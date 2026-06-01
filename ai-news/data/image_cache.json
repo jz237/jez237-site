@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-01T18:00:01.158576+00:00",
+  "updatedAt": "2026-06-01T19:00:01.479164+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -8776,6 +8776,22 @@
     "https://techcrunch.com/2026/05/30/the-groupthink-boom-what-three-top-vcs-really-think-about-the-ai-frenzy": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/SVC-Athens-2.jpg?w=800",
       "checkedAt": "2026-06-01T18:00:01.158576+00:00"
+    },
+    "https://github.com/ggml-org/llama.cpp/releases/tag/b9459": {
+      "image": "https://opengraph.githubassets.com/b4bdaaed6b62e970e413d922ac24d102f520cc201cf26233f7c1442e50949ead/ggml-org/llama.cpp/releases/tag/b9459",
+      "checkedAt": "2026-06-01T19:00:01.479164+00:00"
+    },
+    "https://github.com/ggml-org/llama.cpp/releases/tag/b9458": {
+      "image": "https://opengraph.githubassets.com/116c278a97497da4c9e0a9864e11eb8cc3090de3f564545bc2211ff98c0a2492/ggml-org/llama.cpp/releases/tag/b9458",
+      "checkedAt": "2026-06-01T19:00:01.479164+00:00"
+    },
+    "https://techcrunch.com/2026/06/01/water-access-is-now-a-risk-factor-in-spacexs-ipo": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/GettyImages-2259661359.jpg?w=1024",
+      "checkedAt": "2026-06-01T19:00:01.479164+00:00"
+    },
+    "https://github.com/ggml-org/llama.cpp/releases/tag/b9457": {
+      "image": "https://opengraph.githubassets.com/5d1a282c7130fbed3aadfdee97625c1052c8cfad95bb6dc05ed477dcfea1bc37/ggml-org/llama.cpp/releases/tag/b9457",
+      "checkedAt": "2026-06-01T19:00:01.479164+00:00"
     }
   }
 }

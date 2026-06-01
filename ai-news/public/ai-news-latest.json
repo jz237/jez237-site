@@ -1,8 +1,24 @@
 {
-  "updatedAt": "2026-06-01T18:00:01.158576+00:00",
+  "updatedAt": "2026-06-01T19:00:01.479164+00:00",
   "items": [
     {
-      "title": "Hwa Hui Tew, Junn Yong Loo, Fang Yu Leong, Julia K. Lau, Ding Fan, Hernando Ombao, Rapha\\\"el C. -W. Phan, Chee Pin Ta...",
+      "title": "b9459",
+      "url": "https://github.com/ggml-org/llama.cpp/releases/tag/b9459",
+      "source": "llama.cpp Releases",
+      "sourceUrl": "https://github.com/ggml-org/llama.cpp/releases.atom",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "metal: template GLU kernels to support f16/f32 (#23882)\nDrops the hardcoded f32 GLU kernels in favor of a single template. We now load/store in the native tensor type (half or float) to save memory bandwidth, but keep the actual ALU compute in float to avoid exploding math in geglu/swiglu. Also opened up the dispatch gate to allow f16 inputs.\n\nmacOS/iOS:\n\nmacOS Apple Silicon (arm64)\nmacOS Apple Silicon (arm64, KleidiAI enabled) DISABLED\nmacOS Intel (x64)\niOS XCFramework\n\nLinux:\n\nUbuntu x64 (CPU)\nUbuntu arm64 (CPU)\nUbuntu s390x (CPU)\nUbuntu x64 (Vulkan)\nUbuntu arm64 (Vulkan)\nUbuntu x64 (ROCm 7.",
+      "image": "https://opengraph.githubassets.com/b4bdaaed6b62e970e413d922ac24d102f520cc201cf26233f7c1442e50949ead/ggml-org/llama.cpp/releases/tag/b9459",
+      "published": "2026-06-01T19:00:15+00:00",
+      "firstSeen": "2026-06-01T19:00:01.479164+00:00",
+      "lastSeen": "2026-06-01T19:00:01.479164+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "framework_or_plumbing",
+      "score": 1.62
+    },
+    {
+      "title": "When LLMs Learn to Be Consistently Wrong: A Multi-Model Study of Linear Representations of Synthetic Deception",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -10,12 +26,140 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-01T18:00:14.524658+00:00",
+      "published": "2026-06-01T19:00:12.573151+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-01T18:00:01.158576+00:00",
+      "lastSeen": "2026-06-01T19:00:01.479164+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
+    },
+    {
+      "title": "A GTA V cheat service that promised “enhanced privacy” just got hacked, exposing 64,000 accounts",
+      "url": "https://thenextweb.com/news/gta-v-cheat-service-atlas-menu-hacked-data-breach",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Atlas Menu, a cheat service for Grand Theft Auto V’s online mode, has been hacked, exposing the personal data of nearly 64,000 users. The stolen data included email addresses, usernames, hashed passwords, IP addresses, and support tickets, according to data breach notification service Have I Been Pwned. The breach was claimed by a hacker whose stated [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/gta-v-cheat-service-atlas-menu-hacked-data-breach-1.avif",
+      "published": "2026-06-01T18:46:04+00:00",
+      "firstSeen": "2026-06-01T19:00:01.479164+00:00",
+      "lastSeen": "2026-06-01T19:00:01.479164+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1429
+    },
+    {
+      "title": "Tencent is letting PayPal users pay through WeChat’s merchant network, solving China’s tourist payment problem",
+      "url": "https://thenextweb.com/news/tencent-is-letting-paypal-users-pay-through-wechats-merchant-network-solving-chinas-tourist-payment-problem",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Tencent has announced that PayPal users will be able to make cashless payments in China by scanning QR codes through WeChat Pay’s merchant network. The integration, which will be available to US-based PayPal users first with more markets to follow, connects PayPal’s 400 million-plus user base to the payment infrastructure that covers virtually every taxi, restaurant, and [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/tencent-wechat-pay-paypal-china-tourism-qr-code.avif",
+      "published": "2026-06-01T18:36:24+00:00",
+      "firstSeen": "2026-06-01T19:00:01.479164+00:00",
+      "lastSeen": "2026-06-01T19:00:01.479164+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.138
+    },
+    {
+      "title": "b9458",
+      "url": "https://github.com/ggml-org/llama.cpp/releases/tag/b9458",
+      "source": "llama.cpp Releases",
+      "sourceUrl": "https://github.com/ggml-org/llama.cpp/releases.atom",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "vulkan: don't hold the device mutex while compiling pipelines (#23641)\n\nvulkan: don't hold the device mutex while compiling pipelines\n\nWe need to hold a lock while we traverse all pipelines and lazily initialize\nthem, but we don't need to hold it while the pipeline is being compiled. And\nit doesn't need to be the same lock as the device mutex. We call load_shaders\neach time a pipeline is needed, so we only need to compile that one pipeline\n(and, for example, don't want to end up compiling a pipeline that another\nthread should be compiling).\n\nremove 'needed'\n\n\nmacOS/iOS:\n\nmacOS Apple Silicon (a",
+      "image": "https://opengraph.githubassets.com/116c278a97497da4c9e0a9864e11eb8cc3090de3f564545bc2211ff98c0a2492/ggml-org/llama.cpp/releases/tag/b9458",
+      "published": "2026-06-01T18:32:25+00:00",
+      "firstSeen": "2026-06-01T19:00:01.479164+00:00",
+      "lastSeen": "2026-06-01T19:00:01.479164+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.306
+    },
+    {
+      "title": "The space stock rally is cracking as investors prepare to swap proxies for SpaceX itself",
+      "url": "https://thenextweb.com/news/the-space-stock-rally-is-cracking-as-investors-prepare-to-swap-proxies-for-spacex-itself",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "A rally that carried space-related stocks to extraordinary gains this year is showing serious cracks. The Procure Space ETF, which trades under the ticker UFO, has dropped almost 11% in just two sessions. Intuitive Machines and Rocket Lab have each fallen roughly 17%. AST SpaceMobile, which had become a retail-trading favourite, has sunk nearly 23%. The [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/spacex-starship-v3-flight-12-ipo-superheavy-failure.avif",
+      "published": "2026-06-01T18:28:09+00:00",
+      "firstSeen": "2026-06-01T19:00:01.479164+00:00",
+      "lastSeen": "2026-06-01T19:00:01.479164+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1339
+    },
+    {
+      "title": "Water access is now a risk factor in SpaceX’s IPO",
+      "url": "https://techcrunch.com/2026/06/01/water-access-is-now-a-risk-factor-in-spacexs-ipo",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "The company says it needs \"significant\" water resources to cool its data centers, and that access to abundant, affordable water is a challenge.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/GettyImages-2259661359.jpg?w=1024",
+      "published": "2026-06-01T18:19:53+00:00",
+      "firstSeen": "2026-06-01T19:00:01.479164+00:00",
+      "lastSeen": "2026-06-01T19:00:01.479164+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2697
+    },
+    {
+      "title": "Anthropic’s IPO filing means Salesforce’s early AI bet is about to become its most profitable investment",
+      "url": "https://thenextweb.com/news/salesforce-anthropic-investment-5-billion-ipo",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Salesforce has a stake in Anthropic worth approximately $5 billion after investing repeatedly in the Claude developer since early 2023, Bloomberg reported on Monday. The software company first participated in Anthropic’s fundraising with roughly $50 million and has continued investing in every subsequent round. With Anthropic’s confidential IPO filing also landing on Monday, Salesforce is positioned [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/salesforce-agentforce-saaspocalypse-ai-promise-reality-1.avif",
+      "published": "2026-06-01T18:11:08+00:00",
+      "firstSeen": "2026-06-01T19:00:01.479164+00:00",
+      "lastSeen": "2026-06-01T19:00:01.479164+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 10.2254
+    },
+    {
+      "title": "b9457",
+      "url": "https://github.com/ggml-org/llama.cpp/releases/tag/b9457",
+      "source": "llama.cpp Releases",
+      "sourceUrl": "https://github.com/ggml-org/llama.cpp/releases.atom",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "vulkan: reduce host memory lock contention (#23376)\n\n\nvulkan: reduces lock contention\n\n\nreplace unique_lock with lock_guard\n\n\n\nmacOS/iOS:\n\nmacOS Apple Silicon (arm64)\nmacOS Apple Silicon (arm64, KleidiAI enabled) DISABLED\nmacOS Intel (x64)\niOS XCFramework\n\nLinux:\n\nUbuntu x64 (CPU)\nUbuntu arm64 (CPU)\nUbuntu s390x (CPU)\nUbuntu x64 (Vulkan)\nUbuntu arm64 (Vulkan)\nUbuntu x64 (ROCm 7.2)\nUbuntu x64 (OpenVINO)\nUbuntu x64 (SYCL FP32) DISABLED\n\nAndroid:\n\nAndroid arm64 (CPU)\n\nWindows:\n\nWindows x64 (CPU)\nWindows arm64 (CPU)\nWindows x64 (CUDA 12) - CUDA 12.4 DLLs\nWindows x64 (CUDA 13) - CUDA 13.3 DLLs\nWind",
+      "image": "https://opengraph.githubassets.com/5d1a282c7130fbed3aadfdee97625c1052c8cfad95bb6dc05ed477dcfea1bc37/ggml-org/llama.cpp/releases/tag/b9457",
+      "published": "2026-06-01T18:08:17+00:00",
+      "firstSeen": "2026-06-01T19:00:01.479164+00:00",
+      "lastSeen": "2026-06-01T19:00:01.479164+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "framework_or_plumbing",
+      "score": 1.594
+    },
+    {
+      "title": "Quantinuum boosts its IPO to $1.46 billion as orders hit double-digit multiples of available shares",
+      "url": "https://thenextweb.com/news/quantinuum-ipo-upsized-quantum-computing-14-billion",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Quantinuum, the Honeywell-backed quantum computing company, has increased the size of its initial public offering to as much as $1.46 billion after demand from investors far exceeded the original allocation. The company is now offering 26.5 million shares at $53 to $55 each, up from a previous range of approximately 21 million shares at $45 to $50. [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/quantinuum-ipo-upsized-quantum-computing-14-billion.avif",
+      "published": "2026-06-01T18:02:11+00:00",
+      "firstSeen": "2026-06-01T19:00:01.479164+00:00",
+      "lastSeen": "2026-06-01T19:00:01.479164+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.2209
     },
     {
       "title": "v0.30.0-rc32: llama-server followups (#16353)",
@@ -28,10 +172,10 @@
       "image": "https://opengraph.githubassets.com/ba017001f9d13428ceaa03ae8eb00565d23f543c1d5e69f9b978c6eb29086b51/ollama/ollama",
       "published": "2026-06-01T17:44:21+00:00",
       "firstSeen": "2026-06-01T18:00:01.158576+00:00",
-      "lastSeen": "2026-06-01T18:00:01.158576+00:00",
+      "lastSeen": "2026-06-01T19:00:01.479164+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.352
+      "score": 6.3221
     },
     {
       "title": "Anthropic files confidentially for an IPO, potentially beating OpenAI to Wall Street after eclipsing it in valuation",
@@ -44,10 +188,10 @@
       "image": "https://media.thenextweb.com/2026/04/anthropic-claude-word-lawyers-legal-ai.avif",
       "published": "2026-06-01T17:23:03+00:00",
       "firstSeen": "2026-06-01T18:00:01.158576+00:00",
-      "lastSeen": "2026-06-01T18:00:01.158576+00:00",
+      "lastSeen": "2026-06-01T19:00:01.479164+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.4813
+      "score": 8.4517
     },
     {
       "title": "b9455",
@@ -60,10 +204,10 @@
       "image": "https://opengraph.githubassets.com/692ea654907a4b544c5beb82174299c258f2f4a0e6ded82bf43c339eb4ce7048/ggml-org/llama.cpp/releases/tag/b9455",
       "published": "2026-06-01T17:22:29+00:00",
       "firstSeen": "2026-06-01T18:00:01.158576+00:00",
-      "lastSeen": "2026-06-01T18:00:01.158576+00:00",
+      "lastSeen": "2026-06-01T19:00:01.479164+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 0.201
+      "score": 0.1714
     },
     {
       "title": "Anthropic Confidentially Files for What Could Be the Largest IPO Ever",
@@ -76,10 +220,10 @@
       "image": "https://media.wired.com/photos/6a1db04538f4e0fcb2641f17/master/pass/Anthropic-Goes-Public-Business-2274306161.jpg",
       "published": "2026-06-01T17:17:58+00:00",
       "firstSeen": "2026-06-01T18:00:01.158576+00:00",
-      "lastSeen": "2026-06-01T18:00:01.158576+00:00",
+      "lastSeen": "2026-06-01T19:00:01.479164+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.6188
+      "score": 9.5892
     },
     {
       "title": "Florida becomes the first state to sue OpenAI, naming Altman personally and calling ChatGPT a defective product",
@@ -92,10 +236,10 @@
       "image": "https://media.thenextweb.com/2026/05/Sam-Altman.avif",
       "published": "2026-06-01T17:14:23+00:00",
       "firstSeen": "2026-06-01T18:00:01.158576+00:00",
-      "lastSeen": "2026-06-01T18:00:01.158576+00:00",
+      "lastSeen": "2026-06-01T19:00:01.479164+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.227
+      "score": 12.1975
     },
     {
       "title": "A strike at one Michigan axle plant could choke production of GM’s most profitable vehicles",
@@ -108,10 +252,10 @@
       "image": "https://media.thenextweb.com/2026/06/uaw-strike-gm-truck-axle-supplier-dauch.avif",
       "published": "2026-06-01T16:50:12+00:00",
       "firstSeen": "2026-06-01T18:00:01.158576+00:00",
-      "lastSeen": "2026-06-01T18:00:01.158576+00:00",
+      "lastSeen": "2026-06-01T19:00:01.479164+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.115
+      "score": 2.0858
     },
     {
       "title": "Anthropic is finally giving the EU access to Mythos, ending weeks of standoff over the world’s most powerful cybersecurity AI",
@@ -124,10 +268,10 @@
       "image": "https://media.thenextweb.com/2026/06/anthropic-mythos-eu-enisa-cybersecurity-access.avif",
       "published": "2026-06-01T16:43:30+00:00",
       "firstSeen": "2026-06-01T17:00:01.264343+00:00",
-      "lastSeen": "2026-06-01T18:00:01.158576+00:00",
+      "lastSeen": "2026-06-01T19:00:01.479164+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.5117
+      "score": 10.4826
     },
     {
       "title": "Anthropic has officially filed to go public",
@@ -140,10 +284,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25469941/STK202_DARIO_AMODEI_CVIRGINIA_D.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-01T16:40:38+00:00",
       "firstSeen": "2026-06-01T17:00:01.264343+00:00",
-      "lastSeen": "2026-06-01T18:00:01.158576+00:00",
+      "lastSeen": "2026-06-01T19:00:01.479164+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.3203
+      "score": 7.2913
     },
     {
       "title": "Anthropic files to go public",
@@ -156,10 +300,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/02/GettyImages-2261854833.jpg?resize=1200%2C800",
       "published": "2026-06-01T16:36:55+00:00",
       "firstSeen": "2026-06-01T17:00:01.264343+00:00",
-      "lastSeen": "2026-06-01T18:00:01.158576+00:00",
+      "lastSeen": "2026-06-01T19:00:01.479164+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2485
+      "score": 5.2195
     },
     {
       "title": "How we used Gemini to build Google I/O 2026",
@@ -172,10 +316,10 @@
       "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/AI_IO.max-600x600.format-webp.webp",
       "published": "2026-06-01T16:00:00+00:00",
       "firstSeen": "2026-06-01T18:00:01.158576+00:00",
-      "lastSeen": "2026-06-01T18:00:01.158576+00:00",
+      "lastSeen": "2026-06-01T19:00:01.479164+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.3705
+      "score": 8.342
     },
     {
       "title": "This AI weather startup is out-forecasting government agencies",
@@ -188,10 +332,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/Pic-8.jpg?resize=1200%2C675",
       "published": "2026-06-01T16:00:00+00:00",
       "firstSeen": "2026-06-01T17:00:01.264343+00:00",
-      "lastSeen": "2026-06-01T18:00:01.158576+00:00",
+      "lastSeen": "2026-06-01T19:00:01.479164+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2305
+      "score": 2.202
     },
     {
       "title": "Introducing Mellum2: A 12B Mixture-of-Experts Model by JetBrains",
@@ -204,10 +348,10 @@
       "image": "https://cdn-uploads.huggingface.co/production/uploads/60ef2a438432bc401cd0abbe/tFjSaWUOM_pVsgKjHrAHt.png",
       "published": "2026-06-01T15:45:17+00:00",
       "firstSeen": "2026-06-01T16:00:01.502471+00:00",
-      "lastSeen": "2026-06-01T18:00:01.158576+00:00",
+      "lastSeen": "2026-06-01T19:00:01.479164+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3635
+      "score": 2.3352
     },
     {
       "title": "b9453",
@@ -220,11 +364,11 @@
       "image": "https://opengraph.githubassets.com/70e3ac50cd906e7b2fb939ec43a9b4f467a4066dc0df40365f86252877945b35/ggml-org/llama.cpp/releases/tag/b9453",
       "published": "2026-06-01T14:57:47+00:00",
       "firstSeen": "2026-06-01T15:00:02.058795+00:00",
-      "lastSeen": "2026-06-01T18:00:01.158576+00:00",
+      "lastSeen": "2026-06-01T19:00:01.479164+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 11.831
+      "score": 11.8033
     },
     {
       "title": "QTREX is betting on the layer beneath quantum computing",
@@ -237,10 +381,10 @@
       "image": "https://media.thenextweb.com/2026/06/qtrex-quantum-computing-interconnect-bottleneck.avif",
       "published": "2026-06-01T14:51:10+00:00",
       "firstSeen": "2026-06-01T16:00:01.502471+00:00",
-      "lastSeen": "2026-06-01T18:00:01.158576+00:00",
+      "lastSeen": "2026-06-01T19:00:01.479164+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0579
+      "score": 2.0303
     },
     {
       "title": "DuckDuckGo makes its ‘no-AI’ search engine easier to access as its traffic booms",
@@ -253,10 +397,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/DuckDuckGo_NoAI.png?resize=1200%2C784",
       "published": "2026-06-01T14:49:10+00:00",
       "firstSeen": "2026-06-01T15:00:02.058795+00:00",
-      "lastSeen": "2026-06-01T18:00:01.158576+00:00",
+      "lastSeen": "2026-06-01T19:00:01.479164+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.397
+      "score": 6.3694
     },
     {
       "title": "Microsoft to unveil new AI models and Windows improvements at Build",
@@ -269,10 +413,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/MS_BUILD.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-01T14:39:03+00:00",
       "firstSeen": "2026-06-01T15:00:02.058795+00:00",
-      "lastSeen": "2026-06-01T18:00:01.158576+00:00",
+      "lastSeen": "2026-06-01T19:00:01.479164+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2623
+      "score": 2.2348
     },
     {
       "title": "AI is blowing up music. How should the Grammys handle it?",
@@ -285,10 +429,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/DCD_20260601_Mason_Grammys.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-01T14:30:00+00:00",
       "firstSeen": "2026-06-01T15:00:02.058795+00:00",
-      "lastSeen": "2026-06-01T18:00:01.158576+00:00",
+      "lastSeen": "2026-06-01T19:00:01.479164+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3581
+      "score": 3.3307
     },
     {
       "title": "b9452",
@@ -301,10 +445,10 @@
       "image": "https://opengraph.githubassets.com/29ad4f337ed9fe0640267fda0f8c354e0becbdfa430611d09abc07724f989bcd/ggml-org/llama.cpp/releases/tag/b9452",
       "published": "2026-06-01T14:22:30+00:00",
       "firstSeen": "2026-06-01T15:00:02.058795+00:00",
-      "lastSeen": "2026-06-01T18:00:01.158576+00:00",
+      "lastSeen": "2026-06-01T19:00:01.479164+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1146
+      "score": 2.0874
     },
     {
       "title": "Salesforce is acquiring Contentful to give Agentforce a content layer that can assemble experiences on the fly",
@@ -320,7 +464,7 @@
       "lastSeen": "2026-06-01T18:00:01.158576+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.4442
+      "score": 5.4169
     },
     {
       "title": "AI is crushing startup valuations for companies that raised before ChatGPT existed",
@@ -336,7 +480,7 @@
       "lastSeen": "2026-06-01T18:00:01.158576+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 9.439
+      "score": 9.4119
     },
     {
       "title": "Strava blames zero-code AI apps and scrapers as it tightens API access",
@@ -349,10 +493,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/10/STKB305_STRAVA_B.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-01T14:06:44+00:00",
       "firstSeen": "2026-06-01T14:11:22.608642+00:00",
-      "lastSeen": "2026-06-01T18:00:01.158576+00:00",
+      "lastSeen": "2026-06-01T19:00:01.479164+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 4.0474
+      "score": 4.0203
     },
     {
       "title": "Beyond LLMs: Why Scalable Enterprise AI Adoption Depends on Agent Logic",
@@ -365,10 +509,10 @@
       "image": "https://cdn-uploads.huggingface.co/production/uploads/65b12ed52be9660f0b7e5f72/zJb7AUFeIDNyokJYMK1Ae.jpeg",
       "published": "2026-06-01T13:51:18+00:00",
       "firstSeen": "2026-06-01T14:00:01.238741+00:00",
-      "lastSeen": "2026-06-01T18:00:01.158576+00:00",
+      "lastSeen": "2026-06-01T19:00:01.479164+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0104
+      "score": 4.9835
     },
     {
       "title": "Akeso’s lung cancer drug reduces death risk by 34%, marking the first Chinese drug at ASCO’s top stage in 61 years",
@@ -384,7 +528,7 @@
       "lastSeen": "2026-06-01T18:00:01.158576+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.0294
+      "score": 4.0025
     },
     {
       "title": "b9451",
@@ -397,10 +541,10 @@
       "image": "https://opengraph.githubassets.com/3b94bee40ff47a6910d5fc31a7af61f4970bb7393307bb595e5629cde8d58f97/ggml-org/llama.cpp/releases/tag/b9451",
       "published": "2026-06-01T13:15:03+00:00",
       "firstSeen": "2026-06-01T14:11:22.608642+00:00",
-      "lastSeen": "2026-06-01T18:00:01.158576+00:00",
+      "lastSeen": "2026-06-01T19:00:01.479164+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 0.084
+      "score": 0.0576
     },
     {
       "title": "Open and closed models are on different exponentials",
@@ -413,10 +557,10 @@
       "image": "https://substack-post-media.s3.amazonaws.com/public/images/6b994b97-89a2-4101-ad81-aa3ffe274b75_3182x1790.png",
       "published": "2026-06-01T13:03:48+00:00",
       "firstSeen": "2026-06-01T14:00:01.238741+00:00",
-      "lastSeen": "2026-06-01T18:00:01.158576+00:00",
+      "lastSeen": "2026-06-01T19:00:01.479164+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.219
+      "score": 2.1928
     },
     {
       "title": "US export controls are pushing China’s AI chip industry away from GPUs and toward custom silicon",
@@ -432,7 +576,7 @@
       "lastSeen": "2026-06-01T18:00:01.158576+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3874
+      "score": 3.3617
     },
     {
       "title": "AI eclipsed nuclear weapons as the dominant threat at Asia’s premier defense summit",
@@ -448,7 +592,7 @@
       "lastSeen": "2026-06-01T18:00:01.158576+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9596
+      "score": 1.9347
     },
     {
       "title": "LG Electronics has quadrupled this year. The catalyst: a meeting with Jensen Huang about physical AI.",
@@ -464,7 +608,7 @@
       "lastSeen": "2026-06-01T17:00:01.264343+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9585
+      "score": 1.9336
     },
     {
       "title": "Jensen Huang opens Computex with Vera Rubin in production and a move into Windows PCs",
@@ -480,7 +624,7 @@
       "lastSeen": "2026-06-01T17:00:01.264343+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9559
+      "score": 1.9311
     },
     {
       "title": "Norse Atlantic Airways Offers Dirt-Cheap Tickets. There’s a Catch",
@@ -493,154 +637,10 @@
       "image": "https://media.wired.com/photos/6a15c83805d6069616b25809/master/pass/Norse-Atlantic-Airways-Went-Tech-First-With-Customer-Service-Business-2151560857.jpg",
       "published": "2026-06-01T11:00:00+00:00",
       "firstSeen": "2026-06-01T12:00:01.897495+00:00",
-      "lastSeen": "2026-06-01T18:00:01.158576+00:00",
+      "lastSeen": "2026-06-01T19:00:01.479164+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0956
-    },
-    {
-      "title": "Nadella quietly dismantled Microsoft’s leadership structure. The SLT that ran the company for decades is gone.",
-      "url": "https://thenextweb.com/news/microsoft-nadella-ai-reboot-leadership-restructure-slt",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Satya Nadella has dismantled the senior leadership structure that ran Microsoft for decades. The company “quietly retired what’s known as the SLT,” a person close to the CEO told Business Insider. The senior leadership team, the powerful executives who ran sprawling businesses and reported directly to Nadella, no longer exists. In its place, Nadella has [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/microsoft-nadella-ai-reboot-leadership-restructure-slt.avif",
-      "published": "2026-06-01T10:45:07+00:00",
-      "firstSeen": "2026-06-01T12:00:01.897495+00:00",
-      "lastSeen": "2026-06-01T17:00:01.264343+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.9494
-    },
-    {
-      "title": "Nvidia looks beyond China’s Unitree for its humanoid robot push",
-      "url": "https://thenextweb.com/news/nvidia-humanoid-robot-makers-unitree",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The first robot in Nvidia’s new research line is a collaboration with three flags on it. The body comes from China’s Unitree, the hands from Singapore-headquartered Sharpa, and the computing brain from Nvidia. After Jensen Huang’s keynote in Taipei on Monday, ahead of the Computex trade show, the company said it plans to repeat the [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/02/Nvidias-Q4-results-could-make-or-break-confidence-in-the-AI-hardware-market.avif",
-      "published": "2026-06-01T09:00:24+00:00",
-      "firstSeen": "2026-06-01T10:00:01.323806+00:00",
-      "lastSeen": "2026-06-01T16:00:01.502471+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 3.3068
-    },
-    {
-      "title": "PLD Space raises its Kourou launch-complex investment to €35m",
-      "url": "https://thenextweb.com/news/pld-space-kourou-launch-complex-investment",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The Spanish launch firm says it is the first private operator to commit capital at this scale to the historic Guiana spaceport, with a first MIURA 5 flight still slated for 2026. PLD Space is putting €35m into the launch complex it is building at the Guiana Space Centre in Kourou, the Spanish company announced [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/PLD-Space-Miura.avif",
-      "published": "2026-06-01T08:48:13+00:00",
-      "firstSeen": "2026-06-01T10:00:01.323806+00:00",
-      "lastSeen": "2026-06-01T15:00:02.058795+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.302
-    },
-    {
-      "title": "Vertice buys Vendr to build what it calls the largest procurement dataset",
-      "url": "https://thenextweb.com/news/vertice-acquires-vendr",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Vertice has bought Vendr. The London-based AI procurement company announced on Monday that it has acquired the US software-pricing firm, a deal it says creates the world’s largest procurement intelligence dataset by combining the two companies’ data on what they buy and how they negotiate. Terms of the acquisition were not disclosed. The combined dataset, [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/Vertice-founders.avif",
-      "published": "2026-06-01T08:20:09+00:00",
-      "firstSeen": "2026-06-01T09:00:01.648799+00:00",
-      "lastSeen": "2026-06-01T14:11:22.608642+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.891
-    },
-    {
-      "title": "Runway picks London for its European headquarters with a $200m UK pledge",
-      "url": "https://thenextweb.com/news/runway-london-european-headquarters",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The Nvidia-backed AI video firm joins Anthropic and OpenAI in betting on London, citing customers including the BBC, Fremantle and WPP. Runway is making London its European headquarters and has pledged to put more than $200m into the UK’s AI ecosystem by the end of 2028, the company told CNBC on Monday. The New York [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/Runaway-founders.avif",
-      "published": "2026-06-01T07:48:44+00:00",
-      "firstSeen": "2026-06-01T09:00:01.648799+00:00",
-      "lastSeen": "2026-06-01T14:11:22.608642+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 5.8789
-    },
-    {
-      "title": "NVIDIA names Anthropic and OpenAI among first users of its Vera chip",
-      "url": "https://thenextweb.com/news/nvidia-vera-chip-anthropic-openai",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Jensen Huang spent a portion of his Computex keynote reading out a guest list. Anthropic, OpenAI, SpaceX and Oracle, the Nvidia chief executive told the audience in Taipei on Monday, are among the first big users of Vera, the company’s new in-house processor. Nvidia, a firm that built its empire on graphics chips, would now [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/Jensen-Huang-CEO-NVIDIA.avif",
-      "published": "2026-06-01T07:36:51+00:00",
-      "firstSeen": "2026-06-01T08:00:01.959709+00:00",
-      "lastSeen": "2026-06-01T14:11:22.608642+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 7.8743
-    },
-    {
-      "title": "Two days to go: TNW’s Amsterdam gathering on what it takes to win in AI-native SaaS",
-      "url": "https://thenextweb.com/news/last-chance-tnw-oneflow-flexas-gathering-amsterdam",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "If you have been meaning to register for the TNW, Oneflow &amp; Flexas Gathering Amsterdam and have not got round to it, this is the moment. The event takes place on Wednesday 3 June at De Weesper on Weesperstraat, and the guest list is nearly full. Tickets remain free, but only for as long as there [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/TNW-Oneflow-and-Flexas-event-in-Amsterdam-1.avif",
-      "published": "2026-06-01T07:00:13+00:00",
-      "firstSeen": "2026-06-01T08:00:01.959709+00:00",
-      "lastSeen": "2026-06-01T12:08:11.286344+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.8605
-    },
-    {
-      "title": "MiniMax eyes a Shanghai listing after a 400% run in Hong Kong",
-      "url": "https://thenextweb.com/news/minimax-shanghai-star-market-listing",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "MiniMax went public in Hong Kong less than five months ago. Its shares have since roughly quadrupled. Now the Chinese AI startup wants to do it again, closer to home. In a filing to the Hong Kong stock exchange on Sunday, MiniMax said it is exploring a listing on Shanghai’s STAR Market, the mainland’s tech-focused [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/MiniMax.avif",
-      "published": "2026-06-01T07:00:10+00:00",
-      "firstSeen": "2026-06-01T08:00:01.959709+00:00",
-      "lastSeen": "2026-06-01T11:00:01.590672+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.8604
-    },
-    {
-      "title": "Meta’s employee mouse-click tracking tool is collecting EU data it said it would not collect",
-      "url": "https://thenextweb.com/news/meta-mci-employee-mouse-tracking-eu-gdpr-collision",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Internal documents show the Model Capability Initiative captures emails and chats US employees exchange with European colleagues, putting the AI-agent training programme on a collision course with GDPR. Meta’s Model Capability Initiative, the surveillance programme it deployed across US employee workstations in April to capture keystrokes, mouse clicks and screen contents for AI-agent training, is [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/04/Meta.avif",
-      "published": "2026-06-01T06:30:28+00:00",
-      "firstSeen": "2026-06-01T08:00:01.959709+00:00",
-      "lastSeen": "2026-06-01T11:00:01.590672+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 3.8494
+      "score": 2.0708
     },
     {
       "title": "Dean Lomax on discovering ichthyosaurs and defying nay-sayers",
@@ -653,10 +653,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-26T08:30:00+00:00",
       "firstSeen": "2026-05-26T08:41:33.144051+00:00",
-      "lastSeen": "2026-06-01T18:00:01.158576+00:00",
+      "lastSeen": "2026-06-01T19:00:01.479164+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.1355
+      "score": 1.1351
     },
     {
       "title": "The Life Scientific: Hiranya Peiris",
@@ -669,10 +669,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-25T20:00:00+00:00",
       "firstSeen": "2026-05-25T21:00:01.605108+00:00",
-      "lastSeen": "2026-06-01T18:00:01.158576+00:00",
+      "lastSeen": "2026-06-01T19:00:01.479164+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 0.3009
+      "score": 0.3006
     },
     {
       "title": "Helen Hastie on the future of human-robot relations",
@@ -685,7 +685,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-19T08:30:00+00:00",
       "firstSeen": "2026-05-19T08:37:13.454426+00:00",
-      "lastSeen": "2026-06-01T18:00:01.158576+00:00",
+      "lastSeen": "2026-06-01T19:00:01.479164+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 1.1201
@@ -701,7 +701,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-18T20:00:00+00:00",
       "firstSeen": "2026-05-18T20:42:45.878006+00:00",
-      "lastSeen": "2026-06-01T18:00:01.158576+00:00",
+      "lastSeen": "2026-06-01T19:00:01.479164+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
       "score": -1.9099
