@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-01T15:00:02.058795+00:00",
+  "updatedAt": "2026-06-01T16:00:01.502471+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -8736,6 +8736,18 @@
     "https://github.com/ollama/ollama/releases/tag/v0.30.0-rc30": {
       "image": "https://opengraph.githubassets.com/32b040cdc5131bff1b45aa55722820a5ca28a5e6f73eceef9a009efae6ca2166/ollama/ollama",
       "checkedAt": "2026-06-01T15:00:02.058795+00:00"
+    },
+    "https://huggingface.co/blog/JetBrains/mellum2-launch": {
+      "image": "https://cdn-uploads.huggingface.co/production/uploads/60ef2a438432bc401cd0abbe/tFjSaWUOM_pVsgKjHrAHt.png",
+      "checkedAt": "2026-06-01T16:00:01.502471+00:00"
+    },
+    "https://github.com/BerriAI/litellm/releases/tag/v1.88.0-dev.1": {
+      "image": "https://opengraph.githubassets.com/556341612feac98bff6d375ede8ac4d8a6c5b55211f17346dd1900ad50242c5a/BerriAI/litellm/releases/tag/v1.88.0-dev.1",
+      "checkedAt": "2026-06-01T16:00:01.502471+00:00"
+    },
+    "https://github.com/ollama/ollama/releases/tag/v0.30.0-rc29": {
+      "image": "https://opengraph.githubassets.com/b2e8d6cbb541b565f6f8a2ea12ee9850504fa856573f30b2d43d0bf47cc99217/ollama/ollama",
+      "checkedAt": "2026-06-01T16:00:01.502471+00:00"
     }
   }
 }
