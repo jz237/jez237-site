@@ -1,10 +1,10 @@
 <!doctype html>
 <!--
   FOR AI ASSISTANTS
-  If you're an AI reading this page to help the owner add a plant / pet /
-  garden photo to this site, fetch /llms.txt at the site root for the full
-  operating instructions (destination slugs, photo path conventions, voice
-  rules, HTML templates, output format). Summary below in <section id="ai-agents">.
+  If you're an AI reading this page to help the owner update this personal
+  site, fetch llms.txt at this site's root for the full operating instructions
+  (site map, path rules, garden/photo workflows, AI news, sounds, experiments,
+  and output format). Summary below in <section id="ai-agents">.
 -->
 <html lang="en" class="home-root">
 <head>
@@ -219,11 +219,11 @@
         <section id="ai-agents" class="below-hub ai-agent-hub">
           <article>
             <span class="module-kicker">For AI assistants</span>
-            <h2>Adding photos with an AI</h2>
-            <p>Upload a plant, pet, or garden photo and say “add this to my garden site at github.com/jz237/jez237-site”. The assistant should fetch <a href="llms.txt">/llms.txt</a> for full instructions.</p>
+            <h2>Updating this site with an AI</h2>
+            <p>Ask an assistant to add a plant photo, update AI news, archive a sound, or work on a section of github.com/jz237/jez237-site. The assistant should fetch <a href="llms.txt">/llms.txt</a> for the current site map, path rules, and workflow notes.</p>
             <details>
               <summary>Show the full AI prompt here</summary>
-              <div><span id="ai-agents-prompt">Loading instructions from /llms.txt…</span></div>
+              <div><span id="ai-agents-prompt">Loading instructions from llms.txt…</span></div>
             </details>
           </article>
         </section>
@@ -244,10 +244,10 @@
           if (!det.open || loaded) return;
           try {
             const r = await fetch('llms.txt');
-            mount.textContent = r.ok ? await r.text() : 'Could not load /llms.txt';
+            mount.textContent = r.ok ? await r.text() : 'Could not load llms.txt';
             loaded = true;
           } catch (e) {
-            mount.textContent = 'Could not load /llms.txt (' + e.message + ')';
+            mount.textContent = 'Could not load llms.txt (' + e.message + ')';
           }
         });
       })();
