@@ -1102,5 +1102,17 @@
     "slot": "midday",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-06-01-afternoon-basement-aurora-indicator",
+    "title": "Basement Aurora Indicator",
+    "tests": "Tests whether GPT Image 2 can make an invented impossible weather scene read instantly as a real black-glass vacuum fluorescent elevator indicator panel, using cyan-green segmented glyphs, brushed metal controls, reflected lobby light, dust, scratches, and physical panel depth instead of a poster, archive document, specimen tray, or glossy concept art.",
+    "prompt": "Title: Basement Aurora Indicator\nFormat name: Vacuum Fluorescent Elevator Panel\nCategory/kind: screen\nTests/explores: Tests whether GPT Image 2 can make an invented impossible weather scene read instantly as a real black-glass vacuum fluorescent elevator indicator panel, using cyan-green segmented glyphs, brushed metal controls, reflected lobby light, dust, scratches, and physical panel depth instead of a poster, archive document, specimen tray, or glossy concept art.\n\nCreate a square 1024x1024 image that is unmistakably a close documentary photograph of an old elevator indicator and call-button panel in a quiet office lobby. The selected visual format must be obvious at first glance: glossy black smoked glass display window, glowing cyan-green vacuum fluorescent segmented symbols, faint grid wires inside the display, rounded rectangular brushed stainless steel faceplate, small round metal buttons with worn edges, tiny screw heads, fingerprints, dust caught along the bezel, hairline scratches, and soft reflections of ceiling lights in the black glass.\n\nSubject shown only through the elevator panel: the floor indicator has become a tiny impossible aurora forecast for basement levels. Instead of ordinary floor numbers, the segmented VFD display forms abstract invented glyphs for B1, B2, rain, magnetic north, service tunnel, and a thin wavering aurora line that looks physically constrained by segmented tube strokes. The panel should still feel mundane and functional, like an aging building fixture briefly showing a strange maintenance mode. Include a small blank inspection sticker, unreadable micro labels, and a narrow vertical row of indicator lamps, but no real brand names or logos.\n\nComposition: straight-on close photo, the panel fills most of the frame, with a sliver of beige stone wall and dark elevator door edge at the margins for scale. Keep the image grounded in physical materials: glowing glass, metal brushing, shallow dust, worn button rims, weak reflections, slight green bloom from the display, and realistic camera noise.\n\nPalette and mood: black glass, cyan-green VFD glow, brushed silver steel, warm beige lobby stone, tiny amber lamp, cool reflected fluorescent white. Quiet, mundane, slightly uncanny, old-building maintenance atmosphere.\n\nHard exclusions: no dancing, no dancers, no dance poses, no ballet, no ballroom, no stage dance, no ceremonial dance, no implied choreography, no performers, no copyrighted characters, no real logos, no watermark, no signature, no archive paper, no lab tray, no flat poster layout, no glossy fantasy concept art.",
+    "image": "images/2026-06-01-afternoon-basement-aurora-indicator.png",
+    "date": "2026-06-01",
+    "batch": "Daily Prompt",
+    "slot": "afternoon",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
