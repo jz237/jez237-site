@@ -1162,5 +1162,17 @@
     "slot": "afternoon",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-06-01-evening-glasshouse-beehive-repair-manual",
+    "title": "Glasshouse Beehive Repair Manual",
+    "tests": "Reusable non-photo visual layout template: tests whether GPT Image 2 can produce a coherent vertical repair-manual exploded view with readable hierarchy, believable labels, dense material detail, and no prompt-card artifacts.",
+    "prompt": "Create a finished vertical repair manual exploded-view page for a fictional tabletop appliance called the Glasshouse Beehive Coffee Brewer. Show cream paper, precise black ink linework, transparent amber glass components, brass screws, walnut handle pieces, rubber gaskets, ceramic filters, a steam valve, honeycomb diffuser, water reservoir, and numbered callout leaders. Include natural manual text only: title, parts list, exploded assembly diagram, and maintenance notes. Keep it dense, coherent, tactile, and photographed on a workbench; avoid logos, real company names, placeholder boxes, hands, and prompt-instruction text.\n\nReusable prompt template: Create a finished [FORMAT] about [TOPIC] using [DATA OR CATEGORIES], with a coherent physical design, readable hierarchy, and specific invented details where data is not supplied. Use [MATERIALS], [ERA OR DESIGN LANGUAGE], [COLOR ACCENTS], and [SETTING] to make the layout feel real. Preserve the supplied topic and data relationships; change the document framing, visual system, labels, diagrams, and physical presentation to fit the chosen subject. Avoid nonsense labels, cluttered microtext, placeholder boxes, and generic decoration.\n\nExample substitution: Create a repair manual exploded view about a Glasshouse Beehive Coffee Brewer, with amber glass, brass fittings, walnut handles, cream workshop-manual paper, and a photographed workbench setting.",
+    "image": "images/2026-06-01-evening-glasshouse-beehive-repair-manual.png",
+    "date": "2026-06-01",
+    "batch": "Daily Prompt",
+    "slot": "evening",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1536"
   }
 ]
