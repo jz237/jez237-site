@@ -1126,5 +1126,17 @@
     "slot": "afternoon",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-06-01-afternoon-pet-made-of-salt-crystals",
+    "title": "Pet Made of Salt Crystals",
+    "tests": "Tests whether GPT Image 2 can turn a reusable pet-photo edit idea into a clear prompt-card concept while preserving source markings through a complete material transformation.",
+    "prompt": "Use the uploaded reference photo and preserve the pet’s identity, pose, silhouette, eye placement, tail shape, ear shape, and most recognizable fur markings, then rebuild the pet entirely from translucent salt crystals on a dark slate tabletop with a calm mineral-display mood. Keep the composition close to the source photo while changing the surface into frosted cubic grains, pale pink-white crystalline edges, sparkling facets, and subtle crystalline bands that echo the original markings. Avoid extra limbs, warped faces, real logos, text artifacts, and losing the pet’s recognizable markings.\n\nSource photo needed: a clear photo of a pet.\n\nReusable template: Use the uploaded reference photo and preserve [PET] identity, pose, silhouette, eye placement, tail shape, ear shape, and most recognizable markings, then rebuild [PET] entirely from [MATERIAL] in [SETTING] with a [MOOD] mood. Keep the composition close to the source photo while changing surface, material, lighting, and background into a cohesive crafted scene. Avoid extra limbs, warped faces, real logos, text artifacts, and losing the source likeness.\n\nWhat to preserve: identity, pose, silhouette, expression, eye placement, tail/ear shape, and key markings.\n\nWhat to change: fur/skin/feathers become translucent salt crystals, frosted facets, cubic mineral grains, and sparkling pale edges; background becomes a clean tabletop mineral-display setup.\n\nExample substitution: Use a clear photo of a black-and-white dog; preserve the dog’s sitting pose, ears, eye placement, and patches, then rebuild the dog from translucent salt crystals in a dark-slate tabletop studio with a quiet museum-specimen mood.",
+    "image": "images/2026-06-01-afternoon-pet-made-of-salt-crystals.png",
+    "date": "2026-06-01",
+    "batch": "Daily Prompt",
+    "slot": "afternoon",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
