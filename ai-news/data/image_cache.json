@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-01T16:00:01.502471+00:00",
+  "updatedAt": "2026-06-01T17:00:01.264343+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -8748,6 +8748,18 @@
     "https://github.com/ollama/ollama/releases/tag/v0.30.0-rc29": {
       "image": "https://opengraph.githubassets.com/b2e8d6cbb541b565f6f8a2ea12ee9850504fa856573f30b2d43d0bf47cc99217/ollama/ollama",
       "checkedAt": "2026-06-01T16:00:01.502471+00:00"
+    },
+    "https://www.theverge.com/ai-artificial-intelligence/941016/anthropic-has-officially-filed-to-go-public": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25469941/STK202_DARIO_AMODEI_CVIRGINIA_D.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-06-01T17:00:01.264343+00:00"
+    },
+    "https://techcrunch.com/2026/06/01/anthropic-files-to-go-public": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/02/GettyImages-2261854833.jpg?resize=1200,800",
+      "checkedAt": "2026-06-01T17:00:01.264343+00:00"
+    },
+    "https://techcrunch.com/2026/06/01/this-ai-weather-startup-is-out-forecasting-government-agencies": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/Pic-8.jpg?resize=1200,675",
+      "checkedAt": "2026-06-01T17:00:01.264343+00:00"
     }
   }
 }
