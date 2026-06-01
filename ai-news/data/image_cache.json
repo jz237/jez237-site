@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-01T12:08:11.286344+00:00",
+  "updatedAt": "2026-06-01T14:00:01.238741+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -8648,6 +8648,10 @@
     "https://huggingface.co/blog/nvidia/cosmos-3-for-physical-ai": {
       "image": "https://cdn-uploads.huggingface.co/production/uploads/6799309995f2227228bc38f3/js_kXqJrfpYZd1hZvwPug.png",
       "checkedAt": "2026-06-01T05:00:01.136943+00:00"
+    },
+    "https://huggingface.co/blog/ibm-research/agent-logic-and-scalable-ai-adoption": {
+      "image": "https://cdn-uploads.huggingface.co/production/uploads/65b12ed52be9660f0b7e5f72/zJb7AUFeIDNyokJYMK1Ae.jpeg",
+      "checkedAt": "2026-06-01T14:00:01.238741+00:00"
     }
   }
 }
