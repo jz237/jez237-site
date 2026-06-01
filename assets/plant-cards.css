@@ -12,8 +12,8 @@
   --pc-muted: #c7d8c0;
   --pc-accent: #9fd45f;
   --pc-border: rgba(255,255,255,.12);
-  --pc-shadow: 0 18px 48px rgba(0,0,0,.34);
-  --pc-shadow-lg: 0 32px 90px rgba(0,0,0,.48);
+  --pc-shadow: -2px 2px 0 rgba(0,0,0,.24), 0 18px 48px rgba(0,0,0,.34);
+  --pc-shadow-lg: -3px 3px 0 rgba(0,0,0,.28), 0 32px 90px rgba(0,0,0,.48);
   --pc-ease: cubic-bezier(0.23, 1, 0.32, 1);
   --pc-garden-bg: url("garden/garden-page-bg-20260531.webp");
 }
