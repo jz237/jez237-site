@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-01T22:00:01.536287+00:00",
+  "updatedAt": "2026-06-01T23:00:01.883335+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -8852,6 +8852,14 @@
     "https://openai.com/index/openai-frontier-models-and-codex-are-now-available-on-aws": {
       "image": "https://images.ctfassets.net/kftzwdyauwt9/2Tbsus4QAtPDAlsIM3vYO2/87f4c6894832d7937e54ecb3c245fdbe/OAI_AWS_Partnership_16x9_Art_Card.png?w=1600&amp;h=900&amp;fit=fill",
       "checkedAt": "2026-06-01T22:00:01.536287+00:00"
+    },
+    "https://techcrunch.com/2026/06/01/alphabet-plans-to-raise-80-billion-to-pay-for-ai-buildout": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/02/GettyImages-2173545265.jpg?resize=1200,800",
+      "checkedAt": "2026-06-01T23:00:01.883335+00:00"
+    },
+    "https://github.com/ollama/ollama/releases/tag/v0.30.0": {
+      "image": "https://opengraph.githubassets.com/48bf98a01cb0bcc7ac92f95621c97939c42fa5de9658f1e574becdb9c1456e98/ollama/ollama",
+      "checkedAt": "2026-06-01T23:00:01.883335+00:00"
     }
   }
 }
