@@ -1114,5 +1114,17 @@
     "slot": "afternoon",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-06-01-afternoon-portrait-as-grocery-receipt-icon",
+    "title": "Portrait as Grocery Receipt Icon",
+    "tests": "Tests whether GPT Image 2 can turn a supplied portrait into a reusable identity-preserving vintage grocery receipt mascot artifact while keeping the likeness recognizable through thermal ink, stamp texture, price columns, and paper wear.",
+    "prompt": "Use the uploaded reference photo and preserve the person identity, head angle, expression, hairstyle silhouette, and distinctive facial features, then reinterpret the person as the smiling illustrated mascot portrait printed on a worn 1970s neighborhood grocery receipt for a tiny corner produce market, built from faded thermal ink, overprinted fruit-and-vegetable stamps, tiny price columns, coupon borders, misregistered ink, curled paper edges, and soft desk shadows. Change the image into a flat photographed receipt artifact with warm oddball neighborhood charm; keep the face recognizable while making all details look printed, stamped, creased, and slightly faded. Avoid real store names, readable personal data, extra limbs, text/logo artifacts, and losing the likeness.\n\nReusable template: Use the uploaded reference photo and preserve [PERSON] identity, head angle, expression, hairstyle silhouette, and distinctive facial features, then reinterpret [PERSON] as the smiling illustrated mascot portrait printed on a worn 1970s neighborhood grocery receipt for [SETTING], built from faded thermal ink, overprinted produce stamps, tiny price columns, coupon borders, and paper creases. Change the image into a flat photographed receipt artifact with [MOOD] charm; keep the face recognizable while making all details look printed, stamped, and slightly misregistered. Avoid real store names, readable personal data, extra limbs, text/logo artifacts, and losing the likeness.\n\nSource photo needed: a clear portrait photo of a person.\n\nPreserve: identity, expression, head angle, hairstyle outline, distinctive facial features, and overall portrait composition.\n\nChange: convert the portrait into a fictional receipt mascot made from thermal ink, grocery stamp impressions, price ticks, coupon borders, creases, and vintage paper texture.\n\nNegative constraints: no real store names, no readable private information, no extra limbs, no logos, no watermark, keep the face recognizable.\n\nExample substitution: Use a clear portrait of a friend, set [SETTING] to \"a seaside fruit stand\" and [MOOD] to \"sun-faded cheerful\".",
+    "image": "images/2026-06-01-afternoon-portrait-as-grocery-receipt-icon.png",
+    "date": "2026-06-01",
+    "batch": "Daily Prompt",
+    "slot": "afternoon",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
