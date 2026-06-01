@@ -953,6 +953,35 @@
         -8px 9px 0 rgba(0,0,0,0.58),
         0 18px 40px rgba(90,95,255,0.32) !important;
     }
+    .mobile-first-callout {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0 0 12px;
+      padding: 8px 13px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,217,61,0.58);
+      background: linear-gradient(135deg, rgba(255,217,61,0.22), rgba(77,150,255,0.18));
+      color: #fff5ae;
+      font-size: clamp(0.9rem, 3.8vw, 1.1rem);
+      font-weight: 1000;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-shadow: 0 0 12px rgba(255,217,61,0.35);
+      box-shadow: 0 0 22px rgba(255,217,61,0.12), inset 0 1px 0 rgba(255,255,255,0.16);
+    }
+    .mobile-first-copy {
+      font-weight: 850;
+      color: #f6fbff;
+    }
+    @media (max-width: 620px) {
+      .mobile-first-callout {
+        width: 100%;
+        justify-content: center;
+        padding-inline: 10px;
+        letter-spacing: 0.07em;
+      }
+    }
   </style>
 </head>
 <body class="arcade-galaxy-page">
@@ -965,7 +994,8 @@
       <div style="position:relative;z-index:1;">
         <div class="eyebrow" style="font-size:11px;text-transform:uppercase;letter-spacing:.12em;margin-bottom:8px;">🎮 Playable prototypes, built by AI</div>
 	        <h1 style="margin:18px 0 10px;font-size:clamp(2rem,7vw,3rem);font-weight:900;line-height:1.05;">GameMaster <span style="background:linear-gradient(135deg,#ff6b6b,#ffd93d,#6bcb77,#4d96ff,#c66bff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Arcade</span></h1>
-        <p class="lede" style="max-width:640px;">Mobile-first HTML5 games — built by AI agents, tuned for touch, playable right here. Model showdowns, mechanics experiments, and rebuilds of 70s classics.</p>
+        <div class="mobile-first-callout">📱 Mobile-first games</div>
+        <p class="lede" style="max-width:640px;"><span class="mobile-first-copy">Optimized for phones and tablets, tuned for touch, playable right here.</span> Built by AI agents with model showdowns, mechanics experiments, and rebuilds of 70s classics.</p>
       </div>
     </section>
 
