@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-01T21:00:01.828388+00:00",
+  "updatedAt": "2026-06-01T22:00:01.536287+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -8840,6 +8840,18 @@
     "https://www.theverge.com/tech/941179/meta-instagram-ai-support-chatbot-exploit-hacked": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/meta-chatbot-support.png?quality=90&amp;strip=all&amp;crop=0%2C9.2919928911091%2C100%2C81.416014217782&amp;w=1200",
       "checkedAt": "2026-06-01T21:00:01.828388+00:00"
+    },
+    "https://techcrunch.com/2026/06/01/nvidia-chases-200b-cpu-market-with-ai-agent-pcs-from-microsoft-dell-and-hp": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/03/GettyImages-2205761886.jpg?resize=1200,828",
+      "checkedAt": "2026-06-01T22:00:01.536287+00:00"
+    },
+    "https://simonwillison.net/2026/Jun/1/hackers-simply-asked-meta-ai": {
+      "image": "",
+      "checkedAt": "2026-06-01T22:00:01.536287+00:00"
+    },
+    "https://openai.com/index/openai-frontier-models-and-codex-are-now-available-on-aws": {
+      "image": "https://images.ctfassets.net/kftzwdyauwt9/2Tbsus4QAtPDAlsIM3vYO2/87f4c6894832d7937e54ecb3c245fdbe/OAI_AWS_Partnership_16x9_Art_Card.png?w=1600&amp;h=900&amp;fit=fill",
+      "checkedAt": "2026-06-01T22:00:01.536287+00:00"
     }
   }
 }
