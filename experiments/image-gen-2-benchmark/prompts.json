@@ -1078,5 +1078,17 @@
     "slot": "afternoon",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-06-01-morning-lake-weather-lure-display-card",
+    "title": "Lake Weather Lure Display Card",
+    "tests": "Tests whether GPT Image 2 can make a vertical retail fishing-lure display card read instantly through blister-card packaging, painted lure bodies, harmless wire loops, lake-store fluorescent lighting, price-tag texture, and product-photo realism without becoming a specimen tray, poster, archive document, or glossy concept art.",
+    "prompt": "Title: Lake Weather Lure Display Card\nFormat name: Fishing Lure Display Card\nCategory/kind: product\nTests/explores: Tests whether GPT Image 2 can make a vertical retail fishing-lure display card read instantly through blister-card packaging, painted lure bodies, harmless wire loops, lake-store fluorescent lighting, price-tag texture, and product-photo realism without becoming a specimen tray, poster, archive document, or glossy concept art.\n\nCreate a vertical 1024x1536 image that is unmistakably a photographed fishing lure retail display card hanging on a peg in a small lake bait shop. The backing card is fictional and brandless: sun-faded cardboard with teal grid pattern, dull orange accent stripes, punched hang-tab hole, bent corners, staple impressions, scuffed edges, dust, barcode-like unreadable marks, and a small blank price sticker. Mounted on the card are seven invented weather-themed fishing lures arranged in a neat product display: fog spoon, thunder bobber, cattail spinner, moon-ripple plug, algae-glass minnow, rain-gauge jig, and sunset wake lure. Replace all hooks with harmless rounded wire loops and safety caps, so the objects read as lures but do not show sharp hooks. Include glossy painted lure bodies, chipped enamel, tiny split rings, swivels, clear blister shadows, lake-store fluorescent reflections, pegboard background, shallow depth of field, dust, scuffs, and practical product photography. No real brand names, no logos, no readable trademark text, no people, no animals, no dancing, no performers, no specimen tray, no police board, no archive document, no glossy fantasy concept art.",
+    "image": "images/2026-06-01-morning-lake-weather-lure-display-card.png",
+    "date": "2026-06-01",
+    "batch": "Daily Prompt",
+    "slot": "morning",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1536"
   }
 ]
