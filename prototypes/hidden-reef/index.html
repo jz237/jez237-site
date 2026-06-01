@@ -1551,7 +1551,7 @@
       filter: drop-shadow(0 22px 30px rgba(13,47,65,0.24));
     }
     .link-modal__media.is-touch-zoomed .link-modal__image {
-      transform: scale(var(--modal-touch-scale, 2.6));
+      transform: translate3d(var(--modal-touch-pan-x, 0), var(--modal-touch-pan-y, 0), 0) scale(var(--modal-touch-scale, 2.6));
       transform-origin: var(--modal-touch-x, 50%) var(--modal-touch-y, 50%);
       filter: drop-shadow(0 22px 30px rgba(13,47,65,0.24));
     }
@@ -3218,7 +3218,7 @@
 	  <script src="assets/product-data.js?v=20260530-sitemap-complete"></script>
 	  <script src="assets/catalog-utils.js"></script>
 	  <script src="assets/thr-cards.js"></script>
-	  <script src="assets/link-modal.js?v=20260531-no-zoom-hint"></script>
+	  <script src="assets/link-modal.js?v=20260601-touch-pan"></script>
 	  <script>
 	    window.THR_CATEGORY_CONFIG = {
 	      assetBase: 'assets',
