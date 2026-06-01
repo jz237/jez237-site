@@ -1138,5 +1138,17 @@
     "slot": "afternoon",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-06-01-afternoon-portrait-as-topographic-paper-relief",
+    "title": "Portrait as Topographic Paper Relief",
+    "tests": "Tests whether GPT Image 2 can support a reusable identity-preserving reference-photo transformation prompt while the generated sample remains a finished visual output rather than an instruction card.",
+    "prompt": "Use the uploaded reference photo and preserve the person identity, head angle, facial structure, expression, hairstyle silhouette, shoulder pose, and distinctive features, then transform the person into a layered topographic map paper relief portrait inside a shallow handmade shadowbox frame. The face and body should be rebuilt from stacked cut-paper contour layers in muted cream, teal, fern green, rust, and charcoal, with visible paper fibers, fine elevation-line edges, tiny pinned map flags, and soft side lighting on a clean drafting table. Keep the source pose and recognizable identity clear while changing the material into tactile contour-map paper sculpture. Avoid extra limbs, duplicate faces, logo artifacts, random text, and losing the recognizable face.\n\nReusable template: Use the uploaded reference photo and preserve the [PERSON] identity, head angle, expression, hairstyle silhouette, body pose, and distinctive features, then transform the [PERSON] into a layered topographic map paper relief in [SETTING] with [MOOD] lighting. Rebuild the subject from stacked contour-map paper layers using [COLOR PALETTE], while keeping the original silhouette and face recognizable. Avoid extra limbs, duplicate faces, text/logo artifacts, and losing source-photo likeness.\n\nSource photo needed: a clear portrait photo of a person.\n\nWhat to preserve: identity, head angle, expression, hairstyle silhouette, shoulder/body pose, and distinctive facial features.\n\nWhat to change: convert skin, hair, clothing, and background into stacked cut-paper contour-map relief with realistic paper fibers and shadow gaps.\n\nExample substitution: Use a clear selfie of a person in a denim jacket; preserve their half-smile and wavy hair, then make them a teal-and-rust topographic paper relief mounted in a small museum shadowbox.",
+    "image": "images/2026-06-01-afternoon-portrait-as-topographic-paper-relief.png",
+    "date": "2026-06-01",
+    "batch": "Daily Prompt",
+    "slot": "afternoon",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
