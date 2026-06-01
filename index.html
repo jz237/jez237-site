@@ -10,12 +10,12 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <script>(function(){try{if(localStorage.getItem("theme")==="light")document.documentElement.setAttribute("data-theme","light");}catch(e){}})();</script>
+  <script>(function(){try{var root=document.documentElement;if(localStorage.getItem("theme")==="light")root.setAttribute("data-theme","light");var touch=navigator.maxTouchPoints&&navigator.maxTouchPoints>0;var wide=window.innerWidth>=761||Math.min(screen.width||0,screen.height||0)>=700;if(touch&&wide)root.classList.add("is-touch-tablet");}catch(e){}})();</script>
   <title>Jez237 — Home</title>
   <link rel="icon" type="image/svg+xml" href="assets/brand.svg" />
   <link rel="stylesheet" href="assets/styles.css" />
   <link rel="stylesheet" href="assets/site-enhance.css" />
-  <link rel="stylesheet" href="assets/design.css?v=tablet-home-20260531" />
+  <link rel="stylesheet" href="assets/design.css?v=tablet-home-20260531b" />
   <link rel="preload" as="image" href="assets/galaxy-home-20260530.webp" />
   <link rel="preload" as="image" href="assets/home-cards/garden-center-thumb-20260530.webp" />
   <link rel="preload" as="image" href="assets/home-cards/05-weather-map-dragon-thumb-20260530.webp" />
