@@ -1,5 +1,9 @@
 (function () {
   const IMAGE_ZOOM_SCALE = 2.55;
+  const TOUCH_ZOOM_SCALE = 2.6;
+  const TOUCH_ZOOM_MIN = 1;
+  const TOUCH_ZOOM_MAX = 4;
+  const DOUBLE_TAP_MS = 320;
 
   function ensureModal() {
     let modal = document.querySelector('.link-modal');
@@ -7,7 +11,7 @@
     modal = document.createElement('div');
     modal.className = 'link-modal';
     modal.setAttribute('aria-hidden', 'true');
-    modal.innerHTML = '<div class="link-modal__backdrop" data-link-close></div><section class="link-modal__panel" role="dialog" aria-modal="true" aria-labelledby="link-modal-title"><button class="link-modal__close" type="button" data-link-close>Close</button><div class="link-modal__gallery"><div class="link-modal__media" aria-label="Product image. Hover to zoom in the preview pane."><img class="link-modal__image" alt=""><span class="link-modal__zoom-lens" aria-hidden="true"></span><span class="link-modal__zoom-hint">Roll over image to zoom in</span></div><div class="link-modal__thumbs" aria-label="Product images"></div></div><div class="link-modal__zoom-pane" aria-hidden="true"><img class="link-modal__zoom-image" alt=""></div><div class="link-modal__body"><span class="link-modal__eyebrow">Product details</span><h2 id="link-modal-title"></h2><div class="link-modal__facts"></div><p></p><div class="link-modal__variants"></div><div class="link-modal__status"></div><ul class="link-modal__details"></ul><div class="link-modal__related"></div><div class="link-modal__meta"></div><div class="link-modal__actions"><button class="btn link-modal__add" type="button">Add to preview list</button><a class="btn secondary link-modal__open" target="_blank" rel="noopener">View on Hidden Reef</a></div></div></section>';
+    modal.innerHTML = '<div class="link-modal__backdrop" data-link-close></div><section class="link-modal__panel" role="dialog" aria-modal="true" aria-labelledby="link-modal-title"><button class="link-modal__close" type="button" data-link-close>Close</button><div class="link-modal__gallery"><div class="link-modal__media" aria-label="Product image"><img class="link-modal__image" alt=""><span class="link-modal__zoom-lens" aria-hidden="true"></span></div><div class="link-modal__thumbs" aria-label="Product images"></div></div><div class="link-modal__zoom-pane" aria-hidden="true"><img class="link-modal__zoom-image" alt=""></div><div class="link-modal__body"><span class="link-modal__eyebrow">Product details</span><h2 id="link-modal-title"></h2><div class="link-modal__facts"></div><p></p><div class="link-modal__variants"></div><div class="link-modal__status"></div><ul class="link-modal__details"></ul><div class="link-modal__related"></div><div class="link-modal__meta"></div><div class="link-modal__actions"><button class="btn link-modal__add" type="button">Add to preview list</button><a class="btn secondary link-modal__open" target="_blank" rel="noopener">View on Hidden Reef</a></div></div></section>';
     document.body.appendChild(modal);
     modal.addEventListener('click', event => {
       if (event.target.matches('[data-link-close]')) closeModal(modal);
@@ -75,11 +79,22 @@
     const panel = modal.querySelector('.link-modal__panel');
     const media = modal.querySelector('.link-modal__media');
     const zoomImage = modal.querySelector('.link-modal__zoom-image');
-    media?.classList.remove('is-zoomed');
+    const image = modal.querySelector('.link-modal__image');
+    media?.classList.remove('is-zoomed', 'is-touch-zoomed');
     panel?.classList.remove('is-image-zooming');
     if (media) {
       media.style.removeProperty('--modal-lens-x');
       media.style.removeProperty('--modal-lens-y');
+      media.dataset.touchScale = String(TOUCH_ZOOM_MIN);
+      media.dataset.touchPanX = '0';
+      media.dataset.touchPanY = '0';
+    }
+    if (image) {
+      image.style.removeProperty('--modal-touch-scale');
+      image.style.removeProperty('--modal-touch-x');
+      image.style.removeProperty('--modal-touch-y');
+      image.style.removeProperty('--modal-touch-pan-x');
+      image.style.removeProperty('--modal-touch-pan-y');
     }
     if (zoomImage) {
       zoomImage.style.removeProperty('--modal-zoom-x');
@@ -88,9 +103,102 @@
     }
   }
 
+  function touchDistance(touches) {
+    const dx = touches[0].clientX - touches[1].clientX;
+    const dy = touches[0].clientY - touches[1].clientY;
+    return Math.hypot(dx, dy);
+  }
+
+  function touchCenter(touches) {
+    return {
+      clientX: (touches[0].clientX + touches[1].clientX) / 2,
+      clientY: (touches[0].clientY + touches[1].clientY) / 2
+    };
+  }
+
+  function pointToPercent(media, point) {
+    const rect = media.getBoundingClientRect();
+    return {
+      x: Math.min(100, Math.max(0, ((point.clientX - rect.left) / rect.width) * 100)),
+      y: Math.min(100, Math.max(0, ((point.clientY - rect.top) / rect.height) * 100))
+    };
+  }
+
+  function clampTouchScale(scale) {
+    return Math.min(TOUCH_ZOOM_MAX, Math.max(TOUCH_ZOOM_MIN, scale));
+  }
+
+  function clamp(value, min, max) {
+    return Math.min(max, Math.max(min, value));
+  }
+
+  function clampTouchPan(media, scale, x, y) {
+    const rect = media.getBoundingClientRect();
+    const maxX = Math.max(0, (rect.width * (scale - 1)) / 2);
+    const maxY = Math.max(0, (rect.height * (scale - 1)) / 2);
+    return {
+      x: clamp(x, -maxX, maxX),
+      y: clamp(y, -maxY, maxY)
+    };
+  }
+
+  function setTouchImagePan(modal, x, y) {
+    const media = modal.querySelector('.link-modal__media');
+    const image = modal.querySelector('.link-modal__image');
+    if (!media || !image) return;
+    const scale = Number(media.dataset.touchScale) || TOUCH_ZOOM_MIN;
+    const pan = clampTouchPan(media, scale, x, y);
+    image.style.setProperty('--modal-touch-pan-x', pan.x.toFixed(1) + 'px');
+    image.style.setProperty('--modal-touch-pan-y', pan.y.toFixed(1) + 'px');
+    media.dataset.touchPanX = pan.x.toFixed(1);
+    media.dataset.touchPanY = pan.y.toFixed(1);
+  }
+
+  function setTouchImageZoom(modal, scale, point) {
+    const media = modal.querySelector('.link-modal__media');
+    const image = modal.querySelector('.link-modal__image');
+    if (!media || !image) return TOUCH_ZOOM_MIN;
+    const nextScale = clampTouchScale(scale);
+    if (nextScale <= TOUCH_ZOOM_MIN + 0.02) {
+      image.style.removeProperty('--modal-touch-scale');
+      image.style.removeProperty('--modal-touch-x');
+      image.style.removeProperty('--modal-touch-y');
+      image.style.removeProperty('--modal-touch-pan-x');
+      image.style.removeProperty('--modal-touch-pan-y');
+      media.classList.remove('is-touch-zoomed');
+      media.dataset.touchScale = String(TOUCH_ZOOM_MIN);
+      media.dataset.touchPanX = '0';
+      media.dataset.touchPanY = '0';
+      return TOUCH_ZOOM_MIN;
+    }
+    resetImageZoom(modal);
+    if (point) {
+      const origin = pointToPercent(media, point);
+      image.style.setProperty('--modal-touch-x', origin.x.toFixed(2) + '%');
+      image.style.setProperty('--modal-touch-y', origin.y.toFixed(2) + '%');
+    }
+    image.style.setProperty('--modal-touch-scale', nextScale.toFixed(2));
+    media.classList.add('is-touch-zoomed');
+    media.dataset.touchScale = nextScale.toFixed(2);
+    setTouchImagePan(modal, Number(media.dataset.touchPanX) || 0, Number(media.dataset.touchPanY) || 0);
+    return nextScale;
+  }
+
   function initImageZoom(modal) {
     const media = modal.querySelector('.link-modal__media');
     if (!media) return;
+    let lastTapAt = 0;
+    let currentTouchScale = TOUCH_ZOOM_MIN;
+    let pinchStartDistance = 0;
+    let pinchStartScale = TOUCH_ZOOM_MIN;
+    let pinching = false;
+    let pinchJustEnded = false;
+    let panning = false;
+    let panMoved = false;
+    let panStartX = 0;
+    let panStartY = 0;
+    let panOriginX = 0;
+    let panOriginY = 0;
 
     media.addEventListener('pointermove', event => {
       if (event.pointerType !== 'mouse') return;
@@ -101,9 +209,74 @@
       if (event.pointerType === 'mouse') resetImageZoom(modal);
     });
 
-    media.addEventListener('pointerdown', event => {
-      if (event.pointerType !== 'mouse') resetImageZoom(modal);
-    });
+    media.addEventListener('touchstart', event => {
+      currentTouchScale = Number(media.dataset.touchScale) || TOUCH_ZOOM_MIN;
+      if (event.touches.length === 2) {
+        event.preventDefault();
+        panning = false;
+        panMoved = false;
+        pinching = true;
+        pinchStartDistance = touchDistance(event.touches);
+        pinchStartScale = currentTouchScale;
+      } else if (event.touches.length === 1 && currentTouchScale > TOUCH_ZOOM_MIN) {
+        panning = true;
+        panMoved = false;
+        panStartX = event.touches[0].clientX;
+        panStartY = event.touches[0].clientY;
+        panOriginX = Number(media.dataset.touchPanX) || 0;
+        panOriginY = Number(media.dataset.touchPanY) || 0;
+      }
+    }, { passive: false });
+
+    media.addEventListener('touchmove', event => {
+      if (!pinching) currentTouchScale = Number(media.dataset.touchScale) || TOUCH_ZOOM_MIN;
+      if (event.touches.length === 2 && pinchStartDistance > 0) {
+        event.preventDefault();
+        const nextScale = pinchStartScale * (touchDistance(event.touches) / pinchStartDistance);
+        currentTouchScale = setTouchImageZoom(modal, nextScale, touchCenter(event.touches));
+      } else if (event.touches.length === 1 && panning && currentTouchScale > TOUCH_ZOOM_MIN) {
+        event.preventDefault();
+        const dx = event.touches[0].clientX - panStartX;
+        const dy = event.touches[0].clientY - panStartY;
+        if (Math.abs(dx) > 3 || Math.abs(dy) > 3) panMoved = true;
+        setTouchImagePan(modal, panOriginX + dx, panOriginY + dy);
+      } else if (currentTouchScale > TOUCH_ZOOM_MIN) {
+        event.preventDefault();
+      }
+    }, { passive: false });
+
+    media.addEventListener('touchend', event => {
+      currentTouchScale = Number(media.dataset.touchScale) || TOUCH_ZOOM_MIN;
+      if (pinching && event.touches.length < 2) {
+        pinching = false;
+        pinchStartDistance = 0;
+        pinchJustEnded = true;
+        window.setTimeout(() => { pinchJustEnded = false; }, DOUBLE_TAP_MS);
+        return;
+      }
+      if (panning && event.touches.length < 1) {
+        panning = false;
+        if (panMoved) {
+          panMoved = false;
+          lastTapAt = 0;
+          return;
+        }
+      }
+      if (event.touches.length || pinchJustEnded || !event.changedTouches.length) return;
+
+      const now = Date.now();
+      const tap = event.changedTouches[0];
+      if (now - lastTapAt <= DOUBLE_TAP_MS) {
+        event.preventDefault();
+        currentTouchScale = Number(media.dataset.touchScale) || TOUCH_ZOOM_MIN;
+        currentTouchScale = currentTouchScale > TOUCH_ZOOM_MIN
+          ? setTouchImageZoom(modal, TOUCH_ZOOM_MIN)
+          : setTouchImageZoom(modal, TOUCH_ZOOM_SCALE, tap);
+        lastTapAt = 0;
+      } else {
+        lastTapAt = now;
+      }
+    }, { passive: false });
   }
 
   function escapeHtml(value) {
@@ -282,6 +455,9 @@
   }
 
   function initDemoCart() {
+    document.querySelectorAll('.cart-button strong').forEach(label => {
+      label.textContent = 'Cart';
+    });
     ensureCartDrawer();
     renderCart();
     document.addEventListener('click', event => {
