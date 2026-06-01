@@ -86,11 +86,15 @@
       media.style.removeProperty('--modal-lens-x');
       media.style.removeProperty('--modal-lens-y');
       media.dataset.touchScale = String(TOUCH_ZOOM_MIN);
+      media.dataset.touchPanX = '0';
+      media.dataset.touchPanY = '0';
     }
     if (image) {
       image.style.removeProperty('--modal-touch-scale');
       image.style.removeProperty('--modal-touch-x');
       image.style.removeProperty('--modal-touch-y');
+      image.style.removeProperty('--modal-touch-pan-x');
+      image.style.removeProperty('--modal-touch-pan-y');
     }
     if (zoomImage) {
       zoomImage.style.removeProperty('--modal-zoom-x');
@@ -124,6 +128,32 @@
     return Math.min(TOUCH_ZOOM_MAX, Math.max(TOUCH_ZOOM_MIN, scale));
   }
 
+  function clamp(value, min, max) {
+    return Math.min(max, Math.max(min, value));
+  }
+
+  function clampTouchPan(media, scale, x, y) {
+    const rect = media.getBoundingClientRect();
+    const maxX = Math.max(0, (rect.width * (scale - 1)) / 2);
+    const maxY = Math.max(0, (rect.height * (scale - 1)) / 2);
+    return {
+      x: clamp(x, -maxX, maxX),
+      y: clamp(y, -maxY, maxY)
+    };
+  }
+
+  function setTouchImagePan(modal, x, y) {
+    const media = modal.querySelector('.link-modal__media');
+    const image = modal.querySelector('.link-modal__image');
+    if (!media || !image) return;
+    const scale = Number(media.dataset.touchScale) || TOUCH_ZOOM_MIN;
+    const pan = clampTouchPan(media, scale, x, y);
+    image.style.setProperty('--modal-touch-pan-x', pan.x.toFixed(1) + 'px');
+    image.style.setProperty('--modal-touch-pan-y', pan.y.toFixed(1) + 'px');
+    media.dataset.touchPanX = pan.x.toFixed(1);
+    media.dataset.touchPanY = pan.y.toFixed(1);
+  }
+
   function setTouchImageZoom(modal, scale, point) {
     const media = modal.querySelector('.link-modal__media');
     const image = modal.querySelector('.link-modal__image');
@@ -133,8 +163,12 @@
       image.style.removeProperty('--modal-touch-scale');
       image.style.removeProperty('--modal-touch-x');
       image.style.removeProperty('--modal-touch-y');
+      image.style.removeProperty('--modal-touch-pan-x');
+      image.style.removeProperty('--modal-touch-pan-y');
       media.classList.remove('is-touch-zoomed');
       media.dataset.touchScale = String(TOUCH_ZOOM_MIN);
+      media.dataset.touchPanX = '0';
+      media.dataset.touchPanY = '0';
       return TOUCH_ZOOM_MIN;
     }
     resetImageZoom(modal);
@@ -146,6 +180,7 @@
     image.style.setProperty('--modal-touch-scale', nextScale.toFixed(2));
     media.classList.add('is-touch-zoomed');
     media.dataset.touchScale = nextScale.toFixed(2);
+    setTouchImagePan(modal, Number(media.dataset.touchPanX) || 0, Number(media.dataset.touchPanY) || 0);
     return nextScale;
   }
 
@@ -158,6 +193,12 @@
     let pinchStartScale = TOUCH_ZOOM_MIN;
     let pinching = false;
     let pinchJustEnded = false;
+    let panning = false;
+    let panMoved = false;
+    let panStartX = 0;
+    let panStartY = 0;
+    let panOriginX = 0;
+    let panOriginY = 0;
 
     media.addEventListener('pointermove', event => {
       if (event.pointerType !== 'mouse') return;
@@ -168,37 +209,58 @@
       if (event.pointerType === 'mouse') resetImageZoom(modal);
     });
 
-    media.addEventListener('pointerdown', event => {
-      if (event.pointerType !== 'mouse') resetImageZoom(modal);
-    });
-
     media.addEventListener('touchstart', event => {
+      currentTouchScale = Number(media.dataset.touchScale) || TOUCH_ZOOM_MIN;
       if (event.touches.length === 2) {
         event.preventDefault();
+        panning = false;
+        panMoved = false;
         pinching = true;
         pinchStartDistance = touchDistance(event.touches);
-        currentTouchScale = Number(media.dataset.touchScale) || TOUCH_ZOOM_MIN;
         pinchStartScale = currentTouchScale;
+      } else if (event.touches.length === 1 && currentTouchScale > TOUCH_ZOOM_MIN) {
+        panning = true;
+        panMoved = false;
+        panStartX = event.touches[0].clientX;
+        panStartY = event.touches[0].clientY;
+        panOriginX = Number(media.dataset.touchPanX) || 0;
+        panOriginY = Number(media.dataset.touchPanY) || 0;
       }
     }, { passive: false });
 
     media.addEventListener('touchmove', event => {
+      if (!pinching) currentTouchScale = Number(media.dataset.touchScale) || TOUCH_ZOOM_MIN;
       if (event.touches.length === 2 && pinchStartDistance > 0) {
         event.preventDefault();
         const nextScale = pinchStartScale * (touchDistance(event.touches) / pinchStartDistance);
         currentTouchScale = setTouchImageZoom(modal, nextScale, touchCenter(event.touches));
+      } else if (event.touches.length === 1 && panning && currentTouchScale > TOUCH_ZOOM_MIN) {
+        event.preventDefault();
+        const dx = event.touches[0].clientX - panStartX;
+        const dy = event.touches[0].clientY - panStartY;
+        if (Math.abs(dx) > 3 || Math.abs(dy) > 3) panMoved = true;
+        setTouchImagePan(modal, panOriginX + dx, panOriginY + dy);
       } else if (currentTouchScale > TOUCH_ZOOM_MIN) {
         event.preventDefault();
       }
     }, { passive: false });
 
     media.addEventListener('touchend', event => {
+      currentTouchScale = Number(media.dataset.touchScale) || TOUCH_ZOOM_MIN;
       if (pinching && event.touches.length < 2) {
         pinching = false;
         pinchStartDistance = 0;
         pinchJustEnded = true;
         window.setTimeout(() => { pinchJustEnded = false; }, DOUBLE_TAP_MS);
         return;
+      }
+      if (panning && event.touches.length < 1) {
+        panning = false;
+        if (panMoved) {
+          panMoved = false;
+          lastTapAt = 0;
+          return;
+        }
       }
       if (event.touches.length || pinchJustEnded || !event.changedTouches.length) return;
 
