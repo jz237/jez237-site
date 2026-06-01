@@ -1,6 +1,6 @@
 {
   "date": "2026-06-01",
-  "updatedAt": "2026-06-01T09:00:01.648799+00:00",
+  "updatedAt": "2026-06-01T10:00:01.323806+00:00",
   "items": [
     {
       "title": "May 2026 newsletter",
@@ -13,11 +13,11 @@
       "image": "",
       "published": "2026-06-01T04:45:00+00:00",
       "firstSeen": "2026-06-01T05:00:01.136943+00:00",
-      "lastSeen": "2026-06-01T09:00:01.648799+00:00",
+      "lastSeen": "2026-06-01T10:00:01.323806+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 16.6675
+      "score": 16.6407
     },
     {
       "title": "NVIDIA names Anthropic and OpenAI among first users of its Vera chip",
@@ -30,10 +30,10 @@
       "image": "https://media.thenextweb.com/2026/05/Jensen-Huang-CEO-NVIDIA.avif",
       "published": "2026-06-01T07:36:51+00:00",
       "firstSeen": "2026-06-01T08:00:01.959709+00:00",
-      "lastSeen": "2026-06-01T09:00:01.648799+00:00",
+      "lastSeen": "2026-06-01T10:00:01.323806+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.1084
+      "score": 8.0795
     },
     {
       "title": "NVIDIA Levels Up Local AI Agents Across RTX PCs and DGX Spark",
@@ -46,10 +46,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/05/computex-2026-nv-blog-1280x680-1.jpg",
       "published": "2026-06-01T04:30:11+00:00",
       "firstSeen": "2026-06-01T05:00:01.136943+00:00",
-      "lastSeen": "2026-06-01T09:00:01.648799+00:00",
+      "lastSeen": "2026-06-01T10:00:01.323806+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.3608
+      "score": 7.3342
     },
     {
       "title": "Revolut, Mistral and Wayve founders back Balderton’s ‘Built in Europe’ push",
@@ -65,7 +65,7 @@
       "lastSeen": "2026-06-01T08:00:01.959709+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.4075
+      "score": 6.3812
     },
     {
       "title": "Runway picks London for its European headquarters with a $200m UK pledge",
@@ -78,10 +78,10 @@
       "image": "https://media.thenextweb.com/2026/06/Runaway-founders.avif",
       "published": "2026-06-01T07:48:44+00:00",
       "firstSeen": "2026-06-01T09:00:01.648799+00:00",
-      "lastSeen": "2026-06-01T09:00:01.648799+00:00",
+      "lastSeen": "2026-06-01T10:00:01.323806+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.1143
+      "score": 6.0851
     },
     {
       "title": "Welcome NVIDIA Cosmos 3: The First Open Omni-model for Physical AI Reasoning and Action",
@@ -94,10 +94,10 @@
       "image": "https://cdn-uploads.huggingface.co/production/uploads/6799309995f2227228bc38f3/js_kXqJrfpYZd1hZvwPug.png",
       "published": "2026-06-01T04:44:55+00:00",
       "firstSeen": "2026-06-01T05:00:01.136943+00:00",
-      "lastSeen": "2026-06-01T09:00:01.648799+00:00",
+      "lastSeen": "2026-06-01T10:00:01.323806+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0075
+      "score": 4.9807
     },
     {
       "title": "NVIDIA AI Cloud Ecosystem Expands Worldwide to Meet Global AI Compute Demand",
@@ -110,10 +110,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/05/partner-social-ncp-ai-factory-announcement-1920x1080-1.jpg",
       "published": "2026-06-01T05:00:56+00:00",
       "firstSeen": "2026-06-01T05:12:45.609088+00:00",
-      "lastSeen": "2026-06-01T09:00:01.648799+00:00",
+      "lastSeen": "2026-06-01T10:00:01.323806+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9747
+      "score": 4.9478
     },
     {
       "title": "Meta’s employee mouse-click tracking tool is collecting EU data it said it would not collect",
@@ -126,10 +126,10 @@
       "image": "https://media.thenextweb.com/2026/04/Meta.avif",
       "published": "2026-06-01T06:30:28+00:00",
       "firstSeen": "2026-06-01T08:00:01.959709+00:00",
-      "lastSeen": "2026-06-01T09:00:01.648799+00:00",
+      "lastSeen": "2026-06-01T10:00:01.323806+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.0764
+      "score": 4.0483
     },
     {
       "title": "SoftBank overtakes Toyota as Japan’s most valuable company on the AI rally",
@@ -145,7 +145,7 @@
       "lastSeen": "2026-06-01T09:00:01.648799+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.0296
+      "score": 4.0028
     },
     {
       "title": "Taiwan’s Industry Titans Turbocharge World’s AI Infrastructure Buildout With NVIDIA",
@@ -158,42 +158,42 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/05/Taiwan-AI-Infra-blog-KV-still.jpg",
       "published": "2026-06-01T05:00:41+00:00",
       "firstSeen": "2026-06-01T05:12:45.609088+00:00",
-      "lastSeen": "2026-06-01T09:00:01.648799+00:00",
+      "lastSeen": "2026-06-01T10:00:01.323806+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.8746
+      "score": 3.8477
     },
     {
-      "title": "ASML spinout Invisix raises €20M to see inside the chips optics can’t",
-      "url": "https://thenextweb.com/news/invisix-20m-seed-soft-xray-metrology",
+      "title": "Nvidia looks beyond China’s Unitree for its humanoid robot push",
+      "url": "https://thenextweb.com/news/nvidia-humanoid-robot-makers-unitree",
       "source": "The Next Web",
       "sourceUrl": "https://thenextweb.com/feed",
       "sourceWeight": 0.75,
       "category": "AI",
-      "summary": "Modern chips have a measurement problem that sounds almost philosophical: they have become too complex to look at. As logic and memory devices stack into three dimensions and shrink to a few nanometres, the optical tools that check each layer can no longer resolve the structures buried inside. Invisix, an Eindhoven startup spun out of [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/Invisix.avif",
-      "published": "2026-06-01T06:00:00+00:00",
-      "firstSeen": "2026-06-01T07:00:01.217253+00:00",
-      "lastSeen": "2026-06-01T09:00:01.648799+00:00",
+      "summary": "The first robot in Nvidia’s new research line is a collaboration with three flags on it. The body comes from China’s Unitree, the hands from Singapore-headquartered Sharpa, and the computing brain from Nvidia.After Jensen Huang’s keynote in Taipei on Monday, ahead of the Computex trade show, the company said it plans to repeat the exercise [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/02/Nvidias-Q4-results-could-make-or-break-confidence-in-the-AI-hardware-market.avif",
+      "published": "2026-06-01T09:00:24+00:00",
+      "firstSeen": "2026-06-01T10:00:01.323806+00:00",
+      "lastSeen": "2026-06-01T10:00:01.323806+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.462
+      "score": 3.5201
     },
     {
-      "title": "Dell’s $699 XPS 13 walks straight into MacBook Neo territory",
-      "url": "https://thenextweb.com/news/dell-xps-13-699-macbook-neo-challenger",
+      "title": "PLD Space raises its Kourou launch-complex investment to €35m",
+      "url": "https://thenextweb.com/news/pld-space-kourou-launch-complex-investment",
       "source": "The Next Web",
       "sourceUrl": "https://thenextweb.com/feed",
       "sourceWeight": 0.75,
       "category": "AI",
-      "summary": "Dell unveiled a new XPS 13 at Computex on Sunday with a starting price of $699 for general consumers and $599 for students aged 16 and over, the first time the company’s flagship thin-and-light laptop line has launched anywhere near MacBook Neo territory. The pricing structure is the news: it places Dell’s most-prestige consumer-laptop sub-brand [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/DELL.avif",
-      "published": "2026-06-01T04:36:28+00:00",
-      "firstSeen": "2026-06-01T05:00:01.136943+00:00",
-      "lastSeen": "2026-06-01T08:00:01.959709+00:00",
+      "summary": "The Spanish launch firm says it is the first private operator to commit capital at this scale to the historic Guiana spaceport, with a first MIURA 5 flight still slated for 2026. PLD Space is putting €35m into the launch complex it is building at the Guiana Space Centre in Kourou, the Spanish company announced [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/PLD-Space-Miura.avif",
+      "published": "2026-06-01T08:48:13+00:00",
+      "firstSeen": "2026-06-01T10:00:01.323806+00:00",
+      "lastSeen": "2026-06-01T10:00:01.323806+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7236
+      "score": 3.514
     }
   ],
   "errors": [
