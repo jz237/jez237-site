@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-01T18:15:39.492139+00:00",
+  "updatedAt": "2026-06-01T20:00:01.910682+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -8780,6 +8780,46 @@
     "https://github.com/ggml-org/llama.cpp/releases/tag/b9457": {
       "image": "https://opengraph.githubassets.com/5d1a282c7130fbed3aadfdee97625c1052c8cfad95bb6dc05ed477dcfea1bc37/ggml-org/llama.cpp/releases/tag/b9457",
       "checkedAt": "2026-06-01T18:15:39.492139+00:00"
+    },
+    "https://github.com/ggml-org/llama.cpp/releases/tag/b9464": {
+      "image": "https://opengraph.githubassets.com/10c53af91dcc951ae779ece25cb24561ea2a985a2515d0cb374d2d86b69d9e52/ggml-org/llama.cpp/releases/tag/b9464",
+      "checkedAt": "2026-06-01T20:00:01.910682+00:00"
+    },
+    "https://github.com/ggml-org/llama.cpp/releases/tag/b9460": {
+      "image": "https://opengraph.githubassets.com/e9a10d2e3ccc0fdfa1b8742e6f286b22f045566444c7b9c12fdb4ffd59b26baf/ggml-org/llama.cpp/releases/tag/b9460",
+      "checkedAt": "2026-06-01T20:00:01.910682+00:00"
+    },
+    "https://github.com/ggml-org/llama.cpp/releases/tag/b9458": {
+      "image": "https://opengraph.githubassets.com/116c278a97497da4c9e0a9864e11eb8cc3090de3f564545bc2211ff98c0a2492/ggml-org/llama.cpp/releases/tag/b9458",
+      "checkedAt": "2026-06-01T20:00:01.910682+00:00"
+    },
+    "https://techcrunch.com/2026/06/01/water-access-is-now-a-risk-factor-in-spacexs-ipo": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/GettyImages-2259661359.jpg?w=1024",
+      "checkedAt": "2026-06-01T20:00:01.910682+00:00"
+    },
+    "https://www.techrepublic.com/article/news-softbank-france-ai-data-centers-75b": {
+      "image": "https://assets.techrepublic.com/uploads/2026/06/ChatGPT-Image-Jun-2-2026-12_24_33-AM.png?f=jpeg",
+      "checkedAt": "2026-06-01T20:00:01.910682+00:00"
+    },
+    "https://www.techrepublic.com/article/news-nvidia-microsoft-launch-rtx-spark-pcs-ai-agents": {
+      "image": "https://assets.techrepublic.com/uploads/2026/06/unnamed-30-1-1024x576.png?f=jpeg",
+      "checkedAt": "2026-06-01T20:00:01.910682+00:00"
+    },
+    "https://www.techrepublic.com/article/news-acer-swift-air-14-ai-laptop": {
+      "image": "https://assets.techrepublic.com/uploads/2026/06/tr-06012026-acer-swift-air-14-ai-laptop.jpg?f=jpeg",
+      "checkedAt": "2026-06-01T20:00:01.910682+00:00"
+    },
+    "https://openai.com/index/stargate-michigan-data-center": {
+      "image": "",
+      "checkedAt": "2026-06-01T20:00:01.910682+00:00"
+    },
+    "https://www.techrepublic.com/article/ai-models-break-eu-regulations-study-shows": {
+      "image": "https://assets.techrepublic.com/uploads/2026/06/tr-06012026-ai-models-break-eu-regulations.jpg?f=jpeg",
+      "checkedAt": "2026-06-01T20:00:01.910682+00:00"
+    },
+    "https://www.techrepublic.com/article/news-google-gemini-usage-limits-complaints": {
+      "image": "https://assets.techrepublic.com/uploads/2026/06/tr-06012026-google-gemini-usage-limits-complaints.jpg?f=jpeg",
+      "checkedAt": "2026-06-01T20:00:01.910682+00:00"
     }
   }
 }
