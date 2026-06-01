@@ -1,6 +1,6 @@
 {
   "date": "2026-06-01",
-  "updatedAt": "2026-06-01T08:00:01.959709+00:00",
+  "updatedAt": "2026-06-01T09:00:01.648799+00:00",
   "items": [
     {
       "title": "May 2026 newsletter",
@@ -13,11 +13,11 @@
       "image": "",
       "published": "2026-06-01T04:45:00+00:00",
       "firstSeen": "2026-06-01T05:00:01.136943+00:00",
-      "lastSeen": "2026-06-01T08:00:01.959709+00:00",
+      "lastSeen": "2026-06-01T09:00:01.648799+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 16.695
+      "score": 16.6675
     },
     {
       "title": "NVIDIA names Anthropic and OpenAI among first users of its Vera chip",
@@ -30,10 +30,10 @@
       "image": "https://media.thenextweb.com/2026/05/Jensen-Huang-CEO-NVIDIA.avif",
       "published": "2026-06-01T07:36:51+00:00",
       "firstSeen": "2026-06-01T08:00:01.959709+00:00",
-      "lastSeen": "2026-06-01T08:00:01.959709+00:00",
+      "lastSeen": "2026-06-01T09:00:01.648799+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.1383
+      "score": 8.1084
     },
     {
       "title": "NVIDIA Levels Up Local AI Agents Across RTX PCs and DGX Spark",
@@ -46,10 +46,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/05/computex-2026-nv-blog-1280x680-1.jpg",
       "published": "2026-06-01T04:30:11+00:00",
       "firstSeen": "2026-06-01T05:00:01.136943+00:00",
-      "lastSeen": "2026-06-01T08:00:01.959709+00:00",
+      "lastSeen": "2026-06-01T09:00:01.648799+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.3882
+      "score": 7.3608
     },
     {
       "title": "Revolut, Mistral and Wayve founders back Balderton’s ‘Built in Europe’ push",
@@ -65,7 +65,23 @@
       "lastSeen": "2026-06-01T08:00:01.959709+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.4344
+      "score": 6.4075
+    },
+    {
+      "title": "Runway picks London for its European headquarters with a $200m UK pledge",
+      "url": "https://thenextweb.com/news/runway-london-european-headquarters",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The Nvidia-backed AI video firm joins Anthropic and OpenAI in betting on London, citing customers including the BBC, Fremantle and WPP. Runway is making London its European headquarters and has pledged to put more than $200m into the UK’s AI ecosystem by the end of 2028, the company told CNBC on Monday. The New York [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/Runaway-founders.avif",
+      "published": "2026-06-01T07:48:44+00:00",
+      "firstSeen": "2026-06-01T09:00:01.648799+00:00",
+      "lastSeen": "2026-06-01T09:00:01.648799+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 6.1143
     },
     {
       "title": "Welcome NVIDIA Cosmos 3: The First Open Omni-model for Physical AI Reasoning and Action",
@@ -78,10 +94,10 @@
       "image": "https://cdn-uploads.huggingface.co/production/uploads/6799309995f2227228bc38f3/js_kXqJrfpYZd1hZvwPug.png",
       "published": "2026-06-01T04:44:55+00:00",
       "firstSeen": "2026-06-01T05:00:01.136943+00:00",
-      "lastSeen": "2026-06-01T08:00:01.959709+00:00",
+      "lastSeen": "2026-06-01T09:00:01.648799+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.035
+      "score": 5.0075
     },
     {
       "title": "NVIDIA AI Cloud Ecosystem Expands Worldwide to Meet Global AI Compute Demand",
@@ -94,10 +110,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/05/partner-social-ncp-ai-factory-announcement-1920x1080-1.jpg",
       "published": "2026-06-01T05:00:56+00:00",
       "firstSeen": "2026-06-01T05:12:45.609088+00:00",
-      "lastSeen": "2026-06-01T08:00:01.959709+00:00",
+      "lastSeen": "2026-06-01T09:00:01.648799+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0025
+      "score": 4.9747
     },
     {
       "title": "Meta’s employee mouse-click tracking tool is collecting EU data it said it would not collect",
@@ -110,10 +126,10 @@
       "image": "https://media.thenextweb.com/2026/04/Meta.avif",
       "published": "2026-06-01T06:30:28+00:00",
       "firstSeen": "2026-06-01T08:00:01.959709+00:00",
-      "lastSeen": "2026-06-01T08:00:01.959709+00:00",
+      "lastSeen": "2026-06-01T09:00:01.648799+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.1053
+      "score": 4.0764
     },
     {
       "title": "SoftBank overtakes Toyota as Japan’s most valuable company on the AI rally",
@@ -126,10 +142,10 @@
       "image": "https://media.thenextweb.com/2026/04/softbank-battery-factory-sharp-sakai-ai-data-centres-1.avif",
       "published": "2026-06-01T04:49:41+00:00",
       "firstSeen": "2026-06-01T07:00:01.217253+00:00",
-      "lastSeen": "2026-06-01T08:00:01.959709+00:00",
+      "lastSeen": "2026-06-01T09:00:01.648799+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.0572
+      "score": 4.0296
     },
     {
       "title": "Taiwan’s Industry Titans Turbocharge World’s AI Infrastructure Buildout With NVIDIA",
@@ -142,10 +158,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/05/Taiwan-AI-Infra-blog-KV-still.jpg",
       "published": "2026-06-01T05:00:41+00:00",
       "firstSeen": "2026-06-01T05:12:45.609088+00:00",
-      "lastSeen": "2026-06-01T08:00:01.959709+00:00",
+      "lastSeen": "2026-06-01T09:00:01.648799+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.9024
+      "score": 3.8746
     },
     {
       "title": "ASML spinout Invisix raises €20M to see inside the chips optics can’t",
@@ -158,10 +174,10 @@
       "image": "https://media.thenextweb.com/2026/05/Invisix.avif",
       "published": "2026-06-01T06:00:00+00:00",
       "firstSeen": "2026-06-01T07:00:01.217253+00:00",
-      "lastSeen": "2026-06-01T08:00:01.959709+00:00",
+      "lastSeen": "2026-06-01T09:00:01.648799+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.4905
+      "score": 3.462
     },
     {
       "title": "Dell’s $699 XPS 13 walks straight into MacBook Neo territory",
@@ -177,23 +193,7 @@
       "lastSeen": "2026-06-01T08:00:01.959709+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7511
-    },
-    {
-      "title": "Humanity's Last Exam (HLE) is a multi-modal academic benchmark with 2,500 questions across mathematics, humanities, and natural sciences, designed to test LLM capabilities at the frontier of human knowledge with unambiguous, verifiable solutions",
-      "url": "https://llm-stats.com/ai-news",
-      "source": "LLM Stats AI News",
-      "sourceUrl": "https://llm-stats.com/ai-news",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "",
-      "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-01T07:00:12.207890+00:00",
-      "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-01T07:00:01.217253+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.6799
+      "score": 2.7236
     }
   ],
   "errors": [
