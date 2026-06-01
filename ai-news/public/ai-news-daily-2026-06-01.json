@@ -1,6 +1,6 @@
 {
   "date": "2026-06-01",
-  "updatedAt": "2026-06-01T15:00:02.058795+00:00",
+  "updatedAt": "2026-06-01T16:00:01.502471+00:00",
   "items": [
     {
       "title": "May 2026 newsletter",
@@ -13,11 +13,11 @@
       "image": "",
       "published": "2026-06-01T04:45:00+00:00",
       "firstSeen": "2026-06-01T05:00:01.136943+00:00",
-      "lastSeen": "2026-06-01T15:00:02.058795+00:00",
+      "lastSeen": "2026-06-01T16:00:01.502471+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 16.5174
+      "score": 16.4948
     },
     {
       "title": "b9453",
@@ -30,11 +30,11 @@
       "image": "https://opengraph.githubassets.com/70e3ac50cd906e7b2fb939ec43a9b4f467a4066dc0df40365f86252877945b35/ggml-org/llama.cpp/releases/tag/b9453",
       "published": "2026-06-01T14:57:47+00:00",
       "firstSeen": "2026-06-01T15:00:02.058795+00:00",
-      "lastSeen": "2026-06-01T15:00:02.058795+00:00",
+      "lastSeen": "2026-06-01T16:00:01.502471+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 11.9189
+      "score": 11.8888
     },
     {
       "title": "AI is crushing startup valuations for companies that raised before ChatGPT existed",
@@ -47,10 +47,10 @@
       "image": "https://media.thenextweb.com/2026/06/ai-startup-valuations-pre-chatgpt-fallen-unicorns.avif",
       "published": "2026-06-01T14:10:10+00:00",
       "firstSeen": "2026-06-01T15:00:02.058795+00:00",
-      "lastSeen": "2026-06-01T15:00:02.058795+00:00",
+      "lastSeen": "2026-06-01T16:00:01.502471+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 9.5249
+      "score": 9.4955
     },
     {
       "title": "NVIDIA names Anthropic and OpenAI among first users of its Vera chip",
@@ -66,7 +66,7 @@
       "lastSeen": "2026-06-01T14:11:22.608642+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.946
+      "score": 7.9214
     },
     {
       "title": "NVIDIA Levels Up Local AI Agents Across RTX PCs and DGX Spark",
@@ -79,10 +79,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/05/computex-2026-nv-blog-1280x680-1.jpg",
       "published": "2026-06-01T04:30:11+00:00",
       "firstSeen": "2026-06-01T05:00:01.136943+00:00",
-      "lastSeen": "2026-06-01T15:00:02.058795+00:00",
+      "lastSeen": "2026-06-01T16:00:01.502471+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.2118
+      "score": 7.1893
     },
     {
       "title": "DuckDuckGo makes its ‘no-AI’ search engine easier to access as its traffic booms",
@@ -95,10 +95,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/DuckDuckGo_NoAI.png?resize=1200%2C784",
       "published": "2026-06-01T14:49:10+00:00",
       "firstSeen": "2026-06-01T15:00:02.058795+00:00",
-      "lastSeen": "2026-06-01T15:00:02.058795+00:00",
+      "lastSeen": "2026-06-01T16:00:01.502471+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.4845
+      "score": 6.4545
     },
     {
       "title": "Revolut, Mistral and Wayve founders back Balderton’s ‘Built in Europe’ push",
@@ -114,7 +114,7 @@
       "lastSeen": "2026-06-01T08:00:01.959709+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.2605
+      "score": 6.2383
     },
     {
       "title": "Runway picks London for its European headquarters with a $200m UK pledge",
@@ -130,7 +130,7 @@
       "lastSeen": "2026-06-01T14:11:22.608642+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.9509
+      "score": 5.9262
     },
     {
       "title": "Salesforce is acquiring Contentful to give Agentforce a content layer that can assemble experiences on the fly",
@@ -143,10 +143,10 @@
       "image": "https://media.thenextweb.com/2026/06/salesforce-acquires-contentful-headless-cms-agentforce.avif",
       "published": "2026-06-01T14:21:30+00:00",
       "firstSeen": "2026-06-01T15:00:02.058795+00:00",
-      "lastSeen": "2026-06-01T15:00:02.058795+00:00",
+      "lastSeen": "2026-06-01T16:00:01.502471+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.5306
+      "score": 5.501
     },
     {
       "title": "Beyond LLMs: Why Scalable Enterprise AI Adoption Depends on Agent Logic",
@@ -159,10 +159,10 @@
       "image": "https://cdn-uploads.huggingface.co/production/uploads/65b12ed52be9660f0b7e5f72/zJb7AUFeIDNyokJYMK1Ae.jpeg",
       "published": "2026-06-01T13:51:18+00:00",
       "firstSeen": "2026-06-01T14:00:01.238741+00:00",
-      "lastSeen": "2026-06-01T15:00:02.058795+00:00",
+      "lastSeen": "2026-06-01T16:00:01.502471+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0955
+      "score": 5.0664
     },
     {
       "title": "Welcome NVIDIA Cosmos 3: The First Open Omni-model for Physical AI Reasoning and Action",
@@ -175,10 +175,10 @@
       "image": "https://cdn-uploads.huggingface.co/production/uploads/6799309995f2227228bc38f3/js_kXqJrfpYZd1hZvwPug.png",
       "published": "2026-06-01T04:44:55+00:00",
       "firstSeen": "2026-06-01T05:00:01.136943+00:00",
-      "lastSeen": "2026-06-01T15:00:02.058795+00:00",
+      "lastSeen": "2026-06-01T16:00:01.502471+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8574
+      "score": 4.8347
     },
     {
       "title": "NVIDIA AI Cloud Ecosystem Expands Worldwide to Meet Global AI Compute Demand",
@@ -191,10 +191,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/05/partner-social-ncp-ai-factory-announcement-1920x1080-1.jpg",
       "published": "2026-06-01T05:00:56+00:00",
       "firstSeen": "2026-06-01T05:12:45.609088+00:00",
-      "lastSeen": "2026-06-01T15:00:02.058795+00:00",
+      "lastSeen": "2026-06-01T16:00:01.502471+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8236
+      "score": 4.8007
     }
   ],
   "errors": [
