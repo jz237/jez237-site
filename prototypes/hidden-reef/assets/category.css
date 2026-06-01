@@ -285,22 +285,6 @@ body.department-page .section-band + .section-band {
   transform: scale(var(--modal-image-zoom, 2.55));
   transform-origin: var(--modal-zoom-x, 50%) var(--modal-zoom-y, 50%);
 }
-.link-modal__zoom-hint {
-  position: absolute;
-  left: 14px;
-  bottom: 14px;
-  z-index: 2;
-  padding: 6px 9px;
-  border-radius: 6px;
-  color: #eaf8fc;
-  background: rgba(3,24,38,.78);
-  box-shadow: 0 6px 14px rgba(0,0,0,.22);
-  font-size: 11px;
-  font-weight: 900;
-  letter-spacing: .05em;
-  text-transform: uppercase;
-  pointer-events: none;
-}
 .link-modal__thumbs {
   display: flex;
   grid-column: 1;
