@@ -1,8 +1,8 @@
 {
-  "updatedAt": "2026-06-02T09:00:02.007740+00:00",
+  "updatedAt": "2026-06-02T10:00:01.464247+00:00",
   "items": [
     {
-      "title": "Shannan Liu, Peifeng Li, Yaxin Fan, Qiaoming Zhu",
+      "title": "DraDDP: A Multimodal Multi-Party Dialogue Discourse Parsing Dataset",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -10,12 +10,92 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-02T09:00:18.565909+00:00",
+      "published": "2026-06-02T10:00:12.136293+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-02T09:00:02.007740+00:00",
+      "lastSeen": "2026-06-02T10:00:01.464247+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.76
+    },
+    {
+      "title": "Uber picks Munich for its next robotaxi push, with Autobrains and Nvidia",
+      "url": "https://thenextweb.com/news/uber-autobrains-nvidia-munich-robotaxi",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The ride-hailing company is betting that Germany’s automotive heartland, and a less sensor-heavy approach to autonomy, can finally make robotaxis scale in Europe. Munich is about to become a test of a particular theory: that the cheapest way to put a driverless taxi on a European street is to stop building special cars for it. [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/Uber.avif",
+      "published": "2026-06-02T09:46:30+00:00",
+      "firstSeen": "2026-06-02T10:00:01.464247+00:00",
+      "lastSeen": "2026-06-02T10:00:01.464247+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.36
+      "score": 3.2431
+    },
+    {
+      "title": "b9470",
+      "url": "https://github.com/ggml-org/llama.cpp/releases/tag/b9470",
+      "source": "llama.cpp Releases",
+      "sourceUrl": "https://github.com/ggml-org/llama.cpp/releases.atom",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "hexagon: MUL_MAT, MUL_MAT_ID, FLASH_ATTN and GDN cleanup and optimizations for latest models  (#23989)\n\n\nhex-mm: initial support for F32 * F32 -&gt; F32 matmuls\n\n\nhex-rms-norm: fix src1 stride use in fused rms_norm_mul\n\n\nhex-ops: clear spad pointers in the ops that clober it\n\n\nThis fixes an odd case where fused rms-norm-mul was failing but only in qwen3.5-2B and only at searth op-bath sizes.\n\nhmx-mm: add support for F32 * F32 -&gt; F32 matmul_2d on HMX\n\nDecided to use Q4_0 * F32 -&gt; F32 matmul for this.\nQ4_0 gets dequantized and tiled into F16, and here we quantize and tile F32 into F16.\nSup",
+      "image": "https://opengraph.githubassets.com/247d07b5fd7dbfe33592a2d42e75457435a51f55974f75603c107353cddddd31/ggml-org/llama.cpp/releases/tag/b9470",
+      "published": "2026-06-02T09:37:18+00:00",
+      "firstSeen": "2026-06-02T10:00:01.464247+00:00",
+      "lastSeen": "2026-06-02T10:00:01.464247+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.5085
+    },
+    {
+      "title": "The Trump Administration Is at War With Itself Over AI Regulation",
+      "url": "https://www.wired.com/story/the-white-house-is-at-war-with-itself-over-ai-regulation",
+      "source": "Wired AI",
+      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Donald Trump killed an executive order to regulate AI. Now, administration officials and AI executives are trying to figure out if there’s anything left to piece back together.",
+      "image": "https://media.wired.com/photos/6a1a11a6b6c847bce706bb1b/master/pass/pol_AI_GettyImages-2277330455.jpg",
+      "published": "2026-06-02T09:30:00+00:00",
+      "firstSeen": "2026-06-02T10:00:01.464247+00:00",
+      "lastSeen": "2026-06-02T10:00:01.464247+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2748
+    },
+    {
+      "title": "Jensen Huang says pay workers ‘as much as possible’ days after Nvidia commits 50% of free cash to shareholders",
+      "url": "https://thenextweb.com/news/huang-workers-paid-as-much-as-possible-samsung",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Jensen Huang’s comments at Computex defend the Samsung bonus structure that delivers $400,000 to chip engineers, but land alongside an $80bn Nvidia buyback announced two weeks ago. Jensen Huang, the Nvidia chief executive, told reporters on the sidelines of Computex in Taipei on Tuesday that workers should be paid “as much as possible,” framing the [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/Jensen-Huang-Taipei.avif",
+      "published": "2026-06-02T09:11:53+00:00",
+      "firstSeen": "2026-06-02T10:00:01.464247+00:00",
+      "lastSeen": "2026-06-02T10:00:01.464247+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1258
+    },
+    {
+      "title": "How small businesses can leverage AI",
+      "url": "https://www.technologyreview.com/2026/06/02/1138227/how-small-businesses-can-leverage-ai",
+      "source": "MIT Technology Review AI",
+      "sourceUrl": "https://www.technologyreview.com/topic/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "This article is from Making AI Work, MIT Technology Review’s limited-run newsletter examining how to apply LLMs across industries. To receive it in your inbox,sign up here. From accounting to design to market research and product development, there’s a staggering breadth of skills needed to run a business. A large company can hire experts to&#8230;",
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/06/4729b751-06a4-3828-9bb4-1983e460947d.jpg?resize=1200%2C600",
+      "published": "2026-06-02T09:00:00+00:00",
+      "firstSeen": "2026-06-02T10:00:01.464247+00:00",
+      "lastSeen": "2026-06-02T10:00:01.464247+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "framework_or_plumbing",
+      "score": 1.6599
     },
     {
       "title": "Australia’s biggest bank says corporate AI is racking up bigger bills and producing ‘work slop’",
@@ -28,10 +108,10 @@
       "image": "https://media.thenextweb.com/2026/05/Commonwealth-Bank-of-Australia.avif",
       "published": "2026-06-02T08:44:33+00:00",
       "firstSeen": "2026-06-02T09:00:02.007740+00:00",
-      "lastSeen": "2026-06-02T09:00:02.007740+00:00",
+      "lastSeen": "2026-06-02T10:00:01.464247+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1421
+      "score": 2.1122
     },
     {
       "title": "SEALSQ takes majority of WeCan to build a post-quantum AI compliance co-pilot for private banks",
@@ -44,10 +124,10 @@
       "image": "https://media.thenextweb.com/2026/06/SEALSQ.avif",
       "published": "2026-06-02T08:39:11+00:00",
       "firstSeen": "2026-06-02T09:00:02.007740+00:00",
-      "lastSeen": "2026-06-02T09:00:02.007740+00:00",
+      "lastSeen": "2026-06-02T10:00:01.464247+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1394
+      "score": 2.1096
     },
     {
       "title": "ByteDance and Oracle are using Arm’s in-house AGI CPU, completing the hyperscaler-x86 exit",
@@ -60,10 +140,10 @@
       "image": "https://media.thenextweb.com/2026/06/Arm-CEO-Rene-Haas.avif",
       "published": "2026-06-02T08:33:21+00:00",
       "firstSeen": "2026-06-02T09:00:02.007740+00:00",
-      "lastSeen": "2026-06-02T09:00:02.007740+00:00",
+      "lastSeen": "2026-06-02T10:00:01.464247+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1365
+      "score": 2.1067
     },
     {
       "title": "Vinted Ventures backs Tilt’s $26M live-commerce round as Whatnot pressure mounts",
@@ -76,10 +156,10 @@
       "image": "https://media.thenextweb.com/2026/06/Tilt.avif",
       "published": "2026-06-02T08:21:59+00:00",
       "firstSeen": "2026-06-02T09:00:02.007740+00:00",
-      "lastSeen": "2026-06-02T09:00:02.007740+00:00",
+      "lastSeen": "2026-06-02T10:00:01.464247+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2308
+      "score": 3.2012
     },
     {
       "title": "Mach Industries quadruples to $1.8bn as the Pentagon’s drone-dominance push lifts every defence-tech valuation",
@@ -92,10 +172,10 @@
       "image": "https://media.thenextweb.com/2026/06/Mach-Industries-.avif",
       "published": "2026-06-02T08:10:52+00:00",
       "firstSeen": "2026-06-02T09:00:02.007740+00:00",
-      "lastSeen": "2026-06-02T09:00:02.007740+00:00",
+      "lastSeen": "2026-06-02T10:00:01.464247+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1252
+      "score": 2.0958
     },
     {
       "title": "Amazon moves Prime Day back to June and keeps it a four-day event",
@@ -108,10 +188,10 @@
       "image": "https://media.thenextweb.com/2026/04/Amazon.avif",
       "published": "2026-06-02T07:48:50+00:00",
       "firstSeen": "2026-06-02T09:00:02.007740+00:00",
-      "lastSeen": "2026-06-02T09:00:02.007740+00:00",
+      "lastSeen": "2026-06-02T10:00:01.464247+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1143
+      "score": 2.0852
     },
     {
       "title": "STMicroelectronics doubles its data-centre revenue forecast to $1bn",
@@ -124,10 +204,10 @@
       "image": "https://media.thenextweb.com/2026/05/STMicroelectronics.avif",
       "published": "2026-06-02T07:36:17+00:00",
       "firstSeen": "2026-06-02T08:00:01.606189+00:00",
-      "lastSeen": "2026-06-02T09:00:02.007740+00:00",
+      "lastSeen": "2026-06-02T10:00:01.464247+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.5082
+      "score": 3.4792
     },
     {
       "title": "Alphabet to raise $80bn in equity to fund its AI spending",
@@ -140,10 +220,10 @@
       "image": "https://media.thenextweb.com/2026/03/Alphabet-handed-Sundar-Pichai-a-692M-pay-package.avif",
       "published": "2026-06-02T07:31:02+00:00",
       "firstSeen": "2026-06-02T08:00:01.606189+00:00",
-      "lastSeen": "2026-06-02T09:00:02.007740+00:00",
+      "lastSeen": "2026-06-02T10:00:01.464247+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1056
+      "score": 2.0767
     },
     {
       "title": "b9469",
@@ -156,10 +236,10 @@
       "image": "https://opengraph.githubassets.com/a400e3300a7d9e2c8cb9b361a7dd3cb5b57318071d1726e81b5a353a3d6b2e04/ggml-org/llama.cpp/releases/tag/b9469",
       "published": "2026-06-02T07:18:27+00:00",
       "firstSeen": "2026-06-02T08:00:01.606189+00:00",
-      "lastSeen": "2026-06-02T09:00:02.007740+00:00",
+      "lastSeen": "2026-06-02T10:00:01.464247+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 0.1695
+      "score": 0.1407
     },
     {
       "title": "Why Financial Institutions Are Converging on Transaction Foundation Models to Build Their Own Intelligence",
@@ -172,11 +252,11 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/fsi-press-new-payments-kv-1920x1080-5150250-1.jpg",
       "published": "2026-06-02T06:00:36+00:00",
       "firstSeen": "2026-06-02T06:53:28.339289+00:00",
-      "lastSeen": "2026-06-02T09:00:02.007740+00:00",
+      "lastSeen": "2026-06-02T10:00:01.464247+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 10.5023
+      "score": 10.4746
     },
     {
       "title": "b9468",
@@ -189,10 +269,10 @@
       "image": "https://opengraph.githubassets.com/04606d1442103b7ed25da34c3f6e0a8360a91d12961ff5eef6c0ede20bcadd92/ggml-org/llama.cpp/releases/tag/b9468",
       "published": "2026-06-02T05:54:57+00:00",
       "firstSeen": "2026-06-02T06:00:01.306892+00:00",
-      "lastSeen": "2026-06-02T09:00:02.007740+00:00",
+      "lastSeen": "2026-06-02T10:00:01.464247+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.8297
+      "score": 3.802
     },
     {
       "title": "Pasted File Editor",
@@ -205,10 +285,10 @@
       "image": "",
       "published": "2026-06-02T04:13:36+00:00",
       "firstSeen": "2026-06-02T05:00:01.988171+00:00",
-      "lastSeen": "2026-06-02T09:00:02.007740+00:00",
+      "lastSeen": "2026-06-02T10:00:01.464247+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 4.1534
+      "score": 4.127
     },
     {
       "title": "v1.87.0",
@@ -221,10 +301,10 @@
       "image": "https://opengraph.githubassets.com/39926c571856ad8a9f5b42f8c974345874e3338547b282c449d7a7d41246330d/BerriAI/litellm/releases/tag/v1.87.0",
       "published": "2026-06-02T04:12:22+00:00",
       "firstSeen": "2026-06-02T05:00:01.988171+00:00",
-      "lastSeen": "2026-06-02T09:00:02.007740+00:00",
+      "lastSeen": "2026-06-02T10:00:01.464247+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8528
+      "score": 2.8265
     },
     {
       "title": "b9467",
@@ -237,10 +317,10 @@
       "image": "https://opengraph.githubassets.com/a2c9ab4e9dba8f2e8daed66cb0a7f54f6b8c4723d94eff2eb79fc701b276ed69/ggml-org/llama.cpp/releases/tag/b9467",
       "published": "2026-06-02T03:31:52+00:00",
       "firstSeen": "2026-06-02T04:00:01.596821+00:00",
-      "lastSeen": "2026-06-02T09:00:02.007740+00:00",
+      "lastSeen": "2026-06-02T10:00:01.464247+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 0.065
+      "score": 0.0391
     },
     {
       "title": "b9466",
@@ -253,10 +333,10 @@
       "image": "https://opengraph.githubassets.com/026498f1325244f4c4d223f3d71014f5ef0413d52e988eb0e594600056554481/ggml-org/llama.cpp/releases/tag/b9466",
       "published": "2026-06-02T02:44:14+00:00",
       "firstSeen": "2026-06-02T03:00:01.950539+00:00",
-      "lastSeen": "2026-06-02T09:00:02.007740+00:00",
+      "lastSeen": "2026-06-02T10:00:01.464247+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 0.0443
+      "score": 0.019
     },
     {
       "title": "v1.85.3",
@@ -269,10 +349,10 @@
       "image": "https://opengraph.githubassets.com/b1f1a7c17b7bf9bb50bea2074921b960dbb70007fb31e675ad02af88ee6d7245/BerriAI/litellm/releases/tag/v1.85.3",
       "published": "2026-06-02T02:30:54+00:00",
       "firstSeen": "2026-06-02T03:00:01.950539+00:00",
-      "lastSeen": "2026-06-02T09:00:02.007740+00:00",
+      "lastSeen": "2026-06-02T10:00:01.464247+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8087
+      "score": 2.7835
     },
     {
       "title": "NVIDIA Jetson Brings Agentic AI to the Physical World",
@@ -285,10 +365,26 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/robotics-press-jetson-agentic-ready-cptx26-1920x1080-5180550.jpg",
       "published": "2026-06-02T02:00:40+00:00",
       "firstSeen": "2026-06-02T03:00:01.950539+00:00",
-      "lastSeen": "2026-06-02T09:00:02.007740+00:00",
+      "lastSeen": "2026-06-02T10:00:01.464247+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0959
+      "score": 5.0711
+    },
+    {
+      "title": "Codex is becoming a productivity tool for everyone",
+      "url": "https://openai.com/index/codex-for-knowledge-work",
+      "source": "OpenAI News",
+      "sourceUrl": "https://openai.com/news/rss.xml",
+      "sourceWeight": 1.0,
+      "category": "AI",
+      "summary": "The Next Era of Knowledge Work report explores how Codex is transforming productivity through AI-powered research, data analysis, workflow automation, and content creation.",
+      "image": "",
+      "published": "2026-06-02T02:00:00+00:00",
+      "firstSeen": "2026-06-02T10:00:01.464247+00:00",
+      "lastSeen": "2026-06-02T10:00:01.464247+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.7808
     },
     {
       "title": "v0.30.0",
@@ -301,11 +397,11 @@
       "image": "https://opengraph.githubassets.com/48bf98a01cb0bcc7ac92f95621c97939c42fa5de9658f1e574becdb9c1456e98/ollama/ollama",
       "published": "2026-06-02T00:32:00+00:00",
       "firstSeen": "2026-06-02T00:00:01.509717+00:00",
-      "lastSeen": "2026-06-02T09:00:02.007740+00:00",
+      "lastSeen": "2026-06-02T10:00:01.464247+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 15.6295
+      "score": 15.6056
     },
     {
       "title": "Alphabet plans to raise $80B to pay for AI buildout",
@@ -318,10 +414,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/02/GettyImages-2173545265.jpg?resize=1200%2C800",
       "published": "2026-06-01T22:55:09+00:00",
       "firstSeen": "2026-06-01T23:00:01.883335+00:00",
-      "lastSeen": "2026-06-02T09:00:02.007740+00:00",
+      "lastSeen": "2026-06-02T10:00:01.464247+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0213
+      "score": 1.9986
     },
     {
       "title": "Nvidia chases $200B CPU market with AI agent PCs from Microsoft, Dell, and HP",
@@ -334,10 +430,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/03/GettyImages-2205761886.jpg?resize=1200%2C828",
       "published": "2026-06-01T21:35:00+00:00",
       "firstSeen": "2026-06-01T22:00:01.536287+00:00",
-      "lastSeen": "2026-06-02T09:00:02.007740+00:00",
+      "lastSeen": "2026-06-02T10:00:01.464247+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.691
+      "score": 4.6691
     },
     {
       "title": "Hackers Simply Asked Meta AI to Give Them Access to High-Profile Instagram Accounts. It Worked",
@@ -350,10 +446,10 @@
       "image": "",
       "published": "2026-06-01T21:14:47+00:00",
       "firstSeen": "2026-06-01T22:00:01.536287+00:00",
-      "lastSeen": "2026-06-02T09:00:02.007740+00:00",
+      "lastSeen": "2026-06-02T10:00:01.464247+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9836
+      "score": 4.9618
     },
     {
       "title": "GoPro warned it may not survive. The AI memory crunch is killing companies that make things people hold.",
@@ -369,7 +465,7 @@
       "lastSeen": "2026-06-02T09:00:02.007740+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.223
+      "score": 4.2018
     },
     {
       "title": "Florida sues OpenAI, Sam Altman, in first-of-its-kind lawsuit over violent incidents",
@@ -382,10 +478,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/GettyImages-2273245180.jpg?resize=1200%2C800",
       "published": "2026-06-01T20:03:40+00:00",
       "firstSeen": "2026-06-01T21:00:01.828388+00:00",
-      "lastSeen": "2026-06-02T09:00:02.007740+00:00",
+      "lastSeen": "2026-06-02T10:00:01.464247+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.9579
+      "score": 8.9368
     },
     {
       "title": "This could be Windows’ M1 moment — but expect it to cost a ton",
@@ -398,10 +494,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/Screenshot_20260531_212701.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C9.3778095086996%2C100%2C81.244380982601&amp%3Bw=1200",
       "published": "2026-06-01T20:02:31+00:00",
       "firstSeen": "2026-06-01T21:00:01.828388+00:00",
-      "lastSeen": "2026-06-02T09:00:02.007740+00:00",
+      "lastSeen": "2026-06-02T10:00:01.464247+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1275
+      "score": 3.1065
     },
     {
       "title": "Gemini’s new AI agent is about as good as Google’s demo",
@@ -414,10 +510,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/lcimg-0ebbe911-9fbb-4f68-97b0-b7361d7cb53c.jpeg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.604950381935%2C100%2C78.79009923613&amp%3Bw=1200",
       "published": "2026-06-01T20:00:00+00:00",
       "firstSeen": "2026-06-01T21:00:01.828388+00:00",
-      "lastSeen": "2026-06-02T09:00:02.007740+00:00",
+      "lastSeen": "2026-06-02T10:00:01.464247+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.7266
+      "score": 10.7056
     },
     {
       "title": "b9464",
@@ -430,10 +526,10 @@
       "image": "https://opengraph.githubassets.com/10c53af91dcc951ae779ece25cb24561ea2a985a2515d0cb374d2d86b69d9e52/ggml-org/llama.cpp/releases/tag/b9464",
       "published": "2026-06-01T19:58:39+00:00",
       "firstSeen": "2026-06-01T20:00:01.910682+00:00",
-      "lastSeen": "2026-06-02T09:00:02.007740+00:00",
+      "lastSeen": "2026-06-02T10:00:01.464247+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9861
+      "score": 4.9651
     },
     {
       "title": "Dozens of Red Hat packages backdoored through its official NPM channel",
@@ -446,10 +542,10 @@
       "image": "https://cdn.arstechnica.net/wp-content/uploads/2026/06/redhat-1152x648.jpg",
       "published": "2026-06-01T19:49:09+00:00",
       "firstSeen": "2026-06-01T21:00:01.828388+00:00",
-      "lastSeen": "2026-06-02T09:00:02.007740+00:00",
+      "lastSeen": "2026-06-02T10:00:01.464247+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8127
+      "score": 1.7918
     },
     {
       "title": "Apple is building a bill-splitting feature that photographs receipts and assigns items to friends",
@@ -465,7 +561,7 @@
       "lastSeen": "2026-06-02T09:00:02.007740+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9118
+      "score": 2.8909
     },
     {
       "title": "Hackers hijacked Instagram accounts by asking Meta’s own AI chatbot to reset the password",
@@ -481,7 +577,7 @@
       "lastSeen": "2026-06-02T08:00:01.606189+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8096
+      "score": 1.7888
     },
     {
       "title": "IBM is up 30% in a month as Barclays says its software business is the antidote to the SaaSpocalypse",
@@ -497,7 +593,7 @@
       "lastSeen": "2026-06-02T08:00:01.606189+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -1.2918
+      "score": -1.3126
     },
     {
       "title": "b9460",
@@ -510,10 +606,10 @@
       "image": "https://opengraph.githubassets.com/e9a10d2e3ccc0fdfa1b8742e6f286b22f045566444c7b9c12fdb4ffd59b26baf/ggml-org/llama.cpp/releases/tag/b9460",
       "published": "2026-06-01T19:25:21+00:00",
       "firstSeen": "2026-06-01T20:00:01.910682+00:00",
-      "lastSeen": "2026-06-02T09:00:02.007740+00:00",
+      "lastSeen": "2026-06-02T10:00:01.464247+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 1.8744
+      "score": 1.8537
     },
     {
       "title": "Meta&#8217;s own AI was exploited to hijack Instagram accounts",
@@ -526,10 +622,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/meta-chatbot-support.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C9.2919928911091%2C100%2C81.416014217782&amp%3Bw=1200",
       "published": "2026-06-01T19:20:47+00:00",
       "firstSeen": "2026-06-01T21:00:01.828388+00:00",
-      "lastSeen": "2026-06-02T09:00:02.007740+00:00",
+      "lastSeen": "2026-06-02T10:00:01.464247+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0128
+      "score": 1.9922
     },
     {
       "title": "A WordPress plugin sold to 15,000 sites has a flaw that lets anyone create an admin account, and attackers are already using it",
@@ -545,103 +641,7 @@
       "lastSeen": "2026-06-02T08:00:01.606189+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7983
-    },
-    {
-      "title": "b9459",
-      "url": "https://github.com/ggml-org/llama.cpp/releases/tag/b9459",
-      "source": "llama.cpp Releases",
-      "sourceUrl": "https://github.com/ggml-org/llama.cpp/releases.atom",
-      "sourceWeight": 0.8,
-      "category": "AI",
-      "summary": "metal: template GLU kernels to support f16/f32 (#23882)\nDrops the hardcoded f32 GLU kernels in favor of a single template. We now load/store in the native tensor type (half or float) to save memory bandwidth, but keep the actual ALU compute in float to avoid exploding math in geglu/swiglu. Also opened up the dispatch gate to allow f16 inputs.\n\nmacOS/iOS:\n\nmacOS Apple Silicon (arm64)\nmacOS Apple Silicon (arm64, KleidiAI enabled) DISABLED\nmacOS Intel (x64)\niOS XCFramework\n\nLinux:\n\nUbuntu x64 (CPU)\nUbuntu arm64 (CPU)\nUbuntu s390x (CPU)\nUbuntu x64 (Vulkan)\nUbuntu arm64 (Vulkan)\nUbuntu x64 (ROCm 7.",
-      "image": "https://opengraph.githubassets.com/b4bdaaed6b62e970e413d922ac24d102f520cc201cf26233f7c1442e50949ead/ggml-org/llama.cpp/releases/tag/b9459",
-      "published": "2026-06-01T19:00:15+00:00",
-      "firstSeen": "2026-06-01T19:00:01.479164+00:00",
-      "lastSeen": "2026-06-02T09:00:02.007740+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "framework_or_plumbing",
-      "score": 1.2657
-    },
-    {
-      "title": "Former Meta CTO raises $250 million for climate tech as the rest of venture capital chases AI",
-      "url": "https://thenextweb.com/news/gigascale-capital-250m-climate-fund-meta-cto-schroepfer",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Gigascale Capital, the venture firm led by former Meta chief technology officer Mike Schroepfer, has raised a $250 million fund to invest in energy, grid infrastructure, and critical minerals startups. The fund, announced on Monday, is Gigascale’s second and its first to include institutional investors. It arrives as most of the venture capital industry has pivoted [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/gigascale-capital-250m-climate-fund-meta-cto-schroepfer.avif",
-      "published": "2026-06-01T18:55:09+00:00",
-      "firstSeen": "2026-06-01T20:00:01.910682+00:00",
-      "lastSeen": "2026-06-02T08:00:01.606189+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.4939
-    },
-    {
-      "title": "A GTA V cheat service that promised “enhanced privacy” just got hacked, exposing 64,000 accounts",
-      "url": "https://thenextweb.com/news/gta-v-cheat-service-atlas-menu-hacked-data-breach",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Atlas Menu, a cheat service for Grand Theft Auto V’s online mode, has been hacked, exposing the personal data of nearly 64,000 users. The stolen data included email addresses, usernames, hashed passwords, IP addresses, and support tickets, according to data breach notification service Have I Been Pwned. The breach was claimed by a hacker whose stated [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/gta-v-cheat-service-atlas-menu-hacked-data-breach-1.avif",
-      "published": "2026-06-01T18:46:04+00:00",
-      "firstSeen": "2026-06-01T20:00:01.910682+00:00",
-      "lastSeen": "2026-06-02T08:00:01.606189+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.7908
-    },
-    {
-      "title": "Tencent is letting PayPal users pay through WeChat’s merchant network, solving China’s tourist payment problem",
-      "url": "https://thenextweb.com/news/tencent-is-letting-paypal-users-pay-through-wechats-merchant-network-solving-chinas-tourist-payment-problem",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Tencent has announced that PayPal users will be able to make cashless payments in China by scanning QR codes through WeChat Pay’s merchant network. The integration, which will be available to US-based PayPal users first with more markets to follow, connects PayPal’s 400 million-plus user base to the payment infrastructure that covers virtually every taxi, restaurant, and [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/tencent-wechat-pay-paypal-china-tourism-qr-code.avif",
-      "published": "2026-06-01T18:36:24+00:00",
-      "firstSeen": "2026-06-01T20:00:01.910682+00:00",
-      "lastSeen": "2026-06-02T08:00:01.606189+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.7875
-    },
-    {
-      "title": "b9458",
-      "url": "https://github.com/ggml-org/llama.cpp/releases/tag/b9458",
-      "source": "llama.cpp Releases",
-      "sourceUrl": "https://github.com/ggml-org/llama.cpp/releases.atom",
-      "sourceWeight": 0.8,
-      "category": "AI",
-      "summary": "vulkan: don't hold the device mutex while compiling pipelines (#23641)\n\nvulkan: don't hold the device mutex while compiling pipelines\n\nWe need to hold a lock while we traverse all pipelines and lazily initialize\nthem, but we don't need to hold it while the pipeline is being compiled. And\nit doesn't need to be the same lock as the device mutex. We call load_shaders\neach time a pipeline is needed, so we only need to compile that one pipeline\n(and, for example, don't want to end up compiling a pipeline that another\nthread should be compiling).\n\nremove 'needed'\n\n\nmacOS/iOS:\n\nmacOS Apple Silicon (a",
-      "image": "https://opengraph.githubassets.com/116c278a97497da4c9e0a9864e11eb8cc3090de3f564545bc2211ff98c0a2492/ggml-org/llama.cpp/releases/tag/b9458",
-      "published": "2026-06-01T18:32:25+00:00",
-      "firstSeen": "2026-06-01T20:00:01.910682+00:00",
-      "lastSeen": "2026-06-02T09:00:02.007740+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.9561
-    },
-    {
-      "title": "The space stock rally is cracking as investors prepare to swap proxies for SpaceX itself",
-      "url": "https://thenextweb.com/news/the-space-stock-rally-is-cracking-as-investors-prepare-to-swap-proxies-for-spacex-itself",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "A rally that carried space-related stocks to extraordinary gains this year is showing serious cracks. The Procure Space ETF, which trades under the ticker UFO, has dropped almost 11% in just two sessions. Intuitive Machines and Rocket Lab have each fallen roughly 17%. AST SpaceMobile, which had become a retail-trading favourite, has sunk nearly 23%. The [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/spacex-starship-v3-flight-12-ipo-superheavy-failure.avif",
-      "published": "2026-06-01T18:28:09+00:00",
-      "firstSeen": "2026-06-01T20:00:01.910682+00:00",
-      "lastSeen": "2026-06-02T06:53:28.339289+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.7847
+      "score": 1.7778
     },
     {
       "title": "The Life Scientific: Seth Berkley",
@@ -654,10 +654,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-01T20:00:00+00:00",
       "firstSeen": "2026-06-01T21:00:01.828388+00:00",
-      "lastSeen": "2026-06-02T09:00:02.007740+00:00",
+      "lastSeen": "2026-06-02T10:00:01.464247+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9566
+      "score": 1.9356
     },
     {
       "title": "Dean Lomax on discovering ichthyosaurs and defying nay-sayers",
@@ -670,10 +670,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-26T08:30:00+00:00",
       "firstSeen": "2026-05-26T08:41:33.144051+00:00",
-      "lastSeen": "2026-06-02T09:00:02.007740+00:00",
+      "lastSeen": "2026-06-02T10:00:01.464247+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.1302
+      "score": 1.1299
     },
     {
       "title": "The Life Scientific: Hiranya Peiris",
@@ -686,10 +686,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-25T20:00:00+00:00",
       "firstSeen": "2026-05-25T21:00:01.605108+00:00",
-      "lastSeen": "2026-06-02T09:00:02.007740+00:00",
+      "lastSeen": "2026-06-02T10:00:01.464247+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 0.2972
+      "score": 0.297
     },
     {
       "title": "Helen Hastie on the future of human-robot relations",
