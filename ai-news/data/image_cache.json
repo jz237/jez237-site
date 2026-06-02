@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-02T19:00:01.885376+00:00",
+  "updatedAt": "2026-06-02T20:00:01.996967+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -9024,6 +9024,26 @@
     "https://www.theverge.com/tech/941517/google-phone-scammer-ai-impersonation": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/0.-Fake-call-detection-header.png?quality=90&amp;strip=all&amp;crop=0%2C3.579433208423%2C100%2C92.841133583154&amp;w=1200",
       "checkedAt": "2026-06-02T19:00:01.885376+00:00"
+    },
+    "https://www.theverge.com/tech/941738/microsoft-build-2026-biggest-announcements": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/nadella-build-2026.png?quality=90&amp;strip=all&amp;crop=0%2C2.9395307941329%2C100%2C94.120938411734&amp;w=1200",
+      "checkedAt": "2026-06-02T20:00:01.996967+00:00"
+    },
+    "https://techcrunch.com/2026/06/02/uber-caps-employee-ai-spending-after-blowing-through-budget-in-four-months": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/claude-app-centered-in-ai-apps-GettyImages-2167861906.jpg?resize=1200,801",
+      "checkedAt": "2026-06-02T20:00:01.996967+00:00"
+    },
+    "https://github.com/ollama/ollama/releases/tag/v0.30.1-rc0": {
+      "image": "https://opengraph.githubassets.com/f58432515439acae09521e1086a65c3ca25606414736f2d2e437165ac3ad02ba/ollama/ollama",
+      "checkedAt": "2026-06-02T20:00:01.996967+00:00"
+    },
+    "https://techcrunch.com/2026/06/02/new-microsoft-tool-lets-devs-spin-up-ai-behavior-tests-using-text-descriptions": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/GettyImages-172665283.jpg?resize=1200,900",
+      "checkedAt": "2026-06-02T20:00:01.996967+00:00"
+    },
+    "https://www.together.ai/blog/serving-minimax-m3-for-efficient-inference-unlocking-1m-token-context-and-multimodality-without-regrets": {
+      "image": "https://cdn.prod.website-files.com/69654e88dce9154b5f12070c/6a1f2dd9842216996872b7f5_OG-image_20260602_M3.png",
+      "checkedAt": "2026-06-02T20:00:01.996967+00:00"
     }
   }
 }
