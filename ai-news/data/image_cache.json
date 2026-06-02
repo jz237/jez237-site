@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-02T02:00:01.895467+00:00",
+  "updatedAt": "2026-06-02T03:00:01.950539+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -8864,6 +8864,14 @@
     "https://openai.com/index/our-views-on-ai-policy-and-political-advocacy": {
       "image": "https://images.ctfassets.net/kftzwdyauwt9/2t7PnZhv9RSkCpyADp8h6J/8e94542c974c268eac270cd244dd6055/Political-advocacy-16x9.png?w=1600&amp;h=900&amp;fit=fill",
       "checkedAt": "2026-06-02T01:00:01.219829+00:00"
+    },
+    "https://github.com/ggml-org/llama.cpp/releases/tag/b9466": {
+      "image": "https://opengraph.githubassets.com/026498f1325244f4c4d223f3d71014f5ef0413d52e988eb0e594600056554481/ggml-org/llama.cpp/releases/tag/b9466",
+      "checkedAt": "2026-06-02T03:00:01.950539+00:00"
+    },
+    "https://github.com/BerriAI/litellm/releases/tag/v1.85.3": {
+      "image": "https://opengraph.githubassets.com/b1f1a7c17b7bf9bb50bea2074921b960dbb70007fb31e675ad02af88ee6d7245/BerriAI/litellm/releases/tag/v1.85.3",
+      "checkedAt": "2026-06-02T03:00:01.950539+00:00"
     }
   }
 }
