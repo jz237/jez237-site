@@ -1246,5 +1246,17 @@
     "slot": "midday",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-06-02-afternoon-rain-vial-apothecary-inventory-form",
+    "title": "Rain Vial Apothecary Inventory Form",
+    "tests": "Reusable non-photo data/layout template: tests whether GPT Image 2 can render a coherent physical inventory form with readable hierarchy, tactile paper aging, item rows, columns, icons, stamps, and shop-counter context without becoming a prompt card.",
+    "prompt": "Create a finished vertical apothecary inventory form titled RAIN VIAL APOTHECARY INVENTORY, photographed as a real paper sheet clipped to a blackened oak counter in a tiny old shop. The form tracks fictional rainwater tinctures and weather remedies: silver fog drops, roof-garden dew, thunderhead bitters, canal mist salts, moonbarrel rinse, and storm-window syrup. Use a coherent physical form layout with readable hierarchy: title bar, date and shelf-code boxes, item rows, quantity columns, batch symbols, small bottle silhouette icons, condition check marks, a reorder section, and a narrow notes area. Include natural form text only, with a mix of readable headings and smaller imperfect ledger marks; no prompt instructions or placeholder boxes. Make the paper warm cream with blue-gray ruled lines, faded black letterpress, muted green section stamps, red pencil ticks, wax-seal smears, pin holes, folded corners, ink feathering, water rings, pressed herb crumbs, tiny glass vial shadows, cork dust, and amber side light from a shop window. Avoid real brands, real logos, private data, barcodes, modern UI, nonsense clutter, hands, people, watermark, and signature.\n\nSource photo needed: none.\n\nReusable prompt template: Create a finished apothecary inventory form about [TOPIC] using [DATA OR CATEGORIES], with a coherent physical design, readable hierarchy, and specific invented details where data is not supplied. Use [MATERIALS], [ERA OR DESIGN LANGUAGE], [COLOR ACCENTS], and [SETTING] to make the layout feel real. Preserve the supplied topic, categories, quantities, item relationships, section hierarchy, and any real data provided by the user; change the document framing, row structure, icon system, paper treatment, annotations, props, and physical presentation to fit the chosen subject. Avoid nonsense labels, cluttered microtext, placeholder boxes, generic decoration, real logos, private data, and prompt-instruction text.\n\nWhat to preserve: the supplied topic, data categories, item names, quantities, relationships, hierarchy, and any real facts provided by the user.\n\nWhat to change: turn the topic into a tactile finished apothecary inventory form with item rows, quantity columns, batch symbols, bottle icons, check marks, reorder notes, aged paper, stamped accents, shop-counter props, and believable physical lighting.\n\nExample substitution: Create an apothecary inventory form about rain vial remedies, using six fictional items, batch marks, quantity columns, bottle icons, reorder notes, cream ledger paper, green stamps, red pencil ticks, and an old shop counter setting.",
+    "image": "images/2026-06-02-afternoon-rain-vial-apothecary-inventory-form.png",
+    "date": "2026-06-02",
+    "batch": "Daily Prompt",
+    "slot": "afternoon",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1536"
   }
 ]
