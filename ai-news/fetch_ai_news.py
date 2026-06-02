@@ -23,6 +23,11 @@ TOP_DAILY_COUNT = 12
 TOP_LATEST_COUNT = 50
 MAX_OG_FETCH_PER_RUN = 20
 IMAGE_CACHE_TTL_DAYS = 7
+EXCLUDED_TOPIC_PATTERNS = [
+    "llama.cpp",
+    "ggml-org/llama.cpp",
+    "github.com/ggml-org/llama.cpp",
+]
 
 KEYWORDS = {
     "major": ["release", "launch", "announces", "introduces", "debut", "new model", "api", "open source"],
@@ -132,6 +137,17 @@ def canonicalize_url(url):
         return clean
     except Exception:
         return url.strip()
+
+
+def is_excluded_item(item):
+    haystack = " ".join([
+        item.get("title") or "",
+        item.get("url") or "",
+        item.get("source") or "",
+        item.get("sourceUrl") or "",
+        item.get("summary") or "",
+    ]).lower()
+    return any(pattern in haystack for pattern in EXCLUDED_TOPIC_PATTERNS)
 
 
 def try_parse_date(value):
@@ -549,7 +565,10 @@ def main():
         existing[item["url"]] = merged
 
     allowed_sources = {f.get("name") for f in feeds if f.get("name")}
-    all_items = [it for it in existing.values() if it.get("source") in allowed_sources]
+    all_items = [
+        it for it in existing.values()
+        if it.get("source") in allowed_sources and not is_excluded_item(it)
+    ]
 
     # Parse dates first
     for it in all_items:
