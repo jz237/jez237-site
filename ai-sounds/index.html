@@ -43,7 +43,11 @@
     .sound-player { position:relative; z-index:1; display:grid; gap:10px; min-width:0; padding:11px 13px; border:1px solid rgba(255,255,255,.12); border-radius:18px; background:linear-gradient(180deg, rgba(5,14,28,.62), rgba(0,0,0,.28)); box-shadow:inset 0 1px 0 rgba(255,255,255,.06), 0 14px 26px rgba(0,0,0,.2); }
     .sound-wave { position:relative; z-index:1; height:104px; border:1px solid rgba(255,255,255,.1); border-radius:14px; background:linear-gradient(180deg, rgba(0,0,0,.08), rgba(0,0,0,.34)), url('../assets/ai-sounds/realistic-waveform-20260531.webp') center / cover no-repeat; box-shadow:inset 0 -34px 42px rgba(0,0,0,.18); overflow:hidden; }
     .sound-wave span { display:none; }
-    .sound-scrub { position:relative; min-width:0; height:72px; border:1px solid rgba(255,255,255,.09); border-radius:12px; background:rgba(0,0,0,.16); overflow:hidden; }
+    .sound-spectrum { position:relative; min-width:0; height:92px; border:1px solid rgba(255,255,255,.1); border-radius:12px; background:radial-gradient(circle at 15% 0, rgba(110,203,255,.16), transparent 42%), radial-gradient(circle at 85% 20%, rgba(224,102,126,.16), transparent 44%), linear-gradient(180deg, rgba(0,0,0,.18), rgba(0,0,0,.36)); overflow:hidden; box-shadow:inset 0 1px 0 rgba(255,255,255,.05); }
+    .sound-spectrum::before { content:""; position:absolute; inset:0; background:linear-gradient(180deg, rgba(255,255,255,.06) 0 1px, transparent 1px 18px), linear-gradient(90deg, rgba(255,255,255,.045) 0 1px, transparent 1px 24px); background-size:100% 18px, 24px 100%; opacity:.38; pointer-events:none; }
+    .sound-spectrum::after { content:""; position:absolute; inset:auto 0 0; height:28px; background:linear-gradient(180deg, transparent, rgba(0,0,0,.26)); pointer-events:none; }
+    .sound-spectrum canvas { position:relative; z-index:1; display:block; width:100%; height:100%; }
+    .sound-scrub { position:relative; min-width:0; height:16px; border:1px solid rgba(255,255,255,.09); border-radius:999px; background:rgba(0,0,0,.22); overflow:hidden; }
     .sound-waveform { position:relative; z-index:1; width:100%; height:100%; opacity:.98; }
     .sound-waveform > div { width:100%; height:100%; }
     .sound-card.is-loading .sound-scrub::after { content:""; position:absolute; inset:0; background:linear-gradient(90deg, transparent, rgba(232,197,122,.08), transparent); opacity:.7; }
@@ -139,7 +143,7 @@
       .sound-eq-band input { height:88px; }
     }
     @media (max-width: 620px) { .sound-player-controls { flex-wrap:wrap; gap:6px; } .sound-spacer { display:none; } .sound-time { flex:1 1 auto; } .sound-rate { gap:2px; } .sound-rate button { min-width:31px; } .sound-volume { flex:1 1 96px; min-width:94px; max-width:none; justify-content:center; padding-inline:6px; } .sound-volume input { min-width:52px; max-width:160px; } }
-    @media (max-width: 520px) { .sound-player { padding:10px; } .sound-wave { height:82px; } .sound-scrub { height:64px; } .sound-play { order:1; width:34px; height:34px; } .sound-play::before { left:13px; top:9px; } .sound-player.is-playing .sound-play::before { left:10px; top:8px; } .sound-rate { order:2; gap:2px; padding:2px; } .sound-rate button { width:31px; min-width:31px; padding:0; font-size:9.5px; } .sound-volume { order:3; flex:1 1 96px; min-width:94px; max-width:none; gap:5px; justify-content:center; padding:0 6px; } .sound-volume input { min-width:52px; max-width:160px; } .sound-download { order:4; } .sound-time { order:5; flex:1 1 100%; min-width:0; font-size:11px; } .sound-eq-bands { gap:6px; } }
+    @media (max-width: 520px) { .sound-player { padding:10px; } .sound-wave { height:82px; } .sound-spectrum { height:78px; } .sound-scrub { height:14px; } .sound-play { order:1; width:34px; height:34px; } .sound-play::before { left:13px; top:9px; } .sound-player.is-playing .sound-play::before { left:10px; top:8px; } .sound-rate { order:2; gap:2px; padding:2px; } .sound-rate button { width:31px; min-width:31px; padding:0; font-size:9.5px; } .sound-volume { order:3; flex:1 1 96px; min-width:94px; max-width:none; gap:5px; justify-content:center; padding:0 6px; } .sound-volume input { min-width:52px; max-width:160px; } .sound-download { order:4; } .sound-time { order:5; flex:1 1 100%; min-width:0; font-size:11px; } .sound-eq-bands { gap:6px; } }
     @media (max-width: 400px) { .sound-volume { flex-basis:88px; min-width:88px; padding-inline:6px; } .sound-volume input { min-width:46px; } }
     @media (max-width: 860px) { .desktop-hub { border-radius:0; } main.container { padding-inline:0; } .hub-main { padding:14px 10px 28px !important; } .sound-hero { border-radius:22px; } }
   </style>
@@ -491,6 +495,12 @@
       player.className = "sound-player";
       audio.before(player);
 
+      const spectrum = document.createElement("div");
+      spectrum.className = "sound-spectrum";
+      const spectrumCanvas = document.createElement("canvas");
+      spectrumCanvas.setAttribute("aria-hidden", "true");
+      spectrum.append(spectrumCanvas);
+
       const scrub = document.createElement("div");
       scrub.className = "sound-scrub";
       const waveform = document.createElement("div");
@@ -608,6 +618,7 @@
 
       eqHead.append(eqLabel, eqPresetsWrap);
       eq.append(eqHead, eqBands);
+      player.appendChild(spectrum);
       player.appendChild(scrub);
       player.appendChild(controls);
       player.appendChild(eq);
@@ -616,11 +627,102 @@
       let audioGraph;
       let lastVolume = 1;
       let currentEq = { low: 0, lowMid: 0, mid: 0, highMid: 0, high: 0 };
+      let spectrumFrame = 0;
+      const spectrumCtx = spectrumCanvas.getContext("2d");
+      const spectrumData = new Uint8Array(96);
       const volumeOnIcon = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4V5z"></path><path d="M15.5 8.5a5 5 0 0 1 0 7"></path><path d="M18.5 5.5a9 9 0 0 1 0 13"></path></svg>';
       const volumeMutedIcon = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4V5z"></path><path d="m16 9 5 5"></path><path d="m21 9-5 5"></path></svg>';
       const updateTime = () => {
         if (!wavesurfer) return;
         time.textContent = `${formatTime(wavesurfer.getCurrentTime())} / ${formatTime(wavesurfer.getDuration())}`;
+      };
+      const sizeSpectrumCanvas = () => {
+        const rect = spectrum.getBoundingClientRect();
+        const scale = Math.min(window.devicePixelRatio || 1, 2);
+        const width = Math.max(1, Math.round(rect.width * scale));
+        const height = Math.max(1, Math.round(rect.height * scale));
+        if (spectrumCanvas.width !== width || spectrumCanvas.height !== height) {
+          spectrumCanvas.width = width;
+          spectrumCanvas.height = height;
+        }
+        return { width, height, scale };
+      };
+      const drawSpectrum = () => {
+        if (!spectrumCtx) return;
+        const { width, height } = sizeSpectrumCanvas();
+        const graph = audioGraph;
+        const analyser = graph?.analyser;
+        if (analyser) analyser.getByteFrequencyData(spectrumData);
+        const playing = wavesurfer?.isPlaying?.() || false;
+        spectrumCtx.clearRect(0, 0, width, height);
+
+        const bg = spectrumCtx.createLinearGradient(0, 0, 0, height);
+        bg.addColorStop(0, "rgba(8, 18, 34, .25)");
+        bg.addColorStop(1, "rgba(0, 0, 0, .42)");
+        spectrumCtx.fillStyle = bg;
+        spectrumCtx.fillRect(0, 0, width, height);
+
+        const bars = 48;
+        const gap = Math.max(1, width * .004);
+        const barWidth = Math.max(2, (width - gap * (bars - 1)) / bars);
+        const now = performance.now() * .003;
+        for (let i = 0; i < bars; i += 1) {
+          const binStart = Math.floor((i / bars) * spectrumData.length);
+          const binEnd = Math.max(binStart + 1, Math.floor(((i + 1) / bars) * spectrumData.length));
+          let total = 0;
+          for (let j = binStart; j < binEnd; j += 1) total += spectrumData[j] || 0;
+          const average = total / (binEnd - binStart) / 255;
+          const idle = .12 + Math.sin(now + i * .38) * .04;
+          const level = playing ? Math.max(average, .035) : idle;
+          const shaped = Math.pow(level, .72);
+          const barHeight = Math.max(3, shaped * height * .88);
+          const x = i * (barWidth + gap);
+          const y = height - barHeight;
+          const hue = (i / bars) * 220 + 178;
+          const gradient = spectrumCtx.createLinearGradient(0, y, 0, height);
+          gradient.addColorStop(0, `hsla(${hue}, 96%, 70%, .95)`);
+          gradient.addColorStop(.55, `hsla(${hue + 44}, 94%, 58%, .82)`);
+          gradient.addColorStop(1, "rgba(224, 102, 126, .34)");
+          spectrumCtx.fillStyle = gradient;
+          spectrumCtx.shadowBlur = playing ? 10 : 5;
+          spectrumCtx.shadowColor = `hsla(${hue}, 95%, 64%, .55)`;
+          spectrumCtx.fillRect(x, y, barWidth, barHeight);
+        }
+        spectrumCtx.shadowBlur = 0;
+
+        const trace = spectrumCtx.createLinearGradient(0, 0, width, 0);
+        trace.addColorStop(0, "rgba(110,203,255,.0)");
+        trace.addColorStop(.5, "rgba(232,197,122,.7)");
+        trace.addColorStop(1, "rgba(224,102,126,.0)");
+        spectrumCtx.strokeStyle = trace;
+        spectrumCtx.lineWidth = Math.max(1, width * .003);
+        spectrumCtx.beginPath();
+        for (let i = 0; i < bars; i += 1) {
+          const value = (spectrumData[i * 2] || 0) / 255;
+          const idle = .5 + Math.sin(now * 1.4 + i * .45) * .08;
+          const y = height * (playing ? (.78 - value * .5) : idle);
+          const x = (i / (bars - 1)) * width;
+          if (i === 0) spectrumCtx.moveTo(x, y);
+          else spectrumCtx.lineTo(x, y);
+        }
+        spectrumCtx.stroke();
+
+        if (playing) {
+          spectrumFrame = requestAnimationFrame(drawSpectrum);
+        } else {
+          spectrumFrame = window.setTimeout(drawSpectrum, 180);
+        }
+      };
+      const startSpectrum = () => {
+        if (spectrumFrame) return;
+        drawSpectrum();
+      };
+      const stopSpectrum = () => {
+        if (!spectrumFrame) return;
+        cancelAnimationFrame(spectrumFrame);
+        clearTimeout(spectrumFrame);
+        spectrumFrame = 0;
+        drawSpectrum();
       };
       const syncVolumeState = () => {
         const muted = Number(volumeSlider.value) === 0 || (wavesurfer ? wavesurfer.getMuted() : audio.muted);
@@ -635,6 +737,11 @@
         if (!AudioContext) return null;
         const context = new AudioContext();
         const source = context.createMediaElementSource(audio);
+        const analyser = context.createAnalyser();
+        analyser.fftSize = 256;
+        analyser.smoothingTimeConstant = .72;
+        analyser.minDecibels = -88;
+        analyser.maxDecibels = -16;
         const filters = Object.fromEntries(eqBandConfig.map(([key, , frequency, type]) => {
           const filter = context.createBiquadFilter();
           filter.type = type;
@@ -642,8 +749,8 @@
           if (type === "peaking") filter.Q.value = 1;
           return [key, filter];
         }));
-        eqBandConfig.reduce((previous, [key]) => previous.connect(filters[key]), source).connect(context.destination);
-        audioGraph = { context, filters };
+        eqBandConfig.reduce((previous, [key]) => previous.connect(filters[key]), source).connect(analyser).connect(context.destination);
+        audioGraph = { context, filters, analyser };
         return audioGraph;
       };
       const applyEq = (values) => {
@@ -685,12 +792,14 @@
           container: waveform,
           media: audio,
           url: audio.currentSrc || audio.src,
-          height: 72,
+          height: 14,
           cursorColor: "#e8c57a",
           progressColor: "#e0667e",
-          waveColor: "rgba(198, 219, 230, .58)",
+          waveColor: "rgba(198, 219, 230, .36)",
           normalize: false,
-          barHeight: .72
+          barHeight: .12,
+          barGap: 1,
+          barWidth: 2
         });
 
         players.push(wavesurfer);
@@ -705,14 +814,17 @@
         wavesurfer.on("play", () => {
           player.classList.add("is-playing");
           play.setAttribute("aria-label", "Pause track");
+          startSpectrum();
         });
         wavesurfer.on("pause", () => {
           player.classList.remove("is-playing");
           play.setAttribute("aria-label", "Play track");
+          stopSpectrum();
         });
         wavesurfer.on("finish", () => {
           player.classList.remove("is-playing");
           play.setAttribute("aria-label", "Play track");
+          stopSpectrum();
         });
         wavesurfer.on("timeupdate", updateTime);
         wavesurfer.on("error", () => {
