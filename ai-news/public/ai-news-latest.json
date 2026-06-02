@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-02T20:00:01.996967+00:00",
+  "updatedAt": "2026-06-02T20:16:22.236092+00:00",
   "items": [
     {
       "title": "Hao Xu, Rite Bo, Fausto Giunchiglia, Yingji Li, Rui Song",
@@ -10,9 +10,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-02T20:00:08.538900+00:00",
+      "published": "2026-06-02T20:16:26.892664+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-02T20:00:01.996967+00:00",
+      "lastSeen": "2026-06-02T20:16:22.236092+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
@@ -28,10 +28,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/nadella-build-2026.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C2.9395307941329%2C100%2C94.120938411734&amp%3Bw=1200",
       "published": "2026-06-02T19:23:52+00:00",
       "firstSeen": "2026-06-02T20:00:01.996967+00:00",
-      "lastSeen": "2026-06-02T20:00:01.996967+00:00",
+      "lastSeen": "2026-06-02T20:16:22.236092+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.4417
+      "score": 3.4336
     },
     {
       "title": "The EU’s €20 billion plan for five AI gigafactories is falling apart before the first bid is even submitted",
@@ -44,10 +44,10 @@
       "image": "https://media.thenextweb.com/2026/05/European-flag.avif",
       "published": "2026-06-02T19:19:51+00:00",
       "firstSeen": "2026-06-02T20:00:01.996967+00:00",
-      "lastSeen": "2026-06-02T20:00:01.996967+00:00",
+      "lastSeen": "2026-06-02T20:16:22.236092+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2297
+      "score": 3.2216
     },
     {
       "title": "Uber caps employee AI spending after blowing through budget in four months",
@@ -60,10 +60,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/claude-app-centered-in-ai-apps-GettyImages-2167861906.jpg?resize=1200%2C801",
       "published": "2026-06-02T19:11:48+00:00",
       "firstSeen": "2026-06-02T20:00:01.996967+00:00",
-      "lastSeen": "2026-06-02T20:00:01.996967+00:00",
+      "lastSeen": "2026-06-02T20:16:22.236092+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -0.8343
+      "score": -0.8424
     },
     {
       "title": "v0.30.1-rc0",
@@ -76,10 +76,10 @@
       "image": "https://opengraph.githubassets.com/f58432515439acae09521e1086a65c3ca25606414736f2d2e437165ac3ad02ba/ollama/ollama",
       "published": "2026-06-02T19:10:46+00:00",
       "firstSeen": "2026-06-02T20:00:01.996967+00:00",
-      "lastSeen": "2026-06-02T20:00:01.996967+00:00",
+      "lastSeen": "2026-06-02T20:16:22.236092+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0352
+      "score": 3.0271
     },
     {
       "title": "Microsoft used agentic AI to make its quantum chip 1,000 times more reliable, then cut its timeline to a scalable quantum computer in half",
@@ -92,10 +92,10 @@
       "image": "https://media.thenextweb.com/2026/06/microsoft-majorana-2-quantum-chip-agentic-ai-discovery-.avif",
       "published": "2026-06-02T19:09:02+00:00",
       "firstSeen": "2026-06-02T20:00:01.996967+00:00",
-      "lastSeen": "2026-06-02T20:00:01.996967+00:00",
+      "lastSeen": "2026-06-02T20:16:22.236092+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8243
+      "score": 4.8162
     },
     {
       "title": "New Microsoft tool lets devs spin up AI behavior tests using text descriptions",
@@ -108,10 +108,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/GettyImages-172665283.jpg?resize=1200%2C900",
       "published": "2026-06-02T19:02:21+00:00",
       "firstSeen": "2026-06-02T20:00:01.996967+00:00",
-      "lastSeen": "2026-06-02T20:00:01.996967+00:00",
+      "lastSeen": "2026-06-02T20:16:22.236092+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 0.211
+      "score": 0.2029
     },
     {
       "title": "NVIDIA Partners With Microsoft on Unified Stack for Agentic AI Deployment, From Windows Devices to Cloud to Local",
@@ -124,10 +124,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/logo-lockup-corp-blog-microsoft-1280x680-4999350.png",
       "published": "2026-06-02T19:00:08+00:00",
       "firstSeen": "2026-06-02T20:00:01.996967+00:00",
-      "lastSeen": "2026-06-02T20:00:01.996967+00:00",
+      "lastSeen": "2026-06-02T20:16:22.236092+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.6599
+      "score": 6.6519
     },
     {
       "title": "Perplexity built an “air-traffic controller” that decides in real time whether your AI query runs on your PC or in the cloud",
@@ -140,10 +140,10 @@
       "image": "https://media.thenextweb.com/2026/06/perplexity-ai-split-compute-pc-cloud-inference-cost.avif",
       "published": "2026-06-02T18:57:39+00:00",
       "firstSeen": "2026-06-02T20:00:01.996967+00:00",
-      "lastSeen": "2026-06-02T20:00:01.996967+00:00",
+      "lastSeen": "2026-06-02T20:16:22.236092+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1187
+      "score": 2.1106
     },
     {
       "title": "Microsoft just announced a new operating system for devices that don’t run apps, only AI agents",
@@ -156,10 +156,10 @@
       "image": "https://media.thenextweb.com/2026/04/microsoft-mai-models-openai-independence.avif",
       "published": "2026-06-02T18:46:31+00:00",
       "firstSeen": "2026-06-02T19:00:01.885376+00:00",
-      "lastSeen": "2026-06-02T20:00:01.996967+00:00",
+      "lastSeen": "2026-06-02T20:16:22.236092+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.9132
+      "score": 5.9052
     },
     {
       "title": "Hackers brute-forced Dashlane’s two-factor authentication and downloaded encrypted password vaults",
@@ -172,10 +172,10 @@
       "image": "https://media.thenextweb.com/2026/06/dashlane-brute-force-attack-2fa-bypass-encrypted-vaults.avif",
       "published": "2026-06-02T18:33:42+00:00",
       "firstSeen": "2026-06-02T19:00:01.885376+00:00",
-      "lastSeen": "2026-06-02T20:00:01.996967+00:00",
+      "lastSeen": "2026-06-02T20:16:22.236092+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8069
+      "score": 2.7989
     },
     {
       "title": "Trump signs executive order to review AI models before they’re released",
@@ -188,10 +188,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/09/STK466_ELECTION_2024_CVirginia_E.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C9.9676601489831%2C100%2C80.064679702034&amp%3Bw=1200",
       "published": "2026-06-02T18:33:42+00:00",
       "firstSeen": "2026-06-02T19:00:01.885376+00:00",
-      "lastSeen": "2026-06-02T20:00:01.996967+00:00",
+      "lastSeen": "2026-06-02T20:16:22.236092+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -0.0831
+      "score": -0.0911
     },
     {
       "title": "OpenAI is turning Codex from a coding tool into an enterprise work platform, and non-developers are adopting it 3x faster than engineers",
@@ -204,10 +204,10 @@
       "image": "https://media.thenextweb.com/2026/04/OpenAI.avif",
       "published": "2026-06-02T18:25:23+00:00",
       "firstSeen": "2026-06-02T19:00:01.885376+00:00",
-      "lastSeen": "2026-06-02T20:00:01.996967+00:00",
+      "lastSeen": "2026-06-02T20:16:22.236092+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 10.3028
+      "score": 10.2949
     },
     {
       "title": "Martin Scorsese becomes the latest — and most unlikely — Hollywood voice for AI",
@@ -220,10 +220,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/GettyImages-2244067270.jpg?resize=1200%2C800",
       "published": "2026-06-02T18:16:53+00:00",
       "firstSeen": "2026-06-02T19:00:01.885376+00:00",
-      "lastSeen": "2026-06-02T20:00:01.996967+00:00",
+      "lastSeen": "2026-06-02T20:16:22.236092+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2387
+      "score": 2.2308
     },
     {
       "title": "A German startup raised $240 million to commercialise the only fusion experiment that has ever produced net energy",
@@ -236,10 +236,10 @@
       "image": "https://media.thenextweb.com/2026/06/focused-energy-240m-laser-fusion-nif-rwe.avif",
       "published": "2026-06-02T18:16:19+00:00",
       "firstSeen": "2026-06-02T19:00:01.885376+00:00",
-      "lastSeen": "2026-06-02T20:00:01.996967+00:00",
+      "lastSeen": "2026-06-02T20:16:22.236092+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.8984
+      "score": 3.8905
     },
     {
       "title": "Microsoft’s first advanced reasoning AI is here",
@@ -252,10 +252,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25832912/STK095_MICROSOFT_2_CVirginia_A.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-02T18:12:44+00:00",
       "firstSeen": "2026-06-02T19:00:01.885376+00:00",
-      "lastSeen": "2026-06-02T20:00:01.996967+00:00",
+      "lastSeen": "2026-06-02T20:16:22.236092+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.0067
+      "score": 6.9988
     },
     {
       "title": "A North Dakota startup raised $10 million from ranchers and neighbours to build the operating system for beef cattle",
@@ -268,10 +268,10 @@
       "image": "https://media.thenextweb.com/2026/06/701x-cattle-technology-series-b-community-funded-no-vc.avif",
       "published": "2026-06-02T18:04:34+00:00",
       "firstSeen": "2026-06-02T19:00:01.885376+00:00",
-      "lastSeen": "2026-06-02T20:00:01.996967+00:00",
+      "lastSeen": "2026-06-02T20:16:22.236092+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.8427
+      "score": 3.8349
     },
     {
       "title": "Microsoft launches Scout, an OpenClaw-inspired personal assistant",
@@ -284,10 +284,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/07/microsoft-logo-1865237814.jpg?resize=1200%2C863",
       "published": "2026-06-02T18:02:44+00:00",
       "firstSeen": "2026-06-02T19:00:01.885376+00:00",
-      "lastSeen": "2026-06-02T20:00:01.996967+00:00",
+      "lastSeen": "2026-06-02T20:16:22.236092+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1319
+      "score": 5.124
     },
     {
       "title": "Microsoft Scout is a new AI personal assistant built on OpenClaw",
@@ -300,10 +300,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/Microsoft-Scout.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C8.7943183843327%2C100%2C82.411363231335&amp%3Bw=1200",
       "published": "2026-06-02T18:00:00+00:00",
       "firstSeen": "2026-06-02T19:00:01.885376+00:00",
-      "lastSeen": "2026-06-02T20:00:01.996967+00:00",
+      "lastSeen": "2026-06-02T20:16:22.236092+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 7.2005
+      "score": 7.1927
     },
     {
       "title": "Meet Microsoft Scout, Your AI Coworker That Never Logs Off",
@@ -316,10 +316,10 @@
       "image": "https://media.wired.com/photos/6a1e1d3c70c7c8b915b99802/master/pass/Microsoft-Debuts-Scout-a-Workplace-AI-Agent-Gear.jpg",
       "published": "2026-06-02T18:00:00+00:00",
       "firstSeen": "2026-06-02T19:00:01.885376+00:00",
-      "lastSeen": "2026-06-02T20:00:01.996967+00:00",
+      "lastSeen": "2026-06-02T20:16:22.236092+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0305
+      "score": 5.0227
     },
     {
       "title": "Microsoft offers devs a better way to control AI agent behavior",
@@ -332,10 +332,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/GettyImages-2276155467.jpg?resize=1200%2C833",
       "published": "2026-06-02T18:00:00+00:00",
       "firstSeen": "2026-06-02T19:00:01.885376+00:00",
-      "lastSeen": "2026-06-02T20:00:01.996967+00:00",
+      "lastSeen": "2026-06-02T20:16:22.236092+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9305
+      "score": 4.9227
     },
     {
       "title": "Google’s Phone app will tell you if a scammer is impersonating one of your contacts",
@@ -348,10 +348,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/0.-Fake-call-detection-header.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C3.579433208423%2C100%2C92.841133583154&amp%3Bw=1200",
       "published": "2026-06-02T18:00:00+00:00",
       "firstSeen": "2026-06-02T19:00:01.885376+00:00",
-      "lastSeen": "2026-06-02T20:00:01.996967+00:00",
+      "lastSeen": "2026-06-02T20:16:22.236092+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 4.1005
+      "score": 4.0927
     },
     {
       "title": "Google rolls out fake call detection to protect against AI deepfake impersonation scams",
@@ -364,10 +364,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/fake-call-detection.png?resize=1200%2C640",
       "published": "2026-06-02T18:00:00+00:00",
       "firstSeen": "2026-06-02T19:00:01.885376+00:00",
-      "lastSeen": "2026-06-02T20:00:01.996967+00:00",
+      "lastSeen": "2026-06-02T20:16:22.236092+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2305
+      "score": 2.2227
     },
     {
       "title": "Blue Origin says fuel tanks and key pad components survived the New Glenn explosion, pledges to fly again this year",
@@ -380,10 +380,10 @@
       "image": "https://media.thenextweb.com/2026/06/blue-origin-new-glenn-explosion-fuel-tanks-survive-fly-again.avif",
       "published": "2026-06-02T17:53:13+00:00",
       "firstSeen": "2026-06-02T19:00:01.885376+00:00",
-      "lastSeen": "2026-06-02T20:00:01.996967+00:00",
+      "lastSeen": "2026-06-02T20:16:22.236092+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7873
+      "score": 2.7795
     },
     {
       "title": "Amazon faces class action lawsuit over Ring facial-recognition feature",
@@ -396,10 +396,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2022/08/GettyImages-621058316.jpg?resize=1200%2C930",
       "published": "2026-06-02T17:47:28+00:00",
       "firstSeen": "2026-06-02T18:00:01.832918+00:00",
-      "lastSeen": "2026-06-02T20:00:01.996967+00:00",
+      "lastSeen": "2026-06-02T20:16:22.236092+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2245
+      "score": 2.2167
     },
     {
       "title": "Microsoft&#8217;s Project Solara is an OS for AI agent gadgets",
@@ -412,10 +412,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/projectsolara.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C3.4613147178592%2C100%2C93.077370564282&amp%3Bw=1200",
       "published": "2026-06-02T17:31:02+00:00",
       "firstSeen": "2026-06-02T18:00:01.832918+00:00",
-      "lastSeen": "2026-06-02T20:00:01.996967+00:00",
+      "lastSeen": "2026-06-02T20:16:22.236092+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9867
+      "score": 4.9789
     },
     {
       "title": "Palo Alto Networks shareholders have rejected executive pay seven times, and the CEO still earns nearly $100 million",
@@ -428,10 +428,10 @@
       "image": "https://media.thenextweb.com/2026/06/palo-alto-networks-arora-100m-pay-shareholders-reject.avif",
       "published": "2026-06-02T16:51:33+00:00",
       "firstSeen": "2026-06-02T18:00:01.832918+00:00",
-      "lastSeen": "2026-06-02T20:00:01.996967+00:00",
+      "lastSeen": "2026-06-02T20:16:22.236092+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0581
+      "score": 2.0505
     },
     {
       "title": "Microsoft created the mini Surface dev box that Qualcomm couldn&#8217;t",
@@ -444,10 +444,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/Surface-RTX-Spark-Image-4.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C3.4686413370787%2C100%2C93.062717325843&amp%3Bw=1200",
       "published": "2026-06-02T16:30:00+00:00",
       "firstSeen": "2026-06-02T16:53:11.113275+00:00",
-      "lastSeen": "2026-06-02T20:00:01.996967+00:00",
+      "lastSeen": "2026-06-02T20:16:22.236092+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2581
+      "score": 2.2506
     },
     {
       "title": "Fake Claude Code Installers Deliver Credential-Stealing Malware",
@@ -460,10 +460,10 @@
       "image": "",
       "published": "2026-06-02T16:29:34+00:00",
       "firstSeen": "2026-06-02T16:53:11.113275+00:00",
-      "lastSeen": "2026-06-02T20:00:01.996967+00:00",
+      "lastSeen": "2026-06-02T20:16:22.236092+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.8479
+      "score": 9.8404
     },
     {
       "title": "Trump signs narrower executive order on AI oversight after industry objections",
@@ -476,10 +476,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/GettyImages-2277839095.jpg?w=1024",
       "published": "2026-06-02T16:23:08+00:00",
       "firstSeen": "2026-06-02T16:53:11.113275+00:00",
-      "lastSeen": "2026-06-02T20:00:01.996967+00:00",
+      "lastSeen": "2026-06-02T20:16:22.236092+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8849
+      "score": 2.8774
     },
     {
       "title": "The world’s mathematicians just issued a formal declaration telling AI companies to stop using their work without permission",
@@ -495,7 +495,7 @@
       "lastSeen": "2026-06-02T19:00:01.885376+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7437
+      "score": 2.7362
     },
     {
       "title": "SpaceX’s first employee just raised $500 million for the company that moves satellites once rockets put them in the wrong orbit",
@@ -511,7 +511,7 @@
       "lastSeen": "2026-06-02T19:00:01.885376+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7393
+      "score": 2.7318
     },
     {
       "title": "OpenAI launches new Codex tools for white-collar work",
@@ -524,11 +524,11 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/openai-logo-code-background.jpg?resize=1200%2C798",
       "published": "2026-06-02T16:00:00+00:00",
       "firstSeen": "2026-06-02T16:53:11.113275+00:00",
-      "lastSeen": "2026-06-02T20:00:01.996967+00:00",
+      "lastSeen": "2026-06-02T20:16:22.236092+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 17.0743
+      "score": 17.0669
     },
     {
       "title": "Microsoft Build 2026: All the news about Windows, AI, RTX Spark, and more",
@@ -541,10 +541,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/03/STK095_MICROSOFT_2_CVirginia_C.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-02T15:59:58+00:00",
       "firstSeen": "2026-06-02T16:00:01.391525+00:00",
-      "lastSeen": "2026-06-02T20:00:01.996967+00:00",
+      "lastSeen": "2026-06-02T20:16:22.236092+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3443
+      "score": 3.3369
     },
     {
       "title": "SpaceX IPO Filing Ties AI Growth to Water Access",
@@ -557,10 +557,10 @@
       "image": "",
       "published": "2026-06-02T15:55:19+00:00",
       "firstSeen": "2026-06-02T16:53:11.113275+00:00",
-      "lastSeen": "2026-06-02T20:00:01.996967+00:00",
+      "lastSeen": "2026-06-02T20:16:22.236092+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1322
+      "score": 3.1248
     },
     {
       "title": "Flush With Cash From OpenAI, Opal Is Making an AI-Powered Audio Gadget",
@@ -573,10 +573,10 @@
       "image": "https://media.wired.com/photos/6a1db2153696beebf95db3a0/master/pass/Opal_Tadpole_01.jpg",
       "published": "2026-06-02T15:30:00+00:00",
       "firstSeen": "2026-06-02T16:00:01.391525+00:00",
-      "lastSeen": "2026-06-02T20:00:01.996967+00:00",
+      "lastSeen": "2026-06-02T20:16:22.236092+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1607
+      "score": 5.1534
     },
     {
       "title": "Anthropic scales Claude Mythos  to critical infrastructure in 15+ countries",
@@ -589,10 +589,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/GettyImages-2269811684.jpg?w=1024",
       "published": "2026-06-02T14:44:21+00:00",
       "firstSeen": "2026-06-02T15:00:01.174662+00:00",
-      "lastSeen": "2026-06-02T20:00:01.996967+00:00",
+      "lastSeen": "2026-06-02T20:16:22.236092+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.1404
+      "score": 11.1333
     },
     {
       "title": "Farewell Ai2",
@@ -605,10 +605,10 @@
       "image": "https://substack-post-media.s3.amazonaws.com/public/images/04d1f8be-c112-47a8-9a5b-251653b5951e_3182x1790.png",
       "published": "2026-06-02T14:15:59+00:00",
       "firstSeen": "2026-06-02T15:00:01.174662+00:00",
-      "lastSeen": "2026-06-02T20:00:01.996967+00:00",
+      "lastSeen": "2026-06-02T20:16:22.236092+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.198
+      "score": 2.191
     },
     {
       "title": "Holo3.1: Fast & Local Computer Use Agents",
@@ -621,10 +621,10 @@
       "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/Hcompany/holo31.png",
       "published": "2026-06-02T14:13:23+00:00",
       "firstSeen": "2026-06-02T15:00:01.174662+00:00",
-      "lastSeen": "2026-06-02T20:00:01.996967+00:00",
+      "lastSeen": "2026-06-02T20:16:22.236092+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9669
+      "score": 4.9598
     },
     {
       "title": "Gemini Spark is the most impressive and terrifying AI experience I’ve had yet",
@@ -637,10 +637,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/Google-Gemini-Spark.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.711701357851%2C100%2C78.576597284297&amp%3Bw=1200",
       "published": "2026-06-02T12:38:08+00:00",
       "firstSeen": "2026-06-02T12:54:12.059298+00:00",
-      "lastSeen": "2026-06-02T20:00:01.996967+00:00",
+      "lastSeen": "2026-06-02T20:16:22.236092+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.2565
+      "score": 11.2497
     },
     {
       "title": "The Life Scientific: Seth Berkley",
@@ -653,10 +653,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-01T20:00:00+00:00",
       "firstSeen": "2026-06-01T21:00:01.828388+00:00",
-      "lastSeen": "2026-06-02T20:00:01.996967+00:00",
+      "lastSeen": "2026-06-02T20:16:22.236092+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7548
+      "score": 1.7505
     },
     {
       "title": "Dean Lomax on discovering ichthyosaurs and defying nay-sayers",
@@ -669,7 +669,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-26T08:30:00+00:00",
       "firstSeen": "2026-05-26T08:41:33.144051+00:00",
-      "lastSeen": "2026-06-02T20:00:01.996967+00:00",
+      "lastSeen": "2026-06-02T20:16:22.236092+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 1.1275
@@ -685,7 +685,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-25T20:00:00+00:00",
       "firstSeen": "2026-05-25T21:00:01.605108+00:00",
-      "lastSeen": "2026-06-02T20:00:01.996967+00:00",
+      "lastSeen": "2026-06-02T20:16:22.236092+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 0.2953
@@ -759,7 +759,7 @@
     {
       "source": "MarkTechPost",
       "url": "https://www.marktechpost.com/feed/",
-      "error": "HTTP Error 403: Forbidden"
+      "error": "not well-formed (invalid token): line 1, column 119"
     }
   ]
 }
