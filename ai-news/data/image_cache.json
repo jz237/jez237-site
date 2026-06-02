@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-02T06:53:28.339289+00:00",
+  "updatedAt": "2026-06-02T08:00:01.606189+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -8888,6 +8888,10 @@
     "https://github.com/ggml-org/llama.cpp/releases/tag/b9468": {
       "image": "https://opengraph.githubassets.com/04606d1442103b7ed25da34c3f6e0a8360a91d12961ff5eef6c0ede20bcadd92/ggml-org/llama.cpp/releases/tag/b9468",
       "checkedAt": "2026-06-02T06:00:01.306892+00:00"
+    },
+    "https://github.com/ggml-org/llama.cpp/releases/tag/b9469": {
+      "image": "https://opengraph.githubassets.com/a400e3300a7d9e2c8cb9b361a7dd3cb5b57318071d1726e81b5a353a3d6b2e04/ggml-org/llama.cpp/releases/tag/b9469",
+      "checkedAt": "2026-06-02T08:00:01.606189+00:00"
     }
   }
 }
