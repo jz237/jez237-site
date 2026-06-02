@@ -1210,5 +1210,17 @@
     "slot": "evening",
     "model": "openai/gpt-image-2",
     "size": "1024x1536"
+  },
+  {
+    "id": "2026-06-01-evening-pocket-lighthouse-moth-field-guide",
+    "title": "Pocket Lighthouse Moth Field Guide",
+    "tests": "Reusable non-photo visual layout template; tests GPT Image 2's ability to render a dense vertical field-guide plate with coherent hierarchy, fictional taxonomy labels, tactile printed-paper details, and no instructional prompt-card artifacts.",
+    "prompt": "Create a finished vertical field guide plate titled POCKET LIGHTHOUSE MOTH FIELD GUIDE, photographed as a real printed naturalist plate on a dark corkboard desk. The page documents six fictional moth species that navigate by tiny lighthouse-shaped wing markings: Harbor Wick Moth, Brass Lantern Moth, Fogbell Crescent, Salt Lens Skipper, Red Beacon Looper, and Moon Pier Underwing. Use detailed gouache-and-ink specimen illustrations with pinned-wing poses, tiny dorsal and underside views, scale bars, habitat icons, migration arrows, small range-map insets, and short readable label blocks. Make the physical page tactile: warm ivory stock, deckled edge, two brass pushpins, pencil annotation ticks, faint watercolor blooms, printer misregistration, paper fibers, dust, and a clipped corner. Keep the composition coherent as a reusable field-guide layout, with natural field-guide text only; avoid instructions, placeholder boxes, real logos, hands, people, and watermark.\n\nSource photo needed: none.\n\nReusable prompt template: Create a finished field guide plate about [TOPIC] using [DATA OR CATEGORIES], with a coherent physical design, readable hierarchy, and specific invented details where data is not supplied. Use [ILLUSTRATION STYLE], [MATERIALS], [COLOR ACCENTS], and [SETTING] to make the layout feel real. Preserve the supplied topic, categories, labels, ordering, and data relationships; change the specimen illustrations, maps, callouts, typography, paper treatment, and physical presentation to fit the chosen subject. Avoid nonsense labels, cluttered microtext, placeholder boxes, generic decoration, real logos, private data, and prompt-instruction text.\n\nWhat to preserve: the supplied topic, data categories, label hierarchy, ordering, measurements, and any real facts provided by the user.\n\nWhat to change: turn the topic into a tactile finished field-guide plate with illustrated specimens, section labels, scale bars, habitat icons, inset maps, annotations, paper texture, and a photographed physical setting.\n\nExample substitution: Create a field guide plate about pocket lighthouse moths, using six fictional species with lighthouse-shaped wing markings, gouache-and-ink specimen art, range maps, scale bars, ivory paper, brass pushpins, and a corkboard desk setting.",
+    "image": "images/2026-06-01-evening-pocket-lighthouse-moth-field-guide.png",
+    "date": "2026-06-01",
+    "batch": "Daily Prompt",
+    "slot": "evening",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1536"
   }
 ]
