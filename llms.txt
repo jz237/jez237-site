@@ -84,6 +84,7 @@ Current plant/reference slugs:
 | `little-henry-sweetspire` | Little Henry sweetspire |
 | `narrow-upright-yew` | Narrow upright yew |
 | `orange-rocket-barberry` | Orange Rocket barberry |
+| `orange-milkweed` | Orange milkweed / butterfly weed |
 | `past-years` | 2025 and earlier reference photos |
 | `pugster-butterfly-bushes` | Pugster butterfly bushes |
 | `rhododendron` | Rhododendron |
