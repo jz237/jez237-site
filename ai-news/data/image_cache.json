@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-02T04:00:01.596821+00:00",
+  "updatedAt": "2026-06-02T05:00:01.988171+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -8876,6 +8876,14 @@
     "https://github.com/ggml-org/llama.cpp/releases/tag/b9467": {
       "image": "https://opengraph.githubassets.com/a2c9ab4e9dba8f2e8daed66cb0a7f54f6b8c4723d94eff2eb79fc701b276ed69/ggml-org/llama.cpp/releases/tag/b9467",
       "checkedAt": "2026-06-02T04:00:01.596821+00:00"
+    },
+    "https://simonwillison.net/2026/Jun/2/pasted-file-editor": {
+      "image": "",
+      "checkedAt": "2026-06-02T05:00:01.988171+00:00"
+    },
+    "https://github.com/BerriAI/litellm/releases/tag/v1.87.0": {
+      "image": "https://opengraph.githubassets.com/39926c571856ad8a9f5b42f8c974345874e3338547b282c449d7a7d41246330d/BerriAI/litellm/releases/tag/v1.87.0",
+      "checkedAt": "2026-06-02T05:00:01.988171+00:00"
     }
   }
 }
