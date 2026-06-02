@@ -40,8 +40,24 @@
     .prompt-drawer p { margin:8px 0 0; color:#d7e1e8; white-space:pre-wrap; }
     .prompt-drawer .prompt-source { display:block; margin-top:8px; color:var(--ink-lo); font-size:11px; }
     .sound-card audio { position:relative; z-index:1; width:100%; filter: saturate(1.1); }
-    .sound-wave { position:relative; z-index:1; height:118px; border:1px solid rgba(255,255,255,.1); border-radius:18px; background: linear-gradient(180deg, rgba(0,0,0,.08), rgba(0,0,0,.34)), url('../assets/ai-sounds/realistic-waveform-20260531.webp') center / cover no-repeat; box-shadow: inset 0 -34px 42px rgba(0,0,0,.2), 0 14px 26px rgba(0,0,0,.2); overflow:hidden; }
+    .sound-player { position:relative; z-index:1; display:grid; gap:12px; padding:13px; border:1px solid rgba(255,255,255,.12); border-radius:18px; background:linear-gradient(180deg, rgba(5,14,28,.62), rgba(0,0,0,.28)); box-shadow:inset 0 1px 0 rgba(255,255,255,.06), 0 14px 26px rgba(0,0,0,.2); }
+    .sound-wave { position:relative; z-index:1; height:104px; border:1px solid rgba(255,255,255,.1); border-radius:14px; background:linear-gradient(180deg, rgba(0,0,0,.08), rgba(0,0,0,.34)), url('../assets/ai-sounds/realistic-waveform-20260531.webp') center / cover no-repeat; box-shadow:inset 0 -34px 42px rgba(0,0,0,.18); overflow:hidden; }
     .sound-wave span { display:none; }
+    .sound-player.is-loading .sound-wave::after { content:""; position:absolute; inset:0; background:linear-gradient(90deg, transparent, rgba(232,197,122,.08), transparent); opacity:.7; }
+    .sound-player-controls { display:flex; align-items:center; gap:10px; min-height:38px; }
+    .sound-play { position:relative; flex:0 0 auto; width:38px; height:38px; border:1px solid rgba(232,197,122,.42); border-radius:50%; background:rgba(232,197,122,.12); color:var(--brand-gold); cursor:pointer; box-shadow:inset 0 1px 0 rgba(255,255,255,.08); }
+    .sound-play::before { content:""; position:absolute; left:15px; top:11px; width:0; height:0; border-top:8px solid transparent; border-bottom:8px solid transparent; border-left:12px solid currentColor; }
+    .sound-player.is-playing .sound-play::before { left:12px; top:10px; width:5px; height:18px; border:0; border-right:5px solid currentColor; border-left:5px solid currentColor; }
+    .sound-play:hover { background:rgba(232,197,122,.2); color:var(--ink-hi); }
+    .sound-play:focus-visible, .sound-rate:focus-visible, .sound-download:focus-visible { outline:2px solid var(--brand-gold); outline-offset:3px; }
+    .sound-time { min-width:78px; color:#d7e1e8; font-variant-numeric:tabular-nums; font-size:12px; }
+    .sound-spacer { flex:1 1 auto; }
+    .sound-rate { min-width:70px; min-height:34px; border:1px solid rgba(255,255,255,.14); border-radius:999px; padding:0 28px 0 11px; background:rgba(0,0,0,.22); color:var(--ink-mid); font:inherit; font-size:12px; }
+    .sound-download { position:relative; display:inline-grid; place-items:center; width:34px; height:34px; border:1px solid rgba(255,255,255,.14); border-radius:50%; background:rgba(0,0,0,.18); color:var(--ink-mid); text-decoration:none; font-size:18px; line-height:1; }
+    .sound-download::before { content:""; width:13px; height:15px; background:currentColor; clip-path:polygon(38% 0, 62% 0, 62% 48%, 82% 48%, 50% 82%, 18% 48%, 38% 48%); }
+    .sound-download::after { content:""; position:absolute; left:10px; right:10px; bottom:8px; height:2px; border-radius:999px; background:currentColor; }
+    .sound-download:hover { color:var(--brand-gold); border-color:rgba(232,197,122,.36); }
+    .wavesurfer-enhanced .sound-card audio { position:absolute; width:1px; height:1px; opacity:0; pointer-events:none; }
     .sound-note { margin-top:18px; padding:18px 20px; border:1px solid rgba(232,197,122,.16); border-radius:22px; background:rgba(232,197,122,.055); color:var(--ink-lo); }
     .sound-note strong { color: var(--ink-hi); }
     @media (max-width: 1160px) { .sound-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
@@ -78,9 +94,10 @@
         box-shadow: 0 12px 26px rgba(0,0,0,.26), inset 0 1px 0 rgba(255,255,255,.06);
       }
       .is-touch-tablet body.ai-sounds-page .sound-wave {
-        height: 96px;
+        height: 92px;
       }
     }
+    @media (max-width: 520px) { .sound-player { padding:10px; } .sound-wave { height:82px; } .sound-time { min-width:68px; font-size:11px; } .sound-rate { min-width:62px; padding-left:8px; } }
     @media (max-width: 860px) { .desktop-hub { border-radius:0; } main.container { padding-inline:0; } .hub-main { padding:14px 10px 28px !important; } .sound-hero { border-radius:22px; } }
   </style>
 </head>
@@ -386,5 +403,153 @@
   <script src="../assets/site-enhance.js" defer></script>
   <script src="../assets/side-menu.js?v=ai-sounds-20260530" defer></script>
   <script src="../assets/nav.js" defer></script>
+  <script type="module">
+    import WaveSurfer from "https://cdn.jsdelivr.net/npm/wavesurfer.js@7/dist/wavesurfer.esm.js";
+
+    const players = [];
+    const lazyPlayers = [];
+    const formatTime = (seconds) => {
+      if (!Number.isFinite(seconds)) return "0:00";
+      const mins = Math.floor(seconds / 60);
+      const secs = Math.floor(seconds % 60).toString().padStart(2, "0");
+      return `${mins}:${secs}`;
+    };
+
+    document.documentElement.classList.add("wavesurfer-enhanced");
+
+    document.querySelectorAll(".sound-card").forEach((card) => {
+      const audio = card.querySelector("audio");
+      const wave = card.querySelector(".sound-wave");
+      if (!audio || !wave) return;
+      const durationLabel = card.querySelector(".sound-meta span")?.textContent.trim() || "0:00";
+
+      const player = document.createElement("div");
+      player.className = "sound-player";
+      wave.before(player);
+      player.appendChild(wave);
+
+      const controls = document.createElement("div");
+      controls.className = "sound-player-controls";
+
+      const play = document.createElement("button");
+      play.className = "sound-play";
+      play.type = "button";
+      play.setAttribute("aria-label", "Play track");
+
+      const time = document.createElement("span");
+      time.className = "sound-time";
+      time.textContent = `0:00 / ${durationLabel}`;
+
+      const spacer = document.createElement("span");
+      spacer.className = "sound-spacer";
+      spacer.setAttribute("aria-hidden", "true");
+
+      const rate = document.createElement("select");
+      rate.className = "sound-rate";
+      rate.setAttribute("aria-label", "Playback speed");
+      ["1", "0.75", "1.25", "1.5"].forEach((value) => {
+        const option = document.createElement("option");
+        option.value = value;
+        option.textContent = value === "1" ? "1x" : `${value}x`;
+        option.selected = value === "1";
+        rate.appendChild(option);
+      });
+
+      const download = document.createElement("a");
+      download.className = "sound-download";
+      download.href = audio.currentSrc || audio.src;
+      download.download = "";
+      download.setAttribute("aria-label", "Download track");
+
+      controls.append(play, time, spacer, rate, download);
+      player.appendChild(controls);
+
+      let wavesurfer;
+      const updateTime = () => {
+        if (!wavesurfer) return;
+        time.textContent = `${formatTime(wavesurfer.getCurrentTime())} / ${formatTime(wavesurfer.getDuration())}`;
+      };
+
+      const ensureWaveform = () => {
+        if (wavesurfer) return wavesurfer;
+
+        player.classList.add("is-loading");
+        wavesurfer = WaveSurfer.create({
+          container: wave,
+          media: audio,
+          url: audio.currentSrc || audio.src,
+          height: 96,
+          barWidth: 2,
+          barGap: 2,
+          barRadius: 2,
+          cursorColor: "#e8c57a",
+          progressColor: "#e0667e",
+          waveColor: "rgba(198, 219, 230, .58)",
+          normalize: true
+        });
+
+        players.push(wavesurfer);
+
+        wavesurfer.on("ready", () => {
+          player.classList.remove("is-loading");
+          updateTime();
+        });
+        wavesurfer.on("play", () => {
+          player.classList.add("is-playing");
+          play.setAttribute("aria-label", "Pause track");
+        });
+        wavesurfer.on("pause", () => {
+          player.classList.remove("is-playing");
+          play.setAttribute("aria-label", "Play track");
+        });
+        wavesurfer.on("finish", () => {
+          player.classList.remove("is-playing");
+          play.setAttribute("aria-label", "Play track");
+        });
+        wavesurfer.on("timeupdate", updateTime);
+        wavesurfer.on("error", () => {
+          player.remove();
+          audio.style.position = "relative";
+          audio.style.width = "100%";
+          audio.style.height = "auto";
+          audio.style.opacity = "1";
+          audio.style.pointerEvents = "auto";
+        });
+
+        return wavesurfer;
+      };
+
+      play.addEventListener("click", () => {
+        const current = ensureWaveform();
+        players.forEach((other) => {
+          if (other !== current && other.isPlaying()) other.pause();
+        });
+        current.playPause();
+      });
+
+      rate.addEventListener("change", () => {
+        ensureWaveform().setPlaybackRate(Number(rate.value), true);
+      });
+
+      lazyPlayers.push({ player, ensureWaveform });
+    });
+
+    if ("IntersectionObserver" in window) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          const item = lazyPlayers.find((candidate) => candidate.player === entry.target);
+          if (item) {
+            item.ensureWaveform();
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { rootMargin: "500px 0px" });
+
+      lazyPlayers.forEach(({ player }) => observer.observe(player));
+    } else {
+      lazyPlayers.slice(0, 4).forEach(({ ensureWaveform }) => ensureWaveform());
+    }
+  </script>
 </body>
 </html>
