@@ -47,15 +47,20 @@
     .sound-waveform { position:relative; z-index:1; width:100%; height:100%; opacity:.98; }
     .sound-waveform > div { width:100%; height:100%; }
     .sound-waveform ::part(region) { top:0 !important; height:100% !important; mix-blend-mode:screen; }
+    .sound-waveform ::part(region-handle) { background:rgba(232,197,122,.9) !important; width:3px !important; }
     .sound-card.is-loading .sound-scrub::after { content:""; position:absolute; inset:0; background:linear-gradient(90deg, transparent, rgba(232,197,122,.08), transparent); opacity:.7; }
     .sound-player-controls { display:flex; align-items:center; gap:8px; min-height:38px; }
     .sound-play { position:relative; flex:0 0 auto; width:38px; height:38px; border:1px solid rgba(232,197,122,.42); border-radius:50%; background:rgba(232,197,122,.12); color:var(--brand-gold); cursor:pointer; box-shadow:inset 0 1px 0 rgba(255,255,255,.08); }
     .sound-play::before { content:""; position:absolute; left:15px; top:11px; width:0; height:0; border-top:8px solid transparent; border-bottom:8px solid transparent; border-left:12px solid currentColor; }
     .sound-player.is-playing .sound-play::before { left:12px; top:10px; width:5px; height:18px; border:0; border-right:5px solid currentColor; border-left:5px solid currentColor; }
     .sound-play:hover { background:rgba(232,197,122,.2); color:var(--ink-hi); }
-    .sound-play:focus-visible, .sound-rate button:focus-visible, .sound-volume-button:focus-visible, .sound-volume input:focus-visible, .sound-download:focus-visible, .sound-eq-presets button:focus-visible, .sound-eq input:focus-visible { outline:2px solid var(--brand-gold); outline-offset:3px; }
+    .sound-play:focus-visible, .sound-loop:focus-visible, .sound-rate button:focus-visible, .sound-volume-button:focus-visible, .sound-volume input:focus-visible, .sound-download:focus-visible, .sound-eq-presets button:focus-visible, .sound-eq input:focus-visible { outline:2px solid var(--brand-gold); outline-offset:3px; }
     .sound-time { min-width:78px; color:#d7e1e8; font-variant-numeric:tabular-nums; font-size:12px; }
     .sound-spacer { flex:1 1 auto; min-width:0; }
+    .sound-loop { flex:0 0 auto; height:34px; padding:0 10px; border:1px solid rgba(255,255,255,.14); border-radius:999px; background:rgba(0,0,0,.18); color:var(--ink-mid); cursor:pointer; font:inherit; font-size:11px; }
+    .sound-loop:hover { color:var(--ink-hi); background:rgba(255,255,255,.07); }
+    .sound-loop.is-active { border-color:rgba(232,197,122,.36); background:rgba(232,197,122,.15); color:var(--brand-gold); }
+    .sound-utility-controls { display:flex; align-items:center; justify-content:flex-end; gap:8px; min-width:max-content; }
     .sound-rate { display:inline-flex; align-items:center; gap:2px; min-width:0; min-height:34px; padding:3px; border:1px solid rgba(255,255,255,.14); border-radius:999px; background:rgba(0,0,0,.22); }
     .sound-rate button { min-width:30px; height:28px; border:0; border-radius:999px; background:transparent; color:var(--ink-mid); cursor:pointer; font:inherit; font-size:11px; }
     .sound-rate button:hover { color:var(--ink-hi); background:rgba(255,255,255,.07); }
@@ -124,6 +129,7 @@
       .sound-player-controls { flex-wrap:wrap; }
       .sound-spacer { display:none; }
       .sound-time { flex:1 1 auto; }
+      .sound-utility-controls { flex:1 1 100%; min-width:0; justify-content:flex-start; }
       .sound-volume { flex:1 1 132px; justify-content:center; }
       .sound-volume input { width:min(120px, 100%); }
       .sound-eq-head { align-items:flex-start; flex-direction:column; }
@@ -132,7 +138,7 @@
       .sound-eq-bands { grid-template-columns:1fr; }
       .sound-eq-band { grid-template-columns:58px minmax(0, 1fr); align-items:center; }
     }
-    @media (max-width: 620px) { .sound-player-controls { flex-wrap:wrap; } .sound-spacer { display:none; } .sound-time { flex:1 1 auto; } .sound-volume { flex:1 1 132px; justify-content:center; } .sound-volume input { width:min(120px, 100%); } .sound-eq-head { align-items:flex-start; flex-direction:column; } }
+    @media (max-width: 620px) { .sound-player-controls { flex-wrap:wrap; } .sound-spacer { display:none; } .sound-time { flex:1 1 auto; } .sound-utility-controls { flex:1 1 100%; min-width:0; justify-content:flex-start; } .sound-volume { flex:1 1 132px; justify-content:center; } .sound-volume input { width:min(120px, 100%); } .sound-eq-head { align-items:flex-start; flex-direction:column; } }
     @media (max-width: 520px) { .sound-player { padding:10px; } .sound-wave { height:82px; } .sound-scrub { height:64px; } .sound-time { min-width:68px; font-size:11px; } .sound-rate button { min-width:32px; } .sound-eq-bands { gap:6px; } }
     @media (max-width: 860px) { .desktop-hub { border-radius:0; } main.container { padding-inline:0; } .hub-main { padding:14px 10px 28px !important; } .sound-hero { border-radius:22px; } }
   </style>
@@ -498,6 +504,13 @@
       spacer.className = "sound-spacer";
       spacer.setAttribute("aria-hidden", "true");
 
+      const loop = document.createElement("button");
+      loop.className = "sound-loop";
+      loop.type = "button";
+      loop.textContent = "Loop";
+      loop.setAttribute("aria-pressed", "false");
+      loop.setAttribute("aria-label", "Loop selected region");
+
       const rate = document.createElement("div");
       rate.className = "sound-rate";
       rate.setAttribute("role", "group");
@@ -538,7 +551,11 @@
       download.download = "";
       download.setAttribute("aria-label", "Download track");
 
-      controls.append(play, time, spacer, rate, volume, download);
+      const utilityControls = document.createElement("div");
+      utilityControls.className = "sound-utility-controls";
+      utilityControls.append(rate, volume, download);
+
+      controls.append(play, time, loop, spacer, utilityControls);
       const eq = document.createElement("div");
       eq.className = "sound-eq";
 
@@ -599,6 +616,9 @@
       let audioGraph;
       let lastVolume = 1;
       let currentEq = { bass: 0, mid: 0, treble: 0 };
+      let selectedRegion;
+      let loopRegion = true;
+      let lastScrubPlayAt = 0;
       const updateTime = () => {
         if (!wavesurfer) return;
         time.textContent = `${formatTime(wavesurfer.getCurrentTime())} / ${formatTime(wavesurfer.getDuration())}`;
@@ -656,11 +676,96 @@
         const graph = getAudioGraph();
         if (graph && graph.context.state === "suspended") graph.context.resume();
       };
+      const pauseOtherPlayers = (current) => {
+        players.forEach((other) => {
+          if (other !== current && other.isPlaying()) other.pause();
+        });
+      };
+      let scrubPointer;
+      const isRegionPointerEvent = (event) => event.composedPath().some((node) => (
+        node instanceof Element && String(node.getAttribute("part") || "").includes("region")
+      ));
+      const playFromScrubEvent = (event) => {
+        const current = ensureWaveform();
+        const rect = scrub.getBoundingClientRect();
+        const ratio = Math.min(1, Math.max(0, (event.clientX - rect.left) / rect.width));
+        const targetTime = ratio * (current.getDuration() || expectedDuration);
+        pauseOtherPlayers(current);
+        resumeEq();
+        applyEq(currentEq);
+        audio.currentTime = targetTime;
+        audio.play().catch(() => current.play());
+        window.setTimeout(() => {
+          audio.currentTime = targetTime;
+          audio.play().catch(() => current.play());
+        }, 60);
+        lastScrubPlayAt = Date.now();
+      };
+      const getScrubTime = (clientX) => {
+        const current = ensureWaveform();
+        const rect = scrub.getBoundingClientRect();
+        const ratio = Math.min(1, Math.max(0, (clientX - rect.left) / rect.width));
+        return ratio * (current.getDuration() || expectedDuration);
+      };
+      const bindGeneratedScrubEvents = () => {
+        const host = waveform.firstElementChild;
+        if (!host || host.dataset.scrubBound === "true") return;
+        host.dataset.scrubBound = "true";
+        let generatedPointer;
+        const handleGeneratedDown = (event) => {
+          if (isRegionPointerEvent(event)) return;
+          event.preventDefault();
+          event.stopPropagation();
+          generatedPointer = { x: event.clientX, y: event.clientY };
+        };
+        const handleGeneratedUp = (event) => {
+          if (!generatedPointer || isRegionPointerEvent(event)) {
+            generatedPointer = null;
+            return;
+          }
+          const startPointer = generatedPointer;
+          const moved = Math.hypot(event.clientX - startPointer.x, event.clientY - startPointer.y);
+          generatedPointer = null;
+          event.preventDefault();
+          event.stopPropagation();
+          if (moved <= 6) {
+            playFromScrubEvent(event);
+            return;
+          }
+          const start = getScrubTime(startPointer.x);
+          const end = getScrubTime(event.clientX);
+          if (Math.abs(end - start) > .2) {
+            regions.addRegion({
+              start: Math.min(start, end),
+              end: Math.max(start, end),
+              color: "rgba(232, 197, 122, .2)",
+              drag: true,
+              resize: true
+            });
+            lastScrubPlayAt = Date.now();
+          }
+        };
+        const handleGeneratedClick = (event) => {
+          if (isRegionPointerEvent(event) || Date.now() - lastScrubPlayAt < 250) return;
+          event.preventDefault();
+          event.stopPropagation();
+          playFromScrubEvent(event);
+        };
+        [host, host.shadowRoot].filter(Boolean).forEach((target) => {
+          target.addEventListener("mousedown", handleGeneratedDown, true);
+          target.addEventListener("mouseup", handleGeneratedUp, true);
+          target.addEventListener("pointerdown", handleGeneratedDown, true);
+          target.addEventListener("pointerup", handleGeneratedUp, true);
+          target.addEventListener("click", handleGeneratedClick, true);
+        });
+      };
 
       const ensureWaveform = () => {
         if (wavesurfer) return wavesurfer;
 
         card.classList.add("is-loading");
+        audio.preload = "auto";
+        audio.load();
         const regions = Regions.create();
         wavesurfer = WaveSurfer.create({
           container: waveform,
@@ -679,22 +784,32 @@
         wavesurfer.setVolume(Number(volumeSlider.value));
         wavesurfer.setMuted(Number(volumeSlider.value) === 0);
         syncVolumeState();
+        requestAnimationFrame(bindGeneratedScrubEvents);
 
         wavesurfer.on("ready", () => {
           card.classList.remove("is-loading");
           updateTime();
-          const duration = wavesurfer.getDuration() || expectedDuration;
-          [
-            { start: 0, end: Math.min(duration, duration * .28), color: "rgba(110, 203, 255, .1)" },
-            { start: Math.min(duration, duration * .28), end: Math.min(duration, duration * .68), color: "rgba(232, 197, 122, .1)" },
-            { start: Math.min(duration, duration * .68), end: duration, color: "rgba(224, 102, 126, .12)" }
-          ].forEach((region) => {
-            if (region.end > region.start) regions.addRegion({ ...region, drag: false, resize: false });
+          bindGeneratedScrubEvents();
+        });
+        regions.on("region-created", (region) => {
+          if (selectedRegion && selectedRegion !== region) selectedRegion.remove();
+          selectedRegion = region;
+          selectedRegion.setOptions({
+            color: "rgba(232, 197, 122, .2)",
+            drag: true,
+            resize: true
           });
+        });
+        regions.on("region-updated", (region) => {
+          selectedRegion = region;
         });
         regions.on("region-clicked", (region, event) => {
           event.stopPropagation();
+          selectedRegion = region;
           region.play();
+        });
+        regions.on("region-out", (region) => {
+          if (loopRegion && selectedRegion === region && wavesurfer.isPlaying()) region.play();
         });
         wavesurfer.on("play", () => {
           player.classList.add("is-playing");
@@ -721,13 +836,40 @@
         return wavesurfer;
       };
 
+      scrub.addEventListener("pointerdown", (event) => {
+        if (isRegionPointerEvent(event)) return;
+        scrubPointer = { x: event.clientX, y: event.clientY };
+      }, true);
+      scrub.addEventListener("pointerup", (event) => {
+        if (!scrubPointer || isRegionPointerEvent(event)) {
+          scrubPointer = null;
+          return;
+        }
+        const moved = Math.hypot(event.clientX - scrubPointer.x, event.clientY - scrubPointer.y);
+        scrubPointer = null;
+        if (moved > 6) return;
+        playFromScrubEvent(event);
+      }, true);
+      scrub.addEventListener("click", (event) => {
+        if (isRegionPointerEvent(event) || Date.now() - lastScrubPlayAt < 250) return;
+        event.preventDefault();
+        event.stopPropagation();
+        playFromScrubEvent(event);
+      }, true);
+
+      loop.addEventListener("click", () => {
+        loopRegion = !loopRegion;
+        loop.classList.toggle("is-active", loopRegion);
+        loop.setAttribute("aria-pressed", loopRegion ? "true" : "false");
+      });
+      loop.classList.add("is-active");
+      loop.setAttribute("aria-pressed", "true");
+
       play.addEventListener("click", () => {
         const current = ensureWaveform();
         resumeEq();
         applyEq(currentEq);
-        players.forEach((other) => {
-          if (other !== current && other.isPlaying()) other.pause();
-        });
+        pauseOtherPlayers(current);
         current.playPause();
       });
 
