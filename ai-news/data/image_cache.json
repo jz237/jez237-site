@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-02T00:00:01.509717+00:00",
+  "updatedAt": "2026-06-02T01:00:01.219829+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -8860,6 +8860,10 @@
     "https://github.com/ollama/ollama/releases/tag/v0.30.0": {
       "image": "https://opengraph.githubassets.com/48bf98a01cb0bcc7ac92f95621c97939c42fa5de9658f1e574becdb9c1456e98/ollama/ollama",
       "checkedAt": "2026-06-01T23:00:01.883335+00:00"
+    },
+    "https://openai.com/index/our-views-on-ai-policy-and-political-advocacy": {
+      "image": "https://images.ctfassets.net/kftzwdyauwt9/2t7PnZhv9RSkCpyADp8h6J/8e94542c974c268eac270cd244dd6055/Political-advocacy-16x9.png?w=1600&amp;h=900&amp;fit=fill",
+      "checkedAt": "2026-06-02T01:00:01.219829+00:00"
     }
   }
 }
