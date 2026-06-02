@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-02T15:00:01.174662+00:00",
+  "updatedAt": "2026-06-02T16:00:01.391525+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -8948,6 +8948,18 @@
     "https://openai.com/index/advancing-youth-safety-and-opportunity-through-global-leadership": {
       "image": "https://images.ctfassets.net/kftzwdyauwt9/2IaU9HljDTpAUcw36nZL4C/d869594af4e3f9bbfbfa9797e393bcd4/oai_16x9__1_.png?w=1600&amp;h=900&amp;fit=fill",
       "checkedAt": "2026-06-02T15:00:01.174662+00:00"
+    },
+    "https://www.theverge.com/tech/941668/microsoft-build-may-2026-live-news-updates": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/03/STK095_MICROSOFT_2_CVirginia_C.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-06-02T16:00:01.391525+00:00"
+    },
+    "https://openai.com/index/travelers": {
+      "image": "",
+      "checkedAt": "2026-06-02T16:00:01.391525+00:00"
+    },
+    "https://openai.com/index/codex-for-every-role-tool-workflow": {
+      "image": "https://images.ctfassets.net/kftzwdyauwt9/4Dvw4ZQ90swvHAxpe8tf49/b38745978bd83b554ac8e4f5865cee37/16x9_SEO_Preview.png?w=1600&amp;h=900&amp;fit=fill",
+      "checkedAt": "2026-06-02T16:00:01.391525+00:00"
     }
   }
 }
