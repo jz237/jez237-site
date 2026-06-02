@@ -40,10 +40,10 @@
     .prompt-drawer p { margin:8px 0 0; color:#d7e1e8; white-space:pre-wrap; }
     .prompt-drawer .prompt-source { display:block; margin-top:8px; color:var(--ink-lo); font-size:11px; }
     .sound-card audio { position:relative; z-index:1; width:100%; filter: saturate(1.1); }
-    .sound-player { position:relative; z-index:1; display:grid; gap:12px; padding:13px; border:1px solid rgba(255,255,255,.12); border-radius:18px; background:linear-gradient(180deg, rgba(5,14,28,.62), rgba(0,0,0,.28)); box-shadow:inset 0 1px 0 rgba(255,255,255,.06), 0 14px 26px rgba(0,0,0,.2); }
+    .sound-player { position:relative; z-index:1; padding:11px 13px; border:1px solid rgba(255,255,255,.12); border-radius:18px; background:linear-gradient(180deg, rgba(5,14,28,.62), rgba(0,0,0,.28)); box-shadow:inset 0 1px 0 rgba(255,255,255,.06), 0 14px 26px rgba(0,0,0,.2); }
     .sound-wave { position:relative; z-index:1; height:104px; border:1px solid rgba(255,255,255,.1); border-radius:14px; background:linear-gradient(180deg, rgba(0,0,0,.08), rgba(0,0,0,.34)), url('../assets/ai-sounds/realistic-waveform-20260531.webp') center / cover no-repeat; box-shadow:inset 0 -34px 42px rgba(0,0,0,.18); overflow:hidden; }
     .sound-wave span { display:none; }
-    .sound-player.is-loading .sound-wave::after { content:""; position:absolute; inset:0; background:linear-gradient(90deg, transparent, rgba(232,197,122,.08), transparent); opacity:.7; }
+    .sound-card.is-loading > .sound-wave::after { content:""; position:absolute; inset:0; background:linear-gradient(90deg, transparent, rgba(232,197,122,.08), transparent); opacity:.7; }
     .sound-player-controls { display:flex; align-items:center; gap:8px; min-height:38px; }
     .sound-play { position:relative; flex:0 0 auto; width:38px; height:38px; border:1px solid rgba(232,197,122,.42); border-radius:50%; background:rgba(232,197,122,.12); color:var(--brand-gold); cursor:pointer; box-shadow:inset 0 1px 0 rgba(255,255,255,.08); }
     .sound-play::before { content:""; position:absolute; left:15px; top:11px; width:0; height:0; border-top:8px solid transparent; border-bottom:8px solid transparent; border-left:12px solid currentColor; }
@@ -435,8 +435,7 @@
 
       const player = document.createElement("div");
       player.className = "sound-player";
-      wave.before(player);
-      player.appendChild(wave);
+      audio.before(player);
 
       const controls = document.createElement("div");
       controls.className = "sound-player-controls";
@@ -459,11 +458,11 @@
       rate.setAttribute("role", "group");
       rate.setAttribute("aria-label", "Playback speed");
       const rateButtons = [];
-      ["1", "1.25", "1.5"].forEach((value) => {
+      ["0.75", "1", "1.25"].forEach((value) => {
         const button = document.createElement("button");
         button.type = "button";
         button.dataset.rate = value;
-        button.textContent = value === "1" ? "1x" : `${value}x`;
+        button.textContent = value === "0.75" ? ".75x" : `${value}x`;
         button.setAttribute("aria-pressed", value === "1" ? "true" : "false");
         if (value === "1") button.classList.add("is-active");
         rateButtons.push(button);
@@ -512,7 +511,7 @@
       const ensureWaveform = () => {
         if (wavesurfer) return wavesurfer;
 
-        player.classList.add("is-loading");
+        card.classList.add("is-loading");
         wavesurfer = WaveSurfer.create({
           container: wave,
           media: audio,
@@ -533,7 +532,7 @@
         syncVolumeState();
 
         wavesurfer.on("ready", () => {
-          player.classList.remove("is-loading");
+          card.classList.remove("is-loading");
           updateTime();
         });
         wavesurfer.on("play", () => {
@@ -605,14 +604,14 @@
         syncVolumeState();
       });
 
-      lazyPlayers.push({ player, ensureWaveform });
+      lazyPlayers.push({ target: card, ensureWaveform });
     });
 
     if ("IntersectionObserver" in window) {
       const observer = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
           if (!entry.isIntersecting) return;
-          const item = lazyPlayers.find((candidate) => candidate.player === entry.target);
+          const item = lazyPlayers.find((candidate) => candidate.target === entry.target);
           if (item) {
             item.ensureWaveform();
             observer.unobserve(entry.target);
@@ -620,7 +619,7 @@
         });
       }, { rootMargin: "500px 0px" });
 
-      lazyPlayers.forEach(({ player }) => observer.observe(player));
+      lazyPlayers.forEach(({ target }) => observer.observe(target));
     } else {
       lazyPlayers.slice(0, 4).forEach(({ ensureWaveform }) => ensureWaveform());
     }
