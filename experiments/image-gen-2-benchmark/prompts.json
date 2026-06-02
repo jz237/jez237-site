@@ -1222,5 +1222,17 @@
     "slot": "evening",
     "model": "openai/gpt-image-2",
     "size": "1024x1536"
+  },
+  {
+    "id": "2026-06-02-morning-portrait-as-tin-toy-automaton",
+    "title": "Portrait as Tin Toy Automaton",
+    "tests": "Reusable reference-photo transformation template; tests identity preservation while converting a portrait into a tactile lithographed tin automaton with clockwork toy logic, repair-shop props, and no instructional text rendered in the image.",
+    "prompt": "Use the uploaded reference photo and preserve the person identity, head angle, expression, hairstyle silhouette, glasses or distinctive accessories, facial proportions, shoulder pose, and overall portrait composition, then transform the person into a vintage wind-up tin toy automaton displayed in an old toy repair shop window. Rebuild the subject from lithographed tin, enamel paint, small rivets, hinged clockwork joints, a side key-wind mechanism, pressed-metal seams, tiny scratches, chipped paint, brass gear glimpses, and subtle dents. Keep the face recognizable through printed tin portrait features and raised stamped details while changing skin, clothing, and background into a tactile clockwork toy artifact with warm shop-window light, tiny repair tools, a wooden display base, loose springs, and aged glass reflections. Avoid extra limbs, duplicate faces, readable text, real logos, placeholder marks, watermark, and losing the source-photo likeness.\n\nSource photo needed: a clear portrait photo of a person.\n\nReusable template: Use the uploaded reference photo and preserve the [PERSON] identity, head angle, expression, hairstyle silhouette, distinctive accessories, facial proportions, shoulder/body pose, and overall composition, then transform [PERSON] into a [OBJECT OR ARTIFACT] made from [MATERIAL] in [SETTING] with [MOOD] lighting. Rebuild the subject so the original likeness remains readable while changing the body, clothing, background, surface texture, and props into a cohesive [STYLE] artifact. Avoid extra limbs, duplicate faces, text/logo artifacts, placeholder marks, watermark, and losing the source-photo likeness.\n\nWhat to preserve: identity, head angle, expression, hairstyle outline, glasses or distinctive accessories, facial proportions, shoulder pose, and overall portrait composition.\n\nWhat to change: convert the person into a wind-up tin toy automaton with lithographed metal features, enamel paint, rivets, hinged joints, a key-wind mechanism, chipped edges, visible gears, repair-shop props, and aged window reflections.\n\nExample substitution: Use a clear portrait of a person wearing round glasses; preserve their half-smile, head tilt, glasses, short hair, and shoulders, then turn them into a chipped enamel wind-up tin toy automaton on a wooden repair-shop display base.",
+    "image": "images/2026-06-02-morning-portrait-as-tin-toy-automaton.png",
+    "date": "2026-06-02",
+    "batch": "Daily Prompt",
+    "slot": "morning",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
