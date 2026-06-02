@@ -1234,5 +1234,17 @@
     "slot": "morning",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-06-02-midday-car-as-cutaway-coral-reef",
+    "title": "Car as Cutaway Coral Reef",
+    "tests": "Reusable reference-photo transformation: preserves a car photo silhouette while converting the vehicle into a transparent cutaway coral reef aquarium artifact.",
+    "prompt": "Use the uploaded reference photo and preserve the car's identity, three-quarter angle, wheel placement, headlight shape, roofline, window layout, body proportions, and most recognizable silhouette, then transform the car into a cutaway coral reef aquarium vehicle displayed on a shallow tide-pool museum base. Rebuild the body with transparent glassy panels, branching coral frame ribs, anemones inside the cabin, sea fans following the door seams, pearl-like headlights, barnacles around the wheel arches, tiny reef fish visible through the windows, salt crust, bubbles, wet reflections, and underwater caustic light. Keep the source car recognizable while changing the material, interior logic, surface texture, lighting, and setting into a dense tactile reef artifact. Negative constraints: no extra wheels, no distorted impossible car anatomy, no text or logo artifacts, no readable license plate, no people, no watermark, and do not lose the original car silhouette.\n\nSource photo needed: a clear car photo.\n\nReusable template: Use the uploaded reference photo and preserve the [OBJECT]'s identity, viewing angle, proportions, silhouette, key parts, surface markings, and most recognizable features, then transform the [OBJECT] into a [CONSTRUCTED WORLD OR MATERIAL SYSTEM] in [SETTING] with [MOOD] lighting. Keep [KEY FEATURES] recognizable while changing the material, interior logic, surface texture, props, and environment into a cohesive [STYLE] artifact. Avoid extra parts, broken anatomy, text/logo artifacts, placeholder marks, watermark, and any change that makes the source object unrecognizable.\n\nWhat to preserve: car identity, viewing angle, wheel placement, headlights, roofline, windows, proportions, and overall silhouette.\n\nWhat to change: convert the car body into a transparent cutaway coral reef aquarium with coral ribs, anemones, sea fans, reef fish, barnacles, tide-pool base, salt crust, bubbles, wet reflections, and caustic aquarium light.\n\nExample substitution: Use a clear photo of a teal compact hatchback; preserve its three-quarter front angle, rounded headlights, wheel placement, sloped roofline, and side windows, then turn it into a transparent cutaway coral reef vehicle on a shallow museum tide-pool display.",
+    "image": "images/2026-06-02-midday-car-as-cutaway-coral-reef.png",
+    "date": "2026-06-02",
+    "batch": "Daily Prompt",
+    "slot": "midday",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
