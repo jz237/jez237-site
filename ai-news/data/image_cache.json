@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-02T17:00:01.635697+00:00",
+  "updatedAt": "2026-06-02T18:00:01.832918+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -8984,6 +8984,14 @@
     "https://www.techrepublic.com/article/news-strava-api-scraping-crackdown": {
       "image": "",
       "checkedAt": "2026-06-02T16:53:11.113275+00:00"
+    },
+    "https://techcrunch.com/2026/06/02/amazon-faces-class-action-lawsuit-over-ring-facial-recognition-feature": {
+      "image": "https://techcrunch.com/wp-content/uploads/2022/08/GettyImages-621058316.jpg?resize=1200,930",
+      "checkedAt": "2026-06-02T18:00:01.832918+00:00"
+    },
+    "https://www.theverge.com/news/941830/microsoft-project-solara-os-ai-agent-gadgets": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/projectsolara.jpg?quality=90&amp;strip=all&amp;crop=0%2C3.4613147178592%2C100%2C93.077370564282&amp;w=1200",
+      "checkedAt": "2026-06-02T18:00:01.832918+00:00"
     }
   }
 }
