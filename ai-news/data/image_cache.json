@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-02T09:00:02.007740+00:00",
+  "updatedAt": "2026-06-02T10:00:01.464247+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -8892,6 +8892,18 @@
     "https://github.com/ggml-org/llama.cpp/releases/tag/b9469": {
       "image": "https://opengraph.githubassets.com/a400e3300a7d9e2c8cb9b361a7dd3cb5b57318071d1726e81b5a353a3d6b2e04/ggml-org/llama.cpp/releases/tag/b9469",
       "checkedAt": "2026-06-02T08:00:01.606189+00:00"
+    },
+    "https://github.com/ggml-org/llama.cpp/releases/tag/b9470": {
+      "image": "https://opengraph.githubassets.com/247d07b5fd7dbfe33592a2d42e75457435a51f55974f75603c107353cddddd31/ggml-org/llama.cpp/releases/tag/b9470",
+      "checkedAt": "2026-06-02T10:00:01.464247+00:00"
+    },
+    "https://www.technologyreview.com/2026/06/02/1138227/how-small-businesses-can-leverage-ai": {
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/06/4729b751-06a4-3828-9bb4-1983e460947d.jpg?resize=1200,600",
+      "checkedAt": "2026-06-02T10:00:01.464247+00:00"
+    },
+    "https://openai.com/index/codex-for-knowledge-work": {
+      "image": "",
+      "checkedAt": "2026-06-02T10:00:01.464247+00:00"
     }
   }
 }
