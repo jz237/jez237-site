@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-02T22:00:01.763047+00:00",
+  "updatedAt": "2026-06-02T23:00:01.301412+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -9044,6 +9044,14 @@
     "https://www.together.ai/blog/serving-minimax-m3-for-efficient-inference-unlocking-1m-token-context-and-multimodality-without-regrets": {
       "image": "https://cdn.prod.website-files.com/69654e88dce9154b5f12070c/6a1f2dd9842216996872b7f5_OG-image_20260602_M3.png",
       "checkedAt": "2026-06-02T20:00:01.996967+00:00"
+    },
+    "https://techcrunch.com/2026/06/02/cyera-eyes-12b-valuation-at-80x-arr-multiple-despite-operating-losses": {
+      "image": "https://techcrunch.com/wp-content/uploads/2024/01/Cybersecurity-padlocks-Getty.jpg?resize=1200,675",
+      "checkedAt": "2026-06-02T23:00:01.301412+00:00"
+    },
+    "https://simonwillison.net/2026/Jun/2/microsofts-new-models": {
+      "image": "",
+      "checkedAt": "2026-06-02T23:00:01.301412+00:00"
     }
   }
 }
