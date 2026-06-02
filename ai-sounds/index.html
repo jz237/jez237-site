@@ -68,17 +68,17 @@
     .sound-download::before { content:""; width:13px; height:15px; background:currentColor; clip-path:polygon(38% 0, 62% 0, 62% 48%, 82% 48%, 50% 82%, 18% 48%, 38% 48%); }
     .sound-download::after { content:""; position:absolute; left:10px; right:10px; bottom:8px; height:2px; border-radius:999px; background:currentColor; }
     .sound-download:hover { color:var(--brand-gold); border-color:rgba(232,197,122,.36); }
-    .sound-eq { display:grid; grid-template-columns:minmax(92px, .65fr) minmax(0, 1.35fr); gap:12px; min-width:0; padding:11px 12px 12px; border:1px solid rgba(255,255,255,.1); border-radius:14px; background:rgba(0,0,0,.16); }
+    .sound-eq { display:grid; grid-template-columns:minmax(112px, .72fr) minmax(0, 1.28fr); gap:14px; min-width:0; padding:12px 13px 13px; border:1px solid rgba(255,255,255,.1); border-radius:14px; background:rgba(0,0,0,.16); }
     .sound-eq-head { display:grid; align-content:start; gap:8px; min-width:0; }
     .sound-eq-label { color:var(--brand-gold); font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; }
-    .sound-eq-presets { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:5px; min-width:0; }
-    .sound-eq-presets button { height:28px; min-width:0; padding:0 7px; border:1px solid rgba(255,255,255,.12); border-radius:9px; background:rgba(0,0,0,.18); color:var(--ink-mid); cursor:pointer; font:inherit; font-size:10.5px; font-weight:650; }
+    .sound-eq-presets { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:7px; min-width:0; }
+    .sound-eq-presets button { height:34px; min-width:0; padding:0 9px; border:1px solid rgba(255,255,255,.12); border-radius:11px; background:rgba(0,0,0,.18); color:var(--ink-mid); cursor:pointer; font:inherit; font-size:11.5px; font-weight:700; }
     .sound-eq-presets button:hover { color:var(--ink-hi); background:rgba(255,255,255,.07); }
     .sound-eq-presets button.is-active { border-color:rgba(232,197,122,.36); background:rgba(232,197,122,.15); color:var(--brand-gold); }
-    .sound-eq-bands { display:grid; grid-template-columns:repeat(5, minmax(32px, 1fr)); gap:7px; min-width:0; align-items:end; }
+    .sound-eq-bands { display:grid; grid-template-columns:repeat(5, minmax(24px, 1fr)); gap:4px; min-width:0; align-items:end; padding:0 18px 0 8px; box-sizing:border-box; }
     .sound-eq-band { display:grid; grid-template-rows:18px 104px 14px; justify-items:center; align-items:center; gap:4px; min-width:0; color:var(--ink-lo); font-size:9px; letter-spacing:.04em; text-transform:uppercase; }
     .sound-eq-value { color:var(--brand-gold); font-size:9px; font-variant-numeric:tabular-nums; opacity:.85; }
-    .sound-eq-band input { width:104px; height:26px; min-width:0; max-width:none; accent-color:var(--brand-gold); cursor:pointer; transform:rotate(-90deg); transform-origin:center; }
+    .sound-eq-band input { width:24px; height:104px; min-width:0; max-width:none; accent-color:var(--brand-gold); cursor:pointer; writing-mode:vertical-lr; direction:rtl; }
     .wavesurfer-enhanced .sound-card audio { position:absolute; width:1px; height:1px; opacity:0; pointer-events:none; }
     .sound-note { margin-top:18px; padding:18px 20px; border:1px solid rgba(232,197,122,.16); border-radius:22px; background:rgba(232,197,122,.055); color:var(--ink-lo); }
     .sound-note strong { color: var(--ink-hi); }
@@ -136,7 +136,7 @@
       .sound-eq { grid-template-columns:1fr; }
       .sound-eq-bands { gap:4px; }
       .sound-eq-band { grid-template-rows:16px 88px 13px; }
-      .sound-eq-band input { width:88px; }
+      .sound-eq-band input { height:88px; }
     }
     @media (max-width: 620px) { .sound-player-controls { flex-wrap:wrap; gap:6px; } .sound-spacer { display:none; } .sound-time { flex:1 1 auto; } .sound-volume { flex:1 1 108px; min-width:106px; max-width:none; justify-content:center; } .sound-volume input { min-width:64px; max-width:180px; } }
     @media (max-width: 520px) { .sound-player { padding:10px; } .sound-wave { height:82px; } .sound-scrub { height:64px; } .sound-play { order:1; width:34px; height:34px; } .sound-play::before { left:13px; top:9px; } .sound-player.is-playing .sound-play::before { left:10px; top:8px; } .sound-rate { order:2; gap:0; padding:2px; } .sound-rate button { width:25px; min-width:0; padding:0; font-size:9.5px; } .sound-volume { order:3; flex:1 1 108px; min-width:106px; max-width:none; gap:6px; justify-content:center; padding:0 8px; } .sound-volume input { min-width:64px; max-width:180px; } .sound-download { order:4; } .sound-time { order:5; flex:1 1 100%; min-width:0; font-size:11px; } .sound-eq-bands { gap:6px; } }
