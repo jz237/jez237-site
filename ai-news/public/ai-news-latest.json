@@ -1,8 +1,8 @@
 {
-  "updatedAt": "2026-06-02T11:40:45.899243+00:00",
+  "updatedAt": "2026-06-02T12:54:12.059298+00:00",
   "items": [
     {
-      "title": "DraDDP: A Multimodal Multi-Party Dialogue Discourse Parsing Dataset",
+      "title": "Optimal Transport-based Permutation-Invariant Bayesian Optimization of Offshore Wind Farm Layouts",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -10,44 +10,188 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-02T11:40:59.929924+00:00",
+      "published": "2026-06-02T12:54:15.499769+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-02T11:40:45.899243+00:00",
+      "lastSeen": "2026-06-02T12:54:12.059298+00:00",
       "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.76
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.66
     },
     {
-      "title": "b9474",
-      "url": "https://github.com/ggml-org/llama.cpp/releases/tag/b9474",
-      "source": "llama.cpp Releases",
-      "sourceUrl": "https://github.com/ggml-org/llama.cpp/releases.atom",
-      "sourceWeight": 0.8,
+      "title": "Gemini Spark is the most impressive and terrifying AI experience I’ve had yet",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/941388/gemini-spark-ai-agent-trip-planning",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
       "category": "AI",
-      "summary": "ui: Add Thinking mode toggle with reasoning effort levels + improvements for Chat Form Add Action UI (#23434)\n\n\nfeat: Add \"Thinking\" toggle and status icon + redesign Chat Form Actions Add panel\n\n\ntest: Update test reference\n\n\nfix: Icon\n\n\nfix: E2E test command\n\n\nfix: wait for greeting h1 to be visible in e2e test\n\n\nfix: remove duplicate PDF option in attachment dropdown\n\n\nfix: use label-based group toggle to avoid stale references\n\n\nrefactor: inline MCP server and tool toggles in mobile sheet\n\n\nfix: serve correct build directory in e2e playwright config\n\n\nfeat: add reasoning effort levels sele",
-      "image": "https://opengraph.githubassets.com/6a1d90128f4688f317797c0edfa54e64bf13e68cf8d365f68d7b173bb85d154e/ggml-org/llama.cpp/releases/tag/b9474",
-      "published": "2026-06-02T11:23:08+00:00",
-      "firstSeen": "2026-06-02T11:40:45.899243+00:00",
-      "lastSeen": "2026-06-02T11:40:45.899243+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 3.9111
+      "summary": "According to every product demo from the last four years, planning a trip is a killer use case for AI. Just tell it where you're going, they all promise, and your chatbot / agent / other buzzword will exhaustively search travel options, read up on all the fun things to do, check all the local [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/Google-Gemini-Spark.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.711701357851%2C100%2C78.576597284297&amp%3Bw=1200",
+      "published": "2026-06-02T12:38:08+00:00",
+      "firstSeen": "2026-06-02T12:54:12.059298+00:00",
+      "lastSeen": "2026-06-02T12:54:12.059298+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 11.4518
     },
     {
-      "title": "b9473",
-      "url": "https://github.com/ggml-org/llama.cpp/releases/tag/b9473",
-      "source": "llama.cpp Releases",
-      "sourceUrl": "https://github.com/ggml-org/llama.cpp/releases.atom",
-      "sourceWeight": 0.8,
+      "title": "ZeroDrift raises $10 million to protect AI models from themselves",
+      "url": "https://techcrunch.com/2026/06/02/zerodrift-raises-10-million-to-protect-ai-models-from-themselves",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
       "category": "AI",
-      "summary": "kv-cache : SWA checkpoints store only non-masked cells (#23981)\n\nmacOS/iOS:\n\nmacOS Apple Silicon (arm64)\nmacOS Apple Silicon (arm64, KleidiAI enabled) DISABLED\nmacOS Intel (x64)\niOS XCFramework\n\nLinux:\n\nUbuntu x64 (CPU)\nUbuntu arm64 (CPU)\nUbuntu s390x (CPU)\nUbuntu x64 (Vulkan)\nUbuntu arm64 (Vulkan)\nUbuntu x64 (ROCm 7.2)\nUbuntu x64 (OpenVINO)\nUbuntu x64 (SYCL FP32) DISABLED\n\nAndroid:\n\nAndroid arm64 (CPU)\n\nWindows:\n\nWindows x64 (CPU)\nWindows arm64 (CPU)\nWindows x64 (CUDA 12) - CUDA 12.4 DLLs\nWindows x64 (CUDA 13) - CUDA 13.3 DLLs\nWindows x64 (Vulkan)\nWindows x64 (SYCL) DISABLED\nWindows x64 (HIP)",
-      "image": "https://opengraph.githubassets.com/a65a47e71ffc3ecbf8c7c2187c279c8b848f16dbe0aa909678a7779e41f6c35a/ggml-org/llama.cpp/releases/tag/b9473",
-      "published": "2026-06-02T10:52:54+00:00",
-      "firstSeen": "2026-06-02T11:00:02.005550+00:00",
-      "lastSeen": "2026-06-02T11:40:45.899243+00:00",
+      "summary": "A new AI compliance service sits between AI models and end users to flag and replace any messages that might present a compliance problem.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/Kumesh-headshot.jpg?resize=1200%2C800",
+      "published": "2026-06-02T12:32:59+00:00",
+      "firstSeen": "2026-06-02T12:54:12.059298+00:00",
+      "lastSeen": "2026-06-02T12:54:12.059298+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2792
+    },
+    {
+      "title": "Amazon’s Ring is sued over its Familiar Faces facial-recognition feature",
+      "url": "https://thenextweb.com/news/amazons-ring-is-sued-over-its-familiar-faces-facial-recognition-feature",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "mazon was sued on Monday over the facial-recognition feature it recently added to its Ring doorbells, in a complaint that turns on a familiar asymmetry: the person who buys the camera consents to it, and the person walking past the camera does not. Charles Sigwalt, a Virginia resident, filed the proposed class action in federal [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/amazon-Ring.avif",
+      "published": "2026-06-02T12:14:16+00:00",
+      "firstSeen": "2026-06-02T12:54:12.059298+00:00",
+      "lastSeen": "2026-06-02T12:54:12.059298+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1298
+    },
+    {
+      "title": "Taiwan shows off robot patrol dogs that could guard its South China Sea islands",
+      "url": "https://thenextweb.com/news/taiwan-robot-patrol-dogs-south-china-sea",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "A military research institute demonstrated three versions of a four-legged robot, one of them armed, for possible duty on remote outposts the coast guard struggles to staff. Taiwan’s main weapons-development institute put three robot dogs through their paces on Monday, presenting them as a possible answer to a hard problem: how to keep watch over [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/Ghost-Robotics.avif",
+      "published": "2026-06-02T12:06:55+00:00",
+      "firstSeen": "2026-06-02T12:54:12.059298+00:00",
+      "lastSeen": "2026-06-02T12:54:12.059298+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 3.5262
+    },
+    {
+      "title": "Rocket engine startup Impulse raises $500 million to hire people, not AI",
+      "url": "https://techcrunch.com/2026/06/02/rocket-engine-startup-impulse-raises-500-million-to-hire-people-not-ai",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Engineering physical systems still depends on human talent, according to Impulse Space president Eric Romo.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/Impulse-Mira-Spacecraft-In-Orbit-2.png?resize=1200%2C672",
+      "published": "2026-06-02T12:00:00+00:00",
+      "firstSeen": "2026-06-02T12:54:12.059298+00:00",
+      "lastSeen": "2026-06-02T12:54:12.059298+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2627
+    },
+    {
+      "title": "The White House is at war with itself over who gets to regulate AI",
+      "url": "https://thenextweb.com/news/the-white-house-is-at-war-with-itself-over-who-gets-to-regulate-ai",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The Trump administration is locked in an internal battle over artificial intelligence regulation that has paralysed federal AI policy at the moment it matters most. Three factions are fighting for control: the Commerce Department, which has been quietly building civilian testing partnerships with AI companies; national security officials who want intelligence agencies to evaluate frontier [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/us-white-house-ai-model-distillation-china-theft.avif",
+      "published": "2026-06-02T11:56:45+00:00",
+      "firstSeen": "2026-06-02T12:54:12.059298+00:00",
+      "lastSeen": "2026-06-02T12:54:12.059298+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1211
+    },
+    {
+      "title": "Meta takes its 13+ teen content settings global across Instagram, Facebook, and Messenger",
+      "url": "https://thenextweb.com/news/meta-13-plus-teen-accounts-global",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Meta is taking its “13+” content settings for Teen Accounts global. The company said today that the setting, which it likens to a movie rating, will now apply by default to teenagers across Instagram, Facebook, and Messenger worldwide, extending a system it first introduced last October in the US, UK, Australia, and Canada. According to [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/Meta-teen-13.avif",
+      "published": "2026-06-02T11:50:10+00:00",
+      "firstSeen": "2026-06-02T12:54:12.059298+00:00",
+      "lastSeen": "2026-06-02T12:54:12.059298+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.2179
+    },
+    {
+      "title": "Google wants to release 64 million lab-bred mosquitoes in Florida and California to fight dengue and Zika",
+      "url": "https://thenextweb.com/news/google-verily-32-million-mosquitoes-wolbachia-debug",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Verily, the health and life sciences subsidiary of Google parent Alphabet, has asked the US Environmental Protection Agency for permission to release up to 64 million lab-bred mosquitoes (up to 32 million per year) across Florida and California over two years. The proposal, submitted under the company’s Debug initiative, would deploy male Aedes aegypti mosquitoes [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/google-verily-32-million-mosquitoes-wolbachia-debug.avif",
+      "published": "2026-06-02T11:40:34+00:00",
+      "firstSeen": "2026-06-02T12:54:12.059298+00:00",
+      "lastSeen": "2026-06-02T12:54:12.059298+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.8131
+    },
+    {
+      "title": "Rehumanizing global health care with agentic AI",
+      "url": "https://www.technologyreview.com/2026/06/02/1137827/rehumanizing-global-health-care-with-agentic-ai",
+      "source": "MIT Technology Review AI",
+      "sourceUrl": "https://www.technologyreview.com/topic/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "The global health care sector is under increasing strain.&#160; Decades of chronic underinvestment and constraints in recruitment have coincided with a surge in demand for services for aging populations. Gaps in provision are already taking a toll, with fragmented access to care and high rates of stress and burnout among staff. And it’s getting worse.&#8230;",
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/05/MIT-Abstract-Thumbnail-2_-V1.png?resize=1200%2C600",
+      "published": "2026-06-02T11:23:34+00:00",
+      "firstSeen": "2026-06-02T12:54:12.059298+00:00",
+      "lastSeen": "2026-06-02T12:54:12.059298+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 0.1959
+      "score": 3.2448
+    },
+    {
+      "title": "Marvell jumps after Jensen Huang calls it the next trillion-dollar company",
+      "url": "https://thenextweb.com/news/marvell-huang-next-trillion-dollar-company",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "It took one sentence from Jensen Huang to move tens of billions of dollars. Marvell Technology shares surged about 25% in premarket trading on Tuesday after Nvidia’s chief executive, sharing a Computex stage in Taipei with Marvell boss Matt Murphy, predicted that the chip and networking company would be the next business to reach a [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/Marvell-boss-Matt-Murphy.avif",
+      "published": "2026-06-02T11:21:20+00:00",
+      "firstSeen": "2026-06-02T12:54:12.059298+00:00",
+      "lastSeen": "2026-06-02T12:54:12.059298+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1037
+    },
+    {
+      "title": "Microsoft heads into Build with AI everywhere and a paying-customer problem",
+      "url": "https://thenextweb.com/news/microsoft-build-2026-ai-tools-copilot",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The company’s developer conference opens in San Francisco with another round of AI tooling expected, against the awkward backdrop of how few people pay for Copilot. Microsoft opened its annual Build developer conference in San Francisco on Tuesday, with Satya Nadella due to take the stage at 9:30am Pacific for a keynote that, by every [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/microsoft-threatens-security-researcher-nightmare-eclipse.avif",
+      "published": "2026-06-02T10:55:17+00:00",
+      "firstSeen": "2026-06-02T12:54:12.059298+00:00",
+      "lastSeen": "2026-06-02T12:54:12.059298+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.0911
     },
     {
       "title": "WeRide and Uber take their robotaxi partnership to Madrid",
@@ -60,26 +204,10 @@
       "image": "https://media.thenextweb.com/2026/06/WeRide-Spain.avif",
       "published": "2026-06-02T10:30:28+00:00",
       "firstSeen": "2026-06-02T11:00:02.005550+00:00",
-      "lastSeen": "2026-06-02T11:40:45.899243+00:00",
+      "lastSeen": "2026-06-02T12:54:12.059298+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.9148
-    },
-    {
-      "title": "b9471",
-      "url": "https://github.com/ggml-org/llama.cpp/releases/tag/b9471",
-      "source": "llama.cpp Releases",
-      "sourceUrl": "https://github.com/ggml-org/llama.cpp/releases.atom",
-      "sourceWeight": 0.8,
-      "category": "AI",
-      "summary": "llama : deprecate llama_set_warmup (#24009)\n\n\nllama : deprecate llama_set_warmup\n\n\ncont : fix type\n\n\nCo-authored-by: Daniel Bevenius daniel.bevenius@gmail.com\n\nCo-authored-by: Daniel Bevenius daniel.bevenius@gmail.com\n\nmacOS/iOS:\n\nmacOS Apple Silicon (arm64)\nmacOS Apple Silicon (arm64, KleidiAI enabled) DISABLED\nmacOS Intel (x64)\niOS XCFramework\n\nLinux:\n\nUbuntu x64 (CPU)\nUbuntu arm64 (CPU)\nUbuntu s390x (CPU)\nUbuntu x64 (Vulkan)\nUbuntu arm64 (Vulkan)\nUbuntu x64 (ROCm 7.2)\nUbuntu x64 (OpenVINO)\nUbuntu x64 (SYCL FP32) DISABLED\n\nAndroid:\n\nAndroid arm64 (CPU)\n\nWindows:\n\nWindows x64 (CPU)\nWindows ar",
-      "image": "https://opengraph.githubassets.com/3ab0ae85fb922be2f28b5010dd856aa72fd3bc83b973a29bc98459d7c403430f/ggml-org/llama.cpp/releases/tag/b9471",
-      "published": "2026-06-02T10:22:12+00:00",
-      "firstSeen": "2026-06-02T11:00:02.005550+00:00",
-      "lastSeen": "2026-06-02T11:40:45.899243+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "framework_or_plumbing",
-      "score": 2.1807
+      "score": 3.8792
     },
     {
       "title": "SoftBank is reportedly in early talks to back an $800m Agile Robots round",
@@ -92,10 +220,10 @@
       "image": "https://media.thenextweb.com/2012/10/153960326.avif",
       "published": "2026-06-02T10:10:11+00:00",
       "firstSeen": "2026-06-02T11:00:02.005550+00:00",
-      "lastSeen": "2026-06-02T11:40:45.899243+00:00",
+      "lastSeen": "2026-06-02T12:54:12.059298+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1048
+      "score": 2.0696
     },
     {
       "title": "Uber picks Munich for its next robotaxi push, with Autobrains and Nvidia",
@@ -108,26 +236,10 @@
       "image": "https://media.thenextweb.com/2026/05/Uber.avif",
       "published": "2026-06-02T09:46:30+00:00",
       "firstSeen": "2026-06-02T10:00:01.464247+00:00",
-      "lastSeen": "2026-06-02T11:40:45.899243+00:00",
+      "lastSeen": "2026-06-02T12:54:12.059298+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1933
-    },
-    {
-      "title": "b9470",
-      "url": "https://github.com/ggml-org/llama.cpp/releases/tag/b9470",
-      "source": "llama.cpp Releases",
-      "sourceUrl": "https://github.com/ggml-org/llama.cpp/releases.atom",
-      "sourceWeight": 0.8,
-      "category": "AI",
-      "summary": "hexagon: MUL_MAT, MUL_MAT_ID, FLASH_ATTN and GDN cleanup and optimizations for latest models  (#23989)\n\n\nhex-mm: initial support for F32 * F32 -&gt; F32 matmuls\n\n\nhex-rms-norm: fix src1 stride use in fused rms_norm_mul\n\n\nhex-ops: clear spad pointers in the ops that clober it\n\n\nThis fixes an odd case where fused rms-norm-mul was failing but only in qwen3.5-2B and only at searth op-bath sizes.\n\nhmx-mm: add support for F32 * F32 -&gt; F32 matmul_2d on HMX\n\nDecided to use Q4_0 * F32 -&gt; F32 matmul for this.\nQ4_0 gets dequantized and tiled into F16, and here we quantize and tile F32 into F16.\nSup",
-      "image": "https://opengraph.githubassets.com/247d07b5fd7dbfe33592a2d42e75457435a51f55974f75603c107353cddddd31/ggml-org/llama.cpp/releases/tag/b9470",
-      "published": "2026-06-02T09:37:18+00:00",
-      "firstSeen": "2026-06-02T10:00:01.464247+00:00",
-      "lastSeen": "2026-06-02T11:40:45.899243+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.4589
+      "score": 3.1584
     },
     {
       "title": "The Trump Administration Is at War With Itself Over AI Regulation",
@@ -140,10 +252,10 @@
       "image": "https://media.wired.com/photos/6a1a11a6b6c847bce706bb1b/master/pass/pol_AI_GettyImages-2277330455.jpg",
       "published": "2026-06-02T09:30:00+00:00",
       "firstSeen": "2026-06-02T10:00:01.464247+00:00",
-      "lastSeen": "2026-06-02T11:40:45.899243+00:00",
+      "lastSeen": "2026-06-02T12:54:12.059298+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2254
+      "score": 2.1908
     },
     {
       "title": "Jensen Huang says pay workers ‘as much as possible’ days after Nvidia commits 50% of free cash to shareholders",
@@ -159,7 +271,7 @@
       "lastSeen": "2026-06-02T11:40:45.899243+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0767
+      "score": 2.0424
     },
     {
       "title": "How small businesses can leverage AI",
@@ -172,10 +284,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/06/4729b751-06a4-3828-9bb4-1983e460947d.jpg?resize=1200%2C600",
       "published": "2026-06-02T09:00:00+00:00",
       "firstSeen": "2026-06-02T10:00:01.464247+00:00",
-      "lastSeen": "2026-06-02T11:40:45.899243+00:00",
+      "lastSeen": "2026-06-02T12:54:12.059298+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 1.6111
+      "score": 1.577
     },
     {
       "title": "Australia’s biggest bank says corporate AI is racking up bigger bills and producing ‘work slop’",
@@ -191,7 +303,7 @@
       "lastSeen": "2026-06-02T11:40:45.899243+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0638
+      "score": 2.0299
     },
     {
       "title": "SEALSQ takes majority of WeCan to build a post-quantum AI compliance co-pilot for private banks",
@@ -207,7 +319,7 @@
       "lastSeen": "2026-06-02T11:40:45.899243+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0613
+      "score": 2.0275
     },
     {
       "title": "ByteDance and Oracle are using Arm’s in-house AGI CPU, completing the hyperscaler-x86 exit",
@@ -223,7 +335,7 @@
       "lastSeen": "2026-06-02T11:40:45.899243+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0586
+      "score": 2.0249
     },
     {
       "title": "Vinted Ventures backs Tilt’s $26M live-commerce round as Whatnot pressure mounts",
@@ -239,7 +351,7 @@
       "lastSeen": "2026-06-02T11:40:45.899243+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1533
+      "score": 3.1198
     },
     {
       "title": "Mach Industries quadruples to $1.8bn as the Pentagon’s drone-dominance push lifts every defence-tech valuation",
@@ -255,7 +367,7 @@
       "lastSeen": "2026-06-02T11:40:45.899243+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0481
+      "score": 2.0148
     },
     {
       "title": "Amazon moves Prime Day back to June and keeps it a four-day event",
@@ -271,7 +383,7 @@
       "lastSeen": "2026-06-02T11:40:45.899243+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.038
+      "score": 2.005
     },
     {
       "title": "STMicroelectronics doubles its data-centre revenue forecast to $1bn",
@@ -287,7 +399,7 @@
       "lastSeen": "2026-06-02T10:00:01.464247+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.4323
+      "score": 3.3994
     },
     {
       "title": "Alphabet to raise $80bn in equity to fund its AI spending",
@@ -303,23 +415,7 @@
       "lastSeen": "2026-06-02T10:00:01.464247+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0299
-    },
-    {
-      "title": "b9469",
-      "url": "https://github.com/ggml-org/llama.cpp/releases/tag/b9469",
-      "source": "llama.cpp Releases",
-      "sourceUrl": "https://github.com/ggml-org/llama.cpp/releases.atom",
-      "sourceWeight": 0.8,
-      "category": "AI",
-      "summary": "hexagon: add gelu_quick (#24007)\n\nmacOS/iOS:\n\nmacOS Apple Silicon (arm64)\nmacOS Apple Silicon (arm64, KleidiAI enabled) DISABLED\nmacOS Intel (x64)\niOS XCFramework\n\nLinux:\n\nUbuntu x64 (CPU)\nUbuntu arm64 (CPU)\nUbuntu s390x (CPU)\nUbuntu x64 (Vulkan)\nUbuntu arm64 (Vulkan)\nUbuntu x64 (ROCm 7.2)\nUbuntu x64 (OpenVINO)\nUbuntu x64 (SYCL FP32) DISABLED\n\nAndroid:\n\nAndroid arm64 (CPU)\n\nWindows:\n\nWindows x64 (CPU)\nWindows arm64 (CPU)\nWindows x64 (CUDA 12) - CUDA 12.4 DLLs\nWindows x64 (CUDA 13) - CUDA 13.3 DLLs\nWindows x64 (Vulkan)\nWindows x64 (SYCL) DISABLED\nWindows x64 (HIP)\n\nopenEuler:\n\nDISABLED\nopenEule",
-      "image": "https://opengraph.githubassets.com/a400e3300a7d9e2c8cb9b361a7dd3cb5b57318071d1726e81b5a353a3d6b2e04/ggml-org/llama.cpp/releases/tag/b9469",
-      "published": "2026-06-02T07:18:27+00:00",
-      "firstSeen": "2026-06-02T08:00:01.606189+00:00",
-      "lastSeen": "2026-06-02T11:40:45.899243+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "framework_or_plumbing",
-      "score": 0.0942
+      "score": 1.9971
     },
     {
       "title": "Why Financial Institutions Are Converging on Transaction Foundation Models to Build Their Own Intelligence",
@@ -332,27 +428,11 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/fsi-press-new-payments-kv-1920x1080-5150250-1.jpg",
       "published": "2026-06-02T06:00:36+00:00",
       "firstSeen": "2026-06-02T06:53:28.339289+00:00",
-      "lastSeen": "2026-06-02T11:40:45.899243+00:00",
+      "lastSeen": "2026-06-02T12:54:12.059298+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 10.4297
-    },
-    {
-      "title": "b9468",
-      "url": "https://github.com/ggml-org/llama.cpp/releases/tag/b9468",
-      "source": "llama.cpp Releases",
-      "sourceUrl": "https://github.com/ggml-org/llama.cpp/releases.atom",
-      "sourceWeight": 0.8,
-      "category": "AI",
-      "summary": "server: real-time reasoning interruption via control endpoint (#23971)\n\nserver: real-time reasoning interruption via control endpoint\n\nBuilds on the manual reasoning budget trigger from #23949. Adds a\nCONTROL task that mirrors the CANCEL path on the live slot and calls\ncommon_sampler_reasoning_budget_force to end thinking mid-generation.\nPOST /v1/chat/completions/control with { id_slot, action }, opt-in\nreasoning_control arms the budget sampler on demand. Router and single\nmodel. Minimal WebUI button as a skeleton for further UI work.\n\nui: track reasoning phase via explicit streaming state\n\nAd",
-      "image": "https://opengraph.githubassets.com/04606d1442103b7ed25da34c3f6e0a8360a91d12961ff5eef6c0ede20bcadd92/ggml-org/llama.cpp/releases/tag/b9468",
-      "published": "2026-06-02T05:54:57+00:00",
-      "firstSeen": "2026-06-02T06:00:01.306892+00:00",
-      "lastSeen": "2026-06-02T11:40:45.899243+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 3.7573
+      "score": 10.3983
     },
     {
       "title": "Pasted File Editor",
@@ -365,10 +445,10 @@
       "image": "",
       "published": "2026-06-02T04:13:36+00:00",
       "firstSeen": "2026-06-02T05:00:01.988171+00:00",
-      "lastSeen": "2026-06-02T11:40:45.899243+00:00",
+      "lastSeen": "2026-06-02T12:54:12.059298+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 4.0843
+      "score": 4.0544
     },
     {
       "title": "v1.87.0",
@@ -381,42 +461,10 @@
       "image": "https://opengraph.githubassets.com/39926c571856ad8a9f5b42f8c974345874e3338547b282c449d7a7d41246330d/BerriAI/litellm/releases/tag/v1.87.0",
       "published": "2026-06-02T04:12:22+00:00",
       "firstSeen": "2026-06-02T05:00:01.988171+00:00",
-      "lastSeen": "2026-06-02T11:40:45.899243+00:00",
+      "lastSeen": "2026-06-02T12:54:12.059298+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7838
-    },
-    {
-      "title": "b9467",
-      "url": "https://github.com/ggml-org/llama.cpp/releases/tag/b9467",
-      "source": "llama.cpp Releases",
-      "sourceUrl": "https://github.com/ggml-org/llama.cpp/releases.atom",
-      "sourceWeight": 0.8,
-      "category": "AI",
-      "summary": "clean up unused variables warnings (#23975)\n\nmacOS/iOS:\n\nmacOS Apple Silicon (arm64)\nmacOS Apple Silicon (arm64, KleidiAI enabled) DISABLED\nmacOS Intel (x64)\niOS XCFramework\n\nLinux:\n\nUbuntu x64 (CPU)\nUbuntu arm64 (CPU)\nUbuntu s390x (CPU)\nUbuntu x64 (Vulkan)\nUbuntu arm64 (Vulkan)\nUbuntu x64 (ROCm 7.2)\nUbuntu x64 (OpenVINO)\nUbuntu x64 (SYCL FP32) DISABLED\n\nAndroid:\n\nAndroid arm64 (CPU)\n\nWindows:\n\nWindows x64 (CPU)\nWindows arm64 (CPU)\nWindows x64 (CUDA 12) - CUDA 12.4 DLLs\nWindows x64 (CUDA 13) - CUDA 13.3 DLLs\nWindows x64 (Vulkan)\nWindows x64 (SYCL) DISABLED\nWindows x64 (HIP)\n\nopenEuler:\n\nDISABL",
-      "image": "https://opengraph.githubassets.com/a2c9ab4e9dba8f2e8daed66cb0a7f54f6b8c4723d94eff2eb79fc701b276ed69/ggml-org/llama.cpp/releases/tag/b9467",
-      "published": "2026-06-02T03:31:52+00:00",
-      "firstSeen": "2026-06-02T04:00:01.596821+00:00",
-      "lastSeen": "2026-06-02T11:40:45.899243+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "framework_or_plumbing",
-      "score": -0.0028
-    },
-    {
-      "title": "b9466",
-      "url": "https://github.com/ggml-org/llama.cpp/releases/tag/b9466",
-      "source": "llama.cpp Releases",
-      "sourceUrl": "https://github.com/ggml-org/llama.cpp/releases.atom",
-      "sourceWeight": 0.8,
-      "category": "AI",
-      "summary": "opencl: fix compiler warnings for non-adreno path (#23922)\n\n\nopencl: fix compiler warnings for non-adreno path\n\n\nopencl: fix const cast warning\n\n\n\nmacOS/iOS:\n\nmacOS Apple Silicon (arm64)\nmacOS Apple Silicon (arm64, KleidiAI enabled) DISABLED\nmacOS Intel (x64)\niOS XCFramework\n\nLinux:\n\nUbuntu x64 (CPU)\nUbuntu arm64 (CPU)\nUbuntu s390x (CPU)\nUbuntu x64 (Vulkan)\nUbuntu arm64 (Vulkan)\nUbuntu x64 (ROCm 7.2)\nUbuntu x64 (OpenVINO)\nUbuntu x64 (SYCL FP32) DISABLED\n\nAndroid:\n\nAndroid arm64 (CPU)\n\nWindows:\n\nWindows x64 (CPU)\nWindows arm64 (CPU)\nWindows x64 (CUDA 12) - CUDA 12.4 DLLs\nWindows x64 (CUDA 13) -",
-      "image": "https://opengraph.githubassets.com/026498f1325244f4c4d223f3d71014f5ef0413d52e988eb0e594600056554481/ggml-org/llama.cpp/releases/tag/b9466",
-      "published": "2026-06-02T02:44:14+00:00",
-      "firstSeen": "2026-06-02T03:00:01.950539+00:00",
-      "lastSeen": "2026-06-02T11:40:45.899243+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "framework_or_plumbing",
-      "score": -0.0219
+      "score": 2.7539
     },
     {
       "title": "v1.85.3",
@@ -429,10 +477,10 @@
       "image": "https://opengraph.githubassets.com/b1f1a7c17b7bf9bb50bea2074921b960dbb70007fb31e675ad02af88ee6d7245/BerriAI/litellm/releases/tag/v1.85.3",
       "published": "2026-06-02T02:30:54+00:00",
       "firstSeen": "2026-06-02T03:00:01.950539+00:00",
-      "lastSeen": "2026-06-02T11:40:45.899243+00:00",
+      "lastSeen": "2026-06-02T12:54:12.059298+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7428
+      "score": 2.7143
     },
     {
       "title": "NVIDIA Jetson Brings Agentic AI to the Physical World",
@@ -445,10 +493,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/robotics-press-jetson-agentic-ready-cptx26-1920x1080-5180550.jpg",
       "published": "2026-06-02T02:00:40+00:00",
       "firstSeen": "2026-06-02T03:00:01.950539+00:00",
-      "lastSeen": "2026-06-02T11:40:45.899243+00:00",
+      "lastSeen": "2026-06-02T12:54:12.059298+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0309
+      "score": 5.0028
     },
     {
       "title": "Codex is becoming a productivity tool for everyone",
@@ -461,27 +509,10 @@
       "image": "",
       "published": "2026-06-02T02:00:00+00:00",
       "firstSeen": "2026-06-02T10:00:01.464247+00:00",
-      "lastSeen": "2026-06-02T11:40:45.899243+00:00",
+      "lastSeen": "2026-06-02T12:54:12.059298+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.7407
-    },
-    {
-      "title": "v0.30.0",
-      "url": "https://github.com/ollama/ollama/releases/tag/v0.30.0",
-      "source": "Ollama Releases",
-      "sourceUrl": "https://github.com/ollama/ollama/releases.atom",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "Ollama 0.30 is now available, with improved compatibility and performance using llama.cpp. This augments the MLX engine on Apple Silicon, bringing support to a wider range of hardware.\nThis release brings support for a wider range of models, including GGUF-based models from Hugging Face and your own fine-tuned models along with faster performance on NVIDIA hardware.\nKnown issues:\n\nlaguna-xs.2 is not yet supported on Windows/Linux.\nllama3.2-vision is not yet supported\nnomic-embed-text now converts inputs to lowercase per the model card where prior Ollama versions incorrectly preserved mixed cas",
-      "image": "https://opengraph.githubassets.com/48bf98a01cb0bcc7ac92f95621c97939c42fa5de9658f1e574becdb9c1456e98/ollama/ollama",
-      "published": "2026-06-02T00:32:00+00:00",
-      "firstSeen": "2026-06-02T00:00:01.509717+00:00",
-      "lastSeen": "2026-06-02T11:40:45.899243+00:00",
-      "model_release": true,
-      "editorial_allow": true,
-      "editorial_reason": "model_release",
-      "score": 15.5671
+      "score": 4.7126
     },
     {
       "title": "Alphabet plans to raise $80B to pay for AI buildout",
@@ -494,10 +525,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/02/GettyImages-2173545265.jpg?resize=1200%2C800",
       "published": "2026-06-01T22:55:09+00:00",
       "firstSeen": "2026-06-01T23:00:01.883335+00:00",
-      "lastSeen": "2026-06-02T11:40:45.899243+00:00",
+      "lastSeen": "2026-06-02T12:54:12.059298+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9617
+      "score": 1.9359
     },
     {
       "title": "Nvidia chases $200B CPU market with AI agent PCs from Microsoft, Dell, and HP",
@@ -510,10 +541,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/03/GettyImages-2205761886.jpg?resize=1200%2C828",
       "published": "2026-06-01T21:35:00+00:00",
       "firstSeen": "2026-06-01T22:00:01.536287+00:00",
-      "lastSeen": "2026-06-02T11:40:45.899243+00:00",
+      "lastSeen": "2026-06-02T12:54:12.059298+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.6336
+      "score": 4.6087
     },
     {
       "title": "Hackers Simply Asked Meta AI to Give Them Access to High-Profile Instagram Accounts. It Worked",
@@ -526,10 +557,10 @@
       "image": "",
       "published": "2026-06-01T21:14:47+00:00",
       "firstSeen": "2026-06-01T22:00:01.536287+00:00",
-      "lastSeen": "2026-06-02T11:40:45.899243+00:00",
+      "lastSeen": "2026-06-02T12:54:12.059298+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9267
+      "score": 4.9021
     },
     {
       "title": "GoPro warned it may not survive. The AI memory crunch is killing companies that make things people hold.",
@@ -545,7 +576,7 @@
       "lastSeen": "2026-06-02T09:00:02.007740+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.1675
+      "score": 4.1436
     },
     {
       "title": "Florida sues OpenAI, Sam Altman, in first-of-its-kind lawsuit over violent incidents",
@@ -558,10 +589,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/GettyImages-2273245180.jpg?resize=1200%2C800",
       "published": "2026-06-01T20:03:40+00:00",
       "firstSeen": "2026-06-01T21:00:01.828388+00:00",
-      "lastSeen": "2026-06-02T11:40:45.899243+00:00",
+      "lastSeen": "2026-06-02T12:54:12.059298+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.9028
+      "score": 8.879
     },
     {
       "title": "This could be Windows’ M1 moment — but expect it to cost a ton",
@@ -574,10 +605,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/Screenshot_20260531_212701.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C9.3778095086996%2C100%2C81.244380982601&amp%3Bw=1200",
       "published": "2026-06-01T20:02:31+00:00",
       "firstSeen": "2026-06-01T21:00:01.828388+00:00",
-      "lastSeen": "2026-06-02T11:40:45.899243+00:00",
+      "lastSeen": "2026-06-02T12:54:12.059298+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0724
+      "score": 3.0486
     },
     {
       "title": "Gemini’s new AI agent is about as good as Google’s demo",
@@ -590,26 +621,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/lcimg-0ebbe911-9fbb-4f68-97b0-b7361d7cb53c.jpeg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.604950381935%2C100%2C78.79009923613&amp%3Bw=1200",
       "published": "2026-06-01T20:00:00+00:00",
       "firstSeen": "2026-06-01T21:00:01.828388+00:00",
-      "lastSeen": "2026-06-02T11:40:45.899243+00:00",
+      "lastSeen": "2026-06-02T12:54:12.059298+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.6716
-    },
-    {
-      "title": "b9464",
-      "url": "https://github.com/ggml-org/llama.cpp/releases/tag/b9464",
-      "source": "llama.cpp Releases",
-      "sourceUrl": "https://github.com/ggml-org/llama.cpp/releases.atom",
-      "sourceWeight": 0.8,
-      "category": "AI",
-      "summary": "speculative : fix n_outputs_max and remove draft-simple auto-enable (#23988)\n\nspeculative : add common_speculative_n_max helper function\n\nExtract the speculative max-draft-size logic from server_n_outputs_max\ninto a reusable common_speculative_n_max() function in common/speculative.\nAssisted-by: llama.cpp:local pi\n\n\ncont : draft context always has n_parallel outputs\n\n\nllama : log n_outputs_max\n\n\nspeculative : remove draft-simple auto-enable\n\n\nci : enable server tests on PRs\n\n\n\nmacOS/iOS:\n\nmacOS Apple Silicon (arm64)\nmacOS Apple Silicon (arm64, KleidiAI enabled) DISABLED\nmacOS Intel (x64)\niOS X",
-      "image": "https://opengraph.githubassets.com/10c53af91dcc951ae779ece25cb24561ea2a985a2515d0cb374d2d86b69d9e52/ggml-org/llama.cpp/releases/tag/b9464",
-      "published": "2026-06-01T19:58:39+00:00",
-      "firstSeen": "2026-06-01T20:00:01.910682+00:00",
-      "lastSeen": "2026-06-02T11:40:45.899243+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.9312
+      "score": 10.6478
     },
     {
       "title": "Dozens of Red Hat packages backdoored through its official NPM channel",
@@ -622,26 +637,10 @@
       "image": "https://cdn.arstechnica.net/wp-content/uploads/2026/06/redhat-1152x648.jpg",
       "published": "2026-06-01T19:49:09+00:00",
       "firstSeen": "2026-06-01T21:00:01.828388+00:00",
-      "lastSeen": "2026-06-02T11:40:45.899243+00:00",
+      "lastSeen": "2026-06-02T12:54:12.059298+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.758
-    },
-    {
-      "title": "Apple is building a bill-splitting feature that photographs receipts and assigns items to friends",
-      "url": "https://thenextweb.com/news/apple-bill-splitting-receipt-photo-ios-27-fintech",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Apple is preparing a new iPhone feature that lets users photograph a restaurant receipt, assign individual items to different people, and automatically generate payment requests through Apple Cash. The tool will calculate each person’s share of the bill including item costs, tax, and tip, Bloomberg reported on Monday, citing people with knowledge of the plan. Apple [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/apple-bill-splitting-receipt-photo-ios-27-fintech.avif",
-      "published": "2026-06-01T19:46:29+00:00",
-      "firstSeen": "2026-06-01T21:00:01.828388+00:00",
-      "lastSeen": "2026-06-02T09:00:02.007740+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.8572
+      "score": 1.7344
     },
     {
       "title": "The Life Scientific: Seth Berkley",
@@ -654,10 +653,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-01T20:00:00+00:00",
       "firstSeen": "2026-06-01T21:00:01.828388+00:00",
-      "lastSeen": "2026-06-02T11:40:45.899243+00:00",
+      "lastSeen": "2026-06-02T12:54:12.059298+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9016
+      "score": 1.8778
     },
     {
       "title": "Dean Lomax on discovering ichthyosaurs and defying nay-sayers",
@@ -670,10 +669,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-26T08:30:00+00:00",
       "firstSeen": "2026-05-26T08:41:33.144051+00:00",
-      "lastSeen": "2026-06-02T11:40:45.899243+00:00",
+      "lastSeen": "2026-06-02T12:54:12.059298+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.1295
+      "score": 1.1292
     },
     {
       "title": "The Life Scientific: Hiranya Peiris",
@@ -686,10 +685,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-25T20:00:00+00:00",
       "firstSeen": "2026-05-25T21:00:01.605108+00:00",
-      "lastSeen": "2026-06-02T11:40:45.899243+00:00",
+      "lastSeen": "2026-06-02T12:54:12.059298+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 0.2967
+      "score": 0.2965
     },
     {
       "title": "Helen Hastie on the future of human-robot relations",
@@ -760,7 +759,7 @@
     {
       "source": "MarkTechPost",
       "url": "https://www.marktechpost.com/feed/",
-      "error": "not well-formed (invalid token): line 1, column 119"
+      "error": "HTTP Error 403: Forbidden"
     }
   ]
 }
