@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-02T13:00:01.922835+00:00",
+  "updatedAt": "2026-06-02T14:00:01.826780+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -8932,6 +8932,10 @@
     "https://www.technologyreview.com/2026/06/02/1137827/rehumanizing-global-health-care-with-agentic-ai": {
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/05/MIT-Abstract-Thumbnail-2_-V1.png?resize=1200,600",
       "checkedAt": "2026-06-02T12:54:12.059298+00:00"
+    },
+    "https://www.anthropic.com/news/expanding-project-glasswing": {
+      "image": "https://cdn.sanity.io/images/4zrzovbb/website/19e93d85e033d3f992b78cbce2c5a3f60709bd3b-3840x2160.jpg",
+      "checkedAt": "2026-06-02T14:00:01.826780+00:00"
     }
   }
 }
