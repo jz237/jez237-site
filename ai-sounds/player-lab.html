@@ -586,7 +586,7 @@
       const card = document.querySelector(`[data-player="${id}"]`);
       const kind = card.dataset.kind;
       const colors = colorSets[kind];
-      const wavesurfer = WaveSurfer.create({
+      const playerOptions = {
         container: `#wave-${id.toLowerCase()}`,
         url: audioUrl,
         height: options.height ?? 96,
@@ -600,11 +600,16 @@
         fillParent: true,
         autoScroll: options.autoScroll ?? false,
         hideScrollbar: options.hideScrollbar ?? true,
-        peaks: options.peaks ?? [demoPeaks],
-        duration: options.duration ?? trackDuration,
         ...colors,
         plugins: options.plugins ?? [],
-      });
+      };
+
+      if (!options.decodeAudio) {
+        playerOptions.peaks = options.peaks ?? [demoPeaks];
+        playerOptions.duration = options.duration ?? trackDuration;
+      }
+
+      const wavesurfer = WaveSurfer.create(playerOptions);
 
       players.push(wavesurfer);
       setStatus(card, "Loading waveform...", "loading");
@@ -684,20 +689,31 @@
     const zoom = document.querySelector('[data-player="P05"] .zoom');
     zoom.addEventListener("input", () => minimapPlayer.zoom(Number(zoom.value)));
 
-    createPlayer("P06", {
+    const spectrogramPlugin = Spectrogram.create({
+      container: "#spectrogram-p06",
+      height: 180,
+      labels: true,
+      labelsBackground: "rgba(5, 9, 19, .9)",
+      labelsColor: "#d7e1e8",
+      labelsHzColor: "#7f91a4",
+      fftSamples: 512,
+      frequencyMin: 20,
+      frequencyMax: 12000,
+      scale: "mel",
+      colorMap: "roseus",
+    });
+
+    const spectrogramPlayer = createPlayer("P06", {
       height: 82,
-      plugins: [
-        Spectrogram.create({
-          container: "#spectrogram-p06",
-          height: 180,
-          labels: true,
-          labelsBackground: "rgba(5, 9, 19, .9)",
-          labelsColor: "#d7e1e8",
-          labelsHzColor: "#7f91a4",
-          scale: "mel",
-          colorMap: "roseus",
-        }),
-      ],
+      decodeAudio: true,
+      plugins: [spectrogramPlugin],
+    });
+    const spectrogramCard = document.querySelector('[data-player="P06"]');
+    spectrogramPlayer.on("decode", () => {
+      setStatus(spectrogramCard, "Rendering spectrogram...", "loading");
+    });
+    spectrogramPlugin.on("ready", () => {
+      setStatus(spectrogramCard, "Spectrogram ready", "ready");
     });
 
     createPlayer("P07", {
