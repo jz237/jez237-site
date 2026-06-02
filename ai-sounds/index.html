@@ -44,15 +44,24 @@
     .sound-wave { position:relative; z-index:1; height:104px; border:1px solid rgba(255,255,255,.1); border-radius:14px; background:linear-gradient(180deg, rgba(0,0,0,.08), rgba(0,0,0,.34)), url('../assets/ai-sounds/realistic-waveform-20260531.webp') center / cover no-repeat; box-shadow:inset 0 -34px 42px rgba(0,0,0,.18); overflow:hidden; }
     .sound-wave span { display:none; }
     .sound-player.is-loading .sound-wave::after { content:""; position:absolute; inset:0; background:linear-gradient(90deg, transparent, rgba(232,197,122,.08), transparent); opacity:.7; }
-    .sound-player-controls { display:flex; align-items:center; gap:10px; min-height:38px; }
+    .sound-player-controls { display:flex; align-items:center; gap:8px; min-height:38px; }
     .sound-play { position:relative; flex:0 0 auto; width:38px; height:38px; border:1px solid rgba(232,197,122,.42); border-radius:50%; background:rgba(232,197,122,.12); color:var(--brand-gold); cursor:pointer; box-shadow:inset 0 1px 0 rgba(255,255,255,.08); }
     .sound-play::before { content:""; position:absolute; left:15px; top:11px; width:0; height:0; border-top:8px solid transparent; border-bottom:8px solid transparent; border-left:12px solid currentColor; }
     .sound-player.is-playing .sound-play::before { left:12px; top:10px; width:5px; height:18px; border:0; border-right:5px solid currentColor; border-left:5px solid currentColor; }
     .sound-play:hover { background:rgba(232,197,122,.2); color:var(--ink-hi); }
-    .sound-play:focus-visible, .sound-rate:focus-visible, .sound-download:focus-visible { outline:2px solid var(--brand-gold); outline-offset:3px; }
+    .sound-play:focus-visible, .sound-rate button:focus-visible, .sound-volume-button:focus-visible, .sound-volume input:focus-visible, .sound-download:focus-visible { outline:2px solid var(--brand-gold); outline-offset:3px; }
     .sound-time { min-width:78px; color:#d7e1e8; font-variant-numeric:tabular-nums; font-size:12px; }
-    .sound-spacer { flex:1 1 auto; }
-    .sound-rate { min-width:70px; min-height:34px; border:1px solid rgba(255,255,255,.14); border-radius:999px; padding:0 28px 0 11px; background:rgba(0,0,0,.22); color:var(--ink-mid); font:inherit; font-size:12px; }
+    .sound-spacer { flex:1 1 auto; min-width:0; }
+    .sound-rate { display:inline-flex; align-items:center; gap:2px; min-height:34px; padding:3px; border:1px solid rgba(255,255,255,.14); border-radius:999px; background:rgba(0,0,0,.22); }
+    .sound-rate button { min-width:30px; height:28px; border:0; border-radius:999px; background:transparent; color:var(--ink-mid); cursor:pointer; font:inherit; font-size:11px; }
+    .sound-rate button:hover { color:var(--ink-hi); background:rgba(255,255,255,.07); }
+    .sound-rate button.is-active { background:rgba(232,197,122,.16); color:var(--brand-gold); }
+    .sound-volume { display:flex; align-items:center; gap:6px; min-height:34px; padding:0 8px; border:1px solid rgba(255,255,255,.14); border-radius:999px; background:rgba(0,0,0,.18); }
+    .sound-volume-button { position:relative; width:24px; height:24px; border:0; background:transparent; color:var(--ink-mid); cursor:pointer; }
+    .sound-volume-button::before { content:""; position:absolute; left:3px; top:7px; width:7px; height:10px; background:currentColor; clip-path:polygon(0 28%, 42% 28%, 100% 0, 100% 100%, 42% 72%, 0 72%); }
+    .sound-volume-button::after { content:""; position:absolute; left:13px; top:6px; width:8px; height:12px; border:2px solid currentColor; border-top-color:transparent; border-bottom-color:transparent; border-left:0; border-radius:0 999px 999px 0; }
+    .sound-volume.is-muted .sound-volume-button::after { left:14px; top:7px; width:10px; height:10px; border:0; background:linear-gradient(45deg, transparent 43%, currentColor 43%, currentColor 57%, transparent 57%), linear-gradient(-45deg, transparent 43%, currentColor 43%, currentColor 57%, transparent 57%); }
+    .sound-volume input { width:58px; accent-color:var(--brand-gold); cursor:pointer; }
     .sound-download { position:relative; display:inline-grid; place-items:center; width:34px; height:34px; border:1px solid rgba(255,255,255,.14); border-radius:50%; background:rgba(0,0,0,.18); color:var(--ink-mid); text-decoration:none; font-size:18px; line-height:1; }
     .sound-download::before { content:""; width:13px; height:15px; background:currentColor; clip-path:polygon(38% 0, 62% 0, 62% 48%, 82% 48%, 50% 82%, 18% 48%, 38% 48%); }
     .sound-download::after { content:""; position:absolute; left:10px; right:10px; bottom:8px; height:2px; border-radius:999px; background:currentColor; }
@@ -97,7 +106,8 @@
         height: 92px;
       }
     }
-    @media (max-width: 520px) { .sound-player { padding:10px; } .sound-wave { height:82px; } .sound-time { min-width:68px; font-size:11px; } .sound-rate { min-width:62px; padding-left:8px; } }
+    @media (max-width: 620px) { .sound-player-controls { flex-wrap:wrap; } .sound-spacer { display:none; } .sound-time { flex:1 1 auto; } .sound-volume { flex:1 1 132px; justify-content:center; } .sound-volume input { width:min(120px, 100%); } }
+    @media (max-width: 520px) { .sound-player { padding:10px; } .sound-wave { height:82px; } .sound-time { min-width:68px; font-size:11px; } .sound-rate button { min-width:32px; } }
     @media (max-width: 860px) { .desktop-hub { border-radius:0; } main.container { padding-inline:0; } .hub-main { padding:14px 10px 28px !important; } .sound-hero { border-radius:22px; } }
   </style>
 </head>
@@ -444,16 +454,39 @@
       spacer.className = "sound-spacer";
       spacer.setAttribute("aria-hidden", "true");
 
-      const rate = document.createElement("select");
+      const rate = document.createElement("div");
       rate.className = "sound-rate";
+      rate.setAttribute("role", "group");
       rate.setAttribute("aria-label", "Playback speed");
-      ["1", "0.75", "1.25", "1.5"].forEach((value) => {
-        const option = document.createElement("option");
-        option.value = value;
-        option.textContent = value === "1" ? "1x" : `${value}x`;
-        option.selected = value === "1";
-        rate.appendChild(option);
+      const rateButtons = [];
+      ["1", "1.25", "1.5"].forEach((value) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.dataset.rate = value;
+        button.textContent = value === "1" ? "1x" : `${value}x`;
+        button.setAttribute("aria-pressed", value === "1" ? "true" : "false");
+        if (value === "1") button.classList.add("is-active");
+        rateButtons.push(button);
+        rate.appendChild(button);
       });
+
+      const volume = document.createElement("div");
+      volume.className = "sound-volume";
+
+      const volumeButton = document.createElement("button");
+      volumeButton.className = "sound-volume-button";
+      volumeButton.type = "button";
+      volumeButton.setAttribute("aria-label", "Mute track");
+
+      const volumeSlider = document.createElement("input");
+      volumeSlider.type = "range";
+      volumeSlider.min = "0";
+      volumeSlider.max = "1";
+      volumeSlider.step = "0.01";
+      volumeSlider.value = "1";
+      volumeSlider.setAttribute("aria-label", "Volume");
+
+      volume.append(volumeButton, volumeSlider);
 
       const download = document.createElement("a");
       download.className = "sound-download";
@@ -461,13 +494,19 @@
       download.download = "";
       download.setAttribute("aria-label", "Download track");
 
-      controls.append(play, time, spacer, rate, download);
+      controls.append(play, time, spacer, rate, volume, download);
       player.appendChild(controls);
 
       let wavesurfer;
+      let lastVolume = 1;
       const updateTime = () => {
         if (!wavesurfer) return;
         time.textContent = `${formatTime(wavesurfer.getCurrentTime())} / ${formatTime(wavesurfer.getDuration())}`;
+      };
+      const syncVolumeState = () => {
+        const muted = Number(volumeSlider.value) === 0 || (wavesurfer ? wavesurfer.getMuted() : audio.muted);
+        volume.classList.toggle("is-muted", muted);
+        volumeButton.setAttribute("aria-label", muted ? "Unmute track" : "Mute track");
       };
 
       const ensureWaveform = () => {
@@ -489,6 +528,9 @@
         });
 
         players.push(wavesurfer);
+        wavesurfer.setVolume(Number(volumeSlider.value));
+        wavesurfer.setMuted(Number(volumeSlider.value) === 0);
+        syncVolumeState();
 
         wavesurfer.on("ready", () => {
           player.classList.remove("is-loading");
@@ -527,8 +569,40 @@
         current.playPause();
       });
 
-      rate.addEventListener("change", () => {
-        ensureWaveform().setPlaybackRate(Number(rate.value), true);
+      rateButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          const currentRate = Number(button.dataset.rate || "1");
+          ensureWaveform().setPlaybackRate(currentRate, true);
+          rateButtons.forEach((rateButton) => {
+            const active = rateButton === button;
+            rateButton.classList.toggle("is-active", active);
+            rateButton.setAttribute("aria-pressed", active ? "true" : "false");
+          });
+        });
+      });
+
+      volumeSlider.addEventListener("input", () => {
+        const nextVolume = Number(volumeSlider.value);
+        if (nextVolume > 0) lastVolume = nextVolume;
+        const current = ensureWaveform();
+        current.setVolume(nextVolume);
+        current.setMuted(nextVolume === 0);
+        syncVolumeState();
+      });
+
+      volumeButton.addEventListener("click", () => {
+        const current = ensureWaveform();
+        const muted = Number(volumeSlider.value) === 0 || current.getMuted();
+        if (muted) {
+          volumeSlider.value = String(lastVolume || 1);
+          current.setVolume(Number(volumeSlider.value));
+          current.setMuted(false);
+        } else {
+          lastVolume = Number(volumeSlider.value) || lastVolume || 1;
+          volumeSlider.value = "0";
+          current.setMuted(true);
+        }
+        syncVolumeState();
       });
 
       lazyPlayers.push({ player, ensureWaveform });
