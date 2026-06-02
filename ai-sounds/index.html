@@ -456,17 +456,6 @@
       if (parts.some((part) => !Number.isFinite(part))) return 60;
       return parts.reduce((total, part) => total * 60 + part, 0) || 60;
     };
-    const makePeaks = (seedText, count = 600) => {
-      const seed = Array.from(seedText).reduce((total, char) => total + char.charCodeAt(0), 0) || 1;
-      return Array.from({ length: count }, (_, index) => {
-        const position = index / count;
-        const phrase = Math.sin(position * Math.PI * (16 + seed % 13)) * .32;
-        const texture = Math.sin(position * Math.PI * (37 + seed % 19)) * .2;
-        const detail = Math.sin(position * Math.PI * (73 + seed % 23)) * .12;
-        const envelope = .18 + .82 * Math.exp(-Math.pow((position - .5) / .27, 2));
-        return Math.max(-1, Math.min(1, (phrase + texture + detail) * envelope));
-      });
-    };
     const eqPresets = {
       flat: { label: "Flat", bass: 0, mid: 0, treble: 0 },
       warm: { label: "Warm", bass: 3, mid: 1, treble: -2 },
@@ -482,7 +471,6 @@
       if (!audio || !wave) return;
       const durationLabel = card.querySelector(".sound-meta span")?.textContent.trim() || "0:00";
       const expectedDuration = parseDuration(durationLabel);
-      const peakSource = `${card.querySelector("h2")?.textContent || ""} ${durationLabel}`;
 
       const player = document.createElement("div");
       player.className = "sound-player";
@@ -673,7 +661,6 @@
         if (wavesurfer) return wavesurfer;
 
         card.classList.add("is-loading");
-        const actualDuration = Number.isFinite(audio.duration) && audio.duration > 0 ? audio.duration : expectedDuration;
         const regions = Regions.create();
         wavesurfer = WaveSurfer.create({
           container: waveform,
@@ -684,8 +671,6 @@
           progressColor: "#e0667e",
           waveColor: "rgba(198, 219, 230, .58)",
           normalize: true,
-          peaks: [makePeaks(peakSource)],
-          duration: actualDuration,
           plugins: [regions]
         });
 
