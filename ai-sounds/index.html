@@ -68,16 +68,17 @@
     .sound-download::before { content:""; width:13px; height:15px; background:currentColor; clip-path:polygon(38% 0, 62% 0, 62% 48%, 82% 48%, 50% 82%, 18% 48%, 38% 48%); }
     .sound-download::after { content:""; position:absolute; left:10px; right:10px; bottom:8px; height:2px; border-radius:999px; background:currentColor; }
     .sound-download:hover { color:var(--brand-gold); border-color:rgba(232,197,122,.36); }
-    .sound-eq { display:grid; gap:8px; min-width:0; padding:9px 10px 10px; border:1px solid rgba(255,255,255,.1); border-radius:14px; background:rgba(0,0,0,.16); }
-    .sound-eq-head { display:flex; align-items:center; gap:8px; min-width:0; }
-    .sound-eq-label { flex:0 0 auto; color:var(--brand-gold); font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; }
-    .sound-eq-presets { display:flex; flex:1 1 auto; flex-wrap:wrap; gap:4px; min-width:0; }
-    .sound-eq-presets button { height:24px; padding:0 8px; border:1px solid rgba(255,255,255,.12); border-radius:999px; background:rgba(0,0,0,.18); color:var(--ink-mid); cursor:pointer; font:inherit; font-size:11px; }
+    .sound-eq { display:grid; grid-template-columns:minmax(92px, .65fr) minmax(0, 1.35fr); gap:12px; min-width:0; padding:11px 12px 12px; border:1px solid rgba(255,255,255,.1); border-radius:14px; background:rgba(0,0,0,.16); }
+    .sound-eq-head { display:grid; align-content:start; gap:8px; min-width:0; }
+    .sound-eq-label { color:var(--brand-gold); font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; }
+    .sound-eq-presets { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:5px; min-width:0; }
+    .sound-eq-presets button { height:28px; min-width:0; padding:0 7px; border:1px solid rgba(255,255,255,.12); border-radius:9px; background:rgba(0,0,0,.18); color:var(--ink-mid); cursor:pointer; font:inherit; font-size:10.5px; font-weight:650; }
     .sound-eq-presets button:hover { color:var(--ink-hi); background:rgba(255,255,255,.07); }
     .sound-eq-presets button.is-active { border-color:rgba(232,197,122,.36); background:rgba(232,197,122,.15); color:var(--brand-gold); }
-    .sound-eq-bands { display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:8px; min-width:0; }
-    .sound-eq-band { display:grid; gap:3px; min-width:0; color:var(--ink-lo); font-size:10px; letter-spacing:.04em; text-transform:uppercase; }
-    .sound-eq-band input { width:100%; min-width:0; max-width:100%; accent-color:var(--brand-gold); cursor:pointer; }
+    .sound-eq-bands { display:grid; grid-template-columns:repeat(5, minmax(32px, 1fr)); gap:7px; min-width:0; align-items:end; }
+    .sound-eq-band { display:grid; grid-template-rows:18px 104px 14px; justify-items:center; align-items:center; gap:4px; min-width:0; color:var(--ink-lo); font-size:9px; letter-spacing:.04em; text-transform:uppercase; }
+    .sound-eq-value { color:var(--brand-gold); font-size:9px; font-variant-numeric:tabular-nums; opacity:.85; }
+    .sound-eq-band input { width:104px; height:26px; min-width:0; max-width:none; accent-color:var(--brand-gold); cursor:pointer; transform:rotate(-90deg); transform-origin:center; }
     .wavesurfer-enhanced .sound-card audio { position:absolute; width:1px; height:1px; opacity:0; pointer-events:none; }
     .sound-note { margin-top:18px; padding:18px 20px; border:1px solid rgba(232,197,122,.16); border-radius:22px; background:rgba(232,197,122,.055); color:var(--ink-lo); }
     .sound-note strong { color: var(--ink-hi); }
@@ -130,13 +131,14 @@
       .sound-volume input { min-width:64px; max-width:180px; }
       .sound-download { order:4; }
       .sound-time { order:5; flex:1 1 100%; min-width:0; }
-      .sound-eq-head { align-items:flex-start; flex-direction:column; }
     }
-    @container (max-width: 390px) {
-      .sound-eq-bands { grid-template-columns:1fr; }
-      .sound-eq-band { grid-template-columns:58px minmax(0, 1fr); align-items:center; }
+    @container (max-width: 315px) {
+      .sound-eq { grid-template-columns:1fr; }
+      .sound-eq-bands { gap:4px; }
+      .sound-eq-band { grid-template-rows:16px 88px 13px; }
+      .sound-eq-band input { width:88px; }
     }
-    @media (max-width: 620px) { .sound-player-controls { flex-wrap:wrap; gap:6px; } .sound-spacer { display:none; } .sound-time { flex:1 1 auto; } .sound-volume { flex:1 1 108px; min-width:106px; max-width:none; justify-content:center; } .sound-volume input { min-width:64px; max-width:180px; } .sound-eq-head { align-items:flex-start; flex-direction:column; } }
+    @media (max-width: 620px) { .sound-player-controls { flex-wrap:wrap; gap:6px; } .sound-spacer { display:none; } .sound-time { flex:1 1 auto; } .sound-volume { flex:1 1 108px; min-width:106px; max-width:none; justify-content:center; } .sound-volume input { min-width:64px; max-width:180px; } }
     @media (max-width: 520px) { .sound-player { padding:10px; } .sound-wave { height:82px; } .sound-scrub { height:64px; } .sound-play { order:1; width:34px; height:34px; } .sound-play::before { left:13px; top:9px; } .sound-player.is-playing .sound-play::before { left:10px; top:8px; } .sound-rate { order:2; gap:0; padding:2px; } .sound-rate button { width:25px; min-width:0; padding:0; font-size:9.5px; } .sound-volume { order:3; flex:1 1 108px; min-width:106px; max-width:none; gap:6px; justify-content:center; padding:0 8px; } .sound-volume input { min-width:64px; max-width:180px; } .sound-download { order:4; } .sound-time { order:5; flex:1 1 100%; min-width:0; font-size:11px; } .sound-eq-bands { gap:6px; } }
     @media (max-width: 400px) { .sound-volume { flex-basis:96px; min-width:96px; padding-inline:7px; } .sound-volume input { min-width:54px; } }
     @media (max-width: 860px) { .desktop-hub { border-radius:0; } main.container { padding-inline:0; } .hub-main { padding:14px 10px 28px !important; } .sound-hero { border-radius:22px; } }
@@ -461,11 +463,18 @@
       return parts.reduce((total, part) => total * 60 + part, 0) || 60;
     };
     const eqPresets = {
-      flat: { label: "Flat", bass: 0, mid: 0, treble: 0 },
-      warm: { label: "Warm", bass: 3, mid: 1, treble: -2 },
-      bright: { label: "Bright", bass: -1, mid: 1, treble: 4 },
-      bass: { label: "Bass", bass: 5, mid: 0, treble: -1 }
+      flat: { label: "Flat", low: 0, lowMid: 0, mid: 0, highMid: 0, high: 0 },
+      warm: { label: "Warm", low: 3, lowMid: 2, mid: 1, highMid: -1, high: -2 },
+      bright: { label: "Bright", low: -1, lowMid: 0, mid: 1, highMid: 3, high: 4 },
+      bass: { label: "Bass", low: 5, lowMid: 3, mid: 0, highMid: -1, high: -2 }
     };
+    const eqBandConfig = [
+      ["low", "Low", 120, "lowshelf"],
+      ["lowMid", "Lo Mid", 420, "peaking"],
+      ["mid", "Mid", 1200, "peaking"],
+      ["highMid", "Hi Mid", 3200, "peaking"],
+      ["high", "High", 7600, "highshelf"]
+    ];
 
     document.documentElement.classList.add("wavesurfer-enhanced");
 
@@ -572,14 +581,15 @@
       const eqBands = document.createElement("div");
       eqBands.className = "sound-eq-bands";
       const eqSliders = {};
-      [
-        ["bass", "Bass"],
-        ["mid", "Mid"],
-        ["treble", "Treble"]
-      ].forEach(([key, label]) => {
+      const eqValueLabels = {};
+      eqBandConfig.forEach(([key, label]) => {
         const band = document.createElement("label");
         band.className = "sound-eq-band";
-        band.textContent = label;
+        const valueLabel = document.createElement("span");
+        valueLabel.className = "sound-eq-value";
+        valueLabel.textContent = "0";
+        const bandLabel = document.createElement("span");
+        bandLabel.textContent = label;
         const slider = document.createElement("input");
         slider.type = "range";
         slider.min = "-9";
@@ -589,7 +599,8 @@
         slider.dataset.eqBand = key;
         slider.setAttribute("aria-label", `${label} equalizer gain`);
         eqSliders[key] = slider;
-        band.appendChild(slider);
+        eqValueLabels[key] = valueLabel;
+        band.append(valueLabel, slider, bandLabel);
         eqBands.appendChild(band);
       });
 
@@ -602,7 +613,7 @@
       let wavesurfer;
       let audioGraph;
       let lastVolume = 1;
-      let currentEq = { bass: 0, mid: 0, treble: 0 };
+      let currentEq = { low: 0, lowMid: 0, mid: 0, highMid: 0, high: 0 };
       const volumeOnIcon = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4V5z"></path><path d="M15.5 8.5a5 5 0 0 1 0 7"></path><path d="M18.5 5.5a9 9 0 0 1 0 13"></path></svg>';
       const volumeMutedIcon = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4V5z"></path><path d="m16 9 5 5"></path><path d="m21 9-5 5"></path></svg>';
       const updateTime = () => {
@@ -622,28 +633,22 @@
         if (!AudioContext) return null;
         const context = new AudioContext();
         const source = context.createMediaElementSource(audio);
-        const bass = context.createBiquadFilter();
-        bass.type = "lowshelf";
-        bass.frequency.value = 160;
-        const mid = context.createBiquadFilter();
-        mid.type = "peaking";
-        mid.frequency.value = 1200;
-        mid.Q.value = 1;
-        const treble = context.createBiquadFilter();
-        treble.type = "highshelf";
-        treble.frequency.value = 4200;
-        source.connect(bass).connect(mid).connect(treble).connect(context.destination);
-        audioGraph = { context, filters: { bass, mid, treble } };
+        const filters = Object.fromEntries(eqBandConfig.map(([key, , frequency, type]) => {
+          const filter = context.createBiquadFilter();
+          filter.type = type;
+          filter.frequency.value = frequency;
+          if (type === "peaking") filter.Q.value = 1;
+          return [key, filter];
+        }));
+        eqBandConfig.reduce((previous, [key]) => previous.connect(filters[key]), source).connect(context.destination);
+        audioGraph = { context, filters };
         return audioGraph;
       };
       const applyEq = (values) => {
-        currentEq = {
-          bass: Number(values.bass ?? currentEq.bass),
-          mid: Number(values.mid ?? currentEq.mid),
-          treble: Number(values.treble ?? currentEq.treble)
-        };
+        currentEq = Object.fromEntries(eqBandConfig.map(([key]) => [key, Number(values[key] ?? currentEq[key])]));
         Object.entries(eqSliders).forEach(([key, slider]) => {
           slider.value = String(currentEq[key]);
+          eqValueLabels[key].textContent = currentEq[key] > 0 ? `+${currentEq[key]}` : String(currentEq[key]);
         });
         const graph = getAudioGraph();
         if (graph) {
@@ -652,7 +657,7 @@
           });
         }
         const activePreset = Object.entries(eqPresets).find(([, preset]) => (
-          preset.bass === currentEq.bass && preset.mid === currentEq.mid && preset.treble === currentEq.treble
+          eqBandConfig.every(([key]) => preset[key] === currentEq[key])
         ))?.[0] || "";
         eqPresetButtons.forEach((button) => {
           const active = button.dataset.eqPreset === activePreset;
