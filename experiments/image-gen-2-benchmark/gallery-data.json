@@ -1186,5 +1186,17 @@
     "slot": "evening",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-06-01-evening-attic-planetarium-maintenance-checklist",
+    "title": "Attic Planetarium Maintenance Checklist",
+    "tests": "Reusable non-photo visual layout template; tests coherent form design, readable hierarchy, checklist boxes, small technical diagrams, physical paper texture, and believable invented maintenance data.",
+    "prompt": "Create a finished vertical maintenance checklist form titled ATTIC PLANETARIUM SERVICE LOG, photographed as a real clipboard sheet on a dusty attic workbench. The form is for a fictional home-built attic planetarium: brass star projector, hand-cranked moon gear, paper constellation masks, vellum sky dome panels, fuse box, lens drawer, mothproof velvet curtain, calibration plumb line, and tiny red night lamps. Use a coherent physical form design with readable hierarchy: title bar, date/weather boxes, inspection checklist with square checkboxes, small exploded mini-diagram of the projector head, parts inventory grid, alignment score strip, and notes area with mostly short fictional labels and believable form marks. Make the paper cream with blue-gray ruled lines, faded black ink, stamped red service marks, graphite smudges, coffee ring, punched holes, folded corner, rusty binder clip, brass screws, loose paper star masks, dust, cobweb strands in the workbench corners, and warm bare-bulb attic lighting. Avoid real brands, real logos, private data, placeholder boxes, nonsense clutter, dancing, people, hands, watermark, and signature.\n\nReusable prompt template: Create a finished [FORMAT] about [TOPIC] using [DATA OR CATEGORIES], with a coherent physical design, readable hierarchy, and specific invented details where data is not supplied. Use [MATERIALS], [ERA OR DESIGN LANGUAGE], [COLOR ACCENTS], and [SETTING] to make the layout feel real. Preserve the supplied topic and data relationships; change the document framing, visual system, labels, diagrams, and physical presentation to fit the chosen subject. Avoid nonsense labels, cluttered microtext, placeholder boxes, generic decoration, real logos, and private data.\n\nSource photo needed: none.\n\nWhat to preserve: the supplied topic, data categories, section relationships, and hierarchy.\n\nWhat to change: turn the topic into a tactile finished checklist form with believable typography, diagram labels, checkboxes, grids, paper aging, workbench props, and physical lighting.\n\nExample substitution: Create a maintenance checklist form about an attic planetarium service log with brass projector parts, constellation masks, moon gears, night lamps, cream paper, red service stamps, and a dusty attic workbench setting.",
+    "image": "images/2026-06-01-evening-attic-planetarium-maintenance-checklist.png",
+    "date": "2026-06-01",
+    "batch": "Daily Prompt",
+    "slot": "evening",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1536"
   }
 ]
