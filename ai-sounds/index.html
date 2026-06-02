@@ -40,10 +40,11 @@
     .prompt-drawer p { margin:8px 0 0; color:#d7e1e8; white-space:pre-wrap; }
     .prompt-drawer .prompt-source { display:block; margin-top:8px; color:var(--ink-lo); font-size:11px; }
     .sound-card audio { position:relative; z-index:1; width:100%; filter: saturate(1.1); }
-    .sound-player { position:relative; z-index:1; padding:11px 13px; border:1px solid rgba(255,255,255,.12); border-radius:18px; background:linear-gradient(180deg, rgba(5,14,28,.62), rgba(0,0,0,.28)); box-shadow:inset 0 1px 0 rgba(255,255,255,.06), 0 14px 26px rgba(0,0,0,.2); }
+    .sound-player { position:relative; z-index:1; display:grid; gap:10px; padding:11px 13px; border:1px solid rgba(255,255,255,.12); border-radius:18px; background:linear-gradient(180deg, rgba(5,14,28,.62), rgba(0,0,0,.28)); box-shadow:inset 0 1px 0 rgba(255,255,255,.06), 0 14px 26px rgba(0,0,0,.2); }
     .sound-wave { position:relative; z-index:1; height:104px; border:1px solid rgba(255,255,255,.1); border-radius:14px; background:linear-gradient(180deg, rgba(0,0,0,.08), rgba(0,0,0,.34)), url('../assets/ai-sounds/realistic-waveform-20260531.webp') center / cover no-repeat; box-shadow:inset 0 -34px 42px rgba(0,0,0,.18); overflow:hidden; }
     .sound-wave span { display:none; }
-    .sound-card.is-loading > .sound-wave::after { content:""; position:absolute; inset:0; background:linear-gradient(90deg, transparent, rgba(232,197,122,.08), transparent); opacity:.7; }
+    .sound-scrub { position:relative; min-height:54px; border:1px solid rgba(255,255,255,.09); border-radius:12px; background:rgba(0,0,0,.16); overflow:hidden; }
+    .sound-card.is-loading .sound-scrub::after { content:""; position:absolute; inset:0; background:linear-gradient(90deg, transparent, rgba(232,197,122,.08), transparent); opacity:.7; }
     .sound-player-controls { display:flex; align-items:center; gap:8px; min-height:38px; }
     .sound-play { position:relative; flex:0 0 auto; width:38px; height:38px; border:1px solid rgba(232,197,122,.42); border-radius:50%; background:rgba(232,197,122,.12); color:var(--brand-gold); cursor:pointer; box-shadow:inset 0 1px 0 rgba(255,255,255,.08); }
     .sound-play::before { content:""; position:absolute; left:15px; top:11px; width:0; height:0; border-top:8px solid transparent; border-bottom:8px solid transparent; border-left:12px solid currentColor; }
@@ -107,7 +108,7 @@
       }
     }
     @media (max-width: 620px) { .sound-player-controls { flex-wrap:wrap; } .sound-spacer { display:none; } .sound-time { flex:1 1 auto; } .sound-volume { flex:1 1 132px; justify-content:center; } .sound-volume input { width:min(120px, 100%); } }
-    @media (max-width: 520px) { .sound-player { padding:10px; } .sound-wave { height:82px; } .sound-time { min-width:68px; font-size:11px; } .sound-rate button { min-width:32px; } }
+    @media (max-width: 520px) { .sound-player { padding:10px; } .sound-wave { height:82px; } .sound-scrub { min-height:46px; } .sound-time { min-width:68px; font-size:11px; } .sound-rate button { min-width:32px; } }
     @media (max-width: 860px) { .desktop-hub { border-radius:0; } main.container { padding-inline:0; } .hub-main { padding:14px 10px 28px !important; } .sound-hero { border-radius:22px; } }
   </style>
 </head>
@@ -437,6 +438,9 @@
       player.className = "sound-player";
       audio.before(player);
 
+      const scrub = document.createElement("div");
+      scrub.className = "sound-scrub";
+
       const controls = document.createElement("div");
       controls.className = "sound-player-controls";
 
@@ -494,6 +498,7 @@
       download.setAttribute("aria-label", "Download track");
 
       controls.append(play, time, spacer, rate, volume, download);
+      player.appendChild(scrub);
       player.appendChild(controls);
 
       let wavesurfer;
@@ -513,10 +518,10 @@
 
         card.classList.add("is-loading");
         wavesurfer = WaveSurfer.create({
-          container: wave,
+          container: scrub,
           media: audio,
           url: audio.currentSrc || audio.src,
-          height: 96,
+          height: 48,
           barWidth: 2,
           barGap: 2,
           barRadius: 2,
