@@ -43,7 +43,7 @@
     .sound-player { position:relative; z-index:1; display:grid; gap:10px; padding:11px 13px; border:1px solid rgba(255,255,255,.12); border-radius:18px; background:linear-gradient(180deg, rgba(5,14,28,.62), rgba(0,0,0,.28)); box-shadow:inset 0 1px 0 rgba(255,255,255,.06), 0 14px 26px rgba(0,0,0,.2); }
     .sound-wave { position:relative; z-index:1; height:104px; border:1px solid rgba(255,255,255,.1); border-radius:14px; background:linear-gradient(180deg, rgba(0,0,0,.08), rgba(0,0,0,.34)), url('../assets/ai-sounds/realistic-waveform-20260531.webp') center / cover no-repeat; box-shadow:inset 0 -34px 42px rgba(0,0,0,.18); overflow:hidden; }
     .sound-wave span { display:none; }
-    .sound-scrub { position:relative; min-height:54px; border:1px solid rgba(255,255,255,.09); border-radius:12px; background:rgba(0,0,0,.16); overflow:hidden; }
+    .sound-scrub { position:relative; min-height:72px; border:1px solid rgba(255,255,255,.09); border-radius:12px; background:rgba(0,0,0,.16); overflow:hidden; }
     .sound-card.is-loading .sound-scrub::after { content:""; position:absolute; inset:0; background:linear-gradient(90deg, transparent, rgba(232,197,122,.08), transparent); opacity:.7; }
     .sound-player-controls { display:flex; align-items:center; gap:8px; min-height:38px; }
     .sound-play { position:relative; flex:0 0 auto; width:38px; height:38px; border:1px solid rgba(232,197,122,.42); border-radius:50%; background:rgba(232,197,122,.12); color:var(--brand-gold); cursor:pointer; box-shadow:inset 0 1px 0 rgba(255,255,255,.08); }
@@ -108,7 +108,7 @@
       }
     }
     @media (max-width: 620px) { .sound-player-controls { flex-wrap:wrap; } .sound-spacer { display:none; } .sound-time { flex:1 1 auto; } .sound-volume { flex:1 1 132px; justify-content:center; } .sound-volume input { width:min(120px, 100%); } }
-    @media (max-width: 520px) { .sound-player { padding:10px; } .sound-wave { height:82px; } .sound-scrub { min-height:46px; } .sound-time { min-width:68px; font-size:11px; } .sound-rate button { min-width:32px; } }
+    @media (max-width: 520px) { .sound-player { padding:10px; } .sound-wave { height:82px; } .sound-scrub { min-height:64px; } .sound-time { min-width:68px; font-size:11px; } .sound-rate button { min-width:32px; } }
     @media (max-width: 860px) { .desktop-hub { border-radius:0; } main.container { padding-inline:0; } .hub-main { padding:14px 10px 28px !important; } .sound-hero { border-radius:22px; } }
   </style>
 </head>
@@ -416,6 +416,7 @@
   <script src="../assets/nav.js" defer></script>
   <script type="module">
     import WaveSurfer from "https://cdn.jsdelivr.net/npm/wavesurfer.js@7/dist/wavesurfer.esm.js";
+    import Envelope from "https://cdn.jsdelivr.net/npm/wavesurfer.js@7/dist/plugins/envelope.esm.js";
 
     const players = [];
     const lazyPlayers = [];
@@ -425,6 +426,22 @@
       const secs = Math.floor(seconds % 60).toString().padStart(2, "0");
       return `${mins}:${secs}`;
     };
+    const parseDuration = (label) => {
+      const parts = label.split(":").map((part) => Number(part));
+      if (parts.some((part) => !Number.isFinite(part))) return 60;
+      return parts.reduce((total, part) => total * 60 + part, 0) || 60;
+    };
+    const makePeaks = (seedText, count = 600) => {
+      const seed = Array.from(seedText).reduce((total, char) => total + char.charCodeAt(0), 0) || 1;
+      return Array.from({ length: count }, (_, index) => {
+        const position = index / count;
+        const phrase = Math.sin(position * Math.PI * (16 + seed % 13)) * .32;
+        const texture = Math.sin(position * Math.PI * (37 + seed % 19)) * .2;
+        const detail = Math.sin(position * Math.PI * (73 + seed % 23)) * .12;
+        const envelope = .18 + .82 * Math.exp(-Math.pow((position - .5) / .27, 2));
+        return Math.max(-1, Math.min(1, (phrase + texture + detail) * envelope));
+      });
+    };
 
     document.documentElement.classList.add("wavesurfer-enhanced");
 
@@ -433,6 +450,8 @@
       const wave = card.querySelector(".sound-wave");
       if (!audio || !wave) return;
       const durationLabel = card.querySelector(".sound-meta span")?.textContent.trim() || "0:00";
+      const expectedDuration = parseDuration(durationLabel);
+      const peakSource = `${card.querySelector("h2")?.textContent || ""} ${durationLabel}`;
 
       const player = document.createElement("div");
       player.className = "sound-player";
@@ -517,18 +536,36 @@
         if (wavesurfer) return wavesurfer;
 
         card.classList.add("is-loading");
+        const actualDuration = Number.isFinite(audio.duration) && audio.duration > 0 ? audio.duration : expectedDuration;
+        const envelopeDuration = Math.max(1, actualDuration - .25);
+        const envelopePoints = [
+          { time: 0, volume: 1 },
+          { time: Math.max(.5, envelopeDuration * .22), volume: 1 },
+          { time: Math.max(1, envelopeDuration * .72), volume: 1 },
+          { time: envelopeDuration, volume: 1 }
+        ];
         wavesurfer = WaveSurfer.create({
           container: scrub,
           media: audio,
           url: audio.currentSrc || audio.src,
-          height: 48,
-          barWidth: 2,
-          barGap: 2,
-          barRadius: 2,
+          height: 64,
           cursorColor: "#e8c57a",
           progressColor: "#e0667e",
           waveColor: "rgba(198, 219, 230, .58)",
-          normalize: true
+          normalize: true,
+          peaks: [makePeaks(peakSource)],
+          duration: actualDuration,
+          plugins: [
+            Envelope.create({
+              volume: 1,
+              lineColor: "#e8c57a",
+              lineWidth: 3,
+              dragPointFill: "#07101f",
+              dragPointStroke: "#e8c57a",
+              dragPointSize: 8,
+              points: envelopePoints
+            })
+          ]
         });
 
         players.push(wavesurfer);
@@ -612,22 +649,7 @@
       lazyPlayers.push({ target: card, ensureWaveform });
     });
 
-    if ("IntersectionObserver" in window) {
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
-          const item = lazyPlayers.find((candidate) => candidate.target === entry.target);
-          if (item) {
-            item.ensureWaveform();
-            observer.unobserve(entry.target);
-          }
-        });
-      }, { rootMargin: "500px 0px" });
-
-      lazyPlayers.forEach(({ target }) => observer.observe(target));
-    } else {
-      lazyPlayers.slice(0, 4).forEach(({ ensureWaveform }) => ensureWaveform());
-    }
+    lazyPlayers.forEach(({ ensureWaveform }) => ensureWaveform());
   </script>
 </body>
 </html>
