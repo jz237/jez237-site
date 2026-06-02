@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-02T16:00:01.391525+00:00",
+  "updatedAt": "2026-06-02T16:53:11.113275+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -8960,6 +8960,30 @@
     "https://openai.com/index/codex-for-every-role-tool-workflow": {
       "image": "https://images.ctfassets.net/kftzwdyauwt9/4Dvw4ZQ90swvHAxpe8tf49/b38745978bd83b554ac8e4f5865cee37/16x9_SEO_Preview.png?w=1600&amp;h=900&amp;fit=fill",
       "checkedAt": "2026-06-02T16:00:01.391525+00:00"
+    },
+    "https://www.theverge.com/news/941271/microsoft-surface-rtx-spark-dev-box-specs-availability": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/Surface-RTX-Spark-Image-4.png?quality=90&amp;strip=all&amp;crop=0%2C3.4686413370787%2C100%2C93.062717325843&amp;w=1200",
+      "checkedAt": "2026-06-02T16:53:11.113275+00:00"
+    },
+    "https://www.techrepublic.com/article/news-fake-claude-code-install-sites-malware": {
+      "image": "",
+      "checkedAt": "2026-06-02T16:53:11.113275+00:00"
+    },
+    "https://techcrunch.com/2026/06/02/trump-signs-narrower-executive-order-on-ai-oversight-after-industry-objections": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/GettyImages-2277839095.jpg?w=1024",
+      "checkedAt": "2026-06-02T16:53:11.113275+00:00"
+    },
+    "https://techcrunch.com/2026/06/02/openai-launches-new-codex-tools-for-white-collar-work": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/openai-logo-code-background.jpg?resize=1200,798",
+      "checkedAt": "2026-06-02T16:53:11.113275+00:00"
+    },
+    "https://www.techrepublic.com/article/news-spacex-ipo-ai-data-center-water-access": {
+      "image": "",
+      "checkedAt": "2026-06-02T16:53:11.113275+00:00"
+    },
+    "https://www.techrepublic.com/article/news-strava-api-scraping-crackdown": {
+      "image": "",
+      "checkedAt": "2026-06-02T16:53:11.113275+00:00"
     }
   }
 }
