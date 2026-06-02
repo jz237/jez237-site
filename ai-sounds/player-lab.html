@@ -1,0 +1,724 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AI Sounds Player Lab - Zoh Coh Loh</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/brand.svg" />
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #050913;
+      --panel: rgba(9, 16, 31, .82);
+      --panel-strong: rgba(14, 23, 42, .94);
+      --line: rgba(255, 255, 255, .13);
+      --line-warm: rgba(232, 197, 122, .26);
+      --ink: #f4f7fb;
+      --muted: #b8c6d3;
+      --soft: #7f91a4;
+      --gold: #e8c57a;
+      --cyan: #6ecbff;
+      --pink: #e0667e;
+      --green: #80d39b;
+      --shadow: 0 22px 70px rgba(0, 0, 0, .38);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 14% 8%, rgba(224, 102, 126, .24), transparent 30%),
+        radial-gradient(circle at 82% 12%, rgba(110, 203, 255, .18), transparent 34%),
+        linear-gradient(180deg, #070b16 0%, var(--bg) 52%, #02050b 100%);
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    a { color: inherit; }
+
+    .page {
+      width: min(1240px, 100%);
+      margin: 0 auto;
+      padding: clamp(18px, 3vw, 34px) clamp(14px, 3vw, 34px) 70px;
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(280px, .8fr);
+      gap: clamp(18px, 4vw, 44px);
+      align-items: end;
+      min-height: 360px;
+      margin-bottom: 22px;
+      padding: clamp(22px, 5vw, 54px);
+      border: 1px solid var(--line-warm);
+      border-radius: 24px;
+      background:
+        linear-gradient(90deg, rgba(5, 9, 19, .95) 0%, rgba(5, 9, 19, .78) 55%, rgba(5, 9, 19, .42) 100%),
+        url("../assets/ai-sounds/realistic-waveform-20260531.webp") center / cover no-repeat;
+      box-shadow: var(--shadow);
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: auto -8% -35% 18%;
+      height: 180px;
+      background: repeating-linear-gradient(90deg, transparent 0 17px, rgba(232, 197, 122, .24) 17px 21px);
+      opacity: .42;
+      transform: rotate(-3deg);
+      pointer-events: none;
+    }
+
+    .hero-copy,
+    .hero-panel {
+      position: relative;
+      z-index: 1;
+    }
+
+    .kicker,
+    .variant-id {
+      color: var(--gold);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      max-width: 760px;
+      margin: 10px 0 14px;
+      font-size: clamp(42px, 8vw, 92px);
+      line-height: .88;
+    }
+
+    .hero p {
+      max-width: 690px;
+      margin: 0;
+      color: var(--muted);
+      font-size: clamp(15px, 2vw, 19px);
+      line-height: 1.55;
+    }
+
+    .hero-panel {
+      display: grid;
+      gap: 10px;
+      padding: 18px;
+      border: 1px solid rgba(255, 255, 255, .14);
+      border-radius: 16px;
+      background: rgba(0, 0, 0, .32);
+    }
+
+    .hero-panel span {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .hero-panel strong {
+      color: var(--ink);
+      font-weight: 700;
+      text-align: right;
+    }
+
+    .lab-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .player-card {
+      position: relative;
+      overflow: hidden;
+      display: grid;
+      gap: 16px;
+      padding: clamp(16px, 2.2vw, 22px);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: linear-gradient(145deg, var(--panel-strong), var(--panel));
+      box-shadow: 0 18px 48px rgba(0, 0, 0, .25), inset 0 1px 0 rgba(255, 255, 255, .06);
+    }
+
+    .player-card.large {
+      grid-column: 1 / -1;
+    }
+
+    .player-card::before {
+      content: "";
+      position: absolute;
+      inset: -70px -42px auto auto;
+      width: 180px;
+      height: 180px;
+      border-radius: 999px;
+      background: radial-gradient(circle, rgba(110, 203, 255, .14), transparent 70%);
+      pointer-events: none;
+    }
+
+    .card-head {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      gap: 8px;
+    }
+
+    .card-title {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 10px;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: clamp(22px, 3vw, 34px);
+      line-height: 1;
+    }
+
+    .player-card:not(.large) h2 {
+      font-size: clamp(20px, 2.2vw, 28px);
+    }
+
+    .card-head p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 2px;
+    }
+
+    .tags span {
+      padding: 7px 9px;
+      border: 1px solid rgba(255, 255, 255, .08);
+      border-radius: 999px;
+      background: rgba(0, 0, 0, .24);
+      color: var(--soft);
+      font-size: 12px;
+    }
+
+    .surface {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      gap: 10px;
+      min-width: 0;
+      padding: 12px;
+      border: 1px solid rgba(255, 255, 255, .11);
+      border-radius: 14px;
+      background: linear-gradient(180deg, rgba(3, 9, 20, .68), rgba(0, 0, 0, .24));
+    }
+
+    .wave {
+      min-height: var(--wave-height, 96px);
+    }
+
+    .wave.compact {
+      min-height: 46px;
+    }
+
+    .timeline,
+    .hoverline,
+    .minimap,
+    .spectrogram {
+      overflow: hidden;
+      border-radius: 10px;
+      background: rgba(0, 0, 0, .18);
+    }
+
+    .timeline {
+      min-height: 30px;
+      border-top: 1px solid rgba(255, 255, 255, .08);
+    }
+
+    .hoverline {
+      min-height: 28px;
+      display: grid;
+      place-items: center start;
+      padding: 0 10px;
+      color: var(--soft);
+      font-variant-numeric: tabular-nums;
+      font-size: 12px;
+    }
+
+    .minimap {
+      min-height: 42px;
+    }
+
+    .spectrogram {
+      min-height: 180px;
+      border: 1px solid rgba(255, 255, 255, .08);
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 9px;
+      min-width: 0;
+    }
+
+    button,
+    input[type="range"] {
+      font: inherit;
+    }
+
+    .play {
+      display: inline-grid;
+      place-items: center;
+      min-width: 84px;
+      height: 38px;
+      padding: 0 14px;
+      border: 1px solid rgba(232, 197, 122, .38);
+      border-radius: 999px;
+      background: rgba(232, 197, 122, .12);
+      color: var(--gold);
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .play:hover {
+      background: rgba(232, 197, 122, .2);
+      color: var(--ink);
+    }
+
+    .time {
+      color: #d7e1e8;
+      font-variant-numeric: tabular-nums;
+      font-size: 12px;
+    }
+
+    .hint {
+      color: var(--soft);
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    .zoom-control {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-width: min(240px, 100%);
+      color: var(--soft);
+      font-size: 12px;
+    }
+
+    .zoom-control input {
+      width: min(150px, 38vw);
+      accent-color: var(--gold);
+    }
+
+    .status {
+      min-height: 18px;
+      color: var(--soft);
+      font-size: 12px;
+    }
+
+    .loading .status {
+      color: var(--gold);
+    }
+
+    .error .status {
+      color: #ff9cae;
+    }
+
+    .wave ::part(cursor) {
+      background: var(--gold);
+    }
+
+    .wave ::part(region) {
+      border-radius: 8px;
+    }
+
+    .wave ::part(region-handle) {
+      border-color: rgba(255, 255, 255, .75);
+    }
+
+    .note {
+      margin-top: 18px;
+      padding: 16px 18px;
+      border: 1px solid rgba(232, 197, 122, .16);
+      border-radius: 16px;
+      background: rgba(232, 197, 122, .055);
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    @media (max-width: 860px) {
+      .hero {
+        grid-template-columns: 1fr;
+        min-height: auto;
+      }
+
+      .lab-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .player-card.large {
+        grid-column: auto;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .page {
+        padding-inline: 10px;
+      }
+
+      .hero,
+      .player-card {
+        border-radius: 14px;
+      }
+
+      .controls {
+        align-items: stretch;
+      }
+
+      .play {
+        min-width: 74px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero" aria-labelledby="page-title">
+      <div class="hero-copy">
+        <span class="kicker">AI Sounds Player Lab</span>
+        <h1 id="page-title">Zoh Coh Loh</h1>
+        <p>One sample song, several WaveSurfer v7 treatments. Pick by player ID: P01, P02, P03, P04, P05, P06, or P07.</p>
+      </div>
+      <div class="hero-panel" aria-label="Sample source">
+        <span>Audio <strong>ai-sounds/audio/01-zoh-coh-loh.mp3</strong></span>
+        <span>Backdrop <strong>assets/ai-sounds/realistic-waveform-20260531.webp</strong></span>
+        <span>Library <strong>wavesurfer.js@7 CDN modules</strong></span>
+      </div>
+    </section>
+
+    <section class="lab-grid" aria-label="WaveSurfer player variants">
+      <article class="player-card" data-player="P01" data-kind="compact">
+        <div class="card-head">
+          <div class="card-title"><span class="variant-id">P01</span><h2>Compact Scrubber</h2></div>
+          <p>Small footprint player for list rows or track cards.</p>
+          <div class="tags"><span>bar waveform</span><span>tight controls</span><span>mobile first</span></div>
+        </div>
+        <div class="surface">
+          <div class="wave compact" id="wave-p01"></div>
+          <div class="controls"><button class="play" type="button">Play</button><span class="time">0:00 / 0:00</span><span class="hint">Click the waveform to scrub.</span></div>
+          <div class="status">Loading waveform...</div>
+        </div>
+      </article>
+
+      <article class="player-card large" data-player="P02" data-kind="large">
+        <div class="card-head">
+          <div class="card-title"><span class="variant-id">P02</span><h2>Large Waveform</h2></div>
+          <p>Big listening-room view with a clean waveform, strong color contrast, and room for artwork or track notes.</p>
+          <div class="tags"><span>hero player</span><span>large waveform</span><span>simple</span></div>
+        </div>
+        <div class="surface">
+          <div class="wave" id="wave-p02" style="--wave-height: 168px"></div>
+          <div class="controls"><button class="play" type="button">Play</button><span class="time">0:00 / 0:00</span><span class="hint">Best all-purpose candidate.</span></div>
+          <div class="status">Loading waveform...</div>
+        </div>
+      </article>
+
+      <article class="player-card" data-player="P03" data-kind="timeline">
+        <div class="card-head">
+          <div class="card-title"><span class="variant-id">P03</span><h2>Timeline + Hover</h2></div>
+          <p>Useful when the timestamp matters and hover feedback should feel precise.</p>
+          <div class="tags"><span>timeline</span><span>hover cursor</span><span>time labels</span></div>
+        </div>
+        <div class="surface">
+          <div class="wave" id="wave-p03"></div>
+          <div class="timeline" id="timeline-p03"></div>
+          <div class="hoverline" id="hover-p03">Hover over the waveform for time position.</div>
+          <div class="controls"><button class="play" type="button">Play</button><span class="time">0:00 / 0:00</span></div>
+          <div class="status">Loading waveform...</div>
+        </div>
+      </article>
+
+      <article class="player-card" data-player="P04" data-kind="regions">
+        <div class="card-head">
+          <div class="card-title"><span class="variant-id">P04</span><h2>Regions</h2></div>
+          <p>Shows named sections and clickable ranges for intro/build/crescendo style notes.</p>
+          <div class="tags"><span>regions</span><span>section markers</span><span>range playback</span></div>
+        </div>
+        <div class="surface">
+          <div class="wave" id="wave-p04"></div>
+          <div class="controls"><button class="play" type="button">Play</button><span class="time">0:00 / 0:00</span><span class="hint">Click a colored region to play that range.</span></div>
+          <div class="status">Loading waveform...</div>
+        </div>
+      </article>
+
+      <article class="player-card large" data-player="P05" data-kind="minimap">
+        <div class="card-head">
+          <div class="card-title"><span class="variant-id">P05</span><h2>Minimap + Zoom</h2></div>
+          <p>A detail-editing view with a scrollable main waveform, minimap overview, and zoom slider.</p>
+          <div class="tags"><span>minimap</span><span>zoom</span><span>scroll parent</span></div>
+        </div>
+        <div class="surface">
+          <div class="wave" id="wave-p05" style="--wave-height: 138px"></div>
+          <div class="minimap" id="minimap-p05"></div>
+          <div class="controls">
+            <button class="play" type="button">Play</button>
+            <span class="time">0:00 / 0:00</span>
+            <label class="zoom-control">Zoom <input class="zoom" type="range" min="0" max="120" value="35" /></label>
+          </div>
+          <div class="status">Loading waveform...</div>
+        </div>
+      </article>
+
+      <article class="player-card large" data-player="P06" data-kind="spectrogram">
+        <div class="card-head">
+          <div class="card-title"><span class="variant-id">P06</span><h2>Spectrogram</h2></div>
+          <p>Frequency view for a more technical listening lab, with the standard waveform kept above it.</p>
+          <div class="tags"><span>spectrogram</span><span>frequency view</span><span>analysis style</span></div>
+        </div>
+        <div class="surface">
+          <div class="wave" id="wave-p06" style="--wave-height: 82px"></div>
+          <div class="spectrogram" id="spectrogram-p06"></div>
+          <div class="controls"><button class="play" type="button">Play</button><span class="time">0:00 / 0:00</span><span class="hint">Heavier to render than the simple players.</span></div>
+          <div class="status">Loading waveform...</div>
+        </div>
+      </article>
+
+      <article class="player-card" data-player="P07" data-kind="envelope">
+        <div class="card-head">
+          <div class="card-title"><span class="variant-id">P07</span><h2>Envelope / Fade</h2></div>
+          <p>Interactive volume envelope points for fade-in, held level, and fade-out auditioning.</p>
+          <div class="tags"><span>envelope</span><span>fade points</span><span>editable</span></div>
+        </div>
+        <div class="surface">
+          <div class="wave" id="wave-p07"></div>
+          <div class="controls"><button class="play" type="button">Play</button><span class="time">0:00 / 0:00</span><span class="hint">Drag the gold points to reshape the fade.</span></div>
+          <div class="status">Loading waveform...</div>
+        </div>
+      </article>
+    </section>
+
+    <p class="note">Caveat while judging: every variant decodes the same MP3 independently so this lab page is intentionally heavier than a final production picker would be.</p>
+  </main>
+
+  <script type="module">
+    import WaveSurfer from "https://cdn.jsdelivr.net/npm/wavesurfer.js@7/dist/wavesurfer.esm.js";
+    import Timeline from "https://cdn.jsdelivr.net/npm/wavesurfer.js@7/dist/plugins/timeline.esm.js";
+    import Hover from "https://cdn.jsdelivr.net/npm/wavesurfer.js@7/dist/plugins/hover.esm.js";
+    import Regions from "https://cdn.jsdelivr.net/npm/wavesurfer.js@7/dist/plugins/regions.esm.js";
+    import Minimap from "https://cdn.jsdelivr.net/npm/wavesurfer.js@7/dist/plugins/minimap.esm.js";
+    import Spectrogram from "https://cdn.jsdelivr.net/npm/wavesurfer.js@7/dist/plugins/spectrogram.esm.js";
+    import Envelope from "https://cdn.jsdelivr.net/npm/wavesurfer.js@7/dist/plugins/envelope.esm.js";
+
+    const audioUrl = "audio/01-zoh-coh-loh.mp3";
+    const trackDuration = 60.024;
+    const players = [];
+
+    function makeDemoPeaks(count = 900) {
+      return Array.from({ length: count }, (_, index) => {
+        const position = index / count;
+        const pulse =
+          Math.sin(position * Math.PI * 21) * .36 +
+          Math.sin(position * Math.PI * 47) * .22 +
+          Math.sin(position * Math.PI * 89) * .11;
+        const envelope =
+          .16 +
+          .9 * Math.exp(-Math.pow((position - .5) / .24, 2)) +
+          .24 * Math.exp(-Math.pow((position - .2) / .08, 2));
+        return Math.max(-1, Math.min(1, pulse * envelope));
+      });
+    }
+
+    const demoPeaks = makeDemoPeaks();
+
+    const colorSets = {
+      compact: { waveColor: "#50617a", progressColor: "#e8c57a", cursorColor: "#f4f7fb" },
+      large: { waveColor: ["#25435c", "#4a6178", "#274155"], progressColor: ["#e8c57a", "#e0667e"], cursorColor: "#e8c57a" },
+      timeline: { waveColor: "#31495d", progressColor: "#6ecbff", cursorColor: "#e8c57a" },
+      regions: { waveColor: "#324053", progressColor: "#80d39b", cursorColor: "#e8c57a" },
+      minimap: { waveColor: "#2d455f", progressColor: "#e0667e", cursorColor: "#e8c57a" },
+      spectrogram: { waveColor: "#41506a", progressColor: "#e8c57a", cursorColor: "#6ecbff" },
+      envelope: { waveColor: "#344258", progressColor: "#e8c57a", cursorColor: "#f4f7fb" },
+    };
+
+    function formatTime(seconds) {
+      if (!Number.isFinite(seconds)) return "0:00";
+      const whole = Math.max(0, Math.floor(seconds));
+      const mins = Math.floor(whole / 60);
+      const secs = String(whole % 60).padStart(2, "0");
+      return `${mins}:${secs}`;
+    }
+
+    function setStatus(card, text, state) {
+      const status = card.querySelector(".status");
+      status.textContent = text;
+      card.classList.toggle("loading", state === "loading");
+      card.classList.toggle("error", state === "error");
+    }
+
+    function wireControls(card, wavesurfer) {
+      const button = card.querySelector(".play");
+      const time = card.querySelector(".time");
+      const updateTime = () => {
+        time.textContent = `${formatTime(wavesurfer.getCurrentTime())} / ${formatTime(wavesurfer.getDuration())}`;
+      };
+
+      button.addEventListener("click", () => wavesurfer.playPause());
+      wavesurfer.on("play", () => {
+        players.forEach((other) => {
+          if (other !== wavesurfer && other.isPlaying()) other.pause();
+        });
+        button.textContent = "Pause";
+      });
+      wavesurfer.on("pause", () => { button.textContent = "Play"; });
+      wavesurfer.on("finish", () => { button.textContent = "Play"; });
+      wavesurfer.on("timeupdate", updateTime);
+      wavesurfer.on("ready", updateTime);
+    }
+
+    function createPlayer(id, options = {}) {
+      const card = document.querySelector(`[data-player="${id}"]`);
+      const kind = card.dataset.kind;
+      const colors = colorSets[kind];
+      const wavesurfer = WaveSurfer.create({
+        container: `#wave-${id.toLowerCase()}`,
+        url: audioUrl,
+        height: options.height ?? 96,
+        barWidth: options.barWidth,
+        barGap: options.barGap,
+        barRadius: options.barRadius,
+        normalize: true,
+        interact: true,
+        cursorWidth: 2,
+        minPxPerSec: options.minPxPerSec ?? 0,
+        fillParent: true,
+        autoScroll: options.autoScroll ?? false,
+        hideScrollbar: options.hideScrollbar ?? true,
+        peaks: options.peaks ?? [demoPeaks],
+        duration: options.duration ?? trackDuration,
+        ...colors,
+        plugins: options.plugins ?? [],
+      });
+
+      players.push(wavesurfer);
+      setStatus(card, "Loading waveform...", "loading");
+      wireControls(card, wavesurfer);
+      wavesurfer.on("ready", () => setStatus(card, "Ready", "ready"));
+      wavesurfer.on("error", (error) => setStatus(card, `Error: ${error.message || error}`, "error"));
+
+      return wavesurfer;
+    }
+
+    createPlayer("P01", {
+      height: 44,
+      barWidth: 3,
+      barGap: 2,
+      barRadius: 3,
+    });
+
+    createPlayer("P02", {
+      height: 168,
+      barWidth: 4,
+      barGap: 2,
+      barRadius: 4,
+    });
+
+    const hoverReadout = document.querySelector("#hover-p03");
+    createPlayer("P03", {
+      height: 104,
+      plugins: [
+        Timeline.create({ container: "#timeline-p03", height: 28, timeInterval: 5, primaryLabelInterval: 10 }),
+        Hover.create({
+          lineColor: "#e8c57a",
+          lineWidth: 2,
+          labelBackground: "rgba(5, 9, 19, .92)",
+          labelColor: "#f4f7fb",
+          labelSize: "12px",
+        }),
+      ],
+    }).on("interaction", (time) => {
+      hoverReadout.textContent = `Last scrub position: ${formatTime(time)}`;
+    });
+
+    const regionsPlugin = Regions.create();
+    const regionsPlayer = createPlayer("P04", {
+      height: 106,
+      plugins: [regionsPlugin],
+    });
+    regionsPlayer.on("ready", () => {
+      const duration = regionsPlayer.getDuration() || 60;
+      [
+        { id: "intro", start: 0, end: Math.min(12, duration), color: "rgba(110, 203, 255, .22)", content: "Intro" },
+        { id: "build", start: Math.min(13, duration * .25), end: Math.min(34, duration * .62), color: "rgba(232, 197, 122, .22)", content: "Build" },
+        { id: "crest", start: Math.min(35, duration * .64), end: Math.min(duration - 1, 55), color: "rgba(224, 102, 126, .24)", content: "Crescendo" },
+      ].forEach((region) => {
+        if (region.end > region.start) regionsPlugin.addRegion({ ...region, drag: true, resize: true });
+      });
+      regionsPlugin.enableDragSelection({ color: "rgba(128, 211, 155, .18)" });
+    });
+    regionsPlugin.on("region-clicked", (region, event) => {
+      event.stopPropagation();
+      region.play();
+    });
+
+    const minimapPlayer = createPlayer("P05", {
+      height: 138,
+      minPxPerSec: 35,
+      autoScroll: true,
+      hideScrollbar: false,
+      plugins: [
+        Minimap.create({
+          container: "#minimap-p05",
+          height: 42,
+          waveColor: "rgba(184, 198, 211, .38)",
+          progressColor: "rgba(232, 197, 122, .78)",
+        }),
+      ],
+    });
+    const zoom = document.querySelector('[data-player="P05"] .zoom');
+    zoom.addEventListener("input", () => minimapPlayer.zoom(Number(zoom.value)));
+
+    createPlayer("P06", {
+      height: 82,
+      plugins: [
+        Spectrogram.create({
+          container: "#spectrogram-p06",
+          height: 180,
+          labels: true,
+          labelsBackground: "rgba(5, 9, 19, .9)",
+          labelsColor: "#d7e1e8",
+          labelsHzColor: "#7f91a4",
+          scale: "mel",
+          colorMap: "roseus",
+        }),
+      ],
+    });
+
+    createPlayer("P07", {
+      height: 112,
+      plugins: [
+        Envelope.create({
+          volume: 1,
+          lineColor: "#e8c57a",
+          lineWidth: "3",
+          dragPointFill: "#050913",
+          dragPointStroke: "#e8c57a",
+          dragPointSize: 9,
+          points: [
+            { time: 0, volume: 0 },
+            { time: 4, volume: .92 },
+            { time: 44, volume: .92 },
+            { time: 58, volume: 0 },
+          ],
+        }),
+      ],
+    });
+  </script>
+</body>
+</html>
