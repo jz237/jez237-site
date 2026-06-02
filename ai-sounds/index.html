@@ -50,7 +50,7 @@
     .sound-play::before { content:""; position:absolute; left:15px; top:11px; width:0; height:0; border-top:8px solid transparent; border-bottom:8px solid transparent; border-left:12px solid currentColor; }
     .sound-player.is-playing .sound-play::before { left:12px; top:10px; width:5px; height:18px; border:0; border-right:5px solid currentColor; border-left:5px solid currentColor; }
     .sound-play:hover { background:rgba(232,197,122,.2); color:var(--ink-hi); }
-    .sound-play:focus-visible, .sound-rate button:focus-visible, .sound-volume-button:focus-visible, .sound-volume input:focus-visible, .sound-download:focus-visible { outline:2px solid var(--brand-gold); outline-offset:3px; }
+    .sound-play:focus-visible, .sound-rate button:focus-visible, .sound-volume-button:focus-visible, .sound-volume input:focus-visible, .sound-download:focus-visible, .sound-eq-presets button:focus-visible, .sound-eq input:focus-visible { outline:2px solid var(--brand-gold); outline-offset:3px; }
     .sound-time { min-width:78px; color:#d7e1e8; font-variant-numeric:tabular-nums; font-size:12px; }
     .sound-spacer { flex:1 1 auto; min-width:0; }
     .sound-rate { display:inline-flex; align-items:center; gap:2px; min-height:34px; padding:3px; border:1px solid rgba(255,255,255,.14); border-radius:999px; background:rgba(0,0,0,.22); }
@@ -67,6 +67,16 @@
     .sound-download::before { content:""; width:13px; height:15px; background:currentColor; clip-path:polygon(38% 0, 62% 0, 62% 48%, 82% 48%, 50% 82%, 18% 48%, 38% 48%); }
     .sound-download::after { content:""; position:absolute; left:10px; right:10px; bottom:8px; height:2px; border-radius:999px; background:currentColor; }
     .sound-download:hover { color:var(--brand-gold); border-color:rgba(232,197,122,.36); }
+    .sound-eq { display:grid; gap:8px; padding:9px 10px 10px; border:1px solid rgba(255,255,255,.1); border-radius:14px; background:rgba(0,0,0,.16); }
+    .sound-eq-head { display:flex; align-items:center; gap:8px; min-width:0; }
+    .sound-eq-label { flex:0 0 auto; color:var(--brand-gold); font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; }
+    .sound-eq-presets { display:flex; flex-wrap:wrap; gap:4px; min-width:0; }
+    .sound-eq-presets button { height:24px; padding:0 8px; border:1px solid rgba(255,255,255,.12); border-radius:999px; background:rgba(0,0,0,.18); color:var(--ink-mid); cursor:pointer; font:inherit; font-size:11px; }
+    .sound-eq-presets button:hover { color:var(--ink-hi); background:rgba(255,255,255,.07); }
+    .sound-eq-presets button.is-active { border-color:rgba(232,197,122,.36); background:rgba(232,197,122,.15); color:var(--brand-gold); }
+    .sound-eq-bands { display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:8px; }
+    .sound-eq-band { display:grid; gap:3px; min-width:0; color:var(--ink-lo); font-size:10px; letter-spacing:.04em; text-transform:uppercase; }
+    .sound-eq-band input { width:100%; accent-color:var(--brand-gold); cursor:pointer; }
     .wavesurfer-enhanced .sound-card audio { position:absolute; width:1px; height:1px; opacity:0; pointer-events:none; }
     .sound-note { margin-top:18px; padding:18px 20px; border:1px solid rgba(232,197,122,.16); border-radius:22px; background:rgba(232,197,122,.055); color:var(--ink-lo); }
     .sound-note strong { color: var(--ink-hi); }
@@ -107,8 +117,8 @@
         height: 92px;
       }
     }
-    @media (max-width: 620px) { .sound-player-controls { flex-wrap:wrap; } .sound-spacer { display:none; } .sound-time { flex:1 1 auto; } .sound-volume { flex:1 1 132px; justify-content:center; } .sound-volume input { width:min(120px, 100%); } }
-    @media (max-width: 520px) { .sound-player { padding:10px; } .sound-wave { height:82px; } .sound-scrub { min-height:64px; } .sound-time { min-width:68px; font-size:11px; } .sound-rate button { min-width:32px; } }
+    @media (max-width: 620px) { .sound-player-controls { flex-wrap:wrap; } .sound-spacer { display:none; } .sound-time { flex:1 1 auto; } .sound-volume { flex:1 1 132px; justify-content:center; } .sound-volume input { width:min(120px, 100%); } .sound-eq-head { align-items:flex-start; flex-direction:column; } }
+    @media (max-width: 520px) { .sound-player { padding:10px; } .sound-wave { height:82px; } .sound-scrub { min-height:64px; } .sound-time { min-width:68px; font-size:11px; } .sound-rate button { min-width:32px; } .sound-eq-bands { gap:6px; } }
     @media (max-width: 860px) { .desktop-hub { border-radius:0; } main.container { padding-inline:0; } .hub-main { padding:14px 10px 28px !important; } .sound-hero { border-radius:22px; } }
   </style>
 </head>
@@ -442,6 +452,12 @@
         return Math.max(-1, Math.min(1, (phrase + texture + detail) * envelope));
       });
     };
+    const eqPresets = {
+      flat: { label: "Flat", bass: 0, mid: 0, treble: 0 },
+      warm: { label: "Warm", bass: 3, mid: 1, treble: -2 },
+      bright: { label: "Bright", bass: -1, mid: 1, treble: 4 },
+      bass: { label: "Bass", bass: 5, mid: 0, treble: -1 }
+    };
 
     document.documentElement.classList.add("wavesurfer-enhanced");
 
@@ -517,11 +533,66 @@
       download.setAttribute("aria-label", "Download track");
 
       controls.append(play, time, spacer, rate, volume, download);
+      const eq = document.createElement("div");
+      eq.className = "sound-eq";
+
+      const eqHead = document.createElement("div");
+      eqHead.className = "sound-eq-head";
+
+      const eqLabel = document.createElement("span");
+      eqLabel.className = "sound-eq-label";
+      eqLabel.textContent = "EQ";
+
+      const eqPresetsWrap = document.createElement("div");
+      eqPresetsWrap.className = "sound-eq-presets";
+      eqPresetsWrap.setAttribute("role", "group");
+      eqPresetsWrap.setAttribute("aria-label", "Equalizer presets");
+      const eqPresetButtons = [];
+      Object.entries(eqPresets).forEach(([key, preset]) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.dataset.eqPreset = key;
+        button.textContent = preset.label;
+        button.setAttribute("aria-pressed", key === "flat" ? "true" : "false");
+        if (key === "flat") button.classList.add("is-active");
+        eqPresetButtons.push(button);
+        eqPresetsWrap.appendChild(button);
+      });
+
+      const eqBands = document.createElement("div");
+      eqBands.className = "sound-eq-bands";
+      const eqSliders = {};
+      [
+        ["bass", "Bass"],
+        ["mid", "Mid"],
+        ["treble", "Treble"]
+      ].forEach(([key, label]) => {
+        const band = document.createElement("label");
+        band.className = "sound-eq-band";
+        band.textContent = label;
+        const slider = document.createElement("input");
+        slider.type = "range";
+        slider.min = "-9";
+        slider.max = "9";
+        slider.step = "1";
+        slider.value = "0";
+        slider.dataset.eqBand = key;
+        slider.setAttribute("aria-label", `${label} equalizer gain`);
+        eqSliders[key] = slider;
+        band.appendChild(slider);
+        eqBands.appendChild(band);
+      });
+
+      eqHead.append(eqLabel, eqPresetsWrap);
+      eq.append(eqHead, eqBands);
       player.appendChild(scrub);
       player.appendChild(controls);
+      player.appendChild(eq);
 
       let wavesurfer;
+      let audioGraph;
       let lastVolume = 1;
+      let currentEq = { bass: 0, mid: 0, treble: 0 };
       const updateTime = () => {
         if (!wavesurfer) return;
         time.textContent = `${formatTime(wavesurfer.getCurrentTime())} / ${formatTime(wavesurfer.getDuration())}`;
@@ -530,6 +601,54 @@
         const muted = Number(volumeSlider.value) === 0 || (wavesurfer ? wavesurfer.getMuted() : audio.muted);
         volume.classList.toggle("is-muted", muted);
         volumeButton.setAttribute("aria-label", muted ? "Unmute track" : "Mute track");
+      };
+      const getAudioGraph = () => {
+        if (audioGraph) return audioGraph;
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContext) return null;
+        const context = new AudioContext();
+        const source = context.createMediaElementSource(audio);
+        const bass = context.createBiquadFilter();
+        bass.type = "lowshelf";
+        bass.frequency.value = 160;
+        const mid = context.createBiquadFilter();
+        mid.type = "peaking";
+        mid.frequency.value = 1200;
+        mid.Q.value = 1;
+        const treble = context.createBiquadFilter();
+        treble.type = "highshelf";
+        treble.frequency.value = 4200;
+        source.connect(bass).connect(mid).connect(treble).connect(context.destination);
+        audioGraph = { context, filters: { bass, mid, treble } };
+        return audioGraph;
+      };
+      const applyEq = (values) => {
+        currentEq = {
+          bass: Number(values.bass ?? currentEq.bass),
+          mid: Number(values.mid ?? currentEq.mid),
+          treble: Number(values.treble ?? currentEq.treble)
+        };
+        Object.entries(eqSliders).forEach(([key, slider]) => {
+          slider.value = String(currentEq[key]);
+        });
+        const graph = getAudioGraph();
+        if (graph) {
+          Object.entries(currentEq).forEach(([key, value]) => {
+            graph.filters[key].gain.setTargetAtTime(Number(value), graph.context.currentTime, .015);
+          });
+        }
+        const activePreset = Object.entries(eqPresets).find(([, preset]) => (
+          preset.bass === currentEq.bass && preset.mid === currentEq.mid && preset.treble === currentEq.treble
+        ))?.[0] || "";
+        eqPresetButtons.forEach((button) => {
+          const active = button.dataset.eqPreset === activePreset;
+          button.classList.toggle("is-active", active);
+          button.setAttribute("aria-pressed", active ? "true" : "false");
+        });
+      };
+      const resumeEq = () => {
+        const graph = getAudioGraph();
+        if (graph && graph.context.state === "suspended") graph.context.resume();
       };
 
       const ensureWaveform = () => {
@@ -604,6 +723,8 @@
 
       play.addEventListener("click", () => {
         const current = ensureWaveform();
+        resumeEq();
+        applyEq(currentEq);
         players.forEach((other) => {
           if (other !== current && other.isPlaying()) other.pause();
         });
@@ -644,6 +765,18 @@
           current.setMuted(true);
         }
         syncVolumeState();
+      });
+
+      eqPresetButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          applyEq(eqPresets[button.dataset.eqPreset] || eqPresets.flat);
+        });
+      });
+
+      Object.entries(eqSliders).forEach(([key, slider]) => {
+        slider.addEventListener("input", () => {
+          applyEq({ [key]: Number(slider.value) });
+        });
       });
 
       lazyPlayers.push({ target: card, ensureWaveform });
