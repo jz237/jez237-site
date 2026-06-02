@@ -1,6 +1,6 @@
 {
   "date": "2026-06-02",
-  "updatedAt": "2026-06-02T12:54:12.059298+00:00",
+  "updatedAt": "2026-06-02T13:00:01.922835+00:00",
   "items": [
     {
       "title": "Gemini Spark is the most impressive and terrifying AI experience I’ve had yet",
@@ -13,10 +13,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/Google-Gemini-Spark.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.711701357851%2C100%2C78.576597284297&amp%3Bw=1200",
       "published": "2026-06-02T12:38:08+00:00",
       "firstSeen": "2026-06-02T12:54:12.059298+00:00",
-      "lastSeen": "2026-06-02T12:54:12.059298+00:00",
+      "lastSeen": "2026-06-02T13:00:01.922835+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.4518
+      "score": 11.4489
     },
     {
       "title": "Why Financial Institutions Are Converging on Transaction Foundation Models to Build Their Own Intelligence",
@@ -29,11 +29,11 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/fsi-press-new-payments-kv-1920x1080-5150250-1.jpg",
       "published": "2026-06-02T06:00:36+00:00",
       "firstSeen": "2026-06-02T06:53:28.339289+00:00",
-      "lastSeen": "2026-06-02T12:54:12.059298+00:00",
+      "lastSeen": "2026-06-02T13:00:01.922835+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 10.3983
+      "score": 10.3959
     },
     {
       "title": "NVIDIA Jetson Brings Agentic AI to the Physical World",
@@ -46,10 +46,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/robotics-press-jetson-agentic-ready-cptx26-1920x1080-5180550.jpg",
       "published": "2026-06-02T02:00:40+00:00",
       "firstSeen": "2026-06-02T03:00:01.950539+00:00",
-      "lastSeen": "2026-06-02T12:54:12.059298+00:00",
+      "lastSeen": "2026-06-02T13:00:01.922835+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0028
+      "score": 5.0006
     },
     {
       "title": "Codex is becoming a productivity tool for everyone",
@@ -62,10 +62,10 @@
       "image": "",
       "published": "2026-06-02T02:00:00+00:00",
       "firstSeen": "2026-06-02T10:00:01.464247+00:00",
-      "lastSeen": "2026-06-02T12:54:12.059298+00:00",
+      "lastSeen": "2026-06-02T13:00:01.922835+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.7126
+      "score": 4.7104
     },
     {
       "title": "Microsoft heads into Build with AI everywhere and a paying-customer problem",
@@ -78,10 +78,10 @@
       "image": "https://media.thenextweb.com/2026/05/microsoft-threatens-security-researcher-nightmare-eclipse.avif",
       "published": "2026-06-02T10:55:17+00:00",
       "firstSeen": "2026-06-02T12:54:12.059298+00:00",
-      "lastSeen": "2026-06-02T12:54:12.059298+00:00",
+      "lastSeen": "2026-06-02T13:00:01.922835+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.0911
+      "score": 4.0883
     },
     {
       "title": "Pasted File Editor",
@@ -94,10 +94,10 @@
       "image": "",
       "published": "2026-06-02T04:13:36+00:00",
       "firstSeen": "2026-06-02T05:00:01.988171+00:00",
-      "lastSeen": "2026-06-02T12:54:12.059298+00:00",
+      "lastSeen": "2026-06-02T13:00:01.922835+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 4.0544
+      "score": 4.0521
     },
     {
       "title": "WeRide and Uber take their robotaxi partnership to Madrid",
@@ -110,10 +110,10 @@
       "image": "https://media.thenextweb.com/2026/06/WeRide-Spain.avif",
       "published": "2026-06-02T10:30:28+00:00",
       "firstSeen": "2026-06-02T11:00:02.005550+00:00",
-      "lastSeen": "2026-06-02T12:54:12.059298+00:00",
+      "lastSeen": "2026-06-02T13:00:01.922835+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.8792
+      "score": 3.8764
     },
     {
       "title": "Taiwan shows off robot patrol dogs that could guard its South China Sea islands",
@@ -126,10 +126,10 @@
       "image": "https://media.thenextweb.com/2026/06/Ghost-Robotics.avif",
       "published": "2026-06-02T12:06:55+00:00",
       "firstSeen": "2026-06-02T12:54:12.059298+00:00",
-      "lastSeen": "2026-06-02T12:54:12.059298+00:00",
+      "lastSeen": "2026-06-02T13:00:01.922835+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.5262
+      "score": 3.5233
     },
     {
       "title": "STMicroelectronics doubles its data-centre revenue forecast to $1bn",
@@ -145,7 +145,7 @@
       "lastSeen": "2026-06-02T10:00:01.464247+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.3994
+      "score": 3.3969
     },
     {
       "title": "Rehumanizing global health care with agentic AI",
@@ -158,10 +158,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/05/MIT-Abstract-Thumbnail-2_-V1.png?resize=1200%2C600",
       "published": "2026-06-02T11:23:34+00:00",
       "firstSeen": "2026-06-02T12:54:12.059298+00:00",
-      "lastSeen": "2026-06-02T12:54:12.059298+00:00",
+      "lastSeen": "2026-06-02T13:00:01.922835+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 3.2448
+      "score": 3.242
     },
     {
       "title": "Meta takes its 13+ teen content settings global across Instagram, Facebook, and Messenger",
@@ -174,10 +174,10 @@
       "image": "https://media.thenextweb.com/2026/06/Meta-teen-13.avif",
       "published": "2026-06-02T11:50:10+00:00",
       "firstSeen": "2026-06-02T12:54:12.059298+00:00",
-      "lastSeen": "2026-06-02T12:54:12.059298+00:00",
+      "lastSeen": "2026-06-02T13:00:01.922835+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2179
+      "score": 3.215
     },
     {
       "title": "Uber picks Munich for its next robotaxi push, with Autobrains and Nvidia",
@@ -190,10 +190,10 @@
       "image": "https://media.thenextweb.com/2026/05/Uber.avif",
       "published": "2026-06-02T09:46:30+00:00",
       "firstSeen": "2026-06-02T10:00:01.464247+00:00",
-      "lastSeen": "2026-06-02T12:54:12.059298+00:00",
+      "lastSeen": "2026-06-02T13:00:01.922835+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1584
+      "score": 3.1557
     }
   ],
   "errors": [
