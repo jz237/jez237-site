@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-02T14:00:01.826780+00:00",
+  "updatedAt": "2026-06-02T15:00:01.174662+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -8936,6 +8936,18 @@
     "https://www.anthropic.com/news/expanding-project-glasswing": {
       "image": "https://cdn.sanity.io/images/4zrzovbb/website/19e93d85e033d3f992b78cbce2c5a3f60709bd3b-3840x2160.jpg",
       "checkedAt": "2026-06-02T14:00:01.826780+00:00"
+    },
+    "https://techcrunch.com/2026/06/02/anthropic-scales-claude-mythos-to-critical-infrastructure-in-15-countries": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/04/GettyImages-2269811684.jpg?w=1024",
+      "checkedAt": "2026-06-02T15:00:01.174662+00:00"
+    },
+    "https://huggingface.co/blog/Hcompany/holo31": {
+      "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/Hcompany/holo31.png",
+      "checkedAt": "2026-06-02T15:00:01.174662+00:00"
+    },
+    "https://openai.com/index/advancing-youth-safety-and-opportunity-through-global-leadership": {
+      "image": "https://images.ctfassets.net/kftzwdyauwt9/2IaU9HljDTpAUcw36nZL4C/d869594af4e3f9bbfbfa9797e393bcd4/oai_16x9__1_.png?w=1600&amp;h=900&amp;fit=fill",
+      "checkedAt": "2026-06-02T15:00:01.174662+00:00"
     }
   }
 }
