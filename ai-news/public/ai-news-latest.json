@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-02T06:00:01.306892+00:00",
+  "updatedAt": "2026-06-02T06:53:28.339289+00:00",
   "items": [
     {
       "title": "Shannan Liu, Peifeng Li, Yaxin Fan, Qiaoming Zhu",
@@ -10,12 +10,29 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-02T06:00:12.685712+00:00",
+      "published": "2026-06-02T06:53:32.576478+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-02T06:00:01.306892+00:00",
+      "lastSeen": "2026-06-02T06:53:28.339289+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
+    },
+    {
+      "title": "Why Financial Institutions Are Converging on Transaction Foundation Models to Build Their Own Intelligence",
+      "url": "https://blogs.nvidia.com/blog/financial-institutions-transaction-foundation-models",
+      "source": "NVIDIA Blog",
+      "sourceUrl": "https://blogs.nvidia.com/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Financial institutions have spent years building AI: fraud models, credit models, recommendation engines and risk systems. While this sprawl of task-specific models has been effective, it’s also constrained by siloed systems.  Siloed systems prevent institutions from developing a unified understanding of consumers’ financial behavior. As enterprise datasets keep growing, so does the gap between what [&#8230;]",
+      "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/fsi-press-new-payments-kv-1920x1080-5150250-1.jpg",
+      "published": "2026-06-02T06:00:36+00:00",
+      "firstSeen": "2026-06-02T06:53:28.339289+00:00",
+      "lastSeen": "2026-06-02T06:53:28.339289+00:00",
+      "model_release": true,
+      "editorial_allow": true,
+      "editorial_reason": "model_release",
+      "score": 10.5634
     },
     {
       "title": "b9468",
@@ -28,10 +45,10 @@
       "image": "https://opengraph.githubassets.com/04606d1442103b7ed25da34c3f6e0a8360a91d12961ff5eef6c0ede20bcadd92/ggml-org/llama.cpp/releases/tag/b9468",
       "published": "2026-06-02T05:54:57+00:00",
       "firstSeen": "2026-06-02T06:00:01.306892+00:00",
-      "lastSeen": "2026-06-02T06:00:01.306892+00:00",
+      "lastSeen": "2026-06-02T06:53:28.339289+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.9174
+      "score": 3.8906
     },
     {
       "title": "Pasted File Editor",
@@ -44,10 +61,10 @@
       "image": "",
       "published": "2026-06-02T04:13:36+00:00",
       "firstSeen": "2026-06-02T05:00:01.988171+00:00",
-      "lastSeen": "2026-06-02T06:00:01.306892+00:00",
+      "lastSeen": "2026-06-02T06:53:28.339289+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 4.2371
+      "score": 4.2115
     },
     {
       "title": "v1.87.0",
@@ -60,10 +77,10 @@
       "image": "https://opengraph.githubassets.com/39926c571856ad8a9f5b42f8c974345874e3338547b282c449d7a7d41246330d/BerriAI/litellm/releases/tag/v1.87.0",
       "published": "2026-06-02T04:12:22+00:00",
       "firstSeen": "2026-06-02T05:00:01.988171+00:00",
-      "lastSeen": "2026-06-02T06:00:01.306892+00:00",
+      "lastSeen": "2026-06-02T06:53:28.339289+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9365
+      "score": 2.9109
     },
     {
       "title": "b9467",
@@ -76,10 +93,10 @@
       "image": "https://opengraph.githubassets.com/a2c9ab4e9dba8f2e8daed66cb0a7f54f6b8c4723d94eff2eb79fc701b276ed69/ggml-org/llama.cpp/releases/tag/b9467",
       "published": "2026-06-02T03:31:52+00:00",
       "firstSeen": "2026-06-02T04:00:01.596821+00:00",
-      "lastSeen": "2026-06-02T06:00:01.306892+00:00",
+      "lastSeen": "2026-06-02T06:53:28.339289+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 0.1471
+      "score": 0.122
     },
     {
       "title": "b9466",
@@ -92,10 +109,10 @@
       "image": "https://opengraph.githubassets.com/026498f1325244f4c4d223f3d71014f5ef0413d52e988eb0e594600056554481/ggml-org/llama.cpp/releases/tag/b9466",
       "published": "2026-06-02T02:44:14+00:00",
       "firstSeen": "2026-06-02T03:00:01.950539+00:00",
-      "lastSeen": "2026-06-02T06:00:01.306892+00:00",
+      "lastSeen": "2026-06-02T06:53:28.339289+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 0.1247
+      "score": 0.1001
     },
     {
       "title": "v1.85.3",
@@ -108,10 +125,10 @@
       "image": "https://opengraph.githubassets.com/b1f1a7c17b7bf9bb50bea2074921b960dbb70007fb31e675ad02af88ee6d7245/BerriAI/litellm/releases/tag/v1.85.3",
       "published": "2026-06-02T02:30:54+00:00",
       "firstSeen": "2026-06-02T03:00:01.950539+00:00",
-      "lastSeen": "2026-06-02T06:00:01.306892+00:00",
+      "lastSeen": "2026-06-02T06:53:28.339289+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8885
+      "score": 2.8641
     },
     {
       "title": "NVIDIA Jetson Brings Agentic AI to the Physical World",
@@ -124,10 +141,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/robotics-press-jetson-agentic-ready-cptx26-1920x1080-5180550.jpg",
       "published": "2026-06-02T02:00:40+00:00",
       "firstSeen": "2026-06-02T03:00:01.950539+00:00",
-      "lastSeen": "2026-06-02T06:00:01.306892+00:00",
+      "lastSeen": "2026-06-02T06:53:28.339289+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1746
+      "score": 5.1506
     },
     {
       "title": "v0.30.0",
@@ -140,11 +157,11 @@
       "image": "https://opengraph.githubassets.com/48bf98a01cb0bcc7ac92f95621c97939c42fa5de9658f1e574becdb9c1456e98/ollama/ollama",
       "published": "2026-06-02T00:32:00+00:00",
       "firstSeen": "2026-06-02T00:00:01.509717+00:00",
-      "lastSeen": "2026-06-02T06:00:01.306892+00:00",
+      "lastSeen": "2026-06-02T06:53:28.339289+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 15.705
+      "score": 15.6819
     },
     {
       "title": "Alphabet plans to raise $80B to pay for AI buildout",
@@ -157,10 +174,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/02/GettyImages-2173545265.jpg?resize=1200%2C800",
       "published": "2026-06-01T22:55:09+00:00",
       "firstSeen": "2026-06-01T23:00:01.883335+00:00",
-      "lastSeen": "2026-06-02T06:00:01.306892+00:00",
+      "lastSeen": "2026-06-02T06:53:28.339289+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0936
+      "score": 2.0715
     },
     {
       "title": "Nvidia chases $200B CPU market with AI agent PCs from Microsoft, Dell, and HP",
@@ -173,10 +190,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/03/GettyImages-2205761886.jpg?resize=1200%2C828",
       "published": "2026-06-01T21:35:00+00:00",
       "firstSeen": "2026-06-01T22:00:01.536287+00:00",
-      "lastSeen": "2026-06-02T06:00:01.306892+00:00",
+      "lastSeen": "2026-06-02T06:53:28.339289+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.7607
+      "score": 4.7394
     },
     {
       "title": "Hackers Simply Asked Meta AI to Give Them Access to High-Profile Instagram Accounts. It Worked",
@@ -189,10 +206,10 @@
       "image": "",
       "published": "2026-06-01T21:14:47+00:00",
       "firstSeen": "2026-06-01T22:00:01.536287+00:00",
-      "lastSeen": "2026-06-02T06:00:01.306892+00:00",
+      "lastSeen": "2026-06-02T06:53:28.339289+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0526
+      "score": 5.0315
     },
     {
       "title": "GoPro warned it may not survive. The AI memory crunch is killing companies that make things people hold.",
@@ -205,10 +222,10 @@
       "image": "https://media.thenextweb.com/2026/06/gopro-going-concern-ai-memory-crisis-default.avif",
       "published": "2026-06-01T20:17:56+00:00",
       "firstSeen": "2026-06-01T21:00:01.828388+00:00",
-      "lastSeen": "2026-06-02T06:00:01.306892+00:00",
+      "lastSeen": "2026-06-02T06:53:28.339289+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.2901
+      "score": 4.2696
     },
     {
       "title": "Florida sues OpenAI, Sam Altman, in first-of-its-kind lawsuit over violent incidents",
@@ -221,10 +238,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/GettyImages-2273245180.jpg?resize=1200%2C800",
       "published": "2026-06-01T20:03:40+00:00",
       "firstSeen": "2026-06-01T21:00:01.828388+00:00",
-      "lastSeen": "2026-06-02T06:00:01.306892+00:00",
+      "lastSeen": "2026-06-02T06:53:28.339289+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.0246
+      "score": 9.0042
     },
     {
       "title": "This could be Windows’ M1 moment — but expect it to cost a ton",
@@ -237,10 +254,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/Screenshot_20260531_212701.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C9.3778095086996%2C100%2C81.244380982601&amp%3Bw=1200",
       "published": "2026-06-01T20:02:31+00:00",
       "firstSeen": "2026-06-01T21:00:01.828388+00:00",
-      "lastSeen": "2026-06-02T06:00:01.306892+00:00",
+      "lastSeen": "2026-06-02T06:53:28.339289+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1942
+      "score": 3.1738
     },
     {
       "title": "Gemini’s new AI agent is about as good as Google’s demo",
@@ -253,10 +270,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/lcimg-0ebbe911-9fbb-4f68-97b0-b7361d7cb53c.jpeg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.604950381935%2C100%2C78.79009923613&amp%3Bw=1200",
       "published": "2026-06-01T20:00:00+00:00",
       "firstSeen": "2026-06-01T21:00:01.828388+00:00",
-      "lastSeen": "2026-06-02T06:00:01.306892+00:00",
+      "lastSeen": "2026-06-02T06:53:28.339289+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.7932
+      "score": 10.7728
     },
     {
       "title": "b9464",
@@ -269,10 +286,10 @@
       "image": "https://opengraph.githubassets.com/10c53af91dcc951ae779ece25cb24561ea2a985a2515d0cb374d2d86b69d9e52/ggml-org/llama.cpp/releases/tag/b9464",
       "published": "2026-06-01T19:58:39+00:00",
       "firstSeen": "2026-06-01T20:00:01.910682+00:00",
-      "lastSeen": "2026-06-02T06:00:01.306892+00:00",
+      "lastSeen": "2026-06-02T06:53:28.339289+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0527
+      "score": 5.0323
     },
     {
       "title": "Dozens of Red Hat packages backdoored through its official NPM channel",
@@ -285,10 +302,10 @@
       "image": "https://cdn.arstechnica.net/wp-content/uploads/2026/06/redhat-1152x648.jpg",
       "published": "2026-06-01T19:49:09+00:00",
       "firstSeen": "2026-06-01T21:00:01.828388+00:00",
-      "lastSeen": "2026-06-02T06:00:01.306892+00:00",
+      "lastSeen": "2026-06-02T06:53:28.339289+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.879
+      "score": 1.8588
     },
     {
       "title": "Apple is building a bill-splitting feature that photographs receipts and assigns items to friends",
@@ -301,10 +318,10 @@
       "image": "https://media.thenextweb.com/2026/06/apple-bill-splitting-receipt-photo-ios-27-fintech.avif",
       "published": "2026-06-01T19:46:29+00:00",
       "firstSeen": "2026-06-01T21:00:01.828388+00:00",
-      "lastSeen": "2026-06-02T06:00:01.306892+00:00",
+      "lastSeen": "2026-06-02T06:53:28.339289+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.978
+      "score": 2.9578
     },
     {
       "title": "Hackers hijacked Instagram accounts by asking Meta’s own AI chatbot to reset the password",
@@ -317,10 +334,10 @@
       "image": "https://media.thenextweb.com/2026/06/hackers-tricked-meta-ai-chatbot-instagram-account-hijack.avif",
       "published": "2026-06-01T19:40:19+00:00",
       "firstSeen": "2026-06-01T20:00:01.910682+00:00",
-      "lastSeen": "2026-06-02T06:00:01.306892+00:00",
+      "lastSeen": "2026-06-02T06:53:28.339289+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8756
+      "score": 1.8555
     },
     {
       "title": "IBM is up 30% in a month as Barclays says its software business is the antidote to the SaaSpocalypse",
@@ -333,10 +350,10 @@
       "image": "https://media.thenextweb.com/2026/06/ibm-stock-barclays-quantum-software-saaspocalypse.avif",
       "published": "2026-06-01T19:36:15+00:00",
       "firstSeen": "2026-06-01T20:00:01.910682+00:00",
-      "lastSeen": "2026-06-02T06:00:01.306892+00:00",
+      "lastSeen": "2026-06-02T06:53:28.339289+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -1.2259
+      "score": -1.2461
     },
     {
       "title": "b9460",
@@ -349,10 +366,10 @@
       "image": "https://opengraph.githubassets.com/e9a10d2e3ccc0fdfa1b8742e6f286b22f045566444c7b9c12fdb4ffd59b26baf/ggml-org/llama.cpp/releases/tag/b9460",
       "published": "2026-06-01T19:25:21+00:00",
       "firstSeen": "2026-06-01T20:00:01.910682+00:00",
-      "lastSeen": "2026-06-02T06:00:01.306892+00:00",
+      "lastSeen": "2026-06-02T06:53:28.339289+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 1.9399
+      "score": 1.9199
     },
     {
       "title": "Meta&#8217;s own AI was exploited to hijack Instagram accounts",
@@ -365,10 +382,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/meta-chatbot-support.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C9.2919928911091%2C100%2C81.416014217782&amp%3Bw=1200",
       "published": "2026-06-01T19:20:47+00:00",
       "firstSeen": "2026-06-01T21:00:01.828388+00:00",
-      "lastSeen": "2026-06-02T06:00:01.306892+00:00",
+      "lastSeen": "2026-06-02T06:53:28.339289+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0782
+      "score": 2.0582
     },
     {
       "title": "A WordPress plugin sold to 15,000 sites has a flaw that lets anyone create an admin account, and attackers are already using it",
@@ -381,10 +398,10 @@
       "image": "https://media.thenextweb.com/2026/06/wp-maps-pro-wordpress-vulnerability-admin-accounts-cve-2026-8732.avif",
       "published": "2026-06-01T19:08:00+00:00",
       "firstSeen": "2026-06-01T20:00:01.910682+00:00",
-      "lastSeen": "2026-06-02T06:00:01.306892+00:00",
+      "lastSeen": "2026-06-02T06:53:28.339289+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8634
+      "score": 1.8435
     },
     {
       "title": "b9459",
@@ -397,10 +414,10 @@
       "image": "https://opengraph.githubassets.com/b4bdaaed6b62e970e413d922ac24d102f520cc201cf26233f7c1442e50949ead/ggml-org/llama.cpp/releases/tag/b9459",
       "published": "2026-06-01T19:00:15+00:00",
       "firstSeen": "2026-06-01T19:00:01.479164+00:00",
-      "lastSeen": "2026-06-02T06:00:01.306892+00:00",
+      "lastSeen": "2026-06-02T06:53:28.339289+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 1.3305
+      "score": 1.3107
     },
     {
       "title": "Former Meta CTO raises $250 million for climate tech as the rest of venture capital chases AI",
@@ -413,10 +430,10 @@
       "image": "https://media.thenextweb.com/2026/06/gigascale-capital-250m-climate-fund-meta-cto-schroepfer.avif",
       "published": "2026-06-01T18:55:09+00:00",
       "firstSeen": "2026-06-01T20:00:01.910682+00:00",
-      "lastSeen": "2026-06-02T06:00:01.306892+00:00",
+      "lastSeen": "2026-06-02T06:53:28.339289+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.5586
+      "score": 2.5388
     },
     {
       "title": "A GTA V cheat service that promised “enhanced privacy” just got hacked, exposing 64,000 accounts",
@@ -429,10 +446,10 @@
       "image": "https://media.thenextweb.com/2026/06/gta-v-cheat-service-atlas-menu-hacked-data-breach-1.avif",
       "published": "2026-06-01T18:46:04+00:00",
       "firstSeen": "2026-06-01T20:00:01.910682+00:00",
-      "lastSeen": "2026-06-02T06:00:01.306892+00:00",
+      "lastSeen": "2026-06-02T06:53:28.339289+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8552
+      "score": 1.8355
     },
     {
       "title": "Tencent is letting PayPal users pay through WeChat’s merchant network, solving China’s tourist payment problem",
@@ -445,10 +462,10 @@
       "image": "https://media.thenextweb.com/2026/06/tencent-wechat-pay-paypal-china-tourism-qr-code.avif",
       "published": "2026-06-01T18:36:24+00:00",
       "firstSeen": "2026-06-01T20:00:01.910682+00:00",
-      "lastSeen": "2026-06-02T06:00:01.306892+00:00",
+      "lastSeen": "2026-06-02T06:53:28.339289+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8516
+      "score": 1.832
     },
     {
       "title": "b9458",
@@ -461,10 +478,10 @@
       "image": "https://opengraph.githubassets.com/116c278a97497da4c9e0a9864e11eb8cc3090de3f564545bc2211ff98c0a2492/ggml-org/llama.cpp/releases/tag/b9458",
       "published": "2026-06-01T18:32:25+00:00",
       "firstSeen": "2026-06-01T20:00:01.910682+00:00",
-      "lastSeen": "2026-06-02T06:00:01.306892+00:00",
+      "lastSeen": "2026-06-02T06:53:28.339289+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0201
+      "score": 3.0005
     },
     {
       "title": "The space stock rally is cracking as investors prepare to swap proxies for SpaceX itself",
@@ -477,10 +494,10 @@
       "image": "https://media.thenextweb.com/2026/05/spacex-starship-v3-flight-12-ipo-superheavy-failure.avif",
       "published": "2026-06-01T18:28:09+00:00",
       "firstSeen": "2026-06-01T20:00:01.910682+00:00",
-      "lastSeen": "2026-06-02T06:00:01.306892+00:00",
+      "lastSeen": "2026-06-02T06:53:28.339289+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8485
+      "score": 1.829
     },
     {
       "title": "Water access is now a risk factor in SpaceX’s IPO",
@@ -493,10 +510,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/GettyImages-2259661359.jpg?w=1024",
       "published": "2026-06-01T18:19:53+00:00",
       "firstSeen": "2026-06-01T20:00:01.910682+00:00",
-      "lastSeen": "2026-06-02T06:00:01.306892+00:00",
+      "lastSeen": "2026-06-02T06:53:28.339289+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9855
+      "score": 1.966
     },
     {
       "title": "Anthropic’s IPO filing means Salesforce’s early AI bet is about to become its most profitable investment",
@@ -509,10 +526,10 @@
       "image": "https://media.thenextweb.com/2026/05/salesforce-agentforce-saaspocalypse-ai-promise-reality-1.avif",
       "published": "2026-06-01T18:11:08+00:00",
       "firstSeen": "2026-06-01T20:00:01.910682+00:00",
-      "lastSeen": "2026-06-02T06:00:01.306892+00:00",
+      "lastSeen": "2026-06-02T06:53:28.339289+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.9422
+      "score": 9.9229
     },
     {
       "title": "b9457",
@@ -525,10 +542,10 @@
       "image": "https://opengraph.githubassets.com/5d1a282c7130fbed3aadfdee97625c1052c8cfad95bb6dc05ed477dcfea1bc37/ggml-org/llama.cpp/releases/tag/b9457",
       "published": "2026-06-01T18:08:17+00:00",
       "firstSeen": "2026-06-01T18:15:39.492139+00:00",
-      "lastSeen": "2026-06-02T06:00:01.306892+00:00",
+      "lastSeen": "2026-06-02T06:53:28.339289+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 1.3112
+      "score": 1.2919
     },
     {
       "title": "Quantinuum boosts its IPO to $1.46 billion as orders hit double-digit multiples of available shares",
@@ -544,7 +561,7 @@
       "lastSeen": "2026-06-01T20:00:01.910682+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.939
+      "score": 2.9197
     },
     {
       "title": "v0.30.0-rc32: llama-server followups (#16353)",
@@ -557,10 +574,10 @@
       "image": "https://opengraph.githubassets.com/ba017001f9d13428ceaa03ae8eb00565d23f543c1d5e69f9b978c6eb29086b51/ollama/ollama",
       "published": "2026-06-01T17:44:21+00:00",
       "firstSeen": "2026-06-01T18:00:01.158576+00:00",
-      "lastSeen": "2026-06-02T06:00:01.306892+00:00",
+      "lastSeen": "2026-06-02T06:53:28.339289+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.0425
+      "score": 6.0234
     },
     {
       "title": "Anthropic files confidentially for an IPO, potentially beating OpenAI to Wall Street after eclipsing it in valuation",
@@ -576,7 +593,7 @@
       "lastSeen": "2026-06-01T20:00:01.910682+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.1748
+      "score": 8.1559
     },
     {
       "title": "b9455",
@@ -589,10 +606,10 @@
       "image": "https://opengraph.githubassets.com/692ea654907a4b544c5beb82174299c258f2f4a0e6ded82bf43c339eb4ce7048/ggml-org/llama.cpp/releases/tag/b9455",
       "published": "2026-06-01T17:22:29+00:00",
       "firstSeen": "2026-06-01T18:00:01.158576+00:00",
-      "lastSeen": "2026-06-02T06:00:01.306892+00:00",
+      "lastSeen": "2026-06-02T06:53:28.339289+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -0.1054
+      "score": -0.1243
     },
     {
       "title": "Anthropic Confidentially Files for What Could Be the Largest IPO Ever",
@@ -605,10 +622,10 @@
       "image": "https://media.wired.com/photos/6a1db04538f4e0fcb2641f17/master/pass/Anthropic-Goes-Public-Business-2274306161.jpg",
       "published": "2026-06-01T17:17:58+00:00",
       "firstSeen": "2026-06-01T18:00:01.158576+00:00",
-      "lastSeen": "2026-06-02T06:00:01.306892+00:00",
+      "lastSeen": "2026-06-02T06:53:28.339289+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.313
+      "score": 9.2941
     },
     {
       "title": "Florida becomes the first state to sue OpenAI, naming Altman personally and calling ChatGPT a defective product",
@@ -624,23 +641,7 @@
       "lastSeen": "2026-06-01T18:15:39.492139+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.9217
-    },
-    {
-      "title": "Our views on AI policy and political advocacy",
-      "url": "https://openai.com/index/our-views-on-ai-policy-and-political-advocacy",
-      "source": "OpenAI News",
-      "sourceUrl": "https://openai.com/news/rss.xml",
-      "sourceWeight": 1.0,
-      "category": "AI",
-      "summary": "Our approach to AI policy and political advocacy, transparency, support for thoughtful regulation and AI safety, and that no outside political group speaks on the company’s behalf.",
-      "image": "https://images.ctfassets.net/kftzwdyauwt9/2t7PnZhv9RSkCpyADp8h6J/8e94542c974c268eac270cd244dd6055/Political-advocacy-16x9.png?w=1600&amp%3Bh=900&amp%3Bfit=fill",
-      "published": "2026-06-01T17:00:00+00:00",
-      "firstSeen": "2026-06-02T01:00:01.219829+00:00",
-      "lastSeen": "2026-06-02T06:00:01.306892+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.2666
+      "score": 11.9028
     },
     {
       "title": "The Life Scientific: Seth Berkley",
@@ -653,10 +654,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-01T20:00:00+00:00",
       "firstSeen": "2026-06-01T21:00:01.828388+00:00",
-      "lastSeen": "2026-06-02T06:00:01.306892+00:00",
+      "lastSeen": "2026-06-02T06:53:28.339289+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0232
+      "score": 2.0028
     },
     {
       "title": "Dean Lomax on discovering ichthyosaurs and defying nay-sayers",
@@ -669,10 +670,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-26T08:30:00+00:00",
       "firstSeen": "2026-05-26T08:41:33.144051+00:00",
-      "lastSeen": "2026-06-02T06:00:01.306892+00:00",
+      "lastSeen": "2026-06-02T06:53:28.339289+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.1311
+      "score": 1.1308
     },
     {
       "title": "The Life Scientific: Hiranya Peiris",
@@ -685,10 +686,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-25T20:00:00+00:00",
       "firstSeen": "2026-05-25T21:00:01.605108+00:00",
-      "lastSeen": "2026-06-02T06:00:01.306892+00:00",
+      "lastSeen": "2026-06-02T06:53:28.339289+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 0.2978
+      "score": 0.2976
     },
     {
       "title": "Helen Hastie on the future of human-robot relations",
@@ -701,7 +702,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-19T08:30:00+00:00",
       "firstSeen": "2026-05-19T08:37:13.454426+00:00",
-      "lastSeen": "2026-06-02T06:00:01.306892+00:00",
+      "lastSeen": "2026-06-02T06:53:28.339289+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 1.1201
