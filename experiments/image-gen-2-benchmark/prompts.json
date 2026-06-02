@@ -1198,5 +1198,17 @@
     "slot": "evening",
     "model": "openai/gpt-image-2",
     "size": "1024x1536"
+  },
+  {
+    "id": "2026-06-01-evening-lost-hotel-key-auction-catalog",
+    "title": "Lost Hotel Key Auction Catalog",
+    "tests": "Reusable visual-layout template; vertical auction catalog page; dense physical print artifact; no source photo required.",
+    "prompt": "Create a finished vertical auction catalog page about lost hotel room keys using six fictional antique keys, lot numbers, provenance notes, condition grades, and estimate ranges. Design it as a real printed catalog sheet titled LOST HOTEL KEY AUCTION, photographed on a dark green library desk, with warm ivory paper, black serif typography, muted red lot-number stamps, blue pencil inspection ticks, halftone object photos, yellowed edges, paper fibers, thumb smudges, a folded lower corner, and a cropped brass magnifying glass. Show richly detailed keys with worn brass fobs, bakelite tags, oxidized steel rings, chipped enamel number plates, tasseled cord, engraved room numerals, and tiny scratches. Keep the layout coherent, dense, archival, and tactile. Avoid real hotel names, real logos, barcodes, placeholder boxes, personal data, watermark, signature, hands, people, and prompt-instruction text.\n\nReusable prompt template: Create a finished [FORMAT] about [TOPIC] using [DATA OR CATEGORIES], with a coherent physical design, readable hierarchy, and specific invented details where data is not supplied. Use [MATERIALS], [ERA OR DESIGN LANGUAGE], [COLOR ACCENTS], and [SETTING] to make the layout feel real. Preserve the supplied topic and data relationships; change the document framing, visual system, labels, diagrams, and physical presentation to fit the chosen subject. Avoid nonsense labels, cluttered microtext, placeholder boxes, generic decoration, real logos, and private data.\n\nSource photo needed: none.\n\nWhat to preserve: the supplied topic, data categories, item relationships, hierarchy, and any real data provided by the user.\n\nWhat to change: turn the topic into a tactile finished auction catalog page with object images, lot labels, provenance notes, condition grades, estimate ranges, print texture, paper aging, desk props, and believable editorial design.\n\nExample substitution: Create an auction catalog page about lost hotel room keys, using six fictional lots with brass fobs, bakelite tags, room numerals, short provenance notes, condition grades, and price estimates, printed on ivory catalog paper on a dark green library desk.",
+    "image": "images/2026-06-01-evening-lost-hotel-key-auction-catalog.png",
+    "date": "2026-06-01",
+    "batch": "Daily Prompt",
+    "slot": "evening",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1536"
   }
 ]
