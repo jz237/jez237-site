@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-02T23:07:04.645631+00:00",
+  "updatedAt": "2026-06-03T00:00:01.109607+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -9052,6 +9052,10 @@
     "https://simonwillison.net/2026/Jun/2/microsofts-new-models": {
       "image": "",
       "checkedAt": "2026-06-02T23:00:01.301412+00:00"
+    },
+    "https://github.com/ollama/ollama/releases/tag/v0.30.2-rc0": {
+      "image": "https://opengraph.githubassets.com/9ac2319414182b1df8ab9875b876120c7c99562b3e56bcfe2a55865895238eaf/ollama/ollama",
+      "checkedAt": "2026-06-03T00:00:01.109607+00:00"
     }
   }
 }
