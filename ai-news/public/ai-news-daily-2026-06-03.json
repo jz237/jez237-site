@@ -1,0 +1,29 @@
+{
+  "date": "2026-06-03",
+  "updatedAt": "2026-06-03T00:00:01.109607+00:00",
+  "items": [
+    {
+      "title": "DraDDP: A Multimodal Multi-Party Dialogue Discourse Parsing Dataset",
+      "url": "https://llm-stats.com/ai-news",
+      "source": "LLM Stats AI News",
+      "sourceUrl": "https://llm-stats.com/ai-news",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "",
+      "image": "https://llm-stats.com/og/main.png",
+      "published": "2026-06-03T00:00:13.057165+00:00",
+      "firstSeen": "2026-05-29T21:00:01.522609+00:00",
+      "lastSeen": "2026-06-03T00:00:01.109607+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.76
+    }
+  ],
+  "errors": [
+    {
+      "source": "MarkTechPost",
+      "url": "https://www.marktechpost.com/feed/",
+      "error": "HTTP Error 403: Forbidden"
+    }
+  ]
+}
