@@ -5,6 +5,20 @@ main.page > .footer {
   --thr-page-gutter: clamp(12px, 2.5vw, 28px);
 }
 
+.reef-background {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.page {
+  position: relative;
+  z-index: 1;
+}
+
 .header.masthead {
   display: block !important;
   width: calc(100% + var(--thr-page-gutter) + var(--thr-page-gutter)) !important;
