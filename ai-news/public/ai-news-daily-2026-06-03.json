@@ -1,6 +1,6 @@
 {
   "date": "2026-06-03",
-  "updatedAt": "2026-06-03T14:00:01.283788+00:00",
+  "updatedAt": "2026-06-03T15:00:01.428377+00:00",
   "items": [
     {
       "title": "Meta’s AI agent for WhatsApp Business is now available globally",
@@ -13,11 +13,11 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/02/whatsapp-iphone-icon.jpg?resize=1200%2C800",
       "published": "2026-06-03T13:40:00+00:00",
       "firstSeen": "2026-06-03T14:00:01.283788+00:00",
-      "lastSeen": "2026-06-03T14:00:01.283788+00:00",
+      "lastSeen": "2026-06-03T15:00:01.428377+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.3799
+      "score": 14.35
     },
     {
       "title": "ChatGPT hits 1 billion monthly users faster than any app before it",
@@ -33,7 +33,7 @@
       "lastSeen": "2026-06-03T07:04:16.737349+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.7468
+      "score": 11.7223
     },
     {
       "title": "Uber Caps Usage of AI Tools Like Claude Code to Manage Costs",
@@ -46,10 +46,42 @@
       "image": "",
       "published": "2026-06-03T12:01:27+00:00",
       "firstSeen": "2026-06-03T13:00:01.958544+00:00",
-      "lastSeen": "2026-06-03T14:00:01.283788+00:00",
+      "lastSeen": "2026-06-03T15:00:01.428377+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.3312
+      "score": 11.3027
+    },
+    {
+      "title": "Microsoft and OpenAI broke up — now they’re ready to fight",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/942242/microsoft-build-ai-agents-openai-competition",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "At Microsoft's annual Build conference on Tuesday, the company announced a slew of new or expanded AI initiatives, including a super app, in-house reasoning models, a cybersecurity tool, and OpenClaw-esque AI agents. All this news added up to a clear message: Microsoft is positioned to be one of the biggest players in AI, and it's [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/10/STK178_Satya_Nadella_B.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C9.9676601489831%2C100%2C80.064679702034&amp%3Bw=1200",
+      "published": "2026-06-03T14:04:00+00:00",
+      "firstSeen": "2026-06-03T15:00:01.428377+00:00",
+      "lastSeen": "2026-06-03T15:00:01.428377+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "editorial_score_pass",
+      "score": 9.8318
+    },
+    {
+      "title": "Introducing the Services Track and Partner Hub of the Claude Partner Network",
+      "url": "https://www.anthropic.com/news/services-track-partner-hub",
+      "source": "Anthropic News",
+      "sourceUrl": "https://raw.githubusercontent.com/Olshansk/rss-feeds/main/feeds/feed_anthropic_news.xml",
+      "sourceWeight": 1.0,
+      "category": "AI",
+      "summary": "Introducing the Services Track and Partner Hub of the Claude Partner Network",
+      "image": "https://www.anthropic.com/api/opengraph-illustration?name=Hand+ShapeBuild&amp%3BbackgroundColor=fig",
+      "published": "2026-06-03T00:00:00+00:00",
+      "firstSeen": "2026-06-03T15:00:01.428377+00:00",
+      "lastSeen": "2026-06-03T15:00:01.428377+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 8.1252
     },
     {
       "title": "Lovable makes Google Cloud a primary partner to win over corporate buyers",
@@ -62,10 +94,10 @@
       "image": "https://media.thenextweb.com/2025/07/01938c14-fbd1-7090-b136-1328926ab8fd.avif",
       "published": "2026-06-03T10:29:34+00:00",
       "firstSeen": "2026-06-03T11:00:01.129567+00:00",
-      "lastSeen": "2026-06-03T14:00:01.283788+00:00",
+      "lastSeen": "2026-06-03T15:00:01.428377+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.1479
+      "score": 7.1205
     },
     {
       "title": "v0.30.2",
@@ -78,10 +110,10 @@
       "image": "https://opengraph.githubassets.com/a749683fac0e18c057bca67d6077ee47e3c2617ba7a8cc0ebbb22e999bb15977/ollama/ollama",
       "published": "2026-06-03T02:54:30+00:00",
       "firstSeen": "2026-06-03T01:45:03.395007+00:00",
-      "lastSeen": "2026-06-03T14:00:01.283788+00:00",
+      "lastSeen": "2026-06-03T15:00:01.428377+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.1683
+      "score": 6.1462
     },
     {
       "title": "Redditors Are Using AI to Beat Obscene World Cup Ticket Prices",
@@ -94,10 +126,10 @@
       "image": "https://media.wired.com/photos/6a1fdc7925887801d470b4c0/master/pass/WIRED-WC26-Cristian-Mera-Reddit.png",
       "published": "2026-06-03T09:00:00+00:00",
       "firstSeen": "2026-06-03T10:00:01.781383+00:00",
-      "lastSeen": "2026-06-03T14:00:01.283788+00:00",
+      "lastSeen": "2026-06-03T15:00:01.428377+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.1473
+      "score": 6.1211
     },
     {
       "title": "UK regulator imposes new rules on Google search, including an AI-training opt-out",
@@ -113,7 +145,7 @@
       "lastSeen": "2026-06-03T10:00:01.781383+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.0662
+      "score": 6.0411
     },
     {
       "title": "Google must let publishers opt out of AI Search features, rules UK",
@@ -126,10 +158,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/04/STKS487_ANTITRUST_2__STK093_GOOGLE.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-03T08:45:48+00:00",
       "firstSeen": "2026-06-03T10:00:01.781383+00:00",
-      "lastSeen": "2026-06-03T14:00:01.283788+00:00",
+      "lastSeen": "2026-06-03T15:00:01.428377+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.7111
+      "score": 5.685
     },
     {
       "title": "What’s Worth More Than Cash in San Francisco Real Estate? Anthropic Stock",
@@ -142,10 +174,10 @@
       "image": "https://media.wired.com/photos/6a1f6880163032d6de40fd16/master/pass/Exchange-Home-for-Anthropic-Stock-Business.jpg",
       "published": "2026-06-03T10:00:00+00:00",
       "firstSeen": "2026-06-03T11:00:01.129567+00:00",
-      "lastSeen": "2026-06-03T14:00:01.283788+00:00",
+      "lastSeen": "2026-06-03T15:00:01.428377+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1743
+      "score": 5.1473
     },
     {
       "title": "DeepSeek lines up its first outside money: a $7bn round at up to $59bn",
@@ -161,39 +193,7 @@
       "lastSeen": "2026-06-03T13:00:01.958544+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9889
-    },
-    {
-      "title": "Coralogix raises $200M on bet that someone needs to watch the AI agents",
-      "url": "https://techcrunch.com/2026/06/03/coralogix-raises-200m-in-race-to-build-the-monitoring-layer-for-ai-agents",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "The Series F round values Coralogix at $1.6 billion and comes less than a year after its previous raise.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/06/coralogix-co-founders.jpg?resize=1200%2C800",
-      "published": "2026-06-03T13:02:51+00:00",
-      "firstSeen": "2026-06-03T14:00:01.283788+00:00",
-      "lastSeen": "2026-06-03T14:00:01.283788+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.9613
-    },
-    {
-      "title": "5 ways Google Search can level up your thrift and vintage shopping",
-      "url": "https://blog.google/products-and-platforms/products/search/thrifting-tips",
-      "source": "Google AI Blog",
-      "sourceUrl": "https://blog.google/technology/ai/rss/",
-      "sourceWeight": 0.95,
-      "category": "AI",
-      "summary": "A colorful, grain-textured collage of various items scattered across a light blue background. The items include a green bucket hat, a wooden clothes hanger, a blue-and-red striped collar, blue sunglasses, denim shorts, a yellow price tag, a red high-heele",
-      "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Google_Thrifting_Header.max-600x600.format-webp.webp",
-      "published": "2026-06-03T13:00:00+00:00",
-      "firstSeen": "2026-06-03T14:00:01.283788+00:00",
-      "lastSeen": "2026-06-03T14:00:01.283788+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.7999
+      "score": 4.9632
     }
   ],
   "errors": [
