@@ -2,6 +2,7 @@
   'use strict';
 
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const motionScale = prefersReducedMotion ? 0.72 : 1;
   const canvas = document.querySelector('[data-reef-background]');
   if (!canvas) return;
 
@@ -54,7 +55,7 @@
     for (let band = 0; band < (isDesktop ? 12 : 9); band += 1) {
       const yBase = height * (0.12 + band * 0.105);
       const amp = (isDesktop ? 14 : 10) + band * 1.8;
-      const drift = time * (0.00028 + band * 0.000018);
+      const drift = time * motionScale * (0.00028 + band * 0.000018);
       const gradient = ctx.createLinearGradient(0, yBase - 26, width, yBase + 38);
       gradient.addColorStop(0, 'rgba(64,217,255,0)');
       gradient.addColorStop(0.5, 'rgba(124,236,255,' + (isDesktop ? '0.12' : '0.08') + ')');
@@ -79,7 +80,7 @@
     ctx.save();
     ctx.globalCompositeOperation = 'screen';
     for (let ray = 0; ray < 7; ray += 1) {
-      const center = width * (0.08 + ray * 0.15) + Math.sin(time * 0.00022 + ray) * 52;
+      const center = width * (0.08 + ray * 0.15) + Math.sin(time * motionScale * 0.00022 + ray) * 52;
       const top = -height * 0.05;
       const bottom = height * 1.08;
       const rayWidth = width * (0.08 + (ray % 3) * 0.025);
@@ -100,7 +101,7 @@
   }
 
   function drawBubble(bubble, time) {
-    const x = bubble.x + Math.sin(time * 0.0012 + bubble.phase) * bubble.wobble;
+    const x = bubble.x + Math.sin(time * motionScale * 0.0012 + bubble.phase) * bubble.wobble;
     const y = bubble.y;
     const glow = ctx.createRadialGradient(
       x - bubble.radius * 0.35,
@@ -151,19 +152,17 @@
     ctx.globalCompositeOperation = 'screen';
     bubbles.forEach(function(bubble) {
       drawBubble(bubble, time);
-      if (!prefersReducedMotion) {
-        bubble.y -= bubble.speed * dt / 1000;
-        bubble.phase += dt * 0.00042;
-        if (bubble.y < -24) {
-          bubble.y = height + random(20, 90);
-          bubble.x = random(-40, width + 40);
-          bubble.radius = random(1.4, bubble.radius > 4.8 ? 6.2 : 4.2);
-        }
+      bubble.y -= bubble.speed * motionScale * dt / 1000;
+      bubble.phase += dt * motionScale * 0.00042;
+      if (bubble.y < -24) {
+        bubble.y = height + random(20, 90);
+        bubble.x = random(-40, width + 40);
+        bubble.radius = random(1.4, bubble.radius > 4.8 ? 6.2 : 4.2);
       }
     });
     ctx.restore();
 
-    if (!prefersReducedMotion) raf = requestAnimationFrame(draw);
+    raf = requestAnimationFrame(draw);
   }
 
   window.addEventListener('resize', resize, { passive: true });
