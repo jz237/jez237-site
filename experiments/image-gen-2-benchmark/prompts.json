@@ -1294,5 +1294,17 @@
     "slot": "midday",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-06-03-afternoon-cloud-elevator-checkout-card",
+    "title": "Cloud Elevator Checkout Card",
+    "tests": "Reusable non-photo visual layout template: tests whether GPT Image 2 can make a physical library checkout card read as a structured archive object, with coherent due-date grids, stamps, pocket materials, and topic-specific icon details rather than a generic poster or prompt card.",
+    "prompt": "Create a finished library checkout card about Cloud Elevator Maintenance Log, an imaginary municipal public-works manual for elevators that service clouds above a rainy coastal city. Make a vertical documentary product photograph of a cream checkout card tucked into a frayed manila pocket on worn blue-gray book cloth. Include a printed title area, due-date grid, borrower initials column, librarian stamp marks, catalog code, red overdue stamp, pencil notes, thumb smudges, paper fibers, foxing, a small perforation tear, tiny stamped icons of elevator doors, rain gauges, cloud platforms, cable pulleys, lightning safety symbols, umbrella racks, and maintenance floors. Use only natural library-card text such as CLOUD ELEVATOR MAINTENANCE LOG, DUE DATE, SHELF, BORROWER, RETURNED, fictional date stamps, and a few handwritten notes like cable hum, fog delay, and inspect brass counterweight. Keep the layout readable, tactile, and finished; avoid placeholder boxes, prompt instructions, modern UI, real logos, barcodes, private data, hands, people, watermark, and signature.\n\nSource photo needed: none.\n\nReusable prompt template: Create a finished library checkout card about [TOPIC] using [DATA OR CATEGORIES], with a coherent physical design, readable hierarchy, and specific invented details where data is not supplied. Use [ERA OR DESIGN LANGUAGE], [MATERIALS], [COLOR ACCENTS], and [SETTING] to make the layout feel real. Preserve the supplied topic, labels, dates, item relationships, catalog codes, section hierarchy, and any real data provided by the user; change the card title, due-date grid, borrower columns, stamps, annotations, pocket, paper aging, icons, props, and physical presentation to fit the chosen subject. Avoid nonsense labels, cluttered microtext, placeholder boxes, generic decoration, real logos, private data, and prompt-instruction text.\n\nWhat to preserve: the supplied topic, data categories, dates, labels, catalog codes, section hierarchy, and any factual relationships provided by the user.\n\nWhat to change: turn the topic into a tactile finished library checkout card with a title area, due-date grid, borrower initials, stamps, pencil notes, small icons, aged card stock, a manila pocket, book-cloth setting, and believable library ephemera.\n\nExample substitution: Create a library checkout card for a fictional Cloud Elevator Maintenance Log; use due-date stamps, borrower initials, shelf code MUN-PW 551.57 C56, red overdue marks, elevator and rain-gauge icons, pencil notes about fog delays, cream card stock, a manila pocket, and worn blue-gray book cloth.",
+    "image": "images/2026-06-03-afternoon-cloud-elevator-checkout-card.png",
+    "date": "2026-06-03",
+    "batch": "Daily Prompt",
+    "slot": "afternoon",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1536"
   }
 ]
