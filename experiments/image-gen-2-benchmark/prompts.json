@@ -1282,5 +1282,17 @@
     "slot": "morning",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-06-03-midday-pet-as-marquetry-music-box",
+    "title": "Pet as Marquetry Music Box",
+    "tests": "Reusable reference-photo transformation template; tests identity-preserving pet markings across wood marquetry, tiny music-box mechanics, lacquered veneer texture, and a finished example image without instructional text rendered into the image.",
+    "prompt": "Use the uploaded reference photo and preserve the pet identity, sitting pose, silhouette, facial expression, ear shape, eye color, fur pattern, tabby stripes, whisker placement, paw position, and most recognizable markings, then transform the pet into an ornate marquetry music box figurine displayed in a warm toy-repair workshop. Rebuild the pet from layered wood veneer, lacquered inlay seams, maple whisker lines, ebony nose and pupils, amber shell eyes, walnut stripe patterns, cherrywood ear edges, carved paws, a hinged tail, tiny brass pins, and an exposed brass cylinder movement inside the walnut base. Keep the source pet recognizable while changing fur, body material, surface texture, setting, and props into a tactile handmade music-box artifact with velvet lining, winding key, loose veneer scraps, pearl accents, dust motes, and warm workshop lamp light. Avoid extra legs, duplicate heads, distorted pet anatomy, text/logo artifacts, placeholder marks, watermark, and losing the pet markings.\n\nSource photo needed: a clear pet photo.\n\nReusable template: Use the uploaded reference photo and preserve the [PET] identity, pose, silhouette, expression, ear shape, eye color, fur pattern, key markings, proportions, and most recognizable features, then transform [PET] into a marquetry music box figurine made from [MATERIAL] in [SETTING] with [MOOD] lighting. Keep the source recognizable while changing the body material, surface texture, construction details, props, and environment into a cohesive handcrafted artifact. Avoid extra limbs, duplicate faces, broken anatomy, text/logo artifacts, placeholder marks, watermark, and losing the source-photo markings.\n\nWhat to preserve: pet identity, pose, silhouette, expression, ears, eyes, fur pattern, tabby stripes or key markings, whiskers, paw placement, proportions, and overall composition.\n\nWhat to change: convert the pet into a lacquered wood-inlay music-box figurine with veneer grain, parquet seams, carved paws, brass pins, hinged tail, exposed musical mechanism, velvet-lined base, repair-shop props, and warm handmade lighting.\n\nExample substitution: Use a clear photo of a seated tabby cat; preserve its three-quarter pose, amber eyes, forehead stripes, white whiskers, ear shape, and paw placement, then turn it into a walnut, maple, ebony, and cherrywood marquetry music box figurine on an open velvet-lined base.",
+    "image": "images/2026-06-03-midday-pet-as-marquetry-music-box.png",
+    "date": "2026-06-03",
+    "batch": "Daily Prompt",
+    "slot": "midday",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
