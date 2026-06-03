@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-03T16:00:01.415350+00:00",
+  "updatedAt": "2026-06-03T17:00:01.753114+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -9144,6 +9144,10 @@
     "https://techcrunch.com/2026/06/03/these-two-founders-left-goldman-and-meta-to-build-voice-ai-for-markets-everyone-else-overlooked": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/Athx-Pictures_-Right-Mariama-Left-Ayooluwa.jpg?resize=1200,675",
       "checkedAt": "2026-06-03T16:00:01.415350+00:00"
+    },
+    "https://www.theverge.com/tech/942547/amazon-search-bar-ai-images": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/amazon-ai-search.png?quality=90&amp;strip=all&amp;crop=0%2C4.865499187579%2C100%2C90.269001624842&amp;w=1200",
+      "checkedAt": "2026-06-03T17:00:01.753114+00:00"
     }
   }
 }
