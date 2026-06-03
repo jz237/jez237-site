@@ -1,6 +1,6 @@
 {
   "date": "2026-06-03",
-  "updatedAt": "2026-06-03T22:00:01.859369+00:00",
+  "updatedAt": "2026-06-03T23:00:01.869358+00:00",
   "items": [
     {
       "title": "Release v5.10.1",
@@ -10,14 +10,14 @@
       "sourceWeight": 0.85,
       "category": "AI",
       "summary": "Release v5.10.1\nv5.10.0 was yanked as we publish on a corrupted branch. Sorry everyone, this happens when we rush a release!!!\nNew Model additions\nGemma4 unified+ Gemma4 MTP\n\nGemma 4 12B Unified is an encoder-free multimodal model with pretrained and instruction-tuned variants. Unlike standard Gemma 4, which uses dedicated encoder towers, Gemma 4 12B Unified projects raw inputs directly into the language model's embedding space through lightweight linear pipelines. This results in a simpler architecture while maintaining strong multimodal performance.\nKey differences from standard Gemma 4:\n\nNo",
-      "image": "https://private-user-images.githubusercontent.com/48595927/602317672-5e3ee940-f78d-4343-ac7a-889930800aa6.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3ODA1MjQzMjAsIm5iZiI6MTc4MDUyNDAyMCwicGF0aCI6Ii80ODU5NTkyNy82MDIzMTc2NzItNWUzZWU5NDAtZjc4ZC00MzQzLWFjN2EtODg5OTMwODAwYWE2LnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNjA2MDMlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjYwNjAzVDIyMDAyMFomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTk5MzVkMTNhNWRkMWY4YjQyYzk2MWQ4MmMzMDI2MDU1Nzk0ZjIzYzY5NjQyNDIwYWU0ZmE5YzMwMzZmNjZjNDYmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0JnJlc3BvbnNlLWNvbnRlbnQtdHlwZT1pbWFnZSUyRnBuZyJ9.lGHJz9Gu7K6i7jX8blZyfk69D5WbGAGThDyCm4c2_tM",
+      "image": "https://private-user-images.githubusercontent.com/48595927/602317672-5e3ee940-f78d-4343-ac7a-889930800aa6.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3ODA1Mjc5MTQsIm5iZiI6MTc4MDUyNzYxNCwicGF0aCI6Ii80ODU5NTkyNy82MDIzMTc2NzItNWUzZWU5NDAtZjc4ZC00MzQzLWFjN2EtODg5OTMwODAwYWE2LnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNjA2MDMlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjYwNjAzVDIzMDAxNFomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTQ0YjQ1MjE3YzhjYjMzNzgwNGVhOTkxMzlkZmVlNzllMTA2NDU4YTIzNDYwOWM5NjE1NTRjMmVhNzdjYzNjN2MmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0JnJlc3BvbnNlLWNvbnRlbnQtdHlwZT1pbWFnZSUyRnBuZyJ9.SrxGxGwoya2fBJwQCuOO7mP118EDKavRo14-f1c9wV0",
       "published": "2026-06-03T15:37:41+00:00",
       "firstSeen": "2026-06-03T16:00:01.415350+00:00",
-      "lastSeen": "2026-06-03T22:00:01.859369+00:00",
+      "lastSeen": "2026-06-03T23:00:01.869358+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.3115
+      "score": 14.2863
     },
     {
       "title": "Meta’s AI agent for WhatsApp Business is now available globally",
@@ -30,11 +30,11 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/02/whatsapp-iphone-icon.jpg?resize=1200%2C800",
       "published": "2026-06-03T13:40:00+00:00",
       "firstSeen": "2026-06-03T14:00:01.283788+00:00",
-      "lastSeen": "2026-06-03T22:00:01.859369+00:00",
+      "lastSeen": "2026-06-03T23:00:01.869358+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.1627
+      "score": 14.1388
     },
     {
       "title": "ChatGPT hits 1 billion monthly users faster than any app before it",
@@ -50,7 +50,7 @@
       "lastSeen": "2026-06-03T07:04:16.737349+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.5681
+      "score": 11.5485
     },
     {
       "title": "xAI Asks Court to Strip Alleged Grok Deepfake Nudes Victims of Anonymity",
@@ -63,10 +63,10 @@
       "image": "https://media.wired.com/photos/6a1f4ea4c350c2fb60808fa6/master/pass/Security_xAIWantstoStripAllegedGrokDeepfakeNudesVictimsofAnonymity_v1.jpg",
       "published": "2026-06-03T18:49:32+00:00",
       "firstSeen": "2026-06-03T19:00:01.264980+00:00",
-      "lastSeen": "2026-06-03T22:00:01.859369+00:00",
+      "lastSeen": "2026-06-03T23:00:01.869358+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.1971
+      "score": 11.1696
     },
     {
       "title": "Uber Caps Usage of AI Tools Like Claude Code to Manage Costs",
@@ -79,10 +79,10 @@
       "image": "",
       "published": "2026-06-03T12:01:27+00:00",
       "firstSeen": "2026-06-03T13:00:01.958544+00:00",
-      "lastSeen": "2026-06-03T22:00:01.859369+00:00",
+      "lastSeen": "2026-06-03T23:00:01.869358+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.1238
+      "score": 11.1009
     },
     {
       "title": "NVIDIA Enables the Next Era Of Physical AI Research With Agent Skills For Autonomous Vehicles, Robotics And Vision AI",
@@ -95,10 +95,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/Delta-Defect-Image-Generation.mp4",
       "published": "2026-06-03T15:00:35+00:00",
       "firstSeen": "2026-06-03T16:00:01.415350+00:00",
-      "lastSeen": "2026-06-03T22:00:01.859369+00:00",
+      "lastSeen": "2026-06-03T23:00:01.869358+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 9.8959
+      "score": 9.871
     },
     {
       "title": "Microsoft and OpenAI broke up — now they’re ready to fight",
@@ -111,10 +111,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/10/STK178_Satya_Nadella_B.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C9.9676601489831%2C100%2C80.064679702034&amp%3Bw=1200",
       "published": "2026-06-03T14:04:00+00:00",
       "firstSeen": "2026-06-03T15:00:01.428377+00:00",
-      "lastSeen": "2026-06-03T22:00:01.859369+00:00",
+      "lastSeen": "2026-06-03T23:00:01.869358+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 9.6424
+      "score": 9.6183
     },
     {
       "title": "Anthropic picks Morgan Stanley and Goldman Sachs to lead its IPO, with a SpaceX computing deal worth $1.25 billion per month buried in the fine print",
@@ -127,10 +127,26 @@
       "image": "https://media.thenextweb.com/2026/04/Dario-Amodei-anthropic-acquires-Coefficint-Bio.avif",
       "published": "2026-06-03T18:54:37+00:00",
       "firstSeen": "2026-06-03T20:00:02.061025+00:00",
-      "lastSeen": "2026-06-03T22:00:01.859369+00:00",
+      "lastSeen": "2026-06-03T23:00:01.869358+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.0595
+      "score": 9.0319
+    },
+    {
+      "title": "Lovable signs multi-year deal with Google Cloud to up usage 5x, source says",
+      "url": "https://techcrunch.com/2026/06/03/lovable-signs-multi-year-deal-with-google-cloud-to-up-usage-5x-source-says",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Lovable and Google signed an expanded multi-year deal athat involves a 5x expansion of Lovable's footprint on Google Cloud, and expanded access to Anthropic Claude.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/GettyImages-2245627953.jpg?resize=1200%2C800",
+      "published": "2026-06-03T22:56:51+00:00",
+      "firstSeen": "2026-06-03T23:00:01.869358+00:00",
+      "lastSeen": "2026-06-03T23:00:01.869358+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 8.2884
     },
     {
       "title": "Introducing the Services Track and Partner Hub of the Claude Partner Network",
@@ -143,10 +159,10 @@
       "image": "https://www.anthropic.com/api/opengraph-illustration?name=Hand+ShapeBuild&amp%3BbackgroundColor=fig",
       "published": "2026-06-03T00:00:00+00:00",
       "firstSeen": "2026-06-03T15:00:01.428377+00:00",
-      "lastSeen": "2026-06-03T22:00:01.859369+00:00",
+      "lastSeen": "2026-06-03T23:00:01.869358+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.997
+      "score": 7.9807
     },
     {
       "title": "As AI gets better, it reveals an empty promise",
@@ -159,10 +175,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/11503853/mdoying_180419_1777_0454_2.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-03T17:45:35+00:00",
       "firstSeen": "2026-06-03T19:00:01.264980+00:00",
-      "lastSeen": "2026-06-03T22:00:01.859369+00:00",
+      "lastSeen": "2026-06-03T23:00:01.869358+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.9378
+      "score": 7.911
     },
     {
       "title": "NVIDIA Research Unlocks Advanced Grasping, Smarter Autonomous Driving and Agent Training at Scale",
@@ -175,26 +191,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/CVPR_blog_still-scaled.png",
       "published": "2026-06-03T15:00:57+00:00",
       "firstSeen": "2026-06-03T16:00:01.415350+00:00",
-      "lastSeen": "2026-06-03T22:00:01.859369+00:00",
+      "lastSeen": "2026-06-03T23:00:01.869358+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.496
-    },
-    {
-      "title": "Lovable makes Google Cloud a primary partner to win over corporate buyers",
-      "url": "https://thenextweb.com/news/lovable-google-cloud-expanded-collaboration",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The Swedish app-builder, processing a million new projects a week, is making Google Cloud a primary partner, with Gemini models and a security layer aimed at corporate buyers. The pitch behind Lovable has always been that anyone can build software by chatting with an AI. The harder pitch, the one that turns a viral tool [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2025/07/01938c14-fbd1-7090-b136-1328926ab8fd.avif",
-      "published": "2026-06-03T10:29:34+00:00",
-      "firstSeen": "2026-06-03T11:00:01.129567+00:00",
-      "lastSeen": "2026-06-03T20:27:20.946221+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 6.949
+      "score": 7.4712
     }
   ],
   "errors": [
