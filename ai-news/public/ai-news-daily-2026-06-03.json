@@ -1,6 +1,6 @@
 {
   "date": "2026-06-03",
-  "updatedAt": "2026-06-03T05:00:01.449384+00:00",
+  "updatedAt": "2026-06-03T06:00:01.714158+00:00",
   "items": [
     {
       "title": "v0.30.2",
@@ -13,10 +13,10 @@
       "image": "https://opengraph.githubassets.com/a749683fac0e18c057bca67d6077ee47e3c2617ba7a8cc0ebbb22e999bb15977/ollama/ollama",
       "published": "2026-06-03T02:54:30+00:00",
       "firstSeen": "2026-06-03T01:45:03.395007+00:00",
-      "lastSeen": "2026-06-03T05:00:01.449384+00:00",
+      "lastSeen": "2026-06-03T06:00:01.714158+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.3979
+      "score": 6.3695
     },
     {
       "title": "v1.86.3",
@@ -29,13 +29,13 @@
       "image": "https://opengraph.githubassets.com/46cae93f3bb3e2195285f18b70c2c4f409ae74d529f9e30b6b35b46974d46292/BerriAI/litellm/releases/tag/v1.86.3",
       "published": "2026-06-03T01:40:43+00:00",
       "firstSeen": "2026-06-03T01:45:03.395007+00:00",
-      "lastSeen": "2026-06-03T05:00:01.449384+00:00",
+      "lastSeen": "2026-06-03T06:00:01.714158+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.893
+      "score": 2.8656
     },
     {
-      "title": "Jacob Wong, Sohan Singh, Prannaya Gupta, Jin Xing Ang, Kritika Johari, U-Xuan Tan",
+      "title": "Assessing Region-Level EEG Contributions to Cognitive Workload Prediction",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -43,9 +43,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-03T05:00:06.053616+00:00",
+      "published": "2026-06-03T06:00:08.240533+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-03T05:00:01.449384+00:00",
+      "lastSeen": "2026-06-03T06:00:01.714158+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36

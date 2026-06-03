@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-03T05:00:01.449384+00:00",
+  "updatedAt": "2026-06-03T06:00:01.714158+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -9076,6 +9076,14 @@
     "https://github.com/ollama/ollama/releases/tag/v0.30.2": {
       "image": "https://opengraph.githubassets.com/a749683fac0e18c057bca67d6077ee47e3c2617ba7a8cc0ebbb22e999bb15977/ollama/ollama",
       "checkedAt": "2026-06-03T01:45:03.395007+00:00"
+    },
+    "https://www.techrepublic.com/article/news-zoommate-ai-workflow-automation": {
+      "image": "https://assets.techrepublic.com/uploads/2026/06/Untitled-design-34.png?f=jpeg",
+      "checkedAt": "2026-06-03T06:00:01.714158+00:00"
+    },
+    "https://www.techrepublic.com/article/news-cisco-cloud-control-agentic-ai-security": {
+      "image": "https://assets.techrepublic.com/uploads/2026/06/unnamed-31-1.png?f=jpeg",
+      "checkedAt": "2026-06-03T06:00:01.714158+00:00"
     }
   }
 }
