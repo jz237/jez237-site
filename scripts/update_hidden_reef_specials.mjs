@@ -169,7 +169,7 @@ async function fetchHtml(url) {
     const response = await fetch(url, {
       signal: controller.signal,
       headers: {
-        'user-agent': 'Mozilla/5.0 Hidden Reef weekly specials refresh',
+        'user-agent': 'Mozilla/5.0 Hidden Reef daily specials refresh',
         accept: 'text/html,application/xhtml+xml'
       }
     });
