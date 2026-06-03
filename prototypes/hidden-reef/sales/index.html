@@ -115,6 +115,13 @@
       cursor:pointer;
     }
     .sale-tab.is-active { color:#032033; background:#40d9ff; border-color:#40d9ff; }
+    .sale-tab__count {
+      min-width:22px; padding:2px 6px; border-radius:999px;
+      color:#072130; background:rgba(255,255,255,.86); font-size:11px; text-align:center;
+    }
+    .sale-tab:not(.is-active) .sale-tab__count {
+      color:#eaf8fc; background:rgba(116,205,235,.18);
+    }
     .sale-detail {
       display:grid; grid-template-columns:minmax(0,1fr) auto; gap:14px; align-items:start;
       padding:14px; border:1px solid rgba(116,205,235,.2); border-radius:8px;
@@ -298,10 +305,15 @@
         if (Number.isNaN(date.getTime())) return '';
         return date.toLocaleString('en-US', { month:'short', day:'numeric', hour:'numeric', minute:'2-digit' });
       }
-      function setActive(index) {
+      function scrollToSaleView() {
+        if (!view || view.hidden) return;
+        view.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+      function setActive(index, shouldScroll) {
         activeIndex = Math.max(0, Math.min(index, departments.length - 1));
         if (select) select.value = String(activeIndex);
         render();
+        if (shouldScroll) window.setTimeout(scrollToSaleView, 40);
       }
       function renderControls() {
         document.getElementById('sale-count').textContent = departments.length;
@@ -313,7 +325,12 @@
         }).join('');
         tabs.innerHTML = departments.map(function(dept, index) {
           const active = index === activeIndex ? ' is-active' : '';
-          return '<button class="sale-tab' + active + '" type="button" data-sale-index="' + index + '">' + escapeHtml(dept.title) + '</button>';
+          const count = Number(dept.products?.length || dept.count || 0);
+          const current = index === activeIndex ? ' aria-current="true"' : '';
+          return '<button class="sale-tab' + active + '" type="button" data-sale-index="' + index + '"' + current + '>'
+            + escapeHtml(dept.title)
+            + '<span class="sale-tab__count">' + count + '</span>'
+            + '</button>';
         }).join('');
       }
       function renderProducts(products) {
@@ -345,7 +362,7 @@
         document.getElementById('sale-title').textContent = dept.title || 'Current sale';
         document.getElementById('sale-description').textContent = dept.description || '';
         document.getElementById('sale-source').href = dept.url || 'https://www.thehiddenreef.com/sales-online/';
-        document.getElementById('sale-result-count').textContent = products.length + ' of ' + (dept.products || []).length + ' sale items shown';
+        document.getElementById('sale-result-count').textContent = products.length + ' of ' + (dept.products || []).length + ' items shown for ' + (dept.title || 'this sale');
         document.getElementById('sale-badges').innerHTML = [
           dept.discountLabel || (dept.discount ? dept.discount + '% off' : 'Sale pricing'),
           (dept.products || []).length + ' items'
@@ -355,11 +372,11 @@
         renderProducts(products);
         renderControls();
       }
-      select.addEventListener('change', function() { setActive(Number(select.value || 0)); });
+      select.addEventListener('change', function() { setActive(Number(select.value || 0), true); });
       tabs.addEventListener('click', function(event) {
         const button = event.target.closest('[data-sale-index]');
         if (!button) return;
-        setActive(Number(button.dataset.saleIndex || 0));
+        setActive(Number(button.dataset.saleIndex || 0), true);
       });
       search.addEventListener('input', render);
       const params = new URLSearchParams(window.location.search);
@@ -367,6 +384,7 @@
       const requestedIndex = requested ? departments.findIndex(function(dept) { return dept.slug === requested; }) : 0;
       activeIndex = requestedIndex >= 0 ? requestedIndex : 0;
       render();
+      if (requested || window.location.hash === '#sale-view') window.setTimeout(scrollToSaleView, 120);
     })();
   </script>
 </body>
