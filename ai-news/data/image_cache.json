@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-03T14:00:01.283788+00:00",
+  "updatedAt": "2026-06-03T15:00:01.428377+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -9116,6 +9116,22 @@
     "https://huggingface.co/blog/adding-mcp-tools-to-reachy-mini": {
       "image": "https://huggingface.co/blog/assets/adding-mcp-tools-to-reachy-mini/reachy_mini_remote_spaces_thumbnail.png",
       "checkedAt": "2026-06-03T14:00:01.283788+00:00"
+    },
+    "https://techcrunch.com/2026/06/03/publishers-will-be-able-to-opt-out-of-ai-search-thanks-to-new-regulation": {
+      "image": "https://techcrunch.com/wp-content/uploads/2019/10/google-search-app-ios.jpg?resize=1200,644",
+      "checkedAt": "2026-06-03T15:00:01.428377+00:00"
+    },
+    "https://github.com/ollama/ollama/releases/tag/v0.30.3": {
+      "image": "https://opengraph.githubassets.com/d5b7f056beb356a12c1648fe196566daf924d0261bc41e94a1b0964d3f125691/ollama/ollama",
+      "checkedAt": "2026-06-03T15:00:01.428377+00:00"
+    },
+    "https://www.theverge.com/ai-artificial-intelligence/942242/microsoft-build-ai-agents-openai-competition": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/10/STK178_Satya_Nadella_B.jpg?quality=90&amp;strip=all&amp;crop=0%2C9.9676601489831%2C100%2C80.064679702034&amp;w=1200",
+      "checkedAt": "2026-06-03T15:00:01.428377+00:00"
+    },
+    "https://www.anthropic.com/news/services-track-partner-hub": {
+      "image": "https://www.anthropic.com/api/opengraph-illustration?name=Hand%20ShapeBuild&amp;backgroundColor=fig",
+      "checkedAt": "2026-06-03T15:00:01.428377+00:00"
     }
   }
 }
