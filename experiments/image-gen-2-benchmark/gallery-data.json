@@ -1270,5 +1270,17 @@
     "slot": "evening",
     "model": "fal/openai/gpt-image-2",
     "size": "1024x1536"
+  },
+  {
+    "id": "2026-06-03-morning-portrait-as-onion-skin-lantern",
+    "title": "Portrait as Onion-Skin Lantern",
+    "tests": "Reusable reference-photo transformation template: identity-preserving portrait-to-handcrafted-material conversion, with a finished sample image that contains no instructional text.",
+    "prompt": "Use the uploaded reference photo and preserve the person's identity, head angle, calm half-smile, short wavy hair silhouette, round glasses, shoulder pose, facial proportions, and overall portrait composition, then transform the person into a translucent onion-skin lantern in a rainy night market stall with warm candlelit mood. Rebuild the subject from layered amber and pearl onion skins stretched over thin bamboo ribs: the face reads through delicate vegetable membranes and vein lines, the glasses become darker onion-vein rings and bamboo wire, the hair becomes curled onion-paper strips, and the clothing becomes folded parchment panels over a small shoulder frame. Add damp tarps, brass clips, twine knots, loose onion skins, water beads, wet lacquer-table reflections, blurred hanging lanterns, and tactile handmade craft detail. Keep the source person recognizable while changing the material, body logic, surface texture, lighting, and setting. Avoid extra limbs, duplicate faces, text or logo artifacts, placeholder marks, watermark, and losing the source-photo likeness.\n\nSource photo needed: a clear portrait photo of a person.\n\nReusable template: Use the uploaded reference photo and preserve the [PERSON]'s identity, pose, silhouette, expression, hairstyle, distinctive accessories, facial proportions, and most recognizable features, then transform [PERSON] into a translucent lantern made from [MATERIAL] in [SETTING] with [MOOD] lighting. Keep the source recognizable while changing the material logic, body construction, surface texture, props, and environment into a cohesive handcrafted artifact. Avoid extra limbs, duplicate faces, text/logo artifacts, placeholder marks, watermark, and losing recognizability.\n\nWhat to preserve: identity, pose, silhouette, expression, hairstyle, distinctive accessories such as glasses, facial proportions, shoulder angle, and overall portrait composition.\n\nWhat to change: convert the person into a glowing onion-skin and bamboo lantern with translucent membranes, vegetable vein details, candlelit interior glow, night-market props, rainy reflections, and handmade craft textures.\n\nExample substitution: Use a clear portrait of a middle-aged person with round glasses and short wavy hair; preserve their half-smile, head angle, glasses, hair silhouette, and angled shoulders, then turn them into a warm onion-skin lantern on a wet night-market stall table.",
+    "image": "images/2026-06-03-morning-portrait-as-onion-skin-lantern.png",
+    "date": "2026-06-03",
+    "batch": "Daily Prompt",
+    "slot": "morning",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
