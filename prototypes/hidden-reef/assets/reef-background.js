@@ -100,8 +100,8 @@
 
     const isDesktop = width >= 900;
     const count = prefersReducedMotion
-      ? (isDesktop ? 48 : 18)
-      : Math.round(Math.min(isDesktop ? 178 : 86, Math.max(isDesktop ? 88 : 34, width / (isDesktop ? 9.34 : 18))));
+      ? (isDesktop ? 96 : 18)
+      : Math.round(Math.min(isDesktop ? 356 : 86, Math.max(isDesktop ? 176 : 34, width / (isDesktop ? 4.67 : 18))));
     bubbles = Array.from({ length: count }, function(_, index) {
       const featured = isDesktop && index % 6 === 0;
       return {
