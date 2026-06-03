@@ -1,6 +1,6 @@
 {
   "date": "2026-06-03",
-  "updatedAt": "2026-06-03T17:00:01.753114+00:00",
+  "updatedAt": "2026-06-03T17:12:12.892423+00:00",
   "items": [
     {
       "title": "Release v5.10.1",
@@ -10,14 +10,14 @@
       "sourceWeight": 0.85,
       "category": "AI",
       "summary": "Release v5.10.1\nv5.10.0 was yanked as we publish on a corrupted branch. Sorry everyone, this happens when we rush a release!!!\nNew Model additions\nGemma4 unified+ Gemma4 MTP\n\nGemma 4 12B Unified is an encoder-free multimodal model with pretrained and instruction-tuned variants. Unlike standard Gemma 4, which uses dedicated encoder towers, Gemma 4 12B Unified projects raw inputs directly into the language model's embedding space through lightweight linear pipelines. This results in a simpler architecture while maintaining strong multimodal performance.\nKey differences from standard Gemma 4:\n\nNo",
-      "image": "https://private-user-images.githubusercontent.com/48595927/602317672-5e3ee940-f78d-4343-ac7a-889930800aa6.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3ODA1MDYzMTIsIm5iZiI6MTc4MDUwNjAxMiwicGF0aCI6Ii80ODU5NTkyNy82MDIzMTc2NzItNWUzZWU5NDAtZjc4ZC00MzQzLWFjN2EtODg5OTMwODAwYWE2LnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNjA2MDMlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjYwNjAzVDE3MDAxMlomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPWExMGY0MjQxZTEwMTFlOTliN2QwNjJkYmMxOWUyMWM2ODE0ZTBlNzg3ZmFmNGQ5ZjMwOTIzYWYyYzNmMDEwYTAmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0JnJlc3BvbnNlLWNvbnRlbnQtdHlwZT1pbWFnZSUyRnBuZyJ9.QqjBkZfFp8nuDsJqugv46XJ2cSxa4yLpkdISZ8_PgZU",
+      "image": "https://private-user-images.githubusercontent.com/48595927/602317672-5e3ee940-f78d-4343-ac7a-889930800aa6.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3ODA1MDcwNDEsIm5iZiI6MTc4MDUwNjc0MSwicGF0aCI6Ii80ODU5NTkyNy82MDIzMTc2NzItNWUzZWU5NDAtZjc4ZC00MzQzLWFjN2EtODg5OTMwODAwYWE2LnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNjA2MDMlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjYwNjAzVDE3MTIyMVomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPWYxZGNjNDRmYmIzY2NkMjJmM2Y4OGYyMjJiYzdiNjYwNGQ0NjQ0ZDY4ZGE3N2JkMzhjMGM3ZGMxYjJhOWViNDgmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0JnJlc3BvbnNlLWNvbnRlbnQtdHlwZT1pbWFnZSUyRnBuZyJ9.-td89G23kzUu7OlH7XZdFcXIzFiX2jsXsbf_wMEEDAI",
       "published": "2026-06-03T15:37:41+00:00",
       "firstSeen": "2026-06-03T16:00:01.415350+00:00",
-      "lastSeen": "2026-06-03T17:00:01.753114+00:00",
+      "lastSeen": "2026-06-03T17:12:12.892423+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.4489
+      "score": 14.4429
     },
     {
       "title": "Meta’s AI agent for WhatsApp Business is now available globally",
@@ -30,11 +30,11 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/02/whatsapp-iphone-icon.jpg?resize=1200%2C800",
       "published": "2026-06-03T13:40:00+00:00",
       "firstSeen": "2026-06-03T14:00:01.283788+00:00",
-      "lastSeen": "2026-06-03T17:00:01.753114+00:00",
+      "lastSeen": "2026-06-03T17:12:12.892423+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.2927
+      "score": 14.2871
     },
     {
       "title": "ChatGPT hits 1 billion monthly users faster than any app before it",
@@ -50,7 +50,7 @@
       "lastSeen": "2026-06-03T07:04:16.737349+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.6751
+      "score": 11.6705
     },
     {
       "title": "Uber Caps Usage of AI Tools Like Claude Code to Manage Costs",
@@ -63,10 +63,10 @@
       "image": "",
       "published": "2026-06-03T12:01:27+00:00",
       "firstSeen": "2026-06-03T13:00:01.958544+00:00",
-      "lastSeen": "2026-06-03T17:00:01.753114+00:00",
+      "lastSeen": "2026-06-03T17:12:12.892423+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.248
+      "score": 11.2426
     },
     {
       "title": "NVIDIA Enables the Next Era Of Physical AI Research With Agent Skills For Autonomous Vehicles, Robotics And Vision AI",
@@ -79,10 +79,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/Delta-Defect-Image-Generation.mp4",
       "published": "2026-06-03T15:00:35+00:00",
       "firstSeen": "2026-06-03T16:00:01.415350+00:00",
-      "lastSeen": "2026-06-03T17:00:01.753114+00:00",
+      "lastSeen": "2026-06-03T17:12:12.892423+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 10.0308
+      "score": 10.025
     },
     {
       "title": "Microsoft and OpenAI broke up — now they’re ready to fight",
@@ -95,10 +95,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/10/STK178_Satya_Nadella_B.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C9.9676601489831%2C100%2C80.064679702034&amp%3Bw=1200",
       "published": "2026-06-03T14:04:00+00:00",
       "firstSeen": "2026-06-03T15:00:01.428377+00:00",
-      "lastSeen": "2026-06-03T17:00:01.753114+00:00",
+      "lastSeen": "2026-06-03T17:12:12.892423+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 9.7739
+      "score": 9.7682
     },
     {
       "title": "Introducing the Services Track and Partner Hub of the Claude Partner Network",
@@ -111,10 +111,10 @@
       "image": "https://www.anthropic.com/api/opengraph-illustration?name=Hand+ShapeBuild&amp%3BbackgroundColor=fig",
       "published": "2026-06-03T00:00:00+00:00",
       "firstSeen": "2026-06-03T15:00:01.428377+00:00",
-      "lastSeen": "2026-06-03T17:00:01.753114+00:00",
+      "lastSeen": "2026-06-03T17:12:12.892423+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.086
+      "score": 8.0821
     },
     {
       "title": "NVIDIA Research Unlocks Advanced Grasping, Smarter Autonomous Driving and Agent Training at Scale",
@@ -127,10 +127,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/CVPR_blog_still-scaled.png",
       "published": "2026-06-03T15:00:57+00:00",
       "firstSeen": "2026-06-03T16:00:01.415350+00:00",
-      "lastSeen": "2026-06-03T17:00:01.753114+00:00",
+      "lastSeen": "2026-06-03T17:12:12.892423+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.631
+      "score": 7.6251
     },
     {
       "title": "Lovable makes Google Cloud a primary partner to win over corporate buyers",
@@ -143,10 +143,10 @@
       "image": "https://media.thenextweb.com/2025/07/01938c14-fbd1-7090-b136-1328926ab8fd.avif",
       "published": "2026-06-03T10:29:34+00:00",
       "firstSeen": "2026-06-03T11:00:01.129567+00:00",
-      "lastSeen": "2026-06-03T17:00:01.753114+00:00",
+      "lastSeen": "2026-06-03T17:12:12.892423+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.0681
+      "score": 7.0629
     },
     {
       "title": "v0.30.2",
@@ -159,10 +159,10 @@
       "image": "https://opengraph.githubassets.com/a749683fac0e18c057bca67d6077ee47e3c2617ba7a8cc0ebbb22e999bb15977/ollama/ollama",
       "published": "2026-06-03T02:54:30+00:00",
       "firstSeen": "2026-06-03T01:45:03.395007+00:00",
-      "lastSeen": "2026-06-03T17:00:01.753114+00:00",
+      "lastSeen": "2026-06-03T17:12:12.892423+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.1037
+      "score": 6.0995
     },
     {
       "title": "Redditors Are Using AI to Beat Obscene World Cup Ticket Prices",
@@ -175,10 +175,10 @@
       "image": "https://media.wired.com/photos/6a1fdc7925887801d470b4c0/master/pass/WIRED-WC26-Cristian-Mera-Reddit.png",
       "published": "2026-06-03T09:00:00+00:00",
       "firstSeen": "2026-06-03T10:00:01.781383+00:00",
-      "lastSeen": "2026-06-03T17:00:01.753114+00:00",
+      "lastSeen": "2026-06-03T17:12:12.892423+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.0708
+      "score": 6.0658
     },
     {
       "title": "UK regulator imposes new rules on Google search, including an AI-training opt-out",
@@ -194,7 +194,7 @@
       "lastSeen": "2026-06-03T10:00:01.781383+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.993
+      "score": 5.9882
     }
   ],
   "errors": [

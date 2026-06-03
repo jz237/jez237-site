@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-03T17:00:01.753114+00:00",
+  "updatedAt": "2026-06-03T17:12:12.892423+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -9148,6 +9148,14 @@
     "https://www.theverge.com/tech/942547/amazon-search-bar-ai-images": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/amazon-ai-search.png?quality=90&amp;strip=all&amp;crop=0%2C4.865499187579%2C100%2C90.269001624842&amp;w=1200",
       "checkedAt": "2026-06-03T17:00:01.753114+00:00"
+    },
+    "https://openai.com/index/public-policy-agenda": {
+      "image": "",
+      "checkedAt": "2026-06-03T17:12:12.892423+00:00"
+    },
+    "https://openai.com/index/frontier-safety-blueprint": {
+      "image": "",
+      "checkedAt": "2026-06-03T17:12:12.892423+00:00"
     }
   }
 }
