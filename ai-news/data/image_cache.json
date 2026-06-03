@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-03T12:05:54.578014+00:00",
+  "updatedAt": "2026-06-03T13:00:01.958544+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -9096,6 +9096,14 @@
     "https://www.anthropic.com/news/AI-enabled-cyber-threats-mitre-attack": {
       "image": "https://www.anthropic.com/api/opengraph-illustration?name=Object-LaptopSecure&amp;backgroundColor=cactus",
       "checkedAt": "2026-06-03T11:00:01.129567+00:00"
+    },
+    "https://huggingface.co/blog/Dharma-AI/direct-preference-optimization-beyond-chatbots": {
+      "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/Dharma-AI/direct-preference-optimization-beyond-chatbots.png",
+      "checkedAt": "2026-06-03T13:00:01.958544+00:00"
+    },
+    "https://simonwillison.net/2026/Jun/3/uber-caps-usage": {
+      "image": "",
+      "checkedAt": "2026-06-03T13:00:01.958544+00:00"
     }
   }
 }
