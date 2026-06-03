@@ -204,6 +204,20 @@
     return keys;
   }
 
+  function getNewArrivalProducts(products) {
+    const arrivals = window.THR_NEW_ARRIVALS?.products;
+    if (Array.isArray(arrivals) && arrivals.length) {
+      return arrivals.map(product => Object.assign({}, product, {
+        categorySlug: 'new-arrivals',
+        categoryName: 'New Arrivals',
+        groupSlug: 'new-arrivals',
+        groupName: 'New Arrivals'
+      }));
+    }
+    const keys = getNewArrivalKeys(products);
+    return products.filter(product => keys.has(getProductKey(product)));
+  }
+
   function escapeHtml(value) {
     return String(value || '').replace(/[&<>"']/g, char => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[char]));
   }
@@ -232,13 +246,14 @@
   function applyProductControls(products) {
     const controls = getActiveControls();
     const query = controls.query.toLowerCase();
-    const newArrivalKeys = controls.category === NEW_ARRIVALS_FILTER ? getNewArrivalKeys(products) : null;
-    let filtered = products.filter(product => {
+    const sourceProducts = controls.category === NEW_ARRIVALS_FILTER ? getNewArrivalProducts(products) : products;
+    let filtered = sourceProducts.filter(product => {
       const name = product.name || '';
       const brand = extractBrand(name);
       const matchesQuery = !query || name.toLowerCase().includes(query) || brand.toLowerCase().includes(query);
       const matchesCategory = !controls.category ||
-        (controls.category === NEW_ARRIVALS_FILTER ? newArrivalKeys.has(getProductKey(product)) : product.groupSlug === controls.category);
+        controls.category === NEW_ARRIVALS_FILTER ||
+        product.groupSlug === controls.category;
       const matchesBrand = !controls.brand || brand === controls.brand;
       return matchesQuery && matchesCategory && matchesBrand;
     });
