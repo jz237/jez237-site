@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-03T01:00:01.689286+00:00",
+  "updatedAt": "2026-06-03T02:00:01.772897+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -9068,6 +9068,14 @@
     "https://simonwillison.net/2026/Jun/2/micropython-wasm-2": {
       "image": "",
       "checkedAt": "2026-06-03T01:00:01.689286+00:00"
+    },
+    "https://github.com/BerriAI/litellm/releases/tag/v1.86.3": {
+      "image": "https://opengraph.githubassets.com/46cae93f3bb3e2195285f18b70c2c4f409ae74d529f9e30b6b35b46974d46292/BerriAI/litellm/releases/tag/v1.86.3",
+      "checkedAt": "2026-06-03T02:00:01.772897+00:00"
+    },
+    "https://github.com/ollama/ollama/releases/tag/v0.30.2": {
+      "image": "https://opengraph.githubassets.com/80e5dfd7817d00058f80075634f71a9e17b45c9b26cc128549e5cd000066dc87/ollama/ollama",
+      "checkedAt": "2026-06-03T02:00:01.772897+00:00"
     }
   }
 }
