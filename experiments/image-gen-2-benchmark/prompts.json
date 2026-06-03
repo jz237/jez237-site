@@ -1258,5 +1258,17 @@
     "slot": "afternoon",
     "model": "openai/gpt-image-2",
     "size": "1024x1536"
+  },
+  {
+    "id": "2026-06-02-evening-fog-orchard-courier",
+    "title": "Fog Orchard Courier",
+    "tests": "Tests whether GPT Image 2 can create a reusable board-game-card layout as a finished physical object with readable hierarchy, tactile print materials, coherent fantasy-game data zones, and rich environmental illustration without turning into an instruction card.",
+    "prompt": "Create a finished board game card about an invented strategy game card titled Fog Orchard Courier. Use a vertical premium linen-finish card photographed on a dark walnut table. Include a readable title banner, central painted illustration, left-edge cost pips, three small ability icon boxes, a short rules-text panel, a tiny flavor-text line, and a bottom stat strip. The card art should show a brass bicycle courier carrying glowing pear-shaped lantern fruit through wet espalier trees, with dew beads, fog ribbons, clipped hedges, copper wayfinding tags, mossy stone path, warm pinprick lights, sage and vermilion inks, subtle gold foil, embossed title, rounded corners, slight edge wear, paper fibers, realistic table shadow, and two small wooden scoring tokens nearby. Avoid real logos, copyrighted characters, placeholder boxes, watermarks, signatures, and dancing imagery.\n\nReusable template: Create a finished board game card about [TOPIC] using [DATA OR CATEGORIES], with a coherent physical card design, readable hierarchy, a central illustration, icon/stat areas, concise rules text, tactile print materials, and specific invented details where data is not supplied.\n\nExample substitution: [TOPIC] = a courier delivering lantern fruit through foggy orchards; [DATA OR CATEGORIES] = cost pips, three ability icons, rules panel, flavor text, bottom stat strip.",
+    "image": "images/2026-06-02-evening-fog-orchard-courier.png",
+    "date": "2026-06-02",
+    "batch": "Daily Prompt",
+    "slot": "evening",
+    "model": "fal/openai/gpt-image-2",
+    "size": "1024x1536"
   }
 ]
