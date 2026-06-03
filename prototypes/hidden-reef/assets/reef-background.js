@@ -6,6 +6,74 @@
   const canvas = document.querySelector('[data-reef-background]');
   if (!canvas) return;
 
+  Object.assign(canvas.style, {
+    position: 'fixed',
+    inset: '0',
+    zIndex: '0',
+    width: '100%',
+    height: '100%',
+    pointerEvents: 'none'
+  });
+  document.documentElement.classList.add('has-reef-background');
+  if (!document.getElementById('reef-background-glass-style')) {
+    const style = document.createElement('style');
+    style.id = 'reef-background-glass-style';
+    style.textContent = [
+      '.has-reef-background body{background:transparent!important;}',
+      '.has-reef-background .page{background:transparent!important;}',
+      '.has-reef-background .header:not(.masthead),',
+      '.has-reef-background .main-nav,',
+      '.has-reef-background .preview-banner,',
+      '.has-reef-background .catalog-frame,',
+      '.has-reef-background .shopping-tools,',
+      '.has-reef-background .product-controls,',
+      '.has-reef-background .department-tabs,',
+      '.has-reef-background .department-switcher,',
+      '.has-reef-background .department-sidebar,',
+      '.has-reef-background .product-results,',
+      '.has-reef-background .sidebar,',
+      '.has-reef-background .panel,',
+      '.has-reef-background .path-card,',
+      '.has-reef-background .style-card,',
+      '.has-reef-background .care-card,',
+      '.has-reef-background .routine-card,',
+      '.has-reef-background .path-link,',
+      '.has-reef-background .guide,',
+      '.has-reef-background .live-link,',
+      '.has-reef-background .learn-panel,',
+      '.has-reef-background .learn-column,',
+      '.has-reef-background .learn-disclosure,',
+      '.has-reef-background .infographic-toggle,',
+      '.has-reef-background .visual-band,',
+      '.has-reef-background .callout,',
+      '.has-reef-background .step-card,',
+      '.has-reef-background .type-card,',
+      '.has-reef-background .cause-card,',
+      '.has-reef-background .product-card,',
+      '.has-reef-background .gear-card,',
+      '.has-reef-background .footer{',
+      'background:radial-gradient(circle at 100% 0%,rgba(116,205,235,.12),transparent 38%),rgba(7,26,39,.76)!important;',
+      'backdrop-filter:blur(3px);',
+      '}',
+      '.has-reef-background .thr-product,',
+      '.has-reef-background .brand-tile,',
+      '.has-reef-background .product{background:rgba(247,251,253,.92)!important;}',
+      '.has-reef-background .thr-product .thr-img,',
+      '.has-reef-background .thr-product .thr-info,',
+      '.has-reef-background .product img{background:rgba(247,251,253,.94)!important;}',
+      '.has-reef-background .drawer,',
+      '.has-reef-background .link-modal__panel{background:rgba(7,26,39,.94)!important;}',
+      '.has-reef-background .link-modal__backdrop{background:rgba(0,8,16,.64)!important;}'
+    ].join('');
+    document.head.appendChild(style);
+  }
+  Array.from(document.body.children).forEach(function(child) {
+    if (child === canvas || child.tagName === 'SCRIPT') return;
+    if (window.getComputedStyle(child).position !== 'static') return;
+    child.style.position = 'relative';
+    child.style.zIndex = '1';
+  });
+
   const ctx = canvas.getContext('2d', { alpha: true });
   if (!ctx) return;
 
@@ -32,8 +100,8 @@
 
     const isDesktop = width >= 900;
     const count = prefersReducedMotion
-      ? (isDesktop ? 32 : 18)
-      : Math.round(Math.min(isDesktop ? 118 : 86, Math.max(isDesktop ? 58 : 34, width / (isDesktop ? 14 : 18))));
+      ? (isDesktop ? 38 : 18)
+      : Math.round(Math.min(isDesktop ? 142 : 86, Math.max(isDesktop ? 70 : 34, width / (isDesktop ? 11.67 : 18))));
     bubbles = Array.from({ length: count }, function(_, index) {
       const featured = isDesktop && index % 6 === 0;
       return {
