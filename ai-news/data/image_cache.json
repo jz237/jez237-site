@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-03T20:27:20.946221+00:00",
+  "updatedAt": "2026-06-03T22:00:01.859369+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -9172,6 +9172,18 @@
     "https://openai.com/index/introducing-new-capabilities-to-gpt-rosalind": {
       "image": "",
       "checkedAt": "2026-06-03T20:27:20.946221+00:00"
+    },
+    "https://github.com/ollama/ollama/releases/tag/v0.30.4-rc1": {
+      "image": "https://opengraph.githubassets.com/9c67f0207e49c9c0112423cf7585913bb6cecf5b2abd72d48cc8c190323fdc25/ollama/ollama",
+      "checkedAt": "2026-06-03T22:00:01.859369+00:00"
+    },
+    "https://www.techrepublic.com/article/news-microsoft-wearable-ai-badge-office-workers": {
+      "image": "https://assets.techrepublic.com/uploads/2026/06/Untitled-design-35.png?f=jpeg",
+      "checkedAt": "2026-06-03T22:00:01.859369+00:00"
+    },
+    "https://www.techrepublic.com/article/news-microsoft-windows-ai-agents-developer-tools": {
+      "image": "https://assets.techrepublic.com/uploads/2026/06/tr-06032026-microsoft-windows-ai-agents-developer-tools.jpg?f=jpeg",
+      "checkedAt": "2026-06-03T22:00:01.859369+00:00"
     }
   }
 }
