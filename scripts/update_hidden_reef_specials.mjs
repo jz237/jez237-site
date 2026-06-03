@@ -436,6 +436,7 @@ function renderCard(special) {
               </ul>
               <div class="special-actions">
                 <a class="btn" href="${escapeHtml(special.url)}" target="_blank" rel="noopener">${escapeHtml(special.primaryLabel)}</a>
+                <a class="btn secondary" href="sales/?sale=${escapeHtml(special.slug)}">View sale items</a>
                 <a class="btn secondary" href="${escapeHtml(special.localCategory.href)}">${escapeHtml(special.localCategory.label)}</a>
               </div>
             </div>
