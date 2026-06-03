@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-03T20:00:02.061025+00:00",
+  "updatedAt": "2026-06-03T20:27:20.946221+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -9168,6 +9168,10 @@
     "https://techcrunch.com/2026/06/03/googles-dreambeans-its-weirdest-named-ai-tool-to-date-will-turn-your-life-into-a-cartoon": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/Screenshot-2026-06-03-at-9.13.33-AM.png?resize=1200,667",
       "checkedAt": "2026-06-03T20:00:02.061025+00:00"
+    },
+    "https://openai.com/index/introducing-new-capabilities-to-gpt-rosalind": {
+      "image": "",
+      "checkedAt": "2026-06-03T20:27:20.946221+00:00"
     }
   }
 }
