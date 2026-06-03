@@ -18,9 +18,9 @@ const artBySlug = {
     alt: 'Premium reef care products arranged beside a reef aquarium'
   },
   'sale-innovative-marine-mto-50-off': {
-    image: 'assets/site/specials/innovative-marine-mto-special-gpt2.jpg',
+    image: 'assets/site/specials/innovative-marine-mto-import.jpg',
     label: 'Large MTO reef systems with APS stands',
-    alt: 'Large premium reef aquarium system in a blue-lit showroom'
+    alt: 'Innovative Marine made-to-order aquariums promotion: save 50 percent on MTO orders'
   },
   'innovative-marine-10-off-25-100-g-complete': {
     image: 'assets/site/specials/innovative-marine-complete-special-gpt2.jpg',
@@ -38,9 +38,9 @@ const artBySlug = {
     alt: 'Reef aquarium automation and monitoring equipment beside a reef tank'
   },
   aiosale: {
-    image: 'assets/site/product-reef-system.jpg',
+    image: 'assets/site/specials/nuvo-starter-kits-import.jpg',
     label: 'Featured AIO aquarium systems',
-    alt: 'All-in-one aquarium system in a clean showroom setting'
+    alt: 'NUVO starter kits promotion with Fusion 15 AIO Cube and Fusion 20 AIO Long aquarium sale pricing'
   }
 };
 
@@ -369,15 +369,15 @@ function shortProductName(name) {
 }
 
 function artFor(department, products) {
+  const configured = artBySlug[department.slug];
+  if (configured) return configured;
   if (department.homepageImage) {
     return {
       image: department.homepageImage,
-      label: artBySlug[department.slug]?.label || department.title,
-      alt: artBySlug[department.slug]?.alt || department.title
+      label: department.title,
+      alt: department.title
     };
   }
-  const configured = artBySlug[department.slug];
-  if (configured) return configured;
   const first = products.find(product => product.imageUrl);
   return {
     image: first?.imageUrl || 'assets/site/hidden-reef-masthead.png',
@@ -408,47 +408,70 @@ async function enrichDepartment(department) {
   };
 }
 
-function renderSlide(special) {
+function renderDiscountBadge(special) {
+  if (special.discount) return `${special.discount}%<small>off</small>`;
+  const label = special.discountLabel || '';
+  const explicit = label.match(/(\d+)\s*%/);
+  if (explicit) return `${explicit[1]}%<small>off</small>`;
+  return 'Sale<small>now</small>';
+}
+
+function renderCard(special) {
   const discountText = special.discountLabel || (special.discount ? `${special.discount}% off` : 'Sale pricing');
-  const burst = special.discount ? `${special.discount}%<small>off</small>` : 'Sale<small>now</small>';
   const countText = `${special.count} sale ${special.count === 1 ? 'item' : 'items'}`;
   const example = special.example ? `\n                <li>${escapeHtml(special.example)}</li>` : '';
-  const imageText = special.imageText.length
-    ? `\n              <div class="special-promo-text">
-                <h3>Promo details</h3>
-                <ul>
-                  ${special.imageText.map(item => `<li>${escapeHtml(item)}</li>`).join('\n                  ')}
-                </ul>
-              </div>`
-    : '';
-  return `          <article class="special-slide">
-            <div class="special-copy">
-              <em>${escapeHtml(special.eyebrow)}</em>
+  return `          <article class="special-card">
+            <a class="special-card__media" href="${escapeHtml(special.url)}" target="_blank" rel="noopener">
+              <img src="${escapeHtml(special.art.image)}" alt="${escapeHtml(special.art.alt)}" />
+              <span class="special-card__discount">${renderDiscountBadge(special)}</span>
+            </a>
+            <div class="special-card__body">
+              <span class="special-card__eyebrow">${escapeHtml(special.eyebrow)}</span>
               <h2>${escapeHtml(special.title)}</h2>
               <p>${escapeHtml(special.description)}</p>
-              <ul class="special-meta">
+              <ul class="special-card__notes">
                 <li>${escapeHtml(discountText)}</li>
                 <li>${escapeHtml(countText)}</li>${example}
-              </ul>${imageText}
+              </ul>
               <div class="special-actions">
                 <a class="btn" href="${escapeHtml(special.url)}" target="_blank" rel="noopener">${escapeHtml(special.primaryLabel)}</a>
                 <a class="btn secondary" href="${escapeHtml(special.localCategory.href)}">${escapeHtml(special.localCategory.label)}</a>
               </div>
             </div>
-            <div class="special-media">
-              <img class="special-art-image" src="${escapeHtml(special.art.image)}" alt="${escapeHtml(special.art.alt)}" />
-              <div class="special-media-label">${escapeHtml(special.art.label)}</div>
-              <div class="special-price-burst">${burst}</div>
-            </div>
           </article>`;
 }
 
-function replaceSpecialsTrack(page, renderedSlides) {
-  const pattern = /(<div class="specials-track" id="specials-track">\n)([\s\S]*?)(\n\s*<\/div>\n\s*<\/div>\n\s*<div class="special-controls")/;
+function renderSpecialsSection(specials) {
+  if (!specials.length) return '<!-- THR_SPECIALS_START -->\n<!-- THR_SPECIALS_END -->';
+  const renderedCards = specials.map(renderCard).join('\n');
+  return `<!-- THR_SPECIALS_START -->
+    <section class="specials-spotlight" aria-labelledby="specials-title">
+      <div class="specials-head">
+        <span id="specials-title">Current specials</span>
+        <a href="https://www.thehiddenreef.com/sales-online/" target="_blank" rel="noopener">View all sale departments</a>
+      </div>
+      <div class="specials-carousel">
+        <div class="specials-track" id="specials-track">
+${renderedCards}
+        </div>
+      </div>
+      <div class="special-controls" aria-label="Specials carousel controls">
+        <div class="special-arrows">
+          <button class="special-control" type="button" data-special-dir="-1" aria-label="Previous special">‹</button>
+          <button class="special-control" type="button" data-special-dir="1" aria-label="Next special">›</button>
+        </div>
+        <div class="special-dots" id="special-dots" aria-label="Choose special"></div>
+      </div>
+    </section>
+    <!-- THR_SPECIALS_END -->`;
+}
+
+function replaceSpecialsSection(page, specials) {
+  const pattern = /<!-- THR_SPECIALS_START -->[\s\S]*?<!-- THR_SPECIALS_END -->/;
   if (!pattern.test(page)) {
-    throw new Error('Could not find specials carousel track in homepage');
+    throw new Error('Could not find managed specials section in homepage');
   }
-  return page.replace(pattern, (_match, prefix, _currentSlides, suffix) => `${prefix}${renderedSlides.join('\n')}${suffix}`);
+  return page.replace(pattern, renderSpecialsSection(specials));
 }
 
 await fs.mkdir(reportDir, { recursive: true });
@@ -462,9 +485,6 @@ const homepagePromos = parseHomepagePromos(homeHtml).map(promo => ({
   count: salesDepartmentByUrl.get(promo.url)?.count || promo.count
 }));
 const departments = (homepagePromos.length ? homepagePromos : salesDepartments).slice(0, maxSpecials);
-if (!departments.length) {
-  throw new Error('No sale departments parsed from Hidden Reef homepage or sales page');
-}
 
 const specials = [];
 for (const department of departments) {
@@ -472,7 +492,7 @@ for (const department of departments) {
 }
 
 const page = await fs.readFile(pagePath, 'utf8');
-const nextPage = replaceSpecialsTrack(page, specials.map(renderSlide));
+const nextPage = replaceSpecialsSection(page, specials);
 const changed = nextPage !== page;
 
 const report = {
