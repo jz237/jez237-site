@@ -17,15 +17,15 @@ fi
 node scripts/update_hidden_reef_specials.mjs --write
 
 if git diff --quiet -- "${TRACKED_PATHS[@]}"; then
-  echo "Hidden Reef weekly specials already current; no commit or deploy needed."
+  echo "Hidden Reef daily specials already current; no commit or deploy needed."
   exit 0
 fi
 
 git add "${TRACKED_PATHS[@]}"
 python3 /home/jez237/.openclaw/workspace/scripts/scan_git_diff_secrets.py --staged
-git commit -m "Refresh Hidden Reef weekly specials"
+git commit -m "Refresh Hidden Reef daily specials"
 git push origin main
 
 scripts/deploy_hidden_reef_cloudflare.sh
 
-echo "Hidden Reef weekly specials refreshed, pushed, deployed, and verified."
+echo "Hidden Reef daily specials refreshed, pushed, deployed, and verified."
