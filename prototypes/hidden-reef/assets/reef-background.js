@@ -29,16 +29,20 @@
     canvas.style.height = height + 'px';
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-    const count = prefersReducedMotion ? 18 : Math.round(Math.min(86, Math.max(34, width / 18)));
+    const isDesktop = width >= 900;
+    const count = prefersReducedMotion
+      ? (isDesktop ? 32 : 18)
+      : Math.round(Math.min(isDesktop ? 118 : 86, Math.max(isDesktop ? 58 : 34, width / (isDesktop ? 14 : 18))));
     bubbles = Array.from({ length: count }, function(_, index) {
+      const featured = isDesktop && index % 6 === 0;
       return {
         x: random(-40, width + 40),
         y: random(-height * 0.2, height * 1.15),
-        radius: random(1.4, index % 7 === 0 ? 6.2 : 4.2),
-        speed: random(10, 34),
-        wobble: random(10, 44),
+        radius: random(featured ? 3.6 : 1.5, featured ? 9.2 : 5.1),
+        speed: random(isDesktop ? 12 : 10, isDesktop ? 42 : 34),
+        wobble: random(12, isDesktop ? 58 : 44),
         phase: random(0, Math.PI * 2),
-        alpha: random(0.14, 0.42)
+        alpha: random(isDesktop ? 0.18 : 0.14, isDesktop ? 0.5 : 0.42)
       };
     });
   }
@@ -46,16 +50,17 @@
   function drawCaustics(time) {
     ctx.save();
     ctx.globalCompositeOperation = 'screen';
-    for (let band = 0; band < 9; band += 1) {
+    const isDesktop = width >= 900;
+    for (let band = 0; band < (isDesktop ? 12 : 9); band += 1) {
       const yBase = height * (0.12 + band * 0.105);
-      const amp = 10 + band * 1.8;
+      const amp = (isDesktop ? 14 : 10) + band * 1.8;
       const drift = time * (0.00028 + band * 0.000018);
       const gradient = ctx.createLinearGradient(0, yBase - 26, width, yBase + 38);
       gradient.addColorStop(0, 'rgba(64,217,255,0)');
-      gradient.addColorStop(0.5, 'rgba(124,236,255,0.08)');
+      gradient.addColorStop(0.5, 'rgba(124,236,255,' + (isDesktop ? '0.12' : '0.08') + ')');
       gradient.addColorStop(1, 'rgba(64,217,255,0)');
       ctx.strokeStyle = gradient;
-      ctx.lineWidth = 1.2 + (band % 3) * 0.5;
+      ctx.lineWidth = (isDesktop ? 1.6 : 1.2) + (band % 3) * 0.5;
       ctx.beginPath();
       for (let x = -40; x <= width + 44; x += 28) {
         const y = yBase
@@ -65,6 +70,31 @@
         else ctx.lineTo(x, y);
       }
       ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  function drawLightRays(time) {
+    if (width < 900) return;
+    ctx.save();
+    ctx.globalCompositeOperation = 'screen';
+    for (let ray = 0; ray < 7; ray += 1) {
+      const center = width * (0.08 + ray * 0.15) + Math.sin(time * 0.00022 + ray) * 52;
+      const top = -height * 0.05;
+      const bottom = height * 1.08;
+      const rayWidth = width * (0.08 + (ray % 3) * 0.025);
+      const gradient = ctx.createLinearGradient(center, top, center + rayWidth, bottom);
+      gradient.addColorStop(0, 'rgba(120,232,255,0.14)');
+      gradient.addColorStop(0.48, 'rgba(64,217,255,0.045)');
+      gradient.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = gradient;
+      ctx.beginPath();
+      ctx.moveTo(center - rayWidth * 0.45, top);
+      ctx.lineTo(center + rayWidth * 0.35, top);
+      ctx.lineTo(center + rayWidth * 1.6, bottom);
+      ctx.lineTo(center - rayWidth * 0.85, bottom);
+      ctx.closePath();
+      ctx.fill();
     }
     ctx.restore();
   }
@@ -114,6 +144,7 @@
     ctx.fillStyle = topLight;
     ctx.fillRect(0, 0, width, height);
 
+    drawLightRays(time);
     drawCaustics(time);
 
     ctx.save();
