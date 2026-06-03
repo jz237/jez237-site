@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-03T17:12:12.892423+00:00",
+  "updatedAt": "2026-06-03T19:00:01.264980+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -9156,6 +9156,10 @@
     "https://openai.com/index/frontier-safety-blueprint": {
       "image": "",
       "checkedAt": "2026-06-03T17:12:12.892423+00:00"
+    },
+    "https://www.theverge.com/ai-artificial-intelligence/942629/as-ai-gets-better-it-reveals-an-empty-promise": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/11503853/mdoying_180419_1777_0454_2.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-06-03T19:00:01.264980+00:00"
     }
   }
 }
