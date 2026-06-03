@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-03T18:00:01.322205+00:00",
+  "updatedAt": "2026-06-03T17:12:12.892423+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -9149,17 +9149,13 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/amazon-ai-search.png?quality=90&amp;strip=all&amp;crop=0%2C4.865499187579%2C100%2C90.269001624842&amp;w=1200",
       "checkedAt": "2026-06-03T17:00:01.753114+00:00"
     },
-    "https://github.com/ollama/ollama/releases/tag/v0.30.4-rc0": {
-      "image": "https://opengraph.githubassets.com/7ac4bb1c9b527597e5857635b6ba3a1b4f066e03d84df765871eca08cc1a170e/ollama/ollama",
-      "checkedAt": "2026-06-03T18:00:01.322205+00:00"
-    },
     "https://openai.com/index/public-policy-agenda": {
-      "image": "https://images.ctfassets.net/kftzwdyauwt9/5biIV8BMiZ5j93ClAOEg1T/2a734d5aee55236aba471fc32a7470ba/Frame-1.png?w=1600&amp;h=900&amp;fit=fill",
-      "checkedAt": "2026-06-03T18:00:01.322205+00:00"
+      "image": "",
+      "checkedAt": "2026-06-03T17:12:12.892423+00:00"
     },
     "https://openai.com/index/frontier-safety-blueprint": {
       "image": "",
-      "checkedAt": "2026-06-03T18:00:01.322205+00:00"
+      "checkedAt": "2026-06-03T17:12:12.892423+00:00"
     }
   }
 }
