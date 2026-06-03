@@ -1,8 +1,8 @@
 {
-  "updatedAt": "2026-06-03T10:00:01.781383+00:00",
+  "updatedAt": "2026-06-03T11:00:01.129567+00:00",
   "items": [
     {
-      "title": "Assessing Region-Level EEG Contributions to Cognitive Workload Prediction",
+      "title": "Testing the Test: Score-Direction Instability in Class-Split Anomaly Detection",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -10,12 +10,92 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-03T10:00:09.463927+00:00",
+      "published": "2026-06-03T11:00:06.539313+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-03T10:00:01.781383+00:00",
+      "lastSeen": "2026-06-03T11:00:01.129567+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
+    },
+    {
+      "title": "Lovable makes Google Cloud a primary partner to win over corporate buyers",
+      "url": "https://thenextweb.com/news/lovable-google-cloud-expanded-collaboration",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The Swedish app-builder, processing a million new projects a week, is making Google Cloud a primary partner, with Gemini models and a security layer aimed at corporate buyers. The pitch behind Lovable has always been that anyone can build software by chatting with an AI. The harder pitch, the one that turns a viral tool [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2025/07/01938c14-fbd1-7090-b136-1328926ab8fd.avif",
+      "published": "2026-06-03T10:29:34+00:00",
+      "firstSeen": "2026-06-03T11:00:01.129567+00:00",
+      "lastSeen": "2026-06-03T11:00:01.129567+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 7.2346
+    },
+    {
+      "title": "Apple agrees to hand India the financials it spent months trying to withhold",
+      "url": "https://thenextweb.com/news/apple-india-financials-cci-antitrust",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "For months the fight in India’s App Store antitrust case was not really about app stores. It was about a spreadsheet. The Competition Commission of India wanted Apple’s financial records; Apple did not want to give them up, least of all the global ones. On 3 June, Apple agreed to submit the financials, removing the [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/Apple.avif",
+      "published": "2026-06-03T10:05:30+00:00",
+      "firstSeen": "2026-06-03T11:00:01.129567+00:00",
+      "lastSeen": "2026-06-03T11:00:01.129567+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.2226
+    },
+    {
+      "title": "EU court frees Meta’s Marketplace from gatekeeper rules but keeps Messenger in",
+      "url": "https://thenextweb.com/news/meta-eu-court-marketplace-messenger-dma",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The General Court annulled the Commission’s designation of Marketplace under the Digital Markets Act, faulting its reasoning, while upholding the same label for Messenger. Meta walked into the EU’s General Court asking it to strike down two gatekeeper labels and walked out having shed one. On 3 June the Luxembourg court annulled the European Commission’s [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/meta-users.avif",
+      "published": "2026-06-03T10:00:28+00:00",
+      "firstSeen": "2026-06-03T11:00:01.129567+00:00",
+      "lastSeen": "2026-06-03T11:00:01.129567+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 3.8201
+    },
+    {
+      "title": "What’s Worth More Than Cash in San Francisco Real Estate? Anthropic Stock",
+      "url": "https://www.wired.com/story/whats-worth-more-than-san-francisco-real-estate-anthropic-stock",
+      "source": "Wired AI",
+      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Several real estate listings in the San Francisco Bay Area are offering to exchange a home for a piece of the AI startup.",
+      "image": "https://media.wired.com/photos/6a1f6880163032d6de40fd16/master/pass/Exchange-Home-for-Anthropic-Stock-Business.jpg",
+      "published": "2026-06-03T10:00:00+00:00",
+      "firstSeen": "2026-06-03T11:00:01.129567+00:00",
+      "lastSeen": "2026-06-03T11:00:01.129567+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.2599
+    },
+    {
+      "title": "SpaceX fixes IPO at $135 a share for a $1.75tn valuation and a record listing",
+      "url": "https://thenextweb.com/news/spacex-75-billion-ipo-135-per-share",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Companies going public almost always leave the price for last. They set a range, send executives on a roadshow, take the temperature of the institutions, and let demand decide where the shares land. SpaceX has decided to do it backwards. The company plans to fix its IPO price at $135 a share before the roadshow [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/spacex-cursor-acquisition-ipo-60-billion-ai-coding.avif",
+      "published": "2026-06-03T09:30:12+00:00",
+      "firstSeen": "2026-06-03T11:00:01.129567+00:00",
+      "lastSeen": "2026-06-03T11:00:01.129567+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1052
     },
     {
       "title": "Factorial raises $150M at a $2.5bn valuation, with General Catalyst betting twice",
@@ -28,10 +108,10 @@
       "image": "https://media.thenextweb.com/2026/06/Factorial.avif",
       "published": "2026-06-03T09:19:05+00:00",
       "firstSeen": "2026-06-03T10:00:01.781383+00:00",
-      "lastSeen": "2026-06-03T10:00:01.781383+00:00",
+      "lastSeen": "2026-06-03T11:00:01.129567+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1293
+      "score": 2.0998
     },
     {
       "title": "Apoha emerges from stealth with $36M to teach machines how matter behaves",
@@ -44,10 +124,10 @@
       "image": "https://media.thenextweb.com/2026/06/Apoha.avif",
       "published": "2026-06-03T09:00:13+00:00",
       "firstSeen": "2026-06-03T10:00:01.781383+00:00",
-      "lastSeen": "2026-06-03T10:00:01.781383+00:00",
+      "lastSeen": "2026-06-03T11:00:01.129567+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.12
+      "score": 2.0907
     },
     {
       "title": "Redditors Are Using AI to Beat Obscene World Cup Ticket Prices",
@@ -60,10 +140,10 @@
       "image": "https://media.wired.com/photos/6a1fdc7925887801d470b4c0/master/pass/WIRED-WC26-Cristian-Mera-Reddit.png",
       "published": "2026-06-03T09:00:00+00:00",
       "firstSeen": "2026-06-03T10:00:01.781383+00:00",
-      "lastSeen": "2026-06-03T10:00:01.781383+00:00",
+      "lastSeen": "2026-06-03T11:00:01.129567+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.2599
+      "score": 6.2305
     },
     {
       "title": "AI has a water problem. Google thinks it has a fix",
@@ -76,10 +156,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/STKS528_DATA_CENTERS_B.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-03T09:00:00+00:00",
       "firstSeen": "2026-06-03T10:00:01.781383+00:00",
-      "lastSeen": "2026-06-03T10:00:01.781383+00:00",
+      "lastSeen": "2026-06-03T11:00:01.129567+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3299
+      "score": 2.3005
     },
     {
       "title": "Google must let publishers opt out of AI Search features, rules UK",
@@ -92,10 +172,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/04/STKS487_ANTITRUST_2__STK093_GOOGLE.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-03T08:45:48+00:00",
       "firstSeen": "2026-06-03T10:00:01.781383+00:00",
-      "lastSeen": "2026-06-03T10:00:01.781383+00:00",
+      "lastSeen": "2026-06-03T11:00:01.129567+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.8228
+      "score": 5.7937
     },
     {
       "title": "Applied Aerospace & Defense raises $650M in an IPO the market wanted ten times over",
@@ -108,10 +188,10 @@
       "image": "https://media.thenextweb.com/2026/06/Applied-Aerospace-Defense.avif",
       "published": "2026-06-03T08:40:24+00:00",
       "firstSeen": "2026-06-03T09:00:01.398224+00:00",
-      "lastSeen": "2026-06-03T10:00:01.781383+00:00",
+      "lastSeen": "2026-06-03T11:00:01.129567+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2102
+      "score": 3.1811
     },
     {
       "title": "DeepSeek lines up its first outside money: a $7bn round at up to $59bn",
@@ -124,10 +204,10 @@
       "image": "https://media.thenextweb.com/2026/04/DeepSeek.avif",
       "published": "2026-06-03T08:17:55+00:00",
       "firstSeen": "2026-06-03T09:00:01.398224+00:00",
-      "lastSeen": "2026-06-03T10:00:01.781383+00:00",
+      "lastSeen": "2026-06-03T11:00:01.129567+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0992
+      "score": 5.0705
     },
     {
       "title": "France’s Quobly raises €115M to put a quantum computer on a silicon chip",
@@ -140,10 +220,10 @@
       "image": "https://media.thenextweb.com/2026/06/Quobly.avif",
       "published": "2026-06-03T08:10:22+00:00",
       "firstSeen": "2026-06-03T09:00:01.398224+00:00",
-      "lastSeen": "2026-06-03T10:00:01.781383+00:00",
+      "lastSeen": "2026-06-03T11:00:01.129567+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0955
+      "score": 2.0669
     },
     {
       "title": "Flok Health raises $12.5M to scale an AI physiotherapist the NHS lets work unsupervised",
@@ -156,10 +236,10 @@
       "image": "https://media.thenextweb.com/2026/06/Flok-Health.avif",
       "published": "2026-06-03T08:00:57+00:00",
       "firstSeen": "2026-06-03T09:00:01.398224+00:00",
-      "lastSeen": "2026-06-03T10:00:01.781383+00:00",
+      "lastSeen": "2026-06-03T11:00:01.129567+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.891
+      "score": 3.8625
     },
     {
       "title": "Megaport raises A$827M to build a distributed AI cloud and chase the inference market",
@@ -175,7 +255,7 @@
       "lastSeen": "2026-06-03T10:00:01.781383+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.086
+      "score": 3.0576
     },
     {
       "title": "Gigaton raises $26M to rip out the control software running heavy industry",
@@ -191,7 +271,7 @@
       "lastSeen": "2026-06-03T10:00:01.781383+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0769
+      "score": 2.0488
     },
     {
       "title": "UK regulator imposes new rules on Google search, including an AI-training opt-out",
@@ -207,7 +287,7 @@
       "lastSeen": "2026-06-03T10:00:01.781383+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.1739
+      "score": 6.1459
     },
     {
       "title": "GitLab to cut 14% of staff and exit 22 countries in ‘agentic era’ restructuring",
@@ -223,7 +303,7 @@
       "lastSeen": "2026-06-03T10:00:01.781383+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.7704
+      "score": 4.7424
     },
     {
       "title": "Musk allies back a private-sector DOGE as ex-staffers launch Special",
@@ -239,7 +319,7 @@
       "lastSeen": "2026-06-03T09:00:01.398224+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7655
+      "score": 2.7377
     },
     {
       "title": "Kodesage raises $6.6M to drag enterprise legacy software into the AI era, without it leaving the building",
@@ -255,7 +335,7 @@
       "lastSeen": "2026-06-03T09:00:01.398224+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -1.0378
+      "score": -1.0655
     },
     {
       "title": "UK committee urges break clause on Palantir’s £330M NHS data contract",
@@ -271,7 +351,7 @@
       "lastSeen": "2026-06-03T08:00:01.840940+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0615
+      "score": 2.0338
     },
     {
       "title": "v1.87.0",
@@ -284,10 +364,10 @@
       "image": "https://opengraph.githubassets.com/39926c571856ad8a9f5b42f8c974345874e3338547b282c449d7a7d41246330d/BerriAI/litellm/releases/tag/v1.87.0",
       "published": "2026-06-03T06:47:33+00:00",
       "firstSeen": "2026-06-02T05:00:01.988171+00:00",
-      "lastSeen": "2026-06-03T10:00:01.781383+00:00",
+      "lastSeen": "2026-06-03T11:00:01.129567+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8962
+      "score": 2.8687
     },
     {
       "title": "ChatGPT hits 1 billion monthly users faster than any app before it",
@@ -303,7 +383,7 @@
       "lastSeen": "2026-06-03T07:04:16.737349+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.8522
+      "score": 11.8248
     },
     {
       "title": "v0.30.2",
@@ -316,10 +396,10 @@
       "image": "https://opengraph.githubassets.com/a749683fac0e18c057bca67d6077ee47e3c2617ba7a8cc0ebbb22e999bb15977/ollama/ollama",
       "published": "2026-06-03T02:54:30+00:00",
       "firstSeen": "2026-06-03T01:45:03.395007+00:00",
-      "lastSeen": "2026-06-03T10:00:01.781383+00:00",
+      "lastSeen": "2026-06-03T11:00:01.129567+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.2633
+      "score": 6.2386
     },
     {
       "title": "v1.86.3",
@@ -332,10 +412,26 @@
       "image": "https://opengraph.githubassets.com/46cae93f3bb3e2195285f18b70c2c4f409ae74d529f9e30b6b35b46974d46292/BerriAI/litellm/releases/tag/v1.86.3",
       "published": "2026-06-03T01:40:43+00:00",
       "firstSeen": "2026-06-03T01:45:03.395007+00:00",
-      "lastSeen": "2026-06-03T10:00:01.781383+00:00",
+      "lastSeen": "2026-06-03T11:00:01.129567+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.763
+      "score": 2.7391
+    },
+    {
+      "title": "What we learned mapping a year’s worth of AI-enabled cyber threats",
+      "url": "https://www.anthropic.com/news/AI-enabled-cyber-threats-mitre-attack",
+      "source": "Anthropic News",
+      "sourceUrl": "https://raw.githubusercontent.com/Olshansk/rss-feeds/main/feeds/feed_anthropic_news.xml",
+      "sourceWeight": 1.0,
+      "category": "AI",
+      "summary": "What we learned mapping a year’s worth of AI-enabled cyber threats",
+      "image": "https://www.anthropic.com/api/opengraph-illustration?name=Object-LaptopSecure&amp%3BbackgroundColor=cactus",
+      "published": "2026-06-03T00:00:00+00:00",
+      "firstSeen": "2026-06-03T11:00:01.129567+00:00",
+      "lastSeen": "2026-06-03T11:00:01.129567+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.3104
     },
     {
       "title": "v0.30.2-rc0: fix laguna patch build breakage (#16445)",
@@ -348,10 +444,10 @@
       "image": "https://opengraph.githubassets.com/9ac2319414182b1df8ab9875b876120c7c99562b3e56bcfe2a55865895238eaf/ollama/ollama",
       "published": "2026-06-02T23:35:19+00:00",
       "firstSeen": "2026-06-03T00:00:01.109607+00:00",
-      "lastSeen": "2026-06-03T10:00:01.781383+00:00",
+      "lastSeen": "2026-06-03T11:00:01.129567+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -1.0163
+      "score": -1.0388
     },
     {
       "title": "Cyera eyes $12B valuation at 80x ARR multiple despite operating losses",
@@ -364,10 +460,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2024/01/Cybersecurity-padlocks-Getty.jpg?resize=1200%2C675",
       "published": "2026-06-02T22:50:56+00:00",
       "firstSeen": "2026-06-02T23:00:01.301412+00:00",
-      "lastSeen": "2026-06-03T10:00:01.781383+00:00",
+      "lastSeen": "2026-06-03T11:00:01.129567+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.997
+      "score": 1.9749
     },
     {
       "title": "Microsoft's new MAI models",
@@ -380,10 +476,10 @@
       "image": "",
       "published": "2026-06-02T22:21:52+00:00",
       "firstSeen": "2026-06-02T23:00:01.301412+00:00",
-      "lastSeen": "2026-06-03T10:00:01.781383+00:00",
+      "lastSeen": "2026-06-03T11:00:01.129567+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 6.7862
+      "score": 6.7644
     },
     {
       "title": "Industrial Software Leaders Build Secure, Autonomous AI Engineers With NVIDIA NemoClaw",
@@ -396,10 +492,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/industrial-ai-engineers-kv-1920x1080-1.jpg",
       "published": "2026-06-02T22:00:58+00:00",
       "firstSeen": "2026-06-02T23:00:01.301412+00:00",
-      "lastSeen": "2026-06-03T10:00:01.781383+00:00",
+      "lastSeen": "2026-06-03T11:00:01.129567+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9785
+      "score": 1.9569
     },
     {
       "title": "Trump quietly signs a downsized AI executive order asking companies to voluntarily submit models for review 30 days before release",
@@ -415,7 +511,7 @@
       "lastSeen": "2026-06-03T07:04:16.737349+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -0.5973
+      "score": -0.6179
     },
     {
       "title": "Zoom Introduces ‘ZoomMate,’ an AI Teammate for Post-Meeting Work",
@@ -431,7 +527,7 @@
       "lastSeen": "2026-06-03T10:00:01.781383+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.6005
+      "score": 3.5799
     },
     {
       "title": "Poland will introduce a “sovereignty test” for government tech purchases as Tusk warns AI dependency has reached dangerous proportions",
@@ -447,7 +543,7 @@
       "lastSeen": "2026-06-03T07:04:16.737349+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7997
+      "score": 1.7792
     },
     {
       "title": "RogueDB introduces a simplified database platform designed to reduce infrastructure work for startups and IT teams",
@@ -463,7 +559,7 @@
       "lastSeen": "2026-06-03T07:04:16.737349+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.593
+      "score": 3.5726
     },
     {
       "title": "Cisco Live 2026: New Security Tools Target AI Threats",
@@ -479,7 +575,7 @@
       "lastSeen": "2026-06-03T10:00:01.781383+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8885
+      "score": 2.8683
     },
     {
       "title": "datasette-agent-micropython 0.1a0",
@@ -492,11 +588,11 @@
       "image": "",
       "published": "2026-06-02T19:28:36+00:00",
       "firstSeen": "2026-06-03T01:00:01.689286+00:00",
-      "lastSeen": "2026-06-03T10:00:01.781383+00:00",
+      "lastSeen": "2026-06-03T11:00:01.129567+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 15.6248
+      "score": 15.6047
     },
     {
       "title": "Microsoft Build 2026: The 7 biggest announcements",
@@ -509,10 +605,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/nadella-build-2026.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C2.9395307941329%2C100%2C94.120938411734&amp%3Bw=1200",
       "published": "2026-06-02T19:23:52+00:00",
       "firstSeen": "2026-06-02T20:00:01.996967+00:00",
-      "lastSeen": "2026-06-03T10:00:01.781383+00:00",
+      "lastSeen": "2026-06-03T11:00:01.129567+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0932
+      "score": 3.0731
     },
     {
       "title": "micropython-wasm 0.1a1",
@@ -525,10 +621,10 @@
       "image": "",
       "published": "2026-06-02T19:20:47+00:00",
       "firstSeen": "2026-06-03T01:00:01.689286+00:00",
-      "lastSeen": "2026-06-03T10:00:01.781383+00:00",
+      "lastSeen": "2026-06-03T11:00:01.129567+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.3222
+      "score": 4.3021
     },
     {
       "title": "The EU’s €20 billion plan for five AI gigafactories is falling apart before the first bid is even submitted",
@@ -544,103 +640,7 @@
       "lastSeen": "2026-06-03T07:04:16.737349+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8818
-    },
-    {
-      "title": "Uber caps employee AI spending after blowing through budget in 4 months",
-      "url": "https://techcrunch.com/2026/06/02/uber-caps-employee-ai-spending-after-blowing-through-budget-in-four-months",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Uber's cutback has occurred after the company had reportedly encouraged staff to use AI as much as possible.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/03/claude-app-centered-in-ai-apps-GettyImages-2167861906.jpg?resize=1200%2C801",
-      "published": "2026-06-02T19:11:48+00:00",
-      "firstSeen": "2026-06-02T20:00:01.996967+00:00",
-      "lastSeen": "2026-06-03T10:00:01.781383+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "framework_or_plumbing",
-      "score": -1.1809
-    },
-    {
-      "title": "v0.30.1-rc0",
-      "url": "https://github.com/ollama/ollama/releases/tag/v0.30.1-rc0",
-      "source": "Ollama Releases",
-      "sourceUrl": "https://github.com/ollama/ollama/releases.atom",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "launch: isolate Codex launch configuration (#16437)",
-      "image": "https://opengraph.githubassets.com/f58432515439acae09521e1086a65c3ca25606414736f2d2e437165ac3ad02ba/ollama/ollama",
-      "published": "2026-06-02T19:10:46+00:00",
-      "firstSeen": "2026-06-02T20:00:01.996967+00:00",
-      "lastSeen": "2026-06-03T10:00:01.781383+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.6888
-    },
-    {
-      "title": "Microsoft used agentic AI to make its quantum chip 1,000 times more reliable, then cut its timeline to a scalable quantum computer in half",
-      "url": "https://thenextweb.com/news/microsoft-majorana-2-quantum-chip-agentic-ai-discovery",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Microsoft has unveiled Majorana 2, a next-generation topological quantum chip whose qubits are 1,000 times more reliable than those in the first Majorana chip introduced last year. The improvement is so significant that Microsoft has cut its timeline for achieving a scalable quantum computer from 2033 to 2029, halving the original target. The company credits [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/microsoft-majorana-2-quantum-chip-agentic-ai-discovery-.avif",
-      "published": "2026-06-02T19:09:02+00:00",
-      "firstSeen": "2026-06-02T20:00:01.996967+00:00",
-      "lastSeen": "2026-06-03T07:04:16.737349+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.4782
-    },
-    {
-      "title": "New Microsoft tool lets devs spin up AI behavior tests using text descriptions",
-      "url": "https://techcrunch.com/2026/06/02/new-microsoft-tool-lets-devs-spin-up-ai-behavior-tests-using-text-descriptions",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Microsoft on Tuesday took the wraps off Adaptive Spec-driven Scoring for Evaluation and Regression Testing, an open source framework for spinning up AI evaluations.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/06/GettyImages-172665283.jpg?resize=1200%2C900",
-      "published": "2026-06-02T19:02:21+00:00",
-      "firstSeen": "2026-06-02T20:00:01.996967+00:00",
-      "lastSeen": "2026-06-03T10:00:01.781383+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "framework_or_plumbing",
-      "score": -0.1341
-    },
-    {
-      "title": "NVIDIA Partners With Microsoft on Unified Stack for Agentic AI Deployment, From Windows Devices to Cloud to Local",
-      "url": "https://blogs.nvidia.com/blog/microsoft-build-windows-local-cloud-devices",
-      "source": "NVIDIA Blog",
-      "sourceUrl": "https://blogs.nvidia.com/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "The agentic AI moment has arrived, but delivering on its promise requires more than good models. It also takes fast hardware, secure runtimes, a responsive data layer and models tuned for long-running reasoning. NVIDIA and Microsoft are bringing that full stack to developers across Windows devices, Azure cloud and local deployments. At Microsoft Build, NVIDIA [&#8230;]",
-      "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/logo-lockup-corp-blog-microsoft-1280x680-4999350.png",
-      "published": "2026-06-02T19:00:08+00:00",
-      "firstSeen": "2026-06-02T20:00:01.996967+00:00",
-      "lastSeen": "2026-06-03T10:00:01.781383+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 6.3152
-    },
-    {
-      "title": "Perplexity built an “air-traffic controller” that decides in real time whether your AI query runs on your PC or in the cloud",
-      "url": "https://thenextweb.com/news/perplexity-ai-split-compute-pc-cloud-inference-cost",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Perplexity AI has developed a platform that dynamically splits AI workloads between personal computers and cloud servers, deciding in real time which tasks can run locally on a PC’s processor and which need the power of data centre hardware. CEO Aravind Srinivas announced the system at Computex in Taipei on Tuesday, describing it as an “air-traffic [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/perplexity-ai-split-compute-pc-cloud-inference-cost.avif",
-      "published": "2026-06-02T18:57:39+00:00",
-      "firstSeen": "2026-06-02T20:00:01.996967+00:00",
-      "lastSeen": "2026-06-03T07:04:16.737349+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.7744
+      "score": 2.8618
     },
     {
       "title": "The Life Scientific: Seth Berkley",
@@ -653,10 +653,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-01T20:00:00+00:00",
       "firstSeen": "2026-06-01T21:00:01.828388+00:00",
-      "lastSeen": "2026-06-03T10:00:01.781383+00:00",
+      "lastSeen": "2026-06-03T11:00:01.129567+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.5728
+      "score": 1.5623
     },
     {
       "title": "Dean Lomax on discovering ichthyosaurs and defying nay-sayers",
@@ -669,10 +669,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-26T08:30:00+00:00",
       "firstSeen": "2026-05-26T08:41:33.144051+00:00",
-      "lastSeen": "2026-06-03T10:00:01.781383+00:00",
+      "lastSeen": "2026-06-03T11:00:01.129567+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.1251
+      "score": 1.125
     },
     {
       "title": "The Life Scientific: Hiranya Peiris",
@@ -685,10 +685,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-25T20:00:00+00:00",
       "firstSeen": "2026-05-25T21:00:01.605108+00:00",
-      "lastSeen": "2026-06-03T10:00:01.781383+00:00",
+      "lastSeen": "2026-06-03T11:00:01.129567+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 0.2936
+      "score": 0.2935
     },
     {
       "title": "Helen Hastie on the future of human-robot relations",
