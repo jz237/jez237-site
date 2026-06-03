@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-03T15:00:01.428377+00:00",
+  "updatedAt": "2026-06-03T16:00:01.415350+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -9132,6 +9132,18 @@
     "https://www.anthropic.com/news/services-track-partner-hub": {
       "image": "https://www.anthropic.com/api/opengraph-illustration?name=Hand%20ShapeBuild&amp;backgroundColor=fig",
       "checkedAt": "2026-06-03T15:00:01.428377+00:00"
+    },
+    "https://techcrunch.com/2026/06/03/amazon-will-show-ai-product-images-when-you-search-for-some-reason": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/Screenshot-2026-06-03-at-11.16.52-AM.jpg?resize=1200,695",
+      "checkedAt": "2026-06-03T16:00:01.415350+00:00"
+    },
+    "https://github.com/huggingface/transformers/releases/tag/v5.10.0": {
+      "image": "https://repository-images.githubusercontent.com/155220641/a16c4880-a501-11ea-9e8f-646cf611702e",
+      "checkedAt": "2026-06-03T16:00:01.415350+00:00"
+    },
+    "https://techcrunch.com/2026/06/03/these-two-founders-left-goldman-and-meta-to-build-voice-ai-for-markets-everyone-else-overlooked": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/Athx-Pictures_-Right-Mariama-Left-Ayooluwa.jpg?resize=1200,675",
+      "checkedAt": "2026-06-03T16:00:01.415350+00:00"
     }
   }
 }

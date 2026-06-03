@@ -1,8 +1,8 @@
 {
-  "updatedAt": "2026-06-03T15:00:01.428377+00:00",
+  "updatedAt": "2026-06-03T16:00:01.415350+00:00",
   "items": [
     {
-      "title": "Jacob Wong, Sohan Singh, Prannaya Gupta, Jin Xing Ang, Kritika Johari, U-Xuan Tan",
+      "title": "Assessing Region-Level EEG Contributions to Cognitive Workload Prediction",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -10,12 +10,125 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-03T15:00:07.777213+00:00",
+      "published": "2026-06-03T16:00:13.378802+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-03T15:00:01.428377+00:00",
+      "lastSeen": "2026-06-03T16:00:01.415350+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
+    },
+    {
+      "title": "Amazon will show AI product images when you search for some reason",
+      "url": "https://techcrunch.com/2026/06/03/amazon-will-show-ai-product-images-when-you-search-for-some-reason",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Amazon will use visual search and AI to show AI generated product images that match your search queries. The retailer says it will help guide users to products.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/Screenshot-2026-06-03-at-11.16.52-AM.jpg?resize=1200%2C695",
+      "published": "2026-06-03T15:50:26+00:00",
+      "firstSeen": "2026-06-03T16:00:01.415350+00:00",
+      "lastSeen": "2026-06-03T16:00:01.415350+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.6851
+    },
+    {
+      "title": "This Is How Trump Finally Signed the AI Executive Order",
+      "url": "https://www.wired.com/story/this-is-how-trump-finally-signed-the-ai-executive-order",
+      "source": "Wired AI",
+      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "After shelving the original executive order last month, Donald Trump finally got on board Monday night.",
+      "image": "https://media.wired.com/photos/6a2042b93fae6e15d3dce8a2/master/pass/GettyImages-2278487848.jpg",
+      "published": "2026-06-03T15:46:52+00:00",
+      "firstSeen": "2026-06-03T16:00:01.415350+00:00",
+      "lastSeen": "2026-06-03T16:00:01.415350+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2833
+    },
+    {
+      "title": "Release v5.10.1",
+      "url": "https://github.com/huggingface/transformers/releases/tag/v5.10.1",
+      "source": "Hugging Face Transformers Releases",
+      "sourceUrl": "https://github.com/huggingface/transformers/releases.atom",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Release v5.10.1\nv5.10.0 was yanked as we publish on a corrupted branch. Sorry everyone, this happens when we rush a release!!!\nNew Model additions\nGemma4 unified+ Gemma4 MTP\n\nGemma 4 12B Unified is an encoder-free multimodal model with pretrained and instruction-tuned variants. Unlike standard Gemma 4, which uses dedicated encoder towers, Gemma 4 12B Unified projects raw inputs directly into the language model's embedding space through lightweight linear pipelines. This results in a simpler architecture while maintaining strong multimodal performance.\nKey differences from standard Gemma 4:\n\nNo",
+      "image": "https://private-user-images.githubusercontent.com/48595927/602317672-5e3ee940-f78d-4343-ac7a-889930800aa6.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3ODA1MDI3MTYsIm5iZiI6MTc4MDUwMjQxNiwicGF0aCI6Ii80ODU5NTkyNy82MDIzMTc2NzItNWUzZWU5NDAtZjc4ZC00MzQzLWFjN2EtODg5OTMwODAwYWE2LnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNjA2MDMlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjYwNjAzVDE2MDAxNlomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTNlNDA2NzViNGRkZTljYzU5ZjFiZmRkNjFlOTc5NzFlYmRkODA2ZGI2MTRkMDIwZjJlMTMyNzg4ZTFjMmFmZTQmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0JnJlc3BvbnNlLWNvbnRlbnQtdHlwZT1pbWFnZSUyRnBuZyJ9.OsEk8RnlxKfjwIhTlUfAw16Q7299pK71D7_Zz1IAN2E",
+      "published": "2026-06-03T15:37:41+00:00",
+      "firstSeen": "2026-06-03T16:00:01.415350+00:00",
+      "lastSeen": "2026-06-03T16:00:01.415350+00:00",
+      "model_release": true,
+      "editorial_allow": true,
+      "editorial_reason": "model_release",
+      "score": 14.4787
+    },
+    {
+      "title": "v5.10.0",
+      "url": "https://github.com/huggingface/transformers/releases/tag/v5.10.0",
+      "source": "Hugging Face Transformers Releases",
+      "sourceUrl": "https://github.com/huggingface/transformers/releases.atom",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "v5.10.0",
+      "image": "https://repository-images.githubusercontent.com/155220641/a16c4880-a501-11ea-9e8f-646cf611702e",
+      "published": "2026-06-03T15:08:54+00:00",
+      "firstSeen": "2026-06-03T16:00:01.415350+00:00",
+      "lastSeen": "2026-06-03T16:00:01.415350+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2643
+    },
+    {
+      "title": "NVIDIA Research Unlocks Advanced Grasping, Smarter Autonomous Driving and Agent Training at Scale",
+      "url": "https://blogs.nvidia.com/blog/cvpr-research-grasping-driving-agent-training",
+      "source": "NVIDIA Blog",
+      "sourceUrl": "https://blogs.nvidia.com/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "What makes a robot gripper useful isn’t that it can pick up one object — it’s that it can pick up the next one, and the one after that, with a tool it’s never held before.  What makes an autonomous vehicle system safe isn’t just that it can reason through a situation — it’s that [&#8230;]",
+      "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/CVPR_blog_still-scaled.png",
+      "published": "2026-06-03T15:00:57+00:00",
+      "firstSeen": "2026-06-03T16:00:01.415350+00:00",
+      "lastSeen": "2026-06-03T16:00:01.415350+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 7.6603
+    },
+    {
+      "title": "NVIDIA Enables the Next Era Of Physical AI Research With Agent Skills For Autonomous Vehicles, Robotics And Vision AI",
+      "url": "https://blogs.nvidia.com/blog/cvpr-physical-ai-research-agent-skills",
+      "source": "NVIDIA Blog",
+      "sourceUrl": "https://blogs.nvidia.com/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "At CVPR, NVIDIA is unveiling new physical AI agent skills that help researchers and developers speed the development of autonomous vehicles, robots and vision AI systems. The core challenge in physical AI research isn’t simply developing stronger models. It’s building a full workflow around them — reconstructing real-world scenes, generating edge-case scenarios, training policies, evaluating [&#8230;]",
+      "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/Delta-Defect-Image-Generation.mp4",
+      "published": "2026-06-03T15:00:35+00:00",
+      "firstSeen": "2026-06-03T16:00:01.415350+00:00",
+      "lastSeen": "2026-06-03T16:00:01.415350+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "editorial_score_pass",
+      "score": 10.0601
+    },
+    {
+      "title": "These two founders left Goldman and Meta to build voice AI for markets everyone else overlooked",
+      "url": "https://techcrunch.com/2026/06/03/these-two-founders-left-goldman-and-meta-to-build-voice-ai-for-markets-everyone-else-overlooked",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "The startup's own stack for Africa and Middle East is now handling more than 17,000 calls per day.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/Athx-Pictures_-Right-Mariama-Left-Ayooluwa.jpg?resize=1200%2C675",
+      "published": "2026-06-03T15:00:00+00:00",
+      "firstSeen": "2026-06-03T16:00:01.415350+00:00",
+      "lastSeen": "2026-06-03T16:00:01.415350+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2599
     },
     {
       "title": "Publishers will be able to opt out of AI Search, thanks to new regulation",
@@ -24,14 +137,14 @@
       "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
       "sourceWeight": 0.85,
       "category": "AI",
-      "summary": "U.K. regulators are requiring Google offer a tool allowing website publishers to opt-out of generative AI search features. The option will be tested in the UK then rolled out globally.",
+      "summary": "U.K. regulators are requiring Google offer a tool allowing website publishers to opt-out of generative AI search features. The option will be tested in the U.K. then rolled out globally.",
       "image": "https://techcrunch.com/wp-content/uploads/2019/10/google-search-app-ios.jpg?resize=1200%2C644",
       "published": "2026-06-03T14:58:33+00:00",
       "firstSeen": "2026-06-03T15:00:01.428377+00:00",
-      "lastSeen": "2026-06-03T15:00:01.428377+00:00",
+      "lastSeen": "2026-06-03T16:00:01.415350+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.6892
+      "score": 4.6591
     },
     {
       "title": "v0.30.3",
@@ -44,10 +157,10 @@
       "image": "https://opengraph.githubassets.com/d5b7f056beb356a12c1648fe196566daf924d0261bc41e94a1b0964d3f125691/ollama/ollama",
       "published": "2026-06-03T14:44:57+00:00",
       "firstSeen": "2026-06-03T15:00:01.428377+00:00",
-      "lastSeen": "2026-06-03T15:00:01.428377+00:00",
+      "lastSeen": "2026-06-03T16:00:01.415350+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3524
+      "score": 2.3224
     },
     {
       "title": "Microsoft and OpenAI broke up — now they’re ready to fight",
@@ -60,10 +173,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/10/STK178_Satya_Nadella_B.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C9.9676601489831%2C100%2C80.064679702034&amp%3Bw=1200",
       "published": "2026-06-03T14:04:00+00:00",
       "firstSeen": "2026-06-03T15:00:01.428377+00:00",
-      "lastSeen": "2026-06-03T15:00:01.428377+00:00",
+      "lastSeen": "2026-06-03T16:00:01.415350+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 9.8318
+      "score": 9.8025
     },
     {
       "title": "EU tech sovereignty package: chip emergency powers and curbs on US cloud",
@@ -76,10 +189,10 @@
       "image": "https://media.thenextweb.com/2026/05/European-Commision.avif",
       "published": "2026-06-03T14:03:49+00:00",
       "firstSeen": "2026-06-03T15:00:01.428377+00:00",
-      "lastSeen": "2026-06-03T15:00:01.428377+00:00",
+      "lastSeen": "2026-06-03T16:00:01.415350+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1217
+      "score": 2.0924
     },
     {
       "title": "Meta’s AI agent for WhatsApp Business is now available globally",
@@ -92,11 +205,11 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/02/whatsapp-iphone-icon.jpg?resize=1200%2C800",
       "published": "2026-06-03T13:40:00+00:00",
       "firstSeen": "2026-06-03T14:00:01.283788+00:00",
-      "lastSeen": "2026-06-03T15:00:01.428377+00:00",
+      "lastSeen": "2026-06-03T16:00:01.415350+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.35
+      "score": 14.321
     },
     {
       "title": "Coralogix raises $200M on bet that someone needs to watch the AI agents",
@@ -109,10 +222,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/coralogix-co-founders.jpg?resize=1200%2C800",
       "published": "2026-06-03T13:02:51+00:00",
       "firstSeen": "2026-06-03T14:00:01.283788+00:00",
-      "lastSeen": "2026-06-03T15:00:01.428377+00:00",
+      "lastSeen": "2026-06-03T16:00:01.415350+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9319
+      "score": 4.9034
     },
     {
       "title": "5 ways Google Search can level up your thrift and vintage shopping",
@@ -125,10 +238,10 @@
       "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Google_Thrifting_Header.max-600x600.format-webp.webp",
       "published": "2026-06-03T13:00:00+00:00",
       "firstSeen": "2026-06-03T14:00:01.283788+00:00",
-      "lastSeen": "2026-06-03T15:00:01.428377+00:00",
+      "lastSeen": "2026-06-03T16:00:01.415350+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.7705
+      "score": 4.742
     },
     {
       "title": "Direct Preference Optimization Beyond Chatbots",
@@ -141,10 +254,10 @@
       "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/Dharma-AI/direct-preference-optimization-beyond-chatbots.png",
       "published": "2026-06-03T12:55:11+00:00",
       "firstSeen": "2026-06-03T13:00:01.958544+00:00",
-      "lastSeen": "2026-06-03T15:00:01.428377+00:00",
+      "lastSeen": "2026-06-03T16:00:01.415350+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.6682
+      "score": 2.6398
     },
     {
       "title": "Uber Caps Usage of AI Tools Like Claude Code to Manage Costs",
@@ -157,10 +270,10 @@
       "image": "",
       "published": "2026-06-03T12:01:27+00:00",
       "firstSeen": "2026-06-03T13:00:01.958544+00:00",
-      "lastSeen": "2026-06-03T15:00:01.428377+00:00",
+      "lastSeen": "2026-06-03T16:00:01.415350+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.3027
+      "score": 11.275
     },
     {
       "title": "Tata licenses a Chinese EV platform to rescue its stalled premium push",
@@ -173,10 +286,10 @@
       "image": "https://media.thenextweb.com/2026/05/Tata-Group.avif",
       "published": "2026-06-03T11:30:28+00:00",
       "firstSeen": "2026-06-03T14:00:01.283788+00:00",
-      "lastSeen": "2026-06-03T15:00:01.428377+00:00",
+      "lastSeen": "2026-06-03T16:00:01.415350+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0483
+      "score": 2.0209
     },
     {
       "title": "AI is saving workers hours a week. Most of it is being thrown away",
@@ -189,10 +302,10 @@
       "image": "https://media.thenextweb.com/2026/06/AI-productivity-report.avif",
       "published": "2026-06-03T11:00:30+00:00",
       "firstSeen": "2026-06-03T14:00:01.283788+00:00",
-      "lastSeen": "2026-06-03T15:00:01.428377+00:00",
+      "lastSeen": "2026-06-03T16:00:01.415350+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 2.5345
+      "score": 2.5076
     },
     {
       "title": "Nvidia’s RTX Spark Laptops Look Hell-Bent on Disruption",
@@ -205,10 +318,10 @@
       "image": "https://media.wired.com/photos/6a1f958fbb0dd697e44abd3e/master/pass/Courtesy-of-Nvidia.jpg",
       "published": "2026-06-03T11:00:00+00:00",
       "firstSeen": "2026-06-03T12:00:01.656951+00:00",
-      "lastSeen": "2026-06-03T15:00:01.428377+00:00",
+      "lastSeen": "2026-06-03T16:00:01.415350+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1743
+      "score": 2.1473
     },
     {
       "title": "Suno raises at a $5.4bn valuation, more than doubling its worth in six months",
@@ -221,10 +334,10 @@
       "image": "https://media.thenextweb.com/2026/06/Suno.avif",
       "published": "2026-06-03T10:52:33+00:00",
       "firstSeen": "2026-06-03T12:00:01.656951+00:00",
-      "lastSeen": "2026-06-03T15:00:01.428377+00:00",
+      "lastSeen": "2026-06-03T16:00:01.415350+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0309
+      "score": 3.0041
     },
     {
       "title": "Lovable makes Google Cloud a primary partner to win over corporate buyers",
@@ -237,10 +350,10 @@
       "image": "https://media.thenextweb.com/2025/07/01938c14-fbd1-7090-b136-1328926ab8fd.avif",
       "published": "2026-06-03T10:29:34+00:00",
       "firstSeen": "2026-06-03T11:00:01.129567+00:00",
-      "lastSeen": "2026-06-03T15:00:01.428377+00:00",
+      "lastSeen": "2026-06-03T16:00:01.415350+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.1205
+      "score": 7.094
     },
     {
       "title": "Apple agrees to hand India the financials it spent months trying to withhold",
@@ -253,10 +366,10 @@
       "image": "https://media.thenextweb.com/2026/05/Apple.avif",
       "published": "2026-06-03T10:05:30+00:00",
       "firstSeen": "2026-06-03T11:00:01.129567+00:00",
-      "lastSeen": "2026-06-03T15:00:01.428377+00:00",
+      "lastSeen": "2026-06-03T16:00:01.415350+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1098
+      "score": 3.0835
     },
     {
       "title": "EU court frees Meta’s Marketplace from gatekeeper rules but keeps Messenger in",
@@ -269,10 +382,10 @@
       "image": "https://media.thenextweb.com/2026/04/meta-users.avif",
       "published": "2026-06-03T10:00:28+00:00",
       "firstSeen": "2026-06-03T11:00:01.129567+00:00",
-      "lastSeen": "2026-06-03T15:00:01.428377+00:00",
+      "lastSeen": "2026-06-03T16:00:01.415350+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.7076
+      "score": 3.6813
     },
     {
       "title": "What’s Worth More Than Cash in San Francisco Real Estate? Anthropic Stock",
@@ -285,10 +398,10 @@
       "image": "https://media.wired.com/photos/6a1f6880163032d6de40fd16/master/pass/Exchange-Home-for-Anthropic-Stock-Business.jpg",
       "published": "2026-06-03T10:00:00+00:00",
       "firstSeen": "2026-06-03T11:00:01.129567+00:00",
-      "lastSeen": "2026-06-03T15:00:01.428377+00:00",
+      "lastSeen": "2026-06-03T16:00:01.415350+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1473
+      "score": 5.1211
     },
     {
       "title": "SpaceX fixes IPO at $135 a share for a $1.75tn valuation and a record listing",
@@ -301,10 +414,10 @@
       "image": "https://media.thenextweb.com/2026/05/spacex-cursor-acquisition-ipo-60-billion-ai-coding.avif",
       "published": "2026-06-03T09:30:12+00:00",
       "firstSeen": "2026-06-03T11:00:01.129567+00:00",
-      "lastSeen": "2026-06-03T15:00:01.428377+00:00",
+      "lastSeen": "2026-06-03T16:00:01.415350+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9942
+      "score": 1.9684
     },
     {
       "title": "Factorial raises $150M at a $2.5bn valuation, with General Catalyst betting twice",
@@ -317,10 +430,10 @@
       "image": "https://media.thenextweb.com/2026/06/Factorial.avif",
       "published": "2026-06-03T09:19:05+00:00",
       "firstSeen": "2026-06-03T10:00:01.781383+00:00",
-      "lastSeen": "2026-06-03T15:00:01.428377+00:00",
+      "lastSeen": "2026-06-03T16:00:01.415350+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9894
+      "score": 1.9636
     },
     {
       "title": "Apoha emerges from stealth with $36M to teach machines how matter behaves",
@@ -333,10 +446,10 @@
       "image": "https://media.thenextweb.com/2026/06/Apoha.avif",
       "published": "2026-06-03T09:00:13+00:00",
       "firstSeen": "2026-06-03T10:00:01.781383+00:00",
-      "lastSeen": "2026-06-03T15:00:01.428377+00:00",
+      "lastSeen": "2026-06-03T16:00:01.415350+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9812
+      "score": 1.9557
     },
     {
       "title": "Redditors Are Using AI to Beat Obscene World Cup Ticket Prices",
@@ -349,10 +462,10 @@
       "image": "https://media.wired.com/photos/6a1fdc7925887801d470b4c0/master/pass/WIRED-WC26-Cristian-Mera-Reddit.png",
       "published": "2026-06-03T09:00:00+00:00",
       "firstSeen": "2026-06-03T10:00:01.781383+00:00",
-      "lastSeen": "2026-06-03T15:00:01.428377+00:00",
+      "lastSeen": "2026-06-03T16:00:01.415350+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.1211
+      "score": 6.0956
     },
     {
       "title": "AI has a water problem. Google thinks it has a fix",
@@ -365,10 +478,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/STKS528_DATA_CENTERS_B.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-03T09:00:00+00:00",
       "firstSeen": "2026-06-03T10:00:01.781383+00:00",
-      "lastSeen": "2026-06-03T15:00:01.428377+00:00",
+      "lastSeen": "2026-06-03T16:00:01.415350+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1911
+      "score": 2.1656
     },
     {
       "title": "Google must let publishers opt out of AI Search features, rules UK",
@@ -381,10 +494,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/04/STKS487_ANTITRUST_2__STK093_GOOGLE.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-03T08:45:48+00:00",
       "firstSeen": "2026-06-03T10:00:01.781383+00:00",
-      "lastSeen": "2026-06-03T15:00:01.428377+00:00",
+      "lastSeen": "2026-06-03T16:00:01.415350+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.685
+      "score": 5.6597
     },
     {
       "title": "Applied Aerospace & Defense raises $650M in an IPO the market wanted ten times over",
@@ -400,7 +513,7 @@
       "lastSeen": "2026-06-03T14:00:01.283788+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0727
+      "score": 3.0474
     },
     {
       "title": "DeepSeek lines up its first outside money: a $7bn round at up to $59bn",
@@ -416,7 +529,7 @@
       "lastSeen": "2026-06-03T13:00:01.958544+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9632
+      "score": 4.9381
     },
     {
       "title": "France’s Quobly raises €115M to put a quantum computer on a silicon chip",
@@ -432,7 +545,7 @@
       "lastSeen": "2026-06-03T13:00:01.958544+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.96
+      "score": 1.935
     },
     {
       "title": "Flok Health raises $12.5M to scale an AI physiotherapist the NHS lets work unsupervised",
@@ -448,7 +561,7 @@
       "lastSeen": "2026-06-03T11:00:01.129567+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.756
+      "score": 3.7312
     },
     {
       "title": "Megaport raises A$827M to build a distributed AI cloud and chase the inference market",
@@ -464,7 +577,7 @@
       "lastSeen": "2026-06-03T10:00:01.781383+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9517
+      "score": 2.927
     },
     {
       "title": "Gigaton raises $26M to rip out the control software running heavy industry",
@@ -480,7 +593,7 @@
       "lastSeen": "2026-06-03T10:00:01.781383+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9438
+      "score": 1.9193
     },
     {
       "title": "UK regulator imposes new rules on Google search, including an AI-training opt-out",
@@ -496,7 +609,7 @@
       "lastSeen": "2026-06-03T10:00:01.781383+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.0411
+      "score": 6.0167
     },
     {
       "title": "GitLab to cut 14% of staff and exit 22 countries in ‘agentic era’ restructuring",
@@ -512,7 +625,7 @@
       "lastSeen": "2026-06-03T10:00:01.781383+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.6381
+      "score": 4.6137
     },
     {
       "title": "Musk allies back a private-sector DOGE as ex-staffers launch Special",
@@ -528,119 +641,7 @@
       "lastSeen": "2026-06-03T09:00:01.398224+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.6338
-    },
-    {
-      "title": "Kodesage raises $6.6M to drag enterprise legacy software into the AI era, without it leaving the building",
-      "url": "https://thenextweb.com/news/kodesage-6-6m-seed-legacy-software-modernisation",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The London and Budapest startup runs its modernisation AI entirely on-premise, aimed at the banks and insurers whose core systems still run on COBOL and Oracle Forms. The most important software in a bank is often the software nobody fully understands any more. It runs the core processes, it has run them for decades, and [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/Kodesage.avif",
-      "published": "2026-06-03T07:00:26+00:00",
-      "firstSeen": "2026-06-03T08:00:01.840940+00:00",
-      "lastSeen": "2026-06-03T09:00:01.398224+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "framework_or_plumbing",
-      "score": -1.169
-    },
-    {
-      "title": "UK committee urges break clause on Palantir’s £330M NHS data contract",
-      "url": "https://thenextweb.com/news/palantir-nhs-deal-uk-lawmakers",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "A UK parliamentary committee has called Palantir’s role in the public sector an “unacceptable point of weakness” and urged the government to break its NHS contract with the American company. The Science, Innovation and Technology Committee singled out Palantir as the technology provider it found most concerning, arguing that the UK was at risk of [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/Alex-Karp.avif",
-      "published": "2026-06-03T06:58:55+00:00",
-      "firstSeen": "2026-06-03T08:00:01.840940+00:00",
-      "lastSeen": "2026-06-03T08:00:01.840940+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.9304
-    },
-    {
-      "title": "v1.87.0",
-      "url": "https://github.com/BerriAI/litellm/releases/tag/v1.87.0",
-      "source": "LiteLLM Releases",
-      "sourceUrl": "https://github.com/BerriAI/litellm/releases.atom",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Verify Docker Image Signature\nAll LiteLLM Docker images are signed with cosign. Every release is signed with the same key introduced in commit 0112e53.\nVerify using the pinned commit hash (recommended):\nA commit hash is cryptographically immutable, so this is the strongest way to ensure you are using the original signing key:\ncosign verify \\\n  --key https://raw.githubusercontent.com/BerriAI/litellm/0112e53046018d726492c814b3644b7d376029d0/cosign.pub \\\n  ghcr.io/berriai/litellm:v1.87.0\nVerify using the release tag (convenience):\nTags are protected in this repository and resolve to the same key.",
-      "image": "https://opengraph.githubassets.com/39926c571856ad8a9f5b42f8c974345874e3338547b282c449d7a7d41246330d/BerriAI/litellm/releases/tag/v1.87.0",
-      "published": "2026-06-03T06:47:33+00:00",
-      "firstSeen": "2026-06-02T05:00:01.988171+00:00",
-      "lastSeen": "2026-06-03T15:00:01.428377+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.7657
-    },
-    {
-      "title": "ChatGPT hits 1 billion monthly users faster than any app before it",
-      "url": "https://thenextweb.com/news/chatgpt-1-billion-monthly-active-users",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "One billion is the number apps spend years chasing and most never reach. ChatGPT got there faster than anything before it. OpenAI’s app crossed 1 billion global monthly active users in May, roughly three years after launch, according to estimates from Sensor Tower, making it the quickest app in history to the milestone. The pace [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/03/The-other-side-of-ads-in-ChatGPT.avif",
-      "published": "2026-06-03T06:38:58+00:00",
-      "firstSeen": "2026-06-03T07:00:01.485029+00:00",
-      "lastSeen": "2026-06-03T07:04:16.737349+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 11.7223
-    },
-    {
-      "title": "v0.30.2",
-      "url": "https://github.com/ollama/ollama/releases/tag/v0.30.2",
-      "source": "Ollama Releases",
-      "sourceUrl": "https://github.com/ollama/ollama/releases.atom",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "What's Changed\n\nfeat(launch): show and auto-install Cline CLI by @hoyyeva in #16402\nlog template details to aid troubleshooting by @dhiltgen in #16403\ncmd/launch: add Qwen code integration by @hoyyeva in #15900\nlaunch: fix opencode local model limits by @dhiltgen in #16425\nllm: include cached prompt tokens in llama-server counts by @dhiltgen in #16428\nHarden app markdown URL handling by @dhiltgen in #16380\ndiscover: allow Radeon 8060S iGPU by default by @dhiltgen in #16429\nllm: detect llama-server load stalls from output by @dhiltgen in #16427\nMore harden app markdown URL handling by @dhiltgen",
-      "image": "https://opengraph.githubassets.com/a749683fac0e18c057bca67d6077ee47e3c2617ba7a8cc0ebbb22e999bb15977/ollama/ollama",
-      "published": "2026-06-03T02:54:30+00:00",
-      "firstSeen": "2026-06-03T01:45:03.395007+00:00",
-      "lastSeen": "2026-06-03T15:00:01.428377+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 6.1462
-    },
-    {
-      "title": "v1.86.3",
-      "url": "https://github.com/BerriAI/litellm/releases/tag/v1.86.3",
-      "source": "LiteLLM Releases",
-      "sourceUrl": "https://github.com/BerriAI/litellm/releases.atom",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Verify Docker Image Signature\nAll LiteLLM Docker images are signed with cosign. Every release is signed with the same key introduced in commit 0112e53.\nVerify using the pinned commit hash (recommended):\nA commit hash is cryptographically immutable, so this is the strongest way to ensure you are using the original signing key:\ncosign verify \\\n  --key https://raw.githubusercontent.com/BerriAI/litellm/0112e53046018d726492c814b3644b7d376029d0/cosign.pub \\\n  ghcr.io/berriai/litellm:v1.86.3\nVerify using the release tag (convenience):\nTags are protected in this repository and resolve to the same key.",
-      "image": "https://opengraph.githubassets.com/46cae93f3bb3e2195285f18b70c2c4f409ae74d529f9e30b6b35b46974d46292/BerriAI/litellm/releases/tag/v1.86.3",
-      "published": "2026-06-03T01:40:43+00:00",
-      "firstSeen": "2026-06-03T01:45:03.395007+00:00",
-      "lastSeen": "2026-06-03T15:00:01.428377+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.6498
-    },
-    {
-      "title": "Introducing the Services Track and Partner Hub of the Claude Partner Network",
-      "url": "https://www.anthropic.com/news/services-track-partner-hub",
-      "source": "Anthropic News",
-      "sourceUrl": "https://raw.githubusercontent.com/Olshansk/rss-feeds/main/feeds/feed_anthropic_news.xml",
-      "sourceWeight": 1.0,
-      "category": "AI",
-      "summary": "Introducing the Services Track and Partner Hub of the Claude Partner Network",
-      "image": "https://www.anthropic.com/api/opengraph-illustration?name=Hand+ShapeBuild&amp%3BbackgroundColor=fig",
-      "published": "2026-06-03T00:00:00+00:00",
-      "firstSeen": "2026-06-03T15:00:01.428377+00:00",
-      "lastSeen": "2026-06-03T15:00:01.428377+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 8.1252
+      "score": 2.6096
     },
     {
       "title": "The Life Scientific: Seth Berkley",
@@ -653,10 +654,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-01T20:00:00+00:00",
       "firstSeen": "2026-06-01T21:00:01.828388+00:00",
-      "lastSeen": "2026-06-03T15:00:01.428377+00:00",
+      "lastSeen": "2026-06-03T16:00:01.415350+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.5232
+      "score": 1.514
     },
     {
       "title": "Dean Lomax on discovering ichthyosaurs and defying nay-sayers",
@@ -669,10 +670,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-26T08:30:00+00:00",
       "firstSeen": "2026-05-26T08:41:33.144051+00:00",
-      "lastSeen": "2026-06-03T15:00:01.428377+00:00",
+      "lastSeen": "2026-06-03T16:00:01.415350+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.1244
+      "score": 1.1243
     },
     {
       "title": "The Life Scientific: Hiranya Peiris",
@@ -685,10 +686,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-25T20:00:00+00:00",
       "firstSeen": "2026-05-25T21:00:01.605108+00:00",
-      "lastSeen": "2026-06-03T15:00:01.428377+00:00",
+      "lastSeen": "2026-06-03T16:00:01.415350+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 0.2931
+      "score": 0.293
     },
     {
       "title": "Helen Hastie on the future of human-robot relations",
