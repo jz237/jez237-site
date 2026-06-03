@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-03T22:00:01.859369+00:00",
+  "updatedAt": "2026-06-03T23:00:01.869358+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -9184,6 +9184,14 @@
     "https://www.techrepublic.com/article/news-microsoft-windows-ai-agents-developer-tools": {
       "image": "https://assets.techrepublic.com/uploads/2026/06/tr-06032026-microsoft-windows-ai-agents-developer-tools.jpg?f=jpeg",
       "checkedAt": "2026-06-03T22:00:01.859369+00:00"
+    },
+    "https://techcrunch.com/2026/06/03/lovable-signs-multi-year-deal-with-google-cloud-to-up-usage-5x-source-says": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/GettyImages-2245627953.jpg?resize=1200,800",
+      "checkedAt": "2026-06-03T23:00:01.869358+00:00"
+    },
+    "https://github.com/ollama/ollama/releases/tag/v0.30.4-rc0": {
+      "image": "https://opengraph.githubassets.com/84888f0a0da64de337aa808b67e889b1e42e486980e24cf05cef13df2a7820cc/ollama/ollama",
+      "checkedAt": "2026-06-03T23:00:01.869358+00:00"
     }
   }
 }
