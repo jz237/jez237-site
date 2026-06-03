@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-03T11:00:01.129567+00:00",
+  "updatedAt": "2026-06-03T12:00:01.656951+00:00",
   "items": [
     {
       "title": "Testing the Test: Score-Direction Instability in Class-Split Anomaly Detection",
@@ -10,12 +10,44 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-03T11:00:06.539313+00:00",
+      "published": "2026-06-03T12:00:10.040367+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-03T11:00:01.129567+00:00",
+      "lastSeen": "2026-06-03T12:00:01.656951+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
+    },
+    {
+      "title": "Nvidia’s RTX Spark Laptops Look Hell-Bent on Disruption",
+      "url": "https://www.wired.com/story/nvidia-rtx-spark-laptop-disruption",
+      "source": "Wired AI",
+      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "The company’s RTX Spark chips might finally turn the “AI PC” into reality.",
+      "image": "https://media.wired.com/photos/6a1f958fbb0dd697e44abd3e/master/pass/Courtesy-of-Nvidia.jpg",
+      "published": "2026-06-03T11:00:00+00:00",
+      "firstSeen": "2026-06-03T12:00:01.656951+00:00",
+      "lastSeen": "2026-06-03T12:00:01.656951+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2599
+    },
+    {
+      "title": "Suno raises at a $5.4bn valuation, more than doubling its worth in six months",
+      "url": "https://thenextweb.com/news/suno-5-4-billion-valuation-raise",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Eighteen months ago Suno was the AI company the music industry wanted to destroy. Every major record label had sued it, accusing it of training its models on copyrighted songs without permission. Now the labels are its partners, and investors have repriced the company accordingly. Suno has raised new capital at a $5.4bn valuation, more than [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/Suno.avif",
+      "published": "2026-06-03T10:52:33+00:00",
+      "firstSeen": "2026-06-03T12:00:01.656951+00:00",
+      "lastSeen": "2026-06-03T12:00:01.656951+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.1162
     },
     {
       "title": "Lovable makes Google Cloud a primary partner to win over corporate buyers",
@@ -28,10 +60,10 @@
       "image": "https://media.thenextweb.com/2025/07/01938c14-fbd1-7090-b136-1328926ab8fd.avif",
       "published": "2026-06-03T10:29:34+00:00",
       "firstSeen": "2026-06-03T11:00:01.129567+00:00",
-      "lastSeen": "2026-06-03T11:00:01.129567+00:00",
+      "lastSeen": "2026-06-03T12:00:01.656951+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.2346
+      "score": 7.2049
     },
     {
       "title": "Apple agrees to hand India the financials it spent months trying to withhold",
@@ -44,10 +76,10 @@
       "image": "https://media.thenextweb.com/2026/05/Apple.avif",
       "published": "2026-06-03T10:05:30+00:00",
       "firstSeen": "2026-06-03T11:00:01.129567+00:00",
-      "lastSeen": "2026-06-03T11:00:01.129567+00:00",
+      "lastSeen": "2026-06-03T12:00:01.656951+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2226
+      "score": 3.1932
     },
     {
       "title": "EU court frees Meta’s Marketplace from gatekeeper rules but keeps Messenger in",
@@ -60,10 +92,10 @@
       "image": "https://media.thenextweb.com/2026/04/meta-users.avif",
       "published": "2026-06-03T10:00:28+00:00",
       "firstSeen": "2026-06-03T11:00:01.129567+00:00",
-      "lastSeen": "2026-06-03T11:00:01.129567+00:00",
+      "lastSeen": "2026-06-03T12:00:01.656951+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.8201
+      "score": 3.7908
     },
     {
       "title": "What’s Worth More Than Cash in San Francisco Real Estate? Anthropic Stock",
@@ -76,10 +108,10 @@
       "image": "https://media.wired.com/photos/6a1f6880163032d6de40fd16/master/pass/Exchange-Home-for-Anthropic-Stock-Business.jpg",
       "published": "2026-06-03T10:00:00+00:00",
       "firstSeen": "2026-06-03T11:00:01.129567+00:00",
-      "lastSeen": "2026-06-03T11:00:01.129567+00:00",
+      "lastSeen": "2026-06-03T12:00:01.656951+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2599
+      "score": 5.2305
     },
     {
       "title": "SpaceX fixes IPO at $135 a share for a $1.75tn valuation and a record listing",
@@ -92,10 +124,10 @@
       "image": "https://media.thenextweb.com/2026/05/spacex-cursor-acquisition-ipo-60-billion-ai-coding.avif",
       "published": "2026-06-03T09:30:12+00:00",
       "firstSeen": "2026-06-03T11:00:01.129567+00:00",
-      "lastSeen": "2026-06-03T11:00:01.129567+00:00",
+      "lastSeen": "2026-06-03T12:00:01.656951+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1052
+      "score": 2.0763
     },
     {
       "title": "Factorial raises $150M at a $2.5bn valuation, with General Catalyst betting twice",
@@ -108,10 +140,10 @@
       "image": "https://media.thenextweb.com/2026/06/Factorial.avif",
       "published": "2026-06-03T09:19:05+00:00",
       "firstSeen": "2026-06-03T10:00:01.781383+00:00",
-      "lastSeen": "2026-06-03T11:00:01.129567+00:00",
+      "lastSeen": "2026-06-03T12:00:01.656951+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0998
+      "score": 2.071
     },
     {
       "title": "Apoha emerges from stealth with $36M to teach machines how matter behaves",
@@ -124,10 +156,10 @@
       "image": "https://media.thenextweb.com/2026/06/Apoha.avif",
       "published": "2026-06-03T09:00:13+00:00",
       "firstSeen": "2026-06-03T10:00:01.781383+00:00",
-      "lastSeen": "2026-06-03T11:00:01.129567+00:00",
+      "lastSeen": "2026-06-03T12:00:01.656951+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0907
+      "score": 2.0621
     },
     {
       "title": "Redditors Are Using AI to Beat Obscene World Cup Ticket Prices",
@@ -140,10 +172,10 @@
       "image": "https://media.wired.com/photos/6a1fdc7925887801d470b4c0/master/pass/WIRED-WC26-Cristian-Mera-Reddit.png",
       "published": "2026-06-03T09:00:00+00:00",
       "firstSeen": "2026-06-03T10:00:01.781383+00:00",
-      "lastSeen": "2026-06-03T11:00:01.129567+00:00",
+      "lastSeen": "2026-06-03T12:00:01.656951+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.2305
+      "score": 6.202
     },
     {
       "title": "AI has a water problem. Google thinks it has a fix",
@@ -156,10 +188,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/STKS528_DATA_CENTERS_B.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-03T09:00:00+00:00",
       "firstSeen": "2026-06-03T10:00:01.781383+00:00",
-      "lastSeen": "2026-06-03T11:00:01.129567+00:00",
+      "lastSeen": "2026-06-03T12:00:01.656951+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3005
+      "score": 2.272
     },
     {
       "title": "Google must let publishers opt out of AI Search features, rules UK",
@@ -172,10 +204,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/04/STKS487_ANTITRUST_2__STK093_GOOGLE.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-03T08:45:48+00:00",
       "firstSeen": "2026-06-03T10:00:01.781383+00:00",
-      "lastSeen": "2026-06-03T11:00:01.129567+00:00",
+      "lastSeen": "2026-06-03T12:00:01.656951+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.7937
+      "score": 5.7654
     },
     {
       "title": "Applied Aerospace & Defense raises $650M in an IPO the market wanted ten times over",
@@ -188,10 +220,10 @@
       "image": "https://media.thenextweb.com/2026/06/Applied-Aerospace-Defense.avif",
       "published": "2026-06-03T08:40:24+00:00",
       "firstSeen": "2026-06-03T09:00:01.398224+00:00",
-      "lastSeen": "2026-06-03T11:00:01.129567+00:00",
+      "lastSeen": "2026-06-03T12:00:01.656951+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1811
+      "score": 3.1529
     },
     {
       "title": "DeepSeek lines up its first outside money: a $7bn round at up to $59bn",
@@ -204,10 +236,10 @@
       "image": "https://media.thenextweb.com/2026/04/DeepSeek.avif",
       "published": "2026-06-03T08:17:55+00:00",
       "firstSeen": "2026-06-03T09:00:01.398224+00:00",
-      "lastSeen": "2026-06-03T11:00:01.129567+00:00",
+      "lastSeen": "2026-06-03T12:00:01.656951+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0705
+      "score": 5.0425
     },
     {
       "title": "France’s Quobly raises €115M to put a quantum computer on a silicon chip",
@@ -220,10 +252,10 @@
       "image": "https://media.thenextweb.com/2026/06/Quobly.avif",
       "published": "2026-06-03T08:10:22+00:00",
       "firstSeen": "2026-06-03T09:00:01.398224+00:00",
-      "lastSeen": "2026-06-03T11:00:01.129567+00:00",
+      "lastSeen": "2026-06-03T12:00:01.656951+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0669
+      "score": 2.039
     },
     {
       "title": "Flok Health raises $12.5M to scale an AI physiotherapist the NHS lets work unsupervised",
@@ -239,7 +271,7 @@
       "lastSeen": "2026-06-03T11:00:01.129567+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.8625
+      "score": 3.8347
     },
     {
       "title": "Megaport raises A$827M to build a distributed AI cloud and chase the inference market",
@@ -255,7 +287,7 @@
       "lastSeen": "2026-06-03T10:00:01.781383+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0576
+      "score": 3.03
     },
     {
       "title": "Gigaton raises $26M to rip out the control software running heavy industry",
@@ -271,7 +303,7 @@
       "lastSeen": "2026-06-03T10:00:01.781383+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0488
+      "score": 2.0215
     },
     {
       "title": "UK regulator imposes new rules on Google search, including an AI-training opt-out",
@@ -287,7 +319,7 @@
       "lastSeen": "2026-06-03T10:00:01.781383+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.1459
+      "score": 6.1186
     },
     {
       "title": "GitLab to cut 14% of staff and exit 22 countries in ‘agentic era’ restructuring",
@@ -303,7 +335,7 @@
       "lastSeen": "2026-06-03T10:00:01.781383+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.7424
+      "score": 4.7152
     },
     {
       "title": "Musk allies back a private-sector DOGE as ex-staffers launch Special",
@@ -319,7 +351,7 @@
       "lastSeen": "2026-06-03T09:00:01.398224+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7377
+      "score": 2.7106
     },
     {
       "title": "Kodesage raises $6.6M to drag enterprise legacy software into the AI era, without it leaving the building",
@@ -335,7 +367,7 @@
       "lastSeen": "2026-06-03T09:00:01.398224+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -1.0655
+      "score": -1.0925
     },
     {
       "title": "UK committee urges break clause on Palantir’s £330M NHS data contract",
@@ -351,7 +383,7 @@
       "lastSeen": "2026-06-03T08:00:01.840940+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0338
+      "score": 2.0069
     },
     {
       "title": "v1.87.0",
@@ -364,10 +396,10 @@
       "image": "https://opengraph.githubassets.com/39926c571856ad8a9f5b42f8c974345874e3338547b282c449d7a7d41246330d/BerriAI/litellm/releases/tag/v1.87.0",
       "published": "2026-06-03T06:47:33+00:00",
       "firstSeen": "2026-06-02T05:00:01.988171+00:00",
-      "lastSeen": "2026-06-03T11:00:01.129567+00:00",
+      "lastSeen": "2026-06-03T12:00:01.656951+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8687
+      "score": 2.8418
     },
     {
       "title": "ChatGPT hits 1 billion monthly users faster than any app before it",
@@ -383,7 +415,7 @@
       "lastSeen": "2026-06-03T07:04:16.737349+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.8248
+      "score": 11.7981
     },
     {
       "title": "v0.30.2",
@@ -396,10 +428,10 @@
       "image": "https://opengraph.githubassets.com/a749683fac0e18c057bca67d6077ee47e3c2617ba7a8cc0ebbb22e999bb15977/ollama/ollama",
       "published": "2026-06-03T02:54:30+00:00",
       "firstSeen": "2026-06-03T01:45:03.395007+00:00",
-      "lastSeen": "2026-06-03T11:00:01.129567+00:00",
+      "lastSeen": "2026-06-03T12:00:01.656951+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.2386
+      "score": 6.2145
     },
     {
       "title": "v1.86.3",
@@ -412,10 +444,10 @@
       "image": "https://opengraph.githubassets.com/46cae93f3bb3e2195285f18b70c2c4f409ae74d529f9e30b6b35b46974d46292/BerriAI/litellm/releases/tag/v1.86.3",
       "published": "2026-06-03T01:40:43+00:00",
       "firstSeen": "2026-06-03T01:45:03.395007+00:00",
-      "lastSeen": "2026-06-03T11:00:01.129567+00:00",
+      "lastSeen": "2026-06-03T12:00:01.656951+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7391
+      "score": 2.7158
     },
     {
       "title": "What we learned mapping a year’s worth of AI-enabled cyber threats",
@@ -428,10 +460,10 @@
       "image": "https://www.anthropic.com/api/opengraph-illustration?name=Object-LaptopSecure&amp%3BbackgroundColor=cactus",
       "published": "2026-06-03T00:00:00+00:00",
       "firstSeen": "2026-06-03T11:00:01.129567+00:00",
-      "lastSeen": "2026-06-03T11:00:01.129567+00:00",
+      "lastSeen": "2026-06-03T12:00:01.656951+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3104
+      "score": 3.2882
     },
     {
       "title": "v0.30.2-rc0: fix laguna patch build breakage (#16445)",
@@ -444,10 +476,10 @@
       "image": "https://opengraph.githubassets.com/9ac2319414182b1df8ab9875b876120c7c99562b3e56bcfe2a55865895238eaf/ollama/ollama",
       "published": "2026-06-02T23:35:19+00:00",
       "firstSeen": "2026-06-03T00:00:01.109607+00:00",
-      "lastSeen": "2026-06-03T11:00:01.129567+00:00",
+      "lastSeen": "2026-06-03T12:00:01.656951+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -1.0388
+      "score": -1.0608
     },
     {
       "title": "Cyera eyes $12B valuation at 80x ARR multiple despite operating losses",
@@ -460,10 +492,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2024/01/Cybersecurity-padlocks-Getty.jpg?resize=1200%2C675",
       "published": "2026-06-02T22:50:56+00:00",
       "firstSeen": "2026-06-02T23:00:01.301412+00:00",
-      "lastSeen": "2026-06-03T11:00:01.129567+00:00",
+      "lastSeen": "2026-06-03T12:00:01.656951+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9749
+      "score": 1.9534
     },
     {
       "title": "Microsoft's new MAI models",
@@ -476,10 +508,10 @@
       "image": "",
       "published": "2026-06-02T22:21:52+00:00",
       "firstSeen": "2026-06-02T23:00:01.301412+00:00",
-      "lastSeen": "2026-06-03T11:00:01.129567+00:00",
+      "lastSeen": "2026-06-03T12:00:01.656951+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 6.7644
+      "score": 6.7432
     },
     {
       "title": "Industrial Software Leaders Build Secure, Autonomous AI Engineers With NVIDIA NemoClaw",
@@ -492,10 +524,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/industrial-ai-engineers-kv-1920x1080-1.jpg",
       "published": "2026-06-02T22:00:58+00:00",
       "firstSeen": "2026-06-02T23:00:01.301412+00:00",
-      "lastSeen": "2026-06-03T11:00:01.129567+00:00",
+      "lastSeen": "2026-06-03T12:00:01.656951+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9569
+      "score": 1.9359
     },
     {
       "title": "Trump quietly signs a downsized AI executive order asking companies to voluntarily submit models for review 30 days before release",
@@ -511,7 +543,7 @@
       "lastSeen": "2026-06-03T07:04:16.737349+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -0.6179
+      "score": -0.638
     },
     {
       "title": "Zoom Introduces ‘ZoomMate,’ an AI Teammate for Post-Meeting Work",
@@ -524,10 +556,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/06/Untitled-design-34.png?f=jpeg",
       "published": "2026-06-02T20:14:07+00:00",
       "firstSeen": "2026-06-03T06:00:01.714158+00:00",
-      "lastSeen": "2026-06-03T10:00:01.781383+00:00",
+      "lastSeen": "2026-06-03T12:00:01.656951+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.5799
+      "score": 3.5599
     },
     {
       "title": "Poland will introduce a “sovereignty test” for government tech purchases as Tusk warns AI dependency has reached dangerous proportions",
@@ -543,7 +575,7 @@
       "lastSeen": "2026-06-03T07:04:16.737349+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7792
+      "score": 1.7592
     },
     {
       "title": "RogueDB introduces a simplified database platform designed to reduce infrastructure work for startups and IT teams",
@@ -559,7 +591,7 @@
       "lastSeen": "2026-06-03T07:04:16.737349+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.5726
+      "score": 3.5528
     },
     {
       "title": "Cisco Live 2026: New Security Tools Target AI Threats",
@@ -572,10 +604,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/06/unnamed-31-1.png?f=jpeg",
       "published": "2026-06-02T19:39:27+00:00",
       "firstSeen": "2026-06-03T06:00:01.714158+00:00",
-      "lastSeen": "2026-06-03T10:00:01.781383+00:00",
+      "lastSeen": "2026-06-03T12:00:01.656951+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8683
+      "score": 2.8486
     },
     {
       "title": "datasette-agent-micropython 0.1a0",
@@ -588,11 +620,11 @@
       "image": "",
       "published": "2026-06-02T19:28:36+00:00",
       "firstSeen": "2026-06-03T01:00:01.689286+00:00",
-      "lastSeen": "2026-06-03T11:00:01.129567+00:00",
+      "lastSeen": "2026-06-03T12:00:01.656951+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 15.6047
+      "score": 15.5851
     },
     {
       "title": "Microsoft Build 2026: The 7 biggest announcements",
@@ -605,42 +637,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/nadella-build-2026.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C2.9395307941329%2C100%2C94.120938411734&amp%3Bw=1200",
       "published": "2026-06-02T19:23:52+00:00",
       "firstSeen": "2026-06-02T20:00:01.996967+00:00",
-      "lastSeen": "2026-06-03T11:00:01.129567+00:00",
+      "lastSeen": "2026-06-03T12:00:01.656951+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0731
-    },
-    {
-      "title": "micropython-wasm 0.1a1",
-      "url": "https://simonwillison.net/2026/Jun/2/micropython-wasm",
-      "source": "Simon Willison",
-      "sourceUrl": "https://simonwillison.net/atom/everything/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Release: micropython-wasm 0.1a1\n        Fixes for some limitations that emerged while I was trying to use this to build datasette-agent-micropython.\n    \n    \n        Tags: python, sandboxing, webassembly",
-      "image": "",
-      "published": "2026-06-02T19:20:47+00:00",
-      "firstSeen": "2026-06-03T01:00:01.689286+00:00",
-      "lastSeen": "2026-06-03T11:00:01.129567+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.3021
-    },
-    {
-      "title": "The EU’s €20 billion plan for five AI gigafactories is falling apart before the first bid is even submitted",
-      "url": "https://thenextweb.com/news/eu-ai-data-centre-gigafactory-delays-funding-stumble",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The European Union’s plan to build five massive AI data centres, each with one gigawatt of capacity and approximately 100,000 advanced chips, is stumbling before it starts. The bidding process, originally scheduled for May, has been pushed to July. A lack of funding clarity means only two of the five planned centres can receive money [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/European-flag.avif",
-      "published": "2026-06-02T19:19:51+00:00",
-      "firstSeen": "2026-06-02T20:00:01.996967+00:00",
-      "lastSeen": "2026-06-03T07:04:16.737349+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.8618
+      "score": 3.0536
     },
     {
       "title": "The Life Scientific: Seth Berkley",
@@ -653,10 +653,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-01T20:00:00+00:00",
       "firstSeen": "2026-06-01T21:00:01.828388+00:00",
-      "lastSeen": "2026-06-03T11:00:01.129567+00:00",
+      "lastSeen": "2026-06-03T12:00:01.656951+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.5623
+      "score": 1.5521
     },
     {
       "title": "Dean Lomax on discovering ichthyosaurs and defying nay-sayers",
@@ -669,10 +669,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-26T08:30:00+00:00",
       "firstSeen": "2026-05-26T08:41:33.144051+00:00",
-      "lastSeen": "2026-06-03T11:00:01.129567+00:00",
+      "lastSeen": "2026-06-03T12:00:01.656951+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.125
+      "score": 1.1248
     },
     {
       "title": "The Life Scientific: Hiranya Peiris",
@@ -685,10 +685,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-25T20:00:00+00:00",
       "firstSeen": "2026-05-25T21:00:01.605108+00:00",
-      "lastSeen": "2026-06-03T11:00:01.129567+00:00",
+      "lastSeen": "2026-06-03T12:00:01.656951+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 0.2935
+      "score": 0.2934
     },
     {
       "title": "Helen Hastie on the future of human-robot relations",
