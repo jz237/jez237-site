@@ -494,24 +494,30 @@
       font-size: 13px;
       font-weight: 900;
     }
-    .specials-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 16px;
+    .specials-carousel {
+      overflow: hidden;
+      border: 1px solid rgba(116,205,235,0.16);
+      border-radius: 8px;
+      background: rgba(2,17,29,0.32);
+    }
+    .specials-track {
+      display: flex;
+      transition: transform 0.48s cubic-bezier(.22,.8,.25,1);
+      will-change: transform;
     }
     .special-card {
       display: grid;
       grid-template-rows: auto 1fr;
+      flex: 0 0 100%;
       min-width: 0;
       overflow: hidden;
-      border: 1px solid rgba(116,205,235,0.2);
-      border-radius: 8px;
       background:
         linear-gradient(180deg, rgba(8,35,52,0.92), rgba(4,24,39,0.96)),
         #061c2b;
       box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
     }
     .special-card__media {
+      position: relative;
       display: grid;
       place-items: center;
       padding: clamp(8px, 1.4vw, 12px);
@@ -529,6 +535,40 @@
       object-position: center;
       border-radius: 5px;
       box-shadow: 0 10px 22px rgba(0,0,0,0.18);
+    }
+    .special-card__discount {
+      position: absolute;
+      right: clamp(16px, 2.6vw, 28px);
+      top: clamp(16px, 2.6vw, 28px);
+      z-index: 2;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 104px;
+      min-height: 62px;
+      padding: 10px 14px;
+      border: 2px solid rgba(255,255,255,0.88);
+      border-radius: 7px;
+      color: #fff;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.16), transparent 34%),
+        linear-gradient(135deg, #ff451f 0%, #dc1812 54%, #990d09 100%);
+      box-shadow:
+        0 12px 24px rgba(0,0,0,0.36),
+        inset 0 1px 0 rgba(255,255,255,0.26);
+      text-align: center;
+      font-size: clamp(24px, 4vw, 42px);
+      font-weight: 1000;
+      line-height: 0.86;
+      text-transform: uppercase;
+      transform: rotate(-1.5deg);
+    }
+    .special-card__discount small {
+      display: block;
+      margin-top: 5px;
+      font-size: 12px;
+      letter-spacing: 0.13em;
+      line-height: 1;
     }
     .special-card__body {
       display: grid;
@@ -586,6 +626,49 @@
       flex-wrap: wrap;
       gap: 10px;
       margin-top: 4px;
+    }
+    .special-controls {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 14px;
+    }
+    .special-arrows,
+    .special-dots {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .special-control {
+      display: grid;
+      place-items: center;
+      width: 38px;
+      height: 38px;
+      border: 1px solid rgba(116,205,235,0.28);
+      border-radius: 6px;
+      color: #dff8ff;
+      background: rgba(8,35,52,0.72);
+      font-size: 20px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+    .special-control:disabled {
+      opacity: 0.42;
+      cursor: default;
+    }
+    .special-dot {
+      width: 10px;
+      height: 10px;
+      border: 1px solid rgba(184,150,255,0.48);
+      border-radius: 999px;
+      background: rgba(184,150,255,0.18);
+      cursor: pointer;
+    }
+    .special-dot.is-active {
+      width: 28px;
+      background: #40d9ff;
+      border-color: #40d9ff;
     }
     .path-strip {
       display: grid;
@@ -1583,7 +1666,6 @@
       .categories { grid-template-columns: repeat(4, minmax(0,1fr)); }
       .product-grid { grid-template-columns: repeat(3, minmax(0,1fr)); }
       .promo-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
-      .specials-grid { grid-template-columns: 1fr; }
       .live-links { grid-template-columns: repeat(2, minmax(0,1fr)); }
       .learn-panel { grid-template-columns: 1fr; }
       .learn-split { grid-template-columns: 1fr; }
@@ -1618,6 +1700,18 @@
       .special-card__media {
         padding: 8px;
       }
+      .special-card__discount {
+        right: 14px;
+        top: 14px;
+        min-width: 78px;
+        min-height: 48px;
+        padding: 8px 10px;
+        font-size: 23px;
+      }
+      .special-card__discount small {
+        margin-top: 4px;
+        font-size: 9px;
+      }
       .special-card__body {
         padding: 13px;
       }
@@ -1637,6 +1731,14 @@
       }
       .special-actions {
         gap: 8px;
+      }
+      .special-controls {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 9px;
+      }
+      .special-dots {
+        justify-content: end;
       }
       .categories { grid-template-columns: repeat(2, minmax(0,1fr)); }
       .category-intro { display: block; }
@@ -2687,52 +2789,65 @@
       </div>
     </section>
 
+    <!-- THR_SPECIALS_START -->
     <section class="specials-spotlight" aria-labelledby="specials-title">
       <div class="specials-head">
         <span id="specials-title">Current specials</span>
         <a href="https://www.thehiddenreef.com/sales-online/" target="_blank" rel="noopener">View all sale departments</a>
       </div>
-      <div class="specials-grid">
-        <article class="special-card">
-          <a class="special-card__media" href="https://www.thehiddenreef.com/sales-online/sale-innovative-marine-mto-50-off/" target="_blank" rel="noopener">
-            <img src="assets/site/specials/innovative-marine-mto-import.jpg" alt="Innovative Marine made-to-order aquariums promotion: save 50 percent on MTO orders" />
-          </a>
-          <div class="special-card__body">
-            <span class="special-card__eyebrow">Made to order</span>
-            <h2>Innovative Marine MTO Systems</h2>
-            <p>Large lagoon, EXT, and SR Pro reef systems built to order, with tank plus stand or complete system options.</p>
-            <ul class="special-card__notes">
-              <li>50% off MTO orders</li>
-              <li>112-240 gallon systems</li>
-              <li>Allow 4-6 months</li>
-            </ul>
-            <div class="special-actions">
-              <a class="btn" href="https://www.thehiddenreef.com/sales-online/sale-innovative-marine-mto-50-off/" target="_blank" rel="noopener">Shop MTO Systems</a>
-              <a class="btn secondary" href="category/?cat=equipment">Plan a setup</a>
+      <div class="specials-carousel">
+        <div class="specials-track" id="specials-track">
+          <article class="special-card">
+            <a class="special-card__media" href="https://www.thehiddenreef.com/sales-online/sale-innovative-marine-mto-50-off/" target="_blank" rel="noopener">
+              <img src="assets/site/specials/innovative-marine-mto-import.jpg" alt="Innovative Marine made-to-order aquariums promotion: save 50 percent on MTO orders" />
+              <span class="special-card__discount">50%<small>off</small></span>
+            </a>
+            <div class="special-card__body">
+              <span class="special-card__eyebrow">Made to order</span>
+              <h2>Innovative Marine MTO Systems</h2>
+              <p>Large lagoon, EXT, and SR Pro reef systems built to order, with tank plus stand or complete system options.</p>
+              <ul class="special-card__notes">
+                <li>50% off MTO orders</li>
+                <li>112-240 gallon systems</li>
+                <li>Allow 4-6 months</li>
+              </ul>
+              <div class="special-actions">
+                <a class="btn" href="https://www.thehiddenreef.com/sales-online/sale-innovative-marine-mto-50-off/" target="_blank" rel="noopener">Shop MTO Systems</a>
+                <a class="btn secondary" href="category/?cat=equipment">Plan a setup</a>
+              </div>
             </div>
-          </div>
-        </article>
-        <article class="special-card">
-          <a class="special-card__media" href="https://www.thehiddenreef.com/tags/aiosale/" target="_blank" rel="noopener">
-            <img src="assets/site/specials/nuvo-starter-kits-import.jpg" alt="NUVO starter kits promotion with Fusion 15 AIO Cube and Fusion 20 AIO Long aquarium sale pricing" />
-          </a>
-          <div class="special-card__body">
-            <span class="special-card__eyebrow">Starter kits</span>
-            <h2>NUVO AIO Aquariums</h2>
-            <p>Desktop-ready all-in-one aquariums with clean modern lines, integrated filtration, and sale pricing on compact kits.</p>
-            <ul class="special-card__notes">
-              <li>Fusion 15 AIO Cube $99.99</li>
-              <li>Fusion 20 AIO Long $169.99</li>
-              <li>In stock and ready to ship</li>
-            </ul>
-            <div class="special-actions">
-              <a class="btn" href="https://www.thehiddenreef.com/tags/aiosale/" target="_blank" rel="noopener">Shop AIO Aquariums</a>
-              <a class="btn secondary" href="category/?cat=aquariums">See aquariums</a>
+          </article>
+          <article class="special-card">
+            <a class="special-card__media" href="https://www.thehiddenreef.com/tags/aiosale/" target="_blank" rel="noopener">
+              <img src="assets/site/specials/nuvo-starter-kits-import.jpg" alt="NUVO starter kits promotion with Fusion 15 AIO Cube and Fusion 20 AIO Long aquarium sale pricing" />
+              <span class="special-card__discount">Sale<small>now</small></span>
+            </a>
+            <div class="special-card__body">
+              <span class="special-card__eyebrow">Starter kits</span>
+              <h2>NUVO AIO Aquariums</h2>
+              <p>Desktop-ready all-in-one aquariums with clean modern lines, integrated filtration, and sale pricing on compact kits.</p>
+              <ul class="special-card__notes">
+                <li>Fusion 15 AIO Cube $99.99</li>
+                <li>Fusion 20 AIO Long $169.99</li>
+                <li>In stock and ready to ship</li>
+              </ul>
+              <div class="special-actions">
+                <a class="btn" href="https://www.thehiddenreef.com/tags/aiosale/" target="_blank" rel="noopener">Shop AIO Aquariums</a>
+                <a class="btn secondary" href="category/?cat=aquariums">See aquariums</a>
+              </div>
             </div>
-          </div>
-        </article>
+          </article>
+        </div>
+      </div>
+      <div class="special-controls" aria-label="Specials carousel controls">
+        <div class="special-arrows">
+          <button class="special-control" type="button" data-special-dir="-1" aria-label="Previous special">‹</button>
+          <button class="special-control" type="button" data-special-dir="1" aria-label="Next special">›</button>
+        </div>
+        <div class="special-dots" id="special-dots" aria-label="Choose special"></div>
       </div>
     </section>
+    <!-- THR_SPECIALS_END -->
 
     <section class="section-band alt" aria-labelledby="learn-title">
       <div class="section-head">
@@ -2901,6 +3016,38 @@
 	        });
 	      };
 	      window.setInterval(rotateHero, reducedHeroMotion ? 11000 : 7200);
+	    }
+	    const specialsTrack = document.getElementById('specials-track');
+	    const specialSlides = specialsTrack ? Array.from(specialsTrack.querySelectorAll('.special-card')) : [];
+	    const specialDots = document.getElementById('special-dots');
+	    if (specialsTrack && specialSlides.length && specialDots) {
+	      let activeSpecial = 0;
+	      specialDots.innerHTML = specialSlides.map((slide, index) =>
+	        '<button class="special-dot' + (index === 0 ? ' is-active' : '') + '" type="button" data-special-index="' + index + '" aria-label="Show special ' + (index + 1) + '"></button>'
+	      ).join('');
+	      const dots = Array.from(specialDots.querySelectorAll('.special-dot'));
+	      const controls = Array.from(document.querySelectorAll('[data-special-dir]'));
+	      const controlsWrap = document.querySelector('.special-controls');
+	      if (specialSlides.length <= 1 && controlsWrap) {
+	        controlsWrap.hidden = true;
+	      }
+	      function setSpecial(index) {
+	        activeSpecial = (index + specialSlides.length) % specialSlides.length;
+	        specialsTrack.style.transform = 'translateX(' + (-100 * activeSpecial) + '%)';
+	        dots.forEach((dot, dotIndex) => {
+	          dot.classList.toggle('is-active', dotIndex === activeSpecial);
+	        });
+	      }
+	      controls.forEach(button => {
+	        button.addEventListener('click', () => {
+	          setSpecial(activeSpecial + Number(button.dataset.specialDir || 1));
+	        });
+	      });
+	      dots.forEach(dot => {
+	        dot.addEventListener('click', () => {
+	          setSpecial(Number(dot.dataset.specialIndex || 0));
+	        });
+	      });
 	    }
 	    const revealTargets = Array.from(document.querySelectorAll('.section-band, .footer'));
 	    const reducedPageMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
