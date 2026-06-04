@@ -1,6 +1,6 @@
 {
   "date": "2026-06-04",
-  "updatedAt": "2026-06-04T08:00:01.406712+00:00",
+  "updatedAt": "2026-06-04T09:00:02.117812+00:00",
   "items": [
     {
       "title": "A UK MP’s lawsuit could decide whether xAI answers for what Grok makes",
@@ -13,10 +13,26 @@
       "image": "https://media.thenextweb.com/2026/05/Grok-2.avif",
       "published": "2026-06-04T07:39:09+00:00",
       "firstSeen": "2026-06-04T08:00:01.406712+00:00",
-      "lastSeen": "2026-06-04T08:00:01.406712+00:00",
+      "lastSeen": "2026-06-04T09:00:02.117812+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.1394
+      "score": 11.1096
+    },
+    {
+      "title": "How Endava is redesigning software delivery around AI agents",
+      "url": "https://openai.com/index/endava-frontiers",
+      "source": "OpenAI News",
+      "sourceUrl": "https://openai.com/news/rss.xml",
+      "sourceWeight": 1.0,
+      "category": "AI",
+      "summary": "Learn how Endava is using AI agents, ChatGPT Enterprise, and Codex to accelerate software delivery, automate workflows, and build an AI-native culture across the enterprise.",
+      "image": "",
+      "published": "2026-06-04T12:00:00+00:00",
+      "firstSeen": "2026-06-04T09:00:02.117812+00:00",
+      "lastSeen": "2026-06-04T09:00:02.117812+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 9.2
     },
     {
       "title": "OpenAI and Anthropic Sign Letter to Prevent AI-Developed Biological Weapons",
@@ -29,10 +45,42 @@
       "image": "https://media.wired.com/photos/6a1f6447234d4b89dad80277/master/pass/science_anthropic_final.jpg",
       "published": "2026-06-04T01:01:00+00:00",
       "firstSeen": "2026-06-04T01:47:43.364800+00:00",
-      "lastSeen": "2026-06-04T08:00:01.406712+00:00",
+      "lastSeen": "2026-06-04T09:00:02.117812+00:00",
       "editorial_allow": false,
       "editorial_reason": "fluff",
-      "score": 5.496
+      "score": 5.4712
+    },
+    {
+      "title": "SpaceX wins Texas county approval for Terafab reinvestment zone",
+      "url": "https://thenextweb.com/news/spacex-terafab-grimes-county-reinvestment-zone",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "A reinvestment zone is the unglamorous first step, the procedural gate that has to open before any of the larger numbers attached to a project can flow. On 3 June, the commissioners of Grimes County, Texas, opened it, voting 4-1 to designate a reinvestment zone for SpaceX’s proposed Terafab semiconductor plant. The vote is the [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/spacex-cursor-acquisition-ipo-60-billion-ai-coding.avif",
+      "published": "2026-06-04T08:31:57+00:00",
+      "firstSeen": "2026-06-04T09:00:02.117812+00:00",
+      "lastSeen": "2026-06-04T09:00:02.117812+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.2358
+    },
+    {
+      "title": "SpaceX Sets $135 IPO Price at $1.77T Valuation",
+      "url": "https://www.techrepublic.com/article/news-spacex-ipo-price-valuation",
+      "source": "TechRepublic AI",
+      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "SpaceX set its IPO price at $135, putting the company on track for a record public listing and a valuation near $1.77 trillion.\nThe post SpaceX Sets $135 IPO Price at $1.77T Valuation appeared first on TechRepublic.",
+      "image": "https://assets.techrepublic.com/uploads/2026/06/photo-1711919600878-b5d9e77d3357.jpeg.jpeg?f=jpeg",
+      "published": "2026-06-04T05:48:03+00:00",
+      "firstSeen": "2026-06-04T09:00:02.117812+00:00",
+      "lastSeen": "2026-06-04T09:00:02.117812+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.1564
     },
     {
       "title": "Foxconn and Intel join SambaNova to build rackscale AI infrastructure",
@@ -45,10 +93,10 @@
       "image": "https://media.thenextweb.com/2026/04/Intel.avif",
       "published": "2026-06-04T06:59:19+00:00",
       "firstSeen": "2026-06-04T08:00:01.406712+00:00",
-      "lastSeen": "2026-06-04T08:00:01.406712+00:00",
+      "lastSeen": "2026-06-04T09:00:02.117812+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0195
+      "score": 2.9902
     },
     {
       "title": "v1.85.4",
@@ -61,10 +109,10 @@
       "image": "https://opengraph.githubassets.com/57442734c33cdf7f0873c8f41e4b8efe904300ed2e5e46dd06a12d309bfd8832/BerriAI/litellm/releases/tag/v1.85.4",
       "published": "2026-06-04T05:16:40+00:00",
       "firstSeen": "2026-06-04T06:00:01.706911+00:00",
-      "lastSeen": "2026-06-04T08:00:01.406712+00:00",
+      "lastSeen": "2026-06-04T09:00:02.117812+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9099
+      "score": 2.8819
     },
     {
       "title": "v1.84.5",
@@ -77,13 +125,45 @@
       "image": "https://opengraph.githubassets.com/e610ae1c5d289a032604563dc90a6ce3d0ed62b1ce0d706f15e60a47003e3805/BerriAI/litellm/releases/tag/v1.84.5",
       "published": "2026-06-04T04:11:46+00:00",
       "firstSeen": "2026-06-04T05:00:01.971077+00:00",
-      "lastSeen": "2026-06-04T08:00:01.406712+00:00",
+      "lastSeen": "2026-06-04T09:00:02.117812+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8797
+      "score": 2.8526
     },
     {
-      "title": "Ali Kayyam, Anusha Madan Gopal, M Anthony Lewis",
+      "title": "Merantix Capital closes a €103m fund to back early-stage European AI",
+      "url": "https://thenextweb.com/news/merantix-capital-103m-ai-fund",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Merantix Capital has closed a €103m fund to invest in early-stage, AI-native teams across Europe, the Berlin firm announced on 4 June. The fund is more than three times the size of its first vehicle, which co-founders Rasmus Rothe and Adrian Locher raised at roughly €30m, and it widens the firm’s remit from companies built [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/Merantix-Capital.avif",
+      "published": "2026-06-04T08:51:46+00:00",
+      "firstSeen": "2026-06-04T09:00:02.117812+00:00",
+      "lastSeen": "2026-06-04T09:00:02.117812+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.8458
+    },
+    {
+      "title": "Benchmark breaks its own rule with a $2bn raise and a first growth fund",
+      "url": "https://thenextweb.com/news/benchmark-first-growth-fund-2bn-raise",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The discipline was the whole identity. For more than twenty years Benchmark kept its funds around $425m and backed only young companies, taking a roughly 20% stake in each and trusting that selectivity, not scale, would produce the returns. That model has now bent. The firm has closed $2bn across two new funds, according to [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/Benchmark-Capital.avif",
+      "published": "2026-06-04T08:27:20+00:00",
+      "firstSeen": "2026-06-04T09:00:02.117812+00:00",
+      "lastSeen": "2026-06-04T09:00:02.117812+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.4835
+    },
+    {
+      "title": "Will Savage, Logan Burnett, Dean Price",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -91,44 +171,28 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-04T08:00:06.933386+00:00",
+      "published": "2026-06-04T09:00:11.969396+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-04T08:00:01.406712+00:00",
+      "lastSeen": "2026-06-04T09:00:02.117812+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
     },
     {
-      "title": "Meta accuses Australia of breaching trade pact over news bargaining tax",
-      "url": "https://thenextweb.com/news/meta-australia-fta-news-bargaining-tax",
+      "title": "Cerebras says it will work with everyone in AI hardware except NVIDIA",
+      "url": "https://thenextweb.com/news/cerebras-says-it-will-work-with-everyone-except-nvidia",
       "source": "The Next Web",
       "sourceUrl": "https://thenextweb.com/feed",
       "sourceWeight": 0.75,
       "category": "AI",
-      "summary": "Meta has reached for a bigger weapon. The company accused the Australian government of breaching the US-Australia free trade agreement with its proposed News Bargaining Incentive, and pointed Washington towards the “trade action” it has taken against other countries that taxed American technology firms. The dispute over paying for news, now in its fifth year, [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/04/Meta.avif",
-      "published": "2026-06-04T07:09:12+00:00",
-      "firstSeen": "2026-06-04T08:00:01.406712+00:00",
-      "lastSeen": "2026-06-04T08:00:01.406712+00:00",
+      "summary": "The strategy is defined by a single exclusion. Speaking at the Bloomberg Tech conference on Wednesday, Cerebras chief executive Andrew Feldman said the AI chipmaker is working with every major hardware maker in the industry apart from one: NVIDIA. The line was not a complaint. It was the pitch. Feldman’s argument is that the buyers [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/Cerebras.avif",
+      "published": "2026-06-04T08:37:50+00:00",
+      "firstSeen": "2026-06-04T09:00:02.117812+00:00",
+      "lastSeen": "2026-06-04T09:00:02.117812+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1244
-    },
-    {
-      "title": "Netflix turns to generative AI to fix a problem it helped create",
-      "url": "https://thenextweb.com/news/netflix-generative-ai-content-overload",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The streaming service that taught a generation to scroll endlessly now wants to sell them the cure. At the Bloomberg Tech conference in San Francisco on Wednesday, Netflix’s chief product and technology officer, Elizabeth Stone, said the company is deploying generative AI to help subscribers cut through the volume of content it has spent two [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/04/Netflix.avif",
-      "published": "2026-06-04T06:50:21+00:00",
-      "firstSeen": "2026-06-04T07:00:01.471734+00:00",
-      "lastSeen": "2026-06-04T08:00:01.406712+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.1151
+      "score": 2.1388
     }
   ],
   "errors": [
