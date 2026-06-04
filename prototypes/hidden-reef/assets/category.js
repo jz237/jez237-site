@@ -905,9 +905,11 @@
 
   function updateProductView(page) {
     currentPage = page || 1;
+    const controls = getActiveControls();
     const filteredProducts = applyProductControls(baseProducts);
     const rawFilteredCount = filteredProducts.length;
-    currentProducts = window.THR?.groupProductVariants ? THR.groupProductVariants(filteredProducts) : filteredProducts;
+    const shouldGroupVariants = controls.category !== NEW_ARRIVALS_FILTER;
+    currentProducts = shouldGroupVariants && window.THR?.groupProductVariants ? THR.groupProductVariants(filteredProducts) : filteredProducts;
     const totalPages = Math.max(1, Math.ceil(currentProducts.length / PRODUCTS_PER_PAGE));
     currentPage = Math.min(currentPage, totalPages);
     const start = (currentPage - 1) * PRODUCTS_PER_PAGE;
