@@ -197,6 +197,17 @@
     return Number.isFinite(number) ? number : null;
   }
 
+  function getDiscountPercent(price, oldPrice) {
+    const sale = parsePrice(price);
+    const regular = parsePrice(oldPrice);
+    if (!sale || !regular || regular <= sale) return 0;
+    return Math.round(((regular - sale) / regular) * 100);
+  }
+
+  function normalizeDiscountLabel(label) {
+    return String(label || '').replace(/\s+/g, ' ').trim();
+  }
+
   function extractBrand(name) {
     return window.THR?.extractBrand ? THR.extractBrand(name) : '';
   }
@@ -245,8 +256,11 @@
           categoryName: 'Sale Items',
           groupSlug: SALE_ITEMS_FILTER,
           groupName: 'Sale Items',
+          isSaleItem: true,
           saleDepartment: department.title,
-          saleDiscountLabel: department.discountLabel || (department.discount ? department.discount + '% off' : 'Sale pricing')
+          saleDiscount: department.discount || getDiscountPercent(product.price, product.oldPrice),
+          saleDiscountLabel: normalizeDiscountLabel(department.discountLabel || (department.discount ? department.discount + '% off' : 'Sale pricing')),
+          saleDepartmentUrl: department.url || ''
         });
       }).filter(Boolean);
     });
@@ -837,11 +851,23 @@
       const imgAlt = (p.name || 'Product').replace(/"/g, '&quot;');
       const name = (p.name || 'Unknown Product').replace(/</g, '&lt;');
       const price = formatPrice(p.price);
+      const oldPrice = p.oldPrice ? formatPrice(p.oldPrice) : '';
       const url = p.productUrl || '#';
       const pageLabel = p.page > 1 ? `Page ${p.page}` : '';
       const brandHtml = brand ? `<span class="thr-brand">${brand}</span>` : '';
       const badge = pageLabel ? `<span class="thr-page">${pageLabel}</span>` : '';
-      const optionBadge = p.variants && p.variants.length > 1 ? `<span class="thr-options">${p.variants.length} options</span>` : '';
+      const isSaleItem = Boolean(p.isSaleItem);
+      const optionBadge = !isSaleItem && p.variants && p.variants.length > 1 ? `<span class="thr-options">${p.variants.length} options</span>` : '';
+      const discountPercent = p.saleDiscount || getDiscountPercent(p.price, p.oldPrice);
+      const saleBadgeText = discountPercent ? `${discountPercent}% off` : 'Sale';
+      const saleBadge = isSaleItem ? `<span class="thr-sale-badge">${escapeHtml(saleBadgeText)}</span>` : '';
+      const priceHtml = isSaleItem && oldPrice
+        ? `<span class="thr-price-row"><span class="thr-price thr-price--sale">${price}</span><span class="thr-old-price">${oldPrice}</span></span>`
+        : `<span class="thr-price${isSaleItem ? ' thr-price--sale' : ''}">${price}</span>`;
+      const saleMetaParts = [p.saleDepartment, p.saleDiscountLabel].filter(Boolean);
+      const saleMeta = isSaleItem && saleMetaParts.length
+        ? `<span class="thr-sale-meta">${escapeHtml(saleMetaParts.join(' · '))}</span>`
+        : '';
 
       html += `
         <a class="thr-product" href="${url}" target="_blank" rel="noopener">
@@ -851,10 +877,12 @@
             <img src="${imgSrc}" alt="${imgAlt}" loading="lazy" onerror="this.parentElement.style.background='linear-gradient(180deg,#0c2030,#071a27)';this.style.display='none'" />
             ${badge}
             ${optionBadge}
+            ${saleBadge}
           </div>
           <div class="thr-info">
-            <span class="thr-price">${price}</span>
+            ${priceHtml}
             <h3 class="thr-name">${name}</h3>
+            ${saleMeta}
           </div>
         </a>`;
     });

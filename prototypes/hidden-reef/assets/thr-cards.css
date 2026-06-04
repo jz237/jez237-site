@@ -140,6 +140,29 @@
   letter-spacing: .04em;
   box-shadow: 0 2px 8px rgba(0,0,0,.28);
 }
+.thr-product .thr-sale-badge {
+  position: absolute;
+  bottom: 6px;
+  left: 6px;
+  z-index: 5;
+  max-width: calc(100% - 12px);
+  padding: 3px 8px;
+  border: 1px solid rgba(255,255,255,.52);
+  border-radius: 5px;
+  color: #fff;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.16), transparent 38%),
+    linear-gradient(135deg, #ff451f, #d71912 56%, #960d0a);
+  box-shadow: 0 4px 12px rgba(0,0,0,.34);
+  font-size: 9px;
+  font-weight: 1000;
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
 /* Info bar */
 .thr-product .thr-info {
@@ -163,6 +186,23 @@
   font-weight: 900;
   box-shadow: 0 2px 8px rgba(255,123,50,.3);
 }
+.thr-product .thr-price-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+.thr-product .thr-price--sale {
+  background: linear-gradient(135deg, #e32219, #a9120d);
+  box-shadow: 0 2px 8px rgba(227,34,25,.28);
+}
+.thr-product .thr-old-price {
+  color: #667a86;
+  font-size: 11px;
+  font-weight: 900;
+  text-decoration: line-through;
+  text-decoration-thickness: 2px;
+}
 .thr-product .thr-name {
   margin: 0;
   color: #102f43;
@@ -176,6 +216,17 @@
 }
 .thr-product:hover .thr-name {
   color: #007fa4;
+}
+.thr-product .thr-sale-meta {
+  display: -webkit-box;
+  margin-top: 2px;
+  color: #8a3a24;
+  font-size: 10.5px;
+  font-weight: 900;
+  line-height: 1.22;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 @keyframes thrCardSettle {
@@ -213,6 +264,9 @@
   .thr-product .thr-brand { font-size: 8px; padding: 2px 5px; top: 4px; left: 4px; }
   .thr-product .thr-ext { width: 20px; height: 20px; top: 4px; right: 4px; font-size: 10px; }
   .thr-product .thr-price { font-size: 10px; padding: 1px 6px; }
+  .thr-product .thr-old-price { font-size: 9px; }
+  .thr-product .thr-sale-badge { bottom: 4px; left: 4px; max-width: calc(100% - 8px); padding: 2px 6px; font-size: 8px; }
+  .thr-product .thr-sale-meta { font-size: 9px; -webkit-line-clamp: 2; }
   .thr-product .thr-name { font-size: 10.5px; line-height: 1.2; -webkit-line-clamp: 2; }
 }
 @media (max-width: 380px) {
