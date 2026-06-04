@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-04T14:09:01.257162+00:00",
+  "updatedAt": "2026-06-04T16:00:01.246028+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -9252,6 +9252,18 @@
     "https://www.theverge.com/podcast/942586/elon-musk-spacex-ipo-x-xai-index-funds": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/VRG_DCD_0604_Musk_IPO_AParkin.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
       "checkedAt": "2026-06-04T14:09:01.257162+00:00"
+    },
+    "https://techcrunch.com/2026/06/04/is-silicon-valley-ready-to-put-robots-in-peoples-homes-hello-robot-is": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/IMG_4162-rotated.jpg?resize=900,1200",
+      "checkedAt": "2026-06-04T16:00:01.246028+00:00"
+    },
+    "https://www.theverge.com/tech/943066/tsmc-ai-demand-struggles": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/acastro_210430_1777_semiCon_0001.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-06-04T16:00:01.246028+00:00"
+    },
+    "https://huggingface.co/blog/hf-cli-for-agents": {
+      "image": "https://huggingface.co/blog/assets/hf-cli-for-agents/thumbnail.png",
+      "checkedAt": "2026-06-04T16:00:01.246028+00:00"
     }
   }
 }
