@@ -1,6 +1,6 @@
 {
   "date": "2026-06-04",
-  "updatedAt": "2026-06-04T05:00:01.971077+00:00",
+  "updatedAt": "2026-06-04T06:00:01.706911+00:00",
   "items": [
     {
       "title": "OpenAI and Anthropic Sign Letter to Prevent AI-Developed Biological Weapons",
@@ -13,10 +13,26 @@
       "image": "https://media.wired.com/photos/6a1f6447234d4b89dad80277/master/pass/science_anthropic_final.jpg",
       "published": "2026-06-04T01:01:00+00:00",
       "firstSeen": "2026-06-04T01:47:43.364800+00:00",
-      "lastSeen": "2026-06-04T05:00:01.971077+00:00",
+      "lastSeen": "2026-06-04T06:00:01.706911+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.5748
+      "score": 5.5478
+    },
+    {
+      "title": "v1.85.4",
+      "url": "https://github.com/BerriAI/litellm/releases/tag/v1.85.4",
+      "source": "LiteLLM Releases",
+      "sourceUrl": "https://github.com/BerriAI/litellm/releases.atom",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Verify Docker Image Signature\nAll LiteLLM Docker images are signed with cosign. Every release is signed with the same key introduced in commit 0112e53.\nVerify using the pinned commit hash (recommended):\nA commit hash is cryptographically immutable, so this is the strongest way to ensure you are using the original signing key:\ncosign verify \\\n  --key https://raw.githubusercontent.com/BerriAI/litellm/0112e53046018d726492c814b3644b7d376029d0/cosign.pub \\\n  ghcr.io/berriai/litellm:v1.85.4\nVerify using the release tag (convenience):\nTags are protected in this repository and resolve to the same key.",
+      "image": "https://opengraph.githubassets.com/57442734c33cdf7f0873c8f41e4b8efe904300ed2e5e46dd06a12d309bfd8832/BerriAI/litellm/releases/tag/v1.85.4",
+      "published": "2026-06-04T05:16:40+00:00",
+      "firstSeen": "2026-06-04T06:00:01.706911+00:00",
+      "lastSeen": "2026-06-04T06:00:01.706911+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.9681
     },
     {
       "title": "v1.84.5",
@@ -29,10 +45,10 @@
       "image": "https://opengraph.githubassets.com/e610ae1c5d289a032604563dc90a6ce3d0ed62b1ce0d706f15e60a47003e3805/BerriAI/litellm/releases/tag/v1.84.5",
       "published": "2026-06-04T04:11:46+00:00",
       "firstSeen": "2026-06-04T05:00:01.971077+00:00",
-      "lastSeen": "2026-06-04T05:00:01.971077+00:00",
+      "lastSeen": "2026-06-04T06:00:01.706911+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9657
+      "score": 2.9362
     },
     {
       "title": "Ali Kayyam, Anusha Madan Gopal, M Anthony Lewis",
@@ -43,9 +59,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-04T05:00:08.677254+00:00",
+      "published": "2026-06-04T06:00:09.168265+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-04T05:00:01.971077+00:00",
+      "lastSeen": "2026-06-04T06:00:01.706911+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
