@@ -1,7 +1,23 @@
 {
   "date": "2026-06-04",
-  "updatedAt": "2026-06-04T01:00:01.164134+00:00",
+  "updatedAt": "2026-06-04T01:47:43.364800+00:00",
   "items": [
+    {
+      "title": "OpenAI and Anthropic Sign Letter to Prevent AI-Developed Biological Weapons",
+      "url": "https://www.wired.com/story/openai-anthropic-letter-ai-biological-weapons",
+      "source": "Wired AI",
+      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Leading AI labs, executives, and scientists are sending a letter to lawmakers urging them to improve tracking of synthetic DNA sequences that could be used for bioweapons.",
+      "image": "https://media.wired.com/photos/6a1f6447234d4b89dad80277/master/pass/science_anthropic_final.jpg",
+      "published": "2026-06-04T01:01:00+00:00",
+      "firstSeen": "2026-06-04T01:47:43.364800+00:00",
+      "lastSeen": "2026-06-04T01:47:43.364800+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.6665
+    },
     {
       "title": "Assessing Region-Level EEG Contributions to Cognitive Workload Prediction",
       "url": "https://llm-stats.com/ai-news",
@@ -11,9 +27,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-04T01:00:08.034669+00:00",
+      "published": "2026-06-04T01:47:47.557793+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-04T01:00:01.164134+00:00",
+      "lastSeen": "2026-06-04T01:47:43.364800+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
