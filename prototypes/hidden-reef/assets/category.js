@@ -313,6 +313,9 @@
     const allProducts = getAllCatalogProducts();
     const filterProducts = allProducts.concat(getSaleProducts(), getNewArrivalProducts(allProducts));
     const brands = Array.from(new Set(filterProducts.map(product => extractBrand(product.name)).filter(Boolean))).sort((a, b) => a.localeCompare(b));
+    const requestedBrand = getParams().brand;
+    if (requestedBrand && !brands.includes(requestedBrand)) brands.push(requestedBrand);
+    brands.sort((a, b) => a.localeCompare(b));
     const brandOptions = brands.map(brand => '<option value="' + escapeHtml(brand) + '">' + escapeHtml(brand) + '</option>').join('');
     const categories = Array.from(new Map(allProducts
       .filter(product => product.groupSlug && product.groupName)

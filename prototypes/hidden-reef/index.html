@@ -988,6 +988,12 @@
       box-shadow: var(--card-depth-light);
     }
     .brand-tile img { max-width: 100%; max-height: 46px; object-fit: contain; }
+    .brand-tile:hover,
+    .brand-tile:focus-visible {
+      border-color: rgba(0, 167, 183, .72);
+      box-shadow: 0 0 0 3px rgba(64, 217, 255, .2), var(--card-depth-light);
+      text-decoration: none;
+    }
     .brand-tile--emblem img { max-height: 58px; }
     .guides {
       display: grid;
@@ -2885,16 +2891,16 @@
         <a href="brands/">See Full List of Brands</a>
       </div>
       <div class="brands">
-        <div class="brand-tile"><img src="assets/site/brand-api.png" alt="API" /></div>
-        <div class="brand-tile"><img src="assets/site/brand-aquatop.png" alt="Aquatop" /></div>
-        <div class="brand-tile"><img src="assets/site/brand-fluval.png" alt="Fluval" /></div>
-        <div class="brand-tile brand-tile--emblem"><img src="assets/site/brand-innovative-marine.png" alt="Innovative Marine" /></div>
-        <div class="brand-tile"><img src="assets/site/brand-red-sea.svg" alt="Red Sea" /></div>
-        <div class="brand-tile"><img src="assets/site/brand-seachem.png" alt="Seachem" /></div>
-        <div class="brand-tile"><img src="assets/site/brand-sera.svg" alt="Sera" /></div>
-        <div class="brand-tile"><img src="assets/site/brand-tetra.png" alt="Tetra" /></div>
-        <div class="brand-tile brand-tile--emblem"><img src="assets/site/brand-underwater-treasures.png" alt="Underwater Treasures" /></div>
-        <div class="brand-tile brand-tile--emblem"><img src="assets/site/brand-zoo-med.png" alt="Zoo Med" /></div>
+        <a class="brand-tile" href="category/?brand=API" aria-label="Shop API products"><img src="assets/site/brand-api.png" alt="API" /></a>
+        <a class="brand-tile" href="category/?brand=Aquatop" aria-label="Shop Aquatop products"><img src="assets/site/brand-aquatop.png" alt="Aquatop" /></a>
+        <a class="brand-tile" href="category/?brand=Fluval" aria-label="Shop Fluval products"><img src="assets/site/brand-fluval.png" alt="Fluval" /></a>
+        <a class="brand-tile brand-tile--emblem" href="category/?brand=Innovative%20Marine" aria-label="Shop Innovative Marine products"><img src="assets/site/brand-innovative-marine.png" alt="Innovative Marine" /></a>
+        <a class="brand-tile" href="category/?brand=Red%20Sea" aria-label="Shop Red Sea products"><img src="assets/site/brand-red-sea.svg" alt="Red Sea" /></a>
+        <a class="brand-tile" href="category/?brand=Seachem" aria-label="Shop Seachem products"><img src="assets/site/brand-seachem.png" alt="Seachem" /></a>
+        <a class="brand-tile" href="category/?brand=Sera" aria-label="Shop Sera products"><img src="assets/site/brand-sera.svg" alt="Sera" /></a>
+        <a class="brand-tile" href="category/?brand=Tetra" aria-label="Shop Tetra products"><img src="assets/site/brand-tetra.png" alt="Tetra" /></a>
+        <a class="brand-tile brand-tile--emblem" href="category/?brand=Underwater%20Treasures" aria-label="Shop Underwater Treasures products"><img src="assets/site/brand-underwater-treasures.png" alt="Underwater Treasures" /></a>
+        <a class="brand-tile brand-tile--emblem" href="category/?brand=Zoo%20Med" aria-label="Shop Zoo Med products"><img src="assets/site/brand-zoo-med.png" alt="Zoo Med" /></a>
       </div>
     </section>
 
@@ -3038,6 +3044,6 @@
 	    renderCart();
 	  </script>
 	  <script src="assets/reef-background.js?v=20260603-water8"></script>
-		  <script src="assets/category.js?v=20260604-sidebar-targets"></script>
+		  <script src="assets/category.js?v=20260604-brand-links"></script>
 	</body>
 	</html>
