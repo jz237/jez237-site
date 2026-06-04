@@ -6,6 +6,7 @@
 
   const PRODUCTS_PER_PAGE = 24;
   const NEW_ARRIVALS_FILTER = 'new-arrivals';
+  const SALE_ITEMS_FILTER = 'sale-items';
   const NEW_ARRIVAL_SLUGS = ['starter-kits', 'planted', 'flake-tropical', 'skimmers', 'pond-supplies', 'led-fixtures', 'ornaments', 'gravel-cleaners', 'controllers', 'pumps'];
   const pageConfig = window.THR_CATEGORY_CONFIG || {};
   const categoryBase = pageConfig.categoryBase || './';
@@ -19,6 +20,7 @@
   let currentSubcategory = null;
   let currentResultLabel = '';
   let showNewArrivalsFilter = false;
+  let showSaleItemsFilter = false;
   let categoryHeroRotator = 0;
 
   function getParams() {
@@ -218,6 +220,28 @@
     return products.filter(product => keys.has(getProductKey(product)));
   }
 
+  function getSaleProducts() {
+    const departments = window.THR_SALE_DATA?.departments;
+    if (!Array.isArray(departments)) return [];
+    const seen = new Set();
+    return departments.flatMap(department => {
+      const products = Array.isArray(department.products) ? department.products : [];
+      return products.map(product => {
+        const key = product.productUrl || `${department.slug}:${product.name}`;
+        if (seen.has(key)) return null;
+        seen.add(key);
+        return Object.assign({}, product, {
+          categorySlug: SALE_ITEMS_FILTER,
+          categoryName: 'Sale Items',
+          groupSlug: SALE_ITEMS_FILTER,
+          groupName: 'Sale Items',
+          saleDepartment: department.title,
+          saleDiscountLabel: department.discountLabel || (department.discount ? department.discount + '% off' : 'Sale pricing')
+        });
+      }).filter(Boolean);
+    });
+  }
+
   function escapeHtml(value) {
     return String(value || '').replace(/[&<>"']/g, char => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[char]));
   }
@@ -246,13 +270,18 @@
   function applyProductControls(products) {
     const controls = getActiveControls();
     const query = controls.query.toLowerCase();
-    const sourceProducts = controls.category === NEW_ARRIVALS_FILTER ? getNewArrivalProducts(products) : products;
+    const sourceProducts = controls.category === NEW_ARRIVALS_FILTER
+      ? getNewArrivalProducts(products)
+      : controls.category === SALE_ITEMS_FILTER
+        ? getSaleProducts()
+        : products;
     let filtered = sourceProducts.filter(product => {
       const name = product.name || '';
       const brand = extractBrand(name);
       const matchesQuery = !query || name.toLowerCase().includes(query) || brand.toLowerCase().includes(query);
       const matchesCategory = !controls.category ||
         controls.category === NEW_ARRIVALS_FILTER ||
+        controls.category === SALE_ITEMS_FILTER ||
         product.groupSlug === controls.category;
       const matchesBrand = !controls.brand || brand === controls.brand;
       return matchesQuery && matchesCategory && matchesBrand;
@@ -273,8 +302,9 @@
       .map(product => [product.groupSlug, product.groupName]))
       .entries())
       .sort((a, b) => a[1].localeCompare(b[1]));
+    const saleItemsOption = showSaleItemsFilter ? '<option value="' + SALE_ITEMS_FILTER + '">Sale Items</option>' : '';
     const newArrivalsOption = showNewArrivalsFilter ? '<option value="' + NEW_ARRIVALS_FILTER + '">New Arrivals</option>' : '';
-    const categoryOptions = newArrivalsOption + categories.map(([slug, name]) => '<option value="' + escapeHtml(slug) + '">' + escapeHtml(name) + '</option>').join('');
+    const categoryOptions = saleItemsOption + newArrivalsOption + categories.map(([slug, name]) => '<option value="' + escapeHtml(slug) + '">' + escapeHtml(name) + '</option>').join('');
     el.innerHTML = '<label><span>Category</span><select id="category-filter"><option value="">All categories</option>' + categoryOptions + '</select></label><label><span>Brand</span><select id="brand-filter"><option value="">All brands</option>' + brandOptions + '</select></label><label><span>Sort</span><select id="sort-products"><option value="featured">Featured order</option><option value="name-asc">Name A-Z</option><option value="price-asc">Price low to high</option><option value="price-desc">Price high to low</option></select></label><button type="button" id="reset-products">Reset</button><a class="home-control" href="' + homeHref + '">Home</a>';
 
     el.querySelectorAll('select').forEach(control => {
@@ -887,6 +917,7 @@
     currentSubcategory = sub;
     currentResultLabel = sub ? sub.name : (cat ? cat.name : '');
     showNewArrivalsFilter = !cat && !sub;
+    showSaleItemsFilter = !cat && !sub && getSaleProducts().length > 0;
     setMainNavActive(cat ? cat.slug : '');
 
     renderBreadcrumb(cat, sub);
@@ -920,6 +951,10 @@
     if (showNewArrivalsFilter && initialFilter === NEW_ARRIVALS_FILTER) {
       const categoryFilter = document.getElementById('category-filter');
       if (categoryFilter) categoryFilter.value = NEW_ARRIVALS_FILTER;
+    }
+    if (showSaleItemsFilter && initialFilter === SALE_ITEMS_FILTER) {
+      const categoryFilter = document.getElementById('category-filter');
+      if (categoryFilter) categoryFilter.value = SALE_ITEMS_FILTER;
     }
 
     const searchInput = document.getElementById('search');
