@@ -37,10 +37,6 @@
 
   function findCategory(catSlug) {
     if (!THR || !THR.categories) return null;
-    for (const key of Object.keys(THR.categories)) {
-      const cat = THR.categories[key];
-      if (cat.slug === catSlug) return cat;
-    }
     if (THR.departmentMap && THR.departmentMap[catSlug]) {
       const departmentNames = {
         freshwater: 'Freshwater',
@@ -74,6 +70,10 @@
         description: departmentDescriptions[catSlug] || 'Browse department products',
         children
       };
+    }
+    for (const key of Object.keys(THR.categories)) {
+      const cat = THR.categories[key];
+      if (cat.slug === catSlug) return cat;
     }
     return null;
   }
@@ -504,8 +504,8 @@
         title: 'Food & Care',
         items: [
           { type: 'link', label: 'Salt Mix & Additives', href: '?cat=additives' },
-          { type: 'link', label: 'Test Kits & Refractometers', href: '?cat=maintenance' },
-          { type: 'link', label: 'Calcium, Alk & Magnesium', href: '?cat=additives' },
+          { type: 'link', label: 'Test Kits & Refractometers', href: '?cat=maintenance&sub=marine-test-kits' },
+          { type: 'link', label: 'Calcium, Alk & Magnesium', href: '?cat=additives&sub=coral-supplements' },
           { type: 'link', label: 'Water Conditioner', href: '?cat=additives&sub=water-conditioners' }
         ]
       },
@@ -633,8 +633,8 @@
         title: 'Food & Care',
         items: [
           { type: 'link', label: 'Pond Food & Feeding', href: '?cat=pond&sub=pond-food' },
-          { type: 'link', label: 'Water Treatments', href: '?cat=maintenance' },
-          { type: 'link', label: 'Bacteria & Startup', href: '?cat=maintenance' },
+          { type: 'link', label: 'Water Treatments', href: '?cat=pond&sub=pond-additives' },
+          { type: 'link', label: 'Bacteria & Startup', href: '?cat=pond&sub=pond-bacteria' },
           { type: 'link', label: 'Seasonal Care', href: '?cat=maintenance' }
         ]
       }
@@ -654,7 +654,7 @@
       {
         title: 'Related Departments',
         items: [
-          { type: 'link', label: 'Filter Media & Replacement', href: '?cat=maintenance' },
+          { type: 'link', label: 'Filter Media & Replacement', href: '?cat=maintenance&sub=filter-media' },
           { type: 'link', label: 'Food & Water Care', href: '?cat=food' },
           { type: 'link', label: 'Freshwater', href: '?cat=freshwater' },
           { type: 'link', label: 'Saltwater', href: '?cat=saltwater' }
@@ -711,8 +711,9 @@
         open: true,
         items: [
           { type: 'link', label: 'All Maintenance', href: '?cat=maintenance', active: true },
-          { type: 'link', label: 'Test Kits', href: '?cat=maintenance' },
-          { type: 'link', label: 'Filter Media', href: '?cat=maintenance' },
+          { type: 'link', label: 'Test Kits', href: '?cat=maintenance&sub=test-kits' },
+          { type: 'link', label: 'Marine Test Kits', href: '?cat=maintenance&sub=marine-test-kits' },
+          { type: 'link', label: 'Filter Media', href: '?cat=maintenance&sub=filter-media' },
           { type: 'link', label: 'Algae Control', href: '?cat=maintenance&sub=gravel-cleaners' },
           { type: 'link', label: 'Cleaning Tools', href: '?cat=maintenance&sub=gravel-cleaners' }
         ]
@@ -722,7 +723,7 @@
         items: [
           { type: 'link', label: 'Gravel Vac & Siphons', href: '?cat=maintenance&sub=gravel-cleaners' },
           { type: 'link', label: 'Magnetic Cleaners', href: '?cat=maintenance&sub=gravel-cleaners' },
-          { type: 'link', label: 'Filter Replacements', href: '?cat=maintenance' },
+          { type: 'link', label: 'Filter Replacements', href: '?cat=maintenance&sub=filter-media' },
           { type: 'link', label: 'Water Change Systems', href: '?cat=maintenance&sub=gravel-cleaners' }
         ]
       }
@@ -769,12 +770,7 @@
         button.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
       });
     });
-    el.querySelectorAll('[data-sidebar-filter]').forEach(link => {
-      link.addEventListener('click', event => {
-        event.preventDefault();
-        applySidebarFilter(link);
-      });
-    });
+    // Let sidebar anchors navigate normally so URL, header, breadcrumb, and products stay in sync.
   }
 
   function applySidebarFilter(link) {
