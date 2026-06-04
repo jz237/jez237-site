@@ -210,10 +210,22 @@
             <div><span>Next Task</span><strong>Water new plantings</strong></div>
             <div><span>Next Event</span><strong>Prune grapevine · May 20</strong></div>
             <div><span>Moon Phase</span><strong>Waxing Gibbous</strong></div>
-            <div><span>AI News</span><strong>3 new updates</strong></div>
+            <div><span>AI News</span><strong id="home-ai-news-status">Loading feed…</strong></div>
             <div><span>Markets</span><strong>Stock Command Center linked</strong></div>
             <div><span>Garden Zone</span><strong>Zone 7a</strong></div>
           </div>
+        </section>
+
+        <section class="home-ai-briefing" aria-labelledby="home-ai-briefing-title">
+          <div class="home-ai-briefing-head">
+            <div>
+              <span class="module-kicker">Live briefing</span>
+              <h2 id="home-ai-briefing-title">AI News Signal</h2>
+            </div>
+            <a href="ai-news/">Open feed →</a>
+          </div>
+          <div id="home-ai-briefing-meta" class="home-ai-briefing-meta">Loading latest editor picks…</div>
+          <div id="home-ai-briefing-list" class="home-ai-briefing-list" aria-live="polite"></div>
         </section>
 
         <section id="ai-agents" class="below-hub ai-agent-hub">
@@ -250,6 +262,119 @@
             mount.textContent = 'Could not load llms.txt (' + e.message + ')';
           }
         });
+      })();
+    </script>
+    <script>
+      (function () {
+        const status = document.getElementById('home-ai-news-status');
+        const meta = document.getElementById('home-ai-briefing-meta');
+        const list = document.getElementById('home-ai-briefing-list');
+        if (!status || !meta || !list) return;
+
+        const formatter = new Intl.RelativeTimeFormat(undefined, { numeric: 'auto' });
+        function relativeTime(value) {
+          const date = value ? new Date(value) : null;
+          if (!date || Number.isNaN(date.getTime())) return 'recently';
+          const diff = date.getTime() - Date.now();
+          const units = [
+            ['day', 86400000],
+            ['hour', 3600000],
+            ['minute', 60000]
+          ];
+          for (const [unit, ms] of units) {
+            if (Math.abs(diff) >= ms || unit === 'minute') {
+              return formatter.format(Math.round(diff / ms), unit);
+            }
+          }
+          return 'recently';
+        }
+
+        function cleanSummary(text) {
+          return String(text || '')
+            .replace(/\s+/g, ' ')
+            .replace(/This story continues at.*$/i, '')
+            .trim();
+        }
+
+        function signalLabel(item) {
+          const haystack = `${item.title || ''} ${item.summary || ''} ${item.source || ''}`.toLowerCase();
+          if (/release|github|ollama|litellm|model|api|tool|sdk|developer/.test(haystack)) return 'Tooling';
+          if (/research|paper|safety|alignment|bio|policy|anthropic|openai/.test(haystack)) return 'Research';
+          if (/deal|funding|cloud|startup|company|netflix|microsoft|google/.test(haystack)) return 'Industry';
+          return 'Signal';
+        }
+
+        function pickItems(items) {
+          const aiItems = items.filter((item) => (item.category || 'AI') === 'AI');
+          const editorPicks = aiItems.filter((item) => item.editorial_allow);
+          const pool = editorPicks.length ? editorPicks : aiItems;
+          return [...pool]
+            .sort((a, b) => (b.score || 0) - (a.score || 0))
+            .slice(0, 3);
+        }
+
+        function renderItem(item) {
+          const article = document.createElement('article');
+          article.className = 'home-ai-briefing-item';
+
+          const label = document.createElement('span');
+          label.textContent = signalLabel(item);
+
+          const title = document.createElement('a');
+          title.href = item.url;
+          title.target = '_blank';
+          title.rel = 'noopener';
+          title.textContent = item.title || 'Untitled update';
+
+          const details = document.createElement('p');
+          details.textContent = `${item.source || 'Unknown source'} · ${relativeTime(item.published)}`;
+
+          const summary = cleanSummary(item.summary);
+          if (summary) {
+            const dek = document.createElement('small');
+            dek.textContent = summary.length > 150 ? summary.slice(0, 147) + '…' : summary;
+            article.append(label, title, details, dek);
+          } else {
+            article.append(label, title, details);
+          }
+
+          return article;
+        }
+
+        fetch('ai-news/public/ai-news-latest.json')
+          .then((response) => {
+            if (!response.ok) throw new Error('feed unavailable');
+            return response.json();
+          })
+          .then((feed) => {
+            const items = Array.isArray(feed.items) ? feed.items : [];
+            const aiCount = items.filter((item) => (item.category || 'AI') === 'AI').length;
+            const editorCount = items.filter((item) => (item.category || 'AI') === 'AI' && item.editorial_allow).length;
+            const picks = pickItems(items);
+
+            status.textContent = `${editorCount || picks.length} editor picks`;
+            meta.textContent = `Updated ${relativeTime(feed.updatedAt)} · ${aiCount} AI items · ${editorCount} editor picks`;
+            list.innerHTML = '';
+
+            if (!picks.length) {
+              const empty = document.createElement('p');
+              empty.className = 'home-ai-briefing-empty';
+              empty.textContent = 'No high-signal AI items in the feed right now.';
+              list.appendChild(empty);
+              return;
+            }
+
+            picks.forEach((item) => list.appendChild(renderItem(item)));
+          })
+          .catch((error) => {
+            status.textContent = 'Feed unavailable';
+            meta.textContent = 'Could not load the AI briefing.';
+            list.innerHTML = '';
+            const empty = document.createElement('p');
+            empty.className = 'home-ai-briefing-empty';
+            empty.textContent = error.message;
+            list.appendChild(empty);
+          });
       })();
     </script>
   </main>
