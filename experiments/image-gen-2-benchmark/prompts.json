@@ -1342,5 +1342,17 @@
     "slot": "morning",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-06-04-midday-pet-as-embroidered-train-patch",
+    "title": "Pet as Embroidered Train Patch",
+    "tests": "Reusable reference-photo transformation template for preserving pet markings and pose while converting the subject into a tactile embroidered textile artifact with a finished example output.",
+    "prompt": "Use the uploaded reference photo and preserve the pet identity, sitting pose, silhouette, facial expression, ear shape, eye color, fur pattern, tabby cheek stripes, white muzzle, whisker placement, paw position, curled tail, and most recognizable markings, then transform the pet into a raised embroidered train-conductor patch sewn onto a faded navy work jacket in soft side light. Rebuild the pet from dense satin stitches, chain-stitch outlines, raised chenille whiskers, seed-bead eyes, layered orange, cream, white, and ginger thread colors, and a scalloped merrowed border. Add an invented railroad-patch scene with a brass-whistle motif, stitched signal lamp, miniature rail ties, silver thread steam curls, red-and-cream station pennants, frayed patch edges, loose thread ends, needle holes, lint, worn denim twill, shallow depth of field, and tactile product-photo realism. Keep the source pet recognizable while changing fur, body material, surface texture, setting, and props into a cohesive embroidered textile artifact. Avoid extra legs, duplicate heads, distorted pet anatomy, text/logo artifacts, placeholder marks, watermark, and losing the pet markings.\n\nSource photo needed: a clear pet photo.\n\nReusable template: Use the uploaded reference photo and preserve the [PET] identity, pose, silhouette, expression, ear shape, eye color, fur pattern, key markings, proportions, and most recognizable features, then transform [PET] into an embroidered patch made from [MATERIAL] in [SETTING] with [MOOD] lighting. Keep the source recognizable while changing the body material, surface texture, construction details, props, and environment into a cohesive textile artifact. Avoid extra limbs, duplicate faces, broken anatomy, text/logo artifacts, placeholder marks, watermark, and losing the source-photo markings.\n\nWhat to preserve: pet identity, pose, silhouette, expression, ear shape, eye color, fur pattern, tabby stripes or key markings, whisker placement, paw position, tail shape, proportions, and overall composition.\n\nWhat to change: convert the pet into a raised embroidered train-conductor patch with satin stitches, chain-stitch outlines, chenille whiskers, seed-bead eyes, layered thread colors, scalloped border, railroad motifs, worn jacket fabric, and tactile macro textile lighting.\n\nExample substitution: Use a clear photo of a seated orange-and-white tabby cat; preserve its three-quarter sitting pose, cheek stripes, white muzzle, amber eyes, upright ears, front paws, and curled tail, then turn it into a raised embroidered train-conductor patch sewn onto a faded navy work jacket.",
+    "image": "images/2026-06-04-midday-pet-as-embroidered-train-patch.png",
+    "date": "2026-06-04",
+    "batch": "Daily Prompt",
+    "slot": "midday",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
