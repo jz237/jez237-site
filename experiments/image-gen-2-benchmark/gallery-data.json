@@ -1354,5 +1354,17 @@
     "slot": "midday",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-06-04-evening-pocket-orchard-apron-pattern",
+    "title": "Pocket Orchard Apron Pattern",
+    "tests": "Tests whether GPT Image 2 can create a reusable non-photo visual layout template as a finished physical sewing-pattern instruction sheet, with coherent labels, pattern-piece hierarchy, tactile paper, sewing props, and usable adaptation structure.",
+    "prompt": "Create a finished instructional sewing pattern sheet titled POCKET ORCHARD TOOL APRON, using a mid-century home-sewing instruction layout for a utility apron designed for tending a tiny indoor orchard. Make it a vertical documentary product photograph of cream tissue pattern paper on a scratched pine sewing table, with dashed cutting lines, numbered pattern pieces, seam allowance callouts, grainline arrows, notches, assembly diagrams, stitch symbols, a materials checklist, red pencil corrections, muted green registration marks, curled translucent paper corners, sewing shears, tailor chalk, brass thimble, wooden ruler, pins, moss-green canvas scraps, striped cotton, loose thread, and tiny seed tags. Include only natural sewing-pattern labels such as FRONT PANEL, POCKET A, GRAINLINE, CUT 2, FOLD, SEAM 1/2 IN, STEP 1, STEP 2, and SUPPLIES. Avoid real logos, placeholder boxes, private data, watermark, signature, modern UI, cluttered nonsense microtext, and dancing imagery.\n\nSource photo needed: none.\n\nReusable prompt template: Create a finished instructional sewing pattern about [TOPIC] using [DATA OR CATEGORIES], with a coherent physical sewing-pattern design, readable hierarchy, and specific invented details where data is not supplied. Use [ERA OR DESIGN LANGUAGE], [MATERIALS], [COLOR ACCENTS], and [SETTING] to make the layout feel real. Preserve the supplied topic, garment/object purpose, pattern-piece relationships, measurements, step order, labels, symbols, materials list, and any real data provided by the user; change the title, cutting diagrams, assembly steps, pattern pieces, annotation style, paper treatment, props, and physical presentation to fit the chosen subject. Avoid nonsense labels, cluttered microtext, placeholder boxes, generic decoration, real logos, private data, and prompt-instruction text.\n\nWhat to preserve: the supplied topic, intended object or garment, pattern pieces, measurements, step sequence, labels, symbols, material list, and any factual relationships provided by the user.\n\nWhat to change: turn the topic into a tactile finished sewing pattern sheet with dashed cut lines, numbered pattern pieces, grainline arrows, notches, seam allowances, assembly diagrams, material checklist, paper creases, annotations, sewing tools, fabric scraps, and believable tabletop lighting.\n\nExample substitution: Create an instructional sewing pattern for a pocket orchard tool apron; use pattern pieces for seed-packet pockets, rain-vial sleeve, twine spool tab, pruning tag window, kneeling-pad flap, pencil channel, brass snip loop, moss-green canvas, striped cotton trim, red pencil corrections, and a warm pine sewing-table setting.",
+    "image": "images/2026-06-04-evening-pocket-orchard-apron-pattern.png",
+    "date": "2026-06-04",
+    "batch": "Daily Prompt",
+    "slot": "evening",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1536"
   }
 ]
