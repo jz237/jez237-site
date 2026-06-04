@@ -1,6 +1,6 @@
 {
   "date": "2026-06-04",
-  "updatedAt": "2026-06-04T14:00:01.384462+00:00",
+  "updatedAt": "2026-06-04T14:09:01.257162+00:00",
   "items": [
     {
       "title": "KPMG puts Claude in front of all 276,000 staff in an Anthropic alliance",
@@ -16,7 +16,7 @@
       "lastSeen": "2026-06-04T13:00:01.581582+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.0109
+      "score": 11.0069
     },
     {
       "title": "A UK MP’s lawsuit could decide whether xAI answers for what Grok makes",
@@ -32,7 +32,7 @@
       "lastSeen": "2026-06-04T09:00:02.117812+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.9722
+      "score": 10.9683
     },
     {
       "title": "How Endava is redesigning software delivery around AI agents",
@@ -45,10 +45,10 @@
       "image": "",
       "published": "2026-06-04T12:00:00+00:00",
       "firstSeen": "2026-06-04T09:00:02.117812+00:00",
-      "lastSeen": "2026-06-04T14:00:01.384462+00:00",
+      "lastSeen": "2026-06-04T14:09:01.257162+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.1405
+      "score": 9.1362
     },
     {
       "title": "OpenAI and Anthropic Sign Letter to Prevent AI-Developed Biological Weapons",
@@ -61,10 +61,10 @@
       "image": "https://media.wired.com/photos/6a1f6447234d4b89dad80277/master/pass/science_anthropic_final.jpg",
       "published": "2026-06-04T01:01:00+00:00",
       "firstSeen": "2026-06-04T01:47:43.364800+00:00",
-      "lastSeen": "2026-06-04T14:00:01.384462+00:00",
+      "lastSeen": "2026-06-04T14:09:01.257162+00:00",
       "editorial_allow": false,
       "editorial_reason": "fluff",
-      "score": 5.3569
+      "score": 5.3538
     },
     {
       "title": "Complexity is the ceiling: software design in the age of AI coding",
@@ -77,10 +77,10 @@
       "image": "https://media.thenextweb.com/2026/06/complexity-ceiling-software-design-ai-coding.avif",
       "published": "2026-06-04T09:19:35+00:00",
       "firstSeen": "2026-06-04T10:00:01.867424+00:00",
-      "lastSeen": "2026-06-04T14:00:01.384462+00:00",
+      "lastSeen": "2026-06-04T14:09:01.257162+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.4161
+      "score": 4.4121
     },
     {
       "title": "SoftBank’s PayPay pushes into insurance with a 70.2% T&D Life stake",
@@ -93,10 +93,10 @@
       "image": "https://media.thenextweb.com/2026/06/PayPay.avif",
       "published": "2026-06-04T09:23:54+00:00",
       "firstSeen": "2026-06-04T10:00:01.867424+00:00",
-      "lastSeen": "2026-06-04T14:00:01.384462+00:00",
+      "lastSeen": "2026-06-04T14:09:01.257162+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.818
+      "score": 3.814
     },
     {
       "title": "Let us filter AI slop, you cowards",
@@ -109,10 +109,26 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/05/STKS511_AI_SLOP_B.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C9.9676601489831%2C100%2C80.064679702034&amp%3Bw=1200",
       "published": "2026-06-04T12:30:00+00:00",
       "firstSeen": "2026-06-04T14:00:01.384462+00:00",
-      "lastSeen": "2026-06-04T14:00:01.384462+00:00",
+      "lastSeen": "2026-06-04T14:09:01.257162+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.4151
+      "score": 3.4107
+    },
+    {
+      "title": "Apple touts $1.4 trillion in App Store billings and sales, 90% without a commission",
+      "url": "https://techcrunch.com/2026/06/04/apple-touts-1-4-trillion-in-app-store-billings-and-sales-90-without-a-commission",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Apple's App Store generated $1.4 trillion in sales, up from $1.3 trillion last year, with $149 billion in sales for digital goods.",
+      "image": "https://techcrunch.com/wp-content/uploads/2024/01/app-store-2024-v1.jpg?resize=1200%2C675",
+      "published": "2026-06-04T14:05:58+00:00",
+      "firstSeen": "2026-06-04T14:09:01.257162+00:00",
+      "lastSeen": "2026-06-04T14:09:01.257162+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.3884
     },
     {
       "title": "SpaceX wins Texas county approval for Terafab reinvestment zone",
@@ -128,7 +144,7 @@
       "lastSeen": "2026-06-04T10:43:37.166035+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.095
+      "score": 3.0911
     },
     {
       "title": "SpaceX Sets $135 IPO Price at $1.77T Valuation",
@@ -141,10 +157,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/06/photo-1711919600878-b5d9e77d3357.jpeg.jpeg?f=jpeg",
       "published": "2026-06-04T05:48:03+00:00",
       "firstSeen": "2026-06-04T09:00:02.117812+00:00",
-      "lastSeen": "2026-06-04T14:00:01.384462+00:00",
+      "lastSeen": "2026-06-04T14:09:01.257162+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0259
+      "score": 3.0223
     },
     {
       "title": "Foxconn and Intel join SambaNova to build rackscale AI infrastructure",
@@ -160,7 +176,7 @@
       "lastSeen": "2026-06-04T09:00:02.117812+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8553
+      "score": 2.8516
     },
     {
       "title": "v1.85.4",
@@ -173,33 +189,17 @@
       "image": "https://opengraph.githubassets.com/57442734c33cdf7f0873c8f41e4b8efe904300ed2e5e46dd06a12d309bfd8832/BerriAI/litellm/releases/tag/v1.85.4",
       "published": "2026-06-04T05:16:40+00:00",
       "firstSeen": "2026-06-04T06:00:01.706911+00:00",
-      "lastSeen": "2026-06-04T14:00:01.384462+00:00",
+      "lastSeen": "2026-06-04T14:09:01.257162+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7533
-    },
-    {
-      "title": "The AI hype cycle will slow down. What’s next decides the winners",
-      "url": "https://thenextweb.com/news/the-ai-hype-cycle-will-slow-down-whats-next-decides-the-winners",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Artificial Intelligence is entering the late stage of its hype cycle. Not a collapse. A correction. For the past two years, AI has dominated venture capital flows, with capital pouring into the sector at unprecedented scale and startups multiplying rapidly as funding concentrates around AI-driven businesses. What began as acceleration has now started to show the [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/ai-hype-cycle-slow-down-winners-joe-hipsky.avif",
-      "published": "2026-06-04T10:10:41+00:00",
-      "firstSeen": "2026-06-04T11:00:01.256558+00:00",
-      "lastSeen": "2026-06-04T14:00:01.384462+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.7392
+      "score": 2.7497
     }
   ],
   "errors": [
     {
       "source": "MarkTechPost",
       "url": "https://www.marktechpost.com/feed/",
-      "error": "HTTP Error 403: Forbidden"
+      "error": "not well-formed (invalid token): line 1, column 119"
     }
   ]
 }
