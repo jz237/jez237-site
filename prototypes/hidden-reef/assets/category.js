@@ -7,6 +7,7 @@
   const PRODUCTS_PER_PAGE = 24;
   const NEW_ARRIVALS_FILTER = 'new-arrivals';
   const SALE_ITEMS_FILTER = 'sale-items';
+  const CURRENT_VIEW_FILTER = 'current-view';
   const NEW_ARRIVAL_SLUGS = ['starter-kits', 'planted', 'flake-tropical', 'skimmers', 'pond-supplies', 'led-fixtures', 'ornaments', 'gravel-cleaners', 'controllers', 'pumps'];
   const pageConfig = window.THR_CATEGORY_CONFIG || {};
   const categoryBase = pageConfig.categoryBase || './';
@@ -280,18 +281,21 @@
     const controls = getActiveControls();
     const query = controls.query.toLowerCase();
     const allProducts = getAllCatalogProducts();
-    const sourceProducts = controls.category === NEW_ARRIVALS_FILTER
+    const sourceProducts = controls.category === CURRENT_VIEW_FILTER
+      ? products
+      : controls.category === NEW_ARRIVALS_FILTER
       ? getNewArrivalProducts(allProducts)
       : controls.category === SALE_ITEMS_FILTER
         ? getSaleProducts()
         : controls.category
           ? allProducts
-          : products;
+          : allProducts;
     let filtered = sourceProducts.filter(product => {
       const name = product.name || '';
       const brand = extractBrand(name);
       const matchesQuery = !query || name.toLowerCase().includes(query) || brand.toLowerCase().includes(query);
       const matchesCategory = !controls.category ||
+        controls.category === CURRENT_VIEW_FILTER ||
         controls.category === NEW_ARRIVALS_FILTER ||
         controls.category === SALE_ITEMS_FILTER ||
         product.groupSlug === controls.category;
@@ -316,10 +320,11 @@
       .map(product => [product.groupSlug, product.groupName]))
       .entries())
       .sort((a, b) => a[1].localeCompare(b[1]));
+    const currentViewOption = currentResultLabel ? '<option value="' + CURRENT_VIEW_FILTER + '">' + escapeHtml(currentResultLabel) + '</option>' : '';
     const saleItemsOption = showSaleItemsFilter ? '<option value="' + SALE_ITEMS_FILTER + '">Sale Items</option>' : '';
     const newArrivalsOption = showNewArrivalsFilter ? '<option value="' + NEW_ARRIVALS_FILTER + '">New Arrivals</option>' : '';
-    const categoryOptions = saleItemsOption + newArrivalsOption + categories.map(([slug, name]) => '<option value="' + escapeHtml(slug) + '">' + escapeHtml(name) + '</option>').join('');
-    el.innerHTML = '<label><span>Category</span><select id="category-filter"><option value="">All categories</option>' + categoryOptions + '</select></label><label><span>Brand</span><select id="brand-filter"><option value="">All brands</option>' + brandOptions + '</select></label><label><span>Sort</span><select id="sort-products"><option value="featured">Featured order</option><option value="name-asc">Name A-Z</option><option value="price-asc">Price low to high</option><option value="price-desc">Price high to low</option></select></label><button type="button" id="reset-products">Reset</button><a class="home-control" href="' + homeHref + '">Home</a>';
+    const categoryOptions = currentViewOption + '<option value="">All categories</option>' + saleItemsOption + newArrivalsOption + categories.map(([slug, name]) => '<option value="' + escapeHtml(slug) + '">' + escapeHtml(name) + '</option>').join('');
+    el.innerHTML = '<label><span>Category</span><select id="category-filter">' + categoryOptions + '</select></label><label><span>Brand</span><select id="brand-filter"><option value="">All brands</option>' + brandOptions + '</select></label><label><span>Sort</span><select id="sort-products"><option value="featured">Featured order</option><option value="name-asc">Name A-Z</option><option value="price-asc">Price low to high</option><option value="price-desc">Price high to low</option></select></label><button type="button" id="reset-products">Reset</button><a class="home-control" href="' + homeHref + '">Home</a>';
 
     el.querySelectorAll('select').forEach(control => {
       control.addEventListener('change', () => updateProductView(1));
@@ -330,7 +335,7 @@
       const brandFilter = document.getElementById('brand-filter');
       const sortControl = document.getElementById('sort-products');
       if (searchInput) searchInput.value = '';
-      if (categoryFilter) categoryFilter.value = '';
+      if (categoryFilter) categoryFilter.value = currentResultLabel ? CURRENT_VIEW_FILTER : '';
       if (brandFilter) brandFilter.value = '';
       if (sortControl) sortControl.value = 'featured';
       updateProductView(1);
@@ -806,7 +811,7 @@
     const categoryFilter = document.getElementById('category-filter');
     const brandFilter = document.getElementById('brand-filter');
     const sortControl = document.getElementById('sort-products');
-    if (categoryFilter) categoryFilter.value = '';
+    if (categoryFilter) categoryFilter.value = currentResultLabel ? CURRENT_VIEW_FILTER : '';
     if (brandFilter) brandFilter.value = '';
     if (sortControl) sortControl.value = 'featured';
     updateProductView(1);
@@ -894,7 +899,7 @@
     const selectedCategory = controls.category
       ? document.querySelector('#category-filter option:checked')?.textContent || ''
       : '';
-    const label = selectedCategory || currentResultLabel || (sub ? sub.name : 'All products');
+    const label = selectedCategory || 'All products';
     const rawCount = Number(rawTotal || 0);
     const variantNote = rawCount && rawCount !== total
       ? `<small>${rawCount.toLocaleString()} catalog items including variants</small>`
@@ -952,17 +957,17 @@
     baseProducts = products;
     currentProducts = products;
     renderProductControls(products);
+    const categoryFilter = document.getElementById('category-filter');
+    if (categoryFilter && currentResultLabel) categoryFilter.value = CURRENT_VIEW_FILTER;
     if (params.brand) {
       const brandFilter = document.getElementById('brand-filter');
       if (brandFilter) brandFilter.value = params.brand;
     }
     const initialFilter = params.filter || defaultFilter;
     if (showNewArrivalsFilter && initialFilter === NEW_ARRIVALS_FILTER) {
-      const categoryFilter = document.getElementById('category-filter');
       if (categoryFilter) categoryFilter.value = NEW_ARRIVALS_FILTER;
     }
     if (showSaleItemsFilter && initialFilter === SALE_ITEMS_FILTER) {
-      const categoryFilter = document.getElementById('category-filter');
       if (categoryFilter) categoryFilter.value = SALE_ITEMS_FILTER;
     }
 
