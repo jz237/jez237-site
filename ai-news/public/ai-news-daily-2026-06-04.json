@@ -1,6 +1,6 @@
 {
   "date": "2026-06-04",
-  "updatedAt": "2026-06-04T11:00:01.256558+00:00",
+  "updatedAt": "2026-06-04T12:00:01.952744+00:00",
   "items": [
     {
       "title": "KPMG puts Claude in front of all 276,000 staff in an Anthropic alliance",
@@ -13,10 +13,10 @@
       "image": "https://media.thenextweb.com/2026/06/KPMG.avif",
       "published": "2026-06-04T09:07:54+00:00",
       "firstSeen": "2026-06-04T10:00:01.867424+00:00",
-      "lastSeen": "2026-06-04T11:00:01.256558+00:00",
+      "lastSeen": "2026-06-04T12:00:01.952744+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.0944
+      "score": 11.0657
     },
     {
       "title": "A UK MP’s lawsuit could decide whether xAI answers for what Grok makes",
@@ -32,7 +32,7 @@
       "lastSeen": "2026-06-04T09:00:02.117812+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.0523
+      "score": 11.0249
     },
     {
       "title": "How Endava is redesigning software delivery around AI agents",
@@ -45,7 +45,7 @@
       "image": "",
       "published": "2026-06-04T12:00:00+00:00",
       "firstSeen": "2026-06-04T09:00:02.117812+00:00",
-      "lastSeen": "2026-06-04T11:00:01.256558+00:00",
+      "lastSeen": "2026-06-04T12:00:01.952744+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
       "score": 9.2
@@ -61,10 +61,10 @@
       "image": "https://media.wired.com/photos/6a1f6447234d4b89dad80277/master/pass/science_anthropic_final.jpg",
       "published": "2026-06-04T01:01:00+00:00",
       "firstSeen": "2026-06-04T01:47:43.364800+00:00",
-      "lastSeen": "2026-06-04T11:00:01.256558+00:00",
+      "lastSeen": "2026-06-04T12:00:01.952744+00:00",
       "editorial_allow": false,
       "editorial_reason": "fluff",
-      "score": 5.4236
+      "score": 5.4007
     },
     {
       "title": "Complexity is the ceiling: software design in the age of AI coding",
@@ -77,10 +77,10 @@
       "image": "https://media.thenextweb.com/2026/06/complexity-ceiling-software-design-ai-coding.avif",
       "published": "2026-06-04T09:19:35+00:00",
       "firstSeen": "2026-06-04T10:00:01.867424+00:00",
-      "lastSeen": "2026-06-04T11:00:01.256558+00:00",
+      "lastSeen": "2026-06-04T12:00:01.952744+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.5
+      "score": 4.4713
     },
     {
       "title": "SoftBank’s PayPay pushes into insurance with a 70.2% T&D Life stake",
@@ -93,10 +93,10 @@
       "image": "https://media.thenextweb.com/2026/06/PayPay.avif",
       "published": "2026-06-04T09:23:54+00:00",
       "firstSeen": "2026-06-04T10:00:01.867424+00:00",
-      "lastSeen": "2026-06-04T11:00:01.256558+00:00",
+      "lastSeen": "2026-06-04T12:00:01.952744+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.9021
+      "score": 3.8733
     },
     {
       "title": "SpaceX wins Texas county approval for Terafab reinvestment zone",
@@ -112,7 +112,7 @@
       "lastSeen": "2026-06-04T10:43:37.166035+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1771
+      "score": 3.149
     },
     {
       "title": "SpaceX Sets $135 IPO Price at $1.77T Valuation",
@@ -125,10 +125,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/06/photo-1711919600878-b5d9e77d3357.jpeg.jpeg?f=jpeg",
       "published": "2026-06-04T05:48:03+00:00",
       "firstSeen": "2026-06-04T09:00:02.117812+00:00",
-      "lastSeen": "2026-06-04T11:00:01.256558+00:00",
+      "lastSeen": "2026-06-04T12:00:01.952744+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1021
+      "score": 3.076
     },
     {
       "title": "Foxconn and Intel join SambaNova to build rackscale AI infrastructure",
@@ -144,7 +144,7 @@
       "lastSeen": "2026-06-04T09:00:02.117812+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.934
+      "score": 2.907
     },
     {
       "title": "v1.85.4",
@@ -157,10 +157,10 @@
       "image": "https://opengraph.githubassets.com/57442734c33cdf7f0873c8f41e4b8efe904300ed2e5e46dd06a12d309bfd8832/BerriAI/litellm/releases/tag/v1.85.4",
       "published": "2026-06-04T05:16:40+00:00",
       "firstSeen": "2026-06-04T06:00:01.706911+00:00",
-      "lastSeen": "2026-06-04T11:00:01.256558+00:00",
+      "lastSeen": "2026-06-04T12:00:01.952744+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8283
+      "score": 2.8026
     },
     {
       "title": "The AI hype cycle will slow down. What’s next decides the winners",
@@ -173,10 +173,10 @@
       "image": "https://media.thenextweb.com/2026/06/ai-hype-cycle-slow-down-winners-joe-hipsky.avif",
       "published": "2026-06-04T10:10:41+00:00",
       "firstSeen": "2026-06-04T11:00:01.256558+00:00",
-      "lastSeen": "2026-06-04T11:00:01.256558+00:00",
+      "lastSeen": "2026-06-04T12:00:01.952744+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8252
+      "score": 2.7957
     },
     {
       "title": "Meta keeps delaying the Muse Spark API developers were promised",
@@ -189,10 +189,10 @@
       "image": "https://media.thenextweb.com/2026/04/meta-muse-spark-msl-first-model.avif",
       "published": "2026-06-04T09:43:32+00:00",
       "firstSeen": "2026-06-04T10:00:01.867424+00:00",
-      "lastSeen": "2026-06-04T11:00:01.256558+00:00",
+      "lastSeen": "2026-06-04T12:00:01.952744+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8117
+      "score": 2.7826
     }
   ],
   "errors": [
