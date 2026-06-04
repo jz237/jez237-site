@@ -1,6 +1,6 @@
 {
   "date": "2026-06-04",
-  "updatedAt": "2026-06-04T19:00:01.866512+00:00",
+  "updatedAt": "2026-06-04T20:00:01.481282+00:00",
   "items": [
     {
       "title": "Meta launches an AI assistant that tells Facebook creators why their content works, not just that it did",
@@ -13,11 +13,11 @@
       "image": "https://media.thenextweb.com/2026/04/Meta.avif",
       "published": "2026-06-04T16:57:07+00:00",
       "firstSeen": "2026-06-04T18:00:01.314928+00:00",
-      "lastSeen": "2026-06-04T19:00:01.866512+00:00",
+      "lastSeen": "2026-06-04T20:00:01.481282+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 13.2892
+      "score": 13.2607
     },
     {
       "title": "Dreaming: Better memory for a more helpful ChatGPT",
@@ -30,10 +30,10 @@
       "image": "https://images.ctfassets.net/kftzwdyauwt9/41T8ZOansyDZGCqmwOkuOY/3cdeb6ab147c08fa9b313b677fb5318e/16x9_SEO__1_.png?w=1600&amp%3Bh=900&amp%3Bfit=fill",
       "published": "2026-06-04T09:00:00+00:00",
       "firstSeen": "2026-06-04T17:00:02.090586+00:00",
-      "lastSeen": "2026-06-04T19:00:01.866512+00:00",
+      "lastSeen": "2026-06-04T20:00:01.481282+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.3332
+      "score": 11.3104
     },
     {
       "title": "A single GitHub issue could have hijacked Anthropic’s own Claude Code action and poisoned every project that uses it",
@@ -46,10 +46,10 @@
       "image": "https://media.thenextweb.com/2026/04/anthropic-claude-opus-4-7-coding-agentic-benchmarks-release.avif",
       "published": "2026-06-04T16:44:24+00:00",
       "firstSeen": "2026-06-04T17:00:02.090586+00:00",
-      "lastSeen": "2026-06-04T19:00:01.866512+00:00",
+      "lastSeen": "2026-06-04T20:00:01.481282+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.0831
+      "score": 11.0548
     },
     {
       "title": "KPMG puts Claude in front of all 276,000 staff in an Anthropic alliance",
@@ -65,7 +65,7 @@
       "lastSeen": "2026-06-04T13:00:01.581582+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.8863
+      "score": 10.8633
     },
     {
       "title": "A UK MP’s lawsuit could decide whether xAI answers for what Grok makes",
@@ -81,7 +81,7 @@
       "lastSeen": "2026-06-04T09:00:02.117812+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.8526
+      "score": 10.8306
     },
     {
       "title": "How Endava is redesigning software delivery around AI agents",
@@ -94,10 +94,10 @@
       "image": "",
       "published": "2026-06-04T12:00:00+00:00",
       "firstSeen": "2026-06-04T09:00:02.117812+00:00",
-      "lastSeen": "2026-06-04T19:00:01.866512+00:00",
+      "lastSeen": "2026-06-04T20:00:01.481282+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.0056
+      "score": 8.9808
     },
     {
       "title": "Databricks CEO calls 2026 “a terrible year to go public” as SpaceX, Anthropic, and OpenAI prepare to absorb $200 billion in IPO capital",
@@ -110,10 +110,26 @@
       "image": "https://media.thenextweb.com/2026/06/Databricks-CEO-Ali-Ghodsi.avif",
       "published": "2026-06-04T16:23:48+00:00",
       "firstSeen": "2026-06-04T17:00:02.090586+00:00",
-      "lastSeen": "2026-06-04T19:00:01.866512+00:00",
+      "lastSeen": "2026-06-04T20:00:01.481282+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.7732
+      "score": 8.7452
+    },
+    {
+      "title": "v0.30.5: launch: hermes-desktop app (#16516)",
+      "url": "https://github.com/ollama/ollama/releases/tag/v0.30.5",
+      "source": "Ollama Releases",
+      "sourceUrl": "https://github.com/ollama/ollama/releases.atom",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "Add support to launch the hermes-desktop app alongside the hermes agent from ollama launch. It will go through the install on first run if hermes-desktop is not already installed.",
+      "image": "https://opengraph.githubassets.com/0e91974d2670184a86dc2744ca7430b594da6357fbbc3ba255625eaa4296fd9a/ollama/ollama",
+      "published": "2026-06-04T18:51:36+00:00",
+      "firstSeen": "2026-06-04T20:00:01.481282+00:00",
+      "lastSeen": "2026-06-04T20:00:01.481282+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "editorial_score_pass",
+      "score": 7.8257
     },
     {
       "title": "Malicious WhatsApp, Slack Alerts Could Have Exposed Millions of Android Users",
@@ -126,10 +142,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/06/Untitled-design-35-1.png?f=jpeg",
       "published": "2026-06-04T14:15:40+00:00",
       "firstSeen": "2026-06-04T18:00:01.314928+00:00",
-      "lastSeen": "2026-06-04T19:00:01.866512+00:00",
+      "lastSeen": "2026-06-04T20:00:01.481282+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.1143
+      "score": 7.0879
     },
     {
       "title": "Microsoft Project Solara Brings AI Agents to Enterprise Devices",
@@ -142,10 +158,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/06/00_Title-Page-scaled-1.png?f=jpeg",
       "published": "2026-06-04T08:15:21+00:00",
       "firstSeen": "2026-06-04T18:00:01.314928+00:00",
-      "lastSeen": "2026-06-04T19:00:01.866512+00:00",
+      "lastSeen": "2026-06-04T20:00:01.481282+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 7.0662
+      "score": 7.0438
     },
     {
       "title": "Microsoft’s AI chief says the company wants to “eliminate” what it pays Anthropic",
@@ -161,7 +177,7 @@
       "lastSeen": "2026-06-04T17:21:08.061251+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.0247
+      "score": 6.998
     },
     {
       "title": "DuckDuckGo Makes AI-Free Search Easier To Set as Default",
@@ -174,26 +190,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/06/Studio-Mac-Start-Screen.png?f=jpeg",
       "published": "2026-06-04T15:43:17+00:00",
       "firstSeen": "2026-06-04T18:00:01.314928+00:00",
-      "lastSeen": "2026-06-04T19:00:01.866512+00:00",
+      "lastSeen": "2026-06-04T20:00:01.481282+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 6.9542
-    },
-    {
-      "title": "US Firms Try DeepSeek as Silicon Valley AI Costs Rise",
-      "url": "https://www.techrepublic.com/article/news-us-firms-try-deepseek-ai-costs-rise",
-      "source": "TechRepublic AI",
-      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "US  firms are testing China’s DeepSeek as Silicon Valley AI costs rise, raising questions about savings, data residency, and risk.\nThe post US Firms Try DeepSeek as Silicon Valley AI Costs Rise appeared first on TechRepublic.",
-      "image": "https://assets.techrepublic.com/uploads/2026/06/deepseek.jpg?f=jpeg",
-      "published": "2026-06-04T15:37:23+00:00",
-      "firstSeen": "2026-06-04T18:00:01.314928+00:00",
-      "lastSeen": "2026-06-04T19:00:01.866512+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 6.1515
+      "score": 6.9267
     }
   ],
   "errors": [
