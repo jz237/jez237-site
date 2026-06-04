@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-04T16:00:01.246028+00:00",
+  "updatedAt": "2026-06-04T17:00:02.090586+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -9264,6 +9264,34 @@
     "https://huggingface.co/blog/hf-cli-for-agents": {
       "image": "https://huggingface.co/blog/assets/hf-cli-for-agents/thumbnail.png",
       "checkedAt": "2026-06-04T16:00:01.246028+00:00"
+    },
+    "https://github.com/huggingface/transformers/releases/tag/v5.10.2": {
+      "image": "https://repository-images.githubusercontent.com/155220641/a16c4880-a501-11ea-9e8f-646cf611702e",
+      "checkedAt": "2026-06-04T17:00:02.090586+00:00"
+    },
+    "https://github.com/BerriAI/litellm/releases/tag/v1.88.0-rc.2": {
+      "image": "https://opengraph.githubassets.com/27822757ea8ad9a59505c744c8dc2a0bb83b938d81f2718a2e2cbd05ff25e807/BerriAI/litellm/releases/tag/v1.88.0-rc.2",
+      "checkedAt": "2026-06-04T17:00:02.090586+00:00"
+    },
+    "https://simonwillison.net/2026/Jun/4/a-slightly-different-version": {
+      "image": "",
+      "checkedAt": "2026-06-04T17:00:02.090586+00:00"
+    },
+    "https://github.com/BerriAI/litellm/releases/tag/v1.86.4": {
+      "image": "https://opengraph.githubassets.com/a7b50df7a016d1c748d90dbe03c5d9499d9e68b8e397024291ac3a5a18472ca0/BerriAI/litellm/releases/tag/v1.86.4",
+      "checkedAt": "2026-06-04T17:00:02.090586+00:00"
+    },
+    "https://techcrunch.com/2026/06/04/meta-rolls-out-a-new-ai-creator-assistant-on-facebook": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/Introducing-Creator-Assistant-Plus-More-Languages-for-AI-Translations-on-Facebook_Header.jpg?resize=1200,675",
+      "checkedAt": "2026-06-04T17:00:02.090586+00:00"
+    },
+    "https://techcrunch.com/2026/06/04/what-to-expect-from-wwdc-2026-siris-highly-anticipated-revamp-and-apple-intelligence-updates": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/Apple-WWDC26-event-branding_big.jpg.large_.jpg?w=980",
+      "checkedAt": "2026-06-04T17:00:02.090586+00:00"
+    },
+    "https://openai.com/index/chatgpt-memory-dreaming": {
+      "image": "https://images.ctfassets.net/kftzwdyauwt9/41T8ZOansyDZGCqmwOkuOY/3cdeb6ab147c08fa9b313b677fb5318e/16x9_SEO__1_.png?w=1600&amp;h=900&amp;fit=fill",
+      "checkedAt": "2026-06-04T17:00:02.090586+00:00"
     }
   }
 }
