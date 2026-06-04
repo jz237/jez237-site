@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-04T04:00:01.747809+00:00",
+  "updatedAt": "2026-06-04T05:00:01.971077+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -9200,6 +9200,10 @@
     "https://openai.com/index/wasmer": {
       "image": "",
       "checkedAt": "2026-06-04T00:00:01.222391+00:00"
+    },
+    "https://github.com/BerriAI/litellm/releases/tag/v1.84.5": {
+      "image": "https://opengraph.githubassets.com/e610ae1c5d289a032604563dc90a6ce3d0ed62b1ce0d706f15e60a47003e3805/BerriAI/litellm/releases/tag/v1.84.5",
+      "checkedAt": "2026-06-04T05:00:01.971077+00:00"
     }
   }
 }
