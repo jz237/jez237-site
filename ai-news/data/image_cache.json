@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-03T23:00:01.869358+00:00",
+  "updatedAt": "2026-06-04T00:00:01.222391+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -9192,6 +9192,14 @@
     "https://github.com/ollama/ollama/releases/tag/v0.30.4-rc0": {
       "image": "https://opengraph.githubassets.com/84888f0a0da64de337aa808b67e889b1e42e486980e24cf05cef13df2a7820cc/ollama/ollama",
       "checkedAt": "2026-06-03T23:00:01.869358+00:00"
+    },
+    "https://github.com/ollama/ollama/releases/tag/v0.30.4": {
+      "image": "https://opengraph.githubassets.com/f975f1b27e1268bcd882520d4b1999a2990f58526849b672adf7c20eaf39636f/ollama/ollama",
+      "checkedAt": "2026-06-04T00:00:01.222391+00:00"
+    },
+    "https://openai.com/index/wasmer": {
+      "image": "",
+      "checkedAt": "2026-06-04T00:00:01.222391+00:00"
     }
   }
 }
