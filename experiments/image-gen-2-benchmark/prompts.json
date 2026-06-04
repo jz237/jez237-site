@@ -1306,5 +1306,17 @@
     "slot": "afternoon",
     "model": "openai/gpt-image-2",
     "size": "1024x1536"
+  },
+  {
+    "id": "2026-06-03-evening-miniature-weather-machine-bin-labels",
+    "title": "Miniature Weather Machine Bin Labels",
+    "tests": "Tests whether GPT Image 2 can create a reusable structured hardware-store label-board layout with coherent item hierarchy, tactile paper and metal materials, readable labels, and a finished physical presentation rather than a prompt card.",
+    "prompt": "Create a finished vertical hardware-store parts-bin label board titled MINIATURE WEATHER MACHINE PARTS, photographed as a real battered galvanized metal board on a worn workbench. Show twelve removable cream paper bin labels clipped into tarnished brass holders in a 3 by 4 grid, each for a fictional tiny weather-machine replacement part: brass cloud pulley, porcelain fog nozzle, copper rain sprocket, glass dew reservoir, cork thunder gasket, mica lightning vane, enamel barometer tooth, tin hail chute, rubber wind bellows, wax rainbow prism, nickel drizzle screw, and felt storm muffler. Use readable label title lines, short part codes, quantity tick boxes, tiny silhouette icons, aisle/bin numbers, reorder dots, pencil stock counts, paper fibers, dog-eared corners, oil fingerprints, water stains, screw heads, chipped enamel aisle strip, aged brass, galvanized gray metal, and warm overhead shop light. Avoid placeholder boxes, prompt instructions, modern UI, real logos, barcodes, private data, hands, people, watermark, signature, dancing imagery, copyrighted characters, and nonsense decorative clutter.\n\nSource photo needed: none.\n\nReusable prompt template: Create a finished hardware-store bin label board about [TOPIC] using [DATA OR CATEGORIES], with a coherent physical label-board design, readable hierarchy, and specific invented details where data is not supplied. Use [ERA OR DESIGN LANGUAGE], [MATERIALS], [COLOR ACCENTS], and [SETTING] to make the layout feel real. Preserve the supplied topic, item names, quantities, categories, part relationships, bin codes, section hierarchy, and any real data provided by the user; change the label titles, icon system, grid structure, paper treatment, annotations, props, and physical presentation to fit the chosen subject. Avoid nonsense labels, cluttered microtext, placeholder boxes, generic decoration, real logos, private data, and prompt-instruction text.\n\nWhat to preserve: the supplied topic, item list, categories, counts, part relationships, bin codes, stock quantities, hierarchy, and any factual details provided by the user.\n\nWhat to change: turn the topic into a tactile finished hardware-store bin label board with clipped paper labels, brass holders, title strip, item codes, quantity ticks, reorder marks, small icons, worn paper, shop-counter props, and believable workbench lighting.\n\nExample substitution: Create a hardware-store bin label board for miniature weather machine parts; use twelve fictional part labels, aisle/bin numbers, short part codes, quantity tick boxes, reorder dots, tiny silhouette icons, cream label stock, tarnished brass holders, galvanized metal backing, a worn parts scoop, and warm shop light.",
+    "image": "images/2026-06-03-evening-miniature-weather-machine-bin-labels.png",
+    "date": "2026-06-03",
+    "batch": "Daily Prompt",
+    "slot": "evening",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1536"
   }
 ]
