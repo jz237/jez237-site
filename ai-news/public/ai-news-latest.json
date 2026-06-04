@@ -1,8 +1,24 @@
 {
-  "updatedAt": "2026-06-04T08:00:01.406712+00:00",
+  "updatedAt": "2026-06-04T09:00:02.117812+00:00",
   "items": [
     {
-      "title": "Ali Kayyam, Anusha Madan Gopal, M Anthony Lewis",
+      "title": "How Endava is redesigning software delivery around AI agents",
+      "url": "https://openai.com/index/endava-frontiers",
+      "source": "OpenAI News",
+      "sourceUrl": "https://openai.com/news/rss.xml",
+      "sourceWeight": 1.0,
+      "category": "AI",
+      "summary": "Learn how Endava is using AI agents, ChatGPT Enterprise, and Codex to accelerate software delivery, automate workflows, and build an AI-native culture across the enterprise.",
+      "image": "",
+      "published": "2026-06-04T12:00:00+00:00",
+      "firstSeen": "2026-06-04T09:00:02.117812+00:00",
+      "lastSeen": "2026-06-04T09:00:02.117812+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 9.2
+    },
+    {
+      "title": "Will Savage, Logan Burnett, Dean Price",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -10,12 +26,108 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-04T08:00:06.933386+00:00",
+      "published": "2026-06-04T09:00:11.969396+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-04T08:00:01.406712+00:00",
+      "lastSeen": "2026-06-04T09:00:02.117812+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
+    },
+    {
+      "title": "Merantix Capital closes a €103m fund to back early-stage European AI",
+      "url": "https://thenextweb.com/news/merantix-capital-103m-ai-fund",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Merantix Capital has closed a €103m fund to invest in early-stage, AI-native teams across Europe, the Berlin firm announced on 4 June. The fund is more than three times the size of its first vehicle, which co-founders Rasmus Rothe and Adrian Locher raised at roughly €30m, and it widens the firm’s remit from companies built [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/Merantix-Capital.avif",
+      "published": "2026-06-04T08:51:46+00:00",
+      "firstSeen": "2026-06-04T09:00:02.117812+00:00",
+      "lastSeen": "2026-06-04T09:00:02.117812+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.8458
+    },
+    {
+      "title": "Cerebras says it will work with everyone in AI hardware except NVIDIA",
+      "url": "https://thenextweb.com/news/cerebras-says-it-will-work-with-everyone-except-nvidia",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The strategy is defined by a single exclusion. Speaking at the Bloomberg Tech conference on Wednesday, Cerebras chief executive Andrew Feldman said the AI chipmaker is working with every major hardware maker in the industry apart from one: NVIDIA. The line was not a complaint. It was the pitch. Feldman’s argument is that the buyers [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/Cerebras.avif",
+      "published": "2026-06-04T08:37:50+00:00",
+      "firstSeen": "2026-06-04T09:00:02.117812+00:00",
+      "lastSeen": "2026-06-04T09:00:02.117812+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1388
+    },
+    {
+      "title": "SpaceX wins Texas county approval for Terafab reinvestment zone",
+      "url": "https://thenextweb.com/news/spacex-terafab-grimes-county-reinvestment-zone",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "A reinvestment zone is the unglamorous first step, the procedural gate that has to open before any of the larger numbers attached to a project can flow. On 3 June, the commissioners of Grimes County, Texas, opened it, voting 4-1 to designate a reinvestment zone for SpaceX’s proposed Terafab semiconductor plant. The vote is the [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/spacex-cursor-acquisition-ipo-60-billion-ai-coding.avif",
+      "published": "2026-06-04T08:31:57+00:00",
+      "firstSeen": "2026-06-04T09:00:02.117812+00:00",
+      "lastSeen": "2026-06-04T09:00:02.117812+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.2358
+    },
+    {
+      "title": "Benchmark breaks its own rule with a $2bn raise and a first growth fund",
+      "url": "https://thenextweb.com/news/benchmark-first-growth-fund-2bn-raise",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The discipline was the whole identity. For more than twenty years Benchmark kept its funds around $425m and backed only young companies, taking a roughly 20% stake in each and trusting that selectivity, not scale, would produce the returns. That model has now bent. The firm has closed $2bn across two new funds, according to [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/Benchmark-Capital.avif",
+      "published": "2026-06-04T08:27:20+00:00",
+      "firstSeen": "2026-06-04T09:00:02.117812+00:00",
+      "lastSeen": "2026-06-04T09:00:02.117812+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.4835
+    },
+    {
+      "title": "Uber’s bet on Nuro is bigger than it let on, at close to $500m",
+      "url": "https://thenextweb.com/news/uber-nuro-500m-commitment",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Uber said “multi-hundred-million” and meant something closer to half a billion. The ride-hailing company’s commitment to self-driving start-up Nuro is near $500m, according to sources directly aware of the matter, a figure that reframes a partnership Uber had described in vaguer terms and reveals a follow-on investment significantly larger than its first. The new detail [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/Uber.avif",
+      "published": "2026-06-04T08:09:41+00:00",
+      "firstSeen": "2026-06-04T09:00:02.117812+00:00",
+      "lastSeen": "2026-06-04T09:00:02.117812+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1247
+    },
+    {
+      "title": "Sam Altman tells Congress to fund AI testing, not to require model approvals",
+      "url": "https://thenextweb.com/news/altman-congress-ai-model-approvals",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Sam Altman spent the week in Washington making a careful distinction. He is asking lawmakers to spend more money testing artificial intelligence, and asking them not to require AI companies to win government approval before releasing a model. The first is a request for resources. The second is a request for a particular kind of [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/Sam-Altman.avif",
+      "published": "2026-06-04T08:03:59+00:00",
+      "firstSeen": "2026-06-04T09:00:02.117812+00:00",
+      "lastSeen": "2026-06-04T09:00:02.117812+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "fluff",
+      "score": 0.6218
     },
     {
       "title": "A UK MP’s lawsuit could decide whether xAI answers for what Grok makes",
@@ -28,10 +140,10 @@
       "image": "https://media.thenextweb.com/2026/05/Grok-2.avif",
       "published": "2026-06-04T07:39:09+00:00",
       "firstSeen": "2026-06-04T08:00:01.406712+00:00",
-      "lastSeen": "2026-06-04T08:00:01.406712+00:00",
+      "lastSeen": "2026-06-04T09:00:02.117812+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.1394
+      "score": 11.1096
     },
     {
       "title": "Meta accuses Australia of breaching trade pact over news bargaining tax",
@@ -44,10 +156,26 @@
       "image": "https://media.thenextweb.com/2026/04/Meta.avif",
       "published": "2026-06-04T07:09:12+00:00",
       "firstSeen": "2026-06-04T08:00:01.406712+00:00",
-      "lastSeen": "2026-06-04T08:00:01.406712+00:00",
+      "lastSeen": "2026-06-04T09:00:02.117812+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1244
+      "score": 2.095
+    },
+    {
+      "title": "Kodesage raises $6.6M to drag enterprise legacy software into the AI era, without it leaving the building",
+      "url": "https://thenextweb.com/news/kodesage-6-6m-seed-legacy-software-modernisation",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The London and Budapest startup runs its modernisation AI entirely on-premise, aimed at the banks and insurers whose core systems still run on COBOL and Oracle Forms. The most important software in a bank is often the software nobody fully understands any more. It runs the core processes, it has run them for decades, and [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/Kodesage.avif",
+      "published": "2026-06-04T07:00:26+00:00",
+      "firstSeen": "2026-06-03T08:00:01.840940+00:00",
+      "lastSeen": "2026-06-04T09:00:02.117812+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "framework_or_plumbing",
+      "score": -1.0093
     },
     {
       "title": "Foxconn and Intel join SambaNova to build rackscale AI infrastructure",
@@ -60,10 +188,10 @@
       "image": "https://media.thenextweb.com/2026/04/Intel.avif",
       "published": "2026-06-04T06:59:19+00:00",
       "firstSeen": "2026-06-04T08:00:01.406712+00:00",
-      "lastSeen": "2026-06-04T08:00:01.406712+00:00",
+      "lastSeen": "2026-06-04T09:00:02.117812+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0195
+      "score": 2.9902
     },
     {
       "title": "Netflix turns to generative AI to fix a problem it helped create",
@@ -79,7 +207,23 @@
       "lastSeen": "2026-06-04T08:00:01.406712+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1151
+      "score": 2.0859
+    },
+    {
+      "title": "SpaceX Sets $135 IPO Price at $1.77T Valuation",
+      "url": "https://www.techrepublic.com/article/news-spacex-ipo-price-valuation",
+      "source": "TechRepublic AI",
+      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "SpaceX set its IPO price at $135, putting the company on track for a record public listing and a valuation near $1.77 trillion.\nThe post SpaceX Sets $135 IPO Price at $1.77T Valuation appeared first on TechRepublic.",
+      "image": "https://assets.techrepublic.com/uploads/2026/06/photo-1711919600878-b5d9e77d3357.jpeg.jpeg?f=jpeg",
+      "published": "2026-06-04T05:48:03+00:00",
+      "firstSeen": "2026-06-04T09:00:02.117812+00:00",
+      "lastSeen": "2026-06-04T09:00:02.117812+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.1564
     },
     {
       "title": "v1.85.4",
@@ -92,10 +236,10 @@
       "image": "https://opengraph.githubassets.com/57442734c33cdf7f0873c8f41e4b8efe904300ed2e5e46dd06a12d309bfd8832/BerriAI/litellm/releases/tag/v1.85.4",
       "published": "2026-06-04T05:16:40+00:00",
       "firstSeen": "2026-06-04T06:00:01.706911+00:00",
-      "lastSeen": "2026-06-04T08:00:01.406712+00:00",
+      "lastSeen": "2026-06-04T09:00:02.117812+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9099
+      "score": 2.8819
     },
     {
       "title": "v1.84.5",
@@ -108,10 +252,10 @@
       "image": "https://opengraph.githubassets.com/e610ae1c5d289a032604563dc90a6ce3d0ed62b1ce0d706f15e60a47003e3805/BerriAI/litellm/releases/tag/v1.84.5",
       "published": "2026-06-04T04:11:46+00:00",
       "firstSeen": "2026-06-04T05:00:01.971077+00:00",
-      "lastSeen": "2026-06-04T08:00:01.406712+00:00",
+      "lastSeen": "2026-06-04T09:00:02.117812+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8797
+      "score": 2.8526
     },
     {
       "title": "OpenAI and Anthropic Sign Letter to Prevent AI-Developed Biological Weapons",
@@ -124,10 +268,10 @@
       "image": "https://media.wired.com/photos/6a1f6447234d4b89dad80277/master/pass/science_anthropic_final.jpg",
       "published": "2026-06-04T01:01:00+00:00",
       "firstSeen": "2026-06-04T01:47:43.364800+00:00",
-      "lastSeen": "2026-06-04T08:00:01.406712+00:00",
+      "lastSeen": "2026-06-04T09:00:02.117812+00:00",
       "editorial_allow": false,
       "editorial_reason": "fluff",
-      "score": 5.496
+      "score": 5.4712
     },
     {
       "title": "Lovable signs multiyear deal with Google Cloud to up usage 5x, source says",
@@ -140,10 +284,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/GettyImages-2245627953.jpg?resize=1200%2C800",
       "published": "2026-06-03T22:56:51+00:00",
       "firstSeen": "2026-06-03T23:00:01.869358+00:00",
-      "lastSeen": "2026-06-04T08:00:01.406712+00:00",
+      "lastSeen": "2026-06-04T09:00:02.117812+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.0454
+      "score": 8.022
     },
     {
       "title": "v0.30.4-rc1: llama-server: fix gemma4 patch wiring (#16477)",
@@ -156,10 +300,10 @@
       "image": "https://opengraph.githubassets.com/9c67f0207e49c9c0112423cf7585913bb6cecf5b2abd72d48cc8c190323fdc25/ollama/ollama",
       "published": "2026-06-03T21:41:03+00:00",
       "firstSeen": "2026-06-04T01:00:01.164134+00:00",
-      "lastSeen": "2026-06-04T08:00:01.406712+00:00",
+      "lastSeen": "2026-06-04T09:00:02.117812+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0859
+      "score": 5.0633
     },
     {
       "title": "Microsoft dropped the one survey question its employees actually cared about",
@@ -175,7 +319,7 @@
       "lastSeen": "2026-06-04T08:00:01.406712+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 0.9711
+      "score": 0.9486
     },
     {
       "title": "Alphabet just raised $85 billion for AI, smashing the largest equity offering in history",
@@ -191,7 +335,7 @@
       "lastSeen": "2026-06-04T08:00:01.406712+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.866
+      "score": 1.8436
     },
     {
       "title": "Hackers asked Meta’s AI chatbot to hand over Instagram accounts, and it did",
@@ -207,7 +351,7 @@
       "lastSeen": "2026-06-04T08:00:01.406712+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8605
+      "score": 1.8383
     },
     {
       "title": "A popular OpenAI Codex tool with 29,000 weekly downloads has been quietly stealing developer tokens for a month",
@@ -223,7 +367,7 @@
       "lastSeen": "2026-06-04T08:00:01.406712+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.2583
+      "score": 6.2362
     },
     {
       "title": "Uber cuts nearly a quarter of its HR division as new president reshapes the company from the inside",
@@ -239,7 +383,7 @@
       "lastSeen": "2026-06-04T08:00:01.406712+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.2517
+      "score": 4.2298
     },
     {
       "title": "Meta spent $400 million and fought the US government to buy a VR fitness app, then let its creators take it back",
@@ -255,7 +399,7 @@
       "lastSeen": "2026-06-04T08:00:01.406712+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9465
+      "score": 2.9247
     },
     {
       "title": "Microsoft Tests Wearable AI Badge for Office Workers",
@@ -268,10 +412,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/06/Untitled-design-35.png?f=jpeg",
       "published": "2026-06-03T20:02:38+00:00",
       "firstSeen": "2026-06-03T22:00:01.859369+00:00",
-      "lastSeen": "2026-06-04T08:00:01.406712+00:00",
+      "lastSeen": "2026-06-04T09:00:02.117812+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.6391
+      "score": 4.6175
     },
     {
       "title": "One click on GitHub.dev is all it takes to hand over your private repositories",
@@ -287,7 +431,7 @@
       "lastSeen": "2026-06-04T06:54:15.880857+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.3374
+      "score": 5.3158
     },
     {
       "title": "Can't make sense of Dashlane's vault theft notification? You're not alone.",
@@ -300,10 +444,10 @@
       "image": "https://cdn.arstechnica.net/wp-content/uploads/2026/06/dashlane-app-1152x648-1780514208.webp",
       "published": "2026-06-03T19:53:14+00:00",
       "firstSeen": "2026-06-03T22:00:01.859369+00:00",
-      "lastSeen": "2026-06-04T08:00:01.406712+00:00",
+      "lastSeen": "2026-06-04T09:00:02.117812+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8357
+      "score": 1.8142
     },
     {
       "title": "Alphabet’s record-breaking $85B raise for Google’s AI business is a helluva good signal",
@@ -316,10 +460,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/05/GettyImages-2215577882.jpg?resize=1200%2C800",
       "published": "2026-06-03T19:38:32+00:00",
       "firstSeen": "2026-06-03T20:00:02.061025+00:00",
-      "lastSeen": "2026-06-04T08:00:01.406712+00:00",
+      "lastSeen": "2026-06-04T09:00:02.117812+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0704
+      "score": 3.049
     },
     {
       "title": "Google’s Dreambeans, its weirdest-named AI tool to date, will turn your life into a cartoon",
@@ -332,10 +476,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/Screenshot-2026-06-03-at-9.13.33-AM.png?resize=1200%2C667",
       "published": "2026-06-03T19:07:42+00:00",
       "firstSeen": "2026-06-03T20:00:02.061025+00:00",
-      "lastSeen": "2026-06-04T08:00:01.406712+00:00",
+      "lastSeen": "2026-06-04T09:00:02.117812+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9593
+      "score": 1.9382
     },
     {
       "title": "Anthropic picks Morgan Stanley and Goldman Sachs to lead its IPO, with a SpaceX computing deal worth $1.25 billion per month buried in the fine print",
@@ -351,7 +495,7 @@
       "lastSeen": "2026-06-04T06:54:15.880857+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.8147
+      "score": 8.7937
     },
     {
       "title": "xAI Asks Court to Strip Alleged Grok Deepfake Nudes Victims of Anonymity",
@@ -364,10 +508,10 @@
       "image": "https://media.wired.com/photos/6a1f4ea4c350c2fb60808fa6/master/pass/Security_xAIWantstoStripAllegedGrokDeepfakeNudesVictimsofAnonymity_v1.jpg",
       "published": "2026-06-03T18:49:32+00:00",
       "firstSeen": "2026-06-03T19:00:01.264980+00:00",
-      "lastSeen": "2026-06-04T08:00:01.406712+00:00",
+      "lastSeen": "2026-06-04T09:00:02.117812+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.9529
+      "score": 10.932
     },
     {
       "title": "The EU is asking households to cut electricity use during peak hours because AI data centres are straining the grid",
@@ -383,7 +527,7 @@
       "lastSeen": "2026-06-04T06:54:15.880857+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.5097
+      "score": 3.4889
     },
     {
       "title": "Virtual barbarians at the gate: securing the AI blind spot",
@@ -399,7 +543,7 @@
       "lastSeen": "2026-06-04T06:54:15.880857+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9004
+      "score": 2.8798
     },
     {
       "title": "The Humanoid Robot of the Future Is a 6-Foot-Tall Beefcake With a Chinese Body and an American Brain",
@@ -412,10 +556,10 @@
       "image": "https://media.wired.com/photos/6a1f67f31c7b696a4249008a/master/pass/AI-Lab-Nvidia-Unitree-Frankenstein-Humanoid-Robot-Business.jpg",
       "published": "2026-06-03T18:00:00+00:00",
       "firstSeen": "2026-06-03T19:00:01.264980+00:00",
-      "lastSeen": "2026-06-04T08:00:01.406712+00:00",
+      "lastSeen": "2026-06-04T09:00:02.117812+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9356
+      "score": 1.9152
     },
     {
       "title": "As AI gets better, it reveals an empty promise",
@@ -428,10 +572,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/11503853/mdoying_180419_1777_0454_2.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-03T17:45:35+00:00",
       "firstSeen": "2026-06-03T19:00:01.264980+00:00",
-      "lastSeen": "2026-06-04T08:00:01.406712+00:00",
+      "lastSeen": "2026-06-04T09:00:02.117812+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.7006
+      "score": 7.6803
     },
     {
       "title": "v0.30.4-rc0: Kill llama-server during Windows cleanup (#16458)",
@@ -444,10 +588,10 @@
       "image": "https://opengraph.githubassets.com/84888f0a0da64de337aa808b67e889b1e42e486980e24cf05cef13df2a7820cc/ollama/ollama",
       "published": "2026-06-03T17:25:12+00:00",
       "firstSeen": "2026-06-03T23:00:01.869358+00:00",
-      "lastSeen": "2026-06-04T08:00:01.406712+00:00",
+      "lastSeen": "2026-06-04T09:00:02.117812+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.0937
+      "score": 6.0736
     },
     {
       "title": "v0.30.3",
@@ -460,10 +604,10 @@
       "image": "https://opengraph.githubassets.com/d5b7f056beb356a12c1648fe196566daf924d0261bc41e94a1b0964d3f125691/ollama/ollama",
       "published": "2026-06-03T16:39:44+00:00",
       "firstSeen": "2026-06-03T15:00:01.428377+00:00",
-      "lastSeen": "2026-06-04T08:00:01.406712+00:00",
+      "lastSeen": "2026-06-04T09:00:02.117812+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9784
+      "score": 1.9587
     },
     {
       "title": "Amazon&#8217;s search bar will invent AI-generated products you can&#8217;t buy",
@@ -476,10 +620,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/amazon-ai-search.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C4.865499187579%2C100%2C90.269001624842&amp%3Bw=1200",
       "published": "2026-06-03T16:07:31+00:00",
       "firstSeen": "2026-06-03T17:00:01.753114+00:00",
-      "lastSeen": "2026-06-04T08:00:01.406712+00:00",
+      "lastSeen": "2026-06-04T09:00:02.117812+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.4677
+      "score": 5.4484
     },
     {
       "title": "Amazon will show AI product images when you search for some reason",
@@ -492,155 +636,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/Screenshot-2026-06-03-at-11.16.52-AM.jpg?resize=1200%2C695",
       "published": "2026-06-03T15:50:26+00:00",
       "firstSeen": "2026-06-03T16:00:01.415350+00:00",
-      "lastSeen": "2026-06-04T08:00:01.406712+00:00",
+      "lastSeen": "2026-06-04T09:00:02.117812+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.2922
-    },
-    {
-      "title": "This Is How Trump Finally Signed the AI Executive Order",
-      "url": "https://www.wired.com/story/this-is-how-trump-finally-signed-the-ai-executive-order",
-      "source": "Wired AI",
-      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "After shelving the original executive order last month, Donald Trump finally got on board Monday night.",
-      "image": "https://media.wired.com/photos/6a2042b93fae6e15d3dce8a2/master/pass/GettyImages-2278487848.jpg",
-      "published": "2026-06-03T15:46:52+00:00",
-      "firstSeen": "2026-06-03T16:00:01.415350+00:00",
-      "lastSeen": "2026-06-04T08:00:01.406712+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.891
-    },
-    {
-      "title": "Release v5.10.1",
-      "url": "https://github.com/huggingface/transformers/releases/tag/v5.10.1",
-      "source": "Hugging Face Transformers Releases",
-      "sourceUrl": "https://github.com/huggingface/transformers/releases.atom",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Release v5.10.1\nv5.10.0 was yanked as we publish on a corrupted branch. Sorry everyone, this happens when we rush a release!!!\nNew Model additions\nGemma4 unified+ Gemma4 MTP\n\nGemma 4 12B Unified is an encoder-free multimodal model with pretrained and instruction-tuned variants. Unlike standard Gemma 4, which uses dedicated encoder towers, Gemma 4 12B Unified projects raw inputs directly into the language model's embedding space through lightweight linear pipelines. This results in a simpler architecture while maintaining strong multimodal performance.\nKey differences from standard Gemma 4:\n\nNo",
-      "image": "https://private-user-images.githubusercontent.com/48595927/602317672-5e3ee940-f78d-4343-ac7a-889930800aa6.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3ODA1NjAzMDksIm5iZiI6MTc4MDU2MDAwOSwicGF0aCI6Ii80ODU5NTkyNy82MDIzMTc2NzItNWUzZWU5NDAtZjc4ZC00MzQzLWFjN2EtODg5OTMwODAwYWE2LnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNjA2MDQlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjYwNjA0VDA4MDAwOVomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTgxYzc2Zjk0Mjg5ZTRlYWRhNTEyNjM1MjE5OTZlZDhjMjQ0ZmVlNjNlMjBiYWI5ZjM4N2JiNDA4OTlkZjgwY2MmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0JnJlc3BvbnNlLWNvbnRlbnQtdHlwZT1pbWFnZSUyRnBuZyJ9.8BJJPcWgekNvwwIHSczy-2IhVGLIQVm_omwSLSoIBjY",
-      "published": "2026-06-03T15:37:41+00:00",
-      "firstSeen": "2026-06-03T16:00:01.415350+00:00",
-      "lastSeen": "2026-06-04T08:00:01.406712+00:00",
-      "model_release": true,
-      "editorial_allow": true,
-      "editorial_reason": "model_release",
-      "score": 14.088
-    },
-    {
-      "title": "v5.10.0",
-      "url": "https://github.com/huggingface/transformers/releases/tag/v5.10.0",
-      "source": "Hugging Face Transformers Releases",
-      "sourceUrl": "https://github.com/huggingface/transformers/releases.atom",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "v5.10.0",
-      "image": "https://repository-images.githubusercontent.com/155220641/a16c4880-a501-11ea-9e8f-646cf611702e",
-      "published": "2026-06-03T15:08:54+00:00",
-      "firstSeen": "2026-06-03T16:00:01.415350+00:00",
-      "lastSeen": "2026-06-04T08:00:01.406712+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.8788
-    },
-    {
-      "title": "NVIDIA Research Unlocks Advanced Grasping, Smarter Autonomous Driving and Agent Training at Scale",
-      "url": "https://blogs.nvidia.com/blog/cvpr-research-grasping-driving-agent-training",
-      "source": "NVIDIA Blog",
-      "sourceUrl": "https://blogs.nvidia.com/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "What makes a robot gripper useful isn’t that it can pick up one object — it’s that it can pick up the next one, and the one after that, with a tool it’s never held before.  What makes an autonomous vehicle system safe isn’t just that it can reason through a situation — it’s that [&#8230;]",
-      "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/CVPR_blog_still-scaled.png",
-      "published": "2026-06-03T15:00:57+00:00",
-      "firstSeen": "2026-06-03T16:00:01.415350+00:00",
-      "lastSeen": "2026-06-04T08:00:01.406712+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 7.2763
-    },
-    {
-      "title": "NVIDIA Enables the Next Era Of Physical AI Research With Agent Skills For Autonomous Vehicles, Robotics And Vision AI",
-      "url": "https://blogs.nvidia.com/blog/cvpr-physical-ai-research-agent-skills",
-      "source": "NVIDIA Blog",
-      "sourceUrl": "https://blogs.nvidia.com/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "At CVPR, NVIDIA is unveiling new physical AI agent skills that help researchers and developers speed the development of autonomous vehicles, robots and vision AI systems. The core challenge in physical AI research isn’t simply developing stronger models. It’s building a full workflow around them — reconstructing real-world scenes, generating edge-case scenarios, training policies, evaluating [&#8230;]",
-      "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/Delta-Defect-Image-Generation.mp4",
-      "published": "2026-06-03T15:00:35+00:00",
-      "firstSeen": "2026-06-03T16:00:01.415350+00:00",
-      "lastSeen": "2026-06-04T08:00:01.406712+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "editorial_score_pass",
-      "score": 9.6762
-    },
-    {
-      "title": "These two founders left Goldman and Meta to build voice AI for markets everyone else overlooked",
-      "url": "https://techcrunch.com/2026/06/03/these-two-founders-left-goldman-and-meta-to-build-voice-ai-for-markets-everyone-else-overlooked",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "The startup's own stack for Africa and Middle East is now handling more than 17,000 calls per day.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/06/Athx-Pictures_-Right-Mariama-Left-Ayooluwa.jpg?resize=1200%2C675",
-      "published": "2026-06-03T15:00:00+00:00",
-      "firstSeen": "2026-06-03T16:00:01.415350+00:00",
-      "lastSeen": "2026-06-04T08:00:01.406712+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.876
-    },
-    {
-      "title": "Publishers will be able to opt out of AI Search, thanks to new regulation",
-      "url": "https://techcrunch.com/2026/06/03/publishers-will-be-able-to-opt-out-of-ai-search-thanks-to-new-regulation",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "U.K. regulators are requiring Google offer a tool allowing website publishers to opt-out of generative AI search features. The option will be tested in the U.K. then rolled out globally.",
-      "image": "https://techcrunch.com/wp-content/uploads/2019/10/google-search-app-ios.jpg?resize=1200%2C644",
-      "published": "2026-06-03T14:58:33+00:00",
-      "firstSeen": "2026-06-03T15:00:01.428377+00:00",
-      "lastSeen": "2026-06-04T08:00:01.406712+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.2755
-    },
-    {
-      "title": "Microsoft Unveils AI-Powered Windows Features for Developers",
-      "url": "https://www.techrepublic.com/article/news-microsoft-windows-ai-agents-developer-tools",
-      "source": "TechRepublic AI",
-      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Microsoft’s Build 2026 Windows updates add developer setup tools, local AI models, Linux workflows, and agent security controls.\nThe post Microsoft Unveils AI-Powered Windows Features for Developers appeared first on TechRepublic.",
-      "image": "https://assets.techrepublic.com/uploads/2026/06/tr-06032026-microsoft-windows-ai-agents-developer-tools.jpg?f=jpeg",
-      "published": "2026-06-03T14:17:15+00:00",
-      "firstSeen": "2026-06-03T22:00:01.859369+00:00",
-      "lastSeen": "2026-06-04T08:00:01.406712+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.5225
-    },
-    {
-      "title": "Microsoft and OpenAI broke up — now they’re ready to fight",
-      "url": "https://www.theverge.com/ai-artificial-intelligence/942242/microsoft-build-ai-agents-openai-competition",
-      "source": "The Verge AI",
-      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "At Microsoft's annual Build conference on Tuesday, the company announced a slew of new or expanded AI initiatives, including a super app, in-house reasoning models, a cybersecurity tool, and OpenClaw-esque AI agents. All this news added up to a clear message: Microsoft is positioned to be one of the biggest players in AI, and it's [&#8230;]",
-      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/10/STK178_Satya_Nadella_B.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C9.9676601489831%2C100%2C80.064679702034&amp%3Bw=1200",
-      "published": "2026-06-03T14:04:00+00:00",
-      "firstSeen": "2026-06-03T15:00:01.428377+00:00",
-      "lastSeen": "2026-06-04T08:00:01.406712+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "editorial_score_pass",
-      "score": 9.4284
+      "score": 4.2729
     },
     {
       "title": "The Life Scientific: Seth Berkley",
@@ -653,10 +652,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-01T20:00:00+00:00",
       "firstSeen": "2026-06-01T21:00:01.828388+00:00",
-      "lastSeen": "2026-06-04T08:00:01.406712+00:00",
+      "lastSeen": "2026-06-04T09:00:02.117812+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.3978
+      "score": 1.3921
     },
     {
       "title": "Dean Lomax on discovering ichthyosaurs and defying nay-sayers",
@@ -669,10 +668,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-26T08:30:00+00:00",
       "firstSeen": "2026-05-26T08:41:33.144051+00:00",
-      "lastSeen": "2026-06-04T08:00:01.406712+00:00",
+      "lastSeen": "2026-06-04T09:00:02.117812+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.1228
+      "score": 1.1227
     },
     {
       "title": "The Life Scientific: Hiranya Peiris",
@@ -685,10 +684,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-25T20:00:00+00:00",
       "firstSeen": "2026-05-25T21:00:01.605108+00:00",
-      "lastSeen": "2026-06-04T08:00:01.406712+00:00",
+      "lastSeen": "2026-06-04T09:00:02.117812+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 0.292
+      "score": 0.2919
     },
     {
       "title": "Helen Hastie on the future of human-robot relations",

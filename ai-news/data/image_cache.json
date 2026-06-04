@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-04T08:00:01.406712+00:00",
+  "updatedAt": "2026-06-04T09:00:02.117812+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -9208,6 +9208,14 @@
     "https://github.com/BerriAI/litellm/releases/tag/v1.85.4": {
       "image": "https://opengraph.githubassets.com/57442734c33cdf7f0873c8f41e4b8efe904300ed2e5e46dd06a12d309bfd8832/BerriAI/litellm/releases/tag/v1.85.4",
       "checkedAt": "2026-06-04T06:00:01.706911+00:00"
+    },
+    "https://openai.com/index/endava-frontiers": {
+      "image": "",
+      "checkedAt": "2026-06-04T09:00:02.117812+00:00"
+    },
+    "https://www.techrepublic.com/article/news-spacex-ipo-price-valuation": {
+      "image": "https://assets.techrepublic.com/uploads/2026/06/photo-1711919600878-b5d9e77d3357.jpeg.jpeg?f=jpeg",
+      "checkedAt": "2026-06-04T09:00:02.117812+00:00"
     }
   }
 }
