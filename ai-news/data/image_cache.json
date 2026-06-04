@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-04T11:00:01.256558+00:00",
+  "updatedAt": "2026-06-04T12:00:01.952744+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -9220,6 +9220,14 @@
     "https://www.theverge.com/ai-artificial-intelligence/942884/amazon-next-generation-warehouse-robot-proteus": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/proteus.jpeg?quality=90&amp;strip=all&amp;crop=2.25%2C0%2C95.5%2C100&amp;w=1200",
       "checkedAt": "2026-06-04T10:00:01.867424+00:00"
+    },
+    "https://huggingface.co/blog/nvidia/task-seeded-sdg": {
+      "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/nvidia/task-seeded-sdg.png",
+      "checkedAt": "2026-06-04T12:00:01.952744+00:00"
+    },
+    "https://www.technologyreview.com/2026/06/04/1138391/courts-coping-ai-lawsuits": {
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/06/court-room.jpg?resize=1200,600",
+      "checkedAt": "2026-06-04T12:00:01.952744+00:00"
     }
   }
 }
