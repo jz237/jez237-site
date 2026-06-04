@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-04T23:00:01.697895+00:00",
+  "updatedAt": "2026-06-04T22:41:54.387057+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -9357,17 +9357,13 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/04/StrictlyVC-NYC-2024.jpg?resize=1200,800",
       "checkedAt": "2026-06-04T22:00:01.464523+00:00"
     },
-    "https://techcrunch.com/2026/06/04/ahead-of-its-ipo-anthropics-daniela-amodei-shrugs-off-doubts-about-ais-returns": {
-      "image": "https://techcrunch.com/wp-content/uploads/2026/06/55314412841_11b924318f_c.jpg?w=799",
-      "checkedAt": "2026-06-04T23:00:01.697895+00:00"
-    },
     "https://techcrunch.com/2026/06/04/airbnbs-brian-chesky-plans-to-launch-a-new-ai-lab": {
-      "image": "https://techcrunch.com/wp-content/uploads/2017/05/gettyimages-652988834.jpg?w=1024",
-      "checkedAt": "2026-06-04T23:00:01.697895+00:00"
+      "image": "https://techcrunch.com/wp-content/uploads/2018/02/tc-backlight-e1689786273147.png?w=1200",
+      "checkedAt": "2026-06-04T22:41:54.387057+00:00"
     },
     "https://github.com/BerriAI/litellm/releases/tag/v1.87.1": {
       "image": "https://opengraph.githubassets.com/bfab6526e28a3439c38817f5f6b9cf77e948536dd506a6443b26790668cffe11/BerriAI/litellm/releases/tag/v1.87.1",
-      "checkedAt": "2026-06-04T23:00:01.697895+00:00"
+      "checkedAt": "2026-06-04T22:41:54.387057+00:00"
     }
   }
 }
