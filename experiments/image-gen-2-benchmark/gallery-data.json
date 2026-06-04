@@ -1330,5 +1330,17 @@
     "slot": "evening",
     "model": "gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-06-04-morning-portrait-as-soapstone-weather-idol",
+    "title": "Portrait as Soapstone Weather Idol",
+    "tests": "Reusable reference-photo transformation template; preserves portrait identity while changing material, construction, setting, lighting, and props; generated example image is finished output with no instructional text rendered.",
+    "prompt": "Use the uploaded reference photo and preserve the person identity, head angle, seated or bust-length pose, silhouette, expression, hairstyle, eyewear or distinctive accessories, facial proportions, and most recognizable features, then transform the person into a rain-polished soapstone weather idol on a rooftop weather-station shrine with cool storm-morning light. Rebuild the subject from pale green and charcoal soapstone with cloudy mineral veins, softened chisel planes, worn edges, darker stone inlays for glasses or accessories, subtle carved pupils, layered stone hair ridges, and simplified carved clothing folds. Add a damp copper instrument plinth, tiny anemometer cups, brass pressure gauges, glass rain vials, oxidized screws, curled weather log paper, mineral dust, water beads, rooftop gravel, a parapet, blurred storm clouds, and a small amber maintenance lamp. Keep the source person recognizable while changing the material, body construction, surface texture, props, lighting, and setting into a cohesive carved weather shrine. Avoid extra limbs, duplicate faces, distorted anatomy, text/logo artifacts, placeholder marks, watermark, dancing, and losing the source-photo likeness.\n\nSource photo needed: a clear portrait photo of a person.\n\nReusable template: Use the uploaded reference photo and preserve the [PERSON] identity, pose, silhouette, expression, hairstyle, distinctive accessories, facial proportions, and most recognizable features, then transform [PERSON] into a stone idol made from [MATERIAL] in [SETTING] with [MOOD] lighting. Keep the source recognizable while changing the material logic, body construction, surface texture, props, and environment into a cohesive sculptural artifact. Avoid extra limbs, duplicate faces, distorted anatomy, text/logo artifacts, placeholder marks, watermark, and losing recognizability.\n\nWhat to preserve: identity, pose, silhouette, expression, hairstyle, eyewear or distinctive accessories, facial proportions, recognizable face structure, shoulder or bust composition, and overall source-photo likeness.\n\nWhat to change: convert the person into a soapstone weather idol with mineral veins, carved stone planes, rain-polished surfaces, rooftop weather-station instruments, damp copper and brass props, stormy rooftop context, and cool morning light.\n\nExample substitution: Use a clear portrait of a middle-aged person with round glasses, short swept hair, a calm closed-mouth smile, and a three-quarter seated pose; preserve the glasses, smile, hair silhouette, head angle, and facial proportions, then turn them into a rain-polished pale green soapstone weather idol on a rooftop instrument plinth.",
+    "image": "images/2026-06-04-morning-portrait-as-soapstone-weather-idol.png",
+    "date": "2026-06-04",
+    "batch": "Daily Prompt",
+    "slot": "morning",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
