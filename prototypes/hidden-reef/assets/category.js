@@ -134,6 +134,15 @@
     return products;
   }
 
+  function getAllCatalogProducts() {
+    let products = [];
+    if (!window.THR_PRODUCTS) return products;
+    for (const key of Object.keys(THR_PRODUCTS)) {
+      products = products.concat(getProducts(key));
+    }
+    return products;
+  }
+
   function getCategoryMeta(subSlug) {
     const categories = window.THR?.categories || {};
     for (const groupSlug of Object.keys(categories)) {
@@ -270,11 +279,14 @@
   function applyProductControls(products) {
     const controls = getActiveControls();
     const query = controls.query.toLowerCase();
+    const allProducts = getAllCatalogProducts();
     const sourceProducts = controls.category === NEW_ARRIVALS_FILTER
-      ? getNewArrivalProducts(products)
+      ? getNewArrivalProducts(allProducts)
       : controls.category === SALE_ITEMS_FILTER
         ? getSaleProducts()
-        : products;
+        : controls.category
+          ? allProducts
+          : products;
     let filtered = sourceProducts.filter(product => {
       const name = product.name || '';
       const brand = extractBrand(name);
@@ -294,9 +306,11 @@
     const el = document.getElementById('product-controls');
     if (!el) return;
 
-    const brands = Array.from(new Set(products.map(product => extractBrand(product.name)).filter(Boolean))).sort((a, b) => a.localeCompare(b));
+    const allProducts = getAllCatalogProducts();
+    const filterProducts = allProducts.concat(getSaleProducts(), getNewArrivalProducts(allProducts));
+    const brands = Array.from(new Set(filterProducts.map(product => extractBrand(product.name)).filter(Boolean))).sort((a, b) => a.localeCompare(b));
     const brandOptions = brands.map(brand => '<option value="' + escapeHtml(brand) + '">' + escapeHtml(brand) + '</option>').join('');
-    const categories = Array.from(new Map(products
+    const categories = Array.from(new Map(allProducts
       .filter(product => product.groupSlug && product.groupName)
       .filter(product => product.groupSlug !== 'aquariums')
       .map(product => [product.groupSlug, product.groupName]))
@@ -916,8 +930,8 @@
     currentCategory = cat;
     currentSubcategory = sub;
     currentResultLabel = sub ? sub.name : (cat ? cat.name : '');
-    showNewArrivalsFilter = !cat && !sub;
-    showSaleItemsFilter = !cat && !sub && getSaleProducts().length > 0;
+    showNewArrivalsFilter = getNewArrivalProducts(getAllCatalogProducts()).length > 0;
+    showSaleItemsFilter = getSaleProducts().length > 0;
     setMainNavActive(cat ? cat.slug : '');
 
     renderBreadcrumb(cat, sub);
@@ -933,12 +947,7 @@
     } else if (cat) {
       products = getCategoryProducts(cat);
     } else {
-      products = [];
-      if (window.THR_PRODUCTS) {
-        for (const key of Object.keys(THR_PRODUCTS)) {
-          products = products.concat(getProducts(key));
-        }
-      }
+      products = getAllCatalogProducts();
     }
     baseProducts = products;
     currentProducts = products;
