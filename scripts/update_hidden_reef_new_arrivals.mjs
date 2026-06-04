@@ -5,6 +5,7 @@ import path from 'node:path';
 const repoRoot = path.resolve(import.meta.dirname, '..');
 const outputPath = path.join(repoRoot, 'prototypes/hidden-reef/assets/new-arrivals.js');
 const homeUrl = 'https://www.thehiddenreef.com/';
+const fallbackListUrl = 'https://www.thehiddenreef.com/collection/?sort=newest';
 const args = parseArgs(process.argv.slice(2));
 const write = Boolean(args.write);
 const timestamp = new Date().toISOString();
@@ -84,9 +85,18 @@ async function fetchHtml(url) {
   }
 }
 
-function parseProductCards(html, pageUrl) {
-  const section = html.match(/<h2[^>]*>\s*New arrivals\s*<\/h2>[\s\S]*?<\/section>/i)?.[0] || '';
-  const cards = section.match(/<div class="prod-card">[\s\S]*?<\/div>\s*<\/div>\s*<\/div>/g) || [];
+function extractNewArrivalsSection(html) {
+  return html.match(/<h2[^>]*>\s*New arrivals\s*<\/h2>[\s\S]*?<\/section>/i)?.[0] || '';
+}
+
+function findNewArrivalsListUrl(html) {
+  const section = extractNewArrivalsSection(html);
+  const viewAll = section.match(/<a\b[^>]+href="([^"]+)"[^>]*>\s*View all\s*<\/a>/i)?.[1] || '';
+  return absoluteUrl(viewAll, homeUrl) || fallbackListUrl;
+}
+
+function parseProductCards(html, pageUrl, sourceSection = 'New arrivals') {
+  const cards = html.match(/<div class="prod-card">[\s\S]*?<\/div>\s*<\/div>\s*<\/div>/g) || [];
   return cards.map((card, index) => {
     const titleMatch = card.match(/<a[^>]+class="product-card__title"[^>]*>([\s\S]*?)<\/a>/);
     const imageLinkMatch = card.match(/<a[^>]+class="prod-card__img-link"[^>]+href="([^"]+)"/);
@@ -107,16 +117,26 @@ function parseProductCards(html, pageUrl) {
       productUrl,
       imageUrl,
       page: 1,
-      sourceSection: 'New arrivals',
+      sourceSection,
       newArrivalRank: index + 1
     };
   }).filter(Boolean);
 }
 
-function renderNewArrivalsFile(products) {
+function uniqueByProductUrl(products) {
+  const seen = new Set();
+  return products.filter(product => {
+    const key = product.productUrl.replace(/[#?].*$/, '');
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  }).map((product, index) => Object.assign({}, product, { newArrivalRank: index + 1 }));
+}
+
+function renderNewArrivalsFile(products, sourceUrl) {
   const payload = {
     generatedAt: timestamp,
-    sourceUrl: homeUrl,
+    sourceUrl,
     products
   };
   const json = JSON.stringify(payload, null, 2)
@@ -128,15 +148,20 @@ function renderNewArrivalsFile(products) {
 
 await fs.mkdir(reportDir, { recursive: true });
 const html = await fetchHtml(homeUrl);
-const products = parseProductCards(html, homeUrl);
+const listUrl = args.url || findNewArrivalsListUrl(html);
+const listHtml = await fetchHtml(listUrl);
+const listingProducts = parseProductCards(listHtml, listUrl, 'New arrivals');
+const carouselProducts = parseProductCards(extractNewArrivalsSection(html), homeUrl, 'New arrivals carousel');
+const products = uniqueByProductUrl(listingProducts.length ? listingProducts : carouselProducts);
 const previous = await fs.readFile(outputPath, 'utf8').catch(() => '');
-const next = renderNewArrivalsFile(products);
+const next = renderNewArrivalsFile(products, listingProducts.length ? listUrl : homeUrl);
 const changed = previous !== next;
 const reportPath = path.join(reportDir, 'report.json');
 
 await fs.writeFile(reportPath, `${JSON.stringify({
   timestamp,
   sourceUrl: homeUrl,
+  listUrl,
   write,
   changed,
   products: products.length,
