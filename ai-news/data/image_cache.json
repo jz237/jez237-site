@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-04T18:00:01.314928+00:00",
+  "updatedAt": "2026-06-04T19:00:01.866512+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -9324,6 +9324,18 @@
     "https://www.techrepublic.com/article/news-microsoft-project-solara-ai-agents": {
       "image": "https://assets.techrepublic.com/uploads/2026/06/00_Title-Page-scaled-1.png?f=jpeg",
       "checkedAt": "2026-06-04T18:00:01.314928+00:00"
+    },
+    "https://huggingface.co/blog/nvidia/nemotron-3-5-content-safety": {
+      "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/nvidia/nemotron-3-5-content-safety.png",
+      "checkedAt": "2026-06-04T19:00:01.866512+00:00"
+    },
+    "https://www.theverge.com/ai-artificial-intelligence/943234/kevin-oleary-agrees-to-downsize-massive-utah-data-center": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/STKP224_KEVIN_O_LEARY_CVIRGINIA_A.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-06-04T19:00:01.866512+00:00"
+    },
+    "https://www.techrepublic.com/article/news-gartner-srm-2026-resilience-ai-security": {
+      "image": "https://assets.techrepublic.com/uploads/2026/06/close-up-of-male-hand-using-keyboard-with-abstract-2026-01-11-08-38-45-utc-1.jpg?f=jpeg",
+      "checkedAt": "2026-06-04T19:00:01.866512+00:00"
     }
   }
 }
