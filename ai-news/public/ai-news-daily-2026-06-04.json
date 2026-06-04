@@ -1,7 +1,24 @@
 {
   "date": "2026-06-04",
-  "updatedAt": "2026-06-04T17:21:08.061251+00:00",
+  "updatedAt": "2026-06-04T18:00:01.314928+00:00",
   "items": [
+    {
+      "title": "Meta launches an AI assistant that tells Facebook creators why their content works, not just that it did",
+      "url": "https://thenextweb.com/news/meta-launches-an-ai-assistant-that-tells-facebook-creators-why-their-content-works-not-just-that-it-did",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Knowing that a reel performed well has never been the hard part. The hard part is understanding why. Was it the hook, the timing, the format, the audio? Creators have spent years toggling between analytics dashboards trying to reverse-engineer answers that the data, on its own, does not give. Meta’s new Creator Assistant, announced on Wednesday, [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/Meta.avif",
+      "published": "2026-06-04T16:57:07+00:00",
+      "firstSeen": "2026-06-04T18:00:01.314928+00:00",
+      "lastSeen": "2026-06-04T18:00:01.314928+00:00",
+      "model_release": true,
+      "editorial_allow": true,
+      "editorial_reason": "model_release",
+      "score": 13.3184
+    },
     {
       "title": "Dreaming: Better memory for a more helpful ChatGPT",
       "url": "https://openai.com/index/chatgpt-memory-dreaming",
@@ -13,10 +30,10 @@
       "image": "https://images.ctfassets.net/kftzwdyauwt9/41T8ZOansyDZGCqmwOkuOY/3cdeb6ab147c08fa9b313b677fb5318e/16x9_SEO__1_.png?w=1600&amp%3Bh=900&amp%3Bfit=fill",
       "published": "2026-06-04T09:00:00+00:00",
       "firstSeen": "2026-06-04T17:00:02.090586+00:00",
-      "lastSeen": "2026-06-04T17:21:08.061251+00:00",
+      "lastSeen": "2026-06-04T18:00:01.314928+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.3722
+      "score": 11.3567
     },
     {
       "title": "A single GitHub issue could have hijacked Anthropic’s own Claude Code action and poisoned every project that uses it",
@@ -29,10 +46,10 @@
       "image": "https://media.thenextweb.com/2026/04/anthropic-claude-opus-4-7-coding-agentic-benchmarks-release.avif",
       "published": "2026-06-04T16:44:24+00:00",
       "firstSeen": "2026-06-04T17:00:02.090586+00:00",
-      "lastSeen": "2026-06-04T17:21:08.061251+00:00",
+      "lastSeen": "2026-06-04T18:00:01.314928+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.1315
+      "score": 11.1122
     },
     {
       "title": "KPMG puts Claude in front of all 276,000 staff in an Anthropic alliance",
@@ -48,7 +65,7 @@
       "lastSeen": "2026-06-04T13:00:01.581582+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.9254
+      "score": 10.9098
     },
     {
       "title": "A UK MP’s lawsuit could decide whether xAI answers for what Grok makes",
@@ -64,7 +81,7 @@
       "lastSeen": "2026-06-04T09:00:02.117812+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.8902
+      "score": 10.8752
     },
     {
       "title": "How Endava is redesigning software delivery around AI agents",
@@ -77,10 +94,10 @@
       "image": "",
       "published": "2026-06-04T12:00:00+00:00",
       "firstSeen": "2026-06-04T09:00:02.117812+00:00",
-      "lastSeen": "2026-06-04T17:21:08.061251+00:00",
+      "lastSeen": "2026-06-04T18:00:01.314928+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.048
+      "score": 9.0311
     },
     {
       "title": "Databricks CEO calls 2026 “a terrible year to go public” as SpaceX, Anthropic, and OpenAI prepare to absorb $200 billion in IPO capital",
@@ -93,10 +110,42 @@
       "image": "https://media.thenextweb.com/2026/06/Databricks-CEO-Ali-Ghodsi.avif",
       "published": "2026-06-04T16:23:48+00:00",
       "firstSeen": "2026-06-04T17:00:02.090586+00:00",
-      "lastSeen": "2026-06-04T17:21:08.061251+00:00",
+      "lastSeen": "2026-06-04T18:00:01.314928+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.8212
+      "score": 8.8021
+    },
+    {
+      "title": "Malicious WhatsApp, Slack Alerts Could Have Exposed Millions of Android Users",
+      "url": "https://www.techrepublic.com/article/news-whatsapp-slack-alerts-could-manipulate-gemini-android",
+      "source": "TechRepublic AI",
+      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "SafeBreach found a now-fixed Gemini Android flaw that let malicious WhatsApp and Slack alerts manipulate AI responses and tools.\nThe post Malicious WhatsApp, Slack Alerts Could Have Exposed Millions of Android Users appeared first on TechRepublic.",
+      "image": "https://assets.techrepublic.com/uploads/2026/06/Untitled-design-35-1.png?f=jpeg",
+      "published": "2026-06-04T14:15:40+00:00",
+      "firstSeen": "2026-06-04T18:00:01.314928+00:00",
+      "lastSeen": "2026-06-04T18:00:01.314928+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 7.1415
+    },
+    {
+      "title": "Microsoft Project Solara Brings AI Agents to Enterprise Devices",
+      "url": "https://www.techrepublic.com/article/news-microsoft-project-solara-ai-agents",
+      "source": "TechRepublic AI",
+      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Microsoft’s Project Solara previews a future where AI agents run on managed enterprise devices, not just PCs, browsers, or chat windows. The platform is still early, but its badge and desk concepts raise new questions around identity, privacy, device management, and cloud-connected workflows.\nThe post Microsoft Project Solara Brings AI Agents to Enterprise Devices appeared first on TechRepublic.",
+      "image": "https://assets.techrepublic.com/uploads/2026/06/00_Title-Page-scaled-1.png?f=jpeg",
+      "published": "2026-06-04T08:15:21+00:00",
+      "firstSeen": "2026-06-04T18:00:01.314928+00:00",
+      "lastSeen": "2026-06-04T18:00:01.314928+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "editorial_score_pass",
+      "score": 7.0891
     },
     {
       "title": "Microsoft’s AI chief says the company wants to “eliminate” what it pays Anthropic",
@@ -112,87 +161,39 @@
       "lastSeen": "2026-06-04T17:21:08.061251+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.0704
+      "score": 7.0522
     },
     {
-      "title": "UK forces Google to let publishers opt out of AI search results without losing their ranking",
-      "url": "https://thenextweb.com/news/uk-forces-google-to-let-publishers-opt-out-of-ai-search-results-without-losing-their-ranking",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
+      "title": "DuckDuckGo Makes AI-Free Search Easier To Set as Default",
+      "url": "https://www.techrepublic.com/article/news-duckduckgo-no-ai-search",
+      "source": "TechRepublic AI",
+      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
       "sourceWeight": 0.75,
       "category": "AI",
-      "summary": "For months, publishers have faced a binary choice with Google: let AI Overviews summarise your content at the top of the search page, sending less traffic to your site, or disappear from Google entirely. As of Wednesday, that choice no longer applies in the UK. The Competition and Markets Authority has ordered Google to give publishers the [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/google-search-ai-overhaul-publishers-traffic-open-web.avif",
-      "published": "2026-06-04T15:04:11+00:00",
-      "firstSeen": "2026-06-04T16:00:01.246028+00:00",
-      "lastSeen": "2026-06-04T17:21:08.061251+00:00",
+      "summary": "DuckDuckGo’s new No AI search extensions make AI-free search easier to set as a browser default, giving users a persistent alternative to AI-generated search results.\nThe post DuckDuckGo Makes AI-Free Search Easier To Set as Default appeared first on TechRepublic.",
+      "image": "https://assets.techrepublic.com/uploads/2026/06/Studio-Mac-Start-Screen.png?f=jpeg",
+      "published": "2026-06-04T15:43:17+00:00",
+      "firstSeen": "2026-06-04T18:00:01.314928+00:00",
+      "lastSeen": "2026-06-04T18:00:01.314928+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "editorial_score_pass",
+      "score": 6.9825
+    },
+    {
+      "title": "US Firms Try DeepSeek as Silicon Valley AI Costs Rise",
+      "url": "https://www.techrepublic.com/article/news-us-firms-try-deepseek-ai-costs-rise",
+      "source": "TechRepublic AI",
+      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "US  firms are testing China’s DeepSeek as Silicon Valley AI costs rise, raising questions about savings, data residency, and risk.\nThe post US Firms Try DeepSeek as Silicon Valley AI Costs Rise appeared first on TechRepublic.",
+      "image": "https://assets.techrepublic.com/uploads/2026/06/deepseek.jpg?f=jpeg",
+      "published": "2026-06-04T15:37:23+00:00",
+      "firstSeen": "2026-06-04T18:00:01.314928+00:00",
+      "lastSeen": "2026-06-04T18:00:01.314928+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.5824
-    },
-    {
-      "title": "OpenAI and Anthropic Sign Letter to Prevent AI-Developed Biological Weapons",
-      "url": "https://www.wired.com/story/openai-anthropic-letter-ai-biological-weapons",
-      "source": "Wired AI",
-      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Leading AI labs, executives, and scientists are sending a letter to lawmakers urging them to improve tracking of synthetic DNA sequences that could be used for bioweapons.",
-      "image": "https://media.wired.com/photos/6a1f6447234d4b89dad80277/master/pass/science_anthropic_final.jpg",
-      "published": "2026-06-04T01:01:00+00:00",
-      "firstSeen": "2026-06-04T01:47:43.364800+00:00",
-      "lastSeen": "2026-06-04T17:21:08.061251+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "fluff",
-      "score": 5.2888
-    },
-    {
-      "title": "Ex-DeepMind duo raise $20 million to close the gap between what sales teams know and what they actually do",
-      "url": "https://thenextweb.com/news/airspeed-series-a-gtm-ai-agents",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The pitch deck for every AI sales tool tells the same story: more signals, better insights, smarter forecasting. What they leave out is that most of those insights end up ignored. Reps drown in dashboards. CRM records go stale. The deal that should have closed last week slips because nobody acted on the intent signal [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/airspeed-series-a-gtm-ai-agents.avif",
-      "published": "2026-06-04T14:12:00+00:00",
-      "firstSeen": "2026-06-04T16:00:01.246028+00:00",
-      "lastSeen": "2026-06-04T17:21:08.061251+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 5.0578
-    },
-    {
-      "title": "Designing the hf CLI as an agent-optimized way to work with the Hub",
-      "url": "https://huggingface.co/blog/hf-cli-for-agents",
-      "source": "Hugging Face Blog",
-      "sourceUrl": "https://huggingface.co/blog/feed.xml",
-      "sourceWeight": 0.95,
-      "category": "AI",
-      "summary": "",
-      "image": "https://huggingface.co/blog/assets/hf-cli-for-agents/thumbnail.png",
-      "published": "2026-06-04T00:00:00+00:00",
-      "firstSeen": "2026-06-04T16:00:01.246028+00:00",
-      "lastSeen": "2026-06-04T17:21:08.061251+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.7093
-    },
-    {
-      "title": "Complexity is the ceiling: software design in the age of AI coding",
-      "url": "https://thenextweb.com/news/complexity-is-the-ceiling-software-design-in-the-age-of-ai-coding",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "AI has made writing code faster than ever. The harder work is understanding a system and changing it without breaking it. That has not gotten cheaper, and it now decides how much you can hand to a machine. Introduction In 1987, in an essay called “No Silver Bullet,” Fred Brooks predicted that no tool or [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/complexity-ceiling-software-design-ai-coding.avif",
-      "published": "2026-06-04T09:19:35+00:00",
-      "firstSeen": "2026-06-04T10:00:01.867424+00:00",
-      "lastSeen": "2026-06-04T14:09:01.257162+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.3302
+      "score": 6.1797
     }
   ],
   "errors": [
