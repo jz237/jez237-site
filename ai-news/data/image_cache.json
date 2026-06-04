@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-04T21:00:01.488163+00:00",
+  "updatedAt": "2026-06-04T22:00:01.464523+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -9352,6 +9352,10 @@
     "https://openai.com/index/biodefense-in-the-intelligence-age": {
       "image": "https://images.ctfassets.net/kftzwdyauwt9/2GYeL7adKwSV57xftkvZT1/c6ae97a29ddc3f9b9406dabbfa41794f/oai_16x9_Biodefense_in_the_Intelligence_Age.png?w=1600&amp;h=900&amp;fit=fill",
       "checkedAt": "2026-06-04T21:00:01.488163+00:00"
+    },
+    "https://techcrunch.com/2026/06/04/defense-tech-ai-and-fundraising-take-center-stage-at-strictlyvc-los-angeles-on-june-18": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/04/StrictlyVC-NYC-2024.jpg?resize=1200,800",
+      "checkedAt": "2026-06-04T22:00:01.464523+00:00"
     }
   }
 }
