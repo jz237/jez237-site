@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-04T09:00:02.117812+00:00",
+  "updatedAt": "2026-06-04T10:00:01.867424+00:00",
   "items": [
     {
       "title": "How Endava is redesigning software delivery around AI agents",
@@ -12,13 +12,13 @@
       "image": "",
       "published": "2026-06-04T12:00:00+00:00",
       "firstSeen": "2026-06-04T09:00:02.117812+00:00",
-      "lastSeen": "2026-06-04T09:00:02.117812+00:00",
+      "lastSeen": "2026-06-04T10:00:01.867424+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
       "score": 9.2
     },
     {
-      "title": "Will Savage, Logan Burnett, Dean Price",
+      "title": "Ali Kayyam, Anusha Madan Gopal, M Anthony Lewis",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -26,12 +26,140 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-04T09:00:11.969396+00:00",
+      "published": "2026-06-04T10:00:13.882505+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-04T09:00:02.117812+00:00",
+      "lastSeen": "2026-06-04T10:00:01.867424+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
+    },
+    {
+      "title": "Amazon’s new Proteus robot takes plain-language orders, headed to Europe in 2027",
+      "url": "https://thenextweb.com/news/amazon-proteus-robot-europe-investment",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The pitch for Amazon’s new warehouse robot is that you talk to it. At its “Delivering the Future” event at the Dartford fulfilment centre east of London on 4 June, Amazon unveiled a next-generation Proteus that takes instructions in plain language, no technical commands and no programming interface, alongside a plan to invest more than [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/Amazon-new-Proteus-robot.avif",
+      "published": "2026-06-04T09:55:26+00:00",
+      "firstSeen": "2026-06-04T10:00:01.867424+00:00",
+      "lastSeen": "2026-06-04T10:00:01.867424+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1477
+    },
+    {
+      "title": "Meta keeps delaying the Muse Spark API developers were promised",
+      "url": "https://thenextweb.com/news/meta-muse-spark-api-delay",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The model shipped in April. The interface developers need to build on it has slipped repeatedly, with no firm date until Meta said this week it would arrive this month. A model without an API is a demo, not a platform. That is the awkward position Meta’s Muse Spark has occupied since April, when the [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/meta-muse-spark-msl-first-model.avif",
+      "published": "2026-06-04T09:43:32+00:00",
+      "firstSeen": "2026-06-04T10:00:01.867424+00:00",
+      "lastSeen": "2026-06-04T10:00:01.867424+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.8416
+    },
+    {
+      "title": "Quantum Computing Is Having Its Public Market Moment",
+      "url": "https://www.wired.com/story/quantum-computing-is-having-its-public-market-moment-quantinuum",
+      "source": "Wired AI",
+      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Quantinuum, a quantum computing startup, is losing millions. Investors want in anyway.",
+      "image": "https://media.wired.com/photos/6a209f374cffcda8ea79256c/master/pass/Quantum-Computing-Having-Public-Market-Moment-Business-2275664973.jpg",
+      "published": "2026-06-04T09:34:23+00:00",
+      "firstSeen": "2026-06-04T10:00:01.867424+00:00",
+      "lastSeen": "2026-06-04T10:00:01.867424+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.277
+    },
+    {
+      "title": "Quantinuum prices its IPO at $1.68bn, setting a new bar for quantum",
+      "url": "https://thenextweb.com/news/quantinuum-prices-its-ipo-at-1-68bn-setting-a-new-bar-for-quantum",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The marketed range was $53 to $55. Quantinuum priced at $60. That gap, the willingness of investors to pay above what the bankers asked, is the real news in the Honeywell-backed company’s initial public offering, which raised $1.68bn and set a valuation the entire quantum-computing sector will now be measured against. The mechanics are straightforward. [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/quantinuum-ipo-upsized-quantum-computing-14-billion.avif",
+      "published": "2026-06-04T09:31:25+00:00",
+      "firstSeen": "2026-06-04T10:00:01.867424+00:00",
+      "lastSeen": "2026-06-04T10:00:01.867424+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1355
+    },
+    {
+      "title": "Amazon develops a warehouse robot workers can speak to",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/942884/amazon-next-generation-warehouse-robot-proteus",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "Amazon has announced a new version of its fully autonomous warehouse robot, Proteus, that will can interact using language instead of code. The expanded capabilities come as part of a growing pivot towards automation as the e-commerce giant replaces its human workers with robots. Amazon says the AI-powered upgrade means its human employees can assign [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/proteus.jpeg?quality=90&amp%3Bstrip=all&amp%3Bcrop=2.25%2C0%2C95.5%2C100&amp%3Bw=1200",
+      "published": "2026-06-04T09:31:14+00:00",
+      "firstSeen": "2026-06-04T10:00:01.867424+00:00",
+      "lastSeen": "2026-06-04T10:00:01.867424+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.3454
+    },
+    {
+      "title": "SoftBank’s PayPay pushes into insurance with a 70.2% T&D Life stake",
+      "url": "https://thenextweb.com/news/paypay-td-financial-life-acquisition",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The SoftBank-backed payments app is taking a 70.2% stake in T&amp;D Financial Life, its most capital-intensive move yet from payments into full financial services. PayPay is buying its way into life insurance. The SoftBank-backed payments company has agreed to acquire a 70.2% stake in T&amp;D Financial Life Insurance from T&amp;D Holdings for roughly ¥134.3bn, about [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/PayPay.avif",
+      "published": "2026-06-04T09:23:54+00:00",
+      "firstSeen": "2026-06-04T10:00:01.867424+00:00",
+      "lastSeen": "2026-06-04T10:00:01.867424+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.9318
+    },
+    {
+      "title": "Complexity is the ceiling: software design in the age of AI coding",
+      "url": "https://thenextweb.com/news/complexity-is-the-ceiling-software-design-in-the-age-of-ai-coding",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "AI has made writing code faster than ever. The harder work is understanding a system and changing it without breaking it. That has not gotten cheaper, and it now decides how much you can hand to a machine. Introduction In 1987, in an essay called “No Silver Bullet,” Fred Brooks predicted that no tool or [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/complexity-ceiling-software-design-ai-coding.avif",
+      "published": "2026-06-04T09:19:35+00:00",
+      "firstSeen": "2026-06-04T10:00:01.867424+00:00",
+      "lastSeen": "2026-06-04T10:00:01.867424+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.5296
+    },
+    {
+      "title": "KPMG puts Claude in front of all 276,000 staff in an Anthropic alliance",
+      "url": "https://thenextweb.com/news/kpmg-anthropic-claude-alliance",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The Big Four firm is embedding Claude in the platform its people and clients actually work in, starting with tax and legal, and is named Anthropic’s preferred partner for private equity. The number that defines the deal is 276,000. That is how many KPMG employees will get access to Anthropic’s Claude under a global alliance [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/KPMG.avif",
+      "published": "2026-06-04T09:07:54+00:00",
+      "firstSeen": "2026-06-04T10:00:01.867424+00:00",
+      "lastSeen": "2026-06-04T10:00:01.867424+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 11.1238
     },
     {
       "title": "Merantix Capital closes a €103m fund to back early-stage European AI",
@@ -44,10 +172,10 @@
       "image": "https://media.thenextweb.com/2026/06/Merantix-Capital.avif",
       "published": "2026-06-04T08:51:46+00:00",
       "firstSeen": "2026-06-04T09:00:02.117812+00:00",
-      "lastSeen": "2026-06-04T09:00:02.117812+00:00",
+      "lastSeen": "2026-06-04T10:00:01.867424+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8458
+      "score": 2.8158
     },
     {
       "title": "Cerebras says it will work with everyone in AI hardware except NVIDIA",
@@ -60,10 +188,10 @@
       "image": "https://media.thenextweb.com/2026/05/Cerebras.avif",
       "published": "2026-06-04T08:37:50+00:00",
       "firstSeen": "2026-06-04T09:00:02.117812+00:00",
-      "lastSeen": "2026-06-04T09:00:02.117812+00:00",
+      "lastSeen": "2026-06-04T10:00:01.867424+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1388
+      "score": 2.1089
     },
     {
       "title": "SpaceX wins Texas county approval for Terafab reinvestment zone",
@@ -76,10 +204,10 @@
       "image": "https://media.thenextweb.com/2026/05/spacex-cursor-acquisition-ipo-60-billion-ai-coding.avif",
       "published": "2026-06-04T08:31:57+00:00",
       "firstSeen": "2026-06-04T09:00:02.117812+00:00",
-      "lastSeen": "2026-06-04T09:00:02.117812+00:00",
+      "lastSeen": "2026-06-04T10:00:01.867424+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2358
+      "score": 3.206
     },
     {
       "title": "Benchmark breaks its own rule with a $2bn raise and a first growth fund",
@@ -92,10 +220,10 @@
       "image": "https://media.thenextweb.com/2026/06/Benchmark-Capital.avif",
       "published": "2026-06-04T08:27:20+00:00",
       "firstSeen": "2026-06-04T09:00:02.117812+00:00",
-      "lastSeen": "2026-06-04T09:00:02.117812+00:00",
+      "lastSeen": "2026-06-04T10:00:01.867424+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.4835
+      "score": 2.4538
     },
     {
       "title": "Uber’s bet on Nuro is bigger than it let on, at close to $500m",
@@ -111,7 +239,7 @@
       "lastSeen": "2026-06-04T09:00:02.117812+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1247
+      "score": 2.0952
     },
     {
       "title": "Sam Altman tells Congress to fund AI testing, not to require model approvals",
@@ -127,7 +255,7 @@
       "lastSeen": "2026-06-04T09:00:02.117812+00:00",
       "editorial_allow": false,
       "editorial_reason": "fluff",
-      "score": 0.6218
+      "score": 0.5925
     },
     {
       "title": "A UK MP’s lawsuit could decide whether xAI answers for what Grok makes",
@@ -143,7 +271,7 @@
       "lastSeen": "2026-06-04T09:00:02.117812+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.1096
+      "score": 11.0805
     },
     {
       "title": "Meta accuses Australia of breaching trade pact over news bargaining tax",
@@ -159,7 +287,7 @@
       "lastSeen": "2026-06-04T09:00:02.117812+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.095
+      "score": 2.0664
     },
     {
       "title": "Kodesage raises $6.6M to drag enterprise legacy software into the AI era, without it leaving the building",
@@ -175,7 +303,7 @@
       "lastSeen": "2026-06-04T09:00:02.117812+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -1.0093
+      "score": -1.0378
     },
     {
       "title": "Foxconn and Intel join SambaNova to build rackscale AI infrastructure",
@@ -191,7 +319,7 @@
       "lastSeen": "2026-06-04T09:00:02.117812+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9902
+      "score": 2.9617
     },
     {
       "title": "Netflix turns to generative AI to fix a problem it helped create",
@@ -207,7 +335,7 @@
       "lastSeen": "2026-06-04T08:00:01.406712+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0859
+      "score": 2.0575
     },
     {
       "title": "SpaceX Sets $135 IPO Price at $1.77T Valuation",
@@ -220,10 +348,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/06/photo-1711919600878-b5d9e77d3357.jpeg.jpeg?f=jpeg",
       "published": "2026-06-04T05:48:03+00:00",
       "firstSeen": "2026-06-04T09:00:02.117812+00:00",
-      "lastSeen": "2026-06-04T09:00:02.117812+00:00",
+      "lastSeen": "2026-06-04T10:00:01.867424+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1564
+      "score": 3.1289
     },
     {
       "title": "v1.85.4",
@@ -236,10 +364,10 @@
       "image": "https://opengraph.githubassets.com/57442734c33cdf7f0873c8f41e4b8efe904300ed2e5e46dd06a12d309bfd8832/BerriAI/litellm/releases/tag/v1.85.4",
       "published": "2026-06-04T05:16:40+00:00",
       "firstSeen": "2026-06-04T06:00:01.706911+00:00",
-      "lastSeen": "2026-06-04T09:00:02.117812+00:00",
+      "lastSeen": "2026-06-04T10:00:01.867424+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8819
+      "score": 2.8548
     },
     {
       "title": "v1.84.5",
@@ -252,10 +380,10 @@
       "image": "https://opengraph.githubassets.com/e610ae1c5d289a032604563dc90a6ce3d0ed62b1ce0d706f15e60a47003e3805/BerriAI/litellm/releases/tag/v1.84.5",
       "published": "2026-06-04T04:11:46+00:00",
       "firstSeen": "2026-06-04T05:00:01.971077+00:00",
-      "lastSeen": "2026-06-04T09:00:02.117812+00:00",
+      "lastSeen": "2026-06-04T10:00:01.867424+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8526
+      "score": 2.8262
     },
     {
       "title": "OpenAI and Anthropic Sign Letter to Prevent AI-Developed Biological Weapons",
@@ -268,10 +396,10 @@
       "image": "https://media.wired.com/photos/6a1f6447234d4b89dad80277/master/pass/science_anthropic_final.jpg",
       "published": "2026-06-04T01:01:00+00:00",
       "firstSeen": "2026-06-04T01:47:43.364800+00:00",
-      "lastSeen": "2026-06-04T09:00:02.117812+00:00",
+      "lastSeen": "2026-06-04T10:00:01.867424+00:00",
       "editorial_allow": false,
       "editorial_reason": "fluff",
-      "score": 5.4712
+      "score": 5.4471
     },
     {
       "title": "Lovable signs multiyear deal with Google Cloud to up usage 5x, source says",
@@ -284,10 +412,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/GettyImages-2245627953.jpg?resize=1200%2C800",
       "published": "2026-06-03T22:56:51+00:00",
       "firstSeen": "2026-06-03T23:00:01.869358+00:00",
-      "lastSeen": "2026-06-04T09:00:02.117812+00:00",
+      "lastSeen": "2026-06-04T10:00:01.867424+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.022
+      "score": 7.9992
     },
     {
       "title": "v0.30.4-rc1: llama-server: fix gemma4 patch wiring (#16477)",
@@ -300,10 +428,10 @@
       "image": "https://opengraph.githubassets.com/9c67f0207e49c9c0112423cf7585913bb6cecf5b2abd72d48cc8c190323fdc25/ollama/ollama",
       "published": "2026-06-03T21:41:03+00:00",
       "firstSeen": "2026-06-04T01:00:01.164134+00:00",
-      "lastSeen": "2026-06-04T09:00:02.117812+00:00",
+      "lastSeen": "2026-06-04T10:00:01.867424+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0633
+      "score": 5.0413
     },
     {
       "title": "Microsoft dropped the one survey question its employees actually cared about",
@@ -319,7 +447,7 @@
       "lastSeen": "2026-06-04T08:00:01.406712+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 0.9486
+      "score": 0.9267
     },
     {
       "title": "Alphabet just raised $85 billion for AI, smashing the largest equity offering in history",
@@ -335,7 +463,7 @@
       "lastSeen": "2026-06-04T08:00:01.406712+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8436
+      "score": 1.8219
     },
     {
       "title": "Hackers asked Meta’s AI chatbot to hand over Instagram accounts, and it did",
@@ -351,7 +479,7 @@
       "lastSeen": "2026-06-04T08:00:01.406712+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8383
+      "score": 1.8167
     },
     {
       "title": "A popular OpenAI Codex tool with 29,000 weekly downloads has been quietly stealing developer tokens for a month",
@@ -367,7 +495,7 @@
       "lastSeen": "2026-06-04T08:00:01.406712+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.2362
+      "score": 6.2147
     },
     {
       "title": "Uber cuts nearly a quarter of its HR division as new president reshapes the company from the inside",
@@ -383,7 +511,7 @@
       "lastSeen": "2026-06-04T08:00:01.406712+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.2298
+      "score": 4.2084
     },
     {
       "title": "Meta spent $400 million and fought the US government to buy a VR fitness app, then let its creators take it back",
@@ -399,7 +527,7 @@
       "lastSeen": "2026-06-04T08:00:01.406712+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9247
+      "score": 2.9035
     },
     {
       "title": "Microsoft Tests Wearable AI Badge for Office Workers",
@@ -412,10 +540,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/06/Untitled-design-35.png?f=jpeg",
       "published": "2026-06-03T20:02:38+00:00",
       "firstSeen": "2026-06-03T22:00:01.859369+00:00",
-      "lastSeen": "2026-06-04T09:00:02.117812+00:00",
+      "lastSeen": "2026-06-04T10:00:01.867424+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.6175
+      "score": 4.5965
     },
     {
       "title": "One click on GitHub.dev is all it takes to hand over your private repositories",
@@ -431,7 +559,7 @@
       "lastSeen": "2026-06-04T06:54:15.880857+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.3158
+      "score": 5.2948
     },
     {
       "title": "Can't make sense of Dashlane's vault theft notification? You're not alone.",
@@ -444,10 +572,10 @@
       "image": "https://cdn.arstechnica.net/wp-content/uploads/2026/06/dashlane-app-1152x648-1780514208.webp",
       "published": "2026-06-03T19:53:14+00:00",
       "firstSeen": "2026-06-03T22:00:01.859369+00:00",
-      "lastSeen": "2026-06-04T09:00:02.117812+00:00",
+      "lastSeen": "2026-06-04T10:00:01.867424+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8142
+      "score": 1.7932
     },
     {
       "title": "Alphabet’s record-breaking $85B raise for Google’s AI business is a helluva good signal",
@@ -460,10 +588,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/05/GettyImages-2215577882.jpg?resize=1200%2C800",
       "published": "2026-06-03T19:38:32+00:00",
       "firstSeen": "2026-06-03T20:00:02.061025+00:00",
-      "lastSeen": "2026-06-04T09:00:02.117812+00:00",
+      "lastSeen": "2026-06-04T10:00:01.867424+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.049
+      "score": 3.0282
     },
     {
       "title": "Google’s Dreambeans, its weirdest-named AI tool to date, will turn your life into a cartoon",
@@ -476,10 +604,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/Screenshot-2026-06-03-at-9.13.33-AM.png?resize=1200%2C667",
       "published": "2026-06-03T19:07:42+00:00",
       "firstSeen": "2026-06-03T20:00:02.061025+00:00",
-      "lastSeen": "2026-06-04T09:00:02.117812+00:00",
+      "lastSeen": "2026-06-04T10:00:01.867424+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9382
+      "score": 1.9177
     },
     {
       "title": "Anthropic picks Morgan Stanley and Goldman Sachs to lead its IPO, with a SpaceX computing deal worth $1.25 billion per month buried in the fine print",
@@ -495,7 +623,7 @@
       "lastSeen": "2026-06-04T06:54:15.880857+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.7937
+      "score": 8.7733
     },
     {
       "title": "xAI Asks Court to Strip Alleged Grok Deepfake Nudes Victims of Anonymity",
@@ -508,138 +636,10 @@
       "image": "https://media.wired.com/photos/6a1f4ea4c350c2fb60808fa6/master/pass/Security_xAIWantstoStripAllegedGrokDeepfakeNudesVictimsofAnonymity_v1.jpg",
       "published": "2026-06-03T18:49:32+00:00",
       "firstSeen": "2026-06-03T19:00:01.264980+00:00",
-      "lastSeen": "2026-06-04T09:00:02.117812+00:00",
+      "lastSeen": "2026-06-04T10:00:01.867424+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.932
-    },
-    {
-      "title": "The EU is asking households to cut electricity use during peak hours because AI data centres are straining the grid",
-      "url": "https://thenextweb.com/news/the-eu-is-asking-households-to-cut-electricity-use-during-peak-hours-because-ai-data-centres-are-straining-the-grid",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The European Commission has called on households across the bloc to reduce electricity consumption during peak hours, citing the rapid growth of AI data centres, accelerating electrification, and rising overall digital infrastructure demand as factors straining European power grids. The Commission simultaneously published a Data Centre Energy Efficiency Package on 3 June that introduces a [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/eu-households-electricity-ai-data-centres-energy-bills.avif",
-      "published": "2026-06-03T18:40:30+00:00",
-      "firstSeen": "2026-06-03T19:00:01.264980+00:00",
-      "lastSeen": "2026-06-04T06:54:15.880857+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.4889
-    },
-    {
-      "title": "Virtual barbarians at the gate: securing the AI blind spot",
-      "url": "https://thenextweb.com/news/virtual-barbarians-at-the-gate-securing-the-ai-blind-spot",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Many companies have quickly moved to adopt artificial intelligence in their systems, embedding it into virtually everything from customer apps to internal systems. That speed has created new pressure for security teams, because AI-enabled applications can introduce unfamiliar attack surfaces, unpredictable behavior, and new ways for attackers to manipulate inputs, access data, or chain weaknesses across [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/xbow-securing-ai-blind-spot-agentic-testing.avif",
-      "published": "2026-06-03T18:13:56+00:00",
-      "firstSeen": "2026-06-03T19:00:01.264980+00:00",
-      "lastSeen": "2026-06-04T06:54:15.880857+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.8798
-    },
-    {
-      "title": "The Humanoid Robot of the Future Is a 6-Foot-Tall Beefcake With a Chinese Body and an American Brain",
-      "url": "https://www.wired.com/story/nvidia-unitree-humanoid-robot-h2-plus",
-      "source": "Wired AI",
-      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Spencer Huang, Nvidia’s robotics lead, tells WIRED that the new bot combines the best of both worlds.",
-      "image": "https://media.wired.com/photos/6a1f67f31c7b696a4249008a/master/pass/AI-Lab-Nvidia-Unitree-Frankenstein-Humanoid-Robot-Business.jpg",
-      "published": "2026-06-03T18:00:00+00:00",
-      "firstSeen": "2026-06-03T19:00:01.264980+00:00",
-      "lastSeen": "2026-06-04T09:00:02.117812+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.9152
-    },
-    {
-      "title": "As AI gets better, it reveals an empty promise",
-      "url": "https://www.theverge.com/ai-artificial-intelligence/942629/as-ai-gets-better-it-reveals-an-empty-promise",
-      "source": "The Verge AI",
-      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "This week we've got tandem hands-ons with Google's new Gemini AI agent - Spark - from my colleagues David Pierce and Jay Peters. Their takeaways are similar: It's so effective that it's scary. Spark knew that David's dog is named Frida and knew the first name of Jay's wife, even though neither of them explicitly [&#8230;]",
-      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/11503853/mdoying_180419_1777_0454_2.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
-      "published": "2026-06-03T17:45:35+00:00",
-      "firstSeen": "2026-06-03T19:00:01.264980+00:00",
-      "lastSeen": "2026-06-04T09:00:02.117812+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 7.6803
-    },
-    {
-      "title": "v0.30.4-rc0: Kill llama-server during Windows cleanup (#16458)",
-      "url": "https://github.com/ollama/ollama/releases/tag/v0.30.4-rc0",
-      "source": "Ollama Releases",
-      "sourceUrl": "https://github.com/ollama/ollama/releases.atom",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "Windows installer and app cleanup could leave llama-server.exe running when ollama.exe was killed directly, so cleanup now includes llama-server.exe and taskkill /T.",
-      "image": "https://opengraph.githubassets.com/84888f0a0da64de337aa808b67e889b1e42e486980e24cf05cef13df2a7820cc/ollama/ollama",
-      "published": "2026-06-03T17:25:12+00:00",
-      "firstSeen": "2026-06-03T23:00:01.869358+00:00",
-      "lastSeen": "2026-06-04T09:00:02.117812+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 6.0736
-    },
-    {
-      "title": "v0.30.3",
-      "url": "https://github.com/ollama/ollama/releases/tag/v0.30.3",
-      "source": "Ollama Releases",
-      "sourceUrl": "https://github.com/ollama/ollama/releases.atom",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "What's Changed\n\nmodels: add support for gemma4-12b by @pdevine in #16457\n\nFull Changelog: v0.30.2...v0.30.3",
-      "image": "https://opengraph.githubassets.com/d5b7f056beb356a12c1648fe196566daf924d0261bc41e94a1b0964d3f125691/ollama/ollama",
-      "published": "2026-06-03T16:39:44+00:00",
-      "firstSeen": "2026-06-03T15:00:01.428377+00:00",
-      "lastSeen": "2026-06-04T09:00:02.117812+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.9587
-    },
-    {
-      "title": "Amazon&#8217;s search bar will invent AI-generated products you can&#8217;t buy",
-      "url": "https://www.theverge.com/tech/942547/amazon-search-bar-ai-images",
-      "source": "The Verge AI",
-      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "Amazon's updated search bar will now show you AI-generated images of products as you describe them. For now, the in-app feature only surfaces AI images of clothing and home goods, allowing you to tap on the image that best matches what you're looking for and search for similar-looking items. In a blog post, Amazon positions [&#8230;]",
-      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/amazon-ai-search.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C4.865499187579%2C100%2C90.269001624842&amp%3Bw=1200",
-      "published": "2026-06-03T16:07:31+00:00",
-      "firstSeen": "2026-06-03T17:00:01.753114+00:00",
-      "lastSeen": "2026-06-04T09:00:02.117812+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 5.4484
-    },
-    {
-      "title": "Amazon will show AI product images when you search for some reason",
-      "url": "https://techcrunch.com/2026/06/03/amazon-will-show-ai-product-images-when-you-search-for-some-reason",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Amazon will use visual search and AI to show AI-generated product images that match your search queries. The retailer says it will help guide users to products.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/06/Screenshot-2026-06-03-at-11.16.52-AM.jpg?resize=1200%2C695",
-      "published": "2026-06-03T15:50:26+00:00",
-      "firstSeen": "2026-06-03T16:00:01.415350+00:00",
-      "lastSeen": "2026-06-04T09:00:02.117812+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.2729
+      "score": 10.9116
     },
     {
       "title": "The Life Scientific: Seth Berkley",
@@ -652,10 +652,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-01T20:00:00+00:00",
       "firstSeen": "2026-06-01T21:00:01.828388+00:00",
-      "lastSeen": "2026-06-04T09:00:02.117812+00:00",
+      "lastSeen": "2026-06-04T10:00:01.867424+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.3921
+      "score": 1.3865
     },
     {
       "title": "Dean Lomax on discovering ichthyosaurs and defying nay-sayers",
@@ -668,10 +668,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-26T08:30:00+00:00",
       "firstSeen": "2026-05-26T08:41:33.144051+00:00",
-      "lastSeen": "2026-06-04T09:00:02.117812+00:00",
+      "lastSeen": "2026-06-04T10:00:01.867424+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.1227
+      "score": 1.1226
     },
     {
       "title": "The Life Scientific: Hiranya Peiris",
@@ -684,10 +684,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-25T20:00:00+00:00",
       "firstSeen": "2026-05-25T21:00:01.605108+00:00",
-      "lastSeen": "2026-06-04T09:00:02.117812+00:00",
+      "lastSeen": "2026-06-04T10:00:01.867424+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 0.2919
+      "score": 0.2918
     },
     {
       "title": "Helen Hastie on the future of human-robot relations",
