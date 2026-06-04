@@ -1318,5 +1318,17 @@
     "slot": "evening",
     "model": "openai/gpt-image-2",
     "size": "1024x1536"
+  },
+  {
+    "id": "2026-06-03-evening-mineral-radio-repair-bench",
+    "title": "Mineral Radio Repair Bench",
+    "tests": "Tests GPT Image 2 on a dense standalone workshop scene with coherent period props, tactile mixed materials, subtle practical glow, shallow-depth documentary lighting, and no prompt-card text.",
+    "prompt": "Create a finished richly detailed standalone image of a cramped 1930s-style radio repair workbench where a half-disassembled tabletop radio has been rebuilt around glowing mineral crystals instead of vacuum tubes. Show a real documentary photograph rather than a poster: warm bench lamp light, dark varnished wood, brass screwdrivers, ceramic capacitors, braided cloth wires, tiny labeled drawers, a magnifying loupe, handwritten service notes partly tucked under parts, translucent quartz and smoky amethyst components glowing softly inside the radio chassis, dust motes, fingerprints on glass dials, solder beads, cracked Bakelite knobs, and a small analog meter needle responding to the crystals. Keep one clear focal radio, dense tactile detail, shallow depth of field, believable shadows, no logos, no watermark, no dancing, and no instructional placeholder text or caption text rendered in the image. Reusable template: Create a finished richly detailed standalone image of [SCENE] with [ERA OR SETTING], [PRIMARY OBJECT], tactile materials, coherent lighting, specific believable props, one clear focal subject, and no prompt-card text. Example substitution: [SCENE] = a mineral-powered radio repair bench; [ERA OR SETTING] = a cramped 1930s workshop; [PRIMARY OBJECT] = a tabletop radio rebuilt around glowing quartz and amethyst components.",
+    "image": "images/2026-06-03-evening-mineral-radio-repair-bench.png",
+    "date": "2026-06-03",
+    "batch": "Daily Prompt",
+    "slot": "evening",
+    "model": "gpt-image-2",
+    "size": "1024x1024"
   }
 ]
