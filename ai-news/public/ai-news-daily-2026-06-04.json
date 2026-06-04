@@ -1,7 +1,39 @@
 {
   "date": "2026-06-04",
-  "updatedAt": "2026-06-04T16:00:01.246028+00:00",
+  "updatedAt": "2026-06-04T17:00:02.090586+00:00",
   "items": [
+    {
+      "title": "Dreaming: Better memory for a more helpful ChatGPT",
+      "url": "https://openai.com/index/chatgpt-memory-dreaming",
+      "source": "OpenAI News",
+      "sourceUrl": "https://openai.com/news/rss.xml",
+      "sourceWeight": 1.0,
+      "category": "AI",
+      "summary": "ChatGPT introduces a new memory system to better remember preferences, keeping context fresh and relevant across conversations.",
+      "image": "https://images.ctfassets.net/kftzwdyauwt9/41T8ZOansyDZGCqmwOkuOY/3cdeb6ab147c08fa9b313b677fb5318e/16x9_SEO__1_.png?w=1600&amp%3Bh=900&amp%3Bfit=fill",
+      "published": "2026-06-04T09:00:00+00:00",
+      "firstSeen": "2026-06-04T17:00:02.090586+00:00",
+      "lastSeen": "2026-06-04T17:00:02.090586+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 11.3808
+    },
+    {
+      "title": "A single GitHub issue could have hijacked Anthropic’s own Claude Code action and poisoned every project that uses it",
+      "url": "https://thenextweb.com/news/claude-code-github-action-prompt-injection-flaw",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The attack starts with a GitHub issue. Not a sophisticated one. Just an issue opened by a bot account with a carefully worded body that looks like an error message. When Claude Code’s GitHub Action picks it up for triage, it follows the instructions hidden inside, reads the process’s environment variables, and writes them back [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/anthropic-claude-opus-4-7-coding-agentic-benchmarks-release.avif",
+      "published": "2026-06-04T16:44:24+00:00",
+      "firstSeen": "2026-06-04T17:00:02.090586+00:00",
+      "lastSeen": "2026-06-04T17:00:02.090586+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 11.1421
+    },
     {
       "title": "KPMG puts Claude in front of all 276,000 staff in an Anthropic alliance",
       "url": "https://thenextweb.com/news/kpmg-anthropic-claude-alliance",
@@ -16,7 +48,7 @@
       "lastSeen": "2026-06-04T13:00:01.581582+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.9589
+      "score": 10.934
     },
     {
       "title": "A UK MP’s lawsuit could decide whether xAI answers for what Grok makes",
@@ -32,7 +64,7 @@
       "lastSeen": "2026-06-04T09:00:02.117812+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.9223
+      "score": 10.8984
     },
     {
       "title": "How Endava is redesigning software delivery around AI agents",
@@ -45,10 +77,26 @@
       "image": "",
       "published": "2026-06-04T12:00:00+00:00",
       "firstSeen": "2026-06-04T09:00:02.117812+00:00",
-      "lastSeen": "2026-06-04T16:00:01.246028+00:00",
+      "lastSeen": "2026-06-04T17:00:02.090586+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.0843
+      "score": 9.0573
+    },
+    {
+      "title": "Databricks CEO calls 2026 “a terrible year to go public” as SpaceX, Anthropic, and OpenAI prepare to absorb $200 billion in IPO capital",
+      "url": "https://thenextweb.com/news/databricks-ceo-calls-2026-a-terrible-year-to-go-public-as-spacex-anthropic-and-openai-prepare-to-absorb-200-billion-in-ipo-capital",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Three companies are preparing to enter public markets this year with a combined valuation that could exceed $3 trillion. SpaceX is set to list as early as 12 June at a $1.77 trillion valuation, selling 555.6 million shares at a fixed price of $135 each in what will be the largest IPO in history. Anthropic has filed at [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/Databricks-CEO-Ali-Ghodsi.avif",
+      "published": "2026-06-04T16:23:48+00:00",
+      "firstSeen": "2026-06-04T17:00:02.090586+00:00",
+      "lastSeen": "2026-06-04T17:00:02.090586+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 8.8317
     },
     {
       "title": "Microsoft’s AI chief says the company wants to “eliminate” what it pays Anthropic",
@@ -61,10 +109,10 @@
       "image": "https://media.thenextweb.com/2026/06/microsoft-suleyman-anthropic-expensive-models.avif",
       "published": "2026-06-04T14:38:50+00:00",
       "firstSeen": "2026-06-04T16:00:01.246028+00:00",
-      "lastSeen": "2026-06-04T16:00:01.246028+00:00",
+      "lastSeen": "2026-06-04T17:00:02.090586+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.1094
+      "score": 7.0804
     },
     {
       "title": "UK forces Google to let publishers opt out of AI search results without losing their ranking",
@@ -77,10 +125,10 @@
       "image": "https://media.thenextweb.com/2026/05/google-search-ai-overhaul-publishers-traffic-open-web.avif",
       "published": "2026-06-04T15:04:11+00:00",
       "firstSeen": "2026-06-04T16:00:01.246028+00:00",
-      "lastSeen": "2026-06-04T16:00:01.246028+00:00",
+      "lastSeen": "2026-06-04T17:00:02.090586+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.6219
+      "score": 5.5926
     },
     {
       "title": "OpenAI and Anthropic Sign Letter to Prevent AI-Developed Biological Weapons",
@@ -93,10 +141,10 @@
       "image": "https://media.wired.com/photos/6a1f6447234d4b89dad80277/master/pass/science_anthropic_final.jpg",
       "published": "2026-06-04T01:01:00+00:00",
       "firstSeen": "2026-06-04T01:47:43.364800+00:00",
-      "lastSeen": "2026-06-04T16:00:01.246028+00:00",
+      "lastSeen": "2026-06-04T17:00:02.090586+00:00",
       "editorial_allow": false,
       "editorial_reason": "fluff",
-      "score": 5.3155
+      "score": 5.2956
     },
     {
       "title": "Ex-DeepMind duo raise $20 million to close the gap between what sales teams know and what they actually do",
@@ -109,10 +157,10 @@
       "image": "https://media.thenextweb.com/2026/06/airspeed-series-a-gtm-ai-agents.avif",
       "published": "2026-06-04T14:12:00+00:00",
       "firstSeen": "2026-06-04T16:00:01.246028+00:00",
-      "lastSeen": "2026-06-04T16:00:01.246028+00:00",
+      "lastSeen": "2026-06-04T17:00:02.090586+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0963
+      "score": 5.0677
     },
     {
       "title": "Designing the hf CLI as an agent-optimized way to work with the Hub",
@@ -125,10 +173,10 @@
       "image": "https://huggingface.co/blog/assets/hf-cli-for-agents/thumbnail.png",
       "published": "2026-06-04T00:00:00+00:00",
       "firstSeen": "2026-06-04T16:00:01.246028+00:00",
-      "lastSeen": "2026-06-04T16:00:01.246028+00:00",
+      "lastSeen": "2026-06-04T17:00:02.090586+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.7353
+      "score": 4.716
     },
     {
       "title": "Complexity is the ceiling: software design in the age of AI coding",
@@ -144,55 +192,7 @@
       "lastSeen": "2026-06-04T14:09:01.257162+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.3639
-    },
-    {
-      "title": "SoftBank’s PayPay pushes into insurance with a 70.2% T&D Life stake",
-      "url": "https://thenextweb.com/news/paypay-td-financial-life-acquisition",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The SoftBank-backed payments app is taking a 70.2% stake in T&amp;D Financial Life, its most capital-intensive move yet from payments into full financial services. PayPay is buying its way into life insurance. The SoftBank-backed payments company has agreed to acquire a 70.2% stake in T&amp;D Financial Life Insurance from T&amp;D Holdings for roughly ¥134.3bn, about [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/PayPay.avif",
-      "published": "2026-06-04T09:23:54+00:00",
-      "firstSeen": "2026-06-04T10:00:01.867424+00:00",
-      "lastSeen": "2026-06-04T14:09:01.257162+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.7657
-    },
-    {
-      "title": "Let us filter AI slop, you cowards",
-      "url": "https://www.theverge.com/ai-artificial-intelligence/942909/let-us-filter-ai-slop-google-youtube-meta-instagram-tiktok",
-      "source": "The Verge AI",
-      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "It's almost impossible to avoid seeing AI-generated content online, but it doesn't have to be this way. YouTube, Instagram, TikTok, and more have ramped up content authentication efforts over the last year, with many now automatically applying labels to distinguish AI-generated images, videos, and music from those made by real, human creators. That's all very [&#8230;]",
-      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/05/STKS511_AI_SLOP_B.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C9.9676601489831%2C100%2C80.064679702034&amp%3Bw=1200",
-      "published": "2026-06-04T12:30:00+00:00",
-      "firstSeen": "2026-06-04T14:00:01.384462+00:00",
-      "lastSeen": "2026-06-04T16:00:01.246028+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.3581
-    },
-    {
-      "title": "Apple touts $1.4 trillion in App Store billings and sales, 90% without a commission",
-      "url": "https://techcrunch.com/2026/06/04/apple-touts-1-4-trillion-in-app-store-billings-and-sales-90-without-a-commission",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Apple's App Store generated $1.4 trillion in sales, up from $1.3 trillion last year, with $149 billion in sales for digital goods.",
-      "image": "https://techcrunch.com/wp-content/uploads/2024/01/app-store-2024-v1.jpg?resize=1200%2C675",
-      "published": "2026-06-04T14:05:58+00:00",
-      "firstSeen": "2026-06-04T14:09:01.257162+00:00",
-      "lastSeen": "2026-06-04T16:00:01.246028+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.3334
+      "score": 4.3388
     }
   ],
   "errors": [
