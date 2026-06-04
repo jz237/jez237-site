@@ -444,28 +444,7 @@ function renderCard(special) {
 }
 
 function renderSpecialsSection(specials) {
-  if (!specials.length) return '<!-- THR_SPECIALS_START -->\n<!-- THR_SPECIALS_END -->';
-  const renderedCards = specials.map(renderCard).join('\n');
-  return `<!-- THR_SPECIALS_START -->
-    <section class="specials-spotlight" aria-labelledby="specials-title">
-      <div class="specials-head">
-        <span id="specials-title">Current specials</span>
-        <a href="sales/">View all sale departments</a>
-      </div>
-      <div class="specials-carousel">
-        <div class="specials-track" id="specials-track">
-${renderedCards}
-        </div>
-      </div>
-      <div class="special-controls" aria-label="Specials carousel controls">
-        <div class="special-arrows">
-          <button class="special-control" type="button" data-special-dir="-1" aria-label="Previous special">‹</button>
-          <button class="special-control" type="button" data-special-dir="1" aria-label="Next special">›</button>
-        </div>
-        <div class="special-dots" id="special-dots" aria-label="Choose special"></div>
-      </div>
-    </section>
-    <!-- THR_SPECIALS_END -->`;
+  return '<!-- THR_SPECIALS_START -->\n    <!-- THR_SPECIALS_END -->';
 }
 
 function replaceSpecialsSection(page, specials) {
