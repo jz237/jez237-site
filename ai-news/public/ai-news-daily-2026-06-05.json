@@ -1,7 +1,23 @@
 {
   "date": "2026-06-05",
-  "updatedAt": "2026-06-05T00:18:15.529167+00:00",
+  "updatedAt": "2026-06-05T01:00:01.737141+00:00",
   "items": [
+    {
+      "title": "v0.30.6-rc0",
+      "url": "https://github.com/ollama/ollama/releases/tag/v0.30.6-rc0",
+      "source": "Ollama Releases",
+      "sourceUrl": "https://github.com/ollama/ollama/releases.atom",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "launch: oh-my-pi (#16410)",
+      "image": "https://opengraph.githubassets.com/ecd3bd67f16d528a12f4ee13e0b76d6307ad3ec82702adfe5651c94dcaf86421/ollama/ollama",
+      "published": "2026-06-05T00:49:49+00:00",
+      "firstSeen": "2026-06-05T01:00:01.737141+00:00",
+      "lastSeen": "2026-06-05T01:00:01.737141+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.0548
+    },
     {
       "title": "Do Transformers Need Three Projections? Systematic Study of QKV Variants",
       "url": "https://llm-stats.com/ai-news",
@@ -11,9 +27,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-05T00:18:21.419049+00:00",
+      "published": "2026-06-05T01:00:07.254012+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-05T00:18:15.529167+00:00",
+      "lastSeen": "2026-06-05T01:00:01.737141+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
@@ -23,7 +39,7 @@
     {
       "source": "MarkTechPost",
       "url": "https://www.marktechpost.com/feed/",
-      "error": "not well-formed (invalid token): line 1, column 119"
+      "error": "HTTP Error 403: Forbidden"
     }
   ]
 }
