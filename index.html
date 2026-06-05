@@ -304,6 +304,12 @@
           return 'Signal';
         }
 
+        function fallbackThumb(item) {
+          const label = signalLabel(item);
+          const source = item.source || 'AI News';
+          return `${label} · ${source}`;
+        }
+
         function pickItems(items) {
           const aiItems = items.filter((item) => (item.category || 'AI') === 'AI');
           const editorPicks = aiItems.filter((item) => item.editorial_allow);
@@ -316,6 +322,28 @@
         function renderItem(item) {
           const article = document.createElement('article');
           article.className = 'home-ai-briefing-item';
+
+          const thumb = document.createElement('a');
+          thumb.className = 'home-ai-briefing-thumb';
+          thumb.href = item.url;
+          thumb.target = '_blank';
+          thumb.rel = 'noopener';
+
+          if (item.image) {
+            const image = document.createElement('img');
+            image.src = item.image;
+            image.alt = '';
+            image.loading = 'lazy';
+            image.referrerPolicy = 'no-referrer';
+            image.addEventListener('error', () => {
+              thumb.classList.add('is-fallback');
+              thumb.textContent = fallbackThumb(item);
+            }, { once: true });
+            thumb.appendChild(image);
+          } else {
+            thumb.classList.add('is-fallback');
+            thumb.textContent = fallbackThumb(item);
+          }
 
           const label = document.createElement('span');
           label.textContent = signalLabel(item);
@@ -333,9 +361,9 @@
           if (summary) {
             const dek = document.createElement('small');
             dek.textContent = summary.length > 150 ? summary.slice(0, 147) + '…' : summary;
-            article.append(label, title, details, dek);
+            article.append(thumb, label, title, details, dek);
           } else {
-            article.append(label, title, details);
+            article.append(thumb, label, title, details);
           }
 
           return article;
