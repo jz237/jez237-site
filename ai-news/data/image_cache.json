@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-05T05:00:01.565438+00:00",
+  "updatedAt": "2026-06-05T05:46:33.510991+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -9376,6 +9376,10 @@
     "https://github.com/BerriAI/litellm/releases/tag/v1.88.0-rc.3": {
       "image": "https://opengraph.githubassets.com/8046a6d5bb3b16fb87b7ec1f43bc3bbb1f4e702e2eff4698aca9a8be48c191ba/BerriAI/litellm/releases/tag/v1.88.0-rc.3",
       "checkedAt": "2026-06-05T03:00:01.674158+00:00"
+    },
+    "https://techcrunch.com/2026/06/04/mira-murati-steps-back-into-the-spotlight-carefully": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/Mira-Murati-at-Bloomberg.jpg?w=1024",
+      "checkedAt": "2026-06-05T05:46:33.510991+00:00"
     }
   }
 }
