@@ -1,6 +1,6 @@
 {
   "date": "2026-06-05",
-  "updatedAt": "2026-06-05T10:00:01.701213+00:00",
+  "updatedAt": "2026-06-05T10:13:35.392051+00:00",
   "items": [
     {
       "title": "Anthropic urges a coordinated, verifiable pause for frontier AI",
@@ -13,10 +13,10 @@
       "image": "https://media.thenextweb.com/2026/04/Anthropic.avif",
       "published": "2026-06-05T08:15:21+00:00",
       "firstSeen": "2026-06-05T09:00:01.737539+00:00",
-      "lastSeen": "2026-06-05T10:00:01.701213+00:00",
+      "lastSeen": "2026-06-05T10:13:35.392051+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.098
+      "score": 5.0914
     },
     {
       "title": "The 10 best ecommerce mobile app builders for mid-market and enterprise brands",
@@ -29,10 +29,10 @@
       "image": "https://media.thenextweb.com/2026/06/best-ecommerce-mobile-app-builders-enterprise.avif",
       "published": "2026-06-05T09:36:24+00:00",
       "firstSeen": "2026-06-05T10:00:01.701213+00:00",
-      "lastSeen": "2026-06-05T10:00:01.701213+00:00",
+      "lastSeen": "2026-06-05T10:13:35.392051+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.938
+      "score": 3.9312
     },
     {
       "title": "Nvidia’s Jensen Huang flags robotics as Korea’s next growth engine",
@@ -45,10 +45,26 @@
       "image": "https://media.thenextweb.com/2026/06/Jensen-Huang-Taipei.avif",
       "published": "2026-06-05T08:49:08+00:00",
       "firstSeen": "2026-06-05T09:00:01.737539+00:00",
-      "lastSeen": "2026-06-05T10:00:01.701213+00:00",
+      "lastSeen": "2026-06-05T10:13:35.392051+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.5145
+      "score": 3.5078
+    },
+    {
+      "title": "Why Apple Might Put Cameras Into Its Next AirPods",
+      "url": "https://www.wired.com/story/why-apple-might-put-cameras-into-its-next-airpods",
+      "source": "Wired AI",
+      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "From battery life to privacy, there are many hurdles to the idea taking off.",
+      "image": "https://media.wired.com/photos/6a21fac373f57a5aa16309ff/master/pass/gear_airpodcamera_getty.jpg",
+      "published": "2026-06-05T10:00:00+00:00",
+      "firstSeen": "2026-06-05T10:13:35.392051+00:00",
+      "lastSeen": "2026-06-05T10:13:35.392051+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.3831
     },
     {
       "title": "v0.30.6-rc0",
@@ -61,10 +77,10 @@
       "image": "https://opengraph.githubassets.com/ecd3bd67f16d528a12f4ee13e0b76d6307ad3ec82702adfe5651c94dcaf86421/ollama/ollama",
       "published": "2026-06-05T00:49:49+00:00",
       "firstSeen": "2026-06-05T01:00:01.737141+00:00",
-      "lastSeen": "2026-06-05T10:00:01.701213+00:00",
+      "lastSeen": "2026-06-05T10:13:35.392051+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8126
+      "score": 2.8073
     },
     {
       "title": "v0.30.6",
@@ -77,10 +93,10 @@
       "image": "https://opengraph.githubassets.com/60f61760c34b89ae6fa1dcf45ef6572c285dc5ed3f2717d4816dcd473e0f774a/ollama/ollama",
       "published": "2026-06-05T00:49:49+00:00",
       "firstSeen": "2026-06-05T07:00:01.980033+00:00",
-      "lastSeen": "2026-06-05T10:00:01.701213+00:00",
+      "lastSeen": "2026-06-05T10:13:35.392051+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8126
+      "score": 2.8073
     },
     {
       "title": "v1.88.0-rc.3",
@@ -93,10 +109,10 @@
       "image": "https://opengraph.githubassets.com/8046a6d5bb3b16fb87b7ec1f43bc3bbb1f4e702e2eff4698aca9a8be48c191ba/BerriAI/litellm/releases/tag/v1.88.0-rc.3",
       "published": "2026-06-05T02:10:23+00:00",
       "firstSeen": "2026-06-05T03:00:01.674158+00:00",
-      "lastSeen": "2026-06-05T10:00:01.701213+00:00",
+      "lastSeen": "2026-06-05T10:13:35.392051+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.775
+      "score": 2.7695
     },
     {
       "title": "MCBench: A Multicontext Safety Assessment Benchmark for Omni Large Language Models",
@@ -107,9 +123,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-05T10:00:16.213003+00:00",
+      "published": "2026-06-05T10:13:44.896496+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-05T10:00:01.701213+00:00",
+      "lastSeen": "2026-06-05T10:13:35.392051+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.71
@@ -125,10 +141,10 @@
       "image": "https://media.wired.com/photos/6a20d5436a7879400ec4323c/master/pass/culture_ai_serif_font.jpg",
       "published": "2026-06-05T09:00:00+00:00",
       "firstSeen": "2026-06-05T10:00:01.701213+00:00",
-      "lastSeen": "2026-06-05T10:00:01.701213+00:00",
+      "lastSeen": "2026-06-05T10:13:35.392051+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2599
+      "score": 2.2532
     },
     {
       "title": "Seoul Purpose: How NVIDIA and South Korea Are Building the Future of AI",
@@ -141,10 +157,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/IMG_1519-1-scaled.jpg",
       "published": "2026-06-05T05:38:37+00:00",
       "firstSeen": "2026-06-05T05:46:33.510991+00:00",
-      "lastSeen": "2026-06-05T10:00:01.701213+00:00",
+      "lastSeen": "2026-06-05T10:13:35.392051+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1646
+      "score": 2.1585
     },
     {
       "title": "Mira Murati steps back into the spotlight, carefully",
@@ -157,10 +173,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/Mira-Murati-at-Bloomberg.jpg?w=1024",
       "published": "2026-06-05T05:06:37+00:00",
       "firstSeen": "2026-06-05T05:46:33.510991+00:00",
-      "lastSeen": "2026-06-05T10:00:01.701213+00:00",
+      "lastSeen": "2026-06-05T10:13:35.392051+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1503
+      "score": 2.1443
     },
     {
       "title": "US officials have discussed taking government stakes in AI companies",
@@ -173,26 +189,10 @@
       "image": "https://media.thenextweb.com/2026/06/USA-flag.avif",
       "published": "2026-06-05T09:38:08+00:00",
       "firstSeen": "2026-06-05T10:00:01.701213+00:00",
-      "lastSeen": "2026-06-05T10:00:01.701213+00:00",
+      "lastSeen": "2026-06-05T10:13:35.392051+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1389
-    },
-    {
-      "title": "South Korea’s labour minister wants tech firms to share AI windfalls",
-      "url": "https://thenextweb.com/news/south-korea-share-ai-profits-labour-minister",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The argument is about who the AI boom is for. South Korea’s labour minister, Kim Young-hoon, has called on the country’s largest technology firms to share the windfall profits flowing from the AI-driven chip cycle, warning that record sector gains risk widening the gap between the conglomerates capturing them and everyone working below the top. [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/Kim-Young-hoon.avif",
-      "published": "2026-06-05T09:21:30+00:00",
-      "firstSeen": "2026-06-05T10:00:01.701213+00:00",
-      "lastSeen": "2026-06-05T10:00:01.701213+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.1306
+      "score": 2.1321
     }
   ],
   "errors": [
