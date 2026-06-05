@@ -1768,6 +1768,36 @@ body.home-page::after {
   background: rgba(0,0,0,0.22);
   border: 1px solid rgba(120,179,255,0.16);
 }
+.home-ai-briefing-thumb {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  margin-bottom: 12px;
+  overflow: hidden;
+  border-radius: 8px;
+  background:
+    radial-gradient(circle at 20% 18%, rgba(47,199,255,0.42), transparent 34%),
+    linear-gradient(135deg, rgba(232,197,122,0.26), rgba(27,49,99,0.7));
+  border: 1px solid rgba(120,179,255,0.2);
+  color: #f4ecdf;
+  font-size: 11px;
+  font-weight: 900;
+  line-height: 1.25;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+.home-ai-briefing-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.home-ai-briefing-thumb.is-fallback {
+  padding: 14px;
+}
 .home-ai-briefing-item span {
   display: inline-flex;
   margin-bottom: 8px;
