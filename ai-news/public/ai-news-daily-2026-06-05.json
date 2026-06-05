@@ -1,6 +1,6 @@
 {
   "date": "2026-06-05",
-  "updatedAt": "2026-06-05T13:00:01.841462+00:00",
+  "updatedAt": "2026-06-05T14:00:01.962191+00:00",
   "items": [
     {
       "title": "OpenAI and Anthropic May Be Rivals, but Investors Aren’t Picking Sides",
@@ -13,10 +13,10 @@
       "image": "https://media.wired.com/photos/6a1f7877452f8f7907d948a3/master/pass/Nearly-Half-of-Investors-Have-Stakes-in-Both-OpenAI-and-Anthropic-Business.jpg",
       "published": "2026-06-05T10:30:00+00:00",
       "firstSeen": "2026-06-05T11:00:01.846024+00:00",
-      "lastSeen": "2026-06-05T13:00:01.841462+00:00",
+      "lastSeen": "2026-06-05T14:00:01.962191+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.9162
+      "score": 8.8881
     },
     {
       "title": "Anthropic urges a coordinated, verifiable pause for frontier AI",
@@ -29,10 +29,10 @@
       "image": "https://media.thenextweb.com/2026/04/Anthropic.avif",
       "published": "2026-06-05T08:15:21+00:00",
       "firstSeen": "2026-06-05T09:00:01.737539+00:00",
-      "lastSeen": "2026-06-05T13:00:01.841462+00:00",
+      "lastSeen": "2026-06-05T14:00:01.962191+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0142
+      "score": 4.9878
     },
     {
       "title": "The Meta hack shows there’s more to AI security than Mythos",
@@ -45,10 +45,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/06/hand-keys1.jpg?resize=1200%2C600",
       "published": "2026-06-05T09:00:00+00:00",
       "firstSeen": "2026-06-05T11:00:01.846024+00:00",
-      "lastSeen": "2026-06-05T13:00:01.841462+00:00",
+      "lastSeen": "2026-06-05T14:00:01.962191+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9743
+      "score": 4.9473
     },
     {
       "title": "While tech week talks AI, Scytale is talking about what’s actually killing deals",
@@ -61,10 +61,10 @@
       "image": "https://media.thenextweb.com/2026/06/scytale-ny-tech-week-soc2-compliance.avif",
       "published": "2026-06-05T10:55:31+00:00",
       "firstSeen": "2026-06-05T11:00:01.846024+00:00",
-      "lastSeen": "2026-06-05T13:00:01.841462+00:00",
+      "lastSeen": "2026-06-05T14:00:01.962191+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8884
+      "score": 4.8599
     },
     {
       "title": "The 10 best ecommerce mobile app builders for mid-market and enterprise brands",
@@ -77,10 +77,10 @@
       "image": "https://media.thenextweb.com/2026/06/best-ecommerce-mobile-app-builders-enterprise.avif",
       "published": "2026-06-05T09:36:24+00:00",
       "firstSeen": "2026-06-05T10:00:01.701213+00:00",
-      "lastSeen": "2026-06-05T13:00:01.841462+00:00",
+      "lastSeen": "2026-06-05T14:00:01.962191+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.851
+      "score": 3.8236
     },
     {
       "title": "Quoting Andreas Kling",
@@ -93,10 +93,10 @@
       "image": "",
       "published": "2026-06-05T11:10:05+00:00",
       "firstSeen": "2026-06-05T12:00:01.414730+00:00",
-      "lastSeen": "2026-06-05T13:00:01.841462+00:00",
+      "lastSeen": "2026-06-05T14:00:01.962191+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.6354
+      "score": 3.6068
     },
     {
       "title": "Nvidia’s Jensen Huang flags robotics as Korea’s next growth engine",
@@ -109,10 +109,10 @@
       "image": "https://media.thenextweb.com/2026/06/Jensen-Huang-Taipei.avif",
       "published": "2026-06-05T08:49:08+00:00",
       "firstSeen": "2026-06-05T09:00:01.737539+00:00",
-      "lastSeen": "2026-06-05T13:00:01.841462+00:00",
+      "lastSeen": "2026-06-05T14:00:01.962191+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.4294
+      "score": 3.4025
     },
     {
       "title": "Why Apple Might Put Cameras Into Its Next AirPods",
@@ -125,10 +125,26 @@
       "image": "https://media.wired.com/photos/6a21fac373f57a5aa16309ff/master/pass/gear_airpodcamera_getty.jpg",
       "published": "2026-06-05T10:00:00+00:00",
       "firstSeen": "2026-06-05T10:13:35.392051+00:00",
-      "lastSeen": "2026-06-05T13:00:01.841462+00:00",
+      "lastSeen": "2026-06-05T14:00:01.962191+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.302
+      "score": 3.2743
+    },
+    {
+      "title": "Southeast Asia Scam Compounds Turn AI Into a Cybersecurity Threat",
+      "url": "https://www.techrepublic.com/article/news-ai-scam-compounds-risk-apac-southeast-asia",
+      "source": "TechRepublic AI",
+      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Scam compounds across Southeast Asia are using AI, malware, and automation to scale fraud, forcing APAC security teams to rethink phishing, identity, and mobile-risk controls.\nThe post Southeast Asia Scam Compounds Turn AI Into a Cybersecurity Threat appeared first on TechRepublic.",
+      "image": "https://assets.techrepublic.com/uploads/2026/06/call-center-equipment-to-chat-with-clients-on-tele-2026-03-19-00-46-52-utc-1024x683.jpg?f=jpeg",
+      "published": "2026-06-05T12:31:01+00:00",
+      "firstSeen": "2026-06-05T14:00:01.962191+00:00",
+      "lastSeen": "2026-06-05T14:00:01.962191+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.2056
     },
     {
       "title": "Data-centre developer Switch in talks to raise at $50bn-plus valuation",
@@ -141,10 +157,10 @@
       "image": "https://media.thenextweb.com/2026/06/Switch.avif",
       "published": "2026-06-05T10:47:24+00:00",
       "firstSeen": "2026-06-05T11:00:01.846024+00:00",
-      "lastSeen": "2026-06-05T13:00:01.841462+00:00",
+      "lastSeen": "2026-06-05T14:00:01.962191+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7845
+      "score": 2.7561
     },
     {
       "title": "v0.30.6-rc0",
@@ -157,10 +173,10 @@
       "image": "https://opengraph.githubassets.com/ecd3bd67f16d528a12f4ee13e0b76d6307ad3ec82702adfe5651c94dcaf86421/ollama/ollama",
       "published": "2026-06-05T00:49:49+00:00",
       "firstSeen": "2026-06-05T01:00:01.737141+00:00",
-      "lastSeen": "2026-06-05T13:00:01.841462+00:00",
+      "lastSeen": "2026-06-05T14:00:01.962191+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7445
+      "score": 2.723
     },
     {
       "title": "v0.30.6",
@@ -173,26 +189,10 @@
       "image": "https://opengraph.githubassets.com/60f61760c34b89ae6fa1dcf45ef6572c285dc5ed3f2717d4816dcd473e0f774a/ollama/ollama",
       "published": "2026-06-05T00:49:49+00:00",
       "firstSeen": "2026-06-05T07:00:01.980033+00:00",
-      "lastSeen": "2026-06-05T13:00:01.841462+00:00",
+      "lastSeen": "2026-06-05T14:00:01.962191+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7445
-    },
-    {
-      "title": "v1.88.0-rc.3",
-      "url": "https://github.com/BerriAI/litellm/releases/tag/v1.88.0-rc.3",
-      "source": "LiteLLM Releases",
-      "sourceUrl": "https://github.com/BerriAI/litellm/releases.atom",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Verify Docker Image Signature\nAll LiteLLM Docker images are signed with cosign. Every release is signed with the same key introduced in commit 0112e53.\nVerify using the pinned commit hash (recommended):\nA commit hash is cryptographically immutable, so this is the strongest way to ensure you are using the original signing key:\ncosign verify \\\n  --key https://raw.githubusercontent.com/BerriAI/litellm/0112e53046018d726492c814b3644b7d376029d0/cosign.pub \\\n  ghcr.io/berriai/litellm:v1.88.0-rc.3\nVerify using the release tag (convenience):\nTags are protected in this repository and resolve to the same",
-      "image": "https://opengraph.githubassets.com/8046a6d5bb3b16fb87b7ec1f43bc3bbb1f4e702e2eff4698aca9a8be48c191ba/BerriAI/litellm/releases/tag/v1.88.0-rc.3",
-      "published": "2026-06-05T02:10:23+00:00",
-      "firstSeen": "2026-06-05T03:00:01.674158+00:00",
-      "lastSeen": "2026-06-05T13:00:01.841462+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.7043
+      "score": 2.723
     }
   ],
   "errors": [
