@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-05T18:00:01.344010+00:00",
+  "updatedAt": "2026-06-05T19:00:01.939077+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -9424,6 +9424,14 @@
     "https://techcrunch.com/video/the-most-interesting-startups-right-now-want-to-get-you-off-your-phone": {
       "image": "https://techcrunch.com/wp-content/uploads/2025/07/IMG_2376-rotated.jpeg?resize=900,1200",
       "checkedAt": "2026-06-05T18:00:01.344010+00:00"
+    },
+    "https://techcrunch.com/2026/06/05/google-will-pay-spacex-920m-per-month-for-compute": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/GettyImages-2259661359.jpg?w=1024",
+      "checkedAt": "2026-06-05T19:00:01.939077+00:00"
+    },
+    "https://techcrunch.com/podcast/the-together-tech-wave-might-be-the-most-intriguing-startup-bet-of-2026": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/08/Brynn-Putnam-Disrupt-2028.jpg?resize=1200,808",
+      "checkedAt": "2026-06-05T19:00:01.939077+00:00"
     }
   }
 }
