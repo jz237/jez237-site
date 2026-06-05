@@ -1,6 +1,6 @@
 {
   "date": "2026-06-05",
-  "updatedAt": "2026-06-05T14:02:20.220035+00:00",
+  "updatedAt": "2026-06-05T16:00:01.919010+00:00",
   "items": [
     {
       "title": "Anthropic says Claude writes 80% of its own code and the world needs a plan to hit the brakes",
@@ -13,10 +13,10 @@
       "image": "https://media.thenextweb.com/2026/05/claude-opus-4-8.avif",
       "published": "2026-06-05T13:12:20+00:00",
       "firstSeen": "2026-06-05T14:02:20.220035+00:00",
-      "lastSeen": "2026-06-05T14:02:20.220035+00:00",
+      "lastSeen": "2026-06-05T16:00:01.919010+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.8248
+      "score": 11.7678
     },
     {
       "title": "A Chinese startup just dethroned Nvidia on the benchmark Nvidia helped build",
@@ -29,11 +29,11 @@
       "image": "https://media.thenextweb.com/2026/06/spirit-ai-beats-nvidia-roboarena-physical-ai.avif",
       "published": "2026-06-05T13:30:23+00:00",
       "firstSeen": "2026-06-05T14:02:20.220035+00:00",
-      "lastSeen": "2026-06-05T14:02:20.220035+00:00",
+      "lastSeen": "2026-06-05T16:00:01.919010+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 10.7838
+      "score": 10.7264
     },
     {
       "title": "OpenAI and Anthropic May Be Rivals, but Investors Aren’t Picking Sides",
@@ -46,10 +46,10 @@
       "image": "https://media.wired.com/photos/6a1f7877452f8f7907d948a3/master/pass/Nearly-Half-of-Investors-Have-Stakes-in-Both-OpenAI-and-Anthropic-Business.jpg",
       "published": "2026-06-05T10:30:00+00:00",
       "firstSeen": "2026-06-05T11:00:01.846024+00:00",
-      "lastSeen": "2026-06-05T14:02:20.220035+00:00",
+      "lastSeen": "2026-06-05T16:00:01.919010+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.887
+      "score": 8.8341
     },
     {
       "title": "Mira Murati resurfaces after 18 months with a warning about AI governance and a product no one expected",
@@ -62,10 +62,10 @@
       "image": "https://media.thenextweb.com/2026/06/mira-murati-thinking-machines-bloomberg-return.avif",
       "published": "2026-06-05T13:45:20+00:00",
       "firstSeen": "2026-06-05T14:02:20.220035+00:00",
-      "lastSeen": "2026-06-05T14:02:20.220035+00:00",
+      "lastSeen": "2026-06-05T16:00:01.919010+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.2414
+      "score": 7.1835
     },
     {
       "title": "Anthropic urges a coordinated, verifiable pause for frontier AI",
@@ -81,7 +81,7 @@
       "lastSeen": "2026-06-05T14:00:01.962191+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9868
+      "score": 4.9371
     },
     {
       "title": "The Meta hack shows there’s more to AI security than Mythos",
@@ -94,10 +94,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/06/hand-keys1.jpg?resize=1200%2C600",
       "published": "2026-06-05T09:00:00+00:00",
       "firstSeen": "2026-06-05T11:00:01.846024+00:00",
-      "lastSeen": "2026-06-05T14:02:20.220035+00:00",
+      "lastSeen": "2026-06-05T16:00:01.919010+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9463
+      "score": 4.8956
     },
     {
       "title": "While tech week talks AI, Scytale is talking about what’s actually killing deals",
@@ -110,10 +110,10 @@
       "image": "https://media.thenextweb.com/2026/06/scytale-ny-tech-week-soc2-compliance.avif",
       "published": "2026-06-05T10:55:31+00:00",
       "firstSeen": "2026-06-05T11:00:01.846024+00:00",
-      "lastSeen": "2026-06-05T14:02:20.220035+00:00",
+      "lastSeen": "2026-06-05T16:00:01.919010+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8589
+      "score": 4.8054
     },
     {
       "title": "The 10 best ecommerce mobile app builders for mid-market and enterprise brands",
@@ -129,7 +129,7 @@
       "lastSeen": "2026-06-05T14:02:20.220035+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.8226
+      "score": 3.771
     },
     {
       "title": "Quoting Andreas Kling",
@@ -142,10 +142,10 @@
       "image": "",
       "published": "2026-06-05T11:10:05+00:00",
       "firstSeen": "2026-06-05T12:00:01.414730+00:00",
-      "lastSeen": "2026-06-05T14:02:20.220035+00:00",
+      "lastSeen": "2026-06-05T16:00:01.919010+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.6057
+      "score": 3.5518
     },
     {
       "title": "Nvidia’s Jensen Huang flags robotics as Korea’s next growth engine",
@@ -161,7 +161,23 @@
       "lastSeen": "2026-06-05T14:00:01.962191+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.4015
+      "score": 3.3511
+    },
+    {
+      "title": "Amazon’s ‘Proteus’ Robot Heads to Europe in $11B Automation Push",
+      "url": "https://www.techrepublic.com/article/news-amazon-proteus-robotics-emea-spain-germany",
+      "source": "TechRepublic AI",
+      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Amazon upgraded Proteus with natural-language controls as part of a wider European robotics push involving STARK, Vulcan, and major investment.\nThe post Amazon’s ‘Proteus’ Robot Heads to Europe in $11B Automation Push appeared first on TechRepublic.",
+      "image": "https://assets.techrepublic.com/uploads/2026/06/robot-warehouse-2.jpg?f=jpeg",
+      "published": "2026-06-05T15:07:05+00:00",
+      "firstSeen": "2026-06-05T16:00:01.919010+00:00",
+      "lastSeen": "2026-06-05T16:00:01.919010+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.2234
     },
     {
       "title": "Why Apple Might Put Cameras Into Its Next AirPods",
@@ -174,26 +190,10 @@
       "image": "https://media.wired.com/photos/6a21fac373f57a5aa16309ff/master/pass/gear_airpodcamera_getty.jpg",
       "published": "2026-06-05T10:00:00+00:00",
       "firstSeen": "2026-06-05T10:13:35.392051+00:00",
-      "lastSeen": "2026-06-05T14:02:20.220035+00:00",
+      "lastSeen": "2026-06-05T16:00:01.919010+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2733
-    },
-    {
-      "title": "Southeast Asia Scam Compounds Turn AI Into a Cybersecurity Threat",
-      "url": "https://www.techrepublic.com/article/news-ai-scam-compounds-risk-apac-southeast-asia",
-      "source": "TechRepublic AI",
-      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Scam compounds across Southeast Asia are using AI, malware, and automation to scale fraud, forcing APAC security teams to rethink phishing, identity, and mobile-risk controls.\nThe post Southeast Asia Scam Compounds Turn AI Into a Cybersecurity Threat appeared first on TechRepublic.",
-      "image": "https://assets.techrepublic.com/uploads/2026/06/call-center-equipment-to-chat-with-clients-on-tele-2026-03-19-00-46-52-utc-1024x683.jpg?f=jpeg",
-      "published": "2026-06-05T12:31:01+00:00",
-      "firstSeen": "2026-06-05T14:00:01.962191+00:00",
-      "lastSeen": "2026-06-05T14:02:20.220035+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.2045
+      "score": 3.2211
     }
   ],
   "errors": [
