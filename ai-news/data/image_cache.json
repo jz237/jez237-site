@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-05T19:06:23.115481+00:00",
+  "updatedAt": "2026-06-05T20:53:38.255192+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -9432,6 +9432,10 @@
     "https://techcrunch.com/podcast/the-together-tech-wave-might-be-the-most-intriguing-startup-bet-of-2026": {
       "image": "https://techcrunch.com/wp-content/uploads/2025/08/Brynn-Putnam-Disrupt-2028.jpg?resize=1200,808",
       "checkedAt": "2026-06-05T19:00:01.939077+00:00"
+    },
+    "https://techcrunch.com/2026/06/05/startup-battlefield-200-applications-officially-close-in-3-days": {
+      "image": "https://techcrunch.com/wp-content/uploads/2024/11/54105085427_2cae9d0502_o.jpg?resize=1200,800",
+      "checkedAt": "2026-06-05T20:53:38.255192+00:00"
     }
   }
 }
