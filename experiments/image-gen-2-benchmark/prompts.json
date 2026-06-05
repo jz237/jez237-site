@@ -1414,5 +1414,17 @@
     "slot": "midday",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-06-05-afternoon-bicycle-as-botanical-pressing",
+    "title": "Bicycle as Botanical Pressing",
+    "tests": "Tests whether GPT Image 2 can produce a reusable reference-photo transformation prompt where the finished sample reads as a physical pressed botanical herbarium artifact while preserving an object's recognizable structure.",
+    "prompt": "Use the uploaded reference photo and preserve the bicycle identity, camera angle, silhouette, frame geometry, wheel placement, handlebar shape, saddle position, chain line, pedals, spoke rhythm, proportions, and most recognizable features, then transform the bicycle into a pressed botanical herbarium plate on warm off-white archival paper inside a shallow museum drawer. Rebuild the frame, wheels, handlebar, saddle, chain, pedals, and spokes from flattened dried leaves, fern stems, seed pods, pressed wildflower petals, translucent plant membranes, reed fibers, and dark herbarium twine, with linen tape, brass specimen pins, curled brittle leaf edges, pollen grains, faint pencil measurement ticks, deckled paper fibers, and soft north-window museum light. Keep the source bicycle recognizable while changing the material logic, surface texture, props, and presentation into a coherent botanical specimen artifact. Avoid real logos, brand marks, readable labels, placeholder text, broken bicycle geometry, extra wheels, and losing recognizability.\n\nSource photo needed: a clear side-view bicycle photo.\n\nReusable fill-in-the-blank template: Use the uploaded reference photo and preserve the [OBJECT] identity, camera angle, silhouette, proportions, key structural geometry, distinctive markings, and most recognizable features, then transform [OBJECT] into a pressed botanical herbarium specimen made from [MATERIALS] in [SETTING] with [MOOD] lighting. Keep the source recognizable while changing the material logic, surface texture, props, and environment into a cohesive preserved specimen artifact. Avoid real logos, readable labels, placeholder text, broken geometry, extra duplicate parts, and losing recognizability.\n\nWhat to preserve: the bicycle's overall identity, side-view camera angle, diamond frame, two-wheel placement, handlebar curve, saddle position, pedals, chain line, spoke rhythm, proportions, and any distinctive color or accessory shapes from the source image.\n\nWhat to change: convert metal, rubber, plastic, and paint into flattened pressed leaves, stems, petals, seed pods, translucent membranes, twine, archival tape, pins, herbarium paper, museum drawer context, and botanical conservation lighting.\n\nExample substitution: Use a clear side-view photo of a blue commuter bicycle with a front basket; preserve its frame shape, basket, curved handlebar, saddle, two wheels, pedal position, and proportions, then turn it into a pressed botanical herbarium specimen made from fern stems, maple leaves, violet petals, seed pods, and reed fibers on archival paper in a museum drawer.",
+    "image": "images/2026-06-05-afternoon-bicycle-as-botanical-pressing.png",
+    "date": "2026-06-05",
+    "batch": "Daily Prompt",
+    "slot": "afternoon",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
