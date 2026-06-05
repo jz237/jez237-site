@@ -1055,6 +1055,7 @@
 
       // Experimental
       { title: 'Subway Siege: Blackout',        path: '2026-05-31/subway-siege-blackout/', emoji: '🔦', date: 'May 31', cat: 'arcade',   tag: 'experimental', desc: 'First-person blackout subway shooting gallery with flashlight, muzzle flashes, raiders, drones, and tunnel survival waves' },
+      { title: 'Neon Invaders',                 path: '2026-06-05/neon-invaders/',          emoji: '🛸', date: 'Jun 5',  cat: 'arcade',   tag: 'experimental', desc: 'Modernized neon Space Invaders with waves, boss carriers, shields, dash, power cores, and particle explosions' },
       { title: 'Subway Siege',                  path: '2026-05-30/subway-siege/',          emoji: '🚇', date: 'May 30', cat: 'arcade',   tag: 'experimental', desc: 'Cinematic touch-first subway tunnel defender with raiders, drones, trains, shields, and charge blasts' },
       { title: 'Vortex: Storm Eater',           path: '2026-03-04/vortex/',                    emoji: '🌪️', date: 'Mar 4', cat: 'arcade',   tag: 'experimental', desc: 'Early-build storm shooter' },
       { title: 'Runecaster',                    path: '2026-03-04/runecaster/',                emoji: '🧙', date: 'Mar 4',  cat: 'arcade',   tag: 'experimental', desc: 'Magic-mechanic prototype' },
@@ -1073,14 +1074,14 @@
     const UNFINISHED = new Set([
       'hard hat mac', 'crystal cavern', 'crystal tavern', 'shatter storm', 'plasma pong',
       'lantern creek', 'super star trek', 'depth charge', 'ember knight',
-      'subway siege blackout', 'vortex storm eater', 'runecaster', 'tessera',
+      'subway siege blackout', 'neon invaders', 'vortex storm eater', 'runecaster', 'tessera',
       'void echo', 'gravity weaver', 'storm echo'
     ]);
     const slugTitle = t => t.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
     games.forEach(g => { g.status = UNFINISHED.has(slugTitle(g.title)) ? 'unfinished' : 'released'; });
 
     function tagLabel(t, status) {
-      if (status === 'unfinished') return '🚧 Unfinished';
+      if (status === 'unfinished') return '🚧 Unreleased';
       return t === 'featured' ? '⭐ Featured'
            : t === 'classic'  ? '🎮 Classic'
            : t === 'demo'     ? '🎆 Demo'
@@ -1192,7 +1193,7 @@
         : base;
       const released = list.filter(g => g.status !== 'unfinished');
       const unfinished = list.filter(g => g.status === 'unfinished');
-      sections.innerHTML = renderSection('Released Games', released) + (unfinished.length ? renderSection('Unfinished Games', unfinished) : '');
+      sections.innerHTML = renderSection('Released Games', released) + (unfinished.length ? renderSection('Unreleased Games', unfinished) : '');
       count.textContent = `${list.length} game${list.length === 1 ? '' : 's'}${currentFilter === 'all' ? '' : ' · ' + currentFilter}${q ? ' matching \"' + q + '\"' : ''}`;
       requestAnimationFrame(() => {
         document.querySelectorAll('.game-card').forEach((el,i) => {
