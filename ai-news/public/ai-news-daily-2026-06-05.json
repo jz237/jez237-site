@@ -1,6 +1,6 @@
 {
   "date": "2026-06-05",
-  "updatedAt": "2026-06-05T05:00:01.565438+00:00",
+  "updatedAt": "2026-06-05T06:00:01.599052+00:00",
   "items": [
     {
       "title": "v0.30.6-rc0",
@@ -13,10 +13,26 @@
       "image": "https://opengraph.githubassets.com/ecd3bd67f16d528a12f4ee13e0b76d6307ad3ec82702adfe5651c94dcaf86421/ollama/ollama",
       "published": "2026-06-05T00:49:49+00:00",
       "firstSeen": "2026-06-05T01:00:01.737141+00:00",
-      "lastSeen": "2026-06-05T05:00:01.565438+00:00",
+      "lastSeen": "2026-06-05T06:00:01.599052+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9397
+      "score": 2.9128
+    },
+    {
+      "title": "v0.30.6",
+      "url": "https://github.com/ollama/ollama/releases/tag/v0.30.6",
+      "source": "Ollama Releases",
+      "sourceUrl": "https://github.com/ollama/ollama/releases.atom",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "launch: oh-my-pi (#16410)",
+      "image": "https://opengraph.githubassets.com/fe7827ad2c4f9b3cb1fb214c0610dd452fde4b4dd721a28e99f7c13e7e698df6/ollama/ollama",
+      "published": "2026-06-05T00:49:49+00:00",
+      "firstSeen": "2026-06-05T06:00:01.599052+00:00",
+      "lastSeen": "2026-06-05T06:00:01.599052+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.9128
     },
     {
       "title": "v1.88.0-rc.3",
@@ -29,10 +45,10 @@
       "image": "https://opengraph.githubassets.com/8046a6d5bb3b16fb87b7ec1f43bc3bbb1f4e702e2eff4698aca9a8be48c191ba/BerriAI/litellm/releases/tag/v1.88.0-rc.3",
       "published": "2026-06-05T02:10:23+00:00",
       "firstSeen": "2026-06-05T03:00:01.674158+00:00",
-      "lastSeen": "2026-06-05T05:00:01.565438+00:00",
+      "lastSeen": "2026-06-05T06:00:01.599052+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9069
+      "score": 2.8791
     },
     {
       "title": "Arash Ahmadi, Parisa Masnadi, Sarah Sharif, Charles Nicholson, David Ebert, Mike Banad",
@@ -43,12 +59,44 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-05T05:00:08.313333+00:00",
+      "published": "2026-06-05T06:00:11.312922+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-05T05:00:01.565438+00:00",
+      "lastSeen": "2026-06-05T06:00:01.599052+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
+    },
+    {
+      "title": "Seoul Purpose: How NVIDIA and South Korea Are Building the Future of AI",
+      "url": "https://blogs.nvidia.com/blog/korea-ecosystem-2026",
+      "source": "NVIDIA Blog",
+      "sourceUrl": "https://blogs.nvidia.com/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Home to cutting-edge sovereign AI infrastructure and robotics innovators, as well as one of the world’s most passionate gaming communities, South Korea is one of the world’s centers of AI. NVIDIA founder and CEO Jensen Huang is in Seoul this week to meet the partners and builders behind that work. Stay tuned here for live [&#8230;]",
+      "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/IMG_1519-1-scaled.jpg",
+      "published": "2026-06-05T05:38:37+00:00",
+      "firstSeen": "2026-06-05T06:00:01.599052+00:00",
+      "lastSeen": "2026-06-05T06:00:01.599052+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2792
+    },
+    {
+      "title": "Mira Murati steps back into the spotlight, carefully",
+      "url": "https://techcrunch.com/2026/06/04/mira-murati-steps-back-into-the-spotlight-carefully",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "In the current environment, remaining heads down has diminishing returns; at some point, you have to make some noise just to remind the market you exist.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/Mira-Murati-at-Bloomberg.jpg?w=1024",
+      "published": "2026-06-05T05:06:37+00:00",
+      "firstSeen": "2026-06-05T06:00:01.599052+00:00",
+      "lastSeen": "2026-06-05T06:00:01.599052+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2631
     }
   ],
   "errors": [
