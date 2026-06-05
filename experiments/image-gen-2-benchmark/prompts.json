@@ -1390,5 +1390,17 @@
     "slot": "evening",
     "model": "openai/gpt-image-2",
     "size": "1024x1536"
+  },
+  {
+    "id": "2026-06-05-midday-garden-as-miniature-circuit-board",
+    "title": "Garden as Miniature Circuit Board",
+    "tests": "Tests a reusable reference-photo transformation that preserves a garden layout while changing the entire scene into a tactile electronics workbench diorama, with dense PCB materials and no prompt-card text in the image.",
+    "prompt": "Use the uploaded reference photo and preserve the garden identity, camera angle, bed layout, main paths, plant groupings, pot shapes, trellis positions, border edges, and most recognizable structural features, then transform the garden into a miniature circuit-board diorama on an electronics workbench with glossy green solder-mask islands, copper traces following the paths, tiny LEDs as dew points, micro-resistors as plant markers, translucent capacitors as rain barrels, braided wire trellises, gold contact-pad stepping stones, solder beads, flux smudges, fiberglass texture, dust, fingerprints, and warm magnifying-lamp light. Keep the source garden recognizable while changing the material logic, surface texture, props, and setting into a coherent macro electronics object. Avoid placeholder text, real logos, unreadable clutter, impossible wiring, and losing the original garden layout.\n\nSource photo needed: a garden photo.\n\nReusable fill-in-the-blank template: Use the uploaded reference photo and preserve the [SUBJECT] identity, camera angle, layout, key shapes, major paths or contours, proportions, recognizable markings, and distinctive features, then transform [SUBJECT] into a miniature circuit-board diorama made from [MATERIAL] in [SETTING] with [MOOD] lighting. Keep the source recognizable while changing the material logic, surface texture, props, and environment into a cohesive electronics artifact. Avoid placeholder text, real logos, broken geometry, cluttered microtext, and losing recognizability.\n\nWhat to preserve: the source garden layout, camera angle, bed shapes, paths, plant groupings, borders, trellises, pots, and distinctive landscape features.\n\nWhat to change: convert soil, plants, paths, and garden structures into solder mask, copper traces, LEDs, resistors, capacitors, braided wire, contact pads, solder, fiberglass, electronics tools, and workbench lighting.\n\nExample substitution: Use a clear photo of a small backyard herb garden; preserve the rectangular beds, curved gravel path, rosemary row, basil cluster, mint pot, and wire trellis, then turn it into a glossy green circuit-board diorama on an antistatic workbench with warm magnifying-lamp light.",
+    "image": "images/2026-06-05-midday-garden-as-miniature-circuit-board.png",
+    "date": "2026-06-05",
+    "batch": "Daily Prompt",
+    "slot": "midday",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
