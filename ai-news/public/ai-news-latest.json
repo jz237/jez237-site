@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-05T14:00:01.962191+00:00",
+  "updatedAt": "2026-06-05T14:02:20.220035+00:00",
   "items": [
     {
       "title": "Generic Triple-Latent Compression with Gated Associative Retrieval",
@@ -10,9 +10,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-05T14:00:10.032285+00:00",
+      "published": "2026-06-05T14:02:23.872338+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-05T14:00:01.962191+00:00",
+      "lastSeen": "2026-06-05T14:02:20.220035+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
       "score": -0.74
@@ -28,10 +28,75 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/268573_This_AI_startup_wants_tell_you_if_your_script_will_make_a_hit_film_CVirginia.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-05T13:57:31+00:00",
       "firstSeen": "2026-06-05T14:00:01.962191+00:00",
-      "lastSeen": "2026-06-05T14:00:01.962191+00:00",
+      "lastSeen": "2026-06-05T14:02:20.220035+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3587
+      "score": 2.3575
+    },
+    {
+      "title": "Mira Murati resurfaces after 18 months with a warning about AI governance and a product no one expected",
+      "url": "https://thenextweb.com/news/mira-murati-resurfaces-after-18-months-with-a-warning-about-ai-governance-and-a-product-no-one-expected",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "For someone who helped ship ChatGPT, DALL-E, and Codex, Mira Murati has been remarkably quiet. On Thursday, she broke the silence. Sitting down with Bloomberg’s Emily Chang in San Francisco, the CEO of Thinking Machines Lab gave her first major media appearance in roughly 18 months, a carefully managed re-entry into a conversation that has moved at [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/mira-murati-thinking-machines-bloomberg-return.avif",
+      "published": "2026-06-05T13:45:20+00:00",
+      "firstSeen": "2026-06-05T14:02:20.220035+00:00",
+      "lastSeen": "2026-06-05T14:02:20.220035+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 7.2414
+    },
+    {
+      "title": "A Chinese startup just dethroned Nvidia on the benchmark Nvidia helped build",
+      "url": "https://thenextweb.com/news/spirit-ai-beats-nvidia-roboarena-physical-ai",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Two days. That is how long Nvidia’s latest robotics model sat at the top of the RoboArena leaderboard before a startup from Hangzhou knocked it off. On Wednesday, Spirit AI announced that its foundation model for embodied intelligence, Spirit v1.6, had scored 1,924 on the benchmark, edging out Nvidia’s Cosmos3-Nano-Policy at 1,881. A second Nvidia project, DreamZero, [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/spirit-ai-beats-nvidia-roboarena-physical-ai.avif",
+      "published": "2026-06-05T13:30:23+00:00",
+      "firstSeen": "2026-06-05T14:02:20.220035+00:00",
+      "lastSeen": "2026-06-05T14:02:20.220035+00:00",
+      "model_release": true,
+      "editorial_allow": true,
+      "editorial_reason": "model_release",
+      "score": 10.7838
+    },
+    {
+      "title": "Japan risks becoming an ‘AI colony’, its digital minister warns",
+      "url": "https://thenextweb.com/news/japan-risks-becoming-an-ai-colony-its-digital-minister-warns",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The phrase Japan’s digital minister chose was deliberately stark. Hisashi Matsumoto warned that the country risks becoming an “AI colony” if it fails to keep pace with the technology, using the term to defend a government-backed bill that would amend Japan’s personal-data protection law to let AI developers use medical and criminal records without obtaining [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/Hisashi-Matsumoto.avif",
+      "published": "2026-06-05T13:14:19+00:00",
+      "firstSeen": "2026-06-05T14:02:20.220035+00:00",
+      "lastSeen": "2026-06-05T14:02:20.220035+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1258
+    },
+    {
+      "title": "Anthropic says Claude writes 80% of its own code and the world needs a plan to hit the brakes",
+      "url": "https://thenextweb.com/news/anthropic-claude-recursive-self-improvement-code",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "One of Anthropic’s engineers hasn’t written a line of code in five months. Not because the work dried up, but because Claude does it now. As of May 2026, more than 80% of the code merged into Anthropic’s production codebase was authored by Claude, up from low single digits when Claude Code launched in February 2025. [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/claude-opus-4-8.avif",
+      "published": "2026-06-05T13:12:20+00:00",
+      "firstSeen": "2026-06-05T14:02:20.220035+00:00",
+      "lastSeen": "2026-06-05T14:02:20.220035+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 11.8248
     },
     {
       "title": "AirTrunk commits $30B to build 5GW of AI data centers in India",
@@ -44,10 +109,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/GettyImages-2089845337.jpg?resize=1200%2C800",
       "published": "2026-06-05T13:03:10+00:00",
       "firstSeen": "2026-06-05T14:00:01.962191+00:00",
-      "lastSeen": "2026-06-05T14:00:01.962191+00:00",
+      "lastSeen": "2026-06-05T14:02:20.220035+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2614
+      "score": 2.2603
     },
     {
       "title": "Southeast Asia Scam Compounds Turn AI Into a Cybersecurity Threat",
@@ -60,10 +125,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/06/call-center-equipment-to-chat-with-clients-on-tele-2026-03-19-00-46-52-utc-1024x683.jpg?f=jpeg",
       "published": "2026-06-05T12:31:01+00:00",
       "firstSeen": "2026-06-05T14:00:01.962191+00:00",
-      "lastSeen": "2026-06-05T14:00:01.962191+00:00",
+      "lastSeen": "2026-06-05T14:02:20.220035+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2056
+      "score": 3.2045
     },
     {
       "title": "Quoting Andreas Kling",
@@ -76,10 +141,10 @@
       "image": "",
       "published": "2026-06-05T11:10:05+00:00",
       "firstSeen": "2026-06-05T12:00:01.414730+00:00",
-      "lastSeen": "2026-06-05T14:00:01.962191+00:00",
+      "lastSeen": "2026-06-05T14:02:20.220035+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.6068
+      "score": 3.6057
     },
     {
       "title": "While tech week talks AI, Scytale is talking about what’s actually killing deals",
@@ -92,10 +157,10 @@
       "image": "https://media.thenextweb.com/2026/06/scytale-ny-tech-week-soc2-compliance.avif",
       "published": "2026-06-05T10:55:31+00:00",
       "firstSeen": "2026-06-05T11:00:01.846024+00:00",
-      "lastSeen": "2026-06-05T14:00:01.962191+00:00",
+      "lastSeen": "2026-06-05T14:02:20.220035+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8599
+      "score": 4.8589
     },
     {
       "title": "Data-centre developer Switch in talks to raise at $50bn-plus valuation",
@@ -108,10 +173,10 @@
       "image": "https://media.thenextweb.com/2026/06/Switch.avif",
       "published": "2026-06-05T10:47:24+00:00",
       "firstSeen": "2026-06-05T11:00:01.846024+00:00",
-      "lastSeen": "2026-06-05T14:00:01.962191+00:00",
+      "lastSeen": "2026-06-05T14:02:20.220035+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7561
+      "score": 2.7551
     },
     {
       "title": "OpenAI and Anthropic May Be Rivals, but Investors Aren’t Picking Sides",
@@ -124,10 +189,10 @@
       "image": "https://media.wired.com/photos/6a1f7877452f8f7907d948a3/master/pass/Nearly-Half-of-Investors-Have-Stakes-in-Both-OpenAI-and-Anthropic-Business.jpg",
       "published": "2026-06-05T10:30:00+00:00",
       "firstSeen": "2026-06-05T11:00:01.846024+00:00",
-      "lastSeen": "2026-06-05T14:00:01.962191+00:00",
+      "lastSeen": "2026-06-05T14:02:20.220035+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.8881
+      "score": 8.887
     },
     {
       "title": "Broadcom steps back from M&A as AI revenue surges",
@@ -140,10 +205,10 @@
       "image": "https://media.thenextweb.com/2026/06/Broadcom.avif",
       "published": "2026-06-05T10:28:20+00:00",
       "firstSeen": "2026-06-05T11:00:01.846024+00:00",
-      "lastSeen": "2026-06-05T14:00:01.962191+00:00",
+      "lastSeen": "2026-06-05T14:02:20.220035+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0473
+      "score": 2.0462
     },
     {
       "title": "Trump officials fear a loophole let Chinese firms buy Nvidia Blackwells",
@@ -156,10 +221,10 @@
       "image": "https://media.thenextweb.com/2026/04/China-vs-USA.avif",
       "published": "2026-06-05T10:11:08+00:00",
       "firstSeen": "2026-06-05T11:00:01.846024+00:00",
-      "lastSeen": "2026-06-05T14:00:01.962191+00:00",
+      "lastSeen": "2026-06-05T14:02:20.220035+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3894
+      "score": 2.3883
     },
     {
       "title": "Why Apple Might Put Cameras Into Its Next AirPods",
@@ -172,10 +237,10 @@
       "image": "https://media.wired.com/photos/6a21fac373f57a5aa16309ff/master/pass/gear_airpodcamera_getty.jpg",
       "published": "2026-06-05T10:00:00+00:00",
       "firstSeen": "2026-06-05T10:13:35.392051+00:00",
-      "lastSeen": "2026-06-05T14:00:01.962191+00:00",
+      "lastSeen": "2026-06-05T14:02:20.220035+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2743
+      "score": 3.2733
     },
     {
       "title": "US officials have discussed taking government stakes in AI companies",
@@ -188,10 +253,10 @@
       "image": "https://media.thenextweb.com/2026/06/USA-flag.avif",
       "published": "2026-06-05T09:38:08+00:00",
       "firstSeen": "2026-06-05T10:00:01.701213+00:00",
-      "lastSeen": "2026-06-05T14:00:01.962191+00:00",
+      "lastSeen": "2026-06-05T14:02:20.220035+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0244
+      "score": 2.0234
     },
     {
       "title": "The 10 best ecommerce mobile app builders for mid-market and enterprise brands",
@@ -204,10 +269,10 @@
       "image": "https://media.thenextweb.com/2026/06/best-ecommerce-mobile-app-builders-enterprise.avif",
       "published": "2026-06-05T09:36:24+00:00",
       "firstSeen": "2026-06-05T10:00:01.701213+00:00",
-      "lastSeen": "2026-06-05T14:00:01.962191+00:00",
+      "lastSeen": "2026-06-05T14:02:20.220035+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.8236
+      "score": 3.8226
     },
     {
       "title": "South Korea’s labour minister wants tech firms to share AI windfalls",
@@ -223,7 +288,7 @@
       "lastSeen": "2026-06-05T14:00:01.962191+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0169
+      "score": 2.0159
     },
     {
       "title": "The Meta hack shows there’s more to AI security than Mythos",
@@ -236,10 +301,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/06/hand-keys1.jpg?resize=1200%2C600",
       "published": "2026-06-05T09:00:00+00:00",
       "firstSeen": "2026-06-05T11:00:01.846024+00:00",
-      "lastSeen": "2026-06-05T14:00:01.962191+00:00",
+      "lastSeen": "2026-06-05T14:02:20.220035+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9473
+      "score": 4.9463
     },
     {
       "title": "AI Has Come for Serif Fonts",
@@ -252,10 +317,10 @@
       "image": "https://media.wired.com/photos/6a20d5436a7879400ec4323c/master/pass/culture_ai_serif_font.jpg",
       "published": "2026-06-05T09:00:00+00:00",
       "firstSeen": "2026-06-05T10:00:01.701213+00:00",
-      "lastSeen": "2026-06-05T14:00:01.962191+00:00",
+      "lastSeen": "2026-06-05T14:02:20.220035+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1473
+      "score": 2.1463
     },
     {
       "title": "Nvidia’s Jensen Huang flags robotics as Korea’s next growth engine",
@@ -271,7 +336,7 @@
       "lastSeen": "2026-06-05T14:00:01.962191+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.4025
+      "score": 3.4015
     },
     {
       "title": "Anthropic urges a coordinated, verifiable pause for frontier AI",
@@ -287,7 +352,7 @@
       "lastSeen": "2026-06-05T14:00:01.962191+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9878
+      "score": 4.9868
     },
     {
       "title": "Seoul Purpose: How NVIDIA and South Korea Are Building the Future of AI",
@@ -300,10 +365,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/IMG_1519-1-scaled.jpg",
       "published": "2026-06-05T05:38:37+00:00",
       "firstSeen": "2026-06-05T05:46:33.510991+00:00",
-      "lastSeen": "2026-06-05T14:00:01.962191+00:00",
+      "lastSeen": "2026-06-05T14:02:20.220035+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0621
+      "score": 2.0612
     },
     {
       "title": "Mira Murati steps back into the spotlight, carefully",
@@ -316,10 +381,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/Mira-Murati-at-Bloomberg.jpg?w=1024",
       "published": "2026-06-05T05:06:37+00:00",
       "firstSeen": "2026-06-05T05:46:33.510991+00:00",
-      "lastSeen": "2026-06-05T14:00:01.962191+00:00",
+      "lastSeen": "2026-06-05T14:02:20.220035+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0493
+      "score": 2.0484
     },
     {
       "title": "v1.88.0-rc.3",
@@ -332,10 +397,10 @@
       "image": "https://opengraph.githubassets.com/8046a6d5bb3b16fb87b7ec1f43bc3bbb1f4e702e2eff4698aca9a8be48c191ba/BerriAI/litellm/releases/tag/v1.88.0-rc.3",
       "published": "2026-06-05T02:10:23+00:00",
       "firstSeen": "2026-06-05T03:00:01.674158+00:00",
-      "lastSeen": "2026-06-05T14:00:01.962191+00:00",
+      "lastSeen": "2026-06-05T14:02:20.220035+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.682
+      "score": 2.6811
     },
     {
       "title": "v0.30.6-rc0",
@@ -348,10 +413,10 @@
       "image": "https://opengraph.githubassets.com/ecd3bd67f16d528a12f4ee13e0b76d6307ad3ec82702adfe5651c94dcaf86421/ollama/ollama",
       "published": "2026-06-05T00:49:49+00:00",
       "firstSeen": "2026-06-05T01:00:01.737141+00:00",
-      "lastSeen": "2026-06-05T14:00:01.962191+00:00",
+      "lastSeen": "2026-06-05T14:02:20.220035+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.723
+      "score": 2.7222
     },
     {
       "title": "v0.30.6",
@@ -364,10 +429,10 @@
       "image": "https://opengraph.githubassets.com/60f61760c34b89ae6fa1dcf45ef6572c285dc5ed3f2717d4816dcd473e0f774a/ollama/ollama",
       "published": "2026-06-05T00:49:49+00:00",
       "firstSeen": "2026-06-05T07:00:01.980033+00:00",
-      "lastSeen": "2026-06-05T14:00:01.962191+00:00",
+      "lastSeen": "2026-06-05T14:02:20.220035+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.723
+      "score": 2.7222
     },
     {
       "title": "AI enthusiasts are in a race against time, AI skeptics are in a race against entropy",
@@ -380,10 +445,10 @@
       "image": "",
       "published": "2026-06-04T23:55:27+00:00",
       "firstSeen": "2026-06-05T00:18:15.529167+00:00",
-      "lastSeen": "2026-06-05T14:00:01.962191+00:00",
+      "lastSeen": "2026-06-05T14:02:20.220035+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.934
+      "score": 1.9332
     },
     {
       "title": "Ahead of its IPO, Anthropic’s Daniela Amodei shrugs off doubts about AI’s returns",
@@ -396,10 +461,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/55314412841_11b924318f_c.jpg?w=799",
       "published": "2026-06-04T22:43:26+00:00",
       "firstSeen": "2026-06-04T23:00:01.697895+00:00",
-      "lastSeen": "2026-06-05T14:00:01.962191+00:00",
+      "lastSeen": "2026-06-05T14:02:20.220035+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9096
+      "score": 4.9088
     },
     {
       "title": "Airbnb’s Brian Chesky plans to launch a new AI lab",
@@ -412,10 +477,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2018/02/tc-backlight-e1689786273147.png?w=1200",
       "published": "2026-06-04T22:29:50+00:00",
       "firstSeen": "2026-06-04T22:41:54.387057+00:00",
-      "lastSeen": "2026-06-05T14:00:01.962191+00:00",
+      "lastSeen": "2026-06-05T14:02:20.220035+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.6051
+      "score": 2.6043
     },
     {
       "title": "v1.87.1",
@@ -428,10 +493,10 @@
       "image": "https://opengraph.githubassets.com/bfab6526e28a3439c38817f5f6b9cf77e948536dd506a6443b26790668cffe11/BerriAI/litellm/releases/tag/v1.87.1",
       "published": "2026-06-04T22:12:40+00:00",
       "firstSeen": "2026-06-04T22:41:54.387057+00:00",
-      "lastSeen": "2026-06-05T14:00:01.962191+00:00",
+      "lastSeen": "2026-06-05T14:02:20.220035+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.5994
+      "score": 2.5987
     },
     {
       "title": "Defense tech, AI, and fundraising take center stage at StrictlyVC Los Angeles on June 18",
@@ -444,10 +509,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/04/StrictlyVC-NYC-2024.jpg?resize=1200%2C800",
       "published": "2026-06-04T21:30:00+00:00",
       "firstSeen": "2026-06-04T22:00:01.464523+00:00",
-      "lastSeen": "2026-06-05T14:00:01.962191+00:00",
+      "lastSeen": "2026-06-05T14:02:20.220035+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.5856
+      "score": 2.5848
     },
     {
       "title": "Upwind, the next-gen wiz, now secures every corner of the AI stack",
@@ -463,7 +528,7 @@
       "lastSeen": "2026-06-05T14:00:01.962191+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.4351
+      "score": 3.4344
     },
     {
       "title": "v0.30.5",
@@ -476,10 +541,10 @@
       "image": "https://opengraph.githubassets.com/0e91974d2670184a86dc2744ca7430b594da6357fbbc3ba255625eaa4296fd9a/ollama/ollama",
       "published": "2026-06-04T20:27:38+00:00",
       "firstSeen": "2026-06-04T20:00:01.481282+00:00",
-      "lastSeen": "2026-06-05T14:00:01.962191+00:00",
+      "lastSeen": "2026-06-05T14:02:20.220035+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9358
+      "score": 1.935
     },
     {
       "title": "Dashlane explains how attackers managed to download encrypted password vaults",
@@ -492,10 +557,10 @@
       "image": "https://cdn.arstechnica.net/wp-content/uploads/2022/07/password-login-1000x648.jpeg",
       "published": "2026-06-04T20:02:04+00:00",
       "firstSeen": "2026-06-05T00:00:01.972544+00:00",
-      "lastSeen": "2026-06-05T14:00:01.962191+00:00",
+      "lastSeen": "2026-06-05T14:02:20.220035+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7178
+      "score": 1.7171
     },
     {
       "title": "Meta steals a tactic from Tesla and builds data centers in tents",
@@ -508,10 +573,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/meta-ai-icon-smartphone.jpg?resize=1200%2C800",
       "published": "2026-06-04T19:33:09+00:00",
       "firstSeen": "2026-06-04T20:00:01.481282+00:00",
-      "lastSeen": "2026-06-05T14:00:01.962191+00:00",
+      "lastSeen": "2026-06-05T14:02:20.220035+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8489
+      "score": 1.8482
     },
     {
       "title": "Apple approves Poke as the first AI agent on its Messages for Business platform",
@@ -524,10 +589,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/Poke-at-3.57.33-PM.jpg?resize=1200%2C604",
       "published": "2026-06-04T19:20:58+00:00",
       "firstSeen": "2026-06-04T20:00:01.481282+00:00",
-      "lastSeen": "2026-06-05T14:00:01.962191+00:00",
+      "lastSeen": "2026-06-05T14:02:20.220035+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.6452
+      "score": 5.6445
     },
     {
       "title": "Nemotron 3.5 Content Safety: Customizable Multimodal Safety for Global Enterprise AI",
@@ -540,10 +605,10 @@
       "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/nvidia/nemotron-3-5-content-safety.png",
       "published": "2026-06-04T18:57:45+00:00",
       "firstSeen": "2026-06-04T19:00:01.866512+00:00",
-      "lastSeen": "2026-06-05T14:00:01.962191+00:00",
+      "lastSeen": "2026-06-05T14:02:20.220035+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.3782
+      "score": 4.3775
     },
     {
       "title": "The AI IPO Race Heats Up, DOGE Whistleblower Sues Elon Musk, and Instagram Gets Hacked",
@@ -556,10 +621,10 @@
       "image": "https://media.wired.com/photos/6a20a487d5b5f5af30a6fa53/master/pass/Uncanny-Valley-AI-IPO-Race-Business-1189366547.jpg",
       "published": "2026-06-04T18:44:49+00:00",
       "firstSeen": "2026-06-04T19:00:01.866512+00:00",
-      "lastSeen": "2026-06-05T14:00:01.962191+00:00",
+      "lastSeen": "2026-06-05T14:02:20.220035+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.8344
+      "score": 3.8337
     },
     {
       "title": "Patch release v5.10.2",
@@ -572,74 +637,10 @@
       "image": "https://repository-images.githubusercontent.com/155220641/a16c4880-a501-11ea-9e8f-646cf611702e",
       "published": "2026-06-04T18:43:06+00:00",
       "firstSeen": "2026-06-04T17:00:02.090586+00:00",
-      "lastSeen": "2026-06-05T14:00:01.962191+00:00",
+      "lastSeen": "2026-06-05T14:02:20.220035+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.5338
-    },
-    {
-      "title": "Kevin O’Leary agrees to downsize massive Utah data center",
-      "url": "https://www.theverge.com/ai-artificial-intelligence/943234/kevin-oleary-agrees-to-downsize-massive-utah-data-center",
-      "source": "The Verge AI",
-      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "Kevin O'Leary agreed to halve the size of his planned 40,000-acre data center in Utah amid mounting pressure from residents and activists, as reported earlier by local affiliate ABC4. The Shark Tank star sent a letter to Utah Senate President J. Stuart Adams on Thursday, saying that he will remove 19,430 acres from the project, [&#8230;]",
-      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/STKP224_KEVIN_O_LEARY_CVIRGINIA_A.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
-      "published": "2026-06-04T18:38:04+00:00",
-      "firstSeen": "2026-06-04T19:00:01.866512+00:00",
-      "lastSeen": "2026-06-05T14:00:01.962191+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.9023
-    },
-    {
-      "title": "Gartner SRM 2026 Signals a Cybersecurity Shift From Prevention to Resilience",
-      "url": "https://www.techrepublic.com/article/news-gartner-srm-2026-resilience-ai-security",
-      "source": "TechRepublic AI",
-      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Gartner SRM 2026 put resilience, identity, and AI agent governance at the center of cybersecurity strategy as prevention loses ground.\nThe post Gartner SRM 2026 Signals a Cybersecurity Shift From Prevention to Resilience appeared first on TechRepublic.",
-      "image": "https://assets.techrepublic.com/uploads/2026/06/close-up-of-male-hand-using-keyboard-with-abstract-2026-01-11-08-38-45-utc-1.jpg?f=jpeg",
-      "published": "2026-06-04T17:51:34+00:00",
-      "firstSeen": "2026-06-04T19:00:01.866512+00:00",
-      "lastSeen": "2026-06-05T14:00:01.962191+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.4787
-    },
-    {
-      "title": "Canada unveils $2.3bn AI strategy as Carney takes cues from Pope Leo on safety",
-      "url": "https://thenextweb.com/news/carney-canada-ai-strategy-pope-leo",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Days after a phone call with Pope Leo XIV about the moral stakes of artificial intelligence, Canadian Prime Minister Mark Carney stood in Toronto on Thursday and announced precisely the kind of national framework the pontiff had demanded. The strategy, branded “AI for All,” commits more than $2.3 billion in spending over five years. It is Canada’s [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/carney-canada-ai-strategy-pope-leo.avif",
-      "published": "2026-06-04T17:26:43+00:00",
-      "firstSeen": "2026-06-04T18:00:01.314928+00:00",
-      "lastSeen": "2026-06-05T10:13:35.392051+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "framework_or_plumbing",
-      "score": -1.4285
-    },
-    {
-      "title": "Publishing professionals are becoming prime targets for impersonation",
-      "url": "https://thenextweb.com/news/publishing-professionals-impersonation-ai-fraud-mark-gottlieb",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "An aspiring author receives an email from a “literary agent” expressing enthusiasm about their manuscript. The message is polished, personalized, and professional. The sender references recent bestsellers, adaptation potential, and submission strategy. The agency website looks legitimate, the LinkedIn profile appears credible, and the tone sounds authoritative and reassuring. Then comes the catch with one [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/publishing-professionals-impersonation-ai-fraud-mark-gottlieb.avif",
-      "published": "2026-06-04T17:20:18+00:00",
-      "firstSeen": "2026-06-04T18:00:01.314928+00:00",
-      "lastSeen": "2026-06-05T10:13:35.392051+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.4696
+      "score": 2.5332
     },
     {
       "title": "The Life Scientific: Seth Berkley",
@@ -652,10 +653,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-01T20:00:00+00:00",
       "firstSeen": "2026-06-01T21:00:01.828388+00:00",
-      "lastSeen": "2026-06-05T14:00:01.962191+00:00",
+      "lastSeen": "2026-06-05T14:02:20.220035+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.2803
+      "score": 1.2802
     },
     {
       "title": "Dean Lomax on discovering ichthyosaurs and defying nay-sayers",
@@ -668,7 +669,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-26T08:30:00+00:00",
       "firstSeen": "2026-05-26T08:41:33.144051+00:00",
-      "lastSeen": "2026-06-05T14:00:01.962191+00:00",
+      "lastSeen": "2026-06-05T14:02:20.220035+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 1.1212
@@ -684,7 +685,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-25T20:00:00+00:00",
       "firstSeen": "2026-05-25T21:00:01.605108+00:00",
-      "lastSeen": "2026-06-05T14:00:01.962191+00:00",
+      "lastSeen": "2026-06-05T14:02:20.220035+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 0.2908
