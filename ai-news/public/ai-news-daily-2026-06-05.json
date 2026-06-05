@@ -1,6 +1,6 @@
 {
   "date": "2026-06-05",
-  "updatedAt": "2026-06-05T05:46:33.510991+00:00",
+  "updatedAt": "2026-06-05T07:00:01.980033+00:00",
   "items": [
     {
       "title": "v0.30.6-rc0",
@@ -13,10 +13,26 @@
       "image": "https://opengraph.githubassets.com/ecd3bd67f16d528a12f4ee13e0b76d6307ad3ec82702adfe5651c94dcaf86421/ollama/ollama",
       "published": "2026-06-05T00:49:49+00:00",
       "firstSeen": "2026-06-05T01:00:01.737141+00:00",
-      "lastSeen": "2026-06-05T05:46:33.510991+00:00",
+      "lastSeen": "2026-06-05T07:00:01.980033+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9188
+      "score": 2.8867
+    },
+    {
+      "title": "v0.30.6",
+      "url": "https://github.com/ollama/ollama/releases/tag/v0.30.6",
+      "source": "Ollama Releases",
+      "sourceUrl": "https://github.com/ollama/ollama/releases.atom",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "launch: oh-my-pi (#16410)",
+      "image": "https://opengraph.githubassets.com/60f61760c34b89ae6fa1dcf45ef6572c285dc5ed3f2717d4816dcd473e0f774a/ollama/ollama",
+      "published": "2026-06-05T00:49:49+00:00",
+      "firstSeen": "2026-06-05T07:00:01.980033+00:00",
+      "lastSeen": "2026-06-05T07:00:01.980033+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.8867
     },
     {
       "title": "v1.88.0-rc.3",
@@ -29,10 +45,10 @@
       "image": "https://opengraph.githubassets.com/8046a6d5bb3b16fb87b7ec1f43bc3bbb1f4e702e2eff4698aca9a8be48c191ba/BerriAI/litellm/releases/tag/v1.88.0-rc.3",
       "published": "2026-06-05T02:10:23+00:00",
       "firstSeen": "2026-06-05T03:00:01.674158+00:00",
-      "lastSeen": "2026-06-05T05:46:33.510991+00:00",
+      "lastSeen": "2026-06-05T07:00:01.980033+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8852
+      "score": 2.852
     },
     {
       "title": "Arash Ahmadi, Parisa Masnadi, Sarah Sharif, Charles Nicholson, David Ebert, Mike Banad",
@@ -43,9 +59,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-05T05:46:39.064420+00:00",
+      "published": "2026-06-05T07:00:09.060632+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-05T05:46:33.510991+00:00",
+      "lastSeen": "2026-06-05T07:00:01.980033+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
@@ -61,10 +77,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/IMG_1519-1-scaled.jpg",
       "published": "2026-06-05T05:38:37+00:00",
       "firstSeen": "2026-06-05T05:46:33.510991+00:00",
-      "lastSeen": "2026-06-05T05:46:33.510991+00:00",
+      "lastSeen": "2026-06-05T07:00:01.980033+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.286
+      "score": 2.2493
     },
     {
       "title": "Mira Murati steps back into the spotlight, carefully",
@@ -77,10 +93,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/Mira-Murati-at-Bloomberg.jpg?w=1024",
       "published": "2026-06-05T05:06:37+00:00",
       "firstSeen": "2026-06-05T05:46:33.510991+00:00",
-      "lastSeen": "2026-06-05T05:46:33.510991+00:00",
+      "lastSeen": "2026-06-05T07:00:01.980033+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2698
+      "score": 2.2337
     }
   ],
   "errors": [
