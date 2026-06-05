@@ -269,6 +269,7 @@
           <div class="controls">
             <div><kbd>A</kbd>/<kbd>D</kbd> or <kbd>←</kbd>/<kbd>→</kbd> move</div>
             <div><kbd>Space</kbd> fire, <kbd>Shift</kbd> dash, <kbd>P</kbd> pause</div>
+            <div>Mobile: drag one finger anywhere to steer and auto-fire.</div>
             <div>Power cores: spread, laser, shield, slow-field, and repair.</div>
           </div>
           <button id="startButton" type="button">Start Game</button>
@@ -326,6 +327,10 @@
         powerups: [],
         shields: [],
         boss: null
+      };
+      const touchAim = {
+        active: false,
+        x: null
       };
 
       const colors = {
@@ -396,6 +401,8 @@
         game.powerups = [];
         game.shields = [];
         game.boss = null;
+        touchAim.active = false;
+        touchAim.x = null;
         game.player = {
           x: game.width / 2,
           y: game.height - Math.max(72, 86 * game.scale),
@@ -533,14 +540,19 @@
         const slowMul = game.slow > 0 ? 0.55 : 1;
         const left = keys.has("ArrowLeft") || keys.has("KeyA");
         const right = keys.has("ArrowRight") || keys.has("KeyD");
-        const fire = keys.has("Space") || keys.has("Enter");
+        const fire = keys.has("Space") || keys.has("Enter") || touchAim.active;
         const dashPressed = keys.has("ShiftLeft") || keys.has("ShiftRight");
         const accel = 2100;
         const maxSpeed = dashPressed && p.dash <= 0 ? 680 : 410;
 
-        if (left) p.vx -= accel * dt;
-        if (right) p.vx += accel * dt;
-        if (!left && !right) p.vx *= Math.pow(0.0008, dt);
+        if (touchAim.active && touchAim.x !== null) {
+          const target = clamp(touchAim.x, 30, game.width - 30);
+          const delta = target - p.x;
+          p.vx = clamp(delta * 9, -maxSpeed, maxSpeed);
+          if (Math.abs(delta) < 3) p.vx *= 0.35;
+        } else if (left) p.vx -= accel * dt;
+        if (!touchAim.active && right) p.vx += accel * dt;
+        if (!touchAim.active && !left && !right) p.vx *= Math.pow(0.0008, dt);
         p.vx = clamp(p.vx, -maxSpeed, maxSpeed);
         p.x = clamp(p.x + p.vx * dt, 30, game.width - 30);
         p.invulnerable = Math.max(0, p.invulnerable - dt);
@@ -582,7 +594,7 @@
       }
 
       function updateInvaders(dt) {
-        const speed = 34 + game.wave * 5;
+        const speed = 15 + game.wave * 2.4;
         const amp = Math.min(88, 35 + game.wave * 4);
         let lowest = 0;
         for (const inv of game.invaders) {
@@ -592,14 +604,14 @@
           inv.y += speed * dt;
           inv.baseY += speed * dt;
           lowest = Math.max(lowest, inv.y);
-          if (inv.type === "diver" && Math.random() < dt * (0.02 + game.wave * 0.006) && inv.dive <= 0) {
+          if (inv.type === "diver" && Math.random() < dt * (0.012 + game.wave * 0.0035) && inv.dive <= 0) {
             inv.dive = 1.4;
             inv.diveX = game.player.x - inv.x;
           }
           if (inv.dive > 0) {
             inv.dive -= dt;
             inv.x += inv.diveX * dt * 0.7;
-            inv.y += 145 * dt;
+            inv.y += 95 * dt;
           }
         }
 
@@ -607,7 +619,7 @@
         if (game.nextEnemyShot <= 0 && game.invaders.length) {
           const shooter = game.invaders[Math.floor(Math.random() * game.invaders.length)];
           enemyFire(shooter.x, shooter.y + 14, 210 + game.wave * 14, rand(-0.16, 0.16));
-          game.nextEnemyShot = clamp(1.35 - game.wave * 0.055, 0.34, 1.35);
+          game.nextEnemyShot = clamp(1.55 - game.wave * 0.045, 0.48, 1.55);
         }
 
         if (lowest > game.player.y - 42) hitPlayer(55);
@@ -804,6 +816,8 @@
 
       function endGame() {
         game.state = "over";
+        touchAim.active = false;
+        touchAim.x = null;
         message.textContent = `Final score: ${game.score.toLocaleString()}. The fleet regroups; you get another quarter.`;
         startButton.textContent = "Play Again";
         overlay.classList.remove("hidden");
@@ -1155,6 +1169,27 @@
           resetGame();
         }
       });
+
+      function setTouchAim(event, active) {
+        if (game.state !== "playing") return;
+        event.preventDefault();
+        const rect = canvas.getBoundingClientRect();
+        touchAim.active = active;
+        touchAim.x = event.clientX - rect.left;
+        if (active && canvas.setPointerCapture) {
+          try { canvas.setPointerCapture(event.pointerId); } catch (error) {}
+        }
+      }
+
+      canvas.addEventListener("pointerdown", event => setTouchAim(event, true));
+      canvas.addEventListener("pointermove", event => {
+        if (!touchAim.active || game.state !== "playing") return;
+        event.preventDefault();
+        const rect = canvas.getBoundingClientRect();
+        touchAim.x = event.clientX - rect.left;
+      });
+      canvas.addEventListener("pointerup", event => setTouchAim(event, false));
+      canvas.addEventListener("pointercancel", event => setTouchAim(event, false));
 
       function bindTouch(id, code) {
         const btn = document.getElementById(id);
