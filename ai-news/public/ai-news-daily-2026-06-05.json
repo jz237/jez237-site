@@ -1,6 +1,6 @@
 {
   "date": "2026-06-05",
-  "updatedAt": "2026-06-05T19:06:23.115481+00:00",
+  "updatedAt": "2026-06-05T20:53:38.255192+00:00",
   "items": [
     {
       "title": "Anthropic says Claude writes 80% of its own code and the world needs a plan to hit the brakes",
@@ -13,10 +13,10 @@
       "image": "https://media.thenextweb.com/2026/05/claude-opus-4-8.avif",
       "published": "2026-06-05T13:12:20+00:00",
       "firstSeen": "2026-06-05T14:02:20.220035+00:00",
-      "lastSeen": "2026-06-05T19:06:23.115481+00:00",
+      "lastSeen": "2026-06-05T20:53:38.255192+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.6837
+      "score": 11.6385
     },
     {
       "title": "A Chinese startup just dethroned Nvidia on the benchmark Nvidia helped build",
@@ -29,11 +29,11 @@
       "image": "https://media.thenextweb.com/2026/06/spirit-ai-beats-nvidia-roboarena-physical-ai.avif",
       "published": "2026-06-05T13:30:23+00:00",
       "firstSeen": "2026-06-05T14:02:20.220035+00:00",
-      "lastSeen": "2026-06-05T19:06:23.115481+00:00",
+      "lastSeen": "2026-06-05T20:53:38.255192+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 10.6415
+      "score": 10.5959
     },
     {
       "title": "OpenAI and Anthropic May Be Rivals, but Investors Aren’t Picking Sides",
@@ -46,10 +46,10 @@
       "image": "https://media.wired.com/photos/6a1f7877452f8f7907d948a3/master/pass/Nearly-Half-of-Investors-Have-Stakes-in-Both-OpenAI-and-Anthropic-Business.jpg",
       "published": "2026-06-05T10:30:00+00:00",
       "firstSeen": "2026-06-05T11:00:01.846024+00:00",
-      "lastSeen": "2026-06-05T19:06:23.115481+00:00",
+      "lastSeen": "2026-06-05T20:53:38.255192+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.7561
+      "score": 8.7141
     },
     {
       "title": "Token prices fell 98%. Enterprise AI bills tripled. Now the industry wants a standards body to explain why.",
@@ -62,10 +62,10 @@
       "image": "https://media.thenextweb.com/2026/06/ai-token-costs-enterprise-tokenomics-foundation.avif",
       "published": "2026-06-05T16:05:06+00:00",
       "firstSeen": "2026-06-05T18:00:01.344010+00:00",
-      "lastSeen": "2026-06-05T19:06:23.115481+00:00",
+      "lastSeen": "2026-06-05T20:53:38.255192+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.4614
+      "score": 7.4125
     },
     {
       "title": "Mira Murati resurfaces after 18 months with a warning about AI governance and a product no one expected",
@@ -78,10 +78,10 @@
       "image": "https://media.thenextweb.com/2026/06/mira-murati-thinking-machines-bloomberg-return.avif",
       "published": "2026-06-05T13:45:20+00:00",
       "firstSeen": "2026-06-05T14:02:20.220035+00:00",
-      "lastSeen": "2026-06-05T19:06:23.115481+00:00",
+      "lastSeen": "2026-06-05T20:53:38.255192+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.0981
+      "score": 7.0521
     },
     {
       "title": "Anthropic urges a coordinated, verifiable pause for frontier AI",
@@ -97,7 +97,7 @@
       "lastSeen": "2026-06-05T14:00:01.962191+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8638
+      "score": 4.8243
     },
     {
       "title": "The Meta hack shows there’s more to AI security than Mythos",
@@ -110,10 +110,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/06/hand-keys1.jpg?resize=1200%2C600",
       "published": "2026-06-05T09:00:00+00:00",
       "firstSeen": "2026-06-05T11:00:01.846024+00:00",
-      "lastSeen": "2026-06-05T19:06:23.115481+00:00",
+      "lastSeen": "2026-06-05T20:53:38.255192+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8208
+      "score": 4.7805
     },
     {
       "title": "While tech week talks AI, Scytale is talking about what’s actually killing deals",
@@ -129,7 +129,7 @@
       "lastSeen": "2026-06-05T17:00:01.335734+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.7264
+      "score": 4.6839
     },
     {
       "title": "Airbnb’s Chesky helped put Sam Altman back in power. Now he’s building an AI lab to compete with him.",
@@ -142,10 +142,10 @@
       "image": "https://media.thenextweb.com/2026/06/Brian-Chesky.avif",
       "published": "2026-06-05T16:13:40+00:00",
       "firstSeen": "2026-06-05T18:00:01.344010+00:00",
-      "lastSeen": "2026-06-05T19:06:23.115481+00:00",
+      "lastSeen": "2026-06-05T20:53:38.255192+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.0655
+      "score": 4.0163
     },
     {
       "title": "The 10 best ecommerce mobile app builders for mid-market and enterprise brands",
@@ -161,7 +161,7 @@
       "lastSeen": "2026-06-05T14:02:20.220035+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.6949
+      "score": 3.6539
     },
     {
       "title": "Quoting Andreas Kling",
@@ -174,29 +174,34 @@
       "image": "",
       "published": "2026-06-05T11:10:05+00:00",
       "firstSeen": "2026-06-05T12:00:01.414730+00:00",
-      "lastSeen": "2026-06-05T19:06:23.115481+00:00",
+      "lastSeen": "2026-06-05T20:53:38.255192+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.4723
+      "score": 3.4296
     },
     {
-      "title": "Nvidia’s Jensen Huang flags robotics as Korea’s next growth engine",
-      "url": "https://thenextweb.com/news/nvidia-huang-robotics-south-korea",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
+      "title": "Startup Battlefield 200 applications officially close in 3 days",
+      "url": "https://techcrunch.com/2026/06/05/startup-battlefield-200-applications-officially-close-in-3-days",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
       "category": "AI",
-      "summary": "Nvidia’s chief executive arrived for a four-day visit pitching robotics and physical AI, and looking past the memory chips that already bind the company to Korea. Jensen Huang made the pitch before he had left the airport. Arriving at Gimpo for a four-day visit to Seoul, the Nvidia chief executive told reporters that “robotics is [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/Jensen-Huang-Taipei.avif",
-      "published": "2026-06-05T08:49:08+00:00",
-      "firstSeen": "2026-06-05T09:00:01.737539+00:00",
-      "lastSeen": "2026-06-05T14:00:01.962191+00:00",
+      "summary": "Applications for Startup Battlefield 200 officially close on June 8, 11:59 p.m. PT. Don't wait any longer. Secure your shot at competing on the Disrupt Stage at TechCrunch Disrupt 2026 this October at San Francisco's Moscone West.",
+      "image": "https://techcrunch.com/wp-content/uploads/2024/11/54105085427_2cae9d0502_o.jpg?resize=1200%2C800",
+      "published": "2026-06-05T20:00:00+00:00",
+      "firstSeen": "2026-06-05T20:53:38.255192+00:00",
+      "lastSeen": "2026-06-05T20:53:38.255192+00:00",
       "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 3.2766
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.363
     }
   ],
   "errors": [
+    {
+      "source": "Hugging Face Blog",
+      "url": "https://huggingface.co/blog/feed.xml",
+      "error": "HTTP Error 429: Too Many Requests"
+    },
     {
       "source": "MarkTechPost",
       "url": "https://www.marktechpost.com/feed/",
