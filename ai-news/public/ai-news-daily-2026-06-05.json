@@ -1,7 +1,40 @@
 {
   "date": "2026-06-05",
-  "updatedAt": "2026-06-05T14:00:01.962191+00:00",
+  "updatedAt": "2026-06-05T15:00:01.743158+00:00",
   "items": [
+    {
+      "title": "Anthropic says Claude writes 80% of its own code and the world needs a plan to hit the brakes",
+      "url": "https://thenextweb.com/news/anthropic-claude-recursive-self-improvement-code",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "One of Anthropic’s engineers hasn’t written a line of code in five months. Not because the work dried up, but because Claude does it now. As of May 2026, more than 80% of the code merged into Anthropic’s production codebase was authored by Claude, up from low single digits when Claude Code launched in February 2025. [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/claude-opus-4-8.avif",
+      "published": "2026-06-05T13:12:20+00:00",
+      "firstSeen": "2026-06-05T15:00:01.743158+00:00",
+      "lastSeen": "2026-06-05T15:00:01.743158+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 11.7965
+    },
+    {
+      "title": "A Chinese startup just dethroned Nvidia on the benchmark Nvidia helped build",
+      "url": "https://thenextweb.com/news/spirit-ai-beats-nvidia-roboarena-physical-ai",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Two days. That is how long Nvidia’s latest robotics model sat at the top of the RoboArena leaderboard before a startup from Hangzhou knocked it off. On Wednesday, Spirit AI announced that its foundation model for embodied intelligence, Spirit v1.6, had scored 1,924 on the benchmark, edging out Nvidia’s Cosmos3-Nano-Policy at 1,881. A second Nvidia project, DreamZero, [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/spirit-ai-beats-nvidia-roboarena-physical-ai.avif",
+      "published": "2026-06-05T13:30:23+00:00",
+      "firstSeen": "2026-06-05T15:00:01.743158+00:00",
+      "lastSeen": "2026-06-05T15:00:01.743158+00:00",
+      "model_release": true,
+      "editorial_allow": true,
+      "editorial_reason": "model_release",
+      "score": 10.7553
+    },
     {
       "title": "OpenAI and Anthropic May Be Rivals, but Investors Aren’t Picking Sides",
       "url": "https://www.wired.com/story/openai-and-anthropic-may-be-rivals-but-their-investors-arent-choosing-sides",
@@ -13,10 +46,26 @@
       "image": "https://media.wired.com/photos/6a1f7877452f8f7907d948a3/master/pass/Nearly-Half-of-Investors-Have-Stakes-in-Both-OpenAI-and-Anthropic-Business.jpg",
       "published": "2026-06-05T10:30:00+00:00",
       "firstSeen": "2026-06-05T11:00:01.846024+00:00",
-      "lastSeen": "2026-06-05T14:00:01.962191+00:00",
+      "lastSeen": "2026-06-05T15:00:01.743158+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.8881
+      "score": 8.8607
+    },
+    {
+      "title": "Mira Murati resurfaces after 18 months with a warning about AI governance and a product no one expected",
+      "url": "https://thenextweb.com/news/mira-murati-resurfaces-after-18-months-with-a-warning-about-ai-governance-and-a-product-no-one-expected",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "For someone who helped ship ChatGPT, DALL-E, and Codex, Mira Murati has been remarkably quiet. On Thursday, she broke the silence. Sitting down with Bloomberg’s Emily Chang in San Francisco, the CEO of Thinking Machines Lab gave her first major media appearance in roughly 18 months, a carefully managed re-entry into a conversation that has moved at [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/mira-murati-thinking-machines-bloomberg-return.avif",
+      "published": "2026-06-05T13:45:20+00:00",
+      "firstSeen": "2026-06-05T15:00:01.743158+00:00",
+      "lastSeen": "2026-06-05T15:00:01.743158+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 7.2126
     },
     {
       "title": "Anthropic urges a coordinated, verifiable pause for frontier AI",
@@ -32,7 +81,7 @@
       "lastSeen": "2026-06-05T14:00:01.962191+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9878
+      "score": 4.9621
     },
     {
       "title": "The Meta hack shows there’s more to AI security than Mythos",
@@ -45,10 +94,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/06/hand-keys1.jpg?resize=1200%2C600",
       "published": "2026-06-05T09:00:00+00:00",
       "firstSeen": "2026-06-05T11:00:01.846024+00:00",
-      "lastSeen": "2026-06-05T14:00:01.962191+00:00",
+      "lastSeen": "2026-06-05T15:00:01.743158+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9473
+      "score": 4.9211
     },
     {
       "title": "While tech week talks AI, Scytale is talking about what’s actually killing deals",
@@ -61,10 +110,10 @@
       "image": "https://media.thenextweb.com/2026/06/scytale-ny-tech-week-soc2-compliance.avif",
       "published": "2026-06-05T10:55:31+00:00",
       "firstSeen": "2026-06-05T11:00:01.846024+00:00",
-      "lastSeen": "2026-06-05T14:00:01.962191+00:00",
+      "lastSeen": "2026-06-05T15:00:01.743158+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8599
+      "score": 4.8323
     },
     {
       "title": "The 10 best ecommerce mobile app builders for mid-market and enterprise brands",
@@ -77,10 +126,10 @@
       "image": "https://media.thenextweb.com/2026/06/best-ecommerce-mobile-app-builders-enterprise.avif",
       "published": "2026-06-05T09:36:24+00:00",
       "firstSeen": "2026-06-05T10:00:01.701213+00:00",
-      "lastSeen": "2026-06-05T14:00:01.962191+00:00",
+      "lastSeen": "2026-06-05T15:00:01.743158+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.8236
+      "score": 3.7969
     },
     {
       "title": "Quoting Andreas Kling",
@@ -93,10 +142,10 @@
       "image": "",
       "published": "2026-06-05T11:10:05+00:00",
       "firstSeen": "2026-06-05T12:00:01.414730+00:00",
-      "lastSeen": "2026-06-05T14:00:01.962191+00:00",
+      "lastSeen": "2026-06-05T15:00:01.743158+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.6068
+      "score": 3.5789
     },
     {
       "title": "Nvidia’s Jensen Huang flags robotics as Korea’s next growth engine",
@@ -112,7 +161,7 @@
       "lastSeen": "2026-06-05T14:00:01.962191+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.4025
+      "score": 3.3764
     },
     {
       "title": "Why Apple Might Put Cameras Into Its Next AirPods",
@@ -125,10 +174,10 @@
       "image": "https://media.wired.com/photos/6a21fac373f57a5aa16309ff/master/pass/gear_airpodcamera_getty.jpg",
       "published": "2026-06-05T10:00:00+00:00",
       "firstSeen": "2026-06-05T10:13:35.392051+00:00",
-      "lastSeen": "2026-06-05T14:00:01.962191+00:00",
+      "lastSeen": "2026-06-05T15:00:01.743158+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2743
+      "score": 3.2473
     },
     {
       "title": "Southeast Asia Scam Compounds Turn AI Into a Cybersecurity Threat",
@@ -141,58 +190,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/06/call-center-equipment-to-chat-with-clients-on-tele-2026-03-19-00-46-52-utc-1024x683.jpg?f=jpeg",
       "published": "2026-06-05T12:31:01+00:00",
       "firstSeen": "2026-06-05T14:00:01.962191+00:00",
-      "lastSeen": "2026-06-05T14:00:01.962191+00:00",
+      "lastSeen": "2026-06-05T15:00:01.743158+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2056
-    },
-    {
-      "title": "Data-centre developer Switch in talks to raise at $50bn-plus valuation",
-      "url": "https://thenextweb.com/news/switch-50bn-valuation-fundraise",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Switch is trying to raise money at a valuation that would have looked implausible for a data-centre developer a few years ago. The Las Vegas company is in talks to raise billions of dollars at a valuation of at least $50bn, according to The Information, as it moves to capitalise on the demand for the [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/Switch.avif",
-      "published": "2026-06-05T10:47:24+00:00",
-      "firstSeen": "2026-06-05T11:00:01.846024+00:00",
-      "lastSeen": "2026-06-05T14:00:01.962191+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.7561
-    },
-    {
-      "title": "v0.30.6-rc0",
-      "url": "https://github.com/ollama/ollama/releases/tag/v0.30.6-rc0",
-      "source": "Ollama Releases",
-      "sourceUrl": "https://github.com/ollama/ollama/releases.atom",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "launch: oh-my-pi (#16410)",
-      "image": "https://opengraph.githubassets.com/ecd3bd67f16d528a12f4ee13e0b76d6307ad3ec82702adfe5651c94dcaf86421/ollama/ollama",
-      "published": "2026-06-05T00:49:49+00:00",
-      "firstSeen": "2026-06-05T01:00:01.737141+00:00",
-      "lastSeen": "2026-06-05T14:00:01.962191+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.723
-    },
-    {
-      "title": "v0.30.6",
-      "url": "https://github.com/ollama/ollama/releases/tag/v0.30.6",
-      "source": "Ollama Releases",
-      "sourceUrl": "https://github.com/ollama/ollama/releases.atom",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "launch: oh-my-pi (#16410)",
-      "image": "https://opengraph.githubassets.com/60f61760c34b89ae6fa1dcf45ef6572c285dc5ed3f2717d4816dcd473e0f774a/ollama/ollama",
-      "published": "2026-06-05T00:49:49+00:00",
-      "firstSeen": "2026-06-05T07:00:01.980033+00:00",
-      "lastSeen": "2026-06-05T14:00:01.962191+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.723
+      "score": 3.1767
     }
   ],
   "errors": [

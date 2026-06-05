@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-05T14:00:01.962191+00:00",
+  "updatedAt": "2026-06-05T15:00:01.743158+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -9404,6 +9404,10 @@
     "https://www.techrepublic.com/article/news-ai-scam-compounds-risk-apac-southeast-asia": {
       "image": "https://assets.techrepublic.com/uploads/2026/06/call-center-equipment-to-chat-with-clients-on-tele-2026-03-19-00-46-52-utc-1024x683.jpg?f=jpeg",
       "checkedAt": "2026-06-05T14:00:01.962191+00:00"
+    },
+    "https://techcrunch.com/2026/06/05/the-token-bill-comes-due-inside-the-industry-scramble-to-manage-ais-runaway-costs": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/GettyImages-1316461644.jpg?resize=1200,816",
+      "checkedAt": "2026-06-05T15:00:01.743158+00:00"
     }
   }
 }
