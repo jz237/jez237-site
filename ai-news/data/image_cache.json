@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-05T22:00:01.557982+00:00",
+  "updatedAt": "2026-06-05T23:00:01.931631+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -9436,6 +9436,10 @@
     "https://techcrunch.com/2026/06/05/startup-battlefield-200-applications-officially-close-in-3-days": {
       "image": "https://techcrunch.com/wp-content/uploads/2024/11/54105085427_2cae9d0502_o.jpg?resize=1200,800",
       "checkedAt": "2026-06-05T20:53:38.255192+00:00"
+    },
+    "https://huggingface.co/blog/build-small-hackathon/thousand-token-wood-sim": {
+      "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/build-small-hackathon/thousand-token-wood-sim.png",
+      "checkedAt": "2026-06-05T23:00:01.931631+00:00"
     }
   }
 }
