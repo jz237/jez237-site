@@ -1,6 +1,6 @@
 {
   "date": "2026-06-05",
-  "updatedAt": "2026-06-05T02:00:01.359934+00:00",
+  "updatedAt": "2026-06-05T03:00:01.674158+00:00",
   "items": [
     {
       "title": "v0.30.6-rc0",
@@ -13,10 +13,26 @@
       "image": "https://opengraph.githubassets.com/ecd3bd67f16d528a12f4ee13e0b76d6307ad3ec82702adfe5651c94dcaf86421/ollama/ollama",
       "published": "2026-06-05T00:49:49+00:00",
       "firstSeen": "2026-06-05T01:00:01.737141+00:00",
-      "lastSeen": "2026-06-05T02:00:01.359934+00:00",
+      "lastSeen": "2026-06-05T03:00:01.674158+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0248
+      "score": 2.9956
+    },
+    {
+      "title": "v1.88.0-rc.3",
+      "url": "https://github.com/BerriAI/litellm/releases/tag/v1.88.0-rc.3",
+      "source": "LiteLLM Releases",
+      "sourceUrl": "https://github.com/BerriAI/litellm/releases.atom",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Verify Docker Image Signature\nAll LiteLLM Docker images are signed with cosign. Every release is signed with the same key introduced in commit 0112e53.\nVerify using the pinned commit hash (recommended):\nA commit hash is cryptographically immutable, so this is the strongest way to ensure you are using the original signing key:\ncosign verify \\\n  --key https://raw.githubusercontent.com/BerriAI/litellm/0112e53046018d726492c814b3644b7d376029d0/cosign.pub \\\n  ghcr.io/berriai/litellm:v1.88.0-rc.3\nVerify using the release tag (convenience):\nTags are protected in this repository and resolve to the same",
+      "image": "https://opengraph.githubassets.com/8046a6d5bb3b16fb87b7ec1f43bc3bbb1f4e702e2eff4698aca9a8be48c191ba/BerriAI/litellm/releases/tag/v1.88.0-rc.3",
+      "published": "2026-06-05T02:10:23+00:00",
+      "firstSeen": "2026-06-05T03:00:01.674158+00:00",
+      "lastSeen": "2026-06-05T03:00:01.674158+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.965
     },
     {
       "title": "Pseudospectral Bounds for Transient Amplification in Coupled Gradient Descent",
@@ -27,9 +43,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-05T02:00:06.535163+00:00",
+      "published": "2026-06-05T03:00:06.573411+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-05T02:00:01.359934+00:00",
+      "lastSeen": "2026-06-05T03:00:01.674158+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
