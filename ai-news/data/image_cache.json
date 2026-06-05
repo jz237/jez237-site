@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-05T05:46:33.510991+00:00",
+  "updatedAt": "2026-06-05T07:00:01.980033+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -9380,6 +9380,10 @@
     "https://techcrunch.com/2026/06/04/mira-murati-steps-back-into-the-spotlight-carefully": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/Mira-Murati-at-Bloomberg.jpg?w=1024",
       "checkedAt": "2026-06-05T05:46:33.510991+00:00"
+    },
+    "https://github.com/ollama/ollama/releases/tag/v0.30.6": {
+      "image": "https://opengraph.githubassets.com/60f61760c34b89ae6fa1dcf45ef6572c285dc5ed3f2717d4816dcd473e0f774a/ollama/ollama",
+      "checkedAt": "2026-06-05T07:00:01.980033+00:00"
     }
   }
 }
