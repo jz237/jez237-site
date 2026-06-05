@@ -1,6 +1,6 @@
 {
   "date": "2026-06-05",
-  "updatedAt": "2026-06-05T17:00:01.335734+00:00",
+  "updatedAt": "2026-06-05T18:00:01.344010+00:00",
   "items": [
     {
       "title": "Anthropic says Claude writes 80% of its own code and the world needs a plan to hit the brakes",
@@ -13,10 +13,10 @@
       "image": "https://media.thenextweb.com/2026/05/claude-opus-4-8.avif",
       "published": "2026-06-05T13:12:20+00:00",
       "firstSeen": "2026-06-05T14:02:20.220035+00:00",
-      "lastSeen": "2026-06-05T17:00:01.335734+00:00",
+      "lastSeen": "2026-06-05T18:00:01.344010+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.7399
+      "score": 11.7128
     },
     {
       "title": "A Chinese startup just dethroned Nvidia on the benchmark Nvidia helped build",
@@ -29,11 +29,11 @@
       "image": "https://media.thenextweb.com/2026/06/spirit-ai-beats-nvidia-roboarena-physical-ai.avif",
       "published": "2026-06-05T13:30:23+00:00",
       "firstSeen": "2026-06-05T14:02:20.220035+00:00",
-      "lastSeen": "2026-06-05T17:00:01.335734+00:00",
+      "lastSeen": "2026-06-05T18:00:01.344010+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 10.6983
+      "score": 10.6709
     },
     {
       "title": "OpenAI and Anthropic May Be Rivals, but Investors Aren’t Picking Sides",
@@ -46,10 +46,26 @@
       "image": "https://media.wired.com/photos/6a1f7877452f8f7907d948a3/master/pass/Nearly-Half-of-Investors-Have-Stakes-in-Both-OpenAI-and-Anthropic-Business.jpg",
       "published": "2026-06-05T10:30:00+00:00",
       "firstSeen": "2026-06-05T11:00:01.846024+00:00",
-      "lastSeen": "2026-06-05T17:00:01.335734+00:00",
+      "lastSeen": "2026-06-05T18:00:01.344010+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.8083
+      "score": 8.7831
+    },
+    {
+      "title": "Token prices fell 98%. Enterprise AI bills tripled. Now the industry wants a standards body to explain why.",
+      "url": "https://thenextweb.com/news/token-prices-fell-98-enterprise-ai-bills-tripled-now-the-industry-wants-a-standards-body-to-explain-why",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Uber blew through its entire 2026 AI coding budget by April. Microsoft revoked its developers’ Claude Code licences six months after enabling them. One company reportedly ran up a $500 million Claude bill in a single month after forgetting to set usage limits. A Priceline employee told TechCrunch that a routine Cursor contract renewal came back four to five times [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/ai-token-costs-enterprise-tokenomics-foundation.avif",
+      "published": "2026-06-05T16:05:06+00:00",
+      "firstSeen": "2026-06-05T18:00:01.344010+00:00",
+      "lastSeen": "2026-06-05T18:00:01.344010+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 7.493
     },
     {
       "title": "Mira Murati resurfaces after 18 months with a warning about AI governance and a product no one expected",
@@ -62,10 +78,10 @@
       "image": "https://media.thenextweb.com/2026/06/mira-murati-thinking-machines-bloomberg-return.avif",
       "published": "2026-06-05T13:45:20+00:00",
       "firstSeen": "2026-06-05T14:02:20.220035+00:00",
-      "lastSeen": "2026-06-05T17:00:01.335734+00:00",
+      "lastSeen": "2026-06-05T18:00:01.344010+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.1552
+      "score": 7.1277
     },
     {
       "title": "Anthropic urges a coordinated, verifiable pause for frontier AI",
@@ -81,7 +97,7 @@
       "lastSeen": "2026-06-05T14:00:01.962191+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9128
+      "score": 4.8891
     },
     {
       "title": "The Meta hack shows there’s more to AI security than Mythos",
@@ -94,10 +110,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/06/hand-keys1.jpg?resize=1200%2C600",
       "published": "2026-06-05T09:00:00+00:00",
       "firstSeen": "2026-06-05T11:00:01.846024+00:00",
-      "lastSeen": "2026-06-05T17:00:01.335734+00:00",
+      "lastSeen": "2026-06-05T18:00:01.344010+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8708
+      "score": 4.8467
     },
     {
       "title": "While tech week talks AI, Scytale is talking about what’s actually killing deals",
@@ -113,7 +129,23 @@
       "lastSeen": "2026-06-05T17:00:01.335734+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.7792
+      "score": 4.7537
+    },
+    {
+      "title": "Airbnb’s Chesky helped put Sam Altman back in power. Now he’s building an AI lab to compete with him.",
+      "url": "https://thenextweb.com/news/chesky-airbnb-ai-lab-openai-altman",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Brian Chesky has spent years as an AI kingmaker. He met Sam Altman through Y Combinator in 2006, advised him on managing OpenAI’s hypergrowth, and helped broker Altman’s return to power after the board fired him in November 2023. He was reportedly considered for a seat on OpenAI’s board. Now he is entering competition with his [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/Brian-Chesky.avif",
+      "published": "2026-06-05T16:13:40+00:00",
+      "firstSeen": "2026-06-05T18:00:01.344010+00:00",
+      "lastSeen": "2026-06-05T18:00:01.344010+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.0971
     },
     {
       "title": "The 10 best ecommerce mobile app builders for mid-market and enterprise brands",
@@ -129,7 +161,7 @@
       "lastSeen": "2026-06-05T14:02:20.220035+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.7458
+      "score": 3.7212
     },
     {
       "title": "Quoting Andreas Kling",
@@ -142,10 +174,10 @@
       "image": "",
       "published": "2026-06-05T11:10:05+00:00",
       "firstSeen": "2026-06-05T12:00:01.414730+00:00",
-      "lastSeen": "2026-06-05T17:00:01.335734+00:00",
+      "lastSeen": "2026-06-05T18:00:01.344010+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.5255
+      "score": 3.4998
     },
     {
       "title": "Nvidia’s Jensen Huang flags robotics as Korea’s next growth engine",
@@ -161,39 +193,7 @@
       "lastSeen": "2026-06-05T14:00:01.962191+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.3264
-    },
-    {
-      "title": "Von der Leyen’s AI envoy pick triggers conflict-of-interest backlash weeks after Siemens helped gut the AI Act",
-      "url": "https://thenextweb.com/news/von-der-leyens-ai-envoy-pick-triggers-conflict-of-interest-backlash-weeks-after-siemens-helped-gut-the-ai-act",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The European Commission has appointed Jim Hagemann Snabe, chairman of Siemens’ supervisory board, as its special envoy for industrial artificial intelligence. He will advise Commission President Ursula von der Leyen and tech sovereignty chief Henna Virkkunen on how to accelerate AI adoption across European industry. The backlash was immediate. Snabe’s appointment lands weeks after Siemens [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/von-der-leyen-ai-envoy-snabe-conflict-interest.avif",
-      "published": "2026-06-05T15:42:44+00:00",
-      "firstSeen": "2026-06-05T16:39:22.159084+00:00",
-      "lastSeen": "2026-06-05T17:00:01.335734+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.2113
-    },
-    {
-      "title": "Why Apple Might Put Cameras Into Its Next AirPods",
-      "url": "https://www.wired.com/story/why-apple-might-put-cameras-into-its-next-airpods",
-      "source": "Wired AI",
-      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "From battery life to privacy, there are many hurdles to the idea taking off.",
-      "image": "https://media.wired.com/photos/6a21fac373f57a5aa16309ff/master/pass/gear_airpodcamera_getty.jpg",
-      "published": "2026-06-05T10:00:00+00:00",
-      "firstSeen": "2026-06-05T10:13:35.392051+00:00",
-      "lastSeen": "2026-06-05T17:00:01.335734+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.1956
+      "score": 3.3024
     }
   ],
   "errors": [

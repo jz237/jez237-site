@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-05T17:00:01.335734+00:00",
+  "updatedAt": "2026-06-05T18:00:01.344010+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -9420,6 +9420,10 @@
     "https://www.theverge.com/podcast/944058/ai-laptop-nvidia-build-gemini-spark-vergecast": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/VRG_VST_0605_Site.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
       "checkedAt": "2026-06-05T17:00:01.335734+00:00"
+    },
+    "https://techcrunch.com/video/the-most-interesting-startups-right-now-want-to-get-you-off-your-phone": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/07/IMG_2376-rotated.jpeg?resize=900,1200",
+      "checkedAt": "2026-06-05T18:00:01.344010+00:00"
     }
   }
 }
