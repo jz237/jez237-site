@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-05T10:13:35.392051+00:00",
+  "updatedAt": "2026-06-05T11:00:01.846024+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -9384,6 +9384,10 @@
     "https://github.com/ollama/ollama/releases/tag/v0.30.6": {
       "image": "https://opengraph.githubassets.com/60f61760c34b89ae6fa1dcf45ef6572c285dc5ed3f2717d4816dcd473e0f774a/ollama/ollama",
       "checkedAt": "2026-06-05T07:00:01.980033+00:00"
+    },
+    "https://www.technologyreview.com/2026/06/05/1138437/the-meta-hack-shows-theres-more-to-ai-security-than-mythos": {
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/06/hand-keys1.jpg?resize=1200,600",
+      "checkedAt": "2026-06-05T11:00:01.846024+00:00"
     }
   }
 }
