@@ -1402,5 +1402,17 @@
     "slot": "midday",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-06-05-midday-product-as-museum-x-ray",
+    "title": "Product as Museum X-Ray",
+    "tests": "Tests whether GPT Image 2 can create a reusable source-photo transformation prompt where an ordinary product remains recognizable after being reimagined as a conservation-lab x-ray artifact, with coherent internal detail and tactile museum photography.",
+    "prompt": "Use the uploaded reference photo and preserve the product identity, camera angle, silhouette, proportions, major seams, controls, distinctive materials, labels if intentionally present, and most recognizable features, then transform a vintage compact film camera into a museum conservation x-ray artifact plate on a black glass light table with luminous cyan radiograph glow, translucent lens rings, visible film spool, screws, springs, internal traces, archival foam supports, cotton gloves, brass magnifier, dust under glass, faint measuring ticks, fingerprints, and soft conservation-lab reflections. Keep the source object recognizable while changing the material logic, surface texture, setting, and presentation into a coherent radiographic museum artifact. Avoid real logos, brand names, placeholder text, watermark, cluttered microtext, impossible internal anatomy, and losing the source silhouette.\n\nSource photo needed: a product photo.\n\nReusable fill-in-the-blank template: Use the uploaded reference photo and preserve the [OBJECT] identity, camera angle, silhouette, proportions, major seams, controls, labels or key markings, distinctive materials, and most recognizable features, then transform [OBJECT] into a museum conservation x-ray artifact plate made from [MATERIAL] in [SETTING] with [MOOD] lighting. Keep the source recognizable while changing the material logic, surface texture, props, and environment into a cohesive radiographic museum artifact. Avoid real logos, brand names, placeholder text, watermark, cluttered microtext, broken geometry, impossible internals, and losing recognizability.\n\nWhat to preserve: product identity, camera angle, silhouette, proportions, major seams, controls, key markings, distinctive materials, and recognizable construction details.\n\nWhat to change: convert the product into a luminous cyan radiograph displayed as a conservation-lab artifact, with translucent internal components, black glass light-table reflections, archival supports, measuring ticks, dust, fingerprints, cotton gloves, magnifier, and museum handling cues.\n\nExample substitution: Use a clear photo of a vintage compact film camera; preserve its three-quarter angle, lens ring, viewfinder, shutter button, body silhouette, seams, and proportions, then turn it into a luminous museum x-ray plate on a black glass conservation light table with cool blue-white lab lighting.",
+    "image": "images/2026-06-05-midday-product-as-museum-x-ray.png",
+    "date": "2026-06-05",
+    "batch": "Daily Prompt",
+    "slot": "midday",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
