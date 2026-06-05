@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-05T13:00:01.841462+00:00",
+  "updatedAt": "2026-06-05T14:00:01.962191+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -9392,6 +9392,18 @@
     "https://simonwillison.net/2026/Jun/5/andreas-kling": {
       "image": "",
       "checkedAt": "2026-06-05T12:00:01.414730+00:00"
+    },
+    "https://www.theverge.com/ai-artificial-intelligence/943531/ai-script-quilty-simon-horsman-daniel-wood": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/268573_This_AI_startup_wants_tell_you_if_your_script_will_make_a_hit_film_CVirginia.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-06-05T14:00:01.962191+00:00"
+    },
+    "https://techcrunch.com/2026/06/05/airtrunk-commits-30b-to-build-5gw-of-ai-data-centers-in-india": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/GettyImages-2089845337.jpg?resize=1200,800",
+      "checkedAt": "2026-06-05T14:00:01.962191+00:00"
+    },
+    "https://www.techrepublic.com/article/news-ai-scam-compounds-risk-apac-southeast-asia": {
+      "image": "https://assets.techrepublic.com/uploads/2026/06/call-center-equipment-to-chat-with-clients-on-tele-2026-03-19-00-46-52-utc-1024x683.jpg?f=jpeg",
+      "checkedAt": "2026-06-05T14:00:01.962191+00:00"
     }
   }
 }
