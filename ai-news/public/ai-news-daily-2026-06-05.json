@@ -1,6 +1,6 @@
 {
   "date": "2026-06-05",
-  "updatedAt": "2026-06-05T22:00:01.557982+00:00",
+  "updatedAt": "2026-06-05T23:00:01.931631+00:00",
   "items": [
     {
       "title": "Anthropic says Claude writes 80% of its own code and the world needs a plan to hit the brakes",
@@ -13,10 +13,10 @@
       "image": "https://media.thenextweb.com/2026/05/claude-opus-4-8.avif",
       "published": "2026-06-05T13:12:20+00:00",
       "firstSeen": "2026-06-05T14:02:20.220035+00:00",
-      "lastSeen": "2026-06-05T22:00:01.557982+00:00",
+      "lastSeen": "2026-06-05T23:00:01.931631+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.6116
+      "score": 11.588
     },
     {
       "title": "A Chinese startup just dethroned Nvidia on the benchmark Nvidia helped build",
@@ -29,11 +29,27 @@
       "image": "https://media.thenextweb.com/2026/06/spirit-ai-beats-nvidia-roboarena-physical-ai.avif",
       "published": "2026-06-05T13:30:23+00:00",
       "firstSeen": "2026-06-05T14:02:20.220035+00:00",
-      "lastSeen": "2026-06-05T22:00:01.557982+00:00",
+      "lastSeen": "2026-06-05T23:00:01.931631+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 10.5688
+      "score": 10.545
+    },
+    {
+      "title": "v0.30.6",
+      "url": "https://github.com/ollama/ollama/releases/tag/v0.30.6",
+      "source": "Ollama Releases",
+      "sourceUrl": "https://github.com/ollama/ollama/releases.atom",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "What's Changed\n\nollama launch omp now integrates with Oh My Pi, an AI coding agent with IDE integration\nMLX embedding layers now use NVFP4 global scale for improved quantization on Apple Silicon\n\nFull Changelog: v0.30.5...v0.30.6",
+      "image": "https://opengraph.githubassets.com/60f61760c34b89ae6fa1dcf45ef6572c285dc5ed3f2717d4816dcd473e0f774a/ollama/ollama",
+      "published": "2026-06-05T22:38:53+00:00",
+      "firstSeen": "2026-06-05T07:00:01.980033+00:00",
+      "lastSeen": "2026-06-05T23:00:01.931631+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "editorial_score_pass",
+      "score": 9.2493
     },
     {
       "title": "OpenAI and Anthropic May Be Rivals, but Investors Aren’t Picking Sides",
@@ -46,10 +62,10 @@
       "image": "https://media.wired.com/photos/6a1f7877452f8f7907d948a3/master/pass/Nearly-Half-of-Investors-Have-Stakes-in-Both-OpenAI-and-Anthropic-Business.jpg",
       "published": "2026-06-05T10:30:00+00:00",
       "firstSeen": "2026-06-05T11:00:01.846024+00:00",
-      "lastSeen": "2026-06-05T22:00:01.557982+00:00",
+      "lastSeen": "2026-06-05T23:00:01.931631+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.6892
+      "score": 8.6673
     },
     {
       "title": "Token prices fell 98%. Enterprise AI bills tripled. Now the industry wants a standards body to explain why.",
@@ -62,10 +78,10 @@
       "image": "https://media.thenextweb.com/2026/06/ai-token-costs-enterprise-tokenomics-foundation.avif",
       "published": "2026-06-05T16:05:06+00:00",
       "firstSeen": "2026-06-05T18:00:01.344010+00:00",
-      "lastSeen": "2026-06-05T22:00:01.557982+00:00",
+      "lastSeen": "2026-06-05T23:00:01.931631+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.3833
+      "score": 7.3577
     },
     {
       "title": "Mira Murati resurfaces after 18 months with a warning about AI governance and a product no one expected",
@@ -78,10 +94,26 @@
       "image": "https://media.thenextweb.com/2026/06/mira-murati-thinking-machines-bloomberg-return.avif",
       "published": "2026-06-05T13:45:20+00:00",
       "firstSeen": "2026-06-05T14:02:20.220035+00:00",
-      "lastSeen": "2026-06-05T22:00:01.557982+00:00",
+      "lastSeen": "2026-06-05T23:00:01.931631+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.0248
+      "score": 7.0009
+    },
+    {
+      "title": "Thousand Token Wood: shipping a multi-agent economy on a 3B model",
+      "url": "https://huggingface.co/blog/build-small-hackathon/thousand-token-wood-sim",
+      "source": "Hugging Face Blog",
+      "sourceUrl": "https://huggingface.co/blog/feed.xml",
+      "sourceWeight": 0.95,
+      "category": "AI",
+      "summary": "",
+      "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/build-small-hackathon/thousand-token-wood-sim.png",
+      "published": "2026-06-05T22:18:46+00:00",
+      "firstSeen": "2026-06-05T23:00:01.931631+00:00",
+      "lastSeen": "2026-06-05T23:00:01.931631+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.1092
     },
     {
       "title": "Anthropic urges a coordinated, verifiable pause for frontier AI",
@@ -97,7 +129,7 @@
       "lastSeen": "2026-06-05T14:00:01.962191+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8009
+      "score": 4.7803
     },
     {
       "title": "The Meta hack shows there’s more to AI security than Mythos",
@@ -110,10 +142,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/06/hand-keys1.jpg?resize=1200%2C600",
       "published": "2026-06-05T09:00:00+00:00",
       "firstSeen": "2026-06-05T11:00:01.846024+00:00",
-      "lastSeen": "2026-06-05T22:00:01.557982+00:00",
+      "lastSeen": "2026-06-05T23:00:01.931631+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.7566
+      "score": 4.7356
     },
     {
       "title": "While tech week talks AI, Scytale is talking about what’s actually killing deals",
@@ -129,7 +161,7 @@
       "lastSeen": "2026-06-05T17:00:01.335734+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.6587
+      "score": 4.6365
     },
     {
       "title": "Airbnb’s Chesky helped put Sam Altman back in power. Now he’s building an AI lab to compete with him.",
@@ -142,10 +174,10 @@
       "image": "https://media.thenextweb.com/2026/06/Brian-Chesky.avif",
       "published": "2026-06-05T16:13:40+00:00",
       "firstSeen": "2026-06-05T18:00:01.344010+00:00",
-      "lastSeen": "2026-06-05T22:00:01.557982+00:00",
+      "lastSeen": "2026-06-05T23:00:01.931631+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.987
+      "score": 3.9614
     },
     {
       "title": "The 10 best ecommerce mobile app builders for mid-market and enterprise brands",
@@ -161,39 +193,7 @@
       "lastSeen": "2026-06-05T14:02:20.220035+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.6296
-    },
-    {
-      "title": "Quoting Andreas Kling",
-      "url": "https://simonwillison.net/2026/Jun/5/andreas-kling",
-      "source": "Simon Willison",
-      "sourceUrl": "https://simonwillison.net/atom/everything/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "We will no longer accept public pull requests. [...]\nA substantial patch used to imply substantial effort, and that effort was a reasonable proxy for good faith. That assumption no longer holds. [...]\nWhether code was typed by hand is beside the point. What matters is who is responsible for it once it enters the browser. Ladybird is becoming a browser for real users. The people introducing changes to it must be the people who decide those changes belong in the project, and who will answer for the consequences.\n&mdash; Andreas Kling, Changing How We Develop Ladybird\n\n    Tags: ladybird, ai-ethi",
-      "image": "",
-      "published": "2026-06-05T11:10:05+00:00",
-      "firstSeen": "2026-06-05T12:00:01.414730+00:00",
-      "lastSeen": "2026-06-05T22:00:01.557982+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 3.4042
-    },
-    {
-      "title": "Startup Battlefield 200 applications officially close in 3 days",
-      "url": "https://techcrunch.com/2026/06/05/startup-battlefield-200-applications-officially-close-in-3-days",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Applications for Startup Battlefield 200 officially close on June 8, 11:59 p.m. PT. Don't wait any longer. Secure your shot at competing on the Disrupt Stage at TechCrunch Disrupt 2026 this October at San Francisco's Moscone West.",
-      "image": "https://techcrunch.com/wp-content/uploads/2024/11/54105085427_2cae9d0502_o.jpg?resize=1200%2C800",
-      "published": "2026-06-05T20:00:00+00:00",
-      "firstSeen": "2026-06-05T20:53:38.255192+00:00",
-      "lastSeen": "2026-06-05T22:00:01.557982+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.3305
+      "score": 3.6083
     }
   ],
   "errors": [
