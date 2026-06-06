@@ -11,6 +11,8 @@
     issueNo: document.querySelector("[data-issue-no]"),
     morningLine: document.querySelector("[data-morning-line]"),
     strapline: document.querySelector("[data-strapline]"),
+    heroImage: document.querySelector("[data-hero-image]"),
+    heroCaption: document.querySelector("[data-hero-caption]"),
     lead: document.querySelector("[data-lead]"),
     computerItems: document.querySelector("[data-computer-items]"),
     market: document.querySelector("[data-market]"),
@@ -79,6 +81,19 @@
     }
   }
 
+  function applyHeroImage(issue) {
+    const image = (issue && issue.heroImage) || {};
+    if (els.heroImage && image.src) {
+      els.heroImage.src = image.src;
+      els.heroImage.alt = image.alt || image.caption || "Computer Chronicle issue-front visual";
+    }
+    if (els.heroCaption) {
+      const caption = image.caption || "Issue-front visual";
+      const confidence = image.confidence ? ` · ${image.confidence}` : "";
+      els.heroCaption.textContent = `${caption}${confidence}`;
+    }
+  }
+
   function issueNumber(issue, currentIso) {
     const baseDate = new Date("2026-01-01T00:00:00");
     const issueDate = new Date(`${(issue && issue.currentDate) || currentIso}T00:00:00`);
@@ -93,6 +108,7 @@
     if (els.issueNo) els.issueNo.textContent = issueNumber(issue, currentIso);
     if (els.morningLine) els.morningLine.textContent = issue ? issue.morningLine || "Morning Edition: a quick daily skim from forty years ago." : "Morning Edition: awaiting a researched issue.";
     applyVisualProfile(issue);
+    applyHeroImage(issue);
 
     if (!issue) {
       els.status.textContent = "No researched issue has been loaded for this date yet.";
