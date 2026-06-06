@@ -241,9 +241,15 @@ Editorial priority:
   rotating editorial slots. The BBS item should read like a dated sysop
   log or board digest tied to that issue, not a generic explanation of
   what BBSes were.
-- Include several clippings/images when possible. Tie each image to a
-  visible issue topic, and label generated period-style visuals as visual
-  context rather than archival evidence.
+- Include several clippings/images when possible. Treat them as daily
+  photo assignments, not permanent era wallpaper. Each issue should use
+  new or deliberately selected clippings tied to that day's visible
+  stories, games, BBS topics, ad references, music, mall/arcade context,
+  or technology items.
+- Do not reuse the same generated period-style clipping set across daily
+  issues unless it is intentionally framed as a recurring masthead/house
+  art asset. Label generated period-style visuals as visual context
+  rather than archival evidence.
 - Static or slow-changing sections are acceptable only when they are
   explicitly framed as context, prices, verification, or archive tooling.
 
