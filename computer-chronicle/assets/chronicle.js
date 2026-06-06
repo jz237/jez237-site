@@ -130,6 +130,7 @@
       <h2>${escapeHtml(issue.periodAd && issue.periodAd.headline)}</h2>
       <p>${escapeHtml(issue.periodAd && issue.periodAd.summary)}</p>
       <small>${escapeHtml(issue.periodAd && issue.periodAd.finePrint)}</small>
+      ${(issue.periodAd && issue.periodAd.sourceUrl) ? `<a class="ad-source" href="${escapeHtml(issue.periodAd.sourceUrl)}" target="_blank" rel="noopener">Source ad</a>` : ""}
     `;
 
     const brief = issue.imageBrief || {};
