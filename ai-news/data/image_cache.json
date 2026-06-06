@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-06T00:18:12.110440+00:00",
+  "updatedAt": "2026-06-06T01:00:01.288928+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -9440,6 +9440,14 @@
     "https://huggingface.co/blog/build-small-hackathon/thousand-token-wood-sim": {
       "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/build-small-hackathon/thousand-token-wood-sim.png",
       "checkedAt": "2026-06-05T22:22:33.202967+00:00"
+    },
+    "https://github.com/ollama/ollama/releases/tag/v0.30.7-rc0": {
+      "image": "https://opengraph.githubassets.com/0c75a2c22c34f71df6873e50748a2ff1ede013af1522ff16514d15411ac10067/ollama/ollama",
+      "checkedAt": "2026-06-06T01:00:01.288928+00:00"
+    },
+    "https://simonwillison.net/2026/Jun/5/openai-help-lockdown-mode": {
+      "image": "",
+      "checkedAt": "2026-06-06T01:00:01.288928+00:00"
     }
   }
 }
