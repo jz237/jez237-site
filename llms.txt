@@ -241,6 +241,10 @@ Editorial priority:
   Do not invent fictional businesses or ads for the page.
 - Do not expose image-generation prompts, prompt builders, or private
   generation briefs in public HTML, JavaScript, or JSON.
+- Keep the browser print/PDF output source-safe. The `Print Issue`
+  control should render the researched page itself as the newspaper
+  artifact; generated newspaper images are style experiments unless a
+  later pipeline can lock the text to verified page data.
 - Keep source/confidence labels in the data. Do not turn context into
   fake exact-day claims.
 - Include `accuracyLedger` for each issue. It should quickly count and
