@@ -120,6 +120,36 @@
           "note": "Spreadsheet, database, and word-processing packages could cost as much as hardware upgrades."
         }
       ],
+      "clippings": [
+        {
+          "title": "Home-Computer Game Desk",
+          "caption": "C64-style desk, joystick, floppy disks, and computer-game clutter.",
+          "image": "media/clipping-game-desk-1986.webp",
+          "alt": "Period-style clipping of a 1980s home computer game desk with CRT, joystick, floppy disks, and magazines",
+          "confidence": "Period-style visual"
+        },
+        {
+          "title": "BBS Modem Corner",
+          "caption": "Terminal, modem lights, phone handset, and handwritten calling notes.",
+          "image": "media/clipping-bbs-modem-1986.webp",
+          "alt": "Period-style clipping of a 1980s computer terminal, modem, telephone handset, floppy disks, and notes",
+          "confidence": "Period-style visual"
+        },
+        {
+          "title": "Mall Arcade Row",
+          "caption": "Cabinets, coin slots, stools, and fluorescent mall-arcade glow.",
+          "image": "media/clipping-arcade-1986.webp",
+          "alt": "Period-style clipping of a 1980s mall arcade with rows of arcade cabinets and players from behind",
+          "confidence": "Period-style visual"
+        },
+        {
+          "title": "Electronics & Guitar Bench",
+          "caption": "Soldering iron, circuit boards, cassette deck, effects pedal, and guitar cable.",
+          "image": "media/clipping-electronics-guitar-1986.webp",
+          "alt": "Period-style clipping of a 1980s electronics and guitar workbench with soldering tools, circuit boards, cassette deck, and guitar",
+          "confidence": "Period-style visual"
+        }
+      ],
       "bbsNote": {
         "headline": "Sysop Log: Disk Tips, RPG Maps, and C64 Score Bragging",
         "summary": "Today's board traffic leans game-heavy: Famicom Disk System players are warning each other about the brutal new Mario sequel, RPG callers are asking for Dragon Quest map help, and C64 owners are comparing Leader Board rounds.",
