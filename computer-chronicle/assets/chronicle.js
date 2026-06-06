@@ -37,6 +37,10 @@
     musicChart: document.querySelector("[data-music-chart]"),
     ad: document.querySelector("[data-period-ad]"),
     fallback: document.querySelector("[data-fallback]"),
+    accuracyLabel: document.querySelector("[data-accuracy-label]"),
+    accuracyTitle: document.querySelector("[data-accuracy-title]"),
+    accuracy: document.querySelector("[data-accuracy]"),
+    accuracyNote: document.querySelector("[data-accuracy-note]"),
     sourcesLabel: document.querySelector("[data-sources-label]"),
     sourcesTitle: document.querySelector("[data-sources-title]"),
     sources: document.querySelector("[data-sources]"),
@@ -101,6 +105,8 @@
     setText(els.briefsTitle, chrome(issue, "briefs", "title", "Other Things on the Desk"));
     setText(els.musicLabel, chrome(issue, "music", "label", "Rock Radio Top 10"));
     setText(els.musicTitle, chrome(issue, "music", "title", "Album-Rock Airwaves"));
+    setText(els.accuracyLabel, chrome(issue, "accuracy", "label", "Accuracy Ledger"));
+    setText(els.accuracyTitle, chrome(issue, "accuracy", "title", "How Grounded Is Today?"));
     setText(els.sourcesLabel, chrome(issue, "sources", "label", "Source Trail"));
     setText(els.sourcesTitle, chrome(issue, "sources", "title", "Research Log"));
     setText(els.verificationLabel, chrome(issue, "verification", "label", "Verification Key"));
@@ -143,7 +149,7 @@
   function applyLayoutPlan(issue) {
     const defaults = {
       main: ["editor-note", "lead", "computer-items", "store-shelves"],
-      sidebar: ["market", "price-watch", "bbs", "curiosity", "music", "period-ad", "fallback", "sources", "verification"],
+      sidebar: ["market", "price-watch", "bbs", "curiosity", "music", "period-ad", "fallback", "accuracy", "sources", "verification"],
     };
     const plan = (issue && issue.layoutPlan) || {};
 
@@ -196,6 +202,8 @@
       if (els.musicChart) els.musicChart.innerHTML = "";
       els.ad.innerHTML = "";
       els.fallback.innerHTML = "";
+      if (els.accuracy) els.accuracy.innerHTML = "";
+      if (els.accuracyNote) els.accuracyNote.textContent = "";
       els.sources.innerHTML = "";
       els.editorNote.textContent = "Personal computers and personal computer gaming are the editorial priority when source choices compete.";
       return;
@@ -318,6 +326,20 @@
       <p>${escapeHtml(issue.worldFallback.summary)}</p>
       ${confidenceBadge(issue.worldFallback.confidence)}
     `;
+
+    if (els.accuracy) {
+      const ledger = issue.accuracyLedger || {};
+      els.accuracy.innerHTML = (ledger.items || []).map((item) => `
+        <li>
+          <span class="accuracy-value">${escapeHtml(item.value)}</span>
+          <p>
+            <strong>${escapeHtml(item.label)}</strong>
+            <span>${escapeHtml(item.detail)}</span>
+          </p>
+        </li>
+      `).join("");
+      if (els.accuracyNote) els.accuracyNote.textContent = ledger.note || "";
+    }
 
     els.sources.innerHTML = issue.sources.map((source) => `
       <li><a href="${escapeHtml(source.url)}" target="_blank" rel="noopener">${escapeHtml(source.name)}</a></li>

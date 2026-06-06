@@ -243,6 +243,10 @@ Editorial priority:
   generation briefs in public HTML, JavaScript, or JSON.
 - Keep source/confidence labels in the data. Do not turn context into
   fake exact-day claims.
+- Include `accuracyLedger` for each issue. It should quickly count and
+  explain exact-day items, same-week/current-period items, and period
+  context/generated visual material so the morning issue has an audit
+  trail without becoming a research memo.
 - Treat `bbsNote`, `curiosity`, `periodAd`, and the game shelf as daily
   rotating editorial slots. The BBS item should read like a dated sysop
   log or board digest tied to that issue, not a generic explanation of
