@@ -73,8 +73,8 @@
     .chronicle-kicker,
     .section-label {
       display: inline-block;
-      color: #fff8dc;
-      background: var(--cc-teal);
+      color: var(--cc-ink);
+      background: var(--cc-amber);
       font-size: 0.76rem;
       font-weight: 700;
       letter-spacing: 0.12em;
@@ -83,7 +83,9 @@
       text-transform: uppercase;
     }
     .chronicle-kicker {
-      background: var(--cc-blue);
+      color: #fff8dc;
+      background: var(--cc-ink);
+      border-left: 7px solid var(--cc-amber);
     }
     .chronicle-hero h1 {
       margin: 0;
@@ -93,7 +95,8 @@
       line-height: 0.84;
       letter-spacing: 0;
       text-transform: uppercase;
-      text-shadow: 3px 3px 0 var(--cc-amber), 6px 6px 0 rgba(0, 138, 150, 0.42);
+      text-shadow: 3px 3px 0 rgba(240, 163, 35, 0.92);
+      -webkit-text-fill-color: var(--cc-ink);
     }
     .chronicle-hero p {
       max-width: 760px;
@@ -219,6 +222,8 @@
     }
     .confidence {
       display: inline-flex;
+      width: max-content;
+      max-width: 100%;
       margin-top: 6px;
       border: 1px solid var(--cc-magenta);
       border-radius: 0;
@@ -231,15 +236,21 @@
     }
     .chronicle-card:nth-child(2n + 1) .section-label,
     aside .chronicle-panel:nth-child(2n) .section-label {
-      background: var(--cc-blue);
+      background: var(--cc-amber);
     }
     .chronicle-card:nth-child(2n) .section-label,
     aside .chronicle-panel:nth-child(2n + 1) .section-label {
-      background: var(--cc-teal);
+      color: #fff8dc;
+      background: var(--cc-ink);
     }
     [data-lead] .section-label {
-      background: var(--cc-amber);
+      background: var(--cc-blue);
+      color: #fff8dc;
+    }
+    [data-market] .section-label,
+    .period-ad .section-label {
       color: var(--cc-ink);
+      background: var(--cc-amber);
     }
     .ticker-row {
       display: grid;
@@ -266,7 +277,8 @@
       text-transform: none;
     }
     .shelf-list,
-    .price-list {
+    .price-list,
+    .chart-list {
       list-style: none;
       margin: 12px 0 0;
       padding: 0;
@@ -274,19 +286,22 @@
       gap: 10px;
     }
     .shelf-list li,
-    .price-list li {
+    .price-list li,
+    .chart-list li {
       border-top: 1px solid var(--cc-rule);
       padding-top: 10px;
     }
     .shelf-list strong,
-    .price-list strong {
+    .price-list strong,
+    .chart-list strong {
       display: block;
       color: var(--cc-ink);
       line-height: 1.25;
     }
     .shelf-list span,
     .price-list span,
-    .price-list em {
+    .price-list em,
+    .chart-list span {
       display: block;
       color: var(--cc-muted);
       font-style: normal;
@@ -296,6 +311,31 @@
     .price-list span {
       color: var(--cc-blue);
       font-weight: 700;
+    }
+    .chart-list {
+      counter-reset: chart-rank;
+    }
+    .chart-list li {
+      counter-increment: chart-rank;
+      display: grid;
+      grid-template-columns: 2.2rem 1fr;
+      column-gap: 10px;
+      align-items: start;
+    }
+    .chart-list li::before {
+      content: counter(chart-rank);
+      display: grid;
+      place-items: center;
+      width: 2rem;
+      height: 2rem;
+      border: 2px solid var(--cc-ink);
+      background: var(--cc-amber);
+      color: var(--cc-ink);
+      font-weight: 700;
+      line-height: 1;
+    }
+    .chart-list p {
+      margin: 0;
     }
     .period-ad {
       border-color: var(--cc-ink);
@@ -394,8 +434,34 @@
     html body .chronicle-card p,
     html body .source-list,
     html body .price-list em,
-    html body .shelf-list span {
+    html body .shelf-list span,
+    html body .chart-list span {
       color: var(--cc-muted) !important;
+    }
+    html body .chronicle-hero h1 {
+      color: var(--cc-ink) !important;
+      -webkit-text-fill-color: var(--cc-ink) !important;
+    }
+    html body .chronicle-kicker,
+    html body .chronicle-hero .chronicle-kicker {
+      color: var(--cc-paper) !important;
+      background: var(--cc-ink) !important;
+      -webkit-text-fill-color: var(--cc-paper) !important;
+    }
+    html body .section-label {
+      color: var(--cc-ink) !important;
+      background: var(--cc-amber) !important;
+      -webkit-text-fill-color: var(--cc-ink) !important;
+    }
+    html body [data-lead] .section-label {
+      color: var(--cc-paper) !important;
+      background: var(--cc-blue) !important;
+      -webkit-text-fill-color: var(--cc-paper) !important;
+    }
+    html body aside .chronicle-panel:nth-child(2n + 1) .section-label {
+      color: var(--cc-paper) !important;
+      background: var(--cc-ink) !important;
+      -webkit-text-fill-color: var(--cc-paper) !important;
     }
     .verification-list {
       margin: 10px 0 0;
@@ -484,6 +550,11 @@
           <ul class="price-list" data-price-watch></ul>
         </article>
         <article class="chronicle-panel" data-bbs style="margin-top:14px;"></article>
+        <article class="chronicle-panel" style="margin-top:14px;">
+          <p class="section-label">Radio Top 10</p>
+          <h2>This Week's Hit Singles</h2>
+          <ul class="chart-list" data-music-chart></ul>
+        </article>
         <article class="chronicle-panel period-ad" data-period-ad style="margin-top:14px;"></article>
         <article class="chronicle-panel" data-fallback style="margin-top:14px;"></article>
         <article class="chronicle-panel" style="margin-top:14px;">
