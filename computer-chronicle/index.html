@@ -239,6 +239,16 @@
       gap: 18px;
       margin-top: 18px;
     }
+    .main-column,
+    .sidebar-column {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .main-column > *,
+    .sidebar-column > * {
+      margin-top: 0 !important;
+    }
     body[data-issue-layout="feature-led"] .chronicle-grid {
       grid-template-columns: minmax(0, 1.55fr) minmax(280px, 0.55fr);
     }
@@ -685,11 +695,11 @@
     </div>
 
     <section class="chronicle-grid" aria-label="Daily computer news issue">
-      <div>
-        <div class="editor-note" data-editor-note></div>
-        <article class="chronicle-panel" data-lead></article>
-        <div class="computer-grid" data-computer-items></div>
-        <section class="chronicle-panel" style="margin-top:14px;" aria-labelledby="shelf-title">
+      <div class="main-column">
+        <div class="editor-note" data-editor-note data-main-module="editor-note"></div>
+        <article class="chronicle-panel" data-lead data-main-module="lead"></article>
+        <div class="computer-grid" data-computer-items data-main-module="computer-items"></div>
+        <section class="chronicle-panel" data-main-module="store-shelves" aria-labelledby="shelf-title">
           <p class="section-label">On Store Shelves</p>
           <h2 id="shelf-title">Games, Software &amp; Platforms People Could Talk About</h2>
           <div data-store-shelves-image></div>
@@ -697,29 +707,29 @@
         </section>
       </div>
 
-      <aside>
-        <article class="chronicle-panel" data-market></article>
-        <article class="chronicle-panel" style="margin-top:14px;">
+      <aside class="sidebar-column">
+        <article class="chronicle-panel" data-market data-sidebar-module="market"></article>
+        <article class="chronicle-panel" data-sidebar-module="price-watch">
           <p class="section-label">Price Watch</p>
           <h2>What It Cost</h2>
           <ul class="price-list" data-price-watch></ul>
         </article>
-        <article class="chronicle-panel" data-bbs style="margin-top:14px;"></article>
-        <article class="chronicle-panel curiosity-card" data-curiosity style="margin-top:14px;"></article>
-        <article class="chronicle-panel" style="margin-top:14px;">
+        <article class="chronicle-panel" data-bbs data-sidebar-module="bbs"></article>
+        <article class="chronicle-panel curiosity-card" data-curiosity data-sidebar-module="curiosity"></article>
+        <article class="chronicle-panel" data-sidebar-module="music">
           <p class="section-label">Rock Radio Top 10</p>
           <h2>Album-Rock Airwaves</h2>
           <div data-music-chart-image></div>
           <ul class="chart-list" data-music-chart></ul>
         </article>
-        <article class="chronicle-panel period-ad" data-period-ad style="margin-top:14px;"></article>
-        <article class="chronicle-panel" data-fallback style="margin-top:14px;"></article>
-        <article class="chronicle-panel" style="margin-top:14px;">
+        <article class="chronicle-panel period-ad" data-period-ad data-sidebar-module="period-ad"></article>
+        <article class="chronicle-panel" data-fallback data-sidebar-module="fallback"></article>
+        <article class="chronicle-panel" data-sidebar-module="sources">
           <p class="section-label">Source Trail</p>
           <h2>Research Log</h2>
           <ul class="source-list" data-sources></ul>
         </article>
-        <article class="chronicle-panel" style="margin-top:14px;">
+        <article class="chronicle-panel" data-sidebar-module="verification">
           <p class="section-label">Verification Key</p>
           <h2>How to Read It</h2>
           <ul class="verification-list">
