@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script>(function(){try{if(localStorage.getItem("theme")==="light")document.documentElement.setAttribute("data-theme","light");}catch(e){}})();</script>
+  <title>Jez237 — Computer Chronicle</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/brand.svg" />
+  <link rel="stylesheet" href="../assets/styles.css" />
+  <link rel="stylesheet" href="../assets/design.css" />
+  <link rel="stylesheet" href="../assets/site-enhance.css" />
+  <link rel="stylesheet" href="../assets/workbench-theme.css" />
+  <style>
+    body {
+      background:
+        radial-gradient(circle at 18% 0%, rgba(232, 197, 122, 0.14), transparent 32%),
+        linear-gradient(180deg, rgba(13, 16, 24, 0.98), rgba(16, 18, 21, 1));
+    }
+    .chronicle-shell {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 24px clamp(16px, 3vw, 40px) 80px;
+    }
+    .chronicle-hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.3fr) minmax(260px, 0.7fr);
+      gap: 24px;
+      align-items: end;
+      padding: clamp(20px, 4vw, 36px);
+      border: 1px solid rgba(232, 197, 122, 0.24);
+      background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02)),
+        repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.025), rgba(255, 255, 255, 0.025) 1px, transparent 1px, transparent 7px);
+      border-radius: 8px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.32);
+    }
+    .chronicle-kicker,
+    .section-label {
+      color: #e8c57a;
+      font-size: 0.76rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      margin: 0 0 8px;
+      text-transform: uppercase;
+    }
+    .chronicle-hero h1 {
+      margin: 0;
+      font-size: clamp(2.35rem, 6vw, 5.4rem);
+      line-height: 0.92;
+      letter-spacing: 0;
+    }
+    .chronicle-hero p {
+      max-width: 760px;
+      color: var(--ink-mid);
+      line-height: 1.55;
+    }
+    .issue-date-card {
+      border-left: 2px solid rgba(232, 197, 122, 0.45);
+      padding-left: 20px;
+    }
+    .issue-date-card span {
+      display: block;
+      color: var(--ink-lo);
+      font-size: 0.82rem;
+      margin-top: 8px;
+    }
+    .issue-date-card strong {
+      display: block;
+      color: var(--ink-hi);
+      font-size: 1.2rem;
+      margin-top: 2px;
+    }
+    .chronicle-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(300px, 0.65fr);
+      gap: 18px;
+      margin-top: 18px;
+    }
+    .chronicle-panel,
+    .chronicle-card {
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.055);
+      padding: 18px;
+    }
+    .chronicle-panel h2,
+    .chronicle-card h3 {
+      margin: 0 0 8px;
+      line-height: 1.12;
+      letter-spacing: 0;
+    }
+    .chronicle-panel p,
+    .chronicle-card p {
+      color: var(--ink-mid);
+      line-height: 1.5;
+    }
+    .computer-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 14px;
+    }
+    .confidence {
+      display: inline-flex;
+      margin-top: 6px;
+      border: 1px solid rgba(232, 197, 122, 0.3);
+      border-radius: 999px;
+      padding: 5px 10px;
+      color: #f1dca9;
+      font-size: 0.78rem;
+      line-height: 1;
+    }
+    .ticker-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin: 12px 0;
+    }
+    .ticker-row span {
+      display: block;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 6px;
+      padding: 12px;
+      color: var(--ink-lo);
+      text-transform: uppercase;
+      font-size: 0.74rem;
+      letter-spacing: 0.08em;
+    }
+    .ticker-row strong {
+      display: block;
+      margin-top: 4px;
+      color: var(--ink-hi);
+      font-size: 1.1rem;
+      letter-spacing: 0;
+      text-transform: none;
+    }
+    .source-list {
+      margin: 10px 0 0;
+      padding-left: 18px;
+      color: var(--ink-mid);
+      line-height: 1.6;
+    }
+    .status-line {
+      margin: 14px 0 0;
+      color: var(--ink-lo);
+      font-size: 0.88rem;
+    }
+    @media (max-width: 820px) {
+      .chronicle-hero,
+      .chronicle-grid,
+      .computer-grid {
+        grid-template-columns: 1fr;
+      }
+      .issue-date-card {
+        border-left: 0;
+        border-top: 1px solid rgba(232, 197, 122, 0.32);
+        padding: 18px 0 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header id="site-nav"></header>
+
+  <main class="chronicle-shell">
+    <section class="chronicle-hero" aria-labelledby="chronicle-title">
+      <div>
+        <p class="chronicle-kicker">Daily historical tech desk</p>
+        <h1 id="chronicle-title">Computer Chronicle</h1>
+        <p>A morning-paper style computer section built from the date 40 years ago today, with confidence labels so exact-day items, same-week context, and fallback headlines stay honest.</p>
+      </div>
+      <aside class="issue-date-card" aria-label="Issue date">
+        <span>Today</span>
+        <strong data-current-date>Loading...</strong>
+        <span>40 years ago</span>
+        <strong data-historic-date>Loading...</strong>
+        <span data-edition>Computer &amp; Business Section</span>
+      </aside>
+    </section>
+
+    <p class="status-line" data-status>Loading issue data...</p>
+
+    <section class="chronicle-grid" aria-label="Daily computer news issue">
+      <div>
+        <article class="chronicle-panel" data-lead></article>
+        <div class="computer-grid" data-computer-items></div>
+      </div>
+
+      <aside>
+        <article class="chronicle-panel" data-market></article>
+        <article class="chronicle-panel" data-fallback style="margin-top:14px;"></article>
+        <article class="chronicle-panel" style="margin-top:14px;">
+          <p class="section-label">Source Trail</p>
+          <h2>Research Log</h2>
+          <ul class="source-list" data-sources></ul>
+        </article>
+      </aside>
+    </section>
+  </main>
+
+  <script src="assets/chronicle.js"></script>
+  <script src="../assets/site-enhance.js" defer></script>
+  <script src="../assets/nav.js" defer></script>
+</body>
+</html>

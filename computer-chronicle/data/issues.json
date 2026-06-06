@@ -1,0 +1,65 @@
+{
+  "generatedAt": "2026-06-06T13:55:00-04:00",
+  "fallbackPolicy": "Use exact-day computer news when verified. If none exists, use same-week or same-month items with confidence labels, then fall back to a wider world/business headline.",
+  "issues": [
+    {
+      "currentDate": "2026-06-06",
+      "historicDate": "1986-06-06",
+      "displayDate": "Friday, June 6, 1986",
+      "edition": "Computer & Business Section",
+      "lead": {
+        "headline": "Personal Computers Move Deeper Into Everyday Office Work",
+        "summary": "By mid-1986, the IBM-compatible PC had become the practical business default while Macintosh, Amiga, Atari ST, and Commodore machines kept the home and creative markets lively.",
+        "confidence": "This-month context"
+      },
+      "computerItems": [
+        {
+          "label": "Hardware",
+          "headline": "80286 PCs and Hard Disks Push the Office Past the Hobby Era",
+          "summary": "Faster IBM-compatible systems, falling storage costs, and common business peripherals made the desktop computer feel less experimental and more like office infrastructure.",
+          "confidence": "This-month context"
+        },
+        {
+          "label": "Software",
+          "headline": "Spreadsheets, Databases, and Word Processors Define the Workday",
+          "summary": "Lotus 1-2-3, dBASE, WordPerfect, and DOS utilities remained the practical software stack for many small offices.",
+          "confidence": "This-month context"
+        },
+        {
+          "label": "Games",
+          "headline": "Adventure Games, Commodore 64 Titles, and Console Imports Fill Store Shelves",
+          "summary": "Computer-game coverage in 1986 was scattered across magazine issues and store availability, so daily entries should separate exact releases from reviews and shelf reports.",
+          "confidence": "Needs daily source"
+        },
+        {
+          "label": "Online",
+          "headline": "Modems and Bulletin Board Systems Bring Home Users Onto Phone Lines",
+          "summary": "BBS culture was becoming a real part of hobby computing, with 300- and 1200-baud modems turning isolated machines into local communities.",
+          "confidence": "This-month context"
+        }
+      ],
+      "market": {
+        "headline": "Markets Desk",
+        "summary": "Dow and Nasdaq closes for this historic date still need a verified daily-source pull before publishing exact figures.",
+        "dow": null,
+        "nasdaq": null,
+        "confidence": "Needs verified close"
+      },
+      "worldFallback": {
+        "headline": "Chernobyl Evacuees Face Housing Deadline",
+        "summary": "If the computer desk has no strong exact-day item, this issue can lead with a wider world headline and keep the technology roundup below the fold.",
+        "confidence": "Exact-day archive item"
+      },
+      "sources": [
+        {
+          "name": "UPI Archives: Chernobyl evacuee housing deadline",
+          "url": "https://www.upi.com/Archives/1986/06/06/Housing-Chernobyl-evacuees-a-Politburo-priority/4559518414400/"
+        },
+        {
+          "name": "FRED daily market data source candidate",
+          "url": "https://fred.stlouisfed.org/"
+        }
+      ]
+    }
+  ]
+}
