@@ -293,7 +293,7 @@
         <button id="rightButton" type="button">→</button>
         <button id="fireButton" type="button">FIRE</button>
       </div>
-      <div class="version" aria-hidden="true">v1.8</div>
+      <div class="version" aria-hidden="true">v1.9</div>
     </section>
   </main>
 
@@ -518,7 +518,7 @@
           "111000000111",
           "110000000011"
         ];
-        const cell = clamp(game.width / 54, 6.2, 10);
+        const cell = game.width < 560 ? clamp(game.width / 68, 4.8, 6.2) : clamp(game.width / 54, 6.2, 10);
         const bunkerWidth = mask[0].length * cell;
         const gap = game.width / 4;
         const top = game.height - Math.max(186, 218 * game.scale);
