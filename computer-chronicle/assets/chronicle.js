@@ -49,6 +49,7 @@
     status: document.querySelector("[data-status]"),
     editorNote: document.querySelector("[data-editor-note]"),
     issuePicker: document.querySelector("[data-issue-picker]"),
+    printIssue: document.querySelector("[data-print-issue]"),
     frontPageIndex: document.querySelector("[data-front-page-index]"),
   };
 
@@ -445,6 +446,12 @@
       const url = new URL(window.location.href);
       url.searchParams.set("date", selected);
       window.location.href = url.toString();
+    });
+  }
+
+  if (els.printIssue) {
+    els.printIssue.addEventListener("click", () => {
+      window.print();
     });
   }
 
