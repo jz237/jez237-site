@@ -14,6 +14,7 @@
     storeShelves: document.querySelector("[data-store-shelves]"),
     priceWatch: document.querySelector("[data-price-watch]"),
     bbs: document.querySelector("[data-bbs]"),
+    musicChart: document.querySelector("[data-music-chart]"),
     ad: document.querySelector("[data-period-ad]"),
     fallback: document.querySelector("[data-fallback]"),
     sources: document.querySelector("[data-sources]"),
@@ -63,6 +64,7 @@
       els.storeShelves.innerHTML = "";
       els.priceWatch.innerHTML = "";
       els.bbs.innerHTML = "";
+      if (els.musicChart) els.musicChart.innerHTML = "";
       els.ad.innerHTML = "";
       els.fallback.innerHTML = "";
       els.sources.innerHTML = "";
@@ -123,6 +125,17 @@
       <p>${escapeHtml(issue.bbsNote && issue.bbsNote.summary)}</p>
       ${confidenceBadge(issue.bbsNote && issue.bbsNote.confidence)}
     `;
+
+    if (els.musicChart) {
+      els.musicChart.innerHTML = (issue.musicChart || []).map((item) => `
+        <li>
+          <p>
+            <strong>${escapeHtml(item.title)}</strong>
+            <span>${escapeHtml(item.artist)}</span>
+          </p>
+        </li>
+      `).join("");
+    }
 
     els.ad.innerHTML = `
       <p class="ad-kicker">Advertisement</p>
