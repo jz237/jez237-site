@@ -246,6 +246,9 @@ Editorial priority:
   new or deliberately selected clippings tied to that day's visible
   stories, games, BBS topics, ad references, music, mall/arcade context,
   or technology items.
+- Place images with the article, shelf, sidebar, or digest item they
+  illustrate. Do not use a standalone generic clipping gallery unless
+  the whole issue is explicitly designed around a photo spread.
 - Do not reuse the same generated period-style clipping set across daily
   issues unless it is intentionally framed as a recurring masthead/house
   art asset. Label generated period-style visuals as visual context
