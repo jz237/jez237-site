@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" fill="#050816"/>
+  <g fill="#35f4ff" filter="url(#glow)">
+    <rect x="224" y="108" width="64" height="32"/>
+    <rect x="192" y="140" width="128" height="32"/>
+    <rect x="160" y="172" width="192" height="32"/>
+    <rect x="128" y="204" width="256" height="32"/>
+    <rect x="96" y="236" width="320" height="32"/>
+    <rect x="64" y="268" width="384" height="32"/>
+    <rect x="96" y="300" width="320" height="32"/>
+    <rect x="128" y="332" width="64" height="32"/>
+    <rect x="224" y="332" width="64" height="32"/>
+    <rect x="320" y="332" width="64" height="32"/>
+  </g>
+  <g fill="#ff3df2" opacity="0.9">
+    <rect x="160" y="236" width="32" height="32"/>
+    <rect x="320" y="236" width="32" height="32"/>
+  </g>
+  <defs>
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="10" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+</svg>
