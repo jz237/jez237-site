@@ -204,6 +204,10 @@ This is intended to update every morning as a daily historical newspaper
 section. Each issue should cover the date 40 years before the current
 date in Jez's timezone, `America/New_York`.
 
+The intended experience is a nostalgic morning read, not a deep research
+report. Keep it skimmable in roughly 2-5 minutes, with a familiar daily
+section rhythm and one small "oh wow" curiosity item when possible.
+
 Editorial priority:
 
 - Prefer personal computers, home computing, office PC software, and
@@ -218,6 +222,8 @@ Editorial priority:
   available.
 - Use real period advertisements or clearly sourced ad references.
   Do not invent fictional businesses or ads for the page.
+- Do not expose image-generation prompts, prompt builders, or private
+  generation briefs in public HTML, JavaScript, or JSON.
 - Keep source/confidence labels in the data. Do not turn context into
   fake exact-day claims.
 
@@ -225,8 +231,7 @@ Important files:
 
 - `computer-chronicle/index.html` - rendered page shell.
 - `computer-chronicle/assets/chronicle.js` - client-side renderer.
-- `computer-chronicle/data/issues.json` - structured issue data and
-  image-generation brief.
+- `computer-chronicle/data/issues.json` - public structured issue data.
 
 ## Image prompt gallery
 

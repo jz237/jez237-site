@@ -165,6 +165,40 @@
       font-size: 1.2rem;
       margin-top: 2px;
     }
+    .morning-strip {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: center;
+      margin-top: 18px;
+      border: 3px solid var(--cc-ink);
+      background:
+        repeating-linear-gradient(90deg, rgba(27, 26, 23, 0.04), rgba(27, 26, 23, 0.04) 1px, transparent 1px, transparent 8px),
+        rgba(255, 248, 220, 0.94);
+      box-shadow: 5px 5px 0 rgba(27, 26, 23, 0.12);
+      padding: 10px 12px;
+    }
+    .morning-strip strong {
+      color: var(--cc-ink);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(1.05rem, 2vw, 1.45rem);
+      text-transform: uppercase;
+    }
+    .morning-strip span,
+    .morning-strip p {
+      margin: 0;
+      color: var(--cc-muted);
+      line-height: 1.35;
+    }
+    .morning-strip .issue-number {
+      border: 2px solid var(--cc-ink);
+      background: var(--cc-amber);
+      color: var(--cc-ink);
+      font-weight: 700;
+      padding: 6px 9px;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
     .chronicle-grid {
       display: grid;
       grid-template-columns: minmax(0, 1.35fr) minmax(300px, 0.65fr);
@@ -372,6 +406,20 @@
       text-decoration: none;
       border-bottom: 1px solid var(--cc-magenta);
     }
+    .curiosity-card {
+      border-top-width: 8px;
+      border-top-color: var(--cc-teal);
+      background:
+        linear-gradient(135deg, rgba(240, 163, 35, 0.18), transparent 46%),
+        repeating-linear-gradient(0deg, rgba(27, 26, 23, 0.025), rgba(27, 26, 23, 0.025) 1px, transparent 1px, transparent 6px),
+        rgba(255, 248, 220, 0.94) !important;
+    }
+    .curiosity-detail {
+      border-left: 5px solid var(--cc-amber);
+      padding-left: 10px;
+      color: var(--cc-ink) !important;
+      font-weight: 700;
+    }
     .source-list {
       margin: 10px 0 0;
       padding-left: 18px;
@@ -482,13 +530,20 @@
     }
     html body .chronicle-hero p,
     html body .status-line,
-    html body .status-line {
+    html body .morning-strip p,
+    html body .morning-strip span {
       color: var(--cc-muted) !important;
+    }
+    html body .morning-strip strong,
+    html body .morning-strip .issue-number,
+    html body .morning-strip .issue-number span {
+      color: var(--cc-ink) !important;
     }
     @media (max-width: 820px) {
       .chronicle-hero,
       .chronicle-grid,
-      .computer-grid {
+      .computer-grid,
+      .morning-strip {
         grid-template-columns: 1fr;
       }
       .issue-date-card {
@@ -523,6 +578,11 @@
     </section>
 
     <p class="status-line" data-status>Loading issue data...</p>
+    <section class="morning-strip" aria-label="Morning edition summary">
+      <strong>Morning Edition</strong>
+      <p data-morning-line>Loading daily brief...</p>
+      <span class="issue-number">Issue <span data-issue-no>---</span></span>
+    </section>
     <div class="issue-tools" aria-label="Issue archive controls">
       <label for="issue-picker">Archive</label>
       <select id="issue-picker" data-issue-picker>
@@ -550,6 +610,7 @@
           <ul class="price-list" data-price-watch></ul>
         </article>
         <article class="chronicle-panel" data-bbs style="margin-top:14px;"></article>
+        <article class="chronicle-panel curiosity-card" data-curiosity style="margin-top:14px;"></article>
         <article class="chronicle-panel" style="margin-top:14px;">
           <p class="section-label">Radio Top 10</p>
           <h2>This Week's Hit Singles</h2>
