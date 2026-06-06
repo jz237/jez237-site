@@ -211,6 +211,8 @@ Each morning should feel like a new issue, not yesterday's page with new
 text. Vary the `visualProfile` when appropriate: layout, strapline,
 accent palette, paper feel, `heroImage`, article image placement, ad
 treatment, and which sidebars are emphasized.
+Use `masthead` for issue-front copy. The title may remain the publication
+identity, but the kicker/deck should reflect the day's editorial angle.
 
 Nostalgia texture to favor when it is historically appropriate: TRS-80,
 Commodore 64/C64C, Atari 800/XL, Amiga, BBS culture, modem calling,
@@ -268,6 +270,8 @@ Editorial priority:
 - Use `heroImage` for the issue-front visual. It should normally change
   with each daily issue and tie to the day's strongest verified or
   contextual story.
+- Use `masthead` for the daily front-page kicker, title, and deck. Keep
+  it concise and newspaper-like.
 - Use `layoutPlan` to vary department order by issue. The strongest or
   most nostalgic verified material can move upward; utility sections
   like source trail and verification should usually stay near the bottom.

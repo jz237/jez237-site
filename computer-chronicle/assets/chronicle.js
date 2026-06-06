@@ -11,6 +11,9 @@
     issueNo: document.querySelector("[data-issue-no]"),
     morningLine: document.querySelector("[data-morning-line]"),
     strapline: document.querySelector("[data-strapline]"),
+    mastheadKicker: document.querySelector("[data-masthead-kicker]"),
+    mastheadTitle: document.querySelector("[data-masthead-title]"),
+    mastheadDeck: document.querySelector("[data-masthead-deck]"),
     heroImage: document.querySelector("[data-hero-image]"),
     heroCaption: document.querySelector("[data-hero-caption]"),
     lead: document.querySelector("[data-lead]"),
@@ -104,6 +107,13 @@
     setText(els.verificationTitle, chrome(issue, "verification", "title", "How to Read It"));
   }
 
+  function applyMasthead(issue) {
+    const masthead = (issue && issue.masthead) || {};
+    setText(els.mastheadKicker, masthead.kicker || "Daily historical tech desk");
+    setText(els.mastheadTitle, masthead.title || "Computer Chronicle");
+    setText(els.mastheadDeck, masthead.deck || "A morning-paper style computer section built from the date 40 years ago today, with confidence labels so exact-day items, same-week context, and fallback headlines stay honest.");
+  }
+
   function applyVisualProfile(issue) {
     const profile = (issue && issue.visualProfile) || {};
     const layout = profile.layout || "standard";
@@ -161,6 +171,7 @@
     els.edition.textContent = issue ? issue.edition : "Computer & Business Section";
     if (els.issueNo) els.issueNo.textContent = issueNumber(issue, currentIso);
     if (els.morningLine) els.morningLine.textContent = issue ? issue.morningLine || "Morning Edition: a quick daily skim from forty years ago." : "Morning Edition: awaiting a researched issue.";
+    applyMasthead(issue);
     applyVisualProfile(issue);
     applyHeroImage(issue);
     applyLayoutPlan(issue);
