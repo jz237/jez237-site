@@ -203,6 +203,40 @@
       line-height: 1.4;
       margin-top: 10px;
     }
+    .brief-list {
+      display: grid;
+      gap: 8px;
+      margin: 12px 0 0;
+    }
+    .brief-list dt {
+      color: #f1dca9;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .brief-list dd {
+      margin: 0;
+      color: var(--ink-mid);
+      line-height: 1.45;
+    }
+    .brief-columns {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 16px;
+    }
+    .brief-columns h3 {
+      margin: 0 0 8px;
+      color: var(--ink-hi);
+      font-size: 1rem;
+    }
+    .brief-columns ul {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--ink-mid);
+      line-height: 1.48;
+    }
     .source-list {
       margin: 10px 0 0;
       padding-left: 18px;
@@ -217,7 +251,8 @@
     @media (max-width: 820px) {
       .chronicle-hero,
       .chronicle-grid,
-      .computer-grid {
+      .computer-grid,
+      .brief-columns {
         grid-template-columns: 1fr;
       }
       .issue-date-card {
@@ -259,6 +294,7 @@
           <h2 id="shelf-title">Games &amp; Software People Could Actually Talk About</h2>
           <ul class="shelf-list" data-store-shelves></ul>
         </section>
+        <section class="chronicle-panel" data-image-brief style="margin-top:14px;"></section>
       </div>
 
       <aside>
