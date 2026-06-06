@@ -293,7 +293,7 @@
         <button id="rightButton" type="button">→</button>
         <button id="fireButton" type="button">FIRE</button>
       </div>
-      <div class="version" aria-hidden="true">v1.5</div>
+      <div class="version" aria-hidden="true">v1.6</div>
     </section>
   </main>
 
@@ -1023,9 +1023,11 @@
       function paintPixelSprite(target, pattern, size, ox, oy) {
         const h = pattern.length;
         const w = pattern[0].length;
+        const gap = Math.max(0.55, size * 0.14);
+        const block = Math.max(1, size - gap);
         for (let y = 0; y < h; y++) {
           for (let x = 0; x < w; x++) {
-            if (pattern[y][x] === "1") target.fillRect(ox + x * size, oy + y * size, size, size);
+            if (pattern[y][x] === "1") target.fillRect(ox + x * size + gap / 2, oy + y * size + gap / 2, block, block);
           }
         }
       }
@@ -1117,11 +1119,18 @@
         ctx.save();
         ctx.globalCompositeOperation = "lighter";
         for (const b of game.bullets) {
-          glow(b.color, 14);
-          ctx.fillStyle = b.color;
+          const speed = Math.max(1, Math.hypot(b.vx, b.vy));
+          const len = b.damage > 1 ? 26 : 20;
+          const dx = b.vx / speed * len;
+          const dy = b.vy / speed * len;
+          glow(b.color, 8);
+          ctx.strokeStyle = b.color;
+          ctx.lineWidth = b.damage > 1 ? 1.8 : 1.2;
+          ctx.lineCap = "round";
           ctx.beginPath();
-          ctx.ellipse(b.x, b.y, b.r, b.r * 1.9, 0, 0, TAU);
-          ctx.fill();
+          ctx.moveTo(b.x - dx * 0.25, b.y - dy * 0.25);
+          ctx.lineTo(b.x + dx * 0.75, b.y + dy * 0.75);
+          ctx.stroke();
         }
         for (const b of game.enemyBullets) {
           glow(b.color, 16);
