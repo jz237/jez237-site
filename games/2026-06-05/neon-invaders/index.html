@@ -429,7 +429,7 @@
       <div class="overlay" id="overlay">
         <div class="panel">
           <h1>Neon Invaders</h1>
-          <div class="title-version">v1.19</div>
+          <div class="title-version">v1.20</div>
           <p class="tagline" id="message">A modernized arcade defense run: punch through waves, catch power cores, and survive the boss carrier.</p>
           <div class="controls">
             <div><kbd>A</kbd>/<kbd>D</kbd> or <kbd>←</kbd>/<kbd>→</kbd> move</div>
@@ -453,7 +453,7 @@
         <button id="rightButton" type="button">→</button>
         <button id="fireButton" type="button">FIRE</button>
       </div>
-      <div class="version" aria-hidden="true">v1.19</div>
+      <div class="version" aria-hidden="true">v1.20</div>
     </section>
   </main>
 
@@ -1102,10 +1102,16 @@
             shieldHit.shield.hp -= 1;
             burst(shieldHit.x, shieldHit.y, colors.shield, 6, 100);
           }
-          const hitRadius = 12;
-          if (b.life > 0 && p.invulnerable <= 0 && distSq(b, p) < (b.r + hitRadius) * (b.r + hitRadius)) {
+          const shieldRadius = playerShieldRadius() + Math.max(1, b.r || 1);
+          const shieldT = p.shield > 0
+            ? segmentCircleHit(b.px ?? b.x, b.py ?? b.y, b.x, b.y, p.x, p.y, shieldRadius)
+            : null;
+          if (b.life > 0 && shieldT !== null) {
+            b.x = (b.px ?? b.x) + (b.x - (b.px ?? b.x)) * shieldT;
+            b.y = (b.py ?? b.y) + (b.y - (b.py ?? b.y)) * shieldT;
+            burst(b.x, b.y, p.shield > 40 ? colors.player : colors.red, 18, 190);
             b.life = 0;
-            hitPlayer(16);
+            if (p.invulnerable <= 0) hitPlayer(16);
           }
         }
         game.enemyBullets = game.enemyBullets.filter(b => b.life > 0 && b.y < game.height + 40 && b.x > -40 && b.x < game.width + 40);
@@ -1287,6 +1293,29 @@
         return x >= rect.x - rect.w / 2 && x <= rect.x + rect.w / 2 && y >= rect.y - rect.h / 2 && y <= rect.y + rect.h / 2;
       }
 
+      function playerShieldRadius() {
+        return 38 + Math.sin(game.time * 5) * 2;
+      }
+
+      function segmentCircleHit(x1, y1, x2, y2, cx, cy, radius) {
+        const dx = x2 - x1;
+        const dy = y2 - y1;
+        const fx = x1 - cx;
+        const fy = y1 - cy;
+        const a = dx * dx + dy * dy;
+        if (a === 0) return fx * fx + fy * fy <= radius * radius ? 0 : null;
+        const b = 2 * (fx * dx + fy * dy);
+        const c = fx * fx + fy * fy - radius * radius;
+        const discriminant = b * b - 4 * a * c;
+        if (discriminant < 0) return null;
+        const root = Math.sqrt(discriminant);
+        const t1 = (-b - root) / (2 * a);
+        const t2 = (-b + root) / (2 * a);
+        if (t1 >= 0 && t1 <= 1) return t1;
+        if (t2 >= 0 && t2 <= 1) return t2;
+        return null;
+      }
+
       function firstShieldHit(b) {
         let best = null;
         for (const shield of game.shields) {
@@ -1461,7 +1490,7 @@
           ctx.lineWidth = 2;
           glow(ctx.strokeStyle, 16);
           ctx.beginPath();
-          ctx.arc(0, 0, 38 + Math.sin(game.time * 5) * 2, 0, TAU);
+          ctx.arc(0, 0, playerShieldRadius(), 0, TAU);
           ctx.stroke();
         }
         ctx.restore();
