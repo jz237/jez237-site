@@ -10,6 +10,7 @@
     edition: document.querySelector("[data-edition]"),
     issueNo: document.querySelector("[data-issue-no]"),
     morningLine: document.querySelector("[data-morning-line]"),
+    strapline: document.querySelector("[data-strapline]"),
     lead: document.querySelector("[data-lead]"),
     computerItems: document.querySelector("[data-computer-items]"),
     market: document.querySelector("[data-market]"),
@@ -65,6 +66,19 @@
     `;
   }
 
+  function applyVisualProfile(issue) {
+    const profile = (issue && issue.visualProfile) || {};
+    const layout = profile.layout || "standard";
+    const accent = profile.accent || "amber-blue";
+    const paper = profile.paper || "cream";
+    document.body.dataset.issueLayout = layout;
+    document.body.dataset.issueAccent = accent;
+    document.body.dataset.issuePaper = paper;
+    if (els.strapline) {
+      els.strapline.textContent = profile.strapline || "COMPUTERS • GAMES • SOFTWARE • MARKETS";
+    }
+  }
+
   function issueNumber(issue, currentIso) {
     const baseDate = new Date("2026-01-01T00:00:00");
     const issueDate = new Date(`${(issue && issue.currentDate) || currentIso}T00:00:00`);
@@ -78,6 +92,7 @@
     els.edition.textContent = issue ? issue.edition : "Computer & Business Section";
     if (els.issueNo) els.issueNo.textContent = issueNumber(issue, currentIso);
     if (els.morningLine) els.morningLine.textContent = issue ? issue.morningLine || "Morning Edition: a quick daily skim from forty years ago." : "Morning Edition: awaiting a researched issue.";
+    applyVisualProfile(issue);
 
     if (!issue) {
       els.status.textContent = "No researched issue has been loaded for this date yet.";
