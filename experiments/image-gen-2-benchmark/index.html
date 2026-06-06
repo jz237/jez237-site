@@ -140,6 +140,54 @@
     }
     main { padding: 12px 22px 70px; }
     .gallery-list { display: block; }
+    .world-catalog {
+      margin: 22px 0 34px;
+      padding: 22px;
+      border: 1px solid rgba(216,232,239,.86);
+      border-radius: 8px;
+      background: linear-gradient(180deg, rgba(247,251,255,.94), rgba(231,244,255,.88));
+      box-shadow: var(--shadow);
+    }
+    .world-catalog[hidden] { display: none; }
+    .world-catalog h2 {
+      margin: 0 0 8px;
+      color: var(--accent-strong);
+      font-size: clamp(1.5rem, 3vw, 2.5rem);
+      letter-spacing: -.04em;
+    }
+    .world-catalog-intro {
+      margin: 0 0 20px;
+      color: #4e6f82;
+      max-width: 780px;
+      font-weight: 560;
+    }
+    .world-group + .world-group { margin-top: 28px; }
+    .world-heading {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 18px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 18px;
+    }
+    .world-heading h3 {
+      margin: 0;
+      color: #183b52;
+      font-size: clamp(1.35rem, 2.4vw, 2rem);
+      letter-spacing: -.03em;
+    }
+    .world-heading p {
+      margin: 7px 0 0;
+      color: var(--muted);
+      max-width: 760px;
+    }
+    .world-count { color: var(--muted); white-space: nowrap; }
+    .world-note {
+      color: #385f78;
+      margin: 0 0 14px;
+      font-size: .92rem;
+    }
     .load-more-row { display: flex; justify-content: center; margin: 30px 0 0; }
     .day-group { margin-top: 28px; }
     .day-heading {
@@ -239,7 +287,7 @@
   <header class="gallery-hero">
     <div class="gallery-hero-inner">
       <h1>GPT Image 2<br>Daily Image Prompts</h1>
-      <p class="lede">A growing archive of creative GPT Image 2 prompts and generated images. Four new prompts are scheduled throughout each day, then posted here and in the AI photos Discord channel.</p>
+      <p class="lede">A growing archive of creative GPT Image 2 prompts and generated images. Five evenly spaced prompts are scheduled throughout each day, then posted here and in the AI photos Discord channel.</p>
       <div class="meta">
         <span class="pill">Model: openai/gpt-image-2</span>
         <span class="pill" id="count-pill">Images: loading…</span>
@@ -265,6 +313,11 @@
   </div>
 
   <main>
+    <section class="world-catalog" id="world-catalog" hidden>
+      <h2>Fictional World Catalog</h2>
+      <p class="world-catalog-intro">Weekly fictional worlds get their own catalog sections as the daily image cron adds lived-in views, maps, scenes, and artifacts from each setting.</p>
+      <div id="world-list"></div>
+    </section>
     <div id="gallery" class="gallery-list" aria-live="polite"></div>
     <div class="load-more-row" id="load-more-row">
       <button class="control" id="load-more" type="button">Load more</button>
@@ -287,6 +340,8 @@
   <script>
     (function () {
       const gallery = document.getElementById('gallery');
+      const worldCatalog = document.getElementById('world-catalog');
+      const worldList = document.getElementById('world-list');
       const countPill = document.getElementById('count-pill');
       const search = document.getElementById('search');
       const dateFilter = document.getElementById('date-filter');
@@ -337,7 +392,8 @@
         return allItems.filter((item) => {
           if (date !== 'all' && item.date !== date) return false;
           if (!q) return true;
-          return [item.title, item.prompt, item.tests, item.batch].some((v) => String(v || '').toLowerCase().includes(q));
+          const world = item.world || {};
+          return [item.title, item.prompt, item.tests, item.batch, world.name, world.description, world.continuity, world.entryDescription].some((v) => String(v || '').toLowerCase().includes(q));
         });
       }
 
@@ -347,6 +403,7 @@
         countPill.textContent = `Images: ${allItems.length}`;
         toolbarCount.textContent = `Images: ${allItems.length}`;
         loadMoreRow.hidden = visibleCount >= items.length;
+        renderWorldCatalog(items);
         if (!shown.length) {
           gallery.innerHTML = '<p class="empty">No matching prompts yet.</p>';
           return;
@@ -368,14 +425,53 @@
         bindImages();
       }
 
-      function cardHtml(item) {
+      function renderWorldCatalog(items) {
+        const worlds = new Map();
+        items.forEach((item) => {
+          const world = item.world || {};
+          const name = String(world.name || '').trim();
+          if (!name) return;
+          if (!worlds.has(name)) worlds.set(name, { name, description: world.description || '', continuity: world.continuity || '', items: [] });
+          const group = worlds.get(name);
+          if (!group.description && world.description) group.description = world.description;
+          if (!group.continuity && world.continuity) group.continuity = world.continuity;
+          group.items.push(item);
+        });
+        if (!worlds.size) {
+          worldCatalog.hidden = true;
+          worldList.innerHTML = '';
+          return;
+        }
+        worldCatalog.hidden = false;
+        worldList.innerHTML = Array.from(worlds.values()).map((world) => `
+          <section class="world-group">
+            <div class="world-heading">
+              <div>
+                <h3>${escapeHtml(world.name)}</h3>
+                ${world.description ? `<p>${escapeHtml(world.description)}</p>` : ''}
+              </div>
+              <span class="world-count">${world.items.length} image${world.items.length === 1 ? '' : 's'}</span>
+            </div>
+            ${world.continuity ? `<p class="world-note"><strong>Continuity:</strong> ${escapeHtml(world.continuity)}</p>` : ''}
+            <div class="grid">
+              ${world.items.map((item) => cardHtml(item, true)).join('')}
+            </div>
+          </section>
+        `).join('');
+      }
+
+      function cardHtml(item, worldMode) {
         const portrait = String(item.size || '').includes('1536') || String(item.image || '').includes('almanac');
+        const world = item.world || {};
+        const worldDescription = world.entryDescription || world.description || '';
+        const cardId = `${worldMode ? 'world-' : ''}${item.id || ''}`;
         return `
-          <article class="card" id="${escapeHtml(item.id)}">
+          <article class="card" id="${escapeHtml(cardId)}">
             <div class="image-wrap${portrait ? ' portrait' : ''}"><img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.title)}" loading="lazy"></div>
             <div class="content">
-              <div class="kicker">${escapeHtml(item.batch || 'Daily Prompt')} · ${escapeHtml(item.slot || '')}</div>
+              <div class="kicker">${worldMode && world.name ? `World: ${escapeHtml(world.name)}` : `${escapeHtml(item.batch || 'Daily Prompt')} · ${escapeHtml(item.slot || '')}`}</div>
               <h3>${escapeHtml(item.title)}</h3>
+              ${worldMode && worldDescription ? `<p class="tests"><strong>Description:</strong> ${escapeHtml(worldDescription)}</p>` : ''}
               ${item.tests ? `<p class="tests"><strong>Explores:</strong> ${escapeHtml(item.tests)}</p>` : ''}
               <details>
                 <summary>Show prompt</summary>
