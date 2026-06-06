@@ -293,7 +293,7 @@
         <button id="rightButton" type="button">→</button>
         <button id="fireButton" type="button">FIRE</button>
       </div>
-      <div class="version" aria-hidden="true">v1.7</div>
+      <div class="version" aria-hidden="true">v1.8</div>
     </section>
   </main>
 
@@ -507,20 +507,33 @@
 
       function makeShields() {
         game.shields = [];
-        const blocks = game.width < 720 ? 3 : 4;
-        const gap = game.width / (blocks + 1);
-        for (let s = 1; s <= blocks; s++) {
-          const cx = gap * s;
-          const y = game.height - Math.max(170, 195 * game.scale);
-          for (let i = -3; i <= 3; i++) {
-            for (let j = 0; j < 3; j++) {
-              if (Math.abs(i) === 3 && j === 2) continue;
+        const mask = [
+          "000111111000",
+          "001111111100",
+          "011111111110",
+          "111111111111",
+          "111111111111",
+          "111111111111",
+          "111100001111",
+          "111000000111",
+          "110000000011"
+        ];
+        const cell = clamp(game.width / 54, 6.2, 10);
+        const bunkerWidth = mask[0].length * cell;
+        const gap = game.width / 4;
+        const top = game.height - Math.max(186, 218 * game.scale);
+        for (let s = 1; s <= 3; s++) {
+          const left = gap * s - bunkerWidth / 2;
+          for (let row = 0; row < mask.length; row++) {
+            for (let col = 0; col < mask[row].length; col++) {
+              if (mask[row][col] !== "1") continue;
               game.shields.push({
-                x: cx + i * 18 * game.scale,
-                y: y + j * 14 * game.scale,
-                w: 15 * game.scale,
-                h: 11 * game.scale,
-                hp: 3
+                x: left + col * cell + cell / 2,
+                y: top + row * cell + cell / 2,
+                w: cell * 0.92,
+                h: cell * 0.92,
+                hp: 1,
+                maxHp: 1
               });
             }
           }
@@ -1214,14 +1227,13 @@
       }
 
       function drawShields() {
+        if (game.state !== "playing" && game.state !== "paused") return;
         ctx.save();
-        ctx.globalCompositeOperation = "lighter";
         for (const s of game.shields) {
-          const alpha = 0.25 + s.hp * 0.22;
-          ctx.globalAlpha = alpha;
-          ctx.fillStyle = s.hp > 1 ? colors.shield : colors.red;
-          ctx.shadowColor = ctx.fillStyle;
-          ctx.shadowBlur = 10;
+          ctx.globalAlpha = 0.82;
+          ctx.fillStyle = colors.shield;
+          ctx.shadowColor = colors.shield;
+          ctx.shadowBlur = 4;
           ctx.fillRect(s.x - s.w / 2, s.y - s.h / 2, s.w, s.h);
         }
         ctx.restore();
