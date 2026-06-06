@@ -1025,7 +1025,13 @@
   </main>
 
   <script>
-    const BASE = './';
+    const SITE_BASE = './';
+    const LEGACY_BASE = 'https://jz237.github.io/games/';
+    const SITE_GAME_PATHS = new Set([
+      '2026-06-05/neon-invaders/',
+      '2026-06-06/missile-command-3js/'
+    ]);
+    const gameHref = g => `${SITE_GAME_PATHS.has(g.path) ? SITE_BASE : LEGACY_BASE}${g.path}`;
     const games = [
       // Featured (polished)
       { title: 'Millipede',                     path: '2026-04-28/millipede/',             emoji: '🪲', date: 'Apr 28', cat: 'arcade',   tag: 'featured',     desc: 'Touch-first fungal swarm shooter with power-ups and queen waves' },
@@ -1162,7 +1168,7 @@
     function gameCard(g, index) {
       const isNew = g.date.startsWith('May');
       return `
-        <a class="game-card" href="${BASE}${g.path}" target="_blank" rel="noopener">
+        <a class="game-card" href="${gameHref(g)}">
           ${gameIcon(g, index)}
           ${isNew ? '<span class="new-badge">NEW</span>' : ''}
           <span class="title">${g.title}</span>
