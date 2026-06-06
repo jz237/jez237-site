@@ -35,6 +35,7 @@
           "music",
           "period-ad",
           "fallback",
+          "accuracy",
           "sources",
           "verification"
         ]
@@ -70,6 +71,10 @@
         },
         "fallback": {
           "label": "Fallback Lead"
+        },
+        "accuracy": {
+          "label": "Accuracy Ledger",
+          "title": "How Grounded Is Today?"
         },
         "sources": {
           "label": "Source Trail",
@@ -322,6 +327,26 @@
         "headline": "Chernobyl Evacuees Face Housing Deadline",
         "summary": "UPI reported on June 6, 1986 that Soviet officials were treating housing for Chernobyl evacuees as a Politburo priority, with an October deadline for relocated residents.",
         "confidence": "Exact-day archive item"
+      },
+      "accuracyLedger": {
+        "items": [
+          {
+            "label": "Exact-day",
+            "value": "2",
+            "detail": "Market close and UPI fallback headline are dated to June 6, 1986."
+          },
+          {
+            "label": "Same-week",
+            "value": "5",
+            "detail": "Lotus/VisiCalc, Epson Equity II, PageMaker, Super Mario Bros. 2, and Dragon Quest are tied to the week around the issue."
+          },
+          {
+            "label": "Period context",
+            "value": "9",
+            "detail": "Prices, BBS chatter, several game shelf entries, and generated visuals are period framing, not exact-day claims."
+          }
+        ],
+        "note": "Generated clippings are labeled as visual context. Nothing becomes exact-day without a dated source."
       },
       "sources": [
         {
