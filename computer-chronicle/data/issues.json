@@ -1,12 +1,14 @@
 {
-  "generatedAt": "2026-06-06T14:32:00-04:00",
-  "fallbackPolicy": "Use exact-day computer news when verified. If none exists, use same-week or same-month items with confidence labels, then fall back to a wider world/business headline.",
+  "generatedAt": "2026-06-06T16:58:00-04:00",
+  "editorialPriority": "When there is a choice, prefer personal computers, home computing, office PC software, and personal computer or console gaming over broad enterprise technology.",
+  "fallbackPolicy": "Use exact-day computer news when verified. If none exists, use same-week or same-month personal-computing items with confidence labels, then fall back to a wider world/business headline.",
   "issues": [
     {
       "currentDate": "2026-06-06",
       "historicDate": "1986-06-06",
       "displayDate": "Friday, June 6, 1986",
       "edition": "Computer & Business Section",
+      "editorNote": "Today's issue leans toward personal computers, home computing, software people actually used, and games people could buy or talk about in 1986.",
       "lead": {
         "headline": "Lotus Ends VisiCalc as 1-2-3 Era Takes Hold",
         "summary": "Lotus, already dominant in PC spreadsheets, discontinued VisiCalc during the week of this issue after acquiring Software Arts in 1985. The move marked a symbolic handoff from the Apple II spreadsheet age to the IBM PC business-software era.",
@@ -44,6 +46,60 @@
         "dow": "1,885.90",
         "nasdaq": "400.25",
         "confidence": "Exact-day close"
+      },
+      "storeShelves": [
+        {
+          "name": "Super Mario Bros. 2",
+          "detail": "New in Japan this week for the Famicom Disk System.",
+          "confidence": "Same-week verified"
+        },
+        {
+          "name": "Dragon Quest",
+          "detail": "Fresh on Famicom shelves after its May 27 Japanese release.",
+          "confidence": "Recent release verified"
+        },
+        {
+          "name": "Lotus 1-2-3",
+          "detail": "The business spreadsheet standard for IBM-compatible offices.",
+          "confidence": "Context verified"
+        },
+        {
+          "name": "Aldus PageMaker",
+          "detail": "A defining Macintosh desktop-publishing application in current trade coverage.",
+          "confidence": "Context verified"
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "IBM-compatible PC system",
+          "price": "$1,499-$2,999",
+          "note": "Typical full-system street range varies by clone, memory, monitor, and disk."
+        },
+        {
+          "item": "1200-baud modem",
+          "price": "$199-$399",
+          "note": "A practical upgrade for bulletin board users."
+        },
+        {
+          "item": "5.25-inch floppy disks",
+          "price": "$19.95/box",
+          "note": "Common retail-ad price range for home and office users."
+        },
+        {
+          "item": "Business software",
+          "price": "$295-$495",
+          "note": "Spreadsheet, database, and word-processing packages could cost as much as hardware upgrades."
+        }
+      ],
+      "bbsNote": {
+        "headline": "From the BBS",
+        "summary": "Local modem users swap shareware, printer drivers, game hints, and hardware advice at 300 and 1200 baud. Phone lines are the social network.",
+        "confidence": "Period context"
+      },
+      "periodAd": {
+        "headline": "Bauder Computer Center",
+        "summary": "IBM compatibles, Commodore systems, printers, disks, modems, cables, and setup help. Bring in this ad for a free box of labels with any system purchase.",
+        "finePrint": "Period-style house ad for newspaper atmosphere; not a historical claim."
       },
       "worldFallback": {
         "headline": "Chernobyl Evacuees Face Housing Deadline",
