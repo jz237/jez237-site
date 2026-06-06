@@ -181,24 +181,50 @@
       line-height: 1.55;
     }
 
-    .controls {
+    .enemy-roster {
       display: grid;
       gap: 8px;
-      margin: 18px 0 24px;
-      color: rgba(234, 249, 255, 0.72);
-      font-size: 13px;
-      line-height: 1.45;
+      margin: 16px 0 18px;
+      color: rgba(234, 249, 255, 0.78);
+      font-size: 12px;
+      line-height: 1.25;
     }
 
-    .controls kbd {
-      display: inline-block;
-      min-width: 24px;
-      padding: 2px 7px;
+    .enemy-roster h2 {
+      margin: 0;
+      color: rgba(255, 210, 61, 0.88);
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .enemy-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .enemy-card {
+      min-width: 0;
+      padding: 7px 6px;
       border: 1px solid rgba(53, 244, 255, 0.34);
-      background: rgba(53, 244, 255, 0.08);
-      color: #fff;
+      background: rgba(53, 244, 255, 0.06);
       text-align: center;
-      box-shadow: 0 0 10px rgba(53, 244, 255, 0.16);
+    }
+
+    .enemy-card canvas {
+      display: block;
+      width: 100%;
+      height: 46px;
+      margin: 0 auto 4px;
+      image-rendering: auto;
+    }
+
+    .enemy-card b {
+      color: #fff;
+      font-size: 10px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
     }
 
     .powerups {
@@ -305,6 +331,12 @@
       font-size: 12px;
     }
 
+    .title-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
     button {
       width: 100%;
       min-height: 48px;
@@ -318,6 +350,12 @@
       cursor: pointer;
       touch-action: manipulation;
       box-shadow: 0 0 24px rgba(167, 255, 61, 0.24);
+    }
+
+    button.secondary {
+      border-color: rgba(53, 244, 255, 0.55);
+      background: linear-gradient(90deg, rgba(255, 61, 242, 0.12), rgba(53, 244, 255, 0.2));
+      box-shadow: 0 0 24px rgba(53, 244, 255, 0.18);
     }
 
     button:hover,
@@ -412,6 +450,11 @@
       .powerups {
         grid-template-columns: 1fr;
       }
+
+      .enemy-grid,
+      .title-actions {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
     }
   </style>
 </head>
@@ -429,12 +472,16 @@
       <div class="overlay" id="overlay">
         <div class="panel">
           <h1>Neon Invaders</h1>
-          <div class="title-version">v1.20</div>
+          <div class="title-version">v1.21</div>
           <p class="tagline" id="message">A modernized arcade defense run: punch through waves, catch power cores, and survive the boss carrier.</p>
-          <div class="controls">
-            <div><kbd>A</kbd>/<kbd>D</kbd> or <kbd>←</kbd>/<kbd>→</kbd> move</div>
-            <div><kbd>Space</kbd> fire, <kbd>Shift</kbd> dash, <kbd>P</kbd> pause</div>
-            <div>Mobile: drag one finger anywhere to steer and auto-fire.</div>
+          <div class="enemy-roster" aria-label="Enemy ship guide">
+            <h2>Enemy Ships</h2>
+            <div class="enemy-grid">
+              <div class="enemy-card"><canvas width="92" height="54" data-enemy-sprite="drone"></canvas><b>Scout Drone</b></div>
+              <div class="enemy-card"><canvas width="92" height="54" data-enemy-sprite="striker"></canvas><b>Gold Striker</b></div>
+              <div class="enemy-card"><canvas width="92" height="54" data-enemy-sprite="diver"></canvas><b>Red Diver</b></div>
+              <div class="enemy-card"><canvas width="92" height="54" data-enemy-sprite="boss"></canvas><b>Boss Carrier</b></div>
+            </div>
           </div>
           <div class="powerups" aria-label="Power-up guide">
             <h2>Power Cores</h2>
@@ -444,8 +491,11 @@
             <div class="powerup"><i style="color:#ffd23d;background:#ffd23d"></i><span><b>Slow</b><br>Slows the fleet and boss fire.</span></div>
             <div class="powerup"><i style="color:#ffffff;background:#ffffff"></i><span><b>Repair</b><br>Adds a life and shield charge.</span></div>
           </div>
-          <div class="scores-panel" id="scoresPanel" aria-live="polite"></div>
-          <button id="startButton" type="button">Start Game</button>
+          <div class="scores-panel hidden" id="scoresPanel" aria-live="polite"></div>
+          <div class="title-actions">
+            <button id="startButton" type="button">Start Game</button>
+            <button id="scoresButton" class="secondary" type="button">High Scores</button>
+          </div>
         </div>
       </div>
       <div class="touch" aria-hidden="true">
@@ -453,7 +503,7 @@
         <button id="rightButton" type="button">→</button>
         <button id="fireButton" type="button">FIRE</button>
       </div>
-      <div class="version" aria-hidden="true">v1.20</div>
+      <div class="version" aria-hidden="true">v1.21</div>
     </section>
   </main>
 
@@ -467,6 +517,7 @@
       const overlay = document.getElementById("overlay");
       const message = document.getElementById("message");
       const startButton = document.getElementById("startButton");
+      const scoresButton = document.getElementById("scoresButton");
       const scoreEl = document.getElementById("score");
       const waveEl = document.getElementById("wave");
       const livesEl = document.getElementById("lives");
@@ -696,6 +747,17 @@
           target.style.opacity = "1";
           target.innerHTML = scoreRows(scores);
         });
+      }
+
+      function showScores(includeEntry = false, highlightTs = 0) {
+        renderScores(includeEntry, highlightTs);
+        scoresPanel.classList.remove("hidden");
+        scoresButton.textContent = "Hide Scores";
+      }
+
+      function hideScores() {
+        scoresPanel.classList.add("hidden");
+        scoresButton.textContent = "High Scores";
       }
 
       function resize() {
@@ -1285,7 +1347,7 @@
         touchAim.pointerId = null;
         message.textContent = `Final score: ${game.score.toLocaleString()}. The fleet regroups; you get another quarter.`;
         startButton.textContent = "Play Again";
-        renderScores(true);
+        showScores(true);
         overlay.classList.remove("hidden");
       }
 
@@ -1546,6 +1608,44 @@
         sctx.fillRect(width / 2 + 4, height / 2 - 2, 4, 3);
         invaderSpriteCache.set(key, spriteCanvas);
         return spriteCanvas;
+      }
+
+      function paintTitleEnemies() {
+        document.querySelectorAll("[data-enemy-sprite]").forEach(titleCanvas => {
+          const type = titleCanvas.dataset.enemySprite;
+          const tctx = titleCanvas.getContext("2d");
+          const width = titleCanvas.width;
+          const height = titleCanvas.height;
+          tctx.clearRect(0, 0, width, height);
+          tctx.save();
+          tctx.globalCompositeOperation = "lighter";
+          if (type === "boss") {
+            tctx.translate(width / 2, height / 2 + 1);
+            tctx.shadowColor = colors.enemy2;
+            tctx.shadowBlur = 12;
+            tctx.fillStyle = colors.enemy2;
+            tctx.beginPath();
+            tctx.ellipse(0, 0, 30, 15, 0, 0, TAU);
+            tctx.fill();
+            tctx.fillStyle = colors.enemy;
+            tctx.beginPath();
+            tctx.ellipse(0, -4, 17, 9, 0, 0, TAU);
+            tctx.fill();
+            tctx.strokeStyle = "#fff";
+            tctx.lineWidth = 1.5;
+            tctx.beginPath();
+            tctx.moveTo(-38, 2);
+            tctx.lineTo(-20, 7);
+            tctx.moveTo(38, 2);
+            tctx.lineTo(20, 7);
+            tctx.stroke();
+          } else {
+            const color = type === "drone" ? colors.enemy : type === "striker" ? colors.enemy2 : colors.enemy3;
+            const sprite = getInvaderSprite(type, 0, color, 3.2);
+            tctx.drawImage(sprite, (width - sprite.width) / 2, (height - sprite.height) / 2);
+          }
+          tctx.restore();
+        });
       }
 
       function drawInvaders() {
@@ -1814,6 +1914,7 @@
       startButton.addEventListener("click", () => {
         requestImmersiveMode();
         unlockAudio();
+        hideScores();
         if (game.state === "paused") {
           togglePause();
         } else {
@@ -1827,8 +1928,16 @@
         const initials = sanitizeInitials(input ? input.value : "YOU");
         const highlightTs = addLocalScore(initials, game.score, game.wave);
         game.scoreSubmitted = true;
-        renderScores(false, highlightTs);
-        submitGlobalScore(initials, game.score, game.wave).then(() => renderScores(false, highlightTs));
+        showScores(false, highlightTs);
+        submitGlobalScore(initials, game.score, game.wave).then(() => showScores(false, highlightTs));
+      });
+
+      scoresButton.addEventListener("click", () => {
+        if (scoresPanel.classList.contains("hidden")) {
+          showScores(false);
+        } else {
+          hideScores();
+        }
       });
 
       scoresPanel.addEventListener("input", event => {
@@ -1902,6 +2011,7 @@
       };
       makeShields();
       updateHud();
+      paintTitleEnemies();
       renderScores(false);
       requestAnimationFrame(loop);
     })();
