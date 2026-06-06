@@ -414,7 +414,7 @@
         <button id="rightButton" type="button">→</button>
         <button id="fireButton" type="button">FIRE</button>
       </div>
-      <div class="version" aria-hidden="true">v1.14</div>
+      <div class="version" aria-hidden="true">v1.15</div>
     </section>
   </main>
 
@@ -1432,13 +1432,6 @@
           const pixel = inv.type === "drone" ? 3 : 3.1;
           const sprite = getInvaderSprite(inv.type, game.invaderFrame, color, pixel);
           ctx.drawImage(sprite, -sprite.width / 2, -sprite.height / 2);
-          if (inv.maxHp > 1) {
-            ctx.globalAlpha = 0.65;
-            ctx.fillStyle = "rgba(255,255,255,0.18)";
-            ctx.fillRect(-17, 21, 34, 3);
-            ctx.fillStyle = color;
-            ctx.fillRect(-17, 21, 34 * Math.max(0, inv.hp / inv.maxHp), 3);
-          }
           ctx.restore();
         }
         ctx.restore();
@@ -1487,17 +1480,31 @@
         ctx.globalCompositeOperation = "lighter";
         for (const b of game.bullets) {
           const speed = Math.max(1, Math.hypot(b.vx, b.vy));
-          const len = b.damage > 1 ? 26 : 20;
+          const len = b.damage > 1 ? 34 : 26;
           const dx = b.vx / speed * len;
           const dy = b.vy / speed * len;
-          glow(b.color, 8);
-          ctx.strokeStyle = b.color;
-          ctx.lineWidth = b.damage > 1 ? 1.8 : 1.2;
+          const tailX = b.x - dx;
+          const tailY = b.y - dy;
+          const gradient = ctx.createLinearGradient(tailX, tailY, b.x, b.y);
+          gradient.addColorStop(0, "rgba(167, 255, 61, 0)");
+          gradient.addColorStop(0.45, b.damage > 1 ? "rgba(53, 244, 255, 0.34)" : "rgba(167, 255, 61, 0.34)");
+          gradient.addColorStop(1, b.color);
+          glow(b.color, 12);
+          ctx.strokeStyle = gradient;
+          ctx.lineWidth = b.damage > 1 ? 4 : 3;
           ctx.lineCap = "round";
           ctx.beginPath();
-          ctx.moveTo(b.x - dx * 0.25, b.y - dy * 0.25);
-          ctx.lineTo(b.x + dx * 0.75, b.y + dy * 0.75);
+          ctx.moveTo(tailX, tailY);
+          ctx.lineTo(b.x, b.y);
           ctx.stroke();
+          const block = b.damage > 1 ? 7 : 6;
+          ctx.fillStyle = b.color;
+          ctx.shadowColor = b.color;
+          ctx.shadowBlur = 12;
+          ctx.fillRect(Math.round(b.x - block / 2), Math.round(b.y - block / 2), block, block);
+          ctx.fillStyle = "#ffffff";
+          ctx.shadowBlur = 4;
+          ctx.fillRect(Math.round(b.x - 1.5), Math.round(b.y - 1.5), 3, 3);
         }
         for (const b of game.enemyBullets) {
           const speed = Math.max(1, Math.hypot(b.vx, b.vy));
