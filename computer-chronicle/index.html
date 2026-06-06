@@ -561,6 +561,61 @@
       padding: 10px 12px;
       font: inherit;
     }
+    .front-page-index {
+      margin-top: 14px;
+      border-top: 5px solid var(--cc-ink);
+      border-bottom: 3px double var(--cc-ink);
+      background:
+        repeating-linear-gradient(90deg, rgba(27, 26, 23, 0.035), rgba(27, 26, 23, 0.035) 1px, transparent 1px, transparent 10px),
+        rgba(255, 248, 220, 0.9);
+      padding: 10px 0;
+    }
+    .front-page-index > p {
+      display: inline-block;
+      width: fit-content;
+      margin: 0 0 9px;
+      padding: 4px 7px;
+      background: var(--cc-ink);
+      color: var(--cc-paper) !important;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+    .front-page-index ul {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 0;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .front-page-index li {
+      min-width: 0;
+      border-left: 1px solid rgba(27, 26, 23, 0.22);
+      padding: 0 12px;
+    }
+    .front-page-index li:first-child {
+      border-left: 0;
+      padding-left: 0;
+    }
+    .front-page-index span {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--cc-blue);
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      line-height: 1.1;
+      text-transform: uppercase;
+    }
+    .front-page-index strong {
+      display: block;
+      color: var(--cc-ink);
+      font-family: var(--cc-display);
+      font-size: clamp(0.95rem, 1.5vw, 1.12rem);
+      line-height: 1.1;
+    }
     .article-visual {
       margin: 10px 0 12px;
       border: 2px solid var(--cc-ink);
@@ -722,8 +777,19 @@
       .chronicle-hero,
       .chronicle-grid,
       .computer-grid,
-      .morning-strip {
+      .morning-strip,
+      .front-page-index ul {
         grid-template-columns: 1fr;
+      }
+      .front-page-index li,
+      .front-page-index li:first-child {
+        border-left: 0;
+        border-top: 1px solid rgba(27, 26, 23, 0.18);
+        padding: 9px 0 0;
+      }
+      .front-page-index li:first-child {
+        border-top: 0;
+        padding-top: 0;
       }
       .issue-date-card {
         border-left: 0;
@@ -769,6 +835,10 @@
         <option>Loading issues...</option>
       </select>
     </div>
+    <section class="front-page-index" aria-label="Today at a glance">
+      <p>Today at a Glance</p>
+      <ul data-front-page-index></ul>
+    </section>
 
     <section class="chronicle-grid" aria-label="Daily computer news issue">
       <div class="main-column">
