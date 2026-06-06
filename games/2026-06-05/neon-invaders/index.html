@@ -293,7 +293,7 @@
         <button id="rightButton" type="button">→</button>
         <button id="fireButton" type="button">FIRE</button>
       </div>
-      <div class="version" aria-hidden="true">v1.10</div>
+      <div class="version" aria-hidden="true">v1.11</div>
     </section>
   </main>
 
@@ -334,6 +334,7 @@
         waveClearTimer: 0,
         invaderDir: 1,
         invaderStepTimer: 0,
+        invaderMarchTimer: 0,
         invaderFrame: 0,
         player: null,
         stars: [],
@@ -548,6 +549,7 @@
         game.bossWave = game.wave % 4 === 0;
         game.invaderDir = 1;
         game.invaderStepTimer = 0;
+        game.invaderMarchTimer = 0;
         game.invaderFrame = 0;
         const mobileFormation = game.width < 560;
         const cols = game.bossWave
@@ -713,7 +715,11 @@
       function updateInvaders(dt) {
         const liveCount = Math.max(1, game.invaders.length);
         const urgency = clamp((game.bossWave ? 14 : 52) / liveCount, 1, 3.8);
-        const interval = clamp(0.64 - game.wave * 0.018, 0.24, 0.64) / urgency;
+        game.invaderMarchTimer += dt;
+        const baseInterval = game.bossWave ? 0.72 : 0.68;
+        const timeRamp = clamp(1 + game.invaderMarchTimer * 0.045, 1, 2.45);
+        const thinningRamp = 1 + (urgency - 1) * 0.35;
+        const interval = baseInterval / (timeRamp * thinningRamp);
         const stepX = (game.width < 560 ? 8 : 12) * game.invaderDir;
         const dropY = game.width < 560 ? 12 : 16;
         let lowest = 0;
