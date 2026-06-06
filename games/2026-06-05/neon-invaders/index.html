@@ -293,7 +293,7 @@
         <button id="rightButton" type="button">→</button>
         <button id="fireButton" type="button">FIRE</button>
       </div>
-      <div class="version" aria-hidden="true">v1.2</div>
+      <div class="version" aria-hidden="true">v1.3</div>
     </section>
   </main>
 
@@ -332,6 +332,9 @@
         nextShot: 0,
         nextEnemyShot: 1.3,
         waveClearTimer: 0,
+        invaderDir: 1,
+        invaderStepTimer: 0,
+        invaderFrame: 0,
         player: null,
         stars: [],
         invaders: [],
@@ -466,9 +469,11 @@
         game.invaders = [];
         game.bullets = [];
         game.enemyBullets = [];
-        game.powerups = [];
         game.boss = null;
         game.bossWave = game.wave % 4 === 0;
+        game.invaderDir = 1;
+        game.invaderStepTimer = 0;
+        game.invaderFrame = 0;
         const mobileFormation = game.width < 560;
         const cols = game.bossWave
           ? clamp(5 + Math.floor(game.wave / 6), 5, mobileFormation ? 6 : 7)
@@ -493,9 +498,8 @@
               type,
               hp,
               maxHp: hp,
-              phase: rand(0, TAU),
-              dive: 0,
-              diveX: 0
+              col: x,
+              row: y
             });
           }
         }
@@ -546,6 +550,18 @@
           y,
           vx: Math.cos(angle) * speed,
           vy: Math.sin(angle) * speed,
+          r: 6,
+          color: colors.enemy2,
+          life: 4
+        });
+      }
+
+      function enemyBomb(x, y, speed = 240, drift = 0) {
+        game.enemyBullets.push({
+          x,
+          y,
+          vx: drift,
+          vy: speed,
           r: 6,
           color: colors.enemy2,
           life: 4
@@ -618,32 +634,39 @@
       }
 
       function updateInvaders(dt) {
-        const speed = 15 + game.wave * 2.4;
-        const amp = Math.min(game.width < 560 ? 34 : 88, 26 + game.wave * 3);
+        const liveCount = Math.max(1, game.invaders.length);
+        const urgency = clamp((game.bossWave ? 14 : 52) / liveCount, 1, 3.8);
+        const interval = clamp(0.64 - game.wave * 0.018, 0.24, 0.64) / urgency;
+        const stepX = (game.width < 560 ? 8 : 12) * game.invaderDir;
+        const dropY = game.width < 560 ? 12 : 16;
         let lowest = 0;
-        for (const inv of game.invaders) {
-          inv.phase += dt * (1.8 + game.wave * 0.08);
-          const sway = Math.sin(game.time * 1.25 + inv.phase) * amp;
-          inv.x = clamp(inv.baseX + sway, inv.r + 10, game.width - inv.r - 10);
-          inv.y += speed * dt;
-          inv.baseY += speed * dt;
-          lowest = Math.max(lowest, inv.y);
-          if (inv.type === "diver" && Math.random() < dt * (0.012 + game.wave * 0.0035) && inv.dive <= 0) {
-            inv.dive = 1.4;
-            inv.diveX = game.player.x - inv.x;
+        game.invaderStepTimer += dt;
+        if (game.invaderStepTimer >= interval && game.invaders.length) {
+          game.invaderStepTimer = 0;
+          game.invaderFrame = 1 - game.invaderFrame;
+          let hitEdge = false;
+          for (const inv of game.invaders) {
+            const nextX = inv.x + stepX;
+            if (nextX < inv.r + 14 || nextX > game.width - inv.r - 14) {
+              hitEdge = true;
+              break;
+            }
           }
-          if (inv.dive > 0) {
-            inv.dive -= dt;
-            inv.x += inv.diveX * dt * 0.7;
-            inv.y += 95 * dt;
-            inv.x = clamp(inv.x, inv.r + 10, game.width - inv.r - 10);
+          if (hitEdge) {
+            game.invaderDir *= -1;
+            for (const inv of game.invaders) inv.y += dropY;
+          } else {
+            for (const inv of game.invaders) inv.x += stepX;
           }
         }
+        for (const inv of game.invaders) lowest = Math.max(lowest, inv.y);
 
         game.nextEnemyShot -= dt;
         if (game.nextEnemyShot <= 0 && game.invaders.length) {
-          const shooter = game.invaders[Math.floor(Math.random() * game.invaders.length)];
-          enemyFire(shooter.x, shooter.y + 14, 210 + game.wave * 14, rand(-0.16, 0.16));
+          const bottomY = Math.max(...game.invaders.map(inv => inv.y));
+          const shooters = game.invaders.filter(inv => inv.y >= bottomY - 4);
+          const shooter = shooters[Math.floor(Math.random() * shooters.length)];
+          enemyBomb(shooter.x, shooter.y + 14, 190 + game.wave * 10, rand(-18, 18));
           game.nextEnemyShot = clamp(1.55 - game.wave * 0.045, 0.48, 1.55);
         }
 
@@ -977,6 +1000,33 @@
         ctx.restore();
       }
 
+      const invaderSprites = {
+        diver: [
+          ["00111100","01111110","11011011","11111111","00100100","01011010","10100101","01000010"],
+          ["00111100","01111110","11011011","11111111","00100100","10011001","00100100","01000010"]
+        ],
+        striker: [
+          ["00100100","01111110","11111111","11011011","11111111","00111100","01100110","11000011"],
+          ["00100100","01111110","11111111","11011011","11111111","00111100","11000011","01100110"]
+        ],
+        drone: [
+          ["00011000","00111100","01111110","11011011","11111111","00100100","01011010","10000001"],
+          ["00011000","00111100","01111110","11011011","11111111","00100100","10000001","01011010"]
+        ]
+      };
+
+      function drawPixelSprite(pattern, size) {
+        const h = pattern.length;
+        const w = pattern[0].length;
+        const ox = -w * size / 2;
+        const oy = -h * size / 2;
+        for (let y = 0; y < h; y++) {
+          for (let x = 0; x < w; x++) {
+            if (pattern[y][x] === "1") ctx.fillRect(ox + x * size, oy + y * size, size, size);
+          }
+        }
+      }
+
       function drawInvaders() {
         ctx.save();
         ctx.globalCompositeOperation = "lighter";
@@ -984,36 +1034,21 @@
           ctx.save();
           ctx.translate(inv.x, inv.y);
           const color = inv.type === "drone" ? colors.enemy : inv.type === "striker" ? colors.enemy2 : colors.enemy3;
-          glow(color, 18);
+          const sprite = invaderSprites[inv.type][game.invaderFrame];
+          const pixel = inv.type === "drone" ? 3.6 : 3.8;
+          glow(color, 14);
           ctx.fillStyle = color;
-          ctx.strokeStyle = "#fff";
-          ctx.lineWidth = 1.5;
-          const flap = Math.sin(game.time * 8 + inv.phase) * 4;
-          ctx.beginPath();
-          ctx.moveTo(-22, -2);
-          ctx.lineTo(-13, -14);
-          ctx.lineTo(-4, -8);
-          ctx.lineTo(0, -18);
-          ctx.lineTo(4, -8);
-          ctx.lineTo(13, -14);
-          ctx.lineTo(22, -2);
-          ctx.lineTo(12, 14 + flap);
-          ctx.lineTo(3, 8);
-          ctx.lineTo(0, 18);
-          ctx.lineTo(-3, 8);
-          ctx.lineTo(-12, 14 - flap);
-          ctx.closePath();
-          ctx.fill();
+          drawPixelSprite(sprite, pixel);
           ctx.globalAlpha = 0.85;
-          ctx.fillStyle = "#fff";
-          ctx.fillRect(-9, -2, 5, 4);
-          ctx.fillRect(4, -2, 5, 4);
+          ctx.fillStyle = "#ffffff";
+          ctx.fillRect(-8, -2, 4, 3);
+          ctx.fillRect(4, -2, 4, 3);
           if (inv.maxHp > 1) {
-            ctx.globalAlpha = 0.75;
+            ctx.globalAlpha = 0.65;
             ctx.fillStyle = "rgba(255,255,255,0.18)";
-            ctx.fillRect(-18, 23, 36, 3);
+            ctx.fillRect(-17, 21, 34, 3);
             ctx.fillStyle = color;
-            ctx.fillRect(-18, 23, 36 * Math.max(0, inv.hp / inv.maxHp), 3);
+            ctx.fillRect(-17, 21, 34 * Math.max(0, inv.hp / inv.maxHp), 3);
           }
           ctx.restore();
         }
