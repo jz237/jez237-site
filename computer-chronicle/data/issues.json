@@ -26,6 +26,7 @@
           "price-watch",
           "bbs",
           "curiosity",
+          "briefs",
           "music",
           "period-ad",
           "fallback",
@@ -53,6 +54,10 @@
         },
         "curiosity": {
           "label": "Today's Curiosity"
+        },
+        "briefs": {
+          "label": "Small Notices",
+          "title": "Other Things on the Desk"
         },
         "music": {
           "label": "Rock Radio Top 10",
@@ -234,6 +239,26 @@
         "detail": "Think of it as the difference between mailing a postcard and watching one appear line by line.",
         "confidence": "Period context"
       },
+      "briefs": [
+        {
+          "kicker": "Mall Note",
+          "headline": "Arcade tokens still compete with disk money",
+          "summary": "A new cartridge or computer-game disk could cost the same as a lot of Saturday mall arcade time.",
+          "confidence": "Period context"
+        },
+        {
+          "kicker": "Tape Deck",
+          "headline": "Rock radio meets cassette collecting",
+          "summary": "Album-rock singles were part of the same bedroom ecosystem as blank tapes, boomboxes, and guitar pedals.",
+          "confidence": "Period context"
+        },
+        {
+          "kicker": "Phone Line",
+          "headline": "Evening calls were the computer club",
+          "summary": "BBS users often waited for cheaper calling windows, open phone lines, or a free household telephone.",
+          "confidence": "Period context"
+        }
+      ],
       "musicChart": [
         {
           "title": "Invisible Touch",
