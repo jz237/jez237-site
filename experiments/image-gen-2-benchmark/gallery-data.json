@@ -1426,5 +1426,17 @@
     "slot": "afternoon",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-06-05-evening-tidepool-moon-observation-log",
+    "title": "Tidepool Moon Observation Log",
+    "tests": "Tests whether GPT Image 2 can produce a reusable non-photo data layout as a finished physical field document, balancing legible invented astronomy data, tactile shoreline props, wet paper, night lighting, stamps, diagrams, and coherent hierarchy without becoming an empty prompt card.",
+    "prompt": "Create a finished vertical astronomy observation log titled TIDEPOOL MOON OBSERVATION LOG for a fictional coastal night survey that tracks the reflection of the moon inside different tide pools. Make it a real photographed clipboard page on a damp basalt shoreline field table at night, with crisp navy and silver ink, readable section headers, a moon phase strip, time columns, pool depth rows, salinity ticks, small hand-drawn circular pool diagrams, tiny star-map insets, checkbox observations, wet pencil annotations, a red field-station stamp, clipped waterproof paper, rusted binder clip, glass thermometer, small vial of seawater, grains of black sand, salt crystals, water droplets, and cool moonlight mixed with warm headlamp glow. Include invented but coherent data rows for pools named Mirror Kettle, Limpet Gate, Kelp Window, Basalt Cup, and Silver Wrack; make the hierarchy clear and the physical paper tactile. Avoid placeholder boxes, real logos, brand names, empty template look, unreadable dense microtext, and any people or dancing.\n\nSource photo needed: none.\n\nReusable fill-in-the-blank template: Create a finished astronomy observation log about [TOPIC] using [DATA OR CATEGORIES], with a coherent physical design, readable hierarchy, and specific invented details where data is not supplied. Include observation times, measurement rows, checkbox notes, small diagrams or sky-map insets, field stamps, handwritten annotations, tactile paper texture, and environmental props that match [SETTING] and [MOOD].\n\nWhat to preserve: preserve the supplied topic, required data categories, measurement relationships, observation sequence, labels, and any named locations or subjects.\n\nWhat to change: transform the topic into a fully designed physical astronomy or field-observation log with coherent invented readings, diagrams, stamps, annotations, paper handling, and setting-specific props.\n\nOptional negative constraints: no placeholder boxes, no real logos or brand names, no empty worksheet look, no unreadable text blocks dominating the page, no generic office template.\n\nExample substitution: [TOPIC] = meteor shower sightings over a desert highway rest stop; [DATA OR CATEGORIES] = time, direction, brightness, trail length, cloud cover, observer notes; [SETTING] = folding camp table beside asphalt at night; [MOOD] = quiet, precise, wind-chilled field science.",
+    "image": "images/2026-06-05-evening-tidepool-moon-observation-log.png",
+    "date": "2026-06-05",
+    "batch": "Daily Prompt",
+    "slot": "evening",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1536"
   }
 ]
