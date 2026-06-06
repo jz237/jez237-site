@@ -1,9 +1,25 @@
 {
   "date": "2026-06-06",
-  "updatedAt": "2026-06-06T00:18:12.110440+00:00",
+  "updatedAt": "2026-06-06T01:00:01.288928+00:00",
   "items": [
     {
-      "title": "Arash Ahmadi, Parisa Masnadi, Sarah Sharif, Charles Nicholson, David Ebert, Mike Banad",
+      "title": "v0.30.7-rc0",
+      "url": "https://github.com/ollama/ollama/releases/tag/v0.30.7-rc0",
+      "source": "Ollama Releases",
+      "sourceUrl": "https://github.com/ollama/ollama/releases.atom",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "launch: use native Windows Hermes config path (#16558)",
+      "image": "https://opengraph.githubassets.com/0c75a2c22c34f71df6873e50748a2ff1ede013af1522ff16514d15411ac10067/ollama/ollama",
+      "published": "2026-06-06T00:29:19+00:00",
+      "firstSeen": "2026-06-06T01:00:01.288928+00:00",
+      "lastSeen": "2026-06-06T01:00:01.288928+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.0445
+    },
+    {
+      "title": "Generic Triple-Latent Compression with Gated Associative Retrieval",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -11,12 +27,12 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-06T00:18:16.024788+00:00",
+      "published": "2026-06-06T01:00:07.194653+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-06T00:18:12.110440+00:00",
+      "lastSeen": "2026-06-06T01:00:01.288928+00:00",
       "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.36
+      "editorial_reason": "framework_or_plumbing",
+      "score": -0.74
     }
   ],
   "errors": [
