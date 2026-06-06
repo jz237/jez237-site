@@ -49,6 +49,7 @@
     status: document.querySelector("[data-status]"),
     editorNote: document.querySelector("[data-editor-note]"),
     issuePicker: document.querySelector("[data-issue-picker]"),
+    frontPageIndex: document.querySelector("[data-front-page-index]"),
   };
 
   function isoDate(date) {
@@ -171,6 +172,35 @@
     return String(days + 1).padStart(3, "0");
   }
 
+  function frontPageItems(issue) {
+    if (issue && Array.isArray(issue.frontPageIndex)) return issue.frontPageIndex;
+    if (!issue) return [];
+
+    const gameItem = (issue.computerItems || []).find((item) => /game/i.test(item.label || ""))
+      || (issue.storeShelves || [])[0];
+    const shelfNames = (issue.storeShelves || []).slice(0, 2).map((item) => item.name).filter(Boolean).join(" / ");
+    const rockPick = (issue.musicChart || [])[0];
+
+    return [
+      {
+        kicker: chrome(issue, "lead", "label", "Top Story"),
+        text: issue.lead && issue.lead.headline,
+      },
+      {
+        kicker: "Games",
+        text: gameItem && (gameItem.headline || `${gameItem.name}${shelfNames ? ` leads a shelf with ${shelfNames}` : ""}`),
+      },
+      {
+        kicker: chrome(issue, "bbs", "label", "Modem Desk"),
+        text: issue.bbsNote && issue.bbsNote.headline,
+      },
+      {
+        kicker: chrome(issue, "music", "label", "Rock Radio"),
+        text: rockPick && `${rockPick.title} - ${rockPick.artist}`,
+      },
+    ].filter((item) => item.text);
+  }
+
   function renderIssue(issue, currentIso, historicIso) {
     els.currentDate.textContent = currentIso;
     els.historicDate.textContent = issue ? issue.displayDate : historicIso;
@@ -205,12 +235,21 @@
       if (els.accuracy) els.accuracy.innerHTML = "";
       if (els.accuracyNote) els.accuracyNote.textContent = "";
       els.sources.innerHTML = "";
+      if (els.frontPageIndex) els.frontPageIndex.innerHTML = "";
       els.editorNote.textContent = "Personal computers and personal computer gaming are the editorial priority when source choices compete.";
       return;
     }
 
     els.status.textContent = "Loaded from structured issue data.";
     els.editorNote.textContent = issue.editorNote || "Personal computers and personal computer gaming are the editorial priority when source choices compete.";
+    if (els.frontPageIndex) {
+      els.frontPageIndex.innerHTML = frontPageItems(issue).map((item) => `
+        <li>
+          <span>${escapeHtml(item.kicker || "Desk")}</span>
+          <strong>${escapeHtml(item.text)}</strong>
+        </li>
+      `).join("");
+    }
     els.lead.innerHTML = `
       <p class="section-label">${escapeHtml(chrome(issue, "lead", "label", "Top Computer Story"))}</p>
       <h2>${escapeHtml(issue.lead.headline)}</h2>

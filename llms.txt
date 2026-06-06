@@ -276,6 +276,9 @@ Editorial priority:
   contextual story.
 - Use `masthead` for the daily front-page kicker, title, and deck. Keep
   it concise and newspaper-like.
+- The front-page index is rendered from issue data as a morning skim. It
+  can be overridden with `frontPageIndex` entries when a day needs
+  specific teasers, but avoid making it a second table of contents.
 - Use `layoutPlan` to vary department order by issue. The strongest or
   most nostalgic verified material can move upward; utility sections
   like source trail and verification should usually stay near the bottom.
