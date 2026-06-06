@@ -1,6 +1,6 @@
 {
   "date": "2026-06-06",
-  "updatedAt": "2026-06-06T22:00:01.361734+00:00",
+  "updatedAt": "2026-06-06T22:14:30.675075+00:00",
   "items": [
     {
       "title": "Google will pay SpaceX $920 million a month for AI compute as Musk turns a data centre built for Grok into a cash machine",
@@ -16,7 +16,7 @@
       "lastSeen": "2026-06-06T14:00:01.849764+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.6251
+      "score": 10.6199
     },
     {
       "title": "OpenAI unveils Lockdown Mode to protect sensitive data from prompt injection attacks",
@@ -29,10 +29,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/04/GettyImages-2201630077.jpg?resize=1200%2C798",
       "published": "2026-06-06T20:32:24+00:00",
       "firstSeen": "2026-06-06T21:00:01.925319+00:00",
-      "lastSeen": "2026-06-06T22:00:01.361734+00:00",
+      "lastSeen": "2026-06-06T22:14:30.675075+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.2463
+      "score": 9.2392
     },
     {
       "title": "v0.30.2",
@@ -48,7 +48,7 @@
       "lastSeen": "2026-06-06T21:00:01.925319+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.3849
+      "score": 6.378
     },
     {
       "title": "Running Python code in a sandbox with MicroPython and WASM",
@@ -61,10 +61,10 @@
       "image": "https://static.simonwillison.net/static/2026/micropython-in-datasette-agent.jpg",
       "published": "2026-06-06T03:53:34+00:00",
       "firstSeen": "2026-06-06T04:00:02.048042+00:00",
-      "lastSeen": "2026-06-06T22:00:01.361734+00:00",
+      "lastSeen": "2026-06-06T22:14:30.675075+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.3552
+      "score": 5.3507
     },
     {
       "title": "Meta made its own AI-generated clickbait news feed",
@@ -77,10 +77,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/ai-label-14.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C0%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-06T14:00:00+00:00",
       "firstSeen": "2026-06-06T14:51:56.561927+00:00",
-      "lastSeen": "2026-06-06T22:00:01.361734+00:00",
+      "lastSeen": "2026-06-06T22:14:30.675075+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2408
+      "score": 5.2349
     },
     {
       "title": "The Trump administration might take an equity stake in OpenAI",
@@ -93,10 +93,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/donald-trump-cellphone.jpg?resize=1200%2C800",
       "published": "2026-06-06T16:17:21+00:00",
       "firstSeen": "2026-06-06T17:00:01.274426+00:00",
-      "lastSeen": "2026-06-06T22:00:01.361734+00:00",
+      "lastSeen": "2026-06-06T22:14:30.675075+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1286
+      "score": 5.1224
     },
     {
       "title": "Trump wants the American public to own a piece of OpenAI. Nobody knows how that would work.",
@@ -109,10 +109,10 @@
       "image": "https://media.thenextweb.com/2024/07/Untitled-design-2-2.avif",
       "published": "2026-06-06T10:07:53+00:00",
       "firstSeen": "2026-06-06T12:00:01.977318+00:00",
-      "lastSeen": "2026-06-06T22:00:01.361734+00:00",
+      "lastSeen": "2026-06-06T22:14:30.675075+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8411
+      "score": 4.8358
     },
     {
       "title": "Job Searcher",
@@ -128,7 +128,7 @@
       "lastSeen": "2026-06-06T19:00:01.912188+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.6512
+      "score": 4.645
     },
     {
       "title": "Crypto-Funded Chinese Peptide Labs Are Booming",
@@ -141,10 +141,10 @@
       "image": "https://media.wired.com/photos/6a2312eb2b342fb72975a62e/master/pass/Security-Roundup-Crypto-funded-Chinese-labs-sales-of-peptides-Security-1312618198.jpg",
       "published": "2026-06-06T10:30:00+00:00",
       "firstSeen": "2026-06-06T11:00:02.114878+00:00",
-      "lastSeen": "2026-06-06T22:00:01.361734+00:00",
+      "lastSeen": "2026-06-06T22:14:30.675075+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.9892
+      "score": 3.9839
     },
     {
       "title": "v0.30.7-rc1",
@@ -157,10 +157,10 @@
       "image": "https://opengraph.githubassets.com/78e2df05251b164238bc6424fa80f9b487093b561675da9e569299d0162f3c44/ollama/ollama",
       "published": "2026-06-06T00:59:05+00:00",
       "firstSeen": "2026-06-06T22:00:01.361734+00:00",
-      "lastSeen": "2026-06-06T22:00:01.361734+00:00",
+      "lastSeen": "2026-06-06T22:14:30.675075+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.8736
+      "score": 3.8695
     },
     {
       "title": "What to expect from WWDC 2026: Siri’s highly anticipated revamp and Apple Intelligence updates",
@@ -173,10 +173,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/Apple-WWDC26-event-branding_big.jpg.large_.jpg?w=980",
       "published": "2026-06-06T18:13:36+00:00",
       "firstSeen": "2026-06-06T18:19:35.834145+00:00",
-      "lastSeen": "2026-06-06T22:00:01.361734+00:00",
+      "lastSeen": "2026-06-06T22:14:30.675075+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2805
+      "score": 3.2739
     },
     {
       "title": "Persona Atlas: Mapping How Famous Minds Think",
@@ -192,7 +192,7 @@
       "lastSeen": "2026-06-06T14:00:01.849764+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2563
+      "score": 3.2508
     }
   ],
   "errors": [
