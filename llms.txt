@@ -207,6 +207,10 @@ date in Jez's timezone, `America/New_York`.
 The intended experience is a nostalgic morning read, not a deep research
 report. Keep it skimmable in roughly 2-5 minutes, with a familiar daily
 section rhythm and one small "oh wow" curiosity item when possible.
+Each morning should feel like a new issue, not yesterday's page with new
+text. Vary the `visualProfile` when appropriate: layout, strapline,
+accent palette, paper feel, article image placement, ad treatment, and
+which sidebars are emphasized.
 
 Nostalgia texture to favor when it is historically appropriate: TRS-80,
 Commodore 64/C64C, Atari 800/XL, Amiga, BBS culture, modem calling,
@@ -255,6 +259,9 @@ Editorial priority:
   rather than archival evidence.
 - Static or slow-changing sections are acceptable only when they are
   explicitly framed as context, prices, verification, or archive tooling.
+- Use `visualProfile` for issue-level presentation choices. Keep changes
+  restrained and newspaper-like, but avoid repeating the same visual mix
+  every day.
 
 Important files:
 

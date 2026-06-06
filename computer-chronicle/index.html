@@ -31,6 +31,26 @@
         linear-gradient(180deg, #fff3ce 0%, var(--cc-paper) 42%, #dbc896 100%);
       font-family: "Courier New", Courier, monospace;
     }
+    body[data-issue-paper="gray"] {
+      --cc-paper: #e5dfcf;
+      --cc-paper-deep: #c5bdab;
+    }
+    body[data-issue-paper="pink"] {
+      --cc-paper: #f3dfd8;
+      --cc-paper-deep: #d1ada3;
+    }
+    body[data-issue-accent="teal-magenta"] {
+      --cc-amber: #00a0aa;
+      --cc-blue: #9f2b75;
+      --cc-teal: #006f78;
+      --cc-magenta: #bd1f6a;
+    }
+    body[data-issue-accent="green-amber"] {
+      --cc-amber: #e5a11c;
+      --cc-blue: #27734f;
+      --cc-teal: #27734f;
+      --cc-magenta: #8c3146;
+    }
     .chronicle-shell {
       max-width: 1220px;
       margin: 0 auto;
@@ -52,11 +72,25 @@
       overflow: hidden;
     }
     .chronicle-hero::before {
-      content: "COMPUTERS • GAMES • SOFTWARE • MARKETS";
+      content: "";
       position: absolute;
       top: 0;
       left: 0;
       right: 0;
+      padding: 5px 10px;
+      background: var(--cc-ink);
+      color: var(--cc-paper);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-align: center;
+    }
+    .hero-strapline {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1;
       padding: 5px 10px;
       background: var(--cc-ink);
       color: var(--cc-paper);
@@ -205,6 +239,12 @@
       gap: 18px;
       margin-top: 18px;
     }
+    body[data-issue-layout="feature-led"] .chronicle-grid {
+      grid-template-columns: minmax(0, 1.55fr) minmax(280px, 0.55fr);
+    }
+    body[data-issue-layout="sidebar-heavy"] .chronicle-grid {
+      grid-template-columns: minmax(0, 1.12fr) minmax(330px, 0.88fr);
+    }
     .chronicle-card:nth-child(2n) {
       border-top-color: var(--cc-teal);
       border-top-width: 8px;
@@ -241,6 +281,9 @@
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 14px;
       margin-top: 14px;
+    }
+    body[data-issue-layout="feature-led"] .computer-grid {
+      grid-template-columns: 1fr;
     }
     .editor-note {
       margin: 14px 0 0;
@@ -609,6 +652,7 @@
 
   <main class="chronicle-shell">
     <section class="chronicle-hero" aria-labelledby="chronicle-title">
+      <div class="hero-strapline" data-strapline>COMPUTERS • GAMES • SOFTWARE • MARKETS</div>
       <div>
         <p class="chronicle-kicker">Daily historical tech desk</p>
         <h1 id="chronicle-title">Computer Chronicle</h1>

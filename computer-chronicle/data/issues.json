@@ -8,6 +8,12 @@
       "historicDate": "1986-06-06",
       "displayDate": "Friday, June 6, 1986",
       "edition": "Computer & Business Section",
+      "visualProfile": {
+        "layout": "business-ledger",
+        "accent": "amber-blue",
+        "paper": "cream",
+        "strapline": "COMPUTERS • GAMES • SOFTWARE • MARKETS"
+      },
       "editorNote": "Today's issue leans toward personal computers, home computing, software people actually used, and games people could buy or talk about in 1986.",
       "morningLine": "Morning Edition: five-minute skim for personal-computer people, game-shelf watchers, and anyone who still hears a modem handshake in their soul.",
       "lead": {
