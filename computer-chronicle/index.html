@@ -654,6 +654,55 @@
       display: block;
       color: var(--cc-ink);
     }
+    .accuracy-list {
+      margin: 12px 0 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 10px;
+    }
+    .accuracy-list li {
+      display: grid;
+      grid-template-columns: 42px 1fr;
+      gap: 10px;
+      align-items: start;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(27, 26, 23, 0.16);
+    }
+    .accuracy-list li:last-child {
+      border-bottom: 0;
+      padding-bottom: 0;
+    }
+    .accuracy-value {
+      display: grid;
+      place-items: center;
+      min-height: 34px;
+      border: 2px solid var(--cc-ink);
+      background: var(--cc-paper);
+      color: var(--cc-ink);
+      font-family: var(--cc-display);
+      font-size: 1.05rem;
+      line-height: 1;
+      box-shadow: 3px 3px 0 var(--cc-amber);
+    }
+    .accuracy-list p {
+      margin: 0;
+      color: var(--cc-muted);
+    }
+    .accuracy-list strong {
+      display: block;
+      margin-bottom: 2px;
+      color: var(--cc-ink);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .accuracy-note {
+      margin-top: 12px;
+      padding-top: 10px;
+      border-top: 3px double rgba(27, 26, 23, 0.2);
+      font-style: italic;
+      color: var(--cc-muted);
+    }
     html body .editor-note {
       color: var(--cc-ink) !important;
       background: rgba(0, 138, 150, 0.14) !important;
@@ -756,6 +805,12 @@
         </article>
         <article class="chronicle-panel period-ad" data-period-ad data-sidebar-module="period-ad"></article>
         <article class="chronicle-panel" data-fallback data-sidebar-module="fallback"></article>
+        <article class="chronicle-panel" data-sidebar-module="accuracy">
+          <p class="section-label" data-accuracy-label>Accuracy Ledger</p>
+          <h2 data-accuracy-title>How Grounded Is Today?</h2>
+          <ul class="accuracy-list" data-accuracy></ul>
+          <p class="accuracy-note" data-accuracy-note></p>
+        </article>
         <article class="chronicle-panel" data-sidebar-module="sources">
           <p class="section-label" data-sources-label>Source Trail</p>
           <h2 data-sources-title>Research Log</h2>
