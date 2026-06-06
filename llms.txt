@@ -220,6 +220,8 @@ Editorial priority:
   roundup visible.
 - Include a small Dow/Nasdaq market box when verified daily closes are
   available.
+- If including music, prefer period rock-radio or album-rock tracks over
+  general pop hits unless Jez asks otherwise.
 - Use real period advertisements or clearly sourced ad references.
   Do not invent fictional businesses or ads for the page.
 - Do not expose image-generation prompts, prompt builders, or private
