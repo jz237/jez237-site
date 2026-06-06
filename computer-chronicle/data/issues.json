@@ -51,21 +51,49 @@
       "storeShelves": [
         {
           "name": "Super Mario Bros. 2",
-          "detail": "New in Japan this week for the Famicom Disk System.",
+          "platform": "Famicom Disk System",
+          "detail": "New in Japan this week, and notably harder than the original Super Mario Bros.",
           "confidence": "Same-week verified"
         },
         {
           "name": "Dragon Quest",
-          "detail": "Fresh on Famicom shelves after its May 27 Japanese release.",
+          "platform": "Famicom",
+          "detail": "Fresh on Japanese shelves after its May 27 release; early console RPG history in real time.",
           "confidence": "Recent release verified"
         },
         {
+          "name": "The Bard's Tale",
+          "platform": "Apple II; Commodore 64 in 1986",
+          "detail": "A computer-RPG staple: Apple II first, with the C64 version part of the 1986 home-computer conversation.",
+          "confidence": "Current-year platform"
+        },
+        {
+          "name": "Ultima IV: Quest of the Avatar",
+          "platform": "Apple II, Commodore 64, IBM PC, Atari 8-bit",
+          "detail": "Still one of the big home-computer RPGs people would compare everything else against.",
+          "confidence": "Period context"
+        },
+        {
+          "name": "Leader Board",
+          "platform": "Commodore 64",
+          "detail": "Access Software's golf game was a 1986 C64 favorite, exactly the sort of title that made rounds in computer rooms.",
+          "confidence": "Current-year platform"
+        },
+        {
+          "name": "Gauntlet",
+          "platform": "Arcade",
+          "detail": "Still a loud, four-player arcade magnet while home-computer players chased fantasy RPGs at the desk.",
+          "confidence": "Period context"
+        },
+        {
           "name": "Lotus 1-2-3",
+          "platform": "IBM PC compatibles",
           "detail": "The business spreadsheet standard for IBM-compatible offices.",
           "confidence": "Context verified"
         },
         {
           "name": "Aldus PageMaker",
+          "platform": "Macintosh",
           "detail": "A defining Macintosh desktop-publishing application in current trade coverage.",
           "confidence": "Context verified"
         }
@@ -93,9 +121,26 @@
         }
       ],
       "bbsNote": {
-        "headline": "From the BBS",
-        "summary": "Local modem users swap shareware, printer drivers, game hints, and hardware advice at 300 and 1200 baud. Phone lines are the social network.",
-        "confidence": "Period context"
+        "headline": "Sysop Log: Disk Tips, RPG Maps, and C64 Score Bragging",
+        "summary": "Today's board traffic leans game-heavy: Famicom Disk System players are warning each other about the brutal new Mario sequel, RPG callers are asking for Dragon Quest map help, and C64 owners are comparing Leader Board rounds.",
+        "posts": [
+          {
+            "topic": "Game Help",
+            "text": "Super Mario Bros. 2 callers trade notes on poison mushrooms, wind jumps, and why this one is not for beginners.",
+            "platform": "Famicom Disk System"
+          },
+          {
+            "topic": "Map Desk",
+            "text": "Dragon Quest players ask for town-route hints without spoiling the whole quest.",
+            "platform": "Famicom"
+          },
+          {
+            "topic": "Scoreboard",
+            "text": "C64 golfers compare Leader Board scores and argue about putting feel.",
+            "platform": "Commodore 64"
+          }
+        ],
+        "confidence": "Period-style daily digest"
       },
       "curiosity": {
         "headline": "A 1200-Baud Modem Was Fast Enough to Feel Like the Future",
@@ -176,6 +221,22 @@
         {
           "name": "MobyGames: Dragon Quest / Dragon Warrior release date",
           "url": "https://www.mobygames.com/game/9223/dragon-warrior/"
+        },
+        {
+          "name": "MobyGames: The Bard's Tale platform/release context",
+          "url": "https://www.mobygames.com/game/819/tales-of-the-unknown-volume-i-the-bards-tale/"
+        },
+        {
+          "name": "MobyGames: Ultima IV platform/release context",
+          "url": "https://www.mobygames.com/game/884/ultima-iv-quest-of-the-avatar/"
+        },
+        {
+          "name": "MobyGames: Leader Board platform context",
+          "url": "https://www.mobygames.com/game/22482/leader-board/"
+        },
+        {
+          "name": "MobyGames: Gauntlet arcade platform context",
+          "url": "https://www.mobygames.com/game/1837/gauntlet/"
         },
         {
           "name": "Arcade History: Super Mario Bros. 2 Japan release date",
