@@ -1438,5 +1438,17 @@
     "slot": "evening",
     "model": "openai/gpt-image-2",
     "size": "1024x1536"
+  },
+  {
+    "id": "2026-06-06-morning-pet-as-frosted-bakery-window-cake",
+    "title": "Pet as Frosted Bakery Window Cake",
+    "tests": "Reusable reference-photo transformation template; tests identity-preserving pet-to-edible-sculpture material translation, fine buttercream and pastry textures, recognizable fur-marking preservation, and a finished sample image with no instructional text rendered inside it.",
+    "prompt": "Use the uploaded reference photo and preserve the pet identity, pose, silhouette, facial expression, eye placement, ear shape, tail shape, fur markings, coat colors, and most recognizable features, then transform the pet into an ornate decorated cake displayed in an early-morning bakery window. Rebuild the pet from glossy buttercream, pastry glaze, sugar pearls, piped whiskers, sugar-glass eyes, subtle crumb texture, and chilled marble display props while keeping the original pet recognizable. Change the material logic, surface texture, and setting into a believable bakery display with warm interior lights, clean glass reflections, folded parchment, a brass cake server, and small unlabeled pastries. Avoid extra limbs, distorted anatomy, unreadable facial markings, text, logo artifacts, placeholder boxes, or instructional labels in the image.\n\nReusable template: Use the uploaded reference photo and preserve the [PET] identity, pose, silhouette, expression, eye placement, ear shape, tail shape, coat colors, key markings, and most recognizable features, then transform the [PET] into a decorated cake made from [MATERIAL] in [SETTING] with [MOOD] lighting. Keep the source recognizable while changing the material logic, surface texture, props, and environment. Avoid extra limbs, text/logo artifacts, and losing the pet markings.\n\nSource photo needed: a clear pet photo.\n\nExample substitution: Upload a clear sitting calico cat photo; preserve the calico patches, green eyes, alert ears, curled tail, and seated pose; turn the cat into a glossy buttercream bakery-window cake on a marble tray at warm sunrise.",
+    "image": "images/2026-06-06-morning-pet-as-frosted-bakery-window-cake.png",
+    "date": "2026-06-06",
+    "batch": "Daily Prompt",
+    "slot": "morning",
+    "model": "gpt-image-2",
+    "size": "1024x1024"
   }
 ]
