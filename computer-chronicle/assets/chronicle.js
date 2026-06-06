@@ -8,12 +8,15 @@
     historicDate: document.querySelector("[data-historic-date]"),
     currentDate: document.querySelector("[data-current-date]"),
     edition: document.querySelector("[data-edition]"),
+    issueNo: document.querySelector("[data-issue-no]"),
+    morningLine: document.querySelector("[data-morning-line]"),
     lead: document.querySelector("[data-lead]"),
     computerItems: document.querySelector("[data-computer-items]"),
     market: document.querySelector("[data-market]"),
     storeShelves: document.querySelector("[data-store-shelves]"),
     priceWatch: document.querySelector("[data-price-watch]"),
     bbs: document.querySelector("[data-bbs]"),
+    curiosity: document.querySelector("[data-curiosity]"),
     musicChart: document.querySelector("[data-music-chart]"),
     ad: document.querySelector("[data-period-ad]"),
     fallback: document.querySelector("[data-fallback]"),
@@ -47,10 +50,19 @@
     return `<span class="confidence">${value}</span>`;
   }
 
+  function issueNumber(issue, currentIso) {
+    const baseDate = new Date("2026-01-01T00:00:00");
+    const issueDate = new Date(`${(issue && issue.currentDate) || currentIso}T00:00:00`);
+    const days = Math.max(0, Math.round((issueDate - baseDate) / 86400000));
+    return String(days + 1).padStart(3, "0");
+  }
+
   function renderIssue(issue, currentIso, historicIso) {
     els.currentDate.textContent = currentIso;
     els.historicDate.textContent = issue ? issue.displayDate : historicIso;
     els.edition.textContent = issue ? issue.edition : "Computer & Business Section";
+    if (els.issueNo) els.issueNo.textContent = issueNumber(issue, currentIso);
+    if (els.morningLine) els.morningLine.textContent = issue ? issue.morningLine || "Morning Edition: a quick daily skim from forty years ago." : "Morning Edition: awaiting a researched issue.";
 
     if (!issue) {
       els.status.textContent = "No researched issue has been loaded for this date yet.";
@@ -64,6 +76,7 @@
       els.storeShelves.innerHTML = "";
       els.priceWatch.innerHTML = "";
       els.bbs.innerHTML = "";
+      if (els.curiosity) els.curiosity.innerHTML = "";
       if (els.musicChart) els.musicChart.innerHTML = "";
       els.ad.innerHTML = "";
       els.fallback.innerHTML = "";
@@ -135,6 +148,16 @@
           </p>
         </li>
       `).join("");
+    }
+
+    if (els.curiosity) {
+      els.curiosity.innerHTML = `
+        <p class="section-label">Today's Curiosity</p>
+        <h2>${escapeHtml(issue.curiosity && issue.curiosity.headline)}</h2>
+        <p>${escapeHtml(issue.curiosity && issue.curiosity.summary)}</p>
+        ${(issue.curiosity && issue.curiosity.detail) ? `<p class="curiosity-detail">${escapeHtml(issue.curiosity.detail)}</p>` : ""}
+        ${confidenceBadge(issue.curiosity && issue.curiosity.confidence)}
+      `;
     }
 
     els.ad.innerHTML = `
