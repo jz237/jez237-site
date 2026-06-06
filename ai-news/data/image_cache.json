@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-06T18:00:01.814061+00:00",
+  "updatedAt": "2026-06-06T18:19:35.834145+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -9512,6 +9512,10 @@
     "https://techcrunch.com/2026/06/06/sriram-krishnan-is-leaving-his-role-as-white-house-ai-advisor": {
       "image": "https://techcrunch.com/wp-content/uploads/2022/06/Screen-Shot-2021-02-03-at-1.18.03-PM-1.webp?resize=1200,833",
       "checkedAt": "2026-06-06T18:00:01.814061+00:00"
+    },
+    "https://techcrunch.com/2026/06/06/what-to-expect-from-wwdc-2026-siris-highly-anticipated-revamp-and-apple-intelligence-updates": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/Apple-WWDC26-event-branding_big.jpg.large_.jpg?w=980",
+      "checkedAt": "2026-06-06T18:19:35.834145+00:00"
     }
   }
 }
