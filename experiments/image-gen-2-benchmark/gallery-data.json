@@ -1474,41 +1474,5 @@
     "slot": "afternoon",
     "model": "gpt-image-2",
     "size": "1024x1024"
-  },
-  {
-    "id": "2026-06-06-world-01-veyra-9-planetary-transit-infographic",
-    "title": "Veyra-9 Planetary Transit Infographic",
-    "tests": "World catalog seed entry; establishes Veyra-9 geography, cities, globulous oceans, transit routes, vegetation, and life forms.",
-    "prompt": "Create a detailed sci-fi world infographic for Veyra-9: a colonized planet of black basalt mountain ranges, cliffside space taverns, pressure-dome cities, geothermal tunnel transit, glowing vegetation, and translucent globulous alien oceans. Show named ocean regions, settlements, colored transit routes, vegetation specimens, and native life forms in a clean, readable planetary guide layout.",
-    "image": "images/2026-06-06-world-01-veyra-9-planetary-transit-infographic.png",
-    "date": "2026-06-06",
-    "batch": "Fictional World",
-    "slot": "world-01",
-    "model": "openai/gpt-image-2",
-    "size": "1536x1024",
-    "world": {
-      "name": "Veyra-9",
-      "description": "A colonized basalt planet where tunnel transit links pressure cities, cliffside taverns, mining settlements, and translucent globulous alien oceans.",
-      "continuity": "Black basalt mountains, brineglass oceans, pressure settlements, colored tunnel lines, oxygen infrastructure, glowing vegetation, and lived-in offworld transit culture.",
-      "entryDescription": "A planetary guide infographic showing Veyra-9's oceans, settlements, transit system, vegetation, and native life forms."
-    }
-  },
-  {
-    "id": "2026-06-06-world-02-veyra-9-cliffside-taverns-at-night",
-    "title": "Veyra-9 Cliffside Taverns at Night",
-    "tests": "World catalog seed entry; shows lived-in nightlife, cliff transit, tavern balconies, glass tunnels, ocean glow, and Veyra-9's offworld social life.",
-    "prompt": "Create a cinematic wide night view of Veyra-9's Cliffside Taverns, an offworld settlement carved into black basalt cliffs above a translucent globulous alien ocean. Show stacked tavern balconies, pressure-dome windows, warm interiors, cable trams, glass tunnel transit lines, colored route lights, oxygen kiosks, steam, mist, and glowing brineglass reefs below.",
-    "image": "images/2026-06-06-world-02-veyra-9-cliffside-taverns-at-night.png",
-    "date": "2026-06-06",
-    "batch": "Fictional World",
-    "slot": "world-02",
-    "model": "openai/gpt-image-2",
-    "size": "1536x1024",
-    "world": {
-      "name": "Veyra-9",
-      "description": "A colonized basalt planet where tunnel transit links pressure cities, cliffside taverns, mining settlements, and translucent globulous alien oceans.",
-      "continuity": "Black basalt mountains, brineglass oceans, pressure settlements, colored tunnel lines, oxygen infrastructure, glowing vegetation, and lived-in offworld transit culture.",
-      "entryDescription": "A cinematic night view of daily life around Veyra-9's cliffside taverns, transit tunnels, glowing ocean masses, and pressure-lit balconies."
-    }
   }
 ]

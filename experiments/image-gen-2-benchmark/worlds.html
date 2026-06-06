@@ -142,7 +142,7 @@
     <p class="empty">Loading fictional worlds...</p>
   </main>
   <footer>
-    World entries are generated from <code>gallery-data.json</code> entries that include world metadata.
+    World entries are generated from <code>worlds-data.json</code>.
   </footer>
 
   <script>
@@ -201,8 +201,8 @@
         `).join('');
       }
 
-      fetch('gallery-data.json', { cache: 'no-cache' })
-        .then((r) => r.ok ? r.json() : Promise.reject(new Error('Could not load gallery-data.json')))
+      fetch('worlds-data.json', { cache: 'no-cache' })
+        .then((r) => r.ok ? r.json() : Promise.reject(new Error('Could not load worlds-data.json')))
         .then((items) => render(items.sort((a, b) => String(a.world?.name || '').localeCompare(String(b.world?.name || '')) || String(b.date || '').localeCompare(String(a.date || '')) || String(b.slot || '').localeCompare(String(a.slot || '')))))
         .catch((err) => { worldsRoot.innerHTML = `<p class="empty">${escapeHtml(err.message)}</p>`; });
     })();
