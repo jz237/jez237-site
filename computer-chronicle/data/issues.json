@@ -101,6 +101,29 @@
         "summary": "IBM compatibles, Commodore systems, printers, disks, modems, cables, and setup help. Bring in this ad for a free box of labels with any system purchase.",
         "finePrint": "Period-style house ad for newspaper atmosphere; not a historical claim."
       },
+      "imageBrief": {
+        "title": "Daily Newspaper Image Brief",
+        "masthead": "The Computer Chronicle",
+        "format": "One-page 1980s newspaper computer section, black ink on lightly yellowed newsprint, dense columns, halftone photos, ruled boxes, price ads, and a small market ticker.",
+        "primaryVisual": "A period-correct IBM-compatible office PC or Macintosh desktop publishing workstation, with CRT monitor, keyboard, floppy disks, dot-matrix paper, and trade-magazine atmosphere.",
+        "mustInclude": [
+          "Friday, June 6, 1986 date line",
+          "Lotus / VisiCalc / 1-2-3 lead headline",
+          "Personal computer gaming shelf box",
+          "Dow and Nasdaq market box",
+          "Bauder Computer Center period-style ad",
+          "Visible confidence labels may be omitted from the image, but exact/same-week sourcing should guide headline selection"
+        ],
+        "avoid": [
+          "Modern laptops",
+          "Flat-panel monitors",
+          "Smartphones",
+          "Web browser UI",
+          "QR codes",
+          "Glossy magazine layout",
+          "Fake exact release dates where only same-week context is supported"
+        ]
+      },
       "worldFallback": {
         "headline": "Chernobyl Evacuees Face Housing Deadline",
         "summary": "UPI reported on June 6, 1986 that Soviet officials were treating housing for Chernobyl evacuees as a Politburo priority, with an October deadline for relocated residents.",
