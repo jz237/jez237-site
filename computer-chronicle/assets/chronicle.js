@@ -20,6 +20,7 @@
     sources: document.querySelector("[data-sources]"),
     status: document.querySelector("[data-status]"),
     editorNote: document.querySelector("[data-editor-note]"),
+    issuePicker: document.querySelector("[data-issue-picker]"),
   };
 
   function isoDate(date) {
@@ -169,6 +170,40 @@
     `).join("");
   }
 
+  function pickIssue(issues, currentIso, historicIso) {
+    const params = new URLSearchParams(window.location.search);
+    const requested = params.get("date");
+    if (requested) {
+      return issues.find((item) => item.currentDate === requested || item.historicDate === requested) || null;
+    }
+    return issues.find((item) => item.currentDate === currentIso)
+      || issues.find((item) => item.historicDate === historicIso)
+      || issues[0]
+      || null;
+  }
+
+  function renderIssuePicker(issues, selectedIssue) {
+    if (!els.issuePicker) return;
+    els.issuePicker.innerHTML = "";
+
+    if (!issues.length) {
+      const option = document.createElement("option");
+      option.textContent = "No issues loaded";
+      els.issuePicker.append(option);
+      els.issuePicker.disabled = true;
+      return;
+    }
+
+    els.issuePicker.disabled = false;
+    issues.forEach((issue) => {
+      const option = document.createElement("option");
+      option.value = issue.currentDate;
+      option.textContent = `${issue.currentDate} -> ${issue.displayDate}`;
+      option.selected = selectedIssue && selectedIssue.currentDate === issue.currentDate;
+      els.issuePicker.append(option);
+    });
+  }
+
   async function loadIssues() {
     const today = new Date();
     const currentIso = isoDate(today);
@@ -179,14 +214,23 @@
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const data = await response.json();
       state.issues = data.issues || [];
-      state.issue = state.issues.find((item) => item.currentDate === currentIso)
-        || state.issues.find((item) => item.historicDate === historicIso)
-        || null;
+      state.issue = pickIssue(state.issues, currentIso, historicIso);
+      renderIssuePicker(state.issues, state.issue);
       renderIssue(state.issue, currentIso, historicIso);
     } catch (error) {
       els.status.textContent = `Could not load issue data: ${error.message}`;
       renderIssue(null, currentIso, historicIso);
     }
+  }
+
+  if (els.issuePicker) {
+    els.issuePicker.addEventListener("change", () => {
+      const selected = els.issuePicker.value;
+      if (!selected) return;
+      const url = new URL(window.location.href);
+      url.searchParams.set("date", selected);
+      window.location.href = url.toString();
+    });
   }
 
   loadIssues();
