@@ -47,6 +47,10 @@ def main() -> None:
     ap.add_argument("--batch", default="Daily Prompt")
     ap.add_argument("--model", default="openai/gpt-image-2")
     ap.add_argument("--size", default="1024x1024")
+    ap.add_argument("--world-name", default="")
+    ap.add_argument("--world-description", default="")
+    ap.add_argument("--world-continuity", default="")
+    ap.add_argument("--world-entry-description", default="")
     args = ap.parse_args()
 
     src = Path(args.image).expanduser().resolve()
@@ -74,6 +78,13 @@ def main() -> None:
         "model": args.model,
         "size": args.size,
     }
+    if args.world_name.strip():
+        entry["world"] = {
+            "name": args.world_name.strip(),
+            "description": args.world_description.strip(),
+            "continuity": args.world_continuity.strip(),
+            "entryDescription": args.world_entry_description.strip() or args.tests,
+        }
 
     for path in (DATA, PROMPTS):
         data = load(path)
