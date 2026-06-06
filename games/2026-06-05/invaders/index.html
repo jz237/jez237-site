@@ -487,7 +487,7 @@
       <div class="overlay" id="overlay">
         <div class="panel">
           <h1>Invaders</h1>
-          <div class="title-version">v1.28</div>
+          <div class="title-version">v1.29</div>
           <p class="tagline" id="message">A modernized arcade defense run: punch through waves, catch power cores, and survive the boss carrier.</p>
           <div class="enemy-roster" aria-label="Enemy ship guide">
             <h2>Enemy Ships</h2>
@@ -517,7 +517,7 @@
         <button id="rightButton" type="button">→</button>
         <button id="fireButton" type="button">FIRE</button>
       </div>
-      <div class="version" aria-hidden="true">v1.28</div>
+      <div class="version" aria-hidden="true">v1.29</div>
     </section>
   </main>
 
@@ -671,6 +671,7 @@
         step(frame) { playTone(frame ? 132 : 110, 0.045, "square", 0.025, frame ? 110 : 92); },
         enemy() { playTone(240, 0.055, "triangle", 0.022, 150); },
         bossShot() { playTone(190, 0.12, "sawtooth", 0.03, 80); },
+        bossCharge() { playTone(96, 0.36, "sawtooth", 0.032, 240); },
         hit() { playTone(520, 0.045, "square", 0.025, 290); },
         boom(big = false) { playNoise(big ? 0.22 : 0.1, big ? 0.075 : 0.045, big ? 420 : 760); },
         pickup() { playTone(640, 0.04, "triangle", 0.03, 1180); },
@@ -967,7 +968,11 @@
             maxHp: 42 + game.wave * 7,
             nextPowerDropHp: (42 + game.wave * 7) * rand(0.68, 0.84),
             phase: 0,
-            shot: 0
+            shot: 0.8,
+            attackIndex: 0,
+            warning: 0,
+            warningX: game.width / 2,
+            pendingBeam: false
           };
         }
       }
@@ -996,7 +1001,7 @@
         return { x, y, vx, vy, r, color, damage, life: 2.2 };
       }
 
-      function enemyFire(x, y, speed = 250, spread = 0) {
+      function enemyFire(x, y, speed = 250, spread = 0, options = {}) {
         const p = game.player;
         const dx = p.x - x;
         const dy = p.y - y;
@@ -1007,9 +1012,25 @@
           y,
           vx: Math.cos(angle) * speed,
           vy: Math.sin(angle) * speed,
-          r: 6,
-          color: colors.enemy2,
-          life: 4
+          r: options.r || 6,
+          color: options.color || colors.enemy2,
+          life: options.life || 4,
+          style: options.style || "fireball"
+        });
+      }
+
+      function bossBeam(x, y) {
+        [-10, 0, 10].forEach(offset => {
+          game.enemyBullets.push({
+            x: x + offset,
+            y,
+            vx: offset * 2,
+            vy: 430 + game.wave * 8,
+            r: 8,
+            color: colors.enemy3,
+            life: 3,
+            style: "beam"
+          });
         });
       }
 
@@ -1142,12 +1163,40 @@
         boss.phase += dt;
         boss.x = game.width / 2 + Math.sin(boss.phase * 0.9) * game.width * 0.32;
         boss.y = Math.max(48, 62 * game.scale) + Math.sin(boss.phase * 1.7) * 8;
+        if (boss.warning > 0) {
+          boss.warning -= dt;
+          if (boss.warning <= 0 && boss.pendingBeam) {
+            bossBeam(boss.warningX, boss.y + 38);
+            burst(boss.warningX, boss.y + 42, colors.enemy3, 28, 250);
+            game.shake = Math.max(game.shake, 8);
+            boss.pendingBeam = false;
+            sfx.bossShot();
+          }
+        }
         boss.shot -= dt;
         if (boss.shot <= 0) {
-          [-0.2, 0, 0.2].forEach(a => enemyFire(boss.x, boss.y + 32, 210 + game.wave * 5, a));
-          boss.shot = 1.55;
-          burst(boss.x, boss.y + 32, colors.enemy2, 10, 140);
-          sfx.bossShot();
+          const attack = boss.attackIndex % 3;
+          if (attack === 0) {
+            [-0.24, 0, 0.24].forEach(a => enemyFire(boss.x, boss.y + 34, 220 + game.wave * 6, a));
+            burst(boss.x, boss.y + 32, colors.enemy2, 10, 140);
+            boss.shot = 1.35;
+            sfx.bossShot();
+          } else if (attack === 1) {
+            [-54, 54].forEach(side => {
+              [-0.16, 0.16].forEach(a => enemyFire(boss.x + side, boss.y + 20, 250 + game.wave * 7, a, { r: 5, color: colors.enemy }));
+              burst(boss.x + side, boss.y + 20, colors.enemy, 8, 130);
+            });
+            boss.shot = 1.45;
+            sfx.bossShot();
+          } else {
+            boss.warningX = clamp(game.player.x + rand(-26, 26), 28, game.width - 28);
+            boss.warning = 0.82;
+            boss.pendingBeam = true;
+            boss.shot = 1.05;
+            burst(boss.warningX, boss.y + 36, colors.enemy3, 12, 160);
+            sfx.bossCharge();
+          }
+          boss.attackIndex += 1;
         }
       }
 
@@ -1720,6 +1769,29 @@
       function drawBoss() {
         const boss = game.boss;
         if (!boss) return;
+        if (boss.warning > 0) {
+          const alpha = clamp(boss.warning / 0.82, 0, 1);
+          ctx.save();
+          ctx.globalCompositeOperation = "lighter";
+          ctx.globalAlpha = 0.18 + Math.sin(game.time * 42) * 0.08 + (1 - alpha) * 0.25;
+          const beamWidth = 18 + (1 - alpha) * 18;
+          const warningGradient = ctx.createLinearGradient(boss.warningX, boss.y + 26, boss.warningX, game.height);
+          warningGradient.addColorStop(0, "rgba(255, 77, 109, 0.05)");
+          warningGradient.addColorStop(0.35, "rgba(255, 77, 109, 0.72)");
+          warningGradient.addColorStop(1, "rgba(255, 210, 61, 0.16)");
+          ctx.strokeStyle = warningGradient;
+          ctx.lineWidth = beamWidth;
+          ctx.lineCap = "round";
+          glow(colors.enemy3, 30);
+          ctx.beginPath();
+          ctx.moveTo(boss.warningX, boss.y + 34);
+          ctx.lineTo(boss.warningX, game.height - 18);
+          ctx.stroke();
+          ctx.globalAlpha = 0.9;
+          ctx.fillStyle = colors.enemy3;
+          ctx.fillRect(boss.warningX - 16, boss.y + 28, 32, 5);
+          ctx.restore();
+        }
         ctx.save();
         ctx.translate(boss.x, boss.y);
         ctx.globalCompositeOperation = "lighter";
@@ -1791,32 +1863,33 @@
         }
         for (const b of game.enemyBullets) {
           const speed = Math.max(1, Math.hypot(b.vx, b.vy));
-          const len = clamp(speed * 0.12, 28, 48);
+          const isBeam = b.style === "beam";
+          const len = isBeam ? clamp(speed * 0.2, 70, 96) : clamp(speed * 0.12, 28, 48);
           const dx = b.vx / speed * len;
           const dy = b.vy / speed * len;
           const tailX = b.x - dx;
           const tailY = b.y - dy;
           const gradient = ctx.createLinearGradient(tailX, tailY, b.x, b.y);
-          gradient.addColorStop(0, "rgba(255, 77, 109, 0)");
-          gradient.addColorStop(0.35, "rgba(255, 77, 109, 0.55)");
-          gradient.addColorStop(1, "rgba(255, 210, 61, 1)");
+          gradient.addColorStop(0, isBeam ? "rgba(255, 77, 109, 0)" : "rgba(255, 77, 109, 0)");
+          gradient.addColorStop(0.35, isBeam ? "rgba(255, 77, 109, 0.82)" : "rgba(255, 77, 109, 0.55)");
+          gradient.addColorStop(1, isBeam ? "rgba(255, 255, 255, 1)" : "rgba(255, 210, 61, 1)");
           ctx.lineCap = "round";
           ctx.strokeStyle = gradient;
-          ctx.lineWidth = 7;
-          glow(colors.fire, 18);
+          ctx.lineWidth = isBeam ? 11 : 7;
+          glow(isBeam ? colors.enemy3 : colors.fire, isBeam ? 26 : 18);
           ctx.beginPath();
           ctx.moveTo(tailX, tailY);
           ctx.lineTo(b.x, b.y);
           ctx.stroke();
-          ctx.strokeStyle = "#fff1a8";
-          ctx.lineWidth = 2;
+          ctx.strokeStyle = isBeam ? "#ffffff" : "#fff1a8";
+          ctx.lineWidth = isBeam ? 4 : 2;
           ctx.beginPath();
           ctx.moveTo(b.x - dx * 0.22, b.y - dy * 0.22);
           ctx.lineTo(b.x, b.y);
           ctx.stroke();
-          ctx.fillStyle = colors.gold;
-          ctx.shadowColor = colors.gold;
-          ctx.shadowBlur = 18;
+          ctx.fillStyle = isBeam ? colors.enemy3 : colors.gold;
+          ctx.shadowColor = isBeam ? colors.enemy3 : colors.gold;
+          ctx.shadowBlur = isBeam ? 26 : 18;
           ctx.beginPath();
           ctx.arc(b.x, b.y, b.r + 1.5, 0, TAU);
           ctx.fill();
