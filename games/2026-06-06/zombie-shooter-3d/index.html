@@ -1,0 +1,1064 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <title>Graveyard Lockdown 3D</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --green: #8dff66;
+      --cyan: #75f4ff;
+      --amber: #ffd36a;
+      --red: #ff5274;
+      --ink: #ecf7ff;
+      --panel: rgba(5, 10, 18, 0.78);
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+
+    html,
+    body {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      overscroll-behavior: none;
+      touch-action: none;
+      background: #02050a;
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    #game {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      display: block;
+      background: #02050a;
+      touch-action: none;
+    }
+
+    .hud {
+      position: fixed;
+      inset: max(10px, env(safe-area-inset-top)) 12px auto 12px;
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 8px;
+      z-index: 3;
+      pointer-events: none;
+    }
+
+    .pill {
+      min-width: 0;
+      padding: 8px 9px;
+      border: 1px solid rgba(117, 244, 255, 0.22);
+      background: linear-gradient(180deg, rgba(8, 18, 30, 0.74), rgba(1, 5, 12, 0.54));
+      box-shadow: inset 0 0 22px rgba(117, 244, 255, 0.06), 0 0 20px rgba(0, 0, 0, 0.24);
+      text-shadow: 0 1px 8px rgba(0, 0, 0, 0.9);
+    }
+
+    .pill span {
+      display: block;
+      color: rgba(236, 247, 255, 0.58);
+      font-size: 9px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .pill b {
+      display: block;
+      margin-top: 2px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      color: #fff;
+      font-size: clamp(15px, 2.6vw, 22px);
+      line-height: 1;
+    }
+
+    .reticle {
+      position: fixed;
+      left: 50%;
+      top: 54%;
+      width: 58px;
+      height: 58px;
+      margin: -29px 0 0 -29px;
+      border: 1px solid rgba(141, 255, 102, 0.52);
+      border-radius: 50%;
+      z-index: 2;
+      pointer-events: none;
+      box-shadow: 0 0 22px rgba(141, 255, 102, 0.26), inset 0 0 18px rgba(141, 255, 102, 0.12);
+      transform: translate3d(0, 0, 0);
+    }
+
+    .reticle::before,
+    .reticle::after {
+      content: "";
+      position: absolute;
+      background: rgba(236, 255, 224, 0.9);
+      box-shadow: 0 0 12px var(--green);
+    }
+
+    .reticle::before {
+      left: 50%;
+      top: 7px;
+      bottom: 7px;
+      width: 2px;
+      transform: translateX(-50%);
+    }
+
+    .reticle::after {
+      top: 50%;
+      left: 7px;
+      right: 7px;
+      height: 2px;
+      transform: translateY(-50%);
+    }
+
+    .overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 5;
+      display: grid;
+      place-items: center;
+      padding: 18px;
+      background: radial-gradient(circle at 50% 44%, rgba(20, 60, 46, 0.36), rgba(2, 5, 10, 0.72) 58%, rgba(0, 0, 0, 0.9));
+    }
+
+    .panel {
+      width: min(720px, 94vw);
+      max-height: calc(100vh - 34px);
+      overflow: auto;
+      padding: clamp(20px, 4vw, 34px);
+      border: 1px solid rgba(141, 255, 102, 0.24);
+      background: linear-gradient(180deg, rgba(6, 15, 20, 0.88), rgba(3, 7, 12, 0.94));
+      box-shadow: 0 30px 120px rgba(0, 0, 0, 0.65), inset 0 0 50px rgba(117, 244, 255, 0.05);
+    }
+
+    h1 {
+      margin: 0;
+      color: #fff;
+      font-size: clamp(38px, 8vw, 82px);
+      line-height: 0.9;
+      letter-spacing: 0;
+      text-shadow: 0 0 10px #fff, 0 0 32px rgba(141, 255, 102, 0.72), 0 0 64px rgba(117, 244, 255, 0.28);
+    }
+
+    .version {
+      display: inline-block;
+      margin: 12px 0 14px;
+      padding: 4px 8px;
+      border: 1px solid rgba(117, 244, 255, 0.24);
+      color: rgba(185, 239, 255, 0.72);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .dek {
+      margin: 0 0 18px;
+      max-width: 62ch;
+      color: rgba(236, 247, 255, 0.78);
+      font-size: clamp(15px, 2.2vw, 20px);
+      line-height: 1.45;
+    }
+
+    .brief {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin: 18px 0;
+    }
+
+    .brief div,
+    .scorebox {
+      min-width: 0;
+      padding: 11px 12px;
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      background: rgba(255, 255, 255, 0.045);
+      color: rgba(236, 247, 255, 0.74);
+      font-size: 13px;
+      line-height: 1.35;
+    }
+
+    .brief b,
+    .scorebox h2 {
+      display: block;
+      margin: 0 0 5px;
+      color: var(--green);
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 18px;
+    }
+
+    button {
+      min-height: 48px;
+      padding: 0 18px;
+      border: 1px solid rgba(141, 255, 102, 0.72);
+      background: linear-gradient(180deg, rgba(156, 255, 103, 0.92), rgba(56, 130, 45, 0.92));
+      color: #06110b;
+      cursor: pointer;
+      font: inherit;
+      font-size: 14px;
+      font-weight: 1000;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      box-shadow: 0 14px 42px rgba(95, 255, 83, 0.18), inset 0 1px rgba(255, 255, 255, 0.38);
+      touch-action: manipulation;
+    }
+
+    button.secondary {
+      border-color: rgba(117, 244, 255, 0.36);
+      background: rgba(117, 244, 255, 0.08);
+      color: var(--ink);
+      box-shadow: none;
+    }
+
+    .scores {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .scorebox ol {
+      margin: 0;
+      padding-left: 22px;
+      color: rgba(236, 247, 255, 0.76);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 13px;
+    }
+
+    .entry {
+      display: none;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-top: 14px;
+      color: var(--amber);
+      font-weight: 900;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .entry input {
+      width: 84px;
+      min-height: 46px;
+      border: 1px solid rgba(255, 211, 106, 0.48);
+      background: rgba(255, 211, 106, 0.08);
+      color: #fff;
+      font: 1000 22px ui-monospace, monospace;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    .message {
+      position: fixed;
+      left: 50%;
+      top: 21%;
+      z-index: 4;
+      width: min(680px, 90vw);
+      transform: translateX(-50%);
+      color: #fff;
+      text-align: center;
+      font-size: clamp(24px, 5vw, 56px);
+      font-weight: 1000;
+      letter-spacing: 0;
+      text-shadow: 0 0 12px #fff, 0 0 34px var(--green);
+      opacity: 0;
+      transition: opacity 0.18s ease;
+      pointer-events: none;
+    }
+
+    .message.show {
+      opacity: 1;
+    }
+
+    @media (max-width: 680px) {
+      .hud {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .pill:nth-child(4),
+      .pill:nth-child(5) {
+        display: none;
+      }
+
+      .brief,
+      .scores {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="game"></canvas>
+  <div class="hud" aria-hidden="true">
+    <div class="pill"><span>Score</span><b id="score">0</b></div>
+    <div class="pill"><span>Wave</span><b id="wave">1</b></div>
+    <div class="pill"><span>Health</span><b id="health">100</b></div>
+    <div class="pill"><span>Ammo</span><b id="ammo">24</b></div>
+    <div class="pill"><span>Kills</span><b id="kills">0</b></div>
+  </div>
+  <div class="reticle" id="reticle"></div>
+  <div class="message" id="banner"></div>
+  <div class="overlay" id="overlay">
+    <div class="panel">
+      <h1>Graveyard<br>Lockdown 3D</h1>
+      <span class="version">v1.0 · Three.js</span>
+      <p class="dek" id="overlayText">Hold the cemetery gate with one finger. Drag to aim and strafe, release to stop firing, and cut down the shambling wave before it reaches the barricade.</p>
+      <div class="actions">
+        <button id="startBtn" type="button">Start Lockdown</button>
+        <button class="secondary" id="scoresBtn" type="button">Scores</button>
+      </div>
+      <div class="brief">
+        <div><b>One Finger</b>Drag anywhere. Your aim point, movement, and fire all follow that touch.</div>
+        <div><b>Threats</b>Runners sprint, bloats soak bullets, spitters lob acid, and bosses break the line.</div>
+        <div><b>Pickups</b>Green medkits heal, gold ammo refills, blue shock cells clear breathing room.</div>
+        <div><b>Scoring</b>Head-on shots and close saves pay more. Survive waves to reload and rebuild.</div>
+      </div>
+      <div class="scores">
+        <div class="scorebox">
+          <h2>Local Survivors</h2>
+          <ol id="scores"></ol>
+        </div>
+        <div class="scorebox">
+          <h2>Controls</h2>
+          <div>Phone: drag one finger to move, aim, and shoot.</div>
+          <div>Desktop: hold mouse or Space, move with A/D.</div>
+        </div>
+      </div>
+      <div class="entry" id="entry">
+        <span>New score</span>
+        <input id="initials" maxlength="3" value="AAA" inputmode="text" autocomplete="off">
+        <button id="saveBtn" type="button">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js";
+
+    const canvas = document.getElementById("game");
+    const overlay = document.getElementById("overlay");
+    const overlayText = document.getElementById("overlayText");
+    const startBtn = document.getElementById("startBtn");
+    const scoresBtn = document.getElementById("scoresBtn");
+    const saveBtn = document.getElementById("saveBtn");
+    const initialsInput = document.getElementById("initials");
+    const entryEl = document.getElementById("entry");
+    const scoresEl = document.getElementById("scores");
+    const banner = document.getElementById("banner");
+    const reticle = document.getElementById("reticle");
+    const hud = {
+      score: document.getElementById("score"),
+      wave: document.getElementById("wave"),
+      health: document.getElementById("health"),
+      ammo: document.getElementById("ammo"),
+      kills: document.getElementById("kills")
+    };
+
+    const HS_KEY = "graveyard_lockdown_3d_scores_v1";
+    const clock = new THREE.Clock();
+    const raycaster = new THREE.Raycaster();
+    const pointerNdc = new THREE.Vector2(0, 0);
+    const groundPlane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
+    const aimPoint = new THREE.Vector3(0, 0, -14);
+    const tmp = new THREE.Vector3();
+    const state = {
+      mode: "title",
+      score: 0,
+      wave: 1,
+      health: 100,
+      ammo: 24,
+      maxAmmo: 24,
+      kills: 0,
+      spawnTimer: 0,
+      waveLeft: 0,
+      fireTimer: 0,
+      reloadTimer: 0,
+      shake: 0,
+      slow: 0,
+      messageTimer: 0,
+      pendingScore: null
+    };
+
+    const input = {
+      active: false,
+      pointerId: null,
+      x: window.innerWidth * 0.5,
+      y: window.innerHeight * 0.56,
+      keyLeft: false,
+      keyRight: false,
+      firingKey: false
+    };
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x02050a);
+    scene.fog = new THREE.FogExp2(0x061014, 0.036);
+
+    const camera = new THREE.PerspectiveCamera(54, 1, 0.1, 220);
+    camera.position.set(0, 12.5, 17);
+    camera.lookAt(0, 1.2, -12);
+
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: "high-performance" });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+
+    const root = new THREE.Group();
+    scene.add(root);
+
+    const player = {
+      x: 0,
+      mesh: new THREE.Group(),
+      muzzle: new THREE.Vector3(),
+      invuln: 0
+    };
+
+    const zombies = [];
+    const bullets = [];
+    const pickups = [];
+    const particles = [];
+    const scenery = [];
+    let moon, gate, muzzleFlash, playerLight;
+
+    const mats = {
+      ground: new THREE.MeshStandardMaterial({ color: 0x102018, roughness: 0.95 }),
+      path: new THREE.MeshStandardMaterial({ color: 0x2a2a25, roughness: 0.96 }),
+      stone: new THREE.MeshStandardMaterial({ color: 0x6d7780, roughness: 0.9 }),
+      darkStone: new THREE.MeshStandardMaterial({ color: 0x303943, roughness: 0.92 }),
+      metal: new THREE.MeshStandardMaterial({ color: 0x26343a, metalness: 0.35, roughness: 0.45 }),
+      player: new THREE.MeshStandardMaterial({ color: 0x75f4ff, roughness: 0.35, emissive: 0x0b5662, emissiveIntensity: 0.5 }),
+      coat: new THREE.MeshStandardMaterial({ color: 0x151d28, roughness: 0.75 }),
+      zombie: new THREE.MeshStandardMaterial({ color: 0x6ea05d, roughness: 0.86, emissive: 0x162c12, emissiveIntensity: 0.25 }),
+      zombieDark: new THREE.MeshStandardMaterial({ color: 0x33452b, roughness: 0.9 }),
+      runner: new THREE.MeshStandardMaterial({ color: 0xa0ca62, roughness: 0.82, emissive: 0x243b0a, emissiveIntensity: 0.28 }),
+      bloat: new THREE.MeshStandardMaterial({ color: 0x8e6f48, roughness: 0.9, emissive: 0x342000, emissiveIntensity: 0.2 }),
+      spitter: new THREE.MeshStandardMaterial({ color: 0x58b9a4, roughness: 0.82, emissive: 0x06362e, emissiveIntensity: 0.32 }),
+      boss: new THREE.MeshStandardMaterial({ color: 0xcc445f, roughness: 0.74, emissive: 0x3e0710, emissiveIntensity: 0.42 }),
+      bullet: new THREE.MeshBasicMaterial({ color: 0xfff2ac }),
+      tracer: new THREE.MeshBasicMaterial({ color: 0xfff2ac, transparent: true, opacity: 0.72 }),
+      blood: new THREE.MeshBasicMaterial({ color: 0x8dff66, transparent: true, opacity: 0.9 }),
+      health: new THREE.MeshStandardMaterial({ color: 0x8dff66, emissive: 0x2a5f16, emissiveIntensity: 0.75, roughness: 0.4 }),
+      ammo: new THREE.MeshStandardMaterial({ color: 0xffd36a, emissive: 0x725111, emissiveIntensity: 0.75, roughness: 0.4 }),
+      shock: new THREE.MeshStandardMaterial({ color: 0x75f4ff, emissive: 0x0a6070, emissiveIntensity: 0.85, roughness: 0.28 })
+    };
+
+    function loadScores() {
+      try { return JSON.parse(localStorage.getItem(HS_KEY) || "[]").slice(0, 10); }
+      catch { return []; }
+    }
+
+    function saveScores(rows) {
+      localStorage.setItem(HS_KEY, JSON.stringify(rows.slice(0, 10)));
+    }
+
+    function renderScores() {
+      const rows = loadScores();
+      scoresEl.innerHTML = rows.length
+        ? rows.map(r => `<li><b>${String(r.initials || "---").slice(0, 3).toUpperCase()}</b> ${String(r.score || 0).padStart(6, "0")} W${r.wave || 1}</li>`).join("")
+        : "<li>--- 000000 W1</li>";
+    }
+
+    function qualifies(score) {
+      const rows = loadScores();
+      return score > 0 && (rows.length < 10 || score > rows[rows.length - 1].score);
+    }
+
+    function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
+    function rand(a, b) { return a + Math.random() * (b - a); }
+    function dist2(a, b) {
+      const dx = a.x - b.x;
+      const dz = a.z - b.z;
+      return dx * dx + dz * dz;
+    }
+
+    function makeBox(w, h, d, mat, x, y, z, cast = true) {
+      const mesh = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat);
+      mesh.position.set(x, y, z);
+      mesh.castShadow = cast;
+      mesh.receiveShadow = true;
+      return mesh;
+    }
+
+    function makeCylinder(r1, r2, h, mat, x, y, z, segments = 16) {
+      const mesh = new THREE.Mesh(new THREE.CylinderGeometry(r1, r2, h, segments), mat);
+      mesh.position.set(x, y, z);
+      mesh.castShadow = true;
+      mesh.receiveShadow = true;
+      return mesh;
+    }
+
+    function buildWorld() {
+      const hemi = new THREE.HemisphereLight(0xb8eaff, 0x10200d, 0.85);
+      scene.add(hemi);
+
+      const moonLight = new THREE.DirectionalLight(0xc7e6ff, 1.35);
+      moonLight.position.set(-10, 22, 12);
+      moonLight.castShadow = true;
+      moonLight.shadow.mapSize.set(1024, 1024);
+      moonLight.shadow.camera.near = 1;
+      moonLight.shadow.camera.far = 60;
+      moonLight.shadow.camera.left = -24;
+      moonLight.shadow.camera.right = 24;
+      moonLight.shadow.camera.top = 24;
+      moonLight.shadow.camera.bottom = -24;
+      scene.add(moonLight);
+
+      playerLight = new THREE.PointLight(0x75f4ff, 1.2, 15, 2);
+      playerLight.position.set(0, 2, 6);
+      scene.add(playerLight);
+
+      moon = new THREE.Mesh(new THREE.SphereGeometry(3.4, 32, 16), new THREE.MeshBasicMaterial({ color: 0xdff6ff }));
+      moon.position.set(-18, 26, -54);
+      scene.add(moon);
+
+      const ground = new THREE.Mesh(new THREE.PlaneGeometry(64, 98, 1, 1), mats.ground);
+      ground.rotation.x = -Math.PI / 2;
+      ground.position.z = -24;
+      ground.receiveShadow = true;
+      root.add(ground);
+
+      const path = new THREE.Mesh(new THREE.PlaneGeometry(12, 94), mats.path);
+      path.rotation.x = -Math.PI / 2;
+      path.position.set(0, 0.012, -24);
+      path.receiveShadow = true;
+      root.add(path);
+
+      for (let i = 0; i < 42; i++) {
+        const side = i % 2 ? -1 : 1;
+        const z = -5 - i * 1.9 + rand(-0.35, 0.35);
+        const x = side * rand(8.2, 21.5);
+        const stone = makeBox(rand(0.65, 1.35), rand(1.1, 2.1), rand(0.22, 0.42), i % 4 ? mats.stone : mats.darkStone, x, 0.55, z);
+        stone.rotation.y = rand(-0.35, 0.35);
+        stone.rotation.z = rand(-0.08, 0.08);
+        root.add(stone);
+        scenery.push(stone);
+      }
+
+      for (let i = 0; i < 16; i++) {
+        const side = i % 2 ? -1 : 1;
+        const x = side * rand(15, 27);
+        const z = -7 - i * 4.8;
+        const trunk = makeCylinder(0.18, 0.28, rand(2.6, 4.2), mats.darkStone, x, 1.5, z, 8);
+        trunk.rotation.z = rand(-0.16, 0.16);
+        root.add(trunk);
+        const limbs = new THREE.Group();
+        limbs.position.set(x, 3.2, z);
+        for (let l = 0; l < 4; l++) {
+          const limb = makeBox(0.12, 0.12, rand(1.6, 3.2), mats.darkStone, 0, 0, 0);
+          limb.rotation.y = rand(0, Math.PI * 2);
+          limb.rotation.x = rand(-0.8, 0.35);
+          limbs.add(limb);
+        }
+        root.add(limbs);
+      }
+
+      for (let i = 0; i < 10; i++) {
+        const side = i % 2 ? -1 : 1;
+        const post = makeCylinder(0.12, 0.16, 3, mats.metal, side * 6.8, 1.5, -9 - i * 6.6, 10);
+        root.add(post);
+        const lamp = new THREE.PointLight(0xffd36a, 0.9, 9, 2.2);
+        lamp.position.set(side * 6.8, 3.15, -9 - i * 6.6);
+        scene.add(lamp);
+        const bulb = new THREE.Mesh(new THREE.SphereGeometry(0.24, 12, 8), new THREE.MeshBasicMaterial({ color: 0xffd36a }));
+        bulb.position.copy(lamp.position);
+        root.add(bulb);
+      }
+
+      gate = new THREE.Group();
+      gate.add(makeBox(24, 1.2, 0.65, mats.metal, 0, 0.6, 8.35));
+      for (let x = -11; x <= 11; x += 2) gate.add(makeBox(0.28, 3.2, 0.36, mats.metal, x, 1.55, 8.3));
+      root.add(gate);
+
+      buildPlayer();
+    }
+
+    function buildPlayer() {
+      const g = player.mesh;
+      g.clear();
+      const legs = makeBox(0.7, 1.05, 0.55, mats.coat, -0.34, 0.55, 0);
+      const legs2 = makeBox(0.7, 1.05, 0.55, mats.coat, 0.34, 0.55, 0);
+      const body = makeBox(1.35, 1.45, 0.72, mats.player, 0, 1.55, 0);
+      const head = new THREE.Mesh(new THREE.SphereGeometry(0.43, 18, 12), mats.coat);
+      head.position.set(0, 2.48, -0.02);
+      head.castShadow = true;
+      const gun = makeBox(0.22, 0.22, 1.45, mats.metal, 0.35, 1.78, -0.85);
+      muzzleFlash = new THREE.Mesh(new THREE.SphereGeometry(0.18, 12, 8), new THREE.MeshBasicMaterial({ color: 0xfff2ac, transparent: true, opacity: 0 }));
+      muzzleFlash.position.set(0.35, 1.78, -1.62);
+      g.add(legs, legs2, body, head, gun, muzzleFlash);
+      g.position.set(0, 0, 5.8);
+      root.add(g);
+    }
+
+    function makeZombie(type, x, z) {
+      const group = new THREE.Group();
+      const cfg = {
+        walker: { hp: 3, speed: 2.05, score: 65, mat: mats.zombie, scale: 1, r: 0.78 },
+        runner: { hp: 2, speed: 3.25, score: 90, mat: mats.runner, scale: 0.86, r: 0.68 },
+        bloat: { hp: 8, speed: 1.32, score: 150, mat: mats.bloat, scale: 1.28, r: 1.08 },
+        spitter: { hp: 4, speed: 1.75, score: 125, mat: mats.spitter, scale: 0.95, r: 0.76 },
+        boss: { hp: 26 + state.wave * 5, speed: 1.05, score: 900, mat: mats.boss, scale: 1.9, r: 1.55 }
+      }[type];
+      const s = cfg.scale;
+      group.add(makeBox(0.82 * s, 1.35 * s, 0.52 * s, cfg.mat, 0, 1.25 * s, 0));
+      const head = new THREE.Mesh(new THREE.SphereGeometry(0.36 * s, 16, 10), cfg.mat);
+      head.position.set(0, 2.08 * s, 0);
+      head.castShadow = true;
+      group.add(head);
+      const jaw = makeBox(0.42 * s, 0.12 * s, 0.16 * s, mats.zombieDark, 0, 1.9 * s, -0.28 * s);
+      group.add(jaw);
+      for (const side of [-1, 1]) {
+        const arm = makeBox(0.2 * s, 0.86 * s, 0.24 * s, cfg.mat, side * 0.62 * s, 1.32 * s, -0.2 * s);
+        arm.rotation.x = -0.8;
+        arm.userData.arm = side;
+        group.add(arm);
+        const leg = makeBox(0.26 * s, 0.82 * s, 0.25 * s, mats.zombieDark, side * 0.22 * s, 0.42 * s, 0);
+        group.add(leg);
+      }
+      const eyeMat = new THREE.MeshBasicMaterial({ color: type === "boss" ? 0xff5274 : 0x8dff66 });
+      for (const side of [-1, 1]) {
+        const eye = new THREE.Mesh(new THREE.SphereGeometry(0.045 * s, 8, 6), eyeMat);
+        eye.position.set(side * 0.12 * s, 2.13 * s, -0.32 * s);
+        group.add(eye);
+      }
+      group.position.set(x, 0, z);
+      group.userData = { type, hp: cfg.hp, maxHp: cfg.hp, speed: cfg.speed, score: cfg.score, r: cfg.r, phase: rand(0, 20), bite: 0, spit: rand(1.4, 3.2) };
+      root.add(group);
+      zombies.push(group);
+    }
+
+    function spawnWave() {
+      state.waveLeft = 8 + state.wave * 4;
+      state.spawnTimer = 0.7;
+      showBanner(state.wave % 4 === 0 ? `Boss Wave ${state.wave}` : `Wave ${state.wave}`);
+      state.ammo = Math.min(state.maxAmmo, state.ammo + 8);
+      const opening = state.wave % 4 === 0 ? 1 : 2;
+      for (let i = 0; i < opening && state.waveLeft > 0; i++) spawnZombie();
+      updateHud();
+    }
+
+    function spawnZombie() {
+      let type = "walker";
+      const roll = Math.random();
+      if (state.wave % 4 === 0 && state.waveLeft <= 2) type = "boss";
+      else if (state.wave >= 3 && roll < 0.18) type = "runner";
+      else if (state.wave >= 4 && roll < 0.30) type = "spitter";
+      else if (state.wave >= 5 && roll < 0.42) type = "bloat";
+      const lane = rand(-7.8, 7.8);
+      makeZombie(type, lane, rand(-28, -20));
+      state.waveLeft--;
+    }
+
+    function startGame() {
+      state.mode = "playing";
+      state.score = 0;
+      state.wave = 1;
+      state.health = 100;
+      state.ammo = state.maxAmmo;
+      state.kills = 0;
+      state.slow = 0;
+      state.pendingScore = null;
+      clearDynamic();
+      overlay.style.display = "none";
+      spawnWave();
+    }
+
+    function clearDynamic() {
+      for (const list of [zombies, bullets, pickups, particles]) {
+        while (list.length) {
+          const obj = list.pop();
+          root.remove(obj);
+        }
+      }
+    }
+
+    function fire(dt) {
+      if (state.reloadTimer > 0) return;
+      state.fireTimer -= dt;
+      if (state.fireTimer > 0) return;
+      if (state.ammo <= 0) {
+        state.reloadTimer = 0.72;
+        state.ammo = state.maxAmmo;
+        showBanner("Reload");
+        return;
+      }
+      state.fireTimer = 0.13;
+      state.ammo--;
+      const origin = player.mesh.position.clone().add(new THREE.Vector3(0.34, 1.78, -1.25));
+      const target = aimPoint.clone();
+      target.y = 1.1;
+      const dir = target.sub(origin).normalize();
+      const bullet = new THREE.Mesh(new THREE.SphereGeometry(0.075, 8, 6), mats.bullet);
+      bullet.position.copy(origin);
+      bullet.userData = { dir, speed: 34, life: 1.25, damage: 1 };
+      root.add(bullet);
+      bullets.push(bullet);
+      muzzleFlash.material.opacity = 1;
+      playerLight.intensity = 2.4;
+      state.shake = Math.max(state.shake, 0.08);
+    }
+
+    function updatePlayer(dt) {
+      const p = player.mesh;
+      const targetX = clamp(aimPoint.x * 0.78, -7.6, 7.6);
+      if (input.active) p.position.x += (targetX - p.position.x) * Math.min(1, dt * 7);
+      if (input.keyLeft) p.position.x -= dt * 7;
+      if (input.keyRight) p.position.x += dt * 7;
+      p.position.x = clamp(p.position.x, -8.4, 8.4);
+      playerLight.position.set(p.position.x, 2.2, 5.1);
+      tmp.copy(aimPoint).sub(p.position);
+      p.rotation.y = Math.atan2(tmp.x, tmp.z);
+      player.muzzle.set(p.position.x + Math.sin(p.rotation.y) * -1.2, 1.78, p.position.z + Math.cos(p.rotation.y) * -1.2);
+      player.invuln = Math.max(0, player.invuln - dt);
+      if (muzzleFlash.material.opacity > 0) muzzleFlash.material.opacity = Math.max(0, muzzleFlash.material.opacity - dt * 12);
+      playerLight.intensity += (1.2 - playerLight.intensity) * Math.min(1, dt * 8);
+    }
+
+    function updateZombies(dt) {
+      const speedMul = state.slow > 0 ? 0.45 : 1;
+      for (let i = zombies.length - 1; i >= 0; i--) {
+        const z = zombies[i];
+        const data = z.userData;
+        data.phase += dt * (data.type === "runner" ? 9 : 5);
+        const wobble = Math.sin(data.phase) * 0.04;
+        z.rotation.z = wobble;
+        z.position.z += data.speed * speedMul * dt * (1 + state.wave * 0.035);
+        z.position.x += Math.sin(data.phase * 0.47) * dt * 0.28;
+        z.lookAt(player.mesh.position.x, z.position.y, player.mesh.position.z);
+        for (const child of z.children) if (child.userData.arm) child.rotation.x = -0.75 + Math.sin(data.phase + child.userData.arm) * 0.25;
+
+        if (data.type === "spitter") {
+          data.spit -= dt;
+          if (data.spit <= 0 && z.position.z > -30 && z.position.z < 2) {
+            data.spit = rand(2.1, 3.4);
+            acidSplash(z.position.x + rand(-1.2, 1.2), z.position.z + rand(4, 7));
+          }
+        }
+
+        if (z.position.z > 5.15) {
+          data.bite -= dt;
+          if (data.bite <= 0) {
+            data.bite = data.type === "boss" ? 0.48 : 0.8;
+            hurt(data.type === "boss" ? 18 : data.type === "bloat" ? 12 : 8);
+          }
+        }
+      }
+    }
+
+    function acidSplash(x, z) {
+      if (Math.abs(x - player.mesh.position.x) < 2.3 && Math.abs(z - player.mesh.position.z) < 4.2) hurt(9);
+      for (let i = 0; i < 16; i++) particle(0x58b9a4, x + rand(-0.7, 0.7), rand(0.25, 1.2), z + rand(-0.8, 0.8), rand(-1.8, 1.8), rand(1, 4), rand(-1.8, 1.8), 0.5);
+    }
+
+    function updateBullets(dt) {
+      for (let i = bullets.length - 1; i >= 0; i--) {
+        const b = bullets[i];
+        const last = b.position.clone();
+        b.position.addScaledVector(b.userData.dir, b.userData.speed * dt);
+        b.userData.life -= dt;
+        let hit = null;
+        let best = Infinity;
+        for (const z of zombies) {
+          const d = lineZombieDistance(last, b.position, z.position, z.userData.r);
+          if (d.hit && d.t < best) {
+            best = d.t;
+            hit = z;
+          }
+        }
+        if (hit) {
+          damageZombie(hit, b.userData.damage, b.position);
+          removeObj(bullets, b);
+          continue;
+        }
+        if (b.userData.life <= 0 || b.position.z < -62 || Math.abs(b.position.x) > 18) removeObj(bullets, b);
+      }
+    }
+
+    function lineZombieDistance(a, b, p, r) {
+      const abx = b.x - a.x;
+      const abz = b.z - a.z;
+      const apx = p.x - a.x;
+      const apz = p.z - a.z;
+      const len = abx * abx + abz * abz || 1;
+      const t = clamp((apx * abx + apz * abz) / len, 0, 1);
+      const x = a.x + abx * t;
+      const z = a.z + abz * t;
+      const dx = p.x - x;
+      const dz = p.z - z;
+      return { hit: dx * dx + dz * dz <= r * r, t };
+    }
+
+    function damageZombie(z, damage, pos) {
+      const data = z.userData;
+      data.hp -= damage;
+      const closeBonus = z.position.z > -3 ? 25 : 0;
+      for (let i = 0; i < 10; i++) particle(0x8dff66, pos.x + rand(-0.25, 0.25), pos.y, pos.z + rand(-0.25, 0.25), rand(-2, 2), rand(1, 5), rand(-2, 2), 0.55);
+      if (data.hp <= 0) {
+        state.kills++;
+        state.score += data.score + closeBonus;
+        maybePickup(z.position.x, z.position.z);
+        for (let i = 0; i < 26; i++) particle(data.type === "boss" ? 0xff5274 : 0x8dff66, z.position.x, rand(0.7, 2.7), z.position.z, rand(-4, 4), rand(2, 7), rand(-4, 4), 0.8);
+        removeObj(zombies, z);
+      } else {
+        z.scale.setScalar(1.04);
+        setTimeout(() => z.scale.setScalar(1), 50);
+        state.score += 5;
+      }
+      updateHud();
+    }
+
+    function maybePickup(x, z) {
+      if (Math.random() > 0.16) return;
+      const roll = Math.random();
+      const type = roll < 0.4 ? "health" : roll < 0.78 ? "ammo" : "shock";
+      const mat = type === "health" ? mats.health : type === "ammo" ? mats.ammo : mats.shock;
+      const pickup = new THREE.Mesh(new THREE.OctahedronGeometry(0.36, 0), mat);
+      pickup.position.set(x, 0.62, z);
+      pickup.castShadow = true;
+      pickup.userData = { type, phase: rand(0, 10), life: 12 };
+      root.add(pickup);
+      pickups.push(pickup);
+    }
+
+    function updatePickups(dt) {
+      for (let i = pickups.length - 1; i >= 0; i--) {
+        const p = pickups[i];
+        p.userData.phase += dt * 4;
+        p.userData.life -= dt;
+        p.rotation.y += dt * 2;
+        p.position.y = 0.65 + Math.sin(p.userData.phase) * 0.12;
+        if (dist2(p.position, player.mesh.position) < 3.2) {
+          if (p.userData.type === "health") state.health = Math.min(100, state.health + 22);
+          else if (p.userData.type === "ammo") state.ammo = Math.min(state.maxAmmo, state.ammo + 12);
+          else {
+            state.slow = 3.5;
+            for (const z of zombies) if (z.position.z > -24) damageZombie(z, 2, z.position);
+            showBanner("Shock Cell");
+          }
+          removeObj(pickups, p);
+          updateHud();
+        } else if (p.userData.life <= 0) removeObj(pickups, p);
+      }
+    }
+
+    function particle(color, x, y, z, vx, vy, vz, life) {
+      const m = new THREE.Mesh(new THREE.SphereGeometry(rand(0.04, 0.1), 6, 4), new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.9 }));
+      m.position.set(x, y, z);
+      m.userData = { vx, vy, vz, life, max: life };
+      root.add(m);
+      particles.push(m);
+    }
+
+    function updateParticles(dt) {
+      for (let i = particles.length - 1; i >= 0; i--) {
+        const p = particles[i];
+        const d = p.userData;
+        p.position.x += d.vx * dt;
+        p.position.y += d.vy * dt;
+        p.position.z += d.vz * dt;
+        d.vy -= 7.4 * dt;
+        d.life -= dt;
+        p.material.opacity = Math.max(0, d.life / d.max);
+        if (d.life <= 0 || p.position.y < 0) removeObj(particles, p);
+      }
+    }
+
+    function removeObj(list, obj) {
+      const idx = list.indexOf(obj);
+      if (idx >= 0) list.splice(idx, 1);
+      root.remove(obj);
+    }
+
+    function hurt(amount) {
+      if (player.invuln > 0 || state.mode !== "playing") return;
+      state.health -= amount;
+      player.invuln = 0.45;
+      state.shake = 0.25;
+      for (let i = 0; i < 22; i++) particle(0xff5274, player.mesh.position.x + rand(-0.6, 0.6), rand(0.8, 2.1), player.mesh.position.z + rand(-0.6, 0.6), rand(-3, 3), rand(2, 5), rand(-3, 3), 0.6);
+      if (state.health <= 0) endGame();
+      updateHud();
+    }
+
+    function endGame() {
+      state.mode = "over";
+      input.active = false;
+      state.pendingScore = { score: state.score, wave: state.wave };
+      overlay.style.display = "grid";
+      startBtn.textContent = "Restart";
+      overlayText.textContent = `Score ${state.score.toLocaleString()} · Wave ${state.wave}. The gate cracked, but the cemetery remembers.`;
+      entryEl.style.display = qualifies(state.score) ? "flex" : "none";
+      renderScores();
+    }
+
+    function checkWave(dt) {
+      if (state.waveLeft > 0) {
+        state.spawnTimer -= dt;
+        if (state.spawnTimer <= 0) {
+          spawnZombie();
+          state.spawnTimer = clamp(1.0 - state.wave * 0.045, 0.36, 1.0);
+        }
+      } else if (!zombies.length) {
+        state.wave++;
+        state.health = Math.min(100, state.health + 10);
+        spawnWave();
+      }
+    }
+
+    function updateAimFromScreen(x, y) {
+      input.x = x;
+      input.y = y;
+      reticle.style.left = `${x}px`;
+      reticle.style.top = `${y}px`;
+      pointerNdc.x = (x / window.innerWidth) * 2 - 1;
+      pointerNdc.y = -(y / window.innerHeight) * 2 + 1;
+      raycaster.setFromCamera(pointerNdc, camera);
+      raycaster.ray.intersectPlane(groundPlane, aimPoint);
+      aimPoint.x = clamp(aimPoint.x, -10, 10);
+      aimPoint.z = clamp(aimPoint.z, -46, 4);
+    }
+
+    function updateHud() {
+      hud.score.textContent = state.score.toLocaleString();
+      hud.wave.textContent = state.wave;
+      hud.health.textContent = Math.max(0, Math.ceil(state.health));
+      hud.ammo.textContent = state.reloadTimer > 0 ? "..." : state.ammo;
+      hud.kills.textContent = state.kills;
+    }
+
+    function showBanner(text) {
+      banner.textContent = text;
+      banner.classList.add("show");
+      clearTimeout(showBanner.t);
+      showBanner.t = setTimeout(() => banner.classList.remove("show"), 1150);
+    }
+
+    function resize() {
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+      renderer.setSize(w, h, false);
+      camera.aspect = w / h;
+      camera.position.set(0, h > w ? 13.5 : 12.5, h > w ? 19.5 : 17);
+      camera.userData.baseY = camera.position.y;
+      camera.userData.baseZ = camera.position.z;
+      camera.lookAt(0, 1.15, -13);
+      camera.updateProjectionMatrix();
+      updateAimFromScreen(input.x, input.y);
+    }
+
+    function loop() {
+      const rawDt = Math.min(0.033, clock.getDelta() || 0.016);
+      const dt = rawDt;
+      if (state.mode === "playing") {
+        state.reloadTimer = Math.max(0, state.reloadTimer - dt);
+        state.slow = Math.max(0, state.slow - dt);
+        updatePlayer(dt);
+        if (input.active || input.firingKey) fire(dt);
+        updateZombies(dt);
+        updateBullets(dt);
+        updatePickups(dt);
+        updateParticles(dt);
+        checkWave(dt);
+      } else {
+        player.mesh.rotation.y = Math.sin(performance.now() * 0.0008) * 0.25;
+      }
+
+      const t = performance.now() * 0.001;
+      moon.position.y = 26 + Math.sin(t * 0.2) * 0.3;
+      gate.rotation.x = Math.sin(t * 1.1) * 0.006;
+      const shakeX = state.shake ? rand(-state.shake, state.shake) : 0;
+      const shakeY = state.shake ? rand(-state.shake, state.shake) : 0;
+      state.shake = Math.max(0, state.shake - dt * 1.5);
+      camera.position.x = shakeX;
+      camera.position.y = (camera.userData.baseY || 12.5) + shakeY * 0.2;
+      camera.position.z = camera.userData.baseZ || 17;
+      camera.lookAt(0, 1.15, -13);
+      renderer.render(scene, camera);
+      requestAnimationFrame(loop);
+    }
+
+    canvas.addEventListener("pointerdown", e => {
+      if (state.mode !== "playing") return;
+      input.active = true;
+      input.pointerId = e.pointerId;
+      canvas.setPointerCapture?.(e.pointerId);
+      updateAimFromScreen(e.clientX, e.clientY);
+      e.preventDefault();
+    });
+
+    canvas.addEventListener("pointermove", e => {
+      if (!input.active || input.pointerId !== e.pointerId) return;
+      updateAimFromScreen(e.clientX, e.clientY);
+      e.preventDefault();
+    });
+
+    function endPointer(e) {
+      if (input.pointerId === e.pointerId) {
+        input.active = false;
+        input.pointerId = null;
+      }
+      e.preventDefault();
+    }
+    canvas.addEventListener("pointerup", endPointer);
+    canvas.addEventListener("pointercancel", endPointer);
+
+    window.addEventListener("keydown", e => {
+      if (e.code === "KeyA" || e.code === "ArrowLeft") input.keyLeft = true;
+      if (e.code === "KeyD" || e.code === "ArrowRight") input.keyRight = true;
+      if (e.code === "Space") input.firingKey = true;
+      if (e.code === "Enter" && state.mode !== "playing") startGame();
+    });
+    window.addEventListener("keyup", e => {
+      if (e.code === "KeyA" || e.code === "ArrowLeft") input.keyLeft = false;
+      if (e.code === "KeyD" || e.code === "ArrowRight") input.keyRight = false;
+      if (e.code === "Space") input.firingKey = false;
+    });
+    window.addEventListener("pointermove", e => {
+      if (!input.active && state.mode === "playing" && e.pointerType === "mouse") updateAimFromScreen(e.clientX, e.clientY);
+    }, { passive: true });
+    window.addEventListener("resize", resize, { passive: true });
+    document.addEventListener("touchmove", e => {
+      if (!e.target.closest("button,input,.overlay")) e.preventDefault();
+    }, { passive: false });
+
+    startBtn.addEventListener("click", startGame);
+    scoresBtn.addEventListener("click", renderScores);
+    saveBtn.addEventListener("click", () => {
+      if (!state.pendingScore) return;
+      const initials = (initialsInput.value || "AAA").toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 3).padEnd(3, "A");
+      const rows = loadScores().concat({ initials, score: state.pendingScore.score, wave: state.pendingScore.wave, ts: Date.now() }).sort((a, b) => b.score - a.score).slice(0, 10);
+      saveScores(rows);
+      state.pendingScore = null;
+      entryEl.style.display = "none";
+      renderScores();
+    });
+
+    buildWorld();
+    renderScores();
+    resize();
+    updateHud();
+    updateAimFromScreen(window.innerWidth * 0.5, window.innerHeight * 0.56);
+    if (new URLSearchParams(location.search).has("autostart")) startGame();
+    requestAnimationFrame(loop);
+  </script>
+</body>
+</html>
