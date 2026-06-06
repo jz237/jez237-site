@@ -473,7 +473,7 @@
       <div class="overlay" id="overlay">
         <div class="panel">
           <h1>Neon Invaders</h1>
-          <div class="title-version">v1.22</div>
+          <div class="title-version">v1.23</div>
           <p class="tagline" id="message">A modernized arcade defense run: punch through waves, catch power cores, and survive the boss carrier.</p>
           <div class="enemy-roster" aria-label="Enemy ship guide">
             <h2>Enemy Ships</h2>
@@ -504,7 +504,7 @@
         <button id="rightButton" type="button">→</button>
         <button id="fireButton" type="button">FIRE</button>
       </div>
-      <div class="version" aria-hidden="true">v1.22</div>
+      <div class="version" aria-hidden="true">v1.23</div>
     </section>
   </main>
 
@@ -925,7 +925,7 @@
           game.boss = {
             x: game.width / 2,
             y: Math.max(52, 62 * game.scale),
-            r: 50,
+            r: 58,
             hp: 42 + game.wave * 7,
             maxHp: 42 + game.wave * 7,
             nextPowerDropHp: (42 + game.wave * 7) * rand(0.68, 0.84),
@@ -1574,17 +1574,17 @@
         ]
       };
       const bossCarrierPattern = [
-        "000000111111000000",
-        "000011111111110000",
-        "001111111111111100",
-        "011111111111111110",
-        "111101111111011111",
-        "111111111111111111",
-        "011111100001111110",
-        "001111000000111100",
-        "011100111111001110",
-        "111000111111000111",
-        "110000010010000011"
+        "0000000111111100000000",
+        "0000111111111111000000",
+        "0011111111111111110000",
+        "0111111111111111111000",
+        "1111101111111111011110",
+        "1111111111111111111111",
+        "0111111100000011111110",
+        "0011110000000000111100",
+        "0111000111111100011100",
+        "1110000111111100011100",
+        "1100000010010000001100"
       ];
       const invaderSpriteCache = new Map();
 
@@ -1634,26 +1634,26 @@
           tctx.save();
           tctx.globalCompositeOperation = "lighter";
           if (type === "boss") {
-            const pixel = 4;
+            const pixel = 3.7;
             const ox = (width - bossCarrierPattern[0].length * pixel) / 2;
             const oy = (height - bossCarrierPattern.length * pixel) / 2;
             tctx.shadowColor = colors.enemy2;
             tctx.shadowBlur = 10;
             tctx.fillStyle = colors.enemy2;
-            paintPixelSprite(tctx, bossCarrierPattern, pixel, ox, oy, 0.18);
+            paintPixelSprite(tctx, bossCarrierPattern, pixel, ox, oy, 0.3);
             tctx.shadowBlur = 6;
             tctx.fillStyle = colors.enemy;
-            tctx.fillRect(ox + 7 * pixel, oy + 2 * pixel, pixel * 4, pixel * 2);
-            tctx.fillRect(ox + 5 * pixel, oy + 7 * pixel, pixel * 2, pixel);
-            tctx.fillRect(ox + 11 * pixel, oy + 7 * pixel, pixel * 2, pixel);
+            tctx.fillRect(ox + 9 * pixel, oy + 2 * pixel, pixel * 4, pixel * 2);
+            tctx.fillRect(ox + 6 * pixel, oy + 7 * pixel, pixel * 2, pixel);
+            tctx.fillRect(ox + 14 * pixel, oy + 7 * pixel, pixel * 2, pixel);
             tctx.shadowColor = "#ffffff";
             tctx.fillStyle = "#ffffff";
-            tctx.fillRect(ox + 8 * pixel, oy + 4 * pixel, pixel, pixel);
             tctx.fillRect(ox + 10 * pixel, oy + 4 * pixel, pixel, pixel);
+            tctx.fillRect(ox + 12 * pixel, oy + 4 * pixel, pixel, pixel);
             tctx.shadowColor = colors.fire;
             tctx.fillStyle = colors.fire;
-            tctx.fillRect(ox + 4 * pixel, oy + 10 * pixel, pixel, pixel * 1.2);
-            tctx.fillRect(ox + 13 * pixel, oy + 10 * pixel, pixel, pixel * 1.2);
+            tctx.fillRect(ox + 5 * pixel, oy + 10 * pixel, pixel, pixel * 1.2);
+            tctx.fillRect(ox + 16 * pixel, oy + 10 * pixel, pixel, pixel * 1.2);
           } else {
             const color = type === "drone" ? colors.enemy : type === "striker" ? colors.enemy2 : colors.enemy3;
             const sprite = getInvaderSprite(type, 0, color, 3.2);
@@ -1683,26 +1683,26 @@
         ctx.save();
         ctx.translate(boss.x, boss.y);
         ctx.globalCompositeOperation = "lighter";
-        const pixel = clamp(5.2 * game.scale, 4.2, 6);
+        const pixel = clamp(4.8 * game.scale, 4, 5.6);
         const ox = -bossCarrierPattern[0].length * pixel / 2;
         const oy = -bossCarrierPattern.length * pixel / 2;
         glow(colors.enemy2, 24);
         ctx.fillStyle = colors.enemy2;
-        paintPixelSprite(ctx, bossCarrierPattern, pixel, ox, oy, 0.16);
+        paintPixelSprite(ctx, bossCarrierPattern, pixel, ox, oy, 0.28);
         ctx.shadowBlur = 12;
         ctx.fillStyle = colors.enemy;
-        ctx.fillRect(ox + 7 * pixel, oy + 2 * pixel, pixel * 4, pixel * 2);
-        ctx.fillRect(ox + 5 * pixel, oy + 7 * pixel, pixel * 2, pixel);
-        ctx.fillRect(ox + 11 * pixel, oy + 7 * pixel, pixel * 2, pixel);
+        ctx.fillRect(ox + 9 * pixel, oy + 2 * pixel, pixel * 4, pixel * 2);
+        ctx.fillRect(ox + 6 * pixel, oy + 7 * pixel, pixel * 2, pixel);
+        ctx.fillRect(ox + 14 * pixel, oy + 7 * pixel, pixel * 2, pixel);
         ctx.shadowColor = "#ffffff";
         ctx.fillStyle = "#ffffff";
-        ctx.fillRect(ox + 8 * pixel, oy + 4 * pixel, pixel, pixel);
         ctx.fillRect(ox + 10 * pixel, oy + 4 * pixel, pixel, pixel);
+        ctx.fillRect(ox + 12 * pixel, oy + 4 * pixel, pixel, pixel);
         ctx.shadowColor = colors.fire;
         ctx.fillStyle = colors.fire;
         const flame = 0.8 + Math.sin(game.time * 16) * 0.3;
-        ctx.fillRect(ox + 4 * pixel, oy + 10 * pixel, pixel, pixel * flame);
-        ctx.fillRect(ox + 13 * pixel, oy + 10 * pixel, pixel, pixel * flame);
+        ctx.fillRect(ox + 5 * pixel, oy + 10 * pixel, pixel, pixel * flame);
+        ctx.fillRect(ox + 16 * pixel, oy + 10 * pixel, pixel, pixel * flame);
         ctx.restore();
 
         ctx.save();
