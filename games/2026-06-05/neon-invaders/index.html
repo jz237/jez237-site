@@ -414,7 +414,7 @@
         <button id="rightButton" type="button">→</button>
         <button id="fireButton" type="button">FIRE</button>
       </div>
-      <div class="version" aria-hidden="true">v1.13</div>
+      <div class="version" aria-hidden="true">v1.14</div>
     </section>
   </main>
 
@@ -486,7 +486,9 @@
         enemy: "#ff3df2",
         enemy2: "#ffd23d",
         enemy3: "#ff4d6d",
-        shield: "#35f4ff"
+        shield: "#35f4ff",
+        gold: "#ffd23d",
+        fire: "#ff7a2d"
       };
       let soundCtx = null;
       let lastShotSound = 0;
@@ -1112,7 +1114,7 @@
           sfx.boom(true);
           game.shake = 16;
           game.boss = null;
-          const bossDrops = 1 + (Math.random() < 0.5 ? 1 : 0);
+          const bossDrops = 1;
           for (let i = 0; i < bossDrops; i++) dropPowerup(boss.x + rand(-50, 50), boss.y + rand(-10, 35));
         }
       }
@@ -1324,31 +1326,39 @@
         ctx.globalCompositeOperation = "lighter";
         const blink = p.invulnerable > 0 && Math.floor(game.time * 18) % 2 === 0;
         ctx.globalAlpha = blink ? 0.45 : 1;
-        glow(colors.player, 22);
+        const pixel = game.width < 560 ? 3.7 : 4.2;
+        const pattern = [
+          "0000001000000",
+          "0000011100000",
+          "0000111110000",
+          "0001111111000",
+          "0011111111100",
+          "0111011101110",
+          "1111111111111",
+          "1110111110111",
+          "0111111111110",
+          "0011011101100",
+          "0001001001000"
+        ];
+        const ox = -pattern[0].length * pixel / 2;
+        const oy = -31;
+        glow(colors.player, 20);
         ctx.fillStyle = colors.player;
-        ctx.beginPath();
-        ctx.moveTo(0, -28);
-        ctx.lineTo(25, 22);
-        ctx.lineTo(8, 15);
-        ctx.lineTo(0, 29);
-        ctx.lineTo(-8, 15);
-        ctx.lineTo(-25, 22);
-        ctx.closePath();
-        ctx.fill();
-        ctx.fillStyle = "#ffffff";
-        ctx.beginPath();
-        ctx.moveTo(0, -16);
-        ctx.lineTo(9, 10);
-        ctx.lineTo(-9, 10);
-        ctx.closePath();
-        ctx.fill();
+        paintPixelSprite(ctx, pattern, pixel, ox, oy, 0.18);
+        ctx.shadowBlur = 8;
         ctx.fillStyle = colors.gold;
-        ctx.globalAlpha = 0.9;
-        ctx.beginPath();
-        ctx.moveTo(-9, 20);
-        ctx.lineTo(0, 20 + 18 + Math.sin(game.time * 42) * 6);
-        ctx.lineTo(9, 20);
-        ctx.fill();
+        ctx.fillRect(-4.5 * pixel, oy + 7 * pixel, pixel * 2, pixel * 1.4);
+        ctx.fillRect(2.5 * pixel, oy + 7 * pixel, pixel * 2, pixel * 1.4);
+        ctx.fillStyle = "#ffffff";
+        ctx.shadowColor = "#ffffff";
+        ctx.fillRect(-1.5 * pixel, oy + 3 * pixel, pixel, pixel);
+        ctx.fillRect(0.5 * pixel, oy + 3 * pixel, pixel, pixel);
+        ctx.fillStyle = colors.fire;
+        ctx.shadowColor = colors.fire;
+        ctx.globalAlpha = 0.75 + Math.sin(game.time * 42) * 0.18;
+        ctx.fillRect(-3.5 * pixel, oy + 10.3 * pixel, pixel * 1.2, pixel * 2.4);
+        ctx.fillRect(-0.6 * pixel, oy + 10.5 * pixel, pixel * 1.2, pixel * 3.1);
+        ctx.fillRect(2.3 * pixel, oy + 10.3 * pixel, pixel * 1.2, pixel * 2.4);
         if (p.shield > 0) {
           ctx.globalAlpha = clamp(p.shield / 120, 0.18, 0.72);
           ctx.strokeStyle = p.shield > 40 ? colors.player : colors.red;
@@ -1490,10 +1500,40 @@
           ctx.stroke();
         }
         for (const b of game.enemyBullets) {
-          glow(b.color, 16);
-          ctx.fillStyle = b.color;
+          const speed = Math.max(1, Math.hypot(b.vx, b.vy));
+          const len = clamp(speed * 0.12, 28, 48);
+          const dx = b.vx / speed * len;
+          const dy = b.vy / speed * len;
+          const tailX = b.x - dx;
+          const tailY = b.y - dy;
+          const gradient = ctx.createLinearGradient(tailX, tailY, b.x, b.y);
+          gradient.addColorStop(0, "rgba(255, 77, 109, 0)");
+          gradient.addColorStop(0.35, "rgba(255, 77, 109, 0.55)");
+          gradient.addColorStop(1, "rgba(255, 210, 61, 1)");
+          ctx.lineCap = "round";
+          ctx.strokeStyle = gradient;
+          ctx.lineWidth = 7;
+          glow(colors.fire, 18);
           ctx.beginPath();
-          ctx.arc(b.x, b.y, b.r, 0, TAU);
+          ctx.moveTo(tailX, tailY);
+          ctx.lineTo(b.x, b.y);
+          ctx.stroke();
+          ctx.strokeStyle = "#fff1a8";
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.moveTo(b.x - dx * 0.22, b.y - dy * 0.22);
+          ctx.lineTo(b.x, b.y);
+          ctx.stroke();
+          ctx.fillStyle = colors.gold;
+          ctx.shadowColor = colors.gold;
+          ctx.shadowBlur = 18;
+          ctx.beginPath();
+          ctx.arc(b.x, b.y, b.r + 1.5, 0, TAU);
+          ctx.fill();
+          ctx.fillStyle = "#ffffff";
+          ctx.shadowBlur = 6;
+          ctx.beginPath();
+          ctx.arc(b.x, b.y, Math.max(2, b.r * 0.42), 0, TAU);
           ctx.fill();
         }
         ctx.restore();
