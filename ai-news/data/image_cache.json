@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-06T13:00:02.037997+00:00",
+  "updatedAt": "2026-06-06T14:00:01.849764+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -9472,6 +9472,10 @@
     "https://www.techrepublic.com/article/news-google-android-code-offer": {
       "image": "",
       "checkedAt": "2026-06-06T12:14:38.918607+00:00"
+    },
+    "https://www.sciencedaily.com/releases/2026/06/260604044258.htm": {
+      "image": "https://www.sciencedaily.com/images/1920/extreme-close-up-of-eye.webp",
+      "checkedAt": "2026-06-06T14:00:01.849764+00:00"
     }
   }
 }
