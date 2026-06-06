@@ -327,6 +327,15 @@
       background: rgba(255, 210, 61, 0.08);
     }
 
+    .score-entry-title {
+      grid-column: 1 / -1;
+      color: var(--gold);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
     .score-entry input {
       width: 100%;
       min-height: 38px;
@@ -345,6 +354,15 @@
       min-height: 38px;
       padding: 0 14px;
       font-size: 12px;
+    }
+
+    .overlay.game-over .enemy-roster,
+    .overlay.game-over .powerups {
+      display: none;
+    }
+
+    .overlay.game-over .scores-panel {
+      margin-top: 14px;
     }
 
     .title-actions {
@@ -487,7 +505,7 @@
       <div class="overlay" id="overlay">
         <div class="panel">
           <h1>Invaders</h1>
-          <div class="title-version">v1.30</div>
+          <div class="title-version">v1.31</div>
           <p class="tagline" id="message">A modernized arcade defense run: punch through waves, catch power cores, and survive the boss carrier.</p>
           <div class="enemy-roster" aria-label="Enemy ship guide">
             <h2>Enemy Ships</h2>
@@ -517,7 +535,7 @@
         <button id="rightButton" type="button">→</button>
         <button id="fireButton" type="button">FIRE</button>
       </div>
-      <div class="version" aria-hidden="true">v1.30</div>
+      <div class="version" aria-hidden="true">v1.31</div>
     </section>
   </main>
 
@@ -748,7 +766,7 @@
       function renderScores(includeEntry = false, highlightTs = 0) {
         const lastInitials = sanitizeInitials(localStorage.getItem(LAST_INITIALS_KEY) || "YOU");
         const entryHtml = includeEntry && game.score > 0 && !game.scoreSubmitted
-          ? `<div class="score-entry"><input id="initialsInput" maxlength="3" value="${lastInitials}" aria-label="Initials"><button id="submitScoreButton" type="button">Save Score</button></div>`
+          ? `<div class="score-entry"><div class="score-entry-title">Enter Initials</div><input id="initialsInput" maxlength="3" value="${lastInitials}" aria-label="Initials"><button id="submitScoreButton" type="button">Save Score</button></div>`
           : "";
         scoresPanel.innerHTML = `
           ${entryHtml}
@@ -851,6 +869,7 @@
         game.shields = [];
         game.boss = null;
         game.scoreSubmitted = false;
+        overlay.classList.remove("game-over");
         game.nextShot = 0;
         game.nextEnemyShot = 1.35;
         game.waveClearTimer = 0;
@@ -1452,8 +1471,10 @@
         touchAim.pointerId = null;
         message.textContent = `Final score: ${game.score.toLocaleString()}. The fleet regroups; you get another quarter.`;
         startButton.textContent = "Play Again";
+        overlay.classList.add("game-over");
         showScores(true);
         overlay.classList.remove("hidden");
+        requestAnimationFrame(() => document.getElementById("initialsInput")?.focus());
       }
 
       function pointRect(x, y, rect) {
