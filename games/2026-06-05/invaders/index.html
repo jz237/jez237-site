@@ -487,7 +487,7 @@
       <div class="overlay" id="overlay">
         <div class="panel">
           <h1>Invaders</h1>
-          <div class="title-version">v1.29</div>
+          <div class="title-version">v1.30</div>
           <p class="tagline" id="message">A modernized arcade defense run: punch through waves, catch power cores, and survive the boss carrier.</p>
           <div class="enemy-roster" aria-label="Enemy ship guide">
             <h2>Enemy Ships</h2>
@@ -517,7 +517,7 @@
         <button id="rightButton" type="button">→</button>
         <button id="fireButton" type="button">FIRE</button>
       </div>
-      <div class="version" aria-hidden="true">v1.29</div>
+      <div class="version" aria-hidden="true">v1.30</div>
     </section>
   </main>
 
@@ -905,13 +905,16 @@
             for (let col = 0; col < mask[row].length; col++) {
               if (mask[row][col] !== "1") continue;
               const oldShield = oldShields[i];
+              const oldRatio = oldShield ? clamp(oldShield.hp / Math.max(1, oldShield.maxHp || 1), 0, 1) : 1;
               nextShields.push({
                 x: left + col * cell + cell / 2,
                 y: top + row * cell + cell / 2,
                 w: cell * 0.92,
                 h: cell * 0.92,
-                hp: oldShield ? oldShield.hp : 1,
-                maxHp: 1
+                hp: oldShield ? Math.ceil(oldRatio * 3) : 3,
+                maxHp: 3,
+                flash: oldShield ? oldShield.flash || 0 : 0,
+                scar: oldShield ? oldShield.scar : rand(0, TAU)
               });
               i += 1;
             }
@@ -1097,6 +1100,7 @@
         updateParticles(dt);
         updatePowerups(dt);
         updatePickupLabels(dt);
+        updateShields(dt);
         checkWaveClear(dt);
         updateHud();
       }
@@ -1214,8 +1218,7 @@
             b.life = 0;
             b.x = shieldHit.x;
             b.y = shieldHit.y;
-            shieldHit.shield.hp -= 1;
-            burst(shieldHit.x, shieldHit.y, colors.shield, 5, 90);
+            damageShieldBlock(shieldHit.shield, shieldHit.x, shieldHit.y, 5);
           }
           if (b.life <= 0) continue;
           for (const inv of game.invaders) {
@@ -1247,8 +1250,7 @@
             b.life = 0;
             b.x = shieldHit.x;
             b.y = shieldHit.y;
-            shieldHit.shield.hp -= 1;
-            burst(shieldHit.x, shieldHit.y, colors.shield, 6, 100);
+            damageShieldBlock(shieldHit.shield, shieldHit.x, shieldHit.y, 6);
           }
           const shieldRadius = playerShieldRadius() + Math.max(1, b.r || 1);
           const shieldT = p.shield > 0
@@ -1305,6 +1307,19 @@
           label.life -= dt;
         }
         game.pickupLabels = game.pickupLabels.filter(label => label.life > 0);
+      }
+
+      function updateShields(dt) {
+        for (const shield of game.shields) {
+          shield.flash = Math.max(0, (shield.flash || 0) - dt * 4.5);
+        }
+      }
+
+      function damageShieldBlock(shield, x, y, sparks = 5) {
+        shield.hp -= 1;
+        shield.flash = 1;
+        const color = shield.hp <= 1 ? colors.enemy3 : shield.hp <= 2 ? colors.gold : colors.shield;
+        burst(x, y, color, sparks + (shield.hp <= 0 ? 8 : 0), shield.hp <= 0 ? 150 : 100);
       }
 
       function updateParticles(dt) {
@@ -1905,12 +1920,41 @@
       function drawShields() {
         if (game.state !== "playing" && game.state !== "paused") return;
         ctx.save();
+        ctx.globalCompositeOperation = "lighter";
         for (const s of game.shields) {
-          ctx.globalAlpha = 0.82;
-          ctx.fillStyle = colors.shield;
-          ctx.shadowColor = colors.shield;
-          ctx.shadowBlur = 4;
-          ctx.fillRect(s.x - s.w / 2, s.y - s.h / 2, s.w, s.h);
+          const ratio = clamp(s.hp / Math.max(1, s.maxHp), 0, 1);
+          const damage = 1 - ratio;
+          const flash = s.flash || 0;
+          const color = ratio > 0.66 ? colors.shield : ratio > 0.33 ? colors.gold : colors.enemy3;
+          const shrink = 1 - damage * 0.18;
+          const w = s.w * shrink;
+          const h = s.h * shrink;
+          const x = s.x - w / 2;
+          const y = s.y - h / 2;
+          ctx.globalAlpha = 0.55 + ratio * 0.35 + flash * 0.25;
+          ctx.fillStyle = color;
+          ctx.shadowColor = color;
+          ctx.shadowBlur = 5 + flash * 18;
+          ctx.fillRect(x, y, w, h);
+          if (damage > 0) {
+            ctx.globalAlpha = 0.5 + damage * 0.35;
+            ctx.fillStyle = "rgba(3, 4, 10, 0.8)";
+            const chip = Math.max(1.4, Math.min(w, h) * (0.22 + damage * 0.2));
+            ctx.fillRect(x + Math.abs(Math.sin(s.scar)) * (w - chip), y, chip, chip * 0.72);
+            ctx.strokeStyle = damage > 0.55 ? colors.enemy3 : "#fff1a8";
+            ctx.lineWidth = Math.max(1, Math.min(w, h) * 0.12);
+            ctx.beginPath();
+            ctx.moveTo(x + w * 0.22, y + h * (0.25 + Math.abs(Math.sin(s.scar)) * 0.35));
+            ctx.lineTo(x + w * 0.78, y + h * (0.75 - Math.abs(Math.cos(s.scar)) * 0.28));
+            ctx.stroke();
+          }
+          if (ratio <= 0.34) {
+            ctx.globalAlpha = 0.16 + Math.sin(game.time * 5 + s.scar) * 0.05;
+            ctx.fillStyle = "rgba(255,255,255,0.55)";
+            ctx.beginPath();
+            ctx.arc(s.x + Math.sin(game.time * 1.7 + s.scar) * 3, y - 2, Math.max(1.2, s.w * 0.22), 0, TAU);
+            ctx.fill();
+          }
         }
         ctx.restore();
       }
