@@ -11,9 +11,14 @@
     lead: document.querySelector("[data-lead]"),
     computerItems: document.querySelector("[data-computer-items]"),
     market: document.querySelector("[data-market]"),
+    storeShelves: document.querySelector("[data-store-shelves]"),
+    priceWatch: document.querySelector("[data-price-watch]"),
+    bbs: document.querySelector("[data-bbs]"),
+    ad: document.querySelector("[data-period-ad]"),
     fallback: document.querySelector("[data-fallback]"),
     sources: document.querySelector("[data-sources]"),
     status: document.querySelector("[data-status]"),
+    editorNote: document.querySelector("[data-editor-note]"),
   };
 
   function isoDate(date) {
@@ -54,12 +59,18 @@
       `;
       els.computerItems.innerHTML = "";
       els.market.innerHTML = "";
+      els.storeShelves.innerHTML = "";
+      els.priceWatch.innerHTML = "";
+      els.bbs.innerHTML = "";
+      els.ad.innerHTML = "";
       els.fallback.innerHTML = "";
       els.sources.innerHTML = "";
+      els.editorNote.textContent = "Personal computers and personal computer gaming are the editorial priority when source choices compete.";
       return;
     }
 
     els.status.textContent = "Loaded from structured issue data.";
+    els.editorNote.textContent = issue.editorNote || "Personal computers and personal computer gaming are the editorial priority when source choices compete.";
     els.lead.innerHTML = `
       <p class="section-label">Top Computer Story</p>
       <h2>${escapeHtml(issue.lead.headline)}</h2>
@@ -87,6 +98,36 @@
       </div>
       <p>${escapeHtml(issue.market.summary)}</p>
       ${confidenceBadge(issue.market.confidence)}
+    `;
+
+    els.storeShelves.innerHTML = (issue.storeShelves || []).map((item) => `
+      <li>
+        <strong>${escapeHtml(item.name)}</strong>
+        <span>${escapeHtml(item.detail)}</span>
+        ${confidenceBadge(item.confidence)}
+      </li>
+    `).join("");
+
+    els.priceWatch.innerHTML = (issue.priceWatch || []).map((item) => `
+      <li>
+        <strong>${escapeHtml(item.item)}</strong>
+        <span>${escapeHtml(item.price)}</span>
+        <em>${escapeHtml(item.note)}</em>
+      </li>
+    `).join("");
+
+    els.bbs.innerHTML = `
+      <p class="section-label">Modem Desk</p>
+      <h2>${escapeHtml(issue.bbsNote && issue.bbsNote.headline)}</h2>
+      <p>${escapeHtml(issue.bbsNote && issue.bbsNote.summary)}</p>
+      ${confidenceBadge(issue.bbsNote && issue.bbsNote.confidence)}
+    `;
+
+    els.ad.innerHTML = `
+      <p class="ad-kicker">Advertisement</p>
+      <h2>${escapeHtml(issue.periodAd && issue.periodAd.headline)}</h2>
+      <p>${escapeHtml(issue.periodAd && issue.periodAd.summary)}</p>
+      <small>${escapeHtml(issue.periodAd && issue.periodAd.finePrint)}</small>
     `;
 
     els.fallback.innerHTML = `
