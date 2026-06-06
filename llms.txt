@@ -209,8 +209,8 @@ report. Keep it skimmable in roughly 2-5 minutes, with a familiar daily
 section rhythm and one small "oh wow" curiosity item when possible.
 Each morning should feel like a new issue, not yesterday's page with new
 text. Vary the `visualProfile` when appropriate: layout, strapline,
-accent palette, paper feel, article image placement, ad treatment, and
-which sidebars are emphasized.
+accent palette, paper feel, `heroImage`, article image placement, ad
+treatment, and which sidebars are emphasized.
 
 Nostalgia texture to favor when it is historically appropriate: TRS-80,
 Commodore 64/C64C, Atari 800/XL, Amiga, BBS culture, modem calling,
@@ -262,6 +262,9 @@ Editorial priority:
 - Use `visualProfile` for issue-level presentation choices. Keep changes
   restrained and newspaper-like, but avoid repeating the same visual mix
   every day.
+- Use `heroImage` for the issue-front visual. It should normally change
+  with each daily issue and tie to the day's strongest verified or
+  contextual story.
 
 Important files:
 
