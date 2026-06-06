@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-06T17:00:01.274426+00:00",
+  "updatedAt": "2026-06-06T18:00:01.814061+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -9508,6 +9508,10 @@
     "https://techcrunch.com/2026/06/06/the-trump-administration-might-take-an-equity-stake-in-openai": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/donald-trump-cellphone.jpg?resize=1200,800",
       "checkedAt": "2026-06-06T17:00:01.274426+00:00"
+    },
+    "https://techcrunch.com/2026/06/06/sriram-krishnan-is-leaving-his-role-as-white-house-ai-advisor": {
+      "image": "https://techcrunch.com/wp-content/uploads/2022/06/Screen-Shot-2021-02-03-at-1.18.03-PM-1.webp?resize=1200,833",
+      "checkedAt": "2026-06-06T18:00:01.814061+00:00"
     }
   }
 }
