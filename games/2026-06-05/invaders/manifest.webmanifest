@@ -1,6 +1,6 @@
 {
-  "name": "Neon Invaders",
-  "short_name": "Neon Invaders",
+  "name": "Invaders",
+  "short_name": "Invaders",
   "start_url": "./",
   "scope": "./",
   "display": "fullscreen",
