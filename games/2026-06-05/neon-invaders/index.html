@@ -293,7 +293,7 @@
         <button id="rightButton" type="button">→</button>
         <button id="fireButton" type="button">FIRE</button>
       </div>
-      <div class="version" aria-hidden="true">v1.6</div>
+      <div class="version" aria-hidden="true">v1.7</div>
     </section>
   </main>
 
@@ -358,6 +358,67 @@
         enemy2: "#ffd23d",
         enemy3: "#ff4d6d",
         shield: "#35f4ff"
+      };
+      let soundCtx = null;
+      let lastShotSound = 0;
+
+      function unlockAudio() {
+        try {
+          if (!soundCtx) soundCtx = new (window.AudioContext || window.webkitAudioContext)();
+          if (soundCtx.state === "suspended") soundCtx.resume();
+        } catch (error) {
+          soundCtx = null;
+        }
+      }
+
+      function playTone(freq, duration = 0.06, type = "square", gain = 0.035, endFreq = freq) {
+        if (!soundCtx) return;
+        const now = soundCtx.currentTime;
+        const osc = soundCtx.createOscillator();
+        const amp = soundCtx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, now);
+        osc.frequency.exponentialRampToValueAtTime(Math.max(40, endFreq), now + duration);
+        amp.gain.setValueAtTime(0.0001, now);
+        amp.gain.exponentialRampToValueAtTime(gain, now + 0.006);
+        amp.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+        osc.connect(amp).connect(soundCtx.destination);
+        osc.start(now);
+        osc.stop(now + duration + 0.02);
+      }
+
+      function playNoise(duration = 0.08, gain = 0.045, filterFreq = 900) {
+        if (!soundCtx) return;
+        const frames = Math.max(1, Math.floor(soundCtx.sampleRate * duration));
+        const buffer = soundCtx.createBuffer(1, frames, soundCtx.sampleRate);
+        const data = buffer.getChannelData(0);
+        for (let i = 0; i < frames; i++) data[i] = (Math.random() * 2 - 1) * (1 - i / frames);
+        const src = soundCtx.createBufferSource();
+        const filter = soundCtx.createBiquadFilter();
+        const amp = soundCtx.createGain();
+        src.buffer = buffer;
+        filter.type = "bandpass";
+        filter.frequency.value = filterFreq;
+        filter.Q.value = 0.9;
+        amp.gain.value = gain;
+        src.connect(filter).connect(amp).connect(soundCtx.destination);
+        src.start();
+      }
+
+      const sfx = {
+        shot(weapon) {
+          const now = performance.now();
+          if (now - lastShotSound < 55) return;
+          lastShotSound = now;
+          playTone(weapon === "laser" ? 1280 : 920, 0.035, "square", 0.024, weapon === "laser" ? 900 : 620);
+        },
+        step(frame) { playTone(frame ? 132 : 110, 0.045, "square", 0.025, frame ? 110 : 92); },
+        enemy() { playTone(240, 0.055, "triangle", 0.022, 150); },
+        bossShot() { playTone(190, 0.12, "sawtooth", 0.03, 80); },
+        hit() { playTone(520, 0.045, "square", 0.025, 290); },
+        boom(big = false) { playNoise(big ? 0.22 : 0.1, big ? 0.075 : 0.045, big ? 420 : 760); },
+        pickup() { playTone(640, 0.04, "triangle", 0.03, 1180); },
+        hurt() { playNoise(0.16, 0.065, 520); }
       };
 
       function resize() {
@@ -534,6 +595,7 @@
           game.bullets.push(makeBullet(p.x, p.y - 26, 0, -720, 5, colors.bullet, 1));
         }
         burst(p.x, p.y - 24, colors.player, 4, 90);
+        sfx.shot(p.weapon);
       }
 
       function makeBullet(x, y, vx, vy, r, color, damage) {
@@ -567,6 +629,7 @@
           color: colors.enemy2,
           life: 4
         });
+        sfx.enemy();
       }
 
       function update(dt) {
@@ -645,6 +708,7 @@
         if (game.invaderStepTimer >= interval && game.invaders.length) {
           game.invaderStepTimer = 0;
           game.invaderFrame = 1 - game.invaderFrame;
+          sfx.step(game.invaderFrame);
           let hitEdge = false;
           for (const inv of game.invaders) {
             const nextX = inv.x + stepX;
@@ -685,6 +749,7 @@
           [-0.2, 0, 0.2].forEach(a => enemyFire(boss.x, boss.y + 32, 210 + game.wave * 5, a));
           boss.shot = 1.55;
           burst(boss.x, boss.y + 32, colors.enemy2, 10, 140);
+          sfx.bossShot();
         }
       }
 
@@ -784,12 +849,14 @@
       function damageInvader(inv, damage) {
         inv.hp -= damage;
         burst(inv.x, inv.y, inv.hp > 0 ? colors.enemy2 : colors.enemy, inv.hp > 0 ? 7 : 22, inv.hp > 0 ? 90 : 210);
+        if (inv.hp > 0) sfx.hit();
         game.shake = Math.max(game.shake, inv.hp > 0 ? 1 : 4);
         if (inv.hp <= 0) {
           const idx = game.invaders.indexOf(inv);
           if (idx >= 0) game.invaders.splice(idx, 1);
           addScore(inv.type === "diver" ? 45 : inv.type === "striker" ? 30 : 20);
           maybeDrop(inv.x, inv.y);
+          sfx.boom(false);
         }
       }
 
@@ -798,10 +865,12 @@
         if (!boss) return;
         boss.hp -= damage;
         burst(boss.x + rand(-28, 28), boss.y + rand(-18, 24), colors.enemy2, 8, 110);
+        sfx.hit();
         game.shake = Math.max(game.shake, 2);
         if (boss.hp <= 0) {
           addScore(650 + game.wave * 50);
           burst(boss.x, boss.y, colors.enemy2, 90, 360);
+          sfx.boom(true);
           game.shake = 16;
           game.boss = null;
           for (let i = 0; i < 3; i++) dropPowerup(boss.x + rand(-50, 50), boss.y + rand(-10, 35));
@@ -843,6 +912,7 @@
           game.lives = Math.min(5, game.lives + 1);
           p.shield = Math.min(120, p.shield + 20);
         }
+        sfx.pickup();
       }
 
       function hitPlayer(damage) {
@@ -852,6 +922,7 @@
         game.shake = 14;
         p.invulnerable = 1.3;
         burst(p.x, p.y, colors.red, 36, 270);
+        sfx.hurt();
         if (p.shield <= 0) {
           game.lives -= 1;
           p.shield = 100;
@@ -1020,10 +1091,10 @@
       };
       const invaderSpriteCache = new Map();
 
-      function paintPixelSprite(target, pattern, size, ox, oy) {
+      function paintPixelSprite(target, pattern, size, ox, oy, gapScale = 0.16) {
         const h = pattern.length;
         const w = pattern[0].length;
-        const gap = Math.max(0.55, size * 0.14);
+        const gap = Math.max(0.55, size * gapScale);
         const block = Math.max(1, size - gap);
         for (let y = 0; y < h; y++) {
           for (let x = 0; x < w; x++) {
@@ -1045,8 +1116,8 @@
         const sctx = spriteCanvas.getContext("2d");
         sctx.fillStyle = color;
         sctx.shadowColor = color;
-        sctx.shadowBlur = 8;
-        paintPixelSprite(sctx, pattern, pixel, pad, pad);
+        sctx.shadowBlur = type === "drone" ? 2.5 : 6;
+        paintPixelSprite(sctx, pattern, pixel, pad, pad, type === "drone" ? 0.32 : 0.18);
         sctx.shadowBlur = 0;
         sctx.globalAlpha = 0.85;
         sctx.fillStyle = "#ffffff";
@@ -1254,6 +1325,7 @@
       window.addEventListener("keyup", event => keys.delete(event.code));
 
       startButton.addEventListener("click", () => {
+        unlockAudio();
         if (game.state === "paused") {
           togglePause();
         } else {
@@ -1278,7 +1350,10 @@
         }
       }
 
-      canvas.addEventListener("pointerdown", event => setTouchAim(event, true));
+      canvas.addEventListener("pointerdown", event => {
+        unlockAudio();
+        setTouchAim(event, true);
+      });
       canvas.addEventListener("pointermove", event => {
         if (!touchAim.active || game.state !== "playing") return;
         if (touchAim.pointerId !== null && event.pointerId !== touchAim.pointerId) return;
