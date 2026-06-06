@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-06T14:00:01.849764+00:00",
+  "updatedAt": "2026-06-06T15:00:01.699225+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -9476,6 +9476,10 @@
     "https://www.sciencedaily.com/releases/2026/06/260604044258.htm": {
       "image": "https://www.sciencedaily.com/images/1920/extreme-close-up-of-eye.webp",
       "checkedAt": "2026-06-06T14:00:01.849764+00:00"
+    },
+    "https://www.theverge.com/ai-artificial-intelligence/944235/meta-app-ai-clickbait-articles": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/ai-label-14.png?quality=90&amp;strip=all&amp;crop=0%2C0%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-06-06T15:00:01.699225+00:00"
     }
   }
 }
