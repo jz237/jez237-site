@@ -414,7 +414,7 @@
         <button id="rightButton" type="button">→</button>
         <button id="fireButton" type="button">FIRE</button>
       </div>
-      <div class="version" aria-hidden="true">v1.15</div>
+      <div class="version" aria-hidden="true">v1.16</div>
     </section>
   </main>
 
@@ -470,6 +470,7 @@
         enemyBullets: [],
         particles: [],
         powerups: [],
+        pickupLabels: [],
         shields: [],
         boss: null,
         scoreSubmitted: false
@@ -697,6 +698,7 @@
         game.enemyBullets = [];
         game.particles = [];
         game.powerups = [];
+        game.pickupLabels = [];
         game.shields = [];
         game.boss = null;
         game.scoreSubmitted = false;
@@ -915,6 +917,7 @@
         updateEnemyBullets(dt);
         updateParticles(dt);
         updatePowerups(dt);
+        updatePickupLabels(dt);
         checkWaveClear(dt);
         updateHud();
       }
@@ -1055,12 +1058,41 @@
           core.y += core.vy * dt;
           core.phase += dt * 4;
           if (distSq(core, p) < (core.r + p.r + 8) * (core.r + p.r + 8)) {
+            addPickupLabel(core);
             applyPowerup(core.type);
             core.dead = true;
             burst(core.x, core.y, core.color, 24, 190);
           }
         }
         game.powerups = game.powerups.filter(core => !core.dead && core.y < game.height + 30);
+      }
+
+      function addPickupLabel(core) {
+        const labels = {
+          spread: "SPREAD",
+          laser: "LASER",
+          shield: "SHIELD",
+          slow: "SLOW",
+          repair: "REPAIR"
+        };
+        game.pickupLabels.push({
+          x: core.x,
+          y: core.y - 18,
+          vy: -34,
+          text: labels[core.type] || core.type.toUpperCase(),
+          color: core.color,
+          life: 0.9,
+          maxLife: 0.9
+        });
+      }
+
+      function updatePickupLabels(dt) {
+        for (const label of game.pickupLabels) {
+          label.y += label.vy * dt;
+          label.vy *= Math.pow(0.2, dt);
+          label.life -= dt;
+        }
+        game.pickupLabels = game.pickupLabels.filter(label => label.life > 0);
       }
 
       function updateParticles(dt) {
@@ -1269,6 +1301,7 @@
         drawBoss();
         drawBullets();
         drawPowerups();
+        drawPickupLabels();
         drawParticles();
         drawVignette();
         ctx.restore();
@@ -1585,6 +1618,35 @@
           ctx.beginPath();
           ctx.arc(0, 0, 4, 0, TAU);
           ctx.fill();
+          ctx.restore();
+        }
+        ctx.restore();
+      }
+
+      function drawPickupLabels() {
+        if (!game.pickupLabels.length) return;
+        ctx.save();
+        ctx.globalCompositeOperation = "lighter";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.font = `${Math.max(14, Math.min(22, game.width * 0.024))}px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace`;
+        for (const label of game.pickupLabels) {
+          const t = clamp(label.life / label.maxLife, 0, 1);
+          const pop = 1 + (1 - t) * 0.2;
+          ctx.save();
+          ctx.translate(label.x, label.y);
+          ctx.scale(pop, pop);
+          ctx.globalAlpha = Math.min(1, t * 1.6);
+          ctx.lineWidth = 5;
+          ctx.strokeStyle = "rgba(0,0,0,0.75)";
+          ctx.shadowColor = label.color;
+          ctx.shadowBlur = 18;
+          ctx.strokeText(label.text, 0, 0);
+          ctx.fillStyle = label.color;
+          ctx.fillText(label.text, 0, 0);
+          ctx.fillStyle = "#ffffff";
+          ctx.globalAlpha *= 0.55;
+          ctx.fillText(label.text, 0, -1);
           ctx.restore();
         }
         ctx.restore();
