@@ -293,7 +293,7 @@
         <button id="rightButton" type="button">→</button>
         <button id="fireButton" type="button">FIRE</button>
       </div>
-      <div class="version" aria-hidden="true">v1.3</div>
+      <div class="version" aria-hidden="true">v1.4</div>
     </section>
   </main>
 
@@ -362,7 +362,8 @@
 
       function resize() {
         const rect = canvas.getBoundingClientRect();
-        const dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
+        const maxDpr = rect.width < 560 ? 1.35 : 2;
+        const dpr = Math.max(1, Math.min(maxDpr, window.devicePixelRatio || 1));
         canvas.width = Math.floor(rect.width * dpr);
         canvas.height = Math.floor(rect.height * dpr);
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -391,7 +392,7 @@
       }
 
       function buildStars() {
-        const count = Math.floor(clamp(game.width * game.height / 7200, 80, 190));
+        const count = Math.floor(clamp(game.width * game.height / 9200, game.width < 560 ? 55 : 80, game.width < 560 ? 105 : 190));
         game.stars = Array.from({ length: count }, () => ({
           x: Math.random() * game.width,
           y: Math.random() * game.height,
@@ -878,7 +879,10 @@
       }
 
       function burst(x, y, color, count, force) {
-        for (let i = 0; i < count; i++) {
+        const actualCount = Math.max(1, Math.round(count * (game.width < 560 ? 0.55 : 1)));
+        const maxParticles = game.width < 560 ? 140 : 260;
+        if (game.particles.length > maxParticles) game.particles.splice(0, game.particles.length - maxParticles);
+        for (let i = 0; i < actualCount; i++) {
           const a = rand(0, TAU);
           const s = rand(force * 0.25, force);
           game.particles.push({
@@ -1014,35 +1018,51 @@
           ["00011000","00111100","01111110","11011011","11111111","00100100","10000001","01011010"]
         ]
       };
+      const invaderSpriteCache = new Map();
 
-      function drawPixelSprite(pattern, size) {
+      function paintPixelSprite(target, pattern, size, ox, oy) {
         const h = pattern.length;
         const w = pattern[0].length;
-        const ox = -w * size / 2;
-        const oy = -h * size / 2;
         for (let y = 0; y < h; y++) {
           for (let x = 0; x < w; x++) {
-            if (pattern[y][x] === "1") ctx.fillRect(ox + x * size, oy + y * size, size, size);
+            if (pattern[y][x] === "1") target.fillRect(ox + x * size, oy + y * size, size, size);
           }
         }
       }
 
+      function getInvaderSprite(type, frame, color, pixel) {
+        const key = `${type}:${frame}:${color}:${pixel}`;
+        if (invaderSpriteCache.has(key)) return invaderSpriteCache.get(key);
+        const pattern = invaderSprites[type][frame];
+        const pad = 10;
+        const width = Math.ceil(pattern[0].length * pixel + pad * 2);
+        const height = Math.ceil(pattern.length * pixel + pad * 2);
+        const spriteCanvas = document.createElement("canvas");
+        spriteCanvas.width = width;
+        spriteCanvas.height = height;
+        const sctx = spriteCanvas.getContext("2d");
+        sctx.fillStyle = color;
+        sctx.shadowColor = color;
+        sctx.shadowBlur = 8;
+        paintPixelSprite(sctx, pattern, pixel, pad, pad);
+        sctx.shadowBlur = 0;
+        sctx.globalAlpha = 0.85;
+        sctx.fillStyle = "#ffffff";
+        sctx.fillRect(width / 2 - 8, height / 2 - 2, 4, 3);
+        sctx.fillRect(width / 2 + 4, height / 2 - 2, 4, 3);
+        invaderSpriteCache.set(key, spriteCanvas);
+        return spriteCanvas;
+      }
+
       function drawInvaders() {
         ctx.save();
-        ctx.globalCompositeOperation = "lighter";
         for (const inv of game.invaders) {
           ctx.save();
           ctx.translate(inv.x, inv.y);
           const color = inv.type === "drone" ? colors.enemy : inv.type === "striker" ? colors.enemy2 : colors.enemy3;
-          const sprite = invaderSprites[inv.type][game.invaderFrame];
           const pixel = inv.type === "drone" ? 3.6 : 3.8;
-          glow(color, 14);
-          ctx.fillStyle = color;
-          drawPixelSprite(sprite, pixel);
-          ctx.globalAlpha = 0.85;
-          ctx.fillStyle = "#ffffff";
-          ctx.fillRect(-8, -2, 4, 3);
-          ctx.fillRect(4, -2, 4, 3);
+          const sprite = getInvaderSprite(inv.type, game.invaderFrame, color, pixel);
+          ctx.drawImage(sprite, -sprite.width / 2, -sprite.height / 2);
           if (inv.maxHp > 1) {
             ctx.globalAlpha = 0.65;
             ctx.fillStyle = "rgba(255,255,255,0.18)";
