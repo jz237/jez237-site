@@ -14,6 +14,25 @@
         "paper": "cream",
         "strapline": "COMPUTERS • GAMES • SOFTWARE • MARKETS"
       },
+      "layoutPlan": {
+        "main": [
+          "editor-note",
+          "lead",
+          "computer-items",
+          "store-shelves"
+        ],
+        "sidebar": [
+          "market",
+          "price-watch",
+          "bbs",
+          "curiosity",
+          "music",
+          "period-ad",
+          "fallback",
+          "sources",
+          "verification"
+        ]
+      },
       "heroImage": {
         "src": "media/retro-computer-desk-1986.webp",
         "alt": "A period-style 1980s personal computer desk with CRT monitor, keyboard, floppy disks, printer paper, and computer magazines",
