@@ -481,39 +481,13 @@
       padding: 10px 12px;
       font: inherit;
     }
-    .clipping-sheet {
-      margin-top: 18px;
-      border: 3px solid var(--cc-ink);
-      background:
-        repeating-linear-gradient(90deg, rgba(27, 26, 23, 0.035), rgba(27, 26, 23, 0.035) 1px, transparent 1px, transparent 11px),
-        rgba(255, 248, 220, 0.9);
-      box-shadow: 7px 7px 0 rgba(27, 26, 23, 0.14);
-      padding: 14px;
-    }
-    .clipping-sheet h2 {
-      margin: 0 0 12px;
-      color: var(--cc-ink);
-      font-family: Georgia, "Times New Roman", serif;
-      letter-spacing: 0;
-      text-transform: uppercase;
-    }
-    .clipping-grid {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 12px;
-    }
-    .clipping-card {
-      margin: 0;
+    .article-visual {
+      margin: 10px 0 12px;
       border: 2px solid var(--cc-ink);
       background: rgba(255, 243, 206, 0.92);
-      box-shadow: 4px 4px 0 rgba(0, 138, 150, 0.18);
-      transform: rotate(-0.35deg);
+      box-shadow: 4px 4px 0 rgba(0, 138, 150, 0.16);
     }
-    .clipping-card:nth-child(2n) {
-      transform: rotate(0.45deg);
-      box-shadow: 4px 4px 0 rgba(194, 38, 115, 0.16);
-    }
-    .clipping-card img {
+    .article-visual img {
       display: block;
       width: 100%;
       aspect-ratio: 4 / 3;
@@ -521,21 +495,13 @@
       border-bottom: 2px solid var(--cc-ink);
       filter: contrast(1.04) saturate(0.88);
     }
-    .clipping-card figcaption {
+    .article-visual figcaption {
       padding: 9px;
     }
-    .clipping-card strong,
-    .clipping-card span {
+    .article-visual span {
       display: block;
-    }
-    .clipping-card strong {
-      color: var(--cc-ink);
-      line-height: 1.2;
-    }
-    .clipping-card span {
       color: var(--cc-muted);
       line-height: 1.35;
-      margin-top: 4px;
     }
     html body {
       color: var(--cc-ink) !important;
@@ -558,7 +524,6 @@
     }
     html body .chronicle-panel h2,
     html body .chronicle-card h3,
-    html body .clipping-sheet h2,
     html body .chronicle-panel strong,
     html body .chronicle-card strong {
       color: var(--cc-ink) !important;
@@ -628,7 +593,6 @@
       .chronicle-hero,
       .chronicle-grid,
       .computer-grid,
-      .clipping-grid,
       .morning-strip {
         grid-template-columns: 1fr;
       }
@@ -676,12 +640,6 @@
       </select>
     </div>
 
-    <section class="clipping-sheet" aria-labelledby="clipping-title">
-      <p class="section-label">Photo Clippings</p>
-      <h2 id="clipping-title">Today's Clipping File</h2>
-      <div class="clipping-grid" data-clippings></div>
-    </section>
-
     <section class="chronicle-grid" aria-label="Daily computer news issue">
       <div>
         <div class="editor-note" data-editor-note></div>
@@ -690,6 +648,7 @@
         <section class="chronicle-panel" style="margin-top:14px;" aria-labelledby="shelf-title">
           <p class="section-label">On Store Shelves</p>
           <h2 id="shelf-title">Games, Software &amp; Platforms People Could Talk About</h2>
+          <div data-store-shelves-image></div>
           <ul class="shelf-list" data-store-shelves></ul>
         </section>
       </div>
@@ -706,6 +665,7 @@
         <article class="chronicle-panel" style="margin-top:14px;">
           <p class="section-label">Rock Radio Top 10</p>
           <h2>Album-Rock Airwaves</h2>
+          <div data-music-chart-image></div>
           <ul class="chart-list" data-music-chart></ul>
         </article>
         <article class="chronicle-panel period-ad" data-period-ad style="margin-top:14px;"></article>
