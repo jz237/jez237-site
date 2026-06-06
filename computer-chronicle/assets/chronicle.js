@@ -16,16 +16,26 @@
     lead: document.querySelector("[data-lead]"),
     computerItems: document.querySelector("[data-computer-items]"),
     market: document.querySelector("[data-market]"),
+    storeShelvesLabel: document.querySelector("[data-store-shelves-label]"),
+    storeShelvesTitle: document.querySelector("[data-store-shelves-title]"),
     storeShelvesImage: document.querySelector("[data-store-shelves-image]"),
     storeShelves: document.querySelector("[data-store-shelves]"),
+    priceWatchLabel: document.querySelector("[data-price-watch-label]"),
+    priceWatchTitle: document.querySelector("[data-price-watch-title]"),
     priceWatch: document.querySelector("[data-price-watch]"),
     bbs: document.querySelector("[data-bbs]"),
     curiosity: document.querySelector("[data-curiosity]"),
+    musicLabel: document.querySelector("[data-music-label]"),
+    musicTitle: document.querySelector("[data-music-title]"),
     musicChartImage: document.querySelector("[data-music-chart-image]"),
     musicChart: document.querySelector("[data-music-chart]"),
     ad: document.querySelector("[data-period-ad]"),
     fallback: document.querySelector("[data-fallback]"),
+    sourcesLabel: document.querySelector("[data-sources-label]"),
+    sourcesTitle: document.querySelector("[data-sources-title]"),
     sources: document.querySelector("[data-sources]"),
+    verificationLabel: document.querySelector("[data-verification-label]"),
+    verificationTitle: document.querySelector("[data-verification-title]"),
     status: document.querySelector("[data-status]"),
     editorNote: document.querySelector("[data-editor-note]"),
     issuePicker: document.querySelector("[data-issue-picker]"),
@@ -66,6 +76,27 @@
         </figcaption>
       </figure>
     `;
+  }
+
+  function chrome(issue, key, field, fallback) {
+    return (issue && issue.sectionChrome && issue.sectionChrome[key] && issue.sectionChrome[key][field]) || fallback;
+  }
+
+  function setText(el, value) {
+    if (el) el.textContent = value;
+  }
+
+  function applySectionChrome(issue) {
+    setText(els.storeShelvesLabel, chrome(issue, "storeShelves", "label", "On Store Shelves"));
+    setText(els.storeShelvesTitle, chrome(issue, "storeShelves", "title", "Games, Software & Platforms People Could Talk About"));
+    setText(els.priceWatchLabel, chrome(issue, "priceWatch", "label", "Price Watch"));
+    setText(els.priceWatchTitle, chrome(issue, "priceWatch", "title", "What It Cost"));
+    setText(els.musicLabel, chrome(issue, "music", "label", "Rock Radio Top 10"));
+    setText(els.musicTitle, chrome(issue, "music", "title", "Album-Rock Airwaves"));
+    setText(els.sourcesLabel, chrome(issue, "sources", "label", "Source Trail"));
+    setText(els.sourcesTitle, chrome(issue, "sources", "title", "Research Log"));
+    setText(els.verificationLabel, chrome(issue, "verification", "label", "Verification Key"));
+    setText(els.verificationTitle, chrome(issue, "verification", "title", "How to Read It"));
   }
 
   function applyVisualProfile(issue) {
@@ -128,6 +159,7 @@
     applyVisualProfile(issue);
     applyHeroImage(issue);
     applyLayoutPlan(issue);
+    applySectionChrome(issue);
 
     if (!issue) {
       els.status.textContent = "No researched issue has been loaded for this date yet.";
@@ -155,7 +187,7 @@
     els.status.textContent = "Loaded from structured issue data.";
     els.editorNote.textContent = issue.editorNote || "Personal computers and personal computer gaming are the editorial priority when source choices compete.";
     els.lead.innerHTML = `
-      <p class="section-label">Top Computer Story</p>
+      <p class="section-label">${escapeHtml(chrome(issue, "lead", "label", "Top Computer Story"))}</p>
       <h2>${escapeHtml(issue.lead.headline)}</h2>
       <p>${escapeHtml(issue.lead.summary)}</p>
       ${confidenceBadge(issue.lead.confidence)}
@@ -174,7 +206,7 @@
     const dow = issue.market.dow || "pending";
     const nasdaq = issue.market.nasdaq || "pending";
     els.market.innerHTML = `
-      <p class="section-label">Business / Stock Market</p>
+      <p class="section-label">${escapeHtml(chrome(issue, "market", "label", "Business / Stock Market"))}</p>
       <h2>${escapeHtml(issue.market.headline)}</h2>
       <div class="ticker-row">
         <span>Dow <strong>${escapeHtml(dow)}</strong></span>
@@ -204,7 +236,7 @@
     `).join("");
 
     els.bbs.innerHTML = `
-      <p class="section-label">Modem Desk</p>
+      <p class="section-label">${escapeHtml(chrome(issue, "bbs", "label", "Modem Desk"))}</p>
       <h2>${escapeHtml(issue.bbsNote && issue.bbsNote.headline)}</h2>
       ${articleVisual(issue.bbsNote && issue.bbsNote.image)}
       <p>${escapeHtml(issue.bbsNote && issue.bbsNote.summary)}</p>
@@ -236,7 +268,7 @@
 
     if (els.curiosity) {
       els.curiosity.innerHTML = `
-        <p class="section-label">Today's Curiosity</p>
+        <p class="section-label">${escapeHtml(chrome(issue, "curiosity", "label", "Today's Curiosity"))}</p>
         <h2>${escapeHtml(issue.curiosity && issue.curiosity.headline)}</h2>
         <p>${escapeHtml(issue.curiosity && issue.curiosity.summary)}</p>
         ${(issue.curiosity && issue.curiosity.detail) ? `<p class="curiosity-detail">${escapeHtml(issue.curiosity.detail)}</p>` : ""}
@@ -253,7 +285,7 @@
     `;
 
     els.fallback.innerHTML = `
-      <p class="section-label">Fallback Lead</p>
+      <p class="section-label">${escapeHtml(chrome(issue, "fallback", "label", "Fallback Lead"))}</p>
       <h2>${escapeHtml(issue.worldFallback.headline)}</h2>
       <p>${escapeHtml(issue.worldFallback.summary)}</p>
       ${confidenceBadge(issue.worldFallback.confidence)}

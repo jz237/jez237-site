@@ -33,6 +33,43 @@
           "verification"
         ]
       },
+      "sectionChrome": {
+        "lead": {
+          "label": "Top Computer Story"
+        },
+        "market": {
+          "label": "Business / Stock Market"
+        },
+        "storeShelves": {
+          "label": "On Store Shelves",
+          "title": "Games, Software & Platforms People Could Talk About"
+        },
+        "priceWatch": {
+          "label": "Price Watch",
+          "title": "What It Cost"
+        },
+        "bbs": {
+          "label": "Modem Desk"
+        },
+        "curiosity": {
+          "label": "Today's Curiosity"
+        },
+        "music": {
+          "label": "Rock Radio Top 10",
+          "title": "Album-Rock Airwaves"
+        },
+        "fallback": {
+          "label": "Fallback Lead"
+        },
+        "sources": {
+          "label": "Source Trail",
+          "title": "Research Log"
+        },
+        "verification": {
+          "label": "Verification Key",
+          "title": "How to Read It"
+        }
+      },
       "heroImage": {
         "src": "media/retro-computer-desk-1986.webp",
         "alt": "A period-style 1980s personal computer desk with CRT monitor, keyboard, floppy disks, printer paper, and computer magazines",
