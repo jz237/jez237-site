@@ -487,7 +487,7 @@
       <div class="overlay" id="overlay">
         <div class="panel">
           <h1>Neon Invaders</h1>
-          <div class="title-version">v1.25</div>
+          <div class="title-version">v1.26</div>
           <p class="tagline" id="message">A modernized arcade defense run: punch through waves, catch power cores, and survive the boss carrier.</p>
           <div class="enemy-roster" aria-label="Enemy ship guide">
             <h2>Enemy Ships</h2>
@@ -518,7 +518,7 @@
         <button id="rightButton" type="button">→</button>
         <button id="fireButton" type="button">FIRE</button>
       </div>
-      <div class="version" aria-hidden="true">v1.25</div>
+      <div class="version" aria-hidden="true">v1.26</div>
     </section>
   </main>
 
@@ -789,8 +789,8 @@
         game.scale = Math.min(game.width / 1180, game.height / 760);
         buildStars();
         if (game.player) {
-          game.player.y = game.height - Math.max(72, 86 * game.scale);
-          game.player.x = clamp(game.player.x, 36, game.width - 36);
+          syncPlayerLane();
+          if (game.shields.length) makeShields(true);
         }
       }
 
@@ -806,6 +806,20 @@
         const dx = a.x - b.x;
         const dy = a.y - b.y;
         return dx * dx + dy * dy;
+      }
+
+      function playerLaneY() {
+        const mobile = game.width < 560;
+        const bottomGap = mobile
+          ? clamp(game.height * 0.11, 66, 88)
+          : Math.max(72, 86 * game.scale);
+        return game.height - bottomGap;
+      }
+
+      function syncPlayerLane() {
+        if (!game.player) return;
+        game.player.y = playerLaneY();
+        game.player.x = clamp(game.player.x, 36, game.width - 36);
       }
 
       function buildStars() {
@@ -847,7 +861,7 @@
         touchAim.pointerId = null;
         game.player = {
           x: game.width / 2,
-          y: game.height - Math.max(72, 86 * game.scale),
+          y: playerLaneY(),
           r: 19,
           vx: 0,
           shield: 100,
@@ -863,8 +877,9 @@
         updateHud();
       }
 
-      function makeShields() {
-        game.shields = [];
+      function makeShields(preserveDamage = false) {
+        const oldShields = preserveDamage ? game.shields.slice() : [];
+        const nextShields = [];
         const mask = [
           "000111111000",
           "001111111100",
@@ -880,26 +895,31 @@
         const bunkerWidth = mask[0].length * cell;
         const bunkerHeight = mask.length * cell;
         const gap = game.width / 4;
-        const screenTop = game.height - Math.max(162, 205 * game.scale);
-        const playerY = game.player ? game.player.y : game.height - Math.max(72, 86 * game.scale);
-        const safeTop = playerY - bunkerHeight - Math.max(24, 36 * game.scale);
-        const top = Math.min(screenTop, safeTop);
+        const playerY = playerLaneY();
+        const safeGap = game.width < 560
+          ? clamp(game.height * 0.078, 46, 66)
+          : clamp(game.height * 0.075, 54, 78);
+        const top = playerY - bunkerHeight - safeGap;
+        let i = 0;
         for (let s = 1; s <= 3; s++) {
           const left = gap * s - bunkerWidth / 2;
           for (let row = 0; row < mask.length; row++) {
             for (let col = 0; col < mask[row].length; col++) {
               if (mask[row][col] !== "1") continue;
-              game.shields.push({
+              const oldShield = oldShields[i];
+              nextShields.push({
                 x: left + col * cell + cell / 2,
                 y: top + row * cell + cell / 2,
                 w: cell * 0.92,
                 h: cell * 0.92,
-                hp: 1,
+                hp: oldShield ? oldShield.hp : 1,
                 maxHp: 1
               });
+              i += 1;
             }
           }
         }
+        game.shields = nextShields;
       }
 
       function spawnWave() {
@@ -1013,6 +1033,7 @@
         if (game.state !== "playing") return;
         const p = game.player;
         game.time += dt;
+        syncPlayerLane();
         game.shake = Math.max(0, game.shake - dt * 18);
         game.slow = Math.max(0, game.slow - dt);
         game.comboTimer = Math.max(0, game.comboTimer - dt);
@@ -2048,7 +2069,7 @@
       resize();
       game.player = {
         x: game.width / 2,
-        y: game.height - Math.max(72, 86 * game.scale),
+        y: playerLaneY(),
         r: 19,
         vx: 0,
         shield: 100,
