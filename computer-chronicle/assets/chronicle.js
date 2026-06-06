@@ -94,6 +94,24 @@
     }
   }
 
+  function applyLayoutPlan(issue) {
+    const defaults = {
+      main: ["editor-note", "lead", "computer-items", "store-shelves"],
+      sidebar: ["market", "price-watch", "bbs", "curiosity", "music", "period-ad", "fallback", "sources", "verification"],
+    };
+    const plan = (issue && issue.layoutPlan) || {};
+
+    ["main", "sidebar"].forEach((region) => {
+      const order = Array.isArray(plan[region]) ? plan[region] : defaults[region];
+      const nodes = document.querySelectorAll(`[data-${region}-module]`);
+      nodes.forEach((node, index) => {
+        const name = node.getAttribute(`data-${region}-module`);
+        const plannedIndex = order.indexOf(name);
+        node.style.order = String(plannedIndex === -1 ? order.length + index : plannedIndex);
+      });
+    });
+  }
+
   function issueNumber(issue, currentIso) {
     const baseDate = new Date("2026-01-01T00:00:00");
     const issueDate = new Date(`${(issue && issue.currentDate) || currentIso}T00:00:00`);
@@ -109,6 +127,7 @@
     if (els.morningLine) els.morningLine.textContent = issue ? issue.morningLine || "Morning Edition: a quick daily skim from forty years ago." : "Morning Edition: awaiting a researched issue.";
     applyVisualProfile(issue);
     applyHeroImage(issue);
+    applyLayoutPlan(issue);
 
     if (!issue) {
       els.status.textContent = "No researched issue has been loaded for this date yet.";
