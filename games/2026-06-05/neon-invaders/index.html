@@ -216,6 +216,17 @@
       font-size: 20px;
     }
 
+    .version {
+      position: absolute;
+      right: 12px;
+      bottom: 10px;
+      z-index: 3;
+      color: rgba(234, 249, 255, 0.46);
+      font-size: 11px;
+      pointer-events: none;
+      text-shadow: 0 0 8px rgba(53, 244, 255, 0.65);
+    }
+
     .hidden {
       display: none;
     }
@@ -282,6 +293,7 @@
         <button id="rightButton" type="button">→</button>
         <button id="fireButton" type="button">FIRE</button>
       </div>
+      <div class="version" aria-hidden="true">v1.2</div>
     </section>
   </main>
 
@@ -404,6 +416,9 @@
         game.powerups = [];
         game.shields = [];
         game.boss = null;
+        game.nextShot = 0;
+        game.nextEnemyShot = 1.35;
+        game.waveClearTimer = 0;
         touchAim.active = false;
         touchAim.x = null;
         touchAim.pointerId = null;
@@ -454,9 +469,14 @@
         game.powerups = [];
         game.boss = null;
         game.bossWave = game.wave % 4 === 0;
-        const cols = clamp(8 + Math.floor(game.wave / 2), 8, 13);
-        const rows = clamp(4 + Math.floor(game.wave / 3), 4, 7);
-        const spacingX = clamp(game.width / (cols + 2), 52, 84);
+        const mobileFormation = game.width < 560;
+        const cols = game.bossWave
+          ? clamp(5 + Math.floor(game.wave / 6), 5, mobileFormation ? 6 : 7)
+          : mobileFormation
+            ? clamp(6 + Math.floor(game.wave / 4), 6, 8)
+            : clamp(8 + Math.floor(game.wave / 2), 8, 13);
+        const rows = game.bossWave ? 2 : clamp(4 + Math.floor(game.wave / 3), 4, mobileFormation ? 8 : 7);
+        const spacingX = clamp(game.width / (cols + 1), mobileFormation ? 38 : 52, mobileFormation ? 58 : 84);
         const spacingY = clamp(44 * game.scale, 34, 52);
         const startX = game.width / 2 - (cols - 1) * spacingX / 2;
         const startY = Math.max(82, 98 * game.scale);
@@ -484,8 +504,8 @@
             x: game.width / 2,
             y: Math.max(52, 62 * game.scale),
             r: 42,
-            hp: 70 + game.wave * 12,
-            maxHp: 70 + game.wave * 12,
+            hp: 42 + game.wave * 7,
+            maxHp: 42 + game.wave * 7,
             phase: 0,
             shot: 0
           };
@@ -599,12 +619,12 @@
 
       function updateInvaders(dt) {
         const speed = 15 + game.wave * 2.4;
-        const amp = Math.min(88, 35 + game.wave * 4);
+        const amp = Math.min(game.width < 560 ? 34 : 88, 26 + game.wave * 3);
         let lowest = 0;
         for (const inv of game.invaders) {
           inv.phase += dt * (1.8 + game.wave * 0.08);
           const sway = Math.sin(game.time * 1.25 + inv.phase) * amp;
-          inv.x = inv.baseX + sway;
+          inv.x = clamp(inv.baseX + sway, inv.r + 10, game.width - inv.r - 10);
           inv.y += speed * dt;
           inv.baseY += speed * dt;
           lowest = Math.max(lowest, inv.y);
@@ -616,6 +636,7 @@
             inv.dive -= dt;
             inv.x += inv.diveX * dt * 0.7;
             inv.y += 95 * dt;
+            inv.x = clamp(inv.x, inv.r + 10, game.width - inv.r - 10);
           }
         }
 
@@ -637,8 +658,8 @@
         boss.y = Math.max(48, 62 * game.scale) + Math.sin(boss.phase * 1.7) * 8;
         boss.shot -= dt;
         if (boss.shot <= 0) {
-          [-0.32, -0.16, 0, 0.16, 0.32].forEach(a => enemyFire(boss.x, boss.y + 32, 250 + game.wave * 8, a));
-          boss.shot = 1.1;
+          [-0.2, 0, 0.2].forEach(a => enemyFire(boss.x, boss.y + 32, 210 + game.wave * 5, a));
+          boss.shot = 1.55;
           burst(boss.x, boss.y + 32, colors.enemy2, 10, 140);
         }
       }
@@ -689,9 +710,10 @@
               break;
             }
           }
-          if (b.life > 0 && p.invulnerable <= 0 && distSq(b, p) < (b.r + p.r) * (b.r + p.r)) {
+          const hitRadius = 12;
+          if (b.life > 0 && p.invulnerable <= 0 && distSq(b, p) < (b.r + hitRadius) * (b.r + hitRadius)) {
             b.life = 0;
-            hitPlayer(22);
+            hitPlayer(16);
           }
         }
         game.enemyBullets = game.enemyBullets.filter(b => b.life > 0 && b.y < game.height + 40 && b.x > -40 && b.x < game.width + 40);
