@@ -119,6 +119,7 @@
     els.storeShelves.innerHTML = (issue.storeShelves || []).map((item) => `
       <li>
         <strong>${escapeHtml(item.name)}</strong>
+        ${item.platform ? `<span class="platform-tag">${escapeHtml(item.platform)}</span>` : ""}
         <span>${escapeHtml(item.detail)}</span>
         ${confidenceBadge(item.confidence)}
       </li>
@@ -136,6 +137,17 @@
       <p class="section-label">Modem Desk</p>
       <h2>${escapeHtml(issue.bbsNote && issue.bbsNote.headline)}</h2>
       <p>${escapeHtml(issue.bbsNote && issue.bbsNote.summary)}</p>
+      ${issue.bbsNote && Array.isArray(issue.bbsNote.posts) ? `
+        <ul class="bbs-list">
+          ${issue.bbsNote.posts.map((post) => `
+            <li>
+              <strong>${escapeHtml(post.topic)}</strong>
+              ${post.platform ? `<span class="platform-tag">${escapeHtml(post.platform)}</span>` : ""}
+              <p>${escapeHtml(post.text)}</p>
+            </li>
+          `).join("")}
+        </ul>
+      ` : ""}
       ${confidenceBadge(issue.bbsNote && issue.bbsNote.confidence)}
     `;
 
