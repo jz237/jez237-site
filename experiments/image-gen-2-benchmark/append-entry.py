@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Append one generated GPT Image 2 prompt entry to gallery-data.json.
+"""Append one generated GPT Image 2 prompt entry to archive JSON.
 
 Usage:
   append-entry.py --title "..." --prompt "..." --image /path/to/generated.png \
@@ -17,6 +17,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent
 DATA = ROOT / "gallery-data.json"
 PROMPTS = ROOT / "prompts.json"
+WORLDS = ROOT / "worlds-data.json"
 IMAGES = ROOT / "images"
 
 
@@ -51,6 +52,7 @@ def main() -> None:
     ap.add_argument("--world-description", default="")
     ap.add_argument("--world-continuity", default="")
     ap.add_argument("--world-entry-description", default="")
+    ap.add_argument("--world-only", action="store_true", help="Append to worlds-data.json only, not the main prompt gallery")
     args = ap.parse_args()
 
     src = Path(args.image).expanduser().resolve()
@@ -86,7 +88,8 @@ def main() -> None:
             "entryDescription": args.world_entry_description.strip() or args.tests,
         }
 
-    for path in (DATA, PROMPTS):
+    paths = (WORLDS,) if args.world_only else (DATA, PROMPTS)
+    for path in paths:
         data = load(path)
         data.append(entry)
         save(path, data)
