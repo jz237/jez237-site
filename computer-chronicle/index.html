@@ -342,9 +342,37 @@
       line-height: 1.42;
       margin-top: 3px;
     }
+    .platform-tag {
+      display: inline-block !important;
+      width: fit-content;
+      max-width: 100%;
+      margin: 5px 0 4px !important;
+      border: 1px solid var(--cc-blue);
+      background: rgba(38, 79, 158, 0.08);
+      color: var(--cc-blue) !important;
+      font-size: 0.72rem;
+      font-weight: 700;
+      line-height: 1.1 !important;
+      padding: 3px 6px;
+      text-transform: uppercase;
+    }
     .price-list span {
       color: var(--cc-blue);
       font-weight: 700;
+    }
+    .bbs-list {
+      display: grid;
+      gap: 9px;
+      list-style: none;
+      margin: 12px 0 0;
+      padding: 0;
+    }
+    .bbs-list li {
+      border-top: 1px solid var(--cc-rule);
+      padding-top: 9px;
+    }
+    .bbs-list p {
+      margin: 3px 0 0;
     }
     .chart-list {
       counter-reset: chart-rank;
@@ -597,7 +625,7 @@
         <div class="computer-grid" data-computer-items></div>
         <section class="chronicle-panel" style="margin-top:14px;" aria-labelledby="shelf-title">
           <p class="section-label">On Store Shelves</p>
-          <h2 id="shelf-title">Games &amp; Software People Could Actually Talk About</h2>
+          <h2 id="shelf-title">Games, Software &amp; Platforms People Could Talk About</h2>
           <ul class="shelf-list" data-store-shelves></ul>
         </section>
       </div>
