@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-06T16:17:20.000752+00:00",
+  "updatedAt": "2026-06-06T17:00:01.274426+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -9504,6 +9504,10 @@
     "https://www.techrepublic.com/article/news-hugging-face-transformers-rce-flaw": {
       "image": "https://assets.techrepublic.com/uploads/2026/06/hugging-face.jpg?f=jpeg",
       "checkedAt": "2026-06-06T16:00:02.099452+00:00"
+    },
+    "https://techcrunch.com/2026/06/06/the-trump-administration-might-take-an-equity-stake-in-openai": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/donald-trump-cellphone.jpg?resize=1200,800",
+      "checkedAt": "2026-06-06T17:00:01.274426+00:00"
     }
   }
 }
