@@ -9,6 +9,7 @@
       "displayDate": "Friday, June 6, 1986",
       "edition": "Computer & Business Section",
       "editorNote": "Today's issue leans toward personal computers, home computing, software people actually used, and games people could buy or talk about in 1986.",
+      "morningLine": "Morning Edition: five-minute skim for personal-computer people, game-shelf watchers, and anyone who still hears a modem handshake in their soul.",
       "lead": {
         "headline": "Lotus Ends VisiCalc as 1-2-3 Era Takes Hold",
         "summary": "Lotus, already dominant in PC spreadsheets, discontinued VisiCalc during the week of this issue after acquiring Software Arts in 1985. The move marked a symbolic handoff from the Apple II spreadsheet age to the IBM PC business-software era.",
@@ -96,6 +97,12 @@
         "summary": "Local modem users swap shareware, printer drivers, game hints, and hardware advice at 300 and 1200 baud. Phone lines are the social network.",
         "confidence": "Period context"
       },
+      "curiosity": {
+        "headline": "A 1200-Baud Modem Was Fast Enough to Feel Like the Future",
+        "summary": "At 1200 bits per second, a plain page of text could arrive in seconds instead of minutes. It was still slow by modern standards, but for BBS callers it changed the rhythm from waiting to browsing.",
+        "detail": "Think of it as the difference between mailing a postcard and watching one appear line by line.",
+        "confidence": "Period context"
+      },
       "musicChart": [
         {
           "title": "Live To Tell",
@@ -143,29 +150,6 @@
         "summary": "A real 1986 two-page Epson ad used the caption \"The Power. The Glory\" to promote Epson Equity computers and the LQ-1000 printer.",
         "finePrint": "Historical advertisement reference; summarized rather than reproduced.",
         "sourceUrl": "https://www.vintagepaperads.com/1986-Epson-Equity-Computers-and-LQ-1000-Printer-Ad--The-Power-The-Glory_p_125428.html"
-      },
-      "imageBrief": {
-        "title": "Daily Newspaper Image Brief",
-        "masthead": "The Computer Chronicle",
-        "format": "One-page 1980s newspaper computer section, black ink on lightly yellowed newsprint, dense columns, halftone photos, ruled boxes, price ads, and a small market ticker.",
-        "primaryVisual": "A period-correct IBM-compatible office PC or Macintosh desktop publishing workstation, with CRT monitor, keyboard, floppy disks, dot-matrix paper, and trade-magazine atmosphere.",
-        "mustInclude": [
-          "Friday, June 6, 1986 date line",
-          "Lotus / VisiCalc / 1-2-3 lead headline",
-          "Personal computer gaming shelf box",
-          "Dow and Nasdaq market box",
-          "Real 1986 Epson Equity / LQ-1000 printer advertisement reference",
-          "Visible confidence labels may be omitted from the image, but exact/same-week sourcing should guide headline selection"
-        ],
-        "avoid": [
-          "Modern laptops",
-          "Flat-panel monitors",
-          "Smartphones",
-          "Web browser UI",
-          "QR codes",
-          "Glossy magazine layout",
-          "Fake exact release dates where only same-week context is supported"
-        ]
       },
       "worldFallback": {
         "headline": "Chernobyl Evacuees Face Housing Deadline",
