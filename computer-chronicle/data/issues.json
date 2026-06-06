@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-06T13:55:00-04:00",
+  "generatedAt": "2026-06-06T14:32:00-04:00",
   "fallbackPolicy": "Use exact-day computer news when verified. If none exists, use same-week or same-month items with confidence labels, then fall back to a wider world/business headline.",
   "issues": [
     {
@@ -8,56 +8,80 @@
       "displayDate": "Friday, June 6, 1986",
       "edition": "Computer & Business Section",
       "lead": {
-        "headline": "Personal Computers Move Deeper Into Everyday Office Work",
-        "summary": "By mid-1986, the IBM-compatible PC had become the practical business default while Macintosh, Amiga, Atari ST, and Commodore machines kept the home and creative markets lively.",
-        "confidence": "This-month context"
+        "headline": "Lotus Ends VisiCalc as 1-2-3 Era Takes Hold",
+        "summary": "Lotus, already dominant in PC spreadsheets, discontinued VisiCalc during the week of this issue after acquiring Software Arts in 1985. The move marked a symbolic handoff from the Apple II spreadsheet age to the IBM PC business-software era.",
+        "confidence": "Same-week verified"
       },
       "computerItems": [
         {
           "label": "Hardware",
-          "headline": "80286 PCs and Hard Disks Push the Office Past the Hobby Era",
-          "summary": "Faster IBM-compatible systems, falling storage costs, and common business peripherals made the desktop computer feel less experimental and more like office infrastructure.",
-          "confidence": "This-month context"
+          "headline": "Low-Priced IBM Compatibles Crowd the PC Aisle",
+          "summary": "InfoWorld's June 9 issue covered Epson's Equity II as a low-priced IBM-compatible challenger, a sign that clone competition was pushing business buyers toward cheaper PC-standard machines.",
+          "confidence": "Same-week issue"
         },
         {
           "label": "Software",
-          "headline": "Spreadsheets, Databases, and Word Processors Define the Workday",
-          "summary": "Lotus 1-2-3, dBASE, WordPerfect, and DOS utilities remained the practical software stack for many small offices.",
-          "confidence": "This-month context"
+          "headline": "Desktop Publishing Keeps the Macintosh in the Office Conversation",
+          "summary": "Aldus PageMaker, released for Macintosh in 1985, was still drawing serious trade-press attention in June 1986 as page layout became one of the Mac's clearest professional strengths.",
+          "confidence": "Same-week issue"
         },
         {
           "label": "Games",
-          "headline": "Adventure Games, Commodore 64 Titles, and Console Imports Fill Store Shelves",
-          "summary": "Computer-game coverage in 1986 was scattered across magazine issues and store availability, so daily entries should separate exact releases from reviews and shelf reports.",
-          "confidence": "Needs daily source"
+          "headline": "Japan Gets a Harder Super Mario Sequel",
+          "summary": "Nintendo released the Japanese Super Mario Bros. 2 for the Famicom Disk System on June 3, while Enix's Dragon Quest, released May 27, was still new on Famicom shelves.",
+          "confidence": "Same-week verified"
         },
         {
-          "label": "Online",
-          "headline": "Modems and Bulletin Board Systems Bring Home Users Onto Phone Lines",
-          "summary": "BBS culture was becoming a real part of hobby computing, with 300- and 1200-baud modems turning isolated machines into local communities.",
-          "confidence": "This-month context"
+          "label": "Workstations",
+          "headline": "IBM's RT PC Puts RISC on the Business Radar",
+          "summary": "IBM's 1986 RT PC workstation brought RISC technology into IBM's product line, though early trade coverage treated it as important but not yet a sure threat to established workstation vendors.",
+          "confidence": "This-year verified"
         }
       ],
       "market": {
         "headline": "Markets Desk",
-        "summary": "Dow and Nasdaq closes for this historic date still need a verified daily-source pull before publishing exact figures.",
-        "dow": null,
-        "nasdaq": null,
-        "confidence": "Needs verified close"
+        "summary": "The Dow finished at a record close on June 6, 1986. Nasdaq also edged higher, keeping the tech-heavy index near the 400 mark.",
+        "dow": "1,885.90",
+        "nasdaq": "400.25",
+        "confidence": "Exact-day close"
       },
       "worldFallback": {
         "headline": "Chernobyl Evacuees Face Housing Deadline",
-        "summary": "If the computer desk has no strong exact-day item, this issue can lead with a wider world headline and keep the technology roundup below the fold.",
+        "summary": "UPI reported on June 6, 1986 that Soviet officials were treating housing for Chernobyl evacuees as a Politburo priority, with an October deadline for relocated residents.",
         "confidence": "Exact-day archive item"
       },
       "sources": [
         {
-          "name": "UPI Archives: Chernobyl evacuee housing deadline",
-          "url": "https://www.upi.com/Archives/1986/06/06/Housing-Chernobyl-evacuees-a-Politburo-priority/4559518414400/"
+          "name": "InfoWorld, June 9, 1986 issue references: Epson Equity II and PageMaker coverage",
+          "url": "https://books.google.com/books/about/InfoWorld.html?id=KDwEAAAAMBAJ"
         },
         {
-          "name": "FRED daily market data source candidate",
-          "url": "https://fred.stlouisfed.org/"
+          "name": "Lotus/VisiCalc discontinuation reference",
+          "url": "https://en.wikipedia.org/wiki/Lotus_Development"
+        },
+        {
+          "name": "FRED: NASDAQ Composite daily data",
+          "url": "https://fred.stlouisfed.org/data/NASDAQCOM"
+        },
+        {
+          "name": "CountryEconomy: Dow June 1986 daily closes",
+          "url": "https://countryeconomy.com/stock-exchange/usa?dr=1986-06"
+        },
+        {
+          "name": "MobyGames: Dragon Quest / Dragon Warrior release date",
+          "url": "https://www.mobygames.com/game/9223/dragon-warrior/"
+        },
+        {
+          "name": "Arcade History: Super Mario Bros. 2 Japan release date",
+          "url": "https://www.arcade-history.com/?id=65464&n=super-mario-bros.-2-model-fmc-smb&page=detail"
+        },
+        {
+          "name": "InfoWorld: 1986-1995, the networked enterprise",
+          "url": "https://www.infoworld.com/article/2232269/1986-1995-the-networked-enterprise.html"
+        },
+        {
+          "name": "UPI Archives: Chernobyl evacuee housing deadline",
+          "url": "https://www.upi.com/Archives/1986/06/06/Housing-Chernobyl-evacuees-a-Politburo-priority/4559518414400/"
         }
       ]
     }
