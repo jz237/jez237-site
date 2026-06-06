@@ -13,6 +13,7 @@
     lead: document.querySelector("[data-lead]"),
     computerItems: document.querySelector("[data-computer-items]"),
     market: document.querySelector("[data-market]"),
+    clippings: document.querySelector("[data-clippings]"),
     storeShelves: document.querySelector("[data-store-shelves]"),
     priceWatch: document.querySelector("[data-price-watch]"),
     bbs: document.querySelector("[data-bbs]"),
@@ -73,6 +74,7 @@
       `;
       els.computerItems.innerHTML = "";
       els.market.innerHTML = "";
+      if (els.clippings) els.clippings.innerHTML = "";
       els.storeShelves.innerHTML = "";
       els.priceWatch.innerHTML = "";
       els.bbs.innerHTML = "";
@@ -115,6 +117,19 @@
       <p>${escapeHtml(issue.market.summary)}</p>
       ${confidenceBadge(issue.market.confidence)}
     `;
+
+    if (els.clippings) {
+      els.clippings.innerHTML = (issue.clippings || []).map((item) => `
+        <figure class="clipping-card">
+          <img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.alt || item.title)}" loading="lazy">
+          <figcaption>
+            <strong>${escapeHtml(item.title)}</strong>
+            <span>${escapeHtml(item.caption)}</span>
+            ${confidenceBadge(item.confidence)}
+          </figcaption>
+        </figure>
+      `).join("");
+    }
 
     els.storeShelves.innerHTML = (issue.storeShelves || []).map((item) => `
       <li>
