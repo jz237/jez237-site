@@ -265,6 +265,9 @@ Editorial priority:
 - Use `heroImage` for the issue-front visual. It should normally change
   with each daily issue and tie to the day's strongest verified or
   contextual story.
+- Use `layoutPlan` to vary department order by issue. The strongest or
+  most nostalgic verified material can move upward; utility sections
+  like source trail and verification should usually stay near the bottom.
 
 Important files:
 
