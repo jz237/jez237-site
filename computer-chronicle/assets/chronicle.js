@@ -25,6 +25,9 @@
     priceWatch: document.querySelector("[data-price-watch]"),
     bbs: document.querySelector("[data-bbs]"),
     curiosity: document.querySelector("[data-curiosity]"),
+    briefsLabel: document.querySelector("[data-briefs-label]"),
+    briefsTitle: document.querySelector("[data-briefs-title]"),
+    briefs: document.querySelector("[data-briefs]"),
     musicLabel: document.querySelector("[data-music-label]"),
     musicTitle: document.querySelector("[data-music-title]"),
     musicChartImage: document.querySelector("[data-music-chart-image]"),
@@ -91,6 +94,8 @@
     setText(els.storeShelvesTitle, chrome(issue, "storeShelves", "title", "Games, Software & Platforms People Could Talk About"));
     setText(els.priceWatchLabel, chrome(issue, "priceWatch", "label", "Price Watch"));
     setText(els.priceWatchTitle, chrome(issue, "priceWatch", "title", "What It Cost"));
+    setText(els.briefsLabel, chrome(issue, "briefs", "label", "Small Notices"));
+    setText(els.briefsTitle, chrome(issue, "briefs", "title", "Other Things on the Desk"));
     setText(els.musicLabel, chrome(issue, "music", "label", "Rock Radio Top 10"));
     setText(els.musicTitle, chrome(issue, "music", "title", "Album-Rock Airwaves"));
     setText(els.sourcesLabel, chrome(issue, "sources", "label", "Source Trail"));
@@ -175,6 +180,7 @@
       els.priceWatch.innerHTML = "";
       els.bbs.innerHTML = "";
       if (els.curiosity) els.curiosity.innerHTML = "";
+      if (els.briefs) els.briefs.innerHTML = "";
       if (els.musicChartImage) els.musicChartImage.innerHTML = "";
       if (els.musicChart) els.musicChart.innerHTML = "";
       els.ad.innerHTML = "";
@@ -274,6 +280,17 @@
         ${(issue.curiosity && issue.curiosity.detail) ? `<p class="curiosity-detail">${escapeHtml(issue.curiosity.detail)}</p>` : ""}
         ${confidenceBadge(issue.curiosity && issue.curiosity.confidence)}
       `;
+    }
+
+    if (els.briefs) {
+      els.briefs.innerHTML = (issue.briefs || []).map((item) => `
+        <li>
+          <span class="brief-kicker">${escapeHtml(item.kicker || "Brief")}</span>
+          <strong>${escapeHtml(item.headline)}</strong>
+          <p>${escapeHtml(item.summary)}</p>
+          ${confidenceBadge(item.confidence)}
+        </li>
+      `).join("");
     }
 
     els.ad.innerHTML = `
