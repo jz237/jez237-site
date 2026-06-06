@@ -283,7 +283,7 @@ Keep the page authentic to the period. Use dense serif newspaper columns, halfto
       if (!prompt) return;
       try {
         await navigator.clipboard.writeText(prompt);
-        els.promptStatus.textContent = "Prompt copied.";
+        els.promptStatus.textContent = "Newspaper image prompt copied.";
       } catch (error) {
         els.promptStatus.textContent = "Clipboard blocked; use the image brief below.";
       }
