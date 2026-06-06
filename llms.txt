@@ -241,6 +241,9 @@ Editorial priority:
   rotating editorial slots. The BBS item should read like a dated sysop
   log or board digest tied to that issue, not a generic explanation of
   what BBSes were.
+- Include several clippings/images when possible. Tie each image to a
+  visible issue topic, and label generated period-style visuals as visual
+  context rather than archival evidence.
 - Static or slow-changing sections are acceptable only when they are
   explicitly framed as context, prices, verification, or archive tooling.
 
