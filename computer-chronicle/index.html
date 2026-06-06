@@ -278,6 +278,19 @@
       padding: 10px 12px;
       font: inherit;
     }
+    .issue-tools button {
+      border: 1px solid rgba(232, 197, 122, 0.3);
+      border-radius: 6px;
+      background: rgba(232, 197, 122, 0.12);
+      color: #f1dca9;
+      cursor: pointer;
+      font: inherit;
+      padding: 10px 12px;
+    }
+    .prompt-status {
+      color: var(--ink-lo);
+      font-size: 0.86rem;
+    }
     @media (max-width: 820px) {
       .chronicle-hero,
       .chronicle-grid,
@@ -318,6 +331,8 @@
       <select id="issue-picker" data-issue-picker>
         <option>Loading issues...</option>
       </select>
+      <button type="button" data-copy-prompt>Copy image prompt</button>
+      <span class="prompt-status" data-prompt-status></span>
     </div>
 
     <section class="chronicle-grid" aria-label="Daily computer news issue">
