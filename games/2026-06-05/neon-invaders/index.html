@@ -128,6 +128,21 @@
       font-weight: 800;
     }
 
+    .shield-meter i {
+      display: block;
+      width: 100%;
+      height: 4px;
+      margin-top: 5px;
+      transform-origin: left center;
+      background: linear-gradient(90deg, var(--cyan), var(--lime));
+      box-shadow: 0 0 10px rgba(53, 244, 255, 0.8);
+    }
+
+    .shield-meter.low i {
+      background: linear-gradient(90deg, var(--red), var(--gold));
+      box-shadow: 0 0 10px rgba(255, 77, 109, 0.8);
+    }
+
     .overlay {
       position: absolute;
       inset: 0;
@@ -414,7 +429,7 @@
 
       .hud {
         inset: 8px 8px auto 8px;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
+        grid-template-columns: repeat(4, minmax(0, 1fr));
         gap: 6px;
       }
 
@@ -422,8 +437,7 @@
         padding: 7px 8px;
       }
 
-      .meter:nth-child(4),
-      .meter:nth-child(5) {
+      .meter:nth-child(4) {
         display: none;
       }
 
@@ -468,12 +482,12 @@
         <div class="meter"><b>WAVE</b><span id="wave">1</span></div>
         <div class="meter"><b>LIVES</b><span id="lives">3</span></div>
         <div class="meter"><b>WEAPON</b><span id="weapon">PULSE</span></div>
-        <div class="meter"><b>SHIELD</b><span id="shield">100%</span></div>
+        <div class="meter shield-meter" id="shieldMeter"><b>SHIELD</b><span id="shield">100%</span><i id="shieldFill"></i></div>
       </div>
       <div class="overlay" id="overlay">
         <div class="panel">
           <h1>Neon Invaders</h1>
-          <div class="title-version">v1.23</div>
+          <div class="title-version">v1.24</div>
           <p class="tagline" id="message">A modernized arcade defense run: punch through waves, catch power cores, and survive the boss carrier.</p>
           <div class="enemy-roster" aria-label="Enemy ship guide">
             <h2>Enemy Ships</h2>
@@ -504,7 +518,7 @@
         <button id="rightButton" type="button">→</button>
         <button id="fireButton" type="button">FIRE</button>
       </div>
-      <div class="version" aria-hidden="true">v1.23</div>
+      <div class="version" aria-hidden="true">v1.24</div>
     </section>
   </main>
 
@@ -524,6 +538,8 @@
       const livesEl = document.getElementById("lives");
       const weaponEl = document.getElementById("weapon");
       const shieldEl = document.getElementById("shield");
+      const shieldMeter = document.getElementById("shieldMeter");
+      const shieldFill = document.getElementById("shieldFill");
       const scoresPanel = document.getElementById("scoresPanel");
 
       const TAU = Math.PI * 2;
@@ -1295,13 +1311,21 @@
 
       function dropPowerup(x, y) {
         const types = [
-          ["spread", "#ff3df2"],
-          ["laser", "#35f4ff"],
-          ["shield", "#a7ff3d"],
-          ["slow", "#ffd23d"],
-          ["repair", "#ffffff"]
+          ["spread", "#ff3df2", 4],
+          ["laser", "#35f4ff", 4],
+          ["slow", "#ffd23d", 3],
+          ["shield", "#a7ff3d", 1.2],
+          ["repair", "#ffffff", 0.55]
         ];
-        const [type, color] = types[Math.floor(Math.random() * types.length)];
+        let pick = Math.random() * types.reduce((sum, entry) => sum + entry[2], 0);
+        let type = "spread";
+        let color = "#ff3df2";
+        for (const entry of types) {
+          pick -= entry[2];
+          if (pick > 0) continue;
+          [type, color] = entry;
+          break;
+        }
         game.powerups.push({ x, y, vy: 120, r: 13, type, color, phase: rand(0, TAU) });
       }
 
@@ -1311,12 +1335,12 @@
           p.weapon = type;
           p.weaponTimer = 10;
         } else if (type === "shield") {
-          p.shield = Math.min(150, p.shield + 45);
+          p.shield = Math.min(125, p.shield + 30);
         } else if (type === "slow") {
           game.slow = 5;
         } else if (type === "repair") {
-          game.lives = Math.min(5, game.lives + 1);
-          p.shield = Math.min(120, p.shield + 20);
+          game.lives = Math.min(4, game.lives + 1);
+          p.shield = Math.min(110, p.shield + 12);
         }
         sfx.pickup();
       }
@@ -1896,7 +1920,10 @@
         waveEl.textContent = String(game.wave);
         livesEl.textContent = "◆".repeat(Math.max(0, game.lives));
         weaponEl.textContent = game.player.weapon.toUpperCase();
-        shieldEl.textContent = `${Math.max(0, Math.round(game.player.shield))}%`;
+        const shieldValue = Math.max(0, Math.round(game.player.shield));
+        shieldEl.textContent = `${shieldValue}%`;
+        shieldFill.style.transform = `scaleX(${clamp(shieldValue / 100, 0, 1)})`;
+        shieldMeter.classList.toggle("low", shieldValue <= 35);
       }
 
       function loop(now) {
