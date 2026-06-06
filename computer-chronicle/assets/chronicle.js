@@ -15,6 +15,7 @@
     priceWatch: document.querySelector("[data-price-watch]"),
     bbs: document.querySelector("[data-bbs]"),
     ad: document.querySelector("[data-period-ad]"),
+    imageBrief: document.querySelector("[data-image-brief]"),
     fallback: document.querySelector("[data-fallback]"),
     sources: document.querySelector("[data-sources]"),
     status: document.querySelector("[data-status]"),
@@ -63,6 +64,7 @@
       els.priceWatch.innerHTML = "";
       els.bbs.innerHTML = "";
       els.ad.innerHTML = "";
+      els.imageBrief.innerHTML = "";
       els.fallback.innerHTML = "";
       els.sources.innerHTML = "";
       els.editorNote.textContent = "Personal computers and personal computer gaming are the editorial priority when source choices compete.";
@@ -128,6 +130,30 @@
       <h2>${escapeHtml(issue.periodAd && issue.periodAd.headline)}</h2>
       <p>${escapeHtml(issue.periodAd && issue.periodAd.summary)}</p>
       <small>${escapeHtml(issue.periodAd && issue.periodAd.finePrint)}</small>
+    `;
+
+    const brief = issue.imageBrief || {};
+    els.imageBrief.innerHTML = `
+      <p class="section-label">Image Generator Brief</p>
+      <h2>${escapeHtml(brief.title || "Daily Newspaper Image Brief")}</h2>
+      <dl class="brief-list">
+        <dt>Masthead</dt>
+        <dd>${escapeHtml(brief.masthead)}</dd>
+        <dt>Format</dt>
+        <dd>${escapeHtml(brief.format)}</dd>
+        <dt>Primary Visual</dt>
+        <dd>${escapeHtml(brief.primaryVisual)}</dd>
+      </dl>
+      <div class="brief-columns">
+        <div>
+          <h3>Must include</h3>
+          <ul>${(brief.mustInclude || []).map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>
+        </div>
+        <div>
+          <h3>Avoid</h3>
+          <ul>${(brief.avoid || []).map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>
+        </div>
+      </div>
     `;
 
     els.fallback.innerHTML = `
