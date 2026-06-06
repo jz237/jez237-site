@@ -313,10 +313,10 @@
   </div>
 
   <main>
-    <section class="world-catalog" id="world-catalog" hidden>
+    <section class="world-catalog" id="world-catalog">
       <h2>Fictional World Catalog</h2>
       <p class="world-catalog-intro">Weekly fictional worlds get their own catalog sections as the daily image cron adds lived-in views, maps, scenes, and artifacts from each setting.</p>
-      <div id="world-list"></div>
+      <div id="world-list"><p class="empty">No fictional world images have been archived yet. The first named world section will appear here after the next world-life post.</p></div>
     </section>
     <div id="gallery" class="gallery-list" aria-live="polite"></div>
     <div class="load-more-row" id="load-more-row">
@@ -438,8 +438,8 @@
           group.items.push(item);
         });
         if (!worlds.size) {
-          worldCatalog.hidden = true;
-          worldList.innerHTML = '';
+          worldCatalog.hidden = false;
+          worldList.innerHTML = '<p class="empty">No fictional world images match the current filters yet.</p>';
           return;
         }
         worldCatalog.hidden = false;
