@@ -32,6 +32,12 @@
           "label": "Games",
           "headline": "Japan Gets a Harder Super Mario Sequel",
           "summary": "Nintendo released the Japanese Super Mario Bros. 2 for the Famicom Disk System on June 3, while Enix's Dragon Quest, released May 27, was still new on Famicom shelves.",
+          "image": {
+            "src": "media/clipping-arcade-1986.webp",
+            "alt": "Period-style clipping of a 1980s mall arcade with rows of arcade cabinets and players from behind",
+            "caption": "Arcades stayed loud while new console and computer RPGs moved into bedrooms.",
+            "confidence": "Period-style visual"
+          },
           "confidence": "Same-week verified"
         },
         {
@@ -120,39 +126,21 @@
           "note": "Spreadsheet, database, and word-processing packages could cost as much as hardware upgrades."
         }
       ],
-      "clippings": [
-        {
-          "title": "Home-Computer Game Desk",
-          "caption": "C64-style desk, joystick, floppy disks, and computer-game clutter.",
-          "image": "media/clipping-game-desk-1986.webp",
-          "alt": "Period-style clipping of a 1980s home computer game desk with CRT, joystick, floppy disks, and magazines",
-          "confidence": "Period-style visual"
-        },
-        {
-          "title": "BBS Modem Corner",
-          "caption": "Terminal, modem lights, phone handset, and handwritten calling notes.",
-          "image": "media/clipping-bbs-modem-1986.webp",
-          "alt": "Period-style clipping of a 1980s computer terminal, modem, telephone handset, floppy disks, and notes",
-          "confidence": "Period-style visual"
-        },
-        {
-          "title": "Mall Arcade Row",
-          "caption": "Cabinets, coin slots, stools, and fluorescent mall-arcade glow.",
-          "image": "media/clipping-arcade-1986.webp",
-          "alt": "Period-style clipping of a 1980s mall arcade with rows of arcade cabinets and players from behind",
-          "confidence": "Period-style visual"
-        },
-        {
-          "title": "Electronics & Guitar Bench",
-          "caption": "Soldering iron, circuit boards, cassette deck, effects pedal, and guitar cable.",
-          "image": "media/clipping-electronics-guitar-1986.webp",
-          "alt": "Period-style clipping of a 1980s electronics and guitar workbench with soldering tools, circuit boards, cassette deck, and guitar",
-          "confidence": "Period-style visual"
-        }
-      ],
+      "storeShelvesImage": {
+        "src": "media/clipping-game-desk-1986.webp",
+        "alt": "Period-style clipping of a 1980s home computer game desk with CRT, joystick, floppy disks, and magazines",
+        "caption": "The home-computer shelf meant disks, joysticks, manuals, and a desk that never stayed clean.",
+        "confidence": "Period-style visual"
+      },
       "bbsNote": {
         "headline": "Sysop Log: Disk Tips, RPG Maps, and C64 Score Bragging",
         "summary": "Today's board traffic leans game-heavy: Famicom Disk System players are warning each other about the brutal new Mario sequel, RPG callers are asking for Dragon Quest map help, and C64 owners are comparing Leader Board rounds.",
+        "image": {
+          "src": "media/clipping-bbs-modem-1986.webp",
+          "alt": "Period-style clipping of a 1980s computer terminal, modem, telephone handset, floppy disks, and notes",
+          "caption": "A modem desk turns the day's game talk into a phone-line social network.",
+          "confidence": "Period-style visual"
+        },
         "posts": [
           {
             "topic": "Game Help",
@@ -220,6 +208,12 @@
           "artist": "The Fabulous Thunderbirds"
         }
       ],
+      "musicChartImage": {
+        "src": "media/clipping-electronics-guitar-1986.webp",
+        "alt": "Period-style clipping of a 1980s electronics and guitar workbench with soldering tools, circuit boards, cassette deck, and guitar",
+        "caption": "Rock radio, cassette collecting, and electronics tinkering belonged to the same bedroom ecosystem.",
+        "confidence": "Period-style visual"
+      },
       "periodAd": {
         "headline": "Epson Equity Computers and LQ-1000 Printer",
         "summary": "A real 1986 two-page Epson ad used the caption \"The Power. The Glory\" to promote Epson Equity computers and the LQ-1000 printer.",
