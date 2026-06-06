@@ -429,7 +429,7 @@
       <div class="overlay" id="overlay">
         <div class="panel">
           <h1>Neon Invaders</h1>
-          <div class="title-version">v1.18</div>
+          <div class="title-version">v1.19</div>
           <p class="tagline" id="message">A modernized arcade defense run: punch through waves, catch power cores, and survive the boss carrier.</p>
           <div class="controls">
             <div><kbd>A</kbd>/<kbd>D</kbd> or <kbd>←</kbd>/<kbd>→</kbd> move</div>
@@ -453,7 +453,7 @@
         <button id="rightButton" type="button">→</button>
         <button id="fireButton" type="button">FIRE</button>
       </div>
-      <div class="version" aria-hidden="true">v1.18</div>
+      <div class="version" aria-hidden="true">v1.19</div>
     </section>
   </main>
 
@@ -800,7 +800,7 @@
         const cell = game.width < 560 ? clamp(game.width / 68, 4.8, 6.2) : clamp(game.width / 54, 6.2, 10);
         const bunkerWidth = mask[0].length * cell;
         const gap = game.width / 4;
-        const top = game.height - Math.max(186, 218 * game.scale);
+        const top = game.height - Math.max(162, 205 * game.scale);
         for (let s = 1; s <= 3; s++) {
           const left = gap * s - bunkerWidth / 2;
           for (let row = 0; row < mask.length; row++) {
