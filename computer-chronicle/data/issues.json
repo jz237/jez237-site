@@ -14,6 +14,11 @@
         "paper": "cream",
         "strapline": "COMPUTERS • GAMES • SOFTWARE • MARKETS"
       },
+      "masthead": {
+        "kicker": "Daily historical tech desk",
+        "title": "Computer Chronicle",
+        "deck": "A morning-paper style computer section built from the date 40 years ago today, with confidence labels so exact-day items, same-week context, and fallback headlines stay honest."
+      },
       "layoutPlan": {
         "main": [
           "editor-note",
