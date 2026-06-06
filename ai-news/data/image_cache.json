@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-06T12:00:01.977318+00:00",
+  "updatedAt": "2026-06-06T12:14:38.918607+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -9456,6 +9456,22 @@
     "https://simonwillison.net/2026/Jun/6/micropython-wasm": {
       "image": "",
       "checkedAt": "2026-06-06T05:00:01.934940+00:00"
+    },
+    "https://www.theverge.com/tech/944245/apple-wwdc-2026-ai-siri-gemini": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/wwdc_2024.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.597538331207%2C100%2C78.804923337586&amp;w=1200",
+      "checkedAt": "2026-06-06T12:14:38.918607+00:00"
+    },
+    "https://huggingface.co/blog/build-small-hackathon/persona-atlas": {
+      "image": "https://cdn-uploads.huggingface.co/production/uploads/65aceafa71c5d01a281dfc1a/EmbpxBq1noqC4Vl1x8OCl.png",
+      "checkedAt": "2026-06-06T12:14:38.918607+00:00"
+    },
+    "https://www.techrepublic.com/article/news-apple-siri-ai-overhaul-google-gemini-nvidia-blackwell": {
+      "image": "",
+      "checkedAt": "2026-06-06T12:14:38.918607+00:00"
+    },
+    "https://www.techrepublic.com/article/news-google-android-code-offer": {
+      "image": "",
+      "checkedAt": "2026-06-06T12:14:38.918607+00:00"
     }
   }
 }
