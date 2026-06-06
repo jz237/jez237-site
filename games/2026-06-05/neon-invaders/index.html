@@ -414,7 +414,7 @@
         <button id="rightButton" type="button">→</button>
         <button id="fireButton" type="button">FIRE</button>
       </div>
-      <div class="version" aria-hidden="true">v1.16</div>
+      <div class="version" aria-hidden="true">v1.17</div>
     </section>
   </main>
 
@@ -807,6 +807,7 @@
             r: 42,
             hp: 42 + game.wave * 7,
             maxHp: 42 + game.wave * 7,
+            nextPowerDropHp: (42 + game.wave * 7) * rand(0.68, 0.84),
             phase: 0,
             shot: 0
           };
@@ -1140,13 +1141,17 @@
         burst(boss.x + rand(-28, 28), boss.y + rand(-18, 24), colors.enemy2, 8, 110);
         sfx.hit();
         game.shake = Math.max(game.shake, 2);
+        if (boss.hp > 0 && boss.nextPowerDropHp > 0 && boss.hp <= boss.nextPowerDropHp) {
+          dropPowerup(boss.x + rand(-42, 42), boss.y + rand(6, 42));
+          boss.nextPowerDropHp -= boss.maxHp * rand(0.24, 0.34);
+        }
         if (boss.hp <= 0) {
           addScore(650 + game.wave * 50);
           burst(boss.x, boss.y, colors.enemy2, 90, 360);
           sfx.boom(true);
           game.shake = 16;
           game.boss = null;
-          const bossDrops = 1;
+          const bossDrops = 3;
           for (let i = 0; i < bossDrops; i++) dropPowerup(boss.x + rand(-50, 50), boss.y + rand(-10, 35));
         }
       }
