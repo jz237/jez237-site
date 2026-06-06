@@ -1,6 +1,6 @@
 {
   "date": "2026-06-06",
-  "updatedAt": "2026-06-06T10:18:18.442881+00:00",
+  "updatedAt": "2026-06-06T11:00:02.114878+00:00",
   "items": [
     {
       "title": "Google will pay SpaceX $920 million a month for AI compute as Musk turns a data centre built for Grok into a cash machine",
@@ -13,10 +13,10 @@
       "image": "https://media.thenextweb.com/2026/04/google-classified-ai-pentagon-drone-swarm-exit.avif",
       "published": "2026-06-06T09:23:50+00:00",
       "firstSeen": "2026-06-06T10:18:18.442881+00:00",
-      "lastSeen": "2026-06-06T10:18:18.442881+00:00",
+      "lastSeen": "2026-06-06T11:00:02.114878+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.9226
+      "score": 10.9021
     },
     {
       "title": "Running Python code in a sandbox with MicroPython and WASM",
@@ -29,26 +29,26 @@
       "image": "https://static.simonwillison.net/static/2026/micropython-in-datasette-agent.jpg",
       "published": "2026-06-06T03:53:34+00:00",
       "firstSeen": "2026-06-06T04:00:02.048042+00:00",
-      "lastSeen": "2026-06-06T10:18:18.442881+00:00",
+      "lastSeen": "2026-06-06T11:00:02.114878+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.6105
+      "score": 5.5929
     },
     {
-      "title": "Live model battles across chat, coding, image, video, and audio modalities",
-      "url": "https://llm-stats.com/ai-news",
-      "source": "LLM Stats AI News",
-      "sourceUrl": "https://llm-stats.com/ai-news",
-      "sourceWeight": 0.9,
+      "title": "Crypto-Funded Chinese Peptide Labs Are Booming",
+      "url": "https://www.wired.com/story/security-news-this-week-crypto-funded-chinese-peptide-labs-are-booming",
+      "source": "Wired AI",
+      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
+      "sourceWeight": 0.85,
       "category": "AI",
-      "summary": "",
-      "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-06T10:18:24.622597+00:00",
-      "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-06T10:18:18.442881+00:00",
+      "summary": "Plus: Hackers use Meta’s AI bots to hack Instagram accounts, Anthropic helps NSA hackers, a decades-long GPS satellite mystery may have been solved, and more.",
+      "image": "https://media.wired.com/photos/6a2312eb2b342fb72975a62e/master/pass/Security-Roundup-Crypto-funded-Chinese-labs-sales-of-peptides-Security-1312618198.jpg",
+      "published": "2026-06-06T10:30:00+00:00",
+      "firstSeen": "2026-06-06T11:00:02.114878+00:00",
+      "lastSeen": "2026-06-06T11:00:02.114878+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.76
+      "score": 4.2748
     },
     {
       "title": "Every VC-backed e-bike company went bust. Bootstrapped Lectric just had its biggest month ever.",
@@ -61,10 +61,10 @@
       "image": "https://media.thenextweb.com/2026/06/lectric-ebikes-bootstrapped-growth-vc-bankruptcies.avif",
       "published": "2026-06-06T09:51:05+00:00",
       "firstSeen": "2026-06-06T10:18:18.442881+00:00",
-      "lastSeen": "2026-06-06T10:18:18.442881+00:00",
+      "lastSeen": "2026-06-06T11:00:02.114878+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2362
+      "score": 3.2154
     },
     {
       "title": "micropython-wasm 0.1a2",
@@ -77,10 +77,10 @@
       "image": "",
       "published": "2026-06-06T04:26:06+00:00",
       "firstSeen": "2026-06-06T05:00:01.934940+00:00",
-      "lastSeen": "2026-06-06T10:18:18.442881+00:00",
+      "lastSeen": "2026-06-06T11:00:02.114878+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8245
+      "score": 2.8066
     },
     {
       "title": "The 10 best press release distribution services for 2026",
@@ -93,10 +93,10 @@
       "image": "https://media.thenextweb.com/2026/06/best-press-release-distribution-services-2026.avif",
       "published": "2026-06-06T09:17:26+00:00",
       "firstSeen": "2026-06-06T10:18:18.442881+00:00",
-      "lastSeen": "2026-06-06T10:18:18.442881+00:00",
+      "lastSeen": "2026-06-06T11:00:02.114878+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8194
+      "score": 2.799
     },
     {
       "title": "v0.30.7-rc0",
@@ -109,10 +109,26 @@
       "image": "https://opengraph.githubassets.com/0c75a2c22c34f71df6873e50748a2ff1ede013af1522ff16514d15411ac10067/ollama/ollama",
       "published": "2026-06-06T00:29:19+00:00",
       "firstSeen": "2026-06-06T01:00:01.288928+00:00",
-      "lastSeen": "2026-06-06T10:18:18.442881+00:00",
+      "lastSeen": "2026-06-06T11:00:02.114878+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7975
+      "score": 2.7814
+    },
+    {
+      "title": "Humanity's Last Exam (HLE) is a multi-modal academic benchmark with 2,500 questions across mathematics, humanities, and natural sciences, designed to test LLM capabilities at the frontier of human knowledge with unambiguous, verifiable solutions",
+      "url": "https://llm-stats.com/ai-news",
+      "source": "LLM Stats AI News",
+      "sourceUrl": "https://llm-stats.com/ai-news",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "",
+      "image": "https://llm-stats.com/og/main.png",
+      "published": "2026-06-06T11:00:12.147865+00:00",
+      "firstSeen": "2026-05-29T21:00:01.522609+00:00",
+      "lastSeen": "2026-06-06T11:00:02.114878+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.71
     },
     {
       "title": "GM’s $900 million bet on a battery chemistry no one has commercialised could slash EV prices by 2028",
@@ -125,17 +141,17 @@
       "image": "https://media.thenextweb.com/2026/05/ev-models-discontinued-us-tariffs-2026.avif",
       "published": "2026-06-06T09:35:28+00:00",
       "firstSeen": "2026-06-06T10:18:18.442881+00:00",
-      "lastSeen": "2026-06-06T10:18:18.442881+00:00",
+      "lastSeen": "2026-06-06T11:00:02.114878+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1284
+      "score": 2.1078
     }
   ],
   "errors": [
     {
       "source": "MarkTechPost",
       "url": "https://www.marktechpost.com/feed/",
-      "error": "not well-formed (invalid token): line 1, column 119"
+      "error": "HTTP Error 403: Forbidden"
     }
   ]
 }
