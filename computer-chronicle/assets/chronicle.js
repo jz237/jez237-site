@@ -13,11 +13,12 @@
     lead: document.querySelector("[data-lead]"),
     computerItems: document.querySelector("[data-computer-items]"),
     market: document.querySelector("[data-market]"),
-    clippings: document.querySelector("[data-clippings]"),
+    storeShelvesImage: document.querySelector("[data-store-shelves-image]"),
     storeShelves: document.querySelector("[data-store-shelves]"),
     priceWatch: document.querySelector("[data-price-watch]"),
     bbs: document.querySelector("[data-bbs]"),
     curiosity: document.querySelector("[data-curiosity]"),
+    musicChartImage: document.querySelector("[data-music-chart-image]"),
     musicChart: document.querySelector("[data-music-chart]"),
     ad: document.querySelector("[data-period-ad]"),
     fallback: document.querySelector("[data-fallback]"),
@@ -51,6 +52,19 @@
     return `<span class="confidence">${value}</span>`;
   }
 
+  function articleVisual(image) {
+    if (!image || !image.src) return "";
+    return `
+      <figure class="article-visual">
+        <img src="${escapeHtml(image.src)}" alt="${escapeHtml(image.alt || image.caption || "Period-style article image")}" loading="lazy">
+        <figcaption>
+          <span>${escapeHtml(image.caption || "")}</span>
+          ${confidenceBadge(image.confidence || "Visual context")}
+        </figcaption>
+      </figure>
+    `;
+  }
+
   function issueNumber(issue, currentIso) {
     const baseDate = new Date("2026-01-01T00:00:00");
     const issueDate = new Date(`${(issue && issue.currentDate) || currentIso}T00:00:00`);
@@ -74,11 +88,12 @@
       `;
       els.computerItems.innerHTML = "";
       els.market.innerHTML = "";
-      if (els.clippings) els.clippings.innerHTML = "";
+      if (els.storeShelvesImage) els.storeShelvesImage.innerHTML = "";
       els.storeShelves.innerHTML = "";
       els.priceWatch.innerHTML = "";
       els.bbs.innerHTML = "";
       if (els.curiosity) els.curiosity.innerHTML = "";
+      if (els.musicChartImage) els.musicChartImage.innerHTML = "";
       if (els.musicChart) els.musicChart.innerHTML = "";
       els.ad.innerHTML = "";
       els.fallback.innerHTML = "";
@@ -100,6 +115,7 @@
       <article class="chronicle-card">
         <p class="section-label">${escapeHtml(item.label)}</p>
         <h3>${escapeHtml(item.headline)}</h3>
+        ${articleVisual(item.image)}
         <p>${escapeHtml(item.summary)}</p>
         ${confidenceBadge(item.confidence)}
       </article>
@@ -118,18 +134,7 @@
       ${confidenceBadge(issue.market.confidence)}
     `;
 
-    if (els.clippings) {
-      els.clippings.innerHTML = (issue.clippings || []).map((item) => `
-        <figure class="clipping-card">
-          <img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.alt || item.title)}" loading="lazy">
-          <figcaption>
-            <strong>${escapeHtml(item.title)}</strong>
-            <span>${escapeHtml(item.caption)}</span>
-            ${confidenceBadge(item.confidence)}
-          </figcaption>
-        </figure>
-      `).join("");
-    }
+    if (els.storeShelvesImage) els.storeShelvesImage.innerHTML = articleVisual(issue.storeShelvesImage);
 
     els.storeShelves.innerHTML = (issue.storeShelves || []).map((item) => `
       <li>
@@ -151,6 +156,7 @@
     els.bbs.innerHTML = `
       <p class="section-label">Modem Desk</p>
       <h2>${escapeHtml(issue.bbsNote && issue.bbsNote.headline)}</h2>
+      ${articleVisual(issue.bbsNote && issue.bbsNote.image)}
       <p>${escapeHtml(issue.bbsNote && issue.bbsNote.summary)}</p>
       ${issue.bbsNote && Array.isArray(issue.bbsNote.posts) ? `
         <ul class="bbs-list">
@@ -167,6 +173,7 @@
     `;
 
     if (els.musicChart) {
+      if (els.musicChartImage) els.musicChartImage.innerHTML = articleVisual(issue.musicChartImage);
       els.musicChart.innerHTML = (issue.musicChart || []).map((item) => `
         <li>
           <p>
