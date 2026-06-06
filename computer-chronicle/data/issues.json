@@ -96,6 +96,48 @@
         "summary": "Local modem users swap shareware, printer drivers, game hints, and hardware advice at 300 and 1200 baud. Phone lines are the social network.",
         "confidence": "Period context"
       },
+      "musicChart": [
+        {
+          "title": "Live To Tell",
+          "artist": "Madonna"
+        },
+        {
+          "title": "On My Own",
+          "artist": "Patti LaBelle & Michael McDonald"
+        },
+        {
+          "title": "Greatest Love Of All",
+          "artist": "Whitney Houston"
+        },
+        {
+          "title": "I Can't Wait",
+          "artist": "Nu Shooz"
+        },
+        {
+          "title": "All I Need Is A Miracle",
+          "artist": "Mike + The Mechanics"
+        },
+        {
+          "title": "If You Leave",
+          "artist": "Orchestral Manoeuvres In The Dark"
+        },
+        {
+          "title": "Something About You",
+          "artist": "Level 42"
+        },
+        {
+          "title": "Crush On You",
+          "artist": "The Jets"
+        },
+        {
+          "title": "There'll Be Sad Songs (To Make You Cry)",
+          "artist": "Billy Ocean"
+        },
+        {
+          "title": "A Different Corner",
+          "artist": "George Michael"
+        }
+      ],
       "periodAd": {
         "headline": "Epson Equity Computers and LQ-1000 Printer",
         "summary": "A real 1986 two-page Epson ad used the caption \"The Power. The Glory\" to promote Epson Equity computers and the LQ-1000 printer.",
@@ -162,6 +204,10 @@
         {
           "name": "Vintage Paper Ads: 1986 Epson Equity Computers and LQ-1000 Printer ad",
           "url": "https://www.vintagepaperads.com/1986-Epson-Equity-Computers-and-LQ-1000-Printer-Ad--The-Power-The-Glory_p_125428.html"
+        },
+        {
+          "name": "PopHits/Billboard Hot 100: week ending June 7, 1986",
+          "url": "https://pophits.org/charts/hot-100/1986-06-07"
         },
         {
           "name": "UPI Archives: Chernobyl evacuee housing deadline",
