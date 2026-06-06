@@ -1462,5 +1462,17 @@
     "slot": "midday",
     "model": "openai/gpt-image-2",
     "size": "1024x1536"
+  },
+  {
+    "id": "2026-06-06-afternoon-house-as-pop-up-book-spread",
+    "title": "House as Pop-Up Book Spread",
+    "tests": "Reusable reference-photo transformation: preserves a house exterior while changing it into a tactile pop-up book spread; checks paper engineering, recognizable architecture, and no instruction text in the image.",
+    "prompt": "Use the uploaded reference photo and preserve the house identity, camera angle, facade silhouette, roofline, window and door placement, porch shape, exterior colors, major proportions, landscaping edges, and most recognizable architectural features, then transform the house into a richly detailed pop-up book spread made from layered cardstock on a warm library table with quiet afternoon-window light. Rebuild the walls, roof, porch, trim, windows, walkway, garden details, and background as paper-engineered elements: folded tabs, visible hinges, accordion supports, scalloped paper shingles, cut-paper railings, vellum window panes, pencil layout marks, glue shine, page fibers, trimmed paper scraps, and soft cast shadows. Keep the source house recognizable while changing the material logic, surface texture, props, and environment into a coherent photographed paper sculpture. Avoid readable text, real logos, placeholder boxes, broken architecture, impossible folds, and losing the source silhouette.\n\nSource photo needed: a clear exterior photo of a house.\n\nReusable fill-in-the-blank template: Use the uploaded reference photo and preserve the [SUBJECT] identity, camera angle, silhouette, key structural geometry, proportions, distinctive colors or markings, and most recognizable features, then transform [SUBJECT] into a pop-up book spread made from [MATERIALS] in [SETTING] with [MOOD] lighting. Keep the source recognizable while changing the material logic, surface texture, props, and environment into a cohesive paper-engineered scene. Avoid readable text, real logos, placeholder boxes, broken geometry, impossible folds, duplicate parts, and losing recognizability.\n\nWhat to preserve: the house identity, camera angle, facade silhouette, roofline, window and door placement, porch shape, exterior colors, proportions, landscaping edges, and distinctive architectural details.\n\nWhat to change: convert siding, shingles, glass, trim, brick, plants, and background into layered cardstock, paper hinges, folded tabs, accordion supports, vellum panes, page fibers, book cloth, pencil marks, craft-table props, and library-table lighting.\n\nExample substitution: Use a clear photo of a small teal Victorian row house; preserve the steep gable, white trim, red front door, bay window, porch railings, brick walkway, and compact urban proportions, then turn it into a layered cardstock pop-up book spread on a warm library table in soft afternoon light.",
+    "image": "images/2026-06-06-afternoon-house-as-pop-up-book-spread.png",
+    "date": "2026-06-06",
+    "batch": "Daily Prompt",
+    "slot": "afternoon",
+    "model": "gpt-image-2",
+    "size": "1024x1024"
   }
 ]
