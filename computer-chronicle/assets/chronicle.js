@@ -15,14 +15,11 @@
     priceWatch: document.querySelector("[data-price-watch]"),
     bbs: document.querySelector("[data-bbs]"),
     ad: document.querySelector("[data-period-ad]"),
-    imageBrief: document.querySelector("[data-image-brief]"),
     fallback: document.querySelector("[data-fallback]"),
     sources: document.querySelector("[data-sources]"),
     status: document.querySelector("[data-status]"),
     editorNote: document.querySelector("[data-editor-note]"),
     issuePicker: document.querySelector("[data-issue-picker]"),
-    copyPrompt: document.querySelector("[data-copy-prompt]"),
-    promptStatus: document.querySelector("[data-prompt-status]"),
   };
 
   function isoDate(date) {
@@ -67,7 +64,6 @@
       els.priceWatch.innerHTML = "";
       els.bbs.innerHTML = "";
       els.ad.innerHTML = "";
-      els.imageBrief.innerHTML = "";
       els.fallback.innerHTML = "";
       els.sources.innerHTML = "";
       els.editorNote.textContent = "Personal computers and personal computer gaming are the editorial priority when source choices compete.";
@@ -136,30 +132,6 @@
       ${(issue.periodAd && issue.periodAd.sourceUrl) ? `<a class="ad-source" href="${escapeHtml(issue.periodAd.sourceUrl)}" target="_blank" rel="noopener">Source ad</a>` : ""}
     `;
 
-    const brief = issue.imageBrief || {};
-    els.imageBrief.innerHTML = `
-      <p class="section-label">Image Generator Brief</p>
-      <h2>${escapeHtml(brief.title || "Daily Newspaper Image Brief")}</h2>
-      <dl class="brief-list">
-        <dt>Masthead</dt>
-        <dd>${escapeHtml(brief.masthead)}</dd>
-        <dt>Format</dt>
-        <dd>${escapeHtml(brief.format)}</dd>
-        <dt>Primary Visual</dt>
-        <dd>${escapeHtml(brief.primaryVisual)}</dd>
-      </dl>
-      <div class="brief-columns">
-        <div>
-          <h3>Must include</h3>
-          <ul>${(brief.mustInclude || []).map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>
-        </div>
-        <div>
-          <h3>Avoid</h3>
-          <ul>${(brief.avoid || []).map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>
-        </div>
-      </div>
-    `;
-
     els.fallback.innerHTML = `
       <p class="section-label">Fallback Lead</p>
       <h2>${escapeHtml(issue.worldFallback.headline)}</h2>
@@ -206,48 +178,6 @@
     });
   }
 
-  function buildImagePrompt(issue) {
-    if (!issue) return "";
-    const brief = issue.imageBrief || {};
-    const items = (issue.computerItems || [])
-      .map((item) => `- ${item.label}: ${item.headline} (${item.confidence})`)
-      .join("\n");
-    const shelves = (issue.storeShelves || [])
-      .map((item) => `- ${item.name}: ${item.detail}`)
-      .join("\n");
-    const include = (brief.mustInclude || []).map((item) => `- ${item}`).join("\n");
-    const avoid = (brief.avoid || []).map((item) => `- ${item}`).join("\n");
-
-    return `Create a photorealistic 1980s newspaper computer section image.
-
-Masthead: ${brief.masthead || "The Computer Chronicle"}
-Date line: ${issue.displayDate}
-Edition: ${issue.edition}
-Format: ${brief.format || "One-page newspaper section, black ink on aged newsprint."}
-Primary visual: ${brief.primaryVisual || "Period-correct personal computer setup."}
-
-Lead headline: ${issue.lead.headline}
-Lead summary: ${issue.lead.summary}
-
-Computer desk:
-${items}
-
-On store shelves:
-${shelves}
-
-Markets: Dow ${issue.market.dow || "pending"}, Nasdaq ${issue.market.nasdaq || "pending"}.
-Advertisement reference: ${issue.periodAd.headline}. ${issue.periodAd.summary}
-BBS note: ${issue.bbsNote.headline}. ${issue.bbsNote.summary}
-
-Must include:
-${include}
-
-Avoid:
-${avoid}
-
-Keep the page authentic to the period. Use dense serif newspaper columns, halftone images, ruled boxes, small market/sidebar modules, and no modern technology cues.`;
-  }
-
   async function loadIssues() {
     const today = new Date();
     const currentIso = isoDate(today);
@@ -274,19 +204,6 @@ Keep the page authentic to the period. Use dense serif newspaper columns, halfto
       const url = new URL(window.location.href);
       url.searchParams.set("date", selected);
       window.location.href = url.toString();
-    });
-  }
-
-  if (els.copyPrompt) {
-    els.copyPrompt.addEventListener("click", async () => {
-      const prompt = buildImagePrompt(state.issue);
-      if (!prompt) return;
-      try {
-        await navigator.clipboard.writeText(prompt);
-        els.promptStatus.textContent = "Newspaper image prompt copied.";
-      } catch (error) {
-        els.promptStatus.textContent = "Clipboard blocked; use the image brief below.";
-      }
     });
   }
 
