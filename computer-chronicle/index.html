@@ -100,6 +100,18 @@
       gap: 14px;
       margin-top: 14px;
     }
+    .editor-note {
+      margin: 14px 0 0;
+      border-left: 3px solid rgba(232, 197, 122, 0.5);
+      padding: 10px 14px;
+      color: var(--ink-mid);
+      background: rgba(232, 197, 122, 0.07);
+      border-radius: 0 8px 8px 0;
+      line-height: 1.45;
+    }
+    .editor-note + .chronicle-panel {
+      margin-top: 14px;
+    }
     .confidence {
       display: inline-flex;
       margin-top: 6px;
@@ -133,6 +145,63 @@
       font-size: 1.1rem;
       letter-spacing: 0;
       text-transform: none;
+    }
+    .shelf-list,
+    .price-list {
+      list-style: none;
+      margin: 12px 0 0;
+      padding: 0;
+      display: grid;
+      gap: 10px;
+    }
+    .shelf-list li,
+    .price-list li {
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding-top: 10px;
+    }
+    .shelf-list strong,
+    .price-list strong {
+      display: block;
+      color: var(--ink-hi);
+      line-height: 1.25;
+    }
+    .shelf-list span,
+    .price-list span,
+    .price-list em {
+      display: block;
+      color: var(--ink-mid);
+      font-style: normal;
+      line-height: 1.42;
+      margin-top: 3px;
+    }
+    .price-list span {
+      color: #f1dca9;
+      font-weight: 700;
+    }
+    .period-ad {
+      border-style: double;
+      border-width: 4px;
+      background:
+        repeating-linear-gradient(45deg, rgba(232, 197, 122, 0.08), rgba(232, 197, 122, 0.08) 1px, transparent 1px, transparent 9px),
+        rgba(255, 255, 255, 0.05);
+      text-align: center;
+    }
+    .period-ad .ad-kicker {
+      margin: 0 0 6px;
+      color: var(--ink-lo);
+      font-size: 0.7rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+    .period-ad h2 {
+      font-family: Georgia, "Times New Roman", serif;
+      text-transform: uppercase;
+    }
+    .period-ad small {
+      display: block;
+      color: var(--ink-lo);
+      line-height: 1.4;
+      margin-top: 10px;
     }
     .source-list {
       margin: 10px 0 0;
@@ -182,12 +251,25 @@
 
     <section class="chronicle-grid" aria-label="Daily computer news issue">
       <div>
+        <div class="editor-note" data-editor-note></div>
         <article class="chronicle-panel" data-lead></article>
         <div class="computer-grid" data-computer-items></div>
+        <section class="chronicle-panel" style="margin-top:14px;" aria-labelledby="shelf-title">
+          <p class="section-label">On Store Shelves</p>
+          <h2 id="shelf-title">Games &amp; Software People Could Actually Talk About</h2>
+          <ul class="shelf-list" data-store-shelves></ul>
+        </section>
       </div>
 
       <aside>
         <article class="chronicle-panel" data-market></article>
+        <article class="chronicle-panel" style="margin-top:14px;">
+          <p class="section-label">Price Watch</p>
+          <h2>What It Cost</h2>
+          <ul class="price-list" data-price-watch></ul>
+        </article>
+        <article class="chronicle-panel" data-bbs style="margin-top:14px;"></article>
+        <article class="chronicle-panel period-ad" data-period-ad style="margin-top:14px;"></article>
         <article class="chronicle-panel" data-fallback style="margin-top:14px;"></article>
         <article class="chronicle-panel" style="margin-top:14px;">
           <p class="section-label">Source Trail</p>
