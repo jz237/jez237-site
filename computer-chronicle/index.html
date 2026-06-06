@@ -427,6 +427,33 @@
     .bbs-list p {
       margin: 3px 0 0;
     }
+    .brief-list {
+      display: grid;
+      gap: 10px;
+      list-style: none;
+      margin: 10px 0 0;
+      padding: 0;
+    }
+    .brief-list li {
+      border-top: 1px solid var(--cc-rule);
+      padding-top: 10px;
+    }
+    .brief-kicker {
+      display: inline-block !important;
+      width: fit-content;
+      margin: 0 0 5px !important;
+      background: var(--cc-ink);
+      color: var(--cc-paper) !important;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      line-height: 1 !important;
+      padding: 4px 6px;
+      text-transform: uppercase;
+    }
+    .brief-list p {
+      margin: 4px 0 0;
+    }
     .chart-list {
       counter-reset: chart-rank;
     }
@@ -716,6 +743,11 @@
         </article>
         <article class="chronicle-panel" data-bbs data-sidebar-module="bbs"></article>
         <article class="chronicle-panel curiosity-card" data-curiosity data-sidebar-module="curiosity"></article>
+        <article class="chronicle-panel" data-sidebar-module="briefs">
+          <p class="section-label" data-briefs-label>Small Notices</p>
+          <h2 data-briefs-title>Other Things on the Desk</h2>
+          <ul class="brief-list" data-briefs></ul>
+        </article>
         <article class="chronicle-panel" data-sidebar-module="music">
           <p class="section-label" data-music-label>Rock Radio Top 10</p>
           <h2 data-music-title>Album-Rock Airwaves</h2>
