@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <title>Neon Invaders</title>
   <style>
     :root {
@@ -78,6 +78,7 @@
       height: 100%;
       display: block;
       image-rendering: auto;
+      touch-action: none;
     }
 
     .hud {
@@ -187,6 +188,7 @@
       font-weight: 900;
       text-transform: uppercase;
       cursor: pointer;
+      touch-action: manipulation;
       box-shadow: 0 0 24px rgba(167, 255, 61, 0.24);
     }
 
@@ -246,7 +248,7 @@
       }
 
       .touch {
-        display: grid;
+        display: none;
       }
     }
   </style>
@@ -330,7 +332,8 @@
       };
       const touchAim = {
         active: false,
-        x: null
+        x: null,
+        pointerId: null
       };
 
       const colors = {
@@ -403,6 +406,7 @@
         game.boss = null;
         touchAim.active = false;
         touchAim.x = null;
+        touchAim.pointerId = null;
         game.player = {
           x: game.width / 2,
           y: game.height - Math.max(72, 86 * game.scale),
@@ -818,6 +822,7 @@
         game.state = "over";
         touchAim.active = false;
         touchAim.x = null;
+        touchAim.pointerId = null;
         message.textContent = `Final score: ${game.score.toLocaleString()}. The fleet regroups; you get another quarter.`;
         startButton.textContent = "Play Again";
         overlay.classList.remove("hidden");
@@ -1170,12 +1175,18 @@
         }
       });
 
+      function pointerCanvasX(event) {
+        const rect = canvas.getBoundingClientRect();
+        return (event.clientX - rect.left) * (game.width / Math.max(1, rect.width));
+      }
+
       function setTouchAim(event, active) {
         if (game.state !== "playing") return;
-        event.preventDefault();
-        const rect = canvas.getBoundingClientRect();
+        if (!active && touchAim.pointerId !== null && event.pointerId !== touchAim.pointerId) return;
+        if (event.cancelable) event.preventDefault();
         touchAim.active = active;
-        touchAim.x = event.clientX - rect.left;
+        touchAim.x = active ? pointerCanvasX(event) : null;
+        touchAim.pointerId = active ? event.pointerId : null;
         if (active && canvas.setPointerCapture) {
           try { canvas.setPointerCapture(event.pointerId); } catch (error) {}
         }
@@ -1184,9 +1195,9 @@
       canvas.addEventListener("pointerdown", event => setTouchAim(event, true));
       canvas.addEventListener("pointermove", event => {
         if (!touchAim.active || game.state !== "playing") return;
-        event.preventDefault();
-        const rect = canvas.getBoundingClientRect();
-        touchAim.x = event.clientX - rect.left;
+        if (touchAim.pointerId !== null && event.pointerId !== touchAim.pointerId) return;
+        if (event.cancelable) event.preventDefault();
+        touchAim.x = pointerCanvasX(event);
       });
       canvas.addEventListener("pointerup", event => setTouchAim(event, false));
       canvas.addEventListener("pointercancel", event => setTouchAim(event, false));
