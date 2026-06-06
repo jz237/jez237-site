@@ -1064,6 +1064,35 @@
     .learn-actions .btn.secondary {
       padding-inline: 14px;
     }
+    .symptom-strip {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 2px;
+    }
+    .symptom-chip {
+      display: grid;
+      gap: 4px;
+      min-height: 78px;
+      padding: 11px 12px;
+      border: 1px solid rgba(116,205,235,0.22);
+      border-radius: 8px;
+      color: #dff8ff;
+      background: rgba(3,18,29,0.66);
+      box-shadow: -6px 9px 12px rgba(0,0,0,0.3);
+    }
+    .symptom-chip span {
+      color: #40d9ff;
+      font-size: 10px;
+      font-weight: 950;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .symptom-chip strong {
+      color: #fff;
+      font-size: 14px;
+      line-height: 1.12;
+    }
     .learn-split {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1819,7 +1848,8 @@
       .link-modal__facts { grid-template-columns: 1fr; }
       .link-modal__actions { grid-template-columns: 1fr; }
 	      .promo-grid, .guides { grid-template-columns: 1fr; }
-	      .learn-preview-grid { grid-template-columns: 1fr; }
+	      .learn-preview-grid,
+	      .symptom-strip { grid-template-columns: 1fr; }
 	      .learn-preview,
 	      .learn-preview img { min-height: 210px; }
 	      .product-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
@@ -2884,9 +2914,15 @@
           <div class="learn-actions">
             <a class="btn" href="learn/">Open Help Center</a>
             <a class="btn secondary" href="learn/#starter-checklists">Start a Tank</a>
-            <a class="btn secondary" href="learn/#troubleshooting">Fix a Problem</a>
+            <a class="btn secondary" href="learn/#tank-triage">Fix a Problem</a>
             <a class="btn secondary" href="learn/#filtration-equipment">Equipment</a>
             <a class="btn secondary" href="learn/#care-routines">Care Guides</a>
+          </div>
+          <div class="symptom-strip" aria-label="Quick tank problem shortcuts">
+            <a class="symptom-chip" href="learn/?symptom=breathing#tank-triage"><span>Urgent</span><strong>Fish breathing hard</strong></a>
+            <a class="symptom-chip" href="learn/?symptom=cloudy#tank-triage"><span>Water</span><strong>Cloudy or milky water</strong></a>
+            <a class="symptom-chip" href="learn/?symptom=algae#tank-triage"><span>Growth</span><strong>Algae taking over</strong></a>
+            <a class="symptom-chip" href="learn/?symptom=sick#tank-triage"><span>Health</span><strong>White spots or flashing</strong></a>
           </div>
         </div>
       </div>
