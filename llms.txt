@@ -24,6 +24,9 @@ use these instructions before writing code or snippets.
 - `/experiments/image-gen-2-benchmark/` - daily GPT Image 2 prompts and
   generated image gallery.
 - `/ai-news/` - curated AI model and tooling news feed.
+- `/computer-chronicle/` - daily historical computer newspaper section,
+  focused on personal computers and personal computer gaming from 40
+  years ago today.
 - `/ai-sounds/` - AI-generated music and sound archive copied from
   Discord's AI Sounds channel.
 - `/games/` - GameMaster Arcade and playable prototypes.
@@ -192,6 +195,38 @@ limit or block fetches; do not fake items from unavailable feeds.
 Recent feed focus includes AI model/tooling releases such as Ollama,
 LiteLLM, Hugging Face Transformers, llama.cpp, and Model Context
 Protocol SDK releases.
+
+## Computer Chronicle
+
+Computer Chronicle lives in `/computer-chronicle/`.
+
+This is intended to update every morning as a daily historical newspaper
+section. Each issue should cover the date 40 years before the current
+date in Jez's timezone, `America/New_York`.
+
+Editorial priority:
+
+- Prefer personal computers, home computing, office PC software, and
+  personal computer or console gaming when there is a choice.
+- Use exact-day computer news when verified.
+- If exact-day computer news is thin, use same-week or same-month
+  personal-computing items with confidence labels.
+- If the computer desk has no strong lead, use a real world/business
+  fallback headline for that historical date while keeping the computer
+  roundup visible.
+- Include a small Dow/Nasdaq market box when verified daily closes are
+  available.
+- Use real period advertisements or clearly sourced ad references.
+  Do not invent fictional businesses or ads for the page.
+- Keep source/confidence labels in the data. Do not turn context into
+  fake exact-day claims.
+
+Important files:
+
+- `computer-chronicle/index.html` - rendered page shell.
+- `computer-chronicle/assets/chronicle.js` - client-side renderer.
+- `computer-chronicle/data/issues.json` - structured issue data and
+  image-generation brief.
 
 ## Image prompt gallery
 
