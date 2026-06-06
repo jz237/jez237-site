@@ -1,6 +1,6 @@
 {
   "date": "2026-06-06",
-  "updatedAt": "2026-06-06T04:00:02.048042+00:00",
+  "updatedAt": "2026-06-06T05:00:01.934940+00:00",
   "items": [
     {
       "title": "Running Python code in a sandbox with MicroPython and WASM",
@@ -9,14 +9,46 @@
       "sourceUrl": "https://simonwillison.net/atom/everything/",
       "sourceWeight": 0.85,
       "category": "AI",
-      "summary": "I've been experimenting with different approaches to running code in a sandbox for several years now, but my latest attempt feels like it might finally have all of the characteristics I've been looking for. I've released it as an alpha package called micropython-wasm, and I'm using it for a code execution sandbox plugin for Datasette Agent called datasette-agent-micropython.\nWhy do I want a sandbox?\nMy key open source projects - Datasette, LLM, even sqlite-utils - all support plugins.\nI absolutely love plugins as a mechanism for extending software. A carefully designed plugin system reduces th",
-      "image": "",
+      "summary": "I've been experimenting with different approaches to running code in a sandbox for several years now, but my latest attempt feels like it might finally have all of the characteristics I've been looking for. I've released it as an alpha package called micropython-wasm, and I'm using it for a code execution sandbox plugin for Datasette Agent called datasette-agent-micropython.\n\n  Why do I want a sandbox?\n  What I want from a sandbox\n  WebAssembly looks really promising here\n  MicroPython in WebAssembly\n  Building the first version\n  Try it yourself\n  Should you trust my vibe-coded sandbox?\n\nWhy ",
+      "image": "https://static.simonwillison.net/static/2026/micropython-in-datasette-agent.jpg",
       "published": "2026-06-06T03:53:34+00:00",
       "firstSeen": "2026-06-06T04:00:02.048042+00:00",
-      "lastSeen": "2026-06-06T04:00:02.048042+00:00",
+      "lastSeen": "2026-06-06T05:00:01.934940+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.4867
+      "score": 5.7567
+    },
+    {
+      "title": "Live model battles across chat, coding, image, video, and audio modalities",
+      "url": "https://llm-stats.com/ai-news",
+      "source": "LLM Stats AI News",
+      "sourceUrl": "https://llm-stats.com/ai-news",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "",
+      "image": "https://llm-stats.com/og/main.png",
+      "published": "2026-06-06T05:00:08.837749+00:00",
+      "firstSeen": "2026-05-29T21:00:01.522609+00:00",
+      "lastSeen": "2026-06-06T05:00:01.934940+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.76
+    },
+    {
+      "title": "micropython-wasm 0.1a2",
+      "url": "https://simonwillison.net/2026/Jun/6/micropython-wasm",
+      "source": "Simon Willison",
+      "sourceUrl": "https://simonwillison.net/atom/everything/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Release: micropython-wasm 0.1a2\n        I added a CLI to micropython-wasm (issue #7), inspired by the first draft of the blog entry when I realized it would be a great way to illustrate the Try it yourself section.\n    \n    \n        Tags: python, sandboxing, webassembly, micropython",
+      "image": "",
+      "published": "2026-06-06T04:26:06+00:00",
+      "firstSeen": "2026-06-06T05:00:01.934940+00:00",
+      "lastSeen": "2026-06-06T05:00:01.934940+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.9729
     },
     {
       "title": "v0.30.7-rc0",
@@ -29,26 +61,10 @@
       "image": "https://opengraph.githubassets.com/0c75a2c22c34f71df6873e50748a2ff1ede013af1522ff16514d15411ac10067/ollama/ollama",
       "published": "2026-06-06T00:29:19+00:00",
       "firstSeen": "2026-06-06T01:00:01.288928+00:00",
-      "lastSeen": "2026-06-06T04:00:02.048042+00:00",
+      "lastSeen": "2026-06-06T05:00:01.934940+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9578
-    },
-    {
-      "title": "Generic Triple-Latent Compression with Gated Associative Retrieval",
-      "url": "https://llm-stats.com/ai-news",
-      "source": "LLM Stats AI News",
-      "sourceUrl": "https://llm-stats.com/ai-news",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "",
-      "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-06T04:00:11.776870+00:00",
-      "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-06T04:00:02.048042+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "framework_or_plumbing",
-      "score": -0.74
+      "score": 2.9304
     }
   ],
   "errors": [
