@@ -293,7 +293,7 @@
         <button id="rightButton" type="button">→</button>
         <button id="fireButton" type="button">FIRE</button>
       </div>
-      <div class="version" aria-hidden="true">v1.9</div>
+      <div class="version" aria-hidden="true">v1.10</div>
     </section>
   </main>
 
@@ -768,18 +768,20 @@
 
       function updateBullets(dt) {
         for (const b of game.bullets) {
+          b.px = b.x;
+          b.py = b.y;
           b.x += b.vx * dt;
           b.y += b.vy * dt;
           b.life -= dt;
         }
         for (const b of game.bullets) {
-          for (const shield of game.shields) {
-            if (shield.hp > 0 && pointRect(b.x, b.y, shield)) {
-              b.life = 0;
-              shield.hp -= 1;
-              burst(b.x, b.y, colors.shield, 5, 90);
-              break;
-            }
+          const shieldHit = firstShieldHit(b);
+          if (shieldHit) {
+            b.life = 0;
+            b.x = shieldHit.x;
+            b.y = shieldHit.y;
+            shieldHit.shield.hp -= 1;
+            burst(shieldHit.x, shieldHit.y, colors.shield, 5, 90);
           }
           if (b.life <= 0) continue;
           for (const inv of game.invaders) {
@@ -801,16 +803,18 @@
       function updateEnemyBullets(dt) {
         const p = game.player;
         for (const b of game.enemyBullets) {
+          b.px = b.x;
+          b.py = b.y;
           b.x += b.vx * dt;
           b.y += b.vy * dt;
           b.life -= dt;
-          for (const shield of game.shields) {
-            if (shield.hp > 0 && pointRect(b.x, b.y, shield)) {
-              b.life = 0;
-              shield.hp -= 1;
-              burst(b.x, b.y, colors.shield, 6, 100);
-              break;
-            }
+          const shieldHit = firstShieldHit(b);
+          if (shieldHit) {
+            b.life = 0;
+            b.x = shieldHit.x;
+            b.y = shieldHit.y;
+            shieldHit.shield.hp -= 1;
+            burst(shieldHit.x, shieldHit.y, colors.shield, 6, 100);
           }
           const hitRadius = 12;
           if (b.life > 0 && p.invulnerable <= 0 && distSq(b, p) < (b.r + hitRadius) * (b.r + hitRadius)) {
@@ -960,6 +964,51 @@
 
       function pointRect(x, y, rect) {
         return x >= rect.x - rect.w / 2 && x <= rect.x + rect.w / 2 && y >= rect.y - rect.h / 2 && y <= rect.y + rect.h / 2;
+      }
+
+      function firstShieldHit(b) {
+        let best = null;
+        for (const shield of game.shields) {
+          if (shield.hp <= 0) continue;
+          const pad = Math.max(1, b.r || 1);
+          const left = shield.x - shield.w / 2 - pad;
+          const right = shield.x + shield.w / 2 + pad;
+          const top = shield.y - shield.h / 2 - pad;
+          const bottom = shield.y + shield.h / 2 + pad;
+          const t = segmentRectHit(b.px ?? b.x, b.py ?? b.y, b.x, b.y, left, top, right, bottom);
+          if (t === null || (best && t >= best.t)) continue;
+          best = {
+            shield,
+            t,
+            x: (b.px ?? b.x) + (b.x - (b.px ?? b.x)) * t,
+            y: (b.py ?? b.y) + (b.y - (b.py ?? b.y)) * t
+          };
+        }
+        return best;
+      }
+
+      function segmentRectHit(x1, y1, x2, y2, left, top, right, bottom) {
+        let t0 = 0;
+        let t1 = 1;
+        const dx = x2 - x1;
+        const dy = y2 - y1;
+        const clip = (p, q) => {
+          if (Math.abs(p) < 0.00001) return q >= 0;
+          const r = q / p;
+          if (p < 0) {
+            if (r > t1) return false;
+            if (r > t0) t0 = r;
+          } else {
+            if (r < t0) return false;
+            if (r < t1) t1 = r;
+          }
+          return true;
+        };
+        if (!clip(-dx, x1 - left)) return null;
+        if (!clip(dx, right - x1)) return null;
+        if (!clip(-dy, y1 - top)) return null;
+        if (!clip(dy, bottom - y1)) return null;
+        return t0;
       }
 
       function burst(x, y, color, count, force) {
