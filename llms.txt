@@ -212,6 +212,8 @@ Editorial priority:
 
 - Prefer personal computers, home computing, office PC software, and
   personal computer or console gaming when there is a choice.
+- Include multiple games when possible, and list the original/current
+  platform context for each game rather than only the title.
 - Use exact-day computer news when verified.
 - If exact-day computer news is thin, use same-week or same-month
   personal-computing items with confidence labels.
@@ -228,6 +230,12 @@ Editorial priority:
   generation briefs in public HTML, JavaScript, or JSON.
 - Keep source/confidence labels in the data. Do not turn context into
   fake exact-day claims.
+- Treat `bbsNote`, `curiosity`, `periodAd`, and the game shelf as daily
+  rotating editorial slots. The BBS item should read like a dated sysop
+  log or board digest tied to that issue, not a generic explanation of
+  what BBSes were.
+- Static or slow-changing sections are acceptable only when they are
+  explicitly framed as context, prices, verification, or archive tooling.
 
 Important files:
 
