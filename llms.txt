@@ -245,6 +245,9 @@ Editorial priority:
   rotating editorial slots. The BBS item should read like a dated sysop
   log or board digest tied to that issue, not a generic explanation of
   what BBSes were.
+- Use `briefs` for small disposable notices that make the issue feel
+  alive: mall notes, phone-line notes, short media/arcade/electronics
+  observations, or tiny context items tied to the day. Rotate them often.
 - Include several clippings/images when possible. Treat them as daily
   photo assignments, not permanent era wallpaper. Each issue should use
   new or deliberately selected clippings tied to that day's visible
