@@ -74,7 +74,7 @@
     .section-label {
       display: inline-block;
       color: #fff8dc;
-      background: var(--cc-magenta);
+      background: var(--cc-teal);
       font-size: 0.76rem;
       font-weight: 700;
       letter-spacing: 0.12em;
@@ -83,7 +83,7 @@
       text-transform: uppercase;
     }
     .chronicle-kicker {
-      background: var(--cc-teal);
+      background: var(--cc-blue);
     }
     .chronicle-hero h1 {
       margin: 0;
@@ -93,7 +93,7 @@
       line-height: 0.84;
       letter-spacing: 0;
       text-transform: uppercase;
-      text-shadow: 3px 3px 0 rgba(0, 138, 150, 0.26), 6px 6px 0 rgba(194, 38, 115, 0.18);
+      text-shadow: 3px 3px 0 var(--cc-amber), 6px 6px 0 rgba(0, 138, 150, 0.42);
     }
     .chronicle-hero p {
       max-width: 760px;
@@ -173,7 +173,7 @@
       border-top-width: 8px;
     }
     .chronicle-card:nth-child(2n + 1) {
-      border-top-color: var(--cc-magenta);
+      border-top-color: var(--cc-amber);
       border-top-width: 8px;
     }
     .chronicle-panel,
@@ -228,6 +228,18 @@
       font-size: 0.78rem;
       line-height: 1;
       text-transform: uppercase;
+    }
+    .chronicle-card:nth-child(2n + 1) .section-label,
+    aside .chronicle-panel:nth-child(2n) .section-label {
+      background: var(--cc-blue);
+    }
+    .chronicle-card:nth-child(2n) .section-label,
+    aside .chronicle-panel:nth-child(2n + 1) .section-label {
+      background: var(--cc-teal);
+    }
+    [data-lead] .section-label {
+      background: var(--cc-amber);
+      color: var(--cc-ink);
     }
     .ticker-row {
       display: grid;
@@ -492,8 +504,8 @@
       <select id="issue-picker" data-issue-picker>
         <option>Loading issues...</option>
       </select>
-      <button type="button" data-copy-prompt>Copy image prompt</button>
-      <span class="prompt-status" data-prompt-status></span>
+      <button type="button" data-copy-prompt>Copy newspaper image prompt</button>
+      <span class="prompt-status" data-prompt-status>Copies a ready-to-use prompt for generating the daily newspaper image.</span>
     </div>
 
     <section class="chronicle-grid" aria-label="Daily computer news issue">
