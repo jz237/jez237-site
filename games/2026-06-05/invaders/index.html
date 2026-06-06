@@ -487,7 +487,7 @@
       <div class="overlay" id="overlay">
         <div class="panel">
           <h1>Invaders</h1>
-          <div class="title-version">v1.27</div>
+          <div class="title-version">v1.28</div>
           <p class="tagline" id="message">A modernized arcade defense run: punch through waves, catch power cores, and survive the boss carrier.</p>
           <div class="enemy-roster" aria-label="Enemy ship guide">
             <h2>Enemy Ships</h2>
@@ -503,7 +503,6 @@
             <div class="powerup"><i style="color:#ff3df2;background:#ff3df2"></i><span><b>Spread</b><br>Five-shot fan for 10 seconds.</span></div>
             <div class="powerup"><i style="color:#35f4ff;background:#35f4ff"></i><span><b>Laser</b><br>Twin fast beams for 10 seconds.</span></div>
             <div class="powerup"><i style="color:#a7ff3d;background:#a7ff3d"></i><span><b>Shield</b><br>Restores and overcharges armor.</span></div>
-            <div class="powerup"><i style="color:#ffd23d;background:#ffd23d"></i><span><b>Slow</b><br>Slows the fleet and boss fire.</span></div>
             <div class="powerup"><i style="color:#ffffff;background:#ffffff"></i><span><b>Repair</b><br>Adds a life and shield charge.</span></div>
           </div>
           <div class="scores-panel hidden" id="scoresPanel" aria-live="polite"></div>
@@ -518,7 +517,7 @@
         <button id="rightButton" type="button">→</button>
         <button id="fireButton" type="button">FIRE</button>
       </div>
-      <div class="version" aria-hidden="true">v1.27</div>
+      <div class="version" aria-hidden="true">v1.28</div>
     </section>
   </main>
 
@@ -562,7 +561,6 @@
         combo: 1,
         comboTimer: 0,
         shake: 0,
-        slow: 0,
         bossWave: false,
         nextShot: 0,
         nextEnemyShot: 1.3,
@@ -844,7 +842,6 @@
         game.combo = 1;
         game.comboTimer = 0;
         game.shake = 0;
-        game.slow = 0;
         game.bullets = [];
         game.enemyBullets = [];
         game.particles = [];
@@ -1035,11 +1032,9 @@
         game.time += dt;
         syncPlayerLane();
         game.shake = Math.max(0, game.shake - dt * 18);
-        game.slow = Math.max(0, game.slow - dt);
         game.comboTimer = Math.max(0, game.comboTimer - dt);
         if (game.comboTimer === 0) game.combo = 1;
 
-        const slowMul = game.slow > 0 ? 0.55 : 1;
         const left = keys.has("ArrowLeft") || keys.has("KeyA");
         const right = keys.has("ArrowRight") || keys.has("KeyD");
         const fire = keys.has("Space") || keys.has("Enter") || touchAim.active;
@@ -1074,8 +1069,8 @@
         }
 
         updateStars(dt);
-        updateInvaders(dt * slowMul);
-        updateBoss(dt * slowMul);
+        updateInvaders(dt);
+        updateBoss(dt);
         updateBullets(dt);
         updateEnemyBullets(dt);
         updateParticles(dt);
@@ -1241,7 +1236,6 @@
           spread: "SPREAD",
           laser: "LASER",
           shield: "SHIELD",
-          slow: "SLOW",
           repair: "REPAIR"
         };
         game.pickupLabels.push({
@@ -1336,9 +1330,8 @@
 
       function dropPowerup(x, y) {
         const types = [
-          ["spread", "#ff3df2", 4],
-          ["laser", "#35f4ff", 4],
-          ["slow", "#ffd23d", 3],
+          ["spread", "#ff3df2", 5.5],
+          ["laser", "#35f4ff", 5.5],
           ["shield", "#a7ff3d", 1.2],
           ["repair", "#ffffff", 0.55]
         ];
@@ -1361,8 +1354,6 @@
           p.weaponTimer = 10;
         } else if (type === "shield") {
           p.shield = Math.min(125, p.shield + 30);
-        } else if (type === "slow") {
-          game.slow = 5;
         } else if (type === "repair") {
           game.lives = Math.min(4, game.lives + 1);
           p.shield = Math.min(110, p.shield + 12);
