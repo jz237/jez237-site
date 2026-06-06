@@ -14,6 +14,12 @@
         "paper": "cream",
         "strapline": "COMPUTERS • GAMES • SOFTWARE • MARKETS"
       },
+      "heroImage": {
+        "src": "media/retro-computer-desk-1986.webp",
+        "alt": "A period-style 1980s personal computer desk with CRT monitor, keyboard, floppy disks, printer paper, and computer magazines",
+        "caption": "Personal computer desk · issue-front visual",
+        "confidence": "Period-style visual"
+      },
       "editorNote": "Today's issue leans toward personal computers, home computing, software people actually used, and games people could buy or talk about in 1986.",
       "morningLine": "Morning Edition: five-minute skim for personal-computer people, game-shelf watchers, and anyone who still hears a modem handshake in their soul.",
       "lead": {
