@@ -97,9 +97,10 @@
         "confidence": "Period context"
       },
       "periodAd": {
-        "headline": "Bauder Computer Center",
-        "summary": "IBM compatibles, Commodore systems, printers, disks, modems, cables, and setup help. Bring in this ad for a free box of labels with any system purchase.",
-        "finePrint": "Period-style house ad for newspaper atmosphere; not a historical claim."
+        "headline": "Epson Equity Computers and LQ-1000 Printer",
+        "summary": "A real 1986 two-page Epson ad used the caption \"The Power. The Glory\" to promote Epson Equity computers and the LQ-1000 printer.",
+        "finePrint": "Historical advertisement reference; summarized rather than reproduced.",
+        "sourceUrl": "https://www.vintagepaperads.com/1986-Epson-Equity-Computers-and-LQ-1000-Printer-Ad--The-Power-The-Glory_p_125428.html"
       },
       "imageBrief": {
         "title": "Daily Newspaper Image Brief",
@@ -111,7 +112,7 @@
           "Lotus / VisiCalc / 1-2-3 lead headline",
           "Personal computer gaming shelf box",
           "Dow and Nasdaq market box",
-          "Bauder Computer Center period-style ad",
+          "Real 1986 Epson Equity / LQ-1000 printer advertisement reference",
           "Visible confidence labels may be omitted from the image, but exact/same-week sourcing should guide headline selection"
         ],
         "avoid": [
@@ -157,6 +158,10 @@
         {
           "name": "InfoWorld: 1986-1995, the networked enterprise",
           "url": "https://www.infoworld.com/article/2232269/1986-1995-the-networked-enterprise.html"
+        },
+        {
+          "name": "Vintage Paper Ads: 1986 Epson Equity Computers and LQ-1000 Printer ad",
+          "url": "https://www.vintagepaperads.com/1986-Epson-Equity-Computers-and-LQ-1000-Printer-Ad--The-Power-The-Glory_p_125428.html"
         },
         {
           "name": "UPI Archives: Chernobyl evacuee housing deadline",
