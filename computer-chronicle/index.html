@@ -733,6 +733,65 @@
       background: var(--cc-blue) !important;
       color: var(--cc-paper) !important;
     }
+    .archive-strip {
+      margin-top: 10px;
+      border: 2px solid var(--cc-ink);
+      background:
+        repeating-linear-gradient(90deg, rgba(27, 26, 23, 0.028), rgba(27, 26, 23, 0.028) 1px, transparent 1px, transparent 8px),
+        rgba(255, 248, 220, 0.88);
+      padding: 9px 10px;
+    }
+    .archive-strip[hidden] {
+      display: none !important;
+    }
+    .archive-strip p {
+      margin: 0 0 7px;
+      color: var(--cc-muted);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    .archive-strip ul {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .archive-strip a {
+      display: grid;
+      gap: 2px;
+      min-width: 170px;
+      border: 1px solid var(--cc-rule);
+      background: rgba(255, 243, 206, 0.72);
+      color: var(--cc-ink);
+      padding: 7px 9px;
+      text-decoration: none;
+    }
+    .archive-strip a[aria-current="page"] {
+      border-color: var(--cc-ink);
+      background: var(--cc-ink);
+      color: var(--cc-paper);
+    }
+    .archive-strip span,
+    .archive-strip em {
+      display: block;
+      font-size: 0.68rem;
+      font-style: normal;
+      line-height: 1.15;
+      text-transform: uppercase;
+    }
+    .archive-strip strong {
+      display: block;
+      font-size: 0.95rem;
+      line-height: 1.1;
+    }
+    .archive-strip a:not([aria-current="page"]) span,
+    .archive-strip a:not([aria-current="page"]) em {
+      color: var(--cc-muted);
+    }
     .front-page-index {
       margin-top: 14px;
       border-top: 5px solid var(--cc-ink);
@@ -970,6 +1029,7 @@
       #site-nav,
       .status-line,
       .issue-tools,
+      .archive-strip,
       .editor-note,
       .article-sources,
       [data-sidebar-module="assignment"],
@@ -1226,6 +1286,10 @@
       </select>
       <button class="print-issue" type="button" data-print-issue>Print Issue</button>
     </div>
+    <nav class="archive-strip" aria-label="Issue archive" data-archive-nav hidden>
+      <p>Issue Archive</p>
+      <ul data-archive-list></ul>
+    </nav>
     <section class="front-page-index" aria-label="Today at a glance">
       <p>Today at a Glance</p>
       <ul data-front-page-index></ul>
