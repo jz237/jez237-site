@@ -203,6 +203,10 @@ Computer Chronicle lives in `/computer-chronicle/`.
 This is intended to update every morning as a daily historical newspaper
 section. Each issue should cover the date 40 years before the current
 date in Jez's timezone, `America/New_York`.
+Every morning update must preserve the previous day's issue in the
+archive before replacing the current front page. Do not overwrite or
+discard yesterday's researched issue; keep it in `issues` so the archive
+selector and old links can still load it.
 
 The intended experience is a nostalgic morning read, not a deep research
 report. Keep it skimmable in roughly 2-5 minutes, with a familiar daily
@@ -282,6 +286,9 @@ Editorial priority:
 - If the current day's researched issue is missing, the page must make
   that clear and show the latest archived issue as stale rather than
   silently presenting it as today's paper.
+- When publishing a new issue, move yesterday's issue into the archive
+  first, then add today's issue as the newest/current entry. The archive
+  is part of the product, not cleanup debris.
 - Use `visualProfile` for issue-level presentation choices. Keep changes
   restrained and newspaper-like, but avoid repeating the same visual mix
   every day.
