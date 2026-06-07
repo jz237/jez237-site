@@ -539,7 +539,7 @@
       <div class="overlay" id="overlay">
         <div class="panel">
           <h1>Invaders</h1>
-          <div class="title-version">v1.34</div>
+          <div class="title-version">v1.35</div>
           <p class="tagline" id="message">A modernized arcade defense run: punch through waves, catch power cores, and survive the boss carrier.</p>
           <div class="enemy-roster" aria-label="Enemy ship guide">
             <h2>Enemy Ships</h2>
@@ -569,7 +569,7 @@
         <button id="rightButton" type="button">→</button>
         <button id="fireButton" type="button">FIRE</button>
       </div>
-      <div class="version" aria-hidden="true">v1.34</div>
+      <div class="version" aria-hidden="true">v1.35</div>
     </section>
   </main>
 
@@ -915,7 +915,7 @@
         game.player = {
           x: game.width / 2,
           y: playerLaneY(),
-          r: 19,
+          r: 18,
           vx: 0,
           shield: 100,
           invulnerable: 0,
@@ -944,7 +944,7 @@
           "111000000111",
           "110000000011"
         ];
-        const cell = game.width < 560 ? clamp(game.width / 68, 4.8, 6.2) : clamp(game.width / 54, 6.2, 10);
+        const cell = game.width < 560 ? clamp(game.width / 72, 4.55, 5.9) : clamp(game.width / 57, 5.9, 9.5);
         const bunkerWidth = mask[0].length * cell;
         const bunkerHeight = mask.length * cell;
         const gap = game.width / 4;
@@ -1707,7 +1707,7 @@
         ctx.globalCompositeOperation = "lighter";
         const blink = p.invulnerable > 0 && Math.floor(game.time * 18) % 2 === 0;
         ctx.globalAlpha = blink ? 0.45 : 1;
-        const pixel = game.width < 560 ? 3.7 : 4.2;
+        const pixel = game.width < 560 ? 3.5 : 4.0;
         const pattern = [
           "0000001000000",
           "0000011100000",
@@ -1722,7 +1722,7 @@
           "0001001001000"
         ];
         const ox = -pattern[0].length * pixel / 2;
-        const oy = -31;
+        const oy = -29.5;
         glow(colors.player, 20);
         ctx.fillStyle = colors.player;
         paintPixelSprite(ctx, pattern, pixel, ox, oy, 0.18);
@@ -2352,7 +2352,7 @@
       game.player = {
         x: game.width / 2,
         y: playerLaneY(),
-        r: 19,
+        r: 18,
         vx: 0,
         shield: 100,
         invulnerable: 0,
