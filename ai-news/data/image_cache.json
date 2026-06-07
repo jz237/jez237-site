@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-07T20:00:01.218825+00:00",
+  "updatedAt": "2026-06-07T21:00:01.260243+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -9560,6 +9560,10 @@
     "https://huggingface.co/blog/build-small-hackathon/amazingdigitaldentures": {
       "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/build-small-hackathon/amazingdigitaldentures.png",
       "checkedAt": "2026-06-07T20:00:01.218825+00:00"
+    },
+    "https://techcrunch.com/2026/06/07/is-this-the-dawn-of-the-tokenpocalypse": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/06/GettyImages-124923144.jpeg?resize=1200,800",
+      "checkedAt": "2026-06-07T21:00:01.260243+00:00"
     }
   }
 }
