@@ -539,7 +539,7 @@
       <div class="overlay" id="overlay">
         <div class="panel">
           <h1>Invaders</h1>
-          <div class="title-version">v1.35</div>
+          <div class="title-version">v1.36</div>
           <p class="tagline" id="message">A modernized arcade defense run: punch through waves, catch power cores, and survive the boss carrier.</p>
           <div class="enemy-roster" aria-label="Enemy ship guide">
             <h2>Enemy Ships</h2>
@@ -569,7 +569,7 @@
         <button id="rightButton" type="button">→</button>
         <button id="fireButton" type="button">FIRE</button>
       </div>
-      <div class="version" aria-hidden="true">v1.35</div>
+      <div class="version" aria-hidden="true">v1.36</div>
     </section>
   </main>
 
@@ -597,6 +597,8 @@
       const LOCAL_SCORES_KEY = "neon_invaders_highscores_v1";
       const LAST_INITIALS_KEY = "neon_invaders_last_initials";
       const SCORES_API = "https://game-scores.jez237.workers.dev/scores/neon-invaders";
+      const MUSIC_URL = "audio/victory-lap.mp3";
+      const MUSIC_VOLUME = 0.28;
       let globalScoresCache = null;
       let globalScoresCacheTime = 0;
       const keys = new Set();
@@ -652,6 +654,7 @@
       };
       let soundCtx = null;
       let lastShotSound = 0;
+      let musicTrack = null;
 
       function unlockAudio() {
         try {
@@ -660,6 +663,35 @@
         } catch (error) {
           soundCtx = null;
         }
+      }
+
+      function getMusicTrack() {
+        if (musicTrack) return musicTrack;
+        musicTrack = new Audio(MUSIC_URL);
+        musicTrack.loop = true;
+        musicTrack.preload = "auto";
+        musicTrack.volume = MUSIC_VOLUME;
+        return musicTrack;
+      }
+
+      function startMusic(restart = false) {
+        const track = getMusicTrack();
+        track.volume = MUSIC_VOLUME;
+        if (restart) {
+          try { track.currentTime = 0; } catch (error) {}
+        }
+        const play = track.play();
+        if (play && play.catch) play.catch(() => {});
+      }
+
+      function pauseMusic() {
+        if (musicTrack && !musicTrack.paused) musicTrack.pause();
+      }
+
+      function stopMusic() {
+        if (!musicTrack) return;
+        pauseMusic();
+        try { musicTrack.currentTime = 0; } catch (error) {}
       }
 
       function requestImmersiveMode() {
@@ -926,6 +958,7 @@
         };
         makeShields();
         spawnWave();
+        startMusic(true);
         overlay.classList.add("hidden");
         updateHud();
       }
@@ -1533,6 +1566,7 @@
 
       function endGame() {
         game.state = "over";
+        stopMusic();
         touchAim.active = false;
         touchAim.x = null;
         touchAim.pointerId = null;
@@ -2243,11 +2277,13 @@
       function togglePause() {
         if (game.state === "playing") {
           game.state = "paused";
+          pauseMusic();
           message.textContent = "Paused. The alien fleet is being polite about it.";
           startButton.textContent = "Resume";
           overlay.classList.remove("hidden");
         } else if (game.state === "paused") {
           game.state = "playing";
+          startMusic(false);
           game.last = performance.now();
           overlay.classList.add("hidden");
         }
