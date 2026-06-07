@@ -88,6 +88,7 @@ function checkRendererShapes(issue, issueIndex) {
   if (issue.pictureDesk && !Array.isArray(issue.pictureDesk)) fail(`Issue ${issueIndex}: pictureDesk must be an array when present.`);
   if (!Array.isArray(issue.storeShelves)) fail(`Issue ${issueIndex}: storeShelves must be an array.`);
   if (issue.softwareList && !Array.isArray(issue.softwareList)) fail(`Issue ${issueIndex}: softwareList must be an array when present.`);
+  if (issue.classifieds && !Array.isArray(issue.classifieds)) fail(`Issue ${issueIndex}: classifieds must be an array when present.`);
   if (!Array.isArray(issue.priceWatch)) fail(`Issue ${issueIndex}: priceWatch must be an array.`);
   if (!Array.isArray(issue.briefs)) fail(`Issue ${issueIndex}: briefs must be an array.`);
   if (!Array.isArray(issue.musicChart)) fail(`Issue ${issueIndex}: musicChart must be an array.`);
@@ -114,6 +115,15 @@ function checkRendererShapes(issue, issueIndex) {
   (issue.musicChart || []).forEach((item, itemIndex) => {
     if (!item.title || !item.artist) {
       fail(`Issue ${issueIndex}: musicChart[${itemIndex}] must include title and artist.`);
+    }
+  });
+
+  (issue.classifieds || []).forEach((item, itemIndex) => {
+    if (!item.headline && !item.item) {
+      fail(`Issue ${issueIndex}: classifieds[${itemIndex}] must include headline or item.`);
+    }
+    if (!item.copy && !item.detail) {
+      fail(`Issue ${issueIndex}: classifieds[${itemIndex}] must include copy or detail.`);
     }
   });
 
