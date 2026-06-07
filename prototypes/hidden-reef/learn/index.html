@@ -1699,6 +1699,12 @@
         linear-gradient(90deg, rgba(255,123,50,0.08), transparent 42%),
         rgba(2,14,24,0.72);
     }
+    .triage-result.is-mismatch {
+      border-color: rgba(255,196,92,0.74);
+      background:
+        linear-gradient(90deg, rgba(255,196,92,0.14), transparent 42%),
+        rgba(28,20,13,0.84);
+    }
     .triage-result h3 {
       margin: 2px 0 0;
       color: #fff;
@@ -2932,6 +2938,7 @@
           label: 'Emergency check',
           title: 'Start with oxygen and water quality.',
           summary: 'Fish at the surface or breathing hard need oxygen and water checks before disease guessing.',
+          validTankTypes: ['freshwater', 'saltwater', 'reef', 'pond'],
           tests: ['Ammonia', 'Nitrite', 'Temperature', 'pH'],
           actions: ['Increase surface movement', 'Add aeration if available', 'Stop feeding briefly', 'Check recent chemical additions'],
           avoid: ['Do not medicate before testing', 'Do not shut off filters', 'Do not make several changes at once'],
@@ -2942,6 +2949,7 @@
           label: 'Water clarity check',
           title: 'Separate bloom, waste, and filtration issues.',
           summary: 'Cloudy water can be bacteria, suspended debris, overfeeding, filter trouble, or green-water algae.',
+          validTankTypes: ['freshwater', 'saltwater', 'reef', 'pond'],
           tests: ['Ammonia', 'Nitrite', 'Nitrate', 'Recent feeding amount'],
           actions: ['Reduce feeding', 'Check filter flow', 'Rinse mechanical media safely', 'Look for dirty substrate'],
           avoid: ['Do not replace all media', 'Do not over-clean biological filtration', 'Do not add clarifier before checking cause'],
@@ -2952,6 +2960,7 @@
           label: 'Free-floating algae check',
           title: 'Look for light plus nutrient fuel.',
           summary: 'Green water usually means free-floating algae. Light schedule, direct sun, nutrients, and UV sizing matter.',
+          validTankTypes: ['freshwater', 'saltwater', 'reef', 'pond'],
           tests: ['Nitrate', 'Phosphate', 'Light schedule', 'Direct sun exposure'],
           actions: ['Shorten light schedule', 'Block direct sunlight', 'Service mechanical media', 'Compare UV options if persistent'],
           avoid: ['Do not dose algaecide blindly', 'Do not blackout without checking oxygen', 'Do not ignore overfeeding'],
@@ -2962,6 +2971,7 @@
           label: 'Algae balance check',
           title: 'Identify the algae before treating it.',
           summary: 'Hair algae, green film, cyano, diatoms, and pond algae point to different light, nutrient, and flow problems.',
+          validTankTypes: ['freshwater', 'saltwater', 'reef', 'pond'],
           tests: ['Nitrate', 'Phosphate', 'Light duration', 'Flow dead spots'],
           actions: ['Remove loose algae', 'Set a timer', 'Clean trapped debris', 'Improve flow where waste settles'],
           avoid: ['Do not scrub and dose only', 'Do not overdose algaecide', 'Do not ignore phosphate or sunlight'],
@@ -2972,6 +2982,7 @@
           label: 'Sick fish check',
           title: 'Rule out water trouble before choosing medication.',
           summary: 'White spots, flashing, clamped fins, and hiding can be parasites, stress, injury, or poor water.',
+          validTankTypes: ['freshwater', 'saltwater', 'reef', 'pond'],
           tests: ['Ammonia', 'Nitrite', 'pH', 'Temperature'],
           actions: ['Increase aeration', 'Observe spots or behavior closely', 'Consider a hospital tank', 'Bring clear photos or video'],
           avoid: ['Do not mix medications', 'Do not dose reef displays blindly', 'Do not skip water tests'],
@@ -2982,6 +2993,7 @@
           label: 'Reef stability check',
           title: 'Check stability before moving or dipping coral.',
           summary: 'Coral staying closed often follows salinity, alkalinity, nutrients, lighting, flow, pests, or recent moves.',
+          validTankTypes: ['reef'],
           tests: ['Salinity', 'Alkalinity', 'Nitrate', 'Phosphate'],
           actions: ['Review recent light changes', 'Check flow around the coral', 'Look for pests or irritation', 'Compare trends before correcting'],
           avoid: ['Do not chase one reading aggressively', 'Do not dip repeatedly without cause', 'Do not change light intensity fast'],
@@ -2992,6 +3004,7 @@
           label: 'Invertebrate safety check',
           title: 'Look for toxins, swings, and acclimation stress.',
           summary: 'Shrimp and snails often react first to copper, medication, ammonia, nitrite, salinity swings, or poor acclimation.',
+          validTankTypes: ['freshwater', 'saltwater', 'reef'],
           tests: ['Ammonia', 'Nitrite', 'pH or salinity', 'Copper if medication was used'],
           actions: ['Review recent dosing', 'Check acclimation history', 'Stabilize temperature and salinity', 'Use clean source water'],
           avoid: ['Do not dose copper in invert systems', 'Do not make rapid salinity changes', 'Do not assume it is only lack of food'],
@@ -3002,6 +3015,7 @@
           label: 'Odor source check',
           title: 'Find decay or trapped waste first.',
           summary: 'A bad smell usually means hidden decay, clogged filtration, dirty substrate, stagnant flow, or overfeeding.',
+          validTankTypes: ['freshwater', 'saltwater', 'reef', 'pond'],
           tests: ['Ammonia', 'Nitrite', 'Filter flow', 'Missing livestock'],
           actions: ['Inspect behind decor and intakes', 'Remove dead material', 'Siphon debris', 'Clean mechanical media safely'],
           avoid: ['Do not mask odor with additives', 'Do not deep-clean every filter stage', 'Do not ignore rotten-egg smells'],
@@ -3050,7 +3064,7 @@
         },
         waterChange: {
           tests: ['Source water and temperature match'],
-          actions: ['Confirm conditioner, salinity, and pH match'],
+          actions: ['Confirm conditioner, source water, temperature, and pH match'],
           avoid: ['Do not repeat large changes without a test result'],
           visit: ['Water-change amount and source']
         },
@@ -3078,6 +3092,7 @@
         symptom: document.querySelector('[data-triage-symptom]'),
         tank: document.querySelector('[data-triage-tank]'),
         change: document.querySelector('[data-triage-change]'),
+        result: document.querySelector('[data-triage-result]'),
         label: document.querySelector('[data-triage-label]'),
         title: document.querySelector('[data-triage-title]'),
         summary: document.querySelector('[data-triage-summary]'),
@@ -3108,11 +3123,50 @@
         return [...(container?.querySelectorAll('li') || [])].map((item) => item.textContent.trim());
       }
 
+      function selectedOptionText(select, value = select?.value) {
+        return [...(select?.options || [])].find((option) => option.value === value)?.textContent.trim() || value;
+      }
+
+      function renderTankMismatch(base, selectedTankType) {
+        const validTankTypes = base.validTankTypes || ['freshwater', 'saltwater', 'reef', 'pond'];
+        const validTankLabels = validTankTypes.map((type) => selectedOptionText(triageEls.tank, type));
+        triageEls.result?.classList.add('is-mismatch');
+        triageEls.label.textContent = 'Selection mismatch';
+        triageEls.title.textContent = `${base.title.replace(/\.$/, '')} - but check the tank type first.`;
+        triageEls.summary.textContent = `${selectedOptionText(triageEls.symptom)} does not fit ${selectedOptionText(triageEls.tank, selectedTankType)} guidance. Use ${validTankLabels.join(' or ')} for this symptom before following the checklist.`;
+        renderList(triageEls.tests, ['Confirm the aquarium type', 'Re-select the matching tank type']);
+        renderList(triageEls.actions, ['Do not follow reef-specific steps for a freshwater system', 'Switch the tank type if this is actually a reef or coral system']);
+        renderList(triageEls.avoid, ['Do not test or dose salinity for freshwater', 'Do not use coral dip guidance on freshwater livestock']);
+        renderList(triageEls.visit, ['Photo of the tank and livestock', 'Tank type and setup notes', 'Recent test numbers']);
+
+        triageEls.links.innerHTML = '';
+        validTankTypes.forEach((tankType) => {
+          const button = document.createElement('button');
+          button.className = 'triage-copy-button';
+          button.type = 'button';
+          button.textContent = `Use ${selectedOptionText(triageEls.tank, tankType)}`;
+          button.addEventListener('click', () => {
+            triageEls.tank.value = tankType;
+            updateTriageResult();
+          });
+          triageEls.links.appendChild(button);
+        });
+        if (triageEls.copyStatus) triageEls.copyStatus.textContent = '';
+      }
+
       function updateTriageResult() {
         if (!triageEls.symptom) return;
         const base = triageData[triageEls.symptom.value] || triageData.breathing;
+        const selectedTankType = triageEls.tank.value;
+        const validTankTypes = base.validTankTypes || ['freshwater', 'saltwater', 'reef', 'pond'];
+        if (!validTankTypes.includes(selectedTankType)) {
+          renderTankMismatch(base, selectedTankType);
+          return;
+        }
+
         const tank = tankNotes[triageEls.tank.value] || tankNotes.freshwater;
         const change = changeNotes[triageEls.change.value] || changeNotes.none;
+        triageEls.result?.classList.remove('is-mismatch');
 
         triageEls.label.textContent = base.label;
         triageEls.title.textContent = base.title;
