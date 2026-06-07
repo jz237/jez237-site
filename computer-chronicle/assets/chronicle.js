@@ -21,6 +21,10 @@
     heroLightbox: document.querySelector("[data-hero-lightbox]"),
     lightboxImage: document.querySelector("[data-lightbox-image]"),
     lead: document.querySelector("[data-lead]"),
+    pictureDeskPanel: document.querySelector("[data-picture-desk-panel]"),
+    pictureDeskLabel: document.querySelector("[data-picture-desk-label]"),
+    pictureDeskTitle: document.querySelector("[data-picture-desk-title]"),
+    pictureDesk: document.querySelector("[data-picture-desk]"),
     computerItems: document.querySelector("[data-computer-items]"),
     softwarePanel: document.querySelector("[data-software-panel]"),
     softwareLabel: document.querySelector("[data-software-label]"),
@@ -140,6 +144,8 @@
   function applySectionChrome(issue) {
     setText(els.storeShelvesLabel, chrome(issue, "storeShelves", "label", "On Store Shelves"));
     setText(els.storeShelvesTitle, chrome(issue, "storeShelves", "title", "Games, Software & Platforms People Could Talk About"));
+    setText(els.pictureDeskLabel, chrome(issue, "pictureDesk", "label", "Picture Desk"));
+    setText(els.pictureDeskTitle, chrome(issue, "pictureDesk", "title", "Scenes From the Week"));
     setText(els.softwareLabel, chrome(issue, "software", "label", "Software Top 5"));
     setText(els.softwareTitle, chrome(issue, "software", "title", "New & Notable Software"));
     setText(els.priceWatchLabel, chrome(issue, "priceWatch", "label", "Price Watch"));
@@ -224,7 +230,7 @@
 
   function applyLayoutPlan(issue) {
     const defaults = {
-      main: ["editor-note", "lead", "computer-items", "software", "store-shelves"],
+      main: ["editor-note", "lead", "picture-desk", "computer-items", "software", "store-shelves"],
       sidebar: ["market", "budget", "price-watch", "bbs", "curiosity", "music", "period-ad", "fallback", "accuracy", "sources", "verification"],
     };
     const plan = (issue && issue.layoutPlan) || {};
@@ -332,6 +338,8 @@
         ${confidenceBadge("Not researched yet")}
       `;
       els.computerItems.innerHTML = "";
+      if (els.pictureDeskPanel) els.pictureDeskPanel.hidden = true;
+      if (els.pictureDesk) els.pictureDesk.innerHTML = "";
       if (els.softwarePanel) els.softwarePanel.hidden = true;
       if (els.softwareList) els.softwareList.innerHTML = "";
       els.market.innerHTML = "";
@@ -373,6 +381,19 @@
       ${confidenceBadge(issue.lead.confidence)}
       ${sourceLinks(issue, issue.lead.sourceRefs)}
     `;
+
+    const pictureDeskItems = Array.isArray(issue.pictureDesk) ? issue.pictureDesk : [];
+    if (els.pictureDeskPanel) els.pictureDeskPanel.hidden = pictureDeskItems.length === 0;
+    if (els.pictureDesk) {
+      els.pictureDesk.innerHTML = pictureDeskItems.map((item) => `
+        <article class="picture-desk-item">
+          <h3>${escapeHtml(item.title || item.caption || "Picture")}</h3>
+          ${articleVisual(item.image || item)}
+          ${item.note ? `<p>${escapeHtml(item.note)}</p>` : ""}
+          ${sourceLinks(issue, item.sourceRefs)}
+        </article>
+      `).join("");
+    }
 
     els.computerItems.innerHTML = issue.computerItems.map((item) => `
       <article class="chronicle-card">

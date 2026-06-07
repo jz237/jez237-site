@@ -389,6 +389,26 @@
     body[data-issue-layout="feature-led"] .computer-grid {
       grid-template-columns: 1fr;
     }
+    .picture-desk-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 12px;
+    }
+    .picture-desk-item {
+      min-width: 0;
+    }
+    .picture-desk-item h3 {
+      margin: 0 0 8px;
+      color: var(--cc-ink);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(1.02rem, 1.6vw, 1.28rem);
+      line-height: 1.1;
+      overflow-wrap: anywhere;
+    }
+    .picture-desk-item .article-visual {
+      margin-bottom: 8px;
+    }
     .editor-note {
       margin: 14px 0 0;
       border-left: 3px solid rgba(232, 197, 122, 0.5);
@@ -1308,6 +1328,9 @@
         padding: 0.035in;
         font-size: 6.8pt;
       }
+      .picture-desk-grid {
+        grid-template-columns: 1fr;
+      }
       .confidence {
         border-color: #111;
         color: #111 !important;
@@ -1382,6 +1405,9 @@
       .archive-strip a {
         min-width: 0;
         width: 100%;
+      }
+      .picture-desk-grid {
+        grid-template-columns: 1fr;
       }
       .section-label,
       .chronicle-kicker,
@@ -1464,6 +1490,11 @@
       <div class="main-column">
         <div class="editor-note" data-editor-note data-main-module="editor-note"></div>
         <article class="chronicle-panel" data-lead data-main-module="lead"></article>
+        <section class="chronicle-panel" data-main-module="picture-desk" aria-labelledby="picture-desk-title" data-picture-desk-panel hidden>
+          <p class="section-label" data-picture-desk-label>Picture Desk</p>
+          <h2 id="picture-desk-title" data-picture-desk-title>Scenes From the Week</h2>
+          <div class="picture-desk-grid" data-picture-desk></div>
+        </section>
         <div class="computer-grid" data-computer-items data-main-module="computer-items"></div>
         <section class="chronicle-panel" data-main-module="software" aria-labelledby="software-title" data-software-panel hidden>
           <p class="section-label" data-software-label>Software Top 5</p>
