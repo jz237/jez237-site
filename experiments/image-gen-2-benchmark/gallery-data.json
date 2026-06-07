@@ -1474,5 +1474,17 @@
     "slot": "afternoon",
     "model": "gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-06-06-evening-shoe-as-archaeology-fragment",
+    "title": "Shoe as Archaeology Fragment",
+    "tests": "Exact output file verified non-empty; JSON archive parse verified after append; copied image existence verified.",
+    "prompt": "Use the uploaded reference photo and preserve the shoe identity, camera angle, silhouette, proportions, sole shape, toe cap, lace pattern, stitching, scuffs, color blocking, and most recognizable features, then transform the shoe into an excavated archaeology fragment in a museum dig tray. Rebuild the shoe from sun-baked terracotta, mineralized canvas, cracked clay seams, dusty embedded laces, chipped ceramic eyelets, flaking pigment traces, sediment-filled tread grooves, ochre excavation dust, foam supports, measuring calipers, linen gloves, specimen pins, and warm raking conservation-lab light. Keep the source shoe recognizable while changing the material logic, surface texture, props, and environment into a believable conserved artifact. Avoid readable text, real logos, brand marks, placeholder labels, extra shoes, feet, people, broken shoe geometry, and losing recognizability.\n\nReusable fill-in-the-blank template: Use the uploaded reference photo and preserve the [OBJECT] identity, camera angle, silhouette, proportions, key structural geometry, distinctive markings, surface wear, and most recognizable features, then transform [OBJECT] into an excavated archaeology fragment made from [MATERIAL] in [SETTING] with [MOOD] lighting. Keep the source recognizable while changing the material logic, surface texture, props, and environment into a cohesive museum artifact. Avoid readable text, real logos, brand marks, placeholder labels, duplicate objects, broken geometry, and losing recognizability.\n\nSource photo needed: a clear shoe photo.\n\nWhat to preserve: shoe identity, side or three-quarter camera angle, silhouette, sole proportions, toe cap, lace rhythm, stitching, tread shape, scuffs, distinctive colors or patterns, and overall object geometry.\n\nWhat to change: convert fabric, rubber, leather, plastic, and metal into terracotta, mineralized textile, cracked clay, dusty embedded cords, chipped ceramic fittings, faded pigment, sediment, conservation-tray supports, and museum archaeology props.\n\nExample substitution: Upload a clear side-view photo of a red high-top sneaker; preserve the ankle-high shape, white toe cap, lace pattern, stripe placement, scuffed heel, and chunky sole, then turn it into a terracotta excavation fragment in a museum dig tray under warm conservation-lab light.",
+    "image": "images/2026-06-06-evening-shoe-as-archaeology-fragment.png",
+    "date": "2026-06-06",
+    "batch": "Daily Prompt",
+    "slot": "evening",
+    "model": "gpt-image-2",
+    "size": "1024x1024"
   }
 ]
