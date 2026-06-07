@@ -1,10 +1,436 @@
 {
-  "generatedAt": "2026-06-07T00:40:00-04:00",
+  "generatedAt": "2026-06-07T11:13:00-04:00",
   "editorialPriority": "When there is a choice, prefer personal computers, home computing, office PC software, and personal computer or console gaming over broad enterprise technology.",
   "fallbackPolicy": "Use exact-day computer news when verified. If none exists, use same-week or same-month personal-computing items with confidence labels, then fall back to a wider world/business headline.",
   "issues": [
     {
       "currentDate": "2026-06-07",
+      "historicDate": "1982-08-02",
+      "displayDate": "Week of August 2-8, 1982",
+      "edition": "Issue 001 - Weekly 1982 Computer & Culture Chronicle",
+      "visualProfile": {
+        "layout": "weekly-newsprint-front",
+        "accent": "black-red-cyan",
+        "paper": "halftone-cream",
+        "strapline": "WEEKLY DESK - PERSONAL COMPUTERS - ARCADES - ROCK RADIO - RETAIL ADS"
+      },
+      "masthead": {
+        "kicker": "Morning archive for Jez",
+        "title": "Computer Chronicle",
+        "deck": "The first August 1982 weekly: Commodore 64 reaches the retail moment, IBM PC clones gather, $100 computing gets real, and the arcade shelf keeps humming."
+      },
+      "layoutPlan": {
+        "main": [
+          "editor-note",
+          "lead",
+          "computer-items",
+          "store-shelves"
+        ],
+        "sidebar": [
+          "price-watch",
+          "market",
+          "bbs",
+          "curiosity",
+          "briefs",
+          "music",
+          "period-ad",
+          "fallback",
+          "accuracy",
+          "sources"
+        ]
+      },
+      "sectionChrome": {
+        "lead": {
+          "label": "Lead Story"
+        },
+        "computerItems": {
+          "label": "Computers & Hardware",
+          "title": "Personal Computing Desk"
+        },
+        "storeShelves": {
+          "label": "Top Games This Week",
+          "title": "Arcade, Console & Computer Games"
+        },
+        "priceWatch": {
+          "label": "Retail / Ads",
+          "title": "What It Cost"
+        },
+        "bbs": {
+          "label": "Modem Desk"
+        },
+        "curiosity": {
+          "label": "Everyday 1982"
+        },
+        "briefs": {
+          "label": "Small Notices",
+          "title": "Culture & Shelf Talk"
+        },
+        "music": {
+          "label": "Top Rock This Week",
+          "title": "Rock Radio Chart, August 7"
+        },
+        "periodAd": {
+          "label": "Retail / Ads"
+        },
+        "fallback": {
+          "label": "Bulletin"
+        },
+        "accuracy": {
+          "label": "Accuracy Ledger",
+          "title": "What Is Date-Specific"
+        },
+        "sources": {
+          "label": "Source Trail",
+          "title": "Research Log"
+        },
+        "market": {
+          "label": "Retail / Ads",
+          "title": "Computer Store Market"
+        }
+      },
+      "heroImage": {
+        "src": "media/1982-computer-chronicle-issue-001.png",
+        "alt": "AI-generated vertical 1982 newspaper front page for Computer Chronicle with generic early home computers, arcade shelves, and rock-radio chart sidebar",
+        "caption": "GPT Image 2 issue-front visual - no real logos; factual text is in the issue data.",
+        "confidence": "Generated 2026-06-07 from verified issue brief"
+      },
+      "editorNote": "Issue #1 starts the weekly run at Monday, August 2, 1982. The desk treats the week as a real 1982 newsstand bundle: date-specific where records are strong, same-month where period sources only pin the item to August.",
+      "morningLine": "This week: the Commodore 64 reaches its August launch window, IBM PC momentum turns into a compatibility race, Timex puts a computer under $100, and rock radio has Eddie Money at number one.",
+      "lead": {
+        "headline": "Commodore 64 Reaches the August 1982 Retail Moment",
+        "summary": "The C64 is the home-computer story to circle this week: a 64K machine at a $595 introductory price, with TV hookup, BASIC, color graphics, sound, and room for disk drives, tape, modems, and printers. Guinness places the machine's manufacturing span from August 1982 to April 1994, while the Computer History Museum records its 64K memory and $595 cost. Exact store-by-store dates varied, so the issue labels this as the August 1982 launch window rather than a single-day debut.",
+        "confidence": "Month-specific launch window; exact day not asserted",
+        "sourceRefs": [
+          0,
+          1
+        ]
+      },
+      "computerItems": [
+        {
+          "label": "Commodore 64",
+          "headline": "64K, SID Sound, VIC-II Color, and a Department-Store Future",
+          "summary": "The appeal is not just memory. The machine can use a family television, keeps BASIC close at hand, and arrives with a price meant to pressure Apple II, Atari 800, TI-99/4A, and TRS-80 buyers.",
+          "confidence": "Same-month verified",
+          "sourceRefs": [
+            0,
+            1
+          ]
+        },
+        {
+          "label": "Atari 8-bit",
+          "headline": "Atari 400/800 Owners Watch a New Rival Borrow Their Game-Computer Vocabulary",
+          "summary": "Atari still has strong color graphics, player-missile sprites, cartridge software, and a serious hobbyist base. The week's tension is that Commodore is now selling a cheaper 64K home machine into the same living-room lane.",
+          "confidence": "Context from contemporary product competition",
+          "sourceRefs": [
+            0,
+            1
+          ]
+        },
+        {
+          "label": "IBM PC / compatibles",
+          "headline": "The IBM PC Nears Its First Birthday With Clones Already Forming",
+          "summary": "IBM's own history says the PC was unveiled on August 12, 1981 and that by the end of 1982 retailers and software houses were rushing in. Columbia Data Products had already introduced a more-or-less IBM-compatible machine in June 1982, making compatibility a live buyer question this summer.",
+          "confidence": "Verified 1981 anniversary and June 1982 clone context",
+          "sourceRefs": [
+            2,
+            3
+          ]
+        },
+        {
+          "label": "Timex / Sinclair",
+          "headline": "The $99.95 Timex Sinclair 1000 Puts Computing Beside Watches and Drugstore Counters",
+          "summary": "Timex/Sinclair coverage said Americans would be able to buy the 2K machine in July through more than 100,000 retail outlets. By early August, under-$100 computing is no longer a mail-order curiosity; it is shelf bait for first-time BASIC learners.",
+          "confidence": "Recent July 1982 launch coverage",
+          "sourceRefs": [
+            4
+          ]
+        },
+        {
+          "label": "Storage & peripherals",
+          "headline": "Floppies, Tape, Printers, and Modems Define the Real Cost of Entry",
+          "summary": "The advertised computer price is only the opening bid. A useful 1982 setup often means a cassette recorder or 5.25-inch floppy drive, a TV or monitor, a printer for school or small business, and maybe a modem for CompuServe or The Source.",
+          "confidence": "Period-context synthesis from cited hardware descriptions",
+          "sourceRefs": [
+            0,
+            2,
+            4
+          ]
+        }
+      ],
+      "storeShelves": [
+        {
+          "name": "Choplifter!",
+          "platform": "Apple II; Atari 8-bit; VIC-20",
+          "detail": "Release: 1982. Broderbund's rescue-helicopter hit is current home-computer shelf talk; MobyGames lists Apple II, Atari 8-bit, and VIC-20 releases in 1982.",
+          "confidence": "Year verified; exact day not found",
+          "sourceRefs": [
+            5
+          ]
+        },
+        {
+          "name": "Dig Dug",
+          "platform": "Arcade",
+          "detail": "Release: 1982. Namco's digging-and-pumping arcade game is one of the year's defining coin-op attractions; exact U.S. local arrival varies by operator.",
+          "confidence": "Year verified from arcade/game archives",
+          "sourceRefs": [
+            6
+          ]
+        },
+        {
+          "name": "Pole Position",
+          "platform": "Arcade",
+          "detail": "Release: 1982. Namco's racing cabinet is part of the late-1982 arcade wave; include as current-year arcade buzz rather than a nailed-down first-week-August arrival.",
+          "confidence": "Release: 1982; date confidence broad",
+          "sourceRefs": [
+            7
+          ]
+        },
+        {
+          "name": "Ms. Pac-Man",
+          "platform": "Arcade; Atari VCS/2600 home version arriving in 1982 context",
+          "detail": "Release: 1982. Still the surest arcade conversation starter in malls and pizza parlors, with home-console attention building through the year.",
+          "confidence": "Release: 1982; exact platform timing varies",
+          "sourceRefs": [
+            8
+          ]
+        },
+        {
+          "name": "Ultima II: The Revenge of the Enchantress",
+          "platform": "Apple II",
+          "detail": "Release: August 24, 1982. Not on shelves during this issue week, but advance RPG chatter belongs in the month's computer-store rumor column.",
+          "confidence": "Forthcoming later in August; exact date from copyright/release records",
+          "sourceRefs": [
+            9
+          ]
+        },
+        {
+          "name": "Microsoft Flight Simulator 1.0",
+          "platform": "IBM PC",
+          "detail": "Release: November 1982. Not out yet, but early IBM PC owners are already the audience for simulation software that will become a compatibility benchmark.",
+          "confidence": "Forthcoming 1982 context; not this week",
+          "sourceRefs": [
+            10
+          ]
+        }
+      ],
+      "priceWatch": {
+        "headline": "Retail / Ads: The Price Spread Is the Story",
+        "summary": "Commodore 64: $595 introductory price. Timex Sinclair 1000: $99.95. IBM PC: $1,565 before display, disk drives, and printer. The weekly buyer's lesson is simple: the box price rarely equals the working desk price.",
+        "confidence": "Verified list prices; street prices varied by store",
+        "sourceRefs": [
+          0,
+          2,
+          4
+        ]
+      },
+      "bbsNote": {
+        "headline": "Acoustic Couplers, 300 Baud Patience, and Long-Distance Bills",
+        "summary": "A home modem remains a splurge, but the culture is forming: user groups, dial-up services, local bulletin boards, software swapping, and late-night phone discipline. For C64 and Atari owners, the modem is a future social life as much as a peripheral.",
+        "confidence": "Era-context synthesis",
+        "sourceRefs": [
+          0,
+          4
+        ]
+      },
+      "curiosity": {
+        "headline": "E.T. Keeps the Summer Box Office Orbiting the Suburbs",
+        "summary": "Spielberg's E.T. had opened June 11 and remained the broad pop-culture movie backdrop for early August. It fits this issue as the week's movie chatter, not as a computer story.",
+        "confidence": "Release verified; weekly box-office context broad",
+        "sourceRefs": [
+          11
+        ]
+      },
+      "briefs": [
+        {
+          "label": "Magazine rack",
+          "headline": "PC Magazine Moves Into Monthly Rhythm",
+          "summary": "PC Magazine began 1982 as a specialist IBM PC title and moved to monthly publication with its August 1982 issue, another sign that the IBM PC had become its own magazine ecosystem.",
+          "confidence": "Same-month publishing context",
+          "sourceRefs": [
+            12
+          ]
+        },
+        {
+          "label": "Rock/pop crossover",
+          "headline": "Survivor Still Owns Pop Radio While Rock Radio Picks Eddie Money",
+          "summary": "On the August 7 Hot 100, Survivor's Eye of the Tiger remained number one; the dedicated weekly rock list put Eddie Money's Think I'm in Love on top.",
+          "confidence": "Week-specific chart sources",
+          "sourceRefs": [
+            13,
+            14
+          ]
+        },
+        {
+          "label": "Compatibility desk",
+          "headline": "Workalike Is Not Always Compatible",
+          "summary": "The IBM PC's open architecture is pulling in competitors, but 1982 buyers still need to ask whether software, disks, cards, and BIOS behavior actually line up.",
+          "confidence": "Verified 1982-1983 compatibility context",
+          "sourceRefs": [
+            3
+          ]
+        }
+      ],
+      "musicChart": [
+        {
+          "title": "#1 Think I'm In Love - Eddie Money",
+          "detail": "Weekly Rock Top 20 dated August 7, 1982.",
+          "confidence": "Week-specific rock chart",
+          "sourceRefs": [
+            14
+          ]
+        },
+        {
+          "title": "#2 Burning Down One Side - Robert Plant",
+          "detail": "New solo Plant single sits high on album-rock radio.",
+          "confidence": "Week-specific rock chart",
+          "sourceRefs": [
+            14
+          ]
+        },
+        {
+          "title": "#3 Wasted On The Way - Crosby, Stills & Nash",
+          "detail": "Harmony rock remains a radio staple.",
+          "confidence": "Week-specific rock chart",
+          "sourceRefs": [
+            14
+          ]
+        },
+        {
+          "title": "#4 Should I Stay Or Should I Go - The Clash",
+          "detail": "Punk/new-wave energy in the rock top five.",
+          "confidence": "Week-specific rock chart",
+          "sourceRefs": [
+            14
+          ]
+        },
+        {
+          "title": "#5 Everybody Wants You - Billy Squier",
+          "detail": "Hard-rock radio momentum continues.",
+          "confidence": "Week-specific rock chart",
+          "sourceRefs": [
+            14
+          ]
+        },
+        {
+          "title": "#6 I Ran (So Far Away) - A Flock Of Seagulls",
+          "detail": "Synth/new-wave video-era sound breaks through.",
+          "confidence": "Week-specific rock chart",
+          "sourceRefs": [
+            14
+          ]
+        }
+      ],
+      "periodAd": {
+        "headline": "Sunday Circular Watch: 64K Versus $99.95",
+        "copy": "Ask what comes in the box: BASIC in ROM, TV lead, cassette support, disk drive price, printer port, joystick ports, and whether the software shelf is already alive.",
+        "confidence": "Constructed period-style ad note from sourced prices",
+        "sourceRefs": [
+          0,
+          4
+        ]
+      },
+      "worldFallback": {
+        "headline": "Bulletin: No Era-Defining Hard-News Override This Week",
+        "summary": "No nuclear accident, assassination, head-of-state crisis, major war escalation, or comparable hard-news event displaced the computers/games/culture desk for August 2-8, 1982.",
+        "confidence": "Editorial screening note"
+      },
+      "accuracyLedger": [
+        {
+          "label": "Week anchor",
+          "status": "Exact",
+          "note": "Issue covers Monday August 2 through Sunday August 8, 1982."
+        },
+        {
+          "label": "C64 launch",
+          "status": "Month-specific",
+          "note": "Reliable sources pin manufacturing/release to August 1982; the issue does not invent an exact day."
+        },
+        {
+          "label": "Charts",
+          "status": "Week-specific",
+          "note": "Rock and pop chart references are dated August 7, 1982."
+        },
+        {
+          "label": "Games",
+          "status": "Mixed",
+          "note": "Release dates are exact only where available; otherwise labeled Release: 1982 or forthcoming context."
+        }
+      ],
+      "sources": [
+        {
+          "name": "Guinness World Records: Best-selling desktop computer - Commodore 64",
+          "url": "https://www.guinnessworldrecords.com/world-records/72695-most-computer-sales"
+        },
+        {
+          "name": "Computer History Museum: Commodore 64 object record",
+          "url": "https://www.computerhistory.org/revolution/personal-computers/17/298/1179"
+        },
+        {
+          "name": "IBM History: The IBM PC",
+          "url": "https://www.ibm.com/history/personal-computer?linkId=14355980"
+        },
+        {
+          "name": "IBM PC compatible history and first clone context",
+          "url": "https://en.wikipedia.org/wiki/IBM_PC_compatible"
+        },
+        {
+          "name": "Timex/Sinclair: $99.95 Timex Sinclair 1000 microcomputer debuts (InfoWorld reprint)",
+          "url": "https://www.timexsinclair.com/article/99-95-timex-sinclair-1000-microcomputer-debuts/index.html"
+        },
+        {
+          "name": "MobyGames: Choplifter! release information",
+          "url": "https://www.mobygames.com/game/8127/choplifter/"
+        },
+        {
+          "name": "MobyGames: Dig Dug release information",
+          "url": "https://www.mobygames.com/game/464/dig-dug/"
+        },
+        {
+          "name": "MobyGames: Pole Position release information",
+          "url": "https://www.mobygames.com/game/7065/pole-position/"
+        },
+        {
+          "name": "MobyGames: Ms. Pac-Man release information",
+          "url": "https://www.mobygames.com/game/677/ms-pac-man/"
+        },
+        {
+          "name": "Ultima II release date reference",
+          "url": "https://en.wikipedia.org/wiki/Ultima_II:_The_Revenge_of_the_Enchantress"
+        },
+        {
+          "name": "Microsoft Flight Simulator 1.0 release reference",
+          "url": "https://en.wikipedia.org/wiki/Microsoft_Flight_Simulator_(1982_video_game)"
+        },
+        {
+          "name": "Box Office Mojo: E.T. the Extra-Terrestrial release/weekend data",
+          "url": "https://www.boxofficemojo.com/release/rl995132929/weekend/"
+        },
+        {
+          "name": "PC Magazine history: monthly as of August 1982",
+          "url": "https://en.wikipedia.org/wiki/PCMag"
+        },
+        {
+          "name": "Top40Weekly: US Top 40 singles for week ending August 7, 1982",
+          "url": "https://top40weekly.com/2013/08/07/us-top-40-singles-for-the-week-ending-august-7-1982/"
+        },
+        {
+          "name": "Tunecaster: Weekly Rock Top 20 for August 7, 1982",
+          "url": "https://www.tunecaster.com/charts/80/rock8232.html"
+        }
+      ],
+      "market": {
+        "headline": "Computer Store Market: The Low End Gets Loud",
+        "summary": "This issue skips routine stock-market reporting. The real consumer market signal is retail: a $99.95 Timex Sinclair 1000 below the C64 at $595, while an IBM PC desk with display, drives, and printer could run far higher than the base price.",
+        "confidence": "Retail-price context, not a securities-market report",
+        "sourceRefs": [
+          0,
+          2,
+          4
+        ]
+      }
+    },
+    {
+      "currentDate": "1986-06-07",
       "historicDate": "1986-06-07",
       "displayDate": "Saturday, June 7, 1986",
       "edition": "Saturday Computer & Culture Section",
@@ -12,7 +438,7 @@
         "layout": "saturday-scan",
         "accent": "red-black-blue",
         "paper": "cream",
-        "strapline": "SATURDAY DESK \u2022 COMPUTERS \u2022 GAMES \u2022 BBS \u2022 ROCK RADIO"
+        "strapline": "SATURDAY DESK • COMPUTERS • GAMES • BBS • ROCK RADIO"
       },
       "masthead": {
         "kicker": "Saturday historical tech desk",
@@ -93,7 +519,7 @@
       "heroImage": {
         "src": "media/retro-computer-desk-1986.webp",
         "alt": "A period-style 1980s personal computer desk with CRT monitor, keyboard, floppy disks, printer paper, and computer magazines",
-        "caption": "Personal computer desk \u00b7 issue-front visual",
+        "caption": "Personal computer desk · issue-front visual",
         "confidence": "Period-style visual"
       },
       "editorNote": "June 7, 1986 was a Saturday, so today's issue treats exact-day culture and chart material as the date anchor, while the computer desk leans on same-week trade coverage and current-shelf games.",
@@ -526,7 +952,7 @@
       ]
     },
     {
-      "currentDate": "2026-06-06",
+      "currentDate": "1986-06-06",
       "historicDate": "1986-06-06",
       "displayDate": "Friday, June 6, 1986",
       "edition": "Computer & Business Section",
@@ -534,7 +960,7 @@
         "layout": "business-ledger",
         "accent": "amber-blue",
         "paper": "cream",
-        "strapline": "COMPUTERS \u2022 GAMES \u2022 SOFTWARE \u2022 MARKETS"
+        "strapline": "COMPUTERS • GAMES • SOFTWARE • MARKETS"
       },
       "masthead": {
         "kicker": "Daily historical tech desk",
@@ -615,7 +1041,7 @@
       "heroImage": {
         "src": "media/retro-computer-desk-1986.webp",
         "alt": "A period-style 1980s personal computer desk with CRT monitor, keyboard, floppy disks, printer paper, and computer magazines",
-        "caption": "Personal computer desk \u00b7 issue-front visual",
+        "caption": "Personal computer desk · issue-front visual",
         "confidence": "Period-style visual"
       },
       "editorNote": "Today's issue leans toward personal computers, home computing, software people actually used, and games people could buy or talk about in 1986.",
@@ -1034,5 +1460,6 @@
         }
       ]
     }
-  ]
+  ],
+  "mode": "weekly-1982"
 }
