@@ -51,6 +51,9 @@
     issuePicker: document.querySelector("[data-issue-picker]"),
     printIssue: document.querySelector("[data-print-issue]"),
     frontPageIndex: document.querySelector("[data-front-page-index]"),
+    nextCurrentDate: document.querySelector("[data-next-current-date]"),
+    nextHistoricDate: document.querySelector("[data-next-historic-date]"),
+    nextAssignmentList: document.querySelector("[data-next-assignment-list]"),
   };
 
   function isoDate(date) {
@@ -61,6 +64,12 @@
   function minusYears(date, years) {
     const copy = new Date(date);
     copy.setFullYear(copy.getFullYear() - years);
+    return copy;
+  }
+
+  function addDays(date, days) {
+    const copy = new Date(date);
+    copy.setDate(copy.getDate() + days);
     return copy;
   }
 
@@ -173,6 +182,21 @@
     return String(days + 1).padStart(3, "0");
   }
 
+  function applyNextAssignment(currentIso) {
+    const currentDate = new Date(`${currentIso}T00:00:00`);
+    const nextCurrent = addDays(currentDate, 1);
+    const nextHistoric = minusYears(nextCurrent, 40);
+    setText(els.nextCurrentDate, isoDate(nextCurrent));
+    setText(els.nextHistoricDate, isoDate(nextHistoric));
+    if (!els.nextAssignmentList) return;
+    els.nextAssignmentList.innerHTML = [
+      "Find exact-day computer, business, market, and world headlines first.",
+      "Fill same-week personal-computer, software, games, BBS, and rock-radio context only when labeled.",
+      "Rotate the hero image, article clippings, BBS digest, brief notices, ad reference, and layout profile.",
+      "Update the accuracy ledger before a print/PDF or newspaper image is generated.",
+    ].map((item) => `<li>${escapeHtml(item)}</li>`).join("");
+  }
+
   function frontPageItems(issue) {
     if (issue && Array.isArray(issue.frontPageIndex)) return issue.frontPageIndex;
     if (!issue) return [];
@@ -213,6 +237,7 @@
     applyHeroImage(issue);
     applyLayoutPlan(issue);
     applySectionChrome(issue);
+    applyNextAssignment(currentIso);
 
     if (!issue) {
       els.status.textContent = "No researched issue has been loaded for this date yet.";
