@@ -34,5 +34,23 @@
       "continuity": "Black basalt mountains, brineglass oceans, pressure settlements, colored tunnel lines, oxygen infrastructure, glowing vegetation, and lived-in offworld transit culture.",
       "entryDescription": "A cinematic night view of daily life around Veyra-9's cliffside taverns, transit tunnels, glowing ocean masses, and pressure-lit balconies."
     }
+  },
+  {
+    "id": "2026-06-06-evening-the-lumenreed-keys-brill-quay-lantern-ferry-queue",
+    "title": "The Lumenreed Keys: Brill Quay Lantern Ferry Queue",
+    "tests": "World-only catalog entry; generated image verified at exact CLI output path; JSON parse verification pending.",
+    "prompt": "Create a finished richly detailed square image set in The Lumenreed Keys, showing a dusk commuter line at Brill Quay waiting for hand-cranked lantern ferries, with shell-stone platforms, braided ropes, glowing canal lanes, oilcloth bags, tiny lamp crabs near the tide steps, sea-glass windows, reed-beacon channel markers, warm brass gears, pearl moss, salt ferns, tea lilies, glasspod vines, and honey-gold bioluminescent reflections. Preserve the weekly world canon: low tidal keys, shallow jade channels, lantern-ferry transit, shell-stone and woven reed materials, practical coastal island life, sea-glass green and warm brass palette, and luminous canal motifs. Avoid skyscrapers, cars, aircraft, neon cyberpunk, generic medieval fantasy, hostile monsters, logos, watermarks, and readable text.\\n\\nReusable template: Create a finished daily-life image or reusable visual artifact set in [WORLD_NAME], showing [EVERYDAY SCENE] in [SETTLEMENT OR LOCATION], with [TRANSIT OR INFRASTRUCTURE], [LOCAL MATERIALS], [VEGETATION], [LIFE FORMS], and [TIME_OF_DAY] lighting. Preserve the world geography, settlements, transit logic, vegetation, materials, palette, recurring motifs, and mood; adapt [VIEWPOINT] and [MOOD] while staying inside the canon.\\n\\nSource photo needed: none.\\n\\nWhat to preserve: The Lumenreed Keys world name, low mangrove-like keys, jade canals, Brill Quay, hand-cranked lantern ferries, shell-stone masonry, woven reed panels, brass hand gears, sea-glass windows, oilcloth awnings, lumenreeds, pearl moss, lamp crabs, glasswing moths, sea-glass green and honey-gold palette, and practical daily-life tone.\\n\\nWhat to change: the exact daily-life subject, viewpoint, time of day, weather, settlement, transit stop, crowd activity, props, and layout can be swapped while keeping the same world bible.\\n\\nExample substitution: [EVERYDAY SCENE] = neighbors stocking a storm-shelter pantry; [SETTLEMENT OR LOCATION] = Highbasin; [TRANSIT OR INFRASTRUCTURE] = rain cistern filters and ropewalk docks; [TIME_OF_DAY] = humid evening after rain; [MOOD] = calm and prepared.",
+    "image": "images/2026-06-06-evening-the-lumenreed-keys-brill-quay-lantern-ferry-queue.png",
+    "date": "2026-06-06",
+    "batch": "Daily Prompt",
+    "slot": "evening",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "world": {
+      "name": "The Lumenreed Keys",
+      "description": "A warm tidal chain of glowing reed marshes, shell-stone settlements, and hand-cranked lantern ferries moving through bioluminescent canal lanes.",
+      "continuity": "Preserves Brill Quay, jade canals, lantern-ferry transit, shell-stone and reed construction, lamp crabs, glasswing moths, and the sea-glass green, brass, coral, indigo, and honey-gold palette.",
+      "entryDescription": "A dusk commuter queue at Brill Quay shows how islanders use lantern ferries, ropewalk docks, oilcloth gear, and glowing canal infrastructure in everyday life."
+    }
   }
 ]
