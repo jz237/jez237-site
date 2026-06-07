@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-07T12:00:01.303636+00:00",
+  "updatedAt": "2026-06-07T13:00:01.833652+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -9544,6 +9544,10 @@
     "https://huggingface.co/blog/build-small-hackathon/sponsors-vouchers": {
       "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/build-small-hackathon/sponsors-vouchers.png",
       "checkedAt": "2026-06-07T12:00:01.303636+00:00"
+    },
+    "https://www.theverge.com/ai-artificial-intelligence/943187/ai-content-creators": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/GAUYdq3a4AAAlsX.jpg?quality=90&amp;strip=all&amp;crop=0%2C0.6699364330709%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-06-07T13:00:01.833652+00:00"
     }
   }
 }
