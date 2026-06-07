@@ -409,6 +409,36 @@
     .picture-desk-item .article-visual {
       margin-bottom: 8px;
     }
+    .classified-list {
+      display: grid;
+      gap: 8px;
+      margin: 10px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+    .classified-list li {
+      border-top: 1px solid rgba(27, 26, 23, 0.25);
+      padding-top: 8px;
+    }
+    .classified-list strong {
+      display: block;
+      color: var(--cc-ink);
+      font-family: "Courier New", monospace;
+      font-size: 0.92rem;
+      line-height: 1.2;
+      text-transform: uppercase;
+      overflow-wrap: anywhere;
+    }
+    .classified-list span,
+    .classified-list em {
+      display: block;
+      margin-top: 3px;
+      color: var(--cc-muted);
+      font-size: 0.86rem;
+      font-style: normal;
+      line-height: 1.35;
+      overflow-wrap: anywhere;
+    }
     .editor-note {
       margin: 14px 0 0;
       border-left: 3px solid rgba(232, 197, 122, 0.5);
@@ -1546,6 +1576,11 @@
           <div data-music-sources></div>
         </article>
         <article class="chronicle-panel period-ad" data-period-ad data-sidebar-module="period-ad"></article>
+        <article class="chronicle-panel" data-sidebar-module="classifieds" data-classifieds-panel hidden>
+          <p class="section-label" data-classifieds-label>Classifieds</p>
+          <h2 data-classifieds-title>Small Ads</h2>
+          <ul class="classified-list" data-classifieds></ul>
+        </article>
         <article class="chronicle-panel" data-fallback data-sidebar-module="fallback"></article>
         <article class="chronicle-panel" data-sidebar-module="accuracy">
           <p class="section-label" data-accuracy-label>Accuracy Ledger</p>
