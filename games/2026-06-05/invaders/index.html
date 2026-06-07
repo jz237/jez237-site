@@ -539,7 +539,7 @@
       <div class="overlay" id="overlay">
         <div class="panel">
           <h1>Invaders</h1>
-          <div class="title-version">v1.40</div>
+          <div class="title-version">v1.41</div>
           <p class="tagline" id="message">A modernized arcade defense run: punch through waves, catch power cores, and survive the boss carrier.</p>
           <div class="enemy-roster" aria-label="Enemy ship guide">
             <h2>Enemy Ships</h2>
@@ -569,7 +569,7 @@
         <button id="rightButton" type="button">→</button>
         <button id="fireButton" type="button">FIRE</button>
       </div>
-      <div class="version" aria-hidden="true">v1.40</div>
+      <div class="version" aria-hidden="true">v1.41</div>
     </section>
   </main>
 
@@ -1286,11 +1286,14 @@
       }
 
       function startDiverAttack(inv) {
-        inv.divePhase = "down";
-        inv.diveTargetX = game.player.x;
+        inv.divePhase = "circle";
+        inv.diveTime = 0;
         inv.diveHit = false;
-        inv.divePulse = 0;
-        burst(inv.x, inv.y, colors.enemy3, 8, 130);
+        inv.diveDir = inv.x < game.width / 2 ? 1 : -1;
+        inv.diveCircleStart = rand(0, TAU);
+        inv.diveStartX = inv.x;
+        inv.diveStartY = inv.y;
+        inv.tilt = 0;
       }
 
       function updateDiverAttacks(dt) {
@@ -1303,39 +1306,62 @@
 
         for (const inv of game.invaders) {
           if (!inv.divePhase) continue;
-          inv.divePulse += dt;
+          const prevX = inv.x;
+          inv.diveTime += dt;
           const p = game.player;
-          if (inv.divePhase === "down") {
-            inv.diveTargetX = p.x;
-            const targetY = p.y - 48;
-            const dx = inv.diveTargetX - inv.x;
-            const dy = targetY - inv.y;
-            const len = Math.max(1, Math.hypot(dx, dy));
-            const speed = 360 + game.wave * 18;
-            inv.x += dx / len * speed * dt;
-            inv.y += dy / len * speed * dt;
+          if (inv.divePhase === "circle") {
+            const homeX = inv.homeX ?? inv.baseX;
+            const homeY = inv.homeY ?? inv.baseY;
+            const radius = game.width < 560 ? 28 : 38;
+            const angle = inv.diveCircleStart + inv.diveDir * inv.diveTime * TAU * 0.9;
+            inv.x = homeX + Math.cos(angle) * radius;
+            inv.y = homeY + Math.sin(angle) * radius * 0.62;
+            if (inv.diveTime > 0.85) {
+              inv.divePhase = "swoop";
+              inv.diveTime = 0;
+              inv.diveStartX = inv.x;
+              inv.diveStartY = inv.y;
+            }
+          } else if (inv.divePhase === "swoop") {
+            const duration = clamp(1.25 - game.wave * 0.015, 0.88, 1.25);
+            const t = clamp(inv.diveTime / duration, 0, 1);
+            const ease = t * t * (3 - 2 * t);
+            const targetX = p.x;
+            const targetY = p.y - 8;
+            const sway = Math.sin(t * Math.PI * 2.15) * (game.width < 560 ? 42 : 72) * inv.diveDir * (1 - t * 0.15);
+            const arc = Math.sin(t * Math.PI) * (game.width < 560 ? 24 : 38);
+            inv.x = inv.diveStartX + (targetX - inv.diveStartX) * ease + sway;
+            inv.y = inv.diveStartY + (targetY - inv.diveStartY) * ease - arc;
             if (!inv.diveHit && distSq(inv, p) < (inv.r + p.r + 7) * (inv.r + p.r + 7)) {
               inv.diveHit = true;
               hitPlayer(enemyShotDamage() + 8);
               burst(inv.x, inv.y, colors.enemy3, 16, 220);
             }
-            if (len < 18 || inv.y > p.y - 56) inv.divePhase = "return";
+            if (t >= 1) {
+              inv.divePhase = "return";
+              inv.diveTime = 0;
+              inv.diveStartX = inv.x;
+              inv.diveStartY = inv.y;
+            }
           } else {
             const homeX = inv.homeX ?? inv.baseX;
             const homeY = inv.homeY ?? inv.baseY;
-            const dx = homeX - inv.x;
-            const dy = homeY - inv.y;
-            const len = Math.max(1, Math.hypot(dx, dy));
-            const speed = 430 + game.wave * 16;
-            inv.x += dx / len * speed * dt;
-            inv.y += dy / len * speed * dt;
-            if (len < 8) {
+            const duration = 0.95;
+            const t = clamp(inv.diveTime / duration, 0, 1);
+            const ease = t * t * (3 - 2 * t);
+            const returnSway = Math.sin(t * Math.PI * 1.5) * (game.width < 560 ? 22 : 34) * -inv.diveDir * (1 - t);
+            const climbArc = Math.sin(t * Math.PI) * (game.width < 560 ? 20 : 32);
+            inv.x = inv.diveStartX + (homeX - inv.diveStartX) * ease + returnSway;
+            inv.y = inv.diveStartY + (homeY - inv.diveStartY) * ease - climbArc;
+            if (t >= 1) {
               inv.x = homeX;
               inv.y = homeY;
               inv.divePhase = null;
               inv.diveHit = false;
+              inv.tilt = 0;
             }
           }
+          if (inv.divePhase) inv.tilt = clamp((inv.x - prevX) * 0.035, -0.38, 0.38);
         }
       }
 
@@ -2013,20 +2039,12 @@
         for (const inv of game.invaders) {
           ctx.save();
           ctx.translate(inv.x, inv.y);
-          if (inv.divePhase) {
-            ctx.rotate(Math.sin(game.time * 15) * 0.08);
-            ctx.globalCompositeOperation = "lighter";
-            glow(colors.enemy3, 18);
-          }
+          if (inv.divePhase) ctx.rotate(inv.tilt || 0);
           const color = inv.type === "drone" ? colors.enemy : inv.type === "striker" ? colors.enemy2 : colors.enemy3;
           const pixel = inv.type === "drone" ? 3 : 3.1;
-          const sprite = getInvaderSprite(inv.type, game.invaderFrame, color, pixel);
+          const frame = inv.divePhase ? Math.floor(game.time * 12) % 2 : game.invaderFrame;
+          const sprite = getInvaderSprite(inv.type, frame, color, pixel);
           ctx.drawImage(sprite, -sprite.width / 2, -sprite.height / 2);
-          if (inv.divePhase) {
-            ctx.fillStyle = colors.fire;
-            ctx.globalAlpha = 0.75;
-            ctx.fillRect(-3, -sprite.height / 2 - 7, 6, 10);
-          }
           ctx.restore();
         }
         ctx.restore();
