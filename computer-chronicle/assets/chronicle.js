@@ -52,6 +52,10 @@
     musicChart: document.querySelector("[data-music-chart]"),
     musicSources: document.querySelector("[data-music-sources]"),
     ad: document.querySelector("[data-period-ad]"),
+    classifiedsPanel: document.querySelector("[data-classifieds-panel]"),
+    classifiedsLabel: document.querySelector("[data-classifieds-label]"),
+    classifiedsTitle: document.querySelector("[data-classifieds-title]"),
+    classifieds: document.querySelector("[data-classifieds]"),
     fallback: document.querySelector("[data-fallback]"),
     accuracyLabel: document.querySelector("[data-accuracy-label]"),
     accuracyTitle: document.querySelector("[data-accuracy-title]"),
@@ -156,6 +160,8 @@
     setText(els.briefsTitle, chrome(issue, "briefs", "title", "Other Things on the Desk"));
     setText(els.musicLabel, chrome(issue, "music", "label", "Rock Radio Top 10"));
     setText(els.musicTitle, chrome(issue, "music", "title", "Album-Rock Airwaves"));
+    setText(els.classifiedsLabel, chrome(issue, "classifieds", "label", "Classifieds"));
+    setText(els.classifiedsTitle, chrome(issue, "classifieds", "title", "Small Ads"));
     setText(els.accuracyLabel, chrome(issue, "accuracy", "label", "Accuracy Ledger"));
     setText(els.accuracyTitle, chrome(issue, "accuracy", "title", "How Grounded Is Today?"));
     setText(els.sourcesLabel, chrome(issue, "sources", "label", "Source Trail"));
@@ -231,7 +237,7 @@
   function applyLayoutPlan(issue) {
     const defaults = {
       main: ["editor-note", "lead", "picture-desk", "computer-items", "software", "store-shelves"],
-      sidebar: ["market", "budget", "price-watch", "bbs", "curiosity", "music", "period-ad", "fallback", "accuracy", "sources", "verification"],
+      sidebar: ["market", "budget", "price-watch", "bbs", "curiosity", "music", "period-ad", "classifieds", "fallback", "accuracy", "sources", "verification"],
     };
     const plan = (issue && issue.layoutPlan) || {};
 
@@ -354,6 +360,8 @@
       if (els.musicChart) els.musicChart.innerHTML = "";
       if (els.musicSources) els.musicSources.innerHTML = "";
       els.ad.innerHTML = "";
+      if (els.classifiedsPanel) els.classifiedsPanel.hidden = true;
+      if (els.classifieds) els.classifieds.innerHTML = "";
       els.fallback.innerHTML = "";
       if (els.accuracy) els.accuracy.innerHTML = "";
       if (els.accuracyNote) els.accuracyNote.textContent = "";
@@ -530,6 +538,18 @@
       <small>${escapeHtml(issue.periodAd && issue.periodAd.finePrint)}</small>
       ${(issue.periodAd && issue.periodAd.sourceUrl) ? `<a class="ad-source" href="${escapeHtml(issue.periodAd.sourceUrl)}" target="_blank" rel="noopener">Source ad</a>` : ""}
     `;
+
+    const classifiedItems = Array.isArray(issue.classifieds) ? issue.classifieds : [];
+    if (els.classifiedsPanel) els.classifiedsPanel.hidden = classifiedItems.length === 0;
+    if (els.classifieds) {
+      els.classifieds.innerHTML = classifiedItems.map((item) => `
+        <li>
+          <strong>${escapeHtml(item.headline || item.item || "For Sale")}</strong>
+          <span>${escapeHtml(item.copy || item.detail || "")}</span>
+          ${item.price ? `<em>${escapeHtml(item.price)}</em>` : ""}
+        </li>
+      `).join("");
+    }
 
     els.fallback.innerHTML = `
       <p class="section-label">${escapeHtml(chrome(issue, "fallback", "label", "Fallback Lead"))}</p>
