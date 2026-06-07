@@ -52,5 +52,23 @@
       "continuity": "Preserves Brill Quay, jade canals, lantern-ferry transit, shell-stone and reed construction, lamp crabs, glasswing moths, and the sea-glass green, brass, coral, indigo, and honey-gold palette.",
       "entryDescription": "A dusk commuter queue at Brill Quay shows how islanders use lantern ferries, ropewalk docks, oilcloth gear, and glowing canal infrastructure in everyday life."
     }
+  },
+  {
+    "id": "2026-06-07-midday-the-lumenreed-keys-ferry-ticket-sheet",
+    "title": "The Lumenreed Keys Ferry Ticket Sheet",
+    "tests": "World-life data/layout template; world-only archive entry; exact generated PNG provenance verified",
+    "prompt": "Create a finished vertical ferry ticket and timetable sheet for The Lumenreed Keys, titled THE LUMENREED KEYS LANTERN FERRY SHEET, photographed flat on a damp polished driftwood ticket counter. Show Brill Quay, Morrowtide, Shellhook, Reedgate, and Highbasin as route stops, with a compact canal route diagram, tide-window timetable rows, fare-token illustrations, shell-rail transfer notes, rain delay stamps, punched ticket corners, folds, water stains, hand-painted wayfinding tile motifs, and brass-green ink with coral pink accents. Preserve the weekly world canon: glowing lumenreed canals, shell-stone masonry, hand-cranked lantern ferries, pedal skiffs, shell-rail cargo carts, reed-beacon markers, ropewalk docks, sea-glass windows, ceramic cistern filters, lamp crabs, glasswing moths, canal snails, reedfin fish, and the sea-glass green, warm brass, coral pink, pearl white, wet charcoal, indigo, and honey-gold palette. Avoid cars, aircraft, cyberpunk, plastic futurism, generic fantasy, monsters, logos, QR codes, barcodes, and unreadable type.\\n\\nReusable template: Create a finished vertical [DOCUMENT_TYPE] for [WORLD_NAME]/[PLACE], titled [TITLE], photographed as a real printed artifact on [SURFACE]. Include [ROUTES_OR_SECTIONS], [DATA_ROWS], [ICONS_OR_DIAGRAMS], [WEAR_DETAILS], and [MATERIAL_DETAILS]. Preserve [WORLD_CANON_ELEMENTS], [PALETTE], [TECH_LEVEL], and [RECURRING_MOTIFS]. Make it legible and tactile, with no prompt instructions rendered in the image except natural document text.\\n\\nExample substitution: Create a ferry timetable sheet for The Lumenreed Keys, with Brill Quay-to-Highbasin routes, tide windows, fare tokens, shell-rail transfers, punched corners, water stains, brass-green ink, and honey-gold lantern reflections.",
+    "image": "images/2026-06-07-midday-the-lumenreed-keys-ferry-ticket-sheet.png",
+    "date": "2026-06-07",
+    "batch": "Daily Prompt",
+    "slot": "midday",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1536",
+    "world": {
+      "name": "The Lumenreed Keys",
+      "description": "A chain of warm tidal islands where people live among glowing reed marshes, shell-stone workshops, and hand-cranked lantern ferries that follow bioluminescent canal lanes.",
+      "continuity": "Preserves Brill Quay, Morrowtide, Shellhook, Reedgate, Highbasin, lantern-ferry transit, shell-rail transfers, lumenreeds, shell-stone craft, and the sea-glass/brass/coral/honey palette.",
+      "entryDescription": "A commuter ferry ticket and timetable sheet showing how residents navigate tides, lantern routes, rain delays, and shell-rail transfers in everyday island life."
+    }
   }
 ]
