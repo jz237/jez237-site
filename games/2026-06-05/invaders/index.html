@@ -539,7 +539,7 @@
       <div class="overlay" id="overlay">
         <div class="panel">
           <h1>Invaders</h1>
-          <div class="title-version">v1.42</div>
+          <div class="title-version">v1.43</div>
           <p class="tagline" id="message">A modernized arcade defense run: punch through waves, catch power cores, and survive the boss carrier.</p>
           <div class="enemy-roster" aria-label="Enemy ship guide">
             <h2>Enemy Ships</h2>
@@ -569,7 +569,7 @@
         <button id="rightButton" type="button">→</button>
         <button id="fireButton" type="button">FIRE</button>
       </div>
-      <div class="version" aria-hidden="true">v1.42</div>
+      <div class="version" aria-hidden="true">v1.43</div>
     </section>
   </main>
 
@@ -1086,7 +1086,7 @@
       function firePlayer() {
         if (game.time < game.nextShot || game.state !== "playing") return;
         const p = game.player;
-        const rapid = p.weapon === "laser" ? 0.09 : 0.18;
+        const rapid = p.weapon === "laser" ? 0.055 : p.weapon === "spread" ? 0.13 : 0.11;
         game.nextShot = game.time + rapid;
         p.heat = Math.min(1, p.heat + 0.18);
         if (p.weapon === "spread") {
