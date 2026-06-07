@@ -1486,5 +1486,17 @@
     "slot": "evening",
     "model": "gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-06-06-evening-museum-of-misdelivered-mail-placards",
+    "title": "Museum of Misdelivered Mail Placards",
+    "tests": "Archive entry uses a non-photo reusable visual-layout template; finished image is the output itself, not a prompt card; includes readable museum placard text as the format naturally requires; anti-repeat checked against last 30 archive entries; exact generated PNG path verified before append.",
+    "prompt": "Create a finished museum placard set about the Museum of Misdelivered Mail: Six Impossible Parcels, using six fictional returned packages from impossible addresses. Design it as a real vertical exhibit graphics panel photographed straight-on in a quiet museum: warm off-white enamel placards on charcoal felt, brass screw caps, thin black divider rules, crisp readable hierarchy, accession numbers, dates, materials, condition notes, provenance blurbs, and small ink icons for each object. Include parcels from Stairwell 19B, The Room Behind Thursday, North of the Moon Ferry Office, Fragile: Bottled Echoes, the Sleep Bureau, and the Orchard Under the Station. Keep the panel elegant, tactile, coherent, and richly detailed; no placeholder boxes, no arrows, no instructions, no brand logos.\n\nReusable fill-in-the-blank template: Create a finished museum placard set about [TOPIC] using [DATA OR CATEGORIES], with a coherent physical design, readable hierarchy, [MATERIALS/SETTING], and specific invented details where data is not supplied. Include [NUMBER] labeled exhibits or sections, each with [METADATA FIELDS], a short description, and a small topic-specific icon or diagram. Preserve the supplied topic and data relationships; change the visual system, materials, era, layout density, and exhibit voice to match [MOOD] and [AUDIENCE]. Avoid nonsense labels, cluttered microtext, placeholder boxes, generic stock icons, and irrelevant decorations.\n\nExample substitution: [TOPIC] = Museum of Misdelivered Mail; [DATA OR CATEGORIES] = six impossible returned parcels; [MATERIALS/SETTING] = enamel placards on charcoal felt with brass screw caps; [NUMBER] = six; [METADATA FIELDS] = accession number, date, materials, condition, provenance; [MOOD] = quiet, strange, archival; [AUDIENCE] = curious museum visitors.",
+    "image": "images/2026-06-06-evening-museum-of-misdelivered-mail-placards.png",
+    "date": "2026-06-06",
+    "batch": "Daily Prompt",
+    "slot": "evening",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1536"
   }
 ]
