@@ -72,16 +72,16 @@
       position: relative;
       min-width: 0;
       display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(300px, 0.72fr);
-      gap: clamp(18px, 3vw, 32px);
-      align-items: stretch;
-      padding: clamp(18px, 3vw, 28px);
+      grid-template-columns: minmax(0, 1fr) minmax(220px, 300px) minmax(150px, 185px);
+      gap: 16px;
+      align-items: center;
+      padding: 14px;
       border: 4px double var(--cc-ink);
       background:
         linear-gradient(90deg, rgba(255, 243, 206, 0.95), rgba(255, 243, 206, 0.78)),
         repeating-linear-gradient(90deg, rgba(27, 26, 23, 0.035), rgba(27, 26, 23, 0.035) 1px, transparent 1px, transparent 9px);
       border-radius: 0;
-      box-shadow: 10px 10px 0 rgba(27, 26, 23, 0.18);
+      box-shadow: 7px 7px 0 rgba(27, 26, 23, 0.16);
       overflow: hidden;
     }
     .chronicle-hero::before {
@@ -116,7 +116,7 @@
     .chronicle-hero > aside,
     .chronicle-hero > figure {
       min-width: 0;
-      margin-top: 22px;
+      margin-top: 20px;
     }
     .chronicle-kicker,
     .section-label {
@@ -140,8 +140,8 @@
       margin: 0;
       color: var(--cc-ink);
       font-family: Georgia, "Times New Roman", serif;
-      font-size: clamp(2.7rem, 7vw, 6.7rem);
-      line-height: 0.84;
+      font-size: clamp(2.45rem, 5.2vw, 4.8rem);
+      line-height: 0.86;
       letter-spacing: 0;
       text-transform: uppercase;
       overflow-wrap: normal;
@@ -150,17 +150,21 @@
       -webkit-text-fill-color: var(--cc-ink);
     }
     .chronicle-hero p {
-      max-width: 760px;
+      max-width: 620px;
+      margin: 8px 0 0;
       color: var(--cc-muted);
-      line-height: 1.55;
+      font-size: 0.94rem;
+      line-height: 1.38;
       overflow-wrap: anywhere;
     }
     .hero-art {
       position: relative;
-      min-height: 280px;
+      min-height: 190px;
+      height: 210px;
+      align-self: center;
       border: 3px solid var(--cc-ink);
       background: var(--cc-ink);
-      box-shadow: 7px 7px 0 rgba(194, 38, 115, 0.25);
+      box-shadow: 5px 5px 0 rgba(194, 38, 115, 0.22);
       overflow: hidden;
     }
     .hero-art-button {
@@ -168,7 +172,7 @@
       display: block;
       width: 100%;
       height: 100%;
-      min-height: 280px;
+      min-height: 190px;
       padding: 0;
       border: 0;
       background: transparent;
@@ -183,7 +187,7 @@
     .hero-art img {
       width: 100%;
       height: 100%;
-      min-height: 280px;
+      min-height: 190px;
       object-fit: cover;
       display: block;
       filter: contrast(1.08) saturate(0.88);
@@ -206,9 +210,9 @@
       z-index: 1;
       background: rgba(27, 26, 23, 0.86);
       color: var(--cc-paper);
-      font-size: 0.74rem;
+      font-size: 0.66rem;
       letter-spacing: 0.06em;
-      padding: 8px 10px;
+      padding: 6px 8px;
       text-transform: uppercase;
     }
     .hero-art-zoom {
@@ -219,8 +223,8 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      min-width: 36px;
-      height: 36px;
+      min-width: 30px;
+      height: 30px;
       border: 2px solid var(--cc-paper);
       background: rgba(27, 26, 23, 0.82);
       color: var(--cc-paper);
@@ -267,11 +271,11 @@
       outline-offset: 3px;
     }
     .issue-date-card {
-      align-self: stretch;
+      align-self: center;
       border: 3px solid var(--cc-ink);
-      border-left-width: 12px;
+      border-left-width: 9px;
       border-left-color: var(--cc-teal);
-      padding: 16px;
+      padding: 10px 12px;
       background:
         linear-gradient(135deg, rgba(240, 163, 35, 0.22), transparent 48%),
         rgba(255, 248, 220, 0.82);
@@ -279,15 +283,16 @@
     .issue-date-card span {
       display: block;
       color: var(--cc-muted);
-      font-size: 0.82rem;
-      margin-top: 8px;
+      font-size: 0.68rem;
+      margin-top: 6px;
       text-transform: uppercase;
     }
     .issue-date-card strong {
       display: block;
       color: var(--cc-ink);
-      font-size: 1.2rem;
+      font-size: 0.96rem;
       margin-top: 2px;
+      overflow-wrap: anywhere;
     }
     .morning-strip {
       display: grid;
