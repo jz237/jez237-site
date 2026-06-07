@@ -442,6 +442,50 @@
       color: var(--cc-blue);
       font-weight: 700;
     }
+    .budget-list {
+      display: grid;
+      gap: 8px;
+      margin: 12px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+    .budget-list li {
+      display: grid;
+      grid-template-columns: 58px minmax(0, 1fr);
+      gap: 9px;
+      align-items: start;
+      border-top: 1px solid var(--cc-rule);
+      padding-top: 8px;
+    }
+    .budget-list span {
+      border: 1px solid var(--cc-ink);
+      background: var(--cc-ink);
+      color: var(--cc-paper);
+      font-size: 0.68rem;
+      font-weight: 700;
+      line-height: 1;
+      padding: 5px 4px;
+      text-align: center;
+      text-transform: uppercase;
+    }
+    .budget-list p {
+      margin: 0;
+    }
+    .budget-list strong,
+    .budget-list em {
+      display: block;
+      font-style: normal;
+      line-height: 1.25;
+    }
+    .budget-list strong {
+      color: var(--cc-ink);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+    }
+    .budget-list em {
+      color: var(--cc-muted);
+      margin-top: 2px;
+    }
     .bbs-list {
       display: grid;
       gap: 9px;
@@ -1023,10 +1067,23 @@
       [data-lead] h2 {
         font-size: 18pt;
       }
+      .budget-list {
+        gap: 0.035in;
+      }
+      .budget-list li {
+        grid-template-columns: 0.42in minmax(0, 1fr);
+        gap: 0.045in;
+        padding-top: 0.035in;
+      }
+      .budget-list span {
+        font-size: 6pt;
+        padding: 0.025in;
+      }
       .chronicle-panel p,
       .chronicle-card p,
       .shelf-list,
       .price-list,
+      .budget-list,
       .brief-list,
       .bbs-list,
       .chart-list {
@@ -1161,6 +1218,11 @@
 
       <aside class="sidebar-column">
         <article class="chronicle-panel" data-market data-sidebar-module="market"></article>
+        <article class="chronicle-panel" data-sidebar-module="budget">
+          <p class="section-label" data-issue-budget-label>Editor's Budget</p>
+          <h2 data-issue-budget-title>What Gets Ink Today</h2>
+          <ul class="budget-list" data-issue-budget></ul>
+        </article>
         <article class="chronicle-panel" data-sidebar-module="price-watch">
           <p class="section-label" data-price-watch-label>Price Watch</p>
           <h2 data-price-watch-title>What It Cost</h2>

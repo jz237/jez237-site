@@ -28,6 +28,7 @@
         ],
         "sidebar": [
           "market",
+          "budget",
           "price-watch",
           "bbs",
           "curiosity",
@@ -46,6 +47,10 @@
         },
         "market": {
           "label": "Business / Stock Market"
+        },
+        "issueBudget": {
+          "label": "Editor's Budget",
+          "title": "What Gets Ink Today"
         },
         "storeShelves": {
           "label": "On Store Shelves",
@@ -149,6 +154,33 @@
         "confidence": "Exact-day close",
         "sourceRefs": [3, 2]
       },
+      "issueBudget": [
+        {
+          "priority": "A1",
+          "slot": "Lead",
+          "title": "Lotus closes the VisiCalc chapter as 1-2-3 owns the PC spreadsheet desk"
+        },
+        {
+          "priority": "A2",
+          "slot": "Games",
+          "title": "Super Mario Bros. 2 and Dragon Quest make Japan the shelf to watch"
+        },
+        {
+          "priority": "Rail",
+          "slot": "Market",
+          "title": "Dow record close plus Nasdaq near 400"
+        },
+        {
+          "priority": "Box",
+          "slot": "BBS",
+          "title": "Game help, RPG maps, and C64 scoreboard chatter"
+        },
+        {
+          "priority": "Side",
+          "slot": "Rock",
+          "title": "Genesis, Van Halen, The Fixx, and Peter Gabriel on album-rock radio"
+        }
+      ],
       "storeShelves": [
         {
           "name": "Super Mario Bros. 2",
