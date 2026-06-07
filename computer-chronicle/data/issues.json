@@ -213,19 +213,48 @@
           ]
         }
       ],
-      "priceWatch": {
-        "headline": "Retail / Ads: The Price Spread Is the Story",
-        "summary": "Commodore 64: $595 introductory price. Timex Sinclair 1000: $99.95. IBM PC: $1,565 before display, disk drives, and printer. The weekly buyer's lesson is simple: the box price rarely equals the working desk price.",
-        "confidence": "Verified list prices; street prices varied by store",
-        "sourceRefs": [
-          0,
-          2,
-          4
-        ]
-      },
+      "priceWatch": [
+        {
+          "item": "Commodore 64",
+          "price": "$595",
+          "note": "Introductory August 1982 list price; useful setup still needs storage and display choices."
+        },
+        {
+          "item": "Timex Sinclair 1000",
+          "price": "$99.95",
+          "note": "The under-$100 shelf shocker for first-time BASIC learners."
+        },
+        {
+          "item": "IBM PC base unit",
+          "price": "$1,565",
+          "note": "Before many buyers added display, disk drives, printer, and software."
+        },
+        {
+          "item": "Working home-computer desk",
+          "price": "Box price plus peripherals",
+          "note": "Cassette or floppy storage, printer, joystick, modem, and blank media could reshape the real bill."
+        }
+      ],
       "bbsNote": {
         "headline": "Acoustic Couplers, 300 Baud Patience, and Long-Distance Bills",
         "summary": "A home modem remains a splurge, but the culture is forming: user groups, dial-up services, local bulletin boards, software swapping, and late-night phone discipline. For C64 and Atari owners, the modem is a future social life as much as a peripheral.",
+        "posts": [
+          {
+            "topic": "C64 Watch",
+            "platform": "Commodore 64",
+            "text": "Early buyers ask whether the real system needs cassette first or if saving for a 1541-style disk setup is the wiser move."
+          },
+          {
+            "topic": "Atari Desk",
+            "platform": "Atari 400/800",
+            "text": "Atari owners compare graphics and game libraries against the new Commodore price pressure."
+          },
+          {
+            "topic": "Budget BASIC",
+            "platform": "Timex Sinclair 1000",
+            "text": "The $99.95 price turns computing into an impulse-counter topic, even if 2K RAM makes patience mandatory."
+          }
+        ],
         "confidence": "Era-context synthesis",
         "sourceRefs": [
           0,
@@ -272,7 +301,8 @@
       ],
       "musicChart": [
         {
-          "title": "#1 Think I'm In Love - Eddie Money",
+          "title": "#1 Think I'm In Love",
+          "artist": "Eddie Money",
           "detail": "Weekly Rock Top 20 dated August 7, 1982.",
           "confidence": "Week-specific rock chart",
           "sourceRefs": [
@@ -280,7 +310,8 @@
           ]
         },
         {
-          "title": "#2 Burning Down One Side - Robert Plant",
+          "title": "#2 Burning Down One Side",
+          "artist": "Robert Plant",
           "detail": "New solo Plant single sits high on album-rock radio.",
           "confidence": "Week-specific rock chart",
           "sourceRefs": [
@@ -288,7 +319,8 @@
           ]
         },
         {
-          "title": "#3 Wasted On The Way - Crosby, Stills & Nash",
+          "title": "#3 Wasted On The Way",
+          "artist": "Crosby, Stills & Nash",
           "detail": "Harmony rock remains a radio staple.",
           "confidence": "Week-specific rock chart",
           "sourceRefs": [
@@ -296,7 +328,8 @@
           ]
         },
         {
-          "title": "#4 Should I Stay Or Should I Go - The Clash",
+          "title": "#4 Should I Stay Or Should I Go",
+          "artist": "The Clash",
           "detail": "Punk/new-wave energy in the rock top five.",
           "confidence": "Week-specific rock chart",
           "sourceRefs": [
@@ -304,7 +337,8 @@
           ]
         },
         {
-          "title": "#5 Everybody Wants You - Billy Squier",
+          "title": "#5 Everybody Wants You",
+          "artist": "Billy Squier",
           "detail": "Hard-rock radio momentum continues.",
           "confidence": "Week-specific rock chart",
           "sourceRefs": [
@@ -312,7 +346,8 @@
           ]
         },
         {
-          "title": "#6 I Ran (So Far Away) - A Flock Of Seagulls",
+          "title": "#6 I Ran (So Far Away)",
+          "artist": "A Flock Of Seagulls",
           "detail": "Synth/new-wave video-era sound breaks through.",
           "confidence": "Week-specific rock chart",
           "sourceRefs": [
@@ -322,40 +357,40 @@
       ],
       "periodAd": {
         "headline": "Sunday Circular Watch: 64K Versus $99.95",
-        "copy": "Ask what comes in the box: BASIC in ROM, TV lead, cassette support, disk drive price, printer port, joystick ports, and whether the software shelf is already alive.",
-        "confidence": "Constructed period-style ad note from sourced prices",
-        "sourceRefs": [
-          0,
-          4
-        ]
+        "summary": "Ask what comes in the box: BASIC in ROM, TV lead, cassette support, disk drive price, printer port, joystick ports, and whether the software shelf is already alive.",
+        "finePrint": "Constructed period-style ad note from sourced prices; not a scanned real circular.",
+        "sourceUrl": "https://www.timexsinclair.com/article/99-95-timex-sinclair-1000-microcomputer-debuts/index.html"
       },
       "worldFallback": {
         "headline": "Bulletin: No Era-Defining Hard-News Override This Week",
         "summary": "No nuclear accident, assassination, head-of-state crisis, major war escalation, or comparable hard-news event displaced the computers/games/culture desk for August 2-8, 1982.",
         "confidence": "Editorial screening note"
       },
-      "accuracyLedger": [
-        {
-          "label": "Week anchor",
-          "status": "Exact",
-          "note": "Issue covers Monday August 2 through Sunday August 8, 1982."
-        },
-        {
-          "label": "C64 launch",
-          "status": "Month-specific",
-          "note": "Reliable sources pin manufacturing/release to August 1982; the issue does not invent an exact day."
-        },
-        {
-          "label": "Charts",
-          "status": "Week-specific",
-          "note": "Rock and pop chart references are dated August 7, 1982."
-        },
-        {
-          "label": "Games",
-          "status": "Mixed",
-          "note": "Release dates are exact only where available; otherwise labeled Release: 1982 or forthcoming context."
-        }
-      ],
+      "accuracyLedger": {
+        "items": [
+          {
+            "value": "Exact",
+            "label": "Week anchor",
+            "detail": "Issue covers Monday August 2 through Sunday August 8, 1982."
+          },
+          {
+            "value": "Month",
+            "label": "C64 launch",
+            "detail": "Reliable sources pin manufacturing/release to August 1982; the issue does not invent an exact day."
+          },
+          {
+            "value": "Week",
+            "label": "Charts",
+            "detail": "Rock and pop chart references are dated August 7, 1982."
+          },
+          {
+            "value": "Mixed",
+            "label": "Games",
+            "detail": "Release dates are exact only where available; otherwise labeled Release: 1982 or forthcoming context."
+          }
+        ],
+        "note": "The first issue still leans too much on August/context sources; future cron runs now require stronger same-week proof before using broad claims."
+      },
       "sources": [
         {
           "name": "Guinness World Records: Best-selling desktop computer - Commodore 64",
