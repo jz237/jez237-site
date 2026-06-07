@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-07T00:00:01.467665+00:00",
+  "updatedAt": "2026-06-07T00:15:57.395424+00:00",
   "items": [
     {
       "title": "Gemini 3.5 Flash: Benchmarks, Pricing, and Complete Specs",
@@ -10,13 +10,63 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-07T00:00:13.364332+00:00",
+      "published": "2026-06-07T00:16:01.448476+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-07T00:00:01.467665+00:00",
+      "lastSeen": "2026-06-07T00:15:57.395424+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
       "score": 17.01
+    },
+    {
+      "title": "v0.30.6",
+      "url": "https://github.com/ollama/ollama/releases/tag/v0.30.6",
+      "source": "Ollama Releases",
+      "sourceUrl": "https://github.com/ollama/ollama/releases.atom",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "New models\n\nGemma 4 QAT weights: the Gemma 4 family is now optimized with Quantization-Aware Training (QAT) to dramatically reduce memory requirements and maximize on-device performance. Look for the tags ending in -qat:\n\ngemma4:e2b-it-qat\ngemma4:e4b-it-qat\ngemma4:12b-it-qat\ngemma4:26b-a4b-it-qat\ngemma4:31b-it-qat\n\n\n\nWhat's Changed\n\nollama launch omp now integrates with Oh My Pi, an AI coding agent with IDE integration\nMLX embedding layers now use NVFP4 global scale for improved quantization on Apple Silicon\n\nFull Changelog: v0.30.5...v0.30.6",
+      "image": "https://opengraph.githubassets.com/60f61760c34b89ae6fa1dcf45ef6572c285dc5ed3f2717d4816dcd473e0f774a/ollama/ollama",
+      "published": "2026-06-07T00:12:11+00:00",
+      "firstSeen": "2026-06-05T07:00:01.980033+00:00",
+      "lastSeen": "2026-06-07T00:15:57.395424+00:00",
+      "model_release": true,
+      "editorial_allow": true,
+      "editorial_reason": "model_release",
+      "score": 19.9581
+    },
+    {
+      "title": "v0.30.5",
+      "url": "https://github.com/ollama/ollama/releases/tag/v0.30.5",
+      "source": "Ollama Releases",
+      "sourceUrl": "https://github.com/ollama/ollama/releases.atom",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "What's Changed\n\nFixed the gemma4:12b floating point exception crash on x86, CUDA, Linux, and Windows systems.\nollama launch hermes-desktop now launches Hermes Desktop and can skip rebuilding when a packaged desktop app is already installed.\nollama launch hermes now supports native Windows installs through the Hermes PowerShell installer.\nAdded Cline CLI integration docs.\n\nFull Changelog: v0.30.4...v0.30.5",
+      "image": "https://opengraph.githubassets.com/0e91974d2670184a86dc2744ca7430b594da6357fbbc3ba255625eaa4296fd9a/ollama/ollama",
+      "published": "2026-06-07T00:09:50+00:00",
+      "firstSeen": "2026-06-04T20:00:01.481282+00:00",
+      "lastSeen": "2026-06-07T00:15:57.395424+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "editorial_score_pass",
+      "score": 7.2569
+    },
+    {
+      "title": "v0.30.3",
+      "url": "https://github.com/ollama/ollama/releases/tag/v0.30.3",
+      "source": "Ollama Releases",
+      "sourceUrl": "https://github.com/ollama/ollama/releases.atom",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "New models\n\nGemma 4 12B: high-performance multimodal intelligence that runs directly on laptops, combining efficiency with advanced reasoning.\n\nWhat's Changed\n\nAdded support for gemma4:12b.\n\nFull Changelog: v0.30.2...v0.30.3",
+      "image": "https://opengraph.githubassets.com/d5b7f056beb356a12c1648fe196566daf924d0261bc41e94a1b0964d3f125691/ollama/ollama",
+      "published": "2026-06-07T00:08:34+00:00",
+      "firstSeen": "2026-06-03T15:00:01.428377+00:00",
+      "lastSeen": "2026-06-07T00:15:57.395424+00:00",
+      "model_release": true,
+      "editorial_allow": true,
+      "editorial_reason": "model_release",
+      "score": 14.4562
     },
     {
       "title": "v1.88.0",
@@ -29,10 +79,10 @@
       "image": "https://opengraph.githubassets.com/34eb210e29894e77b81a2d5e5245e682d421af62cbd82219cce07d427502a183/BerriAI/litellm/releases/tag/v1.88.0",
       "published": "2026-06-06T23:43:20+00:00",
       "firstSeen": "2026-06-07T00:00:01.467665+00:00",
-      "lastSeen": "2026-06-07T00:00:01.467665+00:00",
+      "lastSeen": "2026-06-07T00:15:57.395424+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9815
+      "score": 2.9735
     },
     {
       "title": "v1.89.0-rc.1",
@@ -45,10 +95,10 @@
       "image": "https://opengraph.githubassets.com/a80ad81512fceccc47675bd988f6472eea977a31da11e951920bff0a8f40edf1/BerriAI/litellm/releases/tag/v1.89.0-rc.1",
       "published": "2026-06-06T23:06:14+00:00",
       "firstSeen": "2026-06-07T00:00:01.467665+00:00",
-      "lastSeen": "2026-06-07T00:00:01.467665+00:00",
+      "lastSeen": "2026-06-07T00:15:57.395424+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9629
+      "score": 2.9551
     },
     {
       "title": "Audi’s 1,001 PS Nuvolari is its fastest car ever, and it’s not electric",
@@ -61,10 +111,10 @@
       "image": "https://media.thenextweb.com/2026/06/audi-nuvolari-supercar-hybrid-1001ps.avif",
       "published": "2026-06-06T20:57:03+00:00",
       "firstSeen": "2026-06-06T22:00:01.361734+00:00",
-      "lastSeen": "2026-06-07T00:00:01.467665+00:00",
+      "lastSeen": "2026-06-07T00:15:57.395424+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0607
+      "score": 2.0532
     },
     {
       "title": "OpenAI unveils Lockdown Mode to protect sensitive data from prompt injection attacks",
@@ -77,10 +127,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/04/GettyImages-2201630077.jpg?resize=1200%2C798",
       "published": "2026-06-06T20:32:24+00:00",
       "firstSeen": "2026-06-06T21:00:01.925319+00:00",
-      "lastSeen": "2026-06-07T00:00:01.467665+00:00",
+      "lastSeen": "2026-06-07T00:15:57.395424+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.1892
+      "score": 9.1818
     },
     {
       "title": "v0.30.2",
@@ -96,7 +146,7 @@
       "lastSeen": "2026-06-06T21:00:01.925319+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.3295
+      "score": 6.3223
     },
     {
       "title": "Five labs, five minds: building a multi-model finance drama on small models",
@@ -109,10 +159,10 @@
       "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/build-small-hackathon/thousand-token-wood-sim-v2.png",
       "published": "2026-06-06T19:02:33+00:00",
       "firstSeen": "2026-06-06T20:00:01.468431+00:00",
-      "lastSeen": "2026-06-07T00:00:01.467665+00:00",
+      "lastSeen": "2026-06-07T00:15:57.395424+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2885
+      "score": 2.2814
     },
     {
       "title": "What to expect from WWDC 2026: Siri’s highly anticipated revamp and Apple Intelligence updates",
@@ -125,10 +175,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/Apple-WWDC26-event-branding_big.jpg.large_.jpg?w=980",
       "published": "2026-06-06T18:13:36+00:00",
       "firstSeen": "2026-06-06T18:19:35.834145+00:00",
-      "lastSeen": "2026-06-07T00:00:01.467665+00:00",
+      "lastSeen": "2026-06-07T00:15:57.395424+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.227
+      "score": 3.2201
     },
     {
       "title": "Sriram Krishnan is leaving his role as White House AI advisor",
@@ -141,10 +191,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2022/06/Screen-Shot-2021-02-03-at-1.18.03-PM-1.webp?resize=1200%2C833",
       "published": "2026-06-06T17:42:15+00:00",
       "firstSeen": "2026-06-06T18:00:01.814061+00:00",
-      "lastSeen": "2026-06-07T00:00:01.467665+00:00",
+      "lastSeen": "2026-06-07T00:15:57.395424+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8135
+      "score": 2.8067
     },
     {
       "title": "The Trump administration might take an equity stake in OpenAI",
@@ -157,10 +207,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/donald-trump-cellphone.jpg?resize=1200%2C800",
       "published": "2026-06-06T16:17:21+00:00",
       "firstSeen": "2026-06-06T17:00:01.274426+00:00",
-      "lastSeen": "2026-06-07T00:00:01.467665+00:00",
+      "lastSeen": "2026-06-07T00:15:57.395424+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0779
+      "score": 5.0714
     },
     {
       "title": "Job Searcher",
@@ -176,7 +226,7 @@
       "lastSeen": "2026-06-06T19:00:01.912188+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.6014
+      "score": 4.595
     },
     {
       "title": "The mayor of Shelbyville, Indiana, says only people who live in ‘shitty houses’ oppose data center",
@@ -189,10 +239,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/STKS528_DATA_CENTERS_A.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-06T15:05:00+00:00",
       "firstSeen": "2026-06-06T16:00:02.099452+00:00",
-      "lastSeen": "2026-06-07T00:00:01.467665+00:00",
+      "lastSeen": "2026-06-07T00:15:57.395424+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1187
+      "score": 2.1123
     },
     {
       "title": "Chinese EVs are circling the US market. Detroit’s best option may be to partner with them.",
@@ -205,10 +255,10 @@
       "image": "https://media.thenextweb.com/2026/06/chinese-evs-us-market-manufacturing-partnerships.avif",
       "published": "2026-06-06T14:23:36+00:00",
       "firstSeen": "2026-06-06T16:00:02.099452+00:00",
-      "lastSeen": "2026-06-07T00:00:01.467665+00:00",
+      "lastSeen": "2026-06-07T00:15:57.395424+00:00",
       "editorial_allow": false,
       "editorial_reason": "fluff",
-      "score": -0.7076
+      "score": -0.7138
     },
     {
       "title": "Meta made its own AI-generated clickbait news feed",
@@ -221,10 +271,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/ai-label-14.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C0%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-06T14:00:00+00:00",
       "firstSeen": "2026-06-06T14:51:56.561927+00:00",
-      "lastSeen": "2026-06-07T00:00:01.467665+00:00",
+      "lastSeen": "2026-06-07T00:15:57.395424+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1932
+      "score": 5.1871
     },
     {
       "title": "Bank of England governor warns AI may need to be rationed because of energy limits",
@@ -237,10 +287,10 @@
       "image": "https://media.thenextweb.com/2026/06/bailey-bank-of-england-ai-rationing-energy.avif",
       "published": "2026-06-06T13:48:36+00:00",
       "firstSeen": "2026-06-06T14:51:56.561927+00:00",
-      "lastSeen": "2026-06-07T00:00:01.467665+00:00",
+      "lastSeen": "2026-06-07T00:15:57.395424+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8788
+      "score": 1.8727
     },
     {
       "title": "Swiss startup GR3N raises €15.5M to build the world’s first microwave-powered PET recycling plant",
@@ -253,10 +303,10 @@
       "image": "https://media.thenextweb.com/2026/06/gr3n-pet-recycling-series-b-microwave.avif",
       "published": "2026-06-06T13:16:52+00:00",
       "firstSeen": "2026-06-06T14:51:56.561927+00:00",
-      "lastSeen": "2026-06-07T00:00:01.467665+00:00",
+      "lastSeen": "2026-06-07T00:15:57.395424+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.5667
+      "score": 2.5607
     },
     {
       "title": "Self-replicating Miasma worm hits 73 Microsoft GitHub repositories in supply chain attack",
@@ -269,10 +319,10 @@
       "image": "https://media.thenextweb.com/2026/06/miasma-worm-microsoft-github-supply-chain.avif",
       "published": "2026-06-06T12:46:50+00:00",
       "firstSeen": "2026-06-06T14:00:01.849764+00:00",
-      "lastSeen": "2026-06-07T00:00:01.467665+00:00",
+      "lastSeen": "2026-06-07T00:15:57.395424+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8555
+      "score": 1.8495
     },
     {
       "title": "An AI agent found 21 zero-days in FFmpeg for $1,000. Chrome just patched a record 429 bugs.",
@@ -285,10 +335,10 @@
       "image": "https://media.thenextweb.com/2026/06/ai-agent-21-zero-days-ffmpeg-chrome-429.avif",
       "published": "2026-06-06T12:24:11+00:00",
       "firstSeen": "2026-06-06T14:00:01.849764+00:00",
-      "lastSeen": "2026-06-07T00:00:01.467665+00:00",
+      "lastSeen": "2026-06-07T00:15:57.395424+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 1.447
+      "score": 1.4412
     },
     {
       "title": "Here comes new Siri again",
@@ -301,10 +351,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/wwdc_2024.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.597538331207%2C100%2C78.804923337586&amp%3Bw=1200",
       "published": "2026-06-06T12:00:00+00:00",
       "firstSeen": "2026-06-06T12:14:38.918607+00:00",
-      "lastSeen": "2026-06-07T00:00:01.467665+00:00",
+      "lastSeen": "2026-06-07T00:15:57.395424+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1482
+      "score": 3.1424
     },
     {
       "title": "Persona Atlas: Mapping How Famous Minds Think",
@@ -320,7 +370,7 @@
       "lastSeen": "2026-06-06T14:00:01.849764+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2116
+      "score": 3.2059
     },
     {
       "title": "EU trade chief wants a new tool to break Europe’s dependence on Chinese chips and rare earths",
@@ -333,10 +383,10 @@
       "image": "https://media.thenextweb.com/2026/06/eu-sefcovic-diversification-instrument-china-supply-chain.avif",
       "published": "2026-06-06T10:59:26+00:00",
       "firstSeen": "2026-06-06T12:00:01.977318+00:00",
-      "lastSeen": "2026-06-07T00:00:01.467665+00:00",
+      "lastSeen": "2026-06-07T00:15:57.395424+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8164
+      "score": 1.8107
     },
     {
       "title": "Reid Hoffman leaves Microsoft’s board to go ‘founder mode’ with AI drug startup Manus",
@@ -349,10 +399,10 @@
       "image": "https://media.thenextweb.com/2026/06/reid-hoffman-leaves-microsoft-board-manus.avif",
       "published": "2026-06-06T10:36:19+00:00",
       "firstSeen": "2026-06-06T12:00:01.977318+00:00",
-      "lastSeen": "2026-06-07T00:00:01.467665+00:00",
+      "lastSeen": "2026-06-07T00:15:57.395424+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8082
+      "score": 1.8027
     },
     {
       "title": "Crypto-Funded Chinese Peptide Labs Are Booming",
@@ -365,10 +415,10 @@
       "image": "https://media.wired.com/photos/6a2312eb2b342fb72975a62e/master/pass/Security-Roundup-Crypto-funded-Chinese-labs-sales-of-peptides-Security-1312618198.jpg",
       "published": "2026-06-06T10:30:00+00:00",
       "firstSeen": "2026-06-06T11:00:02.114878+00:00",
-      "lastSeen": "2026-06-07T00:00:01.467665+00:00",
+      "lastSeen": "2026-06-07T00:15:57.395424+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.946
+      "score": 3.9405
     },
     {
       "title": "Former IBM cybersecurity exec accuses company of covering up years of Chinese hacking",
@@ -381,10 +431,10 @@
       "image": "https://media.thenextweb.com/2026/06/ibm-whistleblower-data-breach-cover-up.avif",
       "published": "2026-06-06T10:11:58+00:00",
       "firstSeen": "2026-06-06T12:00:01.977318+00:00",
-      "lastSeen": "2026-06-07T00:00:01.467665+00:00",
+      "lastSeen": "2026-06-07T00:15:57.395424+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7997
+      "score": 1.7942
     },
     {
       "title": "Trump wants the American public to own a piece of OpenAI. Nobody knows how that would work.",
@@ -397,10 +447,10 @@
       "image": "https://media.thenextweb.com/2024/07/Untitled-design-2-2.avif",
       "published": "2026-06-06T10:07:53+00:00",
       "firstSeen": "2026-06-06T12:00:01.977318+00:00",
-      "lastSeen": "2026-06-07T00:00:01.467665+00:00",
+      "lastSeen": "2026-06-07T00:15:57.395424+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.7983
+      "score": 4.7928
     },
     {
       "title": "Every VC-backed e-bike company went bust. Bootstrapped Lectric just had its biggest month ever.",
@@ -416,7 +466,7 @@
       "lastSeen": "2026-06-06T21:00:01.925319+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8925
+      "score": 2.8871
     },
     {
       "title": "GM’s $900 million bet on a battery chemistry no one has commercialised could slash EV prices by 2028",
@@ -432,7 +482,7 @@
       "lastSeen": "2026-06-06T14:51:56.561927+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7872
+      "score": 1.7817
     },
     {
       "title": "Google will pay SpaceX $920 million a month for AI compute as Musk turns a data centre built for Grok into a cash machine",
@@ -448,7 +498,7 @@
       "lastSeen": "2026-06-06T14:00:01.849764+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.5832
+      "score": 10.5778
     },
     {
       "title": "The 10 best press release distribution services for 2026",
@@ -464,7 +514,7 @@
       "lastSeen": "2026-06-06T14:00:01.849764+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.481
+      "score": 2.4757
     },
     {
       "title": "micropython-wasm 0.1a2",
@@ -477,10 +527,10 @@
       "image": "",
       "published": "2026-06-06T04:26:06+00:00",
       "firstSeen": "2026-06-06T05:00:01.934940+00:00",
-      "lastSeen": "2026-06-07T00:00:01.467665+00:00",
+      "lastSeen": "2026-06-07T00:15:57.395424+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.5288
+      "score": 2.5241
     },
     {
       "title": "Running Python code in a sandbox with MicroPython and WASM",
@@ -493,10 +543,10 @@
       "image": "https://static.simonwillison.net/static/2026/micropython-in-datasette-agent.jpg",
       "published": "2026-06-06T03:53:34+00:00",
       "firstSeen": "2026-06-06T04:00:02.048042+00:00",
-      "lastSeen": "2026-06-07T00:00:01.467665+00:00",
+      "lastSeen": "2026-06-07T00:15:57.395424+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.3192
+      "score": 5.3146
     },
     {
       "title": "v0.30.7-rc1",
@@ -509,10 +559,10 @@
       "image": "https://opengraph.githubassets.com/78e2df05251b164238bc6424fa80f9b487093b561675da9e569299d0162f3c44/ollama/ollama",
       "published": "2026-06-06T00:59:05+00:00",
       "firstSeen": "2026-06-06T22:00:01.361734+00:00",
-      "lastSeen": "2026-06-07T00:00:01.467665+00:00",
+      "lastSeen": "2026-06-07T00:15:57.395424+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.8404
+      "score": 3.8361
     },
     {
       "title": "v0.30.7-rc0",
@@ -525,10 +575,10 @@
       "image": "https://opengraph.githubassets.com/0c75a2c22c34f71df6873e50748a2ff1ede013af1522ff16514d15411ac10067/ollama/ollama",
       "published": "2026-06-06T00:29:19+00:00",
       "firstSeen": "2026-06-06T01:00:01.288928+00:00",
-      "lastSeen": "2026-06-07T00:00:01.467665+00:00",
+      "lastSeen": "2026-06-07T00:15:57.395424+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.5325
+      "score": 2.5283
     },
     {
       "title": "OpenAI Help: Lockdown Mode",
@@ -541,26 +591,10 @@
       "image": "",
       "published": "2026-06-05T23:56:40+00:00",
       "firstSeen": "2026-06-06T01:00:01.288928+00:00",
-      "lastSeen": "2026-06-07T00:00:01.467665+00:00",
+      "lastSeen": "2026-06-07T00:15:57.395424+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.9539
-    },
-    {
-      "title": "v0.30.6",
-      "url": "https://github.com/ollama/ollama/releases/tag/v0.30.6",
-      "source": "Ollama Releases",
-      "sourceUrl": "https://github.com/ollama/ollama/releases.atom",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "What's Changed\n\nollama launch omp now integrates with Oh My Pi, an AI coding agent with IDE integration\nMLX embedding layers now use NVFP4 global scale for improved quantization on Apple Silicon\n\nFull Changelog: v0.30.5...v0.30.6",
-      "image": "https://opengraph.githubassets.com/60f61760c34b89ae6fa1dcf45ef6572c285dc5ed3f2717d4816dcd473e0f774a/ollama/ollama",
-      "published": "2026-06-05T22:38:53+00:00",
-      "firstSeen": "2026-06-05T07:00:01.980033+00:00",
-      "lastSeen": "2026-06-07T00:00:01.467665+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "editorial_score_pass",
-      "score": 8.7039
+      "score": 10.9497
     },
     {
       "title": "Thousand Token Wood: shipping a multi-agent economy on a 3B model",
@@ -576,7 +610,7 @@
       "lastSeen": "2026-06-06T11:00:02.114878+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.5689
+      "score": 4.5649
     },
     {
       "title": "How a USB-connected speaker can infect a PC without ever being touched",
@@ -589,10 +623,10 @@
       "image": "https://cdn.arstechnica.net/wp-content/uploads/2026/06/sound-blaster-katana-v2x-1152x648-1780688877.jpg",
       "published": "2026-06-05T21:00:29+00:00",
       "firstSeen": "2026-06-05T22:22:33.202967+00:00",
-      "lastSeen": "2026-06-07T00:00:01.467665+00:00",
+      "lastSeen": "2026-06-07T00:15:57.395424+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.5697
+      "score": 1.5659
     },
     {
       "title": "AI Upgrades, Security Flaws, and SpaceX’s Record IPO Define the Week in Tech",
@@ -605,42 +639,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/06/ChatGPT-Image-Jun-5-2026-05_42_49-PM-1024x576.png?f=jpeg",
       "published": "2026-06-05T20:48:52+00:00",
       "firstSeen": "2026-06-06T16:00:02.099452+00:00",
-      "lastSeen": "2026-06-07T00:00:01.467665+00:00",
+      "lastSeen": "2026-06-07T00:15:57.395424+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.6669
-    },
-    {
-      "title": "Apple WWDC26 Live Updates: Apple Intelligence, macOS 27, and More",
-      "url": "https://www.techrepublic.com/article/news-apple-wwdc-26-live-blog",
-      "source": "TechRepublic AI",
-      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Follow TechRepublic’s WWDC26 live updates on Apple Intelligence, macOS 27, Siri, security, developer tools, and enterprise IT impact.\nThe post Apple WWDC26 Live Updates: Apple Intelligence, macOS 27, and More appeared first on TechRepublic.",
-      "image": "https://assets.techrepublic.com/uploads/2026/06/wwdc.jpg?f=jpeg",
-      "published": "2026-06-05T20:41:29+00:00",
-      "firstSeen": "2026-06-06T16:00:02.099452+00:00",
-      "lastSeen": "2026-06-07T00:00:01.467665+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.6652
-    },
-    {
-      "title": "Cisco Warns Agentic AI Will Put New Pressure on Enterprise Networks",
-      "url": "https://www.techrepublic.com/article/news-cisco-ai-networking-bottleneck",
-      "source": "TechRepublic AI",
-      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Cisco executives said agentic AI could triple network traffic, creating new infrastructure and security demands for enterprises.\nThe post Cisco Warns Agentic AI Will Put New Pressure on Enterprise Networks appeared first on TechRepublic.",
-      "image": "https://assets.techrepublic.com/uploads/2026/06/creative-ai-circuit-brain-with-icons-on-blurry-new-2026-01-11-08-46-10-utc-1.jpg?f=jpeg",
-      "published": "2026-06-05T20:07:12+00:00",
-      "firstSeen": "2026-06-06T16:00:02.099452+00:00",
-      "lastSeen": "2026-06-07T00:00:01.467665+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 5.3571
+      "score": 2.6631
     },
     {
       "title": "The Life Scientific: Seth Berkley",
@@ -653,10 +655,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-01T20:00:00+00:00",
       "firstSeen": "2026-06-01T21:00:01.828388+00:00",
-      "lastSeen": "2026-06-07T00:00:01.467665+00:00",
+      "lastSeen": "2026-06-07T00:15:57.395424+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.2251
+      "score": 1.2249
     },
     {
       "title": "Dean Lomax on discovering ichthyosaurs and defying nay-sayers",
@@ -669,7 +671,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-26T08:30:00+00:00",
       "firstSeen": "2026-05-26T08:41:33.144051+00:00",
-      "lastSeen": "2026-06-07T00:00:01.467665+00:00",
+      "lastSeen": "2026-06-07T00:15:57.395424+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 1.1205
@@ -685,7 +687,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-25T20:00:00+00:00",
       "firstSeen": "2026-05-25T21:00:01.605108+00:00",
-      "lastSeen": "2026-06-07T00:00:01.467665+00:00",
+      "lastSeen": "2026-06-07T00:15:57.395424+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 0.2903
