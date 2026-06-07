@@ -264,7 +264,7 @@
 
     .powerup {
       display: grid;
-      grid-template-columns: 12px 1fr;
+      grid-template-columns: 18px 1fr;
       gap: 8px;
       align-items: start;
       min-width: 0;
@@ -274,10 +274,44 @@
     }
 
     .powerup i {
-      width: 10px;
-      height: 10px;
-      margin-top: 3px;
+      position: relative;
+      width: 16px;
+      height: 16px;
+      margin-top: 2px;
       box-shadow: 0 0 12px currentColor;
+    }
+
+    .powerup i::before,
+    .powerup i::after {
+      content: "";
+      position: absolute;
+      inset: 3px;
+      background: currentColor;
+      box-shadow: 0 0 8px currentColor;
+    }
+
+    .powerup i[data-core="spread"] {
+      clip-path: polygon(50% 0, 100% 100%, 50% 74%, 0 100%);
+    }
+
+    .powerup i[data-core="laser"]::before {
+      inset: 2px 6px;
+    }
+
+    .powerup i[data-core="laser"]::after {
+      inset: 6px 2px;
+    }
+
+    .powerup i[data-core="shield"] {
+      clip-path: polygon(50% 0, 94% 25%, 82% 88%, 50% 100%, 18% 88%, 6% 25%);
+    }
+
+    .powerup i[data-core="repair"]::before {
+      inset: 2px 6px;
+    }
+
+    .powerup i[data-core="repair"]::after {
+      inset: 6px 2px;
     }
 
     .powerup b {
@@ -327,6 +361,15 @@
       background: rgba(255, 210, 61, 0.08);
     }
 
+    .score-entry-title {
+      grid-column: 1 / -1;
+      color: var(--gold);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
     .score-entry input {
       width: 100%;
       min-height: 38px;
@@ -345,6 +388,15 @@
       min-height: 38px;
       padding: 0 14px;
       font-size: 12px;
+    }
+
+    .overlay.game-over .enemy-roster,
+    .overlay.game-over .powerups {
+      display: none;
+    }
+
+    .overlay.game-over .scores-panel {
+      margin-top: 14px;
     }
 
     .title-actions {
@@ -487,7 +539,7 @@
       <div class="overlay" id="overlay">
         <div class="panel">
           <h1>Invaders</h1>
-          <div class="title-version">v1.30</div>
+          <div class="title-version">v1.32</div>
           <p class="tagline" id="message">A modernized arcade defense run: punch through waves, catch power cores, and survive the boss carrier.</p>
           <div class="enemy-roster" aria-label="Enemy ship guide">
             <h2>Enemy Ships</h2>
@@ -500,10 +552,10 @@
           </div>
           <div class="powerups" aria-label="Power-up guide">
             <h2>Power Cores</h2>
-            <div class="powerup"><i style="color:#ff3df2;background:#ff3df2"></i><span><b>Spread</b><br>Five-shot fan for 10 seconds.</span></div>
-            <div class="powerup"><i style="color:#35f4ff;background:#35f4ff"></i><span><b>Laser</b><br>Twin fast beams for 10 seconds.</span></div>
-            <div class="powerup"><i style="color:#a7ff3d;background:#a7ff3d"></i><span><b>Shield</b><br>Restores and overcharges armor.</span></div>
-            <div class="powerup"><i style="color:#ffffff;background:#ffffff"></i><span><b>Repair</b><br>Adds a life and shield charge.</span></div>
+            <div class="powerup"><i data-core="spread" style="color:#ff3df2"></i><span><b>Spread</b><br>Five-shot fan for 10 seconds.</span></div>
+            <div class="powerup"><i data-core="laser" style="color:#35f4ff"></i><span><b>Laser</b><br>Twin fast beams for 10 seconds.</span></div>
+            <div class="powerup"><i data-core="shield" style="color:#a7ff3d"></i><span><b>Shield</b><br>Restores and overcharges armor.</span></div>
+            <div class="powerup"><i data-core="repair" style="color:#ffffff"></i><span><b>Repair</b><br>Adds a life and shield charge.</span></div>
           </div>
           <div class="scores-panel hidden" id="scoresPanel" aria-live="polite"></div>
           <div class="title-actions">
@@ -517,7 +569,7 @@
         <button id="rightButton" type="button">→</button>
         <button id="fireButton" type="button">FIRE</button>
       </div>
-      <div class="version" aria-hidden="true">v1.30</div>
+      <div class="version" aria-hidden="true">v1.32</div>
     </section>
   </main>
 
@@ -577,6 +629,7 @@
         particles: [],
         powerups: [],
         pickupLabels: [],
+        waveBanner: null,
         shields: [],
         boss: null,
         scoreSubmitted: false
@@ -748,7 +801,7 @@
       function renderScores(includeEntry = false, highlightTs = 0) {
         const lastInitials = sanitizeInitials(localStorage.getItem(LAST_INITIALS_KEY) || "YOU");
         const entryHtml = includeEntry && game.score > 0 && !game.scoreSubmitted
-          ? `<div class="score-entry"><input id="initialsInput" maxlength="3" value="${lastInitials}" aria-label="Initials"><button id="submitScoreButton" type="button">Save Score</button></div>`
+          ? `<div class="score-entry"><div class="score-entry-title">Enter Initials</div><input id="initialsInput" maxlength="3" value="${lastInitials}" aria-label="Initials"><button id="submitScoreButton" type="button">Save Score</button></div>`
           : "";
         scoresPanel.innerHTML = `
           ${entryHtml}
@@ -848,9 +901,11 @@
         game.particles = [];
         game.powerups = [];
         game.pickupLabels = [];
+        game.waveBanner = null;
         game.shields = [];
         game.boss = null;
         game.scoreSubmitted = false;
+        overlay.classList.remove("game-over");
         game.nextShot = 0;
         game.nextEnemyShot = 1.35;
         game.waveClearTimer = 0;
@@ -963,6 +1018,13 @@
           }
         }
         if (game.bossWave) {
+          game.waveBanner = {
+            text: "BOSS CARRIER INBOUND",
+            life: 2.2,
+            maxLife: 2.2
+          };
+          game.shake = Math.max(game.shake, 7);
+          sfx.bossCharge();
           game.boss = {
             x: game.width / 2,
             y: Math.max(52, 62 * game.scale),
@@ -1100,6 +1162,7 @@
         updateParticles(dt);
         updatePowerups(dt);
         updatePickupLabels(dt);
+        updateWaveBanner(dt);
         updateShields(dt);
         checkWaveClear(dt);
         updateHud();
@@ -1309,6 +1372,12 @@
         game.pickupLabels = game.pickupLabels.filter(label => label.life > 0);
       }
 
+      function updateWaveBanner(dt) {
+        if (!game.waveBanner) return;
+        game.waveBanner.life -= dt;
+        if (game.waveBanner.life <= 0) game.waveBanner = null;
+      }
+
       function updateShields(dt) {
         for (const shield of game.shields) {
           shield.flash = Math.max(0, (shield.flash || 0) - dt * 4.5);
@@ -1452,8 +1521,10 @@
         touchAim.pointerId = null;
         message.textContent = `Final score: ${game.score.toLocaleString()}. The fleet regroups; you get another quarter.`;
         startButton.textContent = "Play Again";
+        overlay.classList.add("game-over");
         showScores(true);
         overlay.classList.remove("hidden");
+        requestAnimationFrame(() => document.getElementById("initialsInput")?.focus());
       }
 
       function pointRect(x, y, rect) {
@@ -1562,6 +1633,7 @@
         drawPowerups();
         drawPickupLabels();
         drawParticles();
+        drawWaveBanner();
         drawVignette();
         ctx.restore();
       }
@@ -1969,6 +2041,9 @@
           glow(core.color, 20);
           ctx.strokeStyle = core.color;
           ctx.lineWidth = 3;
+          drawPowerupIcon(core.type, core.color, 14);
+          ctx.rotate(-core.phase);
+          ctx.globalAlpha = 0.82;
           ctx.beginPath();
           for (let i = 0; i < 6; i++) {
             const a = i / 6 * TAU;
@@ -1987,6 +2062,76 @@
           ctx.fill();
           ctx.restore();
         }
+        ctx.restore();
+      }
+
+      function drawPowerupIcon(type, color, size) {
+        ctx.save();
+        ctx.fillStyle = color;
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 3;
+        ctx.shadowColor = color;
+        ctx.shadowBlur = 18;
+        if (type === "spread") {
+          [-0.65, 0, 0.65].forEach(angle => {
+            ctx.save();
+            ctx.rotate(angle);
+            ctx.beginPath();
+            ctx.moveTo(0, -size);
+            ctx.lineTo(size * 0.36, size * 0.55);
+            ctx.lineTo(0, size * 0.2);
+            ctx.lineTo(-size * 0.36, size * 0.55);
+            ctx.closePath();
+            ctx.fill();
+            ctx.restore();
+          });
+        } else if (type === "laser") {
+          ctx.fillRect(-size * 0.16, -size, size * 0.32, size * 2);
+          ctx.fillRect(-size * 0.72, -size * 0.16, size * 1.44, size * 0.32);
+        } else if (type === "shield") {
+          ctx.beginPath();
+          for (let i = 0; i < 6; i++) {
+            const a = -Math.PI / 2 + i / 6 * TAU;
+            const x = Math.cos(a) * size * 0.86;
+            const y = Math.sin(a) * size;
+            if (i === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+          }
+          ctx.closePath();
+          ctx.stroke();
+          ctx.globalAlpha = 0.42;
+          ctx.fill();
+        } else if (type === "repair") {
+          ctx.fillRect(-size * 0.22, -size, size * 0.44, size * 2);
+          ctx.fillRect(-size, -size * 0.22, size * 2, size * 0.44);
+        }
+        ctx.restore();
+      }
+
+      function drawWaveBanner() {
+        const banner = game.waveBanner;
+        if (!banner) return;
+        const t = clamp(banner.life / banner.maxLife, 0, 1);
+        const pulse = 0.72 + Math.sin(game.time * 28) * 0.18;
+        ctx.save();
+        ctx.globalCompositeOperation = "lighter";
+        ctx.globalAlpha = clamp(Math.min(1, banner.life * 2) * pulse, 0, 1);
+        ctx.fillStyle = "rgba(255, 77, 109, 0.16)";
+        ctx.fillRect(0, game.height * 0.2 - 34, game.width, 68);
+        ctx.strokeStyle = colors.enemy3;
+        ctx.lineWidth = 2;
+        glow(colors.enemy3, 24);
+        ctx.beginPath();
+        ctx.moveTo(game.width * (0.08 + (1 - t) * 0.08), game.height * 0.2 - 34);
+        ctx.lineTo(game.width * (0.92 - (1 - t) * 0.08), game.height * 0.2 - 34);
+        ctx.moveTo(game.width * (0.08 + (1 - t) * 0.08), game.height * 0.2 + 34);
+        ctx.lineTo(game.width * (0.92 - (1 - t) * 0.08), game.height * 0.2 + 34);
+        ctx.stroke();
+        ctx.fillStyle = "#fff";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.font = `900 ${clamp(game.width * 0.045, 20, 42)}px system-ui, sans-serif`;
+        ctx.fillText(banner.text, game.width / 2, game.height * 0.2);
         ctx.restore();
       }
 
@@ -2106,6 +2251,7 @@
         const initials = sanitizeInitials(input ? input.value : "YOU");
         const highlightTs = addLocalScore(initials, game.score, game.wave);
         game.scoreSubmitted = true;
+        message.textContent = `Score saved for ${initials}. Final score: ${game.score.toLocaleString()}.`;
         showScores(false, highlightTs);
         submitGlobalScore(initials, game.score, game.wave).then(() => showScores(false, highlightTs));
       });
