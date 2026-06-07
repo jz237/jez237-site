@@ -150,7 +150,7 @@ if (!Array.isArray(data.issues)) {
 }
 
 const issues = Array.isArray(data.issues) ? data.issues : [];
-const seenCurrentDates = new Set();
+const seenIssueKeys = new Set();
 
 issues.forEach((issue, index) => {
   if (!isIsoDate(issue.currentDate)) fail(`Issue ${index}: currentDate must be YYYY-MM-DD.`);
@@ -158,8 +158,10 @@ issues.forEach((issue, index) => {
   if (!weekly1982Mode && issue.currentDate && issue.historicDate && !dateDiffYears(issue.currentDate, issue.historicDate)) {
     fail(`Issue ${index}: historicDate must be exactly 40 years before currentDate.`);
   }
-  if (seenCurrentDates.has(issue.currentDate)) fail(`Issue ${index}: duplicate currentDate ${issue.currentDate}.`);
-  seenCurrentDates.add(issue.currentDate);
+  const issueKey = weekly1982Mode ? issue.historicDate : issue.currentDate;
+  const issueKeyLabel = weekly1982Mode ? "historicDate" : "currentDate";
+  if (seenIssueKeys.has(issueKey)) fail(`Issue ${index}: duplicate ${issueKeyLabel} ${issueKey}.`);
+  seenIssueKeys.add(issueKey);
 
   ["lead", "market", "accuracyLedger", "sources"].forEach((field) => {
     if (!issue[field]) fail(`Issue ${index}: missing required field ${field}.`);
