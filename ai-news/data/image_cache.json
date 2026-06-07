@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-07T17:00:01.538385+00:00",
+  "updatedAt": "2026-06-07T18:00:01.801509+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -9552,6 +9552,10 @@
     "https://techcrunch.com/2026/06/07/openai-is-still-working-on-that-super-app": {
       "image": "https://techcrunch.com/wp-content/uploads/2025/02/GettyImages-2195918462.jpg?w=1024",
       "checkedAt": "2026-06-07T16:42:13.437720+00:00"
+    },
+    "https://techcrunch.com/2026/06/07/notion-restores-access-to-anthropic-after-service-disruption": {
+      "image": "https://techcrunch.com/wp-content/uploads/2021/02/notion-glitch-hero.jpg?resize=1200,827",
+      "checkedAt": "2026-06-07T18:00:01.801509+00:00"
     }
   }
 }
