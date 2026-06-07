@@ -25,7 +25,7 @@
     .sound-view-toggle button { min-width:132px; height:38px; border:0; border-radius:999px; background:transparent; color:var(--ink-mid); cursor:pointer; font:inherit; font-size:13px; font-weight:800; }
     .sound-view-toggle button:hover { color:var(--ink-hi); background:rgba(255,255,255,.06); }
     .sound-view-toggle button.is-active { color:#10131c; background:var(--brand-gold); }
-    .sound-view-toggle button:focus-visible, .compact-play:focus-visible { outline:2px solid var(--brand-gold); outline-offset:3px; }
+    .sound-view-toggle button:focus-visible, .compact-play:focus-visible, .compact-seek:focus-visible, .compact-volume:focus-visible { outline:2px solid var(--brand-gold); outline-offset:3px; }
     .sound-view-panel[hidden] { display:none; }
     .sound-grid { display:grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
     .sound-card { container-type:inline-size; position:relative; overflow:hidden; display:grid; gap:12px; min-width:0; padding:20px; border:1px solid rgba(255,255,255,.14); border-radius:24px; background: linear-gradient(145deg, rgba(4,10,22,.72), rgba(2,7,16,.54)); box-shadow: 0 16px 42px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.06); }
@@ -98,12 +98,16 @@
     .sound-eq-slider-thumb { position:absolute; left:50%; top:var(--eq-thumb, 50%); width:22px; height:22px; transform:translate(-50%, -50%); border-radius:999px; background:var(--brand-gold); box-shadow:0 0 0 2px rgba(255,255,255,.44), 0 5px 14px rgba(0,0,0,.36), 0 0 14px rgba(232,197,122,.42); pointer-events:none; }
     .wavesurfer-enhanced .sound-card audio { position:absolute; width:1px; height:1px; opacity:0; pointer-events:none; }
     .compact-sound-list { display:grid; gap:6px; padding:10px; border:1px solid rgba(255,255,255,.12); border-radius:20px; background:linear-gradient(180deg, rgba(4,10,22,.74), rgba(0,0,0,.24)); box-shadow:0 16px 42px rgba(0,0,0,.22), inset 0 1px 0 rgba(255,255,255,.05); }
-    .compact-sound-row { display:grid; grid-template-columns:44px minmax(0, 1fr) 58px; align-items:center; gap:10px; min-height:52px; padding:7px 10px; border:1px solid rgba(255,255,255,.08); border-radius:13px; background:rgba(255,255,255,.035); }
+    .compact-sound-row { display:grid; grid-template-columns:44px minmax(140px, 1fr) minmax(120px, 220px) 74px 58px; align-items:center; gap:10px; min-height:52px; padding:7px 10px; border:1px solid rgba(255,255,255,.08); border-radius:13px; background:rgba(255,255,255,.035); }
     .compact-sound-row.is-playing { border-color:rgba(232,197,122,.32); background:rgba(232,197,122,.085); }
     .compact-play { position:relative; display:grid; place-items:center; width:34px; height:34px; border:1px solid rgba(232,197,122,.34); border-radius:50%; background:rgba(232,197,122,.11); color:var(--brand-gold); cursor:pointer; }
     .compact-play::before { content:""; margin-left:3px; width:0; height:0; border-top:7px solid transparent; border-bottom:7px solid transparent; border-left:11px solid currentColor; }
     .compact-sound-row.is-playing .compact-play::before { margin-left:0; width:5px; height:16px; border:0; border-right:5px solid currentColor; border-left:5px solid currentColor; }
     .compact-title { min-width:0; color:var(--ink-hi); font-size:14px; font-weight:800; line-height:1.25; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .compact-seek, .compact-volume { width:100%; min-width:0; accent-color:var(--brand-gold); cursor:pointer; }
+    .compact-seek { opacity:.9; }
+    .compact-volume { opacity:.78; }
+    .compact-seek:disabled { cursor:default; opacity:.34; }
     .compact-length { color:var(--ink-lo); font-size:12px; font-variant-numeric:tabular-nums; text-align:right; }
     .sound-note { margin-top:18px; padding:18px 20px; border:1px solid rgba(232,197,122,.16); border-radius:22px; background:rgba(232,197,122,.055); color:var(--ink-lo); }
     .sound-note strong { color: var(--ink-hi); }
@@ -166,7 +170,8 @@
     @media (max-width: 620px) { .sound-player-controls { flex-wrap:wrap; gap:6px; } .sound-spacer { display:none; } .sound-time { flex:1 1 auto; } .sound-rate { gap:3px; } .sound-rate button { min-width:31px; } .sound-volume { flex:1 1 96px; min-width:94px; max-width:none; justify-content:center; padding-inline:6px; } .sound-volume input { min-width:52px; max-width:160px; } }
     @media (max-width: 520px) { .sound-player { padding:10px; } .sound-wave { height:82px; } .sound-spectrum { height:78px; } .sound-scrub { height:20px; } .sound-play { order:1; width:34px; height:34px; } .sound-play::before { left:13px; top:9px; } .sound-player.is-playing .sound-play::before { left:10px; top:8px; } .sound-rate { order:2; gap:3px; padding:0; } .sound-rate button { width:31px; min-width:31px; padding:0; font-size:9.5px; } .sound-volume { order:3; flex:1 1 96px; min-width:94px; max-width:none; gap:5px; justify-content:center; padding:0 6px; } .sound-volume input { min-width:52px; max-width:160px; } .sound-download { order:4; } .sound-time { order:5; flex:1 1 100%; min-width:0; font-size:11px; } .sound-eq-bands { gap:6px; } }
     @media (max-width: 620px) { .sound-view-toolbar { position:static; display:grid; gap:9px; } .sound-view-toggle { display:grid; grid-template-columns:1fr 1fr; width:100%; } .sound-view-toggle button { min-width:0; } }
-    @media (max-width: 520px) { .compact-sound-list { padding:7px; } .compact-sound-row { grid-template-columns:40px minmax(0, 1fr) 48px; gap:8px; padding:6px 8px; } .compact-title { font-size:13px; } }
+    @media (max-width: 700px) { .compact-sound-row { grid-template-columns:40px minmax(86px, 1fr) minmax(74px, 110px) 52px 44px; gap:7px; padding:6px 8px; } .compact-title { font-size:13px; } .compact-volume { max-width:52px; } .compact-length { font-size:11px; } }
+    @media (max-width: 520px) { .compact-sound-list { padding:7px; } .compact-sound-row { grid-template-columns:38px minmax(62px, 1fr) minmax(60px, 88px) 42px 38px; gap:6px; } .compact-play { width:32px; height:32px; } .compact-title { font-size:12px; } .compact-length { font-size:10px; } }
     @media (max-width: 400px) { .sound-volume { flex-basis:88px; min-width:88px; padding-inline:6px; } .sound-volume input { min-width:46px; } }
     @media (max-width: 860px) { .desktop-hub { border-radius:0; } main.container { padding-inline:0; } .hub-main { padding:14px 10px 28px !important; } .sound-hero { border-radius:22px; } }
   </style>
@@ -634,16 +639,12 @@
           title: "Marty the Cat - Bass Forward Funk Metal Theme (Edition 2)",
           duration: "2:28",
           src: "audio/17-marty-cat-slap-bass-edition-2-add11031-8839-49ee-8c19-462f41c2913c.mp3"
-        },
-        {
-          title: "Russ - Limited Edition Rock Opera Theme (Alt Take)",
-          duration: "2:30",
-          src: "audio/19-russ-limited-edition-rock-opera-1dcf5264-55c3-4861-b3b1-b5d9756d9857.mp3"
         }
       ];
       const compactAudio = new Audio();
       compactAudio.preload = "metadata";
       let compactActiveRow = null;
+      let compactSeekDragging = false;
       const sortTracks = (tracks) => tracks
         .filter((track) => track && track.src)
         .sort((a, b) => a.title.localeCompare(b.title, undefined, { sensitivity: "base" }) || a.src.localeCompare(b.src));
@@ -664,11 +665,32 @@
         if (compactActiveRow) {
           compactActiveRow.classList.remove("is-playing");
           const activeButton = compactActiveRow.querySelector(".compact-play");
+          const activeSeek = compactActiveRow.querySelector(".compact-seek");
           const title = compactActiveRow.querySelector(".compact-title")?.textContent.trim() || "track";
           activeButton?.setAttribute("aria-label", `Play ${title}`);
           activeButton?.setAttribute("aria-pressed", "false");
+          if (activeSeek) {
+            activeSeek.value = "0";
+            activeSeek.disabled = true;
+          }
         }
         compactActiveRow = null;
+      };
+      const setCompactRowPlaying = (row, playing) => {
+        const title = row.querySelector(".compact-title")?.textContent.trim() || "track";
+        const button = row.querySelector(".compact-play");
+        row.classList.toggle("is-playing", playing);
+        button?.setAttribute("aria-label", `${playing ? "Pause" : "Play"} ${title}`);
+        button?.setAttribute("aria-pressed", playing ? "true" : "false");
+      };
+      const updateCompactSeek = () => {
+        if (!compactActiveRow || compactSeekDragging) return;
+        const seek = compactActiveRow.querySelector(".compact-seek");
+        if (!seek) return;
+        const duration = compactAudio.duration;
+        seek.value = Number.isFinite(duration) && duration > 0
+          ? String(Math.round((compactAudio.currentTime / duration) * 1000))
+          : "0";
       };
       const cardTracksFallback = () => {
         const tracks = Array.from(document.querySelectorAll(".sound-card")).map((card) => {
@@ -716,23 +738,63 @@
           length.className = "compact-length";
           length.textContent = track.duration;
 
+          const seek = document.createElement("input");
+          seek.type = "range";
+          seek.className = "compact-seek";
+          seek.min = "0";
+          seek.max = "1000";
+          seek.value = "0";
+          seek.step = "1";
+          seek.disabled = true;
+          seek.setAttribute("aria-label", `Seek ${track.title}`);
+
+          const volume = document.createElement("input");
+          volume.type = "range";
+          volume.className = "compact-volume";
+          volume.min = "0";
+          volume.max = "1";
+          volume.step = "0.01";
+          volume.value = String(compactAudio.volume);
+          volume.setAttribute("aria-label", `Volume for ${track.title}`);
+
           play.addEventListener("click", () => {
-            const sameTrack = compactActiveRow === row && !compactAudio.paused;
-            if (sameTrack) {
-              pauseCompactPlayer();
+            const sameTrack = compactActiveRow === row && normalizeTrackSrc(compactAudio.src) === normalizeTrackSrc(track.src);
+            if (sameTrack && !compactAudio.paused) {
+              compactAudio.pause();
+              setCompactRowPlaying(row, false);
+              return;
+            }
+            if (sameTrack && compactAudio.paused) {
+              setCompactRowPlaying(row, true);
+              compactAudio.play().catch(() => setCompactRowPlaying(row, false));
               return;
             }
             document.querySelectorAll("audio").forEach((audio) => audio.pause());
             pauseCompactPlayer();
             compactAudio.src = track.src;
             compactActiveRow = row;
-            row.classList.add("is-playing");
-            play.setAttribute("aria-label", `Pause ${track.title}`);
-            play.setAttribute("aria-pressed", "true");
+            compactAudio.volume = Number(volume.value);
+            seek.disabled = false;
+            setCompactRowPlaying(row, true);
             compactAudio.play().catch(() => pauseCompactPlayer());
           });
+          seek.addEventListener("input", () => {
+            if (compactActiveRow !== row) return;
+            compactSeekDragging = true;
+            const duration = compactAudio.duration;
+            if (Number.isFinite(duration) && duration > 0) {
+              compactAudio.currentTime = (Number(seek.value) / 1000) * duration;
+            }
+          });
+          seek.addEventListener("change", () => {
+            compactSeekDragging = false;
+            updateCompactSeek();
+          });
+          volume.addEventListener("input", () => {
+            compactAudio.volume = Number(volume.value);
+          });
 
-          row.append(play, title, length);
+          row.append(play, title, seek, volume, length);
           fragment.appendChild(row);
         });
         compactList.replaceChildren(fragment);
@@ -761,8 +823,10 @@
         setSoundViewFallback("cards");
       }
       compactAudio.addEventListener("ended", pauseCompactPlayer);
-      compactAudio.addEventListener("pause", () => {
-        if (compactAudio.ended) pauseCompactPlayer();
+      compactAudio.addEventListener("timeupdate", updateCompactSeek);
+      compactAudio.addEventListener("loadedmetadata", () => {
+        if (compactActiveRow) compactActiveRow.querySelector(".compact-seek")?.removeAttribute("disabled");
+        updateCompactSeek();
       });
     })();
   </script>
@@ -803,17 +867,46 @@
     const compactAudio = new Audio();
     compactAudio.preload = "metadata";
     let compactActiveRow = null;
+    let compactSeekDragging = false;
     const compactRows = [];
     const pauseCompactPlayer = () => {
       compactAudio.pause();
       if (compactActiveRow) {
         compactActiveRow.classList.remove("is-playing");
         const activeButton = compactActiveRow.querySelector(".compact-play");
+        const activeSeek = compactActiveRow.querySelector(".compact-seek");
         const title = compactActiveRow.querySelector(".compact-title")?.textContent.trim() || "track";
         activeButton?.setAttribute("aria-label", `Play ${title}`);
         activeButton?.setAttribute("aria-pressed", "false");
+        if (activeSeek) {
+          activeSeek.value = "0";
+          activeSeek.disabled = true;
+        }
       }
       compactActiveRow = null;
+    };
+    const setCompactRowPlaying = (row, playing) => {
+      const title = row.querySelector(".compact-title")?.textContent.trim() || "track";
+      const button = row.querySelector(".compact-play");
+      row.classList.toggle("is-playing", playing);
+      button?.setAttribute("aria-label", `${playing ? "Pause" : "Play"} ${title}`);
+      button?.setAttribute("aria-pressed", playing ? "true" : "false");
+    };
+    const normalizeCompactSrc = (src) => {
+      try {
+        return new URL(src, window.location.href).pathname;
+      } catch (error) {
+        return src;
+      }
+    };
+    const updateCompactSeek = () => {
+      if (!compactActiveRow || compactSeekDragging) return;
+      const seek = compactActiveRow.querySelector(".compact-seek");
+      if (!seek) return;
+      const duration = compactAudio.duration;
+      seek.value = Number.isFinite(duration) && duration > 0
+        ? String(Math.round((compactAudio.currentTime / duration) * 1000))
+        : "0";
     };
     const buildCompactList = async () => {
       const compactList = document.querySelector("[data-compact-sound-list]");
@@ -841,10 +934,35 @@
         length.className = "compact-length";
         length.textContent = track.duration;
 
+        const seek = document.createElement("input");
+        seek.type = "range";
+        seek.className = "compact-seek";
+        seek.min = "0";
+        seek.max = "1000";
+        seek.value = "0";
+        seek.step = "1";
+        seek.disabled = true;
+        seek.setAttribute("aria-label", `Seek ${track.title}`);
+
+        const volume = document.createElement("input");
+        volume.type = "range";
+        volume.className = "compact-volume";
+        volume.min = "0";
+        volume.max = "1";
+        volume.step = "0.01";
+        volume.value = String(compactAudio.volume);
+        volume.setAttribute("aria-label", `Volume for ${track.title}`);
+
         play.addEventListener("click", () => {
-          const sameTrack = compactActiveRow === row && !compactAudio.paused;
-          if (sameTrack) {
-            pauseCompactPlayer();
+          const sameTrack = compactActiveRow === row && normalizeCompactSrc(compactAudio.src) === normalizeCompactSrc(track.src);
+          if (sameTrack && !compactAudio.paused) {
+            compactAudio.pause();
+            setCompactRowPlaying(row, false);
+            return;
+          }
+          if (sameTrack && compactAudio.paused) {
+            setCompactRowPlaying(row, true);
+            compactAudio.play().catch(() => setCompactRowPlaying(row, false));
             return;
           }
           players.forEach((player) => {
@@ -853,13 +971,28 @@
           pauseCompactPlayer();
           compactAudio.src = track.src;
           compactActiveRow = row;
-          row.classList.add("is-playing");
-          play.setAttribute("aria-label", `Pause ${track.title}`);
-          play.setAttribute("aria-pressed", "true");
+          compactAudio.volume = Number(volume.value);
+          seek.disabled = false;
+          setCompactRowPlaying(row, true);
           compactAudio.play().catch(() => pauseCompactPlayer());
         });
+        seek.addEventListener("input", () => {
+          if (compactActiveRow !== row) return;
+          compactSeekDragging = true;
+          const duration = compactAudio.duration;
+          if (Number.isFinite(duration) && duration > 0) {
+            compactAudio.currentTime = (Number(seek.value) / 1000) * duration;
+          }
+        });
+        seek.addEventListener("change", () => {
+          compactSeekDragging = false;
+          updateCompactSeek();
+        });
+        volume.addEventListener("input", () => {
+          compactAudio.volume = Number(volume.value);
+        });
 
-        row.append(play, title, length);
+        row.append(play, title, seek, volume, length);
         compactRows.push(row);
         fragment.appendChild(row);
       });
@@ -889,8 +1022,10 @@
       setSoundView("cards");
     }
     compactAudio.addEventListener("ended", pauseCompactPlayer);
-    compactAudio.addEventListener("pause", () => {
-      if (compactAudio.ended) pauseCompactPlayer();
+    compactAudio.addEventListener("timeupdate", updateCompactSeek);
+    compactAudio.addEventListener("loadedmetadata", () => {
+      if (compactActiveRow) compactActiveRow.querySelector(".compact-seek")?.removeAttribute("disabled");
+      updateCompactSeek();
     });
 
     document.querySelectorAll(".sound-card").forEach((card) => {
