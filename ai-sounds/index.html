@@ -19,6 +19,12 @@
     .sound-hero p { position:relative; z-index:1; max-width: 780px; color: var(--ink-mid); font-size: clamp(15px, 2vw, 19px); line-height:1.55; }
     .sound-lab-stats { position:relative; z-index:1; display:flex; flex-wrap:wrap; gap:10px; margin-top:24px; }
     .sound-lab-stats span { padding:10px 14px; border:1px solid rgba(255,255,255,.12); border-radius:999px; background:rgba(255,255,255,.055); color:var(--ink-mid); font-size:13px; }
+    .sound-view-toggle { display:inline-flex; gap:4px; margin:0 0 18px; padding:4px; border:1px solid rgba(255,255,255,.14); border-radius:999px; background:rgba(0,0,0,.22); }
+    .sound-view-toggle button { min-width:102px; height:38px; border:0; border-radius:999px; background:transparent; color:var(--ink-mid); cursor:pointer; font:inherit; font-size:13px; font-weight:800; }
+    .sound-view-toggle button:hover { color:var(--ink-hi); background:rgba(255,255,255,.06); }
+    .sound-view-toggle button.is-active { color:#10131c; background:var(--brand-gold); }
+    .sound-view-toggle button:focus-visible, .compact-play:focus-visible { outline:2px solid var(--brand-gold); outline-offset:3px; }
+    .sound-view-panel[hidden] { display:none; }
     .sound-grid { display:grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
     .sound-card { container-type:inline-size; position:relative; overflow:hidden; display:grid; gap:12px; min-width:0; padding:20px; border:1px solid rgba(255,255,255,.14); border-radius:24px; background: linear-gradient(145deg, rgba(4,10,22,.72), rgba(2,7,16,.54)); box-shadow: 0 16px 42px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.06); }
     .sound-card::before { content:""; position:absolute; inset:-40% -20% auto auto; width:180px; height:180px; border-radius:999px; background: radial-gradient(circle, rgba(110,203,255,.18), transparent 68%); }
@@ -89,6 +95,14 @@
     .sound-eq-slider::after { content:""; position:absolute; left:50%; top:50%; width:17px; height:1px; transform:translate(-50%, -50%); background:rgba(255,255,255,.42); }
     .sound-eq-slider-thumb { position:absolute; left:50%; top:var(--eq-thumb, 50%); width:22px; height:22px; transform:translate(-50%, -50%); border-radius:999px; background:var(--brand-gold); box-shadow:0 0 0 2px rgba(255,255,255,.44), 0 5px 14px rgba(0,0,0,.36), 0 0 14px rgba(232,197,122,.42); pointer-events:none; }
     .wavesurfer-enhanced .sound-card audio { position:absolute; width:1px; height:1px; opacity:0; pointer-events:none; }
+    .compact-sound-list { display:grid; gap:6px; padding:10px; border:1px solid rgba(255,255,255,.12); border-radius:20px; background:linear-gradient(180deg, rgba(4,10,22,.74), rgba(0,0,0,.24)); box-shadow:0 16px 42px rgba(0,0,0,.22), inset 0 1px 0 rgba(255,255,255,.05); }
+    .compact-sound-row { display:grid; grid-template-columns:44px minmax(0, 1fr) 58px; align-items:center; gap:10px; min-height:52px; padding:7px 10px; border:1px solid rgba(255,255,255,.08); border-radius:13px; background:rgba(255,255,255,.035); }
+    .compact-sound-row.is-playing { border-color:rgba(232,197,122,.32); background:rgba(232,197,122,.085); }
+    .compact-play { position:relative; display:grid; place-items:center; width:34px; height:34px; border:1px solid rgba(232,197,122,.34); border-radius:50%; background:rgba(232,197,122,.11); color:var(--brand-gold); cursor:pointer; }
+    .compact-play::before { content:""; margin-left:3px; width:0; height:0; border-top:7px solid transparent; border-bottom:7px solid transparent; border-left:11px solid currentColor; }
+    .compact-sound-row.is-playing .compact-play::before { margin-left:0; width:5px; height:16px; border:0; border-right:5px solid currentColor; border-left:5px solid currentColor; }
+    .compact-title { min-width:0; color:var(--ink-hi); font-size:14px; font-weight:800; line-height:1.25; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .compact-length { color:var(--ink-lo); font-size:12px; font-variant-numeric:tabular-nums; text-align:right; }
     .sound-note { margin-top:18px; padding:18px 20px; border:1px solid rgba(232,197,122,.16); border-radius:22px; background:rgba(232,197,122,.055); color:var(--ink-lo); }
     .sound-note strong { color: var(--ink-hi); }
     @media (max-width: 1160px) { .sound-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
@@ -149,6 +163,7 @@
     }
     @media (max-width: 620px) { .sound-player-controls { flex-wrap:wrap; gap:6px; } .sound-spacer { display:none; } .sound-time { flex:1 1 auto; } .sound-rate { gap:3px; } .sound-rate button { min-width:31px; } .sound-volume { flex:1 1 96px; min-width:94px; max-width:none; justify-content:center; padding-inline:6px; } .sound-volume input { min-width:52px; max-width:160px; } }
     @media (max-width: 520px) { .sound-player { padding:10px; } .sound-wave { height:82px; } .sound-spectrum { height:78px; } .sound-scrub { height:20px; } .sound-play { order:1; width:34px; height:34px; } .sound-play::before { left:13px; top:9px; } .sound-player.is-playing .sound-play::before { left:10px; top:8px; } .sound-rate { order:2; gap:3px; padding:0; } .sound-rate button { width:31px; min-width:31px; padding:0; font-size:9.5px; } .sound-volume { order:3; flex:1 1 96px; min-width:94px; max-width:none; gap:5px; justify-content:center; padding:0 6px; } .sound-volume input { min-width:52px; max-width:160px; } .sound-download { order:4; } .sound-time { order:5; flex:1 1 100%; min-width:0; font-size:11px; } .sound-eq-bands { gap:6px; } }
+    @media (max-width: 520px) { .sound-view-toggle { display:grid; grid-template-columns:1fr 1fr; width:100%; } .sound-view-toggle button { min-width:0; } .compact-sound-list { padding:7px; } .compact-sound-row { grid-template-columns:40px minmax(0, 1fr) 48px; gap:8px; padding:6px 8px; } .compact-title { font-size:13px; } }
     @media (max-width: 400px) { .sound-volume { flex-basis:88px; min-width:88px; padding-inline:6px; } .sound-volume input { min-width:46px; } }
     @media (max-width: 860px) { .desktop-hub { border-radius:0; } main.container { padding-inline:0; } .hub-main { padding:14px 10px 28px !important; } .sound-hero { border-radius:22px; } }
   </style>
@@ -181,7 +196,11 @@
           each track. Do not invent generic artwork without direction; use
           images Jez provides or explicitly approves for each track.
         -->
-        <section class="sound-grid" aria-label="AI-generated sound archive">
+        <div class="sound-view-toggle" role="group" aria-label="Sound page view">
+          <button type="button" class="is-active" data-sound-view="cards" aria-pressed="true">Full</button>
+          <button type="button" data-sound-view="compact" aria-pressed="false">Compact</button>
+        </div>
+        <section class="sound-view-panel sound-grid" data-sound-panel="cards" aria-label="AI-generated sound archive">
           <article class="sound-card" style="--i:0">
             <div class="sound-wave" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div>
             <div class="sound-card-copy">
@@ -591,6 +610,9 @@
             <audio controls preload="metadata" src="audio/20-marty-cat-metal-d2a2b60c-8974-4051-9674-bef28c352637.mp3"></audio>
           </article>
         </section>
+        <section class="sound-view-panel" data-sound-panel="compact" aria-label="Compact alphabetical song list" hidden>
+          <div class="compact-sound-list" data-compact-sound-list></div>
+        </section>
       </div>
     </section>
     <footer style="margin-top:60px;padding:30px 0;text-align:center;color:var(--ink-lo);font-size:13px;border-top:1px solid rgba(255,255,255,0.06);"><a href="https://github.com/jz237/jez237-site" target="_blank" rel="noopener" style="color:var(--brand-gold)">github.com/jz237/jez237-site</a></footer>
@@ -632,6 +654,130 @@
     ];
 
     document.documentElement.classList.add("wavesurfer-enhanced");
+
+    const compactExtras = [
+      {
+        title: "Marty the Cat - Bass Forward Funk Metal Theme (Edition 2)",
+        duration: "2:28",
+        src: "audio/17-marty-cat-slap-bass-edition-2-add11031-8839-49ee-8c19-462f41c2913c.mp3"
+      },
+      {
+        title: "Russ - Limited Edition Rock Opera Theme (Alt Take)",
+        duration: "2:30",
+        src: "audio/19-russ-limited-edition-rock-opera-1dcf5264-55c3-4861-b3b1-b5d9756d9857.mp3"
+      }
+    ];
+    const compactAudio = new Audio();
+    compactAudio.preload = "metadata";
+    let compactActiveRow = null;
+    const compactRows = [];
+    const pauseCompactPlayer = () => {
+      compactAudio.pause();
+      if (compactActiveRow) {
+        compactActiveRow.classList.remove("is-playing");
+        const activeButton = compactActiveRow.querySelector(".compact-play");
+        const title = compactActiveRow.querySelector(".compact-title")?.textContent.trim() || "track";
+        activeButton?.setAttribute("aria-label", `Play ${title}`);
+        activeButton?.setAttribute("aria-pressed", "false");
+      }
+      compactActiveRow = null;
+    };
+    const normalizeTrackSrc = (src) => {
+      try {
+        return new URL(src, window.location.href).pathname;
+      } catch (error) {
+        return src;
+      }
+    };
+    const buildCompactList = () => {
+      const compactList = document.querySelector("[data-compact-sound-list]");
+      if (!compactList) return;
+      const tracks = Array.from(document.querySelectorAll(".sound-card")).map((card) => {
+        const title = card.querySelector("h2")?.textContent.trim() || "Untitled";
+        const audio = card.querySelector("audio");
+        return {
+          title,
+          duration: card.querySelector(".sound-meta span")?.textContent.trim() || "0:00",
+          src: audio?.getAttribute("src") || audio?.currentSrc || audio?.src || ""
+        };
+      }).filter((track) => track.src);
+      const knownSrcs = new Set(tracks.map((track) => normalizeTrackSrc(track.src)));
+      compactExtras.forEach((track) => {
+        if (!knownSrcs.has(normalizeTrackSrc(track.src))) tracks.push(track);
+      });
+      tracks.sort((a, b) => a.title.localeCompare(b.title, undefined, { sensitivity: "base" }));
+
+      const fragment = document.createDocumentFragment();
+      tracks.forEach((track) => {
+        const row = document.createElement("div");
+        row.className = "compact-sound-row";
+
+        const play = document.createElement("button");
+        play.type = "button";
+        play.className = "compact-play";
+        play.dataset.src = track.src;
+        play.setAttribute("aria-label", `Play ${track.title}`);
+        play.setAttribute("aria-pressed", "false");
+
+        const title = document.createElement("span");
+        title.className = "compact-title";
+        title.textContent = track.title;
+
+        const length = document.createElement("span");
+        length.className = "compact-length";
+        length.textContent = track.duration;
+
+        play.addEventListener("click", () => {
+          const sameTrack = compactActiveRow === row && !compactAudio.paused;
+          if (sameTrack) {
+            pauseCompactPlayer();
+            return;
+          }
+          players.forEach((player) => {
+            if (player.isPlaying()) player.pause();
+          });
+          pauseCompactPlayer();
+          compactAudio.src = track.src;
+          compactActiveRow = row;
+          row.classList.add("is-playing");
+          play.setAttribute("aria-label", `Pause ${track.title}`);
+          play.setAttribute("aria-pressed", "true");
+          compactAudio.play().catch(() => pauseCompactPlayer());
+        });
+
+        row.append(play, title, length);
+        compactRows.push(row);
+        fragment.appendChild(row);
+      });
+      compactList.replaceChildren(fragment);
+    };
+    const setSoundView = (view) => {
+      const nextView = view === "compact" ? "compact" : "cards";
+      document.querySelectorAll("[data-sound-view]").forEach((button) => {
+        const active = button.dataset.soundView === nextView;
+        button.classList.toggle("is-active", active);
+        button.setAttribute("aria-pressed", active ? "true" : "false");
+      });
+      document.querySelectorAll("[data-sound-panel]").forEach((panel) => {
+        panel.hidden = panel.dataset.soundPanel !== nextView;
+      });
+      try {
+        localStorage.setItem("aiSoundsView", nextView);
+      } catch (error) {}
+    };
+    document.querySelectorAll("[data-sound-view]").forEach((button) => {
+      button.addEventListener("click", () => setSoundView(button.dataset.soundView));
+    });
+    buildCompactList();
+    try {
+      setSoundView(localStorage.getItem("aiSoundsView") || "cards");
+    } catch (error) {
+      setSoundView("cards");
+    }
+    compactAudio.addEventListener("ended", pauseCompactPlayer);
+    compactAudio.addEventListener("pause", () => {
+      if (compactAudio.ended) pauseCompactPlayer();
+    });
 
     document.querySelectorAll(".sound-card").forEach((card) => {
       const audio = card.querySelector("audio");
@@ -973,6 +1119,7 @@
           updateTime();
         });
         wavesurfer.on("play", () => {
+          pauseCompactPlayer();
           player.classList.add("is-playing");
           play.setAttribute("aria-label", "Pause track");
           startSpectrum();
