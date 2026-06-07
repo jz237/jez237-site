@@ -315,6 +315,7 @@
     els.lead.innerHTML = `
       <p class="section-label">${escapeHtml(chrome(issue, "lead", "label", "Top Computer Story"))}</p>
       <h2>${escapeHtml(issue.lead.headline)}</h2>
+      ${articleVisual(issue.lead.image)}
       <p>${escapeHtml(issue.lead.summary)}</p>
       ${confidenceBadge(issue.lead.confidence)}
       ${sourceLinks(issue, issue.lead.sourceRefs)}
@@ -340,6 +341,7 @@
         <span>Dow <strong>${escapeHtml(dow)}</strong></span>
         <span>Nasdaq <strong>${escapeHtml(nasdaq)}</strong></span>
       </div>
+      ${articleVisual(issue.market.image)}
       <p>${escapeHtml(issue.market.summary)}</p>
       ${confidenceBadge(issue.market.confidence)}
       ${sourceLinks(issue, issue.market.sourceRefs)}
@@ -405,6 +407,7 @@
         <p>${escapeHtml(issue.curiosity && issue.curiosity.summary)}</p>
         ${(issue.curiosity && issue.curiosity.detail) ? `<p class="curiosity-detail">${escapeHtml(issue.curiosity.detail)}</p>` : ""}
         ${confidenceBadge(issue.curiosity && issue.curiosity.confidence)}
+        ${sourceLinks(issue, issue.curiosity && issue.curiosity.sourceRefs)}
       `;
     }
 
@@ -415,6 +418,7 @@
           <strong>${escapeHtml(item.headline)}</strong>
           <p>${escapeHtml(item.summary)}</p>
           ${confidenceBadge(item.confidence)}
+          ${sourceLinks(issue, item.sourceRefs)}
         </li>
       `).join("");
     }
@@ -430,6 +434,7 @@
     els.fallback.innerHTML = `
       <p class="section-label">${escapeHtml(chrome(issue, "fallback", "label", "Fallback Lead"))}</p>
       <h2>${escapeHtml(issue.worldFallback.headline)}</h2>
+      ${articleVisual(issue.worldFallback.image)}
       <p>${escapeHtml(issue.worldFallback.summary)}</p>
       ${confidenceBadge(issue.worldFallback.confidence)}
       ${sourceLinks(issue, issue.worldFallback.sourceRefs)}
