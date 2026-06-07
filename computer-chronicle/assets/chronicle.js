@@ -212,6 +212,7 @@
     setText(els.nextHistoricDate, isoDate(nextHistoric));
     if (!els.nextAssignmentList) return;
     els.nextAssignmentList.innerHTML = [
+      "Archive yesterday's issue before replacing the current front page.",
       "Find exact-day computer, business, market, and world headlines first.",
       "Fill same-week personal-computer, software, games, BBS, and rock-radio context only when labeled.",
       "Rotate the hero image, article clippings, BBS digest, brief notices, ad reference, and layout profile.",
