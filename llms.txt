@@ -247,6 +247,10 @@ Editorial priority:
   later pipeline can lock the text to verified page data.
 - Keep source/confidence labels in the data. Do not turn context into
   fake exact-day claims.
+- Put source links near the article, sidebar, shelf item, chart, or ad
+  they support using item-level source references. The bottom source log
+  can remain as a research index, but readers should not have to hunt
+  there to see where a visible claim came from.
 - Include `accuracyLedger` for each issue. It should quickly count and
   explain exact-day items, same-week/current-period items, and period
   context/generated visual material so the morning issue has an audit

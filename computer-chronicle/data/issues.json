@@ -96,20 +96,23 @@
       "lead": {
         "headline": "Lotus Ends VisiCalc as 1-2-3 Era Takes Hold",
         "summary": "Lotus, already dominant in PC spreadsheets, discontinued VisiCalc during the week of this issue after acquiring Software Arts in 1985. The move marked a symbolic handoff from the Apple II spreadsheet age to the IBM PC business-software era.",
-        "confidence": "Same-week verified"
+        "confidence": "Same-week verified",
+        "sourceRefs": [1]
       },
       "computerItems": [
         {
           "label": "Hardware",
           "headline": "Low-Priced IBM Compatibles Crowd the PC Aisle",
           "summary": "InfoWorld's June 9 issue covered Epson's Equity II as a low-priced IBM-compatible challenger, a sign that clone competition was pushing business buyers toward cheaper PC-standard machines.",
-          "confidence": "Same-week issue"
+          "confidence": "Same-week issue",
+          "sourceRefs": [0]
         },
         {
           "label": "Software",
           "headline": "Desktop Publishing Keeps the Macintosh in the Office Conversation",
           "summary": "Aldus PageMaker, released for Macintosh in 1985, was still drawing serious trade-press attention in June 1986 as page layout became one of the Mac's clearest professional strengths.",
-          "confidence": "Same-week issue"
+          "confidence": "Same-week issue",
+          "sourceRefs": [0]
         },
         {
           "label": "Games",
@@ -121,13 +124,15 @@
             "caption": "Arcades stayed loud while new console and computer RPGs moved into bedrooms.",
             "confidence": "Period-style visual"
           },
-          "confidence": "Same-week verified"
+          "confidence": "Same-week verified",
+          "sourceRefs": [9, 4]
         },
         {
           "label": "Workstations",
           "headline": "IBM's RT PC Puts RISC on the Business Radar",
           "summary": "IBM's 1986 RT PC workstation brought RISC technology into IBM's product line, though early trade coverage treated it as important but not yet a sure threat to established workstation vendors.",
-          "confidence": "This-year verified"
+          "confidence": "This-year verified",
+          "sourceRefs": [10]
         }
       ],
       "market": {
@@ -135,56 +140,65 @@
         "summary": "The Dow finished at a record close on June 6, 1986. Nasdaq also edged higher, keeping the tech-heavy index near the 400 mark.",
         "dow": "1,885.90",
         "nasdaq": "400.25",
-        "confidence": "Exact-day close"
+        "confidence": "Exact-day close",
+        "sourceRefs": [3, 2]
       },
       "storeShelves": [
         {
           "name": "Super Mario Bros. 2",
           "platform": "Famicom Disk System",
           "detail": "New in Japan this week, and notably harder than the original Super Mario Bros.",
-          "confidence": "Same-week verified"
+          "confidence": "Same-week verified",
+          "sourceRefs": [9]
         },
         {
           "name": "Dragon Quest",
           "platform": "Famicom",
           "detail": "Fresh on Japanese shelves after its May 27 release; early console RPG history in real time.",
-          "confidence": "Recent release verified"
+          "confidence": "Recent release verified",
+          "sourceRefs": [4]
         },
         {
           "name": "The Bard's Tale",
           "platform": "Apple II; Commodore 64 in 1986",
           "detail": "A computer-RPG staple: Apple II first, with the C64 version part of the 1986 home-computer conversation.",
-          "confidence": "Current-year platform"
+          "confidence": "Current-year platform",
+          "sourceRefs": [5]
         },
         {
           "name": "Ultima IV: Quest of the Avatar",
           "platform": "Apple II, Commodore 64, IBM PC, Atari 8-bit",
           "detail": "Still one of the big home-computer RPGs people would compare everything else against.",
-          "confidence": "Period context"
+          "confidence": "Period context",
+          "sourceRefs": [6]
         },
         {
           "name": "Leader Board",
           "platform": "Commodore 64",
           "detail": "Access Software's golf game was a 1986 C64 favorite, exactly the sort of title that made rounds in computer rooms.",
-          "confidence": "Current-year platform"
+          "confidence": "Current-year platform",
+          "sourceRefs": [7]
         },
         {
           "name": "Gauntlet",
           "platform": "Arcade",
           "detail": "Still a loud, four-player arcade magnet while home-computer players chased fantasy RPGs at the desk.",
-          "confidence": "Period context"
+          "confidence": "Period context",
+          "sourceRefs": [8]
         },
         {
           "name": "Lotus 1-2-3",
           "platform": "IBM PC compatibles",
           "detail": "The business spreadsheet standard for IBM-compatible offices.",
-          "confidence": "Context verified"
+          "confidence": "Context verified",
+          "sourceRefs": [1]
         },
         {
           "name": "Aldus PageMaker",
           "platform": "Macintosh",
           "detail": "A defining Macintosh desktop-publishing application in current trade coverage.",
-          "confidence": "Context verified"
+          "confidence": "Context verified",
+          "sourceRefs": [0]
         }
       ],
       "priceWatch": [
@@ -241,7 +255,8 @@
             "platform": "Commodore 64"
           }
         ],
-        "confidence": "Period-style daily digest"
+        "confidence": "Period-style daily digest",
+        "sourceRefs": [9, 4, 7]
       },
       "curiosity": {
         "headline": "A 1200-Baud Modem Was Fast Enough to Feel Like the Future",
@@ -317,6 +332,7 @@
         "caption": "Rock radio, cassette collecting, and electronics tinkering belonged to the same bedroom ecosystem.",
         "confidence": "Period-style visual"
       },
+      "musicChartSourceRefs": [12],
       "periodAd": {
         "headline": "Epson Equity Computers and LQ-1000 Printer",
         "summary": "A real 1986 two-page Epson ad used the caption \"The Power. The Glory\" to promote Epson Equity computers and the LQ-1000 printer.",
@@ -326,7 +342,8 @@
       "worldFallback": {
         "headline": "Chernobyl Evacuees Face Housing Deadline",
         "summary": "UPI reported on June 6, 1986 that Soviet officials were treating housing for Chernobyl evacuees as a Politburo priority, with an October deadline for relocated residents.",
-        "confidence": "Exact-day archive item"
+        "confidence": "Exact-day archive item",
+        "sourceRefs": [13]
       },
       "accuracyLedger": {
         "items": [
