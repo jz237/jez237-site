@@ -644,6 +644,14 @@
       const compactAudio = new Audio();
       compactAudio.preload = "metadata";
       let compactActiveRow = null;
+      const sortTracks = (tracks) => tracks
+        .filter((track) => track && track.src)
+        .sort((a, b) => a.title.localeCompare(b.title, undefined, { sensitivity: "base" }) || a.src.localeCompare(b.src));
+      const trackDatabasePromise = fetch("tracks.json", { cache: "no-cache" })
+        .then((response) => response.ok ? response.json() : Promise.reject(new Error("Could not load tracks.json")))
+        .then((tracks) => Array.isArray(tracks) ? tracks : [])
+        .then(sortTracks)
+        .catch(() => null);
       const normalizeTrackSrc = (src) => {
         try {
           return new URL(src, window.location.href).pathname;
@@ -662,9 +670,7 @@
         }
         compactActiveRow = null;
       };
-      const buildCompactListFallback = () => {
-        const compactList = document.querySelector("[data-compact-sound-list]");
-        if (!compactList) return;
+      const cardTracksFallback = () => {
         const tracks = Array.from(document.querySelectorAll(".sound-card")).map((card) => {
           const title = card.querySelector("h2")?.textContent.trim() || "Untitled";
           const audio = card.querySelector("audio");
@@ -678,7 +684,17 @@
         compactExtras.forEach((track) => {
           if (!knownSrcs.has(normalizeTrackSrc(track.src))) tracks.push(track);
         });
-        tracks.sort((a, b) => a.title.localeCompare(b.title, undefined, { sensitivity: "base" }));
+        return sortTracks(tracks);
+      };
+      const getCompactTracks = async () => {
+        const databaseTracks = await trackDatabasePromise;
+        return databaseTracks || cardTracksFallback();
+      };
+      window.aiSoundsCompactTracks = getCompactTracks;
+      const buildCompactListFallback = async () => {
+        const compactList = document.querySelector("[data-compact-sound-list]");
+        if (!compactList) return;
+        const tracks = await getCompactTracks();
 
         const fragment = document.createDocumentFragment();
         tracks.forEach((track) => {
@@ -784,18 +800,6 @@
 
     document.documentElement.classList.add("wavesurfer-enhanced");
 
-    const compactExtras = [
-      {
-        title: "Marty the Cat - Bass Forward Funk Metal Theme (Edition 2)",
-        duration: "2:28",
-        src: "audio/17-marty-cat-slap-bass-edition-2-add11031-8839-49ee-8c19-462f41c2913c.mp3"
-      },
-      {
-        title: "Russ - Limited Edition Rock Opera Theme (Alt Take)",
-        duration: "2:30",
-        src: "audio/19-russ-limited-edition-rock-opera-1dcf5264-55c3-4861-b3b1-b5d9756d9857.mp3"
-      }
-    ];
     const compactAudio = new Audio();
     compactAudio.preload = "metadata";
     let compactActiveRow = null;
@@ -811,30 +815,11 @@
       }
       compactActiveRow = null;
     };
-    const normalizeTrackSrc = (src) => {
-      try {
-        return new URL(src, window.location.href).pathname;
-      } catch (error) {
-        return src;
-      }
-    };
-    const buildCompactList = () => {
+    const buildCompactList = async () => {
       const compactList = document.querySelector("[data-compact-sound-list]");
       if (!compactList) return;
-      const tracks = Array.from(document.querySelectorAll(".sound-card")).map((card) => {
-        const title = card.querySelector("h2")?.textContent.trim() || "Untitled";
-        const audio = card.querySelector("audio");
-        return {
-          title,
-          duration: card.querySelector(".sound-meta span")?.textContent.trim() || "0:00",
-          src: audio?.getAttribute("src") || audio?.currentSrc || audio?.src || ""
-        };
-      }).filter((track) => track.src);
-      const knownSrcs = new Set(tracks.map((track) => normalizeTrackSrc(track.src)));
-      compactExtras.forEach((track) => {
-        if (!knownSrcs.has(normalizeTrackSrc(track.src))) tracks.push(track);
-      });
-      tracks.sort((a, b) => a.title.localeCompare(b.title, undefined, { sensitivity: "base" }));
+      const tracks = await window.aiSoundsCompactTracks();
+      compactRows.length = 0;
 
       const fragment = document.createDocumentFragment();
       tracks.forEach((track) => {
