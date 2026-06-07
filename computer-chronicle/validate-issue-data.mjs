@@ -103,6 +103,9 @@ function checkRendererShapes(issue, issueIndex) {
     if (!item.name || !item.detail) {
       fail(`Issue ${issueIndex}: softwareList[${itemIndex}] must include name and detail.`);
     }
+    if (/^#?\d*\.?\s*(spreadsheet|word processor|database|utility|business software|productivity software|game|educational software|programming language)$/i.test(item.name || "")) {
+      fail(`Issue ${issueIndex}: softwareList[${itemIndex}] must use a named software title, not a generic category.`);
+    }
   });
 
   (issue.pictureDesk || []).forEach((item, itemIndex) => {
