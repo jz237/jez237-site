@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-07T16:00:01.571538+00:00",
+  "updatedAt": "2026-06-07T16:42:13.437720+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -9548,6 +9548,10 @@
     "https://www.theverge.com/ai-artificial-intelligence/943187/ai-content-creators": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/GAUYdq3a4AAAlsX.jpg?quality=90&amp;strip=all&amp;crop=0%2C0.6699364330709%2C100%2C78.534031413613&amp;w=1200",
       "checkedAt": "2026-06-07T13:00:01.833652+00:00"
+    },
+    "https://techcrunch.com/2026/06/07/openai-is-still-working-on-that-super-app": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/02/GettyImages-2195918462.jpg?w=1024",
+      "checkedAt": "2026-06-07T16:42:13.437720+00:00"
     }
   }
 }
