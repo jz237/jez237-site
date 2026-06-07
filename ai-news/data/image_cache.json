@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-07T18:17:27.652148+00:00",
+  "updatedAt": "2026-06-07T20:00:01.218825+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -9556,6 +9556,10 @@
     "https://techcrunch.com/2026/06/07/notion-restores-access-to-anthropic-after-service-disruption": {
       "image": "https://techcrunch.com/wp-content/uploads/2021/02/notion-glitch-hero.jpg?resize=1200,827",
       "checkedAt": "2026-06-07T18:00:01.801509+00:00"
+    },
+    "https://huggingface.co/blog/build-small-hackathon/amazingdigitaldentures": {
+      "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/build-small-hackathon/amazingdigitaldentures.png",
+      "checkedAt": "2026-06-07T20:00:01.218825+00:00"
     }
   }
 }
