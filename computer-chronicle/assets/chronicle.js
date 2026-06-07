@@ -19,6 +19,9 @@
     lead: document.querySelector("[data-lead]"),
     computerItems: document.querySelector("[data-computer-items]"),
     market: document.querySelector("[data-market]"),
+    issueBudgetLabel: document.querySelector("[data-issue-budget-label]"),
+    issueBudgetTitle: document.querySelector("[data-issue-budget-title]"),
+    issueBudget: document.querySelector("[data-issue-budget]"),
     storeShelvesLabel: document.querySelector("[data-store-shelves-label]"),
     storeShelvesTitle: document.querySelector("[data-store-shelves-title]"),
     storeShelvesImage: document.querySelector("[data-store-shelves-image]"),
@@ -129,6 +132,8 @@
     setText(els.storeShelvesTitle, chrome(issue, "storeShelves", "title", "Games, Software & Platforms People Could Talk About"));
     setText(els.priceWatchLabel, chrome(issue, "priceWatch", "label", "Price Watch"));
     setText(els.priceWatchTitle, chrome(issue, "priceWatch", "title", "What It Cost"));
+    setText(els.issueBudgetLabel, chrome(issue, "issueBudget", "label", "Editor's Budget"));
+    setText(els.issueBudgetTitle, chrome(issue, "issueBudget", "title", "What Gets Ink Today"));
     setText(els.briefsLabel, chrome(issue, "briefs", "label", "Small Notices"));
     setText(els.briefsTitle, chrome(issue, "briefs", "title", "Other Things on the Desk"));
     setText(els.musicLabel, chrome(issue, "music", "label", "Rock Radio Top 10"));
@@ -177,7 +182,7 @@
   function applyLayoutPlan(issue) {
     const defaults = {
       main: ["editor-note", "lead", "computer-items", "store-shelves"],
-      sidebar: ["market", "price-watch", "bbs", "curiosity", "music", "period-ad", "fallback", "accuracy", "sources", "verification"],
+      sidebar: ["market", "budget", "price-watch", "bbs", "curiosity", "music", "period-ad", "fallback", "accuracy", "sources", "verification"],
     };
     const plan = (issue && issue.layoutPlan) || {};
 
@@ -283,6 +288,7 @@
       `;
       els.computerItems.innerHTML = "";
       els.market.innerHTML = "";
+      if (els.issueBudget) els.issueBudget.innerHTML = "";
       if (els.storeShelvesImage) els.storeShelvesImage.innerHTML = "";
       els.storeShelves.innerHTML = "";
       els.priceWatch.innerHTML = "";
@@ -346,6 +352,18 @@
       ${confidenceBadge(issue.market.confidence)}
       ${sourceLinks(issue, issue.market.sourceRefs)}
     `;
+
+    if (els.issueBudget) {
+      els.issueBudget.innerHTML = (issue.issueBudget || []).map((item) => `
+        <li>
+          <span>${escapeHtml(item.priority || item.slot || "Desk")}</span>
+          <p>
+            <strong>${escapeHtml(item.slot || "Story")}</strong>
+            <em>${escapeHtml(item.title || "")}</em>
+          </p>
+        </li>
+      `).join("");
+    }
 
     if (els.storeShelvesImage) els.storeShelvesImage.innerHTML = articleVisual(issue.storeShelvesImage);
 
