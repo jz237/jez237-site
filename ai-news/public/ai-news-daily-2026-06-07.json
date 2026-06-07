@@ -1,6 +1,6 @@
 {
   "date": "2026-06-07",
-  "updatedAt": "2026-06-07T18:00:01.801509+00:00",
+  "updatedAt": "2026-06-07T19:00:01.697914+00:00",
   "items": [
     {
       "title": "v0.30.6",
@@ -13,14 +13,14 @@
       "image": "https://opengraph.githubassets.com/60f61760c34b89ae6fa1dcf45ef6572c285dc5ed3f2717d4816dcd473e0f774a/ollama/ollama",
       "published": "2026-06-07T00:12:11+00:00",
       "firstSeen": "2026-06-05T07:00:01.980033+00:00",
-      "lastSeen": "2026-06-07T18:00:01.801509+00:00",
+      "lastSeen": "2026-06-07T19:00:01.697914+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 19.5309
+      "score": 19.5126
     },
     {
-      "title": "Claude Opus 4.8 scores 88.6% on SWE-bench Verified, 74.6% on Terminal-Bench 2.1, 1890 Elo on GDPval-AA, with parallel-subagent workflows and a 2.5x fast mode. Same $5/$25 pricing.",
+      "title": "Claude Opus 4.8 Release, Benchmarks And More",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -28,13 +28,13 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-07T18:00:11.697487+00:00",
+      "published": "2026-06-07T19:00:07.446149+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-07T18:00:01.801509+00:00",
+      "lastSeen": "2026-06-07T19:00:01.697914+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 19.36
+      "score": 17.71
     },
     {
       "title": "v0.30.3",
@@ -47,11 +47,11 @@
       "image": "https://opengraph.githubassets.com/d5b7f056beb356a12c1648fe196566daf924d0261bc41e94a1b0964d3f125691/ollama/ollama",
       "published": "2026-06-07T00:08:34+00:00",
       "firstSeen": "2026-06-03T15:00:01.428377+00:00",
-      "lastSeen": "2026-06-07T18:00:01.801509+00:00",
+      "lastSeen": "2026-06-07T19:00:01.697914+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.0298
+      "score": 14.0115
     },
     {
       "title": "OpenAI adds Lockdown Mode to ChatGPT to block data theft from prompt injection attacks",
@@ -64,10 +64,10 @@
       "image": "https://media.thenextweb.com/2026/06/chatgpt-lockdown-mode-prompt-injection.avif",
       "published": "2026-06-07T09:14:51+00:00",
       "firstSeen": "2026-06-07T11:00:02.040408+00:00",
-      "lastSeen": "2026-06-07T18:00:01.801509+00:00",
+      "lastSeen": "2026-06-07T19:00:01.697914+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.0126
+      "score": 11.9889
     },
     {
       "title": "Her · हेर — a detective for your Claude Code sessions",
@@ -83,7 +83,7 @@
       "lastSeen": "2026-06-07T11:00:02.040408+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.2164
+      "score": 8.1921
     },
     {
       "title": "v0.30.5",
@@ -96,10 +96,10 @@
       "image": "https://opengraph.githubassets.com/0e91974d2670184a86dc2744ca7430b594da6357fbbc3ba255625eaa4296fd9a/ollama/ollama",
       "published": "2026-06-07T00:09:50+00:00",
       "firstSeen": "2026-06-04T20:00:01.481282+00:00",
-      "lastSeen": "2026-06-07T18:00:01.801509+00:00",
+      "lastSeen": "2026-06-07T19:00:01.697914+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 6.8302
+      "score": 6.8119
     },
     {
       "title": "OpenAI is still working on that ‘super app’",
@@ -112,10 +112,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/02/GettyImages-2195918462.jpg?w=1024",
       "published": "2026-06-07T16:23:22+00:00",
       "firstSeen": "2026-06-07T16:42:13.437720+00:00",
-      "lastSeen": "2026-06-07T18:00:01.801509+00:00",
+      "lastSeen": "2026-06-07T19:00:01.697914+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.3419
+      "score": 6.313
     },
     {
       "title": "Notion restores access to Anthropic after service disruption",
@@ -128,10 +128,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2021/02/notion-glitch-hero.jpg?resize=1200%2C827",
       "published": "2026-06-07T17:56:22+00:00",
       "firstSeen": "2026-06-07T18:00:01.801509+00:00",
-      "lastSeen": "2026-06-07T18:00:01.801509+00:00",
+      "lastSeen": "2026-06-07T19:00:01.697914+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2881
+      "score": 5.2581
     },
     {
       "title": "Sponsors especially OPENAI CODEX voucher usage for codex - openAI challange",
@@ -144,10 +144,10 @@
       "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/build-small-hackathon/sponsors-vouchers.png",
       "published": "2026-06-07T11:38:54+00:00",
       "firstSeen": "2026-06-07T12:00:01.303636+00:00",
-      "lastSeen": "2026-06-07T18:00:01.801509+00:00",
+      "lastSeen": "2026-06-07T19:00:01.697914+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2521
+      "score": 5.2268
     },
     {
       "title": "NVIDIA, KRAFTON, NC and Reigning ‘League of Legends’ Champions T1 Celebrate RTX Spark at Korea’s PC Bangs",
@@ -160,10 +160,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/jhh-t1-group-photo-1920x1080-1.jpg",
       "published": "2026-06-07T07:00:15+00:00",
       "firstSeen": "2026-06-07T08:00:01.302481+00:00",
-      "lastSeen": "2026-06-07T18:00:01.801509+00:00",
+      "lastSeen": "2026-06-07T19:00:01.697914+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.7005
+      "score": 3.6783
     },
     {
       "title": "Trump’s top AI adviser Sriram Krishnan is stepping down from the White House",
@@ -176,10 +176,10 @@
       "image": "https://media.thenextweb.com/2026/06/sriram-krishnan-leaves-white-house-ai-adviser.avif",
       "published": "2026-06-07T08:36:49+00:00",
       "firstSeen": "2026-06-07T09:32:42.542335+00:00",
-      "lastSeen": "2026-06-07T18:00:01.801509+00:00",
+      "lastSeen": "2026-06-07T19:00:01.697914+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9975
+      "score": 2.9743
     },
     {
       "title": "AI ‘content creators’ are getting harder to spot",
@@ -192,10 +192,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/GAUYdq3a4AAAlsX.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C0.6699364330709%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-07T12:00:00+00:00",
       "firstSeen": "2026-06-07T13:00:01.833652+00:00",
-      "lastSeen": "2026-06-07T18:00:01.801509+00:00",
+      "lastSeen": "2026-06-07T19:00:01.697914+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1911
+      "score": 2.1656
     }
   ],
   "errors": [
