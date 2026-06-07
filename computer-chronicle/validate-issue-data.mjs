@@ -148,6 +148,30 @@ function checkPublicSafety(issue, issueIndex) {
   });
 }
 
+function checkMagazineCoverClaims(issue, issueIndex) {
+  let claimsMagazineCover = false;
+  walk(issue, (value) => {
+    if (typeof value !== "string") return;
+    if (/\b(on the cover|cover promises|cover-featured|cover\/table|cover and table of contents|issue'?s cover)\b/i.test(value)) {
+      claimsMagazineCover = true;
+    }
+  });
+
+  if (!claimsMagazineCover) return;
+
+  const hasActualCoverImage = (issue.pictureDesk || []).some((item) => {
+    const image = item.image || item;
+    const text = `${item.title || ""} ${item.note || ""} ${image.alt || ""} ${image.caption || ""} ${image.confidence || ""}`;
+    const generated = /generated|AI-generated|period-style visual/i.test(text);
+    const actual = /cover/i.test(text) && /source image|archive image|actual cover|cover scan|cover gallery/i.test(text);
+    return Boolean(image.src) && actual && !generated;
+  });
+
+  if (!hasActualCoverImage) {
+    fail(`Issue ${issueIndex}: magazine-cover wording requires an actual source/archive cover image in pictureDesk.`);
+  }
+}
+
 if (!Array.isArray(data.issues)) {
   fail("Top-level issues must be an array.");
 }
@@ -178,6 +202,7 @@ issues.forEach((issue, index) => {
   checkImages(issue, index);
   checkRendererShapes(issue, index);
   checkPublicSafety(issue, index);
+  checkMagazineCoverClaims(issue, index);
 });
 
 const sorted = issues.every((issue, index, list) => {
