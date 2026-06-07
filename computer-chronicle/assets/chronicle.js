@@ -22,6 +22,10 @@
     lightboxImage: document.querySelector("[data-lightbox-image]"),
     lead: document.querySelector("[data-lead]"),
     computerItems: document.querySelector("[data-computer-items]"),
+    softwarePanel: document.querySelector("[data-software-panel]"),
+    softwareLabel: document.querySelector("[data-software-label]"),
+    softwareTitle: document.querySelector("[data-software-title]"),
+    softwareList: document.querySelector("[data-software-list]"),
     market: document.querySelector("[data-market]"),
     issueBudgetLabel: document.querySelector("[data-issue-budget-label]"),
     issueBudgetTitle: document.querySelector("[data-issue-budget-title]"),
@@ -136,6 +140,8 @@
   function applySectionChrome(issue) {
     setText(els.storeShelvesLabel, chrome(issue, "storeShelves", "label", "On Store Shelves"));
     setText(els.storeShelvesTitle, chrome(issue, "storeShelves", "title", "Games, Software & Platforms People Could Talk About"));
+    setText(els.softwareLabel, chrome(issue, "software", "label", "Software Top 5"));
+    setText(els.softwareTitle, chrome(issue, "software", "title", "New & Notable Software"));
     setText(els.priceWatchLabel, chrome(issue, "priceWatch", "label", "Price Watch"));
     setText(els.priceWatchTitle, chrome(issue, "priceWatch", "title", "What It Cost"));
     setText(els.issueBudgetLabel, chrome(issue, "issueBudget", "label", "Editor's Budget"));
@@ -218,7 +224,7 @@
 
   function applyLayoutPlan(issue) {
     const defaults = {
-      main: ["editor-note", "lead", "computer-items", "store-shelves"],
+      main: ["editor-note", "lead", "computer-items", "software", "store-shelves"],
       sidebar: ["market", "budget", "price-watch", "bbs", "curiosity", "music", "period-ad", "fallback", "accuracy", "sources", "verification"],
     };
     const plan = (issue && issue.layoutPlan) || {};
@@ -326,6 +332,8 @@
         ${confidenceBadge("Not researched yet")}
       `;
       els.computerItems.innerHTML = "";
+      if (els.softwarePanel) els.softwarePanel.hidden = true;
+      if (els.softwareList) els.softwareList.innerHTML = "";
       els.market.innerHTML = "";
       if (els.issueBudget) els.issueBudget.innerHTML = "";
       if (els.storeShelvesImage) els.storeShelvesImage.innerHTML = "";
@@ -376,6 +384,20 @@
         ${sourceLinks(issue, item.sourceRefs)}
       </article>
     `).join("");
+
+    const softwareItems = Array.isArray(issue.softwareList) ? issue.softwareList : [];
+    if (els.softwarePanel) els.softwarePanel.hidden = softwareItems.length === 0;
+    if (els.softwareList) {
+      els.softwareList.innerHTML = softwareItems.map((item) => `
+        <li>
+          <strong>${escapeHtml(item.name)}</strong>
+          ${item.platform ? `<span class="platform-tag">${escapeHtml(item.platform)}</span>` : ""}
+          <span>${escapeHtml(item.detail)}</span>
+          ${confidenceBadge(item.confidence)}
+          ${sourceLinks(issue, item.sourceRefs)}
+        </li>
+      `).join("");
+    }
 
     const dow = issue.market.dow || "pending";
     const nasdaq = issue.market.nasdaq || "pending";
