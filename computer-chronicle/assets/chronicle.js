@@ -206,19 +206,20 @@
     return String(days + 1).padStart(3, "0");
   }
 
-  function applyNextAssignment(currentIso) {
+  function applyNextAssignment(currentIso, issue) {
     const currentDate = new Date(`${currentIso}T00:00:00`);
     const nextCurrent = addDays(currentDate, 1);
-    const nextHistoric = minusYears(nextCurrent, 40);
+    const issueHistoric = issue && issue.historicDate ? new Date(`${issue.historicDate}T00:00:00`) : minusYears(nextCurrent, 40);
+    const nextHistoric = issue && issue.historicDate ? addDays(issueHistoric, 7) : minusYears(nextCurrent, 40);
     setText(els.nextCurrentDate, isoDate(nextCurrent));
-    setText(els.nextHistoricDate, isoDate(nextHistoric));
+    setText(els.nextHistoricDate, issue && issue.historicDate ? `Week of ${isoDate(nextHistoric)}` : isoDate(nextHistoric));
     if (!els.nextAssignmentList) return;
     els.nextAssignmentList.innerHTML = [
-      "Archive yesterday's issue before replacing the current front page.",
-      "Find exact-day computer, business, market, and world headlines first.",
-      "Fill same-week personal-computer, software, games, BBS, and rock-radio context only when labeled.",
-      "Rotate the hero image, article clippings, BBS digest, brief notices, ad reference, and layout profile.",
-      "Update the accuracy ledger before a print/PDF or newspaper image is generated.",
+      "Archive the current weekly issue before replacing the front page.",
+      "Lead with personal-computer, hardware, game, and culture items from the next 1982 week.",
+      "Include release dates for games and clear confidence labels for same-week context.",
+      "Refresh the GPT Image 2 newspaper front image, hero caption, chart lists, and retail-ad flavor.",
+      "Update the accuracy ledger before the web page and Discord image are posted.",
     ].map((item) => `<li>${escapeHtml(item)}</li>`).join("");
   }
 
@@ -279,7 +280,7 @@
     applyHeroImage(issue);
     applyLayoutPlan(issue);
     applySectionChrome(issue);
-    applyNextAssignment(currentIso);
+    applyNextAssignment(currentIso, issue);
 
     if (!issue) {
       els.status.textContent = "No researched issue has been loaded for this date yet.";
