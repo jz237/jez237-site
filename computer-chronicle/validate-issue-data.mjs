@@ -7,6 +7,7 @@ const dataPath = path.join(root, "data", "issues.json");
 const data = JSON.parse(fs.readFileSync(dataPath, "utf8"));
 const errors = [];
 const warnings = [];
+const weekly1982Mode = data.mode === "weekly-1982";
 
 function fail(message) {
   errors.push(message);
@@ -101,7 +102,7 @@ const seenCurrentDates = new Set();
 issues.forEach((issue, index) => {
   if (!isIsoDate(issue.currentDate)) fail(`Issue ${index}: currentDate must be YYYY-MM-DD.`);
   if (!isIsoDate(issue.historicDate)) fail(`Issue ${index}: historicDate must be YYYY-MM-DD.`);
-  if (issue.currentDate && issue.historicDate && !dateDiffYears(issue.currentDate, issue.historicDate)) {
+  if (!weekly1982Mode && issue.currentDate && issue.historicDate && !dateDiffYears(issue.currentDate, issue.historicDate)) {
     fail(`Issue ${index}: historicDate must be exactly 40 years before currentDate.`);
   }
   if (seenCurrentDates.has(issue.currentDate)) fail(`Issue ${index}: duplicate currentDate ${issue.currentDate}.`);
