@@ -35,6 +35,7 @@
     musicTitle: document.querySelector("[data-music-title]"),
     musicChartImage: document.querySelector("[data-music-chart-image]"),
     musicChart: document.querySelector("[data-music-chart]"),
+    musicSources: document.querySelector("[data-music-sources]"),
     ad: document.querySelector("[data-period-ad]"),
     fallback: document.querySelector("[data-fallback]"),
     accuracyLabel: document.querySelector("[data-accuracy-label]"),
@@ -84,6 +85,22 @@
   function confidenceBadge(text) {
     const value = escapeHtml(text || "Unlabeled");
     return `<span class="confidence">${value}</span>`;
+  }
+
+  function sourceName(source) {
+    if (!source || !source.name) return "Source";
+    return source.name.replace(/^(InfoWorld|MobyGames|FRED|CountryEconomy|Arcade History|Vintage Paper Ads|Tunecaster|UPI Archives)[:,]?\s*/i, "").trim();
+  }
+
+  function sourceLinks(issue, refs) {
+    if (!issue || !Array.isArray(refs) || !refs.length) return "";
+    const links = refs
+      .map((index) => issue.sources && issue.sources[index])
+      .filter((source) => source && source.url)
+      .map((source) => `<a href="${escapeHtml(source.url)}" target="_blank" rel="noopener">${escapeHtml(sourceName(source))}</a>`);
+
+    if (!links.length) return "";
+    return `<p class="article-sources"><span>Sources</span>${links.join("")}</p>`;
   }
 
   function articleVisual(image) {
@@ -274,6 +291,7 @@
       if (els.briefs) els.briefs.innerHTML = "";
       if (els.musicChartImage) els.musicChartImage.innerHTML = "";
       if (els.musicChart) els.musicChart.innerHTML = "";
+      if (els.musicSources) els.musicSources.innerHTML = "";
       els.ad.innerHTML = "";
       els.fallback.innerHTML = "";
       if (els.accuracy) els.accuracy.innerHTML = "";
@@ -299,6 +317,7 @@
       <h2>${escapeHtml(issue.lead.headline)}</h2>
       <p>${escapeHtml(issue.lead.summary)}</p>
       ${confidenceBadge(issue.lead.confidence)}
+      ${sourceLinks(issue, issue.lead.sourceRefs)}
     `;
 
     els.computerItems.innerHTML = issue.computerItems.map((item) => `
@@ -308,6 +327,7 @@
         ${articleVisual(item.image)}
         <p>${escapeHtml(item.summary)}</p>
         ${confidenceBadge(item.confidence)}
+        ${sourceLinks(issue, item.sourceRefs)}
       </article>
     `).join("");
 
@@ -322,6 +342,7 @@
       </div>
       <p>${escapeHtml(issue.market.summary)}</p>
       ${confidenceBadge(issue.market.confidence)}
+      ${sourceLinks(issue, issue.market.sourceRefs)}
     `;
 
     if (els.storeShelvesImage) els.storeShelvesImage.innerHTML = articleVisual(issue.storeShelvesImage);
@@ -332,6 +353,7 @@
         ${item.platform ? `<span class="platform-tag">${escapeHtml(item.platform)}</span>` : ""}
         <span>${escapeHtml(item.detail)}</span>
         ${confidenceBadge(item.confidence)}
+        ${sourceLinks(issue, item.sourceRefs)}
       </li>
     `).join("");
 
@@ -360,6 +382,7 @@
         </ul>
       ` : ""}
       ${confidenceBadge(issue.bbsNote && issue.bbsNote.confidence)}
+      ${sourceLinks(issue, issue.bbsNote && issue.bbsNote.sourceRefs)}
     `;
 
     if (els.musicChart) {
@@ -372,6 +395,7 @@
           </p>
         </li>
       `).join("");
+      if (els.musicSources) els.musicSources.innerHTML = sourceLinks(issue, issue.musicChartSourceRefs);
     }
 
     if (els.curiosity) {
@@ -408,6 +432,7 @@
       <h2>${escapeHtml(issue.worldFallback.headline)}</h2>
       <p>${escapeHtml(issue.worldFallback.summary)}</p>
       ${confidenceBadge(issue.worldFallback.confidence)}
+      ${sourceLinks(issue, issue.worldFallback.sourceRefs)}
     `;
 
     if (els.accuracy) {
