@@ -226,6 +226,23 @@
     ].filter((item) => item.text);
   }
 
+  function applyIssueStatus(issue, currentIso, historicIso) {
+    if (!els.status) return;
+    const requested = new URLSearchParams(window.location.search).get("date");
+    const matchesToday = issue && (issue.currentDate === currentIso || issue.historicDate === historicIso);
+
+    if (requested) {
+      els.status.textContent = "Archive issue loaded from structured issue data.";
+      els.status.dataset.statusState = "archive";
+    } else if (matchesToday) {
+      els.status.textContent = "Today's researched issue is loaded from structured issue data.";
+      els.status.dataset.statusState = "current";
+    } else {
+      els.status.textContent = "Latest researched issue shown. Today's exact issue has not been loaded yet.";
+      els.status.dataset.statusState = "stale";
+    }
+  }
+
   function renderIssue(issue, currentIso, historicIso) {
     els.currentDate.textContent = currentIso;
     els.historicDate.textContent = issue ? issue.displayDate : historicIso;
@@ -241,6 +258,7 @@
 
     if (!issue) {
       els.status.textContent = "No researched issue has been loaded for this date yet.";
+      if (els.status) els.status.dataset.statusState = "missing";
       els.lead.innerHTML = `
         <h2>Research Queue</h2>
         <p>This date needs a verified computer-news pass before a newspaper image is generated.</p>
@@ -266,7 +284,7 @@
       return;
     }
 
-    els.status.textContent = "Loaded from structured issue data.";
+    applyIssueStatus(issue, currentIso, historicIso);
     els.editorNote.textContent = issue.editorNote || "Personal computers and personal computer gaming are the editorial priority when source choices compete.";
     if (els.frontPageIndex) {
       els.frontPageIndex.innerHTML = frontPageItems(issue).map((item) => `
