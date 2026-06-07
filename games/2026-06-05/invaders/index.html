@@ -539,7 +539,7 @@
       <div class="overlay" id="overlay">
         <div class="panel">
           <h1>Invaders</h1>
-          <div class="title-version">v1.41</div>
+          <div class="title-version">v1.42</div>
           <p class="tagline" id="message">A modernized arcade defense run: punch through waves, catch power cores, and survive the boss carrier.</p>
           <div class="enemy-roster" aria-label="Enemy ship guide">
             <h2>Enemy Ships</h2>
@@ -569,7 +569,7 @@
         <button id="rightButton" type="button">→</button>
         <button id="fireButton" type="button">FIRE</button>
       </div>
-      <div class="version" aria-hidden="true">v1.41</div>
+      <div class="version" aria-hidden="true">v1.42</div>
     </section>
   </main>
 
@@ -1323,12 +1323,12 @@
               inv.diveStartY = inv.y;
             }
           } else if (inv.divePhase === "swoop") {
-            const duration = clamp(1.25 - game.wave * 0.015, 0.88, 1.25);
+            const duration = clamp(1.55 - game.wave * 0.012, 1.08, 1.55);
             const t = clamp(inv.diveTime / duration, 0, 1);
             const ease = t * t * (3 - 2 * t);
             const targetX = p.x;
             const targetY = p.y - 8;
-            const sway = Math.sin(t * Math.PI * 2.15) * (game.width < 560 ? 42 : 72) * inv.diveDir * (1 - t * 0.15);
+            const sway = Math.sin(t * Math.PI * 2.35) * (game.width < 560 ? 62 : 108) * inv.diveDir * (1 - t * 0.12);
             const arc = Math.sin(t * Math.PI) * (game.width < 560 ? 24 : 38);
             inv.x = inv.diveStartX + (targetX - inv.diveStartX) * ease + sway;
             inv.y = inv.diveStartY + (targetY - inv.diveStartY) * ease - arc;
@@ -1346,10 +1346,10 @@
           } else {
             const homeX = inv.homeX ?? inv.baseX;
             const homeY = inv.homeY ?? inv.baseY;
-            const duration = 0.95;
+            const duration = 1.05;
             const t = clamp(inv.diveTime / duration, 0, 1);
             const ease = t * t * (3 - 2 * t);
-            const returnSway = Math.sin(t * Math.PI * 1.5) * (game.width < 560 ? 22 : 34) * -inv.diveDir * (1 - t);
+            const returnSway = Math.sin(t * Math.PI * 1.55) * (game.width < 560 ? 30 : 48) * -inv.diveDir * (1 - t);
             const climbArc = Math.sin(t * Math.PI) * (game.width < 560 ? 20 : 32);
             inv.x = inv.diveStartX + (homeX - inv.diveStartX) * ease + returnSway;
             inv.y = inv.diveStartY + (homeY - inv.diveStartY) * ease - climbArc;
