@@ -539,7 +539,7 @@
       <div class="overlay" id="overlay">
         <div class="panel">
           <h1>Invaders</h1>
-          <div class="title-version">v1.33</div>
+          <div class="title-version">v1.34</div>
           <p class="tagline" id="message">A modernized arcade defense run: punch through waves, catch power cores, and survive the boss carrier.</p>
           <div class="enemy-roster" aria-label="Enemy ship guide">
             <h2>Enemy Ships</h2>
@@ -569,7 +569,7 @@
         <button id="rightButton" type="button">→</button>
         <button id="fireButton" type="button">FIRE</button>
       </div>
-      <div class="version" aria-hidden="true">v1.33</div>
+      <div class="version" aria-hidden="true">v1.34</div>
     </section>
   </main>
 
@@ -1281,7 +1281,7 @@
             b.life = 0;
             b.x = shieldHit.x;
             b.y = shieldHit.y;
-            damageShieldBlock(shieldHit.shield, shieldHit.x, shieldHit.y, 5);
+            damagePlayerShieldHit(shieldHit);
           }
           if (b.life <= 0) continue;
           for (const inv of game.invaders) {
@@ -1389,6 +1389,23 @@
         shield.flash = 1;
         const color = shield.hp <= 1 ? colors.enemy3 : shield.hp <= 2 ? colors.gold : colors.shield;
         burst(x, y, color, sparks + (shield.hp <= 0 ? 8 : 0), shield.hp <= 0 ? 150 : 100);
+      }
+
+      function damagePlayerShieldHit(hit) {
+        damageShieldBlock(hit.shield, hit.x, hit.y, 5);
+        let nearest = null;
+        let nearestD = Infinity;
+        const reach = Math.max(hit.shield.w, hit.shield.h) * 2.45;
+        for (const shield of game.shields) {
+          if (shield === hit.shield || shield.hp <= 0) continue;
+          const dx = shield.x - hit.shield.x;
+          const dy = shield.y - hit.shield.y;
+          const d = dx * dx + dy * dy;
+          if (d > reach * reach || d >= nearestD) continue;
+          nearest = shield;
+          nearestD = d;
+        }
+        if (nearest) damageShieldBlock(nearest, nearest.x, nearest.y, 3);
       }
 
       function updateParticles(dt) {
