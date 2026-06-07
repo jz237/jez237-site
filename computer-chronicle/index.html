@@ -321,6 +321,35 @@
       line-height: 1;
       text-transform: uppercase;
     }
+    .article-sources {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+      margin: 9px 0 0 !important;
+      color: var(--cc-muted);
+      font-size: 0.74rem;
+      line-height: 1.2;
+    }
+    .article-sources span {
+      color: var(--cc-ink) !important;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .article-sources a {
+      display: inline-block;
+      border: 1px solid var(--cc-blue);
+      color: var(--cc-blue);
+      background: rgba(38, 79, 158, 0.07);
+      padding: 3px 6px;
+      text-decoration: none;
+    }
+    .article-sources a:hover,
+    .article-sources a:focus-visible {
+      color: var(--cc-paper);
+      background: var(--cc-blue);
+    }
     .chronicle-card:nth-child(2n + 1) .section-label,
     aside .chronicle-panel:nth-child(2n) .section-label {
       background: var(--cc-amber);
@@ -588,6 +617,9 @@
     .status-line[data-status-state="archive"] {
       color: var(--cc-blue) !important;
       font-weight: 700;
+    }
+    .print-source-note {
+      display: none;
     }
     .issue-tools {
       display: flex;
@@ -867,6 +899,7 @@
       .status-line,
       .issue-tools,
       .editor-note,
+      .article-sources,
       [data-sidebar-module="assignment"],
       [data-sidebar-module="sources"],
       [data-sidebar-module="verification"],
@@ -1030,6 +1063,20 @@
       [data-sidebar-module="verification"] {
         font-size: 8pt;
       }
+      .print-source-note {
+        display: block;
+        position: static;
+        margin-top: 0.12in;
+        border-top: 2pt solid #111;
+        padding: 0.06in 0 0;
+        background: #fff8dc !important;
+        color: #111 !important;
+        font-size: 7.2pt;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        text-align: center;
+        text-transform: uppercase;
+      }
     }
     @media (max-width: 820px) {
       .chronicle-hero,
@@ -1140,6 +1187,7 @@
           <h2 data-music-title>Album-Rock Airwaves</h2>
           <div data-music-chart-image></div>
           <ul class="chart-list" data-music-chart></ul>
+          <div data-music-sources></div>
         </article>
         <article class="chronicle-panel period-ad" data-period-ad data-sidebar-module="period-ad"></article>
         <article class="chronicle-panel" data-fallback data-sidebar-module="fallback"></article>
@@ -1165,6 +1213,7 @@
         </article>
       </aside>
     </section>
+    <p class="print-source-note">See website for source links, verification details, and archive notes: jz237.github.io/jez237-site/computer-chronicle/</p>
   </main>
 
   <script src="assets/chronicle.js"></script>
