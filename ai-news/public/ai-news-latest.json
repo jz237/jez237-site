@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-07T09:00:01.974295+00:00",
+  "updatedAt": "2026-06-07T10:00:01.517681+00:00",
   "items": [
     {
       "title": "Humanity's Last Exam (HLE) is a multi-modal academic benchmark with 2,500 questions across mathematics, humanities, and natural sciences, designed to test LLM capabilities at the frontier of human knowledge with unambiguous, verifiable solutions",
@@ -10,12 +10,44 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-07T09:00:08.266137+00:00",
+      "published": "2026-06-07T10:00:16.661505+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-07T09:00:01.974295+00:00",
+      "lastSeen": "2026-06-07T10:00:01.517681+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.71
+    },
+    {
+      "title": "Robot dogs, hunter drones, and AI cameras: the tech securing the 2026 World Cup",
+      "url": "https://thenextweb.com/news/world-cup-2026-security-tech-robot-dogs-drones-ai",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The 2026 World Cup kicks off next week across 16 cities in the US, Mexico, and Canada. It is the largest in history: 48 teams, 104 matches, 39 days. It is also the most technologically surveilled sporting event ever staged, with robot dogs, net-shooting hunter drones, and thousands of AI-powered cameras deployed across venues and [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/world-cup-2026-security-tech-robot-dogs-drones-ai.avif",
+      "published": "2026-06-07T08:59:25+00:00",
+      "firstSeen": "2026-06-07T10:00:01.517681+00:00",
+      "lastSeen": "2026-06-07T10:00:01.517681+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1196
+    },
+    {
+      "title": "Trump’s top AI adviser Sriram Krishnan is stepping down from the White House",
+      "url": "https://thenextweb.com/news/sriram-krishnan-leaves-white-house-ai-adviser",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Sriram Krishnan, the White House’s senior policy adviser on artificial intelligence, is stepping down. The former Andreessen Horowitz partner was tapped by President Donald Trump to help shape the administration’s AI strategy during his second term. He will leave at the end of June, according to the Washington Post. Krishnan played a central role in [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/sriram-krishnan-leaves-white-house-ai-adviser.avif",
+      "published": "2026-06-07T08:36:49+00:00",
+      "firstSeen": "2026-06-07T10:00:01.517681+00:00",
+      "lastSeen": "2026-06-07T10:00:01.517681+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.2084
     },
     {
       "title": "NVIDIA, KRAFTON, NC and Reigning ‘League of Legends’ Champions T1 Celebrate RTX Spark at Korea’s PC Bangs",
@@ -28,10 +60,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/jhh-t1-group-photo-1920x1080-1.jpg",
       "published": "2026-06-07T07:00:15+00:00",
       "firstSeen": "2026-06-07T08:00:01.302481+00:00",
-      "lastSeen": "2026-06-07T09:00:01.974295+00:00",
+      "lastSeen": "2026-06-07T10:00:01.517681+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.9307
+      "score": 3.9022
     },
     {
       "title": "v0.30.6",
@@ -44,11 +76,11 @@
       "image": "https://opengraph.githubassets.com/60f61760c34b89ae6fa1dcf45ef6572c285dc5ed3f2717d4816dcd473e0f774a/ollama/ollama",
       "published": "2026-06-07T00:12:11+00:00",
       "firstSeen": "2026-06-05T07:00:01.980033+00:00",
-      "lastSeen": "2026-06-07T09:00:01.974295+00:00",
+      "lastSeen": "2026-06-07T10:00:01.517681+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 19.7215
+      "score": 19.6979
     },
     {
       "title": "v0.30.5",
@@ -61,10 +93,10 @@
       "image": "https://opengraph.githubassets.com/0e91974d2670184a86dc2744ca7430b594da6357fbbc3ba255625eaa4296fd9a/ollama/ollama",
       "published": "2026-06-07T00:09:50+00:00",
       "firstSeen": "2026-06-04T20:00:01.481282+00:00",
-      "lastSeen": "2026-06-07T09:00:01.974295+00:00",
+      "lastSeen": "2026-06-07T10:00:01.517681+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 7.0206
+      "score": 6.997
     },
     {
       "title": "v0.30.3",
@@ -77,11 +109,11 @@
       "image": "https://opengraph.githubassets.com/d5b7f056beb356a12c1648fe196566daf924d0261bc41e94a1b0964d3f125691/ollama/ollama",
       "published": "2026-06-07T00:08:34+00:00",
       "firstSeen": "2026-06-03T15:00:01.428377+00:00",
-      "lastSeen": "2026-06-07T09:00:01.974295+00:00",
+      "lastSeen": "2026-06-07T10:00:01.517681+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.2201
+      "score": 14.1965
     },
     {
       "title": "v1.88.0",
@@ -94,10 +126,10 @@
       "image": "https://opengraph.githubassets.com/34eb210e29894e77b81a2d5e5245e682d421af62cbd82219cce07d427502a183/BerriAI/litellm/releases/tag/v1.88.0",
       "published": "2026-06-06T23:43:20+00:00",
       "firstSeen": "2026-06-07T00:00:01.467665+00:00",
-      "lastSeen": "2026-06-07T09:00:01.974295+00:00",
+      "lastSeen": "2026-06-07T10:00:01.517681+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7401
+      "score": 2.7168
     },
     {
       "title": "v1.89.0-rc.1",
@@ -110,10 +142,10 @@
       "image": "https://opengraph.githubassets.com/a80ad81512fceccc47675bd988f6472eea977a31da11e951920bff0a8f40edf1/BerriAI/litellm/releases/tag/v1.89.0-rc.1",
       "published": "2026-06-06T23:06:14+00:00",
       "firstSeen": "2026-06-07T00:00:01.467665+00:00",
-      "lastSeen": "2026-06-07T09:00:01.974295+00:00",
+      "lastSeen": "2026-06-07T10:00:01.517681+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7256
+      "score": 2.7027
     },
     {
       "title": "Audi’s 1,001 PS Nuvolari is its fastest car ever, and it’s not electric",
@@ -126,10 +158,10 @@
       "image": "https://media.thenextweb.com/2026/06/audi-nuvolari-supercar-hybrid-1001ps.avif",
       "published": "2026-06-06T20:57:03+00:00",
       "firstSeen": "2026-06-06T22:00:01.361734+00:00",
-      "lastSeen": "2026-06-07T09:00:01.974295+00:00",
+      "lastSeen": "2026-06-07T10:00:01.517681+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8371
+      "score": 1.8155
     },
     {
       "title": "OpenAI unveils Lockdown Mode to protect sensitive data from prompt injection attacks",
@@ -142,10 +174,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/04/GettyImages-2201630077.jpg?resize=1200%2C798",
       "published": "2026-06-06T20:32:24+00:00",
       "firstSeen": "2026-06-06T21:00:01.925319+00:00",
-      "lastSeen": "2026-06-07T09:00:01.974295+00:00",
+      "lastSeen": "2026-06-07T10:00:01.517681+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.9682
+      "score": 8.9468
     },
     {
       "title": "v0.30.2",
@@ -161,7 +193,7 @@
       "lastSeen": "2026-06-06T21:00:01.925319+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.115
+      "score": 6.0943
     },
     {
       "title": "Five labs, five minds: building a multi-model finance drama on small models",
@@ -174,10 +206,10 @@
       "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/build-small-hackathon/thousand-token-wood-sim-v2.png",
       "published": "2026-06-06T19:02:33+00:00",
       "firstSeen": "2026-06-06T20:00:01.468431+00:00",
-      "lastSeen": "2026-06-07T09:00:01.974295+00:00",
+      "lastSeen": "2026-06-07T10:00:01.517681+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0765
+      "score": 2.056
     },
     {
       "title": "What to expect from WWDC 2026: Siri’s highly anticipated revamp and Apple Intelligence updates",
@@ -190,10 +222,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/Apple-WWDC26-event-branding_big.jpg.large_.jpg?w=980",
       "published": "2026-06-06T18:13:36+00:00",
       "firstSeen": "2026-06-06T18:19:35.834145+00:00",
-      "lastSeen": "2026-06-07T09:00:01.974295+00:00",
+      "lastSeen": "2026-06-07T10:00:01.517681+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0197
+      "score": 2.9997
     },
     {
       "title": "Sriram Krishnan is leaving his role as White House AI advisor",
@@ -206,10 +238,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2022/06/Screen-Shot-2021-02-03-at-1.18.03-PM-1.webp?resize=1200%2C833",
       "published": "2026-06-06T17:42:15+00:00",
       "firstSeen": "2026-06-06T18:00:01.814061+00:00",
-      "lastSeen": "2026-06-07T09:00:01.974295+00:00",
+      "lastSeen": "2026-06-07T10:00:01.517681+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.6092
+      "score": 2.5895
     },
     {
       "title": "The Trump administration might take an equity stake in OpenAI",
@@ -222,10 +254,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/donald-trump-cellphone.jpg?resize=1200%2C800",
       "published": "2026-06-06T16:17:21+00:00",
       "firstSeen": "2026-06-06T17:00:01.274426+00:00",
-      "lastSeen": "2026-06-07T09:00:01.974295+00:00",
+      "lastSeen": "2026-06-07T10:00:01.517681+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8815
+      "score": 4.8626
     },
     {
       "title": "Job Searcher",
@@ -241,7 +273,7 @@
       "lastSeen": "2026-06-06T19:00:01.912188+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.4087
+      "score": 4.3901
     },
     {
       "title": "The mayor of Shelbyville, Indiana, says only people who live in ‘shitty houses’ oppose data center",
@@ -254,10 +286,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/STKS528_DATA_CENTERS_A.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-06T15:05:00+00:00",
       "firstSeen": "2026-06-06T16:00:02.099452+00:00",
-      "lastSeen": "2026-06-07T09:00:01.974295+00:00",
+      "lastSeen": "2026-06-07T10:00:01.517681+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9287
+      "score": 1.9104
     },
     {
       "title": "Chinese EVs are circling the US market. Detroit’s best option may be to partner with them.",
@@ -270,10 +302,10 @@
       "image": "https://media.thenextweb.com/2026/06/chinese-evs-us-market-manufacturing-partnerships.avif",
       "published": "2026-06-06T14:23:36+00:00",
       "firstSeen": "2026-06-06T16:00:02.099452+00:00",
-      "lastSeen": "2026-06-07T09:00:01.974295+00:00",
+      "lastSeen": "2026-06-07T10:00:01.517681+00:00",
       "editorial_allow": false,
       "editorial_reason": "fluff",
-      "score": -0.894
+      "score": -0.9119
     },
     {
       "title": "Meta made its own AI-generated clickbait news feed",
@@ -286,10 +318,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/ai-label-14.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C0%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-06T14:00:00+00:00",
       "firstSeen": "2026-06-06T14:51:56.561927+00:00",
-      "lastSeen": "2026-06-07T09:00:01.974295+00:00",
+      "lastSeen": "2026-06-07T10:00:01.517681+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0089
+      "score": 4.9911
     },
     {
       "title": "Bank of England governor warns AI may need to be rationed because of energy limits",
@@ -302,10 +334,10 @@
       "image": "https://media.thenextweb.com/2026/06/bailey-bank-of-england-ai-rationing-energy.avif",
       "published": "2026-06-06T13:48:36+00:00",
       "firstSeen": "2026-06-06T14:51:56.561927+00:00",
-      "lastSeen": "2026-06-07T09:00:01.974295+00:00",
+      "lastSeen": "2026-06-07T10:00:01.517681+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.6955
+      "score": 1.6778
     },
     {
       "title": "Swiss startup GR3N raises €15.5M to build the world’s first microwave-powered PET recycling plant",
@@ -318,10 +350,10 @@
       "image": "https://media.thenextweb.com/2026/06/gr3n-pet-recycling-series-b-microwave.avif",
       "published": "2026-06-06T13:16:52+00:00",
       "firstSeen": "2026-06-06T14:51:56.561927+00:00",
-      "lastSeen": "2026-06-07T09:00:01.974295+00:00",
+      "lastSeen": "2026-06-07T10:00:01.517681+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3861
+      "score": 2.3686
     },
     {
       "title": "Self-replicating Miasma worm hits 73 Microsoft GitHub repositories in supply chain attack",
@@ -334,10 +366,10 @@
       "image": "https://media.thenextweb.com/2026/06/miasma-worm-microsoft-github-supply-chain.avif",
       "published": "2026-06-06T12:46:50+00:00",
       "firstSeen": "2026-06-06T14:00:01.849764+00:00",
-      "lastSeen": "2026-06-07T09:00:01.974295+00:00",
+      "lastSeen": "2026-06-07T10:00:01.517681+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.6773
+      "score": 1.6601
     },
     {
       "title": "An AI agent found 21 zero-days in FFmpeg for $1,000. Chrome just patched a record 429 bugs.",
@@ -350,10 +382,10 @@
       "image": "https://media.thenextweb.com/2026/06/ai-agent-21-zero-days-ffmpeg-chrome-429.avif",
       "published": "2026-06-06T12:24:11+00:00",
       "firstSeen": "2026-06-06T14:00:01.849764+00:00",
-      "lastSeen": "2026-06-07T09:00:01.974295+00:00",
+      "lastSeen": "2026-06-07T10:00:01.517681+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 1.2707
+      "score": 1.2537
     },
     {
       "title": "Here comes new Siri again",
@@ -366,10 +398,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/wwdc_2024.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.597538331207%2C100%2C78.804923337586&amp%3Bw=1200",
       "published": "2026-06-06T12:00:00+00:00",
       "firstSeen": "2026-06-06T12:14:38.918607+00:00",
-      "lastSeen": "2026-06-07T09:00:01.974295+00:00",
+      "lastSeen": "2026-06-07T10:00:01.517681+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9738
+      "score": 2.957
     },
     {
       "title": "Persona Atlas: Mapping How Famous Minds Think",
@@ -385,7 +417,7 @@
       "lastSeen": "2026-06-06T14:00:01.849764+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0387
+      "score": 3.0221
     },
     {
       "title": "EU trade chief wants a new tool to break Europe’s dependence on Chinese chips and rare earths",
@@ -398,10 +430,10 @@
       "image": "https://media.thenextweb.com/2026/06/eu-sefcovic-diversification-instrument-china-supply-chain.avif",
       "published": "2026-06-06T10:59:26+00:00",
       "firstSeen": "2026-06-06T12:00:01.977318+00:00",
-      "lastSeen": "2026-06-07T09:00:01.974295+00:00",
+      "lastSeen": "2026-06-07T10:00:01.517681+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.6469
+      "score": 1.6305
     },
     {
       "title": "Reid Hoffman leaves Microsoft’s board to go ‘founder mode’ with AI drug startup Manus",
@@ -414,10 +446,10 @@
       "image": "https://media.thenextweb.com/2026/06/reid-hoffman-leaves-microsoft-board-manus.avif",
       "published": "2026-06-06T10:36:19+00:00",
       "firstSeen": "2026-06-06T12:00:01.977318+00:00",
-      "lastSeen": "2026-06-07T09:00:01.974295+00:00",
+      "lastSeen": "2026-06-07T10:00:01.517681+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.6405
+      "score": 1.6243
     },
     {
       "title": "Crypto-Funded Chinese Peptide Labs Are Booming",
@@ -430,10 +462,10 @@
       "image": "https://media.wired.com/photos/6a2312eb2b342fb72975a62e/master/pass/Security-Roundup-Crypto-funded-Chinese-labs-sales-of-peptides-Security-1312618198.jpg",
       "published": "2026-06-06T10:30:00+00:00",
       "firstSeen": "2026-06-06T11:00:02.114878+00:00",
-      "lastSeen": "2026-06-07T09:00:01.974295+00:00",
+      "lastSeen": "2026-06-07T10:00:01.517681+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.7788
+      "score": 3.7627
     },
     {
       "title": "Former IBM cybersecurity exec accuses company of covering up years of Chinese hacking",
@@ -449,7 +481,7 @@
       "lastSeen": "2026-06-07T09:00:01.974295+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.6339
+      "score": 1.6179
     },
     {
       "title": "Trump wants the American public to own a piece of OpenAI. Nobody knows how that would work.",
@@ -465,7 +497,7 @@
       "lastSeen": "2026-06-07T09:00:01.974295+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.6328
+      "score": 4.6168
     },
     {
       "title": "Every VC-backed e-bike company went bust. Bootstrapped Lectric just had its biggest month ever.",
@@ -481,7 +513,7 @@
       "lastSeen": "2026-06-06T21:00:01.925319+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7283
+      "score": 2.7124
     },
     {
       "title": "GM’s $900 million bet on a battery chemistry no one has commercialised could slash EV prices by 2028",
@@ -497,7 +529,7 @@
       "lastSeen": "2026-06-06T14:51:56.561927+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.6241
+      "score": 1.6084
     },
     {
       "title": "Google will pay SpaceX $920 million a month for AI compute as Musk turns a data centre built for Grok into a cash machine",
@@ -513,7 +545,7 @@
       "lastSeen": "2026-06-06T14:00:01.849764+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.421
+      "score": 10.4054
     },
     {
       "title": "The 10 best press release distribution services for 2026",
@@ -529,7 +561,7 @@
       "lastSeen": "2026-06-06T14:00:01.849764+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3193
+      "score": 2.3037
     },
     {
       "title": "micropython-wasm 0.1a2",
@@ -542,10 +574,10 @@
       "image": "",
       "published": "2026-06-06T04:26:06+00:00",
       "firstSeen": "2026-06-06T05:00:01.934940+00:00",
-      "lastSeen": "2026-06-07T09:00:01.974295+00:00",
+      "lastSeen": "2026-06-07T10:00:01.517681+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3875
+      "score": 2.3739
     },
     {
       "title": "Running Python code in a sandbox with MicroPython and WASM",
@@ -558,10 +590,10 @@
       "image": "https://static.simonwillison.net/static/2026/micropython-in-datasette-agent.jpg",
       "published": "2026-06-06T03:53:34+00:00",
       "firstSeen": "2026-06-06T04:00:02.048042+00:00",
-      "lastSeen": "2026-06-07T09:00:01.974295+00:00",
+      "lastSeen": "2026-06-07T10:00:01.517681+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1801
+      "score": 5.1666
     },
     {
       "title": "v0.30.7-rc1",
@@ -574,10 +606,10 @@
       "image": "https://opengraph.githubassets.com/78e2df05251b164238bc6424fa80f9b487093b561675da9e569299d0162f3c44/ollama/ollama",
       "published": "2026-06-06T00:59:05+00:00",
       "firstSeen": "2026-06-06T22:00:01.361734+00:00",
-      "lastSeen": "2026-06-07T09:00:01.974295+00:00",
+      "lastSeen": "2026-06-07T10:00:01.517681+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.712
+      "score": 3.6996
     },
     {
       "title": "v0.30.7-rc0",
@@ -590,10 +622,10 @@
       "image": "https://opengraph.githubassets.com/0c75a2c22c34f71df6873e50748a2ff1ede013af1522ff16514d15411ac10067/ollama/ollama",
       "published": "2026-06-06T00:29:19+00:00",
       "firstSeen": "2026-06-06T01:00:01.288928+00:00",
-      "lastSeen": "2026-06-07T09:00:01.974295+00:00",
+      "lastSeen": "2026-06-07T10:00:01.517681+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.4058
+      "score": 2.3936
     },
     {
       "title": "OpenAI Help: Lockdown Mode",
@@ -606,42 +638,10 @@
       "image": "",
       "published": "2026-06-05T23:56:40+00:00",
       "firstSeen": "2026-06-06T01:00:01.288928+00:00",
-      "lastSeen": "2026-06-07T09:00:01.974295+00:00",
+      "lastSeen": "2026-06-07T10:00:01.517681+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.8291
-    },
-    {
-      "title": "Thousand Token Wood: shipping a multi-agent economy on a 3B model",
-      "url": "https://huggingface.co/blog/build-small-hackathon/thousand-token-wood-sim",
-      "source": "Hugging Face Blog",
-      "sourceUrl": "https://huggingface.co/blog/feed.xml",
-      "sourceWeight": 0.95,
-      "category": "AI",
-      "summary": "",
-      "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/build-small-hackathon/thousand-token-wood-sim.png",
-      "published": "2026-06-05T22:18:46+00:00",
-      "firstSeen": "2026-06-05T22:22:33.202967+00:00",
-      "lastSeen": "2026-06-06T11:00:02.114878+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.4497
-    },
-    {
-      "title": "How a USB-connected speaker can infect a PC without ever being touched",
-      "url": "https://arstechnica.com/security/2026/06/highly-reviewed-speaker-can-be-hacked-over-the-air-to-infect-connected-devices",
-      "source": "Ars Technica (AI/Tech)",
-      "sourceUrl": "https://feeds.arstechnica.com/arstechnica/technology-lab",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Seller of the Sound Blaster Katana V2X doesn't consider the behavior a vulnerability.",
-      "image": "https://cdn.arstechnica.net/wp-content/uploads/2026/06/sound-blaster-katana-v2x-1152x648-1780688877.jpg",
-      "published": "2026-06-05T21:00:29+00:00",
-      "firstSeen": "2026-06-05T22:22:33.202967+00:00",
-      "lastSeen": "2026-06-07T09:00:01.974295+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.4548
+      "score": 10.8171
     },
     {
       "title": "The Life Scientific: Seth Berkley",
@@ -654,10 +654,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-01T20:00:00+00:00",
       "firstSeen": "2026-06-01T21:00:01.828388+00:00",
-      "lastSeen": "2026-06-07T09:00:01.974295+00:00",
+      "lastSeen": "2026-06-07T10:00:01.517681+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.2173
+      "score": 1.2166
     },
     {
       "title": "Dean Lomax on discovering ichthyosaurs and defying nay-sayers",
@@ -670,7 +670,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-26T08:30:00+00:00",
       "firstSeen": "2026-05-26T08:41:33.144051+00:00",
-      "lastSeen": "2026-06-07T09:00:01.974295+00:00",
+      "lastSeen": "2026-06-07T10:00:01.517681+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 1.1204
@@ -686,7 +686,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-25T20:00:00+00:00",
       "firstSeen": "2026-05-25T21:00:01.605108+00:00",
-      "lastSeen": "2026-06-07T09:00:01.974295+00:00",
+      "lastSeen": "2026-06-07T10:00:01.517681+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 0.2903
