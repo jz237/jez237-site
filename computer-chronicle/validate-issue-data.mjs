@@ -86,6 +86,7 @@ function checkImages(issue, issueIndex) {
 function checkRendererShapes(issue, issueIndex) {
   if (!Array.isArray(issue.computerItems)) fail(`Issue ${issueIndex}: computerItems must be an array.`);
   if (!Array.isArray(issue.storeShelves)) fail(`Issue ${issueIndex}: storeShelves must be an array.`);
+  if (issue.softwareList && !Array.isArray(issue.softwareList)) fail(`Issue ${issueIndex}: softwareList must be an array when present.`);
   if (!Array.isArray(issue.priceWatch)) fail(`Issue ${issueIndex}: priceWatch must be an array.`);
   if (!Array.isArray(issue.briefs)) fail(`Issue ${issueIndex}: briefs must be an array.`);
   if (!Array.isArray(issue.musicChart)) fail(`Issue ${issueIndex}: musicChart must be an array.`);
@@ -93,6 +94,12 @@ function checkRendererShapes(issue, issueIndex) {
   (issue.priceWatch || []).forEach((item, itemIndex) => {
     if (!item.item || !item.price || !item.note) {
       fail(`Issue ${issueIndex}: priceWatch[${itemIndex}] must include item, price, and note.`);
+    }
+  });
+
+  (issue.softwareList || []).forEach((item, itemIndex) => {
+    if (!item.name || !item.detail) {
+      fail(`Issue ${issueIndex}: softwareList[${itemIndex}] must include name and detail.`);
     }
   });
 
