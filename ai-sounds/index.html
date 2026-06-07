@@ -19,8 +19,10 @@
     .sound-hero p { position:relative; z-index:1; max-width: 780px; color: var(--ink-mid); font-size: clamp(15px, 2vw, 19px); line-height:1.55; }
     .sound-lab-stats { position:relative; z-index:1; display:flex; flex-wrap:wrap; gap:10px; margin-top:24px; }
     .sound-lab-stats span { padding:10px 14px; border:1px solid rgba(255,255,255,.12); border-radius:999px; background:rgba(255,255,255,.055); color:var(--ink-mid); font-size:13px; }
-    .sound-view-toggle { display:inline-flex; gap:4px; margin:0 0 18px; padding:4px; border:1px solid rgba(255,255,255,.14); border-radius:999px; background:rgba(0,0,0,.22); }
-    .sound-view-toggle button { min-width:102px; height:38px; border:0; border-radius:999px; background:transparent; color:var(--ink-mid); cursor:pointer; font:inherit; font-size:13px; font-weight:800; }
+    .sound-view-toolbar { position:sticky; top:calc(var(--nav-height, 58px) + 8px); z-index:5; display:flex; align-items:center; justify-content:space-between; gap:12px; margin:0 0 18px; padding:10px; border:1px solid rgba(232,197,122,.22); border-radius:20px; background:linear-gradient(135deg, rgba(10,16,28,.92), rgba(4,10,22,.78)); box-shadow:0 16px 36px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.06); backdrop-filter:blur(14px); }
+    .sound-view-label { min-width:0; color:var(--ink-hi); font-size:13px; font-weight:900; letter-spacing:.08em; text-transform:uppercase; }
+    .sound-view-toggle { display:inline-flex; flex:0 0 auto; gap:4px; margin:0; padding:4px; border:1px solid rgba(255,255,255,.14); border-radius:999px; background:rgba(0,0,0,.22); }
+    .sound-view-toggle button { min-width:132px; height:38px; border:0; border-radius:999px; background:transparent; color:var(--ink-mid); cursor:pointer; font:inherit; font-size:13px; font-weight:800; }
     .sound-view-toggle button:hover { color:var(--ink-hi); background:rgba(255,255,255,.06); }
     .sound-view-toggle button.is-active { color:#10131c; background:var(--brand-gold); }
     .sound-view-toggle button:focus-visible, .compact-play:focus-visible { outline:2px solid var(--brand-gold); outline-offset:3px; }
@@ -163,7 +165,8 @@
     }
     @media (max-width: 620px) { .sound-player-controls { flex-wrap:wrap; gap:6px; } .sound-spacer { display:none; } .sound-time { flex:1 1 auto; } .sound-rate { gap:3px; } .sound-rate button { min-width:31px; } .sound-volume { flex:1 1 96px; min-width:94px; max-width:none; justify-content:center; padding-inline:6px; } .sound-volume input { min-width:52px; max-width:160px; } }
     @media (max-width: 520px) { .sound-player { padding:10px; } .sound-wave { height:82px; } .sound-spectrum { height:78px; } .sound-scrub { height:20px; } .sound-play { order:1; width:34px; height:34px; } .sound-play::before { left:13px; top:9px; } .sound-player.is-playing .sound-play::before { left:10px; top:8px; } .sound-rate { order:2; gap:3px; padding:0; } .sound-rate button { width:31px; min-width:31px; padding:0; font-size:9.5px; } .sound-volume { order:3; flex:1 1 96px; min-width:94px; max-width:none; gap:5px; justify-content:center; padding:0 6px; } .sound-volume input { min-width:52px; max-width:160px; } .sound-download { order:4; } .sound-time { order:5; flex:1 1 100%; min-width:0; font-size:11px; } .sound-eq-bands { gap:6px; } }
-    @media (max-width: 520px) { .sound-view-toggle { display:grid; grid-template-columns:1fr 1fr; width:100%; } .sound-view-toggle button { min-width:0; } .compact-sound-list { padding:7px; } .compact-sound-row { grid-template-columns:40px minmax(0, 1fr) 48px; gap:8px; padding:6px 8px; } .compact-title { font-size:13px; } }
+    @media (max-width: 620px) { .sound-view-toolbar { position:static; display:grid; gap:9px; } .sound-view-toggle { display:grid; grid-template-columns:1fr 1fr; width:100%; } .sound-view-toggle button { min-width:0; } }
+    @media (max-width: 520px) { .compact-sound-list { padding:7px; } .compact-sound-row { grid-template-columns:40px minmax(0, 1fr) 48px; gap:8px; padding:6px 8px; } .compact-title { font-size:13px; } }
     @media (max-width: 400px) { .sound-volume { flex-basis:88px; min-width:88px; padding-inline:6px; } .sound-volume input { min-width:46px; } }
     @media (max-width: 860px) { .desktop-hub { border-radius:0; } main.container { padding-inline:0; } .hub-main { padding:14px 10px 28px !important; } .sound-hero { border-radius:22px; } }
   </style>
@@ -196,9 +199,12 @@
           each track. Do not invent generic artwork without direction; use
           images Jez provides or explicitly approves for each track.
         -->
-        <div class="sound-view-toggle" role="group" aria-label="Sound page view">
-          <button type="button" class="is-active" data-sound-view="cards" aria-pressed="true">Full</button>
-          <button type="button" data-sound-view="compact" aria-pressed="false">Compact</button>
+        <div class="sound-view-toolbar">
+          <span class="sound-view-label">Audio View</span>
+          <div class="sound-view-toggle" role="group" aria-label="Sound page view">
+            <button type="button" class="is-active" data-sound-view="cards" aria-pressed="true">Full</button>
+            <button type="button" data-sound-view="compact" aria-pressed="false">Compact</button>
+          </div>
         </div>
         <section class="sound-view-panel sound-grid" data-sound-panel="cards" aria-label="AI-generated sound archive">
           <article class="sound-card" style="--i:0">
@@ -621,6 +627,129 @@
   <script src="../assets/site-enhance.js" defer></script>
   <script src="../assets/side-menu.js?v=ai-sounds-20260530" defer></script>
   <script src="../assets/nav.js" defer></script>
+  <script>
+    (function () {
+      const compactExtras = [
+        {
+          title: "Marty the Cat - Bass Forward Funk Metal Theme (Edition 2)",
+          duration: "2:28",
+          src: "audio/17-marty-cat-slap-bass-edition-2-add11031-8839-49ee-8c19-462f41c2913c.mp3"
+        },
+        {
+          title: "Russ - Limited Edition Rock Opera Theme (Alt Take)",
+          duration: "2:30",
+          src: "audio/19-russ-limited-edition-rock-opera-1dcf5264-55c3-4861-b3b1-b5d9756d9857.mp3"
+        }
+      ];
+      const compactAudio = new Audio();
+      compactAudio.preload = "metadata";
+      let compactActiveRow = null;
+      const normalizeTrackSrc = (src) => {
+        try {
+          return new URL(src, window.location.href).pathname;
+        } catch (error) {
+          return src;
+        }
+      };
+      const pauseCompactPlayer = () => {
+        compactAudio.pause();
+        if (compactActiveRow) {
+          compactActiveRow.classList.remove("is-playing");
+          const activeButton = compactActiveRow.querySelector(".compact-play");
+          const title = compactActiveRow.querySelector(".compact-title")?.textContent.trim() || "track";
+          activeButton?.setAttribute("aria-label", `Play ${title}`);
+          activeButton?.setAttribute("aria-pressed", "false");
+        }
+        compactActiveRow = null;
+      };
+      const buildCompactListFallback = () => {
+        const compactList = document.querySelector("[data-compact-sound-list]");
+        if (!compactList) return;
+        const tracks = Array.from(document.querySelectorAll(".sound-card")).map((card) => {
+          const title = card.querySelector("h2")?.textContent.trim() || "Untitled";
+          const audio = card.querySelector("audio");
+          return {
+            title,
+            duration: card.querySelector(".sound-meta span")?.textContent.trim() || "0:00",
+            src: audio?.getAttribute("src") || audio?.currentSrc || audio?.src || ""
+          };
+        }).filter((track) => track.src);
+        const knownSrcs = new Set(tracks.map((track) => normalizeTrackSrc(track.src)));
+        compactExtras.forEach((track) => {
+          if (!knownSrcs.has(normalizeTrackSrc(track.src))) tracks.push(track);
+        });
+        tracks.sort((a, b) => a.title.localeCompare(b.title, undefined, { sensitivity: "base" }));
+
+        const fragment = document.createDocumentFragment();
+        tracks.forEach((track) => {
+          const row = document.createElement("div");
+          row.className = "compact-sound-row";
+
+          const play = document.createElement("button");
+          play.type = "button";
+          play.className = "compact-play";
+          play.dataset.src = track.src;
+          play.setAttribute("aria-label", `Play ${track.title}`);
+          play.setAttribute("aria-pressed", "false");
+
+          const title = document.createElement("span");
+          title.className = "compact-title";
+          title.textContent = track.title;
+
+          const length = document.createElement("span");
+          length.className = "compact-length";
+          length.textContent = track.duration;
+
+          play.addEventListener("click", () => {
+            const sameTrack = compactActiveRow === row && !compactAudio.paused;
+            if (sameTrack) {
+              pauseCompactPlayer();
+              return;
+            }
+            document.querySelectorAll("audio").forEach((audio) => audio.pause());
+            pauseCompactPlayer();
+            compactAudio.src = track.src;
+            compactActiveRow = row;
+            row.classList.add("is-playing");
+            play.setAttribute("aria-label", `Pause ${track.title}`);
+            play.setAttribute("aria-pressed", "true");
+            compactAudio.play().catch(() => pauseCompactPlayer());
+          });
+
+          row.append(play, title, length);
+          fragment.appendChild(row);
+        });
+        compactList.replaceChildren(fragment);
+      };
+      const setSoundViewFallback = (view) => {
+        const nextView = view === "compact" ? "compact" : "cards";
+        document.querySelectorAll("[data-sound-view]").forEach((button) => {
+          const active = button.dataset.soundView === nextView;
+          button.classList.toggle("is-active", active);
+          button.setAttribute("aria-pressed", active ? "true" : "false");
+        });
+        document.querySelectorAll("[data-sound-panel]").forEach((panel) => {
+          panel.hidden = panel.dataset.soundPanel !== nextView;
+        });
+        try {
+          localStorage.setItem("aiSoundsView", nextView);
+        } catch (error) {}
+      };
+      document.querySelectorAll("[data-sound-view]").forEach((button) => {
+        button.addEventListener("click", () => setSoundViewFallback(button.dataset.soundView));
+      });
+      buildCompactListFallback();
+      try {
+        setSoundViewFallback(localStorage.getItem("aiSoundsView") || "cards");
+      } catch (error) {
+        setSoundViewFallback("cards");
+      }
+      compactAudio.addEventListener("ended", pauseCompactPlayer);
+      compactAudio.addEventListener("pause", () => {
+        if (compactAudio.ended) pauseCompactPlayer();
+      });
+    })();
+  </script>
   <script type="module">
     import WaveSurfer from "https://cdn.jsdelivr.net/npm/wavesurfer.js@7/dist/wavesurfer.esm.js";
 
