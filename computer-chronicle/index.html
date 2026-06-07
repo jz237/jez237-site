@@ -531,6 +531,34 @@
       border-top-width: 8px;
       border-top-color: var(--cc-blue);
     }
+    .assignment-desk > summary {
+      cursor: pointer;
+      color: var(--cc-ink);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      list-style: none;
+      text-transform: uppercase;
+    }
+    .assignment-desk > summary::-webkit-details-marker {
+      display: none;
+    }
+    .assignment-desk > summary::after {
+      content: "+";
+      float: right;
+      border: 2px solid var(--cc-ink);
+      color: var(--cc-ink);
+      font-family: "Courier New", Courier, monospace;
+      font-size: 0.85rem;
+      line-height: 1;
+      padding: 1px 5px;
+    }
+    .assignment-desk[open] > summary::after {
+      content: "-";
+    }
+    .assignment-desk .section-label {
+      margin-top: 10px;
+    }
     .assignment-dates {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1235,15 +1263,16 @@
           <h2 data-briefs-title>Other Things on the Desk</h2>
           <ul class="brief-list" data-briefs></ul>
         </article>
-        <article class="chronicle-panel assignment-desk" data-sidebar-module="assignment">
+        <details class="chronicle-panel assignment-desk" data-sidebar-module="assignment">
+          <summary>Next Desk Queue</summary>
           <p class="section-label">Tomorrow's Desk</p>
-          <h2>Next Issue Assignment</h2>
+          <h2>Internal Assignment</h2>
           <div class="assignment-dates">
             <span>Tomorrow<strong data-next-current-date>Loading...</strong></span>
             <span>Forty Years Back<strong data-next-historic-date>Loading...</strong></span>
           </div>
           <ul class="assignment-list" data-next-assignment-list></ul>
-        </article>
+        </details>
         <article class="chronicle-panel" data-sidebar-module="music">
           <p class="section-label" data-music-label>Rock Radio Top 10</p>
           <h2 data-music-title>Album-Rock Airwaves</h2>
