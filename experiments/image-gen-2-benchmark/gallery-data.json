@@ -1498,5 +1498,17 @@
     "slot": "evening",
     "model": "openai/gpt-image-2",
     "size": "1024x1536"
+  },
+  {
+    "id": "2026-06-07-evening-tiny-impossible-services-classifieds",
+    "title": "Tiny Impossible Services Classifieds",
+    "tests": "Generated with GPT Image 2 CLI; verified exact PNG output path exists and is non-empty.",
+    "prompt": "Create a finished vertical classified newspaper ad page titled TINY IMPOSSIBLE SERVICES CLASSIFIEDS, photographed as a real slightly yellowed broadsheet page on a varnished cafe table. The page contains a coherent grid of small classified ads for fictional household-scale odd services: matchbox locksmith, thimble roof repair, pocket clock rain tuning, lost shadow retrieval, teacup ferry schedules, miniature chimney sweeping, button garden landscaping, keyhole wallpapering, and attic constellation dusting. Use crisp black letterpress typography, narrow columns, tiny box rules, section headers, small topic-specific ink icons, price abbreviations, ad numbers, coupon tear slips along the lower edge, blue pencil circles around two ads, red editor marks, newsprint fibers, slight ink spread, fold creases, coffee ring, crumbs, brass coin, and warm late-evening cafe window light. Make the layout readable and dense but not cluttered, with believable newspaper hierarchy and tactile print texture. No real brands, no real phone numbers, no placeholder boxes, no prompt instructions, no watermark, no people, no hands, no logos.\n\nReusable fill-in-the-blank template: Create a finished classified ad page about [TOPIC] using [DATA OR CATEGORIES], with a coherent physical newspaper or bulletin design, readable hierarchy, and specific invented details where data is not supplied. Include section headers, compact ad blocks, item or service codes, small topic-specific icons, prices or status labels if appropriate, tactile paper texture, editorial marks, and environmental props that match [SETTING] and [MOOD]. Preserve the supplied topic, categories, ordering, labels, relationships, and any real data provided by the user; change the title, ad voice, column structure, icon system, print treatment, paper condition, and surrounding props to fit the chosen subject. Avoid nonsense labels, cluttered microtext, placeholder boxes, real brands, real phone numbers, private data, logos, and prompt-instruction text.\n\nSource photo needed: none.\n\nWhat to preserve: the supplied topic, categories, labels, ordering, relationships, constraints, and any factual data the user provides.\n\nWhat to change: transform the topic into a tactile finished classified-ad page with believable columns, ad codes, section headers, small icons, print texture, editorial marks, paper wear, and setting-specific props.\n\nExample substitution: [TOPIC] = Tiny Impossible Services Classifieds; [DATA OR CATEGORIES] = matchbox locksmith, thimble roof repair, pocket clock rain tuning, lost shadow retrieval, teacup ferry schedules, miniature chimney sweeping, button garden landscaping, keyhole wallpapering, attic constellation dusting; [SETTING] = varnished cafe table; [MOOD] = warm late-evening, whimsical, archival.",
+    "image": "images/2026-06-07-evening-tiny-impossible-services-classifieds.png",
+    "date": "2026-06-07",
+    "batch": "Daily Prompt",
+    "slot": "evening",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1536"
   }
 ]
