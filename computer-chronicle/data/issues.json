@@ -1,8 +1,588 @@
 {
-  "generatedAt": "2026-06-07T12:31:46-04:00",
+  "generatedAt": "2026-06-07T18:32:00-04:00",
   "editorialPriority": "When there is a choice, prefer personal computers, home computing, office PC software, and personal computer or console gaming over broad enterprise technology.",
   "fallbackPolicy": "Use exact-day computer news when verified. If none exists, use same-week or same-month personal-computing items with confidence labels, then fall back to a wider world/business headline.",
   "issues": [
+    {
+      "currentDate": "2026-06-07",
+      "historicDate": "1982-08-09",
+      "displayDate": "Week of August 9-15, 1982",
+      "edition": "Issue 002 - Weekly 1982 Computer & Culture Chronicle",
+      "visualProfile": {
+        "layout": "weekly-newsprint-front",
+        "accent": "black-red-cyan",
+        "paper": "halftone-cream",
+        "strapline": "WEEKLY DESK - PERSONAL COMPUTERS - SOFTWARE - ARCADES - ROCK RADIO"
+      },
+      "masthead": {
+        "kicker": "Morning archive for Jez",
+        "title": "Computer Chronicle",
+        "deck": "The August 9-15 desk: IBM PC turns one, the new home-computer rack gets crowded, Compute! puts C64 and Epson on the cover, and Friday brings a busy cinema marquee."
+      },
+      "layoutPlan": {
+        "main": [
+          "editor-note",
+          "lead",
+          "picture-desk",
+          "computer-items",
+          "software",
+          "store-shelves"
+        ],
+        "sidebar": [
+          "price-watch",
+          "market",
+          "bbs",
+          "curiosity",
+          "briefs",
+          "music",
+          "period-ad",
+          "classifieds",
+          "fallback",
+          "accuracy",
+          "sources"
+        ]
+      },
+      "sectionChrome": {
+        "lead": {
+          "label": "Lead Story"
+        },
+        "pictureDesk": {
+          "label": "Picture Desk",
+          "title": "Scenes From the Week"
+        },
+        "computerItems": {
+          "label": "Computers & Hardware",
+          "title": "Personal Computing Desk"
+        },
+        "software": {
+          "label": "Software Top 5",
+          "title": "Programs on the Editor's Pad"
+        },
+        "storeShelves": {
+          "label": "Top Games This Week",
+          "title": "Arcade, Console & Computer Games"
+        },
+        "priceWatch": {
+          "label": "Price Watch",
+          "title": "What It Cost"
+        },
+        "bbs": {
+          "label": "Modem Desk"
+        },
+        "curiosity": {
+          "label": "Movies / TV / Culture"
+        },
+        "briefs": {
+          "label": "Magazine Rack",
+          "title": "Culture & Shelf Talk"
+        },
+        "music": {
+          "label": "Top Rock This Week",
+          "title": "Rock Radio Chart, August 14"
+        },
+        "periodAd": {
+          "label": "Retail / Ads"
+        },
+        "classifieds": {
+          "label": "Classifieds",
+          "title": "Small Ads"
+        },
+        "fallback": {
+          "label": "Editorial Screen"
+        },
+        "accuracy": {
+          "label": "Accuracy Ledger",
+          "title": "What Is Date-Specific"
+        },
+        "sources": {
+          "label": "Source Trail",
+          "title": "Research Log"
+        },
+        "market": {
+          "label": "Retail / Ads",
+          "title": "Computer Store Market"
+        }
+      },
+      "heroImage": {
+        "src": "media/1982-computer-chronicle-issue-002.png",
+        "alt": "AI-generated vertical 1982 Computer Chronicle front page for the week of August 9-15, 1982 with generic early personal computers and newsprint departments",
+        "caption": "GPT Image 2 issue-front visual - no real logos; factual text is in the issue data.",
+        "confidence": "Generated 2026-06-07 from verified issue brief"
+      },
+      "editorNote": "Issue #2 covers Monday, August 9 through Sunday, August 15, 1982. The desk gives the lead to the IBM PC first anniversary because August 12 falls inside the week, then fills the paper from dated August magazine, chart, retail, and cinema sources.",
+      "morningLine": "This week: the IBM PC reaches its first birthday, August magazines put new home machines and software on the rack, computer-store math still belongs to peripherals, and August 13 crowds the movie marquee.",
+      "lead": {
+        "headline": "IBM PC Turns One With the Clone Question Already in the Room",
+        "summary": "Thursday, August 12 marks one year since IBM announced the Personal Computer. The first-birthday story is not cake; it is compatibility. Buyers now weigh a real IBM 5150 desk against cheaper workalikes, add-in cards, DOS disks, printers, monitors, and the growing office-software shelf. IBM opened the door with a low-cost system built from a system unit, keyboard, diskette drives, monochrome display, and printer options; by this summer, the question on the sales floor is which programs and boards will behave like they belong together.",
+        "confidence": "Exact anniversary date inside target week; 1982 compatibility context labeled as market context",
+        "sourceRefs": [
+          0,
+          1
+        ]
+      },
+      "pictureDesk": [
+        {
+          "title": "One-Year PC Desk",
+          "note": "Generated period-style visual for the August 12 IBM PC anniversary lead; not an archival photograph.",
+          "sourceRefs": [
+            0,
+            1
+          ],
+          "image": {
+            "src": "media/1982-computer-chronicle-issue-002-picture-1.png",
+            "alt": "Generated period-style image of a generic early 1980s IBM PC-style desktop setup with CRT, keyboard, floppy drives, printer, and office paperwork",
+            "caption": "Generated period-style visual: early office PC desk, printer, disks, and paperwork.",
+            "confidence": "AI-generated visual context; no logos or archival claim"
+          }
+        },
+        {
+          "title": "Magazine Rack and Price Tags",
+          "note": "Generated visual keyed to the August 1982 Compute! issue and retail prices quoted in its ads.",
+          "sourceRefs": [
+            2
+          ],
+          "image": {
+            "src": "media/1982-computer-chronicle-issue-002-picture-2.png",
+            "alt": "Generated period-style image of an August 1982 computer magazine rack, floppy disk boxes, software boxes, and retail price tags",
+            "caption": "Generated period-style visual: magazine-rack and computer-store counter texture.",
+            "confidence": "AI-generated visual context based on sourced August 1982 magazine/retail material"
+          }
+        }
+      ],
+      "computerItems": [
+        {
+          "label": "IBM PC / compatibles",
+          "headline": "The Birthday Is Also a Compatibility Test",
+          "summary": "A year after IBM's announcement, a shopper is no longer just choosing a box. The practical questions are DOS version, floppy format, display choice, printer speed, add-in cards, and whether the program on the shelf expects true IBM behavior.",
+          "confidence": "Week-specific anniversary, period market context",
+          "sourceRefs": [
+            0,
+            1
+          ]
+        },
+        {
+          "label": "Commodore 64",
+          "headline": "C64 Watch Moves From Showpiece to Store Counter",
+          "summary": "The August launch window remains the home-computer counterweight to IBM's office desk: 64K memory, color, sound, TV hookup, and a $595 list price that keeps Atari, TI, Apple, and Radio Shack salesmen alert.",
+          "confidence": "Same-month August 1982 launch window",
+          "sourceRefs": [
+            3
+          ]
+        },
+        {
+          "label": "Magazine rack",
+          "headline": "Compute! Runs the New Wave Across Its August Cover",
+          "summary": "The August Compute! cover promises an in-depth look at the new Commodore 64, Sinclair Color Spectrum, Epson portable, and more. Inside, the table of contents pairs hardware first looks with modem, RS-232, Atari, VIC, and Apple utility material.",
+          "confidence": "Dated August 1982 magazine issue",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "label": "Printers & disks",
+          "headline": "The Peripheral Bill Is Still the Real Bill",
+          "summary": "Retail advertising in the August Compute! issue lists Atari 810 disk drives at $599.95, Epson MX-80 printers at $645, Commodore 2031 single disk drives at $695, and serious daisy-wheel printers above $1,800.",
+          "confidence": "Prices from August 1982 magazine ad text",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "label": "Timex / Sinclair",
+          "headline": "Under-$100 BASIC Keeps Pulling Newcomers Toward the Counter",
+          "summary": "The Timex Sinclair 1000 had just arrived through mass retail in July at $99.95. In this issue week it functions as the budget-computer argument beside pricier color machines and office PCs.",
+          "confidence": "Recent July 1982 launch coverage; used as current shelf context",
+          "sourceRefs": [
+            4
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "#1 WordPro PLUS",
+          "platform": "Commodore CBM 8032 / PET line",
+          "detail": "Advertised in the August 1982 Compute! issue as turning the CBM 8032 into a serious office word-processing system; price list shows WordPro 2 Plus at $199.95 and higher CBM versions up to $450.",
+          "confidence": "Dated August 1982 magazine ad and price list",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "name": "#2 BASIC A+",
+          "platform": "Atari 8-bit",
+          "detail": "Compute! August 1982 lists a review of BASIC A+ for the Atari, placing it directly on this month's programmer shelf.",
+          "confidence": "Dated August 1982 magazine review listing",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "name": "#3 Household Budget Manager",
+          "platform": "Home computers, magazine program",
+          "detail": "A cover-featured Compute! August 1982 program for analyzing credit, expenses, and income; belongs here as the month's practical home-accounting software.",
+          "confidence": "Dated August 1982 magazine cover/table listing",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "name": "#4 Apple Data Manager",
+          "platform": "Apple II",
+          "detail": "Compute! bills Apple Data Manager as an intelligent filing cabinet, giving Apple owners a database-style utility item on the August rack.",
+          "confidence": "Dated August 1982 magazine table listing",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "name": "#5 Microsoft SoftCard / CP/M bundle",
+          "platform": "Apple II",
+          "detail": "Microsoft's August Compute! ad sells the SoftCard as a Z-80 and CP/M path for Apple II owners, with BASIC-80 and access to a large CP/M software library.",
+          "confidence": "Dated August 1982 magazine ad",
+          "sourceRefs": [
+            2
+          ]
+        }
+      ],
+      "storeShelves": [
+        {
+          "name": "Choplifter!",
+          "platform": "Apple II; Atari 8-bit; VIC-20",
+          "detail": "Release/date confidence: released in 1982; still a current Broderbund home-computer shelf item for August buyers, though no exact August 9-15 release day is asserted.",
+          "confidence": "Year verified; current-shelf context",
+          "sourceRefs": [
+            5
+          ]
+        },
+        {
+          "name": "Robotron: 2084",
+          "platform": "Arcade",
+          "detail": "Release/date confidence: arcade release records place it in 1982; the August arcade floor can plausibly carry it as a current Williams cabinet, but not as a fresh weekly debut.",
+          "confidence": "1982 arcade release; exact week not asserted",
+          "sourceRefs": [
+            6
+          ]
+        },
+        {
+          "name": "Dig Dug",
+          "platform": "Arcade",
+          "detail": "Release/date confidence: 1982 arcade release; included as current coin-op traffic rather than an August 9 launch claim.",
+          "confidence": "1982 release; broad date confidence",
+          "sourceRefs": [
+            7
+          ]
+        },
+        {
+          "name": "Guess That Animal",
+          "platform": "Commodore / Atari magazine program",
+          "detail": "Release/date confidence: listed in the August 1982 Compute! issue as an educational Commodore/Atari game, making it a magazine-rack game for this issue week.",
+          "confidence": "Dated August 1982 magazine listing",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "name": "Q*bert",
+          "platform": "Arcade",
+          "detail": "Release/date confidence: Gottlieb release notes point to October 1982, so this belongs only in Coming Soon chatter, not as an August cabinet arrival.",
+          "confidence": "Forthcoming context; not this week",
+          "sourceRefs": [
+            8
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "Atari 400 16K",
+          "price": "$399.00",
+          "note": "NEECO ad in the August 1982 Compute! issue."
+        },
+        {
+          "item": "Atari 810 disk drive",
+          "price": "$599.95",
+          "note": "A reminder that floppy storage could cost more than some starter computers."
+        },
+        {
+          "item": "Epson MX-80 with Graftrax",
+          "price": "$645.00",
+          "note": "August magazine ad price for a popular dot-matrix office/home printer."
+        },
+        {
+          "item": "Commodore 2031 single disk drive",
+          "price": "$695.00",
+          "note": "Listed beside CBM machines in the same August retail ad."
+        },
+        {
+          "item": "Microsoft SoftCard",
+          "price": "Ask dealer",
+          "note": "Advertised as an Apple II CP/M expansion path; ad points buyers to dealers rather than a printed price."
+        }
+      ],
+      "market": {
+        "headline": "Computer Store Market: One Desk, Many Add-Ons",
+        "summary": "This issue skips securities-market filler. The market signal is at retail: the PC birthday brings demand for compatible software and boards, while August magazine ads show printers, disk drives, modems, and word processors pushing the real cost far beyond the headline computer price.",
+        "confidence": "Retail-price and anniversary context",
+        "sourceRefs": [
+          0,
+          1,
+          2
+        ]
+      },
+      "bbsNote": {
+        "headline": "Choosing a Modem Is Now a Department, Not a Footnote",
+        "summary": "Compute! keeps telecommunications in the magazine stack with modem and RS-232 coverage. The home user still has to reckon with 300-baud patience, telephone bills, and which serial interface belongs on which machine.",
+        "posts": [
+          {
+            "topic": "VIC Desk",
+            "platform": "VIC-20",
+            "text": "August Compute! carries VIC communications and RS-232 material for readers pushing beyond cassette-and-cartridge use."
+          },
+          {
+            "topic": "Apple Desk",
+            "platform": "Apple II",
+            "text": "SoftCard and CP/M ads make the Apple feel like two machines at once for software hunters."
+          },
+          {
+            "topic": "PC Desk",
+            "platform": "IBM PC",
+            "text": "The anniversary question: which clone, card, disk, printer, and DOS combination behaves when the office program starts?"
+          }
+        ],
+        "confidence": "Dated magazine coverage plus period context",
+        "sourceRefs": [
+          2
+        ]
+      },
+      "curiosity": {
+        "headline": "Friday the 13th Brings a Crowded Marquee",
+        "summary": "August 13 sends Fast Times at Ridgemont High, Friday the 13th Part 3, The Soldier, Star Wars in re-release, and Tempest into wide release listings. The office computer may be turning one, but the weekend ticket line is pure late-summer 1982.",
+        "confidence": "Exact August 13 release listings",
+        "sourceRefs": [
+          9
+        ]
+      },
+      "briefs": [
+        {
+          "label": "Magazine Rack",
+          "headline": "Compute! August: C64, Epson Portable, RS-232, and BASIC A+",
+          "summary": "The issue's cover and table of contents make the new-machine rack unusually useful: first looks, Atari language coverage, VIC word processors, Apple filing software, and modem notes all share the same month-stamped bundle.",
+          "confidence": "Dated August 1982 magazine issue",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "label": "Coming Soon",
+          "headline": "Q*bert Waits Down the Road",
+          "summary": "Gottlieb's Q*bert is treated here as a future arcade watch item; release notes point to October 1982, so the August paper keeps it off the current-arrivals list.",
+          "confidence": "Future 1982 item; not target-week news",
+          "sourceRefs": [
+            8
+          ]
+        },
+        {
+          "label": "Coming Soon",
+          "headline": "Ultima II Nears the Apple RPG Shelf Later This Month",
+          "summary": "Release references place Ultima II later in August 1982, making it fair computer-store anticipation but not an August 9-15 release.",
+          "confidence": "Near-future August context; not target-week release",
+          "sourceRefs": [
+            10
+          ]
+        },
+        {
+          "label": "TV Watch",
+          "headline": "Friday Night Listings Keep Network TV in Summer Mode",
+          "summary": "Prime-time listings for Friday, August 13 show the usual network grid of repeats, movies, and variety rather than a computer-age television event.",
+          "confidence": "Exact-day TV listing context",
+          "sourceRefs": [
+            11
+          ]
+        }
+      ],
+      "musicChart": [
+        {
+          "title": "#1 Everybody Wants You",
+          "artist": "Billy Squier",
+          "detail": "Weekly Rock Top 20 dated August 14, 1982.",
+          "confidence": "Week-specific rock chart",
+          "sourceRefs": [
+            12
+          ]
+        },
+        {
+          "title": "#2 Think I'm In Love",
+          "artist": "Eddie Money",
+          "detail": "Drops from the top after its August 7 run.",
+          "confidence": "Week-specific rock chart",
+          "sourceRefs": [
+            12
+          ]
+        },
+        {
+          "title": "#3 Still In The Game",
+          "artist": "Steve Winwood",
+          "detail": "Moves into the top three for album-rock radio.",
+          "confidence": "Week-specific rock chart",
+          "sourceRefs": [
+            12
+          ]
+        },
+        {
+          "title": "#4 Wasted On The Way",
+          "artist": "Crosby, Stills & Nash",
+          "detail": "Harmony rock remains high on the dial.",
+          "confidence": "Week-specific rock chart",
+          "sourceRefs": [
+            12
+          ]
+        },
+        {
+          "title": "#5 I Ran (So Far Away)",
+          "artist": "A Flock Of Seagulls",
+          "detail": "New-wave video-era sound keeps climbing.",
+          "confidence": "Week-specific rock chart",
+          "sourceRefs": [
+            12
+          ]
+        },
+        {
+          "title": "#6 Pledge Pin",
+          "artist": "Robert Plant",
+          "detail": "Solo Plant sits in the upper rock list.",
+          "confidence": "Week-specific rock chart",
+          "sourceRefs": [
+            12
+          ]
+        }
+      ],
+      "periodAd": {
+        "headline": "Retail Ad: Do Not Price the Computer Alone",
+        "summary": "A serious August 1982 desk may need the box, display, storage, printer, blank disks, interface cable, word processor, and maybe a modem. The cheapest sticker is rarely the finished system.",
+        "finePrint": "Constructed period-style ad note from sourced August 1982 magazine prices; not a scanned real circular.",
+        "sourceUrl": "https://archive.org/stream/1982-08-compute-magazine/Compute_Issue_027_1982_Aug_djvu.txt"
+      },
+      "classifieds": [
+        {
+          "headline": "APPLE II EXPANSION",
+          "copy": "SoftCard curious? Ask for CP/M demo disk and dealer list. Bring your own software questions.",
+          "price": "Dealer quote"
+        },
+        {
+          "headline": "ATARI STORAGE FUND",
+          "copy": "Saving for 810 disk drive. Will trade spare cartridges, manuals, and patience.",
+          "price": "$599.95 new in ad"
+        },
+        {
+          "headline": "DOT-MATRIX WORK",
+          "copy": "School reports, invoices, BASIC listings printed evenings. Clean fanfold preferred.",
+          "price": "By the page"
+        },
+        {
+          "headline": "VIC WORD PROCESSING",
+          "copy": "Two VIC word processors reviewed on the August rack. Looking for owner notes before buying.",
+          "price": "Swap advice"
+        },
+        {
+          "headline": "MODEM NIGHT OWLS",
+          "copy": "300-baud callers wanted for local numbers only. No long-distance surprises.",
+          "price": "After 10 p.m."
+        }
+      ],
+      "worldFallback": {
+        "headline": "No Bulletin Override This Week",
+        "summary": "No nuclear accident, assassination, head-of-state crisis, major disaster, or comparable hard-news event displaced the computer, software, games, and culture desk for August 9-15, 1982.",
+        "confidence": "Editorial screening note"
+      },
+      "accuracyLedger": {
+        "items": [
+          {
+            "value": "Exact",
+            "label": "Week anchor",
+            "detail": "Issue covers Monday August 9 through Sunday August 15, 1982."
+          },
+          {
+            "value": "Exact",
+            "label": "IBM PC anniversary",
+            "detail": "August 12, 1982 is one year after IBM's August 12, 1981 PC announcement."
+          },
+          {
+            "value": "Month",
+            "label": "Magazine rack",
+            "detail": "Compute! material is the August 1982 issue, not a single-day publication claim."
+          },
+          {
+            "value": "Week",
+            "label": "Rock chart",
+            "detail": "Tunecaster weekly rock chart is dated August 14, 1982."
+          },
+          {
+            "value": "Exact",
+            "label": "Movies",
+            "detail": "The Numbers lists several wide releases on August 13, 1982."
+          },
+          {
+            "value": "Mixed",
+            "label": "Games",
+            "detail": "Only the magazine game is month-pinned; arcade releases are labeled as 1982 current-shelf context or future watch."
+          }
+        ],
+        "note": "The lead and culture items are date-specific. Hardware and software departments use same-month magazine and retail evidence with confidence labels where exact week proof is unavailable."
+      },
+      "sources": [
+        {
+          "name": "IBM History: The IBM PC",
+          "url": "https://www.ibm.com/history/personal-computer?linkId=14355980"
+        },
+        {
+          "name": "IBM Product Announcement: IBM Personal Computer, August 12, 1981",
+          "url": "https://minuszerodegrees.net/5150/doco/IBM%20Product%20Announcement%20-%20IBM%20PC%205150.pdf"
+        },
+        {
+          "name": "Internet Archive: Compute! Magazine Issue 027, August 1982 full text",
+          "url": "https://archive.org/stream/1982-08-compute-magazine/Compute_Issue_027_1982_Aug_djvu.txt"
+        },
+        {
+          "name": "Computer History Museum: Commodore 64 object record",
+          "url": "https://www.computerhistory.org/revolution/personal-computers/17/298/1179"
+        },
+        {
+          "name": "Timex/Sinclair: $99.95 Timex Sinclair 1000 microcomputer debuts",
+          "url": "https://www.timexsinclair.com/article/99-95-timex-sinclair-1000-microcomputer-debuts/index.html"
+        },
+        {
+          "name": "MobyGames: Choplifter! release information",
+          "url": "https://www.mobygames.com/game/8127/choplifter/"
+        },
+        {
+          "name": "Arcade History: Robotron: 2084",
+          "url": "https://www.arcade-history.com/game/2243/robotron-2084"
+        },
+        {
+          "name": "MobyGames: Dig Dug release information",
+          "url": "https://www.mobygames.com/game/464/dig-dug/"
+        },
+        {
+          "name": "Gottlieb Q*bert release note archive",
+          "url": "https://arcarc.xmission.com/Web%20Archives/ionpool.net%20(Dec-31-2020)/arcade/gottlieb/qbert.html"
+        },
+        {
+          "name": "The Numbers: 1982 domestic release schedule",
+          "url": "https://www.the-numbers.com/movies/release-schedule/1982"
+        },
+        {
+          "name": "Ultima II release date reference",
+          "url": "https://en.wikipedia.org/wiki/Ultima_II:_The_Revenge_of_the_Enchantress"
+        },
+        {
+          "name": "Ultimate70s: Prime-time TV listings for Friday August 13, 1982",
+          "url": "https://ultimate70s.com/seventies_history/19820813/television"
+        },
+        {
+          "name": "Tunecaster: Weekly Rock Top 20 for August 14, 1982",
+          "url": "https://tunecaster.com/charts/80/rock8233.html"
+        }
+      ]
+    },
     {
       "currentDate": "2026-06-07",
       "historicDate": "1982-08-02",
