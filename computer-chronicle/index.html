@@ -576,6 +576,19 @@
       color: var(--cc-muted);
       font-size: 0.88rem;
     }
+    .status-line[data-status-state="stale"],
+    .status-line[data-status-state="missing"] {
+      display: inline-block;
+      border: 2px solid var(--cc-ink);
+      background: rgba(240, 163, 35, 0.22);
+      color: var(--cc-ink) !important;
+      font-weight: 700;
+      padding: 7px 10px;
+    }
+    .status-line[data-status-state="archive"] {
+      color: var(--cc-blue) !important;
+      font-weight: 700;
+    }
     .issue-tools {
       display: flex;
       align-items: center;

@@ -275,6 +275,9 @@ Editorial priority:
 - The `Tomorrow's Desk` panel is operational guidance for the next daily
   run. It should stay compact and rotate only when the update workflow
   changes; it is hidden from print output.
+- If the current day's researched issue is missing, the page must make
+  that clear and show the latest archived issue as stale rather than
+  silently presenting it as today's paper.
 - Use `visualProfile` for issue-level presentation choices. Keep changes
   restrained and newspaper-like, but avoid repeating the same visual mix
   every day.
