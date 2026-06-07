@@ -1,8 +1,530 @@
 {
-  "generatedAt": "2026-06-06T16:58:00-04:00",
+  "generatedAt": "2026-06-07T00:40:00-04:00",
   "editorialPriority": "When there is a choice, prefer personal computers, home computing, office PC software, and personal computer or console gaming over broad enterprise technology.",
   "fallbackPolicy": "Use exact-day computer news when verified. If none exists, use same-week or same-month personal-computing items with confidence labels, then fall back to a wider world/business headline.",
   "issues": [
+    {
+      "currentDate": "2026-06-07",
+      "historicDate": "1986-06-07",
+      "displayDate": "Saturday, June 7, 1986",
+      "edition": "Saturday Computer & Culture Section",
+      "visualProfile": {
+        "layout": "saturday-scan",
+        "accent": "red-black-blue",
+        "paper": "cream",
+        "strapline": "SATURDAY DESK \u2022 COMPUTERS \u2022 GAMES \u2022 BBS \u2022 ROCK RADIO"
+      },
+      "masthead": {
+        "kicker": "Saturday historical tech desk",
+        "title": "Computer Chronicle",
+        "deck": "A June 7, 1986 issue: exact-day Saturday culture where available, same-week computer trade items where the desk is thin, and labels that keep the difference honest."
+      },
+      "layoutPlan": {
+        "main": [
+          "editor-note",
+          "lead",
+          "computer-items",
+          "store-shelves"
+        ],
+        "sidebar": [
+          "market",
+          "budget",
+          "price-watch",
+          "bbs",
+          "curiosity",
+          "briefs",
+          "music",
+          "period-ad",
+          "fallback",
+          "accuracy",
+          "sources",
+          "verification"
+        ]
+      },
+      "sectionChrome": {
+        "lead": {
+          "label": "Top Computer Story"
+        },
+        "market": {
+          "label": "Business / Stock Market"
+        },
+        "issueBudget": {
+          "label": "Editor's Budget",
+          "title": "What Gets Ink Today"
+        },
+        "storeShelves": {
+          "label": "On Store Shelves",
+          "title": "Games, Software & Platforms People Could Talk About"
+        },
+        "priceWatch": {
+          "label": "Price Watch",
+          "title": "What It Cost"
+        },
+        "bbs": {
+          "label": "Modem Desk"
+        },
+        "curiosity": {
+          "label": "Today's Curiosity"
+        },
+        "briefs": {
+          "label": "Small Notices",
+          "title": "Other Things on the Desk"
+        },
+        "music": {
+          "label": "Rock Radio Top 10",
+          "title": "Album-Rock Airwaves"
+        },
+        "fallback": {
+          "label": "Fallback Lead"
+        },
+        "accuracy": {
+          "label": "Accuracy Ledger",
+          "title": "How Grounded Is Today?"
+        },
+        "sources": {
+          "label": "Source Trail",
+          "title": "Research Log"
+        },
+        "verification": {
+          "label": "Verification Key",
+          "title": "How to Read It"
+        }
+      },
+      "heroImage": {
+        "src": "media/retro-computer-desk-1986.webp",
+        "alt": "A period-style 1980s personal computer desk with CRT monitor, keyboard, floppy disks, printer paper, and computer magazines",
+        "caption": "Personal computer desk \u00b7 issue-front visual",
+        "confidence": "Period-style visual"
+      },
+      "editorNote": "June 7, 1986 was a Saturday, so today's issue treats exact-day culture and chart material as the date anchor, while the computer desk leans on same-week trade coverage and current-shelf games.",
+      "morningLine": "Saturday Edition: the computer desk is quiet, the game shelf is loud, rock radio has the date stamp, and the market box carries Friday's close because Wall Street is shut.",
+      "lead": {
+        "headline": "Saturday Desk: The PC Standard Keeps Spreading While VisiCalc Leaves the Counter",
+        "summary": "For June 7 itself, the computer trade desk is quiet; the strongest personal-computer story remains the same-week VisiCalc handoff after Lotus discontinued the pioneering spreadsheet. Saturday's issue frames it as the office-software background hum behind the weekend game and BBS chatter.",
+        "image": {
+          "src": "media/clipping-lotus-spreadsheet-1986.webp",
+          "alt": "Period-style clipping of a 1986 IBM-compatible computer desk with spreadsheet printouts, a CRT monitor, floppies, and dot-matrix paper",
+          "caption": "Spreadsheet software moved the business desk toward IBM-compatible PCs.",
+          "confidence": "Period-style visual"
+        },
+        "confidence": "Same-week verified; Saturday context",
+        "sourceRefs": [
+          1
+        ]
+      },
+      "computerItems": [
+        {
+          "label": "Hardware",
+          "headline": "Low-Priced IBM Compatibles Crowd the PC Aisle",
+          "summary": "InfoWorld's June 9 issue covered Epson's Equity II as a low-priced IBM-compatible challenger, a sign that clone competition was pushing business buyers toward cheaper PC-standard machines.",
+          "confidence": "Same-week issue",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "label": "Software",
+          "headline": "Desktop Publishing Keeps the Macintosh in the Office Conversation",
+          "summary": "Aldus PageMaker, released for Macintosh in 1985, was still drawing serious trade-press attention in June 1986 as page layout became one of the Mac's clearest professional strengths.",
+          "confidence": "Same-week issue",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "label": "Games",
+          "headline": "Japan Gets a Harder Super Mario Sequel",
+          "summary": "Nintendo released the Japanese Super Mario Bros. 2 for the Famicom Disk System on June 3, while Enix's Dragon Quest, released May 27, was still new on Famicom shelves.",
+          "image": {
+            "src": "media/clipping-arcade-1986.webp",
+            "alt": "Period-style clipping of a 1980s mall arcade with rows of arcade cabinets and players from behind",
+            "caption": "Arcades stayed loud while new console and computer RPGs moved into bedrooms.",
+            "confidence": "Period-style visual"
+          },
+          "confidence": "Same-week verified",
+          "sourceRefs": [
+            9,
+            4
+          ]
+        },
+        {
+          "label": "Workstations",
+          "headline": "IBM's RT PC Puts RISC on the Business Radar",
+          "summary": "IBM's 1986 RT PC workstation brought RISC technology into IBM's product line, though early trade coverage treated it as important but not yet a sure threat to established workstation vendors.",
+          "confidence": "This-year verified",
+          "sourceRefs": [
+            10
+          ]
+        }
+      ],
+      "market": {
+        "headline": "Markets Desk: Friday Close Carries the Weekend",
+        "summary": "U.S. stock markets were closed on Saturday, June 7, 1986. The desk carries Friday's record Dow close and Nasdaq near 400 as the weekend business context, not as a Saturday trading session.",
+        "dow": "1,885.90",
+        "nasdaq": "400.25",
+        "confidence": "Prior trading-day close; Saturday market closed",
+        "sourceRefs": [
+          3,
+          2
+        ]
+      },
+      "issueBudget": [
+        {
+          "priority": "A1",
+          "slot": "Lead",
+          "title": "Same-week Lotus/VisiCalc handoff, clearly labeled because Saturday tech wires are thin"
+        },
+        {
+          "priority": "A2",
+          "slot": "Games",
+          "title": "Famicom Disk System Mario 2 and Dragon Quest define the shelf chatter"
+        },
+        {
+          "priority": "Date",
+          "slot": "Rock",
+          "title": "Weekly Rock Top 20 dated June 7 anchors the exact-day mood"
+        },
+        {
+          "priority": "Box",
+          "slot": "BBS",
+          "title": "Saturday callers trade game hints, modem time, and C64 scores"
+        },
+        {
+          "priority": "Rail",
+          "slot": "Market",
+          "title": "Friday close carried into a closed Saturday market"
+        }
+      ],
+      "storeShelves": [
+        {
+          "name": "Super Mario Bros. 2",
+          "platform": "Famicom Disk System",
+          "detail": "New in Japan this week, and notably harder than the original Super Mario Bros.",
+          "confidence": "Same-week verified",
+          "sourceRefs": [
+            9
+          ]
+        },
+        {
+          "name": "Dragon Quest",
+          "platform": "Famicom",
+          "detail": "Fresh on Japanese shelves after its May 27 release; early console RPG history in real time.",
+          "confidence": "Recent release verified",
+          "sourceRefs": [
+            4
+          ]
+        },
+        {
+          "name": "The Bard's Tale",
+          "platform": "Apple II; Commodore 64 in 1986",
+          "detail": "A computer-RPG staple: Apple II first, with the C64 version part of the 1986 home-computer conversation.",
+          "confidence": "Current-year platform",
+          "sourceRefs": [
+            5
+          ]
+        },
+        {
+          "name": "Ultima IV: Quest of the Avatar",
+          "platform": "Apple II, Commodore 64, IBM PC, Atari 8-bit",
+          "detail": "Still one of the big home-computer RPGs people would compare everything else against.",
+          "confidence": "Period context",
+          "sourceRefs": [
+            6
+          ]
+        },
+        {
+          "name": "Leader Board",
+          "platform": "Commodore 64",
+          "detail": "Access Software's golf game was a 1986 C64 favorite, exactly the sort of title that made rounds in computer rooms.",
+          "confidence": "Current-year platform",
+          "sourceRefs": [
+            7
+          ]
+        },
+        {
+          "name": "Gauntlet",
+          "platform": "Arcade",
+          "detail": "Still a loud, four-player arcade magnet while home-computer players chased fantasy RPGs at the desk.",
+          "confidence": "Period context",
+          "sourceRefs": [
+            8
+          ]
+        },
+        {
+          "name": "Lotus 1-2-3",
+          "platform": "IBM PC compatibles",
+          "detail": "The business spreadsheet standard for IBM-compatible offices.",
+          "confidence": "Context verified",
+          "sourceRefs": [
+            1
+          ]
+        },
+        {
+          "name": "Aldus PageMaker",
+          "platform": "Macintosh",
+          "detail": "A defining Macintosh desktop-publishing application in current trade coverage.",
+          "confidence": "Context verified",
+          "sourceRefs": [
+            0
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "IBM-compatible PC system",
+          "price": "$1,499-$2,999",
+          "note": "Typical full-system street range varies by clone, memory, monitor, and disk."
+        },
+        {
+          "item": "1200-baud modem",
+          "price": "$199-$399",
+          "note": "A practical upgrade for bulletin board users."
+        },
+        {
+          "item": "5.25-inch floppy disks",
+          "price": "$19.95/box",
+          "note": "Common retail-ad price range for home and office users."
+        },
+        {
+          "item": "Business software",
+          "price": "$295-$495",
+          "note": "Spreadsheet, database, and word-processing packages could cost as much as hardware upgrades."
+        }
+      ],
+      "storeShelvesImage": {
+        "src": "media/clipping-game-desk-1986.webp",
+        "alt": "Period-style clipping of a 1980s home computer game desk with CRT, joystick, floppy disks, and magazines",
+        "caption": "The home-computer shelf meant disks, joysticks, manuals, and a desk that never stayed clean.",
+        "confidence": "Period-style visual"
+      },
+      "bbsNote": {
+        "headline": "Saturday Sysop Log: Weekend Calls, Game Hints, and Modem Time",
+        "summary": "The date-specific mood is Saturday usage: more time to dial boards, swap game notes, compare C64 scores, and ask for help without pretending there was a major June 7 computer announcement.",
+        "image": {
+          "src": "media/clipping-bbs-modem-1986.webp",
+          "alt": "Period-style clipping of a 1980s computer terminal, modem, telephone handset, floppy disks, and notes",
+          "caption": "A modem desk turns the day's game talk into a phone-line social network.",
+          "confidence": "Period-style visual"
+        },
+        "posts": [
+          {
+            "topic": "Game Help",
+            "text": "Weekend callers trade Super Mario Bros. 2 notes from the week's Famicom Disk System release.",
+            "platform": "Famicom Disk System"
+          },
+          {
+            "topic": "Map Desk",
+            "text": "Dragon Quest routes and early RPG hints circulate as fresh Famicom shelf chatter.",
+            "platform": "Famicom"
+          },
+          {
+            "topic": "Scoreboard",
+            "text": "C64 owners use the weekend board traffic for Leader Board scores, disk tips, and joystick opinions.",
+            "platform": "Commodore 64"
+          }
+        ],
+        "confidence": "Period-style daily digest",
+        "sourceRefs": [
+          9,
+          4,
+          7
+        ]
+      },
+      "curiosity": {
+        "headline": "A Saturday BBS Felt More Like a Clubhouse Than a Feed",
+        "summary": "On a quiet news Saturday, the timely part is the rhythm: users had more time to dial in, read messages, swap tips, and let a 1200-baud modem turn the phone line into a tiny social room.",
+        "detail": "The historical trick is not to invent a June 7 tech launch; it is to make the weekend behavior carry the date.",
+        "confidence": "Period context",
+        "sourceRefs": [
+          0
+        ]
+      },
+      "briefs": [
+        {
+          "kicker": "Exact Day",
+          "headline": "Rock radio chart is dated June 7",
+          "summary": "The weekly rock chart gives the issue a real Saturday timestamp: Genesis, Van Halen, The Fixx, and Peter Gabriel belong in today's audio texture.",
+          "confidence": "Exact chart week",
+          "sourceRefs": [
+            12
+          ]
+        },
+        {
+          "kicker": "TV Note",
+          "headline": "Star Wars: Droids reaches its 1986 finale window",
+          "summary": "The animated Star Wars Saturday-morning shelf is part of the same weekend culture as toy aisles, cartridges, and bedroom computers.",
+          "confidence": "Exact-day TV context",
+          "sourceRefs": [
+            14
+          ]
+        },
+        {
+          "kicker": "Sports Wire",
+          "headline": "Danzig Connection wins the Belmont Stakes",
+          "summary": "A real June 7 headline sits outside the computer desk, useful as a small newspaper-style date stamp rather than a tech lead.",
+          "confidence": "Exact-day context",
+          "sourceRefs": [
+            15
+          ]
+        }
+      ],
+      "musicChart": [
+        {
+          "title": "Invisible Touch",
+          "artist": "Genesis"
+        },
+        {
+          "title": "Dreams",
+          "artist": "Van Halen"
+        },
+        {
+          "title": "Secret Separation",
+          "artist": "The Fixx"
+        },
+        {
+          "title": "Sledgehammer",
+          "artist": "Peter Gabriel"
+        },
+        {
+          "title": "Touch And Go",
+          "artist": "Emerson, Lake & Powell"
+        },
+        {
+          "title": "Higher Love",
+          "artist": "Steve Winwood"
+        },
+        {
+          "title": "When The Heart Rules The Mind",
+          "artist": "GTR"
+        },
+        {
+          "title": "Like No Other Night",
+          "artist": "38 Special"
+        },
+        {
+          "title": "Like A Rock",
+          "artist": "Bob Seger & The Silver Bullet Band"
+        },
+        {
+          "title": "Wrap It Up",
+          "artist": "The Fabulous Thunderbirds"
+        }
+      ],
+      "musicChartImage": {
+        "src": "media/clipping-electronics-guitar-1986.webp",
+        "alt": "Period-style clipping of a 1980s electronics and guitar workbench with soldering tools, circuit boards, cassette deck, and guitar",
+        "caption": "Rock radio, cassette collecting, and electronics tinkering belonged to the same bedroom ecosystem.",
+        "confidence": "Period-style visual"
+      },
+      "musicChartSourceRefs": [
+        12
+      ],
+      "periodAd": {
+        "headline": "Epson Equity Computers and LQ-1000 Printer",
+        "summary": "A real 1986 two-page Epson ad used the caption \"The Power. The Glory\" to promote Epson Equity computers and the LQ-1000 printer.",
+        "finePrint": "Historical advertisement reference; summarized rather than reproduced.",
+        "sourceUrl": "https://www.vintagepaperads.com/1986-Epson-Equity-Computers-and-LQ-1000-Printer-Ad--The-Power-The-Glory_p_125428.html"
+      },
+      "worldFallback": {
+        "headline": "Danzig Connection Takes the Belmont Stakes",
+        "summary": "On June 7, 1986, Danzig Connection won the 118th Belmont Stakes, giving the Saturday paper a true exact-day wire item when the computer news desk is light.",
+        "confidence": "Exact-day archive item",
+        "sourceRefs": [
+          15
+        ]
+      },
+      "accuracyLedger": {
+        "items": [
+          {
+            "label": "Exact-day",
+            "value": "3",
+            "detail": "June 7 rock chart, Star Wars: Droids finale context, and Belmont Stakes item are dated to June 7, 1986."
+          },
+          {
+            "label": "Prior trading day",
+            "value": "1",
+            "detail": "The market box carries Friday June 6 closes because June 7 was a Saturday with U.S. markets closed."
+          },
+          {
+            "label": "Same-week/current-period",
+            "value": "6",
+            "detail": "Lotus/VisiCalc, Epson Equity II, PageMaker, Super Mario Bros. 2, Dragon Quest, and the game shelf are tied to the surrounding week or current 1986 shelf."
+          },
+          {
+            "label": "Period context",
+            "value": "8",
+            "detail": "Prices, BBS behavior, generated visuals, and some game/sidebar texture are labeled as contextual rather than exact-day claims."
+          }
+        ],
+        "note": "June 7 is treated as a Saturday issue. The page does not manufacture a major exact-day computer story where the sources are thinner."
+      },
+      "sources": [
+        {
+          "name": "InfoWorld, June 9, 1986 issue references: Epson Equity II and PageMaker coverage",
+          "url": "https://books.google.com/books/about/InfoWorld.html?id=KDwEAAAAMBAJ"
+        },
+        {
+          "name": "Lotus/VisiCalc discontinuation reference",
+          "url": "https://en.wikipedia.org/wiki/Lotus_Development"
+        },
+        {
+          "name": "FRED: NASDAQ Composite daily data",
+          "url": "https://fred.stlouisfed.org/data/NASDAQCOM"
+        },
+        {
+          "name": "CountryEconomy: Dow June 1986 daily closes",
+          "url": "https://countryeconomy.com/stock-exchange/usa?dr=1986-06"
+        },
+        {
+          "name": "MobyGames: Dragon Quest / Dragon Warrior release date",
+          "url": "https://www.mobygames.com/game/9223/dragon-warrior/"
+        },
+        {
+          "name": "MobyGames: The Bard's Tale platform/release context",
+          "url": "https://www.mobygames.com/game/819/tales-of-the-unknown-volume-i-the-bards-tale/"
+        },
+        {
+          "name": "MobyGames: Ultima IV platform/release context",
+          "url": "https://www.mobygames.com/game/884/ultima-iv-quest-of-the-avatar/"
+        },
+        {
+          "name": "MobyGames: Leader Board platform context",
+          "url": "https://www.mobygames.com/game/22482/leader-board/"
+        },
+        {
+          "name": "MobyGames: Gauntlet arcade platform context",
+          "url": "https://www.mobygames.com/game/1837/gauntlet/"
+        },
+        {
+          "name": "Arcade History: Super Mario Bros. 2 Japan release date",
+          "url": "https://www.arcade-history.com/?id=65464&n=super-mario-bros.-2-model-fmc-smb&page=detail"
+        },
+        {
+          "name": "InfoWorld: 1986-1995, the networked enterprise",
+          "url": "https://www.infoworld.com/article/2232269/1986-1995-the-networked-enterprise.html"
+        },
+        {
+          "name": "Vintage Paper Ads: 1986 Epson Equity Computers and LQ-1000 Printer ad",
+          "url": "https://www.vintagepaperads.com/1986-Epson-Equity-Computers-and-LQ-1000-Printer-Ad--The-Power-The-Glory_p_125428.html"
+        },
+        {
+          "name": "Tunecaster: Weekly Rock Top 20 for June 7, 1986",
+          "url": "https://tunecaster.com/charts/80/rock8623.html"
+        },
+        {
+          "name": "UPI Archives: Chernobyl evacuee housing deadline",
+          "url": "https://www.upi.com/Archives/1986/06/06/Housing-Chernobyl-evacuees-a-Politburo-priority/4559518414400/"
+        },
+        {
+          "name": "TheTVDB: Star Wars: Droids - The Great Heep originally aired June 7, 1986",
+          "url": "https://thetvdb.com/series/droids/episodes/8808710"
+        },
+        {
+          "name": "Belmont Stakes historical race PDF: 118th running, June 7, 1986",
+          "url": "https://cms.belmontstakes.com/uploads/historical_races/history_pdf_1986.pdf"
+        }
+      ]
+    },
     {
       "currentDate": "2026-06-06",
       "historicDate": "1986-06-06",
@@ -12,7 +534,7 @@
         "layout": "business-ledger",
         "accent": "amber-blue",
         "paper": "cream",
-        "strapline": "COMPUTERS • GAMES • SOFTWARE • MARKETS"
+        "strapline": "COMPUTERS \u2022 GAMES \u2022 SOFTWARE \u2022 MARKETS"
       },
       "masthead": {
         "kicker": "Daily historical tech desk",
@@ -93,7 +615,7 @@
       "heroImage": {
         "src": "media/retro-computer-desk-1986.webp",
         "alt": "A period-style 1980s personal computer desk with CRT monitor, keyboard, floppy disks, printer paper, and computer magazines",
-        "caption": "Personal computer desk · issue-front visual",
+        "caption": "Personal computer desk \u00b7 issue-front visual",
         "confidence": "Period-style visual"
       },
       "editorNote": "Today's issue leans toward personal computers, home computing, software people actually used, and games people could buy or talk about in 1986.",
@@ -108,7 +630,9 @@
           "confidence": "Period-style visual"
         },
         "confidence": "Same-week verified",
-        "sourceRefs": [1]
+        "sourceRefs": [
+          1
+        ]
       },
       "computerItems": [
         {
@@ -116,14 +640,18 @@
           "headline": "Low-Priced IBM Compatibles Crowd the PC Aisle",
           "summary": "InfoWorld's June 9 issue covered Epson's Equity II as a low-priced IBM-compatible challenger, a sign that clone competition was pushing business buyers toward cheaper PC-standard machines.",
           "confidence": "Same-week issue",
-          "sourceRefs": [0]
+          "sourceRefs": [
+            0
+          ]
         },
         {
           "label": "Software",
           "headline": "Desktop Publishing Keeps the Macintosh in the Office Conversation",
           "summary": "Aldus PageMaker, released for Macintosh in 1985, was still drawing serious trade-press attention in June 1986 as page layout became one of the Mac's clearest professional strengths.",
           "confidence": "Same-week issue",
-          "sourceRefs": [0]
+          "sourceRefs": [
+            0
+          ]
         },
         {
           "label": "Games",
@@ -136,14 +664,19 @@
             "confidence": "Period-style visual"
           },
           "confidence": "Same-week verified",
-          "sourceRefs": [9, 4]
+          "sourceRefs": [
+            9,
+            4
+          ]
         },
         {
           "label": "Workstations",
           "headline": "IBM's RT PC Puts RISC on the Business Radar",
           "summary": "IBM's 1986 RT PC workstation brought RISC technology into IBM's product line, though early trade coverage treated it as important but not yet a sure threat to established workstation vendors.",
           "confidence": "This-year verified",
-          "sourceRefs": [10]
+          "sourceRefs": [
+            10
+          ]
         }
       ],
       "market": {
@@ -152,7 +685,10 @@
         "dow": "1,885.90",
         "nasdaq": "400.25",
         "confidence": "Exact-day close",
-        "sourceRefs": [3, 2]
+        "sourceRefs": [
+          3,
+          2
+        ]
       },
       "issueBudget": [
         {
@@ -187,56 +723,72 @@
           "platform": "Famicom Disk System",
           "detail": "New in Japan this week, and notably harder than the original Super Mario Bros.",
           "confidence": "Same-week verified",
-          "sourceRefs": [9]
+          "sourceRefs": [
+            9
+          ]
         },
         {
           "name": "Dragon Quest",
           "platform": "Famicom",
           "detail": "Fresh on Japanese shelves after its May 27 release; early console RPG history in real time.",
           "confidence": "Recent release verified",
-          "sourceRefs": [4]
+          "sourceRefs": [
+            4
+          ]
         },
         {
           "name": "The Bard's Tale",
           "platform": "Apple II; Commodore 64 in 1986",
           "detail": "A computer-RPG staple: Apple II first, with the C64 version part of the 1986 home-computer conversation.",
           "confidence": "Current-year platform",
-          "sourceRefs": [5]
+          "sourceRefs": [
+            5
+          ]
         },
         {
           "name": "Ultima IV: Quest of the Avatar",
           "platform": "Apple II, Commodore 64, IBM PC, Atari 8-bit",
           "detail": "Still one of the big home-computer RPGs people would compare everything else against.",
           "confidence": "Period context",
-          "sourceRefs": [6]
+          "sourceRefs": [
+            6
+          ]
         },
         {
           "name": "Leader Board",
           "platform": "Commodore 64",
           "detail": "Access Software's golf game was a 1986 C64 favorite, exactly the sort of title that made rounds in computer rooms.",
           "confidence": "Current-year platform",
-          "sourceRefs": [7]
+          "sourceRefs": [
+            7
+          ]
         },
         {
           "name": "Gauntlet",
           "platform": "Arcade",
           "detail": "Still a loud, four-player arcade magnet while home-computer players chased fantasy RPGs at the desk.",
           "confidence": "Period context",
-          "sourceRefs": [8]
+          "sourceRefs": [
+            8
+          ]
         },
         {
           "name": "Lotus 1-2-3",
           "platform": "IBM PC compatibles",
           "detail": "The business spreadsheet standard for IBM-compatible offices.",
           "confidence": "Context verified",
-          "sourceRefs": [1]
+          "sourceRefs": [
+            1
+          ]
         },
         {
           "name": "Aldus PageMaker",
           "platform": "Macintosh",
           "detail": "A defining Macintosh desktop-publishing application in current trade coverage.",
           "confidence": "Context verified",
-          "sourceRefs": [0]
+          "sourceRefs": [
+            0
+          ]
         }
       ],
       "priceWatch": [
@@ -294,14 +846,20 @@
           }
         ],
         "confidence": "Period-style daily digest",
-        "sourceRefs": [9, 4, 7]
+        "sourceRefs": [
+          9,
+          4,
+          7
+        ]
       },
       "curiosity": {
         "headline": "A 1200-Baud Modem Was Fast Enough to Feel Like the Future",
         "summary": "At 1200 bits per second, a plain page of text could arrive in seconds instead of minutes. It was still slow by modern standards, but for BBS callers it changed the rhythm from waiting to browsing.",
         "detail": "Think of it as the difference between mailing a postcard and watching one appear line by line.",
         "confidence": "Period context",
-        "sourceRefs": [0]
+        "sourceRefs": [
+          0
+        ]
       },
       "briefs": [
         {
@@ -309,21 +867,27 @@
           "headline": "Arcade tokens still compete with disk money",
           "summary": "A new cartridge or computer-game disk could cost the same as a lot of Saturday mall arcade time.",
           "confidence": "Period context",
-          "sourceRefs": [8]
+          "sourceRefs": [
+            8
+          ]
         },
         {
           "kicker": "Tape Deck",
           "headline": "Rock radio meets cassette collecting",
           "summary": "Album-rock singles were part of the same bedroom ecosystem as blank tapes, boomboxes, and guitar pedals.",
           "confidence": "Period context",
-          "sourceRefs": [12]
+          "sourceRefs": [
+            12
+          ]
         },
         {
           "kicker": "Phone Line",
           "headline": "Evening calls were the computer club",
           "summary": "BBS users often waited for cheaper calling windows, open phone lines, or a free household telephone.",
           "confidence": "Period context",
-          "sourceRefs": [0]
+          "sourceRefs": [
+            0
+          ]
         }
       ],
       "musicChart": [
@@ -374,7 +938,9 @@
         "caption": "Rock radio, cassette collecting, and electronics tinkering belonged to the same bedroom ecosystem.",
         "confidence": "Period-style visual"
       },
-      "musicChartSourceRefs": [12],
+      "musicChartSourceRefs": [
+        12
+      ],
       "periodAd": {
         "headline": "Epson Equity Computers and LQ-1000 Printer",
         "summary": "A real 1986 two-page Epson ad used the caption \"The Power. The Glory\" to promote Epson Equity computers and the LQ-1000 printer.",
@@ -385,7 +951,9 @@
         "headline": "Chernobyl Evacuees Face Housing Deadline",
         "summary": "UPI reported on June 6, 1986 that Soviet officials were treating housing for Chernobyl evacuees as a Politburo priority, with an October deadline for relocated residents.",
         "confidence": "Exact-day archive item",
-        "sourceRefs": [13]
+        "sourceRefs": [
+          13
+        ]
       },
       "accuracyLedger": {
         "items": [
