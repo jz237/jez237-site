@@ -539,7 +539,7 @@
       <div class="overlay" id="overlay">
         <div class="panel">
           <h1>Invaders</h1>
-          <div class="title-version">v1.39</div>
+          <div class="title-version">v1.40</div>
           <p class="tagline" id="message">A modernized arcade defense run: punch through waves, catch power cores, and survive the boss carrier.</p>
           <div class="enemy-roster" aria-label="Enemy ship guide">
             <h2>Enemy Ships</h2>
@@ -569,7 +569,7 @@
         <button id="rightButton" type="button">→</button>
         <button id="fireButton" type="button">FIRE</button>
       </div>
-      <div class="version" aria-hidden="true">v1.39</div>
+      <div class="version" aria-hidden="true">v1.40</div>
     </section>
   </main>
 
@@ -623,6 +623,7 @@
         invaderStepTimer: 0,
         invaderMarchTimer: 0,
         invaderFrame: 0,
+        nextDive: 0,
         player: null,
         stars: [],
         invaders: [],
@@ -1025,6 +1026,7 @@
         game.invaderStepTimer = 0;
         game.invaderMarchTimer = 0;
         game.invaderFrame = 0;
+        game.nextDive = game.time + rand(2.4, 4.8);
         const mobileFormation = game.width < 560;
         const cols = game.bossWave
           ? clamp(5 + Math.floor(game.wave / 6), 5, mobileFormation ? 6 : 7)
@@ -1045,6 +1047,8 @@
               y: startY + y * spacingY,
               baseX: startX + x * spacingX,
               baseY: startY + y * spacingY,
+              homeX: startX + x * spacingX,
+              homeY: startY + y * spacingY,
               r: type === "drone" ? 14 : 16,
               type,
               hp,
@@ -1242,7 +1246,7 @@
           sfx.step(game.invaderFrame);
           let hitEdge = false;
           for (const inv of game.invaders) {
-            const nextX = inv.x + stepX;
+            const nextX = (inv.homeX ?? inv.x) + stepX;
             if (nextX < inv.r + 14 || nextX > game.width - inv.r - 14) {
               hitEdge = true;
               break;
@@ -1250,26 +1254,89 @@
           }
           if (hitEdge) {
             game.invaderDir *= -1;
-            for (const inv of game.invaders) inv.y += dropY;
+            for (const inv of game.invaders) {
+              inv.homeY = (inv.homeY ?? inv.y) + dropY;
+              if (!inv.divePhase) inv.y = inv.homeY;
+            }
           } else {
-            for (const inv of game.invaders) inv.x += stepX;
+            for (const inv of game.invaders) {
+              inv.homeX = (inv.homeX ?? inv.x) + stepX;
+              if (!inv.divePhase) inv.x = inv.homeX;
+            }
           }
         }
+        updateDiverAttacks(dt);
         for (const inv of game.invaders) lowest = Math.max(lowest, inv.y);
 
         game.nextEnemyShot -= dt;
         if (game.nextEnemyShot <= 0 && game.invaders.length) {
           const bottomY = Math.max(...game.invaders.map(inv => inv.y));
-          const shooters = game.invaders.filter(inv => inv.y >= bottomY - 4);
-          const volley = clamp(1 + Math.floor((game.wave - 3) / 4), 1, game.width < 560 ? 2 : 3);
-          for (let i = 0; i < volley; i++) {
-            const shooter = shooters[Math.floor(Math.random() * shooters.length)];
-            enemyBomb(shooter.x, shooter.y + 14, 205 + game.wave * 13, rand(-24, 24));
+          const shooters = game.invaders.filter(inv => !inv.divePhase && inv.y >= bottomY - 4);
+          if (shooters.length) {
+            const volley = clamp(1 + Math.floor((game.wave - 3) / 4), 1, game.width < 560 ? 2 : 3);
+            for (let i = 0; i < volley; i++) {
+              const shooter = shooters[Math.floor(Math.random() * shooters.length)];
+              enemyBomb(shooter.x, shooter.y + 14, 205 + game.wave * 13, rand(-24, 24));
+            }
           }
           game.nextEnemyShot = clamp(1.34 - game.wave * 0.06, 0.32, 1.34);
         }
 
         if (lowest > game.player.y - 42) hitPlayer(70);
+      }
+
+      function startDiverAttack(inv) {
+        inv.divePhase = "down";
+        inv.diveTargetX = game.player.x;
+        inv.diveHit = false;
+        inv.divePulse = 0;
+        burst(inv.x, inv.y, colors.enemy3, 8, 130);
+      }
+
+      function updateDiverAttacks(dt) {
+        if (!game.bossWave && game.time >= game.nextDive) {
+          const activeDive = game.invaders.some(inv => inv.divePhase);
+          const candidates = activeDive ? [] : game.invaders.filter(inv => inv.type === "diver" && !inv.divePhase);
+          if (candidates.length) startDiverAttack(candidates[Math.floor(Math.random() * candidates.length)]);
+          game.nextDive = game.time + rand(game.width < 560 ? 3.2 : 2.6, game.width < 560 ? 5.8 : 4.8);
+        }
+
+        for (const inv of game.invaders) {
+          if (!inv.divePhase) continue;
+          inv.divePulse += dt;
+          const p = game.player;
+          if (inv.divePhase === "down") {
+            inv.diveTargetX = p.x;
+            const targetY = p.y - 48;
+            const dx = inv.diveTargetX - inv.x;
+            const dy = targetY - inv.y;
+            const len = Math.max(1, Math.hypot(dx, dy));
+            const speed = 360 + game.wave * 18;
+            inv.x += dx / len * speed * dt;
+            inv.y += dy / len * speed * dt;
+            if (!inv.diveHit && distSq(inv, p) < (inv.r + p.r + 7) * (inv.r + p.r + 7)) {
+              inv.diveHit = true;
+              hitPlayer(enemyShotDamage() + 8);
+              burst(inv.x, inv.y, colors.enemy3, 16, 220);
+            }
+            if (len < 18 || inv.y > p.y - 56) inv.divePhase = "return";
+          } else {
+            const homeX = inv.homeX ?? inv.baseX;
+            const homeY = inv.homeY ?? inv.baseY;
+            const dx = homeX - inv.x;
+            const dy = homeY - inv.y;
+            const len = Math.max(1, Math.hypot(dx, dy));
+            const speed = 430 + game.wave * 16;
+            inv.x += dx / len * speed * dt;
+            inv.y += dy / len * speed * dt;
+            if (len < 8) {
+              inv.x = homeX;
+              inv.y = homeY;
+              inv.divePhase = null;
+              inv.diveHit = false;
+            }
+          }
+        }
       }
 
       function updateBoss(dt) {
@@ -1946,10 +2013,20 @@
         for (const inv of game.invaders) {
           ctx.save();
           ctx.translate(inv.x, inv.y);
+          if (inv.divePhase) {
+            ctx.rotate(Math.sin(game.time * 15) * 0.08);
+            ctx.globalCompositeOperation = "lighter";
+            glow(colors.enemy3, 18);
+          }
           const color = inv.type === "drone" ? colors.enemy : inv.type === "striker" ? colors.enemy2 : colors.enemy3;
           const pixel = inv.type === "drone" ? 3 : 3.1;
           const sprite = getInvaderSprite(inv.type, game.invaderFrame, color, pixel);
           ctx.drawImage(sprite, -sprite.width / 2, -sprite.height / 2);
+          if (inv.divePhase) {
+            ctx.fillStyle = colors.fire;
+            ctx.globalAlpha = 0.75;
+            ctx.fillRect(-3, -sprite.height / 2 - 7, 6, 10);
+          }
           ctx.restore();
         }
         ctx.restore();
