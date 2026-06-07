@@ -145,6 +145,23 @@
       box-shadow: 7px 7px 0 rgba(194, 38, 115, 0.25);
       overflow: hidden;
     }
+    .hero-art-button {
+      appearance: none;
+      display: block;
+      width: 100%;
+      height: 100%;
+      min-height: 280px;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      cursor: zoom-in;
+      color: inherit;
+      font: inherit;
+    }
+    .hero-art-button:focus-visible {
+      outline: 4px solid var(--cc-amber);
+      outline-offset: -6px;
+    }
     .hero-art img {
       width: 100%;
       height: 100%;
@@ -175,6 +192,61 @@
       letter-spacing: 0.06em;
       padding: 8px 10px;
       text-transform: uppercase;
+    }
+    .hero-art-zoom {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      z-index: 2;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 36px;
+      height: 36px;
+      border: 2px solid var(--cc-paper);
+      background: rgba(27, 26, 23, 0.82);
+      color: var(--cc-paper);
+      font-size: 1.05rem;
+      line-height: 1;
+      pointer-events: none;
+    }
+    .newspaper-lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: clamp(14px, 3vw, 32px);
+      background: rgba(10, 9, 7, 0.94);
+    }
+    .newspaper-lightbox[aria-hidden="false"] {
+      display: flex;
+    }
+    .newspaper-lightbox img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      border: 4px solid var(--cc-paper);
+      background: var(--cc-ink);
+      box-shadow: 0 0 0 1px rgba(255, 248, 220, 0.38), 0 22px 70px rgba(0, 0, 0, 0.62);
+    }
+    .lightbox-close {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      z-index: 1001;
+      width: 42px;
+      height: 42px;
+      border: 2px solid var(--cc-paper);
+      background: var(--cc-ink);
+      color: var(--cc-paper);
+      cursor: pointer;
+      font: 700 1.4rem/1 "Courier New", Courier, monospace;
+    }
+    .lightbox-close:focus-visible {
+      outline: 4px solid var(--cc-amber);
+      outline-offset: 3px;
     }
     .issue-date-card {
       align-self: stretch;
@@ -1261,7 +1333,10 @@
         <p data-masthead-deck>A weekly 1982 computer, games, and culture section with confidence labels so release dates, same-week context, and period background stay honest.</p>
       </div>
       <figure class="hero-art">
-        <img data-hero-image src="media/retro-computer-desk-1986.webp" alt="Computer Chronicle issue-front visual">
+        <button class="hero-art-button" type="button" data-open-hero-image aria-label="Open newspaper visual full screen">
+          <img data-hero-image src="media/retro-computer-desk-1986.webp" alt="Computer Chronicle issue-front visual">
+          <span class="hero-art-zoom" aria-hidden="true">+</span>
+        </button>
         <figcaption data-hero-caption>Issue-front visual</figcaption>
       </figure>
       <aside class="issue-date-card" aria-label="Issue date">
@@ -1370,6 +1445,10 @@
     </section>
     <p class="print-source-note">See website for source links, verification details, and archive notes: jz237.github.io/jez237-site/computer-chronicle/</p>
   </main>
+  <div class="newspaper-lightbox" data-hero-lightbox aria-hidden="true" role="dialog" aria-modal="true" aria-label="Newspaper visual full screen">
+    <button class="lightbox-close" type="button" data-close-hero-image aria-label="Close full screen newspaper visual">x</button>
+    <img data-lightbox-image alt="">
+  </div>
 
   <script src="assets/chronicle.js"></script>
   <script src="../assets/site-enhance.js" defer></script>
