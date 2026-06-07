@@ -2845,7 +2845,7 @@
         <article class="problem-card">
           <span>Inverts</span>
           <h3>Snails or Shrimp Dying</h3>
-          <p>Look at copper, ammonia, nitrite, salinity swings, acclimation, medication exposure, and missing minerals.</p>
+          <p>Look at copper, ammonia, nitrite, parameter swings, acclimation, medication exposure, and missing minerals.</p>
           <a href="snails-shrimp-dying/">Open guide</a>
         </article>
         <article class="problem-card">
@@ -2942,7 +2942,7 @@
           tests: ['Ammonia', 'Nitrite', 'Temperature', 'pH'],
           actions: ['Increase surface movement', 'Add aeration if available', 'Stop feeding briefly', 'Check recent chemical additions'],
           avoid: ['Do not medicate before testing', 'Do not shut off filters', 'Do not make several changes at once'],
-          visit: ['Fresh water sample', 'Short video of breathing', 'Tank size and temperature', 'Recent additive or medication list'],
+          visit: ['Fresh sample of tank water', 'Short video of breathing', 'Tank size and temperature', 'Recent additive or medication list'],
           links: [['Open gasping guide', 'fish-gasping/'], ['Shop air and filtration', '../category/?cat=filtration']]
         },
         cloudy: {
@@ -2953,7 +2953,7 @@
           tests: ['Ammonia', 'Nitrite', 'Nitrate', 'Recent feeding amount'],
           actions: ['Reduce feeding', 'Check filter flow', 'Rinse mechanical media safely', 'Look for dirty substrate'],
           avoid: ['Do not replace all media', 'Do not over-clean biological filtration', 'Do not add clarifier before checking cause'],
-          visit: ['Fresh water sample', 'Photo of water color', 'Filter model or photo', 'Feeding amount and schedule'],
+          visit: ['Fresh sample of tank water', 'Photo of water color', 'Filter model or photo', 'Feeding amount and schedule'],
           links: [['Open cloudy water guide', 'cloudy-water/'], ['Shop maintenance', '../category/?cat=maintenance']]
         },
         green: {
@@ -2985,8 +2985,8 @@
           validTankTypes: ['freshwater', 'saltwater', 'reef', 'pond'],
           tests: ['Ammonia', 'Nitrite', 'pH', 'Temperature'],
           actions: ['Increase aeration', 'Observe spots or behavior closely', 'Consider a hospital tank', 'Bring clear photos or video'],
-          avoid: ['Do not mix medications', 'Do not dose reef displays blindly', 'Do not skip water tests'],
-          visit: ['Clear fish photos or video', 'Fresh water sample', 'Livestock list', 'Medication history'],
+          avoid: ['Do not mix medications', 'Do not dose display tanks blindly', 'Do not skip water tests'],
+          visit: ['Clear fish photos or video', 'Fresh sample of tank water', 'Livestock list', 'Medication history'],
           links: [['Open sick fish guide', 'ich/'], ['Shop maintenance', '../category/?cat=maintenance']]
         },
         coral: {
@@ -3003,12 +3003,12 @@
         inverts: {
           label: 'Invertebrate safety check',
           title: 'Look for toxins, swings, and acclimation stress.',
-          summary: 'Shrimp and snails often react first to copper, medication, ammonia, nitrite, salinity swings, or poor acclimation.',
+          summary: 'Shrimp and snails often react first to copper, medication, ammonia, nitrite, temperature swings, or poor acclimation.',
           validTankTypes: ['freshwater', 'saltwater', 'reef'],
-          tests: ['Ammonia', 'Nitrite', 'pH or salinity', 'Copper if medication was used'],
-          actions: ['Review recent dosing', 'Check acclimation history', 'Stabilize temperature and salinity', 'Use clean source water'],
-          avoid: ['Do not dose copper in invert systems', 'Do not make rapid salinity changes', 'Do not assume it is only lack of food'],
-          visit: ['Fresh water sample', 'Medication or copper history', 'Acclimation method', 'Source water notes'],
+          tests: ['Ammonia', 'Nitrite', 'pH', 'Copper if medication was used'],
+          actions: ['Review recent dosing', 'Check acclimation history', 'Stabilize temperature', 'Use clean source water'],
+          avoid: ['Do not dose copper in invert systems', 'Do not make rapid parameter changes', 'Do not assume it is only lack of food'],
+          visit: ['Fresh sample of tank water', 'Medication or copper history', 'Acclimation method', 'Source water notes'],
           links: [['Open invert guide', 'snails-shrimp-dying/'], ['Shop water care', '../category/?cat=maintenance']]
         },
         smell: {
@@ -3019,7 +3019,7 @@
           tests: ['Ammonia', 'Nitrite', 'Filter flow', 'Missing livestock'],
           actions: ['Inspect behind decor and intakes', 'Remove dead material', 'Siphon debris', 'Clean mechanical media safely'],
           avoid: ['Do not mask odor with additives', 'Do not deep-clean every filter stage', 'Do not ignore rotten-egg smells'],
-          visit: ['Fresh water sample', 'Filter photo or model', 'Missing livestock notes', 'Feeding and cleaning schedule'],
+          visit: ['Fresh sample of tank water', 'Filter photo or model', 'Missing livestock notes', 'Feeding and cleaning schedule'],
           links: [['Open bad smell guide', 'bad-smell/'], ['Shop maintenance', '../category/?cat=maintenance']]
         }
       };
@@ -3135,8 +3135,8 @@
         triageEls.title.textContent = `${base.title.replace(/\.$/, '')} - but check the tank type first.`;
         triageEls.summary.textContent = `${selectedOptionText(triageEls.symptom)} does not fit ${selectedOptionText(triageEls.tank, selectedTankType)} guidance. Use ${validTankLabels.join(' or ')} for this symptom before following the checklist.`;
         renderList(triageEls.tests, ['Confirm the aquarium type', 'Re-select the matching tank type']);
-        renderList(triageEls.actions, ['Do not follow reef-specific steps for a freshwater system', 'Switch the tank type if this is actually a reef or coral system']);
-        renderList(triageEls.avoid, ['Do not test or dose salinity for freshwater', 'Do not use coral dip guidance on freshwater livestock']);
+        renderList(triageEls.actions, ['Do not follow this checklist until the tank type matches', `Switch the tank type if this should be ${validTankLabels.join(' or ')}`]);
+        renderList(triageEls.avoid, ['Do not use tests or treatments meant for a different aquarium type', `Do not treat ${selectedOptionText(triageEls.tank, selectedTankType)} livestock as ${validTankLabels.join(' or ')}`]);
         renderList(triageEls.visit, ['Photo of the tank and livestock', 'Tank type and setup notes', 'Recent test numbers']);
 
         triageEls.links.innerHTML = '';
