@@ -272,6 +272,9 @@ Editorial priority:
   rather than archival evidence.
 - Static or slow-changing sections are acceptable only when they are
   explicitly framed as context, prices, verification, or archive tooling.
+- The `Tomorrow's Desk` panel is operational guidance for the next daily
+  run. It should stay compact and rotate only when the update workflow
+  changes; it is hidden from print output.
 - Use `visualProfile` for issue-level presentation choices. Keep changes
   restrained and newspaper-like, but avoid repeating the same visual mix
   every day.
