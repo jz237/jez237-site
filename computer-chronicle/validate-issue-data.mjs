@@ -28,6 +28,15 @@ function dateDiffYears(currentDate, historicDate) {
   return copy.toISOString().slice(0, 10) === historicDate;
 }
 
+function todayInNewYork() {
+  return new Intl.DateTimeFormat("en-CA", {
+    timeZone: "America/New_York",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit"
+  }).format(new Date());
+}
+
 function walk(value, visit, trail = []) {
   visit(value, trail);
   if (Array.isArray(value)) {
@@ -118,6 +127,13 @@ const sorted = issues.every((issue, index, list) => {
 
 if (!sorted) {
   fail("Issues should be sorted newest first so the archive/current fallback stays predictable.");
+}
+
+if (issues[0] && process.env.CHRONICLE_ALLOW_STALE !== "1") {
+  const expectedCurrentDate = todayInNewYork();
+  if (issues[0].currentDate !== expectedCurrentDate) {
+    fail(`Newest issue is stale: expected currentDate ${expectedCurrentDate}, found ${issues[0].currentDate}. Set CHRONICLE_ALLOW_STALE=1 only for archive/offline checks.`);
+  }
 }
 
 warnings.forEach((message) => console.warn(`Warning: ${message}`));
