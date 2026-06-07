@@ -54,6 +54,8 @@
     editorNote: document.querySelector("[data-editor-note]"),
     issuePicker: document.querySelector("[data-issue-picker]"),
     printIssue: document.querySelector("[data-print-issue]"),
+    archiveNav: document.querySelector("[data-archive-nav]"),
+    archiveList: document.querySelector("[data-archive-list]"),
     frontPageIndex: document.querySelector("[data-front-page-index]"),
     nextCurrentDate: document.querySelector("[data-next-current-date]"),
     nextHistoricDate: document.querySelector("[data-next-historic-date]"),
@@ -512,6 +514,29 @@
     });
   }
 
+  function renderArchiveList(issues, selectedIssue) {
+    if (!els.archiveList) return;
+    if (els.archiveNav) els.archiveNav.hidden = issues.length < 2;
+    if (issues.length < 2) {
+      els.archiveList.innerHTML = "";
+      return;
+    }
+
+    els.archiveList.innerHTML = issues.map((issue, index) => {
+      const active = selectedIssue && selectedIssue.currentDate === issue.currentDate;
+      const label = index === 0 ? "Latest" : "Archive";
+      return `
+        <li>
+          <a href="?date=${encodeURIComponent(issue.currentDate)}" ${active ? "aria-current=\"page\"" : ""}>
+            <span>${escapeHtml(label)}</span>
+            <strong>${escapeHtml(issue.currentDate)}</strong>
+            <em>${escapeHtml(issue.displayDate || issue.historicDate)}</em>
+          </a>
+        </li>
+      `;
+    }).join("");
+  }
+
   async function loadIssues() {
     const today = new Date();
     const currentIso = isoDate(today);
@@ -524,6 +549,7 @@
       state.issues = data.issues || [];
       state.issue = pickIssue(state.issues, currentIso, historicIso);
       renderIssuePicker(state.issues, state.issue);
+      renderArchiveList(state.issues, state.issue);
       renderIssue(state.issue, currentIso, historicIso);
     } catch (error) {
       els.status.textContent = `Could not load issue data: ${error.message}`;
