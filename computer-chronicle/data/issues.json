@@ -113,7 +113,7 @@
       "morningLine": "This week: the IBM PC reaches its first birthday, August magazines put new home machines and software on the rack, computer-store math still belongs to peripherals, and August 13 crowds the movie marquee.",
       "lead": {
         "headline": "IBM PC Turns One With the Clone Question Already in the Room",
-        "summary": "Thursday, August 12 marks one year since IBM announced the Personal Computer. The first-birthday story is not cake; it is compatibility. Buyers now weigh a real IBM 5150 desk against cheaper workalikes, add-in cards, DOS disks, printers, monitors, and the growing office-software shelf. IBM opened the door with a low-cost system built from a system unit, keyboard, diskette drives, monochrome display, and printer options; by this summer, the question on the sales floor is which programs and boards will behave like they belong together.",
+        "summary": "Thursday, August 12 marks one year since IBM announced the Personal Computer. The first-birthday story is not cake; it is compatibility. The IBM 5150 centers on Intel's 8088 processor, starts at 16K RAM with expansion toward 256K, and gives buyers five internal expansion slots for cards, memory, display, printer, communications, and other add-ons. Buyers now weigh a real IBM desk against cheaper workalikes, DOS disks, printers, monitors, and the growing office-software shelf; by this summer, the question on the sales floor is which programs and boards will behave like they belong together.",
         "confidence": "Exact anniversary date inside target week; 1982 compatibility context labeled as market context",
         "sourceRefs": [
           0,
@@ -154,7 +154,7 @@
         {
           "label": "IBM PC / compatibles",
           "headline": "The Birthday Is Also a Compatibility Test",
-          "summary": "A year after IBM's announcement, a shopper is no longer just choosing a box. The practical questions are DOS version, floppy format, display choice, printer speed, add-in cards, and whether the program on the shelf expects true IBM behavior.",
+          "summary": "A year after IBM's announcement, a shopper is no longer just choosing a box. The practical checklist starts with the 8088 CPU, 16K-to-256K memory path, five expansion slots, cassette or diskette storage, monochrome or color display choice, printer speed, DOS version, and whether the program on the shelf expects true IBM behavior.",
           "confidence": "Week-specific anniversary, period market context",
           "sourceRefs": [
             0,
