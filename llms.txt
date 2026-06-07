@@ -203,6 +203,9 @@ Computer Chronicle lives in `/computer-chronicle/`.
 This is intended to update every morning as a daily historical newspaper
 section. Each issue should cover the date 40 years before the current
 date in Jez's timezone, `America/New_York`.
+The newest issue must match today's America/New_York date before a daily
+image is generated or posted. Do not let the image cron treat the latest
+archived issue as current just because it is newest in the JSON.
 Every morning update must preserve the previous day's issue in the
 archive before replacing the current front page. Do not overwrite or
 discard yesterday's researched issue; keep it in `issues` so the archive
@@ -234,6 +237,9 @@ Editorial priority:
 - Use exact-day computer news when verified.
 - If exact-day computer news is thin, use same-week or same-month
   personal-computing items with confidence labels.
+- If the target date has no strong exact-day computer story, say so
+  plainly in the issue and use exact-day culture/business/world items as
+  date anchors while keeping same-week computer material clearly labeled.
 - If the computer desk has no strong lead, use a real world/business
   fallback headline for that historical date while keeping the computer
   roundup visible.
@@ -286,6 +292,16 @@ Editorial priority:
 - If the current day's researched issue is missing, the page must make
   that clear and show the latest archived issue as stale rather than
   silently presenting it as today's paper.
+- Daily Discord newspaper images must be based on the current issue whose
+  `currentDate` equals today's America/New_York date and whose
+  `historicDate` is exactly 40 years earlier. If that issue is missing or
+  stale, do not generate a generic 1980s image; report that the Chronicle
+  issue needs the correct date first.
+- Daily Discord newspaper images should include visible date-specific
+  cues from the issue's exact-day and accuracy-ledger fields. The image
+  can be nostalgic, but the caption/prompt source must be date-first:
+  exact-day items, prior-trading-day notes, same-week computer items, and
+  period context must not be collapsed into one fake headline pile.
 - When publishing a new issue, move yesterday's issue into the archive
   first, then add today's issue as the newest/current entry. The archive
   is part of the product, not cleanup debris.
