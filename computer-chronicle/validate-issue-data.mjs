@@ -85,6 +85,7 @@ function checkImages(issue, issueIndex) {
 
 function checkRendererShapes(issue, issueIndex) {
   if (!Array.isArray(issue.computerItems)) fail(`Issue ${issueIndex}: computerItems must be an array.`);
+  if (issue.pictureDesk && !Array.isArray(issue.pictureDesk)) fail(`Issue ${issueIndex}: pictureDesk must be an array when present.`);
   if (!Array.isArray(issue.storeShelves)) fail(`Issue ${issueIndex}: storeShelves must be an array.`);
   if (issue.softwareList && !Array.isArray(issue.softwareList)) fail(`Issue ${issueIndex}: softwareList must be an array when present.`);
   if (!Array.isArray(issue.priceWatch)) fail(`Issue ${issueIndex}: priceWatch must be an array.`);
@@ -100,6 +101,13 @@ function checkRendererShapes(issue, issueIndex) {
   (issue.softwareList || []).forEach((item, itemIndex) => {
     if (!item.name || !item.detail) {
       fail(`Issue ${issueIndex}: softwareList[${itemIndex}] must include name and detail.`);
+    }
+  });
+
+  (issue.pictureDesk || []).forEach((item, itemIndex) => {
+    const image = item.image || item;
+    if (!image.src || !image.alt || !image.caption || !image.confidence) {
+      fail(`Issue ${issueIndex}: pictureDesk[${itemIndex}] must include image src, alt, caption, and confidence.`);
     }
   });
 
