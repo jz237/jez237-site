@@ -312,6 +312,15 @@ Important files:
 - `computer-chronicle/index.html` - rendered page shell.
 - `computer-chronicle/assets/chronicle.js` - client-side renderer.
 - `computer-chronicle/data/issues.json` - public structured issue data.
+- `computer-chronicle/validate-issue-data.mjs` - validation script for
+  archive order, 40-year date pairing, source references, image files,
+  and public prompt-safety checks.
+
+Before publishing a Chronicle update, run:
+
+```bash
+node computer-chronicle/validate-issue-data.mjs
+```
 
 ## Image prompt gallery
 
