@@ -122,6 +122,7 @@
     .section-label {
       display: inline-block;
       max-width: 100%;
+      min-width: 0;
       color: var(--cc-ink);
       background: var(--cc-amber);
       font-size: 0.76rem;
@@ -130,6 +131,9 @@
       margin: 0 0 8px;
       padding: 4px 7px;
       text-transform: uppercase;
+      white-space: normal;
+      overflow-wrap: anywhere;
+      word-break: break-word;
     }
     .chronicle-kicker {
       color: #fff8dc;
@@ -457,9 +461,10 @@
       margin-top: 14px;
     }
     .confidence {
-      display: inline-flex;
-      width: max-content;
+      display: inline-block;
+      width: auto;
       max-width: 100%;
+      min-width: 0;
       margin-top: 6px;
       border: 1px solid var(--cc-magenta);
       border-radius: 0;
@@ -467,34 +472,50 @@
       color: var(--cc-magenta);
       background: rgba(194, 38, 115, 0.06);
       font-size: 0.78rem;
-      line-height: 1;
+      line-height: 1.22;
       text-transform: uppercase;
+      white-space: normal;
+      overflow-wrap: anywhere;
+      word-break: break-word;
     }
     .article-sources {
-      display: flex;
-      flex-wrap: wrap;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
       gap: 6px;
-      align-items: center;
+      align-items: start;
+      justify-items: start;
+      min-width: 0;
+      max-width: 100%;
       margin: 9px 0 0 !important;
       color: var(--cc-muted);
       font-size: 0.74rem;
       line-height: 1.2;
+      overflow-wrap: anywhere;
     }
     .article-sources span {
+      display: block;
+      max-width: 100%;
+      min-width: 0;
       color: var(--cc-ink) !important;
       font-weight: 700;
       letter-spacing: 0.08em;
       text-transform: uppercase;
+      white-space: normal;
+      overflow-wrap: anywhere;
     }
     .article-sources a {
-      display: inline-block;
+      display: block;
+      width: 100%;
       max-width: 100%;
+      min-width: 0;
       border: 1px solid var(--cc-blue);
       color: var(--cc-blue);
       background: rgba(38, 79, 158, 0.07);
       padding: 3px 6px;
       text-decoration: none;
+      white-space: normal;
       overflow-wrap: anywhere;
+      word-break: break-word;
     }
     .article-sources a:hover,
     .article-sources a:focus-visible {
@@ -670,7 +691,9 @@
     }
     .brief-kicker {
       display: inline-block !important;
-      width: fit-content;
+      width: auto;
+      max-width: 100%;
+      min-width: 0;
       margin: 0 0 5px !important;
       background: var(--cc-ink);
       color: var(--cc-paper) !important;
@@ -680,6 +703,9 @@
       line-height: 1 !important;
       padding: 4px 6px;
       text-transform: uppercase;
+      white-space: normal;
+      overflow-wrap: anywhere;
+      word-break: break-word;
     }
     .brief-list p {
       margin: 4px 0 0;
@@ -830,11 +856,19 @@
       line-height: 1.6;
       overflow-wrap: anywhere;
     }
+    .source-list li {
+      min-width: 0;
+      max-width: 100%;
+    }
     .source-list a,
     .archive-strip a,
     .issue-tools select {
+      display: inline-block;
       max-width: 100%;
+      min-width: 0;
+      white-space: normal;
       overflow-wrap: anywhere;
+      word-break: break-word;
     }
     .status-line {
       margin: 14px 0 0;
@@ -1113,7 +1147,7 @@
     }
     .accuracy-list li {
       display: grid;
-      grid-template-columns: 42px 1fr;
+      grid-template-columns: 58px minmax(0, 1fr);
       gap: 10px;
       align-items: start;
       padding-bottom: 10px;
@@ -1127,12 +1161,17 @@
       display: grid;
       place-items: center;
       min-height: 34px;
+      min-width: 0;
       border: 2px solid var(--cc-ink);
       background: var(--cc-paper);
       color: var(--cc-ink);
       font-family: var(--cc-display);
-      font-size: 1.05rem;
+      font-size: 0.92rem;
       line-height: 1;
+      padding: 3px 4px;
+      text-align: center;
+      overflow-wrap: anywhere;
+      word-break: break-word;
       box-shadow: 3px 3px 0 var(--cc-amber);
     }
     .accuracy-list p {
