@@ -454,6 +454,43 @@
     .brief-list p {
       margin: 4px 0 0;
     }
+    .assignment-desk {
+      border-top-width: 8px;
+      border-top-color: var(--cc-blue);
+    }
+    .assignment-dates {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      margin: 10px 0;
+    }
+    .assignment-dates span {
+      display: block;
+      border: 1px solid var(--cc-rule);
+      background: rgba(240, 163, 35, 0.14);
+      color: var(--cc-muted);
+      font-size: 0.72rem;
+      line-height: 1.25;
+      padding: 8px;
+      text-transform: uppercase;
+    }
+    .assignment-dates strong {
+      display: block;
+      margin-top: 3px;
+      color: var(--cc-ink);
+      font-size: 1rem;
+      letter-spacing: 0;
+      text-transform: none;
+    }
+    .assignment-list {
+      margin: 10px 0 0;
+      padding-left: 18px;
+      color: var(--cc-muted);
+      line-height: 1.45;
+    }
+    .assignment-list li + li {
+      margin-top: 6px;
+    }
     .chart-list {
       counter-reset: chart-rank;
     }
@@ -562,10 +599,10 @@
       font: inherit;
     }
     .print-issue {
-      border: 2px solid var(--cc-ink);
+      border: 2px solid var(--cc-ink) !important;
       border-radius: 0;
-      background: var(--cc-ink);
-      color: var(--cc-paper);
+      background: var(--cc-ink) !important;
+      color: var(--cc-paper) !important;
       cursor: pointer;
       font: inherit;
       font-size: 0.82rem;
@@ -576,8 +613,8 @@
     }
     .print-issue:hover,
     .print-issue:focus-visible {
-      background: var(--cc-blue);
-      color: var(--cc-paper);
+      background: var(--cc-blue) !important;
+      color: var(--cc-paper) !important;
     }
     .front-page-index {
       margin-top: 14px;
@@ -817,6 +854,7 @@
       .status-line,
       .issue-tools,
       .editor-note,
+      [data-sidebar-module="assignment"],
       [data-sidebar-module="sources"],
       [data-sidebar-module="verification"],
       .source-list a::after {
@@ -1074,6 +1112,15 @@
           <p class="section-label" data-briefs-label>Small Notices</p>
           <h2 data-briefs-title>Other Things on the Desk</h2>
           <ul class="brief-list" data-briefs></ul>
+        </article>
+        <article class="chronicle-panel assignment-desk" data-sidebar-module="assignment">
+          <p class="section-label">Tomorrow's Desk</p>
+          <h2>Next Issue Assignment</h2>
+          <div class="assignment-dates">
+            <span>Tomorrow<strong data-next-current-date>Loading...</strong></span>
+            <span>Forty Years Back<strong data-next-historic-date>Loading...</strong></span>
+          </div>
+          <ul class="assignment-list" data-next-assignment-list></ul>
         </article>
         <article class="chronicle-panel" data-sidebar-module="music">
           <p class="section-label" data-music-label>Rock Radio Top 10</p>
