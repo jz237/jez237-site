@@ -16,6 +16,10 @@
     mastheadDeck: document.querySelector("[data-masthead-deck]"),
     heroImage: document.querySelector("[data-hero-image]"),
     heroCaption: document.querySelector("[data-hero-caption]"),
+    openHeroImage: document.querySelector("[data-open-hero-image]"),
+    closeHeroImage: document.querySelector("[data-close-hero-image]"),
+    heroLightbox: document.querySelector("[data-hero-lightbox]"),
+    lightboxImage: document.querySelector("[data-lightbox-image]"),
     lead: document.querySelector("[data-lead]"),
     computerItems: document.querySelector("[data-computer-items]"),
     market: document.querySelector("[data-market]"),
@@ -179,6 +183,37 @@
       const confidence = image.confidence ? ` · ${image.confidence}` : "";
       els.heroCaption.textContent = `${caption}${confidence}`;
     }
+  }
+
+  async function openHeroLightbox() {
+    if (!els.heroLightbox || !els.heroImage || !els.lightboxImage || !els.heroImage.src) return;
+    els.lightboxImage.src = els.heroImage.src;
+    els.lightboxImage.alt = els.heroImage.alt || "Computer Chronicle newspaper visual";
+    els.heroLightbox.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+    if (els.closeHeroImage) els.closeHeroImage.focus({ preventScroll: true });
+
+    if (els.heroLightbox.requestFullscreen && !document.fullscreenElement) {
+      try {
+        await els.heroLightbox.requestFullscreen();
+      } catch (_error) {
+        // Browsers can refuse fullscreen; the fixed overlay still gives a full-window view.
+      }
+    }
+  }
+
+  async function closeHeroLightbox() {
+    if (!els.heroLightbox) return;
+    els.heroLightbox.setAttribute("aria-hidden", "true");
+    document.body.style.overflow = "";
+    if (document.fullscreenElement === els.heroLightbox && document.exitFullscreen) {
+      try {
+        await document.exitFullscreen();
+      } catch (_error) {
+        // Ignore fullscreen exit failures; hiding the overlay is enough.
+      }
+    }
+    if (els.openHeroImage) els.openHeroImage.focus({ preventScroll: true });
   }
 
   function applyLayoutPlan(issue) {
@@ -573,6 +608,26 @@
       window.print();
     });
   }
+
+  if (els.openHeroImage) {
+    els.openHeroImage.addEventListener("click", openHeroLightbox);
+  }
+
+  if (els.closeHeroImage) {
+    els.closeHeroImage.addEventListener("click", closeHeroLightbox);
+  }
+
+  if (els.heroLightbox) {
+    els.heroLightbox.addEventListener("click", (event) => {
+      if (event.target === els.heroLightbox) closeHeroLightbox();
+    });
+  }
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && els.heroLightbox && els.heroLightbox.getAttribute("aria-hidden") === "false") {
+      closeHeroLightbox();
+    }
+  });
 
   loadIssues();
 })();
