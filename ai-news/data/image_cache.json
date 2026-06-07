@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-07T11:00:02.040408+00:00",
+  "updatedAt": "2026-06-07T12:00:01.303636+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -9540,6 +9540,10 @@
     "https://huggingface.co/blog/build-small-hackathon/her-blog": {
       "image": "https://cdn-uploads.huggingface.co/production/uploads/67b09a0bbac2756ce900a8fa/ozXSsTQid-4zpTQm1JgAZ.png",
       "checkedAt": "2026-06-07T11:00:02.040408+00:00"
+    },
+    "https://huggingface.co/blog/build-small-hackathon/sponsors-vouchers": {
+      "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/build-small-hackathon/sponsors-vouchers.png",
+      "checkedAt": "2026-06-07T12:00:01.303636+00:00"
     }
   }
 }
