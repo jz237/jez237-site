@@ -96,6 +96,12 @@
       "lead": {
         "headline": "Lotus Ends VisiCalc as 1-2-3 Era Takes Hold",
         "summary": "Lotus, already dominant in PC spreadsheets, discontinued VisiCalc during the week of this issue after acquiring Software Arts in 1985. The move marked a symbolic handoff from the Apple II spreadsheet age to the IBM PC business-software era.",
+        "image": {
+          "src": "media/clipping-lotus-spreadsheet-1986.webp",
+          "alt": "Period-style clipping of a 1986 IBM-compatible computer desk with spreadsheet printouts, a CRT monitor, floppies, and dot-matrix paper",
+          "caption": "Spreadsheet software moved the business desk toward IBM-compatible PCs.",
+          "confidence": "Period-style visual"
+        },
         "confidence": "Same-week verified",
         "sourceRefs": [1]
       },
@@ -262,26 +268,30 @@
         "headline": "A 1200-Baud Modem Was Fast Enough to Feel Like the Future",
         "summary": "At 1200 bits per second, a plain page of text could arrive in seconds instead of minutes. It was still slow by modern standards, but for BBS callers it changed the rhythm from waiting to browsing.",
         "detail": "Think of it as the difference between mailing a postcard and watching one appear line by line.",
-        "confidence": "Period context"
+        "confidence": "Period context",
+        "sourceRefs": [0]
       },
       "briefs": [
         {
           "kicker": "Mall Note",
           "headline": "Arcade tokens still compete with disk money",
           "summary": "A new cartridge or computer-game disk could cost the same as a lot of Saturday mall arcade time.",
-          "confidence": "Period context"
+          "confidence": "Period context",
+          "sourceRefs": [8]
         },
         {
           "kicker": "Tape Deck",
           "headline": "Rock radio meets cassette collecting",
           "summary": "Album-rock singles were part of the same bedroom ecosystem as blank tapes, boomboxes, and guitar pedals.",
-          "confidence": "Period context"
+          "confidence": "Period context",
+          "sourceRefs": [12]
         },
         {
           "kicker": "Phone Line",
           "headline": "Evening calls were the computer club",
           "summary": "BBS users often waited for cheaper calling windows, open phone lines, or a free household telephone.",
-          "confidence": "Period context"
+          "confidence": "Period context",
+          "sourceRefs": [0]
         }
       ],
       "musicChart": [
