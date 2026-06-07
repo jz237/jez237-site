@@ -136,16 +136,17 @@
           }
         },
         {
-          "title": "Magazine Rack and Price Tags",
-          "note": "Generated visual keyed to the August 1982 Compute! issue and retail prices quoted in its ads.",
+          "title": "Compute! Issue 27 Cover",
+          "note": "Actual August 1982 Compute! cover from the Classic Computer Magazine Archive; used because the issue copy explicitly discusses what appeared on that cover.",
           "sourceRefs": [
-            2
+            2,
+            13
           ],
           "image": {
-            "src": "media/1982-computer-chronicle-issue-002-picture-2.png",
-            "alt": "Generated period-style image of an August 1982 computer magazine rack, floppy disk boxes, software boxes, and retail price tags",
-            "caption": "Generated period-style visual: magazine-rack and computer-store counter texture.",
-            "confidence": "AI-generated visual context based on sourced August 1982 magazine/retail material"
+            "src": "https://www.atarimagazines.com/compute/covers/images/issue27.jpg",
+            "alt": "Actual cover scan of Compute! Issue 27, August 1982",
+            "caption": "Archive image: Compute! Issue 27, August 1982 cover.",
+            "confidence": "Source image from Classic Computer Magazine Archive cover gallery"
           }
         }
       ],
@@ -580,6 +581,10 @@
         {
           "name": "Tunecaster: Weekly Rock Top 20 for August 14, 1982",
           "url": "https://tunecaster.com/charts/80/rock8233.html"
+        },
+        {
+          "name": "Classic Computer Magazine Archive: Compute! Issue 27 August 1982 cover",
+          "url": "https://www.atarimagazines.com/compute/covers/showcover.php?cover=issue27"
         }
       ]
     },
