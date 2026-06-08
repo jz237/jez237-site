@@ -1558,5 +1558,17 @@
     "slot": "midday",
     "model": "openai/gpt-image-2",
     "size": "1024x1536"
+  },
+  {
+    "id": "2026-06-08-midday-basement-comet-seed-packet-labels",
+    "title": "Basement Comet Seed Packet Labels",
+    "tests": "Explores a reusable seed-packet label/data layout template, readable physical packaging design, invented horticultural categories, tactile print texture, and setting-specific props.",
+    "prompt": "Create a finished vertical seed packet label sheet titled BASEMENT COMET SEED PACKET LABELS, photographed as a real printed horticultural specimen label page on a slightly worn potting bench. The sheet presents an invented set of seed packets for a fictional cellar-grown comet garden: Blue Tail Radish, Dust-Ice Pea, Lantern Root, Orbit Marigold, Meteor Chard, and Nightglass Bean. Use a coherent packaging/label layout with readable hierarchy, small packet panels, planting icons, germination notes, tiny diagrams, lot-code style details, color swatches, caution marks, and tidy section labels. Make the paper warm off-white with crisp ink, slight misregistration, fold creases, thumb smudges, seed dust, graphite notes, clipped corners, and tactile props around it: coin envelopes, twine, brass plant tags, a pencil, soil crumbs, a small jar of silver-gray seeds, and cool basement window light mixed with warm desk-lamp glow. Keep it dense but legible, physical, specific, and believable. No placeholder boxes, no real logos, no private data, no watermark, no signature, no dancing imagery.\n\nReusable fill-in-the-blank template: Create a finished seed packet label about [TOPIC] using [DATA OR CATEGORIES], with readable hierarchy, physical materials, and setting-specific props. Preserve the supplied topic, categories, order, labels, relationships, and factual data; change the title, packet styling, icon system, diagrams, color coding, paper/print treatment, and surrounding props to fit [SETTING] and [MOOD]. Avoid placeholder boxes, nonsense clutter, fake private data, real logos, and prompt-instruction text.\n\nSource photo needed: none.\n\nWhat to preserve: supplied topic, categories, order, labels, relationships, and factual data.\n\nWhat to change: turn the information into a tactile finished seed-packet label sheet with packet panels, planting icons, diagrams, section labels, print texture, and matching props.\n\nExample substitution: Create a seed packet label sheet for a basement comet garden with Blue Tail Radish, Dust-Ice Pea, Lantern Root, Orbit Marigold, Meteor Chard, and Nightglass Bean, photographed on a potting bench with coin envelopes, twine, brass plant tags, soil crumbs, and cool basement window light.",
+    "image": "images/2026-06-08-midday-basement-comet-seed-packet-labels.png",
+    "date": "2026-06-08",
+    "batch": "Daily Prompt",
+    "slot": "midday",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1536"
   }
 ]
