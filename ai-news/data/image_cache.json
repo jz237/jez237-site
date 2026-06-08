@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-08T21:59:34.916580+00:00",
+  "updatedAt": "2026-06-08T23:00:02.020036+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -9704,6 +9704,18 @@
     "https://openai.com/index/openai-submits-confidential-s-1": {
       "image": "",
       "checkedAt": "2026-06-08T21:59:34.916580+00:00"
+    },
+    "https://techcrunch.com/2026/06/08/as-openai-files-for-ipo-sam-altmans-eye-scanning-company-is-doing-layoffs-report-says": {
+      "image": "https://techcrunch.com/wp-content/uploads/2023/07/Worldcoin-Project-Co-founders-Alex-Blania-L-and-Sam-Altman-R.jpg?resize=1200,800",
+      "checkedAt": "2026-06-08T23:00:02.020036+00:00"
+    },
+    "https://techcrunch.com/2026/06/08/apples-wwdc-ai-demos-looked-more-real-after-250m-false-ad-settlement": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/Apple-iOS-27-demo.png?resize=1200,677",
+      "checkedAt": "2026-06-08T23:00:02.020036+00:00"
+    },
+    "https://www.theverge.com/tech/946345/apple-safari-ai-update-extensions": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/describe-extension-safari.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.742998834307%2C100%2C78.514002331385&amp;w=1200",
+      "checkedAt": "2026-06-08T23:00:02.020036+00:00"
     }
   }
 }
