@@ -1,6 +1,6 @@
 {
   "date": "2026-06-08",
-  "updatedAt": "2026-06-08T19:00:01.735760+00:00",
+  "updatedAt": "2026-06-08T19:34:30.721455+00:00",
   "items": [
     {
       "title": "NotebookLM&#8217;s Gemini 3.5 upgrade adds a cloud computer and help finding sources",
@@ -13,11 +13,11 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/NotebookLM-Welcome.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C3.4613147178592%2C100%2C93.077370564282&amp%3Bw=1200",
       "published": "2026-06-08T16:00:00+00:00",
       "firstSeen": "2026-06-08T16:16:07.017802+00:00",
-      "lastSeen": "2026-06-08T19:00:01.735760+00:00",
+      "lastSeen": "2026-06-08T19:34:30.721455+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 19.472
+      "score": 19.456
     },
     {
       "title": "Introducing the OpenAI Economic Research Exchange",
@@ -30,11 +30,11 @@
       "image": "https://images.ctfassets.net/kftzwdyauwt9/51xw2pFq7Z8Cur501DVgKi/4c1c938e8553611ca250e45531796660/seo_image.png?w=1600&amp%3Bh=900&amp%3Bfit=fill",
       "published": "2026-06-08T00:00:00+00:00",
       "firstSeen": "2026-06-08T19:00:01.735760+00:00",
-      "lastSeen": "2026-06-08T19:00:01.735760+00:00",
+      "lastSeen": "2026-06-08T19:34:30.721455+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 18.6489
+      "score": 18.6386
     },
     {
       "title": "OpenAI Expands ChatGPT Lockdown Mode to Millions of Eligible Users",
@@ -47,10 +47,26 @@
       "image": "https://assets.techrepublic.com/uploads/2026/06/unnamed-44.png?f=jpeg",
       "published": "2026-06-08T15:21:16+00:00",
       "firstSeen": "2026-06-08T16:00:01.663535+00:00",
-      "lastSeen": "2026-06-08T19:00:01.735760+00:00",
+      "lastSeen": "2026-06-08T19:34:30.721455+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.144
+      "score": 12.1283
+    },
+    {
+      "title": "Apple finally ships its AI do-over: Siri AI, a standalone app, and a three-tier privacy stack",
+      "url": "https://thenextweb.com/news/apple-wwdc-2026-siri-ai-gemini-ios-27",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Apple used its annual developer conference on Monday to unveil Siri AI, the most significant overhaul of its voice assistant in 15 years, rebuilt from the ground up on a custom Google Gemini model. The WWDC 2026 keynote at Apple Park also marked Tim Cook’s final appearance as CEO before he hands the role to [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/apple-wwdc-2026-siri-ai-gemini-ios-27.avif",
+      "published": "2026-06-08T18:45:07+00:00",
+      "firstSeen": "2026-06-08T19:34:30.721455+00:00",
+      "lastSeen": "2026-06-08T19:34:30.721455+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 8.3251
     },
     {
       "title": "Apple’s New Siri AI Is Ready to Get Personal",
@@ -60,13 +76,13 @@
       "sourceWeight": 0.85,
       "category": "AI",
       "summary": "From a stand-alone app to a Google Gemini partnership, here’s everything you need to know from WWDC 2026 about Apple’s upcoming overhaul of Siri.",
-      "image": "https://media.wired.com/photos/6a26fcf0c80531d76bc860e2/master/pass/Whats-New-With-Siri-Gear-2255802491.jpg",
+      "image": "https://media.wired.com/photos/6a2710703d01e9a6c2f2cfec/master/pass/Apple-Siri-AI-architecture-diagram-260608.jpg",
       "published": "2026-06-08T18:17:44+00:00",
       "firstSeen": "2026-06-08T19:00:01.735760+00:00",
-      "lastSeen": "2026-06-08T19:00:01.735760+00:00",
+      "lastSeen": "2026-06-08T19:34:30.721455+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.3687
+      "score": 7.3516
     },
     {
       "title": "Momfluencers Are Pitching AI as a Better ‘Coparent’ Than Men",
@@ -79,10 +95,10 @@
       "image": "https://media.wired.com/photos/6a2347d049872af07a400381/master/pass/AI-Momfluencers-Culture.jpg",
       "published": "2026-06-08T10:30:00+00:00",
       "firstSeen": "2026-06-08T11:00:02.097985+00:00",
-      "lastSeen": "2026-06-08T19:00:01.735760+00:00",
+      "lastSeen": "2026-06-08T19:34:30.721455+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.0587
+      "score": 6.0449
     },
     {
       "title": "The Open Source Community is backing OpenEnv for Agentic RL",
@@ -95,10 +111,10 @@
       "image": "https://huggingface.co/blog/assets/openenv/thumbnail_expansion.png",
       "published": "2026-06-08T00:00:00+00:00",
       "firstSeen": "2026-06-08T14:00:01.641240+00:00",
-      "lastSeen": "2026-06-08T19:00:01.735760+00:00",
+      "lastSeen": "2026-06-08T19:34:30.721455+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.3789
+      "score": 5.3686
     },
     {
       "title": "Meta Deletes Face-Recognition System From Its Smart Glasses App After WIRED Report",
@@ -111,10 +127,10 @@
       "image": "https://media.wired.com/photos/6a26baa814f2ec6e95bd841b/master/pass/GettyImages-2235451108.jpg",
       "published": "2026-06-08T17:31:11+00:00",
       "firstSeen": "2026-06-08T18:00:01.931641+00:00",
-      "lastSeen": "2026-06-08T19:00:01.735760+00:00",
+      "lastSeen": "2026-06-08T19:34:30.721455+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.3457
+      "score": 5.329
     },
     {
       "title": "Apple announces Siri AI and its next generation of Apple Intelligence",
@@ -127,26 +143,26 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/wwdc-2026-the-verge-208.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C3.0313913964321%2C100%2C93.937217207136&amp%3Bw=1200",
       "published": "2026-06-08T17:34:24+00:00",
       "firstSeen": "2026-06-08T18:00:01.931641+00:00",
-      "lastSeen": "2026-06-08T19:00:01.735760+00:00",
+      "lastSeen": "2026-06-08T19:34:30.721455+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2172
+      "score": 5.2005
     },
     {
-      "title": "Lean4Agent: Formal Modeling and Verification for Agent Workflow and Trajectory",
-      "url": "https://llm-stats.com/ai-news",
-      "source": "LLM Stats AI News",
-      "sourceUrl": "https://llm-stats.com/ai-news",
-      "sourceWeight": 0.9,
+      "title": "China just approved the world’s first commercial brain implant. The race with Neuralink is no longer theoretical.",
+      "url": "https://thenextweb.com/news/brain-implants-bci-china-neuralink-commercial-race",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
       "category": "AI",
-      "summary": "",
-      "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-08T19:00:08.459082+00:00",
-      "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-08T19:00:01.735760+00:00",
+      "summary": "Controlling a machine with your mind used to be science fiction. Now it is a regulated medical product, at least in China. Earlier this year, China’s National Medical Products Administration approved NEO, a coin-sized brain-computer interface developed by Shanghai-based NeuraMatrix and Tsinghua University researchers, for commercial use in patients with spinal cord injuries. It is the [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/china-agentic-commerce-ai-shopping-alibaba-qwen.avif",
+      "published": "2026-06-08T18:46:18+00:00",
+      "firstSeen": "2026-06-08T19:34:30.721455+00:00",
+      "lastSeen": "2026-06-08T19:34:30.721455+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.06
+      "score": 4.6257
     },
     {
       "title": "South Korea’s AI Push Leans on Nvidia Infrastructure",
@@ -159,10 +175,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/06/korea-ai-infrastructure-1024x574.png?f=jpeg",
       "published": "2026-06-08T14:54:02+00:00",
       "firstSeen": "2026-06-08T16:00:01.663535+00:00",
-      "lastSeen": "2026-06-08T19:00:01.735760+00:00",
+      "lastSeen": "2026-06-08T19:34:30.721455+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.5316
+      "score": 4.516
     },
     {
       "title": "Visual Studio 2026 Brings AI Deeper Into Development and It’s 93% Off Right Now",
@@ -175,33 +191,22 @@
       "image": "https://assets.techrepublic.com/uploads/2026/01/Copy-of-Untitled-Design-7.png",
       "published": "2026-06-08T12:30:40+00:00",
       "firstSeen": "2026-04-28T14:00:01.148748+00:00",
-      "lastSeen": "2026-06-08T19:00:01.735760+00:00",
+      "lastSeen": "2026-06-08T19:34:30.721455+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.4686
-    },
-    {
-      "title": "Apple’s long-awaited AI Siri overhaul is finally here",
-      "url": "https://techcrunch.com/2026/06/08/apples-long-awaited-ai-siri-overhaul-is-finally-here",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "The idea behind the new \"Siri AI\" is to turn the assistant from a voice controlled assistant into an AI companion that can do a lot more.",
-      "image": "https://techcrunch.com/wp-content/uploads/2024/10/apple-siri-header.jpg?resize=1200%2C800",
-      "published": "2026-06-08T17:56:21+00:00",
-      "firstSeen": "2026-06-08T18:00:01.931641+00:00",
-      "lastSeen": "2026-06-08T19:00:01.735760+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.458
+      "score": 4.454
     }
   ],
   "errors": [
     {
+      "source": "Artificial Intelligence News",
+      "url": "https://www.artificialintelligence-news.com/categories/artificial-intelligence/feed/",
+      "error": "not well-formed (invalid token): line 1, column 158"
+    },
+    {
       "source": "MarkTechPost",
       "url": "https://www.marktechpost.com/feed/",
-      "error": "HTTP Error 403: Forbidden"
+      "error": "not well-formed (invalid token): line 1, column 119"
     }
   ]
 }
