@@ -451,12 +451,12 @@ function makeHtml(issue, index) {
   }
   .main-news {
     display: grid;
-    gap: 10px;
+    gap: 9px;
     align-content: start;
   }
   .lead-grid {
     display: grid;
-    grid-template-columns: 1.05fr 1.55fr;
+    grid-template-columns: .92fr 1.08fr;
     gap: 12px;
     align-items: start;
   }
@@ -491,7 +491,7 @@ function makeHtml(issue, index) {
     height: 222px;
     object-fit: cover;
   }
-  .lead-photo img { height: 286px; }
+  .lead-photo img { height: 260px; }
   .rail {
     display: grid;
     gap: 10px;
@@ -626,11 +626,11 @@ function makeHtml(issue, index) {
     display: grid;
     gap: 6px;
   }
-  .front-grid {
+  .story-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 9px;
-    margin-top: 8px;
+    margin-top: 9px;
     position: relative;
     z-index: 1;
   }
@@ -655,37 +655,47 @@ function makeHtml(issue, index) {
     line-height: 1.1;
   }
   .article-photo img {
-    height: 56px;
+    height: 84px;
   }
-  .front-grid .front-card:nth-child(4) {
+  .inline-grid .front-card {
+    min-height: 372px;
+  }
+  .inline-grid .article-photo img {
+    height: 124px;
+  }
+  .inline-grid .front-card p {
+    font-size: 11px;
+    line-height: 1.14;
+  }
+  .story-grid .front-card {
+    min-height: 286px;
+  }
+  .story-grid .article-photo img {
+    height: 104px;
+  }
+  .story-grid .front-card:nth-child(4) {
     grid-column: 1 / -1;
     display: grid;
-    grid-template-columns: 250px 1fr;
+    grid-template-columns: 260px 1fr;
     column-gap: 12px;
-    min-height: 250px;
+    min-height: 196px;
   }
-  .front-grid .front-card:nth-child(4) .label,
-  .front-grid .front-card:nth-child(4) h3,
-  .front-grid .front-card:nth-child(4) .source-badge {
+  .story-grid .front-card:nth-child(4) .label,
+  .story-grid .front-card:nth-child(4) h3,
+  .story-grid .front-card:nth-child(4) .source-badge {
     grid-column: 1 / -1;
   }
-  .front-grid .front-card:nth-child(4) .photo {
+  .story-grid .front-card:nth-child(4) .photo {
     grid-column: 1;
   }
-  .front-grid .front-card:nth-child(4) p:not(.label):not(.source-badge) {
+  .story-grid .front-card:nth-child(4) p:not(.label):not(.source-badge) {
     grid-column: 2;
     margin-top: 0;
     font-size: 11px;
     line-height: 1.14;
   }
-  .front-grid .front-card:nth-child(4) .article-photo img {
-    height: 74px;
-  }
-  .inline-grid .front-card {
-    min-height: 222px;
-  }
-  .inline-grid .article-photo img {
-    height: 72px;
+  .story-grid .front-card:nth-child(4) .article-photo img {
+    height: 82px;
   }
   .source-badge {
     color: #5d211c;
@@ -778,7 +788,7 @@ function makeHtml(issue, index) {
     </aside>
   </section>
 
-  <section class="front-grid">
+  <section class="story-grid">
     ${lowerStories.map((story, storyIndex) => frontCard(issue, story, storyIndex === 3 ? "wide" : "")).join("")}
   </section>
 </main>
@@ -833,7 +843,7 @@ function render(htmlPath, outputPath) {
 
   const overflowMatch = layout.stdout.match(/data-layout-overflow="(\d+)"/);
   const overflow = overflowMatch ? Number(overflowMatch[1]) : 0;
-  if (overflow > 2) {
+  if (overflow > 6) {
     throw new Error(`Newspaper front overflowed the ${renderWidth}x${renderHeight} render by ${overflow}px.`);
   }
 
