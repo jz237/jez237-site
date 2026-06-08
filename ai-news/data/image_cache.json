@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-08T19:34:30.721455+00:00",
+  "updatedAt": "2026-06-08T21:00:01.371488+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -9668,6 +9668,18 @@
     "https://github.com/ollama/ollama/releases/tag/v0.30.7": {
       "image": "https://opengraph.githubassets.com/32b31d01cb45b3cf082bb43b29f71d5f6a4e01375686b4dd3cbc2e02914290ca/ollama/ollama",
       "checkedAt": "2026-06-08T19:00:01.735760+00:00"
+    },
+    "https://techcrunch.com/2026/06/08/apple-bets-cheaper-ai-will-woo-small-developers": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/12/app-of-the-year.jpg?resize=1200,722",
+      "checkedAt": "2026-06-08T21:00:01.371488+00:00"
+    },
+    "http://www.bbc.co.uk/programmes/w3ct8jsg": {
+      "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
+      "checkedAt": "2026-06-08T21:00:01.371488+00:00"
+    },
+    "https://openai.com/index/built-to-benefit-everyone-our-plan": {
+      "image": "https://images.ctfassets.net/kftzwdyauwt9/VbCQBEe5vEJDMV5yTqtj6/e4b96c472e5d8cc0aea5a24c46070675/Art_Card_1920x1080_Sam__1___1_.png?w=1600&amp;h=900&amp;fit=fill",
+      "checkedAt": "2026-06-08T21:00:01.371488+00:00"
     }
   }
 }
