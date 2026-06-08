@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-08T11:00:02.097985+00:00",
+  "updatedAt": "2026-06-08T11:19:15.718980+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -9568,6 +9568,10 @@
     "https://simonwillison.net/2026/Jun/7/datasette-agent-edit": {
       "image": "",
       "checkedAt": "2026-06-08T00:20:09.081371+00:00"
+    },
+    "https://www.theverge.com/tech/944099/wwdc-2026-how-to-watch": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/unnamed-8.jpg?quality=90&amp;strip=all&amp;crop=0%2C18.517948191493%2C100%2C62.964103617014&amp;w=1200",
+      "checkedAt": "2026-06-08T11:19:15.718980+00:00"
     }
   }
 }
