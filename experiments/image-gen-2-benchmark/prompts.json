@@ -1582,5 +1582,17 @@
     "slot": "midday",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-06-08-afternoon-kitchen-meteorite-safety-poster",
+    "title": "Kitchen Meteorite Safety Poster",
+    "tests": "Finished non-photo safety poster template; readable hierarchy; reusable fill-in template included; no real logos or placeholder prompt-card text.",
+    "prompt": "Create a finished vertical safety poster titled KITCHEN METEORITE SAFETY POSTER, photographed as a real laminated instruction sheet pinned to a stainless-steel wall in a busy imaginary community kitchen. The poster explains how cooks should identify, cool, label, and safely store tiny warm meteorites that occasionally fall through roof vents into soup pots. Use a crisp 1950s public-safety design language with modern high-resolution product photography: readable hierarchy, large title, numbered illustrated steps, hazard icons, a small cutaway diagram of a heatproof ladle cradle, a simple temperature strip chart, checkboxes for incident logging, and margin notes in red pencil. Materials should feel tactile: glossy laminate, taped corners, scuffs, condensation beads, grease-pencil circles, enamel warning symbols, stainless reflections, a hanging ladle, oven mitts, a labeled ceramic meteorite jar, and warm tungsten kitchen light. Keep the text short and legible where possible; include only fictional labels, no real brands, no logos, no QR codes, no placeholder boxes, no nonsense filler, and no dancing.\n\nReusable fill-in-the-blank template: Create a finished safety poster about [TOPIC] using [DATA OR CATEGORIES], with readable hierarchy, physical materials, and setting-specific props. Use a coherent poster layout with natural readable labels only; make it feel photographed as a real physical object; include topic-specific diagrams, icons, tables, or sections as appropriate. Preserve supplied topic, categories, order, labels, relationships, and factual data. Avoid placeholder boxes, nonsense clutter, real logos, private data, and unrelated decorative filler.\n\nExample substitution: [TOPIC] = kitchen meteorite handling; [DATA OR CATEGORIES] = spot, scoop, cool, label, store, hazard icons, temperature strip, and incident checklist.",
+    "image": "images/2026-06-08-afternoon-kitchen-meteorite-safety-poster.png",
+    "date": "2026-06-08",
+    "batch": "Daily Prompt",
+    "slot": "afternoon",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1536"
   }
 ]
