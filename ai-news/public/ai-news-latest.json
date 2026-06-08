@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-08T13:00:01.268947+00:00",
+  "updatedAt": "2026-06-08T14:00:01.641240+00:00",
   "items": [
     {
       "title": "CrowdMath: A Dataset of Crowdsourced Mathematical Research Discussions",
@@ -10,12 +10,60 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-08T13:00:07.195330+00:00",
+      "published": "2026-06-08T14:00:08.410163+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-08T13:00:01.268947+00:00",
+      "lastSeen": "2026-06-08T14:00:01.641240+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 4.76
+    },
+    {
+      "title": "The crash that vanished: control and emergence in a five-model economy",
+      "url": "https://huggingface.co/blog/build-small-hackathon/thousand-token-wood-sim-v3",
+      "source": "Hugging Face Blog",
+      "sourceUrl": "https://huggingface.co/blog/feed.xml",
+      "sourceWeight": 0.95,
+      "category": "AI",
+      "summary": "",
+      "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/build-small-hackathon/thousand-token-wood-sim-v3.png",
+      "published": "2026-06-08T13:10:48+00:00",
+      "firstSeen": "2026-06-08T14:00:01.641240+00:00",
+      "lastSeen": "2026-06-08T14:00:01.641240+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.4052
+    },
+    {
+      "title": "Britain’s Cosine rallies BT, HSBC, and BAE to build a “sovereign” AI model and cut its reliance on US tech",
+      "url": "https://thenextweb.com/news/cosine-lumen-sovereign-uk-frontier-ai-model",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Britain’s banks, telecoms, and weapons-makers have a new shared anxiety: that the AI they increasingly run on is built, owned, and controlled in the United States. A startup barely three years old is betting they will pay to fix it. Cosine, a UK frontier-AI lab, has assembled a coalition of blue-chip British institutions to co-design [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/Cosine-team.avif",
+      "published": "2026-06-08T12:56:51+00:00",
+      "firstSeen": "2026-06-08T14:00:01.641240+00:00",
+      "lastSeen": "2026-06-08T14:00:01.641240+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1183
+    },
+    {
+      "title": "The US wants NATO allies to spend their new defence budgets ripping out Huawei",
+      "url": "https://thenextweb.com/news/us-nato-huawei-defence-funds-replace",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The US has found a new use for Europe’s swelling defence budgets: tearing out Huawei. Whether its allies are listening is another matter. The State Department’s China coordinator, Joshua Young, told officials in Brussels last month that NATO members should use defence-related funding, the spending that counts towards the alliance’s targets, to rip out Huawei [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/huawei-chip-lab-trump-china-visit-1.avif",
+      "published": "2026-06-08T12:36:55+00:00",
+      "firstSeen": "2026-06-08T14:00:01.641240+00:00",
+      "lastSeen": "2026-06-08T14:00:01.641240+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1085
     },
     {
       "title": "Bending Spoons, the Milan firm behind Evernote and Vimeo, files for a US IPO",
@@ -28,10 +76,10 @@
       "image": "https://media.thenextweb.com/2026/06/bending-spoons-milan-office.avif",
       "published": "2026-06-08T12:06:55+00:00",
       "firstSeen": "2026-06-08T13:00:01.268947+00:00",
-      "lastSeen": "2026-06-08T13:00:01.268947+00:00",
+      "lastSeen": "2026-06-08T14:00:01.641240+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2233
+      "score": 3.1939
     },
     {
       "title": "Building Pakistan Notice Helper: A Small AI Tool for a Very Local Safety Problem",
@@ -47,7 +95,7 @@
       "lastSeen": "2026-06-08T13:00:01.268947+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3934
+      "score": 2.3643
     },
     {
       "title": "AI is choosing which online stores you see, and it’s ignoring most of them",
@@ -60,10 +108,10 @@
       "image": "https://media.thenextweb.com/2026/06/ai-choosing-online-stores-ignoring-most-recomaze.avif",
       "published": "2026-06-08T11:37:58+00:00",
       "firstSeen": "2026-06-08T13:00:01.268947+00:00",
-      "lastSeen": "2026-06-08T13:00:01.268947+00:00",
+      "lastSeen": "2026-06-08T14:00:01.641240+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.609
+      "score": 4.58
     },
     {
       "title": "Uber opens a London waitlist for Wayve robotaxis as the UK’s driverless race kicks off",
@@ -76,10 +124,10 @@
       "image": "https://media.thenextweb.com/2026/06/uber-wayve-london-robotaxi-waitlist.avif",
       "published": "2026-06-08T11:28:27+00:00",
       "firstSeen": "2026-06-08T13:00:01.268947+00:00",
-      "lastSeen": "2026-06-08T13:00:01.268947+00:00",
+      "lastSeen": "2026-06-08T14:00:01.641240+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8043
+      "score": 2.7755
     },
     {
       "title": "A UK startup says it can cut data centre network power by 81% by replacing every electrical switch with light",
@@ -92,10 +140,10 @@
       "image": "https://media.thenextweb.com/2026/06/oriole-photonic-network-amd-aria-data-centre.avif",
       "published": "2026-06-08T11:16:26+00:00",
       "firstSeen": "2026-06-08T13:00:01.268947+00:00",
-      "lastSeen": "2026-06-08T13:00:01.268947+00:00",
+      "lastSeen": "2026-06-08T14:00:01.641240+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0985
+      "score": 2.0698
     },
     {
       "title": "Nvidia and Hyundai go deeper on robotics, with Boston Dynamics’ Atlas at the centre",
@@ -108,10 +156,10 @@
       "image": "https://media.thenextweb.com/2026/05/Jensen-Huang-CEO-NVIDIA.avif",
       "published": "2026-06-08T11:01:50+00:00",
       "firstSeen": "2026-06-08T11:19:15.718980+00:00",
-      "lastSeen": "2026-06-08T13:00:01.268947+00:00",
+      "lastSeen": "2026-06-08T14:00:01.641240+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7914
+      "score": 2.7629
     },
     {
       "title": "WWDC 2026: How to watch and what to expect",
@@ -124,10 +172,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/unnamed-8.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C18.517948191493%2C100%2C62.964103617014&amp%3Bw=1200",
       "published": "2026-06-08T11:00:00+00:00",
       "firstSeen": "2026-06-08T11:19:15.718980+00:00",
-      "lastSeen": "2026-06-08T13:00:01.268947+00:00",
+      "lastSeen": "2026-06-08T14:00:01.641240+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.4005
+      "score": 3.372
     },
     {
       "title": "Momfluencers Are Pitching AI as a Better ‘Coparent’ Than Men",
@@ -140,10 +188,10 @@
       "image": "https://media.wired.com/photos/6a2347d049872af07a400381/master/pass/AI-Momfluencers-Culture.jpg",
       "published": "2026-06-08T10:30:00+00:00",
       "firstSeen": "2026-06-08T11:00:02.097985+00:00",
-      "lastSeen": "2026-06-08T13:00:01.268947+00:00",
+      "lastSeen": "2026-06-08T14:00:01.641240+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.2162
+      "score": 6.1881
     },
     {
       "title": "Berlin’s GALVANY raises €10M to fix Germany’s broken heat-pump market, and it’s already profitable",
@@ -156,10 +204,10 @@
       "image": "https://media.thenextweb.com/2026/06/galvany-seed-funding-heat-pump-platform-germany.avif",
       "published": "2026-06-08T10:29:03+00:00",
       "firstSeen": "2026-06-08T11:19:15.718980+00:00",
-      "lastSeen": "2026-06-08T13:00:01.268947+00:00",
+      "lastSeen": "2026-06-08T14:00:01.641240+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.4257
+      "score": 2.3976
     },
     {
       "title": "Ghent’s Companion.energy raises €7.8M to automate enterprise energy in real time",
@@ -172,10 +220,10 @@
       "image": "https://media.thenextweb.com/2026/06/companion-energy-seed-funding-real-time-energy.avif",
       "published": "2026-06-08T10:02:12+00:00",
       "firstSeen": "2026-06-08T11:19:15.718980+00:00",
-      "lastSeen": "2026-06-08T13:00:01.268947+00:00",
+      "lastSeen": "2026-06-08T14:00:01.641240+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0631
+      "score": 2.0353
     },
     {
       "title": "PhysicsX hits $2.4bn valuation as Temasek leads $300m round for the AI startup that cuts simulation times from days to seconds",
@@ -188,10 +236,10 @@
       "image": "https://media.thenextweb.com/2026/06/physicsx-temasek-300m-series-c-ai-simulation.avif",
       "published": "2026-06-08T09:41:08+00:00",
       "firstSeen": "2026-06-08T11:00:02.097985+00:00",
-      "lastSeen": "2026-06-08T13:00:01.268947+00:00",
+      "lastSeen": "2026-06-08T14:00:01.641240+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0532
+      "score": 2.0258
     },
     {
       "title": "The lawsuits that could give AI its Big Tobacco moment are already here",
@@ -207,7 +255,7 @@
       "lastSeen": "2026-06-08T13:00:01.268947+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0469
+      "score": 2.0196
     },
     {
       "title": "A UK startup just raised $18.5 million to fly satellites where nobody else can",
@@ -223,7 +271,7 @@
       "lastSeen": "2026-06-08T13:00:01.268947+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0377
+      "score": 2.0106
     },
     {
       "title": "JPMorgan poaches Nomura’s international AI strategy chief as Dimon doubles down on AI hiring",
@@ -239,7 +287,7 @@
       "lastSeen": "2026-06-08T12:00:01.739819+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0285
+      "score": 2.0017
     },
     {
       "title": "The AI models finding 10,000 vulnerabilities are the same ones China is trying to copy. That is the problem.",
@@ -255,7 +303,7 @@
       "lastSeen": "2026-06-08T12:00:01.739819+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0257
+      "score": 1.999
     },
     {
       "title": "Moonshot AI wants a $30bn valuation six months after being worth $4bn. That tells you everything about China’s AI funding race.",
@@ -271,7 +319,7 @@
       "lastSeen": "2026-06-08T12:00:01.739819+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7218
+      "score": 2.6951
     },
     {
       "title": "South Korea’s AI chip boom is so strong it’s crushing the bond market",
@@ -287,7 +335,7 @@
       "lastSeen": "2026-06-08T12:00:01.739819+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3673
+      "score": 2.3408
     },
     {
       "title": "Mexico unveils the Olinia Uno, an $8,600 government-backed electric vehicle designed for city streets",
@@ -303,7 +351,7 @@
       "lastSeen": "2026-06-08T11:00:02.097985+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0082
+      "score": 1.9819
     },
     {
       "title": "Nvidia locks in SK Hynix for the AI memory race as the chip industry’s “toughest bottleneck” gets its own multi-year deal",
@@ -319,7 +367,7 @@
       "lastSeen": "2026-06-08T11:00:02.097985+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.4047
+      "score": 4.3786
     },
     {
       "title": "Spotify is licensing live concert video and reserving tickets for superfans",
@@ -335,7 +383,7 @@
       "lastSeen": "2026-06-08T11:00:02.097985+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1001
+      "score": 3.0741
     },
     {
       "title": "How the UK Is Turning Sovereign AI Ambition Into Action With NVIDIA Technologies",
@@ -348,10 +396,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/london-tech-week-2026-key-visual.jpeg",
       "published": "2026-06-08T06:00:57+00:00",
       "firstSeen": "2026-06-08T06:05:47.103038+00:00",
-      "lastSeen": "2026-06-08T13:00:01.268947+00:00",
+      "lastSeen": "2026-06-08T14:00:01.641240+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.096
+      "score": 2.0712
     },
     {
       "title": "NVIDIA and LG Group Build an AI Factory to Advance Physical AI, Mobility and AI Infrastructure",
@@ -364,10 +412,26 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/kr-visit-lg-group-1920x1080-no-credit.png",
       "published": "2026-06-08T03:00:50+00:00",
       "firstSeen": "2026-06-08T04:00:01.565319+00:00",
-      "lastSeen": "2026-06-08T13:00:01.268947+00:00",
+      "lastSeen": "2026-06-08T14:00:01.641240+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.4235
+      "score": 3.4007
+    },
+    {
+      "title": "The Open Source Community is backing OpenEnv for Agentic RL",
+      "url": "https://huggingface.co/blog/openenv-agentic-rl",
+      "source": "Hugging Face Blog",
+      "sourceUrl": "https://huggingface.co/blog/feed.xml",
+      "sourceWeight": 0.95,
+      "category": "AI",
+      "summary": "",
+      "image": "https://huggingface.co/blog/assets/openenv/thumbnail_expansion.png",
+      "published": "2026-06-08T00:00:00+00:00",
+      "firstSeen": "2026-06-08T14:00:01.641240+00:00",
+      "lastSeen": "2026-06-08T14:00:01.641240+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.4756
     },
     {
       "title": "datasette-agent-edit 0.1a0",
@@ -380,10 +444,10 @@
       "image": "",
       "published": "2026-06-07T23:56:38+00:00",
       "firstSeen": "2026-06-08T00:20:09.081371+00:00",
-      "lastSeen": "2026-06-08T13:00:01.268947+00:00",
+      "lastSeen": "2026-06-08T14:00:01.641240+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.3554
+      "score": 9.3344
     },
     {
       "title": "NVIDIA and Doosan Group Collaborate to Advance Physical AI and AI Factory Infrastructure",
@@ -396,10 +460,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/kr-visit-blog-doosan-robotics-1920x1080-noncredit.jpg",
       "published": "2026-06-07T23:00:36+00:00",
       "firstSeen": "2026-06-08T00:00:01.830010+00:00",
-      "lastSeen": "2026-06-08T13:00:01.268947+00:00",
+      "lastSeen": "2026-06-08T14:00:01.641240+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9358
+      "score": 1.9154
     },
     {
       "title": "v0.30.7",
@@ -412,10 +476,10 @@
       "image": "https://opengraph.githubassets.com/78e2df05251b164238bc6424fa80f9b487093b561675da9e569299d0162f3c44/ollama/ollama",
       "published": "2026-06-07T21:55:58+00:00",
       "firstSeen": "2026-06-06T22:00:01.361734+00:00",
-      "lastSeen": "2026-06-08T13:00:01.268947+00:00",
+      "lastSeen": "2026-06-08T14:00:01.641240+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.6838
+      "score": 2.664
     },
     {
       "title": "Is this the dawn of the Tokenpocalypse?",
@@ -428,10 +492,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/06/GettyImages-124923144.jpeg?resize=1200%2C800",
       "published": "2026-06-07T20:26:13+00:00",
       "firstSeen": "2026-06-07T22:00:01.786220+00:00",
-      "lastSeen": "2026-06-08T13:00:01.268947+00:00",
+      "lastSeen": "2026-06-08T14:00:01.641240+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8843
+      "score": 1.8653
     },
     {
       "title": "Amazing Digital Dentures (a failed project)",
@@ -447,7 +511,7 @@
       "lastSeen": "2026-06-08T11:19:15.718980+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.011
+      "score": 1.9924
     },
     {
       "title": "Notion restores access to Anthropic after service disruption",
@@ -460,10 +524,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2021/02/notion-glitch-hero.jpg?resize=1200%2C827",
       "published": "2026-06-07T17:56:22+00:00",
       "firstSeen": "2026-06-07T18:00:01.801509+00:00",
-      "lastSeen": "2026-06-08T13:00:01.268947+00:00",
+      "lastSeen": "2026-06-08T14:00:01.641240+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8378
+      "score": 4.8201
     },
     {
       "title": "OpenAI is still working on that ‘super app’",
@@ -476,10 +540,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/02/GettyImages-2195918462.jpg?w=1024",
       "published": "2026-06-07T16:23:22+00:00",
       "firstSeen": "2026-06-07T16:42:13.437720+00:00",
-      "lastSeen": "2026-06-08T13:00:01.268947+00:00",
+      "lastSeen": "2026-06-08T14:00:01.641240+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.9105
+      "score": 5.8935
     },
     {
       "title": "China wants slimmer EVs after batteries and features made them too heavy for parking spaces",
@@ -495,7 +559,7 @@
       "lastSeen": "2026-06-08T10:00:01.909700+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -0.384
+      "score": -0.3995
     },
     {
       "title": "UK plans to buy AI chips from British firms to stop them leaving for the US",
@@ -511,7 +575,7 @@
       "lastSeen": "2026-06-08T10:00:01.909700+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.6124
+      "score": 1.5969
     },
     {
       "title": "AI ‘content creators’ are getting harder to spot",
@@ -524,10 +588,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/GAUYdq3a4AAAlsX.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C0.6699364330709%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-07T12:00:00+00:00",
       "firstSeen": "2026-06-07T13:00:01.833652+00:00",
-      "lastSeen": "2026-06-08T13:00:01.268947+00:00",
+      "lastSeen": "2026-06-08T14:00:01.641240+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8093
+      "score": 1.7942
     },
     {
       "title": "Sponsors especially OPENAI CODEX voucher usage for codex - openAI challange",
@@ -543,7 +607,7 @@
       "lastSeen": "2026-06-07T18:17:27.652148+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8739
+      "score": 4.859
     },
     {
       "title": "Kyle Vogt’s Bot Company is being sued for turning an Airbnb into a robot lab",
@@ -559,7 +623,7 @@
       "lastSeen": "2026-06-08T09:00:01.392657+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.5844
+      "score": 1.5697
     },
     {
       "title": "Trump signs memo putting ‘most advanced AI’ into military hands and banning vendors from pulling the plug",
@@ -575,71 +639,7 @@
       "lastSeen": "2026-06-08T09:00:01.392657+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -0.8221
-    },
-    {
-      "title": "Her · हेर — a detective for your Claude Code sessions",
-      "url": "https://huggingface.co/blog/build-small-hackathon/her-blog",
-      "source": "Hugging Face Blog",
-      "sourceUrl": "https://huggingface.co/blog/feed.xml",
-      "sourceWeight": 0.95,
-      "category": "AI",
-      "summary": "",
-      "image": "https://cdn-uploads.huggingface.co/production/uploads/67b09a0bbac2756ce900a8fa/ozXSsTQid-4zpTQm1JgAZ.png",
-      "published": "2026-06-07T10:13:41+00:00",
-      "firstSeen": "2026-06-07T11:00:02.040408+00:00",
-      "lastSeen": "2026-06-07T11:00:02.040408+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 7.8529
-    },
-    {
-      "title": "OpenAI adds Lockdown Mode to ChatGPT to block data theft from prompt injection attacks",
-      "url": "https://thenextweb.com/news/chatgpt-lockdown-mode-prompt-injection",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "OpenAI has begun rolling out Lockdown Mode to ChatGPT, a new security setting designed to block attackers from stealing data through prompt injection attacks. The feature disables live web browsing, agent mode, deep research, image retrieval, Canvas networking, and file downloads. It is available to logged-in users across Free, Go, Plus, Pro, and self-serve ChatGPT [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/chatgpt-lockdown-mode-prompt-injection.avif",
-      "published": "2026-06-07T09:14:51+00:00",
-      "firstSeen": "2026-06-07T11:00:02.040408+00:00",
-      "lastSeen": "2026-06-08T09:00:01.392657+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 11.6588
-    },
-    {
-      "title": "Robot dogs, hunter drones, and AI cameras: the tech securing the 2026 World Cup",
-      "url": "https://thenextweb.com/news/world-cup-2026-security-tech-robot-dogs-drones-ai",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The 2026 World Cup kicks off next week across 16 cities in the US, Mexico, and Canada. It is the largest in history: 48 teams, 104 matches, 39 days. It is also the most technologically surveilled sporting event ever staged, with robot dogs, net-shooting hunter drones, and thousands of AI-powered cameras deployed across venues and [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/world-cup-2026-security-tech-robot-dogs-drones-ai.avif",
-      "published": "2026-06-07T08:59:25+00:00",
-      "firstSeen": "2026-06-07T09:32:42.542335+00:00",
-      "lastSeen": "2026-06-08T09:00:01.392657+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.5552
-    },
-    {
-      "title": "Trump’s top AI adviser Sriram Krishnan is stepping down from the White House",
-      "url": "https://thenextweb.com/news/sriram-krishnan-leaves-white-house-ai-adviser",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Sriram Krishnan, the White House’s senior policy adviser on artificial intelligence, is stepping down. The former Andreessen Horowitz partner was tapped by President Donald Trump to help shape the administration’s AI strategy during his second term. He will leave at the end of June, according to the Washington Post. Krishnan played a central role in [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/sriram-krishnan-leaves-white-house-ai-adviser.avif",
-      "published": "2026-06-07T08:36:49+00:00",
-      "firstSeen": "2026-06-07T09:32:42.542335+00:00",
-      "lastSeen": "2026-06-08T09:00:01.392657+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.65
+      "score": -0.8366
     },
     {
       "title": "The Life Scientific: Seth Berkley",
@@ -652,10 +652,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-01T20:00:00+00:00",
       "firstSeen": "2026-06-01T21:00:01.828388+00:00",
-      "lastSeen": "2026-06-08T13:00:01.268947+00:00",
+      "lastSeen": "2026-06-08T14:00:01.641240+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.2026
+      "score": 1.2022
     },
     {
       "title": "Dean Lomax on discovering ichthyosaurs and defying nay-sayers",
@@ -668,7 +668,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-26T08:30:00+00:00",
       "firstSeen": "2026-05-26T08:41:33.144051+00:00",
-      "lastSeen": "2026-06-08T13:00:01.268947+00:00",
+      "lastSeen": "2026-06-08T14:00:01.641240+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 1.1202
@@ -684,7 +684,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-25T20:00:00+00:00",
       "firstSeen": "2026-05-25T21:00:01.605108+00:00",
-      "lastSeen": "2026-06-08T13:00:01.268947+00:00",
+      "lastSeen": "2026-06-08T14:00:01.641240+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 0.2901
