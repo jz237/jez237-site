@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-08T18:00:01.931641+00:00",
+  "updatedAt": "2026-06-08T19:00:01.735760+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -9636,6 +9636,38 @@
     "https://www.theverge.com/tech/942416/apple-siri-ai-update-wwdc": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/wwdc-2026-the-verge-208.jpg?quality=90&amp;strip=all&amp;crop=0%2C3.0313913964321%2C100%2C93.937217207136&amp;w=1200",
       "checkedAt": "2026-06-08T18:00:01.931641+00:00"
+    },
+    "https://techcrunch.com/2026/06/08/apple-just-taught-your-iphone-to-finish-your-sentences-your-photos-and-your-workflows": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/Screenshot-2026-06-08-at-2.02.26-PM.png?resize=1200,663",
+      "checkedAt": "2026-06-08T19:00:01.735760+00:00"
+    },
+    "https://techcrunch.com/2026/06/08/apple-will-let-you-build-workflows-using-ai-in-its-new-shortcuts-app": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/shortcuts-at-2.26.16-PM.jpg?resize=1200,666",
+      "checkedAt": "2026-06-08T19:00:01.735760+00:00"
+    },
+    "https://techcrunch.com/2026/06/08/apples-image-playground-doesnt-suck-anymore": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/Screenshot-2026-06-08-at-2.01.54-PM.png?resize=1200,670",
+      "checkedAt": "2026-06-08T19:00:01.735760+00:00"
+    },
+    "https://techcrunch.com/2026/06/08/apples-photos-app-is-getting-new-ai-editing-features": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/Screenshot-2026-06-08-at-2.07.32-PM.jpg?resize=1200,675",
+      "checkedAt": "2026-06-08T19:00:01.735760+00:00"
+    },
+    "https://techcrunch.com/2026/06/08/apple-gives-siri-its-own-dedicated-app": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/apple-wwdc-2026.jpg?resize=1200,736",
+      "checkedAt": "2026-06-08T19:00:01.735760+00:00"
+    },
+    "https://techcrunch.com/2026/06/08/apple-is-fixing-the-headache-of-splitting-the-bill-with-its-new-siri-in-camera-feature": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/Screenshot-2026-06-08-at-1.49.10-PM-1.png?resize=1200,666",
+      "checkedAt": "2026-06-08T19:00:01.735760+00:00"
+    },
+    "https://openai.com/index/economic-research-exchange": {
+      "image": "https://images.ctfassets.net/kftzwdyauwt9/51xw2pFq7Z8Cur501DVgKi/4c1c938e8553611ca250e45531796660/seo_image.png?w=1600&amp;h=900&amp;fit=fill",
+      "checkedAt": "2026-06-08T19:00:01.735760+00:00"
+    },
+    "https://github.com/ollama/ollama/releases/tag/v0.30.7": {
+      "image": "https://opengraph.githubassets.com/32b31d01cb45b3cf082bb43b29f71d5f6a4e01375686b4dd3cbc2e02914290ca/ollama/ollama",
+      "checkedAt": "2026-06-08T19:00:01.735760+00:00"
     }
   }
 }
