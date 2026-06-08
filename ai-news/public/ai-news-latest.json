@@ -1,8 +1,8 @@
 {
-  "updatedAt": "2026-06-08T23:00:02.020036+00:00",
+  "updatedAt": "2026-06-08T23:22:41.274112+00:00",
   "items": [
     {
-      "title": "Sherin Muckatira, Jesse Geneson, Slava Gerovitch, Pavel Etingof, Mikhail Gronas, Anna Rumshisky",
+      "title": "CrowdMath: A Dataset of Crowdsourced Mathematical Research Discussions",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -10,12 +10,12 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-08T23:00:11.229140+00:00",
+      "published": "2026-06-08T23:22:46.203415+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-08T23:00:02.020036+00:00",
+      "lastSeen": "2026-06-08T23:22:41.274112+00:00",
       "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.36
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.76
     },
     {
       "title": "As OpenAI files for IPO, Sam Altman’s eye-scanning company is doing layoffs, report says",
@@ -28,10 +28,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2023/07/Worldcoin-Project-Co-founders-Alex-Blania-L-and-Sam-Altman-R.jpg?resize=1200%2C800",
       "published": "2026-06-08T22:41:45+00:00",
       "firstSeen": "2026-06-08T23:00:02.020036+00:00",
-      "lastSeen": "2026-06-08T23:00:02.020036+00:00",
+      "lastSeen": "2026-06-08T23:22:41.274112+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2807
+      "score": 5.2693
     },
     {
       "title": "Apple’s WWDC AI demos looked more real after $250M false ad settlement",
@@ -44,10 +44,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/Apple-iOS-27-demo.png?resize=1200%2C677",
       "published": "2026-06-08T22:39:57+00:00",
       "firstSeen": "2026-06-08T23:00:02.020036+00:00",
-      "lastSeen": "2026-06-08T23:00:02.020036+00:00",
+      "lastSeen": "2026-06-08T23:22:41.274112+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3798
+      "score": 3.3684
     },
     {
       "title": "Apple is using AI to fix Safari’s extension problem",
@@ -56,14 +56,14 @@
       "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
       "sourceWeight": 0.9,
       "category": "AI",
-      "summary": "Apple is trying to solve one of Safari's biggest weaknesses with AI. Safari has long lacked the robust library of extensions that its rivals have, mainly due to the stringent development requirements from Apple. But now, Apple is inviting users to essentially vibe code their own extensions. In a demo shared by Apple, the company [&#8230;]",
+      "summary": "Apple is trying to solve one of Safari's biggest weaknesses with AI. Safari has long lacked the robust library of extensions that its rivals have, mainly due to the stringent development requirements from Apple. But now, Apple is inviting users to essentially vibe-code their own extensions. In a demo shared by Apple, the company showed [&#8230;]",
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/describe-extension-safari.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.742998834307%2C100%2C78.514002331385&amp%3Bw=1200",
       "published": "2026-06-08T22:14:17+00:00",
       "firstSeen": "2026-06-08T23:00:02.020036+00:00",
-      "lastSeen": "2026-06-08T23:00:02.020036+00:00",
+      "lastSeen": "2026-06-08T23:22:41.274112+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 0.3369
+      "score": 0.3257
     },
     {
       "title": "OpenAI files for IPO, following Anthropic",
@@ -76,10 +76,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/STK155_OPEN_AI_CVirginia_C.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-08T21:38:29+00:00",
       "firstSeen": "2026-06-08T21:59:34.916580+00:00",
-      "lastSeen": "2026-06-08T23:00:02.020036+00:00",
+      "lastSeen": "2026-06-08T23:22:41.274112+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.3192
+      "score": 8.3082
     },
     {
       "title": "OpenAI Confidentially Files for IPO on the Heels of SpaceX and Anthropic",
@@ -92,10 +92,10 @@
       "image": "https://media.wired.com/photos/6a0f431f2e3deb13670a3fb1/master/pass/OpenAI-IPO-Business-2265445220.jpg",
       "published": "2026-06-08T21:31:58+00:00",
       "firstSeen": "2026-06-08T21:59:34.916580+00:00",
-      "lastSeen": "2026-06-08T23:00:02.020036+00:00",
+      "lastSeen": "2026-06-08T23:22:41.274112+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.5961
+      "score": 12.585
     },
     {
       "title": "OpenAI files confidentially for IPO, following Anthropic",
@@ -108,10 +108,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/02/modi-openai-anthropic-2261854815.jpg?resize=1200%2C800",
       "published": "2026-06-08T21:29:57+00:00",
       "firstSeen": "2026-06-08T21:59:34.916580+00:00",
-      "lastSeen": "2026-06-08T23:00:02.020036+00:00",
+      "lastSeen": "2026-06-08T23:22:41.274112+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.2451
+      "score": 8.2341
     },
     {
       "title": "Apple plays catch-up at WWDC",
@@ -124,10 +124,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/tim-cook-wwdc-2026.jpeg?resize=1200%2C677",
       "published": "2026-06-08T21:15:42+00:00",
       "firstSeen": "2026-06-08T21:59:34.916580+00:00",
-      "lastSeen": "2026-06-08T23:00:02.020036+00:00",
+      "lastSeen": "2026-06-08T23:22:41.274112+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3381
+      "score": 3.3272
     },
     {
       "title": "Apple iOS 27: Faster iPhones, New Safety Features, and More",
@@ -140,10 +140,10 @@
       "image": "",
       "published": "2026-06-08T21:09:11+00:00",
       "firstSeen": "2026-06-08T21:59:34.916580+00:00",
-      "lastSeen": "2026-06-08T23:00:02.020036+00:00",
+      "lastSeen": "2026-06-08T23:22:41.274112+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.195
+      "score": 3.1841
     },
     {
       "title": "Apple bets cheaper AI will woo small developers",
@@ -156,10 +156,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/12/app-of-the-year.jpg?resize=1200%2C722",
       "published": "2026-06-08T20:53:55+00:00",
       "firstSeen": "2026-06-08T21:00:01.371488+00:00",
-      "lastSeen": "2026-06-08T23:00:02.020036+00:00",
+      "lastSeen": "2026-06-08T23:22:41.274112+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 4.0276
+      "score": 4.0168
     },
     {
       "title": "Apple previews its biggest parental controls update in years, weeks before UK and US regulatory deadlines",
@@ -172,10 +172,10 @@
       "image": "https://media.thenextweb.com/2026/06/apple-child-safety-parental-controls-ios-27-wwdc-2026.avif",
       "published": "2026-06-08T20:48:46+00:00",
       "firstSeen": "2026-06-08T21:59:34.916580+00:00",
-      "lastSeen": "2026-06-08T23:00:02.020036+00:00",
+      "lastSeen": "2026-06-08T23:22:41.274112+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1851
+      "score": 3.1743
     },
     {
       "title": "Cipher Digital raises $810 million in junk bonds to build another Amazon data centre in Texas",
@@ -188,10 +188,10 @@
       "image": "https://media.thenextweb.com/2026/06/cipher-digital-810m-junk-bond-amazon-data-center-texas.avif",
       "published": "2026-06-08T20:18:03+00:00",
       "firstSeen": "2026-06-08T21:59:34.916580+00:00",
-      "lastSeen": "2026-06-08T23:00:02.020036+00:00",
+      "lastSeen": "2026-06-08T23:22:41.274112+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0705
+      "score": 2.0599
     },
     {
       "title": "Pentagon adds Alibaba, Baidu, BYD, and Unitree to its Chinese military companies list",
@@ -204,10 +204,10 @@
       "image": "https://media.thenextweb.com/2026/06/pentagon-1260h-alibaba-baidu-byd-unitree-chinese-military.avif",
       "published": "2026-06-08T19:51:14+00:00",
       "firstSeen": "2026-06-08T21:00:01.371488+00:00",
-      "lastSeen": "2026-06-08T23:00:02.020036+00:00",
+      "lastSeen": "2026-06-08T23:22:41.274112+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0579
+      "score": 2.0474
     },
     {
       "title": "WWDC 2026: Everything announced on Siri AI, iOS 27, Apple Intelligence and more",
@@ -220,10 +220,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/wwdc-2026-apple-logo.jpg?resize=1200%2C682",
       "published": "2026-06-08T19:41:32+00:00",
       "firstSeen": "2026-06-08T18:00:01.931641+00:00",
-      "lastSeen": "2026-06-08T23:00:02.020036+00:00",
+      "lastSeen": "2026-06-08T23:22:41.274112+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.3934
+      "score": 4.3829
     },
     {
       "title": "For the second time, Apple Intelligence is delayed in Europe, and this time there is no timeline",
@@ -236,10 +236,10 @@
       "image": "https://media.thenextweb.com/2026/06/apple-siri-ai-eu-dma-delay-ios-27.avif",
       "published": "2026-06-08T19:32:15+00:00",
       "firstSeen": "2026-06-08T21:00:01.371488+00:00",
-      "lastSeen": "2026-06-08T23:00:02.020036+00:00",
+      "lastSeen": "2026-06-08T23:22:41.274112+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.2491
+      "score": 4.2387
     },
     {
       "title": "Sam Bankman-Fried has formally asked Trump for a pardon. Trump has said he has “no intention” of granting one.",
@@ -252,10 +252,10 @@
       "image": "https://media.thenextweb.com/2026/06/sam-bankman-fried-trump-pardon-request-ftx.avif",
       "published": "2026-06-08T19:12:51+00:00",
       "firstSeen": "2026-06-08T21:00:01.371488+00:00",
-      "lastSeen": "2026-06-08T23:00:02.020036+00:00",
+      "lastSeen": "2026-06-08T23:22:41.274112+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0402
+      "score": 2.0299
     },
     {
       "title": "Nashville Zoo says a proposed AI data centre could stop its endangered leopards from breeding",
@@ -268,10 +268,10 @@
       "image": "https://media.thenextweb.com/2026/06/nashville-zoo-ai-data-center-dc-blox-opposition.avif",
       "published": "2026-06-08T19:12:45+00:00",
       "firstSeen": "2026-06-08T21:00:01.371488+00:00",
-      "lastSeen": "2026-06-08T23:00:02.020036+00:00",
+      "lastSeen": "2026-06-08T23:22:41.274112+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7401
+      "score": 2.7298
     },
     {
       "title": "Apple’s WWDC 2026 App Store changes let independent developers bundle subscriptions together",
@@ -284,10 +284,10 @@
       "image": "https://media.thenextweb.com/2026/06/apple-app-store-wwdc-2026-developer-bundles-screen-time.avif",
       "published": "2026-06-08T19:01:19+00:00",
       "firstSeen": "2026-06-08T19:34:30.721455+00:00",
-      "lastSeen": "2026-06-08T23:00:02.020036+00:00",
+      "lastSeen": "2026-06-08T23:22:41.274112+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1349
+      "score": 3.1246
     },
     {
       "title": "A federal judge just threw out Trump’s $100,000 H-1B visa fee, calling it an unlawful tax",
@@ -300,10 +300,10 @@
       "image": "https://media.thenextweb.com/2024/02/Untitled-design-16.avif",
       "published": "2026-06-08T18:55:17+00:00",
       "firstSeen": "2026-06-08T19:34:30.721455+00:00",
-      "lastSeen": "2026-06-08T23:00:02.020036+00:00",
+      "lastSeen": "2026-06-08T23:22:41.274112+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1322
+      "score": 3.1219
     },
     {
       "title": "Apple just taught your iPhone to finish your sentences, your photos, and your workflows",
@@ -316,10 +316,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/Screenshot-2026-06-08-at-2.02.26-PM.png?resize=1200%2C663",
       "published": "2026-06-08T18:48:45+00:00",
       "firstSeen": "2026-06-08T19:00:01.735760+00:00",
-      "lastSeen": "2026-06-08T23:00:02.020036+00:00",
+      "lastSeen": "2026-06-08T23:22:41.274112+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2692
+      "score": 3.259
     },
     {
       "title": "China just approved the world’s first commercial brain implant. The race with Neuralink is no longer theoretical.",
@@ -332,10 +332,10 @@
       "image": "https://media.thenextweb.com/2026/05/china-agentic-commerce-ai-shopping-alibaba-qwen.avif",
       "published": "2026-06-08T18:46:18+00:00",
       "firstSeen": "2026-06-08T19:34:30.721455+00:00",
-      "lastSeen": "2026-06-08T23:00:02.020036+00:00",
+      "lastSeen": "2026-06-08T23:22:41.274112+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.5281
+      "score": 4.5179
     },
     {
       "title": "Apple will let you build workflows using AI in its new Shortcuts app",
@@ -348,10 +348,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/shortcuts-at-2.26.16-PM.jpg?resize=1200%2C666",
       "published": "2026-06-08T18:45:12+00:00",
       "firstSeen": "2026-06-08T19:00:01.735760+00:00",
-      "lastSeen": "2026-06-08T23:00:02.020036+00:00",
+      "lastSeen": "2026-06-08T23:22:41.274112+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2676
+      "score": 3.2574
     },
     {
       "title": "Apple finally ships its AI do-over: Siri AI, a standalone app, and a three-tier privacy stack",
@@ -364,10 +364,10 @@
       "image": "https://media.thenextweb.com/2026/06/apple-wwdc-2026-siri-ai-gemini-ios-27.avif",
       "published": "2026-06-08T18:45:07+00:00",
       "firstSeen": "2026-06-08T19:34:30.721455+00:00",
-      "lastSeen": "2026-06-08T23:00:02.020036+00:00",
+      "lastSeen": "2026-06-08T23:22:41.274112+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.2275
+      "score": 8.2173
     },
     {
       "title": "Apple’s Image Playground doesn’t suck anymore",
@@ -380,10 +380,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/Screenshot-2026-06-08-at-2.01.54-PM.png?resize=1200%2C670",
       "published": "2026-06-08T18:38:07+00:00",
       "firstSeen": "2026-06-08T19:00:01.735760+00:00",
-      "lastSeen": "2026-06-08T23:00:02.020036+00:00",
+      "lastSeen": "2026-06-08T23:22:41.274112+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2644
+      "score": 3.2542
     },
     {
       "title": "Apple’s Photos app is getting new AI editing features",
@@ -396,10 +396,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/Screenshot-2026-06-08-at-2.07.32-PM.jpg?resize=1200%2C675",
       "published": "2026-06-08T18:36:04+00:00",
       "firstSeen": "2026-06-08T19:00:01.735760+00:00",
-      "lastSeen": "2026-06-08T23:00:02.020036+00:00",
+      "lastSeen": "2026-06-08T23:22:41.274112+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2635
+      "score": 3.2533
     },
     {
       "title": "For the 2nd time in weeks, Microsoft packages laced with credential stealer",
@@ -412,10 +412,10 @@
       "image": "https://cdn.arstechnica.net/wp-content/uploads/2025/09/microsoft-logo-1024x648.jpg",
       "published": "2026-06-08T18:34:23+00:00",
       "firstSeen": "2026-06-08T19:34:30.721455+00:00",
-      "lastSeen": "2026-06-08T23:00:02.020036+00:00",
+      "lastSeen": "2026-06-08T23:22:41.274112+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.7227
+      "score": 3.7126
     },
     {
       "title": "Apple gives Siri its own dedicated app",
@@ -428,10 +428,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/apple-wwdc-2026.jpg?resize=1200%2C736",
       "published": "2026-06-08T18:33:42+00:00",
       "firstSeen": "2026-06-08T19:00:01.735760+00:00",
-      "lastSeen": "2026-06-08T23:00:02.020036+00:00",
+      "lastSeen": "2026-06-08T23:22:41.274112+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2624
+      "score": 3.2523
     },
     {
       "title": "FCC gives Amazon Leo more time on satellite deployment but strips its spectrum priority",
@@ -447,7 +447,7 @@
       "lastSeen": "2026-06-08T21:00:01.371488+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.019
+      "score": 2.0089
     },
     {
       "title": "Apple is fixing the headache of splitting the bill with its new Siri in Camera feature",
@@ -460,10 +460,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/Screenshot-2026-06-08-at-1.49.10-PM-1.png?resize=1200%2C666",
       "published": "2026-06-08T18:23:04+00:00",
       "firstSeen": "2026-06-08T19:00:01.735760+00:00",
-      "lastSeen": "2026-06-08T23:00:02.020036+00:00",
+      "lastSeen": "2026-06-08T23:22:41.274112+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2576
+      "score": 3.2475
     },
     {
       "title": "Apple’s New Siri AI Is Ready to Get Personal",
@@ -476,10 +476,10 @@
       "image": "https://media.wired.com/photos/6a2710703d01e9a6c2f2cfec/master/pass/Apple-Siri-AI-architecture-diagram-260608.jpg",
       "published": "2026-06-08T18:17:44+00:00",
       "firstSeen": "2026-06-08T19:00:01.735760+00:00",
-      "lastSeen": "2026-06-08T23:00:02.020036+00:00",
+      "lastSeen": "2026-06-08T23:22:41.274112+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.2552
+      "score": 7.2452
     },
     {
       "title": "AI will make content infinite. Human taste will decide what matters.",
@@ -495,7 +495,7 @@
       "lastSeen": "2026-06-08T21:00:01.371488+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0136
+      "score": 2.0035
     },
     {
       "title": "A Qilin ransomware affiliate exploited a Check Point VPN zero-day for a month before a patch existed",
@@ -511,7 +511,7 @@
       "lastSeen": "2026-06-08T19:34:30.721455+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0134
+      "score": 2.0033
     },
     {
       "title": "Apple’s long-awaited AI Siri overhaul is finally here",
@@ -524,10 +524,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2024/10/apple-siri-header.jpg?resize=1200%2C800",
       "published": "2026-06-08T17:56:21+00:00",
       "firstSeen": "2026-06-08T18:00:01.931641+00:00",
-      "lastSeen": "2026-06-08T23:00:02.020036+00:00",
+      "lastSeen": "2026-06-08T23:22:41.274112+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.3457
+      "score": 4.3358
     },
     {
       "title": "Amazon is launching AI-generated custom merch",
@@ -540,10 +540,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/09/acastro_STK103__03.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-08T17:52:51+00:00",
       "firstSeen": "2026-06-08T18:00:01.931641+00:00",
-      "lastSeen": "2026-06-08T23:00:02.020036+00:00",
+      "lastSeen": "2026-06-08T23:22:41.274112+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.3142
+      "score": 4.3042
     },
     {
       "title": "Rethinking growth systems: Rush Digital Marketing’s approach to ownership and autonomy",
@@ -559,7 +559,7 @@
       "lastSeen": "2026-06-08T19:34:30.721455+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.8024
+      "score": 3.7925
     },
     {
       "title": "The UK Is Betting on a Billion-Dollar AI Supercomputer to Kick Its Addiction to US Tech",
@@ -572,10 +572,10 @@
       "image": "https://media.wired.com/photos/6a26d742255fdba4ebd668f3/master/pass/GettyImages-2267728396.jpg",
       "published": "2026-06-08T17:44:28+00:00",
       "firstSeen": "2026-06-08T18:00:01.931641+00:00",
-      "lastSeen": "2026-06-08T23:00:02.020036+00:00",
+      "lastSeen": "2026-06-08T23:22:41.274112+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1405
+      "score": 2.1306
     },
     {
       "title": "SpaceX’s $75 billion IPO is well oversubscribed as order books close ahead of Wednesday pricing",
@@ -591,7 +591,7 @@
       "lastSeen": "2026-06-08T19:34:30.721455+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9984
+      "score": 1.9885
     },
     {
       "title": "EU Unveils ‘Sovereignty Package’ to Break Reliance on US, Chinese Tech",
@@ -604,10 +604,10 @@
       "image": "",
       "published": "2026-06-08T17:38:53+00:00",
       "firstSeen": "2026-06-08T21:59:34.916580+00:00",
-      "lastSeen": "2026-06-08T23:00:02.020036+00:00",
+      "lastSeen": "2026-06-08T23:22:41.274112+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.798
+      "score": 3.7881
     },
     {
       "title": "Apple announces Siri AI and its next generation of Apple Intelligence",
@@ -620,10 +620,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/wwdc-2026-the-verge-208.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C3.0313913964321%2C100%2C93.937217207136&amp%3Bw=1200",
       "published": "2026-06-08T17:34:24+00:00",
       "firstSeen": "2026-06-08T18:00:01.931641+00:00",
-      "lastSeen": "2026-06-08T23:00:02.020036+00:00",
+      "lastSeen": "2026-06-08T23:22:41.274112+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1061
+      "score": 5.0962
     },
     {
       "title": "Meta Deletes Face-Recognition System From Its Smart Glasses App After WIRED Report",
@@ -636,10 +636,10 @@
       "image": "https://media.wired.com/photos/6a26baa814f2ec6e95bd841b/master/pass/GettyImages-2235451108.jpg",
       "published": "2026-06-08T17:31:11+00:00",
       "firstSeen": "2026-06-08T18:00:01.931641+00:00",
-      "lastSeen": "2026-06-08T23:00:02.020036+00:00",
+      "lastSeen": "2026-06-08T23:22:41.274112+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2347
+      "score": 5.2248
     },
     {
       "title": "The Life Scientific: Helen Hastie",
@@ -652,10 +652,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-08T20:00:00+00:00",
       "firstSeen": "2026-06-08T21:00:01.371488+00:00",
-      "lastSeen": "2026-06-08T23:00:02.020036+00:00",
+      "lastSeen": "2026-06-08T23:22:41.274112+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.202
+      "score": 2.1915
     },
     {
       "title": "The Life Scientific: Seth Berkley",
@@ -668,10 +668,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-01T20:00:00+00:00",
       "firstSeen": "2026-06-01T21:00:01.828388+00:00",
-      "lastSeen": "2026-06-08T23:00:02.020036+00:00",
+      "lastSeen": "2026-06-08T23:22:41.274112+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.1995
+      "score": 1.1994
     },
     {
       "title": "Dean Lomax on discovering ichthyosaurs and defying nay-sayers",
@@ -684,7 +684,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-26T08:30:00+00:00",
       "firstSeen": "2026-05-26T08:41:33.144051+00:00",
-      "lastSeen": "2026-06-08T23:00:02.020036+00:00",
+      "lastSeen": "2026-06-08T23:22:41.274112+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 1.1201
@@ -740,9 +740,14 @@
   ],
   "errors": [
     {
+      "source": "Artificial Intelligence News",
+      "url": "https://www.artificialintelligence-news.com/categories/artificial-intelligence/feed/",
+      "error": "not well-formed (invalid token): line 1, column 158"
+    },
+    {
       "source": "MarkTechPost",
       "url": "https://www.marktechpost.com/feed/",
-      "error": "HTTP Error 403: Forbidden"
+      "error": "not well-formed (invalid token): line 1, column 119"
     }
   ]
 }
