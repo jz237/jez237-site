@@ -1,6 +1,6 @@
 {
   "date": "2026-06-08",
-  "updatedAt": "2026-06-08T17:09:09.111537+00:00",
+  "updatedAt": "2026-06-08T18:00:01.931641+00:00",
   "items": [
     {
       "title": "NotebookLM&#8217;s Gemini 3.5 upgrade adds a cloud computer and help finding sources",
@@ -13,11 +13,11 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/NotebookLM-Welcome.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C3.4613147178592%2C100%2C93.077370564282&amp%3Bw=1200",
       "published": "2026-06-08T16:00:00+00:00",
       "firstSeen": "2026-06-08T16:16:07.017802+00:00",
-      "lastSeen": "2026-06-08T17:09:09.111537+00:00",
+      "lastSeen": "2026-06-08T18:00:01.931641+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 19.5253
+      "score": 19.5005
     },
     {
       "title": "OpenAI Expands ChatGPT Lockdown Mode to Millions of Eligible Users",
@@ -30,10 +30,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/06/unnamed-44.png?f=jpeg",
       "published": "2026-06-08T15:21:16+00:00",
       "firstSeen": "2026-06-08T16:00:01.663535+00:00",
-      "lastSeen": "2026-06-08T17:09:09.111537+00:00",
+      "lastSeen": "2026-06-08T18:00:01.931641+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.1964
+      "score": 12.172
     },
     {
       "title": "Momfluencers Are Pitching AI as a Better ‘Coparent’ Than Men",
@@ -46,10 +46,10 @@
       "image": "https://media.wired.com/photos/6a2347d049872af07a400381/master/pass/AI-Momfluencers-Culture.jpg",
       "published": "2026-06-08T10:30:00+00:00",
       "firstSeen": "2026-06-08T11:00:02.097985+00:00",
-      "lastSeen": "2026-06-08T17:09:09.111537+00:00",
+      "lastSeen": "2026-06-08T18:00:01.931641+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.1044
+      "score": 6.0831
     },
     {
       "title": "The Open Source Community is backing OpenEnv for Agentic RL",
@@ -62,10 +62,42 @@
       "image": "https://huggingface.co/blog/assets/openenv/thumbnail_expansion.png",
       "published": "2026-06-08T00:00:00+00:00",
       "firstSeen": "2026-06-08T14:00:01.641240+00:00",
-      "lastSeen": "2026-06-08T17:09:09.111537+00:00",
+      "lastSeen": "2026-06-08T18:00:01.931641+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.4131
+      "score": 5.3972
+    },
+    {
+      "title": "Meta Deletes Face-Recognition System From Its Smart Glasses App After WIRED Report",
+      "url": "https://www.wired.com/story/meta-removes-face-recognition-code-meta-ai-app-smart-glasses",
+      "source": "Wired AI",
+      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "The code WIRED identified is gone from the latest version of Meta AI, the companion app for the company’s smart glasses. Meta won’t say why or whether it’s coming back.",
+      "image": "https://media.wired.com/photos/6a26baa814f2ec6e95bd841b/master/pass/GettyImages-2235451108.jpg",
+      "published": "2026-06-08T17:31:11+00:00",
+      "firstSeen": "2026-06-08T18:00:01.931641+00:00",
+      "lastSeen": "2026-06-08T18:00:01.931641+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.3754
+    },
+    {
+      "title": "Apple announces Siri AI and its next generation of Apple Intelligence",
+      "url": "https://www.theverge.com/tech/942416/apple-siri-ai-update-wwdc",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "Two years after first revealing its plans for Apple Intelligence and a smarter Siri that never fully materialized, at WWDC, Apple just revealed a new set of AI features and a smarter, more personalized Siri. Apple calls Siri AI an \"entirely new version of Siri\" and says it's both more conversational and more capable than [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/wwdc-2026-the-verge-208.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C3.0313913964321%2C100%2C93.937217207136&amp%3Bw=1200",
+      "published": "2026-06-08T17:34:24+00:00",
+      "firstSeen": "2026-06-08T18:00:01.931641+00:00",
+      "lastSeen": "2026-06-08T18:00:01.931641+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.247
     },
     {
       "title": "Lean4Agent: Formal Modeling and Verification for Agent Workflow and Trajectory",
@@ -76,9 +108,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-08T17:09:14.554596+00:00",
+      "published": "2026-06-08T18:00:10.895721+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-08T17:09:09.111537+00:00",
+      "lastSeen": "2026-06-08T18:00:01.931641+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 5.06
@@ -94,10 +126,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/06/korea-ai-infrastructure-1024x574.png?f=jpeg",
       "published": "2026-06-08T14:54:02+00:00",
       "firstSeen": "2026-06-08T16:00:01.663535+00:00",
-      "lastSeen": "2026-06-08T17:09:09.111537+00:00",
+      "lastSeen": "2026-06-08T18:00:01.931641+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.5833
+      "score": 4.5592
     },
     {
       "title": "Visual Studio 2026 Brings AI Deeper Into Development and It’s 93% Off Right Now",
@@ -110,10 +142,26 @@
       "image": "https://assets.techrepublic.com/uploads/2026/01/Copy-of-Untitled-Design-7.png",
       "published": "2026-06-08T12:30:40+00:00",
       "firstSeen": "2026-04-28T14:00:01.148748+00:00",
-      "lastSeen": "2026-06-08T17:09:09.111537+00:00",
+      "lastSeen": "2026-06-08T18:00:01.931641+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.5169
+      "score": 4.4944
+    },
+    {
+      "title": "Apple’s long-awaited AI Siri overhaul is finally here",
+      "url": "https://techcrunch.com/2026/06/08/apples-long-awaited-ai-siri-overhaul-is-finally-here",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "The idea behind the new \"Siri AI\" is to turn the assistant from a voice controlled assistant into an AI companion that can do a lot more.",
+      "image": "https://techcrunch.com/wp-content/uploads/2024/10/apple-siri-header.jpg?resize=1200%2C800",
+      "published": "2026-06-08T17:56:21+00:00",
+      "firstSeen": "2026-06-08T18:00:01.931641+00:00",
+      "lastSeen": "2026-06-08T18:00:01.931641+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.4881
     },
     {
       "title": "AI is choosing which online stores you see, and it’s ignoring most of them",
@@ -129,71 +177,23 @@
       "lastSeen": "2026-06-08T16:00:01.663535+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.4936
+      "score": 4.4717
     },
     {
-      "title": "Nvidia locks in SK Hynix for the AI memory race as the chip industry’s “toughest bottleneck” gets its own multi-year deal",
-      "url": "https://thenextweb.com/news/nvidia-locks-in-sk-hynix-for-the-ai-memory-race-as-the-chip-industrys-toughest-bottleneck-gets-its-own-multi-year-deal",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Nvidia and SK Hynix have signed a multi-year agreement covering both the design and manufacture of next-generation memory chips for AI. The deal, announced on Sunday during Nvidia CEO Jensen Huang’s tour of South Korea, gives SK Hynix a formal co-development role in the high-bandwidth memory that will power Nvidia’s most advanced accelerators, starting with the Vera [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/Jensen-Huang-CEO-NVIDIA.avif",
-      "published": "2026-06-08T07:54:03+00:00",
-      "firstSeen": "2026-06-08T09:00:01.392657+00:00",
-      "lastSeen": "2026-06-08T11:00:02.097985+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.3007
-    },
-    {
-      "title": "Microsoft’s AI chief says superintelligence is near, but won’t take your job",
-      "url": "https://www.theverge.com/podcast/944138/microsoft-ai-ceo-mustafa-suleyman-superintelligence-agi-openai-automation",
+      "title": "Amazon is launching AI-generated custom merch",
+      "url": "https://www.theverge.com/news/945905/amazon-alexa-shopping-ai-generated-custom-merch-design-printing",
       "source": "The Verge AI",
       "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
       "sourceWeight": 0.9,
       "category": "AI",
-      "summary": "Today I’m talking with Mustafa Suleyman, the CEO of Microsoft AI. And I’m actually going to keep today’s intro short — I’m working from my wife’s family farm this week, as you’ll see in the video, but also this is a real burner of an episode. We covered everything from Mustafa’s approach to training new [&#8230;]",
-      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/DCD-Mustafa-Suleyman.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.711631919237%2C100%2C78.576736161526&amp%3Bw=1200",
-      "published": "2026-06-08T14:00:00+00:00",
-      "firstSeen": "2026-06-08T15:00:01.579378+00:00",
-      "lastSeen": "2026-06-08T17:09:09.111537+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.6678
-    },
-    {
-      "title": "7 best HRIS for growing companies: 2026 overview",
-      "url": "https://thenextweb.com/news/7-best-hris-for-growing-companies-2026-overview",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Most HRIS platforms sell you a vision of growth. Then they become the ceiling. The system that handled onboarding for your first 50 hires starts breaking at 200. Reports that worked fine for one office can’t accommodate three countries. The performance review module you never used at 30 employees now sits there, mocking you, because [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/best-hris-growing-companies-2026.avif",
-      "published": "2026-06-08T15:39:31+00:00",
-      "firstSeen": "2026-06-08T16:16:07.017802+00:00",
-      "lastSeen": "2026-06-08T17:09:09.111537+00:00",
+      "summary": "Amazon is expanding its print-on-demand features to AI-generated designs created using Alexa for Shopping for products like T-shirts, water bottles, and hoodies. Shoppers can use text prompts to generate images that are then printed on to blanks for sale on Amazon. They can then share the link to the design so other people can buy [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/09/acastro_STK103__03.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
+      "published": "2026-06-08T17:52:51+00:00",
+      "firstSeen": "2026-06-08T18:00:01.931641+00:00",
+      "lastSeen": "2026-06-08T18:00:01.931641+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.5053
-    },
-    {
-      "title": "Amazon now lets you design custom merch using AI",
-      "url": "https://techcrunch.com/2026/06/08/amazon-now-lets-you-design-custom-merch-using-ai",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "A new feature in the Amazon Shopping app allows users to generate designs with Alexa, then print them on products like T-shirts, hoodies, and tumblers.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/06/about-amazon-hero-ai-merch-hero-amazon-news-lt-060226.jpg?resize=1200%2C675",
-      "published": "2026-06-08T15:49:12+00:00",
-      "firstSeen": "2026-06-08T16:00:01.663535+00:00",
-      "lastSeen": "2026-06-08T17:09:09.111537+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.35
+      "score": 4.4563
     }
   ],
   "errors": [
