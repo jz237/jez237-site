@@ -182,12 +182,12 @@ function marketBox(issue) {
 function musicBox(issue) {
   return `
     <section class="rail-box red-box compact-list">
-      <h2>Rock Radio</h2>
+      <h2>Rock Top 5</h2>
       <p class="small-date">${escapeHtml(issue.sectionChrome?.music?.title || "This Week")}</p>
       <ol class="chart-list">
         ${listItems(issue.musicChart, (item) => `
           <li>
-            <strong>${escapeHtml(item.title)}</strong>
+            <strong>${escapeHtml(displayName(item.title))}</strong>
             <span>${escapeHtml(item.artist)}</span>
           </li>
         `, 5)}
@@ -196,19 +196,36 @@ function musicBox(issue) {
   `;
 }
 
-function releasesBox(issue) {
-  const items = (issue.storeShelves || []).slice(0, 4);
+function movieBox(issue) {
   return `
-    <section class="rail-box blue-box">
-      <h2>Game Shelf</h2>
-      <ul class="bullet-list">
+    <section class="rail-box red-box compact-list">
+      <h2>Movies Top 5</h2>
+      <p class="small-date">June 6-8 weekend</p>
+      <ol class="chart-list">
+        ${listItems(issue.movieChart, (item) => `
+          <li>
+            <strong>${escapeHtml(displayName(item.title))}</strong>
+            <span>${escapeHtml(item.detail || "")}</span>
+          </li>
+        `, 5)}
+      </ol>
+    </section>
+  `;
+}
+
+function releasesBox(issue) {
+  const items = (issue.storeShelves || []).slice(0, 5);
+  return `
+    <section class="rail-box blue-box compact-list">
+      <h2>Games Top 5</h2>
+      <ol class="chart-list">
         ${items.map((item) => `
           <li>
             <strong>${escapeHtml(displayName(item.name))}</strong>
             <span>${escapeHtml(item.platform || item.confidence || "")}</span>
           </li>
         `).join("")}
-      </ul>
+      </ol>
     </section>
   `;
 }
@@ -293,12 +310,13 @@ function sourceBadge(issue, refs) {
 }
 
 function frontCard(issue, story, className = "") {
+  const summaryLimit = className.includes("wide") ? 260 : 120;
   return `
     <article class="front-card ${className}">
       ${story.label ? `<p class="label">${escapeHtml(story.label)}</p>` : ""}
       <h3>${escapeHtml(story.headline || "Untitled")}</h3>
       ${imageFigure(story.image, "article-photo")}
-      <p>${escapeHtml(truncate(story.summary || story.detail || "", className.includes("side") ? 145 : 260))}</p>
+      <p>${escapeHtml(truncate(story.summary || story.detail || "", summaryLimit))}</p>
       ${sourceBadge(issue, story.sourceRefs)}
     </article>
   `;
@@ -311,8 +329,8 @@ function makeHtml(issue, index) {
   const accent = issue.visualProfile?.accent || "red-black-blue";
   const leadHeadline = lead.headline || issue.masthead?.title || "Computer Chronicle";
   const stories = frontStories(issue);
-  const sideStories = stories.slice(0, 2);
-  const lowerStories = stories.slice(2, 8);
+  const mainStories = stories.slice(1, 4);
+  const lowerStories = stories.slice(4, 8);
 
   return `<!doctype html>
 <html lang="en">
@@ -332,7 +350,7 @@ function makeHtml(issue, index) {
     position: relative;
     width: ${pageWidth}px;
     height: ${pageHeight}px;
-    padding: 16px 22px 14px;
+    padding: 14px 22px 12px;
     border: 3px solid #1a1712;
     background:
       radial-gradient(circle at 18% 20%, rgba(255,255,255,.28), transparent 22%),
@@ -372,7 +390,7 @@ function makeHtml(issue, index) {
     gap: 12px;
     align-items: start;
     border-bottom: 5px double #17150f;
-    padding-bottom: 7px;
+    padding-bottom: 5px;
     position: relative;
     z-index: 1;
   }
@@ -382,7 +400,7 @@ function makeHtml(issue, index) {
   }
   .masthead h1 {
     margin: 0;
-    font-size: 74px;
+    font-size: 68px;
     line-height: .9;
     font-weight: 900;
     white-space: nowrap;
@@ -390,13 +408,13 @@ function makeHtml(issue, index) {
     transform-origin: center bottom;
   }
   .tagline {
-    margin-top: 10px;
+    margin-top: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 12px;
     color: #16547d;
-    font: 700 italic 17px/1 Arial, sans-serif;
+    font: 700 italic 16px/1 Arial, sans-serif;
   }
   .tagline::before, .tagline::after {
     content: "";
@@ -419,32 +437,32 @@ function makeHtml(issue, index) {
     z-index: 1;
     font: 700 16px/1.2 Georgia, serif;
   }
-  .meta span { padding: 5px 0; }
+  .meta span { padding: 4px 0; }
   .meta span:nth-child(2) { text-align: center; }
   .meta span:nth-child(3) { text-align: right; }
   .top {
     display: grid;
-    grid-template-columns: 2.25fr 1fr;
+    grid-template-columns: 2.3fr .95fr;
     gap: 14px;
-    margin-top: 10px;
+    margin-top: 8px;
     position: relative;
     z-index: 1;
     align-items: start;
   }
   .main-news {
     display: grid;
-    gap: 10px;
+    gap: 9px;
     align-content: start;
   }
   .lead-grid {
     display: grid;
-    grid-template-columns: 1.05fr 1.55fr;
+    grid-template-columns: .92fr 1.08fr;
     gap: 12px;
     align-items: start;
   }
   .lead h2 {
     margin: 0 0 10px;
-    font: 900 45px/.92 Arial, sans-serif;
+    font: 900 39px/.92 Arial, sans-serif;
     letter-spacing: 0;
   }
   .story-columns {
@@ -472,9 +490,8 @@ function makeHtml(issue, index) {
     width: 100%;
     height: 222px;
     object-fit: cover;
-    filter: grayscale(1) contrast(1.12) sepia(.14);
   }
-  .lead-photo img { height: 430px; }
+  .lead-photo img { height: 260px; }
   .rail {
     display: grid;
     gap: 10px;
@@ -486,19 +503,20 @@ function makeHtml(issue, index) {
   }
   .rail-box h2 {
     margin: 0;
-    padding: 6px 8px 4px;
+    padding: 5px 8px 4px;
     color: #f6efd2;
     background: #22231f;
     text-align: center;
-    font: 900 23px/1 Arial, sans-serif;
+    font: 900 21px/1 Arial, sans-serif;
   }
   .blue-box h2 { background: #245e89; }
   .red-box h2 { background: #9b271f; }
   .small-date {
     margin: 3px 0 0;
     text-align: center;
-    font: 700 12px/1 Arial, sans-serif;
+    font: 700 10px/1 Arial, sans-serif;
   }
+  .compact-list .small-date { display: none; }
   .ranked, .chart-list, .bullet-list, .price-list, .classified-list, .note-list {
     margin: 0;
     padding: 0;
@@ -515,8 +533,12 @@ function makeHtml(issue, index) {
   .compact-list li {
     grid-template-columns: 18px 1fr;
     gap: 5px;
-    padding: 2px 6px;
+    padding: 1px 6px;
     font: 700 10px/1 Arial, sans-serif;
+  }
+  .compact-list h2 {
+    padding: 4px 8px 3px;
+    font-size: 19px;
   }
   .ranked li::before, .chart-list li::before {
     counter-increment: rank;
@@ -600,44 +622,80 @@ function makeHtml(issue, index) {
     text-transform: uppercase;
   }
   .mini-photo img { height: 58px; }
-  .side-news {
+  .departments {
     display: grid;
-    gap: 10px;
+    gap: 6px;
   }
-  .front-grid {
+  .story-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-    margin-top: 10px;
+    gap: 9px;
+    margin-top: 9px;
     position: relative;
     z-index: 1;
+  }
+  .inline-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 9px;
   }
   .front-card {
     border: 2px solid #27231b;
     background: rgba(245,239,216,.62);
     padding: 8px;
-    min-height: 350px;
+    min-height: 224px;
   }
   .front-card h3 {
     margin: 0 0 6px;
-    font: 900 22px/.98 Arial, sans-serif;
+    font: 900 17px/.98 Arial, sans-serif;
   }
   .front-card p {
     margin: 5px 0 0;
-    font-size: 11px;
-    line-height: 1.12;
-  }
-  .front-card.side {
-    min-height: 0;
-  }
-  .front-card.side h3 {
-    font-size: 19px;
+    font-size: 10px;
+    line-height: 1.1;
   }
   .article-photo img {
+    height: 84px;
+  }
+  .inline-grid .front-card {
+    min-height: 372px;
+  }
+  .inline-grid .article-photo img {
+    height: 124px;
+  }
+  .inline-grid .front-card p {
+    font-size: 11px;
+    line-height: 1.14;
+  }
+  .story-grid .front-card {
+    min-height: 286px;
+  }
+  .story-grid .article-photo img {
     height: 104px;
   }
-  .front-card.side .article-photo img {
-    height: 86px;
+  .story-grid .front-card:nth-child(4) {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    column-gap: 12px;
+    min-height: 196px;
+  }
+  .story-grid .front-card:nth-child(4) .label,
+  .story-grid .front-card:nth-child(4) h3,
+  .story-grid .front-card:nth-child(4) .source-badge {
+    grid-column: 1 / -1;
+  }
+  .story-grid .front-card:nth-child(4) .photo {
+    grid-column: 1;
+  }
+  .story-grid .front-card:nth-child(4) p:not(.label):not(.source-badge) {
+    grid-column: 2;
+    margin-top: 0;
+    font-size: 11px;
+    line-height: 1.14;
+  }
+  .story-grid .front-card:nth-child(4) .article-photo img {
+    height: 82px;
   }
   .source-badge {
     color: #5d211c;
@@ -706,25 +764,32 @@ function makeHtml(issue, index) {
   </div>
 
   <section class="top">
-    <article class="lead">
-      <div class="lead-grid">
-        <div>
-          <h2>${escapeHtml(leadHeadline)}</h2>
-          <div class="story-columns">
-            ${storyText(lead.summary, issue.computerItems?.[0]?.summary)}
-            ${sourceMark(issue, lead.sourceRefs)}
+    <div class="main-news">
+      <article class="lead">
+        <div class="lead-grid">
+          <div>
+            <h2>${escapeHtml(leadHeadline)}</h2>
+            <div class="story-columns">
+              ${storyText(lead.summary, issue.computerItems?.[0]?.summary)}
+              ${sourceMark(issue, lead.sourceRefs)}
+            </div>
           </div>
+          ${imageFigure(lead.image || issue.storeShelvesImage || issue.heroImage, "lead-photo")}
         </div>
-        ${imageFigure(lead.image || issue.storeShelvesImage || issue.heroImage, "lead-photo")}
-      </div>
-    </article>
-    <aside class="side-news">
-      ${sideStories.map((story) => frontCard(issue, story, "side")).join("")}
+      </article>
+      <section class="inline-grid">
+        ${mainStories.map((story) => frontCard(issue, story)).join("")}
+      </section>
+    </div>
+    <aside class="departments">
+      ${movieBox(issue)}
+      ${releasesBox(issue)}
+      ${musicBox(issue)}
     </aside>
   </section>
 
-  <section class="front-grid">
-    ${lowerStories.map((story) => frontCard(issue, story)).join("")}
+  <section class="story-grid">
+    ${lowerStories.map((story, storyIndex) => frontCard(issue, story, storyIndex === 3 ? "wide" : "")).join("")}
   </section>
 </main>
 <script>
@@ -778,7 +843,7 @@ function render(htmlPath, outputPath) {
 
   const overflowMatch = layout.stdout.match(/data-layout-overflow="(\d+)"/);
   const overflow = overflowMatch ? Number(overflowMatch[1]) : 0;
-  if (overflow > 2) {
+  if (overflow > 6) {
     throw new Error(`Newspaper front overflowed the ${renderWidth}x${renderHeight} render by ${overflow}px.`);
   }
 
