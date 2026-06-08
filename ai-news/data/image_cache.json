@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-08T17:09:09.111537+00:00",
+  "updatedAt": "2026-06-08T18:00:01.931641+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -9620,6 +9620,22 @@
     "https://www.artificialintelligence-news.com/news/amazon-ai-shopping-assistant-kate-spade-retailers": {
       "image": "",
       "checkedAt": "2026-06-08T17:09:09.111537+00:00"
+    },
+    "https://techcrunch.com/2026/06/08/apples-long-awaited-ai-siri-overhaul-is-finally-here": {
+      "image": "https://techcrunch.com/wp-content/uploads/2024/10/apple-siri-header.jpg?resize=1200,800",
+      "checkedAt": "2026-06-08T18:00:01.931641+00:00"
+    },
+    "https://www.theverge.com/news/945905/amazon-alexa-shopping-ai-generated-custom-merch-design-printing": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/09/acastro_STK103__03.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-06-08T18:00:01.931641+00:00"
+    },
+    "https://techcrunch.com/2026/06/08/wwdc-2026-everything-announced-on-siri-ai-os-27-apple-intelligence-and-more": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/wwdc-2026-apple-logo.jpg?resize=1200,682",
+      "checkedAt": "2026-06-08T18:00:01.931641+00:00"
+    },
+    "https://www.theverge.com/tech/942416/apple-siri-ai-update-wwdc": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/wwdc-2026-the-verge-208.jpg?quality=90&amp;strip=all&amp;crop=0%2C3.0313913964321%2C100%2C93.937217207136&amp;w=1200",
+      "checkedAt": "2026-06-08T18:00:01.931641+00:00"
     }
   }
 }
