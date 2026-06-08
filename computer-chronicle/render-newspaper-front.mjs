@@ -135,14 +135,13 @@ function cornerText(issue) {
 
 function softwareBox(issue) {
   return `
-    <section class="rail-box blue-box">
+    <section class="rail-box blue-box compact-list">
       <h2>Software Top 5</h2>
       <p class="small-date">${escapeHtml(dateline(issue))}</p>
       <ol class="ranked">
         ${listItems(issue.softwareList, (item) => `
           <li>
             <strong>${escapeHtml(displayName(item.name))}</strong>
-            <span>${escapeHtml(item.platform || item.confidence || "")}</span>
           </li>
         `, 5)}
       </ol>
@@ -182,7 +181,7 @@ function marketBox(issue) {
 
 function musicBox(issue) {
   return `
-    <section class="rail-box red-box">
+    <section class="rail-box red-box compact-list">
       <h2>Rock Radio</h2>
       <p class="small-date">${escapeHtml(issue.sectionChrome?.music?.title || "This Week")}</p>
       <ol class="chart-list">
@@ -428,7 +427,7 @@ function makeHtml(issue, index) {
   .lead-photo img { height: 432px; }
   .rail {
     display: grid;
-    gap: 10px;
+    gap: 8px;
     align-content: start;
   }
   .rail-box, .story-card {
@@ -446,9 +445,9 @@ function makeHtml(issue, index) {
   .blue-box h2 { background: #245e89; }
   .red-box h2 { background: #9b271f; }
   .small-date {
-    margin: 4px 0 0;
+    margin: 3px 0 0;
     text-align: center;
-    font: 700 13px/1 Arial, sans-serif;
+    font: 700 12px/1 Arial, sans-serif;
   }
   .ranked, .chart-list, .bullet-list, .price-list, .classified-list, .note-list {
     margin: 0;
@@ -463,6 +462,12 @@ function makeHtml(issue, index) {
     padding: 4px 8px;
     font: 700 12px/1.04 Arial, sans-serif;
   }
+  .compact-list li {
+    grid-template-columns: 18px 1fr;
+    gap: 5px;
+    padding: 2px 6px;
+    font: 700 10px/1 Arial, sans-serif;
+  }
   .ranked li::before, .chart-list li::before {
     counter-increment: rank;
     content: counter(rank);
@@ -470,11 +475,19 @@ function makeHtml(issue, index) {
     font-size: 20px;
     text-align: center;
   }
+  .compact-list li::before { font-size: 17px; }
   .ranked, .chart-list { counter-reset: rank; }
   .ranked span, .chart-list span, .bullet-list span {
     display: block;
     margin-top: 2px;
     font: 10px/1.06 Arial, sans-serif;
+  }
+  .compact-list span {
+    display: inline;
+    margin: 0 0 0 4px;
+    font-size: 9px;
+    line-height: 1;
+    font-weight: 400;
   }
   .bullet-list li {
     grid-template-columns: 1fr;
@@ -553,27 +566,33 @@ function makeHtml(issue, index) {
   }
   .bottom .rail-box h2 { font-size: 23px; }
   .banner {
-    margin-top: 8px;
+    position: absolute;
+    left: 22px;
+    right: 22px;
+    bottom: 24px;
+    min-height: 102px;
     border: 2px solid #9b271f;
     background: #a72b21;
     color: #fff3d4;
     display: grid;
-    grid-template-columns: 1fr 180px;
+    grid-template-columns: 1fr 224px;
     align-items: center;
-    position: relative;
     z-index: 1;
   }
   .banner h2 {
     margin: 0;
-    padding: 7px 14px;
-    font: 900 28px/1 Arial, sans-serif;
+    padding: 16px 18px;
+    font: 900 34px/1 Arial, sans-serif;
   }
   .banner p {
     margin: 0;
-    padding: 7px 10px;
+    align-self: stretch;
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
     color: #17150f;
     background: #efe6bf;
-    font: 700 11px/1.06 Arial, sans-serif;
+    font: 700 12px/1.05 Arial, sans-serif;
   }
 </style>
 </head>
