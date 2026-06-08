@@ -1,23 +1,7 @@
 {
   "date": "2026-06-08",
-  "updatedAt": "2026-06-08T04:00:01.565319+00:00",
+  "updatedAt": "2026-06-08T05:00:01.379298+00:00",
   "items": [
-    {
-      "title": "Live model battles across chat, coding, image, video, and audio modalities",
-      "url": "https://llm-stats.com/ai-news",
-      "source": "LLM Stats AI News",
-      "sourceUrl": "https://llm-stats.com/ai-news",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "",
-      "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-08T04:00:14.690380+00:00",
-      "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-08T04:00:01.565319+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.76
-    },
     {
       "title": "NVIDIA and LG Group Build an AI Factory to Advance Physical AI, Mobility and AI Infrastructure",
       "url": "https://blogs.nvidia.com/blog/nvidia-and-lg-group-ai-factory",
@@ -29,10 +13,26 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/kr-visit-lg-group-1920x1080-no-credit.png",
       "published": "2026-06-08T03:00:50+00:00",
       "firstSeen": "2026-06-08T04:00:01.565319+00:00",
-      "lastSeen": "2026-06-08T04:00:01.565319+00:00",
+      "lastSeen": "2026-06-08T05:00:01.379298+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.6603
+      "score": 3.6309
+    },
+    {
+      "title": "Ruida Wang, Jerry Huang, Pengcheng Wang, Xuanqing Liu, Luyang Kong, Tong Zhang",
+      "url": "https://llm-stats.com/ai-news",
+      "source": "LLM Stats AI News",
+      "sourceUrl": "https://llm-stats.com/ai-news",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "",
+      "image": "https://llm-stats.com/og/main.png",
+      "published": "2026-06-08T05:00:07.443875+00:00",
+      "firstSeen": "2026-05-29T21:00:01.522609+00:00",
+      "lastSeen": "2026-06-08T05:00:01.379298+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.36
     }
   ],
   "errors": [
