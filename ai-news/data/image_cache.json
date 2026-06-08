@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-08T13:00:01.268947+00:00",
+  "updatedAt": "2026-06-08T14:00:01.641240+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -9576,6 +9576,14 @@
     "https://huggingface.co/blog/build-small-hackathon/building-pakistan-notice-helper": {
       "image": "https://cdn-uploads.huggingface.co/production/uploads/603945d6db430f160dced222/eDl8k9EOfPvNxOiY2N2tf.png",
       "checkedAt": "2026-06-08T12:00:01.739819+00:00"
+    },
+    "https://huggingface.co/blog/build-small-hackathon/thousand-token-wood-sim-v3": {
+      "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/build-small-hackathon/thousand-token-wood-sim-v3.png",
+      "checkedAt": "2026-06-08T14:00:01.641240+00:00"
+    },
+    "https://huggingface.co/blog/openenv-agentic-rl": {
+      "image": "https://huggingface.co/blog/assets/openenv/thumbnail_expansion.png",
+      "checkedAt": "2026-06-08T14:00:01.641240+00:00"
     }
   }
 }
