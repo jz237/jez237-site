@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-08T14:00:01.641240+00:00",
+  "updatedAt": "2026-06-08T15:00:01.579378+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -9584,6 +9584,10 @@
     "https://huggingface.co/blog/openenv-agentic-rl": {
       "image": "https://huggingface.co/blog/assets/openenv/thumbnail_expansion.png",
       "checkedAt": "2026-06-08T14:00:01.641240+00:00"
+    },
+    "https://www.theverge.com/podcast/944138/microsoft-ai-ceo-mustafa-suleyman-superintelligence-agi-openai-automation": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/DCD-Mustafa-Suleyman.png?quality=90&amp;strip=all&amp;crop=0%2C10.711631919237%2C100%2C78.576736161526&amp;w=1200",
+      "checkedAt": "2026-06-08T15:00:01.579378+00:00"
     }
   }
 }
