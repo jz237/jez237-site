@@ -1534,5 +1534,17 @@
     "slot": "morning",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-06-08-morning-dog-as-woven-newspaper-artifact",
+    "title": "Dog as Woven Newspaper Artifact",
+    "tests": "Reusable reference-photo transformation; finished sample image has no instructional text; preserves dog identity cues while changing material to woven newspaper; avoids logos/readable headlines/extra limbs.",
+    "prompt": "Use the uploaded reference photo and preserve the dog identity, pose, silhouette, proportions, ear shape, eye placement, muzzle shape, paw placement, coat pattern, and most recognizable markings, then transform the dog into a handwoven newspaper artifact: a rain-stoop porch guardian made from rolled, braided, and basket-woven strips of old black-and-white newspaper, with frayed paper whiskers, layered paper curls suggesting fur, subtle ink smudges, sealed craft edges, and tiny staple-like fasteners. Keep the dog recognizable and emotionally alive while changing every surface into tactile paper craft. Place it on a damp painted stoop beside brick, puddle reflections, scattered paper fibers, and soft overcast morning light. Avoid extra limbs, duplicate subjects, readable headlines, logos, text overlays, and losing the source dog markings.\n\nSource photo needed: a clear photo of a dog.\nReusable template: Use the uploaded reference photo and preserve the [PET] identity, pose, silhouette, proportions, key markings, expression, and camera angle, then transform [PET] into a [MATERIAL] crafted artifact in [SETTING] with [MOOD] lighting. Change the surface, texture, and construction method to [MATERIAL], but keep the recognizable face, markings, body shape, and pose. Avoid extra limbs, duplicate subjects, text/logo artifacts, and losing recognizability.\nExample substitution: Use a clear terrier photo; transform the dog into a woven newspaper porch guardian on a rain-darkened apartment stoop with soft overcast morning light.",
+    "image": "images/2026-06-08-morning-dog-as-woven-newspaper-artifact.png",
+    "date": "2026-06-08",
+    "batch": "Daily Prompt",
+    "slot": "morning",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
