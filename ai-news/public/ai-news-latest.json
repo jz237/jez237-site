@@ -1,8 +1,8 @@
 {
-  "updatedAt": "2026-06-08T16:16:07.017802+00:00",
+  "updatedAt": "2026-06-08T17:09:09.111537+00:00",
   "items": [
     {
-      "title": "Ruida Wang, Jerry Huang, Pengcheng Wang, Xuanqing Liu, Luyang Kong, Tong Zhang",
+      "title": "Lean4Agent: Formal Modeling and Verification for Agent Workflow and Trajectory",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -10,12 +10,12 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-08T16:16:10.971081+00:00",
+      "published": "2026-06-08T17:09:14.554596+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-08T16:16:07.017802+00:00",
+      "lastSeen": "2026-06-08T17:09:09.111537+00:00",
       "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.36
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.06
     },
     {
       "title": "NotebookLM&#8217;s Gemini 3.5 upgrade adds a cloud computer and help finding sources",
@@ -28,11 +28,11 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/NotebookLM-Welcome.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C3.4613147178592%2C100%2C93.077370564282&amp%3Bw=1200",
       "published": "2026-06-08T16:00:00+00:00",
       "firstSeen": "2026-06-08T16:16:07.017802+00:00",
-      "lastSeen": "2026-06-08T16:16:07.017802+00:00",
+      "lastSeen": "2026-06-08T17:09:09.111537+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 19.5518
+      "score": 19.5253
     },
     {
       "title": "Amazon now lets you design custom merch using AI",
@@ -45,10 +45,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/about-amazon-hero-ai-merch-hero-amazon-news-lt-060226.jpg?resize=1200%2C675",
       "published": "2026-06-08T15:49:12+00:00",
       "firstSeen": "2026-06-08T16:00:01.663535+00:00",
-      "lastSeen": "2026-06-08T16:16:07.017802+00:00",
+      "lastSeen": "2026-06-08T17:09:09.111537+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3764
+      "score": 3.35
     },
     {
       "title": "7 best HRIS for growing companies: 2026 overview",
@@ -61,10 +61,10 @@
       "image": "https://media.thenextweb.com/2026/06/best-hris-growing-companies-2026.avif",
       "published": "2026-06-08T15:39:31+00:00",
       "firstSeen": "2026-06-08T16:16:07.017802+00:00",
-      "lastSeen": "2026-06-08T16:16:07.017802+00:00",
+      "lastSeen": "2026-06-08T17:09:09.111537+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.5315
+      "score": 3.5053
     },
     {
       "title": "WWDC 2026: What to expect, from Siri’s highly anticipated revamp to Apple Intelligence and iOS 27",
@@ -77,10 +77,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/Apple-WWDC26-event-branding_big.jpg.large_.jpg?w=980",
       "published": "2026-06-08T15:34:59+00:00",
       "firstSeen": "2026-06-08T16:00:01.663535+00:00",
-      "lastSeen": "2026-06-08T16:16:07.017802+00:00",
+      "lastSeen": "2026-06-08T17:09:09.111537+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3693
+      "score": 3.3431
     },
     {
       "title": "Healthcare’s $97bn staffing problem just won an AI training startup a $55M round",
@@ -93,10 +93,10 @@
       "image": "https://media.thenextweb.com/2026/06/stepful-55m-series-c.avif",
       "published": "2026-06-08T15:23:38+00:00",
       "firstSeen": "2026-06-08T16:16:07.017802+00:00",
-      "lastSeen": "2026-06-08T16:16:07.017802+00:00",
+      "lastSeen": "2026-06-08T17:09:09.111537+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1236
+      "score": 3.0976
     },
     {
       "title": "OpenAI Expands ChatGPT Lockdown Mode to Millions of Eligible Users",
@@ -109,10 +109,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/06/unnamed-44.png?f=jpeg",
       "published": "2026-06-08T15:21:16+00:00",
       "firstSeen": "2026-06-08T16:00:01.663535+00:00",
-      "lastSeen": "2026-06-08T16:16:07.017802+00:00",
+      "lastSeen": "2026-06-08T17:09:09.111537+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.2224
+      "score": 12.1964
     },
     {
       "title": "The UK just collected billions in AI pledges on day one of London Tech Week",
@@ -125,10 +125,10 @@
       "image": "https://media.thenextweb.com/2026/06/prime-minister-sir-keir-starm-london-tech-week.avif",
       "published": "2026-06-08T14:58:49+00:00",
       "firstSeen": "2026-06-08T16:00:01.663535+00:00",
-      "lastSeen": "2026-06-08T16:16:07.017802+00:00",
+      "lastSeen": "2026-06-08T17:09:09.111537+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1113
+      "score": 2.0856
     },
     {
       "title": "South Korea’s AI Push Leans on Nvidia Infrastructure",
@@ -141,10 +141,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/06/korea-ai-infrastructure-1024x574.png?f=jpeg",
       "published": "2026-06-08T14:54:02+00:00",
       "firstSeen": "2026-06-08T16:00:01.663535+00:00",
-      "lastSeen": "2026-06-08T16:16:07.017802+00:00",
+      "lastSeen": "2026-06-08T17:09:09.111537+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.609
+      "score": 4.5833
     },
     {
       "title": "Meta is dragging NSO back to court, saying the spyware firm never stopped targeting WhatsApp",
@@ -157,10 +157,10 @@
       "image": "https://media.thenextweb.com/2026/05/WhatsApp.avif",
       "published": "2026-06-08T14:39:56+00:00",
       "firstSeen": "2026-06-08T16:00:01.663535+00:00",
-      "lastSeen": "2026-06-08T16:16:07.017802+00:00",
+      "lastSeen": "2026-06-08T17:09:09.111537+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 0.1021
+      "score": 0.0766
     },
     {
       "title": "Wizz Air becomes Europe’s first budget airline to put Starlink on its planes",
@@ -173,10 +173,10 @@
       "image": "https://media.thenextweb.com/2026/06/wizzair-starlink.avif",
       "published": "2026-06-08T14:19:15+00:00",
       "firstSeen": "2026-06-08T16:00:01.663535+00:00",
-      "lastSeen": "2026-06-08T16:16:07.017802+00:00",
+      "lastSeen": "2026-06-08T17:09:09.111537+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0921
+      "score": 2.0668
     },
     {
       "title": "A former NASA chief is taking Quantum Space public at $1.2bn to build spacecraft for the next space race",
@@ -189,10 +189,10 @@
       "image": "https://media.thenextweb.com/2026/06/Quantum-Space.avif",
       "published": "2026-06-08T14:09:07+00:00",
       "firstSeen": "2026-06-08T15:00:01.579378+00:00",
-      "lastSeen": "2026-06-08T16:16:07.017802+00:00",
+      "lastSeen": "2026-06-08T17:09:09.111537+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0872
+      "score": 2.062
     },
     {
       "title": "Microsoft’s AI chief says superintelligence is near, but won’t take your job",
@@ -205,10 +205,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/DCD-Mustafa-Suleyman.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.711631919237%2C100%2C78.576736161526&amp%3Bw=1200",
       "published": "2026-06-08T14:00:00+00:00",
       "firstSeen": "2026-06-08T15:00:01.579378+00:00",
-      "lastSeen": "2026-06-08T16:16:07.017802+00:00",
+      "lastSeen": "2026-06-08T17:09:09.111537+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.6928
+      "score": 3.6678
     },
     {
       "title": "Samsung Health Update Leaves Galaxy Watch Owners Waiting on Key AI Features",
@@ -221,10 +221,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/06/005-Samsung-Introduces-Next-Gen-Galaxy-Watch-Features-for-AI-Powered-Everyday-Health-Companion-Newsbody-copy.jpg?f=jpeg",
       "published": "2026-06-08T13:59:13+00:00",
       "firstSeen": "2026-06-08T16:00:01.663535+00:00",
-      "lastSeen": "2026-06-08T16:16:07.017802+00:00",
+      "lastSeen": "2026-06-08T17:09:09.111537+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1824
+      "score": 3.1574
     },
     {
       "title": "Google orders chips from Intel and Nvidia is testing its tech, as TSMC’s grip on AI starts to strain",
@@ -237,10 +237,10 @@
       "image": "https://media.thenextweb.com/2026/04/Intel.avif",
       "published": "2026-06-08T13:34:50+00:00",
       "firstSeen": "2026-06-08T15:00:01.579378+00:00",
-      "lastSeen": "2026-06-08T16:16:07.017802+00:00",
+      "lastSeen": "2026-06-08T17:09:09.111537+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0709
+      "score": 2.0461
     },
     {
       "title": "Amazon’s billion-dollar Corning deal shows fibre is the new bottleneck in the AI build-out",
@@ -253,10 +253,10 @@
       "image": "https://media.thenextweb.com/2026/06/Corning-factory-optical-fibre.avif",
       "published": "2026-06-08T13:18:15+00:00",
       "firstSeen": "2026-06-08T15:00:01.579378+00:00",
-      "lastSeen": "2026-06-08T16:16:07.017802+00:00",
+      "lastSeen": "2026-06-08T17:09:09.111537+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.763
+      "score": 2.7385
     },
     {
       "title": "The crash that vanished: control and emergence in a five-model economy",
@@ -269,10 +269,10 @@
       "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/build-small-hackathon/thousand-token-wood-sim-v3.png",
       "published": "2026-06-08T13:10:48+00:00",
       "firstSeen": "2026-06-08T14:00:01.641240+00:00",
-      "lastSeen": "2026-06-08T16:16:07.017802+00:00",
+      "lastSeen": "2026-06-08T17:09:09.111537+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3396
+      "score": 2.3151
     },
     {
       "title": "Britain’s Cosine rallies BT, HSBC, and BAE to build a “sovereign” AI model and cut its reliance on US tech",
@@ -285,10 +285,10 @@
       "image": "https://media.thenextweb.com/2026/06/Cosine-team.avif",
       "published": "2026-06-08T12:56:51+00:00",
       "firstSeen": "2026-06-08T14:00:01.641240+00:00",
-      "lastSeen": "2026-06-08T16:16:07.017802+00:00",
+      "lastSeen": "2026-06-08T17:09:09.111537+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0531
+      "score": 2.0287
     },
     {
       "title": "The US wants NATO allies to spend their new defence budgets ripping out Huawei",
@@ -301,10 +301,10 @@
       "image": "https://media.thenextweb.com/2026/05/huawei-chip-lab-trump-china-visit-1.avif",
       "published": "2026-06-08T12:36:55+00:00",
       "firstSeen": "2026-06-08T14:00:01.641240+00:00",
-      "lastSeen": "2026-06-08T16:16:07.017802+00:00",
+      "lastSeen": "2026-06-08T17:09:09.111537+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0438
+      "score": 2.0197
     },
     {
       "title": "Visual Studio 2026 Brings AI Deeper Into Development and It’s 93% Off Right Now",
@@ -317,10 +317,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/01/Copy-of-Untitled-Design-7.png",
       "published": "2026-06-08T12:30:40+00:00",
       "firstSeen": "2026-04-28T14:00:01.148748+00:00",
-      "lastSeen": "2026-06-08T16:16:07.017802+00:00",
+      "lastSeen": "2026-06-08T17:09:09.111537+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.541
+      "score": 4.5169
     },
     {
       "title": "Bending Spoons, the Milan firm behind Evernote and Vimeo, files for a US IPO",
@@ -336,7 +336,7 @@
       "lastSeen": "2026-06-08T16:00:01.663535+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1301
+      "score": 3.1064
     },
     {
       "title": "Building Pakistan Notice Helper: A Small AI Tool for a Very Local Safety Problem",
@@ -352,7 +352,7 @@
       "lastSeen": "2026-06-08T13:00:01.268947+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3011
+      "score": 2.2776
     },
     {
       "title": "AI is choosing which online stores you see, and it’s ignoring most of them",
@@ -368,7 +368,7 @@
       "lastSeen": "2026-06-08T16:00:01.663535+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.5171
+      "score": 4.4936
     },
     {
       "title": "Uber opens a London waitlist for Wayve robotaxis as the UK’s driverless race kicks off",
@@ -384,7 +384,7 @@
       "lastSeen": "2026-06-08T15:00:01.579378+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7128
+      "score": 2.6895
     },
     {
       "title": "A UK startup says it can cut data centre network power by 81% by replacing every electrical switch with light",
@@ -400,7 +400,7 @@
       "lastSeen": "2026-06-08T15:00:01.579378+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0075
+      "score": 1.9843
     },
     {
       "title": "Nvidia and Hyundai go deeper on robotics, with Boston Dynamics’ Atlas at the centre",
@@ -416,7 +416,7 @@
       "lastSeen": "2026-06-08T15:00:01.579378+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.701
+      "score": 2.678
     },
     {
       "title": "WWDC 2026: How to watch and what to expect",
@@ -429,10 +429,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/unnamed-8.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C18.517948191493%2C100%2C62.964103617014&amp%3Bw=1200",
       "published": "2026-06-08T11:00:00+00:00",
       "firstSeen": "2026-06-08T11:19:15.718980+00:00",
-      "lastSeen": "2026-06-08T16:16:07.017802+00:00",
+      "lastSeen": "2026-06-08T17:09:09.111537+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3102
+      "score": 3.2872
     },
     {
       "title": "Momfluencers Are Pitching AI as a Better ‘Coparent’ Than Men",
@@ -445,10 +445,10 @@
       "image": "https://media.wired.com/photos/6a2347d049872af07a400381/master/pass/AI-Momfluencers-Culture.jpg",
       "published": "2026-06-08T10:30:00+00:00",
       "firstSeen": "2026-06-08T11:00:02.097985+00:00",
-      "lastSeen": "2026-06-08T16:16:07.017802+00:00",
+      "lastSeen": "2026-06-08T17:09:09.111537+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.1271
+      "score": 6.1044
     },
     {
       "title": "Berlin’s GALVANY raises €10M to fix Germany’s broken heat-pump market, and it’s already profitable",
@@ -464,7 +464,7 @@
       "lastSeen": "2026-06-08T14:00:01.641240+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3367
+      "score": 2.314
     },
     {
       "title": "Ghent’s Companion.energy raises €7.8M to automate enterprise energy in real time",
@@ -480,7 +480,23 @@
       "lastSeen": "2026-06-08T14:00:01.641240+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9751
+      "score": 1.9527
+    },
+    {
+      "title": "Weis Markets adds Instacart AI-powered shopping carts to stores",
+      "url": "https://www.artificialintelligence-news.com/news/weis-markets-instacart-ai-powered-shopping-caper-carts",
+      "source": "Artificial Intelligence News",
+      "sourceUrl": "https://www.artificialintelligence-news.com/categories/artificial-intelligence/feed/",
+      "sourceWeight": 0.82,
+      "category": "AI",
+      "summary": "Weis Markets is adding Instacart’s AI-powered shopping carts, Caper Carts, to select stores in Pennsylvania, bringing digital coupons, loyalty features, and repeat-purchase recommendations into the grocery aisle. The Pennsylvania-based grocery chain is working with Instacart to deploy the smart carts, which include cameras, certified scales, location systems, and a touchscreen. According to Instacart, Caper Carts [&#8230;]\nThe post Weis Markets adds Instacart AI-powered shopping carts to stores appeared first on AI News.",
+      "image": "",
+      "published": "2026-06-08T10:00:00+00:00",
+      "firstSeen": "2026-06-08T17:09:09.111537+00:00",
+      "lastSeen": "2026-06-08T17:09:09.111537+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.1498
     },
     {
       "title": "PhysicsX hits $2.4bn valuation as Temasek leads $300m round for the AI startup that cuts simulation times from days to seconds",
@@ -496,7 +512,7 @@
       "lastSeen": "2026-06-08T14:00:01.641240+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9662
+      "score": 1.9439
     },
     {
       "title": "The lawsuits that could give AI its Big Tobacco moment are already here",
@@ -512,7 +528,7 @@
       "lastSeen": "2026-06-08T13:00:01.268947+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9604
+      "score": 1.9383
     },
     {
       "title": "A UK startup just raised $18.5 million to fly satellites where nobody else can",
@@ -528,7 +544,7 @@
       "lastSeen": "2026-06-08T13:00:01.268947+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.952
+      "score": 1.9301
     },
     {
       "title": "JPMorgan poaches Nomura’s international AI strategy chief as Dimon doubles down on AI hiring",
@@ -544,7 +560,7 @@
       "lastSeen": "2026-06-08T12:00:01.739819+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9435
+      "score": 1.9219
     },
     {
       "title": "The AI models finding 10,000 vulnerabilities are the same ones China is trying to copy. That is the problem.",
@@ -560,7 +576,7 @@
       "lastSeen": "2026-06-08T12:00:01.739819+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.941
+      "score": 1.9194
     },
     {
       "title": "Moonshot AI wants a $30bn valuation six months after being worth $4bn. That tells you everything about China’s AI funding race.",
@@ -576,7 +592,7 @@
       "lastSeen": "2026-06-08T12:00:01.739819+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.6374
+      "score": 2.6159
     },
     {
       "title": "South Korea’s AI chip boom is so strong it’s crushing the bond market",
@@ -592,7 +608,7 @@
       "lastSeen": "2026-06-08T12:00:01.739819+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2833
+      "score": 2.2619
     },
     {
       "title": "Mexico unveils the Olinia Uno, an $8,600 government-backed electric vehicle designed for city streets",
@@ -608,7 +624,7 @@
       "lastSeen": "2026-06-08T11:00:02.097985+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.925
+      "score": 1.9038
     },
     {
       "title": "Nvidia locks in SK Hynix for the AI memory race as the chip industry’s “toughest bottleneck” gets its own multi-year deal",
@@ -624,23 +640,7 @@
       "lastSeen": "2026-06-08T11:00:02.097985+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.3219
-    },
-    {
-      "title": "Spotify is licensing live concert video and reserving tickets for superfans",
-      "url": "https://thenextweb.com/news/spotify-live-concert-video-tickets-live-nation",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Spotify has approached concert promoters about licensing the rights to stream live video from music festivals, according to Bloomberg, as the Swedish streaming company pushes to become a broader hub for the live music economy. The company has already started adding footage from live events, including a Dua Lipa show in Mexico City. The live [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/spotify-live-concert-video-tickets-live-nation.avif",
-      "published": "2026-06-08T07:43:38+00:00",
-      "firstSeen": "2026-06-08T09:00:01.392657+00:00",
-      "lastSeen": "2026-06-08T11:00:02.097985+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.0177
+      "score": 4.3007
     },
     {
       "title": "The Life Scientific: Seth Berkley",
@@ -653,10 +653,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-01T20:00:00+00:00",
       "firstSeen": "2026-06-01T21:00:01.828388+00:00",
-      "lastSeen": "2026-06-08T16:16:07.017802+00:00",
+      "lastSeen": "2026-06-08T17:09:09.111537+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.2015
+      "score": 1.2012
     },
     {
       "title": "Dean Lomax on discovering ichthyosaurs and defying nay-sayers",
@@ -669,7 +669,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-26T08:30:00+00:00",
       "firstSeen": "2026-05-26T08:41:33.144051+00:00",
-      "lastSeen": "2026-06-08T16:16:07.017802+00:00",
+      "lastSeen": "2026-06-08T17:09:09.111537+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 1.1201
@@ -685,7 +685,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-25T20:00:00+00:00",
       "firstSeen": "2026-05-25T21:00:01.605108+00:00",
-      "lastSeen": "2026-06-08T16:16:07.017802+00:00",
+      "lastSeen": "2026-06-08T17:09:09.111537+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 0.2901

@@ -331,8 +331,8 @@ def parse_feed_xml(xml_bytes, source_name, source_url, source_weight):
     return items
 
 
-def fetch_url(url):
-    req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
+def fetch_url(url, user_agent=None):
+    req = urllib.request.Request(url, headers={"User-Agent": user_agent or USER_AGENT})
     with urllib.request.urlopen(req, timeout=20) as r:
         return r.read()
 
@@ -524,13 +524,14 @@ def main():
         weight = float(feed.get("weight", 0.7))
         category = feed.get("category", "AI")
         scrape_type = feed.get("type", "rss")
+        user_agent = feed.get("userAgent") or feed.get("user_agent")
         if not name or not url:
             continue
         try:
             if scrape_type == "llm-stats-news":
                 items = scrape_llm_stats_news(url, name, weight)
             else:
-                body = fetch_url(url)
+                body = fetch_url(url, user_agent=user_agent)
                 items = parse_feed_xml(body, name, url, weight)
             for item in items:
                 item["category"] = category
