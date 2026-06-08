@@ -8,6 +8,10 @@ import process from "node:process";
 const root = path.dirname(new URL(import.meta.url).pathname);
 const dataPath = path.join(root, "data", "issues.json");
 const mediaDir = path.join(root, "media");
+const renderWidth = 1024;
+const renderHeight = 1436;
+const pageWidth = renderWidth - 16;
+const pageHeight = renderHeight - 16;
 
 function parseArgs(argv) {
   const args = {
@@ -53,7 +57,12 @@ function truncate(value, limit) {
   if (text.length <= limit) return text;
   const slice = text.slice(0, limit + 1);
   const boundary = Math.max(slice.lastIndexOf(". "), slice.lastIndexOf("; "), slice.lastIndexOf(", "), slice.lastIndexOf(" "));
-  return `${slice.slice(0, boundary > limit * 0.55 ? boundary : limit).trim()}.`;
+  const trimmed = slice
+    .slice(0, boundary > limit * 0.55 ? boundary : limit)
+    .trim()
+    .replace(/\b(?:a|an|and|as|at|for|from|in|of|or|the|to|with)$/i, "")
+    .trim();
+  return `${trimmed}.`;
 }
 
 function dateline(issue) {
@@ -116,6 +125,14 @@ function displayName(value) {
   return clean(value).replace(/^#\d+\s*/, "");
 }
 
+function cornerText(issue) {
+  const software = displayName(issue.softwareList?.[0]?.name || "Software");
+  const words = software.split(/\s+/).filter(Boolean);
+  const lineOne = words.slice(0, 1).join(" ");
+  const lineTwo = words.slice(1, 3).join(" ");
+  return [lineOne, lineTwo].filter(Boolean).join("<br>");
+}
+
 function softwareBox(issue) {
   return `
     <section class="rail-box blue-box">
@@ -145,6 +162,20 @@ function priceBox(issue) {
           </li>
         `, 6)}
       </ul>
+    </section>
+  `;
+}
+
+function marketBox(issue) {
+  const market = issue.market || {};
+  return `
+    <section class="rail-box">
+      <h2>Market Desk</h2>
+      <ul class="price-list">
+        <li><span>Dow close</span><strong>${escapeHtml(market.dow || "n/a")}</strong></li>
+        <li><span>Nasdaq</span><strong>${escapeHtml(market.nasdaq || "n/a")}</strong></li>
+      </ul>
+      <p class="box-copy">${escapeHtml(truncate(market.summary || market.confidence || "", 150))}</p>
     </section>
   `;
 }
@@ -196,13 +227,30 @@ function classifiedBox(issue) {
   `;
 }
 
+function cultureBox(issue) {
+  const briefs = (issue.briefs || []).slice(0, 3);
+  return `
+    <section class="rail-box">
+      <h2>Culture Desk</h2>
+      <ul class="note-list">
+        ${briefs.map((item) => `
+          <li>
+            <strong>${escapeHtml(item.headline || item.label || "Brief")}</strong>
+            <span>${escapeHtml(truncate(item.summary || item.confidence || "", 100))}</span>
+          </li>
+        `).join("")}
+      </ul>
+    </section>
+  `;
+}
+
 function card(title, body, image, label = "") {
   return `
     <article class="story-card">
       ${label ? `<p class="label">${escapeHtml(label)}</p>` : ""}
       <h3>${escapeHtml(title)}</h3>
       ${imageFigure(image, "mini-photo")}
-      <p>${escapeHtml(truncate(body, 190))}</p>
+      <p>${escapeHtml(truncate(body, 155))}</p>
     </article>
   `;
 }
@@ -212,7 +260,6 @@ function makeHtml(issue, index) {
   const lead = issue.lead || {};
   const firstComputer = issue.computerItems?.[0] || {};
   const games = issue.storeShelves?.[0] || {};
-  const movie = (issue.briefs || []).find((item) => /movie|tv|culture/i.test(`${item.label || ""} ${item.headline || ""}`)) || issue.briefs?.[0] || {};
   const bbs = issue.bbsNote || {};
   const number = issueNumber(issue, index);
   const accent = issue.visualProfile?.accent || "red-black-blue";
@@ -225,18 +272,18 @@ function makeHtml(issue, index) {
 <title>${escapeHtml(issue.masthead?.title || "Computer Chronicle")}</title>
 <style>
   * { box-sizing: border-box; }
-  html, body { margin: 0; width: 1024px; min-height: 1536px; background: #c8b990; }
+  html, body { margin: 0; width: ${renderWidth}px; height: ${renderHeight}px; background: #c8b990; }
   body {
-    padding: 10px;
+    padding: 8px;
     color: #161511;
     font-family: Georgia, "Times New Roman", serif;
     letter-spacing: 0;
   }
   .page {
     position: relative;
-    width: 1004px;
-    min-height: 1516px;
-    padding: 18px 22px 16px;
+    width: ${pageWidth}px;
+    height: ${pageHeight}px;
+    padding: 16px 22px 14px;
     border: 3px solid #1a1712;
     background:
       radial-gradient(circle at 18% 20%, rgba(255,255,255,.28), transparent 22%),
@@ -260,13 +307,13 @@ function makeHtml(issue, index) {
     position: absolute;
     left: 0;
     top: 0;
-    width: 142px;
-    height: 142px;
-    padding: 20px 48px 0 10px;
+    width: 136px;
+    height: 136px;
+    padding: 18px 42px 0 10px;
     color: #fff7dd;
     background: #9b271f;
     clip-path: polygon(0 0, 100% 0, 0 100%);
-    font: 700 20px/1.05 Arial, sans-serif;
+    font: 700 17px/1.02 Arial, sans-serif;
     text-transform: uppercase;
     transform-origin: left top;
   }
@@ -276,7 +323,7 @@ function makeHtml(issue, index) {
     gap: 12px;
     align-items: start;
     border-bottom: 5px double #17150f;
-    padding-bottom: 8px;
+    padding-bottom: 7px;
     position: relative;
     z-index: 1;
   }
@@ -286,7 +333,7 @@ function makeHtml(issue, index) {
   }
   .masthead h1 {
     margin: 0;
-    font-size: 80px;
+    font-size: 74px;
     line-height: .9;
     font-weight: 900;
     white-space: nowrap;
@@ -294,13 +341,13 @@ function makeHtml(issue, index) {
     transform-origin: center bottom;
   }
   .tagline {
-    margin-top: 14px;
+    margin-top: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 12px;
     color: #16547d;
-    font: 700 italic 18px/1 Arial, sans-serif;
+    font: 700 italic 17px/1 Arial, sans-serif;
   }
   .tagline::before, .tagline::after {
     content: "";
@@ -311,10 +358,10 @@ function makeHtml(issue, index) {
     border: 2px solid #17150f;
     text-align: center;
     font-family: Arial, sans-serif;
-    padding: 8px 4px;
+    padding: 7px 4px;
   }
-  .price strong { display: block; color: #9b271f; font-size: 38px; line-height: 1; }
-  .price span { display: block; margin-top: 6px; font-size: 10px; font-weight: 700; text-transform: uppercase; }
+  .price strong { display: block; color: #9b271f; font-size: 35px; line-height: 1; }
+  .price span { display: block; margin-top: 5px; font-size: 9px; font-weight: 700; text-transform: uppercase; }
   .meta {
     display: grid;
     grid-template-columns: 1fr 2fr 1fr;
@@ -330,9 +377,15 @@ function makeHtml(issue, index) {
     display: grid;
     grid-template-columns: 2.55fr .95fr;
     gap: 14px;
-    margin-top: 10px;
+    margin-top: 8px;
     position: relative;
     z-index: 1;
+    align-items: start;
+  }
+  .main-news {
+    display: grid;
+    gap: 10px;
+    align-content: start;
   }
   .lead-grid {
     display: grid;
@@ -342,14 +395,14 @@ function makeHtml(issue, index) {
   }
   .lead h2 {
     margin: 0 0 10px;
-    font: 900 50px/.93 Arial, sans-serif;
+    font: 900 45px/.92 Arial, sans-serif;
     letter-spacing: 0;
   }
   .story-columns {
     column-count: 2;
     column-gap: 16px;
-    font-size: 14px;
-    line-height: 1.18;
+    font-size: 13px;
+    line-height: 1.14;
     text-align: left;
   }
   .story-columns p { margin: 0 0 8px; }
@@ -368,13 +421,15 @@ function makeHtml(issue, index) {
   .photo img {
     display: block;
     width: 100%;
-    height: 268px;
+    height: 222px;
     object-fit: cover;
     filter: grayscale(1) contrast(1.12) sepia(.14);
   }
+  .lead-photo img { height: 432px; }
   .rail {
     display: grid;
     gap: 10px;
+    align-content: start;
   }
   .rail-box, .story-card {
     border: 2px solid #27231b;
@@ -382,11 +437,11 @@ function makeHtml(issue, index) {
   }
   .rail-box h2 {
     margin: 0;
-    padding: 7px 8px 5px;
+    padding: 6px 8px 4px;
     color: #f6efd2;
     background: #22231f;
     text-align: center;
-    font: 900 25px/1 Arial, sans-serif;
+    font: 900 23px/1 Arial, sans-serif;
   }
   .blue-box h2 { background: #245e89; }
   .red-box h2 { background: #9b271f; }
@@ -395,7 +450,7 @@ function makeHtml(issue, index) {
     text-align: center;
     font: 700 13px/1 Arial, sans-serif;
   }
-  .ranked, .chart-list, .bullet-list, .price-list, .classified-list {
+  .ranked, .chart-list, .bullet-list, .price-list, .classified-list, .note-list {
     margin: 0;
     padding: 0;
     list-style: none;
@@ -405,21 +460,21 @@ function makeHtml(issue, index) {
     grid-template-columns: 24px 1fr;
     gap: 6px;
     border-top: 1px solid #27231b;
-    padding: 5px 8px;
-    font: 700 13px/1.05 Arial, sans-serif;
+    padding: 4px 8px;
+    font: 700 12px/1.04 Arial, sans-serif;
   }
   .ranked li::before, .chart-list li::before {
     counter-increment: rank;
     content: counter(rank);
     color: #245e89;
-    font-size: 22px;
+    font-size: 20px;
     text-align: center;
   }
   .ranked, .chart-list { counter-reset: rank; }
   .ranked span, .chart-list span, .bullet-list span {
     display: block;
     margin-top: 2px;
-    font: 11px/1.08 Arial, sans-serif;
+    font: 10px/1.06 Arial, sans-serif;
   }
   .bullet-list li {
     grid-template-columns: 1fr;
@@ -432,37 +487,56 @@ function makeHtml(issue, index) {
   .price-list strong { white-space: nowrap; }
   .classified-list li {
     border-top: 1px solid #27231b;
+    padding: 4px 8px;
+    font-size: 10px;
+    line-height: 1.08;
+  }
+  .note-list li {
+    border-top: 1px solid #27231b;
     padding: 5px 8px;
     font-size: 11px;
-    line-height: 1.12;
+    line-height: 1.1;
+  }
+  .note-list strong, .note-list span {
+    display: block;
+  }
+  .note-list span {
+    margin-top: 3px;
+  }
+  .box-copy {
+    margin: 0;
+    border-top: 1px solid #27231b;
+    padding: 5px 8px;
+    font-size: 10px;
+    line-height: 1.08;
   }
   .cards {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     gap: 10px;
-    margin-top: 12px;
+    margin-top: 0;
     position: relative;
     z-index: 1;
   }
   .story-card {
     padding: 8px;
-    min-height: 212px;
+    min-height: 168px;
   }
   .story-card h3 {
     margin: 0 0 6px;
-    font: 900 23px/1 Arial, sans-serif;
+    font: 900 19px/.98 Arial, sans-serif;
   }
   .story-card p {
     margin: 5px 0 0;
-    font-size: 12px;
-    line-height: 1.12;
+    font-size: 10px;
+    line-height: 1.08;
   }
   .label {
     color: #9b271f;
     font: 900 14px/1 Arial, sans-serif;
     text-transform: uppercase;
   }
-  .mini-photo img { height: 82px; }
+  .mini-photo img { height: 58px; }
   .bottom {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
@@ -470,10 +544,16 @@ function makeHtml(issue, index) {
     margin-top: 10px;
     position: relative;
     z-index: 1;
+    align-items: start;
   }
-  .bottom .rail-box h2 { font-size: 25px; }
+  .mini-stack {
+    display: grid;
+    gap: 10px;
+    align-content: start;
+  }
+  .bottom .rail-box h2 { font-size: 23px; }
   .banner {
-    margin-top: 12px;
+    margin-top: 8px;
     border: 2px solid #9b271f;
     background: #a72b21;
     color: #fff3d4;
@@ -485,21 +565,21 @@ function makeHtml(issue, index) {
   }
   .banner h2 {
     margin: 0;
-    padding: 8px 14px;
-    font: 900 30px/1 Arial, sans-serif;
+    padding: 7px 14px;
+    font: 900 28px/1 Arial, sans-serif;
   }
   .banner p {
     margin: 0;
-    padding: 8px 10px;
+    padding: 7px 10px;
     color: #17150f;
     background: #efe6bf;
-    font: 700 12px/1.08 Arial, sans-serif;
+    font: 700 11px/1.06 Arial, sans-serif;
   }
 </style>
 </head>
 <body>
 <main class="page ${escapeHtml(accent)}">
-  <div class="corner">Inside:<br>${escapeHtml(issue.softwareList?.[0]?.name || "Software")}<br>Page 3</div>
+  <div class="corner">Inside:<br>${cornerText(issue)}</div>
   <header class="flag">
     <div class="masthead">
       <h1>${escapeHtml(issue.masthead?.title || "Computer Chronicle")}</h1>
@@ -514,18 +594,25 @@ function makeHtml(issue, index) {
   </div>
 
   <section class="top">
-    <article class="lead">
-      <div class="lead-grid">
-        <div>
-          <h2>${escapeHtml(leadHeadline)}</h2>
-          <div class="story-columns">
-            ${storyText(lead.summary, firstComputer.summary)}
-            ${sourceMark(issue, lead.sourceRefs)}
+    <div class="main-news">
+      <article class="lead">
+        <div class="lead-grid">
+          <div>
+            <h2>${escapeHtml(leadHeadline)}</h2>
+            <div class="story-columns">
+              ${storyText(lead.summary, firstComputer.summary)}
+              ${sourceMark(issue, lead.sourceRefs)}
+            </div>
           </div>
+          ${imageFigure(lead.image || issue.storeShelvesImage || issue.heroImage, "lead-photo")}
         </div>
-        ${imageFigure(lead.image || issue.storeShelvesImage || issue.heroImage, "lead-photo")}
-      </div>
-    </article>
+      </article>
+      <section class="cards">
+        ${card(firstComputer.headline || "Personal Computing Desk", firstComputer.summary || issue.morningLine, lead.image, firstComputer.label || "Computers")}
+        ${card(games.name || "Game Shelf", games.detail || "", issue.storeShelvesImage, games.platform || "Games")}
+        ${card(bbs.headline || "Modem Desk", bbs.summary || issue.editorNote, bbs.image, "BBS")}
+      </section>
+    </div>
     <aside class="rail">
       ${softwareBox(issue)}
       ${releasesBox(issue)}
@@ -533,23 +620,31 @@ function makeHtml(issue, index) {
     </aside>
   </section>
 
-  <section class="cards">
-    ${card(firstComputer.headline || "Personal Computing Desk", firstComputer.summary || issue.morningLine, lead.image, firstComputer.label || "Computers")}
-    ${card(games.name || "Game Shelf", games.detail || "", issue.storeShelvesImage, games.platform || "Games")}
-    ${card(bbs.headline || "Modem Desk", bbs.summary || issue.editorNote, bbs.image, "BBS")}
-  </section>
-
   <section class="bottom">
-    ${card(movie.headline || "Culture Desk", movie.summary || "", null, movie.label || "Movies / TV")}
+    ${cultureBox(issue)}
     ${musicBox(issue)}
-    ${classifiedBox(issue)}
+    <div class="mini-stack">
+      ${classifiedBox(issue)}
+      ${marketBox(issue)}
+    </div>
   </section>
 
   <section class="banner">
     <h2>${escapeHtml(issue.masthead?.kicker || "Weekly Historical Tech Desk")}</h2>
-    <p>${escapeHtml(truncate(issue.morningLine || issue.masthead?.deck, 165))}</p>
+    <p>${escapeHtml(truncate(issue.morningLine || issue.masthead?.deck, 135))}</p>
   </section>
 </main>
+<script>
+  (() => {
+    const page = document.querySelector(".page");
+    const overflow = Math.max(
+      0,
+      page.scrollHeight - page.clientHeight,
+      page.scrollWidth - page.clientWidth
+    );
+    document.documentElement.setAttribute("data-layout-overflow", String(overflow));
+  })();
+</script>
 </body>
 </html>`;
 }
@@ -569,12 +664,37 @@ function findChrome() {
 function render(htmlPath, outputPath) {
   fs.mkdirSync(path.dirname(outputPath), { recursive: true });
   const chrome = findChrome();
+  const layout = spawnSync(chrome, [
+    "--headless=new",
+    "--no-sandbox",
+    "--disable-gpu",
+    "--hide-scrollbars",
+    "--run-all-compositor-stages-before-draw",
+    "--virtual-time-budget=1000",
+    `--window-size=${renderWidth},${renderHeight}`,
+    "--dump-dom",
+    `file://${htmlPath}`
+  ], {
+    encoding: "utf8",
+    stdio: ["ignore", "pipe", "pipe"]
+  });
+
+  if (layout.status !== 0) {
+    throw new Error(`Chrome layout check failed:\n${layout.stderr || layout.stdout}`);
+  }
+
+  const overflowMatch = layout.stdout.match(/data-layout-overflow="(\d+)"/);
+  const overflow = overflowMatch ? Number(overflowMatch[1]) : 0;
+  if (overflow > 2) {
+    throw new Error(`Newspaper front overflowed the ${renderWidth}x${renderHeight} render by ${overflow}px.`);
+  }
+
   const result = spawnSync(chrome, [
     "--headless=new",
     "--no-sandbox",
     "--disable-gpu",
     "--hide-scrollbars",
-    "--window-size=1024,1536",
+    `--window-size=${renderWidth},${renderHeight}`,
     `--screenshot=${outputPath}`,
     `file://${htmlPath}`
   ], {
