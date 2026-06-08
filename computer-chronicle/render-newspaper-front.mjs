@@ -330,7 +330,16 @@ function makeHtml(issue, index) {
   const leadHeadline = lead.headline || issue.masthead?.title || "Computer Chronicle";
   const stories = frontStories(issue);
   const mainStories = stories.slice(1, 4);
-  const lowerStories = stories.slice(4, 8);
+  const lowerStories = stories.slice(5, 8);
+  const leadVisual = {
+    src: "media/retro-computer-desk-1986.webp",
+    alt: "Period-style color desk scene with an IBM-compatible computer, printer, modem, software, disks, and magazines",
+    caption: "IBM-compatible buying meant complete desks: machine, printer, modem, software, disks, and budget math."
+  };
+  const sideStory = stories[4] || stories[1] || {};
+  const market = issue.market || {};
+  const priceItems = (issue.priceWatch || []).slice(0, 3);
+  const weatherText = issue.morningLine || issue.editorNote || "Computers, games, software, movies, and rock radio for the week.";
 
   return `<!doctype html>
 <html lang="en">
@@ -343,20 +352,21 @@ function makeHtml(issue, index) {
   body {
     padding: 8px;
     color: #161511;
-    font-family: Georgia, "Times New Roman", serif;
+    font-family: "Nimbus Roman", "Liberation Serif", Georgia, "Times New Roman", serif;
     letter-spacing: 0;
   }
   .page {
     position: relative;
     width: ${pageWidth}px;
     height: ${pageHeight}px;
-    padding: 14px 22px 12px;
-    border: 3px solid #1a1712;
+    padding: 10px 16px 14px;
+    border: 2px solid #1a1712;
     background:
-      radial-gradient(circle at 18% 20%, rgba(255,255,255,.28), transparent 22%),
+      radial-gradient(circle at 24% 16%, rgba(255,255,255,.30), transparent 24%),
+      radial-gradient(circle at 82% 84%, rgba(117,54,30,.10), transparent 32%),
       linear-gradient(rgba(255,255,255,.15), rgba(0,0,0,.04)),
-      #eadfbd;
-    box-shadow: inset 0 0 0 2px rgba(22,21,17,.35), inset 0 0 65px rgba(37,28,13,.20);
+      #eadcb9;
+    box-shadow: inset 0 0 0 1px rgba(22,21,17,.30), inset 0 0 70px rgba(37,28,13,.22);
     overflow: hidden;
   }
   .page::after {
@@ -370,109 +380,131 @@ function makeHtml(issue, index) {
       repeating-linear-gradient(90deg, transparent 0, transparent 7px, rgba(70,54,35,.10) 8px);
     mix-blend-mode: multiply;
   }
-  .corner {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 136px;
-    height: 136px;
-    padding: 18px 42px 0 10px;
-    color: #fff7dd;
-    background: #9b271f;
-    clip-path: polygon(0 0, 100% 0, 0 100%);
-    font: 700 17px/1.02 Arial, sans-serif;
-    text-transform: uppercase;
-    transform-origin: left top;
-  }
   .flag {
     display: grid;
-    grid-template-columns: 1fr 86px;
-    gap: 12px;
+    grid-template-columns: 136px 1fr 116px;
+    gap: 18px;
     align-items: start;
-    border-bottom: 5px double #17150f;
-    padding-bottom: 5px;
+    border-bottom: 4px solid #8d211a;
+    padding: 4px 0 8px;
     position: relative;
     z-index: 1;
   }
+  .flag-box {
+    min-height: 118px;
+    border: 2px solid #1f5d82;
+    padding: 8px 8px 7px;
+    color: #132b35;
+    text-align: center;
+    background: rgba(236,226,192,.45);
+  }
+  .flag-box.red { border-color: #8d211a; color: #8d211a; }
+  .flag-box h2 {
+    margin: 0 0 5px;
+    font: 900 19px/1 "Nimbus Roman", Georgia, serif;
+    text-transform: uppercase;
+  }
+  .weather-icon {
+    width: 62px;
+    height: 34px;
+    margin: 3px auto 5px;
+    border-radius: 50%;
+    background:
+      radial-gradient(circle at 30% 44%, #e5ba36 0 15px, transparent 16px),
+      radial-gradient(circle at 58% 54%, #5b6b68 0 17px, transparent 18px),
+      radial-gradient(circle at 78% 58%, #697673 0 13px, transparent 14px);
+    filter: contrast(.95) saturate(.8);
+  }
+  .flag-box p {
+    margin: 0;
+    font: 700 11px/1.18 "Nimbus Roman", Georgia, serif;
+  }
   .masthead {
-    padding-left: 110px;
     text-align: center;
   }
   .masthead h1 {
-    margin: 0;
-    font-size: 68px;
-    line-height: .9;
+    margin: 4px 0 0;
+    color: #0c3854;
+    font-family: "Noto Serif Display", "DejaVu Serif", "Nimbus Roman", Georgia, serif;
+    font-size: 66px;
+    line-height: .86;
     font-weight: 900;
     white-space: nowrap;
-    transform: scaleY(1.12);
+    transform: scaleY(1.18);
     transform-origin: center bottom;
+    text-shadow: 1px 1px 0 rgba(0,0,0,.14);
   }
   .tagline {
-    margin-top: 8px;
+    margin-top: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 12px;
-    color: #16547d;
-    font: 700 italic 16px/1 Arial, sans-serif;
+    color: #8d211a;
+    font: 900 12px/1 Arial, sans-serif;
+    letter-spacing: 1px;
+    text-transform: uppercase;
   }
   .tagline::before, .tagline::after {
     content: "";
-    width: 170px;
-    border-top: 4px double #16547d;
+    width: 112px;
+    border-top: 2px solid #8d211a;
   }
-  .price {
-    border: 2px solid #17150f;
-    text-align: center;
-    font-family: Arial, sans-serif;
-    padding: 7px 4px;
-  }
-  .price strong { display: block; color: #9b271f; font-size: 35px; line-height: 1; }
-  .price span { display: block; margin-top: 5px; font-size: 9px; font-weight: 700; text-transform: uppercase; }
   .meta {
     display: grid;
-    grid-template-columns: 1fr 2fr 1fr;
+    grid-template-columns: 1fr 1.6fr 1fr 70px;
+    gap: 10px;
+    border-top: 2px solid #10344c;
     border-bottom: 2px solid #17150f;
     position: relative;
     z-index: 1;
-    font: 700 16px/1.2 Georgia, serif;
+    font: 900 16px/1.15 "Nimbus Roman", Georgia, serif;
   }
   .meta span { padding: 4px 0; }
   .meta span:nth-child(2) { text-align: center; }
   .meta span:nth-child(3) { text-align: right; }
-  .top {
+  .meta span:nth-child(4) { text-align: right; }
+  .headline {
+    position: relative;
+    z-index: 1;
+    padding: 8px 0 6px;
+    border-bottom: 1px solid #17150f;
+  }
+  .headline h2 {
+    margin: 0;
+    font: 900 59px/.88 "Nimbus Roman", "Liberation Serif", Georgia, serif;
+    letter-spacing: 0;
+  }
+  .headline .deck {
+    margin: 4px 0 0;
+    font: 900 italic 28px/.98 "Nimbus Roman", Georgia, serif;
+  }
+  .lead-layout {
     display: grid;
-    grid-template-columns: 2.3fr .95fr;
-    gap: 14px;
+    grid-template-columns: 176px 1fr 184px;
+    gap: 12px;
     margin-top: 8px;
     position: relative;
     z-index: 1;
     align-items: start;
   }
-  .main-news {
-    display: grid;
-    gap: 9px;
-    align-content: start;
+  .lead-copy h3,
+  .side-copy h3 {
+    margin: 0 0 6px;
+    font: 900 24px/.95 "Nimbus Roman", Georgia, serif;
   }
-  .lead-grid {
-    display: grid;
-    grid-template-columns: .92fr 1.08fr;
-    gap: 12px;
-    align-items: start;
+  .lead-copy p,
+  .side-copy p {
+    margin: 0 0 8px;
+    font-size: 12.2px;
+    line-height: 1.08;
   }
-  .lead h2 {
-    margin: 0 0 10px;
-    font: 900 39px/.92 Arial, sans-serif;
-    letter-spacing: 0;
+  .byline {
+    margin: 6px 0;
+    text-align: center;
+    font: 900 10px/1.15 Arial, sans-serif;
+    text-transform: uppercase;
   }
-  .story-columns {
-    column-count: 2;
-    column-gap: 16px;
-    font-size: 13.5px;
-    line-height: 1.15;
-    text-align: left;
-  }
-  .story-columns p { margin: 0 0 8px; }
   .source-line, figcaption {
     margin: 4px 0 0;
     font-size: 11px;
@@ -488,18 +520,70 @@ function makeHtml(issue, index) {
   .photo img {
     display: block;
     width: 100%;
-    height: 222px;
+    height: 112px;
     object-fit: cover;
   }
-  .lead-photo img { height: 260px; }
-  .rail {
+  .lead-photo img { height: 312px; }
+  .story-strip {
     display: grid;
+    grid-template-columns: 1.05fr 1.05fr 1fr .95fr;
     gap: 10px;
-    align-content: start;
+    margin-top: 8px;
+    position: relative;
+    z-index: 1;
   }
-  .rail-box, .story-card {
+  .story-card, .rail-box {
     border: 2px solid #27231b;
     background: rgba(245,239,216,.62);
+  }
+  .story-card {
+    padding: 8px;
+    min-height: 166px;
+  }
+  .story-card h3 {
+    margin: 0 0 5px;
+    font: 900 21px/.94 "Nimbus Roman", Georgia, serif;
+  }
+  .story-card p {
+    margin: 5px 0 0;
+    font-size: 10.6px;
+    line-height: 1.08;
+  }
+  .story-card .photo img { height: 80px; }
+  .market-card h3 { text-align: center; }
+  .market-lines {
+    margin: 0;
+    padding: 3px 8px 6px;
+    list-style: none;
+    font: 700 11px/1.18 Arial, sans-serif;
+  }
+  .market-lines li {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    border-bottom: 1px solid rgba(39,35,27,.38);
+    padding: 2px 0;
+  }
+  .chart {
+    height: 58px;
+    margin: 6px 8px 2px;
+    border: 1px solid #27231b;
+    background:
+      linear-gradient(90deg, rgba(39,35,27,.20) 1px, transparent 1px) 0 0 / 34px 100%,
+      linear-gradient(0deg, rgba(39,35,27,.18) 1px, transparent 1px) 0 0 / 100% 14px,
+      rgba(238,231,205,.68);
+    position: relative;
+  }
+  .chart::after {
+    content: "";
+    position: absolute;
+    left: 8px;
+    right: 8px;
+    top: 34px;
+    height: 3px;
+    background: #9b271f;
+    transform: skewY(-8deg);
+    box-shadow: 26px -8px 0 #9b271f, 52px 4px 0 #9b271f, 78px -12px 0 #9b271f, 104px -5px 0 #9b271f;
   }
   .rail-box h2 {
     margin: 0;
@@ -507,16 +591,10 @@ function makeHtml(issue, index) {
     color: #f6efd2;
     background: #22231f;
     text-align: center;
-    font: 900 21px/1 Arial, sans-serif;
+    font: 900 22px/1 "Nimbus Roman", Georgia, serif;
   }
   .blue-box h2 { background: #245e89; }
   .red-box h2 { background: #9b271f; }
-  .small-date {
-    margin: 3px 0 0;
-    text-align: center;
-    font: 700 10px/1 Arial, sans-serif;
-  }
-  .compact-list .small-date { display: none; }
   .ranked, .chart-list, .bullet-list, .price-list, .classified-list, .note-list {
     margin: 0;
     padding: 0;
@@ -524,272 +602,182 @@ function makeHtml(issue, index) {
   }
   .ranked li, .chart-list li, .bullet-list li, .price-list li {
     display: grid;
-    grid-template-columns: 24px 1fr;
+    grid-template-columns: 20px 1fr;
     gap: 6px;
     border-top: 1px solid #27231b;
-    padding: 4px 8px;
-    font: 700 12px/1.04 Arial, sans-serif;
-  }
-  .compact-list li {
-    grid-template-columns: 18px 1fr;
-    gap: 5px;
-    padding: 1px 6px;
-    font: 700 10px/1 Arial, sans-serif;
-  }
-  .compact-list h2 {
-    padding: 4px 8px 3px;
-    font-size: 19px;
+    padding: 3px 7px;
+    font: 700 12px/1.02 Arial, sans-serif;
   }
   .ranked li::before, .chart-list li::before {
     counter-increment: rank;
     content: counter(rank);
     color: #245e89;
-    font-size: 20px;
+    font-size: 18px;
     text-align: center;
   }
-  .compact-list li::before { font-size: 17px; }
   .ranked, .chart-list { counter-reset: rank; }
   .ranked span, .chart-list span, .bullet-list span {
     display: block;
-    margin-top: 2px;
-    font: 10px/1.06 Arial, sans-serif;
+    margin-top: 1px;
+    font: 10px/1.04 Arial, sans-serif;
   }
-  .compact-list span {
-    display: inline;
-    margin: 0 0 0 4px;
-    font-size: 9px;
-    line-height: 1;
-    font-weight: 400;
-  }
-  .bullet-list li {
-    grid-template-columns: 1fr;
-    gap: 2px;
-  }
-  .price-list li {
-    grid-template-columns: 1fr auto;
-    font-size: 12px;
-  }
-  .price-list strong { white-space: nowrap; }
-  .classified-list li {
-    border-top: 1px solid #27231b;
-    padding: 4px 8px;
-    font-size: 10px;
-    line-height: 1.08;
-  }
-  .note-list li {
-    border-top: 1px solid #27231b;
-    padding: 5px 8px;
-    font-size: 11px;
-    line-height: 1.1;
-  }
-  .note-list strong, .note-list span {
-    display: block;
-  }
-  .note-list span {
-    margin-top: 3px;
-  }
-  .box-copy {
-    margin: 0;
-    border-top: 1px solid #27231b;
-    padding: 5px 8px;
-    font-size: 10px;
-    line-height: 1.08;
-  }
-  .cards {
+  .charts-row {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: .95fr .95fr 1.1fr 1fr 1fr;
     gap: 10px;
-    margin-top: 0;
+    margin-top: 8px;
     position: relative;
     z-index: 1;
   }
-  .story-card {
-    padding: 8px;
-    min-height: 168px;
+  .chart-panel {
+    min-height: 196px;
+    display: flex;
+    flex-direction: column;
   }
-  .story-card h3 {
-    margin: 0 0 6px;
-    font: 900 19px/.98 Arial, sans-serif;
+  .chart-panel figure {
+    margin: auto 8px 7px;
+    border: 1px solid #27231b;
   }
-  .story-card p {
-    margin: 5px 0 0;
-    font-size: 10px;
-    line-height: 1.08;
+  .chart-panel img {
+    display: block;
+    width: 100%;
+    height: 58px;
+    object-fit: cover;
+  }
+  .chart-panel .chart-list li {
+    padding: 2px 7px;
+    font-size: 10.5px;
+  }
+  .chart-panel .chart-list li::before {
+    font-size: 15px;
+  }
+  .chart-panel .chart-list span {
+    font-size: 9px;
   }
   .label {
+    margin: 0 0 4px;
     color: #9b271f;
-    font: 900 14px/1 Arial, sans-serif;
+    font: 900 11px/1 Arial, sans-serif;
     text-transform: uppercase;
-  }
-  .mini-photo img { height: 58px; }
-  .departments {
-    display: grid;
-    gap: 6px;
-  }
-  .story-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 9px;
-    margin-top: 9px;
-    position: relative;
-    z-index: 1;
-  }
-  .inline-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 9px;
-  }
-  .front-card {
-    border: 2px solid #27231b;
-    background: rgba(245,239,216,.62);
-    padding: 8px;
-    min-height: 224px;
-  }
-  .front-card h3 {
-    margin: 0 0 6px;
-    font: 900 17px/.98 Arial, sans-serif;
-  }
-  .front-card p {
-    margin: 5px 0 0;
-    font-size: 10px;
-    line-height: 1.1;
-  }
-  .article-photo img {
-    height: 84px;
-  }
-  .inline-grid .front-card {
-    min-height: 372px;
-  }
-  .inline-grid .article-photo img {
-    height: 124px;
-  }
-  .inline-grid .front-card p {
-    font-size: 11px;
-    line-height: 1.14;
-  }
-  .story-grid .front-card {
-    min-height: 286px;
-  }
-  .story-grid .article-photo img {
-    height: 104px;
-  }
-  .story-grid .front-card:nth-child(4) {
-    grid-column: 1 / -1;
-    display: grid;
-    grid-template-columns: 260px 1fr;
-    column-gap: 12px;
-    min-height: 196px;
-  }
-  .story-grid .front-card:nth-child(4) .label,
-  .story-grid .front-card:nth-child(4) h3,
-  .story-grid .front-card:nth-child(4) .source-badge {
-    grid-column: 1 / -1;
-  }
-  .story-grid .front-card:nth-child(4) .photo {
-    grid-column: 1;
-  }
-  .story-grid .front-card:nth-child(4) p:not(.label):not(.source-badge) {
-    grid-column: 2;
-    margin-top: 0;
-    font-size: 11px;
-    line-height: 1.14;
-  }
-  .story-grid .front-card:nth-child(4) .article-photo img {
-    height: 82px;
   }
   .source-badge {
     color: #5d211c;
     font: 700 italic 10px/1.1 Georgia, serif;
   }
-  .bottom {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 10px;
-    margin-top: 10px;
-    position: relative;
-    z-index: 1;
-    align-items: start;
-  }
-  .mini-stack {
-    display: grid;
-    gap: 10px;
-    align-content: start;
-  }
-  .bottom .rail-box h2 { font-size: 23px; }
-  .banner {
-    position: absolute;
-    left: 22px;
-    right: 22px;
-    bottom: 24px;
-    min-height: 102px;
-    border: 2px solid #9b271f;
-    background: #a72b21;
-    color: #fff3d4;
-    display: grid;
-    grid-template-columns: 1fr 224px;
-    align-items: center;
-    z-index: 1;
-  }
-  .banner h2 {
-    margin: 0;
-    padding: 16px 18px;
-    font: 900 34px/1 Arial, sans-serif;
-  }
-  .banner p {
-    margin: 0;
-    align-self: stretch;
+  .ad-note {
+    padding: 8px;
+    min-height: 196px;
     display: flex;
-    align-items: center;
-    padding: 8px 12px;
-    color: #17150f;
-    background: #efe6bf;
-    font: 700 12px/1.05 Arial, sans-serif;
+    flex-direction: column;
+  }
+  .ad-note h3 {
+    margin: 0 0 8px;
+    font: 900 20px/.95 "Nimbus Roman", Georgia, serif;
+  }
+  .ad-note p {
+    margin: 0 0 7px;
+    font-size: 11px;
+    line-height: 1;
+  }
+  .ad-note figure {
+    margin-top: auto;
+  }
+  .ad-note .photo img {
+    height: 74px;
   }
 </style>
 </head>
 <body>
 <main class="page ${escapeHtml(accent)}">
-  <div class="corner">Inside:<br>${cornerText(issue)}</div>
   <header class="flag">
+    <section class="flag-box">
+      <h2>Weather</h2>
+      <div class="weather-icon"></div>
+      <p>${escapeHtml(truncate(weatherText, 82))}</p>
+    </section>
     <div class="masthead">
       <h1>${escapeHtml(issue.masthead?.title || "Computer Chronicle")}</h1>
-      <div class="tagline">${escapeHtml(issue.visualProfile?.strapline || "The Newsweekly of Home, Personal & Business Computing")}</div>
+      <div class="tagline">Computers · Games · Software · Movies · Rock Radio</div>
     </div>
-    <div class="price"><strong>75c</strong><span>U.S. & Canada</span><span>$1.00 other countries</span></div>
+    <section class="flag-box red">
+      <h2>Computing Today</h2>
+      <p>32 Pages</p>
+      <p>3 Sections</p>
+      <p>Price Watch</p>
+    </section>
   </header>
   <div class="meta">
     <span>Vol. ${number}, No. ${parts.day}</span>
     <span>${escapeHtml(dateline(issue))}</span>
-    <span>ISSN 0737-6830</span>
+    <span>Portland, Oregon</span>
+    <span>75 Cents</span>
   </div>
 
-  <section class="top">
-    <div class="main-news">
-      <article class="lead">
-        <div class="lead-grid">
-          <div>
-            <h2>${escapeHtml(leadHeadline)}</h2>
-            <div class="story-columns">
-              ${storyText(lead.summary, issue.computerItems?.[0]?.summary)}
-              ${sourceMark(issue, lead.sourceRefs)}
-            </div>
-          </div>
-          ${imageFigure(lead.image || issue.storeShelvesImage || issue.heroImage, "lead-photo")}
-        </div>
-      </article>
-      <section class="inline-grid">
-        ${mainStories.map((story) => frontCard(issue, story)).join("")}
-      </section>
-    </div>
-    <aside class="departments">
-      ${movieBox(issue)}
-      ${releasesBox(issue)}
-      ${musicBox(issue)}
-    </aside>
+  <section class="headline">
+    <h2>${escapeHtml(leadHeadline)}</h2>
+    <p class="deck">Lower Prices, Better Software, and Growing Office Adoption</p>
   </section>
 
-  <section class="story-grid">
-    ${lowerStories.map((story, storyIndex) => frontCard(issue, story, storyIndex === 3 ? "wide" : "")).join("")}
+  <section class="lead-layout">
+    <article class="lead-copy">
+      <h3>${escapeHtml(issue.computerItems?.[0]?.headline || "More Power, More Choices")}</h3>
+      <p class="byline">By Michael O'Leary<br>Computer Chronicle Staff Writer</p>
+      ${storyText(lead.summary, issue.computerItems?.[0]?.summary)}
+      ${sourceMark(issue, lead.sourceRefs)}
+    </article>
+    ${imageFigure(leadVisual, "lead-photo")}
+    <article class="side-copy">
+      <h3>${escapeHtml(sideStory.headline || "New Machines Promise More Power Ahead")}</h3>
+      <p class="byline">By Scott Baker<br>Technology Desk</p>
+      <p>${escapeHtml(truncate(sideStory.summary || sideStory.detail || "", 520))}</p>
+      ${sourceBadge(issue, sideStory.sourceRefs)}
+    </article>
+  </section>
+
+  <section class="story-strip">
+    ${mainStories.map((story) => card(story.headline || "Untitled", story.summary || story.detail || "", story.image, story.label)).join("")}
+    <article class="story-card market-card">
+      <p class="label">Stock Market Summary</p>
+      <h3>Friday Close</h3>
+      <ul class="market-lines">
+        <li><span>Dow Jones</span><strong>${escapeHtml(market.dow || "n/a")}</strong></li>
+        <li><span>Nasdaq</span><strong>${escapeHtml(market.nasdaq || "n/a")}</strong></li>
+        ${priceItems.map((item) => `<li><span>${escapeHtml(item.item)}</span><strong>${escapeHtml(item.price)}</strong></li>`).join("")}
+      </ul>
+      <div class="chart"></div>
+    </article>
+  </section>
+
+  <section class="charts-row">
+    <section class="rail-box red-box chart-panel">
+      <h2>Top 5 Music</h2>
+      <ol class="chart-list">
+        ${listItems(issue.musicChart, (item) => `<li><strong>${escapeHtml(displayName(item.title))}</strong><span>${escapeHtml(item.artist)}</span></li>`, 5)}
+      </ol>
+      <figure><img src="${escapeHtml(fileUrl("media/clipping-electronics-guitar-1986.webp"))}" alt="Rock radio and electronics desk"></figure>
+    </section>
+    <section class="rail-box red-box chart-panel">
+      <h2>Top 5 Movies</h2>
+      <ol class="chart-list">
+        ${listItems(issue.movieChart, (item) => `<li><strong>${escapeHtml(displayName(item.title))}</strong><span>${escapeHtml(item.detail || "")}</span></li>`, 5)}
+      </ol>
+      <figure><img src="${escapeHtml(fileUrl("media/web/f14a-vf84-1986.jpg"))}" alt="F-14A Tomcat in flight"></figure>
+    </section>
+    <section class="rail-box blue-box chart-panel">
+      <h2>Top 5 Computer Games</h2>
+      <ol class="chart-list">
+        ${listItems(issue.storeShelves, (item) => `<li><strong>${escapeHtml(displayName(item.name))}</strong><span>${escapeHtml(item.platform || item.confidence || "")}</span></li>`, 5)}
+      </ol>
+      <figure><img src="${escapeHtml(fileUrl("media/clipping-game-desk-1986.webp"))}" alt="1980s computer game desk"></figure>
+    </section>
+    ${lowerStories.slice(0, 1).map((story) => card(story.headline || "Untitled", story.summary || story.detail || "", story.image, story.label)).join("")}
+    <article class="ad-note story-card">
+      <p class="label">Small Business</p>
+      <h3>${escapeHtml(issue.periodAd?.headline || "Small Business Gets a Big Boost From PCs")}</h3>
+      <p>${escapeHtml(truncate(issue.periodAd?.summary || issue.classifieds?.[0]?.copy || "", 230))}</p>
+      <p class="source-badge">${escapeHtml(issue.periodAd?.finePrint || "Historical desk note")}</p>
+      ${imageFigure({ src: "media/web/epson-equity-i-1987.jpg", alt: "Epson Equity computer system", caption: "Epson's Equity line pushed the clone desk into budget conversations." }, "article-photo")}
+    </article>
   </section>
 </main>
 <script>
