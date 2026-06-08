@@ -9,7 +9,7 @@ const root = path.dirname(new URL(import.meta.url).pathname);
 const dataPath = path.join(root, "data", "issues.json");
 const mediaDir = path.join(root, "media");
 const renderWidth = 1024;
-const renderHeight = 1436;
+const renderHeight = 1536;
 const pageWidth = renderWidth - 16;
 const pageHeight = renderHeight - 16;
 
@@ -254,15 +254,65 @@ function card(title, body, image, label = "") {
   `;
 }
 
+function frontStories(issue) {
+  const lead = issue.lead || {};
+  const fallback = [
+    {
+      label: "Computers",
+      headline: issue.computerItems?.[0]?.headline || lead.headline,
+      summary: issue.computerItems?.[0]?.summary || lead.summary,
+      image: lead.image,
+      sourceRefs: issue.computerItems?.[0]?.sourceRefs || lead.sourceRefs
+    },
+    {
+      label: "Games",
+      headline: issue.storeShelves?.[0]?.name || "Game Shelf",
+      summary: issue.storeShelves?.[0]?.detail || "",
+      image: issue.storeShelvesImage,
+      sourceRefs: issue.storeShelves?.[0]?.sourceRefs
+    },
+    {
+      label: "Culture",
+      headline: issue.briefs?.[0]?.headline || "Culture Desk",
+      summary: issue.briefs?.[0]?.summary || "",
+      sourceRefs: issue.briefs?.[0]?.sourceRefs
+    }
+  ];
+  return (Array.isArray(issue.frontPageStories) && issue.frontPageStories.length ? issue.frontPageStories : fallback)
+    .filter((story) => clean(story.headline || story.summary));
+}
+
+function sourceBadge(issue, refs) {
+  if (!Array.isArray(refs) || !refs.length) return "";
+  const label = refs
+    .map((ref) => issue.sources?.[ref]?.name)
+    .filter(Boolean)
+    .map((name) => name.replace(/[:.,].*$/, ""))
+    .find(Boolean);
+  return label ? `<p class="source-badge">${escapeHtml(label)}</p>` : "";
+}
+
+function frontCard(issue, story, className = "") {
+  return `
+    <article class="front-card ${className}">
+      ${story.label ? `<p class="label">${escapeHtml(story.label)}</p>` : ""}
+      <h3>${escapeHtml(story.headline || "Untitled")}</h3>
+      ${imageFigure(story.image, "article-photo")}
+      <p>${escapeHtml(truncate(story.summary || story.detail || "", className.includes("side") ? 145 : 260))}</p>
+      ${sourceBadge(issue, story.sourceRefs)}
+    </article>
+  `;
+}
+
 function makeHtml(issue, index) {
   const parts = dateParts(issue);
   const lead = issue.lead || {};
-  const firstComputer = issue.computerItems?.[0] || {};
-  const games = issue.storeShelves?.[0] || {};
-  const bbs = issue.bbsNote || {};
   const number = issueNumber(issue, index);
   const accent = issue.visualProfile?.accent || "red-black-blue";
   const leadHeadline = lead.headline || issue.masthead?.title || "Computer Chronicle";
+  const stories = frontStories(issue);
+  const sideStories = stories.slice(0, 2);
+  const lowerStories = stories.slice(2, 8);
 
   return `<!doctype html>
 <html lang="en">
@@ -374,9 +424,9 @@ function makeHtml(issue, index) {
   .meta span:nth-child(3) { text-align: right; }
   .top {
     display: grid;
-    grid-template-columns: 2.55fr .95fr;
+    grid-template-columns: 2.25fr 1fr;
     gap: 14px;
-    margin-top: 8px;
+    margin-top: 10px;
     position: relative;
     z-index: 1;
     align-items: start;
@@ -388,7 +438,7 @@ function makeHtml(issue, index) {
   }
   .lead-grid {
     display: grid;
-    grid-template-columns: 1.05fr 1.65fr;
+    grid-template-columns: 1.05fr 1.55fr;
     gap: 12px;
     align-items: start;
   }
@@ -400,8 +450,8 @@ function makeHtml(issue, index) {
   .story-columns {
     column-count: 2;
     column-gap: 16px;
-    font-size: 13px;
-    line-height: 1.14;
+    font-size: 13.5px;
+    line-height: 1.15;
     text-align: left;
   }
   .story-columns p { margin: 0 0 8px; }
@@ -424,10 +474,10 @@ function makeHtml(issue, index) {
     object-fit: cover;
     filter: grayscale(1) contrast(1.12) sepia(.14);
   }
-  .lead-photo img { height: 432px; }
+  .lead-photo img { height: 430px; }
   .rail {
     display: grid;
-    gap: 8px;
+    gap: 10px;
     align-content: start;
   }
   .rail-box, .story-card {
@@ -550,6 +600,49 @@ function makeHtml(issue, index) {
     text-transform: uppercase;
   }
   .mini-photo img { height: 58px; }
+  .side-news {
+    display: grid;
+    gap: 10px;
+  }
+  .front-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-top: 10px;
+    position: relative;
+    z-index: 1;
+  }
+  .front-card {
+    border: 2px solid #27231b;
+    background: rgba(245,239,216,.62);
+    padding: 8px;
+    min-height: 350px;
+  }
+  .front-card h3 {
+    margin: 0 0 6px;
+    font: 900 22px/.98 Arial, sans-serif;
+  }
+  .front-card p {
+    margin: 5px 0 0;
+    font-size: 11px;
+    line-height: 1.12;
+  }
+  .front-card.side {
+    min-height: 0;
+  }
+  .front-card.side h3 {
+    font-size: 19px;
+  }
+  .article-photo img {
+    height: 104px;
+  }
+  .front-card.side .article-photo img {
+    height: 86px;
+  }
+  .source-badge {
+    color: #5d211c;
+    font: 700 italic 10px/1.1 Georgia, serif;
+  }
   .bottom {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
@@ -613,44 +706,25 @@ function makeHtml(issue, index) {
   </div>
 
   <section class="top">
-    <div class="main-news">
-      <article class="lead">
-        <div class="lead-grid">
-          <div>
-            <h2>${escapeHtml(leadHeadline)}</h2>
-            <div class="story-columns">
-              ${storyText(lead.summary, firstComputer.summary)}
-              ${sourceMark(issue, lead.sourceRefs)}
-            </div>
+    <article class="lead">
+      <div class="lead-grid">
+        <div>
+          <h2>${escapeHtml(leadHeadline)}</h2>
+          <div class="story-columns">
+            ${storyText(lead.summary, issue.computerItems?.[0]?.summary)}
+            ${sourceMark(issue, lead.sourceRefs)}
           </div>
-          ${imageFigure(lead.image || issue.storeShelvesImage || issue.heroImage, "lead-photo")}
         </div>
-      </article>
-      <section class="cards">
-        ${card(firstComputer.headline || "Personal Computing Desk", firstComputer.summary || issue.morningLine, lead.image, firstComputer.label || "Computers")}
-        ${card(games.name || "Game Shelf", games.detail || "", issue.storeShelvesImage, games.platform || "Games")}
-        ${card(bbs.headline || "Modem Desk", bbs.summary || issue.editorNote, bbs.image, "BBS")}
-      </section>
-    </div>
-    <aside class="rail">
-      ${softwareBox(issue)}
-      ${releasesBox(issue)}
-      ${priceBox(issue)}
+        ${imageFigure(lead.image || issue.storeShelvesImage || issue.heroImage, "lead-photo")}
+      </div>
+    </article>
+    <aside class="side-news">
+      ${sideStories.map((story) => frontCard(issue, story, "side")).join("")}
     </aside>
   </section>
 
-  <section class="bottom">
-    ${cultureBox(issue)}
-    ${musicBox(issue)}
-    <div class="mini-stack">
-      ${classifiedBox(issue)}
-      ${marketBox(issue)}
-    </div>
-  </section>
-
-  <section class="banner">
-    <h2>${escapeHtml(issue.masthead?.kicker || "Weekly Historical Tech Desk")}</h2>
-    <p>${escapeHtml(truncate(issue.morningLine || issue.masthead?.deck, 135))}</p>
+  <section class="front-grid">
+    ${lowerStories.map((story) => frontCard(issue, story)).join("")}
   </section>
 </main>
 <script>
