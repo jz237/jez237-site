@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-08T16:16:07.017802+00:00",
+  "updatedAt": "2026-06-08T17:09:09.111537+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -9612,6 +9612,14 @@
     "https://www.theverge.com/tech/944325/google-notebooklm-ai-gemini-update": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/NotebookLM-Welcome.png?quality=90&amp;strip=all&amp;crop=0%2C3.4613147178592%2C100%2C93.077370564282&amp;w=1200",
       "checkedAt": "2026-06-08T16:16:07.017802+00:00"
+    },
+    "https://www.artificialintelligence-news.com/news/weis-markets-instacart-ai-powered-shopping-caper-carts": {
+      "image": "",
+      "checkedAt": "2026-06-08T17:09:09.111537+00:00"
+    },
+    "https://www.artificialintelligence-news.com/news/amazon-ai-shopping-assistant-kate-spade-retailers": {
+      "image": "",
+      "checkedAt": "2026-06-08T17:09:09.111537+00:00"
     }
   }
 }
