@@ -1594,5 +1594,17 @@
     "slot": "afternoon",
     "model": "openai/gpt-image-2",
     "size": "1024x1536"
+  },
+  {
+    "id": "2026-06-08-evening-under-stair-moon-jam-menu-board",
+    "title": "Under-Stair Moon Jam Menu Board",
+    "tests": "Generated once with openclaw infer image generate using openai/gpt-image-2; verified exact PNG output path exists and is non-empty.",
+    "prompt": "Create a finished vertical menu board titled UNDER-STAIR MOON JAM MENU BOARD, photographed as a real chalk-and-enamel board mounted inside a cramped nocturnal pantry beneath old wooden stairs. The board advertises an imaginary tiny midnight preserve shop that sells luminous fruit jams made from moonlit ingredients: Waxing Crescent Quince, Blue Hour Blackberry, New Moon Fig, Stairwell Plum, Lantern Pear, and Salted Silver Apricot. Use a coherent readable menu hierarchy with prices, jar sizes, tasting notes, batch numbers, and small ingredient icons; include subtle hand-lettered chalk texture, brass corner screws, chipped black enamel, tiny sample spoons, labeled glass jars glowing softly on narrow shelves, wax seals, twine, dust motes, and warm lamplight mixed with cool moonlight through a small round window. Make it richly detailed but legible, documentary product-photo realism, no placeholder boxes, no real logos, no people, no dancing, no instructional text outside the menu format.\n\nSource photo needed: none.\n\nReusable prompt template: Create a finished [FORMAT] titled [TITLE], photographed as a real physical object in [SETTING]. The piece is about [TOPIC] and uses [DATA OR CATEGORIES] as the main content. Use a coherent readable hierarchy with [SECTIONS], [LABELS], and [DETAIL TYPES]; make the materials feel tactile and setting-specific with [PROPS], [LIGHTING], and [SURFACE TEXTURES]. Keep all text natural to the format, avoid placeholder boxes, avoid real logos or private data, and make the result richly detailed but readable.\n\nExample substitution: Create a finished menu board titled UNDER-STAIR MOON JAM MENU BOARD, photographed as a chalk-and-enamel board in a cramped pantry beneath old stairs, with moon jam flavors, jar sizes, prices, tasting notes, batch numbers, tiny spoons, glowing jars, brass screws, chipped enamel, and mixed lamplight/moonlight.",
+    "image": "images/2026-06-08-evening-under-stair-moon-jam-menu-board.png",
+    "date": "2026-06-08",
+    "batch": "Daily Prompt",
+    "slot": "evening",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1536"
   }
 ]
