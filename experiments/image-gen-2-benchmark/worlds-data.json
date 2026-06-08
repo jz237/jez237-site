@@ -70,5 +70,23 @@
       "continuity": "Preserves Brill Quay, Morrowtide, Shellhook, Reedgate, Highbasin, lantern-ferry transit, shell-rail transfers, lumenreeds, shell-stone craft, and the sea-glass/brass/coral/honey palette.",
       "entryDescription": "A commuter ferry ticket and timetable sheet showing how residents navigate tides, lantern routes, rain delays, and shell-rail transfers in everyday island life."
     }
+  },
+  {
+    "id": "2026-06-08-overnight-marrowglass-quay-lowtide-breakfast-stall",
+    "title": "Marrowglass Quay: Lowtide Breakfast Stall",
+    "tests": "Weekly world: Marrowglass Quay. World-life image for 2026-06-08 overnight slot; catalog-only fictional-world entry.",
+    "prompt": "Create a finished daily-life view of Marrowglass Quay: Lowtide Breakfast Stall. At pearly dawn in Pearlstep Harbor's Lowtide Ward, show a compact breakfast stall under translucent fossil reef arches beside a shallow canal, with quayfolk in layered oilcloth, glass-bead aprons, shell goggles, and reed satchels buying brine tea, spiral-shell griddle cakes, and copper-kelp bundles while a shell-tram passes on braided brass rails. Preserve the weekly world bible: marrowglass reef architecture, brass tide infrastructure, canals, blue reed fans, lantern lichens, white salt moss, filter crabs, pearl moths, sea-glass green and brass amber palette, and quiet lived-in tidal-city mood. Avoid modern vehicles, logos, neon cyberpunk, spaceships, weapons, generic medieval fantasy, and dancing.\n\nReusable prompt template: Create a finished daily-life view or layout for Marrowglass Quay: [SCENE OR DOCUMENT] using the world bible, with [DATA OR DETAILS] integrated naturally. Anchor the image in pale fossil reef arches, shallow canals, shell-trams on braided brass rails, tide elevators, marrowglass panes, brass tide gears, ceramic shell tiles, blue reed fans, copper kelp, lantern lichens, quayfolk clothing, and pearly mist or warm lamplight. Preserve the named world, geography, settlements, transit logic, materials, vegetation, palette, recurring motifs, and hard avoid rules; change only the specific scene, activity, props, and composition.\n\nSource photo needed: none.\n\nWhat to preserve: Marrowglass Quay's world canon, including Pearlstep Harbor/Lowtide Ward atmosphere, shell-tram and canal transit, marrowglass reef materials, tide gauges, quayfolk clothing, reef vegetation, harmless small life forms, and sea-glass/brass/coral/misty palette.\n\nWhat to change: the selected daily-life activity, viewpoint, props, crowd arrangement, document/layout framing if used, and the exact moment of lived-in routine.\n\nExample substitution: [SCENE OR DOCUMENT] = breakfast stall at Pearlstep Harbor; [DATA OR DETAILS] = brine tea, spiral-shell griddle cakes, copper-kelp bundles, shell-tram commute, light-cistern gauges, wet canal steps, pearl moths, and filter crabs at dawn.",
+    "image": "images/2026-06-08-overnight-marrowglass-quay-lowtide-breakfast-stall.png",
+    "date": "2026-06-08",
+    "batch": "Daily Prompt",
+    "slot": "overnight",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "world": {
+      "name": "Marrowglass Quay",
+      "description": "A tidal city inside translucent fossil reefs where quayfolk farm light, ride shell-trams, and trade through lantern markets.",
+      "continuity": "Preserves the fossil reef geography, Pearlstep Harbor/Lowtide Ward setting, shell-tram canal infrastructure, marrowglass/brass materials, reef vegetation, quayfolk clothing, and pearly dawn palette.",
+      "entryDescription": "A dawn breakfast stall where quayfolk buy brine tea, shell griddle cakes, and kelp bundles beside a canal as a shell-tram passes."
+    }
   }
 ]
