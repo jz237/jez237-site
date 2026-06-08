@@ -115,9 +115,9 @@
         "headline": "IBM-Compatible Bargain Race Keeps the Office Desk Busy",
         "summary": "The June 9 InfoWorld issue put low-priced IBM-compatible machines back in the buyer's notebook, including Epson coverage that captured the week’s real office-computer pressure: more PC-standard speed for less money, while software buyers kept measuring everything against the IBM-compatible desk.",
         "image": {
-          "src": "media/web/epson-equity-i-1987.jpg",
-          "alt": "Epson Equity I computer drawing from a 1987 advertisement, used as a web-sourced visual for same-week Epson Equity IBM-compatible coverage",
-          "caption": "Epson's Equity line made the low-price IBM-compatible fight visible.",
+          "src": "media/web/ibm-pc-5150.jpg",
+          "alt": "IBM PC 5150 compatible-era desktop computer with monitor and keyboard, used as a web-sourced visual for same-week IBM-compatible coverage",
+          "caption": "IBM-compatible buying was really about what sat on the office desk.",
           "confidence": "Web-sourced Wikimedia Commons image; article source is InfoWorld, June 9, 1986"
         },
         "confidence": "Same-week trade issue anchored to the June 8-14 weekly desk",
@@ -131,9 +131,9 @@
           "headline": "Epson Equity III Presses the Clone Price Fight",
           "summary": "InfoWorld's June 9 issue put Epson's Equity III in the low-priced IBM-compatible race, the kind of office-buying story that turned compatibility, expansion slots, printer support, and monthly budget math into front-page computer news.",
           "image": {
-            "src": "media/web/epson-equity-i-1987.jpg",
-            "alt": "Epson Equity I computer drawing from a 1987 advertisement, used as a web-sourced visual for Epson Equity clone coverage",
-            "caption": "Epson's Equity family stood in for the clone-price argument on small-office desks.",
+            "src": "media/web/ibm-pc-5150.jpg",
+            "alt": "IBM PC 5150 compatible-era desktop computer with monitor and keyboard, used as a web-sourced visual for Epson Equity clone coverage",
+            "caption": "The clone-price fight was fought on ordinary office desks.",
             "confidence": "Web-sourced Wikimedia Commons image; article source is InfoWorld, June 9, 1986"
           },
           "sourceRefs": [
@@ -145,7 +145,7 @@
           "headline": "PageMaker Keeps Macintosh in the Layout Room",
           "summary": "The same InfoWorld issue kept Macintosh desktop publishing in the trade conversation. PageMaker was not just another application; it made the Mac look like a practical page-layout workstation for newsletters, brochures, and small publishing desks.",
           "image": {
-            "src": "media/web/macintosh-plus-cropped.jpg",
+            "src": "media/web/macintosh-plus-full.jpg",
             "alt": "Apple Macintosh Plus all-in-one computer, web-sourced visual for Macintosh PageMaker desktop publishing coverage",
             "caption": "Macintosh hardware gave PageMaker its compact publishing desk.",
             "confidence": "Web-sourced Wikimedia Commons image; article source is InfoWorld, June 9, 1986"
@@ -201,8 +201,8 @@
           "headline": "Lotus Leaves VisiCalc in the Rearview Mirror",
           "summary": "The software desk reads the clone story through spreadsheets: by 1986, Lotus 1-2-3 was the standard buyers expected PC compatibles to run, while VisiCalc had become a first-wave name from a much earlier microcomputer moment.",
           "image": {
-            "src": "media/web/epson-equity-i-1987.jpg",
-            "alt": "Epson Equity I computer drawing used as a web-sourced visual for IBM-compatible spreadsheet software coverage",
+            "src": "media/web/ibm-pc-5150.jpg",
+            "alt": "IBM PC 5150 compatible-era desktop computer used as a web-sourced visual for IBM-compatible spreadsheet software coverage",
             "caption": "The PC-compatible fight was really a software fight in office clothes.",
             "confidence": "Web-sourced Wikimedia Commons image; period software source is Lotus/VisiCalc reference"
           },
@@ -215,7 +215,7 @@
           "headline": "Friday Close Carries the Business Desk",
           "summary": "With U.S. markets closed over the weekend, the issue carries Friday's record Dow close and Nasdaq near 400 as business context, not as a claim of Saturday trading.",
           "image": {
-            "src": "media/web/macintosh-plus-cropped.jpg",
+            "src": "media/web/macintosh-plus-full.jpg",
             "alt": "Macintosh Plus computer used as a web-sourced visual for the market and business-computing context",
             "caption": "The business page sits beside the machines people were buying.",
             "confidence": "Web-sourced Wikimedia Commons image; market sources are Dow and Nasdaq references"
@@ -485,6 +485,43 @@
           "confidence": "Prior-day TV listing context",
           "sourceRefs": [
             14
+          ]
+        }
+      ],
+      "movieChart": [
+        {
+          "title": "#1 Top Gun",
+          "detail": "$8.23M weekend",
+          "sourceRefs": [
+            16
+          ]
+        },
+        {
+          "title": "#2 Raw Deal",
+          "detail": "$5.44M weekend",
+          "sourceRefs": [
+            16
+          ]
+        },
+        {
+          "title": "#3 Cobra",
+          "detail": "$5.02M weekend",
+          "sourceRefs": [
+            16
+          ]
+        },
+        {
+          "title": "#4 Poltergeist II",
+          "detail": "$4.21M weekend",
+          "sourceRefs": [
+            16
+          ]
+        },
+        {
+          "title": "#5 SpaceCamp",
+          "detail": "$1.39M weekend",
+          "sourceRefs": [
+            16
           ]
         }
       ],
