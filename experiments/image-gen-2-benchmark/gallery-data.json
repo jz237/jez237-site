@@ -1570,5 +1570,17 @@
     "slot": "midday",
     "model": "openai/gpt-image-2",
     "size": "1024x1536"
+  },
+  {
+    "id": "2026-06-08-midday-houseplant-as-opalized-moss-artifact",
+    "title": "Houseplant as Opalized Moss Artifact",
+    "tests": "Reusable reference-photo transformation template; generated image is a finished example using a generic potted monstera, with no instructional text rendered in the image.",
+    "prompt": "Use the uploaded reference photo and preserve the houseplant's identity, camera angle, pot shape, stem rhythm, leaf silhouette, split-leaf openings, proportions, distinctive damage or variegation, and most recognizable features, then transform the houseplant into an opalized moss artifact displayed in a misty glass conservatory workroom. Rebuild the plant from dense emerald moss, milky opal veins, blue-green fire flashes, mineralized leaf edges, dew beads, pearly inclusions, mossy stems, and a matte ceramic pot rimmed with opal chips. Keep the source plant recognizable while changing the surface, material logic, setting, and props into a tactile botanical specimen with a weathered wooden bench, brass plant tags, pruning scissors, soil crumbs, misted panes, and soft overcast greenhouse light. Avoid duplicate plants, broken leaf geometry, readable text, logos, watermark, and losing the source silhouette.\\n\\nSource photo needed: a clear photo of a houseplant.\\n\\nReusable fill-in-the-blank template: Use the uploaded reference photo and preserve the [SUBJECT]'s identity, camera angle, pot or base shape, pose/growth habit, silhouette, proportions, key markings, texture, distinctive damage or variegation, and recognizable features, then transform [SUBJECT] into an opalized moss artifact in [SETTING] with [MOOD] lighting. Keep the source recognizable while changing the material, surface texture, props, and environment into a cohesive botanical or museum-quality object. Avoid duplicate subjects, broken geometry, text/logo artifacts, placeholder marks, watermark, and losing recognizability.\\n\\nWhat to preserve: plant identity, camera angle, pot shape, stem rhythm, leaf silhouette, split-leaf openings, variegation or damage, proportions, and overall composition.\\n\\nWhat to change: convert leaves, stems, soil, pot details, and surrounding context into opalized moss, milky mineral veins, pearly inclusions, dew, specimen-workroom props, greenhouse mist, and soft conservation lighting.\\n\\nExample substitution: Upload a clear photo of a potted monstera; preserve its ceramic pot, leaning stems, split leaves, leaf holes, and camera angle, then turn it into an opalized moss artifact on a greenhouse workbench under soft overcast light.",
+    "image": "images/2026-06-08-midday-houseplant-as-opalized-moss-artifact.png",
+    "date": "2026-06-08",
+    "batch": "Daily Prompt",
+    "slot": "midday",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
