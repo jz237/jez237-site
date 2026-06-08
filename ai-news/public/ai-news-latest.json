@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-08T17:09:09.111537+00:00",
+  "updatedAt": "2026-06-08T18:00:01.931641+00:00",
   "items": [
     {
       "title": "Lean4Agent: Formal Modeling and Verification for Agent Workflow and Trajectory",
@@ -10,12 +10,156 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-08T17:09:14.554596+00:00",
+      "published": "2026-06-08T18:00:10.895721+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-08T17:09:09.111537+00:00",
+      "lastSeen": "2026-06-08T18:00:01.931641+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 5.06
+    },
+    {
+      "title": "Apple’s long-awaited AI Siri overhaul is finally here",
+      "url": "https://techcrunch.com/2026/06/08/apples-long-awaited-ai-siri-overhaul-is-finally-here",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "The idea behind the new \"Siri AI\" is to turn the assistant from a voice controlled assistant into an AI companion that can do a lot more.",
+      "image": "https://techcrunch.com/wp-content/uploads/2024/10/apple-siri-header.jpg?resize=1200%2C800",
+      "published": "2026-06-08T17:56:21+00:00",
+      "firstSeen": "2026-06-08T18:00:01.931641+00:00",
+      "lastSeen": "2026-06-08T18:00:01.931641+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.4881
+    },
+    {
+      "title": "Amazon is launching AI-generated custom merch",
+      "url": "https://www.theverge.com/news/945905/amazon-alexa-shopping-ai-generated-custom-merch-design-printing",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "Amazon is expanding its print-on-demand features to AI-generated designs created using Alexa for Shopping for products like T-shirts, water bottles, and hoodies. Shoppers can use text prompts to generate images that are then printed on to blanks for sale on Amazon. They can then share the link to the design so other people can buy [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/09/acastro_STK103__03.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
+      "published": "2026-06-08T17:52:51+00:00",
+      "firstSeen": "2026-06-08T18:00:01.931641+00:00",
+      "lastSeen": "2026-06-08T18:00:01.931641+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.4563
+    },
+    {
+      "title": "The UK Is Betting on a Billion-Dollar AI Supercomputer to Kick Its Addiction to US Tech",
+      "url": "https://www.wired.com/story/uk-supercomputer-investment-ai-homegrown-semiconductor",
+      "source": "Wired AI",
+      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "The British government thinks a state-backed infrastructure initiative will help supercharge homegrown chip startups.",
+      "image": "https://media.wired.com/photos/6a26d742255fdba4ebd668f3/master/pass/GettyImages-2267728396.jpg",
+      "published": "2026-06-08T17:44:28+00:00",
+      "firstSeen": "2026-06-08T18:00:01.931641+00:00",
+      "lastSeen": "2026-06-08T18:00:01.931641+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2821
+    },
+    {
+      "title": "WWDC 2026: Everything announced on Siri AI, iOS 27, Apple Intelligence and more",
+      "url": "https://techcrunch.com/2026/06/08/wwdc-2026-everything-announced-on-siri-ai-os-27-apple-intelligence-and-more",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Apple&#8217;s WWDC 2026 event kicked off this morning at 10 a.m. PT at Apple Park, starting a week full of expected announcements around Siri, iOS 27, Apple Intelligence and more, along with developer events and demos. This year&#8217;s event is particularly notable for a couple things. It marks CEO Tim Cook&#8217;s last with the company, [&#8230;]",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/wwdc-2026-apple-logo.jpg?resize=1200%2C682",
+      "published": "2026-06-08T17:42:26+00:00",
+      "firstSeen": "2026-06-08T18:00:01.931641+00:00",
+      "lastSeen": "2026-06-08T18:00:01.931641+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.3811
+    },
+    {
+      "title": "Apple announces Siri AI and its next generation of Apple Intelligence",
+      "url": "https://www.theverge.com/tech/942416/apple-siri-ai-update-wwdc",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "Two years after first revealing its plans for Apple Intelligence and a smarter Siri that never fully materialized, at WWDC, Apple just revealed a new set of AI features and a smarter, more personalized Siri. Apple calls Siri AI an \"entirely new version of Siri\" and says it's both more conversational and more capable than [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/wwdc-2026-the-verge-208.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C3.0313913964321%2C100%2C93.937217207136&amp%3Bw=1200",
+      "published": "2026-06-08T17:34:24+00:00",
+      "firstSeen": "2026-06-08T18:00:01.931641+00:00",
+      "lastSeen": "2026-06-08T18:00:01.931641+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.247
+    },
+    {
+      "title": "Meta Deletes Face-Recognition System From Its Smart Glasses App After WIRED Report",
+      "url": "https://www.wired.com/story/meta-removes-face-recognition-code-meta-ai-app-smart-glasses",
+      "source": "Wired AI",
+      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "The code WIRED identified is gone from the latest version of Meta AI, the companion app for the company’s smart glasses. Meta won’t say why or whether it’s coming back.",
+      "image": "https://media.wired.com/photos/6a26baa814f2ec6e95bd841b/master/pass/GettyImages-2235451108.jpg",
+      "published": "2026-06-08T17:31:11+00:00",
+      "firstSeen": "2026-06-08T18:00:01.931641+00:00",
+      "lastSeen": "2026-06-08T18:00:01.931641+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.3754
+    },
+    {
+      "title": "Trump orders the military to adopt AI faster, protect models from China, and never let a vendor pull the plug",
+      "url": "https://thenextweb.com/news/trump-orders-the-military-to-adopt-ai-faster-protect-models-from-china-and-never-let-a-vendor-pull-the-plug",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "President Donald Trump signed National Security Presidential Memorandum 11 on Friday, directing the US military and intelligence agencies to accelerate their adoption of advanced AI while protecting frontier models from theft by foreign adversaries. The directive replaces the Biden administration’s NSM-25, which had governed AI in national security since 2024, and adds a provision that no commercial [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/trump-ai-military-memo-autonomous-weapons.avif",
+      "published": "2026-06-08T17:01:54+00:00",
+      "firstSeen": "2026-06-08T18:00:01.931641+00:00",
+      "lastSeen": "2026-06-08T18:00:01.931641+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 3.5208
+    },
+    {
+      "title": "The growing divide between surface-level AI adoption and meaningful impact across safety-critical industries",
+      "url": "https://thenextweb.com/news/ai-adoption-divide-safety-critical-dan-macdonald",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Artificial intelligence has rapidly moved from experimentation to mainstream business adoption. Around 78% of organizations reported using AI in 2025, reflecting how quickly the technology has become embedded across business operations. Yet, only 25% of organizations said most of their AI initiatives achieved their expected return on investment, highlighting a growing gap between adoption and measurable impact. Against that [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/BIS-Safety-Software-CEO-Dan-MacDonald.avif",
+      "published": "2026-06-08T16:56:44+00:00",
+      "firstSeen": "2026-06-08T18:00:01.931641+00:00",
+      "lastSeen": "2026-06-08T18:00:01.931641+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.8182
+    },
+    {
+      "title": "The UK just signed an AI deal with ElevenLabs to make government services accessible in any language and any voice",
+      "url": "https://thenextweb.com/news/uk-elevenlabs-mou-voice-ai-public-services",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The UK government and ElevenLabs have signed a memorandum of understanding to explore how voice AI can improve public services, deepen safety research, and build AI talent in the UK. The MoU, signed by AI Minister Kanishka Narayan and ElevenLabs CEO Mateusz Staniszewski, was published on Sunday by the Department for Science, Innovation and Technology. ElevenLabs, which [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/uk-elevenlabs-mou-voice-ai-public-services.avif",
+      "published": "2026-06-08T16:47:50+00:00",
+      "firstSeen": "2026-06-08T18:00:01.931641+00:00",
+      "lastSeen": "2026-06-08T18:00:01.931641+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 3.5138
     },
     {
       "title": "NotebookLM&#8217;s Gemini 3.5 upgrade adds a cloud computer and help finding sources",
@@ -28,11 +172,11 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/NotebookLM-Welcome.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C3.4613147178592%2C100%2C93.077370564282&amp%3Bw=1200",
       "published": "2026-06-08T16:00:00+00:00",
       "firstSeen": "2026-06-08T16:16:07.017802+00:00",
-      "lastSeen": "2026-06-08T17:09:09.111537+00:00",
+      "lastSeen": "2026-06-08T18:00:01.931641+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 19.5253
+      "score": 19.5005
     },
     {
       "title": "Amazon now lets you design custom merch using AI",
@@ -45,10 +189,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/about-amazon-hero-ai-merch-hero-amazon-news-lt-060226.jpg?resize=1200%2C675",
       "published": "2026-06-08T15:49:12+00:00",
       "firstSeen": "2026-06-08T16:00:01.663535+00:00",
-      "lastSeen": "2026-06-08T17:09:09.111537+00:00",
+      "lastSeen": "2026-06-08T18:00:01.931641+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.35
+      "score": 3.3254
     },
     {
       "title": "7 best HRIS for growing companies: 2026 overview",
@@ -61,10 +205,10 @@
       "image": "https://media.thenextweb.com/2026/06/best-hris-growing-companies-2026.avif",
       "published": "2026-06-08T15:39:31+00:00",
       "firstSeen": "2026-06-08T16:16:07.017802+00:00",
-      "lastSeen": "2026-06-08T17:09:09.111537+00:00",
+      "lastSeen": "2026-06-08T18:00:01.931641+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.5053
+      "score": 3.4807
     },
     {
       "title": "WWDC 2026: What to expect, from Siri’s highly anticipated revamp to Apple Intelligence and iOS 27",
@@ -77,10 +221,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/Apple-WWDC26-event-branding_big.jpg.large_.jpg?w=980",
       "published": "2026-06-08T15:34:59+00:00",
       "firstSeen": "2026-06-08T16:00:01.663535+00:00",
-      "lastSeen": "2026-06-08T17:09:09.111537+00:00",
+      "lastSeen": "2026-06-08T18:00:01.931641+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3431
+      "score": 3.3186
     },
     {
       "title": "Healthcare’s $97bn staffing problem just won an AI training startup a $55M round",
@@ -93,10 +237,10 @@
       "image": "https://media.thenextweb.com/2026/06/stepful-55m-series-c.avif",
       "published": "2026-06-08T15:23:38+00:00",
       "firstSeen": "2026-06-08T16:16:07.017802+00:00",
-      "lastSeen": "2026-06-08T17:09:09.111537+00:00",
+      "lastSeen": "2026-06-08T18:00:01.931641+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0976
+      "score": 3.0732
     },
     {
       "title": "OpenAI Expands ChatGPT Lockdown Mode to Millions of Eligible Users",
@@ -109,10 +253,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/06/unnamed-44.png?f=jpeg",
       "published": "2026-06-08T15:21:16+00:00",
       "firstSeen": "2026-06-08T16:00:01.663535+00:00",
-      "lastSeen": "2026-06-08T17:09:09.111537+00:00",
+      "lastSeen": "2026-06-08T18:00:01.931641+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.1964
+      "score": 12.172
     },
     {
       "title": "The UK just collected billions in AI pledges on day one of London Tech Week",
@@ -125,10 +269,10 @@
       "image": "https://media.thenextweb.com/2026/06/prime-minister-sir-keir-starm-london-tech-week.avif",
       "published": "2026-06-08T14:58:49+00:00",
       "firstSeen": "2026-06-08T16:00:01.663535+00:00",
-      "lastSeen": "2026-06-08T17:09:09.111537+00:00",
+      "lastSeen": "2026-06-08T18:00:01.931641+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0856
+      "score": 2.0615
     },
     {
       "title": "South Korea’s AI Push Leans on Nvidia Infrastructure",
@@ -141,10 +285,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/06/korea-ai-infrastructure-1024x574.png?f=jpeg",
       "published": "2026-06-08T14:54:02+00:00",
       "firstSeen": "2026-06-08T16:00:01.663535+00:00",
-      "lastSeen": "2026-06-08T17:09:09.111537+00:00",
+      "lastSeen": "2026-06-08T18:00:01.931641+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.5833
+      "score": 4.5592
     },
     {
       "title": "Meta is dragging NSO back to court, saying the spyware firm never stopped targeting WhatsApp",
@@ -157,10 +301,10 @@
       "image": "https://media.thenextweb.com/2026/05/WhatsApp.avif",
       "published": "2026-06-08T14:39:56+00:00",
       "firstSeen": "2026-06-08T16:00:01.663535+00:00",
-      "lastSeen": "2026-06-08T17:09:09.111537+00:00",
+      "lastSeen": "2026-06-08T18:00:01.931641+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 0.0766
+      "score": 0.0527
     },
     {
       "title": "Wizz Air becomes Europe’s first budget airline to put Starlink on its planes",
@@ -173,10 +317,10 @@
       "image": "https://media.thenextweb.com/2026/06/wizzair-starlink.avif",
       "published": "2026-06-08T14:19:15+00:00",
       "firstSeen": "2026-06-08T16:00:01.663535+00:00",
-      "lastSeen": "2026-06-08T17:09:09.111537+00:00",
+      "lastSeen": "2026-06-08T18:00:01.931641+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0668
+      "score": 2.0431
     },
     {
       "title": "A former NASA chief is taking Quantum Space public at $1.2bn to build spacecraft for the next space race",
@@ -189,10 +333,10 @@
       "image": "https://media.thenextweb.com/2026/06/Quantum-Space.avif",
       "published": "2026-06-08T14:09:07+00:00",
       "firstSeen": "2026-06-08T15:00:01.579378+00:00",
-      "lastSeen": "2026-06-08T17:09:09.111537+00:00",
+      "lastSeen": "2026-06-08T18:00:01.931641+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.062
+      "score": 2.0385
     },
     {
       "title": "Microsoft’s AI chief says superintelligence is near, but won’t take your job",
@@ -205,10 +349,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/DCD-Mustafa-Suleyman.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.711631919237%2C100%2C78.576736161526&amp%3Bw=1200",
       "published": "2026-06-08T14:00:00+00:00",
       "firstSeen": "2026-06-08T15:00:01.579378+00:00",
-      "lastSeen": "2026-06-08T17:09:09.111537+00:00",
+      "lastSeen": "2026-06-08T18:00:01.931641+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.6678
+      "score": 3.6443
     },
     {
       "title": "Samsung Health Update Leaves Galaxy Watch Owners Waiting on Key AI Features",
@@ -221,10 +365,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/06/005-Samsung-Introduces-Next-Gen-Galaxy-Watch-Features-for-AI-Powered-Everyday-Health-Companion-Newsbody-copy.jpg?f=jpeg",
       "published": "2026-06-08T13:59:13+00:00",
       "firstSeen": "2026-06-08T16:00:01.663535+00:00",
-      "lastSeen": "2026-06-08T17:09:09.111537+00:00",
+      "lastSeen": "2026-06-08T18:00:01.931641+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1574
+      "score": 3.134
     },
     {
       "title": "Google orders chips from Intel and Nvidia is testing its tech, as TSMC’s grip on AI starts to strain",
@@ -237,10 +381,10 @@
       "image": "https://media.thenextweb.com/2026/04/Intel.avif",
       "published": "2026-06-08T13:34:50+00:00",
       "firstSeen": "2026-06-08T15:00:01.579378+00:00",
-      "lastSeen": "2026-06-08T17:09:09.111537+00:00",
+      "lastSeen": "2026-06-08T18:00:01.931641+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0461
+      "score": 2.0229
     },
     {
       "title": "Amazon’s billion-dollar Corning deal shows fibre is the new bottleneck in the AI build-out",
@@ -256,7 +400,7 @@
       "lastSeen": "2026-06-08T17:09:09.111537+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7385
+      "score": 2.7155
     },
     {
       "title": "The crash that vanished: control and emergence in a five-model economy",
@@ -272,7 +416,7 @@
       "lastSeen": "2026-06-08T17:09:09.111537+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3151
+      "score": 2.2921
     },
     {
       "title": "Britain’s Cosine rallies BT, HSBC, and BAE to build a “sovereign” AI model and cut its reliance on US tech",
@@ -288,7 +432,7 @@
       "lastSeen": "2026-06-08T17:09:09.111537+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0287
+      "score": 2.0059
     },
     {
       "title": "The US wants NATO allies to spend their new defence budgets ripping out Huawei",
@@ -304,7 +448,7 @@
       "lastSeen": "2026-06-08T17:09:09.111537+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0197
+      "score": 1.9972
     },
     {
       "title": "Visual Studio 2026 Brings AI Deeper Into Development and It’s 93% Off Right Now",
@@ -317,10 +461,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/01/Copy-of-Untitled-Design-7.png",
       "published": "2026-06-08T12:30:40+00:00",
       "firstSeen": "2026-04-28T14:00:01.148748+00:00",
-      "lastSeen": "2026-06-08T17:09:09.111537+00:00",
+      "lastSeen": "2026-06-08T18:00:01.931641+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.5169
+      "score": 4.4944
     },
     {
       "title": "Bending Spoons, the Milan firm behind Evernote and Vimeo, files for a US IPO",
@@ -336,7 +480,7 @@
       "lastSeen": "2026-06-08T16:00:01.663535+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1064
+      "score": 3.0841
     },
     {
       "title": "Building Pakistan Notice Helper: A Small AI Tool for a Very Local Safety Problem",
@@ -352,7 +496,7 @@
       "lastSeen": "2026-06-08T13:00:01.268947+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2776
+      "score": 2.2555
     },
     {
       "title": "AI is choosing which online stores you see, and it’s ignoring most of them",
@@ -368,7 +512,7 @@
       "lastSeen": "2026-06-08T16:00:01.663535+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.4936
+      "score": 4.4717
     },
     {
       "title": "Uber opens a London waitlist for Wayve robotaxis as the UK’s driverless race kicks off",
@@ -384,7 +528,7 @@
       "lastSeen": "2026-06-08T15:00:01.579378+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.6895
+      "score": 2.6676
     },
     {
       "title": "A UK startup says it can cut data centre network power by 81% by replacing every electrical switch with light",
@@ -400,7 +544,7 @@
       "lastSeen": "2026-06-08T15:00:01.579378+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9843
+      "score": 1.9625
     },
     {
       "title": "Nvidia and Hyundai go deeper on robotics, with Boston Dynamics’ Atlas at the centre",
@@ -416,7 +560,7 @@
       "lastSeen": "2026-06-08T15:00:01.579378+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.678
+      "score": 2.6564
     },
     {
       "title": "WWDC 2026: How to watch and what to expect",
@@ -429,10 +573,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/unnamed-8.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C18.517948191493%2C100%2C62.964103617014&amp%3Bw=1200",
       "published": "2026-06-08T11:00:00+00:00",
       "firstSeen": "2026-06-08T11:19:15.718980+00:00",
-      "lastSeen": "2026-06-08T17:09:09.111537+00:00",
+      "lastSeen": "2026-06-08T18:00:01.931641+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2872
+      "score": 3.2656
     },
     {
       "title": "Momfluencers Are Pitching AI as a Better ‘Coparent’ Than Men",
@@ -445,10 +589,10 @@
       "image": "https://media.wired.com/photos/6a2347d049872af07a400381/master/pass/AI-Momfluencers-Culture.jpg",
       "published": "2026-06-08T10:30:00+00:00",
       "firstSeen": "2026-06-08T11:00:02.097985+00:00",
-      "lastSeen": "2026-06-08T17:09:09.111537+00:00",
+      "lastSeen": "2026-06-08T18:00:01.931641+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.1044
+      "score": 6.0831
     },
     {
       "title": "Berlin’s GALVANY raises €10M to fix Germany’s broken heat-pump market, and it’s already profitable",
@@ -464,7 +608,7 @@
       "lastSeen": "2026-06-08T14:00:01.641240+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.314
+      "score": 2.2927
     },
     {
       "title": "Ghent’s Companion.energy raises €7.8M to automate enterprise energy in real time",
@@ -480,7 +624,7 @@
       "lastSeen": "2026-06-08T14:00:01.641240+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9527
+      "score": 1.9317
     },
     {
       "title": "Weis Markets adds Instacart AI-powered shopping carts to stores",
@@ -493,154 +637,10 @@
       "image": "",
       "published": "2026-06-08T10:00:00+00:00",
       "firstSeen": "2026-06-08T17:09:09.111537+00:00",
-      "lastSeen": "2026-06-08T17:09:09.111537+00:00",
+      "lastSeen": "2026-06-08T18:00:01.931641+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1498
-    },
-    {
-      "title": "PhysicsX hits $2.4bn valuation as Temasek leads $300m round for the AI startup that cuts simulation times from days to seconds",
-      "url": "https://thenextweb.com/news/physicsx-temasek-300m-series-c-ai-simulation",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "London-based PhysicsX has raised $300 million in a Series C round led by Singaporean sovereign wealth fund Temasek, more than doubling its valuation to $2.4 billion, less than a year after its Series B priced the company at just under $1 billion. The round was oversubscribed. Alongside Temasek, which first invested in PhysicsX during its [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/physicsx-temasek-300m-series-c-ai-simulation.avif",
-      "published": "2026-06-08T09:41:08+00:00",
-      "firstSeen": "2026-06-08T11:00:02.097985+00:00",
-      "lastSeen": "2026-06-08T14:00:01.641240+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.9439
-    },
-    {
-      "title": "The lawsuits that could give AI its Big Tobacco moment are already here",
-      "url": "https://thenextweb.com/news/ai-lawsuits-big-tobacco-moment-liability-children",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "In the 1990s, almost every US state sued the tobacco industry. The resulting settlements cost hundreds of billions of dollars and transformed how cigarettes were marketed, sold, and regulated. Senator Ed Markey said in March that Big Tech’s Big Tobacco moment has arrived. He was talking about social media. But the legal machinery he described is [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/04/Sam-altman-open-ai.avif",
-      "published": "2026-06-08T09:27:30+00:00",
-      "firstSeen": "2026-06-08T11:00:02.097985+00:00",
-      "lastSeen": "2026-06-08T13:00:01.268947+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.9383
-    },
-    {
-      "title": "A UK startup just raised $18.5 million to fly satellites where nobody else can",
-      "url": "https://thenextweb.com/news/neworbit-vleo-satellite-series-a-european-space",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Between commercial aircraft at 10km and conventional satellites at 500km lies a band of near-Earth space that has never been used commercially. Very low Earth orbit, or VLEO, sits at 200 to 300km, an altitude historically reserved for spy satellites and the International Space Station. Reading-based NewOrbit announced on Monday an oversubscribed $18.5 million Series A to [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/neworbit-vleo-satellite-series-a-european-space.avif",
-      "published": "2026-06-08T09:07:26+00:00",
-      "firstSeen": "2026-06-08T10:00:01.909700+00:00",
-      "lastSeen": "2026-06-08T13:00:01.268947+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.9301
-    },
-    {
-      "title": "JPMorgan poaches Nomura’s international AI strategy chief as Dimon doubles down on AI hiring",
-      "url": "https://thenextweb.com/news/jpmorgan-hires-nomura-ai-strategy-chief",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "JPMorgan Chase is hiring Nomura Holdings’ international head of artificial intelligence strategy, according to Bloomberg, as the largest US bank by assets accelerates its recruitment of AI specialists. Singapore-based Tahir Zafar, who joined Nomura in late 2023 and was promoted to his current role in March 2025, is expected to start around July after completing [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/jpmorgan-hires-nomura-ai-strategy-chief.avif",
-      "published": "2026-06-08T08:47:07+00:00",
-      "firstSeen": "2026-06-08T10:00:01.909700+00:00",
-      "lastSeen": "2026-06-08T12:00:01.739819+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.9219
-    },
-    {
-      "title": "The AI models finding 10,000 vulnerabilities are the same ones China is trying to copy. That is the problem.",
-      "url": "https://thenextweb.com/news/the-ai-models-finding-10000-vulnerabilities-are-the-same-ones-china-is-trying-to-copy-that-is-the-problem",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "In May, Google’s Threat Intelligence Group confirmed the first known case of an AI system discovering and weaponising a zero-day exploit that was then deployed in the wild. A criminal actor used a frontier model to find a two-factor authentication bypass, build a working exploit, and use it before any defender knew the vulnerability existed. That [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/AI-cybersecurity.avif",
-      "published": "2026-06-08T08:41:00+00:00",
-      "firstSeen": "2026-06-08T10:00:01.909700+00:00",
-      "lastSeen": "2026-06-08T12:00:01.739819+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.9194
-    },
-    {
-      "title": "Moonshot AI wants a $30bn valuation six months after being worth $4bn. That tells you everything about China’s AI funding race.",
-      "url": "https://thenextweb.com/news/moonshot-ai-kimi-30-billion-valuation-china-ai-race",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Moonshot AI, the Beijing-based developer of the Kimi chatbot, is seeking as much as $2 billion in a new funding round that would value the company at $30 billion, Bloomberg reported on Sunday. If the round closes at that target, it would mark a seven-fold increase in capitalisation since December, when the startup was valued at just [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/Moonshot-AI.avif",
-      "published": "2026-06-08T08:32:16+00:00",
-      "firstSeen": "2026-06-08T10:00:01.909700+00:00",
-      "lastSeen": "2026-06-08T12:00:01.739819+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.6159
-    },
-    {
-      "title": "South Korea’s AI chip boom is so strong it’s crushing the bond market",
-      "url": "https://thenextweb.com/news/korea-ai-chip-boom-bond-market-pressure",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The AI boom that has made Samsung and SK Hynix trillion-dollar companies and sent the Kospi up roughly 80% is doing something unusual to South Korea’s bond market: destroying it. Korean government bonds have lost 7.5% in 2026 in local-currency terms, the worst performance among 44 sovereign markets tracked by Bloomberg. The benchmark three-year yield has climbed [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/korea-ai-chip-boom-bond-market-pressure.avif",
-      "published": "2026-06-08T08:22:18+00:00",
-      "firstSeen": "2026-06-08T10:00:01.909700+00:00",
-      "lastSeen": "2026-06-08T12:00:01.739819+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.2619
-    },
-    {
-      "title": "Mexico unveils the Olinia Uno, an $8,600 government-backed electric vehicle designed for city streets",
-      "url": "https://thenextweb.com/news/mexico-olinia-uno-ev-prototype-sheinbaum",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Mexico’s government-backed electric vehicle project Olinia has unveiled its first prototype, a six-seat passenger vehicle called the Olinia Uno, at a ceremony where President Claudia Sheinbaum drove the car onto a stage inside a Mexican Air Force hangar north of Mexico City. The vehicle is priced at 150,000 pesos, roughly $8,600, and is designed for [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/mexico-olinia-uno-ev-prototype-sheinbaum.avif",
-      "published": "2026-06-08T08:01:52+00:00",
-      "firstSeen": "2026-06-08T09:00:01.392657+00:00",
-      "lastSeen": "2026-06-08T11:00:02.097985+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.9038
-    },
-    {
-      "title": "Nvidia locks in SK Hynix for the AI memory race as the chip industry’s “toughest bottleneck” gets its own multi-year deal",
-      "url": "https://thenextweb.com/news/nvidia-locks-in-sk-hynix-for-the-ai-memory-race-as-the-chip-industrys-toughest-bottleneck-gets-its-own-multi-year-deal",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Nvidia and SK Hynix have signed a multi-year agreement covering both the design and manufacture of next-generation memory chips for AI. The deal, announced on Sunday during Nvidia CEO Jensen Huang’s tour of South Korea, gives SK Hynix a formal co-development role in the high-bandwidth memory that will power Nvidia’s most advanced accelerators, starting with the Vera [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/Jensen-Huang-CEO-NVIDIA.avif",
-      "published": "2026-06-08T07:54:03+00:00",
-      "firstSeen": "2026-06-08T09:00:01.392657+00:00",
-      "lastSeen": "2026-06-08T11:00:02.097985+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.3007
+      "score": 3.1288
     },
     {
       "title": "The Life Scientific: Seth Berkley",
@@ -653,10 +653,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-01T20:00:00+00:00",
       "firstSeen": "2026-06-01T21:00:01.828388+00:00",
-      "lastSeen": "2026-06-08T17:09:09.111537+00:00",
+      "lastSeen": "2026-06-08T18:00:01.931641+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.2012
+      "score": 1.2009
     },
     {
       "title": "Dean Lomax on discovering ichthyosaurs and defying nay-sayers",
@@ -669,7 +669,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-26T08:30:00+00:00",
       "firstSeen": "2026-05-26T08:41:33.144051+00:00",
-      "lastSeen": "2026-06-08T17:09:09.111537+00:00",
+      "lastSeen": "2026-06-08T18:00:01.931641+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 1.1201
@@ -685,7 +685,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-25T20:00:00+00:00",
       "firstSeen": "2026-05-25T21:00:01.605108+00:00",
-      "lastSeen": "2026-06-08T17:09:09.111537+00:00",
+      "lastSeen": "2026-06-08T18:00:01.931641+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 0.2901
