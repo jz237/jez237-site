@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-08T01:00:01.418748+00:00",
+  "updatedAt": "2026-06-08T00:20:09.081371+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -9567,7 +9567,7 @@
     },
     "https://simonwillison.net/2026/Jun/7/datasette-agent-edit": {
       "image": "",
-      "checkedAt": "2026-06-08T01:00:01.418748+00:00"
+      "checkedAt": "2026-06-08T00:20:09.081371+00:00"
     }
   }
 }
