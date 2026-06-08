@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-08T17:00:01.808160+00:00",
+  "updatedAt": "2026-06-08T16:16:07.017802+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -9608,6 +9608,10 @@
     "https://www.techrepublic.com/article/news-samsung-health-watch-features": {
       "image": "https://assets.techrepublic.com/uploads/2026/06/005-Samsung-Introduces-Next-Gen-Galaxy-Watch-Features-for-AI-Powered-Everyday-Health-Companion-Newsbody-copy.jpg?f=jpeg",
       "checkedAt": "2026-06-08T16:00:01.663535+00:00"
+    },
+    "https://www.theverge.com/tech/944325/google-notebooklm-ai-gemini-update": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/NotebookLM-Welcome.png?quality=90&amp;strip=all&amp;crop=0%2C3.4613147178592%2C100%2C93.077370564282&amp;w=1200",
+      "checkedAt": "2026-06-08T16:16:07.017802+00:00"
     }
   }
 }

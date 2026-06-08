@@ -105,9 +105,9 @@
       },
       "heroImage": {
         "src": "media/computer-chronicle-week-1986-06-08.png",
-        "alt": "AI-generated vertical Computer Chronicle newspaper front page for the week of June 8-14, 1986 with a masthead, lead headline, columns, halftone computer images, and newspaper department boxes",
-        "caption": "Generated weekly newspaper front page for the June 8-14, 1986 issue; small body text is decorative newspaper texture.",
-        "confidence": "Generated front-page visual based on verified issue data"
+        "alt": "Rendered vertical Computer Chronicle newspaper front page for the week of June 8-14, 1986 with readable article headlines, sourced story text, and web-sourced images for Epson Equity, PageMaker, Super Mario Bros. 2, Top Gun, Chernobyl, Lotus, markets, and BBS coverage",
+        "caption": "Rendered weekly newspaper front page for the June 8-14, 1986 issue; visible stories and image choices are built from structured issue data.",
+        "confidence": "Deterministic front-page render based on verified issue data"
       },
       "editorNote": "This catch-up issue anchors on Sunday, June 8, 1986 and covers the historical week of June 8-14. The computer desk uses same-week trade coverage where exact Sunday computer wires are thin; movies and music use dated weekend/chart sources.",
       "morningLine": "Weekly Edition: IBM-compatible pricing keeps tightening, Macintosh desktop publishing stays loud, Nintendo's Japanese shelves are busy, Top Gun owns the weekend, and rock radio turns toward Invisible Touch.",
@@ -115,16 +115,133 @@
         "headline": "IBM-Compatible Bargain Race Keeps the Office Desk Busy",
         "summary": "The June 9 InfoWorld issue put low-priced IBM-compatible machines back in the buyer's notebook, including Epson coverage that captured the week’s real office-computer pressure: more PC-standard speed for less money, while software buyers kept measuring everything against the IBM-compatible desk.",
         "image": {
-          "src": "media/clipping-lotus-spreadsheet-1986.webp",
-          "alt": "Period-style clipping of a 1986 IBM-compatible computer desk with spreadsheet printouts, a CRT monitor, floppies, and dot-matrix paper",
-          "caption": "Spreadsheet software moved the business desk toward IBM-compatible PCs.",
-          "confidence": "Period-style visual"
+          "src": "media/web/epson-equity-i-1987.jpg",
+          "alt": "Epson Equity I computer drawing from a 1987 advertisement, used as a web-sourced visual for same-week Epson Equity IBM-compatible coverage",
+          "caption": "Epson's Equity line made the low-price IBM-compatible fight visible.",
+          "confidence": "Web-sourced Wikimedia Commons image; article source is InfoWorld, June 9, 1986"
         },
         "confidence": "Same-week trade issue anchored to the June 8-14 weekly desk",
         "sourceRefs": [
           0
         ]
       },
+      "frontPageStories": [
+        {
+          "label": "IBM Compatibles",
+          "headline": "Epson Equity III Presses the Clone Price Fight",
+          "summary": "InfoWorld's June 9 issue put Epson's Equity III in the low-priced IBM-compatible race, the kind of office-buying story that turned compatibility, expansion slots, printer support, and monthly budget math into front-page computer news.",
+          "image": {
+            "src": "media/web/epson-equity-i-1987.jpg",
+            "alt": "Epson Equity I computer drawing from a 1987 advertisement, used as a web-sourced visual for Epson Equity clone coverage",
+            "caption": "Epson's Equity family stood in for the clone-price argument on small-office desks.",
+            "confidence": "Web-sourced Wikimedia Commons image; article source is InfoWorld, June 9, 1986"
+          },
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "label": "Desktop Publishing",
+          "headline": "PageMaker Keeps Macintosh in the Layout Room",
+          "summary": "The same InfoWorld issue kept Macintosh desktop publishing in the trade conversation. PageMaker was not just another application; it made the Mac look like a practical page-layout workstation for newsletters, brochures, and small publishing desks.",
+          "image": {
+            "src": "media/web/macintosh-plus-cropped.jpg",
+            "alt": "Apple Macintosh Plus all-in-one computer, web-sourced visual for Macintosh PageMaker desktop publishing coverage",
+            "caption": "Macintosh hardware gave PageMaker its compact publishing desk.",
+            "confidence": "Web-sourced Wikimedia Commons image; article source is InfoWorld, June 9, 1986"
+          },
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "label": "Games",
+          "headline": "Super Mario Bros. 2 Moves Onto Disk",
+          "summary": "Nintendo's Japanese Super Mario Bros. 2, released for the Famicom Disk System on June 3, gave the week a concrete game-shelf hook: familiar plumber, new disk format, and a difficulty jump that would become legend.",
+          "image": {
+            "src": "media/web/famicom-disk-system.jpg",
+            "alt": "Nintendo Famicom with the Disk System add-on, used as a web-sourced visual for Super Mario Bros. 2's June 1986 Famicom Disk System release",
+            "caption": "The Famicom Disk System carried Nintendo's harder sequel in Japan.",
+            "confidence": "Web-sourced public-domain Wikimedia Commons image; release source is Arcade History"
+          },
+          "sourceRefs": [
+            9
+          ]
+        },
+        {
+          "label": "Movies",
+          "headline": "Top Gun Owns the June 6-8 Weekend",
+          "summary": "The weekend box office still belonged to Top Gun, with the June 6-8 domestic chart keeping fighter jets, soundtracks, and summer swagger in the public conversation beside the computer trade news.",
+          "image": {
+            "src": "media/web/f14a-vf84-1986.jpg",
+            "alt": "U.S. Navy F-14A Tomcat of VF-84 in flight in 1986, used as a web-sourced visual for Top Gun's June 6-8 box-office story",
+            "caption": "An F-14A Tomcat gives the box-office story its period silhouette.",
+            "confidence": "Web-sourced U.S. Defense Imagery/Wikimedia Commons image; box-office source is The Numbers"
+          },
+          "sourceRefs": [
+            16
+          ]
+        },
+        {
+          "label": "World",
+          "headline": "Chernobyl Housing Deadline Stays on the Wire",
+          "summary": "UPI's June 6 report on housing Chernobyl evacuees kept the April disaster in the June news cycle. For the week of June 8, the story was less explosion than aftermath: shelter, deadlines, and state pressure.",
+          "image": {
+            "src": "media/web/chernobyl-reactor-1986.jpg",
+            "alt": "Destroyed Chernobyl Reactor 4 photographed from a helicopter in 1986, used as a web-sourced visual for June 1986 Chernobyl evacuee housing coverage",
+            "caption": "Chernobyl remained a live political and human story in June.",
+            "confidence": "Web-sourced IAEA/Wikimedia Commons image; article source is UPI Archives"
+          },
+          "sourceRefs": [
+            13
+          ]
+        },
+        {
+          "label": "Business Software",
+          "headline": "Lotus Leaves VisiCalc in the Rearview Mirror",
+          "summary": "The software desk reads the clone story through spreadsheets: by 1986, Lotus 1-2-3 was the standard buyers expected PC compatibles to run, while VisiCalc had become a first-wave name from a much earlier microcomputer moment.",
+          "image": {
+            "src": "media/web/epson-equity-i-1987.jpg",
+            "alt": "Epson Equity I computer drawing used as a web-sourced visual for IBM-compatible spreadsheet software coverage",
+            "caption": "The PC-compatible fight was really a software fight in office clothes.",
+            "confidence": "Web-sourced Wikimedia Commons image; period software source is Lotus/VisiCalc reference"
+          },
+          "sourceRefs": [
+            1
+          ]
+        },
+        {
+          "label": "Markets",
+          "headline": "Friday Close Carries the Business Desk",
+          "summary": "With U.S. markets closed over the weekend, the issue carries Friday's record Dow close and Nasdaq near 400 as business context, not as a claim of Saturday trading.",
+          "image": {
+            "src": "media/web/macintosh-plus-cropped.jpg",
+            "alt": "Macintosh Plus computer used as a web-sourced visual for the market and business-computing context",
+            "caption": "The business page sits beside the machines people were buying.",
+            "confidence": "Web-sourced Wikimedia Commons image; market sources are Dow and Nasdaq references"
+          },
+          "sourceRefs": [
+            3,
+            2
+          ]
+        },
+        {
+          "label": "Modem Desk",
+          "headline": "Weekend Boards Trade Hints and Scores",
+          "summary": "The BBS note turns the exact date into a real weekend scene: callers with more time to dial in, compare game hints, swap C64 scores, and talk new Famicom releases through a phone-line social network.",
+          "image": {
+            "src": "media/clipping-bbs-modem-1986.webp",
+            "alt": "Period-style clipping of a 1980s computer terminal, modem, telephone handset, floppy disks, and notes",
+            "caption": "Weekend computer talk moved through modems as much as magazines.",
+            "confidence": "Period-style visual tied to the issue's same-week BBS digest"
+          },
+          "sourceRefs": [
+            9,
+            4,
+            7
+          ]
+        }
+      ],
       "computerItems": [
         {
           "label": "IBM compatibles",
