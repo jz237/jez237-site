@@ -104,10 +104,10 @@
         }
       },
       "heroImage": {
-        "src": "media/retro-computer-desk-1986.webp",
-        "alt": "A period-style 1980s personal computer desk with CRT monitor, keyboard, floppy disks, printer paper, and computer magazines",
-        "caption": "Weekly issue-front visual for the June 8-14, 1986 desk.",
-        "confidence": "Period-style visual reused for manual catch-up issue"
+        "src": "media/computer-chronicle-week-1986-06-08.png",
+        "alt": "AI-generated vertical Computer Chronicle newspaper front page for the week of June 8-14, 1986 with a masthead, lead headline, columns, halftone computer images, and newspaper department boxes",
+        "caption": "Generated weekly newspaper front page for the June 8-14, 1986 issue; small body text is decorative newspaper texture.",
+        "confidence": "Generated front-page visual based on verified issue data"
       },
       "editorNote": "This catch-up issue anchors on Sunday, June 8, 1986 and covers the historical week of June 8-14. The computer desk uses same-week trade coverage where exact Sunday computer wires are thin; movies and music use dated weekend/chart sources.",
       "morningLine": "Weekly Edition: IBM-compatible pricing keeps tightening, Macintosh desktop publishing stays loud, Nintendo's Japanese shelves are busy, Top Gun owns the weekend, and rock radio turns toward Invisible Touch.",
