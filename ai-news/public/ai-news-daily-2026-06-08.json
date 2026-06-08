@@ -1,7 +1,23 @@
 {
   "date": "2026-06-08",
-  "updatedAt": "2026-06-08T15:00:01.579378+00:00",
+  "updatedAt": "2026-06-08T16:00:01.663535+00:00",
   "items": [
+    {
+      "title": "OpenAI Expands ChatGPT Lockdown Mode to Millions of Eligible Users",
+      "url": "https://www.techrepublic.com/article/news-openai-expands-chatgpt-lockdown-mode-millions-users",
+      "source": "TechRepublic AI",
+      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "OpenAI is expanding ChatGPT Lockdown Mode to more users, limiting web-connected tools to reduce the risks of prompt injection and data leakage.\nThe post OpenAI Expands ChatGPT Lockdown Mode to Millions of Eligible Users appeared first on TechRepublic.",
+      "image": "https://assets.techrepublic.com/uploads/2026/06/unnamed-44.png?f=jpeg",
+      "published": "2026-06-08T15:21:16+00:00",
+      "firstSeen": "2026-06-08T16:00:01.663535+00:00",
+      "lastSeen": "2026-06-08T16:00:01.663535+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 12.2304
+    },
     {
       "title": "Momfluencers Are Pitching AI as a Better ‘Coparent’ Than Men",
       "url": "https://www.wired.com/story/momfluencers-are-pitching-ai-as-a-better-coparent-than-men",
@@ -13,10 +29,10 @@
       "image": "https://media.wired.com/photos/6a2347d049872af07a400381/master/pass/AI-Momfluencers-Culture.jpg",
       "published": "2026-06-08T10:30:00+00:00",
       "firstSeen": "2026-06-08T11:00:02.097985+00:00",
-      "lastSeen": "2026-06-08T15:00:01.579378+00:00",
+      "lastSeen": "2026-06-08T16:00:01.663535+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.1607
+      "score": 6.1341
     },
     {
       "title": "The Open Source Community is backing OpenEnv for Agentic RL",
@@ -29,26 +45,42 @@
       "image": "https://huggingface.co/blog/assets/openenv/thumbnail_expansion.png",
       "published": "2026-06-08T00:00:00+00:00",
       "firstSeen": "2026-06-08T14:00:01.641240+00:00",
-      "lastSeen": "2026-06-08T15:00:01.579378+00:00",
+      "lastSeen": "2026-06-08T16:00:01.663535+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.4552
+      "score": 5.4353
     },
     {
-      "title": "CrowdMath: A Dataset of Crowdsourced Mathematical Research Discussions",
-      "url": "https://llm-stats.com/ai-news",
-      "source": "LLM Stats AI News",
-      "sourceUrl": "https://llm-stats.com/ai-news",
-      "sourceWeight": 0.9,
+      "title": "South Korea’s AI Push Leans on Nvidia Infrastructure",
+      "url": "https://www.techrepublic.com/article/news-nvidia-ai-deals-apac-south-korea",
+      "source": "TechRepublic AI",
+      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
+      "sourceWeight": 0.75,
       "category": "AI",
-      "summary": "",
-      "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-08T15:00:11.082227+00:00",
-      "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-08T15:00:01.579378+00:00",
+      "summary": "South Korea’s June 2026 Nvidia announcements show how sovereign AI infrastructure is moving from government ambition to corporate buildout, with SK, Naver, LG, Hyundai and Doosan tying cloud, memory, robotics and manufacturing plans to Nvidia’s platform.\nThe post South Korea’s AI Push Leans on Nvidia Infrastructure appeared first on TechRepublic.",
+      "image": "https://assets.techrepublic.com/uploads/2026/06/korea-ai-infrastructure-1024x574.png?f=jpeg",
+      "published": "2026-06-08T14:54:02+00:00",
+      "firstSeen": "2026-06-08T16:00:01.663535+00:00",
+      "lastSeen": "2026-06-08T16:00:01.663535+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.76
+      "score": 4.6169
+    },
+    {
+      "title": "Visual Studio 2026 Brings AI Deeper Into Development and It’s 93% Off Right Now",
+      "url": "https://www.techrepublic.com/article/microsoft-visual-studio-professional-2026",
+      "source": "TechRepublic AI",
+      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Microsoft's latest 64-bit IDE adds AI-assisted coding, faster performance, and advanced collaboration tools.\nThe post Visual Studio 2026 Brings AI Deeper Into Development and It’s 93% Off Right Now appeared first on TechRepublic.",
+      "image": "https://assets.techrepublic.com/uploads/2026/01/Copy-of-Untitled-Design-7.png",
+      "published": "2026-06-08T12:30:40+00:00",
+      "firstSeen": "2026-04-28T14:00:01.148748+00:00",
+      "lastSeen": "2026-06-08T16:00:01.663535+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.5484
     },
     {
       "title": "AI is choosing which online stores you see, and it’s ignoring most of them",
@@ -61,10 +93,10 @@
       "image": "https://media.thenextweb.com/2026/06/ai-choosing-online-stores-ignoring-most-recomaze.avif",
       "published": "2026-06-08T11:37:58+00:00",
       "firstSeen": "2026-06-08T13:00:01.268947+00:00",
-      "lastSeen": "2026-06-08T15:00:01.579378+00:00",
+      "lastSeen": "2026-06-08T16:00:01.663535+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.5518
+      "score": 4.5243
     },
     {
       "title": "Nvidia locks in SK Hynix for the AI memory race as the chip industry’s “toughest bottleneck” gets its own multi-year deal",
@@ -80,7 +112,7 @@
       "lastSeen": "2026-06-08T11:00:02.097985+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.3531
+      "score": 4.3284
     },
     {
       "title": "Microsoft’s AI chief says superintelligence is near, but won’t take your job",
@@ -93,10 +125,42 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/DCD-Mustafa-Suleyman.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.711631919237%2C100%2C78.576736161526&amp%3Bw=1200",
       "published": "2026-06-08T14:00:00+00:00",
       "firstSeen": "2026-06-08T15:00:01.579378+00:00",
-      "lastSeen": "2026-06-08T15:00:01.579378+00:00",
+      "lastSeen": "2026-06-08T16:00:01.663535+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.7299
+      "score": 3.7005
+    },
+    {
+      "title": "Amazon now lets you design custom merch using AI",
+      "url": "https://techcrunch.com/2026/06/08/amazon-now-lets-you-design-custom-merch-using-ai",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "A new feature in the Amazon Shopping app allows users to generate designs with Alexa, then print them on products like T-shirts, hoodies, and tumblers.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/about-amazon-hero-ai-merch-hero-amazon-news-lt-060226.jpg?resize=1200%2C675",
+      "published": "2026-06-08T15:49:12+00:00",
+      "firstSeen": "2026-06-08T16:00:01.663535+00:00",
+      "lastSeen": "2026-06-08T16:00:01.663535+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.3845
+    },
+    {
+      "title": "WWDC 2026: What to expect, from Siri’s highly anticipated revamp to Apple Intelligence and iOS 27",
+      "url": "https://techcrunch.com/2026/06/08/wwdc-2026-what-to-expect-from-siris-highly-anticipated-revamp-to-apple-intelligence-and-ios-27",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Apple's WWDC nears: Here's what you can look forward to.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/Apple-WWDC26-event-branding_big.jpg.large_.jpg?w=980",
+      "published": "2026-06-08T15:34:59+00:00",
+      "firstSeen": "2026-06-08T16:00:01.663535+00:00",
+      "lastSeen": "2026-06-08T16:00:01.663535+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.3773
     },
     {
       "title": "NVIDIA and LG Group Build an AI Factory to Advance Physical AI, Mobility and AI Infrastructure",
@@ -109,10 +173,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/kr-visit-lg-group-1920x1080-no-credit.png",
       "published": "2026-06-08T03:00:50+00:00",
       "firstSeen": "2026-06-08T04:00:01.565319+00:00",
-      "lastSeen": "2026-06-08T15:00:01.579378+00:00",
+      "lastSeen": "2026-06-08T16:00:01.663535+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3785
+      "score": 3.3569
     },
     {
       "title": "WWDC 2026: How to watch and what to expect",
@@ -125,74 +189,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/unnamed-8.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C18.517948191493%2C100%2C62.964103617014&amp%3Bw=1200",
       "published": "2026-06-08T11:00:00+00:00",
       "firstSeen": "2026-06-08T11:19:15.718980+00:00",
-      "lastSeen": "2026-06-08T15:00:01.579378+00:00",
+      "lastSeen": "2026-06-08T16:00:01.663535+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3443
-    },
-    {
-      "title": "Bending Spoons, the Milan firm behind Evernote and Vimeo, files for a US IPO",
-      "url": "https://thenextweb.com/news/bending-spoons-us-ipo-nasdaq-filing",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Bending Spoons does not build many apps. It buys them, fixes the finances, and runs them. Now it wants Wall Street to buy a piece of the machine. The Milan-based group behind Evernote, WeTransfer, and Vimeo has filed for a US initial public offering, submitting a Form F-1 to the Securities and Exchange Commission. It [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/bending-spoons-milan-office.avif",
-      "published": "2026-06-08T12:06:55+00:00",
-      "firstSeen": "2026-06-08T13:00:01.268947+00:00",
-      "lastSeen": "2026-06-08T15:00:01.579378+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.1653
-    },
-    {
-      "title": "Spotify is licensing live concert video and reserving tickets for superfans",
-      "url": "https://thenextweb.com/news/spotify-live-concert-video-tickets-live-nation",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Spotify has approached concert promoters about licensing the rights to stream live video from music festivals, according to Bloomberg, as the Swedish streaming company pushes to become a broader hub for the live music economy. The company has already started adding footage from live events, including a Dua Lipa show in Mexico City. The live [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/spotify-live-concert-video-tickets-live-nation.avif",
-      "published": "2026-06-08T07:43:38+00:00",
-      "firstSeen": "2026-06-08T09:00:01.392657+00:00",
-      "lastSeen": "2026-06-08T11:00:02.097985+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.0488
-    },
-    {
-      "title": "Amazon’s billion-dollar Corning deal shows fibre is the new bottleneck in the AI build-out",
-      "url": "https://thenextweb.com/news/amazon-corning-fibre-ai-data-centres",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The AI boom runs on chips and electricity. It also runs on glass. Amazon is paying Corning billions of dollars for optical fibre to wire up its rapidly expanding US data centres, the two companies said on Monday. The multi-year agreement will create about 1,000 jobs at Corning’s North Carolina factories, though neither side disclosed [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/Corning-factory-optical-fibre.avif",
-      "published": "2026-06-08T13:18:15+00:00",
-      "firstSeen": "2026-06-08T15:00:01.579378+00:00",
-      "lastSeen": "2026-06-08T15:00:01.579378+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.7994
-    },
-    {
-      "title": "Uber opens a London waitlist for Wayve robotaxis as the UK’s driverless race kicks off",
-      "url": "https://thenextweb.com/news/uber-wayve-london-robotaxi-waitlist",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "London’s robotaxi era is starting with a sign-up form. Uber has opened a waitlist for Londoners who want to ride in a self-driving car, the clearest sign yet that driverless taxis are about to reach the capital’s streets. The rides will be powered by Wayve, the London-based self-driving startup, under a partnership in which Uber [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/uber-wayve-london-robotaxi-waitlist.avif",
-      "published": "2026-06-08T11:28:27+00:00",
-      "firstSeen": "2026-06-08T13:00:01.268947+00:00",
-      "lastSeen": "2026-06-08T15:00:01.579378+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.7474
+      "score": 3.3173
     }
   ],
   "errors": [

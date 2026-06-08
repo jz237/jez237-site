@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-08T15:00:01.579378+00:00",
+  "updatedAt": "2026-06-08T16:00:01.663535+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -9588,6 +9588,26 @@
     "https://www.theverge.com/podcast/944138/microsoft-ai-ceo-mustafa-suleyman-superintelligence-agi-openai-automation": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/DCD-Mustafa-Suleyman.png?quality=90&amp;strip=all&amp;crop=0%2C10.711631919237%2C100%2C78.576736161526&amp;w=1200",
       "checkedAt": "2026-06-08T15:00:01.579378+00:00"
+    },
+    "https://techcrunch.com/2026/06/08/amazon-now-lets-you-design-custom-merch-using-ai": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/about-amazon-hero-ai-merch-hero-amazon-news-lt-060226.jpg?resize=1200,675",
+      "checkedAt": "2026-06-08T16:00:01.663535+00:00"
+    },
+    "https://techcrunch.com/2026/06/08/wwdc-2026-what-to-expect-from-siris-highly-anticipated-revamp-to-apple-intelligence-and-ios-27": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/Apple-WWDC26-event-branding_big.jpg.large_.jpg?w=980",
+      "checkedAt": "2026-06-08T16:00:01.663535+00:00"
+    },
+    "https://www.techrepublic.com/article/news-openai-expands-chatgpt-lockdown-mode-millions-users": {
+      "image": "https://assets.techrepublic.com/uploads/2026/06/unnamed-44.png?f=jpeg",
+      "checkedAt": "2026-06-08T16:00:01.663535+00:00"
+    },
+    "https://www.techrepublic.com/article/news-nvidia-ai-deals-apac-south-korea": {
+      "image": "https://assets.techrepublic.com/uploads/2026/06/korea-ai-infrastructure-1024x574.png?f=jpeg",
+      "checkedAt": "2026-06-08T16:00:01.663535+00:00"
+    },
+    "https://www.techrepublic.com/article/news-samsung-health-watch-features": {
+      "image": "https://assets.techrepublic.com/uploads/2026/06/005-Samsung-Introduces-Next-Gen-Galaxy-Watch-Features-for-AI-Powered-Everyday-Health-Companion-Newsbody-copy.jpg?f=jpeg",
+      "checkedAt": "2026-06-08T16:00:01.663535+00:00"
     }
   }
 }
