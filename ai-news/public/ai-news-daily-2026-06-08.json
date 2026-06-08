@@ -1,6 +1,6 @@
 {
   "date": "2026-06-08",
-  "updatedAt": "2026-06-08T11:00:02.097985+00:00",
+  "updatedAt": "2026-06-08T11:19:15.718980+00:00",
   "items": [
     {
       "title": "Momfluencers Are Pitching AI as a Better ‘Coparent’ Than Men",
@@ -13,10 +13,10 @@
       "image": "https://media.wired.com/photos/6a2347d049872af07a400381/master/pass/AI-Momfluencers-Culture.jpg",
       "published": "2026-06-08T10:30:00+00:00",
       "firstSeen": "2026-06-08T11:00:02.097985+00:00",
-      "lastSeen": "2026-06-08T11:00:02.097985+00:00",
+      "lastSeen": "2026-06-08T11:19:15.718980+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.2748
+      "score": 6.2652
     },
     {
       "title": "Nvidia locks in SK Hynix for the AI memory race as the chip industry’s “toughest bottleneck” gets its own multi-year deal",
@@ -32,7 +32,7 @@
       "lastSeen": "2026-06-08T11:00:02.097985+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.4592
+      "score": 4.4503
     },
     {
       "title": "NVIDIA and LG Group Build an AI Factory to Advance Physical AI, Mobility and AI Infrastructure",
@@ -45,10 +45,26 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/kr-visit-lg-group-1920x1080-no-credit.png",
       "published": "2026-06-08T03:00:50+00:00",
       "firstSeen": "2026-06-08T04:00:01.565319+00:00",
-      "lastSeen": "2026-06-08T11:00:02.097985+00:00",
+      "lastSeen": "2026-06-08T11:19:15.718980+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.4711
+      "score": 3.4633
+    },
+    {
+      "title": "WWDC 2026: How to watch and what to expect",
+      "url": "https://www.theverge.com/tech/944099/wwdc-2026-how-to-watch",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "Apple's biggest event of the year is nearly here. The company's Worldwide Developers Conference will spotlight updates to iOS, macOS, and all of Apple's other operating systems, and this year's event could also include a major overhaul for Siri. Here's how you can watch along live. When WWDC will happen and where you can watch [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/unnamed-8.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C18.517948191493%2C100%2C62.964103617014&amp%3Bw=1200",
+      "published": "2026-06-08T11:00:00+00:00",
+      "firstSeen": "2026-06-08T11:19:15.718980+00:00",
+      "lastSeen": "2026-06-08T11:19:15.718980+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.4502
     },
     {
       "title": "Spotify is licensing live concert video and reserving tickets for superfans",
@@ -64,7 +80,23 @@
       "lastSeen": "2026-06-08T11:00:02.097985+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1544
+      "score": 3.1455
+    },
+    {
+      "title": "Nvidia and Hyundai go deeper on robotics, with Boston Dynamics’ Atlas at the centre",
+      "url": "https://thenextweb.com/news/nvidia-hyundai-robotics-boston-dynamics-physical-ai",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The lobby of Hyundai’s Seoul headquarters now waters its own plants. On Monday it was also handling security and deliveries, a row of robots laid on for one important visitor: Jensen Huang. Nvidia’s chief executive was in the South Korean capital to deepen the chipmaker’s alliance with Hyundai Motor Group, and the pitch on display [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/Jensen-Huang-CEO-NVIDIA.avif",
+      "published": "2026-06-08T11:01:50+00:00",
+      "firstSeen": "2026-06-08T11:19:15.718980+00:00",
+      "lastSeen": "2026-06-08T11:19:15.718980+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.8412
     },
     {
       "title": "Moonshot AI wants a $30bn valuation six months after being worth $4bn. That tells you everything about China’s AI funding race.",
@@ -77,10 +109,26 @@
       "image": "https://media.thenextweb.com/2026/05/Moonshot-AI.avif",
       "published": "2026-06-08T08:32:16+00:00",
       "firstSeen": "2026-06-08T10:00:01.909700+00:00",
-      "lastSeen": "2026-06-08T11:00:02.097985+00:00",
+      "lastSeen": "2026-06-08T11:19:15.718980+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7773
+      "score": 2.7682
+    },
+    {
+      "title": "Berlin’s GALVANY raises €10M to fix Germany’s broken heat-pump market, and it’s already profitable",
+      "url": "https://thenextweb.com/news/galvany-seed-funding-heat-pump-platform-germany",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Germany has no shortage of heat pumps on paper. What it lacks is a way to get them sold, installed, subsidised, and paid off without the whole thing falling apart somewhere in the middle. GALVANY, a Berlin startup that runs the entire heat-pump journey from sale to installation to ongoing energy management, has raised €10mn [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/galvany-seed-funding-heat-pump-platform-germany.avif",
+      "published": "2026-06-08T10:29:03+00:00",
+      "firstSeen": "2026-06-08T11:19:15.718980+00:00",
+      "lastSeen": "2026-06-08T11:19:15.718980+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.4747
     },
     {
       "title": "South Korea’s AI chip boom is so strong it’s crushing the bond market",
@@ -93,10 +141,10 @@
       "image": "https://media.thenextweb.com/2026/06/korea-ai-chip-boom-bond-market-pressure.avif",
       "published": "2026-06-08T08:22:18+00:00",
       "firstSeen": "2026-06-08T10:00:01.909700+00:00",
-      "lastSeen": "2026-06-08T11:00:02.097985+00:00",
+      "lastSeen": "2026-06-08T11:19:15.718980+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.4225
+      "score": 2.4135
     },
     {
       "title": "Ruida Wang, Jerry Huang, Pengcheng Wang, Xuanqing Liu, Luyang Kong, Tong Zhang",
@@ -107,9 +155,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-08T11:00:10.853846+00:00",
+      "published": "2026-06-08T11:19:19.743600+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-08T11:00:02.097985+00:00",
+      "lastSeen": "2026-06-08T11:19:15.718980+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
@@ -125,74 +173,26 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/london-tech-week-2026-key-visual.jpeg",
       "published": "2026-06-08T06:00:57+00:00",
       "firstSeen": "2026-06-08T06:05:47.103038+00:00",
-      "lastSeen": "2026-06-08T11:00:02.097985+00:00",
+      "lastSeen": "2026-06-08T11:19:15.718980+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1478
+      "score": 2.1393
     },
     {
-      "title": "PhysicsX hits $2.4bn valuation as Temasek leads $300m round for the AI startup that cuts simulation times from days to seconds",
-      "url": "https://thenextweb.com/news/physicsx-temasek-300m-series-c-ai-simulation",
+      "title": "Ghent’s Companion.energy raises €7.8M to automate enterprise energy in real time",
+      "url": "https://thenextweb.com/news/companion-energy-seed-funding-real-time-energy",
       "source": "The Next Web",
       "sourceUrl": "https://thenextweb.com/feed",
       "sourceWeight": 0.75,
       "category": "AI",
-      "summary": "London-based PhysicsX has raised $300 million in a Series C round led by Singaporean sovereign wealth fund Temasek, more than doubling its valuation to $2.4 billion, less than a year after its Series B priced the company at just under $1 billion. The round was oversubscribed. Alongside Temasek, which first invested in PhysicsX during its [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/physicsx-temasek-300m-series-c-ai-simulation.avif",
-      "published": "2026-06-08T09:41:08+00:00",
-      "firstSeen": "2026-06-08T11:00:02.097985+00:00",
-      "lastSeen": "2026-06-08T11:00:02.097985+00:00",
+      "summary": "The seed round, led by Realyze Ventures and Pi Labs, will fund expansion into Germany and Spain as volatile power markets push large industrial firms past their spreadsheets. Electricity used to move with the seasons. Now it moves by the minute, and the spreadsheets that large industrial firms still rely on to manage it cannot [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/companion-energy-seed-funding-real-time-energy.avif",
+      "published": "2026-06-08T10:02:12+00:00",
+      "firstSeen": "2026-06-08T11:19:15.718980+00:00",
+      "lastSeen": "2026-06-08T11:19:15.718980+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1105
-    },
-    {
-      "title": "The lawsuits that could give AI its Big Tobacco moment are already here",
-      "url": "https://thenextweb.com/news/ai-lawsuits-big-tobacco-moment-liability-children",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "In the 1990s, almost every US state sued the tobacco industry. The resulting settlements cost hundreds of billions of dollars and transformed how cigarettes were marketed, sold, and regulated. Senator Ed Markey said in March that Big Tech’s Big Tobacco moment has arrived. He was talking about social media. But the legal machinery he described is [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/04/Sam-altman-open-ai.avif",
-      "published": "2026-06-08T09:27:30+00:00",
-      "firstSeen": "2026-06-08T11:00:02.097985+00:00",
-      "lastSeen": "2026-06-08T11:00:02.097985+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.1039
-    },
-    {
-      "title": "A UK startup just raised $18.5 million to fly satellites where nobody else can",
-      "url": "https://thenextweb.com/news/neworbit-vleo-satellite-series-a-european-space",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Between commercial aircraft at 10km and conventional satellites at 500km lies a band of near-Earth space that has never been used commercially. Very low Earth orbit, or VLEO, sits at 200 to 300km, an altitude historically reserved for spy satellites and the International Space Station. Reading-based NewOrbit announced on Monday an oversubscribed $18.5 million Series A to [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/neworbit-vleo-satellite-series-a-european-space.avif",
-      "published": "2026-06-08T09:07:26+00:00",
-      "firstSeen": "2026-06-08T10:00:01.909700+00:00",
-      "lastSeen": "2026-06-08T11:00:02.097985+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.0941
-    },
-    {
-      "title": "JPMorgan poaches Nomura’s international AI strategy chief as Dimon doubles down on AI hiring",
-      "url": "https://thenextweb.com/news/jpmorgan-hires-nomura-ai-strategy-chief",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "JPMorgan Chase is hiring Nomura Holdings’ international head of artificial intelligence strategy, according to Bloomberg, as the largest US bank by assets accelerates its recruitment of AI specialists. Singapore-based Tahir Zafar, who joined Nomura in late 2023 and was promoted to his current role in March 2025, is expected to start around July after completing [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/jpmorgan-hires-nomura-ai-strategy-chief.avif",
-      "published": "2026-06-08T08:47:07+00:00",
-      "firstSeen": "2026-06-08T10:00:01.909700+00:00",
-      "lastSeen": "2026-06-08T11:00:02.097985+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.0844
+      "score": 2.1114
     }
   ],
   "errors": [
