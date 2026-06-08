@@ -1522,5 +1522,17 @@
     "slot": "evening",
     "model": "openai/gpt-image-2",
     "size": "1024x1536"
+  },
+  {
+    "id": "2026-06-08-morning-cat-as-red-lacquered-wood-artifact",
+    "title": "Cat as Red Lacquered Wood Artifact",
+    "tests": "Reusable reference-photo transformation template; finished example image contains no instructional placeholder text; primary CLI route succeeded on attempt 1; exact PNG output verified non-empty.",
+    "prompt": "Use the uploaded reference photo and preserve the cat's identity, pose, silhouette, proportions, face markings, eye color, paw placement, tail shape, and most recognizable coat pattern, then transform the cat into a red lacquered wood artifact displayed on a low black plinth in a quiet craft museum alcove. Rebuild the cat as carved deep red lacquered wood with black undercoat showing through rubbed edges, raised relief where the original white markings were, translucent varnish over visible wood grain, tiny hairline cracks, gold dust in carved seams, worn chips along the ears and paws, green glass-inlay eyes, nearby lacquer tools, cotton gloves, rice-paper wall panels, and soft side-window light. Keep the source cat recognizable while changing the material, surface texture, setting, and object logic into a tactile museum artifact. Avoid extra limbs, duplicate cats, readable text, logos, watermark, and losing the cat's distinctive markings.\\n\\nSource photo needed: a clear photo of a cat.\\n\\nReusable fill-in-the-blank template: Use the uploaded reference photo and preserve the [PET]'s identity, pose, silhouette, proportions, key markings, eye color, expression, and recognizable features, then transform [PET] into a [MATERIAL] artifact in [SETTING] with [MOOD] lighting. Keep the source recognizable while changing the body material, surface texture, props, and environment into a cohesive [STYLE] object. Avoid extra limbs, duplicate subjects, readable text, logo artifacts, watermark, and losing the source markings.\\n\\nWhat to preserve: cat identity, pose, body proportions, facial markings, coat pattern, eye color, paw placement, tail shape, and overall camera angle.\\n\\nWhat to change: convert fur and whiskers into polished red lacquered wood, rubbed black undercoat, raised relief marking areas, visible grain, gold-filled carved seams, museum display props, and soft craft-gallery lighting.\\n\\nExample substitution: Upload a clear photo of a tuxedo cat sitting upright; preserve its white muzzle, chest bib, paw markings, green eyes, and curled tail, then turn it into a red lacquered wood museum artifact on a black plinth.",
+    "image": "images/2026-06-08-morning-cat-as-red-lacquered-wood-artifact.png",
+    "date": "2026-06-08",
+    "batch": "Daily Prompt",
+    "slot": "morning",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
