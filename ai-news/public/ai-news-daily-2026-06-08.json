@@ -1,6 +1,6 @@
 {
   "date": "2026-06-08",
-  "updatedAt": "2026-06-08T08:00:01.598844+00:00",
+  "updatedAt": "2026-06-08T09:00:01.392657+00:00",
   "items": [
     {
       "title": "Lean4Agent: Formal Modeling and Verification for Agent Workflow and Trajectory",
@@ -11,12 +11,28 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-08T08:00:08.681432+00:00",
+      "published": "2026-06-08T09:00:08.233327+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-08T08:00:01.598844+00:00",
+      "lastSeen": "2026-06-08T09:00:01.392657+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 5.06
+    },
+    {
+      "title": "Nvidia locks in SK Hynix for the AI memory race as the chip industry’s “toughest bottleneck” gets its own multi-year deal",
+      "url": "https://thenextweb.com/news/nvidia-locks-in-sk-hynix-for-the-ai-memory-race-as-the-chip-industrys-toughest-bottleneck-gets-its-own-multi-year-deal",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Nvidia and SK Hynix have signed a multi-year agreement covering both the design and manufacture of next-generation memory chips for AI. The deal, announced on Sunday during Nvidia CEO Jensen Huang’s tour of South Korea, gives SK Hynix a formal co-development role in the high-bandwidth memory that will power Nvidia’s most advanced accelerators, starting with the Vera [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/Jensen-Huang-CEO-NVIDIA.avif",
+      "published": "2026-06-08T07:54:03+00:00",
+      "firstSeen": "2026-06-08T09:00:01.392657+00:00",
+      "lastSeen": "2026-06-08T09:00:01.392657+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.5169
     },
     {
       "title": "NVIDIA and LG Group Build an AI Factory to Advance Physical AI, Mobility and AI Infrastructure",
@@ -29,10 +45,26 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/kr-visit-lg-group-1920x1080-no-credit.png",
       "published": "2026-06-08T03:00:50+00:00",
       "firstSeen": "2026-06-08T04:00:01.565319+00:00",
-      "lastSeen": "2026-06-08T08:00:01.598844+00:00",
+      "lastSeen": "2026-06-08T09:00:01.392657+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.5477
+      "score": 3.5215
+    },
+    {
+      "title": "Spotify is licensing live concert video and reserving tickets for superfans",
+      "url": "https://thenextweb.com/news/spotify-live-concert-video-tickets-live-nation",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Spotify has approached concert promoters about licensing the rights to stream live video from music festivals, according to Bloomberg, as the Swedish streaming company pushes to become a broader hub for the live music economy. The company has already started adding footage from live events, including a Dua Lipa show in Mexico City. The live [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/spotify-live-concert-video-tickets-live-nation.avif",
+      "published": "2026-06-08T07:43:38+00:00",
+      "firstSeen": "2026-06-08T09:00:01.392657+00:00",
+      "lastSeen": "2026-06-08T09:00:01.392657+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.2118
     },
     {
       "title": "How the UK Is Turning Sovereign AI Ambition Into Action With NVIDIA Technologies",
@@ -45,10 +77,26 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/london-tech-week-2026-key-visual.jpeg",
       "published": "2026-06-08T06:00:57+00:00",
       "firstSeen": "2026-06-08T06:05:47.103038+00:00",
-      "lastSeen": "2026-06-08T08:00:01.598844+00:00",
+      "lastSeen": "2026-06-08T09:00:01.392657+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.231
+      "score": 2.2025
+    },
+    {
+      "title": "Mexico unveils the Olinia Uno, an $8,600 government-backed electric vehicle designed for city streets",
+      "url": "https://thenextweb.com/news/mexico-olinia-uno-ev-prototype-sheinbaum",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Mexico’s government-backed electric vehicle project Olinia has unveiled its first prototype, a six-seat passenger vehicle called the Olinia Uno, at a ceremony where President Claudia Sheinbaum drove the car onto a stage inside a Mexican Air Force hangar north of Mexico City. The vehicle is priced at 150,000 pesos, roughly $8,600, and is designed for [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/mexico-olinia-uno-ev-prototype-sheinbaum.avif",
+      "published": "2026-06-08T08:01:52+00:00",
+      "firstSeen": "2026-06-08T09:00:01.392657+00:00",
+      "lastSeen": "2026-06-08T09:00:01.392657+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1208
     }
   ],
   "errors": [
@@ -56,16 +104,6 @@
       "source": "MarkTechPost",
       "url": "https://www.marktechpost.com/feed/",
       "error": "HTTP Error 403: Forbidden"
-    },
-    {
-      "source": "LiteLLM Releases",
-      "url": "https://github.com/BerriAI/litellm/releases.atom",
-      "error": "HTTP Error 504: Gateway Time-out"
-    },
-    {
-      "source": "Hugging Face Transformers Releases",
-      "url": "https://github.com/huggingface/transformers/releases.atom",
-      "error": "HTTP Error 504: Gateway Time-out"
     }
   ]
 }
