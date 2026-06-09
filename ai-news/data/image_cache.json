@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-08T23:22:41.274112+00:00",
+  "updatedAt": "2026-06-09T01:00:01.108039+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -9720,6 +9720,10 @@
     "https://simonwillison.net/2026/Jun/8/wwdc": {
       "image": "",
       "checkedAt": "2026-06-09T00:00:01.427367+00:00"
+    },
+    "https://techcrunch.com/2026/06/08/mercors-brendan-foody-calls-out-sequoia-over-dual-pricing-valuation-tricks": {
+      "image": "https://techcrunch.com/wp-content/uploads/2024/11/GettyImages-1258486979.jpg?w=1024",
+      "checkedAt": "2026-06-09T01:00:01.108039+00:00"
     }
   }
 }
