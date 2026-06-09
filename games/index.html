@@ -1029,7 +1029,8 @@
     const LEGACY_BASE = 'https://jz237.github.io/games/';
     const SITE_GAME_PATHS = new Set([
       '2026-06-05/invaders/',
-      '2026-06-06/missile-command-3js/'
+      '2026-06-06/missile-command-3js/',
+      '2026-06-09/fluid/'
     ]);
     const gameHref = g => `${SITE_GAME_PATHS.has(g.path) ? SITE_BASE : LEGACY_BASE}${g.path}`;
     const games = [
@@ -1046,6 +1047,7 @@
       { title: 'Missile Command (GPT)',         path: 'gpt-missile-command/',                  emoji: '🎇', date: 'Mar 8',  cat: 'arcade',   tag: 'featured',     desc: "GPT's take on Missile Command" },
       { title: 'Missile Command 3D',            path: '2026-03-17/missile-command-3d/',        emoji: '🚀', date: 'Mar 17', cat: 'arcade',   tag: 'featured',     desc: '3D perspective with destructible cities' },
       { title: 'Invaders',                      path: '2026-06-05/invaders/',               emoji: '🛸', date: 'Jun 5',  cat: 'arcade',   tag: 'featured',     desc: 'Released mobile-first Space Invaders remix with boss carriers, shield bunkers, power cores, global scores, and arcade particle chaos' },
+      { title: 'Fluid Lab',                     path: '2026-06-09/fluid/',                 emoji: '💧', date: 'Jun 9',  cat: 'arcade',   tag: 'demo',         desc: 'Interactive WebGL fluid simulation with dye, bloom, pressure, vorticity, and touchscreen stirring controls' },
       { title: 'Stellar Drift',                 path: '2026-03-25/stellar-drift/',             emoji: '✨', date: 'Mar 25', cat: 'arcade',   tag: 'featured',     desc: 'One-finger auto-fire space shooter' },
       { title: 'Lantern Creek',                 path: '2026-03-29/lantern-creek/',             emoji: '🏮', date: 'Mar 29', cat: 'puzzle',   tag: 'featured',     desc: 'Guide glowing lanterns down a moonlit stream' },
       { title: 'SUPER STAR TREK',               path: '2026-03-27/star-trek/',                 emoji: '🖖', date: 'Mar 27', cat: 'retro70s', tag: 'featured',     desc: 'The 70s computer classic — reborn with LCARS visuals' },
