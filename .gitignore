@@ -13,5 +13,8 @@ node_modules/
 dist/
 build/
 
+# Externally hosted media
+/experiments/image-gen-2-benchmark/images/
+
 # macOS
 .DS_Store

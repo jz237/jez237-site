@@ -84,7 +84,7 @@ while IFS= read -r -d '' file; do
 
   if [[ "$apply" -eq 1 ]]; then
     # shellcheck disable=SC2086
-    $wrangler_bin r2 object put "$bucket/$key" --file "$file"
+    $wrangler_bin r2 object put "$bucket/$key" --file "$file" --remote --content-type image/png --cache-control 'public, max-age=31536000, immutable'
   else
     printf 'DRY RUN: %s -> r2://%s/%s\n' "$rel" "$bucket" "$key"
   fi
