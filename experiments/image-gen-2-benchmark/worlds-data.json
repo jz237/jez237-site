@@ -88,5 +88,23 @@
       "continuity": "Preserves the fossil reef geography, Pearlstep Harbor/Lowtide Ward setting, shell-tram canal infrastructure, marrowglass/brass materials, reef vegetation, quayfolk clothing, and pearly dawn palette.",
       "entryDescription": "A dawn breakfast stall where quayfolk buy brine tea, shell griddle cakes, and kelp bundles beside a canal as a shell-tram passes."
     }
+  },
+  {
+    "id": "2026-06-09-overnight-marrowglass-quay-shell-tram-repair-bay",
+    "title": "Marrowglass Quay: Shell-Tram Repair Bay",
+    "tests": "Weekly world: Marrowglass Quay. World-life image for 2026-06-09 overnight slot; catalog-only fictional-world entry.",
+    "prompt": "Create a finished daily-life view of Marrowglass Quay: Shell-Tram Repair Bay. At pearly dawn in East Siphon Yard, inside a translucent fossil-reef arch over a shallow canal, show quayfolk mechanics in layered oilcloth, glass-bead aprons, shell goggles, and reed satchels repairing a slow shell-tram on braided brass rails. Include ceramic shell tiles, marrowglass panes with fossil inclusions, brass tide gears, wax-sealed lenses, open amber-lit maintenance panels, lantern-cistern gauges, a tide-brake calibration, an apprentice sorting spiral-shell washers, a tied canal skiff, blue reed fans, copper kelp mats, lantern lichens, white salt moss, filter crabs, pearl moths, wet ceramic tiles, and a hand-painted East Siphon Yard sign. Preserve the weekly world bible: Marrowglass Quay's reef architecture, canals, shell-tram transit, tide elevators, lens bridges, light cisterns, quayfolk clothing, marrowglass and brass technology, sea-glass green/chalk white/brass amber/coral pink/smoky violet palette, pearly dawn mist, spiral-shell motifs, tide charts, and quiet lived-in tidal-city mood. Avoid modern vehicles, asphalt, skyscrapers, neon cyberpunk, spaceships, weapons, logos, generic medieval fantasy, dancing, placeholder text, watermarks, and signatures.\n\nReusable prompt template: Create a finished daily-life view or layout for Marrowglass Quay: [SCENE OR DOCUMENT] using the world bible, with [DATA OR DETAILS] integrated naturally. Anchor the image in pale fossil reef arches, shallow canals, shell-trams on braided brass rails, tide elevators, lens bridges, communal light cisterns, marrowglass panes, brass tide gears, ceramic shell tiles, blue reed fans, copper kelp, lantern lichens, white salt moss, quayfolk clothing, sea-glass/brass/coral/misty palette, spiral-shell motifs, lantern-cistern gauges, and tide charts. Preserve the named world, geography, settlements, transit logic, materials, vegetation, inhabitants, palette, recurring motifs, and hard avoid rules; change only the specific scene, activity, props, data, and composition.\n\nSource photo needed: none.\n\nWhat to preserve: Marrowglass Quay's world canon, including East Siphon Yard/Pearlstep Harbor atmosphere, shell-tram and canal transit, marrowglass reef materials, brass tide infrastructure, quayfolk clothing, reef vegetation, harmless filter crabs and pearl moths, and sea-glass/brass/coral/misty palette.\n\nWhat to change: the selected daily-life activity, viewpoint, props, crowd arrangement, document/layout framing if used, data details, and the exact moment of lived-in routine.\n\nExample substitution: [SCENE OR DOCUMENT] = shell-tram repair bay at East Siphon Yard; [DATA OR DETAILS] = tide-brake calibration, spiral-shell washer trays, lantern-cistern gauges, canal skiff tie-up, light-pump inspection, pearl moths, filter crabs, wet ceramic tiles, and dawn commute mist.",
+    "image": "images/2026-06-09-overnight-marrowglass-quay-shell-tram-repair-bay.png",
+    "date": "2026-06-09",
+    "batch": "Daily Prompt",
+    "slot": "overnight",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "world": {
+      "name": "Marrowglass Quay",
+      "description": "A tidal city built inside translucent fossil reefs where residents farm light, repair shell-trams, and trade in quiet lantern markets.",
+      "continuity": "Preserves the fossil-reef canals, shell-tram transit, marrowglass and brass tide technology, quayfolk workwear, reef vegetation, and pearly sea-glass dawn palette.",
+      "entryDescription": "Quayfolk mechanics and an apprentice repair a shell-tram at East Siphon Yard during the dawn commute."
+    }
   }
 ]
