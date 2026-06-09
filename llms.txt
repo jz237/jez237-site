@@ -200,12 +200,14 @@ Protocol SDK releases.
 
 Computer Chronicle lives in `/computer-chronicle/`.
 
-This is intended to update every morning as a daily historical newspaper
-section. Each issue should cover the date 40 years before the current
+This is intended to update every morning as a chronological weekly 1982
+historical newspaper section. Each new issue should use the next week
+from the Chronicle state file, while `currentDate` records the publication
 date in Jez's timezone, `America/New_York`.
-The newest issue must match today's America/New_York date before a daily
-image is generated or posted. Do not let the image cron treat the latest
-archived issue as current just because it is newest in the JSON.
+The newest issue must match today's America/New_York publication date and
+the next 1982 sequence week before a daily image is generated or posted.
+Do not let the image cron treat the latest archived issue as current just
+because it is newest in the JSON.
 Every morning update must preserve the previous day's issue in the
 archive before replacing the current front page. Do not overwrite or
 discard yesterday's researched issue; keep it in `issues` so the archive
@@ -294,9 +296,10 @@ Editorial priority:
   silently presenting it as today's paper.
 - Daily Discord newspaper images must be based on the current issue whose
   `currentDate` equals today's America/New_York date and whose
-  `historicDate` is exactly 40 years earlier. If that issue is missing or
-  stale, do not generate a generic 1980s image; report that the Chronicle
-  issue needs the correct date first.
+  `historicDate` is the next chronological 1982 week from the Chronicle
+  state file. If that issue is missing or stale, do not generate a generic
+  1980s image; report that the Chronicle issue needs the correct week
+  first.
 - Daily Discord newspaper images should include visible date-specific
   cues from the issue's exact-day and accuracy-ledger fields. The image
   can be nostalgic, but the caption/prompt source must be date-first:
@@ -329,7 +332,7 @@ Important files:
 - `computer-chronicle/assets/chronicle.js` - client-side renderer.
 - `computer-chronicle/data/issues.json` - public structured issue data.
 - `computer-chronicle/validate-issue-data.mjs` - validation script for
-  archive order, 40-year date pairing, source references, image files,
+  archive order, 1982 weekly sequence mode, source references, image files,
   and public prompt-safety checks.
 
 Before publishing a Chronicle update, run:
