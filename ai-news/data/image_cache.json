@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-09T10:00:01.430655+00:00",
+  "updatedAt": "2026-06-09T11:00:01.786490+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -9744,6 +9744,18 @@
     "https://huggingface.co/blog/build-small-hackathon/neurobait-adhd": {
       "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/build-small-hackathon/neurobait-adhd.png",
       "checkedAt": "2026-06-09T10:00:01.430655+00:00"
+    },
+    "https://www.technologyreview.com/2026/06/09/1137830/learning-to-lead-in-a-hybrid-human-ai-enterprise": {
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/05/MIT-Abstract-Thumbnail-3-_-V2-1.png?resize=1200,600",
+      "checkedAt": "2026-06-09T11:00:01.786490+00:00"
+    },
+    "https://www.theverge.com/ai-artificial-intelligence/945809/amazon-employees-seattle-data-center-moratorium": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/STKS528_DATA_CENTERS_A.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-06-09T11:00:01.786490+00:00"
+    },
+    "https://www.techrepublic.com/article/news-openai-confidential-sec-ipo-filing": {
+      "image": "https://assets.techrepublic.com/uploads/2025/10/tr-10282025-news-openai-energy-ai-policy.jpg?f=jpeg",
+      "checkedAt": "2026-06-09T11:00:01.786490+00:00"
     }
   }
 }

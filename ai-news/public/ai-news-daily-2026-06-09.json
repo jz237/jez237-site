@@ -1,6 +1,6 @@
 {
   "date": "2026-06-09",
-  "updatedAt": "2026-06-09T10:00:01.430655+00:00",
+  "updatedAt": "2026-06-09T11:00:01.786490+00:00",
   "items": [
     {
       "title": "Lucid’s Gravity SUV gets hands-free highway driving in its latest over-the-air update",
@@ -17,7 +17,23 @@
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 12.5816
+      "score": 12.5533
+    },
+    {
+      "title": "OpenAI Starts IPO Process With Confidential SEC Filing",
+      "url": "https://www.techrepublic.com/article/news-openai-confidential-sec-ipo-filing",
+      "source": "TechRepublic AI",
+      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "OpenAI has submitted a confidential IPO filing, but the ChatGPT maker says it has not decided on timing or disclosed deal terms.\nThe post OpenAI Starts IPO Process With Confidential SEC Filing appeared first on TechRepublic.",
+      "image": "https://assets.techrepublic.com/uploads/2025/10/tr-10282025-news-openai-energy-ai-policy.jpg?f=jpeg",
+      "published": "2026-06-09T09:52:12+00:00",
+      "firstSeen": "2026-06-09T11:00:01.786490+00:00",
+      "lastSeen": "2026-06-09T11:00:01.786490+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 10.216
     },
     {
       "title": "OpenAI filed confidentially for an IPO. Anthropic filed last week. SpaceX lists on Thursday. The AI public market is about to get very crowded.",
@@ -33,7 +49,7 @@
       "lastSeen": "2026-06-09T10:00:01.430655+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.4363
+      "score": 8.4079
     },
     {
       "title": "Perplexity is sticking with a 2028 IPO while OpenAI and Anthropic race to list this year",
@@ -46,10 +62,10 @@
       "image": "https://media.thenextweb.com/2026/06/perplexity-ipo-2028-openai-anthropic-listings.avif",
       "published": "2026-06-09T09:05:16+00:00",
       "firstSeen": "2026-06-09T10:00:01.430655+00:00",
-      "lastSeen": "2026-06-09T10:00:01.430655+00:00",
+      "lastSeen": "2026-06-09T11:00:01.786490+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.1225
+      "score": 8.0931
     },
     {
       "title": "Apple rebuilt Siri on Google’s AI and Nvidia’s chips, then spent WWDC explaining why that doesn’t break its privacy promise",
@@ -62,10 +78,42 @@
       "image": "https://media.thenextweb.com/2026/05/Apple-hq.avif",
       "published": "2026-06-09T09:10:05+00:00",
       "firstSeen": "2026-06-09T10:00:01.430655+00:00",
-      "lastSeen": "2026-06-09T10:00:01.430655+00:00",
+      "lastSeen": "2026-06-09T11:00:01.786490+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.8249
+      "score": 7.7954
+    },
+    {
+      "title": "Lean4Agent: Formal Modeling and Verification for Agent Workflow and Trajectory",
+      "url": "https://llm-stats.com/ai-news",
+      "source": "LLM Stats AI News",
+      "sourceUrl": "https://llm-stats.com/ai-news",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "",
+      "image": "https://llm-stats.com/og/main.png",
+      "published": "2026-06-09T11:00:11.385317+00:00",
+      "firstSeen": "2026-05-29T21:00:01.522609+00:00",
+      "lastSeen": "2026-06-09T11:00:01.786490+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.06
+    },
+    {
+      "title": "Deliverance AI exits stealth with £6m ARR to run agentic AI inside companies’ own walls",
+      "url": "https://thenextweb.com/news/deliverance-ai-stealth-sovereign-enterprise-ai",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Enterprise AI has a stalling problem, and it is not the models. Companies have poured money into chips, private clouds, and pilot projects, then watched most of them stop before they ever reached production. A London company called Deliverance AI thinks it knows why, and on Tuesday it came out of stealth to sell the [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/Deliverance-AI-team.avif",
+      "published": "2026-06-09T09:27:41+00:00",
+      "firstSeen": "2026-06-09T11:00:01.786490+00:00",
+      "lastSeen": "2026-06-09T11:00:01.786490+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.804
     },
     {
       "title": "iOS 27 is full of references to a folding iPhone. Apple didn’t mention it once at WWDC.",
@@ -81,7 +129,39 @@
       "lastSeen": "2026-06-09T10:00:01.430655+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.5977
+      "score": 4.569
+    },
+    {
+      "title": "Learning to lead in a hybrid human-AI enterprise",
+      "url": "https://www.technologyreview.com/2026/06/09/1137830/learning-to-lead-in-a-hybrid-human-ai-enterprise",
+      "source": "MIT Technology Review AI",
+      "sourceUrl": "https://www.technologyreview.com/topic/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "As adoption of AI agents looks set to surge by as much as 300% in the next two years, leadership teams are carefully considering the implications of a hybrid human-AI workforce.  Unlike existing enterprise-level automation that relies on manual input, AI agents are capable of autonomously coordinating complex tasks, interacting with multiple tools and environments across&#8230;",
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/05/MIT-Abstract-Thumbnail-3-_-V2-1.png?resize=1200%2C600",
+      "published": "2026-06-09T10:20:06+00:00",
+      "firstSeen": "2026-06-09T11:00:01.786490+00:00",
+      "lastSeen": "2026-06-09T11:00:01.786490+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 3.9699
+    },
+    {
+      "title": "Prince William is bringing homelessness prevention to London Tech Week for the first time",
+      "url": "https://thenextweb.com/news/prince-william-london-tech-week-homewards-homelessness",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The Prince of Wales will attend London Tech Week on Wednesday for the first time, chairing a panel on how data and technology can identify people at risk of homelessness before they lose their homes. It is the first time homelessness prevention has appeared on the event’s agenda. The panel, hosted by entrepreneur Jake Humphrey, will feature [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/prince-william-london-tech-week-homewards-homelessness.avif",
+      "published": "2026-06-09T09:25:58+00:00",
+      "firstSeen": "2026-06-09T11:00:01.786490+00:00",
+      "lastSeen": "2026-06-09T11:00:01.786490+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.2031
     },
     {
       "title": "Jensen Huang won’t testify before the Senate on Nvidia’s China chip sales. He offered a tour of headquarters instead.",
@@ -97,7 +177,7 @@
       "lastSeen": "2026-06-09T10:00:01.430655+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.205
+      "score": 3.1761
     },
     {
       "title": "Why Apple’s slow-and-steady AI bet is starting to look pretty smart",
@@ -110,90 +190,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/apple-siri-ai-use-cases.png?w=1186",
       "published": "2026-06-09T01:56:48+00:00",
       "firstSeen": "2026-06-09T02:00:01.687416+00:00",
-      "lastSeen": "2026-06-09T10:00:01.430655+00:00",
+      "lastSeen": "2026-06-09T11:00:01.786490+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1695
-    },
-    {
-      "title": "v1.88.1",
-      "url": "https://github.com/BerriAI/litellm/releases/tag/v1.88.1",
-      "source": "LiteLLM Releases",
-      "sourceUrl": "https://github.com/BerriAI/litellm/releases.atom",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Verify Docker Image Signature\nAll LiteLLM Docker images are signed with cosign. Every release is signed with the same key introduced in commit 0112e53.\nVerify using the pinned commit hash (recommended):\nA commit hash is cryptographically immutable, so this is the strongest way to ensure you are using the original signing key:\ncosign verify \\\n  --key https://raw.githubusercontent.com/BerriAI/litellm/0112e53046018d726492c814b3644b7d376029d0/cosign.pub \\\n  ghcr.io/berriai/litellm:v1.88.1\nVerify using the release tag (convenience):\nTags are protected in this repository and resolve to the same key.",
-      "image": "https://opengraph.githubassets.com/ec499708075f24621d7fcedea57866e12aa1896488bf54bec2bf826d3ab470a3/BerriAI/litellm/releases/tag/v1.88.1",
-      "published": "2026-06-09T05:54:19+00:00",
-      "firstSeen": "2026-06-09T02:00:01.687416+00:00",
-      "lastSeen": "2026-06-09T10:00:01.430655+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.8717
-    },
-    {
-      "title": "v1.84.6",
-      "url": "https://github.com/BerriAI/litellm/releases/tag/v1.84.6",
-      "source": "LiteLLM Releases",
-      "sourceUrl": "https://github.com/BerriAI/litellm/releases.atom",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Verify Docker Image Signature\nAll LiteLLM Docker images are signed with cosign. Every release is signed with the same key introduced in commit 0112e53.\nVerify using the pinned commit hash (recommended):\nA commit hash is cryptographically immutable, so this is the strongest way to ensure you are using the original signing key:\ncosign verify \\\n  --key https://raw.githubusercontent.com/BerriAI/litellm/0112e53046018d726492c814b3644b7d376029d0/cosign.pub \\\n  ghcr.io/berriai/litellm:v1.84.6\nVerify using the release tag (convenience):\nTags are protected in this repository and resolve to the same key.",
-      "image": "https://opengraph.githubassets.com/2289ef0fcf1c2ba20456e6d2fb1649302a0ee9442d8f03543c7a3223e1c725b2/BerriAI/litellm/releases/tag/v1.84.6",
-      "published": "2026-06-09T01:55:10+00:00",
-      "firstSeen": "2026-06-09T02:00:01.687416+00:00",
-      "lastSeen": "2026-06-09T10:00:01.430655+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.7688
-    },
-    {
-      "title": "NeuroBait: I fine-tuned a model to spark dopamine for ADHD brain",
-      "url": "https://huggingface.co/blog/build-small-hackathon/neurobait-adhd",
-      "source": "Hugging Face Blog",
-      "sourceUrl": "https://huggingface.co/blog/feed.xml",
-      "sourceWeight": 0.95,
-      "category": "AI",
-      "summary": "",
-      "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/build-small-hackathon/neurobait-adhd.png",
-      "published": "2026-06-09T09:04:58+00:00",
-      "firstSeen": "2026-06-09T10:00:01.430655+00:00",
-      "lastSeen": "2026-06-09T10:00:01.430655+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.4023
-    },
-    {
-      "title": "Five things you need to know about AI",
-      "url": "https://www.technologyreview.com/2026/06/09/1138582/five-things-you-need-to-know-about-ai",
-      "source": "MIT Technology Review AI",
-      "sourceUrl": "https://www.technologyreview.com/topic/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "At SXSW London last week I gave a talk called “Five things you need to know about AI,” in which I shared what I think are the biggest themes in AI right now. I pulled a few things from our first AI10 list, an annual guide to the most important trends in this buzzy world,&#8230;",
-      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/06/5-things-a.jpg?resize=1200%2C600",
-      "published": "2026-06-09T09:16:45+00:00",
-      "firstSeen": "2026-06-09T10:00:01.430655+00:00",
-      "lastSeen": "2026-06-09T10:00:01.430655+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.2682
-    },
-    {
-      "title": "BYD says demand is double its capacity, but its sales data tells a different story",
-      "url": "https://thenextweb.com/news/byd-80-percent-ev-penetration-china-pentagon-list",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "BYD’s executive vice president Stella Li told CNBC on Monday that China’s EV market will push to close to 80% penetration, a bullish forecast that contrasts sharply with rival Nio, whose chief executive William Li said last month that the industry’s “golden era” was over. The prediction arrives on the same day the Pentagon added [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/byd-80-percent-ev-penetration-china-pentagon-list.avif",
-      "published": "2026-06-09T09:08:19+00:00",
-      "firstSeen": "2026-06-09T10:00:01.430655+00:00",
-      "lastSeen": "2026-06-09T10:00:01.430655+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.124
+      "score": 3.1454
     }
   ],
   "errors": [
