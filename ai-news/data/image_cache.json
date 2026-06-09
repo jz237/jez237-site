@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-09T21:00:01.281948+00:00",
+  "updatedAt": "2026-06-09T22:00:01.241721+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -9860,6 +9860,18 @@
     "https://openai.com/index/nextdoor": {
       "image": "https://images.ctfassets.net/kftzwdyauwt9/2VQiKydNUVAutnHRuCIV4S/3262cc8deff3fe49c6b512f854e14dcf/oai_Nextdoor_1x1.png?w=1600&amp;h=900&amp;fit=fill",
       "checkedAt": "2026-06-09T21:00:01.281948+00:00"
+    },
+    "https://www.theverge.com/transportation/946820/gm-energy-ev-v2g-storage-sodium-ion": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/GM-Energy-home-energy-system-2.png?quality=90&amp;strip=all&amp;crop=0%2C10.756710586672%2C100%2C78.486578826656&amp;w=1200",
+      "checkedAt": "2026-06-09T22:00:01.241721+00:00"
+    },
+    "https://techcrunch.com/2026/06/09/anthropics-claude-fable-5-is-a-version-of-mythos-the-public-can-access-today": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/GettyImages-2279025960.jpg?w=1024",
+      "checkedAt": "2026-06-09T22:00:01.241721+00:00"
+    },
+    "https://huggingface.co/blog/github-ci-hf-jobs": {
+      "image": "https://huggingface.co/blog/assets/github-ci-hf-jobs/thumbnail.gif",
+      "checkedAt": "2026-06-09T22:00:01.241721+00:00"
     }
   }
 }

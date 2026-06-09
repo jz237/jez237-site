@@ -1,8 +1,8 @@
 {
-  "updatedAt": "2026-06-09T21:00:01.281948+00:00",
+  "updatedAt": "2026-06-09T22:00:01.241721+00:00",
   "items": [
     {
-      "title": "Julia Kruk, Sanchita Porwal, Amitrajit Bhattacharjee, Mansi Phute",
+      "title": "Community-Specific Slang and Entity Detection via Semantic Shift in Fine-Tuned Language Models",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -10,12 +10,60 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-09T21:00:07.522937+00:00",
+      "published": "2026-06-09T22:00:08.193988+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-09T21:00:01.281948+00:00",
+      "lastSeen": "2026-06-09T22:00:01.241721+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
+    },
+    {
+      "title": "Setting a custom price for a model in AgentsView",
+      "url": "https://simonwillison.net/2026/Jun/9/agentsview-custom-model-price",
+      "source": "Simon Willison",
+      "sourceUrl": "https://simonwillison.net/atom/everything/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "TIL: Setting a custom price for a model in AgentsView\n        I've been really enjoying AgentsView by Wes McKinney as a tool for exploring my token usage across different coding agents running on my laptop.\nClaude Fable 5 came out today and wasn't yet included in the pricing database AgentsView uses. I used Fable to reverse-engineer AgentsView and figured out this recipe for setting custom prices.\nHere's my Claude Fable 5 usage for today so far, plotted by AgentsView as a treemap across my different local projects:\n\n    \n    \n        Tags: ai, generative-ai, llms, llm-pricing",
+      "image": "https://static.simonwillison.net/static/2026/agentsview-fable.jpg",
+      "published": "2026-06-09T21:35:31+00:00",
+      "firstSeen": "2026-06-09T22:00:01.241721+00:00",
+      "lastSeen": "2026-06-09T22:00:01.241721+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 10.3776
+    },
+    {
+      "title": "Sony’s 135-inch Crystal LED UNIFY is a boardroom display you can install in an hour",
+      "url": "https://thenextweb.com/news/sony-crystal-led-unify-135-inch-dvled-display-infocomm-2026",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Sony Electronics announced the Crystal LED UNIFY, a 135-inch all-in-one direct-view LED display designed for corporate boardrooms and university lecture halls. The display, model ZRL-135SG, ships as five pre-assembled panels and a control unit that two people can install in approximately one hour with no electrical work required. Sony plans to show it at InfoComm [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/sony-crystal-led-unify-135-inch-dvled-display-infocomm-2026.avif",
+      "published": "2026-06-09T21:14:35+00:00",
+      "firstSeen": "2026-06-09T22:00:01.241721+00:00",
+      "lastSeen": "2026-06-09T22:00:01.241721+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.2271
+    },
+    {
+      "title": "GM thinks EVs can help offset AI’s energy suck with vehicle-to-grid tech",
+      "url": "https://www.theverge.com/transportation/946820/gm-energy-ev-v2g-storage-sodium-ion",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "At an event in San Francisco today, General Motors made a series of announcements around EV batteries, energy storage, and grid resiliency in the face of growing electricity demand from AI data centers. The automaker announced that it would be activating new vehicle-to-grid capabilities for its current EV and home energy customers. It's releasing a [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/GM-Energy-home-energy-system-2.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.756710586672%2C100%2C78.486578826656&amp%3Bw=1200",
+      "published": "2026-06-09T21:00:00+00:00",
+      "firstSeen": "2026-06-09T22:00:01.241721+00:00",
+      "lastSeen": "2026-06-09T22:00:01.241721+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "framework_or_plumbing",
+      "score": -0.7701
     },
     {
       "title": "Hey Siri, here’s what I actually want from AI",
@@ -28,10 +76,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/GettyImages-1139080118.jpg?resize=1200%2C801",
       "published": "2026-06-09T20:50:17+00:00",
       "firstSeen": "2026-06-09T21:00:01.281948+00:00",
-      "lastSeen": "2026-06-09T21:00:01.281948+00:00",
+      "lastSeen": "2026-06-09T22:00:01.241721+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3851
+      "score": 3.3551
     },
     {
       "title": "Anthropic’s Fable 5 can make weirdly fun video games with the click of a button",
@@ -44,10 +92,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/Screenshot-2026-06-09-at-11.40.18-AM.png?resize=1200%2C871",
       "published": "2026-06-09T20:37:49+00:00",
       "firstSeen": "2026-06-09T21:00:01.281948+00:00",
-      "lastSeen": "2026-06-09T21:00:01.281948+00:00",
+      "lastSeen": "2026-06-09T22:00:01.241721+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.2787
+      "score": 9.2489
     },
     {
       "title": "Microsoft AI head calls out Anthropic for acting like Claude is conscious",
@@ -60,10 +108,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/gettyimages-2207866106.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-09T20:24:25+00:00",
       "firstSeen": "2026-06-09T21:00:01.281948+00:00",
-      "lastSeen": "2026-06-09T21:00:01.281948+00:00",
+      "lastSeen": "2026-06-09T22:00:01.241721+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.342
+      "score": 11.3124
     },
     {
       "title": "Can Voice Agents Handle Bilingual Customers? Benchmarking Frontier ASR on Code-Switched Speech",
@@ -76,10 +124,10 @@
       "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/ServiceNow-AI/code-switching.png",
       "published": "2026-06-09T19:38:28+00:00",
       "firstSeen": "2026-06-09T20:00:01.743276+00:00",
-      "lastSeen": "2026-06-09T21:00:01.281948+00:00",
+      "lastSeen": "2026-06-09T22:00:01.241721+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.4392
+      "score": 5.4102
     },
     {
       "title": "Vinted’s CEO says the US is an “enormous opportunity” as the $9B secondhand marketplace plots its Atlantic crossing",
@@ -92,10 +140,10 @@
       "image": "https://media.thenextweb.com/2026/06/vinted-9-billion-us-expansion-ipo-adam-jay-london-tech-week.avif",
       "published": "2026-06-09T19:34:28+00:00",
       "firstSeen": "2026-06-09T21:00:01.281948+00:00",
-      "lastSeen": "2026-06-09T21:00:01.281948+00:00",
+      "lastSeen": "2026-06-09T22:00:01.241721+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1073
+      "score": 2.0783
     },
     {
       "title": "MIT’s ultrasound wristband tracks every finger movement and lets you control a robot hand in real time",
@@ -108,10 +156,10 @@
       "image": "https://media.thenextweb.com/2026/06/mit-ultrasound-wristband-hand-tracking-robot-control.avif",
       "published": "2026-06-09T19:17:53+00:00",
       "firstSeen": "2026-06-09T21:00:01.281948+00:00",
-      "lastSeen": "2026-06-09T21:00:01.281948+00:00",
+      "lastSeen": "2026-06-09T22:00:01.241721+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.4992
+      "score": 3.4705
     },
     {
       "title": "Quoting Andrej Karpathy",
@@ -124,10 +172,10 @@
       "image": "",
       "published": "2026-06-09T19:03:10+00:00",
       "firstSeen": "2026-06-09T20:00:01.743276+00:00",
-      "lastSeen": "2026-06-09T21:00:01.281948+00:00",
+      "lastSeen": "2026-06-09T22:00:01.241721+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.7321
+      "score": 10.7035
     },
     {
       "title": "Rem3dy Health raises £14M at £84M valuation to take 3D-printed personalised vitamins global",
@@ -140,10 +188,10 @@
       "image": "https://media.thenextweb.com/2026/06/rem3dy-health-nourished-14m-personalised-nutrition-3d-printing.avif",
       "published": "2026-06-09T19:00:24+00:00",
       "firstSeen": "2026-06-09T20:00:01.743276+00:00",
-      "lastSeen": "2026-06-09T21:00:01.281948+00:00",
+      "lastSeen": "2026-06-09T22:00:01.241721+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -1.0093
+      "score": -1.0378
     },
     {
       "title": "Can tech companies learn to love cheaper AI models?",
@@ -156,10 +204,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2023/08/GettyImages-1297856112.jpg?resize=1200%2C675",
       "published": "2026-06-09T18:56:09+00:00",
       "firstSeen": "2026-06-09T19:00:01.724561+00:00",
-      "lastSeen": "2026-06-09T21:00:01.281948+00:00",
+      "lastSeen": "2026-06-09T22:00:01.241721+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2287
+      "score": 2.2002
     },
     {
       "title": "Two Russian APT groups are exploiting a WinRAR flaw patched nearly a year ago to hit Ukraine",
@@ -172,10 +220,10 @@
       "image": "https://media.thenextweb.com/2026/06/winrar-flaw-gamaredon-russia-ukraine-cve-2025-8088.avif",
       "published": "2026-06-09T18:42:13+00:00",
       "firstSeen": "2026-06-09T20:00:01.743276+00:00",
-      "lastSeen": "2026-06-09T21:00:01.281948+00:00",
+      "lastSeen": "2026-06-09T22:00:01.241721+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.482
+      "score": 3.4537
     },
     {
       "title": "Meta pulled facial recognition code from its smart glasses app one day after WIRED found it, then denied the timing was related",
@@ -188,10 +236,10 @@
       "image": "https://media.thenextweb.com/2026/06/meta-nametag-facial-recognition-smart-glasses-removed.avif",
       "published": "2026-06-09T18:12:57+00:00",
       "firstSeen": "2026-06-09T18:21:06.435316+00:00",
-      "lastSeen": "2026-06-09T21:00:01.281948+00:00",
+      "lastSeen": "2026-06-09T22:00:01.241721+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.8681
+      "score": 3.8402
     },
     {
       "title": "WWDC 2026: Everything announced on Siri AI, iOS 27, Apple Intelligence, and more",
@@ -204,10 +252,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/apple-siri-ai-use-cases.png?w=1186",
       "published": "2026-06-09T18:04:24+00:00",
       "firstSeen": "2026-06-09T18:21:06.435316+00:00",
-      "lastSeen": "2026-06-09T21:00:01.281948+00:00",
+      "lastSeen": "2026-06-09T22:00:01.241721+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.4041
+      "score": 4.3763
     },
     {
       "title": "Apple and Google both want to monitor the web for you",
@@ -220,10 +268,10 @@
       "image": "https://media.thenextweb.com/2026/06/Elizabeth-Reid-Googles-VP-of-Search-.avif",
       "published": "2026-06-09T17:40:23+00:00",
       "firstSeen": "2026-06-09T18:21:06.435316+00:00",
-      "lastSeen": "2026-06-09T21:00:01.281948+00:00",
+      "lastSeen": "2026-06-09T22:00:01.241721+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1529
+      "score": 3.1254
     },
     {
       "title": "Anthropic releases Claude Fable 5, a Mythos-class model the public can finally use, days before a potential record IPO",
@@ -236,11 +284,11 @@
       "image": "https://media.thenextweb.com/2026/06/anthropic-claude-fable-5-mythos-public-release-ipo.avif",
       "published": "2026-06-09T17:36:48+00:00",
       "firstSeen": "2026-06-09T18:21:06.435316+00:00",
-      "lastSeen": "2026-06-09T21:00:01.281948+00:00",
+      "lastSeen": "2026-06-09T22:00:01.241721+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 20.0512
+      "score": 20.0238
     },
     {
       "title": "Rivian begins R2 deliveries as it bets a shrinking US EV market is an opportunity, not a threat",
@@ -253,10 +301,10 @@
       "image": "https://media.thenextweb.com/2026/06/rivian-r2-deliveries-begin-ev-market-autonomy.avif",
       "published": "2026-06-09T17:19:36+00:00",
       "firstSeen": "2026-06-09T18:21:06.435316+00:00",
-      "lastSeen": "2026-06-09T21:00:01.281948+00:00",
+      "lastSeen": "2026-06-09T22:00:01.241721+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7433
+      "score": 2.7161
     },
     {
       "title": "Anthropic Offers Mythos Upgrade for Cyber Partners and a ‘Safe’ Version for the Rest of You",
@@ -269,10 +317,10 @@
       "image": "https://media.wired.com/photos/6a270618e083d018dff70e49/master/pass/Anthropic-Dangerous-AI-Business-2261854833.jpg",
       "published": "2026-06-09T17:00:46+00:00",
       "firstSeen": "2026-06-09T18:00:01.135788+00:00",
-      "lastSeen": "2026-06-09T21:00:01.281948+00:00",
+      "lastSeen": "2026-06-09T22:00:01.241721+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.1747
+      "score": 9.1477
     },
     {
       "title": "Anthropic releases its first Mythos-class model Claude Fable",
@@ -285,11 +333,11 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/STKB364_CLAUDE_2_C_96d15c.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-09T17:00:00+00:00",
       "firstSeen": "2026-06-09T18:00:01.135788+00:00",
-      "lastSeen": "2026-06-09T21:00:01.281948+00:00",
+      "lastSeen": "2026-06-09T22:00:01.241721+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 21.6443
+      "score": 21.6173
     },
     {
       "title": "Anthropic’s Claude Fable 5 is a version of Mythos the public can access today",
@@ -305,7 +353,23 @@
       "lastSeen": "2026-06-09T21:00:01.281948+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.1743
+      "score": 11.1473
+    },
+    {
+      "title": "Anthropic’s Claude Fable 5 is a version of Mythos the public can access today",
+      "url": "https://techcrunch.com/2026/06/09/anthropics-claude-fable-5-is-a-version-of-mythos-the-public-can-access-today",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Anthropic is releasing Claude Fable 5, its first Mythos-class model available to the public. The model comes with guardrails that block responses in high-risk areas like cybersecurity and biology.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/GettyImages-2279025960.jpg?w=1024",
+      "published": "2026-06-09T17:00:00+00:00",
+      "firstSeen": "2026-06-09T22:00:01.241721+00:00",
+      "lastSeen": "2026-06-09T22:00:01.241721+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 11.1473
     },
     {
       "title": "The UK just committed £1.3 billion to AI hardware, worker training, and putting AI in courtrooms",
@@ -318,10 +382,10 @@
       "image": "https://media.thenextweb.com/2026/05/UK.avif",
       "published": "2026-06-09T16:59:34+00:00",
       "firstSeen": "2026-06-09T18:00:01.135788+00:00",
-      "lastSeen": "2026-06-09T21:00:01.281948+00:00",
+      "lastSeen": "2026-06-09T22:00:01.241721+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3341
+      "score": 2.3072
     },
     {
       "title": "Lovable hit $500 million in revenue with 146 employees. Its new data shows who is actually building software now.",
@@ -337,7 +401,7 @@
       "lastSeen": "2026-06-09T21:00:01.281948+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.6314
+      "score": 3.6045
     },
     {
       "title": "Atomicwork launches AI workers that IT departments can hire, budget, and audit like human employees",
@@ -351,9 +415,9 @@
       "published": "2026-06-09T16:39:04+00:00",
       "firstSeen": "2026-06-09T18:00:01.135788+00:00",
       "lastSeen": "2026-06-09T20:00:01.743276+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 5.5248
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.4981
     },
     {
       "title": "SpaceX’s $75 billion IPO is massively oversubscribed, with single investors placing $10 billion orders",
@@ -369,7 +433,7 @@
       "lastSeen": "2026-06-09T20:00:01.743276+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0184
+      "score": 1.9919
     },
     {
       "title": "The EU just ordered Meta to let rival AI assistants back onto WhatsApp within five days",
@@ -385,7 +449,7 @@
       "lastSeen": "2026-06-09T19:00:01.724561+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.2138
+      "score": 4.1874
     },
     {
       "title": "Apple is embracing the fantasy of AI photo editing",
@@ -398,10 +462,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/Apple-generative-AI-photo-editing-lede.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C14.033409967608%2C100%2C71.933180064785",
       "published": "2026-06-09T16:13:14+00:00",
       "firstSeen": "2026-06-09T18:00:01.135788+00:00",
-      "lastSeen": "2026-06-09T21:00:01.281948+00:00",
+      "lastSeen": "2026-06-09T22:00:01.241721+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3232
+      "score": 3.2968
     },
     {
       "title": "It’s not FAANG anymore. It’s MANGOS.",
@@ -414,10 +478,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/Mango-crushing-fang.png?resize=1200%2C960",
       "published": "2026-06-09T16:09:14+00:00",
       "firstSeen": "2026-06-09T16:12:33.742848+00:00",
-      "lastSeen": "2026-06-09T21:00:01.281948+00:00",
+      "lastSeen": "2026-06-09T22:00:01.241721+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.8514
+      "score": 6.8251
     },
     {
       "title": "The Netherlands is screening foreign investment in AI companies from January, after letting Nexperia slip through",
@@ -433,7 +497,7 @@
       "lastSeen": "2026-06-09T19:00:01.724561+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0085
+      "score": 1.9823
     },
     {
       "title": "India GCCs Lead AI and Cloud Hiring as IT Services Trail",
@@ -446,10 +510,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/06/indian-flag-waving-against-a-blue-sky-2026-01-05-01-12-35-utc-1024x683.jpg?f=jpeg",
       "published": "2026-06-09T16:00:41+00:00",
       "firstSeen": "2026-06-09T18:00:01.135788+00:00",
-      "lastSeen": "2026-06-09T21:00:01.281948+00:00",
+      "lastSeen": "2026-06-09T22:00:01.241721+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1077
+      "score": 3.0814
     },
     {
       "title": "Introducing North Mini Code: Cohere’s First Model For Developers",
@@ -462,10 +526,10 @@
       "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/CohereLabs/introducing-north-mini-code.png",
       "published": "2026-06-09T15:56:23+00:00",
       "firstSeen": "2026-06-09T21:00:01.281948+00:00",
-      "lastSeen": "2026-06-09T21:00:01.281948+00:00",
+      "lastSeen": "2026-06-09T22:00:01.241721+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2857
+      "score": 2.2596
     },
     {
       "title": "SoftBank briefly became Japan’s most valuable company. The last time that happened was February 2000.",
@@ -481,7 +545,7 @@
       "lastSeen": "2026-06-09T18:00:01.135788+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.7986
+      "score": 3.7726
     },
     {
       "title": "Fluid, natural voice translation with Gemini 3.5 Live Translate",
@@ -494,11 +558,11 @@
       "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/3-5_Live_Translate_hero.width-1300.png",
       "published": "2026-06-09T15:16:25+00:00",
       "firstSeen": "2026-06-09T16:00:01.597394+00:00",
-      "lastSeen": "2026-06-09T21:00:01.281948+00:00",
+      "lastSeen": "2026-06-09T22:00:01.241721+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 16.5682
+      "score": 16.5425
     },
     {
       "title": "High-severity vulnerability in Linux caused by a single faulty character",
@@ -511,10 +575,10 @@
       "image": "https://cdn.arstechnica.net/wp-content/uploads/2023/07/exploit-vulnerability-security.jpg",
       "published": "2026-06-09T15:12:43+00:00",
       "firstSeen": "2026-06-09T16:00:01.597394+00:00",
-      "lastSeen": "2026-06-09T21:00:01.281948+00:00",
+      "lastSeen": "2026-06-09T22:00:01.241721+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9866
+      "score": 1.961
     },
     {
       "title": "Klarna launches US savings accounts at 3.28% as the buy-now-pay-later company tries to become a bank",
@@ -530,7 +594,7 @@
       "lastSeen": "2026-06-09T18:00:01.135788+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 0.6845
+      "score": 0.6589
     },
     {
       "title": "Microsoft AI chief walks back comments about AI taking over white-collar work",
@@ -543,10 +607,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/gettyimages-2219304754.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.737892056687%2C100%2C78.524215886627&amp%3Bw=1200",
       "published": "2026-06-09T14:54:51+00:00",
       "firstSeen": "2026-06-09T15:00:01.178926+00:00",
-      "lastSeen": "2026-06-09T21:00:01.281948+00:00",
+      "lastSeen": "2026-06-09T22:00:01.241721+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1889
+      "score": 2.1635
     },
     {
       "title": "Anthropic says Mythos is too dangerous for the public. It just gave 150 more organisations access.",
@@ -562,7 +626,7 @@
       "lastSeen": "2026-06-09T18:00:01.135788+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9757
+      "score": 4.9503
     },
     {
       "title": "Apple’s AI promises are finally, almost, sort of here",
@@ -575,74 +639,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/lcimg-e9a9ad41-eb47-49f2-80a4-3fb06df3a0d1.jpeg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.597538331207%2C100%2C78.804923337586&amp%3Bw=1200",
       "published": "2026-06-09T14:18:18+00:00",
       "firstSeen": "2026-06-09T15:00:01.178926+00:00",
-      "lastSeen": "2026-06-09T21:00:01.281948+00:00",
+      "lastSeen": "2026-06-09T22:00:01.241721+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2733
-    },
-    {
-      "title": "Introducing Gemma 4 12B: a unified, encoder-free multimodal model",
-      "url": "https://deepmind.google/blog/introducing-gemma-4-12b-a-unified-encoder-free-multimodal-model",
-      "source": "Google DeepMind Blog",
-      "sourceUrl": "https://deepmind.google/blog/rss.xml",
-      "sourceWeight": 0.95,
-      "category": "AI",
-      "summary": "",
-      "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Social_Image_G4_12B.width-1300.png",
-      "published": "2026-06-09T14:10:19+00:00",
-      "firstSeen": "2026-06-09T15:00:01.178926+00:00",
-      "lastSeen": "2026-06-09T21:00:01.281948+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.6399
-    },
-    {
-      "title": "Powering the future of robotics in Europe",
-      "url": "https://deepmind.google/blog/powering-the-future-of-robotics-in-europe",
-      "source": "Google DeepMind Blog",
-      "sourceUrl": "https://deepmind.google/blog/rss.xml",
-      "sourceWeight": 0.95,
-      "category": "AI",
-      "summary": "",
-      "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/130.width-1300.jpg",
-      "published": "2026-06-09T14:02:33+00:00",
-      "firstSeen": "2026-06-09T15:00:01.178926+00:00",
-      "lastSeen": "2026-06-09T21:00:01.281948+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.2367
-    },
-    {
-      "title": "Engineers who helped build Salesforce’s Agentforce raised $5.1M to build its opposite",
-      "url": "https://thenextweb.com/news/zaro-5-1m-pre-seed-agentforce-team-enterprise-ai",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "A London startup called Zaro has come out of stealth. Cherry Ventures led its $5.1mn pre-seed round. Zaro wants to build one AI workspace that a company owns, not its software vendors. Who is backing Zaro The angel list is senior for such an early round. Hugging Face co-founder Thomas Wolf and GitHub chief Thomas [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/Michael-Bajwa-and-Qian-Zheng.avif",
-      "published": "2026-06-09T13:57:34+00:00",
-      "firstSeen": "2026-06-09T15:00:01.178926+00:00",
-      "lastSeen": "2026-06-09T18:00:01.135788+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.6546
-    },
-    {
-      "title": "Sandstone raises $30M to bring AI to in-house legal teams",
-      "url": "https://techcrunch.com/2026/06/09/sandstone-raises-30m-to-bring-ai-to-in-house-legal-teams",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Sandstone's Series A comes just six months after a Sequoia-led seed round.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/06/image-6.png?resize=1200%2C800",
-      "published": "2026-06-09T13:47:25+00:00",
-      "firstSeen": "2026-06-09T14:00:01.971236+00:00",
-      "lastSeen": "2026-06-09T21:00:01.281948+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.0904
+      "score": 3.2483
     },
     {
       "title": "The Life Scientific: Helen Hastie",
@@ -655,10 +655,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-08T20:00:00+00:00",
       "firstSeen": "2026-06-08T21:00:01.371488+00:00",
-      "lastSeen": "2026-06-09T21:00:01.281948+00:00",
+      "lastSeen": "2026-06-09T22:00:01.241721+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7393
+      "score": 1.7242
     },
     {
       "title": "The Life Scientific: Seth Berkley",
@@ -671,10 +671,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-01T20:00:00+00:00",
       "firstSeen": "2026-06-01T21:00:01.828388+00:00",
-      "lastSeen": "2026-06-09T21:00:01.281948+00:00",
+      "lastSeen": "2026-06-09T22:00:01.241721+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.1952
+      "score": 1.195
     },
     {
       "title": "Dean Lomax on discovering ichthyosaurs and defying nay-sayers",
