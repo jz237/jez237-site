@@ -1618,5 +1618,17 @@
     "slot": "evening",
     "model": "openai/gpt-image-2",
     "size": "1024x1536"
+  },
+  {
+    "id": "2026-06-09-morning-car-as-blue-ceramic-tile-artifact",
+    "title": "Car as Blue Ceramic Tile Artifact",
+    "tests": "Generated with openai/gpt-image-2 via synchronous CLI; verified exact output PNG exists before append.",
+    "prompt": "Use the uploaded reference photo and preserve the car identity, camera angle, pose, silhouette, proportions, wheel placement, window shape, grille shape, paint-break pattern, trim details, and most recognizable features, then transform the car into a blue ceramic tile artifact displayed in a sunlit restoration studio. Rebuild the vehicle from hand-cut cobalt, indigo, white, and pale aqua ceramic tiles with visible grout seams following the original panel lines, glazed crackle texture, chipped tile edges, subtle gold repair lines, ceramic-tile headlights with milky glass inserts, dark blue tile tires, loose tile fragments, plaster dust, tile nippers, wet sponges, brass calipers, ceramic glaze swatches, a low museum plinth, soft north-window light, and warm floor reflections. Keep the source car recognizable while changing the material, surface texture, setting, and object logic into a tactile restoration-studio artifact. Avoid extra wheels, duplicate cars, readable text, logos, license plate text, watermark, and losing the car's distinctive silhouette.\n\nSource photo needed: a clear photo of a car.\n\nReusable fill-in-the-blank template: Use the uploaded reference photo and preserve the [SUBJECT]'s identity, camera angle, pose, silhouette, proportions, key markings, structural details, and recognizable features, then transform [SUBJECT] into a [MATERIAL] artifact in [SETTING] with [MOOD] lighting. Keep the source recognizable while changing the body material, surface texture, props, and environment into a cohesive [STYLE] object. Avoid extra limbs or parts, duplicate subjects, readable text, logo artifacts, watermark, and losing the source silhouette.\n\nWhat to preserve: car identity, camera angle, body silhouette, proportions, wheels, windows, grille, trim, paint-break pattern, distinctive marks, and overall composition.\n\nWhat to change: convert metal, glass, rubber, and trim into blue ceramic tile, glazed crackle, grout seams, chipped edges, gold repair lines, ceramic headlights, studio plinth, restoration tools, and tactile museum-workshop lighting.\n\nExample substitution: Upload a clear three-quarter photo of a compact hatchback; preserve its boxy silhouette, wheel placement, window geometry, grille, trim, and camera angle, then turn it into a cobalt-and-aqua ceramic tile artifact on a restoration-studio plinth.",
+    "image": "images/2026-06-09-morning-car-as-blue-ceramic-tile-artifact.png",
+    "date": "2026-06-09",
+    "batch": "Daily Prompt",
+    "slot": "morning",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
