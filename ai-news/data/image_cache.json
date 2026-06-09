@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-09T14:00:01.971236+00:00",
+  "updatedAt": "2026-06-09T15:00:01.178926+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -9780,6 +9780,22 @@
     "https://techcrunch.com/2026/06/09/lovable-says-it-has-hit-500m-in-annualized-revenue-with-1-million-new-projects-a-week": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/GettyImages-2245627953.jpg?resize=1200,800",
       "checkedAt": "2026-06-09T14:00:01.971236+00:00"
+    },
+    "https://www.theverge.com/tech/946879/microsoft-mustafa-suleyman-ai-white-collar-jobs": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/gettyimages-2219304754.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.737892056687%2C100%2C78.524215886627&amp;w=1200",
+      "checkedAt": "2026-06-09T15:00:01.178926+00:00"
+    },
+    "https://www.theverge.com/ai-artificial-intelligence/946780/apples-ai-promises-are-finally-almost-sort-of-here": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/lcimg-e9a9ad41-eb47-49f2-80a4-3fb06df3a0d1.jpeg?quality=90&amp;strip=all&amp;crop=0%2C10.597538331207%2C100%2C78.804923337586&amp;w=1200",
+      "checkedAt": "2026-06-09T15:00:01.178926+00:00"
+    },
+    "https://deepmind.google/blog/introducing-gemma-4-12b-a-unified-encoder-free-multimodal-model": {
+      "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Social_Image_G4_12B.width-1300.png",
+      "checkedAt": "2026-06-09T15:00:01.178926+00:00"
+    },
+    "https://deepmind.google/blog/powering-the-future-of-robotics-in-europe": {
+      "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/130.width-1300.jpg",
+      "checkedAt": "2026-06-09T15:00:01.178926+00:00"
     }
   }
 }
