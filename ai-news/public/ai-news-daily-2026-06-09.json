@@ -1,6 +1,6 @@
 {
   "date": "2026-06-09",
-  "updatedAt": "2026-06-09T08:39:44.860037+00:00",
+  "updatedAt": "2026-06-09T10:00:01.430655+00:00",
   "items": [
     {
       "title": "Lucid’s Gravity SUV gets hands-free highway driving in its latest over-the-air update",
@@ -13,11 +13,11 @@
       "image": "https://media.thenextweb.com/2026/06/lucid-gravity-hands-free-driving-dreamdrive-ota.avif",
       "published": "2026-06-09T07:41:16+00:00",
       "firstSeen": "2026-06-09T08:39:44.860037+00:00",
-      "lastSeen": "2026-06-09T08:39:44.860037+00:00",
+      "lastSeen": "2026-06-09T10:00:01.430655+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 12.6206
+      "score": 12.5816
     },
     {
       "title": "OpenAI filed confidentially for an IPO. Anthropic filed last week. SpaceX lists on Thursday. The AI public market is about to get very crowded.",
@@ -30,10 +30,74 @@
       "image": "https://media.thenextweb.com/2026/05/Sam-Altman.avif",
       "published": "2026-06-09T07:51:07+00:00",
       "firstSeen": "2026-06-09T08:39:44.860037+00:00",
-      "lastSeen": "2026-06-09T08:39:44.860037+00:00",
+      "lastSeen": "2026-06-09T10:00:01.430655+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.4755
+      "score": 8.4363
+    },
+    {
+      "title": "Perplexity is sticking with a 2028 IPO while OpenAI and Anthropic race to list this year",
+      "url": "https://thenextweb.com/news/perplexity-ipo-2028-openai-anthropic-listings",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Perplexity AI plans to go public in 2028, and CEO Aravind Srinivas told CNBC that timeline has not changed because OpenAI and Anthropic are now filing for IPOs. “Agnostic of these two companies, we were planning for something in 2028, so that still remains the case,” Srinivas said. The statement positions Perplexity as the deliberate [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/perplexity-ipo-2028-openai-anthropic-listings.avif",
+      "published": "2026-06-09T09:05:16+00:00",
+      "firstSeen": "2026-06-09T10:00:01.430655+00:00",
+      "lastSeen": "2026-06-09T10:00:01.430655+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 8.1225
+    },
+    {
+      "title": "Apple rebuilt Siri on Google’s AI and Nvidia’s chips, then spent WWDC explaining why that doesn’t break its privacy promise",
+      "url": "https://thenextweb.com/news/apple-siri-google-gemini-nvidia-privacy-wwdc",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Apple’s most important AI announcement at WWDC 2026 was not a feature. It was an architecture. The rebuilt Siri runs on a custom 1.2-trillion-parameter model built on Google’s Gemini technology, hosted on Google Cloud servers powered by Nvidia Blackwell B200 GPUs. For the company that made privacy its premium product, outsourcing AI inference to its largest competitor’s cloud [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/Apple-hq.avif",
+      "published": "2026-06-09T09:10:05+00:00",
+      "firstSeen": "2026-06-09T10:00:01.430655+00:00",
+      "lastSeen": "2026-06-09T10:00:01.430655+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 7.8249
+    },
+    {
+      "title": "iOS 27 is full of references to a folding iPhone. Apple didn’t mention it once at WWDC.",
+      "url": "https://thenextweb.com/news/apple-ios-27-foldable-iphone-hints-wwdc",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Apple did not announce a foldable iPhone at WWDC 2026. But the first developer beta of iOS 27 is full of evidence that one is coming, and soon. Software researcher M1Astra discovered code strings inside the beta that reference folding hardware directly. One mechanism is labelled “foldState.” Others include “mechanicalAngleDegrees” and “angleDegrees,” suggesting the operating system can [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/apple-smart-glasses-eyewear-market-disruption-watch-playbook-1.avif",
+      "published": "2026-06-09T08:14:47+00:00",
+      "firstSeen": "2026-06-09T10:00:01.430655+00:00",
+      "lastSeen": "2026-06-09T10:00:01.430655+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.5977
+    },
+    {
+      "title": "Jensen Huang won’t testify before the Senate on Nvidia’s China chip sales. He offered a tour of headquarters instead.",
+      "url": "https://thenextweb.com/news/jensen-huang-wont-testify-before-the-senate-on-nvidias-china-chip-sales-he-offered-a-tour-of-headquarters-instead",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Nvidia CEO Jensen Huang has declined an invitation from Senator Elizabeth Warren to testify before the Senate Banking Committee on Thursday about the chipmaker’s sales to China and US export controls. Warren had asked Huang to appear under oath to discuss how Nvidia’s AI chips reach Chinese buyers and whether they end up in military applications. Huang [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/nvidia-photonics-investment-copper-bottleneck-ai-data-centre.avif",
+      "published": "2026-06-09T08:29:46+00:00",
+      "firstSeen": "2026-06-09T10:00:01.430655+00:00",
+      "lastSeen": "2026-06-09T10:00:01.430655+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.205
     },
     {
       "title": "Why Apple’s slow-and-steady AI bet is starting to look pretty smart",
@@ -46,10 +110,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/apple-siri-ai-use-cases.png?w=1186",
       "published": "2026-06-09T01:56:48+00:00",
       "firstSeen": "2026-06-09T02:00:01.687416+00:00",
-      "lastSeen": "2026-06-09T08:39:44.860037+00:00",
+      "lastSeen": "2026-06-09T10:00:01.430655+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2028
+      "score": 3.1695
     },
     {
       "title": "v1.88.1",
@@ -62,10 +126,10 @@
       "image": "https://opengraph.githubassets.com/ec499708075f24621d7fcedea57866e12aa1896488bf54bec2bf826d3ab470a3/BerriAI/litellm/releases/tag/v1.88.1",
       "published": "2026-06-09T05:54:19+00:00",
       "firstSeen": "2026-06-09T02:00:01.687416+00:00",
-      "lastSeen": "2026-06-09T08:39:44.860037+00:00",
+      "lastSeen": "2026-06-09T10:00:01.430655+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9089
+      "score": 2.8717
     },
     {
       "title": "v1.84.6",
@@ -78,70 +142,65 @@
       "image": "https://opengraph.githubassets.com/2289ef0fcf1c2ba20456e6d2fb1649302a0ee9442d8f03543c7a3223e1c725b2/BerriAI/litellm/releases/tag/v1.84.6",
       "published": "2026-06-09T01:55:10+00:00",
       "firstSeen": "2026-06-09T02:00:01.687416+00:00",
-      "lastSeen": "2026-06-09T08:39:44.860037+00:00",
+      "lastSeen": "2026-06-09T10:00:01.430655+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8021
+      "score": 2.7688
     },
     {
-      "title": "Sherin Muckatira, Jesse Geneson, Slava Gerovitch, Pavel Etingof, Mikhail Gronas, Anna Rumshisky",
-      "url": "https://llm-stats.com/ai-news",
-      "source": "LLM Stats AI News",
-      "sourceUrl": "https://llm-stats.com/ai-news",
-      "sourceWeight": 0.9,
+      "title": "NeuroBait: I fine-tuned a model to spark dopamine for ADHD brain",
+      "url": "https://huggingface.co/blog/build-small-hackathon/neurobait-adhd",
+      "source": "Hugging Face Blog",
+      "sourceUrl": "https://huggingface.co/blog/feed.xml",
+      "sourceWeight": 0.95,
       "category": "AI",
       "summary": "",
-      "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-09T08:39:50.206385+00:00",
-      "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-09T08:39:44.860037+00:00",
+      "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/build-small-hackathon/neurobait-adhd.png",
+      "published": "2026-06-09T09:04:58+00:00",
+      "firstSeen": "2026-06-09T10:00:01.430655+00:00",
+      "lastSeen": "2026-06-09T10:00:01.430655+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.36
+      "score": 2.4023
     },
     {
-      "title": "A Florida startup is building a thorium fuel supply chain from scratch, starting with an Australian mine",
-      "url": "https://thenextweb.com/news/a-florida-startup-is-building-a-thorium-fuel-supply-chain-from-scratch-starting-with-an-australian-mine",
+      "title": "Five things you need to know about AI",
+      "url": "https://www.technologyreview.com/2026/06/09/1138582/five-things-you-need-to-know-about-ai",
+      "source": "MIT Technology Review AI",
+      "sourceUrl": "https://www.technologyreview.com/topic/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "At SXSW London last week I gave a talk called “Five things you need to know about AI,” in which I shared what I think are the biggest themes in AI right now. I pulled a few things from our first AI10 list, an annual guide to the most important trends in this buzzy world,&#8230;",
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/06/5-things-a.jpg?resize=1200%2C600",
+      "published": "2026-06-09T09:16:45+00:00",
+      "firstSeen": "2026-06-09T10:00:01.430655+00:00",
+      "lastSeen": "2026-06-09T10:00:01.430655+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2682
+    },
+    {
+      "title": "BYD says demand is double its capacity, but its sales data tells a different story",
+      "url": "https://thenextweb.com/news/byd-80-percent-ev-penetration-china-pentagon-list",
       "source": "The Next Web",
       "sourceUrl": "https://thenextweb.com/feed",
       "sourceWeight": 0.75,
       "category": "AI",
-      "summary": "Ampera, a Florida-based nuclear energy startup, announced on Monday that it has established an Australian subsidiary to secure thorium supply for its advanced reactor programme. The company formed Ampera Australia Pty Ltd in February 2026 to procure and import thorium to the United States. The move is part of a strategy to vertically integrate the [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/ampera-thorium-australia-nuclear-fuel-triso.avif",
-      "published": "2026-06-09T07:18:33+00:00",
-      "firstSeen": "2026-06-09T08:39:44.860037+00:00",
-      "lastSeen": "2026-06-09T08:39:44.860037+00:00",
+      "summary": "BYD’s executive vice president Stella Li told CNBC on Monday that China’s EV market will push to close to 80% penetration, a bullish forecast that contrasts sharply with rival Nio, whose chief executive William Li said last month that the industry’s “golden era” was over. The prediction arrives on the same day the Pentagon added [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/byd-80-percent-ev-penetration-china-pentagon-list.avif",
+      "published": "2026-06-09T09:08:19+00:00",
+      "firstSeen": "2026-06-09T10:00:01.430655+00:00",
+      "lastSeen": "2026-06-09T10:00:01.430655+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1094
-    },
-    {
-      "title": "Mercor’s Brendan Foody calls out Sequoia, accusing it of ‘dual-pricing’ valuation tricks",
-      "url": "https://techcrunch.com/2026/06/08/mercors-brendan-foody-calls-out-sequoia-over-dual-pricing-valuation-tricks",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Sequoia is just one of the top firms that sells same equity at two different prices.",
-      "image": "https://techcrunch.com/wp-content/uploads/2024/11/GettyImages-1258486979.jpg?w=1024",
-      "published": "2026-06-09T00:45:56+00:00",
-      "firstSeen": "2026-06-09T01:00:01.108039+00:00",
-      "lastSeen": "2026-06-09T08:39:44.860037+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.0733
+      "score": 2.124
     }
   ],
   "errors": [
     {
-      "source": "Artificial Intelligence News",
-      "url": "https://www.artificialintelligence-news.com/categories/artificial-intelligence/feed/",
-      "error": "not well-formed (invalid token): line 1, column 158"
-    },
-    {
       "source": "MarkTechPost",
       "url": "https://www.marktechpost.com/feed/",
-      "error": "not well-formed (invalid token): line 1, column 119"
+      "error": "HTTP Error 403: Forbidden"
     }
   ]
 }
