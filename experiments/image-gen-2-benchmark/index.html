@@ -324,7 +324,7 @@
       setTimeout(updateHeroChrome, 0);
       setTimeout(updateHeroChrome, 150);
 
-      const IMAGE_BASE_URL = 'images/';
+      const IMAGE_BASE_URL = 'https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/image-gen-2-benchmark/images/';
       const escapeHtml = (value) => String(value || '').replace(/[&<>'"]/g, (ch) => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[ch]));
       const imageUrl = (value) => {
         const path = String(value || '');
