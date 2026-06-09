@@ -192,15 +192,24 @@
       const image = document.getElementById('lightbox-image');
       const title = document.getElementById('lightbox-title');
       const close = document.getElementById('lightbox-close');
+      const IMAGE_BASE_URL = 'images/';
       const escapeHtml = (value) => String(value || '').replace(/[&<>'"]/g, (ch) => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[ch]));
+      const imageUrl = (value) => {
+        const path = String(value || '');
+        if (/^(?:[a-z]+:)?\/\//i.test(path) || path.startsWith('data:') || path.startsWith('/')) return path;
+        if (!path.startsWith('images/')) return path;
+        const base = IMAGE_BASE_URL.endsWith('/') ? IMAGE_BASE_URL : `${IMAGE_BASE_URL}/`;
+        return `${base}${path.slice('images/'.length)}`;
+      };
 
       function cardHtml(item) {
         const world = item.world || {};
         const portrait = String(item.size || '').includes('1536') || String(item.image || '').includes('almanac');
         const description = world.entryDescription || item.tests || '';
+        const src = imageUrl(item.image);
         return `
           <article class="card">
-            <div class="image-wrap${portrait ? ' portrait' : ''}"><img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.title)}" loading="lazy"></div>
+            <div class="image-wrap${portrait ? ' portrait' : ''}"><img src="${escapeHtml(src)}" alt="${escapeHtml(item.title)}" loading="lazy"></div>
             <div class="content">
               <div class="kicker">${escapeHtml(item.date || '')} · ${escapeHtml(item.slot || '')}</div>
               <h3>${escapeHtml(item.title)}</h3>
