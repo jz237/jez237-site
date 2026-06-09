@@ -122,9 +122,9 @@ function buildCaption(issue, index) {
   const number = issueNumber(issue, index);
   const displayDate = clean(issue.displayDate || issue.historicDate || "");
   const bullets = [
+    namedBullet("Games", issue.storeShelves?.[0]),
     leadBullet(issue),
     namedBullet("Software", issue.softwareList?.[0]),
-    namedBullet("Games", issue.storeShelves?.[0]),
     cultureBullet(issue),
     namedBullet("Price Watch", issue.priceWatch?.[0])
   ].filter(Boolean);
