@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-09T11:00:01.786490+00:00",
+  "updatedAt": "2026-06-09T12:00:02.085773+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -9756,6 +9756,14 @@
     "https://www.techrepublic.com/article/news-openai-confidential-sec-ipo-filing": {
       "image": "https://assets.techrepublic.com/uploads/2025/10/tr-10282025-news-openai-energy-ai-policy.jpg?f=jpeg",
       "checkedAt": "2026-06-09T11:00:01.786490+00:00"
+    },
+    "https://techcrunch.com/2026/06/09/how-an-e-scooter-founder-raised-5-million-to-build-space-data-centers": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/satellite.png?resize=1200,675",
+      "checkedAt": "2026-06-09T12:00:02.085773+00:00"
+    },
+    "https://huggingface.co/blog/mishig/spaces-agents-md": {
+      "image": "https://cdn-uploads.huggingface.co/production/uploads/60a551a34ecc5d054c8ad93e/0tamlKpAvO3lZEklNmwHT.png",
+      "checkedAt": "2026-06-09T12:00:02.085773+00:00"
     }
   }
 }
