@@ -616,6 +616,12 @@
       padding: 3px 6px;
       text-transform: uppercase;
     }
+    .platform-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-top: 8px;
+    }
     .price-list span {
       color: var(--cc-blue);
       font-weight: 700;
@@ -1032,6 +1038,149 @@
     .archive-strip a:not([aria-current="page"]) em {
       color: var(--cc-muted);
     }
+    .cover-wall {
+      margin-top: 14px;
+      border: 3px solid var(--cc-ink);
+      border-top-width: 8px;
+      border-top-color: var(--cc-blue);
+      background:
+        linear-gradient(90deg, rgba(38, 79, 158, 0.12), transparent 38%),
+        repeating-linear-gradient(0deg, rgba(27, 26, 23, 0.028), rgba(27, 26, 23, 0.028) 1px, transparent 1px, transparent 7px),
+        rgba(255, 248, 220, 0.92);
+      box-shadow: 5px 5px 0 rgba(27, 26, 23, 0.12);
+      padding: 12px;
+    }
+    .cover-wall-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .cover-wall-head > p {
+      display: inline-block;
+      width: fit-content;
+      margin: 0;
+      padding: 4px 7px;
+      background: var(--cc-ink);
+      color: var(--cc-paper) !important;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+    .platform-filter {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 6px;
+      min-width: 0;
+    }
+    .platform-filter button {
+      appearance: none;
+      border: 1px solid var(--cc-blue);
+      border-radius: 0;
+      background: rgba(255, 243, 206, 0.86) !important;
+      color: var(--cc-blue) !important;
+      cursor: pointer;
+      font: inherit;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      line-height: 1.1;
+      padding: 5px 7px;
+      text-transform: uppercase;
+    }
+    .platform-filter button[aria-pressed="true"],
+    .platform-filter button:hover,
+    .platform-filter button:focus-visible {
+      border-color: var(--cc-ink);
+      background: var(--cc-ink) !important;
+      color: var(--cc-paper) !important;
+    }
+    .cover-wall ul {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .cover-wall li {
+      min-width: 0;
+    }
+    .cover-card {
+      display: grid;
+      grid-template-rows: minmax(0, auto) 1fr;
+      min-height: 100%;
+      border: 2px solid var(--cc-ink);
+      background:
+        repeating-linear-gradient(90deg, rgba(27, 26, 23, 0.035), rgba(27, 26, 23, 0.035) 1px, transparent 1px, transparent 9px),
+        rgba(255, 243, 206, 0.9);
+      color: var(--cc-ink);
+      text-decoration: none;
+      box-shadow: 4px 4px 0 rgba(27, 26, 23, 0.1);
+      overflow: hidden;
+    }
+    .cover-card[aria-current="page"] {
+      outline: 4px solid var(--cc-amber);
+      outline-offset: -6px;
+    }
+    .cover-card figure {
+      position: relative;
+      aspect-ratio: 3 / 4;
+      margin: 0;
+      border-bottom: 2px solid var(--cc-ink);
+      background: var(--cc-ink);
+      overflow: hidden;
+    }
+    .cover-card img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: contrast(1.08) saturate(0.9);
+    }
+    .cover-card figure::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        repeating-linear-gradient(0deg, rgba(255,255,255,0.12), rgba(255,255,255,0.12) 1px, transparent 1px, transparent 4px),
+        linear-gradient(180deg, transparent 48%, rgba(27, 26, 23, 0.38));
+      mix-blend-mode: multiply;
+    }
+    .cover-card-body {
+      display: grid;
+      gap: 7px;
+      min-width: 0;
+      padding: 10px;
+    }
+    .cover-card-kicker {
+      color: var(--cc-blue);
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      line-height: 1.1;
+      text-transform: uppercase;
+    }
+    .cover-card strong {
+      display: block;
+      color: var(--cc-ink);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1.05rem;
+      line-height: 1.05;
+      overflow-wrap: anywhere;
+    }
+    .cover-card em {
+      display: block;
+      color: var(--cc-muted);
+      font-size: 0.74rem;
+      font-style: normal;
+      line-height: 1.25;
+      overflow-wrap: anywhere;
+    }
     .week-scan {
       margin-top: 14px;
       border: 3px solid var(--cc-ink);
@@ -1341,6 +1490,7 @@
       .issue-tools,
       .issue-step-nav,
       .archive-strip,
+      .cover-wall,
       .editor-note,
       .week-scan,
       .article-sources,
@@ -1542,6 +1692,15 @@
         border-width: 3px;
         box-shadow: 5px 5px 0 rgba(27, 26, 23, 0.14);
       }
+      .hero-strapline {
+        position: static;
+        margin: -14px -14px 0;
+      }
+      .chronicle-hero > div,
+      .chronicle-hero > aside,
+      .chronicle-hero > figure {
+        margin-top: 0;
+      }
       .chronicle-hero,
       .chronicle-grid,
       .computer-grid,
@@ -1551,6 +1710,16 @@
       }
       .issue-step-nav,
       .week-scan ul {
+        grid-template-columns: 1fr;
+      }
+      .cover-wall-head {
+        display: grid;
+        gap: 10px;
+      }
+      .platform-filter {
+        justify-content: flex-start;
+      }
+      .cover-wall ul {
         grid-template-columns: 1fr;
       }
       .chronicle-hero h1 {
@@ -1586,6 +1755,7 @@
       .chronicle-kicker,
       .brief-kicker,
       .platform-tag,
+      .platform-filter button,
       .confidence {
         white-space: normal;
       }
@@ -1664,6 +1834,13 @@
       <p>Issue Archive</p>
       <ul data-archive-list></ul>
     </nav>
+    <section class="cover-wall" aria-label="Cover wall">
+      <div class="cover-wall-head">
+        <p>Cover Wall</p>
+        <div class="platform-filter" data-platform-filter></div>
+      </div>
+      <ul data-cover-wall></ul>
+    </section>
     <section class="week-scan" aria-label="On this week">
       <p>On This Week</p>
       <ul data-week-scan></ul>
