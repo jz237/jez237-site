@@ -10,8 +10,12 @@ from __future__ import annotations
 import argparse
 import datetime as dt
 import json
+import mimetypes
+import os
 import re
+import shlex
 import shutil
+import subprocess
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
@@ -19,6 +23,10 @@ DATA = ROOT / "gallery-data.json"
 PROMPTS = ROOT / "prompts.json"
 WORLDS = ROOT / "worlds-data.json"
 IMAGES = ROOT / "images"
+DEFAULT_R2_ACCOUNT_ID = "ac73a259dff5a3cbeccbb78824ac0db6"
+DEFAULT_R2_BUCKET = "jez237-site-media"
+DEFAULT_R2_PREFIX = "image-gen-2-benchmark/images"
+DEFAULT_R2_PUBLIC_BASE_URL = "https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/image-gen-2-benchmark/images/"
 
 
 def slugify(value: str) -> str:
@@ -37,6 +45,29 @@ def save(path: Path, data: list[dict]) -> None:
     path.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n")
 
 
+def upload_to_r2(dest: Path, bucket: str, prefix: str, wrangler_bin: str) -> str:
+    key = f"{prefix.strip('/')}/{dest.name}"
+    content_type = mimetypes.guess_type(dest.name)[0] or "application/octet-stream"
+    cmd = [
+        *shlex.split(wrangler_bin),
+        "r2",
+        "object",
+        "put",
+        f"{bucket}/{key}",
+        "--file",
+        str(dest),
+        "--remote",
+        "--content-type",
+        content_type,
+        "--cache-control",
+        "public, max-age=31536000, immutable",
+    ]
+    env = os.environ.copy()
+    env.setdefault("CLOUDFLARE_ACCOUNT_ID", DEFAULT_R2_ACCOUNT_ID)
+    subprocess.run(cmd, check=True, env=env)
+    return key
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--title", required=True)
@@ -53,6 +84,11 @@ def main() -> None:
     ap.add_argument("--world-continuity", default="")
     ap.add_argument("--world-entry-description", default="")
     ap.add_argument("--world-only", action="store_true", help="Append to worlds-data.json only, not the main prompt gallery")
+    ap.add_argument("--skip-r2-upload", action="store_true", help="Copy the image locally but do not upload it to Cloudflare R2")
+    ap.add_argument("--r2-bucket", default=os.environ.get("IMAGE_ARCHIVE_R2_BUCKET", DEFAULT_R2_BUCKET))
+    ap.add_argument("--r2-prefix", default=os.environ.get("IMAGE_ARCHIVE_R2_PREFIX", DEFAULT_R2_PREFIX))
+    ap.add_argument("--r2-public-base-url", default=os.environ.get("IMAGE_ARCHIVE_R2_PUBLIC_BASE_URL", DEFAULT_R2_PUBLIC_BASE_URL))
+    ap.add_argument("--wrangler-bin", default=os.environ.get("WRANGLER_BIN", "wrangler"))
     args = ap.parse_args()
 
     src = Path(args.image).expanduser().resolve()
@@ -67,6 +103,10 @@ def main() -> None:
         dest = IMAGES / f"{base_slug}-{n}{src.suffix.lower() or '.png'}"
         n += 1
     shutil.copy2(src, dest)
+    if args.skip_r2_upload:
+        r2_key = ""
+    else:
+        r2_key = upload_to_r2(dest, args.r2_bucket, args.r2_prefix, args.wrangler_bin)
 
     entry = {
         "id": dest.stem,
@@ -94,6 +134,9 @@ def main() -> None:
         data.append(entry)
         save(path, data)
 
+    if r2_key:
+        base = args.r2_public_base_url.rstrip("/") + "/"
+        print(f"Uploaded image to R2: {base}{dest.name}")
     print(json.dumps(entry, indent=2, ensure_ascii=False))
 
 
