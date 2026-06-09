@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-REPO="${REPO:-/home/jez237/.openclaw/workspace/jez237-website}"
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+REPO="${REPO:-$(cd -- "$SCRIPT_DIR/.." && pwd)}"
 SOURCE_DIR="$REPO/prototypes/hidden-reef"
 BUILD_DIR="$REPO/tmp/hidden-reef-cloudflare-deploy"
 SECRET_ENV="$HOME/.config/openclaw/secrets/hidden-reef-cloudflare.env"
