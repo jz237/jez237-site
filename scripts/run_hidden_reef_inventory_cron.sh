@@ -100,6 +100,7 @@ fi
 git add "${TRACKED_PATHS[@]}"
 python3 /home/jez237/.openclaw/workspace/scripts/scan_git_diff_secrets.py --staged
 git commit -m "Refresh Hidden Reef inventory"
+git pull --rebase origin main
 git push origin HEAD:main
 
 scripts/deploy_hidden_reef_cloudflare.sh
