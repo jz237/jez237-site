@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-09T20:00:01.743276+00:00",
+  "updatedAt": "2026-06-09T21:00:01.281948+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -9840,6 +9840,26 @@
     "https://simonwillison.net/2026/Jun/9/andrej-karpathy": {
       "image": "",
       "checkedAt": "2026-06-09T20:00:01.743276+00:00"
+    },
+    "https://techcrunch.com/2026/06/09/hey-siri-heres-what-i-actually-want-from-ai": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/GettyImages-1139080118.jpg?resize=1200,801",
+      "checkedAt": "2026-06-09T21:00:01.281948+00:00"
+    },
+    "https://techcrunch.com/2026/06/09/anthropics-fable-5-can-make-weirdly-fun-video-games-with-the-click-of-a-button": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/Screenshot-2026-06-09-at-11.40.18-AM.png?resize=1200,871",
+      "checkedAt": "2026-06-09T21:00:01.281948+00:00"
+    },
+    "https://www.theverge.com/tech/947197/microsoft-ai-mustafa-suleyman-anthropic-claude-conscious": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/gettyimages-2207866106.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-06-09T21:00:01.281948+00:00"
+    },
+    "https://huggingface.co/blog/CohereLabs/introducing-north-mini-code": {
+      "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/CohereLabs/introducing-north-mini-code.png",
+      "checkedAt": "2026-06-09T21:00:01.281948+00:00"
+    },
+    "https://openai.com/index/nextdoor": {
+      "image": "https://images.ctfassets.net/kftzwdyauwt9/2VQiKydNUVAutnHRuCIV4S/3262cc8deff3fe49c6b512f854e14dcf/oai_Nextdoor_1x1.png?w=1600&amp;h=900&amp;fit=fill",
+      "checkedAt": "2026-06-09T21:00:01.281948+00:00"
     }
   }
 }
