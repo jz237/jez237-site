@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-09T19:00:01.724561+00:00",
+  "updatedAt": "2026-06-09T20:00:01.743276+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -9832,6 +9832,14 @@
     "https://techcrunch.com/2026/06/09/can-tech-companies-learn-to-love-cheaper-models": {
       "image": "https://techcrunch.com/wp-content/uploads/2023/08/GettyImages-1297856112.jpg?resize=1200,675",
       "checkedAt": "2026-06-09T19:00:01.724561+00:00"
+    },
+    "https://huggingface.co/blog/ServiceNow-AI/code-switching": {
+      "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/ServiceNow-AI/code-switching.png",
+      "checkedAt": "2026-06-09T20:00:01.743276+00:00"
+    },
+    "https://simonwillison.net/2026/Jun/9/andrej-karpathy": {
+      "image": "",
+      "checkedAt": "2026-06-09T20:00:01.743276+00:00"
     }
   }
 }
