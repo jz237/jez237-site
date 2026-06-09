@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-REPO="/home/jez237/.openclaw/workspace/jez237-website"
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+REPO="${REPO:-$(cd -- "$SCRIPT_DIR/.." && pwd)}"
 cd "$REPO"
 
 TRACKED_PATHS=(
@@ -99,7 +100,7 @@ fi
 git add "${TRACKED_PATHS[@]}"
 python3 /home/jez237/.openclaw/workspace/scripts/scan_git_diff_secrets.py --staged
 git commit -m "Refresh Hidden Reef inventory"
-git push origin main
+git push origin HEAD:main
 
 scripts/deploy_hidden_reef_cloudflare.sh
 
