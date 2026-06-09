@@ -1,6 +1,6 @@
 {
   "date": "2026-06-09",
-  "updatedAt": "2026-06-09T12:00:02.085773+00:00",
+  "updatedAt": "2026-06-09T13:00:02.055953+00:00",
   "items": [
     {
       "title": "Lucid’s Gravity SUV gets hands-free highway driving in its latest over-the-air update",
@@ -17,7 +17,7 @@
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 12.5258
+      "score": 12.4991
     },
     {
       "title": "OpenAI Starts IPO Process With Confidential SEC Filing",
@@ -30,10 +30,10 @@
       "image": "https://assets.techrepublic.com/uploads/2025/10/tr-10282025-news-openai-energy-ai-policy.jpg?f=jpeg",
       "published": "2026-06-09T09:52:12+00:00",
       "firstSeen": "2026-06-09T11:00:01.786490+00:00",
-      "lastSeen": "2026-06-09T12:00:02.085773+00:00",
+      "lastSeen": "2026-06-09T13:00:02.055953+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.1868
+      "score": 10.1584
     },
     {
       "title": "A UK firm trained a “sovereign” NHS triage AI that it says rivals Claude, at a fraction of the cost",
@@ -46,10 +46,10 @@
       "image": "https://media.thenextweb.com/2026/06/oneadvanced-partners-nvidia.avif",
       "published": "2026-06-09T10:36:21+00:00",
       "firstSeen": "2026-06-09T12:00:02.085773+00:00",
-      "lastSeen": "2026-06-09T12:00:02.085773+00:00",
+      "lastSeen": "2026-06-09T13:00:02.055953+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.8082
+      "score": 8.7792
     },
     {
       "title": "OpenAI filed confidentially for an IPO. Anthropic filed last week. SpaceX lists on Thursday. The AI public market is about to get very crowded.",
@@ -65,7 +65,7 @@
       "lastSeen": "2026-06-09T10:00:01.430655+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.3803
+      "score": 8.3534
     },
     {
       "title": "Perplexity is sticking with a 2028 IPO while OpenAI and Anthropic race to list this year",
@@ -81,7 +81,7 @@
       "lastSeen": "2026-06-09T11:00:01.786490+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.0645
+      "score": 8.0367
     },
     {
       "title": "Apple rebuilt Siri on Google’s AI and Nvidia’s chips, then spent WWDC explaining why that doesn’t break its privacy promise",
@@ -97,7 +97,7 @@
       "lastSeen": "2026-06-09T11:00:01.786490+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.7668
+      "score": 7.7389
     },
     {
       "title": "How an Agent Built a 3D Paris Gallery by Chaining Two Hugging Face Spaces",
@@ -110,10 +110,10 @@
       "image": "https://cdn-uploads.huggingface.co/production/uploads/60a551a34ecc5d054c8ad93e/0tamlKpAvO3lZEklNmwHT.png",
       "published": "2026-06-09T10:46:19+00:00",
       "firstSeen": "2026-06-09T12:00:02.085773+00:00",
-      "lastSeen": "2026-06-09T12:00:02.085773+00:00",
+      "lastSeen": "2026-06-09T13:00:02.055953+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0931
+      "score": 5.064
     },
     {
       "title": "Deliverance AI exits stealth with £6m ARR to run agentic AI inside companies’ own walls",
@@ -126,10 +126,10 @@
       "image": "https://media.thenextweb.com/2026/06/Deliverance-AI-team.avif",
       "published": "2026-06-09T09:27:41+00:00",
       "firstSeen": "2026-06-09T11:00:01.786490+00:00",
-      "lastSeen": "2026-06-09T12:00:02.085773+00:00",
+      "lastSeen": "2026-06-09T13:00:02.055953+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.7751
+      "score": 4.747
     },
     {
       "title": "iOS 27 is full of references to a folding iPhone. Apple didn’t mention it once at WWDC.",
@@ -145,7 +145,7 @@
       "lastSeen": "2026-06-09T10:00:01.430655+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.5411
+      "score": 4.5139
     },
     {
       "title": "Learning to lead in a hybrid human-AI enterprise",
@@ -158,45 +158,50 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/05/MIT-Abstract-Thumbnail-3-_-V2-1.png?resize=1200%2C600",
       "published": "2026-06-09T10:20:06+00:00",
       "firstSeen": "2026-06-09T11:00:01.786490+00:00",
-      "lastSeen": "2026-06-09T12:00:02.085773+00:00",
+      "lastSeen": "2026-06-09T13:00:02.055953+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.9403
+      "score": 3.9115
     },
     {
-      "title": "9 best HRIS systems for large organizations (2026)",
-      "url": "https://thenextweb.com/news/9-best-hris-systems-for-large-organizations-2026",
+      "title": "Apple’s AI pitch will live or die by its privacy promise",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/946705/apple-private-cloud-compute-ai-siri-intelligence-wwdc",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "As expected, yesterday's WWDC keynote was mostly about AI. And also as expected, Apple tried to turn its late arrival into its sales pitch: it didn't rush into AI because it was taking its time to do things right. In this case, \"right\" means \"with more privacy than anyone else.\" It's a good pitch - [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/apple-intelligence-siri-ai-private-cloud-compute.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
+      "published": "2026-06-09T12:55:33+00:00",
+      "firstSeen": "2026-06-09T13:00:02.055953+00:00",
+      "lastSeen": "2026-06-09T13:00:02.055953+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.4577
+    },
+    {
+      "title": "France’s ‘sovereign’ messenger Tchap was breached, and officials and the hacker disagree on how badly",
+      "url": "https://thenextweb.com/news/tchap-france-sovereign-messenger-breach",
       "source": "The Next Web",
       "sourceUrl": "https://thenextweb.com/feed",
       "sourceWeight": 0.75,
       "category": "AI",
-      "summary": "Enterprise HRIS buying guides tend to recommend the same five names. That shortlist hasn’t changed in a decade, and most of those platforms were built for a workforce model that no longer exists. Remote-first teams, distributed payroll across multiple countries, AI-driven workforce planning, and employee experience expectations from a generation raised on consumer apps have all reshaped [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/best-hris-systems-large-organizations-2026.avif",
-      "published": "2026-06-09T10:52:17+00:00",
-      "firstSeen": "2026-06-09T12:00:02.085773+00:00",
-      "lastSeen": "2026-06-09T12:00:02.085773+00:00",
+      "summary": "France built its own encrypted messenger so civil servants would not have to trust WhatsApp or Telegram. Now that messenger has been breached, and the government and the attacker cannot agree on how much was taken. France’s National Cybersecurity Agency, ANSSI, detected a compromise of Tchap on 7 June, and the Digital Affairs Directorate (DINUM), [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/france-linux-windows-migration-digital-sovereignty.avif",
+      "published": "2026-06-09T12:04:41+00:00",
+      "firstSeen": "2026-06-09T13:00:02.055953+00:00",
+      "lastSeen": "2026-06-09T13:00:02.055953+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.216
-    },
-    {
-      "title": "Prince William is bringing homelessness prevention to London Tech Week for the first time",
-      "url": "https://thenextweb.com/news/prince-william-london-tech-week-homewards-homelessness",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The Prince of Wales will attend London Tech Week on Wednesday for the first time, chairing a panel on how data and technology can identify people at risk of homelessness before they lose their homes. It is the first time homelessness prevention has appeared on the event’s agenda. The panel, hosted by entrepreneur Jake Humphrey, will feature [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/prince-william-london-tech-week-homewards-homelessness.avif",
-      "published": "2026-06-09T09:25:58+00:00",
-      "firstSeen": "2026-06-09T11:00:01.786490+00:00",
-      "lastSeen": "2026-06-09T12:00:02.085773+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.1743
+      "score": 3.2222
     }
   ],
   "errors": [
+    {
+      "source": "OpenAI News",
+      "url": "https://openai.com/news/rss.xml",
+      "error": "HTTP Error 500: Internal Server Error"
+    },
     {
       "source": "MarkTechPost",
       "url": "https://www.marktechpost.com/feed/",
