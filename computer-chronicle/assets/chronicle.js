@@ -50,26 +50,19 @@
     musicTitle: document.querySelector("[data-music-title]"),
     musicChartImage: document.querySelector("[data-music-chart-image]"),
     musicChart: document.querySelector("[data-music-chart]"),
-    musicSources: document.querySelector("[data-music-sources]"),
     ad: document.querySelector("[data-period-ad]"),
     classifiedsPanel: document.querySelector("[data-classifieds-panel]"),
     classifiedsLabel: document.querySelector("[data-classifieds-label]"),
     classifiedsTitle: document.querySelector("[data-classifieds-title]"),
     classifieds: document.querySelector("[data-classifieds]"),
     fallback: document.querySelector("[data-fallback]"),
-    accuracyLabel: document.querySelector("[data-accuracy-label]"),
-    accuracyTitle: document.querySelector("[data-accuracy-title]"),
-    accuracy: document.querySelector("[data-accuracy]"),
-    accuracyNote: document.querySelector("[data-accuracy-note]"),
-    sourcesLabel: document.querySelector("[data-sources-label]"),
-    sourcesTitle: document.querySelector("[data-sources-title]"),
-    sources: document.querySelector("[data-sources]"),
-    verificationLabel: document.querySelector("[data-verification-label]"),
-    verificationTitle: document.querySelector("[data-verification-title]"),
     status: document.querySelector("[data-status]"),
     editorNote: document.querySelector("[data-editor-note]"),
+    weekScan: document.querySelector("[data-week-scan]"),
     issuePicker: document.querySelector("[data-issue-picker]"),
     printIssue: document.querySelector("[data-print-issue]"),
+    previousIssue: document.querySelector("[data-previous-issue]"),
+    nextIssue: document.querySelector("[data-next-issue]"),
     archiveNav: document.querySelector("[data-archive-nav]"),
     archiveList: document.querySelector("[data-archive-list]"),
     frontPageIndex: document.querySelector("[data-front-page-index]"),
@@ -104,8 +97,7 @@
   }
 
   function confidenceBadge(text) {
-    const value = escapeHtml(text || "Unlabeled");
-    return `<span class="confidence">${value}</span>`;
+    return "";
   }
 
   function sourceName(source) {
@@ -114,14 +106,7 @@
   }
 
   function sourceLinks(issue, refs) {
-    if (!issue || !Array.isArray(refs) || !refs.length) return "";
-    const links = refs
-      .map((index) => issue.sources && issue.sources[index])
-      .filter((source) => source && source.url)
-      .map((source) => `<a href="${escapeHtml(source.url)}" target="_blank" rel="noopener">${escapeHtml(sourceName(source))}</a>`);
-
-    if (!links.length) return "";
-    return `<p class="article-sources"><span>Sources</span>${links.join("")}</p>`;
+    return "";
   }
 
   function articleVisual(image) {
@@ -154,27 +139,22 @@
     setText(els.softwareTitle, chrome(issue, "software", "title", "New & Notable Software"));
     setText(els.priceWatchLabel, chrome(issue, "priceWatch", "label", "Price Watch"));
     setText(els.priceWatchTitle, chrome(issue, "priceWatch", "title", "What It Cost"));
-    setText(els.issueBudgetLabel, chrome(issue, "issueBudget", "label", "Editor's Budget"));
-    setText(els.issueBudgetTitle, chrome(issue, "issueBudget", "title", "What Gets Ink Today"));
+    setText(els.issueBudgetLabel, "Shelf Watch");
+    setText(els.issueBudgetTitle, "Games, Gear & Culture Mix");
     setText(els.briefsLabel, chrome(issue, "briefs", "label", "Small Notices"));
     setText(els.briefsTitle, chrome(issue, "briefs", "title", "Other Things on the Desk"));
     setText(els.musicLabel, chrome(issue, "music", "label", "Rock Radio Top 10"));
     setText(els.musicTitle, chrome(issue, "music", "title", "Album-Rock Airwaves"));
     setText(els.classifiedsLabel, chrome(issue, "classifieds", "label", "Classifieds"));
     setText(els.classifiedsTitle, chrome(issue, "classifieds", "title", "Small Ads"));
-    setText(els.accuracyLabel, chrome(issue, "accuracy", "label", "Accuracy Ledger"));
-    setText(els.accuracyTitle, chrome(issue, "accuracy", "title", "How Grounded Is Today?"));
-    setText(els.sourcesLabel, chrome(issue, "sources", "label", "Source Trail"));
-    setText(els.sourcesTitle, chrome(issue, "sources", "title", "Research Log"));
-    setText(els.verificationLabel, chrome(issue, "verification", "label", "Verification Key"));
-    setText(els.verificationTitle, chrome(issue, "verification", "title", "How to Read It"));
   }
 
   function applyMasthead(issue) {
     const masthead = (issue && issue.masthead) || {};
     setText(els.mastheadKicker, masthead.kicker || "Daily historical tech desk");
     setText(els.mastheadTitle, masthead.title || "Computer Chronicle");
-    setText(els.mastheadDeck, masthead.deck || "A morning-paper style computer section built from the date 40 years ago today, with confidence labels so exact-day items, same-week context, and fallback headlines stay honest.");
+    const deck = masthead.deck || "A morning-paper style computer section built from the date 40 years ago today, with games, software, prices, charts, and culture from the historical week.";
+    setText(els.mastheadDeck, cleanPublicCopy(deck));
   }
 
   function applyVisualProfile(issue) {
@@ -198,8 +178,7 @@
     }
     if (els.heroCaption) {
       const caption = image.caption || "Issue-front visual";
-      const confidence = image.confidence ? ` · ${image.confidence}` : "";
-      els.heroCaption.textContent = `${caption}${confidence}`;
+      els.heroCaption.textContent = cleanPublicCopy(caption);
     }
   }
 
@@ -237,7 +216,7 @@
   function applyLayoutPlan(issue) {
     const defaults = {
       main: ["editor-note", "lead", "picture-desk", "computer-items", "software", "store-shelves"],
-      sidebar: ["market", "budget", "price-watch", "bbs", "curiosity", "music", "period-ad", "classifieds", "fallback", "accuracy", "sources", "verification"],
+      sidebar: ["music", "price-watch", "market", "bbs", "curiosity", "briefs", "period-ad", "classifieds", "fallback"],
     };
     const plan = (issue && issue.layoutPlan) || {};
 
@@ -269,8 +248,8 @@
     if (!els.nextAssignmentList) return;
     els.nextAssignmentList.innerHTML = [
       "Archive the current weekly issue before replacing the front page.",
-      "Lead with personal-computer, hardware, game, and culture items from the next 1982 week.",
-      "Include release dates for games and clear confidence labels for same-week context.",
+      "Lead with gaming when there is credible gaming news for the week.",
+      "Include release dates for games and keep same-week context honest in the data.",
       "Refresh the GPT Image 2 newspaper front image, hero caption, chart lists, and retail-ad flavor.",
       "Update the accuracy ledger before the web page and Discord image are posted.",
     ].map((item) => `<li>${escapeHtml(item)}</li>`).join("");
@@ -287,12 +266,12 @@
 
     return [
       {
-        kicker: chrome(issue, "lead", "label", "Top Story"),
-        text: issue.lead && issue.lead.headline,
-      },
-      {
         kicker: "Games",
         text: gameItem && (gameItem.headline || `${gameItem.name}${shelfNames ? ` leads a shelf with ${shelfNames}` : ""}`),
+      },
+      {
+        kicker: chrome(issue, "lead", "label", "Top Story"),
+        text: issue.lead && issue.lead.headline,
       },
       {
         kicker: chrome(issue, "bbs", "label", "Modem Desk"),
@@ -305,16 +284,102 @@
     ].filter((item) => item.text);
   }
 
+  function cleanPublicCopy(value) {
+    return String(value || "")
+      .replace(/\s*with confidence labels so [^.]+\.?/gi, ".")
+      .replace(/\s*with confidence labels\.?/gi, ".")
+      .replace(/\s*and confidence labels\.?/gi, ".")
+      .replace(/\s*where exact [^;]+;?/gi, "")
+      .replace(/\s*where exact [^.]+\.?/gi, ".")
+      .replace(/\s*where [^.]*sources are thin;?/gi, "")
+      .replace(/\s{2,}/g, " ")
+      .trim();
+  }
+
+  function firstBrief(issue, pattern) {
+    return (issue.briefs || []).find((item) => {
+      const haystack = `${item.label || ""} ${item.kicker || ""} ${item.headline || ""} ${item.summary || ""}`.toLowerCase();
+      return pattern.test(haystack);
+    });
+  }
+
+  function topGame(issue) {
+    return (issue.storeShelves || [])[0] || null;
+  }
+
+  function gameLead(issue) {
+    const game = topGame(issue);
+    if (!game) return null;
+    const title = game.headline || `${game.name} Moves Onto the Front Page`;
+    return {
+      label: "Games Lead",
+      headline: title,
+      summary: game.detail || "",
+      confidence: game.confidence || "",
+      sourceRefs: game.sourceRefs || [],
+      image: game.image || issue.storeShelvesImage || null,
+    };
+  }
+
+  function editorStandfirst(issue) {
+    const game = topGame(issue);
+    const movie = firstBrief(issue, /movie|cinema|box office|marquee|top gun|cobra/);
+    const rock = (issue.musicChart || [])[0];
+    const pieces = [];
+    if (game && game.name) pieces.push(`gaming leads with ${game.name}`);
+    if (issue.lead && issue.lead.headline) pieces.push(issue.lead.headline);
+    if (movie && movie.headline) pieces.push(movie.headline);
+    if (rock && rock.title && rock.artist) pieces.push(`${rock.title} by ${rock.artist}`);
+    if (!pieces.length) return cleanPublicCopy(issue.editorNote || "");
+    return `This week's front page follows ${pieces.join(", ")}.`;
+  }
+
+  function scanItem(label, title, detail) {
+    if (!title) return "";
+    return `
+      <li>
+        <span>${escapeHtml(label)}</span>
+        <strong>${escapeHtml(title)}</strong>
+        ${detail ? `<em>${escapeHtml(detail)}</em>` : ""}
+      </li>
+    `;
+  }
+
+  function renderWeekScan(issue) {
+    if (!els.weekScan) return;
+    if (!issue) {
+      els.weekScan.innerHTML = "";
+      return;
+    }
+
+    const game = topGame(issue);
+    const software = (issue.softwareList || [])[0];
+    const movie = firstBrief(issue, /movie|cinema|box office|marquee|top gun|cobra/);
+    const rock = (issue.musicChart || [])[0];
+    const price = (issue.priceWatch || [])[0];
+    const bbs = issue.bbsNote;
+
+    els.weekScan.innerHTML = [
+      scanItem("Games", game && game.name, game && game.platform),
+      scanItem("Computers", issue.lead && issue.lead.headline, ""),
+      scanItem("Software", software && software.name, software && software.platform),
+      scanItem("Movies", movie && movie.headline, movie && movie.label),
+      scanItem("Rock", rock && rock.title, rock && rock.artist),
+      scanItem("Shelf Watch", price && price.item, price && price.price),
+      scanItem("Modems", bbs && bbs.headline, ""),
+    ].filter(Boolean).join("");
+  }
+
   function applyIssueStatus(issue, currentIso, historicIso) {
     if (!els.status) return;
     const requested = new URLSearchParams(window.location.search).get("date");
     const matchesToday = issue && (issue.currentDate === currentIso || issue.historicDate === historicIso);
 
     if (requested) {
-      els.status.textContent = "Archive issue loaded from structured issue data.";
+      els.status.textContent = "Archive issue loaded.";
       els.status.dataset.statusState = "archive";
     } else if (matchesToday) {
-      els.status.textContent = "Today's researched issue is loaded from structured issue data.";
+      els.status.textContent = "Today’s issue is on the stand.";
       els.status.dataset.statusState = "current";
     } else {
       els.status.textContent = "Latest researched issue shown. Today's exact issue has not been loaded yet.";
@@ -363,16 +428,16 @@
       if (els.classifiedsPanel) els.classifiedsPanel.hidden = true;
       if (els.classifieds) els.classifieds.innerHTML = "";
       els.fallback.innerHTML = "";
-      if (els.accuracy) els.accuracy.innerHTML = "";
-      if (els.accuracyNote) els.accuracyNote.textContent = "";
-      els.sources.innerHTML = "";
+      renderWeekScan(null);
       if (els.frontPageIndex) els.frontPageIndex.innerHTML = "";
       els.editorNote.textContent = "Personal computers and personal computer gaming are the editorial priority when source choices compete.";
       return;
     }
 
     applyIssueStatus(issue, currentIso, historicIso);
-    els.editorNote.textContent = issue.editorNote || "Personal computers and personal computer gaming are the editorial priority when source choices compete.";
+    els.editorNote.textContent = editorStandfirst(issue) || "Personal computers and personal computer gaming are the editorial priority when source choices compete.";
+    els.editorNote.textContent = cleanPublicCopy(els.editorNote.textContent);
+    renderWeekScan(issue);
     if (els.frontPageIndex) {
       els.frontPageIndex.innerHTML = frontPageItems(issue).map((item) => `
         <li>
@@ -381,13 +446,14 @@
         </li>
       `).join("");
     }
+    const lead = gameLead(issue) || issue.lead;
     els.lead.innerHTML = `
-      <p class="section-label">${escapeHtml(chrome(issue, "lead", "label", "Top Computer Story"))}</p>
-      <h2>${escapeHtml(issue.lead.headline)}</h2>
-      ${articleVisual(issue.lead.image)}
-      <p>${escapeHtml(issue.lead.summary)}</p>
-      ${confidenceBadge(issue.lead.confidence)}
-      ${sourceLinks(issue, issue.lead.sourceRefs)}
+      <p class="section-label">${escapeHtml(lead.label || chrome(issue, "lead", "label", "Top Story"))}</p>
+      <h2>${escapeHtml(lead.headline)}</h2>
+      ${articleVisual(lead.image)}
+      <p>${escapeHtml(lead.summary)}</p>
+      ${confidenceBadge(lead.confidence)}
+      ${sourceLinks(issue, lead.sourceRefs)}
     `;
 
     const pictureDeskItems = Array.isArray(issue.pictureDesk) ? issue.pictureDesk : [];
@@ -505,7 +571,6 @@
           </p>
         </li>
       `).join("");
-      if (els.musicSources) els.musicSources.innerHTML = sourceLinks(issue, issue.musicChartSourceRefs);
     }
 
     if (els.curiosity) {
@@ -535,8 +600,6 @@
       <p class="ad-kicker">Advertisement</p>
       <h2>${escapeHtml(issue.periodAd && issue.periodAd.headline)}</h2>
       <p>${escapeHtml(issue.periodAd && issue.periodAd.summary)}</p>
-      <small>${escapeHtml(issue.periodAd && issue.periodAd.finePrint)}</small>
-      ${(issue.periodAd && issue.periodAd.sourceUrl) ? `<a class="ad-source" href="${escapeHtml(issue.periodAd.sourceUrl)}" target="_blank" rel="noopener">Source ad</a>` : ""}
     `;
 
     const classifiedItems = Array.isArray(issue.classifieds) ? issue.classifieds : [];
@@ -560,23 +623,6 @@
       ${sourceLinks(issue, issue.worldFallback.sourceRefs)}
     `;
 
-    if (els.accuracy) {
-      const ledger = issue.accuracyLedger || {};
-      els.accuracy.innerHTML = (ledger.items || []).map((item) => `
-        <li>
-          <span class="accuracy-value">${escapeHtml(item.value)}</span>
-          <p>
-            <strong>${escapeHtml(item.label)}</strong>
-            <span>${escapeHtml(item.detail)}</span>
-          </p>
-        </li>
-      `).join("");
-      if (els.accuracyNote) els.accuracyNote.textContent = ledger.note || "";
-    }
-
-    els.sources.innerHTML = issue.sources.map((source) => `
-      <li><a href="${escapeHtml(source.url)}" target="_blank" rel="noopener">${escapeHtml(source.name)}</a></li>
-    `).join("");
   }
 
   function pickIssue(issues, currentIso, historicIso) {
@@ -621,15 +667,35 @@
       return;
     }
 
+    const selectedIndex = issues.findIndex((issue) => selectedIssue && issue.currentDate === selectedIssue.currentDate);
+    if (els.previousIssue) {
+      const previous = selectedIndex >= 0 ? issues[selectedIndex + 1] : null;
+      els.previousIssue.hidden = !previous;
+      if (previous) {
+        els.previousIssue.href = `?date=${encodeURIComponent(previous.currentDate)}`;
+        els.previousIssue.querySelector("strong").textContent = previous.displayDate || previous.historicDate || previous.currentDate;
+      }
+    }
+    if (els.nextIssue) {
+      const next = selectedIndex > 0 ? issues[selectedIndex - 1] : null;
+      els.nextIssue.hidden = !next;
+      if (next) {
+        els.nextIssue.href = `?date=${encodeURIComponent(next.currentDate)}`;
+        els.nextIssue.querySelector("strong").textContent = next.displayDate || next.historicDate || next.currentDate;
+      }
+    }
+
     els.archiveList.innerHTML = issues.map((issue, index) => {
       const active = selectedIssue && selectedIssue.currentDate === issue.currentDate;
       const label = index === 0 ? "Latest" : "Archive";
+      const headline = issue.lead && issue.lead.headline ? issue.lead.headline : issue.morningLine || "";
       return `
         <li>
           <a href="?date=${encodeURIComponent(issue.currentDate)}" ${active ? "aria-current=\"page\"" : ""}>
             <span>${escapeHtml(label)}</span>
             <strong>${escapeHtml(issue.currentDate)}</strong>
             <em>${escapeHtml(issue.displayDate || issue.historicDate)}</em>
+            <b>${escapeHtml(headline)}</b>
           </a>
         </li>
       `;
