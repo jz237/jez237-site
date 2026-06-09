@@ -616,6 +616,12 @@
       padding: 3px 6px;
       text-transform: uppercase;
     }
+    .platform-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-top: 8px;
+    }
     .price-list span {
       color: var(--cc-blue);
       font-weight: 700;
@@ -888,9 +894,6 @@
       color: var(--cc-blue) !important;
       font-weight: 700;
     }
-    .print-source-note {
-      display: none;
-    }
     .issue-tools {
       display: flex;
       align-items: center;
@@ -939,6 +942,42 @@
         rgba(255, 248, 220, 0.88);
       padding: 9px 10px;
     }
+    .issue-step-nav {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .issue-step-nav a {
+      display: grid;
+      gap: 4px;
+      min-width: 0;
+      border: 2px solid var(--cc-ink);
+      background:
+        repeating-linear-gradient(90deg, rgba(27, 26, 23, 0.035), rgba(27, 26, 23, 0.035) 1px, transparent 1px, transparent 8px),
+        rgba(255, 248, 220, 0.92);
+      color: var(--cc-ink);
+      padding: 10px 12px;
+      text-decoration: none;
+      box-shadow: 4px 4px 0 rgba(27, 26, 23, 0.1);
+    }
+    .issue-step-nav a[hidden] {
+      display: none !important;
+    }
+    .issue-step-nav span {
+      color: var(--cc-blue);
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .issue-step-nav strong {
+      color: var(--cc-ink);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(0.95rem, 1.8vw, 1.2rem);
+      line-height: 1.1;
+      overflow-wrap: anywhere;
+    }
     .archive-strip[hidden] {
       display: none !important;
     }
@@ -986,9 +1025,226 @@
       font-size: 0.95rem;
       line-height: 1.1;
     }
+    .archive-strip b {
+      display: block;
+      margin-top: 3px;
+      color: var(--cc-muted);
+      font-size: 0.72rem;
+      font-weight: 400;
+      line-height: 1.22;
+      overflow-wrap: anywhere;
+    }
     .archive-strip a:not([aria-current="page"]) span,
     .archive-strip a:not([aria-current="page"]) em {
       color: var(--cc-muted);
+    }
+    .cover-wall {
+      margin-top: 14px;
+      border: 3px solid var(--cc-ink);
+      border-top-width: 8px;
+      border-top-color: var(--cc-blue);
+      background:
+        linear-gradient(90deg, rgba(38, 79, 158, 0.12), transparent 38%),
+        repeating-linear-gradient(0deg, rgba(27, 26, 23, 0.028), rgba(27, 26, 23, 0.028) 1px, transparent 1px, transparent 7px),
+        rgba(255, 248, 220, 0.92);
+      box-shadow: 5px 5px 0 rgba(27, 26, 23, 0.12);
+      padding: 12px;
+    }
+    .cover-wall-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .cover-wall-head > p {
+      display: inline-block;
+      width: fit-content;
+      margin: 0;
+      padding: 4px 7px;
+      background: var(--cc-ink);
+      color: var(--cc-paper) !important;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+    .platform-filter {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 6px;
+      min-width: 0;
+    }
+    .platform-filter button {
+      appearance: none;
+      border: 1px solid var(--cc-blue);
+      border-radius: 0;
+      background: rgba(255, 243, 206, 0.86) !important;
+      color: var(--cc-blue) !important;
+      cursor: pointer;
+      font: inherit;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      line-height: 1.1;
+      padding: 5px 7px;
+      text-transform: uppercase;
+    }
+    .platform-filter button[aria-pressed="true"],
+    .platform-filter button:hover,
+    .platform-filter button:focus-visible {
+      border-color: var(--cc-ink);
+      background: var(--cc-ink) !important;
+      color: var(--cc-paper) !important;
+    }
+    .cover-wall ul {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .cover-wall li {
+      min-width: 0;
+    }
+    .cover-card {
+      display: grid;
+      grid-template-rows: minmax(0, auto) 1fr;
+      min-height: 100%;
+      border: 2px solid var(--cc-ink);
+      background:
+        repeating-linear-gradient(90deg, rgba(27, 26, 23, 0.035), rgba(27, 26, 23, 0.035) 1px, transparent 1px, transparent 9px),
+        rgba(255, 243, 206, 0.9);
+      color: var(--cc-ink);
+      text-decoration: none;
+      box-shadow: 4px 4px 0 rgba(27, 26, 23, 0.1);
+      overflow: hidden;
+    }
+    .cover-card[aria-current="page"] {
+      outline: 4px solid var(--cc-amber);
+      outline-offset: -6px;
+    }
+    .cover-card figure {
+      position: relative;
+      aspect-ratio: 3 / 4;
+      margin: 0;
+      border-bottom: 2px solid var(--cc-ink);
+      background: var(--cc-ink);
+      overflow: hidden;
+    }
+    .cover-card img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: contrast(1.08) saturate(0.9);
+    }
+    .cover-card figure::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        repeating-linear-gradient(0deg, rgba(255,255,255,0.12), rgba(255,255,255,0.12) 1px, transparent 1px, transparent 4px),
+        linear-gradient(180deg, transparent 48%, rgba(27, 26, 23, 0.38));
+      mix-blend-mode: multiply;
+    }
+    .cover-card-body {
+      display: grid;
+      gap: 7px;
+      min-width: 0;
+      padding: 10px;
+    }
+    .cover-card-kicker {
+      color: var(--cc-blue);
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      line-height: 1.1;
+      text-transform: uppercase;
+    }
+    .cover-card strong {
+      display: block;
+      color: var(--cc-ink);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1.05rem;
+      line-height: 1.05;
+      overflow-wrap: anywhere;
+    }
+    .cover-card em {
+      display: block;
+      color: var(--cc-muted);
+      font-size: 0.74rem;
+      font-style: normal;
+      line-height: 1.25;
+      overflow-wrap: anywhere;
+    }
+    .week-scan {
+      margin-top: 14px;
+      border: 3px solid var(--cc-ink);
+      border-top-width: 8px;
+      border-top-color: var(--cc-magenta);
+      background:
+        linear-gradient(90deg, rgba(194, 38, 115, 0.11), transparent 34%),
+        repeating-linear-gradient(0deg, rgba(27, 26, 23, 0.028), rgba(27, 26, 23, 0.028) 1px, transparent 1px, transparent 7px),
+        rgba(255, 248, 220, 0.92);
+      box-shadow: 5px 5px 0 rgba(27, 26, 23, 0.12);
+      padding: 12px;
+    }
+    .week-scan > p {
+      display: inline-block;
+      width: fit-content;
+      margin: 0 0 10px;
+      padding: 4px 7px;
+      background: var(--cc-ink);
+      color: var(--cc-paper) !important;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+    .week-scan ul {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: 8px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .week-scan li {
+      min-width: 0;
+      border-left: 3px solid var(--cc-blue);
+      background: rgba(255, 243, 206, 0.64);
+      padding: 8px 9px;
+    }
+    .week-scan span {
+      display: block;
+      color: var(--cc-blue);
+      font-size: 0.66rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      line-height: 1.1;
+      text-transform: uppercase;
+    }
+    .week-scan strong {
+      display: block;
+      margin-top: 4px;
+      color: var(--cc-ink);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 0.95rem;
+      line-height: 1.05;
+      overflow-wrap: anywhere;
+    }
+    .week-scan em {
+      display: block;
+      margin-top: 4px;
+      color: var(--cc-muted);
+      font-size: 0.76rem;
+      font-style: normal;
+      line-height: 1.2;
+      overflow-wrap: anywhere;
     }
     .front-page-index {
       margin-top: 14px;
@@ -1232,8 +1488,11 @@
       #site-nav,
       .status-line,
       .issue-tools,
+      .issue-step-nav,
       .archive-strip,
+      .cover-wall,
       .editor-note,
+      .week-scan,
       .article-sources,
       [data-sidebar-module="assignment"],
       [data-sidebar-module="sources"],
@@ -1414,20 +1673,6 @@
       [data-sidebar-module="verification"] {
         font-size: 8pt;
       }
-      .print-source-note {
-        display: block;
-        position: static;
-        margin-top: 0.12in;
-        border-top: 2pt solid #111;
-        padding: 0.06in 0 0;
-        background: #fff8dc !important;
-        color: #111 !important;
-        font-size: 7.2pt;
-        font-weight: 700;
-        letter-spacing: 0.05em;
-        text-align: center;
-        text-transform: uppercase;
-      }
     }
     @media (max-width: 820px) {
       html,
@@ -1447,11 +1692,34 @@
         border-width: 3px;
         box-shadow: 5px 5px 0 rgba(27, 26, 23, 0.14);
       }
+      .hero-strapline {
+        position: static;
+        margin: -14px -14px 0;
+      }
+      .chronicle-hero > div,
+      .chronicle-hero > aside,
+      .chronicle-hero > figure {
+        margin-top: 0;
+      }
       .chronicle-hero,
       .chronicle-grid,
       .computer-grid,
       .morning-strip,
       .front-page-index ul {
+        grid-template-columns: 1fr;
+      }
+      .issue-step-nav,
+      .week-scan ul {
+        grid-template-columns: 1fr;
+      }
+      .cover-wall-head {
+        display: grid;
+        gap: 10px;
+      }
+      .platform-filter {
+        justify-content: flex-start;
+      }
+      .cover-wall ul {
         grid-template-columns: 1fr;
       }
       .chronicle-hero h1 {
@@ -1487,6 +1755,7 @@
       .chronicle-kicker,
       .brief-kicker,
       .platform-tag,
+      .platform-filter button,
       .confidence {
         white-space: normal;
       }
@@ -1520,7 +1789,7 @@
       <div>
         <p class="chronicle-kicker" data-masthead-kicker>Daily historical tech desk</p>
         <h1 id="chronicle-title" data-masthead-title>Computer Chronicle</h1>
-        <p data-masthead-deck>A weekly 1982 computer, games, and culture section with confidence labels so release dates, same-week context, and period background stay honest.</p>
+        <p data-masthead-deck>A weekly computer, games, and culture section from forty years ago today.</p>
       </div>
       <figure class="hero-art">
         <button class="hero-art-button" type="button" data-open-hero-image aria-label="Open newspaper visual full screen">
@@ -1551,10 +1820,31 @@
       </select>
       <button class="print-issue" type="button" data-print-issue>Print Issue</button>
     </div>
+    <nav class="issue-step-nav" aria-label="Previous and next issues">
+      <a href="#" data-previous-issue hidden>
+        <span>Previous Issue</span>
+        <strong>Loading...</strong>
+      </a>
+      <a href="#" data-next-issue hidden>
+        <span>Next Issue</span>
+        <strong>Loading...</strong>
+      </a>
+    </nav>
     <nav class="archive-strip" aria-label="Issue archive" data-archive-nav hidden>
       <p>Issue Archive</p>
       <ul data-archive-list></ul>
     </nav>
+    <section class="cover-wall" aria-label="Cover wall">
+      <div class="cover-wall-head">
+        <p>Cover Wall</p>
+        <div class="platform-filter" data-platform-filter></div>
+      </div>
+      <ul data-cover-wall></ul>
+    </section>
+    <section class="week-scan" aria-label="On this week">
+      <p>On This Week</p>
+      <ul data-week-scan></ul>
+    </section>
     <section class="front-page-index" aria-label="Today at a glance">
       <p>This Issue at a Glance</p>
       <ul data-front-page-index></ul>
@@ -1586,7 +1876,7 @@
       <aside class="sidebar-column">
         <article class="chronicle-panel" data-market data-sidebar-module="market"></article>
         <article class="chronicle-panel" data-sidebar-module="budget">
-          <p class="section-label" data-issue-budget-label>Editor's Budget</p>
+          <p class="section-label" data-issue-budget-label>Shelf Watch</p>
           <h2 data-issue-budget-title>What Gets Ink Today</h2>
           <ul class="budget-list" data-issue-budget></ul>
         </article>
@@ -1602,22 +1892,11 @@
           <h2 data-briefs-title>Other Things on the Desk</h2>
           <ul class="brief-list" data-briefs></ul>
         </article>
-        <details class="chronicle-panel assignment-desk" data-sidebar-module="assignment">
-          <summary>Next Desk Queue</summary>
-          <p class="section-label">Next Issue Desk</p>
-          <h2>Internal Assignment</h2>
-          <div class="assignment-dates">
-            <span>Next Run<strong data-next-current-date>Loading...</strong></span>
-            <span>Next Historic Week<strong data-next-historic-date>Loading...</strong></span>
-          </div>
-          <ul class="assignment-list" data-next-assignment-list></ul>
-        </details>
         <article class="chronicle-panel" data-sidebar-module="music">
           <p class="section-label" data-music-label>Rock Radio Top 10</p>
           <h2 data-music-title>Album-Rock Airwaves</h2>
           <div data-music-chart-image></div>
           <ul class="chart-list" data-music-chart></ul>
-          <div data-music-sources></div>
         </article>
         <article class="chronicle-panel period-ad" data-period-ad data-sidebar-module="period-ad"></article>
         <article class="chronicle-panel" data-sidebar-module="classifieds" data-classifieds-panel hidden>
@@ -1626,29 +1905,8 @@
           <ul class="classified-list" data-classifieds></ul>
         </article>
         <article class="chronicle-panel" data-fallback data-sidebar-module="fallback"></article>
-        <article class="chronicle-panel" data-sidebar-module="accuracy">
-          <p class="section-label" data-accuracy-label>Accuracy Ledger</p>
-          <h2 data-accuracy-title>How Grounded Is Today?</h2>
-          <ul class="accuracy-list" data-accuracy></ul>
-          <p class="accuracy-note" data-accuracy-note></p>
-        </article>
-        <article class="chronicle-panel" data-sidebar-module="sources">
-          <p class="section-label" data-sources-label>Source Trail</p>
-          <h2 data-sources-title>Research Log</h2>
-          <ul class="source-list" data-sources></ul>
-        </article>
-        <article class="chronicle-panel" data-sidebar-module="verification">
-          <p class="section-label" data-verification-label>Verification Key</p>
-          <h2 data-verification-title>How to Read It</h2>
-          <ul class="verification-list">
-            <li><strong>Exact-day</strong>Reported, released, or closed on the historical date.</li>
-            <li><strong>Same-week</strong>Published or newly relevant in that week.</li>
-            <li><strong>Context</strong>True period background, not a claimed daily event.</li>
-          </ul>
-        </article>
       </aside>
     </section>
-    <p class="print-source-note">See website for source links, verification details, and archive notes: jz237.github.io/jez237-site/computer-chronicle/</p>
   </main>
   <div class="newspaper-lightbox" data-hero-lightbox aria-hidden="true" role="dialog" aria-modal="true" aria-label="Newspaper visual full screen">
     <button class="lightbox-close" type="button" data-close-hero-image aria-label="Close full screen newspaper visual">x</button>
