@@ -1,6 +1,6 @@
 {
   "date": "2026-06-09",
-  "updatedAt": "2026-06-09T21:06:42.374618+00:00",
+  "updatedAt": "2026-06-09T23:00:02.001722+00:00",
   "items": [
     {
       "title": "Anthropic releases its first Mythos-class model Claude Fable",
@@ -13,11 +13,11 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/STKB364_CLAUDE_2_C_96d15c.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-09T17:00:00+00:00",
       "firstSeen": "2026-06-09T18:00:01.135788+00:00",
-      "lastSeen": "2026-06-09T21:06:42.374618+00:00",
+      "lastSeen": "2026-06-09T23:00:02.001722+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 21.6413
+      "score": 21.5911
     },
     {
       "title": "Anthropic releases Claude Fable 5, a Mythos-class model the public can finally use, days before a potential record IPO",
@@ -30,11 +30,11 @@
       "image": "https://media.thenextweb.com/2026/06/anthropic-claude-fable-5-mythos-public-release-ipo.avif",
       "published": "2026-06-09T17:36:48+00:00",
       "firstSeen": "2026-06-09T18:21:06.435316+00:00",
-      "lastSeen": "2026-06-09T21:06:42.374618+00:00",
+      "lastSeen": "2026-06-09T23:00:02.001722+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 20.0481
+      "score": 19.9971
     },
     {
       "title": "Fluid, natural voice translation with Gemini 3.5 Live Translate",
@@ -47,11 +47,11 @@
       "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/3-5_Live_Translate_hero.width-1300.png",
       "published": "2026-06-09T15:16:25+00:00",
       "firstSeen": "2026-06-09T16:00:01.597394+00:00",
-      "lastSeen": "2026-06-09T21:06:42.374618+00:00",
+      "lastSeen": "2026-06-09T23:00:02.001722+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 16.5653
+      "score": 16.5175
     },
     {
       "title": "How engineers at Nextdoor use Codex to build without limits",
@@ -64,11 +64,11 @@
       "image": "https://images.ctfassets.net/kftzwdyauwt9/2VQiKydNUVAutnHRuCIV4S/3262cc8deff3fe49c6b512f854e14dcf/oai_Nextdoor_1x1.png?w=1600&amp%3Bh=900&amp%3Bfit=fill",
       "published": "2026-06-09T12:00:00+00:00",
       "firstSeen": "2026-06-09T21:00:01.281948+00:00",
-      "lastSeen": "2026-06-09T21:06:42.374618+00:00",
+      "lastSeen": "2026-06-09T23:00:02.001722+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 12.554
+      "score": 12.5104
     },
     {
       "title": "Lucid’s Gravity SUV gets hands-free highway driving in its latest over-the-air update",
@@ -85,7 +85,7 @@
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 12.3076
+      "score": 12.2689
     },
     {
       "title": "Microsoft AI head calls out Anthropic for acting like Claude is conscious",
@@ -98,10 +98,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/gettyimages-2207866106.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-09T20:24:25+00:00",
       "firstSeen": "2026-06-09T21:00:01.281948+00:00",
-      "lastSeen": "2026-06-09T21:06:42.374618+00:00",
+      "lastSeen": "2026-06-09T23:00:02.001722+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.3387
+      "score": 11.2835
     },
     {
       "title": "Anthropic’s Claude Fable 5 is a version of Mythos the public can access today",
@@ -117,7 +117,23 @@
       "lastSeen": "2026-06-09T21:06:42.374618+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.1713
+      "score": 11.1211
+    },
+    {
+      "title": "Anthropic’s Claude Fable 5 is a version of Mythos the public can access today",
+      "url": "https://techcrunch.com/2026/06/09/anthropics-claude-fable-5-is-a-version-of-mythos-the-public-can-access-today",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Anthropic is releasing Claude Fable 5, its first Mythos-class model available to the public. The model comes with guardrails that block responses in high-risk areas like cybersecurity and biology.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/GettyImages-2279025960.jpg?w=1024",
+      "published": "2026-06-09T17:00:00+00:00",
+      "firstSeen": "2026-06-09T23:00:02.001722+00:00",
+      "lastSeen": "2026-06-09T23:00:02.001722+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 11.1211
     },
     {
       "title": "Quoting Andrej Karpathy",
@@ -130,10 +146,26 @@
       "image": "",
       "published": "2026-06-09T19:03:10+00:00",
       "firstSeen": "2026-06-09T20:00:01.743276+00:00",
-      "lastSeen": "2026-06-09T21:06:42.374618+00:00",
+      "lastSeen": "2026-06-09T23:00:02.001722+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.7289
+      "score": 10.6758
+    },
+    {
+      "title": "Setting a custom price for a model in AgentsView",
+      "url": "https://simonwillison.net/2026/Jun/9/agentsview-custom-model-price",
+      "source": "Simon Willison",
+      "sourceUrl": "https://simonwillison.net/atom/everything/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "TIL: Setting a custom price for a model in AgentsView\n        I've been really enjoying AgentsView by Wes McKinney as a tool for exploring my token usage across different coding agents running on my laptop.\nClaude Fable 5 came out today and wasn't yet included in the pricing database AgentsView uses. I used Fable to reverse-engineer AgentsView and figured out this recipe for setting custom prices.\nHere's my Claude Fable 5 usage for today so far, plotted by AgentsView as a treemap across my different local projects:\n\n    \n    \n        Tags: ai, generative-ai, llms, llm-pricing",
+      "image": "https://static.simonwillison.net/static/2026/agentsview-fable.jpg",
+      "published": "2026-06-09T21:35:31+00:00",
+      "firstSeen": "2026-06-09T23:00:02.001722+00:00",
+      "lastSeen": "2026-06-09T23:00:02.001722+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 10.3478
     },
     {
       "title": "OpenAI Starts IPO Process With Confidential SEC Filing",
@@ -146,10 +178,10 @@
       "image": "https://assets.techrepublic.com/uploads/2025/10/tr-10282025-news-openai-energy-ai-policy.jpg?f=jpeg",
       "published": "2026-06-09T09:52:12+00:00",
       "firstSeen": "2026-06-09T11:00:01.786490+00:00",
-      "lastSeen": "2026-06-09T21:06:42.374618+00:00",
+      "lastSeen": "2026-06-09T23:00:02.001722+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.955
+      "score": 9.9138
     },
     {
       "title": "Anthropic’s Fable 5 can make weirdly fun video games with the click of a button",
@@ -162,54 +194,17 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/Screenshot-2026-06-09-at-11.40.18-AM.png?resize=1200%2C871",
       "published": "2026-06-09T20:37:49+00:00",
       "firstSeen": "2026-06-09T21:00:01.281948+00:00",
-      "lastSeen": "2026-06-09T21:06:42.374618+00:00",
+      "lastSeen": "2026-06-09T23:00:02.001722+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.2754
-    },
-    {
-      "title": "Anthropic Offers Mythos Upgrade for Cyber Partners and a ‘Safe’ Version for the Rest of You",
-      "url": "https://www.wired.com/story/anthropic-releases-claude-fable-5-mythos-5",
-      "source": "Wired AI",
-      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Anthropic is releasing Claude Mythos 5 to trusted organizations and Claude Fable 5 to the public, a version it says can’t be used for cyberattacks.",
-      "image": "https://media.wired.com/photos/6a270618e083d018dff70e49/master/pass/Anthropic-Dangerous-AI-Business-2261854833.jpg",
-      "published": "2026-06-09T17:00:46+00:00",
-      "firstSeen": "2026-06-09T18:00:01.135788+00:00",
-      "lastSeen": "2026-06-09T21:06:42.374618+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 9.1716
-    },
-    {
-      "title": "A UK firm trained a “sovereign” NHS triage AI that it says rivals Claude, at a fraction of the cost",
-      "url": "https://thenextweb.com/news/oneadvanced-care-navigator-sovereign-nhs-llm",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The NHS does not lack for AI pitches. What it has lacked is one that keeps patient data inside the country. A British software firm says it now has it. OneAdvanced, the Birmingham-based SaaS company whose software touches more than 40 million NHS patients a year, has launched what it bills as the UK’s first [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/oneadvanced-partners-nvidia.avif",
-      "published": "2026-06-09T10:36:21+00:00",
-      "firstSeen": "2026-06-09T12:00:02.085773+00:00",
-      "lastSeen": "2026-06-09T12:14:37.159854+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 8.5716
+      "score": 9.2199
     }
   ],
   "errors": [
     {
-      "source": "Artificial Intelligence News",
-      "url": "https://www.artificialintelligence-news.com/categories/artificial-intelligence/feed/",
-      "error": "not well-formed (invalid token): line 1, column 158"
-    },
-    {
       "source": "MarkTechPost",
       "url": "https://www.marktechpost.com/feed/",
-      "error": "not well-formed (invalid token): line 1, column 119"
+      "error": "HTTP Error 403: Forbidden"
     }
   ]
 }
