@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-09T15:00:01.178926+00:00",
+  "updatedAt": "2026-06-09T16:00:01.597394+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -9796,6 +9796,10 @@
     "https://deepmind.google/blog/powering-the-future-of-robotics-in-europe": {
       "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/130.width-1300.jpg",
       "checkedAt": "2026-06-09T15:00:01.178926+00:00"
+    },
+    "https://deepmind.google/blog/fluid-natural-voice-translation-with-gemini-35-live-translate": {
+      "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/3-5_Live_Translate_hero.width-1300.png",
+      "checkedAt": "2026-06-09T16:00:01.597394+00:00"
     }
   }
 }
