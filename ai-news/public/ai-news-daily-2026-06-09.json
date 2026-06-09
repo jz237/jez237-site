@@ -1,7 +1,23 @@
 {
   "date": "2026-06-09",
-  "updatedAt": "2026-06-09T03:00:01.374709+00:00",
+  "updatedAt": "2026-06-09T04:00:01.687393+00:00",
   "items": [
+    {
+      "title": "CrowdMath: A Dataset of Crowdsourced Mathematical Research Discussions",
+      "url": "https://llm-stats.com/ai-news",
+      "source": "LLM Stats AI News",
+      "sourceUrl": "https://llm-stats.com/ai-news",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "",
+      "image": "https://llm-stats.com/og/main.png",
+      "published": "2026-06-09T04:00:11.632031+00:00",
+      "firstSeen": "2026-05-29T21:00:01.522609+00:00",
+      "lastSeen": "2026-06-09T04:00:01.687393+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.76
+    },
     {
       "title": "Why Apple’s slow-and-steady AI bet is starting to look pretty smart",
       "url": "https://techcrunch.com/2026/06/08/why-apples-slow-and-steady-ai-bet-is-starting-to-look-pretty-smart",
@@ -13,10 +29,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/apple-siri-ai-use-cases.png?w=1186",
       "published": "2026-06-09T01:56:48+00:00",
       "firstSeen": "2026-06-09T02:00:01.687416+00:00",
-      "lastSeen": "2026-06-09T03:00:01.374709+00:00",
+      "lastSeen": "2026-06-09T04:00:01.687393+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3583
+      "score": 3.329
     },
     {
       "title": "v1.84.6",
@@ -29,10 +45,10 @@
       "image": "https://opengraph.githubassets.com/2289ef0fcf1c2ba20456e6d2fb1649302a0ee9442d8f03543c7a3223e1c725b2/BerriAI/litellm/releases/tag/v1.84.6",
       "published": "2026-06-09T01:55:10+00:00",
       "firstSeen": "2026-06-09T02:00:01.687416+00:00",
-      "lastSeen": "2026-06-09T03:00:01.374709+00:00",
+      "lastSeen": "2026-06-09T04:00:01.687393+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9575
+      "score": 2.9282
     },
     {
       "title": "v1.88.1",
@@ -45,26 +61,10 @@
       "image": "https://opengraph.githubassets.com/ec499708075f24621d7fcedea57866e12aa1896488bf54bec2bf826d3ab470a3/BerriAI/litellm/releases/tag/v1.88.1",
       "published": "2026-06-09T01:26:49+00:00",
       "firstSeen": "2026-06-09T02:00:01.687416+00:00",
-      "lastSeen": "2026-06-09T03:00:01.374709+00:00",
+      "lastSeen": "2026-06-09T04:00:01.687393+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9435
-    },
-    {
-      "title": "Ruida Wang, Jerry Huang, Pengcheng Wang, Xuanqing Liu, Luyang Kong, Tong Zhang",
-      "url": "https://llm-stats.com/ai-news",
-      "source": "LLM Stats AI News",
-      "sourceUrl": "https://llm-stats.com/ai-news",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "",
-      "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-09T03:00:08.787121+00:00",
-      "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-09T03:00:01.374709+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.36
+      "score": 2.9147
     },
     {
       "title": "Mercor’s Brendan Foody calls out Sequoia, accusing it of ‘dual-pricing’ valuation tricks",
@@ -77,10 +77,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2024/11/GettyImages-1258486979.jpg?w=1024",
       "published": "2026-06-09T00:45:56+00:00",
       "firstSeen": "2026-06-09T01:00:01.108039+00:00",
-      "lastSeen": "2026-06-09T03:00:01.374709+00:00",
+      "lastSeen": "2026-06-09T04:00:01.687393+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2238
+      "score": 2.1955
     }
   ],
   "errors": [
