@@ -1630,5 +1630,17 @@
     "slot": "morning",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-06-09-midday-product-bottle-as-paper-quilling-artifact",
+    "title": "Product Bottle as Paper Quilling Artifact",
+    "tests": "Generated via openclaw infer image generate using openai/gpt-image-2; verified exact output PNG exists before append.",
+    "prompt": "Use the uploaded reference photo and preserve the product bottle identity, camera angle, silhouette, shoulder curve, neck proportions, cap or cork shape, label placement if present, scuffs, color blocking, and most recognizable features, then transform the bottle into an intricate paper quilling artifact on a matte charcoal craft table. Build the bottle from tightly rolled and curled ivory, teal, coral, ochre, and deep green paper strips; make visible coils form the body, braided paper ribs wrap the shoulders, delicate spirals replace highlights, and layered filigree sit where the label would be without readable text. Keep it physically believable as a handmade studio object with quilling tools, paper offcuts, tweezers, a brass ruler, soft north-window light, crisp fiber texture, and shallow depth of field. Avoid logos, readable text, duplicate bottles, warped proportions, and losing the original bottle silhouette.\n\nReusable template: Use the uploaded reference photo and preserve the [OBJECT] identity, camera angle, silhouette, proportions, key seams, markings, label placement if relevant, distinctive wear, and recognizable features, then transform [OBJECT] into a paper quilling artifact in [SETTING] with [MOOD] lighting. Construct the subject from tightly rolled paper coils, curled strips, braided paper ribs, and layered filigree while keeping the source shape readable. Avoid logos or text artifacts unless intentionally preserved, duplicate objects, distorted proportions, and losing recognizability.\n\nSource photo needed: a clear photo of a product bottle.\n\nWhat to preserve: bottle identity, angle, silhouette, proportions, neck/cap shape, label area, scuffs, color blocking, and recognizable product form.\n\nWhat to change: replace the bottle material with intricate paper quilling, add craft-table context, paper fibers, curled strips, tools, and handmade macro texture.\n\nExample substitution: upload a simple amber apothecary bottle photo and set [SETTING] to a charcoal craft table and [MOOD] to soft north-window studio light.",
+    "image": "images/2026-06-09-midday-product-bottle-as-paper-quilling-artifact.png",
+    "date": "2026-06-09",
+    "batch": "Daily Prompt",
+    "slot": "midday",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
