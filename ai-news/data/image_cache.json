@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-09T18:21:06.435316+00:00",
+  "updatedAt": "2026-06-09T19:00:01.724561+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -9828,6 +9828,10 @@
     "https://techcrunch.com/2026/06/09/wwdc-2026-everything-announced-on-siri-ai-os-27-apple-intelligence-and-more": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/apple-siri-ai-use-cases.png?w=1186",
       "checkedAt": "2026-06-09T18:21:06.435316+00:00"
+    },
+    "https://techcrunch.com/2026/06/09/can-tech-companies-learn-to-love-cheaper-models": {
+      "image": "https://techcrunch.com/wp-content/uploads/2023/08/GettyImages-1297856112.jpg?resize=1200,675",
+      "checkedAt": "2026-06-09T19:00:01.724561+00:00"
     }
   }
 }
