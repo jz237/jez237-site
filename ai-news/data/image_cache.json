@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-09T12:00:02.085773+00:00",
+  "updatedAt": "2026-06-09T13:00:02.055953+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -9764,6 +9764,10 @@
     "https://huggingface.co/blog/mishig/spaces-agents-md": {
       "image": "https://cdn-uploads.huggingface.co/production/uploads/60a551a34ecc5d054c8ad93e/0tamlKpAvO3lZEklNmwHT.png",
       "checkedAt": "2026-06-09T12:00:02.085773+00:00"
+    },
+    "https://www.theverge.com/ai-artificial-intelligence/946705/apple-private-cloud-compute-ai-siri-intelligence-wwdc": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/apple-intelligence-siri-ai-private-cloud-compute.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-06-09T13:00:02.055953+00:00"
     }
   }
 }
