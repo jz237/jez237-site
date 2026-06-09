@@ -273,7 +273,7 @@
   </main>
 
   <footer>
-    Images are stored beside this page in <code>images/</code>; prompt metadata is saved as <code>gallery-data.json</code>. Click any image for fullscreen, then click it again for true 1:1 size.
+    Prompt metadata is saved as <code>gallery-data.json</code>; image files can be served locally or from the configured media base. Click any image for fullscreen, then click it again for true 1:1 size.
   </footer>
 
   <div class="lightbox" id="image-lightbox" aria-hidden="true" role="dialog" aria-label="Expanded image viewer">
@@ -324,7 +324,15 @@
       setTimeout(updateHeroChrome, 0);
       setTimeout(updateHeroChrome, 150);
 
+      const IMAGE_BASE_URL = 'images/';
       const escapeHtml = (value) => String(value || '').replace(/[&<>'"]/g, (ch) => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[ch]));
+      const imageUrl = (value) => {
+        const path = String(value || '');
+        if (/^(?:[a-z]+:)?\/\//i.test(path) || path.startsWith('data:') || path.startsWith('/')) return path;
+        if (!path.startsWith('images/')) return path;
+        const base = IMAGE_BASE_URL.endsWith('/') ? IMAGE_BASE_URL : `${IMAGE_BASE_URL}/`;
+        return `${base}${path.slice('images/'.length)}`;
+      };
       const formatDate = (value) => {
         if (!value) return 'Undated';
         const [y, m, d] = value.split('-').map(Number);
@@ -372,9 +380,10 @@
 
       function cardHtml(item) {
         const portrait = String(item.size || '').includes('1536') || String(item.image || '').includes('almanac');
+        const src = imageUrl(item.image);
         return `
           <article class="card" id="${escapeHtml(item.id)}">
-            <div class="image-wrap${portrait ? ' portrait' : ''}"><img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.title)}" loading="lazy"></div>
+            <div class="image-wrap${portrait ? ' portrait' : ''}"><img src="${escapeHtml(src)}" alt="${escapeHtml(item.title)}" loading="lazy"></div>
             <div class="content">
               <div class="kicker">${escapeHtml(item.batch || 'Daily Prompt')} · ${escapeHtml(item.slot || '')}</div>
               <h3>${escapeHtml(item.title)}</h3>
