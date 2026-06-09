@@ -1,8 +1,8 @@
 {
-  "updatedAt": "2026-06-09T12:14:37.159854+00:00",
+  "updatedAt": "2026-06-09T14:00:01.971236+00:00",
   "items": [
     {
-      "title": "Community-Specific Slang and Entity Detection via Semantic Shift in Fine-Tuned Language Models",
+      "title": "ABLE: Representing and Mapping LLMs via Attribution-Based Large-model Embedding",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -10,12 +10,156 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-09T12:14:43.605749+00:00",
+      "published": "2026-06-09T14:00:12.607072+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-09T12:14:37.159854+00:00",
+      "lastSeen": "2026-06-09T14:00:01.971236+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.36
+      "score": 3.46
+    },
+    {
+      "title": "Sandstone raises $30M to bring AI to in-house legal teams",
+      "url": "https://techcrunch.com/2026/06/09/sandstone-raises-30m-to-bring-ai-to-in-house-legal-teams",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Sandstone's Series A was led by Lightspeed Partners, with participation from Sequoia.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/image-6.png?resize=1200%2C800",
+      "published": "2026-06-09T13:47:25+00:00",
+      "firstSeen": "2026-06-09T14:00:01.971236+00:00",
+      "lastSeen": "2026-06-09T14:00:01.971236+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2836
+    },
+    {
+      "title": "Apple’s best AI idea looks a lot like vibe coding",
+      "url": "https://www.theverge.com/tech/946733/apple-shortcuts-ai-safari-tabs-vibe-code",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "Most of Apple's current AI ideas are roughly the same as everyone else's AI ideas. A chatbot you can ask questions; quick ways to create or summarize text; bizarre, borderline creepy image-generation tools. The company spent most of its WWDC keynote playing catch-up with the state of the AI art, announcing Siri features you can [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/AI-Apple-Shortcuts.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C3.3555449785816%2C100%2C93.288910042837&amp%3Bw=1200",
+      "published": "2026-06-09T13:34:48+00:00",
+      "firstSeen": "2026-06-09T14:00:01.971236+00:00",
+      "lastSeen": "2026-06-09T14:00:01.971236+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.8472
+    },
+    {
+      "title": "Apple’s real AI story isn’t Siri: it’s a 20-billion-parameter model that runs from your iPhone’s flash",
+      "url": "https://thenextweb.com/news/apple-third-generation-foundation-models-afm",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The headline from Apple’s developer conference was a reborn Siri. The more interesting story sits underneath it: the AI models Apple built to run the thing, one of which is far too big to fit in an iPhone’s memory, yet runs on the device anyway. In a technical post published alongside WWDC, Apple detailed the [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/apple-third-generation-foundation-models-afm.avif",
+      "published": "2026-06-09T13:13:22+00:00",
+      "firstSeen": "2026-06-09T14:00:01.971236+00:00",
+      "lastSeen": "2026-06-09T14:00:01.971236+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.6265
+    },
+    {
+      "title": "Lovable says it has hit $500M in annualized revenue, with 1 million new projects a week",
+      "url": "https://techcrunch.com/2026/06/09/lovable-says-it-has-hit-500m-in-annualized-revenue-with-1-million-new-projects-a-week",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Lovable says it has now surpassed $500 million in annualized run-rate revenue and its users are building businesses and replacing internal software.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/GettyImages-2245627953.jpg?resize=1200%2C800",
+      "published": "2026-06-09T13:00:00+00:00",
+      "firstSeen": "2026-06-09T14:00:01.971236+00:00",
+      "lastSeen": "2026-06-09T14:00:01.971236+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2598
+    },
+    {
+      "title": "A $200bn software investor declares the ‘SaaSpocalypse’ over. Not everyone is convinced",
+      "url": "https://thenextweb.com/news/saaspocalypse-over-thoma-bravo-ai-software",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Four months ago, AI looked like it might gut the software industry. This week, one of its biggest investors declared the threat over. The truth sits somewhere in between. Speaking at the SuperReturn International conference in Berlin, Orlando Bravo, founder of Thoma Bravo, one of the world’s largest software-focused private equity firms with almost $200bn [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/thoma-bravo-ai-software.avif",
+      "published": "2026-06-09T12:55:55+00:00",
+      "firstSeen": "2026-06-09T14:00:01.971236+00:00",
+      "lastSeen": "2026-06-09T14:00:01.971236+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1178
+    },
+    {
+      "title": "Apple’s AI pitch will live or die by its privacy promise",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/946705/apple-private-cloud-compute-ai-siri-intelligence-wwdc",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "As expected, yesterday's WWDC keynote was mostly about AI. And also as expected, Apple tried to turn its late arrival into its sales pitch: it didn't rush into AI because it was taking its time to do things right. In this case, \"right\" means \"with more privacy than anyone else.\" It's a good pitch - [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/apple-intelligence-siri-ai-private-cloud-compute.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
+      "published": "2026-06-09T12:55:33+00:00",
+      "firstSeen": "2026-06-09T14:00:01.971236+00:00",
+      "lastSeen": "2026-06-09T14:00:01.971236+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.4276
+    },
+    {
+      "title": "Alta Ares raised €50M to make shooting down a drone cheaper than the drone itself",
+      "url": "https://thenextweb.com/news/alta-ares-50m-ai-air-defence-interceptors",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "A Shahed attack drone costs tens of thousands of euros. The missiles traditionally fired to shoot one down can cost a million or more. A French startup has raised €50mn to fix that maths. Alta Ares, a Paris-based defence-technology company founded in 2024, said on Tuesday it had closed a €50mn round led by Air [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/alta-ares.avif",
+      "published": "2026-06-09T12:41:33+00:00",
+      "firstSeen": "2026-06-09T14:00:01.971236+00:00",
+      "lastSeen": "2026-06-09T14:00:01.971236+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1107
+    },
+    {
+      "title": "Microsoft cuts hundreds of Azure jobs in China as the borderless cloud splinters",
+      "url": "https://thenextweb.com/news/microsoft-china-azure-cloud-layoffs",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The cloud was supposed to make geography irrelevant. Microsoft’s latest round of job cuts in China shows how quickly that promise is coming apart. Microsoft is laying off hundreds of staff at its Azure cloud unit in China, according to affected employees who spoke to the South China Morning Post. Two sources put the number [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2024/12/microsoft-cloud-uk-fine.avif",
+      "published": "2026-06-09T12:29:18+00:00",
+      "firstSeen": "2026-06-09T14:00:01.971236+00:00",
+      "lastSeen": "2026-06-09T14:00:01.971236+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1048
+    },
+    {
+      "title": "An ex-scooter founder raised $5M to build AI data centres in orbit, where the sun never sets",
+      "url": "https://thenextweb.com/news/orbital-5m-pre-seed-ai-data-centres-space",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "AI is running out of power, and out of places to put it, on Earth. A Los Angeles startup wants to solve both problems by leaving the planet. Orbital, a space-infrastructure company building AI data centres in low Earth orbit, has raised a $5mn oversubscribed pre-seed round led by a16z speedrun, with a long list [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/sateline-solar-pannels-space-simulation.avif",
+      "published": "2026-06-09T12:20:33+00:00",
+      "firstSeen": "2026-06-09T14:00:01.971236+00:00",
+      "lastSeen": "2026-06-09T14:00:01.971236+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1005
     },
     {
       "title": "France’s ‘sovereign’ messenger Tchap was breached, and officials and the hacker disagree on how badly",
@@ -28,10 +172,10 @@
       "image": "https://media.thenextweb.com/2026/04/france-linux-windows-migration-digital-sovereignty.avif",
       "published": "2026-06-09T12:04:41+00:00",
       "firstSeen": "2026-06-09T12:14:37.159854+00:00",
-      "lastSeen": "2026-06-09T12:14:37.159854+00:00",
+      "lastSeen": "2026-06-09T14:00:01.971236+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.245
+      "score": 3.1928
     },
     {
       "title": "How an e-scooter founder raised $5 million to build space data centers",
@@ -44,10 +188,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/satellite.png?resize=1200%2C675",
       "published": "2026-06-09T12:00:00+00:00",
       "firstSeen": "2026-06-09T12:00:02.085773+00:00",
-      "lastSeen": "2026-06-09T12:14:37.159854+00:00",
+      "lastSeen": "2026-06-09T14:00:01.971236+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9826
+      "score": 2.9305
     },
     {
       "title": "Robot-arm maker Standard Bots hits a $1bn valuation to scale US manufacturing",
@@ -60,10 +204,10 @@
       "image": "https://media.thenextweb.com/2026/06/standardbots.avif",
       "published": "2026-06-09T11:32:34+00:00",
       "firstSeen": "2026-06-09T12:14:37.159854+00:00",
-      "lastSeen": "2026-06-09T12:14:37.159854+00:00",
+      "lastSeen": "2026-06-09T14:00:01.971236+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1288
+      "score": 2.0774
     },
     {
       "title": "NinjaOne’s valuation more than doubles to $12.3bn, and it says it didn’t even need the money",
@@ -76,10 +220,10 @@
       "image": "https://media.thenextweb.com/2026/04/NinjaOne-Deal.avif",
       "published": "2026-06-09T11:03:09+00:00",
       "firstSeen": "2026-06-09T12:00:02.085773+00:00",
-      "lastSeen": "2026-06-09T12:14:37.159854+00:00",
+      "lastSeen": "2026-06-09T14:00:01.971236+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1142
+      "score": 2.0635
     },
     {
       "title": "9 best HRIS systems for large organizations (2026)",
@@ -92,10 +236,10 @@
       "image": "https://media.thenextweb.com/2026/06/best-hris-systems-large-organizations-2026.avif",
       "published": "2026-06-09T10:52:17+00:00",
       "firstSeen": "2026-06-09T12:00:02.085773+00:00",
-      "lastSeen": "2026-06-09T12:14:37.159854+00:00",
+      "lastSeen": "2026-06-09T14:00:01.971236+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2089
+      "score": 3.1584
     },
     {
       "title": "Vertical Aerospace gets a second VX4 flying, doubling its test fleet on the road to certification",
@@ -108,10 +252,10 @@
       "image": "https://media.thenextweb.com/2026/06/vertical-aerospace-vx4-prototype.avif",
       "published": "2026-06-09T10:52:05+00:00",
       "firstSeen": "2026-06-09T12:00:02.085773+00:00",
-      "lastSeen": "2026-06-09T12:14:37.159854+00:00",
+      "lastSeen": "2026-06-09T14:00:01.971236+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1088
+      "score": 2.0583
     },
     {
       "title": "How an Agent Built a 3D Paris Gallery by Chaining Two Hugging Face Spaces",
@@ -124,10 +268,10 @@
       "image": "https://cdn-uploads.huggingface.co/production/uploads/60a551a34ecc5d054c8ad93e/0tamlKpAvO3lZEklNmwHT.png",
       "published": "2026-06-09T10:46:19+00:00",
       "firstSeen": "2026-06-09T12:00:02.085773+00:00",
-      "lastSeen": "2026-06-09T12:14:37.159854+00:00",
+      "lastSeen": "2026-06-09T14:00:01.971236+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0859
+      "score": 5.0356
     },
     {
       "title": "A UK firm trained a “sovereign” NHS triage AI that it says rivals Claude, at a fraction of the cost",
@@ -143,7 +287,7 @@
       "lastSeen": "2026-06-09T12:14:37.159854+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.8011
+      "score": 8.751
     },
     {
       "title": "Alex Vindman Survived Trump’s Retaliation Machine. Now He’s Running for Senate",
@@ -156,10 +300,10 @@
       "image": "https://media.wired.com/photos/6a27183be76eea53dfe3d41c/master/pass/Big-Interview-UV-Alex-Vindman.jpg",
       "published": "2026-06-09T10:30:00+00:00",
       "firstSeen": "2026-06-09T11:00:01.786490+00:00",
-      "lastSeen": "2026-06-09T12:14:37.159854+00:00",
+      "lastSeen": "2026-06-09T14:00:01.971236+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.238
+      "score": 2.1881
     },
     {
       "title": "Learning to lead in a hybrid human-AI enterprise",
@@ -172,10 +316,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/05/MIT-Abstract-Thumbnail-3-_-V2-1.png?resize=1200%2C600",
       "published": "2026-06-09T10:20:06+00:00",
       "firstSeen": "2026-06-09T11:00:01.786490+00:00",
-      "lastSeen": "2026-06-09T12:14:37.159854+00:00",
+      "lastSeen": "2026-06-09T14:00:01.971236+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.9332
+      "score": 3.8835
     },
     {
       "title": "China is drafting a $295bn plan to build AI data centres, and to lock Nvidia out of them",
@@ -191,7 +335,7 @@
       "lastSeen": "2026-06-09T12:14:37.159854+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0869
+      "score": 2.0375
     },
     {
       "title": "Amazon employees ask Seattle to put the brakes on new data centers",
@@ -204,10 +348,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/STKS528_DATA_CENTERS_A.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-09T10:00:00+00:00",
       "firstSeen": "2026-06-09T11:00:01.786490+00:00",
-      "lastSeen": "2026-06-09T12:14:37.159854+00:00",
+      "lastSeen": "2026-06-09T14:00:01.971236+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2935
+      "score": 2.2443
     },
     {
       "title": "Finland’s ICEYE hits a €10bn valuation, quadrupling in six months as Europe scrambles for its own spy satellites",
@@ -223,7 +367,7 @@
       "lastSeen": "2026-06-09T12:14:37.159854+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0803
+      "score": 2.0312
     },
     {
       "title": "OpenAI Starts IPO Process With Confidential SEC Filing",
@@ -236,10 +380,10 @@
       "image": "https://assets.techrepublic.com/uploads/2025/10/tr-10282025-news-openai-energy-ai-policy.jpg?f=jpeg",
       "published": "2026-06-09T09:52:12+00:00",
       "firstSeen": "2026-06-09T11:00:01.786490+00:00",
-      "lastSeen": "2026-06-09T12:14:37.159854+00:00",
+      "lastSeen": "2026-06-09T14:00:01.971236+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.1798
+      "score": 10.1308
     },
     {
       "title": "Europe’s best-funded rocket startup just raised €270M, and now Isar Aerospace has to actually reach orbit",
@@ -255,7 +399,7 @@
       "lastSeen": "2026-06-09T12:14:37.159854+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0763
+      "score": 2.0274
     },
     {
       "title": "Deliverance AI exits stealth with £6m ARR to run agentic AI inside companies’ own walls",
@@ -271,7 +415,7 @@
       "lastSeen": "2026-06-09T12:14:37.159854+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.7682
+      "score": 4.7197
     },
     {
       "title": "Prince William is bringing homelessness prevention to London Tech Week for the first time",
@@ -287,7 +431,7 @@
       "lastSeen": "2026-06-09T12:00:02.085773+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1674
+      "score": 3.1189
     },
     {
       "title": "Five things you need to know about AI",
@@ -300,10 +444,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/06/5-things-a.jpg?resize=1200%2C600",
       "published": "2026-06-09T09:16:45+00:00",
       "firstSeen": "2026-06-09T10:00:01.430655+00:00",
-      "lastSeen": "2026-06-09T12:14:37.159854+00:00",
+      "lastSeen": "2026-06-09T14:00:01.971236+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.203
+      "score": 2.1548
     },
     {
       "title": "Databricks is raising again at up to $175 billion, four months after closing at $134 billion",
@@ -319,7 +463,7 @@
       "lastSeen": "2026-06-09T12:00:02.085773+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.062
+      "score": 2.0138
     },
     {
       "title": "Apple rebuilt Siri on Google’s AI and Nvidia’s chips, then spent WWDC explaining why that doesn’t break its privacy promise",
@@ -335,7 +479,7 @@
       "lastSeen": "2026-06-09T11:00:01.786490+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.7599
+      "score": 7.7118
     },
     {
       "title": "BYD says demand is double its capacity, but its sales data tells a different story",
@@ -351,7 +495,7 @@
       "lastSeen": "2026-06-09T11:00:01.786490+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0591
+      "score": 2.011
     },
     {
       "title": "Perplexity is sticking with a 2028 IPO while OpenAI and Anthropic race to list this year",
@@ -367,7 +511,7 @@
       "lastSeen": "2026-06-09T11:00:01.786490+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.0577
+      "score": 8.0097
     },
     {
       "title": "NeuroBait: I fine-tuned a model to spark dopamine for ADHD brain",
@@ -383,7 +527,7 @@
       "lastSeen": "2026-06-09T11:00:01.786490+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3375
+      "score": 2.2895
     },
     {
       "title": "The company that wires AI data centres is raising prices because hyperscalers have no alternative",
@@ -399,7 +543,7 @@
       "lastSeen": "2026-06-09T11:00:01.786490+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0552
+      "score": 2.0074
     },
     {
       "title": "Jensen Huang won’t testify before the Senate on Nvidia’s China chip sales. He offered a tour of headquarters instead.",
@@ -415,7 +559,7 @@
       "lastSeen": "2026-06-09T10:00:01.430655+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1413
+      "score": 3.094
     },
     {
       "title": "iOS 27 is full of references to a folding iPhone. Apple didn’t mention it once at WWDC.",
@@ -431,7 +575,7 @@
       "lastSeen": "2026-06-09T10:00:01.430655+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.5344
+      "score": 4.4875
     },
     {
       "title": "OpenAI filed confidentially for an IPO. Anthropic filed last week. SpaceX lists on Thursday. The AI public market is about to get very crowded.",
@@ -447,7 +591,7 @@
       "lastSeen": "2026-06-09T10:00:01.430655+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.3737
+      "score": 8.3273
     },
     {
       "title": "Lucid’s Gravity SUV gets hands-free highway driving in its latest over-the-air update",
@@ -464,7 +608,7 @@
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 12.5192
+      "score": 12.4731
     },
     {
       "title": "A Florida startup is building a thorium fuel supply chain from scratch, starting with an Australian mine",
@@ -480,7 +624,7 @@
       "lastSeen": "2026-06-09T10:00:01.430655+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0091
+      "score": 1.9634
     },
     {
       "title": "v1.88.1",
@@ -493,154 +637,10 @@
       "image": "https://opengraph.githubassets.com/ec499708075f24621d7fcedea57866e12aa1896488bf54bec2bf826d3ab470a3/BerriAI/litellm/releases/tag/v1.88.1",
       "published": "2026-06-09T05:54:19+00:00",
       "firstSeen": "2026-06-09T02:00:01.687416+00:00",
-      "lastSeen": "2026-06-09T12:14:37.159854+00:00",
+      "lastSeen": "2026-06-09T14:00:01.971236+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8124
-    },
-    {
-      "title": "Why Apple’s slow-and-steady AI bet is starting to look pretty smart",
-      "url": "https://techcrunch.com/2026/06/08/why-apples-slow-and-steady-ai-bet-is-starting-to-look-pretty-smart",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Can Apple's new AI glow up put to bed accusations that it's losing an all-important industry race?",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/06/apple-siri-ai-use-cases.png?w=1186",
-      "published": "2026-06-09T01:56:48+00:00",
-      "firstSeen": "2026-06-09T02:00:01.687416+00:00",
-      "lastSeen": "2026-06-09T12:14:37.159854+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.1164
-    },
-    {
-      "title": "v1.84.6",
-      "url": "https://github.com/BerriAI/litellm/releases/tag/v1.84.6",
-      "source": "LiteLLM Releases",
-      "sourceUrl": "https://github.com/BerriAI/litellm/releases.atom",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Verify Docker Image Signature\nAll LiteLLM Docker images are signed with cosign. Every release is signed with the same key introduced in commit 0112e53.\nVerify using the pinned commit hash (recommended):\nA commit hash is cryptographically immutable, so this is the strongest way to ensure you are using the original signing key:\ncosign verify \\\n  --key https://raw.githubusercontent.com/BerriAI/litellm/0112e53046018d726492c814b3644b7d376029d0/cosign.pub \\\n  ghcr.io/berriai/litellm:v1.84.6\nVerify using the release tag (convenience):\nTags are protected in this repository and resolve to the same key.",
-      "image": "https://opengraph.githubassets.com/2289ef0fcf1c2ba20456e6d2fb1649302a0ee9442d8f03543c7a3223e1c725b2/BerriAI/litellm/releases/tag/v1.84.6",
-      "published": "2026-06-09T01:55:10+00:00",
-      "firstSeen": "2026-06-09T02:00:01.687416+00:00",
-      "lastSeen": "2026-06-09T12:14:37.159854+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.7157
-    },
-    {
-      "title": "Mercor’s Brendan Foody calls out Sequoia, accusing it of ‘dual-pricing’ valuation tricks",
-      "url": "https://techcrunch.com/2026/06/08/mercors-brendan-foody-calls-out-sequoia-over-dual-pricing-valuation-tricks",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Sequoia is just one of the top firms that sells same equity at two different prices.",
-      "image": "https://techcrunch.com/wp-content/uploads/2024/11/GettyImages-1258486979.jpg?w=1024",
-      "published": "2026-06-09T00:45:56+00:00",
-      "firstSeen": "2026-06-09T01:00:01.108039+00:00",
-      "lastSeen": "2026-06-09T12:14:37.159854+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.9897
-    },
-    {
-      "title": "Siri AI at WWDC 2026",
-      "url": "https://simonwillison.net/2026/Jun/8/wwdc",
-      "source": "Simon Willison",
-      "sourceUrl": "https://simonwillison.net/atom/everything/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Given how badly burned anyone who took Apple's 2024 WWDC Apple Intelligence announcements at face value was, I'm holding to a strict \"I'll believe it when I see it\" policy for everything they announced today. \nThe new Siri AI features do at least look feasible with today's technology, especially since Apple are licensing a custom Gemini-derived model that they can run on their own Private Cloud Compute.\nIt sounds like they'll be taking advantage of vision LLMs to extract information from the user's screen, which neatly sidesteps the need for every existing application to ship custom code in or",
-      "image": "",
-      "published": "2026-06-08T23:58:04+00:00",
-      "firstSeen": "2026-06-09T01:00:01.108039+00:00",
-      "lastSeen": "2026-06-09T12:14:37.159854+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 8.4722
-    },
-    {
-      "title": "As OpenAI files for IPO, Sam Altman’s eye-scanning company is doing layoffs, report says",
-      "url": "https://techcrunch.com/2026/06/08/as-openai-files-for-ipo-sam-altmans-eye-scanning-company-is-doing-layoffs-report-says",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Tools for Humanity, Sam Altman's identity verification company, is reportedly struggling to generate revenue and will downsize its staff.",
-      "image": "https://techcrunch.com/wp-content/uploads/2023/07/Worldcoin-Project-Co-founders-Alex-Blania-L-and-Sam-Altman-R.jpg?resize=1200%2C800",
-      "published": "2026-06-08T22:41:45+00:00",
-      "firstSeen": "2026-06-08T23:00:02.020036+00:00",
-      "lastSeen": "2026-06-09T12:14:37.159854+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.945
-    },
-    {
-      "title": "Apple’s WWDC AI demos looked more real after $250M false ad settlement",
-      "url": "https://techcrunch.com/2026/06/08/apples-wwdc-ai-demos-looked-more-real-after-250m-false-ad-settlement",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "The vibe of Apple's 2026 WWDC keynote felt like a spouse proudly listing all the honey-do-list items tackled. One subtle example: the many AI demos of someone standing, phone in hand.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/06/Apple-iOS-27-demo.png?resize=1200%2C677",
-      "published": "2026-06-08T22:39:57+00:00",
-      "firstSeen": "2026-06-08T23:00:02.020036+00:00",
-      "lastSeen": "2026-06-09T12:14:37.159854+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.0444
-    },
-    {
-      "title": "Apple is using AI to fix Safari’s extension problem",
-      "url": "https://www.theverge.com/tech/946345/apple-safari-ai-update-extensions",
-      "source": "The Verge AI",
-      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "Apple is trying to solve one of Safari's biggest weaknesses with AI. Safari has long lacked the robust library of extensions that its rivals have, mainly due to the stringent development requirements from Apple. But now, Apple is inviting users to essentially vibe-code their own extensions. In a demo shared by Apple, the company showed [&#8230;]",
-      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/describe-extension-safari.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.742998834307%2C100%2C78.514002331385&amp%3Bw=1200",
-      "published": "2026-06-08T22:14:17+00:00",
-      "firstSeen": "2026-06-08T23:00:02.020036+00:00",
-      "lastSeen": "2026-06-09T12:14:37.159854+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "framework_or_plumbing",
-      "score": 0.0055
-    },
-    {
-      "title": "OpenAI files for IPO, following Anthropic",
-      "url": "https://www.theverge.com/ai-artificial-intelligence/946335/openai-ipo-s-1-confidential",
-      "source": "The Verge AI",
-      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "OpenAI on Monday checked off a preliminary step in the IPO race that it and rival Anthropic have been competing in for the better part of a year: The company announced it has confidentially submitted a Form S-1 with the US Securities and Exchange Commission, following Anthropic's decision to do the same on June 1st. [&#8230;]",
-      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/STK155_OPEN_AI_CVirginia_C.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
-      "published": "2026-06-08T21:38:29+00:00",
-      "firstSeen": "2026-06-08T21:59:34.916580+00:00",
-      "lastSeen": "2026-06-09T12:14:37.159854+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 7.9932
-    },
-    {
-      "title": "OpenAI Confidentially Files for IPO on the Heels of SpaceX and Anthropic",
-      "url": "https://www.wired.com/story/openai-confidentially-files-for-ipo",
-      "source": "Wired AI",
-      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "The ChatGPT-maker announced it has filed paperwork to go public, just a week after rival Anthropic took the same step.",
-      "image": "https://media.wired.com/photos/6a0f431f2e3deb13670a3fb1/master/pass/OpenAI-IPO-Business-2265445220.jpg",
-      "published": "2026-06-08T21:31:58+00:00",
-      "firstSeen": "2026-06-08T21:59:34.916580+00:00",
-      "lastSeen": "2026-06-09T12:14:37.159854+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 12.271
+      "score": 2.7685
     },
     {
       "title": "The Life Scientific: Helen Hastie",
@@ -653,10 +653,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-08T20:00:00+00:00",
       "firstSeen": "2026-06-08T21:00:01.371488+00:00",
-      "lastSeen": "2026-06-09T12:14:37.159854+00:00",
+      "lastSeen": "2026-06-09T14:00:01.971236+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8905
+      "score": 1.8572
     },
     {
       "title": "The Life Scientific: Seth Berkley",
@@ -669,10 +669,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-01T20:00:00+00:00",
       "firstSeen": "2026-06-01T21:00:01.828388+00:00",
-      "lastSeen": "2026-06-09T12:14:37.159854+00:00",
+      "lastSeen": "2026-06-09T14:00:01.971236+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.1965
+      "score": 1.1963
     },
     {
       "title": "Dean Lomax on discovering ichthyosaurs and defying nay-sayers",
@@ -741,14 +741,9 @@
   ],
   "errors": [
     {
-      "source": "Artificial Intelligence News",
-      "url": "https://www.artificialintelligence-news.com/categories/artificial-intelligence/feed/",
-      "error": "not well-formed (invalid token): line 1, column 158"
-    },
-    {
       "source": "MarkTechPost",
       "url": "https://www.marktechpost.com/feed/",
-      "error": "not well-formed (invalid token): line 1, column 119"
+      "error": "HTTP Error 403: Forbidden"
     }
   ]
 }
