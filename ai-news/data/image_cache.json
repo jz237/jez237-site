@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-09T16:00:01.597394+00:00",
+  "updatedAt": "2026-06-09T16:12:33.742848+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -9800,6 +9800,10 @@
     "https://deepmind.google/blog/fluid-natural-voice-translation-with-gemini-35-live-translate": {
       "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/3-5_Live_Translate_hero.width-1300.png",
       "checkedAt": "2026-06-09T16:00:01.597394+00:00"
+    },
+    "https://techcrunch.com/2026/06/09/its-not-faang-anymore-its-mangos": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/Mango-crushing-fang.png?resize=1200,960",
+      "checkedAt": "2026-06-09T16:12:33.742848+00:00"
     }
   }
 }
