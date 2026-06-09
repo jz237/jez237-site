@@ -1,6 +1,6 @@
 {
   "date": "2026-06-09",
-  "updatedAt": "2026-06-09T13:00:02.055953+00:00",
+  "updatedAt": "2026-06-09T12:14:37.159854+00:00",
   "items": [
     {
       "title": "Lucid’s Gravity SUV gets hands-free highway driving in its latest over-the-air update",
@@ -17,7 +17,7 @@
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 12.4991
+      "score": 12.5192
     },
     {
       "title": "OpenAI Starts IPO Process With Confidential SEC Filing",
@@ -30,10 +30,10 @@
       "image": "https://assets.techrepublic.com/uploads/2025/10/tr-10282025-news-openai-energy-ai-policy.jpg?f=jpeg",
       "published": "2026-06-09T09:52:12+00:00",
       "firstSeen": "2026-06-09T11:00:01.786490+00:00",
-      "lastSeen": "2026-06-09T13:00:02.055953+00:00",
+      "lastSeen": "2026-06-09T12:14:37.159854+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.1584
+      "score": 10.1798
     },
     {
       "title": "A UK firm trained a “sovereign” NHS triage AI that it says rivals Claude, at a fraction of the cost",
@@ -46,10 +46,10 @@
       "image": "https://media.thenextweb.com/2026/06/oneadvanced-partners-nvidia.avif",
       "published": "2026-06-09T10:36:21+00:00",
       "firstSeen": "2026-06-09T12:00:02.085773+00:00",
-      "lastSeen": "2026-06-09T13:00:02.055953+00:00",
+      "lastSeen": "2026-06-09T12:14:37.159854+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.7792
+      "score": 8.8011
     },
     {
       "title": "OpenAI filed confidentially for an IPO. Anthropic filed last week. SpaceX lists on Thursday. The AI public market is about to get very crowded.",
@@ -65,7 +65,7 @@
       "lastSeen": "2026-06-09T10:00:01.430655+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.3534
+      "score": 8.3737
     },
     {
       "title": "Perplexity is sticking with a 2028 IPO while OpenAI and Anthropic race to list this year",
@@ -81,7 +81,7 @@
       "lastSeen": "2026-06-09T11:00:01.786490+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.0367
+      "score": 8.0577
     },
     {
       "title": "Apple rebuilt Siri on Google’s AI and Nvidia’s chips, then spent WWDC explaining why that doesn’t break its privacy promise",
@@ -97,7 +97,7 @@
       "lastSeen": "2026-06-09T11:00:01.786490+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.7389
+      "score": 7.7599
     },
     {
       "title": "How an Agent Built a 3D Paris Gallery by Chaining Two Hugging Face Spaces",
@@ -110,10 +110,10 @@
       "image": "https://cdn-uploads.huggingface.co/production/uploads/60a551a34ecc5d054c8ad93e/0tamlKpAvO3lZEklNmwHT.png",
       "published": "2026-06-09T10:46:19+00:00",
       "firstSeen": "2026-06-09T12:00:02.085773+00:00",
-      "lastSeen": "2026-06-09T13:00:02.055953+00:00",
+      "lastSeen": "2026-06-09T12:14:37.159854+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.064
+      "score": 5.0859
     },
     {
       "title": "Deliverance AI exits stealth with £6m ARR to run agentic AI inside companies’ own walls",
@@ -126,10 +126,10 @@
       "image": "https://media.thenextweb.com/2026/06/Deliverance-AI-team.avif",
       "published": "2026-06-09T09:27:41+00:00",
       "firstSeen": "2026-06-09T11:00:01.786490+00:00",
-      "lastSeen": "2026-06-09T13:00:02.055953+00:00",
+      "lastSeen": "2026-06-09T12:14:37.159854+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.747
+      "score": 4.7682
     },
     {
       "title": "iOS 27 is full of references to a folding iPhone. Apple didn’t mention it once at WWDC.",
@@ -145,7 +145,7 @@
       "lastSeen": "2026-06-09T10:00:01.430655+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.5139
+      "score": 4.5344
     },
     {
       "title": "Learning to lead in a hybrid human-AI enterprise",
@@ -158,10 +158,26 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/05/MIT-Abstract-Thumbnail-3-_-V2-1.png?resize=1200%2C600",
       "published": "2026-06-09T10:20:06+00:00",
       "firstSeen": "2026-06-09T11:00:01.786490+00:00",
-      "lastSeen": "2026-06-09T13:00:02.055953+00:00",
+      "lastSeen": "2026-06-09T12:14:37.159854+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.9115
+      "score": 3.9332
+    },
+    {
+      "title": "France’s ‘sovereign’ messenger Tchap was breached, and officials and the hacker disagree on how badly",
+      "url": "https://thenextweb.com/news/tchap-france-sovereign-messenger-breach",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "France built its own encrypted messenger so civil servants would not have to trust WhatsApp or Telegram. Now that messenger has been breached, and the government and the attacker cannot agree on how much was taken. France’s National Cybersecurity Agency, ANSSI, detected a compromise of Tchap on 7 June, and the Digital Affairs Directorate (DINUM), [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/france-linux-windows-migration-digital-sovereignty.avif",
+      "published": "2026-06-09T12:04:41+00:00",
+      "firstSeen": "2026-06-09T12:14:37.159854+00:00",
+      "lastSeen": "2026-06-09T12:14:37.159854+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.245
     },
     {
       "title": "Apple’s AI pitch will live or die by its privacy promise",
@@ -186,26 +202,26 @@
       "sourceUrl": "https://thenextweb.com/feed",
       "sourceWeight": 0.75,
       "category": "AI",
-      "summary": "France built its own encrypted messenger so civil servants would not have to trust WhatsApp or Telegram. Now that messenger has been breached, and the government and the attacker cannot agree on how much was taken. France’s National Cybersecurity Agency, ANSSI, detected a compromise of Tchap on 7 June, and the Digital Affairs Directorate (DINUM), [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/04/france-linux-windows-migration-digital-sovereignty.avif",
-      "published": "2026-06-09T12:04:41+00:00",
-      "firstSeen": "2026-06-09T13:00:02.055953+00:00",
-      "lastSeen": "2026-06-09T13:00:02.055953+00:00",
+      "summary": "Enterprise HRIS buying guides tend to recommend the same five names. That shortlist hasn’t changed in a decade, and most of those platforms were built for a workforce model that no longer exists. Remote-first teams, distributed payroll across multiple countries, AI-driven workforce planning, and employee experience expectations from a generation raised on consumer apps have all reshaped [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/best-hris-systems-large-organizations-2026.avif",
+      "published": "2026-06-09T10:52:17+00:00",
+      "firstSeen": "2026-06-09T12:00:02.085773+00:00",
+      "lastSeen": "2026-06-09T12:14:37.159854+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2222
+      "score": 3.2089
     }
   ],
   "errors": [
     {
-      "source": "OpenAI News",
-      "url": "https://openai.com/news/rss.xml",
-      "error": "HTTP Error 500: Internal Server Error"
+      "source": "Artificial Intelligence News",
+      "url": "https://www.artificialintelligence-news.com/categories/artificial-intelligence/feed/",
+      "error": "not well-formed (invalid token): line 1, column 158"
     },
     {
       "source": "MarkTechPost",
       "url": "https://www.marktechpost.com/feed/",
-      "error": "HTTP Error 403: Forbidden"
+      "error": "not well-formed (invalid token): line 1, column 119"
     }
   ]
 }
