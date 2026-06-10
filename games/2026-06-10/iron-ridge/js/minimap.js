@@ -41,6 +41,13 @@ export class Minimap {
       }
     }
     bctx.putImageData(img, 0, 0);
+    this.pings = [];
+  }
+
+  // expanding alert ring at a world position
+  ping(wx, wz, color = '#ff3b30') {
+    this.pings.push({ wx, wz, t0: performance.now(), color });
+    if (this.pings.length > 8) this.pings.shift();
   }
 
   // world → minimap pixels (relative to player at centre)
@@ -80,7 +87,7 @@ export class Minimap {
     c.restore();
   }
 
-  draw(player, enemies, props, camYaw) {
+  draw(player, enemies, props, camYaw, trucks = []) {
     const c = this.ctx;
     const S = this.size;
     const pp = player.body.position;
@@ -156,6 +163,39 @@ export class Minimap {
       c.beginPath();
       c.arc(x, y, 6, 0, Math.PI * 2);
       c.stroke();
+    }
+
+    // convoy trucks
+    for (const tr of trucks) {
+      if (!tr.alive) continue;
+      const tp = tr.body.position;
+      const d = Math.hypot(tp.x - pp.x, tp.z - pp.z);
+      if (d > RANGE * 0.94) { this.edgeMarker(tp.x, tp.z, pp.x, pp.z, '#52d8ff'); continue; }
+      const [x, y] = this.toMap(tp.x, tp.z, pp.x, pp.z);
+      this.blip(x, y, '#52d8ff', 3.4);
+    }
+
+    // alert pings (expanding rings)
+    const now = performance.now();
+    this.pings = this.pings.filter(p => now - p.t0 < 1600);
+    for (const p of this.pings) {
+      const age = (now - p.t0) / 1600;
+      const d = Math.hypot(p.wx - pp.x, p.wz - pp.z);
+      let x, y;
+      if (d > RANGE * 0.94) {
+        const ang = Math.atan2(p.wz - pp.z, p.wx - pp.x);
+        x = S / 2 + Math.cos(ang) * (S / 2 - 10);
+        y = S / 2 + Math.sin(ang) * (S / 2 - 10);
+      } else {
+        [x, y] = this.toMap(p.wx, p.wz, pp.x, pp.z);
+      }
+      c.strokeStyle = p.color;
+      c.globalAlpha = 1 - age;
+      c.lineWidth = 2;
+      c.beginPath();
+      c.arc(x, y, 3 + age * 14, 0, Math.PI * 2);
+      c.stroke();
+      c.globalAlpha = 1;
     }
 
     // player arrow (hull heading)
