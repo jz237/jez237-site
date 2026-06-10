@@ -996,6 +996,9 @@ def main():
         ("relic_bottle", "a sealed glass bottle with a rolled paper message inside, corked", "Relic: message in a bottle"),
     ]:
         render_string_sprite(nm, SD[nm], "pickup", sprite_prompt(f"A treasure curio: {subject}."), dsc)
+    render_string_sprite("glowcap_jelly", SD["glowcap_jelly"], "pickup",
+        sprite_prompt("A small corked glass jar of luminous golden glowcap jelly, soft inner light, a pale shine on the glass."),
+        "Glowcap Jelly — eaten on pickup, grants a 25s Glimmer Rush (fast, effortless digging)")
     render_string_sprite("moth", SD["moth"], "critter",
         sprite_prompt("A small cream cave moth with spread patterned wings, seen from above."),
         "Cave moth (flutters near glowing flora)")
