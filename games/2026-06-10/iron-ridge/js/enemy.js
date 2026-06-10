@@ -180,23 +180,38 @@ export class WaveManager {
   }
 
   waveSpec(w) {
-    // typed tank roster: scouts arrive at wave 2, heavies from wave 6
+    // armor on EVERY wave — targets are bonus objectives, never the gate
     const tanks = [];
-    if (w >= 2) {
-      const n = Math.min(6, w === 2 ? 1 : w === 3 ? 2 : 2 + Math.floor((w - 2) / 2));
-      for (let i = 0; i < n; i++) {
-        if (w >= 6 && i % 3 === 2) tanks.push('heavy');
-        else if (i % 2 === 1 || w === 2) tanks.push('scout');
-        else tanks.push('standard');
-      }
+    const n = Math.min(6, w === 1 ? 1 : 1 + Math.floor(w / 2)); // 1,2,2,3,3,4…
+    for (let i = 0; i < n; i++) {
+      if (w >= 6 && i % 3 === 2) tanks.push('heavy');
+      else if (i % 2 === 1 || w <= 2) tanks.push('scout');
+      else tanks.push('standard');
     }
     return {
-      targets: w === 1 ? 6 : Math.max(2, 5 - (w >> 1)),
+      targets: Math.max(2, 5 - (w >> 1)),
       barrels: Math.min(9, 3 + w),
       walls: w >= 2 ? Math.min(3, 1 + (w >> 1)) : 0,
       pillboxes: w >= 4 ? Math.min(2, 1 + Math.floor((w - 4) / 3)) : 0,
       tanks,
     };
+  }
+
+  // off-wave reinforcement when the field has gone quiet
+  spawnPatrol(scene, world, playerPos, wave) {
+    const n = wave >= 4 ? 2 : 1;
+    const a = Math.random() * Math.PI * 2;
+    const spawned = [];
+    for (let i = 0; i < n; i++) {
+      let x = playerPos.x + Math.cos(a + i * 0.4) * 115;
+      let z = playerPos.z + Math.sin(a + i * 0.4) * 115;
+      const rr = Math.hypot(x, z);
+      if (rr > PLAY_RADIUS - 30) { x *= (PLAY_RADIUS - 30) / rr; z *= (PLAY_RADIUS - 30) / rr; }
+      const e = new EnemyTank(scene, world, x, z, wave, 'scout');
+      this.enemies.push(e);
+      spawned.push(e);
+    }
+    return spawned;
   }
 
   spawnWave(w, props, scene, world, playerPos) {
@@ -279,6 +294,86 @@ export class WaveManager {
   }
 
   aliveEnemies() { return this.enemies.filter(e => e.tank.alive); }
+
+  // ---- bonus convoy: unarmed fast trucks crossing the battlefield ----
+  spawnConvoy(scene, world, playerPos) {
+    this.trucks = this.trucks || [];
+    const a = Math.random() * Math.PI * 2;
+    const perp = a + Math.PI / 2;
+    const cx = playerPos.x + Math.cos(perp) * (40 + Math.random() * 30);
+    const cz = playerPos.z + Math.sin(perp) * (40 + Math.random() * 30);
+    const dirX = Math.cos(a), dirZ = Math.sin(a);
+    for (let i = 0; i < 3; i++) {
+      const sx = cx - dirX * (120 + i * 14);
+      const sz = cz - dirZ * (120 + i * 14);
+      const grp = new THREE.Group();
+      const cabMat = new THREE.MeshStandardMaterial({ color: 0x70695a, roughness: 0.85 });
+      const tiltMat = new THREE.MeshStandardMaterial({ color: 0x4f5a43, roughness: 0.95 });
+      const cab = new THREE.Mesh(new THREE.BoxGeometry(1.5, 1.0, 1.2), cabMat);
+      cab.position.set(0, 1.15, 1.45);
+      grp.add(cab);
+      const bed = new THREE.Mesh(new THREE.BoxGeometry(1.6, 0.5, 2.6), cabMat);
+      bed.position.set(0, 0.9, -0.5);
+      grp.add(bed);
+      const tilt = new THREE.Mesh(new THREE.BoxGeometry(1.55, 0.85, 2.5), tiltMat);
+      tilt.position.set(0, 1.55, -0.5);
+      grp.add(tilt);
+      const wheelGeo = new THREE.CylinderGeometry(0.4, 0.4, 0.3, 10);
+      const wheelMat = new THREE.MeshStandardMaterial({ color: 0x1d1d1f, roughness: 0.95 });
+      for (const [wx, wz] of [[-0.75, 1.4], [0.75, 1.4], [-0.75, -0.2], [0.75, -0.2], [-0.75, -1.3], [0.75, -1.3]]) {
+        const w = new THREE.Mesh(wheelGeo, wheelMat);
+        w.rotation.z = Math.PI / 2;
+        w.position.set(wx, 0.4, wz);
+        grp.add(w);
+      }
+      grp.traverse(o => { if (o.isMesh) o.castShadow = true; });
+      scene.add(grp);
+      const body = new CANNON.Body({
+        mass: 320,
+        position: new CANNON.Vec3(sx, getHeight(sx, sz) + 1.6, sz),
+        shape: new CANNON.Box(new CANNON.Vec3(0.85, 0.9, 2.1)),
+        collisionFilterGroup: CG.ENEMY,
+        collisionFilterMask: -1,
+        linearDamping: 0.05,
+        angularDamping: 0.9,
+      });
+      body.quaternion.setFromAxisAngle(new CANNON.Vec3(0, 1, 0), Math.atan2(dirX, dirZ));
+      world.addBody(body);
+      const truck = { mesh: grp, body, dirX, dirZ, alive: true, age: 0 };
+      body.userData = { kind: 'truck', truck };
+      this.trucks.push(truck);
+    }
+    return this.trucks;
+  }
+
+  stepTrucks(dt, scene, world) {
+    if (!this.trucks) return;
+    for (let i = this.trucks.length - 1; i >= 0; i--) {
+      const t = this.trucks[i];
+      t.age += dt;
+      if (t.alive) {
+        // kinematic-style drive: hold course at convoy speed
+        t.body.velocity.x = t.dirX * 13;
+        t.body.velocity.z = t.dirZ * 13;
+        t.body.angularVelocity.set(0, 0, 0);
+        t.body.quaternion.setFromAxisAngle(new CANNON.Vec3(0, 1, 0), Math.atan2(t.dirX, t.dirZ));
+        t.mesh.position.copy(t.body.position);
+        t.mesh.position.y -= 1.0;
+        t.mesh.quaternion.copy(t.body.quaternion);
+      }
+      if (t.age > 28 || (!t.alive && t.age > 3)) {
+        scene.remove(t.mesh);
+        world.removeBody(t.body);
+        this.trucks.splice(i, 1);
+      }
+    }
+  }
+
+  clearConvoy(scene, world) {
+    if (!this.trucks) return;
+    for (const t of this.trucks) { scene.remove(t.mesh); world.removeBody(t.body); }
+    this.trucks.length = 0;
+  }
 
   cleanup(scene, world, effects) {
     // tick dead tanks, remove after burn-out

@@ -30,6 +30,8 @@ export class Hud {
       fps: $('fps'),
       quality: $('quality'),
       reticle: $('reticle'),
+      strike: $('strike-ready'),
+      strikeBtn: $('btn-strike'),
     };
     this.bannerT = 0;
     this.shells = [];
@@ -150,6 +152,11 @@ export class Hud {
       a.style.transform = `translate(-50%,-50%) rotate(${ang}rad)`;
     }
     for (; i < this.arrowPool.length; i++) this.arrowPool[i].style.display = 'none';
+  }
+
+  setStrike(ready) {
+    this.el.strike?.classList.toggle('hidden', !ready);
+    this.el.strikeBtn?.classList.toggle('hidden', !ready);
   }
 
   setPerf(fps, qualityName) {
