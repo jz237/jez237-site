@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-10T07:00:01.815968+00:00",
+  "updatedAt": "2026-06-10T08:00:01.224257+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -9900,6 +9900,10 @@
     "https://simonwillison.net/2026/Jun/9/llm": {
       "image": "",
       "checkedAt": "2026-06-10T01:00:01.722384+00:00"
+    },
+    "https://techcrunch.com/2026/06/10/meta-signs-first-ai-data-center-deal-in-india-with-reliance": {
+      "image": "https://techcrunch.com/wp-content/uploads/2024/05/meta-getty.jpg?w=1200",
+      "checkedAt": "2026-06-10T08:00:01.224257+00:00"
     }
   }
 }
