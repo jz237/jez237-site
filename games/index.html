@@ -1120,11 +1120,13 @@
       '2026-06-06/missile-command-3js/',
       '2026-06-09/fluid/',
       '2026-06-09/choplifter/',
-      '2026-06-09/subway-siege-blackout/'
+      '2026-06-09/subway-siege-blackout/',
+      '2026-06-10/hollow-deep/'
     ]);
     const gameHref = g => `${SITE_GAME_PATHS.has(g.path) ? SITE_BASE : LEGACY_BASE}${g.path}`;
     const games = [
       // Featured (polished)
+      { title: 'Hollow Deep',                   path: '2026-06-10/hollow-deep/',           emoji: '🏮', date: 'Jun 10', cat: 'adventure', tag: 'featured',    desc: 'Eerie deep-cave horror spelunker — descend after your missing brother with a failing lantern, real shadow-casting light, rope-swing physics, flares, relics, and something in the dark that hunts by light and sound. Touch + keyboard, synth audio' },
       { title: 'Millipede',                     path: '2026-04-28/millipede/',             emoji: '🪲', date: 'Apr 28', cat: 'arcade',   tag: 'featured',     desc: 'Touch-first fungal swarm shooter with power-ups and queen waves' },
       { title: 'Emerald Mine: Crystal Caves',   path: '2026-03-05/boulder-dash/',              emoji: '💚', date: 'Mar 5',  cat: 'puzzle',   tag: 'featured',     desc: 'Released Boulder Dash-style cave arcade with handmade lesson caves, global scores, and touch controls' },
       { title: 'Night Fireworks Show',          path: '2026-04-23/fireworks-nocturne/',          emoji: '🎆', date: 'Apr 23', cat: 'arcade',   tag: 'demo',         desc: 'Realistic night fireworks demo with smoke, bloom, crackle, and touch launches' },
@@ -1203,7 +1205,7 @@
       ['millipede', 'millipede'], ['emerald', 'crystal'], ['crystal', 'crystal'], ['firework', 'fireworks'],
       ['missile', 'fireworks'], ['asteroid', 'rocket'], ['lunar', 'moon'], ['joust', 'joust'],
       ['hard hat', 'build'], ['shatter', 'brick'], ['pong', 'pong'], ['star trek', 'trek'],
-      ['stellar', 'star'], ['lantern', 'lantern'], ['qix', 'qix'], ['depth', 'wave'],
+      ['stellar', 'star'], ['hollow', 'lantern'], ['lantern', 'lantern'], ['qix', 'qix'], ['depth', 'wave'],
       ['ember', 'sword'], ['blackout', 'tank'], ['subway', 'train'], ['glassrail', 'train'], ['vortex', 'storm'], ['runecaster', 'magic'],
       ['tessera', 'tessera'], ['slash', 'lightning'], ['void', 'void'], ['gravity', 'web'],
       ['fluid', 'fluid'], ['invaders', 'invaders'], ['choplifter', 'chopper'],
@@ -1272,7 +1274,7 @@
     }
 
     function gameCard(g, index) {
-      const isNew = g.date.startsWith('May');
+      const isNew = g.date === 'Jun 10';
       return `
         <a class="game-card" href="${gameHref(g)}">
           ${gameIcon(g, index)}
