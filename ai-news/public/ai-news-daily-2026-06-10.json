@@ -1,7 +1,23 @@
 {
   "date": "2026-06-10",
-  "updatedAt": "2026-06-10T07:00:01.815968+00:00",
+  "updatedAt": "2026-06-10T08:00:01.224257+00:00",
   "items": [
+    {
+      "title": "How B2B brands are earning citations in ChatGPT, Claude, and Google’s AI Overviews",
+      "url": "https://thenextweb.com/news/b2b-brands-earning-citations-chatgpt-claude-ai-overviews",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The B2B marketing playbook has a new top metric: whether a brand gets cited when a buyer asks an AI assistant a question. The brands that show up inside ChatGPT, Claude, and Google’s AI Overviews, are, with very few exceptions, the brands that also rank well on Google itself. AI visibility is correlated with search rank, [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/b2b-brands-earning-citations-chatgpt-claude-ai-overviews.avif",
+      "published": "2026-06-10T06:54:44+00:00",
+      "firstSeen": "2026-06-10T08:00:01.224257+00:00",
+      "lastSeen": "2026-06-10T08:00:01.224257+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 17.7172
+    },
     {
       "title": "If Claude Fable stops helping you, you'll never know",
       "url": "https://simonwillison.net/2026/Jun/10/if-claude-fable-stops-helping-you",
@@ -13,10 +29,26 @@
       "image": "",
       "published": "2026-06-10T00:37:25+00:00",
       "firstSeen": "2026-06-10T01:00:01.722384+00:00",
-      "lastSeen": "2026-06-10T07:00:01.815968+00:00",
+      "lastSeen": "2026-06-10T08:00:01.224257+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.4114
+      "score": 8.3862
+    },
+    {
+      "title": "SynIB: Informational Bottleneck for Maximizing Synergy in Multimodal Learning",
+      "url": "https://llm-stats.com/ai-news",
+      "source": "LLM Stats AI News",
+      "sourceUrl": "https://llm-stats.com/ai-news",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "",
+      "image": "https://llm-stats.com/og/main.png",
+      "published": "2026-06-10T08:00:10.545629+00:00",
+      "firstSeen": "2026-05-29T21:00:01.522609+00:00",
+      "lastSeen": "2026-06-10T08:00:01.224257+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.76
     },
     {
       "title": "Legal AI startup Legora opens in Madrid, Milan, and Paris as it targets 700 European employees within a year",
@@ -29,26 +61,26 @@
       "image": "https://media.thenextweb.com/2026/04/Max-Junestrand-legora.avif",
       "published": "2026-06-10T05:57:06+00:00",
       "firstSeen": "2026-06-10T07:00:01.815968+00:00",
-      "lastSeen": "2026-06-10T07:00:01.815968+00:00",
+      "lastSeen": "2026-06-10T08:00:01.224257+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.8184
+      "score": 3.7891
     },
     {
-      "title": "Konstantinos Kontras, Teodora Gagaleska, Thomas Strypsteen, Christos Chatzichristos, Matthew Blaschko, Maarten De Vos...",
-      "url": "https://llm-stats.com/ai-news",
-      "source": "LLM Stats AI News",
-      "sourceUrl": "https://llm-stats.com/ai-news",
-      "sourceWeight": 0.9,
+      "title": "Meta signs first AI data center deal in India with Reliance",
+      "url": "https://techcrunch.com/2026/06/10/meta-signs-first-ai-data-center-deal-in-india-with-reliance",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
       "category": "AI",
-      "summary": "",
-      "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-10T07:00:12.413800+00:00",
-      "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-10T07:00:01.815968+00:00",
+      "summary": "The 168-megawatt facility will support Meta's global AI computing needs and can be expanded over time.",
+      "image": "https://techcrunch.com/wp-content/uploads/2024/05/meta-getty.jpg?w=1200",
+      "published": "2026-06-10T07:05:26+00:00",
+      "firstSeen": "2026-06-10T08:00:01.224257+00:00",
+      "lastSeen": "2026-06-10T08:00:01.224257+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.36
+      "score": 2.2625
     },
     {
       "title": "Google just fired a warning shot in the AI subscription price wars",
@@ -61,10 +93,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/01/ai-mode-google.jpg?resize=1200%2C800",
       "published": "2026-06-10T00:26:10+00:00",
       "firstSeen": "2026-06-10T01:00:01.722384+00:00",
-      "lastSeen": "2026-06-10T07:00:01.815968+00:00",
+      "lastSeen": "2026-06-10T08:00:01.224257+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1066
+      "score": 2.0815
     }
   ],
   "errors": [
