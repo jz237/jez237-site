@@ -908,6 +908,32 @@ let fpsTimer = 0;
 function gameFrame(dt) {
 
   input.poll();
+
+  // touch drive is camera-relative: push the stick toward where you want
+  // to go on screen and the hull auto-steers that way; pull back to reverse
+  if ((isTouch || window.__forceTouch) && G.player && G.state === 'playing') {
+    const m = Math.hypot(input.stickX ?? 0, input.stickY ?? 0);
+    if (m < 0.02) {
+      input.throttle = 0;
+      input.turn = 0;
+    } else {
+      const stickAng = Math.atan2(input.stickX, input.stickY); // up = 0
+      if (Math.abs(stickAng) > 2.35) {
+        // pulling back: straight reverse with gentle steering
+        input.throttle = -Math.min(1, m);
+        input.turn = THREE.MathUtils.clamp(input.stickX * 0.7, -0.6, 0.6);
+      } else {
+        const want = G.camYaw + stickAng;
+        const cur = G.player.visualYaw();
+        let err = want - cur;
+        err = Math.atan2(Math.sin(err), Math.cos(err));
+        input.turn = THREE.MathUtils.clamp(-err * 1.5, -1, 1);
+        // keep rolling while turning, but don't charge off the wrong way
+        input.throttle = Math.min(1, m) * THREE.MathUtils.clamp(Math.cos(err) + 0.35, 0, 1);
+      }
+    }
+  }
+
   if (input.consumePause()) {
     if (G.state === 'playing') pauseGame();
     else if (G.state === 'paused') resumeGame();
