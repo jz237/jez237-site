@@ -96,7 +96,13 @@ export function initInput(cv, callbacks = {}) {
 
   bindTouchBtn('btnDig', v => { touchState.dig = v; });
   bindTouchBtn('btnJump', v => { touchState.jump = v; });
-  bindTouchBtn('btnAct', v => { if (v) input.interactPressed = true; });
+
+  // the contextual prompt pill doubles as the interact button on touch
+  const hint = document.getElementById('restHint');
+  hint.addEventListener('pointerdown', e => {
+    input.interactPressed = true;
+    e.preventDefault(); e.stopPropagation();
+  });
 
   addEventListener('touchstart', markTouch, { passive: true });
 }
@@ -121,10 +127,10 @@ function bindTouchBtn(id, set) {
 
 /** Per-frame poll. screenToWorld converts css px -> world coords. */
 export function pollInput(screenToWorld) {
-  input.left = !!(keys.KeyA || keys.ArrowLeft) || joyState.dx < -0.25;
-  input.right = !!(keys.KeyD || keys.ArrowRight) || joyState.dx > 0.25;
-  input.up = !!(keys.KeyW || keys.ArrowUp) || joyState.dy < -0.45;
-  input.down = !!(keys.KeyS || keys.ArrowDown) || joyState.dy > 0.45;
+  input.left = !!(keys.KeyA || keys.ArrowLeft) || joyState.dx < -0.22;
+  input.right = !!(keys.KeyD || keys.ArrowRight) || joyState.dx > 0.22;
+  input.up = !!(keys.KeyW || keys.ArrowUp) || joyState.dy < -0.42;
+  input.down = !!(keys.KeyS || keys.ArrowDown) || joyState.dy > 0.42;
   input.jump = !!(keys.Space || keys.KeyW || keys.ArrowUp) || touchState.jump;
 
   const mouseAiming = mouseHeld && pointerScreen && !input.usingTouch;
