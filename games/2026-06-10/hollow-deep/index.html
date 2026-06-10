@@ -101,7 +101,7 @@ function viewRect(pad=0){
 const Input={
   kb:{},touch:false,hasMouse:false,
   ax:0,ay:0,run:false,
-  jbufT:0,grapHeld:false,grapTap:false,flareTap:false,restartTap:false,anyTap:false,
+  jbufT:0,grapHeld:false,grapTap:false,flareTap:false,stoneTap:false,restartTap:false,anyTap:false,
   aimSX:0,aimSY:0,
   aimActive:false,aimId:-1,aimWas:false,
   joy:{id:-1,bx:0,by:0,dx:0,dy:0,active:false},
@@ -113,6 +113,7 @@ const Input={
       jump:{x:w-78*s,y:h-86*s,r:52*s,label:'JUMP'},
       grap:{x:w-186*s,y:h-148*s,r:42*s,label:'ROPE'},
       flare:{x:w-208*s,y:h-52*s,r:38*s,label:'FLARE'},
+      stone:{x:w-80*s,y:h-196*s,r:34*s,label:'STONE'},
       mute:{x:w-34,y:34,r:24},
       pause:{x:34,y:34,r:24},
       joyHome:{x:104*s,y:h-118*s,r:62*s}
@@ -136,9 +137,11 @@ const Input={
 };
 addEventListener('keydown',e=>{
   if(e.repeat){if(e.code==='Space')e.preventDefault();return}
+  if((Game.state==='dead'||Game.state==='won')&&Scores.key(e)){e.preventDefault();return}
   Input.kb[e.code]=true;
   if(e.code==='Space'){Input.jbufT=0.15;e.preventDefault()}
   if(e.code==='KeyE'||e.code==='KeyF')Input.flareTap=true;
+  if(e.code==='KeyQ')Input.stoneTap=true;
   if(e.code==='KeyM')Au.toggleMute();
   if(e.code==='KeyP'||e.code==='Escape')Game.togglePause();
   if(e.code==='KeyR')Input.restartTap=true;
@@ -153,6 +156,7 @@ addEventListener('keyup',e=>{Input.kb[e.code]=false});
 cv.addEventListener('mousedown',e=>{
   Input.hasMouse=true;
   if(e.button===0&&Game.state==='title'&&Game.titleClick(e.clientX,e.clientY)){Au.init();Au.resume();return}
+  if(e.button===0&&(Game.state==='dead'||Game.state==='won')&&Scores.click(e.clientX,e.clientY))return;
   Game.anyInput();
   if(e.button===0)Input.grapHeld=true;
   if(e.button===2)Input.flareTap=true;
@@ -170,10 +174,12 @@ function handleTouchStart(e){
     if(hyp(x-L.mute.x,y-L.mute.y)<L.mute.r*1.4){Au.toggleMute();continue}
     if(hyp(x-L.pause.x,y-L.pause.y)<L.pause.r*1.4){Game.togglePause();continue}
     if(Game.state==='title'&&Game.titleClick(x,y))continue;
+    if((Game.state==='dead'||Game.state==='won')&&Scores.click(x,y))continue;
     if(Game.state!=='play'&&Game.state!=='intro'){Input.anyTap=true;Game.anyInput();continue}
     if(hyp(x-L.jump.x,y-L.jump.y)<L.jump.r*1.25){Input.jumpId=t.identifier;Input.jbufT=0.15;continue}
     if(hyp(x-L.grap.x,y-L.grap.y)<L.grap.r*1.25){Input.grapBtnId=t.identifier;Input.grapTap=true;continue}
     if(hyp(x-L.flare.x,y-L.flare.y)<L.flare.r*1.25){Input.flareBtnId=t.identifier;Input.flareTap=true;continue}
+    if(hyp(x-L.stone.x,y-L.stone.y)<L.stone.r*1.25){Input.stoneTap=true;continue}
     if(x<VIEW.w*0.45&&y>VIEW.h*0.35&&Input.joy.id===-1){
       Input.joy.id=t.identifier;Input.joy.bx=x;Input.joy.by=y;Input.joy.dx=0;Input.joy.dy=0;Input.joy.active=true;continue;
     }
@@ -224,7 +230,8 @@ const Au={
       const AC=window.AudioContext||window.webkitAudioContext;
       this.ctx=new AC();
       const c=this.ctx;
-      this.master=c.createGain();this.master.gain.value=0.9;
+      this.muted=typeof Store!=='undefined'?!!Store.d.muted:this.muted;
+      this.master=c.createGain();this.master.gain.value=this.muted?0:0.9;
       const comp=c.createDynamicsCompressor();
       comp.threshold.value=-18;comp.knee.value=20;comp.ratio.value=8;
       this.master.connect(comp);comp.connect(c.destination);
@@ -266,7 +273,11 @@ const Au={
     }catch(err){this.on=false}
   },
   resume(){if(this.ctx&&this.ctx.state==='suspended')this.ctx.resume()},
-  toggleMute(){this.muted=!this.muted;if(this.master)this.master.gain.setTargetAtTime(this.muted?0:0.9,this.ctx.currentTime,0.05)},
+  toggleMute(){
+    this.muted=!this.muted;
+    if(this.master)this.master.gain.setTargetAtTime(this.muted?0:0.9,this.ctx.currentTime,0.05);
+    if(typeof Store!=='undefined'){Store.d.muted=this.muted;Store.save()}
+  },
   pos(x,y){ /* positional helpers relative to player */
     const dx=x-P.x,dy=y-P.y,d=hyp(dx,dy);
     return{pan:clamp(dx/420,-1,1),vol:clamp(1-d/950,0,1)};
@@ -349,10 +360,10 @@ const Au={
       o.frequency.exponentialRampToValueAtTime(f0*0.22,t+0.55);
       const bp=c.createBiquadFilter();bp.type='bandpass';bp.frequency.value=1300;bp.Q.value=1.4;
       const g=c.createGain();o.connect(bp);bp.connect(g);this.out(g,rnd(-0.3,0.3),0.8);
-      this.env(g,t+i*0.02,0.03,0.12*vol,0.5);
+      this.env(g,t+i*0.02,0.03,0.10*vol,0.5);
       o.start(t);o.stop(t+0.8);
     }
-    this.noiseHit(t,0.4,'highpass',1800,0.8,0.12*vol,0,0.8);},
+    this.noiseHit(t,0.4,'highpass',1800,0.8,0.10*vol,0,0.8);},
   skitter(pan=0,vol=1){if(!this.on)return;const t=this.ctx.currentTime;
     const n=4+Math.random()*7|0;let tt=t;
     for(let i=0;i<n;i++){this.noiseHit(tt,0.02,'highpass',3400,1.5,rnd(0.02,0.06)*vol,pan,0.4,rnd(0.9,1.6));tt+=rnd(0.02,0.07)}},
@@ -369,12 +380,32 @@ const Au={
   ember(){if(!this.on)return;const t=this.ctx.currentTime;
     this.noiseHit(t,1.6,'lowpass',300,0.5,0.12,0,0.6);
     this.tone(t,200,40,1.4,'sine',0.06,0,0.6);},
+  puffPop(pan=0){if(!this.on)return;const t=this.ctx.currentTime;
+    this.tone(t,160,55,0.12,'sine',0.18,pan,0.4);
+    this.noiseHit(t,0.5,'bandpass',1900,0.7,0.1,pan,0.5,0.8);
+    this.noiseHit(t+0.06,0.9,'highpass',3200,0.8,0.045,pan,0.6,0.6);},
+  boneClatter(pan=0){if(!this.on)return;const t=this.ctx.currentTime;
+    const n=4+Math.random()*4|0;let tt=t;
+    for(let i=0;i<n;i++){
+      this.tone(tt,rnd(700,1300),rnd(400,700),0.04,'square',0.05,pan,0.6);
+      this.noiseHit(tt,0.03,'bandpass',rnd(2000,3400),3,0.05,pan,0.5,1.2);
+      tt+=rnd(0.05,0.13);
+    }},
+  knock(){if(!this.on)return;const t=this.ctx.currentTime;
+    this.tone(t,70,28,0.4,'sine',0.6,0,0.9);
+    this.noiseHit(t,0.25,'lowpass',300,0.5,0.4,0,0.9);
+    this.tone(t+0.55,62,24,0.45,'sine',0.55,0,0.9);
+    this.noiseHit(t+0.55,0.28,'lowpass',260,0.5,0.38,0,0.9);},
+  zoneBoom(){if(!this.on)return;const t=this.ctx.currentTime;
+    this.tone(t,46,30,2.2,'sine',0.14,0,0.8);
+    this.noiseHit(t,1.8,'lowpass',120,0.4,0.08,0,0.8);},
+  duckT:0,
   rumble(){if(!this.on)return;const c=this.ctx,t=c.currentTime;
     const s=c.createBufferSource();s.buffer=this.brown;s.loop=true;
     const f=c.createBiquadFilter();f.type='lowpass';f.frequency.value=55;
     const g=c.createGain();s.connect(f);f.connect(g);this.out(g,rnd(-0.6,0.6),0.4);
     g.gain.setValueAtTime(0.0001,t);
-    g.gain.exponentialRampToValueAtTime(0.28,t+rnd(1.5,2.5));
+    g.gain.exponentialRampToValueAtTime(0.22,t+rnd(1.5,2.5));
     g.gain.exponentialRampToValueAtTime(0.001,t+rnd(4,6));
     s.start(t);s.stop(t+7);},
   tick(dt){ /* per-frame ambient mix */
@@ -382,10 +413,13 @@ const Au={
     const depth=clamp((P.y-World.startY)/(World.H*CELL*0.85),0,1);
     const tn=Tension.v/100;
     const tc=this.ctx.currentTime;
-    this.drone.g1.gain.setTargetAtTime(0.05+depth*0.07,tc,0.8);
-    this.drone.g2.gain.setTargetAtTime(0.02+depth*0.04,tc,0.8);
-    this.drone.gn.gain.setTargetAtTime(0.04+depth*0.07+tn*0.04,tc,0.8);
-    this.drone.gd.gain.setTargetAtTime(tn*tn*0.09,tc,1.2);
+    /* the silence after the knock */
+    let duck=1;
+    if(this.duckT>0){this.duckT-=dt;duck=this.duckT>0.4?0.04:lerp(1,0.04,this.duckT/0.4)}
+    this.drone.g1.gain.setTargetAtTime((0.05+depth*0.07)*duck,tc,0.25);
+    this.drone.g2.gain.setTargetAtTime((0.02+depth*0.04)*duck,tc,0.25);
+    this.drone.gn.gain.setTargetAtTime((0.04+depth*0.07+tn*0.04)*duck,tc,0.25);
+    this.drone.gd.gain.setTargetAtTime(tn*tn*0.08*duck,tc,1.2);
     this.breathG.gain.setTargetAtTime(0,tc,2);
     this.breathLG.gain.setTargetAtTime(tn>0.62?0.055*(tn-0.62)/0.38:0,tc,1.5);
     this.rumbleT-=dt;
@@ -409,10 +443,22 @@ const LORE=[
   "A torn page, his hand: \"It doesn't fear the light. It LEARNS the light.\"",
   "The last page: \"If you're reading this, it already knows your name. Don't count the eyes.\""
 ];
+const ZONES=[
+  {name:'the drip caverns',t1:0.25},
+  {name:'the fungal gardens',t1:0.50},
+  {name:'the bone fields',t1:0.75},
+  {name:'the throat',t1:1.01}
+];
+function zoneAt(y){
+  const t=clamp(y/(World.H*CELL),0,1);
+  for(let i=0;i<ZONES.length;i++)if(t<ZONES[i].t1)return i;
+  return 3;
+}
 const World={
   seed:1,W:140,H:720,F:null,
   segs:new Map(),chunks:new Map(),
   water:[],chambers:[],pickups:[],fungi:[],stals:[],bones:[],chalk:[],pathPts:[],
+  puffs:[],chimes:[],notes:[],setp:null,
   startX:0,startY:0,campX:0,campY:0,mouthX:0,
   plx1:null,plx2:null,
   gen(seed){
@@ -479,6 +525,15 @@ const World={
       carve(bx,by,4+R()*2);
       branchEnds.push({x:bx*CELL,y:by*CELL});
     }
+    /* the watching passage: one long level corridor mid-descent */
+    {
+      let spt=this.pathPts[0],sbest=1e9;
+      for(const pp of this.pathPts){const d=Math.abs(pp.y-H*CELL*0.48);if(d<sbest){sbest=d;spt=pp}}
+      const scx=spt.x/CELL,scy=spt.y/CELL;
+      const sx0=Math.max(8,scx-16),sx1=Math.min(W-8,scx+16);
+      for(let x=sx0;x<=sx1;x+=0.8)carve(x,scy+Math.sin(x*0.4)*0.5,2.25);
+      this.setp={x0:sx0*CELL,x1:sx1*CELL,y:scy*CELL,done:false,eyes:[]};
+    }
     /* cellular automata smoothing */
     const C2=new Uint8Array(W*H);
     for(let it=0;it<2;it++){
@@ -543,16 +598,44 @@ const World={
         if(clear)this.water.push(nw);
       }
     }
-    /* glow fungus clusters */
+    /* glow fungus clusters — dense in the fungal gardens, sparse elsewhere */
     this.fungi.length=0;
-    for(let i=0;i<420&&this.fungi.length<110;i++){
-      const x=4+R()*(W-8),y=70+R()*(H-110);
+    for(let i=0;i<620&&this.fungi.length<150;i++){
+      const x=4+R()*(W-8);
+      const y=R()<0.55?H*(0.26+R()*0.22):70/16*16+R()*(H-110);
       const wx=x*CELL,wy=y*CELL;
       if(this.solid(wx,wy))continue;
       if(!this.solid(wx,wy+CELL*1.5)&&!this.solid(wx+CELL*1.5,wy)&&!this.solid(wx-CELL*1.5,wy)&&!this.solid(wx,wy-CELL*1.5))continue;
       const n=2+R()*4|0,hue=R()<0.7?0:1;
       for(let k=0;k<n;k++)
         this.fungi.push({x:wx+rnd(-22,22),y:wy+rnd(-18,18),r:rnd(3,7),hue,ph:R()*TAU});
+    }
+    /* ember veins in the throat: dim red pulses in dead rock */
+    for(let i=0;i<160&&this.fungi.filter(f=>f.hue===2).length<26;i++){
+      const wx=(6+R()*(W-12))*CELL,wy=H*CELL*(0.77+R()*0.19);
+      if(this.solid(wx,wy))continue;
+      if(!this.solid(wx,wy+CELL*2)&&!this.solid(wx,wy-CELL*2)&&!this.solid(wx+CELL*2,wy)&&!this.solid(wx-CELL*2,wy))continue;
+      this.fungi.push({x:wx,y:wy,r:rnd(2.5,5),hue:2,ph:R()*TAU});
+    }
+    /* puffballs: fungal-garden mines that pop and shout your position */
+    this.puffs.length=0;
+    for(let k=0;k<80&&this.puffs.length<18;k++){
+      const wx=(6+R()*(W-12))*CELL,wy=H*CELL*(0.26+R()*0.22);
+      if(this.solid(wx,wy))continue;
+      let fy=null;
+      for(let d=0;d<200;d+=5)if(this.solid(wx,wy+d)){fy=wy+d;break}
+      if(fy===null)continue;
+      this.puffs.push({x:wx,y:fy-7,r:rnd(7,11),state:0,t:0,ph:R()*TAU});
+    }
+    /* bone chimes: hanging remains that clatter if you brush them */
+    this.chimes.length=0;
+    for(let k=0;k<80&&this.chimes.length<14;k++){
+      const wx=(6+R()*(W-12))*CELL,wy=H*CELL*(0.52+R()*0.21);
+      if(this.solid(wx,wy))continue;
+      let cy=null;
+      for(let d=8;d<240;d+=5)if(this.solid(wx,wy-d)){cy=wy-d;break}
+      if(cy===null)continue;
+      this.chimes.push({x:wx,y:cy+2,len:rnd(28,46),sway:0,cd:0,ph:R()*TAU});
     }
     /* pickups along path */
     this.pickups.length=0;
@@ -574,6 +657,14 @@ const World={
       const fy=floorAt(pp.x+rnd(-30,30),pp.y);
       if(fy!==null)this.pickups.push({type:'flare',x:pp.x,y:fy,taken:false,ph:R()*TAU});
     }
+    /* loose stones: throwable decoys, common */
+    i=8;
+    while(i<this.pathPts.length-20){
+      i+=11+R()*9|0;
+      const pp=this.pathPts[i];if(!pp)break;
+      const fy=floorAt(pp.x+rnd(-26,26),pp.y);
+      if(fy!==null)this.pickups.push({type:'stone',x:pp.x+rnd(-20,20),y:fy,taken:false,ph:R()*TAU});
+    }
     /* relics: 6, spread by depth (branch pockets when possible) */
     let li=0;
     branchEnds.sort((a,b)=>a.y-b.y);
@@ -588,22 +679,57 @@ const World={
       if(fy!==null)this.pickups.push({type:'relic',x:pp.x,y:fy,taken:false,li,ph:R()*TAU});
       li++;
     }
-    /* loose stalactites along path */
+    /* loose stalactites along path — the throat bristles with them */
     this.stals.length=0;
     for(let k=24;k<this.pathPts.length-30;k+=9+R()*9|0){
-      if(R()>0.62)continue;
+      const inThroat=this.pathPts[k].y>H*CELL*0.75;
+      if(R()>(inThroat?0.88:0.55))continue;
       const pp=this.pathPts[k];
       let cy=null;
       for(let d=10;d<300;d+=5)if(this.solid(pp.x,pp.y-d)){cy=pp.y-d;break}
       if(cy===null)continue;
       this.stals.push({x:pp.x+rnd(-14,14),y:cy+4,len:rnd(26,58),w:rnd(9,16),state:0,t:0,vy:0});
     }
-    /* bones + chalk arrows */
+    /* bones + chalk arrows — the bone fields earn their name */
     this.bones.length=0;this.chalk.length=0;
-    for(let k=0;k<12;k++){
+    for(let k=0;k<44;k++){
       const pp=this.pathPts[Math.floor(R()*this.pathPts.length)];
+      const inBoneZone=pp.y>H*CELL*0.5&&pp.y<H*CELL*0.75;
+      if(!inBoneZone&&k>=12)continue;
       const fy=floorAt(pp.x+rnd(-40,40),pp.y);
-      if(fy!==null)this.bones.push({x:pp.x,y:fy+6,k:R()*3|0,fl:R()<0.5});
+      if(fy!==null)this.bones.push({x:pp.x+rnd(-30,30),y:fy+6,k:R()*3|0,fl:R()<0.5});
+    }
+    /* Mark's chalk on the early floors: the rules, written by a dead man */
+    this.notes.length=0;
+    {
+      const noteDefs=[[10,'STAY IN THE LIGHT'],[34,'IT HEARS RUNNING'],[62,'STAND STILL. CALM YOUR HEART'],[92,'THROW STONES. IT CHASES SOUND']];
+      for(const[idx,txt]of noteDefs){
+        for(let k=idx;k<idx+22;k++){ /* slide forward until a floor takes the chalk */
+          const pp=this.pathPts[k];if(!pp)break;
+          const fy=floorAt(pp.x,pp.y);
+          if(fy!==null&&fy-pp.y<120){this.notes.push({x:pp.x,y:fy+8,txt});break}
+        }
+      }
+      const firstOil=this.pickups.find(p=>p.type==='oil');
+      if(firstOil)this.notes.push({x:firstOil.x,y:firstOil.y+21,txt:'FEED THE LANTERN'});
+    }
+    /* the watching passage: seed the eyes in its walls */
+    if(this.setp){
+      const sp=this.setp;
+      for(let k=0;k<15;k++){
+        const ex=lerp(sp.x0+30,sp.x1-30,k/14)+rnd(-8,8);
+        /* try the near wall first, then the far one */
+        for(const dir of (k%2?[1,-1]:[-1,1])){
+          let placed=false;
+          for(let d=6;d<110;d+=4){
+            if(this.solid(ex,sp.y+dir*d)){
+              sp.eyes.push({x:ex,y:sp.y+dir*(d-3),delay:0.6+k*0.26+rnd(0,0.15)});
+              placed=true;break;
+            }
+          }
+          if(placed)break;
+        }
+      }
     }
     for(let k=18;k<this.pathPts.length-26;k+=20+R()*18|0){
       if(R()>0.55)continue;
@@ -738,8 +864,14 @@ const World={
     const data=id.data;
     const ox=ci2*CHUNK-PAD,oy=cj*CHUNK-PAD;
     const depthT=clamp(cj*CHUNK/(this.H*CELL),0,1);
-    /* rock palette by depth: wet grey-blue -> near black */
-    const r0=lerp(56,22,depthT),g0=lerp(62,25,depthT),b0=lerp(72,33,depthT);
+    /* biome palettes: drip caverns -> fungal gardens -> bone fields -> the throat */
+    const PALS=[[58,64,74],[46,62,48],[62,58,47],[36,23,21]];
+    const pz=clamp(depthT*4,0,3.999),pi=pz|0,pf=sstep(pz-pi);
+    const pa=PALS[pi],pb=PALS[Math.min(pi+1,3)];
+    const dk2=lerp(1,0.62,depthT);
+    const r0=lerp(pa[0],pb[0],pf)*dk2,g0=lerp(pa[1],pb[1],pf)*dk2,b0=lerp(pa[2],pb[2],pf)*dk2;
+    const fungalK=clamp(1-Math.abs(depthT-0.375)/0.16,0,1);
+    const throatK=clamp((depthT-0.72)/0.16,0,1);
     for(let py=0;py<HR;py++){
       const wy=oy+py*2+1;
       for(let px2=0;px2<HR;px2++){
@@ -751,11 +883,14 @@ const World={
         const ix=(wx*0.5)|0,iy=(wy*0.5)|0;
         const m=ntex(ix,iy),m2=ntex2(ix,iy);
         let rr=r0*(0.62+m*0.66),gg=g0*(0.62+m*0.66),bb=b0*(0.62+m*0.66);
-        /* sickly green damp patches */
-        if(m2>0.6){const k=(m2-0.6)*1.6;rr*=1-k*0.25;gg*=1+k*0.22;bb*=1-k*0.3}
-        /* cracks */
+        /* sickly damp patches — rampant in the fungal gardens */
+        if(m2>0.6-fungalK*0.14){const k=(m2-(0.6-fungalK*0.14))*1.6;rr*=1-k*0.25;gg*=1+k*(0.22+fungalK*0.2);bb*=1-k*0.3}
+        /* cracks — in the throat they smoulder */
         const cr=Math.abs(ntex2(ix+87,iy+31)-0.5);
-        if(cr<0.022){rr*=0.45;gg*=0.45;bb*=0.5}
+        if(cr<0.022){
+          if(throatK>0&&cr<0.013){rr=lerp(rr*0.45,128,throatK);gg=lerp(gg*0.45,34,throatK);bb=lerp(bb*0.5,20,throatK)}
+          else{rr*=0.45;gg*=0.45;bb*=0.5}
+        }
         /* wet sheen near surface */
         const e=1-clamp((s-ISO)/0.22,0,1);
         rr+=e*22;gg+=e*30;bb+=e*40;
@@ -937,6 +1072,10 @@ const Particles={
         case 'breath': case 'smoke':
           p.vy-=14*dt;p.vx*=1-0.8*dt;
           p.x+=p.vx*dt;p.y+=p.vy*dt;p.r+=dt*3;break;
+        case 'spore':
+          p.vy+=8*dt;p.vx+=(vnoise(p.t*2+p.x,3)-0.5)*60*dt;
+          p.vx*=1-1.2*dt;p.vy*=1-1.2*dt;
+          p.x+=p.vx*dt;p.y+=p.vy*dt;break;
         case 'spark':
           p.vy+=500*dt;p.x+=p.vx*dt;p.y+=p.vy*dt;
           if(World.solid(p.x,p.y)){p.vy*=-0.4;p.vx*=0.5;p.y-=2}break;
@@ -984,8 +1123,54 @@ function addRipple(w,x,amp){w.ripples.push({x,amp,t:0});if(w.ripples.length>24)w
 const FloatTxts=[];
 function addFloat(x,y,txt,col='200,210,220'){FloatTxts.push({x,y,txt,col,t:0})}
 const Lore={txt:'',t:99,show(s){this.txt=s;this.t=0}};
+/* one-time diegetic hints: inner-voice lines, each fires once per run */
+const Hints={
+  seen:{},
+  reset(){this.seen={}},
+  show(key,txt){
+    if(this.seen[key]||Game.state!=='play'&&Game.state!=='intro')return;
+    if(Lore.t<6)return; /* don't talk over a relic */
+    this.seen[key]=true;
+    Lore.show(txt);
+  }
+};
 
 /* ---------------- flares ---------------- */
+/* ---------------- thrown stones: decoys that turn sound into a tool ---------------- */
+const stones=[];
+function throwStone(dx,dy){
+  if(P.stones<=0||Game.state!=='play')return;
+  P.stones--;
+  stones.push({x:P.x+P.face*6,y:P.y-10,vx:dx*540+P.vx*0.6,vy:dy*540+P.vy*0.4,t:0,rot:rnd(TAU),vr:rnd(-12,12)});
+  Au.noiseHit(Au.ctx?Au.ctx.currentTime:0,0.05,'bandpass',900,1.4,0.05,0,0.1,1.3);
+  Tension.add(1.5);
+  Hints.show('stoneThrown','it chases sound. run while it looks.');
+}
+function updateStones(dt){
+  for(let i=stones.length-1;i>=0;i--){
+    const s=stones[i];
+    s.t+=dt;
+    if(s.t>5){stones.splice(i,1);continue}
+    s.vy+=GRAV*dt;
+    s.rot+=s.vr*dt;
+    s.x+=s.vx*dt;s.y+=s.vy*dt;
+    const res=collideCircle(s,2.6,0.3);
+    if(res.hit){
+      s.vx*=1-6*dt;
+      if(res.impact>130){
+        /* CLACK. everything down here hears it */
+        const a=Au.pos(s.x,s.y);
+        Au.rock(false,a.pan,Math.max(a.vol,0.3)*0.85);
+        Au.noiseHit(Au.ctx?Au.ctx.currentTime:0,0.05,'highpass',2200,1.5,0.16*Math.max(a.vol,0.3),a.pan,0.7,1.6);
+        NoiseEv.emit(s.x,s.y,0.85);
+        Cr.investigate(s.x,s.y,0.9);
+        Particles.dust(s.x,s.y,4,0.7);
+        Particles.debris(s.x,s.y,2,0.4);
+        stones.splice(i,1);
+      }else if(hyp(s.vx,s.vy)<20){stones.splice(i,1)}
+    }
+  }
+}
 const flares=[];
 function throwFlare(dx,dy){
   if(P.flares<=0||Game.state!=='play')return;
@@ -1031,7 +1216,7 @@ const P={
   x:0,y:0,vx:0,vy:0,r:11,face:1,
   grounded:false,wasG:false,wall:0,coyote:0,
   walkPhase:0,stepAcc:0,oil:100,flares:3,relics:0,hp:2,
-  stunT:0,hurtT:0,slowT:0,noisyT:0,breathT:0,
+  stunT:0,hurtT:0,slowT:0,noisyT:0,breathT:0,sporeT:0,stillT:0,
   inWater:false,sub:0,
   rope:{on:false,anx:0,any:0,len:0,missT:0,mx:0,my:0},
   grapWas:false,aimWas:false,
@@ -1039,12 +1224,14 @@ const P={
   reset(x,y){
     this.x=x;this.y=y;this.vx=0;this.vy=0;this.face=1;
     this.grounded=false;this.wall=0;this.coyote=0;this.oil=100;this.oilWas=100;
-    this.flares=3;this.relics=0;this.hp=2;this.stunT=0;this.hurtT=0;this.slowT=0;
+    this.flares=3;this.stones=2;this.relics=0;this.hp=2;this.stunT=0;this.hurtT=0;this.slowT=0;
     this.rope.on=false;this.rope.missT=0;this.inWater=false;this.sub=0;this.emberT=0;
+    this.sporeT=0;this.stillT=0;
   },
   lightR(){
-    if(this.oil<=0)return 54*Game.flick;
-    return (170+262*Math.pow(this.oil/100,0.55))*Game.flick;
+    const sk=this.sporeT>0?0.72+0.28*clamp(1-this.sporeT/3.2,0,1):1;
+    if(this.oil<=0)return 54*Game.flick*sk;
+    return (170+262*Math.pow(this.oil/100,0.55))*Game.flick*sk;
   },
   update(dt){
     const I=Input;
@@ -1052,6 +1239,12 @@ const P={
     if(this.hurtT>0)this.hurtT-=dt;
     if(this.slowT>0)this.slowT-=dt;
     if(this.noisyT>0)this.noisyT-=dt;
+    if(this.sporeT>0)this.sporeT-=dt;
+    /* stillness in lamplight is a skill — teach it once */
+    if(Math.abs(this.vx)<20&&Math.abs(this.vy)<20&&this.oil>25){
+      this.stillT+=dt;
+      if(this.stillT>2.4&&Tension.v>18)Hints.show('still','breathe. stillness in lamplight steadies the heart.');
+    }else this.stillT=0;
     const ax=I.ax,ay=I.ay,run=I.run;
     const ctl=this.stunT>0?0.35:1;
     /* water state */
@@ -1127,6 +1320,17 @@ const P={
       }else{dx=this.face*0.82;dy=-0.57}
       throwFlare(dx,dy);
     }
+    /* stone input */
+    if(I.stoneTap){
+      I.stoneTap=false;
+      let dx,dy;
+      if(I.hasMouse&&!I.touch){
+        const wpt=Cam.toWorld(I.aimSX,I.aimSY);
+        const d=hyp(wpt.x-this.x,wpt.y-this.y)||1;
+        dx=(wpt.x-this.x)/d;dy=(wpt.y-this.y)/d;
+      }else{dx=this.face*0.8;dy=-0.6}
+      throwStone(dx,dy);
+    }
     /* integrate with substeps */
     const wasG=this.grounded;
     const prevVy=this.vy;
@@ -1178,12 +1382,16 @@ const P={
         this.stepAcc=0;
         Au.step(run);
         NoiseEv.emit(this.x,this.y,run?0.22:0.06);
-        if(run){this.noisyT=0.5;Particles.dust(this.x-this.face*6,this.y+this.r,1,0.5)}
+        if(run){
+          this.noisyT=0.5;Particles.dust(this.x-this.face*6,this.y+this.r,1,0.5);
+          if(Cr.awake)Hints.show('run','running echoes down here.');
+        }
       }
     }else this.walkPhase*=1-3*dt;
     /* lantern */
     this.oilWas=this.oil;
     this.oil=Math.max(0,this.oil-dt*(100/250));
+    if(this.oil<20&&this.oil>0)Hints.show('dark','the lantern is dying. feed it, or the dark feeds.');
     if(this.oil<=0&&this.oilWas>0){Au.ember();Au.stinger(0.8);addFloat(this.x,this.y-30,'the lantern dies','255,120,90')}
     const bobA=this.grounded?Math.sin(this.walkPhase*2)*2.4:0;
     this.bob+=(bobA-this.bob)*Math.min(1,dt*10);
@@ -1207,6 +1415,7 @@ const P={
           if(relit&&Cr.state==='hunt'){Cr.fleeT=2.0;Au.shriek(0.7);Tension.add(-20)}
         }
         else if(pk.type==='flare'){this.flares=Math.min(6,this.flares+2);addFloat(pk.x,pk.y-16,'+ 2 FLARES','255,140,90')}
+        else if(pk.type==='stone'){this.stones=Math.min(4,this.stones+2);addFloat(pk.x,pk.y-16,'+ STONES','170,175,185')}
         else{this.relics++;Lore.show(LORE[pk.li%LORE.length]);addFloat(pk.x,pk.y-16,'RELIC','190,230,210')}
         Au.pickup(pk.type);
       }
@@ -1324,6 +1533,63 @@ function updateStals(dt){
   }
 }
 
+/* ---------------- biome hazards: puffballs + bone chimes ---------------- */
+function updateHazards(dt){
+  for(const pf of World.puffs){
+    if(pf.state===1)continue;
+    if(Math.abs(pf.x-P.x)>700)continue;
+    if(hyp(pf.x-P.x,pf.y-P.y)<pf.r+P.r+3){
+      pf.state=1;
+      Au.puffPop(Au.pos(pf.x,pf.y).pan);
+      NoiseEv.emit(pf.x,pf.y,0.6);
+      Tension.add(5);
+      P.sporeT=3.2; /* spores choke the lantern */
+      for(let i=0;i<14;i++)Particles.spawn({type:'spore',x:pf.x+rnd(-6,6),y:pf.y+rnd(-6,2),
+        vx:rnd(-70,70),vy:rnd(-110,-20),life:rnd(1.2,2.6),t:0,r:rnd(1,2.6)});
+      Particles.dust(pf.x,pf.y,6,0.8);
+      Hints.show('puff','spores. the lantern hates them — and everything heard that.');
+    }
+  }
+  for(const ch of World.chimes){
+    if(ch.cd>0)ch.cd-=dt;
+    ch.sway*=1-1.2*dt;
+    if(Math.abs(ch.x-P.x)>700)continue;
+    if(ch.cd<=0&&Math.abs(P.x-ch.x)<14&&P.y>ch.y&&P.y<ch.y+ch.len+18){
+      ch.cd=6;ch.sway=1;
+      Au.boneClatter(Au.pos(ch.x,ch.y).pan);
+      NoiseEv.emit(ch.x,ch.y,0.7);
+      Tension.add(5);
+      Hints.show('chime','bone chimes. someone hung them here on purpose.');
+    }
+  }
+}
+
+/* ---------------- the watching passage ---------------- */
+function updateSetpiece(dt){
+  const sp=World.setp;
+  if(!sp)return;
+  if(!sp.done){
+    if(Game.state==='play'&&P.x>sp.x0+40&&P.x<sp.x1-40&&Math.abs(P.y-sp.y)<70){
+      sp.done=true;sp.t=0;
+      Au.stinger(0.45);
+      Tension.add(10);
+    }
+    return;
+  }
+  if(sp.t===undefined||sp.t>12)return;
+  sp.t+=dt;
+  /* the lantern shrinks while they watch */
+  if(sp.t<6.4)Game.flick*=lerp(1,0.6,clamp(sp.t*1.5,0,1)*clamp((6.4-sp.t),0,1));
+  if(!sp.knocked&&sp.t>=6.4){
+    sp.knocked=true;
+    Au.knock();
+    Au.duckT=2.6; /* total silence after */
+    Cam.trauma=Math.min(1,Cam.trauma+0.35);
+    Tension.add(8);
+    Hints.show('watched','they only watch. for now.');
+  }
+}
+
 /* ---------------- ambient drips ---------------- */
 const Drips={t:0.5,update(dt){
   this.t-=dt;
@@ -1356,6 +1622,8 @@ const Tension={
     if(inFlareGlow(P.x,P.y))r-=4.2;
     else if(P.oil>25)r-=still?2.7:0.9;
     this.v=clamp(this.v+r*dt,0,100);
+    /* the throat never lets you fully settle */
+    if(zoneAt(P.y)===3)this.v=Math.max(this.v,16);
     /* danger drives heartbeat + vfx */
     let dz=this.v/100;
     if(Cr.awake){
@@ -1380,10 +1648,19 @@ const Cr={
   x:0,y:0,vx:0,vy:0,awake:false,state:'lurk',
   orb:0,orbDir:1,fleeT:0,growlCD:6,skitCD:2,blinkT:0,blink:0,
   eyeGap:13,kill:false,pebCD:3,calmT:0,huntCharge:0,
+  invX:0,invY:0,invT:0,
   reset(){
     this.awake=false;this.state='lurk';this.fleeT=0;this.kill=false;
     this.x=0;this.y=-4000;this.vx=0;this.vy=0;this.orb=rnd(TAU);
     this.growlCD=rnd(5,9);this.blinkT=rnd(2,5);this.calmT=0;this.huntCharge=0;
+    this.invT=0;
+  },
+  investigate(x,y,strength){
+    if(!this.awake)return;
+    /* a sharp sound somewhere else: it goes to LOOK. terror at 90+ overrides curiosity */
+    if(Tension.v>=92&&P.oil<=0)return;
+    this.invX=x;this.invY=y;this.invT=4+strength*4;
+    if(this.state==='hunt'&&Tension.v<88){this.state='stalk';this.huntCharge=0}
   },
   hear(x,y,loud){
     const depth=(P.y-World.startY)/14;
@@ -1436,6 +1713,26 @@ const Cr={
     let R,maxSp,seekX,seekY;
     this.orb+=dt*0.38*this.orbDir;
     if(Math.random()<dt*0.12)this.orbDir*=-1;
+    /* investigating a noise beats stalking the player */
+    if(this.invT>0&&this.state!=='flee'){
+      this.invT-=dt;
+      const idx=this.invX-this.x,idy=this.invY-this.y,idd=hyp(idx,idy)||1;
+      if(idd>50){seekX=this.invX;seekY=this.invY;maxSp=185}
+      else{ /* arrived: prowl the spot */
+        seekX=this.invX+Math.cos(this.orb*2.4)*40;
+        seekY=this.invY+Math.sin(this.orb*2.4)*40;
+        maxSp=110;
+      }
+      const sx=seekX-this.x,sy=seekY-this.y,sd=hyp(sx,sy)||1;
+      this.vx+=sx/sd*560*dt;this.vy+=sy/sd*560*dt;
+      const sp=hyp(this.vx,this.vy);
+      if(sp>maxSp){this.vx*=maxSp/sp;this.vy*=maxSp/sp}
+      this.x+=this.vx*dt;this.y+=this.vy*dt;
+      /* it is distracted: dread eases */
+      Tension.add(-dt*1.1);
+      this.audioCues(dt,dist);
+      return;
+    }
     if(this.state==='flee'){
       R=0;maxSp=420;
       seekX=this.x-dx/dist*500;seekY=this.y-dy/dist*500;
@@ -1453,6 +1750,7 @@ const Cr={
         const RR=LR*0.58;
         seekX=P.x+Math.cos(this.orb*3)*RR;seekY=P.y+Math.sin(this.orb*3)*RR;
         maxSp=260;
+        Hints.show('edge','it will not cross the light. not yet.');
       }else{seekX=P.x;seekY=P.y}
     }
     /* steer */
@@ -1468,7 +1766,10 @@ const Cr={
     if(dist<30&&Game.state==='play'&&!inFlareGlow(P.x,P.y)){
       Game.die('taken');
     }
-    /* audio cues */
+    this.audioCues(dt,dist);
+  },
+  audioCues(dt,dist){
+    const sp=hyp(this.vx,this.vy);
     this.growlCD-=dt;
     if(this.growlCD<=0){
       this.growlCD=this.state==='hunt'?rnd(3,6):rnd(7,14);
@@ -1532,6 +1833,266 @@ const WatcherSys={t:5,update(dt){
 'use strict';
 /* ---------------- rendering ---------------- */
 const segScratch=[];
+
+/* =====================================================================
+   GLR: hybrid WebGL light renderer.
+   The cave's density field doubles as a signed-distance field, so the
+   fragment shader ray-marches it per pixel: soft shadows with real
+   penumbras, normal-lit wet rock, corner-wrapped bounce light,
+   volumetric in-scatter (god rays), and underwater refraction.
+   Falls back to the canvas2d light buffer when WebGL is missing, slow,
+   or lost.
+   ===================================================================== */
+const extraC=document.createElement('canvas'),ectx=extraC.getContext('2d');
+const EX=0.3;
+const GLR={
+  on:false,fail:false,gl:null,canvas:null,prog:null,u:{},steps:20,GS:0.78,fieldDirty:true,
+  init(){
+    if(this.gl||this.fail)return;
+    try{
+      this.canvas=document.createElement('canvas');
+      const gl=this.canvas.getContext('webgl',{alpha:false,premultipliedAlpha:false,antialias:false,depth:false,stencil:false,preserveDrawingBuffer:false});
+      if(!gl){this.fail=true;return}
+      const hp=gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER,gl.HIGH_FLOAT);
+      if(!hp||hp.precision<16){this.fail=true;return}
+      this.gl=gl;
+      const VS='attribute vec2 aP;varying vec2 vUV;void main(){vUV=aP*0.5+0.5;gl_Position=vec4(aP,0.,1.);}';
+      const FS=`
+precision highp float;
+varying vec2 vUV;
+uniform sampler2D uScene,uField,uExtra;
+uniform vec2 uRes,uCam,uFieldSize;
+uniform float uScale,uCell,uTime,uSteps;
+uniform int uNL,uNW;
+uniform vec3 uLpos[5],uLcol[5],uAmbient;
+uniform vec4 uWater[4];
+float field(vec2 w){
+  vec2 uv=(w/uCell+0.5)/uFieldSize;
+  return texture2D(uField,uv).r;
+}
+float sdf(vec2 w){return (0.5-field(w))*22.0;}
+float shadow(vec2 from,vec2 to){
+  vec2 d=to-from;float L=length(d);
+  if(L<2.0)return 1.0;
+  vec2 rd=d/L;
+  float t=3.0,sh=1.0;
+  for(int i=0;i<40;i++){
+    if(float(i)>=uSteps||t>=L-2.5)break;
+    float sd=sdf(from+rd*t);
+    if(sd<0.3)return 0.0;
+    sh=min(sh,13.0*sd/t);
+    t+=clamp(sd,2.5,30.0);
+  }
+  return clamp(sh,0.0,1.0);
+}
+void main(){
+  vec2 suv=vec2(vUV.x,1.0-vUV.y);
+  vec2 frag=suv*uRes;
+  vec2 w=uCam+(frag-uRes*0.5)/uScale;
+  /* underwater refraction: bend the scene before lighting it */
+  float underwater=0.0;float wDepth=0.0;float wH=1.0;
+  for(int i=0;i<4;i++){
+    if(i>=uNW)break;
+    vec4 wr=uWater[i];
+    if(w.x>wr.x&&w.x<wr.x+wr.z&&w.y>wr.y+2.0&&w.y<wr.y+wr.w){
+      underwater=1.0;wDepth=w.y-wr.y;wH=wr.w;
+    }
+  }
+  float s=field(w);
+  float openK=clamp((0.5-s)*8.0+0.5,0.0,1.0);
+  /* water effects only where there is actually water, not rock inside the rect */
+  underwater*=openK;
+  vec2 ruv=suv;
+  if(underwater>0.5){
+    float wob=(sin(w.y*0.11+uTime*2.2)+sin(w.y*0.27-uTime*1.4)*0.5)*2.2*clamp(wDepth/26.0,0.2,1.0);
+    ruv.x+=wob*uScale/uRes.x;
+  }
+  vec3 scene=texture2D(uScene,ruv).rgb;
+  float edgeK=clamp(1.0-abs(s-0.5)*5.0,0.0,1.0);
+  vec2 g=vec2(field(w+vec2(1.6,0.0))-field(w-vec2(1.6,0.0)),
+              field(w+vec2(0.0,1.6))-field(w-vec2(0.0,1.6)));
+  vec2 N=normalize(-g+vec2(1e-5,0.0));
+  vec3 direct=vec3(0.0),air=vec3(0.0);
+  for(int i=0;i<5;i++){
+    if(i>=uNL)break;
+    vec2 lp=uLpos[i].xy;float rad=uLpos[i].z;
+    vec2 dl=lp-w;float dist=length(dl);
+    if(dist>rad*1.18)continue;
+    float fall=pow(clamp(1.0-dist/rad,0.0,1.0),1.55);
+    float sh=shadow(w,lp);
+    vec2 Ld=dl/max(dist,1.0);
+    float rockK=edgeK*(1.0-openK*0.5);
+    float diff=mix(1.0,clamp(dot(N,Ld),0.0,1.0)*1.3+0.16,rockK);
+    float spec=pow(clamp(dot(N,normalize(Ld+vec2(0.0,-1.0))),0.0,1.0),22.0)*rockK;
+    vec3 li=uLcol[i];
+    direct+=li*fall*sh*diff+li*fall*spec*sh*0.85;
+    /* wrap: soft leak around corners reads as bounced light */
+    direct+=li*0.2*pow(sh,0.32)*pow(clamp(1.0-dist/(rad*1.18),0.0,1.0),2.3);
+    /* volumetric in-scatter: lit air, shadowed shafts */
+    air+=li*sh*fall*0.17*openK;
+  }
+  vec3 extra=texture2D(uExtra,suv).rgb;
+  vec3 light=uAmbient+direct+extra*1.15;
+  vec3 col=scene*light+air;
+  if(underwater>0.5){
+    col=mix(col,col*vec3(0.72,0.9,0.98),underwater);
+    float caus=sin(w.x*0.19+uTime*1.6)*sin(w.x*0.073-uTime*1.1)*sin(w.y*0.15+uTime*0.7);
+    float nearFloor=clamp(wDepth/max(wH,1.0),0.0,1.0);
+    col+=light*vec3(0.12,0.3,0.34)*max(caus,0.0)*nearFloor*0.6*underwater;
+  }
+  /* dither last: kill gradient banding everywhere, water included */
+  col+=(fract(sin(dot(frag,vec2(12.9898,78.233)))*43758.5453)-0.5)*(2.5/255.0);
+  gl_FragColor=vec4(col,1.0);
+}`;
+      const sh=(type,src)=>{
+        const o=gl.createShader(type);
+        gl.shaderSource(o,src);gl.compileShader(o);
+        if(!gl.getShaderParameter(o,gl.COMPILE_STATUS))throw new Error(gl.getShaderInfoLog(o));
+        return o;
+      };
+      const prog=gl.createProgram();
+      gl.attachShader(prog,sh(gl.VERTEX_SHADER,VS));
+      gl.attachShader(prog,sh(gl.FRAGMENT_SHADER,FS));
+      gl.linkProgram(prog);
+      if(!gl.getProgramParameter(prog,gl.LINK_STATUS))throw new Error(gl.getProgramInfoLog(prog));
+      this.prog=prog;
+      gl.useProgram(prog);
+      const buf=gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER,buf);
+      gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);
+      const aP=gl.getAttribLocation(prog,'aP');
+      gl.enableVertexAttribArray(aP);
+      gl.vertexAttribPointer(aP,2,gl.FLOAT,false,0,0);
+      for(const n of['uScene','uField','uExtra','uRes','uCam','uFieldSize','uScale','uCell','uTime','uSteps','uNL','uNW','uLpos','uLcol','uAmbient','uWater'])
+        this.u[n]=gl.getUniformLocation(prog,n);
+      const mkTex=()=>{
+        const t=gl.createTexture();
+        gl.bindTexture(gl.TEXTURE_2D,t);
+        gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);
+        return t;
+      };
+      this.texScene=mkTex();this.texField=mkTex();this.texExtra=mkTex();
+      gl.uniform1i(this.u.uScene,0);
+      gl.uniform1i(this.u.uField,1);
+      gl.uniform1i(this.u.uExtra,2);
+      this.canvas.addEventListener('webglcontextlost',e=>{e.preventDefault();this.on=false;this.fail=true});
+      this.on=true;
+    }catch(e){this.fail=true;this.on=false}
+  },
+  resize(w,h){
+    if(!this.gl)return;
+    /* lighting is low-frequency: render under full res, upscale on composite */
+    this.canvas.width=Math.max(2,Math.round(w*this.GS));
+    this.canvas.height=Math.max(2,Math.round(h*this.GS));
+    this.gl.viewport(0,0,this.canvas.width,this.canvas.height);
+    extraC.width=Math.max(2,Math.round(w*EX));
+    extraC.height=Math.max(2,Math.round(h*EX));
+  },
+  uploadField(){
+    const gl=this.gl;if(!gl)return;
+    const FW=World.W+1,FH=World.H+1;
+    const data=new Uint8Array(FW*FH);
+    for(let i=0;i<data.length;i++)data[i]=clamp(World.F[i]*255,0,255);
+    gl.activeTexture(gl.TEXTURE1);
+    gl.bindTexture(gl.TEXTURE_2D,this.texField);
+    gl.pixelStorei(gl.UNPACK_ALIGNMENT,1);
+    gl.texImage2D(gl.TEXTURE_2D,0,gl.LUMINANCE,FW,FH,0,gl.LUMINANCE,gl.UNSIGNED_BYTE,data);
+    this.fieldDirty=false;
+  },
+  render(){
+    const gl=this.gl;
+    if(this.fieldDirty)this.uploadField();
+    gl.useProgram(this.prog);
+    gl.activeTexture(gl.TEXTURE0);
+    gl.bindTexture(gl.TEXTURE_2D,this.texScene);
+    gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,sceneC);
+    gl.activeTexture(gl.TEXTURE2);
+    gl.bindTexture(gl.TEXTURE_2D,this.texExtra);
+    gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,extraC);
+    /* lights: lantern + nearest flares */
+    const Lp=[],Lc=[];
+    const fl=Game.flick;
+    Lp.push(P.lightX,P.lightY,P.lightR());
+    if(P.oil>0)Lc.push(1.12*fl,0.84*fl,0.52*fl);
+    else Lc.push(0.55*fl,0.3*fl,0.16*fl);
+    const fs2=[...flares].sort((a,b)=>hyp(a.x-P.x,a.y-P.y)-hyp(b.x-P.x,b.y-P.y)).slice(0,4);
+    for(const f of fs2){
+      const R=flareLight(f);
+      Lp.push(f.x,f.y,R);
+      Lc.push(1.15,0.42,0.2);
+    }
+    while(Lp.length<15)Lp.push(0,0,0);
+    while(Lc.length<15)Lc.push(0,0,0);
+    const depth=clamp((Cam.y-World.startY)/(World.H*CELL),0,1);
+    const dk=Math.pow(depth,0.55);
+    gl.uniform2f(this.u.uRes,this.canvas.width,this.canvas.height);
+    gl.uniform2f(this.u.uCam,Cam.x+Cam.sx,Cam.y+Cam.sy);
+    gl.uniform2f(this.u.uFieldSize,World.W+1,World.H+1);
+    gl.uniform1f(this.u.uScale,VIEW.px*Cam.zoom*this.GS);
+    gl.uniform1f(this.u.uCell,CELL);
+    gl.uniform1f(this.u.uTime,Game.t);
+    gl.uniform1f(this.u.uSteps,this.steps);
+    gl.uniform1i(this.u.uNL,1+fs2.length);
+    gl.uniform3fv(this.u.uLpos,Lp);
+    gl.uniform3fv(this.u.uLcol,Lc);
+    gl.uniform3f(this.u.uAmbient,lerp(13,3,dk)/255,lerp(17,4,dk)/255,lerp(26,8,dk)/255);
+    /* water rects near the view */
+    const vr=viewRect(80);
+    const Wr=[];let nw=0;
+    for(const w of World.water){
+      if(nw>=4)break;
+      if(w.x>vr.r||w.x+w.w<vr.l||w.y>vr.b||w.y+w.h<vr.t)continue;
+      Wr.push(w.x,w.y,w.w,w.h);nw++;
+    }
+    while(Wr.length<16)Wr.push(0,0,0,0);
+    gl.uniform1i(this.u.uNW,nw);
+    gl.uniform4fv(this.u.uWater,Wr);
+    gl.drawArrays(gl.TRIANGLES,0,3);
+  }
+};
+/* the soft lights GL doesn't march: fungus, daylight, camp, overflow flares */
+function eLight(x,y,R,stops){
+  const g=ectx.createRadialGradient(x,y,R*0.05,x,y,R);
+  for(const[t,c]of stops)g.addColorStop(t,c);
+  ectx.fillStyle=g;
+  ectx.beginPath();ectx.arc(x,y,R,0,TAU);ectx.fill();
+}
+function drawExtraLights(){
+  ectx.setTransform(1,0,0,1,0,0);
+  ectx.clearRect(0,0,extraC.width,extraC.height);
+  applyCam(ectx,EX);
+  ectx.globalCompositeOperation='lighter';
+  if(Cam.y<1600){
+    eLight(World.mouthX,-260,1050,[
+      [0,'rgba(170,190,205,0.85)'],[0.55,'rgba(110,130,150,0.35)'],[1,'rgba(0,0,0,0)']
+    ]);
+  }
+  const vr=viewRect(120);
+  for(const fg of World.fungi){
+    if(fg.x<vr.l||fg.x>vr.r||fg.y<vr.t||fg.y>vr.b)continue;
+    const pul=0.55+0.45*Math.sin(Game.t*0.9+fg.ph);
+    const col=fg.hue===2?'255,96,44':fg.hue?'150,255,190':'110,225,255';
+    eLight(fg.x,fg.y,fg.hue===2?42+fg.r*5:55+fg.r*6,[
+      [0,`rgba(${col},${(fg.hue===2?0.26:0.34)*pul})`],[1,'rgba(0,0,0,0)']
+    ]);
+  }
+  if(Math.abs(World.campX-Cam.x)<900&&Math.abs(World.campY-Cam.y)<700){
+    const pul=0.6+0.4*vnoise(Game.t*3,8.8);
+    eLight(World.campX+28,World.campY+30,130,[
+      [0,`rgba(255,120,60,${0.5*pul})`],[1,'rgba(0,0,0,0)']
+    ]);
+  }
+  /* flares past the 4 the shader marches */
+  const fs2=[...flares].sort((a,b)=>hyp(a.x-P.x,a.y-P.y)-hyp(b.x-P.x,b.y-P.y)).slice(4);
+  for(const f of fs2){
+    const R=flareLight(f);
+    eLight(f.x,f.y,R,[[0,'rgba(255,160,110,0.95)'],[0.35,'rgba(255,90,50,0.65)'],[1,'rgba(0,0,0,0)']]);
+  }
+  ectx.globalCompositeOperation='source-over';
+}
 
 function lightWithShadows(wx,wy,R,stops,intensity){
   /* draw one occluded light into liteC via ltmpC */
@@ -1613,8 +2174,8 @@ function drawScene(){
   const c0y=Math.floor(vr.t/CHUNK),c1y=Math.floor(vr.b/CHUNK);
   for(let cy=c0y;cy<=c1y;cy++)for(let cx=c0x;cx<=c1x;cx++){
     if(cx<0||cy<0||cx*CHUNK>=World.W*CELL||cy*CHUNK>=World.H*CELL)continue;
-    /* clip the pad off: overlapping translucent edges would seam */
-    sctx.drawImage(World.getChunk(cx,cy),16,16,CHUNK,CHUNK,cx*CHUNK,cy*CHUNK,CHUNK,CHUNK);
+    /* keep 1px of pad: bilinear filtering needs real neighbor texels at the edge */
+    sctx.drawImage(World.getChunk(cx,cy),15,15,CHUNK+2,CHUNK+2,cx*CHUNK-1,cy*CHUNK-1,CHUNK+2,CHUNK+2);
   }
   /* water bodies */
   for(const w of World.water){
@@ -1639,7 +2200,7 @@ function drawScene(){
   /* pickups */
   for(const pk of World.pickups){
     if(pk.taken||pk.x<vr.l||pk.x>vr.r||pk.y<vr.t||pk.y>vr.b)continue;
-    const bob=Math.sin(Game.t*2+pk.ph)*2;
+    const bob=pk.type==='stone'?0:Math.sin(Game.t*2+pk.ph)*2;
     sctx.save();sctx.translate(pk.x,pk.y+bob);
     if(pk.type==='oil'){
       sctx.fillStyle='#1f1a12';
@@ -1653,6 +2214,13 @@ function drawScene(){
       sctx.fillStyle='#6e1f1a';sctx.fillRect(-2.5,-9,5,18);
       sctx.fillStyle='#d8d2c0';sctx.fillRect(-2.5,-9,5,4);
       sctx.restore();
+    }else if(pk.type==='stone'){
+      sctx.fillStyle='#565d68';
+      sctx.beginPath();sctx.arc(-3,-2,3.2,0,TAU);sctx.fill();
+      sctx.fillStyle='#49505a';
+      sctx.beginPath();sctx.arc(2.5,-1,2.7,0,TAU);sctx.fill();
+      sctx.fillStyle='#5e6570';
+      sctx.beginPath();sctx.arc(0,-4.5,2.4,0,TAU);sctx.fill();
     }else{
       sctx.fillStyle='rgba(208,222,212,0.9)';
       sctx.beginPath();sctx.arc(0,-8,3.4,0,TAU);sctx.fill();
@@ -1697,6 +2265,52 @@ function drawScene(){
     sctx.save();sctx.translate(f.x,f.y);sctx.rotate(f.rot);
     sctx.fillStyle='#5e1d18';sctx.fillRect(-2,-7,4,14);
     sctx.restore();
+  }
+  /* stones in flight */
+  for(const s of stones){
+    sctx.save();sctx.translate(s.x,s.y);sctx.rotate(s.rot);
+    sctx.fillStyle='#59606b';
+    sctx.fillRect(-2.6,-2.2,5.2,4.4);
+    sctx.restore();
+  }
+  /* puffballs: pale swollen things on the fungal floors */
+  for(const pf of World.puffs){
+    if(pf.state===1||pf.x<vr.l||pf.x>vr.r||pf.y<vr.t||pf.y>vr.b)continue;
+    const br=1+Math.sin(Game.t*1.6+pf.ph)*0.06;
+    const g2=sctx.createRadialGradient(pf.x-pf.r*0.3,pf.y-pf.r*0.4,1,pf.x,pf.y,pf.r*br);
+    g2.addColorStop(0,'rgba(196,214,176,0.95)');
+    g2.addColorStop(0.7,'rgba(134,158,116,0.9)');
+    g2.addColorStop(1,'rgba(86,108,76,0.85)');
+    sctx.fillStyle=g2;
+    sctx.beginPath();sctx.ellipse(pf.x,pf.y,pf.r*br,pf.r*0.82*br,0,0,TAU);sctx.fill();
+    sctx.fillStyle='rgba(220,240,200,0.5)';
+    for(let k=0;k<3;k++){
+      sctx.beginPath();sctx.arc(pf.x+Math.sin(pf.ph+k*2.4)*pf.r*0.5,pf.y-pf.r*0.2+Math.cos(pf.ph+k*1.7)*pf.r*0.3,0.9,0,TAU);sctx.fill();
+    }
+  }
+  /* bone chimes: someone hung the dead up to listen */
+  for(const ch of World.chimes){
+    if(ch.x<vr.l-40||ch.x>vr.r+40||ch.y<vr.t-80||ch.y>vr.b+80)continue;
+    const sw=Math.sin(Game.t*1.1+ch.ph)*2+ch.sway*Math.sin(Game.t*16)*7;
+    sctx.strokeStyle='rgba(150,140,120,0.55)';
+    sctx.lineWidth=1;
+    for(let k=-1;k<=1;k++){
+      const bx=ch.x+k*5,tipX=bx+sw*(0.6+k*0.2),tipY=ch.y+ch.len*(0.8+Math.abs(k)*0.18);
+      sctx.beginPath();sctx.moveTo(bx,ch.y);
+      sctx.quadraticCurveTo(bx+sw*0.4,ch.y+ch.len*0.5,tipX,tipY);
+      sctx.stroke();
+      sctx.fillStyle='rgba(205,198,180,0.8)';
+      sctx.fillRect(tipX-1.4,tipY,2.8,7+Math.abs(k)*2);
+      sctx.fillRect(tipX-2.2,tipY+2.6,4.4,1.6);
+    }
+  }
+  /* Mark's chalk, scrawled on the floor */
+  sctx.font='italic 9px Georgia,serif';
+  sctx.textAlign='center';
+  for(const n of World.notes){
+    if(n.x<vr.l||n.x>vr.r||n.y<vr.t||n.y>vr.b)continue;
+    sctx.fillStyle='rgba(225,220,205,0.62)';
+    sctx.fillText(n.txt,n.x,n.y);
   }
   /* particles, smoke first */
   for(const p of Particles.list){
@@ -1747,8 +2361,9 @@ function drawScene(){
     }
     sctx.stroke();
   }
-  /* volumetric air-scatter: the lantern's halo hangs in the damp air */
-  if(P.oil>0){
+  /* volumetric air-scatter: the lantern's halo hangs in the damp air
+     (canvas fallback only — the shader computes true in-scatter) */
+  if(!GLR.on&&P.oil>0){
     const sg=sctx.createRadialGradient(P.lightX,P.lightY,4,P.lightX,P.lightY,P.lightR()*0.85);
     sg.addColorStop(0,`rgba(255,200,120,${0.16*Game.flick})`);
     sg.addColorStop(0.45,`rgba(220,150,80,${0.07*Game.flick})`);
@@ -1756,7 +2371,7 @@ function drawScene(){
     sctx.fillStyle=sg;
     sctx.beginPath();sctx.arc(P.lightX,P.lightY,P.lightR()*0.85,0,TAU);sctx.fill();
   }
-  for(const f of flares){
+  if(!GLR.on)for(const f of flares){
     const R=flareLight(f);
     const sg=sctx.createRadialGradient(f.x,f.y,2,f.x,f.y,R*0.8);
     sg.addColorStop(0,'rgba(255,120,60,0.2)');
@@ -1931,9 +2546,9 @@ function drawLights(){
   for(const fg of World.fungi){
     if(fg.x<vr.l||fg.x>vr.r||fg.y<vr.t||fg.y>vr.b)continue;
     const pul=0.55+0.45*Math.sin(Game.t*0.9+fg.ph);
-    const col=fg.hue?'150,255,190':'110,225,255';
-    plainLight(fg.x,fg.y,55+fg.r*6,[
-      [0,`rgba(${col},${0.34*pul})`],[1,'rgba(0,0,0,0)']
+    const col=fg.hue===2?'255,96,44':fg.hue?'150,255,190':'110,225,255';
+    plainLight(fg.x,fg.y,fg.hue===2?42+fg.r*5:55+fg.r*6,[
+      [0,`rgba(${col},${(fg.hue===2?0.26:0.34)*pul})`],[1,'rgba(0,0,0,0)']
     ]);
   }
   /* camp ember */
@@ -1968,17 +2583,22 @@ function glowPass(){
     ctx.beginPath();ctx.arc(f.x,f.y,16,0,TAU);ctx.fill();
   }
   for(const p of Particles.list){
-    if(p.type!=='spark')continue;
-    const k=1-p.t/p.life;
-    ctx.fillStyle=`rgba(255,${160+k*60|0},90,${k})`;
-    ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,TAU);ctx.fill();
+    if(p.type==='spark'){
+      const k=1-p.t/p.life;
+      ctx.fillStyle=`rgba(255,${160+k*60|0},90,${k})`;
+      ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,TAU);ctx.fill();
+    }else if(p.type==='spore'){
+      const k=1-p.t/p.life;
+      ctx.fillStyle=`rgba(150,255,170,${0.55*k})`;
+      ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,TAU);ctx.fill();
+    }
   }
   /* fungus cores */
   const vr=viewRect(60);
   for(const fg of World.fungi){
     if(fg.x<vr.l||fg.x>vr.r||fg.y<vr.t||fg.y>vr.b)continue;
     const pul=0.5+0.5*Math.sin(Game.t*0.9+fg.ph);
-    const col=fg.hue?'170,255,205':'140,235,255';
+    const col=fg.hue===2?'255,120,60':fg.hue?'170,255,205':'140,235,255';
     ctx.fillStyle=`rgba(${col},${0.35+0.3*pul})`;
     ctx.beginPath();ctx.arc(fg.x,fg.y,fg.r*0.8,0,TAU);ctx.fill();
   }
@@ -2010,6 +2630,19 @@ function glowPass(){
       const blink=Cr.blink>0?0.12:1;
       const inten=clamp(1.25-d/700,0.25,1);
       drawEyes(Cr.x,Cr.y-4,Cr.eyeGap,3.1,inten,blink,Math.atan2(P.y-Cr.y,P.x-Cr.x));
+    }
+  }
+  /* the watching passage: eyes open in the walls, one by one */
+  if(World.setp&&World.setp.done&&World.setp.t<11){
+    const sp=World.setp;
+    for(const e of sp.eyes){
+      let a;
+      if(sp.t<6.4)a=clamp((sp.t-e.delay)*1.4,0,1)*0.8; /* slow open */
+      else a=0; /* the knock: all gone at once */
+      if(a>0.01){
+        const look=Math.atan2(P.y-e.y,P.x-e.x);
+        drawEyes(e.x,e.y,6.5,1.9,a,1,look);
+      }
     }
   }
   /* ending: the eyes open everywhere */
@@ -2044,9 +2677,26 @@ function drawEyes(x,y,gap,size,alpha,blink=1,lookA=null){
 }
 
 /* ---------------- post fx ---------------- */
+const bloomC=document.createElement('canvas'),bctx=bloomC.getContext('2d');
+const BLOOM_OK=typeof bctx.filter==='string';
 function post(){
   ctx.setTransform(1,0,0,1,0,0);
   const danger=Tension.danger;
+  /* bloom: flame cores, flares, fungus and eyes haze outward */
+  if(BLOOM_OK&&!Perf.lowFx){
+    const bw=Math.max(2,cv.width>>2),bh=Math.max(2,cv.height>>2);
+    if(bloomC.width!==bw||bloomC.height!==bh){bloomC.width=bw;bloomC.height=bh}
+    bctx.setTransform(1,0,0,1,0,0);
+    bctx.clearRect(0,0,bw,bh);
+    bctx.filter='blur(4px)';
+    bctx.drawImage(cv,0,0,bw,bh);
+    bctx.filter='none';
+    ctx.globalCompositeOperation='screen';
+    ctx.globalAlpha=0.28;
+    ctx.drawImage(bloomC,0,0,bw,bh,0,0,cv.width,cv.height);
+    ctx.globalAlpha=1;
+    ctx.globalCompositeOperation='source-over';
+  }
   /* chromatic ghosting when stalked */
   const ab=Math.max(danger-0.45,0)*1.4+(P.hurtT>0?0.3:0);
   if(ab>0.03){
@@ -2123,6 +2773,10 @@ function drawHUD(){
     ctx.fillStyle=`rgba(230,220,200,${a})`;ctx.fillRect(-1.6,-5,3.2,2.6);
     ctx.restore();
   }
+  for(let i=0;i<P.stones;i++){
+    ctx.fillStyle=`rgba(150,158,170,${a*0.9})`;
+    ctx.beginPath();ctx.arc(X+104+i*11,Y+22,3.2,0,TAU);ctx.fill();
+  }
   /* depth */
   const depth=Math.max(0,Math.round((P.y-World.startY)/14));
   ctx.fillStyle=`rgba(170,185,195,${a})`;
@@ -2167,6 +2821,12 @@ function drawTouchUI(){
   circleBtn(L.jump,Input.jumpId!==-1,1);
   circleBtn(L.grap,P.rope.on,1);
   circleBtn(L.flare,false,1);
+  circleBtn(L.stone,false,0.9);
+  /* stone icon */
+  ctx.fillStyle='rgba(170,178,190,0.7)';
+  ctx.beginPath();ctx.arc(L.stone.x-4,L.stone.y+2,4.4,0,TAU);ctx.fill();
+  ctx.beginPath();ctx.arc(L.stone.x+4.5,L.stone.y+3,3.4,0,TAU);ctx.fill();
+  ctx.beginPath();ctx.arc(L.stone.x+1,L.stone.y-4,3,0,TAU);ctx.fill();
   ctx.fillStyle='rgba(190,205,215,0.6)';
   ctx.font='10px "Courier New",monospace';ctx.textAlign='center';
   /* jump chevron */
@@ -2278,11 +2938,17 @@ function drawTitle(){
   ctx.fillStyle='rgba(120,130,140,0.75)';
   ctx.font='11px "Courier New",monospace';
   const lines=Input.touch?
-    ['joystick  move / climb','buttons  jump · rope · flare','touch anywhere  aim the rope','running makes noise']:
-    ['A D  move      SPACE  jump','hold LMB  rope (aim with mouse)','E / RMB  flare      SHIFT  run','running makes noise'];
+    ['joystick  move / climb','buttons  jump · rope · flare · stone','touch anywhere  aim the rope','stones pull it away · running makes noise']:
+    ['A D  move      SPACE  jump','hold LMB  rope (aim with mouse)','E / RMB  flare      Q  stone      SHIFT  run','stones pull it away · running makes noise'];
   lines.forEach((l,i)=>ctx.fillText(l,cx2,VIEW.h*0.62+26+i*16));
   ctx.fillStyle='rgba(110,118,126,0.6)';
   ctx.fillText('headphones recommended',cx2,VIEW.h*0.62+26+lines.length*16+10);
+  if(Store.d.bestDepth>0){
+    ctx.fillStyle='rgba(130,138,148,0.7)';
+    ctx.font='11px "Courier New",monospace';
+    const win=Store.d.bestWinTime?`   ·   the bottom in ${fmtTime(Store.d.bestWinTime)}`:'';
+    ctx.fillText(`deepest descent  ${Store.d.bestDepth} m   ·   relics ${Store.d.mostRelics}/6   ·   descents ${Store.d.runs}${win}`,cx2,VIEW.h-22);
+  }
 }
 const STORY=[
   'Three days ago your brother Mark went down into the Hollow — a cave with no mapped bottom. The rescue team turned back at the second shaft when their lanterns kept guttering out. You didn\'t.',
@@ -2375,16 +3041,25 @@ function drawDead(){
   const msg=Game.deathCause==='taken'?'THE DARK TAKES YOU':
             Game.deathCause==='fall'?'BROKEN ON THE ROCKS':'CRUSHED IN THE DARK';
   ctx.textAlign='center';
-  ctx.font=`${Math.min(38,VIEW.w/16)}px Georgia,serif`;
+  ctx.font=`${Math.min(34,VIEW.w/16)}px Georgia,serif`;
   ctx.fillStyle='rgba(186,60,48,0.88)';
-  ctx.fillText(msg,cx2,VIEW.h*0.38,VIEW.w-36);
+  ctx.fillText(msg,cx2,VIEW.h*0.2,VIEW.w-36);
   ctx.font='13px "Courier New",monospace';
   ctx.fillStyle='rgba(170,180,190,0.85)';
-  ctx.fillText(`depth reached  ${Math.round(Game.maxD)} m`,cx2,VIEW.h*0.38+38);
-  ctx.fillText(`relics  ${P.relics} / 6      time  ${fmtTime(Game.runT)}`,cx2,VIEW.h*0.38+58);
-  const pl=0.45+0.45*Math.sin(Game.t*2.2);
-  ctx.fillStyle=`rgba(190,200,210,${pl})`;
-  ctx.fillText(Input.touch?'— tap to descend again —':'— press R to descend again —',cx2,VIEW.h*0.38+102);
+  ctx.fillText(`depth reached  ${Math.round(Game.maxD)} m${Game.newRecord?'   — deepest yet':''}`,cx2,VIEW.h*0.2+34);
+  ctx.fillText(`relics  ${P.relics} / 6      time  ${fmtTime(Game.runT)}`,cx2,VIEW.h*0.2+54);
+  if(Store.d.bestDepth>0&&!Game.newRecord){
+    ctx.fillStyle='rgba(120,130,140,0.7)';
+    ctx.font='11px "Courier New",monospace';
+    ctx.fillText(`your deepest  ${Store.d.bestDepth} m`,cx2,VIEW.h*0.2+74);
+  }
+  const sy=drawScoresBlock(cx2,VIEW.h*0.2+102);
+  if(!Scores.active()){
+    const pl=0.45+0.45*Math.sin(Game.t*2.2);
+    ctx.font='13px "Courier New",monospace';
+    ctx.fillStyle=`rgba(190,200,210,${pl})`;
+    ctx.fillText(Input.touch?'— tap to descend again —':'— press R to descend again —',cx2,Math.min(sy+30,VIEW.h-30));
+  }
 }
 function drawEndingText(){
   const t=Game.endT;
@@ -2410,18 +3085,103 @@ function drawWon(){
   bigVeil(0.92);
   const cx2=VIEW.w/2;
   ctx.textAlign='center';
-  ctx.font=`${Math.min(36,VIEW.w/16)}px Georgia,serif`;
+  ctx.font=`${Math.min(32,VIEW.w/16)}px Georgia,serif`;
   ctx.fillStyle='rgba(196,186,160,0.92)';
-  ctx.fillText('YOU REACHED THE BOTTOM',cx2,VIEW.h*0.34,VIEW.w-36);
+  ctx.fillText('YOU REACHED THE BOTTOM',cx2,VIEW.h*0.18,VIEW.w-36);
   ctx.font='italic 14px Georgia,serif';
   ctx.fillStyle='rgba(150,158,166,0.85)';
-  ctx.fillText('Nothing that deep ever lets go.',cx2,VIEW.h*0.34+32);
+  ctx.fillText('Nothing that deep ever lets go.',cx2,VIEW.h*0.18+30);
   ctx.font='13px "Courier New",monospace';
   ctx.fillStyle='rgba(170,180,190,0.85)';
-  ctx.fillText(`relics  ${P.relics} / 6      time  ${fmtTime(Game.runT)}`,cx2,VIEW.h*0.34+66);
-  const pl=0.45+0.45*Math.sin(Game.t*2.2);
-  ctx.fillStyle=`rgba(190,200,210,${pl})`;
-  ctx.fillText(Input.touch?'— tap to descend again —':'— press R to descend again —',cx2,VIEW.h*0.34+108);
+  ctx.fillText(`relics  ${P.relics} / 6      time  ${fmtTime(Game.runT)}`+
+    (Store.d.bestWinTime&&Game.runT<=Store.d.bestWinTime?'   — fastest yet':''),cx2,VIEW.h*0.18+58);
+  const sy=drawScoresBlock(cx2,VIEW.h*0.18+88);
+  if(!Scores.active()){
+    const pl=0.45+0.45*Math.sin(Game.t*2.2);
+    ctx.font='13px "Courier New",monospace';
+    ctx.fillStyle=`rgba(190,200,210,${pl})`;
+    ctx.fillText(Input.touch?'— tap to descend again —':'— press R to descend again —',cx2,Math.min(sy+30,VIEW.h-30));
+  }
+}
+/* the leaderboard, kept diegetic: a roll of the fallen */
+function drawScoresBlock(cx2,y){
+  ctx.textAlign='center';
+  if(Scores.active()){
+    ctx.font='italic 13px Georgia,serif';
+    ctx.fillStyle='rgba(186,178,158,0.85)';
+    ctx.fillText('carve your name among those who went before',cx2,y);
+    y+=18;
+    const sw=34,gap=12,x0=cx2-(sw*3+gap*2)/2;
+    const up=y+10,dn=y+58;
+    const slots=[];
+    ctx.font='26px Georgia,serif';
+    for(let i=0;i<3;i++){
+      const sx=x0+i*(sw+gap);
+      slots.push({x:sx});
+      ctx.fillStyle=i===Scores.sel?'rgba(196,186,160,0.16)':'rgba(196,186,160,0.05)';
+      ctx.fillRect(sx,up,sw,dn-up);
+      ctx.strokeStyle=i===Scores.sel?'rgba(196,186,160,0.7)':'rgba(196,186,160,0.25)';
+      ctx.lineWidth=1;
+      ctx.strokeRect(sx,up,sw,dn-up);
+      ctx.fillStyle='rgba(212,206,188,0.95)';
+      ctx.fillText(Scores.initials[i],sx+sw/2,dn-14);
+      /* arrows */
+      ctx.fillStyle='rgba(186,178,158,0.55)';
+      ctx.beginPath();ctx.moveTo(sx+sw/2-6,up-4);ctx.lineTo(sx+sw/2+6,up-4);ctx.lineTo(sx+sw/2,up-12);ctx.closePath();ctx.fill();
+      ctx.beginPath();ctx.moveTo(sx+sw/2-6,dn+4);ctx.lineTo(sx+sw/2+6,dn+4);ctx.lineTo(sx+sw/2,dn+12);ctx.closePath();ctx.fill();
+    }
+    y=dn+26;
+    const bw=104,bh=26;
+    const carve={x:cx2-bw-8,y,w:bw,h:bh},pass={x:cx2+8,y,w:bw,h:bh};
+    ctx.font='12px Georgia,serif';
+    ctx.strokeStyle='rgba(196,186,160,0.6)';
+    ctx.strokeRect(carve.x,carve.y,carve.w,carve.h);
+    ctx.fillStyle='rgba(212,206,188,0.92)';
+    ctx.fillText(Scores.state==='sending'?'carving…':'C A R V E   I T',cx2-bw/2-8,y+17);
+    ctx.strokeStyle='rgba(196,186,160,0.28)';
+    ctx.strokeRect(pass.x,pass.y,pass.w,pass.h);
+    ctx.fillStyle='rgba(160,155,140,0.8)';
+    ctx.fillText('walk away',cx2+bw/2+8,y+17);
+    Scores.ui={slots,sw,up,dn,carve,pass};
+    if(!Input.touch){
+      ctx.font='10px "Courier New",monospace';
+      ctx.fillStyle='rgba(120,130,140,0.7)';
+      ctx.fillText('type letters · ENTER carve · ESC walk away',cx2,y+bh+16);
+      y+=16;
+    }
+    return y+bh+12;
+  }
+  /* board view */
+  ctx.font='italic 13px Georgia,serif';
+  ctx.fillStyle='rgba(186,178,158,0.8)';
+  ctx.fillText('THOSE WHO WENT BEFORE',cx2,y);
+  y+=8;
+  const b=Scores.board;
+  ctx.font='12px "Courier New",monospace';
+  if(b==='offline'){
+    ctx.fillStyle='rgba(130,140,150,0.7)';
+    ctx.fillText('the deep record is unreachable',cx2,y+18);
+    return y+30;
+  }
+  if(!b){
+    ctx.fillStyle='rgba(130,140,150,0.7)';
+    ctx.fillText('listening…',cx2,y+18);
+    return y+30;
+  }
+  if(!b.length){
+    ctx.fillStyle='rgba(130,140,150,0.7)';
+    ctx.fillText('no one has carved a name yet',cx2,y+18);
+    return y+30;
+  }
+  for(let i=0;i<b.length;i++){
+    const r=b[i];
+    const won=r.extra.startsWith('WIN');
+    const me=r.name===Scores.initials.join('')&&Scores.pend&&r.score===Scores.pend.depth;
+    ctx.fillStyle=me?'rgba(255,200,120,0.95)':won?'rgba(196,186,160,0.9)':'rgba(160,168,178,0.8)';
+    const label=won?'the bottom':(r.score+' m');
+    ctx.fillText(`${String(i+1).padStart(2,' ')}  ${r.name}   ${label.padStart(10,' ')}`,cx2,y+18+i*17);
+  }
+  return y+18+b.length*17;
 }
 function fmtTime(s){
   const m=s/60|0,ss=s%60|0;
@@ -2439,14 +3199,26 @@ function render(){
     return;
   }
   drawScene();
-  drawLights();
-  /* composite: scene x light */
-  ctx.setTransform(1,0,0,1,0,0);
-  ctx.globalCompositeOperation='source-over';
-  ctx.drawImage(sceneC,0,0);
-  ctx.globalCompositeOperation='multiply';
-  ctx.drawImage(liteC,0,0,liteC.width,liteC.height,0,0,cv.width,cv.height);
-  ctx.globalCompositeOperation='source-over';
+  if(GLR.on){
+    /* GPU path: ray-marched soft shadows, GI wrap, volumetrics */
+    try{
+      drawExtraLights();
+      GLR.render();
+      ctx.setTransform(1,0,0,1,0,0);
+      ctx.globalCompositeOperation='source-over';
+      ctx.drawImage(GLR.canvas,0,0,GLR.canvas.width,GLR.canvas.height,0,0,cv.width,cv.height);
+    }catch(e){GLR.on=false;GLR.fail=true}
+  }
+  if(!GLR.on){
+    /* canvas fallback: shadow-quad light buffer */
+    drawLights();
+    ctx.setTransform(1,0,0,1,0,0);
+    ctx.globalCompositeOperation='source-over';
+    ctx.drawImage(sceneC,0,0);
+    ctx.globalCompositeOperation='multiply';
+    ctx.drawImage(liteC,0,0,liteC.width,liteC.height,0,0,cv.width,cv.height);
+    ctx.globalCompositeOperation='source-over';
+  }
   drawCreatureBody();
   glowPass();
   post();
@@ -2457,6 +3229,15 @@ function render(){
   if(Game.state==='won'){drawWon();drawSysButtons();return}
   drawHUD();
   drawLore();
+  /* the deep announces itself */
+  if(Game.zoneT<5&&Game.zone>0){
+    const k=Math.min(Game.zoneT*1.2,1)*clamp((5-Game.zoneT)*0.8,0,1);
+    screenSpace(ctx,1);
+    ctx.textAlign='center';
+    ctx.font='italic 19px Georgia,serif';
+    ctx.fillStyle=`rgba(186,178,158,${k*0.85})`;
+    ctx.fillText('— '+ZONES[Game.zone].name+' —',VIEW.w/2,VIEW.h*0.3);
+  }
   if(Game.state==='intro')drawIntro();
   drawTouchUI();
   drawSysButtons();
@@ -2476,6 +3257,86 @@ function render(){
 
 <script>
 'use strict';
+/* ---------------- persistent records (site build — storage allowed) ---------------- */
+const Store={
+  d:{bestDepth:0,bestWinTime:0,mostRelics:0,runs:0,muted:false,initials:''},
+  load(){try{const s=JSON.parse(localStorage.getItem('hollowdeep_v1'));if(s)Object.assign(this.d,s)}catch(e){}},
+  save(){try{localStorage.setItem('hollowdeep_v1',JSON.stringify(this.d))}catch(e){}}
+};
+Store.load();
+/* ---------------- global scores: those who went before ---------------- */
+const Scores={
+  API:'https://game-scores.jez237.workers.dev/scores/hollow-deep',
+  board:null,state:'idle',pend:null,sel:0,initials:['M','R','K'],ui:null,
+  offer(depth,won){
+    this.pend={depth,won,time:Game.runT,relics:P.relics};
+    this.state='entry';this.sel=0;
+    const ini=((Store.d.initials||'MRK')+'AAA').slice(0,3).toUpperCase();
+    this.initials=ini.split('');
+    this.board=null;
+    this.fetchBoard();
+  },
+  async fetchBoard(){
+    try{
+      const r=await fetch(this.API);
+      const d=await r.json();
+      this.board=(Array.isArray(d)?d:(d.scores||[]))
+        .map(s=>({name:String(s.initials||s.name||'???').slice(0,3).toUpperCase(),score:s.score|0,extra:String(s.extra||'')}))
+        .sort((a,b)=>b.score-a.score).slice(0,8);
+    }catch(e){this.board='offline'}
+  },
+  cycle(slot,dir){
+    const A='ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const i=A.indexOf(this.initials[slot]);
+    this.initials[slot]=A[((i<0?0:i)+dir+26)%26];
+  },
+  type(ch){
+    this.initials[this.sel]=ch;
+    this.sel=Math.min(2,this.sel+1);
+  },
+  async submit(){
+    if(!this.pend||this.state!=='entry')return;
+    this.state='sending';
+    const name=this.initials.join('');
+    Store.d.initials=name;Store.save();
+    try{
+      await fetch(this.API,{method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({initials:name,score:this.pend.depth,
+          extra:(this.pend.won?'WIN ':'')+fmtTime(this.pend.time)+' r'+this.pend.relics})});
+      this.board=null;this.fetchBoard();
+    }catch(e){}
+    this.state='done';
+  },
+  skip(){if(this.state==='entry')this.state='skipped'},
+  active(){return this.state==='entry'||this.state==='sending'},
+  click(x,y){ /* returns true if consumed */
+    const u=this.ui;
+    if(!u||!this.active())return false;
+    if(this.state==='sending')return true;
+    for(let i=0;i<3;i++){
+      if(x>u.slots[i].x&&x<u.slots[i].x+u.sw&&y>u.up-14&&y<u.up+12){this.sel=i;this.cycle(i,1);return true}
+      if(x>u.slots[i].x&&x<u.slots[i].x+u.sw&&y>u.dn-12&&y<u.dn+14){this.sel=i;this.cycle(i,-1);return true}
+      if(x>u.slots[i].x&&x<u.slots[i].x+u.sw&&y>u.up&&y<u.dn){this.sel=i;return true}
+    }
+    if(x>u.carve.x&&x<u.carve.x+u.carve.w&&y>u.carve.y&&y<u.carve.y+u.carve.h){this.submit();return true}
+    if(x>u.pass.x&&x<u.pass.x+u.pass.w&&y>u.pass.y&&y<u.pass.y+u.pass.h){this.skip();return true}
+    return true; /* swallow stray taps while entry is open */
+  },
+  key(e){ /* returns true if consumed */
+    if(!this.active())return false;
+    if(this.state==='sending')return true;
+    const c=e.code;
+    if(c.startsWith('Key')&&c.length===4){this.type(c[3]);return true}
+    if(c==='ArrowLeft'){this.sel=Math.max(0,this.sel-1);return true}
+    if(c==='ArrowRight'){this.sel=Math.min(2,this.sel+1);return true}
+    if(c==='ArrowUp'){this.cycle(this.sel,1);return true}
+    if(c==='ArrowDown'){this.cycle(this.sel,-1);return true}
+    if(c==='Backspace'){this.sel=Math.max(0,this.sel-1);return true}
+    if(c==='Enter'||c==='NumpadEnter'){this.submit();return true}
+    if(c==='Escape'){this.skip();return true}
+    return true;
+  }
+};
 /* ---------------- game state ---------------- */
 const Game={
   state:'title',t:0,runT:0,paused:false,
@@ -2497,9 +3358,9 @@ const Game={
       this.newGame();return;
     }
     if(this.state==='dead'||this.state==='won'){
-      if(Input.anyTap||Input.restartTap){Input.anyTap=false;Input.restartTap=false;this.newGame()}
+      if((Input.anyTap||Input.restartTap)&&!Scores.active()){Input.anyTap=false;Input.restartTap=false;this.newGame()}
     }
-    Input.anyTap=false;
+    Input.anyTap=false;Input.restartTap=false;
   },
   togglePause(){
     if(this.state!=='play'&&this.state!=='intro')return;
@@ -2508,20 +3369,35 @@ const Game={
   newGame(){
     this.seed=(Math.random()*1e9)|0;
     World.gen(this.seed);
+    GLR.fieldDirty=true;
     P.reset(World.startX,World.startY);
-    Cr.reset();Tension.reset();
-    flares.length=0;Particles.clear();
+    Cr.reset();Tension.reset();Hints.reset();
+    flares.length=0;stones.length=0;Particles.clear();
     Watchers.length=0;FloatTxts.length=0;
     Lore.t=99;this.maxD=0;this.runT=0;
+    this.zone=0;this.zoneT=99;this.newRecord=false;this.scored=false;
     Cam.x=P.x;Cam.y=P.y;Cam.trauma=0;
     this.paused=false;this.timescale=1;
     this.state='intro';this.introT=0;
+  },
+  recordRun(won){
+    if(this.scored)return;
+    this.scored=true;
+    const d=Math.round(this.maxD);
+    Store.d.runs++;
+    this.newRecord=d>Store.d.bestDepth;
+    Store.d.bestDepth=Math.max(Store.d.bestDepth,d);
+    Store.d.mostRelics=Math.max(Store.d.mostRelics,P.relics);
+    if(won&&(!Store.d.bestWinTime||this.runT<Store.d.bestWinTime))Store.d.bestWinTime=this.runT;
+    Store.save();
+    Scores.offer(d,won);
   },
   die(cause){
     if(this.state!=='play')return;
     this.deathCause=cause;this.state='dying';this.dieT=0;
     P.rope.on=false;
     Cam.trauma=1;
+    this.recordRun(false);
     if(cause==='taken'){Au.shriek(1);Au.stinger(1)}
     else Au.rock(true,0,1);
   },
@@ -2529,6 +3405,7 @@ const Game={
     if(this.state!=='play')return;
     this.state='ending';this.endT=0;
     Tension.v=20;
+    this.recordRun(true);
     Au.stinger(0.7);
   },
   update(dt){
@@ -2574,14 +3451,24 @@ const Game={
     this.timescale=P.slowT>0?0.38:1;
     P.update(dt);
     updateFlares(dt);
+    updateStones(dt);
     Particles.update(dt);
     updateStals(dt);
+    updateHazards(dt);
+    updateSetpiece(dt);
     Drips.update(dt);
     Cr.update(dt);
     WatcherSys.update(dt);
     Tension.update(dt);
     Au.tick(dt);
     Cam.update(dt);
+    /* zone transitions: name the deep as it swallows you */
+    const z=zoneAt(P.y);
+    if(z!==this.zone&&this.state==='play'){
+      if(z>this.zone){this.zoneT=0;Au.zoneBoom()}
+      this.zone=z;
+    }
+    if(this.zoneT<99)this.zoneT+=dt;
     if(Input.restartTap){Input.restartTap=false;this.newGame()}
   }
 };
@@ -2597,6 +3484,8 @@ function resize(){
   abC.width=W;abC.height=H;
   liteC.width=Math.max(2,Math.round(W*LS));liteC.height=Math.max(2,Math.round(H*LS));
   ltmpC.width=liteC.width;ltmpC.height=liteC.height;
+  GLR.init();
+  if(GLR.gl&&!GLR.fail){GLR.resize(W,H);GLR.on=!GLR.perfOff}
   /* vignette */
   vigC=document.createElement('canvas');vigC.width=W;vigC.height=H;
   const vx=vigC.getContext('2d');
@@ -2609,13 +3498,18 @@ function resize(){
 addEventListener('resize',resize);
 
 /* dynamic perf scaling */
-const Perf={ema:16,t:0,fps:60,
+const Perf={ema:16,t:0,fps:60,lowFx:false,
   note(ms){this.ema=this.ema*0.95+ms*0.05;this.fps=1000/Math.max(this.ema,0.1)},
   check(){
     this.t++;
     if(this.t%90)return;
-    if(this.ema>21&&VIEW.rs>0.6){VIEW.rs=Math.max(0.6,VIEW.rs-0.15);resize()}
-    else if(this.ema<11.5&&VIEW.rs<1){VIEW.rs=Math.min(1,VIEW.rs+0.1);resize()}
+    if(this.ema>21){
+      /* degrade in order: march quality -> resolution -> GL off -> bloom off */
+      if(GLR.on&&GLR.steps>14)GLR.steps=14;
+      else if(VIEW.rs>0.6){VIEW.rs=Math.max(0.6,VIEW.rs-0.15);resize()}
+      else if(GLR.on){GLR.on=false;GLR.perfOff=true}
+      else this.lowFx=true;
+    }else if(this.ema<11.5&&VIEW.rs<1){VIEW.rs=Math.min(1,VIEW.rs+0.1);resize()}
   }
 };
 
@@ -2635,13 +3529,14 @@ function frame(ts){
     while(acc>=STEP&&n<8){Game.update(STEP);acc-=STEP;n++}
     if(n===8)acc=0;
   }
-  render();
+  if(!Game.halt)render();
 }
 document.addEventListener('visibilitychange',()=>{acc=0;last=0});
 
 /* ---------------- debug hooks (harmless) ---------------- */
 window.__g={
-  Game,P,Cr,World,Tension,Au,Cam,Input,Perf,flares,Particles,
+  Game,P,Cr,World,Tension,Au,Cam,Input,Perf,flares,Particles,stones,GLR,Scores,
+  halt(v){Game.halt=v},
   start(){Game.anyInput();Game.state='play'},
   tp(m){ /* teleport to ~depth in meters along the main path, settled on a floor */
     const y=World.startY+m*14;
