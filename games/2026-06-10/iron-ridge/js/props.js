@@ -5,7 +5,7 @@ import * as THREE from 'three';
 import * as CANNON from 'cannon-es';
 import { getHeight } from './terrain.js';
 import { makeRng } from './noise.js';
-import { CG, SCORING } from './config.js';
+import { CG, SCORING, PILLBOX, PICKUP } from './config.js';
 
 function barrelTexture() {
   const cv = document.createElement('canvas');
@@ -165,17 +165,108 @@ export class Props {
     }
   }
 
+  spawnPillbox(x, z) {
+    const y = getHeight(x, z);
+    const grp = new THREE.Group();
+    const concrete = new THREE.MeshStandardMaterial({ color: 0x9b988e, roughness: 0.95 });
+    const darkCon = new THREE.MeshStandardMaterial({ color: 0x6f6c64, roughness: 0.95 });
+    const base = new THREE.Mesh(new THREE.CylinderGeometry(2.3, 2.6, 1.7, 8), concrete);
+    base.position.y = 0.85;
+    grp.add(base);
+    const roof = new THREE.Mesh(new THREE.CylinderGeometry(2.0, 2.35, 0.5, 8), darkCon);
+    roof.position.y = 1.95;
+    grp.add(roof);
+    // rotating gun pivot
+    const pivot = new THREE.Group();
+    pivot.position.y = 1.35;
+    grp.add(pivot);
+    const slit = new THREE.Mesh(new THREE.BoxGeometry(1.2, 0.4, 0.6), darkCon);
+    slit.position.z = 2.1;
+    pivot.add(slit);
+    const gun = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.07, 0.09, 2.2, 8),
+      new THREE.MeshStandardMaterial({ color: 0x44473c, roughness: 0.5, metalness: 0.4 }),
+    );
+    gun.rotation.x = Math.PI / 2;
+    gun.position.z = 3.1;
+    pivot.add(gun);
+    const muzzle = new THREE.Object3D();
+    muzzle.position.z = 4.2;
+    pivot.add(muzzle);
+    grp.traverse(o => { if (o.isMesh) o.castShadow = true; });
+    grp.position.set(x, y, z);
+    this.scene.add(grp);
+
+    const body = new CANNON.Body({
+      mass: 0,
+      position: new CANNON.Vec3(x, y + 1.1, z),
+      shape: new CANNON.Cylinder(2.4, 2.6, 2.2, 8),
+      collisionFilterGroup: CG.PROP,
+      collisionFilterMask: -1,
+    });
+    this.world.addBody(body);
+    const it = {
+      kind: 'pillbox', mesh: grp, body, hp: PILLBOX.hp, points: PILLBOX.points,
+      alive: true, dynamic: false, radius: 2.8,
+      pivot, muzzle, yaw: 0, reloadT: 2 + this.rng() * 2,
+    };
+    body.userData = { kind: 'prop', prop: it };
+    this.items.push(it);
+    return it;
+  }
+
+  spawnCrate(x, z) {
+    const grp = new THREE.Group();
+    const box = new THREE.Mesh(
+      new THREE.BoxGeometry(0.9, 0.9, 0.9),
+      new THREE.MeshStandardMaterial({ color: 0x4d6b3a, roughness: 0.7 }),
+    );
+    grp.add(box);
+    const crossMat = new THREE.MeshStandardMaterial({ color: 0xe8e2cf, emissive: 0x333028 });
+    const c1 = new THREE.Mesh(new THREE.BoxGeometry(0.62, 0.2, 0.06), crossMat);
+    const c2 = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.62, 0.06), crossMat);
+    c1.position.z = c2.position.z = 0.46;
+    grp.add(c1, c2);
+    grp.traverse(o => { if (o.isMesh) o.castShadow = true; });
+    grp.position.set(x, getHeight(x, z) + 0.8, z);
+    this.scene.add(grp);
+    const it = {
+      kind: 'crate', mesh: grp, body: null, hp: 1, points: 0,
+      alive: true, dynamic: false, radius: 0.9,
+      x, z, age: 0,
+    };
+    this.items.push(it);
+    return it;
+  }
+
   countAlive(kind) {
     let n = 0;
     for (const it of this.items) if (it.alive && it.kind === kind) n++;
     return n;
   }
 
-  update() {
+  update(dt = 0, time = 0) {
     for (const it of this.items) {
-      if (!it.alive || !it.dynamic) continue;
-      it.mesh.position.copy(it.body.position);
-      it.mesh.quaternion.copy(it.body.quaternion);
+      if (!it.alive) continue;
+      if (it.dynamic) {
+        it.mesh.position.copy(it.body.position);
+        it.mesh.quaternion.copy(it.body.quaternion);
+      } else if (it.kind === 'crate') {
+        it.age += dt;
+        it.mesh.position.y = getHeight(it.x, it.z) + 0.8 + Math.sin(time * 2.4 + it.x) * 0.18;
+        it.mesh.rotation.y += dt * 1.2;
+        // blink before expiring
+        if (it.age > PICKUP.ttl - 4) {
+          it.mesh.visible = Math.sin(time * 9) > -0.4;
+        }
+        if (it.age > PICKUP.ttl) this.removeItem(it, false);
+      }
+    }
+    // prune dead crates lazily
+    if (Math.random() < dt) {
+      for (let i = this.items.length - 1; i >= 0; i--) {
+        if (!this.items[i].alive) this.items.splice(i, 1);
+      }
     }
   }
 }
