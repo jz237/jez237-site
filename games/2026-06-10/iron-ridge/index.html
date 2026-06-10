@@ -76,7 +76,16 @@
   #chamber-fill { background: var(--accent); }
   #reload-label { font-size: 10px; letter-spacing: 2px; color: var(--accent2); margin-top: 3px; }
 
-  #perf { position: absolute; top: 12px; right: 12px; text-align: right; font-size: 11px; color: #ffffff70; text-shadow: 0 1px 3px #000; }
+  #minimap-wrap {
+    position: absolute; top: 12px; right: 12px;
+    width: 168px; height: 168px;
+    background: rgba(10, 16, 10, 0.5); border-radius: 50%;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
+  }
+  #minimap { width: 100%; height: 100%; display: block; }
+  #perf { position: absolute; top: 186px; right: 12px; text-align: right; font-size: 11px; color: #ffffff70; text-shadow: 0 1px 3px #000; }
+  body.touch #minimap-wrap { width: 118px; height: 118px; }
+  body.touch #perf { top: 136px; }
 
   #banner-wrap {
     position: absolute; top: 18%; width: 100%; text-align: center;
@@ -253,6 +262,7 @@
     <div id="reload-label">READY</div>
   </div>
 
+  <div id="minimap-wrap"><canvas id="minimap" width="336" height="336"></canvas></div>
   <div id="perf"><div id="fps">60 fps</div><div id="quality">High</div></div>
 
   <div id="banner-wrap"><div id="banner"></div><div id="banner-sub"></div></div>

@@ -151,6 +151,22 @@ export class Effects {
       this.lights.push({ light: l, t: 0, dur: 0.001, peak: 0 });
     }
 
+    // scorch decals under explosions
+    const scGeo = new THREE.CircleGeometry(1, 14);
+    scGeo.rotateX(-Math.PI / 2);
+    const scMat = new THREE.MeshBasicMaterial({
+      color: 0x14110c, transparent: true, opacity: 0.42, depthWrite: false,
+      polygonOffset: true, polygonOffsetFactor: -3,
+    });
+    this.scorch = new THREE.InstancedMesh(scGeo, scMat, SCATTER.scorch);
+    this.scorch.frustumCulled = false;
+    scene.add(this.scorch);
+    this.scorchHead = 0;
+    {
+      const zeroM = new THREE.Matrix4().makeScale(0, 0, 0);
+      for (let i = 0; i < SCATTER.scorch; i++) this.scorch.setMatrixAt(i, zeroM);
+    }
+
     // tread marks
     const tmGeo = new THREE.PlaneGeometry(0.46, 0.85);
     tmGeo.rotateX(-Math.PI / 2);
@@ -182,15 +198,27 @@ export class Effects {
     slot.peak = intensity;
   }
 
-  ring(pos, scale = 8, dur = 0.5) {
+  ring(pos, scale = 8, dur = 0.5, color = 0xffe6b8) {
     const r = this.rings.find(r => !r.active) || this.rings[0];
     r.active = true;
     r.t = 0;
     r.dur = dur;
     r.scale = scale;
+    r.mesh.material.color.set(color);
     r.mesh.position.copy(pos);
     r.mesh.position.y = getHeight(pos.x, pos.z) + 0.25;
     r.mesh.visible = true;
+  }
+
+  addScorch(pos, scale = 2.2) {
+    const i = this.scorchHead;
+    this.scorchHead = (this.scorchHead + 1) % this.scorch.count;
+    this.dummy.position.set(pos.x, getHeight(pos.x, pos.z) + 0.06, pos.z);
+    this.dummy.rotation.set(0, Math.random() * Math.PI, 0);
+    this.dummy.scale.setScalar(scale * (0.8 + Math.random() * 0.5));
+    this.dummy.updateMatrix();
+    this.scorch.setMatrixAt(i, this.dummy.matrix);
+    this.scorch.instanceMatrix.needsUpdate = true;
   }
 
   spawnDebris(pos, count, power, color = null) {
@@ -264,9 +292,20 @@ export class Effects {
         1.1 + Math.random() * 1.3, (2.6 + Math.random() * 3.4) * power,
         g, g * 0.95, g * 0.88, { drag: 1.4, grow: 3.2 });
     }
+    // shrapnel streaks
+    const nh = Math.floor(8 * ps * power);
+    for (let i = 0; i < nh; i++) {
+      const a = Math.random() * Math.PI * 2;
+      const sp = (24 + Math.random() * 30) * power;
+      this.fire.emit(pos.x, pos.y + 0.5, pos.z,
+        Math.cos(a) * sp, 2 + Math.random() * 14, Math.sin(a) * sp,
+        0.22 + Math.random() * 0.2, 0.42,
+        1, 0.92, 0.62, { grav: -30, drag: 1.2 });
+    }
     // dirt kicked up
     this.spawnDebris(pos, 8 * power, power);
     this.ring(pos, 7 * power, 0.45);
+    this.addScorch(pos, 1.9 * power);
     this.flashLight(pos, 0xffb24f, 160 * power, 0.16);
     const d = this.camera.position.distanceTo(pos);
     this.shake(Math.min(0.7, 26 * power / Math.max(8, d)));
