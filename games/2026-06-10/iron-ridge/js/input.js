@@ -68,12 +68,20 @@ export class Input {
     document.body.classList.add('touch');
     const stick = document.getElementById('stick');
     const knob = document.getElementById('stick-knob');
+    const stickZone = document.getElementById('stick-zone');
     const lookZone = document.getElementById('look-zone');
     const fireBtn = document.getElementById('btn-fire');
 
+    // camera-relative drive vector, consumed by main.js
+    this.stickX = 0;
+    this.stickY = 0;
+
     let stickId = null, lookId = null;
     let sx = 0, sy = 0;
-    const RANGE = 46;
+    const RANGE = 56;
+    const homeRect = stick.getBoundingClientRect();
+    const homeX = homeRect.left, homeY = homeRect.top;
+    const half = stick.offsetWidth / 2 || 62;
 
     const stickPos = (t) => {
       const dx = t.clientX - sx, dy = t.clientY - sy;
@@ -81,16 +89,23 @@ export class Input {
       const cl = Math.min(len, RANGE);
       const nx = (dx / len) * cl, ny = (dy / len) * cl;
       knob.style.transform = `translate(${nx}px, ${ny}px)`;
-      this.turn = (nx / RANGE);
-      this.throttle = -(ny / RANGE);
+      // deadzone + smooth response curve
+      const mRaw = cl / RANGE;
+      const m = mRaw < 0.16 ? 0 : (mRaw - 0.16) / 0.84;
+      this.stickX = (nx / RANGE) * (m / (mRaw || 1));
+      this.stickY = -(ny / RANGE) * (m / (mRaw || 1));
     };
 
-    stick.addEventListener('touchstart', (e) => {
+    // floating joystick: anchor wherever the thumb lands in the zone
+    stickZone.addEventListener('touchstart', (e) => {
       const t = e.changedTouches[0];
+      if (stickId !== null) return;
       stickId = t.identifier;
-      const r = stick.getBoundingClientRect();
-      sx = r.left + r.width / 2;
-      sy = r.top + r.height / 2;
+      sx = t.clientX; sy = t.clientY;
+      stick.style.left = `${sx - half}px`;
+      stick.style.top = `${sy - half}px`;
+      stick.style.bottom = 'auto';
+      stick.classList.add('active');
       stickPos(t);
       e.preventDefault();
     }, { passive: false });
@@ -104,12 +119,16 @@ export class Input {
       e.preventDefault();
     }, { passive: false });
 
+    // consistent look feel across phone sizes
+    const lookScale = () => 2.6 * (820 / Math.max(360, window.innerWidth));
+
     window.addEventListener('touchmove', (e) => {
       for (const t of e.changedTouches) {
         if (t.identifier === stickId) stickPos(t);
         else if (t.identifier === lookId) {
-          this.lookDX += (t.clientX - lastLX) * 2.4;
-          this.lookDY += (t.clientY - lastLY) * 2.4;
+          const k = lookScale();
+          this.lookDX += (t.clientX - lastLX) * k;
+          this.lookDY += (t.clientY - lastLY) * k;
           lastLX = t.clientX; lastLY = t.clientY;
         }
       }
@@ -120,8 +139,11 @@ export class Input {
       for (const t of e.changedTouches) {
         if (t.identifier === stickId) {
           stickId = null;
-          this.turn = 0; this.throttle = 0;
+          this.stickX = 0; this.stickY = 0;
           knob.style.transform = 'translate(0px, 0px)';
+          stick.classList.remove('active');
+          stick.style.left = `${homeX}px`;
+          stick.style.top = `${homeY}px`;
         }
         if (t.identifier === lookId) lookId = null;
       }

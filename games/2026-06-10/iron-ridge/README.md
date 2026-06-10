@@ -11,7 +11,7 @@ check line-of-sight, and lead their shots.
 
 | Desktop | Mobile |
 |---|---|
-| WASD / arrows — drive | left stick — drive |
+| WASD / arrows — drive | floating stick (touch left side) — push where you want to go, pull back to reverse |
 | mouse — aim turret | drag right side — aim |
 | click / space — fire | FIRE button |
 | R — restock the ready rack | |
