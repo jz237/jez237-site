@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-10T18:00:01.207091+00:00",
+  "updatedAt": "2026-06-10T18:07:52.315434+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -10004,6 +10004,10 @@
     "https://techcrunch.com/2026/06/10/ai-pilled-firms-spend-7500-per-employee-each-month-on-ai": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/GettyImages-2253659638.jpg?resize=1200,1057",
       "checkedAt": "2026-06-10T18:00:01.207091+00:00"
+    },
+    "https://github.com/BerriAI/litellm/releases/tag/v1.89.0-rc.2": {
+      "image": "https://opengraph.githubassets.com/c3f50ec35331fa1e1f4bf661b5292f4d12899581a2263a3af6523f395cdaed7a/BerriAI/litellm/releases/tag/v1.89.0-rc.2",
+      "checkedAt": "2026-06-10T18:07:52.315434+00:00"
     }
   }
 }
