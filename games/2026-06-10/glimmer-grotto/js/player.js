@@ -22,6 +22,7 @@ export class Player {
     this.upgrades = { pick: 0, lantern: 0, satchel: 0 };
     this.bag = [];                    // {kind,id}
     this.swingT = 0; this.swinging = false; this.digTarget = null;
+    this.buffT = 0;                   // Glimmer Rush seconds remaining
     this.walkPhase = 0;
     this.sx = 1; this.sy = 1;         // squash & stretch springs
     this.restGlow = 0;                // 1 when resting at fire
@@ -120,6 +121,9 @@ export class Player {
     // -------- digging
     this.updateDig(dt, input);
 
+    // -------- glimmer rush wears off
+    this.buffT = Math.max(0, this.buffT - dt);
+
     // -------- energy regen & anim springs
     const resting = this.restGlow > 0.5;
     this.energy = Math.min(this.energyMax, this.energy + (resting ? 14 : 1.1) * dt);
@@ -163,7 +167,8 @@ export class Player {
   }
 
   updateDig(dt, input) {
-    const speed = this.pickDef.speed * (this.tired ? 0.55 : 1);
+    const rush = this.buffT > 0 ? 1.8 : 1;
+    const speed = this.pickDef.speed * rush * (this.tired ? 0.55 : 1);
     if (this.swinging) {
       this.swingT += dt * speed;
       if (this.swingT >= 0.38) {
@@ -172,7 +177,7 @@ export class Player {
           const { tx, ty } = this.digTarget;
           const res = damageTile(tx, ty, this.pickDef.power, this.pickDef.pick);
           if (res.hit) {
-            this.energy = Math.max(0, this.energy - 0.8);
+            if (this.buffT <= 0) this.energy = Math.max(0, this.energy - 0.8);
             this.events.push({ type: res.blocked ? 'tink' : (res.broken ? 'break' : 'dig'),
               tx, ty, x: (tx + .5) * TILE, y: (ty + .5) * TILE, res });
           }

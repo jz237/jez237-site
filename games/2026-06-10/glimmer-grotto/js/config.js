@@ -79,6 +79,13 @@ export const TREASURE_DEF = {
               rate: 0.0012, flavor: '“If you are reading this — keep going. It’s beautiful.”' },
 };
 
+// consumable found in the stone: eat on pickup -> Glimmer Rush (fast, free digging)
+export const JELLY = {
+  name: 'Glowcap Jelly', sprite: 'glowcap_jelly', rows: [20, 556], rate: 0.0020,
+  duration: 25, maxDuration: 60, speedMult: 1.8,
+  flavor: 'Sweet, warm, faintly luminous. Your arms feel light as moths.',
+};
+
 // one-of-a-kind set pieces, discovered by walking near them
 export const LANDMARK_DEF = [
   { id: 'workings', name: 'The Old Workings',  sprite: 'support_beam',

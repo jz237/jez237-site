@@ -1,6 +1,6 @@
 // DOM HUD, shop, journal, toasts.
 
-import { GEM_DEF, TREASURE_DEF, UPGRADES, WONDERS, LANDMARK_DEF } from './config.js';
+import { GEM_DEF, TREASURE_DEF, UPGRADES, WONDERS, LANDMARK_DEF, JELLY } from './config.js';
 import { sfx } from './audio.js';
 
 export const state = {
@@ -32,9 +32,11 @@ export function updateHUD(player) {
   bagEl.classList.toggle('full', player.bag.length >= player.bagCap);
   const eFill = $('energyFill');
   eFill.style.width = (player.energy / player.energyMax * 100) + '%';
-  eFill.style.background = player.energy < player.energyMax * 0.25
-    ? 'linear-gradient(90deg,#e0667e,#e8a33d)'
-    : 'linear-gradient(90deg,#e8a33d,#ffd87f)';
+  eFill.style.background = player.buffT > 0
+    ? 'linear-gradient(90deg,#ffd87f,#fff6c4,#ffd87f)'
+    : (player.energy < player.energyMax * 0.25
+      ? 'linear-gradient(90deg,#e0667e,#e8a33d)'
+      : 'linear-gradient(90deg,#e8a33d,#ffd87f)');
   const depth = Math.max(0, Math.round((player.y / 32 - 14) * 0.5));
   $('depthChip').textContent = depth + ' m';
 }
@@ -126,6 +128,7 @@ const JOURNAL_ENTRIES = [
   ...Object.entries(WONDERS).map(([id, d]) => ({ id: 'wonder_' + id, name: d.name,
     sprite: d.sprite, flavor: d.flavor })),
   ...LANDMARK_DEF.map(d => ({ id: 'lm_' + d.id, name: d.name, sprite: d.sprite, flavor: d.flavor })),
+  { id: 'jelly', name: JELLY.name, sprite: JELLY.sprite, flavor: JELLY.flavor },
 ];
 
 export function renderJournal() {
