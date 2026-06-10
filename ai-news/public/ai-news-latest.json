@@ -1,8 +1,8 @@
 {
-  "updatedAt": "2026-06-10T05:00:01.442556+00:00",
+  "updatedAt": "2026-06-10T06:00:01.265011+00:00",
   "items": [
     {
-      "title": "Using Probabilistic Programs to Train Inductive Reasoning in Large Language Models",
+      "title": "Konstantinos Kontras, Teodora Gagaleska, Thomas Strypsteen, Christos Chatzichristos, Matthew Blaschko, Maarten De Vos...",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -10,12 +10,12 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-10T05:00:09.060210+00:00",
+      "published": "2026-06-10T06:00:21.915326+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-10T05:00:01.442556+00:00",
+      "lastSeen": "2026-06-10T06:00:01.265011+00:00",
       "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 5.06
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.36
     },
     {
       "title": "If Claude Fable stops helping you, you'll never know",
@@ -28,10 +28,10 @@
       "image": "",
       "published": "2026-06-10T00:37:25+00:00",
       "firstSeen": "2026-06-10T01:00:01.722384+00:00",
-      "lastSeen": "2026-06-10T05:00:01.442556+00:00",
+      "lastSeen": "2026-06-10T06:00:01.265011+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.4641
+      "score": 8.4374
     },
     {
       "title": "Google just fired a warning shot in the AI subscription price wars",
@@ -44,10 +44,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/01/ai-mode-google.jpg?resize=1200%2C800",
       "published": "2026-06-10T00:26:10+00:00",
       "firstSeen": "2026-06-10T01:00:01.722384+00:00",
-      "lastSeen": "2026-06-10T05:00:01.442556+00:00",
+      "lastSeen": "2026-06-10T06:00:01.265011+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.159
+      "score": 2.1325
     },
     {
       "title": "Initial impressions of Claude Fable 5",
@@ -60,10 +60,10 @@
       "image": "https://static.simonwillison.net/static/2026/agentsview-fable-full-day.jpg",
       "published": "2026-06-09T23:59:54+00:00",
       "firstSeen": "2026-06-10T00:22:46.128423+00:00",
-      "lastSeen": "2026-06-10T05:00:01.442556+00:00",
+      "lastSeen": "2026-06-10T06:00:01.265011+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.9473
+      "score": 11.9211
     },
     {
       "title": "I tried Siri AI, and so far it actually works",
@@ -76,10 +76,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/DSC03775_processed.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.723165084465%2C100%2C78.55366983107&amp%3Bw=1200",
       "published": "2026-06-09T23:43:00+00:00",
       "firstSeen": "2026-06-10T00:00:01.660943+00:00",
-      "lastSeen": "2026-06-10T05:00:01.442556+00:00",
+      "lastSeen": "2026-06-10T06:00:01.265011+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2098
+      "score": 2.1838
     },
     {
       "title": "Salesforce acquires m3ter to add consumption-based billing to Agentforce",
@@ -92,10 +92,10 @@
       "image": "https://media.thenextweb.com/2026/06/salesforce-acquires-m3ter-consumption-billing-agentforce.avif",
       "published": "2026-06-09T23:22:57+00:00",
       "firstSeen": "2026-06-10T00:22:46.128423+00:00",
-      "lastSeen": "2026-06-10T05:00:01.442556+00:00",
+      "lastSeen": "2026-06-10T06:00:01.265011+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.3911
+      "score": 5.3653
     },
     {
       "title": "How Justin Ernest invested nearly $500M into hot startups without a traditional VC fund",
@@ -111,7 +111,7 @@
       "lastSeen": "2026-06-10T00:22:46.128423+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.1288
+      "score": 4.1031
     },
     {
       "title": "How Justin Ernest invested nearly $500M into hot startups without a traditional VC fund",
@@ -124,10 +124,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/JustinErnest_TechCrunch.jpg?resize=1200%2C675",
       "published": "2026-06-09T23:17:51+00:00",
       "firstSeen": "2026-06-10T01:00:01.722384+00:00",
-      "lastSeen": "2026-06-10T05:00:01.442556+00:00",
+      "lastSeen": "2026-06-10T06:00:01.265011+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.1288
+      "score": 4.1031
     },
     {
       "title": "Munich startup ERC System unveils Victor, a heavy-lift cargo eVTOL, at ILA Berlin",
@@ -140,10 +140,10 @@
       "image": "https://media.thenextweb.com/2026/06/erc-system-victor-evtol-cargo-drone-ila-berlin-2026.avif",
       "published": "2026-06-09T23:13:04+00:00",
       "firstSeen": "2026-06-10T00:00:01.660943+00:00",
-      "lastSeen": "2026-06-10T05:00:01.442556+00:00",
+      "lastSeen": "2026-06-10T06:00:01.265011+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9868
+      "score": 1.9611
     },
     {
       "title": "Claude Fable 5 and new AI safety fables",
@@ -156,10 +156,10 @@
       "image": "https://substack-post-media.s3.amazonaws.com/public/images/b9a6c144-02b3-4a08-947c-c517667d2249_3182x1790.png",
       "published": "2026-06-09T22:59:35+00:00",
       "firstSeen": "2026-06-10T00:00:01.660943+00:00",
-      "lastSeen": "2026-06-10T05:00:01.442556+00:00",
+      "lastSeen": "2026-06-10T06:00:01.265011+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.1909
+      "score": 8.1654
     },
     {
       "title": "TSMC does not rule out price rises as inflation pushes up chip manufacturing costs",
@@ -172,10 +172,10 @@
       "image": "https://media.thenextweb.com/2026/06/tsmc-price-rise-inflation-ai-chips-taiwan-advanced-manufacturing.avif",
       "published": "2026-06-09T22:50:14+00:00",
       "firstSeen": "2026-06-10T00:00:01.660943+00:00",
-      "lastSeen": "2026-06-10T05:00:01.442556+00:00",
+      "lastSeen": "2026-06-10T06:00:01.265011+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9769
+      "score": 1.9515
     },
     {
       "title": "NVIDIA Confidential Computing to Help Expand Apple’s Private Cloud Compute",
@@ -188,11 +188,11 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/nvidia-confidential-computing-apple-pcc.jpeg",
       "published": "2026-06-09T22:34:27+00:00",
       "firstSeen": "2026-06-09T22:45:46.688009+00:00",
-      "lastSeen": "2026-06-10T05:00:01.442556+00:00",
+      "lastSeen": "2026-06-10T06:00:01.265011+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 9.0102
+      "score": 8.985
     },
     {
       "title": "llm 0.32a3",
@@ -205,10 +205,10 @@
       "image": "",
       "published": "2026-06-09T22:27:03+00:00",
       "firstSeen": "2026-06-10T01:00:01.722384+00:00",
-      "lastSeen": "2026-06-10T05:00:01.442556+00:00",
+      "lastSeen": "2026-06-10T06:00:01.265011+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.807
+      "score": 6.7819
     },
     {
       "title": "Supermicro plans to raise $7 billion to fulfill $39 billion in AI server orders",
@@ -221,10 +221,10 @@
       "image": "https://media.thenextweb.com/2026/06/supermicro-7-billion-equity-offering-ai-servers-39-billion-orders.avif",
       "published": "2026-06-09T22:25:02+00:00",
       "firstSeen": "2026-06-10T00:00:01.660943+00:00",
-      "lastSeen": "2026-06-10T05:00:01.442556+00:00",
+      "lastSeen": "2026-06-10T06:00:01.265011+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0662
+      "score": 3.0411
     },
     {
       "title": "From cars to data centres, GM pushes into energy storage with three new battery deals",
@@ -237,10 +237,10 @@
       "image": "https://media.thenextweb.com/2026/06/gm-energy-storage-sodium-ion-batteries-peak-energy-redwood-materials.avif",
       "published": "2026-06-09T22:08:09+00:00",
       "firstSeen": "2026-06-09T22:45:46.688009+00:00",
-      "lastSeen": "2026-06-10T05:00:01.442556+00:00",
+      "lastSeen": "2026-06-10T06:00:01.265011+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -1.141
+      "score": -1.1659
     },
     {
       "title": "FCC filings suggest Valve’s Steam Machine could launch before June 29",
@@ -253,10 +253,10 @@
       "image": "https://media.thenextweb.com/2026/06/valve-steam-machine-fcc-filing-june-29-launch-date.avif",
       "published": "2026-06-09T21:48:45+00:00",
       "firstSeen": "2026-06-09T22:45:46.688009+00:00",
-      "lastSeen": "2026-06-10T05:00:01.442556+00:00",
+      "lastSeen": "2026-06-10T06:00:01.265011+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0009
+      "score": 2.9762
     },
     {
       "title": "Setting a custom price for a model in AgentsView",
@@ -269,10 +269,10 @@
       "image": "https://static.simonwillison.net/static/2026/agentsview-fable.jpg",
       "published": "2026-06-09T21:35:31+00:00",
       "firstSeen": "2026-06-09T22:45:46.688009+00:00",
-      "lastSeen": "2026-06-10T05:00:01.442556+00:00",
+      "lastSeen": "2026-06-10T06:00:01.265011+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.1854
+      "score": 10.1609
     },
     {
       "title": "Sony’s 135-inch Crystal LED UNIFY is a boardroom display you can install in an hour",
@@ -285,10 +285,10 @@
       "image": "https://media.thenextweb.com/2026/06/sony-crystal-led-unify-135-inch-dvled-display-infocomm-2026.avif",
       "published": "2026-06-09T21:14:35+00:00",
       "firstSeen": "2026-06-09T22:45:46.688009+00:00",
-      "lastSeen": "2026-06-10T05:00:01.442556+00:00",
+      "lastSeen": "2026-06-10T06:00:01.265011+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0368
+      "score": 3.0125
     },
     {
       "title": "GM thinks EVs can help offset AI’s energy suck with vehicle-to-grid tech",
@@ -301,10 +301,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/GM-Energy-home-energy-system-2.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.756710586672%2C100%2C78.486578826656&amp%3Bw=1200",
       "published": "2026-06-09T21:00:00+00:00",
       "firstSeen": "2026-06-09T21:06:42.374618+00:00",
-      "lastSeen": "2026-06-10T05:00:01.442556+00:00",
+      "lastSeen": "2026-06-10T06:00:01.265011+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -0.9592
+      "score": -0.9833
     },
     {
       "title": "Locked in heated rivalry with researcher, Microsoft fixes 0-day they disclosed",
@@ -317,10 +317,10 @@
       "image": "https://cdn.arstechnica.net/wp-content/uploads/2023/09/code-vulnerability-security-1000x648.jpg",
       "published": "2026-06-09T20:56:52+00:00",
       "firstSeen": "2026-06-10T00:00:01.660943+00:00",
-      "lastSeen": "2026-06-10T05:00:01.442556+00:00",
+      "lastSeen": "2026-06-10T06:00:01.265011+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.4295
+      "score": 5.4054
     },
     {
       "title": "Hey, Siri, here’s what I actually want from AI",
@@ -333,10 +333,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/GettyImages-1139080118.jpg?resize=1200%2C801",
       "published": "2026-06-09T20:50:17+00:00",
       "firstSeen": "2026-06-09T21:00:01.281948+00:00",
-      "lastSeen": "2026-06-10T05:00:01.442556+00:00",
+      "lastSeen": "2026-06-10T06:00:01.265011+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1668
+      "score": 3.1428
     },
     {
       "title": "Anthropic’s Fable 5 can make weirdly fun video games with the click of a button",
@@ -349,10 +349,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/Screenshot-2026-06-09-at-11.40.18-AM.png?resize=1200%2C871",
       "published": "2026-06-09T20:37:49+00:00",
       "firstSeen": "2026-06-09T21:00:01.281948+00:00",
-      "lastSeen": "2026-06-10T05:00:01.442556+00:00",
+      "lastSeen": "2026-06-10T06:00:01.265011+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.0618
+      "score": 9.0379
     },
     {
       "title": "Microsoft AI head calls out Anthropic for acting like Claude is conscious",
@@ -365,10 +365,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/gettyimages-2207866106.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-09T20:24:25+00:00",
       "firstSeen": "2026-06-09T21:00:01.281948+00:00",
-      "lastSeen": "2026-06-10T05:00:01.442556+00:00",
+      "lastSeen": "2026-06-10T06:00:01.265011+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.1264
+      "score": 11.1027
     },
     {
       "title": "Can Voice Agents Handle Bilingual Customers? Benchmarking Frontier ASR on Code-Switched Speech",
@@ -381,10 +381,10 @@
       "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/ServiceNow-AI/code-switching.png",
       "published": "2026-06-09T19:38:28+00:00",
       "firstSeen": "2026-06-09T20:00:01.743276+00:00",
-      "lastSeen": "2026-06-10T05:00:01.442556+00:00",
+      "lastSeen": "2026-06-10T06:00:01.265011+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2282
+      "score": 5.2049
     },
     {
       "title": "Vinted’s CEO says the US is an “enormous opportunity” as the $9B secondhand marketplace plots its Atlantic crossing",
@@ -397,10 +397,10 @@
       "image": "https://media.thenextweb.com/2026/06/vinted-9-billion-us-expansion-ipo-adam-jay-london-tech-week.avif",
       "published": "2026-06-09T19:34:28+00:00",
       "firstSeen": "2026-06-09T21:00:01.281948+00:00",
-      "lastSeen": "2026-06-10T05:00:01.442556+00:00",
+      "lastSeen": "2026-06-10T06:00:01.265011+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8966
+      "score": 1.8734
     },
     {
       "title": "MIT’s ultrasound wristband tracks every finger movement and lets you control a robot hand in real time",
@@ -413,10 +413,10 @@
       "image": "https://media.thenextweb.com/2026/06/mit-ultrasound-wristband-hand-tracking-robot-control.avif",
       "published": "2026-06-09T19:17:53+00:00",
       "firstSeen": "2026-06-09T21:00:01.281948+00:00",
-      "lastSeen": "2026-06-10T05:00:01.442556+00:00",
+      "lastSeen": "2026-06-10T06:00:01.265011+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.2901
+      "score": 3.2671
     },
     {
       "title": "Quoting Andrej Karpathy",
@@ -429,10 +429,10 @@
       "image": "",
       "published": "2026-06-09T19:03:10+00:00",
       "firstSeen": "2026-06-09T20:00:01.743276+00:00",
-      "lastSeen": "2026-06-10T05:00:01.442556+00:00",
+      "lastSeen": "2026-06-10T06:00:01.265011+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.5244
+      "score": 10.5016
     },
     {
       "title": "Rem3dy Health raises £14M at £84M valuation to take 3D-printed personalised vitamins global",
@@ -445,10 +445,10 @@
       "image": "https://media.thenextweb.com/2026/06/rem3dy-health-nourished-14m-personalised-nutrition-3d-printing.avif",
       "published": "2026-06-09T19:00:24+00:00",
       "firstSeen": "2026-06-09T20:00:01.743276+00:00",
-      "lastSeen": "2026-06-10T05:00:01.442556+00:00",
+      "lastSeen": "2026-06-10T06:00:01.265011+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -1.2166
+      "score": -1.2395
     },
     {
       "title": "Can tech companies learn to love cheaper AI models?",
@@ -461,10 +461,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2023/08/GettyImages-1297856112.jpg?resize=1200%2C675",
       "published": "2026-06-09T18:56:09+00:00",
       "firstSeen": "2026-06-09T19:00:01.724561+00:00",
-      "lastSeen": "2026-06-10T05:00:01.442556+00:00",
+      "lastSeen": "2026-06-10T06:00:01.265011+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0217
+      "score": 1.9989
     },
     {
       "title": "Two Russian APT groups are exploiting a WinRAR flaw patched nearly a year ago to hit Ukraine",
@@ -480,7 +480,7 @@
       "lastSeen": "2026-06-10T00:00:01.660943+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.2764
+      "score": 3.2537
     },
     {
       "title": "Meta pulled facial recognition code from its smart glasses app one day after WIRED found it, then denied the timing was related",
@@ -496,7 +496,7 @@
       "lastSeen": "2026-06-09T22:45:46.688009+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.6652
+      "score": 3.6429
     },
     {
       "title": "WWDC 2026: Everything announced on Siri AI, iOS 27, Apple Intelligence, and more",
@@ -509,10 +509,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/apple-siri-ai-use-cases.png?w=1186",
       "published": "2026-06-09T18:04:24+00:00",
       "firstSeen": "2026-06-09T18:21:06.435316+00:00",
-      "lastSeen": "2026-06-10T05:00:01.442556+00:00",
+      "lastSeen": "2026-06-10T06:00:01.265011+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.202
+      "score": 4.1798
     },
     {
       "title": "Apple and Google both want to monitor the web for you",
@@ -528,7 +528,7 @@
       "lastSeen": "2026-06-09T22:45:46.688009+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9531
+      "score": 2.9311
     },
     {
       "title": "Anthropic releases Claude Fable 5, a Mythos-class model the public can finally use, days before a potential record IPO",
@@ -545,7 +545,7 @@
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 19.8517
+      "score": 19.8298
     },
     {
       "title": "Rivian begins R2 deliveries as it bets a shrinking US EV market is an opportunity, not a threat",
@@ -561,7 +561,7 @@
       "lastSeen": "2026-06-09T21:06:42.374618+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.5454
+      "score": 2.5236
     },
     {
       "title": "Anthropic Offers Mythos Upgrade for Cyber Partners and a ‘Safe’ Version for the Rest of You",
@@ -574,10 +574,10 @@
       "image": "https://media.wired.com/photos/6a270618e083d018dff70e49/master/pass/Anthropic-Dangerous-AI-Business-2261854833.jpg",
       "published": "2026-06-09T17:00:46+00:00",
       "firstSeen": "2026-06-09T18:00:01.135788+00:00",
-      "lastSeen": "2026-06-10T05:00:01.442556+00:00",
+      "lastSeen": "2026-06-10T06:00:01.265011+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.9785
+      "score": 8.9569
     },
     {
       "title": "Anthropic releases its first Mythos-class model Claude Fable",
@@ -590,11 +590,11 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/STKB364_CLAUDE_2_C_96d15c.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-09T17:00:00+00:00",
       "firstSeen": "2026-06-09T18:00:01.135788+00:00",
-      "lastSeen": "2026-06-10T05:00:01.442556+00:00",
+      "lastSeen": "2026-06-10T06:00:01.265011+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 21.4482
+      "score": 21.4266
     },
     {
       "title": "Anthropic’s Claude Fable 5 is a version of Mythos the public can access today",
@@ -610,7 +610,7 @@
       "lastSeen": "2026-06-09T21:06:42.374618+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.9782
+      "score": 10.9566
     },
     {
       "title": "Anthropic’s Claude Fable 5 is a version of Mythos the public can access today",
@@ -623,10 +623,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/GettyImages-2279025960.jpg?w=1024",
       "published": "2026-06-09T17:00:00+00:00",
       "firstSeen": "2026-06-09T22:45:46.688009+00:00",
-      "lastSeen": "2026-06-10T05:00:01.442556+00:00",
+      "lastSeen": "2026-06-10T06:00:01.265011+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.9782
+      "score": 10.9566
     },
     {
       "title": "The UK just committed £1.3 billion to AI hardware, worker training, and putting AI in courtrooms",
@@ -642,7 +642,7 @@
       "lastSeen": "2026-06-09T21:06:42.374618+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.138
+      "score": 2.1164
     },
     {
       "title": "The Life Scientific: Helen Hastie",
@@ -655,10 +655,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-08T20:00:00+00:00",
       "firstSeen": "2026-06-08T21:00:01.371488+00:00",
-      "lastSeen": "2026-06-10T05:00:01.442556+00:00",
+      "lastSeen": "2026-06-10T06:00:01.265011+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.6298
+      "score": 1.6178
     },
     {
       "title": "The Life Scientific: Seth Berkley",
@@ -671,10 +671,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-01T20:00:00+00:00",
       "firstSeen": "2026-06-01T21:00:01.828388+00:00",
-      "lastSeen": "2026-06-10T05:00:01.442556+00:00",
+      "lastSeen": "2026-06-10T06:00:01.265011+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.1941
+      "score": 1.194
     },
     {
       "title": "Dean Lomax on discovering ichthyosaurs and defying nay-sayers",
