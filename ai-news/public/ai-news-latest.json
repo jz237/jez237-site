@@ -1,8 +1,8 @@
 {
-  "updatedAt": "2026-06-10T13:00:01.944652+00:00",
+  "updatedAt": "2026-06-10T14:00:01.320221+00:00",
   "items": [
     {
-      "title": "SynIB: Informational Bottleneck for Maximizing Synergy in Multimodal Learning",
+      "title": "Can Multi-Agent LLMs Identify Their Peers? Stylometric Fingerprinting in Role-Constrained Political Analysis",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -10,12 +10,125 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-10T13:00:15.110593+00:00",
+      "published": "2026-06-10T14:00:14.084453+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-10T13:00:01.944652+00:00",
+      "lastSeen": "2026-06-10T14:00:01.320221+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.76
+      "score": 5.06
+    },
+    {
+      "title": "China Opens World’s First Wind-Powered Underwater Data Center",
+      "url": "https://www.wired.com/story/china-opens-worlds-first-wind-powered-underwater-data-center",
+      "source": "Wired AI",
+      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "With an initial capacity of 24 megawatts, the innovative data center uses seawater as a natural cooling system.",
+      "image": "https://media.wired.com/photos/68fab92565a13f02607aecfa/master/pass/Screenshot%202025-10-23%20at%2011.33.04%E2%80%AFa.m..png",
+      "published": "2026-06-10T13:39:32+00:00",
+      "firstSeen": "2026-06-10T14:00:01.320221+00:00",
+      "lastSeen": "2026-06-10T14:00:01.320221+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2796
+    },
+    {
+      "title": "Jedify raises $24M to help companies arm AI agents with context on their business",
+      "url": "https://techcrunch.com/2026/06/10/jedify-raises-24m-to-help-companies-arm-ai-agents-with-context-on-their-business",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "The funding round was led by Norwest, with participation S Capital VC, Cerca Partners, and Oceans Ventures. Snowflake Ventures also participated as a strategic investor.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/Jedify-Co-founders.jpg?resize=1200%2C800",
+      "published": "2026-06-10T13:33:09+00:00",
+      "firstSeen": "2026-06-10T14:00:01.320221+00:00",
+      "lastSeen": "2026-06-10T14:00:01.320221+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.6764
+    },
+    {
+      "title": "Decart’s new world model can simulate hours of photorealistic driving — with some caveats",
+      "url": "https://techcrunch.com/2026/06/10/decarts-new-world-model-can-simulate-hours-of-photorealistic-driving-with-some-caveats",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Decart is launching Oasis 3, a real-time world model that generates photorealistic driving environments for autonomous vehicle testing, now available via API for developers to build on.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/Decart-Oasis-3.png?resize=1200%2C675",
+      "published": "2026-06-10T13:07:56+00:00",
+      "firstSeen": "2026-06-10T14:00:01.320221+00:00",
+      "lastSeen": "2026-06-10T14:00:01.320221+00:00",
+      "model_release": true,
+      "editorial_allow": true,
+      "editorial_reason": "model_release",
+      "score": 11.9638
+    },
+    {
+      "title": "Snapchat walls under-16s off from public Spotlight, making their videos friends-only",
+      "url": "https://thenextweb.com/news/snapchat-under-16-spotlight-friends-only",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Snapchat is restricting how its youngest users share video. From this week, Snapchatters aged 13 to 15 will get a dedicated profile where their Stories and short-form Spotlight clips are visible only to mutually accepted friends, and will no longer be pushed to the wider public on Spotlight. Until now, under-16s could post to Spotlight, [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/snap-layoffs-1000-jobs-spiegel-ai-irenic-profitability.avif",
+      "published": "2026-06-10T13:06:49+00:00",
+      "firstSeen": "2026-06-10T14:00:01.320221+00:00",
+      "lastSeen": "2026-06-10T14:00:01.320221+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1232
+    },
+    {
+      "title": "Poetic emerges from stealth with $50M from OpenAI to automate insurance underwriting and compliance",
+      "url": "https://thenextweb.com/news/poetic-openai-50m-enterprise-automation-underwriting",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Poetic, an AI startup that has been operating in stealth, has emerged with $50M in funding and a $500M valuation to automate some of finance’s most sensitive back-office work, from insurance underwriting to compliance and fraud checks. Its backers include OpenAI, Peter Thiel’s Founders Fund, and Kleiner Perkins. The company was founded by Markie Wagner, [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/OpenAI-lawsuite.avif",
+      "published": "2026-06-10T12:53:31+00:00",
+      "firstSeen": "2026-06-10T14:00:01.320221+00:00",
+      "lastSeen": "2026-06-10T14:00:01.320221+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.1166
+    },
+    {
+      "title": "Aryon Security raises $29M to stop cloud breaches before they happen",
+      "url": "https://thenextweb.com/news/aryon-security-29m-series-a-cloud-prevention",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Aryon Security, an Israeli cloud-security startup, has raised $29M in a Series A round to push a prevention-first approach to securing the cloud. The round, which the company says brings its total funding to $38M, was led by US-based Brightmind Partners. The investor list is the headline. Shlomo Kramer’s Skinos Ventures, Datadog, Blumberg Capital, and [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/Aryon-Security-Raises-29-Million.avif",
+      "published": "2026-06-10T12:36:43+00:00",
+      "firstSeen": "2026-06-10T14:00:01.320221+00:00",
+      "lastSeen": "2026-06-10T14:00:01.320221+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.9084
+    },
+    {
+      "title": "Capsa AI raises $18M to build the ‘AI operating system’ for private equity",
+      "url": "https://thenextweb.com/news/capsa-ai-18m-series-a-private-equity",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Capsa AI, a London and New York startup building what it calls an “AI operating system” for private capital, has raised $18M in Series A funding. The round was co-led by TX Ventures and Pivot Investment Partners, with participation from Bek Ventures, and takes the company’s total raised to $20M. Every existing institutional backer reinvested, [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/Capsa-AI-team.avif",
+      "published": "2026-06-10T12:22:05+00:00",
+      "firstSeen": "2026-06-10T14:00:01.320221+00:00",
+      "lastSeen": "2026-06-10T14:00:01.320221+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.8012
     },
     {
       "title": "The ECB moved to rein in Revolut’s ‘self-guided missiles’, just as a share sale values it at $115bn",
@@ -28,10 +141,10 @@
       "image": "https://media.thenextweb.com/2026/06/Revolut-Canary-Wharf.avif",
       "published": "2026-06-10T12:10:58+00:00",
       "firstSeen": "2026-06-10T13:00:01.944652+00:00",
-      "lastSeen": "2026-06-10T13:00:01.944652+00:00",
+      "lastSeen": "2026-06-10T14:00:01.320221+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.9253
+      "score": 3.8958
     },
     {
       "title": "Icertis veterans raise $7.55 million to build the AI layer that recovers money enterprises don’t know they’re losing",
@@ -44,10 +157,10 @@
       "image": "https://media.thenextweb.com/2026/06/rivvun-ai-seed-enterprise-spend-recovery-icertis.avif",
       "published": "2026-06-10T11:55:13+00:00",
       "firstSeen": "2026-06-10T13:00:01.944652+00:00",
-      "lastSeen": "2026-06-10T13:00:01.944652+00:00",
+      "lastSeen": "2026-06-10T14:00:01.320221+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8175
+      "score": 2.7882
     },
     {
       "title": "Meta signs its first India data-centre deal, leasing a 168MW AI facility from Reliance",
@@ -60,10 +173,10 @@
       "image": "https://media.thenextweb.com/2026/04/meta-ceo-mark-zuckerberg.avif",
       "published": "2026-06-10T11:50:14+00:00",
       "firstSeen": "2026-06-10T13:00:01.944652+00:00",
-      "lastSeen": "2026-06-10T13:00:01.944652+00:00",
+      "lastSeen": "2026-06-10T14:00:01.320221+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.115
+      "score": 2.0859
     },
     {
       "title": "TensorWave raises $350M led by AMD to build an Nvidia-free AI cloud",
@@ -76,10 +189,10 @@
       "image": "https://media.thenextweb.com/2026/06/tensorwave-logo.avif",
       "published": "2026-06-10T11:41:40+00:00",
       "firstSeen": "2026-06-10T13:00:01.944652+00:00",
-      "lastSeen": "2026-06-10T13:00:01.944652+00:00",
+      "lastSeen": "2026-06-10T14:00:01.320221+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8108
+      "score": 2.7818
     },
     {
       "title": "SK Hynix is planning a US listing of up to $14bn to cash in on the AI memory boom",
@@ -92,10 +205,10 @@
       "image": "https://media.thenextweb.com/2026/05/SK-Hynix.avif",
       "published": "2026-06-10T11:23:05+00:00",
       "firstSeen": "2026-06-10T13:00:01.944652+00:00",
-      "lastSeen": "2026-06-10T13:00:01.944652+00:00",
+      "lastSeen": "2026-06-10T14:00:01.320221+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.5017
+      "score": 4.4729
     },
     {
       "title": "Siri AI arrives with Google inside, and much of the world is locked out",
@@ -108,10 +221,10 @@
       "image": "",
       "published": "2026-06-10T11:00:00+00:00",
       "firstSeen": "2026-06-10T12:00:01.246957+00:00",
-      "lastSeen": "2026-06-10T13:00:01.944652+00:00",
+      "lastSeen": "2026-06-10T14:00:01.320221+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.6885
+      "score": 4.66
     },
     {
       "title": "A classic brain test exposed AI's biggest weakness",
@@ -124,10 +237,10 @@
       "image": "https://www.sciencedaily.com/images/1920/humanoid-artificial-intelligence-robot-confused.webp",
       "published": "2026-06-10T10:52:17+00:00",
       "firstSeen": "2026-06-10T12:00:01.246957+00:00",
-      "lastSeen": "2026-06-10T13:00:01.944652+00:00",
+      "lastSeen": "2026-06-10T14:00:01.320221+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.5568
+      "score": 3.5284
     },
     {
       "title": "Your face is the ticket: Google’s Gemini and biometric gates are the World Cup’s quieter tech story",
@@ -140,10 +253,10 @@
       "image": "https://media.thenextweb.com/2026/06/fifa-world-cup-2026-scams-phishing-malware.avif",
       "published": "2026-06-10T10:42:20+00:00",
       "firstSeen": "2026-06-10T12:00:01.246957+00:00",
-      "lastSeen": "2026-06-10T13:00:01.944652+00:00",
+      "lastSeen": "2026-06-10T14:00:01.320221+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.1821
+      "score": 9.1538
     },
     {
       "title": "Logitech’s Mobi Fold is a foldable travel mouse with an AI model to stop accidental clicks",
@@ -159,7 +272,7 @@
       "lastSeen": "2026-06-10T13:00:01.944652+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7714
+      "score": 2.7434
     },
     {
       "title": "01Health raises £11.2M to turn its dental-AI platform into infrastructure for specialist care",
@@ -175,7 +288,7 @@
       "lastSeen": "2026-06-10T13:00:01.944652+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7639
+      "score": 2.7361
     },
     {
       "title": "Artificial Intelligence Sneaks Into the World Cup Thanks to Google Gemini",
@@ -188,10 +301,10 @@
       "image": "https://media.wired.com/photos/6a26f2821d5621d5724e9dd9/master/pass/Artificial-Intelligence-Sneaks-into-World-Cup-2279691552.jpg",
       "published": "2026-06-10T10:00:00+00:00",
       "firstSeen": "2026-06-10T10:19:57.026208+00:00",
-      "lastSeen": "2026-06-10T13:00:01.944652+00:00",
+      "lastSeen": "2026-06-10T14:00:01.320221+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.202
+      "score": 8.1743
     },
     {
       "title": "McDonald’s tests Google-backed AI drive-thru ordering system",
@@ -204,10 +317,10 @@
       "image": "",
       "published": "2026-06-10T10:00:00+00:00",
       "firstSeen": "2026-06-10T10:19:57.026208+00:00",
-      "lastSeen": "2026-06-10T13:00:01.944652+00:00",
+      "lastSeen": "2026-06-10T14:00:01.320221+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.26
+      "score": 3.2323
     },
     {
       "title": "Uncovr raises $7M for AI that writes the operative report before the surgeon leaves the room",
@@ -223,7 +336,7 @@
       "lastSeen": "2026-06-10T13:00:01.944652+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0592
+      "score": 2.0316
     },
     {
       "title": "Nvidia partner Bizlink buys Blackstone’s Interplex data centre unit for $850 million",
@@ -239,7 +352,7 @@
       "lastSeen": "2026-06-10T13:00:01.944652+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0586
+      "score": 2.031
     },
     {
       "title": "Amazon’s UK investment passes £1bn in Northamptonshire with 4,000 jobs, and a floor full of robots",
@@ -255,7 +368,7 @@
       "lastSeen": "2026-06-10T12:00:01.246957+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0555
+      "score": 2.028
     },
     {
       "title": "Cambridge Aerospace is in talks to raise $300M at a $3.5bn valuation, almost nine times its worth a year ago",
@@ -271,7 +384,7 @@
       "lastSeen": "2026-06-10T12:00:01.246957+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0521
+      "score": 2.0246
     },
     {
       "title": "How AI is powering the next wave of micro-SaaS entrepreneurs",
@@ -287,7 +400,7 @@
       "lastSeen": "2026-06-10T12:00:01.246957+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8521
+      "score": 4.8246
     },
     {
       "title": "Rotomate raises €2.1M pre-seed to put a reliability engineer inside every factory",
@@ -303,7 +416,7 @@
       "lastSeen": "2026-06-10T12:00:01.246957+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7413
+      "score": 2.7142
     },
     {
       "title": "Ethical proxy sourcing challenges: how to stay on the right side",
@@ -319,7 +432,7 @@
       "lastSeen": "2026-06-10T12:00:01.246957+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0387
+      "score": 2.0116
     },
     {
       "title": "Einride lists on Nasdaq at $1.35 billion, down from the $5 billion it once discussed with banks",
@@ -335,7 +448,7 @@
       "lastSeen": "2026-06-10T10:19:57.026208+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1322
+      "score": 3.1053
     },
     {
       "title": "The $2 trillion AI infrastructure problem no one is talking about, and the engineer solving it",
@@ -351,7 +464,7 @@
       "lastSeen": "2026-06-10T10:19:57.026208+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0143
+      "score": 2.9879
     },
     {
       "title": "75% of C-suite leaders say agentic AI lives up to the hype or is underestimated. 48% still plan to cut headcount.",
@@ -367,7 +480,7 @@
       "lastSeen": "2026-06-10T10:00:01.155256+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.7074
+      "score": 4.6811
     },
     {
       "title": "Standard Bots raises $200 million to build robotic arms in the US and claims it will handle 10% of industrial deployments by year-end",
@@ -383,7 +496,7 @@
       "lastSeen": "2026-06-10T10:00:01.155256+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9977
+      "score": 1.9717
     },
     {
       "title": "Ambani-backed Addverb wants $100 million to build India’s answer to Unitree and Tesla Optimus",
@@ -399,7 +512,7 @@
       "lastSeen": "2026-06-10T10:00:01.155256+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9906
+      "score": 1.9649
     },
     {
       "title": "Meta signs first AI data center deal in India with Reliance",
@@ -412,10 +525,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2024/05/meta-getty.jpg?w=1200",
       "published": "2026-06-10T07:05:26+00:00",
       "firstSeen": "2026-06-10T08:00:01.224257+00:00",
-      "lastSeen": "2026-06-10T13:00:01.944652+00:00",
+      "lastSeen": "2026-06-10T14:00:01.320221+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1235
+      "score": 2.0979
     },
     {
       "title": "How B2B brands are earning citations in ChatGPT, Claude, and Google’s AI Overviews",
@@ -431,7 +544,7 @@
       "lastSeen": "2026-06-10T10:00:01.155256+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 17.5788
+      "score": 17.5534
     },
     {
       "title": "Legal AI startup Legora opens in Madrid, Milan, and Paris as it targets 700 European employees within a year",
@@ -447,7 +560,7 @@
       "lastSeen": "2026-06-10T10:00:01.155256+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.6544
+      "score": 3.6296
     },
     {
       "title": "If Claude Fable stops helping you, you'll never know",
@@ -460,10 +573,10 @@
       "image": "",
       "published": "2026-06-10T00:37:25+00:00",
       "firstSeen": "2026-06-10T01:00:01.722384+00:00",
-      "lastSeen": "2026-06-10T13:00:01.944652+00:00",
+      "lastSeen": "2026-06-10T14:00:01.320221+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.27
+      "score": 8.2486
     },
     {
       "title": "Google just fired a warning shot in the AI subscription price wars",
@@ -476,10 +589,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/01/ai-mode-google.jpg?resize=1200%2C800",
       "published": "2026-06-10T00:26:10+00:00",
       "firstSeen": "2026-06-10T01:00:01.722384+00:00",
-      "lastSeen": "2026-06-10T13:00:01.944652+00:00",
+      "lastSeen": "2026-06-10T14:00:01.320221+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9659
+      "score": 1.9447
     },
     {
       "title": "From data to decisions: how LSEG is scaling trusted AI",
@@ -492,10 +605,10 @@
       "image": "",
       "published": "2026-06-10T00:00:00+00:00",
       "firstSeen": "2026-06-10T10:00:01.155256+00:00",
-      "lastSeen": "2026-06-10T13:00:01.944652+00:00",
+      "lastSeen": "2026-06-10T14:00:01.320221+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8666
+      "score": 4.8456
     },
     {
       "title": "Initial impressions of Claude Fable 5",
@@ -508,10 +621,10 @@
       "image": "https://static.simonwillison.net/static/2026/agentsview-fable-full-day.jpg",
       "published": "2026-06-09T23:59:54+00:00",
       "firstSeen": "2026-06-10T00:22:46.128423+00:00",
-      "lastSeen": "2026-06-10T13:00:01.944652+00:00",
+      "lastSeen": "2026-06-10T14:00:01.320221+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.7565
+      "score": 11.7355
     },
     {
       "title": "I tried Siri AI, and so far it actually works",
@@ -524,123 +637,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/DSC03775_processed.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.723165084465%2C100%2C78.55366983107&amp%3Bw=1200",
       "published": "2026-06-09T23:43:00+00:00",
       "firstSeen": "2026-06-10T00:00:01.660943+00:00",
-      "lastSeen": "2026-06-10T13:00:01.944652+00:00",
+      "lastSeen": "2026-06-10T14:00:01.320221+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0206
-    },
-    {
-      "title": "Salesforce acquires m3ter to add consumption-based billing to Agentforce",
-      "url": "https://thenextweb.com/news/salesforce-acquires-m3ter-consumption-billing-agentforce",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Salesforce has signed a definitive agreement to acquire m3ter, a London-based metering and rating platform built for consumption-based billing. The deal will integrate m3ter’s infrastructure natively into Agentforce Revenue Management, giving Salesforce customers the ability to launch, track, and bill usage-based and outcome-based pricing models without leaving the platform. Financial terms were not disclosed. The [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/salesforce-acquires-m3ter-consumption-billing-agentforce.avif",
-      "published": "2026-06-09T23:22:57+00:00",
-      "firstSeen": "2026-06-10T00:22:46.128423+00:00",
-      "lastSeen": "2026-06-10T10:00:01.155256+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 5.2035
-    },
-    {
-      "title": "How Justin Ernest invested nearly $500M into hot startups without a traditional VC fund",
-      "url": "https://techcrunch.com/2026/06/09/how-justin-ernest-invested-nearly-400m-into-hot-startups-without-a-traditional-vc-fund",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Instead of spending a year raising a formal venture fund, the Sabertooth VC founder used a captive network of LPs to invest in startups like Anthropic, Anduril, and SpaceX.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/06/JustinErnest_TechCrunch.jpg?resize=1200%2C675",
-      "published": "2026-06-09T23:17:51+00:00",
-      "firstSeen": "2026-06-10T00:00:01.660943+00:00",
-      "lastSeen": "2026-06-10T00:22:46.128423+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 3.9418
-    },
-    {
-      "title": "How Justin Ernest invested nearly $500M into hot startups without a traditional VC fund",
-      "url": "https://techcrunch.com/2026/06/09/how-justin-ernest-invested-nearly-500m-into-hot-startups-without-a-traditional-vc-fund",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Instead of spending a year raising a formal venture fund, the Sabertooth VC founder used a captive network of LPs to invest in startups like Anthropic, Anduril, and SpaceX.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/06/JustinErnest_TechCrunch.jpg?resize=1200%2C675",
-      "published": "2026-06-09T23:17:51+00:00",
-      "firstSeen": "2026-06-10T01:00:01.722384+00:00",
-      "lastSeen": "2026-06-10T13:00:01.944652+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 3.9418
-    },
-    {
-      "title": "Munich startup ERC System unveils Victor, a heavy-lift cargo eVTOL, at ILA Berlin",
-      "url": "https://thenextweb.com/news/erc-system-victor-evtol-cargo-drone-ila-berlin-2026",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Munich-area startup ERC System has unveiled Victor, an uncrewed hybrid-electric cargo eVTOL designed for defence, logistics, and disaster response, at ILA Berlin 2026. The company says the aircraft can carry a 250kg payload over a range of 300km at a cruise speed of 250km/h. ERC System is targeting first deliveries in 2028. Victor uses a [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/erc-system-victor-evtol-cargo-drone-ila-berlin-2026.avif",
-      "published": "2026-06-09T23:13:04+00:00",
-      "firstSeen": "2026-06-10T00:00:01.660943+00:00",
-      "lastSeen": "2026-06-10T09:00:02.061811+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.8001
-    },
-    {
-      "title": "Claude Fable 5 and new AI safety fables",
-      "url": "https://www.interconnects.ai/p/claude-fable-5-and-new-ai-safety",
-      "source": "Interconnects AI",
-      "sourceUrl": "https://www.interconnects.ai/feed",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "One step further into the power politics of frontier AI systems.",
-      "image": "https://substack-post-media.s3.amazonaws.com/public/images/b9a6c144-02b3-4a08-947c-c517667d2249_3182x1790.png",
-      "published": "2026-06-09T22:59:35+00:00",
-      "firstSeen": "2026-06-10T00:00:01.660943+00:00",
-      "lastSeen": "2026-06-10T13:00:01.944652+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 8.0054
-    },
-    {
-      "title": "TSMC does not rule out price rises as inflation pushes up chip manufacturing costs",
-      "url": "https://thenextweb.com/news/tsmc-price-rise-inflation-ai-chips-taiwan-advanced-manufacturing",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Taiwan Semiconductor Manufacturing Company, the world’s largest chipmaker, told the BBC that inflation is pushing up its costs and did not rule out raising prices. CFO Wendell Huang said the company would not impose sudden “fourfold, fivefold” increases but acknowledged that costs have risen. “We reflect our value,” he said, pointing to TSMC’s technology leadership [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/tsmc-price-rise-inflation-ai-chips-taiwan-advanced-manufacturing.avif",
-      "published": "2026-06-09T22:50:14+00:00",
-      "firstSeen": "2026-06-10T00:00:01.660943+00:00",
-      "lastSeen": "2026-06-10T09:00:02.061811+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.7922
-    },
-    {
-      "title": "NVIDIA Confidential Computing to Help Expand Apple’s Private Cloud Compute",
-      "url": "https://blogs.nvidia.com/blog/nvidia-confidential-computing-apple-private-cloud-compute",
-      "source": "NVIDIA Blog",
-      "sourceUrl": "https://blogs.nvidia.com/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "NVIDIA GPUs with Confidential Computing are now used for confidential inference in Apple’s Private Cloud Compute (PCC), as it expands beyond Apple’s data centers to Google Cloud.  Unveiled during Apple’s annual WWDC gathering for developers from around the globe, NVIDIA GPUs will support server-side inference for Apple Foundation Models, custom-built by Apple and Google, leveraging [&#8230;]",
-      "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/nvidia-confidential-computing-apple-pcc.jpeg",
-      "published": "2026-06-09T22:34:27+00:00",
-      "firstSeen": "2026-06-09T22:45:46.688009+00:00",
-      "lastSeen": "2026-06-10T13:00:01.944652+00:00",
-      "model_release": true,
-      "editorial_allow": true,
-      "editorial_reason": "model_release",
-      "score": 8.8268
+      "score": 1.9997
     },
     {
       "title": "The Life Scientific: Helen Hastie",
@@ -653,10 +653,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-08T20:00:00+00:00",
       "firstSeen": "2026-06-08T21:00:01.371488+00:00",
-      "lastSeen": "2026-06-10T13:00:01.944652+00:00",
+      "lastSeen": "2026-06-10T14:00:01.320221+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.5422
+      "score": 1.5325
     },
     {
       "title": "The Life Scientific: Seth Berkley",
@@ -669,10 +669,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-01T20:00:00+00:00",
       "firstSeen": "2026-06-01T21:00:01.828388+00:00",
-      "lastSeen": "2026-06-10T13:00:01.944652+00:00",
+      "lastSeen": "2026-06-10T14:00:01.320221+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.1933
+      "score": 1.1932
     },
     {
       "title": "Dean Lomax on discovering ichthyosaurs and defying nay-sayers",
