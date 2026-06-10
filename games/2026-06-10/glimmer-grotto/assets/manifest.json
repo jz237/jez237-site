@@ -6,10 +6,10 @@
  "sprites": {
   "miner": {
    "file": "miner.png",
-   "w": 116,
+   "w": 117,
    "h": 176,
    "native": [
-    29,
+    30,
     44
    ],
    "category": "character",
