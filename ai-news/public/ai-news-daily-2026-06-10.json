@@ -1,6 +1,6 @@
 {
   "date": "2026-06-10",
-  "updatedAt": "2026-06-10T10:00:01.155256+00:00",
+  "updatedAt": "2026-06-10T10:19:57.026208+00:00",
   "items": [
     {
       "title": "How B2B brands are earning citations in ChatGPT, Claude, and Google’s AI Overviews",
@@ -16,7 +16,7 @@
       "lastSeen": "2026-06-10T10:00:01.155256+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 17.6596
+      "score": 17.6503
     },
     {
       "title": "If Claude Fable stops helping you, you'll never know",
@@ -29,10 +29,42 @@
       "image": "",
       "published": "2026-06-10T00:37:25+00:00",
       "firstSeen": "2026-06-10T01:00:01.722384+00:00",
-      "lastSeen": "2026-06-10T10:00:01.155256+00:00",
+      "lastSeen": "2026-06-10T10:19:57.026208+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.3378
+      "score": 8.33
+    },
+    {
+      "title": "Artificial Intelligence Sneaks Into the World Cup Thanks to Google Gemini",
+      "url": "https://www.wired.com/story/artificial-intelligence-sneaks-into-the-world-cup-thanks-to-google-gemini",
+      "source": "Wired AI",
+      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "The Argentine national team will be Google’s test bench and technological showcase during the World Cup.",
+      "image": "https://media.wired.com/photos/6a26f2821d5621d5724e9dd9/master/pass/Artificial-Intelligence-Sneaks-into-World-Cup-2279691552.jpg",
+      "published": "2026-06-10T10:00:00+00:00",
+      "firstSeen": "2026-06-10T10:19:57.026208+00:00",
+      "lastSeen": "2026-06-10T10:19:57.026208+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 8.2799
+    },
+    {
+      "title": "How AI is powering the next wave of micro-SaaS entrepreneurs",
+      "url": "https://thenextweb.com/news/ai-powering-micro-saas-entrepreneurs",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Artificial intelligence is reshaping how software businesses are built, launched, and scaled. In particular, it is driving a surge in micro-SaaS startups, small, highly focused software-as-a-service companies often built by solo founders or tiny teams. What once required large engineering teams, significant funding, and long development cycles can now be achieved with AI-assisted tools, automation [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/ai-powering-micro-saas-entrepreneurs.avif",
+      "published": "2026-06-10T09:38:36+00:00",
+      "firstSeen": "2026-06-10T10:19:57.026208+00:00",
+      "lastSeen": "2026-06-10T10:19:57.026208+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.9291
     },
     {
       "title": "From data to decisions: how LSEG is scaling trusted AI",
@@ -45,10 +77,10 @@
       "image": "",
       "published": "2026-06-10T00:00:00+00:00",
       "firstSeen": "2026-06-10T10:00:01.155256+00:00",
-      "lastSeen": "2026-06-10T10:00:01.155256+00:00",
+      "lastSeen": "2026-06-10T10:19:57.026208+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9332
+      "score": 4.9256
     },
     {
       "title": "75% of C-suite leaders say agentic AI lives up to the hype or is underestimated. 48% still plan to cut headcount.",
@@ -64,7 +96,7 @@
       "lastSeen": "2026-06-10T10:00:01.155256+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.7906
+      "score": 4.781
     },
     {
       "title": "Legal AI startup Legora opens in Madrid, Milan, and Paris as it targets 700 European employees within a year",
@@ -80,7 +112,23 @@
       "lastSeen": "2026-06-10T10:00:01.155256+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.733
+      "score": 3.724
+    },
+    {
+      "title": "McDonald’s tests Google-backed AI drive-thru ordering system",
+      "url": "https://www.artificialintelligence-news.com/news/mcdonalds-ai-drive-thru-google-archiq",
+      "source": "Artificial Intelligence News",
+      "sourceUrl": "https://www.artificialintelligence-news.com/categories/artificial-intelligence/feed/",
+      "sourceWeight": 0.82,
+      "category": "AI",
+      "summary": "McDonald’s is testing a new AI system that can take drive-thru orders and support restaurant operations. The system, called ArchIQ and nicknamed “Archy,” was introduced during the company’s Worldwide convention, according to Restaurant Business. It is being tested at five McDonald’s locations in the United States, though the company has not named the restaurants involved. [&#8230;]\nThe post McDonald’s tests Google-backed AI drive-thru ordering system appeared first on AI News.",
+      "image": "",
+      "published": "2026-06-10T10:00:00+00:00",
+      "firstSeen": "2026-06-10T10:19:57.026208+00:00",
+      "lastSeen": "2026-06-10T10:19:57.026208+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.3379
     },
     {
       "title": "Einride lists on Nasdaq at $1.35 billion, down from the $5 billion it once discussed with banks",
@@ -93,10 +141,10 @@
       "image": "https://media.thenextweb.com/2026/06/Einride-autonomus.avif",
       "published": "2026-06-10T08:55:22+00:00",
       "firstSeen": "2026-06-10T10:00:01.155256+00:00",
-      "lastSeen": "2026-06-10T10:00:01.155256+00:00",
+      "lastSeen": "2026-06-10T10:19:57.026208+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2176
+      "score": 3.2078
     },
     {
       "title": "The $2 trillion AI infrastructure problem no one is talking about, and the engineer solving it",
@@ -109,10 +157,26 @@
       "image": "https://media.thenextweb.com/2026/06/Shashidhar-Bhat.avif",
       "published": "2026-06-10T08:15:44+00:00",
       "firstSeen": "2026-06-10T09:00:02.061811+00:00",
-      "lastSeen": "2026-06-10T10:00:01.155256+00:00",
+      "lastSeen": "2026-06-10T10:19:57.026208+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0982
+      "score": 3.0885
+    },
+    {
+      "title": "01Health raises £11.2M to turn its dental-AI platform into infrastructure for specialist care",
+      "url": "https://thenextweb.com/news/01health-raises-11-2m-to-turn-its-dental-ai-platform-into-infrastructure-for-specialist-care",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "01Health, a London healthtech company, has raised £11.2M ($15M) in Series A funding to open up the clinical platform behind its dental brands and sell it to other practices. The round was led by Gresham House Ventures. Existing backers Balderton Capital, Eka Ventures, and Wavemaker360 followed on, alongside angels including Blockchain.com co-founder Nicolas Cary. 01Health [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/01Health-team.avif",
+      "published": "2026-06-10T10:03:54+00:00",
+      "firstSeen": "2026-06-10T10:19:57.026208+00:00",
+      "lastSeen": "2026-06-10T10:19:57.026208+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.8419
     },
     {
       "title": "Rotomate raises €2.1M pre-seed to put a reliability engineer inside every factory",
@@ -125,74 +189,10 @@
       "image": "https://media.thenextweb.com/2026/06/Rotomate-team.avif",
       "published": "2026-06-10T09:15:19+00:00",
       "firstSeen": "2026-06-10T10:00:01.155256+00:00",
-      "lastSeen": "2026-06-10T10:00:01.155256+00:00",
+      "lastSeen": "2026-06-10T10:19:57.026208+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8275
-    },
-    {
-      "title": "Liyi Zhang, Akshay K. Jagadish, Brenden M. Lake, Thomas L. Griffiths",
-      "url": "https://llm-stats.com/ai-news",
-      "source": "LLM Stats AI News",
-      "sourceUrl": "https://llm-stats.com/ai-news",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "",
-      "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-10T10:00:10.014349+00:00",
-      "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-10T10:00:01.155256+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.36
-    },
-    {
-      "title": "Meta signs first AI data center deal in India with Reliance",
-      "url": "https://techcrunch.com/2026/06/10/meta-signs-first-ai-data-center-deal-in-india-with-reliance",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "The 168-megawatt facility will support Meta's global AI computing needs and can be expanded over time.",
-      "image": "https://techcrunch.com/wp-content/uploads/2024/05/meta-getty.jpg?w=1200",
-      "published": "2026-06-10T07:05:26+00:00",
-      "firstSeen": "2026-06-10T08:00:01.224257+00:00",
-      "lastSeen": "2026-06-10T10:00:01.155256+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.2046
-    },
-    {
-      "title": "Ethical proxy sourcing challenges: how to stay on the right side",
-      "url": "https://thenextweb.com/news/ethical-proxy-sourcing-challenges-how-to-stay-on-the-right-side",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Proxy servers aren’t exactly a high-profile tool – and yet, they power much of AI infrastructure. A proxy server is another device with its own IP address that you use to access the web. In aggregate, they let you open many webpages through automated means without encountering CAPTCHAs or other roadblocks. Lacking proxies, companies wouldn’t [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/proxy-sourcing.avif",
-      "published": "2026-06-10T09:09:40+00:00",
-      "firstSeen": "2026-06-10T10:00:01.155256+00:00",
-      "lastSeen": "2026-06-10T10:00:01.155256+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.1247
-    },
-    {
-      "title": "Standard Bots raises $200 million to build robotic arms in the US and claims it will handle 10% of industrial deployments by year-end",
-      "url": "https://thenextweb.com/news/standard-bots-200m-unicorn-robotic-arms-us-manufacturing",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Standard Bots has raised $200 million at a $1 billion valuation to expand US manufacturing of AI-powered robotic arms. The round was led by General Catalyst and RoboStrategy, a robotics-focused fund, and follows a $63 million raise nearly two years ago at an undisclosed valuation. The New York-based company makes robotic arms for industrial automation, handling tasks [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/standard-bots-200m-unicorn-robotic-arms-us-manufacturing.avif",
-      "published": "2026-06-10T07:38:09+00:00",
-      "firstSeen": "2026-06-10T09:00:02.061811+00:00",
-      "lastSeen": "2026-06-10T10:00:01.155256+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.0801
+      "score": 2.8176
     }
   ],
   "errors": [
