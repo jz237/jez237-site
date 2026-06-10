@@ -1,6 +1,6 @@
 // DOM HUD, shop, journal, toasts.
 
-import { GEM_DEF, TREASURE_DEF, UPGRADES, WONDERS } from './config.js';
+import { GEM_DEF, TREASURE_DEF, UPGRADES, WONDERS, LANDMARK_DEF } from './config.js';
 import { sfx } from './audio.js';
 
 export const state = {
@@ -125,6 +125,7 @@ const JOURNAL_ENTRIES = [
     sprite: id === 'geode' ? 'geode_open' : d.sprite, flavor: d.flavor })),
   ...Object.entries(WONDERS).map(([id, d]) => ({ id: 'wonder_' + id, name: d.name,
     sprite: d.sprite, flavor: d.flavor })),
+  ...LANDMARK_DEF.map(d => ({ id: 'lm_' + d.id, name: d.name, sprite: d.sprite, flavor: d.flavor })),
 ];
 
 export function renderJournal() {

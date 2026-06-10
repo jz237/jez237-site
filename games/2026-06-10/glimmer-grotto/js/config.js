@@ -66,7 +66,36 @@ export const TREASURE_DEF = {
               rate: 0.0026, flavor: 'A forest pressed flat into forever.' },
   fish:     { name: 'Stone Fish', sprite: 'fossil_fish', value: 7, rows: [300, 540],
               rate: 0.0026, flavor: 'It swam here when the lake touched the sky.' },
+  // rare relics — one-in-a-blue-moon finds for devoted wanderers
+  compass:  { name: 'Wayfarer’s Compass', sprite: 'relic_compass', value: 15, rows: [30, 180],
+              rate: 0.0007, flavor: 'Its needle points down. It always pointed down.' },
+  locket:   { name: 'Miner’s Locket', sprite: 'relic_locket', value: 15, rows: [60, 280],
+              rate: 0.0007, flavor: 'Inside, a painted smile, worn soft by thumbs.' },
+  coin:     { name: 'Owl-stamped Coin', sprite: 'relic_coin', value: 12, rows: [200, 520],
+              rate: 0.0008, flavor: 'Currency of a kingdom no map remembers.' },
+  idol:     { name: 'Jade Dragon Idol', sprite: 'relic_idol', value: 18, rows: [280, 530],
+              rate: 0.0006, flavor: 'Warm to the touch, even here.' },
+  bottle:   { name: 'Message in a Bottle', sprite: 'relic_bottle', value: 14, rows: [480, 556],
+              rate: 0.0012, flavor: '“If you are reading this — keep going. It’s beautiful.”' },
 };
+
+// one-of-a-kind set pieces, discovered by walking near them
+export const LANDMARK_DEF = [
+  { id: 'workings', name: 'The Old Workings',  sprite: 'support_beam',
+    flavor: 'Timber and tin. Somebody loved this mine before you.', rows: [52, 86] },
+  { id: 'murals',   name: 'The Painted Dark',  sprite: 'mural_miners',
+    flavor: 'Ochre hands. They found the gems too, long ago.', rows: [128, 176] },
+  { id: 'geode',    name: 'The Geode Heart',   sprite: 'crystal_cluster_violet',
+    flavor: 'A room the earth grew for itself.', rows: [212, 262] },
+  { id: 'eldercap', name: 'The Elder Cap',     sprite: 'great_mushroom',
+    flavor: 'Older than the dark. Gentler, too.', rows: [302, 352] },
+  { id: 'falls',    name: 'The Singing Falls', sprite: 'spring_lily',
+    flavor: 'Water remembering how to laugh.', rows: [396, 438] },
+  { id: 'shrine',   name: 'The Owl Shrine',    sprite: 'statue_owl',
+    flavor: 'It has kept watch. It will keep watching.', rows: [464, 516] },
+  { id: 'ferryman', name: 'The Ferryman’s Rest', sprite: 'sunken_boat',
+    flavor: 'The last crossing ended here, quietly.', rows: [544, 552] },
+];
 
 export const UPGRADES = {
   pick: {
