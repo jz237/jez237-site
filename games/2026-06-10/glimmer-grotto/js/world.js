@@ -2,7 +2,8 @@
 
 import { TILE, WORLD_W as W, WORLD_H as H, SURFACE_Y, CHUNK,
   T_AIR, T_DIRT, T_STONE, T_HARD, T_GRASS, T_CRYS, T_MUSH, T_RUIN, T_SPRING,
-  T_WATER, T_BEDROCK, TILE_DEF, BIOMES, biomeAt, GEM_DEF, TREASURE_DEF } from './config.js';
+  T_WATER, T_BEDROCK, TILE_DEF, BIOMES, biomeAt, GEM_DEF, TREASURE_DEF,
+  LANDMARK_DEF } from './config.js';
 import { hash2, fbm, mulberry32, clamp } from './util.js';
 import { IMG, CRACKS } from './assets.js';
 
@@ -18,6 +19,8 @@ export const world = {
   props: [],                 // campfires, carts, tent...
   restSpots: [],             // {x, y} px (campfire positions)
   pickups: [],
+  landmarks: [],             // {id,name,flavor,sprite,x,y,r} px
+  waterfalls: [],            // {x,y0,y1} px
   surf: new Int16Array(W),
   seed: 20260610,
   campX: 26,                 // tile
@@ -103,6 +106,7 @@ export function generate(seed = 20260610) {
   placeVeins(seed);
   buildCamp();
   buildRestSpots(seed);
+  buildLandmarks(seed);
   placeDecor(seed);
 
   // re-apply persisted edits
@@ -252,6 +256,120 @@ function buildRestSpots(seed) {
   }
 }
 
+// ------------------------------------------------------------ landmarks
+function carveRoom(rx, ry, hw, hh) {
+  for (let ty = ry - hh; ty <= ry - 1; ty++)
+    for (let tx = rx - hw; tx <= rx + hw; tx++) {
+      if (tx < 3 || tx >= W - 3 || ty < 1 || ty >= H - 4 || inGate(ty)) continue;
+      world.grid[idx(tx, ty)] = T_AIR;
+    }
+  for (let tx = rx - hw; tx <= rx + hw; tx++) {       // guarantee a floor
+    if (tx < 3 || tx >= W - 3) continue;
+    const i = idx(tx, ry);
+    if (!isSolid(world.grid[i])) world.grid[i] = T_STONE;
+    world.veins[i] = 0;
+  }
+}
+
+function buildLandmarks(seed) {
+  const rnd = mulberry32(seed + 31);
+  world.landmarks = [];
+  world.waterfalls = [];
+  const px = t => t * TILE;
+  const reg = (def, rx, ry, r = 8) =>
+    world.landmarks.push({ id: def.id, name: def.name, flavor: def.flavor,
+      sprite: def.sprite, x: px(rx), y: px(ry), r: px(r) });
+  for (const def of LANDMARK_DEF) {
+    let rx = Math.floor(24 + rnd() * (W - 48));
+    let ry = Math.floor(def.rows[0] + rnd() * (def.rows[1] - def.rows[0]));
+    switch (def.id) {
+      case 'workings':
+        carveRoom(rx, ry, 8, 4);
+        world.props.push(
+          { type: 'support_beam', x: px(rx - 5), y: px(ry) },
+          { type: 'support_beam', x: px(rx + 0.2), y: px(ry) },
+          { type: 'support_beam', x: px(rx + 5.4), y: px(ry) },
+          { type: 'cart_wreck', x: px(rx + 2.8), y: px(ry), sc: 1.3 },
+          // hangs just under the middle support's crossbeam
+          { type: 'lantern', x: px(rx + 0.2), y: px(ry) - 38, glow: ['warm', 150] },
+        );
+        reg(def, rx, ry); break;
+      case 'murals':
+        carveRoom(rx, ry, 9, 3);
+        world.props.push(
+          { type: 'mural_miners', x: px(rx - 5.5), y: px(ry - 0.7), sc: 1.5 },
+          { type: 'mural_beasts', x: px(rx), y: px(ry - 0.7), sc: 1.5 },
+          { type: 'mural_hands', x: px(rx + 5.5), y: px(ry - 0.7), sc: 1.5 },
+          { type: 'flower_glow', x: px(rx - 8), y: px(ry), glow: ['cyan', 70] },
+          { type: 'flower_glow', x: px(rx + 8), y: px(ry), glow: ['cyan', 70] },
+        );
+        reg(def, rx, ry, 10); break;
+      case 'geode':
+        carveRoom(rx, ry, 8, 6);
+        world.props.push(
+          { type: 'crystal_cluster_violet', x: px(rx - 5), y: px(ry), glow: ['violet', 170] },
+          { type: 'crystal_cluster_teal', x: px(rx - 1.6), y: px(ry), glow: ['teal', 150] },
+          { type: 'crystal_cluster_violet', x: px(rx + 2.4), y: px(ry), glow: ['violet', 170] },
+          { type: 'crystal_cluster_teal', x: px(rx + 5.8), y: px(ry), glow: ['teal', 150] },
+          { type: 'flower_glow', x: px(rx - 7.4), y: px(ry), glow: ['cyan', 60] },
+        );
+        reg(def, rx, ry, 9); break;
+      case 'eldercap':
+        carveRoom(rx, ry, 7, 7);
+        world.props.push(
+          { type: 'great_mushroom', x: px(rx), y: px(ry), glow: ['teal', 260], sc: 2.4 },
+          { type: 'mushroom_glow_small', x: px(rx - 4.6), y: px(ry), glow: ['teal', 80] },
+          { type: 'mushroom_glow_small', x: px(rx + 4.2), y: px(ry), glow: ['teal', 80] },
+          { type: 'spore_plant', x: px(rx - 6.2), y: px(ry), glow: ['teal', 60] },
+          { type: 'spore_plant', x: px(rx + 6.4), y: px(ry), glow: ['teal', 60] },
+        );
+        reg(def, rx, ry); break;
+      case 'falls': {
+        carveRoom(rx, ry, 8, 6);
+        for (let tx = rx - 6; tx <= rx + 6; tx++)
+          for (let ty = ry - 2; ty <= ry - 1; ty++)
+            if (world.grid[idx(tx, ty)] === T_AIR) world.grid[idx(tx, ty)] = T_WATER;
+        const surfY = px(ry - 2) + 7;
+        world.waterfalls.push({ x: px(rx - 3) + 8, y0: px(ry - 6) - 4, y1: surfY });
+        world.waterfalls.push({ x: px(rx + 2.6) + 8, y0: px(ry - 6) - 4, y1: surfY });
+        world.props.push(
+          { type: 'spring_lily', x: px(rx - 1), y: surfY + 4 },
+          { type: 'spring_lily', x: px(rx + 4.4), y: surfY + 4 },
+          { type: 'cairn', x: px(rx - 7.4), y: px(ry) },
+          { type: 'cairn', x: px(rx + 7.6), y: px(ry) },
+        );
+        reg(def, rx, ry, 10); break;
+      }
+      case 'shrine': {
+        carveRoom(rx, ry, 7, 5);
+        for (let tx = rx - 1; tx <= rx + 1; tx++) {     // raised dais
+          world.grid[idx(tx, ry - 1)] = T_RUIN; world.veins[idx(tx, ry - 1)] = 0;
+        }
+        world.props.push(
+          { type: 'statue_owl', x: px(rx), y: px(ry - 1), glow: ['gold', 150], sc: 1.8 },
+          { type: 'ruins_pillar', x: px(rx - 5), y: px(ry) },
+          { type: 'ruins_pillar', x: px(rx + 5), y: px(ry) },
+          { type: 'urn', x: px(rx - 2.8), y: px(ry) },
+          { type: 'urn', x: px(rx + 2.9), y: px(ry) },
+        );
+        reg(def, rx, ry); break;
+      }
+      case 'ferryman': {
+        rx = Math.floor(W / 2 + (rnd() - 0.5) * 40);
+        let fy = 546;
+        while (fy < H - 4 && !isSolid(world.grid[idx(rx, fy)])) fy++;
+        world.props.push(
+          { type: 'sunken_boat', x: px(rx), y: px(fy), glow: ['cyan', 130], sc: 1.7 },
+          { type: 'reeds', x: px(rx - 5), y: px(fy) },
+          { type: 'reeds', x: px(rx + 5.6), y: px(fy) },
+          { type: 'reeds', x: px(rx + 7.2), y: px(fy) },
+        );
+        reg(def, rx, fy, 9); break;
+      }
+    }
+  }
+}
+
 function placeDecor(seed) {
   world.decor.clear();
   const add = (i, item) => { if (!world.decor.has(i)) world.decor.set(i, item); };
@@ -278,24 +396,43 @@ function placeDecor(seed) {
       if (isSolid(tileAt(tx, ty + 1)) && tileAt(tx, ty + 1) !== T_BEDROCK) {
         if (r > 0.08 && r < 0.22) {
           const pick = hash2(tx, ty, seed + 4200);
-          let s = null, light = null, sc = 1;
-          switch (b.id) {
-            case 'earth': s = pick < 0.5 ? 'fern' : (pick < 0.7 ? 'mushroom_glow_small' : 'stalagmite');
+          let s = null, light = null;
+          if (tileAt(tx, ty + 1) === T_GRASS) {          // sunlit meadow scatter
+            s = pick < 0.42 ? 'flowers_patch' : (pick < 0.62 ? 'bush' :
+                (pick < 0.78 ? 'fern' : (pick < 0.86 ? 'tree_pine' : null)));
+          } else switch (b.id) {
+            case 'earth': s = pick < 0.4 ? 'fern' : (pick < 0.58 ? 'boulder' :
+                (pick < 0.74 ? 'mushroom_glow_small' : 'stalagmite'));
               if (s === 'mushroom_glow_small') light = ['teal', 70]; break;
-            case 'stone': s = pick < 0.6 ? 'stalagmite' : 'fern'; break;
-            case 'crystal': s = pick < 0.55 ? 'crystal_cluster_violet' : (pick < 0.8 ? 'flower_glow' : 'stalagmite');
+            case 'stone': s = pick < 0.45 ? 'stalagmite' : (pick < 0.72 ? 'boulder' : 'fern'); break;
+            case 'crystal': s = pick < 0.5 ? 'crystal_cluster_violet' : (pick < 0.72 ? 'flower_glow' :
+                (pick < 0.86 ? 'boulder' : 'stalagmite'));
               if (s === 'crystal_cluster_violet') light = ['violet', 150];
               if (s === 'flower_glow') light = ['cyan', 60]; break;
-            case 'mush': s = pick < 0.45 ? 'mushroom_glow_big' : (pick < 0.8 ? 'mushroom_glow_small' : 'fern');
-              light = ['teal', s === 'mushroom_glow_big' ? 165 : 80]; break;
-            case 'spring': s = pick < 0.5 ? 'stalagmite' : 'fern'; break;
-            case 'ruins': s = pick < 0.35 ? 'ruins_pillar' : (pick < 0.6 ? 'crystal_cluster_teal' : 'fern');
+            case 'mush': s = pick < 0.38 ? 'mushroom_glow_big' : (pick < 0.6 ? 'mushroom_glow_small' :
+                (pick < 0.8 ? 'spore_plant' : 'fern'));
+              if (s !== 'fern') light = ['teal', s === 'mushroom_glow_big' ? 165 : (s === 'spore_plant' ? 60 : 80)];
+              break;
+            case 'spring': s = pick < 0.35 ? 'stalagmite' : (pick < 0.58 ? 'cairn' : 'fern'); break;
+            case 'ruins': s = pick < 0.3 ? 'ruins_pillar' : (pick < 0.48 ? 'urn' :
+                (pick < 0.68 ? 'crystal_cluster_teal' : 'fern'));
               if (s === 'crystal_cluster_teal') light = ['teal', 100]; break;
-            case 'lake': s = pick < 0.5 ? 'crystal_cluster_teal' : 'stalagmite';
+            case 'lake': s = pick < 0.4 ? 'reeds' : (pick < 0.62 ? 'crystal_cluster_teal' : 'stalagmite');
               if (s === 'crystal_cluster_teal') light = ['cyan', 110]; break;
           }
-          if (s) add(i, { sprite: s, x, y: yBot, anchor: idx(tx, ty + 1), ceil: false, sway: s === 'fern', light, sc });
+          if (s) add(i, { sprite: s, x, y: yBot, anchor: idx(tx, ty + 1), ceil: false,
+            sway: s === 'fern' || s === 'reeds' || s === 'flowers_patch', light });
+          continue;
         }
+      }
+      // wall decor: glowing shelf fungi cling to cave walls
+      if (r > 0.23 && r < 0.265 && (b.id === 'mush' || b.id === 'stone' || b.id === 'crystal')) {
+        const lw = isSolid(tileAt(tx - 1, ty)) && tileAt(tx - 1, ty) !== T_BEDROCK;
+        const rw = isSolid(tileAt(tx + 1, ty)) && tileAt(tx + 1, ty) !== T_BEDROCK;
+        if (lw || rw)
+          add(i, { sprite: 'shelf_fungi', x: lw ? tx * TILE + 7 : (tx + 1) * TILE - 7,
+            y: yBot, anchor: lw ? idx(tx - 1, ty) : idx(tx + 1, ty), ceil: false,
+            flip: rw && !lw, light: ['teal', 55] });
       }
     }
   }
@@ -399,11 +536,12 @@ function buildChunk(cxi, cyi) {
       const aboveSurface = ty < world.surf[tx];
       if (t === T_AIR || t === T_WATER) {
         if (!aboveSurface) {
-          // big open caverns open onto the parallax layers for depth;
-          // cells near solid keep the near-wall backdrop.
+          // truly vast caverns open onto the parallax layers for depth;
+          // anything within 3 tiles of solid keeps the near-wall backdrop
+          // (so carved rooms stay cosy instead of showing odd dark windows).
           let nearSolid = 0;
-          for (let dy = -2; dy <= 2 && !nearSolid; dy++)
-            for (let dx = -2; dx <= 2; dx++)
+          for (let dy = -4; dy <= 4 && !nearSolid; dy++)
+            for (let dx = -4; dx <= 4; dx++)
               if (solidAt(tx + dx, ty + dy)) { nearSolid = 1; break; }
           if (nearSolid) x.drawImage(bdTex, px, py, TILE, TILE);
           else {
@@ -504,7 +642,7 @@ export function drawWater(ctx, x0, y0, x1, y1, time, lightSink) {
       if (surface && lightSink && (tx & 3) === 0)
         lightSink.push({ x: px + TILE / 2, y: py + 10, c: 'cyan', r: deep ? 80 : 64,
           a: 0.5, flicker: .3, emissive: true });
-      ctx.fillStyle = deep ? 'rgba(70,155,195,.55)' : 'rgba(95,200,200,.55)';
+      ctx.fillStyle = deep ? 'rgba(75,160,200,.42)' : 'rgba(95,200,200,.55)';
       let top = py;
       if (surface) {
         top = py + 7 + Math.sin(time * 1.7 + tx * 0.9) * 2.2;
@@ -538,22 +676,27 @@ export function drawDecor(ctx, x0, y0, x1, y1, time, lightSink) {
     const img = IMG[d.sprite];
     const w = img.width / 4, h = img.height / 4;      // assets baked at 4x
     const sway = d.sway ? Math.sin(time * 1.4 + tx * 1.7) * 2.4 : 0;
+    if (d.flip) { ctx.save(); ctx.translate(d.x, 0); ctx.scale(-1, 1); ctx.translate(-d.x, 0); }
     if (d.ceil) ctx.drawImage(img, d.x - w / 2 + sway, d.y, w, h);
     else ctx.drawImage(img, d.x - w / 2 + sway * .4, d.y - h, w, h);
+    if (d.flip) ctx.restore();
     if (d.light && lightSink)
-      lightSink.push({ x: d.x, y: d.ceil ? d.y + h * .6 : d.y - h * .55, c: d.light[0], r: d.light[1], flicker: .15 });
+      lightSink.push({ x: d.x, y: d.ceil ? d.y + h * .6 : d.y - h * .55, c: d.light[0], r: d.light[1], flicker: .15, pri: 2 });
   }
   for (const p of world.props) {
     if (p.x < x0 - 200 || p.x > x1 + 200 || p.y < y0 - 200 || p.y > y1 + 200) continue;
     const img = IMG[p.type];
-    const w = img.width / 4, h = img.height / 4;
+    const sc = p.sc || 1;
+    const w = img.width / 4 * sc, h = img.height / 4 * sc;
     ctx.save();
     if (p.flip) { ctx.translate(p.x, 0); ctx.scale(-1, 1); ctx.translate(-p.x, 0); }
     ctx.drawImage(img, p.x - w / 2, p.y - h, w, h);
     ctx.restore();
     if (p.type === 'campfire' && lightSink)
-      lightSink.push({ x: p.x, y: p.y - h * .5, c: 'fire', r: 200, flicker: .5 });
+      lightSink.push({ x: p.x, y: p.y - h * .5, c: 'fire', r: 200, flicker: .5, pri: 1 });
     if (p.type === 'tent' && lightSink)
-      lightSink.push({ x: p.x, y: p.y - h * .4, c: 'warm', r: 90, flicker: .1 });
+      lightSink.push({ x: p.x, y: p.y - h * .4, c: 'warm', r: 90, flicker: .1, pri: 1 });
+    if (p.glow && lightSink)
+      lightSink.push({ x: p.x, y: p.y - h * .5, c: p.glow[0], r: p.glow[1], flicker: .2, emissive: true, pri: 1 });
   }
 }

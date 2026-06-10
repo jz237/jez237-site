@@ -37,8 +37,10 @@ export function renderLighting(ctx, cam, viewW, viewH, lights, dark, tint, time)
   lctx.fillStyle = ambientColor(tint, dark);
   lctx.fillRect(0, 0, lw, lh);
 
-  const s = lighting.scale / cam.zoom;     // world px -> lightmap px  (zoom applied)
   const k = lighting.scale * cam.zoom;
+  // important lights first (player lantern, landmark glows) so the cap
+  // never silently drops them in vein-dense scenes
+  lights.sort((a, b) => (a.pri ?? 3) - (b.pri ?? 3));
   lctx.globalCompositeOperation = 'lighter';
   let count = 0;
   for (const L of lights) {
