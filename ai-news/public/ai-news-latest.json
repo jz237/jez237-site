@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-10T14:00:01.320221+00:00",
+  "updatedAt": "2026-06-10T14:28:17.195164+00:00",
   "items": [
     {
       "title": "Can Multi-Agent LLMs Identify Their Peers? Stylometric Fingerprinting in Role-Constrained Political Analysis",
@@ -10,12 +10,44 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-10T14:00:14.084453+00:00",
+      "published": "2026-06-10T14:28:23.510582+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-10T14:00:01.320221+00:00",
+      "lastSeen": "2026-06-10T14:28:17.195164+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 5.06
+    },
+    {
+      "title": "Wrongful Arrest Exposes Failures in One of the Oldest Police Face-Recognition Tools in the US",
+      "url": "https://www.wired.com/story/wrongful-arrest-tests-one-of-the-oldest-police-face-recognition-tools-in-the-us",
+      "source": "Wired AI",
+      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "The ACLU is suing two Florida police departments over the arrest of a Fort Myers man in a child-abduction case, saying officers treated a flawed face recognition match as a near-certain ID.",
+      "image": "https://media.wired.com/photos/6a296cd55fb28d50a6268abc/master/pass/061026_Wrongful-Arrest-Tests-One-of-the-Oldest-Police-Face-Recognition-Databases-in-the-US.gif",
+      "published": "2026-06-10T14:00:00+00:00",
+      "firstSeen": "2026-06-10T14:28:17.195164+00:00",
+      "lastSeen": "2026-06-10T14:28:17.195164+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2757
+    },
+    {
+      "title": "KPMG secretly and repeatedly accessed a whistleblower’s computer, then shared the files with its CEO",
+      "url": "https://thenextweb.com/news/kpmg-accessed-whistleblower-computer",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "KPMG secretly and repeatedly accessed a whistleblower’s work computer to extract documents detailing their allegations of data misuse, then shared the material with senior partners and the firm’s former chief executive, the Australian Financial Review has reported. The global accounting firm had the legal right to access an employee’s work laptop. What makes it striking [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/KPMG-offices-Sovereign-Street.avif",
+      "published": "2026-06-10T13:41:55+00:00",
+      "firstSeen": "2026-06-10T14:28:17.195164+00:00",
+      "lastSeen": "2026-06-10T14:28:17.195164+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1266
     },
     {
       "title": "China Opens World’s First Wind-Powered Underwater Data Center",
@@ -28,10 +60,10 @@
       "image": "https://media.wired.com/photos/68fab92565a13f02607aecfa/master/pass/Screenshot%202025-10-23%20at%2011.33.04%E2%80%AFa.m..png",
       "published": "2026-06-10T13:39:32+00:00",
       "firstSeen": "2026-06-10T14:00:01.320221+00:00",
-      "lastSeen": "2026-06-10T14:00:01.320221+00:00",
+      "lastSeen": "2026-06-10T14:28:17.195164+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2796
+      "score": 2.2655
     },
     {
       "title": "Jedify raises $24M to help companies arm AI agents with context on their business",
@@ -44,10 +76,26 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/Jedify-Co-founders.jpg?resize=1200%2C800",
       "published": "2026-06-10T13:33:09+00:00",
       "firstSeen": "2026-06-10T14:00:01.320221+00:00",
-      "lastSeen": "2026-06-10T14:00:01.320221+00:00",
+      "lastSeen": "2026-06-10T14:28:17.195164+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.6764
+      "score": 5.6623
+    },
+    {
+      "title": "A German court says Google’s AI Overviews are Google’s own words, and it’s liable when they’re false",
+      "url": "https://thenextweb.com/news/google-ai-overviews-german-court-liable",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "A German court has ruled that Google is directly liable for false claims its AI Overviews make, treating the AI-written summaries as Google’s own speech rather than ordinary search results. It is one of the first rulings to test who is responsible when a generative-AI system gets it wrong, and the answer it gives is [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2024/02/google-ai-skills-europe.avif",
+      "published": "2026-06-10T13:19:50+00:00",
+      "firstSeen": "2026-06-10T14:28:17.195164+00:00",
+      "lastSeen": "2026-06-10T14:28:17.195164+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 3.5157
     },
     {
       "title": "Decart’s new world model can simulate hours of photorealistic driving — with some caveats",
@@ -60,11 +108,11 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/Decart-Oasis-3.png?resize=1200%2C675",
       "published": "2026-06-10T13:07:56+00:00",
       "firstSeen": "2026-06-10T14:00:01.320221+00:00",
-      "lastSeen": "2026-06-10T14:00:01.320221+00:00",
+      "lastSeen": "2026-06-10T14:28:17.195164+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 11.9638
+      "score": 11.9498
     },
     {
       "title": "Snapchat walls under-16s off from public Spotlight, making their videos friends-only",
@@ -77,10 +125,10 @@
       "image": "https://media.thenextweb.com/2026/04/snap-layoffs-1000-jobs-spiegel-ai-irenic-profitability.avif",
       "published": "2026-06-10T13:06:49+00:00",
       "firstSeen": "2026-06-10T14:00:01.320221+00:00",
-      "lastSeen": "2026-06-10T14:00:01.320221+00:00",
+      "lastSeen": "2026-06-10T14:28:17.195164+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1232
+      "score": 2.1093
     },
     {
       "title": "Poetic emerges from stealth with $50M from OpenAI to automate insurance underwriting and compliance",
@@ -93,10 +141,10 @@
       "image": "https://media.thenextweb.com/2026/04/OpenAI-lawsuite.avif",
       "published": "2026-06-10T12:53:31+00:00",
       "firstSeen": "2026-06-10T14:00:01.320221+00:00",
-      "lastSeen": "2026-06-10T14:00:01.320221+00:00",
+      "lastSeen": "2026-06-10T14:28:17.195164+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1166
+      "score": 5.1028
     },
     {
       "title": "Aryon Security raises $29M to stop cloud breaches before they happen",
@@ -109,10 +157,10 @@
       "image": "https://media.thenextweb.com/2026/06/Aryon-Security-Raises-29-Million.avif",
       "published": "2026-06-10T12:36:43+00:00",
       "firstSeen": "2026-06-10T14:00:01.320221+00:00",
-      "lastSeen": "2026-06-10T14:00:01.320221+00:00",
+      "lastSeen": "2026-06-10T14:28:17.195164+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.9084
+      "score": 3.8946
     },
     {
       "title": "Capsa AI raises $18M to build the ‘AI operating system’ for private equity",
@@ -125,10 +173,10 @@
       "image": "https://media.thenextweb.com/2026/06/Capsa-AI-team.avif",
       "published": "2026-06-10T12:22:05+00:00",
       "firstSeen": "2026-06-10T14:00:01.320221+00:00",
-      "lastSeen": "2026-06-10T14:00:01.320221+00:00",
+      "lastSeen": "2026-06-10T14:28:17.195164+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8012
+      "score": 2.7876
     },
     {
       "title": "The ECB moved to rein in Revolut’s ‘self-guided missiles’, just as a share sale values it at $115bn",
@@ -141,10 +189,10 @@
       "image": "https://media.thenextweb.com/2026/06/Revolut-Canary-Wharf.avif",
       "published": "2026-06-10T12:10:58+00:00",
       "firstSeen": "2026-06-10T13:00:01.944652+00:00",
-      "lastSeen": "2026-06-10T14:00:01.320221+00:00",
+      "lastSeen": "2026-06-10T14:28:17.195164+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.8958
+      "score": 3.8822
     },
     {
       "title": "Icertis veterans raise $7.55 million to build the AI layer that recovers money enterprises don’t know they’re losing",
@@ -157,10 +205,10 @@
       "image": "https://media.thenextweb.com/2026/06/rivvun-ai-seed-enterprise-spend-recovery-icertis.avif",
       "published": "2026-06-10T11:55:13+00:00",
       "firstSeen": "2026-06-10T13:00:01.944652+00:00",
-      "lastSeen": "2026-06-10T14:00:01.320221+00:00",
+      "lastSeen": "2026-06-10T14:28:17.195164+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7882
+      "score": 2.7747
     },
     {
       "title": "Meta signs its first India data-centre deal, leasing a 168MW AI facility from Reliance",
@@ -173,10 +221,10 @@
       "image": "https://media.thenextweb.com/2026/04/meta-ceo-mark-zuckerberg.avif",
       "published": "2026-06-10T11:50:14+00:00",
       "firstSeen": "2026-06-10T13:00:01.944652+00:00",
-      "lastSeen": "2026-06-10T14:00:01.320221+00:00",
+      "lastSeen": "2026-06-10T14:28:17.195164+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0859
+      "score": 2.0724
     },
     {
       "title": "TensorWave raises $350M led by AMD to build an Nvidia-free AI cloud",
@@ -189,10 +237,10 @@
       "image": "https://media.thenextweb.com/2026/06/tensorwave-logo.avif",
       "published": "2026-06-10T11:41:40+00:00",
       "firstSeen": "2026-06-10T13:00:01.944652+00:00",
-      "lastSeen": "2026-06-10T14:00:01.320221+00:00",
+      "lastSeen": "2026-06-10T14:28:17.195164+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7818
+      "score": 2.7683
     },
     {
       "title": "SK Hynix is planning a US listing of up to $14bn to cash in on the AI memory boom",
@@ -208,7 +256,7 @@
       "lastSeen": "2026-06-10T14:00:01.320221+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.4729
+      "score": 4.4596
     },
     {
       "title": "Siri AI arrives with Google inside, and much of the world is locked out",
@@ -221,10 +269,10 @@
       "image": "",
       "published": "2026-06-10T11:00:00+00:00",
       "firstSeen": "2026-06-10T12:00:01.246957+00:00",
-      "lastSeen": "2026-06-10T14:00:01.320221+00:00",
+      "lastSeen": "2026-06-10T14:28:17.195164+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.66
+      "score": 4.6469
     },
     {
       "title": "A classic brain test exposed AI's biggest weakness",
@@ -237,10 +285,10 @@
       "image": "https://www.sciencedaily.com/images/1920/humanoid-artificial-intelligence-robot-confused.webp",
       "published": "2026-06-10T10:52:17+00:00",
       "firstSeen": "2026-06-10T12:00:01.246957+00:00",
-      "lastSeen": "2026-06-10T14:00:01.320221+00:00",
+      "lastSeen": "2026-06-10T14:28:17.195164+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.5284
+      "score": 3.5153
     },
     {
       "title": "Your face is the ticket: Google’s Gemini and biometric gates are the World Cup’s quieter tech story",
@@ -256,7 +304,7 @@
       "lastSeen": "2026-06-10T14:00:01.320221+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.1538
+      "score": 9.1407
     },
     {
       "title": "Logitech’s Mobi Fold is a foldable travel mouse with an AI model to stop accidental clicks",
@@ -272,7 +320,7 @@
       "lastSeen": "2026-06-10T13:00:01.944652+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7434
+      "score": 2.7305
     },
     {
       "title": "01Health raises £11.2M to turn its dental-AI platform into infrastructure for specialist care",
@@ -288,7 +336,7 @@
       "lastSeen": "2026-06-10T13:00:01.944652+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7361
+      "score": 2.7233
     },
     {
       "title": "Artificial Intelligence Sneaks Into the World Cup Thanks to Google Gemini",
@@ -301,10 +349,10 @@
       "image": "https://media.wired.com/photos/6a26f2821d5621d5724e9dd9/master/pass/Artificial-Intelligence-Sneaks-into-World-Cup-2279691552.jpg",
       "published": "2026-06-10T10:00:00+00:00",
       "firstSeen": "2026-06-10T10:19:57.026208+00:00",
-      "lastSeen": "2026-06-10T14:00:01.320221+00:00",
+      "lastSeen": "2026-06-10T14:28:17.195164+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.1743
+      "score": 8.1615
     },
     {
       "title": "McDonald’s tests Google-backed AI drive-thru ordering system",
@@ -317,10 +365,10 @@
       "image": "",
       "published": "2026-06-10T10:00:00+00:00",
       "firstSeen": "2026-06-10T10:19:57.026208+00:00",
-      "lastSeen": "2026-06-10T14:00:01.320221+00:00",
+      "lastSeen": "2026-06-10T14:28:17.195164+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2323
+      "score": 3.2195
     },
     {
       "title": "Uncovr raises $7M for AI that writes the operative report before the surgeon leaves the room",
@@ -336,7 +384,7 @@
       "lastSeen": "2026-06-10T13:00:01.944652+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0316
+      "score": 2.0188
     },
     {
       "title": "Nvidia partner Bizlink buys Blackstone’s Interplex data centre unit for $850 million",
@@ -352,7 +400,7 @@
       "lastSeen": "2026-06-10T13:00:01.944652+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.031
+      "score": 2.0182
     },
     {
       "title": "Amazon’s UK investment passes £1bn in Northamptonshire with 4,000 jobs, and a floor full of robots",
@@ -368,7 +416,7 @@
       "lastSeen": "2026-06-10T12:00:01.246957+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.028
+      "score": 2.0153
     },
     {
       "title": "Cambridge Aerospace is in talks to raise $300M at a $3.5bn valuation, almost nine times its worth a year ago",
@@ -384,7 +432,7 @@
       "lastSeen": "2026-06-10T12:00:01.246957+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0246
+      "score": 2.012
     },
     {
       "title": "How AI is powering the next wave of micro-SaaS entrepreneurs",
@@ -400,7 +448,7 @@
       "lastSeen": "2026-06-10T12:00:01.246957+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8246
+      "score": 4.8119
     },
     {
       "title": "Rotomate raises €2.1M pre-seed to put a reliability engineer inside every factory",
@@ -416,7 +464,7 @@
       "lastSeen": "2026-06-10T12:00:01.246957+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7142
+      "score": 2.7016
     },
     {
       "title": "Ethical proxy sourcing challenges: how to stay on the right side",
@@ -432,7 +480,7 @@
       "lastSeen": "2026-06-10T12:00:01.246957+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0116
+      "score": 1.9991
     },
     {
       "title": "Einride lists on Nasdaq at $1.35 billion, down from the $5 billion it once discussed with banks",
@@ -448,7 +496,7 @@
       "lastSeen": "2026-06-10T10:19:57.026208+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1053
+      "score": 3.0929
     },
     {
       "title": "The $2 trillion AI infrastructure problem no one is talking about, and the engineer solving it",
@@ -464,7 +512,7 @@
       "lastSeen": "2026-06-10T10:19:57.026208+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9879
+      "score": 2.9757
     },
     {
       "title": "75% of C-suite leaders say agentic AI lives up to the hype or is underestimated. 48% still plan to cut headcount.",
@@ -480,7 +528,7 @@
       "lastSeen": "2026-06-10T10:00:01.155256+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.6811
+      "score": 4.669
     },
     {
       "title": "Standard Bots raises $200 million to build robotic arms in the US and claims it will handle 10% of industrial deployments by year-end",
@@ -496,7 +544,7 @@
       "lastSeen": "2026-06-10T10:00:01.155256+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9717
+      "score": 1.9598
     },
     {
       "title": "Ambani-backed Addverb wants $100 million to build India’s answer to Unitree and Tesla Optimus",
@@ -512,7 +560,7 @@
       "lastSeen": "2026-06-10T10:00:01.155256+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9649
+      "score": 1.953
     },
     {
       "title": "Meta signs first AI data center deal in India with Reliance",
@@ -525,10 +573,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2024/05/meta-getty.jpg?w=1200",
       "published": "2026-06-10T07:05:26+00:00",
       "firstSeen": "2026-06-10T08:00:01.224257+00:00",
-      "lastSeen": "2026-06-10T14:00:01.320221+00:00",
+      "lastSeen": "2026-06-10T14:28:17.195164+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0979
+      "score": 2.0861
     },
     {
       "title": "How B2B brands are earning citations in ChatGPT, Claude, and Google’s AI Overviews",
@@ -544,7 +592,7 @@
       "lastSeen": "2026-06-10T10:00:01.155256+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 17.5534
+      "score": 17.5417
     },
     {
       "title": "Legal AI startup Legora opens in Madrid, Milan, and Paris as it targets 700 European employees within a year",
@@ -560,7 +608,7 @@
       "lastSeen": "2026-06-10T10:00:01.155256+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.6296
+      "score": 3.6182
     },
     {
       "title": "If Claude Fable stops helping you, you'll never know",
@@ -573,10 +621,10 @@
       "image": "",
       "published": "2026-06-10T00:37:25+00:00",
       "firstSeen": "2026-06-10T01:00:01.722384+00:00",
-      "lastSeen": "2026-06-10T14:00:01.320221+00:00",
+      "lastSeen": "2026-06-10T14:28:17.195164+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.2486
+      "score": 8.2387
     },
     {
       "title": "Google just fired a warning shot in the AI subscription price wars",
@@ -589,58 +637,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/01/ai-mode-google.jpg?resize=1200%2C800",
       "published": "2026-06-10T00:26:10+00:00",
       "firstSeen": "2026-06-10T01:00:01.722384+00:00",
-      "lastSeen": "2026-06-10T14:00:01.320221+00:00",
+      "lastSeen": "2026-06-10T14:28:17.195164+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9447
-    },
-    {
-      "title": "From data to decisions: how LSEG is scaling trusted AI",
-      "url": "https://openai.com/index/lseg",
-      "source": "OpenAI News",
-      "sourceUrl": "https://openai.com/news/rss.xml",
-      "sourceWeight": 1.0,
-      "category": "AI",
-      "summary": "See how LSEG uses OpenAI to scale trusted AI across its global business, accelerating insights, shrinking release cycles, and empowering 4,000 employees.",
-      "image": "",
-      "published": "2026-06-10T00:00:00+00:00",
-      "firstSeen": "2026-06-10T10:00:01.155256+00:00",
-      "lastSeen": "2026-06-10T14:00:01.320221+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.8456
-    },
-    {
-      "title": "Initial impressions of Claude Fable 5",
-      "url": "https://simonwillison.net/2026/Jun/9/claude-fable-5",
-      "source": "Simon Willison",
-      "sourceUrl": "https://simonwillison.net/atom/everything/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "I didn't have early access to today's Claude Fable 5 release, but I've spent the past ~5.5 hours putting it through its paces. My initial impressions are that this is something of a beast. It's slow, expensive and has been quite happily churning through everything I've thrown at it so far. As is frequently the case with current frontier models the challenge is finding tasks that it can't do.\nFirst, let's review the key characteristics.\nAnthropic claim that Claude Fable 5 offers the same performance as Claude Mythos 5, except with much more strict guardrails in place to prevent it being used fo",
-      "image": "https://static.simonwillison.net/static/2026/agentsview-fable-full-day.jpg",
-      "published": "2026-06-09T23:59:54+00:00",
-      "firstSeen": "2026-06-10T00:22:46.128423+00:00",
-      "lastSeen": "2026-06-10T14:00:01.320221+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 11.7355
-    },
-    {
-      "title": "I tried Siri AI, and so far it actually works",
-      "url": "https://www.theverge.com/tech/947432/siri-ai-apple-intelligence-ios-27-wwdc",
-      "source": "The Verge AI",
-      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "Parents want one thing, and one thing only, out of AI: to add a list of soccer games or \"spirit week\" theme days from an email or a poorly formatted flyer onto their calendar in one shot. And I have good news for parents with iPhones - the new Siri can finally do this. After [&#8230;]",
-      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/DSC03775_processed.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.723165084465%2C100%2C78.55366983107&amp%3Bw=1200",
-      "published": "2026-06-09T23:43:00+00:00",
-      "firstSeen": "2026-06-10T00:00:01.660943+00:00",
-      "lastSeen": "2026-06-10T14:00:01.320221+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.9997
+      "score": 1.9349
     },
     {
       "title": "The Life Scientific: Helen Hastie",
@@ -653,10 +653,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-08T20:00:00+00:00",
       "firstSeen": "2026-06-08T21:00:01.371488+00:00",
-      "lastSeen": "2026-06-10T14:00:01.320221+00:00",
+      "lastSeen": "2026-06-10T14:28:17.195164+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.5325
+      "score": 1.5281
     },
     {
       "title": "The Life Scientific: Seth Berkley",
@@ -669,7 +669,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-01T20:00:00+00:00",
       "firstSeen": "2026-06-01T21:00:01.828388+00:00",
-      "lastSeen": "2026-06-10T14:00:01.320221+00:00",
+      "lastSeen": "2026-06-10T14:28:17.195164+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 1.1932
