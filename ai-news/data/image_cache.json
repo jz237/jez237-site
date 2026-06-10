@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-10T16:00:01.165430+00:00",
+  "updatedAt": "2026-06-10T17:00:02.053374+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -9968,6 +9968,26 @@
     "https://techcrunch.com/2026/06/10/datadog-veterans-launch-ai-coding-startup-niteshift-on-a-bet-against-big-ai-lock-in": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/sajid_conor_photo_niteshift_launch.jpg?resize=1200,970",
       "checkedAt": "2026-06-10T16:00:01.165430+00:00"
+    },
+    "https://www.theverge.com/report/947575/microsoft-claude-fable-5-restricted-internally": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/01/STK095_MICROSOFT_CVirginia_B.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-06-10T17:00:02.053374+00:00"
+    },
+    "https://deepmind.google/blog/diffusiongemma-4x-faster-text-generation": {
+      "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Diffusion_Gemma_Social.width-1300.png",
+      "checkedAt": "2026-06-10T17:00:02.053374+00:00"
+    },
+    "https://www.theverge.com/tech/947836/google-search-privacy-settings-images-audio": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/01/STK093_GOOGLE_B.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-06-10T17:00:02.053374+00:00"
+    },
+    "https://techcrunch.com/2026/06/10/how-memory-tools-can-make-ai-models-worse": {
+      "image": "https://techcrunch.com/wp-content/uploads/2023/02/GettyImages-1240239605.jpg?w=1024",
+      "checkedAt": "2026-06-10T17:00:02.053374+00:00"
+    },
+    "https://www.together.ai/blog/iso-27001-2022-certification": {
+      "image": "https://cdn.prod.website-files.com/69654e88dce9154b5f12070c/6a28e1586ff8229cfe9e815a_OG-image_20260609_ISO27001.png",
+      "checkedAt": "2026-06-10T17:00:02.053374+00:00"
     }
   }
 }
