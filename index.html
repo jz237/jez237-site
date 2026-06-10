@@ -140,18 +140,108 @@
           </a>
           <a class="hub-card" href="games/">
             <div class="hub-card-media game-card-animation" aria-hidden="true">
-              <i class="game-stars"></i>
-              <i class="game-ship"></i>
-              <i class="game-laser laser-one"></i>
-              <i class="game-laser laser-two"></i>
-              <i class="game-laser laser-three"></i>
-              <i class="game-laser laser-four"></i>
-              <i class="game-asteroid rock-one"></i>
-              <i class="game-asteroid rock-two"></i>
-              <i class="game-asteroid rock-three"></i>
-              <i class="game-asteroid rock-four"></i>
-              <i class="game-pickup"></i>
-              <i class="game-score"></i>
+              <svg class="gma-screen" viewBox="0 0 220 110" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" focusable="false">
+                <style>
+                  .gma-screen { width: 100%; height: 100%; display: block; position: absolute; inset: 0; z-index: 2; }
+                  .gma-px { shape-rendering: crispEdges; }
+                  .gma-hud { font: 700 8px 'Courier New', monospace; letter-spacing: 1px; fill: #58e5ff; filter: drop-shadow(0 0 3px rgba(88,229,255,.75)); }
+                  .gma-tw { animation: gmaTw 2.8s ease-in-out infinite; }
+                  @keyframes gmaTw { 0%, 100% { opacity: .12; } 50% { opacity: .85; } }
+                  .gma-fA { animation: gmaFA .76s steps(1) infinite; }
+                  .gma-fB { animation: gmaFB .76s steps(1) infinite; }
+                  @keyframes gmaFA { 0%, 49.9% { opacity: 1; } 50%, 100% { opacity: 0; } }
+                  @keyframes gmaFB { 0%, 49.9% { opacity: 0; } 50%, 100% { opacity: 1; } }
+                  .gma-march { animation: gmaMarch 2.7s steps(5) infinite alternate; }
+                  @keyframes gmaMarch { from { transform: translateX(0); } to { transform: translateX(-8px); } }
+                  .gma-ufo { animation: gmaUfo 9s linear infinite; filter: drop-shadow(0 0 4px rgba(255,91,208,.85)); }
+                  @keyframes gmaUfo { 0%, 16% { transform: translate(-28px,18px); opacity: 0; } 18% { opacity: 1; } 30% { transform: translate(45px,15px); } 42% { transform: translate(110px,19px); } 54% { transform: translate(175px,15px); } 62% { transform: translate(248px,18px); opacity: 1; } 62.1%, 100% { transform: translate(248px,18px); opacity: 0; } }
+                  .gma-ul1 { animation: gmaBlink .32s steps(1) infinite; }
+                  .gma-ul2 { animation: gmaBlink .32s steps(1) infinite; animation-delay: .16s; }
+                  @keyframes gmaBlink { 0%, 49.9% { opacity: 1; } 50%, 100% { opacity: .12; } }
+                  .gma-1up { animation: gmaBlink 1.1s steps(1) infinite; }
+                  .gma-player { animation: gmaPlayer 7.2s ease-in-out infinite; filter: drop-shadow(0 0 4px rgba(109,255,138,.65)); }
+                  @keyframes gmaPlayer { 0%, 10% { transform: translate(130px,88px); } 42%, 60% { transform: translate(89px,88px); } 90%, 100% { transform: translate(130px,88px); } }
+                  .gma-bullet { animation: gmaBullet 7.2s linear infinite; filter: drop-shadow(0 0 3px #fff); }
+                  @keyframes gmaBullet { 0%, 4% { transform: translate(130px,86px); opacity: 0; } 4.5% { transform: translate(130px,84px); opacity: 1; } 20% { transform: translate(130px,64px); opacity: 1; } 20.1%, 54% { transform: translate(89px,86px); opacity: 0; } 54.5% { transform: translate(89px,84px); opacity: 1; } 70% { transform: translate(89px,64px); opacity: 1; } 70.1%, 100% { transform: translate(89px,64px); opacity: 0; } }
+                  .gma-mf1 { animation: gmaMf1 7.2s linear infinite; }
+                  @keyframes gmaMf1 { 0%, 2% { opacity: 0; transform: translate(130px,85px) scale(.3); } 4% { opacity: 1; transform: translate(130px,85px) scale(1.1); } 7%, 100% { opacity: 0; transform: translate(130px,85px) scale(.4); } }
+                  .gma-mf2 { animation: gmaMf2 7.2s linear infinite; }
+                  @keyframes gmaMf2 { 0%, 52% { opacity: 0; transform: translate(89px,85px) scale(.3); } 54% { opacity: 1; transform: translate(89px,85px) scale(1.1); } 57%, 100% { opacity: 0; transform: translate(89px,85px) scale(.4); } }
+                  .gma-v1 { animation: gmaV1 7.2s steps(1) infinite; }
+                  @keyframes gmaV1 { 0%, 19.9% { opacity: 1; } 20%, 95% { opacity: 0; } 95.1%, 100% { opacity: 1; } }
+                  .gma-v2 { animation: gmaV2 7.2s steps(1) infinite; }
+                  @keyframes gmaV2 { 0%, 69.9% { opacity: 1; } 70%, 95% { opacity: 0; } 95.1%, 100% { opacity: 1; } }
+                  .gma-boom1 { animation: gmaBoom1 7.2s linear infinite; opacity: 0; }
+                  @keyframes gmaBoom1 { 0%, 19.9% { opacity: 0; transform: scale(.2); } 21.5% { opacity: 1; transform: scale(.8); } 26% { opacity: .95; transform: scale(1.3); } 30%, 100% { opacity: 0; transform: scale(1.55); } }
+                  .gma-boom2 { animation: gmaBoom2 7.2s linear infinite; opacity: 0; }
+                  @keyframes gmaBoom2 { 0%, 69.9% { opacity: 0; transform: scale(.2); } 71.5% { opacity: 1; transform: scale(.8); } 76% { opacity: .95; transform: scale(1.3); } 80%, 100% { opacity: 0; transform: scale(1.55); } }
+                  .gma-pop1 { animation: gmaPop1 7.2s linear infinite; opacity: 0; }
+                  @keyframes gmaPop1 { 0%, 20% { opacity: 0; transform: translateY(3px); } 23% { opacity: 1; transform: translateY(0); } 32%, 100% { opacity: 0; transform: translateY(-9px); } }
+                  .gma-pop2 { animation: gmaPop2 7.2s linear infinite; opacity: 0; }
+                  @keyframes gmaPop2 { 0%, 70% { opacity: 0; transform: translateY(3px); } 73% { opacity: 1; transform: translateY(0); } 82%, 100% { opacity: 0; transform: translateY(-9px); } }
+                  .gma-bomb1 { animation: gmaBomb1 2.4s linear infinite; }
+                  @keyframes gmaBomb1 { 0% { transform: translate(78px,64px); opacity: 0; } 8% { opacity: 1; } 88% { transform: translate(78px,94px); opacity: 1; } 100% { transform: translate(78px,99px); opacity: 0; } }
+                  .gma-bomb2 { animation: gmaBomb2 3.1s linear infinite; }
+                  @keyframes gmaBomb2 { 0% { transform: translate(142px,64px); opacity: 0; } 8% { opacity: 1; } 88% { transform: translate(142px,94px); opacity: 1; } 100% { transform: translate(142px,99px); opacity: 0; } }
+                  .gma-spl1 { animation: gmaSpl1 2.4s linear infinite; opacity: 0; }
+                  @keyframes gmaSpl1 { 0%, 86% { opacity: 0; transform: translate(78px,97px) scale(.3); } 92% { opacity: 1; transform: translate(78px,97px) scale(1); } 100% { opacity: 0; transform: translate(78px,97px) scale(1.35); } }
+                  .gma-spl2 { animation: gmaSpl2 3.1s linear infinite; opacity: 0; }
+                  @keyframes gmaSpl2 { 0%, 86% { opacity: 0; transform: translate(142px,97px) scale(.3); } 92% { opacity: 1; transform: translate(142px,97px) scale(1); } 100% { opacity: 0; transform: translate(142px,97px) scale(1.35); } }
+                </style>
+                <defs>
+                  <g id="gma-iA"><path class="gma-px" d="M1 0h1v1h-1z M6 0h1v1h-1z M2 1h1v1h-1z M5 1h1v1h-1z M1 2h6v1h-6z M0 3h2v1h-2z M3 3h2v1h-2z M6 3h2v1h-2z M0 4h8v1h-8z M1 5h1v1h-1z M6 5h1v1h-1z"/></g>
+                  <g id="gma-iB"><path class="gma-px" d="M1 0h1v1h-1z M6 0h1v1h-1z M2 1h1v1h-1z M5 1h1v1h-1z M1 2h6v1h-6z M0 3h2v1h-2z M3 3h2v1h-2z M6 3h2v1h-2z M0 4h8v1h-8z M0 5h1v1h-1z M7 5h1v1h-1z"/></g>
+                  <g id="gma-bunker"><path class="gma-px" fill="#6dff8a" opacity=".88" d="M0 14 V5 Q0 0 5 0 H21 Q26 0 26 5 V14 H19 V9 H7 V14 Z"/><rect x="4" y="2" width="2" height="2" fill="#061328"/><rect x="20" y="4" width="2" height="2" fill="#061328"/><rect x="11" y="1" width="2" height="1" fill="#061328"/></g>
+                  <g id="gma-boomfx"><path fill="#fff36a" d="M0 -4 L1.2 -1.2 L4 0 L1.2 1.2 L0 4 L-1.2 1.2 L-4 0 L-1.2 -1.2Z"/><path stroke="#ff8a36" stroke-width="1" stroke-linecap="round" d="M0 -6.5 V-4.5 M0 4.5 V6.5 M-6.5 0 H-4.5 M4.5 0 H6.5 M-4.6 -4.6 L-3.4 -3.4 M3.4 3.4 L4.6 4.6 M-4.6 4.6 L-3.4 3.4 M3.4 -3.4 L4.6 -4.6"/></g>
+                  <pattern id="gma-scan" width="2" height="3" patternUnits="userSpaceOnUse"><rect width="2" height="1" fill="#000"/></pattern>
+                </defs>
+                <circle class="gma-tw" cx="18" cy="34" r="1" fill="#fff" style="animation-delay:-.4s"/>
+                <circle class="gma-tw" cx="44" cy="16" r="1.2" fill="#9be8ff" style="animation-delay:-1.3s"/>
+                <circle class="gma-tw" cx="110" cy="14" r="1" fill="#fff" style="animation-delay:-2.1s"/>
+                <circle class="gma-tw" cx="178" cy="30" r="1.2" fill="#ffd95c" style="animation-delay:-.9s"/>
+                <circle class="gma-tw" cx="204" cy="56" r="1" fill="#9be8ff" style="animation-delay:-1.7s"/>
+                <circle class="gma-tw" cx="26" cy="64" r="1" fill="#fff" style="animation-delay:-2.6s"/>
+                <text class="gma-hud" x="32" y="11">SCORE 042700</text>
+                <text class="gma-hud gma-1up" x="188" y="11" text-anchor="end" fill="#ff5bd0">1UP</text>
+                <g class="gma-ufo">
+                  <ellipse cx="0" cy="0" rx="11" ry="3.6" fill="#ff5bd0"/>
+                  <path d="M-5 -2 A5 4 0 0 1 5 -2 Z" fill="#9be8ff"/>
+                  <circle class="gma-ul1" cx="-6" cy="1.4" r="1.1" fill="#fff36a"/>
+                  <circle class="gma-ul2" cx="0" cy="2.2" r="1.1" fill="#fff36a"/>
+                  <circle class="gma-ul1" cx="6" cy="1.4" r="1.1" fill="#fff36a"/>
+                </g>
+                <g transform="translate(63,24) scale(1.55)">
+                  <g class="gma-march">
+                    <g class="gma-fA">
+                      <use href="#gma-iA" x="0" y="0" fill="#ff5bd0"/><use href="#gma-iA" x="13" y="0" fill="#ff5bd0"/><use href="#gma-iA" x="26" y="0" fill="#ff5bd0"/><use href="#gma-iA" x="39" y="0" fill="#ff5bd0"/><use href="#gma-iA" x="52" y="0" fill="#ff5bd0"/>
+                      <use href="#gma-iA" x="0" y="10" fill="#58e5ff"/><use href="#gma-iA" x="13" y="10" fill="#58e5ff"/><use href="#gma-iA" x="26" y="10" fill="#58e5ff"/><use href="#gma-iA" x="39" y="10" fill="#58e5ff"/><use href="#gma-iA" x="52" y="10" fill="#58e5ff"/>
+                      <use href="#gma-iA" x="0" y="20" fill="#ffd95c"/><g class="gma-v2"><use href="#gma-iA" x="13" y="20" fill="#ffd95c"/></g><use href="#gma-iA" x="26" y="20" fill="#ffd95c"/><g class="gma-v1"><use href="#gma-iA" x="39" y="20" fill="#ffd95c"/></g><use href="#gma-iA" x="52" y="20" fill="#ffd95c"/>
+                    </g>
+                    <g class="gma-fB">
+                      <use href="#gma-iB" x="0" y="0" fill="#ff5bd0"/><use href="#gma-iB" x="13" y="0" fill="#ff5bd0"/><use href="#gma-iB" x="26" y="0" fill="#ff5bd0"/><use href="#gma-iB" x="39" y="0" fill="#ff5bd0"/><use href="#gma-iB" x="52" y="0" fill="#ff5bd0"/>
+                      <use href="#gma-iB" x="0" y="10" fill="#58e5ff"/><use href="#gma-iB" x="13" y="10" fill="#58e5ff"/><use href="#gma-iB" x="26" y="10" fill="#58e5ff"/><use href="#gma-iB" x="39" y="10" fill="#58e5ff"/><use href="#gma-iB" x="52" y="10" fill="#58e5ff"/>
+                      <use href="#gma-iB" x="0" y="20" fill="#ffd95c"/><g class="gma-v2"><use href="#gma-iB" x="13" y="20" fill="#ffd95c"/></g><use href="#gma-iB" x="26" y="20" fill="#ffd95c"/><g class="gma-v1"><use href="#gma-iB" x="39" y="20" fill="#ffd95c"/></g><use href="#gma-iB" x="52" y="20" fill="#ffd95c"/>
+                    </g>
+                    <g transform="translate(43,23)"><use class="gma-boom1" href="#gma-boomfx"/></g>
+                    <g transform="translate(17,23)"><use class="gma-boom2" href="#gma-boomfx"/></g>
+                  </g>
+                </g>
+                <path class="gma-bomb1" d="M0 0 q2 1.5 0 3 q-2 1.5 0 3 q2 1.5 0 3" stroke="#ffd95c" stroke-width="1.3" fill="none"/>
+                <path class="gma-bomb2" d="M0 0 q2 1.5 0 3 q-2 1.5 0 3 q2 1.5 0 3" stroke="#ff8a36" stroke-width="1.3" fill="none"/>
+                <g class="gma-spl1"><path stroke="#ffd95c" stroke-width="1" stroke-linecap="round" d="M0 0 L-3 -3 M0 0 L3 -3 M0 0 L-4 0 M0 0 L4 0"/></g>
+                <g class="gma-spl2"><path stroke="#ff8a36" stroke-width="1" stroke-linecap="round" d="M0 0 L-3 -3 M0 0 L3 -3 M0 0 L-4 0 M0 0 L4 0"/></g>
+                <use href="#gma-bunker" x="47" y="72"/>
+                <use href="#gma-bunker" x="97" y="72"/>
+                <use href="#gma-bunker" x="147" y="72"/>
+                <g class="gma-player"><path class="gma-px" fill="#6dff8a" d="M-11 8h22v4h-22z M-7 5h14v3h-14z M-1.5 0h3v5h-3z"/></g>
+                <g class="gma-mf1"><path stroke="#fff" stroke-width="1" stroke-linecap="round" d="M0 0 L0 -3 M0 0 L-2.5 -1.5 M0 0 L2.5 -1.5"/></g>
+                <g class="gma-mf2"><path stroke="#fff" stroke-width="1" stroke-linecap="round" d="M0 0 L0 -3 M0 0 L-2.5 -1.5 M0 0 L2.5 -1.5"/></g>
+                <rect class="gma-bullet" x="-0.8" y="-5" width="1.6" height="5" fill="#fff"/>
+                <text class="gma-pop1 gma-hud" x="130" y="56" text-anchor="middle" fill="#fff36a">+100</text>
+                <text class="gma-pop2 gma-hud" x="89" y="56" text-anchor="middle" fill="#fff36a">+100</text>
+                <rect x="0" y="101.5" width="220" height="1.2" fill="#6dff8a" opacity=".75"/>
+                <rect width="220" height="110" fill="url(#gma-scan)" opacity=".16"/>
+              </svg>
             </div>
             <h2>GameMaster Arcade</h2>
             <p>Playable prototypes &amp; experiments.</p>
