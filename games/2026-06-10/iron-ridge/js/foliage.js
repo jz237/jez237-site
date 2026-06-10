@@ -1,6 +1,6 @@
-// Instanced forests, rocks and grass. Trees live in a spatial hash so
-// shells/tanks can interact with them; hit trees swap to real falling
-// rigid bodies (capped pool), then fade out.
+// Instanced forests, rocks, bushes, deadfall and grass/flowers. Trees live
+// in a spatial hash so shells/tanks can interact with them; hit trees swap
+// to real falling rigid bodies (capped pool), then fade out.
 
 import * as THREE from 'three';
 import * as CANNON from 'cannon-es';
@@ -30,38 +30,95 @@ function mergeGeoms(geoms) {
   return out;
 }
 
-function paint(geo, color) {
+function paint(geo, color, jitter = 0) {
   const c = new THREE.Color(color);
   const n = geo.attributes.position.count;
   const arr = new Float32Array(n * 3);
-  for (let i = 0; i < n; i++) { arr[i * 3] = c.r; arr[i * 3 + 1] = c.g; arr[i * 3 + 2] = c.b; }
+  const rng = makeRng((color ^ 0x5bd1e995) >>> 0);
+  for (let i = 0; i < n; i++) {
+    const j = 1 + (rng() - 0.5) * jitter;
+    arr[i * 3] = c.r * j; arr[i * 3 + 1] = c.g * j; arr[i * 3 + 2] = c.b * j;
+  }
   geo.setAttribute('color', new THREE.BufferAttribute(arr, 3));
   return geo;
 }
 
 // --- tree geometry variants (origin at ground) ---------------------------
 function coniferGeometry() {
-  const trunk = paint(new THREE.CylinderGeometry(0.16, 0.26, 2.2, 5), 0x6e4f30);
+  const trunk = paint(new THREE.CylinderGeometry(0.16, 0.28, 2.2, 6), 0x6e4f30, 0.25);
   trunk.translate(0, 1.1, 0);
-  const c1 = paint(new THREE.ConeGeometry(1.9, 3.4, 7), 0x2f6b2e);
-  c1.translate(0, 3.2, 0);
-  const c2 = paint(new THREE.ConeGeometry(1.45, 2.7, 7), 0x357730);
-  c2.translate(0, 5.0, 0);
-  const c3 = paint(new THREE.ConeGeometry(0.95, 2.0, 6), 0x3d8336);
-  c3.translate(0, 6.6, 0);
-  return mergeGeoms([trunk, c1, c2, c3]); // ~7.6m tall
+  const parts = [trunk];
+  let y = 3.0, r = 2.0, h = 3.2;
+  for (let i = 0; i < 4; i++) {
+    const cone = paint(new THREE.ConeGeometry(r, h, 8), [0x2f6b2e, 0x357730, 0x3d8336, 0x478c3c][i], 0.3);
+    cone.translate(0, y, 0);
+    parts.push(cone);
+    y += h * 0.52; r *= 0.72; h *= 0.8;
+  }
+  return mergeGeoms(parts); // ~8m tall
 }
 
-function broadleafGeometry() {
-  const trunk = paint(new THREE.CylinderGeometry(0.2, 0.32, 2.8, 5), 0x7a5a38);
-  trunk.translate(0, 1.4, 0);
-  const blob = paint(new THREE.IcosahedronGeometry(2.1, 1), 0x4d8a35);
-  blob.scale(1, 0.82, 1);
-  blob.translate(0, 4.4, 0);
-  const blob2 = paint(new THREE.IcosahedronGeometry(1.3, 1), 0x569441);
-  blob2.translate(0.9, 5.3, 0.4);
-  return mergeGeoms([trunk, blob, blob2]); // ~6.5m tall
+function oakGeometry() {
+  const trunk = paint(new THREE.CylinderGeometry(0.22, 0.36, 2.9, 6), 0x7a5a38, 0.3);
+  trunk.translate(0, 1.45, 0);
+  const limb = paint(new THREE.CylinderGeometry(0.1, 0.16, 1.6, 5), 0x6e4f30, 0.2);
+  limb.rotateZ(0.7);
+  limb.translate(0.8, 3.1, 0.2);
+  const parts = [trunk, limb];
+  const rng = makeRng(606);
+  for (let i = 0; i < 5; i++) {
+    const r = 1.15 + rng() * 0.9;
+    const blob = paint(new THREE.IcosahedronGeometry(r, 1), i % 2 ? 0x4d8a35 : 0x569441, 0.35);
+    blob.scale(1, 0.8, 1);
+    blob.translate((rng() - 0.5) * 2.4, 3.9 + rng() * 1.6, (rng() - 0.5) * 2.4);
+    parts.push(blob);
+  }
+  return mergeGeoms(parts); // ~6.8m
 }
+
+function birchGeometry() {
+  // white banded trunk, airy light canopy
+  const trunk = new THREE.CylinderGeometry(0.12, 0.18, 4.2, 6, 6);
+  const tp = trunk.attributes.position;
+  const tc = new Float32Array(tp.count * 3);
+  for (let i = 0; i < tp.count; i++) {
+    const band = Math.sin(tp.getY(i) * 5.1) > 0.72 ? 0.22 : 0.88;
+    tc[i * 3] = band; tc[i * 3 + 1] = band; tc[i * 3 + 2] = band * 0.94;
+  }
+  trunk.setAttribute('color', new THREE.BufferAttribute(tc, 3));
+  trunk.translate(0, 2.1, 0);
+  const parts = [trunk];
+  const rng = makeRng(909);
+  for (let i = 0; i < 4; i++) {
+    const blob = paint(new THREE.IcosahedronGeometry(0.9 + rng() * 0.6, 1), i % 2 ? 0x7fb04a : 0x93bf58, 0.3);
+    blob.scale(1, 0.9, 1);
+    blob.translate((rng() - 0.5) * 1.7, 4.1 + rng() * 1.5, (rng() - 0.5) * 1.7);
+    parts.push(blob);
+  }
+  return mergeGeoms(parts); // ~6m
+}
+
+function deadTreeGeometry() {
+  const trunk = paint(new THREE.CylinderGeometry(0.1, 0.24, 4.6, 5), 0x6b5a48, 0.35);
+  trunk.translate(0, 2.3, 0);
+  const parts = [trunk];
+  const rng = makeRng(303);
+  for (let i = 0; i < 3; i++) {
+    const br = paint(new THREE.CylinderGeometry(0.04, 0.08, 1.6 + rng(), 4), 0x5d4e3e, 0.3);
+    br.rotateZ(0.9 + rng() * 0.6);
+    br.rotateY(rng() * Math.PI * 2);
+    br.translate(0, 2.6 + rng() * 1.6, 0);
+    parts.push(br);
+  }
+  return mergeGeoms(parts); // ~4.8m
+}
+
+const TREE_VARIANTS = [
+  { build: coniferGeometry, height: 8.0, radius: 0.34, share: 0.42 },
+  { build: oakGeometry, height: 6.8, radius: 0.4, share: 0.28 },
+  { build: birchGeometry, height: 6.0, radius: 0.24, share: 0.22 },
+  { build: deadTreeGeometry, height: 4.8, radius: 0.26, share: 0.08 },
+];
 
 function rockGeometry(seed) {
   const rng = makeRng(seed);
@@ -72,7 +129,35 @@ function rockGeometry(seed) {
     p.setXYZ(i, p.getX(i) * m, p.getY(i) * m * 0.8, p.getZ(i) * m);
   }
   geo.computeVertexNormals();
-  return paint(geo, 0x8d8a82);
+  return paint(geo, 0x8d8a82, 0.2);
+}
+
+function bushGeometry() {
+  const rng = makeRng(515);
+  const parts = [];
+  for (let i = 0; i < 3; i++) {
+    const blob = paint(new THREE.IcosahedronGeometry(0.5 + rng() * 0.35, 1), i % 2 ? 0x45712f : 0x55833a, 0.35);
+    blob.scale(1, 0.62, 1);
+    blob.translate((rng() - 0.5) * 0.8, 0.32 + rng() * 0.15, (rng() - 0.5) * 0.8);
+    parts.push(blob);
+  }
+  return mergeGeoms(parts);
+}
+
+function logGeometry() {
+  const log = paint(new THREE.CylinderGeometry(0.22, 0.26, 3.2, 7), 0x6b5138, 0.3);
+  log.rotateZ(Math.PI / 2);
+  log.translate(0, 0.24, 0);
+  const stub = paint(new THREE.CylinderGeometry(0.05, 0.07, 0.5, 5), 0x5d4630, 0.2);
+  stub.rotateX(-0.5);
+  stub.translate(0.6, 0.45, 0.1);
+  return mergeGeoms([log, stub]);
+}
+
+function stumpGeometry() {
+  const s = paint(new THREE.CylinderGeometry(0.3, 0.38, 0.55, 7), 0x77593a, 0.25);
+  s.translate(0, 0.27, 0);
+  return s;
 }
 
 function grassGeometry() {
@@ -81,7 +166,6 @@ function grassGeometry() {
   const rng = makeRng(777);
   for (let i = 0; i < 3; i++) {
     const g = new THREE.PlaneGeometry(0.07, 0.34, 1, 1);
-    // taper: pinch the top vertices inwards
     const p = g.attributes.position;
     for (let v = 0; v < p.count; v++) {
       if (p.getY(v) > 0) p.setX(v, p.getX(v) * 0.15);
@@ -91,7 +175,6 @@ function grassGeometry() {
     g.rotateX(lean * 0.5);
     g.rotateY(rng() * Math.PI);
     g.translate((rng() - 0.5) * 0.22, 0, (rng() - 0.5) * 0.22);
-    // low-contrast gradient close to the terrain greens
     const n = g.attributes.position.count;
     const col = new Float32Array(n * 3);
     for (let v = 0; v < n; v++) {
@@ -106,6 +189,15 @@ function grassGeometry() {
   return mergeGeoms(blades);
 }
 
+function flowerGeometry() {
+  const stem = paint(new THREE.PlaneGeometry(0.03, 0.26), 0x4a7a30);
+  stem.translate(0, 0.13, 0);
+  const head = paint(new THREE.PlaneGeometry(0.14, 0.14), 0xffffff);
+  head.rotateX(-0.9);
+  head.translate(0, 0.3, 0);
+  return mergeGeoms([stem, head]);
+}
+
 const CELL = 10;
 const keyOf = (x, z) => `${Math.floor(x / CELL)}|${Math.floor(z / CELL)}`;
 
@@ -113,7 +205,7 @@ export class Foliage {
   constructor(scene, world) {
     this.scene = scene;
     this.world = world;
-    this.trees = [];          // records
+    this.trees = [];
     this.hash = new Map();
     this.falling = [];
     this.fallMat = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.9 });
@@ -121,28 +213,28 @@ export class Foliage {
     const rng = makeRng(20260610);
     const dummy = new THREE.Object3D();
     const col = new THREE.Color();
+    const nrm = new THREE.Vector3();
+    const treeMat = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.95 });
 
     // ---- trees ----
-    this.treeGeos = [coniferGeometry(), broadleafGeometry()];
+    this.treeGeos = TREE_VARIANTS.map(v => v.build());
     this.treeMeshes = [];
-    const counts = [Math.floor(SCATTER.trees * 0.62), Math.ceil(SCATTER.trees * 0.38)];
-    const treeMat = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.95 });
-    const nrm = new THREE.Vector3();
-
-    for (let v = 0; v < 2; v++) {
-      const mesh = new THREE.InstancedMesh(this.treeGeos[v], treeMat, counts[v]);
+    for (let v = 0; v < TREE_VARIANTS.length; v++) {
+      const spec = TREE_VARIANTS[v];
+      const count = Math.floor(SCATTER.trees * spec.share);
+      const mesh = new THREE.InstancedMesh(this.treeGeos[v], treeMat, count);
       mesh.castShadow = true;
-      mesh.receiveShadow = false;
       let placed = 0, guard = 0;
-      while (placed < counts[v] && guard++ < counts[v] * 60) {
+      while (placed < count && guard++ < count * 60) {
         const x = (rng() * 2 - 1) * (WORLD_HALF - 12);
         const z = (rng() * 2 - 1) * (WORLD_HALF - 12);
-        const d2 = x * x + z * z;
-        if (d2 < 30 * 30) continue;                     // spawn clearing
+        if (x * x + z * z < 30 * 30) continue;
         const dens = forestDensity(x, z);
-        if (rng() > dens * dens * 1.35) continue;       // forest clumping
+        // dead trees prefer sparse areas; the rest clump in forests
+        const keep = v === 3 ? (dens < 0.45 && rng() < 0.4) : rng() < dens * dens * 1.35;
+        if (!keep) continue;
         getNormal(x, z, nrm);
-        if (nrm.y < 0.78) continue;                     // too steep
+        if (nrm.y < 0.78) continue;
         const h = getHeight(x, z);
         const s = 0.75 + rng() * 0.85;
         dummy.position.set(x, h - 0.15, z);
@@ -150,13 +242,13 @@ export class Foliage {
         dummy.scale.setScalar(s);
         dummy.updateMatrix();
         mesh.setMatrixAt(placed, dummy.matrix);
-        col.setHSL(0.28 + rng() * 0.06, 0.42 + rng() * 0.2, 0.42 + rng() * 0.14);
+        col.setHSL(0.27 + rng() * 0.07, 0.4 + rng() * 0.22, 0.45 + rng() * 0.14);
         mesh.setColorAt(placed, col);
         const rec = {
           variant: v, instanceId: placed, mesh,
           x, z, y: h, scale: s,
-          height: (v === 0 ? 7.6 : 6.5) * s,
-          radius: 0.3 * s + 0.25,
+          height: spec.height * s,
+          radius: spec.radius * s + 0.25,
           alive: true, culled: false,
         };
         this.trees.push(rec);
@@ -192,7 +284,6 @@ export class Foliage {
         mesh.setMatrixAt(i, dummy.matrix);
         const g = 0.5 + rng() * 0.22;
         mesh.setColorAt(i, col.setRGB(g, g * 0.99, g * 0.95));
-        // only large rocks get physics
         if (s > 1.15) {
           const body = new CANNON.Body({
             mass: 0,
@@ -211,7 +302,64 @@ export class Foliage {
       this.rockMeshes.push(mesh);
     }
 
-    // ---- grass (re-scattered around the camera) ----
+    // ---- bushes (decor, denser at forest edges) ----
+    const bushMat = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.95 });
+    this.bushes = new THREE.InstancedMesh(bushGeometry(), bushMat, SCATTER.bushes);
+    this.bushes.castShadow = true;
+    {
+      let placed = 0, guard = 0;
+      while (placed < SCATTER.bushes && guard++ < SCATTER.bushes * 40) {
+        const x = (rng() * 2 - 1) * (WORLD_HALF - 12);
+        const z = (rng() * 2 - 1) * (WORLD_HALF - 12);
+        if (x * x + z * z < 26 * 26) continue;
+        const dens = forestDensity(x, z);
+        const edge = dens * (1 - dens) * 4; // peaks at the forest fringe
+        if (rng() > Math.max(0.12, edge)) continue;
+        getNormal(x, z, nrm);
+        if (nrm.y < 0.8) continue;
+        const s = 0.7 + rng() * 1.0;
+        dummy.position.set(x, getHeight(x, z), z);
+        dummy.rotation.set(0, rng() * Math.PI * 2, 0);
+        dummy.scale.setScalar(s);
+        dummy.updateMatrix();
+        this.bushes.setMatrixAt(placed, dummy.matrix);
+        col.setHSL(0.26 + rng() * 0.06, 0.42 + rng() * 0.18, 0.4 + rng() * 0.12);
+        this.bushes.setColorAt(placed, col);
+        placed++;
+      }
+      this.bushes.count = placed;
+      this.bushes.userData.fullCount = placed;
+      this.bushes.instanceMatrix.needsUpdate = true;
+      if (this.bushes.instanceColor) this.bushes.instanceColor.needsUpdate = true;
+      scene.add(this.bushes);
+    }
+
+    // ---- deadfall: logs + stumps ----
+    const deadMat = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.95 });
+    for (const [geoFn, count, key] of [[logGeometry, SCATTER.logs, 'logs'], [stumpGeometry, SCATTER.stumps, 'stumps']]) {
+      const mesh = new THREE.InstancedMesh(geoFn(), deadMat, count);
+      mesh.castShadow = true;
+      let placed = 0, guard = 0;
+      while (placed < count && guard++ < count * 50) {
+        const x = (rng() * 2 - 1) * (WORLD_HALF - 14);
+        const z = (rng() * 2 - 1) * (WORLD_HALF - 14);
+        if (x * x + z * z < 28 * 28) continue;
+        if (rng() > forestDensity(x, z) + 0.15) continue;
+        const s = 0.7 + rng() * 0.8;
+        dummy.position.set(x, getHeight(x, z), z);
+        dummy.rotation.set(0, rng() * Math.PI * 2, 0);
+        dummy.scale.setScalar(s);
+        dummy.updateMatrix();
+        mesh.setMatrixAt(placed, dummy.matrix);
+        placed++;
+      }
+      mesh.count = placed;
+      mesh.instanceMatrix.needsUpdate = true;
+      scene.add(mesh);
+      this[key] = mesh;
+    }
+
+    // ---- grass + flowers (re-scattered around the camera) ----
     const gMat = new THREE.MeshStandardMaterial({
       vertexColors: true, side: THREE.DoubleSide, roughness: 1,
     });
@@ -219,6 +367,13 @@ export class Foliage {
     this.grass.castShadow = false;
     this.grass.receiveShadow = false;
     this.scene.add(this.grass);
+
+    this.flowers = new THREE.InstancedMesh(flowerGeometry(), new THREE.MeshStandardMaterial({
+      vertexColors: true, side: THREE.DoubleSide, roughness: 1,
+    }), SCATTER.flowers);
+    this.flowers.castShadow = false;
+    this.scene.add(this.flowers);
+
     this.grassAnchor = new THREE.Vector2(1e9, 1e9);
     this.grassRng = makeRng(5150);
     this.grassFrac = 1;
@@ -244,6 +399,30 @@ export class Foliage {
     }
     this.grass.count = n;
     this.grass.instanceMatrix.needsUpdate = true;
+
+    // flowers prefer open meadows
+    const fn = Math.floor(SCATTER.flowers * this.grassFrac);
+    const fcol = new THREE.Color();
+    const palette = [0xfff3f3, 0xffd95e, 0xe87fb4, 0xa8c8ff];
+    for (let i = 0; i < fn; i++) {
+      const a = rng() * Math.PI * 2;
+      const r = Math.sqrt(rng()) * R;
+      const x = cx + Math.cos(a) * r;
+      const z = cz + Math.sin(a) * r;
+      const open = 1 - forestDensity(x, z);
+      const s = open > 0.55 ? 0.55 + rng() * 0.45 : 0;
+      dummy.position.set(x, getHeight(x, z), z);
+      dummy.rotation.y = rng() * Math.PI;
+      dummy.scale.setScalar(s);
+      dummy.updateMatrix();
+      this.flowers.setMatrixAt(i, dummy.matrix);
+      fcol.set(palette[(rng() * palette.length) | 0]);
+      this.flowers.setColorAt(i, fcol);
+    }
+    this.flowers.count = fn;
+    this.flowers.instanceMatrix.needsUpdate = true;
+    if (this.flowers.instanceColor) this.flowers.instanceColor.needsUpdate = true;
+
     this.grassAnchor.set(cx, cz);
   }
 
@@ -318,6 +497,7 @@ export class Foliage {
     for (const t of this.trees) {
       t.culled = t.instanceId >= Math.floor(t.mesh.userData.fullCount * frac);
     }
+    if (this.bushes) this.bushes.count = Math.floor(this.bushes.userData.fullCount * frac);
   }
 
   setGrassFraction(frac) {
@@ -334,10 +514,9 @@ export class Foliage {
       f.t += dt;
       f.mesh.position.copy(f.body.position);
       f.mesh.quaternion.copy(f.body.quaternion);
-      // mesh origin is at trunk base; body centre is mid-trunk
       f.mesh.translateY(-f.halfH);
       if (f.t > f.life - 1.2) {
-        f.mesh.position.y -= (f.t - (f.life - 1.2)) * 2.2; // sink away
+        f.mesh.position.y -= (f.t - (f.life - 1.2)) * 2.2;
       }
       if (f.t >= f.life) {
         this.removeFalling(f);
