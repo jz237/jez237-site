@@ -524,9 +524,8 @@ function fixedStep(dt) {
     if (G.state === 'playing') {
       const shot = e.think(dt, p, world, dt);
       if (shot) {
-        if (camera.position.distanceTo(shot.origin) < 160) {
-          audio.blast({ freq: 50, dur: 0.4, vol: 0.4, noiseVol: 0.4, noiseFreq: 800 });
-        }
+        const d = camera.position.distanceTo(shot.origin);
+        if (d < 200) audio.fire(Math.max(0.12, 0.85 - d / 240));
         effects.muzzleFlash(shot.origin, shot.dir);
         projectiles.spawn(shot.origin, shot.dir, SHELL.enemySpeed, e.tank, onShellHit);
       }
@@ -565,9 +564,8 @@ function fixedStep(dt) {
     // pillbox guns
     const shots = waves.updatePillboxes(dt, p, world, props, _pillboxLos);
     for (const sh of shots) {
-      if (camera.position.distanceTo(sh.origin) < 160) {
-        audio.blast({ freq: 58, dur: 0.35, vol: 0.35, noiseVol: 0.4, noiseFreq: 900 });
-      }
+      const d = camera.position.distanceTo(sh.origin);
+      if (d < 200) audio.fire(Math.max(0.12, 0.8 - d / 240));
       effects.muzzleFlash(sh.origin, sh.dir);
       projectiles.spawn(sh.origin, sh.dir, SHELL.enemySpeed, sh.owner, onShellHit);
     }
@@ -905,7 +903,7 @@ requestAnimationFrame(loop);
 // debug/testing handle (harmless in production)
 window.__IR = {
   G, quality, world, startGame, waves, props, projectiles, effects, input, camera,
-  onShellHit,
+  onShellHit, audio,
   player: () => G.player, frames: 0,
   // drive frames manually when rAF is suspended (headless testing)
   pump(n = 1, stepMs = 16.7) {

@@ -71,5 +71,9 @@ physical devices.
   ~8% of casts, so every closest-hit raycast merges an exact analytic
   terrain intersection (`terrain.js: raycastTerrain`).
 
-Audio is synthesized with the Web Audio API (engine drone follows
-throttle, cannon boom, explosions, wind). No audio files.
+Audio: cannon shots and shell explosions use recorded samples
+(`assets/audio/*.mp3`, randomly selected with pitch jitter and
+distance-scaled volume). Everything else — engine drone that follows
+throttle, ambient wind, reload clicks, artillery whistle, shell
+whiz-bys — is synthesized with the Web Audio API, and synth versions of
+the shot/explosion sounds remain as fallback while samples load.
