@@ -16,10 +16,10 @@ const _v3a = new THREE.Vector3();
 const _v3b = new THREE.Vector3();
 
 const SCHEMES = {
-  olive: { hull: '#5b6b3f', camo: '#46552e', camo2: '#6e7d4a', dark: 0x39432a, barrel: 0x465233, mark: '★' },
-  desert: { hull: '#9a8a64', camo: '#7d6c48', camo2: '#b0a079', dark: 0x655a40, barrel: 0x7d6f4f, mark: '◆' },
-  scout: { hull: '#77816b', camo: '#5a6450', camo2: '#8b937e', dark: 0x474f40, barrel: 0x59624e, mark: '▲' },
-  heavy: { hull: '#6a5d45', camo: '#4f4533', camo2: '#7d7055', dark: 0x3d352a, barrel: 0x4d4334, mark: '☠' },
+  olive: { hull: '#79895a', camo: '#5a6a3d', camo2: '#93a06b', dark: 0x4a553a, barrel: 0x5d6a47, mark: '★' },
+  desert: { hull: '#b3a279', camo: '#94815c', camo2: '#c9b990', dark: 0x77694c, barrel: 0x91825f, mark: '◆' },
+  scout: { hull: '#8c9680', camo: '#6d7762', camo2: '#a3ab95', dark: 0x59624f, barrel: 0x6e7760, mark: '▲' },
+  heavy: { hull: '#80714f', camo: '#62553e', camo2: '#988a68', dark: 0x4e4536, barrel: 0x615641, mark: '☠' },
 };
 
 // two-tone camo splotches + grime, shared per scheme
@@ -120,7 +120,7 @@ const TRACK_PATH = (() => {
 const LINK_SPACING = 0.165;
 const LINKS_PER_SIDE = Math.floor(TRACK_PATH.L / LINK_SPACING);
 const linkGeo = new THREE.BoxGeometry(0.46, 0.055, 0.135);
-const linkMat = new THREE.MeshStandardMaterial({ color: 0x2a2a2c, roughness: 0.92, metalness: 0.25 });
+const linkMat = new THREE.MeshStandardMaterial({ color: 0x3b3b3e, roughness: 0.85, metalness: 0.3 });
 
 function markingTexture(mark, tint) {
   const cv = document.createElement('canvas');
@@ -141,12 +141,12 @@ export function buildTankMesh(scheme = 'olive') {
   const colors = SCHEMES[scheme] ?? SCHEMES.olive;
   const camo = camoTexture(scheme);
 
-  const hullMat = new THREE.MeshStandardMaterial({ map: camo, roughness: 0.8, metalness: 0.14 });
-  const accentMat = new THREE.MeshStandardMaterial({ map: camo, color: 0xb9b9b0, roughness: 0.85, metalness: 0.12 });
-  const darkMat = new THREE.MeshStandardMaterial({ color: colors.dark, roughness: 0.85, metalness: 0.1 });
-  const barrelMat = new THREE.MeshStandardMaterial({ color: colors.barrel, roughness: 0.55, metalness: 0.4 });
-  const rubberMat = new THREE.MeshStandardMaterial({ color: 0x202022, roughness: 0.95 });
-  const steelMat = new THREE.MeshStandardMaterial({ color: 0x4a4a4e, roughness: 0.6, metalness: 0.5 });
+  const hullMat = new THREE.MeshStandardMaterial({ map: camo, roughness: 0.74, metalness: 0.05 });
+  const accentMat = new THREE.MeshStandardMaterial({ map: camo, color: 0xc6c6bc, roughness: 0.8, metalness: 0.05 });
+  const darkMat = new THREE.MeshStandardMaterial({ color: colors.dark, roughness: 0.8, metalness: 0.05 });
+  const barrelMat = new THREE.MeshStandardMaterial({ color: colors.barrel, roughness: 0.45, metalness: 0.3 });
+  const rubberMat = new THREE.MeshStandardMaterial({ color: 0x2c2c2e, roughness: 0.95 });
+  const steelMat = new THREE.MeshStandardMaterial({ color: 0x6a6a70, roughness: 0.45, metalness: 0.45 });
 
   const root = new THREE.Group();
 
