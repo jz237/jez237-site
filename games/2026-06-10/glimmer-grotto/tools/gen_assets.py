@@ -16,6 +16,13 @@ os.makedirs(ASSETS, exist_ok=True)
 SCALE = 4          # nearest-neighbor upscale baked into PNGs
 rng = np.random.default_rng(20260610)
 
+# painterly drop-ins are never clobbered by the placeholder generator
+PAINTERLY = set()
+_pf = os.path.join(ASSETS, "PAINTERLY.txt")
+if os.path.exists(_pf):
+    PAINTERLY = {l.strip() for l in open(_pf, encoding="utf-8")
+                 if l.strip() and not l.startswith("#")}
+
 MANIFEST = {}      # name -> entry
 PROMPT_ORDER = []
 
@@ -87,9 +94,14 @@ def outline(img, color="#1a1208", alpha=255):
 
 def upscale_save(name, img, category, transparent, tiling, prompt, desc):
     h, w = img.shape[:2]
-    pil = Image.fromarray(img, "RGBA").resize((w * SCALE, h * SCALE), Image.NEAREST)
-    pil.save(os.path.join(ASSETS, name + ".png"))
-    fw, fh = w * SCALE, h * SCALE
+    path = os.path.join(ASSETS, name + ".png")
+    if name in PAINTERLY and os.path.exists(path):
+        with Image.open(path) as im:
+            fw, fh = im.size          # keep the painterly file & its dims
+    else:
+        pil = Image.fromarray(img, "RGBA").resize((w * SCALE, h * SCALE), Image.NEAREST)
+        pil.save(path)
+        fw, fh = w * SCALE, h * SCALE
     ar = fw / fh
     gen = "1536x1024" if ar > 1.3 else ("1024x1536" if ar < 0.77 else "1024x1024")
     MANIFEST[name] = {
