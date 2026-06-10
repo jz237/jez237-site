@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-10T18:00:01.207091+00:00",
+  "updatedAt": "2026-06-10T19:00:01.904160+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -10004,6 +10004,14 @@
     "https://techcrunch.com/2026/06/10/ai-pilled-firms-spend-7500-per-employee-each-month-on-ai": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/GettyImages-2253659638.jpg?resize=1200,1057",
       "checkedAt": "2026-06-10T18:00:01.207091+00:00"
+    },
+    "https://www.theverge.com/ai-artificial-intelligence/947973/fable-wont-answer-basic-biology-questions": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/STKB364_CLAUDE_2_A_3800fc.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-06-10T19:00:01.904160+00:00"
+    },
+    "https://github.com/BerriAI/litellm/releases/tag/v1.89.0-rc.2": {
+      "image": "https://opengraph.githubassets.com/c3f50ec35331fa1e1f4bf661b5292f4d12899581a2263a3af6523f395cdaed7a/BerriAI/litellm/releases/tag/v1.89.0-rc.2",
+      "checkedAt": "2026-06-10T19:00:01.904160+00:00"
     }
   }
 }
