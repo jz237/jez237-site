@@ -49,6 +49,40 @@ world.allowSleep = true;
 world.defaultContactMaterial.friction = 0.5;
 world.defaultContactMaterial.restitution = 0.05;
 
+// image-based lighting from a tiny procedural sky probe — without this,
+// metallic materials have nothing to reflect and render near-black
+{
+  const pmrem = new THREE.PMREMGenerator(renderer);
+  const envScene = new THREE.Scene();
+  const sphereGeo = new THREE.SphereGeometry(40, 24, 16);
+  const pos = sphereGeo.attributes.position;
+  const cols = new Float32Array(pos.count * 3);
+  const cSky = new THREE.Color(0x6fa3d8);
+  const cHorizon = new THREE.Color(0xd8e6ee);
+  const cGround = new THREE.Color(0x5d6b46);
+  const c = new THREE.Color();
+  for (let i = 0; i < pos.count; i++) {
+    const t = pos.getY(i) / 40;
+    if (t >= 0) c.copy(cHorizon).lerp(cSky, Math.pow(t, 0.6));
+    else c.copy(cHorizon).lerp(cGround, Math.min(1, -t * 3));
+    cols[i * 3] = c.r; cols[i * 3 + 1] = c.g; cols[i * 3 + 2] = c.b;
+  }
+  sphereGeo.setAttribute('color', new THREE.BufferAttribute(cols, 3));
+  envScene.add(new THREE.Mesh(sphereGeo, new THREE.MeshBasicMaterial({
+    side: THREE.BackSide, vertexColors: true,
+  })));
+  // a bright patch standing in for the sun
+  const sunBall = new THREE.Mesh(
+    new THREE.SphereGeometry(4, 8, 6),
+    new THREE.MeshBasicMaterial({ color: 0xfff4d8 }),
+  );
+  sunBall.position.set(18, 26, 12);
+  envScene.add(sunBall);
+  scene.environment = pmrem.fromScene(envScene, 0.06).texture;
+  scene.environmentIntensity = 0.55;
+  pmrem.dispose();
+}
+
 const terrain = buildTerrain(scene, world);
 
 // cannon-es Ray-vs-Heightfield misses ~8% of casts; merge an exact analytic
