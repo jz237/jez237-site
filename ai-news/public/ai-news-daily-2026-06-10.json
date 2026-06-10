@@ -1,6 +1,6 @@
 {
   "date": "2026-06-10",
-  "updatedAt": "2026-06-10T14:00:01.320221+00:00",
+  "updatedAt": "2026-06-10T14:28:17.195164+00:00",
   "items": [
     {
       "title": "How B2B brands are earning citations in ChatGPT, Claude, and Google’s AI Overviews",
@@ -16,7 +16,7 @@
       "lastSeen": "2026-06-10T10:00:01.155256+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 17.5534
+      "score": 17.5417
     },
     {
       "title": "Decart’s new world model can simulate hours of photorealistic driving — with some caveats",
@@ -29,11 +29,11 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/Decart-Oasis-3.png?resize=1200%2C675",
       "published": "2026-06-10T13:07:56+00:00",
       "firstSeen": "2026-06-10T14:00:01.320221+00:00",
-      "lastSeen": "2026-06-10T14:00:01.320221+00:00",
+      "lastSeen": "2026-06-10T14:28:17.195164+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 11.9638
+      "score": 11.9498
     },
     {
       "title": "Your face is the ticket: Google’s Gemini and biometric gates are the World Cup’s quieter tech story",
@@ -49,7 +49,7 @@
       "lastSeen": "2026-06-10T14:00:01.320221+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.1538
+      "score": 9.1407
     },
     {
       "title": "If Claude Fable stops helping you, you'll never know",
@@ -62,10 +62,10 @@
       "image": "",
       "published": "2026-06-10T00:37:25+00:00",
       "firstSeen": "2026-06-10T01:00:01.722384+00:00",
-      "lastSeen": "2026-06-10T14:00:01.320221+00:00",
+      "lastSeen": "2026-06-10T14:28:17.195164+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.2486
+      "score": 8.2387
     },
     {
       "title": "Artificial Intelligence Sneaks Into the World Cup Thanks to Google Gemini",
@@ -78,10 +78,10 @@
       "image": "https://media.wired.com/photos/6a26f2821d5621d5724e9dd9/master/pass/Artificial-Intelligence-Sneaks-into-World-Cup-2279691552.jpg",
       "published": "2026-06-10T10:00:00+00:00",
       "firstSeen": "2026-06-10T10:19:57.026208+00:00",
-      "lastSeen": "2026-06-10T14:00:01.320221+00:00",
+      "lastSeen": "2026-06-10T14:28:17.195164+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.1743
+      "score": 8.1615
     },
     {
       "title": "Jedify raises $24M to help companies arm AI agents with context on their business",
@@ -94,10 +94,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/Jedify-Co-founders.jpg?resize=1200%2C800",
       "published": "2026-06-10T13:33:09+00:00",
       "firstSeen": "2026-06-10T14:00:01.320221+00:00",
-      "lastSeen": "2026-06-10T14:00:01.320221+00:00",
+      "lastSeen": "2026-06-10T14:28:17.195164+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.6764
+      "score": 5.6623
     },
     {
       "title": "Poetic emerges from stealth with $50M from OpenAI to automate insurance underwriting and compliance",
@@ -110,10 +110,10 @@
       "image": "https://media.thenextweb.com/2026/04/OpenAI-lawsuite.avif",
       "published": "2026-06-10T12:53:31+00:00",
       "firstSeen": "2026-06-10T14:00:01.320221+00:00",
-      "lastSeen": "2026-06-10T14:00:01.320221+00:00",
+      "lastSeen": "2026-06-10T14:28:17.195164+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1166
+      "score": 5.1028
     },
     {
       "title": "Can Multi-Agent LLMs Identify Their Peers? Stylometric Fingerprinting in Role-Constrained Political Analysis",
@@ -124,9 +124,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-10T14:00:14.084453+00:00",
+      "published": "2026-06-10T14:28:23.510582+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-10T14:00:01.320221+00:00",
+      "lastSeen": "2026-06-10T14:28:17.195164+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 5.06
@@ -142,10 +142,10 @@
       "image": "",
       "published": "2026-06-10T00:00:00+00:00",
       "firstSeen": "2026-06-10T10:00:01.155256+00:00",
-      "lastSeen": "2026-06-10T14:00:01.320221+00:00",
+      "lastSeen": "2026-06-10T14:28:17.195164+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8456
+      "score": 4.8359
     },
     {
       "title": "How AI is powering the next wave of micro-SaaS entrepreneurs",
@@ -161,7 +161,7 @@
       "lastSeen": "2026-06-10T12:00:01.246957+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8246
+      "score": 4.8119
     },
     {
       "title": "75% of C-suite leaders say agentic AI lives up to the hype or is underestimated. 48% still plan to cut headcount.",
@@ -177,7 +177,7 @@
       "lastSeen": "2026-06-10T10:00:01.155256+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.6811
+      "score": 4.669
     },
     {
       "title": "Siri AI arrives with Google inside, and much of the world is locked out",
@@ -190,10 +190,10 @@
       "image": "",
       "published": "2026-06-10T11:00:00+00:00",
       "firstSeen": "2026-06-10T12:00:01.246957+00:00",
-      "lastSeen": "2026-06-10T14:00:01.320221+00:00",
+      "lastSeen": "2026-06-10T14:28:17.195164+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.66
+      "score": 4.6469
     }
   ],
   "errors": [
