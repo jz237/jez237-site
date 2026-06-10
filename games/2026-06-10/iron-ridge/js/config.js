@@ -2,7 +2,7 @@
 
 export const WORLD_SIZE = 560;          // metres, square terrain
 export const WORLD_HALF = WORLD_SIZE / 2;
-export const TERRAIN_SEGS = 180;        // visual + physics grid resolution
+export const TERRAIN_SEGS = 224;        // visual + physics grid resolution
 export const PLAY_RADIUS = 240;         // soft boundary for gameplay
 
 export const FIXED_DT = 1 / 60;         // physics step
@@ -76,11 +76,63 @@ export const SCORING = {
 
 // --- World scatter -----------------------------------------------------
 export const SCATTER = {
-  trees: 2400,
+  trees: 2600,
   rocks: 380,
+  bushes: 700,
+  logs: 90,
+  stumps: 70,
   grass: 2600,
+  flowers: 500,
   maxFallingTrees: 12,
   treadMarks: 360,
+  scorch: 100,
+};
+
+// --- Enemy variants ------------------------------------------------------
+export const ENEMY_TYPES = {
+  scout: {
+    scheme: 'scout', scale: 0.85, hp: 60, points: 400,
+    shellDamage: 10, reload: 3.4, aimNoise: 0.07,
+    maxSpeed: 16, engineForce: 5200, maxYawRate: 1.35,
+    preferredRange: 48, minRange: 26,
+  },
+  standard: {
+    scheme: 'desert', scale: 1.0, hp: 100, points: 500,
+    shellDamage: 14, reload: 4.4, aimNoise: 0.055,
+    maxSpeed: 12.5, engineForce: 5200, maxYawRate: 1.1,
+    preferredRange: 62, minRange: 34,
+  },
+  heavy: {
+    scheme: 'heavy', scale: 1.18, hp: 200, points: 900,
+    shellDamage: 24, reload: 5.6, aimNoise: 0.045,
+    maxSpeed: 8.5, engineForce: 6200, maxYawRate: 0.8,
+    preferredRange: 75, minRange: 45,
+  },
+};
+
+export const PILLBOX = {
+  hp: 3,             // direct hits to kill
+  points: 350,
+  range: 120,
+  reload: 3.8,
+  shellDamage: 12,
+  aimNoise: 0.05,
+};
+
+export const ARTILLERY = {
+  startWave: 5,
+  period: 18,        // seconds between barrages
+  shellCount: 6,
+  warnTime: 1.4,     // red marker lead time
+  spread: 26,        // metres around the player
+  damage: 30,
+};
+
+export const PICKUP = {
+  dropChance: 0.45,  // from tank kills
+  heal: 30,
+  ttl: 25,
+  magnetRadius: 4.5,
 };
 
 export const SCORES_API = 'https://game-scores.jez237.workers.dev/scores/iron-ridge';

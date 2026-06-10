@@ -30,10 +30,30 @@ function trackTexture() {
   return tex;
 }
 
+const SCHEMES = {
+  olive: { hull: 0x5b6b3f, accent: 0x4c5a34, dark: 0x39432a, barrel: 0x465233, mark: '★' },
+  desert: { hull: 0x9a8a64, accent: 0x877754, dark: 0x655a40, barrel: 0x7d6f4f, mark: '◆' },
+  scout: { hull: 0x77816b, accent: 0x636e58, dark: 0x474f40, barrel: 0x59624e, mark: '▲' },
+  heavy: { hull: 0x6a5d45, accent: 0x564b38, dark: 0x3d352a, barrel: 0x4d4334, mark: '☠' },
+};
+
+function markingTexture(mark, tint) {
+  const cv = document.createElement('canvas');
+  cv.width = cv.height = 64;
+  const ctx = cv.getContext('2d');
+  ctx.clearRect(0, 0, 64, 64);
+  ctx.fillStyle = tint;
+  ctx.font = 'bold 44px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(mark, 32, 36);
+  const tex = new THREE.CanvasTexture(cv);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  return tex;
+}
+
 export function buildTankMesh(scheme = 'olive') {
-  const colors = scheme === 'olive'
-    ? { hull: 0x5b6b3f, accent: 0x4c5a34, dark: 0x39432a, barrel: 0x465233 }
-    : { hull: 0x9a8a64, accent: 0x877754, dark: 0x655a40, barrel: 0x7d6f4f };
+  const colors = SCHEMES[scheme] ?? SCHEMES.olive;
 
   const hullMat = new THREE.MeshStandardMaterial({ color: colors.hull, roughness: 0.72, metalness: 0.18 });
   const accentMat = new THREE.MeshStandardMaterial({ color: colors.accent, roughness: 0.78, metalness: 0.15 });
@@ -83,6 +103,36 @@ export function buildTankMesh(scheme = 'olive') {
   drum.rotation.z = Math.PI / 2;
   drum.rotation.y = Math.PI / 2;
   hull.add(drum);
+  // headlights
+  const lightMat = new THREE.MeshStandardMaterial({ color: 0xfff7d0, emissive: 0x55502c, roughness: 0.3 });
+  for (const sx of [-0.95, 0.95]) {
+    const hl = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.1, 0.1, 8), lightMat);
+    hl.rotation.x = Math.PI / 2 - 0.55;
+    hl.position.set(sx, 1.28, 2.06);
+    hull.add(hl);
+  }
+  // tow hooks + spare track links on the glacis
+  for (const sx of [-0.7, 0.7]) {
+    const hook = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.12, 0.26), darkMat);
+    hook.position.set(sx, 0.62, 2.28);
+    hull.add(hook);
+  }
+  const spare = new THREE.Mesh(new THREE.BoxGeometry(0.9, 0.08, 0.34), darkMat);
+  spare.position.set(0, 1.22, 1.62);
+  spare.rotation.x = -0.62;
+  hull.add(spare);
+  // shovel/tools on the left fender
+  const tool = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.05, 1.5), darkMat);
+  tool.position.set(-1.31, 1.06, 0.5);
+  hull.add(tool);
+  // mud flaps
+  for (const sx of [-1.31, 1.31]) {
+    for (const zz of [2.2, -2.2]) {
+      const flap = new THREE.Mesh(new THREE.BoxGeometry(0.42, 0.3, 0.05), accentMat);
+      flap.position.set(sx, 0.78, zz);
+      hull.add(flap);
+    }
+  }
 
   // ---- tracks & wheels ----
   const wheels = [];
@@ -137,6 +187,29 @@ export function buildTankMesh(scheme = 'olive') {
   ant.position.set(0.55, 1.3, -1.1);
   ant.rotation.z = 0.12;
   turret.add(ant);
+  // periscopes + turret side markings
+  for (const sx of [-0.18, 0.18]) {
+    const peri = new THREE.Mesh(new THREE.BoxGeometry(0.14, 0.1, 0.18), darkMat);
+    peri.position.set(sx, 0.92, 0.32);
+    turret.add(peri);
+  }
+  const markTex = markingTexture(colors.mark, '#e8e2cf');
+  const markMat = new THREE.MeshBasicMaterial({ map: markTex, transparent: true, polygonOffset: true, polygonOffsetFactor: -1 });
+  for (const side of [-1, 1]) {
+    const mark = new THREE.Mesh(new THREE.PlaneGeometry(0.5, 0.5), markMat);
+    mark.position.set(side * 0.93, 0.32, -0.2);
+    mark.rotation.y = side * Math.PI / 2;
+    mark.rotation.z = side > 0 ? 0 : Math.PI;
+    turret.add(mark);
+  }
+  // bustle stowage rack
+  const rack = new THREE.Mesh(new THREE.BoxGeometry(1.1, 0.16, 0.5), darkMat);
+  rack.position.set(0, 0.62, -1.42);
+  turret.add(rack);
+  const roll = new THREE.Mesh(new THREE.CylinderGeometry(0.13, 0.13, 1.0, 7), accentMat);
+  roll.rotation.z = Math.PI / 2;
+  roll.position.set(0, 0.76, -1.42);
+  turret.add(roll);
 
   // ---- elevating barrel assembly ----
   const pivot = new THREE.Group();        // pitch pivot
@@ -172,13 +245,22 @@ export class Tank {
     this.hp = opts.hp ?? TANK.hp;
     this.maxHp = this.hp;
     this.alive = true;
+    const sc = opts.scale ?? 1;
+    this.scale = sc;
+    // per-variant performance tuning (scouts are nimble, heavies ponderous)
+    this.tuning = {
+      maxSpeed: opts.maxSpeed ?? TANK.maxSpeed,
+      engineForce: opts.engineForce ?? TANK.engineForce,
+      maxYawRate: opts.maxYawRate ?? TANK.maxYawRate,
+    };
     this.visual = buildTankMesh(opts.scheme ?? (this.isPlayer ? 'olive' : 'desert'));
+    this.visual.root.scale.setScalar(sc);
     scene.add(this.visual.root);
 
     // physics chassis — shape offset up so the centre of mass sits low
     const half = TANK.chassisHalf;
     const body = new CANNON.Body({
-      mass: TANK.mass,
+      mass: TANK.mass * sc * sc,
       position: new CANNON.Vec3(opts.x ?? 0, (opts.y ?? 2) + 0.7, opts.z ?? 0),
       collisionFilterGroup: this.isPlayer ? CG.PLAYER : CG.ENEMY,
       collisionFilterMask: -1,
@@ -186,8 +268,8 @@ export class Tank {
       linearDamping: 0.08,
     });
     body.addShape(
-      new CANNON.Box(new CANNON.Vec3(half.x, half.y, half.z)),
-      new CANNON.Vec3(0, 0.55, 0),
+      new CANNON.Box(new CANNON.Vec3(half.x * sc, half.y * sc, half.z * sc)),
+      new CANNON.Vec3(0, 0.55 * sc, 0),
     );
     body.allowSleep = false;
     body.userData = { kind: 'tank', tank: this };
@@ -197,8 +279,8 @@ export class Tank {
     // analytic terrain (cannon's RaycastVehicle fights tracked vehicles —
     // its lateral wheel constraints cancel skid-steer entirely)
     this.suspension = [
-      { x: -1.05, z: 1.65 }, { x: 1.05, z: 1.65 },
-      { x: -1.05, z: -1.65 }, { x: 1.05, z: -1.65 },
+      { x: -1.05 * sc, z: 1.65 * sc }, { x: 1.05 * sc, z: 1.65 * sc },
+      { x: -1.05 * sc, z: -1.65 * sc }, { x: 1.05 * sc, z: -1.65 * sc },
     ].map(p => ({ ...p, contact: false, comp: 0 }));
     this.contacts = 0;
     world.addBody(body);
@@ -241,20 +323,21 @@ export class Tank {
     const up = q.vmult(UP);
 
     // ---- suspension: spring/damper per corner vs analytic terrain ----
+    const sc = this.scale, sc2 = sc * sc;
     let contacts = 0;
     for (const w of this.suspension) {
-      _conn.set(w.x, 0.1, w.z);
+      _conn.set(w.x, 0.1 * sc, w.z);
       body.pointToWorldFrame(_conn, _connW);
       const groundY = getHeight(_connW.x, _connW.z);
-      const comp = (TANK.suspensionRest + TANK.wheelRadius) - (_connW.y - groundY);
+      const comp = (TANK.suspensionRest + TANK.wheelRadius) * sc - (_connW.y - groundY);
       w.contact = comp > 0 && up.y > 0.25;
       w.comp = Math.max(0, comp);
       if (!w.contact) continue;
       contacts++;
       body.getVelocityAtWorldPoint(_connW, _pv);
-      let F = TANK.suspK * Math.min(comp, 0.45) - TANK.suspC * _pv.y;
+      let F = TANK.suspK * sc2 * Math.min(comp, 0.45) - TANK.suspC * sc2 * _pv.y;
       if (F < 0) F = 0;
-      if (F > 6200) F = 6200; // ~3.5x static share — soaks impacts without launching
+      if (F > 6200 * sc2) F = 6200 * sc2; // ~3.5x static share — soaks impacts without launching
       _f.set(0, F, 0);
       _connW.vsub(body.position, _rel); // applyForce wants a COM-relative point
       body.applyForce(_f, _rel);
@@ -271,12 +354,12 @@ export class Tank {
         fwd.normalize();
         let force = 0;
         if (this.throttle > 0.01) {
-          force = speed < TANK.maxSpeed ? TANK.engineForce * this.throttle : 0;
+          force = speed < this.tuning.maxSpeed ? this.tuning.engineForce * sc2 * this.throttle : 0;
         } else if (this.throttle < -0.01) {
-          force = speed > -TANK.maxReverse ? -TANK.reverseForce * -this.throttle : 0;
+          force = speed > -TANK.maxReverse ? -TANK.reverseForce * sc2 * -this.throttle : 0;
         } else {
           // tracks resist rolling when coasting
-          force = -THREE.MathUtils.clamp(speed * TANK.rollResist, -2800, 2800) / 1;
+          force = -THREE.MathUtils.clamp(speed * TANK.rollResist * sc2, -2800 * sc2, 2800 * sc2);
         }
         _f.set(fwd.x * force * traction, 0, fwd.z * force * traction);
         body.applyForce(_f);
@@ -286,7 +369,7 @@ export class Tank {
         right.y = 0;
         right.normalize();
         const latV = body.velocity.dot(right);
-        const grip = THREE.MathUtils.clamp(-latV * TANK.latGrip, -TANK.latGripMax, TANK.latGripMax);
+        const grip = THREE.MathUtils.clamp(-latV * TANK.latGrip * sc2, -TANK.latGripMax * sc2, TANK.latGripMax * sc2);
         _f.set(right.x * grip * traction, 0, right.z * grip * traction);
         body.applyForce(_f);
       }
@@ -294,7 +377,7 @@ export class Tank {
       // commanded yaw rate — how tracked steering actually behaves
       const dir = speed < -0.5 ? -1 : 1;
       if (Math.abs(this.turn) > 0.01) {
-        const targetRate = -this.turn * dir * TANK.maxYawRate * traction;
+        const targetRate = -this.turn * dir * this.tuning.maxYawRate * traction;
         body.angularVelocity.y += (targetRate - body.angularVelocity.y) * Math.min(1, dt * 10);
       } else {
         body.angularVelocity.y *= 1 - Math.min(1, dt * 6);
@@ -352,7 +435,7 @@ export class Tank {
     const dir = origin.clone().sub(back).normalize();
 
     // physical recoil shove (slightly above COM for a nose-lift kick)
-    const imp = dir.clone().multiplyScalar(-TANK.mass * 1.45);
+    const imp = dir.clone().multiplyScalar(-this.body.mass * 1.45);
     this.body.applyImpulse(
       new CANNON.Vec3(imp.x, imp.y * 0.3, imp.z),
       new CANNON.Vec3(0, 0.9, 0),
@@ -457,7 +540,7 @@ export class Tank {
     ).normalize();
     // visual origin sits at ground level; wheel contact rest point is
     // connection.y - restLength - radius below the body origin
-    r.position.y -= (0.52 + TANK.wheelRadius - 0.1) - 0.1;
+    r.position.y -= ((0.52 + TANK.wheelRadius - 0.1) - 0.1) * this.scale;
 
     // wheels spin / track scroll
     const speed = this.speedAlongForward();
