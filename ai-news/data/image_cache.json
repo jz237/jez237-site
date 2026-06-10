@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-10T14:00:01.320221+00:00",
+  "updatedAt": "2026-06-10T15:00:01.811220+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -9928,6 +9928,34 @@
     "https://techcrunch.com/2026/06/10/decarts-new-world-model-can-simulate-hours-of-photorealistic-driving-with-some-caveats": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/Decart-Oasis-3.png?resize=1200,675",
       "checkedAt": "2026-06-10T14:00:01.320221+00:00"
+    },
+    "https://techcrunch.com/2026/06/10/the-three-hard-tech-moonshots-fueling-spacexs-unbelievable-ipo": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/SpaceXAIsatrender.jpg?resize=1200,639",
+      "checkedAt": "2026-06-10T15:00:01.811220+00:00"
+    },
+    "https://techcrunch.com/2026/06/10/warner-music-acquires-ai-attribution-startup-sureel-ai": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/warner-music.jpg?resize=1200,800",
+      "checkedAt": "2026-06-10T15:00:01.811220+00:00"
+    },
+    "https://www.techrepublic.com/article/news-india-vivatech-ai-pitch": {
+      "image": "https://assets.techrepublic.com/uploads/2026/06/medium__LEJ1974.png?f=jpeg",
+      "checkedAt": "2026-06-10T15:00:01.811220+00:00"
+    },
+    "https://www.techrepublic.com/article/news-microsoft-reportedly-cuts-azure-jobs-apac-china": {
+      "image": "https://assets.techrepublic.com/uploads/2026/06/tr-06102026-microsoft-reportedly-cuts-azure-jobs-3.jpg?f=jpeg",
+      "checkedAt": "2026-06-10T15:00:01.811220+00:00"
+    },
+    "https://www.techrepublic.com/article/news-apac-meta-reliance-india-ai-data-center": {
+      "image": "https://assets.techrepublic.com/uploads/2026/06/ChatGPT-Image-Jun-10-2026-09_10_19-PM.png?f=jpeg",
+      "checkedAt": "2026-06-10T15:00:01.811220+00:00"
+    },
+    "https://www.techrepublic.com/article/news-apple-intelligence-cheat-sheet": {
+      "image": "https://assets.techrepublic.com/uploads/2025/06/Apple-WWDC24-Apple-Intelligence-hero-240610_big.jpg.large_2x-1.jpg?f=jpeg",
+      "checkedAt": "2026-06-10T15:00:01.811220+00:00"
+    },
+    "https://www.techrepublic.com/article/claude-ai-professional-edegree": {
+      "image": "https://assets.techrepublic.com/uploads/2026/06/tra-06102026-claude-ai-professional-edegree.jpg?f=jpeg",
+      "checkedAt": "2026-06-10T15:00:01.811220+00:00"
     }
   }
 }
