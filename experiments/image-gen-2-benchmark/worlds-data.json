@@ -124,5 +124,23 @@
       "continuity": "Preserves Veyraxis Bloomrift's vertical basalt petals, nacre membranes, reefmind body plan, pressure-light bowls, alien vegetation, cyan storm light, and amber internal glow.",
       "entryDescription": "A dawn Low Rift Nursery breakfast scene where reefmind inhabitants exchange pressure-light around communal living bowls."
     }
+  },
+  {
+    "id": "2026-06-10-morning-veyraxis-bloomrift-vascular-crossing-commute",
+    "title": "Veyraxis Bloomrift: Vascular Crossing Commute",
+    "tests": "Weekly world: Veyraxis Bloomrift. World-life image for 2026-06-10 morning slot; catalog-only fictional-world entry showing reefmind public transit at Vascular Crossing while preserving the basalt, nacre membrane, pressure-light, alien vegetation, cyan storm light, and amber glow canon.",
+    "prompt": "Create a realistic photographed/cinematic square image set in Veyraxis Bloomrift, showing Vascular Crossing Commute: non-human reefmind inhabitants with translucent shell mantles, tripod root-limbs, ribbon sensory fans, bioluminescent throat sacs, and symbiotic tendril tool clusters board slow wind-bladder ferries through living membrane docks during a storm-filtered cyan morning rush. The viewpoint is from a wet basalt landing across a hanging capillary bridge into a vast vertical rift, with pressure-tubes grown through stone, red pressure-light pulses, gill-like dock doors, suspended brine lenses, upward blue-black vapor rivers, scratched living crystal pressure gauges, woven vascular fibers, resin seals, frond lungs, spiral salt antlers, black moss veils, floating pollen sacs, mineral orchids, slow-rooted amber fans, pearl mist, bruised violet shadows, and amber communal ticket bowls. Make it look like real camera/cinematic photography of alien public transit, with physical lighting, material wear, atmospheric scale, naturalistic alien anatomy, no humans, no Earth city props, no readable text, no signs, no logos, no illustration/concept-art look, no watermark, and no dancing.\n\nSource photo needed: none.\n\nReusable template: Create a realistic photographed/cinematic daily-life image set in [WORLD_NAME], showing [EVERYDAY SCENE] at [LOCATION], with [INHABITANTS], [LOCAL MATERIALS], [VEGETATION], [INFRASTRUCTURE], and [TIME_OF_DAY] lighting. Preserve the world geography, settlements, transit/infrastructure logic, vegetation, life forms, materials/technology, palette, lighting, recurring motifs, and hard avoid rules; vary the exact activity, viewpoint, weather, props, and social moment while staying inside the canon. Make it look like a real camera captured an alien society, not an illustration or prompt card.\n\nWhat to preserve: the Veyraxis Bloomrift world name, vertical basalt petals, suspended brine lenses, upward vapor rivers, grown basalt and nacre membrane infrastructure, reefmind body plan, pressure-light technology, alien vegetation, storm-filtered cyan and amber palette, gill-like doors, breathing bridges, shell-mantle silhouettes, hanging brine droplets, living crystal pressure gauges, spiral root-limb tracks, and communal light-harvest/ticket bowls.\n\nWhat to change: the exact daily-life subject, location, time of day, crowd arrangement, camera viewpoint, weather intensity, infrastructure focus, props, and reefmind behavior can change while preserving the same world bible.\n\nExample substitution: Create a realistic photographed daily-life image set in Veyraxis Bloomrift, showing a membrane dock repair shift at Throat-of-Glass during violet storm dusk, with reefminds sealing nacre dock flaps, living ceramic tools, pulse-lit waynodes, frond lungs, wet basalt, amber pressure-light, floating pollen sacs, and pearl mist.",
+    "image": "images/2026-06-10-morning-veyraxis-bloomrift-vascular-crossing-commute.png",
+    "date": "2026-06-10",
+    "batch": "Daily Prompt",
+    "slot": "morning",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "world": {
+      "name": "Veyraxis Bloomrift",
+      "description": "A living basalt-and-membrane world where glass-shelled reefminds inhabit floating mineral blooms, harvest pressure-light, and commute through vascular wind channels.",
+      "continuity": "Preserves Veyraxis Bloomrift's vertical basalt petals, nacre membrane docks, reefmind body plan, pressure-light transit, alien vegetation, cyan storm light, and amber internal glow.",
+      "entryDescription": "A morning commute at Vascular Crossing, where reefminds board wind-bladder ferries through living membrane docks and capillary bridges."
+    }
   }
 ]
