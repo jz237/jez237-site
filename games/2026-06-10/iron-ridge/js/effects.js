@@ -311,6 +311,48 @@ export class Effects {
     this.shake(Math.min(0.7, 26 * power / Math.max(8, d)));
   }
 
+  // ricochet sparks for non-lethal armor hits
+  sparks(pos) {
+    const n = Math.floor(10 * this.particleScale);
+    for (let i = 0; i < n; i++) {
+      const a = Math.random() * Math.PI * 2;
+      const sp = 6 + Math.random() * 14;
+      this.fire.emit(pos.x, pos.y, pos.z,
+        Math.cos(a) * sp, 2 + Math.random() * 9, Math.sin(a) * sp,
+        0.18 + Math.random() * 0.18, 0.4,
+        1, 0.9, 0.55, { grav: -26, drag: 1 });
+    }
+    this.flashLight(pos, 0xffe2a0, 30, 0.06);
+  }
+
+  // engine exhaust puff (dark when working hard)
+  exhaustPuff(pos, load = 1) {
+    const g = 0.3 - load * 0.12;
+    this.smoke.emit(pos.x, pos.y, pos.z,
+      (Math.random() - 0.5) * 0.6, 1.2 + Math.random() * 1.2, (Math.random() - 0.5) * 0.6,
+      0.5 + Math.random() * 0.45, 0.5 + load * 0.5,
+      g, g, g, { drag: 1.5, grow: 2.8 });
+  }
+
+  // hp-scaled battle damage smoke from a tank (call per-frame with dt)
+  damageSmoke(pos, frac, dt) {
+    if (frac >= 0.6) return;
+    const heavy = frac < 0.3;
+    if (Math.random() > dt * (heavy ? 10 : 4.5) * this.particleScale) return;
+    const g = heavy ? 0.1 : 0.34;
+    this.smoke.emit(
+      pos.x + (Math.random() - 0.5), pos.y + 1.6, pos.z - 1.2 + (Math.random() - 0.5),
+      (Math.random() - 0.5), 1.8 + Math.random() * 1.6, (Math.random() - 0.5),
+      heavy ? 1.6 : 1.1, heavy ? 2.4 : 1.6,
+      g, g * 0.98, g * 0.95, { grow: 2.8, drag: 1 },
+    );
+    if (heavy && Math.random() < 0.35) {
+      this.fire.emit(pos.x + (Math.random() - 0.5) * 0.8, pos.y + 1.2, pos.z - 1 + (Math.random() - 0.5) * 0.8,
+        (Math.random() - 0.5), 1.4 + Math.random() * 1.6, (Math.random() - 0.5),
+        0.3, 1.3 + Math.random(), 1, 0.5, 0.16, { grow: 1.3, drag: 1 });
+    }
+  }
+
   dustPuff(x, y, z, amount = 1) {
     const n = Math.floor(2 * amount * this.particleScale);
     for (let i = 0; i < n; i++) {

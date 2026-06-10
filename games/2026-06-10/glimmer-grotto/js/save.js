@@ -16,6 +16,7 @@ export function save(player) {
       upgrades: player.upgrades,
       bag: player.bag,
       energy: player.energy,
+      buffT: player.buffT,
       pos: [Math.round(player.x), Math.round(player.y)],
       mod,
     };
@@ -38,6 +39,7 @@ export function applySave(data, player) {
   player.upgrades = Object.assign({ pick: 0, lantern: 0, satchel: 0 }, data.upgrades);
   player.bag = data.bag || [];
   player.energy = data.energy ?? player.energyMax;
+  player.buffT = data.buffT || 0;
   world.modified.clear();
   const mod = data.mod || [];
   for (let i = 0; i < mod.length; i += 2) world.modified.set(mod[i], mod[i + 1]);

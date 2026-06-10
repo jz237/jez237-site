@@ -30,7 +30,7 @@ export class Projectiles {
   }
 
   // owner: Tank instance; onHit(hit) with {point, normal, body, shell}
-  spawn(origin, dir, speed, owner, onHit) {
+  spawn(origin, dir, speed, owner, onHit, power = 1) {
     const slot = this.pool.pop();
     if (!slot) return null;
     const s = {
@@ -40,6 +40,7 @@ export class Projectiles {
       life: 0,
       owner,
       onHit,
+      power,
       fromPlayer: owner?.isPlayer ?? false,
     };
     slot.mesh.material = s.fromPlayer ? slot.matP : slot.matE;

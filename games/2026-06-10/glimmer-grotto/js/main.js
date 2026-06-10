@@ -2,7 +2,7 @@
 // adaptive quality scaler, interactions.
 
 import { TILE, WORLD_W, WORLD_H, SURFACE_Y, REACH, biomeAt, GEM_DEF, TREASURE_DEF, WONDERS,
-  T_DIRT, T_GRASS, T_MUSH, TILE_DEF } from './config.js';
+  T_DIRT, T_GRASS, T_MUSH, TILE_DEF, JELLY } from './config.js';
 import { clamp, lerp, mixHex } from './util.js';
 import { loadAssets, IMG, tintedLayer } from './assets.js';
 import { world, generate, drawChunks, drawDecor, drawWater, spawnPickupsFor,
@@ -75,7 +75,7 @@ let curBiomeId = null;
 let darkSmooth = 0.12;
 let tintSmooth = '#ffb070';
 let saveTimer = 0, hudTimer = 0, lastTinkToast = -99, lastBagToast = -99;
-let hitstop = 0, wasTired = false, lastTiredToast = -99;
+let hitstop = 0, wasTired = false, lastTiredToast = -99, wasBuffed = false;
 let nearProp = null;
 let restNearby = 0;
 const lights = [];
@@ -105,7 +105,7 @@ async function boot() {
   const hint = document.getElementById('ctrlHint');
   const touchLikely = matchMedia('(pointer: coarse)').matches;
   hint.innerHTML = touchLikely
-    ? 'wander with the <b>joystick</b> · <b>⛏</b> dig · <b>⬆</b> hop · <b>✦</b> rest, stash &amp; shop'
+    ? 'wander with the <b>joystick</b> — <b>push into the earth to dig</b> · <b>⬆</b> hop · tap the prompts to rest &amp; shop'
     : '<b>WASD / arrows</b> wander · <b>hold mouse</b> (or <b>X</b>) dig · <b>E</b> rest &amp; shop · <b>J</b> journal · <b>M</b> sound';
   const btn = document.getElementById('beginBtn');
   btn.disabled = false;
@@ -117,7 +117,9 @@ async function boot() {
     if (touchLikely) document.getElementById('touchUI').classList.remove('hidden');
     running = true;
     if (!saved) {     // gentle first-time guidance
-      setTimeout(() => toast('Dig down — glimmering veins hide in the earth', 'pickaxe'), 2500);
+      setTimeout(() => toast(touchLikely
+        ? 'Push the joystick into the earth to dig'
+        : 'Dig down — glimmering veins hide in the earth', 'pickaxe'), 2500);
       setTimeout(() => toast('Campfires refill your energy and stash your finds', 'campfire'), 14000);
       setTimeout(() => toast('Pemberley’s tent sells sturdier picks & brighter lanterns', 'tent'), 30000);
     }
@@ -207,6 +209,16 @@ function step(dt) {
   // campfire crackle proximity
   if (audioReady()) setFireProximity(clamp(1 - restNearby / 240, 0, 1) * (restNearby < 999 ? 1 : 0));
 
+  // glimmer rush: gold sparkle trail + farewell note when it fades
+  if (player.buffT > 0) {
+    if (Math.random() < dt * 9)
+      P.sparkleBurst(player.x + (Math.random() - .5) * 26, player.y - 14 - Math.random() * 26, '#ffd87f', 1);
+    wasBuffed = true;
+  } else if (wasBuffed) {
+    wasBuffed = false;
+    toast('The glimmer rush fades — but what a lovely sprint');
+  }
+
   if (player.tired && !wasTired && time - lastTiredToast > 20) {
     lastTiredToast = time;
     toast('You’re weary — a campfire would feel wonderful', 'icon_energy');
@@ -281,6 +293,16 @@ function updatePickups(dt) {
     if (waterAtPx(nx, ny)) { p.vy *= (1 - Math.min(1, dt * 3)); p.vx *= (1 - Math.min(1, dt * 2)); }
     p.x = nx; p.y = ny;
     if (p.t > 0.3 && d < 26) {             // collect
+      if (p.kind === 'buff') {             // eaten on the spot — never needs bag room
+        list.splice(i, 1);
+        player.buffT = Math.min(JELLY.maxDuration, player.buffT + JELLY.duration);
+        P.sparkleBurst(p.x, p.y, '#ffd87f', 18);
+        P.riseIcon(p.x, p.y, IMG['glowcap_jelly']);
+        toast('Glimmer Rush! Your pickaxe feels feather-light', 'glowcap_jelly');
+        if (discover('jelly', JELLY.name, 'glowcap_jelly')) { if (audioReady()) sfx.chime(4); }
+        else if (audioReady()) sfx.buy();
+        continue;
+      }
       if (player.bag.length >= player.bagCap) {
         if (time - lastBagToast > 6) {
           lastBagToast = time;
@@ -311,14 +333,16 @@ function updatePickups(dt) {
 function drawPickups(x0, y0, x1, y1) {
   for (const p of world.pickups) {
     if (p.x < x0 - 40 || p.x > x1 + 40 || p.y < y0 - 40 || p.y > y1 + 40) continue;
-    const sprite = p.kind === 'gem' ? 'gem_' + p.id :
-      (p.id === 'geode' ? 'geode_closed' : TREASURE_DEF[p.id].sprite);
+    const sprite = p.kind === 'buff' ? 'glowcap_jelly' : (p.kind === 'gem' ? 'gem_' + p.id :
+      (p.id === 'geode' ? 'geode_closed' : TREASURE_DEF[p.id].sprite));
     const img = IMG[sprite];
     const s = p.kind === 'gem' ? 20 : 26;
     const bob = Math.sin(time * 4 + p.x * 0.1) * 2;
     ctx.drawImage(img, p.x - s / 2, p.y - s / 2 + bob, s, s * (img.height / img.width));
     if (p.kind === 'gem')
       lights.push({ x: p.x, y: p.y, c: glowFor(p.id), r: 46, flicker: .3, emissive: true });
+    if (p.kind === 'buff')
+      lights.push({ x: p.x, y: p.y, c: 'gold', r: 60, flicker: .4, emissive: true, pri: 1 });
     if (Math.random() < 0.02) P.sparkleBurst(p.x, p.y + bob, '#fff6c4', 1);
   }
 }
@@ -355,7 +379,7 @@ function checkProps() {
   }
   player.restGlow = restNearby < 110 ? 1 : 0;
   if (nearProp) {
-    const verb = input.usingTouch ? '✦' : 'E';
+    const verb = input.usingTouch ? 'tap here' : 'E';
     showRestHint(nearProp.interact === 'shop'
       ? `${verb} — browse Pemberley's wares`
       : (player.bag.length ? `${verb} — rest & stash ${player.bag.length} find${player.bag.length > 1 ? 's' : ''}` : `${verb} — rest a while`));
@@ -560,6 +584,9 @@ function render() {
     lights.push({ x: player.x + player.face * 8, y: player.y - 26, c: 'warm',
       r: player.lanternRadius, flicker: 0.18, pri: 0 });
     lights.push({ x: player.x, y: player.y - 24, c: 'warm', r: 46, a: 0.5, pri: 0 });
+    if (player.buffT > 0)
+      lights.push({ x: player.x, y: player.y - 22, c: 'gold', r: 110,
+        a: Math.min(1, player.buffT), flicker: .4, pri: 0, emissive: true });
   }
   for (const L of lights) if (L.c !== 'warm' || L.r < 150) L.emissive = L.emissive ?? (L.r < 140);
   renderBloom(ctx, lights, time);

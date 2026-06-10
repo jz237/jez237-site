@@ -13,7 +13,7 @@ the game hot-swaps whatever exists there, no code changes needed.
 
 ### `miner.png`
 *Player character (single pose; the game animates by bobbing/tilting/squash)*  
-Final size: **96×128** · Generate at: **1024x1536** · transparent — cut out after generation
+Final size: **116×176** · Generate at: **1024x1536** · transparent — cut out after generation
 
 ```
 Cozy storybook painterly video-game art. Soft gouache-and-oil brushwork with visible strokes, warm amber key light from the upper-left, gentle violet ambient shadow, rich jewel-tone palette (amber, terracotta, moss green, teal, violet), rounded inviting shapes with strong readable silhouettes, subtle paper-grain texture, edges defined by dark warm-brown paint rather than black outlines, whimsical calm mood like a beloved children's book about a tiny miner, high detail but soft focus falloff, absolutely no photorealism, no 3D render look, no text. A tiny cheerful miner character seen from the side facing right: round amber hard-hat with a small glowing head-lamp, warm beige face with rosy cheek and a chestnut beard, teal canvas jacket with a leather satchel strap, brown trousers and sturdy dark boots. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame.
@@ -163,6 +163,14 @@ Final size: **56×48** · Generate at: **1024x1024** · transparent — cut out 
 
 ```
 Cozy storybook painterly video-game art. Soft gouache-and-oil brushwork with visible strokes, warm amber key light from the upper-left, gentle violet ambient shadow, rich jewel-tone palette (amber, terracotta, moss green, teal, violet), rounded inviting shapes with strong readable silhouettes, subtle paper-grain texture, edges defined by dark warm-brown paint rather than black outlines, whimsical calm mood like a beloved children's book about a tiny miner, high detail but soft focus falloff, absolutely no photorealism, no 3D render look, no text. A treasure curio: a sealed glass bottle with a rolled paper message inside, corked. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame.
+```
+
+### `glowcap_jelly.png`
+*Glowcap Jelly — eaten on pickup, grants a 25s Glimmer Rush (fast, effortless digging)*  
+Final size: **56×44** · Generate at: **1024x1024** · transparent — cut out after generation
+
+```
+Cozy storybook painterly video-game art. Soft gouache-and-oil brushwork with visible strokes, warm amber key light from the upper-left, gentle violet ambient shadow, rich jewel-tone palette (amber, terracotta, moss green, teal, violet), rounded inviting shapes with strong readable silhouettes, subtle paper-grain texture, edges defined by dark warm-brown paint rather than black outlines, whimsical calm mood like a beloved children's book about a tiny miner, high detail but soft focus falloff, absolutely no photorealism, no 3D render look, no text. A small corked glass jar of luminous golden glowcap jelly, soft inner light, a pale shine on the glass. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame.
 ```
 
 ## Veins
