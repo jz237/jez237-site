@@ -859,6 +859,411 @@
    "desc": "Ruins pillar decoration",
    "prompt": "A broken ancient sandstone column with a carved capital, cracked golden stone and small moss tufts. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame."
   },
+  "statue_owl": {
+   "file": "statue_owl.png",
+   "w": 80,
+   "h": 80,
+   "native": [
+    20,
+    20
+   ],
+   "category": "decor",
+   "transparent": true,
+   "tiling": false,
+   "genSize": "1024x1024",
+   "desc": "Owl shrine statue (Gilded Ruins landmark)",
+   "prompt": "A weathered stone owl statue on a square plinth, carved round eyes, small moss tufts, warm grey stone. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame."
+  },
+  "urn": {
+   "file": "urn.png",
+   "w": 56,
+   "h": 56,
+   "native": [
+    14,
+    14
+   ],
+   "category": "decor",
+   "transparent": true,
+   "tiling": false,
+   "genSize": "1024x1024",
+   "desc": "Ruins urn decoration",
+   "prompt": "A small ancient terracotta amphora with two handles and a chipped rim. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame."
+  },
+  "sunken_boat": {
+   "file": "sunken_boat.png",
+   "w": 160,
+   "h": 48,
+   "native": [
+    40,
+    12
+   ],
+   "category": "decor",
+   "transparent": true,
+   "tiling": false,
+   "genSize": "1536x1024",
+   "desc": "Sunken rowboat (Still Lake landmark)",
+   "prompt": "An old sunken wooden rowboat resting on a lake bed, broken ribs, waterlogged planks, faint teal algae. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame."
+  },
+  "cart_wreck": {
+   "file": "cart_wreck.png",
+   "w": 112,
+   "h": 52,
+   "native": [
+    28,
+    13
+   ],
+   "category": "decor",
+   "transparent": true,
+   "tiling": false,
+   "genSize": "1536x1024",
+   "desc": "Wrecked cart (Old Workings landmark)",
+   "prompt": "A tipped-over broken wooden mine cart, one iron wheel detached, splintered planks. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame."
+  },
+  "relic_compass": {
+   "file": "relic_compass.png",
+   "w": 56,
+   "h": 44,
+   "native": [
+    14,
+    11
+   ],
+   "category": "pickup",
+   "transparent": true,
+   "tiling": false,
+   "genSize": "1024x1024",
+   "desc": "Relic: the Wayfarer's Compass",
+   "prompt": "A treasure curio: an antique brass pocket compass with a cream face and red needle. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame."
+  },
+  "relic_locket": {
+   "file": "relic_locket.png",
+   "w": 56,
+   "h": 48,
+   "native": [
+    14,
+    12
+   ],
+   "category": "pickup",
+   "transparent": true,
+   "tiling": false,
+   "genSize": "1024x1024",
+   "desc": "Relic: the Miner's Locket",
+   "prompt": "A treasure curio: a small golden heart locket on a fine chain, rose-tinted picture inside. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame."
+  },
+  "relic_coin": {
+   "file": "relic_coin.png",
+   "w": 56,
+   "h": 44,
+   "native": [
+    14,
+    11
+   ],
+   "category": "pickup",
+   "transparent": true,
+   "tiling": false,
+   "genSize": "1024x1024",
+   "desc": "Relic: an ancient coin",
+   "prompt": "A treasure curio: an ancient gold coin stamped with a worn owl glyph. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame."
+  },
+  "relic_idol": {
+   "file": "relic_idol.png",
+   "w": 56,
+   "h": 52,
+   "native": [
+    14,
+    13
+   ],
+   "category": "pickup",
+   "transparent": true,
+   "tiling": false,
+   "genSize": "1024x1024",
+   "desc": "Relic: the jade dragon idol",
+   "prompt": "A treasure curio: a tiny carved jade dragon idol with a golden eye. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame."
+  },
+  "relic_bottle": {
+   "file": "relic_bottle.png",
+   "w": 56,
+   "h": 48,
+   "native": [
+    14,
+    12
+   ],
+   "category": "pickup",
+   "transparent": true,
+   "tiling": false,
+   "genSize": "1024x1024",
+   "desc": "Relic: message in a bottle",
+   "prompt": "A treasure curio: a sealed glass bottle with a rolled paper message inside, corked. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame."
+  },
+  "moth": {
+   "file": "moth.png",
+   "w": 48,
+   "h": 24,
+   "native": [
+    12,
+    6
+   ],
+   "category": "critter",
+   "transparent": true,
+   "tiling": false,
+   "genSize": "1536x1024",
+   "desc": "Cave moth (flutters near glowing flora)",
+   "prompt": "A small cream cave moth with spread patterned wings, seen from above. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame."
+  },
+  "snail": {
+   "file": "snail.png",
+   "w": 48,
+   "h": 32,
+   "native": [
+    12,
+    8
+   ],
+   "category": "critter",
+   "transparent": true,
+   "tiling": false,
+   "genSize": "1536x1024",
+   "desc": "Cave snail",
+   "prompt": "A little amber-shelled snail with a cream body, side view. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame."
+  },
+  "bat": {
+   "file": "bat.png",
+   "w": 52,
+   "h": 28,
+   "native": [
+    13,
+    7
+   ],
+   "category": "critter",
+   "transparent": true,
+   "tiling": false,
+   "genSize": "1536x1024",
+   "desc": "Cave bat (flutters away when approached)",
+   "prompt": "A tiny round fruit bat with spread dusk-purple wings and amber eyes, front view, friendly. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame."
+  },
+  "fish": {
+   "file": "fish.png",
+   "w": 56,
+   "h": 28,
+   "native": [
+    14,
+    7
+   ],
+   "category": "critter",
+   "transparent": true,
+   "tiling": false,
+   "genSize": "1536x1024",
+   "desc": "Lake fish",
+   "prompt": "A small plump teal cave fish with pale belly, side view. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame."
+  },
+  "bird": {
+   "file": "bird.png",
+   "w": 48,
+   "h": 40,
+   "native": [
+    12,
+    10
+   ],
+   "category": "critter",
+   "transparent": true,
+   "tiling": false,
+   "genSize": "1024x1024",
+   "desc": "Surface bird (flies off when approached)",
+   "prompt": "A small round robin-like bird with a rust-red breast, side view, perched. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame."
+  },
+  "spore_plant": {
+   "file": "spore_plant.png",
+   "w": 48,
+   "h": 40,
+   "native": [
+    12,
+    10
+   ],
+   "category": "decor",
+   "transparent": true,
+   "tiling": false,
+   "genSize": "1024x1024",
+   "desc": "Spore puffballs (mushroom hollows)",
+   "prompt": "A cluster of teal puffball spore pods on thin green stems, softly glowing. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame."
+  },
+  "reeds": {
+   "file": "reeds.png",
+   "w": 56,
+   "h": 48,
+   "native": [
+    14,
+    12
+   ],
+   "category": "decor",
+   "transparent": true,
+   "tiling": false,
+   "genSize": "1024x1024",
+   "desc": "Lake reeds",
+   "prompt": "A tuft of slender dark-teal underwater reeds swaying gently. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame."
+  },
+  "spring_lily": {
+   "file": "spring_lily.png",
+   "w": 64,
+   "h": 32,
+   "native": [
+    16,
+    8
+   ],
+   "category": "decor",
+   "transparent": true,
+   "tiling": false,
+   "genSize": "1536x1024",
+   "desc": "Hot-spring lily pad",
+   "prompt": "A floating green lily pad with a single small pink-cream blossom, top-down three-quarter view. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame."
+  },
+  "mural_miners": {
+   "file": "mural_miners.png",
+   "w": 160,
+   "h": 112,
+   "native": [
+    40,
+    28
+   ],
+   "category": "decor",
+   "transparent": true,
+   "tiling": false,
+   "genSize": "1536x1024",
+   "desc": "Cave mural: the miners (Painted Dark landmark)",
+   "prompt": "A cave-painting panel on lighter rock: ochre stick-figure miners beside violet and green gem glyphs and a spiral, prehistoric style. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame."
+  },
+  "mural_beasts": {
+   "file": "mural_beasts.png",
+   "w": 160,
+   "h": 112,
+   "native": [
+    40,
+    28
+   ],
+   "category": "decor",
+   "transparent": true,
+   "tiling": false,
+   "genSize": "1536x1024",
+   "desc": "Cave mural: the beasts",
+   "prompt": "A cave-painting panel on lighter rock: ochre long-bodied beasts, cream handprints and a spiral, prehistoric style. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame."
+  },
+  "mural_hands": {
+   "file": "mural_hands.png",
+   "w": 160,
+   "h": 112,
+   "native": [
+    40,
+    28
+   ],
+   "category": "decor",
+   "transparent": true,
+   "tiling": false,
+   "genSize": "1536x1024",
+   "desc": "Cave mural: the hands",
+   "prompt": "A cave-painting panel on lighter rock: cream and ochre handprints, gem glyphs and a small miner figure, prehistoric style. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame."
+  },
+  "support_beam": {
+   "file": "support_beam.png",
+   "w": 160,
+   "h": 232,
+   "native": [
+    40,
+    58
+   ],
+   "category": "decor",
+   "transparent": true,
+   "tiling": false,
+   "genSize": "1024x1536",
+   "desc": "Timber mine support (Old Workings landmark)",
+   "prompt": "An old timber mine support: two upright posts and a crossbeam of worn oak with dark joint pegs. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame."
+  },
+  "boulder": {
+   "file": "boulder.png",
+   "w": 88,
+   "h": 68,
+   "native": [
+    22,
+    17
+   ],
+   "category": "decor",
+   "transparent": true,
+   "tiling": false,
+   "genSize": "1024x1024",
+   "desc": "Scatter boulder",
+   "prompt": "A rounded grey-blue boulder with thin cracks and a little moss on top. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame."
+  },
+  "cairn": {
+   "file": "cairn.png",
+   "w": 64,
+   "h": 72,
+   "native": [
+    16,
+    18
+   ],
+   "category": "decor",
+   "transparent": true,
+   "tiling": false,
+   "genSize": "1024x1024",
+   "desc": "Stone cairn (hot springs)",
+   "prompt": "A small stacked stone cairn of four warm terracotta stones. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame."
+  },
+  "shelf_fungi": {
+   "file": "shelf_fungi.png",
+   "w": 56,
+   "h": 72,
+   "native": [
+    14,
+    18
+   ],
+   "category": "decor",
+   "transparent": true,
+   "tiling": false,
+   "genSize": "1024x1024",
+   "desc": "Wall shelf fungi",
+   "prompt": "Three teal shelf-fungus brackets growing in a column from a cave wall, glowing rims. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame."
+  },
+  "flowers_patch": {
+   "file": "flowers_patch.png",
+   "w": 88,
+   "h": 44,
+   "native": [
+    22,
+    11
+   ],
+   "category": "decor",
+   "transparent": true,
+   "tiling": false,
+   "genSize": "1536x1024",
+   "desc": "Surface wildflowers",
+   "prompt": "A small patch of meadow grass blades with four tiny wildflowers in gold, rose and violet. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame."
+  },
+  "bush": {
+   "file": "bush.png",
+   "w": 96,
+   "h": 60,
+   "native": [
+    24,
+    15
+   ],
+   "category": "decor",
+   "transparent": true,
+   "tiling": false,
+   "genSize": "1536x1024",
+   "desc": "Surface bush",
+   "prompt": "A small rounded leafy shrub in layered moss greens with a few tiny rose berries. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame."
+  },
+  "great_mushroom": {
+   "file": "great_mushroom.png",
+   "w": 192,
+   "h": 232,
+   "native": [
+    48,
+    58
+   ],
+   "category": "decor",
+   "transparent": true,
+   "tiling": false,
+   "genSize": "1024x1024",
+   "desc": "The Elder Cap (mushroom hollows landmark)",
+   "prompt": "A towering ancient bioluminescent mushroom: huge glowing teal domed cap with pale spots and gills, thick cream stem. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame."
+  },
   "ui_panel": {
    "file": "ui_panel.png",
    "w": 192,

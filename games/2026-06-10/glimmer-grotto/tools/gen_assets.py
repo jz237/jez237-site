@@ -446,6 +446,197 @@ def gen_pillar(name, seed, prompt, desc):
     outline(img, "#241c08")
     upscale_save(name, img, "decor", True, False, prompt, desc)
 
+# ---------------------------------------------------------------- scenery
+def gen_mural(name, seed, motif, prompt, desc):
+    """Ochre cave-painting panel on lighter rock."""
+    w, h = 40, 28
+    img = canvas(w, h)
+    v = fbm(w, h, 3, 2, seed)
+    ramp_fill(img, v, ["#4a4036", "#5a4e40", "#6a5c4a"], 0.08)
+    ochre = hex2rgba("#c97a3a"); cream = hex2rgba("#d8c8a0"); dark = hex2rgba("#8a4a2a")
+    r = np.random.default_rng(seed)
+    def stick_miner(x0, y0):
+        for (dx, dy) in [(0,0),(0,1),(0,2),(-1,3),(1,3),(0,1)]: put(img, x0+dx, y0+dy+1, ochre)
+        put(img, x0, y0, cream)                       # head
+        put(img, x0-1, y0+2, ochre); put(img, x0+1, y0+2, ochre)  # arms
+        put(img, x0+2, y0+1, dark)                    # pick
+    def gem_glyph(x0, y0, c):
+        for (dx, dy) in [(0,0),(-1,1),(1,1),(0,2)]: put(img, x0+dx, y0+dy, c)
+        put(img, x0, y0+1, hex2rgba("#fff6c4"))
+    def spiral(x0, y0):
+        pts = [(0,0),(1,0),(1,1),(0,1),(-1,1),(-1,0),(-1,-1),(0,-1),(1,-1),(2,-1),(2,0),(2,1),(2,2),(1,2),(0,2),(-1,2),(-2,2)]
+        for (dx, dy) in pts[:int(r.integers(9, 17))]: put(img, x0+dx, y0+dy, ochre)
+    def beast(x0, y0):
+        for dx in range(5): put(img, x0+dx, y0, ochre)
+        for (dx, dy) in [(0,1),(4,1),(1,1),(3,1)]: put(img, x0+dx, y0+dy, ochre)
+        put(img, x0+5, y0-1, ochre); put(img, x0+6, y0-2, dark)
+    def hands(x0, y0):
+        for k in range(int(r.integers(2, 4))):
+            hx, hy = x0+k*4, y0+int(r.integers(-1, 2))
+            for (dx, dy) in [(0,0),(1,0),(0,1),(1,1),(0,-1),(1,-1),(-1,0),(2,0)]:
+                put(img, hx+dx, hy+dy, cream if k % 2 else ochre)
+    if motif == 0:
+        stick_miner(8, 8); stick_miner(15, 9)
+        gem_glyph(24, 10, hex2rgba("#b07ae0")); gem_glyph(30, 8, hex2rgba("#50d890"))
+        spiral(33, 18)
+    elif motif == 1:
+        beast(8, 12); beast(20, 9); hands(28, 18); spiral(6, 20)
+    else:
+        hands(8, 8); gem_glyph(12, 18, hex2rgba("#f05060")); stick_miner(24, 14)
+        gem_glyph(30, 17, hex2rgba("#5890e8")); spiral(18, 20)
+    # worn edges
+    for _ in range(26):
+        x, y = int(r.integers(0, w)), int(r.integers(0, h))
+        if r.random() < .5: img[y, x] = hex2rgba("#4a4036")
+    outline(img, "#2b2218", 180)
+    upscale_save(name, img, "decor", True, False, prompt, desc)
+
+def gen_support_beam(name, seed, prompt, desc):
+    w, h = 40, 58
+    img = canvas(w, h)
+    r = np.random.default_rng(seed)
+    wood = ["#52432f", "#6e5a40", "#82684a"]
+    for x0 in (4, w - 9):              # tall posts
+        for y in range(4, h):
+            for dx in range(5):
+                shade = wood[1 if dx in (1, 2, 3) else 0]
+                if dx == 2 and r.random() < .3: shade = wood[2]
+                put(img, x0 + dx, y, hex2rgba(shade))
+    for y in range(0, 6):              # crossbeam
+        for x in range(0, w):
+            shade = wood[2 if y == 1 else (1 if y < 4 else 0)]
+            put(img, x, y, hex2rgba(shade))
+    for x0 in (4, w - 9):              # diagonal braces
+        sgn = 1 if x0 == 4 else -1
+        for k in range(10):
+            put(img, x0 + (5 if sgn == 1 else -1) + sgn * k, 6 + k, hex2rgba(wood[0]))
+            put(img, x0 + (5 if sgn == 1 else -1) + sgn * k, 7 + k, hex2rgba(wood[1]))
+    for x in (7, w - 7):               # joint pegs
+        put(img, x, 2, hex2rgba("#2c241e")); put(img, x, 3, hex2rgba("#2c241e"))
+    for _ in range(14):                # grain nicks
+        x, y = int(r.integers(0, w)), int(r.integers(0, h))
+        put(img, x, y, hex2rgba("#41352a"))
+    outline(img, "#241c12", 160)
+    upscale_save(name, img, "decor", True, False, prompt, desc)
+
+def gen_boulder(name, seed, prompt, desc):
+    w, h = 22, 17
+    img = canvas(w, h)
+    r = np.random.default_rng(seed)
+    v = fbm(w, h, 3, 2, seed)
+    for y in range(h):
+        for x in range(w):
+            dx, dy = (x - w/2 + .5) / (w/2), (y - h/2 + .5) / (h/2)
+            if dx*dx + dy*dy*1.3 <= 1 + (v[y, x] - .5) * .35:
+                t = .62 - dy * .3 - dx * .14 + (v[y, x] - .5) * .4
+                ramp = ["#3b4148", "#4c545d", "#5d6770", "#707b85"]
+                img[y, x] = hex2rgba(ramp[int(max(0, min(1, t)) * 3 + .5)])
+    cracks(img, 2, "#2b3036", "#7e8a94", seed + 2)
+    for _ in range(3):
+        x, y = int(r.integers(3, w-3)), int(r.integers(1, 4))
+        put(img, x, y, hex2rgba("#558a3b"))
+    outline(img, "#1a1d22")
+    upscale_save(name, img, "decor", True, False, prompt, desc)
+
+def gen_cairn(name, seed, prompt, desc):
+    w, h = 16, 18
+    img = canvas(w, h)
+    r = np.random.default_rng(seed)
+    ramp = ["#5a3328", "#6e4030", "#824e38", "#965c40"]
+    yb = h - 1
+    for sw in (12, 9, 6, 4):           # stacked stones, biggest first
+        sh = max(2, sw // 3 + 1)
+        x0 = (w - sw) // 2 + int(r.integers(-1, 2))
+        for yy in range(sh):
+            for xx in range(sw - abs(yy - sh // 2)):
+                t = .7 - yy / sh * .4 + (r.random() - .5) * .25
+                put(img, x0 + xx + abs(yy - sh // 2) // 2, yb - yy,
+                    hex2rgba(ramp[int(max(0, min(1, t)) * 3 + .5)]))
+        yb -= sh
+    outline(img, "#2c1812")
+    upscale_save(name, img, "decor", True, False, prompt, desc)
+
+def gen_shelf_fungi(name, seed, prompt, desc):
+    w, h = 14, 18
+    img = canvas(w, h)
+    r = np.random.default_rng(seed)
+    for k, yy in enumerate((3, 9, 14)):
+        sw = int(r.integers(7, 11))
+        for y in range(3):
+            for x in range(sw - y * 2):
+                t = .8 - y * .3
+                c = lerp_c(hex2rgba("#2a8a7e"), hex2rgba("#aef5ea"), t * (0.5 + 0.5 * (x / max(1, sw))))
+                put(img, x, yy + y, c)
+        put(img, sw - 2, yy, hex2rgba("#e8e2c8"))
+    outline(img, "#10201e", 200)
+    upscale_save(name, img, "decor", True, False, prompt, desc)
+
+def gen_flowers_patch(name, seed, prompt, desc):
+    w, h = 22, 11
+    img = canvas(w, h)
+    r = np.random.default_rng(seed)
+    for x in range(1, w - 1):          # grass blades
+        if r.random() < .75:
+            bh = int(r.integers(2, 6))
+            for y in range(bh):
+                put(img, x, h - 1 - y, hex2rgba("#558a3b" if y < bh - 1 else "#7ab35a"))
+    for _ in range(4):                 # flowers
+        x = int(r.integers(2, w - 2)); y = h - int(r.integers(5, 8))
+        c = ["#ffd87f", "#e0667e", "#e8e2c8", "#b07ae0"][int(r.integers(0, 4))]
+        put(img, x, y, hex2rgba(c)); put(img, x + 1, y, hex2rgba(c))
+        put(img, x, y + 1, hex2rgba(c)); put(img, x + 1, y + 1, hex2rgba("#fff6c4"))
+        put(img, x, y + 2, hex2rgba("#3f6b2e"))
+    upscale_save(name, img, "decor", True, False, prompt, desc)
+
+def gen_bush(name, seed, prompt, desc):
+    w, h = 24, 15
+    img = canvas(w, h)
+    v = fbm(w, h, 3, 2, seed)
+    r = np.random.default_rng(seed)
+    for y in range(h):
+        for x in range(w):
+            dx, dy = (x - w/2 + .5) / (w/2), (y - h + 2) / h
+            if dx*dx + dy*dy*1.6 <= 1 + (v[y, x] - .5) * .5:
+                t = .7 - (y / h) * .45 + (v[y, x] - .5) * .5
+                ramp = ["#274d22", "#3f6b2e", "#558a3b", "#7ab35a"]
+                img[y, x] = hex2rgba(ramp[int(max(0, min(1, t)) * 3 + .5)])
+    for _ in range(4):
+        x, y = int(r.integers(3, w - 3)), int(r.integers(2, h - 4))
+        if img[y, x, 3]: put(img, x, y, hex2rgba("#e0667e"))
+    outline(img, "#14240f", 170)
+    upscale_save(name, img, "decor", True, False, prompt, desc)
+
+def gen_great_mushroom(name, seed, prompt, desc):
+    w, h = 48, 58
+    img = canvas(w, h)
+    r = np.random.default_rng(seed)
+    v = fbm(w, h, 4, 2, seed)
+    capH = 26
+    for y in range(capH):              # huge domed cap
+        t = y / capH
+        half = int((w / 2 - 2) * math.sqrt(max(0.05, t)))
+        for x in range(w // 2 - half, w // 2 + half + 1):
+            sh = .78 - t * .35 - abs(x - w/2) / w * .5 + (v[y, x] - .5) * .25
+            ramp = ["#1f6159", "#2a8a7e", "#3fbfae", "#74e0d2"]
+            img[y, x] = hex2rgba(ramp[int(max(0, min(1, sh)) * 3 + .5)])
+    for _ in range(10):                # pale spots
+        x, y = int(r.integers(6, w - 6)), int(r.integers(4, capH - 3))
+        if img[y, x, 3]:
+            for (dx, dy) in [(0,0),(1,0),(0,1),(1,1)]:
+                put(img, x+dx, y+dy, hex2rgba("#aef5ea"))
+    for x in range(w // 2 - 20, w // 2 + 21):     # gills under rim
+        if 0 <= x < w and img[capH - 1, x, 3]:
+            put(img, x, capH, hex2rgba("#16453f" if x % 2 else "#1f6159"))
+    for y in range(capH + 1, h):       # thick stem
+        tt = (y - capH) / (h - capH)
+        half = int(5 + tt * 3)
+        for x in range(w // 2 - half, w // 2 + half + 1):
+            sh = .72 - abs(x - w/2) / (half + 1) * .45 + (v[y, x] - .5) * .2
+            ramp = ["#9a937c", "#c4bda0", "#e8e2c8"]
+            img[y, x] = hex2rgba(ramp[int(max(0, min(1, sh)) * 2 + .5)])
+    outline(img, "#0e2a26")
+    upscale_save(name, img, "decor", True, False, prompt, desc)
+
 # ---------------------------------------------------------------- UI
 def gen_panel(name, prompt, desc):
     s = 48
@@ -784,6 +975,82 @@ def main():
         sprite_prompt("A broken ancient sandstone column with a carved capital, cracked golden stone and small moss tufts."),
         "Ruins pillar decoration")
 
+    # scenery & landmark props
+    render_string_sprite("statue_owl", SD["statue_owl"], "decor",
+        sprite_prompt("A weathered stone owl statue on a square plinth, carved round eyes, small moss tufts, warm grey stone."),
+        "Owl shrine statue (Gilded Ruins landmark)")
+    render_string_sprite("urn", SD["urn"], "decor",
+        sprite_prompt("A small ancient terracotta amphora with two handles and a chipped rim."),
+        "Ruins urn decoration")
+    render_string_sprite("sunken_boat", SD["sunken_boat"], "decor",
+        sprite_prompt("An old sunken wooden rowboat resting on a lake bed, broken ribs, waterlogged planks, faint teal algae."),
+        "Sunken rowboat (Still Lake landmark)")
+    render_string_sprite("cart_wreck", SD["cart_wreck"], "decor",
+        sprite_prompt("A tipped-over broken wooden mine cart, one iron wheel detached, splintered planks."),
+        "Wrecked cart (Old Workings landmark)")
+    for nm, subject, dsc in [
+        ("relic_compass", "an antique brass pocket compass with a cream face and red needle", "Relic: the Wayfarer's Compass"),
+        ("relic_locket", "a small golden heart locket on a fine chain, rose-tinted picture inside", "Relic: the Miner's Locket"),
+        ("relic_coin", "an ancient gold coin stamped with a worn owl glyph", "Relic: an ancient coin"),
+        ("relic_idol", "a tiny carved jade dragon idol with a golden eye", "Relic: the jade dragon idol"),
+        ("relic_bottle", "a sealed glass bottle with a rolled paper message inside, corked", "Relic: message in a bottle"),
+    ]:
+        render_string_sprite(nm, SD[nm], "pickup", sprite_prompt(f"A treasure curio: {subject}."), dsc)
+    render_string_sprite("moth", SD["moth"], "critter",
+        sprite_prompt("A small cream cave moth with spread patterned wings, seen from above."),
+        "Cave moth (flutters near glowing flora)")
+    render_string_sprite("snail", SD["snail"], "critter",
+        sprite_prompt("A little amber-shelled snail with a cream body, side view."),
+        "Cave snail")
+    render_string_sprite("bat", SD["bat"], "critter",
+        sprite_prompt("A tiny round fruit bat with spread dusk-purple wings and amber eyes, front view, friendly."),
+        "Cave bat (flutters away when approached)")
+    render_string_sprite("fish", SD["fish"], "critter",
+        sprite_prompt("A small plump teal cave fish with pale belly, side view."),
+        "Lake fish")
+    render_string_sprite("bird", SD["bird"], "critter",
+        sprite_prompt("A small round robin-like bird with a rust-red breast, side view, perched."),
+        "Surface bird (flies off when approached)")
+    render_string_sprite("spore_plant", SD["spore_plant"], "decor",
+        sprite_prompt("A cluster of teal puffball spore pods on thin green stems, softly glowing."),
+        "Spore puffballs (mushroom hollows)")
+    render_string_sprite("reeds", SD["reeds"], "decor",
+        sprite_prompt("A tuft of slender dark-teal underwater reeds swaying gently."),
+        "Lake reeds")
+    render_string_sprite("spring_lily", SD["spring_lily"], "decor",
+        sprite_prompt("A floating green lily pad with a single small pink-cream blossom, top-down three-quarter view."),
+        "Hot-spring lily pad")
+    gen_mural("mural_miners", 901, 0,
+        sprite_prompt("A cave-painting panel on lighter rock: ochre stick-figure miners beside violet and green gem glyphs and a spiral, prehistoric style."),
+        "Cave mural: the miners (Painted Dark landmark)")
+    gen_mural("mural_beasts", 902, 1,
+        sprite_prompt("A cave-painting panel on lighter rock: ochre long-bodied beasts, cream handprints and a spiral, prehistoric style."),
+        "Cave mural: the beasts")
+    gen_mural("mural_hands", 903, 2,
+        sprite_prompt("A cave-painting panel on lighter rock: cream and ochre handprints, gem glyphs and a small miner figure, prehistoric style."),
+        "Cave mural: the hands")
+    gen_support_beam("support_beam", 904,
+        sprite_prompt("An old timber mine support: two upright posts and a crossbeam of worn oak with dark joint pegs."),
+        "Timber mine support (Old Workings landmark)")
+    gen_boulder("boulder", 905,
+        sprite_prompt("A rounded grey-blue boulder with thin cracks and a little moss on top."),
+        "Scatter boulder")
+    gen_cairn("cairn", 906,
+        sprite_prompt("A small stacked stone cairn of four warm terracotta stones."),
+        "Stone cairn (hot springs)")
+    gen_shelf_fungi("shelf_fungi", 907,
+        sprite_prompt("Three teal shelf-fungus brackets growing in a column from a cave wall, glowing rims."),
+        "Wall shelf fungi")
+    gen_flowers_patch("flowers_patch", 908,
+        sprite_prompt("A small patch of meadow grass blades with four tiny wildflowers in gold, rose and violet."),
+        "Surface wildflowers")
+    gen_bush("bush", 909,
+        sprite_prompt("A small rounded leafy shrub in layered moss greens with a few tiny rose berries."),
+        "Surface bush")
+    gen_great_mushroom("great_mushroom", 910,
+        sprite_prompt("A towering ancient bioluminescent mushroom: huge glowing teal domed cap with pale spots and gills, thick cream stem."),
+        "The Elder Cap (mushroom hollows landmark)")
+
     # UI
     gen_panel("ui_panel",
         sprite_prompt("A square wooden UI panel frame: carved oak border with golden corner studs around a dark leather center. Designed to be 9-sliced."),
@@ -828,7 +1095,7 @@ def main():
     cats = {}
     for k in PROMPT_ORDER:
         cats.setdefault(MANIFEST[k]["category"], []).append(k)
-    for cat in ["character", "pickup", "vein", "tile", "decor", "prop", "background", "ui"]:
+    for cat in ["character", "pickup", "vein", "tile", "decor", "critter", "prop", "background", "ui"]:
         if cat not in cats: continue
         lines.append(f"## {cat.title()}s\n")
         for k in cats[cat]:
