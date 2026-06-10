@@ -106,5 +106,23 @@
       "continuity": "Preserves the fossil-reef canals, shell-tram transit, marrowglass and brass tide technology, quayfolk workwear, reef vegetation, and pearly sea-glass dawn palette.",
       "entryDescription": "Quayfolk mechanics and an apprentice repair a shell-tram at East Siphon Yard during the dawn commute."
     }
+  },
+  {
+    "id": "2026-06-10-overnight-veyraxis-bloomrift-pressure-light-breakfast-bloom",
+    "title": "Veyraxis Bloomrift: Pressure-Light Breakfast Bloom",
+    "tests": "Weekly world: Veyraxis Bloomrift. A dawn nursery breakfast scene showing reefmind inhabitants sharing pressure-light around communal bowls in the recurring basalt, nacre membrane, alien vegetation, cyan storm light, and amber glow canon.",
+    "prompt": "Create a realistic photographed/cinematic square image set in Veyraxis Bloomrift, showing Pressure-Light Breakfast Bloom at Low Rift Nursery: non-human reefmind inhabitants with translucent shell mantles, tripod root-limbs, ribbon sensory fans, bioluminescent throat sacs, and symbiotic tendril tool clusters gather around communal light-harvest bowls at dawn. The bowls are grown basalt and flexing nacre membrane, filled with amber pressure-light and floating brine droplets; reefminds exchange light through soft throat-sac glows rather than human tableware. Surround them with vertical basalt petals, suspended brine lenses, silver mud terraces, semi-transparent frond lungs, spiral salt antlers, black moss veils, floating pollen sacs, mineral orchids with wet ceramic skins, slow-rooted amber fans, gill-like wet-glass nursery doors, pulse-lit waynodes, hanging capillary bridges, living crystal pressure gauges, woven vascular fibers, and spiral root-limb tracks. Render as real camera/cinematic photography with storm-filtered cyan morning light, bruised violet shadows, milky opal membranes, pearlescent mist, amber internal glow, red pressure-light pulses, physical material wear, atmospheric scale, and naturalistic alien anatomy. No humans, astronauts, Earth animals, Earth streets, cars, spaceships, logos, readable text, illustration, concept art, watermark, or dancing.\n\nSource photo needed: none.\n\nReusable template: Create a realistic photographed/cinematic daily-life image set in [WORLD_NAME], showing [EVERYDAY SCENE] at [LOCATION], with [INHABITANTS], [LOCAL MATERIALS], [VEGETATION], [INFRASTRUCTURE], and [TIME_OF_DAY] lighting. Preserve the world geography, settlements, transit/infrastructure logic, vegetation, life forms, materials/technology, palette, lighting, recurring motifs, and hard avoid rules; vary the exact activity, viewpoint, weather, props, and social moment while staying inside the canon. Make it look like a real camera captured an alien society, not an illustration or prompt card.\n\nWhat to preserve: the Veyraxis Bloomrift world name, vertical basalt petals, suspended brine lenses, upward vapor rivers, grown basalt and nacre membrane infrastructure, reefmind body plan, pressure-light technology, alien vegetation, storm-filtered cyan and amber palette, gill-like doors, breathing bridges, shell-mantle silhouettes, hanging brine droplets, living crystal pressure gauges, spiral root-limb tracks, and communal light-harvest bowls.\n\nWhat to change: the exact daily-life subject, location, time of day, crowd arrangement, camera viewpoint, weather intensity, infrastructure focus, props, and specific reefmind behavior can change while preserving the same world bible.\n\nExample substitution: Create a realistic photographed daily-life image set in Veyraxis Bloomrift, showing a wind-bladder ferry platform at Vascular Crossing during dusk commute, with reefminds boarding through membrane docks, pulse-lit waynodes, capillary bridges, frond lungs, floating pollen sacs, wet basalt, amber pressure-light, and storm-filtered cyan mist.",
+    "image": "images/2026-06-10-overnight-veyraxis-bloomrift-pressure-light-breakfast-bloom.png",
+    "date": "2026-06-10",
+    "batch": "Daily Prompt",
+    "slot": "overnight",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "world": {
+      "name": "Veyraxis Bloomrift",
+      "description": "A living basalt-and-membrane alien world where glass-shelled reefminds inhabit floating mineral blooms, harvest pressure-light, and move through vascular wind channels.",
+      "continuity": "Preserves Veyraxis Bloomrift's vertical basalt petals, nacre membranes, reefmind body plan, pressure-light bowls, alien vegetation, cyan storm light, and amber internal glow.",
+      "entryDescription": "A dawn Low Rift Nursery breakfast scene where reefmind inhabitants exchange pressure-light around communal living bowls."
+    }
   }
 ]
