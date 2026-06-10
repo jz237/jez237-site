@@ -1,6 +1,6 @@
 {
   "date": "2026-06-10",
-  "updatedAt": "2026-06-10T20:43:37.391743+00:00",
+  "updatedAt": "2026-06-10T22:00:01.374776+00:00",
   "items": [
     {
       "title": "Cybersecurity researchers aren’t happy about the guardrails on Anthropic’s Fable",
@@ -13,11 +13,11 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/anthropic-claude-fable.jpg?resize=1200%2C798",
       "published": "2026-06-10T15:41:22+00:00",
       "firstSeen": "2026-06-10T16:00:01.165430+00:00",
-      "lastSeen": "2026-06-10T20:43:37.391743+00:00",
+      "lastSeen": "2026-06-10T22:00:01.374776+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 17.6464
+      "score": 17.6131
     },
     {
       "title": "How B2B brands are earning citations in ChatGPT, Claude, and Google’s AI Overviews",
@@ -33,7 +33,7 @@
       "lastSeen": "2026-06-10T10:00:01.155256+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 17.3994
+      "score": 17.3734
     },
     {
       "title": "Microsoft restricts Claude Fable for employees over data retention concerns",
@@ -46,10 +46,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/01/STK095_MICROSOFT_CVirginia_B.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-10T16:50:23+00:00",
       "firstSeen": "2026-06-10T17:00:02.053374+00:00",
-      "lastSeen": "2026-06-10T20:43:37.391743+00:00",
+      "lastSeen": "2026-06-10T22:00:01.374776+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.9474
+      "score": 12.9131
     },
     {
       "title": "Decart’s new world model can simulate hours of photorealistic driving — with some caveats",
@@ -62,11 +62,27 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/Decart-Oasis-3.png?resize=1200%2C675",
       "published": "2026-06-10T13:07:56+00:00",
       "firstSeen": "2026-06-10T14:00:01.320221+00:00",
-      "lastSeen": "2026-06-10T20:43:37.391743+00:00",
+      "lastSeen": "2026-06-10T22:00:01.374776+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 11.7808
+      "score": 11.7498
+    },
+    {
+      "title": "OpenAI says China-linked accounts used ChatGPT to fuel opposition to US data centres",
+      "url": "https://thenextweb.com/news/openai-china-data-center-influence-campaign",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "OpenAI said a cluster of ChatGPT accounts linked to China attempted to stir up local opposition to US data centres by posing as Americans and posting AI-generated content about rising electricity costs. The company nicknamed the campaign “Data Center Bandwagon” and said the accounts were likely tied to a private Chinese technology firm working for [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/openai-china-data-center-influence-campaign.avif",
+      "published": "2026-06-10T20:52:27+00:00",
+      "firstSeen": "2026-06-10T22:00:01.374776+00:00",
+      "lastSeen": "2026-06-10T22:00:01.374776+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 11.1161
     },
     {
       "title": "Anthropic’s CEO says he doesn’t know if Claude was used in the Iran school strike that killed 120 children",
@@ -82,7 +98,7 @@
       "lastSeen": "2026-06-10T20:43:37.391743+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.0418
+      "score": 11.0074
     },
     {
       "title": "Claude Fable won’t answer basic biology questions",
@@ -95,10 +111,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/STKB364_CLAUDE_2_A_3800fc.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-10T18:43:34+00:00",
       "firstSeen": "2026-06-10T20:00:01.627523+00:00",
-      "lastSeen": "2026-06-10T20:43:37.391743+00:00",
+      "lastSeen": "2026-06-10T22:00:01.374776+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.0005
+      "score": 10.9644
     },
     {
       "title": "Release v5.11.0",
@@ -108,14 +124,14 @@
       "sourceWeight": 0.85,
       "category": "AI",
       "summary": "Release v5.11.0\nNew Model additions\nDiffusionGemma\n\nDiffusionGemma is engineered to reduce the sequential bottlenecks of standard causal language models by employing an encoder-decoder architecture specifically optimized for inference speed. During inference, DiffusionGemma leverages multi-canvas sampling, where rather than generating one token at a time, the model iteratively denoises a full block of tokens using a diffusion sampler. This block-autoregressive approach facilitates text generation at higher speeds compared to traditional sequential generation methods.\nLinks: Documentation\n\nGPU ",
-      "image": "https://private-user-images.githubusercontent.com/73884904/605905881-5081e449-6374-4076-bd96-d295c8334ca4.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3ODExMjQ1MjUsIm5iZiI6MTc4MTEyNDIyNSwicGF0aCI6Ii83Mzg4NDkwNC82MDU5MDU4ODEtNTA4MWU0NDktNjM3NC00MDc2LWJkOTYtZDI5NWM4MzM0Y2E0LnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNjA2MTAlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjYwNjEwVDIwNDM0NVomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPWM3YTQ3YjBhYWQ3NTdlZGEwZTg2NWExNTZmODRjMjIyNjhiNzVkOTI3NzA5ZDIyM2Q4ZjkwMmJkMzA5YzlmNDkmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0JnJlc3BvbnNlLWNvbnRlbnQtdHlwZT1pbWFnZSUyRnBuZyJ9.tGCRr0A2yE_KMYbc2Cjk5BPzhwpuQEIhLEvtOmslD0M",
+      "image": "https://private-user-images.githubusercontent.com/73884904/605905881-5081e449-6374-4076-bd96-d295c8334ca4.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3ODExMjkxMTUsIm5iZiI6MTc4MTEyODgxNSwicGF0aCI6Ii83Mzg4NDkwNC82MDU5MDU4ODEtNTA4MWU0NDktNjM3NC00MDc2LWJkOTYtZDI5NWM4MzM0Y2E0LnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNjA2MTAlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjYwNjEwVDIyMDAxNVomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTI1NzdkN2YzZGFlZjUxYjlkYTNkMjU4YTdjZmU1NDFlNGUwZjY3MzljZmU2ZWExNzczZDA4MWU4NzQyYTgzNGEmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0JnJlc3BvbnNlLWNvbnRlbnQtdHlwZT1pbWFnZSUyRnBuZyJ9.rqjVdnqOTp4cCEAFycV0wQsvsgJo2nAb9i7jLw6-BgM",
       "published": "2026-06-10T16:32:44+00:00",
       "firstSeen": "2026-06-10T17:00:02.053374+00:00",
-      "lastSeen": "2026-06-10T20:43:37.391743+00:00",
+      "lastSeen": "2026-06-10T22:00:01.374776+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 10.4694
+      "score": 10.4353
     },
     {
       "title": "This $19.99 Claude AI Course Is Built for Work, Not Just Prompts",
@@ -128,10 +144,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/06/tra-06102026-claude-ai-professional-edegree.jpg?f=jpeg",
       "published": "2026-06-10T07:17:33+00:00",
       "firstSeen": "2026-06-10T16:00:01.165430+00:00",
-      "lastSeen": "2026-06-10T20:43:37.391743+00:00",
+      "lastSeen": "2026-06-10T22:00:01.374776+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.3074
+      "score": 10.2811
     },
     {
       "title": "NVIDIA Accelerates Google DeepMind’s DiffusionGemma for Local AI",
@@ -144,10 +160,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/diffusiongemma-nv-blog-1280x680-1.jpg",
       "published": "2026-06-10T16:15:20+00:00",
       "firstSeen": "2026-06-10T17:00:02.053374+00:00",
-      "lastSeen": "2026-06-10T20:43:37.391743+00:00",
+      "lastSeen": "2026-06-10T22:00:01.374776+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 9.1615
+      "score": 9.1278
     },
     {
       "title": "DiffusionGemma",
@@ -160,10 +176,10 @@
       "image": "https://static.simonwillison.net/static/2026/diffusiongemma-pelican.png",
       "published": "2026-06-10T20:00:54+00:00",
       "firstSeen": "2026-06-10T20:43:37.391743+00:00",
-      "lastSeen": "2026-06-10T20:43:37.391743+00:00",
+      "lastSeen": "2026-06-10T22:00:01.374776+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.0685
+      "score": 9.031
     },
     {
       "title": "Your face is the ticket: Google’s Gemini and biometric gates are the World Cup’s quieter tech story",
@@ -179,35 +195,14 @@
       "lastSeen": "2026-06-10T14:00:01.320221+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.9827
-    },
-    {
-      "title": "PRC-linked influence operations are targeting AI debates in the US",
-      "url": "https://openai.com/index/prc-linked-influence-operations-ai-debates",
-      "source": "OpenAI News",
-      "sourceUrl": "https://openai.com/news/rss.xml",
-      "sourceWeight": 1.0,
-      "category": "AI",
-      "summary": "A new report from OpenAI details PRC-linked influence operations using AI to target U.S. tech debates, data center narratives, tariffs, and false claims  about ChatGPT.",
-      "image": "",
-      "published": "2026-06-10T12:00:00+00:00",
-      "firstSeen": "2026-06-10T20:43:37.391743+00:00",
-      "lastSeen": "2026-06-10T20:43:37.391743+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 8.2632
+      "score": 8.9538
     }
   ],
   "errors": [
     {
-      "source": "Artificial Intelligence News",
-      "url": "https://www.artificialintelligence-news.com/categories/artificial-intelligence/feed/",
-      "error": "not well-formed (invalid token): line 1, column 158"
-    },
-    {
       "source": "MarkTechPost",
       "url": "https://www.marktechpost.com/feed/",
-      "error": "not well-formed (invalid token): line 1, column 119"
+      "error": "HTTP Error 403: Forbidden"
     }
   ]
 }
