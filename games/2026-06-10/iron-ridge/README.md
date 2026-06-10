@@ -15,6 +15,7 @@ check line-of-sight, and lead their shots.
 | mouse — aim turret | drag right side — aim |
 | click / space — fire | FIRE button |
 | R — restock the ready rack | |
+| F — call airstrike (earned via kill streaks) | ✈ button |
 | scroll — camera zoom | |
 | Esc — pause · M — mute | PAUSE button |
 
@@ -32,9 +33,15 @@ check line-of-sight, and lead their shots.
   line-of-sight, lead the player's motion, and un-stick themselves —
   plus static pillbox gun emplacements, and artillery barrages with
   red warning rings from wave 5.
+- **Pacing:** enemy armor appears from wave 1 and is the only thing
+  gating wave progress — target boards are optional bonus objectives.
+  If the field ever goes quiet, scout patrols roll in; new contacts are
+  announced with compass bearings and minimap pings. Kill streaks earn
+  a one-shot airstrike called on your reticle, and unarmed supply
+  convoys periodically cross the map for bonus points.
 - **Tactics:** a live minimap (terrain underlay, enemy/target/barrel/
-  pillbox blips, view cone, edge chevrons for off-map threats) and
-  armor-repair supply drops from tank kills.
+  pillbox/convoy blips, view cone, edge chevrons for off-map threats)
+  and armor-repair supply drops from tank kills.
 - **Scoring:** global top-10 via the site's shared Cloudflare Worker
   (`/scores/iron-ridge` namespace), with localStorage fallback offline.
 
@@ -45,8 +52,11 @@ files, textures, or sourced assets. Terrain is simplex-noise heightmap
 geometry with canvas-painted grass/dirt/rock detail textures blended by
 slope and height in the shader, plus baked concavity AO; four tree
 species, bushes, deadfall, grass, and flowers are instanced primitive
-meshes scattered by noise; tanks are built from boxes and cylinders with
-canvas-decal markings; the sky is a gradient shader with a sun disc and
+meshes scattered by noise. Tanks have sloped trapezoid hulls, cast
+lathe turrets with cupolas and pintle MGs, canvas-painted camo and
+decal markings, road wheels that ride the (real) suspension, and
+individually instanced track links that circulate around the running
+gear at per-side track speed; the sky is a gradient shader with a sun disc and
 canvas-blob clouds; effects are pooled point sprites with scorch decals.
 The look aims for clean stylized low-poly, not photorealism.
 

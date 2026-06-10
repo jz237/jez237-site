@@ -113,6 +113,15 @@ const G = {
   simT: 0,
   artilleryT: 12,
   pendingArty: [],
+  quietT: 0,
+  waveHadTargets: false,
+  targetsBonusGiven: false,
+  streakKills: 0,
+  streakT: 0,
+  airstrike: false,
+  pendingBombs: [],
+  convoyT: 50,
+  fovKick: 0,
 };
 
 let pendingScore = 0;
@@ -263,17 +272,30 @@ function killEnemy(e) {
   bumpCombo();
   addScore(e.type?.points ?? ENEMY.points, 'TANK KILL', 'kill');
   hud.hitmarker(true);
+  // kill streak builds toward an airstrike
+  G.streakT = 14;
+  G.streakKills++;
+  if (G.streakKills >= 3 && !G.airstrike) {
+    G.airstrike = true;
+    G.streakKills = 0;
+    hud.setStrike(true);
+    hud.banner('AIRSTRIKE READY', 'press F (or tap ✈) to call it in on your reticle', 3);
+  }
   // supply drop
   if (Math.random() < PICKUP.dropChance) {
     props.spawnCrate(pos.x + (Math.random() - 0.5) * 4, pos.z + (Math.random() - 0.5) * 4);
   }
 }
 
-function damageEnemy(e, dmg) {
+function damageEnemy(e, dmg, hitPoint = null) {
   if (!e.tank.alive) return;
   const killed = e.tank.damage(dmg);
   if (killed) killEnemy(e);
-  else { hud.hitmarker(false); audio.hitTink(); }
+  else {
+    hud.hitmarker(false);
+    audio.hitTink();
+    if (hitPoint) effects.sparks(hitPoint);
+  }
 }
 
 function damagePlayer(dmg) {
@@ -299,17 +321,38 @@ function applySplashDamage(pos, radius, byPlayer, baseDmg) {
   }
 }
 
+function killTruck(truck, byPlayer) {
+  if (!truck.alive) return;
+  truck.alive = false;
+  truck.age = 0;
+  const pos = new THREE.Vector3().copy(truck.body.position);
+  truck.mesh.traverse(o => {
+    if (o.isMesh) o.material = new THREE.MeshStandardMaterial({ color: 0x232323, roughness: 1 });
+  });
+  effects.explosion(pos, 1.3);
+  audio.explosion(1.1);
+  if (byPlayer) {
+    bumpCombo();
+    addScore(250, 'CONVOY TRUCK', 'kill');
+    hud.hitmarker(true);
+    if (waves.trucks?.length === 3 && waves.trucks.every(t => !t.alive)) {
+      addScore(500, 'CONVOY DESTROYED', 'kill');
+    }
+  }
+}
+
 function onShellHit(hit) {
   const s = hit.shell;
   const byPlayer = s.fromPlayer;
   const pos = hit.point;
+  const power = s.power ?? 1;
 
-  effects.explosion(pos, byPlayer ? 1 : 0.9);
+  effects.explosion(pos, (byPlayer ? 1 : 0.9) * power);
   const camD = camera.position.distanceTo(pos);
-  if (camD < 160) audio.explosion(Math.max(0.4, 1.2 - camD / 160));
+  if (camD < 160) audio.explosion(Math.max(0.4, 1.2 - camD / 160) * power);
 
   // real impulses into nearby rigid bodies
-  const affected = projectiles.explode(pos, SHELL.splashRadius, SHELL.impulse);
+  const affected = projectiles.explode(pos, SHELL.splashRadius * power, SHELL.impulse * power);
 
   // direct hit damage
   const shellDmg = s.owner?.shellDmg ?? ENEMY.shellDamage;
@@ -320,8 +363,11 @@ function onShellHit(hit) {
       damagePlayer(shellDmg + Math.floor(G.wave * 0.8));
     } else if (!tk.isPlayer && byPlayer) {
       const e = waves.enemies.find(e => e.tank === tk);
-      if (e) { damageEnemy(e, SHELL.damageDirect); G.shotsHit++; }
+      if (e) { damageEnemy(e, SHELL.damageDirect, pos); G.shotsHit++; }
     }
+  } else if (ud?.kind === 'truck') {
+    if (byPlayer) G.shotsHit++;
+    killTruck(ud.truck, byPlayer);
   } else if (ud?.kind === 'prop') {
     if (byPlayer) G.shotsHit++;
     damageProp(ud.prop, 2, byPlayer);
@@ -330,13 +376,21 @@ function onShellHit(hit) {
     if (byPlayer) addScore(SCORING.tree, '');
   }
 
-  // splash damage to tanks
+  // splash damage to tanks + trucks
+  const splashR = SHELL.splashRadius * power;
   for (const e of waves.enemies) {
     if (!e.tank.alive) continue;
     const d = e.tank.body.position.distanceTo(new CANNON.Vec3(pos.x, pos.y, pos.z));
-    if (d < SHELL.splashRadius && byPlayer && (!hit.body || hit.body !== e.tank.body)) {
-      damageEnemy(e, SHELL.damageSplash * (1 - d / SHELL.splashRadius));
+    if (d < splashR && byPlayer && (!hit.body || hit.body !== e.tank.body)) {
+      damageEnemy(e, SHELL.damageSplash * power * (1 - d / splashR));
       G.shotsHit++;
+    }
+  }
+  if (byPlayer && waves.trucks) {
+    for (const tr of waves.trucks) {
+      if (tr.alive && tr.body.position.distanceTo(new CANNON.Vec3(pos.x, pos.y, pos.z)) < splashR) {
+        killTruck(tr, true);
+      }
     }
   }
   if (G.player?.alive) {
@@ -372,6 +426,7 @@ function playerFire() {
   }
   const shot = p.fire();
   if (!shot) return;
+  G.fovKick = 1;
   G.shotsFired++;
   audio.fire();
   effects.muzzleFlash(shot.origin, shot.dir);
@@ -381,13 +436,39 @@ function playerFire() {
 }
 
 // ---------------------------------------------------------------- waves
+function compassDir(dx, dz) {
+  // north = -z (matches the minimap)
+  const oct = Math.round(Math.atan2(dx, -dz) / (Math.PI / 4)) & 7;
+  return ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'][oct];
+}
+
+function announceContacts(spawned, label = 'ARMOR INBOUND') {
+  if (!spawned.length || !G.player) return;
+  const pp = G.player.body.position;
+  const e0 = spawned[0].tank.body.position;
+  hud.banner(label, `contact ${compassDir(e0.x - pp.x, e0.z - pp.z)} — check the minimap`, 2.2);
+  for (const e of spawned) minimap.ping(e.tank.body.position.x, e.tank.body.position.z);
+  audio.click();
+}
+
 function startWave(w) {
   G.wave = w;
+  G.targetsBonusGiven = false;
+  // last wave's uncollected bonus targets despawn; cap barrel clutter
+  for (const it of [...props.items]) {
+    if (it.alive && it.kind === 'target') props.removeItem(it);
+  }
+  const barrels = props.items.filter(i => i.alive && i.kind === 'barrel');
+  for (let i = 0; i < barrels.length - 8; i++) props.removeItem(barrels[i]);
+  const before = waves.enemies.length;
   const spec = waves.spawnWave(w, props, scene, world, G.player.body.position);
+  G.waveHadTargets = spec.targets > 0;
   const parts = [];
-  if (spec.targets) parts.push(`${spec.targets} targets`);
-  if (spec.tanks) parts.push(`${spec.tanks} enemy tank${spec.tanks > 1 ? 's' : ''}`);
-  hud.banner(`WAVE ${w}`, parts.join(' • ') || 'clear the field');
+  const armor = spec.tanks.length + spec.pillboxes;
+  if (armor) parts.push(`${armor} hostile${armor > 1 ? 's' : ''} — destroy them to advance`);
+  if (spec.targets) parts.push('targets = bonus');
+  hud.banner(`WAVE ${w}`, parts.join(' • '));
+  announceContacts(waves.enemies.slice(before));
   if (w > 1 && G.player.alive) {
     G.player.hp = Math.min(G.player.maxHp, G.player.hp + SCORING.waveClearHeal);
     hud.setHp(G.player.hp, G.player.maxHp);
@@ -400,16 +481,38 @@ function checkWaveClear(dt) {
     if (G.waveTransition <= 0) startWave(G.wave + 1);
     return;
   }
-  const targetsLeft = props.countAlive('target') + props.countAlive('pillbox');
-  const tanksLeft = waves.aliveEnemies().length;
-  if (targetsLeft === 0 && tanksLeft === 0) {
-    const acc = G.shotsFired > 0 ? G.shotsHit / G.shotsFired : 0;
-    const bonus = Math.round(SCORING.waveAccuracyBonus * Math.min(1, acc));
+  // bonus objective: clearing all target boards pays out, never gates
+  if (!G.targetsBonusGiven && G.waveHadTargets && props.countAlive('target') === 0) {
+    G.targetsBonusGiven = true;
+    G.score += 400;
+    G.player.hp = Math.min(G.player.maxHp, G.player.hp + 10);
+    hud.setHp(G.player.hp, G.player.maxHp);
+    hud.floater('+400 ALL TARGETS +10 ARMOR', 'good');
+  }
+  // the gate: enemy armor only
+  const armorLeft = waves.aliveEnemies().length + props.countAlive('pillbox');
+  if (armorLeft === 0) {
+    const acc = G.shotsFired > 0 ? Math.min(1, G.shotsHit / G.shotsFired) : 0;
+    const bonus = Math.round(SCORING.waveAccuracyBonus * acc);
     if (G.wave > 0) {
       G.score += bonus;
-      hud.banner(`WAVE ${G.wave} CLEAR`, `accuracy ${(acc * 100) | 0}% — +${bonus} bonus`);
+      hud.banner(`WAVE ${G.wave} CLEAR`, `accuracy ${(acc * 100) | 0}% — +${bonus} bonus — next wave incoming`);
     }
-    G.waveTransition = 2.6;
+    G.waveTransition = 4.5;
+  }
+
+  // patrol pressure: never let the field stay quiet
+  let nearest = Infinity;
+  const pp = G.player.body.position;
+  for (const e of waves.aliveEnemies()) {
+    nearest = Math.min(nearest, Math.hypot(e.tank.pos.x - pp.x, e.tank.pos.z - pp.z));
+  }
+  if (nearest > 150) G.quietT += dt;
+  else G.quietT = 0;
+  if (G.quietT > 25) {
+    G.quietT = 0;
+    const spawned = waves.spawnPatrol(scene, world, pp, G.wave);
+    announceContacts(spawned, 'PATROL INBOUND');
   }
 }
 
@@ -423,6 +526,10 @@ function resetGame() {
   G.combo = 0; G.comboT = 0; G.wave = 0; G.waveTransition = 0;
   G.camYaw = 0; G.camPitch = 0.3;
   G.simT = 0; G.artilleryT = 12; G.pendingArty = [];
+  G.quietT = 0; G.streakKills = 0; G.streakT = 0; G.airstrike = false;
+  G.pendingBombs = []; G.convoyT = 50; G.fovKick = 0;
+  waves.clearConvoy?.(scene, world);
+  hud.setStrike(false);
 }
 
 function startGame() {
@@ -599,6 +706,34 @@ function fixedStep(dt) {
       G.pendingArty = G.pendingArty.filter(a => !a.fired);
     }
 
+    // streak decay
+    G.streakT -= dt;
+    if (G.streakT <= 0) G.streakKills = 0;
+
+    // airstrike bombs falling
+    for (const b of G.pendingBombs) {
+      if (!b.fired && G.simT >= b.fireAt) {
+        b.fired = true;
+        const origin = new THREE.Vector3(b.x + (Math.random() - 0.5) * 2, getHeight(b.x, b.z) + 65, b.z + (Math.random() - 0.5) * 2);
+        projectiles.spawn(origin, new THREE.Vector3(0, -1, 0), 60,
+          { isPlayer: true, shellDmg: 0 }, onShellHit, 1.8);
+      }
+    }
+    G.pendingBombs = G.pendingBombs.filter(b => !b.fired);
+
+    // bonus convoy crossings from wave 3
+    if (G.wave >= 3) {
+      G.convoyT -= dt;
+      if (G.convoyT <= 0 && (!waves.trucks || waves.trucks.length === 0)) {
+        G.convoyT = 80 + Math.random() * 25;
+        const trucks = waves.spawnConvoy(scene, world, p.body.position);
+        hud.banner('SUPPLY CONVOY SPOTTED', '250 per truck — intercept before they escape!', 2.6);
+        for (const t of trucks) minimap.ping(t.body.position.x, t.body.position.z, '#52d8ff');
+        audio.click();
+      }
+    }
+    waves.stepTrucks(dt, scene, world);
+
     // supply crate pickup
     for (const it of props.items) {
       if (!it.alive || it.kind !== 'crate' || !p?.alive) continue;
@@ -622,6 +757,7 @@ const _camTarget = new THREE.Vector3();
 const _camDesired = new THREE.Vector3();
 const _lookTarget = new THREE.Vector3();
 const _dirCam = new THREE.Vector3();
+const _exhaustPos = new THREE.Vector3();
 
 function updateCamera(dt) {
   const p = G.player;
@@ -670,6 +806,15 @@ function updateCamera(dt) {
   camera.position.lerp(_camDesired, k);
   _lookTarget.copy(camera.position).add(_dirCam);
   camera.lookAt(_lookTarget);
+
+  // FOV punch on firing
+  G.fovKick *= 1 - Math.min(1, dt * 7);
+  const fov = 58 + G.fovKick * 2.6;
+  if (Math.abs(camera.fov - fov) > 0.02) {
+    camera.fov = fov;
+    camera.updateProjectionMatrix();
+  }
+
   effects.applyShake(camera);
 }
 
@@ -787,6 +932,21 @@ function gameFrame(dt) {
     if (input.consumeReload()) {
       if (G.player.reloadNow()) audio.click();
     }
+    if (input.consumeStrike() && G.airstrike) {
+      G.airstrike = false;
+      hud.setStrike(false);
+      audio.whistle();
+      hud.banner('AIRSTRIKE INBOUND', 'danger close!', 1.8);
+      camera.getWorldDirection(_dir);
+      const fx = _dir.x, fz = _dir.z;
+      const fl = Math.hypot(fx, fz) || 1;
+      for (let i = 0; i < 5; i++) {
+        const bx = G.aimPoint.x + (fx / fl) * (i - 2) * 8 + (Math.random() - 0.5) * 5;
+        const bz = G.aimPoint.z + (fz / fl) * (i - 2) * 8 + (Math.random() - 0.5) * 5;
+        G.pendingBombs.push({ fireAt: G.simT + 0.5 + i * 0.15, x: bx, z: bz, fired: false });
+        effects.ring(new THREE.Vector3(bx, 0, bz), 4, 1.4, 0x8fd6ff);
+      }
+    }
     audio.engine(G.player.throttle, G.player.speedAlongForward());
 
     // dust + tread marks
@@ -810,15 +970,9 @@ function gameFrame(dt) {
     }
   }
 
-  // battle-damage smoke from the engine deck when armour is low
-  if (G.state === 'playing' && G.player.alive && G.player.hp < 35 && Math.random() < dt * 6) {
-    const bp = G.player.visual.root.position;
-    const g = 0.22;
-    effects.smoke.emit(
-      bp.x + (Math.random() - 0.5), bp.y + 1.5, bp.z - 1.4 + (Math.random() - 0.5),
-      (Math.random() - 0.5), 1.8 + Math.random() * 1.5, (Math.random() - 0.5),
-      1.2, 1.8, g, g, g, { grow: 2.5, drag: 1 },
-    );
+  // battle-damage smoke states for the player
+  if (G.state === 'playing' && G.player.alive) {
+    effects.damageSmoke(G.player.visual.root.position, G.player.hp / G.player.maxHp, dt);
   }
 
   if (G.state === 'dying') {
@@ -834,8 +988,33 @@ function gameFrame(dt) {
     G.player.syncVisual(alpha, dt);
     updateCamera(dt);
   }
-  for (const e of waves.enemies) e.tank.syncVisual(alpha, dt);
+  for (const e of waves.enemies) {
+    const near = camera.position.distanceTo(e.tank.visual.root.position) < 170;
+    e.tank.syncVisual(alpha, dt, near);
+    // battle-damage smoke for wounded enemies
+    if (near && e.tank.alive) {
+      effects.damageSmoke(e.tank.visual.root.position, e.tank.hp / e.tank.maxHp, dt);
+    }
+  }
   waves.cleanup(scene, world, effects);
+
+  // exhaust puffs under load (player + nearby enemies)
+  G.exhaustAcc = (G.exhaustAcc ?? 0) + dt;
+  if (G.exhaustAcc > 0.13) {
+    G.exhaustAcc = 0;
+    const puffFrom = (tank) => {
+      const load = Math.abs(tank.throttle);
+      if (load < 0.2 || !tank.alive) return;
+      for (const tip of tank.visual.exhausts) {
+        tip.getWorldPosition(_exhaustPos);
+        effects.exhaustPuff(_exhaustPos, load);
+      }
+    };
+    if (G.player && G.state === 'playing') puffFrom(G.player);
+    for (const e of waves.enemies) {
+      if (camera.position.distanceTo(e.tank.visual.root.position) < 90) puffFrom(e.tank);
+    }
+  }
   props.update(dt, G.time);
 
   // shell whiz-by for incoming fire
@@ -859,7 +1038,7 @@ function gameFrame(dt) {
     );
     hud.setScore(G.score, G.wave, G.kills, G.combo > 1 ? Math.min(SCORING.comboMax, 1 + (G.combo - 1) * 0.5) : 1);
     hud.updateArrows(waves.aliveEnemies(), camera);
-    minimap.draw(G.player, waves.enemies, props, G.camYaw);
+    minimap.draw(G.player, waves.enemies, props, G.camYaw, waves.trucks || []);
   }
 
 }
