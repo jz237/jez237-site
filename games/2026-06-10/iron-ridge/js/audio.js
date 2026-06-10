@@ -1,7 +1,14 @@
-// Synthesized audio (Web Audio API, no files): engine rumble that follows
-// throttle, cannon boom, reload clicks, explosions, hits, ambient wind.
+// Game audio (Web Audio API). Cannon shots and shell explosions use real
+// recorded samples (assets/audio/*.mp3, randomized + pitch-jittered);
+// everything else — engine rumble, wind, clicks, whistles — is synthesized.
+// The synth versions remain as fallback until the samples finish decoding.
 
 import { MUTE_KEY } from './config.js';
+
+const SAMPLES = {
+  fire: ['shot-01', 'shot-02', 'shot-03', 'shot-04', 'shot-05'],
+  explosion: ['explosion-01', 'explosion-02', 'explosion-03', 'explosion-04', 'explosion-05'],
+};
 
 export class GameAudio {
   constructor() {
@@ -9,6 +16,7 @@ export class GameAudio {
     this.muted = localStorage.getItem(MUTE_KEY) === '1';
     this.engineNodes = null;
     this.windNodes = null;
+    this.buffers = { fire: [], explosion: [] };
   }
 
   ensure() {
@@ -19,7 +27,34 @@ export class GameAudio {
       this.master.gain.value = this.muted ? 0 : 0.8;
       this.master.connect(this.ctx.destination);
       this.startWind();
+      this.loadSamples();
     } catch { return false; }
+    return true;
+  }
+
+  loadSamples() {
+    for (const [set, names] of Object.entries(SAMPLES)) {
+      for (const name of names) {
+        fetch(`./assets/audio/${name}.mp3`)
+          .then(r => r.arrayBuffer())
+          .then(buf => this.ctx.decodeAudioData(buf))
+          .then(decoded => this.buffers[set].push(decoded))
+          .catch(() => {}); // synth fallback covers missing/failed samples
+      }
+    }
+  }
+
+  // returns false when the sample set isn't ready (caller falls back to synth)
+  playSample(set, vol = 1, rateJitter = 0.14) {
+    const list = this.buffers[set];
+    if (!this.ctx || !list || list.length === 0) return false;
+    const src = this.ctx.createBufferSource();
+    src.buffer = list[(Math.random() * list.length) | 0];
+    src.playbackRate.value = 1 - rateJitter / 2 + Math.random() * rateJitter;
+    const g = this.ctx.createGain();
+    g.gain.value = Math.min(1.4, vol);
+    src.connect(g).connect(this.master);
+    src.start();
     return true;
   }
 
@@ -124,8 +159,20 @@ export class GameAudio {
     n.start(t);
   }
 
-  fire() { this.blast({ freq: 55, dur: 0.42, vol: 0.85, noiseVol: 0.8, noiseFreq: 1100 }); }
-  explosion(big = 1) { this.blast({ freq: 42, dur: 0.7 * big + 0.3, vol: 1.0, noiseVol: 0.75, noiseFreq: 600 }); }
+  fire(vol = 1) {
+    if (this.playSample('fire', vol)) return;
+    this.blast({ freq: 55, dur: 0.42, vol: 0.85 * vol, noiseVol: 0.8 * vol, noiseFreq: 1100 });
+  }
+
+  explosion(big = 1) {
+    const vol = Math.min(1.35, 0.45 + big * 0.55);
+    if (this.playSample('explosion', vol)) {
+      // keep the synth sub-thump under the sample for body on big blasts
+      if (big > 1.2) this.blast({ freq: 38, dur: 0.5, vol: 0.4, noiseVol: 0, noiseFreq: 400 });
+      return;
+    }
+    this.blast({ freq: 42, dur: 0.7 * big + 0.3, vol: 1.0, noiseVol: 0.75, noiseFreq: 600 });
+  }
   hitTink() { this.blast({ freq: 220, dur: 0.12, vol: 0.25, noiseVol: 0.3, noiseFreq: 2400 }); }
   damaged() { this.blast({ freq: 90, dur: 0.3, vol: 0.5, noiseVol: 0.5, noiseFreq: 500 }); }
   whiz() { this.blast({ freq: 600, dur: 0.18, vol: 0.06, noiseVol: 0.3, noiseFreq: 3200 }); }
