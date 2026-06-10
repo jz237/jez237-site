@@ -23,6 +23,7 @@ export class Input {
       this.keys.add(e.code);
       if (e.code === 'Space') { this.fireQueued = true; e.preventDefault(); }
       if (e.code === 'KeyR') this.reloadQueued = true;
+      if (e.code === 'KeyF') this.strikeQueued = true;
       if (e.code === 'KeyP' || e.code === 'Escape') this.pauseQueued = true;
       if (e.code === 'KeyM') this.muteQueued = true;
     });
@@ -138,6 +139,11 @@ export class Input {
       this.pauseQueued = true;
       e.preventDefault();
     }, { passive: false });
+
+    document.getElementById('btn-strike')?.addEventListener('touchstart', (e) => {
+      this.strikeQueued = true;
+      e.preventDefault();
+    }, { passive: false });
   }
 
   // call once per frame; merges keyboard into analog state
@@ -175,6 +181,12 @@ export class Input {
     const r = this.reloadQueued;
     this.reloadQueued = false;
     return r;
+  }
+
+  consumeStrike() {
+    const s = this.strikeQueued;
+    this.strikeQueued = false;
+    return s;
   }
 
   consumePause() {
