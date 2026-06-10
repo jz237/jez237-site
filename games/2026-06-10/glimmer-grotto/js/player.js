@@ -22,6 +22,8 @@ export class Player {
     this.upgrades = { pick: 0, lantern: 0, satchel: 0 };
     this.bag = [];                    // {kind,id}
     this.swingT = 0; this.swinging = false; this.digTarget = null;
+    this.buffT = 0;                   // Glimmer Rush seconds remaining
+    this.autoHop = 0;                 // step-up assist grace timer
     this.walkPhase = 0;
     this.sx = 1; this.sy = 1;         // squash & stretch springs
     this.restGlow = 0;                // 1 when resting at fire
@@ -79,19 +81,33 @@ export class Player {
         this.sx = 0.78; this.sy = 1.24;
         this.events.push({ type: 'jump', x: this.x, y: this.y });
       }
-      if (!input.jump && this.vy < -140) this.vy = -140;   // variable jump height
+      if (!input.jump && this.autoHop <= 0 && this.vy < -140) this.vy = -140;   // variable jump height
     }
     if (this.vy > 0) this.peakFall = Math.max(this.peakFall, this.vy);
 
     // -------- integrate w/ tile collision (axis separated)
     let nx = this.x + this.vx * dt;
+    let blockedH = false;
     if (this.aabbSolid(nx, this.y)) {
       const step = Math.sign(this.vx);
       while (Math.abs(nx - this.x) > 0.2 && this.aabbSolid(nx, this.y)) nx -= step * 0.5;
       if (this.aabbSolid(nx, this.y)) nx = this.x;
       this.vx = 0;
+      blockedH = true;
     }
     this.x = nx;
+
+    // step-up assist: little ledges are hopped automatically (cozy legs)
+    if (blockedH && this.onGround && want !== 0 && !this.inWater) {
+      const aheadX = Math.floor((this.x + want * (this.w / 2 + 4)) / TILE);
+      const feetTy = Math.floor((this.y - 4) / TILE);
+      if (solidAt(aheadX, feetTy) && !solidAt(aheadX, feetTy - 1) && !solidAt(aheadX, feetTy - 2) &&
+          !solidAt(Math.floor(this.x / TILE), feetTy - 2)) {
+        this.vy = -300;
+        this.autoHop = 0.3;          // exempt from the variable-jump clamp
+        this.sx = 0.86; this.sy = 1.14;
+      }
+    }
 
     let ny = this.y + this.vy * dt;
     const wasGround = this.onGround;
@@ -119,6 +135,10 @@ export class Player {
 
     // -------- digging
     this.updateDig(dt, input);
+
+    // -------- glimmer rush wears off
+    this.buffT = Math.max(0, this.buffT - dt);
+    this.autoHop = Math.max(0, this.autoHop - dt);
 
     // -------- energy regen & anim springs
     const resting = this.restGlow > 0.5;
@@ -163,7 +183,8 @@ export class Player {
   }
 
   updateDig(dt, input) {
-    const speed = this.pickDef.speed * (this.tired ? 0.55 : 1);
+    const rush = this.buffT > 0 ? 1.8 : 1;
+    const speed = this.pickDef.speed * rush * (this.tired ? 0.55 : 1);
     if (this.swinging) {
       this.swingT += dt * speed;
       if (this.swingT >= 0.38) {
@@ -172,7 +193,7 @@ export class Player {
           const { tx, ty } = this.digTarget;
           const res = damageTile(tx, ty, this.pickDef.power, this.pickDef.pick);
           if (res.hit) {
-            this.energy = Math.max(0, this.energy - 0.8);
+            if (this.buffT <= 0) this.energy = Math.max(0, this.energy - 0.8);
             this.events.push({ type: res.blocked ? 'tink' : (res.broken ? 'break' : 'dig'),
               tx, ty, x: (tx + .5) * TILE, y: (ty + .5) * TILE, res });
           }
@@ -188,12 +209,47 @@ export class Player {
         this.events.push({ type: 'swing' });
       } else this.digTarget = null;
     }
+    // touch auto-dig: pushing the stick into earth swings on its own
+    if (!this.swinging && !input.dig && input.usingTouch) {
+      const t = this.autoDigTarget(input);
+      if (t) {
+        this.digTarget = t;
+        this.swinging = true; this.swingT = 0;
+        if (t.dx !== 0) this.face = Math.sign(t.dx);
+        this.events.push({ type: 'swing' });
+      }
+    }
     // gentle drift over the shaft while digging vertically, so the miner
     // settles into the hole instead of standing on its lip
-    if (input.dig && this.digTarget && this.digTarget.center) {
+    if (this.swinging && this.digTarget && this.digTarget.center) {
       const want = (this.digTarget.tx + 0.5) * TILE;
       this.vx += (want - this.x) * 6 * dt;
     }
+  }
+
+  // adjacent-tile target for stick-push digging (touch). Feet-level first so
+  // walls tunnel level instead of stair-casing upward; one-tile ledges are
+  // left alone for the step-up hop.
+  autoDigTarget(input) {
+    const dxIn = (input.right ? 1 : 0) - (input.left ? 1 : 0);
+    const dyIn = (input.down ? 1 : 0) - (input.up ? 1 : 0);
+    if (dxIn === 0 && dyIn === 0) return null;
+    if (dxIn !== 0 && dyIn === 0) {
+      const tx = Math.floor((this.x + dxIn * (this.w / 2 + 7)) / TILE);
+      const feetTy = Math.floor((this.y - 4) / TILE);
+      const headTy = feetTy - 1;
+      if (solidAt(tx, feetTy)) {
+        const hoppable = !solidAt(tx, feetTy - 1) && !solidAt(Math.floor(this.x / TILE), headTy - 1);
+        if (!hoppable) return { tx, ty: feetTy, dx: dxIn, dy: 0 };
+        return null;
+      }
+      if (solidAt(tx, headTy)) return { tx, ty: headTy, dx: dxIn, dy: 0 };
+      return null;
+    }
+    const t = this.resolveTarget(input);
+    if (!t) return null;
+    const d = Math.hypot((t.tx + .5) * TILE - this.x, (t.ty + .5) * TILE - (this.y - this.h * .55));
+    return d < TILE * 1.8 ? t : null;
   }
 
   draw(ctx, time) {
