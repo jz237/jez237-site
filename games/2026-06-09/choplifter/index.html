@@ -132,24 +132,17 @@
   }
   .msg-toast.show { opacity: 1; }
 
-  /* ---- Touch controls ---- */
-  #touch { position: absolute; inset: 0; z-index: 12; display: none; }
-  body.touch #touch { display: block; }
-  .tc {
-    position: absolute; bottom: max(64px, calc(env(safe-area-inset-bottom) + 56px));
-    width: 88px; height: 88px; border-radius: 50%;
-    background: radial-gradient(circle at 38% 32%, rgba(255,255,255,.18), rgba(120,160,255,.1) 60%, transparent);
-    border: 2px solid rgba(150,190,255,.4);
-    display: grid; place-items: center; pointer-events: auto;
-    backdrop-filter: blur(2px); transition: transform .08s, background .08s;
+  /* ---- One-finger drag hint ---- */
+  .drag-hint {
+    position: absolute; left: 50%; transform: translateX(-50%);
+    bottom: max(54px, calc(env(safe-area-inset-bottom) + 46px));
+    z-index: 12; pointer-events: none;
+    font-size: .68rem; font-weight: 700; letter-spacing: 1.5px; color: #aebfe8;
+    text-shadow: 0 1px 8px #000; white-space: nowrap;
+    opacity: 0; transition: opacity .5s ease;
   }
-  .tc:active, .tc.held { transform: scale(.92); background: radial-gradient(circle at 38% 32%, rgba(255,255,255,.32), rgba(120,160,255,.22) 60%, transparent); }
-  .tc svg { width: 42px; height: 42px; opacity: .92; }
-  #tc-left  { left: 18px; }
-  #tc-right { left: 120px; }
-  #tc-fire  { right: 18px; }
-  #tc-lift  { right: 120px; width: 104px; height: 104px; bottom: max(58px, calc(env(safe-area-inset-bottom) + 50px)); }
-  .tc-hint { position:absolute; bottom: -18px; left:50%; transform:translateX(-50%); font-size:.5rem; letter-spacing:1px; color:#8aa0cc; white-space:nowrap; }
+  .drag-hint.show { opacity: .9; animation: hintPulse 1.6s ease-in-out infinite alternate; }
+  @keyframes hintPulse { from { opacity: .55; } to { opacity: .95; } }
 
   .topbtn { position: absolute; z-index: 14; top: max(8px, env(safe-area-inset-top)); pointer-events: auto;
     background: rgba(14,22,46,.7); border: 1px solid rgba(120,160,255,.3); color: #cfe0ff;
@@ -173,6 +166,10 @@
         <span class="hud-value score" id="hud-score">0</span>
         <div class="lives" id="hud-lives"></div>
       </div>
+      <div class="hud-cluster" style="align-items:center">
+        <span class="hud-label">Aboard</span>
+        <span class="hud-value" id="hud-aboard" style="color:#8fd9ff">0/8</span>
+      </div>
       <div class="hud-cluster right">
         <span class="hud-label">Rescued</span>
         <span class="hud-value saved" id="hud-saved">0 / 0</span>
@@ -188,13 +185,8 @@
     <canvas id="minimap"></canvas>
   </div>
 
-  <!-- Touch controls -->
-  <div id="touch">
-    <div class="tc" id="tc-left"><svg viewBox="0 0 24 24" fill="none" stroke="#cfe6ff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5 L8 12 L15 19"/></svg><span class="tc-hint">TILT L</span></div>
-    <div class="tc" id="tc-right"><svg viewBox="0 0 24 24" fill="none" stroke="#cfe6ff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5 L16 12 L9 19"/></svg><span class="tc-hint">TILT R</span></div>
-    <div class="tc" id="tc-lift"><svg viewBox="0 0 24 24" fill="none" stroke="#aaffc8" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19 V5 M6 11 L12 5 L18 11"/></svg><span class="tc-hint">LIFT</span></div>
-    <div class="tc" id="tc-fire"><svg viewBox="0 0 24 24" fill="none" stroke="#ffd2b0" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="7"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg><span class="tc-hint">FIRE</span></div>
-  </div>
+  <!-- One-finger flight: drag anywhere; the chopper chases your finger -->
+  <div class="drag-hint" id="drag-hint">☝ DRAG ANYWHERE — THE CHOPPER FOLLOWS YOUR FINGER</div>
 
   <button class="topbtn" id="btn-mute" aria-label="Mute"><svg viewBox="0 0 24 24" fill="none" stroke="#cfe0ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4z"/><path id="snd-on" d="M15.5 8.5a5 5 0 0 1 0 7M19 5a9 9 0 0 1 0 14"/></svg></button>
   <button class="topbtn" id="btn-pause" aria-label="Pause"><svg viewBox="0 0 24 24" fill="#cfe0ff"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg></button>
@@ -232,6 +224,7 @@
       <div class="stat-row"><span>Rescued home</span><b id="over-saved">0</b></div>
       <div class="stat-row"><span>Waves cleared</span><b id="over-waves">0</b></div>
       <div class="stat-row"><span>Enemies destroyed</span><b id="over-kills">0</b></div>
+      <div class="stat-row"><span>Lost in the field</span><b id="over-lost">0</b></div>
     </div>
     <div id="submit-block">
       <p class="muted" id="rank-line"></p>
@@ -378,7 +371,7 @@ const G = {
   state: 'title',  // title | play | pause | over
   t: 0,
   score: 0, lives: 3, wave: 1, kills: 0,
-  savedHome: 0, totalHostages: 0, aboard: 0, maxAboard: 8,
+  savedHome: 0, totalHostages: 0, aboard: 0, maxAboard: 8, lost: 0,
   cam: 0,
   shakeT: 0, shakeMag: 0,
   flash: 0,
@@ -409,6 +402,7 @@ let buildings = [];    // {x,w,h,type}
 let pickups = [];      // fuel
 let homeBase = { x: 240, w: 200 };  // landing pad / friendly base at left
 let stars = [];
+let rings = [];        // explosion shockwaves
 let toastTimer = 0;
 
 // ===========================================================================
@@ -430,22 +424,26 @@ function readKeys() {
   input.fire  = keys['arrowdown']  || keys['s'] || keys['f'] || keys['control'] || keys['shift'];
 }
 
-// touch buttons
-function bindTouch(id, prop) {
-  const el = document.getElementById(id);
-  const on = (e) => { e.preventDefault(); input[prop] = true; el.classList.add('held'); Audio2.resume(); };
-  const off = (e) => { e.preventDefault(); input[prop] = false; el.classList.remove('held'); };
-  el.addEventListener('touchstart', on, { passive: false });
-  el.addEventListener('touchend', off, { passive: false });
-  el.addEventListener('touchcancel', off, { passive: false });
-  el.addEventListener('mousedown', on);
-  el.addEventListener('mouseup', off);
-  el.addEventListener('mouseleave', off);
-}
-bindTouch('tc-left', 'left');
-bindTouch('tc-right', 'right');
-bindTouch('tc-lift', 'lift');
-bindTouch('tc-fire', 'fire');
+// one-finger flight: drag anywhere — the chopper chases a point above your finger.
+// Works with mouse on desktop too.
+const pointer = { active: false, sx: 0, sy: 0, used: false };
+canvas.addEventListener('pointerdown', (e) => {
+  Audio2.resume();
+  if (G.state !== 'play') return;
+  pointer.active = true; pointer.sx = e.clientX; pointer.sy = e.clientY;
+  pointer.used = true;
+  hideDragHint();
+  canvas.setPointerCapture(e.pointerId);
+});
+canvas.addEventListener('pointermove', (e) => {
+  if (!pointer.active) return;
+  pointer.sx = e.clientX; pointer.sy = e.clientY;
+});
+function pointerEnd() { pointer.active = false; }
+canvas.addEventListener('pointerup', pointerEnd);
+canvas.addEventListener('pointercancel', pointerEnd);
+function hideDragHint() { document.getElementById('drag-hint').classList.remove('show'); }
+function showDragHint() { if (isTouch && !pointer.used) document.getElementById('drag-hint').classList.add('show'); }
 
 // ===========================================================================
 //  LEVEL GENERATION
@@ -547,7 +545,9 @@ function spawnParticles(x, y, n, opts) {
 // ===========================================================================
 function startGame() {
   G.state = 'play'; G.t = 0; G.score = 0; G.lives = 3; G.wave = 1; G.kills = 0;
-  G.savedHome = 0; G.aboard = 0; G.cam = 0;
+  G.savedHome = 0; G.aboard = 0; G.lost = 0; G.cam = 0;
+  pointer.used = false;
+  showDragHint();
   resetHeli(true);
   buildLevel(1);
   hideAllScreens();
@@ -576,9 +576,15 @@ function loseLife(reason) {
   Audio2.bigExplosion();
   spawnParticles(heli.x, heli.y, 60, { smax: 8, lmax: 70, rmax: 6, grav: 0.08 });
   spawnParticles(heli.x, heli.y, 24, { color: '#fff', smax: 6, fade: 'spark' });
+  rings.push({ x: heli.x, y: heli.y, max: 110, life: 22, maxLife: 22 });
   shake(22, 36); G.flash = 1;
-  // hostages aboard are lost
-  if (G.aboard > 0) { toast('LOST ' + G.aboard + ' ABOARD', 100); G.aboard = 0; }
+  // hostages aboard go down with the chopper (mark them, or the wave can never finish)
+  if (G.aboard > 0) {
+    toast('LOST ' + G.aboard + ' ABOARD', 100);
+    hostages.forEach(h => { if (h.state === 'aboard') h.state = 'lost'; });
+    G.lost += G.aboard;
+    G.aboard = 0;
+  }
   setTimeout(() => {
     if (G.lives <= 0) { endGame(false); }
     else { resetHeli(false); }
@@ -610,15 +616,15 @@ function update(dt) {
   updateHostages();
   updatePickups();
 
-  // camera follows heli, clamped
-  const target = clamp(heli.x - VW * 0.4, 0, WORLD_W - VW);
-  G.cam += (target - G.cam) * 0.09;
+  // camera: velocity lookahead, biased toward the nose
+  const target = clamp(heli.x + heli.vx * 26 - VW * (heli.facing > 0 ? 0.42 : 0.58), 0, WORLD_W - VW);
+  G.cam += (target - G.cam) * 0.07;
 
   // rotor audio
   Audio2.setRotor(heli.rotorPow);
 
-  // win condition: all hostages home and none left
-  const remaining = hostages.filter(h => h.state !== 'home').length;
+  // wave complete: every hostage accounted for (home or lost with the chopper)
+  const remaining = hostages.filter(h => h.state !== 'home' && h.state !== 'lost').length;
   if (remaining === 0 && hostages.length > 0) {
     if (G.wave >= 5) { endGame(true); }
     else { hostages = []; setTimeout(nextWave, 200); }
@@ -628,25 +634,43 @@ function update(dt) {
 function updateHeli() {
   const gY = groundY();
   heli.rotor += 0.9 + heli.rotorPow * 0.5;
-
-  // fuel
-  let burning = 0;
-  if (input.lift) burning += 0.05;
-  if (input.left || input.right) burning += 0.02;
-  burning += 0.006; // idle
-  heli.fuel = Math.max(0, heli.fuel - burning);
   const outOfFuel = heli.fuel <= 0;
 
-  // controls -> physics
-  if (input.lift && !outOfFuel) { heli.vy -= LIFT; heli.rotorPow = Math.min(1, heli.rotorPow + 0.08); }
-  else { heli.rotorPow = Math.max(0.25, heli.rotorPow - 0.05); }
-  heli.vy += GRAV;
+  // ---- intent: keyboard or one-finger pointer-chase ----
+  let powered = input.lift || input.left || input.right;
+  let pTarget = null;
+  if (pointer.active && !outOfFuel) {
+    // the chopper chases a point just above the finger so it isn't covered
+    pTarget = { x: pointer.sx + G.cam, y: pointer.sy - 90 };
+    powered = true;
+  }
 
-  if (input.left) { heli.vx -= SIDE_ACCEL; heli.facing = -1; heli.tilt += (-0.34 - heli.tilt) * 0.2; }
-  else if (input.right) { heli.vx += SIDE_ACCEL; heli.facing = 1; heli.tilt += (0.34 - heli.tilt) * 0.2; }
-  else { heli.tilt += (0 - heli.tilt) * 0.12; }
+  if (pTarget) {
+    const dx = pTarget.x - heli.x, dy = pTarget.y - heli.y;
+    const wantVx = clamp(dx * 0.085, -MAX_VX, MAX_VX);
+    const wantVy = clamp(dy * 0.085, -MAX_VY, MAX_VY * 0.85);
+    heli.vx += (wantVx - heli.vx) * 0.14;
+    heli.vy += (wantVy - heli.vy) * 0.16;
+    if (Math.abs(dx) > 14) heli.facing = dx > 0 ? 1 : -1;
+    heli.tilt += (clamp(heli.vx * 0.055, -0.36, 0.36) - heli.tilt) * 0.18;
+    heli.rotorPow = Math.min(1, heli.rotorPow + 0.06);
+  } else {
+    if (input.lift && !outOfFuel) { heli.vy -= LIFT; heli.rotorPow = Math.min(1, heli.rotorPow + 0.08); }
+    else { heli.rotorPow = Math.max(0.25, heli.rotorPow - 0.05); }
+    heli.vy += GRAV;
 
-  heli.vx *= DRAG; heli.vy *= DRAG;
+    if (input.left) { heli.vx -= SIDE_ACCEL; heli.facing = -1; heli.tilt += (-0.34 - heli.tilt) * 0.2; }
+    else if (input.right) { heli.vx += SIDE_ACCEL; heli.facing = 1; heli.tilt += (0.34 - heli.tilt) * 0.2; }
+    else { heli.tilt += (0 - heli.tilt) * 0.12; }
+
+    heli.vx *= DRAG; heli.vy *= DRAG;
+    // autorotation assist: with fuel and no lift, settle into a gentle descent
+    if (!outOfFuel && !input.lift) heli.vy = Math.min(heli.vy, 2.1);
+  }
+
+  // fuel burn scales with demand
+  heli.fuel = Math.max(0, heli.fuel - (0.006 + (powered ? 0.05 : 0)));
+
   heli.vx = clamp(heli.vx, -MAX_VX, MAX_VX);
   heli.vy = clamp(heli.vy, -MAX_VY, MAX_VY);
   heli.x += heli.vx; heli.y += heli.vy;
@@ -681,10 +705,21 @@ function updateHeli() {
 
   if (heli.invuln > 0) heli.invuln--;
 
-  // firing
+  // firing — auto-fire with vertical aim assist; fire keys force a shot
   if (heli.fireCd > 0) heli.fireCd--;
-  if (input.fire && heli.fireCd <= 0) {
-    bullets.push({ x: heli.x + heli.facing * 30, y: heli.y + 2, vx: heli.facing * 12 + heli.vx * 0.3, vy: 0, enemy: false, life: 70 });
+  let aim = null, bestD = 520;
+  for (const e of enemies) {
+    if (e.dead) continue;
+    const dx = e.x - heli.x;
+    if (dx * heli.facing < 20) continue;          // only ahead of the nose
+    if (Math.abs(e.y - heli.y) > 190) continue;   // within the gun's arc
+    const d = Math.abs(dx);
+    if (d < bestD) { bestD = d; aim = e; }
+  }
+  if ((aim || input.fire) && heli.fireCd <= 0) {
+    let bvy = 0;
+    if (aim) bvy = clamp((aim.y - heli.y) / (Math.abs(aim.x - heli.x) / 12 + 1), -4.8, 4.8);
+    bullets.push({ x: heli.x + heli.facing * 30, y: heli.y + 2, vx: heli.facing * 12 + heli.vx * 0.3, vy: bvy, enemy: false, life: 70 });
     heli.fireCd = 11;
     Audio2.shoot();
     spawnParticles(heli.x + heli.facing * 34, heli.y + 2, 3, { color: '#ffd95c', angle: heli.facing > 0 ? 0 : 3.14, spread: 0.3, smax: 3, lmax: 10, grav: 0 });
@@ -763,6 +798,7 @@ function killEnemy(e) {
   Audio2.explosion(); shake(10, 16);
   spawnParticles(e.x, e.y, 28, { smax: 6, lmax: 50, rmax: 5 });
   spawnParticles(e.x, e.y, 10, { color: '#fff', smax: 5, fade: 'spark' });
+  rings.push({ x: e.x, y: e.y, max: 56, life: 16, maxLife: 16 });
 }
 
 function updateEnemies() {
@@ -784,6 +820,8 @@ function updateEnemies() {
         if (e.fireCd <= 0 && heli.x > homeBase.x + homeBase.w) {
           const ang = e.turret;
           bullets.push({ x: e.x + Math.cos(ang) * 26, y: e.y - 8 + Math.sin(ang) * 26, vx: Math.cos(ang) * 5.2, vy: Math.sin(ang) * 5.2, enemy: true, life: 130 });
+          e.muzzle = 7;
+          spawnParticles(e.x + Math.cos(ang) * 30, e.y - 8 + Math.sin(ang) * 30, 4, { color: '#ffce6b', angle: ang, spread: 0.4, smax: 3, lmax: 12, grav: 0 });
           Audio2.enemyShoot();
           e.fireCd = rnd(90, 190) - G.wave * 6;
         }
@@ -878,6 +916,50 @@ function updateParticles() {
     p.x += p.vx; p.y += p.vy; p.vy += p.grav; p.vx *= 0.99; p.life--;
     if (p.life <= 0) particles.splice(i, 1);
   }
+  for (let i = rings.length - 1; i >= 0; i--) {
+    if (--rings[i].life <= 0) rings.splice(i, 1);
+  }
+}
+function drawRings() {
+  for (const r of rings) {
+    const t = 1 - r.life / r.maxLife;
+    ctx.strokeStyle = 'rgba(255,222,170,' + (0.75 * (1 - t)) + ')';
+    ctx.lineWidth = 1 + 3 * (1 - t);
+    ctx.beginPath(); ctx.arc(r.x, r.y, 8 + t * r.max, 0, 6.283); ctx.stroke();
+  }
+}
+// edge-of-screen arrow pointing at the current objective
+function drawGuideArrow() {
+  if (G.state !== 'play' || !heli.alive) return;
+  let tx = null, label = '';
+  if (G.aboard > 0) { tx = homeBase.x + homeBase.w / 2; label = 'HOME'; }
+  else {
+    let bd = Infinity;
+    for (const h of hostages) {
+      if (h.state === 'home' || h.state === 'lost' || h.state === 'aboard') continue;
+      const d = Math.abs(h.x - heli.x);
+      if (d < bd) { bd = d; tx = h.x; }
+    }
+    label = 'RESCUE';
+  }
+  if (tx == null) return;
+  const sxp = tx - G.cam;
+  if (sxp >= 30 && sxp <= VW - 30) return;   // objective already on screen
+  const dir = sxp < 30 ? -1 : 1;
+  const ax = dir < 0 ? 26 : VW - 26;
+  const ay = VH * 0.42;
+  ctx.save();
+  ctx.globalAlpha = 0.55 + 0.4 * Math.sin(G.t * 0.12);
+  ctx.fillStyle = G.aboard > 0 ? '#7dffae' : '#ffd95c';
+  ctx.beginPath();
+  ctx.moveTo(ax + dir * 11, ay);
+  ctx.lineTo(ax - dir * 6, ay - 9);
+  ctx.lineTo(ax - dir * 6, ay + 9);
+  ctx.closePath(); ctx.fill();
+  ctx.font = '700 9px sans-serif'; ctx.textAlign = 'center';
+  ctx.fillText(label, ax, ay + 23);
+  ctx.restore();
+  ctx.textAlign = 'left';
 }
 
 // ===========================================================================
@@ -906,9 +988,12 @@ function render() {
   drawBullets();
   if (heli.alive || G.state === 'play') drawHeli();
   drawParticles();
+  drawRings();
   ctx.restore();
 
   ctx.restore();
+
+  drawGuideArrow();
 
   // flash
   if (G.flash > 0) { ctx.fillStyle = 'rgba(255,180,120,' + (G.flash * 0.5) + ')'; ctx.fillRect(0, 0, VW, VH); }
@@ -933,6 +1018,34 @@ function drawSky() {
   ctx.fillStyle = mg; ctx.beginPath(); ctx.arc(mx, my, 38, 0, 6.28); ctx.fill();
   ctx.fillStyle = '#fff8e8'; ctx.beginPath(); ctx.arc(mx, my, 22, 0, 6.28); ctx.fill();
   ctx.restore();
+
+  // drifting clouds (slow parallax)
+  ctx.save();
+  ctx.globalAlpha = 0.13;
+  ctx.fillStyle = '#cdd8ff';
+  const wrap = VW + 420;
+  for (let i = 0; i < 7; i++) {
+    const base = i * 567 + i * i * 91;
+    let cx = ((base + G.t * 0.16 - G.cam * 0.25) % wrap + wrap) % wrap - 210;
+    const cy = VH * (0.13 + (i % 3) * 0.09);
+    ctx.beginPath();
+    ctx.ellipse(cx, cy, 86 + (i % 3) * 30, 15 + (i % 2) * 6, 0, 0, 6.28);
+    ctx.ellipse(cx + 48, cy - 8, 48, 12, 0, 0, 6.28);
+    ctx.fill();
+  }
+  ctx.restore();
+
+  // distant city silhouette behind the mountains
+  const gY = groundY();
+  ctx.fillStyle = 'rgba(24,26,58,0.9)';
+  const par = G.cam * 0.12;
+  for (let i = -1; i < VW / 110 + 2; i++) {
+    const seed = Math.floor((i * 110 + par) / 110);
+    const x = i * 110 - (par % 110);
+    const h = 42 + ((seed * 7349) % 89 + 89) % 89;
+    const w = 62 + ((seed * 37) % 41 + 41) % 41;
+    ctx.fillRect(x, gY - h, w, h);
+  }
 }
 
 function drawStars() {
@@ -977,15 +1090,14 @@ function drawHomeBase() {
   // landing pad
   ctx.fillStyle = '#2a3550'; ctx.fillRect(hb.x, gY - 6, hb.w, 8);
   ctx.fillStyle = '#3d5a8a'; ctx.fillRect(hb.x, gY - 8, hb.w, 3);
-  // big H
-  ctx.fillStyle = '#ffd95c'; ctx.globalAlpha = 0.85;
+  // pad stripe + pulsing edge beacons
   const hx = hb.x + hb.w / 2;
-  ctx.fillRect(hx - 22, gY - 5, 6, -0); // base
-  ctx.save(); ctx.translate(hx, gY - 3);
-  ctx.fillStyle = 'rgba(255,217,92,0.5)';
-  ctx.fillRect(-20, -2, 6, 0);
-  ctx.restore();
-  ctx.globalAlpha = 1;
+  const pulse = 0.55 + 0.45 * Math.sin(G.t * 0.07);
+  ctx.fillStyle = 'rgba(255,217,92,' + (0.45 + pulse * 0.3) + ')';
+  ctx.fillRect(hx - 24, gY - 6, 48, 2.2);
+  ctx.fillStyle = 'rgba(125,255,174,' + (0.4 + pulse * 0.6) + ')';
+  ctx.beginPath(); ctx.arc(hb.x + 7, gY - 10, 2.4, 0, 6.28); ctx.fill();
+  ctx.beginPath(); ctx.arc(hb.x + hb.w - 7, gY - 10, 2.4, 0, 6.28); ctx.fill();
   // friendly HQ building
   ctx.fillStyle = '#26324e'; ctx.fillRect(hb.x + 6, gY - 70, 54, 70);
   ctx.fillStyle = '#3a4d74'; ctx.fillRect(hb.x + 6, gY - 70, 54, 8);
@@ -1066,7 +1178,7 @@ function drawPickups() {
 function drawHostages() {
   const gY = groundY();
   for (const h of hostages) {
-    if (h.state === 'aboard' || h.state === 'home') continue;
+    if (h.state === 'aboard' || h.state === 'home' || h.state === 'lost') continue;
     ctx.save(); ctx.translate(h.x, gY);
     const waving = h.state === 'wait';
     const running = h.state === 'run' || h.state === 'boarding';
@@ -1107,6 +1219,13 @@ function drawEnemies() {
 }
 function drawTank(e) {
   ctx.save(); ctx.translate(e.x, e.y);
+  if (e.muzzle > 0) {
+    e.muzzle--;
+    ctx.save(); ctx.translate(0, -8); ctx.rotate(e.turret);
+    ctx.fillStyle = 'rgba(255,240,190,' + (e.muzzle / 7) + ')';
+    ctx.beginPath(); ctx.arc(32, 0, 3 + e.muzzle * 0.9, 0, 6.283); ctx.fill();
+    ctx.restore();
+  }
   // tracks
   ctx.fillStyle = '#1a1f1a'; ctx.fillRect(-26, 4, 52, 9);
   ctx.fillStyle = '#33402f';
@@ -1188,11 +1307,13 @@ function drawHeli() {
   ctx.fillStyle = '#3a8aa8'; ctx.fillRect(-44, -3, 34, 3);
   // tail fin
   ctx.fillStyle = '#256078'; ctx.beginPath(); ctx.moveTo(-44, -2); ctx.lineTo(-52, -12); ctx.lineTo(-44, 4); ctx.fill();
-  // tail rotor
-  ctx.strokeStyle = 'rgba(200,230,255,0.5)'; ctx.lineWidth = 2;
-  const tr = Math.sin(heli.rotor * 2) * 10;
-  ctx.beginPath(); ctx.moveTo(-50, -8 - 0); ctx.lineTo(-50, -8 + 0); ctx.stroke();
-  ctx.beginPath(); ctx.moveTo(-50, -8 + tr * 0.6); ctx.lineTo(-50, -8 - tr * 0.6); ctx.stroke();
+  // tail rotor (spinning blur)
+  ctx.strokeStyle = 'rgba(200,230,255,0.55)'; ctx.lineWidth = 2;
+  const tr = Math.sin(heli.rotor * 2.4) * 9;
+  ctx.beginPath(); ctx.moveTo(-50, -8 - tr); ctx.lineTo(-50, -8 + tr); ctx.stroke();
+  ctx.globalAlpha = 0.25;
+  ctx.beginPath(); ctx.arc(-50, -8, 9, 0, 6.283); ctx.stroke();
+  ctx.globalAlpha = 1;
 
   // main body
   const bg = ctx.createLinearGradient(0, -12, 0, 12);
@@ -1227,6 +1348,16 @@ function drawHeli() {
   ctx.beginPath(); ctx.moveTo(-16, 16); ctx.lineTo(22, 16); ctx.stroke();
   ctx.beginPath(); ctx.moveTo(-10, 12); ctx.lineTo(-8, 16); ctx.stroke();
   ctx.beginPath(); ctx.moveTo(14, 12); ctx.lineTo(16, 16); ctx.stroke();
+
+  // nav strobes: red on the tail, green on the nose
+  if (Math.floor(G.t / 16) % 2 === 0) {
+    ctx.fillStyle = 'rgba(255,85,95,0.95)';
+    ctx.beginPath(); ctx.arc(-46, -11, 1.8, 0, 6.283); ctx.fill();
+  }
+  if (Math.floor((G.t + 8) / 16) % 2 === 0) {
+    ctx.fillStyle = 'rgba(120,255,170,0.95)';
+    ctx.beginPath(); ctx.arc(28, -5, 1.6, 0, 6.283); ctx.fill();
+  }
 
   // rotor mast
   ctx.fillStyle = '#234'; ctx.fillRect(-2, -16, 4, 4);
@@ -1288,7 +1419,9 @@ function drawHUD() {
   if (lv.childElementCount !== want) { lv.innerHTML = heart.repeat(want); }
   const fuel = document.getElementById('hud-fuel');
   fuel.style.width = Math.max(0, heli.fuel) + '%';
-  // aboard indicator via toast handled separately
+  const ab = document.getElementById('hud-aboard');
+  ab.textContent = G.aboard + '/' + G.maxAboard;
+  ab.style.color = G.aboard >= G.maxAboard ? '#ffd95c' : '#8fd9ff';
 }
 
 function drawMinimap() {
@@ -1302,7 +1435,7 @@ function drawMinimap() {
   mctx.fillStyle = '#7dffae'; mctx.fillRect(homeBase.x * sc, h - 9, homeBase.w * sc, 5);
   // barracks/hostages
   hostages.forEach(ho => {
-    if (ho.state === 'home' || ho.state === 'aboard') return;
+    if (ho.state === 'home' || ho.state === 'aboard' || ho.state === 'lost') return;
     mctx.fillStyle = '#ffd95c'; mctx.fillRect(ho.x * sc - 1, h - 10, 2, 4);
   });
   // enemies
@@ -1341,8 +1474,8 @@ document.getElementById('btn-mute').onclick = () => { const m = Audio2.toggleMut
 if (Audio2.isMuted()) document.getElementById('snd-on').style.opacity = '0.2';
 
 document.getElementById('howto-body').innerHTML = isTouch
-  ? 'Hold <kbd>LIFT</kbd> (right) to rise — release to descend gently.<br>Tap <kbd>◀</kbd> <kbd>▶</kbd> (left) to fly sideways & turn.<br>Hit <kbd>FIRE</kbd> to shoot the way you face.<br><br>🚁 Land gently near the <b>barracks</b> to load survivors.<br>🏠 Fly them back and land on the <b>green pad</b> to score.<br>⛽ Grab fuel cans. Don\'t crash, run dry, or get shot down.<br><br>Clear all 5 waves to win!'
-  : '<kbd>↑</kbd>/<kbd>W</kbd> lift · <kbd>←</kbd><kbd>→</kbd> fly & turn · <kbd>Space</kbd>/<kbd>F</kbd> fire · <kbd>P</kbd> pause<br><br>🚁 Land gently near the <b>barracks</b> to load survivors.<br>🏠 Fly them back and land on the <b>green base pad</b> to score.<br>⛽ Grab fuel cans. Don\'t crash, run dry, or get shot down.<br><br>Clear all 5 waves to win!';
+  ? 'One finger flies everything:<br><b>Touch &amp; drag</b> — the chopper chases your finger.<br><b>Release</b> — it eases down for a gentle landing.<br>🔫 The gun <b>auto-fires</b> at enemies ahead of the nose.<br><br>🚁 Settle near the <b>barracks</b> to load survivors.<br>🏠 Carry them back to the <b>green pad</b> to score.<br>⛽ Grab fuel cans. Don\'t dive into the ground, run dry, or get shot down.<br><br>Clear all 5 waves to win!'
+  : '<kbd>↑</kbd>/<kbd>W</kbd> lift · <kbd>←</kbd><kbd>→</kbd> fly &amp; turn · or just <b>drag with the mouse</b><br>🔫 The gun <b>auto-fires</b> at enemies ahead — <kbd>Space</kbd>/<kbd>F</kbd> force-fires · <kbd>P</kbd> pause<br><br>🚁 Land gently near the <b>barracks</b> to load survivors.<br>🏠 Fly them back to the <b>green base pad</b> to score.<br>⛽ Grab fuel cans. Don\'t dive into the ground, run dry, or get shot down.<br><br>Clear all 5 waves to win!';
 
 // ---- leaderboard ---------------------------------------------------------
 function getLocal() { try { return JSON.parse(localStorage.getItem(HS_KEY)) || []; } catch (e) { return []; } }
@@ -1361,6 +1494,7 @@ function showGameOver() {
   document.getElementById('over-saved').textContent = G.savedHome;
   document.getElementById('over-waves').textContent = G.result === 'win' ? G.wave : (G.wave - 1);
   document.getElementById('over-kills').textContent = G.kills;
+  document.getElementById('over-lost').textContent = G.lost;
   pendingScore = G.score;
   const loc = getLocal();
   const beats = loc.length < 10 || G.score > (loc[loc.length - 1]?.score || 0);
