@@ -581,9 +581,9 @@ function render() {
 
   // lights: player lantern + nearby emissives
   if (player) {
-    lights.push({ x: player.x + player.face * 8, y: player.y - 26, c: 'warm',
-      r: player.lanternRadius, flicker: 0.18, pri: 0 });
-    lights.push({ x: player.x, y: player.y - 24, c: 'warm', r: 46, a: 0.5, pri: 0 });
+    lights.push({ x: player.x + player.face * 10, y: player.y - 36, c: 'warm',
+      r: player.lanternRadius, flicker: 0.18, pri: 0, emissive: false });   // head-lamp
+    lights.push({ x: player.x, y: player.y - 28, c: 'warm', r: 46, a: 0.5, pri: 0, emissive: false });
     if (player.buffT > 0)
       lights.push({ x: player.x, y: player.y - 22, c: 'gold', r: 110,
         a: Math.min(1, player.buffT), flicker: .4, pri: 0, emissive: true });
