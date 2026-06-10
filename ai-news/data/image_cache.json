@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-10T10:19:57.026208+00:00",
+  "updatedAt": "2026-06-10T12:00:01.246957+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -9912,6 +9912,14 @@
     "https://www.artificialintelligence-news.com/news/mcdonalds-ai-drive-thru-google-archiq": {
       "image": "",
       "checkedAt": "2026-06-10T10:19:57.026208+00:00"
+    },
+    "https://www.artificialintelligence-news.com/news/siri-ai-google-gemini-rollout": {
+      "image": "",
+      "checkedAt": "2026-06-10T12:00:01.246957+00:00"
+    },
+    "https://www.sciencedaily.com/releases/2026/06/260610003049.htm": {
+      "image": "https://www.sciencedaily.com/images/1920/humanoid-artificial-intelligence-robot-confused.webp",
+      "checkedAt": "2026-06-10T12:00:01.246957+00:00"
     }
   }
 }
