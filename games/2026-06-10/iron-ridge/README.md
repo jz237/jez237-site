@@ -27,8 +27,14 @@ check line-of-sight, and lead their shots.
   on true gravity arcs with exact low-arc ballistic zeroing; explosions
   push real impulses into barrels, wall blocks, falling trees, and tanks.
   Yaw is rate-commanded the way tracked vehicles effectively steer.
-- **AI:** enemy tanks seek, orbit at preferred range, raycast
-  line-of-sight, lead the player's motion, and un-stick themselves.
+- **AI:** three enemy tank classes (fast scouts, standard, heavy
+  breakthrough tanks) that seek, orbit at preferred range, raycast
+  line-of-sight, lead the player's motion, and un-stick themselves —
+  plus static pillbox gun emplacements, and artillery barrages with
+  red warning rings from wave 5.
+- **Tactics:** a live minimap (terrain underlay, enemy/target/barrel/
+  pillbox blips, view cone, edge chevrons for off-map threats) and
+  armor-repair supply drops from tank kills.
 - **Scoring:** global top-10 via the site's shared Cloudflare Worker
   (`/scores/iron-ridge` namespace), with localStorage fallback offline.
 
@@ -36,11 +42,13 @@ check line-of-sight, and lead their shots.
 
 Every visual is **procedural, authored in code** — there are no model
 files, textures, or sourced assets. Terrain is simplex-noise heightmap
-geometry with slope/height vertex colours; trees, rocks, and grass are
-instanced primitive meshes scattered by noise; the tank is built from
-boxes and cylinders; the sky is a gradient shader with a sun disc and
-canvas-blob clouds; effects are pooled point sprites. The look aims for
-clean stylized low-poly, not photorealism.
+geometry with canvas-painted grass/dirt/rock detail textures blended by
+slope and height in the shader, plus baked concavity AO; four tree
+species, bushes, deadfall, grass, and flowers are instanced primitive
+meshes scattered by noise; tanks are built from boxes and cylinders with
+canvas-decal markings; the sky is a gradient shader with a sun disc and
+canvas-blob clouds; effects are pooled point sprites with scorch decals.
+The look aims for clean stylized low-poly, not photorealism.
 
 ## Performance
 
@@ -63,5 +71,9 @@ physical devices.
   ~8% of casts, so every closest-hit raycast merges an exact analytic
   terrain intersection (`terrain.js: raycastTerrain`).
 
-Audio is synthesized with the Web Audio API (engine drone follows
-throttle, cannon boom, explosions, wind). No audio files.
+Audio: cannon shots and shell explosions use recorded samples
+(`assets/audio/*.mp3`, randomly selected with pitch jitter and
+distance-scaled volume). Everything else — engine drone that follows
+throttle, ambient wind, reload clicks, artillery whistle, shell
+whiz-bys — is synthesized with the Web Audio API, and synth versions of
+the shot/explosion sounds remain as fallback while samples load.

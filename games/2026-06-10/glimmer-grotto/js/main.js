@@ -10,6 +10,7 @@ import { world, generate, drawChunks, drawDecor, drawWater, spawnPickupsFor,
 import { Player } from './player.js';
 import { input, initInput, pollInput, consumeInteract, getPointerScreen } from './input.js';
 import * as P from './particles.js';
+import { updateCritters, drawCritters } from './critters.js';
 import { renderLighting, renderBloom, renderGodRays, renderVignette, lighting } from './lighting.js';
 import { initAudio, audioReady, toggleMute, isMuted, setPadChord, setFireProximity, sfx } from './audio.js';
 import { state, toast, updateHUD, showRestHint, initUI, togglePanel, hideAllPanels, anyPanelOpen, discover } from './ui.js';
@@ -129,7 +130,10 @@ async function boot() {
   last = performance.now();
   requestAnimationFrame(loop);
   // debug handle (also handy for power users)
-  window.GG = { player, world, cam, quality, get state() { return state; } };
+  window.GG = { player, world, cam, quality, get state() { return state; },
+    forceFrames(n = 1) {           // drive the loop manually (testing in hidden windows)
+      for (let i = 0; i < n; i++) { last = performance.now() - 16.7; loop(performance.now()); }
+    } };
 }
 
 function doMute() {
@@ -167,6 +171,8 @@ function step(dt) {
     handleEvents();
     updatePickups(dt);
     checkProps();
+    updateCritters(dt, cam, cssW / cam.zoom, cssH / cam.zoom, player, time);
+    checkLandmarks(dt);
     if (consumeInteract()) interact();
   } else consumeInteract();
 
@@ -317,6 +323,26 @@ function drawPickups(x0, y0, x1, y1) {
   }
 }
 
+// ------------------------------------------------------------ landmarks
+let lmTimer = 0;
+function checkLandmarks(dt) {
+  lmTimer += dt;
+  if (lmTimer < 0.4) return;
+  lmTimer = 0;
+  for (const lm of world.landmarks) {
+    const key = 'lm_' + lm.id;
+    if (state.journal[key]) continue;
+    const dx = player.x - lm.x, dy = player.y - lm.y;
+    if (dx * dx + dy * dy < lm.r * lm.r) {
+      discover(key, lm.name, lm.sprite);
+      if (audioReady()) sfx.chime(5);
+      P.sparkleBurst(player.x, player.y - 40, '#ffe8b0', 16);
+      setTimeout(() => toast(lm.flavor), 1700);
+      save(player);
+    }
+  }
+}
+
 // ------------------------------------------------------------ props / interaction
 function checkProps() {
   nearProp = null;
@@ -399,6 +425,12 @@ function ambient(dt) {
       break;
     }
   }
+  // waterfall mist & froth
+  for (const wf of world.waterfalls) {
+    if (wf.x < cam.x - 100 || wf.x > cam.x + vw + 100) continue;
+    if (Math.random() < 0.55) P.splash(wf.x + (Math.random() - .5) * 8, wf.y1, 46, 2);
+    if (Math.random() < 0.3) P.steam(wf.x, wf.y1 - 6);
+  }
   // drips from stalactites; campfire smoke
   for (const pr of world.props) {
     if (pr.type !== 'campfire') continue;
@@ -473,7 +505,26 @@ function render() {
 
   drawChunks(ctx, x0, y0, x1, y1, lights);
   drawDecor(ctx, x0, y0, x1, y1, time, lights);
+  drawCritters(ctx);
   drawWater(ctx, x0, y0, x1, y1, time, lights);
+
+  // waterfalls: soft falling sheets with brighter streaks
+  for (const wf of world.waterfalls) {
+    if (wf.x < x0 - 60 || wf.x > x1 + 60 || wf.y1 < y0 - 60 || wf.y0 > y1 + 60) continue;
+    const grad = ctx.createLinearGradient(0, wf.y0, 0, wf.y1);
+    grad.addColorStop(0, 'rgba(205,238,255,.08)');
+    grad.addColorStop(1, 'rgba(205,238,255,.32)');
+    ctx.fillStyle = grad;
+    ctx.fillRect(wf.x - 5, wf.y0, 10, wf.y1 - wf.y0);
+    ctx.fillStyle = 'rgba(238,250,255,.38)';
+    const span = wf.y1 - wf.y0;
+    for (let k = 0; k < 4; k++) {
+      const yy = wf.y0 + ((time * 290 + k * span / 4 + wf.x * 7) % span);
+      ctx.fillRect(wf.x - 3.5 + (k % 3) * 2.6, yy, 2.4, 13);
+    }
+    lights.push({ x: wf.x, y: wf.y1, c: 'cyan', r: 75, a: 0.55, flicker: .4, emissive: true });
+  }
+
   drawPickups(x0, y0, x1, y1);
 
   // desktop aim reticle: faint highlight on the diggable tile under the cursor
@@ -507,8 +558,8 @@ function render() {
   // lights: player lantern + nearby emissives
   if (player) {
     lights.push({ x: player.x + player.face * 8, y: player.y - 26, c: 'warm',
-      r: player.lanternRadius, flicker: 0.18 });
-    lights.push({ x: player.x, y: player.y - 24, c: 'warm', r: 46, a: 0.5 });
+      r: player.lanternRadius, flicker: 0.18, pri: 0 });
+    lights.push({ x: player.x, y: player.y - 24, c: 'warm', r: 46, a: 0.5, pri: 0 });
   }
   for (const L of lights) if (L.c !== 'warm' || L.r < 150) L.emissive = L.emissive ?? (L.r < 140);
   renderBloom(ctx, lights, time);
