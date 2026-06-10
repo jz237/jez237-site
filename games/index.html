@@ -1122,11 +1122,13 @@
       '2026-06-09/choplifter/',
       '2026-06-09/subway-siege-blackout/',
       '2026-06-10/hollow-deep/',
-      '2026-06-10/glimmer-grotto/'
+      '2026-06-10/glimmer-grotto/',
+      '2026-06-10/iron-ridge/'
     ]);
     const gameHref = g => `${SITE_GAME_PATHS.has(g.path) ? SITE_BASE : LEGACY_BASE}${g.path}`;
     const games = [
       // Featured (polished)
+      { title: 'Iron Ridge',                    path: '2026-06-10/iron-ridge/',            emoji: '🪖', date: 'Jun 10', cat: 'arcade',    tag: 'featured',    desc: 'Open-field 3D tank combat — real rigid-body physics, rolling procedural forests, destructible everything, ballistic shells, and AI tank duels with global scores. Three.js + cannon-es, keyboard/mouse + touch' },
       { title: 'Glimmer Grotto',                path: '2026-06-10/glimmer-grotto/',        emoji: '⛏️', date: 'Jun 10', cat: 'adventure', tag: 'featured',    desc: 'Cozy gem-mining idyll — dig a sprawling hand-lit underground of crystal caverns, glowing mushroom hollows, hot springs and gilded ruins. No enemies, no death: gems, campfires, upgrades, and a field journal. Touch + keyboard, synth audio' },
       { title: 'Hollow Deep',                   path: '2026-06-10/hollow-deep/',           emoji: '🏮', date: 'Jun 10', cat: 'adventure', tag: 'featured',    desc: 'Eerie deep-cave horror spelunker — descend after your missing brother with a failing lantern, real shadow-casting light, rope-swing physics, flares, relics, and something in the dark that hunts by light and sound. Touch + keyboard, synth audio' },
       { title: 'Millipede',                     path: '2026-04-28/millipede/',             emoji: '🪲', date: 'Apr 28', cat: 'arcade',   tag: 'featured',     desc: 'Touch-first fungal swarm shooter with power-ups and queen waves' },
