@@ -1,0 +1,1013 @@
+{
+ "version": 1,
+ "generated": "2026-06-10",
+ "styleTarget": "painterly",
+ "stylePreamble": "Cozy storybook painterly video-game art. Soft gouache-and-oil brushwork with visible strokes, warm amber key light from the upper-left, gentle violet ambient shadow, rich jewel-tone palette (amber, terracotta, moss green, teal, violet), rounded inviting shapes with strong readable silhouettes, subtle paper-grain texture, edges defined by dark warm-brown paint rather than black outlines, whimsical calm mood like a beloved children's book about a tiny miner, high detail but soft focus falloff, absolutely no photorealism, no 3D render look, no text.",
+ "sprites": {
+  "miner": {
+   "file": "miner.png",
+   "w": 96,
+   "h": 128,
+   "native": [
+    24,
+    32
+   ],
+   "category": "character",
+   "transparent": true,
+   "tiling": false,
+   "genSize": "1024x1536",
+   "desc": "Player character (single pose; the game animates by bobbing/tilting/squash)",
+   "prompt": "A tiny cheerful miner character seen from the side facing right: round amber hard-hat with a small glowing head-lamp, warm beige face with rosy cheek and a chestnut beard, teal canvas jacket with a leather satchel strap, brown trousers and sturdy dark boots. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame."
+  },
+  "pickaxe": {
+   "file": "pickaxe.png",
+   "w": 80,
+   "h": 76,
+   "native": [
+    20,
+    19
+   ],
+   "category": "character",
+   "transparent": true,
+   "tiling": false,
+   "genSize": "1024x1024",
+   "desc": "Pickaxe, drawn in the miner's hands and swung by rotation",
+   "prompt": "A sturdy miner's pickaxe held diagonally: curved polished steel head with bright top highlight, worn oak handle. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame."
+  },
+  "lantern": {
+   "file": "lantern.png",
+   "w": 48,
+   "h": 48,
+   "native": [
+    12,
+    12
+   ],
+   "category": "prop",
+   "transparent": true,
+   "tiling": false,
+   "genSize": "1024x1024",
+   "desc": "Lantern prop (also used at rest spots)",
+   "prompt": "A small brass camp lantern with a warm amber glass globe glowing softly, wire handle on top. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame."
+  },
+  "campfire": {
+   "file": "campfire.png",
+   "w": 96,
+   "h": 72,
+   "native": [
+    24,
+    18
+   ],
+   "category": "prop",
+   "transparent": true,
+   "tiling": false,
+   "genSize": "1536x1024",
+   "desc": "Campfire rest spot",
+   "prompt": "A cozy little campfire: ring of grey stones, crossed oak logs, lively amber-yellow flame with a bright core and a few rising embers. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame."
+  },
+  "minecart": {
+   "file": "minecart.png",
+   "w": 120,
+   "h": 64,
+   "native": [
+    30,
+    16
+   ],
+   "category": "prop",
+   "transparent": true,
+   "tiling": false,
+   "genSize": "1536x1024",
+   "desc": "Mine-cart hub prop / deposit point",
+   "prompt": "An old wooden mine cart with iron rim and two iron wheels, heaped with colourful raw gems spilling over the top. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame."
+  },
+  "tent": {
+   "file": "tent.png",
+   "w": 160,
+   "h": 84,
+   "native": [
+    40,
+    21
+   ],
+   "category": "prop",
+   "transparent": true,
+   "tiling": false,
+   "genSize": "1536x1024",
+   "desc": "Surface camp tent (shop)",
+   "prompt": "A small terracotta canvas camping tent with a dark inviting entrance and a wooden ridge pole. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame."
+  },
+  "crate": {
+   "file": "crate.png",
+   "w": 72,
+   "h": 60,
+   "native": [
+    18,
+    15
+   ],
+   "category": "prop",
+   "transparent": true,
+   "tiling": false,
+   "genSize": "1024x1024",
+   "desc": "Camp decoration crate",
+   "prompt": "A small worn wooden supply crate with cross planks and pale wood highlights. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame."
+  },
+  "geode_closed": {
+   "file": "geode_closed.png",
+   "w": 80,
+   "h": 60,
+   "native": [
+    20,
+    15
+   ],
+   "category": "pickup",
+   "transparent": true,
+   "tiling": false,
+   "genSize": "1536x1024",
+   "desc": "Closed geode pickup (cracks open when collected)",
+   "prompt": "A round lumpy grey geode stone, unbroken, with subtle mineral banding. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame."
+  },
+  "geode_open": {
+   "file": "geode_open.png",
+   "w": 88,
+   "h": 52,
+   "native": [
+    22,
+    13
+   ],
+   "category": "pickup",
+   "transparent": true,
+   "tiling": false,
+   "genSize": "1536x1024",
+   "desc": "Open geode (journal & pop effect)",
+   "prompt": "A cracked-open geode half, grey stone shell revealing sparkling violet amethyst teeth inside. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame."
+  },
+  "fossil_ammonite": {
+   "file": "fossil_ammonite.png",
+   "w": 80,
+   "h": 60,
+   "native": [
+    20,
+    15
+   ],
+   "category": "pickup",
+   "transparent": true,
+   "tiling": false,
+   "genSize": "1536x1024",
+   "desc": "Ammonite fossil curiosity",
+   "prompt": "A sandy stone slab with a beautifully preserved spiral ammonite fossil imprint in cream tones. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame."
+  },
+  "fossil_fern": {
+   "file": "fossil_fern.png",
+   "w": 80,
+   "h": 60,
+   "native": [
+    20,
+    15
+   ],
+   "category": "pickup",
+   "transparent": true,
+   "tiling": false,
+   "genSize": "1536x1024",
+   "desc": "Fern fossil curiosity",
+   "prompt": "A grey-green stone slab with a delicate fossilized fern frond imprint. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame."
+  },
+  "fossil_fish": {
+   "file": "fossil_fish.png",
+   "w": 96,
+   "h": 36,
+   "native": [
+    24,
+    9
+   ],
+   "category": "pickup",
+   "transparent": true,
+   "tiling": false,
+   "genSize": "1536x1024",
+   "desc": "Fish fossil curiosity",
+   "prompt": "A wide stone slab with a small fossilized fish skeleton, fine cream bones on warm grey. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame."
+  },
+  "mushroom_glow_big": {
+   "file": "mushroom_glow_big.png",
+   "w": 80,
+   "h": 76,
+   "native": [
+    20,
+    19
+   ],
+   "category": "decor",
+   "transparent": true,
+   "tiling": false,
+   "genSize": "1024x1024",
+   "desc": "Large glowing mushroom (emits light)",
+   "prompt": "A tall bioluminescent teal mushroom with a softly glowing aqua cap, pale spotted top and cream stem. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame."
+  },
+  "mushroom_glow_small": {
+   "file": "mushroom_glow_small.png",
+   "w": 48,
+   "h": 44,
+   "native": [
+    12,
+    11
+   ],
+   "category": "decor",
+   "transparent": true,
+   "tiling": false,
+   "genSize": "1024x1024",
+   "desc": "Small glowing mushroom (emits light)",
+   "prompt": "A tiny bioluminescent teal mushroom with a glowing cap and cream stem. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame."
+  },
+  "icon_bag": {
+   "file": "icon_bag.png",
+   "w": 56,
+   "h": 48,
+   "native": [
+    14,
+    12
+   ],
+   "category": "ui",
+   "transparent": true,
+   "tiling": false,
+   "genSize": "1024x1024",
+   "desc": "HUD icon: bag capacity",
+   "prompt": "A tiny leather satchel icon, drawstring open showing a golden glow inside, crisp game-icon styling. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame."
+  },
+  "icon_energy": {
+   "file": "icon_energy.png",
+   "w": 56,
+   "h": 52,
+   "native": [
+    14,
+    13
+   ],
+   "category": "ui",
+   "transparent": true,
+   "tiling": false,
+   "genSize": "1024x1024",
+   "desc": "HUD icon: energy",
+   "prompt": "A tiny warm golden lightning-bolt energy icon with a soft cream highlight, crisp game-icon styling. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame."
+  },
+  "icon_journal": {
+   "file": "icon_journal.png",
+   "w": 56,
+   "h": 48,
+   "native": [
+    14,
+    12
+   ],
+   "category": "ui",
+   "transparent": true,
+   "tiling": false,
+   "genSize": "1024x1024",
+   "desc": "HUD icon: collection journal",
+   "prompt": "A tiny leather-bound journal icon, russet cover, cream pages, small golden gem inlay, crisp game-icon styling. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame."
+  },
+  "gem_amber": {
+   "file": "gem_amber.png",
+   "w": 88,
+   "h": 88,
+   "native": [
+    22,
+    22
+   ],
+   "category": "pickup",
+   "transparent": true,
+   "tiling": false,
+   "genSize": "1024x1024",
+   "desc": "Collectible gem: amber",
+   "prompt": "A faceted gemstone: a polished teardrop of warm honey amber, glowing softly from within, bright specular sparkles, painterly facets. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame."
+  },
+  "vein_amber": {
+   "file": "vein_amber.png",
+   "w": 128,
+   "h": 128,
+   "native": [
+    32,
+    32
+   ],
+   "category": "vein",
+   "transparent": true,
+   "tiling": false,
+   "genSize": "1024x1024",
+   "desc": "Embedded amber vein overlay drawn on rock tiles",
+   "prompt": "A cluster of 3-4 small raw amber crystal shards embedded in dark rock pockets, glowing softly, transparent around the cluster. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame."
+  },
+  "gem_quartz": {
+   "file": "gem_quartz.png",
+   "w": 88,
+   "h": 88,
+   "native": [
+    22,
+    22
+   ],
+   "category": "pickup",
+   "transparent": true,
+   "tiling": false,
+   "genSize": "1024x1024",
+   "desc": "Collectible gem: quartz",
+   "prompt": "A faceted gemstone: a soft rose-white quartz crystal point, glowing softly from within, bright specular sparkles, painterly facets. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame."
+  },
+  "vein_quartz": {
+   "file": "vein_quartz.png",
+   "w": 128,
+   "h": 128,
+   "native": [
+    32,
+    32
+   ],
+   "category": "vein",
+   "transparent": true,
+   "tiling": false,
+   "genSize": "1024x1024",
+   "desc": "Embedded quartz vein overlay drawn on rock tiles",
+   "prompt": "A cluster of 3-4 small raw quartz crystal shards embedded in dark rock pockets, glowing softly, transparent around the cluster. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame."
+  },
+  "gem_amethyst": {
+   "file": "gem_amethyst.png",
+   "w": 88,
+   "h": 88,
+   "native": [
+    22,
+    22
+   ],
+   "category": "pickup",
+   "transparent": true,
+   "tiling": false,
+   "genSize": "1024x1024",
+   "desc": "Collectible gem: amethyst",
+   "prompt": "A faceted gemstone: a violet amethyst kite-cut crystal, glowing softly from within, bright specular sparkles, painterly facets. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame."
+  },
+  "vein_amethyst": {
+   "file": "vein_amethyst.png",
+   "w": 128,
+   "h": 128,
+   "native": [
+    32,
+    32
+   ],
+   "category": "vein",
+   "transparent": true,
+   "tiling": false,
+   "genSize": "1024x1024",
+   "desc": "Embedded amethyst vein overlay drawn on rock tiles",
+   "prompt": "A cluster of 3-4 small raw amethyst crystal shards embedded in dark rock pockets, glowing softly, transparent around the cluster. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame."
+  },
+  "gem_emerald": {
+   "file": "gem_emerald.png",
+   "w": 88,
+   "h": 88,
+   "native": [
+    22,
+    22
+   ],
+   "category": "pickup",
+   "transparent": true,
+   "tiling": false,
+   "genSize": "1024x1024",
+   "desc": "Collectible gem: emerald",
+   "prompt": "A faceted gemstone: a deep green emerald-cut emerald, glowing softly from within, bright specular sparkles, painterly facets. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame."
+  },
+  "vein_emerald": {
+   "file": "vein_emerald.png",
+   "w": 128,
+   "h": 128,
+   "native": [
+    32,
+    32
+   ],
+   "category": "vein",
+   "transparent": true,
+   "tiling": false,
+   "genSize": "1024x1024",
+   "desc": "Embedded emerald vein overlay drawn on rock tiles",
+   "prompt": "A cluster of 3-4 small raw emerald crystal shards embedded in dark rock pockets, glowing softly, transparent around the cluster. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame."
+  },
+  "gem_sapphire": {
+   "file": "gem_sapphire.png",
+   "w": 88,
+   "h": 88,
+   "native": [
+    22,
+    22
+   ],
+   "category": "pickup",
+   "transparent": true,
+   "tiling": false,
+   "genSize": "1024x1024",
+   "desc": "Collectible gem: sapphire",
+   "prompt": "A faceted gemstone: a round cornflower-blue sapphire cabochon, glowing softly from within, bright specular sparkles, painterly facets. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame."
+  },
+  "vein_sapphire": {
+   "file": "vein_sapphire.png",
+   "w": 128,
+   "h": 128,
+   "native": [
+    32,
+    32
+   ],
+   "category": "vein",
+   "transparent": true,
+   "tiling": false,
+   "genSize": "1024x1024",
+   "desc": "Embedded sapphire vein overlay drawn on rock tiles",
+   "prompt": "A cluster of 3-4 small raw sapphire crystal shards embedded in dark rock pockets, glowing softly, transparent around the cluster. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame."
+  },
+  "gem_ruby": {
+   "file": "gem_ruby.png",
+   "w": 88,
+   "h": 88,
+   "native": [
+    22,
+    22
+   ],
+   "category": "pickup",
+   "transparent": true,
+   "tiling": false,
+   "genSize": "1024x1024",
+   "desc": "Collectible gem: ruby",
+   "prompt": "A faceted gemstone: a brilliant-cut crimson ruby, glowing softly from within, bright specular sparkles, painterly facets. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame."
+  },
+  "vein_ruby": {
+   "file": "vein_ruby.png",
+   "w": 128,
+   "h": 128,
+   "native": [
+    32,
+    32
+   ],
+   "category": "vein",
+   "transparent": true,
+   "tiling": false,
+   "genSize": "1024x1024",
+   "desc": "Embedded ruby vein overlay drawn on rock tiles",
+   "prompt": "A cluster of 3-4 small raw ruby crystal shards embedded in dark rock pockets, glowing softly, transparent around the cluster. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame."
+  },
+  "gem_diamond": {
+   "file": "gem_diamond.png",
+   "w": 88,
+   "h": 88,
+   "native": [
+    22,
+    22
+   ],
+   "category": "pickup",
+   "transparent": true,
+   "tiling": false,
+   "genSize": "1024x1024",
+   "desc": "Collectible gem: diamond",
+   "prompt": "A faceted gemstone: a brilliant-cut icy white diamond, glowing softly from within, bright specular sparkles, painterly facets. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame."
+  },
+  "vein_diamond": {
+   "file": "vein_diamond.png",
+   "w": 128,
+   "h": 128,
+   "native": [
+    32,
+    32
+   ],
+   "category": "vein",
+   "transparent": true,
+   "tiling": false,
+   "genSize": "1024x1024",
+   "desc": "Embedded diamond vein overlay drawn on rock tiles",
+   "prompt": "A cluster of 3-4 small raw diamond crystal shards embedded in dark rock pockets, glowing softly, transparent around the cluster. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame."
+  },
+  "tile_dirt": {
+   "file": "tile_dirt.png",
+   "w": 128,
+   "h": 128,
+   "native": [
+    32,
+    32
+   ],
+   "category": "tile",
+   "transparent": false,
+   "tiling": true,
+   "genSize": "1024x1024",
+   "desc": "Soft dirt tile (easy to dig)",
+   "prompt": "A seamless square texture tile of warm amber packed earth with small embedded pebbles and faint root threads, viewed flat-on. Must tile perfectly on all four edges. Even lighting, painterly texture detail, no vignette, full-bleed (no background needed)."
+  },
+  "tile_dirt2": {
+   "file": "tile_dirt2.png",
+   "w": 128,
+   "h": 128,
+   "native": [
+    32,
+    32
+   ],
+   "category": "tile",
+   "transparent": false,
+   "tiling": true,
+   "genSize": "1024x1024",
+   "desc": "Soft dirt tile variant",
+   "prompt": "A seamless square texture tile of warm amber packed earth, slightly darker variant with scattered pebbles, viewed flat-on. Must tile perfectly on all four edges. Even lighting, painterly texture detail, no vignette, full-bleed (no background needed)."
+  },
+  "tile_stone": {
+   "file": "tile_stone.png",
+   "w": 128,
+   "h": 128,
+   "native": [
+    32,
+    32
+   ],
+   "category": "tile",
+   "transparent": false,
+   "tiling": true,
+   "genSize": "1024x1024",
+   "desc": "Stone tile (medium hardness)",
+   "prompt": "A seamless square texture tile of cool blue-grey cave stone with thin cracks and chipped facets, viewed flat-on. Must tile perfectly on all four edges. Even lighting, painterly texture detail, no vignette, full-bleed (no background needed)."
+  },
+  "tile_stone2": {
+   "file": "tile_stone2.png",
+   "w": 128,
+   "h": 128,
+   "native": [
+    32,
+    32
+   ],
+   "category": "tile",
+   "transparent": false,
+   "tiling": true,
+   "genSize": "1024x1024",
+   "desc": "Stone tile variant",
+   "prompt": "A seamless square texture tile of cool blue-grey cave stone variant with mineral flecks, viewed flat-on. Must tile perfectly on all four edges. Even lighting, painterly texture detail, no vignette, full-bleed (no background needed)."
+  },
+  "tile_hardstone": {
+   "file": "tile_hardstone.png",
+   "w": 128,
+   "h": 128,
+   "native": [
+    32,
+    32
+   ],
+   "category": "tile",
+   "transparent": false,
+   "tiling": true,
+   "genSize": "1024x1024",
+   "desc": "Hard stone (needs upgraded pickaxe)",
+   "prompt": "A seamless square texture tile of dense dark slate-blue granite with angular faces and tiny pale glints, viewed flat-on. Must tile perfectly on all four edges. Even lighting, painterly texture detail, no vignette, full-bleed (no background needed)."
+  },
+  "tile_grass": {
+   "file": "tile_grass.png",
+   "w": 128,
+   "h": 128,
+   "native": [
+    32,
+    32
+   ],
+   "category": "tile",
+   "transparent": false,
+   "tiling": true,
+   "genSize": "1024x1024",
+   "desc": "Surface grass-topped earth",
+   "prompt": "A seamless square texture tile of meadow surface: lush mossy green grass blades with tiny wildflowers on top third, warm earth below, viewed flat-on. Must tile perfectly on all four edges. Even lighting, painterly texture detail, no vignette, full-bleed (no background needed)."
+  },
+  "tile_crystal": {
+   "file": "tile_crystal.png",
+   "w": 128,
+   "h": 128,
+   "native": [
+    32,
+    32
+   ],
+   "category": "tile",
+   "transparent": false,
+   "tiling": true,
+   "genSize": "1024x1024",
+   "desc": "Crystal cavern rock",
+   "prompt": "A seamless square texture tile of deep violet crystal-bearing rock with embedded angular amethyst glints, viewed flat-on. Must tile perfectly on all four edges. Even lighting, painterly texture detail, no vignette, full-bleed (no background needed)."
+  },
+  "tile_mushroom": {
+   "file": "tile_mushroom.png",
+   "w": 128,
+   "h": 128,
+   "native": [
+    32,
+    32
+   ],
+   "category": "tile",
+   "transparent": false,
+   "tiling": true,
+   "genSize": "1024x1024",
+   "desc": "Mushroom hollow soil",
+   "prompt": "A seamless square texture tile of dark mossy loam flecked with teal bioluminescent moss patches, viewed flat-on. Must tile perfectly on all four edges. Even lighting, painterly texture detail, no vignette, full-bleed (no background needed)."
+  },
+  "tile_ruins": {
+   "file": "tile_ruins.png",
+   "w": 128,
+   "h": 128,
+   "native": [
+    32,
+    32
+   ],
+   "category": "tile",
+   "transparent": false,
+   "tiling": true,
+   "genSize": "1024x1024",
+   "desc": "Ancient ruins brick",
+   "prompt": "A seamless square texture tile of ancient golden sandstone bricks with worn mortar lines, chips and warm highlights, viewed flat-on. Must tile perfectly on all four edges. Even lighting, painterly texture detail, no vignette, full-bleed (no background needed)."
+  },
+  "tile_spring": {
+   "file": "tile_spring.png",
+   "w": 128,
+   "h": 128,
+   "native": [
+    32,
+    32
+   ],
+   "category": "tile",
+   "transparent": false,
+   "tiling": true,
+   "genSize": "1024x1024",
+   "desc": "Hot-spring terracotta rock",
+   "prompt": "A seamless square texture tile of smooth warm terracotta hot-spring rock with pale mineral veins, viewed flat-on. Must tile perfectly on all four edges. Even lighting, painterly texture detail, no vignette, full-bleed (no background needed)."
+  },
+  "backdrop_dirt": {
+   "file": "backdrop_dirt.png",
+   "w": 128,
+   "h": 128,
+   "native": [
+    32,
+    32
+   ],
+   "category": "tile",
+   "transparent": false,
+   "tiling": true,
+   "genSize": "1024x1024",
+   "desc": "Backdrop wall: warm dark earth cave wall, very dim",
+   "prompt": "A seamless square texture tile of warm dark earth cave wall, very dim, viewed flat-on. Must tile perfectly on all four edges. Even lighting, painterly texture detail, no vignette, full-bleed (no background needed)."
+  },
+  "backdrop_stone": {
+   "file": "backdrop_stone.png",
+   "w": 128,
+   "h": 128,
+   "native": [
+    32,
+    32
+   ],
+   "category": "tile",
+   "transparent": false,
+   "tiling": true,
+   "genSize": "1024x1024",
+   "desc": "Backdrop wall: dim blue-grey stone cave wall",
+   "prompt": "A seamless square texture tile of dim blue-grey stone cave wall, viewed flat-on. Must tile perfectly on all four edges. Even lighting, painterly texture detail, no vignette, full-bleed (no background needed)."
+  },
+  "backdrop_crystal": {
+   "file": "backdrop_crystal.png",
+   "w": 128,
+   "h": 128,
+   "native": [
+    32,
+    32
+   ],
+   "category": "tile",
+   "transparent": false,
+   "tiling": true,
+   "genSize": "1024x1024",
+   "desc": "Backdrop wall: dim violet crystal cave wall with faint sparkle",
+   "prompt": "A seamless square texture tile of dim violet crystal cave wall with faint sparkle, viewed flat-on. Must tile perfectly on all four edges. Even lighting, painterly texture detail, no vignette, full-bleed (no background needed)."
+  },
+  "backdrop_mushroom": {
+   "file": "backdrop_mushroom.png",
+   "w": 128,
+   "h": 128,
+   "native": [
+    32,
+    32
+   ],
+   "category": "tile",
+   "transparent": false,
+   "tiling": true,
+   "genSize": "1024x1024",
+   "desc": "Backdrop wall: dim mossy teal-green cave wall",
+   "prompt": "A seamless square texture tile of dim mossy teal-green cave wall, viewed flat-on. Must tile perfectly on all four edges. Even lighting, painterly texture detail, no vignette, full-bleed (no background needed)."
+  },
+  "backdrop_ruins": {
+   "file": "backdrop_ruins.png",
+   "w": 128,
+   "h": 128,
+   "native": [
+    32,
+    32
+   ],
+   "category": "tile",
+   "transparent": false,
+   "tiling": true,
+   "genSize": "1024x1024",
+   "desc": "Backdrop wall: dim golden sandstone wall with faint brick shadows",
+   "prompt": "A seamless square texture tile of dim golden sandstone wall with faint brick shadows, viewed flat-on. Must tile perfectly on all four edges. Even lighting, painterly texture detail, no vignette, full-bleed (no background needed)."
+  },
+  "backdrop_spring": {
+   "file": "backdrop_spring.png",
+   "w": 128,
+   "h": 128,
+   "native": [
+    32,
+    32
+   ],
+   "category": "tile",
+   "transparent": false,
+   "tiling": true,
+   "genSize": "1024x1024",
+   "desc": "Backdrop wall: dim warm terracotta cave wall with steam stains",
+   "prompt": "A seamless square texture tile of dim warm terracotta cave wall with steam stains, viewed flat-on. Must tile perfectly on all four edges. Even lighting, painterly texture detail, no vignette, full-bleed (no background needed)."
+  },
+  "crystal_cluster_violet": {
+   "file": "crystal_cluster_violet.png",
+   "w": 104,
+   "h": 96,
+   "native": [
+    26,
+    24
+   ],
+   "category": "decor",
+   "transparent": true,
+   "tiling": false,
+   "genSize": "1024x1024",
+   "desc": "Violet crystal cluster (emits light)",
+   "prompt": "A cluster of four violet amethyst crystal shards growing from a small dark rock base, glowing softly. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame."
+  },
+  "crystal_cluster_teal": {
+   "file": "crystal_cluster_teal.png",
+   "w": 104,
+   "h": 96,
+   "native": [
+    26,
+    24
+   ],
+   "category": "decor",
+   "transparent": true,
+   "tiling": false,
+   "genSize": "1024x1024",
+   "desc": "Teal crystal cluster (emits light)",
+   "prompt": "A cluster of four teal aquamarine crystal shards growing from a small dark rock base, glowing softly. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame."
+  },
+  "stalactite": {
+   "file": "stalactite.png",
+   "w": 56,
+   "h": 96,
+   "native": [
+    14,
+    24
+   ],
+   "category": "decor",
+   "transparent": true,
+   "tiling": false,
+   "genSize": "1024x1536",
+   "desc": "Hanging stalactite",
+   "prompt": "A tapering limestone stalactite hanging point-down with a single glistening water drip at the tip. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame."
+  },
+  "stalagmite": {
+   "file": "stalagmite.png",
+   "w": 56,
+   "h": 96,
+   "native": [
+    14,
+    24
+   ],
+   "category": "decor",
+   "transparent": true,
+   "tiling": false,
+   "genSize": "1024x1536",
+   "desc": "Floor stalagmite",
+   "prompt": "A tapering limestone stalagmite rising point-up from the cave floor, banded mineral texture. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame."
+  },
+  "roots": {
+   "file": "roots.png",
+   "w": 120,
+   "h": 80,
+   "native": [
+    30,
+    20
+   ],
+   "category": "decor",
+   "transparent": true,
+   "tiling": false,
+   "genSize": "1536x1024",
+   "desc": "Hanging roots (shallow depths)",
+   "prompt": "A tangle of slender tree roots hanging from a cave ceiling, earthy browns with fine root hairs. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame."
+  },
+  "vine": {
+   "file": "vine.png",
+   "w": 48,
+   "h": 136,
+   "native": [
+    12,
+    34
+   ],
+   "category": "decor",
+   "transparent": true,
+   "tiling": false,
+   "genSize": "1024x1536",
+   "desc": "Hanging vine",
+   "prompt": "A slender hanging cave vine with small paired leaves, moss green with light tips. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame."
+  },
+  "fern": {
+   "file": "fern.png",
+   "w": 96,
+   "h": 64,
+   "native": [
+    24,
+    16
+   ],
+   "category": "decor",
+   "transparent": true,
+   "tiling": false,
+   "genSize": "1536x1024",
+   "desc": "Cave fern tuft",
+   "prompt": "A small arching cave fern with five fronds, moss green with pale highlights. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame."
+  },
+  "flower_glow": {
+   "file": "flower_glow.png",
+   "w": 48,
+   "h": 56,
+   "native": [
+    12,
+    14
+   ],
+   "category": "decor",
+   "transparent": true,
+   "tiling": false,
+   "genSize": "1024x1024",
+   "desc": "Glowing cave flower (emits faint light)",
+   "prompt": "A tiny magical cave flower with pale aqua petals and a softly glowing cream core on a thin green stem. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame."
+  },
+  "tree_pine": {
+   "file": "tree_pine.png",
+   "w": 144,
+   "h": 208,
+   "native": [
+    36,
+    52
+   ],
+   "category": "decor",
+   "transparent": true,
+   "tiling": false,
+   "genSize": "1024x1536",
+   "desc": "Surface pine tree",
+   "prompt": "A small stylised pine tree with four tiers of layered moss-green foliage and a short brown trunk. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame."
+  },
+  "ruins_pillar": {
+   "file": "ruins_pillar.png",
+   "w": 80,
+   "h": 176,
+   "native": [
+    20,
+    44
+   ],
+   "category": "decor",
+   "transparent": true,
+   "tiling": false,
+   "genSize": "1024x1536",
+   "desc": "Ruins pillar decoration",
+   "prompt": "A broken ancient sandstone column with a carved capital, cracked golden stone and small moss tufts. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame."
+  },
+  "ui_panel": {
+   "file": "ui_panel.png",
+   "w": 192,
+   "h": 192,
+   "native": [
+    48,
+    48
+   ],
+   "category": "ui",
+   "transparent": false,
+   "tiling": false,
+   "genSize": "1024x1024",
+   "desc": "9-slice panel for HUD/shop/journal (CSS border-image)",
+   "prompt": "A square wooden UI panel frame: carved oak border with golden corner studs around a dark leather center. Designed to be 9-sliced. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame."
+  },
+  "btn_dig": {
+   "file": "btn_dig.png",
+   "w": 120,
+   "h": 120,
+   "native": [
+    30,
+    30
+   ],
+   "category": "ui",
+   "transparent": true,
+   "tiling": false,
+   "genSize": "1024x1024",
+   "desc": "Touch button: dig",
+   "prompt": "A round carved stone game button engraved with a golden pickaxe glyph, beveled rim, top-down. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame."
+  },
+  "btn_jump": {
+   "file": "btn_jump.png",
+   "w": 120,
+   "h": 120,
+   "native": [
+    30,
+    30
+   ],
+   "category": "ui",
+   "transparent": true,
+   "tiling": false,
+   "genSize": "1024x1024",
+   "desc": "Touch button: jump",
+   "prompt": "A round carved stone game button engraved with a golden up-arrow glyph, beveled rim, top-down. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame."
+  },
+  "btn_action": {
+   "file": "btn_action.png",
+   "w": 120,
+   "h": 120,
+   "native": [
+    30,
+    30
+   ],
+   "category": "ui",
+   "transparent": true,
+   "tiling": false,
+   "genSize": "1024x1024",
+   "desc": "Touch button: interact",
+   "prompt": "A round carved stone game button engraved with a golden open-hand glyph, beveled rim, top-down. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame."
+  },
+  "joystick_base": {
+   "file": "joystick_base.png",
+   "w": 176,
+   "h": 176,
+   "native": [
+    44,
+    44
+   ],
+   "category": "ui",
+   "transparent": true,
+   "tiling": false,
+   "genSize": "1024x1024",
+   "desc": "Virtual joystick base ring (touch controls)",
+   "prompt": " Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame. A carved stone ring pad with four small golden direction notches, seen top-down."
+  },
+  "joystick_thumb": {
+   "file": "joystick_thumb.png",
+   "w": 88,
+   "h": 88,
+   "native": [
+    22,
+    22
+   ],
+   "category": "ui",
+   "transparent": true,
+   "tiling": false,
+   "genSize": "1024x1024",
+   "desc": "Virtual joystick thumb knob (touch controls)",
+   "prompt": " Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame. A round polished wooden knob with visible grain and a soft top-left highlight, top-down."
+  },
+  "bg_sky": {
+   "file": "bg_sky.png",
+   "w": 960,
+   "h": 540,
+   "native": [
+    480,
+    270
+   ],
+   "category": "background",
+   "transparent": false,
+   "tiling": true,
+   "genSize": "1536x1024",
+   "desc": "Surface sky parallax backdrop",
+   "prompt": "A wide painterly dawn sky for a cozy mining village: deep indigo fading through rose to warm gold at the horizon, soft clouds, a gentle sun glow upper-right, distant mossy hills along the bottom. Must tile seamlessly left-to-right. Full-bleed."
+  },
+  "bg_far": {
+   "file": "bg_far.png",
+   "w": 960,
+   "h": 540,
+   "native": [
+    480,
+    270
+   ],
+   "category": "background",
+   "transparent": false,
+   "tiling": true,
+   "genSize": "1536x1024",
+   "desc": "Far cave parallax layer (tinted per biome in-game)",
+   "prompt": "A very dark warm cavern wall seen far away: vast soft rock masses in deep umber and near-black, faint distant crystal glints. Low contrast, must tile seamlessly left-to-right. Full-bleed."
+  },
+  "bg_mid": {
+   "file": "bg_mid.png",
+   "w": 960,
+   "h": 540,
+   "native": [
+    480,
+    270
+   ],
+   "category": "background",
+   "transparent": true,
+   "tiling": true,
+   "genSize": "1536x1024",
+   "desc": "Mid cave parallax layer (tinted per biome in-game)",
+   "prompt": "Mid-distance cave silhouettes: dark rock formations, hanging stalactite fringe along the top and rising stalagmites along the bottom, transparent in the middle. Must tile seamlessly left-to-right. Transparent background between formations."
+  },
+  "bg_near": {
+   "file": "bg_near.png",
+   "w": 960,
+   "h": 540,
+   "native": [
+    480,
+    270
+   ],
+   "category": "background",
+   "transparent": true,
+   "tiling": true,
+   "genSize": "1536x1024",
+   "desc": "Near cave parallax layer (tinted per biome in-game)",
+   "prompt": "Foreground cave silhouettes: a few massive near-black rock columns and ceiling teeth, mostly transparent elsewhere. Must tile seamlessly left-to-right. Transparent background."
+  }
+ }
+}
