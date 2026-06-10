@@ -1,8 +1,568 @@
 {
-  "generatedAt": "2026-06-09T14:26:00.821Z",
+  "generatedAt": "2026-06-10T12:02:46.053Z",
   "editorialPriority": "When there is a choice, prefer personal computers, home computing, office PC software, and personal computer or console gaming over broad enterprise technology.",
   "fallbackPolicy": "Use exact-day computer news when verified. If none exists, use same-week or same-month personal-computing items with confidence labels, then fall back to a wider world/business headline.",
   "issues": [
+    {
+      "currentDate": "2026-06-10",
+      "historicDate": "1982-08-23",
+      "displayDate": "Week of August 23-29, 1982",
+      "edition": "Issue 004 - Weekly 1982 Computer & Culture Chronicle",
+      "visualProfile": {
+        "layout": "weekly-newsprint-front",
+        "accent": "black-red-blue",
+        "paper": "halftone-cream",
+        "strapline": "WEEKLY DESK - TRON ARCADES - C64 - COLECOVISION - SOFTWARE - MOVIES - ROCK RADIO"
+      },
+      "masthead": {
+        "kicker": "Morning archive for Jez",
+        "title": "Computer Chronicle",
+        "deck": "The August 23-29 desk: Tron cabinets glow in late-summer arcades, ColecoVision talk brings older coin-op names home, Commodore 64 production hits stride, E.T. keeps the box-office crown, and Jackson Browne tops album-rock radio."
+      },
+      "layoutPlan": {
+        "main": [
+          "editor-note",
+          "lead",
+          "picture-desk",
+          "computer-items",
+          "software",
+          "store-shelves"
+        ],
+        "sidebar": [
+          "price-watch",
+          "market",
+          "bbs",
+          "curiosity",
+          "briefs",
+          "music",
+          "period-ad",
+          "classifieds",
+          "fallback",
+          "accuracy",
+          "sources"
+        ]
+      },
+      "sectionChrome": {
+        "lead": {
+          "label": "Lead Story"
+        },
+        "pictureDesk": {
+          "label": "Picture Desk",
+          "title": "Scenes From the Week"
+        },
+        "computerItems": {
+          "label": "Computers & Hardware",
+          "title": "Personal Computing Desk"
+        },
+        "software": {
+          "label": "Software Top 5",
+          "title": "Programs on the Editor's Pad"
+        },
+        "storeShelves": {
+          "label": "Top Games This Week",
+          "title": "Arcade, Console & Computer Games"
+        },
+        "priceWatch": {
+          "label": "Price Watch",
+          "title": "What It Cost"
+        },
+        "bbs": {
+          "label": "Modem Desk"
+        },
+        "curiosity": {
+          "label": "Movies / TV / Culture"
+        },
+        "briefs": {
+          "label": "Magazine Rack",
+          "title": "Culture & Shelf Talk"
+        },
+        "music": {
+          "label": "Top Rock This Week",
+          "title": "Rock Radio Chart, August 28"
+        },
+        "periodAd": {
+          "label": "Retail / Ads"
+        },
+        "classifieds": {
+          "label": "Classifieds",
+          "title": "Small Ads"
+        },
+        "fallback": {
+          "label": "Editorial Screen"
+        },
+        "accuracy": {
+          "label": "Accuracy Ledger",
+          "title": "What Is Date-Specific"
+        },
+        "sources": {
+          "label": "Source Trail",
+          "title": "Research Log"
+        },
+        "market": {
+          "label": "Retail / Ads",
+          "title": "Computer Store Market"
+        }
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1982-08-23.png",
+        "alt": "GPT Image 2 vertical Computer Chronicle front page for the week of August 23-29, 1982 with Tron arcade, ColecoVision launch-title chatter, Commodore 64 retail production, E.T. box office, and rock-radio departments",
+        "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data for August 23-29, 1982.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "Issue #4 covers Monday, August 23 through Sunday, August 29, 1982. The desk gives the visual lead to late-summer arcade and console gaming: Tron was an August 1982 arcade release and ColecoVision launch coverage revived several earlier coin-op names as home cartridges. The computer column keeps the Commodore 64 in view because production was reported as reaching full stride in August 1982.",
+      "morningLine": "This week: Tron lights up the arcade aisle, ColecoVision makes older coin-op cabinets feel new at home, Commodore 64 production hits its August stride, E.T. stays on top at the box office, and Jackson Browne takes the rock-radio No. 1 slot.",
+      "lead": {
+        "headline": "Tron Glow Pulls Arcades Into the Computer Age",
+        "summary": "By the week of August 23, Bally Midway's Tron cabinet gives arcade floors a ready-made computer fantasy: light cycles, grid bugs, an MCP cone, and a movie tie-in that makes the cabinet look like it arrived from inside the machine. At the same time, ColecoVision's August launch-title chatter keeps arcade names such as Venture, Mouse Trap, Lady Bug, and Cosmic Avenger in the home-console conversation.",
+        "confidence": "August 1982 arcade and console-release context; exact-day cabinet placement not asserted",
+        "sourceRefs": [
+          0,
+          1,
+          2
+        ]
+      },
+      "computerItems": [
+        {
+          "label": "Arcades",
+          "headline": "Tron Becomes the Week's Neon Computer Story",
+          "summary": "The cabinet turns movie-computer imagery into four short arcade challenges, making the game room itself feel like a glowing terminal.",
+          "confidence": "August 1982 arcade release context",
+          "sourceRefs": [
+            0,
+            1
+          ]
+        },
+        {
+          "label": "Home computers",
+          "headline": "Commodore 64 Production Reaches August Stride",
+          "summary": "Commodore had shown the 64K machine at January CES, and by August the production story gives retailers a sharper answer to Apple, Atari, TI, TRS-80, and IBM comparisons.",
+          "confidence": "August 1982 production and retail context",
+          "sourceRefs": [
+            3
+          ]
+        },
+        {
+          "label": "Consoles",
+          "headline": "ColecoVision Makes Arcade Ports the Counter Pitch",
+          "summary": "The launch-season promise is simple: bring recognizable arcade games home with a look and pace that can be sold across the same counter as cartridges, joysticks, and TV switch boxes.",
+          "confidence": "August 1982 launch-title context",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "label": "Peripherals",
+          "headline": "The Real Home-Computer Bill Is Still the Stack",
+          "summary": "A keyboard price is only the first line. Disk drives, cassette decks, displays, printers, joysticks, modems, and named software keep stretching the family budget.",
+          "confidence": "Period retail context",
+          "sourceRefs": [
+            4
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "#1 VisiCalc",
+          "platform": "Apple II / IBM PC / business micros",
+          "detail": "Still the spreadsheet name that explains practical personal computing to office buyers.",
+          "confidence": "Period business-software context",
+          "sourceRefs": [
+            5
+          ]
+        },
+        {
+          "name": "#2 WordStar",
+          "platform": "CP/M and business micros",
+          "detail": "The word-processing staple for desks where printer setup and muscle memory matter.",
+          "confidence": "Period business-software context",
+          "sourceRefs": [
+            6
+          ]
+        },
+        {
+          "name": "#3 Microsoft BASIC",
+          "platform": "Home computers / IBM PC",
+          "detail": "The common language of type-in listings, learning books, and family-room programming experiments.",
+          "confidence": "Period software context",
+          "sourceRefs": [
+            4
+          ]
+        },
+        {
+          "name": "#4 AtariWriter",
+          "platform": "Atari 8-bit",
+          "detail": "A named home word-processing package buyers could imagine pairing with a printer.",
+          "confidence": "Period software context",
+          "sourceRefs": [
+            4
+          ]
+        },
+        {
+          "name": "#5 Deadline",
+          "platform": "Apple II / Atari / TRS-80 / IBM PC",
+          "detail": "Infocom's 1982 detective mystery keeps parser adventures in the serious-games aisle.",
+          "confidence": "1982 release context",
+          "sourceRefs": [
+            7
+          ]
+        }
+      ],
+      "storeShelves": [
+        {
+          "name": "Tron",
+          "platform": "Arcade",
+          "detail": "Bally Midway turns the Disney film into four glowing cabinet challenges: light cycles, grid bugs, I/O tower, and MCP cone.",
+          "confidence": "August 1982 arcade release context",
+          "sourceRefs": [
+            0,
+            1
+          ]
+        },
+        {
+          "name": "Venture",
+          "platform": "ColecoVision / arcade lineage",
+          "detail": "One of the older arcade names revived in August launch-title talk for ColecoVision.",
+          "confidence": "August 1982 ColecoVision launch-title context",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "name": "Mouse Trap",
+          "platform": "ColecoVision / arcade lineage",
+          "detail": "Another arcade-to-living-room name in the launch mix, useful for selling the new console as more than another VCS box.",
+          "confidence": "August 1982 ColecoVision launch-title context",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "name": "Star Wars: The Empire Strikes Back",
+          "platform": "Atari VCS",
+          "detail": "Parker Brothers keeps licensed cartridge chatter alive during the late-summer retail season.",
+          "confidence": "Mid-1982 retail/date-source context",
+          "sourceRefs": [
+            8
+          ]
+        },
+        {
+          "name": "Deadline",
+          "platform": "Infocom text adventure",
+          "detail": "A detective game for players who want the computer to be a parser, a clock, and a mansion full of suspects.",
+          "confidence": "1982 release context",
+          "sourceRefs": [
+            7
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "Commodore 64 computer",
+          "price": "$595",
+          "note": "The widely quoted introductory-era price for the 64K home computer."
+        },
+        {
+          "item": "IBM PC base system",
+          "price": "$1,565+",
+          "note": "Base configuration before display, drives, printer, and software expand the invoice."
+        },
+        {
+          "item": "ColecoVision console",
+          "price": "about $175-$200",
+          "note": "Launch-era retail pricing commonly sat below a full home-computer desk but above a single cartridge purchase."
+        },
+        {
+          "item": "Dot-matrix printer",
+          "price": "$399-$799",
+          "note": "Still the practical dividing line between playing with a computer and producing pages."
+        }
+      ],
+      "market": {
+        "headline": "Store Desk: Arcade Names Sell the Living Room",
+        "summary": "The late-August counter pitch is no longer just machine specifications. Retailers can point to arcade familiarity: Tron on location, ColecoVision promising sharper home versions, and a C64 whose production story makes the home computer feel less hypothetical.",
+        "confidence": "Weekly retail synthesis from August 1982 gaming and computer sources",
+        "sourceRefs": [
+          0,
+          2,
+          3
+        ]
+      },
+      "bbsNote": {
+        "headline": "Sysop Log: Light Cycles, 64K, and Cartridge Arguments",
+        "summary": "Callers compare Tron scores, ask whether ColecoVision changes the home-console pecking order, and wonder whether a Commodore 64 should be bought now or after the software shelf fills in.",
+        "posts": [
+          {
+            "topic": "Arcade Scoreboard",
+            "text": "Tron light-cycle scores are starting to crowd Pac-Man and Donkey Kong chatter.",
+            "platform": "Arcade"
+          },
+          {
+            "topic": "Console Counter",
+            "text": "Does ColecoVision make old arcade cabinets feel new in the living room?",
+            "platform": "ColecoVision"
+          },
+          {
+            "topic": "Home Computer Desk",
+            "text": "C64 buyers ask about disk drives, printers, and whether 64K changes the schoolwork argument.",
+            "platform": "Commodore 64"
+          }
+        ],
+        "confidence": "Period-style weekly digest",
+        "sourceRefs": [
+          0,
+          2,
+          3
+        ]
+      },
+      "curiosity": {
+        "headline": "E.T. Keeps the Weekend Crown",
+        "summary": "For the August 27-29 domestic weekend, E.T. remains No. 1, with An Officer and a Gentleman moving up to No. 2 while Friday the 13th Part 3 slides to third.",
+        "confidence": "Exact weekend box-office source",
+        "sourceRefs": [
+          9
+        ]
+      },
+      "briefs": [
+        {
+          "label": "Movies",
+          "headline": "An Officer and a Gentleman Climbs to Second",
+          "summary": "The August 27-29 weekend chart puts the drama just behind E.T., a strong adult counterweight to the summer fantasy and arcade glow.",
+          "confidence": "Exact weekend box-office source",
+          "sourceRefs": [
+            9
+          ]
+        },
+        {
+          "label": "Movies",
+          "headline": "Tron Still Hangs Around the Marquee",
+          "summary": "Disney's film sits deeper in the weekend chart, but its arcade cabinet gives the title a second life in game rooms.",
+          "confidence": "Exact weekend box-office plus arcade-release context",
+          "sourceRefs": [
+            0,
+            9
+          ]
+        },
+        {
+          "label": "Magazine Rack",
+          "headline": "Compute! Keeps Peripherals on the Shopping List",
+          "summary": "Period computer magazines remind buyers that serious use means storage, printers, blank media, typed-in programs, and a growing software shelf.",
+          "confidence": "Period magazine context",
+          "sourceRefs": [
+            4
+          ]
+        }
+      ],
+      "musicChart": [
+        {
+          "title": "#1 Somebody's Baby",
+          "artist": "Jackson Browne"
+        },
+        {
+          "title": "#2 Everybody Wants You",
+          "artist": "Billy Squier"
+        },
+        {
+          "title": "#3 Jack & Diane",
+          "artist": "John Cougar"
+        },
+        {
+          "title": "#4 You've Got Another Thing Comin'",
+          "artist": "Judas Priest"
+        },
+        {
+          "title": "#5 Electricland",
+          "artist": "Bad Company"
+        }
+      ],
+      "periodAd": {
+        "headline": "Bring the Arcade Home, Then Price the Computer Desk",
+        "summary": "The ad desk imagines a late-August sale built around arcade names up front and a sober home-computer quote behind it: console, cartridges, keyboard, disk storage, printer, and software all fighting for the same family budget.",
+        "finePrint": "Period-style retail summary based on documented August 1982 game and computer-market context."
+      },
+      "classifieds": [
+        {
+          "headline": "Tron Scores Wanted",
+          "copy": "Arcade regular seeks light-cycle tips and MCP strategies. Will trade Pac-Man patterns or two slices after league night."
+        },
+        {
+          "headline": "ColecoVision Buyer Comparing",
+          "copy": "Family wants Donkey Kong plus recognizable arcade names. Must convince older sibling this is not just another VCS."
+        },
+        {
+          "headline": "C64 Disk Advice",
+          "copy": "New 64K owner pricing cassette versus disk drive. Needs school papers, BASIC listings, and games without tying up the television all night."
+        }
+      ],
+      "worldFallback": {
+        "headline": "Editorial Screen",
+        "summary": "No world-news bulletin displaces the gaming, home-computer, and culture desk for this weekly issue.",
+        "confidence": "Editorial choice"
+      },
+      "accuracyLedger": {
+        "items": [
+          {
+            "value": "Exact",
+            "label": "Series anchor",
+            "detail": "Chronicle state advanced from Issue #3 to Issue #4, week of August 23-29, 1982."
+          },
+          {
+            "value": "Weekly",
+            "label": "Issue range",
+            "detail": "The issue covers Monday, August 23 through Sunday, August 29, 1982."
+          },
+          {
+            "value": "Month-specific",
+            "label": "Games",
+            "detail": "Tron and ColecoVision launch-title references are August 1982 context; no exact-day cabinet claim is made."
+          },
+          {
+            "value": "Exact weekend",
+            "label": "Movies",
+            "detail": "The movie chart uses the August 27-29, 1982 domestic weekend."
+          },
+          {
+            "value": "Dated chart",
+            "label": "Rock radio",
+            "detail": "The rock-radio list uses the August 28, 1982 weekly rock chart."
+          },
+          {
+            "value": "Generated",
+            "label": "Newspaper artifact",
+            "detail": "The hero image is a GPT Image 2 visual; webpage text and sources remain canonical."
+          }
+        ],
+        "note": "This is a chronological weekly 1982 issue. It is not a 40-years-ago-today mapping."
+      },
+      "sources": [
+        {
+          "name": "MobyGames: Tron arcade release, August 1982",
+          "url": "https://www.mobygames.com/game/33983/tron/"
+        },
+        {
+          "name": "Tron arcade reference: Bally Midway cabinet and gameplay context",
+          "url": "https://en.wikipedia.org/wiki/Tron_(video_game)"
+        },
+        {
+          "name": "1982 in video games: ColecoVision August launch-title context",
+          "url": "https://en.wikipedia.org/wiki/1982_in_video_games"
+        },
+        {
+          "name": "Commodore.ca: Commodore 64 production reached full stride by August 1982",
+          "url": "https://www.commodore.ca/commodore-products/commodore-64-the-best-selling-computer-in-history/"
+        },
+        {
+          "name": "COMPUTE! Issue 028, September 1982, C64 software/peripherals rack context",
+          "url": "https://colorcomputerarchive.com/repo/Documents/Magazines/Compute%20%28Clean%29/Compute_Issue_028_1982_Sep.pdf"
+        },
+        {
+          "name": "VC&G: Remembering VisiCalc and early spreadsheet context",
+          "url": "https://www.vintagecomputing.com/index.php/archives/56/retroscan-of-the-week-visicalc"
+        },
+        {
+          "name": "WordStar reference: CP/M and business word-processing context",
+          "url": "https://en.wikipedia.org/wiki/WordStar"
+        },
+        {
+          "name": "MobyGames: Deadline by Infocom release/platform context",
+          "url": "https://www.mobygames.com/game/30/deadline/"
+        },
+        {
+          "name": "Atari Archive: Atari VCS game release dates for Star Wars: The Empire Strikes Back",
+          "url": "https://www.atariarchive.org/atari-vcs-game-release-dates/"
+        },
+        {
+          "name": "The Numbers: Weekend Domestic Box Office, August 27-29, 1982",
+          "url": "https://www.the-numbers.com/box-office-chart/weekend/1982/08/27"
+        },
+        {
+          "name": "Tunecaster: Weekly Rock Top 20 for August 28, 1982",
+          "url": "https://tunecaster.com/charts/80/rock8235.html"
+        }
+      ],
+      "frontPageStories": [
+        {
+          "label": "Arcades",
+          "headline": "Tron Makes the Arcade Look Like a Computer Terminal",
+          "summary": "Bally Midway's August 1982 cabinet turns light cycles, grid bugs, and MCP combat into the week's brightest game-room story.",
+          "sourceRefs": [
+            0,
+            1
+          ]
+        },
+        {
+          "label": "Consoles",
+          "headline": "ColecoVision Reheats Arcade Names for the Living Room",
+          "summary": "August launch-title talk brings Venture, Mouse Trap, Lady Bug, and Cosmic Avenger back into view as home-console selling points.",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "label": "Home Computers",
+          "headline": "C64 Production Hits the August Stride",
+          "summary": "The Commodore 64's 64K memory, color graphics, sound chip, and under-$600 pitch keep the computer counter lively.",
+          "sourceRefs": [
+            3
+          ]
+        },
+        {
+          "label": "Movies",
+          "headline": "E.T. Still Owns the Weekend",
+          "summary": "For August 27-29, E.T. leads the domestic weekend while An Officer and a Gentleman climbs to second.",
+          "sourceRefs": [
+            9
+          ]
+        },
+        {
+          "label": "Rock Radio",
+          "headline": "Jackson Browne Takes the Rock Chart",
+          "summary": "The August 28 rock chart puts Somebody's Baby at No. 1, ahead of Billy Squier and John Cougar.",
+          "sourceRefs": [
+            10
+          ]
+        }
+      ],
+      "movieChart": [
+        {
+          "title": "#1 E.T. the Extra-Terrestrial",
+          "detail": "$6.59M weekend",
+          "sourceRefs": [
+            9
+          ]
+        },
+        {
+          "title": "#2 An Officer and a Gentleman",
+          "detail": "$5.62M weekend",
+          "sourceRefs": [
+            9
+          ]
+        },
+        {
+          "title": "#3 Friday the 13th Part 3",
+          "detail": "$2.90M weekend",
+          "sourceRefs": [
+            9
+          ]
+        },
+        {
+          "title": "#4 The Best Little Whorehouse in Texas",
+          "detail": "$2.31M weekend",
+          "sourceRefs": [
+            9
+          ]
+        },
+        {
+          "title": "#5 The Beastmaster",
+          "detail": "$2.23M weekend",
+          "sourceRefs": [
+            9
+          ]
+        }
+      ],
+      "musicChartSourceRefs": [
+        10
+      ]
+    },
     {
       "currentDate": "2026-06-09",
       "historicDate": "1982-08-16",
