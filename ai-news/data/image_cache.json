@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-10T13:00:01.944652+00:00",
+  "updatedAt": "2026-06-10T14:00:01.320221+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -9920,6 +9920,14 @@
     "https://www.sciencedaily.com/releases/2026/06/260610003049.htm": {
       "image": "https://www.sciencedaily.com/images/1920/humanoid-artificial-intelligence-robot-confused.webp",
       "checkedAt": "2026-06-10T12:00:01.246957+00:00"
+    },
+    "https://techcrunch.com/2026/06/10/jedify-raises-24m-to-help-companies-arm-ai-agents-with-context-on-their-business": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/Jedify-Co-founders.jpg?resize=1200,800",
+      "checkedAt": "2026-06-10T14:00:01.320221+00:00"
+    },
+    "https://techcrunch.com/2026/06/10/decarts-new-world-model-can-simulate-hours-of-photorealistic-driving-with-some-caveats": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/Decart-Oasis-3.png?resize=1200,675",
+      "checkedAt": "2026-06-10T14:00:01.320221+00:00"
     }
   }
 }
