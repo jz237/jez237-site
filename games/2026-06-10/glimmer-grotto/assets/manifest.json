@@ -6,11 +6,11 @@
  "sprites": {
   "miner": {
    "file": "miner.png",
-   "w": 96,
-   "h": 128,
+   "w": 116,
+   "h": 176,
    "native": [
-    24,
-    32
+    29,
+    44
    ],
    "category": "character",
    "transparent": true,
@@ -993,6 +993,21 @@
    "genSize": "1024x1024",
    "desc": "Relic: message in a bottle",
    "prompt": "A treasure curio: a sealed glass bottle with a rolled paper message inside, corked. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame."
+  },
+  "glowcap_jelly": {
+   "file": "glowcap_jelly.png",
+   "w": 56,
+   "h": 44,
+   "native": [
+    14,
+    11
+   ],
+   "category": "pickup",
+   "transparent": true,
+   "tiling": false,
+   "genSize": "1024x1024",
+   "desc": "Glowcap Jelly \u2014 eaten on pickup, grants a 25s Glimmer Rush (fast, effortless digging)",
+   "prompt": "A small corked glass jar of luminous golden glowcap jelly, soft inner light, a pale shine on the glass. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame."
   },
   "moth": {
    "file": "moth.png",

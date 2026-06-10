@@ -44,16 +44,15 @@
 
   /* ---------- touch controls ---------- */
   #touchUI{position:fixed;inset:0;pointer-events:none;z-index:11}
-  #joyZone{position:absolute;left:0;bottom:0;width:46%;height:62%;pointer-events:auto}
-  #joy{position:absolute;width:128px;height:128px;opacity:.62;display:none}
+  #joyZone{position:absolute;left:0;bottom:0;width:54%;height:72%;pointer-events:auto}
+  #joy{position:absolute;width:136px;height:136px;opacity:.66;display:none}
   #joy img.base{position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated}
-  #joy img.thumb{position:absolute;left:50%;top:50%;width:56px;height:56px;margin:-28px 0 0 -28px;image-rendering:pixelated}
-  .tbtn{position:absolute;pointer-events:auto;width:88px;height:88px;opacity:.66}
+  #joy img.thumb{position:absolute;left:50%;top:50%;width:60px;height:60px;margin:-30px 0 0 -30px;image-rendering:pixelated}
+  .tbtn{position:absolute;pointer-events:auto;opacity:.74}
   .tbtn img{width:100%;height:100%;image-rendering:pixelated}
-  .tbtn:active{opacity:.95;transform:scale(.95)}
-  #btnDig{right:calc(20px + env(safe-area-inset-right));bottom:calc(96px + env(safe-area-inset-bottom))}
-  #btnJump{right:calc(116px + env(safe-area-inset-right));bottom:calc(22px + env(safe-area-inset-bottom))}
-  #btnAct{right:calc(20px + env(safe-area-inset-right));bottom:calc(200px + env(safe-area-inset-bottom));width:72px;height:72px}
+  .tbtn:active{opacity:1;transform:scale(.95)}
+  #btnJump{right:calc(22px + env(safe-area-inset-right));bottom:calc(26px + env(safe-area-inset-bottom));width:104px;height:104px}
+  #btnDig{right:calc(136px + env(safe-area-inset-right));bottom:calc(64px + env(safe-area-inset-bottom));width:92px;height:92px}
 
   /* ---------- panels ---------- */
   .panel{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:30;
@@ -108,7 +107,7 @@
   #title h1{font-size:clamp(34px,8vw,58px);font-weight:500;color:var(--gold);letter-spacing:.04em;
     text-shadow:0 0 34px rgba(232,163,61,.45),0 3px 0 #6b4226}
   #title .tag{color:var(--ink-dim);font-size:clamp(14px,3vw,17px);font-style:italic;margin-top:-6px}
-  #title img.heroMiner{width:96px;height:128px;image-rendering:pixelated;
+  #title img.heroMiner{width:104px;height:auto;image-rendering:pixelated;
     filter:drop-shadow(0 0 24px rgba(255,216,127,.35));animation:bob 2.6s ease-in-out infinite}
   @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
   #beginBtn{font-family:inherit;font-size:19px;letter-spacing:.05em;cursor:pointer;color:#2b2014;
@@ -124,9 +123,14 @@
 
   #restHint{position:fixed;left:50%;bottom:calc(120px + env(safe-area-inset-bottom));transform:translateX(-50%);
     z-index:12;pointer-events:none;color:var(--gold);font-size:15px;text-shadow:0 1px 3px #000;
-    background:rgba(24,17,10,.78);border:1px solid rgba(255,216,127,.4);border-radius:999px;
-    padding:7px 18px;opacity:0;transition:opacity .3s}
-  #restHint.show{opacity:1}
+    background:rgba(24,17,10,.82);border:1px solid rgba(255,216,127,.45);border-radius:999px;
+    padding:7px 18px;opacity:0;transition:opacity .3s;cursor:pointer}
+  #restHint.show{opacity:1;pointer-events:auto}
+  #restHint:active{transform:translateX(-50%) scale(.95)}
+  @media (pointer: coarse){
+    #restHint{font-size:17px;padding:13px 26px;border-width:2px;
+      box-shadow:0 4px 20px rgba(255,216,127,.25)}
+  }
 </style>
 </head>
 <body>
@@ -155,7 +159,6 @@
     <img class="thumb" src="assets/joystick_thumb.png" alt=""></div></div>
   <div class="tbtn" id="btnDig"><img src="assets/btn_dig.png" alt="dig"></div>
   <div class="tbtn" id="btnJump"><img src="assets/btn_jump.png" alt="jump"></div>
-  <div class="tbtn" id="btnAct"><img src="assets/btn_action.png" alt="interact"></div>
 </div>
 
 <div id="restHint"></div>

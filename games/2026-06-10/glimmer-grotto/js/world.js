@@ -3,12 +3,13 @@
 import { TILE, WORLD_W as W, WORLD_H as H, SURFACE_Y, CHUNK,
   T_AIR, T_DIRT, T_STONE, T_HARD, T_GRASS, T_CRYS, T_MUSH, T_RUIN, T_SPRING,
   T_WATER, T_BEDROCK, TILE_DEF, BIOMES, biomeAt, GEM_DEF, TREASURE_DEF,
-  LANDMARK_DEF } from './config.js';
+  LANDMARK_DEF, JELLY } from './config.js';
 import { hash2, fbm, mulberry32, clamp } from './util.js';
 import { IMG, CRACKS } from './assets.js';
 
 const GEM_IDS = Object.keys(GEM_DEF);          // 1..7 in veins array
-const TRE_IDS = Object.keys(TREASURE_DEF);     // 8..11
+const TRE_IDS = Object.keys(TREASURE_DEF);     // 8..16
+export const VEIN_JELLY = 30;                  // glowcap jelly consumable
 
 export const world = {
   grid: new Uint8Array(W * H),
@@ -199,6 +200,9 @@ function placeVeins(seed) {
         if (ty < td.rows[0] || ty > td.rows[1]) continue;
         if (hash2(tx, ty, seed + 1300 + ti) < td.rate) { world.veins[i] = 8 + ti; break; }
       }
+      if (world.veins[i]) continue;
+      if (ty >= JELLY.rows[0] && hash2(tx, ty, seed + 2700) < JELLY.rate)
+        world.veins[i] = VEIN_JELLY;
     }
   }
 }
@@ -474,6 +478,10 @@ export function spawnPickupsFor(vein, tx, ty, rnd = Math.random) {
       world.pickups.push({ kind: 'gem', id, x: cx, y: cy, vx: (rnd() - .5) * 130, vy: -90 - rnd() * 80, t: 0 });
     return id;
   }
+  if (vein === VEIN_JELLY) {
+    world.pickups.push({ kind: 'buff', id: 'jelly', x: cx, y: cy, vx: (rnd() - .5) * 70, vy: -70, t: 0 });
+    return 'jelly';
+  }
   if (vein >= 8) {
     const id = TRE_IDS[vein - 8];
     world.pickups.push({ kind: 'treasure', id, x: cx, y: cy, vx: (rnd() - .5) * 70, vy: -70, t: 0 });
@@ -569,6 +577,9 @@ function buildChunk(cxi, cyi) {
         const id = GEM_IDS[vein - 1];
         x.drawImage(IMG['vein_' + id], px, py, TILE, TILE);
         lights.push({ x: (tx + .5) * TILE, y: (ty + .5) * TILE, c: glowFor(id), r: 52, flicker: .25 });
+      } else if (vein === VEIN_JELLY) {
+        x.drawImage(IMG['glowcap_jelly'], px + 5, py + 5, TILE - 10, TILE - 10);
+        lights.push({ x: (tx + .5) * TILE, y: (ty + .5) * TILE, c: 'gold', r: 48, a: 0.7, flicker: .3 });
       } else if (vein >= 8) {
         const td = TREASURE_DEF[TRE_IDS[vein - 8]];
         x.drawImage(IMG[td.sprite], px + 3, py + 3, TILE - 6, TILE - 6);
