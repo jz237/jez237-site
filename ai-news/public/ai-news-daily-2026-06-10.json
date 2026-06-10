@@ -1,7 +1,24 @@
 {
   "date": "2026-06-10",
-  "updatedAt": "2026-06-10T14:28:17.195164+00:00",
+  "updatedAt": "2026-06-10T16:00:01.165430+00:00",
   "items": [
+    {
+      "title": "Cybersecurity researchers aren’t happy about the guardrails on Anthropic’s Fable",
+      "url": "https://techcrunch.com/2026/06/10/cybersecurity-researchers-arent-happy-about-the-guardrails-on-anthropics-fable",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Cybersecurity researchers are complaining that Anthropic's new model Fable has guardrails that are too strict for any cybersecurity work.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/anthropic-claude-fable.jpg?resize=1200%2C798",
+      "published": "2026-06-10T15:41:22+00:00",
+      "firstSeen": "2026-06-10T16:00:01.165430+00:00",
+      "lastSeen": "2026-06-10T16:00:01.165430+00:00",
+      "model_release": true,
+      "editorial_allow": true,
+      "editorial_reason": "model_release",
+      "score": 17.7805
+    },
     {
       "title": "How B2B brands are earning citations in ChatGPT, Claude, and Google’s AI Overviews",
       "url": "https://thenextweb.com/news/b2b-brands-earning-citations-chatgpt-claude-ai-overviews",
@@ -16,7 +33,7 @@
       "lastSeen": "2026-06-10T10:00:01.155256+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 17.5417
+      "score": 17.5046
     },
     {
       "title": "Decart’s new world model can simulate hours of photorealistic driving — with some caveats",
@@ -29,11 +46,27 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/Decart-Oasis-3.png?resize=1200%2C675",
       "published": "2026-06-10T13:07:56+00:00",
       "firstSeen": "2026-06-10T14:00:01.320221+00:00",
-      "lastSeen": "2026-06-10T14:28:17.195164+00:00",
+      "lastSeen": "2026-06-10T16:00:01.165430+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 11.9498
+      "score": 11.9058
+    },
+    {
+      "title": "This $19.99 Claude AI Course Is Built for Work, Not Just Prompts",
+      "url": "https://www.techrepublic.com/article/claude-ai-professional-edegree",
+      "source": "TechRepublic AI",
+      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "This eDegree covers Claude prompting, automation, integrations, and coding for practical business use.\nThe post This $19.99 Claude AI Course Is Built for Work, Not Just Prompts appeared first on TechRepublic.",
+      "image": "https://assets.techrepublic.com/uploads/2026/06/tra-06102026-claude-ai-professional-edegree.jpg?f=jpeg",
+      "published": "2026-06-10T07:17:33+00:00",
+      "firstSeen": "2026-06-10T16:00:01.165430+00:00",
+      "lastSeen": "2026-06-10T16:00:01.165430+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 10.4137
     },
     {
       "title": "Your face is the ticket: Google’s Gemini and biometric gates are the World Cup’s quieter tech story",
@@ -49,7 +82,7 @@
       "lastSeen": "2026-06-10T14:00:01.320221+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.1407
+      "score": 9.0996
     },
     {
       "title": "If Claude Fable stops helping you, you'll never know",
@@ -62,10 +95,10 @@
       "image": "",
       "published": "2026-06-10T00:37:25+00:00",
       "firstSeen": "2026-06-10T01:00:01.722384+00:00",
-      "lastSeen": "2026-06-10T14:28:17.195164+00:00",
+      "lastSeen": "2026-06-10T16:00:01.165430+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.2387
+      "score": 8.2076
     },
     {
       "title": "Artificial Intelligence Sneaks Into the World Cup Thanks to Google Gemini",
@@ -78,10 +111,42 @@
       "image": "https://media.wired.com/photos/6a26f2821d5621d5724e9dd9/master/pass/Artificial-Intelligence-Sneaks-into-World-Cup-2279691552.jpg",
       "published": "2026-06-10T10:00:00+00:00",
       "firstSeen": "2026-06-10T10:19:57.026208+00:00",
-      "lastSeen": "2026-06-10T14:28:17.195164+00:00",
+      "lastSeen": "2026-06-10T16:00:01.165430+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.1615
+      "score": 8.1211
+    },
+    {
+      "title": "Datadog veterans launch AI coding startup Niteshift on a bet against Big AI lock-in",
+      "url": "https://techcrunch.com/2026/06/10/datadog-veterans-launch-ai-coding-startup-niteshift-on-a-bet-against-big-ai-lock-in",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "AI coding agent startup Niteshift has raised a $7 million seed round from a who's who of angels. It's betting companies will want power over, not lock-in with model makers.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/sajid_conor_photo_niteshift_launch.jpg?resize=1200%2C970",
+      "published": "2026-06-10T15:00:00+00:00",
+      "firstSeen": "2026-06-10T16:00:01.165430+00:00",
+      "lastSeen": "2026-06-10T16:00:01.165430+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 7.0599
+    },
+    {
+      "title": "Quoting Jeremy Howard",
+      "url": "https://simonwillison.net/2026/Jun/10/jeremy-howard",
+      "source": "Simon Willison",
+      "sourceUrl": "https://simonwillison.net/atom/everything/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Easy solution to slow down recursive AI self improvement:\n\nThe lab with the top-ranked model must agree THEY must not use it for working on frontier AI\nBut everyone else should have access to it.\n\nBy definition, this means the frontier doesn't advance.\nIt also has the critical benefit of avoiding a dangerous power imbalance.\nAnthropic has chosen the opposite of the safe path: they are allowing themselves, the current top lab, to use their top model for frontier AI research. They've said they'll sabotage others who try.\nThis means the AI frontier advances, &amp; power imbalance increases.\n(To b",
+      "image": "",
+      "published": "2026-06-10T15:23:34+00:00",
+      "firstSeen": "2026-06-10T16:00:01.165430+00:00",
+      "lastSeen": "2026-06-10T16:00:01.165430+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.6716
     },
     {
       "title": "Jedify raises $24M to help companies arm AI agents with context on their business",
@@ -94,10 +159,26 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/Jedify-Co-founders.jpg?resize=1200%2C800",
       "published": "2026-06-10T13:33:09+00:00",
       "firstSeen": "2026-06-10T14:00:01.320221+00:00",
-      "lastSeen": "2026-06-10T14:28:17.195164+00:00",
+      "lastSeen": "2026-06-10T16:00:01.165430+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.6623
+      "score": 5.6177
+    },
+    {
+      "title": "Can Multi-Agent LLMs Identify Their Peers? Stylometric Fingerprinting in Role-Constrained Political Analysis",
+      "url": "https://llm-stats.com/ai-news",
+      "source": "LLM Stats AI News",
+      "sourceUrl": "https://llm-stats.com/ai-news",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "",
+      "image": "https://llm-stats.com/og/main.png",
+      "published": "2026-06-10T16:00:22.506671+00:00",
+      "firstSeen": "2026-05-29T21:00:01.522609+00:00",
+      "lastSeen": "2026-06-10T16:00:01.165430+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.06
     },
     {
       "title": "Poetic emerges from stealth with $50M from OpenAI to automate insurance underwriting and compliance",
@@ -110,90 +191,10 @@
       "image": "https://media.thenextweb.com/2026/04/OpenAI-lawsuite.avif",
       "published": "2026-06-10T12:53:31+00:00",
       "firstSeen": "2026-06-10T14:00:01.320221+00:00",
-      "lastSeen": "2026-06-10T14:28:17.195164+00:00",
+      "lastSeen": "2026-06-10T16:00:01.165430+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1028
-    },
-    {
-      "title": "Can Multi-Agent LLMs Identify Their Peers? Stylometric Fingerprinting in Role-Constrained Political Analysis",
-      "url": "https://llm-stats.com/ai-news",
-      "source": "LLM Stats AI News",
-      "sourceUrl": "https://llm-stats.com/ai-news",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "",
-      "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-10T14:28:23.510582+00:00",
-      "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-10T14:28:17.195164+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 5.06
-    },
-    {
-      "title": "From data to decisions: how LSEG is scaling trusted AI",
-      "url": "https://openai.com/index/lseg",
-      "source": "OpenAI News",
-      "sourceUrl": "https://openai.com/news/rss.xml",
-      "sourceWeight": 1.0,
-      "category": "AI",
-      "summary": "See how LSEG uses OpenAI to scale trusted AI across its global business, accelerating insights, shrinking release cycles, and empowering 4,000 employees.",
-      "image": "",
-      "published": "2026-06-10T00:00:00+00:00",
-      "firstSeen": "2026-06-10T10:00:01.155256+00:00",
-      "lastSeen": "2026-06-10T14:28:17.195164+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.8359
-    },
-    {
-      "title": "How AI is powering the next wave of micro-SaaS entrepreneurs",
-      "url": "https://thenextweb.com/news/ai-powering-micro-saas-entrepreneurs",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Artificial intelligence is reshaping how software businesses are built, launched, and scaled. In particular, it is driving a surge in micro-SaaS startups, small, highly focused software-as-a-service companies often built by solo founders or tiny teams. What once required large engineering teams, significant funding, and long development cycles can now be achieved with AI-assisted tools, automation [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/ai-powering-micro-saas-entrepreneurs.avif",
-      "published": "2026-06-10T09:38:36+00:00",
-      "firstSeen": "2026-06-10T10:19:57.026208+00:00",
-      "lastSeen": "2026-06-10T12:00:01.246957+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.8119
-    },
-    {
-      "title": "75% of C-suite leaders say agentic AI lives up to the hype or is underestimated. 48% still plan to cut headcount.",
-      "url": "https://thenextweb.com/news/c-suite-agentic-ai-survey-jobs-headcount",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Three-quarters of C-suite leaders at some of the world’s largest companies say agentic AI either lives up to the hype or is being underestimated. That is according to a poll conducted by AI Infra Summit at an exclusive CEO event in April, where attendees represented firms including Amazon, Dell Technologies, FedEx, Hitachi, Lenovo, MasterCard, Mercedes-Benz, [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/c-suite-agentic-ai-survey-jobs-headcount.avif",
-      "published": "2026-06-10T08:00:01+00:00",
-      "firstSeen": "2026-06-10T09:00:02.061811+00:00",
-      "lastSeen": "2026-06-10T10:00:01.155256+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.669
-    },
-    {
-      "title": "Siri AI arrives with Google inside, and much of the world is locked out",
-      "url": "https://www.artificialintelligence-news.com/news/siri-ai-google-gemini-rollout",
-      "source": "Artificial Intelligence News",
-      "sourceUrl": "https://www.artificialintelligence-news.com/categories/artificial-intelligence/feed/",
-      "sourceWeight": 0.82,
-      "category": "AI",
-      "summary": "&#8220;We&#8217;ve all had that moment where you search for something you know is there, but it just won&#8217;t show up.&#8221; Apple&#8217;s Stacey Ford, vice president of OS Program Management, was talking about Spotlight at WWDC 2026, but she could have been describing the company&#8217;s AI ambitions.&#160; On Monday at Apple Park, the thing that wouldn&#8217;t [&#8230;]\nThe post Siri AI arrives with Google inside, and much of the world is locked out appeared first on AI News.",
-      "image": "",
-      "published": "2026-06-10T11:00:00+00:00",
-      "firstSeen": "2026-06-10T12:00:01.246957+00:00",
-      "lastSeen": "2026-06-10T14:28:17.195164+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.6469
+      "score": 5.059
     }
   ],
   "errors": [

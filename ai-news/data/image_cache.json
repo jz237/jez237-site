@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-10T14:28:17.195164+00:00",
+  "updatedAt": "2026-06-10T16:00:01.165430+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -9956,6 +9956,18 @@
     "https://www.techrepublic.com/article/claude-ai-professional-edegree": {
       "image": "https://assets.techrepublic.com/uploads/2026/06/tra-06102026-claude-ai-professional-edegree.jpg?f=jpeg",
       "checkedAt": "2026-06-10T15:00:01.811220+00:00"
+    },
+    "https://techcrunch.com/2026/06/10/cybersecurity-researchers-arent-happy-about-the-guardrails-on-anthropics-fable": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/anthropic-claude-fable.jpg?resize=1200,798",
+      "checkedAt": "2026-06-10T16:00:01.165430+00:00"
+    },
+    "https://simonwillison.net/2026/Jun/10/jeremy-howard": {
+      "image": "",
+      "checkedAt": "2026-06-10T16:00:01.165430+00:00"
+    },
+    "https://techcrunch.com/2026/06/10/datadog-veterans-launch-ai-coding-startup-niteshift-on-a-bet-against-big-ai-lock-in": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/sajid_conor_photo_niteshift_launch.jpg?resize=1200,970",
+      "checkedAt": "2026-06-10T16:00:01.165430+00:00"
     }
   }
 }
