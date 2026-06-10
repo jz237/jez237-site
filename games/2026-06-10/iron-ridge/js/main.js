@@ -7,7 +7,7 @@ import { EffectComposer } from '../vendor/postprocessing/EffectComposer.js';
 import { RenderPass } from '../vendor/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from '../vendor/postprocessing/UnrealBloomPass.js';
 
-import { FIXED_DT, MAX_FRAME_DT, GRAVITY, SHELL, ENEMY, SCORING, TANK, PLAY_RADIUS } from './config.js';
+import { FIXED_DT, MAX_FRAME_DT, GRAVITY, SHELL, ENEMY, SCORING, TANK, PLAY_RADIUS, ARTILLERY, PICKUP, PILLBOX } from './config.js';
 import { buildTerrain, getHeight, raycastTerrain } from './terrain.js';
 import { buildSky } from './sky.js';
 import { Foliage } from './foliage.js';
@@ -20,6 +20,7 @@ import { GameAudio } from './audio.js';
 import { Input, isTouch } from './input.js';
 import { Hud } from './hud.js';
 import { QualityScaler, LEVELS } from './quality.js';
+import { Minimap } from './minimap.js';
 import * as LB from './leaderboard.js';
 
 const $ = (id) => document.getElementById(id);
@@ -80,6 +81,7 @@ const audio = new GameAudio();
 const input = new Input(canvas);
 const hud = new Hud();
 const waves = new WaveManager();
+const minimap = new Minimap($('minimap'));
 
 // post-processing
 const composer = new EffectComposer(renderer);
@@ -108,6 +110,9 @@ const G = {
   trailAcc: 0,
   dustAcc: 0,
   time: 0,
+  simT: 0,
+  artilleryT: 12,
+  pendingArty: [],
 };
 
 let pendingScore = 0;
@@ -189,7 +194,7 @@ function updateAimPoint() {
     if (d < best) best = d;
   }
   for (const it of props.items) {
-    if (!it.alive) continue;
+    if (!it.alive || !it.body) continue;
     const p = it.body.position;
     const d = sphereHit(p.x, p.y, p.z, it.radius + 0.4);
     if (d < best) best = d;
@@ -226,6 +231,13 @@ function killProp(it, byPlayer) {
     effects.spawnDebris(pos, 10, 0.8, 0x9a7c52);
     effects.ring(pos, 4, 0.35);
     if (byPlayer) { bumpCombo(); addScore(SCORING.target, 'TARGET', 'good'); }
+  } else if (it.kind === 'pillbox') {
+    props.removeItem(it);
+    effects.explosion(pos, 1.7);
+    audio.explosion(1.4);
+    projectiles.explode(pos, 7, 2400);
+    effects.spawnDebris(pos, 14, 1.2, 0x9b988e);
+    if (byPlayer) { bumpCombo(); addScore(PILLBOX.points, 'PILLBOX', 'kill'); hud.hitmarker(true); }
   } else {
     props.removeItem(it);
     effects.spawnDebris(pos, 5, 0.6, 0xa89a83);
@@ -244,13 +256,17 @@ function killEnemy(e) {
   t.destroyVisual();
   const pos = t.visual.root.position.clone();
   pos.y += 1;
-  effects.explosion(pos, 1.6);
+  effects.explosion(pos, 1.6 * (e.type?.scale ?? 1));
   audio.explosion(1.4);
   projectiles.explode(pos, 6, 2000);
   G.kills++;
   bumpCombo();
-  addScore(ENEMY.points, 'TANK KILL', 'kill');
+  addScore(e.type?.points ?? ENEMY.points, 'TANK KILL', 'kill');
   hud.hitmarker(true);
+  // supply drop
+  if (Math.random() < PICKUP.dropChance) {
+    props.spawnCrate(pos.x + (Math.random() - 0.5) * 4, pos.z + (Math.random() - 0.5) * 4);
+  }
 }
 
 function damageEnemy(e, dmg) {
@@ -296,11 +312,12 @@ function onShellHit(hit) {
   const affected = projectiles.explode(pos, SHELL.splashRadius, SHELL.impulse);
 
   // direct hit damage
+  const shellDmg = s.owner?.shellDmg ?? ENEMY.shellDamage;
   const ud = hit.body?.userData;
   if (ud?.kind === 'tank') {
     const tk = ud.tank;
     if (tk.isPlayer && !byPlayer) {
-      damagePlayer(ENEMY.shellDamage + Math.floor(G.wave * 0.8));
+      damagePlayer(shellDmg + Math.floor(G.wave * 0.8));
     } else if (!tk.isPlayer && byPlayer) {
       const e = waves.enemies.find(e => e.tank === tk);
       if (e) { damageEnemy(e, SHELL.damageDirect); G.shotsHit++; }
@@ -325,14 +342,14 @@ function onShellHit(hit) {
   if (G.player?.alive) {
     const d = G.player.body.position.distanceTo(new CANNON.Vec3(pos.x, pos.y, pos.z));
     if (d < SHELL.splashRadius && hit.body !== G.player.body) {
-      const dmg = byPlayer ? 6 : (ENEMY.shellDamage * 0.55);
+      const dmg = byPlayer ? 6 : (shellDmg * 0.55);
       if (d > 0.01) damagePlayer(Math.round(dmg * (1 - d / SHELL.splashRadius)));
     }
   }
 
   // splash into props (barrels chain)
   for (const it of [...props.items]) {
-    if (!it.alive) continue;
+    if (!it.alive || !it.body) continue;
     const d = it.body.position.distanceTo(new CANNON.Vec3(pos.x, pos.y, pos.z));
     if (d < SHELL.splashRadius * 0.9) {
       if (it.kind === 'barrel') setTimeout(() => killProp(it, byPlayer), 90 + Math.random() * 150);
@@ -383,7 +400,7 @@ function checkWaveClear(dt) {
     if (G.waveTransition <= 0) startWave(G.wave + 1);
     return;
   }
-  const targetsLeft = props.countAlive('target');
+  const targetsLeft = props.countAlive('target') + props.countAlive('pillbox');
   const tanksLeft = waves.aliveEnemies().length;
   if (targetsLeft === 0 && tanksLeft === 0) {
     const acc = G.shotsFired > 0 ? G.shotsHit / G.shotsFired : 0;
@@ -405,6 +422,7 @@ function resetGame() {
   G.score = 0; G.kills = 0; G.shotsFired = 0; G.shotsHit = 0;
   G.combo = 0; G.comboT = 0; G.wave = 0; G.waveTransition = 0;
   G.camYaw = 0; G.camPitch = 0.3;
+  G.simT = 0; G.artilleryT = 12; G.pendingArty = [];
 }
 
 function startGame() {
@@ -506,9 +524,8 @@ function fixedStep(dt) {
     if (G.state === 'playing') {
       const shot = e.think(dt, p, world, dt);
       if (shot) {
-        if (camera.position.distanceTo(shot.origin) < 160) {
-          audio.blast({ freq: 50, dur: 0.4, vol: 0.4, noiseVol: 0.4, noiseFreq: 800 });
-        }
+        const d = camera.position.distanceTo(shot.origin);
+        if (d < 200) audio.fire(Math.max(0.12, 0.85 - d / 240));
         effects.muzzleFlash(shot.origin, shot.dir);
         projectiles.spawn(shot.origin, shot.dir, SHELL.enemySpeed, e.tank, onShellHit);
       }
@@ -540,11 +557,65 @@ function fixedStep(dt) {
   for (const e of waves.enemies) crush(e.tank);
 
   if (G.state === 'playing') {
+    G.simT += dt;
     G.comboT -= dt;
     if (G.comboT <= 0) G.combo = 0;
+
+    // pillbox guns
+    const shots = waves.updatePillboxes(dt, p, world, props, _pillboxLos);
+    for (const sh of shots) {
+      const d = camera.position.distanceTo(sh.origin);
+      if (d < 200) audio.fire(Math.max(0.12, 0.8 - d / 240));
+      effects.muzzleFlash(sh.origin, sh.dir);
+      projectiles.spawn(sh.origin, sh.dir, SHELL.enemySpeed, sh.owner, onShellHit);
+    }
+
+    // artillery barrages on later waves
+    if (G.wave >= ARTILLERY.startWave && p?.alive) {
+      G.artilleryT -= dt;
+      if (G.artilleryT <= 0) {
+        G.artilleryT = ARTILLERY.period * (0.85 + Math.random() * 0.3);
+        hud.floater('⚠ INCOMING', 'warn');
+        audio.whistle();
+        const pp = p.body.position, pv = p.body.velocity;
+        for (let i = 0; i < ARTILLERY.shellCount; i++) {
+          const tx = pp.x + pv.x * 1.3 + (Math.random() - 0.5) * ARTILLERY.spread * 2;
+          const tz = pp.z + pv.z * 1.3 + (Math.random() - 0.5) * ARTILLERY.spread * 2;
+          G.pendingArty.push({ warnAt: G.simT + i * 0.3, fireAt: G.simT + i * 0.3 + 0.25, x: tx, z: tz, warned: false, fired: false });
+        }
+      }
+      for (const a of G.pendingArty) {
+        if (!a.warned && G.simT >= a.warnAt) {
+          a.warned = true;
+          effects.ring(new THREE.Vector3(a.x, 0, a.z), 4, ARTILLERY.warnTime, 0xff5a3c);
+        }
+        if (!a.fired && G.simT >= a.fireAt) {
+          a.fired = true;
+          const origin = new THREE.Vector3(a.x + (Math.random() - 0.5) * 2, getHeight(a.x, a.z) + 58, a.z + (Math.random() - 0.5) * 2);
+          projectiles.spawn(origin, new THREE.Vector3(0, -1, 0), 42,
+            { isPlayer: false, shellDmg: ARTILLERY.damage }, onShellHit);
+        }
+      }
+      G.pendingArty = G.pendingArty.filter(a => !a.fired);
+    }
+
+    // supply crate pickup
+    for (const it of props.items) {
+      if (!it.alive || it.kind !== 'crate' || !p?.alive) continue;
+      const d = Math.hypot(it.x - p.body.position.x, it.z - p.body.position.z);
+      if (d < PICKUP.magnetRadius) {
+        props.removeItem(it, false);
+        G.player.hp = Math.min(G.player.maxHp, G.player.hp + PICKUP.heal);
+        hud.setHp(G.player.hp, G.player.maxHp);
+        hud.floater(`+${PICKUP.heal} ARMOR`, 'good');
+        audio.reloadDone();
+      }
+    }
+
     checkWaveClear(dt);
   }
 }
+const _pillboxLos = new CANNON.RaycastResult();
 
 // ---------------------------------------------------------------- camera
 const _camTarget = new THREE.Vector3();
@@ -765,7 +836,15 @@ function gameFrame(dt) {
   }
   for (const e of waves.enemies) e.tank.syncVisual(alpha, dt);
   waves.cleanup(scene, world, effects);
-  props.update();
+  props.update(dt, G.time);
+
+  // shell whiz-by for incoming fire
+  for (const s of projectiles.active) {
+    if (!s.fromPlayer && !s.whizzed && camera.position.distanceTo(s.pos) < 10) {
+      s.whizzed = true;
+      audio.whiz();
+    }
+  }
   foliage.update(dt, camera.position.x, camera.position.z);
   effects.update(dt);
   sky.update(dt, G.player ? G.player.visual.root.position : camera.position);
@@ -780,6 +859,7 @@ function gameFrame(dt) {
     );
     hud.setScore(G.score, G.wave, G.kills, G.combo > 1 ? Math.min(SCORING.comboMax, 1 + (G.combo - 1) * 0.5) : 1);
     hud.updateArrows(waves.aliveEnemies(), camera);
+    minimap.draw(G.player, waves.enemies, props, G.camYaw);
   }
 
 }
@@ -823,7 +903,7 @@ requestAnimationFrame(loop);
 // debug/testing handle (harmless in production)
 window.__IR = {
   G, quality, world, startGame, waves, props, projectiles, effects, input, camera,
-  onShellHit,
+  onShellHit, audio,
   player: () => G.player, frames: 0,
   // drive frames manually when rAF is suspended (headless testing)
   pump(n = 1, stepMs = 16.7) {
