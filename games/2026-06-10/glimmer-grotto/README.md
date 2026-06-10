@@ -22,11 +22,15 @@ Append `?reset` to the URL to wipe your save and start over.
 | | Desktop | Mobile |
 |---|---|---|
 | Move | WASD / arrows | left-side virtual joystick |
-| Dig | hold mouse toward a tile, or X / J | hold ⛏ button, or hold a finger on a wall |
+| Dig | hold mouse toward a tile, or X / J | **push the joystick into the earth** — or hold ⛏ / hold a finger on a wall |
 | Jump | Space / W / ↑ | ⬆ button |
-| Rest / shop | E | ✦ button |
+| Rest / shop | E | tap the prompt that appears near campfires & the tent |
 | Journal | J or HUD button | HUD button |
 | Sound | M or HUD button | HUD button |
+
+Single-tile ledges are hopped automatically on both platforms, so mobile play is
+one thumb most of the time: steer the stick, and the miner digs walls level,
+digs down when you press down, and hops little steps on his own.
 
 ## The loop
 

@@ -105,7 +105,7 @@ async function boot() {
   const hint = document.getElementById('ctrlHint');
   const touchLikely = matchMedia('(pointer: coarse)').matches;
   hint.innerHTML = touchLikely
-    ? 'wander with the <b>joystick</b> · <b>⛏</b> dig · <b>⬆</b> hop · <b>✦</b> rest, stash &amp; shop'
+    ? 'wander with the <b>joystick</b> — <b>push into the earth to dig</b> · <b>⬆</b> hop · tap the prompts to rest &amp; shop'
     : '<b>WASD / arrows</b> wander · <b>hold mouse</b> (or <b>X</b>) dig · <b>E</b> rest &amp; shop · <b>J</b> journal · <b>M</b> sound';
   const btn = document.getElementById('beginBtn');
   btn.disabled = false;
@@ -117,7 +117,9 @@ async function boot() {
     if (touchLikely) document.getElementById('touchUI').classList.remove('hidden');
     running = true;
     if (!saved) {     // gentle first-time guidance
-      setTimeout(() => toast('Dig down — glimmering veins hide in the earth', 'pickaxe'), 2500);
+      setTimeout(() => toast(touchLikely
+        ? 'Push the joystick into the earth to dig'
+        : 'Dig down — glimmering veins hide in the earth', 'pickaxe'), 2500);
       setTimeout(() => toast('Campfires refill your energy and stash your finds', 'campfire'), 14000);
       setTimeout(() => toast('Pemberley’s tent sells sturdier picks & brighter lanterns', 'tent'), 30000);
     }
@@ -377,7 +379,7 @@ function checkProps() {
   }
   player.restGlow = restNearby < 110 ? 1 : 0;
   if (nearProp) {
-    const verb = input.usingTouch ? '✦' : 'E';
+    const verb = input.usingTouch ? 'tap here' : 'E';
     showRestHint(nearProp.interact === 'shop'
       ? `${verb} — browse Pemberley's wares`
       : (player.bag.length ? `${verb} — rest & stash ${player.bag.length} find${player.bag.length > 1 ? 's' : ''}` : `${verb} — rest a while`));
