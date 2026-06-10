@@ -128,6 +128,23 @@ export class GameAudio {
   explosion(big = 1) { this.blast({ freq: 42, dur: 0.7 * big + 0.3, vol: 1.0, noiseVol: 0.75, noiseFreq: 600 }); }
   hitTink() { this.blast({ freq: 220, dur: 0.12, vol: 0.25, noiseVol: 0.3, noiseFreq: 2400 }); }
   damaged() { this.blast({ freq: 90, dur: 0.3, vol: 0.5, noiseVol: 0.5, noiseFreq: 500 }); }
+  whiz() { this.blast({ freq: 600, dur: 0.18, vol: 0.06, noiseVol: 0.3, noiseFreq: 3200 }); }
+
+  // descending artillery whistle
+  whistle() {
+    if (!this.ctx) return;
+    const ctx = this.ctx, t = ctx.currentTime;
+    const o = ctx.createOscillator();
+    o.type = 'sine';
+    o.frequency.setValueAtTime(1850, t);
+    o.frequency.exponentialRampToValueAtTime(520, t + 1.5);
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(0.09, t + 0.25);
+    g.gain.exponentialRampToValueAtTime(0.001, t + 1.6);
+    o.connect(g).connect(this.master);
+    o.start(t); o.stop(t + 1.7);
+  }
 
   click() {
     if (!this.ctx) return;
