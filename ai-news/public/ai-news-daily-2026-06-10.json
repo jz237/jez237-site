@@ -1,6 +1,6 @@
 {
   "date": "2026-06-10",
-  "updatedAt": "2026-06-10T11:00:01.611039+00:00",
+  "updatedAt": "2026-06-10T10:19:57.026208+00:00",
   "items": [
     {
       "title": "How B2B brands are earning citations in ChatGPT, Claude, and Google’s AI Overviews",
@@ -16,7 +16,7 @@
       "lastSeen": "2026-06-10T10:00:01.155256+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 17.6319
+      "score": 17.6503
     },
     {
       "title": "If Claude Fable stops helping you, you'll never know",
@@ -29,10 +29,10 @@
       "image": "",
       "published": "2026-06-10T00:37:25+00:00",
       "firstSeen": "2026-06-10T01:00:01.722384+00:00",
-      "lastSeen": "2026-06-10T11:00:01.611039+00:00",
+      "lastSeen": "2026-06-10T10:19:57.026208+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.3145
+      "score": 8.33
     },
     {
       "title": "Artificial Intelligence Sneaks Into the World Cup Thanks to Google Gemini",
@@ -44,27 +44,27 @@
       "summary": "The Argentine national team will be Google’s test bench and technological showcase during the World Cup.",
       "image": "https://media.wired.com/photos/6a26f2821d5621d5724e9dd9/master/pass/Artificial-Intelligence-Sneaks-into-World-Cup-2279691552.jpg",
       "published": "2026-06-10T10:00:00+00:00",
-      "firstSeen": "2026-06-10T11:00:01.611039+00:00",
-      "lastSeen": "2026-06-10T11:00:01.611039+00:00",
+      "firstSeen": "2026-06-10T10:19:57.026208+00:00",
+      "lastSeen": "2026-06-10T10:19:57.026208+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.2599
+      "score": 8.2799
     },
     {
-      "title": "Can Multi-Agent LLMs Identify Their Peers? Stylometric Fingerprinting in Role-Constrained Political Analysis",
-      "url": "https://llm-stats.com/ai-news",
-      "source": "LLM Stats AI News",
-      "sourceUrl": "https://llm-stats.com/ai-news",
-      "sourceWeight": 0.9,
+      "title": "How AI is powering the next wave of micro-SaaS entrepreneurs",
+      "url": "https://thenextweb.com/news/ai-powering-micro-saas-entrepreneurs",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
       "category": "AI",
-      "summary": "",
-      "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-10T11:00:08.833072+00:00",
-      "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-10T11:00:01.611039+00:00",
+      "summary": "Artificial intelligence is reshaping how software businesses are built, launched, and scaled. In particular, it is driving a surge in micro-SaaS startups, small, highly focused software-as-a-service companies often built by solo founders or tiny teams. What once required large engineering teams, significant funding, and long development cycles can now be achieved with AI-assisted tools, automation [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/ai-powering-micro-saas-entrepreneurs.avif",
+      "published": "2026-06-10T09:38:36+00:00",
+      "firstSeen": "2026-06-10T10:19:57.026208+00:00",
+      "lastSeen": "2026-06-10T10:19:57.026208+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.06
+      "score": 4.9291
     },
     {
       "title": "From data to decisions: how LSEG is scaling trusted AI",
@@ -77,26 +77,10 @@
       "image": "",
       "published": "2026-06-10T00:00:00+00:00",
       "firstSeen": "2026-06-10T10:00:01.155256+00:00",
-      "lastSeen": "2026-06-10T11:00:01.611039+00:00",
+      "lastSeen": "2026-06-10T10:19:57.026208+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9104
-    },
-    {
-      "title": "How AI is powering the next wave of micro-SaaS entrepreneurs",
-      "url": "https://thenextweb.com/news/ai-powering-micro-saas-entrepreneurs",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Artificial intelligence is reshaping how software businesses are built, launched, and scaled. In particular, it is driving a surge in micro-SaaS startups, small, highly focused software-as-a-service companies often built by solo founders or tiny teams. What once required large engineering teams, significant funding, and long development cycles can now be achieved with AI-assisted tools, automation [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/ai-powering-micro-saas-entrepreneurs.avif",
-      "published": "2026-06-10T09:38:36+00:00",
-      "firstSeen": "2026-06-10T11:00:01.611039+00:00",
-      "lastSeen": "2026-06-10T11:00:01.611039+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.9093
+      "score": 4.9256
     },
     {
       "title": "75% of C-suite leaders say agentic AI lives up to the hype or is underestimated. 48% still plan to cut headcount.",
@@ -112,7 +96,7 @@
       "lastSeen": "2026-06-10T10:00:01.155256+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.762
+      "score": 4.781
     },
     {
       "title": "Legal AI startup Legora opens in Madrid, Milan, and Paris as it targets 700 European employees within a year",
@@ -128,7 +112,7 @@
       "lastSeen": "2026-06-10T10:00:01.155256+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.7061
+      "score": 3.724
     },
     {
       "title": "McDonald’s tests Google-backed AI drive-thru ordering system",
@@ -140,11 +124,11 @@
       "summary": "McDonald’s is testing a new AI system that can take drive-thru orders and support restaurant operations. The system, called ArchIQ and nicknamed “Archy,” was introduced during the company’s Worldwide convention, according to Restaurant Business. It is being tested at five McDonald’s locations in the United States, though the company has not named the restaurants involved. [&#8230;]\nThe post McDonald’s tests Google-backed AI drive-thru ordering system appeared first on AI News.",
       "image": "",
       "published": "2026-06-10T10:00:00+00:00",
-      "firstSeen": "2026-06-10T11:00:01.611039+00:00",
-      "lastSeen": "2026-06-10T11:00:01.611039+00:00",
+      "firstSeen": "2026-06-10T10:19:57.026208+00:00",
+      "lastSeen": "2026-06-10T10:19:57.026208+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3179
+      "score": 3.3379
     },
     {
       "title": "Einride lists on Nasdaq at $1.35 billion, down from the $5 billion it once discussed with banks",
@@ -157,10 +141,10 @@
       "image": "https://media.thenextweb.com/2026/06/Einride-autonomus.avif",
       "published": "2026-06-10T08:55:22+00:00",
       "firstSeen": "2026-06-10T10:00:01.155256+00:00",
-      "lastSeen": "2026-06-10T11:00:01.611039+00:00",
+      "lastSeen": "2026-06-10T10:19:57.026208+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1883
+      "score": 3.2078
     },
     {
       "title": "The $2 trillion AI infrastructure problem no one is talking about, and the engineer solving it",
@@ -173,10 +157,10 @@
       "image": "https://media.thenextweb.com/2026/06/Shashidhar-Bhat.avif",
       "published": "2026-06-10T08:15:44+00:00",
       "firstSeen": "2026-06-10T09:00:02.061811+00:00",
-      "lastSeen": "2026-06-10T11:00:01.611039+00:00",
+      "lastSeen": "2026-06-10T10:19:57.026208+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0694
+      "score": 3.0885
     },
     {
       "title": "01Health raises £11.2M to turn its dental-AI platform into infrastructure for specialist care",
@@ -188,11 +172,27 @@
       "summary": "01Health, a London healthtech company, has raised £11.2M ($15M) in Series A funding to open up the clinical platform behind its dental brands and sell it to other practices. The round was led by Gresham House Ventures. Existing backers Balderton Capital, Eka Ventures, and Wavemaker360 followed on, alongside angels including Blockchain.com co-founder Nicolas Cary. 01Health [&hellip;]\nThis story continues at The Next Web",
       "image": "https://media.thenextweb.com/2026/06/01Health-team.avif",
       "published": "2026-06-10T10:03:54+00:00",
-      "firstSeen": "2026-06-10T11:00:01.611039+00:00",
-      "lastSeen": "2026-06-10T11:00:01.611039+00:00",
+      "firstSeen": "2026-06-10T10:19:57.026208+00:00",
+      "lastSeen": "2026-06-10T10:19:57.026208+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8218
+      "score": 2.8419
+    },
+    {
+      "title": "01Health raises £11.2M to turn its dental-AI platform into infrastructure for specialist care",
+      "url": "https://thenextweb.com/news/01health-raises-11-2m-to-turn-its-dental-ai-platform-into-infrastructure-for-specialist-care",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Rotomate, a Finnish industrial AI startup, has raised €2.1M in pre-seed funding to expand a platform that reads machine data and recommends maintenance actions the way a senior reliability engineer would. The round was led by Helsinki-based Kvanted, with Robin Capital, Angel Invest, Accel’s scout programme, and Business Finland also taking part. Angel investors Jiri [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/Rotomate-team.avif",
+      "published": "2026-06-10T09:15:19+00:00",
+      "firstSeen": "2026-06-10T10:00:01.155256+00:00",
+      "lastSeen": "2026-06-10T10:19:57.026208+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.8176
     }
   ],
   "errors": [
