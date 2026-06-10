@@ -36,6 +36,16 @@ brighter lantern, bigger satchel → hardstone gates open into deeper, stranger 
 Amber Earth, Stone Depths, Crystal Caverns, Mushroom Hollows, Ember Hot Springs,
 the Gilded Ruins, and the Still Lake at the very bottom.
 
+## Sightseeing
+
+Seven one-of-a-kind **landmarks** are hidden in the deep — an abandoned mineshaft,
+a gallery of cave paintings, a geode chamber, a towering elder mushroom, waterfall
+springs, an owl shrine, and a sunken rowboat at the lake bottom. Walking into one
+adds it to your journal. Five rare **relics** (a compass, a locket, an ancient coin,
+a jade idol, a message in a bottle) hide in the stone for devoted wanderers, and the
+caves are alive with **critters**: moths around the glowing flora, snails, roosting
+bats that flutter off, lake fish, and surface birds. 28 journal entries in all.
+
 ## Art pipeline (painterly upgrade path)
 
 Every visible object is a **loaded PNG** from `assets/` drawn with `drawImage` —
