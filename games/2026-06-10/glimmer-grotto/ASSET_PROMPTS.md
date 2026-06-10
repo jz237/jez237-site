@@ -125,6 +125,46 @@ Final size: **88×88** · Generate at: **1024x1024** · transparent — cut out 
 Cozy storybook painterly video-game art. Soft gouache-and-oil brushwork with visible strokes, warm amber key light from the upper-left, gentle violet ambient shadow, rich jewel-tone palette (amber, terracotta, moss green, teal, violet), rounded inviting shapes with strong readable silhouettes, subtle paper-grain texture, edges defined by dark warm-brown paint rather than black outlines, whimsical calm mood like a beloved children's book about a tiny miner, high detail but soft focus falloff, absolutely no photorealism, no 3D render look, no text. A faceted gemstone: a brilliant-cut icy white diamond, glowing softly from within, bright specular sparkles, painterly facets. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame.
 ```
 
+### `relic_compass.png`
+*Relic: the Wayfarer's Compass*  
+Final size: **56×44** · Generate at: **1024x1024** · transparent — cut out after generation
+
+```
+Cozy storybook painterly video-game art. Soft gouache-and-oil brushwork with visible strokes, warm amber key light from the upper-left, gentle violet ambient shadow, rich jewel-tone palette (amber, terracotta, moss green, teal, violet), rounded inviting shapes with strong readable silhouettes, subtle paper-grain texture, edges defined by dark warm-brown paint rather than black outlines, whimsical calm mood like a beloved children's book about a tiny miner, high detail but soft focus falloff, absolutely no photorealism, no 3D render look, no text. A treasure curio: an antique brass pocket compass with a cream face and red needle. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame.
+```
+
+### `relic_locket.png`
+*Relic: the Miner's Locket*  
+Final size: **56×48** · Generate at: **1024x1024** · transparent — cut out after generation
+
+```
+Cozy storybook painterly video-game art. Soft gouache-and-oil brushwork with visible strokes, warm amber key light from the upper-left, gentle violet ambient shadow, rich jewel-tone palette (amber, terracotta, moss green, teal, violet), rounded inviting shapes with strong readable silhouettes, subtle paper-grain texture, edges defined by dark warm-brown paint rather than black outlines, whimsical calm mood like a beloved children's book about a tiny miner, high detail but soft focus falloff, absolutely no photorealism, no 3D render look, no text. A treasure curio: a small golden heart locket on a fine chain, rose-tinted picture inside. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame.
+```
+
+### `relic_coin.png`
+*Relic: an ancient coin*  
+Final size: **56×44** · Generate at: **1024x1024** · transparent — cut out after generation
+
+```
+Cozy storybook painterly video-game art. Soft gouache-and-oil brushwork with visible strokes, warm amber key light from the upper-left, gentle violet ambient shadow, rich jewel-tone palette (amber, terracotta, moss green, teal, violet), rounded inviting shapes with strong readable silhouettes, subtle paper-grain texture, edges defined by dark warm-brown paint rather than black outlines, whimsical calm mood like a beloved children's book about a tiny miner, high detail but soft focus falloff, absolutely no photorealism, no 3D render look, no text. A treasure curio: an ancient gold coin stamped with a worn owl glyph. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame.
+```
+
+### `relic_idol.png`
+*Relic: the jade dragon idol*  
+Final size: **56×52** · Generate at: **1024x1024** · transparent — cut out after generation
+
+```
+Cozy storybook painterly video-game art. Soft gouache-and-oil brushwork with visible strokes, warm amber key light from the upper-left, gentle violet ambient shadow, rich jewel-tone palette (amber, terracotta, moss green, teal, violet), rounded inviting shapes with strong readable silhouettes, subtle paper-grain texture, edges defined by dark warm-brown paint rather than black outlines, whimsical calm mood like a beloved children's book about a tiny miner, high detail but soft focus falloff, absolutely no photorealism, no 3D render look, no text. A treasure curio: a tiny carved jade dragon idol with a golden eye. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame.
+```
+
+### `relic_bottle.png`
+*Relic: message in a bottle*  
+Final size: **56×48** · Generate at: **1024x1024** · transparent — cut out after generation
+
+```
+Cozy storybook painterly video-game art. Soft gouache-and-oil brushwork with visible strokes, warm amber key light from the upper-left, gentle violet ambient shadow, rich jewel-tone palette (amber, terracotta, moss green, teal, violet), rounded inviting shapes with strong readable silhouettes, subtle paper-grain texture, edges defined by dark warm-brown paint rather than black outlines, whimsical calm mood like a beloved children's book about a tiny miner, high detail but soft focus falloff, absolutely no photorealism, no 3D render look, no text. A treasure curio: a sealed glass bottle with a rolled paper message inside, corked. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame.
+```
+
 ## Veins
 
 ### `vein_amber.png`
@@ -409,6 +449,184 @@ Final size: **80×176** · Generate at: **1024x1536** · transparent — cut out
 
 ```
 Cozy storybook painterly video-game art. Soft gouache-and-oil brushwork with visible strokes, warm amber key light from the upper-left, gentle violet ambient shadow, rich jewel-tone palette (amber, terracotta, moss green, teal, violet), rounded inviting shapes with strong readable silhouettes, subtle paper-grain texture, edges defined by dark warm-brown paint rather than black outlines, whimsical calm mood like a beloved children's book about a tiny miner, high detail but soft focus falloff, absolutely no photorealism, no 3D render look, no text. A broken ancient sandstone column with a carved capital, cracked golden stone and small moss tufts. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame.
+```
+
+### `statue_owl.png`
+*Owl shrine statue (Gilded Ruins landmark)*  
+Final size: **80×80** · Generate at: **1024x1024** · transparent — cut out after generation
+
+```
+Cozy storybook painterly video-game art. Soft gouache-and-oil brushwork with visible strokes, warm amber key light from the upper-left, gentle violet ambient shadow, rich jewel-tone palette (amber, terracotta, moss green, teal, violet), rounded inviting shapes with strong readable silhouettes, subtle paper-grain texture, edges defined by dark warm-brown paint rather than black outlines, whimsical calm mood like a beloved children's book about a tiny miner, high detail but soft focus falloff, absolutely no photorealism, no 3D render look, no text. A weathered stone owl statue on a square plinth, carved round eyes, small moss tufts, warm grey stone. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame.
+```
+
+### `urn.png`
+*Ruins urn decoration*  
+Final size: **56×56** · Generate at: **1024x1024** · transparent — cut out after generation
+
+```
+Cozy storybook painterly video-game art. Soft gouache-and-oil brushwork with visible strokes, warm amber key light from the upper-left, gentle violet ambient shadow, rich jewel-tone palette (amber, terracotta, moss green, teal, violet), rounded inviting shapes with strong readable silhouettes, subtle paper-grain texture, edges defined by dark warm-brown paint rather than black outlines, whimsical calm mood like a beloved children's book about a tiny miner, high detail but soft focus falloff, absolutely no photorealism, no 3D render look, no text. A small ancient terracotta amphora with two handles and a chipped rim. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame.
+```
+
+### `sunken_boat.png`
+*Sunken rowboat (Still Lake landmark)*  
+Final size: **160×48** · Generate at: **1536x1024** · transparent — cut out after generation
+
+```
+Cozy storybook painterly video-game art. Soft gouache-and-oil brushwork with visible strokes, warm amber key light from the upper-left, gentle violet ambient shadow, rich jewel-tone palette (amber, terracotta, moss green, teal, violet), rounded inviting shapes with strong readable silhouettes, subtle paper-grain texture, edges defined by dark warm-brown paint rather than black outlines, whimsical calm mood like a beloved children's book about a tiny miner, high detail but soft focus falloff, absolutely no photorealism, no 3D render look, no text. An old sunken wooden rowboat resting on a lake bed, broken ribs, waterlogged planks, faint teal algae. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame.
+```
+
+### `cart_wreck.png`
+*Wrecked cart (Old Workings landmark)*  
+Final size: **112×52** · Generate at: **1536x1024** · transparent — cut out after generation
+
+```
+Cozy storybook painterly video-game art. Soft gouache-and-oil brushwork with visible strokes, warm amber key light from the upper-left, gentle violet ambient shadow, rich jewel-tone palette (amber, terracotta, moss green, teal, violet), rounded inviting shapes with strong readable silhouettes, subtle paper-grain texture, edges defined by dark warm-brown paint rather than black outlines, whimsical calm mood like a beloved children's book about a tiny miner, high detail but soft focus falloff, absolutely no photorealism, no 3D render look, no text. A tipped-over broken wooden mine cart, one iron wheel detached, splintered planks. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame.
+```
+
+### `spore_plant.png`
+*Spore puffballs (mushroom hollows)*  
+Final size: **48×40** · Generate at: **1024x1024** · transparent — cut out after generation
+
+```
+Cozy storybook painterly video-game art. Soft gouache-and-oil brushwork with visible strokes, warm amber key light from the upper-left, gentle violet ambient shadow, rich jewel-tone palette (amber, terracotta, moss green, teal, violet), rounded inviting shapes with strong readable silhouettes, subtle paper-grain texture, edges defined by dark warm-brown paint rather than black outlines, whimsical calm mood like a beloved children's book about a tiny miner, high detail but soft focus falloff, absolutely no photorealism, no 3D render look, no text. A cluster of teal puffball spore pods on thin green stems, softly glowing. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame.
+```
+
+### `reeds.png`
+*Lake reeds*  
+Final size: **56×48** · Generate at: **1024x1024** · transparent — cut out after generation
+
+```
+Cozy storybook painterly video-game art. Soft gouache-and-oil brushwork with visible strokes, warm amber key light from the upper-left, gentle violet ambient shadow, rich jewel-tone palette (amber, terracotta, moss green, teal, violet), rounded inviting shapes with strong readable silhouettes, subtle paper-grain texture, edges defined by dark warm-brown paint rather than black outlines, whimsical calm mood like a beloved children's book about a tiny miner, high detail but soft focus falloff, absolutely no photorealism, no 3D render look, no text. A tuft of slender dark-teal underwater reeds swaying gently. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame.
+```
+
+### `spring_lily.png`
+*Hot-spring lily pad*  
+Final size: **64×32** · Generate at: **1536x1024** · transparent — cut out after generation
+
+```
+Cozy storybook painterly video-game art. Soft gouache-and-oil brushwork with visible strokes, warm amber key light from the upper-left, gentle violet ambient shadow, rich jewel-tone palette (amber, terracotta, moss green, teal, violet), rounded inviting shapes with strong readable silhouettes, subtle paper-grain texture, edges defined by dark warm-brown paint rather than black outlines, whimsical calm mood like a beloved children's book about a tiny miner, high detail but soft focus falloff, absolutely no photorealism, no 3D render look, no text. A floating green lily pad with a single small pink-cream blossom, top-down three-quarter view. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame.
+```
+
+### `mural_miners.png`
+*Cave mural: the miners (Painted Dark landmark)*  
+Final size: **160×112** · Generate at: **1536x1024** · transparent — cut out after generation
+
+```
+Cozy storybook painterly video-game art. Soft gouache-and-oil brushwork with visible strokes, warm amber key light from the upper-left, gentle violet ambient shadow, rich jewel-tone palette (amber, terracotta, moss green, teal, violet), rounded inviting shapes with strong readable silhouettes, subtle paper-grain texture, edges defined by dark warm-brown paint rather than black outlines, whimsical calm mood like a beloved children's book about a tiny miner, high detail but soft focus falloff, absolutely no photorealism, no 3D render look, no text. A cave-painting panel on lighter rock: ochre stick-figure miners beside violet and green gem glyphs and a spiral, prehistoric style. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame.
+```
+
+### `mural_beasts.png`
+*Cave mural: the beasts*  
+Final size: **160×112** · Generate at: **1536x1024** · transparent — cut out after generation
+
+```
+Cozy storybook painterly video-game art. Soft gouache-and-oil brushwork with visible strokes, warm amber key light from the upper-left, gentle violet ambient shadow, rich jewel-tone palette (amber, terracotta, moss green, teal, violet), rounded inviting shapes with strong readable silhouettes, subtle paper-grain texture, edges defined by dark warm-brown paint rather than black outlines, whimsical calm mood like a beloved children's book about a tiny miner, high detail but soft focus falloff, absolutely no photorealism, no 3D render look, no text. A cave-painting panel on lighter rock: ochre long-bodied beasts, cream handprints and a spiral, prehistoric style. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame.
+```
+
+### `mural_hands.png`
+*Cave mural: the hands*  
+Final size: **160×112** · Generate at: **1536x1024** · transparent — cut out after generation
+
+```
+Cozy storybook painterly video-game art. Soft gouache-and-oil brushwork with visible strokes, warm amber key light from the upper-left, gentle violet ambient shadow, rich jewel-tone palette (amber, terracotta, moss green, teal, violet), rounded inviting shapes with strong readable silhouettes, subtle paper-grain texture, edges defined by dark warm-brown paint rather than black outlines, whimsical calm mood like a beloved children's book about a tiny miner, high detail but soft focus falloff, absolutely no photorealism, no 3D render look, no text. A cave-painting panel on lighter rock: cream and ochre handprints, gem glyphs and a small miner figure, prehistoric style. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame.
+```
+
+### `support_beam.png`
+*Timber mine support (Old Workings landmark)*  
+Final size: **160×232** · Generate at: **1024x1536** · transparent — cut out after generation
+
+```
+Cozy storybook painterly video-game art. Soft gouache-and-oil brushwork with visible strokes, warm amber key light from the upper-left, gentle violet ambient shadow, rich jewel-tone palette (amber, terracotta, moss green, teal, violet), rounded inviting shapes with strong readable silhouettes, subtle paper-grain texture, edges defined by dark warm-brown paint rather than black outlines, whimsical calm mood like a beloved children's book about a tiny miner, high detail but soft focus falloff, absolutely no photorealism, no 3D render look, no text. An old timber mine support: two upright posts and a crossbeam of worn oak with dark joint pegs. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame.
+```
+
+### `boulder.png`
+*Scatter boulder*  
+Final size: **88×68** · Generate at: **1024x1024** · transparent — cut out after generation
+
+```
+Cozy storybook painterly video-game art. Soft gouache-and-oil brushwork with visible strokes, warm amber key light from the upper-left, gentle violet ambient shadow, rich jewel-tone palette (amber, terracotta, moss green, teal, violet), rounded inviting shapes with strong readable silhouettes, subtle paper-grain texture, edges defined by dark warm-brown paint rather than black outlines, whimsical calm mood like a beloved children's book about a tiny miner, high detail but soft focus falloff, absolutely no photorealism, no 3D render look, no text. A rounded grey-blue boulder with thin cracks and a little moss on top. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame.
+```
+
+### `cairn.png`
+*Stone cairn (hot springs)*  
+Final size: **64×72** · Generate at: **1024x1024** · transparent — cut out after generation
+
+```
+Cozy storybook painterly video-game art. Soft gouache-and-oil brushwork with visible strokes, warm amber key light from the upper-left, gentle violet ambient shadow, rich jewel-tone palette (amber, terracotta, moss green, teal, violet), rounded inviting shapes with strong readable silhouettes, subtle paper-grain texture, edges defined by dark warm-brown paint rather than black outlines, whimsical calm mood like a beloved children's book about a tiny miner, high detail but soft focus falloff, absolutely no photorealism, no 3D render look, no text. A small stacked stone cairn of four warm terracotta stones. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame.
+```
+
+### `shelf_fungi.png`
+*Wall shelf fungi*  
+Final size: **56×72** · Generate at: **1024x1024** · transparent — cut out after generation
+
+```
+Cozy storybook painterly video-game art. Soft gouache-and-oil brushwork with visible strokes, warm amber key light from the upper-left, gentle violet ambient shadow, rich jewel-tone palette (amber, terracotta, moss green, teal, violet), rounded inviting shapes with strong readable silhouettes, subtle paper-grain texture, edges defined by dark warm-brown paint rather than black outlines, whimsical calm mood like a beloved children's book about a tiny miner, high detail but soft focus falloff, absolutely no photorealism, no 3D render look, no text. Three teal shelf-fungus brackets growing in a column from a cave wall, glowing rims. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame.
+```
+
+### `flowers_patch.png`
+*Surface wildflowers*  
+Final size: **88×44** · Generate at: **1536x1024** · transparent — cut out after generation
+
+```
+Cozy storybook painterly video-game art. Soft gouache-and-oil brushwork with visible strokes, warm amber key light from the upper-left, gentle violet ambient shadow, rich jewel-tone palette (amber, terracotta, moss green, teal, violet), rounded inviting shapes with strong readable silhouettes, subtle paper-grain texture, edges defined by dark warm-brown paint rather than black outlines, whimsical calm mood like a beloved children's book about a tiny miner, high detail but soft focus falloff, absolutely no photorealism, no 3D render look, no text. A small patch of meadow grass blades with four tiny wildflowers in gold, rose and violet. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame.
+```
+
+### `bush.png`
+*Surface bush*  
+Final size: **96×60** · Generate at: **1536x1024** · transparent — cut out after generation
+
+```
+Cozy storybook painterly video-game art. Soft gouache-and-oil brushwork with visible strokes, warm amber key light from the upper-left, gentle violet ambient shadow, rich jewel-tone palette (amber, terracotta, moss green, teal, violet), rounded inviting shapes with strong readable silhouettes, subtle paper-grain texture, edges defined by dark warm-brown paint rather than black outlines, whimsical calm mood like a beloved children's book about a tiny miner, high detail but soft focus falloff, absolutely no photorealism, no 3D render look, no text. A small rounded leafy shrub in layered moss greens with a few tiny rose berries. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame.
+```
+
+### `great_mushroom.png`
+*The Elder Cap (mushroom hollows landmark)*  
+Final size: **192×232** · Generate at: **1024x1024** · transparent — cut out after generation
+
+```
+Cozy storybook painterly video-game art. Soft gouache-and-oil brushwork with visible strokes, warm amber key light from the upper-left, gentle violet ambient shadow, rich jewel-tone palette (amber, terracotta, moss green, teal, violet), rounded inviting shapes with strong readable silhouettes, subtle paper-grain texture, edges defined by dark warm-brown paint rather than black outlines, whimsical calm mood like a beloved children's book about a tiny miner, high detail but soft focus falloff, absolutely no photorealism, no 3D render look, no text. A towering ancient bioluminescent mushroom: huge glowing teal domed cap with pale spots and gills, thick cream stem. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame.
+```
+
+## Critters
+
+### `moth.png`
+*Cave moth (flutters near glowing flora)*  
+Final size: **48×24** · Generate at: **1536x1024** · transparent — cut out after generation
+
+```
+Cozy storybook painterly video-game art. Soft gouache-and-oil brushwork with visible strokes, warm amber key light from the upper-left, gentle violet ambient shadow, rich jewel-tone palette (amber, terracotta, moss green, teal, violet), rounded inviting shapes with strong readable silhouettes, subtle paper-grain texture, edges defined by dark warm-brown paint rather than black outlines, whimsical calm mood like a beloved children's book about a tiny miner, high detail but soft focus falloff, absolutely no photorealism, no 3D render look, no text. A small cream cave moth with spread patterned wings, seen from above. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame.
+```
+
+### `snail.png`
+*Cave snail*  
+Final size: **48×32** · Generate at: **1536x1024** · transparent — cut out after generation
+
+```
+Cozy storybook painterly video-game art. Soft gouache-and-oil brushwork with visible strokes, warm amber key light from the upper-left, gentle violet ambient shadow, rich jewel-tone palette (amber, terracotta, moss green, teal, violet), rounded inviting shapes with strong readable silhouettes, subtle paper-grain texture, edges defined by dark warm-brown paint rather than black outlines, whimsical calm mood like a beloved children's book about a tiny miner, high detail but soft focus falloff, absolutely no photorealism, no 3D render look, no text. A little amber-shelled snail with a cream body, side view. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame.
+```
+
+### `bat.png`
+*Cave bat (flutters away when approached)*  
+Final size: **52×28** · Generate at: **1536x1024** · transparent — cut out after generation
+
+```
+Cozy storybook painterly video-game art. Soft gouache-and-oil brushwork with visible strokes, warm amber key light from the upper-left, gentle violet ambient shadow, rich jewel-tone palette (amber, terracotta, moss green, teal, violet), rounded inviting shapes with strong readable silhouettes, subtle paper-grain texture, edges defined by dark warm-brown paint rather than black outlines, whimsical calm mood like a beloved children's book about a tiny miner, high detail but soft focus falloff, absolutely no photorealism, no 3D render look, no text. A tiny round fruit bat with spread dusk-purple wings and amber eyes, front view, friendly. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame.
+```
+
+### `fish.png`
+*Lake fish*  
+Final size: **56×28** · Generate at: **1536x1024** · transparent — cut out after generation
+
+```
+Cozy storybook painterly video-game art. Soft gouache-and-oil brushwork with visible strokes, warm amber key light from the upper-left, gentle violet ambient shadow, rich jewel-tone palette (amber, terracotta, moss green, teal, violet), rounded inviting shapes with strong readable silhouettes, subtle paper-grain texture, edges defined by dark warm-brown paint rather than black outlines, whimsical calm mood like a beloved children's book about a tiny miner, high detail but soft focus falloff, absolutely no photorealism, no 3D render look, no text. A small plump teal cave fish with pale belly, side view. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame.
+```
+
+### `bird.png`
+*Surface bird (flies off when approached)*  
+Final size: **48×40** · Generate at: **1024x1024** · transparent — cut out after generation
+
+```
+Cozy storybook painterly video-game art. Soft gouache-and-oil brushwork with visible strokes, warm amber key light from the upper-left, gentle violet ambient shadow, rich jewel-tone palette (amber, terracotta, moss green, teal, violet), rounded inviting shapes with strong readable silhouettes, subtle paper-grain texture, edges defined by dark warm-brown paint rather than black outlines, whimsical calm mood like a beloved children's book about a tiny miner, high detail but soft focus falloff, absolutely no photorealism, no 3D render look, no text. A small round robin-like bird with a rust-red breast, side view, perched. Single centered object on a plain flat light-grey background for easy cut-out, no cast shadow on the ground, no border, object fills ~80% of the frame.
 ```
 
 ## Props
