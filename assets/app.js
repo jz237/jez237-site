@@ -1,3 +1,9 @@
+// Site root derived from this script's URL (assets/app.js → one level up), so
+// content paths resolve correctly from subpages and under the GitHub Pages subpath.
+const SITE_BASE = document.currentScript
+  ? new URL('..', document.currentScript.src)
+  : new URL('.', location.href);
+
 async function loadJson(path) {
   const r = await fetch(path);
   if (!r.ok) throw new Error(`Failed: ${path}`);
@@ -86,7 +92,7 @@ function renderSiteContent(data) {
 
 async function init() {
   try {
-    const site = await loadJson('./content/site.json');
+    const site = await loadJson(new URL('content/site.json', SITE_BASE));
     renderSiteContent(site);
   } catch (e) {
     console.error(e);
