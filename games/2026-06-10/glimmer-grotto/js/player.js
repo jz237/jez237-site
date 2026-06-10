@@ -71,7 +71,8 @@ export class Player {
 
     if (this.inWater) {
       this.vy += GRAV * 0.22 * dt;
-      this.vy = clamp(this.vy, -150, 130);
+      if (input.down) this.vy = Math.min(this.vy + 520 * dt, 200);   // active dive stroke
+      this.vy = clamp(this.vy, -150, input.down ? 200 : 130);
       if (input.jump) this.vy = Math.max(this.vy - 480 * dt, -150);
       this.vy -= this.vy * 1.4 * dt;     // drag
     } else {
