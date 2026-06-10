@@ -1,6 +1,6 @@
 {
   "date": "2026-06-10",
-  "updatedAt": "2026-06-10T08:00:01.224257+00:00",
+  "updatedAt": "2026-06-10T09:00:02.061811+00:00",
   "items": [
     {
       "title": "How B2B brands are earning citations in ChatGPT, Claude, and Google’s AI Overviews",
@@ -13,10 +13,10 @@
       "image": "https://media.thenextweb.com/2026/06/b2b-brands-earning-citations-chatgpt-claude-ai-overviews.avif",
       "published": "2026-06-10T06:54:44+00:00",
       "firstSeen": "2026-06-10T08:00:01.224257+00:00",
-      "lastSeen": "2026-06-10T08:00:01.224257+00:00",
+      "lastSeen": "2026-06-10T09:00:02.061811+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 17.7172
+      "score": 17.688
     },
     {
       "title": "If Claude Fable stops helping you, you'll never know",
@@ -29,13 +29,13 @@
       "image": "",
       "published": "2026-06-10T00:37:25+00:00",
       "firstSeen": "2026-06-10T01:00:01.722384+00:00",
-      "lastSeen": "2026-06-10T08:00:01.224257+00:00",
+      "lastSeen": "2026-06-10T09:00:02.061811+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.3862
+      "score": 8.3616
     },
     {
-      "title": "SynIB: Informational Bottleneck for Maximizing Synergy in Multimodal Learning",
+      "title": "Can Multi-Agent LLMs Identify Their Peers? Stylometric Fingerprinting in Role-Constrained Political Analysis",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -43,12 +43,28 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-10T08:00:10.545629+00:00",
+      "published": "2026-06-10T09:00:10.107338+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-10T08:00:01.224257+00:00",
+      "lastSeen": "2026-06-10T09:00:02.061811+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.76
+      "score": 5.06
+    },
+    {
+      "title": "75% of C-suite leaders say agentic AI lives up to the hype or is underestimated. 48% still plan to cut headcount.",
+      "url": "https://thenextweb.com/news/c-suite-agentic-ai-survey-jobs-headcount",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Three-quarters of C-suite leaders at some of the world’s largest companies say agentic AI either lives up to the hype or is being underestimated. That is according to a poll conducted by AI Infra Summit at an exclusive CEO event in April, where attendees represented firms including Amazon, Dell Technologies, FedEx, Hitachi, Lenovo, MasterCard, Mercedes-Benz, [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/c-suite-agentic-ai-survey-jobs-headcount.avif",
+      "published": "2026-06-10T08:00:01+00:00",
+      "firstSeen": "2026-06-10T09:00:02.061811+00:00",
+      "lastSeen": "2026-06-10T09:00:02.061811+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.8199
     },
     {
       "title": "Legal AI startup Legora opens in Madrid, Milan, and Paris as it targets 700 European employees within a year",
@@ -61,10 +77,26 @@
       "image": "https://media.thenextweb.com/2026/04/Max-Junestrand-legora.avif",
       "published": "2026-06-10T05:57:06+00:00",
       "firstSeen": "2026-06-10T07:00:01.815968+00:00",
-      "lastSeen": "2026-06-10T08:00:01.224257+00:00",
+      "lastSeen": "2026-06-10T09:00:02.061811+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.7891
+      "score": 3.7607
+    },
+    {
+      "title": "The $2 trillion AI infrastructure problem no one is talking about, and the engineer solving it",
+      "url": "https://thenextweb.com/news/2-trillion-ai-infrastructure-problem-shashidhar-bhat",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The AI infrastructure earnings calls of the past eight quarters have given the public a precise vocabulary for what the build-out costs in capital. Hyperscaler GPU procurement. Power purchase agreements. Real-estate footprints. The vocabulary they have not given the public is for what it costs to keep the clusters healthy on a recurring basis after [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/Shashidhar-Bhat.avif",
+      "published": "2026-06-10T08:15:44+00:00",
+      "firstSeen": "2026-06-10T09:00:02.061811+00:00",
+      "lastSeen": "2026-06-10T09:00:02.061811+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.1277
     },
     {
       "title": "Meta signs first AI data center deal in India with Reliance",
@@ -77,10 +109,42 @@
       "image": "https://techcrunch.com/wp-content/uploads/2024/05/meta-getty.jpg?w=1200",
       "published": "2026-06-10T07:05:26+00:00",
       "firstSeen": "2026-06-10T08:00:01.224257+00:00",
-      "lastSeen": "2026-06-10T08:00:01.224257+00:00",
+      "lastSeen": "2026-06-10T09:00:02.061811+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2625
+      "score": 2.2332
+    },
+    {
+      "title": "Standard Bots raises $200 million to build robotic arms in the US and claims it will handle 10% of industrial deployments by year-end",
+      "url": "https://thenextweb.com/news/standard-bots-200m-unicorn-robotic-arms-us-manufacturing",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Standard Bots has raised $200 million at a $1 billion valuation to expand US manufacturing of AI-powered robotic arms. The round was led by General Catalyst and RoboStrategy, a robotics-focused fund, and follows a $63 million raise nearly two years ago at an undisclosed valuation. The New York-based company makes robotic arms for industrial automation, handling tasks [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/standard-bots-200m-unicorn-robotic-arms-us-manufacturing.avif",
+      "published": "2026-06-10T07:38:09+00:00",
+      "firstSeen": "2026-06-10T09:00:02.061811+00:00",
+      "lastSeen": "2026-06-10T09:00:02.061811+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1091
+    },
+    {
+      "title": "Ambani-backed Addverb wants $100 million to build India’s answer to Unitree and Tesla Optimus",
+      "url": "https://thenextweb.com/news/addverb-india-robotics-ambani-100m-humanoid",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Addverb Technologies, the Indian robotics startup controlled by Mukesh Ambani’s Reliance Industries, is seeking to raise more than $100 million to fund development of humanoid and quadruped robots and build the AI systems to train them. CEO Sangeet Kumar told Bloomberg the raise is the company’s first major fundraising effort since Reliance’s $132 million investment [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/addverb-india-robotics-ambani-100m-humanoid.avif",
+      "published": "2026-06-10T07:21:58+00:00",
+      "firstSeen": "2026-06-10T09:00:02.061811+00:00",
+      "lastSeen": "2026-06-10T09:00:02.061811+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1012
     },
     {
       "title": "Google just fired a warning shot in the AI subscription price wars",
@@ -93,10 +157,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/01/ai-mode-google.jpg?resize=1200%2C800",
       "published": "2026-06-10T00:26:10+00:00",
       "firstSeen": "2026-06-10T01:00:01.722384+00:00",
-      "lastSeen": "2026-06-10T08:00:01.224257+00:00",
+      "lastSeen": "2026-06-10T09:00:02.061811+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0815
+      "score": 2.0571
     }
   ],
   "errors": [
