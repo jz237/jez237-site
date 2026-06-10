@@ -5,28 +5,36 @@ import * as THREE from 'three';
 import * as CANNON from 'cannon-es';
 import { Tank } from './tank.js';
 import { getHeight } from './terrain.js';
-import { ENEMY, SHELL, CG, PLAY_RADIUS } from './config.js';
+import { ENEMY, ENEMY_TYPES, PILLBOX, SHELL, CG, PLAY_RADIUS } from './config.js';
 
 const _v1 = new THREE.Vector3();
 const _from = new CANNON.Vec3();
 const _to = new CANNON.Vec3();
 
 export class EnemyTank {
-  constructor(scene, world, x, z, wave) {
+  constructor(scene, world, x, z, wave, typeName = 'standard') {
+    const T = ENEMY_TYPES[typeName] ?? ENEMY_TYPES.standard;
+    this.type = T;
+    this.typeName = typeName;
     this.tank = new Tank(scene, world, {
       x, z,
       y: getHeight(x, z) + 1.5,
-      scheme: 'desert',
-      hp: ENEMY.hp,
+      scheme: T.scheme,
+      hp: T.hp,
       isPlayer: false,
       shellSpeed: SHELL.enemySpeed,
+      scale: T.scale,
+      maxSpeed: T.maxSpeed,
+      engineForce: T.engineForce,
+      maxYawRate: T.maxYawRate,
     });
+    this.tank.shellDmg = T.shellDamage;
     this.wave = wave;
     this.state = 'seek';
     this.thinkTimer = Math.random() * 0.4;
-    this.reload = ENEMY.reloadBase * (0.85 + Math.random() * 0.3);
+    this.reload = T.reload * (0.85 + Math.random() * 0.3) * Math.max(0.7, 1 - wave * 0.02);
     this.reloadT = this.reload * (0.4 + Math.random() * 0.6);
-    this.aimNoise = Math.max(0.012, ENEMY.aimNoiseBase - wave * 0.005);
+    this.aimNoise = Math.max(0.012, T.aimNoise - wave * 0.004);
     this.strafeDir = Math.random() > 0.5 ? 1 : -1;
     this.strafeT = 0;
     this.hasLOS = false;
@@ -90,19 +98,19 @@ export class EnemyTank {
     // so steer with the negated heading error.
     if (!player.alive) {
       throttle = 0;
-    } else if (!this.hasLOS || dist > ENEMY.preferredRange + 18) {
+    } else if (!this.hasLOS || dist > this.type.preferredRange + 18) {
       // close in — pivot first, advance once roughly aligned
       const d = headTo(pp.x, pp.z);
       turn = THREE.MathUtils.clamp(-d * 1.6, -1, 1);
       throttle = Math.abs(d) < 0.5 ? 0.95 : Math.abs(d) < 1.2 ? 0.45 : 0.05;
-    } else if (dist < ENEMY.minRange) {
+    } else if (dist < this.type.minRange) {
       // back off, keep gun on target
       const d = headTo(pp.x, pp.z);
       turn = THREE.MathUtils.clamp(-d * 1.2, -1, 1);
       throttle = -0.7;
     } else {
       // hold range: orbit tangentially, leaning in/out to fix range error
-      const lean = THREE.MathUtils.clamp((ENEMY.preferredRange - dist) * 0.025, -0.45, 0.45);
+      const lean = THREE.MathUtils.clamp((this.type.preferredRange - dist) * 0.025, -0.45, 0.45);
       const d = headTo(pp.x, pp.z) + this.strafeDir * (Math.PI / 2 + lean);
       const dn = Math.atan2(Math.sin(d), Math.cos(d));
       turn = THREE.MathUtils.clamp(-dn * 1.2, -1, 1);
@@ -172,11 +180,22 @@ export class WaveManager {
   }
 
   waveSpec(w) {
+    // typed tank roster: scouts arrive at wave 2, heavies from wave 6
+    const tanks = [];
+    if (w >= 2) {
+      const n = Math.min(6, w === 2 ? 1 : w === 3 ? 2 : 2 + Math.floor((w - 2) / 2));
+      for (let i = 0; i < n; i++) {
+        if (w >= 6 && i % 3 === 2) tanks.push('heavy');
+        else if (i % 2 === 1 || w === 2) tanks.push('scout');
+        else tanks.push('standard');
+      }
+    }
     return {
-      targets: w <= 2 ? 4 + w * 2 : Math.max(2, 6 - w),
-      barrels: Math.min(8, 2 + w),
+      targets: w === 1 ? 6 : Math.max(2, 5 - (w >> 1)),
+      barrels: Math.min(9, 3 + w),
       walls: w >= 2 ? Math.min(3, 1 + (w >> 1)) : 0,
-      tanks: w < 3 ? 0 : Math.min(ENEMY.maxCount, 1 + Math.floor((w - 3) / 2)),
+      pillboxes: w >= 4 ? Math.min(2, 1 + Math.floor((w - 4) / 3)) : 0,
+      tanks,
     };
   }
 
@@ -195,13 +214,16 @@ export class WaveManager {
       const s = props.ringSpot(minR + 15, maxR);
       props.spawnWall(s.x, s.z);
     }
-    const spawned = [];
-    for (let i = 0; i < spec.tanks; i++) {
+    for (let i = 0; i < spec.pillboxes; i++) {
+      const s = props.ringSpot(70, maxR + 20);
+      props.spawnPillbox(s.x, s.z);
+    }
+    for (const typeName of spec.tanks) {
       // spawn well away from the player, outside their view if possible
       let x = 0, z = 0;
       for (let tries = 0; tries < 12; tries++) {
         const a = Math.random() * Math.PI * 2;
-        const r = 120 + Math.random() * 70;
+        const r = 110 + Math.random() * 70;
         x = playerPos.x + Math.cos(a) * r;
         z = playerPos.z + Math.sin(a) * r;
         if (Math.hypot(x, z) < PLAY_RADIUS - 30) break;
@@ -211,11 +233,49 @@ export class WaveManager {
         x *= (PLAY_RADIUS - 30) / rr;
         z *= (PLAY_RADIUS - 30) / rr;
       }
-      const e = new EnemyTank(scene, world, x, z, w);
-      this.enemies.push(e);
-      spawned.push(e);
+      this.enemies.push(new EnemyTank(scene, world, x, z, w, typeName));
     }
     return spec;
+  }
+
+  // static gun emplacements: slew toward the player, fire on LOS
+  updatePillboxes(dt, player, world, props, losResult) {
+    const shots = [];
+    if (!player?.alive) return shots;
+    const pp = player.body.position;
+    for (const it of props.items) {
+      if (!it.alive || it.kind !== 'pillbox') continue;
+      it.reloadT -= dt;
+      const bp = it.body.position;
+      const dx = pp.x - bp.x, dz = pp.z - bp.z;
+      const dist = Math.hypot(dx, dz);
+      if (dist > PILLBOX.range) continue;
+      // slew the gun
+      const want = Math.atan2(dx, dz);
+      let d = want - it.yaw;
+      d = Math.atan2(Math.sin(d), Math.cos(d));
+      const step = 1.5 * dt;
+      it.yaw += THREE.MathUtils.clamp(d, -step, step);
+      it.pivot.rotation.y = it.yaw;
+      if (Math.abs(d) > 0.04 || it.reloadT > 0) continue;
+      // LOS check
+      _from.set(bp.x, bp.y + 0.4, bp.z);
+      _to.set(pp.x, pp.y + 0.6, pp.z);
+      losResult.reset();
+      world.raycastClosest(_from, _to, { collisionFilterMask: ~CG.PROP, skipBackfaces: true }, losResult);
+      if (!losResult.hasHit || losResult.body !== player.body) continue;
+      it.reloadT = PILLBOX.reload;
+      it.mesh.updateMatrixWorld(true);
+      const origin = new THREE.Vector3();
+      it.muzzle.getWorldPosition(origin);
+      const dir = new THREE.Vector3(pp.x - origin.x, pp.y + 0.6 - origin.y, pp.z - origin.z).normalize();
+      dir.x += (Math.random() - 0.5) * PILLBOX.aimNoise;
+      dir.y += (Math.random() - 0.5) * PILLBOX.aimNoise * 0.5 + 0.012 * dist / 60;
+      dir.z += (Math.random() - 0.5) * PILLBOX.aimNoise;
+      dir.normalize();
+      shots.push({ origin, dir, owner: { isPlayer: false, shellDmg: PILLBOX.shellDamage } });
+    }
+    return shots;
   }
 
   aliveEnemies() { return this.enemies.filter(e => e.tank.alive); }
