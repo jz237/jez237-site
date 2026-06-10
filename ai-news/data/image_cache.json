@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-10T22:00:01.374776+00:00",
+  "updatedAt": "2026-06-10T23:00:01.177671+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -10028,6 +10028,18 @@
     "https://www.techrepublic.com/article/news-ai-data-centers-grid-risk-apac-australia": {
       "image": "https://assets.techrepublic.com/uploads/2026/06/an-electricity-generation-and-distribution-open-st-2026-03-26-10-23-33-utc-1024x683.jpg?f=jpeg",
       "checkedAt": "2026-06-10T22:00:01.374776+00:00"
+    },
+    "https://openai.com/index/using-codex-to-simulate-black-holes": {
+      "image": "https://images.ctfassets.net/kftzwdyauwt9/2werzLSxuGbJH8PlE7OUjI/e2b93554902c5d96ef2550b4fd3579d6/Frame__5_.png?w=1600&amp;h=900&amp;fit=fill",
+      "checkedAt": "2026-06-10T23:00:01.177671+00:00"
+    },
+    "https://techcrunch.com/2026/06/10/xai-fired-an-engineer-who-raised-alarms-about-grok-safety-new-lawsuit-claims": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/grok-getty.jpg?resize=1200,800",
+      "checkedAt": "2026-06-10T23:00:01.177671+00:00"
+    },
+    "https://openai.com/index/openai-on-oracle-cloud": {
+      "image": "https://images.ctfassets.net/kftzwdyauwt9/5YxRwes6xIOtUirJPj9Tqq/2897a1a8061bf93e016c0c12385b3f55/OAI_Oracle_Partnership_16x9_Art_Card.png?w=1600&amp;h=900&amp;fit=fill",
+      "checkedAt": "2026-06-10T23:00:01.177671+00:00"
     }
   }
 }
