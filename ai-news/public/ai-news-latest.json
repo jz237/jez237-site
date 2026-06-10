@@ -1,8 +1,8 @@
 {
-  "updatedAt": "2026-06-10T21:00:01.412643+00:00",
+  "updatedAt": "2026-06-10T20:43:37.391743+00:00",
   "items": [
     {
-      "title": "SynIB: Informational Bottleneck for Maximizing Synergy in Multimodal Learning",
+      "title": "Konstantinos Kontras, Teodora Gagaleska, Thomas Strypsteen, Christos Chatzichristos, Matthew Blaschko, Maarten De Vos...",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -10,12 +10,12 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-10T21:00:16.577600+00:00",
+      "published": "2026-06-10T20:43:42.513458+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-10T21:00:01.412643+00:00",
+      "lastSeen": "2026-06-10T20:43:37.391743+00:00",
       "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.76
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.36
     },
     {
       "title": "Fresh off bond sale, Amazon borrows $17.5B from banks as AI spending continues",
@@ -27,11 +27,11 @@
       "summary": "Companies are burning through exorbitant sums of money to keep pace in the AI arms race. Debt is climbing.",
       "image": "https://techcrunch.com/wp-content/uploads/2025/06/GettyImages-2217247219.jpg?w=1024",
       "published": "2026-06-10T20:19:31+00:00",
-      "firstSeen": "2026-06-10T21:00:01.412643+00:00",
-      "lastSeen": "2026-06-10T21:00:01.412643+00:00",
+      "firstSeen": "2026-06-10T20:43:37.391743+00:00",
+      "lastSeen": "2026-06-10T20:43:37.391743+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2696
+      "score": 2.2778
     },
     {
       "title": "DiffusionGemma",
@@ -43,11 +43,11 @@
       "summary": "DiffusionGemma\nLast May Google briefly released an experimental Gemini Diffusion model. I tried the preview at the time and recorded it running at 857 tokens/second. It was an exciting model, but Google made no further announcements about it.\nThat research has returned in the best possible way: as a new open weight (Apache 2 licensed) Gemma model, google/diffusiongemma-26B-A4B-it.\nNVIDIA are currently hosting the model for free on their NIM cloud API. I used that API to generate this pelican, which took 4.4s (according to time uv run generate.py) to return 2,409 tokens - so at least 500 tokens",
       "image": "https://static.simonwillison.net/static/2026/diffusiongemma-pelican.png",
       "published": "2026-06-10T20:00:54+00:00",
-      "firstSeen": "2026-06-10T21:00:01.412643+00:00",
-      "lastSeen": "2026-06-10T21:00:01.412643+00:00",
+      "firstSeen": "2026-06-10T20:43:37.391743+00:00",
+      "lastSeen": "2026-06-10T20:43:37.391743+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.0603
+      "score": 9.0685
     },
     {
       "title": "NEURA Robotics raises up to $1.4B in record robotics round backed by Nvidia, Amazon, and Tether",
@@ -59,11 +59,11 @@
       "summary": "German robotics company NEURA Robotics has announced up to $1.4 billion in Series C funding to scale its cognitive robotics platform. The round values the company at approximately $7 billion, according to Bloomberg. NEURA says it is the largest funding round ever raised by a full-stack robotics company. The investor list spans crypto, chips, cloud, [&hellip;]\nThis story continues at The Next Web",
       "image": "https://media.thenextweb.com/2026/06/neura-robotics-1-4b-series-c-physical-ai.avif",
       "published": "2026-06-10T19:58:00+00:00",
-      "firstSeen": "2026-06-10T21:00:01.412643+00:00",
-      "lastSeen": "2026-06-10T21:00:01.412643+00:00",
+      "firstSeen": "2026-06-10T20:43:37.391743+00:00",
+      "lastSeen": "2026-06-10T20:43:37.391743+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2189
+      "score": 3.227
     },
     {
       "title": "Researchers tricked an OpenClaw AI agent into leaking AWS keys and customer data with a phishing email",
@@ -76,10 +76,10 @@
       "image": "https://media.thenextweb.com/2026/06/openclaw-ai-agent-phishing-varonis-pinchy.avif",
       "published": "2026-06-10T19:13:02+00:00",
       "firstSeen": "2026-06-10T20:00:01.627523+00:00",
-      "lastSeen": "2026-06-10T21:00:01.412643+00:00",
+      "lastSeen": "2026-06-10T20:43:37.391743+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.1968
+      "score": 7.2048
     },
     {
       "title": "For Robotaxis, Safety Must Be Built In, Not Bolted On",
@@ -92,10 +92,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/auto-corp-blog-robotaxi-5295700-1280x680-1.png",
       "published": "2026-06-10T19:00:12+00:00",
       "firstSeen": "2026-06-10T20:00:01.627523+00:00",
-      "lastSeen": "2026-06-10T21:00:01.412643+00:00",
+      "lastSeen": "2026-06-10T20:43:37.391743+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3306
+      "score": 3.3386
     },
     {
       "title": "Claude Fable won’t answer basic biology questions",
@@ -108,10 +108,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/STKB364_CLAUDE_2_A_3800fc.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-10T18:43:34+00:00",
       "firstSeen": "2026-06-10T20:00:01.627523+00:00",
-      "lastSeen": "2026-06-10T21:00:01.412643+00:00",
+      "lastSeen": "2026-06-10T20:43:37.391743+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.9927
+      "score": 11.0005
     },
     {
       "title": "A Chinese state-linked botnet has grown to 1,500 hacked routers and is mapping vulnerable targets within hours of disclosure",
@@ -124,10 +124,10 @@
       "image": "https://media.thenextweb.com/2026/06/jdy-botnet-china-1500-devices-reconnaissance.avif",
       "published": "2026-06-10T18:20:53+00:00",
       "firstSeen": "2026-06-10T20:00:01.627523+00:00",
-      "lastSeen": "2026-06-10T21:00:01.412643+00:00",
+      "lastSeen": "2026-06-10T20:43:37.391743+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.5719
+      "score": 4.5797
     },
     {
       "title": "v1.89.0-rc.2",
@@ -140,10 +140,10 @@
       "image": "https://opengraph.githubassets.com/c3f50ec35331fa1e1f4bf661b5292f4d12899581a2263a3af6523f395cdaed7a/BerriAI/litellm/releases/tag/v1.89.0-rc.2",
       "published": "2026-06-10T18:05:53+00:00",
       "firstSeen": "2026-06-10T18:07:52.315434+00:00",
-      "lastSeen": "2026-06-10T21:00:01.412643+00:00",
+      "lastSeen": "2026-06-10T20:43:37.391743+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9048
+      "score": 2.9125
     },
     {
       "title": "SpaceX’s IPO is expected to mint 4,000 new millionaires, from engineers to cafeteria workers",
@@ -156,10 +156,10 @@
       "image": "https://media.thenextweb.com/2021/02/Elon-Musk-photo-by-Daniel-Oberhaus.avif",
       "published": "2026-06-10T17:55:43+00:00",
       "firstSeen": "2026-06-10T20:00:01.627523+00:00",
-      "lastSeen": "2026-06-10T21:00:01.412643+00:00",
+      "lastSeen": "2026-06-10T20:43:37.391743+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.16
+      "score": 3.1677
     },
     {
       "title": "BNP Paribas says the $3.6 trillion US tech IPO pipeline will pull European startups towards public markets",
@@ -172,10 +172,10 @@
       "image": "https://media.thenextweb.com/2026/06/bnp-paribas-us-mega-ipos-europe-tech-deals.avif",
       "published": "2026-06-10T17:48:14+00:00",
       "firstSeen": "2026-06-10T20:00:01.627523+00:00",
-      "lastSeen": "2026-06-10T21:00:01.412643+00:00",
+      "lastSeen": "2026-06-10T20:43:37.391743+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 7.8565
+      "score": 7.8642
     },
     {
       "title": "Microsoft, like, totally gets why students are booing AI-pilled graduation speakers",
@@ -188,10 +188,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/11/STK095_MICROSOFT_CVirginia_A.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-10T17:45:11+00:00",
       "firstSeen": "2026-06-10T18:00:01.207091+00:00",
-      "lastSeen": "2026-06-10T21:00:01.412643+00:00",
+      "lastSeen": "2026-06-10T20:43:37.391743+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2651
+      "score": 2.2728
     },
     {
       "title": "The most AI-obsessed companies spend $7,500 per employee per month. The median spends $11.",
@@ -204,10 +204,10 @@
       "image": "https://media.thenextweb.com/2026/06/ai-pilled-firms-7500-per-employee-spending.avif",
       "published": "2026-06-10T17:39:47+00:00",
       "firstSeen": "2026-06-10T20:00:01.627523+00:00",
-      "lastSeen": "2026-06-10T21:00:01.412643+00:00",
+      "lastSeen": "2026-06-10T20:43:37.391743+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0526
+      "score": 2.0603
     },
     {
       "title": "The future of AI regulation is courting the strangest, most anxious bedfellows",
@@ -220,10 +220,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/gettyimages-2279697530.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.729057198914%2C100%2C78.541885602173&amp%3Bw=1200",
       "published": "2026-06-10T17:38:00+00:00",
       "firstSeen": "2026-06-10T18:00:01.207091+00:00",
-      "lastSeen": "2026-06-10T21:00:01.412643+00:00",
+      "lastSeen": "2026-06-10T20:43:37.391743+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2618
+      "score": 2.2694
     },
     {
       "title": "Boeing upgrades the Ghost Bat with internal weapons and longer range as it competes with Helsing for German drone orders",
@@ -236,10 +236,10 @@
       "image": "https://media.thenextweb.com/2026/06/boeing-ghost-bat-upgrades-germany-helsing-drone.avif",
       "published": "2026-06-10T17:31:27+00:00",
       "firstSeen": "2026-06-10T20:00:01.627523+00:00",
-      "lastSeen": "2026-06-10T21:00:01.412643+00:00",
+      "lastSeen": "2026-06-10T20:43:37.391743+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0487
+      "score": 2.0564
     },
     {
       "title": "Google won’t just admit it’s feeding YouTube creators to its music AI",
@@ -252,10 +252,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/04/STKS487_ANTITRUST_2__STK093_GOOGLE.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-10T17:20:36+00:00",
       "firstSeen": "2026-06-10T18:00:01.207091+00:00",
-      "lastSeen": "2026-06-10T21:00:01.412643+00:00",
+      "lastSeen": "2026-06-10T20:43:37.391743+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.5537
+      "score": 2.5613
     },
     {
       "title": "Trump Media drops Truth Social spinoff, refocuses on $6 billion fusion merger with TAE Technologies",
@@ -268,10 +268,10 @@
       "image": "https://media.thenextweb.com/2024/02/Untitled-design-16.avif",
       "published": "2026-06-10T17:14:51+00:00",
       "firstSeen": "2026-06-10T18:00:01.207091+00:00",
-      "lastSeen": "2026-06-10T21:00:01.412643+00:00",
+      "lastSeen": "2026-06-10T20:43:37.391743+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0411
+      "score": 2.0487
     },
     {
       "title": "India froze Starlink approvals over Iran fears, days before SpaceX’s record IPO",
@@ -284,10 +284,10 @@
       "image": "https://media.thenextweb.com/2026/06/india-starlink-paused-spacex-ipo-iran.avif",
       "published": "2026-06-10T17:12:56+00:00",
       "firstSeen": "2026-06-10T18:00:01.207091+00:00",
-      "lastSeen": "2026-06-10T21:00:01.412643+00:00",
+      "lastSeen": "2026-06-10T20:43:37.391743+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1402
+      "score": 3.1478
     },
     {
       "title": "‘AI-pilled’ firms spend $7,500 per employee each month on AI",
@@ -300,10 +300,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/GettyImages-2253659638.jpg?resize=1200%2C1057",
       "published": "2026-06-10T17:07:35+00:00",
       "firstSeen": "2026-06-10T18:00:01.207091+00:00",
-      "lastSeen": "2026-06-10T21:00:01.412643+00:00",
+      "lastSeen": "2026-06-10T20:43:37.391743+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1778
+      "score": 2.1853
     },
     {
       "title": "Anthropic’s CEO says he doesn’t know if Claude was used in the Iran school strike that killed 120 children",
@@ -316,10 +316,10 @@
       "image": "https://media.thenextweb.com/2026/05/us-government-chip-shortage-anthropic-nsa-9-billion.avif",
       "published": "2026-06-10T17:00:03+00:00",
       "firstSeen": "2026-06-10T18:00:01.207091+00:00",
-      "lastSeen": "2026-06-10T21:00:01.412643+00:00",
+      "lastSeen": "2026-06-10T20:43:37.391743+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.0343
+      "score": 11.0418
     },
     {
       "title": "Russia unbans Roblox after 63,000 children wrote letters of complaint, half saying they wanted to leave the country",
@@ -335,7 +335,7 @@
       "lastSeen": "2026-06-10T20:00:01.627523+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0307
+      "score": 2.0382
     },
     {
       "title": "Microsoft restricts Claude Fable for employees over data retention concerns",
@@ -348,10 +348,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/01/STK095_MICROSOFT_CVirginia_B.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-10T16:50:23+00:00",
       "firstSeen": "2026-06-10T17:00:02.053374+00:00",
-      "lastSeen": "2026-06-10T21:00:01.412643+00:00",
+      "lastSeen": "2026-06-10T20:43:37.391743+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.9399
+      "score": 12.9474
     },
     {
       "title": "Release v5.11.0",
@@ -361,14 +361,14 @@
       "sourceWeight": 0.85,
       "category": "AI",
       "summary": "Release v5.11.0\nNew Model additions\nDiffusionGemma\n\nDiffusionGemma is engineered to reduce the sequential bottlenecks of standard causal language models by employing an encoder-decoder architecture specifically optimized for inference speed. During inference, DiffusionGemma leverages multi-canvas sampling, where rather than generating one token at a time, the model iteratively denoises a full block of tokens using a diffusion sampler. This block-autoregressive approach facilitates text generation at higher speeds compared to traditional sequential generation methods.\nLinks: Documentation\n\nGPU ",
-      "image": "https://private-user-images.githubusercontent.com/73884904/605905881-5081e449-6374-4076-bd96-d295c8334ca4.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3ODExMjU1MTksIm5iZiI6MTc4MTEyNTIxOSwicGF0aCI6Ii83Mzg4NDkwNC82MDU5MDU4ODEtNTA4MWU0NDktNjM3NC00MDc2LWJkOTYtZDI5NWM4MzM0Y2E0LnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNjA2MTAlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjYwNjEwVDIxMDAxOVomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPWY5ZDFkMTdmYjkzOWVjZmEzZTM0NDljNDkxZTljZGVlYzgzZTY2Mzk4NDYxNTFlZWZmMzMwZGNiZjBhOTU2N2QmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0JnJlc3BvbnNlLWNvbnRlbnQtdHlwZT1pbWFnZSUyRnBuZyJ9.wCDqfjg3EwknEij-sjA4IW-elC0OGKXb1NPyjz8ILco",
+      "image": "https://private-user-images.githubusercontent.com/73884904/605905881-5081e449-6374-4076-bd96-d295c8334ca4.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3ODExMjQ1MjUsIm5iZiI6MTc4MTEyNDIyNSwicGF0aCI6Ii83Mzg4NDkwNC82MDU5MDU4ODEtNTA4MWU0NDktNjM3NC00MDc2LWJkOTYtZDI5NWM4MzM0Y2E0LnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNjA2MTAlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjYwNjEwVDIwNDM0NVomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPWM3YTQ3YjBhYWQ3NTdlZGEwZTg2NWExNTZmODRjMjIyNjhiNzVkOTI3NzA5ZDIyM2Q4ZjkwMmJkMzA5YzlmNDkmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0JnJlc3BvbnNlLWNvbnRlbnQtdHlwZT1pbWFnZSUyRnBuZyJ9.tGCRr0A2yE_KMYbc2Cjk5BPzhwpuQEIhLEvtOmslD0M",
       "published": "2026-06-10T16:32:44+00:00",
       "firstSeen": "2026-06-10T17:00:02.053374+00:00",
-      "lastSeen": "2026-06-10T21:00:01.412643+00:00",
+      "lastSeen": "2026-06-10T20:43:37.391743+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 10.462
+      "score": 10.4694
     },
     {
       "title": "DiffusionGemma: 4x faster text generation",
@@ -381,10 +381,10 @@
       "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Diffusion_Gemma_Social.width-1300.png",
       "published": "2026-06-10T16:24:11+00:00",
       "firstSeen": "2026-06-10T17:00:02.053374+00:00",
-      "lastSeen": "2026-06-10T21:00:01.412643+00:00",
+      "lastSeen": "2026-06-10T20:43:37.391743+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2981
+      "score": 2.3055
     },
     {
       "title": "Inside Automat-it’s playbook for scaling AI startups on AWS",
@@ -400,7 +400,7 @@
       "lastSeen": "2026-06-10T18:07:52.315434+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0176
+      "score": 3.0249
     },
     {
       "title": "Google will save your Lens photos, Search Live recordings, and Translate audio for AI training",
@@ -413,10 +413,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/01/STK093_GOOGLE_B.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-10T16:18:45+00:00",
       "firstSeen": "2026-06-10T17:00:02.053374+00:00",
-      "lastSeen": "2026-06-10T21:00:01.412643+00:00",
+      "lastSeen": "2026-06-10T20:43:37.391743+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9257
+      "score": 4.9331
     },
     {
       "title": "NVIDIA Accelerates Google DeepMind’s DiffusionGemma for Local AI",
@@ -429,10 +429,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/diffusiongemma-nv-blog-1280x680-1.jpg",
       "published": "2026-06-10T16:15:20+00:00",
       "firstSeen": "2026-06-10T17:00:02.053374+00:00",
-      "lastSeen": "2026-06-10T21:00:01.412643+00:00",
+      "lastSeen": "2026-06-10T20:43:37.391743+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 9.1542
+      "score": 9.1615
     },
     {
       "title": "How memory tools can make AI models worse",
@@ -445,10 +445,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2023/02/GettyImages-1240239605.jpg?w=1024",
       "published": "2026-06-10T16:11:08+00:00",
       "firstSeen": "2026-06-10T17:00:02.053374+00:00",
-      "lastSeen": "2026-06-10T21:00:01.412643+00:00",
+      "lastSeen": "2026-06-10T20:43:37.391743+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 2.8523
+      "score": 2.8596
     },
     {
       "title": "Cybersecurity researchers aren’t happy about the guardrails on Anthropic’s Fable",
@@ -461,11 +461,11 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/anthropic-claude-fable.jpg?resize=1200%2C798",
       "published": "2026-06-10T15:41:22+00:00",
       "firstSeen": "2026-06-10T16:00:01.165430+00:00",
-      "lastSeen": "2026-06-10T21:00:01.412643+00:00",
+      "lastSeen": "2026-06-10T20:43:37.391743+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 17.6391
+      "score": 17.6464
     },
     {
       "title": "Quoting Jeremy Howard",
@@ -478,10 +478,10 @@
       "image": "",
       "published": "2026-06-10T15:23:34+00:00",
       "firstSeen": "2026-06-10T16:00:01.165430+00:00",
-      "lastSeen": "2026-06-10T21:00:01.412643+00:00",
+      "lastSeen": "2026-06-10T20:43:37.391743+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.5313
+      "score": 5.5385
     },
     {
       "title": "Datadog veterans launch AI coding startup Niteshift on a bet against Big AI lock-in",
@@ -494,10 +494,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/sajid_conor_photo_niteshift_launch.jpg?resize=1200%2C970",
       "published": "2026-06-10T15:00:00+00:00",
       "firstSeen": "2026-06-10T16:00:01.165430+00:00",
-      "lastSeen": "2026-06-10T21:00:01.412643+00:00",
+      "lastSeen": "2026-06-10T20:43:37.391743+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.9211
+      "score": 6.9282
     },
     {
       "title": "The three hard-tech moonshots fueling SpaceX’s unbelievable IPO",
@@ -510,10 +510,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/SpaceXAIsatrender.jpg?resize=1200%2C639",
       "published": "2026-06-10T14:48:01+00:00",
       "firstSeen": "2026-06-10T16:00:01.165430+00:00",
-      "lastSeen": "2026-06-10T21:00:01.412643+00:00",
+      "lastSeen": "2026-06-10T20:43:37.391743+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.116
+      "score": 2.123
     },
     {
       "title": "Warner Music acquires AI attribution startup Sureel AI",
@@ -526,10 +526,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/warner-music.jpg?resize=1200%2C800",
       "published": "2026-06-10T14:31:30+00:00",
       "firstSeen": "2026-06-10T16:00:01.165430+00:00",
-      "lastSeen": "2026-06-10T21:00:01.412643+00:00",
+      "lastSeen": "2026-06-10T20:43:37.391743+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.4089
+      "score": 2.4159
     },
     {
       "title": "India Brings Its AI Pitch to VivaTech 2026",
@@ -542,10 +542,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/06/medium__LEJ1974.png?f=jpeg",
       "published": "2026-06-10T14:17:13+00:00",
       "firstSeen": "2026-06-10T16:00:01.165430+00:00",
-      "lastSeen": "2026-06-10T21:00:01.412643+00:00",
+      "lastSeen": "2026-06-10T20:43:37.391743+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0629
+      "score": 3.0698
     },
     {
       "title": "Wrongful Arrest Exposes Failures in One of the Oldest Police Face-Recognition Tools in the US",
@@ -558,10 +558,10 @@
       "image": "https://media.wired.com/photos/6a296cd55fb28d50a6268abc/master/pass/061026_Wrongful-Arrest-Tests-One-of-the-Oldest-Police-Face-Recognition-Databases-in-the-US.gif",
       "published": "2026-06-10T14:00:00+00:00",
       "firstSeen": "2026-06-10T14:28:17.195164+00:00",
-      "lastSeen": "2026-06-10T21:00:01.412643+00:00",
+      "lastSeen": "2026-06-10T20:43:37.391743+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0956
+      "score": 2.1025
     },
     {
       "title": "Microsoft Reportedly Cuts Hundreds of Azure Jobs in China",
@@ -574,10 +574,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/06/tr-06102026-microsoft-reportedly-cuts-azure-jobs-3.jpg?f=jpeg",
       "published": "2026-06-10T13:47:59+00:00",
       "firstSeen": "2026-06-10T16:00:01.165430+00:00",
-      "lastSeen": "2026-06-10T21:00:01.412643+00:00",
+      "lastSeen": "2026-06-10T20:43:37.391743+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0506
+      "score": 3.0575
     },
     {
       "title": "KPMG secretly and repeatedly accessed a whistleblower’s computer, then shared the files with its CEO",
@@ -593,7 +593,7 @@
       "lastSeen": "2026-06-10T18:07:52.315434+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9481
+      "score": 1.9549
     },
     {
       "title": "China Opens World’s First Wind-Powered Underwater Data Center",
@@ -606,10 +606,10 @@
       "image": "https://media.wired.com/photos/68fab92565a13f02607aecfa/master/pass/Screenshot%202025-10-23%20at%2011.33.04%E2%80%AFa.m..png",
       "published": "2026-06-10T13:39:32+00:00",
       "firstSeen": "2026-06-10T14:00:01.320221+00:00",
-      "lastSeen": "2026-06-10T21:00:01.412643+00:00",
+      "lastSeen": "2026-06-10T20:43:37.391743+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0871
+      "score": 2.0939
     },
     {
       "title": "Jedify raises $24M to help companies arm AI agents with context on their business",
@@ -622,10 +622,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/Jedify-Co-founders.jpg?resize=1200%2C800",
       "published": "2026-06-10T13:33:09+00:00",
       "firstSeen": "2026-06-10T14:00:01.320221+00:00",
-      "lastSeen": "2026-06-10T21:00:01.412643+00:00",
+      "lastSeen": "2026-06-10T20:43:37.391743+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.4844
+      "score": 5.4912
     },
     {
       "title": "A German court says Google’s AI Overviews are Google’s own words, and it’s liable when they’re false",
@@ -641,7 +641,7 @@
       "lastSeen": "2026-06-10T18:07:52.315434+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.3389
+      "score": 3.3457
     },
     {
       "title": "The Life Scientific: Helen Hastie",
@@ -654,10 +654,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-08T20:00:00+00:00",
       "firstSeen": "2026-06-08T21:00:01.371488+00:00",
-      "lastSeen": "2026-06-10T21:00:01.412643+00:00",
+      "lastSeen": "2026-06-10T20:43:37.391743+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.472
+      "score": 1.4742
     },
     {
       "title": "The Life Scientific: Seth Berkley",
@@ -670,7 +670,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-01T20:00:00+00:00",
       "firstSeen": "2026-06-01T21:00:01.828388+00:00",
-      "lastSeen": "2026-06-10T21:00:01.412643+00:00",
+      "lastSeen": "2026-06-10T20:43:37.391743+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 1.1927
@@ -742,9 +742,14 @@
   ],
   "errors": [
     {
+      "source": "Artificial Intelligence News",
+      "url": "https://www.artificialintelligence-news.com/categories/artificial-intelligence/feed/",
+      "error": "not well-formed (invalid token): line 1, column 158"
+    },
+    {
       "source": "MarkTechPost",
       "url": "https://www.marktechpost.com/feed/",
-      "error": "HTTP Error 403: Forbidden"
+      "error": "not well-formed (invalid token): line 1, column 119"
     }
   ]
 }
