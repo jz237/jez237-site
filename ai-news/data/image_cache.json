@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-11T15:00:01.437040+00:00",
+  "updatedAt": "2026-06-11T16:00:01.225760+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -10108,6 +10108,10 @@
     "https://www.techrepublic.com/article/news-ai-biometric-hardware-controls-apac-india": {
       "image": "https://assets.techrepublic.com/uploads/2026/06/digital-security-technology-concept-with-fingerpri-2026-03-26-05-32-58-utc-1024x683.jpg?f=jpeg",
       "checkedAt": "2026-06-11T15:00:01.437040+00:00"
+    },
+    "https://techcrunch.com/2026/06/11/pools-new-app-turns-your-screenshots-into-a-searchable-memory-bank": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/hero.jpg?resize=1200,704",
+      "checkedAt": "2026-06-11T16:00:01.225760+00:00"
     }
   }
 }
