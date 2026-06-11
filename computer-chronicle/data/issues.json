@@ -1,8 +1,555 @@
 {
-  "generatedAt": "2026-06-10T12:02:46.053Z",
+  "generatedAt": "2026-06-11T17:24:14.831Z",
   "editorialPriority": "When there is a choice, prefer personal computers, home computing, office PC software, and personal computer or console gaming over broad enterprise technology.",
   "fallbackPolicy": "Use exact-day computer news when verified. If none exists, use same-week or same-month personal-computing items with confidence labels, then fall back to a wider world/business headline.",
   "issues": [
+    {
+      "currentDate": "2026-06-11",
+      "historicDate": "1982-08-30",
+      "displayDate": "Week of August 30-September 5, 1982",
+      "edition": "Issue 005 - Weekly 1982 Computer & Culture Chronicle",
+      "visualProfile": {
+        "layout": "weekly-newsprint-front",
+        "accent": "black-red-blue",
+        "paper": "halftone-cream",
+        "strapline": "WEEKLY DESK - DONKEY KONG CARTS - ATARI 5200 WATCH - C64 - FALL SOFTWARE - MOVIES - ROCK RADIO"
+      },
+      "masthead": {
+        "kicker": "Morning archive for Jez",
+        "title": "Computer Chronicle",
+        "deck": "The August 30-September 5 desk: Arcade Express opens the week with Coleco Donkey Kong cartridge trouble, Atari 5200 talk hangs over the fall console aisle, September computer magazines sell databases and peripherals, An Officer and a Gentleman edges E.T. over Labor Day, and John Cougar tops rock radio."
+      },
+      "layoutPlan": {
+        "main": [
+          "editor-note",
+          "lead",
+          "picture-desk",
+          "computer-items",
+          "software",
+          "store-shelves"
+        ],
+        "sidebar": [
+          "price-watch",
+          "market",
+          "bbs",
+          "curiosity",
+          "briefs",
+          "music",
+          "period-ad",
+          "classifieds",
+          "fallback",
+          "accuracy",
+          "sources"
+        ]
+      },
+      "sectionChrome": {
+        "lead": {
+          "label": "Lead Story"
+        },
+        "pictureDesk": {
+          "label": "Picture Desk",
+          "title": "Scenes From the Week"
+        },
+        "computerItems": {
+          "label": "Computers & Hardware",
+          "title": "Personal Computing Desk"
+        },
+        "software": {
+          "label": "Software Top 5",
+          "title": "Programs on the Editor's Pad"
+        },
+        "storeShelves": {
+          "label": "Top Games This Week",
+          "title": "Arcade, Console & Computer Games"
+        },
+        "priceWatch": {
+          "label": "Price Watch",
+          "title": "What It Cost"
+        },
+        "bbs": {
+          "label": "Modem Desk"
+        },
+        "curiosity": {
+          "label": "Movies / TV / Culture"
+        },
+        "briefs": {
+          "label": "Magazine Rack",
+          "title": "Culture & Shelf Talk"
+        },
+        "music": {
+          "label": "Top Rock This Week",
+          "title": "Rock Radio Chart, September 4"
+        },
+        "periodAd": {
+          "label": "Retail / Ads"
+        },
+        "classifieds": {
+          "label": "Classifieds",
+          "title": "Small Ads"
+        },
+        "fallback": {
+          "label": "Editorial Screen"
+        },
+        "accuracy": {
+          "label": "Accuracy Ledger",
+          "title": "What Is Date-Specific"
+        },
+        "sources": {
+          "label": "Source Trail",
+          "title": "Research Log"
+        },
+        "market": {
+          "label": "Retail / Ads",
+          "title": "Computer Store Market"
+        }
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1982-08-30.png",
+        "alt": "GPT Image 2 vertical Computer Chronicle front page for the week of August 30-September 5, 1982 with Donkey Kong cartridge trouble, Atari 5200 fall-console talk, Commodore 64 and September personal-computing software departments, Labor Day box office, and rock-radio chart modules",
+        "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data for August 30-September 5, 1982.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "Issue #5 covers Monday, August 30 through Sunday, September 5, 1982. The desk leads with the August 30 Arcade Express report that Coleco's Donkey Kong cartridge for Atari VCS had compatibility trouble on some Model #2600 consoles. Around it, the issue treats Atari 5200 anticipation, Commodore 64 retail momentum, and September personal-computing software/peripheral ads as the week's practical computer-store texture.",
+      "morningLine": "This week: Donkey Kong cartridge trouble lands in the trade press, fall-console talk starts crowding the counter, September computer magazines push databases and hard disks, An Officer and a Gentleman tops Labor Day weekend, and Jack & Diane takes the rock-radio No. 1 slot.",
+      "lead": {
+        "headline": "Donkey Kong Cartridge Trouble Hits the Counter",
+        "summary": "The August 30 Arcade Express opens with a retail headache: Coleco's Donkey Kong cartridge for the Atari VCS had proven unplayable on some Model #2600 consoles, turning one of the hottest arcade names into a compatibility story. For computer and game shops, the lesson is blunt: the home-arcade boom now depends on cartridges, hardware revisions, and return-counter trust as much as cabinet fame.",
+        "confidence": "Dated August 30, 1982 trade-newsletter source; compatibility wording follows the source summary",
+        "sourceRefs": [
+          0
+        ]
+      },
+      "computerItems": [
+        {
+          "label": "Video games",
+          "headline": "Arcade Express Flags Donkey Kong VCS Trouble",
+          "summary": "Coleco's famous arcade license becomes a service-counter problem when some Atari VCS units cannot play the cartridge cleanly.",
+          "confidence": "Exact issue-date trade-newsletter source",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "label": "Consoles",
+          "headline": "Atari 5200 Talk Shapes the Fall Shelf",
+          "summary": "The coming 5200 keeps pressure on ColecoVision and Atari VCS conversations: shoppers are comparing joysticks, arcade names, compatibility, and whether to wait for the next machine.",
+          "confidence": "Late-1982 console-market context",
+          "sourceRefs": [
+            1,
+            2
+          ]
+        },
+        {
+          "label": "Home computers",
+          "headline": "Commodore 64 Still Owns the 64K Pitch",
+          "summary": "August and September computer-magazine coverage keeps the C64 in front of readers as a mass-market 64K machine, while buyers still ask about drives, printers, software, and real availability.",
+          "confidence": "August/September 1982 magazine and retail context",
+          "sourceRefs": [
+            3,
+            4
+          ]
+        },
+        {
+          "label": "Business micros",
+          "headline": "Databases and Hard Disks Move Into the Ads",
+          "summary": "Personal Computing's September issue pushes file systems, databases, NEC systems, Apple II/IBM PC hard disks, and indexed software departments: the office micro is becoming a stack, not a single box.",
+          "confidence": "September 1982 magazine/ad context",
+          "sourceRefs": [
+            5
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "#1 VisiCalc",
+          "platform": "Apple II / IBM PC / business micros",
+          "detail": "Still the shorthand for why a microcomputer belongs on a manager's desk.",
+          "confidence": "Period business-software context",
+          "sourceRefs": [
+            6
+          ]
+        },
+        {
+          "name": "#2 WordStar",
+          "platform": "CP/M and business micros",
+          "detail": "The practical word-processing standard for offices that live by keyboard commands and printer setup.",
+          "confidence": "Period business-software context",
+          "sourceRefs": [
+            7
+          ]
+        },
+        {
+          "name": "#3 Report Manager",
+          "platform": "NEC PC-8000",
+          "detail": "Personal Computing advertises the package as a three-dimensional management tool for NEC's PC-8000.",
+          "confidence": "September 1982 advertisement context",
+          "sourceRefs": [
+            5
+          ]
+        },
+        {
+          "name": "#4 DB Master",
+          "platform": "Apple II / business micros",
+          "detail": "Database packages sit prominently in the September magazine shelf, alongside file and report managers.",
+          "confidence": "September 1982 magazine table-of-contents/software context",
+          "sourceRefs": [
+            5
+          ]
+        },
+        {
+          "name": "#5 Microsoft BASIC",
+          "platform": "Home computers / IBM PC",
+          "detail": "The language remains the common bridge between type-in listings, learning books, and early home programming.",
+          "confidence": "Period software context",
+          "sourceRefs": [
+            3
+          ]
+        }
+      ],
+      "storeShelves": [
+        {
+          "name": "Donkey Kong",
+          "platform": "Atari VCS / Coleco cartridge",
+          "detail": "The August 30 trade item makes the hit license a compatibility and returns story.",
+          "confidence": "Exact issue-date trade-newsletter source",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "name": "Tron",
+          "platform": "Arcade",
+          "detail": "Still visible in arcades and the box-office chart, keeping computer fantasy in the room.",
+          "confidence": "August/September 1982 arcade and movie context",
+          "sourceRefs": [
+            8,
+            9
+          ]
+        },
+        {
+          "name": "ColecoVision launch titles",
+          "platform": "ColecoVision",
+          "detail": "Venture, Mouse Trap, Lady Bug, and Cosmic Avenger remain part of the launch-season arcade-at-home pitch.",
+          "confidence": "August 1982 console launch context",
+          "sourceRefs": [
+            1
+          ]
+        },
+        {
+          "name": "Star Wars: The Empire Strikes Back",
+          "platform": "Atari VCS",
+          "detail": "Parker Brothers' licensed cartridge keeps movie properties in the VCS aisle.",
+          "confidence": "Mid-1982 retail/date-source context",
+          "sourceRefs": [
+            10
+          ]
+        },
+        {
+          "name": "Deadline",
+          "platform": "Infocom text adventure",
+          "detail": "Infocom's detective mystery keeps parser games looking serious beside arcade conversions.",
+          "confidence": "1982 release context",
+          "sourceRefs": [
+            11
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "Commodore 64 computer",
+          "price": "$595",
+          "note": "The widely quoted introductory-era price keeps the 64K home-computer pitch sharp."
+        },
+        {
+          "item": "Mountain Computer Dynamic 5M Disk System",
+          "price": "$2,695",
+          "note": "Advertised in Personal Computing as a hard-disk system for Apple II and IBM PC work."
+        },
+        {
+          "item": "ColecoVision console",
+          "price": "about $175-$200",
+          "note": "Launch-era console pricing sits between a toy purchase and a full computer desk."
+        },
+        {
+          "item": "IBM PC base system",
+          "price": "$1,565+",
+          "note": "The base price remains only the start once display, drives, printer, and software enter the quote."
+        }
+      ],
+      "market": {
+        "headline": "Store Desk: Compatibility Becomes the Sale",
+        "summary": "The week's counter lesson is not just which arcade name is hottest. Donkey Kong shows that cartridges have to work across hardware revisions, while computer buyers ask whether software, disks, printers, and support make the advertised machine usable.",
+        "confidence": "Weekly synthesis from dated trade newsletter, magazine ads, and period retail context",
+        "sourceRefs": [
+          0,
+          5
+        ]
+      },
+      "bbsNote": {
+        "headline": "Sysop Log: Donkey Kong Returns and Fall Waiting Games",
+        "summary": "Callers swap cartridge warnings, wonder whether to wait for Atari's next console, and compare whether a C64 or IBM PC budget disappears faster once storage and printer costs are included.",
+        "posts": [
+          {
+            "topic": "Cartridge Counter",
+            "text": "Does your Atari VCS play the Coleco Donkey Kong cart, or is this a return-trip problem?",
+            "platform": "Atari VCS"
+          },
+          {
+            "topic": "Console Watch",
+            "text": "ColecoVision looks strong, but the Atari 5200 rumor mill keeps buyers hesitating.",
+            "platform": "ColecoVision / Atari 5200"
+          },
+          {
+            "topic": "Office Desk",
+            "text": "Hard disks and database ads make the microcomputer feel less like a hobby box and more like a department purchase.",
+            "platform": "Apple II / IBM PC"
+          }
+        ],
+        "confidence": "Period-style weekly digest based on dated issue themes",
+        "sourceRefs": [
+          0,
+          5
+        ]
+      },
+      "curiosity": {
+        "headline": "An Officer and a Gentleman Edges E.T. on Labor Day Weekend",
+        "summary": "For September 3-6, 1982, Box Office Mojo lists An Officer and a Gentleman at No. 1 with E.T. close behind, while Fast Times at Ridgemont High, Zapped!, Friday the 13th Part 3, and Tron remain part of the same theater landscape.",
+        "confidence": "Exact Labor Day weekend box-office source",
+        "sourceRefs": [
+          9
+        ]
+      },
+      "briefs": [
+        {
+          "label": "Movies",
+          "headline": "Fast Times Holds Third for Labor Day",
+          "summary": "Fast Times at Ridgemont High ranks third for the September 3-6 weekend, keeping teen-mall culture right beside the game-store aisle.",
+          "confidence": "Exact weekend box-office source",
+          "sourceRefs": [
+            9
+          ]
+        },
+        {
+          "label": "Movies",
+          "headline": "Tron Still Charts in Seventeenth",
+          "summary": "Disney's computer-world movie remains on the domestic weekend chart, useful background for arcades still running the cabinet.",
+          "confidence": "Exact weekend box-office source",
+          "sourceRefs": [
+            9
+          ]
+        },
+        {
+          "label": "Magazine Rack",
+          "headline": "Personal Computing Goes Database Heavy",
+          "summary": "The September 1982 issue points readers toward database/file-system coverage, Steve Wozniak interview material, games, hardware, and software indexes.",
+          "confidence": "September 1982 magazine text",
+          "sourceRefs": [
+            5
+          ]
+        }
+      ],
+      "musicChart": [
+        {
+          "title": "#1 Jack & Diane",
+          "artist": "John Cougar"
+        },
+        {
+          "title": "#2 Somebody's Baby",
+          "artist": "Jackson Browne"
+        },
+        {
+          "title": "#3 You've Got Another Thing Comin'",
+          "artist": "Judas Priest"
+        },
+        {
+          "title": "#4 Athena",
+          "artist": "The Who"
+        },
+        {
+          "title": "#5 Gypsy",
+          "artist": "Fleetwood Mac"
+        }
+      ],
+      "periodAd": {
+        "headline": "Before You Buy the Box, Ask What Plugs Into It",
+        "summary": "A period-style counter ad sells the whole stack: console compatibility, cartridges that work, a 64K computer, disk storage, printer, database package, and enough support to keep the return line short.",
+        "finePrint": "Period-style retail summary based on documented August 30-September 5, 1982 game and computer-market context."
+      },
+      "classifieds": [
+        {
+          "headline": "WANTED: VCS TEST UNIT",
+          "copy": "Shop seeks older Atari Model #2600 console for cartridge compatibility checks before Saturday demos."
+        },
+        {
+          "headline": "APPLE II HARD DISK DEMO",
+          "copy": "5MB system shown by appointment. Bring database questions and patience for the invoice."
+        },
+        {
+          "headline": "C64 BUYERS CLUB",
+          "copy": "Families comparing 64K, disk drive, printer, and software costs meet after store hours."
+        }
+      ],
+      "worldFallback": {
+        "headline": "Labor Day Weekend Keeps Theaters Busy",
+        "summary": "The holiday box office gives the issue its wider culture note while the main desk stays on games, home computers, and software shelves.",
+        "confidence": "Exact weekend culture source",
+        "sourceRefs": [
+          9
+        ]
+      },
+      "accuracyLedger": {
+        "items": [
+          {
+            "value": "Exact",
+            "label": "Series anchor",
+            "detail": "Chronicle state advanced to Issue #5, week of August 30-September 5, 1982."
+          },
+          {
+            "value": "Exact issue date",
+            "label": "Lead story",
+            "detail": "Arcade Express Volume 1 Number 2 is dated August 30, 1982 and reports Coleco Donkey Kong cartridge trouble for Atari VCS."
+          },
+          {
+            "value": "Weekly",
+            "label": "Issue range",
+            "detail": "The issue covers Monday, August 30 through Sunday, September 5, 1982."
+          },
+          {
+            "value": "Exact weekend",
+            "label": "Movies",
+            "detail": "The movie chart uses the September 3-6, 1982 Labor Day weekend."
+          },
+          {
+            "value": "Dated chart",
+            "label": "Rock radio",
+            "detail": "The rock-radio list uses the September 4, 1982 weekly rock chart."
+          },
+          {
+            "value": "Generated",
+            "label": "Newspaper artifact",
+            "detail": "The hero image is a GPT Image 2 visual; webpage text and sources remain canonical."
+          }
+        ],
+        "note": "This is a chronological weekly 1982 issue. It is not a 40-years-ago-today mapping."
+      },
+      "sources": [
+        {
+          "name": "Arcade Express Vol. 1 No. 2, August 30, 1982: Coleco Donkey Kong cartridge compatibility report",
+          "url": "https://www.digitpress.com/library/newsletters/arcadeexpress/arcade_express_v1n2.pdf"
+        },
+        {
+          "name": "1982 in video games: ColecoVision August launch-title context",
+          "url": "https://en.wikipedia.org/wiki/1982_in_video_games"
+        },
+        {
+          "name": "Atari 5200 reference: 1982 console context",
+          "url": "https://en.wikipedia.org/wiki/Atari_5200"
+        },
+        {
+          "name": "COMPUTE! Issue 027, August 1982: Commodore 64 cover and personal-computer context",
+          "url": "https://www.commodore.ca/gallery/magazines/compute/Compute-027-01.pdf"
+        },
+        {
+          "name": "Commodore.ca: Commodore 64 production reached full stride by August 1982",
+          "url": "https://www.commodore.ca/commodore-products/commodore-64-the-best-selling-computer-in-history/"
+        },
+        {
+          "name": "Personal Computing, September 1982 full text: database, hard-disk, and software/peripheral ads",
+          "url": "https://archive.org/stream/PersonalComputing198209/Personal%20Computing%201982-09_djvu.txt"
+        },
+        {
+          "name": "VC&G: Remembering VisiCalc and early spreadsheet context",
+          "url": "https://www.vintagecomputing.com/index.php/archives/56/retroscan-of-the-week-visicalc"
+        },
+        {
+          "name": "WordStar reference: CP/M and business word-processing context",
+          "url": "https://en.wikipedia.org/wiki/WordStar"
+        },
+        {
+          "name": "MobyGames: Tron arcade release, August 1982",
+          "url": "https://www.mobygames.com/game/33983/tron/"
+        },
+        {
+          "name": "Box Office Mojo: Domestic 1982 Weekend 36, September 3-6 Labor Day weekend",
+          "url": "https://www.boxofficemojo.com/weekend/1982W36/occasion/us_laborday_weekend/"
+        },
+        {
+          "name": "Atari Archive: Atari VCS game release dates for Star Wars: The Empire Strikes Back",
+          "url": "https://www.atariarchive.org/atari-vcs-game-release-dates/"
+        },
+        {
+          "name": "MobyGames: Deadline by Infocom release/platform context",
+          "url": "https://www.mobygames.com/game/30/deadline/"
+        },
+        {
+          "name": "Tunecaster Weekly Rock Top 20 for September 4, 1982",
+          "url": "https://www.tunecaster.com/charts/80/rock8236.html"
+        }
+      ],
+      "frontPageStories": [
+        {
+          "headline": "Donkey Kong Cartridge Trouble Hits the Counter",
+          "summary": "Coleco's arcade hit becomes an Atari VCS compatibility story.",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "headline": "Databases and Hard Disks Fill the September Magazine Rack",
+          "summary": "Personal Computing sells the office micro as software plus storage plus support.",
+          "sourceRefs": [
+            5
+          ]
+        },
+        {
+          "headline": "Jack & Diane Tops Rock Radio",
+          "summary": "John Cougar leads the September 4 rock chart.",
+          "sourceRefs": [
+            12
+          ]
+        }
+      ],
+      "movieChart": [
+        {
+          "title": "#1 An Officer and a Gentleman",
+          "detail": "$7.71M Labor Day weekend",
+          "sourceRefs": [
+            9
+          ]
+        },
+        {
+          "title": "#2 E.T. the Extra-Terrestrial",
+          "detail": "$7.67M Labor Day weekend",
+          "sourceRefs": [
+            9
+          ]
+        },
+        {
+          "title": "#3 Fast Times at Ridgemont High",
+          "detail": "$3.25M Labor Day weekend",
+          "sourceRefs": [
+            9
+          ]
+        },
+        {
+          "title": "#4 Zapped!",
+          "detail": "$3.01M Labor Day weekend",
+          "sourceRefs": [
+            9
+          ]
+        },
+        {
+          "title": "#5 Friday the 13th Part 3",
+          "detail": "$2.63M Labor Day weekend",
+          "sourceRefs": [
+            9
+          ]
+        }
+      ],
+      "musicChartSourceRefs": [
+        12
+      ]
+    },
     {
       "currentDate": "2026-06-10",
       "historicDate": "1982-08-23",
