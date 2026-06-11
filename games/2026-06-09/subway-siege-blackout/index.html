@@ -96,6 +96,7 @@
   }
   .name-input:focus { outline: none; border-color: #ffb84d; }
   .muted { color: #8d7a5e; font-size: .8rem; }
+  .version { position: absolute; bottom: max(12px, env(safe-area-inset-bottom)); right: 14px; color: #8d7a5e; font: 700 11px ui-monospace, Consolas, monospace; letter-spacing: .08em; }
 
   /* ---- HUD ---- */
   #hud { position: absolute; inset: 0; z-index: 10; pointer-events: none; font-variant-numeric: tabular-nums; }
@@ -182,6 +183,7 @@
     <button class="btn" id="btn-start">▶ START PATROL</button>
     <button class="btn secondary" id="btn-howto">HOW TO PLAY</button>
     <p class="muted" id="best-line" style="margin-top:16px"></p>
+    <div class="version"></div>
   </div>
 
   <!-- How to play -->
@@ -198,6 +200,7 @@
     <div class="logo" style="font-size:clamp(2rem,9vw,3.2rem)">PAUSED</div>
     <button class="btn" id="btn-resume">▶ RESUME</button>
     <button class="btn secondary" id="btn-quit">ABANDON PATROL</button>
+    <div class="version"></div>
   </div>
 
   <!-- Game over -->
@@ -225,6 +228,7 @@
       <button class="btn" id="btn-again">▶ REDEPLOY</button>
       <button class="btn secondary" id="btn-title">TITLE</button>
     </div>
+    <div class="version"></div>
   </div>
 </div>
 
@@ -236,6 +240,7 @@
    WASD + mouse on desktop. Darkness/searchlight lighting engine.
    ========================================================================== */
 (function () {
+const VERSION = 'v1.0.1';
 const SCORES_API = 'https://game-scores.jez237.workers.dev/scores/subway-siege-blackout';
 const HS_KEY = 'ssb_tank_highscores_v1';
 const MUTE_KEY = 'ssb_tank_muted';
@@ -247,12 +252,18 @@ const lctx = light.getContext('2d');
 const mini = document.getElementById('minimap');
 const mctx = mini.getContext('2d');
 
-let VW = 0, VH = 0, DPR = 1;
+let VW = 0, VH = 0, DPR = 1, viewScale = 1;
 function resize() {
-  DPR = Math.min(window.devicePixelRatio || 1, 2);
-  VW = window.innerWidth; VH = window.innerHeight;
+  // Desktop: cap the logical resolution (max height 960) and scale the canvas
+  // up to fill the window, so big monitors don't trivialize the blackout
+  // sightlines. Mobile (vh <= 960) keeps viewScale = 1 — behavior unchanged.
+  const vw = window.innerWidth, vh = window.innerHeight;
+  VH = Math.min(vh, 960);
+  viewScale = vh / VH;
+  VW = Math.floor(vw / viewScale);
+  DPR = Math.min(viewScale * (window.devicePixelRatio || 1), viewScale > 1 ? 2.4 : 2);
   canvas.width = Math.floor(VW * DPR); canvas.height = Math.floor(VH * DPR);
-  canvas.style.width = VW + 'px'; canvas.style.height = VH + 'px';
+  canvas.style.width = vw + 'px'; canvas.style.height = vh + 'px';
   ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
   light.width = canvas.width; light.height = canvas.height;
   lctx.setTransform(DPR, 0, 0, DPR, 0, 0);
@@ -260,6 +271,7 @@ function resize() {
   mctx.setTransform(DPR, 0, 0, DPR, 0, 0);
 }
 window.addEventListener('resize', resize);
+window.addEventListener('orientationchange', () => setTimeout(resize, 220));
 
 const isTouch = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
 
@@ -366,28 +378,52 @@ let toastTimer = 0;
 // ===========================================================================
 //  INPUT — floating joystick (touch) + WASD/mouse (desktop)
 // ===========================================================================
-const stick = { active: false, ox: 0, oy: 0, dx: 0, dy: 0 };
+const stick = { active: false, id: null, ox: 0, oy: 0, dx: 0, dy: 0 };
 const keys = {};
-const mouse = { x: 0, y: 0, fresh: 0 };
+const mouse = { x: 0, y: 0, fresh: 0, down: false };
 
 window.addEventListener('keydown', (e) => {
+  if (e.target && e.target.tagName === 'INPUT') {
+    if (e.key === 'Enter') document.getElementById('btn-submit').click();
+    return;
+  }
   if (['ArrowLeft','ArrowRight','ArrowUp','ArrowDown',' '].includes(e.key)) e.preventDefault();
-  keys[e.key.toLowerCase()] = true;
-  if (e.key === 'Escape' || e.key.toLowerCase() === 'p') togglePause();
+  const k = e.key.toLowerCase();
+  keys[k] = true;
+  if (e.key === 'Escape' || k === 'p') { togglePause(); return; }
+  if (k === 'm') { document.getElementById('btn-mute').click(); return; }
+  if (e.key === 'Enter') {
+    if (!document.getElementById('screen-howto').classList.contains('hidden')) document.getElementById('btn-howback').click();
+    else if (G.state === 'title') document.getElementById('btn-start').click();
+    else if (G.state === 'pause') togglePause();
+    else if (G.state === 'over') document.getElementById('btn-again').click();
+  }
 });
 window.addEventListener('keyup', (e) => { keys[e.key.toLowerCase()] = false; });
-
-canvas.addEventListener('pointerdown', (e) => {
-  Snd.resume();
-  if (G.state !== 'play') return;
-  stick.active = true; stick.ox = e.clientX; stick.oy = e.clientY; stick.dx = 0; stick.dy = 0;
-  canvas.setPointerCapture(e.pointerId);
+window.addEventListener('blur', () => {
+  for (const k in keys) keys[k] = false;
+  stickEnd();
+  if (G.state === 'play') togglePause();
 });
-canvas.addEventListener('pointermove', (e) => {
-  mouse.x = e.clientX; mouse.y = e.clientY;
+
+// window-level pointer input (mouse drives the one-finger scheme too):
+// drag anywhere = floating stick, mouse position sweeps the searchlight,
+// holding the button force-fires. Buttons / overlays / inputs are ignored.
+function uiTarget(e) { return e.target && e.target.closest && e.target.closest('button, .screen, input'); }
+window.addEventListener('pointerdown', (e) => {
+  Snd.resume();
+  if (uiTarget(e) || G.state !== 'play') return;
+  if (e.pointerType === 'mouse') mouse.down = true;
+  stick.active = true; stick.id = e.pointerId;
+  stick.ox = e.clientX / viewScale; stick.oy = e.clientY / viewScale;
+  stick.dx = 0; stick.dy = 0;
+  try { canvas.setPointerCapture(e.pointerId); } catch (err) {}
+});
+window.addEventListener('pointermove', (e) => {
+  mouse.x = e.clientX / viewScale; mouse.y = e.clientY / viewScale;
   if (e.pointerType === 'mouse') mouse.fresh = 120;
-  if (!stick.active) return;
-  let dx = e.clientX - stick.ox, dy = e.clientY - stick.oy;
+  if (!stick.active || e.pointerId !== stick.id) return;
+  let dx = e.clientX / viewScale - stick.ox, dy = e.clientY / viewScale - stick.oy;
   const len = Math.hypot(dx, dy);
   const max = 58;
   if (len > max) {
@@ -398,9 +434,14 @@ canvas.addEventListener('pointermove', (e) => {
   }
   stick.dx = dx; stick.dy = dy;
 });
-function stickEnd() { stick.active = false; stick.dx = 0; stick.dy = 0; }
-canvas.addEventListener('pointerup', stickEnd);
-canvas.addEventListener('pointercancel', stickEnd);
+function stickEnd(e) {
+  if (e && e.pointerType === 'mouse') mouse.down = false;
+  if (e && stick.active && e.pointerId !== stick.id) return;
+  if (!e) mouse.down = false;
+  stick.active = false; stick.id = null; stick.dx = 0; stick.dy = 0;
+}
+window.addEventListener('pointerup', stickEnd);
+window.addEventListener('pointercancel', stickEnd);
 
 function moveInput() {
   let mx = 0, my = 0;
@@ -748,7 +789,7 @@ function updatePlayer() {
   if (player.fireCd > 0) player.fireCd--;
   if (player.recoil > 0) player.recoil -= 0.12;
   const wantFire = best && Math.abs(angDiff(player.turret, Math.atan2(best.y - player.y, best.x - player.x))) < 0.13;
-  const manualFire = keys[' '] || keys['f'];
+  const manualFire = keys[' '] || keys['f'] || mouse.down;
   if ((wantFire || manualFire) && player.fireCd <= 0) {
     const cd = player.overdrive > 0 ? P_FIRE_CD / 2 : P_FIRE_CD;
     player.fireCd = cd;
@@ -909,9 +950,9 @@ function update() {
   updateBullets();
   updatePickups();
 
-  // camera
-  const tx = clamp(player.x - VW / 2, 0, Math.max(0, ARENA_W - VW));
-  const ty = clamp(player.y - VH / 2, 0, Math.max(0, ARENA_H - VH));
+  // camera (centers the arena if the view is wider than it — ultrawide desktops)
+  const tx = ARENA_W <= VW ? (ARENA_W - VW) / 2 : clamp(player.x - VW / 2, 0, ARENA_W - VW);
+  const ty = ARENA_H <= VH ? (ARENA_H - VH) / 2 : clamp(player.y - VH / 2, 0, ARENA_H - VH);
   G.cam.x += (tx - G.cam.x) * 0.1;
   G.cam.y += (ty - G.cam.y) * 0.1;
 
@@ -1450,8 +1491,8 @@ if (Snd.isMuted()) document.getElementById('snd-on').style.opacity = '0.2';
 
 document.getElementById('howto-body').innerHTML = isTouch
   ? 'Touch anywhere and <b>drag</b> — a stick appears under your finger and drives the tank.<br><br>🔦 Your turret <b>auto-aims and auto-fires</b> at anything caught in your searchlight.<br>👀 Enemies hide in the dark — sweep your light, watch for <b>red running lights</b> and muzzle flashes.<br>🛢️ Shoot fuel barrels for chain explosions.<br>⬢ Grab repair, shield, and overdrive drops.<br><br>Survive as many waves as you can.'
-  : '<kbd>WASD</kbd> / arrows drive the tank · mouse steers the searchlight · <kbd>Space</kbd> force-fire · <kbd>P</kbd> pause<br><br>🔦 The turret <b>auto-fires</b> at anything caught in your light.<br>👀 Enemies hide in the dark — sweep your light, watch for red running lights and muzzle flashes.<br>🛢️ Shoot fuel barrels for chain explosions.<br>⬢ Grab repair, shield, and overdrive drops.<br><br>Survive as many waves as you can.';
-document.getElementById('hint-line').textContent = isTouch ? 'drag anywhere to drive — turret fires on its own' : '';
+  : '<kbd>WASD</kbd> / arrows — or <b>mouse drag</b> — drive the tank · mouse steers the searchlight · hold <kbd>Click</kbd> / <kbd>Space</kbd> force-fire · <kbd>P</kbd>/<kbd>Esc</kbd> pause · <kbd>Enter</kbd> start · <kbd>M</kbd> mute<br><br>🔦 The turret <b>auto-fires</b> at anything caught in your light.<br>👀 Enemies hide in the dark — sweep your light, watch for red running lights and muzzle flashes.<br>🛢️ Shoot fuel barrels for chain explosions.<br>⬢ Grab repair, shield, and overdrive drops.<br><br>Survive as many waves as you can.';
+document.getElementById('hint-line').textContent = isTouch ? 'drag anywhere to drive — turret fires on its own' : 'WASD / drag to drive · mouse aims · hold click to force-fire';
 
 function getLocal() { try { return JSON.parse(localStorage.getItem(HS_KEY)) || []; } catch (e) { return []; } }
 function saveLocal(arr) { localStorage.setItem(HS_KEY, JSON.stringify(arr.slice(0, 10))); }
@@ -1534,6 +1575,8 @@ function loop(ts) {
   while (acc >= 1) { update(); acc -= 1; }
   render();
 }
+
+document.querySelectorAll('.version').forEach(el => { el.textContent = VERSION; });
 
 resize();
 buildWorld();

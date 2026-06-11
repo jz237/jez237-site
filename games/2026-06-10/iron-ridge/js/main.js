@@ -634,6 +634,12 @@ document.addEventListener('pointerlockchange', () => {
   }
 });
 
+// click to re-grab the mouse if a quick resume beat the browser's
+// pointer-lock cooldown (Chrome blocks relock for ~1.3s after Esc)
+canvas.addEventListener('mousedown', () => {
+  if (!isTouch && G.state === 'playing' && !input.locked) input.requestLock();
+});
+
 // ---------------------------------------------------------------- physics step
 function fixedStep(dt) {
   const p = G.player;
