@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-11T16:00:01.225760+00:00",
+  "updatedAt": "2026-06-11T17:00:01.632494+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -10112,6 +10112,14 @@
     "https://techcrunch.com/2026/06/11/pools-new-app-turns-your-screenshots-into-a-searchable-memory-bank": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/hero.jpg?resize=1200,704",
       "checkedAt": "2026-06-11T16:00:01.225760+00:00"
+    },
+    "https://techcrunch.com/2026/06/11/deezers-new-tool-can-identify-ai-music-from-spotify-apple-music-and-others": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/03/GettyImages-2180853826.jpg?resize=1200,800",
+      "checkedAt": "2026-06-11T17:00:01.632494+00:00"
+    },
+    "https://openai.com/index/openai-to-acquire-ona": {
+      "image": "https://images.ctfassets.net/kftzwdyauwt9/3vpY0M1x6mrbhiFVcfTF4Y/99dae42f0ed1030d045f56249385ac3a/OAI-Ona-SEO.png?w=1600&amp;h=900&amp;fit=fill",
+      "checkedAt": "2026-06-11T17:00:01.632494+00:00"
     }
   }
 }
