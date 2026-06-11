@@ -1,6 +1,6 @@
 {
   "date": "2026-06-11",
-  "updatedAt": "2026-06-11T00:00:02.046970+00:00",
+  "updatedAt": "2026-06-11T01:00:01.741281+00:00",
   "items": [
     {
       "title": "How an astrophysicist uses Codex to help simulate black holes",
@@ -13,10 +13,10 @@
       "image": "",
       "published": "2026-06-11T00:00:00+00:00",
       "firstSeen": "2026-06-10T22:55:45.504127+00:00",
-      "lastSeen": "2026-06-11T00:00:02.046970+00:00",
+      "lastSeen": "2026-06-11T01:00:01.741281+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.5
+      "score": 2.4699
     },
     {
       "title": "Uncertainty-aware Multi-fidelity Closure via Conditional Normalizing Flows",
@@ -27,9 +27,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-11T00:00:12.872920+00:00",
+      "published": "2026-06-11T01:00:11.694405+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-11T00:00:02.046970+00:00",
+      "lastSeen": "2026-06-11T01:00:01.741281+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
