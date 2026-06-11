@@ -1738,5 +1738,17 @@
     "slot": "morning",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-06-11-morning-backpack-as-alpine-wax-sculpture",
+    "title": "Backpack as Alpine Wax Sculpture",
+    "tests": "Reference-photo template; generated image verified at exact CLI output path; R2 upload required before JSON save.",
+    "prompt": "Use the uploaded reference photo and preserve the backpack's identity, camera angle, silhouette, rounded top flap, shoulder straps, side pockets, zipper seams, buckle positions, patched fabric panels, travel-worn proportions, color placement, and most recognizable details, then transform the backpack into a hand-colored alpine wax museum prop inside an old mountain exhibit case. Rebuild it from translucent tinted wax with subtle amber depth, frosty white dust along the seams, tiny conservation pins, hand-painted red and ochre pigment, embedded air bubbles, wax drips, polished rubbed corners, faint tool marks, and softened fabric folds. Set the finished artifact on a dark carved-wood plinth behind aged glass with brass case hardware, velvet support pads, a cold stone windowsill, mineral dust, wax shavings, a small brush, cotton gloves, blurred snow light, and warm museum spotlight glints. Keep the source backpack recognizable while changing the material, surface texture, props, and environment into a cohesive photographed physical artifact. Avoid extra duplicate objects, text/logo artifacts, readable labels, placeholder cards, people, hands, and losing recognizability.\n\nSource photo needed: a backpack photo.\n\nReusable fill-in-the-blank template: Use the uploaded reference photo and preserve the [OBJECT] identity, pose or camera angle, silhouette, proportions, key seams, straps, closures, color placement, surface wear, and most recognizable features, then transform [OBJECT] into a hand-colored alpine wax museum prop made from [MATERIAL] in [SETTING] with [MOOD] lighting. Keep the source recognizable while changing material, surface texture, display props, and environment into a cohesive finished artifact. Avoid duplicate objects, text/logo artifacts, readable labels, placeholder cards, people or hands unless requested, and losing recognizability.\n\nWhat to preserve: backpack identity, camera angle, silhouette, rounded flap, straps, side pockets, zipper seams, buckles, patched panels, worn proportions, color placement, and distinctive source-photo details.\n\nWhat to change: convert fabric, nylon, plastic, and metal into translucent tinted wax, frost dust, conservation pins, hand-painted pigment, embedded bubbles, wax drips, polished corners, tool marks, museum display glass, velvet supports, alpine room props, and mixed snow-window and spotlight illumination.\n\nOptional negative constraints: no extra duplicate backpacks, no brand names or logos, no readable exhibit labels, no placeholder cards, no people or hands, no paper prompt card, keep the original silhouette and strap layout recognizable.\n\nExample substitution: Upload a clear three-quarter photo of a red hiking backpack with black straps, patched front pocket, side bottle pouch, and worn zipper pulls; preserve those shapes and markings, then turn it into a translucent hand-colored alpine wax museum prop in a cold mountain exhibit case with warm spotlights.",
+    "image": "images/2026-06-11-morning-backpack-as-alpine-wax-sculpture.png",
+    "date": "2026-06-11",
+    "batch": "Daily Prompt",
+    "slot": "morning",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
