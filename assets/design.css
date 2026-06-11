@@ -1550,14 +1550,10 @@ body.home-page::after {
   .galaxy-stars {
     animation-duration: 180s;
   }
-  /* Slow the Home Base topbar effects rather than removing them, matching
-     how the galaxy backdrop is handled above. Comets are the only fast,
-     sudden motion, so those stay off. */
-  .hub-topbar h1 { animation-duration: 20s; }
-  .home-kicker::before { animation-duration: 7s; }
-  .topbar-fx .fx-comet { display: none; }
-  .topbar-fx .fx-orbit-spin { animation-duration: 48s; }
-  .topbar-fx .fx-tw { animation-duration: 9s; }
+  /* The Home Base topbar effects intentionally keep running at full speed
+     here, matching the GameMaster Arcade card below it. Jez's own PC
+     reports reduced motion (Windows animation effects off) and the topbar
+     effects are the point of the hero. */
 }
 .hub-card h2 {
   margin: 0 0 9px;
