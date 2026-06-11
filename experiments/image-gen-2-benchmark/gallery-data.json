@@ -1726,5 +1726,17 @@
     "slot": "evening",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-06-11-morning-person-as-cobalt-porcelain-kintsugi",
+    "title": "Person as Cobalt Porcelain Kintsugi",
+    "tests": "Generated finished example image with no instructional text; preserves reusable portrait-transformation structure; non-paper morning template.",
+    "prompt": "Use the uploaded reference photo and preserve the person's identity, three-quarter pose, head angle, facial proportions, expression, shoulder line, skin-tone value relationships, hairstyle silhouette, and most recognizable features, then transform the person into a cobalt porcelain kintsugi bust in a ceramic restoration studio. Rebuild the subject as glossy white porcelain with deep cobalt botanical patterning, fine glaze crazing, raised glaze droplets, and gold kintsugi repair seams following the face, brow, collarbone, and shoulders. Keep the source person recognizable while changing the material, surface texture, props, and environment into a cohesive photographed physical artifact with warm side light, cool window fill, porcelain shards, gold lacquer bowls, sable brushes, cotton gloves, ceramic dust, and padded supports. Avoid extra limbs, duplicate faces, text/logo artifacts, readable labels, watermark, paper prompt cards, and losing recognizability.\n\nSource photo needed: a clear portrait photo.\n\nReusable fill-in-the-blank template: Use the uploaded reference photo and preserve the [PERSON] identity, pose, head angle, facial proportions, expression, hairstyle silhouette, clothing or shoulder outline, camera angle, and most recognizable features, then transform [PERSON] into a cobalt porcelain kintsugi bust made from [MATERIAL] in [SETTING] with [MOOD] lighting. Keep the source recognizable while changing the material logic, surface texture, props, and environment into a cohesive finished artifact. Avoid extra limbs, duplicate faces, text/logo artifacts, readable labels, watermark, and losing recognizability.\n\nWhat to preserve: identity, pose, head angle, facial proportions, expression, hairstyle silhouette, clothing or shoulder outline, camera angle, and distinctive features from the source portrait.\n\nWhat to change: convert skin, hair, and clothing into glossy porcelain, cobalt glaze painting, fine crazing, raised glaze droplets, gold kintsugi seams, ceramic restoration props, studio supports, and mixed warm/cool product lighting.\n\nExample substitution: Upload a clear three-quarter portrait of a calm middle-aged woman with close-cropped silver hair; preserve her face shape, cheekbones, expression, head angle, neck line, and shoulder pose, then turn her into a glossy cobalt-and-white porcelain kintsugi bust on a dark ceramic restoration worktable.",
+    "image": "images/2026-06-11-morning-person-as-cobalt-porcelain-kintsugi.png",
+    "date": "2026-06-11",
+    "batch": "Daily Prompt",
+    "slot": "morning",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
