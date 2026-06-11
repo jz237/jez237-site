@@ -155,6 +155,11 @@ addEventListener('keydown',e=>{
 addEventListener('keyup',e=>{Input.kb[e.code]=false});
 cv.addEventListener('mousedown',e=>{
   Input.hasMouse=true;
+  if(e.button===0){ /* sys buttons: same targets the touch handler uses */
+    const L=Input.layout();
+    if(hyp(e.clientX-L.mute.x,e.clientY-L.mute.y)<L.mute.r*1.4){Au.init();Au.resume();Au.toggleMute();return}
+    if(hyp(e.clientX-L.pause.x,e.clientY-L.pause.y)<L.pause.r*1.4){Game.togglePause();return}
+  }
   if(e.button===0&&Game.state==='title'&&Game.titleClick(e.clientX,e.clientY)){Au.init();Au.resume();return}
   if(e.button===0&&(Game.state==='dead'||Game.state==='won')&&Scores.click(e.clientX,e.clientY))return;
   Game.anyInput();
@@ -2949,6 +2954,11 @@ function drawTitle(){
     const win=Store.d.bestWinTime?`   ·   the bottom in ${fmtTime(Store.d.bestWinTime)}`:'';
     ctx.fillText(`deepest descent  ${Store.d.bestDepth} m   ·   relics ${Store.d.mostRelics}/6   ·   descents ${Store.d.runs}${win}`,cx2,VIEW.h-22);
   }
+  ctx.fillStyle='rgba(110,118,126,0.45)';
+  ctx.font='10px "Courier New",monospace';
+  ctx.textAlign='right';
+  ctx.fillText('v1.0.1',VIEW.w-10,VIEW.h-8);
+  ctx.textAlign='center';
 }
 const STORY=[
   'Three days ago your brother Mark went down into the Hollow — a cave with no mapped bottom. The rescue team turned back at the second shaft when their lanterns kept guttering out. You didn\'t.',
