@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-11T13:00:01.542418+00:00",
+  "updatedAt": "2026-06-11T14:00:02.097955+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -10096,6 +10096,10 @@
     "https://www.technologyreview.com/2026/06/11/1138794/google-deepmind-is-worried-about-what-happens-when-millions-of-agents-start-to-interact": {
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/06/corralling-agents.jpg?resize=1200,600",
       "checkedAt": "2026-06-11T11:45:43.392005+00:00"
+    },
+    "https://www.anthropic.com/news/claude-corps": {
+      "image": "https://cdn.sanity.io/images/4zrzovbb/website/eb5d94573805e24cb381cd0676527cfada75c177-3840x2160.jpg",
+      "checkedAt": "2026-06-11T14:00:02.097955+00:00"
     }
   }
 }
