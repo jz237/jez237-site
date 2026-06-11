@@ -68,10 +68,10 @@
       "link": "https://jz237.github.io/games/2026-03-27/star-trek/"
     },
     {
-      "name": "🏮 Lantern Creek",
-      "desc": "Guide glowing lanterns down a moonlit stream.",
+      "name": "🌀 Eddy",
+      "desc": "Fluid-dynamics herding game: swipe simulated water to guide spores home.",
       "status": "live",
-      "link": "https://jz237.github.io/games/2026-03-29/lantern-creek/"
+      "link": "/games/2026-06-10/eddy/"
     },
     {
       "name": "⚡ Neon Qix",
@@ -80,8 +80,8 @@
       "link": "https://jz237.github.io/games/2026-04-09/quix-modern/"
     },
     {
-      "name": "🎮 See all 25 games →",
-      "desc": "The full GameMaster Arcade — featured, classic, and experimental builds.",
+      "name": "🎮 See all games →",
+      "desc": "The full GameMaster Arcade — featured, classic, experimental, Three.js, and mobile-first browser games.",
       "status": "live",
       "link": "/games/"
     }
