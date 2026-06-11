@@ -1,6 +1,6 @@
 {
   "date": "2026-06-11",
-  "updatedAt": "2026-06-11T09:00:01.779579+00:00",
+  "updatedAt": "2026-06-11T10:00:01.225358+00:00",
   "items": [
     {
       "title": "Anthropic Walks Back Policy That Could Have ‘Sabotaged’ AI Researchers Using Claude",
@@ -13,10 +13,10 @@
       "image": "",
       "published": "2026-06-11T03:45:49+00:00",
       "firstSeen": "2026-06-11T04:00:01.464860+00:00",
-      "lastSeen": "2026-06-11T09:00:01.779579+00:00",
+      "lastSeen": "2026-06-11T10:00:01.225358+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 13.5411
+      "score": 13.515
     },
     {
       "title": "Anthropic Walks Back Policy That Could Have ‘Sabotaged’ AI Researchers Using Claude",
@@ -29,10 +29,10 @@
       "image": "https://media.wired.com/photos/6a2a20f0915182808732c01f/master/pass/2280239203",
       "published": "2026-06-11T03:11:22+00:00",
       "firstSeen": "2026-06-11T04:00:01.464860+00:00",
-      "lastSeen": "2026-06-11T09:00:01.779579+00:00",
+      "lastSeen": "2026-06-11T10:00:01.225358+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 13.526
+      "score": 13.5004
     },
     {
       "title": "Deezer launches an AI music detector for other streaming services",
@@ -45,10 +45,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/NEW_1200-x-580-pixel-SI-logo-1240x600-1.jpeg?quality=90&amp%3Bstrip=all&amp%3Bcrop=3.7903225806452%2C0%2C92.41935483871%2C100",
       "published": "2026-06-11T08:00:00+00:00",
       "firstSeen": "2026-06-11T09:00:01.779579+00:00",
-      "lastSeen": "2026-06-11T09:00:01.779579+00:00",
+      "lastSeen": "2026-06-11T10:00:01.225358+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2299
+      "score": 5.2005
     },
     {
       "title": "Anthropic’s Dario Amodei has just one direct report",
@@ -61,10 +61,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/Dario-2280291125.jpg?w=1024",
       "published": "2026-06-11T03:53:06+00:00",
       "firstSeen": "2026-06-11T04:00:01.464860+00:00",
-      "lastSeen": "2026-06-11T09:00:01.779579+00:00",
+      "lastSeen": "2026-06-11T10:00:01.225358+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1443
+      "score": 5.1182
     },
     {
       "title": "Supporting Europe’s work in ensuring a trustworthy AI ecosystem",
@@ -77,10 +77,10 @@
       "image": "",
       "published": "2026-06-11T00:00:00+00:00",
       "firstSeen": "2026-06-11T07:02:24.038737+00:00",
-      "lastSeen": "2026-06-11T09:00:01.779579+00:00",
+      "lastSeen": "2026-06-11T10:00:01.225358+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.2567
+      "score": 4.2332
     },
     {
       "title": "Avast’s former CEO built an AI that found every OpenSSL zero-day this year. Now it runs inside air-gapped networks.",
@@ -93,10 +93,10 @@
       "image": "https://media.thenextweb.com/2026/06/aisle-snapshot-on-prem-vulnerability-detection-regulated-enterprises.avif",
       "published": "2026-06-11T08:11:03+00:00",
       "firstSeen": "2026-06-11T09:00:01.779579+00:00",
-      "lastSeen": "2026-06-11T09:00:01.779579+00:00",
+      "lastSeen": "2026-06-11T10:00:01.225358+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.9253
+      "score": 3.8959
     },
     {
       "title": "Oracle spent $55.7 billion on data centres in a single year, beat its own guidance by $5.7 billion, and wants to raise another $40 billion",
@@ -109,10 +109,26 @@
       "image": "https://media.thenextweb.com/2026/04/TNW-Article-Banner-3.avif",
       "published": "2026-06-11T07:43:40+00:00",
       "firstSeen": "2026-06-11T09:00:01.779579+00:00",
-      "lastSeen": "2026-06-11T09:00:01.779579+00:00",
+      "lastSeen": "2026-06-11T10:00:01.225358+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.9118
+      "score": 3.8827
+    },
+    {
+      "title": "Meta has cut Manus off from its internal systems and told staff to sunset the AI platform",
+      "url": "https://thenextweb.com/news/meta-manus-data-split-china-unwind-acquisition",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Meta has erected a data firewall between itself and Manus, the Chinese-founded agentic AI service it acquired for $2 billion in December 2025. Since the start of June, Manus and its staff have been barred from accessing Meta’s internal data systems, and Meta employees can no longer use Manus tools for internal projects, according to Bloomberg. [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/Meta-Manus.avif",
+      "published": "2026-06-11T08:41:12+00:00",
+      "firstSeen": "2026-06-11T10:00:01.225358+00:00",
+      "lastSeen": "2026-06-11T10:00:01.225358+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 3.8106
     },
     {
       "title": "Musk says the ‘acid test’ for Tesla’s self-driving is sleeping through your commute. His Austin robotaxis crash four times more than humans.",
@@ -125,10 +141,26 @@
       "image": "https://media.thenextweb.com/2024/07/Untitled-design-17.avif",
       "published": "2026-06-11T06:59:14+00:00",
       "firstSeen": "2026-06-11T08:00:02.036778+00:00",
-      "lastSeen": "2026-06-11T09:00:01.779579+00:00",
+      "lastSeen": "2026-06-11T10:00:01.225358+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.4902
+      "score": 3.4617
+    },
+    {
+      "title": "CoreWeave’s borrowing costs just fell from 10% to 7%. The AI data centre debt market is repricing risk in real time.",
+      "url": "https://thenextweb.com/news/coreweave-credit-rebound-applied-digital-junk-bond-data-center",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "An Applied Digital subsidiary raised $1.59 billion in the high-yield bond market on Tuesday to fund a fourth building at its Polaris Forge 1 campus in North Dakota, which will provide 150 megawatts of computing capacity for CoreWeave under a 15-year contract. The bonds were priced to yield 7%, a steep drop from the 10% investors demanded [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/coreweave-anthropic-multi-year-cloud-deal.avif",
+      "published": "2026-06-11T08:26:59+00:00",
+      "firstSeen": "2026-06-11T10:00:01.225358+00:00",
+      "lastSeen": "2026-06-11T10:00:01.225358+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.2036
     },
     {
       "title": "v1.87.2",
@@ -141,10 +173,10 @@
       "image": "https://opengraph.githubassets.com/e552d89f65a00d659f5f24feb5f2e83a7229bd51d1a93df4fc050869d1d7c475/BerriAI/litellm/releases/tag/v1.87.2",
       "published": "2026-06-11T05:19:44+00:00",
       "firstSeen": "2026-06-11T06:00:02.044920+00:00",
-      "lastSeen": "2026-06-11T09:00:01.779579+00:00",
+      "lastSeen": "2026-06-11T10:00:01.225358+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8833
+      "score": 2.8561
     },
     {
       "title": "v1.86.5",
@@ -157,42 +189,10 @@
       "image": "https://opengraph.githubassets.com/80d06ba2e609141c1c1e8cf1d9516d0b43e8c6b5e92f80d9b986e8bb3d3f2ead/BerriAI/litellm/releases/tag/v1.86.5",
       "published": "2026-06-11T03:10:46+00:00",
       "firstSeen": "2026-06-11T04:00:01.464860+00:00",
-      "lastSeen": "2026-06-11T09:00:01.779579+00:00",
+      "lastSeen": "2026-06-11T10:00:01.225358+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8258
-    },
-    {
-      "title": "v1.85.5",
-      "url": "https://github.com/BerriAI/litellm/releases/tag/v1.85.5",
-      "source": "LiteLLM Releases",
-      "sourceUrl": "https://github.com/BerriAI/litellm/releases.atom",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Verify Docker Image Signature\nAll LiteLLM Docker images are signed with cosign. Every release is signed with the same key introduced in commit 0112e53.\nVerify using the pinned commit hash (recommended):\nA commit hash is cryptographically immutable, so this is the strongest way to ensure you are using the original signing key:\ncosign verify \\\n  --key https://raw.githubusercontent.com/BerriAI/litellm/0112e53046018d726492c814b3644b7d376029d0/cosign.pub \\\n  ghcr.io/berriai/litellm:v1.85.5\nVerify using the release tag (convenience):\nTags are protected in this repository and resolve to the same key.",
-      "image": "https://opengraph.githubassets.com/d807466c1b4ffc591b030912a839582e02ccc401b78db32931ca299e3748c41d/BerriAI/litellm/releases/tag/v1.85.5",
-      "published": "2026-06-11T01:55:38+00:00",
-      "firstSeen": "2026-06-11T03:00:01.873730+00:00",
-      "lastSeen": "2026-06-11T09:00:01.779579+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.7938
-    },
-    {
-      "title": "v1.84.7",
-      "url": "https://github.com/BerriAI/litellm/releases/tag/v1.84.7",
-      "source": "LiteLLM Releases",
-      "sourceUrl": "https://github.com/BerriAI/litellm/releases.atom",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Verify Docker Image Signature\nAll LiteLLM Docker images are signed with cosign. Every release is signed with the same key introduced in commit 0112e53.\nVerify using the pinned commit hash (recommended):\nA commit hash is cryptographically immutable, so this is the strongest way to ensure you are using the original signing key:\ncosign verify \\\n  --key https://raw.githubusercontent.com/BerriAI/litellm/0112e53046018d726492c814b3644b7d376029d0/cosign.pub \\\n  ghcr.io/berriai/litellm:v1.84.7\nVerify using the release tag (convenience):\nTags are protected in this repository and resolve to the same key.",
-      "image": "https://opengraph.githubassets.com/aa9ec801a1abb248a814fb43b3cb1fc633d679eb7549b01203c890d68e98f030/BerriAI/litellm/releases/tag/v1.84.7",
-      "published": "2026-06-11T01:33:43+00:00",
-      "firstSeen": "2026-06-11T01:36:13.824543+00:00",
-      "lastSeen": "2026-06-11T09:00:01.779579+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.7847
+      "score": 2.8001
     }
   ],
   "errors": [

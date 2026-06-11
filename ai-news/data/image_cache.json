@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-11T09:00:01.779579+00:00",
+  "updatedAt": "2026-06-11T10:00:01.225358+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -10080,6 +10080,10 @@
     "https://www.theverge.com/ai-artificial-intelligence/948153/deezer-ai-music-detector-spotify-apple": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/NEW_1200-x-580-pixel-SI-logo-1240x600-1.jpeg?quality=90&amp;strip=all&amp;crop=3.7903225806452,0,92.41935483871,100",
       "checkedAt": "2026-06-11T09:00:01.779579+00:00"
+    },
+    "https://github.com/modelcontextprotocol/python-sdk/releases/tag/v2.0.0a1": {
+      "image": "https://opengraph.githubassets.com/cc6ddf659e34112f76c801628a3bcca9b584896e32833db5d192892d56a9ee5f/modelcontextprotocol/python-sdk/releases/tag/v2.0.0a1",
+      "checkedAt": "2026-06-11T10:00:01.225358+00:00"
     }
   }
 }
