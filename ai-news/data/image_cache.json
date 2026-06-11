@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-11T10:00:01.225358+00:00",
+  "updatedAt": "2026-06-11T11:00:01.260610+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -10084,6 +10084,10 @@
     "https://github.com/modelcontextprotocol/python-sdk/releases/tag/v2.0.0a1": {
       "image": "https://opengraph.githubassets.com/cc6ddf659e34112f76c801628a3bcca9b584896e32833db5d192892d56a9ee5f/modelcontextprotocol/python-sdk/releases/tag/v2.0.0a1",
       "checkedAt": "2026-06-11T10:00:01.225358+00:00"
+    },
+    "https://huggingface.co/blog/torch-mlp-fusion": {
+      "image": "https://huggingface.co/blog/assets/torch-mlp-fusion/thumbnail.png",
+      "checkedAt": "2026-06-11T11:00:01.260610+00:00"
     }
   }
 }
