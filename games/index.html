@@ -1123,11 +1123,13 @@
       '2026-06-09/subway-siege-blackout/',
       '2026-06-10/hollow-deep/',
       '2026-06-10/glimmer-grotto/',
-      '2026-06-10/iron-ridge/'
+      '2026-06-10/iron-ridge/',
+      '2026-06-10/eddy/'
     ]);
     const gameHref = g => `${SITE_GAME_PATHS.has(g.path) ? SITE_BASE : LEGACY_BASE}${g.path}`;
     const games = [
       // Featured (polished)
+      { title: 'Eddy',                          path: '2026-06-10/eddy/',                  emoji: '🌀', date: 'Jun 10', cat: 'arcade',    tag: 'featured',    desc: 'Fluid-dynamics herding — you ARE the current. Swipe real simulated water to shepherd a glowing spore bloom past undertows, geysers, cold pockets and anglerfish into the home ring. 10 tides, GPU dye, calm-play bonus, global scores. Touch-first, synth audio' },
       { title: 'Iron Ridge',                    path: '2026-06-10/iron-ridge/',            emoji: '🪖', date: 'Jun 10', cat: 'arcade',    tag: 'featured',    desc: 'Open-field 3D tank combat — real rigid-body physics, rolling procedural forests, destructible everything, ballistic shells, and AI tank duels with global scores. Three.js + cannon-es, keyboard/mouse + touch' },
       { title: 'Glimmer Grotto',                path: '2026-06-10/glimmer-grotto/',        emoji: '⛏️', date: 'Jun 10', cat: 'adventure', tag: 'featured',    desc: 'Cozy gem-mining idyll — dig a sprawling hand-lit underground of crystal caverns, glowing mushroom hollows, hot springs and gilded ruins. No enemies, no death: gems, campfires, upgrades, and a field journal. Touch + keyboard, synth audio' },
       { title: 'Hollow Deep',                   path: '2026-06-10/hollow-deep/',           emoji: '🏮', date: 'Jun 10', cat: 'adventure', tag: 'featured',    desc: 'Eerie deep-cave horror spelunker — GPU ray-marched lantern light with real soft shadows, four biomes of descent, stone decoys vs a thing that hunts by sound, rope physics, relics, global depth leaderboard. Touch + keyboard, synth audio' },
