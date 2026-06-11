@@ -1147,7 +1147,6 @@
       { title: 'Invaders',                      path: '2026-06-05/invaders/',               emoji: '🛸', date: 'Jun 5',  cat: 'arcade',   tag: 'featured',     desc: 'Released mobile-first Space Invaders remix with boss carriers, shield bunkers, power cores, global scores, and arcade particle chaos' },
       { title: 'Fluid Lab',                     path: '2026-06-09/fluid/',                 emoji: '💧', date: 'Jun 9',  cat: 'arcade',   tag: 'demo',         desc: 'Interactive WebGL fluid simulation with dye, bloom, pressure, vorticity, and touchscreen stirring controls' },
       { title: 'Stellar Drift',                 path: '2026-03-25/stellar-drift/',             emoji: '✨', date: 'Mar 25', cat: 'arcade',   tag: 'featured',     desc: 'One-finger auto-fire space shooter' },
-      { title: 'Lantern Creek',                 path: '2026-03-29/lantern-creek/',             emoji: '🏮', date: 'Mar 29', cat: 'puzzle',   tag: 'featured',     desc: 'Guide glowing lanterns down a moonlit stream' },
       { title: 'SUPER STAR TREK',               path: '2026-03-27/star-trek/',                 emoji: '🖖', date: 'Mar 27', cat: 'retro70s', tag: 'featured',     desc: 'The 70s computer classic — reborn with LCARS visuals' },
       { title: 'Asteroids',                     path: '2026-03-08/asteroids/',                 emoji: '☄️', date: 'Mar 8',  cat: 'arcade',   tag: 'featured',     desc: 'Classic asteroids, mobile controls' },
       { title: 'Lunar Lander',                  path: 'lunar-lander/lunar-lander.html',        emoji: '🌕', date: 'Apr 7',  cat: 'arcade',   tag: 'featured',     desc: 'Precision moon landing with retro vibes' },
@@ -1167,7 +1166,6 @@
       { title: 'Subway Siege: Blackout',        path: '2026-06-09/subway-siege-blackout/', emoji: '🔦', date: 'Jun 9',  cat: 'arcade',   tag: 'experimental', desc: 'Top-down blackout tank combat — sweep your searchlight, hunt raider armor hiding in the dark, and hold the subway through escalating waves. One-finger controls, chain-reaction barrels, synth audio, global scores' },
       { title: 'Subway Siege',                  path: '2026-05-30/subway-siege/',          emoji: '🚇', date: 'May 30', cat: 'arcade',   tag: 'experimental', desc: 'Cinematic touch-first subway tunnel defender with raiders, drones, trains, shields, and charge blasts' },
       { title: 'Vortex: Storm Eater',           path: '2026-03-04/vortex/',                    emoji: '🌪️', date: 'Mar 4', cat: 'arcade',   tag: 'experimental', desc: 'Early-build storm shooter' },
-      { title: 'Runecaster',                    path: '2026-03-04/runecaster/',                emoji: '🧙', date: 'Mar 4',  cat: 'arcade',   tag: 'experimental', desc: 'Magic-mechanic prototype' },
       { title: 'Tessera',                       path: '2026-03-04/tessera/',                   emoji: '⬡',  date: 'Mar 4',  cat: 'puzzle',   tag: 'experimental', desc: 'Hex-grid puzzle experiment' },
       { title: 'Slash',                         path: '2026-03-04/slash/',                     emoji: '⚡', date: 'Mar 4',  cat: 'arcade',   tag: 'experimental', desc: 'Reflex swipe-action test' },
       { title: 'Void Echo',                     path: '2026-03-03/void-echo/',                 emoji: '🌌', date: 'Mar 3',  cat: 'arcade',   tag: 'experimental', desc: 'Space-ambient exploration' },
@@ -1182,8 +1180,8 @@
 
     const UNFINISHED = new Set([
       'hard hat mac', 'crystal cavern', 'crystal tavern', 'shatter storm', 'plasma pong',
-      'lantern creek', 'super star trek', 'depth charge', 'ember knight',
-      'subway siege blackout', 'neon invaders', 'vortex storm eater', 'runecaster', 'tessera',
+      'super star trek', 'depth charge', 'ember knight',
+      'subway siege blackout', 'neon invaders', 'vortex storm eater', 'tessera',
       'void echo', 'gravity weaver', 'storm echo', 'choplifter rescue run'
     ]);
     const slugTitle = t => t.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
@@ -1211,8 +1209,8 @@
       ['millipede', 'millipede'], ['emerald', 'crystal'], ['crystal', 'crystal'], ['firework', 'fireworks'],
       ['missile', 'fireworks'], ['asteroid', 'rocket'], ['lunar', 'moon'], ['joust', 'joust'],
       ['hard hat', 'build'], ['shatter', 'brick'], ['pong', 'pong'], ['star trek', 'trek'],
-      ['stellar', 'star'], ['hollow', 'lantern'], ['lantern', 'lantern'], ['qix', 'qix'], ['depth', 'wave'],
-      ['ember', 'sword'], ['blackout', 'tank'], ['subway', 'train'], ['glassrail', 'train'], ['vortex', 'storm'], ['runecaster', 'magic'],
+      ['stellar', 'star'], ['hollow', 'lantern'], ['qix', 'qix'], ['depth', 'wave'],
+      ['ember', 'sword'], ['blackout', 'tank'], ['subway', 'train'], ['glassrail', 'train'], ['vortex', 'storm'],
       ['tessera', 'tessera'], ['slash', 'lightning'], ['void', 'void'], ['gravity', 'web'],
       ['fluid', 'fluid'], ['invaders', 'invaders'], ['choplifter', 'chopper'],
       ['serpent', 'serpent']
