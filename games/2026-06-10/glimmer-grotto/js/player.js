@@ -3,7 +3,7 @@
 import { TILE, REACH, ENERGY_MAX, TILE_DEF, UPGRADES } from './config.js';
 import { clamp, lerp } from './util.js';
 import { IMG } from './assets.js';
-import { solidAt, waterAtPx, damageTile, tileAt } from './world.js';
+import { solidAt, solidAtPx, waterAtPx, damageTile, tileAt } from './world.js';
 import { T_AIR } from './config.js';
 
 const GRAV = 1150, MAX_FALL = 620, WALK = 165, ACCEL = 1300, AIR_ACCEL = 760,
@@ -24,6 +24,7 @@ export class Player {
     this.swingT = 0; this.swinging = false; this.digTarget = null;
     this.buffT = 0;                   // Glimmer Rush seconds remaining
     this.autoHop = 0;                 // step-up assist grace timer
+    this.breachT = 0;                 // water-exit jump cooldown
     this.walkPhase = 0;
     this.sx = 1; this.sy = 1;         // squash & stretch springs
     this.restGlow = 0;                // 1 when resting at fire
@@ -73,7 +74,17 @@ export class Player {
       this.vy += GRAV * 0.22 * dt;
       if (input.down) this.vy = Math.min(this.vy + 520 * dt, 200);   // active dive stroke
       this.vy = clamp(this.vy, -150, input.down ? 200 : 130);
-      if (input.jump) this.vy = Math.max(this.vy - 480 * dt, -150);
+      if (input.jump) {
+        this.vy = Math.max(this.vy - 480 * dt, -150);
+        // breach: once the head clears the surface, leap out onto the bank
+        if (!waterAtPx(this.x, this.y - this.h * 0.9) && !solidAtPx(this.x, this.y - this.h - 8)) {
+          if (this.breachT <= 0)
+            this.events.push({ type: 'splash', x: this.x, y: this.y - this.h * 0.6, v: 220 });
+          this.breachT = 0.25;
+          this.vy = -JUMP_V * 0.85;
+          this.autoHop = 0.3;
+        }
+      }
       this.vy -= this.vy * 1.4 * dt;     // drag
     } else {
       this.vy = Math.min(this.vy + GRAV * dt, MAX_FALL);
@@ -145,6 +156,7 @@ export class Player {
     // -------- glimmer rush wears off
     this.buffT = Math.max(0, this.buffT - dt);
     this.autoHop = Math.max(0, this.autoHop - dt);
+    this.breachT = Math.max(0, this.breachT - dt);
 
     // -------- energy regen & anim springs
     const resting = this.restGlow > 0.5;
