@@ -71,7 +71,8 @@ export class Player {
 
     if (this.inWater) {
       this.vy += GRAV * 0.22 * dt;
-      this.vy = clamp(this.vy, -150, 130);
+      if (input.down) this.vy = Math.min(this.vy + 520 * dt, 200);   // active dive stroke
+      this.vy = clamp(this.vy, -150, input.down ? 200 : 130);
       if (input.jump) this.vy = Math.max(this.vy - 480 * dt, -150);
       this.vy -= this.vy * 1.4 * dt;     // drag
     } else {
@@ -118,12 +119,14 @@ export class Player {
       if (this.aabbSolid(this.x, ny)) ny = this.y;
       if (this.vy > 0) {
         this.onGround = true;
+        // only a real fall counts as a landing (standing micro-contact
+        // oscillates a fraction of a pixel and must stay silent)
         if (!wasGround && this.peakFall > 330) {
           const oof = (this.peakFall - 330) / 290;
           this.energy = Math.max(0, this.energy - Math.min(14, oof * 9));
           this.sx = 1 + clamp(oof, 0, .5) * 0.45; this.sy = 1 - clamp(oof, 0, .5) * 0.4;
           this.events.push({ type: 'land', x: this.x, y: this.y, hard: oof > 0.4 });
-        } else if (!wasGround) {
+        } else if (!wasGround && this.peakFall > 60) {
           this.sx = 1.12; this.sy = 0.9;
           this.events.push({ type: 'land', x: this.x, y: this.y, hard: false });
         }
@@ -132,6 +135,9 @@ export class Player {
       this.vy = 0;
     }
     this.y = ny;
+    // stable footing probe: still grounded if the floor is a hair below
+    if (!this.onGround && this.vy >= 0 && this.aabbSolid(this.x, this.y + 2))
+      this.onGround = true;
 
     // -------- digging
     this.updateDig(dt, input);
@@ -288,15 +294,9 @@ export class Player {
       ctx.globalAlpha = 1;
     }
     ctx.restore();
+    ctx.imageSmoothingEnabled = true;      // painterly-friendly for the hero sprite
     ctx.drawImage(img, -w / 2, -h, w, h);
-
-    // lantern on hip, swaying
-    const limg = IMG['lantern'];
-    ctx.save();
-    ctx.translate(-6, -h * 0.38);
-    ctx.rotate(Math.sin(time * 2.2 + this.x * 0.01) * 0.16 + lean * 1.6);
-    ctx.drawImage(limg, -limg.width / 8, 0, limg.width / 4, limg.height / 4);
-    ctx.restore();
+    ctx.imageSmoothingEnabled = false;
 
     ctx.restore();
 
