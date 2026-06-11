@@ -1714,5 +1714,17 @@
     "slot": "evening",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-06-10-evening-moonlit-oyster-tool-bench",
+    "title": "Moonlit Oyster Tool Bench",
+    "tests": "Generated via openclaw infer image generate primary openai/gpt-image-2 route; exact output path verified; reusable non-paper physical visual template.",
+    "prompt": "Create a finished cinematic square product photograph titled Moonlit Oyster Tool Bench, but do not render any title text or labels in the image. Show a compact seaside repair bench where artisans maintain imaginary moon-oyster instruments: open pearlescent shells held in brass cradle clamps, tiny crescent-shaped files, mother-of-pearl screwdrivers, wet linen pads, brine-filled glass vials, silver tuning forks, waxed cotton thread, shell dust, salt crystals, translucent hinge membranes, blue-black slate work surface, a shallow ceramic rinse bowl, magnifying lens, tarnished brass calipers, and a few softly glowing oyster interiors that cast cold moonlight across the tools. Make it look like a real photographed physical workshop object scene, richly detailed and tactile, with shallow depth of field, condensation, scratches, worn handles, mineral residue, moonlight through a round porthole, and a small warm bench lamp balancing the cool blue glow. Avoid paper sheets, forms, placards, readable text, logos, watermarks, hands, people, dancing, flat layout design, and generic stock-photo styling.\n\nSource photo needed: none.\n\nReusable fill-in-the-blank template: Create a finished reusable physical visual about [TOPIC] using [DATA OR DETAILS], set in [SETTING] with [MOOD] lighting. Build the scene around a tactile workbench, shelf, display case, repair station, miniature set, product mockup, or other non-paper physical arrangement; include [MATERIALS], [TOOLS OR PROPS], [SURFACE DETAILS], and [LIGHTING DETAILS]. Preserve supplied categories, object relationships, mood, and any factual details when provided; invent coherent specifics when not supplied. Avoid paper sheets, forms, placards, readable text, logos, private data, cluttered unreadable labels, people or hands unless requested, and generic stock-photo styling.\n\nWhat to preserve: the supplied topic, categories, object relationships, mood, setting, materials, and any user-provided factual data.\n\nWhat to change: transform the topic into a richly detailed photographed physical workbench or display scene with coherent props, tactile materials, surface wear, environmental context, and cinematic lighting.\n\nExample substitution: [TOPIC] = moon-oyster instrument maintenance bench; [DATA OR DETAILS] = pearlescent shell instruments, brass cradle clamps, crescent files, brine vials, tuning forks, waxed cotton thread, salt crystals, glowing oyster interiors; [SETTING] = compact seaside repair workshop; [MOOD] = cool moonlit and quietly meticulous.",
+    "image": "images/2026-06-10-evening-moonlit-oyster-tool-bench.png",
+    "date": "2026-06-10",
+    "batch": "Daily Prompt",
+    "slot": "evening",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
