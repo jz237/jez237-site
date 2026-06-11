@@ -16,7 +16,7 @@
     { href: ROOT + '/photos/', label: 'Photos', sections: ['photos', 'plants/past-years'] },
     { href: ROOT + '/games/', label: 'Arcade', sections: ['games'] },
     { href: ROOT + '/experiments/ai-explainer/', label: 'How AI Works', sections: ['experiments/ai-explainer'] },
-    { href: ROOT + '/prototypes/hidden-reef/', label: 'Hidden Reef', sections: ['prototypes/hidden-reef'] },
+    { href: 'https://hidden-reef.pages.dev/', label: 'Hidden Reef', sections: ['prototypes/hidden-reef'], external: true },
     { href: ROOT + '/ops/', label: 'Ops', sections: ['ops'] },
     { href: 'https://jz237.github.io/stock-command-center/', label: 'Stocks', external: true },
     { href: 'https://baudersigns.com/', label: 'Bauder Signs', external: true }
