@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-11T03:00:01.873730+00:00",
+  "updatedAt": "2026-06-11T04:00:01.464860+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -10052,6 +10052,18 @@
     "https://github.com/BerriAI/litellm/releases/tag/v1.85.5": {
       "image": "https://opengraph.githubassets.com/d807466c1b4ffc591b030912a839582e02ccc401b78db32931ca299e3748c41d/BerriAI/litellm/releases/tag/v1.85.5",
       "checkedAt": "2026-06-11T03:00:01.873730+00:00"
+    },
+    "https://techcrunch.com/2026/06/10/anthropics-dario-amodei-has-just-one-direct-report": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/Dario-2280291125.jpg?w=1024",
+      "checkedAt": "2026-06-11T04:00:01.464860+00:00"
+    },
+    "https://simonwillison.net/2026/Jun/11/anthropic-walks-back-policy": {
+      "image": "",
+      "checkedAt": "2026-06-11T04:00:01.464860+00:00"
+    },
+    "https://github.com/BerriAI/litellm/releases/tag/v1.86.5": {
+      "image": "https://opengraph.githubassets.com/80d06ba2e609141c1c1e8cf1d9516d0b43e8c6b5e92f80d9b986e8bb3d3f2ead/BerriAI/litellm/releases/tag/v1.86.5",
+      "checkedAt": "2026-06-11T04:00:01.464860+00:00"
     }
   }
 }
