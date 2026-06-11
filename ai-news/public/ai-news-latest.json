@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-11T20:00:01.519726+00:00",
+  "updatedAt": "2026-06-11T19:43:19.251225+00:00",
   "items": [
     {
       "title": "Detecting AI-Generated Content on Social Media with Multi-modal Language Models",
@@ -10,44 +10,12 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-11T20:00:09.204641+00:00",
+      "published": "2026-06-11T19:43:27.487949+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-11T20:00:01.519726+00:00",
+      "lastSeen": "2026-06-11T19:43:19.251225+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
-    },
-    {
-      "title": "SpaceX SPV investors won’t know their true holdings until post-IPO lock-ups lift",
-      "url": "https://techcrunch.com/2026/06/11/spacex-spv-investors-wont-know-their-true-holdings-until-post-ipo-lock-ups-lift",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "After SpaceX makes its public debut, lower-tier SPV investors face hidden fees, lengthy payout delays, and the  risk of outright fraud.",
-      "image": "https://techcrunch.com/wp-content/uploads/2024/08/spacex-in-brief.jpg?resize=1200%2C675",
-      "published": "2026-06-11T19:58:01+00:00",
-      "firstSeen": "2026-06-11T20:00:01.519726+00:00",
-      "lastSeen": "2026-06-11T20:00:01.519726+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.989
-    },
-    {
-      "title": "Grok Is Still Hosting Sexualized Deepfakes of Famous Women",
-      "url": "https://www.wired.com/story/grok-is-still-hosting-sexualized-deepfakes-of-famous-women",
-      "source": "Wired AI",
-      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "A WIRED investigation found dozens of “nudified” deepfake images and videos on Grok's website, including nonconsensual depictions of celebrities and at least one prominent US politician.",
-      "image": "https://media.wired.com/photos/6a2ae8ee8b0f92b3d6867ab3/master/pass/grok-explicit-videos.jpg",
-      "published": "2026-06-11T19:41:01+00:00",
-      "firstSeen": "2026-06-11T20:00:01.519726+00:00",
-      "lastSeen": "2026-06-11T20:00:01.519726+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 8.2804
     },
     {
       "title": "BlackRock ordered $5 billion in SpaceX shares as IPO demand hit $250 billion, nearly 4x oversubscribed",
@@ -59,11 +27,11 @@
       "summary": "BlackRock submitted an order to buy at least $5 billion in SpaceX shares ahead of Friday’s debut, the Wall Street Journal reported. That single order is nearly as large as the entire $5.5 billion Cerebras IPO, the biggest of 2026 so far. SpaceX has told banks it will not budge from its $135 per share [&hellip;]\nThis story continues at The Next Web",
       "image": "https://media.thenextweb.com/2026/06/spacex-ipo-blackrock-5b-order-250b-demand.avif",
       "published": "2026-06-11T19:12:03+00:00",
-      "firstSeen": "2026-06-11T20:00:01.519726+00:00",
-      "lastSeen": "2026-06-11T20:00:01.519726+00:00",
+      "firstSeen": "2026-06-11T19:43:19.251225+00:00",
+      "lastSeen": "2026-06-11T19:43:19.251225+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8258
+      "score": 2.8342
     },
     {
       "title": "Meta adds an AI assistant and desktop version to its CapCut rival Edits",
@@ -75,11 +43,11 @@
       "summary": "Meta is adding an AI assistant and a desktop version to Edits, its video-editing app built to compete with ByteDance’s CapCut. The company previewed the features at an invite-only creator event in Los Angeles on Wednesday. The AI assistant is currently in testing with event attendees. The desktop version is “coming soon.” The AI assistant [&hellip;]\nThis story continues at The Next Web",
       "image": "https://media.thenextweb.com/2026/06/meta-edits-ai-assistant-desktop-capcut.avif",
       "published": "2026-06-11T18:46:41+00:00",
-      "firstSeen": "2026-06-11T20:00:01.519726+00:00",
-      "lastSeen": "2026-06-11T20:00:01.519726+00:00",
+      "firstSeen": "2026-06-11T19:43:19.251225+00:00",
+      "lastSeen": "2026-06-11T19:43:19.251225+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.3133
+      "score": 4.3215
     },
     {
       "title": "Barcelona’s THEKER raises €73M to deploy AI-native factory robots that learn on the job",
@@ -92,10 +60,10 @@
       "image": "https://media.thenextweb.com/2026/06/theker-barcelona-73m-series-a-ai-robotics.avif",
       "published": "2026-06-11T18:15:39+00:00",
       "firstSeen": "2026-06-11T19:00:01.981832+00:00",
-      "lastSeen": "2026-06-11T20:00:01.519726+00:00",
+      "lastSeen": "2026-06-11T19:43:19.251225+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7981
+      "score": 2.8062
     },
     {
       "title": "Bezos’s Prometheus raises $12 billion at $41 billion valuation to build AI that engineers physical products",
@@ -108,10 +76,10 @@
       "image": "https://media.thenextweb.com/2026/06/bezos-prometheus-ai-41-billion-valuation-12b-raise.avif",
       "published": "2026-06-11T18:01:04+00:00",
       "firstSeen": "2026-06-11T19:00:01.981832+00:00",
-      "lastSeen": "2026-06-11T20:00:01.519726+00:00",
+      "lastSeen": "2026-06-11T19:43:19.251225+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0911
+      "score": 2.0991
     },
     {
       "title": "Coinbase launches an AI agent that can trade crypto and pay for research on your behalf",
@@ -124,10 +92,10 @@
       "image": "https://media.thenextweb.com/2026/06/coinbase-ai-agent-trading-x402-payments.avif",
       "published": "2026-06-11T17:43:56+00:00",
       "firstSeen": "2026-06-11T19:00:01.981832+00:00",
-      "lastSeen": "2026-06-11T20:00:01.519726+00:00",
+      "lastSeen": "2026-06-11T19:43:19.251225+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.9828
+      "score": 8.9909
     },
     {
       "title": "Amazon&#8217;s data centers used 2.5 billion gallons of water last year",
@@ -140,10 +108,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/STKS528_DATA_CENTERS2_C.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-11T17:26:57+00:00",
       "firstSeen": "2026-06-11T18:00:01.338579+00:00",
-      "lastSeen": "2026-06-11T20:00:01.519726+00:00",
+      "lastSeen": "2026-06-11T19:43:19.251225+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2847
+      "score": 2.2927
     },
     {
       "title": "Waymo launches a $29.99/month subscription for its most frequent robotaxi riders",
@@ -156,10 +124,10 @@
       "image": "https://media.thenextweb.com/2026/06/waymo-premier-subscription-29-99-robotaxi.avif",
       "published": "2026-06-11T17:18:39+00:00",
       "firstSeen": "2026-06-11T18:00:01.338579+00:00",
-      "lastSeen": "2026-06-11T20:00:01.519726+00:00",
+      "lastSeen": "2026-06-11T19:43:19.251225+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.8708
+      "score": 3.8787
     },
     {
       "title": "Why the next AI safety problem is the conversation between models",
@@ -172,10 +140,10 @@
       "image": "https://media.thenextweb.com/2026/06/ai-safety-problem-conversation-between-models.avif",
       "published": "2026-06-11T16:52:25+00:00",
       "firstSeen": "2026-06-11T18:00:01.338579+00:00",
-      "lastSeen": "2026-06-11T20:00:01.519726+00:00",
+      "lastSeen": "2026-06-11T19:43:19.251225+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 13.4585
+      "score": 13.4663
     },
     {
       "title": "Deezer’s new tool can identify AI music from Spotify, Apple Music, and others",
@@ -188,10 +156,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/03/GettyImages-2180853826.jpg?resize=1200%2C800",
       "published": "2026-06-11T16:36:20+00:00",
       "firstSeen": "2026-06-11T17:00:01.632494+00:00",
-      "lastSeen": "2026-06-11T20:00:01.519726+00:00",
+      "lastSeen": "2026-06-11T19:43:19.251225+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.291
+      "score": 3.2988
     },
     {
       "title": "Your robot can’t be smart, fast, and free. Evolution solved that already.",
@@ -204,10 +172,10 @@
       "image": "https://media.thenextweb.com/2026/06/robot-smart-fast-free-embodied-trilemma.avif",
       "published": "2026-06-11T16:12:40+00:00",
       "firstSeen": "2026-06-11T17:00:01.632494+00:00",
-      "lastSeen": "2026-06-11T20:00:01.519726+00:00",
+      "lastSeen": "2026-06-11T19:43:19.251225+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0401
+      "score": 2.0478
     },
     {
       "title": "Pool’s new app turns your screenshots into something useful",
@@ -220,10 +188,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/hero.jpg?resize=1200%2C704",
       "published": "2026-06-11T15:30:00+00:00",
       "firstSeen": "2026-06-11T16:00:01.225760+00:00",
-      "lastSeen": "2026-06-11T20:00:01.519726+00:00",
+      "lastSeen": "2026-06-11T19:43:19.251225+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2607
+      "score": 3.2683
     },
     {
       "title": "datasette 1.0a33",
@@ -236,11 +204,11 @@
       "image": "https://static.simonwillison.net/static/2026/extras-explorer.png",
       "published": "2026-06-11T15:26:49+00:00",
       "firstSeen": "2026-06-11T19:00:01.981832+00:00",
-      "lastSeen": "2026-06-11T20:00:01.519726+00:00",
+      "lastSeen": "2026-06-11T19:43:19.251225+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 18.9593
+      "score": 18.9668
     },
     {
       "title": "DoorDash’s new AI chatbot lets you order with prompts and photos",
@@ -253,10 +221,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2022/08/GettyImages-1232015093.jpg?resize=1200%2C800",
       "published": "2026-06-11T14:23:43+00:00",
       "firstSeen": "2026-06-11T15:00:01.437040+00:00",
-      "lastSeen": "2026-06-11T20:00:01.519726+00:00",
+      "lastSeen": "2026-06-11T19:43:19.251225+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.6314
+      "score": 4.6387
     },
     {
       "title": "Coram raises $35M to turn security cameras into autonomous AI investigators",
@@ -269,10 +237,10 @@
       "image": "https://media.thenextweb.com/2026/06/Ashesh-Jain-Co-Founder-CEO-Coram-AI.avif",
       "published": "2026-06-11T13:03:18+00:00",
       "firstSeen": "2026-06-11T14:00:02.097955+00:00",
-      "lastSeen": "2026-06-11T20:00:01.519726+00:00",
+      "lastSeen": "2026-06-11T19:43:19.251225+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.657
+      "score": 2.664
     },
     {
       "title": "Save Big and Play Bigger: GeForce NOW Summer Sale Brings Major Membership Savings",
@@ -285,10 +253,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/gfn-thursday-6-11-no-copy-kv-1536x920-1.jpg",
       "published": "2026-06-11T13:00:17+00:00",
       "firstSeen": "2026-06-11T14:00:02.097955+00:00",
-      "lastSeen": "2026-06-11T20:00:01.519726+00:00",
+      "lastSeen": "2026-06-11T19:43:19.251225+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0957
+      "score": 2.1028
     },
     {
       "title": "Canada wants to ban under-16s from social media, and rein in AI chatbots too",
@@ -301,10 +269,10 @@
       "image": "https://media.thenextweb.com/2026/06/carney-canada-ai-strategy-pope-leo.avif",
       "published": "2026-06-11T12:52:12+00:00",
       "firstSeen": "2026-06-11T14:00:02.097955+00:00",
-      "lastSeen": "2026-06-11T20:00:01.519726+00:00",
+      "lastSeen": "2026-06-11T19:43:19.251225+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9523
+      "score": 1.9594
     },
     {
       "title": "Irish fleet-safety firm CameraMatics raises up to €49M to take on Samsara in the US",
@@ -320,7 +288,7 @@
       "lastSeen": "2026-06-11T19:00:01.981832+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9492
+      "score": 1.9562
     },
     {
       "title": "AI bubble fears are spreading, even as SpaceX readies the biggest IPO ever",
@@ -336,7 +304,7 @@
       "lastSeen": "2026-06-11T19:00:01.981832+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.6443
+      "score": 2.6512
     },
     {
       "title": "Germany’s Vsquared is taking on Atomico and Balderton on their London home turf",
@@ -352,7 +320,7 @@
       "lastSeen": "2026-06-11T18:00:01.338579+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9373
+      "score": 1.9442
     },
     {
       "title": "India’s AI Hardware Scrutiny Puts Biometric Devices in Focus",
@@ -365,10 +333,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/06/digital-security-technology-concept-with-fingerpri-2026-03-26-05-32-58-utc-1024x683.jpg?f=jpeg",
       "published": "2026-06-11T12:09:33+00:00",
       "firstSeen": "2026-06-11T15:00:01.437040+00:00",
-      "lastSeen": "2026-06-11T20:00:01.519726+00:00",
+      "lastSeen": "2026-06-11T19:43:19.251225+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -0.0653
+      "score": -0.0584
     },
     {
       "title": "US AI giants are colonising London, and squeezing its startups in the process",
@@ -384,7 +352,7 @@
       "lastSeen": "2026-06-11T18:00:01.338579+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.6324
+      "score": 4.6393
     },
     {
       "title": "What SpaceX’s record IPO really means for the OpenAI and Anthropic listings behind it",
@@ -400,7 +368,7 @@
       "lastSeen": "2026-06-11T18:00:01.338579+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.6233
+      "score": 8.6301
     },
     {
       "title": "Anthropic apologizes for invisible Claude Fable guardrails",
@@ -413,10 +381,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/STKB364_CLAUDE_D.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-11T11:40:43+00:00",
       "firstSeen": "2026-06-11T11:45:43.392005+00:00",
-      "lastSeen": "2026-06-11T20:00:01.519726+00:00",
+      "lastSeen": "2026-06-11T19:43:19.251225+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.533
+      "score": 12.5397
     },
     {
       "title": "Deezer’s new free tool scans your Spotify and Apple Music playlists for AI slop",
@@ -432,7 +400,7 @@
       "lastSeen": "2026-06-11T16:18:33.727685+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0143
+      "score": 3.021
     },
     {
       "title": "Upriver raises $14M to fix the unglamorous layer where enterprise AI quietly breaks: the data",
@@ -448,7 +416,7 @@
       "lastSeen": "2026-06-11T16:18:33.727685+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9093
+      "score": 1.9159
     },
     {
       "title": "Google DeepMind is worried about what happens when millions of agents start to interact",
@@ -461,10 +429,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/06/corralling-agents.jpg?resize=1200%2C600",
       "published": "2026-06-11T11:00:45+00:00",
       "firstSeen": "2026-06-11T11:45:43.392005+00:00",
-      "lastSeen": "2026-06-11T20:00:01.519726+00:00",
+      "lastSeen": "2026-06-11T19:43:19.251225+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 13.247
+      "score": 13.2536
     },
     {
       "title": "Google is funding 300,000 electricians and welders, because the AI boom is running out of them",
@@ -480,7 +448,7 @@
       "lastSeen": "2026-06-11T16:18:33.727685+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.6039
+      "score": 4.6105
     },
     {
       "title": "The US-Philippines AI hub now has a price tag, $10bn, and a 99-year lease on the table",
@@ -496,7 +464,7 @@
       "lastSeen": "2026-06-11T13:00:01.542418+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8935
+      "score": 1.9
     },
     {
       "title": "Mercedes-Benz turns to defence, partnering with startup Tytan to build anti-drone vehicles",
@@ -512,7 +480,7 @@
       "lastSeen": "2026-06-11T13:00:01.542418+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.888
+      "score": 1.8945
     },
     {
       "title": "ShopAgentic raises €1.9M to build commerce infrastructure for AI shopping agents",
@@ -528,7 +496,7 @@
       "lastSeen": "2026-06-11T13:00:01.542418+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2854
+      "score": 5.2919
     },
     {
       "title": "Mississippi residents file a 10,000-strong class action against Musk’s xAI and SpaceX over data-centre noise",
@@ -544,7 +512,7 @@
       "lastSeen": "2026-06-11T13:00:01.542418+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8806
+      "score": 4.887
     },
     {
       "title": "OpenAI plugs Visa into ChatGPT so AI agents can shop and pay at any Visa merchant",
@@ -560,7 +528,7 @@
       "lastSeen": "2026-06-11T11:45:43.392005+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 13.5741
+      "score": 13.5805
     },
     {
       "title": "v2.0.0a1",
@@ -573,10 +541,10 @@
       "image": "https://opengraph.githubassets.com/cc6ddf659e34112f76c801628a3bcca9b584896e32833db5d192892d56a9ee5f/modelcontextprotocol/python-sdk/releases/tag/v2.0.0a1",
       "published": "2026-06-11T09:35:12+00:00",
       "firstSeen": "2026-06-11T10:00:01.225358+00:00",
-      "lastSeen": "2026-06-11T20:00:01.519726+00:00",
+      "lastSeen": "2026-06-11T19:43:19.251225+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 0.2437
+      "score": 0.2501
     },
     {
       "title": "South Korea hits Coupang with record $409 million fine over massive data breach",
@@ -592,7 +560,7 @@
       "lastSeen": "2026-06-11T11:45:43.392005+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9729
+      "score": 2.9793
     },
     {
       "title": "OpenAI and Anthropic keep warning about AI risks, then releasing bigger models and filing for IPOs",
@@ -608,7 +576,7 @@
       "lastSeen": "2026-06-11T11:45:43.392005+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 9.6204
+      "score": 9.6268
     },
     {
       "title": "Italian fintech unicorn Satispay reportedly plans €120M raise to push into stock trading",
@@ -624,7 +592,7 @@
       "lastSeen": "2026-06-11T11:00:01.260610+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8662
+      "score": 1.8725
     },
     {
       "title": "China’s state-run Workers’ Daily calls for a ‘dam’ to protect labour rights as AI spreads",
@@ -640,7 +608,39 @@
       "lastSeen": "2026-06-11T11:00:01.260610+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2125
+      "score": 2.2188
+    },
+    {
+      "title": "Meta has cut Manus off from its internal systems and told staff to sunset the AI platform",
+      "url": "https://thenextweb.com/news/meta-manus-data-split-china-unwind-acquisition",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Meta has erected a data firewall between itself and Manus, the Chinese-founded agentic AI service it acquired for $2 billion in December 2025. Since the start of June, Manus and its staff have been barred from accessing Meta’s internal data systems, and Meta employees can no longer use Manus tools for internal projects, according to Bloomberg. [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/Meta-Manus.avif",
+      "published": "2026-06-11T08:41:12+00:00",
+      "firstSeen": "2026-06-11T10:00:01.225358+00:00",
+      "lastSeen": "2026-06-11T11:00:01.260610+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 3.5596
+    },
+    {
+      "title": "CoreWeave’s borrowing costs just fell from 10% to 7%. The AI data centre debt market is repricing risk in real time.",
+      "url": "https://thenextweb.com/news/coreweave-credit-rebound-applied-digital-junk-bond-data-center",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "An Applied Digital subsidiary raised $1.59 billion in the high-yield bond market on Tuesday to fund a fourth building at its Polaris Forge 1 campus in North Dakota, which will provide 150 megawatts of computing capacity for CoreWeave under a 15-year contract. The bonds were priced to yield 7%, a steep drop from the 10% investors demanded [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/coreweave-anthropic-multi-year-cloud-deal.avif",
+      "published": "2026-06-11T08:26:59+00:00",
+      "firstSeen": "2026-06-11T10:00:01.225358+00:00",
+      "lastSeen": "2026-06-11T11:00:01.260610+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.9543
     },
     {
       "title": "The Life Scientific: Helen Hastie",
@@ -653,10 +653,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-08T20:00:00+00:00",
       "firstSeen": "2026-06-08T21:00:01.371488+00:00",
-      "lastSeen": "2026-06-11T20:00:01.519726+00:00",
+      "lastSeen": "2026-06-11T19:43:19.251225+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.3389
+      "score": 1.34
     },
     {
       "title": "The Life Scientific: Seth Berkley",
@@ -669,7 +669,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-01T20:00:00+00:00",
       "firstSeen": "2026-06-01T21:00:01.828388+00:00",
-      "lastSeen": "2026-06-11T20:00:01.519726+00:00",
+      "lastSeen": "2026-06-11T19:43:19.251225+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 1.1914
@@ -709,9 +709,14 @@
   ],
   "errors": [
     {
+      "source": "Artificial Intelligence News",
+      "url": "https://www.artificialintelligence-news.com/categories/artificial-intelligence/feed/",
+      "error": "not well-formed (invalid token): line 1, column 158"
+    },
+    {
       "source": "MarkTechPost",
       "url": "https://www.marktechpost.com/feed/",
-      "error": "HTTP Error 403: Forbidden"
+      "error": "not well-formed (invalid token): line 1, column 119"
     }
   ]
 }

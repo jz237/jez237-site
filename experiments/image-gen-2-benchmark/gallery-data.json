@@ -1750,5 +1750,17 @@
     "slot": "morning",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-06-11-afternoon-tool-as-botanical-bone-artifact",
+    "title": "Tool as Botanical Bone Artifact",
+    "tests": "reference-photo-template; finished physical artifact; no rendered instructions; non-paper tactile scene",
+    "prompt": "Use the uploaded reference photo and preserve the tool's identity, camera angle, silhouette, proportions, handle shape, blade or working-end shape, joints, holes, worn edges, surface wear, and most recognizable construction details, then transform a vintage garden trowel into a botanical bone artifact in a natural-history conservation tray. Rebuild the trowel as smooth aged bone with root-vein inlays, carved seed-pod fittings, polished ivory highlights, amber resin seams, mineral staining, moss caught in shallow grooves, and embedded dry seed husks; set it on dark green felt with brass calipers, a bone-handled brush, seed vials, loose root fibers, museum pins, dust, warm raking cabinet light, and cool window fill. Keep the source tool recognizable while changing the material logic, surface texture, props, and environment into a cohesive photographed physical artifact. Avoid duplicate tools, broken geometry, text/logo artifacts, readable labels, paper prompt cards, people or hands unless requested, and losing recognizability.\n\nSource photo needed: a clear tool photo.\n\nReusable fill-in-the-blank template: Use the uploaded reference photo and preserve the [OBJECT] identity, camera angle, silhouette, proportions, handle shape, working-end shape, joints, holes, surface wear, distinctive markings, and most recognizable construction details, then transform [OBJECT] into a botanical bone artifact made from [MATERIAL] in [SETTING] with [MOOD] lighting. Keep the source recognizable while changing the material logic, surface texture, props, and environment into a cohesive natural-history specimen. Avoid duplicate objects, broken geometry, text/logo artifacts, readable labels, paper prompt cards, people or hands unless requested, and losing recognizability.\n\nWhat to preserve: the source tool's identity, camera angle, silhouette, proportions, handle, blade or working end, joints, holes, worn edges, surface wear, and distinctive construction details.\n\nWhat to change: convert metal, wood, plastic, rubber, and grime into aged bone, root-vein inlay, seed-pod fittings, amber resin seams, mineral stains, moss, seed husks, conservation-tray props, museum workbench textures, and mixed warm/cool artifact lighting.\n\nExample substitution: Upload a clear three-quarter photo of a chipped garden trowel with a short wooden handle and hanging hole; preserve its scoop blade, neck joint, handle silhouette, worn edges, and proportions, then turn it into a smooth botanical bone artifact on a dark green felt natural-history workbench tray.",
+    "image": "images/2026-06-11-afternoon-tool-as-botanical-bone-artifact.png",
+    "date": "2026-06-11",
+    "batch": "Daily Prompt",
+    "slot": "afternoon",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
