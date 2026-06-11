@@ -20,6 +20,7 @@ export class Input {
 
     window.addEventListener('keydown', (e) => {
       if (e.repeat) return;
+      if (e.target instanceof HTMLInputElement) return; // typing initials, not commands
       this.keys.add(e.code);
       if (e.code === 'Space') { this.fireQueued = true; e.preventDefault(); }
       if (e.code === 'KeyR') this.reloadQueued = true;
