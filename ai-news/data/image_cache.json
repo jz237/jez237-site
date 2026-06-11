@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-11T04:00:01.464860+00:00",
+  "updatedAt": "2026-06-11T05:00:01.120432+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -10064,6 +10064,10 @@
     "https://github.com/BerriAI/litellm/releases/tag/v1.86.5": {
       "image": "https://opengraph.githubassets.com/80d06ba2e609141c1c1e8cf1d9516d0b43e8c6b5e92f80d9b986e8bb3d3f2ead/BerriAI/litellm/releases/tag/v1.86.5",
       "checkedAt": "2026-06-11T04:00:01.464860+00:00"
+    },
+    "https://techcrunch.com/2026/06/10/opendoors-india-exit-is-fueling-a-bigger-conversation-about-ai-and-outsourcing": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/opendoor.jpg?resize=1200,800",
+      "checkedAt": "2026-06-11T05:00:01.120432+00:00"
     }
   }
 }
