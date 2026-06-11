@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-11T22:00:01.780912+00:00",
+  "updatedAt": "2026-06-11T22:13:09.544537+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -10156,6 +10156,10 @@
     "https://www.techrepublic.com/article/news-ev-makers-tesla-humanoid-robots-apac-china": {
       "image": "https://assets.techrepublic.com/uploads/2026/06/tr-06112026-ev-makers-tesla-humanoid-robots-1.jpg?f=jpeg",
       "checkedAt": "2026-06-11T21:00:01.613107+00:00"
+    },
+    "https://www.techrepublic.com/article/news-apple-mac-studio-cheat-sheet": {
+      "image": "",
+      "checkedAt": "2026-06-11T22:13:09.544537+00:00"
     }
   }
 }
