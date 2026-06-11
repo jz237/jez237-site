@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-11T18:00:01.338579+00:00",
+  "updatedAt": "2026-06-11T19:00:01.981832+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -10128,6 +10128,10 @@
     "https://openai.com/index/bbva": {
       "image": "https://images.ctfassets.net/kftzwdyauwt9/6aZ6IYFFucrCH6XAzgfWch/598c66ed8e8c99885ea6cf34c27f2258/oai_BBVA_SEO.png?w=1600&amp;h=900&amp;fit=fill",
       "checkedAt": "2026-06-11T18:00:01.338579+00:00"
+    },
+    "https://simonwillison.net/2026/Jun/11/asyncinject": {
+      "image": "",
+      "checkedAt": "2026-06-11T19:00:01.981832+00:00"
     }
   }
 }
