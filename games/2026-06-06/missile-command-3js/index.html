@@ -294,7 +294,7 @@
   <section class="overlay" id="title">
     <div class="panel">
       <h1>Missile Command 3JS</h1>
-      <p>A real Three.js remake of our Missile Command 3D idea: defend a glowing valley city from descending warheads, MIRV splits, and bomber runs with one finger.</p>
+      <p>A real Three.js remake of our Missile Command 3D idea: defend a glowing valley city from descending warheads, MIRV splits, and bomber runs with one finger or a mouse.</p>
       <div class="brief">
         <div><b>One finger</b><span>Tap the sky to fire. Drag between shots to line up the next burst.</span></div>
         <div><b>Three silos</b><span>The nearest loaded battery fires. Ammo refreshes each wave.</span></div>
@@ -303,7 +303,7 @@
       <h2>Threats</h2>
       <p>Red streaks target cities. Gold MIRVs split mid-flight. Purple bombers cross the horizon and drop fast warheads.</p>
       <div class="row">
-        <span class="tiny">v1.1 · First tap unlocks sound</span>
+        <span class="tiny">v1.2 · Enter launches · First tap or click unlocks sound</span>
         <div class="row" style="margin-top:0">
           <button class="secondary" id="scoresBtn">High Scores</button>
           <button id="startBtn">Launch Defense</button>
@@ -1266,6 +1266,7 @@
     function resize() {
       const w = innerWidth;
       const h = innerHeight;
+      renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 2));
       renderer.setSize(w, h, false);
       camera.aspect = w / h;
       if (w < 680) {
@@ -1304,8 +1305,22 @@
     });
 
     canvas.addEventListener('pointerdown', e => { e.preventDefault(); handleAim(e, true); }, { passive: false });
-    canvas.addEventListener('pointermove', e => { if (e.buttons || e.pointerType === 'touch') handleAim(e, false); }, { passive: false });
-    canvas.addEventListener('pointerup', e => { e.preventDefault(); hideReticleSoon(); }, { passive: false });
+    canvas.addEventListener('pointermove', e => { if (e.buttons || e.pointerType === 'touch' || e.pointerType === 'mouse') handleAim(e, false); }, { passive: false });
+    canvas.addEventListener('pointerup', e => { e.preventDefault(); if (e.pointerType !== 'mouse') hideReticleSoon(); }, { passive: false });
+    canvas.addEventListener('pointerleave', e => { if (e.pointerType === 'mouse') reticle.style.opacity = '0'; });
+    addEventListener('keydown', e => {
+      if (e.repeat) return;
+      if (e.key === 'Enter') {
+        if (!title.classList.contains('hidden')) document.getElementById('startBtn').click();
+        else if (!scores.classList.contains('hidden')) document.getElementById('backBtn').click();
+        else if (!gameOver.classList.contains('hidden')) {
+          if (!initialEntry.classList.contains('hidden')) initials.querySelector(':scope > button')?.click();
+          else document.getElementById('restartBtn').click();
+        }
+      } else if (e.key === 'Escape' && !scores.classList.contains('hidden')) {
+        document.getElementById('backBtn').click();
+      }
+    });
     document.addEventListener('touchmove', e => {
       if (e.target.closest('button') || e.target.closest('.overlay')) return;
       e.preventDefault();

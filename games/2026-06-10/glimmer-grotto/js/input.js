@@ -141,7 +141,7 @@ export function pollInput(screenToWorld) {
     const w = screenToWorld(p.x, p.y);
     input.aimX = w.x; input.aimY = w.y;
   }
-  input.dig = !!(keys.KeyX || keys.KeyJ) || touchState.dig || mouseAiming || touchAiming;
+  input.dig = !!keys.KeyX || touchState.dig || mouseAiming || touchAiming;
 }
 
 export function consumeInteract() {
