@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#02060d">
 <meta name="description" content="EDDY — you are the current. Swipe real simulated water to herd a glowing spore bloom past drains, geysers and anglerfish into the home ring.">
+<meta property="og:title" content="EDDY — you are the current">
+<meta property="og:description" content="Swipe real simulated water to herd a glowing spore bloom past drains, geysers and anglerfish. 10 tides, global scores.">
+<meta property="og:type" content="website">
 <title>EDDY — you are the current</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8C%80%3C/text%3E%3C/svg%3E">
 <style>
@@ -557,7 +560,7 @@ const LEVELS=[
   spores:80,target:.55,time:60,energy:2800,
   spawn:{x:.5,y:.8,r:.13},pool:{x:.5,y:.15,r:.095}},
  {name:'The Narrows',hint:'Thread the gap — or surge them through in one wave.',
-  spores:90,target:.55,time:75,energy:2700,
+  spores:90,target:.5,time:80,energy:2700,
   spawn:{x:.5,y:.82,r:.13},pool:{x:.5,y:.13,r:.09},
   rocks:[{x1:-.05,y1:.46,x2:.3,y2:.46,r:.055},{x1:.7,y1:.46,x2:1.05,y2:.46,r:.055}]},
  {name:'Undertow',hint:'The undertow never sleeps. Route the bloom around its pull.',
@@ -609,6 +612,7 @@ let spores=[];      /* {x,y,vx,vy,ph,spr} */
 let absorbs=[];     /* {x,y,t} cosmetic */
 let fxp=[];         /* particles {x,y,vx,vy,t,dur,col,sz,kind} */
 let pool=null,drains=[],vents=[],rocks=[],urchins=[],colds=[],preds=[];
+let tutOn=false,tutT=0,shakeOn=false; /* first-run hint + vent shake */
 
 function layoutLevel(){
   const L=LEVELS[Game.lv],m=Game.minDim(),W=VIEW.w,H=VIEW.h;
@@ -683,6 +687,7 @@ function startLevel(n){
 }
 function beginPlay(){
   Game.state='PLAY';
+  tutOn=(Game.lv===0&&Store.d.runs===0);tutT=0;
   spawnSpores();
   UI.show('hud');UI.hide('card');UI.hide('title');
   UI.hud();
@@ -712,9 +717,10 @@ function runOver(win){
 const pointers=new Map();
 let strokeHue=185;
 function strokeSeg(x0,y0,x1,y1,dtm){ /* dtm ms */
-  if(!Sim.u)return; /* pre-boot */
+  if(!Sim.u||Game.state==='PAUSE')return; /* pre-boot, or stirring while paused */
   const dx=x1-x0,dy=y1-y0,len=hyp(dx,dy);
   if(len<1)return;
+  if(Game.state==='PLAY')tutOn=false;
   const dts=Math.max(dtm,4)/1000;
   /* target velocity in cells/s */
   let vcx=(dx/dts)/Sim.cellW,vcy=(dy/dts)/Sim.cellH;
@@ -874,12 +880,18 @@ function updatePreds(dt){
     /* weak hunger: drift toward nearest spore */
     let best=null,bd=260*260;
     for(const s of spores){
+      if(pool&&hyp(s.x-pool.x,s.y-pool.y)<pool.r*1.15)continue; /* don't hunt into sanctuary */
       const dd=(s.x-p.x)*(s.x-p.x)+(s.y-p.y)*(s.y-p.y);
       if(dd<bd){bd=dd;best=s}
     }
     if(best){
       const d=Math.sqrt(bd)||1;
       p.vx+=(best.x-p.x)/d*26*dt;p.vy+=(best.y-p.y)/d*26*dt;
+    }
+    /* the home ring is sanctuary — anglers shy from its light */
+    if(pool){
+      const dx=p.x-pool.x,dy=p.y-pool.y,dd=hyp(dx,dy),rr=pool.r*1.5;
+      if(dd<rr&&dd>1){const F=(1-dd/rr)*480*dt;p.vx+=dx/dd*F;p.vy+=dy/dd*F}
     }
     p.wob+=dt*3;
     const spd=hyp(p.vx,p.vy);
@@ -915,7 +927,17 @@ function draw2D(now){
   const d=VIEW.dpr;
   ctx.setTransform(d,0,0,d,0,0);
   ctx.clearRect(0,0,VIEW.w,VIEW.h);
-  const inPlay=Game.state==='PLAY'||Game.state==='RESULT';
+  const inPlay=Game.state==='PLAY'||Game.state==='RESULT'||Game.state==='PAUSE';
+  /* vent shake: jolt both layers, decay handled in gameUpdate */
+  if(Game.shake>0){
+    const a=Game.shake*Game.shake*5;
+    const ox=(Math.random()*2-1)*a,oy=(Math.random()*2-1)*a;
+    glC.style.transform=fxC.style.transform=`translate(${ox.toFixed(1)}px,${oy.toFixed(1)}px)`;
+    shakeOn=true;
+  }else if(shakeOn){
+    shakeOn=false;
+    glC.style.transform=fxC.style.transform='';
+  }
   /* cold zones */
   for(const c of colds){
     const g=ctx.createRadialGradient(c.x,c.y,0,c.x,c.y,c.r);
@@ -1042,6 +1064,26 @@ function draw2D(now){
     ctx.fillStyle='rgba(220,250,255,.8)';ctx.beginPath();ctx.arc(6,-3,1.8,0,TAU);ctx.fill();
     ctx.restore();
   }
+  /* first-run hint: pulsing motes drift the path from bloom to ring */
+  if(tutOn&&Game.state==='PLAY'&&pool){
+    tutT+=.016;
+    if(tutT>9)tutOn=false;
+    const L0=LEVELS[0],sx=L0.spawn.x*VIEW.w,sy=L0.spawn.y*VIEW.h;
+    ctx.globalCompositeOperation='lighter';
+    for(let k=0;k<3;k++){
+      const t=((tutT*.42)+k*.33)%1;
+      const x=lerp(sx,pool.x,t),y=lerp(sy,pool.y,t);
+      const a=Math.sin(t*Math.PI)*.5;
+      const g=ctx.createRadialGradient(x,y,0,x,y,15);
+      g.addColorStop(0,`rgba(180,240,255,${a})`);g.addColorStop(1,'rgba(180,240,255,0)');
+      ctx.fillStyle=g;ctx.beginPath();ctx.arc(x,y,15,0,TAU);ctx.fill();
+    }
+    ctx.globalCompositeOperation='source-over';
+    ctx.fillStyle=`rgba(205,240,255,${.5+.3*Math.sin(tutT*3)})`;
+    ctx.font='600 15px ui-rounded,system-ui,sans-serif';
+    ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillText('swipe the water — sweep the bloom home',VIEW.w/2,lerp(sy,pool.y,.5));
+  }
   /* fx particles */
   for(let i=fxp.length-1;i>=0;i--){
     const f=fxp[i];f.t+=.016;
@@ -1108,6 +1150,7 @@ const UI={
       `<div class="rows"><div><span>herd home</span><span>${Math.ceil(L.spores*L.target)} of ${L.spores} ✦</span></div>`+
       `<div><span>tide window</span><span>${L.time}s</span></div></div>`+
       `<p class="how" style="font-size:13.5px;color:#9fc9da">${L.hint}</p>`+
+      (n===0?`<p class="haz" style="margin:4px 0 10px"><span style="color:#7df2da">▰</span> tide left · <span style="color:#ffd87a">▰</span> calm — gentler currents score more</p>`:'')+
       `<button class="btn" id="bGo">RELEASE THE BLOOM</button>`;
     $('bGo').onclick=()=>{Au.init();Au.resume();Au.tick();beginPlay()};
   },
@@ -1146,6 +1189,16 @@ const UI={
     $('bMark').onclick=()=>{Au.tick();UI.entry()};
     $('bAgain').onclick=()=>{Au.tick();startRun()};
   },
+  pause(){
+    Game.state='PAUSE';this.show('card');
+    $('card').innerHTML=
+      `<p class="sub">held still</p><h2>THE TIDE WAITS</h2>`+
+      `<p class="how">the bloom drifts. the clock holds its breath.</p>`+
+      `<button class="btn" id="bRes">RESUME</button>`+
+      `<button class="btn ghost" id="bAband">ABANDON RUN</button>`;
+    $('bRes').onclick=()=>{Au.tick();Game.state='PLAY';UI.hide('card')};
+    $('bAband').onclick=()=>{Au.tick();UI.title()};
+  },
   entry(){
     this.hide('card');this.show('entry');
     $('eScore').textContent=fmt(Game.score);
@@ -1174,7 +1227,12 @@ function startRun(){
 
 /* buttons */
 $('bPlay').onclick=()=>{Au.init();Au.resume();Au.tick();startRun()};
-$('bQuit').onclick=()=>{Au.tick();UI.title()};
+$('bQuit').onclick=()=>{
+  Au.tick();
+  if(Game.state==='PLAY')UI.pause();
+  else if(Game.state==='PAUSE'){Game.state='PLAY';UI.hide('card')}
+  else UI.title();
+};
 const muteLbl=()=>{
   $('bMute').textContent=Store.d.muted?'∅':'♪';
   $('bMute2').textContent=Store.d.muted?'∅ sound off':'♪ sound on';
@@ -1192,6 +1250,8 @@ $('bSend').onclick=async()=>{
 };
 $('bSkip').onclick=()=>{Au.tick();UI.title()};
 $('eIni').addEventListener('input',e=>{e.target.value=e.target.value.toUpperCase().replace(/[^A-Z]/g,'')});
+$('eIni').addEventListener('keydown',e=>{if(e.key==='Enter')$('bSend').click()});
+window.addEventListener('contextmenu',e=>{if(e.target.tagName!=='INPUT')e.preventDefault()});
 
 /* ---------------- ambient title attractor ---------------- */
 let ambT=0;
@@ -1227,8 +1287,12 @@ function gameUpdate(dt,now){
     acc-=STEP;sub++;
   }
   if(acc>=STEP)acc=0; /* drop backlog if we can't keep up */
+  Game.shake=Math.max(0,Game.shake-dt*2.2);
   if(Game.state==='PLAY'){
+    const tPrev=Math.ceil(Game.t);
     Game.t-=dt;
+    const tNow=Math.ceil(Game.t);
+    if(tNow<tPrev&&tNow<=5&&tNow>0)Au.tick();
     updateSpores(dt);
     updatePreds(dt);
     if(Game.state==='PLAY'&&Game.t<=0){
@@ -1275,7 +1339,7 @@ window.addEventListener('resize',()=>{
     }
   },180);
 });
-document.addEventListener('visibilitychange',()=>{if(!document.hidden)last=performance.now()});
+document.addEventListener('visibilitychange',()=>{if(!document.hidden){last=performance.now();Au.resume()}});
 
 /* ---------------- debug hooks (headless testing) ---------------- */
 window.__g={
@@ -1295,7 +1359,8 @@ window.__g={
     }
   },
   timeout(){if(Game.state==='PLAY'){Game.t=.01}},
-  vel:(x,y)=>Sim.velAtPx(x,y)
+  vel:(x,y)=>Sim.velAtPx(x,y),
+  get tut(){return tutOn}
 };
 
 boot();
