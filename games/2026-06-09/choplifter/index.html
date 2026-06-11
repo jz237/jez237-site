@@ -258,7 +258,7 @@
    Single-file canvas game. Mobile one-finger + desktop keyboard.
    ========================================================================== */
 (function () {
-const VERSION = 'v1.1.0';
+const VERSION = 'v1.2.0';
 const SCORES_API = 'https://game-scores.jez237.workers.dev/scores/choplifter';
 const HS_KEY = 'choplifter_highscores_v1';
 const MUTE_KEY = 'choplifter_muted';
@@ -357,6 +357,8 @@ const Audio2 = (function () {
     hit() { noise(0.2, 0.4, 500); blip(160, 0.18, 'square', 0.2, 80); },
     land() { blip(180, 0.12, 'sine', 0.18, 120); },
     lowFuel() { blip(520, 0.12, 'square', 0.22, 380); setTimeout(() => blip(520, 0.12, 'square', 0.22, 380), 180); },
+    missile() { noise(0.3, 0.3, 2200); blip(220, 0.5, 'sawtooth', 0.2, 700); },
+    extraLife() { [659, 784, 988, 1318, 1568].forEach((f, i) => setTimeout(() => blip(f, 0.16, 'triangle', 0.3), i * 80)); },
     win() { [523,659,784,1046,1318].forEach((f,i)=>setTimeout(()=>blip(f,0.22,'triangle',0.3),i*120)); },
     lose() { [400,330,260,180].forEach((f,i)=>setTimeout(()=>blip(f,0.3,'sawtooth',0.28,f*0.6),i*150)); },
     toggleMute() { muted = !muted; localStorage.setItem(MUTE_KEY, muted ? '1' : '0'); if (master && ac) master.gain.setTargetAtTime(muted ? 0 : 0.9, ac.currentTime, 0.05); return muted; },
@@ -393,6 +395,7 @@ const G = {
   result: 'lose',
   deathT: 0,   // frames until respawn / game-over after losing the chopper
   waveT: 0,    // frames until the next wave builds
+  lostThisWave: 0,
 };
 
 const heli = {
@@ -419,8 +422,14 @@ let pickups = [];      // fuel
 let homeBase = { x: 240, w: 200 };  // landing pad / friendly base at left
 let stars = [];
 let rings = [];        // explosion shockwaves
+let wrecks = [];       // burnt-out tank hulls
+let popups = [];       // floating score text
+let meteors = [];      // shooting stars (screen space)
+let lights = [];       // sweeping searchlights in enemy territory
 let toastTimer = 0;
 let fuelWarn = 0;      // 0 ok | 1 low warned | 2 critical warned | 3 empty warned
+const LIFE_EVERY = 7500;
+let nextLifeAt = LIFE_EVERY;
 
 // ===========================================================================
 //  INPUT
@@ -491,6 +500,8 @@ function showDragHint() {
 // ===========================================================================
 function buildLevel(wave) {
   enemies = []; hostages = []; bullets = []; particles = []; pickups = []; buildings = [];
+  wrecks = []; popups = []; lights = [];
+  G.lostThisWave = 0;
   homeBase = { x: 240, w: 210 };
 
   // skyline buildings across the map (enemy territory to the right)
@@ -509,11 +520,15 @@ function buildLevel(wave) {
   G.totalHostages = totalHostages;
   const zoneStart = homeBase.x + homeBase.w + 500;
   const zoneEnd = WORLD_W - 360;
+  const SHIRTS = ['#d8a06a', '#c46a6a', '#6a9ac4', '#9a7ac4', '#6ab48a'];
   for (let b = 0; b < numBarracks; b++) {
     const zx = zoneStart + (zoneEnd - zoneStart) * (b / Math.max(1, numBarracks - 1)) + rnd(-60, 60);
     buildings.push({ x: zx - 60, w: 120, h: 54, type: 'barracks' });
+    if (b < 3) lights.push({ x: zx + rnd(-140, 140), phase: rnd(0, 6.28), speed: rnd(0.004, 0.007), spread: 0.10 });
     for (let i = 0; i < 4; i++) {
-      hostages.push({ x: zx + rnd(-44, 44), y: 0, vx: 0, state: 'wait', anim: Math.random() * 6.28, frame: 0, blink: 0 });
+      hostages.push({ x: zx + rnd(-44, 44), y: 0, vx: 0, state: 'wait', anim: Math.random() * 6.28, frame: 0, blink: 0,
+        shirt: SHIRTS[Math.floor(Math.random() * SHIRTS.length)],
+        hairc: Math.random() < 0.5 ? '#3a2c20' : '#6a5440' });
     }
   }
 
@@ -530,10 +545,18 @@ function buildLevel(wave) {
   for (let i = 0; i < nJets; i++) {
     enemies.push(mkJet());
   }
+  // SAM sites from wave 2 — launch slow homing missiles you can shoot down
+  const nSams = Math.min(3, Math.max(0, wave - 1));
+  for (let i = 0; i < nSams; i++) {
+    enemies.push(mkSam(zoneStart + (zoneEnd - zoneStart) * ((i + 0.5) / nSams) + rnd(-80, 80)));
+  }
 
-  // fuel pickups
+  // pickups: fuel cans + hull-repair wrenches
   for (let i = 0; i < 2 + Math.floor(wave / 2); i++) {
     pickups.push({ x: rnd(zoneStart, zoneEnd), y: 0, type: 'fuel', bob: Math.random() * 6.28, taken: false });
+  }
+  for (let i = 0; i < 1 + Math.floor(wave / 3); i++) {
+    pickups.push({ x: rnd(zoneStart, zoneEnd), y: 0, type: 'wrench', bob: Math.random() * 6.28, taken: false });
   }
 
   // stars
@@ -554,6 +577,18 @@ function mkJet() {
   return { type: 'jet', x: dir === 1 ? -120 : WORLD_W + 120, y: rnd(VH * 0.12, VH * 0.34),
     w: 60, h: 18, hp: 1, vx: dir * rnd(4.5, 6.5), fireCd: rnd(40, 90), dead: false, alpha: 1, respawn: rnd(120, 360) };
 }
+function mkSam(x) {
+  return { type: 'sam', x, y: 0, w: 36, h: 20, hp: 3, fireCd: rnd(240, 420), dish: rnd(0, 6.28), dead: false, alpha: 1 };
+}
+function mkMissile(x, y) {
+  return { type: 'missile', x, y, w: 16, h: 8, hp: 1, ang: -Math.PI / 2, speed: 2.2, life: 420, dead: false, alpha: 1 };
+}
+function boomMissile(e) {
+  e.dead = true; e.hp = 0;
+  Audio2.explosion();
+  spawnParticles(e.x, e.y, 16, { smax: 4, lmax: 34 });
+  rings.push({ x: e.x, y: e.y, max: 34, life: 12, maxLife: 12 });
+}
 
 // ===========================================================================
 //  HELPERS
@@ -571,6 +606,17 @@ function shake(mag, time) { G.shakeMag = Math.max(G.shakeMag, mag); G.shakeT = M
 function toast(text, dur) {
   const el = document.getElementById('toast');
   el.textContent = text; el.classList.add('show'); toastTimer = dur || 90;
+}
+// score with optional floating popup; handles extra-life thresholds
+function addScore(n, x, y, label, color) {
+  G.score += n;
+  if (x != null) popups.push({ x, y, text: label || ('+' + n), life: 70, maxLife: 70, color: color || '#ffd95c' });
+  if (G.score >= nextLifeAt) {
+    nextLifeAt += LIFE_EVERY;
+    G.lives++;
+    toast('EXTRA CHOPPER!', 100);
+    Audio2.extraLife();
+  }
 }
 function spawnParticles(x, y, n, opts) {
   opts = opts || {};
@@ -594,6 +640,7 @@ function startGame() {
   G.state = 'play'; G.t = 0; G.score = 0; G.lives = 3; G.wave = 1; G.kills = 0;
   G.savedHome = 0; G.aboard = 0; G.lost = 0; G.cam = 0;
   G.deathT = 0; G.waveT = 0;
+  nextLifeAt = LIFE_EVERY;
   pointer.used = false;
   showDragHint();
   resetHeli(true);
@@ -613,12 +660,12 @@ function resetHeli(full) {
 }
 function nextWave() {
   G.wave++;
-  G.score += 500 + G.savedHome * 50;
+  addScore(500 + G.savedHome * 50);
   G.deathT = 0;
   buildLevel(G.wave);
   resetHeli(false);
   heli.fuel = Math.min(100, heli.fuel + 40);
-  toast('WAVE ' + G.wave + ' — GO!', 110);
+  toast('WAVE ' + G.wave + (G.wave === 2 ? ' — SAM SITES SPOTTED!' : ' — GO!'), 120);
   Audio2.win();
 }
 function loseLife(reason) {
@@ -635,6 +682,7 @@ function loseLife(reason) {
     toast('LOST ' + G.aboard + ' ABOARD', 100);
     hostages.forEach(h => { if (h.state === 'aboard') h.state = 'lost'; });
     G.lost += G.aboard;
+    G.lostThisWave += G.aboard;
     G.aboard = 0;
   }
   G.deathT = 84;   // ~1.4s, counted in update() so pause and quit behave
@@ -683,6 +731,7 @@ function update(dt) {
   // wave complete: every hostage accounted for (home or lost with the chopper)
   const remaining = hostages.filter(h => h.state !== 'home' && h.state !== 'lost').length;
   if (heli.alive && remaining === 0 && hostages.length > 0) {
+    if (G.lostThisWave === 0) addScore(300, heli.x, heli.y - 46, 'NO ONE LEFT BEHIND +300', '#7dffae');
     if (G.wave >= 5) { endGame(true); }
     else { hostages = []; G.waveT = 30; }
   }
@@ -809,9 +858,11 @@ function tryDeliver() {
   if (G.aboard > 0 && Math.abs(heli.vx) < 1.5) {
     const n = G.aboard;
     G.savedHome += n; G.aboard = 0;
-    G.score += n * 100;
-    hostages.forEach(h => { if (h.state === 'aboard') { h.state = 'home'; } });
-    toast('+' + (n * 100) + '  ' + n + ' SAVED!', 90);
+    // they hop out and run into HQ (state 'delivered' walks to the door)
+    hostages.forEach(h => { if (h.state === 'aboard') { h.state = 'delivered'; h.x = heli.x + rnd(-12, 12); h.frame = 0; } });
+    addScore(n * 100, heli.x, heli.y - 30, '+' + (n * 100), '#7dffae');
+    if (n >= G.maxAboard) addScore(250, heli.x, heli.y - 52, 'FULL LOAD +250');
+    toast(n + ' SAVED!', 90);
     Audio2.deliver();
     spawnParticles(heli.x, groundY(), 18, { color: '#7dffae', angle: -1.57, spread: 1, smax: 4, lmax: 40 });
   }
@@ -864,11 +915,13 @@ function damageHeli(dmg) {
 
 function killEnemy(e) {
   e.dead = true; G.kills++;
-  G.score += e.type === 'jet' ? 150 : e.type === 'drone' ? 80 : 120;
+  const pts = e.type === 'jet' ? 150 : e.type === 'drone' ? 80 : e.type === 'sam' ? 200 : e.type === 'missile' ? 50 : 120;
+  addScore(pts, e.x, e.y - 12);
   Audio2.explosion(); shake(10, 16);
   spawnParticles(e.x, e.y, 28, { smax: 6, lmax: 50, rmax: 5 });
   spawnParticles(e.x, e.y, 10, { color: '#fff', smax: 5, fade: 'spark' });
   rings.push({ x: e.x, y: e.y, max: 56, life: 16, maxLife: 16 });
+  if (e.type === 'tank' || e.type === 'sam') wrecks.push({ x: e.x, t: 0 });
 }
 
 function updateEnemies() {
@@ -928,10 +981,42 @@ function updateEnemies() {
         e.x = dir === 1 ? -120 : WORLD_W + 120; e.vx = dir * rnd(4.5, 6.5);
         e.y = rnd(VH * 0.12, VH * 0.34);
       }
+    } else if (e.type === 'sam') {
+      e.y = gY - 10;
+      e.dish += 0.03;
+      if (onScreen && heli.alive && heli.x > homeBase.x + homeBase.w) {
+        e.fireCd--;
+        const inFlight = enemies.filter(m => m.type === 'missile' && !m.dead).length;
+        if (e.fireCd <= 0 && inFlight < 2 && Math.abs(e.x - heli.x) < 760) {
+          enemies.push(mkMissile(e.x, e.y - 16));
+          e.fireCd = rnd(430, 620);
+          Audio2.missile();
+          spawnParticles(e.x, e.y - 14, 8, { color: '#cfd8ff', angle: -1.57, spread: 0.7, smax: 3, lmax: 22 });
+        }
+      }
+    } else if (e.type === 'missile') {
+      e.life--;
+      if (e.life <= 0 || e.y > gY - 4) { boomMissile(e); continue; }
+      // homing: limited turn rate so it can be outmaneuvered, slower than the heli
+      if (heli.alive) {
+        const want = Math.atan2(heli.y - e.y, heli.x - e.x);
+        let d = want - e.ang;
+        while (d > Math.PI) d -= 2 * Math.PI;
+        while (d < -Math.PI) d += 2 * Math.PI;
+        e.ang += clamp(d, -0.045, 0.045);
+      }
+      e.speed = Math.min(4.6, e.speed + 0.07);
+      e.x += Math.cos(e.ang) * e.speed;
+      e.y += Math.sin(e.ang) * e.speed;
+      if (G.t % 2 === 0) spawnParticles(e.x - Math.cos(e.ang) * 10, e.y - Math.sin(e.ang) * 10, 1,
+        { color: 'rgba(200,200,210,0.45)', smax: 0.6, lmin: 14, lmax: 26, grav: -0.01, fade: 'smoke', rmin: 1.5, rmax: 3 });
+      if (heli.alive && heli.invuln <= 0 && Math.hypot(heli.x - e.x, heli.y - e.y) < 26) {
+        damageHeli(30); boomMissile(e); continue;
+      }
     }
 
-    // enemy collision with heli body (tanks/drones)
-    if (e.type !== 'jet' && heli.alive && heli.invuln <= 0 &&
+    // enemy collision with heli body (tanks/drones/sam — missiles have their own fuse)
+    if (e.type !== 'jet' && e.type !== 'missile' && heli.alive && heli.invuln <= 0 &&
         aabb(e.x - e.w/2, e.y - e.h/2, e.w, e.h, heli.x - heli.w/2, heli.y - heli.h/2, heli.w, heli.h)) {
       damageHeli(34);
     }
@@ -966,6 +1051,13 @@ function updateHostages() {
         h.state = 'aboard'; G.aboard++; Audio2.pickup();
         spawnParticles(heli.x, gY - 10, 6, { color: '#7dffae', angle: -1.57, spread: 0.8, smax: 2, lmax: 20 });
       }
+    } else if (h.state === 'delivered') {
+      // jog from the pad into the HQ doorway, then they're home
+      const door = homeBase.x + 33;
+      const dx = door - h.x;
+      h.x += clamp(dx, -1.9, 1.9);
+      h.frame = (h.frame + 0.35) % 4;
+      if (Math.abs(dx) < 4) h.state = 'home';
     }
   }
 }
@@ -977,9 +1069,11 @@ function updatePickups() {
     p.bob += 0.06;
     p.y = gY - 30 + Math.sin(p.bob) * 6;
     if (heli.alive && aabb(heli.x - heli.w/2, heli.y - heli.h/2, heli.w, heli.h, p.x - 14, p.y - 14, 28, 28)) {
-      p.taken = true; heli.fuel = Math.min(100, heli.fuel + 35);
-      Audio2.pickup(); toast('+FUEL', 50);
-      spawnParticles(p.x, p.y, 12, { color: '#7dffae', smax: 4, lmax: 30 });
+      p.taken = true;
+      if (p.type === 'fuel') { heli.fuel = Math.min(100, heli.fuel + 35); toast('+FUEL', 50); }
+      else { heli.hp = Math.min(100, heli.hp + 40); toast('+HULL REPAIR', 50); }
+      Audio2.pickup();
+      spawnParticles(p.x, p.y, 12, { color: p.type === 'fuel' ? '#7dffae' : '#4fd0e8', smax: 4, lmax: 30 });
     }
   }
 }
@@ -992,6 +1086,27 @@ function updateParticles() {
   }
   for (let i = rings.length - 1; i >= 0; i--) {
     if (--rings[i].life <= 0) rings.splice(i, 1);
+  }
+  for (let i = popups.length - 1; i >= 0; i--) {
+    const p = popups[i]; p.y -= 0.5;
+    if (--p.life <= 0) popups.splice(i, 1);
+  }
+  // burning wrecks smoulder for a while, then fade out
+  for (let i = wrecks.length - 1; i >= 0; i--) {
+    const w = wrecks[i]; w.t++;
+    if (w.t < 200 && w.t % 7 === 0) spawnParticles(w.x + rnd(-10, 10), groundY() - 12, 1,
+      { color: 'rgba(70,66,76,0.5)', angle: -1.57, spread: 0.4, smax: 1.2, lmin: 24, lmax: 44, grav: -0.05, fade: 'smoke', rmin: 3, rmax: 6 });
+    if (w.t < 160 && w.t % 23 === 0) spawnParticles(w.x + rnd(-8, 8), groundY() - 8, 1,
+      { color: '#ff8a3c', smax: 1.5, lmax: 14, grav: -0.02 });
+    if (w.t > 700) wrecks.splice(i, 1);
+  }
+  // the occasional shooting star (screen space)
+  if (VW > 0 && meteors.length < 2 && Math.random() < 0.003) {
+    meteors.push({ x: rnd(0, VW), y: rnd(20, VH * 0.3), vx: rnd(4, 7), vy: rnd(1.2, 2.4), life: rnd(26, 40), maxLife: 40 });
+  }
+  for (let i = meteors.length - 1; i >= 0; i--) {
+    const m = meteors[i]; m.x += m.vx; m.y += m.vy;
+    if (--m.life <= 0) meteors.splice(i, 1);
   }
 }
 function drawRings() {
@@ -1010,7 +1125,7 @@ function drawGuideArrow() {
   else {
     let bd = Infinity;
     for (const h of hostages) {
-      if (h.state === 'home' || h.state === 'lost' || h.state === 'aboard') continue;
+      if (h.state === 'home' || h.state === 'lost' || h.state === 'aboard' || h.state === 'delivered') continue;
       const d = Math.abs(h.x - heli.x);
       if (d < bd) { bd = d; tx = h.x; }
     }
@@ -1053,9 +1168,12 @@ function render() {
   ctx.translate(-G.cam, 0);
   drawStars();
   drawFarMountains();
+  drawMidHills();
+  drawSearchlights();
   drawHomeBase();
   drawBuildings();
   drawGround();
+  drawWrecks();
   drawPickups();
   drawHostages();
   drawEnemies();
@@ -1063,6 +1181,7 @@ function render() {
   if (heli.alive) drawHeli();
   drawParticles();
   drawRings();
+  drawPopups();
   ctx.restore();
 
   ctx.restore();
@@ -1109,6 +1228,14 @@ function drawSky() {
   }
   ctx.restore();
 
+  // shooting stars
+  for (const m of meteors) {
+    const a = clamp(m.life / m.maxLife, 0, 1);
+    ctx.strokeStyle = 'rgba(220,235,255,' + (a * 0.8) + ')';
+    ctx.lineWidth = 1.5; ctx.lineCap = 'round';
+    ctx.beginPath(); ctx.moveTo(m.x, m.y); ctx.lineTo(m.x - m.vx * 4, m.y - m.vy * 4); ctx.stroke();
+  }
+
   // distant city silhouette behind the mountains
   const gY = groundY();
   ctx.fillStyle = 'rgba(24,26,58,0.9)';
@@ -1149,6 +1276,76 @@ function drawFarMountains() {
     ctx.lineTo(x + off + 160, gY);
   }
   ctx.lineTo(WORLD_W + off, gY); ctx.closePath(); ctx.fill();
+}
+
+function drawMidHills() {
+  const gY = groundY();
+  ctx.fillStyle = 'rgba(56,46,96,0.45)';
+  ctx.beginPath(); ctx.moveTo(0, gY);
+  // mid layer at 0.55× the camera (drawn in world space: x + 0.45×cam)
+  const off = G.cam * 0.45;
+  for (let x = -240; x < WORLD_W; x += 120) {
+    const h = 36 + Math.sin(x * 0.016 + 2) * 22 + Math.cos(x * 0.031) * 14;
+    ctx.lineTo(x + off + 60, gY - h);
+    ctx.lineTo(x + off + 120, gY);
+  }
+  ctx.lineTo(WORLD_W + off, gY); ctx.closePath(); ctx.fill();
+}
+
+function drawSearchlights() {
+  const gY = groundY();
+  ctx.save();
+  ctx.globalCompositeOperation = 'lighter';
+  for (const L of lights) {
+    const ang = -Math.PI / 2 + Math.sin(G.t * L.speed + L.phase) * 0.55;
+    const len = VH * 0.75;
+    const g = ctx.createLinearGradient(L.x, gY, L.x + Math.cos(ang) * len, gY + Math.sin(ang) * len);
+    g.addColorStop(0, 'rgba(180,200,255,0.11)');
+    g.addColorStop(1, 'rgba(180,200,255,0)');
+    ctx.fillStyle = g;
+    ctx.beginPath();
+    ctx.moveTo(L.x, gY);
+    ctx.lineTo(L.x + Math.cos(ang - L.spread) * len, gY + Math.sin(ang - L.spread) * len);
+    ctx.lineTo(L.x + Math.cos(ang + L.spread) * len, gY + Math.sin(ang + L.spread) * len);
+    ctx.closePath(); ctx.fill();
+    ctx.fillStyle = 'rgba(200,220,255,0.5)';
+    ctx.fillRect(L.x - 2, gY - 4, 4, 4);
+  }
+  ctx.restore();
+}
+
+function drawWrecks() {
+  const gY = groundY();
+  for (const w of wrecks) {
+    const a = w.t > 550 ? clamp(1 - (w.t - 550) / 150, 0, 1) : 1;
+    ctx.save(); ctx.translate(w.x, gY); ctx.globalAlpha = a;
+    ctx.fillStyle = '#1c1a18'; ctx.fillRect(-24, -10, 48, 10);
+    ctx.fillStyle = '#26221e'; ctx.beginPath(); ctx.arc(-2, -10, 9, Math.PI, 0); ctx.fill();
+    ctx.strokeStyle = '#332e28'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(4, -14); ctx.lineTo(14, -24); ctx.stroke();
+    if (w.t < 300) {
+      const em = 0.5 + 0.5 * Math.sin(G.t * 0.3 + w.x);
+      ctx.fillStyle = 'rgba(255,120,60,' + (0.35 * em) + ')';
+      ctx.fillRect(-10, -8, 5, 3); ctx.fillRect(6, -6, 4, 3);
+    }
+    ctx.restore();
+  }
+}
+
+function drawPopups() {
+  if (!popups.length) return;
+  ctx.save();
+  ctx.font = '800 13px "Segoe UI", sans-serif';
+  ctx.textAlign = 'center'; ctx.lineJoin = 'round';
+  for (const p of popups) {
+    ctx.globalAlpha = clamp(p.life / p.maxLife * 1.4, 0, 1);
+    ctx.strokeStyle = 'rgba(0,0,0,0.6)'; ctx.lineWidth = 3;
+    ctx.strokeText(p.text, p.x, p.y);
+    ctx.fillStyle = p.color;
+    ctx.fillText(p.text, p.x, p.y);
+  }
+  ctx.restore();
+  ctx.textAlign = 'left';
 }
 
 function drawGround() {
@@ -1242,14 +1439,16 @@ function drawBuildings() {
 function drawPickups() {
   for (const p of pickups) {
     if (p.taken) continue;
+    const fuel = p.type === 'fuel';
+    const glow = fuel ? '#7dffae' : '#4fd0e8';
     ctx.save(); ctx.translate(p.x, p.y);
     const gl = 0.5 + 0.5 * Math.sin(p.bob * 2);
-    ctx.shadowColor = '#7dffae'; ctx.shadowBlur = 8 + gl * 6;
-    ctx.fillStyle = '#1a3326'; ctx.fillRect(-11, -14, 22, 28);
-    ctx.fillStyle = '#7dffae'; ctx.fillRect(-11, -14, 22, 5);
+    ctx.shadowColor = glow; ctx.shadowBlur = 8 + gl * 6;
+    ctx.fillStyle = fuel ? '#1a3326' : '#16283a'; ctx.fillRect(-11, -14, 22, 28);
+    ctx.fillStyle = glow; ctx.fillRect(-11, -14, 22, 5);
     ctx.shadowBlur = 0;
-    ctx.fillStyle = '#caffd9'; ctx.font = 'bold 13px sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-    ctx.fillText('⛽', 0, 2);
+    ctx.fillStyle = fuel ? '#caffd9' : '#cdeeff'; ctx.font = 'bold 13px sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText(fuel ? '⛽' : '🔧', 0, 2);
     ctx.restore();
   }
   ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
@@ -1261,9 +1460,9 @@ function drawHostages() {
     if (h.state === 'aboard' || h.state === 'home' || h.state === 'lost') continue;
     ctx.save(); ctx.translate(h.x, gY);
     const waving = h.state === 'wait';
-    const running = h.state === 'run' || h.state === 'boarding';
+    const running = h.state === 'run' || h.state === 'boarding' || h.state === 'delivered';
     // body
-    ctx.fillStyle = '#d8a06a'; // shirt
+    ctx.fillStyle = h.shirt || '#d8a06a'; // shirt
     ctx.fillRect(-4, -18, 8, 11);
     ctx.fillStyle = '#2c3e66'; // legs
     if (running) {
@@ -1272,10 +1471,11 @@ function drawHostages() {
     } else {
       ctx.fillRect(-4, -8, 3, 8); ctx.fillRect(1, -8, 3, 8);
     }
-    // head
+    // head + hair
     ctx.fillStyle = '#f0c89a'; ctx.beginPath(); ctx.arc(0, -22, 4, 0, 6.28); ctx.fill();
+    ctx.fillStyle = h.hairc || '#3a2c20'; ctx.fillRect(-4, -27, 8, 3);
     // arms
-    ctx.strokeStyle = '#d8a06a'; ctx.lineWidth = 2.5; ctx.lineCap = 'round';
+    ctx.strokeStyle = h.shirt || '#d8a06a'; ctx.lineWidth = 2.5; ctx.lineCap = 'round';
     if (waving) {
       const wv = Math.sin(h.anim) * 0.5;
       ctx.beginPath(); ctx.moveTo(-3, -16); ctx.lineTo(-9, -24 + wv * 4); ctx.stroke();
@@ -1294,6 +1494,8 @@ function drawEnemies() {
     if (e.type === 'tank') drawTank(e);
     else if (e.type === 'drone') drawDrone(e);
     else if (e.type === 'jet') drawJet(e);
+    else if (e.type === 'sam') drawSam(e);
+    else if (e.type === 'missile') drawMissile(e);
     ctx.restore();
   }
 }
@@ -1357,6 +1559,42 @@ function drawJet(e) {
   ctx.beginPath(); ctx.moveTo(-2, -2); ctx.lineTo(-14, -12); ctx.lineTo(-6, -2); ctx.fill();
   // canopy
   ctx.fillStyle = '#9fd8ff'; ctx.beginPath(); ctx.ellipse(10, -2, 7, 3, 0, 0, 6.28); ctx.fill();
+  ctx.restore();
+}
+
+function drawSam(e) {
+  ctx.save(); ctx.translate(e.x, e.y);
+  // tracked base
+  ctx.fillStyle = '#1a1f1a'; ctx.fillRect(-20, 2, 40, 8);
+  ctx.fillStyle = '#3a4434'; ctx.fillRect(-18, -6, 36, 9);
+  // missile rack angled up
+  ctx.save(); ctx.translate(2, -6); ctx.rotate(-0.9);
+  ctx.fillStyle = '#4a5544'; ctx.fillRect(0, -3, 24, 6);
+  ctx.fillStyle = '#ff7b5b'; ctx.fillRect(20, -3, 4, 6);
+  ctx.restore();
+  // sweeping radar dish
+  ctx.save(); ctx.translate(-10, -8); ctx.rotate(Math.sin(e.dish) * 0.6);
+  ctx.strokeStyle = '#9fb2dd'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.arc(0, -4, 6, Math.PI * 0.15, Math.PI * 0.85, true); ctx.stroke();
+  ctx.restore();
+  // warning light
+  const wl = 0.5 + 0.5 * Math.sin(G.t * 0.25);
+  ctx.fillStyle = 'rgba(255,91,110,' + (0.4 + wl * 0.6) + ')';
+  ctx.beginPath(); ctx.arc(12, -9, 2, 0, 6.283); ctx.fill();
+  ctx.restore();
+}
+function drawMissile(e) {
+  ctx.save(); ctx.translate(e.x, e.y); ctx.rotate(e.ang);
+  // exhaust flame
+  ctx.fillStyle = 'rgba(255,180,90,0.85)';
+  const fl = 6 + Math.random() * 6;
+  ctx.beginPath(); ctx.moveTo(-8, -2); ctx.lineTo(-8 - fl, 0); ctx.lineTo(-8, 2); ctx.fill();
+  // body + warhead + fins
+  ctx.fillStyle = '#aab4c8'; ctx.fillRect(-8, -2.5, 16, 5);
+  ctx.fillStyle = '#ff5b6e'; ctx.beginPath(); ctx.moveTo(8, -2.5); ctx.lineTo(13, 0); ctx.lineTo(8, 2.5); ctx.fill();
+  ctx.fillStyle = '#7e8aa0';
+  ctx.beginPath(); ctx.moveTo(-8, -2.5); ctx.lineTo(-12, -6); ctx.lineTo(-6, -2.5); ctx.fill();
+  ctx.beginPath(); ctx.moveTo(-8, 2.5); ctx.lineTo(-12, 6); ctx.lineTo(-6, 2.5); ctx.fill();
   ctx.restore();
 }
 
@@ -1520,14 +1758,19 @@ function drawMinimap() {
   mctx.fillStyle = '#7dffae'; mctx.fillRect(homeBase.x * sc, h - 9, homeBase.w * sc, 5);
   // barracks/hostages
   hostages.forEach(ho => {
-    if (ho.state === 'home' || ho.state === 'aboard' || ho.state === 'lost') return;
+    if (ho.state === 'home' || ho.state === 'aboard' || ho.state === 'lost' || ho.state === 'delivered') return;
     mctx.fillStyle = '#ffd95c'; mctx.fillRect(ho.x * sc - 1, h - 10, 2, 4);
   });
   // enemies
   enemies.forEach(e => {
     if (e.dead) return;
-    mctx.fillStyle = e.type === 'jet' ? '#ff9b5b' : '#ff5b6e';
-    mctx.fillRect(e.x * sc - 1, (e.type === 'tank' ? h - 9 : h * 0.4), 2, 3);
+    let col = '#ff5b6e', y = h * 0.4;
+    if (e.type === 'tank') y = h - 9;
+    else if (e.type === 'sam') { y = h - 9; col = '#ff9b5b'; }
+    else if (e.type === 'jet') col = '#ff9b5b';
+    else if (e.type === 'missile') { y = h * 0.3; col = '#ffd95c'; }
+    mctx.fillStyle = col;
+    mctx.fillRect(e.x * sc - 1, y, 2, 3);
   });
   // viewport window
   mctx.strokeStyle = 'rgba(255,255,255,0.4)'; mctx.lineWidth = 1;
@@ -1559,8 +1802,8 @@ document.getElementById('btn-mute').onclick = () => { const m = Audio2.toggleMut
 if (Audio2.isMuted()) document.getElementById('snd-on').style.opacity = '0.2';
 
 document.getElementById('howto-body').innerHTML = isTouch
-  ? 'One finger flies everything:<br><b>Touch &amp; drag</b> — the chopper chases your finger.<br><b>Release</b> — it eases down for a gentle landing.<br>🔫 The gun <b>auto-fires</b> at enemies ahead of the nose.<br><br>🚁 Settle near the <b>barracks</b> to load survivors.<br>🏠 Carry them back to the <b>green pad</b> to score — landing there also <b>refuels</b> you.<br>⛽ Grab fuel cans. Don\'t dive into the ground, run dry, or get shot down.<br><br>Clear all 5 waves to win!'
-  : '<kbd>↑</kbd>/<kbd>W</kbd> lift · <kbd>←</kbd><kbd>→</kbd>/<kbd>A</kbd><kbd>D</kbd> fly &amp; turn · or just <b>drag with the mouse</b><br>🔫 The gun <b>auto-fires</b> at enemies ahead — <kbd>Space</kbd>/<kbd>F</kbd> force-fires<br><kbd>P</kbd>/<kbd>Esc</kbd> pause · <kbd>Enter</kbd> start &amp; restart · <kbd>M</kbd> mute<br><br>🚁 Land gently near the <b>barracks</b> to load survivors.<br>🏠 Fly them back to the <b>green base pad</b> to score — landing there also <b>refuels</b> you.<br>⛽ Grab fuel cans. Don\'t dive into the ground, run dry, or get shot down.<br><br>Clear all 5 waves to win!';
+  ? 'One finger flies everything:<br><b>Touch &amp; drag</b> — the chopper chases your finger.<br><b>Release</b> — it eases down for a gentle landing.<br>🔫 The gun <b>auto-fires</b> at enemies ahead of the nose.<br><br>🚁 Settle near the <b>barracks</b> to load survivors.<br>🏠 Carry them back to the <b>green pad</b> to score — landing there also <b>refuels</b> you.<br>⛽ Fuel cans refuel · 🔧 wrenches repair the hull.<br>🚀 From wave 2, SAM sites launch homing missiles — shoot them down or outrun them.<br><br>Clear all 5 waves to win!'
+  : '<kbd>↑</kbd>/<kbd>W</kbd> lift · <kbd>←</kbd><kbd>→</kbd>/<kbd>A</kbd><kbd>D</kbd> fly &amp; turn · or just <b>drag with the mouse</b><br>🔫 The gun <b>auto-fires</b> at enemies ahead — <kbd>Space</kbd>/<kbd>F</kbd> force-fires<br><kbd>P</kbd>/<kbd>Esc</kbd> pause · <kbd>Enter</kbd> start &amp; restart · <kbd>M</kbd> mute<br><br>🚁 Land gently near the <b>barracks</b> to load survivors.<br>🏠 Fly them back to the <b>green base pad</b> to score — landing there also <b>refuels</b> you.<br>⛽ Fuel cans refuel · 🔧 wrenches repair the hull.<br>🚀 From wave 2, SAM sites launch homing missiles — shoot them down or outrun them.<br><br>Clear all 5 waves to win!';
 
 // ---- leaderboard ---------------------------------------------------------
 function getLocal() { try { return JSON.parse(localStorage.getItem(HS_KEY)) || []; } catch (e) { return []; } }
@@ -1683,8 +1926,9 @@ document.addEventListener('visibilitychange', () => {
 });
 
 // headless-verification hooks (same convention as the other games)
-window.__g = { G, heli, startGame, loseLife, nextWave, update, render,
-  get hostages() { return hostages; }, get enemies() { return enemies; } };
+window.__g = { G, heli, startGame, loseLife, nextWave, update, render, addScore, damageHeli,
+  get hostages() { return hostages; }, get enemies() { return enemies; },
+  get pickups() { return pickups; }, get popups() { return popups; }, get wrecks() { return wrecks; } };
 })();
 </script>
 </body>
