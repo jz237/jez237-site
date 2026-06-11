@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-11T19:43:19.251225+00:00",
+  "updatedAt": "2026-06-11T21:00:01.613107+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -10136,6 +10136,26 @@
     "https://www.anthropic.com/news/dxc-anthropic-alliance": {
       "image": "https://www.anthropic.com/api/opengraph-illustration?name=Hand%20Megaphone&amp;backgroundColor=coral",
       "checkedAt": "2026-06-11T19:43:19.251225+00:00"
+    },
+    "https://techcrunch.com/2026/06/11/spacex-officially-prices-shares-at-135-in-the-largest-ipo-ever": {
+      "image": "https://techcrunch.com/wp-content/uploads/2022/07/spacex-falcon-9.jpeg?resize=1200,675",
+      "checkedAt": "2026-06-11T21:00:01.613107+00:00"
+    },
+    "https://techcrunch.com/2026/06/11/spacex-spv-investors-wont-know-their-true-holdings-until-post-ipo-lock-ups-lift": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/20260511_Wet_Dress_Actual_2_259bcb3ae9.jpg?resize=1200,899",
+      "checkedAt": "2026-06-11T21:00:01.613107+00:00"
+    },
+    "https://www.techrepublic.com/article/news-google-ai-overviews-legal-risks": {
+      "image": "https://assets.techrepublic.com/uploads/2026/06/7b363b99-02b1-4778-ab19-4bfe4ba0aafe.png?f=jpeg",
+      "checkedAt": "2026-06-11T21:00:01.613107+00:00"
+    },
+    "https://www.techrepublic.com/article/news-litellm-cisa-ai-gateway-service-account-governance": {
+      "image": "https://assets.techrepublic.com/uploads/2026/06/Untitled-design-19.png?f=jpeg",
+      "checkedAt": "2026-06-11T21:00:01.613107+00:00"
+    },
+    "https://www.techrepublic.com/article/news-ev-makers-tesla-humanoid-robots-apac-china": {
+      "image": "https://assets.techrepublic.com/uploads/2026/06/tr-06112026-ev-makers-tesla-humanoid-robots-1.jpg?f=jpeg",
+      "checkedAt": "2026-06-11T21:00:01.613107+00:00"
     }
   }
 }
