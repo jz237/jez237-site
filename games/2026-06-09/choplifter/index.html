@@ -198,6 +198,7 @@
     <button class="btn" id="btn-start">▶ START MISSION</button>
     <button class="btn secondary" id="btn-howto">HOW TO PLAY</button>
     <p class="muted" id="best-line" style="margin-top:16px"></p>
+    <p class="muted" id="version-line" style="margin-top:8px;font-size:.68rem;opacity:.75"></p>
   </div>
 
   <!-- How to play -->
@@ -252,6 +253,7 @@
    Single-file canvas game. Mobile one-finger + desktop keyboard.
    ========================================================================== */
 (function () {
+const VERSION = 'v1.0.1';
 const SCORES_API = 'https://game-scores.jez237.workers.dev/scores/choplifter';
 const HS_KEY = 'choplifter_highscores_v1';
 const MUTE_KEY = 'choplifter_muted';
@@ -262,12 +264,18 @@ const mini = document.getElementById('minimap');
 const mctx = mini.getContext('2d');
 
 // ---- responsive sizing --------------------------------------------------
-let VW = 0, VH = 0, DPR = 1;
+// Game logic runs at phone-ish height (max 960 logical px) no matter the
+// monitor; the canvas is CSS-scaled to fill the window. Landscape game, so
+// we fill the full width (no gutters) — sprite scale and pacing match phones.
+let VW = 0, VH = 0, DPR = 1, viewScale = 1;
 function resize() {
-  DPR = Math.min(window.devicePixelRatio || 1, 2);
-  VW = window.innerWidth; VH = window.innerHeight;
+  const vw = window.innerWidth, vh = window.innerHeight;
+  VH = Math.min(vh, 960);
+  viewScale = vh / VH;
+  VW = Math.floor(vw / viewScale);
+  DPR = Math.min(viewScale * Math.min(window.devicePixelRatio || 1, 2), VW * VH > 500000 ? 2.4 : 3);
   canvas.width = Math.floor(VW * DPR); canvas.height = Math.floor(VH * DPR);
-  canvas.style.width = VW + 'px'; canvas.style.height = VH + 'px';
+  canvas.style.width = vw + 'px'; canvas.style.height = vh + 'px';
   ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
   const mw = mini.clientWidth, mh = mini.clientHeight;
   mini.width = Math.floor(mw * DPR); mini.height = Math.floor(mh * DPR);
@@ -411,39 +419,63 @@ let toastTimer = 0;
 const input = { left: false, right: false, lift: false, fire: false };
 const keys = {};
 window.addEventListener('keydown', (e) => {
+  // typing initials: let the field have the keys, Enter submits
+  if (e.target && e.target.tagName === 'INPUT') {
+    if (e.key === 'Enter') document.getElementById('btn-submit').click();
+    return;
+  }
   if (['ArrowLeft','ArrowRight','ArrowUp','ArrowDown',' '].includes(e.key)) e.preventDefault();
-  keys[e.key.toLowerCase()] = true;
-  if (e.key === 'Escape' || e.key.toLowerCase() === 'p') togglePause();
+  const k = e.key.toLowerCase();
+  if (e.key === 'Enter') {
+    if (G.state === 'title') { Audio2.resume(); startGame(); }
+    else if (G.state === 'over') { Audio2.resume(); startGame(); }
+    else if (G.state === 'pause') togglePause();
+    return;
+  }
+  if (k === 'm' && !e.repeat) { document.getElementById('btn-mute').click(); return; }
+  keys[k] = true;
+  if (G.state === 'play') hideDragHint();
+  if (e.key === 'Escape' || k === 'p') togglePause();
 });
 window.addEventListener('keyup', (e) => { keys[e.key.toLowerCase()] = false; });
 function readKeys() {
   if (G.state !== 'play') return;
   input.left  = keys['arrowleft']  || keys['a'];
   input.right = keys['arrowright'] || keys['d'];
-  input.lift  = keys['arrowup']    || keys['w'] || keys[' '];
-  input.fire  = keys['arrowdown']  || keys['s'] || keys['f'] || keys['control'] || keys['shift'];
+  input.lift  = keys['arrowup']    || keys['w'];
+  input.fire  = keys['arrowdown']  || keys['s'] || keys['f'] || keys[' '] || keys['control'] || keys['shift'];
 }
 
 // one-finger flight: drag anywhere — the chopper chases a point above your finger.
-// Works with mouse on desktop too.
+// Works with mouse drag on desktop too. Listens window-level so tracking holds
+// across the whole screen; buttons, inputs and overlays opt out. Coordinates are
+// divided by viewScale into the logical space the game simulates in.
 const pointer = { active: false, sx: 0, sy: 0, used: false };
-canvas.addEventListener('pointerdown', (e) => {
+function flightTarget(e) { return !(e.target && e.target.closest && e.target.closest('button, input, .screen')); }
+window.addEventListener('pointerdown', (e) => {
+  if (!flightTarget(e)) return;
   Audio2.resume();
   if (G.state !== 'play') return;
-  pointer.active = true; pointer.sx = e.clientX; pointer.sy = e.clientY;
+  pointer.active = true; pointer.sx = e.clientX / viewScale; pointer.sy = e.clientY / viewScale;
   pointer.used = true;
   hideDragHint();
-  canvas.setPointerCapture(e.pointerId);
+  try { canvas.setPointerCapture(e.pointerId); } catch (err) {}
 });
-canvas.addEventListener('pointermove', (e) => {
+window.addEventListener('pointermove', (e) => {
   if (!pointer.active) return;
-  pointer.sx = e.clientX; pointer.sy = e.clientY;
+  pointer.sx = e.clientX / viewScale; pointer.sy = e.clientY / viewScale;
 });
 function pointerEnd() { pointer.active = false; }
-canvas.addEventListener('pointerup', pointerEnd);
-canvas.addEventListener('pointercancel', pointerEnd);
+window.addEventListener('pointerup', pointerEnd);
+window.addEventListener('pointercancel', pointerEnd);
 function hideDragHint() { document.getElementById('drag-hint').classList.remove('show'); }
-function showDragHint() { if (isTouch && !pointer.used) document.getElementById('drag-hint').classList.add('show'); }
+function showDragHint() {
+  if (pointer.used) return;
+  const el = document.getElementById('drag-hint');
+  el.textContent = isTouch ? '☝ DRAG ANYWHERE — THE CHOPPER FOLLOWS YOUR FINGER'
+                           : '⌨ ARROWS / WASD FLY — OR DRAG WITH THE MOUSE';
+  el.classList.add('show');
+}
 
 // ===========================================================================
 //  LEVEL GENERATION
@@ -1475,7 +1507,7 @@ if (Audio2.isMuted()) document.getElementById('snd-on').style.opacity = '0.2';
 
 document.getElementById('howto-body').innerHTML = isTouch
   ? 'One finger flies everything:<br><b>Touch &amp; drag</b> — the chopper chases your finger.<br><b>Release</b> — it eases down for a gentle landing.<br>🔫 The gun <b>auto-fires</b> at enemies ahead of the nose.<br><br>🚁 Settle near the <b>barracks</b> to load survivors.<br>🏠 Carry them back to the <b>green pad</b> to score.<br>⛽ Grab fuel cans. Don\'t dive into the ground, run dry, or get shot down.<br><br>Clear all 5 waves to win!'
-  : '<kbd>↑</kbd>/<kbd>W</kbd> lift · <kbd>←</kbd><kbd>→</kbd> fly &amp; turn · or just <b>drag with the mouse</b><br>🔫 The gun <b>auto-fires</b> at enemies ahead — <kbd>Space</kbd>/<kbd>F</kbd> force-fires · <kbd>P</kbd> pause<br><br>🚁 Land gently near the <b>barracks</b> to load survivors.<br>🏠 Fly them back to the <b>green base pad</b> to score.<br>⛽ Grab fuel cans. Don\'t dive into the ground, run dry, or get shot down.<br><br>Clear all 5 waves to win!';
+  : '<kbd>↑</kbd>/<kbd>W</kbd> lift · <kbd>←</kbd><kbd>→</kbd>/<kbd>A</kbd><kbd>D</kbd> fly &amp; turn · or just <b>drag with the mouse</b><br>🔫 The gun <b>auto-fires</b> at enemies ahead — <kbd>Space</kbd>/<kbd>F</kbd> force-fires<br><kbd>P</kbd>/<kbd>Esc</kbd> pause · <kbd>Enter</kbd> start &amp; restart · <kbd>M</kbd> mute<br><br>🚁 Land gently near the <b>barracks</b> to load survivors.<br>🏠 Fly them back to the <b>green base pad</b> to score.<br>⛽ Grab fuel cans. Don\'t dive into the ground, run dry, or get shot down.<br><br>Clear all 5 waves to win!';
 
 // ---- leaderboard ---------------------------------------------------------
 function getLocal() { try { return JSON.parse(localStorage.getItem(HS_KEY)) || []; } catch (e) { return []; } }
@@ -1575,6 +1607,7 @@ function loop(ts) {
 }
 
 // ---- boot ----
+document.getElementById('version-line').textContent = VERSION;
 resize();
 heli.y = groundY() - heli.h / 2;
 buildLevel(1); // background for title screen
