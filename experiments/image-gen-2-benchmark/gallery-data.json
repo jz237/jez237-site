@@ -1702,5 +1702,17 @@
     "slot": "afternoon",
     "model": "openai/gpt-image-2",
     "size": "1024x1536"
+  },
+  {
+    "id": "2026-06-10-evening-pet-as-salt-crystal-lantern",
+    "title": "Pet as Salt Crystal Lantern",
+    "tests": "Reference-photo transformation template; finished non-paper example image; exact generated PNG provenance verified; R2 upload required before archive JSON save.",
+    "prompt": "Use the uploaded reference photo and preserve the pet identity, seated pose, body silhouette, triangular ears, eye color, muzzle shape, whisker placement, tail position, fur length, calico markings or other key markings, proportions, expression, camera angle, and most recognizable features, then transform the pet into a translucent salt-crystal lantern sculpture on a deep blue night windowsill. Rebuild the pet from frosted salt crystal with cloudy internal veins, faceted mineral edges, milky white inclusions, polished worn corners, dew-like condensation, and fine mineral dust; add a warm amber glow from a tiny brass wick cage inside the chest, a thin copper hanging loop, tiny brass paw feet, ceramic matches, a shallow tray of coarse sea salt, an old brass snuffer, moonlit glass reflections, and cinematic product-photo lighting. Keep the source pet recognizable while changing fur, body material, surface texture, props, and setting into a cohesive physical lantern artifact. Avoid extra limbs, duplicate heads, distorted anatomy, text/logo artifacts, watermark, and losing the source markings.\n\nSource photo needed: a clear pet photo.\n\nReusable fill-in-the-blank template: Use the uploaded reference photo and preserve the [PET] identity, pose, silhouette, ear shape, eye color, muzzle shape, whisker placement, tail position, fur length or coat texture, key markings, proportions, expression, camera angle, and most recognizable features, then transform [PET] into a salt-crystal lantern sculpture made from [MATERIAL] in [SETTING] with [MOOD] lighting. Keep the source recognizable while changing the body material, surface texture, construction details, props, and environment into a cohesive illuminated artifact. Avoid extra limbs, duplicate faces, distorted anatomy, text/logo artifacts, watermark, and losing the source-photo markings.\n\nWhat to preserve: pet identity, pose, silhouette, ear shape, eye color, muzzle shape, whisker placement, tail position, fur length or coat texture, key markings, proportions, expression, camera angle, and overall composition.\n\nWhat to change: convert fur and body mass into frosted salt crystal, mineral facets, cloudy veins, milky inclusions, condensation, brass wick hardware, copper hanging loop, brass paw feet, coarse salt props, windowsill reflections, and mixed amber lantern light with cold moonlight.\n\nExample substitution: Use a clear photo of a seated long-haired calico cat; preserve its green eyes, orange-black-white patches, fluffy chest, curled tail, triangular ears, muzzle shape, whiskers, and gentle alert expression, then turn it into a glowing salt-crystal lantern on a deep blue night windowsill.",
+    "image": "images/2026-06-10-evening-pet-as-salt-crystal-lantern.png",
+    "date": "2026-06-10",
+    "batch": "Daily Prompt",
+    "slot": "evening",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
