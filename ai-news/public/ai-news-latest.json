@@ -1,8 +1,8 @@
 {
-  "updatedAt": "2026-06-11T13:00:01.542418+00:00",
+  "updatedAt": "2026-06-11T14:00:02.097955+00:00",
   "items": [
     {
-      "title": "NightFeats @ MMU-RAGent NeurIPS 2025: A Context-Optimized Multi-Agent RAG System for the Text-to-Text Track",
+      "title": "Chenyang Yang, Shen Yan, Yibo Yang, Litao Hu, Yuchen Liu, Yuan Zeng, Hanchao Yu, Yinan Zhu, Sumedha Singla, Brian Van...",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -10,12 +10,92 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-11T13:00:14.144796+00:00",
+      "published": "2026-06-11T14:00:12.924769+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-11T13:00:01.542418+00:00",
+      "lastSeen": "2026-06-11T14:00:02.097955+00:00",
       "editorial_allow": false,
-      "editorial_reason": "framework_or_plumbing",
-      "score": 1.96
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.36
+    },
+    {
+      "title": "Coram raises $35M to turn security cameras into autonomous AI investigators",
+      "url": "https://thenextweb.com/news/coram-35m-series-b-ai-physical-security",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Coram AI has raised $35m to turn the security cameras already bolted to walls into something closer to an autonomous detective. The Series B is co-led by the new investor Ansa Capital and Battery Ventures, with UP Partners, 8VC and Mosaic Ventures joining. It takes the San Francisco company’s total funding to $66m. Coram’s pitch [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/Ashesh-Jain-Co-Founder-CEO-Coram-AI.avif",
+      "published": "2026-06-11T13:03:18+00:00",
+      "firstSeen": "2026-06-11T14:00:02.097955+00:00",
+      "lastSeen": "2026-06-11T14:00:02.097955+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.8215
+    },
+    {
+      "title": "Save Big and Play Bigger: GeForce NOW Summer Sale Brings Major Membership Savings",
+      "url": "https://blogs.nvidia.com/blog/geforce-now-thursday-summer-sale-2026",
+      "source": "NVIDIA Blog",
+      "sourceUrl": "https://blogs.nvidia.com/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "The GeForce NOW summer sale kicked off today with limited-time savings of up to $70 off a 12-month membership, making now the perfect time to upgrade to get the best of the cloud and see just how far Ultimate gaming can go. PC gamers are driven by one thing: the love of the game. But [&#8230;]",
+      "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/gfn-thursday-6-11-no-copy-kv-1536x920-1.jpg",
+      "published": "2026-06-11T13:00:17+00:00",
+      "firstSeen": "2026-06-11T14:00:02.097955+00:00",
+      "lastSeen": "2026-06-11T14:00:02.097955+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.26
+    },
+    {
+      "title": "Canada wants to ban under-16s from social media, and rein in AI chatbots too",
+      "url": "https://thenextweb.com/news/canada-digital-safety-act-under-16-social-media-chatbots",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Canada has introduced a bill that would bar under-16s from social media and, in a twist that sets it apart from other countries, regulate AI chatbots in the same sweep. The Digital Safety Act, tabled on Wednesday, is the latest move in a global wave of governments cracking down on platforms over harm to children. [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/carney-canada-ai-strategy-pope-leo.avif",
+      "published": "2026-06-11T12:52:12+00:00",
+      "firstSeen": "2026-06-11T14:00:02.097955+00:00",
+      "lastSeen": "2026-06-11T14:00:02.097955+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.116
+    },
+    {
+      "title": "Irish fleet-safety firm CameraMatics raises up to €49M to take on Samsara in the US",
+      "url": "https://thenextweb.com/news/cameramatics-49m-blume-equity-isif-fleet-safety",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "An Irish company that uses AI to stop crashes before drivers see them coming has raised up to €49m to expand in North America and Europe. CameraMatics, founded in Dublin in 2016, makes a video-telematics platform for commercial fleets. Its cameras and software watch the road and the cab at the same time. The system [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/cameramatics-secures-up-to-e49m-investment.avif",
+      "published": "2026-06-11T12:44:36+00:00",
+      "firstSeen": "2026-06-11T14:00:02.097955+00:00",
+      "lastSeen": "2026-06-11T14:00:02.097955+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1122
+    },
+    {
+      "title": "AI bubble fears are spreading, even as SpaceX readies the biggest IPO ever",
+      "url": "https://thenextweb.com/news/ai-bubble-fears-spacex-ipo-software-selloff",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "On the day SpaceX prices the largest stock-market debut in history, the market underneath it has a case of nerves. The cause is not rockets. It is AI. Several warning lights are flashing at once. Together they amount to the first serious test of a trade that has carried global markets for two years. The [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/stock-screen-red.avif",
+      "published": "2026-06-11T12:32:47+00:00",
+      "firstSeen": "2026-06-11T14:00:02.097955+00:00",
+      "lastSeen": "2026-06-11T14:00:02.097955+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.8065
     },
     {
       "title": "Germany’s Vsquared is taking on Atomico and Balderton on their London home turf",
@@ -28,10 +108,10 @@
       "image": "https://media.thenextweb.com/2026/06/Vsquared-Ventures-team.avif",
       "published": "2026-06-11T12:15:59+00:00",
       "firstSeen": "2026-06-11T13:00:01.542418+00:00",
-      "lastSeen": "2026-06-11T13:00:01.542418+00:00",
+      "lastSeen": "2026-06-11T14:00:02.097955+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1278
+      "score": 2.0983
     },
     {
       "title": "US AI giants are colonising London, and squeezing its startups in the process",
@@ -44,10 +124,10 @@
       "image": "https://media.thenextweb.com/2016/04/london.avif",
       "published": "2026-06-11T12:04:02+00:00",
       "firstSeen": "2026-06-11T13:00:01.542418+00:00",
-      "lastSeen": "2026-06-11T13:00:01.542418+00:00",
+      "lastSeen": "2026-06-11T14:00:02.097955+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8219
+      "score": 4.7925
     },
     {
       "title": "What SpaceX’s record IPO really means for the OpenAI and Anthropic listings behind it",
@@ -60,10 +140,10 @@
       "image": "https://media.thenextweb.com/2023/10/spacex-europe-deal.avif",
       "published": "2026-06-11T11:41:36+00:00",
       "firstSeen": "2026-06-11T13:00:01.542418+00:00",
-      "lastSeen": "2026-06-11T13:00:01.542418+00:00",
+      "lastSeen": "2026-06-11T14:00:02.097955+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.8108
+      "score": 8.7817
     },
     {
       "title": "Anthropic apologizes for invisible Claude Fable guardrails",
@@ -76,10 +156,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/STKB364_CLAUDE_D.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-11T11:40:43+00:00",
       "firstSeen": "2026-06-11T11:45:43.392005+00:00",
-      "lastSeen": "2026-06-11T13:00:01.542418+00:00",
+      "lastSeen": "2026-06-11T14:00:02.097955+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.7203
+      "score": 12.6913
     },
     {
       "title": "Deezer’s new free tool scans your Spotify and Apple Music playlists for AI slop",
@@ -92,10 +172,10 @@
       "image": "https://media.thenextweb.com/2026/06/check-ai-generated-music-in-playlists-with-deezer-detector.avif",
       "published": "2026-06-11T11:19:02+00:00",
       "firstSeen": "2026-06-11T11:45:43.392005+00:00",
-      "lastSeen": "2026-06-11T13:00:01.542418+00:00",
+      "lastSeen": "2026-06-11T14:00:02.097955+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1998
+      "score": 3.171
     },
     {
       "title": "Upriver raises $14M to fix the unglamorous layer where enterprise AI quietly breaks: the data",
@@ -108,10 +188,10 @@
       "image": "https://media.thenextweb.com/2026/06/IdoBronstein-Omri-Lifshitz-Upriver.avif",
       "published": "2026-06-11T11:06:31+00:00",
       "firstSeen": "2026-06-11T11:45:43.392005+00:00",
-      "lastSeen": "2026-06-11T13:00:01.542418+00:00",
+      "lastSeen": "2026-06-11T14:00:02.097955+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0937
+      "score": 2.0651
     },
     {
       "title": "Google DeepMind is worried about what happens when millions of agents start to interact",
@@ -124,10 +204,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/06/corralling-agents.jpg?resize=1200%2C600",
       "published": "2026-06-11T11:00:45+00:00",
       "firstSeen": "2026-06-11T11:45:43.392005+00:00",
-      "lastSeen": "2026-06-11T13:00:01.542418+00:00",
+      "lastSeen": "2026-06-11T14:00:02.097955+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 13.4309
+      "score": 13.4024
     },
     {
       "title": "Google is funding 300,000 electricians and welders, because the AI boom is running out of them",
@@ -140,10 +220,10 @@
       "image": "https://media.thenextweb.com/2026/06/skilled-trades-worker.avif",
       "published": "2026-06-11T10:52:56+00:00",
       "firstSeen": "2026-06-11T11:45:43.392005+00:00",
-      "lastSeen": "2026-06-11T13:00:01.542418+00:00",
+      "lastSeen": "2026-06-11T14:00:02.097955+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.7871
+      "score": 4.7587
     },
     {
       "title": "The US-Philippines AI hub now has a price tag, $10bn, and a 99-year lease on the table",
@@ -159,7 +239,7 @@
       "lastSeen": "2026-06-11T13:00:01.542418+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0745
+      "score": 2.0464
     },
     {
       "title": "Mercedes-Benz turns to defence, partnering with startup Tytan to build anti-drone vehicles",
@@ -175,7 +255,7 @@
       "lastSeen": "2026-06-11T13:00:01.542418+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0679
+      "score": 2.04
     },
     {
       "title": "ShopAgentic raises €1.9M to build commerce infrastructure for AI shopping agents",
@@ -191,7 +271,7 @@
       "lastSeen": "2026-06-11T13:00:01.542418+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.4647
+      "score": 5.4369
     },
     {
       "title": "Mississippi residents file a 10,000-strong class action against Musk’s xAI and SpaceX over data-centre noise",
@@ -207,7 +287,7 @@
       "lastSeen": "2026-06-11T13:00:01.542418+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0588
+      "score": 5.0312
     },
     {
       "title": "OpenAI plugs Visa into ChatGPT so AI agents can shop and pay at any Visa merchant",
@@ -223,7 +303,7 @@
       "lastSeen": "2026-06-11T11:45:43.392005+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 13.751
+      "score": 13.7236
     },
     {
       "title": "v2.0.0a1",
@@ -236,10 +316,10 @@
       "image": "https://opengraph.githubassets.com/cc6ddf659e34112f76c801628a3bcca9b584896e32833db5d192892d56a9ee5f/modelcontextprotocol/python-sdk/releases/tag/v2.0.0a1",
       "published": "2026-06-11T09:35:12+00:00",
       "firstSeen": "2026-06-11T10:00:01.225358+00:00",
-      "lastSeen": "2026-06-11T13:00:01.542418+00:00",
+      "lastSeen": "2026-06-11T14:00:02.097955+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 0.4205
+      "score": 0.3931
     },
     {
       "title": "South Korea hits Coupang with record $409 million fine over massive data breach",
@@ -255,7 +335,7 @@
       "lastSeen": "2026-06-11T11:45:43.392005+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1495
+      "score": 3.1221
     },
     {
       "title": "OpenAI and Anthropic keep warning about AI risks, then releasing bigger models and filing for IPOs",
@@ -271,7 +351,7 @@
       "lastSeen": "2026-06-11T11:45:43.392005+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 9.7965
+      "score": 9.7692
     },
     {
       "title": "Italian fintech unicorn Satispay reportedly plans €120M raise to push into stock trading",
@@ -287,7 +367,7 @@
       "lastSeen": "2026-06-11T11:00:01.260610+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0413
+      "score": 2.0142
     },
     {
       "title": "China’s state-run Workers’ Daily calls for a ‘dam’ to protect labour rights as AI spreads",
@@ -303,7 +383,7 @@
       "lastSeen": "2026-06-11T11:00:01.260610+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3868
+      "score": 2.3598
     },
     {
       "title": "Meta has cut Manus off from its internal systems and told staff to sunset the AI platform",
@@ -319,7 +399,7 @@
       "lastSeen": "2026-06-11T11:00:01.260610+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.7258
+      "score": 3.699
     },
     {
       "title": "CoreWeave’s borrowing costs just fell from 10% to 7%. The AI data centre debt market is repricing risk in real time.",
@@ -335,7 +415,7 @@
       "lastSeen": "2026-06-11T11:00:01.260610+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1194
+      "score": 3.0928
     },
     {
       "title": "Avast’s former CEO built an AI that found every OpenSSL zero-day this year. Now it runs inside air-gapped networks.",
@@ -351,7 +431,7 @@
       "lastSeen": "2026-06-11T10:00:01.225358+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.8123
+      "score": 3.7859
     },
     {
       "title": "Deezer launches an AI music detector for other streaming services",
@@ -364,10 +444,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/NEW_1200-x-580-pixel-SI-logo-1240x600-1.jpeg?quality=90&amp%3Bstrip=all&amp%3Bcrop=3.7903225806452%2C0%2C92.41935483871%2C100",
       "published": "2026-06-11T08:00:00+00:00",
       "firstSeen": "2026-06-11T09:00:01.779579+00:00",
-      "lastSeen": "2026-06-11T13:00:01.542418+00:00",
+      "lastSeen": "2026-06-11T14:00:02.097955+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1173
+      "score": 5.0911
     },
     {
       "title": "Oracle spent $55.7 billion on data centres in a single year, beat its own guidance by $5.7 billion, and wants to raise another $40 billion",
@@ -383,7 +463,7 @@
       "lastSeen": "2026-06-11T10:00:01.225358+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.8001
+      "score": 3.7741
     },
     {
       "title": "Musk says the ‘acid test’ for Tesla’s self-driving is sleeping through your commute. His Austin robotaxis crash four times more than humans.",
@@ -399,7 +479,7 @@
       "lastSeen": "2026-06-11T10:00:01.225358+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.3808
+      "score": 3.3553
     },
     {
       "title": "v1.87.2",
@@ -412,10 +492,10 @@
       "image": "https://opengraph.githubassets.com/e552d89f65a00d659f5f24feb5f2e83a7229bd51d1a93df4fc050869d1d7c475/BerriAI/litellm/releases/tag/v1.87.2",
       "published": "2026-06-11T05:19:44+00:00",
       "firstSeen": "2026-06-11T06:00:02.044920+00:00",
-      "lastSeen": "2026-06-11T13:00:01.542418+00:00",
+      "lastSeen": "2026-06-11T14:00:02.097955+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7789
+      "score": 2.7545
     },
     {
       "title": "Opendoor’s India exit is fueling a bigger conversation about AI and outsourcing",
@@ -428,10 +508,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/opendoor.jpg?resize=1200%2C800",
       "published": "2026-06-11T04:02:19+00:00",
       "firstSeen": "2026-06-11T05:00:01.120432+00:00",
-      "lastSeen": "2026-06-11T13:00:01.542418+00:00",
+      "lastSeen": "2026-06-11T14:00:02.097955+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0476
+      "score": 2.0241
     },
     {
       "title": "Anthropic’s Dario Amodei has just one direct report",
@@ -444,10 +524,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/Dario-2280291125.jpg?w=1024",
       "published": "2026-06-11T03:53:06+00:00",
       "firstSeen": "2026-06-11T04:00:01.464860+00:00",
-      "lastSeen": "2026-06-11T13:00:01.542418+00:00",
+      "lastSeen": "2026-06-11T14:00:02.097955+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0439
+      "score": 5.0205
     },
     {
       "title": "Anthropic Walks Back Policy That Could Have ‘Sabotaged’ AI Researchers Using Claude",
@@ -460,10 +540,10 @@
       "image": "",
       "published": "2026-06-11T03:45:49+00:00",
       "firstSeen": "2026-06-11T04:00:01.464860+00:00",
-      "lastSeen": "2026-06-11T13:00:01.542418+00:00",
+      "lastSeen": "2026-06-11T14:00:02.097955+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 13.4411
+      "score": 13.4177
     },
     {
       "title": "Anthropic Walks Back Policy That Could Have ‘Sabotaged’ AI Researchers Using Claude",
@@ -476,10 +556,10 @@
       "image": "https://media.wired.com/photos/6a2a20f0915182808732c01f/master/pass/2280239203",
       "published": "2026-06-11T03:11:22+00:00",
       "firstSeen": "2026-06-11T04:00:01.464860+00:00",
-      "lastSeen": "2026-06-11T13:00:01.542418+00:00",
+      "lastSeen": "2026-06-11T14:00:02.097955+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 13.4276
+      "score": 13.4046
     },
     {
       "title": "v1.86.5",
@@ -492,10 +572,10 @@
       "image": "https://opengraph.githubassets.com/80d06ba2e609141c1c1e8cf1d9516d0b43e8c6b5e92f80d9b986e8bb3d3f2ead/BerriAI/litellm/releases/tag/v1.86.5",
       "published": "2026-06-11T03:10:46+00:00",
       "firstSeen": "2026-06-11T04:00:01.464860+00:00",
-      "lastSeen": "2026-06-11T13:00:01.542418+00:00",
+      "lastSeen": "2026-06-11T14:00:02.097955+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7274
+      "score": 2.7044
     },
     {
       "title": "v1.85.5",
@@ -508,10 +588,10 @@
       "image": "https://opengraph.githubassets.com/d807466c1b4ffc591b030912a839582e02ccc401b78db32931ca299e3748c41d/BerriAI/litellm/releases/tag/v1.85.5",
       "published": "2026-06-11T01:55:38+00:00",
       "firstSeen": "2026-06-11T03:00:01.873730+00:00",
-      "lastSeen": "2026-06-11T13:00:01.542418+00:00",
+      "lastSeen": "2026-06-11T14:00:02.097955+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.6987
+      "score": 2.6766
     },
     {
       "title": "v1.84.7",
@@ -524,10 +604,26 @@
       "image": "https://opengraph.githubassets.com/aa9ec801a1abb248a814fb43b3cb1fc633d679eb7549b01203c890d68e98f030/BerriAI/litellm/releases/tag/v1.84.7",
       "published": "2026-06-11T01:33:43+00:00",
       "firstSeen": "2026-06-11T01:36:13.824543+00:00",
-      "lastSeen": "2026-06-11T13:00:01.542418+00:00",
+      "lastSeen": "2026-06-11T14:00:02.097955+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.6906
+      "score": 2.6686
+    },
+    {
+      "title": "Introducing Claude Corps",
+      "url": "https://www.anthropic.com/news/claude-corps",
+      "source": "Anthropic News",
+      "sourceUrl": "https://raw.githubusercontent.com/Olshansk/rss-feeds/main/feeds/feed_anthropic_news.xml",
+      "sourceWeight": 1.0,
+      "category": "AI",
+      "summary": "Introducing Claude Corps",
+      "image": "https://cdn.sanity.io/images/4zrzovbb/website/eb5d94573805e24cb381cd0676527cfada75c177-3840x2160.jpg",
+      "published": "2026-06-11T00:00:00+00:00",
+      "firstSeen": "2026-06-11T14:00:02.097955+00:00",
+      "lastSeen": "2026-06-11T14:00:02.097955+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 8.1456
     },
     {
       "title": "Supporting Europe’s work in ensuring a trustworthy AI ecosystem",
@@ -540,106 +636,10 @@
       "image": "",
       "published": "2026-06-11T00:00:00+00:00",
       "firstSeen": "2026-06-11T07:02:24.038737+00:00",
-      "lastSeen": "2026-06-11T13:00:01.542418+00:00",
+      "lastSeen": "2026-06-11T14:00:02.097955+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.1666
-    },
-    {
-      "title": "How an astrophysicist uses Codex to help simulate black holes",
-      "url": "https://openai.com/index/using-codex-to-simulate-black-holes",
-      "source": "OpenAI News",
-      "sourceUrl": "https://openai.com/news/rss.xml",
-      "sourceWeight": 1.0,
-      "category": "AI",
-      "summary": "Discover how astrophysicist Chi-kwan Chan uses Codex to build black hole simulations, helping scientists study extreme physics and test Einstein’s theory of general relativity.",
-      "image": "",
-      "published": "2026-06-11T00:00:00+00:00",
-      "firstSeen": "2026-06-10T22:55:45.504127+00:00",
-      "lastSeen": "2026-06-11T13:00:01.542418+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.1666
-    },
-    {
-      "title": "Profiling in PyTorch (Part 2): From nn.Linear to a Fused MLP",
-      "url": "https://huggingface.co/blog/torch-mlp-fusion",
-      "source": "Hugging Face Blog",
-      "sourceUrl": "https://huggingface.co/blog/feed.xml",
-      "sourceWeight": 0.95,
-      "category": "AI",
-      "summary": "",
-      "image": "https://huggingface.co/blog/assets/torch-mlp-fusion/thumbnail.png",
-      "published": "2026-06-11T00:00:00+00:00",
-      "firstSeen": "2026-06-11T11:00:01.260610+00:00",
-      "lastSeen": "2026-06-11T13:00:01.542418+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.0966
-    },
-    {
-      "title": "datasette-agent 0.2a0",
-      "url": "https://simonwillison.net/2026/Jun/10/datasette-agent",
-      "source": "Simon Willison",
-      "sourceUrl": "https://simonwillison.net/atom/everything/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Release: datasette-agent 0.2a0\n        Highlights from the release notes:\n\n\nTools can now ask the user questions mid-execution. Tools that declare a context parameter receive a ToolContext object, and await context.ask_user(...) can ask a yes/no, multiple-choice (options=[...]) or free-text (free_text=True) question. While a question is unanswered the agent turn suspends: the question renders as a form in the chat UI and persists to the internal database, so suspended conversations survive a server restart. Once answered, the tool re-executes from the top with stored answers replayed, so call ",
-      "image": "",
-      "published": "2026-06-10T23:57:27+00:00",
-      "firstSeen": "2026-06-11T01:00:01.741281+00:00",
-      "lastSeen": "2026-06-11T13:00:01.542418+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 6.7557
-    },
-    {
-      "title": "Palantir’s Karp says Sanders will regret only asking for 50% of AI companies. Full nationalization is coming.",
-      "url": "https://thenextweb.com/news/palantir-karp-ai-nationalization-sanders-50-percent",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Palantir CEO Alex Karp says full nationalization of AI companies is coming, and that Senator Bernie Sanders’ proposal for 50% public ownership will soon look moderate. “In two years, they’re not going to think Bernie Sanders is progressive,” Karp told CNBC on Wednesday. “They’re going to be like, ‘Bernie Sanders, you only want 50%? What [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/palantir-karp-ai-nationalization-sanders-50-percent.avif",
-      "published": "2026-06-10T23:08:56+00:00",
-      "firstSeen": "2026-06-11T00:00:02.046970+00:00",
-      "lastSeen": "2026-06-11T10:00:01.225358+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.7987
-    },
-    {
-      "title": "The researcher Microsoft threatened just dropped a seventh Windows zero-day hours after Patch Tuesday",
-      "url": "https://thenextweb.com/news/chaotic-eclipse-rogueplanet-windows-defender-zero-day",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Chaotic Eclipse, the security researcher Microsoft threatened with criminal prosecution, has published a seventh Windows zero-day exploit. Called RoguePlanet, it grants attackers SYSTEM privileges on fully patched Windows 10 and 11 machines. The researcher released the proof-of-concept hours after Microsoft shipped its June Patch Tuesday update, which fixed a record 200 vulnerabilities. RoguePlanet exploits a [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/chaotic-eclipse-rogueplanet-windows-defender-zero-day.avif",
-      "published": "2026-06-10T22:49:45+00:00",
-      "firstSeen": "2026-06-11T00:00:02.046970+00:00",
-      "lastSeen": "2026-06-11T10:00:01.225358+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.8921
-    },
-    {
-      "title": "Paramount is merging Pluto TV, BET+, and Paramount+ onto one tech stack to prepare for HBO Max",
-      "url": "https://thenextweb.com/news/paramount-streaming-tech-stack-pluto-tv-hbo-max",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Paramount is unifying the tech stacks behind Paramount+, Pluto TV, and BET+ onto a single backend infrastructure by mid-2026. CEO David Ellison announced the consolidation earlier this year. It is designed to eliminate duplicate systems, improve the app experience, and build the playbook for absorbing HBO Max after the $110 billion Warner Bros. Discovery merger [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/paramount-streaming-tech-stack-pluto-tv-hbo-max.avif",
-      "published": "2026-06-10T22:34:58+00:00",
-      "firstSeen": "2026-06-11T00:00:02.046970+00:00",
-      "lastSeen": "2026-06-11T10:00:01.225358+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.887
+      "score": 4.1456
     },
     {
       "title": "The Life Scientific: Helen Hastie",
@@ -652,10 +652,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-08T20:00:00+00:00",
       "firstSeen": "2026-06-08T21:00:01.371488+00:00",
-      "lastSeen": "2026-06-11T13:00:01.542418+00:00",
+      "lastSeen": "2026-06-11T14:00:02.097955+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.3708
+      "score": 1.3659
     },
     {
       "title": "The Life Scientific: Seth Berkley",
@@ -668,7 +668,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-01T20:00:00+00:00",
       "firstSeen": "2026-06-01T21:00:01.828388+00:00",
-      "lastSeen": "2026-06-11T13:00:01.542418+00:00",
+      "lastSeen": "2026-06-11T14:00:02.097955+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 1.1917
