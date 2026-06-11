@@ -10,6 +10,14 @@ TRACKED_PATHS=(
   "prototypes/hidden-reef/assets/sale-data.js"
 )
 
+if ! git diff --quiet || ! git diff --cached --quiet; then
+  echo "Hidden Reef worktree has uncommitted changes; refusing to rebase or overwrite them."
+  exit 2
+fi
+
+git fetch origin main
+git rebase origin/main
+
 if ! git diff --quiet -- "${TRACKED_PATHS[@]}" || ! git diff --cached --quiet -- "${TRACKED_PATHS[@]}"; then
   echo "Hidden Reef specials files already have uncommitted changes; refusing to overwrite them."
   exit 2
