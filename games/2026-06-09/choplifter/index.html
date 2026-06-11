@@ -258,7 +258,7 @@
    Single-file canvas game. Mobile one-finger + desktop keyboard.
    ========================================================================== */
 (function () {
-const VERSION = 'v1.2.0';
+const VERSION = 'v1.3.0';
 const SCORES_API = 'https://game-scores.jez237.workers.dev/scores/choplifter';
 const HS_KEY = 'choplifter_highscores_v1';
 const MUTE_KEY = 'choplifter_muted';
@@ -358,6 +358,8 @@ const Audio2 = (function () {
     land() { blip(180, 0.12, 'sine', 0.18, 120); },
     lowFuel() { blip(520, 0.12, 'square', 0.22, 380); setTimeout(() => blip(520, 0.12, 'square', 0.22, 380), 180); },
     missile() { noise(0.3, 0.3, 2200); blip(220, 0.5, 'sawtooth', 0.2, 700); },
+    bombDrop() { blip(1500, 0.8, 'sine', 0.1, 350); },
+    bombBoom() { noise(0.9, 0.7, 520); blip(75, 0.8, 'sawtooth', 0.34, 26); },
     extraLife() { [659, 784, 988, 1318, 1568].forEach((f, i) => setTimeout(() => blip(f, 0.16, 'triangle', 0.3), i * 80)); },
     win() { [523,659,784,1046,1318].forEach((f,i)=>setTimeout(()=>blip(f,0.22,'triangle',0.3),i*120)); },
     lose() { [400,330,260,180].forEach((f,i)=>setTimeout(()=>blip(f,0.3,'sawtooth',0.28,f*0.6),i*150)); },
@@ -411,6 +413,7 @@ const heli = {
   fuel: 100,
   invuln: 0,
   fireCd: 0,
+  bombCd: 0,
 };
 
 let bullets = [];      // {x,y,vx,vy,enemy}
@@ -422,6 +425,8 @@ let pickups = [];      // fuel
 let homeBase = { x: 240, w: 200 };  // landing pad / friendly base at left
 let stars = [];
 let rings = [];        // explosion shockwaves
+let bombs = [];        // falling bombs
+let scorch = [];       // blast craters on the ground
 let wrecks = [];       // burnt-out tank hulls
 let popups = [];       // floating score text
 let meteors = [];      // shooting stars (screen space)
@@ -434,7 +439,7 @@ let nextLifeAt = LIFE_EVERY;
 // ===========================================================================
 //  INPUT
 // ===========================================================================
-const input = { left: false, right: false, lift: false, fire: false };
+const input = { left: false, right: false, lift: false, fire: false, bomb: false };
 const keys = {};
 window.addEventListener('keydown', (e) => {
   // typing initials: let the field have the keys, Enter submits
@@ -462,6 +467,7 @@ function readKeys() {
   input.right = keys['arrowright'] || keys['d'];
   input.lift  = keys['arrowup']    || keys['w'];
   input.fire  = keys['arrowdown']  || keys['s'] || keys['f'] || keys[' '] || keys['control'] || keys['shift'];
+  input.bomb  = !!keys['b'];
 }
 
 // one-finger flight: drag anywhere — the chopper chases a point above your finger.
@@ -500,7 +506,7 @@ function showDragHint() {
 // ===========================================================================
 function buildLevel(wave) {
   enemies = []; hostages = []; bullets = []; particles = []; pickups = []; buildings = [];
-  wrecks = []; popups = []; lights = [];
+  wrecks = []; popups = []; lights = []; bombs = []; scorch = [];
   G.lostThisWave = 0;
   homeBase = { x: 240, w: 210 };
 
@@ -654,6 +660,7 @@ function resetHeli(full) {
   heli.vx = 0; heli.vy = 0; heli.facing = 1; heli.tilt = 0;
   heli.alive = true; heli.onGround = true; heli.invuln = 90;
   heli.hp = 100;                                   // fresh hull every spawn
+  heli.bombCd = 60;
   if (full) { heli.fuel = 100; G.aboard = 0; }
   else { heli.fuel = Math.max(heli.fuel, 60); }    // never respawn on fumes
   fuelWarn = 0;
@@ -717,6 +724,7 @@ function update(dt) {
 
   if (heli.alive) updateHeli();
   updateBullets();
+  updateBombs();
   updateEnemies();
   updateHostages();
   updatePickups();
@@ -842,6 +850,59 @@ function updateHeli() {
     heli.fireCd = 11;
     Audio2.shoot();
     spawnParticles(heli.x + heli.facing * 34, heli.y + 2, 3, { color: '#ffd95c', angle: heli.facing > 0 ? 0 : 3.14, spread: 0.3, smax: 3, lmax: 10, grav: 0 });
+  }
+
+  // bombs: auto-release when the predicted impact lines up with armor below
+  // (B forces a drop). Needs altitude so the chopper can't carpet the ground.
+  if (heli.bombCd > 0) heli.bombCd--;
+  if (!heli.onGround && heli.bombCd <= 0) {
+    const alt = gY - heli.y;
+    if (alt > 70) {
+      const t = Math.sqrt(2 * alt / GRAV);
+      const ix = heli.x + heli.vx * 0.9 * t;
+      let over = input.bomb;
+      if (!over) for (const e of enemies) {
+        if (e.dead || (e.type !== 'tank' && e.type !== 'sam')) continue;
+        if (Math.abs(e.x + (e.vx || 0) * t - ix) < 34) { over = true; break; }
+      }
+      if (over) {
+        bombs.push({ x: heli.x, y: heli.y + 16, vx: heli.vx * 0.9, vy: Math.max(0, heli.vy) + 0.5 });
+        heli.bombCd = 90;
+        Audio2.bombDrop();
+      }
+    }
+  }
+}
+
+function updateBombs() {
+  const gY = groundY();
+  for (let i = bombs.length - 1; i >= 0; i--) {
+    const b = bombs[i];
+    b.vy = Math.min(8, b.vy + GRAV * 0.9);
+    b.vx *= 0.995;
+    b.x += b.vx; b.y += b.vy;
+    // detonate on the ground, or on a rooftop it lands on
+    let hitY = gY;
+    for (const bd of buildings) {
+      if (bd.type === 'barracks') continue;   // never the prisons
+      if (b.x > bd.x && b.x < bd.x + bd.w) hitY = Math.min(hitY, gY - bd.h);
+    }
+    if (b.y >= hitY - 2) { explodeBomb(b.x, Math.min(b.y, hitY)); bombs.splice(i, 1); }
+  }
+}
+function explodeBomb(x, y) {
+  Audio2.bombBoom(); shake(16, 24);
+  spawnParticles(x, y, 40, { smax: 7, lmax: 60, rmax: 6, grav: 0.06 });
+  spawnParticles(x, y, 14, { color: '#fff', smax: 6, fade: 'spark' });
+  spawnParticles(x, y - 4, 10, { color: 'rgba(80,76,86,0.6)', angle: -1.57, spread: 0.9, smax: 2.2, lmin: 30, lmax: 60, grav: -0.04, fade: 'smoke', rmin: 4, rmax: 8 });
+  rings.push({ x, y, max: 90, life: 20, maxLife: 20 });
+  if (y > groundY() - 8) { scorch.push({ x, t: 0 }); if (scorch.length > 24) scorch.shift(); }
+  // blast vs armor and anything hovering low (friendlies are unharmed)
+  for (const e of enemies) {
+    if (e.dead) continue;
+    const dx = Math.abs(e.x - x), dy = Math.abs(e.y - y);
+    if ((e.type === 'tank' || e.type === 'sam') && dx < 75 && dy < 50) { e.hp -= 3; if (e.hp <= 0) killEnemy(e); }
+    else if ((e.type === 'drone' || e.type === 'missile') && dx < 70 && dy < 70) { e.hp -= 3; if (e.hp <= 0) killEnemy(e); }
   }
 }
 
@@ -1100,6 +1161,9 @@ function updateParticles() {
       { color: '#ff8a3c', smax: 1.5, lmax: 14, grav: -0.02 });
     if (w.t > 700) wrecks.splice(i, 1);
   }
+  for (let i = scorch.length - 1; i >= 0; i--) {
+    if (++scorch[i].t > 900) scorch.splice(i, 1);
+  }
   // the occasional shooting star (screen space)
   if (VW > 0 && meteors.length < 2 && Math.random() < 0.003) {
     meteors.push({ x: rnd(0, VW), y: rnd(20, VH * 0.3), vx: rnd(4, 7), vy: rnd(1.2, 2.4), life: rnd(26, 40), maxLife: 40 });
@@ -1170,14 +1234,17 @@ function render() {
   drawFarMountains();
   drawMidHills();
   drawSearchlights();
+  drawHaze();
   drawHomeBase();
   drawBuildings();
   drawGround();
+  drawScorch();
   drawWrecks();
   drawPickups();
   drawHostages();
   drawEnemies();
   drawBullets();
+  drawBombs();
   if (heli.alive) drawHeli();
   drawParticles();
   drawRings();
@@ -1197,34 +1264,53 @@ function render() {
 
 function drawSky() {
   const g = ctx.createLinearGradient(0, 0, 0, VH);
-  g.addColorStop(0, '#0a0e26');
-  g.addColorStop(0.4, '#1a2456');
-  g.addColorStop(0.7, '#41386e');
-  g.addColorStop(0.85, '#9a5a6e');
-  g.addColorStop(1, '#d98a5a');
+  g.addColorStop(0, '#070a1e');
+  g.addColorStop(0.35, '#16204e');
+  g.addColorStop(0.62, '#3b3468');
+  g.addColorStop(0.78, '#6e4a72');
+  g.addColorStop(0.88, '#a8606a');
+  g.addColorStop(0.96, '#cf7f56');
+  g.addColorStop(1, '#e09a5e');
   ctx.fillStyle = g; ctx.fillRect(0, 0, VW, VH);
-  // moon
+  // moon with a wide halo and a few craters
   const mx = 90 - G.cam * 0.05, my = VH * 0.18;
-  ctx.save(); ctx.globalAlpha = 0.9;
-  const mg = ctx.createRadialGradient(mx, my, 4, mx, my, 38);
-  mg.addColorStop(0, '#fff8e8'); mg.addColorStop(0.5, '#ffe9c0'); mg.addColorStop(1, 'rgba(255,233,192,0)');
-  ctx.fillStyle = mg; ctx.beginPath(); ctx.arc(mx, my, 38, 0, 6.28); ctx.fill();
-  ctx.fillStyle = '#fff8e8'; ctx.beginPath(); ctx.arc(mx, my, 22, 0, 6.28); ctx.fill();
+  ctx.save();
+  const halo = ctx.createRadialGradient(mx, my, 10, mx, my, 90);
+  halo.addColorStop(0, 'rgba(255,238,200,0.45)');
+  halo.addColorStop(0.4, 'rgba(255,238,200,0.12)');
+  halo.addColorStop(1, 'rgba(255,238,200,0)');
+  ctx.fillStyle = halo; ctx.beginPath(); ctx.arc(mx, my, 90, 0, 6.28); ctx.fill();
+  const mg = ctx.createRadialGradient(mx - 7, my - 7, 2, mx, my, 23);
+  mg.addColorStop(0, '#fffdf4'); mg.addColorStop(0.75, '#ffeec6'); mg.addColorStop(1, '#f3d9a4');
+  ctx.fillStyle = mg; ctx.beginPath(); ctx.arc(mx, my, 22, 0, 6.28); ctx.fill();
+  ctx.fillStyle = 'rgba(216,186,140,0.5)';
+  ctx.beginPath(); ctx.arc(mx - 6, my - 3, 4.5, 0, 6.28); ctx.fill();
+  ctx.beginPath(); ctx.arc(mx + 7, my + 6, 3, 0, 6.28); ctx.fill();
+  ctx.beginPath(); ctx.arc(mx + 2, my - 10, 2.2, 0, 6.28); ctx.fill();
   ctx.restore();
 
-  // drifting clouds (slow parallax)
+  // drifting clouds — two soft parallax layers of gradient puffs
   ctx.save();
-  ctx.globalAlpha = 0.13;
-  ctx.fillStyle = '#cdd8ff';
-  const wrap = VW + 420;
-  for (let i = 0; i < 7; i++) {
-    const base = i * 567 + i * i * 91;
-    let cx = ((base + G.t * 0.16 - G.cam * 0.25) % wrap + wrap) % wrap - 210;
-    const cy = VH * (0.13 + (i % 3) * 0.09);
-    ctx.beginPath();
-    ctx.ellipse(cx, cy, 86 + (i % 3) * 30, 15 + (i % 2) * 6, 0, 0, 6.28);
-    ctx.ellipse(cx + 48, cy - 8, 48, 12, 0, 0, 6.28);
-    ctx.fill();
+  for (let layer = 0; layer < 2; layer++) {
+    const par = layer === 0 ? 0.18 : 0.3;
+    const alpha = layer === 0 ? 0.09 : 0.14;
+    const wrap = VW + 480;
+    for (let i = 0; i < 5; i++) {
+      const base = i * 631 + layer * 257 + i * i * 97;
+      const cx = ((base + G.t * (0.1 + layer * 0.08) - G.cam * par) % wrap + wrap) % wrap - 240;
+      const cy = VH * (0.1 + ((i + layer) % 3) * 0.09) + layer * 26;
+      const s = 1 + ((i + layer) % 3) * 0.35;
+      const cg = ctx.createRadialGradient(cx, cy, 4, cx, cy, 110 * s);
+      cg.addColorStop(0, 'rgba(205,216,255,' + alpha + ')');
+      cg.addColorStop(0.7, 'rgba(205,216,255,' + (alpha * 0.5) + ')');
+      cg.addColorStop(1, 'rgba(205,216,255,0)');
+      ctx.fillStyle = cg;
+      ctx.beginPath();
+      ctx.ellipse(cx, cy, 110 * s, 17 * s, 0, 0, 6.28);
+      ctx.ellipse(cx + 55 * s, cy - 9 * s, 60 * s, 12 * s, 0, 0, 6.28);
+      ctx.ellipse(cx - 60 * s, cy - 5 * s, 50 * s, 10 * s, 0, 0, 6.28);
+      ctx.fill();
+    }
   }
   ctx.restore();
 
@@ -1236,16 +1322,21 @@ function drawSky() {
     ctx.beginPath(); ctx.moveTo(m.x, m.y); ctx.lineTo(m.x - m.vx * 4, m.y - m.vy * 4); ctx.stroke();
   }
 
-  // distant city silhouette behind the mountains
+  // distant city silhouette behind the mountains, with sparse lit windows
   const gY = groundY();
-  ctx.fillStyle = 'rgba(24,26,58,0.9)';
   const par = G.cam * 0.12;
   for (let i = -1; i < VW / 110 + 2; i++) {
     const seed = Math.floor((i * 110 + par) / 110);
     const x = i * 110 - (par % 110);
     const h = 42 + ((seed * 7349) % 89 + 89) % 89;
     const w = 62 + ((seed * 37) % 41 + 41) % 41;
+    ctx.fillStyle = 'rgba(24,26,58,0.9)';
     ctx.fillRect(x, gY - h, w, h);
+    ctx.fillStyle = 'rgba(255,214,150,0.20)';
+    for (let k = 0; k < 4; k++) {
+      if (hash01(seed * 5 + k, 3) < 0.5)
+        ctx.fillRect(x + 6 + hash01(seed, k) * (w - 12), gY - h + 6 + hash01(k, seed) * (h - 12), 2, 3);
+    }
   }
 }
 
@@ -1265,31 +1356,61 @@ function drawStars() {
 
 function drawFarMountains() {
   const gY = groundY();
-  ctx.fillStyle = 'rgba(40,40,80,0.55)';
-  ctx.beginPath(); ctx.moveTo(0, gY);
   // mountains scroll at 0.3× the camera; drawn inside the world translate,
   // so push them forward by 0.7×cam (screen = x + 0.7cam − cam = x − 0.3cam)
   const off = G.cam * 0.7;
+  const pts = [];
   for (let x = -200; x < WORLD_W; x += 160) {
     const h = 70 + Math.sin(x * 0.01) * 40 + Math.cos(x * 0.023) * 30;
-    ctx.lineTo(x + off + 80, gY - h);
-    ctx.lineTo(x + off + 160, gY);
+    pts.push([x + off + 80, gY - h], [x + off + 160, gY]);
   }
+  const mg = ctx.createLinearGradient(0, gY - 140, 0, gY);
+  mg.addColorStop(0, 'rgba(64,58,108,0.6)');
+  mg.addColorStop(1, 'rgba(30,30,62,0.55)');
+  ctx.fillStyle = mg;
+  ctx.beginPath(); ctx.moveTo(0, gY);
+  for (const p of pts) ctx.lineTo(p[0], p[1]);
   ctx.lineTo(WORLD_W + off, gY); ctx.closePath(); ctx.fill();
+  // faint warm rim light along the ridge line
+  ctx.strokeStyle = 'rgba(255,170,120,0.10)'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(pts[0][0], pts[0][1]);
+  for (const p of pts) ctx.lineTo(p[0], p[1]);
+  ctx.stroke();
 }
 
 function drawMidHills() {
   const gY = groundY();
-  ctx.fillStyle = 'rgba(56,46,96,0.45)';
-  ctx.beginPath(); ctx.moveTo(0, gY);
   // mid layer at 0.55× the camera (drawn in world space: x + 0.45×cam)
   const off = G.cam * 0.45;
+  const hg = ctx.createLinearGradient(0, gY - 70, 0, gY);
+  hg.addColorStop(0, 'rgba(70,56,112,0.5)');
+  hg.addColorStop(1, 'rgba(44,36,80,0.45)');
+  ctx.fillStyle = hg;
+  ctx.beginPath(); ctx.moveTo(0, gY);
   for (let x = -240; x < WORLD_W; x += 120) {
     const h = 36 + Math.sin(x * 0.016 + 2) * 22 + Math.cos(x * 0.031) * 14;
     ctx.lineTo(x + off + 60, gY - h);
     ctx.lineTo(x + off + 120, gY);
   }
   ctx.lineTo(WORLD_W + off, gY); ctx.closePath(); ctx.fill();
+  // a treeline of small dark conifers along the base of the hills
+  ctx.fillStyle = 'rgba(26,24,52,0.85)';
+  for (let x = -240; x < WORLD_W; x += 48) {
+    if (hash01(x, 9) > 0.4) continue;
+    const tx = x + off, ty = gY - (4 + hash01(x, 4) * 22);
+    const s = 5 + hash01(x, 5) * 5;
+    ctx.beginPath(); ctx.moveTo(tx, ty - s); ctx.lineTo(tx - s * 0.55, ty + s * 0.6); ctx.lineTo(tx + s * 0.55, ty + s * 0.6); ctx.closePath(); ctx.fill();
+  }
+}
+
+// low atmospheric haze in front of the hills — depth cue at the horizon
+function drawHaze() {
+  const gY = groundY();
+  const hz = ctx.createLinearGradient(0, gY - 110, 0, gY);
+  hz.addColorStop(0, 'rgba(196,128,96,0)');
+  hz.addColorStop(1, 'rgba(196,128,96,0.13)');
+  ctx.fillStyle = hz;
+  ctx.fillRect(G.cam, gY - 110, VW, 110);
 }
 
 function drawSearchlights() {
@@ -1351,14 +1472,56 @@ function drawPopups() {
 function drawGround() {
   const gY = groundY();
   const g = ctx.createLinearGradient(0, gY, 0, VH);
-  g.addColorStop(0, '#3a2e3e'); g.addColorStop(0.3, '#241c2c'); g.addColorStop(1, '#140e18');
+  g.addColorStop(0, '#46364a'); g.addColorStop(0.25, '#2c2234'); g.addColorStop(1, '#120c16');
   ctx.fillStyle = g; ctx.fillRect(0, gY, WORLD_W, VH - gY + 40);
-  // ground edge highlight
-  ctx.strokeStyle = 'rgba(255,180,120,0.35)'; ctx.lineWidth = 2;
+  // warm rim where the dusk light grazes the ground line
+  ctx.strokeStyle = 'rgba(255,180,120,0.4)'; ctx.lineWidth = 2;
   ctx.beginPath(); ctx.moveTo(0, gY); ctx.lineTo(WORLD_W, gY); ctx.stroke();
-  // texture stripes
-  ctx.strokeStyle = 'rgba(255,255,255,0.03)'; ctx.lineWidth = 1;
-  for (let x = 0; x < WORLD_W; x += 46) { ctx.beginPath(); ctx.moveTo(x, gY + 6); ctx.lineTo(x - 30, VH); ctx.stroke(); }
+  // supply road with a dashed center line
+  ctx.fillStyle = 'rgba(16,12,20,0.6)';
+  ctx.fillRect(0, gY + 10, WORLD_W, 14);
+  ctx.fillStyle = 'rgba(150,130,120,0.18)';
+  for (let rx = Math.floor(G.cam / 44) * 44; rx < G.cam + VW + 44; rx += 44) ctx.fillRect(rx, gY + 16, 22, 2);
+  // scattered rocks and brush (deterministic, culled to the view)
+  for (let x = Math.floor((G.cam - 40) / 90) * 90; x < G.cam + VW + 40; x += 90) {
+    const r1 = hash01(x, 11), r2 = hash01(x, 23);
+    const dx = x + r1 * 70, dy = gY + 30 + r2 * (VH - gY - 38);
+    if (r1 < 0.45) {
+      ctx.fillStyle = 'rgba(120,100,110,' + (0.10 + r2 * 0.10) + ')';
+      ctx.beginPath(); ctx.ellipse(dx, dy, 5 + r2 * 7, 2.5 + r1 * 3, 0, 0, 6.28); ctx.fill();
+    } else {
+      ctx.strokeStyle = 'rgba(140,120,100,' + (0.10 + r1 * 0.08) + ')'; ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(dx, dy); ctx.lineTo(dx - 2, dy - 5);
+      ctx.moveTo(dx, dy); ctx.lineTo(dx + 1, dy - 6);
+      ctx.moveTo(dx, dy); ctx.lineTo(dx + 3, dy - 4);
+      ctx.stroke();
+    }
+  }
+  // faded strata sweeping down-screen
+  ctx.strokeStyle = 'rgba(255,255,255,0.025)'; ctx.lineWidth = 1;
+  for (let x = Math.floor(G.cam / 46) * 46; x < G.cam + VW + 46; x += 46) { ctx.beginPath(); ctx.moveTo(x, gY + 6); ctx.lineTo(x - 30, VH); ctx.stroke(); }
+}
+
+function drawScorch() {
+  const gY = groundY();
+  for (const s of scorch) {
+    const a = clamp(1 - s.t / 900, 0, 1) * 0.5;
+    ctx.fillStyle = 'rgba(8,6,8,' + a + ')';
+    ctx.beginPath(); ctx.ellipse(s.x, gY, 34, 5, 0, 0, 6.28); ctx.fill();
+  }
+}
+
+function drawBombs() {
+  for (const b of bombs) {
+    ctx.save(); ctx.translate(b.x, b.y); ctx.rotate(Math.atan2(b.vy, b.vx));
+    ctx.fillStyle = '#39414f';
+    ctx.beginPath(); ctx.ellipse(0, 0, 7, 3, 0, 0, 6.28); ctx.fill();
+    ctx.fillStyle = '#222831';
+    ctx.beginPath(); ctx.moveTo(-6, -1.5); ctx.lineTo(-10, -4); ctx.lineTo(-10, 4); ctx.lineTo(-6, 1.5); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = '#ffd95c'; ctx.fillRect(2.5, -2.5, 1.6, 5);
+    ctx.restore();
+  }
 }
 
 function drawHomeBase() {
@@ -1375,13 +1538,23 @@ function drawHomeBase() {
   ctx.fillStyle = 'rgba(125,255,174,' + (0.4 + pulse * 0.6) + ')';
   ctx.beginPath(); ctx.arc(hb.x + 7, gY - 10, 2.4, 0, 6.28); ctx.fill();
   ctx.beginPath(); ctx.arc(hb.x + hb.w - 7, gY - 10, 2.4, 0, 6.28); ctx.fill();
-  // friendly HQ building
-  ctx.fillStyle = '#26324e'; ctx.fillRect(hb.x + 6, gY - 70, 54, 70);
-  ctx.fillStyle = '#3a4d74'; ctx.fillRect(hb.x + 6, gY - 70, 54, 8);
-  // windows lit (stable pattern — no per-frame flicker)
-  ctx.fillStyle = '#9fd8ff';
-  for (let r = 0; r < 4; r++) for (let cc = 0; cc < 3; cc++) {
-    if (hash01(r * 3 + cc, 17) < 0.93) ctx.fillRect(hb.x + 14 + cc * 15, gY - 60 + r * 14, 8, 8);
+  // friendly HQ building — lit front face with a darker side return
+  const hq = ctx.createLinearGradient(0, gY - 70, 0, gY);
+  hq.addColorStop(0, '#33446b'); hq.addColorStop(1, '#1e2940');
+  ctx.fillStyle = hq; ctx.fillRect(hb.x + 6, gY - 70, 46, 70);
+  ctx.fillStyle = '#16203a'; ctx.fillRect(hb.x + 52, gY - 70, 8, 70);
+  ctx.fillStyle = '#42587f'; ctx.fillRect(hb.x + 6, gY - 72, 54, 4);
+  // doorway with warm light and a pool on the pavement
+  ctx.fillStyle = '#0c1224'; ctx.fillRect(hb.x + 25, gY - 22, 16, 22);
+  ctx.fillStyle = 'rgba(255,214,150,0.8)'; ctx.fillRect(hb.x + 27, gY - 20, 12, 2);
+  const pool = ctx.createRadialGradient(hb.x + 33, gY, 2, hb.x + 33, gY, 26);
+  pool.addColorStop(0, 'rgba(255,214,150,0.18)'); pool.addColorStop(1, 'rgba(255,214,150,0)');
+  ctx.fillStyle = pool; ctx.beginPath(); ctx.ellipse(hb.x + 33, gY, 26, 6, 0, 0, 6.28); ctx.fill();
+  // windows: warm/cool mix (stable pattern — no per-frame flicker)
+  for (let r = 0; r < 3; r++) for (let cc = 0; cc < 3; cc++) {
+    const warm = hash01(r * 3 + cc, 29) < 0.6;
+    ctx.fillStyle = hash01(r * 3 + cc, 17) < 0.9 ? (warm ? 'rgba(255,214,150,0.85)' : 'rgba(159,216,255,0.7)') : '#0e1526';
+    ctx.fillRect(hb.x + 12 + cc * 14, gY - 62 + r * 13, 8, 8);
   }
   // flag
   ctx.strokeStyle = '#cfd8e8'; ctx.lineWidth = 2;
@@ -1398,40 +1571,90 @@ function drawHomeBase() {
 function drawBuildings() {
   const gY = groundY();
   for (const b of buildings) {
+    if (b.x + b.w < G.cam - 60 || b.x > G.cam + VW + 60) continue;   // cull off-screen
     const by = gY - b.h;
+    // soft contact shadow at the foundation
+    ctx.fillStyle = 'rgba(0,0,0,0.28)';
+    ctx.beginPath(); ctx.ellipse(b.x + b.w / 2, gY, b.w * 0.62, 4, 0, 0, 6.28); ctx.fill();
     if (b.type === 'barracks') {
-      // enemy barracks (where hostages are held)
-      ctx.fillStyle = '#3a2e26'; ctx.fillRect(b.x, by, b.w, b.h);
-      ctx.fillStyle = '#5a4636'; ctx.fillRect(b.x, by, b.w, 6);
-      // roof
-      ctx.fillStyle = '#2a211c'; ctx.beginPath(); ctx.moveTo(b.x - 6, by); ctx.lineTo(b.x + b.w / 2, by - 16); ctx.lineTo(b.x + b.w + 6, by); ctx.fill();
-      // door + barred windows
-      ctx.fillStyle = '#1a130f'; ctx.fillRect(b.x + b.w / 2 - 9, gY - 26, 18, 26);
-      ctx.fillStyle = '#6a5444';
-      for (let i = 0; i < 3; i++) ctx.fillRect(b.x + 12 + i * (b.w - 30) / 2, by + 16, 14, 12);
+      // timber prison hut: planked walls, gabled roof with a moonlit slope
+      const wg = ctx.createLinearGradient(0, by, 0, gY);
+      wg.addColorStop(0, '#524030'); wg.addColorStop(1, '#2e211a');
+      ctx.fillStyle = wg; ctx.fillRect(b.x, by, b.w, b.h);
+      ctx.strokeStyle = 'rgba(0,0,0,0.25)'; ctx.lineWidth = 1;
+      for (let y = by + 9; y < gY - 4; y += 9) { ctx.beginPath(); ctx.moveTo(b.x + 2, y); ctx.lineTo(b.x + b.w - 2, y); ctx.stroke(); }
+      ctx.fillStyle = '#241b15'; ctx.beginPath(); ctx.moveTo(b.x - 8, by); ctx.lineTo(b.x + b.w / 2, by - 18); ctx.lineTo(b.x + b.w + 8, by); ctx.closePath(); ctx.fill();
+      ctx.fillStyle = 'rgba(255,170,120,0.08)'; ctx.beginPath(); ctx.moveTo(b.x - 8, by); ctx.lineTo(b.x + b.w / 2, by - 18); ctx.lineTo(b.x + b.w / 2, by); ctx.closePath(); ctx.fill();
+      // door under a hanging lamp, light pooling down the wall
+      ctx.fillStyle = '#140e0a'; ctx.fillRect(b.x + b.w / 2 - 9, gY - 26, 18, 26);
+      ctx.fillStyle = 'rgba(255,200,130,0.9)'; ctx.fillRect(b.x + b.w / 2 - 1.5, by + 6, 3, 3);
+      const lp = ctx.createRadialGradient(b.x + b.w / 2, gY - 8, 2, b.x + b.w / 2, gY - 8, 26);
+      lp.addColorStop(0, 'rgba(255,200,130,0.13)'); lp.addColorStop(1, 'rgba(255,200,130,0)');
+      ctx.fillStyle = lp; ctx.fillRect(b.x + b.w / 2 - 26, by, 52, b.h);
+      // barred windows
+      for (let i = 0; i < 3; i++) {
+        const wx = b.x + 12 + i * (b.w - 30) / 2;
+        ctx.fillStyle = '#100c08'; ctx.fillRect(wx, by + 16, 14, 12);
+        ctx.strokeStyle = '#6a5444'; ctx.lineWidth = 1.5;
+        ctx.beginPath(); ctx.moveTo(wx + 5, by + 16); ctx.lineTo(wx + 5, by + 28);
+        ctx.moveTo(wx + 9, by + 16); ctx.lineTo(wx + 9, by + 28); ctx.stroke();
+      }
       // red cross marker
       ctx.fillStyle = '#ff5b6e';
       ctx.fillRect(b.x + b.w/2 - 2, by + 18, 4, 14); ctx.fillRect(b.x + b.w/2 - 7, by + 23, 14, 4);
-    } else if (b.type === 'tower') {
-      ctx.fillStyle = '#1c2740'; ctx.fillRect(b.x, by, b.w, b.h);
-      ctx.fillStyle = '#28344f'; ctx.fillRect(b.x, by, b.w, 5);
-      ctx.fillStyle = 'rgba(159,216,255,0.5)';
-      for (let r = 0; r < Math.floor(b.h / 18); r++) for (let cc = 0; cc < 2; cc++)
-        if (hash01(b.x * 13 + r * 7, cc) < 0.5) ctx.fillRect(b.x + 8 + cc * (b.w - 22), by + 10 + r * 18, 7, 9);
-      // antenna
-      ctx.strokeStyle = '#445'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(b.x + b.w/2, by); ctx.lineTo(b.x + b.w/2, by - 18); ctx.stroke();
-      const al = 0.5 + 0.5 * Math.sin(G.t * 0.12 + b.x);
-      ctx.fillStyle = 'rgba(255,91,110,' + (0.4 + al*0.5) + ')'; ctx.beginPath(); ctx.arc(b.x + b.w/2, by - 18, 2.5, 0, 6.28); ctx.fill();
     } else if (b.type === 'bunker') {
-      ctx.fillStyle = '#24302a'; ctx.beginPath();
-      ctx.moveTo(b.x, gY); ctx.lineTo(b.x + 10, by); ctx.lineTo(b.x + b.w - 10, by); ctx.lineTo(b.x + b.w, gY); ctx.fill();
-      ctx.fillStyle = '#16201a'; ctx.fillRect(b.x + b.w/2 - 12, by + 14, 24, 6);
+      const bg2 = ctx.createLinearGradient(0, by, 0, gY);
+      bg2.addColorStop(0, '#33423a'); bg2.addColorStop(1, '#1c2620');
+      ctx.fillStyle = bg2; ctx.beginPath();
+      ctx.moveTo(b.x, gY); ctx.lineTo(b.x + 10, by); ctx.lineTo(b.x + b.w - 10, by); ctx.lineTo(b.x + b.w, gY); ctx.closePath(); ctx.fill();
+      // sandbag courses
+      ctx.strokeStyle = 'rgba(0,0,0,0.22)'; ctx.lineWidth = 1;
+      for (let y = by + 7; y < gY - 3; y += 7) {
+        ctx.beginPath(); ctx.moveTo(b.x + 6, y); ctx.lineTo(b.x + b.w - 6, y); ctx.stroke();
+      }
+      // glowing gun slit
+      ctx.fillStyle = 'rgba(255,120,90,0.45)'; ctx.fillRect(b.x + b.w/2 - 13, by + 13, 26, 6);
+      ctx.fillStyle = '#0c0f0c'; ctx.fillRect(b.x + b.w/2 - 12, by + 15, 24, 3);
     } else {
-      ctx.fillStyle = '#222d44'; ctx.fillRect(b.x, by, b.w, b.h);
-      ctx.fillStyle = '#2e3b58'; ctx.fillRect(b.x, by, b.w, 5);
-      ctx.fillStyle = 'rgba(159,216,255,0.4)';
-      for (let r = 0; r < Math.floor(b.h / 20); r++) for (let cc = 0; cc < 3; cc++)
-        if (hash01(b.x * 11 + r * 5, cc + 3) < 0.4) ctx.fillRect(b.x + 10 + cc * (b.w - 26)/2, by + 12 + r * 20, 9, 11);
+      // city block / tower: lit front face, dark side return, roof clutter
+      const tower = b.type === 'tower';
+      const side = Math.max(5, Math.round(b.w * 0.1));
+      const fg = ctx.createLinearGradient(0, by, 0, gY);
+      if (tower) { fg.addColorStop(0, '#27345a'); fg.addColorStop(1, '#161f38'); }
+      else { fg.addColorStop(0, '#2c3a5c'); fg.addColorStop(1, '#1a2440'); }
+      ctx.fillStyle = fg; ctx.fillRect(b.x, by, b.w - side, b.h);
+      ctx.fillStyle = 'rgba(8,12,26,0.9)'; ctx.fillRect(b.x + b.w - side, by, side, b.h);
+      ctx.fillStyle = tower ? '#36456e' : '#3a4a70'; ctx.fillRect(b.x - 1, by - 3, b.w + 2, 4); // parapet
+      // floor ledges
+      ctx.strokeStyle = 'rgba(0,0,0,0.18)'; ctx.lineWidth = 1;
+      const fl = tower ? 18 : 20;
+      for (let y = by + fl; y < gY - 6; y += fl) { ctx.beginPath(); ctx.moveTo(b.x + 1, y); ctx.lineTo(b.x + b.w - side, y); ctx.stroke(); }
+      // windows: warm/cool mix, stable per building
+      const cols = tower ? 2 : 3, wW = tower ? 7 : 9, wH = tower ? 9 : 11;
+      for (let r = 0; r < Math.floor(b.h / fl); r++) for (let cc = 0; cc < cols; cc++) {
+        const hsh = hash01(b.x * 13 + r * 7, cc + (tower ? 0 : 3));
+        if (hsh > (tower ? 0.5 : 0.42)) continue;
+        const warm = hash01(b.x * 7 + cc * 3, r) < 0.55;
+        ctx.fillStyle = warm ? 'rgba(255,206,140,' + (0.35 + hsh * 0.5) + ')' : 'rgba(159,216,255,' + (0.3 + hsh * 0.4) + ')';
+        ctx.fillRect(b.x + 8 + cc * ((b.w - side - 18) / Math.max(1, cols - 1)), by + 10 + r * fl, wW, wH);
+      }
+      // rooftop: antenna on towers, AC box / water tank on blocks
+      if (tower) {
+        ctx.strokeStyle = '#445'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(b.x + b.w/2, by); ctx.lineTo(b.x + b.w/2, by - 18); ctx.stroke();
+        const al = 0.5 + 0.5 * Math.sin(G.t * 0.12 + b.x);
+        ctx.fillStyle = 'rgba(255,91,110,' + (0.4 + al*0.5) + ')'; ctx.beginPath(); ctx.arc(b.x + b.w/2, by - 18, 2.5, 0, 6.28); ctx.fill();
+      } else {
+        if (hash01(b.x, 41) < 0.5) {
+          ctx.fillStyle = '#222c46'; ctx.fillRect(b.x + 8, by - 9, 14, 7);
+          ctx.fillStyle = '#2e3a58'; ctx.fillRect(b.x + 8, by - 9, 14, 2);
+        }
+        if (hash01(b.x, 43) < 0.4) {
+          ctx.fillStyle = '#1c2438'; ctx.fillRect(b.x + b.w - side - 22, by - 12, 12, 10);
+          ctx.strokeStyle = '#1c2438'; ctx.lineWidth = 1.5;
+          ctx.beginPath(); ctx.moveTo(b.x + b.w - side - 19, by - 12); ctx.lineTo(b.x + b.w - side - 19, by - 16);
+          ctx.moveTo(b.x + b.w - side - 13, by - 12); ctx.lineTo(b.x + b.w - side - 13, by - 16); ctx.stroke();
+        }
+      }
     }
   }
 }
@@ -1442,6 +1665,9 @@ function drawPickups() {
     const fuel = p.type === 'fuel';
     const glow = fuel ? '#7dffae' : '#4fd0e8';
     ctx.save(); ctx.translate(p.x, p.y);
+    // shadow on the ground beneath the bobbing crate
+    ctx.fillStyle = 'rgba(0,0,0,0.2)';
+    ctx.beginPath(); ctx.ellipse(0, groundY() - p.y, 10, 2.5, 0, 0, 6.28); ctx.fill();
     const gl = 0.5 + 0.5 * Math.sin(p.bob * 2);
     ctx.shadowColor = glow; ctx.shadowBlur = 8 + gl * 6;
     ctx.fillStyle = fuel ? '#1a3326' : '#16283a'; ctx.fillRect(-11, -14, 22, 28);
@@ -1461,6 +1687,9 @@ function drawHostages() {
     ctx.save(); ctx.translate(h.x, gY);
     const waving = h.state === 'wait';
     const running = h.state === 'run' || h.state === 'boarding' || h.state === 'delivered';
+    // contact shadow
+    ctx.fillStyle = 'rgba(0,0,0,0.25)';
+    ctx.beginPath(); ctx.ellipse(0, -1, 5, 1.8, 0, 0, 6.28); ctx.fill();
     // body
     ctx.fillStyle = h.shirt || '#d8a06a'; // shirt
     ctx.fillRect(-4, -18, 8, 11);
@@ -1508,19 +1737,31 @@ function drawTank(e) {
     ctx.beginPath(); ctx.arc(32, 0, 3 + e.muzzle * 0.9, 0, 6.283); ctx.fill();
     ctx.restore();
   }
-  // tracks
-  ctx.fillStyle = '#1a1f1a'; ctx.fillRect(-26, 4, 52, 9);
-  ctx.fillStyle = '#33402f';
-  for (let i = -24; i < 26; i += 8) ctx.fillRect(i, 5, 5, 7);
-  // hull
-  ctx.fillStyle = '#445539'; ctx.fillRect(-24, -6, 48, 12);
-  ctx.fillStyle = '#556b46'; ctx.fillRect(-24, -6, 48, 4);
-  // turret
+  // contact shadow
+  ctx.fillStyle = 'rgba(0,0,0,0.3)';
+  ctx.beginPath(); ctx.ellipse(0, 13, 30, 4, 0, 0, 6.28); ctx.fill();
+  // tracks with road wheels
+  ctx.fillStyle = '#151915'; ctx.fillRect(-26, 4, 52, 9);
+  ctx.fillStyle = '#2c372a';
+  for (let i = -20; i <= 20; i += 10) { ctx.beginPath(); ctx.arc(i, 8.5, 3.2, 0, 6.28); ctx.fill(); }
+  ctx.strokeStyle = '#3c4a38'; ctx.lineWidth = 1;
+  ctx.strokeRect(-26, 4, 52, 9);
+  // hull with moonlit top plate
+  const hg = ctx.createLinearGradient(0, -6, 0, 6);
+  hg.addColorStop(0, '#5b7048'); hg.addColorStop(0.45, '#46583a'); hg.addColorStop(1, '#33402c');
+  ctx.fillStyle = hg; ctx.fillRect(-24, -6, 48, 12);
+  ctx.fillStyle = 'rgba(0,0,0,0.18)'; ctx.fillRect(-24, 2, 48, 4);
+  // turret barrel with muzzle collar
   ctx.save(); ctx.translate(0, -8); ctx.rotate(e.turret);
   ctx.fillStyle = '#3a4a30'; ctx.fillRect(0, -3, 30, 6);
+  ctx.fillStyle = '#2c3a26'; ctx.fillRect(24, -3.5, 6, 7);
   ctx.restore();
-  ctx.fillStyle = '#4a5d3c'; ctx.beginPath(); ctx.arc(0, -8, 11, Math.PI, 0); ctx.fill();
-  ctx.fillStyle = '#5a704a'; ctx.beginPath(); ctx.arc(0, -8, 11, Math.PI, Math.PI + 0.5); ctx.fill();
+  const tg = ctx.createLinearGradient(0, -19, 0, -8);
+  tg.addColorStop(0, '#5f7550'); tg.addColorStop(1, '#42523a');
+  ctx.fillStyle = tg; ctx.beginPath(); ctx.arc(0, -8, 11, Math.PI, 0); ctx.fill();
+  // whip antenna
+  ctx.strokeStyle = 'rgba(180,200,180,0.4)'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(-8, -16); ctx.quadraticCurveTo(-11, -26, -9, -30); ctx.stroke();
   ctx.restore();
 }
 function drawDrone(e) {
@@ -1564,6 +1805,9 @@ function drawJet(e) {
 
 function drawSam(e) {
   ctx.save(); ctx.translate(e.x, e.y);
+  // contact shadow
+  ctx.fillStyle = 'rgba(0,0,0,0.3)';
+  ctx.beginPath(); ctx.ellipse(0, 10, 24, 3.5, 0, 0, 6.28); ctx.fill();
   // tracked base
   ctx.fillStyle = '#1a1f1a'; ctx.fillRect(-20, 2, 40, 8);
   ctx.fillStyle = '#3a4434'; ctx.fillRect(-18, -6, 36, 9);
@@ -1613,19 +1857,25 @@ function drawBullets() {
 
 function drawHeli() {
   ctx.save();
-  ctx.translate(heli.x, heli.y);
+  // gentle hover bob (visual only) + a touch of pitch from vertical speed
+  const bob = heli.onGround ? 0 : Math.sin(G.t * 0.09) * 1.4;
+  ctx.translate(heli.x, heli.y + bob);
   // blink when invulnerable
   if (heli.invuln > 0 && Math.floor(heli.invuln / 4) % 2 === 0) ctx.globalAlpha = 0.45;
-  ctx.rotate(heli.tilt * 0.5);
+  ctx.rotate(heli.tilt * 0.5 + clamp(heli.vy * 0.01, -0.06, 0.06));
   ctx.scale(heli.facing, 1);
 
-  // shadow on ground
   const groundDist = (groundY() - heli.y);
-  // tail boom
-  ctx.fillStyle = '#2c6e8a'; ctx.fillRect(-44, -3, 34, 7);
-  ctx.fillStyle = '#3a8aa8'; ctx.fillRect(-44, -3, 34, 3);
-  // tail fin
-  ctx.fillStyle = '#256078'; ctx.beginPath(); ctx.moveTo(-44, -2); ctx.lineTo(-52, -12); ctx.lineTo(-44, 4); ctx.fill();
+
+  // tapered tail boom + horizontal stabilizer
+  const tb = ctx.createLinearGradient(0, -4, 0, 5);
+  tb.addColorStop(0, '#3f97b6'); tb.addColorStop(1, '#205a74');
+  ctx.fillStyle = tb;
+  ctx.beginPath(); ctx.moveTo(-10, -4); ctx.lineTo(-46, -2.5); ctx.lineTo(-46, 2); ctx.lineTo(-10, 5); ctx.closePath(); ctx.fill();
+  ctx.fillStyle = '#1b4f66'; ctx.beginPath(); ctx.moveTo(-36, -1); ctx.lineTo(-44, 3); ctx.lineTo(-34, 3); ctx.closePath(); ctx.fill();
+  // tail fin with stripe
+  ctx.fillStyle = '#256078'; ctx.beginPath(); ctx.moveTo(-44, -2); ctx.lineTo(-52, -13); ctx.lineTo(-47, -13); ctx.lineTo(-42, 4); ctx.closePath(); ctx.fill();
+  ctx.fillStyle = '#ffd95c'; ctx.fillRect(-50.5, -12, 6, 2.5);
   // tail rotor (spinning blur)
   ctx.strokeStyle = 'rgba(200,230,255,0.55)'; ctx.lineWidth = 2;
   const tr = Math.sin(heli.rotor * 2.4) * 9;
@@ -1634,73 +1884,106 @@ function drawHeli() {
   ctx.beginPath(); ctx.arc(-50, -8, 9, 0, 6.283); ctx.stroke();
   ctx.globalAlpha = 1;
 
-  // main body
-  const bg = ctx.createLinearGradient(0, -12, 0, 12);
-  bg.addColorStop(0, '#4fd0e8'); bg.addColorStop(0.5, '#2c9ac8'); bg.addColorStop(1, '#1c6e96');
+  // main fuselage — rounded nose, sculpted belly
+  const bg = ctx.createLinearGradient(0, -13, 0, 13);
+  bg.addColorStop(0, '#67dcef'); bg.addColorStop(0.35, '#37a8d2'); bg.addColorStop(0.75, '#1f7aa6'); bg.addColorStop(1, '#155a80');
   ctx.fillStyle = bg;
   ctx.beginPath();
-  ctx.moveTo(28, -2); ctx.quadraticCurveTo(30, -12, 16, -13);
-  ctx.lineTo(-12, -13); ctx.quadraticCurveTo(-20, -12, -18, 0);
-  ctx.lineTo(-18, 6); ctx.quadraticCurveTo(-16, 12, -4, 12);
-  ctx.lineTo(20, 12); ctx.quadraticCurveTo(30, 10, 28, -2);
+  ctx.moveTo(29, -3);
+  ctx.quadraticCurveTo(31, -10, 20, -12.5);
+  ctx.lineTo(-8, -13); ctx.quadraticCurveTo(-19, -12, -18, -2);
+  ctx.lineTo(-18, 5); ctx.quadraticCurveTo(-16, 12, -4, 12);
+  ctx.lineTo(16, 12); ctx.quadraticCurveTo(29, 10, 29, -3);
   ctx.closePath(); ctx.fill();
-  // belly stripe
-  ctx.fillStyle = '#ffd95c'; ctx.fillRect(-18, 7, 40, 3);
-  // cockpit glass
-  const cg = ctx.createLinearGradient(8, -12, 24, 4);
-  cg.addColorStop(0, '#cdf3ff'); cg.addColorStop(1, '#3a7a9a');
+  // painterly volume: soft top highlight + belly shadow
+  ctx.fillStyle = 'rgba(255,255,255,0.18)';
+  ctx.beginPath(); ctx.ellipse(2, -10, 22, 3.4, 0, 0, 6.28); ctx.fill();
+  ctx.fillStyle = 'rgba(8,30,46,0.35)';
+  ctx.beginPath(); ctx.ellipse(2, 9.5, 21, 3, 0, 0, 6.28); ctx.fill();
+  // engine cowl + exhaust stub
+  ctx.fillStyle = '#1d6485'; ctx.fillRect(-9, -16, 16, 5);
+  ctx.fillStyle = '#2c80a4'; ctx.fillRect(-9, -16, 16, 2);
+  ctx.fillStyle = '#10303f'; ctx.fillRect(-11, -14.5, 4, 3);
+  // cabin door outline + belly stripe
+  ctx.strokeStyle = 'rgba(10,40,60,0.5)'; ctx.lineWidth = 1;
+  ctx.strokeRect(-12, -7, 14, 15);
+  ctx.fillStyle = '#ffd95c'; ctx.fillRect(-18, 6.5, 41, 3);
+  ctx.fillStyle = 'rgba(170,90,20,0.35)'; ctx.fillRect(-18, 8.5, 41, 1);
+  // cockpit glass: two panes with a glint
+  const cg = ctx.createLinearGradient(8, -12, 26, 6);
+  cg.addColorStop(0, '#d9f6ff'); cg.addColorStop(0.5, '#7cc4e2'); cg.addColorStop(1, '#2c6c8e');
   ctx.fillStyle = cg;
   ctx.beginPath();
-  ctx.moveTo(28, -2); ctx.quadraticCurveTo(30, -11, 17, -11);
-  ctx.lineTo(9, -11); ctx.lineTo(7, 4); ctx.lineTo(26, 6);
-  ctx.quadraticCurveTo(30, 4, 28, -2); ctx.closePath(); ctx.fill();
-  ctx.strokeStyle = 'rgba(255,255,255,0.5)'; ctx.lineWidth = 1; ctx.stroke();
+  ctx.moveTo(28.5, -3); ctx.quadraticCurveTo(30, -10, 19, -11.5);
+  ctx.lineTo(10, -11.5); ctx.lineTo(8, 4); ctx.lineTo(25, 6);
+  ctx.quadraticCurveTo(29.5, 3, 28.5, -3); ctx.closePath(); ctx.fill();
+  ctx.strokeStyle = 'rgba(12,40,60,0.55)'; ctx.lineWidth = 1; ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(16, -11.5); ctx.lineTo(14.5, 5); ctx.stroke();
+  ctx.strokeStyle = 'rgba(255,255,255,0.65)'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(20, -9.5); ctx.lineTo(26, -3.5); ctx.stroke();
 
-  // hostage count bubbles in cabin
+  // hostage silhouettes in the cabin
   for (let i = 0; i < Math.min(G.aboard, 8); i++) {
     ctx.fillStyle = '#f0c89a';
     ctx.beginPath(); ctx.arc(-14 + (i % 4) * 7, -4 + Math.floor(i / 4) * 7, 2.2, 0, 6.28); ctx.fill();
   }
 
-  // skids
-  ctx.strokeStyle = '#345'; ctx.lineWidth = 2.5; ctx.lineCap = 'round';
-  ctx.beginPath(); ctx.moveTo(-16, 16); ctx.lineTo(22, 16); ctx.stroke();
-  ctx.beginPath(); ctx.moveTo(-10, 12); ctx.lineTo(-8, 16); ctx.stroke();
-  ctx.beginPath(); ctx.moveTo(14, 12); ctx.lineTo(16, 16); ctx.stroke();
+  // gun pod under the nose + bomb on the belly pylon when armed
+  ctx.fillStyle = '#28465c'; ctx.fillRect(12, 11, 12, 3.5);
+  ctx.fillStyle = '#1a3346'; ctx.fillRect(22, 11.8, 5, 2);
+  if (heli.bombCd <= 0 && !heli.onGround) {
+    ctx.fillStyle = '#39414f';
+    ctx.beginPath(); ctx.ellipse(0, 15.5, 6, 2.6, 0, 0, 6.28); ctx.fill();
+    ctx.fillStyle = '#222831'; ctx.fillRect(-7.5, 14.2, 3, 2.6);
+  }
+
+  // skids with struts, front tip curled
+  ctx.strokeStyle = '#2c3a4c'; ctx.lineWidth = 2.5; ctx.lineCap = 'round';
+  ctx.beginPath(); ctx.moveTo(-10, 12); ctx.lineTo(-9, 17); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(13, 12); ctx.lineTo(15, 17); ctx.stroke();
+  ctx.lineWidth = 2.2; ctx.strokeStyle = '#3c4e64';
+  ctx.beginPath(); ctx.moveTo(-18, 17.5); ctx.lineTo(23, 17.5); ctx.quadraticCurveTo(27, 17.5, 28, 14); ctx.stroke();
 
   // nav strobes: red on the tail, green on the nose
   if (Math.floor(G.t / 16) % 2 === 0) {
     ctx.fillStyle = 'rgba(255,85,95,0.95)';
-    ctx.beginPath(); ctx.arc(-46, -11, 1.8, 0, 6.283); ctx.fill();
+    ctx.beginPath(); ctx.arc(-49, -13.5, 1.8, 0, 6.283); ctx.fill();
   }
   if (Math.floor((G.t + 8) / 16) % 2 === 0) {
     ctx.fillStyle = 'rgba(120,255,170,0.95)';
-    ctx.beginPath(); ctx.arc(28, -5, 1.6, 0, 6.283); ctx.fill();
+    ctx.beginPath(); ctx.arc(29, -5, 1.6, 0, 6.283); ctx.fill();
   }
 
-  // rotor mast
-  ctx.fillStyle = '#234'; ctx.fillRect(-2, -16, 4, 4);
-  // main rotor (motion-blurred disc)
+  // rotor mast + hub
+  ctx.fillStyle = '#1c2c3c'; ctx.fillRect(-2.5, -19, 5, 5);
+  ctx.fillStyle = '#31495e'; ctx.fillRect(-1.5, -20.5, 3, 3);
+  // main rotor: soft blur disc + two coned blades (tips lift)
   ctx.save();
   const blurAlpha = clamp(heli.rotorPow, 0.3, 1);
-  ctx.globalAlpha = 0.16 * blurAlpha;
-  ctx.fillStyle = '#cfe8ff';
-  ctx.beginPath(); ctx.ellipse(0, -16, 46, 4, 0, 0, 6.28); ctx.fill();
-  ctx.globalAlpha = 1;
-  // two crisp blades spinning
-  ctx.strokeStyle = 'rgba(220,240,255,0.85)'; ctx.lineWidth = 2.5;
+  const rg = ctx.createLinearGradient(-46, 0, 46, 0);
+  rg.addColorStop(0, 'rgba(207,232,255,0)');
+  rg.addColorStop(0.5, 'rgba(207,232,255,' + (0.22 * blurAlpha) + ')');
+  rg.addColorStop(1, 'rgba(207,232,255,0)');
+  ctx.fillStyle = rg;
+  ctx.beginPath(); ctx.ellipse(0, -19, 47, 4.5, 0, 0, 6.28); ctx.fill();
   const b1 = Math.cos(heli.rotor) * 46;
-  ctx.beginPath(); ctx.moveTo(-b1, -16); ctx.lineTo(b1, -16); ctx.stroke();
+  ctx.strokeStyle = 'rgba(225,242,255,0.9)'; ctx.lineWidth = 2.5; ctx.lineCap = 'round';
+  ctx.beginPath(); ctx.moveTo(0, -19); ctx.quadraticCurveTo(b1 * 0.55, -19.5, b1, -21.5); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(0, -19); ctx.quadraticCurveTo(-b1 * 0.55, -19.5, -b1, -21.5); ctx.stroke();
   ctx.restore();
 
   ctx.restore();
 
-  // ground shadow (drawn unflipped)
-  if (groundDist > 0 && groundDist < 200) {
+  // soft radial ground shadow (drawn unflipped)
+  if (groundDist > 0 && groundDist < 220) {
     ctx.save();
-    const sa = clamp(1 - groundDist / 200, 0, 0.4);
-    ctx.fillStyle = 'rgba(0,0,0,' + sa + ')';
-    ctx.beginPath(); ctx.ellipse(heli.x, groundY() - 1, 36 - groundDist * 0.06, 5, 0, 0, 6.28); ctx.fill();
+    const sa = clamp(1 - groundDist / 220, 0, 0.42);
+    const sw = 38 - groundDist * 0.06;
+    const sg = ctx.createRadialGradient(heli.x, groundY() - 1, 1, heli.x, groundY() - 1, sw);
+    sg.addColorStop(0, 'rgba(0,0,0,' + sa + ')');
+    sg.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = sg;
+    ctx.beginPath(); ctx.ellipse(heli.x, groundY() - 1, sw, 6, 0, 0, 6.28); ctx.fill();
     ctx.restore();
   }
 }
@@ -1802,8 +2085,8 @@ document.getElementById('btn-mute').onclick = () => { const m = Audio2.toggleMut
 if (Audio2.isMuted()) document.getElementById('snd-on').style.opacity = '0.2';
 
 document.getElementById('howto-body').innerHTML = isTouch
-  ? 'One finger flies everything:<br><b>Touch &amp; drag</b> — the chopper chases your finger.<br><b>Release</b> — it eases down for a gentle landing.<br>🔫 The gun <b>auto-fires</b> at enemies ahead of the nose.<br><br>🚁 Settle near the <b>barracks</b> to load survivors.<br>🏠 Carry them back to the <b>green pad</b> to score — landing there also <b>refuels</b> you.<br>⛽ Fuel cans refuel · 🔧 wrenches repair the hull.<br>🚀 From wave 2, SAM sites launch homing missiles — shoot them down or outrun them.<br><br>Clear all 5 waves to win!'
-  : '<kbd>↑</kbd>/<kbd>W</kbd> lift · <kbd>←</kbd><kbd>→</kbd>/<kbd>A</kbd><kbd>D</kbd> fly &amp; turn · or just <b>drag with the mouse</b><br>🔫 The gun <b>auto-fires</b> at enemies ahead — <kbd>Space</kbd>/<kbd>F</kbd> force-fires<br><kbd>P</kbd>/<kbd>Esc</kbd> pause · <kbd>Enter</kbd> start &amp; restart · <kbd>M</kbd> mute<br><br>🚁 Land gently near the <b>barracks</b> to load survivors.<br>🏠 Fly them back to the <b>green base pad</b> to score — landing there also <b>refuels</b> you.<br>⛽ Fuel cans refuel · 🔧 wrenches repair the hull.<br>🚀 From wave 2, SAM sites launch homing missiles — shoot them down or outrun them.<br><br>Clear all 5 waves to win!';
+  ? 'One finger flies everything:<br><b>Touch &amp; drag</b> — the chopper chases your finger.<br><b>Release</b> — it eases down for a gentle landing.<br>🔫 The gun <b>auto-fires</b> at enemies ahead of the nose.<br>💣 Bombs <b>drop automatically</b> when you fly over tanks &amp; SAM sites.<br><br>🚁 Settle near the <b>barracks</b> to load survivors.<br>🏠 Carry them back to the <b>green pad</b> to score — landing there also <b>refuels</b> you.<br>⛽ Fuel cans refuel · 🔧 wrenches repair the hull.<br>🚀 From wave 2, SAM sites launch homing missiles — shoot them down or outrun them.<br><br>Clear all 5 waves to win!'
+  : '<kbd>↑</kbd>/<kbd>W</kbd> lift · <kbd>←</kbd><kbd>→</kbd>/<kbd>A</kbd><kbd>D</kbd> fly &amp; turn · or just <b>drag with the mouse</b><br>🔫 The gun <b>auto-fires</b> at enemies ahead — <kbd>Space</kbd>/<kbd>F</kbd> force-fires<br>💣 Bombs <b>auto-drop</b> over tanks &amp; SAM sites — <kbd>B</kbd> drops one anytime<br><kbd>P</kbd>/<kbd>Esc</kbd> pause · <kbd>Enter</kbd> start &amp; restart · <kbd>M</kbd> mute<br><br>🚁 Land gently near the <b>barracks</b> to load survivors.<br>🏠 Fly them back to the <b>green base pad</b> to score — landing there also <b>refuels</b> you.<br>⛽ Fuel cans refuel · 🔧 wrenches repair the hull.<br>🚀 From wave 2, SAM sites launch homing missiles — shoot them down or outrun them.<br><br>Clear all 5 waves to win!';
 
 // ---- leaderboard ---------------------------------------------------------
 function getLocal() { try { return JSON.parse(localStorage.getItem(HS_KEY)) || []; } catch (e) { return []; } }
@@ -1926,9 +2209,10 @@ document.addEventListener('visibilitychange', () => {
 });
 
 // headless-verification hooks (same convention as the other games)
-window.__g = { G, heli, startGame, loseLife, nextWave, update, render, addScore, damageHeli,
+window.__g = { G, heli, startGame, loseLife, nextWave, update, render, addScore, damageHeli, explodeBomb,
   get hostages() { return hostages; }, get enemies() { return enemies; },
-  get pickups() { return pickups; }, get popups() { return popups; }, get wrecks() { return wrecks; } };
+  get pickups() { return pickups; }, get popups() { return popups; }, get wrecks() { return wrecks; },
+  get bombs() { return bombs; }, get scorch() { return scorch; }, get buildings() { return buildings; } };
 })();
 </script>
 </body>
