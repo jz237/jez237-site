@@ -13,6 +13,7 @@
   <style>
     :root {
       color-scheme: dark;
+      --gutter: 0px;
       --cyan: #35f4ff;
       --pink: #ff3df2;
       --lime: #a7ff3d;
@@ -63,41 +64,42 @@
     .shell {
       position: fixed;
       inset: 0;
-      display: grid;
-      place-items: center;
-      padding: 18px;
     }
 
     .cabinet {
-      position: relative;
-      width: min(100vw - 28px, 1180px);
-      height: min(100vh - 28px, 760px);
-      height: min(100dvh - 28px, 760px);
-      min-height: min(520px, 100vh - 28px);
-      min-height: min(520px, 100dvh - 28px);
-      border: 1px solid rgba(53, 244, 255, 0.42);
-      background: rgba(2, 5, 15, 0.72);
-      box-shadow:
-        0 0 0 1px rgba(255, 61, 242, 0.2),
-        0 0 42px rgba(53, 244, 255, 0.22),
-        inset 0 0 44px rgba(53, 244, 255, 0.07);
+      position: absolute;
+      inset: 0;
       overflow: hidden;
     }
 
     canvas {
-      width: 100%;
-      height: 100%;
       display: block;
       image-rendering: auto;
+    }
+
+    #game {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
       touch-action: none;
+      cursor: crosshair;
+    }
+
+    #game.boxed {
+      outline: 1px solid rgba(53, 244, 255, 0.28);
+      box-shadow:
+        0 0 0 1px rgba(255, 61, 242, 0.12),
+        0 0 42px rgba(53, 244, 255, 0.16);
     }
 
     .hud {
       position: absolute;
       inset: max(14px, env(safe-area-inset-top))
-        calc(max(16px, env(safe-area-inset-right)) + 102px)
+        calc(max(16px, env(safe-area-inset-right)) + 102px + var(--gutter))
         auto
-        max(16px, env(safe-area-inset-left));
+        calc(max(16px, env(safe-area-inset-left)) + var(--gutter));
       display: grid;
       grid-template-columns: repeat(5, minmax(0, 1fr));
       gap: 10px;
@@ -440,7 +442,7 @@
     .controls {
       position: absolute;
       top: max(14px, env(safe-area-inset-top));
-      right: max(16px, env(safe-area-inset-right));
+      right: calc(max(16px, env(safe-area-inset-right)) + var(--gutter));
       display: flex;
       gap: 8px;
       z-index: 3;
@@ -471,7 +473,7 @@
 
     .version {
       position: absolute;
-      right: max(12px, env(safe-area-inset-right));
+      right: calc(max(12px, env(safe-area-inset-right)) + var(--gutter));
       bottom: max(10px, env(safe-area-inset-bottom));
       z-index: 3;
       color: rgba(234, 249, 255, 0.46);
@@ -485,24 +487,11 @@
     }
 
     @media (max-width: 760px), (pointer: coarse) {
-      .shell {
-        padding: 0;
-      }
-
-      .cabinet {
-        width: 100vw;
-        height: 100vh;
-        height: 100dvh;
-        min-height: 100vh;
-        min-height: 100dvh;
-        border: 0;
-      }
-
       .hud {
         inset: max(8px, env(safe-area-inset-top))
-          calc(max(8px, env(safe-area-inset-right)) + 94px)
+          calc(max(8px, env(safe-area-inset-right)) + 94px + var(--gutter))
           auto
-          max(8px, env(safe-area-inset-left));
+          calc(max(8px, env(safe-area-inset-left)) + var(--gutter));
         grid-template-columns: repeat(4, minmax(0, 1fr));
         gap: 6px;
       }
@@ -517,7 +506,7 @@
 
       .controls {
         top: max(8px, env(safe-area-inset-top));
-        right: max(8px, env(safe-area-inset-right));
+        right: calc(max(8px, env(safe-area-inset-right)) + var(--gutter));
       }
 
       .controls button {
@@ -567,7 +556,7 @@
       <div class="overlay" id="overlay">
         <div class="panel">
           <h1>Invaders</h1>
-          <div class="title-version">v1.44</div>
+          <div class="title-version">v1.45</div>
           <p class="tagline" id="message">A modernized arcade defense run: punch through waves, catch power cores, and survive the boss carrier.</p>
           <p class="hint" id="controlsHint"></p>
           <div class="enemy-roster" aria-label="Enemy ship guide">
@@ -597,7 +586,7 @@
         <button id="pauseButton" type="button" aria-label="Pause" title="Pause (P)">⏸</button>
         <button id="muteButton" type="button" aria-label="Mute sound" aria-pressed="false" title="Mute (M)">🔊</button>
       </div>
-      <div class="version" aria-hidden="true">v1.44</div>
+      <div class="version" aria-hidden="true">v1.45</div>
     </section>
   </main>
 
@@ -698,6 +687,8 @@
       let overlayShownAt = 0;
       let bgGradient = null;
       let vignetteGradient = null;
+      let viewScale = 1;
+      let canvasLeft = 0;
 
       function applyMute() {
         if (musicTrack) musicTrack.muted = muted;
@@ -943,16 +934,29 @@
       }
 
       function resize() {
-        const rect = canvas.getBoundingClientRect();
-        game.compact = rect.width < 560 || (rect.height < 560 && navigator.maxTouchPoints > 0);
-        game.lowPower = game.compact || (navigator.maxTouchPoints > 0 && rect.width < 760);
-        const maxDpr = game.lowPower ? 1 : 1.65;
-        const dpr = Math.max(1, Math.min(maxDpr, window.devicePixelRatio || 1));
-        canvas.width = Math.floor(rect.width * dpr);
-        canvas.height = Math.floor(rect.height * dpr);
+        // Game logic runs at phone-ish dimensions (max ~595x960) regardless of monitor;
+        // the canvas is scaled up to fill the window height and letterboxed on wide screens.
+        const vw = window.innerWidth;
+        const vh = window.innerHeight;
+        const H = Math.min(vh, 960);
+        viewScale = vh / H;
+        const W = Math.min(Math.floor(vw / viewScale), Math.max(560, Math.round(H * 0.62)));
+        const cssW = Math.round(W * viewScale);
+        canvasLeft = Math.max(0, Math.round((vw - cssW) / 2));
+        game.compact = W < 560 || (H < 560 && navigator.maxTouchPoints > 0);
+        game.lowPower = game.compact || (navigator.maxTouchPoints > 0 && Math.min(vw, vh) < 760);
+        const maxDpr = game.lowPower ? 1 : (W * H > 500000 ? 2.4 : 3.2);
+        const dpr = Math.max(1, Math.min(maxDpr, viewScale * (window.devicePixelRatio || 1)));
+        canvas.width = Math.floor(W * dpr);
+        canvas.height = Math.floor(H * dpr);
+        canvas.style.width = cssW + "px";
+        canvas.style.height = vh + "px";
+        canvas.style.left = canvasLeft + "px";
+        canvas.classList.toggle("boxed", canvasLeft > 0);
+        document.documentElement.style.setProperty("--gutter", canvasLeft + "px");
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-        game.width = rect.width;
-        game.height = rect.height;
+        game.width = W;
+        game.height = H;
         game.scale = Math.min(game.width / 1180, game.height / 760);
         bgGradient = null;
         vignetteGradient = null;
@@ -1111,13 +1115,21 @@
         game.invaderFrame = 0;
         game.nextDive = game.time + rand(2.4, 4.8);
         const mobileFormation = game.compact;
-        const cols = game.bossWave
+        let cols = game.bossWave
           ? clamp(5 + Math.floor(game.wave / 6), 5, mobileFormation ? 6 : 7)
           : mobileFormation
             ? clamp(6 + Math.floor(game.wave / 4), 6, 8)
             : clamp(8 + Math.floor(game.wave / 2), 8, 13);
         const rowsTarget = game.bossWave ? 2 : clamp(4 + Math.floor(game.wave / 3), 4, mobileFormation ? 8 : 7);
-        const spacingX = clamp(game.width / (cols + 1), mobileFormation ? 38 : 52, mobileFormation ? 58 : 84);
+        let spacingX = clamp(game.width / (cols + 1), mobileFormation ? 38 : 52, mobileFormation ? 58 : 84);
+        if (!mobileFormation) {
+          // Keep the formation narrow enough to march sideways inside the boxed column.
+          const usable = game.width - 96;
+          while (cols > 6 && (cols - 1) * spacingX > usable) {
+            cols -= 1;
+            spacingX = clamp(game.width / (cols + 1), 52, 84);
+          }
+        }
         const spacingY = clamp(44 * game.scale, 34, 52);
         const startX = game.width / 2 - (cols - 1) * spacingX / 2;
         const startY = Math.max(82, 98 * game.scale);
@@ -1262,14 +1274,17 @@
         const accel = 2100;
         const maxSpeed = dashPressed && p.dash <= 0 ? 680 : 410;
 
-        if (touchAim.active && touchAim.x !== null) {
+        // Keyboard overrides a parked mouse-hover target; an active press always wins.
+        if (!touchAim.active && (left || right)) touchAim.x = null;
+        const steering = touchAim.x !== null;
+        if (steering) {
           const target = clamp(touchAim.x, 30, game.width - 30);
           const delta = target - p.x;
           p.vx = clamp(delta * 9, -maxSpeed, maxSpeed);
           if (Math.abs(delta) < 3) p.vx *= 0.35;
         } else if (left) p.vx -= accel * dt;
-        if (!touchAim.active && right) p.vx += accel * dt;
-        if (!touchAim.active && !left && !right) p.vx *= Math.pow(0.0008, dt);
+        if (!steering && right) p.vx += accel * dt;
+        if (!steering && !left && !right) p.vx *= Math.pow(0.0008, dt);
         p.vx = clamp(p.vx, -maxSpeed, maxSpeed);
         p.x = clamp(p.x + p.vx * dt, 30, game.width - 30);
         p.invulnerable = Math.max(0, p.invulnerable - dt);
@@ -2600,34 +2615,50 @@
       });
 
       function pointerCanvasX(event) {
-        const rect = canvas.getBoundingClientRect();
-        return (event.clientX - rect.left) * (game.width / Math.max(1, rect.width));
+        return (event.clientX - canvasLeft) / viewScale;
+      }
+
+      // Steering listens on the whole window so the ship keeps tracking when the
+      // pointer crosses into the letterbox gutters; buttons and overlays opt out.
+      function steerTarget(event) {
+        return !(event.target && event.target.closest && event.target.closest("button, input, a, .overlay, .controls"));
       }
 
       function setTouchAim(event, active) {
-        if (game.state !== "playing") return;
+        if (active && game.state !== "playing") return;
         if (!active && touchAim.pointerId !== null && event.pointerId !== touchAim.pointerId) return;
-        if (event.cancelable) event.preventDefault();
+        if ((active || touchAim.active) && event.cancelable) event.preventDefault();
         touchAim.active = active;
-        touchAim.x = active ? pointerCanvasX(event) : null;
         touchAim.pointerId = active ? event.pointerId : null;
+        if (active) touchAim.x = pointerCanvasX(event);
+        else if (event.pointerType !== "mouse") touchAim.x = null;
         if (active && canvas.setPointerCapture) {
           try { canvas.setPointerCapture(event.pointerId); } catch (error) {}
         }
       }
 
-      canvas.addEventListener("pointerdown", event => {
+      window.addEventListener("pointerdown", event => {
+        if (!steerTarget(event)) return;
         unlockAudio();
         setTouchAim(event, true);
       });
-      canvas.addEventListener("pointermove", event => {
-        if (!touchAim.active || game.state !== "playing") return;
+      window.addEventListener("pointermove", event => {
+        if (game.state !== "playing" || !steerTarget(event)) return;
+        if (event.pointerType === "mouse") {
+          // Mouse follows without holding a button; holding it (or Space) fires.
+          touchAim.x = pointerCanvasX(event);
+          return;
+        }
+        if (!touchAim.active) return;
         if (touchAim.pointerId !== null && event.pointerId !== touchAim.pointerId) return;
         if (event.cancelable) event.preventDefault();
         touchAim.x = pointerCanvasX(event);
       });
-      canvas.addEventListener("pointerup", event => setTouchAim(event, false));
-      canvas.addEventListener("pointercancel", event => setTouchAim(event, false));
+      window.addEventListener("pointerup", event => setTouchAim(event, false));
+      window.addEventListener("pointercancel", event => setTouchAim(event, false));
+      document.addEventListener("contextmenu", event => {
+        if (game.state === "playing") event.preventDefault();
+      });
 
       pauseButton.addEventListener("click", () => {
         pauseButton.blur();
@@ -2657,7 +2688,7 @@
       applyMute();
       controlsHint.textContent = window.matchMedia && matchMedia("(pointer: coarse)").matches
         ? "Touch and drag anywhere — your ship follows your finger and fires automatically."
-        : "Move: ← → or A/D · Fire: Space or hold mouse · Dash: Shift · Pause: P · Mute: M";
+        : "Mouse steers the ship — no need to hold a button. Fire: hold mouse or Space · Move: ← → or A/D · Dash: Shift · Pause: P or Esc · Mute: M";
       paintTitleEnemies();
       renderScores(false);
       requestAnimationFrame(loop);
