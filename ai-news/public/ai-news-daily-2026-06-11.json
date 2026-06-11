@@ -1,6 +1,6 @@
 {
   "date": "2026-06-11",
-  "updatedAt": "2026-06-11T07:00:01.642897+00:00",
+  "updatedAt": "2026-06-11T07:02:24.038737+00:00",
   "items": [
     {
       "title": "Anthropic Walks Back Policy That Could Have ‘Sabotaged’ AI Researchers Using Claude",
@@ -13,10 +13,10 @@
       "image": "",
       "published": "2026-06-11T03:45:49+00:00",
       "firstSeen": "2026-06-11T04:00:01.464860+00:00",
-      "lastSeen": "2026-06-11T07:00:01.642897+00:00",
+      "lastSeen": "2026-06-11T07:02:24.038737+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 13.5954
+      "score": 13.5943
     },
     {
       "title": "Anthropic Walks Back Policy That Could Have ‘Sabotaged’ AI Researchers Using Claude",
@@ -29,10 +29,10 @@
       "image": "https://media.wired.com/photos/6a2a20f0915182808732c01f/master/pass/2280239203",
       "published": "2026-06-11T03:11:22+00:00",
       "firstSeen": "2026-06-11T04:00:01.464860+00:00",
-      "lastSeen": "2026-06-11T07:00:01.642897+00:00",
+      "lastSeen": "2026-06-11T07:02:24.038737+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 13.5795
+      "score": 13.5784
     },
     {
       "title": "Anthropic’s Dario Amodei has just one direct report",
@@ -45,10 +45,26 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/Dario-2280291125.jpg?w=1024",
       "published": "2026-06-11T03:53:06+00:00",
       "firstSeen": "2026-06-11T04:00:01.464860+00:00",
-      "lastSeen": "2026-06-11T07:00:01.642897+00:00",
+      "lastSeen": "2026-06-11T07:02:24.038737+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1988
+      "score": 5.1977
+    },
+    {
+      "title": "Supporting Europe’s work in ensuring a trustworthy AI ecosystem",
+      "url": "https://openai.com/index/supporting-eu-trustworthy-ai-ecosystem",
+      "source": "OpenAI News",
+      "sourceUrl": "https://openai.com/news/rss.xml",
+      "sourceWeight": 1.0,
+      "category": "AI",
+      "summary": "OpenAI supports the EU Code of Practice on AI content transparency, advancing provenance standards and tools to help people understand AI-generated content.",
+      "image": "",
+      "published": "2026-06-11T00:00:00+00:00",
+      "firstSeen": "2026-06-11T07:02:24.038737+00:00",
+      "lastSeen": "2026-06-11T07:02:24.038737+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.3046
     },
     {
       "title": "v1.87.2",
@@ -61,10 +77,10 @@
       "image": "https://opengraph.githubassets.com/e552d89f65a00d659f5f24feb5f2e83a7229bd51d1a93df4fc050869d1d7c475/BerriAI/litellm/releases/tag/v1.87.2",
       "published": "2026-06-11T05:19:44+00:00",
       "firstSeen": "2026-06-11T06:00:02.044920+00:00",
-      "lastSeen": "2026-06-11T07:00:01.642897+00:00",
+      "lastSeen": "2026-06-11T07:02:24.038737+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9401
+      "score": 2.9389
     },
     {
       "title": "v1.86.5",
@@ -77,10 +93,10 @@
       "image": "https://opengraph.githubassets.com/80d06ba2e609141c1c1e8cf1d9516d0b43e8c6b5e92f80d9b986e8bb3d3f2ead/BerriAI/litellm/releases/tag/v1.86.5",
       "published": "2026-06-11T03:10:46+00:00",
       "firstSeen": "2026-06-11T04:00:01.464860+00:00",
-      "lastSeen": "2026-06-11T07:00:01.642897+00:00",
+      "lastSeen": "2026-06-11T07:02:24.038737+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8792
+      "score": 2.8781
     },
     {
       "title": "v1.85.5",
@@ -93,10 +109,10 @@
       "image": "https://opengraph.githubassets.com/d807466c1b4ffc591b030912a839582e02ccc401b78db32931ca299e3748c41d/BerriAI/litellm/releases/tag/v1.85.5",
       "published": "2026-06-11T01:55:38+00:00",
       "firstSeen": "2026-06-11T03:00:01.873730+00:00",
-      "lastSeen": "2026-06-11T07:00:01.642897+00:00",
+      "lastSeen": "2026-06-11T07:02:24.038737+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8454
+      "score": 2.8444
     },
     {
       "title": "v1.84.7",
@@ -109,10 +125,10 @@
       "image": "https://opengraph.githubassets.com/aa9ec801a1abb248a814fb43b3cb1fc633d679eb7549b01203c890d68e98f030/BerriAI/litellm/releases/tag/v1.84.7",
       "published": "2026-06-11T01:33:43+00:00",
       "firstSeen": "2026-06-11T01:36:13.824543+00:00",
-      "lastSeen": "2026-06-11T07:00:01.642897+00:00",
+      "lastSeen": "2026-06-11T07:02:24.038737+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8358
+      "score": 2.8347
     },
     {
       "title": "Chenyang Yang, Shen Yan, Yibo Yang, Litao Hu, Yuchen Liu, Yuan Zeng, Hanchao Yu, Yinan Zhu, Sumedha Singla, Brian Van...",
@@ -123,9 +139,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-11T07:00:08.875935+00:00",
+      "published": "2026-06-11T07:02:28.830308+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-11T07:00:01.642897+00:00",
+      "lastSeen": "2026-06-11T07:02:24.038737+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
@@ -141,10 +157,10 @@
       "image": "",
       "published": "2026-06-11T00:00:00+00:00",
       "firstSeen": "2026-06-10T22:55:45.504127+00:00",
-      "lastSeen": "2026-06-11T07:00:01.642897+00:00",
+      "lastSeen": "2026-06-11T07:02:24.038737+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3056
+      "score": 2.3046
     },
     {
       "title": "Opendoor’s India exit is fueling a bigger conversation about AI and outsourcing",
@@ -157,10 +173,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/opendoor.jpg?resize=1200%2C800",
       "published": "2026-06-11T04:02:19+00:00",
       "firstSeen": "2026-06-11T05:00:01.120432+00:00",
-      "lastSeen": "2026-06-11T07:00:01.642897+00:00",
+      "lastSeen": "2026-06-11T07:02:24.038737+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2031
+      "score": 2.202
     }
   ],
   "errors": [
