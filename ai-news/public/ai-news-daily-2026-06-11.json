@@ -1,0 +1,45 @@
+{
+  "date": "2026-06-11",
+  "updatedAt": "2026-06-11T00:00:02.046970+00:00",
+  "items": [
+    {
+      "title": "How an astrophysicist uses Codex to help simulate black holes",
+      "url": "https://openai.com/index/using-codex-to-simulate-black-holes",
+      "source": "OpenAI News",
+      "sourceUrl": "https://openai.com/news/rss.xml",
+      "sourceWeight": 1.0,
+      "category": "AI",
+      "summary": "Discover how astrophysicist Chi-kwan Chan uses Codex to build black hole simulations, helping scientists study extreme physics and test Einstein’s theory of general relativity.",
+      "image": "",
+      "published": "2026-06-11T00:00:00+00:00",
+      "firstSeen": "2026-06-10T22:55:45.504127+00:00",
+      "lastSeen": "2026-06-11T00:00:02.046970+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.5
+    },
+    {
+      "title": "Uncertainty-aware Multi-fidelity Closure via Conditional Normalizing Flows",
+      "url": "https://llm-stats.com/ai-news",
+      "source": "LLM Stats AI News",
+      "sourceUrl": "https://llm-stats.com/ai-news",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "",
+      "image": "https://llm-stats.com/og/main.png",
+      "published": "2026-06-11T00:00:12.872920+00:00",
+      "firstSeen": "2026-05-29T21:00:01.522609+00:00",
+      "lastSeen": "2026-06-11T00:00:02.046970+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.36
+    }
+  ],
+  "errors": [
+    {
+      "source": "MarkTechPost",
+      "url": "https://www.marktechpost.com/feed/",
+      "error": "HTTP Error 403: Forbidden"
+    }
+  ]
+}
