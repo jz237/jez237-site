@@ -51,6 +51,13 @@ canvas{position:fixed;inset:0;width:100%;height:100%;display:block}
 #bTime i{background:linear-gradient(90deg,#46e3bf,#8df3ff)}
 #bCalm i{background:linear-gradient(90deg,#ffd87a,#ffb35c)}
 #hScore{font-size:12.5px;font-weight:700;letter-spacing:.06em;color:#ffd87a;text-shadow:0 1px 6px rgba(0,0,0,.7)}
+.srow{display:flex;align-items:center;gap:10px;margin:13px 2px;font-size:13px;color:#9fc9da}
+.srow label{width:118px;text-align:right}
+.srow span{width:42px;text-align:left;color:#ffd87a;font-weight:700;font-size:12.5px}
+input[type=range]{flex:1;accent-color:#51e8c8;touch-action:auto;pointer-events:auto;min-width:0}
+#wslide{position:absolute;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 12px);transform:translateX(-50%);display:flex;align-items:center;gap:8px;width:min(58vw,230px);padding:7px 14px;border-radius:999px;background:rgba(5,18,30,.55);border:1px solid rgba(110,225,255,.14);pointer-events:auto;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+#wslide span{font-size:12px;color:#9fdcef;font-weight:700;white-space:nowrap}
+#bBank{position:absolute;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 58px);transform:translateX(-50%);padding:11px 24px;font-size:14px;margin:0}
 </style>
 </head>
 <body>
@@ -76,10 +83,27 @@ canvas{position:fixed;inset:0;width:100%;height:100%;display:block}
     <p class="haz">slow strokes carry · drains swallow · geysers scatter · anglers hunt</p>
     <p class="haz hide" id="deskKeys" style="margin-top:-8px">mouse: drag the water · enter: begin · p: pause · m: mute</p>
     <button class="btn" id="bPlay">BEGIN THE DRIFT</button>
+    <br><button class="btn ghost" id="bDaily">◈ TODAY'S TIDE</button>
+    <div class="stat" id="tDaily"></div>
     <div class="stat" id="tBest"></div>
     <div class="board" id="tBoard"></div>
-    <button class="btn ghost" id="bMute2" style="margin-top:14px">♪ sound on</button>
+    <div style="margin-top:14px">
+      <button class="btn ghost" id="bMute2">♪ sound on</button>
+      <button class="btn ghost" id="bSet">≋ tide settings</button>
+    </div>
     <p class="tiny">10 tides · calm play scores higher · global leaderboard</p>
+  </div>
+
+  <div id="settings" class="panel hide">
+    <h2>TIDE SETTINGS</h2>
+    <p class="sub" style="margin-bottom:4px">shape your water</p>
+    <div class="srow"><label>current strength</label><input type="range" id="rStr" min="70" max="140" step="5"><span id="vStr"></span></div>
+    <div class="srow"><label>stroke width</label><input type="range" id="rWid" min="60" max="160" step="5"><span id="vWid"></span></div>
+    <div class="srow"><label>swirl</label><input type="range" id="rSwirl" min="0" max="200" step="10"><span id="vSwirl"></span></div>
+    <div class="srow"><label>dye glow</label><input type="range" id="rGlow" min="40" max="160" step="5"><span id="vGlow"></span></div>
+    <p class="tiny" style="margin-top:6px">wider, stronger strokes drain your calm faster — finesse is cheaper</p>
+    <button class="btn" id="bSetBack">DONE</button>
+    <button class="btn ghost" id="bSetReset">RESET</button>
   </div>
 
   <div id="card" class="panel hide"></div>
@@ -95,6 +119,9 @@ canvas{position:fixed;inset:0;width:100%;height:100%;display:block}
       <button class="btn ghost" id="bSkip">DRIFT ON</button>
     </div>
   </div>
+
+  <div id="wslide" class="hide"><span>≋ width</span><input type="range" id="rWidG" min="60" max="160" step="5"><span id="vWidG"></span></div>
+  <button class="btn hide" id="bBank">BANK</button>
 </div>
 
 <script>
@@ -114,6 +141,7 @@ const rnd=(a=1,b)=>b===undefined?Math.random()*a:a+Math.random()*(b-a);
 const $=id=>document.getElementById(id);
 const fmt=n=>Math.round(n).toLocaleString('en-US');
 const Q=new URLSearchParams(location.search);
+function mulberry32(s){return function(){s|=0;s=s+0x6D2B79F5|0;let t=Math.imul(s^s>>>15,1|s);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
 function hsl(h,s,l){ /* h 0..360 -> [r,g,b] 0..1 */
   s/=100;l/=100;const k=n=>(n+h/30)%12,a=s*Math.min(l,1-l);
   const f=n=>l-a*Math.max(-1,Math.min(k(n)-3,Math.min(9-k(n),1)));
@@ -146,7 +174,7 @@ function sizeCanvases(){
 
 /* ---------------- persistent store ---------------- */
 const Store={
-  d:{best:0,runs:0,muted:false,initials:''},
+  d:{best:0,runs:0,muted:false,initials:'',set:{str:1,wid:1,swirl:1,glow:1},dBest:{d:'',s:0}},
   load(){try{const s=JSON.parse(localStorage.getItem('eddy_v1'));if(s)Object.assign(this.d,s)}catch(e){}},
   save(){try{localStorage.setItem('eddy_v1',JSON.stringify(this.d))}catch(e){}}
 };
@@ -304,8 +332,8 @@ const Sim={
       const i=x+y*W;
       curl[i]=S[i]?0:.5*((v[i+1]-v[i-1])-(u[i+W]-u[i-W]));
     }
-    const CONF=16;
-    for(let y=2;y<H-2;y++)for(let x=2;x<W-2;x++){
+    const CONF=16*Store.d.set.swirl;
+    if(CONF>0)for(let y=2;y<H-2;y++)for(let x=2;x<W-2;x++){
       const i=x+y*W;if(S[i])continue;
       const dx=(Math.abs(curl[i+1])-Math.abs(curl[i-1]))*.5;
       const dy=(Math.abs(curl[i+W])-Math.abs(curl[i-W]))*.5;
@@ -610,22 +638,58 @@ const LEVELS=[
   vents:[{x:.16,y:.2,r:.15,p:4,ph:0,s:24},{x:.84,y:.2,r:.15,p:4,ph:1,s:24},{x:.16,y:.76,r:.15,p:4,ph:2,s:24},{x:.84,y:.76,r:.15,p:4,ph:3,s:24}]}
 ];
 
+/* ---------------- daily tide: date-seeded layout, same for every drifter ---------------- */
+function dailyLevel(dateStr){
+  const d=dateStr||new Date().toISOString().slice(0,10); /* UTC date: one tide per day worldwide */
+  let seed=0;for(const ch of d)seed=(seed*31+ch.charCodeAt(0))>>>0;
+  const R=mulberry32(seed),ri=(a,b)=>a+R()*(b-a);
+  const N1=['Slack','Neap','Glass','Iron','Salt','Hollow','Ember','Moon','Storm','Pale'];
+  const N2=['Tide','Drift','Surge','Swell','Current','Reach','Sound','Channel'];
+  const L={name:N1[R()*N1.length|0]+' '+N2[R()*N2.length|0],
+    hint:"today's tide — one shape for every drifter on earth.",
+    daily:d,
+    spores:Math.round(ri(100,130)),target:+ri(.42,.55).toFixed(2),
+    time:Math.round(ri(80,100)),energy:Math.round(ri(2900,3600)),
+    spawn:{x:ri(.35,.65),y:ri(.8,.88),r:.12},
+    pool:{x:ri(.3,.7),y:ri(.1,.16),r:.085},
+    drains:[],vents:[],urchins:[],cold:[],preds:[],rocks:[]};
+  const nd=R()<.65?(R()<.75?1:2):0;
+  for(let i=0;i<nd;i++)L.drains.push({x:ri(.2,.8),y:ri(.3,.62),R:ri(.22,.3),s:ri(22,28),sw:(R()<.5?-1:1)*ri(10,20),kill:.03});
+  const nv=R()*3|0;
+  for(let i=0;i<nv;i++)L.vents.push({x:ri(.15,.85),y:ri(.3,.7),r:ri(.13,.17),p:ri(3,4.4),ph:R()*4,s:ri(22,28)});
+  const nu=R()*5|0;
+  for(let i=0;i<nu;i++)L.urchins.push({x:ri(.15,.85),y:ri(.28,.7),r:ri(.028,.036)});
+  const nc=R()*2.4|0;
+  for(let i=0;i<nc;i++)L.cold.push({x:ri(.2,.8),y:ri(.35,.6),r:ri(.14,.2)});
+  const np=R()<.5?1:(R()<.3?2:0);
+  for(let i=0;i<np;i++)L.preds.push({x:ri(.3,.7),y:ri(.25,.4)});
+  const nr=R()*2.4|0;
+  for(let i=0;i<nr;i++)L.rocks.push({x:ri(.15,.85),y:ri(.3,.65),r:ri(.05,.08)});
+  if(!L.drains.length&&!L.vents.length&&!L.urchins.length&&!L.preds.length)
+    L.drains.push({x:.5,y:.45,R:.28,s:25,sw:14,kill:.03});
+  return L;
+}
+function dailyNice(d){const M=['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];return M[+d.slice(5,7)-1]+' '+(+d.slice(8))}
+
 /* ---------------- game state ---------------- */
 const Game={
   state:'TITLE', /* TITLE INTRO PLAY RESULT OVER WIN */
   lv:0,score:0,collected:0,needed:0,total:0,t:0,tMax:1,
   energy:0,energyMax:1,runSpores:0,hueBase:185,shake:0,
   basePts:0,streak:0,streakT:0, /* streak scoring: rapid arrivals worth more */
+  after:0, /* afterglow seconds left once target met (bonus collection) */
+  daily:false,dailyL:null,
   minDim(){return Math.min(VIEW.w,VIEW.h)}
 };
 let spores=[];      /* {x,y,vx,vy,ph,spr} */
 let absorbs=[];     /* {x,y,t} cosmetic */
 let fxp=[];         /* particles {x,y,vx,vy,t,dur,col,sz,kind} */
 let pool=null,drains=[],vents=[],rocks=[],urchins=[],colds=[],preds=[];
-let tutOn=false,tutT=0,shakeOn=false; /* first-run hint + vent shake */
+let tutOn=false,tutT=0,shakeOn=false,trailTick=0; /* first-run hint + vent shake + spore trail rotation */
+const curL=()=>Game.daily&&Game.dailyL?Game.dailyL:LEVELS[Game.lv];
 
 function layoutLevel(){
-  const L=LEVELS[Game.lv],m=Game.minDim(),W=VIEW.w,H=VIEW.h;
+  const L=curL(),m=Game.minDim(),W=VIEW.w,H=VIEW.h;
   const P=o=>({x:o.x*W,y:o.y*H});
   pool={x:L.pool.x*W,y:L.pool.y*H,r:L.pool.r*m,pulse:0,spin:0};
   drains=(L.drains||[]).map(d=>({x:d.x*W,y:d.y*H,R:d.R*m,s:d.s,sw:d.sw,kill:d.kill*m,spin:rnd(TAU)}));
@@ -676,7 +740,7 @@ const sporeSprites=[];
 })();
 
 function spawnSpores(){
-  const L=LEVELS[Game.lv],m=Game.minDim();
+  const L=curL(),m=Game.minDim();
   spores=[];absorbs=[];
   const cx=L.spawn.x*VIEW.w,cy=L.spawn.y*VIEW.h,r=L.spawn.r*m;
   for(let i=0;i<L.spores;i++){
@@ -685,26 +749,44 @@ function spawnSpores(){
   }
 }
 
-function startLevel(n){
-  Game.lv=n;Game.state='INTRO';
+function startLevel(n){Game.daily=false;Game.lv=n;initLevel(LEVELS[n],n)}
+function startDaily(dateStr){
+  Game.daily=true;Game.dailyL=dailyLevel(dateStr);
+  Game.score=0;Game.runSpores=0;Game.lv=0;
+  initLevel(Game.dailyL,0);
+}
+function initLevel(L,n){
+  Game.state='INTRO';
   layoutLevel();Sim.reset();
-  const L=LEVELS[n];
   Game.total=L.spores;Game.needed=Math.ceil(L.spores*L.target);
   Game.collected=0;Game.t=L.time;Game.tMax=L.time;
   Game.energy=L.energy;Game.energyMax=L.energy;
-  Game.basePts=0;Game.streak=0;Game.streakT=0;
+  Game.basePts=0;Game.streak=0;Game.streakT=0;Game.after=0;
+  $('bBank').classList.add('hide');
   spores=[];absorbs=[];fxp=[];
   UI.intro(L,n);
 }
 function beginPlay(){
   Game.state='PLAY';
-  tutOn=(Game.lv===0&&Store.d.runs===0);tutT=0;
+  tutOn=(!Game.daily&&Game.lv===0&&Store.d.runs===0);tutT=0;
   spawnSpores();
-  UI.show('hud');UI.hide('card');UI.hide('title');
+  UI.show('hud');UI.show('wslide');UI.hide('card');UI.hide('title');
   UI.hud();
+}
+function checkTarget(){ /* target met: open the afterglow, or finish outright */
+  if(Game.state!=='PLAY'||Game.collected<Game.needed||Game.after>0)return;
+  if(spores.length>0&&Game.t>1.5){
+    Game.after=8;
+    $('bBank').classList.remove('hide');
+    Au.env('sine',659.25,659.25,.3,.1);Au.env('sine',987.77,987.77,.35,.08);
+    if(pool)fxp.push({x:pool.x,y:pool.y,vx:0,vy:0,t:0,dur:.7,col:'140,255,225',sz:pool.r*2.2,kind:'ring'});
+  }else levelDone();
 }
 function levelDone(){
   /* success */
+  if(Game.state!=='PLAY')return;
+  Game.after=0;
+  $('bBank').classList.add('hide');
   const tBonus=Math.ceil(Game.t)*20;
   const calmFrac=clamp(Game.energy/Game.energyMax,0,1);
   const calmBonus=Math.round(calmFrac*400);
@@ -718,7 +800,11 @@ function levelDone(){
 function runOver(win){
   Game.state=win?'WIN':'OVER';
   Store.d.runs++;
-  if(Game.score>Store.d.best)Store.d.best=Game.score;
+  if(Game.daily){
+    const today=Game.dailyL.daily;
+    if(Store.d.dBest.d!==today)Store.d.dBest={d:today,s:0};
+    if(Game.score>Store.d.dBest.s)Store.d.dBest.s=Game.score;
+  }else if(Game.score>Store.d.best)Store.d.best=Game.score;
   Store.save();
   win?Au.good():Au.bad();
   UI.endCard(win);
@@ -732,12 +818,13 @@ function strokeSeg(x0,y0,x1,y1,dtm){ /* dtm ms */
   const dx=x1-x0,dy=y1-y0,len=hyp(dx,dy);
   if(len<1)return;
   if(Game.state==='PLAY')tutOn=false;
+  const S=Store.d.set;
   const dts=Math.max(dtm,4)/1000;
   /* target velocity in cells/s */
   let vcx=(dx/dts)/Sim.cellW,vcy=(dy/dts)/Sim.cellH;
-  const vm=hyp(vcx,vcy),cap=38;
+  const vm=hyp(vcx,vcy),cap=38*S.str;
   if(vm>cap){vcx*=cap/vm;vcy*=cap/vm}
-  const rad=Game.minDim()*.06;
+  const rad=Game.minDim()*.06*S.wid;
   const steps=Math.max(1,Math.ceil(len/(rad*.7)));
   for(let i=0;i<steps;i++){
     const t=(i+.5)/steps;
@@ -746,12 +833,14 @@ function strokeSeg(x0,y0,x1,y1,dtm){ /* dtm ms */
   /* dye along stroke */
   strokeHue=(strokeHue+len*.02)%360;
   const c=hsl(170+((strokeHue*1.3)%140),85,60);
-  Dye.splatDye((x0+x1)/2,(y0+y1)/2,rad*1.35,[c[0]*.36,c[1]*.36,c[2]*.36]);
+  const dg=.36*S.glow;
+  Dye.splatDye((x0+x1)/2,(y0+y1)/2,rad*1.35,[c[0]*dg,c[1]*dg,c[2]*dg]);
   Au.swish(len/dts*.001*1000);
-  if(Game.state==='PLAY')Game.energy=Math.max(0,Game.energy-len*.06);
+  /* wider + stronger strokes drain calm faster — keeps the sliders honest */
+  if(Game.state==='PLAY')Game.energy=Math.max(0,Game.energy-len*.06*S.wid*S.str);
 }
 function onDown(e){
-  if(e.target&&e.target.closest&&e.target.closest('.panel,#hud button'))return;
+  if(e.target&&e.target.closest&&e.target.closest('.panel,#hud button,#wslide,#bBank'))return;
   Au.init();Au.resume();
   pointers.set(e.pointerId,{x:e.clientX/VIEW.scale,y:e.clientY/VIEW.scale,t:performance.now()});
 }
@@ -871,7 +960,8 @@ function updateSpores(dt){
       Game.basePts+=pts;
       fxp.push({x:s.x,y:s.y,vx:0,vy:-30,t:0,dur:.85,col:'190,255,225',sz:pts,kind:'txt'});
       Au.collect();
-      if(Game.collected>=Game.needed){levelDone();return}
+      checkTarget();
+      if(Game.state!=='PLAY')return;
     }
   }
   /* cosmetic absorb anim */
@@ -882,6 +972,14 @@ function updateSpores(dt){
   /* impossible check */
   if(Game.state==='PLAY'&&Game.collected+spores.length<Game.needed){
     runOver(false);
+  }
+  /* spore trails: the school paints its path into the dye (2 per frame, round-robin) */
+  if(spores.length){
+    for(let k=0;k<2;k++){
+      const s=spores[(trailTick*2+k)%spores.length];
+      if(s.born<=0&&hyp(s.vx,s.vy)>25)Dye.splatDye(s.x,s.y,m*.018,[.022,.055,.03]);
+    }
+    trailTick++;
   }
 }
 function killFx(x,y,col){
@@ -976,7 +1074,7 @@ function draw2D(now){
     ctx.beginPath();ctx.arc(pool.x,pool.y,R,0,TAU);ctx.stroke();ctx.setLineDash([]);
     ctx.fillStyle='rgba(170,255,230,.85)';ctx.font=`700 ${Math.round(R*.34)}px ui-rounded,system-ui,sans-serif`;
     ctx.textAlign='center';ctx.textBaseline='middle';
-    ctx.fillText(`${Game.collected}/${Game.needed}`,pool.x,pool.y);
+    ctx.fillText(Game.collected>=Game.needed?'+'+(Game.collected-Game.needed):`${Game.collected}/${Game.needed}`,pool.x,pool.y);
   }
   /* drains */
   for(const dr of drains){
@@ -1126,11 +1224,14 @@ function draw2D(now){
 
 /* ---------------- scores ---------------- */
 const Scores={
-  API:'https://game-scores.jez237.workers.dev/scores/eddy',
+  BASE:'https://game-scores.jez237.workers.dev/scores/',
+  ns:'eddy', /* 'eddy' campaign · 'eddy-daily' daily tide */
   board:null,
+  url(){return this.BASE+this.ns},
+  setNs(n){if(this.ns!==n){this.ns=n;this.board=null}},
   async fetchBoard(){
     try{
-      const r=await fetch(this.API);
+      const r=await fetch(this.url());
       const d=await r.json();
       this.board=(Array.isArray(d)?d:(d.scores||[]))
         .map(s=>({name:String(s.initials||s.name||'???').slice(0,3).toUpperCase(),score:s.score|0,extra:String(s.extra||'')}))
@@ -1140,7 +1241,7 @@ const Scores={
   },
   async submit(name,score,extra){
     try{
-      await fetch(this.API,{method:'POST',headers:{'Content-Type':'application/json'},
+      await fetch(this.url(),{method:'POST',headers:{'Content-Type':'application/json'},
         body:JSON.stringify({initials:name,score,extra})});
       this.board=null;
     }catch(e){}
@@ -1168,8 +1269,11 @@ const UI={
   show(id){$(id).classList.remove('hide')},
   hide(id){$(id).classList.add('hide')},
   hud(){
-    $('hLv').textContent='LV '+(Game.lv+1);
-    $('hSp').textContent=Game.collected+'/'+Game.needed;
+    $('hLv').textContent=Game.daily?'◈':'LV '+(Game.lv+1);
+    $('hSp').textContent=Game.collected>=Game.needed
+      ?Game.needed+'+'+(Game.collected-Game.needed)
+      :Game.collected+'/'+Game.needed;
+    if(Game.after>0)$('bBank').textContent='BANK +'+(Game.collected-Game.needed)+' ✦ · '+Math.ceil(Game.after);
     const t=Math.max(0,Math.ceil(Game.t));
     $('hTm').textContent=t;
     $('hTm').classList.toggle('low',Game.t<11&&Game.state==='PLAY');
@@ -1180,18 +1284,18 @@ const UI={
   intro(L,n){
     this.hide('title');this.hide('entry');this.show('card');this.show('hud');this.hud();
     $('card').innerHTML=
-      `<p class="sub">tide ${n+1} of ${LEVELS.length}</p><h2>${L.name}</h2>`+
+      `<p class="sub">${Game.daily?"today's tide · "+dailyNice(L.daily):'tide '+(n+1)+' of '+LEVELS.length}</p><h2>${L.name}</h2>`+
       `<div class="rows"><div><span>herd home</span><span>${Math.ceil(L.spores*L.target)} of ${L.spores} ✦</span></div>`+
       `<div><span>tide window</span><span>${L.time}s</span></div></div>`+
       `<p class="how" style="font-size:13.5px;color:#9fc9da">${L.hint}</p>`+
-      (n===0?`<p class="haz" style="margin:4px 0 10px"><span style="color:#7df2da">▰</span> tide left · <span style="color:#ffd87a">▰</span> calm — gentler currents score more</p>`:'')+
+      (n===0&&!Game.daily?`<p class="haz" style="margin:4px 0 10px"><span style="color:#7df2da">▰</span> tide left · <span style="color:#ffd87a">▰</span> calm — gentler currents score more</p>`:'')+
       `<button class="btn" id="bGo">RELEASE THE BLOOM</button>`;
     $('bGo').onclick=()=>{Au.init();Au.resume();Au.tick();beginPlay()};
   },
   result(r){
     this.show('card');
     $('card').innerHTML=
-      `<p class="sub">tide ${Game.lv+1} held</p><h2>${LEVELS[Game.lv].name}</h2>`+
+      `<p class="sub">${Game.daily?"today's tide held":'tide '+(Game.lv+1)+' held'}</p><h2>${curL().name}</h2>`+
       `<div class="bigpct">${Math.round(Game.collected/Game.total*100)}%</div>`+
       `<div class="rows">`+
       `<div><span>✦ ${Game.collected} herded home</span><span>${fmt(r.base)}</span></div>`+
@@ -1199,39 +1303,41 @@ const UI={
       `<div><span>calm water ${Math.round(r.calmFrac*100)}%</span><span>+${fmt(r.calmBonus)}</span></div>`+
       `<div style="border-top:1px solid rgba(120,220,255,.18);margin-top:4px;padding-top:6px"><span>run total</span><span>${fmt(Game.score)}</span></div>`+
       `</div>`+
-      `<button class="btn" id="bNext">${Game.lv+1<LEVELS.length?'NEXT TIDE':'FACE THE RECKONING'}</button>`;
+      `<button class="btn" id="bNext">${Game.daily?'THE RECKONING':(Game.lv+1<LEVELS.length?'NEXT TIDE':'FACE THE RECKONING')}</button>`;
     $('bNext').onclick=()=>{
       Au.tick();
-      if(Game.lv+1<LEVELS.length)startLevel(Game.lv+1);
+      if(Game.daily)runOver(true);
+      else if(Game.lv+1<LEVELS.length)startLevel(Game.lv+1);
       else runOver(true);
     };
   },
   endCard(win){
-    this.show('card');this.hide('hud');
-    const pct=Game.total?Math.round(Game.collected/Game.total*100):0;
+    this.show('card');this.hide('hud');this.hide('wslide');
+    const pct=Game.total?Math.round(Game.collected/Game.total*100):0,dl=Game.daily;
     $('card').innerHTML=
-      `<p class="sub">${win?'all ten tides held':'the bloom is lost'}</p>`+
-      `<h2>${win?'MASTER OF CURRENTS':'SWALLOWED'}</h2>`+
+      `<p class="sub">${dl?(win?"today's tide held":"today's tide lost"):(win?'all ten tides held':'the bloom is lost')}</p>`+
+      `<h2>${win?(dl?'TIDE MASTER':'MASTER OF CURRENTS'):'SWALLOWED'}</h2>`+
       `<div class="bigpct" style="color:${win?'#7df2da':'#ff9d7a'}">${fmt(Game.score)}</div>`+
       `<div class="rows">`+
-      `<div><span>tides survived</span><span>${win?LEVELS.length:Game.lv}${win?'':' of '+LEVELS.length}</span></div>`+
+      (dl?`<div><span>${Game.dailyL.name} · ${dailyNice(Game.dailyL.daily)}</span><span>${pct}%</span></div>`
+         :`<div><span>tides survived</span><span>${win?LEVELS.length:Game.lv}${win?'':' of '+LEVELS.length}</span></div>`)+
       `<div><span>spores herded</span><span>${Game.runSpores+(win?0:Game.collected)} ✦</span></div>`+
-      `<div><span>personal best</span><span>${fmt(Store.d.best)}</span></div>`+
+      `<div><span>${dl?"today's best":'personal best'}</span><span>${fmt(dl?Store.d.dBest.s:Store.d.best)}</span></div>`+
       `</div>`+
       `<button class="btn" id="bMark">LEAVE A MARK</button>`+
       `<button class="btn ghost" id="bAgain">DRIFT AGAIN</button>`;
     $('bMark').onclick=()=>{Au.tick();UI.entry()};
-    $('bAgain').onclick=()=>{Au.tick();startRun()};
+    $('bAgain').onclick=()=>{Au.tick();Game.daily?startDaily():startRun()};
   },
   async boardCard(name,score){
-    this.hide('entry');this.hide('hud');this.show('card');
+    this.hide('entry');this.hide('hud');this.hide('wslide');this.show('card');
     $('card').innerHTML=
-      `<p class="sub">the tide charts</p><h2>DRIFTERS</h2>`+
+      `<p class="sub">${Scores.ns==='eddy-daily'?"today's tide charts":'the tide charts'}</p><h2>DRIFTERS</h2>`+
       `<div class="board" id="cBoard"><div class="tiny">reading the tide charts…</div></div>`+
       `<p class="stat" id="cRank"></p>`+
       `<button class="btn" id="bAgain2">DRIFT AGAIN</button>`+
       `<button class="btn ghost" id="bTitle2">TITLE</button>`;
-    $('bAgain2').onclick=()=>{Au.tick();startRun()};
+    $('bAgain2').onclick=()=>{Au.tick();Game.daily?startDaily():startRun()};
     $('bTitle2').onclick=()=>{Au.tick();UI.title()};
     await Scores.fetchBoard();
     if(!$('cBoard'))return; /* card was replaced while fetching */
@@ -1263,8 +1369,12 @@ const UI={
   },
   title(){
     Game.state='TITLE';
-    this.hide('card');this.hide('entry');this.hide('hud');this.show('title');
+    this.hide('card');this.hide('entry');this.hide('hud');this.hide('wslide');this.hide('settings');this.show('title');
+    $('bBank').classList.add('hide');
     $('tBest').textContent=Store.d.best>0?`personal best ${fmt(Store.d.best)} · ${Store.d.runs} drift${Store.d.runs===1?'':'s'}`:'';
+    const DL=dailyLevel();
+    $('tDaily').textContent=DL.name+' · '+dailyNice(DL.daily)+(Store.d.dBest.d===DL.daily&&Store.d.dBest.s>0?` · best ${fmt(Store.d.dBest.s)}`:'');
+    Scores.setNs('eddy');
     this.board();
   }
 };
@@ -1277,6 +1387,23 @@ function startRun(){
 
 /* buttons */
 $('bPlay').onclick=()=>{Au.init();Au.resume();Au.tick();startRun()};
+$('bDaily').onclick=()=>{Au.init();Au.resume();Au.tick();startDaily()};
+$('bBank').onclick=()=>{Au.tick();levelDone()};
+/* tide settings sliders (persisted; rWidG is the in-game width pill) */
+const SLIDERS=[['rStr','str'],['rWid','wid'],['rSwirl','swirl'],['rGlow','glow'],['rWidG','wid']];
+function syncSliders(){
+  for(const[id,k]of SLIDERS){
+    $(id).value=Math.round(Store.d.set[k]*100);
+    $('v'+id.slice(1)).textContent=(Math.round(Store.d.set[k]*100)/100)+'×';
+  }
+}
+for(const[id,k]of SLIDERS)$(id).addEventListener('input',()=>{
+  Store.d.set[k]=$(id).value/100;Store.save();syncSliders();
+});
+syncSliders();
+$('bSet').onclick=()=>{Au.tick();UI.hide('title');UI.show('settings')};
+$('bSetBack').onclick=()=>{Au.tick();UI.hide('settings');UI.show('title')};
+$('bSetReset').onclick=()=>{Au.tick();Store.d.set={str:1,wid:1,swirl:1,glow:1};Store.save();syncSliders()};
 $('bQuit').onclick=()=>{
   Au.tick();
   if(Game.state==='PLAY')UI.pause();
@@ -1295,7 +1422,16 @@ $('bSend').onclick=async()=>{
   Store.d.initials=name;Store.save();
   $('bSend').textContent='CARVING…';$('bSend').disabled=true;
   const win=Game.state==='WIN';
-  await Scores.submit(name,Game.score,(win?'WIN ':'')+'L'+(win?LEVELS.length:Game.lv+1)+' '+(Game.runSpores+(win?0:Game.collected))+'sp');
+  let extra;
+  if(Game.daily){
+    const pct=Game.total?Math.round(Game.collected/Game.total*100):0;
+    extra='D '+Game.dailyL.daily.slice(5)+' '+pct+'%';
+    Scores.setNs('eddy-daily');
+  }else{
+    extra=(win?'WIN ':'')+'L'+(win?LEVELS.length:Game.lv+1)+' '+(Game.runSpores+(win?0:Game.collected))+'sp';
+    Scores.setNs('eddy');
+  }
+  await Scores.submit(name,Game.score,extra);
   $('bSend').textContent='CARVE IT';$('bSend').disabled=false;
   UI.boardCard(name,Game.score);
 };
@@ -1362,11 +1498,14 @@ function gameUpdate(dt,now){
     Game.t-=dt;
     const tNow=Math.ceil(Game.t);
     if(tNow<tPrev&&tNow<=5&&tNow>0)Au.tick();
-    updateSpores(dt);
-    updatePreds(dt);
+    if(Game.after>0){
+      Game.after-=dt;
+      if(Game.after<=0||!spores.length)levelDone();
+    }
+    if(Game.state==='PLAY'){updateSpores(dt);updatePreds(dt)}
     if(Game.state==='PLAY'&&Game.t<=0){
       Game.t=0;
-      runOver(false);
+      if(Game.collected>=Game.needed)levelDone();else runOver(false);
     }
     UI.hud();
   }else if(Game.state==='RESULT'){
@@ -1424,12 +1563,16 @@ window.__g={
       const s=spores.pop();
       absorbs.push({x:s.x,y:s.y,t:0,spr:s.spr});
       Game.collected++;Game.basePts+=30;
-      if(Game.collected>=Game.needed){levelDone();break}
     }
+    checkTarget();
   },
+  daily(ds){startDaily(ds);beginPlay()},
+  bank:()=>levelDone(),
+  gen:dailyLevel,
   timeout(){if(Game.state==='PLAY'){Game.t=.01}},
   vel:(x,y)=>Sim.velAtPx(x,y),
-  get tut(){return tutOn}
+  get tut(){return tutOn},
+  get after(){return Game.after}
 };
 
 boot();
