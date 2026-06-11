@@ -1221,7 +1221,7 @@
       'hard hat mac', 'crystal cavern', 'crystal tavern', 'shatter storm', 'plasma pong',
       'super star trek', 'depth charge',
       'subway siege blackout', 'neon invaders', 'vortex storm eater',
-      'void echo', 'gravity weaver', 'storm echo', 'choplifter rescue run'
+      'void echo', 'gravity weaver', 'storm echo'
     ]);
     const slugTitle = t => t.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
     games.forEach(g => { g.status = UNFINISHED.has(slugTitle(g.title)) ? 'unfinished' : 'released'; });
