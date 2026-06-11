@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-11T16:00:01.225760+00:00",
+  "updatedAt": "2026-06-11T16:18:33.727685+00:00",
   "items": [
     {
       "title": "Chenyang Yang, Shen Yan, Yibo Yang, Litao Hu, Yuchen Liu, Yuan Zeng, Hanchao Yu, Yinan Zhu, Sumedha Singla, Brian Van...",
@@ -10,9 +10,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-11T16:00:11.654609+00:00",
+      "published": "2026-06-11T16:18:40.060666+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-11T16:00:01.225760+00:00",
+      "lastSeen": "2026-06-11T16:18:33.727685+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
@@ -28,10 +28,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/hero.jpg?resize=1200%2C704",
       "published": "2026-06-11T15:30:00+00:00",
       "firstSeen": "2026-06-11T16:00:01.225760+00:00",
-      "lastSeen": "2026-06-11T16:00:01.225760+00:00",
+      "lastSeen": "2026-06-11T16:18:33.727685+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3748
+      "score": 3.3655
     },
     {
       "title": "DoorDash’s new AI chatbot lets you order with prompts and photos",
@@ -44,10 +44,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2022/08/GettyImages-1232015093.jpg?resize=1200%2C800",
       "published": "2026-06-11T14:23:43+00:00",
       "firstSeen": "2026-06-11T15:00:01.437040+00:00",
-      "lastSeen": "2026-06-11T16:00:01.225760+00:00",
+      "lastSeen": "2026-06-11T16:18:33.727685+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.742
+      "score": 4.733
     },
     {
       "title": "Coram raises $35M to turn security cameras into autonomous AI investigators",
@@ -60,10 +60,10 @@
       "image": "https://media.thenextweb.com/2026/06/Ashesh-Jain-Co-Founder-CEO-Coram-AI.avif",
       "published": "2026-06-11T13:03:18+00:00",
       "firstSeen": "2026-06-11T14:00:02.097955+00:00",
-      "lastSeen": "2026-06-11T16:00:01.225760+00:00",
+      "lastSeen": "2026-06-11T16:18:33.727685+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7636
+      "score": 2.7549
     },
     {
       "title": "Save Big and Play Bigger: GeForce NOW Summer Sale Brings Major Membership Savings",
@@ -76,10 +76,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/gfn-thursday-6-11-no-copy-kv-1536x920-1.jpg",
       "published": "2026-06-11T13:00:17+00:00",
       "firstSeen": "2026-06-11T14:00:02.097955+00:00",
-      "lastSeen": "2026-06-11T16:00:01.225760+00:00",
+      "lastSeen": "2026-06-11T16:18:33.727685+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2022
+      "score": 2.1935
     },
     {
       "title": "Canada wants to ban under-16s from social media, and rein in AI chatbots too",
@@ -92,10 +92,10 @@
       "image": "https://media.thenextweb.com/2026/06/carney-canada-ai-strategy-pope-leo.avif",
       "published": "2026-06-11T12:52:12+00:00",
       "firstSeen": "2026-06-11T14:00:02.097955+00:00",
-      "lastSeen": "2026-06-11T16:00:01.225760+00:00",
+      "lastSeen": "2026-06-11T16:18:33.727685+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0584
+      "score": 2.0498
     },
     {
       "title": "Irish fleet-safety firm CameraMatics raises up to €49M to take on Samsara in the US",
@@ -108,10 +108,10 @@
       "image": "https://media.thenextweb.com/2026/06/cameramatics-secures-up-to-e49m-investment.avif",
       "published": "2026-06-11T12:44:36+00:00",
       "firstSeen": "2026-06-11T14:00:02.097955+00:00",
-      "lastSeen": "2026-06-11T16:00:01.225760+00:00",
+      "lastSeen": "2026-06-11T16:18:33.727685+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0548
+      "score": 2.0463
     },
     {
       "title": "AI bubble fears are spreading, even as SpaceX readies the biggest IPO ever",
@@ -124,10 +124,10 @@
       "image": "https://media.thenextweb.com/2026/06/stock-screen-red.avif",
       "published": "2026-06-11T12:32:47+00:00",
       "firstSeen": "2026-06-11T14:00:02.097955+00:00",
-      "lastSeen": "2026-06-11T16:00:01.225760+00:00",
+      "lastSeen": "2026-06-11T16:18:33.727685+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7494
+      "score": 2.7408
     },
     {
       "title": "Germany’s Vsquared is taking on Atomico and Balderton on their London home turf",
@@ -140,10 +140,10 @@
       "image": "https://media.thenextweb.com/2026/06/Vsquared-Ventures-team.avif",
       "published": "2026-06-11T12:15:59+00:00",
       "firstSeen": "2026-06-11T13:00:01.542418+00:00",
-      "lastSeen": "2026-06-11T16:00:01.225760+00:00",
+      "lastSeen": "2026-06-11T16:18:33.727685+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0416
+      "score": 2.0331
     },
     {
       "title": "India’s AI Hardware Scrutiny Puts Biometric Devices in Focus",
@@ -156,10 +156,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/06/digital-security-technology-concept-with-fingerpri-2026-03-26-05-32-58-utc-1024x683.jpg?f=jpeg",
       "published": "2026-06-11T12:09:33+00:00",
       "firstSeen": "2026-06-11T15:00:01.437040+00:00",
-      "lastSeen": "2026-06-11T16:00:01.225760+00:00",
+      "lastSeen": "2026-06-11T16:18:33.727685+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 0.0387
+      "score": 0.0302
     },
     {
       "title": "US AI giants are colonising London, and squeezing its startups in the process",
@@ -172,10 +172,10 @@
       "image": "https://media.thenextweb.com/2016/04/london.avif",
       "published": "2026-06-11T12:04:02+00:00",
       "firstSeen": "2026-06-11T13:00:01.542418+00:00",
-      "lastSeen": "2026-06-11T16:00:01.225760+00:00",
+      "lastSeen": "2026-06-11T16:18:33.727685+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.7362
+      "score": 4.7277
     },
     {
       "title": "What SpaceX’s record IPO really means for the OpenAI and Anthropic listings behind it",
@@ -188,10 +188,10 @@
       "image": "https://media.thenextweb.com/2023/10/spacex-europe-deal.avif",
       "published": "2026-06-11T11:41:36+00:00",
       "firstSeen": "2026-06-11T13:00:01.542418+00:00",
-      "lastSeen": "2026-06-11T16:00:01.225760+00:00",
+      "lastSeen": "2026-06-11T16:18:33.727685+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.726
+      "score": 8.7176
     },
     {
       "title": "Anthropic apologizes for invisible Claude Fable guardrails",
@@ -204,10 +204,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/STKB364_CLAUDE_D.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-11T11:40:43+00:00",
       "firstSeen": "2026-06-11T11:45:43.392005+00:00",
-      "lastSeen": "2026-06-11T16:00:01.225760+00:00",
+      "lastSeen": "2026-06-11T16:18:33.727685+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.6356
+      "score": 12.6272
     },
     {
       "title": "Deezer’s new free tool scans your Spotify and Apple Music playlists for AI slop",
@@ -220,10 +220,10 @@
       "image": "https://media.thenextweb.com/2026/06/check-ai-generated-music-in-playlists-with-deezer-detector.avif",
       "published": "2026-06-11T11:19:02+00:00",
       "firstSeen": "2026-06-11T11:45:43.392005+00:00",
-      "lastSeen": "2026-06-11T16:00:01.225760+00:00",
+      "lastSeen": "2026-06-11T16:18:33.727685+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1158
+      "score": 3.1076
     },
     {
       "title": "Upriver raises $14M to fix the unglamorous layer where enterprise AI quietly breaks: the data",
@@ -236,10 +236,10 @@
       "image": "https://media.thenextweb.com/2026/06/IdoBronstein-Omri-Lifshitz-Upriver.avif",
       "published": "2026-06-11T11:06:31+00:00",
       "firstSeen": "2026-06-11T11:45:43.392005+00:00",
-      "lastSeen": "2026-06-11T16:00:01.225760+00:00",
+      "lastSeen": "2026-06-11T16:18:33.727685+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0102
+      "score": 2.002
     },
     {
       "title": "Google DeepMind is worried about what happens when millions of agents start to interact",
@@ -252,10 +252,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/06/corralling-agents.jpg?resize=1200%2C600",
       "published": "2026-06-11T11:00:45+00:00",
       "firstSeen": "2026-06-11T11:45:43.392005+00:00",
-      "lastSeen": "2026-06-11T16:00:01.225760+00:00",
+      "lastSeen": "2026-06-11T16:18:33.727685+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 13.3477
+      "score": 13.3395
     },
     {
       "title": "Google is funding 300,000 electricians and welders, because the AI boom is running out of them",
@@ -268,10 +268,10 @@
       "image": "https://media.thenextweb.com/2026/06/skilled-trades-worker.avif",
       "published": "2026-06-11T10:52:56+00:00",
       "firstSeen": "2026-06-11T11:45:43.392005+00:00",
-      "lastSeen": "2026-06-11T16:00:01.225760+00:00",
+      "lastSeen": "2026-06-11T16:18:33.727685+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.7042
+      "score": 4.6961
     },
     {
       "title": "The US-Philippines AI hub now has a price tag, $10bn, and a 99-year lease on the table",
@@ -287,7 +287,7 @@
       "lastSeen": "2026-06-11T13:00:01.542418+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9926
+      "score": 1.9846
     },
     {
       "title": "Mercedes-Benz turns to defence, partnering with startup Tytan to build anti-drone vehicles",
@@ -303,7 +303,7 @@
       "lastSeen": "2026-06-11T13:00:01.542418+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9865
+      "score": 1.9785
     },
     {
       "title": "ShopAgentic raises €1.9M to build commerce infrastructure for AI shopping agents",
@@ -319,7 +319,7 @@
       "lastSeen": "2026-06-11T13:00:01.542418+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.3836
+      "score": 5.3756
     },
     {
       "title": "Mississippi residents file a 10,000-strong class action against Musk’s xAI and SpaceX over data-centre noise",
@@ -335,7 +335,7 @@
       "lastSeen": "2026-06-11T13:00:01.542418+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9782
+      "score": 4.9702
     },
     {
       "title": "OpenAI plugs Visa into ChatGPT so AI agents can shop and pay at any Visa merchant",
@@ -351,7 +351,7 @@
       "lastSeen": "2026-06-11T11:45:43.392005+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 13.671
+      "score": 13.6631
     },
     {
       "title": "v2.0.0a1",
@@ -364,10 +364,10 @@
       "image": "https://opengraph.githubassets.com/cc6ddf659e34112f76c801628a3bcca9b584896e32833db5d192892d56a9ee5f/modelcontextprotocol/python-sdk/releases/tag/v2.0.0a1",
       "published": "2026-06-11T09:35:12+00:00",
       "firstSeen": "2026-06-11T10:00:01.225358+00:00",
-      "lastSeen": "2026-06-11T16:00:01.225760+00:00",
+      "lastSeen": "2026-06-11T16:18:33.727685+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 0.3405
+      "score": 0.3326
     },
     {
       "title": "South Korea hits Coupang with record $409 million fine over massive data breach",
@@ -383,7 +383,7 @@
       "lastSeen": "2026-06-11T11:45:43.392005+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0696
+      "score": 3.0617
     },
     {
       "title": "OpenAI and Anthropic keep warning about AI risks, then releasing bigger models and filing for IPOs",
@@ -399,7 +399,7 @@
       "lastSeen": "2026-06-11T11:45:43.392005+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 9.7168
+      "score": 9.709
     },
     {
       "title": "Italian fintech unicorn Satispay reportedly plans €120M raise to push into stock trading",
@@ -415,7 +415,7 @@
       "lastSeen": "2026-06-11T11:00:01.260610+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9621
+      "score": 1.9543
     },
     {
       "title": "China’s state-run Workers’ Daily calls for a ‘dam’ to protect labour rights as AI spreads",
@@ -431,7 +431,7 @@
       "lastSeen": "2026-06-11T11:00:01.260610+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3079
+      "score": 2.3002
     },
     {
       "title": "Meta has cut Manus off from its internal systems and told staff to sunset the AI platform",
@@ -447,7 +447,7 @@
       "lastSeen": "2026-06-11T11:00:01.260610+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.6478
+      "score": 3.6401
     },
     {
       "title": "CoreWeave’s borrowing costs just fell from 10% to 7%. The AI data centre debt market is repricing risk in real time.",
@@ -463,7 +463,7 @@
       "lastSeen": "2026-06-11T11:00:01.260610+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0419
+      "score": 3.0343
     },
     {
       "title": "Avast’s former CEO built an AI that found every OpenSSL zero-day this year. Now it runs inside air-gapped networks.",
@@ -479,7 +479,7 @@
       "lastSeen": "2026-06-11T10:00:01.225358+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.7353
+      "score": 3.7278
     },
     {
       "title": "Deezer launches an AI music detector for other streaming services",
@@ -492,10 +492,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/NEW_1200-x-580-pixel-SI-logo-1240x600-1.jpeg?quality=90&amp%3Bstrip=all&amp%3Bcrop=3.7903225806452%2C0%2C92.41935483871%2C100",
       "published": "2026-06-11T08:00:00+00:00",
       "firstSeen": "2026-06-11T09:00:01.779579+00:00",
-      "lastSeen": "2026-06-11T16:00:01.225760+00:00",
+      "lastSeen": "2026-06-11T16:18:33.727685+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0408
+      "score": 5.0333
     },
     {
       "title": "Oracle spent $55.7 billion on data centres in a single year, beat its own guidance by $5.7 billion, and wants to raise another $40 billion",
@@ -511,7 +511,7 @@
       "lastSeen": "2026-06-11T10:00:01.225358+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.7242
+      "score": 3.7167
     },
     {
       "title": "Musk says the ‘acid test’ for Tesla’s self-driving is sleeping through your commute. His Austin robotaxis crash four times more than humans.",
@@ -527,7 +527,7 @@
       "lastSeen": "2026-06-11T10:00:01.225358+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.3064
+      "score": 3.299
     },
     {
       "title": "v1.87.2",
@@ -540,10 +540,10 @@
       "image": "https://opengraph.githubassets.com/e552d89f65a00d659f5f24feb5f2e83a7229bd51d1a93df4fc050869d1d7c475/BerriAI/litellm/releases/tag/v1.87.2",
       "published": "2026-06-11T05:19:44+00:00",
       "firstSeen": "2026-06-11T06:00:02.044920+00:00",
-      "lastSeen": "2026-06-11T16:00:01.225760+00:00",
+      "lastSeen": "2026-06-11T16:18:33.727685+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7078
+      "score": 2.7008
     },
     {
       "title": "Opendoor’s India exit is fueling a bigger conversation about AI and outsourcing",
@@ -556,10 +556,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/opendoor.jpg?resize=1200%2C800",
       "published": "2026-06-11T04:02:19+00:00",
       "firstSeen": "2026-06-11T05:00:01.120432+00:00",
-      "lastSeen": "2026-06-11T16:00:01.225760+00:00",
+      "lastSeen": "2026-06-11T16:18:33.727685+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.979
+      "score": 1.9723
     },
     {
       "title": "Anthropic’s Dario Amodei has just one direct report",
@@ -568,14 +568,14 @@
       "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
       "sourceWeight": 0.85,
       "category": "AI",
-      "summary": "If you doubted his genius, doubt no more.",
+      "summary": "If founders and other business leaders weren't already envious of Dario Amodei, who sits atop one of the world's fastest-growing AI companies, they're going to be seriously envious now.",
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/Dario-2280291125.jpg?w=1024",
       "published": "2026-06-11T03:53:06+00:00",
       "firstSeen": "2026-06-11T04:00:01.464860+00:00",
-      "lastSeen": "2026-06-11T16:00:01.225760+00:00",
+      "lastSeen": "2026-06-11T16:18:33.727685+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9757
+      "score": 4.9689
     },
     {
       "title": "Anthropic Walks Back Policy That Could Have ‘Sabotaged’ AI Researchers Using Claude",
@@ -588,10 +588,10 @@
       "image": "",
       "published": "2026-06-11T03:45:49+00:00",
       "firstSeen": "2026-06-11T04:00:01.464860+00:00",
-      "lastSeen": "2026-06-11T16:00:01.225760+00:00",
+      "lastSeen": "2026-06-11T16:18:33.727685+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 13.373
+      "score": 13.3663
     },
     {
       "title": "Anthropic Walks Back Policy That Could Have ‘Sabotaged’ AI Researchers Using Claude",
@@ -604,10 +604,10 @@
       "image": "https://media.wired.com/photos/6a2a474b0ce2fad63750beac/master/pass/Anthropic-Responds-to-Backlash-Business-2276530995.jpg",
       "published": "2026-06-11T03:11:22+00:00",
       "firstSeen": "2026-06-11T04:00:01.464860+00:00",
-      "lastSeen": "2026-06-11T16:00:01.225760+00:00",
+      "lastSeen": "2026-06-11T16:18:33.727685+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 13.3606
+      "score": 13.354
     },
     {
       "title": "v1.86.5",
@@ -620,10 +620,10 @@
       "image": "https://opengraph.githubassets.com/80d06ba2e609141c1c1e8cf1d9516d0b43e8c6b5e92f80d9b986e8bb3d3f2ead/BerriAI/litellm/releases/tag/v1.86.5",
       "published": "2026-06-11T03:10:46+00:00",
       "firstSeen": "2026-06-11T04:00:01.464860+00:00",
-      "lastSeen": "2026-06-11T16:00:01.225760+00:00",
+      "lastSeen": "2026-06-11T16:18:33.727685+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.6604
+      "score": 2.6538
     },
     {
       "title": "v1.85.5",
@@ -636,10 +636,10 @@
       "image": "https://opengraph.githubassets.com/d807466c1b4ffc591b030912a839582e02ccc401b78db32931ca299e3748c41d/BerriAI/litellm/releases/tag/v1.85.5",
       "published": "2026-06-11T01:55:38+00:00",
       "firstSeen": "2026-06-11T03:00:01.873730+00:00",
-      "lastSeen": "2026-06-11T16:00:01.225760+00:00",
+      "lastSeen": "2026-06-11T16:18:33.727685+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.6341
+      "score": 2.6277
     },
     {
       "title": "The Life Scientific: Helen Hastie",
@@ -652,10 +652,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-08T20:00:00+00:00",
       "firstSeen": "2026-06-08T21:00:01.371488+00:00",
-      "lastSeen": "2026-06-11T16:00:01.225760+00:00",
+      "lastSeen": "2026-06-11T16:18:33.727685+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.3564
+      "score": 1.3549
     },
     {
       "title": "The Life Scientific: Seth Berkley",
@@ -668,7 +668,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-01T20:00:00+00:00",
       "firstSeen": "2026-06-01T21:00:01.828388+00:00",
-      "lastSeen": "2026-06-11T16:00:01.225760+00:00",
+      "lastSeen": "2026-06-11T16:18:33.727685+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 1.1916
