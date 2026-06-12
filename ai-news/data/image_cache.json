@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-12T00:00:01.251811+00:00",
+  "updatedAt": "2026-06-12T01:00:01.641604+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -10160,6 +10160,10 @@
     "https://www.techrepublic.com/article/news-apple-mac-studio-cheat-sheet": {
       "image": "",
       "checkedAt": "2026-06-11T22:13:09.544537+00:00"
+    },
+    "https://github.com/ollama/ollama/releases/tag/v0.30.8-rc0": {
+      "image": "https://opengraph.githubassets.com/3f1e4e15213e038e25f046a7bbe1258ff17c04ad35184c7114e88d4a3e0aef21/ollama/ollama",
+      "checkedAt": "2026-06-12T01:00:01.641604+00:00"
     }
   }
 }
