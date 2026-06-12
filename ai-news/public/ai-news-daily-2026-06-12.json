@@ -1,6 +1,6 @@
 {
   "date": "2026-06-12",
-  "updatedAt": "2026-06-12T17:41:22.374004+00:00",
+  "updatedAt": "2026-06-12T19:00:02.075559+00:00",
   "items": [
     {
       "title": "Release v5.12.0",
@@ -10,14 +10,14 @@
       "sourceWeight": 0.85,
       "category": "AI",
       "summary": "Release v5.12.0\nNew Model additions\nMiniMax-M3-VL\n\nMiniMax-M3-VL is the vision-language member of the MiniMax-M3 family that pairs a CLIP-style vision tower with 3D rotary position embeddings with the MiniMax-M3 text backbone. It uses a mixed dense/sparse Mixture-of-Experts decoder with SwiGLU-OAI gated experts and a lightning indexer for block-sparse attention. The model processes images through a Conv3d patch embedding system and includes specialized components for efficient multimodal understanding and generation.\nLinks: Documentation\n\nAdd minimax m3vl (#46600) by @ArthurZucker in #46600\n\nP",
-      "image": "https://private-user-images.githubusercontent.com/73884904/607168450-ae9dd96f-6877-4531-a06b-a756686f24e5.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3ODEyODYzODksIm5iZiI6MTc4MTI4NjA4OSwicGF0aCI6Ii83Mzg4NDkwNC82MDcxNjg0NTAtYWU5ZGQ5NmYtNjg3Ny00NTMxLWEwNmItYTc1NjY4NmYyNGU1LnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNjA2MTIlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjYwNjEyVDE3NDEyOVomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTA1N2JkOGZmYjM5NTQ3NTE5Mzc1YTUyMGYwOWNmMzQ4Y2M5YzE5OGEwYjZjMDM3ZjFjNWM1MDVlY2E0NTdmNjAmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0JnJlc3BvbnNlLWNvbnRlbnQtdHlwZT1pbWFnZSUyRnBuZyJ9.v_5ihB5dKRxoJy9Jkm6yhulraW1u14hyZgOCkOM2FX4",
+      "image": "https://private-user-images.githubusercontent.com/73884904/607168450-ae9dd96f-6877-4531-a06b-a756686f24e5.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3ODEyOTExMTIsIm5iZiI6MTc4MTI5MDgxMiwicGF0aCI6Ii83Mzg4NDkwNC82MDcxNjg0NTAtYWU5ZGQ5NmYtNjg3Ny00NTMxLWEwNmItYTc1NjY4NmYyNGU1LnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNjA2MTIlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjYwNjEyVDE5MDAxMlomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTM2YjdiNGVkMGMxNTZmOTVjMjE3MDU3YTMyMmY5NzZjNzk0YzkwMTQ1MDZjZDA3ZTU5YjE1NmUyODY4YTViNmUmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0JnJlc3BvbnNlLWNvbnRlbnQtdHlwZT1pbWFnZSUyRnBuZyJ9.-YQT7bFmV4hJBa1lfBGlfRFJZf7DeeNpnu6F9sV9TkQ",
       "published": "2026-06-12T14:39:40+00:00",
       "firstSeen": "2026-06-12T16:00:01.862709+00:00",
-      "lastSeen": "2026-06-12T17:41:22.374004+00:00",
+      "lastSeen": "2026-06-12T19:00:02.075559+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.7012
+      "score": 14.6651
     },
     {
       "title": "Anthropic’s Claude Fable 5 curbs target China. The backlash came from its own side.",
@@ -33,7 +33,23 @@
       "lastSeen": "2026-06-12T13:00:01.410102+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.6512
+      "score": 11.619
+    },
+    {
+      "title": "TCS and Anthropic partner to bring Claude to regulated industries",
+      "url": "https://www.anthropic.com/news/tcs-anthropic-partnership",
+      "source": "Anthropic News",
+      "sourceUrl": "https://raw.githubusercontent.com/Olshansk/rss-feeds/main/feeds/feed_anthropic_news.xml",
+      "sourceWeight": 1.0,
+      "category": "AI",
+      "summary": "TCS and Anthropic partner to bring Claude to regulated industries",
+      "image": "https://www.anthropic.com/api/opengraph-illustration?name=Hand+NodeLine&amp%3BbackgroundColor=olive",
+      "published": "2026-06-12T00:00:00+00:00",
+      "firstSeen": "2026-06-12T19:00:02.075559+00:00",
+      "lastSeen": "2026-06-12T19:00:02.075559+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 11.0489
     },
     {
       "title": "OpenAI acquires Ona to run Codex agents inside the customer’s own cloud",
@@ -49,7 +65,7 @@
       "lastSeen": "2026-06-12T17:41:22.374004+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 9.1089
+      "score": 9.0746
     },
     {
       "title": "New OpenAI Academy courses for the next era of work",
@@ -62,10 +78,10 @@
       "image": "",
       "published": "2026-06-12T10:00:00+00:00",
       "firstSeen": "2026-06-12T17:41:22.374004+00:00",
-      "lastSeen": "2026-06-12T17:41:22.374004+00:00",
+      "lastSeen": "2026-06-12T19:00:02.075559+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.7884
+      "score": 8.7567
     },
     {
       "title": "Agentjacking: a fake bug report can hijack your AI coding agent",
@@ -81,7 +97,7 @@
       "lastSeen": "2026-06-12T17:41:22.374004+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.5184
+      "score": 8.4838
     },
     {
       "title": "SpaceX, Anthropic, and OpenAI’s hot IPO summer",
@@ -94,10 +110,26 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/GettyImages-2275575484.jpg?resize=1200%2C815",
       "published": "2026-06-12T16:23:25+00:00",
       "firstSeen": "2026-06-12T17:00:01.222571+00:00",
-      "lastSeen": "2026-06-12T17:41:22.374004+00:00",
+      "lastSeen": "2026-06-12T19:00:02.075559+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.251
+      "score": 8.2131
+    },
+    {
+      "title": "Google sues Chinese cybercrime ring that used Gemini to build phishing sites and send 2.5 million scam texts",
+      "url": "https://thenextweb.com/news/google-sues-outsider-enterprise-ai-scam-texts",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Google filed a lawsuit on Friday to dismantle the infrastructure behind a Chinese cybercrime operation called Outsider Enterprise. The group used AI, including Google’s own Gemini, to generate phishing websites and send scam text messages impersonating Google and other brands. It sent 2.5 million fraudulent texts to Android users in a two-week period. The operation [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/google-sues-outsider-enterprise-ai-scam-texts.avif",
+      "published": "2026-06-12T17:57:11+00:00",
+      "firstSeen": "2026-06-12T19:00:02.075559+00:00",
+      "lastSeen": "2026-06-12T19:00:02.075559+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 8.1185
     },
     {
       "title": "Google sues suspected Chinese cybercrime ring that used Gemini to build scam websites",
@@ -113,7 +145,7 @@
       "lastSeen": "2026-06-12T13:00:01.410102+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.9545
+      "score": 7.9222
     },
     {
       "title": "Altman, Amodei, and Hassabis are heading to the G7. The rivals have a lot to discuss.",
@@ -129,7 +161,7 @@
       "lastSeen": "2026-06-12T11:08:09.226250+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 7.9453
+      "score": 7.9133
     },
     {
       "title": "It’s hot IPO summer, and the MANGOS are ripe",
@@ -142,10 +174,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/spacex-rocket-getty.jpg?resize=1200%2C801",
       "published": "2026-06-12T15:50:52+00:00",
       "firstSeen": "2026-06-12T16:00:01.862709+00:00",
-      "lastSeen": "2026-06-12T17:41:22.374004+00:00",
+      "lastSeen": "2026-06-12T19:00:02.075559+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.2351
+      "score": 6.1978
     },
     {
       "title": "Pleo layoffs hit engineers a day after it launched finance AI agents",
@@ -161,51 +193,14 @@
       "lastSeen": "2026-06-12T14:14:20.832146+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.3588
-    },
-    {
-      "title": "Mistral is rumored to be raising €3B at €20 valuation",
-      "url": "https://techcrunch.com/2026/06/12/mistral-is-rumored-to-be-raising-e3b-at-e20-valuation",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "The funding round would value the company at around €20 billion (about $23.15 billion), nearly double its Series C valuation of €11.7 billion.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/03/GettyImages-2264771189.jpg?resize=1200%2C800",
-      "published": "2026-06-12T17:38:11+00:00",
-      "firstSeen": "2026-06-12T17:41:22.374004+00:00",
-      "lastSeen": "2026-06-12T17:41:22.374004+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 5.2884
-    },
-    {
-      "title": "Siri won’t be your AI girlfriend",
-      "url": "https://www.theverge.com/tech/948890/siri-wont-be-your-ai-girlfriend",
-      "source": "The Verge AI",
-      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "Our early testing has already shown that Siri AI knows when to shut up, and that's very much by design. In an interview with Mostly Human spotted by MacRumors, Craig Federighi said Apple's new Siri won't act all sycophantic like chatbots made by OpenAI, Google, and others. \"As you may know, if you use many [&#8230;]",
-      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/siri-ai.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0.17391304347827%2C0%2C99.652173913043%2C100&amp%3Bw=1200",
-      "published": "2026-06-12T07:00:31+00:00",
-      "firstSeen": "2026-06-12T08:00:02.121297+00:00",
-      "lastSeen": "2026-06-12T17:41:22.374004+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 5.1776
+      "score": 5.3263
     }
   ],
   "errors": [
     {
-      "source": "Artificial Intelligence News",
-      "url": "https://www.artificialintelligence-news.com/categories/artificial-intelligence/feed/",
-      "error": "not well-formed (invalid token): line 1, column 158"
-    },
-    {
       "source": "MarkTechPost",
       "url": "https://www.marktechpost.com/feed/",
-      "error": "not well-formed (invalid token): line 1, column 119"
+      "error": "HTTP Error 403: Forbidden"
     }
   ]
 }
