@@ -1,6 +1,6 @@
 {
   "date": "2026-06-12",
-  "updatedAt": "2026-06-12T14:14:20.832146+00:00",
+  "updatedAt": "2026-06-12T16:00:01.862709+00:00",
   "items": [
     {
       "title": "Release v5.12.0",
@@ -10,14 +10,14 @@
       "sourceWeight": 0.85,
       "category": "AI",
       "summary": "Release v5.12.0\nNew Model additions\nMiniMax-M3-VL\n\nMiniMax-M3-VL is the vision-language member of the MiniMax-M3 family that pairs a CLIP-style vision tower with 3D rotary position embeddings with the MiniMax-M3 text backbone. It uses a mixed dense/sparse Mixture-of-Experts decoder with SwiGLU-OAI gated experts and a lightning indexer for block-sparse attention. The model processes images through a Conv3d patch embedding system and includes specialized components for efficient multimodal understanding and generation.\nLinks: Documentation\n\nAdd minimax m3vl (#46600) by @ArthurZucker in #46600\n\nP",
-      "image": "https://private-user-images.githubusercontent.com/73884904/607168450-ae9dd96f-6877-4531-a06b-a756686f24e5.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3ODEyNzY3MTEsIm5iZiI6MTc4MTI3NjQxMSwicGF0aCI6Ii83Mzg4NDkwNC82MDcxNjg0NTAtYWU5ZGQ5NmYtNjg3Ny00NTMxLWEwNmItYTc1NjY4NmYyNGU1LnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNjA2MTIlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjYwNjEyVDE1MDAxMVomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTUyZTJiMDBmYTdmNDNmYmMwZTRhM2MxZDk1ODEwMWUyODNmMTE0NWZjNWUxOGYyYTFkZGQ2MTY0YzIzZmJlNzYmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0JnJlc3BvbnNlLWNvbnRlbnQtdHlwZT1pbWFnZSUyRnBuZyJ9.erI5a3BvsvVtA1l3ojlRrF_WH_lu9KSykBNRh6xmySk",
+      "image": "https://private-user-images.githubusercontent.com/73884904/607168450-ae9dd96f-6877-4531-a06b-a756686f24e5.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3ODEyODAzMTUsIm5iZiI6MTc4MTI4MDAxNSwicGF0aCI6Ii83Mzg4NDkwNC82MDcxNjg0NTAtYWU5ZGQ5NmYtNjg3Ny00NTMxLWEwNmItYTc1NjY4NmYyNGU1LnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNjA2MTIlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjYwNjEyVDE2MDAxNVomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPWVjYjcwOTU3MjVhNjBiYTk3ZGNiZDA3NjJhNGU0MDg0MzQ2NTU5YzU4YjRlOTIyNzM1YWE4YjYzMzYxZmY5NzImWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0JnJlc3BvbnNlLWNvbnRlbnQtdHlwZT1pbWFnZSUyRnBuZyJ9.WEVnrov5nNDSzj7Kl-vs5_7i5GT3EJ1_3oe2PGD4n8M",
       "published": "2026-06-12T14:39:40+00:00",
-      "firstSeen": "2026-06-12T15:00:02.035753+00:00",
-      "lastSeen": "2026-06-12T15:00:02.035753+00:00",
+      "firstSeen": "2026-06-12T16:00:01.862709+00:00",
+      "lastSeen": "2026-06-12T16:00:01.862709+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.7797
+      "score": 14.7498
     },
     {
       "title": "Anthropic’s Claude Fable 5 curbs target China. The backlash came from its own side.",
@@ -33,7 +33,7 @@
       "lastSeen": "2026-06-12T13:00:01.410102+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.7419
+      "score": 11.6945
     },
     {
       "title": "OpenAI acquires Ona to run Codex agents inside the customer’s own cloud",
@@ -46,10 +46,10 @@
       "image": "https://media.thenextweb.com/2026/02/OpenAI-Codex-app.avif",
       "published": "2026-06-12T12:44:52+00:00",
       "firstSeen": "2026-06-12T14:00:01.687326+00:00",
-      "lastSeen": "2026-06-12T14:14:20.832146+00:00",
+      "lastSeen": "2026-06-12T16:00:01.862709+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 9.2054
+      "score": 9.155
     },
     {
       "title": "Agentjacking: a fake bug report can hijack your AI coding agent",
@@ -62,10 +62,10 @@
       "image": "https://media.thenextweb.com/2026/06/developer-terminal.avif",
       "published": "2026-06-12T13:06:15+00:00",
       "firstSeen": "2026-06-12T14:00:01.687326+00:00",
-      "lastSeen": "2026-06-12T14:14:20.832146+00:00",
+      "lastSeen": "2026-06-12T16:00:01.862709+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.6159
+      "score": 8.565
     },
     {
       "title": "Google sues suspected Chinese cybercrime ring that used Gemini to build scam websites",
@@ -81,7 +81,7 @@
       "lastSeen": "2026-06-12T13:00:01.410102+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.0455
+      "score": 7.998
     },
     {
       "title": "Altman, Amodei, and Hassabis are heading to the G7. The rivals have a lot to discuss.",
@@ -97,7 +97,23 @@
       "lastSeen": "2026-06-12T11:08:09.226250+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.0354
+      "score": 7.9883
+    },
+    {
+      "title": "It’s hot IPO summer, and the MANGOS are ripe",
+      "url": "https://techcrunch.com/podcast/its-hot-ipo-summer-and-the-mangos-are-ripe",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "The IPO market is back, and&#160;it&#8217;s&#160;not the same&#160;companies&#160;leading the charge. FAANG had a good run, but a&#160;new acronym is taking over: MANGOS&#160;— Meta (or Microsoft, depending on who you ask), Anthropic, Nvidia, Google, OpenAI, and SpaceX. Half&#160;of that&#160;bunch is heading to public markets in the same window,&#160;and&#160;it&#8217;s&#160;a stress test for investors, for valuations, and for [&#8230;]",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/spacex-rocket-getty.jpg?resize=1200%2C801",
+      "published": "2026-06-12T15:50:52+00:00",
+      "firstSeen": "2026-06-12T16:00:01.862709+00:00",
+      "lastSeen": "2026-06-12T16:00:01.862709+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 6.2853
     },
     {
       "title": "Pleo layoffs hit engineers a day after it launched finance AI agents",
@@ -113,7 +129,7 @@
       "lastSeen": "2026-06-12T14:14:20.832146+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.4502
+      "score": 5.4025
     },
     {
       "title": "Siri won’t be your AI girlfriend",
@@ -126,10 +142,26 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/siri-ai.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0.17391304347827%2C0%2C99.652173913043%2C100&amp%3Bw=1200",
       "published": "2026-06-12T07:00:31+00:00",
       "firstSeen": "2026-06-12T08:00:02.121297+00:00",
-      "lastSeen": "2026-06-12T14:14:20.832146+00:00",
+      "lastSeen": "2026-06-12T16:00:01.862709+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2598
+      "score": 5.2169
+    },
+    {
+      "title": "Mistral is in funding talks at a €20bn valuation",
+      "url": "https://thenextweb.com/news/mistral-funding-talks-20-billion-valuation",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Mistral is in funding talks to raise about €3bn ($3.5bn) at a valuation of roughly €20bn, Bloomberg reported on Friday, citing people familiar with the discussions. That would nearly double the price investors put on Europe’s leading AI startup just months ago. The talks are early, and the terms could change. The valuation may even [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/Mistral-AI.avif",
+      "published": "2026-06-12T13:52:39+00:00",
+      "firstSeen": "2026-06-12T16:00:01.862709+00:00",
+      "lastSeen": "2026-06-12T16:00:01.862709+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.087
     },
     {
       "title": "How Preply combines AI and human tutors to personalize learning",
@@ -142,74 +174,26 @@
       "image": "https://images.ctfassets.net/kftzwdyauwt9/4TlUSJyvzcUk3f3wPzVmtY/e69435b271f2e2c44c1fe621dae9d24f/oai_Preply_SEO.png?w=1600&amp%3Bh=900&amp%3Bfit=fill",
       "published": "2026-06-12T00:00:00+00:00",
       "firstSeen": "2026-06-12T10:00:01.366609+00:00",
-      "lastSeen": "2026-06-12T14:14:20.832146+00:00",
+      "lastSeen": "2026-06-12T16:00:01.862709+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8407
+      "score": 4.8053
     },
     {
-      "title": "Equal AI raised $30M to screen phone calls for Indians who get 20 spam calls a week",
-      "url": "https://thenextweb.com/news/equal-ai-india-call-screening-30m-series-b",
+      "title": "Meta is giving free AI glasses to every blind veteran in America",
+      "url": "https://thenextweb.com/news/meta-free-ai-glasses-blind-veterans",
       "source": "The Next Web",
       "sourceUrl": "https://thenextweb.com/feed",
       "sourceWeight": 0.75,
       "category": "AI",
-      "summary": "Equal AI, an Indian startup that built an AI assistant to answer phone calls on your behalf, has raised $30 million in a Series B led by Prosus Ventures and Tomales Bay Capital. Think Investments and Valiant Fund also participated, alongside individual investors including PhonePe founder Sameer Nigam and Meta’s India and Southeast Asia VP [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/equal-ai-india-call-screening-30m-series-b.avif",
-      "published": "2026-06-12T07:40:24+00:00",
-      "firstSeen": "2026-06-12T09:00:01.943489+00:00",
-      "lastSeen": "2026-06-12T11:08:09.226250+00:00",
+      "summary": "Meta is giving free Meta AI glasses to every blind veteran in America. Mark Zuckerberg announced the programme on Friday, offering a pair of Ray-Ban Meta glasses, at no cost, to all legally blind US veterans. “Meta AI on these glasses can describe what’s around you, read documents, and help you navigate daily life more [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/AI-Glasses-for-Blind-Veterans-in-America.avif",
+      "published": "2026-06-12T14:34:49+00:00",
+      "firstSeen": "2026-06-12T16:00:01.862709+00:00",
+      "lastSeen": "2026-06-12T16:00:01.862709+00:00",
       "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.7666
-    },
-    {
-      "title": "SpaceX rings the bell on its Nasdaq debut, and Musk admits he gave it ‘less than a 10% chance’",
-      "url": "https://thenextweb.com/news/spacex-nasdaq-debut-bell-musk-shotwell",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "SpaceX rang the Nasdaq opening bell on Friday, marking its Nasdaq debut as a public company with the largest IPO on record. It did so in typical fashion. Hours earlier, a Falcon 9 rocket had launched a batch of Starlink satellites into orbit. “What other company would do something like that on the day it [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/spacex-nasdaq-debut-bell-musk-shotwell.avif",
-      "published": "2026-06-12T13:46:47+00:00",
-      "firstSeen": "2026-06-12T15:00:02.035753+00:00",
-      "lastSeen": "2026-06-12T15:00:02.035753+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.1234
-    },
-    {
-      "title": "Apple’s Camera Chief Thinks AI Can Give You Superpowers",
-      "url": "https://www.wired.com/story/apple-camera-chief-thinks-ai-can-give-you-superpowers",
-      "source": "Wired AI",
-      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "The generative features in iOS 27’s new Photos app will add fake pixels to some of your shots, but Apple’s Jon McCormack says the company isn’t using AI “for the sake of AI.”",
-      "image": "https://media.wired.com/photos/6a2991038b88eda4e0bec24e/master/pass/Siri%20AI%20in%20Camera%20SOURCE%20Julian%20Chokkattu%20(1).jpg",
-      "published": "2026-06-12T01:00:00+00:00",
-      "firstSeen": "2026-06-12T01:37:22.017530+00:00",
-      "lastSeen": "2026-06-12T14:14:20.832146+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.0515
-    },
-    {
-      "title": "Nvidia’s Vera CPU is its side door back into China",
-      "url": "https://thenextweb.com/news/nvidia-vera-cpu-china",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Nvidia has started pitching its Vera CPU to Chinese customers. Orders can begin now, and deliveries could start as soon as August, Reuters reported on Friday, citing three people familiar with the talks. It is a workaround dressed as a product launch. Nvidia’s China business has collapsed under US export controls. Jensen Huang said in [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/china-ai-chip-asic-gpu-nvidia-export-controls.avif",
-      "published": "2026-06-12T12:27:36+00:00",
-      "firstSeen": "2026-06-12T14:00:01.687326+00:00",
-      "lastSeen": "2026-06-12T14:14:20.832146+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.797
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.1074
     }
   ],
   "errors": [
