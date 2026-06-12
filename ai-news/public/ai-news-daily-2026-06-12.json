@@ -1,7 +1,23 @@
 {
   "date": "2026-06-12",
-  "updatedAt": "2026-06-12T01:00:01.641604+00:00",
+  "updatedAt": "2026-06-12T01:37:22.017530+00:00",
   "items": [
+    {
+      "title": "Apple’s Camera Chief Thinks AI Can Give You Superpowers",
+      "url": "https://www.wired.com/story/apple-camera-chief-thinks-ai-can-give-you-superpowers",
+      "source": "Wired AI",
+      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "The generative features in iOS 27’s new Photos app will add fake pixels to some of your shots, but Apple’s Jon McCormack says the company isn’t using AI “for the sake of AI.”",
+      "image": "https://media.wired.com/photos/6a2991038b88eda4e0bec24e/master/pass/Siri%20AI%20in%20Camera%20SOURCE%20Julian%20Chokkattu%20(1).jpg",
+      "published": "2026-06-12T01:00:00+00:00",
+      "firstSeen": "2026-06-12T01:37:22.017530+00:00",
+      "lastSeen": "2026-06-12T01:37:22.017530+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.3711
+    },
     {
       "title": "v0.30.8-rc0",
       "url": "https://github.com/ollama/ollama/releases/tag/v0.30.8-rc0",
@@ -13,13 +29,13 @@
       "image": "https://opengraph.githubassets.com/3f1e4e15213e038e25f046a7bbe1258ff17c04ad35184c7114e88d4a3e0aef21/ollama/ollama",
       "published": "2026-06-12T00:21:46+00:00",
       "firstSeen": "2026-06-12T01:00:01.641604+00:00",
-      "lastSeen": "2026-06-12T01:00:01.641604+00:00",
+      "lastSeen": "2026-06-12T01:37:22.017530+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0407
+      "score": 3.0222
     },
     {
-      "title": "NightFeats @ MMU-RAGent NeurIPS 2025: A Context-Optimized Multi-Agent RAG System for the Text-to-Text Track",
+      "title": "Detecting AI-Generated Content on Social Media with Multi-modal Language Models",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -27,12 +43,28 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-12T01:00:10.873114+00:00",
+      "published": "2026-06-12T01:37:27.072290+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-12T01:00:01.641604+00:00",
+      "lastSeen": "2026-06-12T01:37:22.017530+00:00",
       "editorial_allow": false,
-      "editorial_reason": "framework_or_plumbing",
-      "score": 1.96
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.36
+    },
+    {
+      "title": "Jeff Bezos’s Prometheus raises $12B to build an ‘artificial general engineer’ for the physical world",
+      "url": "https://techcrunch.com/2026/06/11/jeff-bezoss-prometheus-raises-12b-to-build-an-artificial-general-engineer-for-the-physical-world",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "The new round values the physical AI startup that aims to automate heavy engineering and drug design at $41 billion.",
+      "image": "https://techcrunch.com/wp-content/uploads/2025/04/GettyImages-2208733347.jpg?w=1024",
+      "published": "2026-06-12T01:04:38+00:00",
+      "firstSeen": "2026-06-12T01:37:22.017530+00:00",
+      "lastSeen": "2026-06-12T01:37:22.017530+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2735
     }
   ],
   "errors": [
