@@ -115,6 +115,20 @@ const ART = (() => {
     }
     ctx.restore();
 
+    /* gold star rivets along the wood side margins */
+    const star = (x,y,r) => {
+      ctx.save(); ctx.translate(x,y); ctx.fillStyle='#d8aa3c';
+      ctx.beginPath();
+      for (let i=0;i<10;i++){
+        const a = i*Math.PI/5 - Math.PI/2, rr2 = i%2 ? r*0.42 : r;
+        ctx[i?'lineTo':'moveTo'](Math.cos(a)*rr2, Math.sin(a)*rr2);
+      }
+      ctx.closePath(); ctx.fill();
+      ctx.strokeStyle='rgba(60,40,8,.6)'; ctx.lineWidth=0.8; ctx.stroke();
+      ctx.restore();
+    };
+    for (let y = 340; y < 1080; y += 130){ star(7, y, 5); star(553, y, 5); }
+
     /* ----- explosion burst behind the 7-bank (EBD "EACH TARGET DOWN" art) ----- */
     ctx.save();
     ctx.translate(330,545);
@@ -196,15 +210,12 @@ const ART = (() => {
     }
     ctx.restore();
 
-    /* ----- BANK SHOT VALUE ladder panel (left, rope-bordered like the art) ----- */
-    rr(ctx,66,448,46,250,10);
-    ctx.fillStyle='rgba(10,18,52,.55)'; ctx.fill();
-    ctx.strokeStyle='#e8c44a'; ctx.lineWidth=1.8; ctx.stroke();
+    /* ----- BANK SHOT VALUE label beside the left-lane mouth ----- */
     ctx.save();
-    ctx.translate(89,442); ctx.textAlign='center';
-    ctx.fillStyle='#ffe9b8'; ctx.font='800 8px Georgia,serif';
-    ctx.fillText('BANK SHOT', 0, -10);
-    ctx.fillText('VALUE', 0, 0);
+    ctx.translate(72,648); ctx.textAlign='center';
+    ctx.fillStyle='#ffe9b8'; ctx.font='800 8.5px Georgia,serif';
+    ctx.fillText('BANK SHOT', 0, 0);
+    ctx.fillText('VALUE ▲', 0, 11);
     ctx.restore();
 
     /* ----- inserts (off state) ----- */
@@ -222,10 +233,14 @@ const ART = (() => {
       else if (id==='arrowL'){ insertRect(ctx,lp.x-24,lp.y-8,48,16,'#7a1c10'); label(ctx,lp.x,lp.y,lp.label,8,'#e8a88a'); }
       else if (id==='bankT'){ insertRect(ctx,lp.x-28,lp.y-8,56,16,'#7a5a14'); label(ctx,lp.x,lp.y,lp.label,8,'#e0c484'); }
     }
-    /* shot arrows (cream-outlined like classic playfield art) */
+    /* shot arrows (cream-outlined like classic playfield art) + micro-labels */
     arrow(ctx, 170,648, -1.82, '#cf3a28');         // up the in-line lane
     arrow(ctx, 414,430, -1.14, '#cf3a28');         // up the corner-pocket lane
     arrow(ctx, 37,756, -1.57, '#e8c44a');          // left lane
+    ctx.textAlign='center'; ctx.font='800 8px Georgia,serif';
+    ctx.fillStyle='#ffe9b8';
+    ctx.fillText('IN-LINES', 196,672); ctx.fillText('RAISE BONUS X', 196,682);
+    ctx.fillText('CORNER', 448,452); ctx.fillText('POCKET', 448,462);
 
     /* ----- baked GI light pools (warm lamps under plastics) ----- */
     [[240,300,120,.13],[150,520,90,.10],[460,300,80,.12],[280,940,150,.12],[37,560,60,.10]].forEach(([x,y,r,a])=>{
@@ -390,6 +405,21 @@ const ART = (() => {
       if (s.id && (s.id.startsWith('drop')||s.id.startsWith('dlx')||s.id.startsWith('inl')||s.id==='lone'||s.id==='bankT')) continue; // dynamic
       if (s.id==='gate') continue;     // gate drawn dynamically (wire)
       shadedCapsule(ctx,s.ax,s.ay,s.bx,s.by,s.r+1.5, RAIL_COLS[s.mat]||RAIL_COLS.wood);
+      /* screw heads on longer plastic/wood rails */
+      const len = Math.hypot(s.bx-s.ax, s.by-s.ay);
+      if ((s.mat==='plastic'||s.mat==='wood') && len > 90){
+        const n = Math.max(2, Math.round(len/110));
+        for (let i=0;i<n;i++){
+          const t = (i+0.5)/n;
+          const sx = s.ax + (s.bx-s.ax)*t, sy = s.ay + (s.by-s.ay)*t;
+          const sg = ctx.createRadialGradient(sx-0.8,sy-1,0.3,sx,sy,2.6);
+          sg.addColorStop(0,'#f4f0e4'); sg.addColorStop(1,'#5e5648');
+          ctx.fillStyle = sg;
+          ctx.beginPath(); ctx.arc(sx,sy,2.4,0,7); ctx.fill();
+          ctx.strokeStyle='rgba(30,20,10,.6)'; ctx.lineWidth=0.7;
+          ctx.beginPath(); ctx.moveTo(sx-1.5,sy); ctx.lineTo(sx+1.5,sy); ctx.stroke();
+        }
+      }
     }
     for (const c of PHYS.circs()){
       if (c.id && c.id.startsWith('bump')) continue;       // bumpers dynamic
@@ -444,16 +474,19 @@ const ART = (() => {
   }
 
   function drawDropTarget(ctx,d,col,num){
-    if (!d.up){    // dark slot
-      ctx.fillStyle='rgba(20,12,6,.8)';
-      ctx.save(); ctx.translate(d.cx,d.cy);
-      ctx.rotate(Math.atan2(d.seg.by-d.seg.ay, d.seg.bx-d.seg.ax));
-      rr(ctx,-12,-3,24,6,2); ctx.fill(); ctx.restore();
-      return;
-    }
+    const a = d.anim !== undefined ? d.anim : (d.up ? 1 : 0);
+    /* slot is always there */
+    ctx.save(); ctx.translate(d.cx,d.cy);
+    ctx.rotate(Math.atan2(d.seg.by-d.seg.ay, d.seg.bx-d.seg.ax));
+    ctx.fillStyle='rgba(20,12,6,.8)';
+    rr(ctx,-12,-3,24,6,2); ctx.fill();
+    ctx.restore();
+    if (a <= 0.03) return;                          // fully dropped
     ctx.save();
     ctx.translate(d.cx,d.cy);
     ctx.rotate(Math.atan2(d.seg.by-d.seg.ay, d.seg.bx-d.seg.ax));
+    ctx.translate(0, (1-a)*9);                      // sinks into / rises from the slot
+    ctx.globalAlpha = Math.min(1, a*2.2);
     /* extrusion shadow + slot */
     ctx.fillStyle='rgba(8,12,30,.45)'; rr(ctx,-12,-3,24,11,3); ctx.fill();
     /* white face (real EBD targets are white), coloured ball roundel */
@@ -502,38 +535,61 @@ const ART = (() => {
   }
 
   function drawBumper(ctx,b,glow,t){
+    const lit = glow>0;
+    const kick = lit ? glow : 0;                  // 1 at impact → 0
+    const skirtR = 33 + kick*3.5;                 // skirt flares on the kick
+    const capDy = kick*2.6;                       // cap visibly depresses
     /* drop shadow */
     ctx.fillStyle='rgba(40,22,10,.3)';
-    ctx.beginPath(); ctx.arc(b.x+3,b.y+5,33,0,7); ctx.fill();
+    ctx.beginPath(); ctx.arc(b.x+3,b.y+5,skirtR,0,7); ctx.fill();
     /* skirt: shaded cream petals */
-    const sk=ctx.createRadialGradient(b.x-6,b.y-9,6,b.x,b.y,34);
+    const sk=ctx.createRadialGradient(b.x-6,b.y-9,6,b.x,b.y,skirtR+1);
     sk.addColorStop(0,'#fcf4e0'); sk.addColorStop(.7,'#e8d9b8'); sk.addColorStop(1,'#bfa87e');
     ctx.fillStyle=sk;
-    ctx.beginPath(); ctx.arc(b.x,b.y,33,0,7); ctx.fill();
+    ctx.beginPath(); ctx.arc(b.x,b.y,skirtR,0,7); ctx.fill();
     ctx.strokeStyle='rgba(60,40,20,.45)'; ctx.lineWidth=1.1; ctx.stroke();
-    /* body: white base like the real machine */
+    /* petal seams */
+    ctx.strokeStyle='rgba(120,96,60,.3)'; ctx.lineWidth=1;
+    for (let i=0;i<8;i++){
+      const a=i*Math.PI/4 + 0.39;
+      ctx.beginPath();
+      ctx.moveTo(b.x+Math.cos(a)*27, b.y+Math.sin(a)*27);
+      ctx.lineTo(b.x+Math.cos(a)*skirtR, b.y+Math.sin(a)*skirtR);
+      ctx.stroke();
+    }
+    /* body: white base */
     const g=ctx.createRadialGradient(b.x-7,b.y-9,4,b.x,b.y,29);
     g.addColorStop(0,'#ffffff'); g.addColorStop(.6,'#e4dcc8'); g.addColorStop(1,'#a89c80');
     ctx.fillStyle=g;
     ctx.beginPath(); ctx.arc(b.x,b.y,27,0,7); ctx.fill();
     ctx.strokeStyle='rgba(40,28,12,.45)'; ctx.lineWidth=1; ctx.stroke();
-    /* amber glass cap with brass ring */
-    const lit = glow>0;
-    const cap=ctx.createRadialGradient(b.x-4.5,b.y-6.5,2,b.x,b.y,19);
+    /* mounting screws on the body ring */
+    ctx.fillStyle='rgba(90,70,40,.8)';
+    for (let i=0;i<3;i++){
+      const a=i*Math.PI*2/3 - 0.5;
+      ctx.beginPath(); ctx.arc(b.x+Math.cos(a)*22.5, b.y+Math.sin(a)*22.5, 1.8, 0, 7); ctx.fill();
+    }
+    /* amber glass dome cap (depresses on kick) */
+    const cy = b.y + capDy;
+    const cap=ctx.createRadialGradient(b.x-4.5,cy-6.5,2,b.x,cy,19);
     cap.addColorStop(0, lit?'#fff8e0':'#ffe3a4');
-    cap.addColorStop(.7, lit?'#ffc964':'#cf913a');
-    cap.addColorStop(1, lit?'#e89a3a':'#8e5e1e');
+    cap.addColorStop(.55, lit?'#ffc964':'#d89a42');
+    cap.addColorStop(.85, lit?'#e89a3a':'#9a682a');
+    cap.addColorStop(1, lit?'#c87e28':'#6e4c16');
     ctx.fillStyle=cap;
-    ctx.beginPath(); ctx.arc(b.x,b.y,18,0,7); ctx.fill();
+    ctx.beginPath(); ctx.arc(b.x,cy,18,0,7); ctx.fill();
     ctx.strokeStyle='rgba(186,142,74,.9)'; ctx.lineWidth=1.6; ctx.stroke();
-    ctx.strokeStyle='rgba(50,26,8,.5)'; ctx.lineWidth=0.9;
-    ctx.beginPath(); ctx.arc(b.x,b.y,19.4,0,7); ctx.stroke();
+    /* dome ring highlights (curvature) */
+    ctx.strokeStyle='rgba(255,250,235,.5)'; ctx.lineWidth=1.2;
+    ctx.beginPath(); ctx.arc(b.x-1.5,cy-2.5,12.5, Math.PI*1.05, Math.PI*1.7); ctx.stroke();
+    ctx.strokeStyle='rgba(110,76,22,.5)'; ctx.lineWidth=1.4;
+    ctx.beginPath(); ctx.arc(b.x,cy,15.4, Math.PI*0.15, Math.PI*0.85); ctx.stroke();
     /* glass gloss */
-    ctx.fillStyle='rgba(255,255,255,.28)';
-    ctx.beginPath(); ctx.ellipse(b.x-5,b.y-7.5,8.5,4.4,-0.6,0,7); ctx.fill();
-    ctx.fillStyle = lit?'#7e1f14':'#6e4716';
+    ctx.fillStyle='rgba(255,255,255,.35)';
+    ctx.beginPath(); ctx.ellipse(b.x-5,cy-7.5,8,4,-0.6,0,7); ctx.fill();
+    ctx.fillStyle = lit?'#7e1f14':'#5e3c12';
     ctx.font='800 9px Georgia,serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
-    ctx.fillText('100', b.x, b.y+1.5);
+    ctx.fillText('100', b.x, cy+1.5);
     if (lit){
       ctx.globalCompositeOperation='lighter';
       const fg=ctx.createRadialGradient(b.x,b.y,4,b.x,b.y,64*glow+30);
