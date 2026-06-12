@@ -103,35 +103,9 @@ const AU = (() => {
     extra(){ const t=now(); [659,880,1175].forEach((f,i)=>osc('square',f,t+i*.08,.16,.15)); },
   };
 
-  /* bonus drone — Bally background hum rising with bonus */
-  function drone(level){   // 0..1, 0 stops
-    droneLevel = level;
-    if (!ctx) return;
-    if (level > 0 && !droneNodes){
-      const o1 = ctx.createOscillator(), o2 = ctx.createOscillator();
-      const f = ctx.createBiquadFilter(), g = ctx.createGain();
-      o1.type='sawtooth'; o2.type='sawtooth';
-      f.type='lowpass'; f.frequency.value=320; f.Q.value=2;
-      g.gain.value=0;
-      o1.connect(f); o2.connect(f); f.connect(g); g.connect(master);
-      o1.start(); o2.start();
-      droneNodes = {o1,o2,f,g};
-    }
-    if (droneNodes){
-      const t = now();
-      if (level <= 0){
-        droneNodes.g.gain.setTargetAtTime(0, t, .2);
-        const dn = droneNodes; droneNodes = null;
-        setTimeout(()=>{ try{dn.o1.stop();dn.o2.stop();}catch(e){} }, 800);
-      } else {
-        const base = 55 + level*110;
-        droneNodes.o1.frequency.setTargetAtTime(base, t, .08);
-        droneNodes.o2.frequency.setTargetAtTime(base*1.007+1.3, t, .08);
-        droneNodes.f.frequency.setTargetAtTime(240+level*700, t, .1);
-        droneNodes.g.gain.setTargetAtTime(.05+.05*level, t, .12);
-      }
-    }
-  }
+  /* bonus drone removed — the constant low hum read as an audio bug.
+     Kept as a no-op so existing call sites stay harmless. */
+  function drone(level){ droneLevel = level; }
 
   /* ---------- speech ---------- */
   let voice = null, voicesScanned = false, lastSay = 0, sayQ = [];
