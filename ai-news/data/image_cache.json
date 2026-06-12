@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-12T01:00:01.641604+00:00",
+  "updatedAt": "2026-06-12T02:00:01.914136+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -10164,6 +10164,18 @@
     "https://github.com/ollama/ollama/releases/tag/v0.30.8-rc0": {
       "image": "https://opengraph.githubassets.com/3f1e4e15213e038e25f046a7bbe1258ff17c04ad35184c7114e88d4a3e0aef21/ollama/ollama",
       "checkedAt": "2026-06-12T01:00:01.641604+00:00"
+    },
+    "https://techcrunch.com/2026/06/11/theker-just-raised-85m-to-build-the-factory-robot-that-doesnt-specialize-in-anything": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/THEKER-photo-seriesA.jpg?resize=1200,799",
+      "checkedAt": "2026-06-12T02:00:01.914136+00:00"
+    },
+    "https://techcrunch.com/2026/06/11/jeff-bezoss-prometheus-raises-12b-to-build-an-artificial-general-engineer-for-the-physical-world": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/04/GettyImages-2208733347.jpg?w=1024",
+      "checkedAt": "2026-06-12T02:00:01.914136+00:00"
+    },
+    "https://github.com/ollama/ollama/releases/tag/v0.30.8": {
+      "image": "https://opengraph.githubassets.com/fa00cd8d60c1ac20526a499a9a7cb705a1223fa790974656a055a8f35133a6ac/ollama/ollama",
+      "checkedAt": "2026-06-12T02:00:01.914136+00:00"
     }
   }
 }
