@@ -2,7 +2,6 @@
   const state = {
     issue: null,
     issues: [],
-    platformFilter: new URLSearchParams(window.location.search).get("platform") || "all",
   };
 
   const els = {
@@ -64,10 +63,6 @@
     printIssue: document.querySelector("[data-print-issue]"),
     previousIssue: document.querySelector("[data-previous-issue]"),
     nextIssue: document.querySelector("[data-next-issue]"),
-    archiveNav: document.querySelector("[data-archive-nav]"),
-    archiveList: document.querySelector("[data-archive-list]"),
-    coverWall: document.querySelector("[data-cover-wall]"),
-    platformFilter: document.querySelector("[data-platform-filter]"),
     frontPageIndex: document.querySelector("[data-front-page-index]"),
     nextCurrentDate: document.querySelector("[data-next-current-date]"),
     nextHistoricDate: document.querySelector("[data-next-historic-date]"),
@@ -297,88 +292,6 @@
       .replace(/\s*where [^.]*sources are thin;?/gi, "")
       .replace(/\s{2,}/g, " ")
       .trim();
-  }
-
-  const platformRules = [
-    { pattern: /\bfamicom disk system\b/i, label: "Famicom Disk System" },
-    { pattern: /\bfamicom\b/i, label: "Famicom" },
-    { pattern: /\bnes\b|\bnintendo\b/i, label: "NES" },
-    { pattern: /\bcommodore\s*64\b|\bc64\b/i, label: "Commodore 64" },
-    { pattern: /\bapple\s*ii\b/i, label: "Apple II" },
-    { pattern: /\bibm\s*pc\b|\bpc compatibles?\b|\bdos\b/i, label: "IBM PC" },
-    { pattern: /\bmacintosh\b|\bmac\b/i, label: "Macintosh" },
-    { pattern: /\batari\b/i, label: "Atari" },
-    { pattern: /\barcade\b/i, label: "Arcade" },
-    { pattern: /\bbbs\b|\bmodem\b/i, label: "BBS/Modem" },
-    { pattern: /\bhome computers?\b/i, label: "Home Computers" },
-  ];
-
-  function platformTagsFromText(value) {
-    const text = String(value || "");
-    if (!text.trim()) return [];
-    const tags = [];
-    platformRules.forEach((rule) => {
-      if (rule.pattern.test(text)) tags.push(rule.label);
-    });
-    return tags;
-  }
-
-  function uniqueTags(tags) {
-    return Array.from(new Set(tags.filter(Boolean)));
-  }
-
-  function issuePlatformTags(issue) {
-    if (!issue) return [];
-    const fields = [
-      issue.edition,
-      issue.morningLine,
-      issue.lead && issue.lead.headline,
-      issue.lead && issue.lead.summary,
-      issue.bbsNote && issue.bbsNote.headline,
-      issue.bbsNote && issue.bbsNote.summary,
-    ];
-
-    const itemGroups = [
-      issue.storeShelves,
-      issue.softwareList,
-      issue.computerItems,
-      issue.briefs,
-      issue.priceWatch,
-    ];
-
-    itemGroups.forEach((items) => {
-      (items || []).forEach((item) => {
-        fields.push(item.platform, item.label, item.kicker, item.name, item.headline, item.summary, item.detail, item.item);
-      });
-    });
-
-    if (issue.storeShelvesImage) fields.push(issue.storeShelvesImage.caption, issue.storeShelvesImage.alt);
-    if (issue.heroImage) fields.push(issue.heroImage.caption, issue.heroImage.alt);
-
-    const tags = fields.flatMap(platformTagsFromText);
-    if ((issue.storeShelves || []).length) tags.unshift("Games");
-    return uniqueTags(tags).slice(0, 8);
-  }
-
-  function issueCoverImage(issue) {
-    return (issue && issue.heroImage && issue.heroImage.src)
-      || (issue && issue.storeShelvesImage && issue.storeShelvesImage.src)
-      || "media/retro-computer-desk-1986.webp";
-  }
-
-  function issueCoverHeadline(issue) {
-    const game = topGame(issue);
-    if (game && game.name) return game.headline || game.name;
-    return (issue && issue.lead && issue.lead.headline) || (issue && issue.morningLine) || "Computer Chronicle";
-  }
-
-  function renderPlatformTags(tags) {
-    if (!tags || !tags.length) return "";
-    return `
-      <span class="platform-tags">
-        ${tags.map((tag) => `<span class="platform-tag">${escapeHtml(tag)}</span>`).join("")}
-      </span>
-    `;
   }
 
   function firstBrief(issue, pattern) {
@@ -735,20 +648,21 @@
     }
 
     els.issuePicker.disabled = false;
-    issues.forEach((issue) => {
+    issues.forEach((issue, index) => {
+      const label = index === 0 ? "Latest" : "Archive";
+      const headline = issue.lead && issue.lead.headline ? issue.lead.headline : issue.morningLine || "";
       const option = document.createElement("option");
       option.value = issue.currentDate;
-      option.textContent = `${issue.currentDate} -> ${issue.displayDate}`;
+      option.textContent = `${label}: ${issue.currentDate} / ${issue.displayDate || issue.historicDate}${headline ? ` - ${headline}` : ""}`;
       option.selected = selectedIssue && selectedIssue.currentDate === issue.currentDate;
       els.issuePicker.append(option);
     });
   }
 
-  function renderArchiveList(issues, selectedIssue) {
-    if (!els.archiveList) return;
-    if (els.archiveNav) els.archiveNav.hidden = issues.length < 2;
+  function renderIssueStepNav(issues, selectedIssue) {
     if (issues.length < 2) {
-      els.archiveList.innerHTML = "";
+      if (els.previousIssue) els.previousIssue.hidden = true;
+      if (els.nextIssue) els.nextIssue.hidden = true;
       return;
     }
 
@@ -770,65 +684,6 @@
       }
     }
 
-    els.archiveList.innerHTML = issues.map((issue, index) => {
-      const active = selectedIssue && selectedIssue.currentDate === issue.currentDate;
-      const label = index === 0 ? "Latest" : "Archive";
-      const headline = issue.lead && issue.lead.headline ? issue.lead.headline : issue.morningLine || "";
-      return `
-        <li>
-          <a href="?date=${encodeURIComponent(issue.currentDate)}" ${active ? "aria-current=\"page\"" : ""}>
-            <span>${escapeHtml(label)}</span>
-            <strong>${escapeHtml(issue.currentDate)}</strong>
-            <em>${escapeHtml(issue.displayDate || issue.historicDate)}</em>
-            <b>${escapeHtml(headline)}</b>
-          </a>
-        </li>
-      `;
-    }).join("");
-  }
-
-  function renderCoverWall(issues, selectedIssue) {
-    if (!els.coverWall || !els.platformFilter) return;
-    const issueEntries = issues.map((issue) => ({
-      issue,
-      tags: issuePlatformTags(issue),
-    }));
-    const allTags = uniqueTags(issueEntries.flatMap((entry) => entry.tags)).slice(0, 12);
-    const activeTag = state.platformFilter === "all" || allTags.includes(state.platformFilter) ? state.platformFilter : "all";
-    state.platformFilter = activeTag;
-
-    els.platformFilter.innerHTML = ["all", ...allTags].map((tag) => {
-      const active = tag === activeTag;
-      return `
-        <button type="button" data-platform-value="${escapeHtml(tag)}" aria-pressed="${active ? "true" : "false"}">
-          ${escapeHtml(tag === "all" ? "All" : tag)}
-        </button>
-      `;
-    }).join("");
-
-    const filteredEntries = activeTag === "all"
-      ? issueEntries
-      : issueEntries.filter((entry) => entry.tags.includes(activeTag));
-
-    els.coverWall.innerHTML = filteredEntries.map(({ issue, tags }, index) => {
-      const active = selectedIssue && selectedIssue.currentDate === issue.currentDate;
-      const label = index === 0 && activeTag === "all" ? "Latest Issue" : issue.displayDate || issue.historicDate || "Archive";
-      return `
-        <li>
-          <a class="cover-card" href="?date=${encodeURIComponent(issue.currentDate)}" ${active ? "aria-current=\"page\"" : ""}>
-            <figure>
-              <img src="${escapeHtml(issueCoverImage(issue))}" alt="${escapeHtml((issue.heroImage && issue.heroImage.alt) || issueCoverHeadline(issue))}" loading="lazy">
-            </figure>
-            <span class="cover-card-body">
-              <span class="cover-card-kicker">${escapeHtml(label)}</span>
-              <strong>${escapeHtml(issueCoverHeadline(issue))}</strong>
-              <em>${escapeHtml(issue.currentDate)} / ${escapeHtml(issue.displayDate || issue.historicDate || "")}</em>
-              ${renderPlatformTags(tags.slice(0, 4))}
-            </span>
-          </a>
-        </li>
-      `;
-    }).join("");
   }
 
   async function loadIssues() {
@@ -843,8 +698,7 @@
       state.issues = data.issues || [];
       state.issue = pickIssue(state.issues, currentIso, historicIso);
       renderIssuePicker(state.issues, state.issue);
-      renderArchiveList(state.issues, state.issue);
-      renderCoverWall(state.issues, state.issue);
+      renderIssueStepNav(state.issues, state.issue);
       renderIssue(state.issue, currentIso, historicIso);
     } catch (error) {
       els.status.textContent = `Could not load issue data: ${error.message}`;
@@ -865,22 +719,6 @@
   if (els.printIssue) {
     els.printIssue.addEventListener("click", () => {
       window.print();
-    });
-  }
-
-  if (els.platformFilter) {
-    els.platformFilter.addEventListener("click", (event) => {
-      const button = event.target.closest("[data-platform-value]");
-      if (!button) return;
-      state.platformFilter = button.getAttribute("data-platform-value") || "all";
-      const url = new URL(window.location.href);
-      if (state.platformFilter === "all") {
-        url.searchParams.delete("platform");
-      } else {
-        url.searchParams.set("platform", state.platformFilter);
-      }
-      window.history.replaceState({}, "", url.toString());
-      renderCoverWall(state.issues, state.issue);
     });
   }
 
