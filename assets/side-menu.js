@@ -6,6 +6,7 @@
     garden: '<path d="M7 3v4"/><path d="M17 3v4"/><path d="M4.5 8h15"/><rect x="4.5" y="5" width="15" height="15.5" rx="2"/><path d="M8 12h2.5M13.5 12H16M8 16h2.5M13.5 16H16"/>',
     imageGen: '<rect x="4" y="5" width="16" height="14" rx="2"/><path d="m7 16 3.4-3.4 2.6 2.6 2.2-2.2L19 16.8"/><circle cx="15.5" cy="9.5" r="1.4"/>',
     aiNews: '<path d="M12 4v16"/><path d="M8.2 7.2a3 3 0 0 0-1.8 5.4 3 3 0 0 0 1.4 5.8"/><path d="M15.8 7.2a3 3 0 0 1 1.8 5.4 3 3 0 0 1-1.4 5.8"/><path d="M8.2 7.2A3.6 3.6 0 0 1 12 4"/><path d="M15.8 7.2A3.6 3.6 0 0 0 12 4"/><path d="M8.5 12h7"/><path d="M8.8 16h6.4"/>',
+    chronicle: '<path d="M6 4h12a2 2 0 0 1 2 2v13H8a2 2 0 0 0-2 2V4Z"/><path d="M6 4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h2"/><path d="M9 8h7"/><path d="M9 12h7"/><path d="M9 16h4"/>',
     aiSounds: '<path d="M4 14v-4"/><path d="M8 18V6"/><path d="M12 21V3"/><path d="M16 18V6"/><path d="M20 14v-4"/><path d="M3 20c3-2 5-2 8 0s5 2 10 0"/>',
     photos: '<path d="M6.5 8.5h2l1.5-2h4l1.5 2h2a2 2 0 0 1 2 2v6.5a2 2 0 0 1-2 2h-11a2 2 0 0 1-2-2v-6.5a2 2 0 0 1 2-2Z"/><circle cx="12" cy="14" r="3"/>',
     games: '<path d="M7 10h10a4 4 0 0 1 3.8 2.8l.7 2.3a3 3 0 0 1-5 3l-1.4-1.6H8.9l-1.4 1.6a3 3 0 0 1-5-3l.7-2.3A4 4 0 0 1 7 10Z"/><path d="M7.5 14h4"/><path d="M9.5 12v4"/><path d="M16.5 13.2h.1"/><path d="M18.5 15.2h.1"/>',
@@ -40,6 +41,7 @@
       items: [
         ['image-gen', 'experiments/image-gen-2-benchmark/', 'imageGen', 'GPT Image 2 Gallery'],
         ['ai-news', 'ai-news/', 'aiNews', 'AI News'],
+        ['computer-chronicle', 'computer-chronicle/', 'chronicle', 'Computer Chronicle'],
         ['ai-sounds', 'ai-sounds/', 'aiSounds', 'AI Sounds'],
         ['photos', 'photos/', 'photos', 'Photos, kept casual'],
         ['games', 'games/', 'games', 'GameMaster Arcade'],
