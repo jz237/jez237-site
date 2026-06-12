@@ -178,5 +178,23 @@
       "continuity": "Vertical basalt petals, suspended brine lenses, reefmind shell mantles, nacre membranes, pressure-light bowls, living gauges, alien vegetation, cyan storm light, and amber glow remain consistent.",
       "entryDescription": "A lived-in pressure-mite clinic at Throat-of-Glass where reefmind caretakers use brine-lens cradles and pressure-light bowls for small-creature care."
     }
+  },
+  {
+    "id": "2026-06-12-overnight-veyraxis-bloomrift-gilldoor-repair-steps",
+    "title": "Veyraxis Bloomrift: Gilldoor Repair Steps",
+    "tests": "World-only catalog entry showing everyday repair work on a living membrane door in Veyraxis Bloomrift.",
+    "prompt": "Veyraxis Bloomrift: Gilldoor Repair Steps. Create a realistic photographed/cinematic square image of everyday maintenance life in Veyraxis Bloomrift, showing non-human reefmind repairers calmly sealing a breathing gill-door hinge on wet basalt repair steps above suspended brine lenses. Preserve the weekly world bible: vertical basalt petals, nacre membranes, pressure-light bowls, living crystal pressure gauges, reefmind shell mantles, tripod root-limbs, ribbon sensory fans, bioluminescent throat sacs, red pulse lichens, brine droplets, mineral orchids, storm-filtered cyan light, bruised violet shadows, milky opal membrane surfaces, amber internal glow, and red pressure-light pulses. Make it feel like a real 35mm camera photograph with wet reflections, condensation, material wear, atmospheric scale, and naturalistic alien anatomy. Avoid humans, astronauts, Earth props, spaceships, readable signage, logos, illustration, concept-art look, paper prompt cards, and dancing.\n\nSource photo needed: none.\n\nReusable fill-in-the-blank template: Create a realistic photographed/cinematic daily-life image set in Veyraxis Bloomrift, showing [EVERYDAY SCENE] at [LOCATION], with reefmind inhabitants, grown basalt, nacre membrane, pressure-light infrastructure, alien vegetation, and storm-filtered cyan/amber lighting. Preserve the world bible exactly while varying the daily activity and viewpoint.\n\nWhat to preserve: Veyraxis Bloomrift's named world continuity, basalt-and-membrane geography, suspended brine lenses, reefmind body plan, pressure-light technology, alien vegetation, wet grown materials, cyan/violet/amber/red palette, and realistic photographic rendering.\n\nWhat to change: vary the daily activity, camera position, local settlement detail, tools, props, and immediate lived-in scene while staying within the same world logic.\n\nExample substitution: Show reefmind repairers at the Gilldoor Repair Steps applying resin seals and woven vascular-fiber patches to a breathing nacre membrane hinge while pressure mites gather near the seam and amber bowls glow on wet basalt ledges.",
+    "image": "images/2026-06-12-overnight-veyraxis-bloomrift-gilldoor-repair-steps.png",
+    "date": "2026-06-12",
+    "batch": "Daily Prompt",
+    "slot": "overnight",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "world": {
+      "name": "Veyraxis Bloomrift",
+      "description": "A living basalt-and-membrane alien world where glass-shelled reefminds inhabit floating mineral blooms, harvest pressure-light, and move through vascular wind channels.",
+      "continuity": "Preserves the basalt rift geography, reefmind anatomy, nacre membrane infrastructure, pressure-light technology, alien wet ecology, and cyan-violet-amber lighting.",
+      "entryDescription": "Reefmind maintenance workers repair a breathing gill-door hinge on wet basalt steps above suspended brine lenses."
+    }
   }
 ]
