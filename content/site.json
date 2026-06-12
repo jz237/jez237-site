@@ -68,6 +68,12 @@
       "link": "https://jz237.github.io/games/2026-03-27/star-trek/"
     },
     {
+      "name": "🎱 Eight Ball Deluxe",
+      "desc": "Bally's 1981 pinball classic with real physics, Amiga-style scrolling, and voice callouts.",
+      "status": "live",
+      "link": "/games/2026-06-11/eight-ball-deluxe/"
+    },
+    {
       "name": "🌀 Eddy",
       "desc": "Fluid-dynamics herding game: swipe simulated water to guide spores home.",
       "status": "live",
