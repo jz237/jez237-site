@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-12T20:00:01.844328+00:00",
+  "updatedAt": "2026-06-12T21:00:02.009084+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -10264,6 +10264,14 @@
     "https://www.techrepublic.com/article/news-apple-samsung-glucose-data-ai-health-advice": {
       "image": "https://assets.techrepublic.com/uploads/2026/06/samsung-smartwatch-1.png?f=jpeg",
       "checkedAt": "2026-06-12T20:00:01.844328+00:00"
+    },
+    "https://techcrunch.com/2026/06/12/chinese-cybercrime-operation-that-used-ai-to-scam-hundreds-of-thousands-of-victims-sued-by-google": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/google-logo.jpg?resize=1200,800",
+      "checkedAt": "2026-06-12T21:00:02.009084+00:00"
+    },
+    "https://www.microsoft.com/en-us/research/blog/ire-identifies-another-lotuslite-specimen": {
+      "image": "https://www.microsoft.com/en-us/research/wp-content/uploads/2026/06/ProjectIre-TWLIFB-1200x627-1.jpg",
+      "checkedAt": "2026-06-12T21:00:02.009084+00:00"
     }
   }
 }
