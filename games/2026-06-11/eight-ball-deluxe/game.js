@@ -463,7 +463,7 @@ const GAME = (() => {
         const ball = PHYS.ball;
         const dx = ball.x-b.x, dy = ball.y-b.y, dl = Math.hypot(dx,dy)||1;
         /* impulse blends with incoming momentum — no teleport-style direction snap */
-        const kick = 1120 + PHYS.rng()*120;
+        const kick = 1000 + PHYS.rng()*110;
         ball.vx = ball.vx*0.3 + dx/dl*kick;
         ball.vy = ball.vy*0.3 + dy/dl*kick;
         score(100); AU.sfx.bumper();
@@ -477,7 +477,7 @@ const GAME = (() => {
       if (s.cool <= 0 && ev.speed > 35){
         s.cool = 0.15;
         const ball = PHYS.ball;
-        ball.vx += s.nx*1060; ball.vy += s.ny*1060 - 120;
+        ball.vx += s.nx*960; ball.vy += s.ny*960 - 110;
         score(100); AU.sfx.sling();
         slingFlash[i] = 1;
       }
