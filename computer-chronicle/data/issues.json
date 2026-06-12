@@ -1,8 +1,501 @@
 {
-  "generatedAt": "2026-06-11T17:24:14.831Z",
+  "generatedAt": "2026-06-12T12:03:02.139Z",
   "editorialPriority": "When there is a choice, prefer personal computers, home computing, office PC software, and personal computer or console gaming over broad enterprise technology.",
   "fallbackPolicy": "Use exact-day computer news when verified. If none exists, use same-week or same-month personal-computing items with confidence labels, then fall back to a wider world/business headline.",
   "issues": [
+    {
+      "currentDate": "2026-06-12",
+      "historicDate": "1982-09-06",
+      "displayDate": "Week of September 6-12, 1982",
+      "edition": "Issue 006 - Weekly 1982 Computer & Culture Chronicle",
+      "visualProfile": {
+        "layout": "weekly-newsprint-front",
+        "accent": "black-red-blue",
+        "paper": "halftone-cream",
+        "strapline": "Home arcade cartridges, fall software shelves, and pop-culture charts from one 1982 week"
+      },
+      "masthead": {
+        "kicker": "A weekly 1982 archive dispatch",
+        "title": "Computer Chronicle",
+        "deck": "Video games, home computers, software counters, and culture for the week of September 6-12, 1982"
+      },
+      "layoutPlan": {
+        "main": [
+          "editor-note",
+          "lead",
+          "picture-desk",
+          "computer-items",
+          "software",
+          "store-shelves"
+        ],
+        "sidebar": [
+          "price-watch",
+          "market",
+          "bbs",
+          "curiosity",
+          "briefs",
+          "music",
+          "period-ad",
+          "classifieds",
+          "fallback",
+          "accuracy",
+          "sources"
+        ]
+      },
+      "sectionChrome": {
+        "lead": {
+          "label": "Lead Story"
+        },
+        "pictureDesk": {
+          "label": "Picture Desk",
+          "title": "Scenes From the Week"
+        },
+        "computerItems": {
+          "label": "Computers & Hardware",
+          "title": "Personal Computing Desk"
+        },
+        "software": {
+          "label": "Software Top 5",
+          "title": "Programs on the Editor's Pad"
+        },
+        "storeShelves": {
+          "label": "Top Games This Week",
+          "title": "Arcade, Console & Computer Games"
+        },
+        "priceWatch": {
+          "label": "Price Watch",
+          "title": "What It Cost"
+        },
+        "bbs": {
+          "label": "Modem Desk"
+        },
+        "curiosity": {
+          "label": "Movies / TV / Culture"
+        },
+        "briefs": {
+          "label": "Magazine Rack",
+          "title": "Culture & Shelf Talk"
+        },
+        "music": {
+          "label": "Top Rock This Week",
+          "title": "Rock Radio Chart, September 4"
+        },
+        "periodAd": {
+          "label": "Retail / Ads"
+        },
+        "classifieds": {
+          "label": "Classifieds",
+          "title": "Small Ads"
+        },
+        "fallback": {
+          "label": "Editorial Screen"
+        },
+        "accuracy": {
+          "label": "Accuracy Ledger",
+          "title": "What Is Date-Specific"
+        },
+        "sources": {
+          "label": "Source Trail",
+          "title": "Research Log"
+        },
+        "market": {
+          "label": "Retail / Ads",
+          "title": "Computer Store Market"
+        }
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1982-09-06.png",
+        "alt": "GPT Image 2 newspaper-style Computer Chronicle front page for the week of September 6-12, 1982",
+        "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data for the week of September 6-12, 1982.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "This issue follows the chronological 1982 series into the week beginning September 6, when the home-arcade shelf was crowded enough for Parker Brothers' Frogger translation to become the headline while computer stores kept selling practical software and falling memory prices.",
+      "morningLine": "Frogger jumps from coin-op fame to the Atari VCS counter as Chicago reaches No. 1 and E.T. retakes the weekend box office.",
+      "lead": {
+        "headline": "Frogger Hops Onto the VCS Counter",
+        "summary": "Arcade Express' September 12 Hotseat treated Parker Brothers' Atari VCS Frogger as a serious home-arcade translation, praising its authentic coin-op feel and sophisticated play. For stores, the frog was more than a novelty: it showed third-party publishers could compete for the hottest VCS shelf space with arcade licenses of their own.",
+        "confidence": "Dated September 12, 1982 Arcade Express review; wording follows the preserved review summary and later bibliographic references",
+        "sourceRefs": [
+          0,
+          1
+        ]
+      },
+      "computerItems": [
+        {
+          "label": "Video games",
+          "headline": "Frogger Becomes a VCS Test Case",
+          "summary": "A recognizable arcade license gives Parker Brothers a strong answer to Atari and Activision at the cartridge rack.",
+          "confidence": "Exact-week Arcade Express review and later sales context",
+          "sourceRefs": [
+            0,
+            1
+          ]
+        },
+        {
+          "label": "Arcade desk",
+          "headline": "Pac-Man Still Sets the Earnings Pace",
+          "summary": "Trade retrospectives for 1982 still identify Pac-Man as the year's highest-grossing arcade game, even as newer names such as Zaxxon, Q*bert, Time Pilot, and Pitfall! fill the release calendar.",
+          "confidence": "Year-specific video-game chronology; same-season context rather than exact-day release claim",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "label": "Home systems",
+          "headline": "ColecoVision and Atari 5200 Crowd the Fall Conversation",
+          "summary": "The 1982 console field is no longer just VCS versus Intellivision; new machines and arcade licenses make comparison shopping more complicated.",
+          "confidence": "1982 system-launch context from year chronology",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "label": "Office micros",
+          "headline": "Software Sells the Machine",
+          "summary": "VisiCalc, WordStar, dBASE II, SuperCalc, and The Home Accountant remain the kind of named packages clerks use to explain why a microcomputer belongs at home or in the office.",
+          "confidence": "Period-appropriate software lineup carried forward from 1982 archive sources",
+          "sourceRefs": [
+            5,
+            6
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "#1 VisiCalc",
+          "platform": "Apple II / IBM PC / business micros",
+          "detail": "The spreadsheet remains the plainest argument for buying a microcomputer.",
+          "confidence": "Period business-software context",
+          "sourceRefs": [
+            5
+          ]
+        },
+        {
+          "name": "#2 WordStar",
+          "platform": "CP/M and business systems",
+          "detail": "Word processing keeps driving office demonstrations and printer sales.",
+          "confidence": "Period software context",
+          "sourceRefs": [
+            6
+          ]
+        },
+        {
+          "name": "#3 dBASE II",
+          "platform": "CP/M / early PC database work",
+          "detail": "Database filing gives small offices another reason to move records onto disks.",
+          "confidence": "Period software context",
+          "sourceRefs": [
+            6
+          ]
+        },
+        {
+          "name": "#4 SuperCalc",
+          "platform": "CP/M / Osborne-style portables",
+          "detail": "A spreadsheet rival with strong portable-computer shelf presence.",
+          "confidence": "Period software context",
+          "sourceRefs": [
+            6
+          ]
+        },
+        {
+          "name": "#5 The Home Accountant",
+          "platform": "Apple II / Atari / home micros",
+          "detail": "Personal finance software sits naturally beside tax folders and household ledgers.",
+          "confidence": "Period retail-software context",
+          "sourceRefs": [
+            5
+          ]
+        }
+      ],
+      "storeShelves": [
+        {
+          "name": "Frogger",
+          "platform": "Atari VCS",
+          "detail": "Parker Brothers' arcade translation is the cartridge to ask about this week.",
+          "confidence": "Exact-week Arcade Express review",
+          "sourceRefs": [
+            0,
+            1
+          ]
+        },
+        {
+          "name": "Pitfall!",
+          "platform": "Atari VCS",
+          "detail": "Activision's jungle adventure is part of the 1982 home-game conversation.",
+          "confidence": "1982 release context",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "name": "Zaxxon",
+          "platform": "Arcade",
+          "detail": "Sega's isometric shooter is one of the new arcade names defining 1982.",
+          "confidence": "1982 arcade context",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "name": "Q*bert",
+          "platform": "Arcade",
+          "detail": "Gottlieb's pyramid-hopping character game joins the year's notable arcade list.",
+          "confidence": "1982 arcade context",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "name": "Pac-Man",
+          "platform": "Arcade / home licensing",
+          "detail": "Still the benchmark game every operator and home publisher has to measure against.",
+          "confidence": "1982 highest-grossing arcade context",
+          "sourceRefs": [
+            2
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "Atari VCS cartridges",
+          "price": "about $30-$40",
+          "note": "Typical early-1980s premium cartridge range; hit arcade licenses often sat high on the rack."
+        },
+        {
+          "item": "Apple II Plus system",
+          "price": "about $1,300 before monitor and drives",
+          "note": "A serious home or small-office purchase, with software and storage adding fast."
+        },
+        {
+          "item": "5.25-inch floppy disks",
+          "price": "roughly $30-$45 per box",
+          "note": "Blank media remains a visible add-on sale at the counter."
+        },
+        {
+          "item": "300-baud modem",
+          "price": "roughly $100-$200",
+          "note": "Still a specialist accessory, but increasingly part of the bulletin-board pitch."
+        }
+      ],
+      "market": {
+        "headline": "Cartridges Turn Into a Brand Fight",
+        "summary": "The week's retail signal is that recognizable arcade names are no longer locked to a single maker. Parker Brothers, Activision, Atari, and Coleco are all teaching shoppers to compare publishers as much as hardware.",
+        "confidence": "Synthesis from exact-week Frogger review and 1982 console-market context",
+        "sourceRefs": [
+          0,
+          2
+        ]
+      },
+      "bbsNote": {
+        "headline": "Slow Lines, Fast Rumors",
+        "summary": "A 300-baud call is still a patient ritual, but hobbyists are trading tips on modems, CP/M disks, and which arcade conversions are worth the cartridge price.",
+        "posts": [
+          "Looking for VCS Frogger impressions before payday.",
+          "Need WordStar printer setup notes for Epson MX series.",
+          "Trade Apple II game disks locally; no mail order."
+        ],
+        "confidence": "Period-culture reconstruction based on 1982 modem/software context",
+        "sourceRefs": [
+          5,
+          6
+        ]
+      },
+      "curiosity": {
+        "headline": "The Frog as a Salesman",
+        "summary": "Frogger's home success matters because it turns a simple road-and-river character into a box that can move systems, cartridges, and magazine review space.",
+        "confidence": "Synthesis from exact-week review and later sales summaries",
+        "sourceRefs": [
+          0,
+          1
+        ]
+      },
+      "briefs": [
+        {
+          "label": "Charts",
+          "headline": "Chicago Takes No. 1",
+          "summary": "Billboard's September 11 Hot 100 puts Chicago's \"Hard to Say I'm Sorry\" at the top, ahead of Survivor and Steve Miller Band.",
+          "confidence": "Dated September 11, 1982 chart source",
+          "sourceRefs": [
+            3
+          ]
+        },
+        {
+          "label": "Movies",
+          "headline": "E.T. Edges Back Ahead",
+          "summary": "The September 10 weekend chart has E.T. narrowly leading An Officer and a Gentleman, with Pink Floyd: The Wall surging into third.",
+          "confidence": "Dated weekend box-office chart",
+          "sourceRefs": [
+            4
+          ]
+        },
+        {
+          "label": "Shelf",
+          "headline": "Fall Means Comparison Shopping",
+          "summary": "A shopper can now compare familiar arcade names, practical office software, and rising home-computer accessory costs in the same store visit.",
+          "confidence": "Synthesis from structured issue sources",
+          "sourceRefs": [
+            0,
+            2,
+            5
+          ]
+        }
+      ],
+      "musicChart": [
+        {
+          "title": "Hard to Say I'm Sorry",
+          "artist": "Chicago"
+        },
+        {
+          "title": "Eye of the Tiger",
+          "artist": "Survivor"
+        },
+        {
+          "title": "Abracadabra",
+          "artist": "Steve Miller Band"
+        },
+        {
+          "title": "Jack & Diane",
+          "artist": "John Cougar"
+        },
+        {
+          "title": "Even the Nights Are Better",
+          "artist": "Air Supply"
+        }
+      ],
+      "periodAd": {
+        "headline": "FROGGER HAS LANDED",
+        "summary": "Ask for Parker Brothers' Atari VCS Frogger and see why the arcade line at the pizza shop is moving into the den.",
+        "finePrint": "Period-style advertisement copy; not a reproduced historical ad."
+      },
+      "classifieds": [
+        {
+          "headline": "APPLE II DISK DRIVE WANTED",
+          "copy": "Local pickup preferred. Will trade printer interface and cash."
+        },
+        {
+          "headline": "VCS CARTRIDGE SWAP",
+          "copy": "Have duplicate sports carts; looking for Activision titles or Frogger."
+        },
+        {
+          "headline": "CP/M HELP NEEDED",
+          "copy": "Small office seeks WordStar setup assistance after hours."
+        }
+      ],
+      "worldFallback": {
+        "headline": "Culture Desk",
+        "summary": "E.T., Chicago, and arcade cartridges keep the week's non-computer mood bright, commercial, and unmistakably 1982.",
+        "confidence": "Dated music and box-office sources",
+        "sourceRefs": [
+          3,
+          4
+        ]
+      },
+      "accuracyLedger": {
+        "items": [
+          "Historic week comes from the Chronicle state file: 1982-09-06 through 1982-09-12.",
+          "Lead story is anchored to Arcade Express Vol. 1 No. 3, dated September 12, 1982.",
+          "Music chart uses the September 11, 1982 Hot 100 ranking.",
+          "Movie chart uses the weekend beginning September 10, 1982.",
+          "Game shelf items are either exact-week review subjects or broader 1982 releases/context.",
+          "Price Watch uses period-typical retail ranges and is labeled as such."
+        ],
+        "note": "Webpage text and sources are canonical; the generated image is an art-directed newspaper artifact."
+      },
+      "sources": [
+        {
+          "name": "Arcade Express Vol. 1 No. 3, September 12, 1982: The Hotseat reviews Parker Brothers Frogger for Atari VCS",
+          "url": "https://www.ataricompendium.com/archives/newsletters/arcade_express/arcade_express_v1n3.pdf"
+        },
+        {
+          "name": "Frogger historical summary citing Arcade Express September 12, 1982 review and Parker Brothers sales context",
+          "url": "https://en.wikipedia.org/wiki/Frogger"
+        },
+        {
+          "name": "1982 in video games: Pac-Man, ColecoVision, Atari 5200, Q*bert, Zaxxon, Time Pilot, Pitfall! context",
+          "url": "https://en.wikipedia.org/wiki/1982_in_video_games"
+        },
+        {
+          "name": "US Top 40 Singles for the week ending September 11, 1982",
+          "url": "https://top40weekly.com/2013/09/11/us-top-40-singles-for-the-week-ending-september-11-1982/"
+        },
+        {
+          "name": "The Numbers weekend domestic box office chart for September 10, 1982",
+          "url": "https://www.the-numbers.com/box-office-chart/weekend/1982/09/10"
+        },
+        {
+          "name": "Computer History Museum timeline: VisiCalc context",
+          "url": "https://www.computerhistory.org/timeline/1979/"
+        },
+        {
+          "name": "Vintage software and CP/M-era application context",
+          "url": "https://en.wikipedia.org/wiki/WordStar"
+        }
+      ],
+      "frontPageStories": [
+        {
+          "headline": "Frogger Hops Onto the VCS Counter",
+          "summary": "Parker Brothers' arcade translation becomes the week's home-game headline.",
+          "sourceRefs": [
+            0,
+            1
+          ]
+        },
+        {
+          "headline": "Chicago Reaches No. 1",
+          "summary": "\"Hard to Say I'm Sorry\" leads the September 11 Hot 100.",
+          "sourceRefs": [
+            3
+          ]
+        },
+        {
+          "headline": "E.T. Leads the Weekend",
+          "summary": "The September 10 box-office chart puts E.T. just ahead of An Officer and a Gentleman.",
+          "sourceRefs": [
+            4
+          ]
+        }
+      ],
+      "movieChart": [
+        {
+          "title": "E.T. the Extra-Terrestrial",
+          "detail": "No. 1 weekend gross, September 10 chart",
+          "sourceRefs": [
+            4
+          ]
+        },
+        {
+          "title": "An Officer and a Gentleman",
+          "detail": "No. 2 weekend gross",
+          "sourceRefs": [
+            4
+          ]
+        },
+        {
+          "title": "Pink Floyd: The Wall",
+          "detail": "No. 3 weekend gross after a sharp expansion",
+          "sourceRefs": [
+            4
+          ]
+        },
+        {
+          "title": "Fast Times at Ridgemont High",
+          "detail": "No. 4 weekend gross",
+          "sourceRefs": [
+            4
+          ]
+        },
+        {
+          "title": "The Best Little Whorehouse in Texas",
+          "detail": "No. 5 weekend gross",
+          "sourceRefs": [
+            4
+          ]
+        }
+      ],
+      "musicChartSourceRefs": [
+        3
+      ]
+    },
     {
       "currentDate": "2026-06-11",
       "historicDate": "1982-08-30",
