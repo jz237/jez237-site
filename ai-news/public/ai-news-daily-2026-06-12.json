@@ -1,7 +1,23 @@
 {
   "date": "2026-06-12",
-  "updatedAt": "2026-06-12T00:00:01.251811+00:00",
+  "updatedAt": "2026-06-12T01:00:01.641604+00:00",
   "items": [
+    {
+      "title": "v0.30.8-rc0",
+      "url": "https://github.com/ollama/ollama/releases/tag/v0.30.8-rc0",
+      "source": "Ollama Releases",
+      "sourceUrl": "https://github.com/ollama/ollama/releases.atom",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "launch: Fix launch provider drift (#16683)",
+      "image": "https://opengraph.githubassets.com/3f1e4e15213e038e25f046a7bbe1258ff17c04ad35184c7114e88d4a3e0aef21/ollama/ollama",
+      "published": "2026-06-12T00:21:46+00:00",
+      "firstSeen": "2026-06-12T01:00:01.641604+00:00",
+      "lastSeen": "2026-06-12T01:00:01.641604+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.0407
+    },
     {
       "title": "NightFeats @ MMU-RAGent NeurIPS 2025: A Context-Optimized Multi-Agent RAG System for the Text-to-Text Track",
       "url": "https://llm-stats.com/ai-news",
@@ -11,9 +27,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-12T00:00:09.643041+00:00",
+      "published": "2026-06-12T01:00:10.873114+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-12T00:00:01.251811+00:00",
+      "lastSeen": "2026-06-12T01:00:01.641604+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
       "score": 1.96
