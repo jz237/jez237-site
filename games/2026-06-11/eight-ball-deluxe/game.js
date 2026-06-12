@@ -140,7 +140,7 @@ const GAME = (() => {
   let plungePull = 0, plungeHeld = false, served = false;
   let bonusTimer = 0, bonusLeft = 0, endTimer = 0;
   let saucerTimer = 0, rackPending = false, loneTimer = 0;
-  let stillX = 0, stillY = 0, stillT = 0, searchN = 0, lastSearchT = -99;
+  let stillX = 0, stillY = 0, stillT = 0, searchN = 0, lastSearchT = -99, auditT = 0;
   let lastMajor = 0, quipIdx = 0;
   let flashes = [];           // {x,y,r,col,age,max}
   let bumpGlow = [0,0,0];
@@ -623,6 +623,8 @@ const GAME = (() => {
         AU.say(pick(['Stop talking and start chalking','Quit playing with yourself','Shoot the eight ball']), 0);
       }
     }
+    auditT += PHYS.DT;
+    if (auditT > 0.5){ auditT = 0; keyAudit(); }
     if (state === 'attract' && !demoMode && !window.__headless){
       attractIdle += PHYS.DT;
       if (attractIdle > 14 && !document.getElementById('title').classList.contains('hide')){
@@ -739,6 +741,16 @@ const GAME = (() => {
     const b = PHYS.ball;
     if ((b.active||b.held) && !TABLE.saucer.holding){
       const bx = b.px + (b.x-b.px)*alpha, by = b.py + (b.y-b.py)*alpha;
+      const spd = Math.hypot(b.vx, b.vy);
+      if (spd > 1200){                          // motion-blur streak
+        const n = Math.min(3, spd/900|0), ux = b.vx/spd, uy = b.vy/spd;
+        for (let i = 1; i <= n; i++){
+          ctx.globalAlpha = 0.15*(1 - i/(n+1));
+          ctx.fillStyle = '#b8c2ca';
+          ctx.beginPath(); ctx.arc(bx-ux*i*8, by-uy*i*8, 13.5-i*1.4, 0, 7); ctx.fill();
+        }
+        ctx.globalAlpha = 1;
+      }
       ART.drawBall(ctx,bx,by);
     }
 
@@ -822,6 +834,18 @@ const GAME = (() => {
     }
     ctx.shadowBlur = 0;
 
+    /* ?debug=1 overlay: live flipper source sets + recent input events */
+    if (window.__debugHud){
+      ctx.font = '11px Consolas,monospace'; ctx.textAlign='left'; ctx.textBaseline='top';
+      ctx.fillStyle = 'rgba(0,0,0,.6)'; ctx.fillRect(4, panelH+4, 250, 110);
+      ctx.fillStyle = TABLE.FL.on ? '#7dff8a' : '#888';
+      ctx.fillText('FL '+(TABLE.FL.on?'UP':'dn')+' ['+[...flipSrc.L].join(' ')+']', 8, panelH+8);
+      ctx.fillStyle = TABLE.FR.on ? '#7dff8a' : '#888';
+      ctx.fillText('FR '+(TABLE.FR.on?'UP':'dn')+' ['+[...flipSrc.R].join(' ')+']', 8, panelH+22);
+      ctx.fillStyle = '#caa46a';
+      inputLog.slice(-6).forEach((l,i)=> ctx.fillText(l.t%100000+' '+l.e, 8, panelH+38+i*12));
+    }
+
     /* DMD on the right */
     const dmd = renderDMD();
     const dw = Math.min(cssW*0.42, panelH*4.7), dh = dw*(DMD.H/DMD.W);
@@ -841,6 +865,15 @@ const GAME = (() => {
     acc += dt;
     while (acc >= PHYS.DT){ simStep(); acc -= PHYS.DT; }
     for (let i=0;i<bumpGlow.length;i++) bumpGlow[i] = Math.max(0, bumpGlow[i]-dt*5);
+    /* drop-target drop/rise animation */
+    for (const d of [...TABLE.drops7, ...TABLE.inline, TABLE.lone]){
+      const want = d.up ? 1 : 0;
+      if (d.anim === undefined) d.anim = want;
+      else if (d.anim !== want){
+        const step = dt/0.07;
+        d.anim += Math.sign(want - d.anim) * Math.min(Math.abs(want - d.anim), step);
+      }
+    }
     for (let i=0;i<2;i++) slingFlash[i] = Math.max(0, slingFlash[i]-dt*5);
     for (const f of flashes) f.age += dt;
     flashes = flashes.filter(f=>f.age<f.max);
@@ -857,6 +890,48 @@ const GAME = (() => {
   const LKEYS = ['ShiftLeft','KeyZ','ArrowLeft','KeyA'];
   const RKEYS = ['ShiftRight','Slash','ArrowRight','KeyD','Quote'];
   const flipSrc = { L:new Set(), R:new Set() };
+  const keyLastSeen = {};                       // code → performance.now() of last keydown (incl. repeats)
+
+  /* input ring buffer for field debugging (__g.inputLog, ?debug=1 overlay) */
+  const inputLog = [];
+  function ilog(ev){
+    inputLog.push({ t: performance.now()|0, e: ev,
+                    L: [...flipSrc.L].join('|'), R: [...flipSrc.R].join('|') });
+    if (inputLog.length > 200) inputLog.shift();
+  }
+
+  /* watchdogs against swallowed releases:
+     · modifier keys don't auto-repeat, but every later event can be asked
+       via getModifierState — drop Shift sources the instant it reads false
+     · non-modifier keys DO auto-repeat, so a held key refreshes keyLastSeen;
+       a key source silent for >2s means its keyup was swallowed            */
+  function modifierAudit(e){
+    if (!e.getModifierState) return;
+    if (!e.getModifierState('Shift')){
+      if (flipSrc.L.has('key:ShiftLeft')){ ilog('watchdog -ShiftLeft'); releaseSrc('L','key:ShiftLeft'); }
+      if (flipSrc.R.has('key:ShiftRight')){ ilog('watchdog -ShiftRight'); releaseSrc('R','key:ShiftRight'); }
+    }
+  }
+  function keyAudit(){
+    for (const side of ['L','R']){
+      for (const src of flipSrc[side]){
+        if (!src.startsWith('key:')) continue;
+        const code = src.slice(4);
+        if (code === 'ShiftLeft' || code === 'ShiftRight') continue;   // covered by modifierAudit
+        if (tNow - (keyLastSeen[code]||0) > 2.0){                      // sim-clock: keyboards auto-repeat well under 2s
+          ilog('watchdog -'+code);
+          releaseSrc(side, src);
+        }
+      }
+      /* pointer sources must exist in the live pointer map */
+      for (const src of flipSrc[side]){
+        if (src.startsWith('ptr:') && !ptrs.has(+src.slice(4))){
+          ilog('watchdog -'+src);
+          releaseSrc(side, src);
+        }
+      }
+    }
+  }
 
   function syncFlip(side){
     const want = flipSrc[side].size > 0 && !tilted && state!=='paused' && state!=='attract';
@@ -879,6 +954,9 @@ const GAME = (() => {
 
   addEventListener('keydown', e=>{
     const k = e.key, c = e.code;
+    keyLastSeen[c] = tNow;
+    if (!e.repeat) ilog('kd '+c);
+    modifierAudit(e);
     if (['ArrowLeft','ArrowRight','ArrowUp','ArrowDown',' '].includes(k)) e.preventDefault();
     if (k==='p'||k==='P'||k==='Escape'){
       if (state==='play'||state==='serve') return pauseGame();
@@ -902,10 +980,12 @@ const GAME = (() => {
   });
   addEventListener('keyup', e=>{
     const c = e.code;
+    ilog('ku '+c);
+    modifierAudit(e);
     releaseSrc('L','key:'+c); releaseSrc('R','key:'+c);
     if (c==='Space'||c==='ArrowDown'){ if (state==='serve' && plungeHeld) launch(); }
   });
-  addEventListener('blur', ()=>{ releaseAllInputs();
+  addEventListener('blur', ()=>{ ilog('blur'); releaseAllInputs();
     if (state==='play'||state==='serve') pauseGame(); });
   document.addEventListener('visibilitychange', ()=>{
     releaseAllInputs();
@@ -922,9 +1002,11 @@ const GAME = (() => {
     const side = ptrSide(e.clientX);
     ptrs.set(e.pointerId, {side, x0:e.clientX, y0:e.clientY, t0:performance.now(), nudged:false});
     if (state==='serve') plungeHeld = true;
+    ilog('pd '+e.pointerId+e.pointerType[0]+side);
     press(side, 'ptr:'+e.pointerId);
   });
   document.addEventListener('pointermove', e=>{
+    modifierAudit(e);
     const o = ptrs.get(e.pointerId);
     if (o){
       const dy = e.clientY-o.y0, dx = e.clientX-o.x0;
@@ -939,6 +1021,7 @@ const GAME = (() => {
     const o = ptrs.get(e.pointerId);
     if (!o) return;
     ptrs.delete(e.pointerId);
+    ilog('pu '+e.pointerId);
     releaseSrc(o.side, 'ptr:'+e.pointerId);
     if (state==='serve' && plungeHeld && ptrs.size===0) launch();
   }
@@ -975,6 +1058,47 @@ const GAME = (() => {
   }
   document.getElementById('bHow').onclick = ()=>{ hide('title'); show('how'); };
   document.getElementById('bHowBack').onclick = ()=>{ hide('how'); show('title'); };
+  document.getElementById('bGuide').onclick = ()=>{ hide('how'); show('guide'); buildGuide(); };
+  document.getElementById('bGuideBack').onclick = ()=>{ hide('guide'); show('how'); };
+
+  /* table guide: miniature playfield + numbered callouts, generated from the registry */
+  function buildGuide(){
+    const FEATURES = [
+      { at: [TABLE.lamps.pool3.x, TABLE.lamps.pool3.y-58], name: '7-bank pool-ball drop targets',
+        desc: '2,000 each + 7,000 bonus. Clear all 7 to light the 8-BALL.' },
+      { at: [TABLE.lone.cx, TABLE.lone.cy], name: '8-BALL & corner pocket',
+        desc: 'Knock the lone 8-ball target, then the saucer collects the rack (shoot it from the upper flipper).' },
+      { at: [TABLE.deluxe[2].cx, TABLE.deluxe[2].cy], name: 'DELUXE standups',
+        desc: 'Exposed behind downed targets. Spell D-E-L-U-X-E for a replay.' },
+      { at: [TABLE.inline[1].cx, TABLE.inline[1].cy], name: 'In-line drops + Bank Shot',
+        desc: '4 drops raise your bonus to 5×; the target behind them scores 50,000.' },
+      { at: [38, 470], name: 'Left lane (Bank Shot value)',
+        desc: 'Climbs 10K→70K per trip; 70K lights extra ball. Loops to the top.' },
+      { at: [TABLE.lamps.A.x, TABLE.lamps.A.y-18], name: 'A-B top lanes & 25,000 crown',
+        desc: 'A-B-C-D completion spots a pool ball. The crown rollover pays 25,000 when lit.' },
+      { at: [TABLE.lamps.C.x, TABLE.lamps.C.y+18], name: 'C / D inlanes',
+        desc: 'Complete A-B-C-D with the flipper-return lanes.' },
+      { at: [280, 946], name: 'Bonus multipliers',
+        desc: '2× to 5× from the in-line drops — applied to your bonus at ball end. Bonus carries all game.' },
+    ];
+    const cv = document.getElementById('guideCv');
+    const sc = 230 / TABLE.W;
+    cv.width = 230; cv.height = Math.round(TABLE.H * sc);
+    const g2 = cv.getContext('2d');
+    g2.drawImage(ART.base, 0, 0, cv.width, cv.height);
+    g2.fillStyle = 'rgba(8,6,3,.25)'; g2.fillRect(0,0,cv.width,cv.height);
+    FEATURES.forEach((f, i) => {
+      const x = f.at[0]*sc, y = f.at[1]*sc;
+      g2.beginPath(); g2.arc(x, y, 9, 0, 7);
+      g2.fillStyle = '#ffb347'; g2.fill();
+      g2.strokeStyle = '#1a0e02'; g2.lineWidth = 1.5; g2.stroke();
+      g2.fillStyle = '#1a0e02'; g2.font = '800 11px sans-serif';
+      g2.textAlign = 'center'; g2.textBaseline = 'middle';
+      g2.fillText(String(i+1), x, y+0.5);
+    });
+    document.getElementById('guideList').innerHTML =
+      FEATURES.map(f => `<li><b style="color:#ffd98a">${f.name}</b><br>${f.desc}</li>`).join('');
+  }
   document.getElementById('bScores').onclick = async ()=>{
     hide('title'); show('scores');
     document.getElementById('tBoard').innerHTML = '<div class="tiny">checking the wall…</div>';
@@ -1080,6 +1204,7 @@ const GAME = (() => {
   requestAnimationFrame(frame);
 
   /* headless screenshot staging: ?shot=play|full|title|serve (CI/visual checks) */
+  window.__debugHud = new URLSearchParams(location.search).get('debug') === '1';
   const shotMode = new URLSearchParams(location.search).get('shot');
   if (shotMode){
     window.__headless = true;
@@ -1115,6 +1240,8 @@ const GAME = (() => {
     endBall(){ PHYS.ball.active=false; handleEvent({type:'drain'}); },
     get phys(){ return PHYS; }, get table(){ return TABLE; },
     get ai(){ return AI; },
+    get inputLog(){ return inputLog; },
+    get flipSrc(){ return { L:[...flipSrc.L], R:[...flipSrc.R] }; },
     startDemo(){ startDemo(); }, stopDemo(){ endDemo(); },
     set headless(v){ window.__headless = v; },
     render(){ updateCam(1/60); render(1); return 'rendered'; },

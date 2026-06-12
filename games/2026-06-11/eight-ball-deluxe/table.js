@@ -42,7 +42,9 @@ const TABLE = (() => {
     const S = PHYS.addSeg, C = PHYS.addCirc;
 
     /* outer shell */
-    S(16,300, 16,1010, 6, 'metal');                    // left wall
+    S(16,300, 16,700, 6, 'metal');                     // left wall
+    S(16,700, 16,860, 6, 'rubber');                    //   …rubber cushion section (lane approach)
+    S(16,860, 16,1010, 6, 'metal');
     arc(280,300, 264, Math.PI, 0, 30, 6, 'metal');     // outer crown (fine chords = smooth ride)
     S(544,300, 544,1098, 6, 'metal');                  // shooter outer wall
 
@@ -73,12 +75,14 @@ const TABLE = (() => {
       bumpers.push({circ:c, x,y, cool:0});
     });
 
-    /* ---- left orbit (Bank Shot lane) ---- */
-    S(58,300, 58,735, 5, 'metal');            // inner guide ends high enough that the
-    S(58,735, 78,800, 5, 'metal');            //   right-flipper approach line crosses
-    S(78,800, 96,848, 5, 'metal');            //   into the lane above the mouth funnel
-    zone('bank', 37,560, 20);                 // wall channel (descending loop balls)
-    zone('bank2', 79,560, 18);                // inner channel (upward left-lane shots)
+    /* ---- left lane (values ladder, loops to the top) ----
+       Mouth sits at MID-table like the real EBD; below it the whole west
+       flank is OPEN so balls reach the left inlane/outlane naturally. */
+    S(58,300, 58,520, 5, 'metal');            // inner guide
+    S(58,520, 73.6,627.5, 5, 'metal');        // long catch-funnel (geometry found by
+    S(73.6,627.5, 110,735, 5, 'metal');       //   parameter search over shot sweeps)
+    zone('bank', 37,440, 20);                 // wall channel (descending loop balls)
+    zone('bank2', 76,440, 18);                // inner channel (upward left-lane shots)
 
     /* ---- in-line drop lane: near-vertical stack at left-center (real EBD),
        shot from the lower-left flipper; Bank Shot standup at the dead end ---- */
@@ -91,7 +95,6 @@ const TABLE = (() => {
       /* right wall ends short of the bank backwall so balls rolling off the
          backwall FALL THROUGH the gap instead of wedging in a valley */
       S(ex+px*28+ux*28, ey+py*28+uy*28, ex+px*28+ux*L, ey+py*28+uy*L, 6, 'plastic');
-      S(ex-px*28, ey-py*28, ex-px*28-16, ey-py*28+30, 6, 'plastic');      // mouth flare L
       const bx=ex+ux*L, by=ey+uy*L;
       bankTop = { seg: S(bx-px*24, by-py*24, bx+px*24, by+py*24, 4, 'target', 'bankT'),
                   cx:bx, cy:by };
@@ -195,7 +198,7 @@ const TABLE = (() => {
     lamp('x4', 308,956, '4X'); lamp('x5', 338,936, '5X');
     const DLET = 'DELUXE';
     for (let i=0;i<6;i++) lamp('dl'+i, 238+i*29, 706-i*10, DLET[i]);
-    for (let i=0;i<7;i++) lamp('bk'+i, 86, 478+i*33, ((i+1)*10)+'K');
+    for (let i=0;i<7;i++) lamp('bk'+i, 38, 360+i*32, ((i+1)*10)+'K');
     lamp('again', 280,1002, 'SHOOT AGAIN', '#ff5a3c');
   }
 
