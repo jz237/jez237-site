@@ -1,6 +1,6 @@
 {
   "date": "2026-06-12",
-  "updatedAt": "2026-06-12T22:00:01.248802+00:00",
+  "updatedAt": "2026-06-12T23:00:01.848205+00:00",
   "items": [
     {
       "title": "Release v5.12.0",
@@ -10,14 +10,14 @@
       "sourceWeight": 0.85,
       "category": "AI",
       "summary": "Release v5.12.0\nNew Model additions\nMiniMax-M3-VL\n\nMiniMax-M3-VL is the vision-language member of the MiniMax-M3 family that pairs a CLIP-style vision tower with 3D rotary position embeddings with the MiniMax-M3 text backbone. It uses a mixed dense/sparse Mixture-of-Experts decoder with SwiGLU-OAI gated experts and a lightning indexer for block-sparse attention. The model processes images through a Conv3d patch embedding system and includes specialized components for efficient multimodal understanding and generation.\nLinks: Documentation\n\nAdd minimax m3vl (#46600) by @ArthurZucker in #46600\n\nP",
-      "image": "https://private-user-images.githubusercontent.com/73884904/607168450-ae9dd96f-6877-4531-a06b-a756686f24e5.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3ODEzMDE5MTIsIm5iZiI6MTc4MTMwMTYxMiwicGF0aCI6Ii83Mzg4NDkwNC82MDcxNjg0NTAtYWU5ZGQ5NmYtNjg3Ny00NTMxLWEwNmItYTc1NjY4NmYyNGU1LnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNjA2MTIlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjYwNjEyVDIyMDAxMlomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTc4ODBhYWU0OTM2MGIxNjFiYmViNTU5M2Y3NmFlZmFkODQyMzRlZTYzMzU2ZjM5ZTI1M2VlZWYzMGE1ZDBmYzcmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0JnJlc3BvbnNlLWNvbnRlbnQtdHlwZT1pbWFnZSUyRnBuZyJ9.omt1Tl1ZREyRNO3cTatp0qxVygcs-vFy7264bCeWDoM",
+      "image": "https://private-user-images.githubusercontent.com/73884904/607168450-ae9dd96f-6877-4531-a06b-a756686f24e5.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3ODEzMDU1MDMsIm5iZiI6MTc4MTMwNTIwMywicGF0aCI6Ii83Mzg4NDkwNC82MDcxNjg0NTAtYWU5ZGQ5NmYtNjg3Ny00NTMxLWEwNmItYTc1NjY4NmYyNGU1LnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNjA2MTIlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjYwNjEyVDIzMDAwM1omWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTY0ODI1YWQyN2NiYWJiZjA4MjhjZjRiNTYyNzQ5ZTU3ZTE1ZDU2ZWE0ZWE5ODAxZWMyZDlhOGY3MjUwMmViNjMmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0JnJlc3BvbnNlLWNvbnRlbnQtdHlwZT1pbWFnZSUyRnBuZyJ9.RBI_SAz1lqnECK3ihSwDgD5DxCkjciwfz2ovpWLqf_U",
       "published": "2026-06-12T14:39:40+00:00",
       "firstSeen": "2026-06-12T16:00:01.862709+00:00",
-      "lastSeen": "2026-06-12T22:00:01.248802+00:00",
+      "lastSeen": "2026-06-12T23:00:01.848205+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.5871
+      "score": 14.5625
     },
     {
       "title": "Anthropic’s Claude Fable 5 curbs target China. The backlash came from its own side.",
@@ -33,7 +33,7 @@
       "lastSeen": "2026-06-12T13:00:01.410102+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.5495
+      "score": 11.5276
     },
     {
       "title": "SpaceX rented Colossus 1 to Anthropic because it couldn’t make the data centre work for Grok",
@@ -46,10 +46,10 @@
       "image": "https://media.thenextweb.com/2026/06/spacex-colossus-1-technical-problems-rented-anthropic.avif",
       "published": "2026-06-12T19:24:16+00:00",
       "firstSeen": "2026-06-12T20:00:01.844328+00:00",
-      "lastSeen": "2026-06-12T22:00:01.248802+00:00",
+      "lastSeen": "2026-06-12T23:00:01.848205+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.0735
+      "score": 11.0454
     },
     {
       "title": "TCS and Anthropic partner to bring Claude to regulated industries",
@@ -62,10 +62,10 @@
       "image": "https://www.anthropic.com/api/opengraph-illustration?name=Hand+NodeLine&amp%3BbackgroundColor=olive",
       "published": "2026-06-12T00:00:00+00:00",
       "firstSeen": "2026-06-12T19:00:02.075559+00:00",
-      "lastSeen": "2026-06-12T22:00:01.248802+00:00",
+      "lastSeen": "2026-06-12T23:00:01.848205+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.997
+      "score": 10.9807
     },
     {
       "title": "OpenAI acquires Ona to run Codex agents inside the customer’s own cloud",
@@ -81,7 +81,7 @@
       "lastSeen": "2026-06-12T17:41:22.374004+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 9.0007
+      "score": 8.9774
     },
     {
       "title": "New OpenAI Academy courses for the next era of work",
@@ -94,10 +94,10 @@
       "image": "",
       "published": "2026-06-12T10:00:00+00:00",
       "firstSeen": "2026-06-12T17:41:22.374004+00:00",
-      "lastSeen": "2026-06-12T22:00:01.248802+00:00",
+      "lastSeen": "2026-06-12T23:00:01.848205+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.6882
+      "score": 8.6666
     },
     {
       "title": "Agentjacking: a fake bug report can hijack your AI coding agent",
@@ -113,7 +113,7 @@
       "lastSeen": "2026-06-12T17:41:22.374004+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.4092
+      "score": 8.3856
     },
     {
       "title": "SpaceX, Anthropic, and OpenAI’s hot IPO summer",
@@ -126,10 +126,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/GettyImages-2275575484.jpg?resize=1200%2C815",
       "published": "2026-06-12T16:23:25+00:00",
       "firstSeen": "2026-06-12T17:00:01.222571+00:00",
-      "lastSeen": "2026-06-12T22:00:01.248802+00:00",
+      "lastSeen": "2026-06-12T23:00:01.848205+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.1313
+      "score": 8.1055
     },
     {
       "title": "v0.30.8",
@@ -142,10 +142,10 @@
       "image": "https://opengraph.githubassets.com/b50c7ff6cad6b910728a05e5b8335aa7bfa63b8c19ec4a823a40fbd1a1c2313d/ollama/ollama",
       "published": "2026-06-12T19:57:22+00:00",
       "firstSeen": "2026-06-12T03:00:01.623686+00:00",
-      "lastSeen": "2026-06-12T22:00:01.248802+00:00",
+      "lastSeen": "2026-06-12T23:00:01.848205+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.0993
+      "score": 8.0708
     },
     {
       "title": "Google sues Chinese cybercrime ring that used Gemini to build phishing sites and send 2.5 million scam texts",
@@ -158,10 +158,10 @@
       "image": "https://media.thenextweb.com/2026/06/google-sues-outsider-enterprise-ai-scam-texts.avif",
       "published": "2026-06-12T17:57:11+00:00",
       "firstSeen": "2026-06-12T19:00:02.075559+00:00",
-      "lastSeen": "2026-06-12T22:00:01.248802+00:00",
+      "lastSeen": "2026-06-12T23:00:01.848205+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.033
+      "score": 8.0061
     },
     {
       "title": "Google sues suspected Chinese cybercrime ring that used Gemini to build scam websites",
@@ -177,7 +177,7 @@
       "lastSeen": "2026-06-12T13:00:01.410102+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.8524
+      "score": 7.8304
     },
     {
       "title": "Altman, Amodei, and Hassabis are heading to the G7. The rivals have a lot to discuss.",
@@ -193,7 +193,7 @@
       "lastSeen": "2026-06-12T11:08:09.226250+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 7.8443
+      "score": 7.8225
     }
   ],
   "errors": [
