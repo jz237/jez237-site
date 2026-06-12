@@ -1762,5 +1762,17 @@
     "slot": "afternoon",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-06-11-evening-night-market-spice-cabinet",
+    "title": "Night Market Spice Cabinet",
+    "tests": "Generated via openclaw infer image generate primary openai/gpt-image-2 route; exact output path verified; reusable non-paper physical visual template.",
+    "prompt": "Create a finished cinematic square product photograph titled Night Market Spice Cabinet, but do not render any title text or labels in the image. Show a compact traveling spice cabinet from an imaginary midnight street market: a dark lacquered wooden cabinet with many tiny open drawers, unlabeled ceramic jars, brass scoops, stained cork stoppers, hinged glass doors, worn velvet drawer linings, loose piles of colorful impossible spices, threads of luminous saffron, blue salt crystals, smoked rose powder, black cardamom pods, silver peppercorns, dried citrus wheels, small glass vials of glowing oil, folded indigo cloth, tarnished brass weights, and a shallow copper scale. Set it on a rain-dark market stall counter under mixed warm lantern light and cool street reflections, with steam, condensation beads, scratches, spice dust, fingerprints on glass, worn brass edges, shallow depth of field, and dense tactile material detail. Make it look like a real photographed physical object scene, not a prompt card, not a poster, not a flat lay, and not a document. Avoid readable text, labels, paper sheets, logos, watermarks, hands, people, faces, dancing, copyrighted characters, placeholder boxes, and generic stock-photo styling.\n\nSource photo needed: none.\n\nReusable fill-in-the-blank template: Create a finished reusable physical visual about [TOPIC] using [DATA OR DETAILS], set in [SETTING] with [MOOD] lighting. Build the scene around a tactile cabinet, shelf system, display case, market stall, workbench, product mockup, miniature set, or other non-paper physical arrangement; include [MATERIALS], [TOOLS OR PROPS], [SURFACE DETAILS], and [LIGHTING DETAILS]. Preserve supplied categories, object relationships, mood, setting, and any factual details when provided; invent coherent specifics when not supplied. Avoid paper sheets, forms, placards, readable labels, logos, private data, cluttered unreadable text, people or hands unless requested, and generic stock-photo styling.\n\nWhat to preserve: the supplied topic, categories, object relationships, mood, setting, materials, and any user-provided factual data.\n\nWhat to change: transform the topic into a richly detailed photographed physical cabinet, shelf, display, market stall, workbench, or product scene with coherent props, tactile materials, surface wear, environmental context, and cinematic lighting.\n\nExample substitution: [TOPIC] = night market spice cabinet; [DATA OR DETAILS] = unlabeled ceramic jars, brass scoops, blue salt crystals, luminous saffron, smoked rose powder, glass oil vials, copper scale, rain-dark counter; [SETTING] = imaginary midnight street market; [MOOD] = warm lantern light mixed with cool rainy street reflections.",
+    "image": "images/2026-06-11-evening-night-market-spice-cabinet.png",
+    "date": "2026-06-11",
+    "batch": "Daily Prompt",
+    "slot": "evening",
+    "model": "gpt-image-2",
+    "size": "1024x1024"
   }
 ]
