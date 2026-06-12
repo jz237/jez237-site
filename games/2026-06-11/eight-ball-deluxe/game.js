@@ -140,7 +140,7 @@ const GAME = (() => {
   let plungePull = 0, plungeHeld = false, served = false;
   let bonusTimer = 0, bonusLeft = 0, endTimer = 0;
   let saucerTimer = 0, rackPending = false, loneTimer = 0;
-  let stillX = 0, stillY = 0, stillT = 0;
+  let stillX = 0, stillY = 0, stillT = 0, searchN = 0, lastSearchT = -99;
   let lastMajor = 0, quipIdx = 0;
   let flashes = [];           // {x,y,r,col,age,max}
   let bumpGlow = [0,0,0];
@@ -449,7 +449,7 @@ const GAME = (() => {
         b.cool = 0.07;
         const ball = PHYS.ball;
         const dx = ball.x-b.x, dy = ball.y-b.y, dl = Math.hypot(dx,dy)||1;
-        const kick = 1240 + PHYS.rng()*140;
+        const kick = 1520 + PHYS.rng()*160;
         ball.vx = dx/dl*kick; ball.vy = dy/dl*kick;
         score(100); AU.sfx.bumper();
         bumpGlow[i] = 1;
@@ -462,7 +462,7 @@ const GAME = (() => {
       if (s.cool <= 0 && ev.speed > 35){
         s.cool = 0.15;
         const ball = PHYS.ball;
-        ball.vx += s.nx*1050; ball.vy += s.ny*1050 - 120;
+        ball.vx += s.nx*1320; ball.vy += s.ny*1320 - 140;
         score(100); AU.sfx.sling();
         slingFlash[i] = 1;
       }
@@ -499,7 +499,7 @@ const GAME = (() => {
     /* plunger */
     const b = PHYS.ball;
     if (state==='serve' && b.held){
-      if (plungeHeld && plungePull<1){ plungePull = Math.min(1, plungePull + dt*1.05); }
+      if (plungeHeld && plungePull<1){ plungePull = Math.min(1, plungePull + dt*1.35); }
       b.x = TABLE.PLUNGE.x; b.y = TABLE.PLUNGE.y + plungePull*20;
     }
     /* saucer hold / re-rack / eject (lone resets after the ball clears the pocket) */
@@ -526,7 +526,8 @@ const GAME = (() => {
     const b = PHYS.ball;
     if (state!=='serve' || !b.held) return;
     b.held = false;
-    b.vy = -(1280 + plungePull*1060) * (0.98+PHYS.rng()*0.04);
+    /* crown-clear threshold ≈1950 px/s: tap fails visibly, 40% just clears, full rips */
+    b.vy = -(1250 + plungePull*2050) * (0.99+PHYS.rng()*0.02);
     b.vx = 0;
     AU.sfx.launch(plungePull);
     plungePull = 0; plungeHeld = false;
@@ -537,7 +538,7 @@ const GAME = (() => {
     if (state!=='play' || tilted) return;
     const b = PHYS.ball;
     if (b.active && !b.held){ b.vx += dx; b.vy += dy; }
-    shake = 0.22; shakeX = dx*0.012;
+    shake = 0.4; shakeX = dx*0.014;
     AU.sfx.nudge();
     tiltBob += 1;
     if (tiltBob >= 3){
@@ -583,14 +584,30 @@ const GAME = (() => {
       if (b.active && !b.held && b.x>504 && b.y>1030 && Math.abs(b.vy)<28 && Math.abs(b.vx)<28){
         state = 'serve'; b.held = true; plungePull = 0;
       }
-      /* stuck-ball rescue: velocity-based + position-based (catches jitter wedges) */
+      /* stuck-ball rescue: velocity- AND position-based, escalating like a real
+         ball search — gentle kick, hard kick toward centre, then back to plunger */
       if (!b.held){
         if (Math.abs(b.x-stillX) < 1.5 && Math.abs(b.y-stillY) < 1.5) stillT += PHYS.DT;
         else { stillX = b.x; stillY = b.y; stillT = 0; }
         if ((b.lowTime > 3 || stillT > 2.6) && b.y < 1050){
           b.lowTime = 0; stillT = 0;
-          b.vx += (PHYS.rng()-0.5)*300; b.vy -= 260 + PHYS.rng()*140;
-          dmdShow(['BALL SEARCH'],1);
+          if (tNow - lastSearchT > 15) searchN = 0;
+          lastSearchT = tNow; searchN++;
+          if (searchN >= 3){
+            searchN = 0;
+            b.held = true; b.x = TABLE.PLUNGE.x; b.y = TABLE.PLUNGE.y;
+            b.px = b.x; b.py = b.y; b.vx = 0; b.vy = 0; b.w = 0;
+            plungePull = 0; plungeHeld = false;
+            state = 'serve';
+            dmdShow(['BALL SEARCH','BALL RETURNED'],1.8);
+          } else if (searchN === 2){
+            const dx = 280-b.x, dy = 720-b.y, dl = Math.hypot(dx,dy)||1;
+            b.vx = dx/dl*950; b.vy = dy/dl*950 - 200;
+            dmdShow(['BALL SEARCH'],1);
+          } else {
+            b.vx += (PHYS.rng()-0.5)*340; b.vy -= 300 + PHYS.rng()*160;
+            dmdShow(['BALL SEARCH'],1);
+          }
         }
       }
       /* idle taunt */
@@ -626,7 +643,7 @@ const GAME = (() => {
 
     ctx.save();
     ctx.beginPath(); ctx.rect(ox,panelH,viewW,cssH-panelH); ctx.clip();
-    ctx.translate(ox + shakeX*40*shake, panelH + (shake>0? Math.sin(tNow*70)*3*shake:0));
+    ctx.translate(ox + shakeX*46*shake, panelH + (shake>0? Math.sin(tNow*70)*5*shake:0));
     ctx.scale(z,z);
     ctx.translate(0, -cam.y);
 
@@ -764,22 +781,33 @@ const GAME = (() => {
     render(acc/PHYS.DT);
   }
 
-  /* ================= input ================= */
+  /* ================= input =================
+     Each flipper is energized iff its SET of active sources is non-empty
+     ('key:<code>' | 'ptr:<id>' | 'api'). Sources are dropped on release,
+     blur, hide, pointercancel, and a buttons-watchdog — flippers can never
+     stick up from a missed release event. */
   const LKEYS = ['ShiftLeft','KeyZ','ArrowLeft','KeyA'];
   const RKEYS = ['ShiftRight','Slash','ArrowRight','KeyD','Quote'];
-  const downKeys = new Set();
+  const flipSrc = { L:new Set(), R:new Set() };
 
-  function flip(side,on){
-    if (state==='paused'||state==='attract') { if(!on) return; }
-    if (tilted && on) return;
+  function syncFlip(side){
+    const want = flipSrc[side].size > 0 && !tilted && state!=='paused' && state!=='attract';
     if (side==='L'){
-      if (on && !TABLE.FL.on) AU.sfx.flipUp(); else if (!on && TABLE.FL.on) AU.sfx.flipDn();
-      TABLE.FL.on = on;
+      if (want !== TABLE.FL.on) AU.sfx[want?'flipUp':'flipDn']();
+      TABLE.FL.on = want;
     } else {
-      if (on && !TABLE.FR.on) AU.sfx.flipUp(); else if (!on && TABLE.FR.on) AU.sfx.flipDn();
-      TABLE.FR.on = on; TABLE.FU.on = on;
+      if (want !== TABLE.FR.on) AU.sfx[want?'flipUp':'flipDn']();
+      TABLE.FR.on = want; TABLE.FU.on = want;
     }
   }
+  function press(side, src){ if (!flipSrc[side].has(src)){ flipSrc[side].add(src); syncFlip(side); } }
+  function releaseSrc(side, src){ if (flipSrc[side].delete(src)) syncFlip(side); }
+  function releaseAllInputs(){
+    flipSrc.L.clear(); flipSrc.R.clear();
+    syncFlip('L'); syncFlip('R');
+  }
+  /* legacy/api entry point (used by __g and tests) */
+  function flip(side,on){ if (on) press(side,'api'); else releaseSrc(side,'api'); }
 
   addEventListener('keydown', e=>{
     const k = e.key, c = e.code;
@@ -792,90 +820,73 @@ const GAME = (() => {
     if (k==='v'||k==='V'){ fullView = !fullView; return; }
     if (state==='attract' && (k==='Enter')){ startGame(1); return; }
     if (state==='paused' && k==='Enter') return resumeGame();
-    if (downKeys.has(c)) { if(c==='Space'||c==='ArrowDown') return; }
-    downKeys.add(c);
-    if (LKEYS.includes(c)) flip('L',true);
-    if (RKEYS.includes(c)) flip('R',true);
+    if (LKEYS.includes(c)) press('L','key:'+c);
+    if (RKEYS.includes(c)) press('R','key:'+c);
     if (c==='Space'||c==='ArrowDown'){
-      if (state==='serve'){ plungeHeld = true; AU.resume(); }
+      if (state==='serve' && !e.repeat){ plungeHeld = true; AU.resume(); }
+      else if (state==='play' && c==='Space' && !e.repeat) nudge((PHYS.rng()-0.5)*60, -170);
     }
     if (state==='play' && !e.repeat){
-      if (c==='ArrowUp'||c==='KeyW') nudge((PHYS.rng()-0.5)*60, -150);
-      if (c==='KeyQ') nudge(130,-60);
-      if (c==='KeyE') nudge(-130,-60);
+      if (c==='ArrowUp'||c==='KeyW') nudge((PHYS.rng()-0.5)*60, -170);
+      if (c==='KeyQ') nudge(150,-70);
+      if (c==='KeyE') nudge(-150,-70);
     }
   });
   addEventListener('keyup', e=>{
     const c = e.code;
-    downKeys.delete(c);
-    if (LKEYS.includes(c)) flip('L',false);
-    if (RKEYS.includes(c)) flip('R',false);
+    releaseSrc('L','key:'+c); releaseSrc('R','key:'+c);
     if (c==='Space'||c==='ArrowDown'){ if (state==='serve' && plungeHeld) launch(); }
   });
-  addEventListener('blur', ()=>{ downKeys.clear(); flip('L',false); flip('R',false);
+  addEventListener('blur', ()=>{ releaseAllInputs();
     if (state==='play'||state==='serve') pauseGame(); });
   document.addEventListener('visibilitychange', ()=>{
+    releaseAllInputs();
     if (document.hidden && (state==='play'||state==='serve') && !window.__headless) pauseGame();
   });
 
-  /* touch */
-  const touches = new Map();   // id → {x0,y0,t0,side,moved}
-  function touchSide(x){ return x < cssW/2 ? 'L':'R'; }
-  document.addEventListener('touchstart', e=>{
-    if (e.target.closest('button,.overlay')) return;
-    e.preventDefault(); AU.init(); AU.resume();
-    for (const t of e.changedTouches){
-      const side = touchSide(t.clientX);
-      touches.set(t.identifier, {x0:t.clientX,y0:t.clientY,t0:performance.now(),side});
-      if (state==='serve'){ plungeHeld = true; }
-      flip(side, true);
-    }
-  }, {passive:false});
-  document.addEventListener('touchmove', e=>{
-    if (e.target.closest('button,.overlay')) return;
-    e.preventDefault();
-    for (const t of e.changedTouches){
-      const o = touches.get(t.identifier); if (!o) continue;
-      const dy = t.clientY-o.y0, dx = t.clientX-o.x0;
-      if (!o.moved && performance.now()-o.t0 < 200 && dy < -30 && Math.abs(dy)>Math.abs(dx)*1.3){
-        o.moved = true; nudge(dx*1.4, -160);
-      }
-    }
-  }, {passive:false});
-  function touchEnd(e){
-    if (e.target && e.target.closest && e.target.closest('button,.overlay')) return;
-    for (const t of e.changedTouches){
-      const o = touches.get(t.identifier);
-      touches.delete(t.identifier);
-      if (!o) continue;
-      let still = false;
-      for (const [,v] of touches) if (v.side===o.side) still = true;
-      if (!still) flip(o.side,false);
-      if (state==='serve' && plungeHeld && touches.size===0) launch();
-    }
-  }
-  document.addEventListener('touchend', touchEnd, {passive:false});
-  document.addEventListener('touchcancel', touchEnd, {passive:false});
-  /* mouse (desktop convenience) */
-  addEventListener('mousedown', e=>{
-    if (e.target.closest('button,.overlay')) return;
+  /* pointers (mouse + touch unified); body has touch-action:none */
+  const ptrs = new Map();   // pointerId → {side,x0,y0,t0,nudged}
+  const ptrSide = x => x < cssW/2 ? 'L':'R';
+  document.addEventListener('pointerdown', e=>{
+    if (e.target.closest('button,.overlay,#init')) return;
     AU.init(); AU.resume();
-    const side = touchSide(e.clientX);
-    if (state==='serve'){ plungeHeld = true; }
-    flip(side,true);
-    canvas._mside = side;
+    try{ canvas.setPointerCapture(e.pointerId); }catch(_){}
+    const side = ptrSide(e.clientX);
+    ptrs.set(e.pointerId, {side, x0:e.clientX, y0:e.clientY, t0:performance.now(), nudged:false});
+    if (state==='serve') plungeHeld = true;
+    press(side, 'ptr:'+e.pointerId);
   });
-  addEventListener('mouseup', e=>{
-    if (canvas._mside){ flip(canvas._mside,false); canvas._mside=null; }
-    if (state==='serve' && plungeHeld) launch();
+  document.addEventListener('pointermove', e=>{
+    const o = ptrs.get(e.pointerId);
+    if (o){
+      const dy = e.clientY-o.y0, dx = e.clientX-o.x0;
+      if (!o.nudged && performance.now()-o.t0 < 220 && dy < -30 && Math.abs(dy) > Math.abs(dx)*1.3){
+        o.nudged = true; nudge(dx*1.4, -180);
+      }
+      /* watchdog: mouse button already up (release happened off-window) */
+      if (e.pointerType==='mouse' && e.buttons===0) endPtr(e);
+    }
   });
+  function endPtr(e){
+    const o = ptrs.get(e.pointerId);
+    if (!o) return;
+    ptrs.delete(e.pointerId);
+    releaseSrc(o.side, 'ptr:'+e.pointerId);
+    if (state==='serve' && plungeHeld && ptrs.size===0) launch();
+  }
+  document.addEventListener('pointerup', endPtr);
+  document.addEventListener('pointercancel', endPtr);
+  /* keep page from scrolling/zooming on touch (some browsers ignore touch-action) */
+  document.addEventListener('touchmove', e=>{
+    if (!e.target.closest('button,.overlay')) e.preventDefault();
+  }, {passive:false});
   document.addEventListener('contextmenu', e=>{ if (state==='play') e.preventDefault(); });
 
   /* ================= pause / overlays ================= */
   function show(id){ document.getElementById(id).classList.remove('hide'); }
   function hide(id){ document.getElementById(id).classList.add('hide'); }
-  function pauseGame(){ if (state==='paused') return; pausedFrom = state; state='paused'; show('pause'); }
-  function resumeGame(){ hide('pause'); state = pausedFrom||'play'; last = 0; }
+  function pauseGame(){ if (state==='paused') return; pausedFrom = state; state='paused'; show('pause'); syncFlip('L'); syncFlip('R'); }
+  function resumeGame(){ hide('pause'); state = pausedFrom||'play'; last = 0; syncFlip('L'); syncFlip('R'); }
   function quitToTitle(){
     hide('pause'); hide('over'); state='attract'; players=[];
     showTouchBtns(false); AU.drone(0); AU.shutUp();
