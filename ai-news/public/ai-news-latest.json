@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-12T18:00:01.952615+00:00",
+  "updatedAt": "2026-06-12T17:41:22.374004+00:00",
   "items": [
     {
       "title": "Representing Time Series as Structured Programs for LLM Reasoning",
@@ -10,31 +10,15 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-12T18:00:10.158964+00:00",
+      "published": "2026-06-12T17:41:27.172617+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-12T18:00:01.952615+00:00",
+      "lastSeen": "2026-06-12T17:41:22.374004+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 5.06
     },
     {
-      "title": "SpaceX IPO: Everything you need to know",
-      "url": "https://techcrunch.com/2026/06/12/spacex-ipo-everything-you-need-to-know",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "TechCrunch has followed SpaceX's start, struggles, and successes from the early days. And we're here for what happens next too. This package of SpaceX IPO coverage includes who stands to win (and maybe some who won't), pre-IPO deals, and what's tucked inside its S-1 registration document.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/01/GettyImages-2240506392.jpg?resize=1200%2C800",
-      "published": "2026-06-12T17:41:21+00:00",
-      "firstSeen": "2026-06-12T14:14:20.832146+00:00",
-      "lastSeen": "2026-06-12T18:00:01.952615+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "framework_or_plumbing",
-      "score": 0.2805
-    },
-    {
-      "title": "Mistral is rumored to be raising €3B at €20B valuation",
+      "title": "Mistral is rumored to be raising €3B at €20 valuation",
       "url": "https://techcrunch.com/2026/06/12/mistral-is-rumored-to-be-raising-e3b-at-e20-valuation",
       "source": "TechCrunch AI",
       "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
@@ -43,11 +27,11 @@
       "summary": "The funding round would value the company at around €20 billion (about $23.15 billion), nearly double its Series C valuation of €11.7 billion.",
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/GettyImages-2264771189.jpg?resize=1200%2C800",
       "published": "2026-06-12T17:38:11+00:00",
-      "firstSeen": "2026-06-12T18:00:01.952615+00:00",
-      "lastSeen": "2026-06-12T18:00:01.952615+00:00",
+      "firstSeen": "2026-06-12T17:41:22.374004+00:00",
+      "lastSeen": "2026-06-12T17:41:22.374004+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2789
+      "score": 5.2884
     },
     {
       "title": "From AI deals to streaming fraud, the music industry is wrestling with four existential battles at once",
@@ -59,11 +43,11 @@
       "summary": "The music industry descended on New York this week for Indie Week and a flurry of parallel gatherings. The conversations kept circling back to the same handful of anxieties: generative AI, streaming fraud, underpaid songwriters, and the organisations meant to protect them. Four issues, in particular, dominated the agenda. Each one carries the potential to [&hellip;]\nThis story continues at The Next Web",
       "image": "https://media.thenextweb.com/2026/06/AI-music-licensing.avif",
       "published": "2026-06-12T17:22:23+00:00",
-      "firstSeen": "2026-06-12T18:00:01.952615+00:00",
-      "lastSeen": "2026-06-12T18:00:01.952615+00:00",
+      "firstSeen": "2026-06-12T17:41:22.374004+00:00",
+      "lastSeen": "2026-06-12T17:41:22.374004+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.131
+      "score": 2.1404
     },
     {
       "title": "China Didn't Make People Hate Data Centers",
@@ -75,11 +59,11 @@
       "summary": "GOP lawmakers, tech investors, and even OpenAI have tied the anti-data center movement in the US to Chinese interference. Experts say it’s much more complicated than that.",
       "image": "https://media.wired.com/photos/6a2bc68dcccd59782588bff1/master/pass/061226_Data%20Center%20Boosters%20Think%20China%20Is%20Funding%20Opposition%20in%20the%20US.jpg",
       "published": "2026-06-12T17:17:10+00:00",
-      "firstSeen": "2026-06-12T18:00:01.952615+00:00",
-      "lastSeen": "2026-06-12T18:00:01.952615+00:00",
+      "firstSeen": "2026-06-12T17:41:22.374004+00:00",
+      "lastSeen": "2026-06-12T17:41:22.374004+00:00",
       "editorial_allow": false,
       "editorial_reason": "fluff",
-      "score": 1.6684
+      "score": 1.6777
     },
     {
       "title": "Siri is good now??",
@@ -91,11 +75,11 @@
       "summary": "You'd be forgiven for thinking this day would never come. Siri has spent a decade and half somewhere between \"sort of useful at a few things\" and \"utterly disastrous, why did I even try, can it honestly not even set a timer.\" But the wildest thing just happened: Apple put out a new version of [&#8230;]",
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/VST_0612_Site.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-12T17:17:04+00:00",
-      "firstSeen": "2026-06-12T18:00:01.952615+00:00",
-      "lastSeen": "2026-06-12T18:00:01.952615+00:00",
+      "firstSeen": "2026-06-12T17:41:22.374004+00:00",
+      "lastSeen": "2026-06-12T17:41:22.374004+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.4383
+      "score": 3.4477
     },
     {
       "title": "v0.30.8",
@@ -108,10 +92,10 @@
       "image": "https://opengraph.githubassets.com/b50c7ff6cad6b910728a05e5b8335aa7bfa63b8c19ec4a823a40fbd1a1c2313d/ollama/ollama",
       "published": "2026-06-12T17:04:52+00:00",
       "firstSeen": "2026-06-12T03:00:01.623686+00:00",
-      "lastSeen": "2026-06-12T18:00:01.952615+00:00",
+      "lastSeen": "2026-06-12T17:41:22.374004+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0323
+      "score": 3.0416
     },
     {
       "title": "Elon Musk is the world&#8217;s first trillionaire",
@@ -124,10 +108,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/STKE012_SPACEX_IPO_2026_D.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-12T16:24:39+00:00",
       "firstSeen": "2026-06-12T17:00:01.222571+00:00",
-      "lastSeen": "2026-06-12T18:00:01.952615+00:00",
+      "lastSeen": "2026-06-12T17:41:22.374004+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3125
+      "score": 2.3216
     },
     {
       "title": "SpaceX, Anthropic, and OpenAI’s hot IPO summer",
@@ -140,10 +124,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/GettyImages-2275575484.jpg?resize=1200%2C815",
       "published": "2026-06-12T16:23:25+00:00",
       "firstSeen": "2026-06-12T17:00:01.222571+00:00",
-      "lastSeen": "2026-06-12T18:00:01.952615+00:00",
+      "lastSeen": "2026-06-12T17:41:22.374004+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.2419
+      "score": 8.251
     },
     {
       "title": "olmo-eval: An evaluation workbench for the model development loop",
@@ -156,10 +140,10 @@
       "image": "https://cdn-uploads.huggingface.co/production/uploads/638e39b249de7ae552d977b5/gacAOFYwPkpxu7cC4eeey.png",
       "published": "2026-06-12T15:56:10+00:00",
       "firstSeen": "2026-06-12T16:00:01.862709+00:00",
-      "lastSeen": "2026-06-12T18:00:01.952615+00:00",
+      "lastSeen": "2026-06-12T17:41:22.374004+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7187
+      "score": 2.7277
     },
     {
       "title": "SpaceX Goes Public: Wall Street Bets $1.77T on Elon Musk’s Space Empire",
@@ -169,13 +153,13 @@
       "sourceWeight": 0.75,
       "category": "AI",
       "summary": "SpaceX’s reported IPO would value Elon Musk’s company at $1.77 trillion, reflecting investor bets on Starlink, Starship, and defense work.\nThe post SpaceX Goes Public: Wall Street Bets $1.77T on Elon Musk’s Space Empire appeared first on TechRepublic.",
-      "image": "https://assets.techrepublic.com/uploads/2026/06/tr-06122026-spacex-ipo-valuation.jpg?f=jpeg",
+      "image": "",
       "published": "2026-06-12T15:53:36+00:00",
-      "firstSeen": "2026-06-12T18:00:01.952615+00:00",
-      "lastSeen": "2026-06-12T18:00:01.952615+00:00",
+      "firstSeen": "2026-06-12T17:41:22.374004+00:00",
+      "lastSeen": "2026-06-12T17:41:22.374004+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1875
+      "score": 3.1965
     },
     {
       "title": "It’s hot IPO summer, and the MANGOS are ripe",
@@ -188,10 +172,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/spacex-rocket-getty.jpg?resize=1200%2C801",
       "published": "2026-06-12T15:50:52+00:00",
       "firstSeen": "2026-06-12T16:00:01.862709+00:00",
-      "lastSeen": "2026-06-12T18:00:01.952615+00:00",
+      "lastSeen": "2026-06-12T17:41:22.374004+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.2261
+      "score": 6.2351
     },
     {
       "title": "Facebook, Instagram, and WhatsApp hit by a major Meta outage",
@@ -204,10 +188,10 @@
       "image": "https://media.thenextweb.com/2026/04/Meta.avif",
       "published": "2026-06-12T15:03:44+00:00",
       "firstSeen": "2026-06-12T16:00:01.862709+00:00",
-      "lastSeen": "2026-06-12T18:00:01.952615+00:00",
+      "lastSeen": "2026-06-12T17:41:22.374004+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1638
+      "score": 3.1726
     },
     {
       "title": "Baidu’s Apollo Go robotaxi wins Level 4 approval in Switzerland",
@@ -220,10 +204,10 @@
       "image": "https://media.thenextweb.com/2026/06/baidu-amigo-switzerland.avif",
       "published": "2026-06-12T14:46:49+00:00",
       "firstSeen": "2026-06-12T16:00:01.862709+00:00",
-      "lastSeen": "2026-06-12T18:00:01.952615+00:00",
+      "lastSeen": "2026-06-12T17:41:22.374004+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1559
+      "score": 3.1646
     },
     {
       "title": "Release v5.12.0",
@@ -233,14 +217,14 @@
       "sourceWeight": 0.85,
       "category": "AI",
       "summary": "Release v5.12.0\nNew Model additions\nMiniMax-M3-VL\n\nMiniMax-M3-VL is the vision-language member of the MiniMax-M3 family that pairs a CLIP-style vision tower with 3D rotary position embeddings with the MiniMax-M3 text backbone. It uses a mixed dense/sparse Mixture-of-Experts decoder with SwiGLU-OAI gated experts and a lightning indexer for block-sparse attention. The model processes images through a Conv3d patch embedding system and includes specialized components for efficient multimodal understanding and generation.\nLinks: Documentation\n\nAdd minimax m3vl (#46600) by @ArthurZucker in #46600\n\nP",
-      "image": "https://private-user-images.githubusercontent.com/73884904/607168450-ae9dd96f-6877-4531-a06b-a756686f24e5.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3ODEyODc1MTIsIm5iZiI6MTc4MTI4NzIxMiwicGF0aCI6Ii83Mzg4NDkwNC82MDcxNjg0NTAtYWU5ZGQ5NmYtNjg3Ny00NTMxLWEwNmItYTc1NjY4NmYyNGU1LnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNjA2MTIlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjYwNjEyVDE4MDAxMlomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPWQzOGY5ZDA3MjkwNWU3MTI5OGQ2ZDczYzA3ODA1YTM5OTQ4N2U0MmY4MmRkYTdkMDUzNzdiYTliYjE2Y2I4ZGEmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0JnJlc3BvbnNlLWNvbnRlbnQtdHlwZT1pbWFnZSUyRnBuZyJ9.PkOdlp3S__JgA_KuyvlGwxrXsWsEqHpc17wCHvBAe5E",
+      "image": "https://private-user-images.githubusercontent.com/73884904/607168450-ae9dd96f-6877-4531-a06b-a756686f24e5.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3ODEyODYzODksIm5iZiI6MTc4MTI4NjA4OSwicGF0aCI6Ii83Mzg4NDkwNC82MDcxNjg0NTAtYWU5ZGQ5NmYtNjg3Ny00NTMxLWEwNmItYTc1NjY4NmYyNGU1LnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNjA2MTIlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjYwNjEyVDE3NDEyOVomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTA1N2JkOGZmYjM5NTQ3NTE5Mzc1YTUyMGYwOWNmMzQ4Y2M5YzE5OGEwYjZjMDM3ZjFjNWM1MDVlY2E0NTdmNjAmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0JnJlc3BvbnNlLWNvbnRlbnQtdHlwZT1pbWFnZSUyRnBuZyJ9.v_5ihB5dKRxoJy9Jkm6yhulraW1u14hyZgOCkOM2FX4",
       "published": "2026-06-12T14:39:40+00:00",
       "firstSeen": "2026-06-12T16:00:01.862709+00:00",
-      "lastSeen": "2026-06-12T18:00:01.952615+00:00",
+      "lastSeen": "2026-06-12T17:41:22.374004+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.6926
+      "score": 14.7012
     },
     {
       "title": "SpaceX’s massive IPO: all the latest news",
@@ -253,10 +237,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/STKE012_SPACEX_IPO_2026_A.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-12T14:35:48+00:00",
       "firstSeen": "2026-06-12T16:00:01.862709+00:00",
-      "lastSeen": "2026-06-12T18:00:01.952615+00:00",
+      "lastSeen": "2026-06-12T17:41:22.374004+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.6108
+      "score": 2.6194
     },
     {
       "title": "Meta is giving free AI glasses to every blind veteran in America",
@@ -269,10 +253,10 @@
       "image": "https://media.thenextweb.com/2026/06/AI-Glasses-for-Blind-Veterans-in-America.avif",
       "published": "2026-06-12T14:34:49+00:00",
       "firstSeen": "2026-06-12T16:00:01.862709+00:00",
-      "lastSeen": "2026-06-12T18:00:01.952615+00:00",
+      "lastSeen": "2026-06-12T17:41:22.374004+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.0503
+      "score": 4.059
     },
     {
       "title": "Thena Capital closes a £45M fund to back UK medtech, a first for an all-female GP team",
@@ -285,10 +269,26 @@
       "image": "https://media.thenextweb.com/2026/06/THENA-Capital-founding-members.avif",
       "published": "2026-06-12T14:16:48+00:00",
       "firstSeen": "2026-06-12T16:00:01.862709+00:00",
-      "lastSeen": "2026-06-12T18:00:01.952615+00:00",
+      "lastSeen": "2026-06-12T17:41:22.374004+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.742
+      "score": 2.7506
+    },
+    {
+      "title": "SpaceX IPO: Everything you need to know",
+      "url": "https://techcrunch.com/2026/06/12/spacex-ipo-everything-you-need-to-know",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "TechCrunch has followed SpaceX's start, struggles, and successes from the early days. And we're here for what happens next too. This package of SpaceX IPO coverage includes who stands to win (and maybe some who won't), pre-IPO deals, and what's tucked inside its S-1 registration document.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/01/GettyImages-2240506392.jpg?resize=1200%2C800",
+      "published": "2026-06-12T14:08:54+00:00",
+      "firstSeen": "2026-06-12T14:14:20.832146+00:00",
+      "lastSeen": "2026-06-12T17:41:22.374004+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "framework_or_plumbing",
+      "score": 0.1869
     },
     {
       "title": "Jeff Bezos’ AI startup aims to build an ‘artificial general engineer’",
@@ -301,10 +301,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/23951505/VRG_Illo_STK173_L_Normand_JeffBezos_Positive.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-12T14:03:39+00:00",
       "firstSeen": "2026-06-12T14:14:20.832146+00:00",
-      "lastSeen": "2026-06-12T18:00:01.952615+00:00",
+      "lastSeen": "2026-06-12T17:41:22.374004+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.246
+      "score": 2.2545
     },
     {
       "title": "Humanoid robot maker EngineAI files for a Hong Kong IPO",
@@ -317,10 +317,10 @@
       "image": "https://media.thenextweb.com/2026/06/engineai-hong-kong-ipo-humanoid-robots.avif",
       "published": "2026-06-12T14:03:36+00:00",
       "firstSeen": "2026-06-12T16:00:01.862709+00:00",
-      "lastSeen": "2026-06-12T18:00:01.952615+00:00",
+      "lastSeen": "2026-06-12T17:41:22.374004+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.736
+      "score": 2.7445
     },
     {
       "title": "AI Rivalries, Cyberthreats, and IPO Fever Define This Week in Tech",
@@ -330,13 +330,13 @@
       "sourceWeight": 0.75,
       "category": "AI",
       "summary": "See what you missed in Daily Tech Insider from June 8–12.\nThe post AI Rivalries, Cyberthreats, and IPO Fever Define This Week in Tech appeared first on TechRepublic.",
-      "image": "https://assets.techrepublic.com/uploads/2026/06/ChatGPT-Image-Jun-12-2026-10_51_12-AM-1024x576.png?f=jpeg",
+      "image": "",
       "published": "2026-06-12T14:02:22+00:00",
-      "firstSeen": "2026-06-12T18:00:01.952615+00:00",
-      "lastSeen": "2026-06-12T18:00:01.952615+00:00",
+      "firstSeen": "2026-06-12T17:41:22.374004+00:00",
+      "lastSeen": "2026-06-12T17:41:22.374004+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1354
+      "score": 3.1439
     },
     {
       "title": "Mistral is in funding talks at a €20bn valuation",
@@ -349,10 +349,10 @@
       "image": "https://media.thenextweb.com/2026/05/Mistral-AI.avif",
       "published": "2026-06-12T13:52:39+00:00",
       "firstSeen": "2026-06-12T16:00:01.862709+00:00",
-      "lastSeen": "2026-06-12T18:00:01.952615+00:00",
+      "lastSeen": "2026-06-12T17:41:22.374004+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.031
+      "score": 5.0395
     },
     {
       "title": "SpaceX rings the bell on its Nasdaq debut, and Musk admits he gave it ‘less than a 10% chance’",
@@ -365,10 +365,10 @@
       "image": "https://media.thenextweb.com/2026/06/spacex-nasdaq-debut-bell-musk-shotwell.avif",
       "published": "2026-06-12T13:46:47+00:00",
       "firstSeen": "2026-06-12T16:00:01.862709+00:00",
-      "lastSeen": "2026-06-12T18:00:01.952615+00:00",
+      "lastSeen": "2026-06-12T17:41:22.374004+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.4283
+      "score": 3.4368
     },
     {
       "title": "Agentjacking: a fake bug report can hijack your AI coding agent",
@@ -381,10 +381,10 @@
       "image": "https://media.thenextweb.com/2026/06/developer-terminal.avif",
       "published": "2026-06-12T13:06:15+00:00",
       "firstSeen": "2026-06-12T14:00:01.687326+00:00",
-      "lastSeen": "2026-06-12T18:00:01.952615+00:00",
+      "lastSeen": "2026-06-12T17:41:22.374004+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.5101
+      "score": 8.5184
     },
     {
       "title": "OpenAI acquires Ona to run Codex agents inside the customer’s own cloud",
@@ -397,10 +397,10 @@
       "image": "https://media.thenextweb.com/2026/02/OpenAI-Codex-app.avif",
       "published": "2026-06-12T12:44:52+00:00",
       "firstSeen": "2026-06-12T14:00:01.687326+00:00",
-      "lastSeen": "2026-06-12T18:00:01.952615+00:00",
+      "lastSeen": "2026-06-12T17:41:22.374004+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 9.1007
+      "score": 9.1089
     },
     {
       "title": "Nvidia’s Vera CPU is its side door back into China",
@@ -416,7 +416,7 @@
       "lastSeen": "2026-06-12T17:00:01.222571+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.6931
+      "score": 2.7013
     },
     {
       "title": "A SpaceX-Tesla merger was a fantasy. The IPO just made it look plausible.",
@@ -432,7 +432,7 @@
       "lastSeen": "2026-06-12T14:14:20.832146+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9867
+      "score": 1.9948
     },
     {
       "title": "Founders Fund put $600M into SpaceX. The IPO just turned it into $50bn.",
@@ -448,7 +448,7 @@
       "lastSeen": "2026-06-12T14:14:20.832146+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9744
+      "score": 1.9825
     },
     {
       "title": "Current’s $80M Series E values the neobank below its 2021 peak",
@@ -464,7 +464,7 @@
       "lastSeen": "2026-06-12T14:14:20.832146+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9688
+      "score": 1.9768
     },
     {
       "title": "The UK is about to ban under-16s from social media. Its own child-safety charities are worried.",
@@ -480,7 +480,7 @@
       "lastSeen": "2026-06-12T14:14:20.832146+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9632
+      "score": 1.9712
     },
     {
       "title": "SpaceX IPO makes Elon Musk the world’s first trillionaire, but your retirement fund is picking up the tab",
@@ -496,7 +496,7 @@
       "lastSeen": "2026-06-12T14:14:20.832146+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9525
+      "score": 1.9603
     },
     {
       "title": "Pleo layoffs hit engineers a day after it launched finance AI agents",
@@ -512,7 +512,7 @@
       "lastSeen": "2026-06-12T14:14:20.832146+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.351
+      "score": 5.3588
     },
     {
       "title": "Starlink is SpaceX’s cash machine, but the maths is getting harder",
@@ -528,7 +528,7 @@
       "lastSeen": "2026-06-12T14:14:20.832146+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.95
+      "score": 1.9578
     },
     {
       "title": "Brain-inspired chip runs near absolute zero and could transform quantum computing",
@@ -541,10 +541,10 @@
       "image": "https://www.sciencedaily.com/images/1920/digital-brain-circuit-computer-chip.webp",
       "published": "2026-06-12T10:38:54+00:00",
       "firstSeen": "2026-06-12T14:14:20.832146+00:00",
-      "lastSeen": "2026-06-12T18:00:01.952615+00:00",
+      "lastSeen": "2026-06-12T17:41:22.374004+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0168
+      "score": 2.0246
     },
     {
       "title": "Google sues suspected Chinese cybercrime ring that used Gemini to build scam websites",
@@ -560,7 +560,7 @@
       "lastSeen": "2026-06-12T13:00:01.410102+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.9467
+      "score": 7.9545
     },
     {
       "title": "UK tech secretary vows to push pension funds into British AI startups",
@@ -576,7 +576,7 @@
       "lastSeen": "2026-06-12T13:00:01.410102+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9445
+      "score": 1.9522
     },
     {
       "title": "Anthropic’s Claude Fable 5 curbs target China. The backlash came from its own side.",
@@ -592,7 +592,7 @@
       "lastSeen": "2026-06-12T13:00:01.410102+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.6435
+      "score": 11.6512
     },
     {
       "title": "Altman, Amodei, and Hassabis are heading to the G7. The rivals have a lot to discuss.",
@@ -608,7 +608,7 @@
       "lastSeen": "2026-06-12T11:08:09.226250+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 7.9376
+      "score": 7.9453
     },
     {
       "title": "Alibaba is offering $1.5 billion for China’s last big independent grocer. The bidding war with Meituan is on.",
@@ -624,7 +624,7 @@
       "lastSeen": "2026-06-12T11:08:09.226250+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.6342
+      "score": 2.6419
     },
     {
       "title": "New OpenAI Academy courses for the next era of work",
@@ -634,13 +634,13 @@
       "sourceWeight": 1.0,
       "category": "AI",
       "summary": "OpenAI introduces three Academy courses that help people build practical AI skills, create repeatable workflows, and apply agents in everyday work.",
-      "image": "https://images.ctfassets.net/kftzwdyauwt9/3uhZVST93Uain15J19fqjF/544b8b12c44fb2035c96b419c5196013/Frame.png?w=1600&amp%3Bh=900&amp%3Bfit=fill",
+      "image": "",
       "published": "2026-06-12T10:00:00+00:00",
-      "firstSeen": "2026-06-12T18:00:01.952615+00:00",
-      "lastSeen": "2026-06-12T18:00:01.952615+00:00",
+      "firstSeen": "2026-06-12T17:41:22.374004+00:00",
+      "lastSeen": "2026-06-12T17:41:22.374004+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.7808
+      "score": 8.7884
     },
     {
       "title": "The Life Scientific: Helen Hastie",
@@ -653,10 +653,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-08T20:00:00+00:00",
       "firstSeen": "2026-06-08T21:00:01.371488+00:00",
-      "lastSeen": "2026-06-12T18:00:01.952615+00:00",
+      "lastSeen": "2026-06-12T17:41:22.374004+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.2708
+      "score": 1.2715
     },
     {
       "title": "The Life Scientific: Seth Berkley",
@@ -669,7 +669,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-01T20:00:00+00:00",
       "firstSeen": "2026-06-01T21:00:01.828388+00:00",
-      "lastSeen": "2026-06-12T18:00:01.952615+00:00",
+      "lastSeen": "2026-06-12T17:41:22.374004+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 1.1908
@@ -709,9 +709,14 @@
   ],
   "errors": [
     {
+      "source": "Artificial Intelligence News",
+      "url": "https://www.artificialintelligence-news.com/categories/artificial-intelligence/feed/",
+      "error": "not well-formed (invalid token): line 1, column 158"
+    },
+    {
       "source": "MarkTechPost",
       "url": "https://www.marktechpost.com/feed/",
-      "error": "HTTP Error 403: Forbidden"
+      "error": "not well-formed (invalid token): line 1, column 119"
     }
   ]
 }
