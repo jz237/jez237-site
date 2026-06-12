@@ -234,9 +234,15 @@ const PHYS = (() => {
 
     // forces
     ball.vy += GRAV * dt;
-    // rolling resistance + spin decay + faint magnus curl
-    const fr = 1 - ROLLFRIC*dt;
-    ball.vx *= fr; ball.vy *= fr;
+    // rolling resistance: mostly CONSTANT deceleration (real rolling) plus a
+    // whisper of proportional drag — slow balls stop instead of crawling
+    {
+      const sp = Math.hypot(ball.vx, ball.vy);
+      if (sp > 1e-3){
+        const k = Math.max(0, 1 - (70*dt)/sp - 0.06*dt);
+        ball.vx *= k; ball.vy *= k;
+      }
+    }
     ball.w  *= 1 - SPINDECAY*dt;
     ball.vx += -ball.w * ball.vy * 0.00002;
     ball.vy +=  ball.w * ball.vx * 0.00002;
