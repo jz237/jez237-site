@@ -1774,5 +1774,17 @@
     "slot": "evening",
     "model": "gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-06-12-morning-houseplant-as-velvet-circuit-creature",
+    "title": "Houseplant as Velvet Circuit Creature",
+    "tests": "Reference-photo transformation template; finished sample image has no instructional text; non-paper physical macro scene.",
+    "prompt": "Use the uploaded reference photo and preserve the houseplant's identity, camera angle, pot position, leaning pose, stem structure, split-leaf silhouettes, leaf size relationships, distinctive leaf damage or variegation, proportions, and most recognizable features, then transform the houseplant into a velvet circuit organism on a dark macro electronics workbench. Rebuild the leaves from deep black-green velvet with copper circuit traces following the veins, amber dew-like micro-LEDs at vein junctions, translucent resin solder beads, soft moss at the soil line, braided copper root filaments over the pot rim, and a matte charcoal ceramic pot with mineral speckles. Keep the source plant recognizable while changing the material logic, surface texture, props, and environment into a cohesive photographed botanical-electronic artifact with warm amber internal glow, cool cyan rim light, brass tweezers, ceramic insulators, copper shavings, velvet lint, and shallow depth of field. Avoid extra duplicate plants, broken leaf anatomy, readable text, logos, instruction cards, hands, people, and losing recognizability.\n\nSource photo needed: a clear houseplant photo.\n\nReusable fill-in-the-blank template: Use the uploaded reference photo and preserve the [SUBJECT] identity, camera angle, pose, silhouette, proportions, distinctive markings or surface details, key structural features, and most recognizable traits, then transform [SUBJECT] into a velvet circuit organism made from [MATERIALS] in [SETTING] with [MOOD] lighting. Keep the source recognizable while changing material logic, surface texture, props, and environment into a cohesive photographed artifact. Avoid duplicate subjects, broken anatomy or geometry, readable text, logo artifacts, instruction cards, and losing recognizability.\n\nWhat to preserve: the houseplant's identity, camera angle, pot position, leaning pose, stem structure, split-leaf silhouettes, leaf size relationships, proportions, variegation or leaf damage, and any distinctive source-photo features.\n\nWhat to change: convert leaves, stems, soil, roots, and pot surfaces into black-green velvet, copper traces, amber micro-LED dew, resin solder beads, moss, braided copper filaments, ceramic electronics-bench materials, macro tools, and cinematic mixed amber/cyan lighting.\n\nExample substitution: Upload a clear photo of a leaning potted monstera with three split leaves and a charcoal pot; preserve its pot position, arcing stems, leaf silhouettes, scale relationships, and any torn leaf edges, then turn it into a velvet circuit organism glowing on a dark electronics workbench.",
+    "image": "images/2026-06-12-morning-houseplant-as-velvet-circuit-creature.png",
+    "date": "2026-06-12",
+    "batch": "Daily Prompt",
+    "slot": "morning",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
