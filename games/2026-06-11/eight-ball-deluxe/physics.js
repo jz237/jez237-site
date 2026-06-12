@@ -17,23 +17,24 @@ const PHYS = (() => {
 
   /* ---------- constants ----------
      Scale: playfield 560px wide ≈ 20.25in → 1px ≈ 0.92mm.
-     Gravity along a 6.5° sloped table: 9.81*sin(6.5°) ≈ 1.11 m/s² ≈ 1210 px/s². */
+     Gravity tuned steeper than the literal 6.5° table (≈9.5° equivalent) —
+     on screen a true-scale slope reads feather-light. */
   const DT       = 1/240;        // base physics step
-  const GRAV     = 1210;
+  const GRAV     = 1750;
   const BALL_R   = 14;
-  const MAXV     = 3400;         // px/s hard cap (≈3.1 m/s)
-  const ROLLFRIC = 0.16;         // per-second rolling resistance
+  const MAXV     = 3800;         // px/s hard cap
+  const ROLLFRIC = 0.22;         // per-second rolling resistance
   const SPINDECAY= 0.55;         // per-second spin decay
 
   /* material: restitution, contact friction (spin coupling) */
   const MATS = {
-    wood:   { e: 0.30, f: 0.16 },
-    metal:  { e: 0.42, f: 0.08 },
-    rubber: { e: 0.78, f: 0.26 },
-    rubberHard: { e: 0.60, f: 0.22 },
-    target: { e: 0.46, f: 0.10 },
-    flipper:{ e: 0.55, f: 0.30 },
-    plastic:{ e: 0.38, f: 0.10 },
+    wood:   { e: 0.28, f: 0.16 },
+    metal:  { e: 0.38, f: 0.08 },
+    rubber: { e: 0.70, f: 0.26 },
+    rubberHard: { e: 0.55, f: 0.22 },
+    target: { e: 0.42, f: 0.10 },
+    flipper:{ e: 0.50, f: 0.30 },
+    plastic:{ e: 0.34, f: 0.10 },
   };
 
   /* ---------- ball ---------- */
@@ -60,8 +61,9 @@ const PHYS = (() => {
      screen coords means upward); handled generically via sign.            */
   const flippers = [];
   function addFlipper(px,py,len,rest,end,id){
-    const f = { px,py,len,rest,end, ang:rest, av:0, on:false, r:11.5, id,
-                maxAV: 56, accel: 1500, retAV: 26 };
+    const f = { px,py,len,rest,end, ang:rest, av:0, on:false,
+                r:13, rTip:9.5,                 // tapered collision body
+                id, maxAV: 66, accel: 1900, retAV: 30 };
     flippers.push(f); return f;
   }
 
@@ -167,9 +169,14 @@ const PHYS = (() => {
     let e = m.e * (speedScaleE !== undefined ? speedScaleE : 1);
     const avn = -vn;
     if (avn < 90) e *= avn/90;
-    // spin/friction: slip = vt - ω r
+    // spin/friction: slip = vt - ω r, Coulomb-capped by the normal impulse so
+    // grazing wall contact doesn't bleed speed (μ ≈ 2.2·f per material)
+    const Jn = (1+e) * avn;
     const slip = vt - ball.w * ball.r;
-    const dvt = -m.f * slip;
+    let dvt = -m.f * slip;
+    const cap = 2.2 * m.f * Jn;
+    if (dvt >  cap) dvt =  cap;
+    else if (dvt < -cap) dvt = -cap;
     vt += dvt;
     ball.w += -2.5 * dvt / ball.r * 0.55;     // partial spin transfer (2D approx)
     const vnNew = -e * vn;
@@ -207,7 +214,7 @@ const PHYS = (() => {
       const c = flipperContact(f, ball.x, ball.y);
       const dx = ball.x - c.cx, dy = ball.y - c.cy;
       const d = Math.hypot(dx,dy);
-      const R = f.r + ball.r;
+      const R = f.r + (f.rTip - f.r)*c.s + ball.r;   // tapered body radius
       if (d < R){
         const nx = d>1e-6 ? dx/d : 0, ny = d>1e-6 ? dy/d : -1;
         // surface velocity at contact = ω × (contact - pivot)
@@ -230,8 +237,8 @@ const PHYS = (() => {
     const fr = 1 - ROLLFRIC*dt;
     ball.vx *= fr; ball.vy *= fr;
     ball.w  *= 1 - SPINDECAY*dt;
-    ball.vx += -ball.w * ball.vy * 0.00004;
-    ball.vy +=  ball.w * ball.vx * 0.00004;
+    ball.vx += -ball.w * ball.vy * 0.00002;
+    ball.vy +=  ball.w * ball.vx * 0.00002;
 
     let sp2 = ball.vx*ball.vx + ball.vy*ball.vy;
     if (sp2 > MAXV*MAXV){ const k = MAXV/Math.sqrt(sp2); ball.vx*=k; ball.vy*=k; }
