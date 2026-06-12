@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-12T14:14:20.832146+00:00",
+  "updatedAt": "2026-06-12T16:00:01.862709+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -10200,6 +10200,18 @@
     "https://www.sciencedaily.com/releases/2026/06/260612032024.htm": {
       "image": "https://www.sciencedaily.com/images/1920/digital-brain-circuit-computer-chip.webp",
       "checkedAt": "2026-06-12T14:14:20.832146+00:00"
+    },
+    "https://huggingface.co/blog/allenai/olmo-eval": {
+      "image": "https://cdn-uploads.huggingface.co/production/uploads/638e39b249de7ae552d977b5/gacAOFYwPkpxu7cC4eeey.png",
+      "checkedAt": "2026-06-12T16:00:01.862709+00:00"
+    },
+    "https://techcrunch.com/podcast/its-hot-ipo-summer-and-the-mangos-are-ripe": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/spacex-rocket-getty.jpg?resize=1200,801",
+      "checkedAt": "2026-06-12T16:00:01.862709+00:00"
+    },
+    "https://www.theverge.com/business/948996/spacex-ipo-elon-musk": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/STKE012_SPACEX_IPO_2026_A.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-06-12T16:00:01.862709+00:00"
     }
   }
 }
