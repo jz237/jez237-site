@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-12T17:41:22.374004+00:00",
+  "updatedAt": "2026-06-12T19:00:02.075559+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -10244,6 +10244,22 @@
     "https://www.anthropic.com/news/anthropic-public-record": {
       "image": "https://www.anthropic.com/api/opengraph-illustration?name=Hand%20Globe&amp;backgroundColor=heather",
       "checkedAt": "2026-06-12T17:41:22.374004+00:00"
+    },
+    "https://techcrunch.com/2026/06/12/spacex-ipo-live-updates-on-everything-you-need-to-know": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/elon-nasdaq-spacex-ipo.jpg?resize=1200,801",
+      "checkedAt": "2026-06-12T19:00:02.075559+00:00"
+    },
+    "https://simonwillison.net/2026/Jun/12/andrew-singleton": {
+      "image": "",
+      "checkedAt": "2026-06-12T19:00:02.075559+00:00"
+    },
+    "https://techcrunch.com/2026/06/12/google-sues-alleged-chinese-cybercrime-operation-that-used-ai-to-send-scam-texts": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/google-logo.jpg?resize=1200,800",
+      "checkedAt": "2026-06-12T19:00:02.075559+00:00"
+    },
+    "https://www.anthropic.com/news/tcs-anthropic-partnership": {
+      "image": "https://www.anthropic.com/api/opengraph-illustration?name=Hand%20NodeLine&amp;backgroundColor=olive",
+      "checkedAt": "2026-06-12T19:00:02.075559+00:00"
     }
   }
 }
