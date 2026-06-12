@@ -121,7 +121,21 @@
       <b>Multipliers.</b> The 4 in-line drops on the left (backhand them from the upper flipper) push your bonus to 5×. The left orbit is the <b>Bank Shot</b> — it climbs 10K→70K.<br><br>
       <b>A-B-C-D</b> lanes spot you a pool ball. Tilt warnings are real. The machine <i>will</i> talk trash.
     </div>
+    <button class="btn ghost" id="bGuide">Table guide</button>
     <button class="btn" id="bHowBack">Got it</button>
+  </div>
+</div>
+
+<!-- ---------- TABLE GUIDE ---------- -->
+<div class="overlay hide" id="guide">
+  <div class="card" style="width:min(540px,96vw)">
+    <p class="sub">know the table</p>
+    <h1 class="logo" style="font-size:26px">Table Guide</h1>
+    <div style="display:flex;gap:14px;align-items:flex-start;justify-content:center;flex-wrap:wrap">
+      <canvas id="guideCv" style="border-radius:8px;border:1px solid rgba(255,179,71,.3)"></canvas>
+      <ol id="guideList" style="text-align:left;font-size:12px;line-height:1.55;color:#d8c8a4;margin:4px 0;padding-left:20px;max-width:230px"></ol>
+    </div>
+    <button class="btn" id="bGuideBack">Back</button>
   </div>
 </div>
 
