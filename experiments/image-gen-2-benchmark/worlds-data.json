@@ -196,5 +196,23 @@
       "continuity": "Preserves the basalt rift geography, reefmind anatomy, nacre membrane infrastructure, pressure-light technology, alien wet ecology, and cyan-violet-amber lighting.",
       "entryDescription": "Reefmind maintenance workers repair a breathing gill-door hinge on wet basalt steps above suspended brine lenses."
     }
+  },
+  {
+    "id": "2026-06-12-overnight-veyraxis-bloomrift-amber-fan-market-queue",
+    "title": "Veyraxis Bloomrift: Amber Fan Market Queue",
+    "tests": "World-only catalog entry; generated image verified at exact CLI output path; R2 upload required by append-entry.py.",
+    "prompt": "Veyraxis Bloomrift: Amber Fan Market Queue. Create a realistic photographed/cinematic daily-life image set in Veyraxis Bloomrift, showing glass-shelled reefmind inhabitants waiting in a slow spiral line at Amber Fan Market, exchanging amber pressure-light bowls beneath living nacre membrane awnings and slow-rooted amber fan vegetation. Preserve the weekly world bible: vertical basalt petals, suspended brine lenses, breathing capillary bridges, wet ceramic tools, living crystal pressure gauges, black moss veils, red pulse lichens, storm-filtered cyan light, bruised violet shadows, pearl mist, amber internal glow, and non-human reefmind body plans with translucent shell mantles, tripod root-limbs, ribbon sensory fans, bioluminescent throat sacs, and symbiotic tendril tool clusters. Make it a realistic documentary photograph with tactile wet surfaces, atmospheric rift depth, material wear, naturalistic alien anatomy, and no humans, Earth streets, spaceships, readable Earth signage, paper posters, logos, or text labels.\n\nWeekly world: Veyraxis Bloomrift.\n\nSource photo needed: none.\n\nReusable fill-in-the-blank template: Create a realistic photographed/cinematic daily-life image set in Veyraxis Bloomrift, showing [EVERYDAY SCENE] at [LOCATION], with reefmind inhabitants, grown basalt, nacre membrane, pressure-light infrastructure, alien vegetation, and storm-filtered cyan/amber lighting. Preserve the world bible exactly while varying the daily activity and viewpoint. Avoid humans, spaceships, Earth props, readable Earth signage, logos, dancing, and illustration/concept-art rendering.\n\nWhat to preserve: Veyraxis Bloomrift world name, geography, settlements, reefmind body plan, transit logic, materials, vegetation, palette, and recurring motifs.\n\nWhat to change: vary only the everyday activity, camera position, local props, crowd rhythm, and specific daily-life details while staying inside the same alien ecology and material culture.\n\nExample substitution: [EVERYDAY SCENE] = reefmind neighbors waiting to exchange amber pressure-light bowls in a patient spiral queue; [LOCATION] = Amber Fan Market on a wet basalt ledge below suspended brine lenses.",
+    "image": "images/2026-06-12-overnight-veyraxis-bloomrift-amber-fan-market-queue.png",
+    "date": "2026-06-12",
+    "batch": "Daily Prompt",
+    "slot": "overnight",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "world": {
+      "name": "Veyraxis Bloomrift",
+      "description": "A living basalt-and-membrane alien world where glass-shelled reefminds inhabit floating mineral blooms, harvest pressure-light, and move through vascular wind channels.",
+      "continuity": "Preserves Veyraxis Bloomrift vertical basalt petals, brine lenses, nacre membranes, reefmind inhabitants, pressure-light bowls, alien vegetation, cyan/violet storm light, amber glow, and non-Earth daily-life infrastructure.",
+      "entryDescription": "A patient morning queue at Amber Fan Market where reefmind inhabitants exchange amber pressure-light bowls along a wet basalt ledge."
+    }
   }
 ]
