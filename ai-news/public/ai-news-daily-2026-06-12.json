@@ -1,6 +1,6 @@
 {
   "date": "2026-06-12",
-  "updatedAt": "2026-06-12T11:08:09.226250+00:00",
+  "updatedAt": "2026-06-12T13:00:01.410102+00:00",
   "items": [
     {
       "title": "Anthropic’s Claude Fable 5 curbs target China. The backlash came from its own side.",
@@ -13,10 +13,10 @@
       "image": "https://media.thenextweb.com/2026/06/claude-fable-5-mythos-5.avif",
       "published": "2026-06-12T10:30:55+00:00",
       "firstSeen": "2026-06-12T12:00:01.592641+00:00",
-      "lastSeen": "2026-06-12T12:00:01.592641+00:00",
+      "lastSeen": "2026-06-12T13:00:01.410102+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.8055
+      "score": 11.7766
     },
     {
       "title": "Google sues suspected Chinese cybercrime ring that used Gemini to build scam websites",
@@ -29,10 +29,10 @@
       "image": "https://media.thenextweb.com/2026/05/google-io-2026-gemini-intelligence-android-xr-glasses.avif",
       "published": "2026-06-12T10:38:43+00:00",
       "firstSeen": "2026-06-12T12:00:01.592641+00:00",
-      "lastSeen": "2026-06-12T12:00:01.592641+00:00",
+      "lastSeen": "2026-06-12T13:00:01.410102+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.1094
+      "score": 8.0803
     },
     {
       "title": "Altman, Amodei, and Hassabis are heading to the G7. The rivals have a lot to discuss.",
@@ -48,7 +48,23 @@
       "lastSeen": "2026-06-12T11:08:09.226250+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.1241
+      "score": 8.0699
+    },
+    {
+      "title": "Pleo layoffs hit engineers a day after it launched finance AI agents",
+      "url": "https://thenextweb.com/news/pleo-layoffs-ai-agents-finance",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "On 11 June, Pleo told finance teams that AI agents would soon free them from administrative work. The next day came the Pleo layoffs: the Danish spend-management fintech had cut around 50 of its own staff, most of them in engineering and data. The product launch came first. Pleo unveiled a suite of “agentic” AI, [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/pleo-card.avif",
+      "published": "2026-06-12T10:48:59+00:00",
+      "firstSeen": "2026-06-12T12:00:01.592641+00:00",
+      "lastSeen": "2026-06-12T13:00:01.410102+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.4853
     },
     {
       "title": "Siri won’t be your AI girlfriend",
@@ -61,26 +77,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/siri-ai.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0.17391304347827%2C0%2C99.652173913043%2C100&amp%3Bw=1200",
       "published": "2026-06-12T07:00:31+00:00",
       "firstSeen": "2026-06-12T08:00:02.121297+00:00",
-      "lastSeen": "2026-06-12T11:08:09.226250+00:00",
+      "lastSeen": "2026-06-12T13:00:01.410102+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.3408
-    },
-    {
-      "title": "Representing Time Series as Structured Programs for LLM Reasoning",
-      "url": "https://llm-stats.com/ai-news",
-      "source": "LLM Stats AI News",
-      "sourceUrl": "https://llm-stats.com/ai-news",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "",
-      "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-12T11:08:13.683984+00:00",
-      "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-12T11:08:09.226250+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 5.06
+      "score": 5.2913
     },
     {
       "title": "How Preply combines AI and human tutors to personalize learning",
@@ -93,10 +93,10 @@
       "image": "https://images.ctfassets.net/kftzwdyauwt9/4TlUSJyvzcUk3f3wPzVmtY/e69435b271f2e2c44c1fe621dae9d24f/oai_Preply_SEO.png?w=1600&amp%3Bh=900&amp%3Bfit=fill",
       "published": "2026-06-12T00:00:00+00:00",
       "firstSeen": "2026-06-12T10:00:01.366609+00:00",
-      "lastSeen": "2026-06-12T11:08:09.226250+00:00",
+      "lastSeen": "2026-06-12T13:00:01.410102+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9073
+      "score": 4.8666
     },
     {
       "title": "Equal AI raised $30M to screen phone calls for Indians who get 20 spam calls a week",
@@ -112,7 +112,7 @@
       "lastSeen": "2026-06-12T11:08:09.226250+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.8491
+      "score": 3.7987
     },
     {
       "title": "Infineon is opening a €5 billion chip factory in Dresden. It is the EU Chips Act’s first major success.",
@@ -128,7 +128,7 @@
       "lastSeen": "2026-06-12T11:08:09.226250+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2111
+      "score": 3.1575
     },
     {
       "title": "Apple’s Camera Chief Thinks AI Can Give You Superpowers",
@@ -141,10 +141,10 @@
       "image": "https://media.wired.com/photos/6a2991038b88eda4e0bec24e/master/pass/Siri%20AI%20in%20Camera%20SOURCE%20Julian%20Chokkattu%20(1).jpg",
       "published": "2026-06-12T01:00:00+00:00",
       "firstSeen": "2026-06-12T01:37:22.017530+00:00",
-      "lastSeen": "2026-06-12T11:08:09.226250+00:00",
+      "lastSeen": "2026-06-12T13:00:01.410102+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1201
+      "score": 3.0782
     },
     {
       "title": "Alibaba is offering $1.5 billion for China’s last big independent grocer. The bidding war with Meituan is on.",
@@ -160,7 +160,7 @@
       "lastSeen": "2026-06-12T11:08:09.226250+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8199
+      "score": 2.7659
     },
     {
       "title": "v0.30.8-rc0",
@@ -173,10 +173,10 @@
       "image": "https://opengraph.githubassets.com/3f1e4e15213e038e25f046a7bbe1258ff17c04ad35184c7114e88d4a3e0aef21/ollama/ollama",
       "published": "2026-06-12T00:21:46+00:00",
       "firstSeen": "2026-06-12T01:00:01.641604+00:00",
-      "lastSeen": "2026-06-12T11:08:09.226250+00:00",
+      "lastSeen": "2026-06-12T13:00:01.410102+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7755
+      "score": 2.7343
     },
     {
       "title": "v0.30.8",
@@ -189,42 +189,10 @@
       "image": "https://opengraph.githubassets.com/b50c7ff6cad6b910728a05e5b8335aa7bfa63b8c19ec4a823a40fbd1a1c2313d/ollama/ollama",
       "published": "2026-06-12T00:21:46+00:00",
       "firstSeen": "2026-06-12T03:00:01.623686+00:00",
-      "lastSeen": "2026-06-12T11:08:09.226250+00:00",
+      "lastSeen": "2026-06-12T13:00:01.410102+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7755
-    },
-    {
-      "title": "You Probably Won’t Get Rich Off the SpaceX IPO",
-      "url": "https://www.wired.com/story/you-probably-wont-get-rich-off-the-spacex-ipo",
-      "source": "Wired AI",
-      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "The company has set aside an unusually high number of shares for retail investors. Still, experts say, you’re just getting the crumbs.",
-      "image": "https://media.wired.com/photos/6a2b26d63472ef5ff1e6a164/master/pass/Probably-Wont-Get-Rich-SpaceX-IPO-Business-AP-26156715402871.jpg",
-      "published": "2026-06-12T09:30:00+00:00",
-      "firstSeen": "2026-06-12T10:00:01.366609+00:00",
-      "lastSeen": "2026-06-12T11:08:09.226250+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.2411
-    },
-    {
-      "title": "Cheaper, faster, and culturally aware, Avataar’s video AI is built for India’s scale",
-      "url": "https://techcrunch.com/2026/06/11/cheaper-faster-and-culturally-aware-avataars-video-ai-is-built-for-indias-scale",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Avataar AI's distilled video model is priced at $0.005 for every second of generation",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/06/Screenshot-2026-06-11-at-3.39.00-PM.jpg?resize=1200%2C685",
-      "published": "2026-06-12T04:30:00+00:00",
-      "firstSeen": "2026-06-12T06:00:01.725301+00:00",
-      "lastSeen": "2026-06-12T11:08:09.226250+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.1048
+      "score": 2.7343
     }
   ],
   "errors": [
