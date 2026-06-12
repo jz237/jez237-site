@@ -51,7 +51,7 @@
   "games": [
     {
       "name": "👷 Hard Hat Mac",
-      "desc": "Classic 1983 Apple II remake — 3 construction levels.",
+      "desc": "The 1983 Apple II classic, fully remastered — 4 levels, power-ups, chiptune music, global scores.",
       "status": "live",
       "link": "https://jz237.github.io/games/hard-hat-mac/"
     },
