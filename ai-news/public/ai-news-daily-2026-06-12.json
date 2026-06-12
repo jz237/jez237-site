@@ -1,6 +1,6 @@
 {
   "date": "2026-06-12",
-  "updatedAt": "2026-06-12T09:00:01.943489+00:00",
+  "updatedAt": "2026-06-12T10:00:01.366609+00:00",
   "items": [
     {
       "title": "Siri won’t be your AI girlfriend",
@@ -13,10 +13,26 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/siri-ai.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0.17391304347827%2C0%2C99.652173913043%2C100&amp%3Bw=1200",
       "published": "2026-06-12T07:00:31+00:00",
       "firstSeen": "2026-06-12T08:00:02.121297+00:00",
-      "lastSeen": "2026-06-12T09:00:01.943489+00:00",
+      "lastSeen": "2026-06-12T10:00:01.366609+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.4008
+      "score": 5.3723
+    },
+    {
+      "title": "How Preply combines AI and human tutors to personalize learning",
+      "url": "https://openai.com/index/preply",
+      "source": "OpenAI News",
+      "sourceUrl": "https://openai.com/news/rss.xml",
+      "sourceWeight": 1.0,
+      "category": "AI",
+      "summary": "Preply uses OpenAI to launch AI-generated lesson summaries, providing personalised feedback and language learning exercises.",
+      "image": "https://images.ctfassets.net/kftzwdyauwt9/4TlUSJyvzcUk3f3wPzVmtY/e69435b271f2e2c44c1fe621dae9d24f/oai_Preply_SEO.png?w=1600&amp%3Bh=900&amp%3Bfit=fill",
+      "published": "2026-06-12T00:00:00+00:00",
+      "firstSeen": "2026-06-12T10:00:01.366609+00:00",
+      "lastSeen": "2026-06-12T10:00:01.366609+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.9332
     },
     {
       "title": "Equal AI raised $30M to screen phone calls for Indians who get 20 spam calls a week",
@@ -29,10 +45,10 @@
       "image": "https://media.thenextweb.com/2026/06/equal-ai-india-call-screening-30m-series-b.avif",
       "published": "2026-06-12T07:40:24+00:00",
       "firstSeen": "2026-06-12T09:00:01.943489+00:00",
-      "lastSeen": "2026-06-12T09:00:01.943489+00:00",
+      "lastSeen": "2026-06-12T10:00:01.366609+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.9102
+      "score": 3.8811
     },
     {
       "title": "Apple’s Camera Chief Thinks AI Can Give You Superpowers",
@@ -45,10 +61,10 @@
       "image": "https://media.wired.com/photos/6a2991038b88eda4e0bec24e/master/pass/Siri%20AI%20in%20Camera%20SOURCE%20Julian%20Chokkattu%20(1).jpg",
       "published": "2026-06-12T01:00:00+00:00",
       "firstSeen": "2026-06-12T01:37:22.017530+00:00",
-      "lastSeen": "2026-06-12T09:00:01.943489+00:00",
+      "lastSeen": "2026-06-12T10:00:01.366609+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1708
+      "score": 3.1467
     },
     {
       "title": "v0.30.8-rc0",
@@ -61,10 +77,10 @@
       "image": "https://opengraph.githubassets.com/3f1e4e15213e038e25f046a7bbe1258ff17c04ad35184c7114e88d4a3e0aef21/ollama/ollama",
       "published": "2026-06-12T00:21:46+00:00",
       "firstSeen": "2026-06-12T01:00:01.641604+00:00",
-      "lastSeen": "2026-06-12T09:00:01.943489+00:00",
+      "lastSeen": "2026-06-12T10:00:01.366609+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8253
+      "score": 2.8016
     },
     {
       "title": "v0.30.8",
@@ -77,10 +93,10 @@
       "image": "https://opengraph.githubassets.com/b50c7ff6cad6b910728a05e5b8335aa7bfa63b8c19ec4a823a40fbd1a1c2313d/ollama/ollama",
       "published": "2026-06-12T00:21:46+00:00",
       "firstSeen": "2026-06-12T03:00:01.623686+00:00",
-      "lastSeen": "2026-06-12T09:00:01.943489+00:00",
+      "lastSeen": "2026-06-12T10:00:01.366609+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8253
+      "score": 2.8016
     },
     {
       "title": "Jaeho Kim, Changhun Oh, Seokhyun Lee, Irina Rish, Changhee Lee",
@@ -91,12 +107,28 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-12T09:00:11.962610+00:00",
+      "published": "2026-06-12T10:00:11.277572+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-12T09:00:01.943489+00:00",
+      "lastSeen": "2026-06-12T10:00:01.366609+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
+    },
+    {
+      "title": "You Probably Won’t Get Rich Off the SpaceX IPO",
+      "url": "https://www.wired.com/story/you-probably-wont-get-rich-off-the-spacex-ipo",
+      "source": "Wired AI",
+      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "The company has set aside an unusually high number of shares for retail investors. Still, experts say, you’re just getting the crumbs.",
+      "image": "https://media.wired.com/photos/6a2b26d63472ef5ff1e6a164/master/pass/Probably-Wont-Get-Rich-SpaceX-IPO-Business-AP-26156715402871.jpg",
+      "published": "2026-06-12T09:30:00+00:00",
+      "firstSeen": "2026-06-12T10:00:01.366609+00:00",
+      "lastSeen": "2026-06-12T10:00:01.366609+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2748
     },
     {
       "title": "Cheaper, faster, and culturally aware, Avataar’s video AI is built for India’s scale",
@@ -109,10 +141,26 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/Screenshot-2026-06-11-at-3.39.00-PM.jpg?resize=1200%2C685",
       "published": "2026-06-12T04:30:00+00:00",
       "firstSeen": "2026-06-12T06:00:01.725301+00:00",
-      "lastSeen": "2026-06-12T09:00:01.943489+00:00",
+      "lastSeen": "2026-06-12T10:00:01.366609+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1607
+      "score": 2.1341
+    },
+    {
+      "title": "SpaceX raised $75 billion in the largest IPO in history. Japanese retail investors got $2.2 billion of it.",
+      "url": "https://thenextweb.com/news/spacex-raised-75-billion-in-the-largest-ipo-in-history-japanese-retail-investors-got-2-2-billion-of-it",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "SpaceX begins trading on Nasdaq today under the ticker SPCX after raising $75 billion in the largest initial public offering ever completed. The previous record holder, Saudi Aramco’s 2019 listing, raised $29.4 billion, making SpaceX’s offering roughly 2.5 times larger. A regulatory filing on Friday confirmed that Japanese investors accounted for $2.2 billion of the [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/03/xai-all-cofounders-departed-musk-spacex-rebuild.avif",
+      "published": "2026-06-12T09:00:03+00:00",
+      "firstSeen": "2026-06-12T10:00:01.366609+00:00",
+      "lastSeen": "2026-06-12T10:00:01.366609+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1199
     },
     {
       "title": "Theker just raised $85M to build the factory robot that doesn’t specialize in anything",
@@ -125,10 +173,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/THEKER-photo-seriesA.jpg?resize=1200%2C799",
       "published": "2026-06-12T01:48:07+00:00",
       "firstSeen": "2026-06-12T03:00:01.623686+00:00",
-      "lastSeen": "2026-06-12T09:00:01.943489+00:00",
+      "lastSeen": "2026-06-12T10:00:01.366609+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0906
+      "score": 2.066
     },
     {
       "title": "Jeff Bezos’s Prometheus raises $12B to build an ‘artificial general engineer’ for the physical world",
@@ -141,10 +189,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/04/GettyImages-2208733347.jpg?w=1024",
       "published": "2026-06-12T01:04:38+00:00",
       "firstSeen": "2026-06-12T01:37:22.017530+00:00",
-      "lastSeen": "2026-06-12T09:00:01.943489+00:00",
+      "lastSeen": "2026-06-12T10:00:01.366609+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0727
+      "score": 2.0485
     }
   ],
   "errors": [

@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-12T09:00:01.943489+00:00",
+  "updatedAt": "2026-06-12T10:00:01.366609+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -10184,6 +10184,10 @@
     "https://www.theverge.com/tech/948890/siri-wont-be-your-ai-girlfriend": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/siri-ai.jpg?quality=90&amp;strip=all&amp;crop=0.17391304347827%2C0%2C99.652173913043%2C100&amp;w=1200",
       "checkedAt": "2026-06-12T08:00:02.121297+00:00"
+    },
+    "https://openai.com/index/preply": {
+      "image": "https://images.ctfassets.net/kftzwdyauwt9/4TlUSJyvzcUk3f3wPzVmtY/e69435b271f2e2c44c1fe621dae9d24f/oai_Preply_SEO.png?w=1600&amp;h=900&amp;fit=fill",
+      "checkedAt": "2026-06-12T10:00:01.366609+00:00"
     }
   }
 }
