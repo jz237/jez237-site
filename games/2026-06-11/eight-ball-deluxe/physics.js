@@ -22,10 +22,11 @@ const PHYS = (() => {
   const DT       = 1/240;        // base physics step
   const GRAV     = 1750;
   const BALL_R   = 14;
-  const MAXV     = 2950;         // px/s hard cap — a steel ball, not a laser
+  const MAXV     = 2650;         // px/s hard cap — a steel ball, not a laser
   const ROLLFRIC = 0.22;         // per-second rolling resistance
   const SPINDECAY= 0.55;         // per-second spin decay
-  const DRAGV    = 1850;         // extra quadratic-ish drag above this speed
+  const DRAGV    = 2000;         // extra drag above this — must stay ABOVE the
+                                 // crown-clear speed (~1950) or plunges die
 
   /* material: restitution, contact friction (spin coupling) */
   const MATS = {
@@ -180,6 +181,20 @@ const PHYS = (() => {
     else if (dvt < -cap) dvt = -cap;
     vt += dvt;
     ball.w += -2.5 * dvt / ball.r * 0.55;     // partial spin transfer (2D approx)
+    /* surface micro-imperfection: ±1.5% angular jitter on real impacts.
+       Real tables never repeat a bounce exactly — this is what breaks the
+       perfect periodic loops a clean reflection model can fall into. */
+    let jn = nx, jt_x = tx, jt_y = ty;
+    if (avn > 120){
+      const ja = (rng() - 0.5) * 0.05;
+      const ca = Math.cos(ja), sa = Math.sin(ja);
+      jn = nx*ca - ny*sa; const jny = nx*sa + ny*ca;
+      jt_x = -jny; jt_y = jn;
+      const vnNew2 = -e * vn;
+      ball.vx = (svx||0) + jn*vnNew2 + jt_x*vt;
+      ball.vy = (svy||0) + jny*vnNew2 + jt_y*vt;
+      return avn;
+    }
     const vnNew = -e * vn;
     ball.vx = (svx||0) + nx*vnNew + tx*vt;
     ball.vy = (svy||0) + ny*vnNew + ty*vt;
