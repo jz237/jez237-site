@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-12T19:00:02.075559+00:00",
+  "updatedAt": "2026-06-12T20:00:01.844328+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -10260,6 +10260,10 @@
     "https://www.anthropic.com/news/tcs-anthropic-partnership": {
       "image": "https://www.anthropic.com/api/opengraph-illustration?name=Hand%20NodeLine&amp;backgroundColor=olive",
       "checkedAt": "2026-06-12T19:00:02.075559+00:00"
+    },
+    "https://www.techrepublic.com/article/news-apple-samsung-glucose-data-ai-health-advice": {
+      "image": "https://assets.techrepublic.com/uploads/2026/06/samsung-smartwatch-1.png?f=jpeg",
+      "checkedAt": "2026-06-12T20:00:01.844328+00:00"
     }
   }
 }
