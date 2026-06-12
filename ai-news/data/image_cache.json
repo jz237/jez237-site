@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-12T06:54:00.442493+00:00",
+  "updatedAt": "2026-06-12T08:00:02.121297+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -10180,6 +10180,10 @@
     "https://techcrunch.com/2026/06/11/cheaper-faster-and-culturally-aware-avataars-video-ai-is-built-for-indias-scale": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/Screenshot-2026-06-11-at-3.39.00-PM.jpg?resize=1200,685",
       "checkedAt": "2026-06-12T06:00:01.725301+00:00"
+    },
+    "https://www.theverge.com/tech/948890/siri-wont-be-your-ai-girlfriend": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/siri-ai.jpg?quality=90&amp;strip=all&amp;crop=0.17391304347827%2C0%2C99.652173913043%2C100&amp;w=1200",
+      "checkedAt": "2026-06-12T08:00:02.121297+00:00"
     }
   }
 }
