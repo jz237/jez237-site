@@ -43,13 +43,13 @@ const TABLE = (() => {
 
     /* outer shell */
     S(16,300, 16,1010, 6, 'metal');                    // left wall
-    arc(280,300, 264, Math.PI, 0, 16, 6, 'metal');     // outer crown
+    arc(280,300, 264, Math.PI, 0, 30, 6, 'metal');     // outer crown (fine chords = smooth ride)
     S(544,300, 544,1098, 6, 'metal');                  // shooter outer wall
 
     /* inner arch (two pieces, gap = top lanes); R sized so the crown channel
        and shooter lane clear the 28px ball with margin */
-    arc(280,300, 222, Math.PI, Math.PI*116/180, 6, 5, 'metal');   // left piece → (58,300)
-    arc(280,300, 222, Math.PI*64/180, 0, 6, 5, 'metal');          // right piece → (502,300)
+    arc(280,300, 222, Math.PI, Math.PI*116/180, 10, 5, 'metal');  // left piece → (58,300)
+    arc(280,300, 222, Math.PI*64/180, 0, 10, 5, 'metal');         // right piece → (502,300)
 
     /* shooter lane inner wall + floor; plunger seat at (522,1075) */
     S(502,300, 502,1108, 5, 'metal');
@@ -144,7 +144,7 @@ const TABLE = (() => {
     /* ---- upper flipper: pivot left, tip right — fires up the pocket lane ---- */
     S(330,436, 344,462, 6, 'metal');             // mount stub above the pivot
     FU = PHYS.addFlipper(348,470, 58, 0.42, -0.50, 'FU');
-    FU.maxAV = 50; FU.accel = 1300;
+    FU.maxAV = 58; FU.accel = 1600; FU.rTip = 9;
 
     /* ---- slings ---- */
     {
@@ -169,8 +169,9 @@ const TABLE = (() => {
     zone('outL', 38,1042, 17);   zone('outR', 480,1042, 17);
 
     /* ---- flippers + drain funnels ---- */
-    FL = PHYS.addFlipper(185,1012, 90, 0.56, -0.45, 'FL');
-    FR = PHYS.addFlipper(375,1012, 90, Math.PI-0.56, Math.PI+0.45, 'FR');
+    /* pivots widened so the rest-position tip gap clears the ball (drain works) */
+    FL = PHYS.addFlipper(175,1012, 90, 0.56, -0.45, 'FL');
+    FR = PHYS.addFlipper(385,1012, 90, Math.PI-0.56, Math.PI+0.45, 'FR');
     S(16,1010, 192,1128, 6, 'metal');
     S(502,1010, 368,1128, 6, 'metal');
 
@@ -230,7 +231,7 @@ const TABLE = (() => {
     saucer.cool = 0.9;
     const b = PHYS.ball;
     b.held = false; b.x = saucer.x - 8; b.y = saucer.y + 10;
-    b.vx = -180 + PHYS.rng()*40; b.vy = 300; b.w = 0;
+    b.vx = -200 + PHYS.rng()*40; b.vy = 360; b.w = 0;
   }
 
   return {
