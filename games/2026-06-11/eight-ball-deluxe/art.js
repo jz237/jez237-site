@@ -24,21 +24,34 @@ const ART = (() => {
     ctx.arc(bx,by,r,a-Math.PI/2,a+Math.PI/2);
     ctx.closePath();
   }
-  function billiard(ctx,x,y,r,i,dim){
-    // pool ball i (0-based → ball 1..7); dim = unlit insert
-    const col = BALLCOLS[i%7];
+  function billiard(ctx,x,y,r,i,dim,striped,num){
+    // pool ball: i 0-6 = colour index, i -1 = the 8-ball; striped = 9-15 style
+    const col = i === -1 ? '#1a1a1e' : BALLCOLS[((i%7)+7)%7];
     const g = ctx.createRadialGradient(x-r*0.35,y-r*0.4,r*0.15,x,y,r);
-    g.addColorStop(0, dim ? '#6e655a' : '#fff');
-    g.addColorStop(0.25, dim ? shade(col,-55) : col);
-    g.addColorStop(1, dim ? shade(col,-75) : shade(col,-35));
+    if (striped){
+      g.addColorStop(0, dim ? '#7a7468' : '#ffffff');
+      g.addColorStop(0.6, dim ? '#5e584c' : '#ece4d2');
+      g.addColorStop(1, dim ? '#46403a' : '#b8b0a0');
+    } else {
+      g.addColorStop(0, dim ? '#6e655a' : '#fff');
+      g.addColorStop(0.25, dim ? shade(col,-55) : col);
+      g.addColorStop(1, dim ? shade(col,-75) : shade(col,-35));
+    }
     ctx.fillStyle = g;
     ctx.beginPath(); ctx.arc(x,y,r,0,7); ctx.fill();
+    if (striped){
+      ctx.save();
+      ctx.beginPath(); ctx.arc(x,y,r,0,7); ctx.clip();
+      ctx.fillStyle = dim ? shade(col,-55) : col;
+      ctx.fillRect(x-r, y-r*0.42, r*2, r*0.84);
+      ctx.restore();
+    }
     ctx.fillStyle = dim ? '#3c372f' : '#f6efdf';
     ctx.beginPath(); ctx.arc(x,y,r*0.52,0,7); ctx.fill();
     ctx.fillStyle = dim ? '#17120c' : '#221a10';
-    ctx.font = `700 ${Math.round(r*0.78)}px Georgia,serif`;
+    ctx.font = `700 ${Math.round(r*0.74)}px Georgia,serif`;
     ctx.textAlign='center'; ctx.textBaseline='middle';
-    ctx.fillText(String(i+1), x, y+r*0.05);
+    ctx.fillText(String(num !== undefined ? num : i+1), x, y+r*0.05);
   }
   function shade(hex,amt){
     const n=parseInt(hex.slice(1),16);
@@ -59,85 +72,139 @@ const ART = (() => {
     wood.addColorStop(0,'#2a160a'); wood.addColorStop(.5,'#3a2010'); wood.addColorStop(1,'#27140a');
     ctx.fillStyle = wood; ctx.fillRect(0,0,TABLE.W,TABLE.H);
 
-    /* playfield deck */
-    const pf = ctx.createLinearGradient(0,0,0,TABLE.H);
-    pf.addColorStop(0,'#efe3c6'); pf.addColorStop(.55,'#ecdcba'); pf.addColorStop(1,'#e4d2ab');
-    ctx.fillStyle = pf;
-    ctx.fillRect(10,10,TABLE.W-20,TABLE.H-20);
-
-    /* faint wood grain on deck */
-    ctx.globalAlpha = 0.05; ctx.strokeStyle='#7a5a30'; ctx.lineWidth=1;
-    for (let y=14;y<TABLE.H;y+=7){
-      ctx.beginPath(); ctx.moveTo(12,y);
-      for(let x=12;x<TABLE.W-10;x+=40) ctx.lineTo(x, y + Math.sin(x*0.05+y)*1.6);
+    /* wood plank grain for the out-of-play margins */
+    ctx.globalAlpha = 0.35; ctx.strokeStyle='#1c0e06'; ctx.lineWidth=1;
+    for (let y=6;y<TABLE.H;y+=11){
+      ctx.beginPath(); ctx.moveTo(0,y);
+      for(let x=0;x<TABLE.W;x+=44) ctx.lineTo(x, y + Math.sin(x*0.04+y)*1.8);
       ctx.stroke();
     }
     ctx.globalAlpha = 1;
 
-    /* ----- painted art ----- */
-    /* big orange sunburst radiating from behind the 7-bank */
-    ctx.save();
-    ctx.translate(220,560);
-    for (let i=0;i<26;i++){
-      const a = (i/26)*Math.PI*2;
-      ctx.fillStyle = i%2 ? 'rgba(228,116,44,.20)' : 'rgba(198,62,38,.15)';
+    /* royal-blue playfield deck inside the wall boundary (real EBD blue) */
+    const deckPath = () => {
       ctx.beginPath();
-      ctx.moveTo(0,0);
-      ctx.arc(0,0, 390, a, a+Math.PI/26);
+      ctx.arc(280,300, 261, Math.PI, 0);     // under the crown
+      ctx.lineTo(541,1158); ctx.lineTo(19,1158); ctx.closePath();
+    };
+    deckPath();
+    const pf = ctx.createLinearGradient(0,0,0,TABLE.H);
+    pf.addColorStop(0,'#2a4cb4'); pf.addColorStop(.5,'#2343a4'); pf.addColorStop(1,'#1b3488');
+    ctx.fillStyle = pf; ctx.fill();
+    /* subtle weave on the blue */
+    ctx.save(); deckPath(); ctx.clip();
+    ctx.globalAlpha = 0.05; ctx.strokeStyle='#dfe8ff'; ctx.lineWidth=1;
+    for (let y=40;y<TABLE.H;y+=9){
+      ctx.beginPath(); ctx.moveTo(14,y); ctx.lineTo(TABLE.W-14,y); ctx.stroke();
+    }
+    ctx.globalAlpha = 1;
+
+    /* yellow lasso-rope pinstripes (the EBD border motif) */
+    ctx.strokeStyle='#e8c44a'; ctx.lineWidth=2.6; ctx.setLineDash([11,5]);
+    ctx.beginPath(); ctx.arc(280,300, 240, Math.PI, 0);
+    ctx.lineTo(520,1100); ctx.lineTo(40,1100); ctx.closePath(); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.strokeStyle='rgba(232,196,74,.45)'; ctx.lineWidth=1.2;
+    ctx.beginPath(); ctx.arc(280,300, 246, Math.PI, 0);
+    ctx.lineTo(526,1106); ctx.lineTo(34,1106); ctx.closePath(); ctx.stroke();
+    /* corner lasso loops */
+    for (const [lx,ly] of [[70,1070],[490,1070]]){
+      ctx.strokeStyle='#e8c44a'; ctx.lineWidth=2.2;
+      ctx.beginPath(); ctx.arc(lx,ly,12,0,7); ctx.stroke();
+      ctx.beginPath(); ctx.arc(lx+7,ly-4,7,0,7); ctx.stroke();
+    }
+    ctx.restore();
+
+    /* ----- explosion burst behind the 7-bank (EBD "EACH TARGET DOWN" art) ----- */
+    ctx.save();
+    ctx.translate(330,545);
+    for (let layer=0; layer<2; layer++){
+      const spikes = layer? 12 : 16, R = layer? 105 : 150, rIn = layer? 40 : 58;
+      ctx.fillStyle = layer? 'rgba(255,243,192,.95)' : 'rgba(248,196,60,.9)';
+      ctx.beginPath();
+      for (let i=0;i<spikes*2;i++){
+        const a = (i/(spikes*2))*Math.PI*2 + (layer?0.13:0);
+        const r = i%2 ? rIn : R*(0.8+0.25*Math.sin(i*2.7));
+        ctx[i?'lineTo':'moveTo'](Math.cos(a)*r*1.15, Math.sin(a)*r*0.8);
+      }
       ctx.closePath(); ctx.fill();
     }
-    ctx.restore();
-    /* knock the burst back with deck colour ring */
-    const fade = ctx.createRadialGradient(220,560,40,220,560,400);
-    fade.addColorStop(0,'rgba(236,220,186,0)');
-    fade.addColorStop(.5,'rgba(236,220,186,.3)');
-    fade.addColorStop(1,'rgba(236,220,186,.96)');
-    ctx.fillStyle=fade; ctx.fillRect(0,110,TABLE.W,900);
-
-    /* chalk-blue pinstripe frame */
-    ctx.strokeStyle='rgba(38,102,204,.5)'; ctx.lineWidth=2.4;
-    ctx.strokeRect(30,46,TABLE.W-60,1054);
-    ctx.strokeStyle='rgba(206,52,28,.45)'; ctx.lineWidth=1.2;
-    ctx.strokeRect(36,52,TABLE.W-72,1042);
-
-    /* script title on the lower playfield */
-    ctx.save();
-    ctx.translate(262,712); ctx.rotate(-0.045);
-    ctx.textAlign='center';
-    ctx.font='italic 900 44px Georgia,serif';
-    ctx.lineWidth=7; ctx.strokeStyle='#f6efdf'; ctx.lineJoin='round';
-    ctx.strokeText('Eight Ball',0,0); ctx.strokeText('Deluxe',0,46);
-    const tg = ctx.createLinearGradient(0,-34,0,60);
-    tg.addColorStop(0,'#e8702a'); tg.addColorStop(.5,'#cf3a28'); tg.addColorStop(1,'#9c2418');
-    ctx.fillStyle=tg;
-    ctx.fillText('Eight Ball',0,0); ctx.fillText('Deluxe',0,46);
+    ctx.fillStyle='#b02a14'; ctx.textAlign='center';
+    ctx.font='800 10.5px Georgia,serif';
+    ctx.fillText('EACH TARGET DOWN', 30, -16);
+    ctx.fillText('SCORES 2000', 30, -3);
     ctx.restore();
 
-    /* painted rack of balls near the apron */
+    /* ----- green felt pool panel with the full 15-ball rack ----- */
     ctx.save();
-    ctx.translate(280,852); ctx.globalAlpha=.85;
-    let k=0;
-    for (let row=0;row<3;row++) for(let c=0;c<=row;c++){
-      const x=(c-row/2)*30, y=row*26-20;
-      if (row===1 && c===0){ // 8 ball in the heart of the rack
-        const g=ctx.createRadialGradient(x-4,y-24-4,2,x,y-24+26-26,12);
-        ctx.fillStyle='#191919';
-        ctx.beginPath(); ctx.arc(x,y,12,0,7); ctx.fill();
-        ctx.fillStyle='#f1ead8'; ctx.beginPath(); ctx.arc(x,y,6,0,7); ctx.fill();
-        ctx.fillStyle='#111'; ctx.font='700 9px Georgia,serif';
-        ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText('8',x,y+0.5);
-      } else billiard(ctx,x,y,12,(k*3+1)%7,false);
-      k++;
+    rr(ctx,140,738,280,184,26);
+    const felt=ctx.createRadialGradient(280,830,40,280,841,210);
+    felt.addColorStop(0,'#2d9152'); felt.addColorStop(.7,'#1e7a40'); felt.addColorStop(1,'#13522a');
+    ctx.fillStyle=felt; ctx.fill();
+    ctx.strokeStyle='#e8c44a'; ctx.lineWidth=2.6; ctx.stroke();
+    ctx.clip();
+    /* rack: point-down triangle, stripes high, 8 in the heart (like the art) */
+    const rows = [[11,12,13,14,15],[7,8,9,10],[4,5,6],[2,3],[1]];
+    rows.forEach((row,ri)=>{
+      row.forEach((n,ci)=>{
+        const x = 280 + (ci - (row.length-1)/2)*27.4;
+        const y = 772 + ri*26.5;
+        billiard(ctx, x, y, 13.2, n===8 ? -1 : ((n-1)%7), false, n>8, n);
+      });
+    });
+    ctx.restore();
+
+    /* OUTHOLE bonus text + crossed cues, left-centre like the original */
+    ctx.save();
+    ctx.translate(150,724); ctx.textAlign='center';
+    ctx.fillStyle='#f3e2b8'; ctx.font='800 8.6px Georgia,serif';
+    ctx.fillText('OUTHOLE RACKS UP', 0, 0);
+    ctx.fillText('7000 BONUS FOR', 0, 11);
+    ctx.fillText('EACH LIT BALL', 0, 22);
+    for (const m of [-0.45, 0.45]){
+      ctx.save(); ctx.translate(0,-32); ctx.rotate(m); ctx.globalAlpha=.9;
+      const cg=ctx.createLinearGradient(-34,0,38,0);
+      cg.addColorStop(0,'#caa46a'); cg.addColorStop(1,'#6e4a26');
+      ctx.fillStyle=cg; ctx.fillRect(-34,-1.8,72,3.6);
+      ctx.restore();
     }
     ctx.restore();
 
-    /* cue + chalk doodle by the left orbit */
+    /* 25,000 WHEN LIT banner at the crown */
     ctx.save();
-    ctx.translate(118,742); ctx.rotate(1.05); ctx.globalAlpha=.8;
-    const cue=ctx.createLinearGradient(0,0,118,0);
-    cue.addColorStop(0,'#caa46a'); cue.addColorStop(1,'#6e4a26');
-    ctx.fillStyle=cue; ctx.fillRect(0,-2.4,118,4.8);
-    ctx.fillStyle='#2266cc'; ctx.fillRect(-7,-3.2,7,6.4);
+    ctx.translate(280,36); ctx.textAlign='center';
+    rr(ctx,-44,-11,88,22,6);
+    ctx.fillStyle='#b02a14'; ctx.fill();
+    ctx.strokeStyle='#e8c44a'; ctx.lineWidth=1.6; ctx.stroke();
+    ctx.fillStyle='#ffe9b8'; ctx.font='800 10px Georgia,serif';
+    ctx.fillText('25,000', 0, -0.5);
+    ctx.font='700 6.4px sans-serif';
+    ctx.fillText('WHEN LIT', 0, 7.5);
+    ctx.restore();
+
+    /* yellow horseshoe around SHOOT AGAIN (the EBD bottom-centre icon) */
+    ctx.save();
+    ctx.translate(280,996);
+    ctx.strokeStyle='#e8c44a'; ctx.lineWidth=7; ctx.lineCap='round';
+    ctx.beginPath(); ctx.arc(0,4,34, Math.PI*0.86, Math.PI*0.14, false); ctx.stroke();
+    ctx.strokeStyle='rgba(120,80,16,.55)'; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.arc(0,4,34, Math.PI*0.86, Math.PI*0.14, false); ctx.stroke();
+    for (let i=0;i<7;i++){
+      const a = Math.PI*0.86 - (i/6)*(Math.PI*0.72+Math.PI);
+      ctx.fillStyle='#8a6020';
+      ctx.beginPath(); ctx.arc(Math.cos(a)*34, 4+Math.sin(a)*34, 1.8, 0, 7); ctx.fill();
+    }
+    ctx.restore();
+
+    /* ----- BANK SHOT VALUE ladder panel (left, rope-bordered like the art) ----- */
+    rr(ctx,66,448,46,250,10);
+    ctx.fillStyle='rgba(10,18,52,.55)'; ctx.fill();
+    ctx.strokeStyle='#e8c44a'; ctx.lineWidth=1.8; ctx.stroke();
+    ctx.save();
+    ctx.translate(89,442); ctx.textAlign='center';
+    ctx.fillStyle='#ffe9b8'; ctx.font='800 8px Georgia,serif';
+    ctx.fillText('BANK SHOT', 0, -10);
+    ctx.fillText('VALUE', 0, 0);
     ctx.restore();
 
     /* ----- inserts (off state) ----- */
@@ -145,20 +212,20 @@ const ART = (() => {
     for (const id in L){
       const lp = L[id];
       if (id.startsWith('pool')) billiard(ctx,lp.x,lp.y,13,+id.slice(4),true);
-      else if (id.startsWith('dl')&&id!=='dlx'){ insertCircle(ctx,lp.x,lp.y,11,'#5a2018'); label(ctx,lp.x,lp.y,lp.label,11,'#caa48a'); }
-      else if (id.startsWith('x')){ insertRect(ctx,lp.x-14,lp.y-9,28,18,'#5a2018'); label(ctx,lp.x,lp.y,lp.label,10,'#caa48a'); }
-      else if (id.startsWith('bk')){ insertRect(ctx,lp.x-17,lp.y-8,34,16,'#1d3a5c'); label(ctx,lp.x,lp.y,lp.label,9,'#8fb4d8'); }
-      else if (id==='A'||id==='B'||id==='C'||id==='D'){ insertCircle(ctx,lp.x,lp.y,10,'#5a2018'); label(ctx,lp.x,lp.y,lp.label,11,'#caa48a'); }
-      else if (id==='eightL'){ insertCircle(ctx,lp.x,lp.y,13,'#111'); label(ctx,lp.x,lp.y,'8',12,'#888'); }
-      else if (id==='saucerL'){ insertRect(ctx,lp.x-26,lp.y-8,52,16,'#5a2018'); label(ctx,lp.x,lp.y,lp.label,8,'#caa48a'); }
-      else if (id==='again'){ insertRect(ctx,lp.x-38,lp.y-8,76,16,'#5a1418'); label(ctx,lp.x,lp.y,lp.label,8,'#d88'); }
-      else if (id==='arrowL'){ insertRect(ctx,lp.x-24,lp.y-8,48,16,'#5a2018'); label(ctx,lp.x,lp.y,lp.label,8,'#caa48a'); }
-      else if (id==='bankT'){ insertRect(ctx,lp.x-28,lp.y-8,56,16,'#1d3a5c'); label(ctx,lp.x,lp.y,lp.label,8,'#8fb4d8'); }
+      else if (id.startsWith('dl')&&id!=='dlx'){ insertCircle(ctx,lp.x,lp.y,11,'#7a5a14'); label(ctx,lp.x,lp.y,lp.label,11,'#d8bc7a'); }
+      else if (id.startsWith('x')){ insertCircle(ctx,lp.x,lp.y,13,'#5a2018'); label(ctx,lp.x,lp.y,lp.label,10,'#d8a88a'); }
+      else if (id.startsWith('bk')){ insertRect(ctx,lp.x-17,lp.y-8,34,16,'#7a5a14'); label(ctx,lp.x,lp.y,lp.label,9,'#e0c484'); }
+      else if (id==='A'||id==='B'||id==='C'||id==='D'){ insertCircle(ctx,lp.x,lp.y,10,'#0f7a38'); label(ctx,lp.x,lp.y,lp.label,11,'#9adbae'); }
+      else if (id==='eightL'){ insertCircle(ctx,lp.x,lp.y,13,'#111'); label(ctx,lp.x,lp.y,'8',12,'#999'); }
+      else if (id==='saucerL'){ insertRect(ctx,lp.x-26,lp.y-8,52,16,'#7a5a14'); label(ctx,lp.x,lp.y,lp.label,8,'#e0c484'); }
+      else if (id==='again'){ insertCircle(ctx,lp.x,lp.y,14,'#7a3a10'); label(ctx,lp.x,lp.y-3,'SHOOT',6,'#f0c890'); label(ctx,lp.x,lp.y+4,'AGAIN',6,'#f0c890'); }
+      else if (id==='arrowL'){ insertRect(ctx,lp.x-24,lp.y-8,48,16,'#7a1c10'); label(ctx,lp.x,lp.y,lp.label,8,'#e8a88a'); }
+      else if (id==='bankT'){ insertRect(ctx,lp.x-28,lp.y-8,56,16,'#7a5a14'); label(ctx,lp.x,lp.y,lp.label,8,'#e0c484'); }
     }
-    /* shot arrows */
+    /* shot arrows (cream-outlined like classic playfield art) */
     arrow(ctx, 170,648, -1.82, '#cf3a28');         // up the in-line lane
     arrow(ctx, 414,430, -1.14, '#cf3a28');         // up the corner-pocket lane
-    arrow(ctx, 37,756, -1.57, '#2266cc');          // left lane
+    arrow(ctx, 37,756, -1.57, '#e8c44a');          // left lane
 
     /* ----- baked GI light pools (warm lamps under plastics) ----- */
     [[240,300,120,.13],[150,520,90,.10],[460,300,80,.12],[280,940,150,.12],[37,560,60,.10]].forEach(([x,y,r,a])=>{
@@ -167,30 +234,41 @@ const ART = (() => {
       ctx.fillStyle=g; ctx.beginPath(); ctx.arc(x,y,r,0,7); ctx.fill();
     });
 
-    /* ----- sling plastics ----- */
+    /* ----- sling plastics: red-curtain panels with cowboy silhouettes ----- */
     for (const m of [1,-1]){
       ctx.save();
       if (m<0){ ctx.translate(518,0); ctx.scale(-1,1); }   // mirror for right sling
       ctx.beginPath();
       ctx.moveTo(116,882); ctx.lineTo(170,950); ctx.lineTo(110,942); ctx.closePath();
       const g=ctx.createLinearGradient(110,880,170,950);
-      g.addColorStop(0,'#e2603f'); g.addColorStop(1,'#a22d1c');
+      g.addColorStop(0,'#8e2f23'); g.addColorStop(1,'#5e1810');
       ctx.fillStyle=g; ctx.fill();
-      ctx.strokeStyle='rgba(246,239,223,.75)'; ctx.lineWidth=2; ctx.stroke();
-      ctx.fillStyle='rgba(255,236,190,.9)';
-      ctx.beginPath(); ctx.arc(126,898,3,0,7); ctx.fill();
+      /* curtain stripes */
+      ctx.save(); ctx.clip();
+      ctx.strokeStyle='rgba(255,210,170,.22)'; ctx.lineWidth=3;
+      for (let sx=104; sx<176; sx+=8){ ctx.beginPath(); ctx.moveTo(sx,876); ctx.lineTo(sx,956); ctx.stroke(); }
+      /* cowboy silhouette: hat + head + shoulders */
+      ctx.fillStyle='#f3e2b8';
+      ctx.beginPath(); ctx.ellipse(136,914,4.6,5.4,0,0,7); ctx.fill();           // head
+      ctx.beginPath(); ctx.ellipse(136,909,9,2.4,0,0,7); ctx.fill();             // brim
+      rr(ctx,132,901,8,6,2); ctx.fill();                                          // crown
+      ctx.beginPath(); ctx.ellipse(136,928,9.5,7,0,Math.PI,0); ctx.fill();        // shoulders
+      ctx.restore();
+      ctx.strokeStyle='rgba(246,239,223,.85)'; ctx.lineWidth=2.2; ctx.stroke();
       ctx.restore();
     }
 
     /* ----- mechanical: walls, guides, posts ----- */
     drawWalls(ctx);
 
-    /* bumper base art rings */
+    /* bumper base art rings (white + rope, like the real blue upper field) */
     for (const b of TABLE.bumpers){
-      ctx.strokeStyle='rgba(206,52,28,.55)'; ctx.lineWidth=3;
+      ctx.strokeStyle='rgba(243,236,220,.65)'; ctx.lineWidth=3;
       ctx.beginPath(); ctx.arc(b.x,b.y,40,0,7); ctx.stroke();
-      ctx.strokeStyle='rgba(38,102,204,.4)'; ctx.lineWidth=1.6;
+      ctx.strokeStyle='rgba(232,196,74,.5)'; ctx.lineWidth=1.6;
+      ctx.setLineDash([7,4]);
       ctx.beginPath(); ctx.arc(b.x,b.y,46,0,7); ctx.stroke();
+      ctx.setLineDash([]);
     }
 
     /* apron */
@@ -302,7 +380,7 @@ const ART = (() => {
     metal:  ['#e8ebee','#a8afb6','#5c636a','rgba(255,255,255,.55)'],
     rubber: ['#e06a4e','#b03a24','#6e1d10','rgba(255,200,170,.4)'],
     rubberHard: ['#e06a4e','#b03a24','#6e1d10','rgba(255,200,170,.4)'],
-    plastic:['#d8604a','#b03826','#701d10','rgba(255,205,180,.4)'],
+    plastic:['#7aa0e8','#3a64c4','#1d3470','rgba(220,235,255,.45)'],
     wood:   ['#cdb084','#a8895c','#6e5430','rgba(255,235,200,.4)'],
   };
 
@@ -377,22 +455,24 @@ const ART = (() => {
     ctx.translate(d.cx,d.cy);
     ctx.rotate(Math.atan2(d.seg.by-d.seg.ay, d.seg.bx-d.seg.ax));
     /* extrusion shadow + slot */
-    ctx.fillStyle='rgba(40,22,10,.4)'; rr(ctx,-12,-3,24,11,3); ctx.fill();
-    /* face with vertical sheen */
+    ctx.fillStyle='rgba(8,12,30,.45)'; rr(ctx,-12,-3,24,11,3); ctx.fill();
+    /* white face (real EBD targets are white), coloured ball roundel */
     const g=ctx.createLinearGradient(0,-7,0,5);
-    g.addColorStop(0, shade(col,46)); g.addColorStop(0.4, col); g.addColorStop(1, shade(col,-34));
+    g.addColorStop(0,'#ffffff'); g.addColorStop(0.45,'#efe8d6'); g.addColorStop(1,'#bfb49a');
     ctx.fillStyle=g; rr(ctx,-11,-7,22,11,3); ctx.fill();
-    ctx.strokeStyle='rgba(24,10,4,.65)'; ctx.lineWidth=1.1; ctx.stroke();
-    /* top bevel highlight */
-    ctx.strokeStyle='rgba(255,240,210,.55)'; ctx.lineWidth=1.2;
+    ctx.strokeStyle='rgba(24,16,8,.6)'; ctx.lineWidth=1.1; ctx.stroke();
+    ctx.strokeStyle='rgba(255,255,255,.7)'; ctx.lineWidth=1.2;
     ctx.beginPath(); ctx.moveTo(-9.5,-6); ctx.lineTo(9.5,-6); ctx.stroke();
     if (num){
-      const rg=ctx.createRadialGradient(-1,-2.6,0.5,0,-1.6,5);
-      rg.addColorStop(0,'#fdf6e4'); rg.addColorStop(1,'#d8c8a4');
-      ctx.fillStyle=rg; ctx.beginPath(); ctx.arc(0,-1.6,4.8,0,7); ctx.fill();
-      ctx.strokeStyle='rgba(40,22,10,.4)'; ctx.lineWidth=0.8; ctx.stroke();
-      ctx.fillStyle='#2a1810'; ctx.font='700 7.4px Georgia,serif';
-      ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText(num,0,-1.2);
+      const rg=ctx.createRadialGradient(-1.4,-3,0.5,0,-1.6,5.4);
+      rg.addColorStop(0, shade(col,46)); rg.addColorStop(1, shade(col,-18));
+      ctx.fillStyle=rg; ctx.beginPath(); ctx.arc(0,-1.6,5,0,7); ctx.fill();
+      ctx.strokeStyle='rgba(24,16,8,.45)'; ctx.lineWidth=0.8; ctx.stroke();
+      ctx.fillStyle='#fff7e6'; ctx.font='700 7.2px Georgia,serif';
+      ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText(num,0,-1.4);
+    } else {
+      ctx.fillStyle = col;
+      rr(ctx,-7,-4.5,14,5,2); ctx.fill();
     }
     ctx.restore();
   }
@@ -431,12 +511,12 @@ const ART = (() => {
     ctx.fillStyle=sk;
     ctx.beginPath(); ctx.arc(b.x,b.y,33,0,7); ctx.fill();
     ctx.strokeStyle='rgba(60,40,20,.45)'; ctx.lineWidth=1.1; ctx.stroke();
-    /* body */
+    /* body: white base like the real machine */
     const g=ctx.createRadialGradient(b.x-7,b.y-9,4,b.x,b.y,29);
-    g.addColorStop(0,'#f08a60'); g.addColorStop(.55,'#c2402c'); g.addColorStop(1,'#741d10');
+    g.addColorStop(0,'#ffffff'); g.addColorStop(.6,'#e4dcc8'); g.addColorStop(1,'#a89c80');
     ctx.fillStyle=g;
     ctx.beginPath(); ctx.arc(b.x,b.y,27,0,7); ctx.fill();
-    ctx.strokeStyle='rgba(40,14,8,.5)'; ctx.lineWidth=1; ctx.stroke();
+    ctx.strokeStyle='rgba(40,28,12,.45)'; ctx.lineWidth=1; ctx.stroke();
     /* amber glass cap with brass ring */
     const lit = glow>0;
     const cap=ctx.createRadialGradient(b.x-4.5,b.y-6.5,2,b.x,b.y,19);
@@ -486,10 +566,10 @@ const ART = (() => {
     rg.addColorStop(0,'#d8604a'); rg.addColorStop(1,'#7e2412');
     ctx.fillStyle=rg; ctx.fill();
     ctx.strokeStyle='rgba(46,16,8,.6)'; ctx.lineWidth=1.1; ctx.stroke();
-    /* plastic body */
+    /* plastic body: white with cream shading (real EBD flippers are white) */
     taperPath(ctx,f.px,f.py,tx,ty,r0-2.8,r1-2.6);
     const g=ctx.createLinearGradient(f.px,f.py-r0,f.px,f.py+r0);
-    g.addColorStop(0,'#fff0cc'); g.addColorStop(.45,'#f6c05e'); g.addColorStop(1,'#c2811f');
+    g.addColorStop(0,'#ffffff'); g.addColorStop(.5,'#f0e9d8'); g.addColorStop(1,'#c8bda4');
     ctx.fillStyle=g; ctx.fill();
     /* centre groove + specular */
     ctx.strokeStyle='rgba(140,84,18,.4)'; ctx.lineWidth=1.4;

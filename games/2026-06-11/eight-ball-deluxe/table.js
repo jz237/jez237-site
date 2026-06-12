@@ -60,12 +60,12 @@ const TABLE = (() => {
     gateSeg = S(384.2,104, 403.9,66.9, 4, 'metal', 'gate');
     gateSeg.pass = { x:-0.88, y:-0.47 };
 
-    /* top lane guides + 25K arrow standup */
-    S(244,72, 244,160, 6, 'plastic');
-    S(316,72, 316,160, 6, 'plastic');
-    C(280,128, 10, 'rubberHard', 'arrow');
-    zone('zoneA', 213,140, 16);
-    zone('zoneB', 347,140, 16);
+    /* top lanes: single centre guide like the real table (A | B), with the
+       25,000 collect up in the crown channel ("25000 WHEN LIT") */
+    S(280,72, 280,160, 6, 'plastic');
+    zone('zoneA', 228,140, 17);
+    zone('zoneB', 332,140, 17);
+    zone('top25', 280,48, 18);
 
     /* pop bumpers (body circle; kick handled on hit event) */
     [[185,260],[300,240],[240,350]].forEach(([x,y],i)=>{
@@ -74,9 +74,11 @@ const TABLE = (() => {
     });
 
     /* ---- left orbit (Bank Shot lane) ---- */
-    S(58,300, 58,800, 5, 'metal');            // inner guide (joins arch at top)
-    S(58,800, 86,852, 6, 'rubberHard');       // mouth deflector
-    zone('bank', 37,560, 20);
+    S(58,300, 58,735, 5, 'metal');            // inner guide ends high enough that the
+    S(58,735, 78,800, 5, 'metal');            //   right-flipper approach line crosses
+    S(78,800, 96,848, 5, 'metal');            //   into the lane above the mouth funnel
+    zone('bank', 37,560, 20);                 // wall channel (descending loop balls)
+    zone('bank2', 79,560, 18);                // inner channel (upward left-lane shots)
 
     /* ---- in-line drop lane: near-vertical stack at left-center (real EBD),
        shot from the lower-left flipper; Bank Shot standup at the dead end ---- */
@@ -86,13 +88,14 @@ const TABLE = (() => {
       const px=0.970, py=-0.244;                     // perpendicular
       const L=164;
       S(ex-px*28, ey-py*28, ex-px*28+ux*L, ey-py*28+uy*L, 6, 'plastic');  // left wall
-      S(ex+px*28, ey+py*28, ex+px*28+ux*L, ey+py*28+uy*L, 6, 'plastic');  // right wall
+      /* right wall ends short of the bank backwall so balls rolling off the
+         backwall FALL THROUGH the gap instead of wedging in a valley */
+      S(ex+px*28+ux*28, ey+py*28+uy*28, ex+px*28+ux*L, ey+py*28+uy*L, 6, 'plastic');
       S(ex-px*28, ey-py*28, ex-px*28-16, ey-py*28+30, 6, 'plastic');      // mouth flare L
-      S(ex+px*28, ey+py*28, 216.4,600.3, 6, 'plastic');                   // mouth flare R → seals against bank backwall end
-      C(217,592, 10, 'rubber');                                           // crown post sheds balls off the junction
       const bx=ex+ux*L, by=ey+uy*L;
       bankTop = { seg: S(bx-px*24, by-py*24, bx+px*24, by+py*24, 4, 'target', 'bankT'),
                   cx:bx, cy:by };
+      S(160,400, 98,428, 5, 'plastic');     // lane-top roof: sheds falling balls left into the side channel
       for (let i=0;i<4;i++){
         const s = (0.20 + i*0.22) * L;
         const cx = ex+ux*s, cy = ey+uy*s;
@@ -114,19 +117,25 @@ const TABLE = (() => {
       // NOTE: up-left normal is (-uy? ...) → verify: (ux,uy)≈(0.948,-0.319); want normal pointing up-left = (-0.319,-0.948)
       const nux=uy, nuy=-ux;                 // (-0.319,-0.948) — up-left, into the box
       const BX1=Lx+nux*42, BY1=Ly+nuy*42, BX2=Rx+nux*42, BY2=Ry+nuy*42;
-      S(BX1,BY1, BX2,BY2, 5, 'rubberHard');                  // backwall
-      S(Lx,Ly, BX1,BY1, 5, 'metal');                          // left side
+      /* no separate backwall: the DELUXE standup row IS the back boundary
+         (a twin parallel wall lets a ball bridge both tops and stick).
+         The left side is a ONE-WAY gate: balls spill OUT (down-left) but
+         up-the-middle shots can't sneak in behind the targets. */
       S(Rx,Ry, BX2,BY2, 5, 'metal');                          // right side
+      const lg = S(214,597, 232,646, 4, 'metal', 'boxgate');
+      lg.pass = { x:-0.55, y:0.835 };
       C(224,648, 9, 'rubber'); C(428,583, 9, 'rubber');       // end posts
       for (let i=0;i<7;i++){
         const s=(i+0.5)*sp, cx=Lx+ux*s, cy=Ly+uy*s;
         const seg = S(cx-ux*10, cy-uy*10, cx+ux*10, cy+uy*10, 4, 'target', 'drop'+i);
         drops7.push({seg, up:true, cx, cy, ux, uy});
         lamp('pool'+i, cx-nux*55, cy-nuy*55, String(i+1));
+        const bcx=Lx+ux*s+nux*40, bcy=Ly+uy*s+nuy*40;
         if (i<6){
-          const bcx=Lx+ux*s+nux*40, bcy=Ly+uy*s+nuy*40;
-          const st = S(bcx-ux*12, bcy-uy*12, bcx+ux*12, bcy+uy*12, 4, 'target', 'dlx'+i);
+          const st = S(bcx-ux*15.4, bcy-uy*15.4, bcx+ux*15.4, bcy+uy*15.4, 4, 'target', 'dlx'+i);
           deluxe.push({seg:st, cx:bcx, cy:bcy});
+        } else {
+          S(bcx-ux*15.4, bcy-uy*15.4, bcx+ux*15.4, bcy+uy*15.4, 4, 'plastic');  // filler behind target 7
         }
       }
     }
@@ -136,6 +145,7 @@ const TABLE = (() => {
     S(432,300, 444,240, 6, 'plastic');           // pocket left wall
     S(444,240, 488,244, 6, 'plastic');           // pocket top
     S(488,244, 482,296, 6, 'plastic');           // pocket right wall
+    S(489,222, 443,238, 5, 'plastic');           // roof seal: sheds balls off the pocket top
     lone = { seg: S(438,307, 478,295, 4, 'target', 'lone'), up:true, cx:458, cy:301 };
     saucer = { x:461, y:266, r:15, holding:false, timer:0, cool:0 };
     lamp('eightL', 430,386, '8-BALL');
@@ -149,11 +159,11 @@ const TABLE = (() => {
     /* ---- slings ---- */
     {
       const f1 = S(120,886, 166,946, 5, 'rubber', 'slingL');
-      S(114,892, 114,938, 5, 'rubber'); S(114,938, 162,950, 5, 'rubber');
+      S(114,892, 114,934, 5, 'plastic'); S(104,940, 162,956, 5, 'plastic');  // bottom merges into guide B (no saddle)
       const n1 = norm(60,-46);  // face normal (down-right)
       slings.push({seg:f1, nx:n1.x, ny:n1.y, cool:0});
       const f2 = S(398,886, 352,946, 5, 'rubber', 'slingR');
-      S(403,892, 403,938, 5, 'rubber'); S(403,938, 356,950, 5, 'rubber');
+      S(403,892, 403,934, 5, 'plastic'); S(412,940, 356,956, 5, 'plastic');
       const n2 = norm(-60,-46); // face normal (down-left)
       slings.push({seg:f2, nx:n2.x, ny:n2.y, cool:0});
     }
@@ -169,19 +179,22 @@ const TABLE = (() => {
     zone('outL', 38,1042, 17);   zone('outR', 480,1042, 17);
 
     /* ---- flippers + drain funnels ---- */
-    /* pivots widened so the rest-position tip gap clears the ball (drain works) */
+    /* pivots widened so the rest-position tip gap clears the ball (drain works);
+       right flipper rests a touch steeper so its cone reaches the left lane */
     FL = PHYS.addFlipper(175,1012, 90, 0.56, -0.45, 'FL');
-    FR = PHYS.addFlipper(385,1012, 90, Math.PI-0.56, Math.PI+0.45, 'FR');
+    FR = PHYS.addFlipper(385,1012, 90, Math.PI-0.63, Math.PI+0.42, 'FR');
     S(16,1010, 192,1128, 6, 'metal');
     S(502,1010, 368,1128, 6, 'metal');
 
     /* lamps (inserts) */
-    lamp('arrowL', 280,165, '25,000');
-    lamp('A', 208,176, 'A'); lamp('B', 352,176, 'B');
+    lamp('arrowL', 280,196, '25,000');
+    lamp('A', 228,180, 'A'); lamp('B', 332,180, 'B');
     lamp('C', 82,912, 'C');  lamp('D', 439,912, 'D');
-    for (let i=0;i<4;i++) lamp('x'+(i+2), 214+i*7, 566-i*34, (i+2)+'X');
+    /* bonus multipliers cluster at bottom centre (matches the real layout) */
+    lamp('x2', 222,936, '2X'); lamp('x3', 252,956, '3X');
+    lamp('x4', 308,956, '4X'); lamp('x5', 338,936, '5X');
     const DLET = 'DELUXE';
-    for (let i=0;i<6;i++) lamp('dl'+i, 178+i*41, 796, DLET[i]);
+    for (let i=0;i<6;i++) lamp('dl'+i, 238+i*29, 706-i*10, DLET[i]);
     for (let i=0;i<7;i++) lamp('bk'+i, 86, 478+i*33, ((i+1)*10)+'K');
     lamp('again', 280,1002, 'SHOOT AGAIN', '#ff5a3c');
   }

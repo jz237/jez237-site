@@ -120,8 +120,8 @@ const GAME = (() => {
       /* idle status */
       if (state==='play'||state==='serve'||state==='bonus'){
         const P = cur ? null : plr();
-        dmdText(g, 'PLAYER '+(curP+1)+'  BALL '+ballNo, DMD.W/2, 2);
-        dmdText(g, fmt(P.bonusBalls*7000)+' × '+P.bonusX, DMD.W/2, 12);
+        dmdText(g, demoMode ? 'DEMO MODE' : 'PLAYER '+(curP+1)+'  BALL '+ballNo, DMD.W/2, 2);
+        dmdText(g, demoMode ? 'PRESS START' : fmt(P.bonusBalls*7000)+' × '+P.bonusX, DMD.W/2, 12);
       } else {
         dmdText(g, 'EIGHT BALL DELUXE', DMD.W/2, 2);
         const hs = best();
@@ -248,6 +248,7 @@ const GAME = (() => {
     dmdShow(['BONUS '+fmt(p.bonusBalls*7000) + (p.bonusX>1?' ×'+p.bonusX:'')],1.4);
   }
   function finishBall(){
+    if (demoMode){ endDemo(); return; }
     const p = plr();
     if (p.extraBalls > 0){
       p.extraBalls--;
@@ -374,6 +375,9 @@ const GAME = (() => {
         }
         return;
       }
+      case 'bank2':
+        if (PHYS.ball.vy > -100) return;      // inner channel only counts going UP
+        /* fall through */
       case 'bank': {
         if (state!=='play') return;
         const val = Math.min(7, p.bankLvl+1)*10000;
@@ -382,6 +386,15 @@ const GAME = (() => {
         addFlash(86, 580, 90, '120,190,255');
         if (p.bankLvl < 7) p.bankLvl++;
         if (val === 70000 && !p._bank70){ p._bank70 = true; extraBall(); }
+        return;
+      }
+      case 'top25': {
+        if (state!=='play' && state!=='serve') return;
+        if (TABLE.lamps.arrowL.on){
+          score(25000); AU.sfx.standup(); major();
+          dmdShow(['25,000'],1);
+          addFlash(280,60, 60, '255,217,138');
+        } else { score(1000); AU.sfx.rollover(); }
         return;
       }
       case 'outL': case 'outR':
@@ -449,8 +462,10 @@ const GAME = (() => {
         b.cool = 0.07;
         const ball = PHYS.ball;
         const dx = ball.x-b.x, dy = ball.y-b.y, dl = Math.hypot(dx,dy)||1;
-        const kick = 1520 + PHYS.rng()*160;
-        ball.vx = dx/dl*kick; ball.vy = dy/dl*kick;
+        /* impulse blends with incoming momentum — no teleport-style direction snap */
+        const kick = 1120 + PHYS.rng()*120;
+        ball.vx = ball.vx*0.3 + dx/dl*kick;
+        ball.vy = ball.vy*0.3 + dy/dl*kick;
         score(100); AU.sfx.bumper();
         bumpGlow[i] = 1;
         addFlash(b.x,b.y, 56, '255,160,80');
@@ -462,7 +477,7 @@ const GAME = (() => {
       if (s.cool <= 0 && ev.speed > 35){
         s.cool = 0.15;
         const ball = PHYS.ball;
-        ball.vx += s.nx*1320; ball.vy += s.ny*1320 - 140;
+        ball.vx += s.nx*1060; ball.vy += s.ny*1060 - 120;
         score(100); AU.sfx.sling();
         slingFlash[i] = 1;
       }
@@ -477,15 +492,6 @@ const GAME = (() => {
         addFlash(TABLE.bankTop.cx, TABLE.bankTop.cy, 70, '120,190,255');
       } else if (ev.speed > 40){
         score(1000); AU.sfx.standup();
-      }
-      return;
-    }
-    if (id === 'arrow'){
-      if (!handleHit._arrowCool || tNow-handleHit._arrowCool>0.5){
-        handleHit._arrowCool = tNow;
-        score(25000); AU.sfx.standup(); major();
-        dmdShow(['25,000'],1);
-        addFlash(280,128, 56, '255,217,138');
       }
       return;
     }
@@ -527,7 +533,7 @@ const GAME = (() => {
     if (state!=='serve' || !b.held) return;
     b.held = false;
     /* crown-clear threshold ≈1950 px/s: tap fails visibly, 40% just clears, full rips */
-    b.vy = -(1250 + plungePull*2050) * (0.99+PHYS.rng()*0.02);
+    b.vy = -(1390 + plungePull*1600) * (0.99+PHYS.rng()*0.02);
     b.vx = 0;
     AU.sfx.launch(plungePull);
     plungePull = 0; plungeHeld = false;
@@ -589,7 +595,8 @@ const GAME = (() => {
       if (!b.held){
         if (Math.abs(b.x-stillX) < 1.5 && Math.abs(b.y-stillY) < 1.5) stillT += PHYS.DT;
         else { stillX = b.x; stillY = b.y; stillT = 0; }
-        if ((b.lowTime > 3 || stillT > 2.6) && b.y < 1050){
+        if (!window.__noSearch && (b.lowTime > 3 || stillT > 2.6) && b.y < 1050){
+          if (window.__searchCount !== undefined) window.__searchCount++;   // test instrumentation
           b.lowTime = 0; stillT = 0;
           if (tNow - lastSearchT > 15) searchN = 0;
           lastSearchT = tNow; searchN++;
@@ -616,8 +623,69 @@ const GAME = (() => {
         AU.say(pick(['Stop talking and start chalking','Quit playing with yourself','Shoot the eight ball']), 0);
       }
     }
+    if (state === 'attract' && !demoMode && !window.__headless){
+      attractIdle += PHYS.DT;
+      if (attractIdle > 14 && !document.getElementById('title').classList.contains('hide')){
+        attractIdle = 0;
+        startDemo();
+      }
+    }
+    AI.step();
     dmdStep(PHYS.DT);
   }
+
+  /* ================= AI player (attract demo + test harness) ================= */
+  let demoMode = false, attractIdle = 0;
+  const AI = {
+    on: false, holdL: 0, holdR: 0, coolL: 0, coolR: 0, plungeT: 0, lastNudge: -9,
+    step(){
+      if (!this.on) return;
+      const b = PHYS.ball;
+      if (state === 'serve' && b.held){
+        this.plungeT += PHYS.DT;
+        if (this.plungeT > 1.1){
+          plungePull = 0.5 + PHYS.rng()*0.5;
+          launch();
+          this.plungeT = 0;
+        }
+        return;
+      }
+      if (state !== 'play' || !b.active || b.held) return;
+      /* lower flippers: strike when the ball is in the window and not rising fast */
+      const zoneL = b.y > 935 && b.y < 1058 && b.vy > -60 && b.x > 160 && b.x < 295;
+      const zoneR = b.y > 935 && b.y < 1058 && b.vy > -60 && b.x > 265 && b.x < 400;
+      const nearFU = b.x > 330 && b.x < 432 && b.y > 425 && b.y < 515 && b.vy > -40;
+      if (zoneL && this.coolL <= 0){ flip('L', true); this.holdL = 0.10 + PHYS.rng()*0.10; this.coolL = 0.5; }
+      if ((zoneR || nearFU) && this.coolR <= 0){ flip('R', true); this.holdR = 0.09 + PHYS.rng()*0.10; this.coolR = 0.5; }
+      if (this.holdL > 0){ this.holdL -= PHYS.DT; if (this.holdL <= 0) flip('L', false); }
+      if (this.holdR > 0){ this.holdR -= PHYS.DT; if (this.holdR <= 0) flip('R', false); }
+      if (this.coolL > 0) this.coolL -= PHYS.DT;
+      if (this.coolR > 0) this.coolR -= PHYS.DT;
+      /* desperation nudge on a centre drain approach */
+      if (b.y > 1010 && Math.abs(b.x-280) < 26 && b.vy > 150 && tNow - this.lastNudge > 5){
+        this.lastNudge = tNow;
+        nudge((b.x < 280 ? 1 : -1) * 140, -150);
+      }
+    },
+    reset(){ this.holdL = this.holdR = this.coolL = this.coolR = this.plungeT = 0; flip('L',false); flip('R',false); }
+  };
+  function startDemo(){
+    demoMode = true; AI.reset(); AI.on = true;
+    players = [newPlayer(0)]; curP = 0; ballNo = 1;
+    hide('title'); hide('how'); hide('scores');
+    applyRackState();
+    serve(false);
+    dmdShow(['DEMO','PRESS START'], 3);
+  }
+  function endDemo(){
+    if (!demoMode) return;
+    demoMode = false; AI.on = false; AI.reset();
+    players = []; state = 'attract'; attractIdle = 0;
+    AU.drone(0); AU.shutUp();
+    show('title');
+  }
+  window.addEventListener('keydown', () => { attractIdle = 0; if (demoMode) endDemo(); }, true);
+  window.addEventListener('pointerdown', () => { attractIdle = 0; if (demoMode) endDemo(); }, true);
 
   /* ================= flash fx ================= */
   function addFlash(x,y,r,col){ flashes.push({x,y,r,col,age:0,max:0.35}); if(flashes.length>24)flashes.shift(); }
@@ -1046,6 +1114,8 @@ const GAME = (() => {
     sw(id){ handleEvent(id==='drain'?{type:'drain'}:id==='saucer'?{type:'saucer'}:id.startsWith('zone')||['bank','outL','outR'].includes(id)?{type:'zone',id}:{type:'hit',id,speed:200,x:0,y:0}); },
     endBall(){ PHYS.ball.active=false; handleEvent({type:'drain'}); },
     get phys(){ return PHYS; }, get table(){ return TABLE; },
+    get ai(){ return AI; },
+    startDemo(){ startDemo(); }, stopDemo(){ endDemo(); },
     set headless(v){ window.__headless = v; },
     render(){ updateCam(1/60); render(1); return 'rendered'; },
     cam(y){ if (y!==undefined) cam.y = y; return cam.y; },

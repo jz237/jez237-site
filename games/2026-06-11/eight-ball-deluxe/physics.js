@@ -22,19 +22,20 @@ const PHYS = (() => {
   const DT       = 1/240;        // base physics step
   const GRAV     = 1750;
   const BALL_R   = 14;
-  const MAXV     = 3800;         // px/s hard cap
+  const MAXV     = 2950;         // px/s hard cap — a steel ball, not a laser
   const ROLLFRIC = 0.22;         // per-second rolling resistance
   const SPINDECAY= 0.55;         // per-second spin decay
+  const DRAGV    = 1850;         // extra quadratic-ish drag above this speed
 
   /* material: restitution, contact friction (spin coupling) */
   const MATS = {
-    wood:   { e: 0.28, f: 0.16 },
-    metal:  { e: 0.38, f: 0.08 },
-    rubber: { e: 0.70, f: 0.26 },
-    rubberHard: { e: 0.55, f: 0.22 },
-    target: { e: 0.42, f: 0.10 },
-    flipper:{ e: 0.50, f: 0.30 },
-    plastic:{ e: 0.34, f: 0.10 },
+    wood:   { e: 0.26, f: 0.16 },
+    metal:  { e: 0.34, f: 0.08 },
+    rubber: { e: 0.62, f: 0.26 },
+    rubberHard: { e: 0.50, f: 0.22 },
+    target: { e: 0.40, f: 0.10 },
+    flipper:{ e: 0.48, f: 0.30 },
+    plastic:{ e: 0.32, f: 0.10 },
   };
 
   /* ---------- ball ---------- */
@@ -241,6 +242,12 @@ const PHYS = (() => {
     ball.vy +=  ball.w * ball.vx * 0.00002;
 
     let sp2 = ball.vx*ball.vx + ball.vy*ball.vy;
+    if (sp2 > DRAGV*DRAGV){
+      const sp = Math.sqrt(sp2);
+      const k = 1 - Math.min(0.5, (sp-DRAGV)*0.00055) * dt * 18;
+      ball.vx *= k; ball.vy *= k;
+      sp2 = ball.vx*ball.vx + ball.vy*ball.vy;
+    }
     if (sp2 > MAXV*MAXV){ const k = MAXV/Math.sqrt(sp2); ball.vx*=k; ball.vy*=k; }
 
     stepFlippers(dt);
