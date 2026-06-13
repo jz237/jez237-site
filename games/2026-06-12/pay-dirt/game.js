@@ -295,7 +295,9 @@ function moveActor(a, dt, inp, spd){
     a.y += FALL_SPEED * dt;
     const nr = Math.floor(a.y);
     if (a.y >= nr + .5){
-      const landed = isSupportTile(c, nr + 1) || guardSupportAt(c, nr + 1) ||
+      // Classic asymmetry: guards are caught BY a dug hole; the player falls through theirs.
+      const caughtByHole = a.kind !== 'player' && isDug(c, nr);
+      const landed = caughtByHole || isSupportTile(c, nr + 1) || guardSupportAt(c, nr + 1) ||
                      isLadder(c, nr) || isBar(c, nr);
       if (landed){
         a.y = nr + .5;
@@ -1472,7 +1474,7 @@ window.__g = {
   step(n){ for (let i = 0; i < (n || 1); i++) if (state === 'playing') update(TICK); render(); return true; },
   snap(){ render(); return true; },
   input(code, down){ keys[code] = !!down; },
-  loadLevel(i){ loadCampaignLevel(i); state = 'playing'; hideOverlays(); return grid.length === ROWS; },
+  loadLevel(i){ mode = 'campaign'; loadCampaignLevel(i); state = 'playing'; hideOverlays(); return grid.length === ROWS; },
   dig(dir){ return tryDig(dir < 0 ? -1 : 1); },
   kill(){ killPlayer('debug'); },
   give(kind){ applyPowerup(kind); },
