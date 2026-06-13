@@ -1,4 +1,4 @@
-/* Eight Ball Deluxe — physics core.
+/* Corner Pocket — physics core.
    Fixed-timestep, swept circle-vs-capsule/circle collision, deterministic
    given a seed + identical inputs. All randomness must go through PHYS.rng. */
 'use strict';
