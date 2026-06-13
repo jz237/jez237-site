@@ -1,0 +1,1038 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script>(function(){try{if(localStorage.getItem("theme")==="light")document.documentElement.setAttribute("data-theme","light");}catch(e){}})();</script>
+  <title>AI Training and Alignment - Deep Dive</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/brand.svg" />
+  <link rel="stylesheet" href="../assets/styles.css" />
+  <link rel="stylesheet" href="../assets/site-enhance.css" />
+  <link rel="stylesheet" href="../assets/workbench-theme.css" />
+  <style>
+    :root {
+      --lab-bg: #020813;
+      --lab-panel: rgba(4, 17, 34, 0.84);
+      --lab-line: rgba(74, 151, 242, 0.34);
+      --lab-line-hot: rgba(61, 208, 255, 0.72);
+      --lab-text: #eef7fb;
+      --lab-muted: #9fb8c9;
+      --lab-dim: #6f8da3;
+      --lab-cyan: #39cfff;
+      --lab-gold: #e6bd67;
+      --lab-green: #84e37a;
+      --lab-rose: #ff7f9c;
+      --lab-violet: #9d86ff;
+      --lab-orange: #ffb060;
+    }
+    * { box-sizing: border-box; }
+    html { background: var(--lab-bg); scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--lab-text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 10% 8%, rgba(57,207,255,0.16), transparent 26%),
+        radial-gradient(circle at 86% 0%, rgba(230,189,103,0.12), transparent 24%),
+        linear-gradient(180deg, #020813 0%, #051427 55%, #020813 100%);
+    }
+    a { color: var(--lab-cyan); }
+    button, input { font: inherit; }
+    .outline-page {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 28px clamp(14px, 4vw, 42px) 72px;
+    }
+    .outline-hero {
+      padding: clamp(26px, 5vw, 52px);
+      border: 1px solid var(--lab-line);
+      border-radius: 18px;
+      background:
+        linear-gradient(135deg, rgba(2,8,19,0.98), rgba(6,24,44,0.9)),
+        url("../assets/home-cards/ai-explainer.jpg?v=training-outline-20260527") center/cover;
+      box-shadow: 0 24px 70px rgba(0,0,0,0.42);
+    }
+    .kicker {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      color: var(--lab-gold);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+    .kicker::before {
+      content: "";
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--lab-green);
+      box-shadow: 0 0 18px rgba(132,227,122,0.8);
+    }
+    h1, h2, h3 {
+      margin: 0;
+      color: #f8ecd8;
+      font-family: Georgia, "Times New Roman", serif;
+      letter-spacing: 0;
+    }
+    h1 {
+      max-width: 760px;
+      margin-top: 14px;
+      font-size: clamp(2.35rem, 6vw, 5rem);
+      line-height: 0.96;
+    }
+    .outline-hero p {
+      max-width: 720px;
+      margin: 18px 0 0;
+      color: #c1d3df;
+      font-size: clamp(1rem, 2vw, 1.16rem);
+      line-height: 1.58;
+    }
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 24px;
+    }
+    .button, .lab-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 40px;
+      padding: 10px 14px;
+      border: 1px solid rgba(86,163,232,0.42);
+      border-radius: 8px;
+      color: var(--lab-text);
+      background: rgba(255,255,255,0.06);
+      text-decoration: none;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .button:hover, .lab-button:hover, .lab-button.active {
+      border-color: var(--lab-line-hot);
+      background: rgba(57,207,255,0.14);
+      color: #fff;
+    }
+    .button.primary {
+      color: #10202b;
+      border-color: rgba(230,189,103,0.8);
+      background: linear-gradient(135deg, var(--lab-gold), #ff8b74);
+    }
+    .section-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 20px;
+    }
+    .section-nav a {
+      display: inline-flex;
+      align-items: center;
+      min-height: 32px;
+      padding: 6px 11px;
+      border: 1px solid rgba(96,156,216,0.3);
+      border-radius: 999px;
+      color: #d8eaf2;
+      background: rgba(255,255,255,0.04);
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 800;
+    }
+    .section-nav a:hover {
+      border-color: var(--lab-line-hot);
+      background: rgba(57,207,255,0.12);
+    }
+    .outline-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+      margin-top: 22px;
+    }
+    .outline-card {
+      padding: 20px;
+      border: 1px solid var(--lab-line);
+      border-radius: 14px;
+      background: linear-gradient(145deg, var(--lab-panel), rgba(2,10,22,0.9));
+      box-shadow: 0 18px 50px rgba(0,0,0,0.28);
+      scroll-margin-top: 18px;
+    }
+    .outline-card h2 { font-size: clamp(1.35rem, 2.6vw, 1.8rem); }
+    .outline-card > p, .outline-card .lead {
+      margin: 10px 0 0;
+      color: var(--lab-muted);
+      line-height: 1.58;
+    }
+    .outline-card ul {
+      display: grid;
+      gap: 8px;
+      margin: 14px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+    .outline-card li {
+      position: relative;
+      padding-left: 18px;
+      color: #d8eaf2;
+      line-height: 1.5;
+    }
+    .outline-card li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.68em;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--lab-cyan);
+    }
+    .wide { grid-column: 1 / -1; }
+    .sequence {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 16px;
+    }
+    .sequence button {
+      display: grid;
+      align-content: center;
+      min-height: 74px;
+      padding: 10px;
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 10px;
+      background: rgba(255,255,255,0.055);
+      color: #eef7fb;
+      font-size: 13px;
+      font-weight: 800;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color .2s ease, background .2s ease, box-shadow .2s ease;
+    }
+    .sequence button:hover { border-color: var(--lab-line-hot); }
+    .sequence button.active {
+      border-color: rgba(230,189,103,0.72);
+      background: rgba(230,189,103,0.14);
+      box-shadow: 0 0 18px rgba(230,189,103,0.25);
+    }
+    .note-box {
+      margin-top: 14px;
+      padding: 12px 14px;
+      border: 1px solid rgba(230,189,103,0.28);
+      border-radius: 10px;
+      color: #f5ddb0;
+      background: rgba(230,189,103,0.055);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .demo-box {
+      margin-top: 16px;
+      padding: 16px;
+      border: 1px solid rgba(110,159,205,0.26);
+      border-radius: 12px;
+      background: rgba(2,8,18,0.72);
+    }
+    .demo-box h3 { font-size: 1.08rem; }
+    .demo-box .demo-sub {
+      margin: 6px 0 12px;
+      color: var(--lab-dim);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .control-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .bar-row {
+      display: grid;
+      grid-template-columns: 92px minmax(0, 1fr) 52px;
+      gap: 10px;
+      align-items: center;
+      margin-top: 8px;
+      font-size: 13px;
+    }
+    .bar-row strong {
+      color: #e8f8ff;
+      font: 13px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .bar-track {
+      height: 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.07);
+      overflow: hidden;
+    }
+    .bar-fill {
+      display: block;
+      height: 100%;
+      width: 0%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--lab-cyan), var(--lab-green));
+      transition: width .45s ease;
+    }
+    .bar-row span:last-child {
+      color: var(--lab-muted);
+      font-size: 12px;
+      text-align: right;
+    }
+    .metric-row {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .metric {
+      padding: 10px;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 8px;
+      background: rgba(255,255,255,0.035);
+    }
+    .metric span {
+      display: block;
+      color: var(--lab-dim);
+      font-size: 11px;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+    .metric strong {
+      display: block;
+      margin-top: 4px;
+      color: #fff;
+      font-size: 1rem;
+    }
+    .meter {
+      height: 10px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.08);
+      margin-top: 6px;
+    }
+    .meter span {
+      display: block;
+      height: 100%;
+      width: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--lab-rose), var(--lab-orange), var(--lab-green));
+      transition: width .45s ease;
+    }
+    .compare-cols {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .compare-panel {
+      min-height: 150px;
+      padding: 14px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(0,0,0,0.24);
+    }
+    .compare-panel.base { border-color: rgba(255,176,96,0.36); }
+    .compare-panel.tuned { border-color: rgba(132,227,122,0.36); }
+    .compare-panel strong {
+      display: block;
+      margin-bottom: 8px;
+      color: #fff;
+      font-size: 13px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .compare-panel p {
+      margin: 0;
+      color: #d8eaf2;
+      line-height: 1.5;
+      font-size: 14px;
+      white-space: pre-wrap;
+    }
+    .pref-question {
+      margin-top: 12px;
+      padding: 12px 14px;
+      border: 1px solid rgba(157,134,255,0.34);
+      border-radius: 10px;
+      background: rgba(157,134,255,0.07);
+      color: #e8e1ff;
+      font-weight: 700;
+    }
+    .pref-pair {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .pref-answer {
+      display: grid;
+      gap: 10px;
+      align-content: start;
+      padding: 14px;
+      border: 1px solid rgba(110,159,205,0.26);
+      border-radius: 10px;
+      background: rgba(255,255,255,0.04);
+      color: #d8eaf2;
+      line-height: 1.5;
+      font-size: 14px;
+      text-align: left;
+      cursor: pointer;
+      transition: border-color .2s ease, background .2s ease, transform .2s ease;
+    }
+    .pref-answer:hover {
+      border-color: var(--lab-line-hot);
+      background: rgba(57,207,255,0.08);
+      transform: translateY(-2px);
+    }
+    .pref-answer b {
+      color: var(--lab-gold);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .pref-signal {
+      margin-top: 14px;
+      padding: 14px;
+      border: 1px solid rgba(132,227,122,0.26);
+      border-radius: 10px;
+      background: rgba(132,227,122,0.05);
+      color: #dfffe0;
+      font-size: 14px;
+      line-height: 1.55;
+    }
+    .pref-signal strong { color: #fff; }
+    .eval-table {
+      display: grid;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .eval-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) 86px 86px 110px;
+      gap: 10px;
+      align-items: center;
+      padding: 10px 12px;
+      border: 1px solid rgba(110,159,205,0.2);
+      border-radius: 8px;
+      background: rgba(255,255,255,0.035);
+      font-size: 13px;
+      color: #d8eaf2;
+      opacity: 0;
+      transform: translateY(4px);
+      transition: opacity .35s ease, transform .35s ease;
+    }
+    .eval-row.show { opacity: 1; transform: translateY(0); }
+    .eval-row.head {
+      opacity: 1;
+      transform: none;
+      border-color: transparent;
+      background: transparent;
+      color: var(--lab-dim);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+    }
+    .eval-row .delta-up { color: var(--lab-green); font-weight: 800; }
+    .eval-row .delta-down { color: var(--lab-rose); font-weight: 800; }
+    .eval-row .delta-flat { color: var(--lab-muted); }
+    .eval-verdict {
+      margin-top: 12px;
+      padding: 12px 14px;
+      border-radius: 10px;
+      font-size: 14px;
+      line-height: 1.5;
+      border: 1px solid rgba(255,127,156,0.34);
+      background: rgba(255,127,156,0.06);
+      color: #ffd9e1;
+    }
+    .eval-verdict.pass {
+      border-color: rgba(132,227,122,0.34);
+      background: rgba(132,227,122,0.06);
+      color: #dfffe0;
+    }
+    .rag-docs {
+      display: grid;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .rag-doc {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 120px;
+      gap: 10px;
+      align-items: center;
+      padding: 10px 12px;
+      border: 1px solid rgba(110,159,205,0.2);
+      border-radius: 8px;
+      background: rgba(255,255,255,0.035);
+      transition: border-color .25s ease, background .25s ease, opacity .25s ease;
+    }
+    .rag-doc strong {
+      display: block;
+      color: #fff;
+      font-size: 13px;
+    }
+    .rag-doc span.snippet {
+      display: block;
+      margin-top: 3px;
+      color: var(--lab-muted);
+      font-size: 12.5px;
+      line-height: 1.4;
+    }
+    .rag-doc.retrieved {
+      border-color: rgba(132,227,122,0.5);
+      background: rgba(132,227,122,0.07);
+    }
+    .rag-doc.skipped { opacity: 0.45; }
+    .rag-score {
+      justify-self: end;
+      text-align: right;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--lab-muted);
+    }
+    .rag-doc.retrieved .rag-score { color: #caffc3; }
+    .rag-answer {
+      margin-top: 12px;
+      padding: 14px;
+      border: 1px solid rgba(57,207,255,0.3);
+      border-radius: 10px;
+      background: rgba(57,207,255,0.06);
+      color: #e2f8ff;
+      font-size: 14px;
+      line-height: 1.55;
+      min-height: 56px;
+    }
+    footer {
+      margin-top: 28px;
+      color: var(--lab-muted);
+    }
+    @media (max-width: 760px) {
+      .outline-grid, .sequence, .compare-cols, .pref-pair { grid-template-columns: 1fr; }
+      .metric-row { grid-template-columns: 1fr; }
+      .eval-row { grid-template-columns: minmax(0, 1.2fr) 60px 60px 84px; font-size: 12px; }
+      .bar-row { grid-template-columns: 76px minmax(0, 1fr) 44px; }
+      .rag-doc { grid-template-columns: 1fr; }
+      .rag-score { justify-self: start; text-align: left; }
+    }
+  </style>
+</head>
+<body>
+  <header id="site-nav"></header>
+
+  <main class="outline-page">
+    <section class="outline-hero">
+      <span class="kicker">Deep dive</span>
+      <h1>AI Training and Alignment</h1>
+      <p>The main How AI Works page explains what happens when you <em>use</em> an AI system. This page explains how the model got there: how raw text becomes a base model, how a base model becomes an assistant, and how labs try to make that assistant honest, useful, and safe. Every big idea here has a small demo you can poke.</p>
+      <div class="actions">
+        <a class="button primary" href="./">Back to How AI Works</a>
+        <a class="button" href="#pipeline">Start the tour</a>
+      </div>
+      <nav class="section-nav" aria-label="Page sections">
+        <a href="#pipeline">Pipeline</a>
+        <a href="#data">1. Data</a>
+        <a href="#pretraining">2. Pretraining</a>
+        <a href="#finetuning">3. Fine-tuning</a>
+        <a href="#rlhf">4. RLHF</a>
+        <a href="#evals">5. Evals</a>
+        <a href="#deployment">6. Deployment</a>
+        <a href="#rag">7. RAG</a>
+        <a href="#limits">8. Limits</a>
+      </nav>
+    </section>
+
+    <section class="outline-grid" aria-label="Training and alignment deep dive">
+      <article id="pipeline" class="outline-card wide">
+        <h2>The Core Pipeline</h2>
+        <p>Every modern AI assistant goes through roughly the same lifecycle. Tap a stage to see what happens there.</p>
+        <div class="sequence" id="pipelineSeq" aria-label="Model training sequence">
+          <button type="button" data-stage="0" class="active">Collect and filter data</button>
+          <button type="button" data-stage="1">Pretrain base model</button>
+          <button type="button" data-stage="2">Fine-tune behavior</button>
+          <button type="button" data-stage="3">Align with feedback</button>
+          <button type="button" data-stage="4">Evaluate and red-team</button>
+          <button type="button" data-stage="5">Deploy with safeguards</button>
+        </div>
+        <div class="note-box" id="pipelineDetail" aria-live="polite"></div>
+      </article>
+
+      <article id="data" class="outline-card wide">
+        <h2>1. Training Data</h2>
+        <p class="lead">A model can only learn patterns that exist in what it reads. Frontier models are trained on trillions of tokens: web pages, books, code, reference works, licensed datasets, and increasingly images, audio, and video. The quality of that mixture matters as much as its size — a model trained on sloppy text learns sloppy habits.</p>
+        <ul>
+          <li><strong>Cleaning and filtering:</strong> raw web data is full of duplicates, spam, boilerplate, and junk. Labs deduplicate aggressively and filter for quality, because repeated or low-value text wastes training and skews behavior.</li>
+          <li><strong>Mixture choices:</strong> how much code vs. prose vs. math vs. other languages is a deliberate recipe. More code in the mix is part of why modern models are decent programmers.</li>
+          <li><strong>Hard problems:</strong> copyright disputes, privacy of scraped personal data, bias baked into source text, and uneven language coverage are all live, unresolved issues.</li>
+          <li><strong>Synthetic data:</strong> labs now also train on data generated or curated by other models — useful for filling gaps, risky if errors compound.</li>
+        </ul>
+        <div class="note-box"><strong>Key distinction:</strong> training data is not a database the model looks things up in. After training, the data is gone — what remains is a web of statistical patterns squeezed into the model's weights. That is why a model can "know" something approximately but misremember the details.</div>
+      </article>
+
+      <article id="pretraining" class="outline-card wide">
+        <h2>2. Pretraining</h2>
+        <p class="lead">Pretraining is one deceptively simple game played at staggering scale: <strong>guess the next token</strong>. The model reads a chunk of text with the ending hidden, predicts what comes next, and gets measured on how wrong it was — a number called the <em>loss</em>. An algorithm called backpropagation works out how to adjust each of the model's billions of weights to be slightly less wrong next time. Repeat trillions of times on thousands of specialized chips for months, and the model is forced to absorb grammar, facts, reasoning patterns, and style — because all of those help it guess better.</p>
+        <div class="demo-box">
+          <h3>Train a tiny model yourself</h3>
+          <p class="demo-sub">Real demo — a real (toy) statistical model learning from real example sentences</p>
+          <p class="lead" style="margin-top:0">This miniature model counts which word tends to follow each pair of words. It starts knowing nothing. Feed it examples and watch its prediction sharpen and its surprise (loss) fall — the same feedback loop as a real model, minus the neural network and about a trillion tokens.</p>
+          <div class="control-row" aria-label="Prediction cue">
+            <button class="lab-button active" data-cue="on the" type="button">Predict after “…on the”</button>
+            <button class="lab-button" data-cue="the cat" type="button">Predict after “…the cat”</button>
+            <button class="lab-button" data-cue="likes to" type="button">Predict after “…likes to”</button>
+          </div>
+          <div id="bigramBars" aria-live="polite"></div>
+          <div class="metric-row">
+            <div class="metric"><span>Examples seen</span><strong id="bigramSeen">0 sentences</strong></div>
+            <div class="metric"><span>Surprise (loss)</span><strong id="bigramLoss">maximum — it knows nothing</strong><div class="meter"><span id="bigramLossMeter"></span></div></div>
+            <div class="metric"><span>Training round</span><strong id="bigramRound">0 of 4</strong></div>
+          </div>
+          <div class="control-row">
+            <button class="lab-button" id="bigramTrain" type="button">Feed more examples</button>
+            <button class="lab-button" id="bigramReset" type="button">Reset to untrained</button>
+          </div>
+          <div class="note-box" id="bigramNote">Untrained, every word is an equally good guess. Click “Feed more examples” to start training.</div>
+        </div>
+        <ul>
+          <li><strong>Why it works:</strong> predicting the next token well in arbitrary text quietly requires understanding the text. You cannot reliably finish "the capital of France is" without knowing the answer.</li>
+          <li><strong>Scale:</strong> frontier training runs use trillions of tokens, weights numbering in the hundreds of billions or more, and months of compute. Bigger runs have historically produced predictably better predictions — the "scaling laws."</li>
+          <li><strong>The catch:</strong> the result is a <em>base model</em> — a brilliant text continuer, not an assistant. Ask it a question and it may continue with three more questions, because that is what the pattern looked like online.</li>
+        </ul>
+      </article>
+
+      <article id="finetuning" class="outline-card wide">
+        <h2>3. Fine-Tuning</h2>
+        <p class="lead">Fine-tuning takes the base model and keeps training it — but now on a much smaller, hand-built dataset of examples showing the behavior you actually want. For assistants, that means example conversations: a user asks, the assistant answers helpfully. This is called <em>supervised fine-tuning</em> (SFT), and it is the step that teaches the model that a question deserves an answer rather than a continuation.</p>
+        <div class="demo-box">
+          <h3>Base model vs. tuned assistant</h3>
+          <p class="demo-sub">Illustrative examples — written to show the typical behavior gap, not live model output</p>
+          <div class="control-row" aria-label="Choose a prompt">
+            <button class="lab-button active" data-basePrompt="question" type="button">Ask a question</button>
+            <button class="lab-button" data-basePrompt="haiku" type="button">Request a haiku</button>
+            <button class="lab-button" data-basePrompt="bug" type="button">Paste an error</button>
+          </div>
+          <div class="note-box" id="basePromptShown"></div>
+          <div class="compare-cols">
+            <div class="compare-panel base">
+              <strong>Base model continues the text</strong>
+              <p id="basePanel"></p>
+            </div>
+            <div class="compare-panel tuned">
+              <strong>Tuned assistant answers</strong>
+              <p id="tunedPanel"></p>
+            </div>
+          </div>
+        </div>
+        <ul>
+          <li><strong>Instruction tuning:</strong> a broad SFT diet of many task types teaches the general skill of following instructions, not just answering trivia.</li>
+          <li><strong>Domain adaptation:</strong> the same technique can specialize a model for code, medicine, law, or support — at some cost to general flexibility.</li>
+          <li><strong>Same engine underneath:</strong> fine-tuning does not add knowledge so much as reshape behavior. The base model already "knew" how to answer; tuning made answering the default.</li>
+        </ul>
+      </article>
+
+      <article id="rlhf" class="outline-card wide">
+        <h2>4. RLHF and Alignment</h2>
+        <p class="lead">Fine-tuning shows the model what good answers look like. But "good" is fuzzy — helpful, honest, harmless, appropriately confident — and you cannot write enough perfect examples to pin it down. So labs use <em>reinforcement learning from human feedback</em> (RLHF): show people two candidate answers, ask which is better, train a <em>reward model</em> to predict those preferences, then use reinforcement learning to nudge the assistant toward answers the reward model scores highly. You are about to generate that exact training signal yourself.</p>
+        <div class="demo-box">
+          <h3>You are the human feedback</h3>
+          <p class="demo-sub">Pick the better answer in each round — your choices become a reward signal</p>
+          <div id="prefRoundLabel" class="demo-sub" style="margin-bottom:4px"></div>
+          <div class="pref-question" id="prefQuestion"></div>
+          <div class="pref-pair" id="prefPair"></div>
+          <div class="pref-signal" id="prefSignal">No preferences recorded yet. Your picks will be tallied here, the way a reward model tallies millions of them.</div>
+          <div class="control-row">
+            <button class="lab-button" id="prefReset" type="button">Start over</button>
+          </div>
+        </div>
+        <ul>
+          <li><strong>The chain:</strong> human rankings → reward model → reinforcement learning. No single person writes the assistant's personality; it emerges from millions of comparisons.</li>
+          <li><strong>Variants:</strong> RLAIF replaces some human raters with AI raters; Constitutional AI has the model critique itself against written principles; DPO trains directly on preference pairs and skips the separate reward model.</li>
+          <li><strong>The balance problem:</strong> if raters reward caution too much, the model becomes uselessly over-cautious; reward confidence too much and it becomes a smooth-talking guesser. Alignment is steering between those ditches, and it is never finished.</li>
+        </ul>
+        <div class="note-box"><strong>Honest framing:</strong> alignment shapes behavior; it does not install guarantees. A well-aligned model is more likely to be honest and refuse harm — it is not incapable of error.</div>
+      </article>
+
+      <article id="evals" class="outline-card wide">
+        <h2>5. Evals and Red Teaming</h2>
+        <p class="lead">Before a new model ships, it gets examined: benchmark suites for reasoning, coding, and math; human evaluations of usefulness and style; safety testing for jailbreaks, dangerous capabilities, and privacy leaks; and red teams whose whole job is to make the model misbehave. The most important rule is the least glamorous: <strong>a new model must not quietly get worse at things the old one did well.</strong></p>
+        <div class="demo-box">
+          <h3>Run the release gate</h3>
+          <p class="demo-sub">A simplified eval dashboard — candidate model vs. the current one</p>
+          <div class="control-row" style="margin-top:0">
+            <button class="lab-button" id="evalRun" type="button">Run the eval suite</button>
+          </div>
+          <div class="eval-table" id="evalTable"></div>
+          <div class="eval-verdict" id="evalVerdict" hidden></div>
+        </div>
+        <ul>
+          <li><strong>Benchmarks saturate:</strong> once models near 100% on a test, it stops measuring anything. Eval suites are constantly rebuilt, and scores on old benchmarks mean less every year.</li>
+          <li><strong>Contamination:</strong> if a benchmark's questions leaked into training data, the score is memorization, not skill. Labs work to detect and exclude this.</li>
+          <li><strong>Red teaming:</strong> adversarial testers probe for jailbreaks, harmful instructions, persuasion, and misuse before — and after — release.</li>
+        </ul>
+      </article>
+
+      <article id="deployment" class="outline-card wide">
+        <h2>6. Deployment Layer</h2>
+        <p class="lead">The trained model is not what you talk to. Products wrap it in a system prompt that sets role and rules, tool access, retrieval, memory, moderation filters, and rate limits. That wrapper is why the same underlying model can feel like a different product in different apps.</p>
+        <ul>
+          <li>System prompts set persona, boundaries, and output style before your message arrives</li>
+          <li>Tool routing and permissions decide what the model may actually <em>do</em></li>
+          <li>Moderation and monitoring catch failures the training missed</li>
+          <li>Agent wrappers add loops and autonomy — raising both capability and risk</li>
+        </ul>
+      </article>
+
+      <article id="rag" class="outline-card wide">
+        <h2>7. RAG and Embeddings</h2>
+        <p class="lead">Retraining a model to teach it your documents is slow and expensive. <em>Retrieval-augmented generation</em> (RAG) skips that: store your documents, search them when a question arrives, and place the best matches into the model's context so it can answer from evidence. The search usually uses <em>embeddings</em> — every text gets converted to a list of numbers (a vector) where similar meanings land near each other, so "watering schedule" can find "irrigation notes" without sharing a single word.</p>
+        <div class="demo-box">
+          <h3>Retrieve, then answer</h3>
+          <p class="demo-sub">Real demo — a real (toy) keyword retriever scoring a real mini document library</p>
+          <div class="control-row" style="margin-top:0" aria-label="Choose a question">
+            <button class="lab-button" data-rag="redbud" type="button">When did I plant the redbud?</button>
+            <button class="lab-button" data-rag="deploy" type="button">How does the site deploy?</button>
+            <button class="lab-button" data-rag="tomato" type="button">How often to water tomatoes?</button>
+          </div>
+          <div class="rag-docs" id="ragDocs"></div>
+          <div class="rag-answer" id="ragAnswer">Pick a question. The retriever will score every document, pull the best matches into context, and answer only from what it retrieved.</div>
+        </div>
+        <ul>
+          <li><strong>Why it beats retraining</strong> for facts: documents update instantly, answers can cite sources, and nothing is baked irreversibly into weights</li>
+          <li><strong>Why it is not magic:</strong> retrieval can miss the right document or pull an irrelevant one — then the model confidently answers from the wrong evidence</li>
+          <li><strong>When fine-tuning still wins:</strong> style, format, and skills are behaviors, not facts — you cannot retrieve your way into being better at code review</li>
+        </ul>
+      </article>
+
+      <article id="limits" class="outline-card wide">
+        <h2>8. Limits and Open Questions</h2>
+        <p class="lead">An honest explainer ends with what nobody fully knows yet.</p>
+        <ul>
+          <li><strong>Hallucination</strong> is reduced, not solved — fluent text without enough grounding remains the signature failure</li>
+          <li><strong>Interpretability</strong> is young: researchers can map some internal features and circuits, but nobody can fully explain a frontier model's reasoning weight-by-weight</li>
+          <li><strong>Bias</strong> from training data persists despite filtering and tuning</li>
+          <li><strong>Emergence and saturation:</strong> which abilities appear at which scale is still debated, and benchmarks keep getting outgrown</li>
+          <li><strong>What alignment can guarantee</strong> — versus merely make likely — is the central open question of the field</li>
+        </ul>
+      </article>
+    </section>
+
+    <footer>
+      <a href="./">How AI Works</a> · <a href="../">Home</a> · <a href="https://github.com/jz237/jez237-site" target="_blank" rel="noopener">Source repo</a>
+    </footer>
+  </main>
+
+  <script>
+    const pipelineDetails = [
+      ['Collect and filter data', 'Trillions of tokens of text, code, and media are gathered, deduplicated, and filtered for quality. The mixture recipe — how much code, how many languages, which sources — is one of the most consequential decisions in the whole process.'],
+      ['Pretrain base model', 'The model plays guess-the-next-token across the entire dataset for months on thousands of chips, gradually compressing the patterns of human text into its weights. The result is a powerful but raw text continuer.'],
+      ['Fine-tune behavior', 'A much smaller, curated set of example conversations teaches the base model to behave like an assistant: answer the question, follow the instruction, use the format requested.'],
+      ['Align with feedback', 'Humans (and increasingly AI raters) compare candidate answers. A reward model learns those preferences, and reinforcement learning nudges the assistant toward helpful, honest, harmless behavior.'],
+      ['Evaluate and red-team', 'Benchmarks, human evals, safety tests, and adversarial red teams probe the candidate. Regressions block release: better on average is not good enough if something important got worse.'],
+      ['Deploy with safeguards', 'The model ships wrapped in system prompts, tool permissions, moderation, monitoring, and rate limits. Deployment is where a model becomes a product — and where its behavior is watched in the real world.']
+    ];
+    function renderPipelineDetail(index) {
+      document.querySelectorAll('#pipelineSeq button').forEach(btn => btn.classList.toggle('active', Number(btn.dataset.stage) === index));
+      const [title, copy] = pipelineDetails[index];
+      document.getElementById('pipelineDetail').innerHTML = `<strong>${title}.</strong> ${copy}`;
+    }
+    document.querySelectorAll('#pipelineSeq button').forEach(btn => btn.addEventListener('click', () => renderPipelineDetail(Number(btn.dataset.stage))));
+    renderPipelineDetail(0);
+
+    // --- Tiny trainable model (real trigram-style counts) ---
+    const trainingBatches = [
+      ['the cat sat on the mat', 'the dog slept on the rug'],
+      ['the cat slept on the mat', 'the cat likes to nap', 'a bird sat on the fence'],
+      ['the cat curled up on the mat', 'the dog likes to dig', 'the cat likes to nap in the sun'],
+      ['the cat sat on the mat again', 'the cat likes to nap on the mat', 'the dog sat on the rug']
+    ];
+    const bigramCues = ['on the', 'the cat', 'likes to'];
+    let bigramCounts = {};
+    let bigramVocab = new Set();
+    let bigramRound = 0;
+    let bigramSentences = 0;
+    let bigramCue = 'on the';
+
+    function trainBatch(sentences) {
+      sentences.forEach(sentence => {
+        const words = sentence.split(' ');
+        words.forEach(w => bigramVocab.add(w));
+        for (let i = 0; i + 2 < words.length + 1; i++) {
+          const key = words[i] + ' ' + words[i + 1];
+          const next = words[i + 2];
+          if (!next) continue;
+          bigramCounts[key] = bigramCounts[key] || {};
+          bigramCounts[key][next] = (bigramCounts[key][next] || 0) + 1;
+        }
+      });
+      bigramSentences += sentences.length;
+    }
+
+    function bigramPredictions(cue) {
+      const counts = bigramCounts[cue] || {};
+      const vocab = [...bigramVocab];
+      const alpha = 0.18;
+      const total = Object.values(counts).reduce((a, b) => a + b, 0) + alpha * Math.max(vocab.length, 1);
+      const scored = (vocab.length ? vocab : ['?']).map(word => ({
+        word,
+        p: ((counts[word] || 0) + alpha) / (total || 1)
+      }));
+      scored.sort((a, b) => b.p - a.p);
+      return scored.slice(0, 5);
+    }
+
+    function bigramSurprise() {
+      const test = 'the cat sat on the mat';
+      const words = test.split(' ');
+      const vocab = Math.max(bigramVocab.size, 1);
+      const alpha = 0.18;
+      let logLoss = 0;
+      let n = 0;
+      for (let i = 0; i + 2 < words.length + 1; i++) {
+        const key = words[i] + ' ' + words[i + 1];
+        const next = words[i + 2];
+        if (!next) continue;
+        const counts = bigramCounts[key] || {};
+        const total = Object.values(counts).reduce((a, b) => a + b, 0) + alpha * vocab;
+        const p = ((counts[next] || 0) + alpha) / total;
+        logLoss += -Math.log2(p);
+        n += 1;
+      }
+      return n ? logLoss / n : 5;
+    }
+
+    function renderBigram() {
+      const preds = bigramPredictions(bigramCue);
+      const max = preds[0] ? preds[0].p : 1;
+      document.getElementById('bigramBars').innerHTML = bigramRound === 0
+        ? '<div class="bar-row"><strong>?</strong><div class="bar-track"><span class="bar-fill" style="width:0%"></span></div><span>—</span></div>'
+        : preds.map(item => {
+            const pct = Math.round(item.p * 100);
+            const width = Math.max(4, Math.round(item.p / max * 100));
+            return `<div class="bar-row"><strong>${item.word}</strong><div class="bar-track"><span class="bar-fill" style="width:${width}%"></span></div><span>${pct}%</span></div>`;
+          }).join('');
+      document.getElementById('bigramSeen').textContent = `${bigramSentences} sentence${bigramSentences === 1 ? '' : 's'}`;
+      document.getElementById('bigramRound').textContent = `${bigramRound} of ${trainingBatches.length}`;
+      const loss = bigramRound === 0 ? 5 : bigramSurprise();
+      const lossPct = Math.max(6, Math.min(100, Math.round(loss / 5 * 100)));
+      document.getElementById('bigramLossMeter').style.width = lossPct + '%';
+      document.getElementById('bigramLoss').textContent = bigramRound === 0
+        ? 'maximum — it knows nothing'
+        : loss > 2.2 ? `${loss.toFixed(2)} bits — still guessing a lot`
+        : loss > 1.2 ? `${loss.toFixed(2)} bits — getting the idea`
+        : `${loss.toFixed(2)} bits — confident on familiar phrases`;
+      const note = document.getElementById('bigramNote');
+      if (bigramRound === 0) {
+        note.textContent = 'Untrained, every word is an equally good guess. Click “Feed more examples” to start training.';
+      } else if (bigramRound < trainingBatches.length) {
+        note.innerHTML = `After ${bigramSentences} example sentences the model already leans toward the words it has seen follow “${bigramCue}”. More examples sharpen the lean. Real pretraining does this across <strong>trillions</strong> of tokens with a neural network instead of a counting table.`;
+      } else {
+        note.innerHTML = `Training data exhausted. Notice what it learned and what it did not: it is confident about phrases it saw, clueless about everything else, and it has no idea what a cat <em>is</em> — only which words travel together. Scale that up enormously and the patterns get rich enough to look like understanding.`;
+      }
+      document.getElementById('bigramTrain').textContent = bigramRound >= trainingBatches.length ? 'No more data' : 'Feed more examples';
+    }
+
+    document.getElementById('bigramTrain').addEventListener('click', () => {
+      if (bigramRound >= trainingBatches.length) return;
+      trainBatch(trainingBatches[bigramRound]);
+      bigramRound += 1;
+      renderBigram();
+    });
+    document.getElementById('bigramReset').addEventListener('click', () => {
+      bigramCounts = {};
+      bigramVocab = new Set();
+      bigramRound = 0;
+      bigramSentences = 0;
+      renderBigram();
+    });
+    document.querySelectorAll('[data-cue]').forEach(btn => btn.addEventListener('click', () => {
+      bigramCue = btn.dataset.cue;
+      document.querySelectorAll('[data-cue]').forEach(b => b.classList.toggle('active', b === btn));
+      renderBigram();
+    }));
+    renderBigram();
+
+    // --- Base vs tuned comparison ---
+    const basePrompts = {
+      question: {
+        prompt: 'Prompt: “What is a token in an AI model?”',
+        base: 'What is a context window? What is temperature? What is a system prompt?\n\nChapter 3: Frequently asked questions about modern language models. In this chapter we will cover the twelve terms most often confused by…',
+        tuned: 'A token is a chunk of text the model reads or writes — sometimes a whole short word, sometimes a piece of one. In English a token averages about three-quarters of a word, so a 100-word paragraph is roughly 130 tokens.'
+      },
+      haiku: {
+        prompt: 'Prompt: “Write a haiku about rain.”',
+        base: '— a creative writing exercise for Year 8 students.\n\nLearning objectives: students will identify syllable counts and seasonal imagery. Worksheet 4B. Time allowed: 20 minutes. Example answers may…',
+        tuned: 'Rain taps the window —\nthe garden drinks in silence,\nroots remembering.'
+      },
+      bug: {
+        prompt: 'Prompt: “My code throws TypeError: x is undefined.”',
+        base: 'I have been stuck on this for two days and nothing works. I tried reinstalling node. Any help appreciated.\n\nReply #1 (2014): did you ever fix this? I have the same problem…',
+        tuned: 'That error means the code is reading a property of a variable that has no value yet. Check three things: (1) is x assigned before this line runs, (2) is an async result being used before it resolves, (3) does a typo point at the wrong name? Paste the surrounding lines and I can pinpoint it.'
+      }
+    };
+    function renderBasePrompt(kind) {
+      document.querySelectorAll('[data-basePrompt]').forEach(btn => btn.classList.toggle('active', btn.dataset.baseprompt === kind || btn.getAttribute('data-basePrompt') === kind));
+      const item = basePrompts[kind];
+      document.getElementById('basePromptShown').textContent = item.prompt;
+      document.getElementById('basePanel').textContent = item.base;
+      document.getElementById('tunedPanel').textContent = item.tuned;
+    }
+    document.querySelectorAll('[data-basePrompt]').forEach(btn => btn.addEventListener('click', () => renderBasePrompt(btn.getAttribute('data-basePrompt'))));
+    renderBasePrompt('question');
+
+    // --- RLHF preference demo ---
+    const prefRounds = [
+      {
+        question: '“Will it frost tonight? My seedlings are out.”',
+        answers: [
+          { text: 'Probably not, it is June. You should be fine.', traits: ['sounded confident without checking anything'] },
+          { text: 'The forecast shows a low of 36°F around 5am — above freezing, but borderline for tender seedlings in low spots. Covering them costs little; losing them costs weeks.', traits: ['checked the evidence', 'gave a usable recommendation'] }
+        ]
+      },
+      {
+        question: '“Explain what RAM does.”',
+        answers: [
+          { text: 'RAM is your computer\'s workbench: the stuff it is actively working on sits there for fast access. More RAM means more things open at once before the machine starts shuffling to slower storage.', traits: ['used plain language', 'explained with a concrete analogy'] },
+          { text: 'RAM (Random Access Memory) is volatile primary storage providing low-latency read/write access to the CPU via the memory controller, in contrast to non-volatile secondary storage media.', traits: ['buried the point in jargon'] }
+        ]
+      },
+      {
+        question: '“I found a mushroom in my yard that looks like the ones at the store. Safe to eat?”',
+        answers: [
+          { text: 'If it looks like a store mushroom it almost certainly is one. Enjoy!', traits: ['sounded confident without checking anything'] },
+          { text: 'I can\'t identify a mushroom safely from a description, and look-alikes include deadly species. Please don\'t eat it on my judgment — a local expert or extension office can identify it properly.', traits: ['stayed honest about uncertainty', 'protected you from real harm'] }
+        ]
+      }
+    ];
+    let prefRound = 0;
+    let prefPicks = [];
+    function renderPref() {
+      const label = document.getElementById('prefRoundLabel');
+      if (prefRound >= prefRounds.length) {
+        label.textContent = 'All rounds complete';
+        document.getElementById('prefQuestion').textContent = 'That is the whole trick — at a scale of millions of comparisons.';
+        document.getElementById('prefPair').innerHTML = '';
+        const tally = {};
+        prefPicks.forEach(pick => pick.traits.forEach(trait => { tally[trait] = (tally[trait] || 0) + 1; }));
+        const learned = Object.keys(tally).sort((a, b) => tally[b] - tally[a]);
+        document.getElementById('prefSignal').innerHTML = `<strong>Reward signal learned from your picks:</strong> answers that ${learned.map(t => `<em>${t}</em>`).join(', ')} score higher.<br><br>A reward model trained on millions of such picks scores new answers automatically, and reinforcement learning adjusts the assistant until high-scoring answers become its default behavior. You just did, three times, what RLHF raters do all day.`;
+        return;
+      }
+      const round = prefRounds[prefRound];
+      label.textContent = `Round ${prefRound + 1} of ${prefRounds.length}`;
+      document.getElementById('prefQuestion').textContent = round.question;
+      document.getElementById('prefPair').innerHTML = round.answers.map((answer, i) =>
+        `<button class="pref-answer" data-pick="${i}" type="button"><b>Answer ${i === 0 ? 'A' : 'B'}</b>${answer.text}</button>`
+      ).join('');
+      document.querySelectorAll('[data-pick]').forEach(btn => btn.addEventListener('click', () => {
+        prefPicks.push(round.answers[Number(btn.dataset.pick)]);
+        const picked = round.answers[Number(btn.dataset.pick)];
+        prefRound += 1;
+        document.getElementById('prefSignal').innerHTML = `<strong>Recorded:</strong> you preferred the answer that ${picked.traits.join(' and ')}. (${prefPicks.length} comparison${prefPicks.length === 1 ? '' : 's'} so far)`;
+        renderPref();
+      }));
+      if (prefRound === 0 && prefPicks.length === 0) {
+        document.getElementById('prefSignal').textContent = 'No preferences recorded yet. Your picks will be tallied here, the way a reward model tallies millions of them.';
+      }
+    }
+    document.getElementById('prefReset').addEventListener('click', () => {
+      prefRound = 0;
+      prefPicks = [];
+      renderPref();
+    });
+    renderPref();
+
+    // --- Eval dashboard ---
+    const evalRows = [
+      ['Reasoning benchmark', '78%', '84%', '<span class="delta-up">+6 better</span>', true],
+      ['Coding benchmark', '71%', '80%', '<span class="delta-up">+9 better</span>', true],
+      ['Honesty / calibration', '88%', '90%', '<span class="delta-up">+2 better</span>', true],
+      ['Long-context recall', '81%', '81%', '<span class="delta-flat">no change</span>', true],
+      ['Jailbreak resistance', '96%', '97%', '<span class="delta-up">+1 better</span>', true],
+      ['Instruction following', '93%', '88%', '<span class="delta-down">−5 REGRESSION</span>', false]
+    ];
+    let evalState = 0;
+    function runEvals() {
+      const table = document.getElementById('evalTable');
+      const verdict = document.getElementById('evalVerdict');
+      const fixed = evalState === 1;
+      verdict.hidden = true;
+      table.innerHTML = '<div class="eval-row head"><span>Eval</span><span>Current</span><span>Candidate</span><span>Delta</span></div>' + evalRows.map(row => {
+        const [name, current, candidate, delta, ok] = row;
+        const shownCandidate = fixed && !ok ? '94%' : candidate;
+        const shownDelta = fixed && !ok ? '<span class="delta-up">+1 better</span>' : delta;
+        return `<div class="eval-row"><span>${name}</span><span>${current}</span><span>${shownCandidate}</span><span>${shownDelta}</span></div>`;
+      }).join('');
+      const rows = [...table.querySelectorAll('.eval-row:not(.head)')];
+      rows.forEach((row, index) => setTimeout(() => row.classList.add('show'), 160 * (index + 1)));
+      setTimeout(() => {
+        verdict.hidden = false;
+        if (!fixed) {
+          verdict.className = 'eval-verdict';
+          verdict.innerHTML = '<strong>Release blocked.</strong> The candidate is better at five of six evals — and that does not matter, because instruction following regressed. Users feel a regression immediately; they take improvements for granted. Back to training.';
+          document.getElementById('evalRun').textContent = 'Fix the regression and re-run';
+          evalState = 1;
+        } else {
+          verdict.className = 'eval-verdict pass';
+          verdict.innerHTML = '<strong>Cleared to ship.</strong> Every eval is equal or better. Real release gates run thousands of checks like these — plus human review and red-team sign-off — and this cycle repeats for every model version.';
+          document.getElementById('evalRun').textContent = 'Run the eval suite';
+          evalState = 0;
+        }
+      }, 160 * (rows.length + 2));
+    }
+    document.getElementById('evalRun').addEventListener('click', runEvals);
+
+    // --- RAG demo ---
+    const ragLibrary = [
+      { title: 'Garden journal — spring', text: 'Planted the eastern redbud by the back fence on April 12 after the last frost. Mulched the bed and watered deeply.' },
+      { title: 'Site README', text: 'The website deploys automatically: pushing to the main branch on GitHub triggers the Pages workflow, which publishes the static files.' },
+      { title: 'Plant care guide', text: 'Tomatoes prefer deep, infrequent watering — about one to two inches per week including rain. Daily shallow watering encourages weak roots.' },
+      { title: 'Weather note', text: 'Hot spell expected this weekend with highs near 95. Container plants may need water twice daily during the heat.' },
+      { title: 'Hardware invoice', text: 'Invoice #2214: one bag of pine bark mulch, two tomato cages, one trowel. Paid in full at the garden center.' }
+    ];
+    const ragQuestions = {
+      redbud: {
+        words: ['planted', 'redbud', 'plant', 'fence', 'april', 'when'],
+        answer: '<strong>Grounded answer:</strong> According to your garden journal, the redbud went in by the back fence on <strong>April 12</strong>, right after the last frost. <em>The model did not memorize this — the retriever placed the journal entry into its context, and it answered from that evidence. Notice the weather memo also got retrieved on a weak one-point match: retrievers return the top documents whether or not number two is actually useful, and the model has to ignore the noise.</em>'
+      },
+      deploy: {
+        words: ['site', 'deploys', 'deploy', 'github', 'publish', 'website', 'workflow'],
+        answer: '<strong>Grounded answer:</strong> Per the README, pushing to the main branch triggers the GitHub Pages workflow, which publishes the static files automatically. <em>If the README changes tomorrow, the answer updates instantly — no retraining.</em>'
+      },
+      tomato: {
+        words: ['tomatoes', 'tomato', 'water', 'watering', 'often', 'week'],
+        answer: '<strong>Grounded answer:</strong> The care guide says tomatoes want deep, infrequent watering — one to two inches per week including rain — and warns against daily shallow watering. <em>Note the weather memo also scored points for “water”: real retrievers must rank near-misses below true matches, and they sometimes get it wrong.</em>'
+      }
+    };
+    function scoreDoc(doc, words) {
+      const text = doc.text.toLowerCase();
+      return words.reduce((sum, word) => sum + (text.includes(word) ? 1 : 0), 0);
+    }
+    function renderRagDocs(scored) {
+      document.getElementById('ragDocs').innerHTML = ragLibrary.map((doc, index) => {
+        const info = scored ? scored.find(s => s.index === index) : null;
+        const cls = info ? (info.retrieved ? 'retrieved' : 'skipped') : '';
+        const label = info ? (info.retrieved ? `retrieved · score ${info.score}` : `score ${info.score}`) : 'in library';
+        return `<div class="rag-doc ${cls}"><div><strong>${doc.title}</strong><span class="snippet">${doc.text}</span></div><span class="rag-score">${label}</span></div>`;
+      }).join('');
+    }
+    function runRag(kind) {
+      document.querySelectorAll('[data-rag]').forEach(btn => btn.classList.toggle('active', btn.dataset.rag === kind));
+      const q = ragQuestions[kind];
+      const scored = ragLibrary.map((doc, index) => ({ index, score: scoreDoc(doc, q.words), retrieved: false }));
+      const ranked = [...scored].sort((a, b) => b.score - a.score);
+      ranked.slice(0, 2).forEach(item => { if (item.score > 0) item.retrieved = true; });
+      renderRagDocs(scored);
+      document.getElementById('ragAnswer').innerHTML = q.answer;
+    }
+    document.querySelectorAll('[data-rag]').forEach(btn => btn.addEventListener('click', () => runRag(btn.dataset.rag)));
+    renderRagDocs(null);
+  </script>
+  <script src="../assets/site-enhance.js" defer></script>
+  <script src="../assets/nav.js?v=chronicle-20260612" defer></script>
+</body>
+</html>

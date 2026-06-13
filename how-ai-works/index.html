@@ -1,0 +1,2286 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script>(function(){try{if(localStorage.getItem("theme")==="light")document.documentElement.setAttribute("data-theme","light");}catch(e){}})();</script>
+  <title>How AI Works - Interactive Guide</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/brand.svg" />
+  <link rel="stylesheet" href="../assets/styles.css" />
+  <link rel="stylesheet" href="../assets/site-enhance.css" />
+  <link rel="stylesheet" href="../assets/workbench-theme.css" />
+  <style>
+    :root {
+      --lab-bg: #020813;
+      --lab-panel: rgba(4, 17, 34, 0.82);
+      --lab-panel-2: rgba(8, 27, 48, 0.78);
+      --lab-line: rgba(74, 151, 242, 0.34);
+      --lab-line-hot: rgba(61, 208, 255, 0.72);
+      --lab-text: #eef7fb;
+      --lab-muted: #9fb8c9;
+      --lab-dim: #6f8da3;
+      --lab-cyan: #39cfff;
+      --lab-gold: #e6bd67;
+      --lab-green: #84e37a;
+      --lab-rose: #ff7f9c;
+      --lab-violet: #9d86ff;
+      --lab-orange: #ffb060;
+      --lab-shadow: 0 24px 70px rgba(0,0,0,0.42);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; background: var(--lab-bg); }
+    body {
+      position: relative;
+      margin: 0;
+      min-height: 100vh;
+      overflow-x: hidden;
+      color: var(--lab-text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 12% 4%, rgba(57,207,255,0.16), transparent 28%),
+        radial-gradient(circle at 88% 8%, rgba(230,189,103,0.12), transparent 26%),
+        linear-gradient(180deg, #020813 0%, #051427 52%, #020813 100%);
+    }
+    body::before,
+    body::after {
+      content: "";
+      position: fixed;
+      pointer-events: none;
+      z-index: 0;
+    }
+    body::before {
+      inset: -8vh -18vw -14vh;
+      background:
+        linear-gradient(90deg, rgba(2,7,17,0.82), rgba(2,7,17,0.02) 17%, rgba(2,7,17,0.0) 84%, rgba(2,7,17,0.82)),
+        linear-gradient(180deg, rgba(2,7,17,0.62), rgba(2,7,17,0.02) 24%, rgba(2,7,17,0.18) 70%, rgba(2,7,17,0.84)),
+        url("../assets/galaxy-home-20260530.webp") center 42% / cover no-repeat;
+      opacity: 0.96;
+      filter: saturate(1.28) contrast(1.08);
+      -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+      mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+      animation: galaxy-drift 28s ease-in-out infinite alternate;
+    }
+    body::after {
+      inset: -38vmax -42vmax;
+      background:
+        linear-gradient(90deg, rgba(1,4,12,0.52), rgba(1,4,12,0.0) 17%, rgba(1,4,12,0.0) 83%, rgba(1,4,12,0.52)),
+        radial-gradient(ellipse at 50% 50%, rgba(255,255,255,0.08), transparent 34%),
+        url("../assets/galaxy-home-20260530.webp") center 50% / cover no-repeat;
+      opacity: 0.3;
+      filter: saturate(1.22) contrast(1.06) blur(0.4px);
+      mix-blend-mode: screen;
+      transform-origin: 50% 50%;
+      animation: galaxy-slow-turn 210s linear infinite;
+      -webkit-mask-image: radial-gradient(ellipse at 50% 50%, #000 0 43%, rgba(0,0,0,0.72) 58%, transparent 83%);
+      mask-image: radial-gradient(ellipse at 50% 50%, #000 0 43%, rgba(0,0,0,0.72) 58%, transparent 83%);
+    }
+    a { color: var(--lab-cyan); }
+    button, textarea, input { font: inherit; }
+    .ai-lab {
+      position: relative;
+      z-index: 1;
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 24px clamp(14px, 3vw, 40px) 80px;
+    }
+    .lab-shell {
+      display: grid;
+      grid-template-columns: 270px minmax(0, 1fr);
+      gap: 22px;
+      align-items: start;
+    }
+    .lab-rail {
+      position: sticky;
+      top: 18px;
+      padding: 18px;
+      border: 1px solid var(--lab-line);
+      border-radius: 14px;
+      background: linear-gradient(160deg, rgba(8,28,48,0.92), rgba(3,12,24,0.94));
+      box-shadow: var(--lab-shadow);
+    }
+    .rail-brand {
+      display: block;
+      padding-bottom: 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      text-decoration: none;
+    }
+    .rail-brand strong {
+      display: block;
+      color: #f8ecd8;
+      font: 800 1.35rem/1.05 Georgia, serif;
+    }
+    .rail-brand span {
+      display: block;
+      margin-top: 6px;
+      color: var(--lab-muted);
+      font-size: 12px;
+    }
+    .lab-nav {
+      display: grid;
+      gap: 8px;
+      margin-top: 16px;
+    }
+    .lab-nav a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 38px;
+      padding: 9px 10px;
+      border: 1px solid rgba(96,156,216,0.28);
+      border-radius: 8px;
+      color: #d8eaf2;
+      text-decoration: none;
+      background: rgba(255,255,255,0.035);
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .lab-nav a:hover {
+      border-color: var(--lab-line-hot);
+      background: rgba(57,207,255,0.11);
+    }
+    .lab-nav svg {
+      width: 18px;
+      height: 18px;
+      flex: 0 0 auto;
+      stroke: currentColor;
+      stroke-width: 1.8;
+      fill: none;
+    }
+    .lab-main { min-width: 0; }
+    .lab-hero {
+      position: relative;
+      overflow: hidden;
+      min-height: 390px;
+      padding: clamp(24px, 4vw, 46px);
+      border: 1px solid var(--lab-line);
+      border-radius: 18px;
+      background:
+        linear-gradient(115deg, rgba(2,8,19,0.98) 0%, rgba(5,18,34,0.9) 42%, rgba(8,25,45,0.56) 100%),
+        url("../assets/home-cards/ai-explainer.jpg?v=neural-network-20260526") center/cover;
+      box-shadow: var(--lab-shadow);
+    }
+    .lab-hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, rgba(57,207,255,0.08) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(57,207,255,0.06) 1px, transparent 1px);
+      background-size: 42px 42px;
+      mask-image: linear-gradient(90deg, transparent, #000 52%, transparent);
+      pointer-events: none;
+    }
+    .hero-copy {
+      position: relative;
+      z-index: 1;
+      max-width: 720px;
+    }
+    .kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+      color: var(--lab-gold);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+    .kicker::before {
+      content: "";
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--lab-green);
+      box-shadow: 0 0 18px rgba(132,227,122,0.8);
+    }
+    h1, h2, h3 {
+      margin: 0;
+      color: #f8ecd8;
+      font-family: Georgia, "Times New Roman", serif;
+      letter-spacing: 0;
+    }
+    h1 {
+      max-width: 760px;
+      font-size: clamp(2.6rem, 7vw, 5.6rem);
+      line-height: 0.94;
+    }
+    @keyframes galaxy-slow-turn {
+      from { transform: rotate(-1deg) scale(1.03); }
+      to { transform: rotate(359deg) scale(1.03); }
+    }
+    @keyframes galaxy-drift {
+      from { transform: translate3d(-1.5%, -1%, 0) scale(1.02); }
+      to { transform: translate3d(1.5%, 1%, 0) scale(1.08); }
+    }
+    .hero-copy p {
+      max-width: 640px;
+      margin: 18px 0 0;
+      color: #c1d3df;
+      font-size: clamp(1rem, 2vw, 1.18rem);
+      line-height: 1.58;
+    }
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 24px;
+    }
+    .tour-panel {
+      position: relative;
+      z-index: 1;
+      max-width: 720px;
+      margin-top: 28px;
+      padding: 14px;
+      border: 1px solid rgba(86,163,232,0.34);
+      border-radius: 12px;
+      background: rgba(3, 13, 26, 0.72);
+      backdrop-filter: blur(10px);
+    }
+    .tour-panel strong {
+      display: block;
+      color: #fff;
+      font-size: 14px;
+    }
+    .tour-panel p {
+      margin: 6px 0 0;
+      color: var(--lab-muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+    .tour-progress {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(14px, 1fr));
+      gap: 6px;
+      margin: 12px 0;
+    }
+    .tour-dot {
+      display: block;
+      height: 6px;
+      min-height: 0 !important;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.12) !important;
+      border: 0 !important;
+      padding: 0 !important;
+      cursor: pointer;
+    }
+    .tour-dot.active { background: linear-gradient(90deg, var(--lab-gold), var(--lab-cyan)) !important; }
+    .lab-button, .hero-actions a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 40px;
+      padding: 10px 14px;
+      border: 1px solid rgba(86,163,232,0.42);
+      border-radius: 8px;
+      color: var(--lab-text);
+      background: rgba(255,255,255,0.06) !important;
+      text-decoration: none;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .lab-button:hover, .lab-button.active, .hero-actions a:hover {
+      border-color: var(--lab-line-hot);
+      background: rgba(57,207,255,0.14) !important;
+      color: #fff;
+    }
+    .lab-button.primary, .hero-actions a.primary {
+      color: #10202b !important;
+      border-color: rgba(230,189,103,0.8) !important;
+      background: linear-gradient(135deg, var(--lab-gold), #ff8b74) !important;
+    }
+    .lab-grid {
+      display: grid;
+      gap: 18px;
+      margin-top: 22px;
+    }
+    .scope-callout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 18px;
+      align-items: center;
+      padding: 18px;
+      border: 1px solid rgba(230,189,103,0.42);
+      border-radius: 12px;
+      background: linear-gradient(135deg, rgba(230,189,103,0.13), rgba(57,207,255,0.07));
+    }
+    .scope-callout p {
+      margin: 8px 0 0;
+      color: var(--lab-muted);
+      line-height: 1.5;
+    }
+    .scope-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .scope-tags span {
+      display: inline-flex;
+      align-items: center;
+      min-height: 26px;
+      padding: 5px 9px;
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 999px;
+      color: #dbeaf2;
+      background: rgba(255,255,255,0.055);
+      font-size: 12px;
+      font-weight: 800;
+    }
+    .lab-card {
+      border: 1px solid var(--lab-line);
+      border-radius: 14px;
+      background: linear-gradient(145deg, var(--lab-panel), rgba(2,10,22,0.9));
+      box-shadow: 0 18px 50px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.04);
+      scroll-margin-top: 20px;
+    }
+    .lab-card + .lab-card { margin-top: 22px; }
+    .lab-card.tour-active {
+      border-color: var(--lab-line-hot);
+      box-shadow: 0 24px 70px rgba(57,207,255,0.18), inset 0 1px 0 rgba(255,255,255,0.08);
+    }
+    .mobile-tour-bar { display: none; }
+    .lab-card-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 22px 22px 0;
+    }
+    .lab-card h2 { font-size: clamp(1.45rem, 3vw, 2.1rem); }
+    .lab-card-header p {
+      max-width: 720px;
+      margin: 8px 0 0;
+      color: var(--lab-muted);
+      line-height: 1.55;
+    }
+    .status-pill {
+      flex: 0 0 auto;
+      align-self: start;
+      padding: 7px 10px;
+      border: 1px solid rgba(132,227,122,0.36);
+      border-radius: 999px;
+      color: #caffc3;
+      background: rgba(132,227,122,0.08);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .lab-card-body { padding: 20px 22px 22px; }
+    .agent-board {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 320px;
+      gap: 18px;
+    }
+    .scenario-picker,
+    .preset-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .agent-flow {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .flow-step {
+      min-height: 112px;
+      padding: 14px;
+      border: 1px solid rgba(110,159,205,0.22);
+      border-radius: 10px;
+      background: rgba(255,255,255,0.035);
+      transition: border-color .2s ease, background .2s ease, transform .2s ease;
+    }
+    .flow-step.active {
+      border-color: var(--lab-line-hot);
+      background: rgba(57,207,255,0.12);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(57,207,255,0.12);
+    }
+    .flow-step.done {
+      border-color: rgba(132,227,122,0.38);
+      background: rgba(132,227,122,0.07);
+    }
+    .flow-step span {
+      color: var(--lab-gold);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .flow-step strong {
+      display: block;
+      margin-top: 8px;
+      color: #fff;
+      font-size: 1rem;
+    }
+    .flow-step p {
+      margin: 7px 0 0;
+      color: var(--lab-muted);
+      font-size: 13px;
+      line-height: 1.4;
+    }
+    .agent-console {
+      display: grid;
+      align-content: start;
+      gap: 12px;
+      min-height: 100%;
+      padding: 16px;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 10px;
+      background: #020812;
+    }
+    .console-readout {
+      min-height: 172px;
+      padding: 14px;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.04);
+      color: #d8eaf2;
+      font: 13px/1.55 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      white-space: pre-wrap;
+    }
+    .control-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .two-col {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+    .three-col {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .diagram-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .diagram-panel {
+      min-width: 0;
+      padding: 16px;
+      border: 1px solid rgba(110,159,205,0.24);
+      border-radius: 10px;
+      background: rgba(255,255,255,0.035);
+      overflow: hidden;
+    }
+    .diagram-panel-wide { grid-column: 1 / -1; }
+    .diagram-panel h3 { font-size: 1.08rem; }
+    .diagram-panel p {
+      margin: 12px 0 0;
+      color: var(--lab-muted);
+      line-height: 1.5;
+      font-size: 14px;
+    }
+    .pipeline-diagram {
+      display: grid;
+      grid-template-columns: minmax(92px, 1fr) 28px minmax(92px, 1fr) 28px minmax(92px, 1fr) 28px minmax(92px, 1fr);
+      gap: 10px;
+      align-items: center;
+      margin-top: 14px;
+    }
+    .pipeline-diagram span,
+    .loop-diagram span,
+    .memory-diagram span {
+      display: grid;
+      place-items: center;
+      min-height: 42px;
+      padding: 8px;
+      border: 1px solid rgba(57,207,255,0.3);
+      border-radius: 8px;
+      color: #e2f8ff;
+      background: rgba(57,207,255,0.08);
+      font-size: 12px;
+      font-weight: 900;
+      text-align: center;
+    }
+    .pipeline-diagram i {
+      display: block;
+      height: 2px;
+      background: linear-gradient(90deg, var(--lab-cyan), transparent);
+      position: relative;
+    }
+    .pipeline-diagram i::after {
+      content: "";
+      position: absolute;
+      right: 0;
+      top: -4px;
+      border-left: 7px solid var(--lab-cyan);
+      border-top: 5px solid transparent;
+      border-bottom: 5px solid transparent;
+    }
+    .loop-diagram {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 14px;
+      padding: 8px;
+      border: 1px dashed rgba(230,189,103,0.35);
+      border-radius: 12px;
+    }
+    .loop-diagram span:nth-child(1) { border-color: rgba(132,227,122,0.36); background: rgba(132,227,122,0.08); }
+    .loop-diagram span:nth-child(2) { border-color: rgba(230,189,103,0.36); background: rgba(230,189,103,0.08); }
+    .loop-diagram span:nth-child(3) { border-color: rgba(157,134,255,0.38); background: rgba(157,134,255,0.08); }
+    .loop-diagram span:nth-child(4) { border-color: rgba(57,207,255,0.36); background: rgba(57,207,255,0.08); }
+    .loop-diagram b {
+      grid-column: 1 / -1;
+      display: block;
+      color: var(--lab-gold);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-align: center;
+      text-transform: uppercase;
+    }
+    .memory-diagram {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .memory-diagram div {
+      display: grid;
+      gap: 8px;
+      padding: 10px;
+      border: 1px solid rgba(255,255,255,0.09);
+      border-radius: 10px;
+      background: rgba(0,0,0,0.16);
+    }
+    .memory-diagram strong {
+      color: #fff;
+      font-size: 13px;
+    }
+    .memory-diagram .faded { opacity: 0.45; }
+    .map-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.45fr) minmax(280px, 0.55fr);
+      gap: 16px;
+      align-items: stretch;
+    }
+    .map-figure {
+      position: relative;
+      min-height: 360px;
+      overflow: hidden;
+      border: 1px solid rgba(86,163,232,0.3);
+      border-radius: 12px;
+      background: #020812;
+    }
+    .map-figure img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      min-height: 360px;
+      object-fit: cover;
+    }
+    .map-marker {
+      position: absolute;
+      left: var(--x);
+      top: var(--y);
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      border: 1px solid rgba(57,207,255,0.7);
+      border-radius: 50%;
+      color: #fff;
+      background: rgba(3, 13, 26, 0.72);
+      box-shadow: 0 0 0 6px rgba(57,207,255,0.12), 0 0 22px rgba(57,207,255,0.42);
+      transform: translate(-50%, -50%);
+      cursor: pointer;
+    }
+    .map-marker.active {
+      border-color: var(--lab-gold);
+      color: #10202b;
+      background: linear-gradient(135deg, var(--lab-gold), var(--lab-cyan));
+      box-shadow: 0 0 0 8px rgba(230,189,103,0.16), 0 0 28px rgba(230,189,103,0.44);
+    }
+    .map-side {
+      display: grid;
+      align-content: start;
+      gap: 12px;
+    }
+    .map-buttons {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+    .map-readout {
+      min-height: 194px;
+      padding: 16px;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 10px;
+      background: #020812;
+    }
+    .map-readout h3 { font-size: 1.2rem; }
+    .map-readout p {
+      margin: 10px 0 0;
+      color: var(--lab-muted);
+      line-height: 1.55;
+      font-size: 14px;
+    }
+    .map-readout .trace-note { margin-top: 12px; }
+    .mini-panel {
+      padding: 16px;
+      border: 1px solid rgba(110,159,205,0.24);
+      border-radius: 10px;
+      background: rgba(255,255,255,0.035);
+    }
+    .mini-panel h3 {
+      font-size: 1.08rem;
+      margin-bottom: 8px;
+    }
+    .mini-panel p {
+      margin: 0;
+      color: var(--lab-muted);
+      line-height: 1.5;
+      font-size: 14px;
+    }
+    textarea {
+      width: 100%;
+      min-height: 116px;
+      resize: vertical;
+      padding: 13px;
+      border: 1px solid rgba(110,159,205,0.34);
+      border-radius: 8px;
+      color: var(--lab-text);
+      background: rgba(2,8,18,0.92);
+      line-height: 1.5;
+    }
+    .token-output {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      min-height: 104px;
+      align-content: start;
+      padding: 12px;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 8px;
+      background: rgba(0,0,0,0.2);
+    }
+    .token {
+      padding: 5px 8px;
+      border: 1px solid rgba(57,207,255,0.28);
+      border-radius: 7px;
+      color: #dcf8ff;
+      background: rgba(57,207,255,0.09);
+      font: 12px/1.2 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    .meter {
+      height: 10px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.08);
+      margin-top: 12px;
+    }
+    .meter span {
+      display: block;
+      height: 100%;
+      width: 0%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--lab-green), var(--lab-cyan), var(--lab-gold));
+      transition: width .2s ease;
+    }
+    .metric-row {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .metric {
+      padding: 10px;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 8px;
+      background: rgba(255,255,255,0.035);
+    }
+    .metric span {
+      display: block;
+      color: var(--lab-dim);
+      font-size: 11px;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+    .metric strong {
+      display: block;
+      margin-top: 4px;
+      color: #fff;
+      font-size: 1rem;
+    }
+    .context-stack {
+      display: grid;
+      gap: 8px;
+      margin-top: 14px;
+    }
+    .context-controls {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 14px;
+      align-items: end;
+      margin-bottom: 12px;
+    }
+    .context-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .legend-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 8px;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 999px;
+      color: var(--lab-muted);
+      background: rgba(255,255,255,0.035);
+      font-size: 12px;
+      font-weight: 800;
+    }
+    .legend-pill::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--pill-color, var(--lab-cyan));
+    }
+    .context-item {
+      display: grid;
+      grid-template-columns: 90px minmax(0, 1fr) 96px;
+      gap: 10px;
+      align-items: center;
+      padding: 10px;
+      border: 1px solid rgba(110,159,205,0.2);
+      border-radius: 8px;
+      background: rgba(255,255,255,0.035);
+      color: var(--lab-muted);
+      font-size: 13px;
+    }
+    .context-item.visible { border-color: rgba(132,227,122,0.42); color: #dfffe0; }
+    .context-item.summary { border-color: rgba(230,189,103,0.38); color: #f4dfb5; opacity: 0.78; }
+    .context-item.memory { border-color: rgba(157,134,255,0.56); color: #e8e1ff; opacity: 1; }
+    .context-item.dropped { color: #73879a; opacity: 0.42; }
+    .context-state {
+      justify-self: end;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--lab-cyan);
+    }
+    .prompt-output {
+      min-height: 180px;
+      padding: 14px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(0,0,0,0.22);
+      color: #d8eaf2;
+      line-height: 1.55;
+      font-size: 14px;
+    }
+    .tool-grid {
+      display: grid;
+      grid-template-columns: 210px minmax(0, 1fr);
+      gap: 16px;
+    }
+    .tool-list {
+      display: grid;
+      gap: 8px;
+    }
+    .tool-readout {
+      min-height: 252px;
+      padding: 16px;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 10px;
+      background: #020812;
+      color: #d8eaf2;
+      font: 13px/1.55 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      white-space: pre-wrap;
+    }
+    .tool-compare {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 14px;
+    }
+    .compare-panel {
+      min-height: 158px;
+      padding: 14px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(0,0,0,0.2);
+    }
+    .compare-panel strong {
+      display: block;
+      margin-bottom: 8px;
+      color: #fff;
+    }
+    .compare-panel p {
+      margin: 0;
+      color: var(--lab-muted);
+      line-height: 1.5;
+      font-size: 14px;
+    }
+    .trace-grid {
+      display: grid;
+      grid-template-columns: 330px minmax(0, 1fr);
+      gap: 16px;
+    }
+    .trace-list {
+      display: grid;
+      gap: 8px;
+      align-content: start;
+    }
+    .trace-row {
+      display: grid;
+      grid-template-columns: 44px minmax(0, 1fr);
+      gap: 10px;
+      padding: 11px;
+      border: 1px solid rgba(110,159,205,0.22);
+      border-radius: 10px;
+      color: var(--lab-muted);
+      background: rgba(255,255,255,0.035);
+      cursor: pointer;
+      text-align: left;
+    }
+    .trace-row.active {
+      border-color: var(--lab-line-hot);
+      color: #e8f8ff;
+      background: rgba(57,207,255,0.1);
+    }
+    .trace-row b {
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      color: #10202b;
+      background: linear-gradient(135deg, var(--lab-gold), var(--lab-cyan));
+      font-size: 12px;
+    }
+    .trace-row strong {
+      display: block;
+      color: #fff;
+      font-size: 14px;
+    }
+    .trace-row span {
+      display: block;
+      margin-top: 4px;
+      font-size: 12px;
+      line-height: 1.35;
+    }
+    .trace-output {
+      min-height: 330px;
+      padding: 16px;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 10px;
+      background: #020812;
+    }
+    .trace-output .status-pill { margin-bottom: 12px; }
+    .trace-output h3 { font-size: 1.15rem; }
+    .trace-output p {
+      margin: 10px 0 0;
+      color: var(--lab-muted);
+      line-height: 1.55;
+    }
+    .trace-note {
+      margin-top: 14px;
+      padding: 12px;
+      border: 1px solid rgba(230,189,103,0.28);
+      border-radius: 10px;
+      color: #f5ddb0;
+      background: rgba(230,189,103,0.055);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+    .quiz-card {
+      display: grid;
+      gap: 12px;
+      padding: 16px;
+      border: 1px solid rgba(230,189,103,0.32);
+      border-radius: 10px;
+      background: rgba(230,189,103,0.055);
+      margin-top: 14px;
+    }
+    .quiz-card h3 { font-size: 1.1rem; }
+    .quiz-result {
+      min-height: 52px;
+      color: #f5ddb0;
+      line-height: 1.5;
+      font-size: 14px;
+    }
+    .failure-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .failure-card {
+      padding: 16px;
+      border: 1px solid rgba(255,127,156,0.28);
+      border-radius: 10px;
+      background: rgba(255,127,156,0.055);
+    }
+    .failure-card h3 { color: #ffe3e9; }
+    .failure-card p {
+      margin: 8px 0 0;
+      color: #f1bec9;
+      line-height: 1.55;
+    }
+    .system-strip {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .system-tile {
+      padding: 16px;
+      border-radius: 10px;
+      border: 1px solid rgba(110,159,205,0.24);
+      background: rgba(255,255,255,0.035);
+    }
+    .system-tile:nth-child(1) { border-color: rgba(132,227,122,0.34); }
+    .system-tile:nth-child(2) { border-color: rgba(57,207,255,0.34); }
+    .system-tile:nth-child(3) { border-color: rgba(157,134,255,0.34); }
+    .system-tile:nth-child(4) { border-color: rgba(230,189,103,0.34); }
+    .system-tile h3 { font-size: 1rem; }
+    .system-tile p {
+      margin: 8px 0 0;
+      color: var(--lab-muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+    .concept-grid {
+      display: grid;
+      grid-template-columns: 320px minmax(0, 1fr);
+      gap: 16px;
+    }
+    .concept-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      align-content: start;
+    }
+    .concept-card {
+      min-height: 78px;
+      padding: 12px;
+      border: 1px solid rgba(110,159,205,0.22);
+      border-radius: 10px;
+      color: var(--lab-muted);
+      background: rgba(255,255,255,0.035);
+      cursor: pointer;
+      text-align: left;
+    }
+    .concept-card.active {
+      border-color: var(--lab-line-hot);
+      color: #e8f8ff;
+      background: rgba(57,207,255,0.1);
+    }
+    .concept-card strong {
+      display: block;
+      color: #fff;
+      font-size: 14px;
+    }
+    .concept-card span {
+      display: block;
+      margin-top: 6px;
+      color: var(--lab-dim);
+      font-size: 12px;
+      line-height: 1.35;
+    }
+    .concept-detail {
+      min-height: 338px;
+      padding: 18px;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 10px;
+      background: #020812;
+    }
+    .concept-detail h3 { font-size: 1.35rem; }
+    .concept-detail p {
+      margin: 12px 0 0;
+      color: var(--lab-muted);
+      line-height: 1.58;
+    }
+    .concept-example {
+      margin-top: 16px;
+      padding: 14px;
+      border: 1px solid rgba(132,227,122,0.26);
+      border-radius: 10px;
+      color: #dfffe0;
+      background: rgba(132,227,122,0.055);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .concept-pair {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .concept-pair div {
+      padding: 12px;
+      border: 1px solid rgba(230,189,103,0.22);
+      border-radius: 10px;
+      background: rgba(230,189,103,0.045);
+    }
+    .concept-pair strong {
+      display: block;
+      color: #fff;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .concept-pair span {
+      display: block;
+      margin-top: 7px;
+      color: #f5ddb0;
+      font-size: 13px;
+      line-height: 1.4;
+    }
+    .builder-grid {
+      display: grid;
+      grid-template-columns: 310px minmax(0, 1fr);
+      gap: 16px;
+    }
+    .builder-options {
+      display: grid;
+      gap: 10px;
+    }
+    .builder-option {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: 10px;
+      align-items: start;
+      padding: 12px;
+      border: 1px solid rgba(110,159,205,0.24);
+      border-radius: 10px;
+      background: rgba(255,255,255,0.035);
+      cursor: pointer;
+    }
+    .builder-option input {
+      margin-top: 3px;
+      accent-color: var(--lab-cyan);
+    }
+    .builder-option strong {
+      display: block;
+      color: #fff;
+      font-size: 14px;
+    }
+    .builder-option span {
+      display: block;
+      margin-top: 4px;
+      color: var(--lab-muted);
+      font-size: 12px;
+      line-height: 1.4;
+    }
+    .builder-output {
+      display: grid;
+      align-content: start;
+      gap: 14px;
+      padding: 16px;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 10px;
+      background: #020812;
+    }
+    .stack-visual {
+      display: grid;
+      gap: 8px;
+    }
+    .stack-layer {
+      display: grid;
+      grid-template-columns: 120px minmax(0, 1fr);
+      gap: 10px;
+      align-items: center;
+      padding: 10px;
+      border: 1px solid rgba(57,207,255,0.22);
+      border-left: 4px solid var(--layer-color, var(--lab-cyan));
+      border-radius: 9px;
+      background: rgba(255,255,255,0.035);
+    }
+    .stack-layer strong {
+      color: #fff;
+      font-size: 13px;
+    }
+    .stack-layer span {
+      color: var(--lab-muted);
+      font-size: 13px;
+      line-height: 1.35;
+    }
+    .builder-summary {
+      min-height: 92px;
+      padding: 14px;
+      border: 1px solid rgba(230,189,103,0.28);
+      border-radius: 10px;
+      color: #f5ddb0;
+      background: rgba(230,189,103,0.055);
+      line-height: 1.5;
+      font-size: 14px;
+    }
+    .pipeline-diagram span {
+      cursor: pointer;
+      transition: border-color .2s ease, background .2s ease, box-shadow .2s ease;
+    }
+    .pipeline-diagram span.active {
+      border-color: rgba(230,189,103,0.72);
+      background: rgba(230,189,103,0.15);
+      color: #fff;
+      box-shadow: 0 0 18px rgba(230,189,103,0.28);
+    }
+    .system-tile {
+      transition: border-color .2s ease, background .2s ease, transform .2s ease;
+    }
+    .system-tile.active {
+      border-color: var(--lab-line-hot);
+      background: rgba(57,207,255,0.1);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(57,207,255,0.12);
+    }
+    footer {
+      margin-top: 38px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      color: var(--lab-muted);
+      font-size: 13px;
+      text-align: center;
+    }
+    @media (max-width: 980px) {
+      .lab-shell { grid-template-columns: 1fr; }
+      .lab-rail { position: static; }
+      .lab-nav { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .agent-board, .two-col, .map-layout, .tool-grid, .tool-compare, .trace-grid, .concept-grid, .builder-grid { grid-template-columns: 1fr; }
+      .diagram-grid { grid-template-columns: 1fr; }
+      .context-controls { grid-template-columns: 1fr; }
+      .system-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 680px) {
+      .ai-lab { padding: 14px 12px 94px; }
+      .lab-hero { min-height: 0; padding: 24px; }
+      .lab-hero h1 { font-size: clamp(2.1rem, 13vw, 3.2rem); }
+      .hero-actions a,
+      .hero-actions button,
+      .control-row .lab-button { flex: 1 1 145px; }
+      .mobile-tour-bar {
+        position: sticky;
+        bottom: 10px;
+        z-index: 20;
+        display: grid;
+        grid-template-columns: 1.2fr 0.9fr 0.9fr;
+        gap: 8px;
+        margin: 12px 0;
+        padding: 10px;
+        border: 1px solid rgba(86,163,232,0.34);
+        border-radius: 12px;
+        background: rgba(3,13,26,0.9);
+        backdrop-filter: blur(12px);
+      }
+      .lab-card-header { display: block; }
+      .lab-card-body { padding: 16px; }
+      .status-pill { display: inline-flex; margin-top: 12px; }
+      .agent-flow, .three-col, .metric-row, .system-strip, .lab-nav, .pipeline-diagram, .memory-diagram { grid-template-columns: 1fr; }
+      .pipeline-diagram i {
+        width: 2px;
+        height: 20px;
+        margin: 0 auto;
+        background: linear-gradient(180deg, var(--lab-cyan), transparent);
+      }
+      .pipeline-diagram i::after {
+        right: -4px;
+        top: auto;
+        bottom: 0;
+        border-left: 5px solid transparent;
+        border-right: 5px solid transparent;
+        border-top: 7px solid var(--lab-cyan);
+        border-bottom: 0;
+      }
+      .context-item { grid-template-columns: 1fr; }
+      .context-state { justify-self: start; }
+      .scope-callout { grid-template-columns: 1fr; }
+      .map-figure, .map-figure img { min-height: 240px; }
+      .map-buttons { grid-template-columns: 1fr; }
+      .trace-row { grid-template-columns: 38px minmax(0, 1fr); }
+      .concept-list, .concept-pair { grid-template-columns: 1fr; }
+      .stack-layer { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header id="site-nav"></header>
+
+  <main class="ai-lab">
+    <div class="lab-shell">
+      <aside class="lab-rail" aria-label="AI guide sections">
+        <a class="rail-brand" href="../">
+          <strong>Jez237</strong>
+          <span>AI workbench / interactive guide</span>
+        </a>
+        <nav class="lab-nav">
+          <a href="#map"><svg viewBox="0 0 24 24"><path d="M4 7l5-3 6 3 5-3v13l-5 3-6-3-5 3z"/><path d="M9 4v13"/><path d="M15 7v13"/></svg>System map</a>
+          <a href="#training-roadmap"><svg viewBox="0 0 24 24"><path d="M4 19V7"/><path d="M8 19V5"/><path d="M12 19V9"/><path d="M16 19V4"/><path d="M20 19v-7"/></svg>Training</a>
+          <a href="#diagrams"><svg viewBox="0 0 24 24"><path d="M4 6h5v5H4z"/><path d="M15 4h5v5h-5z"/><path d="M15 15h5v5h-5z"/><path d="M9 8.5h6"/><path d="M12 11v6h3"/></svg>Diagrams</a>
+          <a href="#tokens"><svg viewBox="0 0 24 24"><path d="M5 7h14"/><path d="M7 12h10"/><path d="M9 17h6"/></svg>Tokens</a>
+          <a href="#context"><svg viewBox="0 0 24 24"><path d="M5 5h14v14H5z"/><path d="M8 9h8"/><path d="M8 13h5"/></svg>Context</a>
+          <a href="#prompts"><svg viewBox="0 0 24 24"><path d="M4 6h16v12H4z"/><path d="m8 10 2 2-2 2"/><path d="M13 14h3"/></svg>Prompts</a>
+          <a href="#tools"><svg viewBox="0 0 24 24"><path d="M14.5 5.5 18 2l4 4-3.5 3.5"/><path d="M3 21l8.5-8.5"/><path d="M12 8l4 4"/></svg>Tools</a>
+          <a href="#agent-loop"><svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 0 1 13.6-5.7"/><path d="M18 3v5h-5"/><path d="M20 12a8 8 0 0 1-13.6 5.7"/><path d="M6 21v-5h5"/></svg>Agent loop</a>
+          <a href="#trace"><svg viewBox="0 0 24 24"><path d="M5 4v16"/><path d="M9 6h10"/><path d="M9 12h10"/><path d="M9 18h10"/><path d="M5 6h.01"/><path d="M5 12h.01"/><path d="M5 18h.01"/></svg>Trace viewer</a>
+          <a href="#systems"><svg viewBox="0 0 24 24"><path d="M4 6h16"/><path d="M4 12h16"/><path d="M4 18h16"/><path d="M8 6v12"/><path d="M16 6v12"/></svg>Systems</a>
+          <a href="#concepts"><svg viewBox="0 0 24 24"><path d="M4 5h16"/><path d="M4 12h10"/><path d="M4 19h16"/><path d="M17 9l3 3-3 3"/></svg>Concepts</a>
+          <a href="#builder"><svg viewBox="0 0 24 24"><path d="M4 18V8"/><path d="M10 18V4"/><path d="M16 18v-7"/><path d="M4 8h4"/><path d="M10 4h4"/><path d="M16 11h4"/><path d="M2 18h20"/></svg>Build stack</a>
+          <a href="#failure"><svg viewBox="0 0 24 24"><path d="M12 3 2.8 20h18.4z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>Failure modes</a>
+        </nav>
+      </aside>
+
+      <div class="lab-main">
+        <section class="lab-hero">
+          <div class="hero-copy">
+            <span class="kicker">Interactive AI lab</span>
+            <h1>How AI Works</h1>
+            <p>AI feels mysterious until you separate the parts: tokens, context, model prediction, tool use, memory, and verification. This page lets you poke each part directly.</p>
+            <div class="hero-actions">
+              <button class="lab-button primary" id="startTour" type="button">Start guided tour</button>
+              <a href="#agent-loop">Run the agent loop</a>
+              <a href="training-alignment.html">Training &amp; alignment deep dive</a>
+              <a href="../">Back to Home</a>
+            </div>
+            <div class="tour-panel" aria-live="polite">
+              <strong id="tourTitle">Tour ready</strong>
+              <p id="tourCopy">Walk through the lab in order: system map, training, diagrams, tokens, context, prompts, tools, agent loop, trace, systems, concepts, stack building, and failure modes.</p>
+              <div class="tour-progress" id="tourProgress" aria-label="Tour progress"></div>
+              <div class="control-row">
+                <button class="lab-button" id="prevTour" type="button">Previous</button>
+                <button class="lab-button" id="nextTour" type="button">Next stop</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <div class="mobile-tour-bar" aria-label="Guided tour controls">
+          <button class="lab-button primary" id="mobileTour" type="button">Tour</button>
+          <button class="lab-button" id="mobilePrev" type="button">Prev</button>
+          <button class="lab-button" id="mobileNext" type="button">Next</button>
+        </div>
+
+        <section id="map" class="lab-card">
+          <div class="lab-card-header">
+            <div>
+              <span class="kicker">Illustrated overview</span>
+              <h2>AI System Map</h2>
+              <p>The illustration shows the same system as a physical workbench. Pick a station to see what that part contributes to an agent run.</p>
+            </div>
+            <span class="status-pill">Generated illustration</span>
+          </div>
+          <div class="lab-card-body map-layout">
+            <figure class="map-figure" aria-label="Illustrated AI agent system map">
+              <img src="../assets/ai-explainer/ai-system-map.jpg?v=ai-system-map-20260526" alt="Illustrated AI agent system with input, token blocks, context window, model core, tools, memory, verification, and final output stations." />
+              <button class="map-marker active" style="--x: 10%; --y: 47%" data-map="input" type="button" aria-label="Input station">1</button>
+              <button class="map-marker" style="--x: 27%; --y: 56%" data-map="tokens" type="button" aria-label="Token station">2</button>
+              <button class="map-marker" style="--x: 43%; --y: 48%" data-map="context" type="button" aria-label="Context station">3</button>
+              <button class="map-marker" style="--x: 59%; --y: 43%" data-map="model" type="button" aria-label="Model core">4</button>
+              <button class="map-marker" style="--x: 74%; --y: 28%" data-map="tools" type="button" aria-label="Tool station">5</button>
+              <button class="map-marker" style="--x: 76%; --y: 61%" data-map="memory" type="button" aria-label="Memory station">6</button>
+              <button class="map-marker" style="--x: 84%; --y: 66%" data-map="verify" type="button" aria-label="Verification station">7</button>
+              <button class="map-marker" style="--x: 93%; --y: 55%" data-map="answer" type="button" aria-label="Final answer station">8</button>
+            </figure>
+            <div class="map-side">
+              <div class="map-buttons" id="mapButtons"></div>
+              <div class="map-readout" id="mapReadout" aria-live="polite"></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="training-roadmap" class="lab-card">
+          <div class="lab-card-header">
+            <div>
+              <span class="kicker">Separate deep dive</span>
+              <h2>Training and Alignment Roadmap</h2>
+              <p>This page mostly explains what happens when you use an AI system. Model training and RLHF are a deeper topic, so they have their own full page with hands-on demos.</p>
+            </div>
+            <span class="status-pill">Deep dive live</span>
+          </div>
+          <div class="lab-card-body">
+            <div class="scope-callout">
+              <div>
+                <h3>How models are made</h3>
+                <p>The deep dive covers pretraining, fine-tuning, RLHF, safety tuning, evaluation, data quality, and the difference between base models and chat assistants — including a tiny model you can train yourself and a preference-ranking demo.</p>
+                <div class="scope-tags" aria-label="Training outline topics">
+                  <span>Pretraining</span>
+                  <span>Fine-tuning</span>
+                  <span>RLHF</span>
+                  <span>Alignment</span>
+                  <span>Evals</span>
+                  <span>Data issues</span>
+                </div>
+              </div>
+              <a class="lab-button primary" href="training-alignment.html">Open the deep dive</a>
+            </div>
+          </div>
+        </section>
+
+        <section id="diagrams" class="lab-card">
+          <div class="lab-card-header">
+            <div>
+              <span class="kicker">Mental models</span>
+              <h2>Three Diagrams Worth Remembering</h2>
+              <p>These are the useful shapes underneath most AI systems: the text pipeline, the agent loop, and the difference between temporary context and durable memory.</p>
+            </div>
+          </div>
+          <div class="lab-card-body diagram-grid">
+            <article class="diagram-panel diagram-panel-wide">
+              <h3>Model Pipeline</h3>
+              <div class="pipeline-diagram" id="pipelineDiagram" aria-label="Prompt to response pipeline">
+                <span data-stage="0" class="active">Prompt</span><i></i><span data-stage="1">Tokens</span><i></i><span data-stage="2">Model</span><i></i><span data-stage="3">Response</span>
+              </div>
+              <div class="control-row" style="margin-top: 14px">
+                <button class="lab-button" id="pipelineRun" type="button">Send a prompt through</button>
+              </div>
+              <div class="trace-note" id="pipelineNote" aria-live="polite"></div>
+              <p>Text is chopped into tokens, processed through the model, then decoded back into text. The model is predicting the next useful pieces, not looking up a literal answer book. Tap a stage, or send a prompt through to watch the whole trip.</p>
+            </article>
+            <article class="diagram-panel">
+              <h3>Agent Loop</h3>
+              <div class="loop-diagram" aria-label="Agent loop diagram">
+                <span>Read</span><span>Plan</span><span>Tool</span><span>Observe</span>
+                <b>Loop until done</b>
+              </div>
+              <p>An agent keeps cycling until it has enough evidence or hits a limit. Good agents know when to stop and report what they verified.</p>
+            </article>
+            <article class="diagram-panel">
+              <h3>Context vs Memory</h3>
+              <div class="memory-diagram" aria-label="Context and memory diagram">
+                <div><strong>Context</strong><span>visible now</span><span>summary</span><span class="faded">drops out</span></div>
+                <div><strong>Memory</strong><span>saved fact</span><span>preference</span><span>workflow rule</span></div>
+              </div>
+              <p>Context is the working desk. Memory is the labeled drawer. If a fact needs to survive future sessions, it belongs in memory or a source file.</p>
+            </article>
+          </div>
+        </section>
+
+        <section id="tokens" class="lab-card">
+          <div class="lab-card-header">
+            <div>
+              <span class="kicker">Text becomes pieces</span>
+              <h2>Token Playground</h2>
+              <p>Models do not read text exactly like humans do. They see chunks called tokens — in English, one token averages about three-quarters of a word. This is an approximate local demo, but it shows why wording and length matter. Real models accept anywhere from thousands to over a million tokens at once; the meter here fills against a tiny 120-token demo budget so you can watch it move.</p>
+            </div>
+          </div>
+          <div class="lab-card-body two-col">
+            <div>
+              <div class="preset-row" aria-label="Token examples">
+                <button class="lab-button" data-token-preset="short" type="button">Short</button>
+                <button class="lab-button active" data-token-preset="clear" type="button">Clear</button>
+                <button class="lab-button" data-token-preset="logs" type="button">Copied logs</button>
+                <button class="lab-button" data-token-preset="overloaded" type="button">Overloaded</button>
+              </div>
+              <textarea id="tokenInput">Ask Claw to check the latest garden photo, write a caption, and add it to the website without leaking private metadata.</textarea>
+              <div class="meter"><span id="tokenMeter"></span></div>
+              <div class="metric-row">
+                <div class="metric"><span>Approx tokens</span><strong id="tokenCount">0</strong></div>
+                <div class="metric"><span>Demo budget used</span><strong id="contextUse">0%</strong></div>
+                <div class="metric"><span>Why it matters</span><strong id="tokenHint">Short</strong></div>
+              </div>
+            </div>
+            <div class="token-output" id="tokenOutput" aria-live="polite"></div>
+          </div>
+        </section>
+
+        <section id="context" class="lab-card">
+          <div class="lab-card-header">
+            <div>
+              <span class="kicker">What the model can see</span>
+              <h2>Context Window Visualizer</h2>
+              <p>A chat can be long while the model's active view is limited. Older material may stay visible, get summarized, or fall out unless it is saved somewhere durable.</p>
+            </div>
+          </div>
+          <div class="lab-card-body">
+            <div class="context-controls">
+              <div>
+                <label for="contextRange" class="status-pill">Conversation length: <span id="contextLabel">6</span> turns</label>
+                <input id="contextRange" type="range" min="4" max="14" value="6" />
+                <div class="context-legend">
+                  <span class="legend-pill" style="--pill-color: var(--lab-green)">visible now</span>
+                  <span class="legend-pill" style="--pill-color: var(--lab-gold)">summary</span>
+                  <span class="legend-pill" style="--pill-color: var(--lab-violet)">saved memory</span>
+                  <span class="legend-pill" style="--pill-color: #60758a">dropped</span>
+                </div>
+              </div>
+              <button class="lab-button" id="memoryToggle" type="button" aria-pressed="false">Save key fact</button>
+            </div>
+            <div class="context-stack" id="contextStack"></div>
+          </div>
+        </section>
+
+        <section id="prompts" class="lab-card">
+          <div class="lab-card-header">
+            <div>
+              <span class="kicker">Same model, better instructions</span>
+              <h2>Prompt Quality Compare</h2>
+              <p>Better prompts do not make the model magical. They reduce ambiguity, supply constraints, and tell the model what a useful answer looks like.</p>
+            </div>
+          </div>
+          <div class="lab-card-body two-col">
+            <div class="mini-panel">
+              <h3>Choose the prompt</h3>
+              <div class="control-row">
+                <button class="lab-button active" data-prompt="weak" type="button">Vague</button>
+                <button class="lab-button" data-prompt="clear" type="button">Clear</button>
+                <button class="lab-button" data-prompt="agent" type="button">Agent-ready</button>
+              </div>
+              <div class="prompt-output" id="promptText"></div>
+            </div>
+            <div class="mini-panel">
+              <h3>Likely result</h3>
+              <div class="prompt-output" id="promptResult"></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="tools" class="lab-card">
+          <div class="lab-card-header">
+            <div>
+              <span class="kicker">Guessing vs checking</span>
+              <h2>Tool Use Simulator</h2>
+              <p>A plain model predicts an answer from its training and current context. A tool-using agent can inspect files, search, run commands, generate images, or ask for approval.</p>
+            </div>
+          </div>
+          <div class="lab-card-body tool-grid">
+            <div class="tool-list">
+              <button class="lab-button active" data-tool="guess" type="button">No tool</button>
+              <button class="lab-button" data-tool="files" type="button">Search files</button>
+              <button class="lab-button" data-tool="web" type="button">Check web</button>
+              <button class="lab-button" data-tool="image" type="button">Generate image</button>
+              <button class="lab-button" data-tool="approve" type="button">Needs approval</button>
+            </div>
+            <div>
+              <div class="tool-readout" id="toolReadout"></div>
+              <div class="tool-compare">
+                <div class="compare-panel">
+                  <strong>Model guesses</strong>
+                  <p id="guessPanel">A model can produce a plausible answer from context, but it may invent details when the answer depends on current files, dates, or external state.</p>
+                </div>
+                <div class="compare-panel">
+                  <strong>Agent checks</strong>
+                  <p id="checkPanel">A tool-using agent can inspect the actual source of truth, then answer with less guesswork and clearer evidence.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="agent-loop" class="lab-card lab-grid">
+          <div class="lab-card-header">
+            <div>
+              <span class="kicker">Step through it</span>
+              <h2>Agent Loop Simulator</h2>
+              <p>An agent is a model wrapped in a loop. It reads the request, checks context, chooses tools when needed, observes the result, and decides whether to keep going or answer.</p>
+            </div>
+            <span class="status-pill">No API required</span>
+          </div>
+          <div class="lab-card-body">
+            <div class="scenario-picker" aria-label="Agent scenarios">
+              <button class="lab-button active" data-scenario="garden" type="button">Garden photo</button>
+              <button class="lab-button" data-scenario="weather" type="button">Watering check</button>
+              <button class="lab-button" data-scenario="layout" type="button">Fix layout</button>
+            </div>
+            <div class="agent-board">
+              <div class="agent-flow" id="agentFlow"></div>
+              <div class="agent-console">
+                <div class="console-readout" id="agentConsole"></div>
+                <div class="control-row">
+                  <button class="lab-button primary" id="nextStep" type="button">Next step</button>
+                  <button class="lab-button" id="autoStep" type="button">Auto run</button>
+                  <button class="lab-button" id="resetStep" type="button">Reset</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="trace" class="lab-card">
+          <div class="lab-card-header">
+            <div>
+              <span class="kicker">Observable work</span>
+              <h2>Trace Viewer</h2>
+              <p>A useful AI run leaves an outside trail: what was requested, what it checked, what it observed, and how it verified the result. You do not need hidden chain-of-thought to judge whether the work is trustworthy.</p>
+            </div>
+            <span class="status-pill">Audit trail</span>
+          </div>
+          <div class="lab-card-body">
+            <div class="scenario-picker" aria-label="Trace examples">
+              <button class="lab-button active" data-trace="good" type="button">Good trace</button>
+              <button class="lab-button" data-trace="bad" type="button">Bad trace</button>
+              <button class="lab-button" data-trace="blocked" type="button">Approval stop</button>
+            </div>
+            <div class="trace-grid">
+              <div class="trace-list" id="traceList"></div>
+              <div class="trace-output" id="traceOutput" aria-live="polite"></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="systems" class="lab-card">
+          <div class="lab-card-header">
+            <div>
+              <span class="kicker">Different jobs, different tradeoffs</span>
+              <h2>Local, Cloud, Agent, Media</h2>
+              <p>AI is not one thing. The useful question is what kind of system you are using and what constraints come with it. Pick a job below and see which system fits.</p>
+            </div>
+            <span class="status-pill">Match the job</span>
+          </div>
+          <div class="lab-card-body">
+            <div class="preset-row" aria-label="Pick a job">
+              <button class="lab-button" data-job="journal" type="button">Private journaling helper</button>
+              <button class="lab-button" data-job="bug" type="button">Crack a hard bug</button>
+              <button class="lab-button" data-job="site" type="button">Update my website</button>
+              <button class="lab-button" data-job="thumb" type="button">Make a thumbnail</button>
+            </div>
+            <div class="system-strip">
+              <article class="system-tile"><h3>Local model</h3><p>Private and hardware-bound. Good for experiments, automation, and offline control. Quality depends on the model and machine.</p></article>
+              <article class="system-tile"><h3>Cloud model</h3><p>Usually stronger and faster to update. Great for hard reasoning, coding, and multimodal work, with external service tradeoffs.</p></article>
+              <article class="system-tile"><h3>Agent</h3><p>A model with tools, memory, permissions, and a loop. Powerful because it can act, risky if guardrails are sloppy.</p></article>
+              <article class="system-tile"><h3>Media model</h3><p>Image, voice, music, and video models translate prompts into pixels or sound. They need visual direction, not just facts.</p></article>
+            </div>
+            <div class="trace-note" id="systemNote" aria-live="polite">Pick a job above to see which kind of system fits it best — and why the others are a worse match.</div>
+          </div>
+        </section>
+
+        <section id="concepts" class="lab-card">
+          <div class="lab-card-header">
+            <div>
+              <span class="kicker">Plain terms</span>
+              <h2>Concept Decoder</h2>
+              <p>AI terms get thrown around loosely. Pick a concept to see the useful definition, a practical example, and the common misunderstanding to avoid.</p>
+            </div>
+            <span class="status-pill">Tap a term</span>
+          </div>
+          <div class="lab-card-body concept-grid">
+            <div class="concept-list" id="conceptList"></div>
+            <div class="concept-detail" id="conceptDetail" aria-live="polite"></div>
+          </div>
+        </section>
+
+        <section id="builder" class="lab-card">
+          <div class="lab-card-header">
+            <div>
+              <span class="kicker">Assemble the system</span>
+              <h2>Build an Agent Stack</h2>
+              <p>Most real AI systems are a stack of choices. Add or remove capabilities below and watch the profile change.</p>
+            </div>
+            <span class="status-pill">Interactive model</span>
+          </div>
+          <div class="lab-card-body builder-grid">
+            <div class="builder-options" id="builderOptions"></div>
+            <div class="builder-output">
+              <div class="stack-visual" id="stackVisual" aria-label="Agent stack layers"></div>
+              <div class="metric-row">
+                <div class="metric"><span>Capability</span><strong id="builderCapability">0</strong></div>
+                <div class="metric"><span>Risk</span><strong id="builderRisk">0</strong></div>
+                <div class="metric"><span>Oversight</span><strong id="builderOversight">0</strong></div>
+              </div>
+              <div class="builder-summary" id="builderSummary"></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="failure" class="lab-card">
+          <div class="lab-card-header">
+            <div>
+              <span class="kicker">Where it goes wrong</span>
+              <h2>Failure Modes</h2>
+              <p>Most AI mistakes are not mysterious. They usually come from missing context, stale information, weak instructions, bad tool choice, or permission boundaries.</p>
+            </div>
+          </div>
+          <div class="lab-card-body">
+            <div class="failure-tabs" id="failureTabs"></div>
+            <div class="failure-card" id="failureCard"></div>
+            <div class="quiz-card">
+              <h3>Quick checkpoint</h3>
+              <p id="quizQuestion">Question: “What changed in the latest deployed website commit?”</p>
+              <div class="preset-row" id="quizPicker" aria-label="Checkpoint questions"></div>
+              <div class="control-row">
+                <button class="lab-button" data-quiz="guess" type="button">Let the model guess</button>
+                <button class="lab-button" data-quiz="tool" type="button">Use a tool</button>
+              </div>
+              <div class="quiz-result" id="quizResult">Pick the safer approach.</div>
+            </div>
+          </div>
+        </section>
+
+        <footer>
+          <a href="../">Home</a> · <a href="https://github.com/jz237/jez237-site" target="_blank" rel="noopener">Source repo</a>
+        </footer>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const scenarios = {
+      garden: [
+        ['01', 'Read request', 'Extract intent, constraints, and what would count as done.', 'USER: "Find my latest garden photo and write a caption."\n\nIntent: add a useful caption.\nRisk: private metadata, wrong folder, stale assumptions.'],
+        ['02', 'Load context', 'Use visible chat, saved instructions, and relevant files.', 'CONTEXT: site uses photos/garden/ and resized JPEGs.\nMEMORY: captions should be casual, not stiff.'],
+        ['03', 'Plan', 'Break the job into small checks before touching files.', 'PLAN:\n1. Inspect image.\n2. Resize safely.\n3. Add page entry.\n4. Verify layout.'],
+        ['04', 'Choose tool', 'Use tools when guessing is weaker than checking.', 'TOOL SELECTED: filesystem + image inspection.\nReason: the model cannot know the file dimensions by memory.'],
+        ['05', 'Observe result', 'Read tool output and update the next move.', 'OBSERVATION: image is 3024x4032, portrait, contains garden bed with redbud.\nNext: crop/resize to site convention.'],
+        ['06', 'Answer or continue', 'Stop when the task is verified, otherwise loop again.', 'FINAL: page updated, image resized, layout checked, commit ready.\nLoop ends because verification passed.']
+      ],
+      weather: [
+        ['01', 'Read request', 'Find the actual decision being asked for.', 'USER: "Should I water tonight?"\n\nIntent: watering advice.\nRisk: guessing weather from memory would be useless.'],
+        ['02', 'Load context', 'Use location, garden preferences, and recent task history.', 'CONTEXT: Philadelphia / Zone 7a.\nMemory: new plantings dry out faster than established shrubs.'],
+        ['03', 'Plan', 'Separate facts from judgment.', 'PLAN:\n1. Check forecast.\n2. Check rain timing.\n3. Consider new plantings.\n4. Give concise recommendation.'],
+        ['04', 'Choose tool', 'Use live data for unstable facts.', 'TOOL SELECTED: weather lookup.\nReason: precipitation and temperature change hourly.'],
+        ['05', 'Observe result', 'Turn raw data into a practical decision.', 'OBSERVATION: rain likely overnight, humidity high, no heat spike.\nNext: advise skipping most watering, check containers.'],
+        ['06', 'Answer or continue', 'Answer with caveats when evidence is limited.', 'FINAL: skip beds tonight, water containers if light, revisit tomorrow morning if rain misses.']
+      ],
+      layout: [
+        ['01', 'Read request', 'Translate subjective feedback into testable layout checks.', 'USER: "Those buttons are not centered."\n\nIntent: visual alignment fix.\nRisk: changing the wrong container.'],
+        ['02', 'Load context', 'Inspect CSS and the actual rendered page.', 'CONTEXT: sidebar uses generated nav plus shared global styles.\nClue: inherited nav padding may affect alignment.'],
+        ['03', 'Plan', 'Make a small visual fix and verify at multiple widths.', 'PLAN:\n1. Locate sidebar rules.\n2. Reset inherited spacing.\n3. Screenshot desktop/tablet.\n4. Push cache-busted update.'],
+        ['04', 'Choose tool', 'Use browser screenshots because this is visual.', 'TOOL SELECTED: local server + Chrome screenshot.\nReason: code inspection alone cannot prove centering.'],
+        ['05', 'Observe result', 'Compare screenshot against the requested frame.', 'OBSERVATION: button stack now fills the sidebar frame evenly.\nNext: check labels do not clip.'],
+        ['06', 'Answer or continue', 'Report exactly what changed and how it was verified.', 'FINAL: sidebar nav centered, screenshots checked at 1280px and 1024px, commit pushed.']
+      ]
+    };
+    let steps = scenarios.garden;
+    let stepIndex = 0;
+    let autoTimer = null;
+    let memorySaved = false;
+    let tourIndex = 0;
+    let quizKind = 'commit';
+    const tourStops = [
+      ['map', 'System map', 'The illustration turns the abstract parts into stations: input, tokens, context, model, tools, memory, verification, and answer.'],
+      ['training-roadmap', 'Training', 'This runtime guide links to a full deep dive on model training, fine-tuning, RLHF, alignment, and evaluation — with demos you can poke.'],
+      ['diagrams', 'Diagrams', 'The three shapes to remember are pipeline, loop, and memory. Most AI behavior fits into one of those.'],
+      ['tokens', 'Tokens', 'Models operate on chunks of text. More text means more context pressure, cost, and chances for the important part to get buried.'],
+      ['context', 'Context and memory', 'The active context is temporary. Durable memory is how key facts survive beyond the visible chat.'],
+      ['prompts', 'Prompt quality', 'Clear prompts reduce hidden assumptions. Agent-ready prompts also include constraints, verification, and expected output.'],
+      ['tools', 'Tool checking', 'Tools turn the model from a guesser into an inspector. The model still reasons, but it reasons from fresher evidence.'],
+      ['agent-loop', 'Agent loop', 'An agent is not just a chat response. It repeats: read, plan, choose a tool, observe, and decide whether to continue.'],
+      ['trace', 'Trace viewer', 'A trustworthy run shows observable steps: request, tool call, observation, verification, and final answer. Hidden reasoning is not the audit trail.'],
+      ['systems', 'Systems', 'Local models, cloud models, agents, and media models are different systems with different strengths and tradeoffs.'],
+      ['concepts', 'Concept decoder', 'Once the moving pieces make sense, the vocabulary gets easier: tokens, context, memory, tools, grounding, verification, and approvals.'],
+      ['builder', 'Agent stack', 'A useful agent is assembled from capabilities: model, context, tools, memory, approvals, and verification.'],
+      ['failure', 'Failure modes', 'Most AI mistakes come from missing evidence, stale info, bad instructions, wrong tools, or unsafe permissions.']
+    ];
+
+    function renderAgent() {
+      const flow = document.getElementById('agentFlow');
+      const consoleBox = document.getElementById('agentConsole');
+      flow.innerHTML = steps.map((s, i) => {
+        const cls = i === stepIndex ? 'active' : i < stepIndex ? 'done' : '';
+        return `<article class="flow-step ${cls}"><span>${s[0]}</span><strong>${s[1]}</strong><p>${s[2]}</p></article>`;
+      }).join('');
+      consoleBox.textContent = steps[stepIndex][3];
+    }
+
+    function advanceAgent() {
+      stepIndex = (stepIndex + 1) % steps.length;
+      renderAgent();
+    }
+
+    function setScenario(kind) {
+      steps = scenarios[kind];
+      stepIndex = 0;
+      document.querySelectorAll('[data-scenario]').forEach(btn => btn.classList.toggle('active', btn.dataset.scenario === kind));
+      renderAgent();
+    }
+
+    const mapStations = {
+      input: ['1', 'Input', 'The user request enters first. A good system extracts intent, constraints, and what done should look like.', 'Bad input is recoverable if the agent asks a focused question or checks the source of truth.'],
+      tokens: ['2', 'Tokens', 'Text becomes model-readable chunks. Token pressure matters because long messy input can bury the important clue.', 'Short, clear context usually beats a giant undigested paste.'],
+      context: ['3', 'Context', 'The working window holds instructions, visible conversation, files, tool results, and images for this run.', 'If a fact is not in context or retrievable by tool, the model may not know it.'],
+      model: ['4', 'Model core', 'The model predicts useful next text or actions from the current context. It is the reasoning engine, not the whole system.', 'Better models help, but even strong models need evidence.'],
+      tools: ['5', 'Tools', 'Tools let the agent inspect reality: files, commands, browser state, images, or live data.', 'Tool output still needs interpretation. The tool gives evidence; it does not replace judgment.'],
+      memory: ['6', 'Memory', 'Memory stores selected durable facts, preferences, and workflow lessons so they survive future sessions.', 'Memory should be curated. Saving everything creates noise.'],
+      verify: ['7', 'Verification', 'The checkpoint proves the work: tests, screenshots, scans, syntax checks, source comparisons, or live page checks.', 'This is where confident claims become inspected claims.'],
+      answer: ['8', 'Final answer', 'The final response should say what changed, what was verified, and where to see it.', 'A concise closeout is part of the system, not an afterthought.']
+    };
+
+    function renderMapStation(key) {
+      const item = mapStations[key];
+      document.querySelectorAll('[data-map]').forEach(btn => btn.classList.toggle('active', btn.dataset.map === key));
+      document.getElementById('mapButtons').innerHTML = Object.entries(mapStations).map(([id, station]) => {
+        return `<button class="lab-button ${id === key ? 'active' : ''}" data-map-button="${id}" type="button">${station[0]} ${station[1]}</button>`;
+      }).join('');
+      document.getElementById('mapReadout').innerHTML = `<span class="status-pill">Station ${item[0]}</span><h3>${item[1]}</h3><p>${item[2]}</p><div class="trace-note">${item[3]}</div>`;
+      document.querySelectorAll('[data-map-button]').forEach(btn => btn.addEventListener('click', () => renderMapStation(btn.dataset.mapButton)));
+    }
+
+    function splitTokens(text) {
+      return (text.match(/[A-Za-z]+(?:'[A-Za-z]+)?|\d+|[^\sA-Za-z\d]/g) || []).flatMap(part => {
+        if (part.length <= 8 || /[^A-Za-z]/.test(part)) return [part];
+        const out = [];
+        for (let i = 0; i < part.length; i += 6) out.push(part.slice(i, i + 6));
+        return out;
+      });
+    }
+
+    function renderTokens() {
+      const input = document.getElementById('tokenInput').value;
+      const tokens = splitTokens(input);
+      document.getElementById('tokenOutput').innerHTML = tokens.map(t => `<span class="token">${escapeHtml(t)}</span>`).join('');
+      document.getElementById('tokenCount').textContent = tokens.length;
+      const pct = Math.min(100, Math.round(tokens.length / 120 * 100));
+      document.getElementById('contextUse').textContent = pct + '%';
+      document.getElementById('tokenMeter').style.width = pct + '%';
+      document.getElementById('tokenHint').textContent = tokens.length < 35 ? 'Short' : tokens.length < 80 ? 'Medium' : 'Crowded';
+    }
+
+    const tokenPresets = {
+      short: 'Explain AI agents simply.',
+      clear: 'Ask Claw to check the latest garden photo, write a caption, and add it to the website without leaking private metadata.',
+      logs: 'Here is a copied error log: TypeError: Cannot read properties of undefined, at renderAgent, at HTMLButtonElement, after clicking Next step. Explain what likely broke and where to inspect first.',
+      overloaded: 'Fix the AI page and make it better and more interactive and add a bunch of examples and make the mobile layout nice and maybe add diagrams and also explain tokens and context and tools and hallucinations and memory and local models and cloud models and make it look cool.'
+    };
+
+    function setTokenPreset(kind) {
+      document.querySelectorAll('[data-token-preset]').forEach(btn => btn.classList.toggle('active', btn.dataset.tokenPreset === kind));
+      document.getElementById('tokenInput').value = tokenPresets[kind];
+      renderTokens();
+    }
+
+    const contextMessages = [
+      ['Turn 1', 'User asks for a garden photo page.'],
+      ['Turn 2', 'Assistant checks project structure.'],
+      ['Turn 3', 'User says captions should be funny.'],
+      ['Turn 4', 'Assistant resizes images and edits HTML.'],
+      ['Turn 5', 'User changes the homepage nav.'],
+      ['Turn 6', 'Assistant verifies with screenshots.'],
+      ['Turn 7', 'User asks about AI education content.'],
+      ['Turn 8', 'Assistant proposes an agent simulator.'],
+      ['Turn 9', 'User says to proceed.'],
+      ['Turn 10', 'Assistant edits the AI explainer page.'],
+      ['Turn 11', 'Browser verification finds a mobile issue.'],
+      ['Turn 12', 'Assistant fixes responsive layout.'],
+      ['Turn 13', 'User asks for another interaction.'],
+      ['Turn 14', 'Assistant adds a tool-use demo.']
+    ];
+
+    function renderContext() {
+      const count = Number(document.getElementById('contextRange').value);
+      document.getElementById('contextLabel').textContent = count;
+      const visibleFrom = Math.max(0, count - 5);
+      const summaryFrom = Math.max(0, count - 9);
+      document.getElementById('contextStack').innerHTML = contextMessages.slice(0, count).map((msg, i) => {
+        let state = 'dropped';
+        let label = 'dropped';
+        if (memorySaved && i === 2) { state = 'memory'; label = 'saved'; }
+        else if (i >= visibleFrom) { state = 'visible'; label = 'visible'; }
+        else if (i >= summaryFrom) { state = 'summary'; label = 'summary'; }
+        return `<div class="context-item ${state}"><strong>${msg[0]}</strong><span>${msg[1]}</span><span class="context-state">${label}</span></div>`;
+      }).join('');
+    }
+
+    function toggleMemory() {
+      memorySaved = !memorySaved;
+      const button = document.getElementById('memoryToggle');
+      button.classList.toggle('active', memorySaved);
+      button.setAttribute('aria-pressed', String(memorySaved));
+      button.textContent = memorySaved ? 'Key fact saved' : 'Save key fact';
+      renderContext();
+    }
+
+    const prompts = {
+      weak: {
+        text: 'Make the AI page better.',
+        result: 'The model has to guess what better means: more text, different styling, new sections, or bug fixes. You may get a generic answer.'
+      },
+      clear: {
+        text: 'Improve the How AI Works page by adding interactive demos for tokens, context, prompts, tools, and failure modes. Keep it static and compatible with GitHub Pages.',
+        result: 'The model has scope, constraints, and implementation boundaries. The output is more likely to match the actual job.'
+      },
+      agent: {
+        text: 'Edit the existing site, preserve unrelated files, verify desktop/mobile layout, commit the change, and give me the live cache-busted link.',
+        result: 'Now it is agent-ready: it describes actions, safety constraints, verification, and final reporting.'
+      }
+    };
+
+    function renderPrompt(kind) {
+      document.querySelectorAll('[data-prompt]').forEach(btn => btn.classList.toggle('active', btn.dataset.prompt === kind));
+      document.getElementById('promptText').textContent = prompts[kind].text;
+      document.getElementById('promptResult').textContent = prompts[kind].result;
+    }
+
+    const tools = {
+      guess: 'REQUEST: "What changed on the site?"\n\nMODEL ONLY: I can describe likely changes, but I may be wrong if I have not inspected the repo.',
+      files: 'TOOL: rg + file reads\n\nRESULT: The page contains an agent simulator, token playground, context visualizer, prompt comparison, tool simulator, system tradeoffs, and failure modes.',
+      web: 'TOOL: web/browser check\n\nRESULT: Useful for current facts or deployed pages. Also requires prompt-injection caution because external pages are untrusted input.',
+      image: 'TOOL: image generation\n\nRESULT: Best when the page needs a new bitmap asset, thumbnail, texture, or visual reference. Not needed for every UI.',
+      approve: 'TOOL: external action\n\nRESULT: Restarting services, spending money, publishing public posts, or changing credentials should pause for approval first.'
+    };
+    const toolCompare = {
+      guess: [
+        'A model may say the page was probably updated recently because the conversation mentioned it. That can sound confident while still being unverified.',
+        'An agent checks the repository, commit history, or deployed page before saying what changed.'
+      ],
+      files: [
+        'Without reading files, the model can only infer structure from memory or chat context.',
+        'File search gives exact paths, text, and line-level evidence. That is the right move for site edits.'
+      ],
+      web: [
+        'For current facts, a model-only answer can be stale the moment it is written.',
+        'A web check can confirm live state, but external pages must be treated as untrusted input.'
+      ],
+      image: [
+        'A text model can describe an image idea, but it cannot create the bitmap itself.',
+        'An image tool creates a real asset, then the agent should place it and verify that it loads.'
+      ],
+      approve: [
+        'The model may know what command would restart a service, but knowing is not permission.',
+        'A safer agent pauses before destructive, public, paid, credential, or service-level actions.'
+      ]
+    };
+
+    function renderTool(kind) {
+      document.querySelectorAll('[data-tool]').forEach(btn => btn.classList.toggle('active', btn.dataset.tool === kind));
+      document.getElementById('toolReadout').textContent = tools[kind];
+      document.getElementById('guessPanel').textContent = toolCompare[kind][0];
+      document.getElementById('checkPanel').textContent = toolCompare[kind][1];
+    }
+
+    const traces = {
+      good: {
+        badge: 'Healthy run',
+        note: 'This is what you want from an agent: enough public structure to review the work, without exposing private internal reasoning.',
+        steps: [
+          ['Request', 'User asks to add an interactive AI page section.', 'The task has a clear target and an existing page to edit.'],
+          ['Visible plan', 'Agent chooses a small next module: explain observable traces.', 'A short public plan is useful because it sets scope and gives the user something concrete to judge.'],
+          ['Tool call', 'Read local HTML/CSS/JS and find the tour/nav structure.', 'The agent inspects the actual source instead of assuming where the section belongs.'],
+          ['Observation', 'Page already has tour stops, nav items, modules, and static JavaScript.', 'The new feature should fit that existing pattern rather than introduce a framework.'],
+          ['Verification', 'Run syntax checks, screenshot the page, and scan staged changes for secrets.', 'The agent proves the static page still loads and no accidental private data is being shipped.'],
+          ['Final answer', 'Report commit, what changed, and the cache-busted live link.', 'A good closeout is short, specific, and tied to evidence.']
+        ]
+      },
+      bad: {
+        badge: 'Weak run',
+        note: 'This trace is weak because it jumps from request to confidence. The missing middle is where most mistakes hide.',
+        steps: [
+          ['Request', 'User asks to improve the page.', 'The goal is broad and could mean design, content, interactivity, or bug fixes.'],
+          ['Assumption', 'Agent decides what the page probably looks like from memory.', 'No file read, no screenshot, and no check against the current repo.'],
+          ['Confident answer', 'Agent says the page was improved.', 'Confidence is not evidence. It may be describing work that never happened.'],
+          ['No observation', 'There is no tool result to compare against.', 'Without an observation, the agent cannot know whether the change exists or works.'],
+          ['No verification', 'No syntax check, no layout check, no commit check.', 'The user has to find mistakes manually.'],
+          ['Correction needed', 'The next run must inspect the source and verify the rendered page.', 'Bad traces are fixable, but they cost time and trust.']
+        ]
+      },
+      blocked: {
+        badge: 'Approval boundary',
+        note: 'Stopping is part of good agent behavior. A capable agent still needs permission boundaries.',
+        steps: [
+          ['Request', 'User asks for an action that changes service state or publishes externally.', 'The agent can understand the task, but capability is not permission.'],
+          ['Risk check', 'Action touches a restart, public post, credential, payment, or destructive change.', 'These are approval-required categories because mistakes have real consequences.'],
+          ['Pause', 'Agent explains what it would do and asks for explicit approval.', 'This is better than quietly doing something powerful and hoping it was okay.'],
+          ['Wait', 'No command runs until the user confirms that exact action.', 'The trace should show that the boundary was respected.'],
+          ['Proceed or cancel', 'If approved, the agent acts and verifies. If not, it stops cleanly.', 'Good automation has brakes.'],
+          ['Report', 'Final answer says whether the action happened or was intentionally not run.', 'No ambiguity about external effects.']
+        ]
+      }
+    };
+    let currentTrace = 'good';
+    let traceIndex = 0;
+
+    function renderTrace(kind) {
+      currentTrace = kind;
+      traceIndex = 0;
+      document.querySelectorAll('[data-trace]').forEach(btn => btn.classList.toggle('active', btn.dataset.trace === kind));
+      renderTraceStep();
+    }
+
+    function renderTraceStep() {
+      const trace = traces[currentTrace];
+      document.getElementById('traceList').innerHTML = trace.steps.map((step, index) => {
+        return `<button class="trace-row ${index === traceIndex ? 'active' : ''}" data-trace-step="${index}" type="button"><b>${index + 1}</b><span><strong>${step[0]}</strong><span>${step[1]}</span></span></button>`;
+      }).join('');
+      const step = trace.steps[traceIndex];
+      document.getElementById('traceOutput').innerHTML = `<span class="status-pill">${trace.badge}</span><h3>${step[0]}</h3><p>${step[1]}</p><p>${step[2]}</p><div class="trace-note">${trace.note}</div>`;
+      document.querySelectorAll('[data-trace-step]').forEach(btn => btn.addEventListener('click', () => {
+        traceIndex = Number(btn.dataset.traceStep);
+        renderTraceStep();
+      }));
+    }
+
+    const concepts = {
+      token: {
+        label: 'Token',
+        short: 'A chunk of text the model reads or writes.',
+        definition: 'A token is a piece of text: sometimes a whole short word, sometimes part of a word, sometimes punctuation. Models process tokens, not raw letters or human meanings directly.',
+        example: 'Long pasted logs consume many tokens. If the important error is buried near the bottom, the model may spend attention on noise before it reaches the useful clue.',
+        avoid: 'Not exactly a word.',
+        better: 'A model-sized text piece.'
+      },
+      context: {
+        label: 'Context',
+        short: 'The working material visible right now.',
+        definition: 'Context is the active bundle the model can use for this answer: your latest message, relevant previous messages, files, tool results, images, and instructions.',
+        example: 'When an agent edits a page, the current HTML and CSS need to be in context or retrieved with tools. Otherwise it is guessing the structure.',
+        avoid: 'The model remembers everything.',
+        better: 'The model uses what is currently loaded.'
+      },
+      memory: {
+        label: 'Memory',
+        short: 'Durable facts saved outside the moment.',
+        definition: 'Memory is information intentionally saved so future sessions can reuse it: preferences, stable facts, project rules, and lessons learned.',
+        example: 'A note like "GitHub username is jz237, not jez237" belongs in memory because it prevents repeated mistakes.',
+        avoid: 'Memory is the whole chat log.',
+        better: 'Memory is selected durable context.'
+      },
+      model: {
+        label: 'Model',
+        short: 'The prediction engine doing the language work.',
+        definition: 'The model is the trained neural network that turns input tokens into output tokens. It does not automatically inspect your computer or the live web unless a system gives it tools.',
+        example: 'A stronger model may reason better about a bug, but it still needs the actual code to fix the right file.',
+        avoid: 'The model is the whole assistant.',
+        better: 'The model is one part of the assistant.'
+      },
+      training: {
+        label: 'Training',
+        short: 'The process that creates the model weights.',
+        definition: 'Training is the expensive learning phase before normal use. The system shows the model many examples, measures prediction error, and adjusts weights so future predictions get better.',
+        example: 'A base language model learns broad text patterns during pretraining. Later tuning can make it follow instructions or specialize in code.',
+        avoid: 'Training happens every time you chat.',
+        better: 'Training creates the model; inference uses it.'
+      },
+      alignment: {
+        label: 'Alignment',
+        short: 'Tuning model behavior toward human goals.',
+        definition: 'Alignment is the post-training work that tries to make a capable model more useful, honest, safe, and controllable. RLHF is one common alignment method.',
+        example: 'Humans may rank two answers, a reward model learns that preference, and reinforcement learning nudges the assistant toward the preferred behavior.',
+        avoid: 'Alignment makes models perfect.',
+        better: 'Alignment shapes behavior and still needs evals.'
+      },
+      tool: {
+        label: 'Tool',
+        short: 'A controlled action outside the model.',
+        definition: 'A tool lets the agent do something the model cannot do internally: read files, run commands, search the web, create images, inspect screenshots, or send messages.',
+        example: 'For "what changed in the latest commit," git is the right tool. The model should not answer from memory.',
+        avoid: 'Tools make answers automatically correct.',
+        better: 'Tools provide evidence the model must interpret.'
+      },
+      agent: {
+        label: 'Agent',
+        short: 'A model plus loop, tools, and boundaries.',
+        definition: 'An agent wraps a model in a process: read the task, plan, use tools when useful, observe results, verify, and decide whether to continue or stop.',
+        example: 'Editing the website is agent work because it involves reading files, changing code, checking screenshots, committing, and pushing.',
+        avoid: 'Agent means smarter chatbot.',
+        better: 'Agent means model plus action loop.'
+      },
+      grounding: {
+        label: 'Grounding',
+        short: 'Tying claims to evidence.',
+        definition: 'Grounding means anchoring an answer in sources the system can inspect: files, tool output, screenshots, documents, or live data.',
+        example: 'A browser screenshot grounds a layout fix better than saying "the CSS looks centered."',
+        avoid: 'Grounding removes all mistakes.',
+        better: 'Grounding reduces unsupported claims.'
+      },
+      verification: {
+        label: 'Verification',
+        short: 'Checking that the result actually works.',
+        definition: 'Verification is the proof step after work is done: syntax checks, tests, screenshots, link checks, secret scans, or comparing output to the request.',
+        example: 'For this static page, useful verification is JS syntax, Chrome rendering, DOM checks, and a staged secret scan.',
+        avoid: 'No error message means verified.',
+        better: 'Verification is an explicit check.'
+      },
+      approval: {
+        label: 'Approval',
+        short: 'A human checkpoint before risky action.',
+        definition: 'Approval is the boundary that stops an agent before destructive, public, paid, credential, or service-level actions.',
+        example: 'Restarting OpenClaw or publishing a public post should pause for explicit confirmation.',
+        avoid: 'Approval is just caution.',
+        better: 'Approval controls real-world side effects.'
+      },
+      hallucination: {
+        label: 'Hallucination',
+        short: 'A plausible answer without enough evidence.',
+        definition: 'A hallucination is not random nonsense. It is often a fluent, reasonable-looking answer produced when the model lacks grounding or overextends from weak context.',
+        example: 'Saying a homepage tile exists without reading the HTML would be a classic hallucination risk.',
+        avoid: 'Hallucination means the model is broken.',
+        better: 'Hallucination means the claim is unsupported.'
+      }
+    };
+    let conceptKey = 'token';
+
+    function renderConcept(key) {
+      conceptKey = key;
+      document.getElementById('conceptList').innerHTML = Object.entries(concepts).map(([id, item]) => {
+        return `<button class="concept-card ${id === key ? 'active' : ''}" data-concept="${id}" type="button"><strong>${item.label}</strong><span>${item.short}</span></button>`;
+      }).join('');
+      const item = concepts[key];
+      document.getElementById('conceptDetail').innerHTML = `<span class="status-pill">Core concept</span><h3>${item.label}</h3><p>${item.definition}</p><div class="concept-example">${item.example}</div><div class="concept-pair"><div><strong>Avoid thinking</strong><span>${item.avoid}</span></div><div><strong>Better mental model</strong><span>${item.better}</span></div></div>`;
+      document.querySelectorAll('[data-concept]').forEach(btn => btn.addEventListener('click', () => renderConcept(btn.dataset.concept)));
+    }
+
+    const failures = {
+      hallucination: ['Hallucination', 'The model fills in a plausible answer without evidence. Reduce it by giving sources, using tools, and asking it to separate known facts from assumptions.'],
+      stale: ['Stale information', 'Training data and memory can be outdated. For current prices, laws, model releases, schedules, or live websites, the system needs fresh lookup.'],
+      context: ['Missing context', 'The model may not see the file, previous decision, image, or private instruction that matters. Put key facts in the current context or durable memory.'],
+      prompt: ['Weak prompt', 'Ambiguous requests force the model to choose hidden assumptions. Better prompts say the goal, constraints, output shape, and what not to change.'],
+      tool: ['Wrong tool', 'A coding agent should inspect code. A research agent should cite sources. A media job may need an image tool. Good agents pick the right instrument.'],
+      permission: ['Permission boundary', 'A capable agent still needs limits. Destructive actions, external posts, secrets, payments, and service restarts deserve explicit approval.']
+    };
+    const quizQuestions = {
+      commit: {
+        label: 'Latest commit',
+        question: 'Question: “What changed in the latest deployed website commit?”',
+        tool: 'Correct. Latest deployed commit is current state, so the agent should inspect git or the live page before answering.',
+        guess: 'Risky. The model might remember an earlier commit from the chat, but that is not proof of the latest deployed state.'
+      },
+      weather: {
+        label: 'Tonight weather',
+        question: 'Question: “Will it rain enough tonight that I can skip watering?”',
+        tool: 'Correct. Weather is live and unstable, so the agent should check a forecast before advising.',
+        guess: 'Risky. Weather changes too quickly for memory or training data to be reliable.'
+      },
+      definition: {
+        label: 'Concept',
+        question: 'Question: “What is a token in an AI model?”',
+        tool: 'Usually unnecessary. A general concept can be answered from model knowledge unless exact source wording is required.',
+        guess: 'Reasonable. This is stable conceptual knowledge, so a plain explanation is fine.'
+      },
+      restart: {
+        label: 'Restart service',
+        question: 'Question: “Restart the site service now.”',
+        tool: 'Partly right, but the key point is approval. The agent should pause before service restarts unless explicitly authorized.',
+        guess: 'Wrong direction. This is not a question to guess about; it is an action with operational risk.'
+      }
+    };
+    const builderLayers = [
+      {
+        key: 'model',
+        title: 'Reasoning model',
+        desc: 'Turns instructions and context into next actions or answers.',
+        color: 'var(--lab-cyan)',
+        capability: 2,
+        risk: 1,
+        oversight: 1,
+        defaultOn: true
+      },
+      {
+        key: 'context',
+        title: 'Context window',
+        desc: 'Carries the current task, visible chat, files, and constraints.',
+        color: 'var(--lab-green)',
+        capability: 2,
+        risk: 1,
+        oversight: 1,
+        defaultOn: true
+      },
+      {
+        key: 'tools',
+        title: 'Tools',
+        desc: 'Lets the agent inspect files, browse, run commands, or create media.',
+        color: 'var(--lab-violet)',
+        capability: 3,
+        risk: 3,
+        oversight: 2,
+        defaultOn: true
+      },
+      {
+        key: 'memory',
+        title: 'Memory',
+        desc: 'Persists preferences, facts, and workflow lessons across sessions.',
+        color: 'var(--lab-gold)',
+        capability: 2,
+        risk: 2,
+        oversight: 2,
+        defaultOn: true
+      },
+      {
+        key: 'approvals',
+        title: 'Approvals',
+        desc: 'Adds checkpoints for destructive, public, credential, or service actions.',
+        color: 'var(--lab-orange)',
+        capability: 1,
+        risk: -2,
+        oversight: 3,
+        defaultOn: true
+      },
+      {
+        key: 'verification',
+        title: 'Verification',
+        desc: 'Checks results with tests, screenshots, scans, or source comparisons.',
+        color: 'var(--lab-rose)',
+        capability: 2,
+        risk: -2,
+        oversight: 2,
+        defaultOn: true
+      }
+    ];
+
+    function renderFailure(kind) {
+      document.querySelectorAll('[data-failure]').forEach(btn => btn.classList.toggle('active', btn.dataset.failure === kind));
+      const [title, copy] = failures[kind];
+      document.getElementById('failureCard').innerHTML = `<h3>${title}</h3><p>${copy}</p>`;
+    }
+
+    function renderTour() {
+      const [id, title, copy] = tourStops[tourIndex];
+      document.getElementById('tourTitle').textContent = `${tourIndex + 1}/${tourStops.length}: ${title}`;
+      document.getElementById('tourCopy').textContent = copy;
+      document.getElementById('tourProgress').innerHTML = tourStops.map((stop, index) => {
+        return `<button class="tour-dot ${index === tourIndex ? 'active' : ''}" data-tour-index="${index}" type="button" aria-label="Tour stop ${index + 1}"></button>`;
+      }).join('');
+      document.querySelectorAll('.lab-card').forEach(card => card.classList.toggle('tour-active', card.id === id));
+      document.querySelectorAll('[data-tour-index]').forEach(btn => btn.addEventListener('click', () => moveTour(Number(btn.dataset.tourIndex), true)));
+    }
+
+    function moveTour(index, scroll) {
+      tourIndex = (index + tourStops.length) % tourStops.length;
+      renderTour();
+      if (scroll) document.getElementById(tourStops[tourIndex][0]).scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function answerQuiz(kind) {
+      document.querySelectorAll('[data-quiz]').forEach(btn => btn.classList.toggle('active', btn.dataset.quiz === kind));
+      document.getElementById('quizResult').textContent = quizQuestions[quizKind][kind];
+    }
+
+    function renderQuiz(kind) {
+      quizKind = kind;
+      document.getElementById('quizQuestion').textContent = quizQuestions[kind].question;
+      document.getElementById('quizPicker').innerHTML = Object.entries(quizQuestions).map(([key, value]) => {
+        return `<button class="lab-button ${key === kind ? 'active' : ''}" data-quiz-kind="${key}" type="button">${value.label}</button>`;
+      }).join('');
+      document.querySelectorAll('[data-quiz-kind]').forEach(btn => btn.addEventListener('click', () => renderQuiz(btn.dataset.quizKind)));
+      document.querySelectorAll('[data-quiz]').forEach(btn => btn.classList.remove('active'));
+      document.getElementById('quizResult').textContent = 'Pick the safer approach.';
+    }
+
+    function renderBuilder() {
+      const selected = builderLayers.filter(layer => document.getElementById(`stack-${layer.key}`)?.checked);
+      document.getElementById('stackVisual').innerHTML = selected.length
+        ? selected.map(layer => `<div class="stack-layer" style="--layer-color:${layer.color}"><strong>${layer.title}</strong><span>${layer.desc}</span></div>`).join('')
+        : '<div class="stack-layer"><strong>No stack</strong><span>A model needs at least instructions and context to do useful work.</span></div>';
+      const capability = selected.reduce((sum, layer) => sum + layer.capability, 0);
+      const risk = Math.max(0, selected.reduce((sum, layer) => sum + layer.risk, 0));
+      const oversight = selected.reduce((sum, layer) => sum + layer.oversight, 0);
+      document.getElementById('builderCapability').textContent = capability;
+      document.getElementById('builderRisk').textContent = risk;
+      document.getElementById('builderOversight').textContent = oversight;
+      const hasTools = selected.some(layer => layer.key === 'tools');
+      const hasApprovals = selected.some(layer => layer.key === 'approvals');
+      const hasVerify = selected.some(layer => layer.key === 'verification');
+      let summary = 'This stack can answer basic questions, but it is limited.';
+      if (hasTools && hasVerify && hasApprovals) {
+        summary = 'This is the strongest practical setup: tools provide evidence, verification checks the result, and approvals keep risky actions bounded.';
+      } else if (hasTools && !hasApprovals) {
+        summary = 'Powerful but risky: tools let the agent act, but missing approvals makes destructive or public actions easier to mishandle.';
+      } else if (hasTools && !hasVerify) {
+        summary = 'Useful but less dependable: the agent can inspect or act, but it lacks a final proof step.';
+      } else if (!hasTools && hasVerify) {
+        summary = 'Conservative: it can reason and review, but without tools it cannot inspect current files or live state.';
+      }
+      document.getElementById('builderSummary').textContent = summary;
+    }
+
+    function initBuilder() {
+      document.getElementById('builderOptions').innerHTML = builderLayers.map(layer => {
+        return `<label class="builder-option"><input id="stack-${layer.key}" type="checkbox" ${layer.defaultOn ? 'checked' : ''}><span><strong>${layer.title}</strong><span>${layer.desc}</span></span></label>`;
+      }).join('');
+      builderLayers.forEach(layer => document.getElementById(`stack-${layer.key}`).addEventListener('change', renderBuilder));
+      renderBuilder();
+    }
+
+    function escapeHtml(value) {
+      return value.replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+    }
+
+    const pipelineStages = [
+      ['Prompt', 'Everything loaded for this run goes in first: your message, the system instructions, files, and earlier conversation.'],
+      ['Tokens', 'The text is split into model-sized chunks. The model never sees raw letters or whole documents — only tokens.'],
+      ['Model', 'Billions of learned weights turn the input into a prediction of the most useful next token, repeated again and again.'],
+      ['Response', 'Predicted tokens are decoded back into text. Replies stream out one token at a time — that is why answers appear to type themselves.']
+    ];
+    let pipelineTimer = null;
+    function renderPipelineStage(index) {
+      document.querySelectorAll('#pipelineDiagram span').forEach(el => el.classList.toggle('active', Number(el.dataset.stage) === index));
+      const [title, copy] = pipelineStages[index];
+      document.getElementById('pipelineNote').innerHTML = `<strong>${title}:</strong> ${copy}`;
+    }
+    function stopPipeline() {
+      if (!pipelineTimer) return;
+      clearInterval(pipelineTimer);
+      pipelineTimer = null;
+      document.getElementById('pipelineRun').textContent = 'Send a prompt through';
+    }
+    function runPipeline() {
+      if (pipelineTimer) { stopPipeline(); return; }
+      let index = 0;
+      renderPipelineStage(0);
+      document.getElementById('pipelineRun').textContent = 'Stop';
+      pipelineTimer = setInterval(() => {
+        index += 1;
+        if (index >= pipelineStages.length) { stopPipeline(); return; }
+        renderPipelineStage(index);
+      }, 1200);
+    }
+
+    const systemJobs = {
+      journal: ['Local model', 0, 'A private journaling helper should stay on your machine. A local model keeps every word offline — no service ever sees it. A cloud model would work, but sends your private writing to someone else\'s computer.'],
+      bug: ['Cloud model', 1, 'A gnarly bug benefits from the strongest reasoning available, and frontier models live in the cloud. A local model may not be sharp enough, and you do not need tools acting on your machine just to think a problem through.'],
+      site: ['Agent', 2, 'Updating a website end-to-end means reading files, editing code, verifying in a browser, and pushing — a loop of actions with tools, not a single answer. That is agent work.'],
+      thumb: ['Media model', 3, 'A thumbnail is pixels, not prose. An image model creates the actual asset. A text model can only describe what the thumbnail should look like.']
+    };
+    function renderSystemJob(kind) {
+      const [tile, index, copy] = systemJobs[kind];
+      document.querySelectorAll('[data-job]').forEach(btn => btn.classList.toggle('active', btn.dataset.job === kind));
+      document.querySelectorAll('.system-tile').forEach((el, i) => el.classList.toggle('active', i === index));
+      document.getElementById('systemNote').innerHTML = `<strong>Best fit: ${tile}.</strong> ${copy}`;
+    }
+
+    document.getElementById('nextStep').addEventListener('click', advanceAgent);
+    document.getElementById('resetStep').addEventListener('click', () => { stepIndex = 0; renderAgent(); });
+    document.getElementById('autoStep').addEventListener('click', (event) => {
+      if (autoTimer) {
+        clearInterval(autoTimer);
+        autoTimer = null;
+        event.currentTarget.textContent = 'Auto run';
+        return;
+      }
+      event.currentTarget.textContent = 'Stop';
+      autoTimer = setInterval(advanceAgent, 1300);
+    });
+    document.getElementById('tokenInput').addEventListener('input', renderTokens);
+    document.getElementById('contextRange').addEventListener('input', renderContext);
+    document.getElementById('memoryToggle').addEventListener('click', toggleMemory);
+    document.getElementById('startTour').addEventListener('click', () => moveTour(0, true));
+    document.getElementById('prevTour').addEventListener('click', () => moveTour(tourIndex - 1, true));
+    document.getElementById('nextTour').addEventListener('click', () => moveTour(tourIndex + 1, true));
+    document.getElementById('mobileTour').addEventListener('click', () => moveTour(0, true));
+    document.getElementById('mobilePrev').addEventListener('click', () => moveTour(tourIndex - 1, true));
+    document.getElementById('mobileNext').addEventListener('click', () => moveTour(tourIndex + 1, true));
+    document.querySelectorAll('[data-map]').forEach(btn => btn.addEventListener('click', () => renderMapStation(btn.dataset.map)));
+    document.getElementById('pipelineRun').addEventListener('click', runPipeline);
+    document.querySelectorAll('#pipelineDiagram span').forEach(el => el.addEventListener('click', () => { stopPipeline(); renderPipelineStage(Number(el.dataset.stage)); }));
+    document.querySelectorAll('[data-job]').forEach(btn => btn.addEventListener('click', () => renderSystemJob(btn.dataset.job)));
+    document.querySelectorAll('[data-scenario]').forEach(btn => btn.addEventListener('click', () => setScenario(btn.dataset.scenario)));
+    document.querySelectorAll('[data-token-preset]').forEach(btn => btn.addEventListener('click', () => setTokenPreset(btn.dataset.tokenPreset)));
+    document.querySelectorAll('[data-prompt]').forEach(btn => btn.addEventListener('click', () => renderPrompt(btn.dataset.prompt)));
+    document.querySelectorAll('[data-tool]').forEach(btn => btn.addEventListener('click', () => renderTool(btn.dataset.tool)));
+    document.querySelectorAll('[data-trace]').forEach(btn => btn.addEventListener('click', () => renderTrace(btn.dataset.trace)));
+    document.querySelectorAll('[data-quiz]').forEach(btn => btn.addEventListener('click', () => answerQuiz(btn.dataset.quiz)));
+    document.getElementById('failureTabs').innerHTML = Object.keys(failures).map((key, i) => `<button class="lab-button ${i === 0 ? 'active' : ''}" data-failure="${key}" type="button">${failures[key][0]}</button>`).join('');
+    document.querySelectorAll('[data-failure]').forEach(btn => btn.addEventListener('click', () => renderFailure(btn.dataset.failure)));
+
+    renderAgent();
+    renderMapStation('input');
+    renderTokens();
+    renderContext();
+    renderPrompt('weak');
+    renderTool('guess');
+    renderTrace('good');
+    renderConcept('token');
+    renderFailure('hallucination');
+    renderQuiz('commit');
+    initBuilder();
+    renderPipelineStage(0);
+    renderTour();
+  </script>
+  <script src="../assets/site-enhance.js" defer></script>
+  <script src="../assets/nav.js?v=chronicle-20260612" defer></script>
+</body>
+</html>
