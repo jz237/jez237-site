@@ -790,10 +790,29 @@ function loadCampaignLevel(i){
 }
 
 /* ================= flow ================= */
+let dailyDate = null;
+
 function startGame(m){
   mode = m || 'campaign';
   score = 0; lives = 3;
-  loadCampaignLevel(0);
+  if (mode === 'daily'){
+    const d = LEVELS.generateDaily();
+    dailyDate = d.date;
+    levelIndex = 0;
+    loadLevelData(d.rows);
+  } else {
+    loadCampaignLevel(0);
+  }
+  gameTime = 0;
+  state = 'playing';
+  hideOverlays();
+  AUDIO.ensure();
+}
+
+function startCampaignAt(i){
+  mode = 'campaign';
+  score = 0; lives = 3;
+  loadCampaignLevel(i);
   gameTime = 0;
   state = 'playing';
   hideOverlays();
@@ -1073,5 +1092,14 @@ window.__g = {
   get combo(){ return {n: comboN, t: comboT, mult: comboMult()}; },
   boom(c, r){ boom(c, r); },
   get levelTime(){ return levelTime; },
-  seedDaily(seed){ /* phase 6 */ },
+  get dailyDate(){ return dailyDate; },
+  seedDaily(dateStr){
+    const d = LEVELS.generateDaily(dateStr);
+    mode = 'daily'; dailyDate = d.date; score = 0; lives = 3;
+    loadLevelData(d.rows);
+    state = 'playing'; hideOverlays();
+    return {date: d.date, attempt: d.attempt};
+  },
+  solvable(rows){ return LEVELS.solvable(rows || currentRows); },
+  startAt: startCampaignAt,
 };
