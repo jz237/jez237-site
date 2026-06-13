@@ -1,6 +1,6 @@
 {
   "date": "2026-06-13",
-  "updatedAt": "2026-06-13T12:00:01.176028+00:00",
+  "updatedAt": "2026-06-13T13:00:01.843276+00:00",
   "items": [
     {
       "title": "Anthropic Says It’s Taking Claude Fable 5 Offline to Comply With US Government Order",
@@ -13,10 +13,10 @@
       "image": "https://media.wired.com/photos/6a2cb2e540437fd74449a752/master/pass/Anthropic-Says-US-Gov-Ordered-it-to-Shut-Down-Mythos-Models-Business-2280583841.jpg",
       "published": "2026-06-13T02:26:10+00:00",
       "firstSeen": "2026-06-13T03:00:01.182117+00:00",
-      "lastSeen": "2026-06-13T12:00:01.176028+00:00",
+      "lastSeen": "2026-06-13T13:00:01.843276+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.0334
+      "score": 11.0103
     },
     {
       "title": "US government orders Anthropic to kill Fable 5 and Mythos 5 in unprecedented AI model recall",
@@ -29,10 +29,26 @@
       "image": "https://media.thenextweb.com/2026/06/anthropic-mythos-eu-enisa-cybersecurity-access.avif",
       "published": "2026-06-13T06:57:05+00:00",
       "firstSeen": "2026-06-13T08:00:01.437241+00:00",
-      "lastSeen": "2026-06-13T12:00:01.176028+00:00",
+      "lastSeen": "2026-06-13T13:00:01.843276+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.1061
+      "score": 6.0799
+    },
+    {
+      "title": "Anthropic cuts off Fable 5 and Mythos 5 access following government order",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/949553/anthropic-fable-5-mythos-5-government-national-security",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "On Friday evening, the government ordered Anthropic to block access to Fable 5 and Mythos 5 for all foreign nations, both inside and outside the US, due to national security concerns. That order included employees of Anthropic. To meet those demands, the company has completely cut off access to the models for all customers. In [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/01/STK269_ANTHROPIC_2_D.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
+      "published": "2026-06-13T12:55:49+00:00",
+      "firstSeen": "2026-06-13T13:00:01.843276+00:00",
+      "lastSeen": "2026-06-13T13:00:01.843276+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.3579
     },
     {
       "title": "Anthropic’s safety warnings may have just backfired — the government has pulled the plug on its most powerful AI",
@@ -45,10 +61,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/02/GettyImages-2153561878.jpg?w=1024",
       "published": "2026-06-13T02:26:30+00:00",
       "firstSeen": "2026-06-13T03:00:01.182117+00:00",
-      "lastSeen": "2026-06-13T12:00:01.176028+00:00",
+      "lastSeen": "2026-06-13T13:00:01.843276+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0335
+      "score": 5.0104
     },
     {
       "title": "OpenAI is under investigation by 42 state attorneys general, days after filing for its IPO",
@@ -61,26 +77,26 @@
       "image": "https://media.thenextweb.com/2026/04/Sam-altman-open-ai.avif",
       "published": "2026-06-13T07:40:56+00:00",
       "firstSeen": "2026-06-13T09:00:01.338788+00:00",
-      "lastSeen": "2026-06-13T12:00:01.176028+00:00",
+      "lastSeen": "2026-06-13T13:00:01.843276+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0257
+      "score": 4.9989
     },
     {
-      "title": "A verified subset of 500 software engineering problems from real GitHub issues, validated by human annotators for evaluating language models' ability to resolve real-world coding issues by generating patches for Python codebases.",
-      "url": "https://llm-stats.com/ai-news",
-      "source": "LLM Stats AI News",
-      "sourceUrl": "https://llm-stats.com/ai-news",
-      "sourceWeight": 0.9,
+      "title": "The FBI built a fake town to train agents for cyberattacks. It has a hospital, a power company, and 200 servers.",
+      "url": "https://thenextweb.com/news/fbi-kinetic-cyber-range-replica-town-cyberattacks",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
       "category": "AI",
-      "summary": "",
-      "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-13T12:00:07.940176+00:00",
-      "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-13T12:00:01.176028+00:00",
+      "summary": "The FBI has revealed a 22,000 square-foot replica town on its Huntsville, Alabama, campus built to train law enforcement in simulating and investigating real-world cyberattacks. The Kinetic Cyber Range opened in February 2025 and has trained more than 1,400 students, including FBI personnel and partners from other federal and local agencies. The facility features fully [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/fbi-kinetic-cyber-range-replica-town-cyberattacks.avif",
+      "published": "2026-06-13T11:31:05+00:00",
+      "firstSeen": "2026-06-13T13:00:01.843276+00:00",
+      "lastSeen": "2026-06-13T13:00:01.843276+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.76
+      "score": 4.8056
     },
     {
       "title": "Statement on the US government directive to suspend access to Fable 5 and Mythos 5",
@@ -93,10 +109,42 @@
       "image": "",
       "published": "2026-06-13T01:01:50+00:00",
       "firstSeen": "2026-06-13T02:00:02.094769+00:00",
-      "lastSeen": "2026-06-13T12:00:01.176028+00:00",
+      "lastSeen": "2026-06-13T13:00:01.843276+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.0011
+      "score": 3.9788
+    },
+    {
+      "title": "Windows 11 finally finds files when you type two characters instead of three",
+      "url": "https://thenextweb.com/news/windows-11-search-two-character-fix-patch-tuesday",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Microsoft’s June 2026 Patch Tuesday update quietly fixes one of Windows Search’s longest-standing irritations. The search box now finds files with as few as two characters, down from the previous three-character minimum. Files named Q3, V2, or any other short label are no longer invisible. The update also changes how results are ranked. Local files [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/windows-11-search-two-character-fix-patch-tuesday.avif",
+      "published": "2026-06-13T12:12:02+00:00",
+      "firstSeen": "2026-06-13T13:00:01.843276+00:00",
+      "lastSeen": "2026-06-13T13:00:01.843276+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 3.5258
+    },
+    {
+      "title": "Apple’s new AI photo editing tools mostly work, for better and worse",
+      "url": "https://www.theverge.com/tech/949360/apple-ai-photo-edit-reframe-extend-clean-up-hands-on",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "The most popular camera in the world just got its first set of serious AI photo editing features, and I don't think any of us are ready. As far as AI photo editing goes, the new features in iOS 27 are pretty tame compared to what you can do on, say, Google's Pixel phones. But [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/DSC03778_processed.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.723165084465%2C100%2C78.55366983107&amp%3Bw=1200",
+      "published": "2026-06-13T12:00:00+00:00",
+      "firstSeen": "2026-06-13T13:00:01.843276+00:00",
+      "lastSeen": "2026-06-13T13:00:01.843276+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.4298
     },
     {
       "title": "CoreWeave joins the Nasdaq-100 just 15 months after its IPO, capping a wild ride from crypto mining to AI darling",
@@ -109,10 +157,10 @@
       "image": "https://media.thenextweb.com/2026/06/coreweave-nasdaq-100-index-ipo-ai-cloud.avif",
       "published": "2026-06-13T07:46:59+00:00",
       "firstSeen": "2026-06-13T09:00:01.338788+00:00",
-      "lastSeen": "2026-06-13T12:00:01.176028+00:00",
+      "lastSeen": "2026-06-13T13:00:01.843276+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1284
+      "score": 3.1016
     },
     {
       "title": "v1.84.8",
@@ -125,74 +173,26 @@
       "image": "https://opengraph.githubassets.com/493f42f17f8f27db62de610346e9d74ba80e7035b945371d4e20577d8eb8d914/BerriAI/litellm/releases/tag/v1.84.8",
       "published": "2026-06-13T01:45:29+00:00",
       "firstSeen": "2026-06-13T02:00:02.094769+00:00",
-      "lastSeen": "2026-06-13T12:00:01.176028+00:00",
+      "lastSeen": "2026-06-13T13:00:01.843276+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7176
+      "score": 2.6949
     },
     {
-      "title": "The future of Hollywood isn’t feeding prompts into vanilla gen AI models",
-      "url": "https://www.theverge.com/ai-artificial-intelligence/948425/tribeca-2026-dear-upstairs-neighbors-google-deepmind-openai",
-      "source": "The Verge AI",
-      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "title": "A challenging dataset of 448 multiple-choice questions written by domain experts in biology, physics, and chemistry. Questions are Google-proof and extremely difficult, with PhD experts reaching 65% accuracy.",
+      "url": "https://llm-stats.com/ai-news",
+      "source": "LLM Stats AI News",
+      "sourceUrl": "https://llm-stats.com/ai-news",
       "sourceWeight": 0.9,
       "category": "AI",
-      "summary": "For all the noise that's been made about how generative AI is poised to revolutionize the filmmaking industry, there haven't really been any projects created with the technology that felt like the sort of entertainment people would pay to see. Most AI firms' video models are still only capable of churning out short bursts of [&#8230;]",
-      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/Figure05_700_6_1080p.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C3.4613147178592%2C100%2C93.077370564282&amp%3Bw=1200",
-      "published": "2026-06-13T11:00:00+00:00",
-      "firstSeen": "2026-06-13T12:00:01.176028+00:00",
-      "lastSeen": "2026-06-13T12:00:01.176028+00:00",
+      "summary": "",
+      "image": "https://llm-stats.com/og/main.png",
+      "published": "2026-06-13T13:00:17.887250+00:00",
+      "firstSeen": "2026-05-29T21:00:01.522609+00:00",
+      "lastSeen": "2026-06-13T13:00:01.843276+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3299
-    },
-    {
-      "title": "A Court Has Ruled That Google Is Liable for False Statements Generated by AI Overviews",
-      "url": "https://www.wired.com/story/a-court-has-ruled-that-google-is-liable-for-false-statements-generated-by-ai-overviews",
-      "source": "Wired AI",
-      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "The ruling holds that a company that designs, trains, operates, and manages an AI system must assume legal liability for any damages caused by the responses it generates.",
-      "image": "https://media.wired.com/photos/6a2c41ce14f8a13c2f9c4aac/master/pass/googleAI.jpg",
-      "published": "2026-06-13T09:00:00+00:00",
-      "firstSeen": "2026-06-13T10:00:01.708948+00:00",
-      "lastSeen": "2026-06-13T12:00:01.176028+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.202
-    },
-    {
-      "title": "Andrew Yang thinks the next big startup opportunity is lowering the cost of living",
-      "url": "https://techcrunch.com/2026/06/12/andrew-yang-thinks-the-next-big-startup-opportunity-is-lowering-the-cost-of-living",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Andrew Yang made a list of everything Americans overpay for — housing, food, wireless — and thinks the next startup gold rush is giving that money back.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/06/GettyImages-1487822193.jpg?resize=1200%2C800",
-      "published": "2026-06-13T04:14:19+00:00",
-      "firstSeen": "2026-06-13T05:00:01.558672+00:00",
-      "lastSeen": "2026-06-13T12:00:01.176028+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.0767
-    },
-    {
-      "title": "Andrew Yang says the next startup wave isn’t building AI. It’s lowering the cost of living.",
-      "url": "https://thenextweb.com/news/andrew-yang-cost-of-living-startups-ai-displacement",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Andrew Yang thinks the biggest startup opportunity of the next decade is not building AI. It is lowering the cost of living for the people AI is about to displace. In a TechCrunch interview, the former presidential candidate and UBI advocate laid out a thesis: as AI compresses wages and eliminates entry-level jobs, the market [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/andrew-yang-cost-of-living-startups-ai-displacement.avif",
-      "published": "2026-06-13T08:45:00+00:00",
-      "firstSeen": "2026-06-13T10:00:01.708948+00:00",
-      "lastSeen": "2026-06-13T12:00:01.176028+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.055
+      "score": 2.36
     }
   ],
   "errors": [
