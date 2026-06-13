@@ -1166,11 +1166,13 @@
       '2026-06-10/glimmer-grotto/',
       '2026-06-10/iron-ridge/',
       '2026-06-10/eddy/',
-      '2026-06-11/corner-pocket/'
+      '2026-06-11/corner-pocket/',
+      '2026-06-12/pay-dirt/'
     ]);
     const gameHref = g => `${SITE_GAME_PATHS.has(g.path) ? SITE_BASE : LEGACY_BASE}${g.path}`;
     const games = [
       // Featured (polished)
+      { title: 'Pay Dirt',                      path: '2026-06-12/pay-dirt/',              emoji: '💰', date: 'Jun 12', cat: 'arcade',    tag: 'featured',    desc: 'Modernized Lode Runner — dig traps under claim-jumping guards, grab every nugget, climb out before the holes seal. HD pixel art with dynamic lantern lighting and particle juice, 13 handcrafted claims plus a seeded Daily Dig, power-ups (TNT, speed boots, phase cloak, gold magnet, power shovel), conveyor/crumble/one-way/TNT-crate tiles, scout & mason guard variants, combo multipliers, global leaderboards. Keyboard + touch, synth audio' },
       { title: 'Corner Pocket',                 path: '2026-06-11/corner-pocket/',         emoji: '🎱', date: 'Jun 11', cat: 'arcade',    tag: 'featured',    desc: 'Trash-talking pool-hall pinball with real swept-collision physics, in the scrolling style of Amiga Pinball Illusions. Sink the rack, shoot the 8-ball corner pocket, spell POCKET for a replay — bonus carryover, 5× multipliers, voice callouts, synth audio, global scores. Keyboard + touch' },
       { title: 'Eddy',                          path: '2026-06-10/eddy/',                  emoji: '🌀', date: 'Jun 10', cat: 'arcade',    tag: 'featured',    desc: 'Fluid-dynamics herding — you ARE the current. Swipe real simulated water to shepherd a glowing spore bloom past undertows, geysers, cold pockets and anglerfish into the home ring. 10 tides plus a daily seeded tide, streak scoring, tide-settings sliders, global leaderboards. Touch-first, synth audio' },
       { title: 'Iron Ridge',                    path: '2026-06-10/iron-ridge/',            emoji: '🪖', date: 'Jun 10', cat: 'arcade',    tag: 'featured',    desc: 'Open-field 3D tank combat — real rigid-body physics, rolling procedural forests, destructible everything, ballistic shells, and AI tank duels with global scores. Three.js + cannon-es, keyboard/mouse + touch' },
