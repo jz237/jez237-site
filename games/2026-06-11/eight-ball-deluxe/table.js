@@ -172,14 +172,19 @@ const TABLE = (() => {
     }
 
     /* ---- in/out-lane guides ---- */
-    S(60,880, 60,975, 6, 'metal');                // left guide A (outlane | inlane)
+    S(60,856, 60,975, 6, 'metal');                // left guide A (taller: shrinks outlane entry)
     S(60,975, 174,1006, 6, 'metal');              //   …delivers onto the flipper heel
     S(104,880, 104,940, 6, 'metal');              // left guide B
-    S(458,880, 458,975, 5, 'metal');              // right guide A
+    S(458,856, 458,975, 5, 'metal');              // right guide A (taller)
     S(458,975, 386,1006, 5, 'metal');             //   …delivers onto the right flipper
     S(412,880, 412,940, 5, 'metal');              // right guide B
     zone('zoneC', 82,930, 16);   zone('zoneD', 435,930, 16);
-    zone('outL', 38,1042, 17);   zone('outR', 480,1042, 17);
+    zone('outL', 38,985, 17);    zone('outR', 481,985, 17);
+    /* outlane deflector posts, FLUSH against the walls (a freestanding post
+       would form a rest pocket); they shoulder descending balls inward */
+    C(33,812, 11, 'rubber');     // left: shoulders descending balls past the divider
+    C(486,812, 11, 'rubber');    // right (flush on the OUTLANE side of the wall —
+                                 //  any further east and it blocks the shooter lane)
 
     /* ---- flippers + drain funnels ---- */
     /* pivots widened so the rest-position tip gap clears the ball (drain works);
