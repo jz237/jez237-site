@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>Pay Dirt — dig fast, get rich, don't get caught</title>
+<meta name="description" content="A modernized Lode Runner: dig holes, outsmart claim-jumpers, grab every nugget. Campaign + Daily Dig with global scores.">
+<style>
+:root{
+  --gold:#ffd23f; --gold-hi:#ffe98a; --amber:#ff9d2e; --ember:#ff5c33;
+  --rock:#2a2331; --deep:#16121d; --ink:#0c0a12;
+  --ui:#f2e9d8; --dim:#9b8fa6; --teal:#3fd2c7; --danger:#ff4f6b;
+}
+*{box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent;}
+html,body{height:100%; overflow:hidden; background:var(--ink);}
+body{
+  font-family:'Segoe UI', system-ui, sans-serif; color:var(--ui);
+  touch-action:none; user-select:none; -webkit-user-select:none;
+  overscroll-behavior:none;
+}
+#wrap{position:fixed; inset:0; display:flex; align-items:center; justify-content:center;}
+canvas#game{position:absolute; image-rendering:pixelated; background:#000;}
+.overlay{
+  position:absolute; display:none; flex-direction:column; align-items:center; justify-content:center;
+  gap:14px; text-align:center; padding:20px; z-index:5;
+}
+.overlay.show{display:flex;}
+.panel{
+  background:rgba(14,10,20,.92); border:1px solid rgba(255,210,63,.28);
+  border-radius:14px; padding:22px 30px; box-shadow:0 20px 60px rgba(0,0,0,.7), 0 0 40px rgba(255,157,46,.08) inset;
+  backdrop-filter:blur(4px); max-width:min(92vw,560px); max-height:86vh; overflow-y:auto;
+}
+h1.logo{
+  font-size:clamp(34px,7vw,58px); letter-spacing:4px; font-weight:900; line-height:1;
+  background:linear-gradient(180deg,var(--gold-hi) 15%,var(--gold) 45%,var(--amber) 75%,#c96a18 100%);
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+  filter:drop-shadow(0 3px 0 #5a3208) drop-shadow(0 6px 14px rgba(0,0,0,.8));
+  text-transform:uppercase;
+}
+.tag{color:var(--dim); font-size:14px; letter-spacing:1px; margin-top:-6px;}
+button{
+  font:inherit; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; font-size:15px;
+  color:var(--ink); background:linear-gradient(180deg,var(--gold-hi),var(--gold) 55%,var(--amber));
+  border:0; border-radius:9px; padding:11px 26px; cursor:pointer; min-width:190px; min-height:48px;
+  box-shadow:0 4px 0 #8a5a10, 0 8px 18px rgba(0,0,0,.5);
+  transition:transform .08s, box-shadow .08s, filter .15s;
+}
+button:hover{filter:brightness(1.08);}
+button:active{transform:translateY(3px); box-shadow:0 1px 0 #8a5a10, 0 4px 10px rgba(0,0,0,.5);}
+button.ghost{
+  background:rgba(255,233,138,.06); color:var(--gold); border:1px solid rgba(255,210,63,.45);
+  box-shadow:0 4px 0 rgba(90,50,8,.45), 0 8px 18px rgba(0,0,0,.4);
+}
+button.small{min-width:0; padding:8px 16px; font-size:13px; min-height:44px;}
+.row{display:flex; gap:10px; flex-wrap:wrap; justify-content:center;}
+.tiny{font-size:12px; color:var(--dim); letter-spacing:.5px;}
+.board{font:600 14px/1.7 Consolas, monospace; min-width:260px; text-align:left; white-space:pre;}
+.board .me{color:var(--gold);}
+.howto{ text-align:left; font-size:14px; line-height:1.65; color:#d8cfe4; max-width:440px;}
+.howto b{color:var(--gold);}
+.howto .k{
+  display:inline-block; border:1px solid rgba(255,255,255,.3); border-bottom-width:3px; border-radius:5px;
+  padding:0 7px; font:700 12px/20px Consolas,monospace; background:rgba(255,255,255,.07); margin:0 1px;
+}
+#lvlGrid{display:grid; grid-template-columns:repeat(5,1fr); gap:8px; margin:6px 0;}
+#lvlGrid button{min-width:0; width:58px; height:48px; padding:0; font-size:15px;}
+#lvlGrid button.locked{filter:grayscale(1) brightness(.5); cursor:default;}
+#lvlGrid button.done{outline:2px solid var(--teal);}
+/* touch controls */
+#touch{position:absolute; inset:0; display:none; z-index:8; pointer-events:none;}
+body.touch #touch{display:block;}
+.tbtn{
+  position:absolute; pointer-events:auto; border-radius:50%;
+  background:rgba(255,233,138,.08); border:1.5px solid rgba(255,210,63,.4);
+  color:var(--gold); font-weight:900; display:flex; align-items:center; justify-content:center;
+  font-size:22px; text-shadow:0 0 8px rgba(0,0,0,.8); box-shadow:0 6px 18px rgba(0,0,0,.45);
+}
+.tbtn:active,.tbtn.on{background:rgba(255,210,63,.32);}
+#tLeft {left:18px;  bottom:64px; width:64px; height:64px;}
+#tRight{left:118px; bottom:64px; width:64px; height:64px;}
+#tUp   {left:68px;  bottom:118px; width:64px; height:64px;}
+#tDown {left:68px;  bottom:12px;  width:64px; height:64px;}
+#tDigL {right:104px; bottom:46px; width:76px; height:76px; font-size:15px;}
+#tDigR {right:16px;  bottom:46px; width:76px; height:76px; font-size:15px;}
+#initials{display:flex; gap:10px; justify-content:center; margin:8px 0;}
+#initials span{
+  width:52px; height:64px; border:2px solid rgba(255,210,63,.4); border-radius:8px;
+  font:900 38px/60px Consolas,monospace; color:var(--gold); background:rgba(255,255,255,.04);
+}
+#initials span.cur{border-color:var(--gold); box-shadow:0 0 14px rgba(255,210,63,.35); background:rgba(255,210,63,.1);}
+.statline{display:flex; gap:22px; justify-content:center; font-size:15px; color:#d8cfe4;}
+.statline b{color:var(--gold); font-size:20px;}
+@media (max-height:520px){ .panel{padding:12px 18px;} h1.logo{font-size:30px;} button{min-height:42px; padding:8px 18px;} }
+</style>
+</head>
+<body>
+<div id="wrap">
+  <canvas id="game"></canvas>
+
+  <div class="overlay show" id="ovTitle">
+    <div class="panel" id="titlePanel">
+      <h1 class="logo">Pay Dirt</h1>
+      <div class="tag">dig fast · get rich · don't get caught</div>
+      <div style="height:12px"></div>
+      <div class="row">
+        <button id="bPlay">⛏ Prospect</button>
+        <button id="bDaily" class="ghost">📅 Daily Dig</button>
+      </div>
+      <div class="row">
+        <button id="bLevels" class="ghost small">Level Select</button>
+        <button id="bHow" class="ghost small">How To Play</button>
+        <button id="bScores" class="ghost small">The Ledger</button>
+        <button id="bMute" class="ghost small">🔊 Sound</button>
+      </div>
+      <div style="height:8px"></div>
+      <div class="board" id="titleBoard"></div>
+    </div>
+  </div>
+
+  <div class="overlay" id="ovHow">
+    <div class="panel">
+      <h2 style="color:var(--gold); letter-spacing:2px;">HOW TO PLAY</h2>
+      <div class="howto" id="howBody"></div>
+      <button id="bHowBack" class="ghost small">Back</button>
+    </div>
+  </div>
+
+  <div class="overlay" id="ovLevels">
+    <div class="panel">
+      <h2 style="color:var(--gold); letter-spacing:2px;">CLAIM MAP</h2>
+      <div class="tiny" id="lvlHint">clear a claim to unlock the next</div>
+      <div id="lvlGrid"></div>
+      <button id="bLevelsBack" class="ghost small">Back</button>
+    </div>
+  </div>
+
+  <div class="overlay" id="ovScores">
+    <div class="panel">
+      <h2 style="color:var(--gold); letter-spacing:2px;">THE LEDGER</h2>
+      <div class="row" style="gap:6px;">
+        <button id="bLedgerCampaign" class="ghost small">Campaign</button>
+        <button id="bLedgerDaily" class="ghost small">Daily Dig</button>
+      </div>
+      <div class="board" id="scoreBoard">checking the ledger…</div>
+      <button id="bScoresBack" class="ghost small">Back</button>
+    </div>
+  </div>
+
+  <div class="overlay" id="ovPause">
+    <div class="panel">
+      <h2 style="color:var(--gold); letter-spacing:2px;">PAUSED</h2>
+      <div class="row">
+        <button id="bResume">Resume</button>
+      </div>
+      <div class="row">
+        <button id="bRestartLvl" class="ghost small">Restart Level</button>
+        <button id="bPauseMute" class="ghost small">🔊 Sound</button>
+        <button id="bQuit" class="ghost small">Quit to Camp</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay" id="ovOver">
+    <div class="panel">
+      <h2 id="overTitle" style="color:var(--gold); letter-spacing:2px;">CLAIM LOST</h2>
+      <div class="statline" id="overStats"></div>
+      <div id="entryWrap" style="display:none;">
+        <div class="tiny">strike it rich — sign the ledger</div>
+        <div id="initials"><span>A</span><span>A</span><span>A</span></div>
+        <button id="bSubmit" class="small">Sign ✒</button>
+      </div>
+      <div class="board" id="overBoard"></div>
+      <div class="row">
+        <button id="bAgain">Dig Again</button>
+        <button id="bOverMenu" class="ghost small">Camp</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="touch">
+    <div class="tbtn" id="tUp">▲</div>
+    <div class="tbtn" id="tLeft">◀</div>
+    <div class="tbtn" id="tRight">▶</div>
+    <div class="tbtn" id="tDown">▼</div>
+    <div class="tbtn" id="tDigL">⛏◀</div>
+    <div class="tbtn" id="tDigR">▶⛏</div>
+  </div>
+</div>
+<script src="art.js"></script>
+<script src="audio.js"></script>
+<script src="levels.js"></script>
+<script src="game.js"></script>
+</body>
+</html>
