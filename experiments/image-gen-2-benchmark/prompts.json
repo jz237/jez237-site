@@ -1798,5 +1798,17 @@
     "slot": "afternoon",
     "model": "gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-06-12-evening-subway-moss-maintenance-kit",
+    "title": "Subway Moss Maintenance Kit",
+    "tests": "Reusable non-photo visual template; tests whether GPT Image 2 can render a dense tactile physical kit scene without turning the idea into paper, labels, or an instructional prompt card.",
+    "prompt": "Create a finished cinematic square product photograph titled Subway Moss Maintenance Kit, but do not render any title text or labels in the image. Show a compact maintenance kit for keeping imaginary moss gardens alive inside an abandoned subway station: a scuffed black metal case open on a damp green-tiled platform bench, trays of glowing emerald moss plugs, brass mist nozzles, tiny ceramic root combs, copper nutrient ampoules, glass humidity bulbs, soft velvet pads, mineral salts, bent nickel tweezers, a small hand pump, woven wick tubing, condensation beads, wet stone grit, chipped tile fragments, rusted rail dust, and shallow puddle reflections. Make the kit feel practical, heavily used, and real, with tactile layered materials, worn hinges, scratched brass, damp fabric, moss spores suspended in the light, warm work-lamp glow balanced against cool underground fluorescent spill, shallow depth of field, and a quiet late-night maintenance mood. The composition should be a photographed physical object scene, not a poster, not a flat document, not a prompt card, and not a paper layout. Avoid readable text, labels, logos, brand marks, paper sheets, instruction cards, placeholder boxes, people, hands, faces, dancing imagery, copyrighted characters, watermark, signature, and generic stock-photo styling.\n\nReusable fill-in-the-blank template: Create a finished reusable physical visual about [TOPIC] using [DATA OR DETAILS], set in [SETTING] with [MOOD] lighting. Build the scene around a tactile kit, cabinet, shelf system, display case, workbench, miniature set, product mockup, or other non-paper physical arrangement; include [MATERIALS], [TOOLS OR PROPS], [SURFACE DETAILS], and [LIGHTING DETAILS]. Preserve supplied categories, object relationships, mood, setting, and any factual details when provided; invent coherent specifics when not supplied. Avoid paper sheets, forms, placards, readable labels, logos, private data, cluttered unreadable text, people or hands unless requested, and generic stock-photo styling.\n\nSource photo needed: none.\n\nWhat to preserve: the supplied topic, categories, object relationships, mood, setting, materials, and any user-provided factual data.\n\nWhat to change: transform the topic into a richly detailed photographed physical kit, shelf, display, workbench, product mockup, miniature, or object scene with coherent props, tactile materials, surface wear, environmental context, and cinematic lighting.\n\nExample substitution: [TOPIC] = subway moss maintenance kit; [DATA OR DETAILS] = glowing moss plugs, brass mist nozzles, ceramic root combs, copper nutrient ampoules, glass humidity bulbs, wick tubing, wet tile grit, and rusted rail dust; [SETTING] = abandoned subway platform bench; [MOOD] = quiet late-night maintenance under warm work-lamp glow and cool fluorescent spill.",
+    "image": "images/2026-06-12-evening-subway-moss-maintenance-kit.png",
+    "date": "2026-06-12",
+    "batch": "Daily Prompt",
+    "slot": "evening",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
