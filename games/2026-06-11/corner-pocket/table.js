@@ -1,8 +1,8 @@
-/* Eight Ball Deluxe — table geometry & devices.
+/* Corner Pocket — table geometry & devices.
    Playfield logical space: 560 × 1160, y down. Slope is baked into PHYS gravity.
 
-   Layout (faithful to Bally 1981):
-   · 7-bank pool-ball drop targets mid-left, DELUXE standups behind them
+   Layout (Eight Ball Deluxe-inspired):
+   · 7-bank pool-ball drop targets mid-left, POCKET standups behind them
    · lone 8-ball drop guarding the bonus-collect saucer, up a right-center
      channel aimed from the LEFT flipper
    · 4 in-line drops on the left, shot from the upper-right flipper
@@ -108,7 +108,7 @@ const TABLE = (() => {
       lamp('bankT', bx+2, by-38, 'BANK SHOT');
     }
 
-    /* ---- 7-bank of pool-ball drop targets + DELUXE standups ---- */
+    /* ---- 7-bank of pool-ball drop targets + POCKET standups ---- */
     {
       const Lx=230, Ly=640, Rx=420, Ry=575;
       const dx=Rx-Lx, dy=Ry-Ly, len=Math.hypot(dx,dy);
@@ -201,7 +201,7 @@ const TABLE = (() => {
     /* bonus multipliers cluster at bottom centre (matches the real layout) */
     lamp('x2', 222,936, '2X'); lamp('x3', 252,956, '3X');
     lamp('x4', 308,956, '4X'); lamp('x5', 338,936, '5X');
-    const DLET = 'DELUXE';
+    const DLET = 'POCKET';
     for (let i=0;i<6;i++) lamp('dl'+i, 238+i*29, 706-i*10, DLET[i]);
     for (let i=0;i<7;i++) lamp('bk'+i, 38, 360+i*32, ((i+1)*10)+'K');
     lamp('again', 280,1002, 'SHOOT AGAIN', '#ff5a3c');
