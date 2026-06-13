@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>Corner Pocket · Pinball</title>
+<meta name="description" content="Corner Pocket — a trash-talking pool-hall pinball table — real physics, scrolling Amiga-style presentation, voice callouts, global scores.">
+<meta property="og:title" content="Corner Pocket — Pinball">
+<meta property="og:description" content="A trash-talking pool-hall pinball table in the style of Amiga Pinball Illusions. Real physics, voice callouts, global scores.">
+<meta name="theme-color" content="#0a0805">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<style>
+  :root{
+    --amber:#ffb347; --amber-hot:#ffd98a; --red:#ff5a3c; --cream:#f5e9d0;
+    --felt:#1d5c3a; --chalk:#79c7ff; --ink:#0a0805;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0;height:100%;overflow:hidden;background:#070604}
+  body{font-family:"Segoe UI",system-ui,-apple-system,sans-serif;color:var(--cream);
+       -webkit-user-select:none;user-select:none;touch-action:none;
+       overscroll-behavior:none;position:fixed;inset:0}
+  canvas#pf{position:absolute;inset:0;display:block}
+  /* ---------- overlays ---------- */
+  .overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+           z-index:10;background:radial-gradient(120% 90% at 50% 20%, rgba(20,12,4,.55), rgba(5,3,1,.88));
+           backdrop-filter:blur(2px)}
+  .overlay.hide{display:none}
+  .card{width:min(440px, 92vw);max-height:94vh;overflow-y:auto;text-align:center;
+        background:linear-gradient(165deg,#181009 0%,#0d0905 60%,#0a0703 100%);
+        border:1px solid rgba(255,179,71,.34);border-radius:14px;
+        box-shadow:0 0 0 1px rgba(0,0,0,.6),0 18px 60px rgba(0,0,0,.7),inset 0 1px 0 rgba(255,217,138,.12);
+        padding:22px 22px 18px}
+  .card::-webkit-scrollbar{width:0}
+  h1.logo{margin:4px 0 0;font-size:clamp(30px,8vw,44px);line-height:.95;font-weight:900;letter-spacing:.5px;
+     background:linear-gradient(180deg,#fff3d6 8%,#ffd98a 30%,#ff9b2d 52%,#c1481f 72%,#ffd98a 96%);
+     -webkit-background-clip:text;background-clip:text;color:transparent;
+     filter:drop-shadow(0 2px 0 rgba(0,0,0,.85)) drop-shadow(0 0 18px rgba(255,155,45,.35));
+     font-family:Georgia,"Times New Roman",serif;font-style:italic;text-transform:uppercase}
+  .sub{margin:6px 0 2px;color:#caa46a;font-size:12.5px;letter-spacing:.22em;text-transform:uppercase}
+  .tiny{color:#8d7a59;font-size:11.5px;margin:8px 0 0;line-height:1.5}
+  .eight{display:inline-block;width:46px;height:46px;border-radius:50%;
+     background:radial-gradient(circle at 34% 30%, #4a4a4f, #131316 58%, #000 100%);
+     box-shadow:0 4px 12px rgba(0,0,0,.7), inset 0 -3px 7px rgba(0,0,0,.8);
+     position:relative;vertical-align:middle;margin:2px 8px 8px}
+  .eight::after{content:"8";position:absolute;inset:0;margin:auto;width:22px;height:22px;border-radius:50%;
+     background:radial-gradient(circle at 38% 32%, #fff, #cfc8b8 70%);color:#111;font:700 15px/22px Georgia,serif;text-align:center}
+  .btn{display:block;width:100%;margin:9px 0 0;padding:13px 14px;border-radius:10px;cursor:pointer;
+     font:700 15px/1 "Segoe UI",system-ui,sans-serif;letter-spacing:.12em;text-transform:uppercase;
+     color:#1a0e02;background:linear-gradient(180deg,#ffd98a,#ff9b2d 60%,#e2701f);
+     border:1px solid #8a4d12;box-shadow:0 3px 0 #6d3a0c,0 6px 16px rgba(255,155,45,.25);
+     transition:transform .06s, box-shadow .06s}
+  .btn:active{transform:translateY(2px);box-shadow:0 1px 0 #6d3a0c}
+  .btn.ghost{background:rgba(255,179,71,.08);color:var(--amber);border:1px solid rgba(255,179,71,.4);box-shadow:none}
+  .btn.ghost:active{background:rgba(255,179,71,.16)}
+  .prow{display:flex;gap:8px;margin-top:10px}
+  .prow .btn{flex:1 1 0;width:auto;min-width:0;margin:0;padding:12px 0;font-size:14px}
+  .rows{display:flex;flex-direction:column;gap:5px;margin:12px 0 4px;font-size:13.5px}
+  .rows>div{display:flex;justify-content:space-between;gap:10px;color:#e8d9b8}
+  .rows>div span:last-child{color:var(--amber-hot);font-variant-numeric:tabular-nums}
+  .board{margin-top:10px;display:flex;flex-direction:column;gap:4px;font-variant-numeric:tabular-nums}
+  .br{display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:7px;background:rgba(255,179,71,.06);font-size:13.5px}
+  .br .rk{width:18px;color:#8d7a59;text-align:right}
+  .br .nm{font-weight:700;letter-spacing:.14em;color:var(--amber-hot)}
+  .br .sc{margin-left:auto;color:#f5e9d0}
+  .br .ex{color:#8d7a59;font-size:11px}
+  .kbd{display:inline-block;border:1px solid rgba(255,233,200,.35);border-bottom-width:2px;border-radius:5px;
+       padding:1px 7px;margin:0 2px;font:600 11.5px/1.55 Consolas,monospace;color:#f0e2c4;background:rgba(255,255,255,.05)}
+  .howrows{ text-align:left;font-size:13px;line-height:1.62;color:#d8c8a4;margin:10px 2px 0}
+  .howrows b{color:var(--amber-hot)}
+  /* initials entry */
+  .init{display:flex;justify-content:center;gap:10px;margin:14px 0 6px}
+  .init span{width:52px;height:62px;border-radius:9px;display:flex;align-items:center;justify-content:center;
+     font:800 34px Georgia,serif;color:var(--amber-hot);background:#140d06;border:1px solid rgba(255,179,71,.3)}
+  .init span.cur{border-color:var(--amber-hot);box-shadow:0 0 14px rgba(255,179,71,.45);animation:blink 1s steps(2) infinite}
+  @keyframes blink{50%{box-shadow:0 0 4px rgba(255,179,71,.2)}}
+  /* touch buttons */
+  .tbtn{position:absolute;z-index:6;width:42px;height:42px;border-radius:50%;border:1px solid rgba(255,233,200,.25);
+     background:rgba(10,7,3,.55);color:#d8c8a4;font:600 15px/40px sans-serif;text-align:center;cursor:pointer;
+     backdrop-filter:blur(3px)}
+  .tbtn.hide{display:none}
+  #btnPause{top:calc(8px + env(safe-area-inset-top));right:10px}
+  #btnMute{top:calc(8px + env(safe-area-inset-top));right:60px}
+  #btnView{top:calc(8px + env(safe-area-inset-top));right:110px}
+  .noselect{pointer-events:none}
+</style>
+</head>
+<body>
+<canvas id="pf"></canvas>
+
+<button class="tbtn hide" id="btnPause" aria-label="pause">⏸</button>
+<button class="tbtn hide" id="btnMute"  aria-label="mute">♪</button>
+<button class="tbtn hide" id="btnView"  aria-label="view">⤢</button>
+
+<!-- ---------- TITLE ---------- -->
+<div class="overlay" id="title">
+  <div class="card">
+    <div class="eight"></div>
+    <h1 class="logo">Corner<br>Pocket</h1>
+    <p class="sub">pool-hall pinball · Amiga Pinball Illusions style</p>
+    <div class="prow">
+      <button class="btn" data-p="1">1 Player</button>
+      <button class="btn ghost" data-p="2">2P</button>
+      <button class="btn ghost" data-p="3">3P</button>
+      <button class="btn ghost" data-p="4">4P</button>
+    </div>
+    <button class="btn ghost" id="bHow">How to play</button>
+    <button class="btn ghost" id="bScores">Pool hall legends</button>
+    <p class="tiny" id="titleHint">Flippers <span class="kbd">⇧ Shift</span> · plunger hold <span class="kbd">Space</span> · nudge <span class="kbd">◀ ▲ ▶</span>… arrows&nbsp;&nbsp;<span class="kbd">V</span> view · <span class="kbd">P</span> pause · <span class="kbd">M</span> mute</p>
+  </div>
+</div>
+
+<!-- ---------- HOW TO ---------- -->
+<div class="overlay hide" id="how">
+  <div class="card">
+    <p class="sub">House rules</p>
+    <h1 class="logo" style="font-size:30px">Rack 'em up</h1>
+    <div class="howrows">
+      <b>Sink the rack.</b> Knock down the 7 pool-ball drop targets, then shoot the lone 8-BALL target and the saucer behind it to clear the rack — your bonus carries the whole game.<br><br>
+      <b>POCKET.</b> Downed targets expose the P-O-C-K-E-T standups behind the bank. Spell it for a replay — and listen for the knocker.<br><br>
+      <b>Multipliers.</b> The 4 in-line drops on the left (backhand them from the upper flipper) push your bonus to 5×. The left orbit is the <b>Bank Shot</b> — it climbs 10K→70K.<br><br>
+      <b>A-B-C-D</b> lanes spot you a pool ball. Tilt warnings are real. The machine <i>will</i> talk trash.
+    </div>
+    <button class="btn ghost" id="bGuide">Table guide</button>
+    <button class="btn" id="bHowBack">Got it</button>
+  </div>
+</div>
+
+<!-- ---------- TABLE GUIDE ---------- -->
+<div class="overlay hide" id="guide">
+  <div class="card" style="width:min(540px,96vw)">
+    <p class="sub">know the table</p>
+    <h1 class="logo" style="font-size:26px">Table Guide</h1>
+    <div style="display:flex;gap:14px;align-items:flex-start;justify-content:center;flex-wrap:wrap">
+      <canvas id="guideCv" style="border-radius:8px;border:1px solid rgba(255,179,71,.3)"></canvas>
+      <ol id="guideList" style="text-align:left;font-size:12px;line-height:1.55;color:#d8c8a4;margin:4px 0;padding-left:20px;max-width:230px"></ol>
+    </div>
+    <button class="btn" id="bGuideBack">Back</button>
+  </div>
+</div>
+
+<!-- ---------- SCORES ---------- -->
+<div class="overlay hide" id="scores">
+  <div class="card">
+    <p class="sub">the pool hall wall</p>
+    <h1 class="logo" style="font-size:30px">Legends</h1>
+    <div class="board" id="tBoard"></div>
+    <button class="btn" id="bScoresBack">Back</button>
+  </div>
+</div>
+
+<!-- ---------- PAUSE ---------- -->
+<div class="overlay hide" id="pause">
+  <div class="card">
+    <p class="sub">racked</p>
+    <h1 class="logo" style="font-size:30px">Paused</h1>
+    <button class="btn" id="bResume">Resume</button>
+    <button class="btn ghost" id="bQuit">Quit to title</button>
+  </div>
+</div>
+
+<!-- ---------- GAME OVER / ENTRY ---------- -->
+<div class="overlay hide" id="over">
+  <div class="card" id="overCard"></div>
+</div>
+
+<script src="physics.js?v=3"></script>
+<script src="table.js?v=3"></script>
+<script src="art.js?v=3"></script>
+<script src="audio.js?v=3"></script>
+<script src="game.js?v=3"></script>
+</body>
+</html>
