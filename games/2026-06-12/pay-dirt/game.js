@@ -296,6 +296,133 @@ function moveActor(a, dt, inp, spd){
 
 function onPlayerLand(a){ /* dust + sfx in later phases */ }
 
+/* ================= dig + holes ================= */
+const DIG_TIME = 0.3, HOLE_LIFE = 5.4, HOLE_WARN = 1.1;
+let prevDigL = false, prevDigR = false;
+let levelTime = 0;
+let currentRows = null;   // source rows of the live level (for clean restarts)
+
+function tryDig(dir){
+  if (!player || player.state === 'dead' || player.digT > 0) return false;
+  if (player.state !== 'idle' && player.state !== 'run') return false;
+  const c = Math.floor(player.x), r = Math.floor(player.y);
+  if (Math.abs(player.y - (r + .5)) > 0.1) return false;
+  if (!isSupportTile(c, r + 1) && !guardSupportAt(c, r + 1)) return false;
+  const tc = c + dir, tr = r + 1;
+  if (tileAt(tc, tr) !== '#' || isDug(tc, tr)) return false;
+  const above = tileAt(tc, r);
+  if (above === '#' && !isDug(tc, r)) return false;
+  if (above === 'X' || above === 'B') return false;
+  if (above === 'C' && !isCrumbleGone(tc, r)) return false;
+  player.digT = DIG_TIME;
+  player.dir = dir;
+  player.pendingDig = {c: tc, r: tr};
+  return true;
+}
+
+function openHole(c, r){
+  holes.set(key(c, r), {c, r, t: 0});
+  shake = Math.max(shake, .25);
+}
+
+function updateHoles(dt){
+  for (const h of [...holes.values()]){
+    h.t += dt;
+    if (h.t >= HOLE_LIFE){
+      holes.delete(key(h.c, h.r));
+      if (player && player.state !== 'dead' &&
+          Math.floor(player.x) === h.c && Math.floor(player.y) === h.r)
+        killPlayer('sealed');
+      for (const g of guards)
+        if (g.state !== 'dead' && Math.floor(g.x) === h.c && Math.floor(g.y) === h.r)
+          sealGuard(g);
+    }
+  }
+}
+
+function sealGuard(g){ // full guard lifecycle lands in phase 4
+  g.state = 'dead'; g.deadT = 0;
+  addScore(300);
+}
+
+function addScore(n){ score += n; }
+
+/* ================= gold + exit + win/lose ================= */
+function revealExit(){
+  exitRevealed = true;
+  shake = Math.max(shake, .3);
+}
+
+function checkGold(){
+  const c = Math.floor(player.x), r = Math.floor(player.y);
+  for (const gd of golds){
+    if (gd.taken || gd.held) continue;
+    if (gd.c === c && gd.r === r &&
+        Math.abs(player.x - (gd.c + .5)) < .4 && Math.abs(player.y - (gd.r + .5)) < .4){
+      gd.taken = true; goldLeft--;
+      addScore(100);
+      if (goldLeft <= 0) revealExit();
+    }
+  }
+}
+
+function checkWin(){
+  if (!exitRevealed) return;
+  const c = Math.floor(player.x);
+  if (player.y <= 0.55 && isLadder(c, 0)) levelComplete();
+}
+
+let campaignDone = [];
+try { campaignDone = JSON.parse(localStorage.getItem('paydirt-done') || '[]'); } catch (e) {}
+function markLevelDone(i){
+  if (!campaignDone.includes(i)){
+    campaignDone.push(i);
+    try { localStorage.setItem('paydirt-done', JSON.stringify(campaignDone)); } catch (e) {}
+  }
+}
+
+function levelComplete(){
+  addScore(1000 + Math.max(0, 600 - (levelTime | 0) * 10));
+  if (mode === 'campaign'){
+    markLevelDone(levelIndex);
+    if (levelIndex + 1 < LEVELS.campaign.length){
+      loadCampaignLevel(levelIndex + 1);
+    } else {
+      endGame(true);
+    }
+  } else {
+    endGame(true);
+  }
+}
+
+function killPlayer(reason){
+  if (!player || player.state === 'dead') return;
+  player.state = 'dead';
+  player.deadT = 0;
+  player.deathReason = reason;
+  shake = Math.max(shake, .6);
+}
+
+function respawnOrGameOver(){
+  lives--;
+  if (lives > 0) reloadCurrentLevel();
+  else endGame(false);
+}
+
+function reloadCurrentLevel(){
+  if (currentRows) loadLevelData(currentRows);
+  levelTime = 0;
+}
+
+function endGame(won){
+  state = 'over';
+  $('overTitle').textContent = won ? 'CLAIM CLEARED!' : 'CLAIM LOST';
+  $('overStats').innerHTML =
+    '<div>HAUL<br><b>' + score + '</b></div>' +
+    (mode === 'campaign' ? '<div>CLAIM<br><b>' + (levelIndex + 1) + '</b></div>' : '<div>MODE<br><b>DAILY</b></div>');
+  showOnly('ovOver');
+}
+
 function playerInput(){
   return {
     left: keys.ArrowLeft || keys.KeyA,
@@ -308,9 +435,12 @@ function playerInput(){
 }
 
 function loadLevelData(rows){
+  currentRows = rows;
   parseLevel(rows);
   player = makeActor(spawnPoint.c, spawnPoint.r, 'player');
+  player.digT = 0;
   guards = guardSpawns.map(g => makeActor(g.c, g.r, g.kind));
+  levelTime = 0;
 }
 
 function loadCampaignLevel(i){
@@ -365,7 +495,37 @@ bindButton('bLedgerDaily', () => {});
 function update(dt){
   gameTime += dt;
   if (shake > 0) shake = Math.max(0, shake - dt * 3.2);
-  if (player && player.state !== 'dead') moveActor(player, dt, playerInput(), 1);
+  if (!player) return;
+  levelTime += dt;
+
+  if (player.state === 'dead'){
+    player.deadT += dt;
+    if (player.deadT > 0.9) respawnOrGameOver();
+    updateHoles(dt);
+    return;
+  }
+
+  const inp = playerInput();
+  // dig is edge-triggered
+  if (inp.digL && !prevDigL) tryDig(-1);
+  if (inp.digR && !prevDigR) tryDig(1);
+  prevDigL = !!inp.digL; prevDigR = !!inp.digR;
+
+  if (player.digT > 0){
+    player.digT -= dt;
+    if (player.digT <= 0 && player.pendingDig){
+      openHole(player.pendingDig.c, player.pendingDig.r);
+      player.pendingDig = null;
+    }
+  } else {
+    moveActor(player, dt, inp, 1);
+  }
+
+  updateHoles(dt);
+  if (player.state !== 'dead'){
+    checkGold();
+    checkWin();
+  }
 }
 
 /* ================= render ================= */
@@ -393,7 +553,17 @@ function render(){
       for (let c = 0; c < COLS; c++){
         const t = grid[r][c];
         if (t === '#' || t === 'T' || t === 'B' || t === 'C'){
-          if (!isDug(c, r) && !isCrumbleGone(c, r)) drawTile(T.brick, c, r);
+          if (isDug(c, r)){
+            // hole: closing warning shimmer in the final stretch
+            const h = holes.get(key(c, r));
+            if (h && h.t > HOLE_LIFE - HOLE_WARN){
+              const u = (h.t - (HOLE_LIFE - HOLE_WARN)) / HOLE_WARN;
+              ctx.globalAlpha = .25 + .75 * u * (0.6 + 0.4 * Math.sin(h.t * 24));
+              drawTile(T.brick, c, r);
+              ctx.globalAlpha = 1;
+            }
+          }
+          else if (!isCrumbleGone(c, r)) drawTile(T.brick, c, r);
         }
         else if (t === 'X') drawTile(T.solid, c, r);
         else if (t === 'H') drawTile(T.ladder, c, r);
@@ -402,15 +572,28 @@ function render(){
         else if (t === '<' || t === '>') drawTile(T.solid, c, r);
       }
     }
+    // dig-in-progress: target brick breaking up
+    if (player && player.digT > 0 && player.pendingDig){
+      ctx.globalAlpha = Math.max(0, player.digT / DIG_TIME);
+      drawTile(T.brick, player.pendingDig.c, player.pendingDig.r);
+      ctx.globalAlpha = 1;
+    }
     // gold
-    for (const gd of golds) if (!gd.taken) drawTile(T.gold, gd.c, gd.r);
+    for (const gd of golds) if (!gd.taken && !gd.held) drawTile(T.gold, gd.c, gd.r);
     // entities (placeholder boxes until art pass)
     if (player){
-      ctx.fillStyle = '#3fd2c7';
-      ctx.fillRect(px(player.x) - 12, py(player.y) - 16, 24, 32);
+      if (player.state === 'dead'){
+        ctx.globalAlpha = Math.max(0, 1 - player.deadT);
+        ctx.fillStyle = '#ff4f6b';
+        ctx.fillRect(px(player.x) - 12, py(player.y) - 16, 24, 32);
+        ctx.globalAlpha = 1;
+      } else {
+        ctx.fillStyle = '#3fd2c7';
+        ctx.fillRect(px(player.x) - 12, py(player.y) - 16, 24, 32);
+      }
     }
     ctx.fillStyle = '#ff4f6b';
-    for (const gu of guards) ctx.fillRect(px(gu.x) - 12, py(gu.y) - 16, 24, 32);
+    for (const gu of guards) if (gu.state !== 'dead') ctx.fillRect(px(gu.x) - 12, py(gu.y) - 16, 24, 32);
   }
   ctx.restore();
 
@@ -457,9 +640,12 @@ window.__g = {
   grid: () => grid.map(r => r.join('')),
   keys,
   start: startGame,
-  step(n){ for (let i = 0; i < (n || 1); i++) update(TICK); render(); return true; },
+  step(n){ for (let i = 0; i < (n || 1); i++) if (state === 'playing') update(TICK); render(); return true; },
   snap(){ render(); return true; },
   input(code, down){ keys[code] = !!down; },
   loadLevel(i){ loadCampaignLevel(i); state = 'playing'; hideOverlays(); return grid.length === ROWS; },
+  dig(dir){ return tryDig(dir < 0 ? -1 : 1); },
+  kill(){ killPlayer('debug'); },
+  get levelTime(){ return levelTime; },
   seedDaily(seed){ /* phase 6 */ },
 };
