@@ -8,6 +8,14 @@ const ART = (() => {
   function cv(w, h){ const c = document.createElement('canvas'); c.width = w; c.height = h; return c; }
   function cx(c){ const x = c.getContext('2d'); x.imageSmoothingEnabled = false; return x; }
   function rng(seed){ let s = seed >>> 0 || 1; return () => (s = (s * 1664525 + 1013904223) >>> 0) / 4294967296; }
+  // blend two #rrggbb colors; t=0 -> a, t=1 -> b
+  function mix(a, b, t){
+    const pa = parseInt(a.slice(1), 16), pb = parseInt(b.slice(1), 16);
+    const r = Math.round(((pa >> 16) & 255) * (1 - t) + ((pb >> 16) & 255) * t);
+    const g = Math.round(((pa >> 8) & 255) * (1 - t) + ((pb >> 8) & 255) * t);
+    const bl = Math.round((pa & 255) * (1 - t) + (pb & 255) * t);
+    return '#' + ((1 << 24) + (r << 16) + (g << 8) + bl).toString(16).slice(1);
+  }
 
   const T = 36; // tile px
 
@@ -111,79 +119,135 @@ const ART = (() => {
   buildTiles();
 
   /* ---------------- figures (player + guards) ---------------- */
-  // Painted on an 18x24 logical-pixel canvas, anchored feet-at-bottom-center.
-  const FW = 18, FH = 24;
-  function fcanvas(){ return cv(FW, FH); }
+  // Art area is 16x26 with a 1px outline margin → 18x28 canvas. The body is painted
+  // on a temp canvas, a dark silhouette is derived from it, and the silhouette is
+  // stamped at 8 offsets to give every sprite a clean 1px outline (the thing that
+  // makes pixel art read). Anchored feet-at-bottom-center.
+  const FW = 18, FH = 28, M = 1;
 
-  // palette: {outline, skinned hat hi, hat, face, coat, coatHi, coatDk, legs, boot, accent}
-  function paintFigure(pose, fi, pal){
-    const c = fcanvas(), x = cx(c);
-    const R = (px, py, w, h, col) => { x.fillStyle = col; x.fillRect(px, py, w, h); };
-    // limb phase
-    const swing = pose === 'run' ? [0, 1, 0, -1][fi % 4] : 0;
+  function darken(src){
+    const s = cv(FW, FH), x = cx(s);
+    x.drawImage(src, 0, 0);
+    x.globalCompositeOperation = 'source-in';
+    x.fillStyle = '#0b0712';
+    x.fillRect(0, 0, FW, FH);
+    return s;
+  }
+
+  // Draw the un-outlined figure. Art coords 0..15 x, 0..25 y (offset by M).
+  function paintBody(pose, fi, pal){
+    const c = cv(FW, FH), x = cx(c);
+    const R = (px, py, w, h, col) => { x.fillStyle = col; x.fillRect(px + M, py + M, w, h); };
+    const skinSh = mix(pal.face, '#000', 0.28);
+
+    // animation params
+    const run4 = [0, 1, 2, 1][fi % 4];          // 0..2 stride
+    const stride = pose === 'run' ? [2, 0, -2, 0][fi % 4] : 0;
+    const lift = pose === 'run' ? [0, 1, 0, 1][fi % 4] : 0;
     const climbA = pose === 'climb' ? (fi % 2 ? 1 : -1) : 0;
-    const bob = pose === 'idle' ? (fi % 2) : 0;
-    const top = 2 + bob;
+    const bob = (pose === 'idle' && fi % 2) ? 1 : 0;
+    const T = bob;                               // vertical bob offset
 
-    // shadow
-    R(4, FH - 1, 10, 1, 'rgba(0,0,0,.35)');
-
-    // legs
+    // ---- LEGS ----
     if (pose === 'fall'){
-      R(3, 17, 4, 5, pal.legs); R(11, 17, 4, 5, pal.legs);
-      R(3, 21, 4, 2, pal.boot); R(11, 21, 4, 2, pal.boot);
-    } else if (pose === 'climb'){
-      R(6, 17, 3, 5 - climbA, pal.legs); R(9, 17, 3, 5 + climbA, pal.legs);
-      R(6, 22 - climbA, 3, 2, pal.boot); R(9, 22 + climbA, 3, 2, pal.boot);
-    } else if (pose === 'dig'){
-      R(5, 17, 4, 5, pal.legs); R(10, 17, 4, 5, pal.legs);
-      R(5, 21, 4, 2, pal.boot); R(10, 21, 4, 2, pal.boot);
-    } else { // idle / run / bar
-      R(6 - swing, 17, 3, 5, pal.legs); R(9 + swing, 17, 3, 5, pal.legs);
-      R(6 - swing, 21, 4, 2, pal.boot); R(9 + swing, 21, 4, 2, pal.boot);
-    }
-
-    // torso / coat
-    R(4, 9 + top, 10, 8, pal.coat);
-    R(4, 9 + top, 10, 2, pal.coatHi);
-    R(4, 15 + top, 10, 2, pal.coatDk);
-    R(5, 13 + top, 8, 1, pal.accent); // belt/strap
-
-    // arms
-    if (pose === 'climb'){
-      R(3, 8 + top + (climbA < 0 ? 0 : 3), 3, 5, pal.coat);
-      R(12, 8 + top + (climbA < 0 ? 3 : 0), 3, 5, pal.coat);
+      R(3, 19, 3, 5, pal.legs); R(10, 19, 3, 5, pal.legs);
+      R(2, 22, 4, 2, pal.boot); R(10, 22, 4, 2, pal.boot);
     } else if (pose === 'bar'){
-      R(2, 6 + top, 3, 5, pal.coat); R(13, 6 + top, 3, 5, pal.coat); // reaching up
+      R(6, 19, 4, 6, pal.legs); R(6, 24, 5, 2, pal.boot);
+    } else if (pose === 'climb'){
+      R(5, 19, 3, 5 - climbA, pal.legs); R(9, 19, 3, 5 + climbA, pal.legs);
+      R(5, 24 - climbA, 3, 2, pal.boot); R(9, 24 + climbA, 3, 2, pal.boot);
     } else if (pose === 'dig'){
-      R(13, 11 + top, 5, 3, pal.coat); // arm forward
-      R(2, 11 + top, 3, 4, pal.coat);
+      R(4, 20, 4, 4, pal.legs); R(9, 20, 4, 4, pal.legs);
+      R(3, 23, 5, 2, pal.boot); R(9, 23, 5, 2, pal.boot);
+    } else if (pose === 'run'){
+      R(5 - stride, 19 + lift, 3, 5 - lift, pal.legs); R(8 + stride, 19, 3, 5, pal.legs);
+      R(4 - stride, 23 + lift, 4, 2, pal.boot);        R(8 + stride, 23, 5, 2, pal.boot);
+    } else { // idle
+      R(5, 19, 3, 5, pal.legs); R(9, 19, 3, 5, pal.legs);
+      R(4, 23, 4, 2, pal.boot); R(9, 23, 4, 2, pal.boot);
+    }
+
+    // ---- TORSO / COAT ----
+    const ty = (pose === 'dig') ? 12 : 11 + T;
+    R(4, ty, 9, 8, pal.coat);
+    R(4, ty, 9, 2, pal.coatHi);                 // top highlight
+    R(4, ty + 6, 9, 2, pal.coatDk);             // bottom shade
+    R(12, ty + 1, 1, 6, pal.coatDk);            // right edge shade
+    R(7, ty + 1, 1, 6, pal.accent);             // center strap
+
+    // ---- ARMS ----
+    const armCol = pal.coatDk;
+    if (pose === 'climb'){
+      R(3, 8 + (climbA < 0 ? 0 : 4), 2, 5, pal.coat);  R(2, 7 + (climbA < 0 ? 0 : 4), 2, 2, pal.face);
+      R(12, 8 + (climbA < 0 ? 4 : 0), 2, 5, pal.coat); R(13, 7 + (climbA < 0 ? 4 : 0), 2, 2, pal.face);
+    } else if (pose === 'bar'){
+      R(4, 2, 2, 9, pal.coat); R(11, 2, 2, 9, pal.coat);  // reaching straight up
+      R(4, 1, 2, 2, pal.face); R(11, 1, 2, 2, pal.face);  // hands gripping
+    } else if (pose === 'dig'){
+      R(3, ty + 1, 2, 5, armCol);                       // back arm
+      R(12, ty + 1, 4, 2, pal.coat); R(15, ty + 2, 2, 2, pal.face); // front arm thrust
+    } else if (pose === 'fall'){
+      R(2, 9, 2, 4, pal.coat); R(13, 9, 2, 4, pal.coat); // flailing up
+      R(2, 8, 2, 2, pal.face); R(13, 8, 2, 2, pal.face);
+    } else { // idle / run — back arm + front arm swinging
+      const sw = pose === 'run' ? stride : 0;
+      R(3 - (sw < 0 ? sw : 0), ty + 1, 2, 6, armCol);
+      R(12 + (sw > 0 ? sw : 0), ty + 1, 2, 6, pal.coat);
+      R(12 + (sw > 0 ? sw : 0), ty + 6, 2, 2, pal.face); // front hand
+    }
+
+    // ---- HEAD ----
+    const hy = pose === 'dig' ? 6 : 5 + T;
+    const back = pose === 'climb';
+    if (back){
+      // back of head: hat + hair, no face
+      R(5, hy + 1, 7, 5, mix(pal.face, '#000', 0.4));
     } else {
-      R(2 + swing, 10 + top, 3, 6, pal.coat); R(13 - swing, 10 + top, 3, 6, pal.coat);
+      R(5, hy, 7, 6, pal.face);
+      R(5, hy, 7, 1, skinSh);                   // brow shadow under brim
+      R(5, hy + 5, 7, 1, skinSh);               // jaw shade
+      // face — looking right
+      R(10, hy + 2, 1, 2, pal.outline);         // eye
+      R(6, hy + 4, 4, 1, mix(pal.face, '#5a3a1e', 0.7)); // moustache
+      R(11, hy + 3, 1, 1, skinSh);              // nose tip
     }
 
-    // head + face
-    R(5, 4 + top, 8, 6, pal.face);
-    R(11, 6 + top, 2, 2, pal.outline); // eye (facing right)
-    // hard hat
-    R(4, 2 + top, 10, 3, pal.hat);
-    R(4, 2 + top, 10, 1, pal.hatHi);
-    R(6, 0 + top, 6, 2, pal.hat);
-    R(6, 0 + top, 6, 1, pal.hatHi);
+    // ---- HARD HAT ----
+    R(3, hy - 1, 11, 2, pal.hat);               // brim
+    R(3, hy - 1, 11, 1, pal.hatHi);
+    R(5, hy - 4, 7, 3, pal.hat);                // dome
+    R(5, hy - 4, 7, 1, pal.hatHi);
+    R(8, hy - 4, 1, 3, mix(pal.hat, '#000', 0.25)); // dome ridge
+    if (pal.lampOnHat){ R(7, hy - 5, 3, 1, '#3a2a12'); R(8, hy - 5, 1, 1, pal.lantern); } // headlamp
 
-    // lantern (player only) — small glowing box on the front hand
+    // ---- LANTERN (player) ----
     if (pal.lantern && pose !== 'climb' && pose !== 'bar'){
-      const lx = pose === 'dig' ? 16 : 15 + swing;
-      R(lx, 13 + top, 3, 4, '#3a2a12');
-      R(lx, 14 + top, 3, 2, pal.lantern);
+      const lx = pose === 'dig' ? 16 : 14 + (pose === 'run' ? Math.max(0, stride) : 0);
+      R(lx, ty + 6, 3, 4, '#3a2a12');           // frame
+      R(lx, ty + 7, 3, 2, pal.lantern);         // glass
+      R(lx + 1, ty + 5, 1, 1, '#6b5126');       // handle
     }
-    // dig tool
-    if (pose === 'dig'){ R(16, 9 + top, 2, 6, '#9aa0ad'); R(15, 8 + top, 4, 2, '#c8cdd8'); }
 
-    // guard-type marks (readability)
-    if (pal.mark === 'antenna'){ R(8, top - 2, 2, 2, pal.hatHi); R(8, top - 4, 2, 2, '#ffe66b'); } // scout: bright antenna
-    if (pal.mark === 'trowel' && pose !== 'climb' && pose !== 'bar'){ R(15, 12 + top, 5, 2, '#b8bcc6'); R(17, 13 + top, 2, 4, '#7e8490'); } // mason: trowel
+    // ---- dig tool ----
+    if (pose === 'dig'){ R(15, hy + 4, 3, 2, '#cfd6e0'); R(16, hy + 6, 2, 5, '#9aa0ad'); }
 
+    // ---- guard marks ----
+    if (pal.mark === 'antenna' && !back){ R(8, hy - 6, 1, 2, '#2a1a06'); R(7, hy - 7, 2, 2, '#ffe66b'); }
+    if (pal.mark === 'trowel' && pose !== 'climb' && pose !== 'bar'){ R(14, ty + 3, 4, 2, '#c2c7d0'); R(16, ty + 5, 2, 3, '#7e8490'); }
+
+    return c;
+  }
+
+  function paintFigure(pose, fi, pal){
+    const body = paintBody(pose, fi, pal);
+    const sil = darken(body);
+    const c = cv(FW, FH), x = cx(c);
+    // shadow
+    x.fillStyle = 'rgba(0,0,0,.3)'; x.fillRect(4, FH - 2, 10, 2);
+    // 8-way outline from the silhouette
+    for (const o of [[-1, 0], [1, 0], [0, -1], [0, 1], [-1, -1], [1, -1], [-1, 1], [1, 1]]) x.drawImage(sil, o[0], o[1]);
+    x.drawImage(body, 0, 0);
     return c;
   }
 
@@ -200,7 +264,7 @@ const ART = (() => {
   }
 
   const PAL = {
-    player: { outline: '#10202a', face: '#e8b07a', hat: '#ffb02e', hatHi: '#ffd676', coat: '#2f8f86', coatHi: '#46b3a8', coatDk: '#1d5f59', legs: '#26405a', boot: '#161f2e', accent: '#13302c', lantern: '#fff3b0' },
+    player: { outline: '#10202a', face: '#e8b07a', hat: '#ffb02e', hatHi: '#ffd676', coat: '#2f8f86', coatHi: '#46b3a8', coatDk: '#1d5f59', legs: '#26405a', boot: '#161f2e', accent: '#13302c', lantern: '#fff3b0', lampOnHat: true },
     guard:  { outline: '#2a0c12', face: '#d89a6a', hat: '#b23a3a', hatHi: '#e06868', coat: '#8f2f3a', coatHi: '#b3464f', coatDk: '#5f1d24', legs: '#3a1a22', boot: '#1f0c10', accent: '#5a1a20', mark: null },
     scout:  { outline: '#2a1a06', face: '#e8c07a', hat: '#ff8b2e', hatHi: '#ffc070', coat: '#c46a1f', coatHi: '#e09040', coatDk: '#8a4710', legs: '#5a3210', boot: '#2a1808', accent: '#7a3e0f', mark: 'antenna' },
     mason:  { outline: '#101820', face: '#cdb89a', hat: '#7a8694', hatHi: '#a8b4c0', coat: '#4a5560', coatHi: '#646f7c', coatDk: '#2e353e', legs: '#2a3038', boot: '#181c22', accent: '#343a44', mark: 'trowel' },
