@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-13T01:00:01.235897+00:00",
+  "updatedAt": "2026-06-13T02:00:02.094769+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -10276,6 +10276,18 @@
     "https://techcrunch.com/2026/06/12/metas-months-old-ai-unit-is-a-soul-crushing-gulag-say-the-engineers-stuck-inside-it": {
       "image": "https://techcrunch.com/wp-content/uploads/2025/07/GettyImages-2194278734.jpg?w=1024",
       "checkedAt": "2026-06-13T00:00:01.632600+00:00"
+    },
+    "https://github.com/BerriAI/litellm/releases/tag/v1.84.8": {
+      "image": "https://opengraph.githubassets.com/493f42f17f8f27db62de610346e9d74ba80e7035b945371d4e20577d8eb8d914/BerriAI/litellm/releases/tag/v1.84.8",
+      "checkedAt": "2026-06-13T02:00:02.094769+00:00"
+    },
+    "https://simonwillison.net/2026/Jun/13/us-government-directive-to-suspend-access": {
+      "image": "",
+      "checkedAt": "2026-06-13T02:00:02.094769+00:00"
+    },
+    "https://www.anthropic.com/news/fable-mythos-access": {
+      "image": "https://cdn.sanity.io/images/4zrzovbb/website/50159fff55088f12070cc8a56eb51ff61006b631-2400x1260.png",
+      "checkedAt": "2026-06-13T02:00:02.094769+00:00"
     }
   }
 }
