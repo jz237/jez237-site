@@ -121,6 +121,7 @@ let state = 'title';   // title | playing | paused | over | how | levels | score
 let score = 0, lives = 3, levelIndex = 0, mode = 'campaign'; // campaign | daily
 let gameTime = 0, shake = 0, hitStop = 0, flash = 0, deathFlash = 0;
 let banner = null;          // {text, sub, life}
+let hint = null;            // {life} first-level control hint
 let runDustT = 0, digBuffer = 0, digBufDir = 0;
 let titleRunner = null;     // attract-scene actor
 
@@ -579,8 +580,12 @@ function updateGuard(g, dt){
     g.stunT += dt;
     g.anim += dt;
     const c = Math.floor(g.x), r = Math.floor(g.y);
+    // struggle telegraph: dirt flecks fly faster as escape nears
+    if (g.stunT > STUN_TIME - 1.0 && rnd() < 0.25)
+      spawnParticles(g.x + (rnd() - .5) * .4, g.y, 1, {color: ['#7d5230', '#915e36'], spd: 2.5, ang: -Math.PI / 2, spread: 1.4, life: .35, size: 2.5, grav: 18});
     if (g.stunT >= STUN_TIME && isDug(c, r) && gOccupy(c, r - 1) && !isDug(c, r - 1)){
       g.state = 'climbout';
+      spawnParticles(g.x, g.y, 5, {color: ['#7d5230'], spd: 2.5, life: .4, size: 3, grav: 14});
     }
     return;
   }
@@ -806,7 +811,9 @@ function markLevelDone(i){
 }
 
 function levelComplete(){
-  addScore(1000 + Math.max(0, 600 - (levelTime | 0) * 10));
+  const bonus = 1000 + Math.max(0, 600 - (levelTime | 0) * 10);
+  addScore(bonus);
+  if (player) popup(player.x, player.y - 1, '+' + bonus + ' CLEAR', '#3fd2c7');
   if (mode === 'campaign'){
     markLevelDone(levelIndex);
     if (levelIndex + 1 < LEVELS.campaign.length){
@@ -1039,6 +1046,8 @@ function loadLevelData(rows){
   // intro banner
   if (mode === 'daily') banner = {text: 'DAILY DIG', sub: dailyDate || LEVELS.dailyDateUTC(), life: 2.4};
   else banner = {text: 'CLAIM ' + (levelIndex + 1), sub: (LEVELS.names[levelIndex] || '').toUpperCase(), life: 2.4};
+  // first-claim onboarding hint
+  hint = (mode === 'campaign' && levelIndex === 0) ? {life: 7} : null;
 }
 
 function loadCampaignLevel(i){
@@ -1119,6 +1128,7 @@ function update(dt){
   if (flash > 0) flash = Math.max(0, flash - dt * 2.4);
   if (deathFlash > 0) deathFlash = Math.max(0, deathFlash - dt * 1.6);
   if (banner){ banner.life -= dt; if (banner.life <= 0) banner = null; }
+  if (hint){ hint.life -= dt; if (hint.life <= 0) hint = null; }
   updateParticles(dt);
   if (!player) return;
   // hit-pause: freeze entity sim for a few frames on big impacts (deterministic under step)
@@ -1147,10 +1157,13 @@ function update(dt){
     }
   } else {
     moveActor(player, dt, inp, player.speedT > 0 ? 1.45 : 1);
-    // running dust puffs
+    // running dust puffs + footstep ticks
     if (player.state === 'run'){
       runDustT -= dt;
-      if (runDustT <= 0){ runDustT = 0.12; spawnParticles(player.x - player.dir * 0.2, player.y + 0.42, 1, {color: ['#6b4326', '#8a6038'], spd: 0.8, ang: -1.8, spread: 1, life: 0.3, size: 2.5, grav: 12}); }
+      if (runDustT <= 0){ runDustT = 0.16; spawnParticles(player.x - player.dir * 0.2, player.y + 0.42, 1, {color: ['#6b4326', '#8a6038'], spd: 0.8, ang: -1.8, spread: 1, life: 0.3, size: 2.5, grav: 12}); AUDIO.sfx('step'); }
+    } else if (player.state === 'climb'){
+      runDustT -= dt;
+      if (runDustT <= 0){ runDustT = 0.2; AUDIO.sfx('rung'); }
     }
   }
 
@@ -1238,15 +1251,26 @@ function drawActor(a){
   if (a.dir < 0){ ctx.translate(w, 0); ctx.scale(-1, 1); }
   ctx.drawImage(img, 0, 0, w, h);
   ctx.restore();
+  // carried gold — show which guard pocketed your nugget
+  if (a.gold){
+    ctx.drawImage(ART.tiles.gold, cx2 - 9, footY - h * 0.62 - 9, 18, 18);
+  }
 }
 
-/* additive radial glow */
+/* additive radial glow — cached per color sprite, scaled on draw (cheaper than per-call gradients) */
+const glowCache = {};
+function glowSprite(color){
+  if (glowCache[color]) return glowCache[color];
+  const S = 64, c = ART.cv(S, S), x = ART.cx(c);
+  const g = x.createRadialGradient(S / 2, S / 2, 0, S / 2, S / 2, S / 2);
+  g.addColorStop(0, color); g.addColorStop(1, 'rgba(0,0,0,0)');
+  x.fillStyle = g; x.fillRect(0, 0, S, S);
+  glowCache[color] = c; return c;
+}
 function glow(wx, wy, radius, color, alpha){
   const x = px(wx), y = py(wy);
-  const grd = ctx.createRadialGradient(x, y, 0, x, y, radius);
-  grd.addColorStop(0, color); grd.addColorStop(1, 'rgba(0,0,0,0)');
-  ctx.globalAlpha = alpha; ctx.fillStyle = grd;
-  ctx.fillRect(x - radius, y - radius, radius * 2, radius * 2);
+  ctx.globalAlpha = alpha;
+  ctx.drawImage(glowSprite(color), x - radius, y - radius, radius * 2, radius * 2);
   ctx.globalAlpha = 1;
 }
 
@@ -1434,6 +1458,8 @@ function render(){
     if (player && player.state !== 'dead'){
       glow(player.x, player.y - .15, 96, 'rgba(255,210,120,.55)', 1);
       glow(player.x, player.y - .15, 44, 'rgba(255,240,200,.5)', 1);
+      if (player.cloakT > 0) glow(player.x, player.y - .15, 50, 'rgba(176,127,255,.6)', 0.5 + 0.3 * Math.sin(gameTime * 10));
+      if (player.magnetT > 0) glow(player.x, player.y - .15, 90, 'rgba(255,210,63,.25)', 0.4 + 0.2 * Math.sin(gameTime * 6));
     }
     for (const gd of golds) if (!gd.taken && !gd.held) glow(gd.c + .5, gd.r + .5, 30, 'rgba(255,200,60,.35)', 1);
     if (exitRevealed){ const pulse = 0.4 + 0.25 * Math.sin(gameTime * 5); for (const e of exitCells) glow(e.c + .5, e.r + .5, 40, 'rgba(63,210,199,' + pulse + ')', 1); }
@@ -1470,6 +1496,16 @@ function render(){
     ctx.fillStyle = '#ffd23f'; ctx.font = '900 40px Consolas, monospace';
     ctx.fillText(banner.text, VIEW_W / 2, VIEW_H / 2 - 18);
     if (banner.sub){ ctx.fillStyle = '#d8cfe4'; ctx.font = '600 18px Consolas, monospace'; ctx.fillText(banner.sub, VIEW_W / 2, VIEW_H / 2 + 16); }
+    ctx.globalAlpha = 1;
+  }
+
+  // first-claim onboarding hint
+  if (hint && !banner){
+    ctx.globalAlpha = Math.min(1, hint.life / 1.5) * 0.85;
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillStyle = '#0c0a12cc'; ctx.fillRect(VIEW_W / 2 - 235, VIEW_H - 70, 470, 34);
+    ctx.fillStyle = '#ffe98a'; ctx.font = '700 16px Consolas, monospace';
+    ctx.fillText('◀ ▶ run   ↑ ↓ ladders   Z / X  dig left / right', VIEW_W / 2, VIEW_H - 53);
     ctx.globalAlpha = 1;
   }
 
@@ -1528,13 +1564,24 @@ function drawHUD(){
       ctx.fillStyle = '#ff9d2e'; ctx.textAlign = 'center';
       ctx.fillText('COMBO ×' + comboMult().toFixed(1).replace('.0', ''), VIEW_W / 2, HUD_H - 11);
     }
-    const tags = [];
-    if (player.tnt > 0) tags.push('TNT×' + player.tnt);
-    if (player.speedT > 0) tags.push('BOOTS');
-    if (player.cloakT > 0) tags.push('CLOAK');
-    if (player.magnetT > 0) tags.push('MAGNET');
-    if (player.shovelT > 0) tags.push('SHOVEL');
-    if (tags.length){ ctx.fillStyle = '#3fd2c7'; ctx.textAlign = 'left'; ctx.fillText(tags.join(' · '), 150, HUD_H / 2); }
+    // active power-ups as labeled countdown bars
+    const PUP = [
+      {t: player.speedT, max: 8, label: 'BOOTS', col: '#3fd2c7'},
+      {t: player.cloakT, max: 6, label: 'CLOAK', col: '#b07fff'},
+      {t: player.magnetT, max: 8, label: 'MAGNET', col: '#ffd23f'},
+      {t: player.shovelT, max: 10, label: 'SHOVEL', col: '#7fd24a'},
+    ];
+    let bx = 150;
+    ctx.textAlign = 'left'; ctx.font = '700 11px Consolas, monospace';
+    if (player.tnt > 0){ ctx.fillStyle = '#ff5c33'; ctx.fillText('TNT×' + player.tnt, bx, HUD_H / 2); bx += 56; }
+    for (const pu of PUP){
+      if (pu.t <= 0) continue;
+      const w = 58;
+      ctx.fillStyle = 'rgba(255,255,255,.12)'; ctx.fillRect(bx, HUD_H / 2 - 8, w, 6);
+      ctx.fillStyle = pu.col; ctx.fillRect(bx, HUD_H / 2 - 8, w * Math.min(1, pu.t / pu.max), 6);
+      ctx.fillStyle = pu.col; ctx.fillText(pu.label, bx, HUD_H / 2 + 8);
+      bx += w + 8;
+    }
     if (mode === 'daily' && dailyDate){ ctx.fillStyle = '#9b8fa6'; ctx.textAlign = 'right'; ctx.font = '600 12px Consolas, monospace'; ctx.fillText('DAILY ' + dailyDate, VIEW_W - 16, HUD_H - 10); }
   }
 }
