@@ -239,6 +239,11 @@ const PHYS = (() => {
         // push out
         ball.x = c.cx + nx*R; ball.y = c.cy + ny*R;
         const sp = bounce(nx,ny,'flipper', svx,svy, f.id);
+        // clamp flipper exit speed at the source — otherwise the ball briefly
+        // carries an impossible velocity until the next step's global cap
+        const ex2 = ball.vx*ball.vx + ball.vy*ball.vy;
+        const lim = MAXV*1.1;
+        if (ex2 > lim*lim){ const k = lim/Math.sqrt(ex2); ball.vx*=k; ball.vy*=k; }
         if (sp > 60) events.push({type:'flipperHit', id:f.id, x:ball.x, y:ball.y, speed:sp});
       }
     }
