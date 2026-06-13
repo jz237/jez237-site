@@ -794,6 +794,7 @@ function levelComplete(){
   if (mode === 'campaign'){
     markLevelDone(levelIndex);
     if (levelIndex + 1 < LEVELS.campaign.length){
+      AUDIO.sfx('win');
       loadCampaignLevel(levelIndex + 1);
     } else {
       endGame(true);
@@ -826,6 +827,7 @@ function reloadCurrentLevel(){
 
 function endGame(won){
   state = 'over';
+  AUDIO.sfx(won ? 'win' : 'die');
   $('overTitle').textContent = won ? 'CLAIM CLEARED!' : 'CLAIM LOST';
   $('overStats').innerHTML =
     '<div>HAUL<br><b>' + score + '</b></div>' +
@@ -878,7 +880,7 @@ function startGame(m){
   gameTime = 0;
   state = 'playing';
   hideOverlays();
-  AUDIO.ensure();
+  AUDIO.ensure(); AUDIO.startMusic();
 }
 
 function startCampaignAt(i){
@@ -888,7 +890,7 @@ function startCampaignAt(i){
   gameTime = 0;
   state = 'playing';
   hideOverlays();
-  AUDIO.ensure();
+  AUDIO.ensure(); AUDIO.startMusic();
 }
 function pauseGame(){ if (state !== 'playing') return; state = 'paused'; showOnly('ovPause'); }
 function resumeGame(){ if (state !== 'paused') return; state = 'playing'; hideOverlays(); }
@@ -902,7 +904,7 @@ function toggleMute(){
 
 function bindButton(id, fn){
   const b = $(id);
-  b.addEventListener('click', e => { e.preventDefault(); AUDIO.ensure(); fn(); });
+  b.addEventListener('click', e => { e.preventDefault(); AUDIO.ensure(); AUDIO.sfx('ui'); fn(); });
 }
 bindButton('bPlay', () => startGame('campaign'));
 bindButton('bDaily', () => startGame('daily'));
