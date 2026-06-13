@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-12T22:43:58.771990+00:00",
+  "updatedAt": "2026-06-13T00:00:01.632600+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -10272,6 +10272,10 @@
     "https://www.microsoft.com/en-us/research/blog/ire-identifies-another-lotuslite-specimen": {
       "image": "https://www.microsoft.com/en-us/research/wp-content/uploads/2026/06/ProjectIre-TWLIFB-1200x627-1.jpg",
       "checkedAt": "2026-06-12T21:00:02.009084+00:00"
+    },
+    "https://techcrunch.com/2026/06/12/metas-months-old-ai-unit-is-a-soul-crushing-gulag-say-the-engineers-stuck-inside-it": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/07/GettyImages-2194278734.jpg?w=1024",
+      "checkedAt": "2026-06-13T00:00:01.632600+00:00"
     }
   }
 }
