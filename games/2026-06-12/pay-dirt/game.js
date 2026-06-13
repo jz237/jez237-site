@@ -147,14 +147,163 @@ document.addEventListener('contextmenu', e => { if (state === 'playing') e.preve
 document.addEventListener('touchmove', e => { if (e.target.closest('button,.panel')) return; e.preventDefault(); }, {passive: false});
 addEventListener('touchstart', () => document.body.classList.add('touch'), {once: true, passive: true});
 
-/* ================= entities (placeholder until phase 2/4) ================= */
+/* ================= entities ================= */
 function makeActor(c, r, kind){
   return {
     kind,                       // 'player' | 'guard' | 'scout' | 'mason'
     x: c + 0.5, y: r + 0.5,     // tile-units, cell center
-    dir: 1, vx: 0, vy: 0,
-    state: 'fall',              // run|climb|bar|fall|stun|dead
-    anim: 0,
+    dir: 1,
+    state: 'fall',              // idle|run|climb|bar|fall|stun|dead
+    anim: 0, moved: false,
+  };
+}
+
+/* ================= movement (shared by player + guards) ================= */
+const RUN_SPEED = 5.4, CLIMB_SPEED = 4.5, FALL_SPEED = 9.5;
+const CENTER_EPS = 0.01;
+
+function clamp(v, lo, hi){ return v < lo ? lo : v > hi ? hi : v; }
+
+// can a body move horizontally into cell (c,r) travelling in dir (-1/+1)?
+function canEnterHoriz(c, r, dir){
+  if (!canOccupy(c, r)) return false;
+  const t = tileAt(c, r);
+  if (t === '[') return dir < 0;  // one-way: enter moving left only
+  if (t === ']') return dir > 0;  // one-way: enter moving right only
+  return true;
+}
+
+// is there a stunned guard in a hole at (c,r) to stand on? (filled in phase 4)
+function guardSupportAt(c, r){
+  for (const g of guards)
+    if (g.state === 'stun' && Math.floor(g.x) === c && Math.floor(g.y) === r) return true;
+  return false;
+}
+
+function hasSupport(a){
+  const c = Math.floor(a.x), r = Math.floor(a.y);
+  if (Math.abs(a.y - (r + .5)) > 0.05){
+    // between rows: ladders hold you — including one your lower half still overlaps
+    return isLadder(c, r) || (a.y > r + .5 && isLadder(c, r + 1));
+  }
+  return isSupportTile(c, r + 1) || isLadder(c, r) || isBar(c, r) || guardSupportAt(c, r + 1);
+}
+
+function tryMoveX(a, dx){
+  if (!dx) return false;
+  const r = Math.floor(a.y), c = Math.floor(a.x);
+  const dir = Math.sign(dx);
+  let nx = a.x + dx;
+  if (!canEnterHoriz(c + dir, r, dir))
+    nx = dir > 0 ? Math.min(nx, c + .5) : Math.max(nx, c + .5);
+  nx = clamp(nx, .5, COLS - .5);
+  const moved = Math.abs(nx - a.x) > 1e-6;
+  a.x = nx;
+  a.dir = dir;
+  return moved;
+}
+
+function tryMoveY(a, dy){
+  if (!dy) return false;
+  const c = Math.floor(a.x);
+  let r = Math.floor(a.y);
+  let ny = a.y + dy;
+  if (dy < 0){
+    // rising: clamp at current cell center unless this cell is ladder with occupiable above
+    if (!isLadder(c, r) || !canOccupy(c, r - 1)) ny = Math.max(ny, r + .5);
+    ny = Math.max(ny, .5);
+  } else {
+    if (!canOccupy(c, r + 1)) ny = Math.min(ny, r + .5);
+    ny = Math.min(ny, ROWS - .5);
+  }
+  const moved = Math.abs(ny - a.y) > 1e-6;
+  a.y = ny;
+  return moved;
+}
+
+// One tick of motion for an actor given an input intent {left,right,up,down}.
+function moveActor(a, dt, inp, spd){
+  const run = RUN_SPEED * spd * dt, climb = CLIMB_SPEED * spd * dt;
+  let c = Math.floor(a.x), r = Math.floor(a.y);
+
+  if (a.state === 'fall'){
+    // x eases to column center; no steering mid-air (classic)
+    a.x += (c + .5 - a.x) * Math.min(1, dt * 16);
+    a.y += FALL_SPEED * dt;
+    const nr = Math.floor(a.y);
+    if (a.y >= nr + .5){
+      const landed = isSupportTile(c, nr + 1) || guardSupportAt(c, nr + 1) ||
+                     isLadder(c, nr) || isBar(c, nr);
+      if (landed){
+        a.y = nr + .5;
+        a.state = isBar(c, nr) && !isSupportTile(c, nr + 1) && !isLadder(c, nr) ? 'bar' : 'idle';
+        if (a.kind === 'player') onPlayerLand(a);
+      }
+    }
+    if (a.y > ROWS - .5){ a.y = ROWS - .5; a.state = 'idle'; }
+    a.anim += dt;
+    return;
+  }
+
+  const dx = (inp.right ? 1 : 0) - (inp.left ? 1 : 0);
+  const dyIn = (inp.down ? 1 : 0) - (inp.up ? 1 : 0);
+  let movedX = false, movedY = false;
+
+  // vertical intent first (ladder priority, classic feel)
+  if (dyIn !== 0){
+    const onLad = isLadder(c, r), ladBelow = isLadder(c, r + 1);
+    const onBar = isBar(c, r);
+    if (dyIn > 0 && onBar && !onLad && !isSupportTile(c, r + 1)){
+      a.state = 'fall'; a.y += 0.02; a.anim = 0; return; // drop from bar
+    }
+    const canClimb = dyIn < 0
+      ? (onLad || (ladBelow && a.y > r + .5 + CENTER_EPS))
+      : (onLad || ladBelow);
+    if (canClimb){
+      movedY = tryMoveY(a, dyIn * climb);
+      if (movedY){
+        a.x += (c + .5 - a.x) * Math.min(1, dt * 16); // hug the ladder
+        a.state = 'climb';
+      }
+    }
+  }
+
+  if (!movedY && dx !== 0){
+    // horizontal only when something holds you up
+    if (hasSupport(a)){
+      movedX = tryMoveX(a, dx * run);
+      if (movedX){
+        const rr = Math.floor(a.y);
+        a.y += (rr + .5 - a.y) * Math.min(1, dt * 16); // settle to row center
+      }
+    }
+  }
+
+  // re-evaluate footing
+  c = Math.floor(a.x); r = Math.floor(a.y);
+  if (!hasSupport(a)){
+    a.state = 'fall'; a.anim = 0;
+    return;
+  }
+  const onBarNow = isBar(c, r) && !isSupportTile(c, r + 1) && !isLadder(c, r);
+  if (onBarNow) a.state = 'bar';
+  else if (movedY) a.state = 'climb';
+  else if (movedX) a.state = 'run';
+  else if (a.state !== 'climb' || !isLadder(c, r)) a.state = 'idle';
+  a.moved = movedX || movedY;
+  if (movedX || movedY) a.anim += dt; else a.anim = 0;
+}
+
+function onPlayerLand(a){ /* dust + sfx in later phases */ }
+
+function playerInput(){
+  return {
+    left: keys.ArrowLeft || keys.KeyA,
+    right: keys.ArrowRight || keys.KeyD,
+    up: keys.ArrowUp || keys.KeyW,
+    down: keys.ArrowDown || keys.KeyS,
+    digL: keys.KeyZ || keys.Comma,
+    digR: keys.KeyX || keys.Period,
   };
 }
 
@@ -216,6 +365,7 @@ bindButton('bLedgerDaily', () => {});
 function update(dt){
   gameTime += dt;
   if (shake > 0) shake = Math.max(0, shake - dt * 3.2);
+  if (player && player.state !== 'dead') moveActor(player, dt, playerInput(), 1);
 }
 
 /* ================= render ================= */
