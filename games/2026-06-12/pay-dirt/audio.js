@@ -83,6 +83,8 @@ const AUDIO = (() => {
       case 'win':    [523, 659, 784, 1047, 1319].forEach((f, i) => tone(f, t + i * 0.09, 0.4, 'triangle', 0.28)); break;
       case 'ui':     tone(660, t, 0.05, 'square', 0.16); break;
       case 'tick':   tone(880, t, 0.03, 'square', 0.12); break;
+      case 'step':   noise(t, 0.04, 0.12, 600, 150); break;
+      case 'rung':   tone(330, t, 0.04, 'square', 0.08); break;
     }
   }
 
