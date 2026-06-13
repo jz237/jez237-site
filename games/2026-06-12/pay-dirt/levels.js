@@ -22,7 +22,7 @@ const LEVELS = (() => {
     '................H...........',
     '................H...........',
     '..$...P.........H.......$...',
-    'XXXXXXXXXXXXXXXXXXXXXXXXXXXX',
+    'XXXX######XXXXXXXXXXXXXXXXXX',
   ];
 
   return { campaign: [test] };
