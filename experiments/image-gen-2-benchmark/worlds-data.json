@@ -214,5 +214,23 @@
       "continuity": "Preserves Veyraxis Bloomrift vertical basalt petals, brine lenses, nacre membranes, reefmind inhabitants, pressure-light bowls, alien vegetation, cyan/violet storm light, amber glow, and non-Earth daily-life infrastructure.",
       "entryDescription": "A patient morning queue at Amber Fan Market where reefmind inhabitants exchange amber pressure-light bowls along a wet basalt ledge."
     }
+  },
+  {
+    "id": "2026-06-13-overnight-veyraxis-bloomrift-vapor-river-laundry",
+    "title": "Veyraxis Bloomrift: Vapor River Laundry",
+    "tests": "Generated with openai/gpt-image-2 via OpenClaw CLI; exact output path verified before append; world-only archive entry.",
+    "prompt": "Create a realistic photographed/cinematic daily-life image set in Veyraxis Bloomrift, showing reefmind inhabitants laundering nacre membrane cloths in an upward blue-black vapor river at Vascular Crossing. Anchor the image in the weekly world bible: vertical basalt petals, suspended brine lenses, grown basalt ledges, breathing capillary bridges, gill-like doors, semi-transparent frond lungs, spiral salt antlers, black moss veils, floating pollen sacs, mineral orchids with wet ceramic skins, living crystal pressure gauges, amber pressure-light bowls, wet ceramic tools, storm-filtered cyan light, bruised violet shadows, pearl mist, sea-glass green flashes, and red pressure-light pulses. Render it like a real 35mm documentary photograph with low ledge viewpoint, shallow foreground droplets, atmospheric depth, material wear, believable scale cues, naturalistic alien anatomy, and no text.\n\nSource photo needed: none.\n\nReusable fill-in-the-blank template: Create a realistic photographed/cinematic daily-life image set in Veyraxis Bloomrift, showing [EVERYDAY SCENE] at [LOCATION], with reefmind inhabitants, grown basalt, nacre membrane, pressure-light infrastructure, alien vegetation, and storm-filtered cyan/amber lighting. Preserve the world bible exactly while varying the daily activity and viewpoint.\n\nWhat to preserve: Veyraxis Bloomrift world name, vertical basalt-petal geography, suspended brine lenses, reefmind body plan, pressure-light infrastructure, nacre membranes, alien vegetation, storm-filtered cyan/amber palette, red pressure pulses, and realistic photographic rendering.\n\nWhat to change: choose a new everyday activity, settlement viewpoint, object arrangement, time of day, and lived-in detail while staying within the same alien ecology and material logic.\n\nExample substitution: [EVERYDAY SCENE] = vapor river laundry; [LOCATION] = Vascular Crossing; show reefminds clipping nacre membrane cloths to breathing bridge rails while brine-lens cleaners scrub mineral residue under amber pressure-light bowls.\n\nWeekly world: Veyraxis Bloomrift. Continuity note: preserves the shell-mantled reefminds, vertical basalt rift settlements, living membrane infrastructure, brine-lens ecology, pressure-light tools, and cyan/amber storm lighting.",
+    "image": "images/2026-06-13-overnight-veyraxis-bloomrift-vapor-river-laundry.png",
+    "date": "2026-06-13",
+    "batch": "Daily Prompt",
+    "slot": "overnight",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "world": {
+      "name": "Veyraxis Bloomrift",
+      "description": "A living basalt-and-membrane alien world where glass-shelled reefminds inhabit floating mineral blooms, harvest pressure-light, and move through vascular wind channels.",
+      "continuity": "Preserves the vertical basalt rift, shell-mantled reefminds, nacre membrane infrastructure, brine-lens ecology, pressure-light tools, and storm-filtered cyan/amber lighting.",
+      "entryDescription": "Reefmind inhabitants do laundry by clipping nacre membrane cloths to breathing bridge rails beside an upward vapor river at Vascular Crossing."
+    }
   }
 ]
