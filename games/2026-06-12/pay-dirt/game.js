@@ -1194,16 +1194,16 @@ function buildBackdrop(){
   bg = ART.cv(VIEW_W, VIEW_H);
   const x = ART.cx(bg), r = ART.rng(1234 + levelIndex * 97 + (mode === 'daily' ? 555 : 0));
   const g = x.createLinearGradient(0, 0, 0, VIEW_H);
-  g.addColorStop(0, '#221a30'); g.addColorStop(.55, '#171121'); g.addColorStop(1, '#0b0812');
+  g.addColorStop(0, '#3a2f50'); g.addColorStop(.55, '#2a2040'); g.addColorStop(1, '#1a1228');
   x.fillStyle = g; x.fillRect(0, 0, VIEW_W, VIEW_H);
   // far rock humps
-  x.fillStyle = 'rgba(60,48,82,.30)';
+  x.fillStyle = 'rgba(90,76,120,.32)';
   for (let i = 0; i < 7; i++){
     const cx2 = r() * VIEW_W, w = 120 + r() * 200, h = 80 + r() * 160;
     x.beginPath(); x.ellipse(cx2, VIEW_H - 40 + r() * 60, w, h, 0, Math.PI, 0); x.fill();
   }
   // mid stalactites
-  x.fillStyle = 'rgba(40,32,58,.55)';
+  x.fillStyle = 'rgba(58,48,80,.55)';
   for (let i = 0; i < 14; i++){
     const sx = r() * VIEW_W, w = 14 + r() * 26, h = 40 + r() * 120;
     x.beginPath(); x.moveTo(sx - w / 2, 0); x.lineTo(sx + w / 2, 0); x.lineTo(sx, h); x.closePath(); x.fill();
@@ -1448,24 +1448,22 @@ function render(){
   /* ---------- lighting overlay ---------- */
   if (grid.length){
     ctx.save();
-    // darkness wash + vignette
-    ctx.fillStyle = 'rgba(8,5,14,.46)'; ctx.fillRect(0, 0, VIEW_W, VIEW_H);
-    const vg = ctx.createRadialGradient(VIEW_W / 2, VIEW_H / 2, VIEW_H * .35, VIEW_W / 2, VIEW_H / 2, VIEW_H * .85);
-    vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, 'rgba(0,0,0,.5)');
+    // subtle vignette only — the playfield stays brightly readable; the lantern adds warmth
+    const vg = ctx.createRadialGradient(VIEW_W / 2, VIEW_H / 2 + 20, VIEW_H * .55, VIEW_W / 2, VIEW_H / 2, VIEW_H * 1.05);
+    vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, 'rgba(0,0,0,.16)');
     ctx.fillStyle = vg; ctx.fillRect(0, 0, VIEW_W, VIEW_H);
-    // additive lights punch through
+    // additive lights — soft warm POOL on the ground around the player (keeps the sprite the focal point)
     ctx.globalCompositeOperation = 'lighter';
     if (player && player.state !== 'dead'){
-      glow(player.x, player.y - .15, 96, 'rgba(255,210,120,.55)', 1);
-      glow(player.x, player.y - .15, 44, 'rgba(255,240,200,.5)', 1);
-      if (player.cloakT > 0) glow(player.x, player.y - .15, 50, 'rgba(176,127,255,.6)', 0.5 + 0.3 * Math.sin(gameTime * 10));
-      if (player.magnetT > 0) glow(player.x, player.y - .15, 90, 'rgba(255,210,63,.25)', 0.4 + 0.2 * Math.sin(gameTime * 6));
+      glow(player.x, player.y + .25, 116, 'rgba(255,198,120,.18)', 1);
+      if (player.cloakT > 0) glow(player.x, player.y - .15, 54, 'rgba(176,127,255,.5)', 0.4 + 0.25 * Math.sin(gameTime * 10));
+      if (player.magnetT > 0) glow(player.x, player.y - .15, 96, 'rgba(255,210,63,.2)', 0.35 + 0.15 * Math.sin(gameTime * 6));
     }
-    for (const gd of golds) if (!gd.taken && !gd.held) glow(gd.c + .5, gd.r + .5, 30, 'rgba(255,200,60,.35)', 1);
-    if (exitRevealed){ const pulse = 0.4 + 0.25 * Math.sin(gameTime * 5); for (const e of exitCells) glow(e.c + .5, e.r + .5, 40, 'rgba(63,210,199,' + pulse + ')', 1); }
-    for (const h of holes.values()) glow(h.c + .5, h.r + .6, 22, 'rgba(255,90,40,.25)', 1);
-    // faint danger underglow so guards read in the dark
-    for (const gu of guards) if (gu.state !== 'dead') glow(gu.x, gu.y + .2, 30, 'rgba(255,60,80,' + (gu.state === 'stun' ? .12 : .28) + ')', 1);
+    for (const gd of golds) if (!gd.taken && !gd.held) glow(gd.c + .5, gd.r + .5, 26, 'rgba(255,200,60,.3)', 1);
+    if (exitRevealed){ const pulse = 0.35 + 0.2 * Math.sin(gameTime * 5); for (const e of exitCells) glow(e.c + .5, e.r + .5, 38, 'rgba(63,210,199,' + pulse + ')', 1); }
+    for (const h of holes.values()) glow(h.c + .5, h.r + .6, 20, 'rgba(255,90,40,.22)', 1);
+    // faint danger underglow so guards read at a glance
+    for (const gu of guards) if (gu.state !== 'dead') glow(gu.x, gu.y + .15, 26, 'rgba(255,60,80,' + (gu.state === 'stun' ? .1 : .22) + ')', 1);
     for (const p of particles) if (p.glow) glow(p.x, p.y, p.size * 3.5, hexA(p.color, .6), 1);
     ctx.restore();
   }
