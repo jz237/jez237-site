@@ -1123,6 +1123,25 @@
       line-height: 1.5;
       font-size: 14px;
     }
+    .pipeline-diagram span {
+      cursor: pointer;
+      transition: border-color .2s ease, background .2s ease, box-shadow .2s ease;
+    }
+    .pipeline-diagram span.active {
+      border-color: rgba(230,189,103,0.72);
+      background: rgba(230,189,103,0.15);
+      color: #fff;
+      box-shadow: 0 0 18px rgba(230,189,103,0.28);
+    }
+    .system-tile {
+      transition: border-color .2s ease, background .2s ease, transform .2s ease;
+    }
+    .system-tile.active {
+      border-color: var(--lab-line-hot);
+      background: rgba(57,207,255,0.1);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(57,207,255,0.12);
+    }
     footer {
       margin-top: 38px;
       padding-top: 24px;
@@ -1227,7 +1246,7 @@
             <div class="hero-actions">
               <button class="lab-button primary" id="startTour" type="button">Start guided tour</button>
               <a href="#agent-loop">Run the agent loop</a>
-              <a href="./training-alignment.html">Training &amp; alignment outline</a>
+              <a href="./training-alignment.html">Training &amp; alignment deep dive</a>
               <a href="../../">Back to Home</a>
             </div>
             <div class="tour-panel" aria-live="polite">
@@ -1281,15 +1300,15 @@
             <div>
               <span class="kicker">Separate deep dive</span>
               <h2>Training and Alignment Roadmap</h2>
-              <p>This page mostly explains what happens when you use an AI system. Model training and RLHF are a deeper topic, so they now have their own outline page.</p>
+              <p>This page mostly explains what happens when you use an AI system. Model training and RLHF are a deeper topic, so they have their own full page with hands-on demos.</p>
             </div>
-            <span class="status-pill">Future module</span>
+            <span class="status-pill">Deep dive live</span>
           </div>
           <div class="lab-card-body">
             <div class="scope-callout">
               <div>
-                <h3>Coming next: how models are made</h3>
-                <p>The future page will cover pretraining, fine-tuning, RLHF, safety tuning, evaluation, data quality, and the difference between base models and chat assistants.</p>
+                <h3>How models are made</h3>
+                <p>The deep dive covers pretraining, fine-tuning, RLHF, safety tuning, evaluation, data quality, and the difference between base models and chat assistants — including a tiny model you can train yourself and a preference-ranking demo.</p>
                 <div class="scope-tags" aria-label="Training outline topics">
                   <span>Pretraining</span>
                   <span>Fine-tuning</span>
@@ -1299,7 +1318,7 @@
                   <span>Data issues</span>
                 </div>
               </div>
-              <a class="lab-button primary" href="./training-alignment.html">Open outline</a>
+              <a class="lab-button primary" href="./training-alignment.html">Open the deep dive</a>
             </div>
           </div>
         </section>
@@ -1315,10 +1334,14 @@
           <div class="lab-card-body diagram-grid">
             <article class="diagram-panel diagram-panel-wide">
               <h3>Model Pipeline</h3>
-              <div class="pipeline-diagram" aria-label="Prompt to response pipeline">
-                <span>Prompt</span><i></i><span>Tokens</span><i></i><span>Model</span><i></i><span>Response</span>
+              <div class="pipeline-diagram" id="pipelineDiagram" aria-label="Prompt to response pipeline">
+                <span data-stage="0" class="active">Prompt</span><i></i><span data-stage="1">Tokens</span><i></i><span data-stage="2">Model</span><i></i><span data-stage="3">Response</span>
               </div>
-              <p>Text is chopped into tokens, processed through the model, then decoded back into text. The model is predicting the next useful pieces, not looking up a literal answer book.</p>
+              <div class="control-row" style="margin-top: 14px">
+                <button class="lab-button" id="pipelineRun" type="button">Send a prompt through</button>
+              </div>
+              <div class="trace-note" id="pipelineNote" aria-live="polite"></div>
+              <p>Text is chopped into tokens, processed through the model, then decoded back into text. The model is predicting the next useful pieces, not looking up a literal answer book. Tap a stage, or send a prompt through to watch the whole trip.</p>
             </article>
             <article class="diagram-panel">
               <h3>Agent Loop</h3>
@@ -1344,7 +1367,7 @@
             <div>
               <span class="kicker">Text becomes pieces</span>
               <h2>Token Playground</h2>
-              <p>Models do not read text exactly like humans do. They see chunks called tokens. This is an approximate local demo, but it shows why wording and length matter.</p>
+              <p>Models do not read text exactly like humans do. They see chunks called tokens — in English, one token averages about three-quarters of a word. This is an approximate local demo, but it shows why wording and length matter. Real models accept anywhere from thousands to over a million tokens at once; the meter here fills against a tiny 120-token demo budget so you can watch it move.</p>
             </div>
           </div>
           <div class="lab-card-body two-col">
@@ -1359,7 +1382,7 @@
               <div class="meter"><span id="tokenMeter"></span></div>
               <div class="metric-row">
                 <div class="metric"><span>Approx tokens</span><strong id="tokenCount">0</strong></div>
-                <div class="metric"><span>Context use</span><strong id="contextUse">0%</strong></div>
+                <div class="metric"><span>Demo budget used</span><strong id="contextUse">0%</strong></div>
                 <div class="metric"><span>Why it matters</span><strong id="tokenHint">Short</strong></div>
               </div>
             </div>
@@ -1506,14 +1529,24 @@
             <div>
               <span class="kicker">Different jobs, different tradeoffs</span>
               <h2>Local, Cloud, Agent, Media</h2>
-              <p>AI is not one thing. The useful question is what kind of system you are using and what constraints come with it.</p>
+              <p>AI is not one thing. The useful question is what kind of system you are using and what constraints come with it. Pick a job below and see which system fits.</p>
             </div>
+            <span class="status-pill">Match the job</span>
           </div>
-          <div class="lab-card-body system-strip">
-            <article class="system-tile"><h3>Local model</h3><p>Private and hardware-bound. Good for experiments, automation, and offline control. Quality depends on the model and machine.</p></article>
-            <article class="system-tile"><h3>Cloud model</h3><p>Usually stronger and faster to update. Great for hard reasoning, coding, and multimodal work, with external service tradeoffs.</p></article>
-            <article class="system-tile"><h3>Agent</h3><p>A model with tools, memory, permissions, and a loop. Powerful because it can act, risky if guardrails are sloppy.</p></article>
-            <article class="system-tile"><h3>Media model</h3><p>Image, voice, music, and video models translate prompts into pixels or sound. They need visual direction, not just facts.</p></article>
+          <div class="lab-card-body">
+            <div class="preset-row" aria-label="Pick a job">
+              <button class="lab-button" data-job="journal" type="button">Private journaling helper</button>
+              <button class="lab-button" data-job="bug" type="button">Crack a hard bug</button>
+              <button class="lab-button" data-job="site" type="button">Update my website</button>
+              <button class="lab-button" data-job="thumb" type="button">Make a thumbnail</button>
+            </div>
+            <div class="system-strip">
+              <article class="system-tile"><h3>Local model</h3><p>Private and hardware-bound. Good for experiments, automation, and offline control. Quality depends on the model and machine.</p></article>
+              <article class="system-tile"><h3>Cloud model</h3><p>Usually stronger and faster to update. Great for hard reasoning, coding, and multimodal work, with external service tradeoffs.</p></article>
+              <article class="system-tile"><h3>Agent</h3><p>A model with tools, memory, permissions, and a loop. Powerful because it can act, risky if guardrails are sloppy.</p></article>
+              <article class="system-tile"><h3>Media model</h3><p>Image, voice, music, and video models translate prompts into pixels or sound. They need visual direction, not just facts.</p></article>
+            </div>
+            <div class="trace-note" id="systemNote" aria-live="polite">Pick a job above to see which kind of system fits it best — and why the others are a worse match.</div>
           </div>
         </section>
 
@@ -1589,27 +1622,27 @@
   <script>
     const scenarios = {
       garden: [
-        ['01', 'Read request', 'Extract intent, constraints, and what would count as done.', 'USER: "Find my latest garden photo and write a caption."\\n\\nIntent: add a useful caption.\\nRisk: private metadata, wrong folder, stale assumptions.'],
-        ['02', 'Load context', 'Use visible chat, saved instructions, and relevant files.', 'CONTEXT: site uses photos/garden/ and resized JPEGs.\\nMEMORY: captions should be casual, not stiff.'],
-        ['03', 'Plan', 'Break the job into small checks before touching files.', 'PLAN:\\n1. Inspect image.\\n2. Resize safely.\\n3. Add page entry.\\n4. Verify layout.'],
-        ['04', 'Choose tool', 'Use tools when guessing is weaker than checking.', 'TOOL SELECTED: filesystem + image inspection.\\nReason: the model cannot know the file dimensions by memory.'],
-        ['05', 'Observe result', 'Read tool output and update the next move.', 'OBSERVATION: image is 3024x4032, portrait, contains garden bed with redbud.\\nNext: crop/resize to site convention.'],
-        ['06', 'Answer or continue', 'Stop when the task is verified, otherwise loop again.', 'FINAL: page updated, image resized, layout checked, commit ready.\\nLoop ends because verification passed.']
+        ['01', 'Read request', 'Extract intent, constraints, and what would count as done.', 'USER: "Find my latest garden photo and write a caption."\n\nIntent: add a useful caption.\nRisk: private metadata, wrong folder, stale assumptions.'],
+        ['02', 'Load context', 'Use visible chat, saved instructions, and relevant files.', 'CONTEXT: site uses photos/garden/ and resized JPEGs.\nMEMORY: captions should be casual, not stiff.'],
+        ['03', 'Plan', 'Break the job into small checks before touching files.', 'PLAN:\n1. Inspect image.\n2. Resize safely.\n3. Add page entry.\n4. Verify layout.'],
+        ['04', 'Choose tool', 'Use tools when guessing is weaker than checking.', 'TOOL SELECTED: filesystem + image inspection.\nReason: the model cannot know the file dimensions by memory.'],
+        ['05', 'Observe result', 'Read tool output and update the next move.', 'OBSERVATION: image is 3024x4032, portrait, contains garden bed with redbud.\nNext: crop/resize to site convention.'],
+        ['06', 'Answer or continue', 'Stop when the task is verified, otherwise loop again.', 'FINAL: page updated, image resized, layout checked, commit ready.\nLoop ends because verification passed.']
       ],
       weather: [
-        ['01', 'Read request', 'Find the actual decision being asked for.', 'USER: "Should I water tonight?"\\n\\nIntent: watering advice.\\nRisk: guessing weather from memory would be useless.'],
-        ['02', 'Load context', 'Use location, garden preferences, and recent task history.', 'CONTEXT: Philadelphia / Zone 7a.\\nMemory: new plantings dry out faster than established shrubs.'],
-        ['03', 'Plan', 'Separate facts from judgment.', 'PLAN:\\n1. Check forecast.\\n2. Check rain timing.\\n3. Consider new plantings.\\n4. Give concise recommendation.'],
-        ['04', 'Choose tool', 'Use live data for unstable facts.', 'TOOL SELECTED: weather lookup.\\nReason: precipitation and temperature change hourly.'],
-        ['05', 'Observe result', 'Turn raw data into a practical decision.', 'OBSERVATION: rain likely overnight, humidity high, no heat spike.\\nNext: advise skipping most watering, check containers.'],
+        ['01', 'Read request', 'Find the actual decision being asked for.', 'USER: "Should I water tonight?"\n\nIntent: watering advice.\nRisk: guessing weather from memory would be useless.'],
+        ['02', 'Load context', 'Use location, garden preferences, and recent task history.', 'CONTEXT: Philadelphia / Zone 7a.\nMemory: new plantings dry out faster than established shrubs.'],
+        ['03', 'Plan', 'Separate facts from judgment.', 'PLAN:\n1. Check forecast.\n2. Check rain timing.\n3. Consider new plantings.\n4. Give concise recommendation.'],
+        ['04', 'Choose tool', 'Use live data for unstable facts.', 'TOOL SELECTED: weather lookup.\nReason: precipitation and temperature change hourly.'],
+        ['05', 'Observe result', 'Turn raw data into a practical decision.', 'OBSERVATION: rain likely overnight, humidity high, no heat spike.\nNext: advise skipping most watering, check containers.'],
         ['06', 'Answer or continue', 'Answer with caveats when evidence is limited.', 'FINAL: skip beds tonight, water containers if light, revisit tomorrow morning if rain misses.']
       ],
       layout: [
-        ['01', 'Read request', 'Translate subjective feedback into testable layout checks.', 'USER: "Those buttons are not centered."\\n\\nIntent: visual alignment fix.\\nRisk: changing the wrong container.'],
-        ['02', 'Load context', 'Inspect CSS and the actual rendered page.', 'CONTEXT: sidebar uses generated nav plus shared global styles.\\nClue: inherited nav padding may affect alignment.'],
-        ['03', 'Plan', 'Make a small visual fix and verify at multiple widths.', 'PLAN:\\n1. Locate sidebar rules.\\n2. Reset inherited spacing.\\n3. Screenshot desktop/tablet.\\n4. Push cache-busted update.'],
-        ['04', 'Choose tool', 'Use browser screenshots because this is visual.', 'TOOL SELECTED: local server + Chrome screenshot.\\nReason: code inspection alone cannot prove centering.'],
-        ['05', 'Observe result', 'Compare screenshot against the requested frame.', 'OBSERVATION: button stack now fills the sidebar frame evenly.\\nNext: check labels do not clip.'],
+        ['01', 'Read request', 'Translate subjective feedback into testable layout checks.', 'USER: "Those buttons are not centered."\n\nIntent: visual alignment fix.\nRisk: changing the wrong container.'],
+        ['02', 'Load context', 'Inspect CSS and the actual rendered page.', 'CONTEXT: sidebar uses generated nav plus shared global styles.\nClue: inherited nav padding may affect alignment.'],
+        ['03', 'Plan', 'Make a small visual fix and verify at multiple widths.', 'PLAN:\n1. Locate sidebar rules.\n2. Reset inherited spacing.\n3. Screenshot desktop/tablet.\n4. Push cache-busted update.'],
+        ['04', 'Choose tool', 'Use browser screenshots because this is visual.', 'TOOL SELECTED: local server + Chrome screenshot.\nReason: code inspection alone cannot prove centering.'],
+        ['05', 'Observe result', 'Compare screenshot against the requested frame.', 'OBSERVATION: button stack now fills the sidebar frame evenly.\nNext: check labels do not clip.'],
         ['06', 'Answer or continue', 'Report exactly what changed and how it was verified.', 'FINAL: sidebar nav centered, screenshots checked at 1280px and 1024px, commit pushed.']
       ]
     };
@@ -1621,7 +1654,7 @@
     let quizKind = 'commit';
     const tourStops = [
       ['map', 'System map', 'The illustration turns the abstract parts into stations: input, tokens, context, model, tools, memory, verification, and answer.'],
-      ['training-roadmap', 'Training', 'This runtime guide points to a separate outline for model training, fine-tuning, RLHF, alignment, and evaluation.'],
+      ['training-roadmap', 'Training', 'This runtime guide links to a full deep dive on model training, fine-tuning, RLHF, alignment, and evaluation — with demos you can poke.'],
       ['diagrams', 'Diagrams', 'The three shapes to remember are pipeline, loop, and memory. Most AI behavior fits into one of those.'],
       ['tokens', 'Tokens', 'Models operate on chunks of text. More text means more context pressure, cost, and chances for the important part to get buried.'],
       ['context', 'Context and memory', 'The active context is temporary. Durable memory is how key facts survive beyond the visible chat.'],
@@ -1679,7 +1712,7 @@
     }
 
     function splitTokens(text) {
-      return (text.match(/[A-Za-z]+(?:'[A-Za-z]+)?|\\d+|[^\\sA-Za-z\\d]/g) || []).flatMap(part => {
+      return (text.match(/[A-Za-z]+(?:'[A-Za-z]+)?|\d+|[^\sA-Za-z\d]/g) || []).flatMap(part => {
         if (part.length <= 8 || /[^A-Za-z]/.test(part)) return [part];
         const out = [];
         for (let i = 0; i < part.length; i += 6) out.push(part.slice(i, i + 6));
@@ -1774,11 +1807,11 @@
     }
 
     const tools = {
-      guess: 'REQUEST: "What changed on the site?"\\n\\nMODEL ONLY: I can describe likely changes, but I may be wrong if I have not inspected the repo.',
-      files: 'TOOL: rg + file reads\\n\\nRESULT: The page contains an agent simulator, token playground, context visualizer, prompt comparison, tool simulator, system tradeoffs, and failure modes.',
-      web: 'TOOL: web/browser check\\n\\nRESULT: Useful for current facts or deployed pages. Also requires prompt-injection caution because external pages are untrusted input.',
-      image: 'TOOL: image generation\\n\\nRESULT: Best when the page needs a new bitmap asset, thumbnail, texture, or visual reference. Not needed for every UI.',
-      approve: 'TOOL: external action\\n\\nRESULT: Restarting services, spending money, publishing public posts, or changing credentials should pause for approval first.'
+      guess: 'REQUEST: "What changed on the site?"\n\nMODEL ONLY: I can describe likely changes, but I may be wrong if I have not inspected the repo.',
+      files: 'TOOL: rg + file reads\n\nRESULT: The page contains an agent simulator, token playground, context visualizer, prompt comparison, tool simulator, system tradeoffs, and failure modes.',
+      web: 'TOOL: web/browser check\n\nRESULT: Useful for current facts or deployed pages. Also requires prompt-injection caution because external pages are untrusted input.',
+      image: 'TOOL: image generation\n\nRESULT: Best when the page needs a new bitmap asset, thumbnail, texture, or visual reference. Not needed for every UI.',
+      approve: 'TOOL: external action\n\nRESULT: Restarting services, spending money, publishing public posts, or changing credentials should pause for approval first.'
     };
     const toolCompare = {
       guess: [
@@ -2156,6 +2189,49 @@
       return value.replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
     }
 
+    const pipelineStages = [
+      ['Prompt', 'Everything loaded for this run goes in first: your message, the system instructions, files, and earlier conversation.'],
+      ['Tokens', 'The text is split into model-sized chunks. The model never sees raw letters or whole documents — only tokens.'],
+      ['Model', 'Billions of learned weights turn the input into a prediction of the most useful next token, repeated again and again.'],
+      ['Response', 'Predicted tokens are decoded back into text. Replies stream out one token at a time — that is why answers appear to type themselves.']
+    ];
+    let pipelineTimer = null;
+    function renderPipelineStage(index) {
+      document.querySelectorAll('#pipelineDiagram span').forEach(el => el.classList.toggle('active', Number(el.dataset.stage) === index));
+      const [title, copy] = pipelineStages[index];
+      document.getElementById('pipelineNote').innerHTML = `<strong>${title}:</strong> ${copy}`;
+    }
+    function stopPipeline() {
+      if (!pipelineTimer) return;
+      clearInterval(pipelineTimer);
+      pipelineTimer = null;
+      document.getElementById('pipelineRun').textContent = 'Send a prompt through';
+    }
+    function runPipeline() {
+      if (pipelineTimer) { stopPipeline(); return; }
+      let index = 0;
+      renderPipelineStage(0);
+      document.getElementById('pipelineRun').textContent = 'Stop';
+      pipelineTimer = setInterval(() => {
+        index += 1;
+        if (index >= pipelineStages.length) { stopPipeline(); return; }
+        renderPipelineStage(index);
+      }, 1200);
+    }
+
+    const systemJobs = {
+      journal: ['Local model', 0, 'A private journaling helper should stay on your machine. A local model keeps every word offline — no service ever sees it. A cloud model would work, but sends your private writing to someone else\'s computer.'],
+      bug: ['Cloud model', 1, 'A gnarly bug benefits from the strongest reasoning available, and frontier models live in the cloud. A local model may not be sharp enough, and you do not need tools acting on your machine just to think a problem through.'],
+      site: ['Agent', 2, 'Updating a website end-to-end means reading files, editing code, verifying in a browser, and pushing — a loop of actions with tools, not a single answer. That is agent work.'],
+      thumb: ['Media model', 3, 'A thumbnail is pixels, not prose. An image model creates the actual asset. A text model can only describe what the thumbnail should look like.']
+    };
+    function renderSystemJob(kind) {
+      const [tile, index, copy] = systemJobs[kind];
+      document.querySelectorAll('[data-job]').forEach(btn => btn.classList.toggle('active', btn.dataset.job === kind));
+      document.querySelectorAll('.system-tile').forEach((el, i) => el.classList.toggle('active', i === index));
+      document.getElementById('systemNote').innerHTML = `<strong>Best fit: ${tile}.</strong> ${copy}`;
+    }
+
     document.getElementById('nextStep').addEventListener('click', advanceAgent);
     document.getElementById('resetStep').addEventListener('click', () => { stepIndex = 0; renderAgent(); });
     document.getElementById('autoStep').addEventListener('click', (event) => {
@@ -2178,6 +2254,9 @@
     document.getElementById('mobilePrev').addEventListener('click', () => moveTour(tourIndex - 1, true));
     document.getElementById('mobileNext').addEventListener('click', () => moveTour(tourIndex + 1, true));
     document.querySelectorAll('[data-map]').forEach(btn => btn.addEventListener('click', () => renderMapStation(btn.dataset.map)));
+    document.getElementById('pipelineRun').addEventListener('click', runPipeline);
+    document.querySelectorAll('#pipelineDiagram span').forEach(el => el.addEventListener('click', () => { stopPipeline(); renderPipelineStage(Number(el.dataset.stage)); }));
+    document.querySelectorAll('[data-job]').forEach(btn => btn.addEventListener('click', () => renderSystemJob(btn.dataset.job)));
     document.querySelectorAll('[data-scenario]').forEach(btn => btn.addEventListener('click', () => setScenario(btn.dataset.scenario)));
     document.querySelectorAll('[data-token-preset]').forEach(btn => btn.addEventListener('click', () => setTokenPreset(btn.dataset.tokenPreset)));
     document.querySelectorAll('[data-prompt]').forEach(btn => btn.addEventListener('click', () => renderPrompt(btn.dataset.prompt)));
@@ -2198,6 +2277,7 @@
     renderFailure('hallucination');
     renderQuiz('commit');
     initBuilder();
+    renderPipelineStage(0);
     renderTour();
   </script>
   <script src="../../assets/site-enhance.js" defer></script>
