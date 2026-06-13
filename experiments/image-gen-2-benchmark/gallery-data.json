@@ -1810,5 +1810,17 @@
     "slot": "evening",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-06-13-morning-garden-as-wool-felt-terrain",
+    "title": "Garden as Wool Felt Terrain",
+    "tests": "Generated through openai/gpt-image-2 CLI; reusable reference-photo transformation; finished output example with no instructional text in image; non-paper physical craft scene.",
+    "prompt": "Use the uploaded reference photo and preserve the garden identity, camera angle, layout, path curve, raised-bed geometry, plant groupings, pot or fence placement, distinctive colors, scale relationships, and most recognizable features, then transform the garden into a wool felt terrain model on a warm craft table. Rebuild the soil, stones, leaves, stems, flowers, paths, pots, trellises, fence, and garden tools from needle felt, roving wool, braided yarn, bead dew, embroidered stitch lines, colored thread roots, tiny felt leaves, felting needle marks, wool scraps, and soft fiber fuzz. Keep the source garden recognizable while changing the material logic, surface texture, props, and environment into a cohesive photographed handmade miniature. Avoid readable text, labels, paper prompt cards, logos, people, hands, duplicate garden sections, broken perspective, and losing recognizability.\n\nSource photo needed: a clear garden photo.\n\nReusable fill-in-the-blank template: Use the uploaded reference photo and preserve the [SUBJECT] identity, camera angle, layout, silhouette, proportions, key structural features, distinctive colors or markings, and most recognizable details, then transform [SUBJECT] into a wool felt terrain model made from [MATERIALS] in [SETTING] with [MOOD] lighting. Keep the source recognizable while changing material logic, surface texture, props, and environment into a cohesive photographed handmade miniature. Avoid duplicate subjects, broken anatomy or geometry, readable text, logos, paper prompt cards, people or hands unless requested, and losing recognizability.\n\nWhat to preserve: the source garden layout, camera angle, path shapes, bed or border placement, plant groupings, pot/fence/trellis positions, distinctive colors, proportions, and recognizable landscaping features.\n\nWhat to change: convert soil, leaves, flowers, stone, wood, water, ceramic, and garden tools into needle felt, wool roving, yarn, embroidery thread, bead dew, felted stones, fiber fuzz, craft-table props, and warm handmade-object lighting.\n\nExample substitution: Upload a clear photo of a small backyard herb garden with three raised beds, a curved stone path, tomato stakes, lavender, basil, thyme, marigolds, a watering can, and a low fence; preserve the layout and plant groupings, then turn it into a needle-felted wool terrain model on a craft table in warm side-window light.",
+    "image": "images/2026-06-13-morning-garden-as-wool-felt-terrain.png",
+    "date": "2026-06-13",
+    "batch": "Daily Prompt",
+    "slot": "morning",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
