@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-13T20:00:01.747274+00:00",
+  "updatedAt": "2026-06-13T21:00:02.106887+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -10316,6 +10316,10 @@
     "https://techcrunch.com/2026/06/13/amazon-ceo-reportedly-raised-anthropic-model-concerns-before-government-crackdown": {
       "image": "https://techcrunch.com/wp-content/uploads/2022/07/GettyImages-1348139958.jpg?resize=1200,767",
       "checkedAt": "2026-06-13T20:00:01.747274+00:00"
+    },
+    "https://techcrunch.com/2026/06/13/kpmg-pulls-report-on-ai-usage-due-to-apparent-hallucinations": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/GettyImages-2276519058.jpg?w=1024",
+      "checkedAt": "2026-06-13T21:00:02.106887+00:00"
     }
   }
 }
