@@ -1239,10 +1239,11 @@ function drawActor(a){
   const fi = a.moved || pose === 'idle' || pose === 'fall' || pose === 'stun'
     ? Math.floor(a.anim * rate) % frames.length : 0;
   const img = frames[fi] || frames[0];
-  const h = 34, w = h * ART.FW / ART.FH;
+  const h = 42, w = h * ART.FW / ART.FH;       // larger + downscaled from hi-res source
   const cx2 = px(a.x);
-  let footY = py(a.y) + TILE * 0.46;
+  let footY = py(a.y) + TILE * 0.5;
   ctx.save();
+  ctx.imageSmoothingEnabled = true;            // smooth the hi-res sprite downscale (less blocky)
   if (a.kind === 'player' && a.cloakT > 0) ctx.globalAlpha = 0.45 + 0.2 * Math.sin(gameTime * 12);
   if (a.state === 'dead'){ ctx.globalAlpha = Math.max(0, 1 - a.deadT); footY -= a.deadT * 10; }
   if (a.state === 'stun'){ ctx.globalAlpha = 0.6 + 0.2 * Math.sin(gameTime * 16); }
@@ -1411,13 +1412,25 @@ function render(){
       ctx.globalAlpha = Math.max(0, player.digT / DIG_TIME);
       drawTile(T.brick, player.pendingDig.c, player.pendingDig.r); ctx.globalAlpha = 1;
     }
-    // gold with twinkle
+    // gold — gentle float bob + breathing pulse + drifting twinkle
     for (const gd of golds){
       if (gd.taken || gd.held) continue;
-      drawTile(T.gold, gd.c, gd.r);
-      if ((Math.floor(gameTime * 3 + gd.c * 2 + gd.r) % 3) === 0){
-        ctx.fillStyle = '#fff'; ctx.globalAlpha = .8;
-        ctx.fillRect(gd.c * TILE + 12, gd.r * TILE + HUD_H + 12, 2, 2); ctx.globalAlpha = 1;
+      const ph = gameTime * 2 + gd.c * 0.9 + gd.r * 1.4;
+      const bob = Math.sin(ph) * 2.2;
+      const s = 1 + Math.sin(ph * 1.3) * 0.06;
+      const cx0 = gd.c * TILE + 18, cy0 = gd.r * TILE + HUD_H + 18 + bob;
+      const w = 36 * s;
+      ctx.save();
+      ctx.imageSmoothingEnabled = true;
+      ctx.drawImage(T.gold, cx0 - w / 2, cy0 - w / 2, w, w);
+      ctx.restore();
+      const tw = Math.sin(ph * 1.7);
+      if (tw > 0.5){
+        ctx.globalAlpha = (tw - 0.5) / 0.5;
+        ctx.fillStyle = '#fff';
+        const sx = cx0 + Math.cos(ph * 1.1) * 5 - 1, sy = cy0 + Math.sin(ph * 1.4) * 4 - 5;
+        ctx.fillRect(sx, sy, 2, 2);
+        ctx.globalAlpha = 1;
       }
     }
 
