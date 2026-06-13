@@ -46,6 +46,8 @@ const PHYS = (() => {
     active: false,           // in play (false: in trough/saucer/being served)
     held: false,             // captured by saucer / plunger seat
     lowTime: 0,              // seconds spent nearly stationary (stuck detect)
+    slide: 0,                // seconds of post-impulse SLIDING left — kinetic
+                             // friction ≫ rolling friction until spin catches up
   };
 
   /* ---------- colliders ----------
@@ -211,11 +213,14 @@ const PHYS = (() => {
   function stepFlippers(dt){
     for (const f of flippers){
       const dir = Math.sign(f.end - f.rest) || 1;
+      if (f._rc > 0) f._rc -= dt;
       if (f.on){
         f.av += dir * f.accel * dt;
         if (Math.abs(f.av) > f.maxAV) f.av = dir * f.maxAV;
         f.ang += f.av * dt;
         if ((dir>0 && f.ang >= f.end) || (dir<0 && f.ang <= f.end)){ f.ang = f.end; f.av = 0; }
+        // recoil can never push past the rest stop either
+        if ((dir>0 && f.ang < f.rest) || (dir<0 && f.ang > f.rest)){ f.ang = f.rest; f.av = 0; }
       } else {
         f.av = -dir * f.retAV;
         f.ang += f.av * dt;
@@ -244,7 +249,24 @@ const PHYS = (() => {
         const ex2 = ball.vx*ball.vx + ball.vy*ball.vy;
         const lim = MAXV*1.1;
         if (ex2 > lim*lim){ const k = lim/Math.sqrt(ex2); ball.vx*=k; ball.vy*=k; }
-        if (sp > 60) events.push({type:'flipperHit', id:f.id, x:ball.x, y:ball.y, speed:sp});
+        // BALL MASS pushes back on the flipper: reaction torque about the
+        // pivot (τ = r × (−J·n̂)), applied ONCE per impact (cooldown — contact
+        // persists across micro-steps and would otherwise stack into a fling).
+        // Torque INTO the end stop is absorbed by the stop; only push-back
+        // toward rest moves the flipper, and the coil re-drives it.
+        if (sp > 60){
+          if (!f._rc || f._rc <= 0){
+            const dir = Math.sign(f.end - f.rest) || 1;
+            let tau = (ry*nx - rx*ny) * sp / f.len * 0.012;
+            if (tau * dir > 0) tau = 0;                    // stop absorbs it
+            tau = Math.max(-16, Math.min(16, tau));
+            f.av += tau;
+            f._rc = 0.08;
+          }
+          // a solid smack also breaks rolling → brief slide
+          if (sp > 500) ball.slide = Math.max(ball.slide, Math.min(0.3, sp/6000));
+          events.push({type:'flipperHit', id:f.id, x:ball.x, y:ball.y, speed:sp});
+        }
       }
     }
   }
@@ -255,13 +277,20 @@ const PHYS = (() => {
     // forces
     ball.vy += GRAV * dt;
     // rolling resistance: mostly CONSTANT deceleration (real rolling) plus a
-    // whisper of proportional drag — slow balls stop instead of crawling
+    // whisper of proportional drag — slow balls stop instead of crawling.
+    // While SLIDING (right after a kick, before spin catches up) kinetic
+    // friction dominates: ~9× the rolling decel, fading as rolling resumes.
     {
       const sp = Math.hypot(ball.vx, ball.vy);
       if (sp > 1e-3){
-        const k = Math.max(0, 1 - (70*dt)/sp - 0.06*dt);
+        let dec = 70;
+        if (ball.slide > 0){
+          dec += 560 * Math.min(1, ball.slide / 0.25);
+          ball.slide -= dt;
+        }
+        const k = Math.max(0, 1 - (dec*dt)/sp - 0.06*dt);
         ball.vx *= k; ball.vy *= k;
-      }
+      } else if (ball.slide > 0) ball.slide -= dt;
     }
     ball.w  *= 1 - SPINDECAY*dt;
     ball.vx += -ball.w * ball.vy * 0.00002;
