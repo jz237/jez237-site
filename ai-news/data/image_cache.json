@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-13T04:00:01.548127+00:00",
+  "updatedAt": "2026-06-13T05:00:01.558672+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -10288,6 +10288,10 @@
     "https://www.anthropic.com/news/fable-mythos-access": {
       "image": "https://cdn.sanity.io/images/4zrzovbb/website/50159fff55088f12070cc8a56eb51ff61006b631-2400x1260.png",
       "checkedAt": "2026-06-13T03:00:01.182117+00:00"
+    },
+    "https://techcrunch.com/2026/06/12/andrew-yang-thinks-the-next-big-startup-opportunity-is-lowering-the-cost-of-living": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/GettyImages-1487822193.jpg?resize=1200,800",
+      "checkedAt": "2026-06-13T05:00:01.558672+00:00"
     }
   }
 }
