@@ -1,5 +1,5 @@
-/* Eight Ball Deluxe — game logic, presentation, input, scores.
-   Faithful Bally 1981 ruleset; Pinball Illusions-style scrolling camera and
+/* Corner Pocket — game logic, presentation, input, scores.
+   Eight Ball Deluxe-inspired ruleset; Pinball Illusions-style scrolling camera and
    LED/DMD panel. Deterministic sim (PHYS.seed + injected inputs) for tests. */
 'use strict';
 
@@ -123,7 +123,7 @@ const GAME = (() => {
         dmdText(g, demoMode ? 'DEMO MODE' : 'PLAYER '+(curP+1)+'  BALL '+ballNo, DMD.W/2, 2);
         dmdText(g, demoMode ? 'PRESS START' : fmt(P.bonusBalls*7000)+' × '+P.bonusX, DMD.W/2, 12);
       } else {
-        dmdText(g, 'EIGHT BALL DELUXE', DMD.W/2, 2);
+        dmdText(g, 'CORNER POCKET', DMD.W/2, 2);
         const hs = best();
         dmdText(g, hs? 'HI '+fmt(hs) : 'STOP TALKING', DMD.W/2, 12);
       }
@@ -213,8 +213,8 @@ const GAME = (() => {
     hide('title'); hide('how'); hide('scores'); hide('over');
     showTouchBtns(true);
     AU.sfx.jingle();
-    AU.say('Eight Ball Deluxe', 2);
-    dmdShow(['EIGHT BALL DELUXE','RACK EM UP'],2.2);
+    AU.say('Corner Pocket', 2);
+    dmdShow(['CORNER POCKET','RACK EM UP'],2.2);
     applyRackState();
     serve(false);
   }
@@ -343,8 +343,8 @@ const GAME = (() => {
         if (rackDone){
           p.racks++; p.bonusBalls++; score(25000);
           AU.sfx.eight();
-          AU.say('Eight Ball Deluxe', 2);
-          dmdShow(['RACK '+p.racks+' COMPLETE','EIGHT BALL DELUXE'],2.4,{ballAnim:true});
+          AU.say('Corner Pocket', 2);
+          dmdShow(['RACK '+p.racks+' COMPLETE','CORNER POCKET'],2.4,{ballAnim:true});
           addFlash(TABLE.saucer.x, TABLE.saucer.y, 130, '255,220,150');
         } else {
           dmdShow(['BONUS HOLD','+3000'],1.2);
@@ -422,9 +422,9 @@ const GAME = (() => {
           p.letters = 0;
           score(50000);
           p.replays++;
-          replay('DELUXE');
-          AU.say('Deluxe!', 2);
-          dmdShow(['D-E-L-U-X-E','REPLAY'],2.4,{blink:true});
+          replay('POCKET');
+          AU.say('Corner pocket!', 2);
+          dmdShow(['P-O-C-K-E-T','REPLAY'],2.4,{blink:true});
           /* resetting the bank lets bonus keep building (real rule) */
           p.drops = p.drops.map(()=>true);
           TABLE.resetBank();
@@ -729,7 +729,7 @@ const GAME = (() => {
     TABLE.drops7.forEach((d,i)=> ART.drawDropTarget(ctx,d, ['#f2b03c','#2467c4','#cf3a28','#7b3fa0','#e06a1f','#2e7d4f','#8c2f23'][i], String(i+1)));
     TABLE.inline.forEach(d=> ART.drawDropTarget(ctx,d,'#2467c4',''));
     ART.drawDropTarget(ctx, TABLE.lone, '#16161a','8');
-    TABLE.deluxe.forEach((st,i)=> ART.drawStandup(ctx,st,'DELUXE'[i], p? !!(p.letters&(1<<i)) : false));
+    TABLE.deluxe.forEach((st,i)=> ART.drawStandup(ctx,st,'POCKET'[i], p? !!(p.letters&(1<<i)) : false));
     ART.drawStandup(ctx, TABLE.bankTop, '50', TABLE.lamps.bankT.on);
     TABLE.bumpers.forEach((b,i)=>{ ART.drawBumper(ctx,b,bumpGlow[i],tNow); });
     ART.drawSaucer(ctx, TABLE.saucer);
@@ -802,7 +802,7 @@ const GAME = (() => {
       ctx.fillStyle = ledCol;
       ctx.font = `700 ${Math.round(panelH*0.34)}px Consolas,monospace`;
       ctx.textAlign='left';
-      ctx.fillText('EIGHT BALL DELUXE', pad, panelH*0.32);
+      ctx.fillText('CORNER POCKET', pad, panelH*0.32);
       ctx.font = `600 ${Math.round(panelH*0.22)}px Consolas,monospace`;
       ctx.fillStyle = '#caa46a';
       ctx.shadowBlur = 0;
@@ -1068,8 +1068,8 @@ const GAME = (() => {
         desc: '2,000 each + 7,000 bonus. Clear all 7 to light the 8-BALL.' },
       { at: [TABLE.lone.cx, TABLE.lone.cy], name: '8-BALL & corner pocket',
         desc: 'Knock the lone 8-ball target, then the saucer collects the rack (shoot it from the upper flipper).' },
-      { at: [TABLE.deluxe[2].cx, TABLE.deluxe[2].cy], name: 'DELUXE standups',
-        desc: 'Exposed behind downed targets. Spell D-E-L-U-X-E for a replay.' },
+      { at: [TABLE.deluxe[2].cx, TABLE.deluxe[2].cy], name: 'POCKET letters',
+        desc: 'Exposed behind downed targets. Spell P-O-C-K-E-T for a replay.' },
       { at: [TABLE.inline[1].cx, TABLE.inline[1].cy], name: 'In-line drops + Bank Shot',
         desc: '4 drops raise your bonus to 5×; the target behind them scores 50,000.' },
       { at: [38, 470], name: 'Left lane (Bank Shot value)',
@@ -1164,7 +1164,7 @@ const GAME = (() => {
   /* ================= global scores ================= */
   const Scores = {
     BASE:'https://game-scores.jez237.workers.dev/scores/',
-    ns:'eight-ball-deluxe', board:null,
+    ns:'corner-pocket', board:null,
     url(){ return this.BASE+this.ns; },
     async fetchBoard(){
       try{
