@@ -180,6 +180,17 @@ addEventListener('keydown', e => {
   }
   if (state === 'playing'){ keys[e.code] = true; return; }
   if (state === 'paused' && k === 'Enter') return resumeGame();
+  if (state === 'over' && pendingEntry){
+    if (/^[a-zA-Z]$/.test(k)){ setInitial(k); return; }
+    if (k === 'Backspace'){ e.preventDefault(); moveCursor(-1); return; }
+    if (k === 'ArrowLeft') return moveCursor(-1);
+    if (k === 'ArrowRight') return moveCursor(1);
+    if (k === 'ArrowUp') return cycleInitial(initCursor, 1);
+    if (k === 'ArrowDown') return cycleInitial(initCursor, -1);
+    if (k === 'Enter') return submitEntry();
+    return;
+  }
+  if (state === 'over' && k === 'Enter'){ AUDIO.ensure(); return startGame(mode); }
   if (state === 'title' && (k === 'Enter' || k === ' ')){ AUDIO.ensure(); return startGame('campaign'); }
 }, {passive: false});
 addEventListener('keyup', e => { keys[e.code] = false; });
@@ -828,11 +839,111 @@ function reloadCurrentLevel(){
 function endGame(won){
   state = 'over';
   AUDIO.sfx(won ? 'win' : 'die');
+  AUDIO.stopMusic();
   $('overTitle').textContent = won ? 'CLAIM CLEARED!' : 'CLAIM LOST';
   $('overStats').innerHTML =
     '<div>HAUL<br><b>' + score + '</b></div>' +
     (mode === 'campaign' ? '<div>CLAIM<br><b>' + (levelIndex + 1) + '</b></div>' : '<div>MODE<br><b>DAILY</b></div>');
+  beginEntry();
   showOnly('ovOver');
+}
+
+/* ================= high-score entry UI ================= */
+let pendingEntry = null, initials = ['A', 'A', 'A'], initCursor = 0;
+function beginEntry(){
+  pendingEntry = score > 0 ? {score, mode, date: dailyDate} : null;
+  initCursor = 0;
+  try {
+    const saved = (localStorage.getItem('paydirt-initials') || 'AAA').toUpperCase();
+    initials = [saved[0] || 'A', saved[1] || 'A', saved[2] || 'A'];
+  } catch (e) { initials = ['A', 'A', 'A']; }
+  $('entryWrap').style.display = pendingEntry ? '' : 'none';
+  renderInitials();
+  $('overBoard').innerHTML = '';
+  if (pendingEntry) refreshBoardInto('overBoard'); else refreshBoardInto('overBoard');
+}
+function renderInitials(){
+  const spans = $('initials').children;
+  for (let i = 0; i < 3; i++){
+    spans[i].textContent = initials[i];
+    spans[i].classList.toggle('cur', i === initCursor);
+  }
+}
+function cycleInitial(i, dir){
+  const code = initials[i].charCodeAt(0) - 65;
+  initials[i] = String.fromCharCode(65 + ((code + dir + 26) % 26));
+  renderInitials();
+}
+function moveCursor(d){ initCursor = (initCursor + d + 3) % 3; renderInitials(); }
+function setInitial(ch){ initials[initCursor] = ch.toUpperCase(); if (initCursor < 2) initCursor++; renderInitials(); AUDIO.sfx('tick'); }
+function submitEntry(){
+  if (!pendingEntry) return;
+  const name = initials.join('');
+  try { localStorage.setItem('paydirt-initials', name); } catch (e) {}
+  if (typeof Scores !== 'undefined') Scores.submit(name, pendingEntry.score, pendingEntry.mode, pendingEntry.date);
+  pendingEntry = null;
+  $('entryWrap').style.display = 'none';
+  AUDIO.sfx('ui');
+  setTimeout(() => refreshBoardInto('overBoard'), 350);
+}
+
+/* board rendering is finalized in phase 10 (global scores) */
+let ledgerView = 'campaign';
+function refreshBoardInto(id, forceMode){
+  if (forceMode) ledgerView = forceMode;
+  else if (id === 'overBoard') ledgerView = (mode === 'daily' ? 'daily' : 'campaign');
+  if (typeof Scores !== 'undefined') Scores.render(id, ledgerView);
+}
+
+/* ================= how-to + level select ================= */
+function buildHowTo(){
+  $('howBody').innerHTML =
+    '<p><b>Goal:</b> grab every <b>nugget</b>, then climb the revealed <b>exit ladder</b> off the top — without getting caught.</p>' +
+    '<p><b>Move</b> <span class="k">←</span><span class="k">→</span> or <span class="k">A</span><span class="k">D</span> · ' +
+    '<b>climb</b> <span class="k">↑</span><span class="k">↓</span> / <span class="k">W</span><span class="k">S</span> · hang &amp; cross bars.</p>' +
+    '<p><b>Dig</b> a trap to the lower-left <span class="k">Z</span> or lower-right <span class="k">X</span> ' +
+    '(also <span class="k">,</span> <span class="k">.</span>). Holes seal shut — a guard caught inside is trapped, then lost.</p>' +
+    '<p><b>Jumpers</b> chase you and pocket gold. <b>Scouts</b> are quick; <b>masons</b> re-seal your holes.</p>' +
+    '<p><b>Pick-ups:</b> <span style="color:#ff5c33">TNT</span> blasts 3 wide · ' +
+    '<span style="color:#3fd2c7">Boots</span> speed · <span style="color:#b07fff">Cloak</span> phase through guards · ' +
+    '<span style="color:#ffd23f">Magnet</span> grabs gold · <span style="color:#7fd24a">Shovel</span> instant digs.</p>' +
+    '<p>Chain nuggets fast for a <b>combo multiplier</b>. <span class="k">P</span> pause · <span class="k">M</span> mute · <span class="k">R</span> restart.</p>';
+}
+
+function buildLevelSelect(){
+  const grid = $('lvlGrid');
+  grid.innerHTML = '';
+  const maxDone = campaignDone.length ? Math.max(...campaignDone) : -1;
+  const unlockTo = Math.min(LEVELS.campaign.length - 1, maxDone + 1);
+  for (let i = 0; i < LEVELS.campaign.length; i++){
+    const b = document.createElement('button');
+    const done = campaignDone.includes(i);
+    const locked = i > unlockTo;
+    b.textContent = locked ? '🔒' : (i + 1);
+    b.title = LEVELS.names[i] || ('Claim ' + (i + 1));
+    if (locked) b.classList.add('locked');
+    if (done) b.classList.add('done');
+    if (!locked) b.addEventListener('click', e => { e.preventDefault(); AUDIO.ensure(); AUDIO.sfx('ui'); startCampaignAt(i); });
+    grid.appendChild(b);
+  }
+}
+
+/* ================= touch controls ================= */
+function initTouch(){
+  const map = { tLeft: 'ArrowLeft', tRight: 'ArrowRight', tUp: 'ArrowUp', tDown: 'ArrowDown', tDigL: 'KeyZ', tDigR: 'KeyX' };
+  for (const id in map){
+    const el = $(id), code = map[id];
+    const on = e => { e.preventDefault(); keys[code] = true; el.classList.add('on'); AUDIO.ensure(); };
+    const off = e => { e.preventDefault(); keys[code] = false; el.classList.remove('on'); };
+    el.addEventListener('pointerdown', on);
+    el.addEventListener('pointerup', off);
+    el.addEventListener('pointerleave', off);
+    el.addEventListener('pointercancel', off);
+  }
+  // clickable initials (touch-friendly entry)
+  const spans = $('initials').children;
+  for (let i = 0; i < 3; i++)
+    spans[i].addEventListener('click', () => { initCursor = i; cycleInitial(i, 1); });
 }
 
 function playerInput(){
@@ -908,9 +1019,9 @@ function bindButton(id, fn){
 }
 bindButton('bPlay', () => startGame('campaign'));
 bindButton('bDaily', () => startGame('daily'));
-bindButton('bLevels', () => { state = 'levels'; showOnly('ovLevels'); });
+bindButton('bLevels', () => { state = 'levels'; buildLevelSelect(); showOnly('ovLevels'); });
 bindButton('bHow', () => { state = 'how'; showOnly('ovHow'); });
-bindButton('bScores', () => { state = 'scores'; showOnly('ovScores'); });
+bindButton('bScores', () => { state = 'scores'; showOnly('ovScores'); refreshBoardInto('scoreBoard'); });
 bindButton('bMute', toggleMute);
 bindButton('bPauseMute', toggleMute);
 bindButton('bHowBack', quitToTitle);
@@ -921,9 +1032,12 @@ bindButton('bRestartLvl', restartLevel);
 bindButton('bQuit', quitToTitle);
 bindButton('bAgain', () => startGame(mode));
 bindButton('bOverMenu', quitToTitle);
-bindButton('bSubmit', () => {});
-bindButton('bLedgerCampaign', () => {});
-bindButton('bLedgerDaily', () => {});
+bindButton('bSubmit', submitEntry);
+bindButton('bLedgerCampaign', () => refreshBoardInto('scoreBoard', 'campaign'));
+bindButton('bLedgerDaily', () => refreshBoardInto('scoreBoard', 'daily'));
+
+buildHowTo();
+initTouch();
 
 /* ================= sim ================= */
 function update(dt){
@@ -1032,7 +1146,8 @@ function drawActor(a){
     ? Math.floor(a.anim * rate) % frames.length : 0;
   const img = frames[fi] || frames[0];
   const h = 34, w = h * ART.FW / ART.FH;
-  const cx2 = px(a.x), footY = py(a.y) + TILE * 0.46;
+  const cx2 = px(a.x);
+  let footY = py(a.y) + TILE * 0.46;
   ctx.save();
   if (a.kind === 'player' && a.cloakT > 0) ctx.globalAlpha = 0.45 + 0.2 * Math.sin(gameTime * 12);
   if (a.state === 'dead'){ ctx.globalAlpha = Math.max(0, 1 - a.deadT); footY -= a.deadT * 10; }
