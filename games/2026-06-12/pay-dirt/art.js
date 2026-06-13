@@ -127,11 +127,11 @@ const ART = (() => {
   buildTiles();
 
   /* ---------------- figures (player + guards) ---------------- */
-  // Art area is 16x26 with a 1px outline margin → 18x28 canvas. The body is painted
-  // on a temp canvas, a dark silhouette is derived from it, and the silhouette is
-  // stamped at 8 offsets to give every sprite a clean 1px outline (the thing that
-  // makes pixel art read). Anchored feet-at-bottom-center.
-  const FW = 18, FH = 28, M = 1;
+  // Higher-res figures (art area 32x46 + 1px outline margin → 34x48). Built on a temp
+  // canvas, a dark silhouette is derived and stamped at 8 offsets for a clean outline,
+  // and corners are rounded with clearRect so the silhouette doesn't read as a box.
+  // Rendered downscaled+smoothed in-game, so it looks crisp but not chunky.
+  const FW = 34, FH = 48, M = 1;
 
   function darken(src){
     const s = cv(FW, FH), x = cx(s);
@@ -142,107 +142,121 @@ const ART = (() => {
     return s;
   }
 
-  // Draw the un-outlined figure. Art coords 0..15 x, 0..25 y (offset by M).
+  // Draw the un-outlined figure. Art coords ~0..31 x, 0..45 y (offset by M).
   function paintBody(pose, fi, pal){
     const c = cv(FW, FH), x = cx(c);
     const R = (px, py, w, h, col) => { x.fillStyle = col; x.fillRect(px + M, py + M, w, h); };
-    const skinSh = mix(pal.face, '#000', 0.28);
+    const CL = (px, py, w, h) => x.clearRect(px + M, py + M, w, h);   // for rounding corners
+    const skin = pal.face, skinSh = mix(skin, '#000', 0.26), skinHi = mix(skin, '#fff', 0.16);
+    const coat = pal.coat, coatHi = pal.coatHi, coatDk = pal.coatDk;
+    const legs = pal.legs, legsHi = mix(legs, '#fff', 0.16), boot = pal.boot, bootHi = mix(boot, '#fff', 0.18);
+    const moust = mix(skin, '#4a2c12', 0.78);
+    const back = pose === 'climb';
 
     // animation params
-    const run4 = [0, 1, 2, 1][fi % 4];          // 0..2 stride
-    const stride = pose === 'run' ? [2, 0, -2, 0][fi % 4] : 0;
-    const lift = pose === 'run' ? [0, 1, 0, 1][fi % 4] : 0;
-    const climbA = pose === 'climb' ? (fi % 2 ? 1 : -1) : 0;
+    const stride = pose === 'run' ? [4, 0, -4, 0][fi % 4] : 0;
+    const lift = pose === 'run' ? [0, 3, 0, 3][fi % 4] : 0;
+    const climbA = pose === 'climb' ? (fi % 2 ? 3 : -3) : 0;
     const bob = (pose === 'idle' && fi % 2) ? 1 : 0;
-    const T = bob;                               // vertical bob offset
+    const T = bob;
 
-    // ---- LEGS ----
+    const ty = (pose === 'dig' ? 23 : 22 + T);   // torso top
+    const hy = (pose === 'dig' ? 9 : 8 + T);      // hat/head anchor
+    const ly = 34;                                // legs top (feet stay grounded)
+
+    // ===== LEGS =====
+    function leg(px, len, bx){ R(px, ly, 5, len, legs); R(px, ly, 1, len, legsHi); R(bx, ly + len, 6, 3, boot); R(bx, ly + len + 2, 6, 1, bootHi); }
     if (pose === 'fall'){
-      R(3, 19, 3, 5, pal.legs); R(10, 19, 3, 5, pal.legs);
-      R(2, 22, 4, 2, pal.boot); R(10, 22, 4, 2, pal.boot);
+      R(8, ly, 5, 8, legs); R(19, ly, 5, 8, legs); R(6, ly + 8, 6, 3, boot); R(19, ly + 8, 6, 3, boot);
     } else if (pose === 'bar'){
-      R(6, 19, 4, 6, pal.legs); R(6, 24, 5, 2, pal.boot);
+      leg(13, 9, 12); leg(17, 9, 16);
     } else if (pose === 'climb'){
-      R(5, 19, 3, 5 - climbA, pal.legs); R(9, 19, 3, 5 + climbA, pal.legs);
-      R(5, 24 - climbA, 3, 2, pal.boot); R(9, 24 + climbA, 3, 2, pal.boot);
+      leg(11, 9 - climbA, 10); leg(17, 9 + climbA, 16);
     } else if (pose === 'dig'){
-      R(4, 20, 4, 4, pal.legs); R(9, 20, 4, 4, pal.legs);
-      R(3, 23, 5, 2, pal.boot); R(9, 23, 5, 2, pal.boot);
+      R(9, ly, 6, 7, legs); R(17, ly, 6, 7, legs); R(7, ly + 7, 7, 3, boot); R(17, ly + 7, 7, 3, boot);
     } else if (pose === 'run'){
-      R(5 - stride, 19 + lift, 3, 5 - lift, pal.legs); R(8 + stride, 19, 3, 5, pal.legs);
-      R(4 - stride, 23 + lift, 4, 2, pal.boot);        R(8 + stride, 23, 5, 2, pal.boot);
+      leg(11 - stride, 9 - lift, 9 - stride); leg(16 + stride, 9, 16 + stride);
     } else { // idle
-      R(5, 19, 3, 5, pal.legs); R(9, 19, 3, 5, pal.legs);
-      R(4, 23, 4, 2, pal.boot); R(9, 23, 4, 2, pal.boot);
+      leg(11, 9, 10); leg(17, 9, 16);
     }
 
-    // ---- TORSO / COAT ----
-    const ty = (pose === 'dig') ? 12 : 11 + T;
-    R(4, ty, 9, 8, pal.coat);
-    R(4, ty, 9, 2, pal.coatHi);                 // top highlight
-    R(4, ty + 6, 9, 2, pal.coatDk);             // bottom shade
-    R(12, ty + 1, 1, 6, pal.coatDk);            // right edge shade
-    R(7, ty + 1, 1, 6, pal.accent);             // center strap
+    // ===== TORSO / HOODIE =====
+    R(8, ty, 17, 4, coat);                       // shoulders
+    R(9, ty + 4, 15, 9, coat);                   // body
+    R(8, ty, 17, 2, coatHi);                     // top light
+    R(9, ty + 11, 15, 2, coatDk);                // hem shade
+    R(23, ty + 4, 1, 9, coatDk);                 // right edge shade
+    R(13, ty, 8, 2, coatDk);                     // hood collar
+    R(16, ty + 2, 1, 10, pal.accent);            // zipper
+    R(10, ty + 8, 13, 1, coatDk);                // pocket seam
+    CL(8, ty, 1, 1); CL(24, ty, 1, 1);           // round shoulder corners
+    CL(9, ty + 12, 1, 1); CL(23, ty + 12, 1, 1); // round waist corners
 
-    // ---- ARMS ----
-    const armCol = pal.coatDk;
+    // ===== ARMS =====
     if (pose === 'climb'){
-      R(3, 8 + (climbA < 0 ? 0 : 4), 2, 5, pal.coat);  R(2, 7 + (climbA < 0 ? 0 : 4), 2, 2, pal.face);
-      R(12, 8 + (climbA < 0 ? 4 : 0), 2, 5, pal.coat); R(13, 7 + (climbA < 0 ? 4 : 0), 2, 2, pal.face);
+      R(6, 16 + (climbA < 0 ? 0 : 6), 4, 8, coat); R(5, 14 + (climbA < 0 ? 0 : 6), 4, 3, skin);
+      R(24, 16 + (climbA < 0 ? 6 : 0), 4, 8, coat); R(25, 14 + (climbA < 0 ? 6 : 0), 4, 3, skin);
     } else if (pose === 'bar'){
-      R(4, 2, 2, 9, pal.coat); R(11, 2, 2, 9, pal.coat);  // reaching straight up
-      R(4, 1, 2, 2, pal.face); R(11, 1, 2, 2, pal.face);  // hands gripping
+      R(8, 4, 4, 16, coat); R(22, 4, 4, 16, coat);
+      R(7, 2, 5, 3, skin); R(22, 2, 5, 3, skin);   // gripping hands
     } else if (pose === 'dig'){
-      R(3, ty + 1, 2, 5, armCol);                       // back arm
-      R(12, ty + 1, 4, 2, pal.coat); R(15, ty + 2, 2, 2, pal.face); // front arm thrust
+      R(6, ty + 3, 4, 8, coatDk);                  // back arm
+      R(23, ty + 3, 7, 4, coat); R(29, ty + 4, 4, 3, skin); // front arm thrust
     } else if (pose === 'fall'){
-      R(2, 9, 2, 4, pal.coat); R(13, 9, 2, 4, pal.coat); // flailing up
-      R(2, 8, 2, 2, pal.face); R(13, 8, 2, 2, pal.face);
-    } else { // idle / run — back arm + front arm swinging
-      const sw = pose === 'run' ? stride : 0;
-      R(3 - (sw < 0 ? sw : 0), ty + 1, 2, 6, armCol);
-      R(12 + (sw > 0 ? sw : 0), ty + 1, 2, 6, pal.coat);
-      R(12 + (sw > 0 ? sw : 0), ty + 6, 2, 2, pal.face); // front hand
+      R(5, 16, 4, 7, coat); R(24, 16, 4, 7, coat);
+      R(4, 14, 4, 3, skin); R(25, 14, 4, 3, skin);
+    } else { // idle / run
+      const sw = stride;
+      R(6 - (sw < 0 ? sw : 0), ty + 3, 4, 9, coatDk);  R(6 - (sw < 0 ? sw : 0), ty + 11, 4, 3, skin);
+      R(23 + (sw > 0 ? sw : 0), ty + 3, 4, 9, coat);   R(23 + (sw > 0 ? sw : 0), ty + 11, 4, 3, skin);
     }
 
-    // ---- HEAD ----
-    const hy = pose === 'dig' ? 6 : 5 + T;
-    const back = pose === 'climb';
+    // ===== HEAD / FACE =====
     if (back){
-      // back of head: hat + hair, no face
-      R(5, hy + 1, 7, 5, mix(pal.face, '#000', 0.4));
+      R(11, hy + 4, 11, 8, mix(skin, '#000', 0.42)); // back of head
+      R(11, hy + 4, 11, 2, mix(skin, '#000', 0.55));
     } else {
-      R(5, hy, 7, 6, pal.face);
-      R(5, hy, 7, 1, skinSh);                   // brow shadow under brim
-      R(5, hy + 5, 7, 1, skinSh);               // jaw shade
-      // face — looking right
-      R(10, hy + 2, 1, 2, pal.outline);         // eye
-      R(6, hy + 4, 4, 1, mix(pal.face, '#5a3a1e', 0.7)); // moustache
-      R(11, hy + 3, 1, 1, skinSh);              // nose tip
+      R(11, hy + 3, 11, 9, skin);
+      R(11, hy + 3, 11, 2, skinSh);              // brow shadow under brim
+      R(11, hy + 3, 1, 9, skinSh);               // left cheek shadow
+      R(20, hy + 4, 2, 7, skinHi);               // lit cheek
+      R(11, hy + 11, 11, 1, skinSh);             // jaw
+      R(17, hy + 5, 3, 1, mix(skin, '#000', 0.45)); // eyebrow
+      R(18, hy + 6, 2, 2, pal.outline);          // eye
+      R(19, hy + 6, 1, 1, '#ffffff');            // eye glint
+      R(21, hy + 7, 1, 2, skinSh);               // nose
+      R(12, hy + 9, 9, 2, moust);                // moustache
     }
 
-    // ---- HARD HAT ----
-    R(3, hy - 1, 11, 2, pal.hat);               // brim
-    R(3, hy - 1, 11, 1, pal.hatHi);
-    R(5, hy - 4, 7, 3, pal.hat);                // dome
-    R(5, hy - 4, 7, 1, pal.hatHi);
-    R(8, hy - 4, 1, 3, mix(pal.hat, '#000', 0.25)); // dome ridge
-    if (pal.lampOnHat){ R(7, hy - 5, 3, 1, '#3a2a12'); R(8, hy - 5, 1, 1, pal.lantern); } // headlamp
+    // ===== HARD HAT (rounded dome) =====
+    R(12, hy - 6, 8, 2, pal.hat);                // dome top
+    R(10, hy - 4, 12, 4, pal.hat);               // dome body
+    R(10, hy - 4, 12, 1, pal.hatHi);             // dome highlight
+    R(15, hy - 4, 1, 4, mix(pal.hat, '#000', 0.22)); // ridge
+    R(10, hy - 1, 12, 1, mix(pal.hat, '#000', 0.18)); // dome base
+    CL(12, hy - 6, 1, 1); CL(19, hy - 6, 1, 1);  // round dome top corners
+    R(7, hy, 18, 2, pal.hat);                    // brim
+    R(7, hy, 18, 1, pal.hatHi);
+    R(7, hy + 2, 18, 1, mix(pal.hat, '#000', 0.3)); // brim underside
+    if (!back) R(20, hy + 2, 5, 1, pal.hat);     // front brim dip
+    CL(7, hy, 1, 1); CL(24, hy, 1, 1);           // round brim corners
+    if (pal.lampOnHat && !back){ R(20, hy - 3, 4, 2, '#2a2012'); R(23, hy - 2, 1, 1, pal.lantern); } // headlamp
 
-    // ---- LANTERN (player) ----
+    // ===== LANTERN (player) =====
     if (pal.lantern && pose !== 'climb' && pose !== 'bar'){
-      const lx = pose === 'dig' ? 16 : 14 + (pose === 'run' ? Math.max(0, stride) : 0);
-      R(lx, ty + 6, 3, 4, '#3a2a12');           // frame
-      R(lx, ty + 7, 3, 2, pal.lantern);         // glass
-      R(lx + 1, ty + 5, 1, 1, '#6b5126');       // handle
+      const lx = pose === 'dig' ? 30 : 25 + (pose === 'run' ? Math.max(0, stride) : 0);
+      R(lx, ty + 12, 5, 6, '#33260f');           // frame
+      R(lx + 1, ty + 13, 3, 4, pal.lantern);     // glass
+      R(lx + 1, ty + 13, 3, 1, '#ffffff');       // top glint
+      R(lx + 1, ty + 11, 3, 1, '#6b5126');       // handle
     }
 
-    // ---- dig tool ----
-    if (pose === 'dig'){ R(15, hy + 4, 3, 2, '#cfd6e0'); R(16, hy + 6, 2, 5, '#9aa0ad'); }
+    // ===== dig tool =====
+    if (pose === 'dig'){ R(28, hy + 6, 4, 3, '#cfd6e0'); R(30, hy + 9, 3, 8, '#9aa0ad'); }
 
-    // ---- guard marks ----
-    if (pal.mark === 'antenna' && !back){ R(8, hy - 6, 1, 2, '#2a1a06'); R(7, hy - 7, 2, 2, '#ffe66b'); }
-    if (pal.mark === 'trowel' && pose !== 'climb' && pose !== 'bar'){ R(14, ty + 3, 4, 2, '#c2c7d0'); R(16, ty + 5, 2, 3, '#7e8490'); }
+    // ===== guard marks =====
+    if (pal.mark === 'antenna' && !back){ R(15, hy - 9, 1, 3, '#2a1a06'); R(14, hy - 11, 3, 2, '#ffe66b'); }
+    if (pal.mark === 'trowel' && pose !== 'climb' && pose !== 'bar'){ R(26, ty + 6, 6, 2, '#c2c7d0'); R(29, ty + 8, 3, 4, '#7e8490'); }
 
     return c;
   }
@@ -251,9 +265,7 @@ const ART = (() => {
     const body = paintBody(pose, fi, pal);
     const sil = darken(body);
     const c = cv(FW, FH), x = cx(c);
-    // shadow
-    x.fillStyle = 'rgba(0,0,0,.3)'; x.fillRect(4, FH - 2, 10, 2);
-    // 8-way outline from the silhouette
+    x.fillStyle = 'rgba(0,0,0,.3)'; x.fillRect(9, FH - 2, 16, 2); // ground shadow
     for (const o of [[-1, 0], [1, 0], [0, -1], [0, 1], [-1, -1], [1, -1], [-1, 1], [1, 1]]) x.drawImage(sil, o[0], o[1]);
     x.drawImage(body, 0, 0);
     return c;
