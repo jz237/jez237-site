@@ -466,6 +466,7 @@ const GAME = (() => {
         const kick = 1000 + PHYS.rng()*110;
         ball.vx = ball.vx*0.3 + dx/dl*kick;
         ball.vy = ball.vy*0.3 + dy/dl*kick;
+        ball.slide = 0.34;        // kicked ball SLIDES before it rolls — sheds speed fast
         score(100); AU.sfx.bumper();
         bumpGlow[i] = 1;
         addFlash(b.x,b.y, 56, '255,160,80');
@@ -478,6 +479,7 @@ const GAME = (() => {
         s.cool = 0.15;
         const ball = PHYS.ball;
         ball.vx += s.nx*960; ball.vy += s.ny*960 - 110;
+        ball.slide = 0.28;
         score(100); AU.sfx.sling();
         slingFlash[i] = 1;
       }
