@@ -119,7 +119,10 @@ function isBar(c, r){ return tileAt(c, r) === '-'; }
 /* ================= state machine + overlays ================= */
 let state = 'title';   // title | playing | paused | over | how | levels | scores | win
 let score = 0, lives = 3, levelIndex = 0, mode = 'campaign'; // campaign | daily
-let gameTime = 0, shake = 0, hitStop = 0, flash = 0;
+let gameTime = 0, shake = 0, hitStop = 0, flash = 0, deathFlash = 0;
+let banner = null;          // {text, sub, life}
+let runDustT = 0, digBuffer = 0, digBufDir = 0;
+let titleRunner = null;     // attract-scene actor
 
 /* ================= particles + floating text ================= */
 let particles = [], popups = [];
@@ -823,7 +826,8 @@ function killPlayer(reason){
   player.deadT = 0;
   player.deathReason = reason;
   shake = Math.max(shake, .6); flash = Math.max(flash, .4); hitStop = Math.max(hitStop, .08);
-  spawnParticles(player.x, player.y, 16, {color: ['#3fd2c7', '#ffd23f', '#ff4f6b'], spd: 4.5, life: .7, size: 4, grav: 10, glow: true});
+  deathFlash = 1;
+  spawnParticles(player.x, player.y, 24, {color: ['#3fd2c7', '#ffd23f', '#ff4f6b', '#fff'], spd: 5.5, life: .8, size: 4, grav: 10, glow: true});
   AUDIO.sfx('die');
 }
 
@@ -1029,8 +1033,12 @@ function loadLevelData(rows){
   guards = guardSpawns.map(g => makeActor(g.c, g.r, g.kind));
   levelTime = 0;
   particles = []; popups = [];
-  shake = 0; hitStop = 0; flash = 0;
+  shake = 0; hitStop = 0; flash = 0; deathFlash = 0;
+  digBuffer = 0; runDustT = 0;
   buildBackdrop();
+  // intro banner
+  if (mode === 'daily') banner = {text: 'DAILY DIG', sub: dailyDate || LEVELS.dailyDateUTC(), life: 2.4};
+  else banner = {text: 'CLAIM ' + (levelIndex + 1), sub: (LEVELS.names[levelIndex] || '').toUpperCase(), life: 2.4};
 }
 
 function loadCampaignLevel(i){
@@ -1109,6 +1117,8 @@ function update(dt){
   gameTime += dt;
   if (shake > 0) shake = Math.max(0, shake - dt * 3.2);
   if (flash > 0) flash = Math.max(0, flash - dt * 2.4);
+  if (deathFlash > 0) deathFlash = Math.max(0, deathFlash - dt * 1.6);
+  if (banner){ banner.life -= dt; if (banner.life <= 0) banner = null; }
   updateParticles(dt);
   if (!player) return;
   // hit-pause: freeze entity sim for a few frames on big impacts (deterministic under step)
@@ -1123,9 +1133,10 @@ function update(dt){
   }
 
   const inp = playerInput();
-  // dig is edge-triggered
-  if (inp.digL && !prevDigL) tryDig(-1);
-  if (inp.digR && !prevDigR) tryDig(1);
+  // Dig attempts every tick the button is held (classic): tap = one dig, hold = repeats
+  // as the cooldown frees, and a held button digs the instant you land. tryDig() self-gates.
+  if (inp.digL) tryDig(-1);
+  else if (inp.digR) tryDig(1);
   prevDigL = !!inp.digL; prevDigR = !!inp.digR;
 
   if (player.digT > 0){
@@ -1136,6 +1147,11 @@ function update(dt){
     }
   } else {
     moveActor(player, dt, inp, player.speedT > 0 ? 1.45 : 1);
+    // running dust puffs
+    if (player.state === 'run'){
+      runDustT -= dt;
+      if (runDustT <= 0){ runDustT = 0.12; spawnParticles(player.x - player.dir * 0.2, player.y + 0.42, 1, {color: ['#6b4326', '#8a6038'], spd: 0.8, ang: -1.8, spread: 1, life: 0.3, size: 2.5, grav: 12}); }
+    }
   }
 
   for (const g of guards){
@@ -1234,7 +1250,48 @@ function glow(wx, wy, radius, color, alpha){
   ctx.globalAlpha = 1;
 }
 
+function renderTitle(){
+  if (!bg) buildBackdrop();
+  ctx.clearRect(0, 0, VIEW_W, VIEW_H);
+  ctx.drawImage(bg, 0, 0);
+  // drifting embers
+  for (let i = 0; i < 26; i++){
+    const ex = (i * 211 + clock * (10 + i % 6 * 4)) % VIEW_W;
+    const ey = VIEW_H - ((i * 97 + clock * (18 + i % 5 * 7)) % (VIEW_H + 80)) + 40;
+    const a = 0.25 + 0.25 * Math.sin(clock * 2 + i);
+    ctx.globalCompositeOperation = 'lighter';
+    glow(ex / TILE, (ey - HUD_H) / TILE, 8, 'rgba(255,150,60,' + a + ')', 1);
+    ctx.globalCompositeOperation = 'source-over';
+  }
+  // a prospector pacing the lower ledge
+  const span = VIEW_W - 4 * TILE;
+  const phase = (clock * 0.18) % 2;
+  const tx = (phase < 1 ? phase : 2 - phase);
+  const rx = (2 * TILE + tx * span) / TILE;
+  titleRunner = titleRunner || makeActor(2, ROWS - 2, 'player');
+  titleRunner.x = rx; titleRunner.y = ROWS - 1.5;
+  titleRunner.state = 'run'; titleRunner.moved = true; titleRunner.anim = clock;
+  titleRunner.dir = phase < 1 ? 1 : -1;
+  // warm pool of light under the runner + vignette
+  ctx.save(); ctx.globalCompositeOperation = 'lighter';
+  glow(rx, ROWS - 1.6, 90, 'rgba(255,200,120,.4)', 1);
+  ctx.restore();
+  drawActor(titleRunner);
+  // a few sparkles of gold scattered
+  for (let i = 0; i < 5; i++){
+    const gx = (3 + i * 5.3) , gy = ROWS - 1.5;
+    ctx.globalCompositeOperation = 'lighter';
+    glow(gx, gy, 16, 'rgba(255,200,60,' + (0.3 + 0.2 * Math.sin(clock * 3 + i * 2)) + ')', 1);
+    ctx.globalCompositeOperation = 'source-over';
+  }
+  // vignette
+  const vg = ctx.createRadialGradient(VIEW_W / 2, VIEW_H / 2, VIEW_H * .3, VIEW_W / 2, VIEW_H / 2, VIEW_H * .8);
+  vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, 'rgba(0,0,0,.6)');
+  ctx.fillStyle = vg; ctx.fillRect(0, 0, VIEW_W, VIEW_H);
+}
+
 function render(){
+  if (state === 'title'){ renderTitle(); return; }
   ctx.clearRect(0, 0, VIEW_W, VIEW_H);
   if (bg) ctx.drawImage(bg, 0, 0); else { ctx.fillStyle = '#0b0812'; ctx.fillRect(0, 0, VIEW_W, VIEW_H); }
 
@@ -1379,14 +1436,55 @@ function render(){
       glow(player.x, player.y - .15, 44, 'rgba(255,240,200,.5)', 1);
     }
     for (const gd of golds) if (!gd.taken && !gd.held) glow(gd.c + .5, gd.r + .5, 30, 'rgba(255,200,60,.35)', 1);
-    for (const e of exitCells) if (exitRevealed) glow(e.c + .5, e.r + .5, 34, 'rgba(63,210,199,.4)', 1);
+    if (exitRevealed){ const pulse = 0.4 + 0.25 * Math.sin(gameTime * 5); for (const e of exitCells) glow(e.c + .5, e.r + .5, 40, 'rgba(63,210,199,' + pulse + ')', 1); }
     for (const h of holes.values()) glow(h.c + .5, h.r + .6, 22, 'rgba(255,90,40,.25)', 1);
+    // faint danger underglow so guards read in the dark
+    for (const gu of guards) if (gu.state !== 'dead') glow(gu.x, gu.y + .2, 30, 'rgba(255,60,80,' + (gu.state === 'stun' ? .12 : .28) + ')', 1);
     for (const p of particles) if (p.glow) glow(p.x, p.y, p.size * 3.5, hexA(p.color, .6), 1);
     ctx.restore();
   }
 
   // hit flash
   if (flash > 0){ ctx.fillStyle = 'rgba(255,245,210,' + (flash * .5) + ')'; ctx.fillRect(0, 0, VIEW_W, VIEW_H); }
+  // death red vignette
+  if (deathFlash > 0){
+    const dv = ctx.createRadialGradient(VIEW_W / 2, VIEW_H / 2, VIEW_H * .2, VIEW_W / 2, VIEW_H / 2, VIEW_H * .75);
+    dv.addColorStop(0, 'rgba(0,0,0,0)'); dv.addColorStop(1, 'rgba(180,20,40,' + (deathFlash * .5) + ')');
+    ctx.fillStyle = dv; ctx.fillRect(0, 0, VIEW_W, VIEW_H);
+  }
+  // combo escalation tint
+  if (comboN >= 3){
+    const ct = ctx.createRadialGradient(VIEW_W / 2, VIEW_H / 2, VIEW_H * .35, VIEW_W / 2, VIEW_H / 2, VIEW_H * .8);
+    const a = Math.min(.28, (comboN - 2) * 0.06) * (0.7 + 0.3 * Math.sin(gameTime * 8));
+    ct.addColorStop(0, 'rgba(0,0,0,0)'); ct.addColorStop(1, 'rgba(255,140,40,' + a + ')');
+    ctx.fillStyle = ct; ctx.fillRect(0, 0, VIEW_W, VIEW_H);
+  }
+  // pause scrim
+  if (state === 'paused'){ ctx.fillStyle = 'rgba(8,5,14,.55)'; ctx.fillRect(0, 0, VIEW_W, VIEW_H); }
+
+  // intro banner
+  if (banner){
+    const a = Math.min(1, banner.life) * Math.min(1, (2.4 - banner.life) * 4);
+    ctx.globalAlpha = Math.max(0, a);
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillStyle = '#ffd23f'; ctx.font = '900 40px Consolas, monospace';
+    ctx.fillText(banner.text, VIEW_W / 2, VIEW_H / 2 - 18);
+    if (banner.sub){ ctx.fillStyle = '#d8cfe4'; ctx.font = '600 18px Consolas, monospace'; ctx.fillText(banner.sub, VIEW_W / 2, VIEW_H / 2 + 16); }
+    ctx.globalAlpha = 1;
+  }
+
+  // exit arrow when revealed and far from the player
+  if (exitRevealed && player && exitCells.length){
+    const e = exitCells[0];
+    if (Math.abs(e.c - player.x) > 6 || Math.abs(e.r - player.y) > 4){
+      const ang = Math.atan2((e.r + .5) - player.y, (e.c + .5) - player.x);
+      const ax = px(player.x) + Math.cos(ang) * 40, ay = py(player.y) + Math.sin(ang) * 40;
+      ctx.save(); ctx.translate(ax, ay); ctx.rotate(ang);
+      ctx.fillStyle = 'rgba(63,210,199,' + (0.6 + 0.3 * Math.sin(gameTime * 6)) + ')';
+      ctx.beginPath(); ctx.moveTo(10, 0); ctx.lineTo(-6, -7); ctx.lineTo(-6, 7); ctx.closePath(); ctx.fill();
+      ctx.restore();
+    }
+  }
 
   drawHUD();
 }
@@ -1416,7 +1514,8 @@ function drawHUD(){
   ctx.textAlign = 'center';
   if (grid.length){
     ctx.fillStyle = exitRevealed ? '#3fd2c7' : '#ffd23f';
-    ctx.fillText(exitRevealed ? 'EXIT OPEN ↑' : ('GOLD ' + goldLeft), VIEW_W / 2, HUD_H / 2);
+    const total = golds.length;
+    ctx.fillText(exitRevealed ? 'ESCAPE ↑' : ('GOLD ' + (total - goldLeft) + '/' + total), VIEW_W / 2, HUD_H / 2);
   }
   ctx.textAlign = 'right'; ctx.fillStyle = '#ffd23f';
   let lifeStr = '';
@@ -1441,11 +1540,12 @@ function drawHUD(){
 }
 
 /* ================= fixed-timestep loop ================= */
-let last = 0, acc = 0;
+let last = 0, acc = 0, clock = 0;
 function frame(t){
   requestAnimationFrame(frame);
   if (canvas.width === 0 || canvas.height === 0) resize(); // recover from a 0-size boot
   const dt = Math.min((t - last) / 1000, .25); last = t;
+  clock += dt;  // purely-visual clock; advances even when the sim is paused (title/menus)
   acc += dt;
   while (acc >= TICK){ if (state === 'playing') update(TICK); acc -= TICK; }
   render();
