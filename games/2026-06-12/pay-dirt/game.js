@@ -147,14 +147,24 @@ document.addEventListener('contextmenu', e => { if (state === 'playing') e.preve
 document.addEventListener('touchmove', e => { if (e.target.closest('button,.panel')) return; e.preventDefault(); }, {passive: false});
 addEventListener('touchstart', () => document.body.classList.add('touch'), {once: true, passive: true});
 
+/* ================= seeded rng (deterministic sim) ================= */
+let rndState = 1;
+function srand(seed){ rndState = (seed >>> 0) || 1; }
+function rnd(){ rndState = (rndState * 1664525 + 1013904223) >>> 0; return rndState / 4294967296; }
+
 /* ================= entities ================= */
 function makeActor(c, r, kind){
   return {
     kind,                       // 'player' | 'guard' | 'scout' | 'mason'
     x: c + 0.5, y: r + 0.5,     // tile-units, cell center
     dir: 1,
-    state: 'fall',              // idle|run|climb|bar|fall|stun|dead
+    state: 'fall',              // idle|run|climb|bar|fall|stun|climbout|dead
     anim: 0, moved: false,
+    repath: 0, wp: null, gold: null, dropT: 0,
+    invuln: 0, stunT: 0, deadT: 0,
+    jitter: 0.96 + rnd() * 0.08,
+    lastC: c, lastR: r,
+    digT: 0,
   };
 }
 
@@ -340,9 +350,204 @@ function updateHoles(dt){
   }
 }
 
-function sealGuard(g){ // full guard lifecycle lands in phase 4
+/* ================= guard AI ================= */
+const GUARD_SPEED = { guard: 0.8, scout: 1.06, mason: 0.62 };
+const STUN_TIME = 3.2, GUARD_RESPAWN_T = 1.4;
+
+/* Guard's-eye geometry: holes are PRETEND-FILLED so guards path straight into them
+   (classic behaviour — they don't see traps). Crumbled/blasted tiles use real state. */
+function gOccupy(c, r){
+  if (c < 0 || c >= COLS || r < 0 || r >= ROWS) return false;
+  const t = tileAt(c, r);
+  if (t === '#' || t === 'B') return false;
+  if (t === 'C') return isCrumbleGone(c, r);
+  if (t === 'X') return false;
+  return true;
+}
+function gOccupyDir(c, r, dir){
+  if (!gOccupy(c, r)) return false;
+  const t = tileAt(c, r);
+  if (t === '[') return dir < 0;
+  if (t === ']') return dir > 0;
+  return true;
+}
+function gSolidBelow(c, r){
+  const t = tileAt(c, r + 1);
+  if (r + 1 >= ROWS) return true;
+  if (t === '#' || t === 'B') return true;
+  if (t === 'C') return !isCrumbleGone(c, r + 1);
+  return t === 'X' || t === 'H' || t === '<' || t === '>' || (t === 'E' && exitRevealed);
+}
+function gSupported(c, r){ return gSolidBelow(c, r) || isLadder(c, r) || isBar(c, r); }
+function landFrom(c, r){
+  while (r < ROWS - 1 && !gSupported(c, r) && gOccupy(c, r + 1)) r++;
+  return r;
+}
+
+function guardNeighbors(c, r){
+  const out = [];
+  if (!gSupported(c, r)){ // transient node: can only fall
+    out.push([c, landFrom(c, r)]);
+    return out;
+  }
+  for (const dir of [-1, 1]){
+    const nc = c + dir;
+    if (gOccupyDir(nc, r, dir)) out.push([nc, landFrom(nc, r)]);
+  }
+  if (isLadder(c, r) && gOccupy(c, r - 1)) out.push([c, r - 1]);
+  if (gOccupy(c, r + 1) && (isLadder(c, r) || isLadder(c, r + 1))) out.push([c, r + 1]);
+  if (isBar(c, r) && !gSolidBelow(c, r) && gOccupy(c, r + 1)) out.push([c, landFrom(c, r + 1)]); // drop from bar
+  return out;
+}
+
+// BFS first-step toward the player; returns next waypoint cell or null
+function guardPathStep(gc, gr, pc, pr){
+  if (gc === pc && gr === pr) return null;
+  const start = gr * COLS + gc, goal = pr * COLS + pc;
+  const prev = new Int16Array(COLS * ROWS).fill(-1);
+  prev[start] = start;
+  const q = [start];
+  let found = false;
+  for (let qi = 0; qi < q.length; qi++){
+    const n = q[qi];
+    if (n === goal){ found = true; break; }
+    const c = n % COLS, r = (n / COLS) | 0;
+    for (const [nc, nr] of guardNeighbors(c, r)){
+      const m = nr * COLS + nc;
+      if (prev[m] === -1){ prev[m] = n; q.push(m); }
+    }
+  }
+  if (!found) return null;
+  let n = goal;
+  while (prev[n] !== start) n = prev[n];
+  return {c: n % COLS, r: (n / COLS) | 0};
+}
+
+function updateGuard(g, dt){
+  if (g.state === 'dead'){
+    g.deadT += dt;
+    if (g.deadT >= GUARD_RESPAWN_T) respawnGuard(g);
+    return;
+  }
+  if (g.state === 'stun'){
+    g.stunT += dt;
+    g.anim += dt;
+    const c = Math.floor(g.x), r = Math.floor(g.y);
+    if (g.stunT >= STUN_TIME && isDug(c, r) && gOccupy(c, r - 1) && !isDug(c, r - 1)){
+      g.state = 'climbout';
+    }
+    return;
+  }
+  if (g.state === 'climbout'){
+    g.y -= CLIMB_SPEED * 0.7 * dt;
+    g.anim += dt;
+    const r = Math.floor(g.y);
+    if (g.y <= r + .5 && !isDug(Math.floor(g.x), r)){
+      g.y = r + .5;
+      g.state = 'idle';
+      g.repath = 0;
+    }
+    return;
+  }
+
+  // landing in an open hole => trapped
+  const c = Math.floor(g.x), r = Math.floor(g.y);
+  if (g.state !== 'fall' && isDug(c, r)){
+    trapGuard(g);
+    return;
+  }
+
+  // re-plan
+  g.repath -= dt;
+  if (g.repath <= 0 && player && player.state !== 'dead'){
+    g.repath = 0.35 + rnd() * 0.15;
+    const wp = guardPathStep(c, r, Math.floor(player.x), Math.floor(player.y));
+    g.wp = wp;
+  }
+
+  const inp = {left: false, right: false, up: false, down: false};
+  const wp = g.wp;
+  if (wp){
+    if (wp.r < r) inp.up = true;
+    else if (wp.r > r) inp.down = true;
+    else if (wp.c < c) inp.left = true;
+    else if (wp.c > c) inp.right = true;
+    else { // inside waypoint cell: home to its center, then re-plan
+      if (Math.abs(g.x - (wp.c + .5)) > 0.08) (g.x < wp.c + .5) ? inp.right = true : inp.left = true;
+      else g.repath = 0;
+    }
+  } else if (player){
+    // no path: pace toward the player's column
+    if (Math.floor(player.x) < c) inp.left = true;
+    else if (Math.floor(player.x) > c) inp.right = true;
+  }
+
+  const wasFalling = g.state === 'fall';
+  moveActor(g, dt, inp, GUARD_SPEED[g.kind] * (g.jitter || 1));
+
+  // landed inside an open hole?
+  const nc = Math.floor(g.x), nr = Math.floor(g.y);
+  if (g.state !== 'fall' && isDug(nc, nr)){ trapGuard(g); return; }
+  if (wasFalling && g.state !== 'fall') g.repath = 0;
+
+  // gold pickup / random drop
+  if (g.kind !== 'scout'){
+    const cellChanged = nc !== g.lastC || nr !== g.lastR;
+    if (cellChanged && !g.gold){
+      for (const gd of golds){
+        if (!gd.taken && !gd.held && gd.c === nc && gd.r === nr && rnd() < 0.4){
+          gd.held = g; g.gold = gd; g.dropT = 8 + rnd() * 10;
+          break;
+        }
+      }
+    }
+    if (g.gold){
+      g.dropT -= dt;
+      if (g.dropT <= 0 && !isDug(nc, nr) && gSupported(nc, nr) && !golds.some(o => !o.taken && !o.held && o.c === nc && o.r === nr)){
+        g.gold.c = nc; g.gold.r = nr; g.gold.held = null; g.gold = null;
+      }
+    }
+  }
+  g.lastC = nc; g.lastR = nr;
+
+  // catch the player
+  if (player && player.state !== 'dead' && !playerCloaked()){
+    if (Math.abs(g.x - player.x) < 0.55 && Math.abs(g.y - player.y) < 0.7) killPlayer('caught');
+  }
+}
+
+function playerCloaked(){ return false; } // phase 5: phase cloak
+
+function trapGuard(g){
+  g.state = 'stun'; g.stunT = 0; g.anim = 0;
+  addScore(150);
+  shake = Math.max(shake, .2);
+  if (g.gold){ // gold pops out above the hole
+    const c = Math.floor(g.x), r = Math.floor(g.y);
+    g.gold.c = c; g.gold.r = Math.max(0, r - 1);
+    g.gold.held = null; g.gold = null;
+  }
+}
+
+function respawnGuard(g){
+  const cols = [];
+  for (let c = 0; c < COLS; c++)
+    if (gOccupy(c, 0) && !(player && Math.abs(player.x - (c + .5)) < 3)) cols.push(c);
+  const c = cols.length ? cols[(rnd() * cols.length) | 0] : (rnd() * COLS) | 0;
+  g.x = c + .5; g.y = 0.5;
+  g.state = 'fall'; g.anim = 0; g.wp = null; g.repath = 0;
+  g.invuln = 1.2;
+}
+
+function sealGuard(g){
+  if (g.gold){
+    const c = Math.floor(g.x), r = Math.floor(g.y);
+    g.gold.c = c; g.gold.r = Math.max(0, r - 1);
+    g.gold.held = null; g.gold = null;
+  }
   g.state = 'dead'; g.deadT = 0;
   addScore(300);
+  shake = Math.max(shake, .35);
 }
 
 function addScore(n){ score += n; }
@@ -436,9 +641,9 @@ function playerInput(){
 
 function loadLevelData(rows){
   currentRows = rows;
+  srand(rows.join('').length * 2654435761 + rows[0].charCodeAt(0));
   parseLevel(rows);
   player = makeActor(spawnPoint.c, spawnPoint.r, 'player');
-  player.digT = 0;
   guards = guardSpawns.map(g => makeActor(g.c, g.r, g.kind));
   levelTime = 0;
 }
@@ -519,6 +724,11 @@ function update(dt){
     }
   } else {
     moveActor(player, dt, inp, 1);
+  }
+
+  for (const g of guards){
+    if (g.invuln > 0) g.invuln -= dt;
+    updateGuard(g, dt);
   }
 
   updateHoles(dt);
