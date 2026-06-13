@@ -115,6 +115,54 @@ const ART = (() => {
     }
     ctx.restore();
 
+    /* lasso-rope curls scattered on the blue (the EBD border motif, freed) */
+    const ropeCurl = (x,y,r,a0,turns) => {
+      ctx.save(); ctx.translate(x,y);
+      ctx.strokeStyle='rgba(232,196,74,.55)'; ctx.lineWidth=2.2;
+      ctx.setLineDash([7,4]);
+      ctx.beginPath();
+      for (let t=0; t<=turns*Math.PI*2; t+=0.12){
+        const rr2 = r * (0.55 + 0.45*t/(turns*Math.PI*2));
+        const px2 = Math.cos(t+a0)*rr2, py2 = Math.sin(t+a0)*rr2*0.78;
+        if (t===0) ctx.moveTo(px2,py2); else ctx.lineTo(px2,py2);
+      }
+      ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.restore();
+    };
+    ropeCurl(135,330, 26, 0.6, 1.7);
+    ropeCurl(452,520, 22, 2.2, 1.6);
+    ropeCurl(480,700, 24, 1.1, 1.8);
+    ropeCurl(95,545, 18, 0.2, 1.5);
+    ropeCurl(250,210, 16, 1.6, 1.4);
+
+    /* cream star sparkles on the blue field */
+    const sparkle = (x,y,r) => {
+      ctx.save(); ctx.translate(x,y);
+      ctx.fillStyle='rgba(243,236,220,.5)';
+      ctx.beginPath();
+      ctx.moveTo(0,-r); ctx.quadraticCurveTo(r*0.18,-r*0.18, r,0);
+      ctx.quadraticCurveTo(r*0.18,r*0.18, 0,r);
+      ctx.quadraticCurveTo(-r*0.18,r*0.18, -r,0);
+      ctx.quadraticCurveTo(-r*0.18,-r*0.18, 0,-r);
+      ctx.fill();
+      ctx.restore();
+    };
+    [[105,215,6],[395,180,5],[470,360,7],[120,430,5],[330,300,4],[505,640,5],
+     [60,630,4],[200,560,4],[430,760,6],[85,755,5],[520,860,4],[230,420,4]].forEach(s=>sparkle(...s));
+
+    /* BALLY script + stars on the top wood corners */
+    ctx.save();
+    ctx.translate(64,66); ctx.rotate(-0.5);
+    ctx.font='italic 800 15px Georgia,serif'; ctx.textAlign='center';
+    ctx.fillStyle='#d8aa3c'; ctx.fillText('Bally', 0, 0);
+    ctx.restore();
+    ctx.save();
+    ctx.translate(498,66); ctx.rotate(0.5);
+    ctx.font='italic 800 11px Georgia,serif'; ctx.textAlign='center';
+    ctx.fillStyle='#d8aa3c'; ctx.fillText("'81", 0, 0);
+    ctx.restore();
+
     /* gold star rivets along the wood side margins */
     const star = (x,y,r) => {
       ctx.save(); ctx.translate(x,y); ctx.fillStyle='#d8aa3c';
@@ -157,6 +205,24 @@ const ART = (() => {
     ctx.fillStyle=felt; ctx.fill();
     ctx.strokeStyle='#e8c44a'; ctx.lineWidth=2.6; ctx.stroke();
     ctx.clip();
+    /* felt corner pockets + brass surrounds */
+    for (const [px2,py2] of [[148,746],[412,746],[148,914],[412,914]]){
+      ctx.fillStyle='#0c0c10';
+      ctx.beginPath(); ctx.arc(px2,py2,14,0,7); ctx.fill();
+      ctx.strokeStyle='#b08a4a'; ctx.lineWidth=3;
+      ctx.beginPath(); ctx.arc(px2,py2,15,0,7); ctx.stroke();
+    }
+    /* chalk marks + a cue resting along the felt's lower edge */
+    ctx.strokeStyle='rgba(255,255,255,.12)'; ctx.lineWidth=8;
+    ctx.beginPath(); ctx.moveTo(200,892); ctx.lineTo(240,880); ctx.stroke();
+    ctx.save();
+    ctx.translate(280,905); ctx.rotate(-0.06);
+    const cueG=ctx.createLinearGradient(-120,0,120,0);
+    cueG.addColorStop(0,'#e8d2a8'); cueG.addColorStop(0.7,'#a87c44'); cueG.addColorStop(1,'#5e3c1c');
+    ctx.fillStyle=cueG; ctx.fillRect(-120,-2.8,240,5.6);
+    ctx.fillStyle='#2266cc'; ctx.fillRect(-128,-3.4,9,6.8);
+    ctx.fillStyle='#f3ecdc'; ctx.fillRect(-131,-3.4,4,6.8);
+    ctx.restore();
     /* rack: point-down triangle, stripes high, 8 in the heart (like the art) */
     const rows = [[11,12,13,14,15],[7,8,9,10],[4,5,6],[2,3],[1]];
     rows.forEach((row,ri)=>{
@@ -295,11 +361,22 @@ const ART = (() => {
     ctx.lineTo(352,1058); ctx.lineTo(550,1108); ctx.lineTo(550,1160); ctx.closePath();
     ctx.fill();
     ctx.strokeStyle='rgba(255,217,138,.5)'; ctx.lineWidth=2; ctx.stroke();
+    /* apron details: inner pinstripe + rivets */
+    ctx.strokeStyle='rgba(232,196,74,.45)'; ctx.lineWidth=1.2;
+    ctx.beginPath();
+    ctx.moveTo(22,1112); ctx.lineTo(210,1066); ctx.lineTo(350,1066); ctx.lineTo(538,1112);
+    ctx.stroke();
+    ctx.fillStyle='rgba(232,196,74,.7)';
+    for (const [rx,ry] of [[60,1115],[140,1096],[230,1072],[330,1072],[420,1096],[500,1115]]){
+      ctx.beginPath(); ctx.arc(rx,ry,2.2,0,7); ctx.fill();
+    }
     ctx.fillStyle='#f3e2b8'; ctx.textAlign='center';
     ctx.font='italic 900 19px Georgia,serif';
     ctx.fillText('EIGHT BALL DELUXE', 280, 1124);
     ctx.font='600 9px sans-serif'; ctx.fillStyle='rgba(243,226,184,.7)';
     ctx.fillText('STOP TALKING AND START CHALKING', 280, 1142);
+    ctx.font='600 7.5px sans-serif'; ctx.fillStyle='rgba(243,226,184,.45)';
+    ctx.fillText("A 1981 BALLY TRIBUTE · 3 BALLS PER GAME", 280, 1153);
 
     /* subtle print grain + warm edge vignette tie everything together */
     const gr = document.createElement('canvas'); gr.width = gr.height = 160;
