@@ -180,6 +180,10 @@ const ART = (() => {
     // dig tool
     if (pose === 'dig'){ R(16, 9 + top, 2, 6, '#9aa0ad'); R(15, 8 + top, 4, 2, '#c8cdd8'); }
 
+    // guard-type marks (readability)
+    if (pal.mark === 'antenna'){ R(8, top - 2, 2, 2, pal.hatHi); R(8, top - 4, 2, 2, '#ffe66b'); } // scout: bright antenna
+    if (pal.mark === 'trowel' && pose !== 'climb' && pose !== 'bar'){ R(15, 12 + top, 5, 2, '#b8bcc6'); R(17, 13 + top, 2, 4, '#7e8490'); } // mason: trowel
+
     return c;
   }
 
@@ -197,9 +201,9 @@ const ART = (() => {
 
   const PAL = {
     player: { outline: '#10202a', face: '#e8b07a', hat: '#ffb02e', hatHi: '#ffd676', coat: '#2f8f86', coatHi: '#46b3a8', coatDk: '#1d5f59', legs: '#26405a', boot: '#161f2e', accent: '#13302c', lantern: '#fff3b0' },
-    guard:  { outline: '#2a0c12', face: '#d89a6a', hat: '#b23a3a', hatHi: '#e06868', coat: '#8f2f3a', coatHi: '#b3464f', coatDk: '#5f1d24', legs: '#3a1a22', boot: '#1f0c10', accent: '#5a1a20' },
-    scout:  { outline: '#2a1a06', face: '#e8c07a', hat: '#ff8b2e', hatHi: '#ffc070', coat: '#c46a1f', coatHi: '#e09040', coatDk: '#8a4710', legs: '#5a3210', boot: '#2a1808', accent: '#7a3e0f' },
-    mason:  { outline: '#101820', face: '#cdb89a', hat: '#7a8694', hatHi: '#a8b4c0', coat: '#4a5560', coatHi: '#646f7c', coatDk: '#2e353e', legs: '#2a3038', boot: '#181c22', accent: '#343a44' },
+    guard:  { outline: '#2a0c12', face: '#d89a6a', hat: '#b23a3a', hatHi: '#e06868', coat: '#8f2f3a', coatHi: '#b3464f', coatDk: '#5f1d24', legs: '#3a1a22', boot: '#1f0c10', accent: '#5a1a20', mark: null },
+    scout:  { outline: '#2a1a06', face: '#e8c07a', hat: '#ff8b2e', hatHi: '#ffc070', coat: '#c46a1f', coatHi: '#e09040', coatDk: '#8a4710', legs: '#5a3210', boot: '#2a1808', accent: '#7a3e0f', mark: 'antenna' },
+    mason:  { outline: '#101820', face: '#cdb89a', hat: '#7a8694', hatHi: '#a8b4c0', coat: '#4a5560', coatHi: '#646f7c', coatDk: '#2e353e', legs: '#2a3038', boot: '#181c22', accent: '#343a44', mark: 'trowel' },
   };
 
   const frames = {
