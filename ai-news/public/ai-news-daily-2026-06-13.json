@@ -1,6 +1,6 @@
 {
   "date": "2026-06-13",
-  "updatedAt": "2026-06-13T14:00:01.817020+00:00",
+  "updatedAt": "2026-06-13T14:22:05.948318+00:00",
   "items": [
     {
       "title": "Anthropic Says It’s Taking Claude Fable 5 Offline to Comply With US Government Order",
@@ -13,10 +13,10 @@
       "image": "https://media.wired.com/photos/6a2cb2e540437fd74449a752/master/pass/Anthropic-Says-US-Gov-Ordered-it-to-Shut-Down-Mythos-Models-Business-2280583841.jpg",
       "published": "2026-06-13T02:26:10+00:00",
       "firstSeen": "2026-06-13T03:00:01.182117+00:00",
-      "lastSeen": "2026-06-13T14:00:01.817020+00:00",
+      "lastSeen": "2026-06-13T14:22:05.948318+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.9878
+      "score": 10.9797
     },
     {
       "title": "My yard is dying, so I made an app for that",
@@ -29,10 +29,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/268530_SUMMER_UPGRADE_WEEK_VIBECODING_BACKYARD_ADemidova.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-13T13:00:00+00:00",
       "firstSeen": "2026-06-13T14:00:01.817020+00:00",
-      "lastSeen": "2026-06-13T14:00:01.817020+00:00",
+      "lastSeen": "2026-06-13T14:22:05.948318+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.4298
+      "score": 7.419
     },
     {
       "title": "US government orders Anthropic to kill Fable 5 and Mythos 5 in unprecedented AI model recall",
@@ -45,10 +45,10 @@
       "image": "https://media.thenextweb.com/2026/06/anthropic-mythos-eu-enisa-cybersecurity-access.avif",
       "published": "2026-06-13T06:57:05+00:00",
       "firstSeen": "2026-06-13T08:00:01.437241+00:00",
-      "lastSeen": "2026-06-13T14:00:01.817020+00:00",
+      "lastSeen": "2026-06-13T14:22:05.948318+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.0544
+      "score": 6.0452
     },
     {
       "title": "Anthropic cuts off Fable 5 and Mythos 5 access following government order",
@@ -61,10 +61,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/01/STK269_ANTHROPIC_2_D.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-13T12:55:49+00:00",
       "firstSeen": "2026-06-13T14:00:01.817020+00:00",
-      "lastSeen": "2026-06-13T14:00:01.817020+00:00",
+      "lastSeen": "2026-06-13T14:22:05.948318+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.3278
+      "score": 5.3169
     },
     {
       "title": "Anthropic’s safety warnings may have just backfired — the government has pulled the plug on its most powerful AI",
@@ -77,10 +77,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/02/GettyImages-2153561878.jpg?w=1024",
       "published": "2026-06-13T02:26:30+00:00",
       "firstSeen": "2026-06-13T03:00:01.182117+00:00",
-      "lastSeen": "2026-06-13T14:00:01.817020+00:00",
+      "lastSeen": "2026-06-13T14:22:05.948318+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9879
+      "score": 4.9798
     },
     {
       "title": "OpenAI is under investigation by 42 state attorneys general, days after filing for its IPO",
@@ -93,10 +93,10 @@
       "image": "https://media.thenextweb.com/2026/04/Sam-altman-open-ai.avif",
       "published": "2026-06-13T07:40:56+00:00",
       "firstSeen": "2026-06-13T09:00:01.338788+00:00",
-      "lastSeen": "2026-06-13T14:00:01.817020+00:00",
+      "lastSeen": "2026-06-13T14:22:05.948318+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9729
+      "score": 4.9636
     },
     {
       "title": "The FBI built a fake town to train agents for cyberattacks. It has a hospital, a power company, and 200 servers.",
@@ -109,10 +109,10 @@
       "image": "https://media.thenextweb.com/2026/06/fbi-kinetic-cyber-range-replica-town-cyberattacks.avif",
       "published": "2026-06-13T11:31:05+00:00",
       "firstSeen": "2026-06-13T13:00:01.843276+00:00",
-      "lastSeen": "2026-06-13T14:00:01.817020+00:00",
+      "lastSeen": "2026-06-13T14:22:05.948318+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.7767
+      "score": 4.7663
     },
     {
       "title": "Statement on the US government directive to suspend access to Fable 5 and Mythos 5",
@@ -125,10 +125,10 @@
       "image": "",
       "published": "2026-06-13T01:01:50+00:00",
       "firstSeen": "2026-06-13T02:00:02.094769+00:00",
-      "lastSeen": "2026-06-13T14:00:01.817020+00:00",
+      "lastSeen": "2026-06-13T14:22:05.948318+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.9572
+      "score": 3.9494
     },
     {
       "title": "Windows 11 finally finds files when you type two characters instead of three",
@@ -141,10 +141,10 @@
       "image": "https://media.thenextweb.com/2026/06/windows-11-search-two-character-fix-patch-tuesday.avif",
       "published": "2026-06-13T12:12:02+00:00",
       "firstSeen": "2026-06-13T13:00:01.843276+00:00",
-      "lastSeen": "2026-06-13T14:00:01.817020+00:00",
+      "lastSeen": "2026-06-13T14:22:05.948318+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.4964
+      "score": 3.4857
     },
     {
       "title": "Apple’s new AI photo editing tools mostly work, for better and worse",
@@ -157,10 +157,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/DSC03778_processed.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.723165084465%2C100%2C78.55366983107&amp%3Bw=1200",
       "published": "2026-06-13T12:00:00+00:00",
       "firstSeen": "2026-06-13T13:00:01.843276+00:00",
-      "lastSeen": "2026-06-13T14:00:01.817020+00:00",
+      "lastSeen": "2026-06-13T14:22:05.948318+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.4005
+      "score": 3.39
     },
     {
       "title": "CoreWeave joins the Nasdaq-100 just 15 months after its IPO, capping a wild ride from crypto mining to AI darling",
@@ -173,10 +173,10 @@
       "image": "https://media.thenextweb.com/2026/06/coreweave-nasdaq-100-index-ipo-ai-cloud.avif",
       "published": "2026-06-13T07:46:59+00:00",
       "firstSeen": "2026-06-13T09:00:01.338788+00:00",
-      "lastSeen": "2026-06-13T14:00:01.817020+00:00",
+      "lastSeen": "2026-06-13T14:22:05.948318+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0755
+      "score": 3.0661
     },
     {
       "title": "v1.84.8",
@@ -189,17 +189,22 @@
       "image": "https://opengraph.githubassets.com/493f42f17f8f27db62de610346e9d74ba80e7035b945371d4e20577d8eb8d914/BerriAI/litellm/releases/tag/v1.84.8",
       "published": "2026-06-13T01:45:29+00:00",
       "firstSeen": "2026-06-13T02:00:02.094769+00:00",
-      "lastSeen": "2026-06-13T14:00:01.817020+00:00",
+      "lastSeen": "2026-06-13T14:22:05.948318+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.6729
+      "score": 2.6649
     }
   ],
   "errors": [
     {
+      "source": "Artificial Intelligence News",
+      "url": "https://www.artificialintelligence-news.com/categories/artificial-intelligence/feed/",
+      "error": "not well-formed (invalid token): line 1, column 158"
+    },
+    {
       "source": "MarkTechPost",
       "url": "https://www.marktechpost.com/feed/",
-      "error": "HTTP Error 403: Forbidden"
+      "error": "not well-formed (invalid token): line 1, column 119"
     }
   ]
 }
