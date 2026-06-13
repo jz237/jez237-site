@@ -75,3 +75,6 @@ Sim is fixed-timestep (60Hz accumulator); `__g.step(n)` drives ticks headlessly.
   standard set (arrows/WASD, Enter/Space, P pause, M mute, R restart, Esc menu).
 - 2026-06-12: TNT crates are lethal to the player too — risk/reward.
 - 2026-06-12: One-way gates restrict horizontal entry only (exit free) — readable and simple.
+- 2026-06-12: The scores worker only persists initials/score/ts and drops `extra`, so the
+  Daily Dig date is encoded into the namespace (`pay-dirt-daily-YYYY-MM-DD`) rather than
+  `extra`. Gives a clean separate board per UTC day; campaign stays `pay-dirt`.
