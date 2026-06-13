@@ -887,13 +887,75 @@ function submitEntry(){
   setTimeout(() => refreshBoardInto('overBoard'), 350);
 }
 
-/* board rendering is finalized in phase 10 (global scores) */
 let ledgerView = 'campaign';
 function refreshBoardInto(id, forceMode){
   if (forceMode) ledgerView = forceMode;
   else if (id === 'overBoard') ledgerView = (mode === 'daily' ? 'daily' : 'campaign');
-  if (typeof Scores !== 'undefined') Scores.render(id, ledgerView);
+  Scores.render(id, ledgerView);
 }
+function refreshTitleBoard(){ Scores.render('titleBoard', 'campaign'); }
+
+/* ================= global scores ================= */
+const Scores = {
+  BASE: 'https://game-scores.jez237.workers.dev/scores/',
+  cache: {},          // ns -> array | 'offline'
+  last: null,         // {name, score, ns} of the most recent submit, for highlight
+  // The scores worker only persists initials/score/ts (it drops `extra`), so the
+  // Daily Dig date is encoded into the namespace instead — one board per UTC day.
+  nsFor(view, date){
+    if (view !== 'daily') return 'pay-dirt';
+    return 'pay-dirt-daily-' + (date || dailyDate || LEVELS.dailyDateUTC());
+  },
+  url(ns){ return this.BASE + ns; },
+  async fetchBoard(ns){
+    try {
+      const r = await fetch(this.url(ns), {cache: 'no-store'});
+      const d = await r.json();
+      const arr = (Array.isArray(d) ? d : (d.scores || []))
+        .map(s => ({
+          name: String(s.initials || s.name || '???').slice(0, 3).toUpperCase(),
+          score: s.score | 0,
+          extra: String(s.extra || ''),
+        }))
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 8);
+      this.cache[ns] = arr;
+    } catch (e) { this.cache[ns] = 'offline'; }
+    return this.cache[ns];
+  },
+  async submit(name, score, mode, date){
+    const ns = this.nsFor(mode === 'daily' ? 'daily' : 'campaign', date);
+    this.last = {name, score, ns};
+    try {
+      await fetch(this.url(ns), {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({initials: name, score}),
+      });
+      delete this.cache[ns]; // force refresh
+    } catch (e) {}
+  },
+  rowsHTML(board, ns){
+    if (board === 'offline') return '<div class="tiny">the ledger is unreachable — score kept locally</div>';
+    if (!board) return '<div class="tiny">reading the ledger…</div>';
+    if (!board.length) return '<div class="tiny">no claims filed yet — stake the first</div>';
+    return board.map((s, i) => {
+      const me = this.last && this.last.ns === ns && s.name === this.last.name && s.score === this.last.score;
+      const rank = String(i + 1).padStart(2, ' ');
+      const sc = String(s.score).padStart(7, ' ');
+      return '<div class="' + (me ? 'me' : '') + '">' + rank + '.  ' + s.name + '  ' + sc + '</div>';
+    }).join('');
+  },
+  render(id, view){
+    const el = document.getElementById(id);
+    if (!el) return;
+    const ns = this.nsFor(view);
+    const head = view === 'daily' ? '<div class="tiny" style="color:var(--teal)">DAILY DIG · ' + (dailyDate || LEVELS.dailyDateUTC()) + '</div>' : '';
+    const paint = (board) => { el.innerHTML = head + this.rowsHTML(board, ns); };
+    if (this.cache[ns]) paint(this.cache[ns]);
+    else { paint(null); this.fetchBoard(ns).then(b => paint(b)); }
+  },
+};
 
 /* ================= how-to + level select ================= */
 function buildHowTo(){
@@ -1006,7 +1068,7 @@ function startCampaignAt(i){
 function pauseGame(){ if (state !== 'playing') return; state = 'paused'; showOnly('ovPause'); }
 function resumeGame(){ if (state !== 'paused') return; state = 'playing'; hideOverlays(); }
 function restartLevel(){ loadCampaignLevel(levelIndex); state = 'playing'; hideOverlays(); }
-function quitToTitle(){ state = 'title'; showOnly('ovTitle'); }
+function quitToTitle(){ state = 'title'; AUDIO.stopMusic(); showOnly('ovTitle'); refreshTitleBoard(); }
 function toggleMute(){
   AUDIO.ensure(); AUDIO.setMuted(!AUDIO.muted);
   const label = (AUDIO.muted ? '🔇 Muted' : '🔊 Sound');
@@ -1038,6 +1100,7 @@ bindButton('bLedgerDaily', () => refreshBoardInto('scoreBoard', 'daily'));
 
 buildHowTo();
 initTouch();
+refreshTitleBoard();
 
 /* ================= sim ================= */
 function update(dt){
@@ -1429,4 +1492,5 @@ window.__g = {
   },
   solvable(rows){ return LEVELS.solvable(rows || currentRows); },
   startAt: startCampaignAt,
+  scores: () => Scores,
 };
