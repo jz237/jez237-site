@@ -232,5 +232,23 @@
       "continuity": "Preserves the vertical basalt rift, shell-mantled reefminds, nacre membrane infrastructure, brine-lens ecology, pressure-light tools, and storm-filtered cyan/amber lighting.",
       "entryDescription": "Reefmind inhabitants do laundry by clipping nacre membrane cloths to breathing bridge rails beside an upward vapor river at Vascular Crossing."
     }
+  },
+  {
+    "id": "2026-06-13-morning-veyraxis-bloomrift-membrane-dock-sealers",
+    "title": "Veyraxis Bloomrift: Membrane Dock Sealers",
+    "tests": "Weekly-world life image for Veyraxis Bloomrift: practical membrane-dock maintenance, reefmind inhabitants, living nacre infrastructure, wet basalt materials, alien ecology, and realistic cinematic photography.",
+    "prompt": "Create a realistic photographed/cinematic daily-life image set in Veyraxis Bloomrift, showing membrane dock sealers at a breathing nacre dock grown into a vertical basalt petal above a suspended brine lens. Include non-human reefmind inhabitants with translucent shell mantles, tripod root-limbs, ribbon sensory fans, amber throat sacs, and symbiotic tendril tool clusters resealing translucent nacre membranes with wet ceramic paddles and resin bulbs before a pressure storm. Preserve the Veyraxis Bloomrift world bible: vertical basalt petals, suspended brine lenses, grown basalt, nacre membranes, pressure-light bowls, gill-like doors, living gauges, black moss veils, floating pollen sacs, mineral orchids, storm-filtered cyan light, bruised violet shadows, pearl mist, sea-glass green flashes, amber internal glow, and red pressure-light pulses. Render as realistic physical photography with a 45mm documentary lens, dock-level viewpoint, shallow depth of field, wet material wear, resin smears, droplets, root-limb tracks, and small brine-lens cleaner creatures. No humans, spaceships, Earth props, readable Earth signage, logos, dancing, watermark, poster, document, illustration, or concept-art rendering.\n\nSource photo needed: none.\n\nReusable prompt template: Create a realistic photographed/cinematic daily-life image set in Veyraxis Bloomrift, showing [EVERYDAY SCENE] at [LOCATION], with reefmind inhabitants, grown basalt, nacre membrane, pressure-light infrastructure, alien vegetation, storm-filtered cyan/amber lighting, and practical daily-life tools. Preserve the weekly world bible exactly while varying the activity, scale cues, viewpoint, and material details. Avoid humans, spaceships, Earth streets, readable signage, logos, dancing, and illustration/concept-art rendering.\n\nExample substitution: Show membrane dock sealers at a breathing nacre dock above a suspended brine lens, using resin bulbs and wet ceramic paddles while small brine-lens cleaner creatures work in the seams.",
+    "image": "images/2026-06-13-morning-veyraxis-bloomrift-membrane-dock-sealers.png",
+    "date": "2026-06-13",
+    "batch": "Daily Prompt",
+    "slot": "morning",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "world": {
+      "name": "Veyraxis Bloomrift",
+      "description": "A living basalt-and-membrane alien world where glass-shelled reefminds inhabit floating mineral blooms, harvest pressure-light, and move through vascular wind channels.",
+      "continuity": "Preserves the Veyraxis Bloomrift canon: vertical basalt petals, brine lenses, nacre membranes, reefmind body plan, pressure-light technology, alien vegetation, and cyan/amber storm lighting.",
+      "entryDescription": "Reefmind maintenance workers reseal a breathing membrane dock above a suspended brine lens before a pressure storm."
+    }
   }
 ]
