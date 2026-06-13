@@ -26,13 +26,91 @@ function resize(){
   canvas.style.left = canvasLeft + 'px'; canvas.style.top = canvasTop + 'px';
   ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
   ctx.imageSmoothingEnabled = false;
+  if (booted) render(); // repaint immediately (rAF may be frozen in hidden windows)
 }
+var booted = false; // var: hoisted, safe to read inside resize() before init
 addEventListener('resize', resize);
 addEventListener('orientationchange', () => setTimeout(resize, 220));
 resize();
 
+/* ================= level state ================= */
+const TILE_CHARS = '.#XH-TE<>CB[]';
+let grid = [];          // grid[r][c] = base tile char
+let golds = [];         // [{c,r,taken}]
+let powerups = [];      // [{c,r,kind,taken}]  kind 1..5
+let exitCells = [];     // [{c,r}]
+let exitRevealed = false;
+let holes = new Map();  // 'c,r' -> {c,r,t}
+let crumbles = new Map();// 'c,r' -> {t, gone}
+let spawnPoint = {c: 1, r: 1};
+let guardSpawns = [];   // [{c,r,kind}] kind: 'guard'|'scout'|'mason'
+let player = null, guards = [];
+let goldLeft = 0;
+
+function key(c, r){ return c + ',' + r; }
+
+function parseLevel(rows){
+  if (!Array.isArray(rows) || rows.length !== ROWS)
+    throw new Error('level must have ' + ROWS + ' rows, got ' + (rows && rows.length));
+  grid = []; golds = []; powerups = []; exitCells = [];
+  guardSpawns = []; holes = new Map(); crumbles = new Map();
+  exitRevealed = false;
+  for (let r = 0; r < ROWS; r++){
+    const row = rows[r];
+    if (row.length !== COLS)
+      throw new Error('level row ' + r + ' must have ' + COLS + ' chars, got ' + row.length);
+    const out = [];
+    for (let c = 0; c < COLS; c++){
+      let ch = row[c];
+      if (ch === 'P'){ spawnPoint = {c, r}; ch = '.'; }
+      else if (ch === 'G'){ guardSpawns.push({c, r, kind: 'guard'}); ch = '.'; }
+      else if (ch === 'S'){ guardSpawns.push({c, r, kind: 'scout'}); ch = '.'; }
+      else if (ch === 'M'){ guardSpawns.push({c, r, kind: 'mason'}); ch = '.'; }
+      else if (ch === '$'){ golds.push({c, r, taken: false}); ch = '.'; }
+      else if (ch >= '1' && ch <= '5'){ powerups.push({c, r, kind: +ch, taken: false}); ch = '.'; }
+      else if (ch === 'E'){ exitCells.push({c, r}); }
+      else if (!TILE_CHARS.includes(ch))
+        throw new Error('level row ' + r + ' col ' + c + ': unknown tile "' + ch + '"');
+      out.push(ch);
+    }
+    grid.push(out);
+  }
+  goldLeft = golds.length;
+}
+
+/* tile queries (entities + AI share these) */
+function tileAt(c, r){
+  if (c < 0 || c >= COLS || r < 0 || r >= ROWS) return 'X';
+  return grid[r][c];
+}
+function isDug(c, r){ return holes.has(key(c, r)); }
+function isCrumbleGone(c, r){ const s = crumbles.get(key(c, r)); return !!(s && s.gone); }
+// solid for standing-on (support from below)
+function isSupportTile(c, r){
+  const t = tileAt(c, r);
+  if (t === '#' || t === 'B') return !isDug(c, r);
+  if (t === 'C') return !isCrumbleGone(c, r);
+  return t === 'X' || t === 'H' || t === '<' || t === '>' || (t === 'E' && exitRevealed);
+  // note: 'T' trapdoor intentionally gives NO support
+}
+// can an entity's body occupy this cell?
+function canOccupy(c, r){
+  if (c < 0 || c >= COLS || r < 0 || r >= ROWS) return false;
+  const t = tileAt(c, r);
+  if (t === '#' || t === 'B') return isDug(c, r);
+  if (t === 'C') return isCrumbleGone(c, r);
+  if (t === 'X') return false;
+  if (t === 'T') return true; // fall-through cell: enterable (you drop straight through)
+  return true;
+}
+function isLadder(c, r){
+  const t = tileAt(c, r);
+  return t === 'H' || (t === 'E' && exitRevealed);
+}
+function isBar(c, r){ return tileAt(c, r) === '-'; }
+
 /* ================= state machine + overlays ================= */
-let state = 'title';   // title | playing | paused | over | how | levels | scores
+let state = 'title';   // title | playing | paused | over | how | levels | scores | win
 let score = 0, lives = 3, levelIndex = 0, mode = 'campaign'; // campaign | daily
 let gameTime = 0, shake = 0;
 
@@ -69,17 +147,41 @@ document.addEventListener('contextmenu', e => { if (state === 'playing') e.preve
 document.addEventListener('touchmove', e => { if (e.target.closest('button,.panel')) return; e.preventDefault(); }, {passive: false});
 addEventListener('touchstart', () => document.body.classList.add('touch'), {once: true, passive: true});
 
-/* ================= flow stubs (filled across phases) ================= */
+/* ================= entities (placeholder until phase 2/4) ================= */
+function makeActor(c, r, kind){
+  return {
+    kind,                       // 'player' | 'guard' | 'scout' | 'mason'
+    x: c + 0.5, y: r + 0.5,     // tile-units, cell center
+    dir: 1, vx: 0, vy: 0,
+    state: 'fall',              // run|climb|bar|fall|stun|dead
+    anim: 0,
+  };
+}
+
+function loadLevelData(rows){
+  parseLevel(rows);
+  player = makeActor(spawnPoint.c, spawnPoint.r, 'player');
+  guards = guardSpawns.map(g => makeActor(g.c, g.r, g.kind));
+}
+
+function loadCampaignLevel(i){
+  levelIndex = Math.max(0, Math.min(LEVELS.campaign.length - 1, i | 0));
+  loadLevelData(LEVELS.campaign[levelIndex]);
+}
+
+/* ================= flow ================= */
 function startGame(m){
   mode = m || 'campaign';
-  score = 0; lives = 3; levelIndex = 0;
+  score = 0; lives = 3;
+  loadCampaignLevel(0);
+  gameTime = 0;
   state = 'playing';
   hideOverlays();
   AUDIO.ensure();
 }
 function pauseGame(){ if (state !== 'playing') return; state = 'paused'; showOnly('ovPause'); }
 function resumeGame(){ if (state !== 'paused') return; state = 'playing'; hideOverlays(); }
-function restartLevel(){ state = 'playing'; hideOverlays(); }
+function restartLevel(){ loadCampaignLevel(levelIndex); state = 'playing'; hideOverlays(); }
 function quitToTitle(){ state = 'title'; showOnly('ovTitle'); }
 function toggleMute(){
   AUDIO.ensure(); AUDIO.setMuted(!AUDIO.muted);
@@ -117,12 +219,51 @@ function update(dt){
 }
 
 /* ================= render ================= */
+function px(v){ return v * TILE; } // tile-units -> logical px (x)
+function py(v){ return v * TILE + HUD_H; }
+
+function drawTile(img, c, r){ ctx.drawImage(img, c * TILE, r * TILE + HUD_H); }
+
 function render(){
   ctx.clearRect(0, 0, VIEW_W, VIEW_H);
   // cave backdrop
   const g = ctx.createLinearGradient(0, 0, 0, VIEW_H);
   g.addColorStop(0, '#1c1526'); g.addColorStop(.6, '#150f1e'); g.addColorStop(1, '#0c0a12');
   ctx.fillStyle = g; ctx.fillRect(0, 0, VIEW_W, VIEW_H);
+
+  ctx.save();
+  if (shake > 0){
+    const s = shake * shake * 9;
+    ctx.translate((Math.random() * 2 - 1) * s, (Math.random() * 2 - 1) * s);
+  }
+
+  if (grid.length){
+    const T = ART.tiles;
+    for (let r = 0; r < ROWS; r++){
+      for (let c = 0; c < COLS; c++){
+        const t = grid[r][c];
+        if (t === '#' || t === 'T' || t === 'B' || t === 'C'){
+          if (!isDug(c, r) && !isCrumbleGone(c, r)) drawTile(T.brick, c, r);
+        }
+        else if (t === 'X') drawTile(T.solid, c, r);
+        else if (t === 'H') drawTile(T.ladder, c, r);
+        else if (t === '-') drawTile(T.bar, c, r);
+        else if (t === 'E' && exitRevealed) drawTile(T.ladder, c, r);
+        else if (t === '<' || t === '>') drawTile(T.solid, c, r);
+      }
+    }
+    // gold
+    for (const gd of golds) if (!gd.taken) drawTile(T.gold, gd.c, gd.r);
+    // entities (placeholder boxes until art pass)
+    if (player){
+      ctx.fillStyle = '#3fd2c7';
+      ctx.fillRect(px(player.x) - 12, py(player.y) - 16, 24, 32);
+    }
+    ctx.fillStyle = '#ff4f6b';
+    for (const gu of guards) ctx.fillRect(px(gu.x) - 12, py(gu.y) - 16, 24, 32);
+  }
+  ctx.restore();
+
   // HUD bar
   ctx.fillStyle = 'rgba(0,0,0,.45)'; ctx.fillRect(0, 0, VIEW_W, HUD_H);
   ctx.fillStyle = '#ffd23f';
@@ -130,14 +271,10 @@ function render(){
   ctx.textBaseline = 'middle';
   ctx.textAlign = 'left';
   ctx.fillText('SCORE ' + String(score).padStart(6, '0'), 16, HUD_H / 2);
+  ctx.textAlign = 'center';
+  if (grid.length) ctx.fillText('GOLD ' + goldLeft, VIEW_W / 2, HUD_H / 2);
   ctx.textAlign = 'right';
   ctx.fillText('LIVES ' + lives, VIEW_W - 16, HUD_H / 2);
-  ctx.textAlign = 'center';
-  if (state === 'playing'){
-    ctx.fillStyle = '#9b8fa6';
-    ctx.font = '600 16px Consolas, monospace';
-    ctx.fillText('— claim under construction (phase 0) —', VIEW_W / 2, VIEW_H / 2);
-  }
 }
 
 /* ================= fixed-timestep loop ================= */
@@ -150,6 +287,7 @@ function frame(t){
   render();
 }
 requestAnimationFrame(frame);
+booted = true; render();
 
 /* ================= debug hooks (headless testing) ================= */
 window.__g = {
@@ -160,11 +298,18 @@ window.__g = {
   get lives(){ return lives; },
   get level(){ return levelIndex; },
   get mode(){ return mode; },
+  get player(){ return player; },
+  get guards(){ return guards; },
+  get golds(){ return golds; },
+  get goldLeft(){ return goldLeft; },
+  get holes(){ return [...holes.values()]; },
+  get exitRevealed(){ return exitRevealed; },
+  grid: () => grid.map(r => r.join('')),
   keys,
   start: startGame,
   step(n){ for (let i = 0; i < (n || 1); i++) update(TICK); render(); return true; },
   snap(){ render(); return true; },
   input(code, down){ keys[code] = !!down; },
-  loadLevel(i){ levelIndex = i | 0; },
+  loadLevel(i){ loadCampaignLevel(i); state = 'playing'; hideOverlays(); return grid.length === ROWS; },
   seedDaily(seed){ /* phase 6 */ },
 };
