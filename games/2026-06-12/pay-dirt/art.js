@@ -55,22 +55,30 @@ const ART = (() => {
     x.fillStyle = 'rgba(0,0,0,.35)'; x.fillRect(0, T - 2, T, 2);
     tiles.solid = c;
 
-    // ladder — wooden rails + rungs, highlight
-    c = cv(T, T); x = cx(c);
-    x.fillStyle = '#3a2c1c'; x.fillRect(0, 0, T, T); x.clearRect(0, 0, T, T);
-    x.fillStyle = '#a9803f'; x.fillRect(6, 0, 5, T); x.fillRect(T - 11, 0, 5, T);
-    x.fillStyle = '#c79a52'; x.fillRect(6, 0, 2, T); x.fillRect(T - 11, 0, 2, T);
-    for (let yy = 3; yy < T; yy += 10){
-      x.fillStyle = '#b78a47'; x.fillRect(6, yy, T - 12, 5);
-      x.fillStyle = '#d6a85c'; x.fillRect(6, yy, T - 12, 2);
+    // ladder — clean rails + rounded rungs. Rungs are spaced 12px (centres 6/18/30)
+    // so vertically-stacked tiles tile SEAMLESSLY with perfectly even spacing.
+    function buildLadder(p){
+      const cc = cv(T, T), xx = cx(cc);
+      const LX = 7, RX = 25, RW = 4;            // rail x positions, width 4
+      // rail outline (dark) for definition against brick/background
+      xx.fillStyle = p.edge;
+      xx.fillRect(LX - 1, 0, RW + 2, T); xx.fillRect(RX - 1, 0, RW + 2, T);
+      // rails
+      xx.fillStyle = p.rail; xx.fillRect(LX, 0, RW, T); xx.fillRect(RX, 0, RW, T);
+      xx.fillStyle = p.railHi; xx.fillRect(LX, 0, 1, T); xx.fillRect(RX, 0, 1, T);       // left highlight
+      xx.fillStyle = p.edge;   xx.fillRect(LX + RW - 1, 0, 1, T); xx.fillRect(RX + RW - 1, 0, 1, T); // right shade
+      // rungs (between the rails) at y = 6, 18, 30
+      const rL = LX + RW, rR = RX, rw = rR - rL;
+      for (const yc of [6, 18, 30]){
+        xx.fillStyle = p.edge;   xx.fillRect(rL, yc - 3, rw, 6);   // rung outline
+        xx.fillStyle = p.rung;   xx.fillRect(rL, yc - 2, rw, 4);   // rung body
+        xx.fillStyle = p.rungHi; xx.fillRect(rL, yc - 2, rw, 1);   // top highlight
+        xx.fillStyle = p.edge;   xx.fillRect(rL, yc + 1, rw, 1);   // bottom shade
+      }
+      return cc;
     }
-    tiles.ladder = c;
-    // exit ladder — glowing teal variant
-    c = cv(T, T); x = cx(c);
-    x.fillStyle = '#2aa79b'; x.fillRect(6, 0, 5, T); x.fillRect(T - 11, 0, 5, T);
-    x.fillStyle = '#6ff0e2'; x.fillRect(6, 0, 2, T); x.fillRect(T - 11, 0, 2, T);
-    for (let yy = 3; yy < T; yy += 10){ x.fillStyle = '#3fd2c7'; x.fillRect(6, yy, T - 12, 5); x.fillStyle = '#9ff7ec'; x.fillRect(6, yy, T - 12, 2); }
-    tiles.exit = c;
+    tiles.ladder = buildLadder({ edge: '#4a3115', rail: '#9c6b32', railHi: '#c89250', rung: '#b07d3c', rungHi: '#d8a85e' });
+    tiles.exit   = buildLadder({ edge: '#0f5048', rail: '#2aa79b', railHi: '#6ff0e2', rung: '#3fd2c7', rungHi: '#b6fff5' });
 
     // bar — brass pipe with sheen
     c = cv(T, T); x = cx(c);
