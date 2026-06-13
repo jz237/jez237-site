@@ -1,8 +1,8 @@
 {
-  "updatedAt": "2026-06-13T16:42:27.627468+00:00",
+  "updatedAt": "2026-06-13T18:00:01.713203+00:00",
   "items": [
     {
-      "title": "A verified subset of 500 software engineering problems from real GitHub issues, validated by human annotators for evaluating language models' ability to resolve real-world coding issues by generating patches for Python codebases.",
+      "title": "Humanity's Last Exam (HLE) is a multi-modal academic benchmark with 2,500 questions across mathematics, humanities, and natural sciences, designed to test LLM capabilities at the frontier of human knowledge with unambiguous, verifiable solutions",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -10,12 +10,28 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-13T16:42:31.767538+00:00",
+      "published": "2026-06-13T18:00:11.702122+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-13T16:42:27.627468+00:00",
+      "lastSeen": "2026-06-13T18:00:01.713203+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.71
+    },
+    {
+      "title": "Microsoft is considering spinning off Xbox entirely as the division’s margins hit 3%",
+      "url": "https://thenextweb.com/news/microsoft-xbox-spinoff-subsidiary-asha-sharma",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Microsoft has not ruled out spinning off its Xbox division into a separate company. The Information reported that options under consideration include turning Xbox into a wholly owned subsidiary, forming a joint venture with outside partners, or selling the business outright. No decision is imminent, but new Xbox CEO Asha Sharma and Microsoft CEO Satya [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/microsoft-xbox-spinoff-subsidiary-asha-sharma.avif",
+      "published": "2026-06-13T17:10:09+00:00",
+      "firstSeen": "2026-06-13T18:00:01.713203+00:00",
+      "lastSeen": "2026-06-13T18:00:01.713203+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.76
+      "score": 4.5249
     },
     {
       "title": "OpenAI faces investigation from state attorneys general",
@@ -28,10 +44,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/openai-logo-code-background.jpg?resize=1200%2C798",
       "published": "2026-06-13T16:47:18+00:00",
       "firstSeen": "2026-06-13T17:00:01.706033+00:00",
-      "lastSeen": "2026-06-13T17:00:01.706033+00:00",
+      "lastSeen": "2026-06-13T18:00:01.713203+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2835
+      "score": 5.2536
     },
     {
       "title": "Final Fantasy VII Revelation was built in three years because 95% of the team stayed",
@@ -44,10 +60,10 @@
       "image": "https://media.thenextweb.com/2026/06/final-fantasy-vii-revelation-3-year-dev-staff-retention.avif",
       "published": "2026-06-13T14:05:51+00:00",
       "firstSeen": "2026-06-13T15:00:01.563782+00:00",
-      "lastSeen": "2026-06-13T16:42:27.627468+00:00",
+      "lastSeen": "2026-06-13T18:00:01.713203+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7731
+      "score": 2.737
     },
     {
       "title": "My yard is dying, so I made an app for that",
@@ -60,10 +76,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/268530_SUMMER_UPGRADE_WEEK_VIBECODING_BACKYARD_ADemidova.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-13T13:00:00+00:00",
       "firstSeen": "2026-06-13T14:00:01.817020+00:00",
-      "lastSeen": "2026-06-13T16:42:27.627468+00:00",
+      "lastSeen": "2026-06-13T18:00:01.713203+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.3523
+      "score": 7.3173
     },
     {
       "title": "Anthropic cuts off Fable 5 and Mythos 5 access following government order",
@@ -76,10 +92,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/01/STK269_ANTHROPIC_2_D.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-13T12:55:49+00:00",
       "firstSeen": "2026-06-13T14:00:01.817020+00:00",
-      "lastSeen": "2026-06-13T16:42:27.627468+00:00",
+      "lastSeen": "2026-06-13T18:00:01.713203+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2504
+      "score": 5.2155
     },
     {
       "title": "Windows 11 finally finds files when you type two characters instead of three",
@@ -92,10 +108,10 @@
       "image": "https://media.thenextweb.com/2026/06/windows-11-search-two-character-fix-patch-tuesday.avif",
       "published": "2026-06-13T12:12:02+00:00",
       "firstSeen": "2026-06-13T13:00:01.843276+00:00",
-      "lastSeen": "2026-06-13T16:42:27.627468+00:00",
+      "lastSeen": "2026-06-13T18:00:01.713203+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.4206
+      "score": 3.3863
     },
     {
       "title": "Apple’s new AI photo editing tools mostly work, for better and worse",
@@ -108,10 +124,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/DSC03778_processed.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.723165084465%2C100%2C78.55366983107&amp%3Bw=1200",
       "published": "2026-06-13T12:00:00+00:00",
       "firstSeen": "2026-06-13T13:00:01.843276+00:00",
-      "lastSeen": "2026-06-13T16:42:27.627468+00:00",
+      "lastSeen": "2026-06-13T18:00:01.713203+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3252
+      "score": 3.2911
     },
     {
       "title": "The FBI built a fake town to train agents for cyberattacks. It has a hospital, a power company, and 200 servers.",
@@ -124,10 +140,10 @@
       "image": "https://media.thenextweb.com/2026/06/fbi-kinetic-cyber-range-replica-town-cyberattacks.avif",
       "published": "2026-06-13T11:31:05+00:00",
       "firstSeen": "2026-06-13T13:00:01.843276+00:00",
-      "lastSeen": "2026-06-13T16:42:27.627468+00:00",
+      "lastSeen": "2026-06-13T18:00:01.713203+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.7023
+      "score": 4.6687
     },
     {
       "title": "The future of Hollywood isn’t feeding prompts into vanilla gen AI models",
@@ -140,10 +156,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/Figure05_700_6_1080p.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C3.4613147178592%2C100%2C93.077370564282&amp%3Bw=1200",
       "published": "2026-06-13T11:00:00+00:00",
       "firstSeen": "2026-06-13T12:00:01.176028+00:00",
-      "lastSeen": "2026-06-13T16:42:27.627468+00:00",
+      "lastSeen": "2026-06-13T18:00:01.713203+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1987
+      "score": 2.1656
     },
     {
       "title": "A Court Has Ruled That Google Is Liable for False Statements Generated by AI Overviews",
@@ -156,10 +172,10 @@
       "image": "https://media.wired.com/photos/6a2c41ce14f8a13c2f9c4aac/master/pass/googleAI.jpg",
       "published": "2026-06-13T09:00:00+00:00",
       "firstSeen": "2026-06-13T10:00:01.708948+00:00",
-      "lastSeen": "2026-06-13T16:42:27.627468+00:00",
+      "lastSeen": "2026-06-13T18:00:01.713203+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.078
+      "score": 2.0467
     },
     {
       "title": "Andrew Yang says the next startup wave isn’t building AI. It’s lowering the cost of living.",
@@ -172,10 +188,10 @@
       "image": "https://media.thenextweb.com/2026/06/andrew-yang-cost-of-living-startups-ai-displacement.avif",
       "published": "2026-06-13T08:45:00+00:00",
       "firstSeen": "2026-06-13T10:00:01.708948+00:00",
-      "lastSeen": "2026-06-13T16:42:27.627468+00:00",
+      "lastSeen": "2026-06-13T18:00:01.713203+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9318
+      "score": 1.9007
     },
     {
       "title": "DOJ clears Paramount’s $110 billion purchase of Warner Bros. Discovery without conditions",
@@ -188,10 +204,10 @@
       "image": "https://media.thenextweb.com/2026/06/paramount-warner-bros-merger-doj-cleared.avif",
       "published": "2026-06-13T08:17:14+00:00",
       "firstSeen": "2026-06-13T09:00:01.338788+00:00",
-      "lastSeen": "2026-06-13T16:42:27.627468+00:00",
+      "lastSeen": "2026-06-13T18:00:01.713203+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9206
+      "score": 1.8899
     },
     {
       "title": "CoreWeave joins the Nasdaq-100 just 15 months after its IPO, capping a wild ride from crypto mining to AI darling",
@@ -204,10 +220,10 @@
       "image": "https://media.thenextweb.com/2026/06/coreweave-nasdaq-100-index-ipo-ai-cloud.avif",
       "published": "2026-06-13T07:46:59+00:00",
       "firstSeen": "2026-06-13T09:00:01.338788+00:00",
-      "lastSeen": "2026-06-13T16:42:27.627468+00:00",
+      "lastSeen": "2026-06-13T18:00:01.713203+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0085
+      "score": 2.9782
     },
     {
       "title": "OpenAI is under investigation by 42 state attorneys general, days after filing for its IPO",
@@ -220,10 +236,10 @@
       "image": "https://media.thenextweb.com/2026/04/Sam-altman-open-ai.avif",
       "published": "2026-06-13T07:40:56+00:00",
       "firstSeen": "2026-06-13T09:00:01.338788+00:00",
-      "lastSeen": "2026-06-13T16:42:27.627468+00:00",
+      "lastSeen": "2026-06-13T18:00:01.713203+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9061
+      "score": 4.8759
     },
     {
       "title": "US government orders Anthropic to kill Fable 5 and Mythos 5 in unprecedented AI model recall",
@@ -236,10 +252,10 @@
       "image": "https://media.thenextweb.com/2026/06/anthropic-mythos-eu-enisa-cybersecurity-access.avif",
       "published": "2026-06-13T06:57:05+00:00",
       "firstSeen": "2026-06-13T08:00:01.437241+00:00",
-      "lastSeen": "2026-06-13T16:42:27.627468+00:00",
+      "lastSeen": "2026-06-13T18:00:01.713203+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.9889
+      "score": 5.9593
     },
     {
       "title": "Andrew Yang thinks the next big startup opportunity is lowering the cost of living",
@@ -252,10 +268,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/GettyImages-1487822193.jpg?resize=1200%2C800",
       "published": "2026-06-13T04:14:19+00:00",
       "firstSeen": "2026-06-13T05:00:01.558672+00:00",
-      "lastSeen": "2026-06-13T16:42:27.627468+00:00",
+      "lastSeen": "2026-06-13T18:00:01.713203+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.968
+      "score": 1.9405
     },
     {
       "title": "Anthropic’s safety warnings may have just backfired — the government has pulled the plug on its most powerful AI",
@@ -268,10 +284,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/02/GettyImages-2153561878.jpg?w=1024",
       "published": "2026-06-13T02:26:30+00:00",
       "firstSeen": "2026-06-13T03:00:01.182117+00:00",
-      "lastSeen": "2026-06-13T16:42:27.627468+00:00",
+      "lastSeen": "2026-06-13T18:00:01.713203+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9301
+      "score": 4.904
     },
     {
       "title": "Anthropic Says It’s Taking Claude Fable 5 Offline to Comply With US Government Order",
@@ -284,10 +300,10 @@
       "image": "https://media.wired.com/photos/6a2cb2e540437fd74449a752/master/pass/Anthropic-Says-US-Gov-Ordered-it-to-Shut-Down-Mythos-Models-Business-2280583841.jpg",
       "published": "2026-06-13T02:26:10+00:00",
       "firstSeen": "2026-06-13T03:00:01.182117+00:00",
-      "lastSeen": "2026-06-13T16:42:27.627468+00:00",
+      "lastSeen": "2026-06-13T18:00:01.713203+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.93
+      "score": 10.9039
     },
     {
       "title": "v1.84.8",
@@ -300,10 +316,10 @@
       "image": "https://opengraph.githubassets.com/493f42f17f8f27db62de610346e9d74ba80e7035b945371d4e20577d8eb8d914/BerriAI/litellm/releases/tag/v1.84.8",
       "published": "2026-06-13T01:45:29+00:00",
       "firstSeen": "2026-06-13T02:00:02.094769+00:00",
-      "lastSeen": "2026-06-13T16:42:27.627468+00:00",
+      "lastSeen": "2026-06-13T18:00:01.713203+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.6162
+      "score": 2.5906
     },
     {
       "title": "Statement on the US government directive to suspend access to Fable 5 and Mythos 5",
@@ -316,10 +332,10 @@
       "image": "",
       "published": "2026-06-13T01:01:50+00:00",
       "firstSeen": "2026-06-13T02:00:02.094769+00:00",
-      "lastSeen": "2026-06-13T16:42:27.627468+00:00",
+      "lastSeen": "2026-06-13T18:00:01.713203+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.9017
+      "score": 3.8765
     },
     {
       "title": "OpenAI WebRTC Audio Session, now with document context",
@@ -332,11 +348,11 @@
       "image": "https://static.simonwillison.net/static/2026/openai-webrtc-document-context.jpg",
       "published": "2026-06-12T23:53:04+00:00",
       "firstSeen": "2026-06-13T01:00:01.235897+00:00",
-      "lastSeen": "2026-06-13T16:42:27.627468+00:00",
+      "lastSeen": "2026-06-13T18:00:01.713203+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 24.1794
+      "score": 24.155
     },
     {
       "title": "Meta Employees Absolutely Hate Mark Zuckerberg’s Plan for a Companywide AI Hackathon",
@@ -349,10 +365,10 @@
       "image": "https://media.wired.com/photos/6a29a9c94fc22a32725fb4b6/master/pass/Meta-Employee-Interrupts-AI-Business-AP-26085781053500.jpg",
       "published": "2026-06-12T23:45:26+00:00",
       "firstSeen": "2026-06-13T00:00:01.632600+00:00",
-      "lastSeen": "2026-06-13T16:42:27.627468+00:00",
+      "lastSeen": "2026-06-13T18:00:01.713203+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8769
+      "score": 1.8527
     },
     {
       "title": "SpaceX IPO: Live updates on everything you need to know",
@@ -365,10 +381,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/elon-nasdaq-spacex-ipo.jpg?resize=1200%2C801",
       "published": "2026-06-12T23:15:14+00:00",
       "firstSeen": "2026-06-12T19:00:02.075559+00:00",
-      "lastSeen": "2026-06-13T16:42:27.627468+00:00",
+      "lastSeen": "2026-06-13T18:00:01.713203+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -0.1326
+      "score": -0.1565
     },
     {
       "title": "Meta’s months-old AI unit is a soul-crushing gulag, say the engineers stuck inside it",
@@ -381,10 +397,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/07/GettyImages-2194278734.jpg?w=1024",
       "published": "2026-06-12T23:00:54+00:00",
       "firstSeen": "2026-06-13T00:00:01.632600+00:00",
-      "lastSeen": "2026-06-13T16:42:27.627468+00:00",
+      "lastSeen": "2026-06-13T18:00:01.713203+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8629
+      "score": 1.8392
     },
     {
       "title": "‘Tell Him He’s a Piece of Shit’: Meta’s New AI Unit Is a Total Mess",
@@ -397,10 +413,10 @@
       "image": "https://media.wired.com/photos/6a2c555e0473de232b255ae6/master/pass/Meta-Employee-Interrupts-AI-Training-Business-2261841192.jpg",
       "published": "2026-06-12T21:16:25+00:00",
       "firstSeen": "2026-06-12T22:00:01.248802+00:00",
-      "lastSeen": "2026-06-13T16:42:27.627468+00:00",
+      "lastSeen": "2026-06-13T18:00:01.713203+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8311
+      "score": 1.8085
     },
     {
       "title": "NVIDIA Blackwell Leads on First Agentic AI Infrastructure Benchmark",
@@ -413,10 +429,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/dgx-social-gb300-2048x2048-1-1.jpg",
       "published": "2026-06-12T21:00:08+00:00",
       "firstSeen": "2026-06-12T22:00:01.248802+00:00",
-      "lastSeen": "2026-06-13T16:42:27.627468+00:00",
+      "lastSeen": "2026-06-13T18:00:01.713203+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8763
+      "score": 4.8539
     },
     {
       "title": "Chinese cybercrime operation that used AI to scam ‘hundreds of thousands of victims’ sued by Google",
@@ -429,10 +445,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/google-logo.jpg?resize=1200%2C800",
       "published": "2026-06-12T20:38:09+00:00",
       "firstSeen": "2026-06-12T22:00:01.248802+00:00",
-      "lastSeen": "2026-06-13T16:42:27.627468+00:00",
+      "lastSeen": "2026-06-13T18:00:01.713203+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8199
+      "score": 1.7977
     },
     {
       "title": "80 Texas residents are suing SpaceX, saying rocket launches are literally destroying their homes",
@@ -445,10 +461,10 @@
       "image": "https://media.thenextweb.com/2026/06/spacex-starbase-class-action-homes-damaged-launches.avif",
       "published": "2026-06-12T20:31:33+00:00",
       "firstSeen": "2026-06-12T22:00:01.248802+00:00",
-      "lastSeen": "2026-06-13T16:42:27.627468+00:00",
+      "lastSeen": "2026-06-13T18:00:01.713203+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.4779
+      "score": 3.4558
     },
     {
       "title": "Ire identifies another LOTUSLITE specimen",
@@ -461,10 +477,10 @@
       "image": "https://www.microsoft.com/en-us/research/wp-content/uploads/2026/06/ProjectIre-TWLIFB-1200x627-1.jpg",
       "published": "2026-06-12T20:30:48+00:00",
       "firstSeen": "2026-06-12T21:00:02.009084+00:00",
-      "lastSeen": "2026-06-13T16:42:27.627468+00:00",
+      "lastSeen": "2026-06-13T18:00:01.713203+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.3877
+      "score": 4.3656
     },
     {
       "title": "India’s Avataar AI launches a video model that costs $0.005 per second, 27x cheaper than rivals",
@@ -480,7 +496,7 @@
       "lastSeen": "2026-06-13T16:42:27.627468+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.4724
+      "score": 3.4505
     },
     {
       "title": "v0.30.8",
@@ -493,10 +509,10 @@
       "image": "https://opengraph.githubassets.com/b50c7ff6cad6b910728a05e5b8335aa7bfa63b8c19ec4a823a40fbd1a1c2313d/ollama/ollama",
       "published": "2026-06-12T19:57:22+00:00",
       "firstSeen": "2026-06-12T03:00:01.623686+00:00",
-      "lastSeen": "2026-06-13T16:42:27.627468+00:00",
+      "lastSeen": "2026-06-13T18:00:01.713203+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 7.6781
+      "score": 7.6563
     },
     {
       "title": "Five cloud security mistakes that start at the architecture level",
@@ -512,7 +528,7 @@
       "lastSeen": "2026-06-13T14:22:05.948318+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.663
+      "score": 1.6414
     },
     {
       "title": "China opens its first photonic computing lab as it bets on light to outrun US chip curbs",
@@ -528,7 +544,7 @@
       "lastSeen": "2026-06-13T12:01:52.023000+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.36
+      "score": 2.3385
     },
     {
       "title": "PeopleSoft 0-day affecting hundreds of organizations steals gigabytes of data",
@@ -541,10 +557,10 @@
       "image": "https://cdn.arstechnica.net/wp-content/uploads/2025/12/GettyImages-1867844462-1152x648.jpg",
       "published": "2026-06-12T19:26:47+00:00",
       "firstSeen": "2026-06-12T20:00:01.844328+00:00",
-      "lastSeen": "2026-06-13T16:42:27.627468+00:00",
+      "lastSeen": "2026-06-13T18:00:01.713203+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.6594
+      "score": 1.6379
     },
     {
       "title": "Apple, Samsung, and the Race to Turn Glucose Data Into AI Health Advice",
@@ -557,10 +573,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/06/samsung-smartwatch-1.png?f=jpeg",
       "published": "2026-06-12T19:25:32+00:00",
       "firstSeen": "2026-06-12T20:00:01.844328+00:00",
-      "lastSeen": "2026-06-13T16:42:27.627468+00:00",
+      "lastSeen": "2026-06-13T18:00:01.713203+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.759
+      "score": 2.7376
     },
     {
       "title": "SpaceX rented Colossus 1 to Anthropic because it couldn’t make the data centre work for Grok",
@@ -576,7 +592,7 @@
       "lastSeen": "2026-06-13T12:01:52.023000+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.6587
+      "score": 10.6372
     },
     {
       "title": "London Tech Week 2026: the AI billions, the US build-out, and a royal first",
@@ -592,7 +608,7 @@
       "lastSeen": "2026-06-13T09:00:01.338788+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7565
+      "score": 2.7351
     },
     {
       "title": "Spotify is adding editor-hosted videos to New Music Friday so you can meet the people behind the playlist",
@@ -608,7 +624,7 @@
       "lastSeen": "2026-06-13T08:00:01.437241+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.4503
+      "score": 3.4291
     },
     {
       "title": "Firefox’s AI kill switch exists. Only 1% of users have flipped it.",
@@ -624,39 +640,7 @@
       "lastSeen": "2026-06-13T08:00:01.437241+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.6386
-    },
-    {
-      "title": "Quoting Andrew Singleton",
-      "url": "https://simonwillison.net/2026/Jun/12/andrew-singleton",
-      "source": "Simon Willison",
-      "sourceUrl": "https://simonwillison.net/atom/everything/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Jenny owns a crematorium. John’s propane company gives her a $20 billion investment in return for 5 percent of her operation. Jenny throws $10 billion into the incinerator, then pays John $10 billion to buy propane to burn that money to ashes. John reports that his AI investments have generated $10 billion in revenue this quarter and that he owns 5 percent of a $100 billion business. A reporter from Forbes is assigned to profile John and Jenny, and over the course of his research, he becomes embroiled in a passionate but confusing three-way love affair with them, which eventually turns into a ",
-      "image": "",
-      "published": "2026-06-12T18:09:21+00:00",
-      "firstSeen": "2026-06-12T19:00:02.075559+00:00",
-      "lastSeen": "2026-06-13T16:42:27.627468+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 3.1779
-    },
-    {
-      "title": "Google sues Chinese cybercrime ring that used Gemini to build phishing sites and send 2.5 million scam texts",
-      "url": "https://thenextweb.com/news/google-sues-outsider-enterprise-ai-scam-texts",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Google filed a lawsuit on Friday to dismantle the infrastructure behind a Chinese cybercrime operation called Outsider Enterprise. The group used AI, including Google’s own Gemini, to generate phishing websites and send scam text messages impersonating Google and other brands. It sent 2.5 million fraudulent texts to Android users in a two-week period. The operation [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/google-sues-outsider-enterprise-ai-scam-texts.avif",
-      "published": "2026-06-12T17:57:11+00:00",
-      "firstSeen": "2026-06-12T19:00:02.075559+00:00",
-      "lastSeen": "2026-06-13T08:00:01.437241+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 7.6346
+      "score": 1.6178
     },
     {
       "title": "The Life Scientific: Helen Hastie",
@@ -669,10 +653,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-08T20:00:00+00:00",
       "firstSeen": "2026-06-08T21:00:01.371488+00:00",
-      "lastSeen": "2026-06-13T16:42:27.627468+00:00",
+      "lastSeen": "2026-06-13T18:00:01.713203+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.233
+      "score": 1.2315
     },
     {
       "title": "The Life Scientific: Seth Berkley",
@@ -685,7 +669,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-01T20:00:00+00:00",
       "firstSeen": "2026-06-01T21:00:01.828388+00:00",
-      "lastSeen": "2026-06-13T16:42:27.627468+00:00",
+      "lastSeen": "2026-06-13T18:00:01.713203+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 1.1904
@@ -725,14 +709,9 @@
   ],
   "errors": [
     {
-      "source": "Artificial Intelligence News",
-      "url": "https://www.artificialintelligence-news.com/categories/artificial-intelligence/feed/",
-      "error": "not well-formed (invalid token): line 1, column 158"
-    },
-    {
       "source": "MarkTechPost",
       "url": "https://www.marktechpost.com/feed/",
-      "error": "not well-formed (invalid token): line 1, column 119"
+      "error": "HTTP Error 403: Forbidden"
     }
   ]
 }
