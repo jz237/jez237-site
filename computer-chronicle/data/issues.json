@@ -1,8 +1,506 @@
 {
-  "generatedAt": "2026-06-12T12:03:02.139Z",
+  "generatedAt": "2026-06-13T13:11:34.935Z",
   "editorialPriority": "When there is a choice, prefer personal computers, home computing, office PC software, and personal computer or console gaming over broad enterprise technology.",
   "fallbackPolicy": "Use exact-day computer news when verified. If none exists, use same-week or same-month personal-computing items with confidence labels, then fall back to a wider world/business headline.",
   "issues": [
+    {
+      "currentDate": "2026-06-13",
+      "historicDate": "1982-09-13",
+      "displayDate": "Week of September 13-19, 1982",
+      "edition": "Issue 007 - Weekly 1982 Computer & Culture Chronicle",
+      "visualProfile": {
+        "layout": "weekly-newsprint-front",
+        "accent": "black-red-blue",
+        "paper": "halftone-cream",
+        "strapline": "Atari VCS cartridge shelves, fall programming magazines, and pop-culture charts from one 1982 week"
+      },
+      "masthead": {
+        "kicker": "A weekly 1982 archive dispatch",
+        "title": "Computer Chronicle",
+        "deck": "Video games, home computers, software counters, and culture for the week of September 13-19, 1982"
+      },
+      "layoutPlan": {
+        "main": [
+          "editor-note",
+          "lead",
+          "picture-desk",
+          "computer-items",
+          "software",
+          "store-shelves"
+        ],
+        "sidebar": [
+          "price-watch",
+          "market",
+          "bbs",
+          "curiosity",
+          "briefs",
+          "music",
+          "period-ad",
+          "classifieds",
+          "fallback",
+          "accuracy",
+          "sources"
+        ]
+      },
+      "sectionChrome": {
+        "lead": {
+          "label": "Lead Story"
+        },
+        "pictureDesk": {
+          "label": "Picture Desk",
+          "title": "Scenes From the Week"
+        },
+        "computerItems": {
+          "label": "Computers & Hardware",
+          "title": "Personal Computing Desk"
+        },
+        "software": {
+          "label": "Software Top 5",
+          "title": "Programs on the Editor's Pad"
+        },
+        "storeShelves": {
+          "label": "Top Games This Week",
+          "title": "Arcade, Console & Computer Games"
+        },
+        "priceWatch": {
+          "label": "Price Watch",
+          "title": "What It Cost"
+        },
+        "bbs": {
+          "label": "Modem Desk"
+        },
+        "curiosity": {
+          "label": "Movies / TV / Culture"
+        },
+        "briefs": {
+          "label": "Magazine Rack",
+          "title": "Culture & Shelf Talk"
+        },
+        "music": {
+          "label": "Top Rock This Week",
+          "title": "Hot 100, September 18"
+        },
+        "periodAd": {
+          "label": "Retail / Ads"
+        },
+        "classifieds": {
+          "label": "Classifieds",
+          "title": "Small Ads"
+        },
+        "fallback": {
+          "label": "Editorial Screen"
+        },
+        "accuracy": {
+          "label": "Accuracy Ledger",
+          "title": "What Is Date-Specific"
+        },
+        "sources": {
+          "label": "Source Trail",
+          "title": "Research Log"
+        },
+        "market": {
+          "label": "Retail / Ads",
+          "title": "Computer Store Market"
+        }
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1982-09-13.png",
+        "alt": "GPT Image 2 newspaper-style Computer Chronicle front page for the week of September 13-19, 1982, featuring Atari VCS cartridge shelves and home-computer programming notes.",
+        "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data for the week of September 13-19, 1982.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "This issue follows the chronological 1982 series into the week beginning September 13, with home-arcade retail trouble moving onto the front page while fall computer magazines kept pushing programming languages, graphics chips, and practical applications.",
+      "morningLine": "Mattel's M-Network turns the Atari VCS aisle into a compatibility story while Chicago holds No. 1 and E.T. keeps winning weekends.",
+      "lead": {
+        "headline": "M-Network Trouble Hits the Atari Shelf",
+        "summary": "As Mattel pushed Intellivision-born games onto the Atari VCS under the M-Network label, trade reporting around the launch described retailers finding defective cartridges in the first shipment. For stores, the lesson was blunt: the hottest aisle in the shop was no longer just about titles, but returns, compatibility, and whether third-party publishers could keep quality steady on Atari's dominant console.",
+        "confidence": "Late-September trade report describing launch problems around the initial M-Network shipment; treated as close-period retail context for this week rather than exact-day news",
+        "sourceRefs": [
+          0,
+          1
+        ]
+      },
+      "computerItems": [
+        {
+          "label": "Magazine Rack",
+          "headline": "Compute! Keeps the Fall Programming Bench Busy",
+          "summary": "The September Compute! issue leaned hard into the practical home-computer workshop: Turtle PILOT for Apple, VIC-20 joystick instruction, Atari GTIA graphics, Commodore 64 sprite and sound coverage, and Color Computer graphics. It is exactly the kind of multi-platform reading that made a computer store feel like a night school.",
+          "confidence": "September 1982 issue table-of-contents source",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "label": "Atari Desk",
+          "headline": "GTIA Graphics Still Sell the Atari Pitch",
+          "summary": "Atari's 8-bit line kept getting ink for graphics capability, with GTIA articles and demonstrations giving technically curious buyers a concrete reason to look past cartridge games and ask about programming.",
+          "confidence": "September 1982 Compute! table-of-contents context",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "label": "Commodore Desk",
+          "headline": "Commodore 64 Becomes a Sound-and-Sprite Talking Point",
+          "summary": "Compute!'s Commodore 64 coverage put sprite graphics and sound synthesis in front of readers just as the machine's 64K headline was turning into a retail shorthand for the next home-computer jump.",
+          "confidence": "September 1982 Compute! coverage plus prior contemporary C64 context",
+          "sourceRefs": [
+            2,
+            3
+          ]
+        },
+        {
+          "label": "Office Counter",
+          "headline": "Applications Still Close the Sale",
+          "summary": "Games brought people to the counter, but a practical stack of spreadsheet, word-processing, and database programs still explained why a microcomputer belonged in a home office or small business.",
+          "confidence": "Period software context anchored to VisiCalc and WordStar source material",
+          "sourceRefs": [
+            7,
+            8
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "VisiCalc",
+          "platform": "Apple II / microcomputer office shelves",
+          "detail": "Still the clearest demonstration that a personal computer could pay for itself in business planning.",
+          "confidence": "Period application context",
+          "sourceRefs": [
+            7
+          ]
+        },
+        {
+          "name": "WordStar",
+          "platform": "CP/M word processing",
+          "detail": "The name small offices asked about when the computer was expected to replace a typewriter rather than a joystick.",
+          "confidence": "Period application context",
+          "sourceRefs": [
+            8
+          ]
+        },
+        {
+          "name": "Turtle PILOT",
+          "platform": "Apple / educational programming",
+          "detail": "Compute!'s September issue put Turtle PILOT on the programming bench for readers interested in Logo-like educational computing.",
+          "confidence": "September 1982 magazine table of contents",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "name": "Atari Microsoft BASIC",
+          "platform": "Atari 8-bit",
+          "detail": "Advertised as part of the Atari language shelf for buyers moving from packaged games to typed-in programs.",
+          "confidence": "September 1982 magazine advertising context",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "name": "Atari Macro Assembler",
+          "platform": "Atari 8-bit",
+          "detail": "A more technical language option for readers beginning to think about speed, hardware, and serious development.",
+          "confidence": "September 1982 magazine advertising context",
+          "sourceRefs": [
+            2
+          ]
+        }
+      ],
+      "storeShelves": [
+        {
+          "name": "Space Attack",
+          "platform": "M-Network / Atari VCS",
+          "detail": "A Mattel-to-Atari conversion that made the M-Network shelf look like more than a label experiment.",
+          "confidence": "M-Network catalog/context",
+          "sourceRefs": [
+            1
+          ]
+        },
+        {
+          "name": "Lock 'N' Chase",
+          "platform": "M-Network / Atari VCS",
+          "detail": "One of the Intellivision-to-VCS conversions whose tighter joystick feel made it stand out among ports.",
+          "confidence": "M-Network catalog/context",
+          "sourceRefs": [
+            1
+          ]
+        },
+        {
+          "name": "Frogs And Flies",
+          "platform": "M-Network / Atari VCS",
+          "detail": "The renamed Frog Bog conversion gave the new blue-label line a family-friendly cartridge entry.",
+          "confidence": "M-Network catalog/context",
+          "sourceRefs": [
+            1
+          ]
+        },
+        {
+          "name": "Frogger",
+          "platform": "Parker Brothers / Atari VCS",
+          "detail": "Still an easy retail recommendation after Arcade Express treated the home translation as a serious arcade-to-living-room event.",
+          "confidence": "Prior week Arcade Express context",
+          "sourceRefs": [
+            6
+          ]
+        },
+        {
+          "name": "Pitfall!",
+          "platform": "Activision / Atari VCS",
+          "detail": "The 1982 adventure cartridge remained a benchmark for third-party design and a useful comparison point for every new VCS release.",
+          "confidence": "1982 release context",
+          "sourceRefs": [
+            6
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "Commodore 64 computer",
+          "price": "$595 list price",
+          "note": "Introductory-era price used to sell 64K memory as the headline."
+        },
+        {
+          "item": "Atari VCS premium cartridges",
+          "price": "$30-$40 typical shelf range",
+          "note": "Arcade licenses and third-party releases often sat high on the rack."
+        },
+        {
+          "item": "Compute! magazine",
+          "price": "$2.50 cover price",
+          "note": "A cheap way to turn a home computer into a programming course."
+        },
+        {
+          "item": "Apple II disk software",
+          "price": "$40-$100 common business-software range",
+          "note": "Office programs cost enough to make reviews and dealer advice matter."
+        }
+      ],
+      "market": {
+        "headline": "Third-Party Cartridges Make Quality a Retail Issue",
+        "summary": "The M-Network story shows how fast the VCS market had matured: rival hardware makers now wanted Atari shelf space, and stores had to think about defective batches, returns, and customer trust alongside splashy licenses.",
+        "confidence": "Close-period trade reporting and M-Network historical context",
+        "sourceRefs": [
+          0,
+          1
+        ]
+      },
+      "bbsNote": {
+        "headline": "Modem Talk Stays Practical",
+        "summary": "The modem crowd was still small, but the questions were practical: which terminal program, which bulletin board, which phone bill, and whether typed-in listings from magazines were worth the long evenings.",
+        "posts": [
+          "Need Apple II terminal settings for local board.",
+          "Trading Atari GTIA demos on cassette.",
+          "Anyone using WordStar with a letter-quality printer?"
+        ],
+        "confidence": "Period-style BBS vignette based on 1982 microcomputer use; not a verbatim archive transcript",
+        "sourceRefs": [
+          2,
+          8
+        ]
+      },
+      "curiosity": {
+        "headline": "E.T. Holds the Weekend Again",
+        "summary": "The September 17-19 domestic chart still has E.T. at No. 1, narrowly ahead of An Officer and a Gentleman, with Pink Floyd: The Wall in third.",
+        "confidence": "Dated weekend box-office source",
+        "sourceRefs": [
+          5
+        ]
+      },
+      "briefs": [
+        {
+          "label": "Retail",
+          "headline": "Blue-Label M-Network Carts Crowd the Rack",
+          "summary": "Mattel's Atari-compatible line gave stores another third-party pitch, but the launch story made reliability part of the sales conversation.",
+          "confidence": "Close-period trade report and M-Network context",
+          "sourceRefs": [
+            0,
+            1
+          ]
+        },
+        {
+          "label": "Music",
+          "headline": "Chicago Keeps No. 1",
+          "summary": "Hard To Say I'm Sorry holds the top spot on the September 18 Hot 100, ahead of Abracadabra and Eye Of The Tiger.",
+          "confidence": "Dated singles chart source",
+          "sourceRefs": [
+            4
+          ]
+        },
+        {
+          "label": "Programming",
+          "headline": "Typed-In Listings Stay on the Workbench",
+          "summary": "Compute!'s September issue offers the familiar 1982 bargain: buy one magazine, spend the evening typing, debugging, and learning what the machine can really do.",
+          "confidence": "September 1982 magazine source",
+          "sourceRefs": [
+            2
+          ]
+        }
+      ],
+      "musicChart": [
+        {
+          "title": "Hard To Say I'm Sorry",
+          "artist": "Chicago"
+        },
+        {
+          "title": "Abracadabra",
+          "artist": "Steve Miller Band"
+        },
+        {
+          "title": "Eye Of The Tiger",
+          "artist": "Survivor"
+        },
+        {
+          "title": "Jack And Diane",
+          "artist": "John Cougar"
+        },
+        {
+          "title": "You Should Hear How She Talks About You",
+          "artist": "Melissa Manchester"
+        }
+      ],
+      "periodAd": {
+        "headline": "M-NETWORK FOR YOUR ATARI VCS",
+        "summary": "Ask about blue-label sports, action, and arcade-style cartridges from Mattel Electronics for the Atari VCS shelf.",
+        "finePrint": "Period-style advertisement copy; not a reproduced historical ad."
+      },
+      "classifieds": [
+        {
+          "headline": "ATARI GTIA DEMOS WANTED",
+          "copy": "Will trade cassette utilities or pay postage. Prefer commented BASIC listings."
+        },
+        {
+          "headline": "VCS CART RETURNS CHECKED",
+          "copy": "Dealer tests new blue-label titles before exchange. Bring receipt and console model if possible."
+        },
+        {
+          "headline": "WORDSTAR SETUP HELP",
+          "copy": "Small office needs CP/M printer configuration after 6 PM. Coffee provided."
+        }
+      ],
+      "worldFallback": {
+        "headline": "Culture Desk",
+        "summary": "E.T., Chicago, and the crowded Atari cartridge aisle make the week feel commercial, bright, and very early-eighties.",
+        "confidence": "Dated music and box-office sources",
+        "sourceRefs": [
+          4,
+          5
+        ]
+      },
+      "accuracyLedger": {
+        "items": [
+          "Historic week comes from the Chronicle state file: 1982-09-13 through 1982-09-19.",
+          "Lead story uses late-September Arcade Express reporting about initial M-Network launch problems and is labeled close-period retail context.",
+          "Music chart uses the September 18, 1982 Hot 100 ranking.",
+          "Movie chart uses the domestic weekend beginning September 17, 1982.",
+          "Compute! material uses the September 1982 issue table of contents and ads as period shelf context.",
+          "Price Watch uses period-typical retail/list prices and is labeled as such."
+        ],
+        "note": "Webpage text and sources are canonical; the generated image is an art-directed newspaper artifact."
+      },
+      "sources": [
+        {
+          "name": "Arcade Express Vol. 1 No. 4, September 26, 1982: M-Network launch problems report",
+          "url": "https://www.digitpress.com/library/newsletters/arcadeexpress/arcade_express_v1n4.pdf"
+        },
+        {
+          "name": "Atari Gaming Headquarters third-party profile: M-Network/Mattel for Atari VCS context",
+          "url": "https://www.atarihq.com/2678/3party/mnetwork.html"
+        },
+        {
+          "name": "Compute! Issue 28, September 1982: programming, Atari GTIA, VIC-20, Commodore 64, and Color Computer coverage",
+          "url": "https://colorcomputerarchive.com/repo/Documents/Magazines/Compute%20(Clean)/Compute_Issue_028_1982_Sep.pdf"
+        },
+        {
+          "name": "Compute! August 1982 issue with Commodore 64 early coverage context",
+          "url": "https://www.commodore.ca/gallery/magazines/compute/Compute-027-01.pdf"
+        },
+        {
+          "name": "Music Charts Archive: Billboard singles chart for September 18, 1982",
+          "url": "https://musicchartsarchive.com/singles-chart/1982-09-18"
+        },
+        {
+          "name": "Box Office Mojo domestic weekend chart for September 17-19, 1982",
+          "url": "https://www.boxofficemojo.com/weekend/1982W38/"
+        },
+        {
+          "name": "1982 in video games: broad release context for Frogger, Pitfall!, Q*bert, Zaxxon, and other 1982 titles",
+          "url": "https://en.wikipedia.org/wiki/1982_in_video_games"
+        },
+        {
+          "name": "Computer History Museum timeline: VisiCalc business-computing context",
+          "url": "https://www.computerhistory.org/timeline/1979/"
+        },
+        {
+          "name": "WordStar historical context for CP/M-era word processing",
+          "url": "https://en.wikipedia.org/wiki/WordStar"
+        }
+      ],
+      "frontPageStories": [
+        {
+          "headline": "M-Network Trouble Hits the Atari Shelf",
+          "summary": "Mattel's Atari-compatible cartridges turn third-party publishing into a quality-control story.",
+          "sourceRefs": [
+            0,
+            1
+          ]
+        },
+        {
+          "headline": "Compute! Fills the Programming Bench",
+          "summary": "September articles cover Apple, VIC-20, Atari GTIA, Commodore 64, and Color Computer work.",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "headline": "E.T. Keeps the Weekend Crown",
+          "summary": "The alien still leads domestic theaters for September 17-19.",
+          "sourceRefs": [
+            5
+          ]
+        }
+      ],
+      "movieChart": [
+        {
+          "title": "E.T. the Extra-Terrestrial",
+          "detail": "No. 1 for the September 17-19 domestic weekend.",
+          "sourceRefs": [
+            5
+          ]
+        },
+        {
+          "title": "An Officer and a Gentleman",
+          "detail": "No. 2, close behind E.T. for the weekend.",
+          "sourceRefs": [
+            5
+          ]
+        },
+        {
+          "title": "Pink Floyd: The Wall",
+          "detail": "No. 3 on the weekend chart.",
+          "sourceRefs": [
+            5
+          ]
+        },
+        {
+          "title": "Inchon",
+          "detail": "New wide release at No. 4.",
+          "sourceRefs": [
+            5
+          ]
+        },
+        {
+          "title": "Fast Times at Ridgemont High",
+          "detail": "No. 5 as teen-mall culture stays in the mix.",
+          "sourceRefs": [
+            5
+          ]
+        }
+      ],
+      "musicChartSourceRefs": [
+        4
+      ]
+    },
     {
       "currentDate": "2026-06-12",
       "historicDate": "1982-09-06",
