@@ -1,7 +1,7 @@
-/* Eight Ball Deluxe — playfield art.
+/* Corner Pocket — playfield art.
    Static base pre-rendered at 2× into an offscreen canvas; dynamic elements
    (ball, flippers, targets, bumpers, lamps, effects) drawn per frame in
-   playfield coordinates. Evokes the 1981 Bally cabinet art (cream playfield,
+   playfield coordinates. Evokes classic 1981-era Bally cabinet art (cream playfield,
    orange sunburst, billiard imagery) without copying it. */
 'use strict';
 
@@ -151,16 +151,16 @@ const ART = (() => {
     [[105,215,6],[395,180,5],[470,360,7],[120,430,5],[330,300,4],[505,640,5],
      [60,630,4],[200,560,4],[430,760,6],[85,755,5],[520,860,4],[230,420,4]].forEach(s=>sparkle(...s));
 
-    /* BALLY script + stars on the top wood corners */
+    /* Corner / Pocket scripts on the top wood corners */
     ctx.save();
     ctx.translate(64,66); ctx.rotate(-0.5);
     ctx.font='italic 800 15px Georgia,serif'; ctx.textAlign='center';
-    ctx.fillStyle='#d8aa3c'; ctx.fillText('Bally', 0, 0);
+    ctx.fillStyle='#d8aa3c'; ctx.fillText('Corner', 0, 0);
     ctx.restore();
     ctx.save();
     ctx.translate(498,66); ctx.rotate(0.5);
     ctx.font='italic 800 11px Georgia,serif'; ctx.textAlign='center';
-    ctx.fillStyle='#d8aa3c'; ctx.fillText("'81", 0, 0);
+    ctx.fillStyle='#d8aa3c'; ctx.fillText('Pocket', 0, 0);
     ctx.restore();
 
     /* gold star rivets along the wood side margins */
@@ -372,11 +372,11 @@ const ART = (() => {
     }
     ctx.fillStyle='#f3e2b8'; ctx.textAlign='center';
     ctx.font='italic 900 19px Georgia,serif';
-    ctx.fillText('EIGHT BALL DELUXE', 280, 1124);
+    ctx.fillText('CORNER POCKET', 280, 1124);
     ctx.font='600 9px sans-serif'; ctx.fillStyle='rgba(243,226,184,.7)';
     ctx.fillText('STOP TALKING AND START CHALKING', 280, 1142);
     ctx.font='600 7.5px sans-serif'; ctx.fillStyle='rgba(243,226,184,.45)';
-    ctx.fillText("A 1981 BALLY TRIBUTE · 3 BALLS PER GAME", 280, 1153);
+    ctx.fillText("POOL-HALL PINBALL · 3 BALLS PER GAME", 280, 1153);
 
     /* subtle print grain + warm edge vignette tie everything together */
     const gr = document.createElement('canvas'); gr.width = gr.height = 160;

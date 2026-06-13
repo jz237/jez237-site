@@ -1,4 +1,4 @@
-/* Eight Ball Deluxe — audio: WebAudio synth SFX (no assets) + speech callouts.
+/* Corner Pocket — audio: WebAudio synth SFX (no assets) + speech callouts.
    Everything is generated; mute persists. Speech falls back silently — the DMD
    always shows the line as text regardless. */
 'use strict';
