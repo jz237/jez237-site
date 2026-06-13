@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-13T01:33:28.943318+00:00",
+  "updatedAt": "2026-06-13T03:00:01.182117+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -10280,6 +10280,14 @@
     "https://simonwillison.net/2026/Jun/13/us-government-directive-to-suspend-access": {
       "image": "",
       "checkedAt": "2026-06-13T01:33:28.943318+00:00"
+    },
+    "https://techcrunch.com/2026/06/12/anthropics-safety-warnings-may-have-just-backfired-the-government-has-pulled-the-plug-on-its-most-powerful-ai": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/02/GettyImages-2153561878.jpg?w=1024",
+      "checkedAt": "2026-06-13T03:00:01.182117+00:00"
+    },
+    "https://www.anthropic.com/news/fable-mythos-access": {
+      "image": "https://cdn.sanity.io/images/4zrzovbb/website/50159fff55088f12070cc8a56eb51ff61006b631-2400x1260.png",
+      "checkedAt": "2026-06-13T03:00:01.182117+00:00"
     }
   }
 }
