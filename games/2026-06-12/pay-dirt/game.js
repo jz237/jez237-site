@@ -46,6 +46,9 @@ let spawnPoint = {c: 1, r: 1};
 let guardSpawns = [];   // [{c,r,kind}] kind: 'guard'|'scout'|'mason'
 let player = null, guards = [];
 let goldLeft = 0;
+let blasted = new Set(); // cells permanently cleared by explosions
+let fuses = [];          // [{c,r,t}] TNT crates about to blow
+let comboN = 0, comboT = 0;
 
 function key(c, r){ return c + ',' + r; }
 
@@ -54,6 +57,8 @@ function parseLevel(rows){
     throw new Error('level must have ' + ROWS + ' rows, got ' + (rows && rows.length));
   grid = []; golds = []; powerups = []; exitCells = [];
   guardSpawns = []; holes = new Map(); crumbles = new Map();
+  blasted = new Set(); fuses = [];
+  comboN = 0; comboT = 0;
   exitRevealed = false;
   for (let r = 0; r < ROWS; r++){
     const row = rows[r];
@@ -85,11 +90,12 @@ function tileAt(c, r){
 }
 function isDug(c, r){ return holes.has(key(c, r)); }
 function isCrumbleGone(c, r){ const s = crumbles.get(key(c, r)); return !!(s && s.gone); }
+function isBlasted(c, r){ return blasted.has(key(c, r)); }
 // solid for standing-on (support from below)
 function isSupportTile(c, r){
   const t = tileAt(c, r);
-  if (t === '#' || t === 'B') return !isDug(c, r);
-  if (t === 'C') return !isCrumbleGone(c, r);
+  if (t === '#' || t === 'B') return !isDug(c, r) && !isBlasted(c, r);
+  if (t === 'C') return !isCrumbleGone(c, r) && !isBlasted(c, r);
   return t === 'X' || t === 'H' || t === '<' || t === '>' || (t === 'E' && exitRevealed);
   // note: 'T' trapdoor intentionally gives NO support
 }
@@ -97,8 +103,8 @@ function isSupportTile(c, r){
 function canOccupy(c, r){
   if (c < 0 || c >= COLS || r < 0 || r >= ROWS) return false;
   const t = tileAt(c, r);
-  if (t === '#' || t === 'B') return isDug(c, r);
-  if (t === 'C') return isCrumbleGone(c, r);
+  if (t === '#' || t === 'B') return isDug(c, r) || isBlasted(c, r);
+  if (t === 'C') return isCrumbleGone(c, r) || isBlasted(c, r);
   if (t === 'X') return false;
   if (t === 'T') return true; // fall-through cell: enterable (you drop straight through)
   return true;
@@ -289,8 +295,21 @@ function moveActor(a, dt, inp, spd){
     }
   }
 
-  // re-evaluate footing
+  // conveyor drift + crumble trigger (anything standing on these)
   c = Math.floor(a.x); r = Math.floor(a.y);
+  if (Math.abs(a.y - (r + .5)) < 0.05){
+    const below = tileAt(c, r + 1);
+    if ((below === '<' || below === '>') && !movedY && !isLadder(c, r)){
+      tryMoveX(a, (below === '<' ? -1 : 1) * 2.2 * dt);
+      c = Math.floor(a.x);
+    }
+    if (below === 'C' && !isCrumbleGone(c, r + 1) && !isBlasted(c, r + 1)){
+      const k = key(c, r + 1);
+      if (!crumbles.has(k)) crumbles.set(k, {c, r: r + 1, t: 0, gone: false});
+    }
+  }
+
+  // re-evaluate footing
   if (!hasSupport(a)){
     a.state = 'fall'; a.anim = 0;
     return;
@@ -319,13 +338,24 @@ function tryDig(dir){
   if (Math.abs(player.y - (r + .5)) > 0.1) return false;
   if (!isSupportTile(c, r + 1) && !guardSupportAt(c, r + 1)) return false;
   const tc = c + dir, tr = r + 1;
-  if (tileAt(tc, tr) !== '#' || isDug(tc, tr)) return false;
+  if (tileAt(tc, tr) !== '#' || isDug(tc, tr) || isBlasted(tc, tr)) return false;
   const above = tileAt(tc, r);
-  if (above === '#' && !isDug(tc, r)) return false;
-  if (above === 'X' || above === 'B') return false;
-  if (above === 'C' && !isCrumbleGone(tc, r)) return false;
-  player.digT = DIG_TIME;
+  if (above === '#' && !isDug(tc, r) && !isBlasted(tc, r)) return false;
+  if (above === 'X') return false;
+  if (above === 'B' && !isBlasted(tc, r)) return false;
+  if (above === 'C' && !isCrumbleGone(tc, r) && !isBlasted(tc, r)) return false;
   player.dir = dir;
+  if (player.tnt > 0){
+    // TNT charge: instant 3-wide excavation
+    player.tnt--;
+    for (let k = -1; k <= 1; k++){
+      const cc = tc + k;
+      if (tileAt(cc, tr) === '#' && !isDug(cc, tr) && !isBlasted(cc, tr)) openHole(cc, tr);
+    }
+    shake = Math.max(shake, .5);
+    return true;
+  }
+  player.digT = player.shovelT > 0 ? 0.05 : DIG_TIME;
   player.pendingDig = {c: tc, r: tr};
   return true;
 }
@@ -333,6 +363,55 @@ function tryDig(dir){
 function openHole(c, r){
   holes.set(key(c, r), {c, r, t: 0});
   shake = Math.max(shake, .25);
+  // digging beside a TNT crate lights its fuse
+  for (const [dc, dr] of [[-1, 0], [1, 0], [0, -1], [0, 1]]){
+    const nc = c + dc, nr = r + dr;
+    if (tileAt(nc, nr) === 'B' && !isBlasted(nc, nr) && !fuses.some(f => f.c === nc && f.r === nr))
+      fuses.push({c: nc, r: nr, t: 0.5});
+  }
+}
+
+function boom(c, r){
+  blasted.add(key(c, r));
+  for (let dr = -1; dr <= 1; dr++) for (let dc = -1; dc <= 1; dc++){
+    const nc = c + dc, nr = r + dr;
+    const t = tileAt(nc, nr);
+    if (t === '#' || t === 'C'){
+      blasted.add(key(nc, nr));
+      holes.delete(key(nc, nr));
+    } else if (t === 'B' && !isBlasted(nc, nr) && !fuses.some(f => f.c === nc && f.r === nr)){
+      fuses.push({c: nc, r: nr, t: 0.18}); // chain reaction
+    }
+  }
+  // blast kills
+  const bx = c + .5, by = r + .5;
+  if (player && player.state !== 'dead' &&
+      Math.abs(player.x - bx) < 1.6 && Math.abs(player.y - by) < 1.6) killPlayer('blast');
+  for (const g of guards){
+    if (g.state !== 'dead' && Math.abs(g.x - bx) < 1.6 && Math.abs(g.y - by) < 1.6){
+      if (g.gold){ g.gold.held = null; g.gold.c = Math.floor(g.x); g.gold.r = Math.max(0, Math.floor(g.y) - 1); g.gold = null; }
+      g.state = 'dead'; g.deadT = 0; addScore(200);
+    }
+  }
+  shake = Math.max(shake, .8);
+}
+
+function updateFuses(dt){
+  for (let i = fuses.length - 1; i >= 0; i--){
+    fuses[i].t -= dt;
+    if (fuses[i].t <= 0){
+      const f = fuses.splice(i, 1)[0];
+      boom(f.c, f.r);
+    }
+  }
+}
+
+function updateCrumbles(dt){
+  for (const cr of crumbles.values()){
+    if (cr.gone) continue;
+    cr.t += dt;
+    if (cr.t >= 0.55) cr.gone = true;
+  }
 }
 
 function updateHoles(dt){
@@ -359,8 +438,8 @@ const STUN_TIME = 3.2, GUARD_RESPAWN_T = 1.4;
 function gOccupy(c, r){
   if (c < 0 || c >= COLS || r < 0 || r >= ROWS) return false;
   const t = tileAt(c, r);
-  if (t === '#' || t === 'B') return false;
-  if (t === 'C') return isCrumbleGone(c, r);
+  if (t === '#' || t === 'B') return isBlasted(c, r); // holes pretend-filled; blasts are real
+  if (t === 'C') return isCrumbleGone(c, r) || isBlasted(c, r);
   if (t === 'X') return false;
   return true;
 }
@@ -374,8 +453,8 @@ function gOccupyDir(c, r, dir){
 function gSolidBelow(c, r){
   const t = tileAt(c, r + 1);
   if (r + 1 >= ROWS) return true;
-  if (t === '#' || t === 'B') return true;
-  if (t === 'C') return !isCrumbleGone(c, r + 1);
+  if (t === '#' || t === 'B') return !isBlasted(c, r + 1);
+  if (t === 'C') return !isCrumbleGone(c, r + 1) && !isBlasted(c, r + 1);
   return t === 'X' || t === 'H' || t === '<' || t === '>' || (t === 'E' && exitRevealed);
 }
 function gSupported(c, r){ return gSolidBelow(c, r) || isLadder(c, r) || isBar(c, r); }
@@ -510,13 +589,73 @@ function updateGuard(g, dt){
   }
   g.lastC = nc; g.lastR = nr;
 
+  // mason: re-seals holes he walks beside (not ones he's inside)
+  if (g.kind === 'mason'){
+    for (const h of holes.values()){
+      if (h.t < HOLE_LIFE - HOLE_WARN - 0.1 &&
+          Math.abs(h.c + .5 - g.x) < 1.6 && Math.abs(h.r + .5 - g.y) < 1.2 &&
+          !(Math.floor(g.x) === h.c && Math.floor(g.y) === h.r))
+        h.t = HOLE_LIFE - HOLE_WARN - 0.1;
+    }
+  }
+
   // catch the player
   if (player && player.state !== 'dead' && !playerCloaked()){
     if (Math.abs(g.x - player.x) < 0.55 && Math.abs(g.y - player.y) < 0.7) killPlayer('caught');
   }
 }
 
-function playerCloaked(){ return false; } // phase 5: phase cloak
+function playerCloaked(){ return !!(player && player.cloakT > 0); }
+
+/* ================= power-ups ================= */
+const PKINDS = {
+  1: {name: 'TNT',     color: '#ff5c33'},
+  2: {name: 'BOOTS',   color: '#3fd2c7'},
+  3: {name: 'CLOAK',   color: '#b07fff'},
+  4: {name: 'MAGNET',  color: '#ffd23f'},
+  5: {name: 'SHOVEL',  color: '#7fd24a'},
+};
+
+function applyPowerup(kind){
+  if (kind === 1) player.tnt = Math.min(3, (player.tnt || 0) + 1);
+  else if (kind === 2) player.speedT = 8;
+  else if (kind === 3) player.cloakT = 6;
+  else if (kind === 4) player.magnetT = 8;
+  else if (kind === 5) player.shovelT = 10;
+  addScore(50);
+}
+
+function updatePowerups(dt){
+  player.speedT = Math.max(0, (player.speedT || 0) - dt);
+  player.cloakT = Math.max(0, (player.cloakT || 0) - dt);
+  player.magnetT = Math.max(0, (player.magnetT || 0) - dt);
+  player.shovelT = Math.max(0, (player.shovelT || 0) - dt);
+  const c = Math.floor(player.x), r = Math.floor(player.y);
+  for (const pu of powerups){
+    if (!pu.taken && pu.c === c && pu.r === r){
+      pu.taken = true;
+      applyPowerup(pu.kind);
+    }
+  }
+  // gold magnet: nearby gold leaps to you
+  if (player.magnetT > 0){
+    for (const gd of golds){
+      if (gd.taken || gd.held) continue;
+      if (Math.abs(gd.c + .5 - player.x) < 2.6 && Math.abs(gd.r + .5 - player.y) < 2.6)
+        collectGold(gd);
+    }
+  }
+}
+
+/* ================= combo ================= */
+function comboMult(){ return Math.min(1 + 0.5 * Math.max(0, comboN - 1), 5); }
+
+function collectGold(gd){
+  gd.taken = true; goldLeft--;
+  comboN++; comboT = 2.5;
+  addScore(Math.round(100 * comboMult()));
+  if (goldLeft <= 0) revealExit();
+}
 
 function trapGuard(g){
   g.state = 'stun'; g.stunT = 0; g.anim = 0;
@@ -563,11 +702,8 @@ function checkGold(){
   for (const gd of golds){
     if (gd.taken || gd.held) continue;
     if (gd.c === c && gd.r === r &&
-        Math.abs(player.x - (gd.c + .5)) < .4 && Math.abs(player.y - (gd.r + .5)) < .4){
-      gd.taken = true; goldLeft--;
-      addScore(100);
-      if (goldLeft <= 0) revealExit();
-    }
+        Math.abs(player.x - (gd.c + .5)) < .4 && Math.abs(player.y - (gd.r + .5)) < .4)
+      collectGold(gd);
   }
 }
 
@@ -723,7 +859,7 @@ function update(dt){
       player.pendingDig = null;
     }
   } else {
-    moveActor(player, dt, inp, 1);
+    moveActor(player, dt, inp, player.speedT > 0 ? 1.45 : 1);
   }
 
   for (const g of guards){
@@ -732,7 +868,11 @@ function update(dt){
   }
 
   updateHoles(dt);
+  updateFuses(dt);
+  updateCrumbles(dt);
+  if (comboT > 0){ comboT -= dt; if (comboT <= 0) comboN = 0; }
   if (player.state !== 'dead'){
+    updatePowerups(dt);
     checkGold();
     checkWin();
   }
@@ -763,6 +903,7 @@ function render(){
       for (let c = 0; c < COLS; c++){
         const t = grid[r][c];
         if (t === '#' || t === 'T' || t === 'B' || t === 'C'){
+          if (isBlasted(c, r)) continue;
           if (isDug(c, r)){
             // hole: closing warning shimmer in the final stretch
             const h = holes.get(key(c, r));
@@ -773,14 +914,63 @@ function render(){
               ctx.globalAlpha = 1;
             }
           }
-          else if (!isCrumbleGone(c, r)) drawTile(T.brick, c, r);
+          else if (t === 'C' && isCrumbleGone(c, r)) continue;
+          else {
+            drawTile(T.brick, c, r);
+            if (t === 'B'){ // crate marking (placeholder until art pass)
+              ctx.fillStyle = '#ff5c33';
+              ctx.fillRect(c * TILE + 8, r * TILE + HUD_H + 8, TILE - 16, TILE - 16);
+            } else if (t === 'C'){
+              const cr = crumbles.get(key(c, r));
+              ctx.strokeStyle = 'rgba(0,0,0,' + (cr ? .8 : .45) + ')';
+              ctx.beginPath();
+              ctx.moveTo(c * TILE + 6, r * TILE + HUD_H + 28);
+              ctx.lineTo(c * TILE + 16, r * TILE + HUD_H + 12);
+              ctx.lineTo(c * TILE + 26, r * TILE + HUD_H + 24);
+              ctx.stroke();
+            }
+          }
         }
         else if (t === 'X') drawTile(T.solid, c, r);
         else if (t === 'H') drawTile(T.ladder, c, r);
         else if (t === '-') drawTile(T.bar, c, r);
         else if (t === 'E' && exitRevealed) drawTile(T.ladder, c, r);
-        else if (t === '<' || t === '>') drawTile(T.solid, c, r);
+        else if (t === '<' || t === '>'){
+          drawTile(T.solid, c, r);
+          ctx.fillStyle = '#ffd23f';
+          const ax = c * TILE + TILE / 2 + (t === '<' ? 4 : -4), ay = r * TILE + HUD_H + TILE / 2;
+          ctx.beginPath();
+          if (t === '<'){ ctx.moveTo(ax, ay - 6); ctx.lineTo(ax - 8, ay); ctx.lineTo(ax, ay + 6); }
+          else { ctx.moveTo(ax, ay - 6); ctx.lineTo(ax + 8, ay); ctx.lineTo(ax, ay + 6); }
+          ctx.fill();
+        }
+        else if (t === '[' || t === ']'){
+          ctx.fillStyle = 'rgba(63,210,199,.5)';
+          ctx.fillRect(c * TILE + TILE / 2 - 3, r * TILE + HUD_H + 3, 6, TILE - 6);
+          ctx.fillStyle = '#3fd2c7';
+          const gx = c * TILE + TILE / 2, gy = r * TILE + HUD_H + TILE / 2;
+          ctx.beginPath();
+          if (t === '['){ ctx.moveTo(gx - 4, gy); ctx.lineTo(gx + 5, gy - 6); ctx.lineTo(gx + 5, gy + 6); }
+          else { ctx.moveTo(gx + 4, gy); ctx.lineTo(gx - 5, gy - 6); ctx.lineTo(gx - 5, gy + 6); }
+          ctx.fill();
+        }
       }
+    }
+    // power-ups (placeholder diamonds until art pass)
+    for (const pu of powerups){
+      if (pu.taken) continue;
+      const cx2 = pu.c * TILE + TILE / 2, cy2 = pu.r * TILE + HUD_H + TILE / 2;
+      ctx.fillStyle = PKINDS[pu.kind].color;
+      ctx.beginPath();
+      ctx.moveTo(cx2, cy2 - 11); ctx.lineTo(cx2 + 9, cy2); ctx.lineTo(cx2, cy2 + 11); ctx.lineTo(cx2 - 9, cy2);
+      ctx.closePath(); ctx.fill();
+    }
+    // lit fuses flash
+    for (const f of fuses){
+      ctx.globalAlpha = 0.5 + 0.5 * Math.sin(f.t * 40);
+      ctx.fillStyle = '#fff3b0';
+      ctx.fillRect(f.c * TILE + 4, f.r * TILE + HUD_H + 4, TILE - 8, TILE - 8);
+      ctx.globalAlpha = 1;
     }
     // dig-in-progress: target brick breaking up
     if (player && player.digT > 0 && player.pendingDig){
@@ -818,6 +1008,26 @@ function render(){
   if (grid.length) ctx.fillText('GOLD ' + goldLeft, VIEW_W / 2, HUD_H / 2);
   ctx.textAlign = 'right';
   ctx.fillText('LIVES ' + lives, VIEW_W - 16, HUD_H / 2);
+  // combo + power-up status
+  if (player){
+    ctx.font = '700 15px Consolas, monospace';
+    if (comboN > 1){
+      ctx.fillStyle = '#ff9d2e';
+      ctx.textAlign = 'center';
+      ctx.fillText('COMBO ×' + comboMult().toFixed(1).replace('.0', ''), VIEW_W / 2, HUD_H - 10);
+    }
+    const tags = [];
+    if (player.tnt > 0) tags.push('TNT×' + player.tnt);
+    if (player.speedT > 0) tags.push('BOOTS ' + player.speedT.toFixed(0));
+    if (player.cloakT > 0) tags.push('CLOAK ' + player.cloakT.toFixed(0));
+    if (player.magnetT > 0) tags.push('MAGNET ' + player.magnetT.toFixed(0));
+    if (player.shovelT > 0) tags.push('SHOVEL ' + player.shovelT.toFixed(0));
+    if (tags.length){
+      ctx.fillStyle = '#3fd2c7';
+      ctx.textAlign = 'left';
+      ctx.fillText(tags.join('  '), 220, HUD_H / 2);
+    }
+  }
 }
 
 /* ================= fixed-timestep loop ================= */
@@ -856,6 +1066,12 @@ window.__g = {
   loadLevel(i){ loadCampaignLevel(i); state = 'playing'; hideOverlays(); return grid.length === ROWS; },
   dig(dir){ return tryDig(dir < 0 ? -1 : 1); },
   kill(){ killPlayer('debug'); },
+  give(kind){ applyPowerup(kind); },
+  get powerups(){ return powerups; },
+  get fuses(){ return fuses; },
+  get blasted(){ return [...blasted]; },
+  get combo(){ return {n: comboN, t: comboT, mult: comboMult()}; },
+  boom(c, r){ boom(c, r); },
   get levelTime(){ return levelTime; },
   seedDaily(seed){ /* phase 6 */ },
 };
