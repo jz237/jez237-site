@@ -37,4 +37,7 @@ crisp outlined pixel sprites over a painterly bloomed cave. Loop: assess→criti
 - New scores: prop density 7→8, juice 7→8, overall cohesion 8→8.5, animation life 6→6.5.
 - Pushed checkpoint (iters 1-3).
 
-### Iter 4 — picks: (a) animated title logo (shine sweep / gentle bob) + richer attract scene, (b) menu panels art polish (ornate gold frame corners, textured bg), (c) guard "alert" eye-glow + readability, (d) gold/exit/torch slight bloom tuning so highlights pop more.
+### Iter 4 — DONE. (a) CSS: animated PAY DIRT logo (shine sweep + gentle bob) + ornate gold corner brackets & textured gradient on all menu panels, (b) richer title attract scene (flanking flickering torches + stronger lantern pool), (c) menacing guard/scout/mason eyes (red/amber glow + glint). Verified all green, 0 errors, perf 0.55ms.
+- New scores: HUD/menu polish 7→8.5, prop density 8→8.5, silhouette/readability 7→7.5.
+
+### Iter 5 — picks: (a) character animation life — add a 4th distinct run frame feel + idle blink/look + land squash, (b) ambient fireflies/floating spores drifting in the play area, (c) richer climb pose (clear hand-over-hand), (d) subtle final contrast/saturation grade.

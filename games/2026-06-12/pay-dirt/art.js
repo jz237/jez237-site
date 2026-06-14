@@ -239,8 +239,9 @@ const ART = (() => {
       R(20, hy + 4, 2, 7, skinHi);               // lit cheek
       R(11, hy + 11, 11, 1, skinSh);             // jaw
       R(17, hy + 5, 3, 1, mix(skin, '#000', 0.45)); // eyebrow
-      R(18, hy + 6, 2, 2, pal.outline);          // eye
-      R(19, hy + 6, 1, 1, '#ffffff');            // eye glint
+      R(18, hy + 6, 2, 2, pal.eye || pal.outline);    // eye
+      R(19, hy + 6, 1, 1, pal.eyeGlint || '#ffffff'); // eye glint
+      if (pal.eye){ R(17, hy + 6, 1, 1, pal.eye); }    // menacing wider glow for guards
       R(21, hy + 7, 1, 2, skinSh);               // nose
       R(12, hy + 9, 9, 2, moust);                // moustache
     }
@@ -302,9 +303,9 @@ const ART = (() => {
 
   const PAL = {
     player: { outline: '#10202a', face: '#e8b07a', hat: '#ffb02e', hatHi: '#ffd676', coat: '#2f8f86', coatHi: '#46b3a8', coatDk: '#1d5f59', legs: '#26405a', boot: '#161f2e', accent: '#13302c', lantern: '#fff3b0', lampOnHat: true },
-    guard:  { outline: '#2a0c12', face: '#d89a6a', hat: '#b23a3a', hatHi: '#e06868', coat: '#8f2f3a', coatHi: '#b3464f', coatDk: '#5f1d24', legs: '#3a1a22', boot: '#1f0c10', accent: '#5a1a20', mark: null },
-    scout:  { outline: '#2a1a06', face: '#e8c07a', hat: '#ff8b2e', hatHi: '#ffc070', coat: '#c46a1f', coatHi: '#e09040', coatDk: '#8a4710', legs: '#5a3210', boot: '#2a1808', accent: '#7a3e0f', mark: 'antenna' },
-    mason:  { outline: '#101820', face: '#cdb89a', hat: '#7a8694', hatHi: '#a8b4c0', coat: '#4a5560', coatHi: '#646f7c', coatDk: '#2e353e', legs: '#2a3038', boot: '#181c22', accent: '#343a44', mark: 'trowel' },
+    guard:  { outline: '#2a0c12', face: '#d89a6a', hat: '#b23a3a', hatHi: '#e06868', coat: '#8f2f3a', coatHi: '#b3464f', coatDk: '#5f1d24', legs: '#3a1a22', boot: '#1f0c10', accent: '#5a1a20', mark: null, eye: '#ff3a2a', eyeGlint: '#ffd2c0' },
+    scout:  { outline: '#2a1a06', face: '#e8c07a', hat: '#ff8b2e', hatHi: '#ffc070', coat: '#c46a1f', coatHi: '#e09040', coatDk: '#8a4710', legs: '#5a3210', boot: '#2a1808', accent: '#7a3e0f', mark: 'antenna', eye: '#ffb020', eyeGlint: '#fff0c0' },
+    mason:  { outline: '#101820', face: '#cdb89a', hat: '#7a8694', hatHi: '#a8b4c0', coat: '#4a5560', coatHi: '#646f7c', coatDk: '#2e353e', legs: '#2a3038', boot: '#181c22', accent: '#343a44', mark: 'trowel', eye: '#ff5040', eyeGlint: '#ffd2c0' },
   };
 
   const frames = {
