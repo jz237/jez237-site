@@ -376,5 +376,23 @@
       "continuity": "Mirthcap Lookingglass Village canon: jewel-colored mushroom homes, tiny original villagers, checkerboard paths, teacup lanterns, pocket-watch details, moss terraces, oversized garden scale, warm whimsical daily life, and no recognizable Alice/copyrighted characters. Doctor Marlow Dewmoss is the village male herb-healer and spiritual remedy keeper, replacing the earlier Maribel concept; he has a long narrow bearded face and must remain visually distinct from Tansy.",
       "entryDescription": "Doctor Marlow Dewmoss treats a young boy with glowing herb remedies while the boy’s parents watch anxiously inside the village healing nook."
     }
+  },
+  {
+    "id": "2026-06-14-manual-07-mirthcap-lookingglass-village-vesperfall-hour",
+    "title": "Mirthcap Lookingglass Village: Vesperfall Hour",
+    "tests": "Manual world catalog entry from #ai-photos; establishes Vesperfall Hour, held on Dewwane 17 when Bellivane aligns opposite the sun at twilight, and shows Mirthcap townsfolk celebrating Finnel Buttonby’s recovery.",
+    "prompt": "Create a richly detailed wide storybook festival scene of the townsfolk of Mirthcap Lookingglass Village celebrating outside during Vesperfall Hour, held on Dewwane 17 once every 365 days when the planet Bellivane perfectly aligns opposite the sun at twilight. This year the villagers are also celebrating Finnel Buttonby’s recovery. Outdoor Mirthcap village square at magical twilight with jewel-colored mushroom houses, rounded painted doors, checkerboard paths, teacup lanterns, moss terraces, pocketwatch charms, clover garlands, glowing dew, and Bellivane luminous in the opposite sky. Tiny human-like Mirthcap townsfolk, not elves, with ears hidden by caps/hair/bonnets or only small rounded human ears, singing, dancing, drinking from acorn cups and thimble mugs, clapping, playing tiny fiddles and spoon drums, carrying lanterns, and being merry. Finnel Buttonby near the center, recovered and celebrated by his parents and neighbors. Warm communal joy, folk holiday energy, relief after illness, twilight wonder. No pointy ears, no elf features, no copyrighted characters, no readable text, no watermark.",
+    "image": "images/2026-06-14-manual-07-mirthcap-lookingglass-village-vesperfall-hour.png",
+    "date": "2026-06-14",
+    "batch": "Fictional World",
+    "slot": "manual-07",
+    "model": "codex-builtin-imagegen",
+    "size": "landscape",
+    "world": {
+      "name": "Mirthcap Lookingglass Village",
+      "description": "A whimsical storybook pocket-world where tiny villagers live inside jewel-colored mushroom houses, using tea-table infrastructure, checkerboard paths, and playful scale-shifted garden objects as everyday civic life.",
+      "continuity": "Mirthcap Lookingglass Village canon: jewel-colored mushroom homes, tiny original villagers, checkerboard paths, teacup lanterns, pocket-watch details, moss terraces, oversized garden scale, warm whimsical daily life, and no recognizable Alice/copyrighted characters. Mirthcap villagers are tiny human-like people, not elves; use rounded human ears or hide ears under caps, curls, bonnets, or shawls. Finnel Buttonby is the recovered round-eared child linked to prophecy. Vesperfall Hour is held on Dewwane 17 once every 365 days, when Bellivane aligns opposite the sun at twilight.",
+      "entryDescription": "The villagers gather outside for Vesperfall Hour, singing, dancing, drinking, and celebrating Finnel Buttonby’s recovery under Bellivane’s twilight alignment."
+    }
   }
 ]
