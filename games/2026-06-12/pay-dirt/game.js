@@ -221,7 +221,7 @@ function makeActor(c, r, kind){
     invuln: 0, stunT: 0, deadT: 0,
     jitter: 0.96 + rnd() * 0.08,
     lastC: c, lastR: r,
-    digT: 0,
+    digT: 0, squashT: 0,
   };
 }
 
@@ -382,6 +382,7 @@ function onPlayerLand(a){
     spawnParticles(a.x, a.y + .45, 6, {color: ['#7d5230', '#915e36', '#a06e42'], spd: 2.4, ang: -Math.PI / 2, spread: 2.2, life: .4, size: 3, grav: 26});
     shake = Math.max(shake, .12);
   }
+  if (a.fellFrom != null && a.fellFrom < a.y - 1.0) a.squashT = 0.15;
   a.fellFrom = null;
   AUDIO.sfx('land');
 }
@@ -731,8 +732,10 @@ function collectGold(gd){
   comboN++; comboT = 2.5;
   const val = Math.round(100 * comboMult());
   addScore(val);
-  spawnParticles(gd.c + .5, gd.r + .5, 9, {color: ['#ffd23f', '#fff3b0', '#ff9d2e'], spd: 3, life: .55, size: 3, grav: -2, glow: true});
-  popup(gd.c + .5, gd.r + .3, comboN > 1 ? val + ' ×' + comboMult().toFixed(1).replace('.0', '') : '' + val, '#ffd23f');
+  // juicy pickup burst: gold shards + a quick bright sparkle ring
+  spawnParticles(gd.c + .5, gd.r + .5, 16, {color: ['#ffd23f', '#fff3b0', '#ff9d2e'], spd: 3.4, life: .55, size: 3, grav: -2, glow: true});
+  spawnParticles(gd.c + .5, gd.r + .5, 7, {color: ['#ffffff'], spd: 5.5, life: .3, size: 2, grav: 0, glow: true});
+  popup(gd.c + .5, gd.r + .3, comboN > 1 ? val + ' ×' + comboMult().toFixed(1).replace('.0', '') : '' + val, comboN > 2 ? '#ff9d2e' : '#ffd23f');
   AUDIO.sfx(comboN > 2 ? 'goldhi' : 'gold');
   if (goldLeft <= 0) revealExit();
 }
@@ -1135,6 +1138,7 @@ function update(dt){
   // hit-pause: freeze entity sim for a few frames on big impacts (deterministic under step)
   if (hitStop > 0){ hitStop = Math.max(0, hitStop - dt); return; }
   levelTime += dt;
+  if (player.squashT > 0) player.squashT = Math.max(0, player.squashT - dt);
 
   if (player.state === 'dead'){
     player.deadT += dt;
@@ -1225,16 +1229,20 @@ function buildBackdrop(){
   x.fillStyle = 'rgba(38,44,72,.62)';
   for (let i = 0; i < 6; i++){ const cx2 = r() * W, w = 150 + r() * 230, h = 90 + r() * 150; x.beginPath(); x.ellipse(cx2, H - 20 + r() * 80, w, h, 0, Math.PI, 0); x.fill(); }
 
-  // 5) glowing crystal clusters
-  for (let i = 0; i < 6; i++){
-    const cx2 = 50 + r() * (W - 100), cy = H * 0.42 + r() * H * 0.4, teal = r() < 0.55;
-    const col = teal ? '#3fd2c7' : '#9a6cff';
-    lift(cx2, cy, 44, teal ? 'rgba(63,210,199,.4)' : 'rgba(154,108,255,.4)', 1);
-    for (let k = 0; k < 4; k++){
-      const dx = (r() - .5) * 28, dh = 13 + r() * 22, dw = 4 + r() * 5;
-      x.globalAlpha = .55; x.fillStyle = col;
+  // 5) glowing crystal clusters (more, bigger, brighter — a signature of the look)
+  for (let i = 0; i < 9; i++){
+    const cx2 = 40 + r() * (W - 80), cy = H * 0.38 + r() * H * 0.46, teal = r() < 0.55;
+    const col = teal ? '#3fd2c7' : '#9a6cff', glo = teal ? 'rgba(63,210,199,' : 'rgba(154,108,255,';
+    const scale = 0.8 + r() * 0.9;
+    lift(cx2, cy, 60 * scale, glo + '.45)', 1);
+    lift(cx2, cy, 26 * scale, glo + '.4)', 1);
+    const n = 4 + (r() * 3 | 0);
+    for (let k = 0; k < n; k++){
+      const dx = (r() - .5) * 34 * scale, dh = (15 + r() * 26) * scale, dw = (4 + r() * 6) * scale;
+      x.globalAlpha = .6; x.fillStyle = col;
       x.beginPath(); x.moveTo(cx2 + dx, cy - dh); x.lineTo(cx2 + dx + dw, cy); x.lineTo(cx2 + dx, cy + dh * 0.4); x.lineTo(cx2 + dx - dw, cy); x.closePath(); x.fill();
-      x.globalAlpha = .5; x.fillStyle = '#fff'; x.fillRect(cx2 + dx - 1, cy - dh * 0.5 | 0, 2, dh * 0.4);
+      x.globalAlpha = .85; x.fillStyle = teal ? '#bafff5' : '#e0ccff'; x.fillRect(cx2 + dx - 1, (cy - dh * 0.55) | 0, 2, (dh * 0.5) | 0); // bright facet edge
+      x.globalAlpha = .9; x.fillStyle = '#fff'; x.fillRect((cx2 + dx) | 0, (cy - dh * 0.35) | 0, 1, 2);                                   // glint
     }
     x.globalAlpha = 1;
   }
@@ -1262,6 +1270,11 @@ function buildBackdrop(){
   // 9) faint floating specks baked into depth
   for (let i = 0; i < 40; i++){ x.globalAlpha = .08 + r() * .18; x.fillStyle = r() < .5 ? '#8fb0d0' : '#d0b070'; x.fillRect(r() * W | 0, r() * H | 0, 1, 1); }
   x.globalAlpha = 1;
+
+  // per-level mood tint so claims don't all look identical
+  const hues = ['rgba(60,90,150,', 'rgba(96,72,150,', 'rgba(48,116,124,', 'rgba(120,84,58,', 'rgba(72,108,90,'];
+  const h = hues[(mode === 'daily' ? 2 : levelIndex) % hues.length];
+  x.save(); x.globalCompositeOperation = 'overlay'; x.fillStyle = h + '0.16)'; x.fillRect(0, 0, W, H); x.restore();
 }
 
 /* ================= decorative set-dressing (deterministic per level) ================= */
@@ -1322,6 +1335,14 @@ function drawTorch(d){
   ctx.fillStyle = 'rgba(255,120,30,.8)'; ctx.beginPath(); ctx.ellipse(fx, fy, 5 * fl, 10 * fl, 0, 0, 7); ctx.fill();
   ctx.fillStyle = 'rgba(255,205,70,.95)'; ctx.beginPath(); ctx.ellipse(fx, fy + 2, 3 * fl, 6.5 * fl, 0, 0, 7); ctx.fill();
   ctx.fillStyle = 'rgba(255,250,210,1)'; ctx.beginPath(); ctx.ellipse(fx, fy + 3, 1.5, 3.5 * fl, 0, 0, 7); ctx.fill();
+  // rising embers
+  for (let i = 0; i < 3; i++){
+    const t = (clock * 0.7 + i * 0.37 + d.c * 0.11) % 1;
+    const ey = fy - t * 30, ex = fx + Math.sin((t + i) * 9) * 4;
+    ctx.globalAlpha = (1 - t) * 0.8; ctx.fillStyle = i % 2 ? '#ffd27a' : '#ff8a3a';
+    ctx.fillRect(ex, ey, 2, 2);
+  }
+  ctx.globalAlpha = 1;
   ctx.restore();
 }
 function drawDecor(){
@@ -1335,10 +1356,15 @@ function topExitCell(){ let e = exitCells[0]; for (const c2 of exitCells) if (c2
 function drawPortal(){
   if (!exitRevealed || !exitCells.length) return;
   const e = topExitCell(); const cx2 = e.c * TILE + 18, cy = e.r * TILE + HUD_H + 18;
-  const a = 0.5 + 0.3 * Math.sin(gameTime * 4);
+  const a = 0.55 + 0.3 * Math.sin(gameTime * 4);
   ctx.save(); ctx.globalCompositeOperation = 'lighter';
-  ctx.strokeStyle = 'rgba(150,255,240,' + a + ')'; ctx.lineWidth = 2;
-  for (let i = 0; i < 3; i++){ ctx.beginPath(); ctx.arc(cx2, cy, 6 + i * 4, gameTime * 2 + i * 2, gameTime * 2 + i * 2 + 3.4); ctx.stroke(); }
+  // bright core
+  glow(e.c + .5, e.r + .5, 26, 'rgba(120,255,235,' + (a * .5) + ')', 1);
+  // rotating swirl arcs
+  ctx.strokeStyle = 'rgba(160,255,240,' + a + ')'; ctx.lineWidth = 2;
+  for (let i = 0; i < 4; i++){ const r2 = 5 + i * 3.5, sp = gameTime * (2 + i * 0.6); ctx.beginPath(); ctx.arc(cx2, cy, r2, sp + i * 1.6, sp + i * 1.6 + 2.6); ctx.stroke(); }
+  // orbiting sparks
+  for (let i = 0; i < 5; i++){ const ang = gameTime * 2.4 + i * 1.257, r2 = 13 + Math.sin(gameTime * 3 + i) * 3; ctx.fillStyle = 'rgba(200,255,248,.9)'; ctx.fillRect(cx2 + Math.cos(ang) * r2 - 1, cy + Math.sin(ang) * r2 - 1, 2, 2); }
   ctx.restore();
 }
 
@@ -1372,6 +1398,8 @@ function drawActor(a){
   if (a.state === 'dead'){ ctx.globalAlpha = Math.max(0, 1 - a.deadT); footY -= a.deadT * 10; }
   if (a.state === 'stun'){ ctx.globalAlpha = 0.6 + 0.2 * Math.sin(gameTime * 16); }
   if (a.invuln > 0 && Math.floor(gameTime * 16) % 2) ctx.globalAlpha *= 0.4;
+  // landing squash-and-stretch (juice)
+  if (a.squashT > 0){ const s = a.squashT / 0.15; ctx.translate(cx2, footY); ctx.scale(1 + 0.18 * s, 1 - 0.22 * s); ctx.translate(-cx2, -footY); }
   ctx.translate(cx2, footY - h);
   if (a.dir < 0){ ctx.translate(w, 0); ctx.scale(-1, 1); }
   ctx.drawImage(img, 0, 0, w, h);
@@ -1412,6 +1440,19 @@ function renderTitle(){
     glow(ex / TILE, (ey - HUD_H) / TILE, 8, 'rgba(255,150,60,' + a + ')', 1);
     ctx.globalCompositeOperation = 'source-over';
   }
+  // flickering torches flanking the lower ledge
+  for (const txc of [2.4, COLS - 2.4]){
+    const fl = 0.7 + 0.3 * Math.sin(clock * 13 + txc);
+    ctx.save(); ctx.globalCompositeOperation = 'lighter';
+    glow(txc, ROWS - 2.0, 70 * fl, 'rgba(255,150,50,.5)', 1); ctx.restore();
+    const bx = txc * TILE, by = (ROWS - 1) * TILE + HUD_H;
+    ctx.fillStyle = '#3a2a16'; ctx.fillRect(bx - 2, by - 22, 4, 22);
+    ctx.fillStyle = '#5a4326'; ctx.fillRect(bx - 4, by - 25, 8, 4);
+    ctx.save(); ctx.globalCompositeOperation = 'lighter';
+    ctx.fillStyle = 'rgba(255,120,30,.85)'; ctx.beginPath(); ctx.ellipse(bx, by - 30, 5 * fl, 10 * fl, 0, 0, 7); ctx.fill();
+    ctx.fillStyle = 'rgba(255,250,210,1)'; ctx.beginPath(); ctx.ellipse(bx, by - 28, 1.6, 4 * fl, 0, 0, 7); ctx.fill();
+    ctx.restore();
+  }
   // a prospector pacing the lower ledge
   const span = VIEW_W - 4 * TILE;
   const phase = (clock * 0.18) % 2;
@@ -1421,9 +1462,10 @@ function renderTitle(){
   titleRunner.x = rx; titleRunner.y = ROWS - 1.5;
   titleRunner.state = 'run'; titleRunner.moved = true; titleRunner.anim = clock;
   titleRunner.dir = phase < 1 ? 1 : -1;
-  // warm pool of light under the runner + vignette
+  // warm lantern pool under the runner
   ctx.save(); ctx.globalCompositeOperation = 'lighter';
-  glow(rx, ROWS - 1.6, 90, 'rgba(255,200,120,.4)', 1);
+  glow(rx, ROWS - 1.6, 100, 'rgba(255,205,130,.45)', 1);
+  glow(rx, ROWS - 1.7, 40, 'rgba(255,235,180,.4)', 1);
   ctx.restore();
   drawActor(titleRunner);
   // a few sparkles of gold scattered
@@ -1439,13 +1481,31 @@ function renderTitle(){
   ctx.fillStyle = vg; ctx.fillRect(0, 0, VIEW_W, VIEW_H);
 }
 
-// is the block above this cell a rendered-solid block? (if not, this top is exposed → moss cap)
-function coveredAbove(c, r){
-  const t = tileAt(c, r - 1);
-  if (t === '#' || t === 'B') return !isDug(c, r - 1) && !isBlasted(c, r - 1);
-  if (t === 'C') return !isCrumbleGone(c, r - 1) && !isBlasted(c, r - 1);
+// does this cell render as a solid block?
+function rendersSolid(c, r){
+  const t = tileAt(c, r);
+  if (t === '#' || t === 'B') return !isDug(c, r) && !isBlasted(c, r);
+  if (t === 'C') return !isCrumbleGone(c, r) && !isBlasted(c, r);
   if (t === 'T') return true;
   return t === 'X';
+}
+function coveredAbove(c, r){ return rendersSolid(c, r - 1); }
+
+// cached soft contact-shadow strip drawn into the air cell beneath a platform (grounds ledges)
+let underShadowImg = null;
+function underShadow(){
+  if (underShadowImg) return underShadowImg;
+  const h = 22, c = ART.cv(TILE, h), x = ART.cx(c);
+  const g = x.createLinearGradient(0, 0, 0, h);
+  g.addColorStop(0, 'rgba(0,0,0,.42)'); g.addColorStop(1, 'rgba(0,0,0,0)');
+  x.fillStyle = g; x.fillRect(0, 0, TILE, h);
+  underShadowImg = c; return c;
+}
+// subtle deterministic per-cell shade so tiled stone doesn't read as flat repetition
+function tileVary(c, r){
+  const v = (c * 13 + r * 7) % 5;
+  if (v === 0){ ctx.fillStyle = 'rgba(255,248,230,.05)'; ctx.fillRect(c * TILE, r * TILE + HUD_H, TILE, TILE); }
+  else if (v === 1 || v === 2){ ctx.fillStyle = 'rgba(0,0,0,.07)'; ctx.fillRect(c * TILE, r * TILE + HUD_H, TILE, TILE); }
 }
 
 function render(){
@@ -1461,6 +1521,47 @@ function render(){
     ctx.fillRect(mx, my, 2, 2);
   }
 
+  // animated atmosphere: breathing god-ray shafts + slow drifting mist (adds life to the static backdrop)
+  if (grid.length){
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+    for (let i = 0; i < 4; i++){
+      const baseX = VIEW_W * (0.22 + i * 0.18);
+      const drift = Math.sin(clock * 0.15 + i * 1.7) * 40;
+      const a = 0.05 + 0.04 * (0.5 + 0.5 * Math.sin(clock * 0.6 + i * 2));
+      ctx.globalAlpha = a; ctx.fillStyle = '#acc8ec';
+      const rx = baseX + drift;
+      ctx.beginPath(); ctx.moveTo(rx, 0); ctx.lineTo(rx + 60, 0); ctx.lineTo(rx + 150, VIEW_H); ctx.lineTo(rx + 70, VIEW_H); ctx.closePath(); ctx.fill();
+    }
+    // far waterfall shimmer — scrolling streaks at the sides
+    ctx.globalCompositeOperation = 'lighter';
+    for (const wx of [VIEW_W * 0.13, VIEW_W * 0.87]){
+      for (let i = 0; i < 7; i++){
+        const yy = ((i * 64 + clock * 130) % (VIEW_H * 0.62)) + 30;
+        ctx.globalAlpha = 0.07 + 0.03 * Math.sin(clock * 4 + i);
+        ctx.fillStyle = '#cfe6f6'; ctx.fillRect(wx, yy, 9, 22);
+      }
+    }
+    ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over';
+    // drifting mist blobs
+    for (let i = 0; i < 3; i++){
+      const mx = ((i * 420 + clock * (10 + i * 4)) % (VIEW_W + 300)) - 150;
+      const my = VIEW_H * (0.5 + 0.18 * Math.sin(clock * 0.2 + i));
+      glow(mx / TILE, (my - HUD_H) / TILE, 150, 'rgba(120,150,200,0.05)', 1);
+    }
+    // drifting fireflies (slow glowing motes that wander the cave)
+    ctx.globalCompositeOperation = 'lighter';
+    for (let i = 0; i < 13; i++){
+      const fx = (i * 173.1 + Math.sin(clock * 0.3 + i * 1.3) * 60 + clock * (5 + i % 4 * 2)) % VIEW_W;
+      const fy = HUD_H + 30 + ((i * 91.7 + Math.sin(clock * 0.5 + i) * 40) % (VIEW_H - HUD_H - 60));
+      const a = 0.18 + 0.18 * (0.5 + 0.5 * Math.sin(clock * 2.2 + i * 2));
+      const warm = i % 3 === 0;
+      glow(fx / TILE, (fy - HUD_H) / TILE, 7, warm ? 'rgba(255,210,120,' + a + ')' : 'rgba(120,230,210,' + a + ')', 1);
+      ctx.globalAlpha = a + 0.2; ctx.fillStyle = warm ? '#fff0c8' : '#cffff5'; ctx.fillRect(fx | 0, fy | 0, 1, 1);
+    }
+    ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over';
+  }
+
   ctx.save();
   if (shake > 0){
     const s = shake * shake * 9;
@@ -1469,6 +1570,9 @@ function render(){
 
   if (grid.length){
     const T = ART.tiles;
+    // contact shadows: ground every platform by darkening the air cell beneath it
+    for (let r = 0; r < ROWS - 1; r++) for (let c = 0; c < COLS; c++)
+      if (rendersSolid(c, r) && !rendersSolid(c, r + 1)) ctx.drawImage(underShadow(), c * TILE, (r + 1) * TILE + HUD_H);
     for (let r = 0; r < ROWS; r++){
       for (let c = 0; c < COLS; c++){
         const t = grid[r][c];
@@ -1493,9 +1597,9 @@ function render(){
             if (cr){ ctx.globalAlpha = 0.3 + 0.3 * Math.sin(gameTime * 20); ctx.fillStyle = '#1a0e06';
               ctx.fillRect(c * TILE + 2, r * TILE + HUD_H + 2, TILE - 4, TILE - 4); ctx.globalAlpha = 1; }
           }
-          else drawTile(coveredAbove(c, r) ? T.brick : T.brickTop, c, r);
+          else { drawTile(coveredAbove(c, r) ? T.brick : T.brickTop, c, r); tileVary(c, r); }
         }
-        else if (t === 'X') drawTile(coveredAbove(c, r) ? T.solid : T.solidTop, c, r);
+        else if (t === 'X'){ drawTile(coveredAbove(c, r) ? T.solid : T.solidTop, c, r); tileVary(c, r); }
         else if (t === 'H') drawTile(T.ladder, c, r);
         else if (t === '-') drawTile(T.bar, c, r);
         else if (t === 'E' && exitRevealed) drawTile(T.exit, c, r);
@@ -1584,24 +1688,33 @@ function render(){
     }
     ctx.globalAlpha = 1;
 
-    // floating score popups
-    ctx.font = '900 16px Consolas, monospace'; ctx.textAlign = 'center';
+    // floating score popups (with a quick scale-pop)
+    ctx.font = '900 16px Consolas, monospace'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
     for (const t of popups){
+      const age = 1.1 - t.life, sc = 1 + 0.5 * Math.max(0, 1 - age * 6);
       ctx.globalAlpha = Math.max(0, Math.min(1, t.life));
-      ctx.fillStyle = 'rgba(0,0,0,.6)'; ctx.fillText(t.text, px(t.x) + 1, py(t.y) + 1);
-      ctx.fillStyle = t.color; ctx.fillText(t.text, px(t.x), py(t.y));
+      ctx.save(); ctx.translate(px(t.x), py(t.y)); ctx.scale(sc, sc);
+      ctx.fillStyle = 'rgba(0,0,0,.6)'; ctx.fillText(t.text, 1, 1);
+      ctx.fillStyle = t.color; ctx.fillText(t.text, 0, 0);
+      ctx.restore();
     }
-    ctx.globalAlpha = 1;
+    ctx.globalAlpha = 1; ctx.textBaseline = 'alphabetic';
   }
   ctx.restore();
 
   /* ---------- lighting overlay ---------- */
   if (grid.length){
     ctx.save();
-    // subtle vignette only — the playfield stays brightly readable; the lantern adds warmth
-    const vg = ctx.createRadialGradient(VIEW_W / 2, VIEW_H / 2 + 20, VIEW_H * .55, VIEW_W / 2, VIEW_H / 2, VIEW_H * 1.05);
-    vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, 'rgba(0,0,0,.16)');
+    // cinematic vignette (stronger at edges/corners) — frames the action without crushing the centre
+    const vg = ctx.createRadialGradient(VIEW_W / 2, VIEW_H / 2 + 20, VIEW_H * .48, VIEW_W / 2, VIEW_H / 2, VIEW_H * 1.0);
+    vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(.7, 'rgba(6,4,12,.12)'); vg.addColorStop(1, 'rgba(4,3,10,.42)');
     ctx.fillStyle = vg; ctx.fillRect(0, 0, VIEW_W, VIEW_H);
+    // warm-key / cool-shadow colour grade for depth
+    ctx.save(); ctx.globalCompositeOperation = 'soft-light';
+    const gr = ctx.createLinearGradient(0, HUD_H, 0, VIEW_H);
+    gr.addColorStop(0, 'rgba(255,176,90,.28)'); gr.addColorStop(.55, 'rgba(120,110,150,.05)'); gr.addColorStop(1, 'rgba(40,80,150,.34)');
+    ctx.fillStyle = gr; ctx.fillRect(0, HUD_H, VIEW_W, VIEW_H - HUD_H);
+    ctx.restore();
     // additive lights — soft warm POOL on the ground around the player (keeps the sprite the focal point)
     ctx.globalCompositeOperation = 'lighter';
     if (player && player.state !== 'dead'){
@@ -1626,7 +1739,7 @@ function render(){
     if (!bloomCv){ bloomCv = ART.cv(bw, bh); bloomCx = bloomCv.getContext('2d'); }
     bloomCx.setTransform(1, 0, 0, 1, 0, 0);
     bloomCx.clearRect(0, 0, bw, bh);
-    bloomCx.filter = 'blur(2.5px)';
+    bloomCx.filter = 'blur(2.5px) saturate(1.7)';   // richer, more saturated glow
     bloomCx.drawImage(canvas, 0, 0, canvas.width, canvas.height, 0, 0, bw, bh);
     bloomCx.filter = 'none';
     ctx.save();
@@ -1652,6 +1765,9 @@ function render(){
     ct.addColorStop(0, 'rgba(0,0,0,0)'); ct.addColorStop(1, 'rgba(255,140,40,' + a + ')');
     ctx.fillStyle = ct; ctx.fillRect(0, 0, VIEW_W, VIEW_H);
   }
+  // foreground framing layer (near, dark — frames the scene without covering the action)
+  if (grid.length) drawForeground();
+
   // pause scrim
   if (state === 'paused'){ ctx.fillStyle = 'rgba(8,5,14,.55)'; ctx.fillRect(0, 0, VIEW_W, VIEW_H); }
 
@@ -1705,6 +1821,30 @@ function hexA(hex, a){
   if (hex[0] !== '#') return hex;
   const n = parseInt(hex.slice(1), 16);
   return 'rgba(' + ((n >> 16) & 255) + ',' + ((n >> 8) & 255) + ',' + (n & 255) + ',' + a + ')';
+}
+
+// near foreground framing: soft top/bottom inner shadow + dark drooping foliage in the top corners
+function drawForeground(){
+  let g = ctx.createLinearGradient(0, HUD_H, 0, HUD_H + 55);
+  g.addColorStop(0, 'rgba(4,3,10,.5)'); g.addColorStop(1, 'rgba(4,3,10,0)');
+  ctx.fillStyle = g; ctx.fillRect(0, HUD_H, VIEW_W, 55);
+  g = ctx.createLinearGradient(0, VIEW_H - 64, 0, VIEW_H);
+  g.addColorStop(0, 'rgba(4,3,10,0)'); g.addColorStop(1, 'rgba(4,3,10,.5)');
+  ctx.fillStyle = g; ctx.fillRect(0, VIEW_H - 64, VIEW_W, 64);
+  // drooping leaf clusters in the two top corners
+  const cluster = (ox, dir) => {
+    ctx.fillStyle = 'rgba(10,20,12,.92)';
+    for (let i = 0; i < 9; i++){
+      const ang = dir * (0.15 + i * 0.16), len = 26 + (i % 3) * 20;
+      const lx = ox + Math.cos(ang) * len * dir, ly = HUD_H + 2 + Math.sin(ang) * len + (i % 2) * 6;
+      ctx.save(); ctx.translate(lx, ly); ctx.rotate(ang * dir); ctx.beginPath(); ctx.ellipse(0, 0, 20, 8, 0, 0, 7); ctx.fill(); ctx.restore();
+    }
+    ctx.fillStyle = 'rgba(10,20,12,.92)'; ctx.fillRect(ox - 6 * dir, HUD_H, 12, 26);
+  };
+  // don't let foliage hide the revealed exit (exits live in a top corner)
+  const exC = exitRevealed && exitCells.length ? exitCells[0].c : -1;
+  if (!(exC >= 0 && exC < COLS / 2)) cluster(8, 1);
+  if (!(exC >= COLS / 2)) cluster(VIEW_W - 8, -1);
 }
 
 function roundRect(x, y, w, h, r){
