@@ -1,6 +1,6 @@
 {
   "date": "2026-06-14",
-  "updatedAt": "2026-06-14T12:00:01.657781+00:00",
+  "updatedAt": "2026-06-14T13:00:01.217687+00:00",
   "items": [
     {
       "title": "As Anthropic suspends access to new models, India debates its AI future",
@@ -13,11 +13,11 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/Claude-photo.jpg?w=1024",
       "published": "2026-06-14T03:00:00+00:00",
       "firstSeen": "2026-06-14T06:00:01.953649+00:00",
-      "lastSeen": "2026-06-14T12:00:01.657781+00:00",
+      "lastSeen": "2026-06-14T13:00:01.217687+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.0467
+      "score": 14.0232
     },
     {
       "title": "Fable 5 was beating GPT 5.5 on every major benchmark. Then the US government pulled it offline.",
@@ -30,10 +30,10 @@
       "image": "https://media.thenextweb.com/2026/06/anthropic-fable-5-vs-openai-gpt-5-5-benchmark-comparison.avif",
       "published": "2026-06-14T10:26:53+00:00",
       "firstSeen": "2026-06-14T11:00:01.641647+00:00",
-      "lastSeen": "2026-06-14T12:00:01.657781+00:00",
+      "lastSeen": "2026-06-14T13:00:01.217687+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 13.2536
+      "score": 13.2247
     },
     {
       "title": "Grassroots opposition blocked $130 billion in US data center projects in the first three months of 2026",
@@ -46,10 +46,10 @@
       "image": "https://media.thenextweb.com/2026/06/data-center-opposition-75-projects-blocked-q1-2026.avif",
       "published": "2026-06-14T10:44:12+00:00",
       "firstSeen": "2026-06-14T12:00:01.657781+00:00",
-      "lastSeen": "2026-06-14T12:00:01.657781+00:00",
+      "lastSeen": "2026-06-14T13:00:01.217687+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.5121
+      "score": 3.483
     },
     {
       "title": "GM says its autonomous cars will eventually be capable of running as robotaxis too",
@@ -62,10 +62,10 @@
       "image": "https://media.thenextweb.com/2026/06/gm-autonomous-driving-robotaxi-sterling-anderson-super-cruise.avif",
       "published": "2026-06-14T09:58:40+00:00",
       "firstSeen": "2026-06-14T11:00:01.641647+00:00",
-      "lastSeen": "2026-06-14T12:00:01.657781+00:00",
+      "lastSeen": "2026-06-14T13:00:01.217687+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.4899
+      "score": 3.4614
     },
     {
       "title": "v1.88.2",
@@ -78,10 +78,10 @@
       "image": "https://opengraph.githubassets.com/6f47cac8f7c0f015df7c180057af4714a76fc830cd930a5aea58574c7a191667/BerriAI/litellm/releases/tag/v1.88.2",
       "published": "2026-06-14T02:51:58+00:00",
       "firstSeen": "2026-06-14T03:00:01.368430+00:00",
-      "lastSeen": "2026-06-14T12:00:01.657781+00:00",
+      "lastSeen": "2026-06-14T13:00:01.217687+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7435
+      "score": 2.7201
     },
     {
       "title": "Massive Multitask Language Understanding benchmark testing knowledge across 57 diverse subjects including STEM, humanities, social sciences, and professional domains",
@@ -92,9 +92,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-14T12:00:11.172983+00:00",
+      "published": "2026-06-14T13:00:09.060366+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-14T12:00:01.657781+00:00",
+      "lastSeen": "2026-06-14T13:00:01.217687+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.71
@@ -110,10 +110,10 @@
       "image": "https://opengraph.githubassets.com/efc240b6b73b85d3fca97dd41fd7a9d6388ffa8461c3a6b3cf2c1e8ae2e29b64/BerriAI/litellm/releases/tag/v1.87.3",
       "published": "2026-06-14T01:16:13+00:00",
       "firstSeen": "2026-06-14T02:00:01.897293+00:00",
-      "lastSeen": "2026-06-14T12:00:01.657781+00:00",
+      "lastSeen": "2026-06-14T13:00:01.217687+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7065
+      "score": 2.6841
     },
     {
       "title": "v1.86.6",
@@ -126,10 +126,10 @@
       "image": "https://opengraph.githubassets.com/13f8e4927a8d53871394fc72c85928b0b629ee25436cc2943c19eebd58e48130/BerriAI/litellm/releases/tag/v1.86.6",
       "published": "2026-06-14T01:04:36+00:00",
       "firstSeen": "2026-06-14T02:00:01.897293+00:00",
-      "lastSeen": "2026-06-14T12:00:01.657781+00:00",
+      "lastSeen": "2026-06-14T13:00:01.217687+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7021
+      "score": 2.6799
     },
     {
       "title": "v1.89.0",
@@ -142,10 +142,10 @@
       "image": "https://opengraph.githubassets.com/1a96245655b47976f7e5cd71fd6aff87c69b60e2020bf0e1fab0f425bb6eb5db/BerriAI/litellm/releases/tag/v1.89.0",
       "published": "2026-06-14T00:28:15+00:00",
       "firstSeen": "2026-06-14T00:19:04.421568+00:00",
-      "lastSeen": "2026-06-14T12:00:01.657781+00:00",
+      "lastSeen": "2026-06-14T13:00:01.217687+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.6886
+      "score": 2.6667
     },
     {
       "title": "Skoda’s Peaq is a seven-seat electric SUV built to undercut the Kia EV9 and Ioniq 9 on price",
@@ -158,10 +158,10 @@
       "image": "https://media.thenextweb.com/2026/06/skoda-peaq-seven-seat-electric-suv-flagship.avif",
       "published": "2026-06-14T11:13:36+00:00",
       "firstSeen": "2026-06-14T12:00:01.657781+00:00",
-      "lastSeen": "2026-06-14T12:00:01.657781+00:00",
+      "lastSeen": "2026-06-14T13:00:01.217687+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1266
+      "score": 2.0971
     },
     {
       "title": "Spotify removed 57,000 fake podcast episodes promoting illegal drugs, but only after a senator forced its hand",
@@ -174,10 +174,10 @@
       "image": "https://media.thenextweb.com/2026/06/spotify-removed-57000-fake-podcast-episodes-drug-spam.avif",
       "published": "2026-06-14T09:37:12+00:00",
       "firstSeen": "2026-06-14T11:00:01.641647+00:00",
-      "lastSeen": "2026-06-14T12:00:01.657781+00:00",
+      "lastSeen": "2026-06-14T13:00:01.217687+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0796
+      "score": 2.0514
     },
     {
       "title": "Meta reportedly moves to unwind $2B Manus deal after Beijing’s demand",
@@ -190,10 +190,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/07/GettyImages-2194278734.jpg?w=1024",
       "published": "2026-06-14T00:03:49+00:00",
       "firstSeen": "2026-06-14T00:19:04.421568+00:00",
-      "lastSeen": "2026-06-14T12:00:01.657781+00:00",
+      "lastSeen": "2026-06-14T13:00:01.217687+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9796
+      "score": 1.9579
     }
   ],
   "errors": [
