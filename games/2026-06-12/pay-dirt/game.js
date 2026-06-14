@@ -1356,10 +1356,15 @@ function topExitCell(){ let e = exitCells[0]; for (const c2 of exitCells) if (c2
 function drawPortal(){
   if (!exitRevealed || !exitCells.length) return;
   const e = topExitCell(); const cx2 = e.c * TILE + 18, cy = e.r * TILE + HUD_H + 18;
-  const a = 0.5 + 0.3 * Math.sin(gameTime * 4);
+  const a = 0.55 + 0.3 * Math.sin(gameTime * 4);
   ctx.save(); ctx.globalCompositeOperation = 'lighter';
-  ctx.strokeStyle = 'rgba(150,255,240,' + a + ')'; ctx.lineWidth = 2;
-  for (let i = 0; i < 3; i++){ ctx.beginPath(); ctx.arc(cx2, cy, 6 + i * 4, gameTime * 2 + i * 2, gameTime * 2 + i * 2 + 3.4); ctx.stroke(); }
+  // bright core
+  glow(e.c + .5, e.r + .5, 26, 'rgba(120,255,235,' + (a * .5) + ')', 1);
+  // rotating swirl arcs
+  ctx.strokeStyle = 'rgba(160,255,240,' + a + ')'; ctx.lineWidth = 2;
+  for (let i = 0; i < 4; i++){ const r2 = 5 + i * 3.5, sp = gameTime * (2 + i * 0.6); ctx.beginPath(); ctx.arc(cx2, cy, r2, sp + i * 1.6, sp + i * 1.6 + 2.6); ctx.stroke(); }
+  // orbiting sparks
+  for (let i = 0; i < 5; i++){ const ang = gameTime * 2.4 + i * 1.257, r2 = 13 + Math.sin(gameTime * 3 + i) * 3; ctx.fillStyle = 'rgba(200,255,248,.9)'; ctx.fillRect(cx2 + Math.cos(ang) * r2 - 1, cy + Math.sin(ang) * r2 - 1, 2, 2); }
   ctx.restore();
 }
 
@@ -1734,7 +1739,7 @@ function render(){
     if (!bloomCv){ bloomCv = ART.cv(bw, bh); bloomCx = bloomCv.getContext('2d'); }
     bloomCx.setTransform(1, 0, 0, 1, 0, 0);
     bloomCx.clearRect(0, 0, bw, bh);
-    bloomCx.filter = 'blur(2.5px)';
+    bloomCx.filter = 'blur(2.5px) saturate(1.7)';   // richer, more saturated glow
     bloomCx.drawImage(canvas, 0, 0, canvas.width, canvas.height, 0, 0, bw, bh);
     bloomCx.filter = 'none';
     ctx.save();
