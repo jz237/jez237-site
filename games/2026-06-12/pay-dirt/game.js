@@ -731,8 +731,10 @@ function collectGold(gd){
   comboN++; comboT = 2.5;
   const val = Math.round(100 * comboMult());
   addScore(val);
-  spawnParticles(gd.c + .5, gd.r + .5, 9, {color: ['#ffd23f', '#fff3b0', '#ff9d2e'], spd: 3, life: .55, size: 3, grav: -2, glow: true});
-  popup(gd.c + .5, gd.r + .3, comboN > 1 ? val + ' ×' + comboMult().toFixed(1).replace('.0', '') : '' + val, '#ffd23f');
+  // juicy pickup burst: gold shards + a quick bright sparkle ring
+  spawnParticles(gd.c + .5, gd.r + .5, 16, {color: ['#ffd23f', '#fff3b0', '#ff9d2e'], spd: 3.4, life: .55, size: 3, grav: -2, glow: true});
+  spawnParticles(gd.c + .5, gd.r + .5, 7, {color: ['#ffffff'], spd: 5.5, life: .3, size: 2, grav: 0, glow: true});
+  popup(gd.c + .5, gd.r + .3, comboN > 1 ? val + ' ×' + comboMult().toFixed(1).replace('.0', '') : '' + val, comboN > 2 ? '#ff9d2e' : '#ffd23f');
   AUDIO.sfx(comboN > 2 ? 'goldhi' : 'gold');
   if (goldLeft <= 0) revealExit();
 }
@@ -1500,6 +1502,15 @@ function render(){
       const rx = baseX + drift;
       ctx.beginPath(); ctx.moveTo(rx, 0); ctx.lineTo(rx + 60, 0); ctx.lineTo(rx + 150, VIEW_H); ctx.lineTo(rx + 70, VIEW_H); ctx.closePath(); ctx.fill();
     }
+    // far waterfall shimmer — scrolling streaks at the sides
+    ctx.globalCompositeOperation = 'lighter';
+    for (const wx of [VIEW_W * 0.13, VIEW_W * 0.87]){
+      for (let i = 0; i < 7; i++){
+        const yy = ((i * 64 + clock * 130) % (VIEW_H * 0.62)) + 30;
+        ctx.globalAlpha = 0.07 + 0.03 * Math.sin(clock * 4 + i);
+        ctx.fillStyle = '#cfe6f6'; ctx.fillRect(wx, yy, 9, 22);
+      }
+    }
     ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over';
     // drifting mist blobs
     for (let i = 0; i < 3; i++){
@@ -1635,14 +1646,17 @@ function render(){
     }
     ctx.globalAlpha = 1;
 
-    // floating score popups
-    ctx.font = '900 16px Consolas, monospace'; ctx.textAlign = 'center';
+    // floating score popups (with a quick scale-pop)
+    ctx.font = '900 16px Consolas, monospace'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
     for (const t of popups){
+      const age = 1.1 - t.life, sc = 1 + 0.5 * Math.max(0, 1 - age * 6);
       ctx.globalAlpha = Math.max(0, Math.min(1, t.life));
-      ctx.fillStyle = 'rgba(0,0,0,.6)'; ctx.fillText(t.text, px(t.x) + 1, py(t.y) + 1);
-      ctx.fillStyle = t.color; ctx.fillText(t.text, px(t.x), py(t.y));
+      ctx.save(); ctx.translate(px(t.x), py(t.y)); ctx.scale(sc, sc);
+      ctx.fillStyle = 'rgba(0,0,0,.6)'; ctx.fillText(t.text, 1, 1);
+      ctx.fillStyle = t.color; ctx.fillText(t.text, 0, 0);
+      ctx.restore();
     }
-    ctx.globalAlpha = 1;
+    ctx.globalAlpha = 1; ctx.textBaseline = 'alphabetic';
   }
   ctx.restore();
 
@@ -1709,6 +1723,9 @@ function render(){
     ct.addColorStop(0, 'rgba(0,0,0,0)'); ct.addColorStop(1, 'rgba(255,140,40,' + a + ')');
     ctx.fillStyle = ct; ctx.fillRect(0, 0, VIEW_W, VIEW_H);
   }
+  // foreground framing layer (near, dark — frames the scene without covering the action)
+  if (grid.length) drawForeground();
+
   // pause scrim
   if (state === 'paused'){ ctx.fillStyle = 'rgba(8,5,14,.55)'; ctx.fillRect(0, 0, VIEW_W, VIEW_H); }
 
@@ -1762,6 +1779,30 @@ function hexA(hex, a){
   if (hex[0] !== '#') return hex;
   const n = parseInt(hex.slice(1), 16);
   return 'rgba(' + ((n >> 16) & 255) + ',' + ((n >> 8) & 255) + ',' + (n & 255) + ',' + a + ')';
+}
+
+// near foreground framing: soft top/bottom inner shadow + dark drooping foliage in the top corners
+function drawForeground(){
+  let g = ctx.createLinearGradient(0, HUD_H, 0, HUD_H + 55);
+  g.addColorStop(0, 'rgba(4,3,10,.5)'); g.addColorStop(1, 'rgba(4,3,10,0)');
+  ctx.fillStyle = g; ctx.fillRect(0, HUD_H, VIEW_W, 55);
+  g = ctx.createLinearGradient(0, VIEW_H - 64, 0, VIEW_H);
+  g.addColorStop(0, 'rgba(4,3,10,0)'); g.addColorStop(1, 'rgba(4,3,10,.5)');
+  ctx.fillStyle = g; ctx.fillRect(0, VIEW_H - 64, VIEW_W, 64);
+  // drooping leaf clusters in the two top corners
+  const cluster = (ox, dir) => {
+    ctx.fillStyle = 'rgba(10,20,12,.92)';
+    for (let i = 0; i < 9; i++){
+      const ang = dir * (0.15 + i * 0.16), len = 26 + (i % 3) * 20;
+      const lx = ox + Math.cos(ang) * len * dir, ly = HUD_H + 2 + Math.sin(ang) * len + (i % 2) * 6;
+      ctx.save(); ctx.translate(lx, ly); ctx.rotate(ang * dir); ctx.beginPath(); ctx.ellipse(0, 0, 20, 8, 0, 0, 7); ctx.fill(); ctx.restore();
+    }
+    ctx.fillStyle = 'rgba(10,20,12,.92)'; ctx.fillRect(ox - 6 * dir, HUD_H, 12, 26);
+  };
+  // don't let foliage hide the revealed exit (exits live in a top corner)
+  const exC = exitRevealed && exitCells.length ? exitCells[0].c : -1;
+  if (!(exC >= 0 && exC < COLS / 2)) cluster(8, 1);
+  if (!(exC >= COLS / 2)) cluster(VIEW_W - 8, -1);
 }
 
 function roundRect(x, y, w, h, r){
