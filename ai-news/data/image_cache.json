@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-14T05:00:02.057445+00:00",
+  "updatedAt": "2026-06-14T06:00:01.953649+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -10352,6 +10352,10 @@
     "https://github.com/BerriAI/litellm/releases/tag/v1.88.2": {
       "image": "https://opengraph.githubassets.com/6f47cac8f7c0f015df7c180057af4714a76fc830cd930a5aea58574c7a191667/BerriAI/litellm/releases/tag/v1.88.2",
       "checkedAt": "2026-06-14T03:00:01.368430+00:00"
+    },
+    "https://techcrunch.com/2026/06/13/as-anthropic-suspends-access-to-new-models-india-debates-its-ai-future": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/Claude-photo.jpg?w=1024",
+      "checkedAt": "2026-06-14T06:00:01.953649+00:00"
     }
   }
 }
