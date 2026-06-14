@@ -286,5 +286,95 @@
       "continuity": "Preserves Veyraxis Bloomrift canon: vertical basalt petals, suspended brine lenses, reefmind body plans, nacre membranes, pressure-light bowls, alien vegetation, cyan storm light, amber glow, and red pressure pulses.",
       "entryDescription": "Reefmind harvesters gather buoyant amber pollen sacs from slow-rooted amber fans on the upper ledges of Amber Fan Market."
     }
+  },
+  {
+    "id": "2026-06-14-manual-01-mirthcap-lookingglass-village-first-view",
+    "title": "Mirthcap Lookingglass Village: First View",
+    "tests": "Manual world catalog entry from #ai-photos; establishes the core village look, mushroom homes, tiny citizens, paths, lanterns, and whimsical scale.",
+    "prompt": "Create a rich whimsical storybook fantasy scene of Mirthcap Lookingglass Village: a brightly colored colony of tiny original villagers living in oversized mushroom huts, with checkerboard stone paths, teacup lanterns, crooked painted doors, spiral stairways, tiny market stalls, laundry lines, pocket-watch signs, playing-card-shaped garden markers, warm golden window light, saturated garden color, and a playful Alice-in-Wonderland mood without recognizable copyrighted characters.",
+    "image": "images/2026-06-14-manual-01-mirthcap-lookingglass-village-first-view.png",
+    "date": "2026-06-14",
+    "batch": "Fictional World",
+    "slot": "manual-01",
+    "model": "codex-builtin-imagegen",
+    "size": "landscape",
+    "world": {
+      "name": "Mirthcap Lookingglass Village",
+      "description": "A whimsical storybook pocket-world where tiny villagers live inside jewel-colored mushroom houses, using tea-table infrastructure, checkerboard paths, and playful scale-shifted garden objects as everyday civic life.",
+      "continuity": "Mirthcap Lookingglass Village canon: jewel-colored mushroom homes, tiny original villagers, checkerboard paths, teacup lanterns, pocket-watch details, moss terraces, oversized garden scale, warm whimsical daily life, and no recognizable Alice/copyrighted characters.",
+      "entryDescription": "A broad establishing view of the village, showing colorful mushroom homes, tiny residents, market details, paths, lanterns, and the overall storybook tone."
+    }
+  },
+  {
+    "id": "2026-06-14-manual-02-mirthcap-lookingglass-village-scientific-field-in",
+    "title": "Mirthcap Lookingglass Village: Scientific Field Infographic",
+    "tests": "Manual world catalog entry from #ai-photos; introduces the new world with a scientific infographic covering ecology, settlement structure, inhabitants, infrastructure, materials, and daily life.",
+    "prompt": "Create a detailed scientific infographic/world field chart for Mirthcap Lookingglass Village. Include a world title, ecology and terrain panel, settlement cross-section, inhabitant study, infrastructure and transit diagram, materials and technology swatches, and a daily-life vignette strip. Use a polished museum natural-history wall chart style with high information density, clean hierarchy, diagrams, callouts, and rich storybook scientific detail.",
+    "image": "images/2026-06-14-manual-02-mirthcap-lookingglass-village-scientific-field-in.png",
+    "date": "2026-06-14",
+    "batch": "Fictional World",
+    "slot": "manual-02",
+    "model": "codex-builtin-imagegen",
+    "size": "portrait",
+    "world": {
+      "name": "Mirthcap Lookingglass Village",
+      "description": "A whimsical storybook pocket-world where tiny villagers live inside jewel-colored mushroom houses, using tea-table infrastructure, checkerboard paths, and playful scale-shifted garden objects as everyday civic life.",
+      "continuity": "Mirthcap Lookingglass Village canon: jewel-colored mushroom homes, tiny original villagers, checkerboard paths, teacup lanterns, pocket-watch details, moss terraces, oversized garden scale, warm whimsical daily life, and no recognizable Alice/copyrighted characters.",
+      "entryDescription": "A field-science style infographic documenting the world bible: ecology, settlement cross-section, inhabitants, transit, materials, technology, and daily life."
+    }
+  },
+  {
+    "id": "2026-06-14-manual-03-mirthcap-lookingglass-village-mayor-tansy-thimble",
+    "title": "Mirthcap Lookingglass Village: Mayor Tansy Thimblegate",
+    "tests": "Manual world catalog entry from #ai-photos; establishes Mayor Tansy Thimblegate as a recurring civic leader character.",
+    "prompt": "Create a richly detailed portrait of Mayor Tansy Thimblegate, elderly tiny civic leader of Mirthcap Lookingglass Village and head of the Under-Cap Circle. Show her as sharp-eyed, stern but warm, wearing a practical mushroom-cap bonnet, brass pocketwatch sash, moss-stained boots, fingerless work gloves, measuring cord, keys, and rolled blueprint scraps, standing before a crooked painted mushroom-house doorway with warm undercap windows and checkerboard path stones.",
+    "image": "images/2026-06-14-manual-03-mirthcap-lookingglass-village-mayor-tansy-thimble.png",
+    "date": "2026-06-14",
+    "batch": "Fictional World",
+    "slot": "manual-03",
+    "model": "codex-builtin-imagegen",
+    "size": "portrait",
+    "world": {
+      "name": "Mirthcap Lookingglass Village",
+      "description": "A whimsical storybook pocket-world where tiny villagers live inside jewel-colored mushroom houses, using tea-table infrastructure, checkerboard paths, and playful scale-shifted garden objects as everyday civic life.",
+      "continuity": "Mirthcap Lookingglass Village canon: jewel-colored mushroom homes, tiny original villagers, checkerboard paths, teacup lanterns, pocket-watch details, moss terraces, oversized garden scale, warm whimsical daily life, and no recognizable Alice/copyrighted characters. Mayor Tansy Thimblegate is the practical head of the Under-Cap Circle, not royalty.",
+      "entryDescription": "A character portrait of Mayor Tansy Thimblegate, the village architect-leader with pocketwatch sash, plans, moss-stained boots, and practical civic authority."
+    }
+  },
+  {
+    "id": "2026-06-14-manual-04-mirthcap-lookingglass-village-under-cap-circle-me",
+    "title": "Mirthcap Lookingglass Village: Under-Cap Circle Meeting",
+    "tests": "Manual world catalog entry from #ai-photos; establishes the Under-Cap Circle government and the inside of Tansy’s hut.",
+    "prompt": "Create a wide interior scene of Mayor Tansy Thimblegate at a round table meeting inside her mushroom hut with the full Under-Cap Circle council. Show a cozy curved mushroom interior, warm undercap windows, button-paned windows, thimble chimney pipe, moss hearth, teacup lanterns, hanging herbs, rolled plans, pocket-watch gears, checkerboard rug, and distinct council members reviewing a village plan with teacups, acorn mugs, measuring tools, colored pins, and repair samples.",
+    "image": "images/2026-06-14-manual-04-mirthcap-lookingglass-village-under-cap-circle-me.png",
+    "date": "2026-06-14",
+    "batch": "Fictional World",
+    "slot": "manual-04",
+    "model": "codex-builtin-imagegen",
+    "size": "landscape",
+    "world": {
+      "name": "Mirthcap Lookingglass Village",
+      "description": "A whimsical storybook pocket-world where tiny villagers live inside jewel-colored mushroom houses, using tea-table infrastructure, checkerboard paths, and playful scale-shifted garden objects as everyday civic life.",
+      "continuity": "Mirthcap Lookingglass Village canon: jewel-colored mushroom homes, tiny original villagers, checkerboard paths, teacup lanterns, pocket-watch details, moss terraces, oversized garden scale, warm whimsical daily life, and no recognizable Alice/copyrighted characters. The Under-Cap Circle is the civic council, with Tansy leading practical village decisions.",
+      "entryDescription": "A round-table council meeting inside Tansy’s mushroom hut, showing the Under-Cap Circle and the village’s cozy civic life."
+    }
+  },
+  {
+    "id": "2026-06-14-manual-05-mirthcap-lookingglass-village-doctor-maribel-dewm",
+    "title": "Mirthcap Lookingglass Village: Doctor Maribel Dewmoss",
+    "tests": "Manual world catalog entry from #ai-photos; establishes Doctor Maribel Dewmoss as Mirthcap’s holistic herb-healer and spiritual remedy keeper.",
+    "prompt": "Create a portrait of Doctor Maribel Dewmoss, the Mirthcap Lookingglass Village holistic and spiritual herb-healer. She is a gentle perceptive tiny elder with warm eyes, silver-brown braided hair, moss-green shawl, mushroom-fiber apron, tiny spectacles, herb-stained fingers, crescent brass herb knife, luminous pollen-bell necklace, corked thimble vials, and a teacup mortar and pestle. Show her in a cozy healing nook built into a spotted mushroom hut with thimble jars, pressed clover, sugar-snap vine bundles, luminous pollen bells, rose-hip beads, dewdrop grasses, teacup burners, warm lantern glow, moss treatment stool, and a small altar shelf of stones, petals, and pocketwatch charms.",
+    "image": "images/2026-06-14-manual-05-mirthcap-lookingglass-village-doctor-maribel-dewm.png",
+    "date": "2026-06-14",
+    "batch": "Fictional World",
+    "slot": "manual-05",
+    "model": "codex-builtin-imagegen",
+    "size": "portrait",
+    "world": {
+      "name": "Mirthcap Lookingglass Village",
+      "description": "A whimsical storybook pocket-world where tiny villagers live inside jewel-colored mushroom houses, using tea-table infrastructure, checkerboard paths, and playful scale-shifted garden objects as everyday civic life.",
+      "continuity": "Mirthcap Lookingglass Village canon: jewel-colored mushroom homes, tiny original villagers, checkerboard paths, teacup lanterns, pocket-watch details, moss terraces, oversized garden scale, warm whimsical daily life, and no recognizable Alice/copyrighted characters. Doctor Maribel Dewmoss is the village herb-healer and spiritual remedy keeper, specializing in garden-herb remedies and calming ritual care.",
+      "entryDescription": "A character portrait of Doctor Maribel Dewmoss, the herb-healer and spiritual remedy keeper in her warm apothecary nook."
+    }
   }
 ]
