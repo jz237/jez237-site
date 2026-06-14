@@ -40,4 +40,7 @@ crisp outlined pixel sprites over a painterly bloomed cave. Loop: assess→criti
 ### Iter 4 — DONE. (a) CSS: animated PAY DIRT logo (shine sweep + gentle bob) + ornate gold corner brackets & textured gradient on all menu panels, (b) richer title attract scene (flanking flickering torches + stronger lantern pool), (c) menacing guard/scout/mason eyes (red/amber glow + glint). Verified all green, 0 errors, perf 0.55ms.
 - New scores: HUD/menu polish 7→8.5, prop density 8→8.5, silhouette/readability 7→7.5.
 
-### Iter 5 — picks: (a) character animation life — add a 4th distinct run frame feel + idle blink/look + land squash, (b) ambient fireflies/floating spores drifting in the play area, (c) richer climb pose (clear hand-over-hand), (d) subtle final contrast/saturation grade.
+### Iter 5 — DONE. (a) drifting FIREFLIES (warm+teal glowing motes wandering the cave), (b) rising EMBERS from braziers, (c) landing SQUASH-and-stretch on the player (juice). Verified all green, 0 errors, perf 0.89ms.
+- New scores: animation life 6.5→7.5, juice 8→8.5, prop density 8.5→9, overall cohesion 8.5→9.
+
+### Iter 6 — picks: (a) gem-type variety in HUD (gold/blue/red/purple counters like the reference, even if cosmetic), (b) game-over & level-clear screen flourish (rays/confetti gold burst), (c) richer combo visual at high multiplier (screen-edge gold glow), (d) final saturation/contrast bump on the bloom composite. Will stop after this if returns are marginal.
