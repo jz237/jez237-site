@@ -29,4 +29,8 @@ crisp outlined pixel sprites over a painterly bloomed cave. Loop: assess→criti
 ### Iter 1 — DONE. (a) brass bar/pipe tile w/ bolt collars + bright sheen (was a beaded line → solid pipe), (b) cinematic vignette + warm-key/cool-shadow soft-light grade, (c) animated atmosphere: breathing+drifting god-ray shafts & drifting mist blobs, (d) faceted gold gem w/ bright core, (e) per-level `overlay` hue tint so claims differ. Verified: all gameplay green, 0 errors, perf<6ms.
 - New scores: lighting 6→8, bg depth/parallax 6→7, tile detail 7→8, color 6→7, animation life 5→6, juice 6→7.
 
-### Iter 2 — picks: (a) richer character animation (more run frames + idle breathing/blink + climb hand alternation), (b) tile tonal variety (avoid flat repetition; subtle per-tile shade variation + edge AO under ledges), (c) beef up crystals/props in bg (bigger, more, glowing), (d) gem sparkle burst + collect polish.
+### Iter 2 — DONE. (a) under-ledge CONTACT SHADOWS (cached strip in the air cell beneath every platform → real grounding/depth), (b) per-cell tonal variation on stone (kills flat repetition), (c) richer background crystals (9 clusters, bigger, brighter cores + glints + double glow). Verified all green, 0 errors, perf 0.52ms.
+- New scores: bg depth/parallax 7→8, tile detail 8→8.5, prop density 6→7, overall cohesion 7→8.
+- Biggest remaining gaps now: character animation life (still thin at scale), foreground framing layer, gem-collect juice, menu/HUD richness, and water/waterfall motion.
+
+### Iter 3 — picks: (a) foreground framing layer (dark, slightly blurred near rocks/foliage at screen edges + bottom corners, NOT obscuring play), (b) animated waterfall shimmer in bg, (c) gold-collect juice (sparkle burst + score-pop scale), (d) subtle platform top rim-light from the warm key.
