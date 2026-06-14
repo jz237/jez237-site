@@ -1360,6 +1360,15 @@ function renderTitle(){
   ctx.fillStyle = vg; ctx.fillRect(0, 0, VIEW_W, VIEW_H);
 }
 
+// is the block above this cell a rendered-solid block? (if not, this top is exposed → moss cap)
+function coveredAbove(c, r){
+  const t = tileAt(c, r - 1);
+  if (t === '#' || t === 'B') return !isDug(c, r - 1) && !isBlasted(c, r - 1);
+  if (t === 'C') return !isCrumbleGone(c, r - 1) && !isBlasted(c, r - 1);
+  if (t === 'T') return true;
+  return t === 'X';
+}
+
 function render(){
   if (state === 'title'){ renderTitle(); return; }
   ctx.clearRect(0, 0, VIEW_W, VIEW_H);
@@ -1405,9 +1414,9 @@ function render(){
             if (cr){ ctx.globalAlpha = 0.3 + 0.3 * Math.sin(gameTime * 20); ctx.fillStyle = '#1a0e06';
               ctx.fillRect(c * TILE + 2, r * TILE + HUD_H + 2, TILE - 4, TILE - 4); ctx.globalAlpha = 1; }
           }
-          else drawTile(T.brick, c, r);
+          else drawTile(coveredAbove(c, r) ? T.brick : T.brickTop, c, r);
         }
-        else if (t === 'X') drawTile(T.solid, c, r);
+        else if (t === 'X') drawTile(coveredAbove(c, r) ? T.solid : T.solidTop, c, r);
         else if (t === 'H') drawTile(T.ladder, c, r);
         else if (t === '-') drawTile(T.bar, c, r);
         else if (t === 'E' && exitRevealed) drawTile(T.exit, c, r);
