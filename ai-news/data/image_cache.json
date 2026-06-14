@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-14T00:19:04.421568+00:00",
+  "updatedAt": "2026-06-14T02:00:01.897293+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -10340,6 +10340,14 @@
     "https://simonwillison.net/2026/Jun/13/sqlite-column-provenance": {
       "image": "",
       "checkedAt": "2026-06-14T00:19:04.421568+00:00"
+    },
+    "https://github.com/BerriAI/litellm/releases/tag/v1.87.3": {
+      "image": "https://opengraph.githubassets.com/efc240b6b73b85d3fca97dd41fd7a9d6388ffa8461c3a6b3cf2c1e8ae2e29b64/BerriAI/litellm/releases/tag/v1.87.3",
+      "checkedAt": "2026-06-14T02:00:01.897293+00:00"
+    },
+    "https://github.com/BerriAI/litellm/releases/tag/v1.86.6": {
+      "image": "https://opengraph.githubassets.com/13f8e4927a8d53871394fc72c85928b0b629ee25436cc2943c19eebd58e48130/BerriAI/litellm/releases/tag/v1.86.6",
+      "checkedAt": "2026-06-14T02:00:01.897293+00:00"
     }
   }
 }
