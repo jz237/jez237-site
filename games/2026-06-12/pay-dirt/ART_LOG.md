@@ -43,4 +43,27 @@ crisp outlined pixel sprites over a painterly bloomed cave. Loop: assess→criti
 ### Iter 5 — DONE. (a) drifting FIREFLIES (warm+teal glowing motes wandering the cave), (b) rising EMBERS from braziers, (c) landing SQUASH-and-stretch on the player (juice). Verified all green, 0 errors, perf 0.89ms.
 - New scores: animation life 6.5→7.5, juice 8→8.5, prop density 8.5→9, overall cohesion 8.5→9.
 
-### Iter 6 — picks: (a) gem-type variety in HUD (gold/blue/red/purple counters like the reference, even if cosmetic), (b) game-over & level-clear screen flourish (rays/confetti gold burst), (c) richer combo visual at high multiplier (screen-edge gold glow), (d) final saturation/contrast bump on the bloom composite. Will stop after this if returns are marginal.
+### Iter 6 — DONE. (a) saturated bloom (blur+saturate 1.7 → richer crystal/gold/glow color), (b) upgraded exit PORTAL (bright core + rotating swirl arcs + orbiting sparks). Verified all green, 0 errors, perf 0.63ms.
+- New scores: color 7→8.5, prop density 9→9, juice 8.5→9.
+
+## STOP — diminishing returns after iter 6.
+Iters 5-6 were progressively smaller than 1-4; the big procedural axes are captured. Remaining gains need real IMAGE ASSETS (see below), not more canvas code.
+
+### Final scores (baseline → now)
+- silhouette/readability 7 → 7.5
+- color harmony & contrast 6 → 8.5
+- lighting cohesion 6 → 8.5
+- background depth & parallax 6 → 8.5
+- animation life 5 → 7.5
+- prop density & variety 6 → 9
+- tile detail & seams 7 → 8.5
+- HUD/menu polish 7 → 8.5
+- overall cohesion 7 → 9
+- juice 6 → 9
+
+### Remaining improvements that need real image assets (procedural can't reach)
+- Hand-painted character + guard sprite sheets (true illustrative detail, blink/idle micro-anim).
+- Hand-painted tileset (organic stone/moss variety, ornate edges) and a painted parallax background.
+- Distinct multi-gem economy art (blue/red/purple gems) for a reference-style HUD counter.
+- Painted props (treasure chest, statues, mine carts) and an illustrated title logo.
+(Loader path is ready: drop PNGs in an assets/ folder and wire ART.tiles/ART.frames to use them with procedural fallback.)
