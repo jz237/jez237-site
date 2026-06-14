@@ -93,21 +93,25 @@ const ART = (() => {
     tiles.ladder = buildLadder({ edge: '#4a3115', rail: '#9c6b32', railHi: '#c89250', rung: '#b07d3c', rungHi: '#d8a85e' });
     tiles.exit   = buildLadder({ edge: '#0f5048', rail: '#2aa79b', railHi: '#6ff0e2', rung: '#3fd2c7', rungHi: '#b6fff5' });
 
-    // bar — brass pipe with sheen
+    // bar — solid brass pipe with bolt joints + bright sheen (reads as connected segments)
     c = cv(T, T); x = cx(c);
-    x.fillStyle = '#9a7b3a'; x.fillRect(0, 4, T, 7);
-    x.fillStyle = '#d8b85e'; x.fillRect(0, 4, T, 2);
-    x.fillStyle = '#5e4a22'; x.fillRect(0, 10, T, 1);
+    { const py0 = 3, ph = 9;
+      x.fillStyle = '#8a6f34'; x.fillRect(0, py0, T, ph);
+      x.fillStyle = '#caa75a'; x.fillRect(0, py0 + 1, T, 3);
+      x.fillStyle = '#f2da8c'; x.fillRect(0, py0 + 1, T, 1);                 // bright top highlight
+      x.fillStyle = '#5e4a22'; x.fillRect(0, py0 + ph - 2, T, 2);           // underside shadow
+      x.fillStyle = '#6e5a2c'; x.fillRect(2, py0, 3, ph); x.fillRect(T - 5, py0, 3, ph); x.fillRect(T / 2 - 1, py0, 3, ph); // bolt collars
+      x.fillStyle = '#efd684'; x.fillRect(3, py0 + 2, 1, 1); x.fillRect(T - 4, py0 + 2, 1, 1); x.fillRect(T / 2, py0 + 2, 1, 1); }
     tiles.bar = c;
 
-    // gold nugget — faceted with highlight
+    // gold nugget — multi-facet gem with bright core (richer + brighter)
     c = cv(T, T); x = cx(c);
-    const gx = 18, gy = 20;
-    x.fillStyle = '#b8860b';
-    x.beginPath(); x.moveTo(gx - 10, gy + 2); x.lineTo(gx - 6, gy - 8); x.lineTo(gx + 6, gy - 9); x.lineTo(gx + 11, gy + 1); x.lineTo(gx + 5, gy + 9); x.lineTo(gx - 7, gy + 9); x.closePath(); x.fill();
-    x.fillStyle = '#ffd23f';
-    x.beginPath(); x.moveTo(gx - 8, gy + 1); x.lineTo(gx - 4, gy - 6); x.lineTo(gx + 5, gy - 6); x.lineTo(gx + 8, gy); x.lineTo(gx + 3, gy + 7); x.lineTo(gx - 6, gy + 7); x.closePath(); x.fill();
-    x.fillStyle = '#fff3b0'; x.fillRect(gx - 4, gy - 4, 5, 3);
+    const gx = 18, gy = 19;
+    x.fillStyle = '#9a6e0a'; x.beginPath(); x.moveTo(gx - 11, gy + 1); x.lineTo(gx - 6, gy - 9); x.lineTo(gx + 7, gy - 10); x.lineTo(gx + 12, gy); x.lineTo(gx + 6, gy + 10); x.lineTo(gx - 8, gy + 10); x.closePath(); x.fill();
+    x.fillStyle = '#e0a91c'; x.beginPath(); x.moveTo(gx - 8, gy); x.lineTo(gx - 4, gy - 7); x.lineTo(gx + 5, gy - 7); x.lineTo(gx + 9, gy - 1); x.lineTo(gx + 4, gy + 8); x.lineTo(gx - 6, gy + 8); x.closePath(); x.fill();
+    x.fillStyle = '#ffd23f'; x.beginPath(); x.moveTo(gx - 5, gy - 1); x.lineTo(gx - 2, gy - 5); x.lineTo(gx + 4, gy - 5); x.lineTo(gx + 6, gy + 1); x.lineTo(gx + 2, gy + 6); x.lineTo(gx - 4, gy + 5); x.closePath(); x.fill();
+    x.strokeStyle = 'rgba(110,72,0,.45)'; x.lineWidth = 1; x.beginPath(); x.moveTo(gx - 4, gy - 5); x.lineTo(gx, gy); x.lineTo(gx + 4, gy - 5); x.moveTo(gx, gy); x.lineTo(gx + 1, gy + 6); x.stroke();
+    x.fillStyle = '#fff6c8'; x.fillRect(gx - 3, gy - 4, 3, 2); x.fillRect(gx - 1, gy - 2, 1, 1);
     tiles.gold = c;
 
     // TNT crate — wood + red bands + fuse
