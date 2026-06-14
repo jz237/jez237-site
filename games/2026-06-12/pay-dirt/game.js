@@ -1707,50 +1707,97 @@ function hexA(hex, a){
   return 'rgba(' + ((n >> 16) & 255) + ',' + ((n >> 8) & 255) + ',' + (n & 255) + ',' + a + ')';
 }
 
+function roundRect(x, y, w, h, r){
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath();
+}
+function drawHeart(cx, cy, s, filled){
+  ctx.save(); ctx.translate(cx, cy); ctx.scale(s / 18, s / 18);
+  ctx.beginPath();
+  ctx.moveTo(0, 5);
+  ctx.bezierCurveTo(-2, -3, -10, -3, -10, 3.5);
+  ctx.bezierCurveTo(-10, 9, -2, 13, 0, 16);
+  ctx.bezierCurveTo(2, 13, 10, 9, 10, 3.5);
+  ctx.bezierCurveTo(10, -3, 2, -3, 0, 5);
+  ctx.closePath();
+  if (filled){ ctx.fillStyle = '#ff4f6b'; ctx.fill(); ctx.fillStyle = 'rgba(255,255,255,.45)'; ctx.beginPath(); ctx.ellipse(-4, 1, 2.4, 1.6, -0.5, 0, 7); ctx.fill(); }
+  else { ctx.strokeStyle = 'rgba(255,120,140,.45)'; ctx.lineWidth = 2; ctx.stroke(); }
+  ctx.restore();
+}
+function drawGemIcon(cx, cy, s, col){
+  ctx.fillStyle = col;
+  ctx.beginPath(); ctx.moveTo(cx, cy - s); ctx.lineTo(cx + s * .8, cy - s * .2); ctx.lineTo(cx, cy + s); ctx.lineTo(cx - s * .8, cy - s * .2); ctx.closePath(); ctx.fill();
+  ctx.fillStyle = 'rgba(255,255,255,.6)'; ctx.fillRect(cx - s * .3, cy - s * .5, s * .3, 2);
+}
+function drawHotbar(){
+  if (!player) return;
+  const slots = [];
+  if (player.tnt > 0) slots.push({icon: ART.PUPS[1], badge: '×' + player.tnt, col: '#ff5c33', ratio: 1});
+  if (player.speedT > 0) slots.push({icon: ART.PUPS[2], col: '#3fd2c7', ratio: player.speedT / 8});
+  if (player.cloakT > 0) slots.push({icon: ART.PUPS[3], col: '#b07fff', ratio: player.cloakT / 6});
+  if (player.magnetT > 0) slots.push({icon: ART.PUPS[4], col: '#ffd23f', ratio: player.magnetT / 8});
+  if (player.shovelT > 0) slots.push({icon: ART.PUPS[5], col: '#7fd24a', ratio: player.shovelT / 10});
+  if (!slots.length) return;
+  const sw = 44, gap = 8, totalW = slots.length * sw + (slots.length - 1) * gap;
+  let sx = (VIEW_W - totalW) / 2; const sy = VIEW_H - sw - 12;
+  for (const s of slots){
+    roundRect(sx, sy, sw, sw, 8); ctx.fillStyle = 'rgba(14,10,20,.82)'; ctx.fill();
+    ctx.lineWidth = 2; ctx.strokeStyle = s.col; ctx.stroke();
+    ctx.drawImage(s.icon, sx + 10, sy + 7, 24, 24);
+    ctx.fillStyle = 'rgba(255,255,255,.15)'; ctx.fillRect(sx + 6, sy + sw - 9, sw - 12, 4);
+    ctx.fillStyle = s.col; ctx.fillRect(sx + 6, sy + sw - 9, (sw - 12) * Math.min(1, s.ratio), 4);
+    if (s.badge){ ctx.fillStyle = '#fff'; ctx.font = '800 12px Consolas, monospace'; ctx.textAlign = 'right'; ctx.textBaseline = 'alphabetic'; ctx.fillText(s.badge, sx + sw - 5, sy + 15); }
+    sx += sw + gap;
+  }
+}
 function drawHUD(){
-  ctx.fillStyle = 'rgba(10,7,16,.62)'; ctx.fillRect(0, 0, VIEW_W, HUD_H);
-  ctx.fillStyle = 'rgba(255,210,63,.25)'; ctx.fillRect(0, HUD_H - 2, VIEW_W, 2);
-  ctx.fillStyle = '#ffd23f';
-  ctx.font = '700 20px Consolas, monospace';
-  ctx.textBaseline = 'middle'; ctx.textAlign = 'left';
-  ctx.fillText('$' + String(score).padStart(6, '0'), 16, HUD_H / 2);
-  ctx.textAlign = 'center';
-  if (grid.length){
-    ctx.fillStyle = exitRevealed ? '#3fd2c7' : '#ffd23f';
-    const total = golds.length;
-    ctx.fillText(exitRevealed ? 'ESCAPE ↑' : ('GOLD ' + (total - goldLeft) + '/' + total), VIEW_W / 2, HUD_H / 2);
-  }
-  ctx.textAlign = 'right'; ctx.fillStyle = '#ffd23f';
-  let lifeStr = '';
-  for (let i = 0; i < lives; i++) lifeStr += '⛏';
-  ctx.fillText(lifeStr || '—', VIEW_W - 16, HUD_H / 2);
+  // framed top panel
+  const g = ctx.createLinearGradient(0, 0, 0, HUD_H);
+  g.addColorStop(0, 'rgba(22,15,30,.94)'); g.addColorStop(1, 'rgba(10,7,16,.8)');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, VIEW_W, HUD_H);
+  ctx.fillStyle = 'rgba(255,210,63,.38)'; ctx.fillRect(0, HUD_H - 2, VIEW_W, 2);
+  ctx.fillStyle = 'rgba(255,210,63,.1)'; ctx.fillRect(0, 0, VIEW_W, 1);
+  const cy = HUD_H / 2;
+  ctx.textBaseline = 'middle';
 
-  if (player){
-    ctx.font = '700 14px Consolas, monospace';
-    if (comboN > 1){
-      ctx.fillStyle = '#ff9d2e'; ctx.textAlign = 'center';
-      ctx.fillText('COMBO ×' + comboMult().toFixed(1).replace('.0', ''), VIEW_W / 2, HUD_H - 11);
-    }
-    // active power-ups as labeled countdown bars
-    const PUP = [
-      {t: player.speedT, max: 8, label: 'BOOTS', col: '#3fd2c7'},
-      {t: player.cloakT, max: 6, label: 'CLOAK', col: '#b07fff'},
-      {t: player.magnetT, max: 8, label: 'MAGNET', col: '#ffd23f'},
-      {t: player.shovelT, max: 10, label: 'SHOVEL', col: '#7fd24a'},
-    ];
-    let bx = 150;
-    ctx.textAlign = 'left'; ctx.font = '700 11px Consolas, monospace';
-    if (player.tnt > 0){ ctx.fillStyle = '#ff5c33'; ctx.fillText('TNT×' + player.tnt, bx, HUD_H / 2); bx += 56; }
-    for (const pu of PUP){
-      if (pu.t <= 0) continue;
-      const w = 58;
-      ctx.fillStyle = 'rgba(255,255,255,.12)'; ctx.fillRect(bx, HUD_H / 2 - 8, w, 6);
-      ctx.fillStyle = pu.col; ctx.fillRect(bx, HUD_H / 2 - 8, w * Math.min(1, pu.t / pu.max), 6);
-      ctx.fillStyle = pu.col; ctx.fillText(pu.label, bx, HUD_H / 2 + 8);
-      bx += w + 8;
-    }
-    if (mode === 'daily' && dailyDate){ ctx.fillStyle = '#9b8fa6'; ctx.textAlign = 'right'; ctx.font = '600 12px Consolas, monospace'; ctx.fillText('DAILY ' + dailyDate, VIEW_W - 16, HUD_H - 10); }
+  // lives as hearts
+  let hx = 16;
+  for (let i = 0, n = Math.min(lives, 6); i < n; i++){ drawHeart(hx + 8, cy, 16, true); hx += 21; }
+  hx += 6;
+
+  // gold counter with gem icon
+  if (grid.length){
+    const total = golds.length, got = total - goldLeft;
+    drawGemIcon(hx + 9, cy, 8, '#ffd23f');
+    ctx.fillStyle = '#ffe98a'; ctx.font = '800 17px Consolas, monospace'; ctx.textAlign = 'left';
+    ctx.fillText(got + '/' + total, hx + 22, cy + 1);
   }
+
+  // centre score
+  ctx.textAlign = 'center';
+  ctx.fillStyle = 'rgba(255,210,63,.65)'; ctx.font = '800 9px Consolas, monospace'; ctx.fillText('SCORE', VIEW_W / 2, 9);
+  ctx.fillStyle = '#fff'; ctx.font = '800 22px Consolas, monospace'; ctx.fillText(String(score).padStart(6, '0'), VIEW_W / 2, cy + 6);
+
+  // right: time / daily, escape flag
+  ctx.textAlign = 'right';
+  const tt = Math.max(0, levelTime | 0), mm = String((tt / 60) | 0).padStart(2, '0'), ss = String(tt % 60).padStart(2, '0');
+  ctx.fillStyle = 'rgba(216,207,228,.55)'; ctx.font = '800 9px Consolas, monospace'; ctx.fillText(mode === 'daily' ? ('DAILY ' + (dailyDate || '')) : 'TIME', VIEW_W - 16, 9);
+  ctx.fillStyle = '#d8cfe4'; ctx.font = '800 17px Consolas, monospace'; ctx.fillText(mm + ':' + ss, VIEW_W - 16, cy + 6);
+
+  // escape indicator when exit open
+  if (grid.length && exitRevealed){
+    ctx.textAlign = 'center'; ctx.fillStyle = '#3fd2c7'; ctx.font = '800 12px Consolas, monospace';
+    ctx.fillText('▲ ESCAPE', VIEW_W / 2 - 120, cy + 1);
+  }
+  // combo badge
+  if (comboN > 1){
+    ctx.textAlign = 'center'; ctx.fillStyle = '#ff9d2e'; ctx.font = '800 13px Consolas, monospace';
+    ctx.fillText('COMBO ×' + comboMult().toFixed(1).replace('.0', ''), VIEW_W / 2 + 120, cy + 1);
+  }
+
+  drawHotbar();
 }
 
 /* ================= fixed-timestep loop ================= */
