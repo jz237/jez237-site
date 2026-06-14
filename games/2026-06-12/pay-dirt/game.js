@@ -1423,6 +1423,19 @@ function renderTitle(){
     glow(ex / TILE, (ey - HUD_H) / TILE, 8, 'rgba(255,150,60,' + a + ')', 1);
     ctx.globalCompositeOperation = 'source-over';
   }
+  // flickering torches flanking the lower ledge
+  for (const txc of [2.4, COLS - 2.4]){
+    const fl = 0.7 + 0.3 * Math.sin(clock * 13 + txc);
+    ctx.save(); ctx.globalCompositeOperation = 'lighter';
+    glow(txc, ROWS - 2.0, 70 * fl, 'rgba(255,150,50,.5)', 1); ctx.restore();
+    const bx = txc * TILE, by = (ROWS - 1) * TILE + HUD_H;
+    ctx.fillStyle = '#3a2a16'; ctx.fillRect(bx - 2, by - 22, 4, 22);
+    ctx.fillStyle = '#5a4326'; ctx.fillRect(bx - 4, by - 25, 8, 4);
+    ctx.save(); ctx.globalCompositeOperation = 'lighter';
+    ctx.fillStyle = 'rgba(255,120,30,.85)'; ctx.beginPath(); ctx.ellipse(bx, by - 30, 5 * fl, 10 * fl, 0, 0, 7); ctx.fill();
+    ctx.fillStyle = 'rgba(255,250,210,1)'; ctx.beginPath(); ctx.ellipse(bx, by - 28, 1.6, 4 * fl, 0, 0, 7); ctx.fill();
+    ctx.restore();
+  }
   // a prospector pacing the lower ledge
   const span = VIEW_W - 4 * TILE;
   const phase = (clock * 0.18) % 2;
@@ -1432,9 +1445,10 @@ function renderTitle(){
   titleRunner.x = rx; titleRunner.y = ROWS - 1.5;
   titleRunner.state = 'run'; titleRunner.moved = true; titleRunner.anim = clock;
   titleRunner.dir = phase < 1 ? 1 : -1;
-  // warm pool of light under the runner + vignette
+  // warm lantern pool under the runner
   ctx.save(); ctx.globalCompositeOperation = 'lighter';
-  glow(rx, ROWS - 1.6, 90, 'rgba(255,200,120,.4)', 1);
+  glow(rx, ROWS - 1.6, 100, 'rgba(255,205,130,.45)', 1);
+  glow(rx, ROWS - 1.7, 40, 'rgba(255,235,180,.4)', 1);
   ctx.restore();
   drawActor(titleRunner);
   // a few sparkles of gold scattered
