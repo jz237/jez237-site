@@ -1043,6 +1043,7 @@ function loadLevelData(rows){
   shake = 0; hitStop = 0; flash = 0; deathFlash = 0;
   digBuffer = 0; runDustT = 0;
   buildBackdrop();
+  computeDecor();
   // intro banner
   if (mode === 'daily') banner = {text: 'DAILY DIG', sub: dailyDate || LEVELS.dailyDateUTC(), life: 2.4};
   else banner = {text: 'CLAIM ' + (levelIndex + 1), sub: (LEVELS.names[levelIndex] || '').toUpperCase(), life: 2.4};
@@ -1263,6 +1264,84 @@ function buildBackdrop(){
   x.globalAlpha = 1;
 }
 
+/* ================= decorative set-dressing (deterministic per level) ================= */
+let decor = [];
+function computeDecor(){
+  decor = [];
+  const rr = ART.rng(4242 + levelIndex * 131 + (mode === 'daily' ? 777 : 0));
+  const isBlk = (c, r) => { const t = tileAt(c, r); return t === '#' || t === 'X' || t === 'B' || t === 'C'; };
+  const occ = new Set();
+  for (const g of golds) occ.add(g.c + ',' + g.r);
+  for (const p of powerups) occ.add(p.c + ',' + p.r);
+  let torches = 0, plants = 0, vines = 0, lastTorchC = -9;
+  for (let r = 0; r < ROWS; r++) for (let c = 0; c < COLS; c++){
+    if (!isBlk(c, r)) continue;
+    const aboveAir = !isBlk(c, r - 1) && tileAt(c, r - 1) !== 'H' && tileAt(c, r - 1) !== 'E' && tileAt(c, r - 1) !== '-';
+    if (aboveAir && plants < 11 && !occ.has(c + ',' + (r - 1)) && rr() < 0.22){ decor.push({type: 'plant', c, r, k: (rr() * 3) | 0, s: rr()}); plants++; }
+    if (!isBlk(c, r + 1) && tileAt(c, r + 1) !== 'H' && vines < 7 && rr() < 0.13){ decor.push({type: 'vine', c, r, len: 14 + rr() * 22, s: rr()}); vines++; }
+    // standing brazier on a platform END (top exposed + a side open), spaced out
+    if (aboveAir && torches < 5 && c - lastTorchC >= 4 && !occ.has(c + ',' + (r - 1))){
+      const endL = tileAt(c - 1, r) === '.', endR = tileAt(c + 1, r) === '.';
+      if ((endL || endR) && rr() < 0.6){ decor.push({type: 'torch', c, r}); torches++; lastTorchC = c; }
+    }
+  }
+}
+
+function drawPlant(d){
+  const bx = d.c * TILE, by = d.r * TILE + HUD_H;
+  if (d.k === 0){ // grass tuft
+    ctx.strokeStyle = '#5f9a40'; ctx.lineWidth = 1.5;
+    for (let i = -2; i <= 2; i++){ ctx.beginPath(); ctx.moveTo(bx + 18 + i * 3, by); ctx.quadraticCurveTo(bx + 18 + i * 3 + i, by - 9, bx + 18 + i * 4, by - 13); ctx.stroke(); }
+  } else if (d.k === 1){ // mushroom
+    ctx.fillStyle = '#caa05a'; ctx.fillRect(bx + 16, by - 5, 3, 5);
+    ctx.fillStyle = '#d6533f'; ctx.beginPath(); ctx.ellipse(bx + 17, by - 6, 6, 4, 0, Math.PI, 0); ctx.fill();
+    ctx.fillStyle = '#ffd2b0'; ctx.fillRect(bx + 14, by - 7, 1, 1); ctx.fillRect(bx + 20, by - 6, 1, 1);
+  } else { // flowering bush
+    ctx.fillStyle = '#3f7a34'; ctx.beginPath(); ctx.ellipse(bx + 18, by - 4, 7, 4, 0, 0, 7); ctx.fill();
+    ctx.fillStyle = '#ffd23f'; ctx.fillRect(bx + 16, by - 6, 2, 2); ctx.fillStyle = '#ff7ba8'; ctx.fillRect(bx + 20, by - 5, 2, 2);
+  }
+}
+function drawVine(d){
+  const topx = d.c * TILE + 6 + d.s * 24, topy = (d.r + 1) * TILE + HUD_H;
+  ctx.strokeStyle = '#3f6a2e'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(topx, topy);
+  for (let y = 0; y <= d.len; y += 6){ const sway = Math.sin(gameTime * 1.4 + y * 0.2 + d.c) * 2 * (y / d.len); ctx.lineTo(topx + sway, topy + y); }
+  ctx.stroke();
+  ctx.fillStyle = '#4f8a3a';
+  for (let y = 9; y < d.len; y += 10){ const sway = Math.sin(gameTime * 1.4 + y * 0.2 + d.c) * 2 * (y / d.len); ctx.beginPath(); ctx.ellipse(topx + sway + 2, topy + y, 3, 2, 0.6, 0, 7); ctx.fill(); }
+}
+function drawTorch(d){
+  const bx = d.c * TILE + 18, by = d.r * TILE + HUD_H;   // top-centre of the ledge cell
+  // wooden post + iron cup
+  ctx.fillStyle = '#3a2a16'; ctx.fillRect(bx - 2, by - 15, 4, 15);
+  ctx.fillStyle = '#241a0e'; ctx.fillRect(bx - 2, by - 15, 1, 15);
+  ctx.fillStyle = '#5a4326'; ctx.fillRect(bx - 4, by - 18, 8, 4);
+  ctx.fillStyle = '#6e5430'; ctx.fillRect(bx - 4, by - 18, 8, 1);
+  // flame (additive, flickering)
+  const fx = bx, fy = by - 22, fl = 0.7 + 0.3 * Math.sin(gameTime * 14 + d.c * 3) + 0.1 * Math.sin(gameTime * 31 + d.c);
+  ctx.save(); ctx.globalCompositeOperation = 'lighter';
+  ctx.fillStyle = 'rgba(255,120,30,.8)'; ctx.beginPath(); ctx.ellipse(fx, fy, 5 * fl, 10 * fl, 0, 0, 7); ctx.fill();
+  ctx.fillStyle = 'rgba(255,205,70,.95)'; ctx.beginPath(); ctx.ellipse(fx, fy + 2, 3 * fl, 6.5 * fl, 0, 0, 7); ctx.fill();
+  ctx.fillStyle = 'rgba(255,250,210,1)'; ctx.beginPath(); ctx.ellipse(fx, fy + 3, 1.5, 3.5 * fl, 0, 0, 7); ctx.fill();
+  ctx.restore();
+}
+function drawDecor(){
+  for (const d of decor){
+    if (d.type === 'vine') drawVine(d);
+    else if (d.type === 'plant') drawPlant(d);
+    else if (d.type === 'torch') drawTorch(d);
+  }
+}
+function topExitCell(){ let e = exitCells[0]; for (const c2 of exitCells) if (c2.r < e.r) e = c2; return e; }
+function drawPortal(){
+  if (!exitRevealed || !exitCells.length) return;
+  const e = topExitCell(); const cx2 = e.c * TILE + 18, cy = e.r * TILE + HUD_H + 18;
+  const a = 0.5 + 0.3 * Math.sin(gameTime * 4);
+  ctx.save(); ctx.globalCompositeOperation = 'lighter';
+  ctx.strokeStyle = 'rgba(150,255,240,' + a + ')'; ctx.lineWidth = 2;
+  for (let i = 0; i < 3; i++){ ctx.beginPath(); ctx.arc(cx2, cy, 6 + i * 4, gameTime * 2 + i * 2, gameTime * 2 + i * 2 + 3.4); ctx.stroke(); }
+  ctx.restore();
+}
+
 /* one animation-state -> sprite pose */
 function poseFor(a){
   if (a.digT > 0) return 'dig';
@@ -1447,6 +1526,10 @@ function render(){
       }
     }
 
+    // decorative set-dressing (behind gold/entities) + glowing exit portal
+    drawDecor();
+    drawPortal();
+
     // power-ups: icon + bob + halo
     for (const pu of powerups){
       if (pu.taken) continue;
@@ -1529,6 +1612,10 @@ function render(){
     for (const gd of golds) if (!gd.taken && !gd.held) glow(gd.c + .5, gd.r + .5, 26, 'rgba(255,200,60,.3)', 1);
     if (exitRevealed){ const pulse = 0.35 + 0.2 * Math.sin(gameTime * 5); for (const e of exitCells) glow(e.c + .5, e.r + .5, 38, 'rgba(63,210,199,' + pulse + ')', 1); }
     for (const h of holes.values()) glow(h.c + .5, h.r + .6, 20, 'rgba(255,90,40,.22)', 1);
+    // torch pools
+    for (const d of decor) if (d.type === 'torch'){ const fl = 0.85 + 0.15 * Math.sin(gameTime * 14 + d.c * 3); glow(d.c + .5, d.r - 0.5, 58 * fl, 'rgba(255,150,50,.5)', 1); }
+    // exit portal aura
+    if (exitRevealed && exitCells.length){ const e = topExitCell(); glow(e.c + .5, e.r + .5, 44, 'rgba(80,230,210,' + (0.4 + 0.2 * Math.sin(gameTime * 4)) + ')', 1); }
     // faint danger underglow so guards read at a glance
     for (const gu of guards) if (gu.state !== 'dead') glow(gu.x, gu.y + .15, 26, 'rgba(255,60,80,' + (gu.state === 'stun' ? .1 : .22) + ')', 1);
     for (const p of particles) if (p.glow) glow(p.x, p.y, p.size * 3.5, hexA(p.color, .6), 1);
