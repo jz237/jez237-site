@@ -1225,16 +1225,20 @@ function buildBackdrop(){
   x.fillStyle = 'rgba(38,44,72,.62)';
   for (let i = 0; i < 6; i++){ const cx2 = r() * W, w = 150 + r() * 230, h = 90 + r() * 150; x.beginPath(); x.ellipse(cx2, H - 20 + r() * 80, w, h, 0, Math.PI, 0); x.fill(); }
 
-  // 5) glowing crystal clusters
-  for (let i = 0; i < 6; i++){
-    const cx2 = 50 + r() * (W - 100), cy = H * 0.42 + r() * H * 0.4, teal = r() < 0.55;
-    const col = teal ? '#3fd2c7' : '#9a6cff';
-    lift(cx2, cy, 44, teal ? 'rgba(63,210,199,.4)' : 'rgba(154,108,255,.4)', 1);
-    for (let k = 0; k < 4; k++){
-      const dx = (r() - .5) * 28, dh = 13 + r() * 22, dw = 4 + r() * 5;
-      x.globalAlpha = .55; x.fillStyle = col;
+  // 5) glowing crystal clusters (more, bigger, brighter — a signature of the look)
+  for (let i = 0; i < 9; i++){
+    const cx2 = 40 + r() * (W - 80), cy = H * 0.38 + r() * H * 0.46, teal = r() < 0.55;
+    const col = teal ? '#3fd2c7' : '#9a6cff', glo = teal ? 'rgba(63,210,199,' : 'rgba(154,108,255,';
+    const scale = 0.8 + r() * 0.9;
+    lift(cx2, cy, 60 * scale, glo + '.45)', 1);
+    lift(cx2, cy, 26 * scale, glo + '.4)', 1);
+    const n = 4 + (r() * 3 | 0);
+    for (let k = 0; k < n; k++){
+      const dx = (r() - .5) * 34 * scale, dh = (15 + r() * 26) * scale, dw = (4 + r() * 6) * scale;
+      x.globalAlpha = .6; x.fillStyle = col;
       x.beginPath(); x.moveTo(cx2 + dx, cy - dh); x.lineTo(cx2 + dx + dw, cy); x.lineTo(cx2 + dx, cy + dh * 0.4); x.lineTo(cx2 + dx - dw, cy); x.closePath(); x.fill();
-      x.globalAlpha = .5; x.fillStyle = '#fff'; x.fillRect(cx2 + dx - 1, cy - dh * 0.5 | 0, 2, dh * 0.4);
+      x.globalAlpha = .85; x.fillStyle = teal ? '#bafff5' : '#e0ccff'; x.fillRect(cx2 + dx - 1, (cy - dh * 0.55) | 0, 2, (dh * 0.5) | 0); // bright facet edge
+      x.globalAlpha = .9; x.fillStyle = '#fff'; x.fillRect((cx2 + dx) | 0, (cy - dh * 0.35) | 0, 1, 2);                                   // glint
     }
     x.globalAlpha = 1;
   }
@@ -1444,13 +1448,31 @@ function renderTitle(){
   ctx.fillStyle = vg; ctx.fillRect(0, 0, VIEW_W, VIEW_H);
 }
 
-// is the block above this cell a rendered-solid block? (if not, this top is exposed → moss cap)
-function coveredAbove(c, r){
-  const t = tileAt(c, r - 1);
-  if (t === '#' || t === 'B') return !isDug(c, r - 1) && !isBlasted(c, r - 1);
-  if (t === 'C') return !isCrumbleGone(c, r - 1) && !isBlasted(c, r - 1);
+// does this cell render as a solid block?
+function rendersSolid(c, r){
+  const t = tileAt(c, r);
+  if (t === '#' || t === 'B') return !isDug(c, r) && !isBlasted(c, r);
+  if (t === 'C') return !isCrumbleGone(c, r) && !isBlasted(c, r);
   if (t === 'T') return true;
   return t === 'X';
+}
+function coveredAbove(c, r){ return rendersSolid(c, r - 1); }
+
+// cached soft contact-shadow strip drawn into the air cell beneath a platform (grounds ledges)
+let underShadowImg = null;
+function underShadow(){
+  if (underShadowImg) return underShadowImg;
+  const h = 22, c = ART.cv(TILE, h), x = ART.cx(c);
+  const g = x.createLinearGradient(0, 0, 0, h);
+  g.addColorStop(0, 'rgba(0,0,0,.42)'); g.addColorStop(1, 'rgba(0,0,0,0)');
+  x.fillStyle = g; x.fillRect(0, 0, TILE, h);
+  underShadowImg = c; return c;
+}
+// subtle deterministic per-cell shade so tiled stone doesn't read as flat repetition
+function tileVary(c, r){
+  const v = (c * 13 + r * 7) % 5;
+  if (v === 0){ ctx.fillStyle = 'rgba(255,248,230,.05)'; ctx.fillRect(c * TILE, r * TILE + HUD_H, TILE, TILE); }
+  else if (v === 1 || v === 2){ ctx.fillStyle = 'rgba(0,0,0,.07)'; ctx.fillRect(c * TILE, r * TILE + HUD_H, TILE, TILE); }
 }
 
 function render(){
@@ -1495,6 +1517,9 @@ function render(){
 
   if (grid.length){
     const T = ART.tiles;
+    // contact shadows: ground every platform by darkening the air cell beneath it
+    for (let r = 0; r < ROWS - 1; r++) for (let c = 0; c < COLS; c++)
+      if (rendersSolid(c, r) && !rendersSolid(c, r + 1)) ctx.drawImage(underShadow(), c * TILE, (r + 1) * TILE + HUD_H);
     for (let r = 0; r < ROWS; r++){
       for (let c = 0; c < COLS; c++){
         const t = grid[r][c];
@@ -1519,9 +1544,9 @@ function render(){
             if (cr){ ctx.globalAlpha = 0.3 + 0.3 * Math.sin(gameTime * 20); ctx.fillStyle = '#1a0e06';
               ctx.fillRect(c * TILE + 2, r * TILE + HUD_H + 2, TILE - 4, TILE - 4); ctx.globalAlpha = 1; }
           }
-          else drawTile(coveredAbove(c, r) ? T.brick : T.brickTop, c, r);
+          else { drawTile(coveredAbove(c, r) ? T.brick : T.brickTop, c, r); tileVary(c, r); }
         }
-        else if (t === 'X') drawTile(coveredAbove(c, r) ? T.solid : T.solidTop, c, r);
+        else if (t === 'X'){ drawTile(coveredAbove(c, r) ? T.solid : T.solidTop, c, r); tileVary(c, r); }
         else if (t === 'H') drawTile(T.ladder, c, r);
         else if (t === '-') drawTile(T.bar, c, r);
         else if (t === 'E' && exitRevealed) drawTile(T.exit, c, r);
