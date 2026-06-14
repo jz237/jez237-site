@@ -1834,5 +1834,17 @@
     "slot": "afternoon",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-06-14-afternoon-pet-as-copper-weather-vane",
+    "title": "Pet as Copper Weather Vane",
+    "tests": "reference-photo transformation template; finished non-paper physical example; no readable text or logos; preserves recognizable pet pose and markings",
+    "prompt": "Use the uploaded reference photo and preserve the pet's identity, pose, silhouette, proportions, expression, key markings, camera angle, and most recognizable features, then transform the pet into a copper weather-vane sculpture on the peak of an old red barn roof at dawn. Rebuild the pet as hammered copper sheet with green-blue verdigris in creases, tiny brass rivets, folded seams, punched fur plates, warmer polished copper for distinctive markings, arrow fins, cardinal-direction rods with no readable letters, and a balanced rotating spindle. Keep the source pet recognizable while changing the material, surface texture, props, and environment into a cohesive finished artifact with dew on red shingles, lichen, rusted nails, misty fields, warm sunrise rim light, cool shadow fill, shallow depth of field, realistic scratches, and aged patina. Avoid extra limbs, duplicate animals, readable text, letters, logos, watermark, people, hands, prompt cards, and losing recognizability.\n\nReusable fill-in-the-blank template: Use the uploaded reference photo and preserve the [PET]'s identity, pose, silhouette, proportions, expression or key markings, camera angle, and most recognizable features, then transform [PET] into a copper weather-vane sculpture made from [MATERIAL] in [SETTING] with [MOOD] lighting. Keep the source recognizable while changing material, surface texture, props, and environment into a cohesive finished artifact. Avoid extra limbs, duplicate subjects, readable text, letters, logos, watermark, people or hands unless requested, prompt cards, and losing recognizability.\n\nSource photo needed: a clear pet photo.\n\nWhat to preserve: pet identity, pose, silhouette, proportions, expression, face markings, coat pattern or key markings, ear shape, tail shape, paw placement, camera angle, and the most recognizable features from the uploaded photo.\n\nWhat to change: convert fur, whiskers, eyes, markings, and body volume into hammered copper, patinated seams, rivets, folded metal plates, directional weather-vane fins, rotating spindle hardware, barn-roof props, dawn mist, and cinematic sunrise lighting.\n\nExample substitution: Upload a clear photo of a small black-and-tan terrier sitting alert with perked ears, tan eyebrows, a tan muzzle, and a curled tail; preserve those markings and the sitting pose, then turn the dog into a patinated copper weather-vane sculpture on an old red barn roof at dawn.",
+    "image": "images/2026-06-14-afternoon-pet-as-copper-weather-vane.png",
+    "date": "2026-06-14",
+    "batch": "Daily Prompt",
+    "slot": "afternoon",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
