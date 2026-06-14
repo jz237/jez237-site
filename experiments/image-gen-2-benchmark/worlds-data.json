@@ -430,5 +430,23 @@
       "continuity": "Mirthcap Lookingglass Village canon: jewel-colored mushroom homes, tiny original villagers, checkerboard paths, teacup lanterns, pocket-watch details, moss terraces, oversized garden scale, warm whimsical daily life, and no recognizable Alice/copyrighted characters. Mirthcap villagers are tiny human-like people, not elves; use rounded human ears or hide ears under caps, curls, bonnets, or shawls. Finnel Buttonby is the recovered round-eared child linked to prophecy. Luma Purl is Finnel’s next-door neighbor and friend, related to Mossabet Purl. Hearthpetal Thicket is a lush forest beyond the village where healing herbs grow. Briarwing drakes are friendly winged horse-dragon-like forest creatures; individuals can vary in color.",
       "entryDescription": "Finnel and Luma forage for Doctor Marlow’s herbs in Hearthpetal Thicket while two friendly briarwing drakes watch from the brush."
     }
+  },
+  {
+    "id": "2026-06-14-manual-10-mirthcap-lookingglass-village-briarwings-over-loo",
+    "title": "Mirthcap Lookingglass Village: Briarwings Over Lookingglass Pond",
+    "tests": "Manual world catalog entry from #ai-photos; shows Luma Purl and Finnel Buttonby riding briarwing drakes over Lookingglass Pond with friendly aquatic and amphibious creatures nearby, returning herbs to Doctor Marlow.",
+    "prompt": "Create a cinematic storybook fantasy image of Luma Purl and Finnel Buttonby riding the two friendly briarwing drakes a few feet above Lookingglass Pond, returning to Mirthcap Lookingglass Village to give Doctor Marlow Dewmoss the herbs and plants collected in Hearthpetal Thicket. Lookingglass Pond is clear and reflective, bordered by mossy roots, clover reeds, lily pads, tiny mushroom steps, blue glassy water, floating pollen lights, and distant jewel-colored mushroom huts. Luma Purl rides the warm yellow/copper-gold briarwing drake; Finnel Buttonby rides the cool moon-blue briarwing drake. Both children are tiny human-like Mirthcap people, not elves, with rounded ears or ears hidden by hair/caps. The briarwing drakes fly just above the pond, wing tips near the water, making ripples. Friendly pond life includes glowing glassfish, lilyback turtles, salamander-like amphibians on lily pads, gentle frog-like creatures near reeds, jewel-shelled water snails, and harmless ripple eels below the surface. Joyful secret discovery, safe magical nature, no pointy ears, no danger, no text.",
+    "image": "images/2026-06-14-manual-10-mirthcap-lookingglass-village-briarwings-over-loo.png",
+    "date": "2026-06-14",
+    "batch": "Fictional World",
+    "slot": "manual-10",
+    "model": "codex-builtin-imagegen",
+    "size": "landscape",
+    "world": {
+      "name": "Mirthcap Lookingglass Village",
+      "description": "A whimsical storybook pocket-world where tiny villagers live inside jewel-colored mushroom houses, using tea-table infrastructure, checkerboard paths, and playful scale-shifted garden objects as everyday civic life.",
+      "continuity": "Mirthcap Lookingglass Village canon: jewel-colored mushroom homes, tiny original villagers, checkerboard paths, teacup lanterns, pocket-watch details, moss terraces, oversized garden scale, warm whimsical daily life, and no recognizable Alice/copyrighted characters. Mirthcap villagers are tiny human-like people, not elves; use rounded human ears or hide ears under caps, curls, bonnets, or shawls. Finnel Buttonby is the recovered round-eared child linked to prophecy. Luma Purl is Finnel’s next-door neighbor and friend, related to Mossabet Purl. Hearthpetal Thicket is a lush forest beyond the village where healing herbs grow. Briarwing drakes are friendly winged horse-dragon-like forest creatures; individuals can vary in color. Lookingglass Pond is a clear reflective pond near Mirthcap with friendly aquatic and amphibious life including glassfish, lilyback turtles, pond salamanders, frog-like reed creatures, jewel-shelled snails, and harmless ripple eels.",
+      "entryDescription": "Luma and Finnel ride the yellow and blue briarwing drakes low over Lookingglass Pond, passing friendly pond creatures as they carry herbs back to Doctor Marlow."
+    }
   }
 ]
