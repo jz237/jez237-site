@@ -268,5 +268,23 @@
       "continuity": "Preserves Veyraxis Bloomrift's vertical basalt petals, suspended brine lenses, shell-mantled reefminds, nacre membranes, pressure-light bowls, living gauges, alien vegetation, cyan storm light, red pressure pulses, and amber glow.",
       "entryDescription": "Juvenile reefmind learners cross a breathing capillary bridge at Low Rift Nursery under the guidance of taller attendants, using amber pressure-light bowls as crossing signals."
     }
+  },
+  {
+    "id": "2026-06-14-morning-veyraxis-bloomrift-floating-pollen-harvest",
+    "title": "Veyraxis Bloomrift: Floating Pollen Harvest",
+    "tests": "Weekly world: Veyraxis Bloomrift. World-life image for 2026-06-14 morning slot; catalog-only fictional-world entry showing reefmind pollen harvesting at Amber Fan Market while preserving the basalt, nacre membrane, pressure-light, alien vegetation, cyan storm light, and amber glow canon.",
+    "prompt": "Create a realistic photographed/cinematic daily-life image set in Veyraxis Bloomrift, showing Floating Pollen Harvest at the upper ledges of Amber Fan Market: reefmind inhabitants gather buoyant amber pollen sacs from slow-rooted amber fans using wet ceramic scoops, woven vascular fiber nets, flexing nacre membrane baskets, and small amber pressure-light bowls. Preserve the weekly world canon: vertical basalt petals, suspended brine lenses, upward blue-black vapor rivers, grown basalt and nacre membrane infrastructure, translucent shell-mantled reefminds with tripod root-limbs and ribbon sensory fans, pressure-light technology, alien vegetation, storm-filtered cyan light, bruised violet shadows, pearl mist, amber glow, red pressure-light pulses, gill-like doors, breathing bridges, living crystal pressure gauges, and everyday non-human social routines. Make it look like real camera photography of an alien society, not illustration or concept art. Avoid humans, astronauts, Earth animals, Earth streets, cars, spaceships, readable text, signs, labels, logos, poster layouts, prompt cards, watermarks, and dancing.\n\nReusable template: Create a realistic photographed/cinematic daily-life image set in [WORLD_NAME], showing [EVERYDAY SCENE] at [LOCATION], with [INHABITANTS], [LOCAL MATERIALS], [VEGETATION], [INFRASTRUCTURE], and [TIME_OF_DAY] lighting. Preserve the world geography, settlements, transit/infrastructure logic, vegetation, life forms, materials/technology, palette, lighting, recurring motifs, and hard avoid rules; vary the exact activity, viewpoint, weather, props, and social moment while staying inside the canon. Make it look like a real camera captured an alien society, not an illustration or prompt card.\n\nSource photo needed: none.\n\nWhat to preserve: the Veyraxis Bloomrift world name, vertical basalt petals, suspended brine lenses, upward vapor rivers, grown basalt and nacre membrane infrastructure, reefmind body plan, pressure-light technology, alien vegetation, storm-filtered cyan and amber palette, gill-like doors, breathing bridges, shell-mantle silhouettes, hanging brine droplets, living crystal pressure gauges, spiral root-limb tracks, and communal light-harvest bowls.\n\nWhat to change: the exact daily-life subject, location, time of day, crowd arrangement, camera viewpoint, weather intensity, infrastructure focus, props, and specific reefmind behavior can change while preserving the same world bible.\n\nExample substitution: Create a realistic photographed daily-life image set in Veyraxis Bloomrift, showing brine-lens cleaners repairing a nursery skylight at Low Rift Nursery during violet storm dusk, with reefminds anchoring on wet basalt, nacre membranes flexing overhead, living crystal gauges, red pulse lichens, frond lungs, pearl mist, and amber pressure-light bowls.",
+    "image": "images/2026-06-14-morning-veyraxis-bloomrift-floating-pollen-harvest.png",
+    "date": "2026-06-14",
+    "batch": "Daily Prompt",
+    "slot": "morning",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "world": {
+      "name": "Veyraxis Bloomrift",
+      "description": "A living basalt-and-membrane alien world where glass-shelled reefminds inhabit floating mineral blooms, harvest pressure-light, and move through vascular wind channels.",
+      "continuity": "Preserves Veyraxis Bloomrift canon: vertical basalt petals, suspended brine lenses, reefmind body plans, nacre membranes, pressure-light bowls, alien vegetation, cyan storm light, amber glow, and red pressure pulses.",
+      "entryDescription": "Reefmind harvesters gather buoyant amber pollen sacs from slow-rooted amber fans on the upper ledges of Amber Fan Market."
+    }
   }
 ]
