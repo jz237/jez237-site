@@ -221,7 +221,7 @@ function makeActor(c, r, kind){
     invuln: 0, stunT: 0, deadT: 0,
     jitter: 0.96 + rnd() * 0.08,
     lastC: c, lastR: r,
-    digT: 0,
+    digT: 0, squashT: 0,
   };
 }
 
@@ -382,6 +382,7 @@ function onPlayerLand(a){
     spawnParticles(a.x, a.y + .45, 6, {color: ['#7d5230', '#915e36', '#a06e42'], spd: 2.4, ang: -Math.PI / 2, spread: 2.2, life: .4, size: 3, grav: 26});
     shake = Math.max(shake, .12);
   }
+  if (a.fellFrom != null && a.fellFrom < a.y - 1.0) a.squashT = 0.15;
   a.fellFrom = null;
   AUDIO.sfx('land');
 }
@@ -1137,6 +1138,7 @@ function update(dt){
   // hit-pause: freeze entity sim for a few frames on big impacts (deterministic under step)
   if (hitStop > 0){ hitStop = Math.max(0, hitStop - dt); return; }
   levelTime += dt;
+  if (player.squashT > 0) player.squashT = Math.max(0, player.squashT - dt);
 
   if (player.state === 'dead'){
     player.deadT += dt;
@@ -1333,6 +1335,14 @@ function drawTorch(d){
   ctx.fillStyle = 'rgba(255,120,30,.8)'; ctx.beginPath(); ctx.ellipse(fx, fy, 5 * fl, 10 * fl, 0, 0, 7); ctx.fill();
   ctx.fillStyle = 'rgba(255,205,70,.95)'; ctx.beginPath(); ctx.ellipse(fx, fy + 2, 3 * fl, 6.5 * fl, 0, 0, 7); ctx.fill();
   ctx.fillStyle = 'rgba(255,250,210,1)'; ctx.beginPath(); ctx.ellipse(fx, fy + 3, 1.5, 3.5 * fl, 0, 0, 7); ctx.fill();
+  // rising embers
+  for (let i = 0; i < 3; i++){
+    const t = (clock * 0.7 + i * 0.37 + d.c * 0.11) % 1;
+    const ey = fy - t * 30, ex = fx + Math.sin((t + i) * 9) * 4;
+    ctx.globalAlpha = (1 - t) * 0.8; ctx.fillStyle = i % 2 ? '#ffd27a' : '#ff8a3a';
+    ctx.fillRect(ex, ey, 2, 2);
+  }
+  ctx.globalAlpha = 1;
   ctx.restore();
 }
 function drawDecor(){
@@ -1383,6 +1393,8 @@ function drawActor(a){
   if (a.state === 'dead'){ ctx.globalAlpha = Math.max(0, 1 - a.deadT); footY -= a.deadT * 10; }
   if (a.state === 'stun'){ ctx.globalAlpha = 0.6 + 0.2 * Math.sin(gameTime * 16); }
   if (a.invuln > 0 && Math.floor(gameTime * 16) % 2) ctx.globalAlpha *= 0.4;
+  // landing squash-and-stretch (juice)
+  if (a.squashT > 0){ const s = a.squashT / 0.15; ctx.translate(cx2, footY); ctx.scale(1 + 0.18 * s, 1 - 0.22 * s); ctx.translate(-cx2, -footY); }
   ctx.translate(cx2, footY - h);
   if (a.dir < 0){ ctx.translate(w, 0); ctx.scale(-1, 1); }
   ctx.drawImage(img, 0, 0, w, h);
@@ -1532,6 +1544,17 @@ function render(){
       const my = VIEW_H * (0.5 + 0.18 * Math.sin(clock * 0.2 + i));
       glow(mx / TILE, (my - HUD_H) / TILE, 150, 'rgba(120,150,200,0.05)', 1);
     }
+    // drifting fireflies (slow glowing motes that wander the cave)
+    ctx.globalCompositeOperation = 'lighter';
+    for (let i = 0; i < 13; i++){
+      const fx = (i * 173.1 + Math.sin(clock * 0.3 + i * 1.3) * 60 + clock * (5 + i % 4 * 2)) % VIEW_W;
+      const fy = HUD_H + 30 + ((i * 91.7 + Math.sin(clock * 0.5 + i) * 40) % (VIEW_H - HUD_H - 60));
+      const a = 0.18 + 0.18 * (0.5 + 0.5 * Math.sin(clock * 2.2 + i * 2));
+      const warm = i % 3 === 0;
+      glow(fx / TILE, (fy - HUD_H) / TILE, 7, warm ? 'rgba(255,210,120,' + a + ')' : 'rgba(120,230,210,' + a + ')', 1);
+      ctx.globalAlpha = a + 0.2; ctx.fillStyle = warm ? '#fff0c8' : '#cffff5'; ctx.fillRect(fx | 0, fy | 0, 1, 1);
+    }
+    ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over';
   }
 
   ctx.save();
