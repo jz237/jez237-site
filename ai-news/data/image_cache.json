@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-14T00:00:01.698605+00:00",
+  "updatedAt": "2026-06-14T00:19:04.421568+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -10324,6 +10324,22 @@
     "https://www.theverge.com/ai-artificial-intelligence/949601/amazon-anthropic-fablemythos-government-ban": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/01/STK269_ANTHROPIC_2_A.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
       "checkedAt": "2026-06-13T22:00:01.413539+00:00"
+    },
+    "https://github.com/BerriAI/litellm/releases/tag/v1.89.0": {
+      "image": "https://opengraph.githubassets.com/1a96245655b47976f7e5cd71fd6aff87c69b60e2020bf0e1fab0f425bb6eb5db/BerriAI/litellm/releases/tag/v1.89.0",
+      "checkedAt": "2026-06-14T00:19:04.421568+00:00"
+    },
+    "https://techcrunch.com/2026/06/13/meta-reportedly-moves-to-unwind-2b-manus-deal-after-beijings-demand": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/07/GettyImages-2194278734.jpg?w=1024",
+      "checkedAt": "2026-06-14T00:19:04.421568+00:00"
+    },
+    "https://simonwillison.net/2026/Jun/13/luau-wasm": {
+      "image": "",
+      "checkedAt": "2026-06-14T00:19:04.421568+00:00"
+    },
+    "https://simonwillison.net/2026/Jun/13/sqlite-column-provenance": {
+      "image": "",
+      "checkedAt": "2026-06-14T00:19:04.421568+00:00"
     }
   }
 }
