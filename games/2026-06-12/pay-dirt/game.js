@@ -1189,32 +1189,77 @@ function py(v){ return v * TILE + HUD_H; }          // tile-units -> logical px 
 function drawTile(img, c, r){ ctx.drawImage(img, c * TILE, r * TILE + HUD_H); }
 
 /* parallax cave backdrop, baked per level */
-let bg = null;
+let bg = null, bloomCv = null, bloomCx = null;
 function buildBackdrop(){
   bg = ART.cv(VIEW_W, VIEW_H);
   const x = ART.cx(bg), r = ART.rng(1234 + levelIndex * 97 + (mode === 'daily' ? 555 : 0));
-  const g = x.createLinearGradient(0, 0, 0, VIEW_H);
-  g.addColorStop(0, '#3a2f50'); g.addColorStop(.55, '#2a2040'); g.addColorStop(1, '#1a1228');
-  x.fillStyle = g; x.fillRect(0, 0, VIEW_W, VIEW_H);
-  // far rock humps
-  x.fillStyle = 'rgba(90,76,120,.32)';
-  for (let i = 0; i < 7; i++){
-    const cx2 = r() * VIEW_W, w = 120 + r() * 200, h = 80 + r() * 160;
-    x.beginPath(); x.ellipse(cx2, VIEW_H - 40 + r() * 60, w, h, 0, Math.PI, 0); x.fill();
+  const W = VIEW_W, H = VIEW_H;
+  const lift = (cx2, cy, rad, col, a) => {
+    const rg = x.createRadialGradient(cx2, cy, 0, cx2, cy, rad);
+    rg.addColorStop(0, col); rg.addColorStop(1, 'rgba(0,0,0,0)');
+    x.save(); x.globalCompositeOperation = 'lighter'; x.globalAlpha = a;
+    x.fillStyle = rg; x.fillRect(cx2 - rad, cy - rad, rad * 2, rad * 2); x.restore();
+  };
+
+  // 1) deep cave gradient
+  let g = x.createLinearGradient(0, 0, 0, H);
+  g.addColorStop(0, '#1b2440'); g.addColorStop(.45, '#161527'); g.addColorStop(1, '#0b0914');
+  x.fillStyle = g; x.fillRect(0, 0, W, H);
+
+  // 2) distant cavern light (far openings glowing cold blue)
+  lift(W * 0.5, H * 0.30, H * 0.62, 'rgba(58,116,158,.5)', 1);
+  lift(W * 0.17, H * 0.24, H * 0.34, 'rgba(44,92,134,.4)', 1);
+  lift(W * 0.84, H * 0.40, H * 0.34, 'rgba(50,84,124,.34)', 1);
+
+  // 3) waterfalls drifting through the far light
+  for (let i = 0; i < 3; i++){
+    const wx = W * (0.28 + 0.46 * r()), ww = 16 + r() * 26;
+    const wg = x.createLinearGradient(0, 30, 0, H * 0.72);
+    wg.addColorStop(0, 'rgba(160,205,235,0)'); wg.addColorStop(.35, 'rgba(150,200,230,.16)'); wg.addColorStop(1, 'rgba(120,170,210,.03)');
+    x.fillStyle = wg; x.fillRect(wx, 30, ww, H * 0.64);
+    x.fillStyle = 'rgba(190,225,245,.08)'; x.fillRect(wx + ww * 0.3, 30, ww * 0.25, H * 0.6);
   }
-  // mid stalactites
-  x.fillStyle = 'rgba(58,48,80,.55)';
-  for (let i = 0; i < 14; i++){
-    const sx = r() * VIEW_W, w = 14 + r() * 26, h = 40 + r() * 120;
-    x.beginPath(); x.moveTo(sx - w / 2, 0); x.lineTo(sx + w / 2, 0); x.lineTo(sx, h); x.closePath(); x.fill();
+
+  // 4) far rock-wall silhouettes (humps, lower so the light reads as depth behind)
+  x.fillStyle = 'rgba(38,44,72,.62)';
+  for (let i = 0; i < 6; i++){ const cx2 = r() * W, w = 150 + r() * 230, h = 90 + r() * 150; x.beginPath(); x.ellipse(cx2, H - 20 + r() * 80, w, h, 0, Math.PI, 0); x.fill(); }
+
+  // 5) glowing crystal clusters
+  for (let i = 0; i < 6; i++){
+    const cx2 = 50 + r() * (W - 100), cy = H * 0.42 + r() * H * 0.4, teal = r() < 0.55;
+    const col = teal ? '#3fd2c7' : '#9a6cff';
+    lift(cx2, cy, 44, teal ? 'rgba(63,210,199,.4)' : 'rgba(154,108,255,.4)', 1);
+    for (let k = 0; k < 4; k++){
+      const dx = (r() - .5) * 28, dh = 13 + r() * 22, dw = 4 + r() * 5;
+      x.globalAlpha = .55; x.fillStyle = col;
+      x.beginPath(); x.moveTo(cx2 + dx, cy - dh); x.lineTo(cx2 + dx + dw, cy); x.lineTo(cx2 + dx, cy + dh * 0.4); x.lineTo(cx2 + dx - dw, cy); x.closePath(); x.fill();
+      x.globalAlpha = .5; x.fillStyle = '#fff'; x.fillRect(cx2 + dx - 1, cy - dh * 0.5 | 0, 2, dh * 0.4);
+    }
+    x.globalAlpha = 1;
   }
-  // crystal glints (static)
-  for (let i = 0; i < 28; i++){
-    x.globalAlpha = .2 + r() * .4;
-    x.fillStyle = r() < .5 ? '#3fd2c7' : '#ffd23f';
-    const gx = r() * VIEW_W, gy = 40 + r() * (VIEW_H - 80), s = 1 + r() * 2;
-    x.fillRect(gx, gy, s, s);
+
+  // 6) stalactites (top) + stalagmites (bottom)
+  x.fillStyle = 'rgba(34,30,54,.85)';
+  for (let i = 0; i < 16; i++){ const sx = r() * W, w = 14 + r() * 30, h = 44 + r() * 150; x.beginPath(); x.moveTo(sx - w / 2, 0); x.lineTo(sx + w / 2, 0); x.lineTo(sx, h); x.closePath(); x.fill(); }
+  for (let i = 0; i < 9; i++){ const sx = r() * W, w = 22 + r() * 40, h = 40 + r() * 120; x.beginPath(); x.moveTo(sx - w / 2, H); x.lineTo(sx + w / 2, H); x.lineTo(sx, H - h); x.closePath(); x.fill(); }
+
+  // 7) hanging vines
+  for (let i = 0; i < 9; i++){
+    const vx = r() * W, vl = 50 + r() * 150;
+    x.strokeStyle = 'rgba(46,74,44,.55)'; x.lineWidth = 2; x.beginPath(); x.moveTo(vx, 0);
+    for (let y = 0; y < vl; y += 8) x.lineTo(vx + Math.sin(y * 0.18 + i) * 5, y);
+    x.stroke();
+    x.fillStyle = 'rgba(64,104,54,.55)';
+    for (let y = 14; y < vl; y += 18){ const lx = vx + Math.sin(y * 0.18 + i) * 5; x.beginPath(); x.ellipse(lx + 3, y, 4, 2, 0.5, 0, 7); x.fill(); }
   }
+
+  // 8) god-ray light shafts (subtle, additive)
+  x.save(); x.globalCompositeOperation = 'lighter';
+  for (let i = 0; i < 4; i++){ const rx = W * 0.28 + i * W * 0.14 + r() * 30; x.globalAlpha = 0.035 + 0.025 * r(); x.fillStyle = '#9fc0e6'; x.beginPath(); x.moveTo(rx, 0); x.lineTo(rx + 55, 0); x.lineTo(rx + 150, H); x.lineTo(rx + 60, H); x.closePath(); x.fill(); }
+  x.restore();
+
+  // 9) faint floating specks baked into depth
+  for (let i = 0; i < 40; i++){ x.globalAlpha = .08 + r() * .18; x.fillStyle = r() < .5 ? '#8fb0d0' : '#d0b070'; x.fillRect(r() * W | 0, r() * H | 0, 1, 1); }
   x.globalAlpha = 1;
 }
 
@@ -1478,6 +1523,21 @@ function render(){
     // faint danger underglow so guards read at a glance
     for (const gu of guards) if (gu.state !== 'dead') glow(gu.x, gu.y + .15, 26, 'rgba(255,60,80,' + (gu.state === 'stun' ? .1 : .22) + ')', 1);
     for (const p of particles) if (p.glow) glow(p.x, p.y, p.size * 3.5, hexA(p.color, .6), 1);
+    ctx.restore();
+
+    // bloom — downscale + blur the scene and add it back so bright things glow (painterly haze)
+    const bw = VIEW_W >> 1, bh = VIEW_H >> 1;
+    if (!bloomCv){ bloomCv = ART.cv(bw, bh); bloomCx = bloomCv.getContext('2d'); }
+    bloomCx.setTransform(1, 0, 0, 1, 0, 0);
+    bloomCx.clearRect(0, 0, bw, bh);
+    bloomCx.filter = 'blur(2.5px)';
+    bloomCx.drawImage(canvas, 0, 0, canvas.width, canvas.height, 0, 0, bw, bh);
+    bloomCx.filter = 'none';
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+    ctx.globalAlpha = 0.28;
+    ctx.imageSmoothingEnabled = true;
+    ctx.drawImage(bloomCv, 0, 0, VIEW_W, VIEW_H);
     ctx.restore();
   }
 
