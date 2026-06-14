@@ -39,6 +39,9 @@
     }
     .hero, main, footer { max-width: 1180px; margin: 0 auto; }
     .hero {
+      position: static;
+      z-index: auto;
+      backdrop-filter: none;
       padding: 46px 22px 24px;
       background: linear-gradient(180deg, rgba(255,255,255,.94), rgba(233,248,252,.88)) !important;
       border: 1px solid rgba(216,232,239,.9) !important;
@@ -65,6 +68,76 @@
     }
     main { padding: 26px 22px 70px; }
     .world + .world { margin-top: 34px; }
+    .world-hero {
+      position: relative;
+      overflow: hidden;
+      min-height: min(72vh, 720px);
+      border: 1px solid rgba(216,232,239,.86);
+      border-radius: 8px;
+      background: #05070a;
+      box-shadow: var(--shadow);
+      margin-bottom: 18px;
+      isolation: isolate;
+    }
+    .world-hero img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -2;
+    }
+    .world-hero.portrait img { object-fit: contain; background: #05070a; }
+    .world-hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background:
+        linear-gradient(90deg, rgba(2,8,19,.78), rgba(2,8,19,.34) 52%, rgba(2,8,19,.08)),
+        linear-gradient(0deg, rgba(2,8,19,.7), transparent 42%);
+      pointer-events: none;
+    }
+    .world-hero-content {
+      display: flex;
+      min-height: inherit;
+      flex-direction: column;
+      justify-content: flex-end;
+      max-width: 680px;
+      padding: clamp(22px, 5vw, 48px);
+      color: #f7fbff;
+    }
+    .world-hero-kicker {
+      color: #9be4ff;
+      text-transform: uppercase;
+      font-size: .78rem;
+      letter-spacing: .14em;
+      font-weight: 850;
+    }
+    .world-hero h2 {
+      margin: 8px 0 10px;
+      color: #fff;
+      font-size: clamp(2.2rem, 6vw, 5.4rem);
+      letter-spacing: -.05em;
+      line-height: .9;
+      text-shadow: 0 18px 40px rgba(0,0,0,.45);
+    }
+    .world-hero p { margin: 0; color: rgba(241,248,255,.9); font-weight: 560; }
+    .world-hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 18px;
+    }
+    .world-hero-meta span {
+      border: 1px solid rgba(255,255,255,.24);
+      border-radius: 999px;
+      background: rgba(5,7,10,.44);
+      color: rgba(247,251,255,.9);
+      padding: 7px 10px;
+      backdrop-filter: blur(10px);
+      font-size: .86rem;
+    }
     .world-head {
       display: flex;
       justify-content: space-between;
@@ -151,6 +224,13 @@
     .lightbox.actual .lightbox-stage { align-items: flex-start; justify-content: flex-start; }
     .lightbox.actual .lightbox-stage img { max-width: none; max-height: none; cursor: zoom-out; }
     @media (max-width: 680px) {
+      .world-hero { min-height: 62vh; }
+      .world-hero::after {
+        background:
+          linear-gradient(0deg, rgba(2,8,19,.82), rgba(2,8,19,.2) 70%),
+          linear-gradient(90deg, rgba(2,8,19,.44), rgba(2,8,19,.12));
+      }
+      .world-hero-content { padding: 22px; }
       .world-head { display: block; }
       .world-count { display: inline-block; margin-top: 10px; }
       .grid { grid-template-columns: 1fr; }
@@ -223,6 +303,26 @@
           </article>`;
       }
 
+      function heroHtml(world) {
+        const item = world.items.find((candidate) => /first view/i.test(candidate.title || '') || /^(world|manual)-0?1$/i.test(candidate.slot || '')) || world.items[0];
+        const src = imageUrl(item.image);
+        const portrait = String(item.size || '').includes('portrait') || String(item.size || '').includes('1536') || String(item.image || '').includes('almanac');
+        const subtitle = world.description || item.world?.entryDescription || item.tests || '';
+        return `
+          <div class="world-hero${portrait ? ' portrait' : ''}">
+            <img src="${escapeHtml(src)}" alt="${escapeHtml(item.title)}" loading="lazy">
+            <div class="world-hero-content">
+              <div class="world-hero-kicker">Fictional world</div>
+              <h2>${escapeHtml(world.name)}</h2>
+              ${subtitle ? `<p>${escapeHtml(subtitle)}</p>` : ''}
+              <div class="world-hero-meta">
+                <span>${world.items.length} image${world.items.length === 1 ? '' : 's'}</span>
+                <span>Hero: ${escapeHtml(item.title)}</span>
+              </div>
+            </div>
+          </div>`;
+      }
+
       function render(items) {
         const groups = new Map();
         items.forEach((item) => {
@@ -241,6 +341,7 @@
         }
         worldsRoot.innerHTML = Array.from(groups.values()).map((world) => `
           <section class="world">
+            ${heroHtml(world)}
             <div class="world-head">
               <div>
                 <h2>${escapeHtml(world.name)}</h2>
