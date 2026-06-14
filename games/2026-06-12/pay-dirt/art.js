@@ -26,34 +26,47 @@ const ART = (() => {
   function buildTiles(){
     let c, x, r;
 
-    // diggable brick — earthy, beveled courses, speckle
-    c = cv(T, T); x = cx(c); r = rng(7);
-    x.fillStyle = '#6b4326'; x.fillRect(0, 0, T, T);
-    const bh = 9;
-    for (let row = 0, ry = 0; ry < T; row++, ry += bh){
-      const off = (row % 2) ? -12 : 0;
-      for (let bx = off; bx < T; bx += 24){
-        x.fillStyle = '#7d5230'; x.fillRect(bx + 1, ry + 1, 22, bh - 2);
-        x.fillStyle = '#915e36'; x.fillRect(bx + 1, ry + 1, 22, 2);          // top highlight
-        x.fillStyle = '#532f1a'; x.fillRect(bx + 1, ry + bh - 2, 22, 1);     // bottom shadow
+    // ---- carved stone-block tile builder (beveled blocks, mortar, cracks, veins) ----
+    function stoneTile(p){
+      const cc = cv(T, T), xx = cx(cc), rr = rng(p.seed);
+      xx.fillStyle = p.mortar; xx.fillRect(0, 0, T, T);          // mortar shows in the gaps
+      const bh = 12;
+      for (let row = 0, ry = 0; ry < T; row++, ry += bh){
+        const off = (row % 2) ? -10 : 1;                          // running bond
+        for (let bx = off; bx < T; bx += 19){
+          const x0 = bx + 1, y0 = ry + 1, w = 18, h = bh - 2;
+          xx.fillStyle = p.base; xx.fillRect(x0, y0, w, h);
+          xx.fillStyle = p.hi;   xx.fillRect(x0, y0, w, 2); xx.fillRect(x0, y0, 2, h);      // lit top+left bevel
+          xx.fillStyle = p.sh;   xx.fillRect(x0, y0 + h - 2, w, 2); xx.fillRect(x0 + w - 2, y0, 2, h); // dark bottom+right
+          // speckle
+          xx.globalAlpha = .5;
+          for (let k = 0; k < 7; k++){ xx.fillStyle = rr() < .5 ? p.sh : p.hi; xx.fillRect(x0 + (rr() * w) | 0, y0 + (rr() * h) | 0, 1, 1); }
+          xx.globalAlpha = 1;
+          // occasional crack
+          if (rr() < .35){ xx.strokeStyle = p.crack; xx.lineWidth = 1; xx.beginPath(); let px2 = x0 + 3 + rr() * (w - 6), py2 = y0 + 1; xx.moveTo(px2, py2); for (let s = 0; s < 3; s++){ px2 += (rr() - .5) * 6; py2 += h / 3; xx.lineTo(px2, py2); } xx.stroke(); }
+          // gold vein fleck
+          if (p.vein && rr() < .22){ xx.fillStyle = '#e9c64a'; xx.fillRect(x0 + 3 + (rr() * (w - 6)) | 0, y0 + 3 + (rr() * (h - 6)) | 0, 2, 1); }
+        }
       }
+      return cc;
     }
-    x.globalAlpha = .5;
-    for (let i = 0; i < 50; i++){ x.fillStyle = (r() < .5 ? '#3c2212' : '#a06e42'); x.fillRect((r() * T) | 0, (r() * T) | 0, 1, 1); }
-    x.globalAlpha = 1;
-    tiles.brick = c;
+    tiles.brick = stoneTile({ seed: 7,  mortar: '#2c1d10', base: '#7a5836', hi: '#9a7548', sh: '#4e3720', crack: 'rgba(20,10,4,.6)', vein: true });
+    tiles.solid = stoneTile({ seed: 13, mortar: '#181628', base: '#3c3a52', hi: '#54506e', sh: '#26233a', crack: 'rgba(8,6,16,.6)', vein: false });
 
-    // solid rock — cool, faceted, undiggable
-    c = cv(T, T); x = cx(c); r = rng(13);
-    x.fillStyle = '#3a3550'; x.fillRect(0, 0, T, T);
-    for (let i = 0; i < 10; i++){
-      x.fillStyle = ['#332e47', '#433d5e', '#2c2840'][i % 3];
-      const w = 8 + r() * 16, h = 6 + r() * 12;
-      x.fillRect((r() * (T - w)) | 0, (r() * (T - h)) | 0, w | 0, h | 0);
+    // mossy-cap variants (used on the TOP row of a platform — context-aware in the renderer)
+    function withMossCap(src){
+      const cc = cv(T, T), xx = cx(cc), rr = rng(99);
+      xx.drawImage(src, 0, 0);
+      xx.fillStyle = '#4a7a32'; xx.fillRect(0, 0, T, 4);                  // moss band
+      xx.fillStyle = '#5f9a40'; xx.fillRect(0, 0, T, 2);                  // lit moss
+      xx.fillStyle = '#356026'; xx.fillRect(0, 4, T, 1);                  // moss underline
+      for (let i = 0; i < T; i += 2){ if (rr() < .5){ const bl = 2 + (rr() * 4) | 0; xx.fillStyle = rr() < .5 ? '#6fb34a' : '#4a7a32'; xx.fillRect(i, 4 - bl + 1, 1, bl); } } // grass blades
+      // a few dangling moss bits
+      for (let k = 0; k < 4; k++){ const mx = (rr() * T) | 0; xx.fillStyle = '#3c6a28'; xx.fillRect(mx, 4, 1, 2 + (rr() * 3) | 0); }
+      return cc;
     }
-    x.fillStyle = 'rgba(150,140,180,.25)'; x.fillRect(0, 0, T, 2);
-    x.fillStyle = 'rgba(0,0,0,.35)'; x.fillRect(0, T - 2, T, 2);
-    tiles.solid = c;
+    tiles.brickTop = withMossCap(tiles.brick);
+    tiles.solidTop = withMossCap(tiles.solid);
 
     // ladder — clean rails + rounded rungs. Rungs are spaced 12px (centres 6/18/30)
     // so vertically-stacked tiles tile SEAMLESSLY with perfectly even spacing.
