@@ -506,9 +506,9 @@
   {
     "id": "2026-06-14-manual-14-mirthcap-lookingglass-village-marlow-s-final-beds",
     "title": "Mirthcap Lookingglass Village: Marlow’s Final Bedside",
-    "tests": "Manual world catalog entry from #ai-photos; shows an extremely aged Doctor Marlow on his final bed surrounded by concerned Mirthcap residents, with older Finnel closest by his side.",
+    "tests": "Manual world catalog entry from #ai-photos; shows an extremely aged Doctor Marlow on his final bed surrounded by concerned Mirthcap residents, with older Finnel closest by his side. Corrected to remove an accidental second Doctor Marlow lookalike; canon has only Marlow in the bed.",
     "prompt": "Create a solemn cinematic storybook fantasy image set years after Finnel and Luma’s wedding. Doctor Marlow Dewmoss is now very old and lying on his dying bed inside his mushroom-hut healing room, surrounded by concerned Mirthcap residents. Older Finnel Buttonby is closest by Marlow’s side. Marlow is a much more aged tiny male elder healer with long narrow weathered face, hooked nose, white brows, silver mossy beard, frail but peaceful, propped on a moss bed. Finnel is an adult, recognizable but older, curly hair hiding rounded ears, warm grave expression, holding Marlow’s hand. Luma, Mayor Tansy, Finnel’s parents, Luma’s parents, and varied Mirthcap residents surround the bed with concern and respect. Warm dim teacup lanterns, moss hearth embers, hanging herbs, thimble jars, moonroot bundles, remedy books, pocketwatch charms. No pointy ears, no elf features, no gore, no modern medical equipment, no text.",
-    "image": "images/2026-06-14-manual-14-mirthcap-lookingglass-village-marlow-s-final-beds.png",
+    "image": "images/2026-06-14-manual-14-mirthcap-lookingglass-village-marlow-s-final-beds-corrected.png",
     "date": "2026-06-14",
     "batch": "Fictional World",
     "slot": "manual-14",
