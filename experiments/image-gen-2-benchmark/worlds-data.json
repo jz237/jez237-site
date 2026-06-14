@@ -250,5 +250,23 @@
       "continuity": "Preserves the Veyraxis Bloomrift canon: vertical basalt petals, brine lenses, nacre membranes, reefmind body plan, pressure-light technology, alien vegetation, and cyan/amber storm lighting.",
       "entryDescription": "Reefmind maintenance workers reseal a breathing membrane dock above a suspended brine lens before a pressure storm."
     }
+  },
+  {
+    "id": "2026-06-14-morning-veyraxis-bloomrift-root-limb-school-crossing",
+    "title": "Veyraxis Bloomrift: Root-Limb School Crossing",
+    "tests": "Weekly-world life image for 2026-06-14 morning slot; catalog-only Veyraxis Bloomrift entry showing a juvenile reefmind school crossing while preserving basalt, nacre membrane, pressure-light, alien ecology, cyan/amber lighting, and realistic cinematic photography.",
+    "prompt": "Create a realistic photographed/cinematic daily-life image set in Veyraxis Bloomrift, showing Root-Limb School Crossing at Low Rift Nursery: juvenile reefmind learners with translucent shell mantles, tripod root-limbs, ribbon sensory fans, tiny amber throat sacs, and symbiotic tendril satchels cross a breathing capillary bridge under the guidance of taller reefmind attendants. Preserve the weekly world bible: wet vertical basalt petals, suspended brine lenses, silver mud terraces, nacre membrane guardrails, amber pressure-light crossing bowls, living crystal pressure gauges, spiral root-limb tracks, brine-lens cleaner creatures, semi-transparent frond lungs, spiral salt antlers, black moss veils, floating pollen sacs, mineral orchids, slow-rooted amber fans, pulse-lit waynodes, woven vascular fibers, gill-like nursery doors, pearl mist, upward blue-black vapor rivers, storm-filtered cyan morning light, bruised violet shadows, milky opal membranes, amber internal glow, and red pressure-light pulses. Render it as a real 45mm documentary photograph with wet material wear, condensation, atmospheric depth, believable scale cues, and naturalistic alien anatomy. Avoid humans, astronauts, Earth animals, Earth school props, Earth streets, cars, spaceships, readable signage, logos, poster/document layouts, illustration, concept art, watermark, signature, and dancing.\n\nWeekly world: Veyraxis Bloomrift.\n\nSource photo needed: none.\n\nReusable fill-in-the-blank template: Create a realistic photographed/cinematic daily-life image set in Veyraxis Bloomrift, showing [EVERYDAY SCENE] at [LOCATION], with reefmind inhabitants, grown basalt, nacre membrane, pressure-light infrastructure, alien vegetation, and storm-filtered cyan/amber lighting. Preserve the world bible exactly while varying the daily activity and viewpoint. Avoid humans, spaceships, Earth props, readable Earth signage, logos, dancing, and illustration/concept-art rendering.\n\nWhat to preserve: Veyraxis Bloomrift world name, vertical basalt-petal geography, suspended brine lenses, reefmind body plan, pressure-light tools, nacre membrane infrastructure, living gauges, alien vegetation, cyan/violet/amber/red palette, shell-mantle silhouettes, brine droplets, breathing bridges, and realistic photographic rendering.\n\nWhat to change: vary the daily-life activity, settlement location, time of day, camera position, crowd rhythm, tools, props, weather intensity, and immediate lived-in details while staying inside the same alien ecology and material culture.\n\nExample substitution: [EVERYDAY SCENE] = juvenile reefmind learners crossing a breathing capillary bridge; [LOCATION] = Low Rift Nursery; include taller attendants, amber pressure-light crossing bowls, living crystal gauges, nacre guardrails, brine-lens cleaner creatures, and storm-filtered cyan morning mist.",
+    "image": "images/2026-06-14-morning-veyraxis-bloomrift-root-limb-school-crossing.png",
+    "date": "2026-06-14",
+    "batch": "Daily Prompt",
+    "slot": "morning",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "world": {
+      "name": "Veyraxis Bloomrift",
+      "description": "A living basalt-and-membrane alien world where glass-shelled reefminds inhabit floating mineral blooms, harvest pressure-light, and move through vascular wind channels.",
+      "continuity": "Preserves Veyraxis Bloomrift's vertical basalt petals, suspended brine lenses, shell-mantled reefminds, nacre membranes, pressure-light bowls, living gauges, alien vegetation, cyan storm light, red pressure pulses, and amber glow.",
+      "entryDescription": "Juvenile reefmind learners cross a breathing capillary bridge at Low Rift Nursery under the guidance of taller attendants, using amber pressure-light bowls as crossing signals."
+    }
   }
 ]
