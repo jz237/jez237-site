@@ -358,5 +358,23 @@
       "continuity": "Mirthcap Lookingglass Village canon: jewel-colored mushroom homes, tiny original villagers, checkerboard paths, teacup lanterns, pocket-watch details, moss terraces, oversized garden scale, warm whimsical daily life, and no recognizable Alice/copyrighted characters. The Under-Cap Circle is the civic council, with Tansy leading practical village decisions.",
       "entryDescription": "A round-table council meeting inside Tansy’s mushroom hut, showing the Under-Cap Circle and the village’s cozy civic life."
     }
+  },
+  {
+    "id": "2026-06-14-manual-05-mirthcap-lookingglass-village-doctor-maribel-dewm",
+    "title": "Mirthcap Lookingglass Village: Doctor Maribel Dewmoss",
+    "tests": "Manual world catalog entry from #ai-photos; establishes Doctor Maribel Dewmoss as Mirthcap’s holistic herb-healer and spiritual remedy keeper.",
+    "prompt": "Create a portrait of Doctor Maribel Dewmoss, the Mirthcap Lookingglass Village holistic and spiritual herb-healer. She is a gentle perceptive tiny elder with warm eyes, silver-brown braided hair, moss-green shawl, mushroom-fiber apron, tiny spectacles, herb-stained fingers, crescent brass herb knife, luminous pollen-bell necklace, corked thimble vials, and a teacup mortar and pestle. Show her in a cozy healing nook built into a spotted mushroom hut with thimble jars, pressed clover, sugar-snap vine bundles, luminous pollen bells, rose-hip beads, dewdrop grasses, teacup burners, warm lantern glow, moss treatment stool, and a small altar shelf of stones, petals, and pocketwatch charms.",
+    "image": "images/2026-06-14-manual-05-mirthcap-lookingglass-village-doctor-maribel-dewm.png",
+    "date": "2026-06-14",
+    "batch": "Fictional World",
+    "slot": "manual-05",
+    "model": "codex-builtin-imagegen",
+    "size": "portrait",
+    "world": {
+      "name": "Mirthcap Lookingglass Village",
+      "description": "A whimsical storybook pocket-world where tiny villagers live inside jewel-colored mushroom houses, using tea-table infrastructure, checkerboard paths, and playful scale-shifted garden objects as everyday civic life.",
+      "continuity": "Mirthcap Lookingglass Village canon: jewel-colored mushroom homes, tiny original villagers, checkerboard paths, teacup lanterns, pocket-watch details, moss terraces, oversized garden scale, warm whimsical daily life, and no recognizable Alice/copyrighted characters. Doctor Maribel Dewmoss is the village herb-healer and spiritual remedy keeper, specializing in garden-herb remedies and calming ritual care.",
+      "entryDescription": "A character portrait of Doctor Maribel Dewmoss, the herb-healer and spiritual remedy keeper in her warm apothecary nook."
+    }
   }
 ]
