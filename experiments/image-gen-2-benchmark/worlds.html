@@ -375,22 +375,44 @@
         viewer.classList.add('open');
         viewer.classList.remove('actual');
         viewer.setAttribute('aria-hidden', 'false');
+        stage.scrollTo(0, 0);
         document.body.style.overflow = 'hidden';
         close.focus({ preventScroll: true });
+        if (image.complete) fitViewerImage();
+      }
+      function fitViewerImage() {
+        if (!viewer.classList.contains('open') || viewer.classList.contains('actual')) return;
+        stage.scrollTo(0, 0);
+      }
+      function centerActualImage() {
+        if (!viewer.classList.contains('actual')) return;
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            const left = Math.max(0, (image.offsetWidth - stage.clientWidth) / 2);
+            const top = Math.max(0, (image.offsetHeight - stage.clientHeight) / 2);
+            stage.scrollTo(left, top);
+          });
+        });
       }
       function closeViewer() {
         viewer.classList.remove('open', 'actual');
         viewer.setAttribute('aria-hidden', 'true');
         document.body.style.overflow = '';
         image.removeAttribute('src');
+        stage.scrollTo(0, 0);
       }
       image.addEventListener('click', (event) => {
         event.stopPropagation();
         viewer.classList.toggle('actual');
         if (viewer.classList.contains('actual')) {
-          stage.scrollLeft = Math.max(0, (image.naturalWidth - stage.clientWidth) / 2);
-          stage.scrollTop = Math.max(0, (image.naturalHeight - stage.clientHeight) / 2);
+          centerActualImage();
+        } else {
+          fitViewerImage();
         }
+      });
+      image.addEventListener('load', () => {
+        if (viewer.classList.contains('actual')) centerActualImage();
+        else fitViewerImage();
       });
       stage.addEventListener('click', (event) => { if (event.target === stage) closeViewer(); });
       close.addEventListener('click', closeViewer);
