@@ -1043,6 +1043,7 @@ function loadLevelData(rows){
   shake = 0; hitStop = 0; flash = 0; deathFlash = 0;
   digBuffer = 0; runDustT = 0;
   buildBackdrop();
+  computeDecor();
   // intro banner
   if (mode === 'daily') banner = {text: 'DAILY DIG', sub: dailyDate || LEVELS.dailyDateUTC(), life: 2.4};
   else banner = {text: 'CLAIM ' + (levelIndex + 1), sub: (LEVELS.names[levelIndex] || '').toUpperCase(), life: 2.4};
@@ -1189,33 +1190,156 @@ function py(v){ return v * TILE + HUD_H; }          // tile-units -> logical px 
 function drawTile(img, c, r){ ctx.drawImage(img, c * TILE, r * TILE + HUD_H); }
 
 /* parallax cave backdrop, baked per level */
-let bg = null;
+let bg = null, bloomCv = null, bloomCx = null;
 function buildBackdrop(){
   bg = ART.cv(VIEW_W, VIEW_H);
   const x = ART.cx(bg), r = ART.rng(1234 + levelIndex * 97 + (mode === 'daily' ? 555 : 0));
-  const g = x.createLinearGradient(0, 0, 0, VIEW_H);
-  g.addColorStop(0, '#3a2f50'); g.addColorStop(.55, '#2a2040'); g.addColorStop(1, '#1a1228');
-  x.fillStyle = g; x.fillRect(0, 0, VIEW_W, VIEW_H);
-  // far rock humps
-  x.fillStyle = 'rgba(90,76,120,.32)';
-  for (let i = 0; i < 7; i++){
-    const cx2 = r() * VIEW_W, w = 120 + r() * 200, h = 80 + r() * 160;
-    x.beginPath(); x.ellipse(cx2, VIEW_H - 40 + r() * 60, w, h, 0, Math.PI, 0); x.fill();
+  const W = VIEW_W, H = VIEW_H;
+  const lift = (cx2, cy, rad, col, a) => {
+    const rg = x.createRadialGradient(cx2, cy, 0, cx2, cy, rad);
+    rg.addColorStop(0, col); rg.addColorStop(1, 'rgba(0,0,0,0)');
+    x.save(); x.globalCompositeOperation = 'lighter'; x.globalAlpha = a;
+    x.fillStyle = rg; x.fillRect(cx2 - rad, cy - rad, rad * 2, rad * 2); x.restore();
+  };
+
+  // 1) deep cave gradient
+  let g = x.createLinearGradient(0, 0, 0, H);
+  g.addColorStop(0, '#1b2440'); g.addColorStop(.45, '#161527'); g.addColorStop(1, '#0b0914');
+  x.fillStyle = g; x.fillRect(0, 0, W, H);
+
+  // 2) distant cavern light (far openings glowing cold blue)
+  lift(W * 0.5, H * 0.30, H * 0.62, 'rgba(58,116,158,.5)', 1);
+  lift(W * 0.17, H * 0.24, H * 0.34, 'rgba(44,92,134,.4)', 1);
+  lift(W * 0.84, H * 0.40, H * 0.34, 'rgba(50,84,124,.34)', 1);
+
+  // 3) waterfalls drifting through the far light
+  for (let i = 0; i < 3; i++){
+    const wx = W * (0.28 + 0.46 * r()), ww = 16 + r() * 26;
+    const wg = x.createLinearGradient(0, 30, 0, H * 0.72);
+    wg.addColorStop(0, 'rgba(160,205,235,0)'); wg.addColorStop(.35, 'rgba(150,200,230,.16)'); wg.addColorStop(1, 'rgba(120,170,210,.03)');
+    x.fillStyle = wg; x.fillRect(wx, 30, ww, H * 0.64);
+    x.fillStyle = 'rgba(190,225,245,.08)'; x.fillRect(wx + ww * 0.3, 30, ww * 0.25, H * 0.6);
   }
-  // mid stalactites
-  x.fillStyle = 'rgba(58,48,80,.55)';
-  for (let i = 0; i < 14; i++){
-    const sx = r() * VIEW_W, w = 14 + r() * 26, h = 40 + r() * 120;
-    x.beginPath(); x.moveTo(sx - w / 2, 0); x.lineTo(sx + w / 2, 0); x.lineTo(sx, h); x.closePath(); x.fill();
+
+  // 4) far rock-wall silhouettes (humps, lower so the light reads as depth behind)
+  x.fillStyle = 'rgba(38,44,72,.62)';
+  for (let i = 0; i < 6; i++){ const cx2 = r() * W, w = 150 + r() * 230, h = 90 + r() * 150; x.beginPath(); x.ellipse(cx2, H - 20 + r() * 80, w, h, 0, Math.PI, 0); x.fill(); }
+
+  // 5) glowing crystal clusters
+  for (let i = 0; i < 6; i++){
+    const cx2 = 50 + r() * (W - 100), cy = H * 0.42 + r() * H * 0.4, teal = r() < 0.55;
+    const col = teal ? '#3fd2c7' : '#9a6cff';
+    lift(cx2, cy, 44, teal ? 'rgba(63,210,199,.4)' : 'rgba(154,108,255,.4)', 1);
+    for (let k = 0; k < 4; k++){
+      const dx = (r() - .5) * 28, dh = 13 + r() * 22, dw = 4 + r() * 5;
+      x.globalAlpha = .55; x.fillStyle = col;
+      x.beginPath(); x.moveTo(cx2 + dx, cy - dh); x.lineTo(cx2 + dx + dw, cy); x.lineTo(cx2 + dx, cy + dh * 0.4); x.lineTo(cx2 + dx - dw, cy); x.closePath(); x.fill();
+      x.globalAlpha = .5; x.fillStyle = '#fff'; x.fillRect(cx2 + dx - 1, cy - dh * 0.5 | 0, 2, dh * 0.4);
+    }
+    x.globalAlpha = 1;
   }
-  // crystal glints (static)
-  for (let i = 0; i < 28; i++){
-    x.globalAlpha = .2 + r() * .4;
-    x.fillStyle = r() < .5 ? '#3fd2c7' : '#ffd23f';
-    const gx = r() * VIEW_W, gy = 40 + r() * (VIEW_H - 80), s = 1 + r() * 2;
-    x.fillRect(gx, gy, s, s);
+
+  // 6) stalactites (top) + stalagmites (bottom)
+  x.fillStyle = 'rgba(34,30,54,.85)';
+  for (let i = 0; i < 16; i++){ const sx = r() * W, w = 14 + r() * 30, h = 44 + r() * 150; x.beginPath(); x.moveTo(sx - w / 2, 0); x.lineTo(sx + w / 2, 0); x.lineTo(sx, h); x.closePath(); x.fill(); }
+  for (let i = 0; i < 9; i++){ const sx = r() * W, w = 22 + r() * 40, h = 40 + r() * 120; x.beginPath(); x.moveTo(sx - w / 2, H); x.lineTo(sx + w / 2, H); x.lineTo(sx, H - h); x.closePath(); x.fill(); }
+
+  // 7) hanging vines
+  for (let i = 0; i < 9; i++){
+    const vx = r() * W, vl = 50 + r() * 150;
+    x.strokeStyle = 'rgba(46,74,44,.55)'; x.lineWidth = 2; x.beginPath(); x.moveTo(vx, 0);
+    for (let y = 0; y < vl; y += 8) x.lineTo(vx + Math.sin(y * 0.18 + i) * 5, y);
+    x.stroke();
+    x.fillStyle = 'rgba(64,104,54,.55)';
+    for (let y = 14; y < vl; y += 18){ const lx = vx + Math.sin(y * 0.18 + i) * 5; x.beginPath(); x.ellipse(lx + 3, y, 4, 2, 0.5, 0, 7); x.fill(); }
   }
+
+  // 8) god-ray light shafts (subtle, additive)
+  x.save(); x.globalCompositeOperation = 'lighter';
+  for (let i = 0; i < 4; i++){ const rx = W * 0.28 + i * W * 0.14 + r() * 30; x.globalAlpha = 0.035 + 0.025 * r(); x.fillStyle = '#9fc0e6'; x.beginPath(); x.moveTo(rx, 0); x.lineTo(rx + 55, 0); x.lineTo(rx + 150, H); x.lineTo(rx + 60, H); x.closePath(); x.fill(); }
+  x.restore();
+
+  // 9) faint floating specks baked into depth
+  for (let i = 0; i < 40; i++){ x.globalAlpha = .08 + r() * .18; x.fillStyle = r() < .5 ? '#8fb0d0' : '#d0b070'; x.fillRect(r() * W | 0, r() * H | 0, 1, 1); }
   x.globalAlpha = 1;
+}
+
+/* ================= decorative set-dressing (deterministic per level) ================= */
+let decor = [];
+function computeDecor(){
+  decor = [];
+  const rr = ART.rng(4242 + levelIndex * 131 + (mode === 'daily' ? 777 : 0));
+  const isBlk = (c, r) => { const t = tileAt(c, r); return t === '#' || t === 'X' || t === 'B' || t === 'C'; };
+  const occ = new Set();
+  for (const g of golds) occ.add(g.c + ',' + g.r);
+  for (const p of powerups) occ.add(p.c + ',' + p.r);
+  let torches = 0, plants = 0, vines = 0, lastTorchC = -9;
+  for (let r = 0; r < ROWS; r++) for (let c = 0; c < COLS; c++){
+    if (!isBlk(c, r)) continue;
+    const aboveAir = !isBlk(c, r - 1) && tileAt(c, r - 1) !== 'H' && tileAt(c, r - 1) !== 'E' && tileAt(c, r - 1) !== '-';
+    if (aboveAir && plants < 11 && !occ.has(c + ',' + (r - 1)) && rr() < 0.22){ decor.push({type: 'plant', c, r, k: (rr() * 3) | 0, s: rr()}); plants++; }
+    if (!isBlk(c, r + 1) && tileAt(c, r + 1) !== 'H' && vines < 7 && rr() < 0.13){ decor.push({type: 'vine', c, r, len: 14 + rr() * 22, s: rr()}); vines++; }
+    // standing brazier on a platform END (top exposed + a side open), spaced out
+    if (aboveAir && torches < 5 && c - lastTorchC >= 4 && !occ.has(c + ',' + (r - 1))){
+      const endL = tileAt(c - 1, r) === '.', endR = tileAt(c + 1, r) === '.';
+      if ((endL || endR) && rr() < 0.6){ decor.push({type: 'torch', c, r}); torches++; lastTorchC = c; }
+    }
+  }
+}
+
+function drawPlant(d){
+  const bx = d.c * TILE, by = d.r * TILE + HUD_H;
+  if (d.k === 0){ // grass tuft
+    ctx.strokeStyle = '#5f9a40'; ctx.lineWidth = 1.5;
+    for (let i = -2; i <= 2; i++){ ctx.beginPath(); ctx.moveTo(bx + 18 + i * 3, by); ctx.quadraticCurveTo(bx + 18 + i * 3 + i, by - 9, bx + 18 + i * 4, by - 13); ctx.stroke(); }
+  } else if (d.k === 1){ // mushroom
+    ctx.fillStyle = '#caa05a'; ctx.fillRect(bx + 16, by - 5, 3, 5);
+    ctx.fillStyle = '#d6533f'; ctx.beginPath(); ctx.ellipse(bx + 17, by - 6, 6, 4, 0, Math.PI, 0); ctx.fill();
+    ctx.fillStyle = '#ffd2b0'; ctx.fillRect(bx + 14, by - 7, 1, 1); ctx.fillRect(bx + 20, by - 6, 1, 1);
+  } else { // flowering bush
+    ctx.fillStyle = '#3f7a34'; ctx.beginPath(); ctx.ellipse(bx + 18, by - 4, 7, 4, 0, 0, 7); ctx.fill();
+    ctx.fillStyle = '#ffd23f'; ctx.fillRect(bx + 16, by - 6, 2, 2); ctx.fillStyle = '#ff7ba8'; ctx.fillRect(bx + 20, by - 5, 2, 2);
+  }
+}
+function drawVine(d){
+  const topx = d.c * TILE + 6 + d.s * 24, topy = (d.r + 1) * TILE + HUD_H;
+  ctx.strokeStyle = '#3f6a2e'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(topx, topy);
+  for (let y = 0; y <= d.len; y += 6){ const sway = Math.sin(gameTime * 1.4 + y * 0.2 + d.c) * 2 * (y / d.len); ctx.lineTo(topx + sway, topy + y); }
+  ctx.stroke();
+  ctx.fillStyle = '#4f8a3a';
+  for (let y = 9; y < d.len; y += 10){ const sway = Math.sin(gameTime * 1.4 + y * 0.2 + d.c) * 2 * (y / d.len); ctx.beginPath(); ctx.ellipse(topx + sway + 2, topy + y, 3, 2, 0.6, 0, 7); ctx.fill(); }
+}
+function drawTorch(d){
+  const bx = d.c * TILE + 18, by = d.r * TILE + HUD_H;   // top-centre of the ledge cell
+  // wooden post + iron cup
+  ctx.fillStyle = '#3a2a16'; ctx.fillRect(bx - 2, by - 15, 4, 15);
+  ctx.fillStyle = '#241a0e'; ctx.fillRect(bx - 2, by - 15, 1, 15);
+  ctx.fillStyle = '#5a4326'; ctx.fillRect(bx - 4, by - 18, 8, 4);
+  ctx.fillStyle = '#6e5430'; ctx.fillRect(bx - 4, by - 18, 8, 1);
+  // flame (additive, flickering)
+  const fx = bx, fy = by - 22, fl = 0.7 + 0.3 * Math.sin(gameTime * 14 + d.c * 3) + 0.1 * Math.sin(gameTime * 31 + d.c);
+  ctx.save(); ctx.globalCompositeOperation = 'lighter';
+  ctx.fillStyle = 'rgba(255,120,30,.8)'; ctx.beginPath(); ctx.ellipse(fx, fy, 5 * fl, 10 * fl, 0, 0, 7); ctx.fill();
+  ctx.fillStyle = 'rgba(255,205,70,.95)'; ctx.beginPath(); ctx.ellipse(fx, fy + 2, 3 * fl, 6.5 * fl, 0, 0, 7); ctx.fill();
+  ctx.fillStyle = 'rgba(255,250,210,1)'; ctx.beginPath(); ctx.ellipse(fx, fy + 3, 1.5, 3.5 * fl, 0, 0, 7); ctx.fill();
+  ctx.restore();
+}
+function drawDecor(){
+  for (const d of decor){
+    if (d.type === 'vine') drawVine(d);
+    else if (d.type === 'plant') drawPlant(d);
+    else if (d.type === 'torch') drawTorch(d);
+  }
+}
+function topExitCell(){ let e = exitCells[0]; for (const c2 of exitCells) if (c2.r < e.r) e = c2; return e; }
+function drawPortal(){
+  if (!exitRevealed || !exitCells.length) return;
+  const e = topExitCell(); const cx2 = e.c * TILE + 18, cy = e.r * TILE + HUD_H + 18;
+  const a = 0.5 + 0.3 * Math.sin(gameTime * 4);
+  ctx.save(); ctx.globalCompositeOperation = 'lighter';
+  ctx.strokeStyle = 'rgba(150,255,240,' + a + ')'; ctx.lineWidth = 2;
+  for (let i = 0; i < 3; i++){ ctx.beginPath(); ctx.arc(cx2, cy, 6 + i * 4, gameTime * 2 + i * 2, gameTime * 2 + i * 2 + 3.4); ctx.stroke(); }
+  ctx.restore();
 }
 
 /* one animation-state -> sprite pose */
@@ -1315,6 +1439,15 @@ function renderTitle(){
   ctx.fillStyle = vg; ctx.fillRect(0, 0, VIEW_W, VIEW_H);
 }
 
+// is the block above this cell a rendered-solid block? (if not, this top is exposed → moss cap)
+function coveredAbove(c, r){
+  const t = tileAt(c, r - 1);
+  if (t === '#' || t === 'B') return !isDug(c, r - 1) && !isBlasted(c, r - 1);
+  if (t === 'C') return !isCrumbleGone(c, r - 1) && !isBlasted(c, r - 1);
+  if (t === 'T') return true;
+  return t === 'X';
+}
+
 function render(){
   if (state === 'title'){ renderTitle(); return; }
   ctx.clearRect(0, 0, VIEW_W, VIEW_H);
@@ -1360,9 +1493,9 @@ function render(){
             if (cr){ ctx.globalAlpha = 0.3 + 0.3 * Math.sin(gameTime * 20); ctx.fillStyle = '#1a0e06';
               ctx.fillRect(c * TILE + 2, r * TILE + HUD_H + 2, TILE - 4, TILE - 4); ctx.globalAlpha = 1; }
           }
-          else drawTile(T.brick, c, r);
+          else drawTile(coveredAbove(c, r) ? T.brick : T.brickTop, c, r);
         }
-        else if (t === 'X') drawTile(T.solid, c, r);
+        else if (t === 'X') drawTile(coveredAbove(c, r) ? T.solid : T.solidTop, c, r);
         else if (t === 'H') drawTile(T.ladder, c, r);
         else if (t === '-') drawTile(T.bar, c, r);
         else if (t === 'E' && exitRevealed) drawTile(T.exit, c, r);
@@ -1392,6 +1525,10 @@ function render(){
         }
       }
     }
+
+    // decorative set-dressing (behind gold/entities) + glowing exit portal
+    drawDecor();
+    drawPortal();
 
     // power-ups: icon + bob + halo
     for (const pu of powerups){
@@ -1475,9 +1612,28 @@ function render(){
     for (const gd of golds) if (!gd.taken && !gd.held) glow(gd.c + .5, gd.r + .5, 26, 'rgba(255,200,60,.3)', 1);
     if (exitRevealed){ const pulse = 0.35 + 0.2 * Math.sin(gameTime * 5); for (const e of exitCells) glow(e.c + .5, e.r + .5, 38, 'rgba(63,210,199,' + pulse + ')', 1); }
     for (const h of holes.values()) glow(h.c + .5, h.r + .6, 20, 'rgba(255,90,40,.22)', 1);
+    // torch pools
+    for (const d of decor) if (d.type === 'torch'){ const fl = 0.85 + 0.15 * Math.sin(gameTime * 14 + d.c * 3); glow(d.c + .5, d.r - 0.5, 58 * fl, 'rgba(255,150,50,.5)', 1); }
+    // exit portal aura
+    if (exitRevealed && exitCells.length){ const e = topExitCell(); glow(e.c + .5, e.r + .5, 44, 'rgba(80,230,210,' + (0.4 + 0.2 * Math.sin(gameTime * 4)) + ')', 1); }
     // faint danger underglow so guards read at a glance
     for (const gu of guards) if (gu.state !== 'dead') glow(gu.x, gu.y + .15, 26, 'rgba(255,60,80,' + (gu.state === 'stun' ? .1 : .22) + ')', 1);
     for (const p of particles) if (p.glow) glow(p.x, p.y, p.size * 3.5, hexA(p.color, .6), 1);
+    ctx.restore();
+
+    // bloom — downscale + blur the scene and add it back so bright things glow (painterly haze)
+    const bw = VIEW_W >> 1, bh = VIEW_H >> 1;
+    if (!bloomCv){ bloomCv = ART.cv(bw, bh); bloomCx = bloomCv.getContext('2d'); }
+    bloomCx.setTransform(1, 0, 0, 1, 0, 0);
+    bloomCx.clearRect(0, 0, bw, bh);
+    bloomCx.filter = 'blur(2.5px)';
+    bloomCx.drawImage(canvas, 0, 0, canvas.width, canvas.height, 0, 0, bw, bh);
+    bloomCx.filter = 'none';
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+    ctx.globalAlpha = 0.28;
+    ctx.imageSmoothingEnabled = true;
+    ctx.drawImage(bloomCv, 0, 0, VIEW_W, VIEW_H);
     ctx.restore();
   }
 
@@ -1551,50 +1707,97 @@ function hexA(hex, a){
   return 'rgba(' + ((n >> 16) & 255) + ',' + ((n >> 8) & 255) + ',' + (n & 255) + ',' + a + ')';
 }
 
+function roundRect(x, y, w, h, r){
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath();
+}
+function drawHeart(cx, cy, s, filled){
+  ctx.save(); ctx.translate(cx, cy); ctx.scale(s / 18, s / 18);
+  ctx.beginPath();
+  ctx.moveTo(0, 5);
+  ctx.bezierCurveTo(-2, -3, -10, -3, -10, 3.5);
+  ctx.bezierCurveTo(-10, 9, -2, 13, 0, 16);
+  ctx.bezierCurveTo(2, 13, 10, 9, 10, 3.5);
+  ctx.bezierCurveTo(10, -3, 2, -3, 0, 5);
+  ctx.closePath();
+  if (filled){ ctx.fillStyle = '#ff4f6b'; ctx.fill(); ctx.fillStyle = 'rgba(255,255,255,.45)'; ctx.beginPath(); ctx.ellipse(-4, 1, 2.4, 1.6, -0.5, 0, 7); ctx.fill(); }
+  else { ctx.strokeStyle = 'rgba(255,120,140,.45)'; ctx.lineWidth = 2; ctx.stroke(); }
+  ctx.restore();
+}
+function drawGemIcon(cx, cy, s, col){
+  ctx.fillStyle = col;
+  ctx.beginPath(); ctx.moveTo(cx, cy - s); ctx.lineTo(cx + s * .8, cy - s * .2); ctx.lineTo(cx, cy + s); ctx.lineTo(cx - s * .8, cy - s * .2); ctx.closePath(); ctx.fill();
+  ctx.fillStyle = 'rgba(255,255,255,.6)'; ctx.fillRect(cx - s * .3, cy - s * .5, s * .3, 2);
+}
+function drawHotbar(){
+  if (!player) return;
+  const slots = [];
+  if (player.tnt > 0) slots.push({icon: ART.PUPS[1], badge: '×' + player.tnt, col: '#ff5c33', ratio: 1});
+  if (player.speedT > 0) slots.push({icon: ART.PUPS[2], col: '#3fd2c7', ratio: player.speedT / 8});
+  if (player.cloakT > 0) slots.push({icon: ART.PUPS[3], col: '#b07fff', ratio: player.cloakT / 6});
+  if (player.magnetT > 0) slots.push({icon: ART.PUPS[4], col: '#ffd23f', ratio: player.magnetT / 8});
+  if (player.shovelT > 0) slots.push({icon: ART.PUPS[5], col: '#7fd24a', ratio: player.shovelT / 10});
+  if (!slots.length) return;
+  const sw = 44, gap = 8, totalW = slots.length * sw + (slots.length - 1) * gap;
+  let sx = (VIEW_W - totalW) / 2; const sy = VIEW_H - sw - 12;
+  for (const s of slots){
+    roundRect(sx, sy, sw, sw, 8); ctx.fillStyle = 'rgba(14,10,20,.82)'; ctx.fill();
+    ctx.lineWidth = 2; ctx.strokeStyle = s.col; ctx.stroke();
+    ctx.drawImage(s.icon, sx + 10, sy + 7, 24, 24);
+    ctx.fillStyle = 'rgba(255,255,255,.15)'; ctx.fillRect(sx + 6, sy + sw - 9, sw - 12, 4);
+    ctx.fillStyle = s.col; ctx.fillRect(sx + 6, sy + sw - 9, (sw - 12) * Math.min(1, s.ratio), 4);
+    if (s.badge){ ctx.fillStyle = '#fff'; ctx.font = '800 12px Consolas, monospace'; ctx.textAlign = 'right'; ctx.textBaseline = 'alphabetic'; ctx.fillText(s.badge, sx + sw - 5, sy + 15); }
+    sx += sw + gap;
+  }
+}
 function drawHUD(){
-  ctx.fillStyle = 'rgba(10,7,16,.62)'; ctx.fillRect(0, 0, VIEW_W, HUD_H);
-  ctx.fillStyle = 'rgba(255,210,63,.25)'; ctx.fillRect(0, HUD_H - 2, VIEW_W, 2);
-  ctx.fillStyle = '#ffd23f';
-  ctx.font = '700 20px Consolas, monospace';
-  ctx.textBaseline = 'middle'; ctx.textAlign = 'left';
-  ctx.fillText('$' + String(score).padStart(6, '0'), 16, HUD_H / 2);
-  ctx.textAlign = 'center';
-  if (grid.length){
-    ctx.fillStyle = exitRevealed ? '#3fd2c7' : '#ffd23f';
-    const total = golds.length;
-    ctx.fillText(exitRevealed ? 'ESCAPE ↑' : ('GOLD ' + (total - goldLeft) + '/' + total), VIEW_W / 2, HUD_H / 2);
-  }
-  ctx.textAlign = 'right'; ctx.fillStyle = '#ffd23f';
-  let lifeStr = '';
-  for (let i = 0; i < lives; i++) lifeStr += '⛏';
-  ctx.fillText(lifeStr || '—', VIEW_W - 16, HUD_H / 2);
+  // framed top panel
+  const g = ctx.createLinearGradient(0, 0, 0, HUD_H);
+  g.addColorStop(0, 'rgba(22,15,30,.94)'); g.addColorStop(1, 'rgba(10,7,16,.8)');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, VIEW_W, HUD_H);
+  ctx.fillStyle = 'rgba(255,210,63,.38)'; ctx.fillRect(0, HUD_H - 2, VIEW_W, 2);
+  ctx.fillStyle = 'rgba(255,210,63,.1)'; ctx.fillRect(0, 0, VIEW_W, 1);
+  const cy = HUD_H / 2;
+  ctx.textBaseline = 'middle';
 
-  if (player){
-    ctx.font = '700 14px Consolas, monospace';
-    if (comboN > 1){
-      ctx.fillStyle = '#ff9d2e'; ctx.textAlign = 'center';
-      ctx.fillText('COMBO ×' + comboMult().toFixed(1).replace('.0', ''), VIEW_W / 2, HUD_H - 11);
-    }
-    // active power-ups as labeled countdown bars
-    const PUP = [
-      {t: player.speedT, max: 8, label: 'BOOTS', col: '#3fd2c7'},
-      {t: player.cloakT, max: 6, label: 'CLOAK', col: '#b07fff'},
-      {t: player.magnetT, max: 8, label: 'MAGNET', col: '#ffd23f'},
-      {t: player.shovelT, max: 10, label: 'SHOVEL', col: '#7fd24a'},
-    ];
-    let bx = 150;
-    ctx.textAlign = 'left'; ctx.font = '700 11px Consolas, monospace';
-    if (player.tnt > 0){ ctx.fillStyle = '#ff5c33'; ctx.fillText('TNT×' + player.tnt, bx, HUD_H / 2); bx += 56; }
-    for (const pu of PUP){
-      if (pu.t <= 0) continue;
-      const w = 58;
-      ctx.fillStyle = 'rgba(255,255,255,.12)'; ctx.fillRect(bx, HUD_H / 2 - 8, w, 6);
-      ctx.fillStyle = pu.col; ctx.fillRect(bx, HUD_H / 2 - 8, w * Math.min(1, pu.t / pu.max), 6);
-      ctx.fillStyle = pu.col; ctx.fillText(pu.label, bx, HUD_H / 2 + 8);
-      bx += w + 8;
-    }
-    if (mode === 'daily' && dailyDate){ ctx.fillStyle = '#9b8fa6'; ctx.textAlign = 'right'; ctx.font = '600 12px Consolas, monospace'; ctx.fillText('DAILY ' + dailyDate, VIEW_W - 16, HUD_H - 10); }
+  // lives as hearts
+  let hx = 16;
+  for (let i = 0, n = Math.min(lives, 6); i < n; i++){ drawHeart(hx + 8, cy, 16, true); hx += 21; }
+  hx += 6;
+
+  // gold counter with gem icon
+  if (grid.length){
+    const total = golds.length, got = total - goldLeft;
+    drawGemIcon(hx + 9, cy, 8, '#ffd23f');
+    ctx.fillStyle = '#ffe98a'; ctx.font = '800 17px Consolas, monospace'; ctx.textAlign = 'left';
+    ctx.fillText(got + '/' + total, hx + 22, cy + 1);
   }
+
+  // centre score
+  ctx.textAlign = 'center';
+  ctx.fillStyle = 'rgba(255,210,63,.65)'; ctx.font = '800 9px Consolas, monospace'; ctx.fillText('SCORE', VIEW_W / 2, 9);
+  ctx.fillStyle = '#fff'; ctx.font = '800 22px Consolas, monospace'; ctx.fillText(String(score).padStart(6, '0'), VIEW_W / 2, cy + 6);
+
+  // right: time / daily, escape flag
+  ctx.textAlign = 'right';
+  const tt = Math.max(0, levelTime | 0), mm = String((tt / 60) | 0).padStart(2, '0'), ss = String(tt % 60).padStart(2, '0');
+  ctx.fillStyle = 'rgba(216,207,228,.55)'; ctx.font = '800 9px Consolas, monospace'; ctx.fillText(mode === 'daily' ? ('DAILY ' + (dailyDate || '')) : 'TIME', VIEW_W - 16, 9);
+  ctx.fillStyle = '#d8cfe4'; ctx.font = '800 17px Consolas, monospace'; ctx.fillText(mm + ':' + ss, VIEW_W - 16, cy + 6);
+
+  // escape indicator when exit open
+  if (grid.length && exitRevealed){
+    ctx.textAlign = 'center'; ctx.fillStyle = '#3fd2c7'; ctx.font = '800 12px Consolas, monospace';
+    ctx.fillText('▲ ESCAPE', VIEW_W / 2 - 120, cy + 1);
+  }
+  // combo badge
+  if (comboN > 1){
+    ctx.textAlign = 'center'; ctx.fillStyle = '#ff9d2e'; ctx.font = '800 13px Consolas, monospace';
+    ctx.fillText('COMBO ×' + comboMult().toFixed(1).replace('.0', ''), VIEW_W / 2 + 120, cy + 1);
+  }
+
+  drawHotbar();
 }
 
 /* ================= fixed-timestep loop ================= */
