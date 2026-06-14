@@ -33,4 +33,8 @@ crisp outlined pixel sprites over a painterly bloomed cave. Loop: assess→criti
 - New scores: bg depth/parallax 7→8, tile detail 8→8.5, prop density 6→7, overall cohesion 7→8.
 - Biggest remaining gaps now: character animation life (still thin at scale), foreground framing layer, gem-collect juice, menu/HUD richness, and water/waterfall motion.
 
-### Iter 3 — picks: (a) foreground framing layer (dark, slightly blurred near rocks/foliage at screen edges + bottom corners, NOT obscuring play), (b) animated waterfall shimmer in bg, (c) gold-collect juice (sparkle burst + score-pop scale), (d) subtle platform top rim-light from the warm key.
+### Iter 3 — DONE. (a) foreground framing: soft top/bottom inner-shadow + dark drooping foliage in top corners (auto-skips the corner that holds a revealed exit so it's never hidden), (b) animated waterfall shimmer at the sides, (c) gold-collect juice: bigger gold-shard burst + white sparkle ring + scale-pop score popups. Verified all green, 0 errors, perf 0.45ms.
+- New scores: prop density 7→8, juice 7→8, overall cohesion 8→8.5, animation life 6→6.5.
+- Pushed checkpoint (iters 1-3).
+
+### Iter 4 — picks: (a) animated title logo (shine sweep / gentle bob) + richer attract scene, (b) menu panels art polish (ornate gold frame corners, textured bg), (c) guard "alert" eye-glow + readability, (d) gold/exit/torch slight bloom tuning so highlights pop more.
