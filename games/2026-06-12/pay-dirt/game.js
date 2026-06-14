@@ -1262,6 +1262,11 @@ function buildBackdrop(){
   // 9) faint floating specks baked into depth
   for (let i = 0; i < 40; i++){ x.globalAlpha = .08 + r() * .18; x.fillStyle = r() < .5 ? '#8fb0d0' : '#d0b070'; x.fillRect(r() * W | 0, r() * H | 0, 1, 1); }
   x.globalAlpha = 1;
+
+  // per-level mood tint so claims don't all look identical
+  const hues = ['rgba(60,90,150,', 'rgba(96,72,150,', 'rgba(48,116,124,', 'rgba(120,84,58,', 'rgba(72,108,90,'];
+  const h = hues[(mode === 'daily' ? 2 : levelIndex) % hues.length];
+  x.save(); x.globalCompositeOperation = 'overlay'; x.fillStyle = h + '0.16)'; x.fillRect(0, 0, W, H); x.restore();
 }
 
 /* ================= decorative set-dressing (deterministic per level) ================= */
@@ -1461,6 +1466,27 @@ function render(){
     ctx.fillRect(mx, my, 2, 2);
   }
 
+  // animated atmosphere: breathing god-ray shafts + slow drifting mist (adds life to the static backdrop)
+  if (grid.length){
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+    for (let i = 0; i < 4; i++){
+      const baseX = VIEW_W * (0.22 + i * 0.18);
+      const drift = Math.sin(clock * 0.15 + i * 1.7) * 40;
+      const a = 0.05 + 0.04 * (0.5 + 0.5 * Math.sin(clock * 0.6 + i * 2));
+      ctx.globalAlpha = a; ctx.fillStyle = '#acc8ec';
+      const rx = baseX + drift;
+      ctx.beginPath(); ctx.moveTo(rx, 0); ctx.lineTo(rx + 60, 0); ctx.lineTo(rx + 150, VIEW_H); ctx.lineTo(rx + 70, VIEW_H); ctx.closePath(); ctx.fill();
+    }
+    ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over';
+    // drifting mist blobs
+    for (let i = 0; i < 3; i++){
+      const mx = ((i * 420 + clock * (10 + i * 4)) % (VIEW_W + 300)) - 150;
+      const my = VIEW_H * (0.5 + 0.18 * Math.sin(clock * 0.2 + i));
+      glow(mx / TILE, (my - HUD_H) / TILE, 150, 'rgba(120,150,200,0.05)', 1);
+    }
+  }
+
   ctx.save();
   if (shake > 0){
     const s = shake * shake * 9;
@@ -1598,10 +1624,16 @@ function render(){
   /* ---------- lighting overlay ---------- */
   if (grid.length){
     ctx.save();
-    // subtle vignette only — the playfield stays brightly readable; the lantern adds warmth
-    const vg = ctx.createRadialGradient(VIEW_W / 2, VIEW_H / 2 + 20, VIEW_H * .55, VIEW_W / 2, VIEW_H / 2, VIEW_H * 1.05);
-    vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, 'rgba(0,0,0,.16)');
+    // cinematic vignette (stronger at edges/corners) — frames the action without crushing the centre
+    const vg = ctx.createRadialGradient(VIEW_W / 2, VIEW_H / 2 + 20, VIEW_H * .48, VIEW_W / 2, VIEW_H / 2, VIEW_H * 1.0);
+    vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(.7, 'rgba(6,4,12,.12)'); vg.addColorStop(1, 'rgba(4,3,10,.42)');
     ctx.fillStyle = vg; ctx.fillRect(0, 0, VIEW_W, VIEW_H);
+    // warm-key / cool-shadow colour grade for depth
+    ctx.save(); ctx.globalCompositeOperation = 'soft-light';
+    const gr = ctx.createLinearGradient(0, HUD_H, 0, VIEW_H);
+    gr.addColorStop(0, 'rgba(255,176,90,.28)'); gr.addColorStop(.55, 'rgba(120,110,150,.05)'); gr.addColorStop(1, 'rgba(40,80,150,.34)');
+    ctx.fillStyle = gr; ctx.fillRect(0, HUD_H, VIEW_W, VIEW_H - HUD_H);
+    ctx.restore();
     // additive lights — soft warm POOL on the ground around the player (keeps the sprite the focal point)
     ctx.globalCompositeOperation = 'lighter';
     if (player && player.state !== 'dead'){
