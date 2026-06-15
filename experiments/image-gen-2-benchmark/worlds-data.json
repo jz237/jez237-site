@@ -754,5 +754,41 @@
       "continuity": "Preserves Vesperglass reef-plates, tension spires, membrane habitats, mag-sled and ion-kite infrastructure, prism-frond ecology, ribbon-bodied inhabitants, copper-black coils, blue-white glare, and cyan/violet aurora weather.",
       "entryDescription": "A museum-style scientific field chart introducing the Vesperglass Array world bible through geography, habitat, inhabitants, infrastructure, ecology, materials, magnetic weather, and daily life."
     }
+  },
+  {
+    "id": "2026-06-15-afternoon-vesperglass-array-lumen-docks-ion-kite-repairs",
+    "title": "Vesperglass Array: Lumen Docks Ion-Kite Repairs",
+    "tests": "World continuity, non-paper cinematic daily-life scene, exact generated PNG provenance, R2 upload",
+    "prompt": "Create a realistic cinematic square photograph from the invented alien world Vesperglass Array, showing everyday work at Lumen Docks along the transparent mineral reef edge of a suspended megahabitat above a turbulent cobalt gas giant. Several non-human ribbon-bodied, fan-limbed inhabitants with translucent skin, dark sensory nodes, branching electroreceptor crests, six to ten delicate handling tendrils, and flexible pressure-wrap garments repair ion-kite rigs on a glass dock. Folded-kite repair drones hover beside copper-black induction coils, matte graphite tool trays, frost-edged airlocks, ceramic-white pressure ribs, worn hand-grip rails, luminous fluid conduits, and tether clamps polished by daily use. Far below, blue storm bands and cyan/violet aurora currents curve around the gas giant; blue-white glare refracts through Vesperglass panels while warm amber work lights pool around the crew. Make it feel photographed, practical, lived-in, and alien: believable lens depth, glass reflections/refractions, atmospheric scale cues, small scratches, condensation, tool wear, subtle dust, safety tethers, pressure membranes, and low-gravity body language. No human astronauts as the main society, no Earth city, no generic neon cyberpunk, no copyrighted sci-fi franchise cues, no mushroom/fairytale motifs, no brand logos, no readable text, no captions, no prompt card, no poster, no dancing.\n\nReusable prompt template: Create a realistic cinematic daily-life view from [WORLD NAME]: show [INHABITANTS] doing [EVERYDAY ACTIVITY] in [SPECIFIC LOCATION], preserving the world's canon geography, materials, infrastructure, body plans, lighting, and recurring motifs. Include tactile work details, environmental scale cues, practical tools, worn surfaces, and believable photographic lens depth. Avoid generic sci-fi, human-dominated society unless canon requires it, franchise references, logos, readable text artifacts, and prompt-card composition.\n\nSource photo needed: none.\n\nWhat to preserve: Vesperglass Array continuity: suspended transparent reef-plates above a cobalt gas giant, cyan/violet auroras, Vesperglass panels, copper-black induction coils, ceramic-white pressure ribs, pressure membranes, pulse-lit infrastructure, and ribbon-bodied electroceptive inhabitants with translucent pressure-wrap garments.\n\nWhat to change: focus this view on Lumen Docks repair labor, ion-kite rigs, folded-kite drones, dock tools, tether clamps, glass edge reflections, and warm work-light pools.\n\nExample substitution: [WORLD NAME] = Vesperglass Array; [INHABITANTS] = ribbon-bodied electroceptive dock workers; [EVERYDAY ACTIVITY] = repairing ion-kite rigs; [SPECIFIC LOCATION] = Lumen Docks along a transparent reef edge above the cobalt gas giant.",
+    "image": "images/2026-06-15-afternoon-vesperglass-array-lumen-docks-ion-kite-repairs.png",
+    "date": "2026-06-15",
+    "batch": "Daily Prompt",
+    "slot": "afternoon",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "world": {
+      "name": "Vesperglass Array",
+      "description": "A hard-sci-fi alien megahabitat of transparent reef-plates, pressure membranes, and electroceptive ribbon-bodied inhabitants suspended above a stormy cobalt gas giant.",
+      "continuity": "Preserves Vesperglass panels, cobalt gas-giant glare, cyan/violet auroras, copper-black induction coils, ion-kite infrastructure, and ribbon-bodied electroceptive inhabitants in pressure-wrap garments.",
+      "entryDescription": "Dock workers and folded-kite drones repair ion-kite rigs at Lumen Docks, showing the practical maintenance life that keeps the suspended habitat operating."
+    }
+  },
+  {
+    "id": "2026-06-15-1544-deep-interior-settlement",
+    "title": "Deep Interior Settlement",
+    "tests": "Shows a more populated area of the planet's deep interior below the Vesperglass Array.",
+    "prompt": "A wide storybook science-fantasy establishing scene of a more populated area of the deep interior on the planet below the Vesperglass Array: a twilight settlement built inside a resonance-safe canyon and cavern network, carved basalt, old ceramic, mineral glass, layered bridges, crowded balconies, market terraces, hanging tramways, water channels, prism-shade awnings, lantern gardens, glass-memory conduits glowing through walls, many adapted humanoid inhabitants, a few Veyrith emissaries, shafts of reflected Array light filtering from far overhead, populated but hushed old-world market energy, painterly realism, no text or signage.",
+    "image": "images/2026-06-15-1544-deep-interior-settlement.png",
+    "date": "2026-06-15",
+    "batch": "Manual #ai-photos",
+    "slot": "1544",
+    "model": "openai/gpt-image-2",
+    "size": "wide",
+    "world": {
+      "name": "The Vesperglass Array",
+      "description": "A wounded old world beneath a living orbital memory cathedral of vesperglass, inhabited by adapted humanoids and the glass-born Veyrith.",
+      "continuity": "The Veyrith communicate through glasslight resonance and are grown by the Vesperglass Array from memory, light, and harmonic pressure. Aurelian Voss, the First Glazier, taught glass how to remember; humanoids evolved elsewhere, then the Array changed them.",
+      "entryDescription": "A populated deep-interior twilight settlement carved into resonance-safe canyon stone below the Array, crowded with adapted humanoids, markets, bridges, water channels, and small Veyrith emissaries."
+    }
   }
 ]
