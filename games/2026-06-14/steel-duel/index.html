@@ -24,6 +24,7 @@
   .ov{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:30;
     background:rgba(4,7,12,.72);backdrop-filter:blur(3px);padding:18px}
   .ov.hidden{display:none}
+  #ovTitle{background:rgba(4,7,12,.42);backdrop-filter:none}
   .card{width:min(560px,94vw);background:var(--panel);border:1px solid var(--edge);
     border-radius:16px;padding:26px 26px 22px;text-align:center;box-shadow:0 24px 60px rgba(0,0,0,.55)}
   h1{margin:0 0 2px;font-size:clamp(34px,7vw,56px);letter-spacing:3px;
@@ -43,14 +44,16 @@
   .big{font-size:40px;font-weight:700;margin:6px 0 14px}
   .sb-row{display:flex;justify-content:space-between;padding:7px 12px;border-bottom:1px solid var(--edge);font-size:15px}
   #overScoreForm.hidden{display:none}
-  /* touch */
+  /* touch — twin sticks */
   #touch{position:fixed;inset:0;z-index:15;display:none;pointer-events:none}
-  #touch .pad{position:absolute;bottom:18px;display:flex;gap:10px;pointer-events:auto}
-  #touch .dpad{left:16px} #touch .act{right:16px}
-  .tbtn{width:62px;height:62px;border-radius:14px;background:rgba(20,27,40,.7);border:1px solid var(--edge);
-    color:var(--ink);font-size:22px;display:flex;align-items:center;justify-content:center;touch-action:none}
-  #tFire{width:84px;height:84px;border-radius:50%;background:rgba(58,42,18,.7);border-color:var(--amber);font-size:15px;letter-spacing:1px}
-  .colpad{display:flex;flex-direction:column;gap:10px;align-items:center}
+  .stick{position:absolute;bottom:26px;width:120px;height:120px;border-radius:50%;
+    background:rgba(20,27,40,.45);border:1px solid var(--edge);pointer-events:auto;touch-action:none}
+  #stickL{left:22px} #stickR{right:22px;border-color:var(--amber);background:rgba(58,42,18,.4)}
+  .knob{position:absolute;left:50%;top:50%;width:54px;height:54px;margin:-27px 0 0 -27px;border-radius:50%;
+    background:rgba(120,140,180,.6);border:1px solid rgba(255,255,255,.3)}
+  #stickRk{background:rgba(255,179,71,.6)}
+  .sticklbl{position:absolute;bottom:-17px;left:0;width:100%;text-align:center;font-size:10px;color:var(--dim)}
+  input[type=range]{accent-color:var(--amber)}
   .footer{margin-top:12px;color:var(--dim);font-size:11px}
   a{color:var(--teal)}
 </style>
@@ -70,8 +73,10 @@
       <p class="sub">HD remaster of Atari TANK (1974) · 2-player maze &amp; minefield</p>
       <button id="btnDuel" class="btn primary">⚔️ 2-PLAYER DUEL</button>
       <button id="btnCpu" class="btn">🤖 PLAY vs CPU</button>
-      <div class="opt">CPU difficulty
-        <select id="diffSel"><option value="easy">Easy</option><option value="normal" selected>Normal</option><option value="hard">Hard</option></select>
+      <div class="opt" style="flex-direction:column;gap:6px;margin-top:12px">
+        <div>CPU skill — <b id="diffLabel" style="color:var(--amber)">Seasoned (45)</b></div>
+        <input id="diffSlider" type="range" min="0" max="100" value="45" style="width:100%">
+        <div style="display:flex;justify-content:space-between;width:100%;font-size:10px;opacity:.6"><span>Stupid</span><span>Can't&nbsp;Defeat</span></div>
       </div>
       <div class="row" style="margin-top:12px">
         <button id="btnHow" class="btn">HOW TO PLAY</button>
@@ -87,12 +92,12 @@
       <h1 style="font-size:34px">HOW TO PLAY</h1>
       <p class="sub">Outscore your rival before the clock hits zero</p>
       <div class="keys">
-        <div><h3 class="p1">PLAYER 1</h3><b>W</b> forward · <b>S</b> reverse<br><b>A/D</b> steer · <b>Space</b> fire</div>
-        <div><h3 class="p2">PLAYER 2 / CPU</h3><b>↑</b> forward · <b>↓</b> reverse<br><b>←/→</b> steer · <b>Enter</b> fire</div>
+        <div><h3 class="p1">vs CPU&nbsp;(1P)</h3><b>W</b> drive · <b>A/D</b> steer<br><b>S</b> reverse<br><b>Mouse</b> aims turret<br><b>Click</b> / <b>Space</b> fire</div>
+        <div><h3 class="p2">2-PLAYER DUEL</h3>P1 <b>WASD</b> + <b>Space</b><br>P2 <b>↑ ↓ ← →</b> + <b>Enter</b><br><span style="opacity:.7">(barrels fire forward)</span></div>
       </div>
-      <p class="sub" style="margin-top:14px">Shells are stopped by walls. A hit (or a mine!) scores a point for your
-        opponent, then both tanks respawn. Mines never come back — bait your rival into them.
-        Press <b>P</b> to pause, <b>C</b> for 1974 mode, <b>M</b> to mute.</p>
+      <p class="sub" style="margin-top:14px">On mobile: <b>left stick</b> drives, <b>right stick</b> aims &amp; fires.
+        Shells are stopped by walls — and chip them, so walls can be blasted open. A hit, or driving your
+        rival into a mine, scores <i>them</i> a point; mines never come back. <b>P</b> pause · <b>C</b> 1974 mode · <b>M</b> mute.</p>
       <button id="btnHowBack" class="btn primary">BACK</button>
     </div>
   </div>
@@ -133,13 +138,10 @@
     </div>
   </div>
 
-  <!-- TOUCH -->
+  <!-- TOUCH (twin sticks) -->
   <div id="touch">
-    <div class="pad dpad">
-      <div class="colpad"><div id="tUp" class="tbtn">▲</div><div id="tDown" class="tbtn">▼</div></div>
-      <div class="colpad" style="justify-content:flex-end"><div style="display:flex;gap:10px"><div id="tLeft" class="tbtn">◀</div><div id="tRight" class="tbtn">▶</div></div></div>
-    </div>
-    <div class="pad act"><div id="tFire" class="tbtn">FIRE</div></div>
+    <div id="stickL" class="stick"><div id="stickLk" class="knob"></div><span class="sticklbl">MOVE</span></div>
+    <div id="stickR" class="stick"><div id="stickRk" class="knob"></div><span class="sticklbl">AIM · FIRE</span></div>
   </div>
 
   <script src="audio.js"></script>
