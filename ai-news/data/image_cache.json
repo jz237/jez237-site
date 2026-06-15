@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-15T12:39:04.338676+00:00",
+  "updatedAt": "2026-06-15T14:00:01.569765+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -10392,6 +10392,26 @@
     "https://www.artificialintelligence-news.com/news/harmonyos-7-china-ai-apple-gap": {
       "image": "",
       "checkedAt": "2026-06-15T12:00:01.938795+00:00"
+    },
+    "https://techcrunch.com/2026/06/15/sarvam-becomes-indias-newest-ai-unicorn-with-234-million-funding-round-led-by-hcltech": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/02/sarvam.jpg?resize=1200,800",
+      "checkedAt": "2026-06-15T14:00:01.569765+00:00"
+    },
+    "https://techcrunch.com/2026/06/15/ai-agents-are-becoming-employees-newcore-emerges-with-66m-to-give-them-identities": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/newcore-founders.jpg?resize=1200,800",
+      "checkedAt": "2026-06-15T14:00:01.569765+00:00"
+    },
+    "https://www.techrepublic.com/article/ai-boardroom-decisions-survey": {
+      "image": "https://assets.techrepublic.com/uploads/2026/06/Untitled-design-1-2.png?f=jpeg",
+      "checkedAt": "2026-06-15T14:00:01.569765+00:00"
+    },
+    "https://techcrunch.com/2026/06/15/a-satellite-just-learned-to-find-things-on-its-own-heres-what-that-means": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/coast_ground_postprocess.png?resize=1200,900",
+      "checkedAt": "2026-06-15T14:00:01.569765+00:00"
+    },
+    "https://www.techrepublic.com/article/cold-cannon-lifetime-subscription": {
+      "image": "https://assets.techrepublic.com/uploads/2026/06/Untitled-design-3.png?f=jpeg",
+      "checkedAt": "2026-06-15T14:00:01.569765+00:00"
     }
   }
 }
