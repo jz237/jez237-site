@@ -718,5 +718,23 @@
       "continuity": "Mirthcap Lookingglass Village canon: Finnel’s Heartglass Rue tonic eradicates Glassmoss Fever. Luma recovers, their son is born at healing dawn, and the whole village celebrates in front of Finnel and Luma’s hut, completing the story with a happily-ever-after ending.",
       "entryDescription": "Finnel, Luma, and their newborn celebrate with the entire village after Glassmoss Fever is eradicated and Mirthcap is saved."
     }
+  },
+  {
+    "id": "2026-06-15-manual-29-mirthcap-lookingglass-village-character-list",
+    "title": "Mirthcap Lookingglass Village: Character List",
+    "tests": "Manual world catalog entry from #ai-photos; deterministic readable character-list poster for The Heartglass Rue, including main characters, family/village groups, creatures, animals, monsters, and threats.",
+    "prompt": "Create a clean readable poster infographic listing all major characters, family groups, villagers, creatures, animals, monsters, and threats in The Heartglass Rue Mirthcap story. Organize sections for main cast, family and village, creatures and animals, and monsters and threats. Keep text accurate and readable.",
+    "image": "images/2026-06-15-manual-29-mirthcap-lookingglass-village-character-list.png",
+    "date": "2026-06-15",
+    "batch": "Fictional Worlds",
+    "slot": "manual-29",
+    "model": "local/pillow-infographic",
+    "size": "1800x2850",
+    "world": {
+      "name": "Mirthcap Lookingglass Village",
+      "description": "A tiny whimsical village of human-like Mirthcap people living among mushroom homes, pocketwatch mechanisms, healing herbs, briarwings, and dangerous outer-garden mysteries.",
+      "continuity": "Mirthcap Lookingglass Village canon: Finnel Buttonby, Luma Purl, Doctor Marlow Dewmoss, Mayor Tansy Thimblegate, their families, the Under-Cap Circle, Mirthcap villagers, briarwing drakes, lantern gnats, pond creatures, the thornmaw, Glassmoss Fever, and the outer garden are the active cast, creatures, and threats for The Heartglass Rue.",
+      "entryDescription": "A readable poster cataloging the Mirthcap story cast, village groups, creatures, animals, monsters, and threats."
+    }
   }
 ]
