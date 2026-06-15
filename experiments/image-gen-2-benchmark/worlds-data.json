@@ -630,24 +630,6 @@
     }
   },
   {
-    "id": "2026-06-14-2124-mirthcap-lookingglass-village-map-to-heartglass-rue-re",
-    "title": "Mirthcap Lookingglass Village: Map to Heartglass Rue Recreated",
-    "tests": "Manual world catalog entry from #ai-photos; recreated map reveal scene showing only one Doctor Marlow, Finnel grieving, and Marlow's glowing box projecting the route to Heartglass Rue onto the ceiling.",
-    "prompt": "Create a high-resolution 16:9 storybook fantasy illustration for the fictional world of Mirthcap. Older Finnel stops at Doctor Marlow Dewmoss's mushroom-and-root hut before leaving the sick village on his quest. Inside, Finnel discovers the elderly Doctor Marlow dead on his bed and cries beside him, devastated but gentle and respectful. In a shadowed corner, a tiny warm light emanates from a small wooden box/pipe-case. Finnel has opened the box, and an intricate pocketwatch-like mechanism projects a glowing map onto the ceiling, revealing the route to the last lost herb, Heartglass Rue. The hut is gloomy, rainy, and full of herbal jars, mushroom wood furniture, healing tools, quilts, dim lanterns, and a warm golden-green projection. Wide cinematic composition with Marlow's bed, grieving adult Finnel, glowing box, and magical ceiling map visible. Only one Doctor Marlow; no duplicate Marlow-like figure. Finnel has round humanlike ears and Mirthcap clothing. No captions, no words, no watermark.",
-    "image": "images/2026-06-14-2124-mirthcap-lookingglass-village-map-to-heartglass-rue-re.png",
-    "date": "2026-06-14",
-    "batch": "Fictional Worlds",
-    "slot": "2124",
-    "model": "openai/gpt-image-2",
-    "size": "1536x1024",
-    "world": {
-      "name": "Mirthcap Lookingglass Village",
-      "description": "A tiny whimsical village of human-like Mirthcap people living among mushroom homes, pocketwatch mechanisms, healing herbs, briarwings, and dangerous outer-garden mysteries.",
-      "continuity": "Mirthcap Lookingglass Village canon: jewel-colored mushroom homes, tiny original villagers, checkerboard paths, teacup lanterns, pocket-watch details, moss terraces, warm whimsical daily life, and no recognizable Alice/copyrighted characters. Mirthcap villagers are tiny human-like people, not elves. Glassmoss Fever returns years after Marlow's death and sickens the village, including pregnant Luma. Finnel must find Heartglass Rue, the missing last herb needed to brew Marlow's tonic and save Mirthcap. Marlow's hidden map is contained in a small box/pipe-case with his old pocketwatch mechanism, projecting the route onto the ceiling when opened.",
-      "entryDescription": "Finnel visits Doctor Marlow's hut before leaving on his quest, finds Marlow dead, and opens the glowing pocketwatch box that projects the map to Heartglass Rue onto the ceiling."
-    }
-  },
-  {
     "id": "2026-06-14-manual-21-mirthcap-lookingglass-village-thornmaw-encounter-",
     "title": "Mirthcap Lookingglass Village: Thornmaw Encounter Recreated",
     "tests": "Manual world catalog entry from #ai-photos; regenerated thornmaw encounter scene showing Finnel riding his blue briarwing through the outer garden and confronting the vicious thornmaw.",
