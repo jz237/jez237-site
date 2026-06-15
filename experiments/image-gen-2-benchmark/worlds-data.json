@@ -772,5 +772,23 @@
       "continuity": "Preserves Vesperglass panels, cobalt gas-giant glare, cyan/violet auroras, copper-black induction coils, ion-kite infrastructure, and ribbon-bodied electroceptive inhabitants in pressure-wrap garments.",
       "entryDescription": "Dock workers and folded-kite drones repair ion-kite rigs at Lumen Docks, showing the practical maintenance life that keeps the suspended habitat operating."
     }
+  },
+  {
+    "id": "2026-06-15-1544-deep-interior-settlement",
+    "title": "Deep Interior Settlement",
+    "tests": "Shows a more populated area of the planet's deep interior below the Vesperglass Array.",
+    "prompt": "A wide storybook science-fantasy establishing scene of a more populated area of the deep interior on the planet below the Vesperglass Array: a twilight settlement built inside a resonance-safe canyon and cavern network, carved basalt, old ceramic, mineral glass, layered bridges, crowded balconies, market terraces, hanging tramways, water channels, prism-shade awnings, lantern gardens, glass-memory conduits glowing through walls, many adapted humanoid inhabitants, a few Veyrith emissaries, shafts of reflected Array light filtering from far overhead, populated but hushed old-world market energy, painterly realism, no text or signage.",
+    "image": "images/2026-06-15-1544-deep-interior-settlement.png",
+    "date": "2026-06-15",
+    "batch": "Manual #ai-photos",
+    "slot": "1544",
+    "model": "openai/gpt-image-2",
+    "size": "wide",
+    "world": {
+      "name": "The Vesperglass Array",
+      "description": "A wounded old world beneath a living orbital memory cathedral of vesperglass, inhabited by adapted humanoids and the glass-born Veyrith.",
+      "continuity": "The Veyrith communicate through glasslight resonance and are grown by the Vesperglass Array from memory, light, and harmonic pressure. Aurelian Voss, the First Glazier, taught glass how to remember; humanoids evolved elsewhere, then the Array changed them.",
+      "entryDescription": "A populated deep-interior twilight settlement carved into resonance-safe canyon stone below the Array, crowded with adapted humanoids, markets, bridges, water channels, and small Veyrith emissaries."
+    }
   }
 ]
