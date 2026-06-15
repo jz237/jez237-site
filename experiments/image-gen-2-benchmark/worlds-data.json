@@ -646,5 +646,41 @@
       "continuity": "Mirthcap Lookingglass Village canon: jewel-colored mushroom homes, tiny original villagers, checkerboard paths, teacup lanterns, pocket-watch details, moss terraces, warm whimsical daily life, and no recognizable Alice/copyrighted characters. Mirthcap villagers are tiny human-like people, not elves. Glassmoss Fever returns years after Marlow's death and sickens the village, including pregnant Luma. Finnel must find Heartglass Rue, the missing last herb needed to brew Marlow's tonic and save Mirthcap. Marlow's hidden map is contained in a small box/pipe-case with his old pocketwatch mechanism, projecting the route onto the ceiling when opened.",
       "entryDescription": "Finnel visits Doctor Marlow's hut before leaving on his quest, finds Marlow dead, and opens the glowing pocketwatch box that projects the map to Heartglass Rue onto the ceiling."
     }
+  },
+  {
+    "id": "2026-06-14-manual-21-mirthcap-lookingglass-village-thornmaw-encounter-",
+    "title": "Mirthcap Lookingglass Village: Thornmaw Encounter Recreated",
+    "tests": "Manual world catalog entry from #ai-photos; regenerated thornmaw encounter scene showing Finnel riding his blue briarwing through the outer garden and confronting the vicious thornmaw.",
+    "prompt": "Use case: illustration-story\nAsset type: cinematic storybook panel for the Mirthcap fictional world\nPrimary request: Finnel traverses the dangerous outer garden riding his loyal blue briarwing. He encounters an evil, vicious-looking monster with large teeth threatening to attack him.\nScene/backdrop: the outer garden beyond Mirthcap, overgrown gigantic stems, thorny vines, wet moss, looming leaves like forest canopies, misty late-evening light.\nSubject: older Finnel, a tiny brave Mirthcap villager with rounded ears and travel gear, riding a blue briarwing insect mount; a hulking monster called a thornmaw blocking the path, enormous teeth, low predatory stance, claws in the mud.\nStyle/medium: rich detailed cinematic fantasy storybook illustration, wholesome but scary adventure tone, consistent with previous Mirthcap images.\nComposition/framing: wide landscape action panel, Finnel and blue briarwing in the foreground/midground facing the monster, clear scale difference, dynamic tension, no text.\nLighting/mood: dark, suspenseful, misty, rain-damp, dramatic rim light through leaves.\nConstraints: Finnel should look courageous but frightened; the briarwing must be blue; the monster should be threatening and scary but not graphic.\nAvoid: gore, blood, modern objects, text, watermark, extra duplicate Finnels.",
+    "image": "images/2026-06-14-manual-21-mirthcap-lookingglass-village-thornmaw-encounter-.png",
+    "date": "2026-06-14",
+    "batch": "Fictional Worlds",
+    "slot": "manual-21",
+    "model": "fal/openai/gpt-image-2",
+    "size": "1536x1024",
+    "world": {
+      "name": "Mirthcap Lookingglass Village",
+      "description": "A tiny whimsical village of human-like Mirthcap people living among mushroom homes, pocketwatch mechanisms, healing herbs, briarwings, and dangerous outer-garden mysteries.",
+      "continuity": "Mirthcap Lookingglass Village canon: Finnel must find Heartglass Rue to brew Marlow’s tonic and save Mirthcap from Glassmoss Fever. The outer garden beyond Hearthpetal Thicket is dangerous and contains thornmaws, vicious plant-reptile predators with bark armor, thorn ridges, huge teeth, claws, and angry glowing eyes. Finnel rides his blue briarwing during this quest.",
+      "entryDescription": "Finnel rides his blue briarwing into the outer garden and comes face to face with a vicious thornmaw blocking the route to Heartglass Rue."
+    }
+  },
+  {
+    "id": "2026-06-14-manual-22-mirthcap-lookingglass-village-finnel-defeats-the-",
+    "title": "Mirthcap Lookingglass Village: Finnel Defeats the Thornmaw Recreated",
+    "tests": "Manual world catalog entry from #ai-photos; regenerated non-graphic victory scene showing Finnel dropping the thornmaw with bolas and defeating it during the Heartglass Rue quest.",
+    "prompt": "Use case: illustration-story\nAsset type: cinematic storybook panel for the Mirthcap fictional world\nPrimary request: Finnel has successfully thrown bolas around the thornmaw monster’s legs, brought it crashing to the ground, climbed onto it, and delivers the final dagger strike that defeats the beast.\nScene/backdrop: the outer garden beyond Mirthcap, giant thorny stems, slick moss, rain mist, broken roots, dark leaves overhead.\nSubject: older Finnel, tiny but heroic, standing on the fallen thornmaw monster; the thornmaw’s legs are tightly tangled with bolas and living roots; Finnel grips a large dagger in a decisive heroic finishing pose. The beast is clearly defeated.\nStyle/medium: rich detailed cinematic fantasy storybook illustration, scary but wholesome adventure tone, not horror splatter, consistent with previous Mirthcap images.\nComposition/framing: wide landscape action panel, low dramatic angle, the fallen monster dominating the foreground, Finnel visible on top as the brave hero; blue briarwing nearby in the background, no text.\nLighting/mood: stormy evening, mist, rain sheen, dramatic rim light and shadow, triumphant but grim.\nConstraints: show a clear heroic victory over the monster; keep it non-graphic and suitable for a fantasy storybook; no visible blood spray, no gore, no exposed organs.\nAvoid: graphic gore, realistic blood, human injury, text, watermark, modern weapons, extra duplicate Finnels.",
+    "image": "images/2026-06-14-manual-22-mirthcap-lookingglass-village-finnel-defeats-the-.png",
+    "date": "2026-06-14",
+    "batch": "Fictional Worlds",
+    "slot": "manual-22",
+    "model": "fal/openai/gpt-image-2",
+    "size": "1536x1024",
+    "world": {
+      "name": "Mirthcap Lookingglass Village",
+      "description": "A tiny whimsical village of human-like Mirthcap people living among mushroom homes, pocketwatch mechanisms, healing herbs, briarwings, and dangerous outer-garden mysteries.",
+      "continuity": "Mirthcap Lookingglass Village canon: Finnel must find Heartglass Rue to brew Marlow’s tonic and save Mirthcap from Glassmoss Fever. Thornmaws are dangerous outer-garden predators. In this sequence, Finnel defeats a thornmaw by tangling its legs with bolas, bringing it down, and winning the fight in a non-graphic but decisive heroic moment before continuing the quest.",
+      "entryDescription": "Finnel brings the thornmaw down with bolas and defeats it in a decisive, non-graphic heroic victory before continuing toward Heartglass Rue."
+    }
   }
 ]
