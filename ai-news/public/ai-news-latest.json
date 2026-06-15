@@ -1,8 +1,8 @@
 {
-  "updatedAt": "2026-06-15T11:00:01.476353+00:00",
+  "updatedAt": "2026-06-15T12:00:01.938795+00:00",
   "items": [
     {
-      "title": "The Coin Flip Judge? Reliability and Bias in LLM-as-a-Judge Evaluation",
+      "title": "Benchmarking Web Agent Safety under E-commerce Deceptive Interfaces",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -10,12 +10,76 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-15T11:00:21.310999+00:00",
+      "published": "2026-06-15T12:00:13.730660+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-15T11:00:01.476353+00:00",
+      "lastSeen": "2026-06-15T12:00:01.938795+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.41
+    },
+    {
+      "title": "AT&S pours up to €2bn into Malaysia and China to ride the AI chip boom",
+      "url": "https://thenextweb.com/news/ats-malaysia-ai-substrate-investment",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "AT&amp;S, the Austrian maker of printed circuit boards and chip substrates, will spend between €1.5bn and €2bn expanding capacity for the high-end IC substrates that AI and high-performance computing chips are built on, the company said. The plan spans its plant at Kulim in Malaysia and its facility at Chongqing in China, and it is [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/ATS-Malaysia.avif",
+      "published": "2026-06-15T11:16:17+00:00",
+      "firstSeen": "2026-06-15T12:00:01.938795+00:00",
+      "lastSeen": "2026-06-15T12:00:01.938795+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.71
+      "score": 2.1279
+    },
+    {
+      "title": "Tesla gave European regulators misleading self-driving safety data",
+      "url": "https://thenextweb.com/news/tesla-fsd-misleading-data-eu-regulators",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Tesla put self-published safety statistics in front of regulators in Sweden and the Netherlands that independent traffic-safety researchers say amount to misleading marketing, according to a Reuters review of correspondence obtained through public-records requests. The data was part of the company’s push to win wider European approval for its Full Self-Driving system, in a region where Tesla [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/tesla-fsd-eu-skepticism-regulator-records-.avif",
+      "published": "2026-06-15T11:01:43+00:00",
+      "firstSeen": "2026-06-15T12:00:01.938795+00:00",
+      "lastSeen": "2026-06-15T12:00:01.938795+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.6207
+    },
+    {
+      "title": "HarmonyOS 7 steps into the AI gap Apple left open in China",
+      "url": "https://www.artificialintelligence-news.com/news/harmonyos-7-china-ai-apple-gap",
+      "source": "Artificial Intelligence News",
+      "sourceUrl": "https://www.artificialintelligence-news.com/categories/artificial-intelligence/feed/",
+      "sourceWeight": 0.82,
+      "category": "AI",
+      "summary": "Four days after Apple confirmed that Siri AI would not launch in China, Huawei took the stage in Dongguan and declared HarmonyOS 7 the beginning of the agent era. The gap Apple could not fill, Huawei has moved into with an architecture built specifically for it. What HarmonyOS 7 actually changes The headline change is [&#8230;]\nThe post HarmonyOS 7 steps into the AI gap Apple left open in China appeared first on AI News.",
+      "image": "",
+      "published": "2026-06-15T11:00:00+00:00",
+      "firstSeen": "2026-06-15T12:00:01.938795+00:00",
+      "lastSeen": "2026-06-15T12:00:01.938795+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.7178
+    },
+    {
+      "title": "Google’s Sundar Pichai chose optimism over AI at Stanford. Graduates walked out anyway",
+      "url": "https://thenextweb.com/news/pichai-stanford-commencement-2026",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The man who runs one of the world’s largest artificial-intelligence companies stood up to address Stanford’s graduating class and, for the most part, declined to talk about artificial intelligence. Sundar Pichai, the chief executive of Google and Alphabet, gave the address at the university’s 135th commencement on Sunday 14 June, in Stanford Stadium, and chose [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/Sundar-Pichai-at-Standford.avif",
+      "published": "2026-06-15T10:37:30+00:00",
+      "firstSeen": "2026-06-15T12:00:01.938795+00:00",
+      "lastSeen": "2026-06-15T12:00:01.938795+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1088
     },
     {
       "title": "India’s Razorpay files for IPO through the confidential route",
@@ -28,10 +92,10 @@
       "image": "https://media.thenextweb.com/2026/06/Razorpay.avif",
       "published": "2026-06-15T10:26:56+00:00",
       "firstSeen": "2026-06-15T11:00:01.476353+00:00",
-      "lastSeen": "2026-06-15T11:00:01.476353+00:00",
+      "lastSeen": "2026-06-15T12:00:01.938795+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.4833
+      "score": 2.4536
     },
     {
       "title": "Schneider Electric and Foxconn partner on AI data-centre infrastructure",
@@ -44,10 +108,10 @@
       "image": "https://media.thenextweb.com/2026/06/Schneider-Electric-and-Foxconn-partner.avif",
       "published": "2026-06-15T10:12:51+00:00",
       "firstSeen": "2026-06-15T11:00:01.476353+00:00",
-      "lastSeen": "2026-06-15T11:00:01.476353+00:00",
+      "lastSeen": "2026-06-15T12:00:01.938795+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.5262
+      "score": 3.4967
     },
     {
       "title": "Accenture: Consumers show growing trust in AI shopping agents",
@@ -60,10 +124,10 @@
       "image": "",
       "published": "2026-06-15T10:00:00+00:00",
       "firstSeen": "2026-06-15T10:00:01.539237+00:00",
-      "lastSeen": "2026-06-15T11:00:01.476353+00:00",
+      "lastSeen": "2026-06-15T12:00:01.938795+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 6.5179
+      "score": 6.4885
     },
     {
       "title": "France hosts the G7 with an AI pitch built on other people’s billions",
@@ -76,10 +140,10 @@
       "image": "https://media.thenextweb.com/2024/05/Untitled-design-8.avif",
       "published": "2026-06-15T09:31:02+00:00",
       "firstSeen": "2026-06-15T10:00:01.539237+00:00",
-      "lastSeen": "2026-06-15T11:00:01.476353+00:00",
+      "lastSeen": "2026-06-15T12:00:01.938795+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1056
+      "score": 2.0767
     },
     {
       "title": "The freelancer admin tax is real. Here’s how to cut it in half (and save 70% on FreshBooks while you’re at it)",
@@ -92,10 +156,10 @@
       "image": "https://media.thenextweb.com/2026/06/Freshbooks-deal-tnw.avif",
       "published": "2026-06-15T09:02:33+00:00",
       "firstSeen": "2026-06-15T10:00:01.539237+00:00",
-      "lastSeen": "2026-06-15T11:00:01.476353+00:00",
+      "lastSeen": "2026-06-15T12:00:01.938795+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -1.0082
+      "score": -1.0368
     },
     {
       "title": "US order to block foreign access to Anthropic’s top models marks a reversal",
@@ -108,10 +172,10 @@
       "image": "https://media.thenextweb.com/2026/06/USA-flag.avif",
       "published": "2026-06-15T09:00:27+00:00",
       "firstSeen": "2026-06-15T10:00:01.539237+00:00",
-      "lastSeen": "2026-06-15T11:00:01.476353+00:00",
+      "lastSeen": "2026-06-15T12:00:01.938795+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.1908
+      "score": 10.1622
     },
     {
       "title": "Meta Tapped a Pentagon Supplier to Prototype Face Recognition for Its Glasses",
@@ -124,10 +188,10 @@
       "image": "https://media.wired.com/photos/6a2a0a5069d7cd90279b88e1/master/pass/security_meta_glasses_pentagon.jpg",
       "published": "2026-06-15T09:00:00+00:00",
       "firstSeen": "2026-06-15T10:00:01.539237+00:00",
-      "lastSeen": "2026-06-15T11:00:01.476353+00:00",
+      "lastSeen": "2026-06-15T12:00:01.938795+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3305
+      "score": 3.302
     },
     {
       "title": "UK under-16s social media rules to reach into gaming and AI chatbots",
@@ -140,10 +204,10 @@
       "image": "https://media.thenextweb.com/2026/06/Prime-Minister-Keir-Starmer.avif",
       "published": "2026-06-15T08:39:39+00:00",
       "firstSeen": "2026-06-15T10:00:01.539237+00:00",
-      "lastSeen": "2026-06-15T11:00:01.476353+00:00",
+      "lastSeen": "2026-06-15T12:00:01.938795+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0808
+      "score": 2.0525
     },
     {
       "title": "SpaceX could hit $1tn a year by 2030, Musk claims after record IPO",
@@ -156,10 +220,10 @@
       "image": "https://media.thenextweb.com/2026/06/spacex-ipo-musk-trillionaire-index-fund-wealth-transfer.avif",
       "published": "2026-06-15T08:22:13+00:00",
       "firstSeen": "2026-06-15T09:00:02.103412+00:00",
-      "lastSeen": "2026-06-15T11:00:01.476353+00:00",
+      "lastSeen": "2026-06-15T12:00:01.938795+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7725
+      "score": 2.7445
     },
     {
       "title": "The AI off switch: How Anthropic’s export controls sparked a global AI sovereignty scramble",
@@ -172,10 +236,10 @@
       "image": "",
       "published": "2026-06-15T08:00:00+00:00",
       "firstSeen": "2026-06-15T09:00:02.103412+00:00",
-      "lastSeen": "2026-06-15T11:00:01.476353+00:00",
+      "lastSeen": "2026-06-15T12:00:01.938795+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.26
+      "score": 6.2323
     },
     {
       "title": "ByteDance is in talks to buy AI chips from China’s Iluvatar CoreX",
@@ -191,7 +255,7 @@
       "lastSeen": "2026-06-15T11:00:01.476353+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3544
+      "score": 2.3269
     },
     {
       "title": "Google is about to disable uBlock Origin and every other Manifest V2 extension in Chrome",
@@ -207,7 +271,7 @@
       "lastSeen": "2026-06-15T11:00:01.476353+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.4504
+      "score": 3.423
     },
     {
       "title": "The AI layoff wave is becoming a powder keg",
@@ -220,10 +284,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/Powder-Keg.png?resize=1200%2C960",
       "published": "2026-06-15T07:25:41+00:00",
       "firstSeen": "2026-06-15T08:00:01.934491+00:00",
-      "lastSeen": "2026-06-15T11:00:01.476353+00:00",
+      "lastSeen": "2026-06-15T12:00:01.938795+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1861
+      "score": 2.1588
     },
     {
       "title": "The scam economy is now bigger than Denmark’s GDP, and it is accelerating",
@@ -239,7 +303,7 @@
       "lastSeen": "2026-06-15T11:00:01.476353+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.1425
+      "score": 1.1154
     },
     {
       "title": "Quoting Julia Evans",
@@ -252,10 +316,10 @@
       "image": "",
       "published": "2026-06-15T02:05:19+00:00",
       "firstSeen": "2026-06-15T03:00:01.442971+00:00",
-      "lastSeen": "2026-06-15T11:00:01.476353+00:00",
+      "lastSeen": "2026-06-15T12:00:01.938795+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0488
+      "score": 2.0253
     },
     {
       "title": "Why AI hasn’t replaced software engineers, and won’t",
@@ -268,10 +332,10 @@
       "image": "",
       "published": "2026-06-14T23:54:11+00:00",
       "firstSeen": "2026-06-15T00:00:01.726363+00:00",
-      "lastSeen": "2026-06-15T11:00:01.476353+00:00",
+      "lastSeen": "2026-06-15T12:00:01.938795+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0982
+      "score": 3.0761
     },
     {
       "title": "Chinese AI models are learning to detect safety tests and adjust their behaviour accordingly",
@@ -287,7 +351,7 @@
       "lastSeen": "2026-06-15T10:00:01.539237+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.5147
+      "score": 3.4951
     },
     {
       "title": "30 European family offices are looking to set up in Hong Kong as the city overtakes Switzerland in cross-border wealth",
@@ -303,7 +367,7 @@
       "lastSeen": "2026-06-15T10:00:01.539237+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7591
+      "score": 1.7397
     },
     {
       "title": "Geely will purge excess factory capacity and focus on becoming a global competitor to BYD",
@@ -319,7 +383,7 @@
       "lastSeen": "2026-06-15T09:00:02.103412+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.753
+      "score": 1.7337
     },
     {
       "title": "Canada’s Carney compares Anthropic shutdown to 2008 financial crisis, warns of AI “model risk”",
@@ -335,7 +399,7 @@
       "lastSeen": "2026-06-15T09:00:02.103412+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.7469
+      "score": 4.7278
     },
     {
       "title": "China may have accessed Mythos",
@@ -348,10 +412,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/01/STK269_ANTHROPIC_2_C.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-14T18:27:55+00:00",
       "firstSeen": "2026-06-14T19:00:01.758923+00:00",
-      "lastSeen": "2026-06-15T11:00:01.476353+00:00",
+      "lastSeen": "2026-06-15T12:00:01.938795+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.9549
+      "score": 3.9359
     },
     {
       "title": "FINQ’s AI-managed ETFs quietly outrun Wall Street in early 2026",
@@ -367,7 +431,7 @@
       "lastSeen": "2026-06-15T09:00:02.103412+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.5414
+      "score": 3.5225
     },
     {
       "title": "De Beers weaponises blockchain to fight lab-grown diamonds, but a 45% price crash looms large",
@@ -383,7 +447,7 @@
       "lastSeen": "2026-06-15T09:00:02.103412+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7376
+      "score": 1.7187
     },
     {
       "title": "Anthropic’s model shutdown just handed India’s sovereign AI movement its strongest argument yet",
@@ -399,7 +463,7 @@
       "lastSeen": "2026-06-15T08:00:01.934491+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.8353
+      "score": 5.8165
     },
     {
       "title": "Welcome to the AGI era of AI governance",
@@ -412,10 +476,10 @@
       "image": "https://substack-post-media.s3.amazonaws.com/public/images/74e1df37-06b8-444e-a5a4-fbc1ead00360_3182x1790.png",
       "published": "2026-06-14T17:43:42+00:00",
       "firstSeen": "2026-06-14T19:00:01.758923+00:00",
-      "lastSeen": "2026-06-15T11:00:01.476353+00:00",
+      "lastSeen": "2026-06-15T12:00:01.938795+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9408
+      "score": 1.9222
     },
     {
       "title": "Built to assist, not replace: inside Intercall’s real-time AI for professional interpreters",
@@ -431,7 +495,7 @@
       "lastSeen": "2026-06-15T08:00:01.934491+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7281
+      "score": 1.7095
     },
     {
       "title": "Introducing the OpenAI Partner Network",
@@ -444,11 +508,11 @@
       "image": "https://images.ctfassets.net/kftzwdyauwt9/4Mmo10RLJ6HIoEmbRe3QPf/4dd23942812b8e483d345607db7bc551/Introducing_OAI_Partner_Network_seo_card.png?w=1600&amp%3Bh=900&amp%3Bfit=fill",
       "published": "2026-06-14T17:00:00+00:00",
       "firstSeen": "2026-06-15T01:00:01.490980+00:00",
-      "lastSeen": "2026-06-15T11:00:01.476353+00:00",
+      "lastSeen": "2026-06-15T12:00:01.938795+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 15.1672
+      "score": 15.1489
     },
     {
       "title": "As AI companies race to go public, who else is along for the ride?",
@@ -461,10 +525,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/spacexipo-nasdaq.jpg?resize=1200%2C800",
       "published": "2026-06-14T16:38:09+00:00",
       "firstSeen": "2026-06-14T17:00:01.675220+00:00",
-      "lastSeen": "2026-06-15T11:00:01.476353+00:00",
+      "lastSeen": "2026-06-15T12:00:01.938795+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8505
+      "score": 1.8324
     },
     {
       "title": "Why Apple built a third-party AI system for Siri and then refused to show it at WWDC",
@@ -480,7 +544,7 @@
       "lastSeen": "2026-06-15T07:00:01.415046+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.7021
+      "score": 9.6843
     },
     {
       "title": "IQM adds a Vanguard board director to its bench as Europe’s first quantum Nasdaq listing approaches",
@@ -496,7 +560,7 @@
       "lastSeen": "2026-06-15T07:00:01.415046+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.794
+      "score": 2.7763
     },
     {
       "title": "Crypto exchanges promised users access to the SpaceX IPO. The tokenized shares never arrived.",
@@ -512,7 +576,7 @@
       "lastSeen": "2026-06-14T19:00:01.758923+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.6799
+      "score": 1.6627
     },
     {
       "title": "The lawyer who won a $6 million verdict against Meta says AI let him do 30 hours of work in 10",
@@ -528,7 +592,7 @@
       "lastSeen": "2026-06-14T19:00:01.758923+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.6691
+      "score": 1.6521
     },
     {
       "title": "Skoda’s Peaq is a seven-seat electric SUV built to undercut the Kia EV9 and Ioniq 9 on price",
@@ -544,7 +608,7 @@
       "lastSeen": "2026-06-14T19:00:01.758923+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.6183
+      "score": 1.6027
     },
     {
       "title": "Grassroots opposition blocked $130 billion in US data center projects in the first three months of 2026",
@@ -560,7 +624,7 @@
       "lastSeen": "2026-06-14T17:42:49.946807+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.0106
+      "score": 2.9953
     },
     {
       "title": "Fable 5 was beating GPT 5.5 on every major benchmark. Then the US government pulled it offline.",
@@ -576,72 +640,7 @@
       "lastSeen": "2026-06-14T17:42:49.946807+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 12.7562
-    },
-    {
-      "title": "GM says its autonomous cars will eventually be capable of running as robotaxis too",
-      "url": "https://thenextweb.com/news/gm-autonomous-driving-robotaxi-sterling-anderson-super-cruise",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "General Motors shut down Cruise, its $10 billion robotaxi division, in December 2024. Eighteen months later, the company’s chief product officer says GM’s autonomous vehicles will eventually be capable of operating as robotaxis anyway. Sterling Anderson, the former head of Tesla’s Autopilot program, told Business Insider that GM’s personal autonomy strategy and the robotaxi business [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/gm-autonomous-driving-robotaxi-sterling-anderson-super-cruise.avif",
-      "published": "2026-06-14T09:58:40+00:00",
-      "firstSeen": "2026-06-14T11:00:01.641647+00:00",
-      "lastSeen": "2026-06-14T17:42:49.946807+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 2.9989
-    },
-    {
-      "title": "Spotify removed 57,000 fake podcast episodes promoting illegal drugs, but only after a senator forced its hand",
-      "url": "https://thenextweb.com/news/spotify-removed-57000-fake-podcast-episodes-drug-spam",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Spotify has removed more than 57,000 fake podcast episodes and banned 3,500 accounts tied to illegal drug promotion after a US Senate investigation exposed the scale of the problem. The episodes, spread across more than 3,000 shows, used AI-generated audio to direct listeners to websites selling modafinil, opioids, and cryptocurrency on unregulated marketplaces. Senator Maggie [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/spotify-removed-57000-fake-podcast-episodes-drug-spam.avif",
-      "published": "2026-06-14T09:37:12+00:00",
-      "firstSeen": "2026-06-14T11:00:01.641647+00:00",
-      "lastSeen": "2026-06-14T17:42:49.946807+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.5935
-    },
-    {
-      "title": "NHS England rolls out Microsoft 365 Copilot to 505,000 staff after trial reports 43 minutes saved per day",
-      "url": "https://thenextweb.com/news/nhs-england-microsoft-copilot-505000-staff-ai-rollout",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "NHS England is giving more than 505,000 clinicians and support staff access to Microsoft 365 Copilot in what will be the largest AI deployment in healthcare globally. The rollout follows a pilot across 90 NHS organisations in which 30,000 workers used the tool for administrative tasks. NHS England says the average participant saved 43 minutes [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/nhs-england-microsoft-copilot-505000-staff-ai-rollout.avif",
-      "published": "2026-06-14T09:15:41+00:00",
-      "firstSeen": "2026-06-14T09:54:07.731108+00:00",
-      "lastSeen": "2026-06-14T17:42:49.946807+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "framework_or_plumbing",
-      "score": 1.4881
-    },
-    {
-      "title": "As Anthropic suspends access to new models, India debates its AI future",
-      "url": "https://techcrunch.com/2026/06/13/as-anthropic-suspends-access-to-new-models-india-debates-its-ai-future",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Tech leaders debate whether the Anthropic episode is a wake-up call for India’s AI ambitions.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/06/Claude-photo.jpg?w=1024",
-      "published": "2026-06-14T03:00:00+00:00",
-      "firstSeen": "2026-06-14T06:00:01.953649+00:00",
-      "lastSeen": "2026-06-15T11:00:01.476353+00:00",
-      "model_release": true,
-      "editorial_allow": true,
-      "editorial_reason": "model_release",
-      "score": 13.6422
+      "score": 12.7409
     },
     {
       "title": "The Life Scientific: Helen Hastie",
@@ -654,10 +653,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-08T20:00:00+00:00",
       "firstSeen": "2026-06-08T21:00:01.371488+00:00",
-      "lastSeen": "2026-06-15T11:00:01.476353+00:00",
+      "lastSeen": "2026-06-15T12:00:01.938795+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.2033
+      "score": 1.2029
     },
     {
       "title": "The Life Scientific: Seth Berkley",
@@ -670,7 +669,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-01T20:00:00+00:00",
       "firstSeen": "2026-06-01T21:00:01.828388+00:00",
-      "lastSeen": "2026-06-15T11:00:01.476353+00:00",
+      "lastSeen": "2026-06-15T12:00:01.938795+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 1.1901
