@@ -1,6 +1,6 @@
 {
   "date": "2026-06-15",
-  "updatedAt": "2026-06-15T03:00:01.442971+00:00",
+  "updatedAt": "2026-06-15T04:00:01.171413+00:00",
   "items": [
     {
       "title": "A challenging dataset of 448 multiple-choice questions written by domain experts in biology, physics, and chemistry. Questions are Google-proof and extremely difficult, with PhD experts reaching 65% accuracy.",
@@ -11,9 +11,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-15T03:00:07.119533+00:00",
+      "published": "2026-06-15T04:00:11.105366+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-15T03:00:01.442971+00:00",
+      "lastSeen": "2026-06-15T04:00:01.171413+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
@@ -29,10 +29,10 @@
       "image": "",
       "published": "2026-06-15T02:05:19+00:00",
       "firstSeen": "2026-06-15T03:00:01.442971+00:00",
-      "lastSeen": "2026-06-15T03:00:01.442971+00:00",
+      "lastSeen": "2026-06-15T04:00:01.171413+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2625
+      "score": 2.2331
     }
   ],
   "errors": [
