@@ -1,6 +1,6 @@
 {
   "date": "2026-06-15",
-  "updatedAt": "2026-06-15T10:00:01.539237+00:00",
+  "updatedAt": "2026-06-15T11:00:01.476353+00:00",
   "items": [
     {
       "title": "US order to block foreign access to Anthropic’s top models marks a reversal",
@@ -13,10 +13,10 @@
       "image": "https://media.thenextweb.com/2026/06/USA-flag.avif",
       "published": "2026-06-15T09:00:27+00:00",
       "firstSeen": "2026-06-15T10:00:01.539237+00:00",
-      "lastSeen": "2026-06-15T10:00:01.539237+00:00",
+      "lastSeen": "2026-06-15T11:00:01.476353+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.2201
+      "score": 10.1908
     },
     {
       "title": "Accenture: Consumers show growing trust in AI shopping agents",
@@ -29,10 +29,10 @@
       "image": "",
       "published": "2026-06-15T10:00:00+00:00",
       "firstSeen": "2026-06-15T10:00:01.539237+00:00",
-      "lastSeen": "2026-06-15T10:00:01.539237+00:00",
+      "lastSeen": "2026-06-15T11:00:01.476353+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 6.548
+      "score": 6.5179
     },
     {
       "title": "The AI off switch: How Anthropic’s export controls sparked a global AI sovereignty scramble",
@@ -45,10 +45,26 @@
       "image": "",
       "published": "2026-06-15T08:00:00+00:00",
       "firstSeen": "2026-06-15T09:00:02.103412+00:00",
-      "lastSeen": "2026-06-15T10:00:01.539237+00:00",
+      "lastSeen": "2026-06-15T11:00:01.476353+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.2885
+      "score": 6.26
+    },
+    {
+      "title": "Schneider Electric and Foxconn partner on AI data-centre infrastructure",
+      "url": "https://thenextweb.com/news/schneider-electric-foxconn-ai-data-center",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Schneider Electric has announced a strategic collaboration with Hon Hai Technology Group, better known as Foxconn, to design and scale the next generation of AI data centres. The deal, announced on 15 June, pairs the French energy-management group with the world’s largest contract electronics manufacturer. The division of labour follows the two companies’ respective strengths. Foxconn [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/Schneider-Electric-and-Foxconn-partner.avif",
+      "published": "2026-06-15T10:12:51+00:00",
+      "firstSeen": "2026-06-15T11:00:01.476353+00:00",
+      "lastSeen": "2026-06-15T11:00:01.476353+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 3.5262
     },
     {
       "title": "Google is about to disable uBlock Origin and every other Manifest V2 extension in Chrome",
@@ -61,10 +77,10 @@
       "image": "https://media.thenextweb.com/2026/06/chrome-manifest-v3-ublock-origin-content-blockers-disabled.avif",
       "published": "2026-06-15T07:34:58+00:00",
       "firstSeen": "2026-06-15T08:00:01.934491+00:00",
-      "lastSeen": "2026-06-15T10:00:01.539237+00:00",
+      "lastSeen": "2026-06-15T11:00:01.476353+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.4786
+      "score": 3.4504
     },
     {
       "title": "Meta Tapped a Pentagon Supplier to Prototype Face Recognition for Its Glasses",
@@ -77,10 +93,10 @@
       "image": "https://media.wired.com/photos/6a2a0a5069d7cd90279b88e1/master/pass/security_meta_glasses_pentagon.jpg",
       "published": "2026-06-15T09:00:00+00:00",
       "firstSeen": "2026-06-15T10:00:01.539237+00:00",
-      "lastSeen": "2026-06-15T10:00:01.539237+00:00",
+      "lastSeen": "2026-06-15T11:00:01.476353+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3599
+      "score": 3.3305
     },
     {
       "title": "SpaceX could hit $1tn a year by 2030, Musk claims after record IPO",
@@ -93,10 +109,42 @@
       "image": "https://media.thenextweb.com/2026/06/spacex-ipo-musk-trillionaire-index-fund-wealth-transfer.avif",
       "published": "2026-06-15T08:22:13+00:00",
       "firstSeen": "2026-06-15T09:00:02.103412+00:00",
-      "lastSeen": "2026-06-15T10:00:01.539237+00:00",
+      "lastSeen": "2026-06-15T11:00:01.476353+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8013
+      "score": 2.7725
+    },
+    {
+      "title": "The Coin Flip Judge? Reliability and Bias in LLM-as-a-Judge Evaluation",
+      "url": "https://llm-stats.com/ai-news",
+      "source": "LLM Stats AI News",
+      "sourceUrl": "https://llm-stats.com/ai-news",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "",
+      "image": "https://llm-stats.com/og/main.png",
+      "published": "2026-06-15T11:00:21.310999+00:00",
+      "firstSeen": "2026-05-29T21:00:01.522609+00:00",
+      "lastSeen": "2026-06-15T11:00:01.476353+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.71
+    },
+    {
+      "title": "India’s Razorpay files for IPO through the confidential route",
+      "url": "https://thenextweb.com/news/indias-razorpay-files-for-ipo-through-the-confidential-route",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Razorpay, the Bengaluru payments company, has filed draft papers for an initial public offering through India’s confidential route, according to people familiar with the matter. The filing moves one of the country’s larger fintech firms a step closer to the public markets, without yet putting its financials on public display. The confidential mechanism, which Indian [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/Razorpay.avif",
+      "published": "2026-06-15T10:26:56+00:00",
+      "firstSeen": "2026-06-15T11:00:01.476353+00:00",
+      "lastSeen": "2026-06-15T11:00:01.476353+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.4833
     },
     {
       "title": "ByteDance is in talks to buy AI chips from China’s Iluvatar CoreX",
@@ -109,26 +157,10 @@
       "image": "https://media.thenextweb.com/2021/08/d2674dd1014d53b65f57922c2eaabdac_noop-e1628498009410.avif",
       "published": "2026-06-15T07:43:41+00:00",
       "firstSeen": "2026-06-15T09:00:02.103412+00:00",
-      "lastSeen": "2026-06-15T10:00:01.539237+00:00",
+      "lastSeen": "2026-06-15T11:00:01.476353+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3827
-    },
-    {
-      "title": "History of the Muddy Children Puzzle",
-      "url": "https://llm-stats.com/ai-news",
-      "source": "LLM Stats AI News",
-      "sourceUrl": "https://llm-stats.com/ai-news",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "",
-      "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-15T10:00:17.596054+00:00",
-      "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-15T10:00:01.539237+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.36
+      "score": 2.3544
     },
     {
       "title": "The AI layoff wave is becoming a powder keg",
@@ -141,10 +173,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/Powder-Keg.png?resize=1200%2C960",
       "published": "2026-06-15T07:25:41+00:00",
       "firstSeen": "2026-06-15T08:00:01.934491+00:00",
-      "lastSeen": "2026-06-15T10:00:01.539237+00:00",
+      "lastSeen": "2026-06-15T11:00:01.476353+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2141
+      "score": 2.1861
     },
     {
       "title": "France hosts the G7 with an AI pitch built on other people’s billions",
@@ -157,42 +189,10 @@
       "image": "https://media.thenextweb.com/2024/05/Untitled-design-8.avif",
       "published": "2026-06-15T09:31:02+00:00",
       "firstSeen": "2026-06-15T10:00:01.539237+00:00",
-      "lastSeen": "2026-06-15T10:00:01.539237+00:00",
+      "lastSeen": "2026-06-15T11:00:01.476353+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1353
-    },
-    {
-      "title": "UK under-16s social media rules to reach into gaming and AI chatbots",
-      "url": "https://thenextweb.com/news/uk-under-16s-social-media-restrictions",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Britain is expected to set out restrictions on how children under 16 use social media, in a package that could ban access to the main platforms and curb features judged too addictive for young users, according to reporting on the government’s plans. Prime Minister Keir Starmer is said to have decided to go further after speaking [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/Prime-Minister-Keir-Starmer.avif",
-      "published": "2026-06-15T08:39:39+00:00",
-      "firstSeen": "2026-06-15T10:00:01.539237+00:00",
-      "lastSeen": "2026-06-15T10:00:01.539237+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.1098
-    },
-    {
-      "title": "Quoting Julia Evans",
-      "url": "https://simonwillison.net/2026/Jun/15/julia-evans",
-      "source": "Simon Willison",
-      "sourceUrl": "https://simonwillison.net/atom/everything/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "[...] Instead, I picture a specific person and I just write for them. Often this person is \"me, but 3 years ago\" or a good friend.\n&mdash; Julia Evans, write for 1 person\n\n    Tags: writing, julia-evans",
-      "image": "",
-      "published": "2026-06-15T02:05:19+00:00",
-      "firstSeen": "2026-06-15T03:00:01.442971+00:00",
-      "lastSeen": "2026-06-15T10:00:01.539237+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.073
+      "score": 2.1056
     }
   ],
   "errors": [
