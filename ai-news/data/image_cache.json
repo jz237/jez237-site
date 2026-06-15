@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-14T23:36:00.397035+00:00",
+  "updatedAt": "2026-06-15T01:00:01.490980+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -10368,6 +10368,10 @@
     "https://simonwillison.net/2026/Jun/14/why-ai-hasnt-replaced-software-engineers": {
       "image": "",
       "checkedAt": "2026-06-15T00:00:01.726363+00:00"
+    },
+    "https://openai.com/index/introducing-openai-partner-network": {
+      "image": "https://images.ctfassets.net/kftzwdyauwt9/4Mmo10RLJ6HIoEmbRe3QPf/4dd23942812b8e483d345607db7bc551/Introducing_OAI_Partner_Network_seo_card.png?w=1600&amp;h=900&amp;fit=fill",
+      "checkedAt": "2026-06-15T01:00:01.490980+00:00"
     }
   }
 }
