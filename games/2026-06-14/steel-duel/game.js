@@ -277,15 +277,41 @@
   function endMatch() { state = 'over'; winner = score.p1 === score.p2 ? 'draw' : (score.p1 > score.p2 ? 'p1' : 'p2'); if (!headless) { SDAudio.roundEnd(); SDAudio.engine(0); maybeOfferScore(); } showOverlay('over'); }
 
   /* ===================== render ===================== */
-  let ctx, canvas, dpr = 1;
+  let ctx, canvas, dpr = 1, viewW = LW, viewH = LH, mobileView = false;
+  const cam = { x: 0, y: 0, zoom: 1 };
+  function hasTouchScreen() { return ('ontouchstart' in window) || navigator.maxTouchPoints > 0 || matchMedia('(pointer: coarse)').matches; }
+  function clampCam(v, max) { return max <= 0 ? max / 2 : Math.max(0, Math.min(max, v)); }
+  function updateCamera() {
+    if (!mobileView) { cam.x = 0; cam.y = 0; cam.zoom = 1; return cam; }
+    const portrait = viewH >= viewW;
+    cam.zoom = portrait ? 1.38 : 1.18;
+    const vw = viewW / cam.zoom, vh = viewH / cam.zoom;
+    let target = tanks[0];
+    if (state === 'attract' && tanks[0] && tanks[1]) target = { x: (tanks[0].x + tanks[1].x) / 2, y: (tanks[0].y + tanks[1].y) / 2 };
+    if (!target) target = { x: LW / 2, y: LH / 2 };
+    cam.x = clampCam(target.x - vw * 0.5, LW - vw);
+    cam.y = clampCam(target.y - vh * 0.5, LH - vh);
+    return cam;
+  }
+  function screenToWorld(clientX, clientY) {
+    if (!canvas) return { x: clientX, y: clientY };
+    const r = canvas.getBoundingClientRect();
+    const sx = (clientX - r.left) / Math.max(1, r.width) * viewW;
+    const sy = (clientY - r.top) / Math.max(1, r.height) * viewH;
+    const c = updateCamera();
+    return { x: c.x + sx / c.zoom, y: c.y + sy / c.zoom };
+  }
   function render() {
     if (!ctx) return;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     const T = SDArt.theme(visualMode);
     const sx = (Math.random() - 0.5) * shake, sy = (Math.random() - 0.5) * shake;
-    const bg = ctx.createLinearGradient(0, 0, 0, LH); bg.addColorStop(0, T.bg1); bg.addColorStop(1, T.bg0);
-    ctx.fillStyle = bg; ctx.fillRect(0, 0, LW, LH);
-    ctx.save(); ctx.translate(sx, sy);
+    const c = updateCamera();
+    const bg = ctx.createLinearGradient(0, 0, 0, viewH); bg.addColorStop(0, T.bg1); bg.addColorStop(1, T.bg0);
+    ctx.fillStyle = bg; ctx.fillRect(0, 0, viewW, viewH);
+    ctx.save();
+    if (mobileView) { ctx.scale(c.zoom, c.zoom); ctx.translate(-c.x + sx, -c.y + sy); }
+    else ctx.translate(sx, sy);
     SDArt.drawFloor(ctx, 0, HUD_H, FIELD_W, FIELD_H, visualMode);
     if (SDArt) DECALS.draw(ctx);
     SDArt.drawWalls(ctx, { solid, hp: wallHP, MAX: WALL_MAX, COLS, ROWS, TILE, HUD_H }, visualMode);
@@ -298,19 +324,20 @@
     if (state === 'playing' && mode === 'cpu' && !touchActive && tanks[0] && tanks[0].alive) SDArt.drawReticle(ctx, mouseX, mouseY, T.p1);
     ctx.restore();
     drawHUD(T);
-    if (visualMode === 'classic') SDArt.classicOverlay(ctx, LW, LH);
+    if (visualMode === 'classic') SDArt.classicOverlay(ctx, viewW, viewH);
   }
   function drawHUD(T) {
-    ctx.fillStyle = 'rgba(0,0,0,0.35)'; ctx.fillRect(0, 0, LW, HUD_H);
+    const w = viewW, h = mobileView ? 56 : HUD_H;
+    ctx.fillStyle = 'rgba(0,0,0,0.48)'; ctx.fillRect(0, 0, w, h);
     ctx.font = 'bold 40px Menlo,Consolas,monospace'; ctx.textBaseline = 'middle';
-    ctx.fillStyle = visualMode === 'classic' ? '#fff' : T.p1; ctx.textAlign = 'left'; ctx.fillText(String(score.p1).padStart(2, '0'), 28, HUD_H / 2);
-    ctx.fillStyle = visualMode === 'classic' ? '#bdbdbd' : T.p2; ctx.textAlign = 'right'; ctx.fillText(String(score.p2).padStart(2, '0'), LW - 28, HUD_H / 2);
+    ctx.fillStyle = visualMode === 'classic' ? '#fff' : T.p1; ctx.textAlign = 'left'; ctx.fillText(String(score.p1).padStart(2, '0'), mobileView ? 14 : 28, h / 2);
+    ctx.fillStyle = visualMode === 'classic' ? '#bdbdbd' : T.p2; ctx.textAlign = 'right'; ctx.fillText(String(score.p2).padStart(2, '0'), w - (mobileView ? 14 : 28), h / 2);
     const flash = timeLeft <= FLASH_AT && Math.floor(timeLeft * 2) % 2 === 0;
     ctx.fillStyle = timeLeft <= FLASH_AT ? (flash ? '#ff5277' : '#7a2236') : T.ink;
-    ctx.font = 'bold 34px Menlo,Consolas,monospace'; ctx.textAlign = 'center'; ctx.fillText(Math.ceil(timeLeft).toString().padStart(2, '0'), LW / 2, HUD_H / 2);
+    ctx.font = 'bold 34px Menlo,Consolas,monospace'; ctx.textAlign = 'center'; ctx.fillText(Math.ceil(timeLeft).toString().padStart(2, '0'), w / 2, h / 2);
     ctx.fillStyle = T.inkDim; ctx.font = '11px Menlo,Consolas,monospace';
-    ctx.fillText(state === 'attract' ? 'ATTRACT — CPU vs CPU' : (mode === 'cpu' ? 'P1  vs  CPU' : 'P1  vs  P2'), LW / 2, HUD_H - 12);
-    if (freezeT > 0 && state === 'playing') { ctx.fillStyle = T.inkDim; ctx.font = 'bold 13px Menlo,Consolas,monospace'; ctx.fillText('— RELOADING —', LW / 2, HUD_H / 2 + 22); }
+    ctx.fillText(state === 'attract' ? 'ATTRACT - CPU vs CPU' : (mode === 'cpu' ? 'P1  vs  CPU' : 'P1  vs  P2'), w / 2, h - 10);
+    if (freezeT > 0 && state === 'playing') { ctx.fillStyle = T.inkDim; ctx.font = 'bold 13px Menlo,Consolas,monospace'; ctx.fillText('- RELOADING -', w / 2, h / 2 + 22); }
   }
 
   /* ===================== UI ===================== */
@@ -385,7 +412,7 @@
 
   function setupMouse() {
     if (!canvas) return;
-    const toLogical = e => { const r = canvas.getBoundingClientRect(); mouseX = (e.clientX - r.left) / r.width * LW; mouseY = (e.clientY - r.top) / r.height * LH; };
+    const toLogical = e => { const p = screenToWorld(e.clientX, e.clientY); mouseX = p.x; mouseY = p.y; };
     window.addEventListener('mousemove', toLogical);
     canvas.addEventListener('mousedown', e => { if (e.button === 0) { controls[0].fire = true; toLogical(e); e.preventDefault(); } });
     window.addEventListener('mouseup', e => { if (e.button === 0) controls[0].fire = false; });
@@ -393,7 +420,7 @@
 
   /* ===================== touch (twin-stick) ===================== */
   function setupTouch() {
-    const isTouch = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
+    const isTouch = hasTouchScreen();
     const wrap = $('touch'); if (!wrap) return;
     if (!isTouch) { wrap.style.display = 'none'; return; }
     touchActive = true; wrap.style.display = 'block'; applyCursor();
@@ -406,9 +433,10 @@
       const r = base.getBoundingClientRect(), ox = r.left + r.width / 2, oy = r.top + r.height / 2;
       let dx = cx - ox, dy = cy - oy, d = Math.hypot(dx, dy); const mag = Math.min(1, d / R);
       const ang = Math.atan2(dy, dx); controls[0][prop] = { active: true, angle: ang, mag };
+      if (prop === 'aimVec') controls[0].fire = true;
       if (knob) { const kd = Math.min(d, R); knob.style.transform = `translate(${Math.cos(ang) * kd}px,${Math.sin(ang) * kd}px)`; }
     };
-    const end = () => { controls[0][prop] = { active: false, angle: 0, mag: 0 }; if (knob) knob.style.transform = 'translate(0,0)'; };
+    const end = () => { controls[0][prop] = { active: false, angle: 0, mag: 0 }; if (prop === 'aimVec') controls[0].fire = false; if (knob) knob.style.transform = 'translate(0,0)'; };
     base.addEventListener('touchstart', e => { e.preventDefault(); const t = e.changedTouches[0]; move(t.clientX, t.clientY); }, { passive: false });
     base.addEventListener('touchmove', e => { e.preventDefault(); const t = e.changedTouches[0]; move(t.clientX, t.clientY); }, { passive: false });
     base.addEventListener('touchend', e => { e.preventDefault(); end(); }, { passive: false });
@@ -419,9 +447,19 @@
   function resize() {
     if (!canvas) return;
     dpr = Math.min(2, window.devicePixelRatio || 1);
-    canvas.width = LW * dpr; canvas.height = LH * dpr;
-    const scale = Math.min(window.innerWidth / LW, (window.innerHeight - 4) / LH);
-    canvas.style.width = (LW * scale) + 'px'; canvas.style.height = (LH * scale) + 'px';
+    mobileView = hasTouchScreen() && !headless;
+    document.body.classList.toggle('mobile-play', mobileView);
+    if (mobileView) {
+      viewW = Math.max(1, window.innerWidth);
+      viewH = Math.max(1, window.innerHeight);
+      canvas.width = Math.round(viewW * dpr); canvas.height = Math.round(viewH * dpr);
+      canvas.style.width = viewW + 'px'; canvas.style.height = viewH + 'px';
+    } else {
+      viewW = LW; viewH = LH;
+      canvas.width = LW * dpr; canvas.height = LH * dpr;
+      const scale = Math.min(window.innerWidth / LW, (window.innerHeight - 4) / LH);
+      canvas.style.width = (LW * scale) + 'px'; canvas.style.height = (LH * scale) + 'px';
+    }
   }
 
   /* ===================== self-tests ===================== */
@@ -526,9 +564,9 @@
   function boot() {
     canvas = $('game'); if (!canvas) return; ctx = canvas.getContext('2d');
     TRACKS = new SDArt.Tracks(); PARTS = new SDArt.Particles(); DECALS = new SDArt.Decals();
-    resize(); window.addEventListener('resize', resize);
     window.addEventListener('keydown', e => onKey(e, true)); window.addEventListener('keyup', e => onKey(e, false));
     setupMouse(); setupTouch();
+    resize(); window.addEventListener('resize', resize);
 
     const click = (id, fn) => { const e = $(id); if (e) e.addEventListener('click', () => { SDAudio.ui(); fn(); }); };
     click('btnDuel', () => startGame('duel')); click('btnCpu', () => startGame('cpu'));
