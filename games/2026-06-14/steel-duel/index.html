@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>Steel Duel — HD Tank Battle</title>
+<meta name="description" content="Steel Duel — a faithful HD remaster of Atari's 1974 arcade Tank. Two-player top-down maze duel through a deadly minefield, plus a CPU mode, a 1974 CRT homage, and global scores." />
+<style>
+  :root{
+    --amber:#ffb347; --teal:#46d6e8; --ink:#eef3ff; --dim:#8fa0bd;
+    --panel:rgba(14,19,29,.92); --edge:rgba(120,150,200,.18);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;background:#05070c;color:var(--ink);
+    font-family:Menlo,Consolas,"SF Mono",monospace;overflow:hidden;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
+  #stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 30%,#0d1320,#05070c 70%)}
+  canvas{display:block;image-rendering:auto;border-radius:6px;box-shadow:0 0 60px rgba(70,120,200,.18),0 14px 40px rgba(0,0,0,.6)}
+  /* top-right toolbar */
+  #bar{position:fixed;top:10px;right:12px;display:flex;gap:8px;z-index:20}
+  #bar button{background:var(--panel);border:1px solid var(--edge);color:var(--ink);
+    border-radius:8px;padding:6px 10px;font:inherit;font-size:13px;cursor:pointer}
+  #bar button:hover{border-color:var(--amber)}
+  /* overlays */
+  .ov{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:30;
+    background:rgba(4,7,12,.72);backdrop-filter:blur(3px);padding:18px}
+  .ov.hidden{display:none}
+  .card{width:min(560px,94vw);background:var(--panel);border:1px solid var(--edge);
+    border-radius:16px;padding:26px 26px 22px;text-align:center;box-shadow:0 24px 60px rgba(0,0,0,.55)}
+  h1{margin:0 0 2px;font-size:clamp(34px,7vw,56px);letter-spacing:3px;
+    background:linear-gradient(120deg,var(--amber),#fff,var(--teal));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  .sub{color:var(--dim);font-size:13px;margin:0 0 18px;letter-spacing:1px}
+  .btn{display:block;width:100%;margin:9px 0;padding:13px;border-radius:10px;font:inherit;font-size:16px;
+    cursor:pointer;border:1px solid var(--edge);background:#161d2b;color:var(--ink);transition:.15s}
+  .btn:hover{transform:translateY(-1px)}
+  .btn.primary{background:linear-gradient(120deg,#3a2a12,#123038);border-color:var(--amber);font-weight:700}
+  .row{display:flex;gap:10px}.row .btn{flex:1}
+  .opt{display:flex;align-items:center;justify-content:center;gap:10px;color:var(--dim);font-size:13px;margin-top:8px}
+  select,input{background:#0c1019;color:var(--ink);border:1px solid var(--edge);border-radius:8px;padding:8px;font:inherit}
+  .keys{display:grid;grid-template-columns:1fr 1fr;gap:14px;text-align:left;margin:8px 0 4px;font-size:13px;color:var(--dim)}
+  .keys b{color:var(--ink)} .keys h3{margin:0 0 6px;font-size:12px;letter-spacing:1px}
+  .keys .p1{color:var(--amber)} .keys .p2{color:var(--teal)}
+  .result{font-size:30px;letter-spacing:2px;margin:4px 0}
+  .big{font-size:40px;font-weight:700;margin:6px 0 14px}
+  .sb-row{display:flex;justify-content:space-between;padding:7px 12px;border-bottom:1px solid var(--edge);font-size:15px}
+  #overScoreForm.hidden{display:none}
+  /* touch */
+  #touch{position:fixed;inset:0;z-index:15;display:none;pointer-events:none}
+  #touch .pad{position:absolute;bottom:18px;display:flex;gap:10px;pointer-events:auto}
+  #touch .dpad{left:16px} #touch .act{right:16px}
+  .tbtn{width:62px;height:62px;border-radius:14px;background:rgba(20,27,40,.7);border:1px solid var(--edge);
+    color:var(--ink);font-size:22px;display:flex;align-items:center;justify-content:center;touch-action:none}
+  #tFire{width:84px;height:84px;border-radius:50%;background:rgba(58,42,18,.7);border-color:var(--amber);font-size:15px;letter-spacing:1px}
+  .colpad{display:flex;flex-direction:column;gap:10px;align-items:center}
+  .footer{margin-top:12px;color:var(--dim);font-size:11px}
+  a{color:var(--teal)}
+</style>
+</head>
+<body>
+  <div id="stage"><canvas id="game"></canvas></div>
+
+  <div id="bar">
+    <button id="btnClassic" title="Toggle 1974 CRT mode (C)">HD</button>
+    <button id="btnMute" title="Mute (M)">🔊</button>
+  </div>
+
+  <!-- TITLE -->
+  <div id="ovTitle" class="ov">
+    <div class="card">
+      <h1>STEEL&nbsp;DUEL</h1>
+      <p class="sub">HD remaster of Atari TANK (1974) · 2-player maze &amp; minefield</p>
+      <button id="btnDuel" class="btn primary">⚔️ 2-PLAYER DUEL</button>
+      <button id="btnCpu" class="btn">🤖 PLAY vs CPU</button>
+      <div class="opt">CPU difficulty
+        <select id="diffSel"><option value="easy">Easy</option><option value="normal" selected>Normal</option><option value="hard">Hard</option></select>
+      </div>
+      <div class="row" style="margin-top:12px">
+        <button id="btnHow" class="btn">HOW TO PLAY</button>
+        <button id="btnScores" class="btn">🏆 SCORES</button>
+      </div>
+      <div class="footer">First tank-combat arcade game, Kee&nbsp;Games 1974. Drive your foe into the mines.</div>
+    </div>
+  </div>
+
+  <!-- HOW -->
+  <div id="ovHow" class="ov hidden">
+    <div class="card">
+      <h1 style="font-size:34px">HOW TO PLAY</h1>
+      <p class="sub">Outscore your rival before the clock hits zero</p>
+      <div class="keys">
+        <div><h3 class="p1">PLAYER 1</h3><b>W</b> forward · <b>S</b> reverse<br><b>A/D</b> steer · <b>Space</b> fire</div>
+        <div><h3 class="p2">PLAYER 2 / CPU</h3><b>↑</b> forward · <b>↓</b> reverse<br><b>←/→</b> steer · <b>Enter</b> fire</div>
+      </div>
+      <p class="sub" style="margin-top:14px">Shells are stopped by walls. A hit (or a mine!) scores a point for your
+        opponent, then both tanks respawn. Mines never come back — bait your rival into them.
+        Press <b>P</b> to pause, <b>C</b> for 1974 mode, <b>M</b> to mute.</p>
+      <button id="btnHowBack" class="btn primary">BACK</button>
+    </div>
+  </div>
+
+  <!-- PAUSE -->
+  <div id="ovPause" class="ov hidden">
+    <div class="card">
+      <h1 style="font-size:38px">PAUSED</h1>
+      <button id="btnResume" class="btn primary">RESUME</button>
+      <button id="btnQuit" class="btn">QUIT TO MENU</button>
+    </div>
+  </div>
+
+  <!-- OVER -->
+  <div id="ovOver" class="ov hidden">
+    <div class="card">
+      <div class="result" id="overResult">—</div>
+      <div class="big" id="overScore">0 — 0</div>
+      <div id="overScoreForm" class="hidden">
+        <div class="sub" id="overYourScore"></div>
+        <div class="row" style="justify-content:center">
+          <input id="initials" maxlength="3" placeholder="AAA" style="width:90px;text-align:center;text-transform:uppercase" />
+          <button id="btnSubmit" class="btn primary" style="flex:0 0 auto;width:auto">SUBMIT</button>
+        </div>
+      </div>
+      <button id="btnAgain" class="btn primary">PLAY AGAIN</button>
+      <button id="btnMenu" class="btn">MENU</button>
+    </div>
+  </div>
+
+  <!-- SCORES -->
+  <div id="ovScores" class="ov hidden">
+    <div class="card">
+      <h1 style="font-size:34px">🏆 SCORES</h1>
+      <p class="sub">Most points scored vs CPU</p>
+      <div id="scoreBoard"></div>
+      <button id="btnScoresBack" class="btn primary" style="margin-top:14px">BACK</button>
+    </div>
+  </div>
+
+  <!-- TOUCH -->
+  <div id="touch">
+    <div class="pad dpad">
+      <div class="colpad"><div id="tUp" class="tbtn">▲</div><div id="tDown" class="tbtn">▼</div></div>
+      <div class="colpad" style="justify-content:flex-end"><div style="display:flex;gap:10px"><div id="tLeft" class="tbtn">◀</div><div id="tRight" class="tbtn">▶</div></div></div>
+    </div>
+    <div class="pad act"><div id="tFire" class="tbtn">FIRE</div></div>
+  </div>
+
+  <script src="audio.js"></script>
+  <script src="art.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>
