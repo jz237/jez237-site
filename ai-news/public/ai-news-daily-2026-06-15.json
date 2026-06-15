@@ -1,6 +1,6 @@
 {
   "date": "2026-06-15",
-  "updatedAt": "2026-06-15T11:00:01.476353+00:00",
+  "updatedAt": "2026-06-15T12:00:01.938795+00:00",
   "items": [
     {
       "title": "US order to block foreign access to Anthropic’s top models marks a reversal",
@@ -13,10 +13,10 @@
       "image": "https://media.thenextweb.com/2026/06/USA-flag.avif",
       "published": "2026-06-15T09:00:27+00:00",
       "firstSeen": "2026-06-15T10:00:01.539237+00:00",
-      "lastSeen": "2026-06-15T11:00:01.476353+00:00",
+      "lastSeen": "2026-06-15T12:00:01.938795+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.1908
+      "score": 10.1622
     },
     {
       "title": "Accenture: Consumers show growing trust in AI shopping agents",
@@ -29,10 +29,10 @@
       "image": "",
       "published": "2026-06-15T10:00:00+00:00",
       "firstSeen": "2026-06-15T10:00:01.539237+00:00",
-      "lastSeen": "2026-06-15T11:00:01.476353+00:00",
+      "lastSeen": "2026-06-15T12:00:01.938795+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 6.5179
+      "score": 6.4885
     },
     {
       "title": "The AI off switch: How Anthropic’s export controls sparked a global AI sovereignty scramble",
@@ -45,10 +45,58 @@
       "image": "",
       "published": "2026-06-15T08:00:00+00:00",
       "firstSeen": "2026-06-15T09:00:02.103412+00:00",
-      "lastSeen": "2026-06-15T11:00:01.476353+00:00",
+      "lastSeen": "2026-06-15T12:00:01.938795+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.26
+      "score": 6.2323
+    },
+    {
+      "title": "HarmonyOS 7 steps into the AI gap Apple left open in China",
+      "url": "https://www.artificialintelligence-news.com/news/harmonyos-7-china-ai-apple-gap",
+      "source": "Artificial Intelligence News",
+      "sourceUrl": "https://www.artificialintelligence-news.com/categories/artificial-intelligence/feed/",
+      "sourceWeight": 0.82,
+      "category": "AI",
+      "summary": "Four days after Apple confirmed that Siri AI would not launch in China, Huawei took the stage in Dongguan and declared HarmonyOS 7 the beginning of the agent era. The gap Apple could not fill, Huawei has moved into with an architecture built specifically for it. What HarmonyOS 7 actually changes The headline change is [&#8230;]\nThe post HarmonyOS 7 steps into the AI gap Apple left open in China appeared first on AI News.",
+      "image": "",
+      "published": "2026-06-15T11:00:00+00:00",
+      "firstSeen": "2026-06-15T12:00:01.938795+00:00",
+      "lastSeen": "2026-06-15T12:00:01.938795+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.7178
+    },
+    {
+      "title": "Benchmarking Web Agent Safety under E-commerce Deceptive Interfaces",
+      "url": "https://llm-stats.com/ai-news",
+      "source": "LLM Stats AI News",
+      "sourceUrl": "https://llm-stats.com/ai-news",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "",
+      "image": "https://llm-stats.com/og/main.png",
+      "published": "2026-06-15T12:00:13.730660+00:00",
+      "firstSeen": "2026-05-29T21:00:01.522609+00:00",
+      "lastSeen": "2026-06-15T12:00:01.938795+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.41
+    },
+    {
+      "title": "Tesla gave European regulators misleading self-driving safety data",
+      "url": "https://thenextweb.com/news/tesla-fsd-misleading-data-eu-regulators",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Tesla put self-published safety statistics in front of regulators in Sweden and the Netherlands that independent traffic-safety researchers say amount to misleading marketing, according to a Reuters review of correspondence obtained through public-records requests. The data was part of the company’s push to win wider European approval for its Full Self-Driving system, in a region where Tesla [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/tesla-fsd-eu-skepticism-regulator-records-.avif",
+      "published": "2026-06-15T11:01:43+00:00",
+      "firstSeen": "2026-06-15T12:00:01.938795+00:00",
+      "lastSeen": "2026-06-15T12:00:01.938795+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.6207
     },
     {
       "title": "Schneider Electric and Foxconn partner on AI data-centre infrastructure",
@@ -61,10 +109,10 @@
       "image": "https://media.thenextweb.com/2026/06/Schneider-Electric-and-Foxconn-partner.avif",
       "published": "2026-06-15T10:12:51+00:00",
       "firstSeen": "2026-06-15T11:00:01.476353+00:00",
-      "lastSeen": "2026-06-15T11:00:01.476353+00:00",
+      "lastSeen": "2026-06-15T12:00:01.938795+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.5262
+      "score": 3.4967
     },
     {
       "title": "Google is about to disable uBlock Origin and every other Manifest V2 extension in Chrome",
@@ -80,7 +128,7 @@
       "lastSeen": "2026-06-15T11:00:01.476353+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.4504
+      "score": 3.423
     },
     {
       "title": "Meta Tapped a Pentagon Supplier to Prototype Face Recognition for Its Glasses",
@@ -93,10 +141,10 @@
       "image": "https://media.wired.com/photos/6a2a0a5069d7cd90279b88e1/master/pass/security_meta_glasses_pentagon.jpg",
       "published": "2026-06-15T09:00:00+00:00",
       "firstSeen": "2026-06-15T10:00:01.539237+00:00",
-      "lastSeen": "2026-06-15T11:00:01.476353+00:00",
+      "lastSeen": "2026-06-15T12:00:01.938795+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3305
+      "score": 3.302
     },
     {
       "title": "SpaceX could hit $1tn a year by 2030, Musk claims after record IPO",
@@ -109,26 +157,10 @@
       "image": "https://media.thenextweb.com/2026/06/spacex-ipo-musk-trillionaire-index-fund-wealth-transfer.avif",
       "published": "2026-06-15T08:22:13+00:00",
       "firstSeen": "2026-06-15T09:00:02.103412+00:00",
-      "lastSeen": "2026-06-15T11:00:01.476353+00:00",
+      "lastSeen": "2026-06-15T12:00:01.938795+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7725
-    },
-    {
-      "title": "The Coin Flip Judge? Reliability and Bias in LLM-as-a-Judge Evaluation",
-      "url": "https://llm-stats.com/ai-news",
-      "source": "LLM Stats AI News",
-      "sourceUrl": "https://llm-stats.com/ai-news",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "",
-      "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-15T11:00:21.310999+00:00",
-      "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-15T11:00:01.476353+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.71
+      "score": 2.7445
     },
     {
       "title": "India’s Razorpay files for IPO through the confidential route",
@@ -141,10 +173,10 @@
       "image": "https://media.thenextweb.com/2026/06/Razorpay.avif",
       "published": "2026-06-15T10:26:56+00:00",
       "firstSeen": "2026-06-15T11:00:01.476353+00:00",
-      "lastSeen": "2026-06-15T11:00:01.476353+00:00",
+      "lastSeen": "2026-06-15T12:00:01.938795+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.4833
+      "score": 2.4536
     },
     {
       "title": "ByteDance is in talks to buy AI chips from China’s Iluvatar CoreX",
@@ -160,39 +192,7 @@
       "lastSeen": "2026-06-15T11:00:01.476353+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3544
-    },
-    {
-      "title": "The AI layoff wave is becoming a powder keg",
-      "url": "https://techcrunch.com/2026/06/15/the-ai-layoff-wave-is-becoming-a-powder-keg",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "What makes this combustible: at the very moment that tens of thousands of workers are being shown the door, a small cohort of AI insiders is becoming wealthy on a scale that's hard to comprehend.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/06/Powder-Keg.png?resize=1200%2C960",
-      "published": "2026-06-15T07:25:41+00:00",
-      "firstSeen": "2026-06-15T08:00:01.934491+00:00",
-      "lastSeen": "2026-06-15T11:00:01.476353+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.1861
-    },
-    {
-      "title": "France hosts the G7 with an AI pitch built on other people’s billions",
-      "url": "https://thenextweb.com/news/macron-g7-ai-funding-data-centres",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "France took over the G7 this week with Emmanuel Macron pressing artificial intelligence to the front of the agenda and, with it, a good deal of his own standing. The summit runs from 15 to 17 June, and the pitch is straightforward: position France as Europe’s AI powerhouse, running on the country’s plentiful nuclear electricity. [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2024/05/Untitled-design-8.avif",
-      "published": "2026-06-15T09:31:02+00:00",
-      "firstSeen": "2026-06-15T10:00:01.539237+00:00",
-      "lastSeen": "2026-06-15T11:00:01.476353+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.1056
+      "score": 2.3269
     }
   ],
   "errors": [
