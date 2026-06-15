@@ -48,22 +48,20 @@
   .big{font-size:40px;font-weight:700;margin:6px 0 14px}
   .sb-row{display:flex;justify-content:space-between;padding:7px 12px;border-bottom:1px solid var(--edge);font-size:15px}
   #overScoreForm.hidden{display:none}
-  /* Full-height touch zones with faint corner control hints. */
+  /* Faint lower-corner touch pads; hitboxes match the visible controls. */
   #touch{position:fixed;inset:0;z-index:15;display:none;pointer-events:none}
-  .stick{position:absolute;top:0;width:50%;height:100%;border:0;border-radius:0;
+  .stick{position:absolute;bottom:22px;width:132px;height:132px;border:0;border-radius:50%;
     background:transparent;pointer-events:auto;touch-action:none}
-  #stickL{left:0} #stickR{right:0}
-  .stick::before{content:"";position:absolute;bottom:24px;width:92px;height:92px;border-radius:50%;
+  #stickL{left:16px} #stickR{right:16px}
+  .stick::before{content:"";position:absolute;inset:20px;border-radius:50%;
     border:1px solid rgba(238,243,255,.16);background:radial-gradient(circle,rgba(238,243,255,.055) 0 26%,rgba(238,243,255,.025) 27% 56%,transparent 57%);
     box-shadow:0 0 24px rgba(70,214,232,.08);pointer-events:none}
-  #stickL::before{left:18px}
-  #stickR::before{right:18px;border-color:rgba(255,179,71,.18);box-shadow:0 0 24px rgba(255,179,71,.08)}
+  #stickR::before{border-color:rgba(255,179,71,.18);box-shadow:0 0 24px rgba(255,179,71,.08)}
   .knob{position:absolute;left:50%;top:50%;width:54px;height:54px;margin:-27px 0 0 -27px;border-radius:50%;
     background:rgba(120,140,180,.6);border:1px solid rgba(255,255,255,.3)}
   #stickRk{background:rgba(255,179,71,.6)}
-  .sticklbl{position:absolute;bottom:10px;width:92px;text-align:center;font-size:9px;letter-spacing:1.2px;color:rgba(238,243,255,.18);pointer-events:none}
-  #stickL .sticklbl{left:18px}
-  #stickR .sticklbl{right:18px;color:rgba(255,179,71,.2)}
+  .sticklbl{position:absolute;bottom:8px;left:20px;width:92px;text-align:center;font-size:9px;letter-spacing:1.2px;color:rgba(238,243,255,.18);pointer-events:none}
+  #stickR .sticklbl{color:rgba(255,179,71,.2)}
   .knob{display:none}
   input[type=range]{accent-color:var(--amber)}
   .footer{margin-top:12px;color:var(--dim);font-size:11px}
@@ -94,7 +92,7 @@
         <button id="btnHow" class="btn">HOW TO PLAY</button>
         <button id="btnScores" class="btn">🏆 SCORES</button>
       </div>
-      <div class="footer">v4 · First tank-combat arcade game, Kee&nbsp;Games 1974. Drive your foe into the mines.</div>
+      <div class="footer">v5 · First tank-combat arcade game, Kee&nbsp;Games 1974. Drive your foe into the mines.</div>
     </div>
   </div>
 
@@ -156,8 +154,8 @@
     <div id="stickR" class="stick"><div id="stickRk" class="knob"></div><span class="sticklbl">AIM · FIRE</span></div>
   </div>
 
-  <script src="audio.js?v=4"></script>
-  <script src="art.js?v=4"></script>
-  <script src="game.js?v=4"></script>
+  <script src="audio.js?v=5"></script>
+  <script src="art.js?v=5"></script>
+  <script src="game.js?v=5"></script>
 </body>
 </html>
