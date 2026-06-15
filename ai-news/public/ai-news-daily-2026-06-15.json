@@ -1,6 +1,6 @@
 {
   "date": "2026-06-15",
-  "updatedAt": "2026-06-15T17:00:01.632650+00:00",
+  "updatedAt": "2026-06-15T18:00:01.483797+00:00",
   "items": [
     {
       "title": "Anthropic lawsuit says it oversold the usage on its $200 Claude Max plans",
@@ -13,10 +13,10 @@
       "image": "https://media.thenextweb.com/2026/04/workday-cto-bailis-anthropic-member-technical-staff.avif",
       "published": "2026-06-15T14:08:52+00:00",
       "firstSeen": "2026-06-15T15:00:01.885095+00:00",
-      "lastSeen": "2026-06-15T17:00:01.632650+00:00",
+      "lastSeen": "2026-06-15T18:00:01.483797+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.0662
+      "score": 11.0384
     },
     {
       "title": "US order to block foreign access to Anthropic’s top models marks a reversal",
@@ -32,7 +32,7 @@
       "lastSeen": "2026-06-15T12:39:04.338676+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.031
+      "score": 10.0068
     },
     {
       "title": "\"They screwed us\": Personality clashes sent Anthropic's models offline",
@@ -45,10 +45,10 @@
       "image": "",
       "published": "2026-06-15T14:57:33+00:00",
       "firstSeen": "2026-06-15T16:00:02.137972+00:00",
-      "lastSeen": "2026-06-15T17:00:01.632650+00:00",
+      "lastSeen": "2026-06-15T18:00:01.483797+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 9.2294
+      "score": 9.2009
     },
     {
       "title": "Accenture: Consumers show growing trust in AI shopping agents",
@@ -61,10 +61,10 @@
       "image": "",
       "published": "2026-06-15T10:00:00+00:00",
       "firstSeen": "2026-06-15T10:00:01.539237+00:00",
-      "lastSeen": "2026-06-15T17:00:01.632650+00:00",
+      "lastSeen": "2026-06-15T18:00:01.483797+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 6.3536
+      "score": 6.3288
     },
     {
       "title": "The AI off switch: How Anthropic’s export controls sparked a global AI sovereignty scramble",
@@ -77,10 +77,10 @@
       "image": "",
       "published": "2026-06-15T08:00:00+00:00",
       "firstSeen": "2026-06-15T09:00:02.103412+00:00",
-      "lastSeen": "2026-06-15T17:00:01.632650+00:00",
+      "lastSeen": "2026-06-15T18:00:01.483797+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.1047
+      "score": 6.0812
     },
     {
       "title": "HarmonyOS 7 steps into the AI gap Apple left open in China",
@@ -93,26 +93,26 @@
       "image": "",
       "published": "2026-06-15T11:00:00+00:00",
       "firstSeen": "2026-06-15T12:00:01.938795+00:00",
-      "lastSeen": "2026-06-15T17:00:01.632650+00:00",
+      "lastSeen": "2026-06-15T18:00:01.483797+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.5791
+      "score": 5.5536
     },
     {
-      "title": "Benchmarking Web Agent Safety under E-commerce Deceptive Interfaces",
-      "url": "https://llm-stats.com/ai-news",
-      "source": "LLM Stats AI News",
-      "sourceUrl": "https://llm-stats.com/ai-news",
-      "sourceWeight": 0.9,
+      "title": "Google Bug Hunter Claims $500K From AI-Assisted Vulnerability Pipeline",
+      "url": "https://www.techrepublic.com/article/news-google-ai-bug-bounty-pipeline",
+      "source": "TechRepublic AI",
+      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
+      "sourceWeight": 0.75,
       "category": "AI",
-      "summary": "",
-      "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-15T17:00:14.618865+00:00",
-      "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-15T17:00:01.632650+00:00",
+      "summary": "A researcher known as Brutecat says an AI-assisted pipeline helped map and test more than 1,500 Google APIs. Google has not confirmed the $500,000 payout total.\nThe post Google Bug Hunter Claims $500K From AI-Assisted Vulnerability Pipeline appeared first on TechRepublic.",
+      "image": "https://assets.techrepublic.com/uploads/2026/06/ai-and-data-management-concept-in-blue-tone-2026-03-17-05-29-24-utc-1-1024x656.png?f=jpeg",
+      "published": "2026-06-15T13:56:10+00:00",
+      "firstSeen": "2026-06-15T18:00:01.483797+00:00",
+      "lastSeen": "2026-06-15T18:00:01.483797+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.41
+      "score": 5.2326
     },
     {
       "title": "Cybersecurity vets protest ‘dangerous’ US government ban on Anthropic’s most powerful models",
@@ -125,10 +125,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/claude-mythos-logo.jpg?resize=1200%2C800",
       "published": "2026-06-15T15:29:51+00:00",
       "firstSeen": "2026-06-15T16:00:02.137972+00:00",
-      "lastSeen": "2026-06-15T17:00:01.632650+00:00",
+      "lastSeen": "2026-06-15T18:00:01.483797+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.245
+      "score": 5.2161
     },
     {
       "title": "Zhipu shares jump as Wall Street bets China AI fills the Anthropic gap",
@@ -141,10 +141,42 @@
       "image": "https://media.thenextweb.com/2026/06/Zhipu-AI-Logo.avif",
       "published": "2026-06-15T14:46:57+00:00",
       "firstSeen": "2026-06-15T16:00:02.137972+00:00",
-      "lastSeen": "2026-06-15T17:00:01.632650+00:00",
+      "lastSeen": "2026-06-15T18:00:01.483797+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0843
+      "score": 5.0559
+    },
+    {
+      "title": "Patch release v5.12.1",
+      "url": "https://github.com/huggingface/transformers/releases/tag/v5.12.1",
+      "source": "Hugging Face Transformers Releases",
+      "sourceUrl": "https://github.com/huggingface/transformers/releases.atom",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Patch release v5.12.1\nUpdated the lower bound for PEFT and a fix for auto tokenizer to properly resolve the mistral tokenizer (when mistral-common is installed). This is similar to v.5.10.3 minus the fixes that were already included in the main release - vLLM will first target 5.10.3 🤗\n\nFix peft lower bound #46605 by @hmellor (#46605)\nmistral common backend fix #46667 by @itazap (#46667)\n\nFull Changelog: v5.12.0...v5.12.1",
+      "image": "https://repository-images.githubusercontent.com/155220641/a16c4880-a501-11ea-9e8f-646cf611702e",
+      "published": "2026-06-15T17:29:59+00:00",
+      "firstSeen": "2026-06-15T17:00:01.632650+00:00",
+      "lastSeen": "2026-06-15T18:00:01.483797+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.9748
+    },
+    {
+      "title": "Patch release v5.10.3",
+      "url": "https://github.com/huggingface/transformers/releases/tag/v5.10.3",
+      "source": "Hugging Face Transformers Releases",
+      "sourceUrl": "https://github.com/huggingface/transformers/releases.atom",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Patch release v5.10.3\nA few fixes needed for vLLM to sync with transformers 🤗\n\n[fix] regression introduced by #45534 #46456 by @eustlb (#46456)\nFix {image/video/audio}_token_ids in ProcessorMixin #46500 by @hmellor (#46500)\nFix InternVL models #46524 by @hmellor (#46524)\nFix the offsets in processing #46525 by @zucchini-nlp (#46525)\nFix peft lower bound #46605 by @hmellor (#46605)\nmistral common backend fix #46667 by @itazap (#46667)\n\nFull Changelog: v5.10.2...v5.10.3",
+      "image": "https://repository-images.githubusercontent.com/155220641/a16c4880-a501-11ea-9e8f-646cf611702e",
+      "published": "2026-06-15T17:29:39+00:00",
+      "firstSeen": "2026-06-15T17:00:01.632650+00:00",
+      "lastSeen": "2026-06-15T18:00:01.483797+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.9746
     },
     {
       "title": "As AI agents become employees, NewCore emerges with $66M to give them identities",
@@ -157,42 +189,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/newcore-founders.jpg?resize=1200%2C800",
       "published": "2026-06-15T13:00:00+00:00",
       "firstSeen": "2026-06-15T14:00:01.569765+00:00",
-      "lastSeen": "2026-06-15T17:00:01.632650+00:00",
+      "lastSeen": "2026-06-15T18:00:01.483797+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8743
-    },
-    {
-      "title": "NewCore raises $66m to give AI agents a corporate identity",
-      "url": "https://thenextweb.com/news/newcore-66-million-ai-agent-identity-security",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "NewCore has come out of stealth with $66m to solve a problem most companies have not named yet: who, or what, is logging into their systems. The identity-security startup, based in Tel Aviv and San Francisco, is building a platform to govern both human employees and autonomous AI agents under one architecture, and it is [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/newcore-logo.avif",
-      "published": "2026-06-15T13:59:50+00:00",
-      "firstSeen": "2026-06-15T15:00:01.885095+00:00",
-      "lastSeen": "2026-06-15T17:00:01.632650+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.762
-    },
-    {
-      "title": "Tesla gave European regulators misleading self-driving safety data",
-      "url": "https://thenextweb.com/news/tesla-fsd-misleading-data-eu-regulators",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Tesla put self-published safety statistics in front of regulators in Sweden and the Netherlands that independent traffic-safety researchers say amount to misleading marketing, according to a Reuters review of correspondence obtained through public-records requests. The data was part of the company’s push to win wider European approval for its Full Self-Driving system, in a region where Tesla [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/tesla-fsd-eu-skepticism-regulator-records-.avif",
-      "published": "2026-06-15T11:01:43+00:00",
-      "firstSeen": "2026-06-15T12:00:01.938795+00:00",
-      "lastSeen": "2026-06-15T14:00:01.569765+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.4819
+      "score": 4.8473
     }
   ],
   "errors": [
