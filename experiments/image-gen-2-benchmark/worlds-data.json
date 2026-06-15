@@ -700,5 +700,41 @@
       "continuity": "Mirthcap Lookingglass Village canon: Finnel must find Heartglass Rue to brew Marlow’s tonic and save Mirthcap from Glassmoss Fever. Thornmaws are dangerous outer-garden predators. In the corrected quest sequence, Finnel brings a thornmaw down with bolas, climbs onto it, and kills it with a dagger strike to the heart before continuing toward Heartglass Rue.",
       "entryDescription": "Finnel tangles the thornmaw with bolas, climbs onto the fallen beast, and kills it with a dagger strike to the heart before continuing his quest."
     }
+  },
+  {
+    "id": "2026-06-14-manual-24-mirthcap-lookingglass-village-finnel-brews-the-he",
+    "title": "Mirthcap Lookingglass Village: Finnel Brews the Heartglass Tonic",
+    "tests": "Manual world catalog entry from #ai-photos; Finnel returns with Heartglass Rue and brews Marlow’s healing tonic in the old hut after Marlow has been buried.",
+    "prompt": "Use case: illustration-story\nAsset type: cinematic storybook panel for the Mirthcap fictional world\nPrimary request: Finnel proudly holds the Heartglass Rue while creating the healing potion in Doctor Marlow’s old hut. Marlow is not there because he has already been buried. Finnel is preparing the tonic to give out to the sick Mirthcap people.\nScene/backdrop: Doctor Marlow’s old mushroom-and-root hut interior, now quiet and solemn, full of herbal jars, thimble bottles, tiny wooden shelves, hanging dried plants, mortar and pestle, steaming cauldron, pocketwatch mechanism, rain-dim window, warm lantern light.\nSubject: older Finnel, tiny human-like Mirthcap villager with rounded ears or curls partly hiding ears, exhausted but proud and relieved; he holds up the glowing Heartglass Rue herb, a delicate translucent green-blue plant with heart-shaped glassy leaves; in front of him is a bubbling healing potion/tonic made from Marlow’s recipes.\nStyle/medium: rich detailed cinematic fantasy storybook illustration, wholesome emotional adventure tone, consistent with prior Mirthcap images.\nComposition/framing: wide landscape interior panel; Finnel central near the workbench and cauldron; the glowing Heartglass Rue clearly visible; potion ingredients and Marlow’s old tools around him; no text.\nLighting/mood: warm golden-green healing glow cutting through gloomy rain light, hopeful after danger, reverent but triumphant.\nConstraints: Marlow must not appear anywhere in the image; no dead body, no ghost, no portrait that could be mistaken for Marlow present in the scene; Finnel is alone in the hut preparing medicine; make the herb and potion visually clear.\nAvoid: Doctor Marlow present, duplicate Finnel, readable text, watermark, modern medical equipment, gore, horror.",
+    "image": "images/2026-06-14-manual-24-mirthcap-lookingglass-village-finnel-brews-the-he.png",
+    "date": "2026-06-14",
+    "batch": "Fictional Worlds",
+    "slot": "manual-24",
+    "model": "fal/openai/gpt-image-2",
+    "size": "1536x1024",
+    "world": {
+      "name": "Mirthcap Lookingglass Village",
+      "description": "A tiny whimsical village of human-like Mirthcap people living among mushroom homes, pocketwatch mechanisms, healing herbs, briarwings, and dangerous outer-garden mysteries.",
+      "continuity": "Mirthcap Lookingglass Village canon: Finnel survives the outer garden, obtains Heartglass Rue, and returns to Doctor Marlow’s old hut to brew the healing tonic from Marlow’s recipes. Marlow has already been buried and is not present. The tonic is prepared to save Mirthcap from Glassmoss Fever, including pregnant Luma.",
+      "entryDescription": "Finnel holds the glowing Heartglass Rue in Marlow’s old hut and brews the healing tonic that can save Mirthcap."
+    }
+  },
+  {
+    "id": "2026-06-14-manual-25-mirthcap-lookingglass-village-line-for-the-healin",
+    "title": "Mirthcap Lookingglass Village: Line for the Healing Tonic",
+    "tests": "Manual world catalog entry from #ai-photos; sick Mirthcap villagers line up at Marlow’s old hut for Finnel’s healing tonic, with pregnant Luma last in line.",
+    "prompt": "Use case: illustration-story\nAsset type: cinematic storybook panel for the Mirthcap fictional world\nPrimary request: The sick Mirthcap people line up outside Doctor Marlow’s old hut to receive Finnel’s healing tonic, with pregnant Luma last in line.\nScene/backdrop: outside Doctor Marlow’s mushroom-and-root hut in Mirthcap, rainy misty evening beginning to lift, wet mushroom paths, tiny lanterns, moss terraces, villagers gathered quietly, the hut door glowing warm green-gold from the healing potion inside.\nSubject: a line of very sick and frail Mirthcap villagers waiting for medicine; they look pale, weak, lethargic, wrapped in shawls, some leaning on canes or family; Finnel is visible at the hut doorway or small serving table with little tonic vials/cups; pregnant Luma is clearly last in line, visibly pregnant, very sick and fragile but hopeful, supported by one hand on her belly or leaning gently on a post.\nStyle/medium: rich detailed cinematic fantasy storybook illustration, wholesome emotional healing scene, consistent with previous Mirthcap images.\nComposition/framing: wide landscape exterior panel; line of villagers leads from foreground toward Marlow’s hut; Finnel at the glowing doorway distributing tonic; Luma last in line in the foreground or far end but clearly identifiable as pregnant and sick; no text.\nLighting/mood: gloomy rain and mist giving way to warm healing light, bittersweet hope, urgent but tender.\nConstraints: Doctor Marlow must not appear; no ghost, no body, no portrait that looks present; Luma must be last in line and visibly pregnant; villagers should look sick/frail but not monstrous; Finnel is distributing the potion.\nAvoid: Marlow present, gore, horror monsters, modern medical equipment, readable text, watermark, duplicate Finnels, wine or alcohol.",
+    "image": "images/2026-06-14-manual-25-mirthcap-lookingglass-village-line-for-the-healin.png",
+    "date": "2026-06-14",
+    "batch": "Fictional Worlds",
+    "slot": "manual-25",
+    "model": "fal/openai/gpt-image-2",
+    "size": "1536x1024",
+    "world": {
+      "name": "Mirthcap Lookingglass Village",
+      "description": "A tiny whimsical village of human-like Mirthcap people living among mushroom homes, pocketwatch mechanisms, healing herbs, briarwings, and dangerous outer-garden mysteries.",
+      "continuity": "Mirthcap Lookingglass Village canon: Finnel returns with Heartglass Rue, brews the healing tonic in Marlow’s old hut, and begins distributing it to the sick Mirthcap villagers. Pregnant Luma is sick and last in line, raising the final stakes before the cure reaches her.",
+      "entryDescription": "The sick villagers line up outside Marlow’s old hut to receive Finnel’s tonic, with pregnant Luma waiting last."
+    }
   }
 ]
