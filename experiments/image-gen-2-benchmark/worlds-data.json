@@ -578,8 +578,8 @@
   {
     "id": "2026-06-14-manual-18-mirthcap-lookingglass-village-map-to-heartglass-r",
     "title": "Mirthcap Lookingglass Village: Map to Heartglass Rue",
-    "tests": "Manual world catalog entry from #ai-photos; Pic 3 of the Glassmoss quest, showing Finnel finding Marlow dead and discovering the projected map to Heartglass Rue in Marlow’s hidden box.",
-    "prompt": "Create a dark cinematic storybook image of older Finnel Buttonby stopping by Doctor Marlow Dewmoss’s mushroom hut before leaving on his quest. Finnel discovers Marlow is dead on his bed. While crying, Finnel notices a tiny light from a little box in the corner. When opened, the box projects a luminous image of a map to the lost herb Heartglass Rue onto the mushroom ceiling. Marlow lies peacefully dead under a quilt, no gore or wounds. Finnel is an adult with curly hair hiding rounded ears, rain-wet travel cloak, satchel, herb tools, and Marlow’s recipe bundle. The box contains Marlow’s old pocketwatch charm and hidden mechanism, projecting delicate lines, dots, root paths, symbols, and the glowing Heartglass Rue destination. Gloomy healing chamber, teacup lanterns, hanging herbs, thimble jars, rain at the window, grief and revelation. Only one Marlow, no pointy ears, no elf features, no readable text.",
+    "tests": "Manual world catalog entry from #ai-photos; Pic 3 of the Glassmoss quest, corrected canon: Finnel returns to Marlow’s empty old hut after Marlow has already been buried and discovers the projected map to Heartglass Rue in Marlow’s hidden box.",
+    "prompt": "Create a dark cinematic storybook image of older Finnel Buttonby stopping by Doctor Marlow Dewmoss’s old mushroom hut before leaving on his quest. Marlow has already died and been buried, so the hut is empty of Marlow. Finnel grieves in the quiet room and notices a tiny light from a little box in the corner. When opened, the box projects a luminous image of a map to the lost herb Heartglass Rue onto the mushroom ceiling. Finnel is an adult with curly hair hiding rounded ears, rain-wet travel cloak, satchel, herb tools, and Marlow’s recipe bundle. The box contains Marlow’s old pocketwatch charm and hidden mechanism, projecting delicate lines, dots, root paths, symbols, and the glowing Heartglass Rue destination. Gloomy healing chamber, teacup lanterns, hanging herbs, thimble jars, rain at the window, grief and revelation. No Marlow present, no dead body, no ghost, no pointy ears, no elf features, no readable text.",
     "image": "images/2026-06-14-manual-18-mirthcap-lookingglass-village-map-to-heartglass-r.png",
     "date": "2026-06-14",
     "batch": "Fictional World",
@@ -590,7 +590,7 @@
       "name": "Mirthcap Lookingglass Village",
       "description": "A whimsical storybook pocket-world where tiny villagers live inside jewel-colored mushroom houses, using tea-table infrastructure, checkerboard paths, and playful scale-shifted garden objects as everyday civic life.",
       "continuity": "Mirthcap Lookingglass Village canon: jewel-colored mushroom homes, tiny original villagers, checkerboard paths, teacup lanterns, pocket-watch details, moss terraces, oversized garden scale, warm whimsical daily life, and no recognizable Alice/copyrighted characters. Mirthcap villagers are tiny human-like people, not elves. Keep Doctor Marlow, Finnel, Luma, Finnel’s parents, and Mayor Tansy facially consistent through age progression. Glassmoss Fever returns years after Marlow’s death and sickens the village, including pregnant Luma. Finnel must find a hidden map and the missing last herb ingredient needed to brew Marlow’s tonic and save Mirthcap. The missing herb is Heartglass Rue. Marlow’s hidden map is contained in a small box/pipe-case with his old pocketwatch mechanism, projecting the route onto the ceiling when opened.",
-      "entryDescription": "Before leaving, Finnel finds Marlow dead and discovers the little box that projects the map to Heartglass Rue across the ceiling."
+      "entryDescription": "Before leaving, Finnel grieves in Marlow’s empty old hut and discovers the little box that projects the map to Heartglass Rue across the ceiling."
     }
   },
   {
@@ -627,24 +627,6 @@
       "description": "A whimsical storybook pocket-world where tiny villagers live inside jewel-colored mushroom houses, using tea-table infrastructure, checkerboard paths, and playful scale-shifted garden objects as everyday civic life.",
       "continuity": "Mirthcap Lookingglass Village canon: Finnel must find Heartglass Rue to brew Marlow’s tonic and save Mirthcap from Glassmoss Fever. Thornmaws are dangerous outer-garden predators. Finnel can defeat or escape monsters through cleverness, tools, and the help of his moon-blue briarwing; in this sequence he traps a thornmaw with bolas and living roots, then continues the quest. Keep Mirthcap people tiny human-like, not elves, with rounded ears or ears hidden by hair/caps.",
       "entryDescription": "Finnel survives the thornmaw by tangling it with bolas and living roots, then escapes onward with his moon-blue briarwing."
-    }
-  },
-  {
-    "id": "2026-06-14-2124-mirthcap-lookingglass-village-map-to-heartglass-rue-re",
-    "title": "Mirthcap Lookingglass Village: Map to Heartglass Rue Recreated",
-    "tests": "Manual world catalog entry from #ai-photos; recreated map reveal scene showing only one Doctor Marlow, Finnel grieving, and Marlow's glowing box projecting the route to Heartglass Rue onto the ceiling.",
-    "prompt": "Create a high-resolution 16:9 storybook fantasy illustration for the fictional world of Mirthcap. Older Finnel stops at Doctor Marlow Dewmoss's mushroom-and-root hut before leaving the sick village on his quest. Inside, Finnel discovers the elderly Doctor Marlow dead on his bed and cries beside him, devastated but gentle and respectful. In a shadowed corner, a tiny warm light emanates from a small wooden box/pipe-case. Finnel has opened the box, and an intricate pocketwatch-like mechanism projects a glowing map onto the ceiling, revealing the route to the last lost herb, Heartglass Rue. The hut is gloomy, rainy, and full of herbal jars, mushroom wood furniture, healing tools, quilts, dim lanterns, and a warm golden-green projection. Wide cinematic composition with Marlow's bed, grieving adult Finnel, glowing box, and magical ceiling map visible. Only one Doctor Marlow; no duplicate Marlow-like figure. Finnel has round humanlike ears and Mirthcap clothing. No captions, no words, no watermark.",
-    "image": "images/2026-06-14-2124-mirthcap-lookingglass-village-map-to-heartglass-rue-re.png",
-    "date": "2026-06-14",
-    "batch": "Fictional Worlds",
-    "slot": "2124",
-    "model": "openai/gpt-image-2",
-    "size": "1536x1024",
-    "world": {
-      "name": "Mirthcap Lookingglass Village",
-      "description": "A tiny whimsical village of human-like Mirthcap people living among mushroom homes, pocketwatch mechanisms, healing herbs, briarwings, and dangerous outer-garden mysteries.",
-      "continuity": "Mirthcap Lookingglass Village canon: jewel-colored mushroom homes, tiny original villagers, checkerboard paths, teacup lanterns, pocket-watch details, moss terraces, warm whimsical daily life, and no recognizable Alice/copyrighted characters. Mirthcap villagers are tiny human-like people, not elves. Glassmoss Fever returns years after Marlow's death and sickens the village, including pregnant Luma. Finnel must find Heartglass Rue, the missing last herb needed to brew Marlow's tonic and save Mirthcap. Marlow's hidden map is contained in a small box/pipe-case with his old pocketwatch mechanism, projecting the route onto the ceiling when opened.",
-      "entryDescription": "Finnel visits Doctor Marlow's hut before leaving on his quest, finds Marlow dead, and opens the glowing pocketwatch box that projects the map to Heartglass Rue onto the ceiling."
     }
   },
   {
@@ -686,9 +668,9 @@
   {
     "id": "2026-06-14-manual-23-mirthcap-lookingglass-village-finnel-kills-the-th",
     "title": "Mirthcap Lookingglass Village: Finnel Kills the Thornmaw",
-    "tests": "Manual world catalog entry from #ai-photos; corrected thornmaw victory beat showing Finnel tangling the beast with bolas, climbing onto it, and killing it with a dagger strike to the heart in a non-gory storybook style.",
+    "tests": "Manual world catalog entry from #ai-photos; identity-corrected thornmaw victory beat with confirmed adult Finnel, showing him tangling the beast with bolas, climbing onto it, and killing it with a dagger strike to the heart in a non-gory storybook style.",
     "prompt": "Use case: illustration-story\nAsset type: cinematic storybook panel for the Mirthcap fictional world\nPrimary request: After Finnel throws bolas around the thornmaw monster’s legs and brings it crashing down, he climbs onto the beast and plunges a large dagger into its heart, killing it.\nScene/backdrop: the dangerous outer garden beyond Mirthcap, giant thorn stems, slick moss, rain mist, broken roots, dark leaves overhead, stormy twilight.\nSubject: older Finnel, tiny but heroic, standing on top of the fallen thornmaw monster; the thornmaw’s legs are tightly tangled with bolas and living roots; Finnel has both hands on a large dagger driven into the monster’s chest/heart area. The monster is clearly dying/defeated, jaws open, huge teeth visible, claws slack.\nStyle/medium: rich detailed cinematic fantasy storybook illustration, scary but wholesome adventure tone, not horror splatter, consistent with previous Mirthcap images.\nComposition/framing: wide landscape action panel, low dramatic angle, fallen monster dominating foreground, Finnel clearly visible on top delivering the decisive heart strike; blue briarwing nearby behind him, tense and protective; no text.\nLighting/mood: stormy evening, mist, rain sheen, dramatic rim light and shadow, grim heroic victory.\nConstraints: make the dagger-to-heart action visually clear; keep it non-graphic, fantasy storybook style; no blood spray, no gore, no exposed organs. The beast can have a faint dark magical crack or dimming glow at the wound instead of realistic blood.\nAvoid: graphic gore, realistic blood, human injury, text, watermark, modern weapons, duplicate Finnels, extra Marlow figure.",
-    "image": "images/2026-06-14-manual-23-mirthcap-lookingglass-village-finnel-kills-the-th.png",
+    "image": "images/2026-06-14-manual-23-mirthcap-lookingglass-village-finnel-kills-the-th-identity-corrected.png",
     "date": "2026-06-14",
     "batch": "Fictional Worlds",
     "slot": "manual-23",
@@ -704,9 +686,9 @@
   {
     "id": "2026-06-14-manual-24-mirthcap-lookingglass-village-finnel-brews-the-he",
     "title": "Mirthcap Lookingglass Village: Finnel Brews the Heartglass Tonic",
-    "tests": "Manual world catalog entry from #ai-photos; Finnel returns with Heartglass Rue and brews Marlow’s healing tonic in the old hut after Marlow has been buried.",
+    "tests": "Manual world catalog entry from #ai-photos; identity-corrected version using wedding and thornmaw references so Finnel matches his adult canon look, no pointy ears, while brewing Marlow’s healing tonic with Heartglass Rue after Marlow has been buried.",
     "prompt": "Use case: illustration-story\nAsset type: cinematic storybook panel for the Mirthcap fictional world\nPrimary request: Finnel proudly holds the Heartglass Rue while creating the healing potion in Doctor Marlow’s old hut. Marlow is not there because he has already been buried. Finnel is preparing the tonic to give out to the sick Mirthcap people.\nScene/backdrop: Doctor Marlow’s old mushroom-and-root hut interior, now quiet and solemn, full of herbal jars, thimble bottles, tiny wooden shelves, hanging dried plants, mortar and pestle, steaming cauldron, pocketwatch mechanism, rain-dim window, warm lantern light.\nSubject: older Finnel, tiny human-like Mirthcap villager with rounded ears or curls partly hiding ears, exhausted but proud and relieved; he holds up the glowing Heartglass Rue herb, a delicate translucent green-blue plant with heart-shaped glassy leaves; in front of him is a bubbling healing potion/tonic made from Marlow’s recipes.\nStyle/medium: rich detailed cinematic fantasy storybook illustration, wholesome emotional adventure tone, consistent with prior Mirthcap images.\nComposition/framing: wide landscape interior panel; Finnel central near the workbench and cauldron; the glowing Heartglass Rue clearly visible; potion ingredients and Marlow’s old tools around him; no text.\nLighting/mood: warm golden-green healing glow cutting through gloomy rain light, hopeful after danger, reverent but triumphant.\nConstraints: Marlow must not appear anywhere in the image; no dead body, no ghost, no portrait that could be mistaken for Marlow present in the scene; Finnel is alone in the hut preparing medicine; make the herb and potion visually clear.\nAvoid: Doctor Marlow present, duplicate Finnel, readable text, watermark, modern medical equipment, gore, horror.",
-    "image": "images/2026-06-14-manual-24-mirthcap-lookingglass-village-finnel-brews-the-he.png",
+    "image": "images/2026-06-14-manual-24-mirthcap-lookingglass-village-finnel-brews-the-he-identity-corrected.png",
     "date": "2026-06-14",
     "batch": "Fictional Worlds",
     "slot": "manual-24",
@@ -722,9 +704,9 @@
   {
     "id": "2026-06-14-manual-25-mirthcap-lookingglass-village-line-for-the-healin",
     "title": "Mirthcap Lookingglass Village: Line for the Healing Tonic",
-    "tests": "Manual world catalog entry from #ai-photos; sick Mirthcap villagers line up at Marlow’s old hut for Finnel’s healing tonic, with pregnant Luma last in line.",
+    "tests": "Manual world catalog entry from #ai-photos; identity-corrected scene with confirmed adult Finnel serving the healing tonic while sick Mirthcap villagers line up at Marlow’s old hut, with older pregnant Luma last in line.",
     "prompt": "Use case: illustration-story\nAsset type: cinematic storybook panel for the Mirthcap fictional world\nPrimary request: The sick Mirthcap people line up outside Doctor Marlow’s old hut to receive Finnel’s healing tonic, with pregnant Luma last in line.\nScene/backdrop: outside Doctor Marlow’s mushroom-and-root hut in Mirthcap, rainy misty evening beginning to lift, wet mushroom paths, tiny lanterns, moss terraces, villagers gathered quietly, the hut door glowing warm green-gold from the healing potion inside.\nSubject: a line of very sick and frail Mirthcap villagers waiting for medicine; they look pale, weak, lethargic, wrapped in shawls, some leaning on canes or family; Finnel is visible at the hut doorway or small serving table with little tonic vials/cups; pregnant Luma is clearly last in line, visibly pregnant, very sick and fragile but hopeful, supported by one hand on her belly or leaning gently on a post.\nStyle/medium: rich detailed cinematic fantasy storybook illustration, wholesome emotional healing scene, consistent with previous Mirthcap images.\nComposition/framing: wide landscape exterior panel; line of villagers leads from foreground toward Marlow’s hut; Finnel at the glowing doorway distributing tonic; Luma last in line in the foreground or far end but clearly identifiable as pregnant and sick; no text.\nLighting/mood: gloomy rain and mist giving way to warm healing light, bittersweet hope, urgent but tender.\nConstraints: Doctor Marlow must not appear; no ghost, no body, no portrait that looks present; Luma must be last in line and visibly pregnant; villagers should look sick/frail but not monstrous; Finnel is distributing the potion.\nAvoid: Marlow present, gore, horror monsters, modern medical equipment, readable text, watermark, duplicate Finnels, wine or alcohol.",
-    "image": "images/2026-06-14-manual-25-mirthcap-lookingglass-village-line-for-the-healin.png",
+    "image": "images/2026-06-14-manual-25-mirthcap-lookingglass-village-line-for-the-healin-identity-corrected.png",
     "date": "2026-06-14",
     "batch": "Fictional Worlds",
     "slot": "manual-25",
