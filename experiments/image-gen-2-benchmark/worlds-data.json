@@ -754,5 +754,23 @@
       "continuity": "Mirthcap Lookingglass Village canon: Finnel’s Heartglass Rue tonic saves Mirthcap and Luma. After Luma recovers, she gives birth to her and Finnel’s son at healing dawn in their hut, completing Finnel’s hero arc and giving the story its earned happy ending.",
       "entryDescription": "At healing dawn, recovered Luma holds her newborn son while Finnel sits beside her bed, both parents glowing with happiness."
     }
+  },
+  {
+    "id": "2026-06-14-manual-28-mirthcap-lookingglass-village-happily-ever-after-",
+    "title": "Mirthcap Lookingglass Village: Happily Ever After Celebration",
+    "tests": "Manual world catalog entry from #ai-photos; true final epilogue panel showing Finnel, Luma, and their newborn celebrating with all of Mirthcap after Glassmoss Fever is eradicated.",
+    "prompt": "Use case: illustration-story\nAsset type: final epilogue cinematic storybook panel for the Mirthcap fictional world\nPrimary request: Finnel, Luma, and their newborn baby stand in front of their hut celebrating with the entire village after Glassmoss Fever is eradicated.\nScene/backdrop: Mirthcap Lookingglass Village outside Finnel and Luma’s cozy mushroom hut, warm dawn/sunset light, mushroom houses, moss paths, teacup lanterns, flowers, banners, lantern gnats and luminous native insects glowing overhead.\nSubject: confirmed adult Finnel and recovered adult Luma stand proudly together with their single newborn baby safely wrapped in Luma’s arms. Around them, the entire village celebrates because everyone survived and they all get to live happily ever after.\nStyle/medium: rich detailed cinematic fantasy storybook illustration, warm, joyful, whimsical, final happily-ever-after panel, consistent with Mirthcap series.\nComposition/framing: wide 16:9 group celebration panel; Finnel, Luma, and baby are central foreground figures in front of their hut; village dancing and merriment fills the midground and background.\nCelebration details: adult villagers drink from tiny cups, dance, sing, hug, laugh, and are merry. Children dance, clap, and drink shell-fruit drinks only, not wine.\nConstraints: Finnel matches confirmed adult Finnel reference; Luma matches recovered adult Luma references; baby is a single peaceful newborn; Mirthcap villagers are human-like with rounded/hidden ears, not elves.\nAvoid: pointy ears, elf features, changing Finnel or Luma identity, Doctor Marlow present as a living person, dead body, ghost, sickness, gloom, medical gore, childbirth gore, hospital equipment, readable text, watermark, duplicate babies, duplicate Finnels, children drinking wine/alcohol.",
+    "image": "images/2026-06-14-manual-28-mirthcap-lookingglass-village-happily-ever-after-.png",
+    "date": "2026-06-14",
+    "batch": "Fictional Worlds",
+    "slot": "manual-28",
+    "model": "fal/openai/gpt-image-2",
+    "size": "1536x1024",
+    "world": {
+      "name": "Mirthcap Lookingglass Village",
+      "description": "A tiny whimsical village of human-like Mirthcap people living among mushroom homes, pocketwatch mechanisms, healing herbs, briarwings, and dangerous outer-garden mysteries.",
+      "continuity": "Mirthcap Lookingglass Village canon: Finnel’s Heartglass Rue tonic eradicates Glassmoss Fever. Luma recovers, their son is born at healing dawn, and the whole village celebrates in front of Finnel and Luma’s hut, completing the story with a happily-ever-after ending.",
+      "entryDescription": "Finnel, Luma, and their newborn celebrate with the entire village after Glassmoss Fever is eradicated and Mirthcap is saved."
+    }
   }
 ]
