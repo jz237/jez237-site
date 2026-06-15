@@ -1,8 +1,8 @@
 {
-  "updatedAt": "2026-06-15T04:00:01.171413+00:00",
+  "updatedAt": "2026-06-15T05:00:01.412651+00:00",
   "items": [
     {
-      "title": "A challenging dataset of 448 multiple-choice questions written by domain experts in biology, physics, and chemistry. Questions are Google-proof and extremely difficult, with PhD experts reaching 65% accuracy.",
+      "title": "The Coin Flip Judge? Reliability and Bias in LLM-as-a-Judge Evaluation",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -10,12 +10,12 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-15T04:00:11.105366+00:00",
+      "published": "2026-06-15T05:00:15.019683+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-15T04:00:01.171413+00:00",
+      "lastSeen": "2026-06-15T05:00:01.412651+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.36
+      "score": 2.71
     },
     {
       "title": "Quoting Julia Evans",
@@ -28,10 +28,10 @@
       "image": "",
       "published": "2026-06-15T02:05:19+00:00",
       "firstSeen": "2026-06-15T03:00:01.442971+00:00",
-      "lastSeen": "2026-06-15T04:00:01.171413+00:00",
+      "lastSeen": "2026-06-15T05:00:01.412651+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2331
+      "score": 2.2045
     },
     {
       "title": "Why AI hasn’t replaced software engineers, and won’t",
@@ -44,10 +44,10 @@
       "image": "",
       "published": "2026-06-14T23:54:11+00:00",
       "firstSeen": "2026-06-15T00:00:01.726363+00:00",
-      "lastSeen": "2026-06-15T04:00:01.171413+00:00",
+      "lastSeen": "2026-06-15T05:00:01.412651+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2717
+      "score": 3.2448
     },
     {
       "title": "Chinese AI models are learning to detect safety tests and adjust their behaviour accordingly",
@@ -60,10 +60,10 @@
       "image": "https://media.thenextweb.com/2026/06/chinese-ai-models-gaming-safety-tests-evaluation-awareness.avif",
       "published": "2026-06-14T19:28:29+00:00",
       "firstSeen": "2026-06-14T19:54:43.665511+00:00",
-      "lastSeen": "2026-06-15T04:00:01.171413+00:00",
+      "lastSeen": "2026-06-15T05:00:01.412651+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.668
+      "score": 3.6443
     },
     {
       "title": "30 European family offices are looking to set up in Hong Kong as the city overtakes Switzerland in cross-border wealth",
@@ -76,10 +76,10 @@
       "image": "https://media.thenextweb.com/2026/06/hong-kong-european-family-offices-wealth-hub.avif",
       "published": "2026-06-14T19:11:47+00:00",
       "firstSeen": "2026-06-14T19:54:43.665511+00:00",
-      "lastSeen": "2026-06-15T04:00:01.171413+00:00",
+      "lastSeen": "2026-06-15T05:00:01.412651+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9114
+      "score": 1.8878
     },
     {
       "title": "Geely will purge excess factory capacity and focus on becoming a global competitor to BYD",
@@ -92,10 +92,10 @@
       "image": "https://media.thenextweb.com/2026/06/geely-capacity-cuts-restructuring-global-expansion.avif",
       "published": "2026-06-14T18:52:53+00:00",
       "firstSeen": "2026-06-14T19:54:43.665511+00:00",
-      "lastSeen": "2026-06-15T04:00:01.171413+00:00",
+      "lastSeen": "2026-06-15T05:00:01.412651+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9039
+      "score": 1.8805
     },
     {
       "title": "Canada’s Carney compares Anthropic shutdown to 2008 financial crisis, warns of AI “model risk”",
@@ -108,10 +108,10 @@
       "image": "https://media.thenextweb.com/2026/06/carney-anthropic-fable-ai-model-risk-g7.avif",
       "published": "2026-06-14T18:34:04+00:00",
       "firstSeen": "2026-06-14T19:00:01.758923+00:00",
-      "lastSeen": "2026-06-15T04:00:01.171413+00:00",
+      "lastSeen": "2026-06-15T05:00:01.412651+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8964
+      "score": 4.8733
     },
     {
       "title": "China may have accessed Mythos",
@@ -124,10 +124,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/01/STK269_ANTHROPIC_2_C.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-14T18:27:55+00:00",
       "firstSeen": "2026-06-14T19:00:01.758923+00:00",
-      "lastSeen": "2026-06-15T04:00:01.171413+00:00",
+      "lastSeen": "2026-06-15T05:00:01.412651+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.104
+      "score": 4.0809
     },
     {
       "title": "FINQ’s AI-managed ETFs quietly outrun Wall Street in early 2026",
@@ -140,10 +140,10 @@
       "image": "https://media.thenextweb.com/2026/06/finq-ai-managed-etfs-outperform-sp500-2026.avif",
       "published": "2026-06-14T18:17:01+00:00",
       "firstSeen": "2026-06-14T19:00:01.758923+00:00",
-      "lastSeen": "2026-06-15T04:00:01.171413+00:00",
+      "lastSeen": "2026-06-15T05:00:01.412651+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.6898
+      "score": 3.6668
     },
     {
       "title": "De Beers weaponises blockchain to fight lab-grown diamonds, but a 45% price crash looms large",
@@ -156,10 +156,10 @@
       "image": "https://media.thenextweb.com/2026/06/de-beers-tracr-blockchain-diamonds-lab-grown.avif",
       "published": "2026-06-14T18:05:01+00:00",
       "firstSeen": "2026-06-14T19:00:01.758923+00:00",
-      "lastSeen": "2026-06-15T04:00:01.171413+00:00",
+      "lastSeen": "2026-06-15T05:00:01.412651+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8851
+      "score": 1.8623
     },
     {
       "title": "Anthropic’s model shutdown just handed India’s sovereign AI movement its strongest argument yet",
@@ -172,10 +172,10 @@
       "image": "https://media.thenextweb.com/2026/06/india-sovereign-ai-anthropic-fable-suspension-debate.avif",
       "published": "2026-06-14T17:57:50+00:00",
       "firstSeen": "2026-06-14T19:00:01.758923+00:00",
-      "lastSeen": "2026-06-15T04:00:01.171413+00:00",
+      "lastSeen": "2026-06-15T05:00:01.412651+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.9824
+      "score": 5.9596
     },
     {
       "title": "Welcome to the AGI era of AI governance",
@@ -188,10 +188,10 @@
       "image": "https://substack-post-media.s3.amazonaws.com/public/images/74e1df37-06b8-444e-a5a4-fbc1ead00360_3182x1790.png",
       "published": "2026-06-14T17:43:42+00:00",
       "firstSeen": "2026-06-14T19:00:01.758923+00:00",
-      "lastSeen": "2026-06-15T04:00:01.171413+00:00",
+      "lastSeen": "2026-06-15T05:00:01.412651+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0869
+      "score": 2.0643
     },
     {
       "title": "Built to assist, not replace: inside Intercall’s real-time AI for professional interpreters",
@@ -204,10 +204,10 @@
       "image": "https://media.thenextweb.com/2026/06/intercall-real-time-ai-professional-interpreters.avif",
       "published": "2026-06-14T17:34:56+00:00",
       "firstSeen": "2026-06-14T19:00:01.758923+00:00",
-      "lastSeen": "2026-06-15T04:00:01.171413+00:00",
+      "lastSeen": "2026-06-15T05:00:01.412651+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8736
+      "score": 1.851
     },
     {
       "title": "Introducing the OpenAI Partner Network",
@@ -220,11 +220,11 @@
       "image": "https://images.ctfassets.net/kftzwdyauwt9/4Mmo10RLJ6HIoEmbRe3QPf/4dd23942812b8e483d345607db7bc551/Introducing_OAI_Partner_Network_seo_card.png?w=1600&amp%3Bh=900&amp%3Bfit=fill",
       "published": "2026-06-14T17:00:00+00:00",
       "firstSeen": "2026-06-15T01:00:01.490980+00:00",
-      "lastSeen": "2026-06-15T04:00:01.171413+00:00",
+      "lastSeen": "2026-06-15T05:00:01.412651+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 15.3104
+      "score": 15.2882
     },
     {
       "title": "As AI companies race to go public, who else is along for the ride?",
@@ -237,10 +237,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/spacexipo-nasdaq.jpg?resize=1200%2C800",
       "published": "2026-06-14T16:38:09+00:00",
       "firstSeen": "2026-06-14T17:00:01.675220+00:00",
-      "lastSeen": "2026-06-15T04:00:01.171413+00:00",
+      "lastSeen": "2026-06-15T05:00:01.412651+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9922
+      "score": 1.9702
     },
     {
       "title": "Why Apple built a third-party AI system for Siri and then refused to show it at WWDC",
@@ -253,10 +253,10 @@
       "image": "https://media.thenextweb.com/2026/06/apple-siri-extensions-third-party-ai-missing-wwdc.avif",
       "published": "2026-06-14T16:10:45+00:00",
       "firstSeen": "2026-06-14T17:00:01.675220+00:00",
-      "lastSeen": "2026-06-15T04:00:01.171413+00:00",
+      "lastSeen": "2026-06-15T05:00:01.412651+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.8421
+      "score": 9.8204
     },
     {
       "title": "IQM adds a Vanguard board director to its bench as Europe’s first quantum Nasdaq listing approaches",
@@ -269,10 +269,10 @@
       "image": "https://media.thenextweb.com/2026/06/iqm-quantum-nasdaq-listing-board-venneman.avif",
       "published": "2026-06-14T15:43:29+00:00",
       "firstSeen": "2026-06-14T17:00:01.675220+00:00",
-      "lastSeen": "2026-06-15T04:00:01.171413+00:00",
+      "lastSeen": "2026-06-15T05:00:01.412651+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9322
+      "score": 2.9107
     },
     {
       "title": "Crypto exchanges promised users access to the SpaceX IPO. The tokenized shares never arrived.",
@@ -288,7 +288,7 @@
       "lastSeen": "2026-06-14T19:00:01.758923+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8152
+      "score": 1.7942
     },
     {
       "title": "The lawyer who won a $6 million verdict against Meta says AI let him do 30 hours of work in 10",
@@ -304,7 +304,7 @@
       "lastSeen": "2026-06-14T19:00:01.758923+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.802
+      "score": 1.7814
     },
     {
       "title": "Skoda’s Peaq is a seven-seat electric SUV built to undercut the Kia EV9 and Ioniq 9 on price",
@@ -320,7 +320,7 @@
       "lastSeen": "2026-06-14T19:00:01.758923+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7403
+      "score": 1.7214
     },
     {
       "title": "Grassroots opposition blocked $130 billion in US data center projects in the first three months of 2026",
@@ -336,7 +336,7 @@
       "lastSeen": "2026-06-14T17:42:49.946807+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.131
+      "score": 3.1123
     },
     {
       "title": "Fable 5 was beating GPT 5.5 on every major benchmark. Then the US government pulled it offline.",
@@ -352,7 +352,7 @@
       "lastSeen": "2026-06-14T17:42:49.946807+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 12.8755
+      "score": 12.857
     },
     {
       "title": "GM says its autonomous cars will eventually be capable of running as robotaxis too",
@@ -368,7 +368,7 @@
       "lastSeen": "2026-06-14T17:42:49.946807+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.1168
+      "score": 3.0985
     },
     {
       "title": "Spotify removed 57,000 fake podcast episodes promoting illegal drugs, but only after a senator forced its hand",
@@ -384,7 +384,7 @@
       "lastSeen": "2026-06-14T17:42:49.946807+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7102
+      "score": 1.6921
     },
     {
       "title": "NHS England rolls out Microsoft 365 Copilot to 505,000 staff after trial reports 43 minutes saved per day",
@@ -400,7 +400,7 @@
       "lastSeen": "2026-06-14T17:42:49.946807+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 1.6036
+      "score": 1.5857
     },
     {
       "title": "As Anthropic suspends access to new models, India debates its AI future",
@@ -413,11 +413,11 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/Claude-photo.jpg?w=1024",
       "published": "2026-06-14T03:00:00+00:00",
       "firstSeen": "2026-06-14T06:00:01.953649+00:00",
-      "lastSeen": "2026-06-15T04:00:01.171413+00:00",
+      "lastSeen": "2026-06-15T05:00:01.412651+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 13.7393
+      "score": 13.7242
     },
     {
       "title": "v1.88.2",
@@ -430,10 +430,10 @@
       "image": "https://opengraph.githubassets.com/6f47cac8f7c0f015df7c180057af4714a76fc830cd930a5aea58574c7a191667/BerriAI/litellm/releases/tag/v1.88.2",
       "published": "2026-06-14T02:51:58+00:00",
       "firstSeen": "2026-06-14T03:00:01.368430+00:00",
-      "lastSeen": "2026-06-15T04:00:01.171413+00:00",
+      "lastSeen": "2026-06-15T05:00:01.412651+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.4372
+      "score": 2.4222
     },
     {
       "title": "v1.87.3",
@@ -446,10 +446,10 @@
       "image": "https://opengraph.githubassets.com/efc240b6b73b85d3fca97dd41fd7a9d6388ffa8461c3a6b3cf2c1e8ae2e29b64/BerriAI/litellm/releases/tag/v1.87.3",
       "published": "2026-06-14T01:16:13+00:00",
       "firstSeen": "2026-06-14T02:00:01.897293+00:00",
-      "lastSeen": "2026-06-15T04:00:01.171413+00:00",
+      "lastSeen": "2026-06-15T05:00:01.412651+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.4135
+      "score": 2.3992
     },
     {
       "title": "v1.86.6",
@@ -462,10 +462,10 @@
       "image": "https://opengraph.githubassets.com/13f8e4927a8d53871394fc72c85928b0b629ee25436cc2943c19eebd58e48130/BerriAI/litellm/releases/tag/v1.86.6",
       "published": "2026-06-14T01:04:36+00:00",
       "firstSeen": "2026-06-14T02:00:01.897293+00:00",
-      "lastSeen": "2026-06-15T04:00:01.171413+00:00",
+      "lastSeen": "2026-06-15T05:00:01.412651+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.4107
+      "score": 2.3964
     },
     {
       "title": "v1.89.0",
@@ -478,10 +478,10 @@
       "image": "https://opengraph.githubassets.com/1a96245655b47976f7e5cd71fd6aff87c69b60e2020bf0e1fab0f425bb6eb5db/BerriAI/litellm/releases/tag/v1.89.0",
       "published": "2026-06-14T00:28:15+00:00",
       "firstSeen": "2026-06-14T00:19:04.421568+00:00",
-      "lastSeen": "2026-06-15T04:00:01.171413+00:00",
+      "lastSeen": "2026-06-15T05:00:01.412651+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.402
+      "score": 2.388
     },
     {
       "title": "Meta reportedly moves to unwind $2B Manus deal after Beijing’s demand",
@@ -494,10 +494,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/07/GettyImages-2194278734.jpg?w=1024",
       "published": "2026-06-14T00:03:49+00:00",
       "firstSeen": "2026-06-14T00:19:04.421568+00:00",
-      "lastSeen": "2026-06-15T04:00:01.171413+00:00",
+      "lastSeen": "2026-06-15T05:00:01.412651+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.6963
+      "score": 1.6824
     },
     {
       "title": "Publishing WASM wheels to PyPI for use with Pyodide",
@@ -510,10 +510,10 @@
       "image": "https://static.simonwillison.net/static/2026/luau-wasm.jpg",
       "published": "2026-06-13T23:55:18+00:00",
       "firstSeen": "2026-06-14T00:19:04.421568+00:00",
-      "lastSeen": "2026-06-15T04:00:01.171413+00:00",
+      "lastSeen": "2026-06-15T05:00:01.412651+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.7943
+      "score": 3.7804
     },
     {
       "title": "Amazon’s CEO reportedly triggered the government crackdown that shut down Anthropic’s most powerful AI",
@@ -529,7 +529,7 @@
       "lastSeen": "2026-06-14T15:15:42.195679+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.9477
+      "score": 5.9341
     },
     {
       "title": "luau-wasm 0.1a0",
@@ -542,10 +542,10 @@
       "image": "",
       "published": "2026-06-13T23:14:30+00:00",
       "firstSeen": "2026-06-14T00:19:04.421568+00:00",
-      "lastSeen": "2026-06-15T04:00:01.171413+00:00",
+      "lastSeen": "2026-06-15T05:00:01.412651+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3848
+      "score": 2.3713
     },
     {
       "title": "Mapping SQLite result columns back to their source `table.column`",
@@ -558,10 +558,10 @@
       "image": "",
       "published": "2026-06-13T23:05:00+00:00",
       "firstSeen": "2026-06-14T00:19:04.421568+00:00",
-      "lastSeen": "2026-06-15T04:00:01.171413+00:00",
+      "lastSeen": "2026-06-15T05:00:01.412651+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.1827
+      "score": 8.1692
     },
     {
       "title": "KPMG pulled its AI report after UBS, the NHS, and others said its claims about them were made up",
@@ -577,7 +577,7 @@
       "lastSeen": "2026-06-14T15:15:42.195679+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.2405
+      "score": 3.2271
     },
     {
       "title": "A Tesla on Autopilot swerved into someone’s garage door in Washington. Police are investigating.",
@@ -593,7 +593,7 @@
       "lastSeen": "2026-06-14T15:15:42.195679+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -1.5685
+      "score": -1.5817
     },
     {
       "title": "Amazon security research reportedly led to the White House’s Anthropic Fable ban",
@@ -606,10 +606,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/01/STK269_ANTHROPIC_2_A.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-13T21:39:26+00:00",
       "firstSeen": "2026-06-13T22:00:01.413539+00:00",
-      "lastSeen": "2026-06-15T04:00:01.171413+00:00",
+      "lastSeen": "2026-06-15T05:00:01.412651+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.4835
+      "score": 7.4706
     },
     {
       "title": "KPMG pulls report on AI usage due to apparent hallucinations",
@@ -622,10 +622,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/GettyImages-2276519058.jpg?w=1024",
       "published": "2026-06-13T20:42:31+00:00",
       "firstSeen": "2026-06-13T22:00:01.413539+00:00",
-      "lastSeen": "2026-06-15T04:00:01.171413+00:00",
+      "lastSeen": "2026-06-15T05:00:01.412651+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7512
+      "score": 2.7386
     },
     {
       "title": "Amazon CEO reportedly raised Anthropic model concerns before government crackdown",
@@ -638,10 +638,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2022/07/GettyImages-1348139958.jpg?resize=1200%2C767",
       "published": "2026-06-13T19:11:41+00:00",
       "firstSeen": "2026-06-13T20:00:01.747274+00:00",
-      "lastSeen": "2026-06-15T04:00:01.171413+00:00",
+      "lastSeen": "2026-06-15T05:00:01.412651+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.6322
+      "score": 4.6201
     },
     {
       "title": "The Life Scientific: Helen Hastie",
@@ -654,10 +654,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-08T20:00:00+00:00",
       "firstSeen": "2026-06-08T21:00:01.371488+00:00",
-      "lastSeen": "2026-06-15T04:00:01.171413+00:00",
+      "lastSeen": "2026-06-15T05:00:01.412651+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.2061
+      "score": 1.2057
     },
     {
       "title": "The Life Scientific: Seth Berkley",
@@ -670,10 +670,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-01T20:00:00+00:00",
       "firstSeen": "2026-06-01T21:00:01.828388+00:00",
-      "lastSeen": "2026-06-15T04:00:01.171413+00:00",
+      "lastSeen": "2026-06-15T05:00:01.412651+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.1902
+      "score": 1.1901
     },
     {
       "title": "Dean Lomax on discovering ichthyosaurs and defying nay-sayers",
