@@ -682,5 +682,23 @@
       "continuity": "Mirthcap Lookingglass Village canon: Finnel must find Heartglass Rue to brew Marlow’s tonic and save Mirthcap from Glassmoss Fever. Thornmaws are dangerous outer-garden predators. In this sequence, Finnel defeats a thornmaw by tangling its legs with bolas, bringing it down, and winning the fight in a non-graphic but decisive heroic moment before continuing the quest.",
       "entryDescription": "Finnel brings the thornmaw down with bolas and defeats it in a decisive, non-graphic heroic victory before continuing toward Heartglass Rue."
     }
+  },
+  {
+    "id": "2026-06-14-manual-23-mirthcap-lookingglass-village-finnel-kills-the-th",
+    "title": "Mirthcap Lookingglass Village: Finnel Kills the Thornmaw",
+    "tests": "Manual world catalog entry from #ai-photos; corrected thornmaw victory beat showing Finnel tangling the beast with bolas, climbing onto it, and killing it with a dagger strike to the heart in a non-gory storybook style.",
+    "prompt": "Use case: illustration-story\nAsset type: cinematic storybook panel for the Mirthcap fictional world\nPrimary request: After Finnel throws bolas around the thornmaw monster’s legs and brings it crashing down, he climbs onto the beast and plunges a large dagger into its heart, killing it.\nScene/backdrop: the dangerous outer garden beyond Mirthcap, giant thorn stems, slick moss, rain mist, broken roots, dark leaves overhead, stormy twilight.\nSubject: older Finnel, tiny but heroic, standing on top of the fallen thornmaw monster; the thornmaw’s legs are tightly tangled with bolas and living roots; Finnel has both hands on a large dagger driven into the monster’s chest/heart area. The monster is clearly dying/defeated, jaws open, huge teeth visible, claws slack.\nStyle/medium: rich detailed cinematic fantasy storybook illustration, scary but wholesome adventure tone, not horror splatter, consistent with previous Mirthcap images.\nComposition/framing: wide landscape action panel, low dramatic angle, fallen monster dominating foreground, Finnel clearly visible on top delivering the decisive heart strike; blue briarwing nearby behind him, tense and protective; no text.\nLighting/mood: stormy evening, mist, rain sheen, dramatic rim light and shadow, grim heroic victory.\nConstraints: make the dagger-to-heart action visually clear; keep it non-graphic, fantasy storybook style; no blood spray, no gore, no exposed organs. The beast can have a faint dark magical crack or dimming glow at the wound instead of realistic blood.\nAvoid: graphic gore, realistic blood, human injury, text, watermark, modern weapons, duplicate Finnels, extra Marlow figure.",
+    "image": "images/2026-06-14-manual-23-mirthcap-lookingglass-village-finnel-kills-the-th.png",
+    "date": "2026-06-14",
+    "batch": "Fictional Worlds",
+    "slot": "manual-23",
+    "model": "fal/openai/gpt-image-2",
+    "size": "1536x1024",
+    "world": {
+      "name": "Mirthcap Lookingglass Village",
+      "description": "A tiny whimsical village of human-like Mirthcap people living among mushroom homes, pocketwatch mechanisms, healing herbs, briarwings, and dangerous outer-garden mysteries.",
+      "continuity": "Mirthcap Lookingglass Village canon: Finnel must find Heartglass Rue to brew Marlow’s tonic and save Mirthcap from Glassmoss Fever. Thornmaws are dangerous outer-garden predators. In the corrected quest sequence, Finnel brings a thornmaw down with bolas, climbs onto it, and kills it with a dagger strike to the heart before continuing toward Heartglass Rue.",
+      "entryDescription": "Finnel tangles the thornmaw with bolas, climbs onto the fallen beast, and kills it with a dagger strike to the heart before continuing his quest."
+    }
   }
 ]
