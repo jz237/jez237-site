@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-15T21:00:01.290903+00:00",
+  "updatedAt": "2026-06-15T21:18:13.883073+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -10484,6 +10484,10 @@
     "http://www.bbc.co.uk/programmes/w3ct8jsh": {
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "checkedAt": "2026-06-15T21:00:01.290903+00:00"
+    },
+    "https://github.com/ollama/ollama/releases/tag/v0.30.9-rc1": {
+      "image": "https://opengraph.githubassets.com/b793bfcb95cd221d4c1d95fa44eea1f3240ffefdb75c44b55ad95f37591da0a5/ollama/ollama",
+      "checkedAt": "2026-06-15T21:18:13.883073+00:00"
     }
   }
 }
