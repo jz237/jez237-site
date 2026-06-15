@@ -736,5 +736,23 @@
       "continuity": "Mirthcap Lookingglass Village canon: Finnel returns with Heartglass Rue, brews the healing tonic in Marlow’s old hut, distributes it to the sick villagers, and finally gives Luma her dose. Pregnant Luma drinks the tonic and begins to recover, turning the ending from grief toward survival and birth.",
       "entryDescription": "In a close-up at Marlow’s old hut, Finnel gives pregnant Luma the Heartglass Rue tonic and she drinks it."
     }
+  },
+  {
+    "id": "2026-06-14-manual-27-mirthcap-lookingglass-village-healing-dawn-newbor",
+    "title": "Mirthcap Lookingglass Village: Healing Dawn Newborn",
+    "tests": "Manual world catalog entry from #ai-photos; final healing-dawn panel showing recovered Luma in bed with her and Finnel’s newborn while Finnel sits beside them, both parents joyful.",
+    "prompt": "Use case: illustration-story\nAsset type: final cinematic storybook panel for the Mirthcap fictional world\nPrimary request: Finnel and Luma in their hut after the village is saved, with Finnel sitting next to her bed as she holds their just-born baby and both parents gleam with happiness.\nScene/backdrop: Finnel and Luma’s cozy Mirthcap hut at healing dawn, warm mushroom-and-root interior, sunrise through a round window, herbal lanterns, soft blankets, tiny cradle nearby, moss textures, family keepsakes, subtle green-gold healing glow fading into warm dawn.\nSubject: confirmed adult Finnel sits beside Luma’s bed, smiling tenderly; recovered adult Luma lies resting after childbirth, joyful and relieved, holding their newborn baby safely wrapped in a soft tiny blanket. All three are happy and peaceful.\nStyle/medium: rich detailed cinematic fantasy storybook illustration, warm, joyful, wholesome, final-scene feeling, consistent with Mirthcap series.\nComposition/framing: 16:9 interior panel; Luma and baby are emotional center on the bed; Finnel sits close at bedside; all three figures readable; no crowd.\nConstraints: Finnel matches confirmed adult Finnel reference; Luma matches proper adult Luma references; baby is a single peaceful newborn Mirthcap child; rounded/hidden ears, not elves. Marlow is absent.\nAvoid: pointy ears, elf features, changing Finnel or Luma identity, Doctor Marlow present, dead body, ghost, medical gore, childbirth gore, exposed body, hospital equipment, readable text, watermark, duplicate babies, duplicate Finnels.",
+    "image": "images/2026-06-14-manual-27-mirthcap-lookingglass-village-healing-dawn-newbor.png",
+    "date": "2026-06-14",
+    "batch": "Fictional Worlds",
+    "slot": "manual-27",
+    "model": "fal/openai/gpt-image-2",
+    "size": "1536x1024",
+    "world": {
+      "name": "Mirthcap Lookingglass Village",
+      "description": "A tiny whimsical village of human-like Mirthcap people living among mushroom homes, pocketwatch mechanisms, healing herbs, briarwings, and dangerous outer-garden mysteries.",
+      "continuity": "Mirthcap Lookingglass Village canon: Finnel’s Heartglass Rue tonic saves Mirthcap and Luma. After Luma recovers, she gives birth to her and Finnel’s son at healing dawn in their hut, completing Finnel’s hero arc and giving the story its earned happy ending.",
+      "entryDescription": "At healing dawn, recovered Luma holds her newborn son while Finnel sits beside her bed, both parents glowing with happiness."
+    }
   }
 ]
