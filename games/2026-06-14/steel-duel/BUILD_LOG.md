@@ -51,3 +51,42 @@ with no NaN/console errors; sim ≤ 2ms/step.
 - Leaderboard ranks **points vs CPU** (PvP is inherently unrankable on a single-score board).
 - Shells non-bouncing (faithful to the 1974 original); 1 shot in flight per tank (gated fire rate).
 - `MAX_SHELLS`, speeds, `FREEZE`, mine count, timer are constants at the top of `game.js` for tuning.
+
+---
+
+# v2 — smarter AI, controls, attract mode, destructible walls
+
+User feedback: the AI was bad (drove into mines / stuck on walls); wanted a Stupid→Can't-Defeat
+slider, an attract-mode title with two AIs dueling, desktop A/D/W + mouse, mobile play, global
+scoring, destructible walls, and better graphics.
+
+## Iter 6 — rewrite
+- **AI:** replaced the reactive turner with **A\* pathfinding** (walls+mines blocked) + a `safeDir`
+  whisker so it never drives into a mine; skill now scales only combat (lead, aim error, turret
+  speed, cadence, shell-dodge), keeping driving competent at every level.
+- **Control model:** unified command bus (turn/throttle/aim/fire) fed by keys, **mouse**, **twin-stick
+  touch**, or AI. Added an **independent rotating turret** (mouse-aimed vs CPU; locked to hull in 2P).
+- **Attract mode:** new `attract` state runs CPU-vs-CPU on the title behind a now-transparent card.
+- **Destructible walls:** per-tile `wallHP`; shells chip (cracks) and blast tiles open; pathfinder
+  reads the live grid. Border indestructible.
+- **Graphics:** per-tile beveled/merged walls with damage cracks, independent turret + barrel, aim
+  reticle, scorch decals, brighter sparks/treads.
+- Rewrote `art.js`; added tests **T-WALL** (destructible) and **T-AI** (stupid AI still navigates
+  toward foe and never mine-suicides).
+
+## Iter 7 — test run: 10/11
+- ✗ T-WALL — **test bug**: it inherited `bots=[true,true]` from the determinism test, so tank 0 was
+  AI-driven and wandered instead of shelling the wall. Standalone repro destroyed the wall in 4 hits
+  (logic correct). Fix: reset `bots=[false,false]` in T-WALL.
+
+## Iter 8 — all green: 11/11
+`runTests()` → 11/11. AI benchmark (bot-vs-bot, ~20s): **Stupid 0–5 Lethal**, Rookie 1–2 Crack Shot,
+even 1–0 — difficulty gradient confirmed, longest "stuck" 29 ticks (~0.5s, normal repositioning).
+
+## Iter 9 — visual + integration
+- Captured title (attract duel behind card + skill slider), duel (independent turrets + reticle),
+  mobile landscape twin-stick — all clean, 0 console errors.
+- Updated index card; leaderboard score now encodes difficulty (`points*100 + level`) so beating a
+  harder CPU ranks higher; board display splits it back into points / level.
+
+### Final v2 status — ALL GREEN ✅  (11/11 gates; AI gradient verified; no console errors)
