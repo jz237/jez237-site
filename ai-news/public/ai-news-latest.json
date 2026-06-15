@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-15T09:00:02.103412+00:00",
+  "updatedAt": "2026-06-15T10:00:01.539237+00:00",
   "items": [
     {
       "title": "History of the Muddy Children Puzzle",
@@ -10,12 +10,108 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-15T09:00:13.521108+00:00",
+      "published": "2026-06-15T10:00:17.596054+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-15T09:00:02.103412+00:00",
+      "lastSeen": "2026-06-15T10:00:01.539237+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
+    },
+    {
+      "title": "Accenture: Consumers show growing trust in AI shopping agents",
+      "url": "https://www.artificialintelligence-news.com/news/ai-shopping-agents-consumer-trust-accenture-report",
+      "source": "Artificial Intelligence News",
+      "sourceUrl": "https://www.artificialintelligence-news.com/categories/artificial-intelligence/feed/",
+      "sourceWeight": 0.82,
+      "category": "AI",
+      "summary": "Consumers are showing a willingness to let AI agents take on more shopping-related tasks, according to new research from Accenture. The company’s 2026 Consumer Pulse Research, based on a survey of 25,590 consumers across 16 countries, found that 74% of respondents would trust a personal AI agent more than their best friend to make a [&#8230;]\nThe post Accenture: Consumers show growing trust in AI shopping agents appeared first on AI News.",
+      "image": "",
+      "published": "2026-06-15T10:00:00+00:00",
+      "firstSeen": "2026-06-15T10:00:01.539237+00:00",
+      "lastSeen": "2026-06-15T10:00:01.539237+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "editorial_score_pass",
+      "score": 6.548
+    },
+    {
+      "title": "France hosts the G7 with an AI pitch built on other people’s billions",
+      "url": "https://thenextweb.com/news/macron-g7-ai-funding-data-centres",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "France took over the G7 this week with Emmanuel Macron pressing artificial intelligence to the front of the agenda and, with it, a good deal of his own standing. The summit runs from 15 to 17 June, and the pitch is straightforward: position France as Europe’s AI powerhouse, running on the country’s plentiful nuclear electricity. [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2024/05/Untitled-design-8.avif",
+      "published": "2026-06-15T09:31:02+00:00",
+      "firstSeen": "2026-06-15T10:00:01.539237+00:00",
+      "lastSeen": "2026-06-15T10:00:01.539237+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1353
+    },
+    {
+      "title": "The freelancer admin tax is real. Here’s how to cut it in half (and save 70% on FreshBooks while you’re at it)",
+      "url": "https://thenextweb.com/news/freshbooks-deal-70-off-freelancers",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The numbers are quietly damning. The average freelancer in 2026 spends between eight and 10 hours a week on administrative work that has nothing to do with the service they are paid to deliver. This article contains affiliate links. If you make a purchase through these links, we may earn a commission at no extra [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/Freshbooks-deal-tnw.avif",
+      "published": "2026-06-15T09:02:33+00:00",
+      "firstSeen": "2026-06-15T10:00:01.539237+00:00",
+      "lastSeen": "2026-06-15T10:00:01.539237+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "framework_or_plumbing",
+      "score": -0.9789
+    },
+    {
+      "title": "US order to block foreign access to Anthropic’s top models marks a reversal",
+      "url": "https://thenextweb.com/news/anthropic-foreign-access-block-us-reversal",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The US government has ordered Anthropic to bar foreign nationals from its two most capable AI models, and rather than try to enforce a nationality rule selectively across a shared cloud service, the company switched them off for everyone. Anthropic disabled Claude Fable 5 and Claude Mythos 5 worldwide late on Friday 12 June, three days [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/USA-flag.avif",
+      "published": "2026-06-15T09:00:27+00:00",
+      "firstSeen": "2026-06-15T10:00:01.539237+00:00",
+      "lastSeen": "2026-06-15T10:00:01.539237+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 10.2201
+    },
+    {
+      "title": "Meta Tapped a Pentagon Supplier to Prototype Face Recognition for Its Glasses",
+      "url": "https://www.wired.com/story/meta-rank-one-computing-face-recognition-smart-glasses",
+      "source": "Wired AI",
+      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Rank One, whose board includes a former CIA deputy director and a former FBI science chief, supplied face recognition to Meta for internal development of its smart glasses app.",
+      "image": "https://media.wired.com/photos/6a2a0a5069d7cd90279b88e1/master/pass/security_meta_glasses_pentagon.jpg",
+      "published": "2026-06-15T09:00:00+00:00",
+      "firstSeen": "2026-06-15T10:00:01.539237+00:00",
+      "lastSeen": "2026-06-15T10:00:01.539237+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.3599
+    },
+    {
+      "title": "UK under-16s social media rules to reach into gaming and AI chatbots",
+      "url": "https://thenextweb.com/news/uk-under-16s-social-media-restrictions",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Britain is expected to set out restrictions on how children under 16 use social media, in a package that could ban access to the main platforms and curb features judged too addictive for young users, according to reporting on the government’s plans. Prime Minister Keir Starmer is said to have decided to go further after speaking [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/Prime-Minister-Keir-Starmer.avif",
+      "published": "2026-06-15T08:39:39+00:00",
+      "firstSeen": "2026-06-15T10:00:01.539237+00:00",
+      "lastSeen": "2026-06-15T10:00:01.539237+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1098
     },
     {
       "title": "SpaceX could hit $1tn a year by 2030, Musk claims after record IPO",
@@ -28,10 +124,10 @@
       "image": "https://media.thenextweb.com/2026/06/spacex-ipo-musk-trillionaire-index-fund-wealth-transfer.avif",
       "published": "2026-06-15T08:22:13+00:00",
       "firstSeen": "2026-06-15T09:00:02.103412+00:00",
-      "lastSeen": "2026-06-15T09:00:02.103412+00:00",
+      "lastSeen": "2026-06-15T10:00:01.539237+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8309
+      "score": 2.8013
     },
     {
       "title": "The AI off switch: How Anthropic’s export controls sparked a global AI sovereignty scramble",
@@ -44,10 +140,10 @@
       "image": "",
       "published": "2026-06-15T08:00:00+00:00",
       "firstSeen": "2026-06-15T09:00:02.103412+00:00",
-      "lastSeen": "2026-06-15T09:00:02.103412+00:00",
+      "lastSeen": "2026-06-15T10:00:01.539237+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.3178
+      "score": 6.2885
     },
     {
       "title": "ByteDance is in talks to buy AI chips from China’s Iluvatar CoreX",
@@ -60,10 +156,10 @@
       "image": "https://media.thenextweb.com/2021/08/d2674dd1014d53b65f57922c2eaabdac_noop-e1628498009410.avif",
       "published": "2026-06-15T07:43:41+00:00",
       "firstSeen": "2026-06-15T09:00:02.103412+00:00",
-      "lastSeen": "2026-06-15T09:00:02.103412+00:00",
+      "lastSeen": "2026-06-15T10:00:01.539237+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.4118
+      "score": 2.3827
     },
     {
       "title": "Google is about to disable uBlock Origin and every other Manifest V2 extension in Chrome",
@@ -76,10 +172,10 @@
       "image": "https://media.thenextweb.com/2026/06/chrome-manifest-v3-ublock-origin-content-blockers-disabled.avif",
       "published": "2026-06-15T07:34:58+00:00",
       "firstSeen": "2026-06-15T08:00:01.934491+00:00",
-      "lastSeen": "2026-06-15T09:00:02.103412+00:00",
+      "lastSeen": "2026-06-15T10:00:01.539237+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.5075
+      "score": 3.4786
     },
     {
       "title": "The AI layoff wave is becoming a powder keg",
@@ -92,10 +188,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/Powder-Keg.png?resize=1200%2C960",
       "published": "2026-06-15T07:25:41+00:00",
       "firstSeen": "2026-06-15T08:00:01.934491+00:00",
-      "lastSeen": "2026-06-15T09:00:02.103412+00:00",
+      "lastSeen": "2026-06-15T10:00:01.539237+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.243
+      "score": 2.2141
     },
     {
       "title": "The scam economy is now bigger than Denmark’s GDP, and it is accelerating",
@@ -108,10 +204,10 @@
       "image": "https://media.thenextweb.com/2026/06/global-scam-economy-442-billion-ai-fraud-yahoo-boys.avif",
       "published": "2026-06-15T07:18:00+00:00",
       "firstSeen": "2026-06-15T08:00:01.934491+00:00",
-      "lastSeen": "2026-06-15T09:00:02.103412+00:00",
+      "lastSeen": "2026-06-15T10:00:01.539237+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.1992
+      "score": 1.1705
     },
     {
       "title": "Quoting Julia Evans",
@@ -124,10 +220,10 @@
       "image": "",
       "published": "2026-06-15T02:05:19+00:00",
       "firstSeen": "2026-06-15T03:00:01.442971+00:00",
-      "lastSeen": "2026-06-15T09:00:02.103412+00:00",
+      "lastSeen": "2026-06-15T10:00:01.539237+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0978
+      "score": 2.073
     },
     {
       "title": "Why AI hasn’t replaced software engineers, and won’t",
@@ -140,10 +236,10 @@
       "image": "",
       "published": "2026-06-14T23:54:11+00:00",
       "firstSeen": "2026-06-15T00:00:01.726363+00:00",
-      "lastSeen": "2026-06-15T09:00:02.103412+00:00",
+      "lastSeen": "2026-06-15T10:00:01.539237+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1444
+      "score": 3.121
     },
     {
       "title": "Chinese AI models are learning to detect safety tests and adjust their behaviour accordingly",
@@ -156,10 +252,10 @@
       "image": "https://media.thenextweb.com/2026/06/chinese-ai-models-gaming-safety-tests-evaluation-awareness.avif",
       "published": "2026-06-14T19:28:29+00:00",
       "firstSeen": "2026-06-14T19:54:43.665511+00:00",
-      "lastSeen": "2026-06-15T09:00:02.103412+00:00",
+      "lastSeen": "2026-06-15T10:00:01.539237+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.5555
+      "score": 3.5348
     },
     {
       "title": "30 European family offices are looking to set up in Hong Kong as the city overtakes Switzerland in cross-border wealth",
@@ -172,10 +268,10 @@
       "image": "https://media.thenextweb.com/2026/06/hong-kong-european-family-offices-wealth-hub.avif",
       "published": "2026-06-14T19:11:47+00:00",
       "firstSeen": "2026-06-14T19:54:43.665511+00:00",
-      "lastSeen": "2026-06-15T09:00:02.103412+00:00",
+      "lastSeen": "2026-06-15T10:00:01.539237+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7997
+      "score": 1.7791
     },
     {
       "title": "Geely will purge excess factory capacity and focus on becoming a global competitor to BYD",
@@ -191,7 +287,7 @@
       "lastSeen": "2026-06-15T09:00:02.103412+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7931
+      "score": 1.7728
     },
     {
       "title": "Canada’s Carney compares Anthropic shutdown to 2008 financial crisis, warns of AI “model risk”",
@@ -207,7 +303,7 @@
       "lastSeen": "2026-06-15T09:00:02.103412+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.7867
+      "score": 4.7665
     },
     {
       "title": "China may have accessed Mythos",
@@ -220,10 +316,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/01/STK269_ANTHROPIC_2_C.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-14T18:27:55+00:00",
       "firstSeen": "2026-06-14T19:00:01.758923+00:00",
-      "lastSeen": "2026-06-15T09:00:02.103412+00:00",
+      "lastSeen": "2026-06-15T10:00:01.539237+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.9946
+      "score": 3.9745
     },
     {
       "title": "FINQ’s AI-managed ETFs quietly outrun Wall Street in early 2026",
@@ -239,7 +335,7 @@
       "lastSeen": "2026-06-15T09:00:02.103412+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.5809
+      "score": 3.5609
     },
     {
       "title": "De Beers weaponises blockchain to fight lab-grown diamonds, but a 45% price crash looms large",
@@ -255,7 +351,7 @@
       "lastSeen": "2026-06-15T09:00:02.103412+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7768
+      "score": 1.7569
     },
     {
       "title": "Anthropic’s model shutdown just handed India’s sovereign AI movement its strongest argument yet",
@@ -271,7 +367,7 @@
       "lastSeen": "2026-06-15T08:00:01.934491+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.8744
+      "score": 5.8546
     },
     {
       "title": "Welcome to the AGI era of AI governance",
@@ -284,10 +380,10 @@
       "image": "https://substack-post-media.s3.amazonaws.com/public/images/74e1df37-06b8-444e-a5a4-fbc1ead00360_3182x1790.png",
       "published": "2026-06-14T17:43:42+00:00",
       "firstSeen": "2026-06-14T19:00:01.758923+00:00",
-      "lastSeen": "2026-06-15T09:00:02.103412+00:00",
+      "lastSeen": "2026-06-15T10:00:01.539237+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9797
+      "score": 1.96
     },
     {
       "title": "Built to assist, not replace: inside Intercall’s real-time AI for professional interpreters",
@@ -303,7 +399,7 @@
       "lastSeen": "2026-06-15T08:00:01.934491+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7668
+      "score": 1.7472
     },
     {
       "title": "Introducing the OpenAI Partner Network",
@@ -316,11 +412,11 @@
       "image": "https://images.ctfassets.net/kftzwdyauwt9/4Mmo10RLJ6HIoEmbRe3QPf/4dd23942812b8e483d345607db7bc551/Introducing_OAI_Partner_Network_seo_card.png?w=1600&amp%3Bh=900&amp%3Bfit=fill",
       "published": "2026-06-14T17:00:00+00:00",
       "firstSeen": "2026-06-15T01:00:01.490980+00:00",
-      "lastSeen": "2026-06-15T09:00:02.103412+00:00",
+      "lastSeen": "2026-06-15T10:00:01.539237+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 15.2053
+      "score": 15.186
     },
     {
       "title": "As AI companies race to go public, who else is along for the ride?",
@@ -333,10 +429,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/spacexipo-nasdaq.jpg?resize=1200%2C800",
       "published": "2026-06-14T16:38:09+00:00",
       "firstSeen": "2026-06-14T17:00:01.675220+00:00",
-      "lastSeen": "2026-06-15T09:00:02.103412+00:00",
+      "lastSeen": "2026-06-15T10:00:01.539237+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8882
+      "score": 1.8691
     },
     {
       "title": "Why Apple built a third-party AI system for Siri and then refused to show it at WWDC",
@@ -352,7 +448,7 @@
       "lastSeen": "2026-06-15T07:00:01.415046+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.7394
+      "score": 9.7205
     },
     {
       "title": "IQM adds a Vanguard board director to its bench as Europe’s first quantum Nasdaq listing approaches",
@@ -368,7 +464,7 @@
       "lastSeen": "2026-06-15T07:00:01.415046+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8307
+      "score": 2.8121
     },
     {
       "title": "Crypto exchanges promised users access to the SpaceX IPO. The tokenized shares never arrived.",
@@ -384,7 +480,7 @@
       "lastSeen": "2026-06-14T19:00:01.758923+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7159
+      "score": 1.6977
     },
     {
       "title": "The lawyer who won a $6 million verdict against Meta says AI let him do 30 hours of work in 10",
@@ -400,7 +496,7 @@
       "lastSeen": "2026-06-14T19:00:01.758923+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7045
+      "score": 1.6865
     },
     {
       "title": "Skoda’s Peaq is a seven-seat electric SUV built to undercut the Kia EV9 and Ioniq 9 on price",
@@ -416,7 +512,7 @@
       "lastSeen": "2026-06-14T19:00:01.758923+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.6508
+      "score": 1.6343
     },
     {
       "title": "Grassroots opposition blocked $130 billion in US data center projects in the first three months of 2026",
@@ -432,7 +528,7 @@
       "lastSeen": "2026-06-14T17:42:49.946807+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.0427
+      "score": 3.0264
     },
     {
       "title": "Fable 5 was beating GPT 5.5 on every major benchmark. Then the US government pulled it offline.",
@@ -448,7 +544,7 @@
       "lastSeen": "2026-06-14T17:42:49.946807+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 12.7879
+      "score": 12.7718
     },
     {
       "title": "GM says its autonomous cars will eventually be capable of running as robotaxis too",
@@ -464,7 +560,7 @@
       "lastSeen": "2026-06-14T17:42:49.946807+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.0303
+      "score": 3.0144
     },
     {
       "title": "Spotify removed 57,000 fake podcast episodes promoting illegal drugs, but only after a senator forced its hand",
@@ -480,7 +576,7 @@
       "lastSeen": "2026-06-14T17:42:49.946807+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.6246
+      "score": 1.6088
     },
     {
       "title": "NHS England rolls out Microsoft 365 Copilot to 505,000 staff after trial reports 43 minutes saved per day",
@@ -496,7 +592,7 @@
       "lastSeen": "2026-06-14T17:42:49.946807+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 1.5189
+      "score": 1.5033
     },
     {
       "title": "As Anthropic suspends access to new models, India debates its AI future",
@@ -509,11 +605,11 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/Claude-photo.jpg?w=1024",
       "published": "2026-06-14T03:00:00+00:00",
       "firstSeen": "2026-06-14T06:00:01.953649+00:00",
-      "lastSeen": "2026-06-15T09:00:02.103412+00:00",
+      "lastSeen": "2026-06-15T10:00:01.539237+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 13.6681
+      "score": 13.655
     },
     {
       "title": "v1.88.2",
@@ -526,10 +622,10 @@
       "image": "https://opengraph.githubassets.com/6f47cac8f7c0f015df7c180057af4714a76fc830cd930a5aea58574c7a191667/BerriAI/litellm/releases/tag/v1.88.2",
       "published": "2026-06-14T02:51:58+00:00",
       "firstSeen": "2026-06-14T03:00:01.368430+00:00",
-      "lastSeen": "2026-06-15T09:00:02.103412+00:00",
+      "lastSeen": "2026-06-15T10:00:01.539237+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3663
+      "score": 2.3532
     },
     {
       "title": "v1.87.3",
@@ -542,106 +638,10 @@
       "image": "https://opengraph.githubassets.com/efc240b6b73b85d3fca97dd41fd7a9d6388ffa8461c3a6b3cf2c1e8ae2e29b64/BerriAI/litellm/releases/tag/v1.87.3",
       "published": "2026-06-14T01:16:13+00:00",
       "firstSeen": "2026-06-14T02:00:01.897293+00:00",
-      "lastSeen": "2026-06-15T09:00:02.103412+00:00",
+      "lastSeen": "2026-06-15T10:00:01.539237+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3456
-    },
-    {
-      "title": "v1.86.6",
-      "url": "https://github.com/BerriAI/litellm/releases/tag/v1.86.6",
-      "source": "LiteLLM Releases",
-      "sourceUrl": "https://github.com/BerriAI/litellm/releases.atom",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Verify Docker Image Signature\nAll LiteLLM Docker images are signed with cosign. Every release is signed with the same key introduced in commit 0112e53.\nVerify using the pinned commit hash (recommended):\nA commit hash is cryptographically immutable, so this is the strongest way to ensure you are using the original signing key:\ncosign verify \\\n  --key https://raw.githubusercontent.com/BerriAI/litellm/0112e53046018d726492c814b3644b7d376029d0/cosign.pub \\\n  ghcr.io/berriai/litellm:v1.86.6\nVerify using the release tag (convenience):\nTags are protected in this repository and resolve to the same key.",
-      "image": "https://opengraph.githubassets.com/13f8e4927a8d53871394fc72c85928b0b629ee25436cc2943c19eebd58e48130/BerriAI/litellm/releases/tag/v1.86.6",
-      "published": "2026-06-14T01:04:36+00:00",
-      "firstSeen": "2026-06-14T02:00:01.897293+00:00",
-      "lastSeen": "2026-06-15T09:00:02.103412+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.3432
-    },
-    {
-      "title": "v1.89.0",
-      "url": "https://github.com/BerriAI/litellm/releases/tag/v1.89.0",
-      "source": "LiteLLM Releases",
-      "sourceUrl": "https://github.com/BerriAI/litellm/releases.atom",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Verify Docker Image Signature\nAll LiteLLM Docker images are signed with cosign. Every release is signed with the same key introduced in commit 0112e53.\nVerify using the pinned commit hash (recommended):\nA commit hash is cryptographically immutable, so this is the strongest way to ensure you are using the original signing key:\ncosign verify \\\n  --key https://raw.githubusercontent.com/BerriAI/litellm/0112e53046018d726492c814b3644b7d376029d0/cosign.pub \\\n  ghcr.io/berriai/litellm:v1.89.0\nVerify using the release tag (convenience):\nTags are protected in this repository and resolve to the same key.",
-      "image": "https://opengraph.githubassets.com/1a96245655b47976f7e5cd71fd6aff87c69b60e2020bf0e1fab0f425bb6eb5db/BerriAI/litellm/releases/tag/v1.89.0",
-      "published": "2026-06-14T00:28:15+00:00",
-      "firstSeen": "2026-06-14T00:19:04.421568+00:00",
-      "lastSeen": "2026-06-15T09:00:02.103412+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.3356
-    },
-    {
-      "title": "Meta reportedly moves to unwind $2B Manus deal after Beijing’s demand",
-      "url": "https://techcrunch.com/2026/06/13/meta-reportedly-moves-to-unwind-2b-manus-deal-after-beijings-demand",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Meta starts dismantling its $2 billion Manus acquisition after Beijing ordered the deal reversed.",
-      "image": "https://techcrunch.com/wp-content/uploads/2025/07/GettyImages-2194278734.jpg?w=1024",
-      "published": "2026-06-14T00:03:49+00:00",
-      "firstSeen": "2026-06-14T00:19:04.421568+00:00",
-      "lastSeen": "2026-06-15T09:00:02.103412+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.6306
-    },
-    {
-      "title": "Publishing WASM wheels to PyPI for use with Pyodide",
-      "url": "https://simonwillison.net/2026/Jun/13/publishing-wasm-wheels",
-      "source": "Simon Willison",
-      "sourceUrl": "https://simonwillison.net/atom/everything/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "The Pyodide 314.0 release announcement (via Hacker News) includes news I've been looking forward to for a long time:\n\nYou can now publish Python packages built for Pyodide (or any Python runtime compatible with the PyEmscripten platform defined in PEP 783) directly to PyPI and install them at runtime.\nPreviously, the Pyodide maintainers had to maintain, build, and host over 300 packages ourselves. This created a significant burden on our maintainers and became a major bottleneck for the community, as every new package required manual review.\nMoving forward, package maintainers can simply build",
-      "image": "https://static.simonwillison.net/static/2026/luau-wasm.jpg",
-      "published": "2026-06-13T23:55:18+00:00",
-      "firstSeen": "2026-06-14T00:19:04.421568+00:00",
-      "lastSeen": "2026-06-15T09:00:02.103412+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 3.7289
-    },
-    {
-      "title": "Amazon’s CEO reportedly triggered the government crackdown that shut down Anthropic’s most powerful AI",
-      "url": "https://thenextweb.com/news/amazon-jassy-triggered-anthropic-fable-mythos-crackdown",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Amazon CEO Andy Jassy was reportedly the source of security concerns that led the US government to force Anthropic to shut down Fable 5 and Mythos 5 for every customer on Friday. The Wall Street Journal reported that Jassy told Treasury Secretary Scott Bessent and other officials that Amazon researchers used Fable 5 to obtain [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/amazon-jassy-triggered-anthropic-fable-mythos-crackdown.avif",
-      "published": "2026-06-13T23:26:58+00:00",
-      "firstSeen": "2026-06-14T00:00:01.698605+00:00",
-      "lastSeen": "2026-06-14T15:15:42.195679+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 5.8832
-    },
-    {
-      "title": "luau-wasm 0.1a0",
-      "url": "https://simonwillison.net/2026/Jun/13/luau-wasm",
-      "source": "Simon Willison",
-      "sourceUrl": "https://simonwillison.net/atom/everything/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Release: luau-wasm 0.1a0\n        See Publishing WASM wheels to PyPI for use with Pyodide for details.\n    \n    \n        Tags: lua, webassembly, pyodide",
-      "image": "",
-      "published": "2026-06-13T23:14:30+00:00",
-      "firstSeen": "2026-06-14T00:19:04.421568+00:00",
-      "lastSeen": "2026-06-15T09:00:02.103412+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.3207
+      "score": 2.3331
     },
     {
       "title": "The Life Scientific: Helen Hastie",
@@ -654,10 +654,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-08T20:00:00+00:00",
       "firstSeen": "2026-06-08T21:00:01.371488+00:00",
-      "lastSeen": "2026-06-15T09:00:02.103412+00:00",
+      "lastSeen": "2026-06-15T10:00:01.539237+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.204
+      "score": 1.2037
     },
     {
       "title": "The Life Scientific: Seth Berkley",
@@ -670,7 +670,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-01T20:00:00+00:00",
       "firstSeen": "2026-06-01T21:00:01.828388+00:00",
-      "lastSeen": "2026-06-15T09:00:02.103412+00:00",
+      "lastSeen": "2026-06-15T10:00:01.539237+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 1.1901

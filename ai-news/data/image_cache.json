@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-15T09:00:02.103412+00:00",
+  "updatedAt": "2026-06-15T10:00:01.539237+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -10384,6 +10384,10 @@
     "https://www.artificialintelligence-news.com/news/anthropic-export-controls-ai-sovereignty": {
       "image": "",
       "checkedAt": "2026-06-15T09:00:02.103412+00:00"
+    },
+    "https://www.artificialintelligence-news.com/news/ai-shopping-agents-consumer-trust-accenture-report": {
+      "image": "",
+      "checkedAt": "2026-06-15T10:00:01.539237+00:00"
     }
   }
 }
