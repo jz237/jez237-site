@@ -1,9 +1,9 @@
 {
   "date": "2026-06-15",
-  "updatedAt": "2026-06-15T02:00:01.934198+00:00",
+  "updatedAt": "2026-06-15T03:00:01.442971+00:00",
   "items": [
     {
-      "title": "Massive Multitask Language Understanding benchmark testing knowledge across 57 diverse subjects including STEM, humanities, social sciences, and professional domains",
+      "title": "A challenging dataset of 448 multiple-choice questions written by domain experts in biology, physics, and chemistry. Questions are Google-proof and extremely difficult, with PhD experts reaching 65% accuracy.",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -11,12 +11,28 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-15T02:00:11.008957+00:00",
+      "published": "2026-06-15T03:00:07.119533+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-15T02:00:01.934198+00:00",
+      "lastSeen": "2026-06-15T03:00:01.442971+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.71
+      "score": 2.36
+    },
+    {
+      "title": "Quoting Julia Evans",
+      "url": "https://simonwillison.net/2026/Jun/15/julia-evans",
+      "source": "Simon Willison",
+      "sourceUrl": "https://simonwillison.net/atom/everything/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "[...] Instead, I picture a specific person and I just write for them. Often this person is \"me, but 3 years ago\" or a good friend.\n&mdash; Julia Evans, write for 1 person\n\n    Tags: writing, julia-evans",
+      "image": "",
+      "published": "2026-06-15T02:05:19+00:00",
+      "firstSeen": "2026-06-15T03:00:01.442971+00:00",
+      "lastSeen": "2026-06-15T03:00:01.442971+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2625
     }
   ],
   "errors": [
