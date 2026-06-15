@@ -15,7 +15,7 @@
   const SHELL_SPD = 7.0, SHELL_LIFE = 1.7, SHELL_R = 3, MAX_SHELLS = 1, FIRE_CD = 0.4;
   const FREEZE = 1.3, MINE_R = 11;
   const DEFAULT_TIME = 60, FLASH_AT = 20;
-  const WALL_MAX = 4;                               // interior wall hit points
+  const WALL_MAX = 8;                               // interior wall hit points
 
   const WALL_DEF = [
     [5, 4, 4, 1], [19, 4, 4, 1], [5, 13, 4, 1], [19, 13, 4, 1],
