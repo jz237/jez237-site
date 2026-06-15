@@ -1,7 +1,23 @@
 {
   "date": "2026-06-15",
-  "updatedAt": "2026-06-15T07:00:01.415046+00:00",
+  "updatedAt": "2026-06-15T08:00:01.934491+00:00",
   "items": [
+    {
+      "title": "Google is about to disable uBlock Origin and every other Manifest V2 extension in Chrome",
+      "url": "https://thenextweb.com/news/chrome-manifest-v3-ublock-origin-content-blockers-disabled",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Google is weeks away from permanently disabling every Manifest V2 browser extension in Chrome, a change that will kill uBlock Origin and fundamentally limit what content blockers can do inside the world’s most popular browser. Chrome 150, scheduled to reach the stable channel on June 30, will remove the ExtensionManifestV2Disabled flag, the last mechanism that [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/chrome-manifest-v3-ublock-origin-content-blockers-disabled.avif",
+      "published": "2026-06-15T07:34:58+00:00",
+      "firstSeen": "2026-06-15T08:00:01.934491+00:00",
+      "lastSeen": "2026-06-15T08:00:01.934491+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 3.5373
+    },
     {
       "title": "The Coin Flip Judge? Reliability and Bias in LLM-as-a-Judge Evaluation",
       "url": "https://llm-stats.com/ai-news",
@@ -11,12 +27,28 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-15T07:00:19.283131+00:00",
+      "published": "2026-06-15T08:00:12.355928+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-15T07:00:01.415046+00:00",
+      "lastSeen": "2026-06-15T08:00:01.934491+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.71
+    },
+    {
+      "title": "The AI layoff wave is becoming a powder keg",
+      "url": "https://techcrunch.com/2026/06/15/the-ai-layoff-wave-is-becoming-a-powder-keg",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "What makes this combustible: at the very moment that tens of thousands of workers are being shown the door, a small cohort of AI insiders is becoming wealthy on a scale that's hard to comprehend.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/Powder-Keg.png?resize=1200%2C960",
+      "published": "2026-06-15T07:25:41+00:00",
+      "firstSeen": "2026-06-15T08:00:01.934491+00:00",
+      "lastSeen": "2026-06-15T08:00:01.934491+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2726
     },
     {
       "title": "Quoting Julia Evans",
@@ -29,10 +61,26 @@
       "image": "",
       "published": "2026-06-15T02:05:19+00:00",
       "firstSeen": "2026-06-15T03:00:01.442971+00:00",
-      "lastSeen": "2026-06-15T07:00:01.415046+00:00",
+      "lastSeen": "2026-06-15T08:00:01.934491+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1497
+      "score": 2.1234
+    },
+    {
+      "title": "The scam economy is now bigger than Denmark’s GDP, and it is accelerating",
+      "url": "https://thenextweb.com/news/global-scam-economy-442-billion-ai-fraud-yahoo-boys",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Global financial fraud cost victims an estimated $442 billion in 2025, roughly equivalent to the economic output of Denmark, according to Interpol’s 2026 Global Financial Fraud Threat Assessment. The figure, corroborated by the Global Anti-Scam Alliance’s own survey data, reflects what Interpol Secretary General Valdecy Urquiza described as “the industrialisation of fraud,” driven by artificial [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/global-scam-economy-442-billion-ai-fraud-yahoo-boys.avif",
+      "published": "2026-06-15T07:18:00+00:00",
+      "firstSeen": "2026-06-15T08:00:01.934491+00:00",
+      "lastSeen": "2026-06-15T08:00:01.934491+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 1.2288
     }
   ],
   "errors": [
