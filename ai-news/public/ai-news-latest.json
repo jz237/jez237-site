@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-15T22:00:01.468152+00:00",
+  "updatedAt": "2026-06-15T21:18:13.883073+00:00",
   "items": [
     {
       "title": "Benchmarking Web Agent Safety under E-commerce Deceptive Interfaces",
@@ -10,9 +10,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-15T22:00:17.163064+00:00",
+      "published": "2026-06-15T21:18:18.888128+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-15T22:00:01.468152+00:00",
+      "lastSeen": "2026-06-15T21:18:13.883073+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 5.41
@@ -140,10 +140,10 @@
       "image": "https://media.thenextweb.com/2026/06/meta-facebook-ai-mode-search-public-posts-groups-reels.avif",
       "published": "2026-06-15T20:37:15+00:00",
       "firstSeen": "2026-06-15T21:00:01.290903+00:00",
-      "lastSeen": "2026-06-15T22:00:01.468152+00:00",
+      "lastSeen": "2026-06-15T21:18:13.883073+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.3086
+      "score": 8.3293
     },
     {
       "title": "LinkedIn just produced its most unlikely success story: a World Cup footballer",
@@ -156,10 +156,10 @@
       "image": "https://media.thenextweb.com/2026/06/pico-lopes-linkedin-world-cup-cape-verde.avif",
       "published": "2026-06-15T20:27:20+00:00",
       "firstSeen": "2026-06-15T21:00:01.290903+00:00",
-      "lastSeen": "2026-06-15T22:00:01.468152+00:00",
+      "lastSeen": "2026-06-15T21:18:13.883073+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1038
+      "score": 2.1244
     },
     {
       "title": "Polymarket’s $345 million Iran peace bet is stuck because nobody can agree on what “permanent” means",
@@ -172,10 +172,10 @@
       "image": "https://media.thenextweb.com/2026/06/polymarket-345-million-iran-peace-deal-dispute-uma-whale-voting.avif",
       "published": "2026-06-15T20:20:05+00:00",
       "firstSeen": "2026-06-15T21:00:01.290903+00:00",
-      "lastSeen": "2026-06-15T22:00:01.468152+00:00",
+      "lastSeen": "2026-06-15T21:18:13.883073+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1003
+      "score": 2.1208
     },
     {
       "title": "100 cybersecurity experts say banning Fable 5 hurts defenders more than hackers",
@@ -188,10 +188,10 @@
       "image": "https://media.thenextweb.com/2026/06/fable-5-ban-cybersecurity-defenders-open-letter.avif",
       "published": "2026-06-15T20:16:15+00:00",
       "firstSeen": "2026-06-15T21:00:01.290903+00:00",
-      "lastSeen": "2026-06-15T22:00:01.468152+00:00",
+      "lastSeen": "2026-06-15T21:18:13.883073+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.0984
+      "score": 4.1189
     },
     {
       "title": "Samsung’s $2,100 Galaxy Book6 Edge ships with 16GB of RAM in 2026",
@@ -204,10 +204,10 @@
       "image": "https://media.thenextweb.com/2026/06/samsung-galaxy-book6-edge-snapdragon-x2-elite-16gb-ram-controversy.avif",
       "published": "2026-06-15T19:59:20+00:00",
       "firstSeen": "2026-06-15T21:00:01.290903+00:00",
-      "lastSeen": "2026-06-15T22:00:01.468152+00:00",
+      "lastSeen": "2026-06-15T21:18:13.883073+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 1.6902
+      "score": 1.7105
     },
     {
       "title": "Huawei’s ‘chip queen’ returns from seven years in the shadows with a bold new scaling law",
@@ -220,10 +220,10 @@
       "image": "https://media.thenextweb.com/2026/06/huawei-tau-scaling-law-chip-queen-logicfolding.avif",
       "published": "2026-06-15T19:50:16+00:00",
       "firstSeen": "2026-06-15T21:00:01.290903+00:00",
-      "lastSeen": "2026-06-15T21:00:01.290903+00:00",
+      "lastSeen": "2026-06-15T21:18:13.883073+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0859
+      "score": 2.1061
     },
     {
       "title": "Your Ryzen CPU used to encrypt your RAM. A firmware update silently turned that off.",
@@ -236,10 +236,10 @@
       "image": "https://media.thenextweb.com/2026/06/amd-tsme-memory-encryption-removed-consumer-ryzen-cpus.avif",
       "published": "2026-06-15T19:46:34+00:00",
       "firstSeen": "2026-06-15T21:00:01.290903+00:00",
-      "lastSeen": "2026-06-15T21:00:01.290903+00:00",
+      "lastSeen": "2026-06-15T21:18:13.883073+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.4841
+      "score": 3.5043
     },
     {
       "title": "YouTube’s AI slop purge is punishing the human creators who never showed their faces",
@@ -252,10 +252,10 @@
       "image": "https://media.thenextweb.com/2026/06/youtube-ai-slop-crackdown-faceless-creators-collateral-damage.avif",
       "published": "2026-06-15T19:17:57+00:00",
       "firstSeen": "2026-06-15T20:00:01.467567+00:00",
-      "lastSeen": "2026-06-15T21:00:01.290903+00:00",
+      "lastSeen": "2026-06-15T21:18:13.883073+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0705
+      "score": 2.0904
     },
     {
       "title": "All the news about Anthropic&#8217;s new AI fight with the White House",
@@ -268,10 +268,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/STK269_ANTHROPIC_2_D.webp?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-15T19:04:53+00:00",
       "firstSeen": "2026-06-15T20:00:01.467567+00:00",
-      "lastSeen": "2026-06-15T22:00:01.468152+00:00",
+      "lastSeen": "2026-06-15T21:18:13.883073+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.6743
+      "score": 6.6941
     },
     {
       "title": "Why do South Koreans love AI so much?",
@@ -284,10 +284,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/06/AP26126222060508.jpg?resize=1200%2C600",
       "published": "2026-06-15T18:46:08+00:00",
       "firstSeen": "2026-06-15T20:00:01.467567+00:00",
-      "lastSeen": "2026-06-15T22:00:01.468152+00:00",
+      "lastSeen": "2026-06-15T21:18:13.883073+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2956
+      "score": 3.3152
     },
     {
       "title": "v0.30.9-rc1",
@@ -297,13 +297,13 @@
       "sourceWeight": 0.9,
       "category": "AI",
       "summary": "server: context shift for context windows larger than 8k, add error w…",
-      "image": "https://opengraph.githubassets.com/942765e3372c9645edf273758eef2eb09a4a3a609f52ac9fb2c334895a7dc3eb/ollama/ollama",
+      "image": "https://opengraph.githubassets.com/b793bfcb95cd221d4c1d95fa44eea1f3240ffefdb75c44b55ad95f37591da0a5/ollama/ollama",
       "published": "2026-06-15T18:36:50+00:00",
-      "firstSeen": "2026-06-15T22:00:01.468152+00:00",
-      "lastSeen": "2026-06-15T22:00:01.468152+00:00",
+      "firstSeen": "2026-06-15T21:18:13.883073+00:00",
+      "lastSeen": "2026-06-15T21:18:13.883073+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2612
+      "score": 2.2808
     },
     {
       "title": "Meta’s new ‘AI Mode’ on Facebook pulls from public info across its platforms",
@@ -316,10 +316,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/meta-apps-GettyImages-2152655816.jpg?w=1024",
       "published": "2026-06-15T18:30:58+00:00",
       "firstSeen": "2026-06-15T19:00:01.567475+00:00",
-      "lastSeen": "2026-06-15T22:00:01.468152+00:00",
+      "lastSeen": "2026-06-15T21:18:13.883073+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2885
+      "score": 3.308
     },
     {
       "title": "SpaceX is public: Everything you need to know post-IPO",
@@ -332,10 +332,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/elon-nasdaq-spacex-ipo.jpg?resize=1200%2C801",
       "published": "2026-06-15T18:30:34+00:00",
       "firstSeen": "2026-06-15T19:00:01.567475+00:00",
-      "lastSeen": "2026-06-15T22:00:01.468152+00:00",
+      "lastSeen": "2026-06-15T21:18:13.883073+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 0.1883
+      "score": 0.2078
     },
     {
       "title": "A single click on a Microsoft link could have drained your inbox. Here’s how SearchLeak worked.",
@@ -348,10 +348,10 @@
       "image": "https://media.thenextweb.com/2026/06/microsoft-365-copilot-searchleak-one-click-data-exfiltration.avif",
       "published": "2026-06-15T18:22:42+00:00",
       "firstSeen": "2026-06-15T19:00:01.567475+00:00",
-      "lastSeen": "2026-06-15T21:00:01.290903+00:00",
+      "lastSeen": "2026-06-15T21:18:13.883073+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.4447
+      "score": 6.4641
     },
     {
       "title": "Father’s Day Tech Gifts on Sale at Amazon, Best Buy, and Walmart",
@@ -364,10 +364,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/06/DRL-Fathers-Day-Tech-Deals-06152026-1.jpg?f=jpeg",
       "published": "2026-06-15T18:14:42+00:00",
       "firstSeen": "2026-06-15T19:00:01.567475+00:00",
-      "lastSeen": "2026-06-15T22:00:01.468152+00:00",
+      "lastSeen": "2026-06-15T21:18:13.883073+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.141
+      "score": 3.1604
     },
     {
       "title": "Trump’s Anthropic shutdown just made the case for non-American AI",
@@ -380,10 +380,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/04/VRG_Illo_STK175_L_Normand_DonaldTrump_Negative.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-15T18:10:27+00:00",
       "firstSeen": "2026-06-15T19:00:01.567475+00:00",
-      "lastSeen": "2026-06-15T22:00:01.468152+00:00",
+      "lastSeen": "2026-06-15T21:18:13.883073+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2491
+      "score": 5.2684
     },
     {
       "title": "Java’s biggest language change in a decade is finally landing. It took 197,000 lines of code.",
@@ -396,10 +396,10 @@
       "image": "https://media.thenextweb.com/2026/06/java-project-valhalla-jep-401-value-classes-jdk-28.avif",
       "published": "2026-06-15T18:01:15+00:00",
       "firstSeen": "2026-06-15T19:00:01.567475+00:00",
-      "lastSeen": "2026-06-15T21:00:01.290903+00:00",
+      "lastSeen": "2026-06-15T21:18:13.883073+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7349
+      "score": 2.7541
     },
     {
       "title": "Users cry foul after AMD stripped memory crypto from its consumer CPUs",
@@ -412,10 +412,10 @@
       "image": "https://cdn.arstechnica.net/wp-content/uploads/2026/01/IMG_7105-1152x648-1769617334.jpeg",
       "published": "2026-06-15T17:55:46+00:00",
       "firstSeen": "2026-06-15T20:00:01.467567+00:00",
-      "lastSeen": "2026-06-15T22:00:01.468152+00:00",
+      "lastSeen": "2026-06-15T21:18:13.883073+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.5324
+      "score": 5.5516
     },
     {
       "title": "Seattle has been using AI to listen to every 911 medical call since 2023. Nobody was told.",
@@ -431,7 +431,7 @@
       "lastSeen": "2026-06-15T20:00:01.467567+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.029
+      "score": 2.0481
     },
     {
       "title": "Big Tech’s desperate last push at AI regulation",
@@ -444,10 +444,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/gettyimages-2163958194.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-15T17:44:10+00:00",
       "firstSeen": "2026-06-15T18:00:01.483797+00:00",
-      "lastSeen": "2026-06-15T22:00:01.468152+00:00",
+      "lastSeen": "2026-06-15T21:18:13.883073+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3371
+      "score": 3.3562
     },
     {
       "title": "UK Weighs Under-16 Social Media Ban for 2027",
@@ -460,10 +460,10 @@
       "image": "https://assets.techrepublic.com/uploads/2025/10/tr-10152025-news-instagram-teen-accounts-pg13-safety.jpg?f=jpeg",
       "published": "2026-06-15T17:40:25+00:00",
       "firstSeen": "2026-06-15T18:00:01.483797+00:00",
-      "lastSeen": "2026-06-15T22:00:01.468152+00:00",
+      "lastSeen": "2026-06-15T21:18:13.883073+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1254
+      "score": 3.1445
     },
     {
       "title": "EA just built a full advertising platform inside its games, and 120 million players are the audience",
@@ -479,7 +479,7 @@
       "lastSeen": "2026-06-15T20:00:01.467567+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.723
+      "score": 2.742
     },
     {
       "title": "Patch release v5.12.1",
@@ -492,10 +492,10 @@
       "image": "https://repository-images.githubusercontent.com/155220641/a16c4880-a501-11ea-9e8f-646cf611702e",
       "published": "2026-06-15T17:29:59+00:00",
       "firstSeen": "2026-06-15T17:00:01.632650+00:00",
-      "lastSeen": "2026-06-15T22:00:01.468152+00:00",
+      "lastSeen": "2026-06-15T21:18:13.883073+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8607
+      "score": 4.8797
     },
     {
       "title": "Patch release v5.10.3",
@@ -508,10 +508,10 @@
       "image": "https://repository-images.githubusercontent.com/155220641/a16c4880-a501-11ea-9e8f-646cf611702e",
       "published": "2026-06-15T17:29:39+00:00",
       "firstSeen": "2026-06-15T17:00:01.632650+00:00",
-      "lastSeen": "2026-06-15T22:00:01.468152+00:00",
+      "lastSeen": "2026-06-15T21:18:13.883073+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8606
+      "score": 4.8795
     },
     {
       "title": "Cybersecurity vets protest ‘dangerous’ US government ban on Anthropic’s most powerful models",
@@ -524,10 +524,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/claude-mythos-logo.jpg?resize=1200%2C800",
       "published": "2026-06-15T15:29:51+00:00",
       "firstSeen": "2026-06-15T16:00:02.137972+00:00",
-      "lastSeen": "2026-06-15T22:00:01.468152+00:00",
+      "lastSeen": "2026-06-15T21:18:13.883073+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1082
+      "score": 5.1262
     },
     {
       "title": "Adani and Jabil plan to build AI data-centre hardware in India",
@@ -543,7 +543,7 @@
       "lastSeen": "2026-06-15T20:00:01.467567+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9578
+      "score": 1.9755
     },
     {
       "title": "We’re strengthening our presence in Alabama through new investments and community support.",
@@ -556,10 +556,10 @@
       "image": "https://blog.google/static/blogv2/images/google-200x200.png?version=pr20260609-1635",
       "published": "2026-06-15T15:00:00+00:00",
       "firstSeen": "2026-06-15T16:00:02.137972+00:00",
-      "lastSeen": "2026-06-15T22:00:01.468152+00:00",
+      "lastSeen": "2026-06-15T21:18:13.883073+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2356
+      "score": 2.2533
     },
     {
       "title": "Monday.com launches Monday Ventures, a $200m fund for workplace-AI startups",
@@ -575,7 +575,7 @@
       "lastSeen": "2026-06-15T20:00:01.467567+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.7549
+      "score": 3.7726
     },
     {
       "title": "\"They screwed us\": Personality clashes sent Anthropic's models offline",
@@ -588,10 +588,10 @@
       "image": "",
       "published": "2026-06-15T14:57:33+00:00",
       "firstSeen": "2026-06-15T16:00:02.137972+00:00",
-      "lastSeen": "2026-06-15T22:00:01.468152+00:00",
+      "lastSeen": "2026-06-15T21:18:13.883073+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 9.0946
+      "score": 9.1123
     },
     {
       "title": "Zhipu shares jump as Wall Street bets China AI fills the Anthropic gap",
@@ -607,7 +607,7 @@
       "lastSeen": "2026-06-15T20:00:01.467567+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9502
+      "score": 4.9677
     },
     {
       "title": "Siri AI Supported Devices: Full List of iPhones, iPads, Macs, and More",
@@ -620,10 +620,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/06/siri-support.jpg?f=jpeg",
       "published": "2026-06-15T14:40:17+00:00",
       "firstSeen": "2026-06-15T18:00:01.483797+00:00",
-      "lastSeen": "2026-06-15T22:00:01.468152+00:00",
+      "lastSeen": "2026-06-15T21:18:13.883073+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.7474
+      "score": 3.7649
     },
     {
       "title": "Sarvam becomes India’s newest AI unicorn with a $234m round led by HCLTech",
@@ -639,7 +639,119 @@
       "lastSeen": "2026-06-15T20:00:01.467567+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9474
+      "score": 1.9649
+    },
+    {
+      "title": "Who decides who gets to use a piece of software?",
+      "url": "https://thenextweb.com/news/who-decides-who-gets-to-use-a-piece-of-software",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The letter arrived at 5:21pm Eastern Time on a Friday, which is the hour at which official Washington usually stops returning calls and the news cycle goes slack for the weekend. It came from the Commerce Department, ran to a few paragraphs, and did something no piece of American paper had ever quite done before. [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/Claude-Fable-5.avif",
+      "published": "2026-06-15T14:36:36+00:00",
+      "firstSeen": "2026-06-15T15:00:01.885095+00:00",
+      "lastSeen": "2026-06-15T20:00:01.467567+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "framework_or_plumbing",
+      "score": -0.7866
+    },
+    {
+      "title": "Salesforce acquires AI customer service platform Fin for $3.6B",
+      "url": "https://techcrunch.com/2026/06/15/salesforce-acquires-ai-customer-service-platform-fin-for-3-6b",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Salesforce says it wants to use Fin's team and technology to improve Agentforce, its existing enterprise platform that businesses can use to build custom AI agents that automate tasks.",
+      "image": "https://techcrunch.com/wp-content/uploads/2024/06/GettyImages-1125951338.jpg?resize=1200%2C900",
+      "published": "2026-06-15T14:34:45+00:00",
+      "firstSeen": "2026-06-15T15:00:01.885095+00:00",
+      "lastSeen": "2026-06-15T21:18:13.883073+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 3.8026
+    },
+    {
+      "title": "Meta face recognition for its glasses came from a Pentagon contractor, WIRED reports",
+      "url": "https://thenextweb.com/news/meta-rank-one-face-recognition-glasses-pentagon",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The Meta face recognition system for its smart glasses was built on software licensed from Rank One Computing, a Pentagon and police contractor, according to a WIRED investigation. Reporters Dell Cameron and Dhruv Mehrotra found a leaked, still-active licence tying Meta to a vendor that draws roughly 80 per cent of its revenue from government [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/meta-smart-glasses-privacy-crisis-apple-google-snap.avif",
+      "published": "2026-06-15T14:33:50+00:00",
+      "firstSeen": "2026-06-15T15:00:01.885095+00:00",
+      "lastSeen": "2026-06-15T19:00:01.567475+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 1.9622
+    },
+    {
+      "title": "Anthropic lawsuit says it oversold the usage on its $200 Claude Max plans",
+      "url": "https://thenextweb.com/news/anthropic-lawsuit-claude-max-plans-usage-limits",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "An Anthropic lawsuit filed in California this week accuses the AI company of overselling its priciest Claude subscriptions. The complaint, brought by Washington, D.C. customer Karl Kahn, claims Anthropic’s “Max 5x” ($100 a month) and “Max 20x” ($200 a month) plans deliver far less usage than advertised, and asks a court to make the company [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/workday-cto-bailis-anthropic-member-technical-staff.avif",
+      "published": "2026-06-15T14:08:52+00:00",
+      "firstSeen": "2026-06-15T15:00:01.885095+00:00",
+      "lastSeen": "2026-06-15T18:00:01.483797+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 10.9517
+    },
+    {
+      "title": "Skydio CEO Adam Bry on why Silicon Valley shouldn’t draw red lines for drone use",
+      "url": "https://www.theverge.com/podcast/949195/skydio-ceo-adam-bry-autonmous-drones-china-red-lines-military",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "Today, I’m talking with Adam Bry, who is CEO of Skydio, the leading US maker of autonomous drones. Before we recorded this episode, I actually got to remotely operate one of Skydio’s drones in the Bay Area from Adam’s laptop in our podcast studio in New York and fly an indoor drone around our office. [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/DCD_20260615_Adam_Bry.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.711631919237%2C100%2C78.576736161526&amp%3Bw=1200",
+      "published": "2026-06-15T14:00:00+00:00",
+      "firstSeen": "2026-06-15T15:00:01.885095+00:00",
+      "lastSeen": "2026-06-15T21:18:13.883073+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.158
+    },
+    {
+      "title": "NewCore raises $66m to give AI agents a corporate identity",
+      "url": "https://thenextweb.com/news/newcore-66-million-ai-agent-identity-security",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "NewCore has come out of stealth with $66m to solve a problem most companies have not named yet: who, or what, is logging into their systems. The identity-security startup, based in Tel Aviv and San Francisco, is building a platform to govern both human employees and autonomous AI agents under one architecture, and it is [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/newcore-logo.avif",
+      "published": "2026-06-15T13:59:50+00:00",
+      "firstSeen": "2026-06-15T15:00:01.885095+00:00",
+      "lastSeen": "2026-06-15T18:00:01.483797+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.6479
+    },
+    {
+      "title": "Google Bug Hunter Claims $500K From AI-Assisted Vulnerability Pipeline",
+      "url": "https://www.techrepublic.com/article/news-google-ai-bug-bounty-pipeline",
+      "source": "TechRepublic AI",
+      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "A researcher known as Brutecat says an AI-assisted pipeline helped map and test more than 1,500 Google APIs. Google has not confirmed the $500,000 payout total.\nThe post Google Bug Hunter Claims $500K From AI-Assisted Vulnerability Pipeline appeared first on TechRepublic.",
+      "image": "https://assets.techrepublic.com/uploads/2026/06/ai-and-data-management-concept-in-blue-tone-2026-03-17-05-29-24-utc-1-1024x656.png?f=jpeg",
+      "published": "2026-06-15T13:56:10+00:00",
+      "firstSeen": "2026-06-15T18:00:01.483797+00:00",
+      "lastSeen": "2026-06-15T21:18:13.883073+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.1464
     },
     {
       "title": "The Life Scientific: Dean Lomax",
@@ -652,10 +764,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-15T20:00:00+00:00",
       "firstSeen": "2026-06-15T21:00:01.290903+00:00",
-      "lastSeen": "2026-06-15T22:00:01.468152+00:00",
+      "lastSeen": "2026-06-15T21:18:13.883073+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2305
+      "score": 2.2509
     },
     {
       "title": "The Life Scientific: Helen Hastie",
@@ -668,10 +780,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-08T20:00:00+00:00",
       "firstSeen": "2026-06-08T21:00:01.371488+00:00",
-      "lastSeen": "2026-06-15T22:00:01.468152+00:00",
+      "lastSeen": "2026-06-15T21:18:13.883073+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.1998
+      "score": 1.2
     },
     {
       "title": "The Life Scientific: Seth Berkley",
