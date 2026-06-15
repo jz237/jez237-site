@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-15T17:00:01.632650+00:00",
+  "updatedAt": "2026-06-15T18:00:01.483797+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -10440,6 +10440,22 @@
     "https://github.com/huggingface/transformers/releases/tag/v5.12.1": {
       "image": "https://repository-images.githubusercontent.com/155220641/a16c4880-a501-11ea-9e8f-646cf611702e",
       "checkedAt": "2026-06-15T17:00:01.632650+00:00"
+    },
+    "https://www.theverge.com/policy/949970/ai-regulation-child-safety-kosa-congress": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/gettyimages-2163958194.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-06-15T18:00:01.483797+00:00"
+    },
+    "https://www.techrepublic.com/article/news-emea-uk-social-media-ban-under-16": {
+      "image": "https://assets.techrepublic.com/uploads/2025/10/tr-10152025-news-instagram-teen-accounts-pg13-safety.jpg?f=jpeg",
+      "checkedAt": "2026-06-15T18:00:01.483797+00:00"
+    },
+    "https://www.techrepublic.com/article/news-apple-siri-ai-upgrade-newer-devices": {
+      "image": "https://assets.techrepublic.com/uploads/2026/06/siri-support.jpg?f=jpeg",
+      "checkedAt": "2026-06-15T18:00:01.483797+00:00"
+    },
+    "https://www.techrepublic.com/article/news-google-ai-bug-bounty-pipeline": {
+      "image": "https://assets.techrepublic.com/uploads/2026/06/ai-and-data-management-concept-in-blue-tone-2026-03-17-05-29-24-utc-1-1024x656.png?f=jpeg",
+      "checkedAt": "2026-06-15T18:00:01.483797+00:00"
     }
   }
 }
