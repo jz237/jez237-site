@@ -1,7 +1,23 @@
 {
   "date": "2026-06-15",
-  "updatedAt": "2026-06-15T21:00:01.290903+00:00",
+  "updatedAt": "2026-06-15T22:00:01.468152+00:00",
   "items": [
+    {
+      "title": "Musk’s trade secret case against OpenAI is dead, and this time it’s permanent",
+      "url": "https://thenextweb.com/news/xai-openai-trade-secret-lawsuit-dismissed",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "A federal judge has permanently killed xAI’s lawsuit accusing OpenAI of stealing trade secrets related to the Grok chatbot. US District Judge Rita Lin dismissed the case with prejudice on Monday, meaning xAI cannot bring the same claims again. Lin said xAI failed to show that OpenAI induced former xAI senior engineer Xuechen Li to divulge confidential [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/xai-cursor-gun-jumping-antitrust-spacex-ipo.avif",
+      "published": "2026-06-15T21:11:22+00:00",
+      "firstSeen": "2026-06-15T22:00:01.468152+00:00",
+      "lastSeen": "2026-06-15T22:00:01.468152+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 11.1255
+    },
     {
       "title": "Anthropic lawsuit says it oversold the usage on its $200 Claude Max plans",
       "url": "https://thenextweb.com/news/anthropic-lawsuit-claude-max-plans-usage-limits",
@@ -16,7 +32,7 @@
       "lastSeen": "2026-06-15T18:00:01.483797+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.9593
+      "score": 10.9344
     },
     {
       "title": "US order to block foreign access to Anthropic’s top models marks a reversal",
@@ -32,7 +48,7 @@
       "lastSeen": "2026-06-15T12:39:04.338676+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.9383
+      "score": 9.9167
     },
     {
       "title": "\"They screwed us\": Personality clashes sent Anthropic's models offline",
@@ -45,10 +61,10 @@
       "image": "",
       "published": "2026-06-15T14:57:33+00:00",
       "firstSeen": "2026-06-15T16:00:02.137972+00:00",
-      "lastSeen": "2026-06-15T21:00:01.290903+00:00",
+      "lastSeen": "2026-06-15T22:00:01.468152+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 9.1201
+      "score": 9.0946
     },
     {
       "title": "Facebook now has an AI search engine that pulls answers from your Group posts and Reels",
@@ -61,10 +77,26 @@
       "image": "https://media.thenextweb.com/2026/06/meta-facebook-ai-mode-search-public-posts-groups-reels.avif",
       "published": "2026-06-15T20:37:15+00:00",
       "firstSeen": "2026-06-15T21:00:01.290903+00:00",
-      "lastSeen": "2026-06-15T21:00:01.290903+00:00",
+      "lastSeen": "2026-06-15T22:00:01.468152+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.3385
+      "score": 8.3086
+    },
+    {
+      "title": "Facebook’s new AI Mode search gets its info from public posts",
+      "url": "https://www.theverge.com/tech/950264/meta-ai-mode-search-facebook",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "Your public Facebook posts could help inform AI-generated results in Meta's new AI Mode. When you search on Facebook, the \"AI Mode\" option will appear alongside the usual search modes like \"People\" and \"Marketplace.\" It's one of several new AI features Meta is rolling out starting today, including photo presets that swap sports jerseys onto [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/videoframe_7395.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C11.992407477375%2C100%2C76.015185045249&amp%3Bw=1200",
+      "published": "2026-06-15T21:15:08+00:00",
+      "firstSeen": "2026-06-15T22:00:01.468152+00:00",
+      "lastSeen": "2026-06-15T22:00:01.468152+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "editorial_score_pass",
+      "score": 6.9374
     },
     {
       "title": "All the news about Anthropic&#8217;s new AI fight with the White House",
@@ -77,10 +109,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/STK269_ANTHROPIC_2_D.webp?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-15T19:04:53+00:00",
       "firstSeen": "2026-06-15T20:00:01.467567+00:00",
-      "lastSeen": "2026-06-15T21:00:01.290903+00:00",
+      "lastSeen": "2026-06-15T22:00:01.468152+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.7029
+      "score": 6.6743
     },
     {
       "title": "A single click on a Microsoft link could have drained your inbox. Here’s how SearchLeak worked.",
@@ -96,7 +128,7 @@
       "lastSeen": "2026-06-15T21:00:01.290903+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.4727
+      "score": 6.4447
     },
     {
       "title": "Accenture: Consumers show growing trust in AI shopping agents",
@@ -109,10 +141,10 @@
       "image": "",
       "published": "2026-06-15T10:00:00+00:00",
       "firstSeen": "2026-06-15T10:00:01.539237+00:00",
-      "lastSeen": "2026-06-15T21:00:01.290903+00:00",
+      "lastSeen": "2026-06-15T22:00:01.468152+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 6.2584
+      "score": 6.2362
     },
     {
       "title": "The AI off switch: How Anthropic’s export controls sparked a global AI sovereignty scramble",
@@ -125,10 +157,10 @@
       "image": "",
       "published": "2026-06-15T08:00:00+00:00",
       "firstSeen": "2026-06-15T09:00:02.103412+00:00",
-      "lastSeen": "2026-06-15T21:00:01.290903+00:00",
+      "lastSeen": "2026-06-15T22:00:01.468152+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.0146
+      "score": 5.9936
     },
     {
       "title": "Users cry foul after AMD stripped memory crypto from its consumer CPUs",
@@ -141,10 +173,10 @@
       "image": "https://cdn.arstechnica.net/wp-content/uploads/2026/01/IMG_7105-1152x648-1769617334.jpeg",
       "published": "2026-06-15T17:55:46+00:00",
       "firstSeen": "2026-06-15T20:00:01.467567+00:00",
-      "lastSeen": "2026-06-15T21:00:01.290903+00:00",
+      "lastSeen": "2026-06-15T22:00:01.468152+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.5601
+      "score": 5.5324
     },
     {
       "title": "HarmonyOS 7 steps into the AI gap Apple left open in China",
@@ -157,42 +189,10 @@
       "image": "",
       "published": "2026-06-15T11:00:00+00:00",
       "firstSeen": "2026-06-15T12:00:01.938795+00:00",
-      "lastSeen": "2026-06-15T21:00:01.290903+00:00",
+      "lastSeen": "2026-06-15T22:00:01.468152+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.4812
-    },
-    {
-      "title": "Benchmarking Web Agent Safety under E-commerce Deceptive Interfaces",
-      "url": "https://llm-stats.com/ai-news",
-      "source": "LLM Stats AI News",
-      "sourceUrl": "https://llm-stats.com/ai-news",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "",
-      "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-15T21:00:08.337597+00:00",
-      "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-15T21:00:01.290903+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 5.41
-    },
-    {
-      "title": "Trump’s Anthropic shutdown just made the case for non-American AI",
-      "url": "https://www.theverge.com/ai-artificial-intelligence/949986/anthropic-fable-mythos-shutdown-sovereign-ai",
-      "source": "The Verge AI",
-      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "At Washington's request, Anthropic suddenly took its newest and most powerful AI models offline over the weekend. The American company said it had little choice after the White House demanded it block access for all foreign nationals, including its own employees. Abroad, the incident offered a sobering reminder that the US not only dominates frontier [&#8230;]",
-      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/04/VRG_Illo_STK175_L_Normand_DonaldTrump_Negative.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
-      "published": "2026-06-15T18:10:27+00:00",
-      "firstSeen": "2026-06-15T19:00:01.567475+00:00",
-      "lastSeen": "2026-06-15T21:00:01.290903+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 5.2769
+      "score": 5.4584
     }
   ],
   "errors": [

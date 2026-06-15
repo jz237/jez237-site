@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-15T21:00:01.290903+00:00",
+  "updatedAt": "2026-06-15T22:00:01.468152+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -10484,6 +10484,14 @@
     "http://www.bbc.co.uk/programmes/w3ct8jsh": {
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "checkedAt": "2026-06-15T21:00:01.290903+00:00"
+    },
+    "https://www.theverge.com/tech/950264/meta-ai-mode-search-facebook": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/videoframe_7395.jpg?quality=90&amp;strip=all&amp;crop=0%2C11.992407477375%2C100%2C76.015185045249&amp;w=1200",
+      "checkedAt": "2026-06-15T22:00:01.468152+00:00"
+    },
+    "https://github.com/ollama/ollama/releases/tag/v0.30.9-rc1": {
+      "image": "https://opengraph.githubassets.com/942765e3372c9645edf273758eef2eb09a4a3a609f52ac9fb2c334895a7dc3eb/ollama/ollama",
+      "checkedAt": "2026-06-15T22:00:01.468152+00:00"
     }
   }
 }
