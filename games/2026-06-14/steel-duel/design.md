@@ -22,9 +22,29 @@ Two tanks duel in a fixed walled maze around a central minefield, top-down, on a
 - WebAudio synth SFX + engine rumble, muteable.
 
 ## Modes & controls
-- **2-Player Duel** (local) and **Play vs CPU** (AI, easy/normal/hard).
-- P1 `W/A/S/D` + `Space`; P2 `↑↓←→` + `Enter`. Touch: D-pad + FIRE (best in landscape).
+- **Play vs CPU** (1P) with a continuous **skill slider, Stupid → Can't Defeat**, and **2-Player Duel** (local).
+- **Attract mode:** the title screen runs a live CPU-vs-CPU duel behind the menu.
+- **Desktop (vs CPU):** `W` drive, `A/D` steer, `S` reverse, **mouse aims the turret**, click or `Space` fires.
+  The turret rotates **independently** of the hull (a modern addition over the fixed 1974 barrel).
+- **2-Player Duel:** P1 `WASD` + `Space`, P2 `↑↓←→` + `Enter`; barrels fire forward (faithful, no mouse needed).
+- **Mobile:** twin-stick — **left stick drives, right stick aims & fires**.
 - `P` pause · `C` 1974 mode · `M` mute.
+
+## AI (the part that matters)
+- **A\* pathfinding** on the tile grid (walls + mines treated as blocked) so it routes *around* the maze
+  instead of grinding into walls, recomputed a few times a second. A reactive `safeDir` whisker check
+  guarantees it **never drives into a mine**, even at the lowest skill.
+- **Skill (0–1, from the slider)** scales only the *combat* competence, never the driving: aim lead
+  prediction, aim error, turret-traverse speed, fire cadence, and (above ~0.5) **shell-dodging**. So
+  "Stupid" drives fine but shoots wildly; "Can't Defeat" leads perfectly, dodges your shots, and keeps
+  optimal range. Bot-vs-bot sanity: Stupid 0 – 5 Lethal over ~20s.
+- Fully deterministic (A* + tick-based aim noise, no `Math.random` in sim) so the self-tests and the
+  attract duel are reproducible.
+
+## Destructible walls
+- Each interior wall tile has hit points (`WALL_MAX`); shells chip them (cracks render with damage)
+  and after enough hits the tile is **blasted open**, changing the maze mid-match. Border is indestructible.
+  The AI's pathfinder uses the live wall grid, so new holes open new routes.
 
 ## Tech
 - Vanilla JS + Canvas 2D, no build step. `audio.js` (synth), `art.js` (render/particles/CRT),
