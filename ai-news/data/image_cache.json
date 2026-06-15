@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-15T15:00:01.885095+00:00",
+  "updatedAt": "2026-06-15T16:00:02.137972+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -10420,6 +10420,18 @@
     "https://www.theverge.com/podcast/949195/skydio-ceo-adam-bry-autonmous-drones-china-red-lines-military": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/DCD_20260615_Adam_Bry.png?quality=90&amp;strip=all&amp;crop=0%2C10.711631919237%2C100%2C78.576736161526&amp;w=1200",
       "checkedAt": "2026-06-15T15:00:01.885095+00:00"
+    },
+    "https://techcrunch.com/2026/06/15/cybersecurity-vets-protest-dangerous-us-government-ban-on-anthropics-most-powerful-models": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/claude-mythos-logo.jpg?resize=1200,800",
+      "checkedAt": "2026-06-15T16:00:02.137972+00:00"
+    },
+    "https://blog.google/innovation-and-ai/infrastructure-and-cloud/global-network/alabama-investment-june-2026": {
+      "image": "https://blog.google/static/blogv2/images/google-200x200.png?version=pr20260609-1635",
+      "checkedAt": "2026-06-15T16:00:02.137972+00:00"
+    },
+    "https://simonwillison.net/2026/Jun/15/axios-clashes-anthropics": {
+      "image": "",
+      "checkedAt": "2026-06-15T16:00:02.137972+00:00"
     }
   }
 }
