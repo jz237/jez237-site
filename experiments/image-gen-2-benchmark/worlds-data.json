@@ -612,60 +612,6 @@
     }
   },
   {
-    "id": "2026-06-14-manual-20-mirthcap-lookingglass-village-finnel-traps-the-th",
-    "title": "Mirthcap Lookingglass Village: Finnel Traps the Thornmaw",
-    "tests": "Manual world catalog entry from #ai-photos; non-graphic action scene showing Finnel surviving the thornmaw by tangling it with bolas and living roots, buying time to continue toward Heartglass Rue.",
-    "prompt": "Create a cinematic fantasy image showing older Finnel Buttonby surviving the thornmaw encounter through cleverness. The thornmaw is tangled harmlessly in bolas and living roots while Finnel escapes deeper into the outer garden toward Heartglass Rue. Stormy twilight, thorn stems, twisted roots, giant leaves, black dew, fungal ledges, wet ground, dramatic blue-green-gold light. Finnel is exhausted but resolute with curls hiding rounded ears, travel cloak, Marlow’s recipe bundle, pocketwatch charm, herb tools, vial case, empty bolas cord. His moon-blue briarwing stands protectively nearby. Thornmaw is trapped and roaring in frustration, not injured. No weapons visible, no stabbing, no killing, no blood, no gore.",
-    "image": "images/2026-06-14-manual-20-mirthcap-lookingglass-village-finnel-traps-the-th.png",
-    "date": "2026-06-14",
-    "batch": "Fictional World",
-    "slot": "manual-20",
-    "model": "codex-builtin-imagegen",
-    "size": "landscape",
-    "world": {
-      "name": "Mirthcap Lookingglass Village",
-      "description": "A whimsical storybook pocket-world where tiny villagers live inside jewel-colored mushroom houses, using tea-table infrastructure, checkerboard paths, and playful scale-shifted garden objects as everyday civic life.",
-      "continuity": "Mirthcap Lookingglass Village canon: Finnel must find Heartglass Rue to brew Marlow’s tonic and save Mirthcap from Glassmoss Fever. Thornmaws are dangerous outer-garden predators. Finnel can defeat or escape monsters through cleverness, tools, and the help of his moon-blue briarwing; in this sequence he traps a thornmaw with bolas and living roots, then continues the quest. Keep Mirthcap people tiny human-like, not elves, with rounded ears or ears hidden by hair/caps.",
-      "entryDescription": "Finnel survives the thornmaw by tangling it with bolas and living roots, then escapes onward with his moon-blue briarwing."
-    }
-  },
-  {
-    "id": "2026-06-14-manual-21-mirthcap-lookingglass-village-thornmaw-encounter-",
-    "title": "Mirthcap Lookingglass Village: Thornmaw Encounter Recreated",
-    "tests": "Manual world catalog entry from #ai-photos; regenerated thornmaw encounter scene showing Finnel riding his blue briarwing through the outer garden and confronting the vicious thornmaw.",
-    "prompt": "Use case: illustration-story\nAsset type: cinematic storybook panel for the Mirthcap fictional world\nPrimary request: Finnel traverses the dangerous outer garden riding his loyal blue briarwing. He encounters an evil, vicious-looking monster with large teeth threatening to attack him.\nScene/backdrop: the outer garden beyond Mirthcap, overgrown gigantic stems, thorny vines, wet moss, looming leaves like forest canopies, misty late-evening light.\nSubject: older Finnel, a tiny brave Mirthcap villager with rounded ears and travel gear, riding a blue briarwing insect mount; a hulking monster called a thornmaw blocking the path, enormous teeth, low predatory stance, claws in the mud.\nStyle/medium: rich detailed cinematic fantasy storybook illustration, wholesome but scary adventure tone, consistent with previous Mirthcap images.\nComposition/framing: wide landscape action panel, Finnel and blue briarwing in the foreground/midground facing the monster, clear scale difference, dynamic tension, no text.\nLighting/mood: dark, suspenseful, misty, rain-damp, dramatic rim light through leaves.\nConstraints: Finnel should look courageous but frightened; the briarwing must be blue; the monster should be threatening and scary but not graphic.\nAvoid: gore, blood, modern objects, text, watermark, extra duplicate Finnels.",
-    "image": "images/2026-06-14-manual-21-mirthcap-lookingglass-village-thornmaw-encounter-.png",
-    "date": "2026-06-14",
-    "batch": "Fictional Worlds",
-    "slot": "manual-21",
-    "model": "fal/openai/gpt-image-2",
-    "size": "1536x1024",
-    "world": {
-      "name": "Mirthcap Lookingglass Village",
-      "description": "A tiny whimsical village of human-like Mirthcap people living among mushroom homes, pocketwatch mechanisms, healing herbs, briarwings, and dangerous outer-garden mysteries.",
-      "continuity": "Mirthcap Lookingglass Village canon: Finnel must find Heartglass Rue to brew Marlow’s tonic and save Mirthcap from Glassmoss Fever. The outer garden beyond Hearthpetal Thicket is dangerous and contains thornmaws, vicious plant-reptile predators with bark armor, thorn ridges, huge teeth, claws, and angry glowing eyes. Finnel rides his blue briarwing during this quest.",
-      "entryDescription": "Finnel rides his blue briarwing into the outer garden and comes face to face with a vicious thornmaw blocking the route to Heartglass Rue."
-    }
-  },
-  {
-    "id": "2026-06-14-manual-22-mirthcap-lookingglass-village-finnel-defeats-the-",
-    "title": "Mirthcap Lookingglass Village: Finnel Defeats the Thornmaw Recreated",
-    "tests": "Manual world catalog entry from #ai-photos; regenerated non-graphic victory scene showing Finnel dropping the thornmaw with bolas and defeating it during the Heartglass Rue quest.",
-    "prompt": "Use case: illustration-story\nAsset type: cinematic storybook panel for the Mirthcap fictional world\nPrimary request: Finnel has successfully thrown bolas around the thornmaw monster’s legs, brought it crashing to the ground, climbed onto it, and delivers the final dagger strike that defeats the beast.\nScene/backdrop: the outer garden beyond Mirthcap, giant thorny stems, slick moss, rain mist, broken roots, dark leaves overhead.\nSubject: older Finnel, tiny but heroic, standing on the fallen thornmaw monster; the thornmaw’s legs are tightly tangled with bolas and living roots; Finnel grips a large dagger in a decisive heroic finishing pose. The beast is clearly defeated.\nStyle/medium: rich detailed cinematic fantasy storybook illustration, scary but wholesome adventure tone, not horror splatter, consistent with previous Mirthcap images.\nComposition/framing: wide landscape action panel, low dramatic angle, the fallen monster dominating the foreground, Finnel visible on top as the brave hero; blue briarwing nearby in the background, no text.\nLighting/mood: stormy evening, mist, rain sheen, dramatic rim light and shadow, triumphant but grim.\nConstraints: show a clear heroic victory over the monster; keep it non-graphic and suitable for a fantasy storybook; no visible blood spray, no gore, no exposed organs.\nAvoid: graphic gore, realistic blood, human injury, text, watermark, modern weapons, extra duplicate Finnels.",
-    "image": "images/2026-06-14-manual-22-mirthcap-lookingglass-village-finnel-defeats-the-.png",
-    "date": "2026-06-14",
-    "batch": "Fictional Worlds",
-    "slot": "manual-22",
-    "model": "fal/openai/gpt-image-2",
-    "size": "1536x1024",
-    "world": {
-      "name": "Mirthcap Lookingglass Village",
-      "description": "A tiny whimsical village of human-like Mirthcap people living among mushroom homes, pocketwatch mechanisms, healing herbs, briarwings, and dangerous outer-garden mysteries.",
-      "continuity": "Mirthcap Lookingglass Village canon: Finnel must find Heartglass Rue to brew Marlow’s tonic and save Mirthcap from Glassmoss Fever. Thornmaws are dangerous outer-garden predators. In this sequence, Finnel defeats a thornmaw by tangling its legs with bolas, bringing it down, and winning the fight in a non-graphic but decisive heroic moment before continuing the quest.",
-      "entryDescription": "Finnel brings the thornmaw down with bolas and defeats it in a decisive, non-graphic heroic victory before continuing toward Heartglass Rue."
-    }
-  },
-  {
     "id": "2026-06-14-manual-23-mirthcap-lookingglass-village-finnel-kills-the-th",
     "title": "Mirthcap Lookingglass Village: Finnel Kills the Thornmaw",
     "tests": "Manual world catalog entry from #ai-photos; identity-corrected thornmaw victory beat with confirmed adult Finnel, showing him tangling the beast with bolas, climbing onto it, and killing it with a dagger strike to the heart in a non-gory storybook style.",
@@ -704,9 +650,9 @@
   {
     "id": "2026-06-14-manual-25-mirthcap-lookingglass-village-line-for-the-healin",
     "title": "Mirthcap Lookingglass Village: Line for the Healing Tonic",
-    "tests": "Manual world catalog entry from #ai-photos; identity-corrected scene with confirmed adult Finnel serving the healing tonic while sick Mirthcap villagers line up at Marlow’s old hut, with older pregnant Luma last in line.",
+    "tests": "Manual world catalog entry from #ai-photos; corrected scene with confirmed adult Finnel serving the healing tonic while sick Mirthcap villagers line up at Marlow’s old hut, with proper older pregnant Luma last in line.",
     "prompt": "Use case: illustration-story\nAsset type: cinematic storybook panel for the Mirthcap fictional world\nPrimary request: The sick Mirthcap people line up outside Doctor Marlow’s old hut to receive Finnel’s healing tonic, with pregnant Luma last in line.\nScene/backdrop: outside Doctor Marlow’s mushroom-and-root hut in Mirthcap, rainy misty evening beginning to lift, wet mushroom paths, tiny lanterns, moss terraces, villagers gathered quietly, the hut door glowing warm green-gold from the healing potion inside.\nSubject: a line of very sick and frail Mirthcap villagers waiting for medicine; they look pale, weak, lethargic, wrapped in shawls, some leaning on canes or family; Finnel is visible at the hut doorway or small serving table with little tonic vials/cups; pregnant Luma is clearly last in line, visibly pregnant, very sick and fragile but hopeful, supported by one hand on her belly or leaning gently on a post.\nStyle/medium: rich detailed cinematic fantasy storybook illustration, wholesome emotional healing scene, consistent with previous Mirthcap images.\nComposition/framing: wide landscape exterior panel; line of villagers leads from foreground toward Marlow’s hut; Finnel at the glowing doorway distributing tonic; Luma last in line in the foreground or far end but clearly identifiable as pregnant and sick; no text.\nLighting/mood: gloomy rain and mist giving way to warm healing light, bittersweet hope, urgent but tender.\nConstraints: Doctor Marlow must not appear; no ghost, no body, no portrait that looks present; Luma must be last in line and visibly pregnant; villagers should look sick/frail but not monstrous; Finnel is distributing the potion.\nAvoid: Marlow present, gore, horror monsters, modern medical equipment, readable text, watermark, duplicate Finnels, wine or alcohol.",
-    "image": "images/2026-06-14-manual-25-mirthcap-lookingglass-village-line-for-the-healin-identity-corrected.png",
+    "image": "images/2026-06-14-manual-25-mirthcap-lookingglass-village-line-for-the-healin-luma-corrected.png",
     "date": "2026-06-14",
     "batch": "Fictional Worlds",
     "slot": "manual-25",
@@ -717,6 +663,60 @@
       "description": "A tiny whimsical village of human-like Mirthcap people living among mushroom homes, pocketwatch mechanisms, healing herbs, briarwings, and dangerous outer-garden mysteries.",
       "continuity": "Mirthcap Lookingglass Village canon: Finnel returns with Heartglass Rue, brews the healing tonic in Marlow’s old hut, and begins distributing it to the sick Mirthcap villagers. Pregnant Luma is sick and last in line, raising the final stakes before the cure reaches her.",
       "entryDescription": "The sick villagers line up outside Marlow’s old hut to receive Finnel’s tonic, with pregnant Luma waiting last."
+    }
+  },
+  {
+    "id": "2026-06-14-manual-26-mirthcap-lookingglass-village-luma-drinks-the-ton",
+    "title": "Mirthcap Lookingglass Village: Luma Drinks the Tonic",
+    "tests": "Manual world catalog entry from #ai-photos; close-up cure moment showing confirmed adult Finnel handing Heartglass Rue tonic to proper older pregnant Luma as she drinks it.",
+    "prompt": "Use case: illustration-story\nAsset type: very close-up cinematic storybook panel for the Mirthcap fictional world\nPrimary request: Finnel gently hands pregnant Luma her Heartglass Rue healing tonic and she drinks it.\nScene/backdrop: Doctor Marlow’s old hut doorway in rainy evening, warm green-gold healing light, rain and mist blurred in the background.\nSubject: confirmed adult Finnel with curly hair and human-like rounded/hidden ears, handing a tiny glowing vial/cup of Heartglass Rue tonic to proper older pregnant Luma. Luma is visibly pregnant, sick and frail but hopeful, drinking the tonic with one hand near her belly.\nStyle/medium: rich detailed cinematic fantasy storybook illustration, emotional, hopeful, wholesome, consistent with Mirthcap series.\nComposition/framing: very close-up portrait-style crop; Finnel and Luma fill most of the frame; hands and glowing tonic clearly visible between them.\nConstraints: Finnel matches the confirmed adult Finnel reference; Luma matches the proper older pregnant Luma references; both are adult human-like Mirthcap villagers, not elves. Marlow is absent because he has already been buried.\nAvoid: pointy ears, elf features, changing Finnel or Luma identity, Doctor Marlow present, dead body, ghost, wine/alcohol, modern medical equipment, readable text, watermark, duplicate Finnels, making Luma not pregnant.",
+    "image": "images/2026-06-14-manual-26-mirthcap-lookingglass-village-luma-drinks-the-ton.png",
+    "date": "2026-06-14",
+    "batch": "Fictional Worlds",
+    "slot": "manual-26",
+    "model": "fal/openai/gpt-image-2",
+    "size": "1536x1024",
+    "world": {
+      "name": "Mirthcap Lookingglass Village",
+      "description": "A tiny whimsical village of human-like Mirthcap people living among mushroom homes, pocketwatch mechanisms, healing herbs, briarwings, and dangerous outer-garden mysteries.",
+      "continuity": "Mirthcap Lookingglass Village canon: Finnel returns with Heartglass Rue, brews the healing tonic in Marlow’s old hut, distributes it to the sick villagers, and finally gives Luma her dose. Pregnant Luma drinks the tonic and begins to recover, turning the ending from grief toward survival and birth.",
+      "entryDescription": "In a close-up at Marlow’s old hut, Finnel gives pregnant Luma the Heartglass Rue tonic and she drinks it."
+    }
+  },
+  {
+    "id": "2026-06-14-manual-27-mirthcap-lookingglass-village-healing-dawn-newbor",
+    "title": "Mirthcap Lookingglass Village: Healing Dawn Newborn",
+    "tests": "Manual world catalog entry from #ai-photos; final healing-dawn panel showing recovered Luma in bed with her and Finnel’s newborn while Finnel sits beside them, both parents joyful.",
+    "prompt": "Use case: illustration-story\nAsset type: final cinematic storybook panel for the Mirthcap fictional world\nPrimary request: Finnel and Luma in their hut after the village is saved, with Finnel sitting next to her bed as she holds their just-born baby and both parents gleam with happiness.\nScene/backdrop: Finnel and Luma’s cozy Mirthcap hut at healing dawn, warm mushroom-and-root interior, sunrise through a round window, herbal lanterns, soft blankets, tiny cradle nearby, moss textures, family keepsakes, subtle green-gold healing glow fading into warm dawn.\nSubject: confirmed adult Finnel sits beside Luma’s bed, smiling tenderly; recovered adult Luma lies resting after childbirth, joyful and relieved, holding their newborn baby safely wrapped in a soft tiny blanket. All three are happy and peaceful.\nStyle/medium: rich detailed cinematic fantasy storybook illustration, warm, joyful, wholesome, final-scene feeling, consistent with Mirthcap series.\nComposition/framing: 16:9 interior panel; Luma and baby are emotional center on the bed; Finnel sits close at bedside; all three figures readable; no crowd.\nConstraints: Finnel matches confirmed adult Finnel reference; Luma matches proper adult Luma references; baby is a single peaceful newborn Mirthcap child; rounded/hidden ears, not elves. Marlow is absent.\nAvoid: pointy ears, elf features, changing Finnel or Luma identity, Doctor Marlow present, dead body, ghost, medical gore, childbirth gore, exposed body, hospital equipment, readable text, watermark, duplicate babies, duplicate Finnels.",
+    "image": "images/2026-06-14-manual-27-mirthcap-lookingglass-village-healing-dawn-newbor.png",
+    "date": "2026-06-14",
+    "batch": "Fictional Worlds",
+    "slot": "manual-27",
+    "model": "fal/openai/gpt-image-2",
+    "size": "1536x1024",
+    "world": {
+      "name": "Mirthcap Lookingglass Village",
+      "description": "A tiny whimsical village of human-like Mirthcap people living among mushroom homes, pocketwatch mechanisms, healing herbs, briarwings, and dangerous outer-garden mysteries.",
+      "continuity": "Mirthcap Lookingglass Village canon: Finnel’s Heartglass Rue tonic saves Mirthcap and Luma. After Luma recovers, she gives birth to her and Finnel’s son at healing dawn in their hut, completing Finnel’s hero arc and giving the story its earned happy ending.",
+      "entryDescription": "At healing dawn, recovered Luma holds her newborn son while Finnel sits beside her bed, both parents glowing with happiness."
+    }
+  },
+  {
+    "id": "2026-06-14-manual-28-mirthcap-lookingglass-village-happily-ever-after-",
+    "title": "Mirthcap Lookingglass Village: Happily Ever After Celebration",
+    "tests": "Manual world catalog entry from #ai-photos; true final epilogue panel showing Finnel, Luma, and their newborn celebrating with all of Mirthcap after Glassmoss Fever is eradicated.",
+    "prompt": "Use case: illustration-story\nAsset type: final epilogue cinematic storybook panel for the Mirthcap fictional world\nPrimary request: Finnel, Luma, and their newborn baby stand in front of their hut celebrating with the entire village after Glassmoss Fever is eradicated.\nScene/backdrop: Mirthcap Lookingglass Village outside Finnel and Luma’s cozy mushroom hut, warm dawn/sunset light, mushroom houses, moss paths, teacup lanterns, flowers, banners, lantern gnats and luminous native insects glowing overhead.\nSubject: confirmed adult Finnel and recovered adult Luma stand proudly together with their single newborn baby safely wrapped in Luma’s arms. Around them, the entire village celebrates because everyone survived and they all get to live happily ever after.\nStyle/medium: rich detailed cinematic fantasy storybook illustration, warm, joyful, whimsical, final happily-ever-after panel, consistent with Mirthcap series.\nComposition/framing: wide 16:9 group celebration panel; Finnel, Luma, and baby are central foreground figures in front of their hut; village dancing and merriment fills the midground and background.\nCelebration details: adult villagers drink from tiny cups, dance, sing, hug, laugh, and are merry. Children dance, clap, and drink shell-fruit drinks only, not wine.\nConstraints: Finnel matches confirmed adult Finnel reference; Luma matches recovered adult Luma references; baby is a single peaceful newborn; Mirthcap villagers are human-like with rounded/hidden ears, not elves.\nAvoid: pointy ears, elf features, changing Finnel or Luma identity, Doctor Marlow present as a living person, dead body, ghost, sickness, gloom, medical gore, childbirth gore, hospital equipment, readable text, watermark, duplicate babies, duplicate Finnels, children drinking wine/alcohol.",
+    "image": "images/2026-06-14-manual-28-mirthcap-lookingglass-village-happily-ever-after-.png",
+    "date": "2026-06-14",
+    "batch": "Fictional Worlds",
+    "slot": "manual-28",
+    "model": "fal/openai/gpt-image-2",
+    "size": "1536x1024",
+    "world": {
+      "name": "Mirthcap Lookingglass Village",
+      "description": "A tiny whimsical village of human-like Mirthcap people living among mushroom homes, pocketwatch mechanisms, healing herbs, briarwings, and dangerous outer-garden mysteries.",
+      "continuity": "Mirthcap Lookingglass Village canon: Finnel’s Heartglass Rue tonic eradicates Glassmoss Fever. Luma recovers, their son is born at healing dawn, and the whole village celebrates in front of Finnel and Luma’s hut, completing the story with a happily-ever-after ending.",
+      "entryDescription": "Finnel, Luma, and their newborn celebrate with the entire village after Glassmoss Fever is eradicated and Mirthcap is saved."
     }
   }
 ]
