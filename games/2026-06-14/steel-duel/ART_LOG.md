@@ -22,6 +22,15 @@ build prompt's V1–V8. Target for Gate D: **≥ 8/10**.
 - `classic` — the 1974 CRT mode.
 - `mobile` — portrait (centered field + D-pad/FIRE) and landscape (full-height field).
 
+## v2 additions
+- **Independent rotating turret + barrel** (renders separately from the hull at the aim angle).
+- **Aim reticle** for the mouse (desktop vs-CPU).
+- **Destructible walls:** per-tile beveled/merged rendering with progressive **damage cracks**, and
+  tiles blast open when destroyed.
+- **Scorch decals** persisting where mines, walls, and tanks blew up; brighter spark bursts.
+- **Attract-mode title:** live CPU-vs-CPU duel renders behind a translucent title card.
+- Twin-stick mobile control visuals (MOVE / AIM·FIRE).
+
 ## Possible future polish (diminishing returns; not blocking)
 - Brighter, longer-lived spark streaks on kills.
 - Subtle floor scorch decals where mines detonate.
