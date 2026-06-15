@@ -718,5 +718,23 @@
       "continuity": "Mirthcap Lookingglass Village canon: Finnel returns with Heartglass Rue, brews the healing tonic in Marlow’s old hut, and begins distributing it to the sick Mirthcap villagers. Pregnant Luma is sick and last in line, raising the final stakes before the cure reaches her.",
       "entryDescription": "The sick villagers line up outside Marlow’s old hut to receive Finnel’s tonic, with pregnant Luma waiting last."
     }
+  },
+  {
+    "id": "2026-06-14-manual-26-mirthcap-lookingglass-village-luma-drinks-the-ton",
+    "title": "Mirthcap Lookingglass Village: Luma Drinks the Tonic",
+    "tests": "Manual world catalog entry from #ai-photos; close-up cure moment showing confirmed adult Finnel handing Heartglass Rue tonic to proper older pregnant Luma as she drinks it.",
+    "prompt": "Use case: illustration-story\nAsset type: very close-up cinematic storybook panel for the Mirthcap fictional world\nPrimary request: Finnel gently hands pregnant Luma her Heartglass Rue healing tonic and she drinks it.\nScene/backdrop: Doctor Marlow’s old hut doorway in rainy evening, warm green-gold healing light, rain and mist blurred in the background.\nSubject: confirmed adult Finnel with curly hair and human-like rounded/hidden ears, handing a tiny glowing vial/cup of Heartglass Rue tonic to proper older pregnant Luma. Luma is visibly pregnant, sick and frail but hopeful, drinking the tonic with one hand near her belly.\nStyle/medium: rich detailed cinematic fantasy storybook illustration, emotional, hopeful, wholesome, consistent with Mirthcap series.\nComposition/framing: very close-up portrait-style crop; Finnel and Luma fill most of the frame; hands and glowing tonic clearly visible between them.\nConstraints: Finnel matches the confirmed adult Finnel reference; Luma matches the proper older pregnant Luma references; both are adult human-like Mirthcap villagers, not elves. Marlow is absent because he has already been buried.\nAvoid: pointy ears, elf features, changing Finnel or Luma identity, Doctor Marlow present, dead body, ghost, wine/alcohol, modern medical equipment, readable text, watermark, duplicate Finnels, making Luma not pregnant.",
+    "image": "images/2026-06-14-manual-26-mirthcap-lookingglass-village-luma-drinks-the-ton.png",
+    "date": "2026-06-14",
+    "batch": "Fictional Worlds",
+    "slot": "manual-26",
+    "model": "fal/openai/gpt-image-2",
+    "size": "1536x1024",
+    "world": {
+      "name": "Mirthcap Lookingglass Village",
+      "description": "A tiny whimsical village of human-like Mirthcap people living among mushroom homes, pocketwatch mechanisms, healing herbs, briarwings, and dangerous outer-garden mysteries.",
+      "continuity": "Mirthcap Lookingglass Village canon: Finnel returns with Heartglass Rue, brews the healing tonic in Marlow’s old hut, distributes it to the sick villagers, and finally gives Luma her dose. Pregnant Luma drinks the tonic and begins to recover, turning the ending from grief toward survival and birth.",
+      "entryDescription": "In a close-up at Marlow’s old hut, Finnel gives pregnant Luma the Heartglass Rue tonic and she drinks it."
+    }
   }
 ]
