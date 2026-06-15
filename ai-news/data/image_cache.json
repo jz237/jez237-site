@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-15T07:00:01.415046+00:00",
+  "updatedAt": "2026-06-15T08:00:01.934491+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -10376,6 +10376,10 @@
     "https://simonwillison.net/2026/Jun/15/julia-evans": {
       "image": "",
       "checkedAt": "2026-06-15T03:00:01.442971+00:00"
+    },
+    "https://techcrunch.com/2026/06/15/the-ai-layoff-wave-is-becoming-a-powder-keg": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/Powder-Keg.png?resize=1200,960",
+      "checkedAt": "2026-06-15T08:00:01.934491+00:00"
     }
   }
 }
