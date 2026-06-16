@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-16T15:00:01.528831+00:00",
+  "updatedAt": "2026-06-16T16:00:01.930362+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -10576,6 +10576,18 @@
     "https://www.techrepublic.com/article/gitmind-lifetime-subscription": {
       "image": "https://assets.techrepublic.com/uploads/2026/06/Untitled-design-6-1.png?f=jpeg",
       "checkedAt": "2026-06-16T15:00:01.528831+00:00"
+    },
+    "https://techcrunch.com/2026/06/16/spacex-is-public-everything-you-need-to-know-post-ipo": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/elon-nasdaq-spacex-ipo.jpg?resize=1200,801",
+      "checkedAt": "2026-06-16T16:00:01.930362+00:00"
+    },
+    "https://techcrunch.com/2026/06/16/doj-claims-xais-unpermitted-gas-turbines-are-a-matter-of-national-economic-and-energy-security": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/06/GettyImages-2217198328.jpeg?resize=1200,800",
+      "checkedAt": "2026-06-16T16:00:01.930362+00:00"
+    },
+    "https://techcrunch.com/2026/06/16/plaud-says-its-software-business-topped-100m-in-arr-after-shipping-over-2m-ai-notetakers": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/08/SilverBlack-Plaud-Note-Pro.jpeg?resize=1200,675",
+      "checkedAt": "2026-06-16T16:00:01.930362+00:00"
     }
   }
 }
