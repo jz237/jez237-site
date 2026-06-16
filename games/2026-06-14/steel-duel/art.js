@@ -37,6 +37,11 @@
 
   /* ---- background / floor ---- */
   function drawFloor(ctx, x0, y0, w, h, mode) {
+    if (mode === 'classic') {
+      ctx.fillStyle = '#000';
+      ctx.fillRect(x0, y0, w, h);
+      return;
+    }
     const T = theme(mode);
     const g = ctx.createLinearGradient(0, y0, 0, y0 + h);
     g.addColorStop(0, T.floor0); g.addColorStop(1, T.floor1);
@@ -52,6 +57,13 @@
   function drawWalls(ctx, M, mode) {
     const T = theme(mode), S = M.solid, HP = M.hp, TILE = M.TILE, H0 = M.HUD_H;
     const solidAt = (c, r) => (r >= 0 && r < M.ROWS && c >= 0 && c < M.COLS && S[r][c]);
+    if (mode === 'classic') {
+      ctx.fillStyle = '#fff';
+      for (let r = 0; r < M.ROWS; r++) for (let c = 0; c < M.COLS; c++) {
+        if (S[r][c]) ctx.fillRect(c * TILE, H0 + r * TILE, TILE, TILE);
+      }
+      return;
+    }
     // shadow pass
     ctx.fillStyle = 'rgba(0,0,0,0.45)';
     for (let r = 0; r < M.ROWS; r++) for (let c = 0; c < M.COLS; c++) {
@@ -87,6 +99,16 @@
   /* ---- mines ---- */
   function drawMine(ctx, m, t, mode) {
     const T = theme(mode);
+    if (mode === 'classic') {
+      ctx.save(); ctx.translate(m.x, m.y);
+      ctx.strokeStyle = '#fff'; ctx.lineWidth = 3; ctx.lineCap = 'square';
+      ctx.beginPath();
+      ctx.moveTo(-7, -7); ctx.lineTo(7, 7);
+      ctx.moveTo(7, -7); ctx.lineTo(-7, 7);
+      ctx.stroke();
+      ctx.restore();
+      return;
+    }
     const pulse = 0.5 + 0.5 * Math.sin(t * 4 + m.ph);
     ctx.save(); ctx.translate(m.x, m.y);
     ctx.globalCompositeOperation = 'lighter';
@@ -104,6 +126,11 @@
   /* ---- shells ---- */
   function drawShell(ctx, s, mode) {
     const T = theme(mode);
+    if (mode === 'classic') {
+      ctx.fillStyle = '#fff';
+      ctx.fillRect(Math.round(s.x) - 2, Math.round(s.y) - 2, 4, 4);
+      return;
+    }
     ctx.save(); ctx.globalCompositeOperation = 'lighter';
     const a = Math.atan2(s.vy, s.vx);
     const tx = s.x - Math.cos(a) * 18, ty = s.y - Math.sin(a) * 18;
@@ -118,6 +145,17 @@
   /* ---- tank: hull at heading, turret/barrel at turret angle ---- */
   function drawTank(ctx, tk, t, mode) {
     const T = theme(mode), main = tk.id === 0 ? T.p1 : T.p2, dark = tk.id === 0 ? T.p1d : T.p2d, glow = tk.id === 0 ? T.p1g : T.p2g;
+    if (mode === 'classic') {
+      ctx.save();
+      ctx.translate(Math.round(tk.x), Math.round(tk.y));
+      ctx.rotate(tk.heading);
+      ctx.fillStyle = '#fff';
+      ctx.fillRect(-11, -6, 22, 12);
+      ctx.fillRect(-6, -11, 12, 22);
+      ctx.fillRect(9, -2, 18, 4);
+      ctx.restore();
+      return;
+    }
     // glow ring
     ctx.save(); ctx.globalCompositeOperation = 'lighter';
     ctx.strokeStyle = glow; ctx.lineWidth = 2;
@@ -244,5 +282,21 @@
     ctx.restore();
   }
 
-  window.SDArt = { theme, rr, drawFloor, drawWalls, drawMine, drawShell, drawTank, drawReticle, classicOverlay, Tracks, Particles, Decals };
+  function classicDigit(ctx, x, y, n, s) {
+    const segs = {
+      '0': 'abcdef', '1': 'bc', '2': 'abged', '3': 'abgcd', '4': 'fgbc',
+      '5': 'afgcd', '6': 'afgecd', '7': 'abc', '8': 'abcdefg', '9': 'abfgcd',
+    }[String(Math.max(0, Math.min(9, n | 0)))] || 'abcdef';
+    const t = s, l = s * 5, h = s * 8;
+    ctx.fillStyle = '#fff';
+    if (segs.includes('a')) ctx.fillRect(x, y, l, t);
+    if (segs.includes('g')) ctx.fillRect(x, y + h / 2 - t / 2, l, t);
+    if (segs.includes('d')) ctx.fillRect(x, y + h - t, l, t);
+    if (segs.includes('f')) ctx.fillRect(x, y, t, h / 2);
+    if (segs.includes('b')) ctx.fillRect(x + l - t, y, t, h / 2);
+    if (segs.includes('e')) ctx.fillRect(x, y + h / 2, t, h / 2);
+    if (segs.includes('c')) ctx.fillRect(x + l - t, y + h / 2, t, h / 2);
+  }
+
+  window.SDArt = { theme, rr, drawFloor, drawWalls, drawMine, drawShell, drawTank, drawReticle, classicOverlay, classicDigit, Tracks, Particles, Decals };
 })();
