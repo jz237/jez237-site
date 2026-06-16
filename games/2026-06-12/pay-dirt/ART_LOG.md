@@ -113,3 +113,19 @@ Verification:
 - Local asset HTTP check returned 200 for `assets/painterly-cavern-runtime-v2.png`.
 - Headless Chrome gameplay smoke reached `state=playing`, found 5 treasures, rendered a nonblank canvas, and saved `/tmp/pay-dirt-smoke/painterly-v2b.png`.
 - Only observed browser errors were two non-game 404s, consistent with prior favicon/noise checks.
+
+## Follow-up Correction — Make the interactive layer painterly
+Jez pointed out that the background looked good, but the actual game still looked like old graphics placed over a painting. This pass moves the playable/interactable layer into the painterly style.
+
+Changes:
+- Replaced normal one-cell brick/wall rendering with merged organic painted platform runs, while preserving the same collision grid underneath.
+- Painted earth/wall ledges now sample the generated cavern image as texture and use irregular top edges, moss, brush highlights, and shadow strokes.
+- Replaced stacked ladder tiles visually with continuous painted mine ladders/exit ladders while preserving the same climb cells.
+- Repainted main collectible gold from a token/gem into a hand-painted ore cluster.
+- Repainted power-up icons as illustrated objects: TNT satchel, explorer boots, phase cloak, magnet relic, and enchanted shovel.
+
+Verification:
+- `node --check game.js` passed.
+- `node --check art.js` passed.
+- Headless Chrome smoke reached `state=playing`, found 5 treasures, rendered a nonblank canvas, and saved `/tmp/pay-dirt-smoke/painterly-interactive-v3.png`.
+- Only observed browser errors were favicon/non-game 404s.
