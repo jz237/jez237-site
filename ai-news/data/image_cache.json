@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-16T10:00:01.277680+00:00",
+  "updatedAt": "2026-06-16T11:00:01.488356+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -10524,6 +10524,10 @@
     "https://www.technologyreview.com/2026/06/16/1138591/data-center-online-quickly-electric-grid-flex": {
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/06/26-05-25-MIT-TECH-01-Interior-2-thumb.jpg?resize=1200,600",
       "checkedAt": "2026-06-16T10:00:01.277680+00:00"
+    },
+    "https://www.artificialintelligence-news.com/news/ai-content-labelling-eu-code-of-practice": {
+      "image": "",
+      "checkedAt": "2026-06-16T11:00:01.488356+00:00"
     }
   }
 }
