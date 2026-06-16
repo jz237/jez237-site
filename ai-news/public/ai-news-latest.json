@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-16T00:00:01.997765+00:00",
+  "updatedAt": "2026-06-15T23:59:16.901814+00:00",
   "items": [
     {
       "title": "Benchmarking Web Agent Safety under E-commerce Deceptive Interfaces",
@@ -10,9 +10,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-16T00:00:15.495560+00:00",
+      "published": "2026-06-15T23:59:23.023670+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-16T00:00:01.997765+00:00",
+      "lastSeen": "2026-06-15T23:59:16.901814+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 5.41
@@ -27,11 +27,11 @@
       "summary": "AI is once again at the heart of a college graduation protest — this time for the technology's use in Google's defense contracts.",
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/sundar-io2026-intro-close.png?w=1191",
       "published": "2026-06-15T23:51:44+00:00",
-      "firstSeen": "2026-06-16T00:00:01.997765+00:00",
-      "lastSeen": "2026-06-16T00:00:01.997765+00:00",
+      "firstSeen": "2026-06-15T23:59:16.901814+00:00",
+      "lastSeen": "2026-06-15T23:59:16.901814+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2858
+      "score": 2.2862
     },
     {
       "title": "Xiaomi built a robotic arm that plugs in your EV at home, delivering on a promise Tesla made in 2014 and never kept",
@@ -43,11 +43,11 @@
       "summary": "Xiaomi has unveiled a robotic charging arm designed for residential garages that automatically plugs and unplugs an electric vehicle without any owner intervention. The system detects the vehicle’s position after parking, extends to the charging port, connects the cable, and retracts it once charging is complete or a preset battery level is reached. Xiaomi is [&hellip;]\nThis story continues at The Next Web",
       "image": "https://media.thenextweb.com/2026/06/xiaomi-robotic-charging-arm-ev-home-garage-tesla-snake.avif",
       "published": "2026-06-15T23:33:18+00:00",
-      "firstSeen": "2026-06-16T00:00:01.997765+00:00",
-      "lastSeen": "2026-06-16T00:00:01.997765+00:00",
+      "firstSeen": "2026-06-15T23:59:16.901814+00:00",
+      "lastSeen": "2026-06-15T23:59:16.901814+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -0.9635
+      "score": -0.9632
     },
     {
       "title": "Rivian CEO says supervised point-to-point self-driving will arrive this year, and he’s comparing it directly to Tesla’s FSD",
@@ -59,11 +59,11 @@
       "summary": "Rivian CEO RJ Scaringe said the company will ship supervised point-to-point self-driving on all of its second-generation vehicles and the R2 later this year, describing the capability as “very similar to Tesla’s FSD.” Speaking at the Masters of Scale event in Anaheim on Thursday, Scaringe laid out a three-stage autonomy roadmap: supervised point-to-point driving in [&hellip;]\nThis story continues at The Next Web",
       "image": "https://media.thenextweb.com/2026/06/rivian-point-to-point-self-driving-tesla-fsd-scaringe-uber-robotaxi.avif",
       "published": "2026-06-15T23:19:04+00:00",
-      "firstSeen": "2026-06-16T00:00:01.997765+00:00",
-      "lastSeen": "2026-06-16T00:00:01.997765+00:00",
+      "firstSeen": "2026-06-15T23:59:16.901814+00:00",
+      "lastSeen": "2026-06-15T23:59:16.901814+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1293
+      "score": 2.1297
     },
     {
       "title": "IMEC built a chip platform that works up to 325GHz, and it could make 6G hardware cheap enough to actually deploy",
@@ -75,11 +75,11 @@
       "summary": "IMEC, the Belgian semiconductor research institute that partners with more than 600 chip industry players, has expanded its 300mm RF silicon interposer platform with three new manufacturing capabilities that bring 6G chip production closer to commercial viability. The platform achieves record-low signal loss at frequencies up to 325GHz, covering the millimetre-wave and sub-terahertz bands that [&hellip;]\nThis story continues at The Next Web",
       "image": "https://media.thenextweb.com/2026/06/imec-6g-rf-silicon-interposer-chiplet-nvidia-telecom.avif",
       "published": "2026-06-15T23:05:10+00:00",
-      "firstSeen": "2026-06-16T00:00:01.997765+00:00",
-      "lastSeen": "2026-06-16T00:00:01.997765+00:00",
+      "firstSeen": "2026-06-15T23:59:16.901814+00:00",
+      "lastSeen": "2026-06-15T23:59:16.901814+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.5224
+      "score": 3.5228
     },
     {
       "title": "Three Xbox studios are trying to buy their way out of Microsoft’s gaming restructuring",
@@ -91,11 +91,11 @@
       "summary": "Three Xbox-owned studios are in active negotiations to buy themselves back from Microsoft rather than face closure, according to Bloomberg. Compulsion Games in Montreal, Double Fine Productions in San Francisco, and Ninja Theory in Cambridge, England, are each exploring deals that would make them independent again. Even if the talks succeed, many employees at all [&hellip;]\nThis story continues at The Next Web",
       "image": "https://media.thenextweb.com/2026/06/xbox-studio-closures-compulsion-double-fine-ninja-theory-spinoff.avif",
       "published": "2026-06-15T22:40:44+00:00",
-      "firstSeen": "2026-06-16T00:00:01.997765+00:00",
-      "lastSeen": "2026-06-16T00:00:01.997765+00:00",
+      "firstSeen": "2026-06-15T23:59:16.901814+00:00",
+      "lastSeen": "2026-06-15T23:59:16.901814+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1103
+      "score": 2.1107
     },
     {
       "title": "Japan’s biggest taxi app raised $553 million in the country’s largest IPO this year",
@@ -108,10 +108,10 @@
       "image": "https://media.thenextweb.com/2026/06/go-inc-japan-taxi-app-ipo-tokyo-stock-exchange-goldman-sachs.avif",
       "published": "2026-06-15T22:18:27+00:00",
       "firstSeen": "2026-06-15T23:00:01.319057+00:00",
-      "lastSeen": "2026-06-16T00:00:01.997765+00:00",
+      "lastSeen": "2026-06-15T23:59:16.901814+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1995
+      "score": 3.1998
     },
     {
       "title": "A built-in Google Workspace feature became a Chinese espionage group’s favourite exfiltration tool",
@@ -124,10 +124,10 @@
       "image": "https://media.thenextweb.com/2026/06/chinese-hackers-unc6508-google-workspace-redcap-medical-military-research.avif",
       "published": "2026-06-15T21:56:01+00:00",
       "firstSeen": "2026-06-15T23:00:01.319057+00:00",
-      "lastSeen": "2026-06-16T00:00:01.997765+00:00",
+      "lastSeen": "2026-06-15T23:59:16.901814+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.4886
+      "score": 3.489
     },
     {
       "title": "The US government’s Anthropic models ban was never about an AI jailbreak",
@@ -140,10 +140,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/trump-2267050833.jpg?resize=1200%2C800",
       "published": "2026-06-15T21:50:21+00:00",
       "firstSeen": "2026-06-15T23:00:01.319057+00:00",
-      "lastSeen": "2026-06-16T00:00:01.997765+00:00",
+      "lastSeen": "2026-06-15T23:59:16.901814+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2259
+      "score": 5.2263
     },
     {
       "title": "Meta CTO Andrew Bosworth Admits the Company’s AI Reorg Was ‘Atrocious’",
@@ -156,10 +156,10 @@
       "image": "https://media.wired.com/photos/6a3066677da677701d8b62cd/master/pass/Andrew-Bosworth-Urges-Employees-Business-2235573265.jpg",
       "published": "2026-06-15T21:33:46+00:00",
       "firstSeen": "2026-06-15T22:00:01.468152+00:00",
-      "lastSeen": "2026-06-16T00:00:01.997765+00:00",
+      "lastSeen": "2026-06-15T23:59:16.901814+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.218
+      "score": 2.2183
     },
     {
       "title": "Asian tech stocks surged after the Iran-US deal, and AI chipmakers gained the most",
@@ -172,10 +172,10 @@
       "image": "https://media.thenextweb.com/2026/06/asian-tech-stocks-surge-iran-us-peace-deal-softbank-samsung-sk-hynix.avif",
       "published": "2026-06-15T21:26:50+00:00",
       "firstSeen": "2026-06-15T22:00:01.468152+00:00",
-      "lastSeen": "2026-06-16T00:00:01.997765+00:00",
+      "lastSeen": "2026-06-15T23:59:16.901814+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0747
+      "score": 2.075
     },
     {
       "title": "The Pentagon’s AI platform went from 80,000 users to 1.5 million in six months",
@@ -188,10 +188,10 @@
       "image": "https://media.thenextweb.com/2026/06/Miro-Deal.avif",
       "published": "2026-06-15T21:16:17+00:00",
       "firstSeen": "2026-06-15T22:00:01.468152+00:00",
-      "lastSeen": "2026-06-16T00:00:01.997765+00:00",
+      "lastSeen": "2026-06-15T23:59:16.901814+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.4697
+      "score": 3.47
     },
     {
       "title": "Facebook’s new AI Mode search gets its info from public posts",
@@ -207,7 +207,7 @@
       "lastSeen": "2026-06-16T00:00:01.997765+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 6.8791
+      "score": 6.8795
     },
     {
       "title": "Musk’s trade secret case against OpenAI is dead, and this time it’s permanent",
@@ -220,10 +220,10 @@
       "image": "https://media.thenextweb.com/2026/05/xai-cursor-gun-jumping-antitrust-spacex-ipo.avif",
       "published": "2026-06-15T21:11:22+00:00",
       "firstSeen": "2026-06-15T22:00:01.468152+00:00",
-      "lastSeen": "2026-06-16T00:00:01.997765+00:00",
+      "lastSeen": "2026-06-15T23:59:16.901814+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.0674
+      "score": 11.0677
     },
     {
       "title": "The MSI Claw 8 EX AI+ costs $1,699 and that is gaming laptop money for a handheld",
@@ -236,10 +236,10 @@
       "image": "https://media.thenextweb.com/2026/06/msi-claw-8-ex-ai-plus-1699-arc-g3-extreme-handheld-gaming.avif",
       "published": "2026-06-15T20:54:30+00:00",
       "firstSeen": "2026-06-15T22:00:01.468152+00:00",
-      "lastSeen": "2026-06-16T00:00:01.997765+00:00",
+      "lastSeen": "2026-06-15T23:59:16.901814+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0595
+      "score": 3.0598
     },
     {
       "title": "Anthropic heads to Washington for crisis talks as Fable 5 ban spirals into the ugliest AI policy fight in US history",
@@ -255,7 +255,7 @@
       "lastSeen": "2026-06-15T23:00:01.319057+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0564
+      "score": 5.0568
     },
     {
       "title": "Facebook now has an AI search engine that pulls answers from your Group posts and Reels",
@@ -271,7 +271,7 @@
       "lastSeen": "2026-06-15T23:00:01.319057+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.2514
+      "score": 8.2518
     },
     {
       "title": "LinkedIn just produced its most unlikely success story: a World Cup footballer",
@@ -287,7 +287,7 @@
       "lastSeen": "2026-06-15T23:00:01.319057+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0468
+      "score": 2.0472
     },
     {
       "title": "Polymarket’s $345 million Iran peace bet is stuck because nobody can agree on what “permanent” means",
@@ -303,7 +303,7 @@
       "lastSeen": "2026-06-15T23:00:01.319057+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0435
+      "score": 2.0438
     },
     {
       "title": "100 cybersecurity experts say banning Fable 5 hurts defenders more than hackers",
@@ -319,7 +319,7 @@
       "lastSeen": "2026-06-15T21:18:13.883073+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.0417
+      "score": 4.0421
     },
     {
       "title": "Samsung’s $2,100 Galaxy Book6 Edge ships with 16GB of RAM in 2026",
@@ -335,7 +335,7 @@
       "lastSeen": "2026-06-15T21:18:13.883073+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 1.634
+      "score": 1.6343
     },
     {
       "title": "Huawei’s ‘chip queen’ returns from seven years in the shadows with a bold new scaling law",
@@ -351,7 +351,7 @@
       "lastSeen": "2026-06-15T21:18:13.883073+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0299
+      "score": 2.0302
     },
     {
       "title": "Your Ryzen CPU used to encrypt your RAM. A firmware update silently turned that off.",
@@ -367,7 +367,7 @@
       "lastSeen": "2026-06-15T21:18:13.883073+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.4282
+      "score": 3.4285
     },
     {
       "title": "YouTube’s AI slop purge is punishing the human creators who never showed their faces",
@@ -383,7 +383,7 @@
       "lastSeen": "2026-06-15T21:18:13.883073+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0153
+      "score": 2.0157
     },
     {
       "title": "All the news about Anthropic&#8217;s new AI fight with the White House",
@@ -396,10 +396,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/STK269_ANTHROPIC_2_D.webp?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-15T19:04:53+00:00",
       "firstSeen": "2026-06-15T20:00:01.467567+00:00",
-      "lastSeen": "2026-06-16T00:00:01.997765+00:00",
+      "lastSeen": "2026-06-15T23:59:16.901814+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.6195
+      "score": 6.6198
     },
     {
       "title": "Why do South Koreans love AI so much?",
@@ -412,10 +412,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/06/AP26126222060508.jpg?resize=1200%2C600",
       "published": "2026-06-15T18:46:08+00:00",
       "firstSeen": "2026-06-15T20:00:01.467567+00:00",
-      "lastSeen": "2026-06-16T00:00:01.997765+00:00",
+      "lastSeen": "2026-06-15T23:59:16.901814+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2412
+      "score": 3.2415
     },
     {
       "title": "Meta’s new ‘AI Mode’ on Facebook pulls from public info across its platforms",
@@ -428,10 +428,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/meta-apps-GettyImages-2152655816.jpg?w=1024",
       "published": "2026-06-15T18:30:58+00:00",
       "firstSeen": "2026-06-15T19:00:01.567475+00:00",
-      "lastSeen": "2026-06-16T00:00:01.997765+00:00",
+      "lastSeen": "2026-06-15T23:59:16.901814+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2346
+      "score": 3.2349
     },
     {
       "title": "SpaceX is public: Everything you need to know post-IPO",
@@ -444,10 +444,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/elon-nasdaq-spacex-ipo.jpg?resize=1200%2C801",
       "published": "2026-06-15T18:30:34+00:00",
       "firstSeen": "2026-06-15T19:00:01.567475+00:00",
-      "lastSeen": "2026-06-16T00:00:01.997765+00:00",
+      "lastSeen": "2026-06-15T23:59:16.901814+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 0.1344
+      "score": 0.1347
     },
     {
       "title": "A single click on a Microsoft link could have drained your inbox. Here’s how SearchLeak worked.",
@@ -463,7 +463,7 @@
       "lastSeen": "2026-06-15T21:18:13.883073+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.391
+      "score": 6.3913
     },
     {
       "title": "Father’s Day Tech Gifts on Sale at Amazon, Best Buy, and Walmart",
@@ -476,10 +476,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/06/DRL-Fathers-Day-Tech-Deals-06152026-1.jpg?f=jpeg",
       "published": "2026-06-15T18:14:42+00:00",
       "firstSeen": "2026-06-15T19:00:01.567475+00:00",
-      "lastSeen": "2026-06-16T00:00:01.997765+00:00",
+      "lastSeen": "2026-06-15T23:59:16.901814+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0875
+      "score": 3.0878
     },
     {
       "title": "Trump’s Anthropic shutdown just made the case for non-American AI",
@@ -492,10 +492,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/04/VRG_Illo_STK175_L_Normand_DonaldTrump_Negative.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-15T18:10:27+00:00",
       "firstSeen": "2026-06-15T19:00:01.567475+00:00",
-      "lastSeen": "2026-06-16T00:00:01.997765+00:00",
+      "lastSeen": "2026-06-15T23:59:16.901814+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1956
+      "score": 5.196
     },
     {
       "title": "Java’s biggest language change in a decade is finally landing. It took 197,000 lines of code.",
@@ -511,7 +511,7 @@
       "lastSeen": "2026-06-15T21:18:13.883073+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.6817
+      "score": 2.682
     },
     {
       "title": "Users cry foul after AMD stripped memory crypto from its consumer CPUs",
@@ -524,10 +524,10 @@
       "image": "https://cdn.arstechnica.net/wp-content/uploads/2026/01/IMG_7105-1152x648-1769617334.jpeg",
       "published": "2026-06-15T17:55:46+00:00",
       "firstSeen": "2026-06-15T20:00:01.467567+00:00",
-      "lastSeen": "2026-06-16T00:00:01.997765+00:00",
+      "lastSeen": "2026-06-15T23:59:16.901814+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.4793
+      "score": 5.4796
     },
     {
       "title": "Seattle has been using AI to listen to every 911 medical call since 2023. Nobody was told.",
@@ -543,7 +543,7 @@
       "lastSeen": "2026-06-15T20:00:01.467567+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9761
+      "score": 1.9764
     },
     {
       "title": "Big Tech’s desperate last push at AI regulation",
@@ -556,10 +556,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/gettyimages-2163958194.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-15T17:44:10+00:00",
       "firstSeen": "2026-06-15T18:00:01.483797+00:00",
-      "lastSeen": "2026-06-16T00:00:01.997765+00:00",
+      "lastSeen": "2026-06-15T23:59:16.901814+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2843
+      "score": 3.2846
     },
     {
       "title": "UK Weighs Under-16 Social Media Ban for 2027",
@@ -572,10 +572,10 @@
       "image": "https://assets.techrepublic.com/uploads/2025/10/tr-10152025-news-instagram-teen-accounts-pg13-safety.jpg?f=jpeg",
       "published": "2026-06-15T17:40:25+00:00",
       "firstSeen": "2026-06-15T18:00:01.483797+00:00",
-      "lastSeen": "2026-06-16T00:00:01.997765+00:00",
+      "lastSeen": "2026-06-15T23:59:16.901814+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0727
+      "score": 3.073
     },
     {
       "title": "EA just built a full advertising platform inside its games, and 120 million players are the audience",
@@ -591,7 +591,7 @@
       "lastSeen": "2026-06-15T20:00:01.467567+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.6704
+      "score": 2.6707
     },
     {
       "title": "Patch release v5.12.1",
@@ -604,10 +604,10 @@
       "image": "https://repository-images.githubusercontent.com/155220641/a16c4880-a501-11ea-9e8f-646cf611702e",
       "published": "2026-06-15T17:29:59+00:00",
       "firstSeen": "2026-06-15T17:00:01.632650+00:00",
-      "lastSeen": "2026-06-16T00:00:01.997765+00:00",
+      "lastSeen": "2026-06-15T23:59:16.901814+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8083
+      "score": 4.8086
     },
     {
       "title": "Patch release v5.10.3",
@@ -620,10 +620,10 @@
       "image": "https://repository-images.githubusercontent.com/155220641/a16c4880-a501-11ea-9e8f-646cf611702e",
       "published": "2026-06-15T17:29:39+00:00",
       "firstSeen": "2026-06-15T17:00:01.632650+00:00",
-      "lastSeen": "2026-06-16T00:00:01.997765+00:00",
+      "lastSeen": "2026-06-15T23:59:16.901814+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8081
+      "score": 4.8084
     },
     {
       "title": "datasette-agent 0.3a0",
@@ -635,11 +635,11 @@
       "summary": "Release: datasette-agent 0.3a0\n        \n\nNew tool, execute_write_sql, which requests user approval and then writes to a database - taking user permissions into account. #27\n\n\nI added a mechanism for asking user approval in datasette agent 0.2a0. The new execute_write_sql tool can now prompt the user for all kinds of useful operations. Here's an example where I add some pelican sightings to my pelican_sightings table:\n\nThe new version also enhances the datasette agent chat terminal mode to support approvals, and adds several new options including --unsafe mode for auto-approving them:\n\n\ndataset",
       "image": "https://static.simonwillison.net/static/2026/i-saw-pelicans-agent.jpg",
       "published": "2026-06-15T17:19:27+00:00",
-      "firstSeen": "2026-06-16T00:00:01.997765+00:00",
-      "lastSeen": "2026-06-16T00:00:01.997765+00:00",
+      "firstSeen": "2026-06-15T23:59:16.901814+00:00",
+      "lastSeen": "2026-06-15T23:59:16.901814+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.0038
+      "score": 8.0041
     },
     {
       "title": "The Life Scientific: Dean Lomax",
@@ -652,10 +652,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-15T20:00:00+00:00",
       "firstSeen": "2026-06-15T21:00:01.290903+00:00",
-      "lastSeen": "2026-06-16T00:00:01.997765+00:00",
+      "lastSeen": "2026-06-15T23:59:16.901814+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1743
+      "score": 2.1747
     },
     {
       "title": "The Life Scientific: Helen Hastie",
@@ -668,7 +668,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-08T20:00:00+00:00",
       "firstSeen": "2026-06-08T21:00:01.371488+00:00",
-      "lastSeen": "2026-06-16T00:00:01.997765+00:00",
+      "lastSeen": "2026-06-15T23:59:16.901814+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 1.1993
