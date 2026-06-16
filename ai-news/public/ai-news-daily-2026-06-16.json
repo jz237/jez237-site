@@ -1,6 +1,6 @@
 {
   "date": "2026-06-16",
-  "updatedAt": "2026-06-16T11:00:01.488356+00:00",
+  "updatedAt": "2026-06-16T11:31:39.294458+00:00",
   "items": [
     {
       "title": "Inside the fight over Claude Mythos 5",
@@ -17,7 +17,7 @@
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 19.1408
+      "score": 19.128
     },
     {
       "title": "Anthropic Is Still at Odds With the White House Over Claude Fable 5",
@@ -30,10 +30,10 @@
       "image": "https://media.wired.com/photos/6a3068b96de136e1eb346f80/master/pass/Anthropic-Latest-Clash-With-White-House-Business-2280291383.jpg",
       "published": "2026-06-16T00:53:46+00:00",
       "firstSeen": "2026-06-16T01:00:01.529593+00:00",
-      "lastSeen": "2026-06-16T11:00:01.488356+00:00",
+      "lastSeen": "2026-06-16T11:31:39.294458+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.0208
+      "score": 11.0087
     },
     {
       "title": "Cloudflare CAPTCHA on at least one ampersand",
@@ -46,10 +46,10 @@
       "image": "",
       "published": "2026-06-16T00:21:36+00:00",
       "firstSeen": "2026-06-16T01:00:01.529593+00:00",
-      "lastSeen": "2026-06-16T11:00:01.488356+00:00",
+      "lastSeen": "2026-06-16T11:31:39.294458+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.5085
+      "score": 8.4966
     },
     {
       "title": "The Fable 5 Export Controls Harm US Cyber Defense",
@@ -62,10 +62,10 @@
       "image": "",
       "published": "2026-06-16T05:20:29+00:00",
       "firstSeen": "2026-06-16T05:28:13.066998+00:00",
-      "lastSeen": "2026-06-16T11:00:01.488356+00:00",
+      "lastSeen": "2026-06-16T11:31:39.294458+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.53
+      "score": 7.5163
     },
     {
       "title": "Malaysia’s AI agent-powered messaging app Respond.io raises $62.5M, eyes acquisitions",
@@ -78,10 +78,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/respond-team-comp-2.webp?resize=1200%2C800",
       "published": "2026-06-16T06:59:00+00:00",
       "firstSeen": "2026-06-16T07:00:01.843155+00:00",
-      "lastSeen": "2026-06-16T11:00:01.488356+00:00",
+      "lastSeen": "2026-06-16T11:31:39.294458+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.9739
+      "score": 5.9596
     },
     {
       "title": "AlphaGo’s David Silver puts his superintelligence bet on Google Cloud",
@@ -94,10 +94,10 @@
       "image": "https://media.thenextweb.com/2026/02/David-Silver-is-chasing-superhuman-intelligence-with-a-1bn-seed.avif",
       "published": "2026-06-16T08:04:43+00:00",
       "firstSeen": "2026-06-16T09:00:01.431059+00:00",
-      "lastSeen": "2026-06-16T11:00:01.488356+00:00",
+      "lastSeen": "2026-06-16T11:31:39.294458+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.4642
+      "score": 5.4495
     },
     {
       "title": "Alibaba unveils AI models for robots as China’s focus shifts to agents",
@@ -113,7 +113,7 @@
       "lastSeen": "2026-06-16T09:00:01.431059+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.4441
+      "score": 5.4296
     },
     {
       "title": "Quoting Matteo Wong, The Atlantic",
@@ -126,10 +126,10 @@
       "image": "",
       "published": "2026-06-16T03:07:54+00:00",
       "firstSeen": "2026-06-16T04:00:02.113408+00:00",
-      "lastSeen": "2026-06-16T11:00:01.488356+00:00",
+      "lastSeen": "2026-06-16T11:31:39.294458+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.174
+      "score": 5.1612
     },
     {
       "title": "OpenAI spent $34bn last year as it lines up for an IPO",
@@ -142,10 +142,10 @@
       "image": "https://media.thenextweb.com/2026/04/OpenAI.avif",
       "published": "2026-06-16T09:00:00+00:00",
       "firstSeen": "2026-06-16T10:00:01.277680+00:00",
-      "lastSeen": "2026-06-16T11:00:01.488356+00:00",
+      "lastSeen": "2026-06-16T11:31:39.294458+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0905
+      "score": 5.0754
     },
     {
       "title": "DOJ Lawyers Argue xAI Is ‘Vital’ for National Security in NAACP Lawsuit",
@@ -158,10 +158,10 @@
       "image": "https://media.wired.com/photos/6a30b0678f3c861b578bab3f/master/pass/GettyImages-2217198328.jpg",
       "published": "2026-06-16T03:06:37+00:00",
       "firstSeen": "2026-06-16T04:00:02.113408+00:00",
-      "lastSeen": "2026-06-16T11:00:01.488356+00:00",
+      "lastSeen": "2026-06-16T11:31:39.294458+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0735
+      "score": 5.0607
     },
     {
       "title": "DeepSeek closes $7bn-plus round with an unusual structure",
@@ -177,7 +177,7 @@
       "lastSeen": "2026-06-16T09:00:01.431059+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0499
+      "score": 5.0354
     },
     {
       "title": "Anthropic curbs make the case for sovereign AI, Upstage chief says",
@@ -193,7 +193,7 @@
       "lastSeen": "2026-06-16T09:00:01.431059+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0416
+      "score": 5.0272
     }
   ],
   "errors": [
