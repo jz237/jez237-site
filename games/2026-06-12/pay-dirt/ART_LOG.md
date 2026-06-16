@@ -129,3 +129,18 @@ Verification:
 - `node --check art.js` passed.
 - Headless Chrome smoke reached `state=playing`, found 5 treasures, rendered a nonblank canvas, and saved `/tmp/pay-dirt-smoke/painterly-interactive-v3.png`.
 - Only observed browser errors were favicon/non-game 404s.
+
+## Mobile Stability Fix — low-power painterly path
+Jez reported that mobile Chrome crashed after a short while. The likely cause was the new painterly renderer sampling a large PNG into multiple platform paths every frame, plus the half-resolution bloom copy/blur pass.
+
+Changes:
+- Added `lowPowerRender()` detection for small scale, coarse pointer, and mobile user agents.
+- Capped canvas DPR lower on low-power/mobile devices to reduce backing-store memory.
+- Disabled per-frame high-resolution painterly PNG sampling for organic platforms on low-power/mobile; those devices use the cheaper gradient-painted ledge path.
+- Disabled the bloom copy/blur pass on low-power/mobile, avoiding a full-canvas extra buffer every frame.
+- Desktop keeps the richer texture sampling and bloom path.
+
+Verification:
+- `node --check game.js` passed.
+- Mobile emulation reached `state=playing`, activated low-power mode, ran 900 sim steps, and rendered a nonblank canvas.
+- A 12-second mobile animation-loop smoke stayed alive without page crashes; only favicon/non-game 404s appeared.

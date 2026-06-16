@@ -12,6 +12,10 @@ const TICK = 1 / 60;
 const canvas = document.getElementById('game');
 const ctx = canvas.getContext('2d');
 let viewScale = 1, DPR = 1, canvasLeft = 0, canvasTop = 0;
+function lowPowerRender(){
+  return viewScale < 0.78 || matchMedia('(pointer: coarse)').matches ||
+    /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent || '');
+}
 
 function resize(){
   // Logical resolution is fixed at 1008x624; scale to fit the window, letterbox the rest.
@@ -21,7 +25,8 @@ function resize(){
   const cssW = Math.round(VIEW_W * viewScale), cssH = Math.round(VIEW_H * viewScale);
   canvasLeft = Math.round((vw - cssW) / 2);
   canvasTop = Math.round((vh - cssH) / 2);
-  DPR = Math.min(viewScale * (devicePixelRatio || 1), 2.5);
+  const maxDpr = lowPowerRender() ? 1.35 : 2.5;
+  DPR = Math.min(viewScale * (devicePixelRatio || 1), maxDpr);
   canvas.width = Math.floor(VIEW_W * DPR); canvas.height = Math.floor(VIEW_H * DPR);
   canvas.style.width = cssW + 'px'; canvas.style.height = cssH + 'px';
   canvas.style.left = canvasLeft + 'px'; canvas.style.top = canvasTop + 'px';
@@ -1777,7 +1782,7 @@ function drawOrganicPlatformRun(c0, c1, r, kind){
   ctx.closePath();
   ctx.clip();
 
-  if (painterlyPlateReady && painterlyPlate.naturalWidth){
+  if (painterlyPlateReady && painterlyPlate.naturalWidth && !lowPowerRender()){
     const nw = painterlyPlate.naturalWidth, nh = painterlyPlate.naturalHeight;
     const sw = Math.min(nw, Math.max(260, w * 2.2)), sh = Math.min(nh, 220);
     const sx = (seed % Math.max(1, nw - sw));
@@ -2148,19 +2153,21 @@ function render(){
     ctx.restore();
 
     // bloom — downscale + blur the scene and add it back so bright things glow (painterly haze)
-    const bw = VIEW_W >> 1, bh = VIEW_H >> 1;
-    if (!bloomCv){ bloomCv = ART.cv(bw, bh); bloomCx = bloomCv.getContext('2d'); }
-    bloomCx.setTransform(1, 0, 0, 1, 0, 0);
-    bloomCx.clearRect(0, 0, bw, bh);
-    bloomCx.filter = 'blur(2.5px) saturate(1.7)';   // richer, more saturated glow
-    bloomCx.drawImage(canvas, 0, 0, canvas.width, canvas.height, 0, 0, bw, bh);
-    bloomCx.filter = 'none';
-    ctx.save();
-    ctx.globalCompositeOperation = 'lighter';
-    ctx.globalAlpha = 0.28;
-    ctx.imageSmoothingEnabled = true;
-    ctx.drawImage(bloomCv, 0, 0, VIEW_W, VIEW_H);
-    ctx.restore();
+    if (!lowPowerRender()){
+      const bw = VIEW_W >> 1, bh = VIEW_H >> 1;
+      if (!bloomCv){ bloomCv = ART.cv(bw, bh); bloomCx = bloomCv.getContext('2d'); }
+      bloomCx.setTransform(1, 0, 0, 1, 0, 0);
+      bloomCx.clearRect(0, 0, bw, bh);
+      bloomCx.filter = 'blur(2.5px) saturate(1.7)';   // richer, more saturated glow
+      bloomCx.drawImage(canvas, 0, 0, canvas.width, canvas.height, 0, 0, bw, bh);
+      bloomCx.filter = 'none';
+      ctx.save();
+      ctx.globalCompositeOperation = 'lighter';
+      ctx.globalAlpha = 0.28;
+      ctx.imageSmoothingEnabled = true;
+      ctx.drawImage(bloomCv, 0, 0, VIEW_W, VIEW_H);
+      ctx.restore();
+    }
   }
 
   // hit flash
