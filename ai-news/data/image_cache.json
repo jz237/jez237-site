@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-15T23:59:16.901814+00:00",
+  "updatedAt": "2026-06-16T01:00:01.529593+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -10496,6 +10496,10 @@
     "https://techcrunch.com/2026/06/15/sundar-pichai-faces-boos-walkout-at-stanford-graduation-ceremony-over-googles-israel-ice-ties": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/sundar-io2026-intro-close.png?w=1191",
       "checkedAt": "2026-06-15T23:59:16.901814+00:00"
+    },
+    "https://simonwillison.net/2026/Jun/16/captcha-on-at-least-one-ampersand": {
+      "image": "",
+      "checkedAt": "2026-06-16T01:00:01.529593+00:00"
     }
   }
 }
