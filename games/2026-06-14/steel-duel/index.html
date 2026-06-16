@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-<title>Steel Duel — 1974 Tank Battle</title>
-<meta name="description" content="Steel Duel — a faithful 1974 arcade Tank homage. Two-player top-down maze duel through a deadly minefield, plus a CPU mode and global scores." />
+<title>Steel Duel — HD Tank Battle</title>
+<meta name="description" content="Steel Duel — a faithful HD remaster of Atari's 1974 arcade Tank. Two-player top-down maze duel through a deadly minefield, plus a CPU mode, a 1974 CRT homage, and global scores." />
 <style>
   :root{
     --amber:#ffb347; --teal:#46d6e8; --ink:#eef3ff; --dim:#8fa0bd;
@@ -24,7 +24,7 @@
   #bar button:hover{border-color:var(--amber)}
   body.mobile-play #bar{top:64px;right:8px;opacity:.72}
   body.mobile-play #bar button{padding:5px 8px;font-size:12px}
-  body.classic-mode #bar{opacity:0;pointer-events:none}
+  body.classic-mode #bar{opacity:.72}
   /* overlays */
   .ov{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:30;
     background:rgba(4,7,12,.72);backdrop-filter:blur(3px);padding:18px}
@@ -73,6 +73,7 @@
   <div id="stage"><canvas id="game"></canvas></div>
 
   <div id="bar">
+    <button id="btnClassic" title="Toggle 1974 CRT mode (C)">HD</button>
     <button id="btnMute" title="Mute (M)">🔊</button>
   </div>
 
@@ -80,7 +81,7 @@
   <div id="ovTitle" class="ov">
     <div class="card">
       <h1>STEEL&nbsp;DUEL</h1>
-      <p class="sub">1974 arcade tank duel · 2-player maze &amp; minefield</p>
+      <p class="sub">HD remaster of Atari TANK (1974) · 2-player maze &amp; minefield</p>
       <button id="btnDuel" class="btn primary">⚔️ 2-PLAYER DUEL</button>
       <button id="btnCpu" class="btn">🤖 PLAY vs CPU</button>
       <div class="opt" style="flex-direction:column;gap:6px;margin-top:12px">
@@ -92,7 +93,7 @@
         <button id="btnHow" class="btn">HOW TO PLAY</button>
         <button id="btnScores" class="btn">🏆 SCORES</button>
       </div>
-      <div class="footer">v9 · First tank-combat arcade game, Kee&nbsp;Games 1974. Drive your foe into the mines.</div>
+      <div class="footer">v10 · First tank-combat arcade game, Kee&nbsp;Games 1974. Drive your foe into the mines.</div>
     </div>
   </div>
 
@@ -107,7 +108,7 @@
       </div>
       <p class="sub" style="margin-top:14px">On mobile: <b>left stick</b> drives, <b>right stick</b> aims &amp; fires.
         Shells are stopped by walls — and chip them, so walls can be blasted open. A hit, or driving your
-        rival into a mine, scores <i>them</i> a point; mines never come back. <b>P</b> pause · <b>M</b> mute.</p>
+        rival into a mine, scores <i>them</i> a point; mines never come back. <b>P</b> pause · <b>C</b> 1974 mode · <b>M</b> mute.</p>
       <button id="btnHowBack" class="btn primary">BACK</button>
     </div>
   </div>
@@ -154,8 +155,8 @@
     <div id="stickR" class="stick"><div id="stickRk" class="knob"></div><span class="sticklbl">AIM · FIRE</span></div>
   </div>
 
-  <script src="audio.js?v=9"></script>
-  <script src="art.js?v=9"></script>
-  <script src="game.js?v=9"></script>
+  <script src="audio.js?v=10"></script>
+  <script src="art.js?v=10"></script>
+  <script src="game.js?v=10"></script>
 </body>
 </html>

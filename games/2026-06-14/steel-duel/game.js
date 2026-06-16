@@ -1,4 +1,4 @@
-/* Steel Duel — 1974 arcade Tank homage.
+/* Steel Duel — HD remaster of Atari Tank (1974).
    Deterministic fixed-timestep sim, A* tank AI (skill slider), attract mode, mouse + twin-stick
    controls, destructible walls, render, UI, scores, window.__g hooks + self-tests. */
 (function () {
@@ -55,7 +55,7 @@
   let state = 'attract';        // attract | playing | paused | over | how | scores
   let mode = 'cpu';             // cpu | duel
   let aiLevel = 45;             // 0..100 difficulty slider
-  let visualMode = 'classic';
+  let visualMode = 'hd';
   let muted = false, headless = false, touchActive = false;
   let tanks = [], shells = [], mines = [];
   let tankSkill = [0.45, 0.45];
@@ -420,7 +420,9 @@
     if (!down) return;
     if (c === 'KeyP' || c === 'Escape') { if (state === 'playing') { state = 'paused'; showOverlay('paused'); } else if (state === 'paused') { state = 'playing'; hideAllOverlays(); } }
     if (c === 'KeyM') { muted = !muted; SDAudio.setMuted(muted); const b = $('btnMute'); if (b) b.textContent = muted ? '🔇' : '🔊'; }
+    if (c === 'KeyC') toggleVisual();
   }
+  function toggleVisual() { visualMode = visualMode === 'hd' ? 'classic' : 'hd'; const b = $('btnClassic'); if (b) b.textContent = visualMode === 'classic' ? '1974' : 'HD'; }
   function applyCursor() { if (canvas) canvas.style.cursor = (state === 'playing' && mode === 'cpu' && !touchActive) ? 'none' : 'default'; }
 
   function setupMouse() {
@@ -590,6 +592,7 @@
     const sl = $('diffSlider'), lab = $('diffLabel');
     if (sl) { sl.value = aiLevel; const upd = () => { aiLevel = +sl.value; if (lab) lab.textContent = diffName(aiLevel) + ' (' + aiLevel + ')'; }; upd(); sl.addEventListener('input', upd); }
     const mb = $('btnMute'); if (mb) mb.addEventListener('click', () => { muted = !muted; SDAudio.setMuted(muted); mb.textContent = muted ? '🔇' : '🔊'; });
+    const cb = $('btnClassic'); if (cb) cb.addEventListener('click', toggleVisual);
     const sub = $('btnSubmit'); if (sub) sub.addEventListener('click', async () => { const inp = $('initials'); const nm = (inp && inp.value || 'YOU').toUpperCase().slice(0, 3) || 'YOU'; await Scores.submit(nm, scoreValue()); const f = $('overScoreForm'); if (f) f.classList.add('hidden'); state = 'scores'; showOverlay('scores'); refreshBoard(); });
 
     const q = new URLSearchParams(location.search);
