@@ -1744,6 +1744,167 @@ function drawPainterlySolid(base, c, r, kind){
   tileVary(c, r);
 }
 
+function platformKindAt(c, r){
+  if (c < 0 || c >= COLS || r < 0 || r >= ROWS) return null;
+  const t = tileAt(c, r);
+  if (t === '#') return (!isDug(c, r) && !isBlasted(c, r)) ? 'earth' : null;
+  if (t === 'X') return 'wall';
+  return null;
+}
+
+function runHasOpenTop(c0, c1, r){
+  for (let c = c0; c <= c1; c++) if (!platformKindAt(c, r - 1)) return true;
+  return false;
+}
+
+function drawOrganicPlatformRun(c0, c1, r, kind){
+  const x0 = c0 * TILE, y0 = r * TILE + HUD_H, w = (c1 - c0 + 1) * TILE, h = TILE;
+  const openTop = runHasOpenTop(c0, c1, r);
+  const seed = (c0 * 73856093 ^ c1 * 19349663 ^ r * 83492791 ^ levelIndex * 2654435761) >>> 0;
+  const wob = (i) => (((seed >>> ((i % 6) * 5)) & 7) - 3);
+  ctx.save();
+  ctx.beginPath();
+  ctx.moveTo(x0, y0 + (openTop ? 7 + wob(0) : 1));
+  const steps = Math.max(2, Math.ceil(w / 34));
+  for (let i = 1; i <= steps; i++){
+    const px0 = x0 + (w * i) / steps;
+    const py0 = y0 + (openTop ? 4 + wob(i) : 1);
+    const cx0 = x0 + (w * (i - .5)) / steps;
+    ctx.quadraticCurveTo(cx0, y0 + (openTop ? wob(i + 2) : 1), px0, py0);
+  }
+  ctx.lineTo(x0 + w, y0 + h + 2);
+  ctx.lineTo(x0, y0 + h + 2);
+  ctx.closePath();
+  ctx.clip();
+
+  if (painterlyPlateReady && painterlyPlate.naturalWidth){
+    const nw = painterlyPlate.naturalWidth, nh = painterlyPlate.naturalHeight;
+    const sw = Math.min(nw, Math.max(260, w * 2.2)), sh = Math.min(nh, 220);
+    const sx = (seed % Math.max(1, nw - sw));
+    const sy = (((seed >>> 9) + (kind === 'wall' ? nh * .32 : nh * .55)) % Math.max(1, nh - sh));
+    ctx.imageSmoothingEnabled = true;
+    ctx.filter = kind === 'wall' ? 'saturate(1.12) contrast(1.08)' : 'saturate(1.28) contrast(1.08)';
+    ctx.drawImage(painterlyPlate, sx, sy, sw, sh, x0 - 8, y0 - 8, w + 16, h + 16);
+    ctx.filter = 'none';
+    ctx.globalCompositeOperation = 'multiply';
+    ctx.globalAlpha = kind === 'wall' ? .24 : .12;
+    ctx.fillStyle = kind === 'wall' ? '#102036' : '#41200d';
+    ctx.fillRect(x0, y0, w, h + 2);
+    ctx.globalCompositeOperation = 'soft-light';
+    ctx.globalAlpha = .5;
+    const wash = ctx.createLinearGradient(0, y0, 0, y0 + h);
+    wash.addColorStop(0, kind === 'wall' ? '#6fa0bc' : '#ffb765');
+    wash.addColorStop(1, kind === 'wall' ? '#203451' : '#5b2f19');
+    ctx.fillStyle = wash;
+    ctx.fillRect(x0, y0, w, h);
+  } else {
+    const g = ctx.createLinearGradient(0, y0, 0, y0 + h);
+    g.addColorStop(0, kind === 'wall' ? '#59687d' : '#a27645');
+    g.addColorStop(1, kind === 'wall' ? '#20283c' : '#4a2b17');
+    ctx.fillStyle = g;
+    ctx.fillRect(x0, y0, w, h);
+  }
+  ctx.restore();
+
+  ctx.save();
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+  ctx.strokeStyle = kind === 'wall' ? 'rgba(174,225,222,.28)' : 'rgba(255,221,142,.32)';
+  ctx.lineWidth = openTop ? 3 : 1.5;
+  ctx.beginPath();
+  ctx.moveTo(x0 + 2, y0 + (openTop ? 7 + wob(0) : 2));
+  for (let i = 1; i <= steps; i++){
+    const px0 = x0 + (w * i) / steps - 2;
+    const py0 = y0 + (openTop ? 4 + wob(i) : 2);
+    const cx0 = x0 + (w * (i - .5)) / steps;
+    ctx.quadraticCurveTo(cx0, y0 + (openTop ? wob(i + 2) : 2), px0, py0);
+  }
+  ctx.stroke();
+  ctx.strokeStyle = 'rgba(8,6,12,.42)';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(x0 + 1, y0 + h - 3);
+  ctx.lineTo(x0 + w - 1, y0 + h - 3);
+  ctx.stroke();
+  if (openTop){
+    const mossG = ctx.createLinearGradient(0, y0 - 1, 0, y0 + 12);
+    mossG.addColorStop(0, 'rgba(181,235,92,.9)');
+    mossG.addColorStop(.35, 'rgba(80,148,58,.72)');
+    mossG.addColorStop(1, 'rgba(36,72,36,0)');
+    ctx.fillStyle = mossG;
+    ctx.fillRect(x0, y0 - 1, w, 14);
+    ctx.fillStyle = 'rgba(184,236,94,.78)';
+    for (let i = 0; i < Math.max(4, w / 18); i++){
+      const px0 = x0 + ((seed >>> ((i % 8) * 3)) % Math.max(1, w));
+      const len = 5 + ((seed >>> ((i % 5) * 4)) & 9);
+      ctx.fillRect(px0, y0 + 3, 2, len);
+    }
+  }
+  ctx.restore();
+}
+
+function drawPainterlyPlatforms(){
+  for (let r = 0; r < ROWS; r++){
+    let c = 0;
+    while (c < COLS){
+      const kind = platformKindAt(c, r);
+      if (!kind){ c++; continue; }
+      let c1 = c;
+      while (c1 + 1 < COLS && platformKindAt(c1 + 1, r) === kind) c1++;
+      drawOrganicPlatformRun(c, c1, r, kind);
+      c = c1 + 1;
+    }
+  }
+}
+
+function ladderVisibleAt(c, r){
+  const t = tileAt(c, r);
+  return t === 'H' || (t === 'E' && exitRevealed);
+}
+
+function drawPainterlyLadderRun(c, r0, r1){
+  const x = c * TILE, y = r0 * TILE + HUD_H, h = (r1 - r0 + 1) * TILE;
+  const exit = tileAt(c, r0) === 'E';
+  ctx.save();
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+  const rail = exit ? '#39d8ce' : '#9b6a34';
+  const railDk = exit ? '#0d5d58' : '#3c2714';
+  const railHi = exit ? '#bafff5' : '#e7b66a';
+  for (const ox of [10, 26]){
+    ctx.strokeStyle = railDk; ctx.lineWidth = 7;
+    ctx.beginPath(); ctx.moveTo(x + ox, y - 3); ctx.lineTo(x + ox + Math.sin(c + r0) * 1.5, y + h + 3); ctx.stroke();
+    ctx.strokeStyle = rail; ctx.lineWidth = 4.5;
+    ctx.beginPath(); ctx.moveTo(x + ox, y - 4); ctx.lineTo(x + ox + Math.sin(c + r0) * 1.5, y + h + 4); ctx.stroke();
+    ctx.strokeStyle = railHi; ctx.lineWidth = 1.3;
+    ctx.beginPath(); ctx.moveTo(x + ox - 1.4, y); ctx.lineTo(x + ox - .5, y + h); ctx.stroke();
+  }
+  for (let yy = y + 7; yy < y + h; yy += 12){
+    ctx.strokeStyle = railDk; ctx.lineWidth = 6;
+    ctx.beginPath(); ctx.moveTo(x + 10, yy); ctx.quadraticCurveTo(x + 18, yy + Math.sin(yy * .2) * 1.5, x + 26, yy); ctx.stroke();
+    ctx.strokeStyle = rail; ctx.lineWidth = 3.5;
+    ctx.beginPath(); ctx.moveTo(x + 10, yy); ctx.quadraticCurveTo(x + 18, yy + Math.sin(yy * .2) * 1.5, x + 26, yy); ctx.stroke();
+  }
+  if (exit){
+    ctx.globalCompositeOperation = 'lighter';
+    for (let yy = y + 4; yy < y + h; yy += 26) glow((x + 18) / TILE, (yy - HUD_H) / TILE, 18, 'rgba(80,230,210,.28)', 1);
+  }
+  ctx.restore();
+}
+
+function drawPainterlyLadders(){
+  for (let c = 0; c < COLS; c++){
+    let r = 0;
+    while (r < ROWS){
+      if (!ladderVisibleAt(c, r)){ r++; continue; }
+      let r1 = r;
+      while (r1 + 1 < ROWS && ladderVisibleAt(c, r1 + 1)) r1++;
+      drawPainterlyLadderRun(c, r, r1);
+      r = r1 + 1;
+    }
+  }
+}
+
 function render(){
   if (state === 'title'){ renderTitle(); return; }
   ctx.clearRect(0, 0, VIEW_W, VIEW_H);
@@ -1809,6 +1970,8 @@ function render(){
     // contact shadows: ground every platform by darkening the air cell beneath it
     for (let r = 0; r < ROWS - 1; r++) for (let c = 0; c < COLS; c++)
       if (rendersSolid(c, r) && !rendersSolid(c, r + 1)) ctx.drawImage(underShadow(), c * TILE, (r + 1) * TILE + HUD_H);
+    drawPainterlyPlatforms();
+    drawPainterlyLadders();
     for (let r = 0; r < ROWS; r++){
       for (let c = 0; c < COLS; c++){
         const t = grid[r][c];
@@ -1833,12 +1996,12 @@ function render(){
             if (cr){ ctx.globalAlpha = 0.3 + 0.3 * Math.sin(gameTime * 20); ctx.fillStyle = '#1a0e06';
               ctx.fillRect(c * TILE + 2, r * TILE + HUD_H + 2, TILE - 4, TILE - 4); ctx.globalAlpha = 1; }
           }
-          else drawPainterlySolid(coveredAbove(c, r) ? T.brick : T.brickTop, c, r, 'earth');
+          else continue;
         }
-        else if (t === 'X') drawPainterlySolid(coveredAbove(c, r) ? T.solid : T.solidTop, c, r, 'wall');
-        else if (t === 'H') drawTile(T.ladder, c, r);
+        else if (t === 'X') continue;
+        else if (t === 'H') continue;
         else if (t === '-') drawTile(T.bar, c, r);
-        else if (t === 'E' && exitRevealed) drawTile(T.exit, c, r);
+        else if (t === 'E' && exitRevealed) continue;
         else if (t === '<' || t === '>'){
           drawTile(t === '<' ? T.beltL : T.beltR, c, r);
           ctx.fillStyle = '#ffd23f';
