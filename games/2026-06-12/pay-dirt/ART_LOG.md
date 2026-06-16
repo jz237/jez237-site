@@ -80,3 +80,19 @@ The big procedural axes are captured: painterly wash, optional exploration finds
 - Distinct multi-gem economy art (blue/red/purple gems) for a reference-style HUD counter.
 - Painted props (treasure chest, statues, mine carts) and an illustrated title logo.
 (Loader path is ready: drop PNGs in an assets/ folder and wire ART.tiles/ART.frames to use them with procedural fallback.)
+
+## Follow-up Correction — Image Gen 2-style painterly target
+Jez correctly called out that the first pass still read like the old game with painterly overpaint, not a new high-polish painterly game. This correction uses a generated painterly platformer reference plate as an actual runtime visual layer and pushes the frame closer to the attached Image Gen 2 example.
+
+Changes:
+- Generated and saved `assets/painterly-platformer-reference.png` as a stronger cave-platform visual direction asset.
+- Blended that reference into the live backdrop so the game immediately reads as a richer illustrated cavern instead of a procedural wash.
+- Expanded the HUD to a modern adventure-game frame: player portrait, bigger hearts, larger score/time, objectives panel, and minimap panel.
+- Enlarged the player/guard runtime sprites and increased screen-space glow around key collectibles.
+- Added per-cell stone overpaint: asymmetric bevels, chips, moss caps, and flecks to reduce the repeated tile-stamp look.
+- Added `?autoplay=1` debug boot for headless visual verification.
+
+Verification:
+- `node --check game.js` passed.
+- Headless Chrome title screenshot rendered: `/tmp/pay-dirt-title-2.png`.
+- Headless Chrome autoplay gameplay screenshot rendered: `/tmp/pay-dirt-game-2.png`.
