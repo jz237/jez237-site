@@ -1,8 +1,483 @@
 {
-  "generatedAt": "2026-06-15T12:02:08.949Z",
+  "generatedAt": "2026-06-16T04:47:46.286Z",
   "editorialPriority": "When there is a choice, prefer personal computers, home computing, office PC software, and personal computer or console gaming over broad enterprise technology.",
   "fallbackPolicy": "Use exact-day computer news when verified. If none exists, use same-week or same-month personal-computing items with confidence labels, then fall back to a wider world/business headline.",
   "issues": [
+    {
+      "currentDate": "2026-06-16",
+      "historicDate": "1982-10-04",
+      "displayDate": "Week of October 4-10, 1982",
+      "edition": "Issue 010 - Weekly 1982 Computer & Culture Chronicle",
+      "visualProfile": {
+        "layout": "weekly-newsprint-front",
+        "accent": "black-red-blue",
+        "paper": "halftone-cream",
+        "strapline": "Coleco maze cartridges, Atari sports boxes, Apple II bestsellers, and Jack & Diane on the radio"
+      },
+      "masthead": {
+        "kicker": "A weekly 1982 archive dispatch",
+        "title": "Computer Chronicle",
+        "deck": "Video games, home computers, software counters, and culture for the week of October 4-10, 1982"
+      },
+      "layoutPlan": {
+        "main": [
+          "editor-note",
+          "lead",
+          "picture-desk",
+          "computer-items",
+          "software",
+          "store-shelves"
+        ],
+        "sidebar": [
+          "price-watch",
+          "market",
+          "bbs",
+          "curiosity",
+          "briefs",
+          "music",
+          "period-ad",
+          "classifieds",
+          "fallback",
+          "accuracy",
+          "sources"
+        ]
+      },
+      "sectionChrome": {
+        "lead": {
+          "label": "Lead Story"
+        },
+        "pictureDesk": {
+          "label": "Picture Desk",
+          "title": "Scenes From the Week"
+        },
+        "computerItems": {
+          "label": "Computers & Hardware",
+          "title": "Personal Computing Desk"
+        },
+        "software": {
+          "label": "Software Top 5",
+          "title": "Programs on the Editor's Pad"
+        },
+        "storeShelves": {
+          "label": "Top Games This Week",
+          "title": "Arcade, Console & Computer Games"
+        },
+        "priceWatch": {
+          "label": "Price Watch",
+          "title": "What It Cost"
+        },
+        "bbs": {
+          "label": "Modem Desk"
+        },
+        "curiosity": {
+          "label": "Movies / TV / Culture"
+        },
+        "briefs": {
+          "label": "Magazine Rack",
+          "title": "Culture & Shelf Talk"
+        },
+        "music": {
+          "label": "Top Rock This Week",
+          "title": "Hot 100, September 18"
+        },
+        "periodAd": {
+          "label": "Retail / Ads"
+        },
+        "classifieds": {
+          "label": "Classifieds",
+          "title": "Small Ads"
+        },
+        "fallback": {
+          "label": "Editorial Screen"
+        },
+        "accuracy": {
+          "label": "Accuracy Ledger",
+          "title": "What Is Date-Specific"
+        },
+        "sources": {
+          "label": "Source Trail",
+          "title": "Research Log"
+        },
+        "market": {
+          "label": "Retail / Ads",
+          "title": "Computer Store Market"
+        }
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1982-10-04.png",
+        "alt": "GPT Image 2 vintage newspaper front page for the Computer Chronicle issue covering October 4-10, 1982",
+        "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data for the week of October 4-10, 1982.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "The first full week of October 1982 finds the cartridge wall thick with arcade translations and sports labels while Apple II owners still talk about Softalk best-sellers, spreadsheets, adventures, and action games in the same breath.",
+      "morningLine": "Maze chases, baseball cartridges, Apple II shelf leaders, E.T. at the theater, and John Cougar on every Top 40 radio.",
+      "lead": {
+        "headline": "Coleco Sends Mouse Trap Into the Atari Maze",
+        "summary": "Coleco's Atari VCS version of Mouse Trap is listed for October 1982, bringing Exidy's arcade maze to a home-console aisle already crowded with Pac-Man followers, arcade licenses, and third-party publishers. Its arrival captures the week's retail mood: recognizable coin-op ideas were being repackaged quickly for living-room cartridge buyers before the holiday rush.",
+        "confidence": "October 1982 Atari 2600 release listing; used as exact-month shelf context for this weekly issue",
+        "sourceRefs": [
+          0,
+          1,
+          2
+        ]
+      },
+      "computerItems": [
+        {
+          "label": "Console Shelf",
+          "headline": "Coleco Adds Another Arcade License",
+          "summary": "Mouse Trap put a cat-and-mouse maze beside the season's other VCS arcade conversions, showing how quickly outside publishers were filling Atari-compatible racks.",
+          "confidence": "October 1982 Atari 2600 release listing",
+          "sourceRefs": [
+            0,
+            1,
+            2
+          ]
+        },
+        {
+          "label": "Atari Sports",
+          "headline": "RealSports Baseball Reaches the VCS Lineup",
+          "summary": "Atari's RealSports branding was expanding the machine beyond abstract early sports games, with RealSports Baseball listed in October 1982 release records.",
+          "confidence": "October 1982 release listing",
+          "sourceRefs": [
+            1,
+            2
+          ]
+        },
+        {
+          "label": "Apple II Desk",
+          "headline": "Softalk Keeps the Bestseller Conversation Alive",
+          "summary": "Softalk's Apple II best-seller lists made the microcomputer software market feel charted, with games, utilities, and business programs competing for attention.",
+          "confidence": "Same-year Apple II software-market context",
+          "sourceRefs": [
+            5,
+            6
+          ]
+        },
+        {
+          "label": "Home Computer Counter",
+          "headline": "Commodore 64 Memory Remains the Sales Hook",
+          "summary": "The new Commodore 64 kept turning 64K RAM, color graphics, and a sub-$600 list price into a simple retail pitch against older 8-bit machines.",
+          "confidence": "1982 launch and list-price context",
+          "sourceRefs": [
+            7
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "VisiCalc",
+          "platform": "Apple II / business micros",
+          "detail": "The spreadsheet remained the showroom answer to why an office might buy a microcomputer.",
+          "confidence": "Period business-software context",
+          "sourceRefs": [
+            6
+          ]
+        },
+        {
+          "name": "Wizardry: Proving Grounds of the Mad Overlord",
+          "platform": "Apple II",
+          "detail": "Role-playing depth kept the Apple II game shelf from being only arcade action.",
+          "confidence": "Softalk-derived Apple II bestseller context",
+          "sourceRefs": [
+            5,
+            6
+          ]
+        },
+        {
+          "name": "Choplifter",
+          "platform": "Apple II",
+          "detail": "Broderbund's helicopter rescue game was one of the Apple II action names buyers recognized.",
+          "confidence": "Softalk-derived Apple II bestseller context",
+          "sourceRefs": [
+            5,
+            6
+          ]
+        },
+        {
+          "name": "Zork I",
+          "platform": "Apple II / TRS-80 / CP/M",
+          "detail": "Text adventures still offered a different kind of home-computer showpiece.",
+          "confidence": "Period microcomputer software context",
+          "sourceRefs": [
+            6
+          ]
+        },
+        {
+          "name": "Apple Writer",
+          "platform": "Apple II",
+          "detail": "Word processing remained a practical reason to keep disks beside the game boxes.",
+          "confidence": "Period Apple II software context",
+          "sourceRefs": [
+            6
+          ]
+        }
+      ],
+      "storeShelves": [
+        {
+          "name": "Mouse Trap",
+          "platform": "Coleco / Atari VCS",
+          "detail": "October 1982 Exidy-licensed maze chase for Atari households.",
+          "confidence": "October 1982 release listing",
+          "sourceRefs": [
+            0,
+            1,
+            2
+          ]
+        },
+        {
+          "name": "RealSports Baseball",
+          "platform": "Atari VCS",
+          "detail": "Atari sports branding adds a new baseball box to the VCS shelf.",
+          "confidence": "October 1982 release listing",
+          "sourceRefs": [
+            1,
+            2
+          ]
+        },
+        {
+          "name": "Frogger",
+          "platform": "Parker Brothers / Atari VCS",
+          "detail": "The summer arcade conversion was still an easy store-counter comparison for new maze and action cartridges.",
+          "confidence": "Late July/August 1982 release context",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "name": "Lock 'n' Chase",
+          "platform": "M-Network / Atari VCS",
+          "detail": "Mattel's Data East-licensed maze game remained part of the October cartridge conversation.",
+          "confidence": "October 1982 release context",
+          "sourceRefs": [
+            1
+          ]
+        },
+        {
+          "name": "Choplifter",
+          "platform": "Apple II",
+          "detail": "A leading Apple II action title in Softalk-derived best-seller summaries.",
+          "confidence": "Softalk-derived Apple II bestseller context",
+          "sourceRefs": [
+            5,
+            6
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "Commodore 64 computer",
+          "price": "$595 list price",
+          "note": "64K memory was the headline specification in the new-machine pitch."
+        },
+        {
+          "item": "Atari 2600 cartridges",
+          "price": "Often around $25-$35 at retail",
+          "note": "Licensed arcade names helped justify premium cartridge pricing."
+        },
+        {
+          "item": "Apple IIe / Apple II family software",
+          "price": "Commonly sold as boxed disk programs",
+          "note": "Business and game disks shared the same store counter."
+        }
+      ],
+      "market": {
+        "headline": "Third-Party Cartridges Crowd the VCS Rack",
+        "summary": "Mouse Trap, Lock 'n' Chase, Frogger, and Atari's own sports line show the late-1982 VCS aisle becoming a publisher contest built on licenses, arcade familiarity, and fast holiday shelf placement.",
+        "confidence": "October 1982 release listings plus broader 1982 console-market context",
+        "sourceRefs": [
+          0,
+          1,
+          2
+        ]
+      },
+      "bbsNote": {
+        "headline": "Modem Owners Trade Tips After Store Hours",
+        "summary": "Local bulletin-board culture remained small, phone-line based, and intensely practical: game hints, swap notes, and microcomputer troubleshooting traveled well before national online services reached ordinary homes.",
+        "confidence": "Period BBS context, not exact-week claim",
+        "sourceRefs": [
+          8
+        ]
+      },
+      "curiosity": {
+        "headline": "E.T. Keeps the Family Film Slot",
+        "summary": "E.T. the Extra-Terrestrial remained the dominant October box-office title, while An Officer and a Gentleman held adult audiences and My Favorite Year opened on October 8.",
+        "confidence": "October 1982 monthly box-office chart and release-date context",
+        "sourceRefs": [
+          3
+        ]
+      },
+      "briefs": [
+        {
+          "headline": "Jack & Diane Holds No. 1",
+          "summary": "John Cougar's single sat atop the Billboard Hot 100 for the week ending October 9, with Steve Miller Band and Chicago still just behind.",
+          "confidence": "Dated October 9, 1982 chart",
+          "sourceRefs": [
+            4
+          ]
+        },
+        {
+          "headline": "Apple II Lists Still Matter",
+          "summary": "Softalk's bestseller culture gave computer stores a language for recommending games and productivity disks.",
+          "confidence": "Softalk bestseller-list context",
+          "sourceRefs": [
+            5,
+            6
+          ]
+        },
+        {
+          "headline": "October Movie Boards Stay Familiar",
+          "summary": "E.T. and An Officer and a Gentleman kept drawing while My Favorite Year joined the marquee on October 8.",
+          "confidence": "October 1982 box-office chart",
+          "sourceRefs": [
+            3
+          ]
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "Jack & Diane",
+          "artist": "John Cougar"
+        },
+        {
+          "rank": 2,
+          "title": "Abracadabra",
+          "artist": "Steve Miller Band"
+        },
+        {
+          "rank": 3,
+          "title": "Hard to Say I'm Sorry",
+          "artist": "Chicago"
+        },
+        {
+          "rank": 4,
+          "title": "Eye in the Sky",
+          "artist": "The Alan Parsons Project"
+        },
+        {
+          "rank": 5,
+          "title": "Who Can It Be Now?",
+          "artist": "Men at Work"
+        }
+      ],
+      "periodAd": {
+        "headline": "This Week at the Computer Counter",
+        "summary": "Ask about arcade-name VCS cartridges, Apple II adventures, spreadsheet disks, and the new 64K Commodore display machine.",
+        "confidence": "Composite period-style ad copy based on issue items"
+      },
+      "classifieds": [
+        {
+          "headline": "Wanted",
+          "copy": "Apple II game disks and hint sheets; local pickup preferred."
+        },
+        {
+          "headline": "For Sale",
+          "copy": "Atari VCS with paddles, joysticks, and mixed arcade cartridges."
+        }
+      ],
+      "worldFallback": {
+        "headline": "Editors Keep the Front Page Local to the Computer Store",
+        "summary": "No routine world or sports item displaces the week's computing, cartridge, software, and culture material.",
+        "confidence": "Editorial scope note"
+      },
+      "accuracyLedger": {
+        "items": [
+          {
+            "claim": "Mouse Trap for Atari VCS is treated as the lead",
+            "status": "Exact-month October 1982 release; weekly placement is shelf-context"
+          },
+          {
+            "claim": "RealSports Baseball appears in the hardware/software desk",
+            "status": "October 1982 Atari 2600 release listing"
+          },
+          {
+            "claim": "Music chart uses October 9, 1982 Hot 100 order",
+            "status": "Dated chart"
+          },
+          {
+            "claim": "Movie list uses October 1982 domestic box office and October 8 release context for My Favorite Year",
+            "status": "Dated monthly chart"
+          },
+          {
+            "claim": "Apple II software references use Softalk-derived or period software context",
+            "status": "Same-year context, not exact-week ranking"
+          }
+        ]
+      },
+      "sources": [
+        {
+          "name": "AtariAge Mouse Trap for Atari 2600 entry",
+          "url": "https://www.atariage.com/software_page.php?SoftwareLabelID=321"
+        },
+        {
+          "name": "List of Atari 2600 games, release-month entries",
+          "url": "https://en.wikipedia.org/wiki/List_of_Atari_2600_games"
+        },
+        {
+          "name": "Random Terrain Atari 2600 NTSC game list",
+          "url": "https://www.randomterrain.com/rt-atari-2600-game-list.html"
+        },
+        {
+          "name": "Box Office Mojo domestic box office for October 1982",
+          "url": "https://www.boxofficemojo.com/month/october/1982/"
+        },
+        {
+          "name": "American Top 40 Wiki, October 9 1982 chart",
+          "url": "https://therealamericantop40.fandom.com/wiki/October_9%2C_1982"
+        },
+        {
+          "name": "Apple II History, Softalk software hits appendix",
+          "url": "https://www.apple2history.org/appendix/aha/"
+        },
+        {
+          "name": "Classic Apple II Games analysis of Softalk bestseller lists",
+          "url": "https://allincolorforaquarter.blogspot.com/2015/08/classic-apple-ii-games-analyis-of.html"
+        },
+        {
+          "name": "Commodore 64 overview and 1982 launch context",
+          "url": "https://en.wikipedia.org/wiki/Commodore_64"
+        },
+        {
+          "name": "Jason Scott, BBS documentary / bulletin-board culture context",
+          "url": "http://www.bbsdocumentary.com/"
+        },
+        {
+          "name": "Billboard Hot 100 number-one singles of 1982",
+          "url": "https://en.wikipedia.org/wiki/List_of_Billboard_Hot_100_number_ones_of_1982"
+        },
+        {
+          "name": "Box Office Mojo My Favorite Year release context within October 1982 chart",
+          "url": "https://www.boxofficemojo.com/month/october/1982/"
+        }
+      ],
+      "frontPageStories": [
+        "Coleco Sends Mouse Trap Into the Atari Maze",
+        "RealSports Baseball Joins Atari's October Lineup",
+        "Apple II Buyers Still Follow Softalk's Software Charts",
+        "Jack & Diane Holds the Week's Radio Crown"
+      ],
+      "movieChart": [
+        {
+          "title": "E.T. the Extra-Terrestrial"
+        },
+        {
+          "title": "An Officer and a Gentleman"
+        },
+        {
+          "title": "My Favorite Year"
+        },
+        {
+          "title": "Amityville II: The Possession"
+        },
+        {
+          "title": "Fast Times at Ridgemont High"
+        }
+      ],
+      "musicChartSourceRefs": [
+        4,
+        9
+      ]
+    },
     {
       "currentDate": "2026-06-15",
       "historicDate": "1982-09-27",
