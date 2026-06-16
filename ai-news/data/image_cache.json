@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-16T21:00:02.122404+00:00",
+  "updatedAt": "2026-06-16T22:00:01.274295+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -10636,6 +10636,14 @@
     "https://www.techrepublic.com/article/news-spacex-cursor-acquisition": {
       "image": "https://assets.techrepublic.com/uploads/2026/06/Untitled-design-8-2.png?f=jpeg",
       "checkedAt": "2026-06-16T21:00:02.122404+00:00"
+    },
+    "https://github.com/modelcontextprotocol/python-sdk/releases/tag/v2.0.0a2": {
+      "image": "https://opengraph.githubassets.com/a099b69a21a2680d6e601f59a61ea5ccbce561b635163af242144962caa281e4/modelcontextprotocol/python-sdk/releases/tag/v2.0.0a2",
+      "checkedAt": "2026-06-16T22:00:01.274295+00:00"
+    },
+    "https://github.com/modelcontextprotocol/python-sdk/releases/tag/v1.28.0": {
+      "image": "https://opengraph.githubassets.com/3664e127b8db1db54dade222d944c15760daf2b2401ab63d57141eaea09dd080/modelcontextprotocol/python-sdk/releases/tag/v1.28.0",
+      "checkedAt": "2026-06-16T22:00:01.274295+00:00"
     }
   }
 }
