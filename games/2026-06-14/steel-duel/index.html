@@ -24,6 +24,7 @@
   #bar button:hover{border-color:var(--amber)}
   body.mobile-play #bar{top:64px;right:8px;opacity:.72}
   body.mobile-play #bar button{padding:5px 8px;font-size:12px}
+  body.classic-mode #bar{opacity:0;pointer-events:none}
   /* overlays */
   .ov{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:30;
     background:rgba(4,7,12,.72);backdrop-filter:blur(3px);padding:18px}
@@ -92,7 +93,7 @@
         <button id="btnHow" class="btn">HOW TO PLAY</button>
         <button id="btnScores" class="btn">🏆 SCORES</button>
       </div>
-      <div class="footer">v7 · First tank-combat arcade game, Kee&nbsp;Games 1974. Drive your foe into the mines.</div>
+      <div class="footer">v8 · First tank-combat arcade game, Kee&nbsp;Games 1974. Drive your foe into the mines.</div>
     </div>
   </div>
 
@@ -154,8 +155,8 @@
     <div id="stickR" class="stick"><div id="stickRk" class="knob"></div><span class="sticklbl">AIM · FIRE</span></div>
   </div>
 
-  <script src="audio.js?v=7"></script>
-  <script src="art.js?v=7"></script>
-  <script src="game.js?v=7"></script>
+  <script src="audio.js?v=8"></script>
+  <script src="art.js?v=8"></script>
+  <script src="game.js?v=8"></script>
 </body>
 </html>
