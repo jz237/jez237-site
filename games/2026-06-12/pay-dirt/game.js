@@ -1281,7 +1281,7 @@ let bg = null, bloomCv = null, bloomCx = null;
 const painterlyPlate = new Image();
 let painterlyPlateReady = false;
 painterlyPlate.onload = () => { painterlyPlateReady = true; bg = null; if (booted) render(); };
-painterlyPlate.src = 'assets/painterly-platformer-reference.png';
+painterlyPlate.src = 'assets/painterly-cavern-runtime-v2.png';
 
 function drawCoverImage(x, img, dx, dy, dw, dh){
   if (!img || !img.naturalWidth || !img.naturalHeight) return;
@@ -1305,11 +1305,11 @@ function buildBackdrop(){
   // 1) generated painterly direction plate, dimmed into a playable background
   if (painterlyPlateReady){
     x.save();
-    x.filter = 'saturate(1.28) contrast(1.08)';
+    x.filter = 'saturate(1.36) contrast(1.1)';
     drawCoverImage(x, painterlyPlate, 0, HUD_H, W, H - HUD_H);
     x.filter = 'none';
     x.globalCompositeOperation = 'multiply';
-    x.fillStyle = 'rgba(5,7,15,.28)';
+    x.fillStyle = 'rgba(5,7,15,.14)';
     x.fillRect(0, HUD_H, W, H - HUD_H);
     x.globalCompositeOperation = 'source-over';
     x.restore();
@@ -1317,9 +1317,9 @@ function buildBackdrop(){
 
   // 2) deep cave gradient, pushed toward a painted gouache plate
   let g = x.createLinearGradient(0, 0, 0, H);
-  g.addColorStop(0, painterlyPlateReady ? 'rgba(35,49,74,.5)' : '#23314a');
-  g.addColorStop(.45, painterlyPlateReady ? 'rgba(24,26,43,.46)' : '#181a2b');
-  g.addColorStop(1, painterlyPlateReady ? 'rgba(9,10,18,.66)' : '#090a12');
+  g.addColorStop(0, painterlyPlateReady ? 'rgba(35,49,74,.22)' : '#23314a');
+  g.addColorStop(.45, painterlyPlateReady ? 'rgba(24,26,43,.2)' : '#181a2b');
+  g.addColorStop(1, painterlyPlateReady ? 'rgba(9,10,18,.38)' : '#090a12');
   x.fillStyle = g; x.fillRect(0, 0, W, H);
   x.globalAlpha = painterlyPlateReady ? .055 : .18;
   for (let i = 0; i < (painterlyPlateReady ? 70 : 180); i++){
@@ -1521,12 +1521,31 @@ function drawActor(a){
   const fi = a.moved || pose === 'idle' || pose === 'fall' || pose === 'stun'
     ? Math.floor(a.anim * rate) % frames.length : 0;
   const img = frames[fi] || frames[0];
-  const h = a.kind === 'player' ? 54 : 50;
+  const h = a.kind === 'player' ? 64 : 58;
   const w = h * ART.FW / ART.FH;       // larger + downscaled from hi-res source
   const cx2 = px(a.x);
   let footY = py(a.y) + TILE * 0.5;
   ctx.save();
+  ctx.globalCompositeOperation = 'lighter';
+  const aura = ctx.createRadialGradient(cx2, footY - h * .46, 0, cx2, footY - h * .46, h * .58);
+  aura.addColorStop(0, a.kind === 'player' ? 'rgba(255,205,125,.2)' : 'rgba(255,70,80,.16)');
+  aura.addColorStop(.5, a.kind === 'player' ? 'rgba(255,170,80,.1)' : 'rgba(255,70,80,.08)');
+  aura.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = aura;
+  ctx.beginPath();
+  ctx.ellipse(cx2, footY - h * .46, w * .62, h * .58, 0, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.restore();
+  ctx.save();
+  ctx.globalAlpha = .34;
+  ctx.fillStyle = 'rgba(0,0,0,.75)';
+  ctx.beginPath();
+  ctx.ellipse(cx2, footY - 2, w * .42, 5, 0, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.restore();
+  ctx.save();
   ctx.imageSmoothingEnabled = true;            // smooth the hi-res sprite downscale (less blocky)
+  ctx.filter = painterlyPlateReady ? 'saturate(1.12) contrast(1.03)' : 'none';
   if (a.kind === 'player' && a.cloakT > 0) ctx.globalAlpha = 0.45 + 0.2 * Math.sin(gameTime * 12);
   if (a.state === 'dead'){ ctx.globalAlpha = Math.max(0, 1 - a.deadT); footY -= a.deadT * 10; }
   if (a.state === 'stun'){ ctx.globalAlpha = 0.6 + 0.2 * Math.sin(gameTime * 16); }
@@ -1680,6 +1699,51 @@ function tileVary(c, r){
   ctx.restore();
 }
 
+function painterlyTileWash(c, r, kind){
+  if (!painterlyPlateReady || !painterlyPlate.naturalWidth) return;
+  const x = c * TILE, y = r * TILE + HUD_H;
+  const nw = painterlyPlate.naturalWidth, nh = painterlyPlate.naturalHeight;
+  const seed = (c * 110351 + r * 91753 + levelIndex * 211 + (kind === 'wall' ? 503 : 0)) >>> 0;
+  const sw = Math.min(180, nw), sh = Math.min(180, nh);
+  const sx = (seed % Math.max(1, nw - sw));
+  const sy = (((seed >>> 8) + (kind === 'wall' ? nh * 0.38 : nh * 0.58)) % Math.max(1, nh - sh));
+  ctx.save();
+  ctx.beginPath();
+  const radius = !rendersSolid(c, r - 1) ? 6 : 2;
+  if (ctx.roundRect) ctx.roundRect(x + 1, y + 1, TILE - 2, TILE - 2, radius);
+  else ctx.rect(x + 1, y + 1, TILE - 2, TILE - 2);
+  ctx.clip();
+  ctx.imageSmoothingEnabled = true;
+  ctx.globalAlpha = kind === 'wall' ? .52 : .6;
+  ctx.globalCompositeOperation = 'overlay';
+  ctx.drawImage(painterlyPlate, sx, sy, sw, sh, x - 3, y - 3, TILE + 6, TILE + 6);
+  ctx.globalCompositeOperation = 'soft-light';
+  ctx.globalAlpha = .38;
+  ctx.fillStyle = kind === 'wall' ? '#5f7ea0' : '#d39a56';
+  ctx.fillRect(x, y, TILE, TILE);
+  ctx.restore();
+
+  if (!rendersSolid(c, r - 1)){
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+    const g = ctx.createLinearGradient(0, y, 0, y + 12);
+    g.addColorStop(0, kind === 'wall' ? 'rgba(160,220,210,.22)' : 'rgba(255,210,120,.24)');
+    g.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = g;
+    ctx.fillRect(x + 1, y, TILE - 2, 13);
+    ctx.restore();
+  }
+}
+
+function drawPainterlySolid(base, c, r, kind){
+  ctx.save();
+  ctx.globalAlpha = painterlyPlateReady ? .82 : 1;
+  drawTile(base, c, r);
+  ctx.restore();
+  painterlyTileWash(c, r, kind);
+  tileVary(c, r);
+}
+
 function render(){
   if (state === 'title'){ renderTitle(); return; }
   ctx.clearRect(0, 0, VIEW_W, VIEW_H);
@@ -1769,9 +1833,9 @@ function render(){
             if (cr){ ctx.globalAlpha = 0.3 + 0.3 * Math.sin(gameTime * 20); ctx.fillStyle = '#1a0e06';
               ctx.fillRect(c * TILE + 2, r * TILE + HUD_H + 2, TILE - 4, TILE - 4); ctx.globalAlpha = 1; }
           }
-          else { drawTile(coveredAbove(c, r) ? T.brick : T.brickTop, c, r); tileVary(c, r); }
+          else drawPainterlySolid(coveredAbove(c, r) ? T.brick : T.brickTop, c, r, 'earth');
         }
-        else if (t === 'X'){ drawTile(coveredAbove(c, r) ? T.solid : T.solidTop, c, r); tileVary(c, r); }
+        else if (t === 'X') drawPainterlySolid(coveredAbove(c, r) ? T.solid : T.solidTop, c, r, 'wall');
         else if (t === 'H') drawTile(T.ladder, c, r);
         else if (t === '-') drawTile(T.bar, c, r);
         else if (t === 'E' && exitRevealed) drawTile(T.exit, c, r);
