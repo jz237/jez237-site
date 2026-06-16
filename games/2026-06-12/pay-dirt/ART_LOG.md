@@ -96,3 +96,20 @@ Verification:
 - `node --check game.js` passed.
 - Headless Chrome title screenshot rendered: `/tmp/pay-dirt-title-2.png`.
 - Headless Chrome autoplay gameplay screenshot rendered: `/tmp/pay-dirt-game-2.png`.
+
+## Follow-up Continuation — Runtime painterly asset integration
+Jez asked to keep going after the first correction. This pass moves the look further away from procedural overpaint and toward a GPT Image 2-style painted game screen.
+
+Changes:
+- Generated and saved `assets/painterly-cavern-runtime-v2.png`, a new no-UI/no-character hand-painted cavern scene for the live runtime.
+- Switched the backdrop loader to the new image and reduced the dark multiply/gradient overlays so the actual painting remains visible.
+- Added `painterlyTileWash(...)`, which samples the generated painting into solid tiles so ledges inherit brush texture, color variation, and organic surface detail.
+- Added `drawPainterlySolid(...)` so earth and wall tiles render as semi-painted collision surfaces with procedural fallback.
+- Enlarged runtime actors and added soft warm/cool painterly aura/shadow treatment so characters read better against the richer background.
+
+Verification:
+- `node --check game.js` passed.
+- `node --check art.js` passed.
+- Local asset HTTP check returned 200 for `assets/painterly-cavern-runtime-v2.png`.
+- Headless Chrome gameplay smoke reached `state=playing`, found 5 treasures, rendered a nonblank canvas, and saved `/tmp/pay-dirt-smoke/painterly-v2b.png`.
+- Only observed browser errors were two non-game 404s, consistent with prior favicon/noise checks.
