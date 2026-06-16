@@ -10,28 +10,45 @@ const TICK = 1 / 60;
 
 /* ================= canvas + letterbox (desktop pass) ================= */
 const canvas = document.getElementById('game');
-const ctx = canvas.getContext('2d');
-let viewScale = 1, DPR = 1, canvasLeft = 0, canvasTop = 0;
+const mainCtx = canvas.getContext('2d');
+let ctx = mainCtx;
+let viewScale = 1, DPR = 1, canvasLeft = 0, canvasTop = 0, screenW = VIEW_W, screenH = VIEW_H;
+let mobileCamera = false;
 function lowPowerRender(){
-  return viewScale < 0.78 || matchMedia('(pointer: coarse)').matches ||
+  return mobileCamera || viewScale < 0.78 || matchMedia('(pointer: coarse)').matches ||
     /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent || '');
+}
+function wantsMobileCamera(vw, vh){
+  const coarse = matchMedia('(pointer: coarse)').matches ||
+    /Android|iPhone|iPod|Mobile/i.test(navigator.userAgent || '');
+  return coarse && Math.min(vw, vh) <= 760 && Math.max(vw, vh) <= 980;
 }
 
 function resize(){
   // Logical resolution is fixed at 1008x624; scale to fit the window, letterbox the rest.
   // Guard against a 0-size viewport during load (hidden windows briefly report 0).
   const vw = innerWidth || VIEW_W, vh = innerHeight || VIEW_H;
-  viewScale = Math.min(vw / VIEW_W, vh / VIEW_H) || 1;
-  const cssW = Math.round(VIEW_W * viewScale), cssH = Math.round(VIEW_H * viewScale);
-  canvasLeft = Math.round((vw - cssW) / 2);
-  canvasTop = Math.round((vh - cssH) / 2);
+  mobileCamera = wantsMobileCamera(vw, vh);
+  if (mobileCamera){
+    screenW = Math.max(320, Math.round(vw));
+    screenH = Math.max(420, Math.round(vh));
+    viewScale = 1;
+  } else {
+    screenW = VIEW_W;
+    screenH = VIEW_H;
+    viewScale = Math.min(vw / VIEW_W, vh / VIEW_H) || 1;
+  }
+  const cssW = mobileCamera ? vw : Math.round(VIEW_W * viewScale);
+  const cssH = mobileCamera ? vh : Math.round(VIEW_H * viewScale);
+  canvasLeft = mobileCamera ? 0 : Math.round((vw - cssW) / 2);
+  canvasTop = mobileCamera ? 0 : Math.round((vh - cssH) / 2);
   const maxDpr = lowPowerRender() ? 1.35 : 2.5;
-  DPR = Math.min(viewScale * (devicePixelRatio || 1), maxDpr);
-  canvas.width = Math.floor(VIEW_W * DPR); canvas.height = Math.floor(VIEW_H * DPR);
+  DPR = Math.min((mobileCamera ? 1 : viewScale) * (devicePixelRatio || 1), maxDpr);
+  canvas.width = Math.floor(screenW * DPR); canvas.height = Math.floor(screenH * DPR);
   canvas.style.width = cssW + 'px'; canvas.style.height = cssH + 'px';
   canvas.style.left = canvasLeft + 'px'; canvas.style.top = canvasTop + 'px';
-  ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
-  ctx.imageSmoothingEnabled = false;
+  mainCtx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  mainCtx.imageSmoothingEnabled = false;
   if (booted) render(); // repaint immediately (rAF may be frozen in hidden windows)
 }
 var booted = false; // var: hoisted, safe to read inside resize() before init
@@ -1910,7 +1927,7 @@ function drawPainterlyLadders(){
   }
 }
 
-function render(){
+function renderWorldFrame(includeHUD){
   if (state === 'title'){ renderTitle(); return; }
   ctx.clearRect(0, 0, VIEW_W, VIEW_H);
   if (bg) ctx.drawImage(bg, 0, 0); else { ctx.fillStyle = '#0b0812'; ctx.fillRect(0, 0, VIEW_W, VIEW_H); }
@@ -2159,7 +2176,8 @@ function render(){
       bloomCx.setTransform(1, 0, 0, 1, 0, 0);
       bloomCx.clearRect(0, 0, bw, bh);
       bloomCx.filter = 'blur(2.5px) saturate(1.7)';   // richer, more saturated glow
-      bloomCx.drawImage(canvas, 0, 0, canvas.width, canvas.height, 0, 0, bw, bh);
+      const srcCanvas = ctx.canvas || canvas;
+      bloomCx.drawImage(srcCanvas, 0, 0, srcCanvas.width, srcCanvas.height, 0, 0, bw, bh);
       bloomCx.filter = 'none';
       ctx.save();
       ctx.globalCompositeOperation = 'lighter';
@@ -2225,7 +2243,120 @@ function render(){
     }
   }
 
-  drawHUD();
+  if (includeHUD) drawHUD();
+}
+
+let worldCv = null, worldCx = null;
+let camX = 0, camY = HUD_H;
+function ensureWorldCanvas(){
+  if (worldCv) return;
+  worldCv = document.createElement('canvas');
+  worldCv.width = VIEW_W;
+  worldCv.height = VIEW_H;
+  worldCx = worldCv.getContext('2d');
+  worldCx.imageSmoothingEnabled = false;
+}
+function mobileHudHeight(){ return Math.max(74, Math.min(92, Math.round(screenH * 0.1))); }
+function mobileCameraScale(){
+  const portrait = screenH >= screenW;
+  const base = portrait ? 1.36 : 1.55;
+  return Math.max(1.18, Math.min(1.7, base + (screenW < 380 ? 0.08 : 0)));
+}
+function updateMobileCamera(playH, zoom){
+  const srcW = Math.min(VIEW_W, screenW / zoom);
+  const srcH = Math.min(VIEW_H - HUD_H, playH / zoom);
+  const targetX = player ? px(player.x) - srcW * 0.5 : (VIEW_W - srcW) * 0.5;
+  const targetY = player ? py(player.y) - srcH * 0.56 : HUD_H;
+  const nextX = clamp(targetX, 0, VIEW_W - srcW);
+  const nextY = clamp(targetY, HUD_H, VIEW_H - srcH);
+  const follow = state === 'playing' ? 0.18 : 0.32;
+  camX += (nextX - camX) * follow;
+  camY += (nextY - camY) * follow;
+  camX = clamp(camX, 0, VIEW_W - srcW);
+  camY = clamp(camY, HUD_H, VIEW_H - srcH);
+  return {x: camX, y: camY, w: srcW, h: srcH};
+}
+function drawMobileHUD(){
+  const h = mobileHudHeight();
+  const g = ctx.createLinearGradient(0, 0, 0, h);
+  g.addColorStop(0, 'rgba(18,16,26,.98)');
+  g.addColorStop(.62, 'rgba(8,14,24,.92)');
+  g.addColorStop(1, 'rgba(6,8,14,.84)');
+  ctx.fillStyle = g;
+  ctx.fillRect(0, 0, screenW, h);
+  ctx.fillStyle = 'rgba(255,210,63,.46)';
+  ctx.fillRect(0, h - 3, screenW, 2);
+  ctx.textBaseline = 'middle';
+
+  const total = golds.length || 0, got = total - goldLeft;
+  ctx.textAlign = 'left';
+  ctx.fillStyle = '#ffd86b';
+  ctx.font = '900 11px system-ui, sans-serif';
+  ctx.fillText('HAUL', 14, 18);
+  drawGemIcon(22, 46, 8, '#ffd23f');
+  ctx.fillStyle = '#fff1af';
+  ctx.font = '900 18px system-ui, sans-serif';
+  ctx.fillText(got + '/' + total, 36, 47);
+  for (let i = 0, n = Math.min(lives, 4); i < n; i++) drawHeart(94 + i * 22, 45, 17, true);
+
+  ctx.textAlign = 'center';
+  ctx.fillStyle = 'rgba(255,216,107,.9)';
+  ctx.font = '900 11px system-ui, sans-serif';
+  ctx.fillText('SCORE', screenW / 2, 18);
+  ctx.fillStyle = '#fff';
+  ctx.font = '900 23px system-ui, sans-serif';
+  ctx.fillText(String(score).padStart(6, '0'), screenW / 2, 47);
+
+  const tt = Math.max(0, levelTime | 0), mm = String((tt / 60) | 0).padStart(2, '0'), ss = String(tt % 60).padStart(2, '0');
+  ctx.textAlign = 'right';
+  ctx.fillStyle = 'rgba(216,207,228,.72)';
+  ctx.font = '900 11px system-ui, sans-serif';
+  ctx.fillText(mode === 'daily' ? 'DAILY' : 'TIME', screenW - 14, 18);
+  ctx.fillStyle = '#f6f0ff';
+  ctx.font = '900 20px system-ui, sans-serif';
+  ctx.fillText(mm + ':' + ss, screenW - 14, 47);
+}
+function renderMobileCamera(){
+  ensureWorldCanvas();
+  const oldCtx = ctx;
+  ctx = worldCx;
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.imageSmoothingEnabled = false;
+  renderWorldFrame(false);
+  ctx = oldCtx;
+
+  ctx.clearRect(0, 0, screenW, screenH);
+  ctx.imageSmoothingEnabled = true;
+  if (state === 'title'){
+    const cover = Math.max(screenW / VIEW_W, screenH / VIEW_H);
+    const dw = VIEW_W * cover, dh = VIEW_H * cover;
+    ctx.drawImage(worldCv, (screenW - dw) / 2, (screenH - dh) / 2, dw, dh);
+    return;
+  }
+
+  const hudH = mobileHudHeight();
+  const playH = Math.max(1, screenH - hudH);
+  const zoom = mobileCameraScale();
+  const cam = updateMobileCamera(playH, zoom);
+  ctx.save();
+  ctx.beginPath();
+  ctx.rect(0, hudH, screenW, playH);
+  ctx.clip();
+  ctx.drawImage(worldCv, cam.x, cam.y, cam.w, cam.h, 0, hudH, screenW, playH);
+  ctx.restore();
+
+  if (state === 'paused'){
+    ctx.fillStyle = 'rgba(8,5,14,.38)';
+    ctx.fillRect(0, hudH, screenW, playH);
+  }
+  drawMobileHUD();
+}
+function render(){
+  ctx = mainCtx;
+  ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  ctx.imageSmoothingEnabled = false;
+  if (mobileCamera) renderMobileCamera();
+  else renderWorldFrame(true);
 }
 
 function drawPit(c, r, dark){
