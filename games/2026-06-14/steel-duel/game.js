@@ -18,9 +18,14 @@
   const WALL_MAX = 8;                               // interior wall hit points
 
   const WALL_DEF = [
-    [5, 4, 4, 1], [19, 4, 4, 1], [5, 13, 4, 1], [19, 13, 4, 1],
-    [9, 7, 1, 4], [18, 7, 1, 4], [13, 1, 2, 3], [13, 14, 2, 3],
-    [3, 8, 2, 2], [23, 8, 2, 2],
+    [4, 3, 4, 1], [12, 1, 1, 3], [15, 1, 1, 3], [20, 3, 4, 1],
+    [2, 6, 2, 2], [5, 8, 3, 1], [8, 6, 1, 3], [9, 9, 1, 3],
+    [19, 6, 1, 4], [20, 8, 3, 1], [24, 6, 2, 2],
+    [4, 13, 4, 1], [8, 14, 1, 3], [12, 15, 1, 2], [15, 15, 1, 2],
+    [19, 14, 1, 3], [20, 13, 4, 1],
+    [2, 15, 1, 2], [3, 16, 4, 1], [21, 16, 4, 1], [24, 15, 1, 2],
+    [6, 5, 1, 2], [21, 5, 1, 2], [11, 6, 2, 1], [15, 6, 2, 1],
+    [11, 11, 2, 1], [15, 11, 2, 1],
   ];
   const MINE_RECT = { c0: 10, r0: 6, c1: 17, r1: 11 };
   const SPAWNS = [{ c: 2, r: 2, a: 0 }, { c: 25, r: 15, a: Math.PI }];
@@ -303,6 +308,7 @@
   }
   function render() {
     if (!ctx) return;
+    document.body.classList.toggle('classic-mode', visualMode === 'classic');
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     const T = SDArt.theme(visualMode);
     const sx = (Math.random() - 0.5) * shake, sy = (Math.random() - 0.5) * shake;
