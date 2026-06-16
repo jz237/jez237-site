@@ -313,21 +313,30 @@
     if (mobileView) { ctx.scale(c.zoom, c.zoom); ctx.translate(-c.x + sx, -c.y + sy); }
     else ctx.translate(sx, sy);
     SDArt.drawFloor(ctx, 0, HUD_H, FIELD_W, FIELD_H, visualMode);
-    if (SDArt) DECALS.draw(ctx);
+    if (SDArt && visualMode !== 'classic') DECALS.draw(ctx);
     SDArt.drawWalls(ctx, { solid, hp: wallHP, MAX: WALL_MAX, COLS, ROWS, TILE, HUD_H }, visualMode);
-    if (SDArt) TRACKS.draw(ctx);
+    if (SDArt && visualMode !== 'classic') TRACKS.draw(ctx);
     const tm = tick * STEP;
     for (const m of mines) SDArt.drawMine(ctx, m, tm, visualMode);
     for (const t of tanks) if (t.alive) SDArt.drawTank(ctx, t, tm, visualMode);
     for (const s of shells) SDArt.drawShell(ctx, s, visualMode);
-    if (SDArt) PARTS.draw(ctx);
-    if (state === 'playing' && mode === 'cpu' && !touchActive && tanks[0] && tanks[0].alive) SDArt.drawReticle(ctx, mouseX, mouseY, T.p1);
+    if (SDArt && visualMode !== 'classic') PARTS.draw(ctx);
+    if (visualMode !== 'classic' && state === 'playing' && mode === 'cpu' && !touchActive && tanks[0] && tanks[0].alive) SDArt.drawReticle(ctx, mouseX, mouseY, T.p1);
     ctx.restore();
     drawHUD(T);
     if (visualMode === 'classic') SDArt.classicOverlay(ctx, viewW, viewH);
   }
   function drawHUD(T) {
     const w = viewW, h = mobileView ? 56 : HUD_H;
+    if (visualMode === 'classic') {
+      ctx.fillStyle = '#000'; ctx.fillRect(0, 0, w, h);
+      const s = mobileView ? 5 : 7;
+      const y = mobileView ? 6 : 8;
+      SDArt.classicDigit(ctx, mobileView ? 10 : 28, y, score.p1 % 10, s);
+      SDArt.classicDigit(ctx, w - (mobileView ? 10 : 28) - s * 5, y, score.p2 % 10, s);
+      ctx.fillStyle = '#fff'; ctx.fillRect(0, h - 9, w, 9);
+      return;
+    }
     ctx.fillStyle = 'rgba(0,0,0,0.48)'; ctx.fillRect(0, 0, w, h);
     ctx.font = 'bold 40px Menlo,Consolas,monospace'; ctx.textBaseline = 'middle';
     ctx.fillStyle = visualMode === 'classic' ? '#fff' : T.p1; ctx.textAlign = 'left'; ctx.fillText(String(score.p1).padStart(2, '0'), mobileView ? 14 : 28, h / 2);
