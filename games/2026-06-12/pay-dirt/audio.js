@@ -92,6 +92,8 @@ const AUDIO = (() => {
   // A minor pentatonic, slow brooding loop. Lookahead scheduler on the audio clock.
   let playing = false, timer = null, step = 0, nextTime = 0;
   const BPM = 96, SPB = 60 / BPM, STEP = SPB / 2; // eighth notes
+  const LOOKAHEAD = 0.42;
+  const SCHED_MS = 55;
   // bass progression (one root per bar of 8 steps): Am F C G
   const bassSeq = [55.00, 43.65, 32.70, 49.00]; // A1 F1 C1 G1
   const A_MIN_PENT = [220.00, 261.63, 293.66, 329.63, 392.00, 440.00]; // A C D E G A
@@ -129,7 +131,7 @@ const AUDIO = (() => {
 
   function scheduler(){
     if (!ctx || !playing) return;
-    while (nextTime < ctx.currentTime + 0.12){
+    while (nextTime < ctx.currentTime + LOOKAHEAD){
       scheduleStep(step, nextTime);
       nextTime += STEP;
       step++;
@@ -139,7 +141,8 @@ const AUDIO = (() => {
   function startMusic(){
     if (!ensure() || playing) return;
     playing = true; step = 0; nextTime = ctx.currentTime + 0.06;
-    timer = setInterval(scheduler, 25);
+    scheduler();
+    timer = setInterval(scheduler, SCHED_MS);
   }
   function stopMusic(){
     playing = false;
