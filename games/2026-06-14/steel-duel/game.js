@@ -278,7 +278,7 @@
     t.flash = 1; shake = Math.max(shake, 3);
     if (t.hp <= 0) { killTank(i); return; }
     if (SDArt) { PARTS.chips(t.x, t.y, i === 0 ? '#ffb347' : '#46d6e8'); DECALS.add(t.x, t.y, 12); }
-    if (!silent()) SDAudio.wall();
+    if (!silent()) SDAudio.tankHit();
   }
   function killTank(i) {
     const t = tanks[i]; if (!t.alive) return; t.alive = false; t.hp = 0;
