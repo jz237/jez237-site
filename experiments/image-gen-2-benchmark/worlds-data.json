@@ -808,5 +808,23 @@
       "continuity": "The Veyrith communicate through glasslight resonance and are grown by the Vesperglass Array from memory, light, and harmonic pressure. Aurelian Voss, the First Glazier, taught glass how to remember; humanoids evolved elsewhere, then the Array changed them. Interior cultures include dusk-herders, mirror monks, buried archive towns, and communities who regard the Veyrith as ancestors.",
       "entryDescription": "A cultural tableau of the planet below the Array: dusk-herders on violet terminator plains, mirror monks tuning ancient light, buried archive towns, and humanoid communities treating Veyrith as ancestral kin."
     }
+  },
+  {
+    "id": "2026-06-15-evening-manual-ancestor-kin-ancestor-kin-xenology-plate",
+    "title": "Ancestor-Kin Xenology Plate",
+    "tests": "Field-guide infographic for the Ancestor-Kin, a deep-interior humanoid lineage that considers the Veyrith elder kin rather than aliens.",
+    "prompt": "Locally rendered infographic for the Vesperglass Array fictional world: an Ancestor-Kin xenology plate showing a post-human deep-interior humanoid lineage partially rewritten by living vesperglass, with readable field-guide callouts for classification, ancestry belief, anatomy, communication, daily work, risk, and origin summary.",
+    "image": "images/2026-06-15-evening-manual-ancestor-kin-ancestor-kin-xenology-plate.png",
+    "date": "2026-06-15",
+    "batch": "Manual Worldbuilding",
+    "slot": "evening-manual-ancestor-kin",
+    "model": "local-render",
+    "size": "1600x2000",
+    "world": {
+      "name": "Vesperglass Array",
+      "description": "Hard-sci-fi alien megahabitat and deep-interior cultures shaped by living vesperglass resonance.",
+      "continuity": "Current weekly fictional world from #ai-photos: Veyrith, Vesperglass Array, deep-interior settlements, and humanoid lineages transformed by the Array.",
+      "entryDescription": "A readable xenology infographic defining the Ancestor-Kin culture, anatomy, communication, work, risks, and origin."
+    }
   }
 ]
