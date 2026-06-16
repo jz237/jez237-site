@@ -145,6 +145,7 @@
   /* ---- tank: hull at heading, turret/barrel at turret angle ---- */
   function drawTank(ctx, tk, t, mode) {
     const T = theme(mode), main = tk.id === 0 ? T.p1 : T.p2, dark = tk.id === 0 ? T.p1d : T.p2d, glow = tk.id === 0 ? T.p1g : T.p2g;
+    const damage = Math.max(0, 4 - (tk.hp == null ? 4 : tk.hp));
     if (mode === 'classic') {
       ctx.save();
       ctx.translate(Math.round(tk.x), Math.round(tk.y));
@@ -153,6 +154,13 @@
       ctx.fillRect(-11, -6, 22, 12);
       ctx.fillRect(-6, -11, 12, 22);
       ctx.fillRect(9, -2, 18, 4);
+      if (damage > 0) {
+        ctx.fillStyle = '#000';
+        const marks = [[-7, -4, 5, 2], [2, 3, 7, 2], [-3, -9, 2, 6]];
+        for (let i = 0; i < Math.min(damage, marks.length); i++) {
+          const m = marks[i]; ctx.fillRect(m[0], m[1], m[2], m[3]);
+        }
+      }
       ctx.restore();
       return;
     }
@@ -176,6 +184,19 @@
     // rivets
     ctx.fillStyle = 'rgba(0,0,0,0.35)';
     [[-9, -5], [9, -5], [-9, 5], [9, 5]].forEach(p => { ctx.beginPath(); ctx.arc(p[0], p[1], 1.1, 0, 7); ctx.fill(); });
+    if (damage > 0) {
+      const scars = [[-6, -4, 8, 2, -0.2], [1, 4, 9, 2, 0.18], [-8, 1, 5, 2, 0.45]];
+      for (let i = 0; i < Math.min(damage, scars.length); i++) {
+        const s = scars[i];
+        ctx.save(); ctx.translate(s[0], s[1]); ctx.rotate(s[4]);
+        ctx.fillStyle = 'rgba(4,5,7,0.78)'; rr(ctx, -s[2] / 2, -s[3] / 2, s[2], s[3], 1); ctx.fill();
+        ctx.strokeStyle = 'rgba(255,210,120,0.35)'; ctx.lineWidth = 0.8;
+        ctx.beginPath(); ctx.moveTo(-s[2] / 2, 0); ctx.lineTo(s[2] / 2, 0); ctx.stroke();
+        ctx.restore();
+      }
+      ctx.fillStyle = 'rgba(0,0,0,0.28)';
+      ctx.beginPath(); ctx.arc(-3, -1, 8 + damage * 1.5, 0, 7); ctx.fill();
+    }
     ctx.restore();
     // turret + barrel
     ctx.save(); ctx.translate(tk.x, tk.y); ctx.rotate(tk.turret);
