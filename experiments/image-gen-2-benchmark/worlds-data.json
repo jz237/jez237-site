@@ -862,5 +862,23 @@
       "continuity": "Preserves Vesperglass Array's transparent reef habitat, cobalt gas giant, cyan/violet auroras, copper-black induction coils, ceramic-white pressure ribs, pulse-lantern wayfinding, conductive garden life, and ribbon-bodied electroceptive inhabitants.",
       "entryDescription": "An overnight-to-morning commute through Prismfall Concourse, showing everyday transit rituals, mag-sled queues, carrying pods, and magnetic-weather wayfinding inside the Vesperglass Array."
     }
+  },
+  {
+    "id": "2026-06-16-overnight-vesperglass-array-coilward-market-exchange",
+    "title": "Vesperglass Array: Coilward Market Exchange",
+    "tests": "Generated via openclaw infer image generate primary openai/gpt-image-2 route; exact output path verified; Fictional Worlds catalog-only Vesperglass Array daily-life entry.",
+    "prompt": "Create a detailed realistic cinematic daily-life view from Vesperglass Array: Show a daily market where translucent ribbon-bodied inhabitants trade living circuit textiles, prism frond cuttings, blue bioluminescent seed curtains, ceramic-white tools, graphite repair parts, and luminous fluid conduit coils under copper-black induction coils. Use the Vesperglass Array world bible as canon: suspended transparent mineral reef-plates above a turbulent cobalt gas giant, cyan and violet auroras, pulse-lantern color signals, low-gravity rails, vesperglass shelves, pressure membranes, conductive lace-vines, and non-human inhabitants with electroreceptor crests and multiple delicate handling tendrils. Make the scene feel photographed, practical, inhabited, alien, and coherent rather than generic sci-fi. Avoid human astronauts as the main society, Earth signage, readable text, logos, franchise aesthetics, neon cyberpunk, mushroom/fairytale motifs, horror, dancing, watermark, and signature.\\n\\nSource photo needed: none.\\n\\nReusable prompt template: Create a realistic photographed daily-life view from [WORLD NAME], showing [EVERYDAY ACTIVITY] in [SPECIFIC SETTING]. Preserve the world bible's geography, inhabitants, materials, transit/infrastructure, ecology, palette, lighting, and recurring motifs. Make the scene practical, lived-in, culturally specific, and visually coherent, with tactile objects, environmental scale cues, realistic lens behavior, and no generic franchise cues.\\n\\nWhat to preserve: Vesperglass Array continuity: transparent mineral reef-plates, tension-spire towers, glass tubes and membranes, cobalt gas giant below, cyan/violet auroras, copper-black induction coils, pulse-lantern color wayfinding, prism fronds, conductive lace-vines, living circuit textiles, and ribbon-bodied electroceptive inhabitants.\\n\\nWhat to change: focus this entry on the market-exchange rhythm of daily life: trade goods, alien stall construction, handling tendrils, membrane baskets, worn rails, warm interior pools, and practical material culture.\\n\\nExample substitution: [WORLD NAME] = Vesperglass Array; [EVERYDAY ACTIVITY] = Coilward Market exchange; [SPECIFIC SETTING] = a transparent reef-plate concourse above cobalt storm bands.",
+    "image": "images/2026-06-16-overnight-vesperglass-array-coilward-market-exchange.png",
+    "date": "2026-06-16",
+    "batch": "Daily Prompt",
+    "slot": "overnight",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "world": {
+      "name": "Vesperglass Array",
+      "description": "A hard-sci-fi alien megahabitat where ribbon-bodied electroceptive inhabitants live across suspended glass reefs inside the magnetosphere of a blue-white gas giant.",
+      "continuity": "Preserves Vesperglass Array's suspended reef-plate habitat, cobalt gas giant, aurora currents, copper-black induction coils, pulse-lantern signals, prism ecology, and ribbon-bodied electroceptive inhabitants.",
+      "entryDescription": "A daily market exchange at Coilward Market, showing how Vesperglass inhabitants trade living circuit textiles, prism fronds, tools, and repair parts inside a glass concourse above the storm bands."
+    }
   }
 ]
