@@ -10,6 +10,7 @@
   const LW = FIELD_W, LH = HUD_H + FIELD_H;
   const STEP = 1 / 60;
   const TANK_R = 12;
+  const TANK_MAX_HP = 4;
   const ACCEL = 0.18, MAX_FWD = 2.5, MAX_REV = 1.5, FRICTION = 0.86, HULL_TURN = 0.055;
   const TURRET_TURN = 0.16;                         // max turret rad/tick (human aim is instant)
   const SHELL_SPD = 7.0, SHELL_LIFE = 1.7, SHELL_R = 3, MAX_SHELLS = 1, FIRE_CD = 0.4;
@@ -53,8 +54,9 @@
 
   /* ===================== state ===================== */
   let state = 'attract';        // attract | playing | paused | over | how | scores
-  let mode = 'cpu';             // cpu | duel
+  let mode = 'cpu';             // cpu | duel | watch
   let aiLevel = 45;             // 0..100 difficulty slider
+  let watchLevel = [45, 45];    // CPU 1 / CPU 2 watch-mode sliders
   let visualMode = 'hd';
   let muted = false, headless = false, touchActive = false;
   let tanks = [], shells = [], mines = [];
@@ -70,7 +72,7 @@
   function silent() { return headless || state === 'attract'; }
 
   /* ===================== entities ===================== */
-  function makeTank(id) { const s = SPAWNS[id], p = tileCenter(s.c, s.r); return { id, x: p.x, y: p.y, heading: s.a, turret: s.a, speed: 0, vx: 0, vy: 0, dist: 0, cd: 0, flash: 0, alive: true, path: null, pathTick: -999 }; }
+  function makeTank(id) { const s = SPAWNS[id], p = tileCenter(s.c, s.r); return { id, x: p.x, y: p.y, heading: s.a, turret: s.a, speed: 0, vx: 0, vy: 0, dist: 0, cd: 0, flash: 0, hp: TANK_MAX_HP, alive: true, path: null, pathTick: -999 }; }
   function resetMatch(seed) {
     rng = mulberry32((seed | 0) || 1);
     buildMaze();
@@ -227,7 +229,7 @@
       if (sh.life <= 0) { shells.splice(s, 1); continue; }
       if (isSolidAt(sh.x, sh.y)) { damageWall(sh.x, sh.y); shells.splice(s, 1); continue; }
       let hit = false;
-      for (let i = 0; i < 2; i++) { const t = tanks[i]; if (t.alive && i !== sh.owner && Math.hypot(t.x - sh.x, t.y - sh.y) < TANK_R + SHELL_R) { killTank(i); hit = true; break; } }
+      for (let i = 0; i < 2; i++) { const t = tanks[i]; if (t.alive && i !== sh.owner && Math.hypot(t.x - sh.x, t.y - sh.y) < TANK_R + SHELL_R) { damageTank(i); hit = true; break; } }
       if (hit) shells.splice(s, 1);
     }
     if (shake > 0) shake *= 0.85;
@@ -270,14 +272,22 @@
     if (wallHP[r][c] <= 0) { solid[r][c] = false; wallHP[r][c] = 0; if (SDArt) { PARTS.chips(x, y, '#8a93a6'); DECALS.add(c * TILE + TILE / 2, HUD_H + r * TILE + TILE / 2, 22); } }
     else if (SDArt) PARTS.chips(x, y, '#8a93a6');
   }
+  function damageTank(i) {
+    const t = tanks[i]; if (!t.alive) return;
+    t.hp = Math.max(0, (t.hp == null ? TANK_MAX_HP : t.hp) - 1);
+    t.flash = 1; shake = Math.max(shake, 3);
+    if (t.hp <= 0) { killTank(i); return; }
+    if (SDArt) { PARTS.chips(t.x, t.y, i === 0 ? '#ffb347' : '#46d6e8'); DECALS.add(t.x, t.y, 12); }
+    if (!silent()) SDAudio.wall();
+  }
   function killTank(i) {
-    const t = tanks[i]; if (!t.alive) return; t.alive = false;
+    const t = tanks[i]; if (!t.alive) return; t.alive = false; t.hp = 0;
     if (SDArt) { PARTS.explosion(t.x, t.y, i === 0 ? '#ffb347' : '#46d6e8'); DECALS.add(t.x, t.y, 30); }
     if (!silent()) { SDAudio.explosion(); SDAudio.point(); }
     shake = 9; if (i === 0) score.p2++; else score.p1++; freezeT = FREEZE;
   }
   function reviveTanks() {
-    for (let i = 0; i < 2; i++) if (!tanks[i].alive) { const s = SPAWNS[i], p = tileCenter(s.c, s.r); const t = tanks[i]; t.x = p.x; t.y = p.y; t.heading = s.a; t.turret = s.a; t.speed = 0; t.alive = true; t.cd = 0.3; t.path = null; }
+    for (let i = 0; i < 2; i++) if (!tanks[i].alive) { const s = SPAWNS[i], p = tileCenter(s.c, s.r); const t = tanks[i]; t.x = p.x; t.y = p.y; t.heading = s.a; t.turret = s.a; t.speed = 0; t.hp = TANK_MAX_HP; t.alive = true; t.cd = 0.3; t.path = null; }
   }
   function endMatch() { state = 'over'; winner = score.p1 === score.p2 ? 'draw' : (score.p1 > score.p2 ? 'p1' : 'p2'); if (!headless) { SDAudio.roundEnd(); SDAudio.engine(0); maybeOfferScore(); } showOverlay('over'); }
 
@@ -292,7 +302,7 @@
     cam.zoom = portrait ? 1.38 : 1.18;
     const vw = viewW / cam.zoom, vh = viewH / cam.zoom;
     let target = tanks[0];
-    if (state === 'attract' && tanks[0] && tanks[1]) target = { x: (tanks[0].x + tanks[1].x) / 2, y: (tanks[0].y + tanks[1].y) / 2 };
+    if ((state === 'attract' || mode === 'watch') && tanks[0] && tanks[1]) target = { x: (tanks[0].x + tanks[1].x) / 2, y: (tanks[0].y + tanks[1].y) / 2 };
     if (!target) target = { x: LW / 2, y: LH / 2 };
     cam.x = clampCam(target.x - vw * 0.5, LW - vw);
     cam.y = clampCam(target.y - vh * 0.5, LH - vh);
@@ -347,12 +357,25 @@
     ctx.font = 'bold 40px Menlo,Consolas,monospace'; ctx.textBaseline = 'middle';
     ctx.fillStyle = visualMode === 'classic' ? '#fff' : T.p1; ctx.textAlign = 'left'; ctx.fillText(String(score.p1).padStart(2, '0'), mobileView ? 14 : 28, h / 2);
     ctx.fillStyle = visualMode === 'classic' ? '#bdbdbd' : T.p2; ctx.textAlign = 'right'; ctx.fillText(String(score.p2).padStart(2, '0'), w - (mobileView ? 14 : 28), h / 2);
+    drawHealthPips(T, w, h);
     const flash = timeLeft <= FLASH_AT && Math.floor(timeLeft * 2) % 2 === 0;
     ctx.fillStyle = timeLeft <= FLASH_AT ? (flash ? '#ff5277' : '#7a2236') : T.ink;
     ctx.font = 'bold 34px Menlo,Consolas,monospace'; ctx.textAlign = 'center'; ctx.fillText(Math.ceil(timeLeft).toString().padStart(2, '0'), w / 2, h / 2);
     ctx.fillStyle = T.inkDim; ctx.font = '11px Menlo,Consolas,monospace';
-    ctx.fillText(state === 'attract' ? 'ATTRACT - CPU vs CPU' : (mode === 'cpu' ? 'P1  vs  CPU' : 'P1  vs  P2'), w / 2, h - 10);
+    ctx.fillText(state === 'attract' ? 'ATTRACT - CPU vs CPU' : (mode === 'cpu' ? 'P1  vs  CPU' : (mode === 'watch' ? 'CPU 1  vs  CPU 2' : 'P1  vs  P2')), w / 2, h - 10);
     if (freezeT > 0 && state === 'playing') { ctx.fillStyle = T.inkDim; ctx.font = 'bold 13px Menlo,Consolas,monospace'; ctx.fillText('- RELOADING -', w / 2, h / 2 + 22); }
+  }
+  function drawHealthPips(T, w, h) {
+    const y = h - 17, size = 6, gap = 4;
+    const draw = (x, hp, color, dir) => {
+      for (let i = 0; i < TANK_MAX_HP; i++) {
+        const on = i < hp, px = x + dir * i * (size + gap);
+        ctx.fillStyle = on ? color : 'rgba(255,255,255,.16)';
+        ctx.fillRect(px, y, size, size);
+      }
+    };
+    draw(mobileView ? 14 : 30, tanks[0] ? tanks[0].hp : TANK_MAX_HP, T.p1, 1);
+    draw(w - (mobileView ? 14 : 30) - size, tanks[1] ? tanks[1].hp : TANK_MAX_HP, T.p2, -1);
   }
 
   /* ===================== UI ===================== */
@@ -365,14 +388,15 @@
     const map = { title: 'ovTitle', how: 'ovHow', paused: 'ovPause', over: 'ovOver', scores: 'ovScores' };
     if (map[which]) { const e = $(map[which]); if (e) e.classList.remove('hidden'); }
     if (which === 'over') {
-      const w = $('overResult'); if (w) w.textContent = winner === 'draw' ? 'DRAW' : (winner === 'p1' ? (mode === 'cpu' ? 'YOU WIN' : 'PLAYER 1 WINS') : (mode === 'cpu' ? 'CPU WINS' : 'PLAYER 2 WINS'));
+      const w = $('overResult'); if (w) w.textContent = winner === 'draw' ? 'DRAW' : (winner === 'p1' ? (mode === 'cpu' ? 'YOU WIN' : (mode === 'watch' ? 'CPU 1 WINS' : 'PLAYER 1 WINS')) : (mode === 'cpu' ? 'CPU WINS' : (mode === 'watch' ? 'CPU 2 WINS' : 'PLAYER 2 WINS')));
       const sc = $('overScore'); if (sc) sc.textContent = score.p1 + ' — ' + score.p2;
     }
   }
   function startAttract() { state = 'attract'; mode = 'cpu'; bots = [true, true]; tankSkill = [0.72, 0.6]; matchTime = DEFAULT_TIME; resetMatch((tick + 7) * 2654435761 >>> 0 || 11); state = 'attract'; }
   function startGame(m) {
-    mode = m || mode; bots = mode === 'cpu' ? [false, true] : [false, false];
-    const sk = aiLevel / 100; tankSkill = [sk, sk];
+    mode = m || mode;
+    bots = mode === 'cpu' ? [false, true] : (mode === 'watch' ? [true, true] : [false, false]);
+    const sk = aiLevel / 100; tankSkill = mode === 'watch' ? [watchLevel[0] / 100, watchLevel[1] / 100] : [sk, sk];
     matchTime = DEFAULT_TIME;
     resetMatch((Math.random() * 1e9) | 0);
     state = 'playing'; hideAllOverlays();
@@ -478,7 +502,7 @@
   }
 
   /* ===================== self-tests ===================== */
-  function snapHash() { const r2 = n => Math.round(n * 100) / 100; return JSON.stringify({ s: score, t: tanks.map(t => [r2(t.x), r2(t.y), r2(t.heading), r2(t.turret), t.alive]), m: mines.length, sh: shells.length }); }
+  function snapHash() { const r2 = n => Math.round(n * 100) / 100; return JSON.stringify({ s: score, t: tanks.map(t => [r2(t.x), r2(t.y), r2(t.heading), r2(t.turret), t.hp, t.alive]), m: mines.length, sh: shells.length }); }
   function fresh() { return [ctrl(), ctrl()]; }
   function perfNow() { try { return performance.now(); } catch (e) { return 0; } }
   function runTests() {
@@ -513,7 +537,12 @@
     const pa = tileCenter(4, 2), pb = tileCenter(10, 2);
     tanks[0].x = pa.x; tanks[0].y = pa.y; tanks[0].heading = 0; tanks[0].turret = 0; tanks[1].x = pb.x; tanks[1].y = pb.y; tanks[1].alive = true;
     fire(tanks[0]); let killed = false; for (let i = 0; i < 60; i++) { update(); if (!tanks[1].alive) { killed = true; break; } }
-    ok('T-F4 shells', had && capOk && absorbed && killed, 'had=' + had + ' cap=' + capOk + ' abs=' + absorbed + ' kill=' + killed);
+    const tookHit = tanks[1].alive && tanks[1].hp === TANK_MAX_HP - 1 && score.p1 === 0;
+    for (let shot = 0; shot < TANK_MAX_HP - 1 && !killed; shot++) {
+      tanks[0].cd = 0; fire(tanks[0]);
+      for (let i = 0; i < 60; i++) { update(); if (!tanks[1].alive) { killed = true; break; } if (shells.length === 0) break; }
+    }
+    ok('T-F4 shells', had && capOk && absorbed && tookHit && killed && score.p1 === 1, 'had=' + had + ' cap=' + capOk + ' abs=' + absorbed + ' tookHit=' + tookHit + ' kill=' + killed);
 
     resetMatch(7); state = 'playing'; controls = fresh();
     killTank(1); const pointOk = score.p1 === 1;
@@ -553,6 +582,9 @@
     ok('T-soak bot match', state === 'over' && !nan, 'state=' + state + ' nan=' + nan);
     ok('T-perf sim<=2.5ms/step', per <= 2.5, per.toFixed(3) + 'ms');
 
+    watchLevel = [15, 85]; startGame('watch'); headless = true;
+    ok('T-watch mode', mode === 'watch' && bots[0] && bots[1] && Math.abs(tankSkill[0] - 0.15) < 0.001 && Math.abs(tankSkill[1] - 0.85) < 0.001, 'mode=' + mode + ' bots=' + bots.join(',') + ' skill=' + tankSkill.join(','));
+
     headless = ph; mode = pmode; state = ps;
     const pass = out.filter(o => o.pass).length;
     const res = { pass, fail: out.length - pass, total: out.length, details: out }; window.__testResults = res; return res;
@@ -584,13 +616,20 @@
     resize(); window.addEventListener('resize', resize);
 
     const click = (id, fn) => { const e = $(id); if (e) e.addEventListener('click', () => { SDAudio.ui(); fn(); }); };
-    click('btnDuel', () => startGame('duel')); click('btnCpu', () => startGame('cpu'));
+    click('btnDuel', () => startGame('duel')); click('btnCpu', () => startGame('cpu')); click('btnWatch', () => startGame('watch'));
     click('btnHow', () => { state = 'how'; showOverlay('how'); }); click('btnHowBack', () => { startAttract(); showOverlay('title'); });
     click('btnScores', () => { state = 'scores'; showOverlay('scores'); refreshBoard(); }); click('btnScoresBack', () => { startAttract(); showOverlay('title'); });
     click('btnResume', () => { state = 'playing'; hideAllOverlays(); }); click('btnQuit', () => { startAttract(); showOverlay('title'); });
     click('btnAgain', () => startGame(mode)); click('btnMenu', () => { startAttract(); showOverlay('title'); });
     const sl = $('diffSlider'), lab = $('diffLabel');
     if (sl) { sl.value = aiLevel; const upd = () => { aiLevel = +sl.value; if (lab) lab.textContent = diffName(aiLevel) + ' (' + aiLevel + ')'; }; upd(); sl.addEventListener('input', upd); }
+    const bindWatch = (idx, sid, lid) => {
+      const sl = $(sid), lab = $(lid); if (!sl) return;
+      sl.value = watchLevel[idx];
+      const upd = () => { watchLevel[idx] = +sl.value; if (lab) lab.textContent = diffName(watchLevel[idx]) + ' (' + watchLevel[idx] + ')'; };
+      upd(); sl.addEventListener('input', upd);
+    };
+    bindWatch(0, 'watchSliderA', 'watchLabelA'); bindWatch(1, 'watchSliderB', 'watchLabelB');
     const mb = $('btnMute'); if (mb) mb.addEventListener('click', () => { muted = !muted; SDAudio.setMuted(muted); mb.textContent = muted ? '🔇' : '🔊'; });
     const cb = $('btnClassic'); if (cb) cb.addEventListener('click', toggleVisual);
     const sub = $('btnSubmit'); if (sub) sub.addEventListener('click', async () => { const inp = $('initials'); const nm = (inp && inp.value || 'YOU').toUpperCase().slice(0, 3) || 'YOU'; await Scores.submit(nm, scoreValue()); const f = $('overScoreForm'); if (f) f.classList.add('hidden'); state = 'scores'; showOverlay('scores'); refreshBoard(); });
@@ -611,6 +650,7 @@
     get state() { return state; }, set state(s) { state = s; },
     get mode() { return mode; }, set mode(m) { mode = m; },
     get aiLevel() { return aiLevel; }, set aiLevel(v) { aiLevel = v; tankSkill = [v / 100, v / 100]; },
+    get watchLevel() { return watchLevel.slice(); }, set watchLevel(v) { if (Array.isArray(v)) watchLevel = [Number(v[0]) || 0, Number(v[1]) || 0]; },
     get visualMode() { return visualMode; }, set visualMode(v) { visualMode = v; },
     get score() { return score; }, get timeLeft() { return timeLeft; }, get winner() { return winner; },
     get tanks() { return tanks; }, get shells() { return shells; }, get mines() { return mines; },
