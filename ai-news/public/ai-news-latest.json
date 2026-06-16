@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-16T17:18:55.360353+00:00",
+  "updatedAt": "2026-06-16T18:00:01.601012+00:00",
   "items": [
     {
       "title": "Louis Mahon, Elliot Ford, Callum Hackett",
@@ -10,12 +10,44 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-16T17:19:01.029524+00:00",
+      "published": "2026-06-16T18:00:15.115886+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-16T17:18:55.360353+00:00",
+      "lastSeen": "2026-06-16T18:00:01.601012+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
+    },
+    {
+      "title": "Android 17 launches with new multitasking tools as Google expands Gemini features",
+      "url": "https://techcrunch.com/2026/06/16/android-17-launches-with-new-multitasking-tools-as-google-expands-gemini-features",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Google has released Android 17 and Wear OS 7, introducing new multitasking features, parental controls, security tools, and smartwatch upgrades. The launch is also accompanied by a Pixel Drop that brings Google’s latest AI models to its devices.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/gemini-app-GettyImages-2276204472.jpg?w=1024",
+      "published": "2026-06-16T18:00:00+00:00",
+      "firstSeen": "2026-06-16T18:00:01.601012+00:00",
+      "lastSeen": "2026-06-16T18:00:01.601012+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 10.79
+    },
+    {
+      "title": "‘Dangerous’ AI Models Are Coming No Matter What",
+      "url": "https://www.wired.com/story/dangerous-ai-models-are-coming-no-matter-what",
+      "source": "Wired AI",
+      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "The US government crackdown on Anthropic’s Claude Fable 5 and Mythos 5 hides a glaring truth: AI models with advanced hacking capabilities will soon be the norm.",
+      "image": "https://media.wired.com/photos/6a30202e9402edb0adc1701d/master/pass/GettyImages-2280291188.jpg",
+      "published": "2026-06-16T17:50:52+00:00",
+      "firstSeen": "2026-06-16T18:00:01.601012+00:00",
+      "lastSeen": "2026-06-16T18:00:01.601012+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 8.2853
     },
     {
       "title": "Apple 2027 rumors: AirPods with cameras for AI and the second folding iPhone",
@@ -28,10 +60,26 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/09/257943_Airpods_Pro3_AKrales_0078.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-16T17:04:05+00:00",
       "firstSeen": "2026-06-16T17:18:55.360353+00:00",
-      "lastSeen": "2026-06-16T17:18:55.360353+00:00",
+      "lastSeen": "2026-06-16T18:00:01.601012+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 4.1525
+      "score": 4.1319
+    },
+    {
+      "title": "I was in OpenAI’s first intern cohort. Here’s what it taught me about becoming an AI-native engineer",
+      "url": "https://thenextweb.com/news/openai-first-intern-cohort-ai-native-engineer",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "TL;DR: AI is making it easier than ever to build software that looks impressive in a demo. But after working in OpenAI’s first intern cohort, I learned that the real challenge is not just speed. It is judgment: knowing what to trust, what to test, and when a human still needs to stay in the loop. [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/openai-first-intern-cohort-ai-native-engineer.avif",
+      "published": "2026-06-16T17:00:45+00:00",
+      "firstSeen": "2026-06-16T18:00:01.601012+00:00",
+      "lastSeen": "2026-06-16T18:00:01.601012+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.1202
     },
     {
       "title": "Qualcomm’s latest chip hints that more powerful smart glasses could be on the way",
@@ -44,13 +92,13 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/snapdragonreality.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C3.4613147178592%2C100%2C93.077370564282",
       "published": "2026-06-16T17:00:00+00:00",
       "firstSeen": "2026-06-16T17:18:55.360353+00:00",
-      "lastSeen": "2026-06-16T17:18:55.360353+00:00",
+      "lastSeen": "2026-06-16T18:00:01.601012+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -0.7496
+      "score": -0.7701
     },
     {
-      "title": "Sixty percent of U.S. consumers say ‘AI’ in brand messaging is a turnoff, survey finds",
+      "title": "Sixty percent of US consumers say ‘AI’ in brand messaging is a turnoff, survey finds",
       "url": "https://techcrunch.com/2026/06/16/sixty-percent-of-u-s-consumers-say-ai-in-brand-messaging-is-a-turnoff-survey-finds",
       "source": "TechCrunch AI",
       "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
@@ -60,10 +108,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2024/09/wordpress-v1.jpg?resize=1200%2C675",
       "published": "2026-06-16T16:49:44+00:00",
       "firstSeen": "2026-06-16T17:00:01.963444+00:00",
-      "lastSeen": "2026-06-16T17:18:55.360353+00:00",
+      "lastSeen": "2026-06-16T18:00:01.601012+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 2.7752
+      "score": 2.7548
     },
     {
       "title": "HPE AI Factory With NVIDIA Expands for the Era of Agents",
@@ -76,10 +124,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/logo-lockup-press-hpe-1600x900-4603000.png",
       "published": "2026-06-16T16:30:27+00:00",
       "firstSeen": "2026-06-16T17:00:01.963444+00:00",
-      "lastSeen": "2026-06-16T17:18:55.360353+00:00",
+      "lastSeen": "2026-06-16T18:00:01.601012+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -0.3344
+      "score": -0.3547
     },
     {
       "title": "Quoting Georgi Gerganov",
@@ -92,10 +140,10 @@
       "image": "",
       "published": "2026-06-16T16:04:59+00:00",
       "firstSeen": "2026-06-16T17:00:01.963444+00:00",
-      "lastSeen": "2026-06-16T17:18:55.360353+00:00",
+      "lastSeen": "2026-06-16T18:00:01.601012+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.353
+      "score": 5.3329
     },
     {
       "title": "SpaceX is public: Everything you need to know post-IPO",
@@ -108,10 +156,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/elon-nasdaq-spacex-ipo.jpg?resize=1200%2C801",
       "published": "2026-06-16T15:53:12+00:00",
       "firstSeen": "2026-06-16T16:00:01.930362+00:00",
-      "lastSeen": "2026-06-16T17:18:55.360353+00:00",
+      "lastSeen": "2026-06-16T18:00:01.601012+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 0.2472
+      "score": 0.2273
     },
     {
       "title": "CyCognito pushes AI pentesting beyond vulnerability scans as enterprise attack surfaces evolve",
@@ -124,10 +172,10 @@
       "image": "https://media.thenextweb.com/2026/06/cycognito-ai-pentesting-enterprise-attack-surfaces.avif",
       "published": "2026-06-16T15:36:59+00:00",
       "firstSeen": "2026-06-16T16:00:01.930362+00:00",
-      "lastSeen": "2026-06-16T17:18:55.360353+00:00",
+      "lastSeen": "2026-06-16T18:00:01.601012+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.5993
+      "score": 5.5795
     },
     {
       "title": "v0.30.9",
@@ -140,10 +188,10 @@
       "image": "https://opengraph.githubassets.com/b793bfcb95cd221d4c1d95fa44eea1f3240ffefdb75c44b55ad95f37591da0a5/ollama/ollama",
       "published": "2026-06-16T15:23:33+00:00",
       "firstSeen": "2026-06-16T16:00:01.930362+00:00",
-      "lastSeen": "2026-06-16T17:18:55.360353+00:00",
+      "lastSeen": "2026-06-16T18:00:01.601012+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 13.2028
+      "score": 13.1831
     },
     {
       "title": "Microsoft’s new Surface Laptop has a trackpad that rumbles like a game controller",
@@ -156,10 +204,10 @@
       "image": "https://media.thenextweb.com/2026/06/microsoft-surface-laptop-trackpad-haptics-snapdragon-x2.avif",
       "published": "2026-06-16T15:17:45+00:00",
       "firstSeen": "2026-06-16T16:00:01.930362+00:00",
-      "lastSeen": "2026-06-16T17:18:55.360353+00:00",
+      "lastSeen": "2026-06-16T18:00:01.601012+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.09
+      "score": 2.0704
     },
     {
       "title": "Attackers hijacked over 1,500 Arch Linux packages to steal developers’ secrets, no hacking required",
@@ -172,10 +220,10 @@
       "image": "https://media.thenextweb.com/2026/06/open-source-security.avif",
       "published": "2026-06-16T15:16:34+00:00",
       "firstSeen": "2026-06-16T16:00:01.930362+00:00",
-      "lastSeen": "2026-06-16T17:18:55.360353+00:00",
+      "lastSeen": "2026-06-16T18:00:01.601012+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0894
+      "score": 2.0698
     },
     {
       "title": "DOJ claims xAI’s unpermitted gas turbines are a matter of ‘national, economic, and energy security’",
@@ -188,10 +236,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/06/GettyImages-2217198328.jpeg?resize=1200%2C800",
       "published": "2026-06-16T15:05:03+00:00",
       "firstSeen": "2026-06-16T16:00:01.930362+00:00",
-      "lastSeen": "2026-06-16T17:18:55.360353+00:00",
+      "lastSeen": "2026-06-16T18:00:01.601012+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2239
+      "score": 5.2044
     },
     {
       "title": "Fastest, Largest, Strongest: NVIDIA Blackwell Sweeps MLPerf Training 6.0",
@@ -204,10 +252,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/end-to-end-corp-blog-best-models-trained-1280x680-4660123.jpg",
       "published": "2026-06-16T15:00:36+00:00",
       "firstSeen": "2026-06-16T16:00:01.930362+00:00",
-      "lastSeen": "2026-06-16T17:18:55.360353+00:00",
+      "lastSeen": "2026-06-16T18:00:01.601012+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.5218
+      "score": 2.5023
     },
     {
       "title": "Plaud says its software business topped $100M in ARR after shipping over 2M AI notetakers",
@@ -220,10 +268,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/08/SilverBlack-Plaud-Note-Pro.jpeg?resize=1200%2C675",
       "published": "2026-06-16T15:00:00+00:00",
       "firstSeen": "2026-06-16T16:00:01.930362+00:00",
-      "lastSeen": "2026-06-16T17:18:55.360353+00:00",
+      "lastSeen": "2026-06-16T18:00:01.601012+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2215
+      "score": 2.202
     },
     {
       "title": "Robinhood’s note on 10% layoffs shows blaming AI isn’t cutting it",
@@ -236,10 +284,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2021/01/robinhood-volatility.jpg?resize=1200%2C675",
       "published": "2026-06-16T14:50:09+00:00",
       "firstSeen": "2026-06-16T15:00:01.528831+00:00",
-      "lastSeen": "2026-06-16T17:18:55.360353+00:00",
+      "lastSeen": "2026-06-16T18:00:01.601012+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2168
+      "score": 2.1974
     },
     {
       "title": "Mobileye puts self-driving tech in 230 million cars. Now it wants to run its own robotaxis.",
@@ -252,10 +300,26 @@
       "image": "https://media.thenextweb.com/2026/06/planned-Mobileye-robotaxi.avif",
       "published": "2026-06-16T14:46:35+00:00",
       "firstSeen": "2026-06-16T16:00:01.930362+00:00",
-      "lastSeen": "2026-06-16T17:18:55.360353+00:00",
+      "lastSeen": "2026-06-16T18:00:01.601012+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7751
+      "score": 2.7558
+    },
+    {
+      "title": "Salesforce Makes $3.6B Play for AI Customer Service",
+      "url": "https://www.techrepublic.com/article/news-salesforce-acquires-fin-agentforce-ai-agents",
+      "source": "TechRepublic AI",
+      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Salesforce will buy Fin, formerly Intercom, for about $3.6 billion to expand Agentforce with AI customer service agents and support automation.\nThe post Salesforce Makes $3.6B Play for AI Customer Service appeared first on TechRepublic.",
+      "image": "https://assets.techrepublic.com/uploads/2026/06/Untitled-design-7-1.png?f=jpeg",
+      "published": "2026-06-16T14:45:50+00:00",
+      "firstSeen": "2026-06-16T18:00:01.601012+00:00",
+      "lastSeen": "2026-06-16T18:00:01.601012+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.8554
     },
     {
       "title": "Genesis AI thinks the humanoid hype is wrong. Its wheeled robot is the counterargument.",
@@ -268,11 +332,11 @@
       "image": "https://media.thenextweb.com/2026/06/genesis-ai-eno-robot-humanoid-alternative.avif",
       "published": "2026-06-16T14:38:02+00:00",
       "firstSeen": "2026-06-16T15:00:01.528831+00:00",
-      "lastSeen": "2026-06-16T17:18:55.360353+00:00",
+      "lastSeen": "2026-06-16T18:00:01.601012+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 10.371
+      "score": 10.3518
     },
     {
       "title": "The team that built Microsoft’s Security Copilot just raised $100M to stop attacks before they happen",
@@ -285,10 +349,10 @@
       "image": "https://media.thenextweb.com/2026/06/ENT-Team-Photo.avif",
       "published": "2026-06-16T14:30:51+00:00",
       "firstSeen": "2026-06-16T15:00:01.528831+00:00",
-      "lastSeen": "2026-06-16T17:18:55.360353+00:00",
+      "lastSeen": "2026-06-16T18:00:01.601012+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.1677
+      "score": 6.1485
     },
     {
       "title": "This two-year-old startup already programs Blue Origin’s rockets. It just raised $20M.",
@@ -301,10 +365,10 @@
       "image": "https://media.thenextweb.com/2026/06/limitless-labs-founders.avif",
       "published": "2026-06-16T14:09:48+00:00",
       "firstSeen": "2026-06-16T15:00:01.528831+00:00",
-      "lastSeen": "2026-06-16T17:18:55.360353+00:00",
+      "lastSeen": "2026-06-16T18:00:01.601012+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0578
+      "score": 2.0388
     },
     {
       "title": "Meta’s New Facebook ‘AI Mode’ Pulls From Groups, Reels, and Posts",
@@ -317,10 +381,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/06/Untitled-design-6-2.png?f=jpeg",
       "published": "2026-06-16T14:05:48+00:00",
       "firstSeen": "2026-06-16T15:00:01.528831+00:00",
-      "lastSeen": "2026-06-16T17:18:55.360353+00:00",
+      "lastSeen": "2026-06-16T18:00:01.601012+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 6.5559
+      "score": 6.537
     },
     {
       "title": "More Big Tech executives just became Army officers. The conflict-of-interest question is getting louder.",
@@ -333,10 +397,10 @@
       "image": "https://media.thenextweb.com/2026/06/detachment-201-big-tech-army-reserve.avif",
       "published": "2026-06-16T14:02:48+00:00",
       "firstSeen": "2026-06-16T15:00:01.528831+00:00",
-      "lastSeen": "2026-06-16T17:18:55.360353+00:00",
+      "lastSeen": "2026-06-16T18:00:01.601012+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0545
+      "score": 2.0356
     },
     {
       "title": "My Father Wants to Age in Place. AI Will Be Watching",
@@ -349,10 +413,10 @@
       "image": "https://media.wired.com/photos/6a20764c9e9ae62de4e328fc/master/pass/Sensi_housePillar.jpg",
       "published": "2026-06-16T14:00:00+00:00",
       "firstSeen": "2026-06-16T15:00:01.528831+00:00",
-      "lastSeen": "2026-06-16T17:18:55.360353+00:00",
+      "lastSeen": "2026-06-16T18:00:01.601012+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2932
+      "score": 3.2743
     },
     {
       "title": "What Do We Need From Our Homes Right Now?",
@@ -365,10 +429,10 @@
       "image": "https://media.wired.com/photos/6a2b2e1f9afae66b5925a399/master/pass/editors-letter-final-websize.jpg",
       "published": "2026-06-16T14:00:00+00:00",
       "firstSeen": "2026-06-16T15:00:01.528831+00:00",
-      "lastSeen": "2026-06-16T17:18:55.360353+00:00",
+      "lastSeen": "2026-06-16T18:00:01.601012+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1932
+      "score": 2.1743
     },
     {
       "title": "This Swedish startup doesn’t want to give patent lawyers AI tools. It wants to replace them.",
@@ -381,10 +445,10 @@
       "image": "https://media.thenextweb.com/2026/06/Lightbringer-team.avif",
       "published": "2026-06-16T13:57:44+00:00",
       "firstSeen": "2026-06-16T15:00:01.528831+00:00",
-      "lastSeen": "2026-06-16T17:18:55.360353+00:00",
+      "lastSeen": "2026-06-16T18:00:01.601012+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0522
+      "score": 2.0333
     },
     {
       "title": "Anthropic spent six months warning the world about AI. Then the government pulled its models.",
@@ -400,7 +464,7 @@
       "lastSeen": "2026-06-16T17:18:55.360353+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0504
+      "score": 5.0316
     },
     {
       "title": "BAE Systems is funding the startups that want to disrupt it",
@@ -416,7 +480,7 @@
       "lastSeen": "2026-06-16T15:00:01.528831+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7487
+      "score": 2.7299
     },
     {
       "title": "SpaceX passes Amazon as valuation balloons to $2.7T",
@@ -429,10 +493,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2023/01/GettyImages-1244294229.jpg?resize=1200%2C675",
       "published": "2026-06-16T13:48:37+00:00",
       "firstSeen": "2026-06-16T14:00:01.699447+00:00",
-      "lastSeen": "2026-06-16T17:18:55.360353+00:00",
+      "lastSeen": "2026-06-16T18:00:01.601012+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1879
+      "score": 2.1691
     },
     {
       "title": "China’s biggest carmakers are designing their own driving chips, and Nvidia should be worried",
@@ -448,7 +512,7 @@
       "lastSeen": "2026-06-16T15:00:01.528831+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0474
+      "score": 2.0286
     },
     {
       "title": "India’s Sovereign AI Push Runs Into US Model Access Limits",
@@ -461,10 +525,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/06/waving-national-flag-against-bright-blue-sky-2026-01-05-00-41-31-utc-1024x683.jpg?f=jpeg",
       "published": "2026-06-16T13:47:19+00:00",
       "firstSeen": "2026-06-16T15:00:01.528831+00:00",
-      "lastSeen": "2026-06-16T17:18:55.360353+00:00",
+      "lastSeen": "2026-06-16T18:00:01.601012+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1473
+      "score": 3.1285
     },
     {
       "title": "EU Parliament strips immunity from senior Italian MEP in Huawei bribery probe",
@@ -480,7 +544,7 @@
       "lastSeen": "2026-06-16T15:00:01.528831+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0445
+      "score": 2.0258
     },
     {
       "title": "This a16z-backed startup says the fix for AI errors is a weaker model, not a smarter one",
@@ -496,7 +560,7 @@
       "lastSeen": "2026-06-16T15:00:01.528831+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.043
+      "score": 2.0243
     },
     {
       "title": "AI Compliance Failures Put Australian Enterprises on Notice",
@@ -509,10 +573,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/06/Untitled-design-8-1.png?f=jpeg",
       "published": "2026-06-16T13:34:25+00:00",
       "firstSeen": "2026-06-16T15:00:01.528831+00:00",
-      "lastSeen": "2026-06-16T17:18:55.360353+00:00",
+      "lastSeen": "2026-06-16T18:00:01.601012+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1414
+      "score": 3.1227
     },
     {
       "title": "The EU just passed the Turnberry trade deal. The tech fight is only starting.",
@@ -528,7 +592,7 @@
       "lastSeen": "2026-06-16T14:00:01.699447+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.041
+      "score": 2.0223
     },
     {
       "title": "Frontier post-training recipe review with Finbarr Timbers",
@@ -541,10 +605,10 @@
       "image": "https://substackcdn.com/image/fetch/$s_!sl6J!,w_1200,h_600,c_fill,f_jpg,q_auto:good,fl_progressive:steep,g_auto/https%3A%2F%2Fsubstack-video.s3.amazonaws.com%2Fvideo_upload%2Fpost%2F201754262%2F37ffc034-910b-4950-9e24-8483679ab453%2Ftranscoded-1781616095.png",
       "published": "2026-06-16T13:29:30+00:00",
       "firstSeen": "2026-06-16T14:00:01.699447+00:00",
-      "lastSeen": "2026-06-16T17:18:55.360353+00:00",
+      "lastSeen": "2026-06-16T18:00:01.601012+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.5492
+      "score": 2.5305
     },
     {
       "title": "Nvidia is backing a startup that turns its own GPUs into a commodity",
@@ -560,7 +624,7 @@
       "lastSeen": "2026-06-16T14:00:01.699447+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.337
+      "score": 2.3184
     },
     {
       "title": "Probably raises $9M to build a more reliable kind of AI",
@@ -573,74 +637,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/probably-peter-elias.png?resize=1200%2C800",
       "published": "2026-06-16T13:15:09+00:00",
       "firstSeen": "2026-06-16T14:00:01.699447+00:00",
-      "lastSeen": "2026-06-16T17:18:55.360353+00:00",
+      "lastSeen": "2026-06-16T18:00:01.601012+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1726
-    },
-    {
-      "title": "Commodore’s comeback flip phone runs your apps but bans the doomscroll",
-      "url": "https://thenextweb.com/news/commodore-callback-8020-flip-phone-blocks-social-media",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Commodore, the computer brand that defined the 1980s, is back with a flip phone, and its main selling point is everything it will not let you do. The Callback 8020, announced on Tuesday, is a clamshell that runs modern apps but blocks web browsers and social media outright. Pre-orders open on 30 June, prices start [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/Commodore-Callback-8020.avif",
-      "published": "2026-06-16T13:11:21+00:00",
-      "firstSeen": "2026-06-16T14:00:01.699447+00:00",
-      "lastSeen": "2026-06-16T14:00:01.699447+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.5309
-    },
-    {
-      "title": "New Apple Macs Coming in 2026: Everything We Know So Far",
-      "url": "https://www.techrepublic.com/article/news-apple-m5-macs-macbook-redesign",
-      "source": "TechRepublic AI",
-      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Apple may still have more Macs planned for 2026, including the rumored Mac Studio, iMac, Mac mini, and high-end OLED MacBook updates.\nThe post New Apple Macs Coming in 2026: Everything We Know So Far appeared first on TechRepublic.",
-      "image": "https://assets.techrepublic.com/uploads/2026/06/Untitled-design-7.png?f=jpeg",
-      "published": "2026-06-16T13:07:43+00:00",
-      "firstSeen": "2026-06-16T15:00:01.528831+00:00",
-      "lastSeen": "2026-06-16T17:18:55.360353+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.1292
-    },
-    {
-      "title": "Nuvei is buying Payoneer for $2.75bn to build a one-stop rival to Stripe",
-      "url": "https://thenextweb.com/news/nuvei-payoneer-2-75bn-acquisition-stripe-adyen",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Nuvei is buying Payoneer for $2.75bn, a bet that the way to take on Stripe is to own every step of a payment, not just one. The Canadian firm will pay $7.40 a share in cash for Payoneer, the cross-border specialist listed on Nasdaq, in a deal both boards have approved. It ends Payoneer’s roughly [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/nuvei-payoneer.avif",
-      "published": "2026-06-16T12:53:39+00:00",
-      "firstSeen": "2026-06-16T14:00:01.699447+00:00",
-      "lastSeen": "2026-06-16T14:00:01.699447+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.1229
-    },
-    {
-      "title": "The US government is defending xAI’s polluting turbines as vital to the war effort",
-      "url": "https://thenextweb.com/news/doj-backs-xai-naacp-pollution-lawsuit-national-security",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The US Justice Department has taken Elon Musk’s side in a pollution lawsuit, arguing that the gas turbines powering his AI data centre are too important to national security to switch off. In a filing on Monday, the department, joined by the state of Mississippi, asked a court to dismiss the case the NAACP brought [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/spacex-colossus-1-technical-problems-rented-anthropic.avif",
-      "published": "2026-06-16T12:42:38+00:00",
-      "firstSeen": "2026-06-16T14:00:01.699447+00:00",
-      "lastSeen": "2026-06-16T14:00:01.699447+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 5.0179
+      "score": 2.1541
     },
     {
       "title": "The Life Scientific: Dean Lomax",
@@ -653,10 +653,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-15T20:00:00+00:00",
       "firstSeen": "2026-06-15T21:00:01.290903+00:00",
-      "lastSeen": "2026-06-16T17:18:55.360353+00:00",
+      "lastSeen": "2026-06-16T18:00:01.601012+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7985
+      "score": 1.787
     },
     {
       "title": "The Life Scientific: Helen Hastie",
@@ -669,10 +669,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-08T20:00:00+00:00",
       "firstSeen": "2026-06-08T21:00:01.371488+00:00",
-      "lastSeen": "2026-06-16T17:18:55.360353+00:00",
+      "lastSeen": "2026-06-16T18:00:01.601012+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.1957
+      "score": 1.1956
     },
     {
       "title": "The Life Scientific: Seth Berkley",
