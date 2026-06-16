@@ -1,6 +1,6 @@
 {
   "date": "2026-06-16",
-  "updatedAt": "2026-06-16T07:00:01.843155+00:00",
+  "updatedAt": "2026-06-16T08:00:01.285617+00:00",
   "items": [
     {
       "title": "Inside the fight over Claude Mythos 5",
@@ -13,11 +13,11 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/STKS515_CYBER_WARFARE2_D.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-16T03:00:00+00:00",
       "firstSeen": "2026-06-16T04:00:02.113408+00:00",
-      "lastSeen": "2026-06-16T07:00:01.843155+00:00",
+      "lastSeen": "2026-06-16T08:00:01.285617+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 19.2443
+      "score": 19.2173
     },
     {
       "title": "Anthropic Is Still at Odds With the White House Over Claude Fable 5",
@@ -30,10 +30,10 @@
       "image": "https://media.wired.com/photos/6a3068b96de136e1eb346f80/master/pass/Anthropic-Latest-Clash-With-White-House-Business-2280291383.jpg",
       "published": "2026-06-16T00:53:46+00:00",
       "firstSeen": "2026-06-16T01:00:01.529593+00:00",
-      "lastSeen": "2026-06-16T07:00:01.843155+00:00",
+      "lastSeen": "2026-06-16T08:00:01.285617+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.1184
+      "score": 11.093
     },
     {
       "title": "Cloudflare CAPTCHA on at least one ampersand",
@@ -46,10 +46,10 @@
       "image": "",
       "published": "2026-06-16T00:21:36+00:00",
       "firstSeen": "2026-06-16T01:00:01.529593+00:00",
-      "lastSeen": "2026-06-16T07:00:01.843155+00:00",
+      "lastSeen": "2026-06-16T08:00:01.285617+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.6047
+      "score": 8.5797
     },
     {
       "title": "The Fable 5 Export Controls Harm US Cyber Defense",
@@ -62,10 +62,10 @@
       "image": "",
       "published": "2026-06-16T05:20:29+00:00",
       "firstSeen": "2026-06-16T05:28:13.066998+00:00",
-      "lastSeen": "2026-06-16T07:00:01.843155+00:00",
+      "lastSeen": "2026-06-16T08:00:01.285617+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.6405
+      "score": 7.6117
     },
     {
       "title": "Malaysia’s AI agent-powered messaging app Respond.io raises $62.5M, eyes acquisitions",
@@ -78,10 +78,26 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/respond-team-comp-2.webp?resize=1200%2C800",
       "published": "2026-06-16T06:59:00+00:00",
       "firstSeen": "2026-06-16T07:00:01.843155+00:00",
-      "lastSeen": "2026-06-16T07:00:01.843155+00:00",
+      "lastSeen": "2026-06-16T08:00:01.285617+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.0895
+      "score": 6.0594
+    },
+    {
+      "title": "Alibaba unveils AI models for robots as China’s focus shifts to agents",
+      "url": "https://thenextweb.com/news/alibaba-ai-models-for-robots-as-chinas-focus-shifts-to-agents",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Alibaba has revealed its first suite of AI models for robots, a move that says as much about where Chinese technology is heading as about the models themselves. The launch came as the industry pivots away from chatbots and towards agents, the systems meant to carry out complex tasks rather than just answer questions. At [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/Alibaba.avif",
+      "published": "2026-06-16T07:21:20+00:00",
+      "firstSeen": "2026-06-16T08:00:01.285617+00:00",
+      "lastSeen": "2026-06-16T08:00:01.285617+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.5305
     },
     {
       "title": "Quoting Matteo Wong, The Atlantic",
@@ -94,10 +110,10 @@
       "image": "",
       "published": "2026-06-16T03:07:54+00:00",
       "firstSeen": "2026-06-16T04:00:02.113408+00:00",
-      "lastSeen": "2026-06-16T07:00:01.843155+00:00",
+      "lastSeen": "2026-06-16T08:00:01.285617+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2779
+      "score": 5.2509
     },
     {
       "title": "DOJ Lawyers Argue xAI Is ‘Vital’ for National Security in NAACP Lawsuit",
@@ -110,10 +126,42 @@
       "image": "https://media.wired.com/photos/6a30b0678f3c861b578bab3f/master/pass/GettyImages-2217198328.jpg",
       "published": "2026-06-16T03:06:37+00:00",
       "firstSeen": "2026-06-16T04:00:02.113408+00:00",
-      "lastSeen": "2026-06-16T07:00:01.843155+00:00",
+      "lastSeen": "2026-06-16T08:00:01.285617+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1773
+      "score": 5.1503
+    },
+    {
+      "title": "DeepSeek closes $7bn-plus round with an unusual structure",
+      "url": "https://thenextweb.com/news/deepseek-closes-7bn-plus-round-with-an-unusual-structure",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "DeepSeek, the Chinese AI lab that unsettled the industry with a cheap, capable model last year, has closed its first round of outside funding, raising roughly 50 billion yuan, about $7bn, in a deal whose structure is as notable as its size. The valuation lands between $52bn and $59bn, according to Reuters. The unusual part [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/DeepSeek.avif",
+      "published": "2026-06-16T07:33:55+00:00",
+      "firstSeen": "2026-06-16T08:00:01.285617+00:00",
+      "lastSeen": "2026-06-16T08:00:01.285617+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.1368
+    },
+    {
+      "title": "Anthropic curbs make the case for sovereign AI, Upstage chief says",
+      "url": "https://thenextweb.com/news/anthropic-curbs-make-the-case-for-sovereign-ai-upstage-chief-says",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "When the US government ordered Anthropic to cut foreign access to its most capable models, and the company switched them off worldwide rather than try to comply selectively, it handed every advocate of home-grown AI a tidy piece of evidence. Sung Kim, chief executive of the South Korean startup Upstage, picked it up at a [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/Sung-Kim-Upstage-CEO.avif",
+      "published": "2026-06-16T07:15:54+00:00",
+      "firstSeen": "2026-06-16T08:00:01.285617+00:00",
+      "lastSeen": "2026-06-16T08:00:01.285617+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.1278
     },
     {
       "title": "Rocapine raises $13m to build wellness apps that hold instead of hook",
@@ -126,42 +174,26 @@
       "image": "https://media.thenextweb.com/2026/06/Rocapine.avif",
       "published": "2026-06-16T00:00:11+00:00",
       "firstSeen": "2026-06-16T07:00:01.843155+00:00",
-      "lastSeen": "2026-06-16T07:00:01.843155+00:00",
+      "lastSeen": "2026-06-16T08:00:01.285617+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.7557
+      "score": 3.7309
     },
     {
-      "title": "v1.89.1",
-      "url": "https://github.com/BerriAI/litellm/releases/tag/v1.89.1",
-      "source": "LiteLLM Releases",
-      "sourceUrl": "https://github.com/BerriAI/litellm/releases.atom",
-      "sourceWeight": 0.85,
+      "title": "Florida sues TikTok over its child social-media law",
+      "url": "https://thenextweb.com/news/florida-sues-tiktok-over-its-child-social-media-law",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
       "category": "AI",
-      "summary": "Verify Docker Image Signature\nAll LiteLLM Docker images are signed with cosign. Every release is signed with the same key introduced in commit 0112e53.\nVerify using the pinned commit hash (recommended):\nA commit hash is cryptographically immutable, so this is the strongest way to ensure you are using the original signing key:\ncosign verify \\\n  --key https://raw.githubusercontent.com/BerriAI/litellm/0112e53046018d726492c814b3644b7d376029d0/cosign.pub \\\n  ghcr.io/berriai/litellm:v1.89.1\nVerify using the release tag (convenience):\nTags are protected in this repository and resolve to the same key.",
-      "image": "https://opengraph.githubassets.com/19e08b103560c0ceef1b0cfa5c3294ae507b2d2052e399cb83e5a300f1c93b9c/BerriAI/litellm/releases/tag/v1.89.1",
-      "published": "2026-06-16T03:31:56+00:00",
-      "firstSeen": "2026-06-16T04:00:02.113408+00:00",
-      "lastSeen": "2026-06-16T07:00:01.843155+00:00",
+      "summary": "Florida has sued TikTok, accusing the app of breaking the state’s law restricting minors’ access to social media and of misleading parents about what their children would find there. Attorney General James Uthmeier announced the suit on 15 June, filing it in St. Lucie County Circuit Court. The complaint alleges TikTok illegally let minors onto the platform, [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2023/12/tiktok-europe-data-centre-norway-1.avif",
+      "published": "2026-06-16T07:27:45+00:00",
+      "firstSeen": "2026-06-16T08:00:01.285617+00:00",
+      "lastSeen": "2026-06-16T08:00:01.285617+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.889
-    },
-    {
-      "title": "GRAPE: Guided Parameter-Space Evolution for Compact Adversarial Robustness",
-      "url": "https://llm-stats.com/ai-news",
-      "source": "LLM Stats AI News",
-      "sourceUrl": "https://llm-stats.com/ai-news",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "",
-      "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-16T07:00:18.644411+00:00",
-      "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-16T07:00:01.843155+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.36
+      "score": 3.2337
     }
   ],
   "errors": [
