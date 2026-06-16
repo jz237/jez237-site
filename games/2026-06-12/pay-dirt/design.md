@@ -1,13 +1,14 @@
 # Pay Dirt — design doc
 
-A modernized Lode Runner: classic dig-and-dash platforming with HD pixel art,
-dynamic lighting, power-ups, new tile types, a handcrafted campaign and a seeded
+A modernized Lode Runner turned painterly cavern adventure: classic dig-and-dash
+platforming with hand-painted procedural art, dynamic lighting, optional
+exploration finds, power-ups, new tile types, a handcrafted campaign and a seeded
 Daily Dig mode with global scores.
 
 ## Architecture
 
 - `index.html` — shell, CSS, DOM overlays (menus), touch controls, script loader
-- `art.js` — procedural HD pixel sprites + parallax cave backdrop (no external assets)
+- `art.js` — procedural painterly sprites, tiles, pickups + parallax cave backdrop
 - `audio.js` — WebAudio SFX + sequenced music loop
 - `levels.js` — campaign maps (ASCII), seeded procedural generator + solvability checker
 - `game.js` — fixed-timestep sim, entities, AI, rendering, UI flow, scores, `__g` hooks
@@ -56,6 +57,10 @@ Sim is fixed-timestep (60Hz accumulator); `__g.step(n)` drives ticks headlessly.
 - Power-ups (timed unless noted): TNT charge (next dig = 3-wide blast, 1 charge),
   Speed Boots (8s, 1.45×), Phase Cloak (6s, pass guards), Gold Magnet (8s, r=2.5 auto-grab),
   Power Shovel (10s, instant digs).
+- Exploration finds are seeded per claim in reachable side paths: relics, cave blooms,
+  survey maps, and lantern oil. They add score, visual feedback, and a full-survey
+  bonus without blocking the exit. Oil temporarily widens the player light pool; maps
+  briefly boost magnet time.
 - Combo: gold chained within 2.5s → ×1, ×1.5, ×2 … capped ×5.
 - Campaign: 13 levels, one mechanic introduced at a time.
 - Daily Dig: mulberry32(UTC date) seeds the generator; solvability checker
@@ -78,3 +83,6 @@ Sim is fixed-timestep (60Hz accumulator); `__g.step(n)` drives ticks headlessly.
 - 2026-06-12: The scores worker only persists initials/score/ts and drops `extra`, so the
   Daily Dig date is encoded into the namespace (`pay-dirt-daily-YYYY-MM-DD`) rather than
   `extra`. Gives a clean separate board per UTC day; campaign stays `pay-dirt`.
+- 2026-06-16: Painterly pass keeps runtime self-contained. Image Gen 2 output is saved as
+  `assets/painterly-direction-reference.png` for visual direction; the playable art remains
+  procedural so the game stays fast and portable.
