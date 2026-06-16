@@ -39,6 +39,7 @@ const TILE_CHARS = '.#XH-TE<>CB[]';
 let grid = [];          // grid[r][c] = base tile char
 let golds = [];         // [{c,r,taken}]
 let powerups = [];      // [{c,r,kind,taken}]  kind 1..5
+let treasures = [];     // optional exploration finds: relic, bloom, map, oil
 let exitCells = [];     // [{c,r}]
 let exitRevealed = false;
 let holes = new Map();  // 'c,r' -> {c,r,t}
@@ -50,13 +51,14 @@ let goldLeft = 0;
 let blasted = new Set(); // cells permanently cleared by explosions
 let fuses = [];          // [{c,r,t}] TNT crates about to blow
 let comboN = 0, comboT = 0;
+let discoveryCount = 0, discoveryTotal = 0, discoveryPulse = 0, oilLightT = 0;
 
 function key(c, r){ return c + ',' + r; }
 
 function parseLevel(rows){
   if (!Array.isArray(rows) || rows.length !== ROWS)
     throw new Error('level must have ' + ROWS + ' rows, got ' + (rows && rows.length));
-  grid = []; golds = []; powerups = []; exitCells = [];
+  grid = []; golds = []; powerups = []; treasures = []; exitCells = [];
   guardSpawns = []; holes = new Map(); crumbles = new Map();
   blasted = new Set(); fuses = [];
   comboN = 0; comboT = 0;
@@ -689,6 +691,13 @@ const PKINDS = {
   5: {name: 'SHOVEL',  color: '#7fd24a'},
 };
 
+const TKINDS = {
+  relic: {name: 'RELIC', color: '#fff0b8', score: 250},
+  bloom: {name: 'BLOOM', color: '#9ef0c8', score: 125},
+  map:   {name: 'MAP',   color: '#d8bf86', score: 175},
+  oil:   {name: 'OIL',   color: '#f1b34e', score: 100},
+};
+
 function applyPowerup(kind){
   if (kind === 1) player.tnt = Math.min(3, (player.tnt || 0) + 1);
   else if (kind === 2) player.speedT = 8;
@@ -707,11 +716,18 @@ function updatePowerups(dt){
   player.cloakT = Math.max(0, (player.cloakT || 0) - dt);
   player.magnetT = Math.max(0, (player.magnetT || 0) - dt);
   player.shovelT = Math.max(0, (player.shovelT || 0) - dt);
+  oilLightT = Math.max(0, oilLightT - dt);
   const c = Math.floor(player.x), r = Math.floor(player.y);
   for (const pu of powerups){
     if (!pu.taken && pu.c === c && pu.r === r){
       pu.taken = true;
       applyPowerup(pu.kind);
+    }
+  }
+  for (const tr of treasures){
+    if (!tr.taken && tr.c === c && tr.r === r &&
+        Math.abs(player.x - (tr.c + .5)) < .46 && Math.abs(player.y - (tr.r + .5)) < .48){
+      collectTreasure(tr);
     }
   }
   // gold magnet: nearby gold leaps to you
@@ -722,6 +738,32 @@ function updatePowerups(dt){
         collectGold(gd);
     }
   }
+}
+
+function collectTreasure(tr){
+  tr.taken = true;
+  discoveryCount++;
+  discoveryPulse = 1;
+  const meta = TKINDS[tr.kind] || TKINDS.relic;
+  let val = meta.score;
+  if (tr.kind === 'oil') oilLightT = 9;
+  if (tr.kind === 'map') player.magnetT = Math.max(player.magnetT || 0, 3.5);
+  if (discoveryCount === discoveryTotal && discoveryTotal > 0){
+    val += 650;
+    flash = Math.max(flash, .28);
+    banner = {text: 'CAVERN SURVEYED', sub: '+650 EXPLORER BONUS', life: 2.0};
+  }
+  addScore(val);
+  spawnParticles(tr.c + .5, tr.r + .5, tr.kind === 'bloom' ? 18 : 12, {
+    color: [meta.color, '#ffffff', tr.kind === 'relic' ? '#ffd86b' : '#71d7cc'],
+    spd: tr.kind === 'bloom' ? 2.8 : 3.4,
+    life: .65,
+    size: tr.kind === 'map' ? 2.4 : 3,
+    grav: tr.kind === 'bloom' ? -5 : -2,
+    glow: true,
+  });
+  popup(tr.c + .5, tr.r + .2, meta.name + ' +' + val, meta.color);
+  AUDIO.sfx(tr.kind === 'oil' ? 'power' : 'goldhi');
 }
 
 /* ================= combo ================= */
@@ -977,6 +1019,7 @@ const Scores = {
 function buildHowTo(){
   $('howBody').innerHTML =
     '<p><b>Goal:</b> grab every <b>nugget</b>, then climb the revealed <b>exit ladder</b> off the top — without getting caught.</p>' +
+    '<p><b>Explore:</b> relics, cave blooms, survey maps, and lantern oil are tucked into side paths. Find them all for a <b>cavern survey</b> bonus.</p>' +
     '<p><b>Move</b> <span class="k">←</span><span class="k">→</span> or <span class="k">A</span><span class="k">D</span> · ' +
     '<b>climb</b> <span class="k">↑</span><span class="k">↓</span> / <span class="k">W</span><span class="k">S</span> · hang &amp; cross bars.</p>' +
     '<p><b>Dig</b> a trap to the lower-left <span class="k">Z</span> or lower-right <span class="k">X</span> ' +
@@ -985,7 +1028,8 @@ function buildHowTo(){
     '<p><b>Pick-ups:</b> <span style="color:#ff5c33">TNT</span> blasts 3 wide · ' +
     '<span style="color:#3fd2c7">Boots</span> speed · <span style="color:#b07fff">Cloak</span> phase through guards · ' +
     '<span style="color:#ffd23f">Magnet</span> grabs gold · <span style="color:#7fd24a">Shovel</span> instant digs.</p>' +
-    '<p>Chain nuggets fast for a <b>combo multiplier</b>. <span class="k">P</span> pause · <span class="k">M</span> mute · <span class="k">R</span> restart.</p>';
+    '<p><b>Lantern oil</b> briefly widens the painted light pool; maps briefly boost magnet pull. Chain nuggets fast for a <b>combo multiplier</b>.</p>' +
+    '<p><span class="k">P</span> pause · <span class="k">M</span> mute · <span class="k">R</span> restart.</p>';
 }
 
 function buildLevelSelect(){
@@ -1035,10 +1079,48 @@ function playerInput(){
   };
 }
 
+function seedTreasures(){
+  treasures = [];
+  const rr = ART.rng(8603 + levelIndex * 211 + (mode === 'daily' ? 991 : 0));
+  const occ = new Set();
+  for (const gd of golds) occ.add(key(gd.c, gd.r));
+  for (const pu of powerups) occ.add(key(pu.c, pu.r));
+  for (const gs of guardSpawns) occ.add(key(gs.c, gs.r));
+  occ.add(key(spawnPoint.c, spawnPoint.r));
+  for (const e of exitCells) occ.add(key(e.c, e.r));
+  const candidates = [];
+  for (let r = 1; r < ROWS - 1; r++){
+    for (let c = 1; c < COLS - 1; c++){
+      if (occ.has(key(c, r))) continue;
+      const t = tileAt(c, r);
+      if (t !== '.' && t !== '-' && t !== 'H' && t !== '<' && t !== '>') continue;
+      const supported = isSupportTile(c, r + 1) || isLadder(c, r) || isBar(c, r);
+      if (!supported) continue;
+      const nearGold = golds.some(g => Math.abs(g.c - c) + Math.abs(g.r - r) <= 2);
+      const edgeOrNook = c < 4 || c > COLS - 5 || r < 3 || r > ROWS - 4 || tileAt(c - 1, r) === 'X' || tileAt(c + 1, r) === 'X';
+      const weight = (nearGold ? 1 : 2) + (edgeOrNook ? 2 : 0) + (tileAt(c, r) === 'H' ? 1 : 0);
+      candidates.push({c, r, weight});
+    }
+  }
+  candidates.sort((a, b) => (b.weight + rr() * .2) - (a.weight + rr() * .2));
+  const kinds = ['relic', 'bloom', 'map', 'oil'];
+  const want = Math.min(5 + Math.min(levelIndex, 3), Math.max(2, candidates.length));
+  for (const spot of candidates){
+    if (treasures.length >= want) break;
+    if (treasures.some(t => Math.abs(t.c - spot.c) + Math.abs(t.r - spot.r) < 3)) continue;
+    treasures.push({c: spot.c, r: spot.r, kind: kinds[treasures.length % kinds.length], taken: false});
+  }
+  discoveryCount = 0;
+  discoveryTotal = treasures.length;
+  discoveryPulse = 0;
+  oilLightT = 0;
+}
+
 function loadLevelData(rows){
   currentRows = rows;
   srand(rows.join('').length * 2654435761 + rows[0].charCodeAt(0));
   parseLevel(rows);
+  seedTreasures();
   player = makeActor(spawnPoint.c, spawnPoint.r, 'player');
   guards = guardSpawns.map(g => makeActor(g.c, g.r, g.kind));
   levelTime = 0;
@@ -1131,6 +1213,7 @@ function update(dt){
   if (shake > 0) shake = Math.max(0, shake - dt * 3.2);
   if (flash > 0) flash = Math.max(0, flash - dt * 2.4);
   if (deathFlash > 0) deathFlash = Math.max(0, deathFlash - dt * 1.6);
+  if (discoveryPulse > 0) discoveryPulse = Math.max(0, discoveryPulse - dt * 1.8);
   if (banner){ banner.life -= dt; if (banner.life <= 0) banner = null; }
   if (hint){ hint.life -= dt; if (hint.life <= 0) hint = null; }
   updateParticles(dt);
@@ -1206,10 +1289,20 @@ function buildBackdrop(){
     x.fillStyle = rg; x.fillRect(cx2 - rad, cy - rad, rad * 2, rad * 2); x.restore();
   };
 
-  // 1) deep cave gradient
+  // 1) deep cave gradient, pushed toward a painted gouache plate
   let g = x.createLinearGradient(0, 0, 0, H);
-  g.addColorStop(0, '#1b2440'); g.addColorStop(.45, '#161527'); g.addColorStop(1, '#0b0914');
+  g.addColorStop(0, '#23314a'); g.addColorStop(.45, '#181a2b'); g.addColorStop(1, '#090a12');
   x.fillStyle = g; x.fillRect(0, 0, W, H);
+  x.globalAlpha = .18;
+  for (let i = 0; i < 180; i++){
+    const px0 = r() * W, py0 = r() * H, ww = 28 + r() * 110, hh = 2 + r() * 10;
+    x.save();
+    x.translate(px0, py0); x.rotate((r() - .5) * .55);
+    x.fillStyle = r() < .5 ? '#36506a' : '#6b5742';
+    x.beginPath(); x.ellipse(0, 0, ww, hh, 0, 0, 7); x.fill();
+    x.restore();
+  }
+  x.globalAlpha = 1;
 
   // 2) distant cavern light (far openings glowing cold blue)
   lift(W * 0.5, H * 0.30, H * 0.62, 'rgba(58,116,158,.5)', 1);
@@ -1239,7 +1332,7 @@ function buildBackdrop(){
     const n = 4 + (r() * 3 | 0);
     for (let k = 0; k < n; k++){
       const dx = (r() - .5) * 34 * scale, dh = (15 + r() * 26) * scale, dw = (4 + r() * 6) * scale;
-      x.globalAlpha = .6; x.fillStyle = col;
+    x.globalAlpha = .58; x.fillStyle = col;
       x.beginPath(); x.moveTo(cx2 + dx, cy - dh); x.lineTo(cx2 + dx + dw, cy); x.lineTo(cx2 + dx, cy + dh * 0.4); x.lineTo(cx2 + dx - dw, cy); x.closePath(); x.fill();
       x.globalAlpha = .85; x.fillStyle = teal ? '#bafff5' : '#e0ccff'; x.fillRect(cx2 + dx - 1, (cy - dh * 0.55) | 0, 2, (dh * 0.5) | 0); // bright facet edge
       x.globalAlpha = .9; x.fillStyle = '#fff'; x.fillRect((cx2 + dx) | 0, (cy - dh * 0.35) | 0, 1, 2);                                   // glint
@@ -1270,6 +1363,17 @@ function buildBackdrop(){
   // 9) faint floating specks baked into depth
   for (let i = 0; i < 40; i++){ x.globalAlpha = .08 + r() * .18; x.fillStyle = r() < .5 ? '#8fb0d0' : '#d0b070'; x.fillRect(r() * W | 0, r() * H | 0, 1, 1); }
   x.globalAlpha = 1;
+
+  // 10) warm hand-painted wash near playable ledges
+  x.save(); x.globalCompositeOperation = 'soft-light'; x.globalAlpha = .32;
+  for (let i = 0; i < 44; i++){
+    const cx2 = r() * W, cy = HUD_H + r() * (H - HUD_H), ww = 40 + r() * 170, hh = 5 + r() * 22;
+    x.translate(cx2, cy); x.rotate((r() - .5) * .8);
+    x.fillStyle = r() < .55 ? '#d69a55' : '#72b9b2';
+    x.beginPath(); x.ellipse(0, 0, ww, hh, 0, 0, 7); x.fill();
+    x.setTransform(1, 0, 0, 1, 0, 0);
+  }
+  x.restore();
 
   // per-level mood tint so claims don't all look identical
   const hues = ['rgba(60,90,150,', 'rgba(96,72,150,', 'rgba(48,116,124,', 'rgba(120,84,58,', 'rgba(72,108,90,'];
@@ -1641,6 +1745,18 @@ function render(){
       glow(pu.c + .5, pu.r + .5 + bobv / TILE, 26, hexA(PKINDS[pu.kind].color, .5), .6);
       ctx.drawImage(ART.PUPS[pu.kind], pu.c * TILE + 6, pu.r * TILE + HUD_H + 6 + bobv);
     }
+    for (const tr of treasures){
+      if (tr.taken) continue;
+      const meta = TKINDS[tr.kind] || TKINDS.relic;
+      const bobv = Math.sin(gameTime * 2.2 + tr.c * .8 + tr.r) * 2.6;
+      const pulse = 0.46 + 0.18 * Math.sin(gameTime * 3.5 + tr.c);
+      glow(tr.c + .5, tr.r + .5 + bobv / TILE, tr.kind === 'relic' ? 30 : 23, hexA(meta.color, pulse), .7);
+      ctx.save();
+      ctx.imageSmoothingEnabled = true;
+      ctx.globalAlpha = .96;
+      ctx.drawImage(ART.TREASURES[tr.kind] || ART.TREASURES.relic, tr.c * TILE + 3, tr.r * TILE + HUD_H + 3 + bobv, 30, 30);
+      ctx.restore();
+    }
     // lit fuses
     for (const f of fuses){
       const a = 0.5 + 0.5 * Math.sin(f.t * 50);
@@ -1721,8 +1837,10 @@ function render(){
       glow(player.x, player.y + .25, 116, 'rgba(255,198,120,.18)', 1);
       if (player.cloakT > 0) glow(player.x, player.y - .15, 54, 'rgba(176,127,255,.5)', 0.4 + 0.25 * Math.sin(gameTime * 10));
       if (player.magnetT > 0) glow(player.x, player.y - .15, 96, 'rgba(255,210,63,.2)', 0.35 + 0.15 * Math.sin(gameTime * 6));
+      if (oilLightT > 0) glow(player.x, player.y + .1, 168, 'rgba(255,191,90,.18)', 0.6 + 0.18 * Math.sin(gameTime * 5));
     }
     for (const gd of golds) if (!gd.taken && !gd.held) glow(gd.c + .5, gd.r + .5, 26, 'rgba(255,200,60,.3)', 1);
+    for (const tr of treasures) if (!tr.taken){ const meta = TKINDS[tr.kind] || TKINDS.relic; glow(tr.c + .5, tr.r + .5, 20, hexA(meta.color, .18), 1); }
     if (exitRevealed){ const pulse = 0.35 + 0.2 * Math.sin(gameTime * 5); for (const e of exitCells) glow(e.c + .5, e.r + .5, 38, 'rgba(63,210,199,' + pulse + ')', 1); }
     for (const h of holes.values()) glow(h.c + .5, h.r + .6, 20, 'rgba(255,90,40,.22)', 1);
     // torch pools
@@ -1913,6 +2031,16 @@ function drawHUD(){
     drawGemIcon(hx + 9, cy, 8, '#ffd23f');
     ctx.fillStyle = '#ffe98a'; ctx.font = '800 17px Consolas, monospace'; ctx.textAlign = 'left';
     ctx.fillText(got + '/' + total, hx + 22, cy + 1);
+    if (discoveryTotal){
+      hx += 86;
+      const pulse = discoveryPulse > 0 ? 1 + discoveryPulse * .28 : 1;
+      ctx.save(); ctx.translate(hx + 9, cy); ctx.scale(pulse, pulse);
+      ctx.fillStyle = '#9ef0c8'; ctx.beginPath(); ctx.moveTo(0, -8); ctx.lineTo(7, 0); ctx.lineTo(0, 8); ctx.lineTo(-7, 0); ctx.closePath(); ctx.fill();
+      ctx.fillStyle = 'rgba(255,255,255,.7)'; ctx.fillRect(-2, -5, 2, 5);
+      ctx.restore();
+      ctx.fillStyle = '#d9f7ee'; ctx.font = '800 17px Consolas, monospace'; ctx.textAlign = 'left';
+      ctx.fillText(discoveryCount + '/' + discoveryTotal, hx + 22, cy + 1);
+    }
   }
 
   // centre score
@@ -1935,6 +2063,10 @@ function drawHUD(){
   if (comboN > 1){
     ctx.textAlign = 'center'; ctx.fillStyle = '#ff9d2e'; ctx.font = '800 13px Consolas, monospace';
     ctx.fillText('COMBO ×' + comboMult().toFixed(1).replace('.0', ''), VIEW_W / 2 + 120, cy + 1);
+  }
+  if (oilLightT > 0){
+    ctx.textAlign = 'center'; ctx.fillStyle = '#f1b34e'; ctx.font = '800 12px Consolas, monospace';
+    ctx.fillText('LANTERN +' + Math.ceil(oilLightT), VIEW_W / 2 + 230, cy + 1);
   }
 
   drawHotbar();
@@ -1966,6 +2098,8 @@ window.__g = {
   get player(){ return player; },
   get guards(){ return guards; },
   get golds(){ return golds; },
+  get treasures(){ return treasures; },
+  get discoveries(){ return {count: discoveryCount, total: discoveryTotal, oilLightT}; },
   get goldLeft(){ return goldLeft; },
   get holes(){ return [...holes.values()]; },
   get exitRevealed(){ return exitRevealed; },
