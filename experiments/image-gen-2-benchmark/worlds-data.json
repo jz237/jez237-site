@@ -810,42 +810,6 @@
     }
   },
   {
-    "id": "2026-06-15-evening-manual-ancestor-kin-ancestor-kin-xenology-plate",
-    "title": "Ancestor-Kin Xenology Plate",
-    "tests": "Field-guide infographic for the Ancestor-Kin, a deep-interior humanoid lineage that considers the Veyrith elder kin rather than aliens.",
-    "prompt": "Locally rendered infographic for the Vesperglass Array fictional world: an Ancestor-Kin xenology plate showing a post-human deep-interior humanoid lineage partially rewritten by living vesperglass, with readable field-guide callouts for classification, ancestry belief, anatomy, communication, daily work, risk, and origin summary.",
-    "image": "images/2026-06-15-evening-manual-ancestor-kin-ancestor-kin-xenology-plate.png",
-    "date": "2026-06-15",
-    "batch": "Manual Worldbuilding",
-    "slot": "evening-manual-ancestor-kin",
-    "model": "local-render",
-    "size": "1600x2000",
-    "world": {
-      "name": "Vesperglass Array",
-      "description": "Hard-sci-fi alien megahabitat and deep-interior cultures shaped by living vesperglass resonance.",
-      "continuity": "Current weekly fictional world from #ai-photos: Veyrith, Vesperglass Array, deep-interior settlements, and humanoid lineages transformed by the Array.",
-      "entryDescription": "A readable xenology infographic defining the Ancestor-Kin culture, anatomy, communication, work, risks, and origin."
-    }
-  },
-  {
-    "id": "2026-06-15-evening-manual-ancestor-kin-gpt-image-2-ancestor-kin-gpt-im",
-    "title": "Ancestor-Kin GPT Image 2 Xenology Plate",
-    "tests": "GPT Image 2 xenology infographic for the Ancestor-Kin, a deep-interior humanoid lineage that considers the Veyrith elder kin rather than aliens.",
-    "prompt": "GPT Image 2 field-guide infographic for the Vesperglass Array fictional world: a richly illustrated Ancestor-Kin xenology plate showing a post-human deep-interior humanoid lineage partially rewritten by living vesperglass, with callouts for classification, ancestry belief, body changes, communication, daily work, risk, origin summary, anatomy highlights, scale reference, and environment.",
-    "image": "images/2026-06-15-evening-manual-ancestor-kin-gpt-image-2-ancestor-kin-gpt-im.png",
-    "date": "2026-06-15",
-    "batch": "Manual Worldbuilding",
-    "slot": "evening-manual-ancestor-kin-gpt-image-2",
-    "model": "openai/gpt-image-2",
-    "size": "1024x1536",
-    "world": {
-      "name": "Vesperglass Array",
-      "description": "Hard-sci-fi alien megahabitat and deep-interior cultures shaped by living vesperglass resonance.",
-      "continuity": "Current weekly fictional world from #ai-photos: Veyrith, Vesperglass Array, deep-interior settlements, and humanoid lineages transformed by the Array.",
-      "entryDescription": "A GPT Image 2 xenology infographic defining the Ancestor-Kin culture, anatomy, communication, work, risks, scale, and environment."
-    }
-  },
-  {
     "id": "2026-06-16-overnight-vesperglass-array-prismfall-concourse-morning-com",
     "title": "Vesperglass Array: Prismfall Concourse Morning Commute",
     "tests": "Weekly-world daily-life image for Vesperglass Array; tests GPT Image 2 on coherent alien commute worldbuilding, non-human body plans, transparent megahabitat materials, realistic glass/refraction lighting, and lived-in transit infrastructure.",
