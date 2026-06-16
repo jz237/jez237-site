@@ -1870,5 +1870,17 @@
     "slot": "evening",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-06-16-morning-pet-as-salt-crystal-lantern",
+    "title": "Pet as Salt Crystal Lantern",
+    "tests": "Reference-photo transformation template; finished physical object example; exact generated PNG provenance; R2 upload",
+    "prompt": "Use the uploaded reference photo and preserve the pet's identity, pose, silhouette, proportions, expression or key markings, camera angle, and most recognizable features, then transform the pet into a salt-crystal lantern displayed in a tactile night-window shrine. For the filled-in example, use a small cream-and-charcoal lop-eared rabbit sitting upright; preserve its rounded body, long drooping ears, compact muzzle, dark eye placement, small front paws, seated pose, and soft cream-and-charcoal marking pattern. Rebuild the pet from translucent rose-pink and milky white salt crystal, frosted glassy facets, granular mineral edges, smoky charcoal mineral veining where the markings were, faint internal warm amber light, brass wick-cage ribs following the original silhouette, tiny copper pins at the ears and paws, and a dark stone base. Set it against rain-specked old glass, a worn black walnut sill, brass snuffer, melted beeswax drips, folded indigo cloth, salt dust, crystal chips, warm lantern glow, and cool blue rainy-night reflections. Keep the source pet recognizable while changing the material, surface texture, props, and environment into a cohesive photographed physical artifact. Avoid extra limbs, duplicate animals, readable text, labels, logos, watermark, prompt cards, paper instructions, human hands, faces, dancing imagery, and losing recognizability.\n\nSource photo needed: a clear pet photo.\n\nReusable fill-in-the-blank template: Use the uploaded reference photo and preserve the [PET]'s identity, pose, silhouette, proportions, expression or key markings, camera angle, and most recognizable features, then transform [PET] into a salt-crystal lantern made from [MATERIALS] in [SETTING] with [MOOD] lighting. Keep the source recognizable while changing material, surface texture, props, and environment into a cohesive photographed physical artifact. Avoid extra limbs, duplicate subjects, readable text, label/logo artifacts, watermark, prompt cards, paper instructions, people or hands unless requested, and losing recognizability.\n\nWhat to preserve: pet identity, pose, silhouette, proportions, face shape, eye placement, ear or tail shape, paw placement, distinctive markings, expression, camera angle, and the most recognizable details from the uploaded photo.\n\nWhat to change: convert fur, whiskers, eyes, markings, and body volume into salt crystal, frosted glass facets, granular mineral edges, internal amber lantern glow, brass cage ribs, copper pins, a stone base, shrine props, rain-glass reflections, and cinematic night-window lighting.\n\nExample substitution: Upload a clear photo of a cream-and-charcoal lop-eared rabbit sitting upright with drooping ears and small front paws; preserve its pose and markings, then turn it into a glowing salt-crystal lantern on a rainy night windowsill shrine.",
+    "image": "images/2026-06-16-morning-pet-as-salt-crystal-lantern.png",
+    "date": "2026-06-16",
+    "batch": "Daily Prompt",
+    "slot": "morning",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
