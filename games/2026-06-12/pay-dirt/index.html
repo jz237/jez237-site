@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Pay Dirt — dig fast, get rich, don't get caught</title>
-<meta name="description" content="A modernized Lode Runner: dig holes, outsmart claim-jumpers, grab every nugget. Campaign + Daily Dig with global scores.">
+<title>Pay Dirt — painterly cavern adventure</title>
+<meta name="description" content="A painterly cavern adventure: dig holes, outsmart claim-jumpers, gather gold, relics, blooms, maps, and lantern oil. Campaign + Daily Dig with global scores.">
 <style>
 :root{
-  --gold:#ffd23f; --gold-hi:#ffe98a; --amber:#ff9d2e; --ember:#ff5c33;
-  --rock:#2a2331; --deep:#16121d; --ink:#0c0a12;
-  --ui:#f2e9d8; --dim:#9b8fa6; --teal:#3fd2c7; --danger:#ff4f6b;
+  --gold:#ffd86b; --gold-hi:#fff1af; --amber:#d68a3a; --ember:#d9573a;
+  --rock:#293044; --deep:#151726; --ink:#090b13;
+  --ui:#f5eddd; --dim:#a8a8bc; --teal:#71d7cc; --danger:#e75a75;
 }
 *{box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent;}
 html,body{height:100%; overflow:hidden; background:var(--ink);}
@@ -19,7 +19,7 @@ body{
   overscroll-behavior:none;
 }
 #wrap{position:fixed; inset:0; display:flex; align-items:center; justify-content:center;}
-canvas#game{position:absolute; image-rendering:pixelated; background:#000;}
+canvas#game{position:absolute; image-rendering:auto; background:#000;}
 .overlay{
   position:absolute; display:none; flex-direction:column; align-items:center; justify-content:center;
   gap:14px; text-align:center; padding:20px; z-index:5;
@@ -28,11 +28,11 @@ canvas#game{position:absolute; image-rendering:pixelated; background:#000;}
 .panel{
   position:relative;
   background:
-    radial-gradient(120% 80% at 50% 0%, rgba(255,157,46,.10), transparent 60%),
-    linear-gradient(180deg, rgba(28,20,38,.95), rgba(12,9,18,.95));
-  border:1px solid rgba(255,210,63,.3);
-  border-radius:14px; padding:22px 30px;
-  box-shadow:0 20px 60px rgba(0,0,0,.7), 0 0 40px rgba(255,157,46,.1) inset, 0 1px 0 rgba(255,233,138,.15) inset;
+    radial-gradient(140% 90% at 50% 0%, rgba(255,210,120,.16), transparent 62%),
+    linear-gradient(180deg, rgba(35,31,44,.95), rgba(12,12,22,.96));
+  border:1px solid rgba(255,216,107,.35);
+  border-radius:12px; padding:22px 30px;
+  box-shadow:0 20px 70px rgba(0,0,0,.72), 0 0 44px rgba(113,215,204,.08) inset, 0 1px 0 rgba(255,241,175,.2) inset;
   backdrop-filter:blur(5px); max-width:min(92vw,560px); max-height:86vh; overflow-y:auto;
 }
 /* ornate gold corner brackets on every panel */
@@ -133,7 +133,7 @@ body.touch #touch{display:block;}
   <div class="overlay show" id="ovTitle">
     <div class="panel" id="titlePanel">
       <h1 class="logo">Pay Dirt</h1>
-      <div class="tag">dig fast · get rich · don't get caught</div>
+      <div class="tag">painted caverns · hidden relics · claim-jumpers in the dark</div>
       <div style="height:12px"></div>
       <div class="row">
         <button id="bPlay">⛏ Prospect</button>
