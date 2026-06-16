@@ -144,3 +144,19 @@ Verification:
 - `node --check game.js` passed.
 - Mobile emulation reached `state=playing`, activated low-power mode, ran 900 sim steps, and rendered a nonblank canvas.
 - A 12-second mobile animation-loop smoke stayed alive without page crashes; only favicon/non-game 404s appeared.
+
+## Mobile Camera Fix — zoomed phone viewport
+Jez asked for the phone version to be zoomed in and to scroll as the player moves, instead of squeezing the whole board into a tiny letterboxed canvas.
+
+Changes:
+- Added a phone-only mobile camera mode while preserving the desktop whole-board view.
+- Mobile now fills the phone viewport with the canvas instead of letterboxing the full 1008x624 board.
+- Gameplay renders into an offscreen full-board buffer, then crops/scales that buffer through a player-following camera.
+- Added a compact mobile HUD so score, gold, lives, and time stay readable while the world scrolls underneath.
+- Clipped the wrapper overflow so the phone viewport behaves like a real camera window.
+
+Verification:
+- `node --check game.js` passed.
+- `git diff --check` passed for the touched Pay Dirt files.
+- Headless Chrome mobile screenshot rendered `/tmp/pay-dirt-mobile-camera.png`.
+- Chrome DevTools mobile smoke started the game, confirmed the canvas filled the mobile viewport, moved the player from x=7.5 to x=19.47, and sampled nonblank gameplay/HUD pixels.
