@@ -5,6 +5,505 @@
   "issues": [
     {
       "currentDate": "2026-06-16",
+      "historicDate": "1982-10-11",
+      "displayDate": "Week of October 11-17, 1982",
+      "edition": "Issue 011 - Weekly 1982 Computer & Culture Chronicle",
+      "visualProfile": {
+        "layout": "weekly-newsprint-front",
+        "accent": "black-red-blue",
+        "paper": "halftone-cream",
+        "strapline": "COMPUTE! game programming, Commodore 64 memory maps, E.T. at the box office, and Jack & Diane on the radio"
+      },
+      "masthead": {
+        "kicker": "A weekly 1982 archive dispatch",
+        "title": "Computer Chronicle",
+        "deck": "Video games, home computers, software counters, and culture for the week of October 11-17, 1982"
+      },
+      "layoutPlan": {
+        "main": [
+          "editor-note",
+          "lead",
+          "picture-desk",
+          "computer-items",
+          "software",
+          "store-shelves"
+        ],
+        "sidebar": [
+          "price-watch",
+          "market",
+          "bbs",
+          "curiosity",
+          "briefs",
+          "music",
+          "period-ad",
+          "classifieds",
+          "fallback",
+          "accuracy",
+          "sources"
+        ]
+      },
+      "sectionChrome": {
+        "lead": {
+          "label": "Lead Story"
+        },
+        "pictureDesk": {
+          "label": "Picture Desk",
+          "title": "Scenes From the Week"
+        },
+        "computerItems": {
+          "label": "Computers & Hardware",
+          "title": "Personal Computing Desk"
+        },
+        "software": {
+          "label": "Software Top 5",
+          "title": "Programs on the Editor's Pad"
+        },
+        "storeShelves": {
+          "label": "Top Games This Week",
+          "title": "Arcade, Console & Computer Games"
+        },
+        "priceWatch": {
+          "label": "Price Watch",
+          "title": "What It Cost"
+        },
+        "bbs": {
+          "label": "Modem Desk"
+        },
+        "curiosity": {
+          "label": "Movies / TV / Culture"
+        },
+        "briefs": {
+          "label": "Magazine Rack",
+          "title": "Culture & Shelf Talk"
+        },
+        "music": {
+          "label": "Top Rock This Week",
+          "title": "Hot 100, September 18"
+        },
+        "periodAd": {
+          "label": "Retail / Ads"
+        },
+        "classifieds": {
+          "label": "Classifieds",
+          "title": "Small Ads"
+        },
+        "fallback": {
+          "label": "Editorial Screen"
+        },
+        "accuracy": {
+          "label": "Accuracy Ledger",
+          "title": "What Is Date-Specific"
+        },
+        "sources": {
+          "label": "Source Trail",
+          "title": "Research Log"
+        },
+        "market": {
+          "label": "Retail / Ads",
+          "title": "Computer Store Market"
+        }
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1982-10-11.png",
+        "alt": "GPT Image 2 newspaper-style Computer Chronicle front page for the week of October 11-17, 1982",
+        "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "This issue follows the October magazine rack: home-computer gaming is becoming a how-to subject, the Commodore 64 is technical enough to need memory maps, and store counters still sell Apple II business disks beside Atari and VIC-20 play.",
+      "morningLine": "On the radio, John Cougar holds No. 1; at theaters, E.T. retakes the weekend; on the computer shelf, October magazines turn game making into a practical lesson.",
+      "lead": {
+        "headline": "COMPUTE! Turns Game Making Into the Main Story",
+        "summary": "COMPUTE!'s October 1982 issue put \"The Computer Games Of Tomorrow\" and programming games with limited memory on the same cover rack as Atari, VIC-20, Apple, Sinclair/Timex, and Commodore 64 material. For this week's Chronicle, that magazine shelf is the cleanest signal: home-computer games were no longer just boxed products, but lessons, listings, reviews, and experiments for readers ready to type, tune, and modify their own software.",
+        "confidence": "October 1982 magazine issue used as same-month shelf context for the week of October 11-17",
+        "sourceRefs": [
+          0
+        ]
+      },
+      "computerItems": [
+        {
+          "label": "Magazine Rack",
+          "headline": "Games Become a Programming Curriculum",
+          "summary": "COMPUTE! paired game-design articles with type-in programs and reviews, making play a route into BASIC, memory limits, graphics, and machine-language curiosity.",
+          "confidence": "October 1982 COMPUTE! issue contents",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "label": "Commodore Desk",
+          "headline": "C64 Memory Map Reaches New Owners",
+          "summary": "The same issue included a Commodore 64 memory-map feature, a sign that the new 64K machine was moving from showroom promise to hands-on exploration.",
+          "confidence": "October 1982 COMPUTE! issue contents",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "label": "Atari Shelf",
+          "headline": "Atari Games Get Review Space",
+          "summary": "Four Atari games and Turtile Pilot for the Atari appeared in the October issue mix, keeping the 8-bit Atari line visible beside Apple, PET, VIC, and Sinclair/Timex coverage.",
+          "confidence": "October 1982 COMPUTE! issue contents",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "label": "Office Counter",
+          "headline": "VisiCalc Still Explains the Business Micro",
+          "summary": "Even as games filled the rack, VisiCalc remained the familiar answer for buyers asking why a personal computer belonged in an office.",
+          "confidence": "Period business-software context; not an exact-week release",
+          "sourceRefs": [
+            1,
+            2
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "VisiCalc",
+          "platform": "Apple II / business micros",
+          "detail": "The spreadsheet remained the showroom proof that micros could do office work.",
+          "confidence": "Period business-software context",
+          "sourceRefs": [
+            1,
+            2
+          ]
+        },
+        {
+          "name": "Raster Blaster",
+          "platform": "Apple II",
+          "detail": "A pinball-style Apple II title reviewed in the October COMPUTE! issue.",
+          "confidence": "October 1982 COMPUTE! issue contents",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "name": "Meteorites",
+          "platform": "Sinclair Timex",
+          "detail": "A same-issue review kept low-cost Sinclair/Timex gaming on the rack.",
+          "confidence": "October 1982 COMPUTE! issue contents",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "name": "Red Alert",
+          "platform": "Sinclair Timex",
+          "detail": "Another October review title showing the small-machine game market widening.",
+          "confidence": "October 1982 COMPUTE! issue contents",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "name": "Data Perfect Apple",
+          "platform": "Apple II",
+          "detail": "Listed in the issue's new-products run, part of the continuing Apple software counter.",
+          "confidence": "October 1982 COMPUTE! issue contents",
+          "sourceRefs": [
+            0
+          ]
+        }
+      ],
+      "storeShelves": [
+        {
+          "name": "Raster Blaster",
+          "platform": "Apple II",
+          "detail": "Pinball action for Apple II readers watching the magazine review pages.",
+          "confidence": "October 1982 COMPUTE! issue contents",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "name": "Meteorites",
+          "platform": "Sinclair Timex",
+          "detail": "A budget-micro game name appearing in the October review rack.",
+          "confidence": "October 1982 COMPUTE! issue contents",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "name": "Red Alert",
+          "platform": "Sinclair Timex",
+          "detail": "Reviewed alongside Meteorites for Sinclair Timex owners.",
+          "confidence": "October 1982 COMPUTE! issue contents",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "name": "Turtile Pilot",
+          "platform": "Atari 8-bit",
+          "detail": "Atari learning-and-play material continued in the October issue.",
+          "confidence": "October 1982 COMPUTE! issue contents",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "name": "Choplifter",
+          "platform": "Apple II",
+          "detail": "A period Apple II action staple still useful as a store-counter comparison.",
+          "confidence": "Period Apple II game context",
+          "sourceRefs": [
+            3
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "Commodore 64 computer",
+          "price": "$595 list price",
+          "note": "64K memory made the new machine a headline spec for home buyers."
+        },
+        {
+          "item": "COMPUTE! magazine",
+          "price": "Monthly newsstand computer magazine",
+          "note": "October issue contents show how much of the market was learned through magazines."
+        },
+        {
+          "item": "Atari 2600 cartridges",
+          "price": "Often around $25-$35 at retail",
+          "note": "Cartridges competed for the same family entertainment budget as typed-in computer games."
+        }
+      ],
+      "market": {
+        "headline": "Magazine Shelves Sell the Home-Computer Future",
+        "summary": "The October rack mixes programming lessons, reviews, utilities, education, speech synthesis, modem notes, and new-products blurbs. That blend captures late-1982 computing: users bought machines, then bought magazines to discover what the machines could become.",
+        "confidence": "October 1982 COMPUTE! issue contents",
+        "sourceRefs": [
+          0
+        ]
+      },
+      "bbsNote": {
+        "headline": "Modem Desk: Telegaming Enters the Vocabulary",
+        "summary": "COMPUTE! listed a telecommunications item titled \"Telegaming,\" a period reminder that games and modems were already being imagined together before home networking was common.",
+        "confidence": "October 1982 COMPUTE! issue contents",
+        "sourceRefs": [
+          0
+        ]
+      },
+      "curiosity": {
+        "headline": "At the Movies: E.T. Retakes the Weekend",
+        "summary": "For the October 15 weekend, E.T. the Extra-Terrestrial led the domestic box office, narrowly ahead of An Officer and a Gentleman, with My Favorite Year in third.",
+        "confidence": "Dated October 15, 1982 weekend chart",
+        "sourceRefs": [
+          4
+        ]
+      },
+      "briefs": [
+        {
+          "headline": "Jack & Diane Holds No. 1",
+          "summary": "John Cougar led the Billboard Hot 100 dated October 16, 1982, with Men at Work, the Alan Parsons Project, Chicago, and Steve Miller Band filling out the top five.",
+          "confidence": "Dated October 16, 1982 Hot 100 chart",
+          "sourceRefs": [
+            5,
+            6
+          ]
+        },
+        {
+          "headline": "My Favorite Year Stays in the Top Three",
+          "summary": "The comedy sat third on the October 15 domestic weekend chart, behind E.T. and An Officer and a Gentleman.",
+          "confidence": "Dated October 15, 1982 weekend chart",
+          "sourceRefs": [
+            4
+          ]
+        },
+        {
+          "headline": "C64 Technical Notes Hit Print",
+          "summary": "A Commodore 64 memory-map article in COMPUTE! shows early owners needing practical maps of the new machine.",
+          "confidence": "October 1982 COMPUTE! issue contents",
+          "sourceRefs": [
+            0
+          ]
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "Jack & Diane",
+          "artist": "John Cougar"
+        },
+        {
+          "rank": 2,
+          "title": "Who Can It Be Now?",
+          "artist": "Men at Work"
+        },
+        {
+          "rank": 3,
+          "title": "Eye in the Sky",
+          "artist": "The Alan Parsons Project"
+        },
+        {
+          "rank": 4,
+          "title": "Hard to Say I'm Sorry",
+          "artist": "Chicago"
+        },
+        {
+          "rank": 5,
+          "title": "Abracadabra",
+          "artist": "Steve Miller Band"
+        }
+      ],
+      "periodAd": {
+        "headline": "New From the Magazine Counter",
+        "summary": "Programs to type, games to review, memory maps to clip, and a 64K Commodore to learn one address at a time.",
+        "confidence": "Styled from October 1982 COMPUTE! issue contents",
+        "sourceRefs": [
+          0
+        ]
+      },
+      "classifieds": [
+        {
+          "headline": "Wanted: Atari BASIC Hints",
+          "copy": "Reader seeks cleaner joystick routine and page-flipped color tricks."
+        },
+        {
+          "headline": "For Sale: Apple II Game Disks",
+          "copy": "Pinball, rescue, and adventure titles. Bring formatted blanks."
+        },
+        {
+          "headline": "Modem Note",
+          "copy": "Telegaming experiments discussed after school; acoustic coupler welcome."
+        }
+      ],
+      "worldFallback": {
+        "headline": "Culture Window",
+        "summary": "E.T. and Jack & Diane keep the week's popular mood warm while computer magazines teach readers how to build their own games.",
+        "confidence": "Dated music/movie charts plus October computer-magazine context",
+        "sourceRefs": [
+          0,
+          4,
+          5,
+          6
+        ]
+      },
+      "accuracyLedger": {
+        "items": [
+          {
+            "claim": "COMPUTE! October 1982 is the lead source for game-programming and C64 memory-map coverage",
+            "status": "Exact-month magazine issue; used as same-month shelf context for this weekly issue"
+          },
+          {
+            "claim": "Music chart uses the October 16, 1982 Hot 100 top five",
+            "status": "Dated chart"
+          },
+          {
+            "claim": "Movie list uses the domestic weekend chart for October 15, 1982",
+            "status": "Dated weekend chart"
+          },
+          {
+            "claim": "VisiCalc appears as office-software context",
+            "status": "Period context, not an exact-week release"
+          },
+          {
+            "claim": "Choplifter appears as Apple II game context",
+            "status": "Period context, not an exact-week release"
+          }
+        ]
+      },
+      "sources": [
+        {
+          "name": "Internet Archive, COMPUTE! Issue 29 - October 1982",
+          "url": "https://archive.org/details/1982-10-compute-magazine"
+        },
+        {
+          "name": "VisiCalc historical overview",
+          "url": "https://en.wikipedia.org/wiki/VisiCalc"
+        },
+        {
+          "name": "Low End Mac, VisiCalc and the Rise of the Apple II",
+          "url": "https://lowendmac.com/2006/visicalc-and-the-rise-of-the-apple-ii/"
+        },
+        {
+          "name": "Choplifter Apple II historical context",
+          "url": "https://en.wikipedia.org/wiki/Choplifter"
+        },
+        {
+          "name": "The Numbers, Weekend Domestic Box Office October 15, 1982",
+          "url": "https://www.the-numbers.com/box-office-chart/weekend/1982/10/15"
+        },
+        {
+          "name": "Billboard Hot 100, week of October 16, 1982",
+          "url": "https://www.billboard.com/charts/hot-100/1982-10-16/"
+        },
+        {
+          "name": "American Top 40 archive, October 16, 1982 top 40 listing",
+          "url": "https://therealamericantop40.fandom.com/wiki/October_16%2C_1982"
+        }
+      ],
+      "frontPageStories": [
+        {
+          "headline": "COMPUTE! Turns Game Making Into the Main Story",
+          "summary": "COMPUTE!'s October 1982 issue put \"The Computer Games Of Tomorrow\" and programming games with limited memory on the same cover rack as Atari, VIC-20, Apple, Sinclair/Timex, and Commodore 64 material. For this week's Chronicle, that magazine shelf is the cleanest signal: home-computer games were no longer just boxed products, but lessons, listings, reviews, and experiments for readers ready to type, tune, and modify their own software.",
+          "confidence": "October 1982 magazine issue used as same-month shelf context for the week of October 11-17",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "label": "Magazine Rack",
+          "headline": "Games Become a Programming Curriculum",
+          "summary": "COMPUTE! paired game-design articles with type-in programs and reviews, making play a route into BASIC, memory limits, graphics, and machine-language curiosity.",
+          "confidence": "October 1982 COMPUTE! issue contents",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "label": "Commodore Desk",
+          "headline": "C64 Memory Map Reaches New Owners",
+          "summary": "The same issue included a Commodore 64 memory-map feature, a sign that the new 64K machine was moving from showroom promise to hands-on exploration.",
+          "confidence": "October 1982 COMPUTE! issue contents",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "label": "Atari Shelf",
+          "headline": "Atari Games Get Review Space",
+          "summary": "Four Atari games and Turtile Pilot for the Atari appeared in the October issue mix, keeping the 8-bit Atari line visible beside Apple, PET, VIC, and Sinclair/Timex coverage.",
+          "confidence": "October 1982 COMPUTE! issue contents",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "headline": "At the Movies: E.T. Retakes the Weekend",
+          "summary": "For the October 15 weekend, E.T. the Extra-Terrestrial led the domestic box office, narrowly ahead of An Officer and a Gentleman, with My Favorite Year in third.",
+          "confidence": "Dated October 15, 1982 weekend chart",
+          "sourceRefs": [
+            4
+          ]
+        }
+      ],
+      "movieChart": [
+        {
+          "title": "E.T. the Extra-Terrestrial"
+        },
+        {
+          "title": "An Officer and a Gentleman"
+        },
+        {
+          "title": "My Favorite Year"
+        },
+        {
+          "title": "Fast Times at Ridgemont High"
+        },
+        {
+          "title": "The Incubus"
+        }
+      ],
+      "musicChartSourceRefs": [
+        5,
+        6
+      ]
+    },
+    {
+      "currentDate": "2026-06-16",
       "historicDate": "1982-10-04",
       "displayDate": "Week of October 4-10, 1982",
       "edition": "Issue 010 - Weekly 1982 Computer & Culture Chronicle",
