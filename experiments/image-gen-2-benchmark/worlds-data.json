@@ -844,5 +844,23 @@
       "continuity": "Current weekly fictional world from #ai-photos: Veyrith, Vesperglass Array, deep-interior settlements, and humanoid lineages transformed by the Array.",
       "entryDescription": "A GPT Image 2 xenology infographic defining the Ancestor-Kin culture, anatomy, communication, work, risks, scale, and environment."
     }
+  },
+  {
+    "id": "2026-06-16-overnight-vesperglass-array-prismfall-concourse-morning-com",
+    "title": "Vesperglass Array: Prismfall Concourse Morning Commute",
+    "tests": "Weekly-world daily-life image for Vesperglass Array; tests GPT Image 2 on coherent alien commute worldbuilding, non-human body plans, transparent megahabitat materials, realistic glass/refraction lighting, and lived-in transit infrastructure.",
+    "prompt": "Create a realistic cinematic daily-life view from Vesperglass Array: show non-human ribbon-bodied electroceptive inhabitants commuting through Prismfall Concourse, a suspended transparent mineral-reef transit hall above a turbulent cobalt gas giant. Preserve the world bible: Vesperglass reef-plates, tension-spire towers, glass mag-sled tubes, pulse-lantern wayfinding, copper-black induction coils, ceramic-white pressure ribs, frost-edged airlocks, conductive lace-vines, prism fronds, cyan/violet auroras, blue-white gas-giant glare, warm amber interior pools, and practical low-gravity body language. Show commuters coiling around polished rails, exchanging light-pulse greetings, guiding carrying pods, waiting at mag-sled doors, tending a child-sized ballast kelp satchel, and checking magnetic-weather colors. Make it realistic, tactile, photographed, and lived-in with scratches, condensation halos, tool wear, reflections, refractions, atmospheric scale, and no readable text.\\n\\nReusable prompt template: Create a realistic cinematic daily-life view from [WORLD_NAME]: show [INHABITANTS] doing [EVERYDAY_ACTIVITY] in [SPECIFIC_LOCATION], preserving the world's canon geography, settlements, transit logic, vegetation/ecology, body plans, materials, palette, lighting, and recurring motifs. Include tactile work or domestic details, environmental scale cues, practical tools, worn surfaces, weather behavior, and believable photographic lens depth. Avoid generic sci-fi, human-dominated society unless canon requires it, franchise references, logos, readable text artifacts, prompt-card composition, and dancing.\\n\\nSource photo needed: none.\\n\\nWhat to preserve: Vesperglass Array continuity: suspended transparent reef-plates above a cobalt gas giant, cyan/violet auroras, Vesperglass panels, copper-black induction coils, ceramic-white pressure ribs, glass transit tubes, pressure membranes, pulse-lit infrastructure, conductive alien gardens, and ribbon-bodied electroceptive inhabitants with translucent pressure-wrap garments.\\n\\nWhat to change: focus this view on Prismfall Concourse commuting, morning transit rituals, carrying pods, mag-sled doors, magnetic-weather wayfinding, worn public infrastructure, and warm interior light against blue-white gas-giant glare.\\n\\nExample substitution: [WORLD_NAME] = Vesperglass Array; [INHABITANTS] = ribbon-bodied electroceptive commuters; [EVERYDAY_ACTIVITY] = moving through the morning commute and checking magnetic-weather wayfinding; [SPECIFIC_LOCATION] = Prismfall Concourse, a suspended glass transit hall above the cobalt gas giant.",
+    "image": "images/2026-06-16-overnight-vesperglass-array-prismfall-concourse-morning-com.png",
+    "date": "2026-06-16",
+    "batch": "Daily Prompt",
+    "slot": "overnight",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "world": {
+      "name": "Vesperglass Array",
+      "description": "A suspended hard-sci-fi alien megahabitat of transparent mineral reef-plates, glass transit tubes, and electroceptive ribbon-bodied inhabitants living above a stormy cobalt gas giant.",
+      "continuity": "Preserves Vesperglass Array's transparent reef habitat, cobalt gas giant, cyan/violet auroras, copper-black induction coils, ceramic-white pressure ribs, pulse-lantern wayfinding, conductive garden life, and ribbon-bodied electroceptive inhabitants.",
+      "entryDescription": "An overnight-to-morning commute through Prismfall Concourse, showing everyday transit rituals, mag-sled queues, carrying pods, and magnetic-weather wayfinding inside the Vesperglass Array."
+    }
   }
 ]
