@@ -160,3 +160,18 @@ Verification:
 - `git diff --check` passed for the touched Pay Dirt files.
 - Headless Chrome mobile screenshot rendered `/tmp/pay-dirt-mobile-camera.png`.
 - Chrome DevTools mobile smoke started the game, confirmed the canvas filled the mobile viewport, moved the player from x=7.5 to x=19.47, and sampled nonblank gameplay/HUD pixels.
+
+## Polish Pass — audio, shake, and ladder feel
+Jez reported music stutter during movement, flickery graphics during actions, and ladder grabs requiring the player to stand slightly off the visible ladder.
+
+Changes:
+- Increased the procedural music scheduler lookahead from 0.12s to 0.42s and starts scheduling immediately, making the music more tolerant of render spikes.
+- Added forgiving ladder-column detection so up/down input grabs the nearest ladder and eases the player onto its centerline.
+- Replaced random per-frame screen shake with deterministic smooth shake, reduced on mobile camera mode.
+- Reduced phone-camera flash intensity so digging, landing, and impacts do not read as full-screen flicker.
+
+Verification:
+- `node --check game.js`, `audio.js`, and `art.js` passed.
+- `git diff --check` passed for the touched Pay Dirt files.
+- Chrome DevTools mobile smoke placed the player slightly outside a ladder column, held up, and confirmed the player climbed.
+- Chrome DevTools mobile movement smoke ran 240 simulation steps and sampled nonblank HUD/gameplay pixels.
