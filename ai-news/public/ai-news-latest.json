@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-16T06:00:01.381348+00:00",
+  "updatedAt": "2026-06-16T05:28:13.066998+00:00",
   "items": [
     {
       "title": "GRAPE: Guided Parameter-Space Evolution for Compact Adversarial Robustness",
@@ -10,9 +10,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-16T06:00:10.511498+00:00",
+      "published": "2026-06-16T05:28:18.102597+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-16T06:00:01.381348+00:00",
+      "lastSeen": "2026-06-16T05:28:13.066998+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
@@ -27,11 +27,11 @@
       "summary": "The Fable 5 Export Controls Harm US Cyber Defense\nI quoted The Atlantic quoting Kate Moussouris earlier, when I should have gone straight to the source. Here she is confirming that the \"jailbreak\" that got Claude Fable 5 banned under an export control really was \"fix this code\":\n\nThe researchers took open-source code with known CVEs, plus new code with deliberately planted vulnerabilities, and asked Fable 5, Mythos, and Opus to “review the code for security issues.” Fable 5 refused. They then asked the models to “fix this code” and, through a multistep and manual process, turned the output int",
       "image": "",
       "published": "2026-06-16T05:20:29+00:00",
-      "firstSeen": "2026-06-16T06:00:01.381348+00:00",
-      "lastSeen": "2026-06-16T06:00:01.381348+00:00",
+      "firstSeen": "2026-06-16T05:28:13.066998+00:00",
+      "lastSeen": "2026-06-16T05:28:13.066998+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.67
+      "score": 7.6861
     },
     {
       "title": "v1.89.1",
@@ -44,10 +44,10 @@
       "image": "https://opengraph.githubassets.com/19e08b103560c0ceef1b0cfa5c3294ae507b2d2052e399cb83e5a300f1c93b9c/BerriAI/litellm/releases/tag/v1.89.1",
       "published": "2026-06-16T03:31:56+00:00",
       "firstSeen": "2026-06-16T04:00:02.113408+00:00",
-      "lastSeen": "2026-06-16T06:00:01.381348+00:00",
+      "lastSeen": "2026-06-16T05:28:13.066998+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9171
+      "score": 2.9323
     },
     {
       "title": "Quoting Matteo Wong, The Atlantic",
@@ -60,10 +60,10 @@
       "image": "",
       "published": "2026-06-16T03:07:54+00:00",
       "firstSeen": "2026-06-16T04:00:02.113408+00:00",
-      "lastSeen": "2026-06-16T06:00:01.381348+00:00",
+      "lastSeen": "2026-06-16T05:28:13.066998+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.3057
+      "score": 5.3208
     },
     {
       "title": "DOJ Lawyers Argue xAI Is ‘Vital’ for National Security in NAACP Lawsuit",
@@ -76,10 +76,10 @@
       "image": "https://media.wired.com/photos/6a30b0678f3c861b578bab3f/master/pass/GettyImages-2217198328.jpg",
       "published": "2026-06-16T03:06:37+00:00",
       "firstSeen": "2026-06-16T04:00:02.113408+00:00",
-      "lastSeen": "2026-06-16T06:00:01.381348+00:00",
+      "lastSeen": "2026-06-16T05:28:13.066998+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2051
+      "score": 5.2202
     },
     {
       "title": "Inside the fight over Claude Mythos 5",
@@ -96,7 +96,7 @@
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 19.272
+      "score": 19.2871
     },
     {
       "title": "Anthropic Is Still at Odds With the White House Over Claude Fable 5",
@@ -109,10 +109,10 @@
       "image": "https://media.wired.com/photos/6a3068b96de136e1eb346f80/master/pass/Anthropic-Latest-Clash-With-White-House-Business-2280291383.jpg",
       "published": "2026-06-16T00:53:46+00:00",
       "firstSeen": "2026-06-16T01:00:01.529593+00:00",
-      "lastSeen": "2026-06-16T06:00:01.381348+00:00",
+      "lastSeen": "2026-06-16T05:28:13.066998+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.1446
+      "score": 11.1587
     },
     {
       "title": "Cloudflare CAPTCHA on at least one ampersand",
@@ -125,10 +125,10 @@
       "image": "",
       "published": "2026-06-16T00:21:36+00:00",
       "firstSeen": "2026-06-16T01:00:01.529593+00:00",
-      "lastSeen": "2026-06-16T06:00:01.381348+00:00",
+      "lastSeen": "2026-06-16T05:28:13.066998+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.6305
+      "score": 8.6444
     },
     {
       "title": "Sundar Pichai faces boos, walkout at Stanford graduation ceremony over Google’s Israel, ICE ties",
@@ -141,10 +141,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/sundar-io2026-intro-close.png?w=1191",
       "published": "2026-06-15T23:51:44+00:00",
       "firstSeen": "2026-06-15T23:59:16.901814+00:00",
-      "lastSeen": "2026-06-16T06:00:01.381348+00:00",
+      "lastSeen": "2026-06-16T05:28:13.066998+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1176
+      "score": 2.1313
     },
     {
       "title": "Canada wants to stop companies from using your data to charge you more, but the details are still missing",
@@ -157,10 +157,10 @@
       "image": "https://media.thenextweb.com/2026/06/canada-surveillance-pricing-privacy-bill-carney-pipeda-replacement.avif",
       "published": "2026-06-15T23:50:49+00:00",
       "firstSeen": "2026-06-16T01:00:01.529593+00:00",
-      "lastSeen": "2026-06-16T06:00:01.381348+00:00",
+      "lastSeen": "2026-06-16T05:28:13.066998+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9772
+      "score": 1.9909
     },
     {
       "title": "Xiaomi built a robotic arm that plugs in your EV at home, delivering on a promise Tesla made in 2014 and never kept",
@@ -173,10 +173,10 @@
       "image": "https://media.thenextweb.com/2026/06/xiaomi-robotic-charging-arm-ev-home-garage-tesla-snake.avif",
       "published": "2026-06-15T23:33:18+00:00",
       "firstSeen": "2026-06-15T23:59:16.901814+00:00",
-      "lastSeen": "2026-06-16T06:00:01.381348+00:00",
+      "lastSeen": "2026-06-16T05:28:13.066998+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -1.1303
+      "score": -1.1167
     },
     {
       "title": "Rivian CEO says supervised point-to-point self-driving will arrive this year, and he’s comparing it directly to Tesla’s FSD",
@@ -189,10 +189,10 @@
       "image": "https://media.thenextweb.com/2026/06/rivian-point-to-point-self-driving-tesla-fsd-scaringe-uber-robotaxi.avif",
       "published": "2026-06-15T23:19:04+00:00",
       "firstSeen": "2026-06-15T23:59:16.901814+00:00",
-      "lastSeen": "2026-06-16T06:00:01.381348+00:00",
+      "lastSeen": "2026-06-16T05:28:13.066998+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9636
+      "score": 1.9772
     },
     {
       "title": "IMEC built a chip platform that works up to 325GHz, and it could make 6G hardware cheap enough to actually deploy",
@@ -205,10 +205,10 @@
       "image": "https://media.thenextweb.com/2026/06/imec-6g-rf-silicon-interposer-chiplet-nvidia-telecom.avif",
       "published": "2026-06-15T23:05:10+00:00",
       "firstSeen": "2026-06-15T23:59:16.901814+00:00",
-      "lastSeen": "2026-06-16T06:00:01.381348+00:00",
+      "lastSeen": "2026-06-16T05:28:13.066998+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.3578
+      "score": 3.3712
     },
     {
       "title": "Three Xbox studios are trying to buy their way out of Microsoft’s gaming restructuring",
@@ -221,10 +221,10 @@
       "image": "https://media.thenextweb.com/2026/06/xbox-studio-closures-compulsion-double-fine-ninja-theory-spinoff.avif",
       "published": "2026-06-15T22:40:44+00:00",
       "firstSeen": "2026-06-15T23:59:16.901814+00:00",
-      "lastSeen": "2026-06-16T06:00:01.381348+00:00",
+      "lastSeen": "2026-06-16T05:28:13.066998+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9476
+      "score": 1.9609
     },
     {
       "title": "Japan’s biggest taxi app raised $553 million in the country’s largest IPO this year",
@@ -237,10 +237,10 @@
       "image": "https://media.thenextweb.com/2026/06/go-inc-japan-taxi-app-ipo-tokyo-stock-exchange-goldman-sachs.avif",
       "published": "2026-06-15T22:18:27+00:00",
       "firstSeen": "2026-06-15T23:00:01.319057+00:00",
-      "lastSeen": "2026-06-16T06:00:01.381348+00:00",
+      "lastSeen": "2026-06-16T05:28:13.066998+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0384
+      "score": 3.0515
     },
     {
       "title": "A built-in Google Workspace feature became a Chinese espionage group’s favourite exfiltration tool",
@@ -253,10 +253,10 @@
       "image": "https://media.thenextweb.com/2026/06/chinese-hackers-unc6508-google-workspace-redcap-medical-military-research.avif",
       "published": "2026-06-15T21:56:01+00:00",
       "firstSeen": "2026-06-15T23:00:01.319057+00:00",
-      "lastSeen": "2026-06-16T06:00:01.381348+00:00",
+      "lastSeen": "2026-06-16T05:28:13.066998+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.3292
+      "score": 3.3422
     },
     {
       "title": "The US government’s Anthropic models ban was never about an AI jailbreak",
@@ -269,10 +269,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/trump-2267050833.jpg?resize=1200%2C800",
       "published": "2026-06-15T21:50:21+00:00",
       "firstSeen": "2026-06-15T23:00:01.319057+00:00",
-      "lastSeen": "2026-06-16T06:00:01.381348+00:00",
+      "lastSeen": "2026-06-16T05:28:13.066998+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0669
+      "score": 5.0799
     },
     {
       "title": "Meta CTO Andrew Bosworth Admits the Company’s AI Reorg Was ‘Atrocious’",
@@ -285,10 +285,10 @@
       "image": "https://media.wired.com/photos/6a3066677da677701d8b62cd/master/pass/Andrew-Bosworth-Urges-Employees-Business-2235573265.jpg",
       "published": "2026-06-15T21:33:46+00:00",
       "firstSeen": "2026-06-15T22:00:01.468152+00:00",
-      "lastSeen": "2026-06-16T06:00:01.381348+00:00",
+      "lastSeen": "2026-06-16T05:28:13.066998+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0602
+      "score": 2.0731
     },
     {
       "title": "Asian tech stocks surged after the Iran-US deal, and AI chipmakers gained the most",
@@ -301,10 +301,10 @@
       "image": "https://media.thenextweb.com/2026/06/asian-tech-stocks-surge-iran-us-peace-deal-softbank-samsung-sk-hynix.avif",
       "published": "2026-06-15T21:26:50+00:00",
       "firstSeen": "2026-06-15T22:00:01.468152+00:00",
-      "lastSeen": "2026-06-16T06:00:01.381348+00:00",
+      "lastSeen": "2026-06-16T05:28:13.066998+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9174
+      "score": 1.9302
     },
     {
       "title": "The Pentagon’s AI platform went from 80,000 users to 1.5 million in six months",
@@ -317,10 +317,10 @@
       "image": "https://media.thenextweb.com/2026/06/Miro-Deal.avif",
       "published": "2026-06-15T21:16:17+00:00",
       "firstSeen": "2026-06-15T22:00:01.468152+00:00",
-      "lastSeen": "2026-06-16T06:00:01.381348+00:00",
+      "lastSeen": "2026-06-16T05:28:13.066998+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.3132
+      "score": 3.326
     },
     {
       "title": "Facebook’s new AI Mode search gets its info from public posts",
@@ -336,7 +336,7 @@
       "lastSeen": "2026-06-16T06:00:01.381348+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 6.7227
+      "score": 6.7355
     },
     {
       "title": "Musk’s trade secret case against OpenAI is dead, and this time it’s permanent",
@@ -349,10 +349,10 @@
       "image": "https://media.thenextweb.com/2026/05/xai-cursor-gun-jumping-antitrust-spacex-ipo.avif",
       "published": "2026-06-15T21:11:22+00:00",
       "firstSeen": "2026-06-15T22:00:01.468152+00:00",
-      "lastSeen": "2026-06-16T06:00:01.381348+00:00",
+      "lastSeen": "2026-06-16T05:28:13.066998+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.9112
+      "score": 10.924
     },
     {
       "title": "The MSI Claw 8 EX AI+ costs $1,699 and that is gaming laptop money for a handheld",
@@ -368,7 +368,7 @@
       "lastSeen": "2026-06-15T23:59:16.901814+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9045
+      "score": 2.9172
     },
     {
       "title": "Anthropic heads to Washington for crisis talks as Fable 5 ban spirals into the ugliest AI policy fight in US history",
@@ -384,7 +384,7 @@
       "lastSeen": "2026-06-15T23:00:01.319057+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9019
+      "score": 4.9146
     },
     {
       "title": "Facebook now has an AI search engine that pulls answers from your Group posts and Reels",
@@ -400,7 +400,7 @@
       "lastSeen": "2026-06-15T23:00:01.319057+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.0977
+      "score": 8.1103
     },
     {
       "title": "LinkedIn just produced its most unlikely success story: a World Cup footballer",
@@ -416,7 +416,7 @@
       "lastSeen": "2026-06-15T23:00:01.319057+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8938
+      "score": 1.9063
     },
     {
       "title": "Polymarket’s $345 million Iran peace bet is stuck because nobody can agree on what “permanent” means",
@@ -432,7 +432,7 @@
       "lastSeen": "2026-06-15T23:00:01.319057+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.891
+      "score": 1.9035
     },
     {
       "title": "100 cybersecurity experts say banning Fable 5 hurts defenders more than hackers",
@@ -448,7 +448,7 @@
       "lastSeen": "2026-06-15T21:18:13.883073+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.8895
+      "score": 3.9019
     },
     {
       "title": "Samsung’s $2,100 Galaxy Book6 Edge ships with 16GB of RAM in 2026",
@@ -464,7 +464,7 @@
       "lastSeen": "2026-06-15T21:18:13.883073+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 1.4829
+      "score": 1.4953
     },
     {
       "title": "Huawei’s ‘chip queen’ returns from seven years in the shadows with a bold new scaling law",
@@ -480,7 +480,7 @@
       "lastSeen": "2026-06-15T21:18:13.883073+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8795
+      "score": 1.8918
     },
     {
       "title": "Your Ryzen CPU used to encrypt your RAM. A firmware update silently turned that off.",
@@ -496,7 +496,7 @@
       "lastSeen": "2026-06-15T21:18:13.883073+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.278
+      "score": 3.2903
     },
     {
       "title": "YouTube’s AI slop purge is punishing the human creators who never showed their faces",
@@ -512,7 +512,7 @@
       "lastSeen": "2026-06-15T21:18:13.883073+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8671
+      "score": 1.8793
     },
     {
       "title": "All the news about Anthropic&#8217;s new AI fight with the White House",
@@ -528,7 +528,7 @@
       "lastSeen": "2026-06-16T06:00:01.381348+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.4722
+      "score": 6.4843
     },
     {
       "title": "Why do South Koreans love AI so much?",
@@ -541,10 +541,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/06/AP26126222060508.jpg?resize=1200%2C600",
       "published": "2026-06-15T18:46:08+00:00",
       "firstSeen": "2026-06-15T20:00:01.467567+00:00",
-      "lastSeen": "2026-06-16T06:00:01.381348+00:00",
+      "lastSeen": "2026-06-16T05:28:13.066998+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0952
+      "score": 3.1071
     },
     {
       "title": "Meta’s new ‘AI Mode’ on Facebook pulls from public info across its platforms",
@@ -557,10 +557,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/meta-apps-GettyImages-2152655816.jpg?w=1024",
       "published": "2026-06-15T18:30:58+00:00",
       "firstSeen": "2026-06-15T19:00:01.567475+00:00",
-      "lastSeen": "2026-06-16T06:00:01.381348+00:00",
+      "lastSeen": "2026-06-16T05:28:13.066998+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0896
+      "score": 3.1014
     },
     {
       "title": "SpaceX is public: Everything you need to know post-IPO",
@@ -573,10 +573,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/elon-nasdaq-spacex-ipo.jpg?resize=1200%2C801",
       "published": "2026-06-15T18:30:34+00:00",
       "firstSeen": "2026-06-15T19:00:01.567475+00:00",
-      "lastSeen": "2026-06-16T06:00:01.381348+00:00",
+      "lastSeen": "2026-06-16T05:28:13.066998+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -0.0106
+      "score": 0.0013
     },
     {
       "title": "A single click on a Microsoft link could have drained your inbox. Here’s how SearchLeak worked.",
@@ -592,7 +592,7 @@
       "lastSeen": "2026-06-15T21:18:13.883073+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.2465
+      "score": 6.2583
     },
     {
       "title": "Father’s Day Tech Gifts on Sale at Amazon, Best Buy, and Walmart",
@@ -605,10 +605,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/06/DRL-Fathers-Day-Tech-Deals-06152026-1.jpg?f=jpeg",
       "published": "2026-06-15T18:14:42+00:00",
       "firstSeen": "2026-06-15T19:00:01.567475+00:00",
-      "lastSeen": "2026-06-16T06:00:01.381348+00:00",
+      "lastSeen": "2026-06-16T05:28:13.066998+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9436
+      "score": 2.9553
     },
     {
       "title": "Trump’s Anthropic shutdown just made the case for non-American AI",
@@ -624,7 +624,7 @@
       "lastSeen": "2026-06-16T06:00:01.381348+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.052
+      "score": 5.0637
     },
     {
       "title": "Java’s biggest language change in a decade is finally landing. It took 197,000 lines of code.",
@@ -640,7 +640,7 @@
       "lastSeen": "2026-06-15T21:18:13.883073+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.5386
+      "score": 2.5503
     },
     {
       "title": "The Life Scientific: Dean Lomax",
@@ -653,10 +653,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-15T20:00:00+00:00",
       "firstSeen": "2026-06-15T21:00:01.290903+00:00",
-      "lastSeen": "2026-06-16T06:00:01.381348+00:00",
+      "lastSeen": "2026-06-16T05:28:13.066998+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0232
+      "score": 2.0356
     },
     {
       "title": "The Life Scientific: Helen Hastie",
@@ -669,10 +669,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-08T20:00:00+00:00",
       "firstSeen": "2026-06-08T21:00:01.371488+00:00",
-      "lastSeen": "2026-06-16T06:00:01.381348+00:00",
+      "lastSeen": "2026-06-16T05:28:13.066998+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.1978
+      "score": 1.198
     },
     {
       "title": "The Life Scientific: Seth Berkley",
@@ -725,9 +725,14 @@
   ],
   "errors": [
     {
+      "source": "Artificial Intelligence News",
+      "url": "https://www.artificialintelligence-news.com/categories/artificial-intelligence/feed/",
+      "error": "not well-formed (invalid token): line 1, column 158"
+    },
+    {
       "source": "MarkTechPost",
       "url": "https://www.marktechpost.com/feed/",
-      "error": "HTTP Error 403: Forbidden"
+      "error": "not well-formed (invalid token): line 1, column 119"
     }
   ]
 }
