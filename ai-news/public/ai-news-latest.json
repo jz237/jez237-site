@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-16T12:00:01.183553+00:00",
+  "updatedAt": "2026-06-16T11:31:39.294458+00:00",
   "items": [
     {
       "title": "Louis Mahon, Elliot Ford, Callum Hackett",
@@ -10,44 +10,12 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-16T12:00:08.458332+00:00",
+      "published": "2026-06-16T11:31:45.676951+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-16T12:00:01.183553+00:00",
+      "lastSeen": "2026-06-16T11:31:39.294458+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
-    },
-    {
-      "title": "SpaceX is officially buying Cursor for $60 billion",
-      "url": "https://www.theverge.com/ai-artificial-intelligence/950571/spacex-is-officially-buying-cursor-for-60-billion",
-      "source": "The Verge AI",
-      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "Days after its massive IPO, SpaceX says it is spending $60 billion to buy Cursor - a bet designed to help Elon Musk's sprawling rocket / AI / social media behemoth win over lucrative enterprise customers and close the gap with AI rivals like Anthropic and OpenAI. The takeover was not entirely unexpected: SpaceX announced [&#8230;]",
-      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/STKE012_SPACEX_IPO_2026_F.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
-      "published": "2026-06-16T11:41:31+00:00",
-      "firstSeen": "2026-06-16T12:00:01.183553+00:00",
-      "lastSeen": "2026-06-16T12:00:01.183553+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 6.3506
-    },
-    {
-      "title": "Claude earns more revenue per user than ChatGPT, Sensor Tower finds",
-      "url": "https://thenextweb.com/news/claude-chatgpt-revenue-per-user-sensor-tower",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "OpenAI still rules AI by sheer size, but it is no longer running away with it. ChatGPT’s apps crossed 1 billion monthly users last month, the fastest any app has reached the milestone, according to Sensor Tower’s State of AI report. Yet on the metric that pays the bills, OpenAI is losing: Anthropic’s Claude now [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/claude-chatgpt.avif",
-      "published": "2026-06-16T11:24:39+00:00",
-      "firstSeen": "2026-06-16T12:00:01.183553+00:00",
-      "lastSeen": "2026-06-16T12:00:01.183553+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 17.2321
     },
     {
       "title": "SpaceX to acquire Cursor for $60B in stock, days after blockbuster IPO",
@@ -59,75 +27,11 @@
       "summary": "The deal is supposed to help SpaceX's struggling AI division. The company told IPO investors it sees a $26 trillion addressable market in AI.",
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/elon-nasdaq-spacex-ipo.jpg?resize=1200%2C801",
       "published": "2026-06-16T11:21:41+00:00",
-      "firstSeen": "2026-06-16T12:00:01.183553+00:00",
-      "lastSeen": "2026-06-16T12:00:01.183553+00:00",
+      "firstSeen": "2026-06-16T11:31:39.294458+00:00",
+      "lastSeen": "2026-06-16T11:31:39.294458+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.6706
-    },
-    {
-      "title": "Critical Copilot vulnerability allowed hackers to seal 2FA code from users",
-      "url": "https://arstechnica.com/security/2026/06/critical-copilot-vulnerability-allowed-hackers-to-seal-2fa-code-from-users",
-      "source": "Ars Technica (AI/Tech)",
-      "sourceUrl": "https://feeds.arstechnica.com/arstechnica/technology-lab",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "SearchLeak exploit shows why the industry's approach to LLM security fails over and over.",
-      "image": "https://cdn.arstechnica.net/wp-content/uploads/2026/06/GettyImages-2242817595-1152x648.jpg",
-      "published": "2026-06-16T11:15:46+00:00",
-      "firstSeen": "2026-06-16T12:00:01.183553+00:00",
-      "lastSeen": "2026-06-16T12:00:01.183553+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "editorial_score_pass",
-      "score": 7.6277
-    },
-    {
-      "title": "SailPoint plans to buy Entro to pour non-human identities into its “Agentic Fabric”",
-      "url": "https://thenextweb.com/news/sailpoint-entro-non-human-identity-agentic-fabric",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The race to secure non-human identities just produced its second deal of the day. SailPoint, the Austin-based identity-security giant, said it plans to buy Entro, a Tel Aviv startup that finds and protects the credentials, keys and machine accounts that now swarm through every cloud. The companies did not disclose a price; Calcalist reports it [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/Entro-team.avif",
-      "published": "2026-06-16T11:10:47+00:00",
-      "firstSeen": "2026-06-16T12:00:01.183553+00:00",
-      "lastSeen": "2026-06-16T12:00:01.183553+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.8252
-    },
-    {
-      "title": "1Password acquires Apono to govern what AI agents can do once they’re inside",
-      "url": "https://thenextweb.com/news/1password-acquires-apono-ai-agent-access-governance",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "1Password is buying its way into the agentic enterprise. The Toronto identity-security company said on Monday it has acquired Apono, an Israeli startup that decides, in real time, what every human, machine and AI agent is allowed to touch inside a company’s systems. Neither side disclosed a price; the Israeli outlet Calcalist reports the deal [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/Apono-founders.avif",
-      "published": "2026-06-16T11:05:17+00:00",
-      "firstSeen": "2026-06-16T12:00:01.183553+00:00",
-      "lastSeen": "2026-06-16T12:00:01.183553+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.8225
-    },
-    {
-      "title": "SoftBank and OpenAI launch “Patching as a Service” to defend Japan’s critical infrastructure",
-      "url": "https://thenextweb.com/news/softbank-openai-patching-as-a-service-japan",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "SoftBank and OpenAI are moving into cyber defence. The two said on Tuesday they are launching “Patching as a Service,” a security product built on OpenAI’s technology, to shield the companies behind Japan’s critical infrastructure from a rising wave of cyberattacks. SoftBank founder Masayoshi Son framed the threat in stark terms, calling Japan’s exposure “a [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/04/softbank-battery-factory-sharp-sakai-ai-data-centres-1.avif",
-      "published": "2026-06-16T10:46:57+00:00",
-      "firstSeen": "2026-06-16T12:00:01.183553+00:00",
-      "lastSeen": "2026-06-16T12:00:01.183553+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 5.8134
+      "score": 3.6849
     },
     {
       "title": "EU publishes its AI content labelling playbook ahead of the AI Act’s August deadline",
@@ -140,10 +44,10 @@
       "image": "",
       "published": "2026-06-16T10:00:00+00:00",
       "firstSeen": "2026-06-16T11:00:01.488356+00:00",
-      "lastSeen": "2026-06-16T12:00:01.183553+00:00",
+      "lastSeen": "2026-06-16T11:31:39.294458+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.9885
+      "score": 4.0023
     },
     {
       "title": "‘Pretty Crazy’ Token Usage Is Testing Bosses’ Bet on AI",
@@ -156,10 +60,10 @@
       "image": "https://media.wired.com/photos/6a28a1a365e0fc8f488095dc/master/pass/How-Software-Company-Is-Saving-Money-By-Spending-Big-on-Claude-Business.jpg",
       "published": "2026-06-16T09:30:00+00:00",
       "firstSeen": "2026-06-16T10:00:01.277680+00:00",
-      "lastSeen": "2026-06-16T12:00:01.183553+00:00",
+      "lastSeen": "2026-06-16T11:31:39.294458+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2162
+      "score": 2.2298
     },
     {
       "title": "France’s intelligence service is dropping Palantir for a homegrown rival",
@@ -172,10 +76,10 @@
       "image": "https://media.thenextweb.com/2020/05/drapeau-francais-13384961510Hm-e1589443554115.avif",
       "published": "2026-06-16T09:21:40+00:00",
       "firstSeen": "2026-06-16T10:00:01.277680+00:00",
-      "lastSeen": "2026-06-16T12:00:01.183553+00:00",
+      "lastSeen": "2026-06-16T11:31:39.294458+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.4722
+      "score": 3.4858
     },
     {
       "title": "SpaceX overtakes Amazon as its post-IPO rally rolls on",
@@ -188,10 +92,10 @@
       "image": "https://media.thenextweb.com/2026/05/spacex-cursor-acquisition-ipo-60-billion-ai-coding.avif",
       "published": "2026-06-16T09:14:22+00:00",
       "firstSeen": "2026-06-16T10:00:01.277680+00:00",
-      "lastSeen": "2026-06-16T12:00:01.183553+00:00",
+      "lastSeen": "2026-06-16T11:31:39.294458+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7688
+      "score": 2.7823
     },
     {
       "title": "China signs up 26 financial institutions for digital-yuan cross-border payments",
@@ -204,10 +108,10 @@
       "image": "https://media.thenextweb.com/2013/11/shutterstock_141608113-e1451303698498.avif",
       "published": "2026-06-16T09:07:18+00:00",
       "firstSeen": "2026-06-16T10:00:01.277680+00:00",
-      "lastSeen": "2026-06-16T12:00:01.183553+00:00",
+      "lastSeen": "2026-06-16T11:31:39.294458+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0655
+      "score": 2.0789
     },
     {
       "title": "OpenAI spent $34bn last year as it lines up for an IPO",
@@ -220,10 +124,10 @@
       "image": "https://media.thenextweb.com/2026/04/OpenAI.avif",
       "published": "2026-06-16T09:00:00+00:00",
       "firstSeen": "2026-06-16T10:00:01.277680+00:00",
-      "lastSeen": "2026-06-16T12:00:01.183553+00:00",
+      "lastSeen": "2026-06-16T11:31:39.294458+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.062
+      "score": 5.0754
     },
     {
       "title": "Want to get a data center online quickly? Give it some flex.",
@@ -236,10 +140,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/06/26-05-25-MIT-TECH-01-Interior-2-thumb.jpg?resize=1200%2C600",
       "published": "2026-06-16T09:00:00+00:00",
       "firstSeen": "2026-06-16T10:00:01.277680+00:00",
-      "lastSeen": "2026-06-16T12:00:01.183553+00:00",
+      "lastSeen": "2026-06-16T11:31:39.294458+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.202
+      "score": 2.2154
     },
     {
       "title": "As Europe rearms, the ‘wingman’ drone takes centre stage at the Berlin airshow",
@@ -252,10 +156,10 @@
       "image": "https://media.thenextweb.com/2026/06/Airbus-wingman.avif",
       "published": "2026-06-16T08:55:56+00:00",
       "firstSeen": "2026-06-16T10:00:01.277680+00:00",
-      "lastSeen": "2026-06-16T12:00:01.183553+00:00",
+      "lastSeen": "2026-06-16T11:31:39.294458+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0601
+      "score": 2.0735
     },
     {
       "title": "France to spend €655m on AI and a single chatbot for the whole civil service",
@@ -268,10 +172,10 @@
       "image": "https://media.thenextweb.com/2026/06/Prime-Minister-Sebastien-Lecornu.avif",
       "published": "2026-06-16T08:47:25+00:00",
       "firstSeen": "2026-06-16T10:00:01.277680+00:00",
-      "lastSeen": "2026-06-16T12:00:01.183553+00:00",
+      "lastSeen": "2026-06-16T11:31:39.294458+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8562
+      "score": 4.8695
     },
     {
       "title": "Ukraine gains access to EU emergency cyber response for major attacks",
@@ -284,10 +188,10 @@
       "image": "https://media.thenextweb.com/2026/05/European-Commision.avif",
       "published": "2026-06-16T08:11:48+00:00",
       "firstSeen": "2026-06-16T09:00:01.431059+00:00",
-      "lastSeen": "2026-06-16T11:00:01.488356+00:00",
+      "lastSeen": "2026-06-16T11:31:39.294458+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.5397
+      "score": 4.5528
     },
     {
       "title": "AlphaGo’s David Silver puts his superintelligence bet on Google Cloud",
@@ -300,10 +204,10 @@
       "image": "https://media.thenextweb.com/2026/02/David-Silver-is-chasing-superhuman-intelligence-with-a-1bn-seed.avif",
       "published": "2026-06-16T08:04:43+00:00",
       "firstSeen": "2026-06-16T09:00:01.431059+00:00",
-      "lastSeen": "2026-06-16T11:00:01.488356+00:00",
+      "lastSeen": "2026-06-16T11:31:39.294458+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.4365
+      "score": 5.4495
     },
     {
       "title": "TCS takes a $70m hit after US Supreme Court rejects its appeal",
@@ -316,10 +220,10 @@
       "image": "https://media.thenextweb.com/2026/06/Tata-Consultancy-Services.avif",
       "published": "2026-06-16T07:54:14+00:00",
       "firstSeen": "2026-06-16T09:00:01.431059+00:00",
-      "lastSeen": "2026-06-16T11:00:01.488356+00:00",
+      "lastSeen": "2026-06-16T11:31:39.294458+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1317
+      "score": 3.1447
     },
     {
       "title": "India blocks Telegram until 22 June over medical exam-cheating rackets",
@@ -332,10 +236,10 @@
       "image": "https://media.thenextweb.com/2026/04/Telegram.avif",
       "published": "2026-06-16T07:46:47+00:00",
       "firstSeen": "2026-06-16T09:00:01.431059+00:00",
-      "lastSeen": "2026-06-16T11:00:01.488356+00:00",
+      "lastSeen": "2026-06-16T11:31:39.294458+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1283
+      "score": 3.1412
     },
     {
       "title": "Italy’s antitrust regulator opens a probe into Apple’s cloud services",
@@ -351,7 +255,7 @@
       "lastSeen": "2026-06-16T09:00:01.431059+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 0.0257
+      "score": 0.0386
     },
     {
       "title": "DeepSeek closes $7bn-plus round with an unusual structure",
@@ -367,7 +271,7 @@
       "lastSeen": "2026-06-16T09:00:01.431059+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0225
+      "score": 5.0354
     },
     {
       "title": "Florida sues TikTok over its child social-media law",
@@ -383,7 +287,7 @@
       "lastSeen": "2026-06-16T09:00:01.431059+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1197
+      "score": 3.1325
     },
     {
       "title": "Alibaba unveils AI models for robots as China’s focus shifts to agents",
@@ -399,7 +303,7 @@
       "lastSeen": "2026-06-16T09:00:01.431059+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.4169
+      "score": 5.4296
     },
     {
       "title": "Anthropic curbs make the case for sovereign AI, Upstage chief says",
@@ -415,7 +319,7 @@
       "lastSeen": "2026-06-16T09:00:01.431059+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0144
+      "score": 5.0272
     },
     {
       "title": "Exclusive: Optiak raises €4m to build an orchestration layer for enterprise AI",
@@ -431,7 +335,7 @@
       "lastSeen": "2026-06-16T09:00:01.431059+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7076
+      "score": 2.7203
     },
     {
       "title": "Malaysia’s AI agent-powered messaging app Respond.io raises $62.5M, eyes acquisitions",
@@ -444,10 +348,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/respond-team-comp-2.webp?resize=1200%2C800",
       "published": "2026-06-16T06:59:00+00:00",
       "firstSeen": "2026-06-16T07:00:01.843155+00:00",
-      "lastSeen": "2026-06-16T12:00:01.183553+00:00",
+      "lastSeen": "2026-06-16T11:31:39.294458+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.9469
+      "score": 5.9596
     },
     {
       "title": "The Fable 5 Export Controls Harm US Cyber Defense",
@@ -460,10 +364,10 @@
       "image": "",
       "published": "2026-06-16T05:20:29+00:00",
       "firstSeen": "2026-06-16T05:28:13.066998+00:00",
-      "lastSeen": "2026-06-16T12:00:01.183553+00:00",
+      "lastSeen": "2026-06-16T11:31:39.294458+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.5042
+      "score": 7.5163
     },
     {
       "title": "v1.89.1",
@@ -476,10 +380,10 @@
       "image": "https://opengraph.githubassets.com/19e08b103560c0ceef1b0cfa5c3294ae507b2d2052e399cb83e5a300f1c93b9c/BerriAI/litellm/releases/tag/v1.89.1",
       "published": "2026-06-16T03:31:56+00:00",
       "firstSeen": "2026-06-16T04:00:02.113408+00:00",
-      "lastSeen": "2026-06-16T12:00:01.183553+00:00",
+      "lastSeen": "2026-06-16T11:31:39.294458+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7594
+      "score": 2.7709
     },
     {
       "title": "Quoting Matteo Wong, The Atlantic",
@@ -492,10 +396,10 @@
       "image": "",
       "published": "2026-06-16T03:07:54+00:00",
       "firstSeen": "2026-06-16T04:00:02.113408+00:00",
-      "lastSeen": "2026-06-16T12:00:01.183553+00:00",
+      "lastSeen": "2026-06-16T11:31:39.294458+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1498
+      "score": 5.1612
     },
     {
       "title": "DOJ Lawyers Argue xAI Is ‘Vital’ for National Security in NAACP Lawsuit",
@@ -508,10 +412,10 @@
       "image": "https://media.wired.com/photos/6a30b0678f3c861b578bab3f/master/pass/GettyImages-2217198328.jpg",
       "published": "2026-06-16T03:06:37+00:00",
       "firstSeen": "2026-06-16T04:00:02.113408+00:00",
-      "lastSeen": "2026-06-16T12:00:01.183553+00:00",
+      "lastSeen": "2026-06-16T11:31:39.294458+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0493
+      "score": 5.0607
     },
     {
       "title": "Inside the fight over Claude Mythos 5",
@@ -528,7 +432,7 @@
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 19.1167
+      "score": 19.128
     },
     {
       "title": "Anthropic Is Still at Odds With the White House Over Claude Fable 5",
@@ -541,10 +445,10 @@
       "image": "https://media.wired.com/photos/6a3068b96de136e1eb346f80/master/pass/Anthropic-Latest-Clash-With-White-House-Business-2280291383.jpg",
       "published": "2026-06-16T00:53:46+00:00",
       "firstSeen": "2026-06-16T01:00:01.529593+00:00",
-      "lastSeen": "2026-06-16T12:00:01.183553+00:00",
+      "lastSeen": "2026-06-16T11:31:39.294458+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.998
+      "score": 11.0087
     },
     {
       "title": "Cloudflare CAPTCHA on at least one ampersand",
@@ -557,10 +461,10 @@
       "image": "",
       "published": "2026-06-16T00:21:36+00:00",
       "firstSeen": "2026-06-16T01:00:01.529593+00:00",
-      "lastSeen": "2026-06-16T12:00:01.183553+00:00",
+      "lastSeen": "2026-06-16T11:31:39.294458+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.4861
+      "score": 8.4966
     },
     {
       "title": "Rocapine raises $13m to build wellness apps that hold instead of hook",
@@ -576,7 +480,7 @@
       "lastSeen": "2026-06-16T08:00:01.285617+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.6382
+      "score": 3.6487
     },
     {
       "title": "Sundar Pichai faces boos, walkout at Stanford graduation ceremony over Google’s Israel, ICE ties",
@@ -589,10 +493,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/sundar-io2026-intro-close.png?w=1191",
       "published": "2026-06-15T23:51:44+00:00",
       "firstSeen": "2026-06-15T23:59:16.901814+00:00",
-      "lastSeen": "2026-06-16T12:00:01.183553+00:00",
+      "lastSeen": "2026-06-16T11:31:39.294458+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9752
+      "score": 1.9855
     },
     {
       "title": "Canada wants to stop companies from using your data to charge you more, but the details are still missing",
@@ -608,7 +512,7 @@
       "lastSeen": "2026-06-16T08:00:01.285617+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8348
+      "score": 1.8452
     },
     {
       "title": "Xiaomi built a robotic arm that plugs in your EV at home, delivering on a promise Tesla made in 2014 and never kept",
@@ -624,7 +528,7 @@
       "lastSeen": "2026-06-16T08:00:01.285617+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -1.2715
+      "score": -1.2612
     },
     {
       "title": "Rivian CEO says supervised point-to-point self-driving will arrive this year, and he’s comparing it directly to Tesla’s FSD",
@@ -640,7 +544,103 @@
       "lastSeen": "2026-06-16T08:00:01.285617+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8234
+      "score": 1.8336
+    },
+    {
+      "title": "IMEC built a chip platform that works up to 325GHz, and it could make 6G hardware cheap enough to actually deploy",
+      "url": "https://thenextweb.com/news/imec-6g-rf-silicon-interposer-chiplet-nvidia-telecom",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "IMEC, the Belgian semiconductor research institute that partners with more than 600 chip industry players, has expanded its 300mm RF silicon interposer platform with three new manufacturing capabilities that bring 6G chip production closer to commercial viability. The platform achieves record-low signal loss at frequencies up to 325GHz, covering the millimetre-wave and sub-terahertz bands that [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/imec-6g-rf-silicon-interposer-chiplet-nvidia-telecom.avif",
+      "published": "2026-06-15T23:05:10+00:00",
+      "firstSeen": "2026-06-15T23:59:16.901814+00:00",
+      "lastSeen": "2026-06-16T08:00:01.285617+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 3.2286
+    },
+    {
+      "title": "Three Xbox studios are trying to buy their way out of Microsoft’s gaming restructuring",
+      "url": "https://thenextweb.com/news/xbox-studio-closures-compulsion-double-fine-ninja-theory-spinoff",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Three Xbox-owned studios are in active negotiations to buy themselves back from Microsoft rather than face closure, according to Bloomberg. Compulsion Games in Montreal, Double Fine Productions in San Francisco, and Ninja Theory in Cambridge, England, are each exploring deals that would make them independent again. Even if the talks succeed, many employees at all [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/xbox-studio-closures-compulsion-double-fine-ninja-theory-spinoff.avif",
+      "published": "2026-06-15T22:40:44+00:00",
+      "firstSeen": "2026-06-15T23:59:16.901814+00:00",
+      "lastSeen": "2026-06-16T07:00:01.843155+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 1.8198
+    },
+    {
+      "title": "Japan’s biggest taxi app raised $553 million in the country’s largest IPO this year",
+      "url": "https://thenextweb.com/news/go-inc-japan-taxi-app-ipo-tokyo-stock-exchange-goldman-sachs",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Go Inc., Japan’s most widely used taxi-hailing app, begins trading on the Tokyo Stock Exchange on Tuesday after raising ¥88.6 billion ($553 million) in the country’s largest initial public offering this year. The offering was more than 25 times oversubscribed. Investors valued the company at ¥186 billion. The IPO priced at ¥2,400 per share, the [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/go-inc-japan-taxi-app-ipo-tokyo-stock-exchange-goldman-sachs.avif",
+      "published": "2026-06-15T22:18:27+00:00",
+      "firstSeen": "2026-06-15T23:00:01.319057+00:00",
+      "lastSeen": "2026-06-16T07:00:01.843155+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.9119
+    },
+    {
+      "title": "A built-in Google Workspace feature became a Chinese espionage group’s favourite exfiltration tool",
+      "url": "https://thenextweb.com/news/chinese-hackers-unc6508-google-workspace-redcap-medical-military-research",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "A China-linked espionage group spent more than a year inside North American medical, academic, and military research networks, stealing sensitive data and defence email. The attackers got in through a backdoor on REDCap research servers. The exfiltration method was the unusual part: they rewired the victims’ own Google Workspace rules to copy matching messages to [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/chinese-hackers-unc6508-google-workspace-redcap-medical-military-research.avif",
+      "published": "2026-06-15T21:56:01+00:00",
+      "firstSeen": "2026-06-15T23:00:01.319057+00:00",
+      "lastSeen": "2026-06-16T07:00:01.843155+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 3.204
+    },
+    {
+      "title": "The US government’s Anthropic models ban was never about an AI jailbreak",
+      "url": "https://techcrunch.com/2026/06/15/the-us-governments-anthropic-models-ban-was-never-about-an-ai-jailbreak",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "The Trump administration's decision that forced Anthropic to pull its latest cybersecurity models could be reactionary, retaliatory, or both, but the message is clear: The AI industry isn't immune from U.S. government interference.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/trump-2267050833.jpg?resize=1200%2C800",
+      "published": "2026-06-15T21:50:21+00:00",
+      "firstSeen": "2026-06-15T23:00:01.319057+00:00",
+      "lastSeen": "2026-06-16T11:31:39.294458+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.9421
+    },
+    {
+      "title": "Meta CTO Andrew Bosworth Admits the Company’s AI Reorg Was ‘Atrocious’",
+      "url": "https://www.wired.com/story/andrew-bosworth-meta-employees-unrest",
+      "source": "Wired AI",
+      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "In an internal memo seen by WIRED, Bosworth promised employees more stability, better communication, and the return of workplace perks as the company seeks to improve morale.",
+      "image": "https://media.wired.com/photos/6a3066677da677701d8b62cd/master/pass/Andrew-Bosworth-Urges-Employees-Business-2235573265.jpg",
+      "published": "2026-06-15T21:33:46+00:00",
+      "firstSeen": "2026-06-15T22:00:01.468152+00:00",
+      "lastSeen": "2026-06-16T11:31:39.294458+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 1.9363
     },
     {
       "title": "The Life Scientific: Dean Lomax",
@@ -653,10 +653,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-15T20:00:00+00:00",
       "firstSeen": "2026-06-15T21:00:01.290903+00:00",
-      "lastSeen": "2026-06-16T12:00:01.183553+00:00",
+      "lastSeen": "2026-06-16T11:31:39.294458+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8953
+      "score": 1.9046
     },
     {
       "title": "The Life Scientific: Helen Hastie",
@@ -669,10 +669,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-08T20:00:00+00:00",
       "firstSeen": "2026-06-08T21:00:01.371488+00:00",
-      "lastSeen": "2026-06-16T12:00:01.183553+00:00",
+      "lastSeen": "2026-06-16T11:31:39.294458+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.1966
+      "score": 1.1967
     },
     {
       "title": "The Life Scientific: Seth Berkley",
