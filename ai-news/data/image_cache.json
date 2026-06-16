@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-16T14:00:01.699447+00:00",
+  "updatedAt": "2026-06-16T15:00:01.528831+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -10548,6 +10548,34 @@
     "https://techcrunch.com/2026/06/16/probably-raises-9m-to-build-a-more-reliable-kind-of-ai": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/probably-peter-elias.png?resize=1200,800",
       "checkedAt": "2026-06-16T14:00:01.699447+00:00"
+    },
+    "https://techcrunch.com/2026/06/16/robinhoods-note-on-10-layoffs-shows-blaming-ai-isnt-cutting-it": {
+      "image": "https://techcrunch.com/wp-content/uploads/2021/01/robinhood-volatility.jpg?resize=1200,675",
+      "checkedAt": "2026-06-16T15:00:01.528831+00:00"
+    },
+    "https://www.techrepublic.com/article/news-meta-ai-mode-facebook-search-public-posts": {
+      "image": "https://assets.techrepublic.com/uploads/2026/06/Untitled-design-6-2.png?f=jpeg",
+      "checkedAt": "2026-06-16T15:00:01.528831+00:00"
+    },
+    "https://www.techrepublic.com/article/news-sovereign-ai-stack-apac-india": {
+      "image": "https://assets.techrepublic.com/uploads/2026/06/waving-national-flag-against-bright-blue-sky-2026-01-05-00-41-31-utc-1024x683.jpg?f=jpeg",
+      "checkedAt": "2026-06-16T15:00:01.528831+00:00"
+    },
+    "https://www.techrepublic.com/article/ai-compliance-failures-australia-apac": {
+      "image": "https://assets.techrepublic.com/uploads/2026/06/Untitled-design-8-1.png?f=jpeg",
+      "checkedAt": "2026-06-16T15:00:01.528831+00:00"
+    },
+    "https://www.techrepublic.com/article/news-apple-m5-macs-macbook-redesign": {
+      "image": "https://assets.techrepublic.com/uploads/2026/06/Untitled-design-7.png?f=jpeg",
+      "checkedAt": "2026-06-16T15:00:01.528831+00:00"
+    },
+    "https://www.techrepublic.com/article/news-windows-11-npu-monitoring": {
+      "image": "https://assets.techrepublic.com/uploads/2026/06/Copilot-PC-Hero.jpg?f=jpeg",
+      "checkedAt": "2026-06-16T15:00:01.528831+00:00"
+    },
+    "https://www.techrepublic.com/article/gitmind-lifetime-subscription": {
+      "image": "https://assets.techrepublic.com/uploads/2026/06/Untitled-design-6-1.png?f=jpeg",
+      "checkedAt": "2026-06-16T15:00:01.528831+00:00"
     }
   }
 }
