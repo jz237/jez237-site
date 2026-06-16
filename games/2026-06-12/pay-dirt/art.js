@@ -1,7 +1,7 @@
 /* Pay Dirt — art.js
-   Procedural HD pixel-art sprites + parallax cave backdrop. No external assets.
-   Sprites are painted with fillRect blocks on small "logical-pixel" canvases and
-   scaled up with imageSmoothing off → crisp pixel edges, controllable animation. */
+   Procedural painterly sprites, tiles, pickups, and cave props. The game still uses
+   tiny generated canvases for speed, but the marks are layered like gouache instead
+   of hard pixel stamps. */
 'use strict';
 const ART = (() => {
 
@@ -17,6 +17,26 @@ const ART = (() => {
     return '#' + ((1 << 24) + (r << 16) + (g << 8) + bl).toString(16).slice(1);
   }
 
+  function dab(x, px, py, w, h, col, a, rot){
+    x.save();
+    x.translate(px, py);
+    x.rotate(rot || 0);
+    x.globalAlpha = a == null ? 1 : a;
+    x.fillStyle = col;
+    x.beginPath();
+    x.ellipse(0, 0, w, h, 0, 0, Math.PI * 2);
+    x.fill();
+    x.restore();
+    x.globalAlpha = 1;
+  }
+
+  function brushNoise(x, w, h, rr, colors, count, alpha){
+    for (let i = 0; i < count; i++){
+      const col = colors[(rr() * colors.length) | 0];
+      dab(x, rr() * w, rr() * h, 2 + rr() * 6, .6 + rr() * 2.2, col, alpha * (0.45 + rr() * 0.7), (rr() - .5) * 2.2);
+    }
+  }
+
   const T = 36; // tile px
 
   /* ---------------- tiles ---------------- */
@@ -29,19 +49,18 @@ const ART = (() => {
     // ---- carved stone-block tile builder (beveled blocks, mortar, cracks, veins) ----
     function stoneTile(p){
       const cc = cv(T, T), xx = cx(cc), rr = rng(p.seed);
+      xx.imageSmoothingEnabled = true;
       xx.fillStyle = p.mortar; xx.fillRect(0, 0, T, T);          // mortar shows in the gaps
+      brushNoise(xx, T, T, rr, [p.sh, p.mortar, p.base], 26, .16);
       const bh = 12;
       for (let row = 0, ry = 0; ry < T; row++, ry += bh){
         const off = (row % 2) ? -10 : 1;                          // running bond
         for (let bx = off; bx < T; bx += 19){
           const x0 = bx + 1, y0 = ry + 1, w = 18, h = bh - 2;
           xx.fillStyle = p.base; xx.fillRect(x0, y0, w, h);
-          xx.fillStyle = p.hi;   xx.fillRect(x0, y0, w, 2); xx.fillRect(x0, y0, 2, h);      // lit top+left bevel
-          xx.fillStyle = p.sh;   xx.fillRect(x0, y0 + h - 2, w, 2); xx.fillRect(x0 + w - 2, y0, 2, h); // dark bottom+right
-          // speckle
-          xx.globalAlpha = .5;
-          for (let k = 0; k < 7; k++){ xx.fillStyle = rr() < .5 ? p.sh : p.hi; xx.fillRect(x0 + (rr() * w) | 0, y0 + (rr() * h) | 0, 1, 1); }
-          xx.globalAlpha = 1;
+          xx.fillStyle = p.hi;   xx.fillRect(x0, y0, w, 1.5); xx.fillRect(x0, y0, 1.5, h);
+          xx.fillStyle = p.sh;   xx.fillRect(x0, y0 + h - 2, w, 2); xx.fillRect(x0 + w - 2, y0, 2, h);
+          brushNoise(xx, w, h, rr, [p.hi, p.sh, mix(p.base, '#fff', .14)], 8, .20);
           // occasional crack
           if (rr() < .35){ xx.strokeStyle = p.crack; xx.lineWidth = 1; xx.beginPath(); let px2 = x0 + 3 + rr() * (w - 6), py2 = y0 + 1; xx.moveTo(px2, py2); for (let s = 0; s < 3; s++){ px2 += (rr() - .5) * 6; py2 += h / 3; xx.lineTo(px2, py2); } xx.stroke(); }
           // gold vein fleck
@@ -50,16 +69,16 @@ const ART = (() => {
       }
       return cc;
     }
-    tiles.brick = stoneTile({ seed: 7,  mortar: '#2c1d10', base: '#7a5836', hi: '#9a7548', sh: '#4e3720', crack: 'rgba(20,10,4,.6)', vein: true });
-    tiles.solid = stoneTile({ seed: 13, mortar: '#181628', base: '#3c3a52', hi: '#54506e', sh: '#26233a', crack: 'rgba(8,6,16,.6)', vein: false });
+    tiles.brick = stoneTile({ seed: 7,  mortar: '#2b2118', base: '#806443', hi: '#b28a56', sh: '#4b3826', crack: 'rgba(35,22,12,.5)', vein: true });
+    tiles.solid = stoneTile({ seed: 13, mortar: '#151a2b', base: '#3d465f', hi: '#647089', sh: '#252b3e', crack: 'rgba(8,10,18,.55)', vein: false });
 
     // mossy-cap variants (used on the TOP row of a platform — context-aware in the renderer)
     function withMossCap(src){
       const cc = cv(T, T), xx = cx(cc), rr = rng(99);
       xx.drawImage(src, 0, 0);
-      xx.fillStyle = '#4a7a32'; xx.fillRect(0, 0, T, 4);                  // moss band
-      xx.fillStyle = '#5f9a40'; xx.fillRect(0, 0, T, 2);                  // lit moss
-      xx.fillStyle = '#356026'; xx.fillRect(0, 4, T, 1);                  // moss underline
+      xx.fillStyle = '#4f7f42'; xx.fillRect(0, 0, T, 4);
+      xx.fillStyle = '#79a95b'; xx.fillRect(0, 0, T, 2);
+      xx.fillStyle = '#314f2d'; xx.fillRect(0, 4, T, 1);
       for (let i = 0; i < T; i += 2){ if (rr() < .5){ const bl = 2 + (rr() * 4) | 0; xx.fillStyle = rr() < .5 ? '#6fb34a' : '#4a7a32'; xx.fillRect(i, 4 - bl + 1, 1, bl); } } // grass blades
       // a few dangling moss bits
       for (let k = 0; k < 4; k++){ const mx = (rr() * T) | 0; xx.fillStyle = '#3c6a28'; xx.fillRect(mx, 4, 1, 2 + (rr() * 3) | 0); }
@@ -327,5 +346,33 @@ const ART = (() => {
   }
   buildPups();
 
-  return { T, tiles, frames, PUPS, PAL, cv, cx, rng, FW, FH };
+  const TREASURES = {};
+  function buildTreasures(){
+    const mk = (draw) => { const c = cv(30, 30), x = c.getContext('2d'); x.imageSmoothingEnabled = true; draw(x); return c; };
+    TREASURES.relic = mk(x => {
+      x.fillStyle = 'rgba(255,222,137,.18)'; x.beginPath(); x.ellipse(15, 16, 13, 10, 0, 0, 7); x.fill();
+      x.fillStyle = '#8c6f4b'; x.beginPath(); x.moveTo(7, 20); x.lineTo(12, 7); x.lineTo(22, 9); x.lineTo(24, 20); x.closePath(); x.fill();
+      x.fillStyle = '#c9a76b'; x.beginPath(); x.moveTo(10, 18); x.lineTo(14, 9); x.lineTo(20, 11); x.lineTo(21, 18); x.closePath(); x.fill();
+      x.strokeStyle = '#fff0b8'; x.lineWidth = 1.4; x.beginPath(); x.arc(16, 14, 4, 0, 7); x.stroke();
+    });
+    TREASURES.bloom = mk(x => {
+      x.fillStyle = '#4a8054'; x.fillRect(14, 15, 3, 9);
+      for (let i = 0; i < 6; i++){ x.save(); x.translate(15, 14); x.rotate(i * Math.PI / 3); x.fillStyle = i % 2 ? '#7fd7b7' : '#a6efd1'; x.beginPath(); x.ellipse(0, -6, 4, 8, 0, 0, 7); x.fill(); x.restore(); }
+      x.fillStyle = '#fff5b8'; x.beginPath(); x.arc(15, 14, 3.2, 0, 7); x.fill();
+    });
+    TREASURES.map = mk(x => {
+      x.fillStyle = '#d8bf86'; x.beginPath(); x.moveTo(6, 8); x.quadraticCurveTo(12, 5, 18, 8); x.quadraticCurveTo(23, 11, 24, 21); x.quadraticCurveTo(16, 18, 7, 22); x.closePath(); x.fill();
+      x.strokeStyle = '#7f5932'; x.lineWidth = 1.2; x.beginPath(); x.moveTo(10, 12); x.bezierCurveTo(13, 10, 17, 17, 21, 13); x.stroke();
+      x.fillStyle = '#c44d3d'; x.beginPath(); x.arc(18, 16, 2.2, 0, 7); x.fill();
+    });
+    TREASURES.oil = mk(x => {
+      x.fillStyle = '#393247'; x.beginPath(); x.roundRect ? x.roundRect(10, 7, 10, 18, 3) : x.rect(10, 7, 10, 18); x.fill();
+      x.fillStyle = '#f1b34e'; x.fillRect(12, 13, 6, 8);
+      x.fillStyle = '#fff0b8'; x.fillRect(13, 13, 2, 8);
+      x.strokeStyle = '#c8b690'; x.lineWidth = 1.5; x.beginPath(); x.arc(15, 8, 5, Math.PI, 0); x.stroke();
+    });
+  }
+  buildTreasures();
+
+  return { T, tiles, frames, PUPS, TREASURES, PAL, cv, cx, rng, FW, FH };
 })();
