@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-16T16:00:01.930362+00:00",
+  "updatedAt": "2026-06-16T17:00:01.963444+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -10588,6 +10588,14 @@
     "https://techcrunch.com/2026/06/16/plaud-says-its-software-business-topped-100m-in-arr-after-shipping-over-2m-ai-notetakers": {
       "image": "https://techcrunch.com/wp-content/uploads/2025/08/SilverBlack-Plaud-Note-Pro.jpeg?resize=1200,675",
       "checkedAt": "2026-06-16T16:00:01.930362+00:00"
+    },
+    "https://techcrunch.com/2026/06/16/sixty-percent-of-u-s-consumers-say-ai-in-brand-messaging-is-a-turnoff-survey-finds": {
+      "image": "https://techcrunch.com/wp-content/uploads/2024/09/wordpress-v1.jpg?resize=1200,675",
+      "checkedAt": "2026-06-16T17:00:01.963444+00:00"
+    },
+    "https://simonwillison.net/2026/Jun/16/georgi-gerganov": {
+      "image": "",
+      "checkedAt": "2026-06-16T17:00:01.963444+00:00"
     }
   }
 }
