@@ -123,14 +123,18 @@ const ART = (() => {
       x.fillStyle = '#efd684'; x.fillRect(3, py0 + 2, 1, 1); x.fillRect(T - 4, py0 + 2, 1, 1); x.fillRect(T / 2, py0 + 2, 1, 1); }
     tiles.bar = c;
 
-    // gold nugget — multi-facet gem with bright core (richer + brighter)
-    c = cv(T, T); x = cx(c);
-    const gx = 18, gy = 19;
-    x.fillStyle = '#9a6e0a'; x.beginPath(); x.moveTo(gx - 11, gy + 1); x.lineTo(gx - 6, gy - 9); x.lineTo(gx + 7, gy - 10); x.lineTo(gx + 12, gy); x.lineTo(gx + 6, gy + 10); x.lineTo(gx - 8, gy + 10); x.closePath(); x.fill();
-    x.fillStyle = '#e0a91c'; x.beginPath(); x.moveTo(gx - 8, gy); x.lineTo(gx - 4, gy - 7); x.lineTo(gx + 5, gy - 7); x.lineTo(gx + 9, gy - 1); x.lineTo(gx + 4, gy + 8); x.lineTo(gx - 6, gy + 8); x.closePath(); x.fill();
-    x.fillStyle = '#ffd23f'; x.beginPath(); x.moveTo(gx - 5, gy - 1); x.lineTo(gx - 2, gy - 5); x.lineTo(gx + 4, gy - 5); x.lineTo(gx + 6, gy + 1); x.lineTo(gx + 2, gy + 6); x.lineTo(gx - 4, gy + 5); x.closePath(); x.fill();
-    x.strokeStyle = 'rgba(110,72,0,.45)'; x.lineWidth = 1; x.beginPath(); x.moveTo(gx - 4, gy - 5); x.lineTo(gx, gy); x.lineTo(gx + 4, gy - 5); x.moveTo(gx, gy); x.lineTo(gx + 1, gy + 6); x.stroke();
-    x.fillStyle = '#fff6c8'; x.fillRect(gx - 3, gy - 4, 3, 2); x.fillRect(gx - 1, gy - 2, 1, 1);
+    // gold ore cluster — painterly chunk the player actually collects
+    c = cv(T, T); x = c.getContext('2d'); x.imageSmoothingEnabled = true;
+    { const gx = 18, gy = 19;
+      x.globalAlpha = .5; x.fillStyle = '#fff0a8'; x.beginPath(); x.ellipse(gx, gy, 15, 12, 0, 0, 7); x.fill(); x.globalAlpha = 1;
+      const ore = x.createLinearGradient(7, 7, 28, 29); ore.addColorStop(0, '#5f4124'); ore.addColorStop(.55, '#9a6527'); ore.addColorStop(1, '#2f2118');
+      x.fillStyle = ore; x.beginPath(); x.moveTo(7, 22); x.quadraticCurveTo(6, 11, 15, 8); x.quadraticCurveTo(24, 5, 29, 15); x.quadraticCurveTo(30, 26, 18, 29); x.quadraticCurveTo(10, 30, 7, 22); x.fill();
+      const gold = x.createRadialGradient(18, 16, 2, 18, 18, 14); gold.addColorStop(0, '#fff8ba'); gold.addColorStop(.35, '#ffd23f'); gold.addColorStop(.78, '#d18a12'); gold.addColorStop(1, '#6f4306');
+      for (const p of [[15,15,7,5,-.4],[22,17,6,8,.45],[13,22,6,4,.1],[20,23,8,4,-.25]]){
+        x.save(); x.translate(p[0], p[1]); x.rotate(p[4]); x.fillStyle = gold; x.beginPath(); x.ellipse(0, 0, p[2], p[3], 0, 0, 7); x.fill(); x.restore();
+      }
+      x.strokeStyle = 'rgba(70,38,8,.42)'; x.lineWidth = 1.4; x.beginPath(); x.moveTo(10, 18); x.bezierCurveTo(15, 14, 21, 19, 27, 14); x.moveTo(13, 24); x.quadraticCurveTo(19, 20, 26, 23); x.stroke();
+      x.fillStyle = '#fff9d6'; x.fillRect(16, 12, 4, 2); x.fillRect(22, 15, 2, 2); }
     tiles.gold = c;
 
     // TNT crate — wood + red bands + fuse
@@ -337,12 +341,45 @@ const ART = (() => {
   /* ---------------- power-up icons ---------------- */
   const PUPS = {};
   function buildPups(){
-    const mk = (draw) => { const c = cv(24, 24), x = cx(c); draw(x); return c; };
-    PUPS[1] = mk(x => { x.fillStyle = '#8a5a2b'; x.fillRect(4, 6, 16, 14); x.fillStyle = '#c43b2a'; x.fillRect(4, 11, 16, 5); x.fillStyle = '#fff3b0'; x.fillRect(11, 2, 2, 5); }); // TNT
-    PUPS[2] = mk(x => { x.fillStyle = '#3fd2c7'; x.fillRect(5, 12, 14, 8); x.fillRect(5, 7, 6, 8); x.fillStyle = '#9ff7ec'; x.fillRect(5, 7, 6, 2); }); // boots
-    PUPS[3] = mk(x => { x.globalAlpha = .85; x.fillStyle = '#b07fff'; x.beginPath(); x.arc(12, 12, 8, 0, 7); x.fill(); x.globalAlpha = 1; x.fillStyle = '#e0ccff'; x.fillRect(9, 9, 2, 2); }); // cloak
-    PUPS[4] = mk(x => { x.strokeStyle = '#ff5c5c'; x.lineWidth = 4; x.beginPath(); x.arc(12, 11, 6, Math.PI * .15, Math.PI * .85, true); x.stroke(); x.fillStyle = '#ff5c5c'; x.fillRect(5, 13, 4, 5); x.fillRect(15, 13, 4, 5); x.fillStyle = '#cfd6e0'; x.fillRect(5, 16, 4, 3); x.fillRect(15, 16, 4, 3); }); // magnet
-    PUPS[5] = mk(x => { x.fillStyle = '#7fd24a'; x.fillRect(10, 4, 4, 11); x.beginPath(); x.moveTo(6, 14); x.lineTo(18, 14); x.lineTo(12, 21); x.closePath(); x.fill(); x.fillStyle = '#b6f08a'; x.fillRect(10, 4, 2, 11); }); // shovel
+    const mk = (draw) => {
+      const c = cv(30, 30), x = c.getContext('2d');
+      x.imageSmoothingEnabled = true;
+      x.globalAlpha = .55; x.fillStyle = '#fff6c8'; x.beginPath(); x.ellipse(15, 17, 13, 10, 0, 0, 7); x.fill(); x.globalAlpha = 1;
+      draw(x);
+      return c;
+    };
+    PUPS[1] = mk(x => { // TNT satchel
+      const g = x.createLinearGradient(7, 7, 22, 25); g.addColorStop(0, '#e85a44'); g.addColorStop(.55, '#a92e25'); g.addColorStop(1, '#5a201a');
+      x.fillStyle = '#6f4524'; x.beginPath(); x.roundRect ? x.roundRect(5, 9, 20, 15, 4) : x.rect(5, 9, 20, 15); x.fill();
+      x.fillStyle = g; x.beginPath(); x.roundRect ? x.roundRect(7, 8, 16, 15, 5) : x.rect(7, 8, 16, 15); x.fill();
+      x.strokeStyle = '#ffd18a'; x.lineWidth = 1.5; x.beginPath(); x.moveTo(9, 12); x.lineTo(21, 19); x.moveTo(21, 12); x.lineTo(9, 20); x.stroke();
+      x.strokeStyle = '#3a2411'; x.lineWidth = 2; x.beginPath(); x.moveTo(15, 8); x.quadraticCurveTo(13, 3, 19, 3); x.stroke();
+      x.fillStyle = '#fff0a8'; x.beginPath(); x.arc(20, 3, 2.5, 0, 7); x.fill();
+    });
+    PUPS[2] = mk(x => { // explorer boots
+      const g = x.createLinearGradient(6, 6, 24, 24); g.addColorStop(0, '#8efff0'); g.addColorStop(.5, '#2bb7ad'); g.addColorStop(1, '#12585a');
+      x.fillStyle = g; x.beginPath(); x.roundRect ? x.roundRect(7, 8, 8, 16, 3) : x.rect(7, 8, 8, 16); x.fill();
+      x.beginPath(); x.roundRect ? x.roundRect(15, 11, 8, 13, 3) : x.rect(15, 11, 8, 13); x.fill();
+      x.fillStyle = '#10202a'; x.fillRect(5, 21, 11, 4); x.fillRect(14, 21, 11, 4);
+      x.fillStyle = '#cffff8'; x.fillRect(8, 9, 3, 10); x.fillRect(16, 12, 3, 8);
+    });
+    PUPS[3] = mk(x => { // phase cloak
+      const g = x.createRadialGradient(15, 12, 2, 15, 15, 13); g.addColorStop(0, '#f0dcff'); g.addColorStop(.4, '#a66cff'); g.addColorStop(1, '#341f62');
+      x.fillStyle = g; x.beginPath(); x.moveTo(15, 5); x.bezierCurveTo(6, 10, 7, 22, 4, 25); x.quadraticCurveTo(15, 21, 26, 25); x.bezierCurveTo(22, 20, 24, 10, 15, 5); x.fill();
+      x.globalCompositeOperation = 'lighter'; x.fillStyle = 'rgba(240,220,255,.55)'; x.beginPath(); x.ellipse(15, 14, 5, 9, 0, 0, 7); x.fill(); x.globalCompositeOperation = 'source-over';
+    });
+    PUPS[4] = mk(x => { // magnet relic
+      x.strokeStyle = '#ff5959'; x.lineWidth = 6; x.lineCap = 'round'; x.beginPath(); x.arc(15, 14, 8, Math.PI * .12, Math.PI * .88, true); x.stroke();
+      x.strokeStyle = '#ffd0d0'; x.lineWidth = 2; x.beginPath(); x.arc(15, 14, 8, Math.PI * .18, Math.PI * .82, true); x.stroke();
+      x.fillStyle = '#d8e2ed'; x.beginPath(); x.roundRect ? x.roundRect(5, 16, 7, 8, 2) : x.rect(5, 16, 7, 8); x.fill();
+      x.beginPath(); x.roundRect ? x.roundRect(18, 16, 7, 8, 2) : x.rect(18, 16, 7, 8); x.fill();
+    });
+    PUPS[5] = mk(x => { // enchanted shovel
+      x.strokeStyle = '#8b5c2e'; x.lineWidth = 4; x.lineCap = 'round'; x.beginPath(); x.moveTo(17, 5); x.lineTo(13, 20); x.stroke();
+      const g = x.createLinearGradient(9, 16, 21, 28); g.addColorStop(0, '#c8ff9b'); g.addColorStop(.45, '#69c94a'); g.addColorStop(1, '#2d6a30');
+      x.fillStyle = g; x.beginPath(); x.moveTo(9, 18); x.quadraticCurveTo(15, 15, 21, 18); x.quadraticCurveTo(19, 25, 15, 27); x.quadraticCurveTo(11, 25, 9, 18); x.fill();
+      x.fillStyle = '#efffd8'; x.fillRect(13, 18, 2, 6);
+    });
   }
   buildPups();
 
