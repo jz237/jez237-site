@@ -43,6 +43,7 @@
     setMuted(b) { muted = !!b; if (master) master.gain.value = muted ? 0 : 0.6; if (engineGain) engineGain.gain.value = 0; },
     isMuted() { return muted; },
     fire() { tone(620, 0.12, 'square', 0.18, 180); noise(0.06, 0.12, 2200); },
+    tankHit() { noise(0.055, 0.22, 3600, 'highpass'); tone(260, 0.07, 'square', 0.11, 140); tone(740, 0.035, 'triangle', 0.07, 520); },
     wall() { noise(0.09, 0.18, 500); tone(120, 0.08, 'sine', 0.12, 70); },
     explosion() { noise(0.5, 0.5, 900); tone(90, 0.5, 'sawtooth', 0.3, 30); tone(160, 0.35, 'square', 0.15, 40); },
     mine() { noise(0.45, 0.55, 2600, 'highpass'); noise(0.4, 0.4, 700); tone(70, 0.45, 'sawtooth', 0.3, 28); },
