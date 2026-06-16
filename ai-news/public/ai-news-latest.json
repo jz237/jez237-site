@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-16T09:00:01.431059+00:00",
+  "updatedAt": "2026-06-16T10:00:01.277680+00:00",
   "items": [
     {
       "title": "Louis Mahon, Elliot Ford, Callum Hackett",
@@ -10,12 +10,140 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-16T09:00:10.920311+00:00",
+      "published": "2026-06-16T10:00:10.432702+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-16T09:00:01.431059+00:00",
+      "lastSeen": "2026-06-16T10:00:01.277680+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
+    },
+    {
+      "title": "‘Pretty Crazy’ Token Usage Is Testing Bosses’ Bet on AI",
+      "url": "https://www.wired.com/story/claude-tokens-compute-cost-code-8x8",
+      "source": "Wired AI",
+      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "A Silicon Valley software maker and an ecommerce company reveal to WIRED how they are navigating the emerging challenge of “tokenomics.”",
+      "image": "https://media.wired.com/photos/6a28a1a365e0fc8f488095dc/master/pass/How-Software-Company-Is-Saving-Money-By-Spending-Big-on-Claude-Business.jpg",
+      "published": "2026-06-16T09:30:00+00:00",
+      "firstSeen": "2026-06-16T10:00:01.277680+00:00",
+      "lastSeen": "2026-06-16T10:00:01.277680+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2748
+    },
+    {
+      "title": "France’s intelligence service is dropping Palantir for a homegrown rival",
+      "url": "https://thenextweb.com/news/frances-intelligence-service-is-dropping-palantir-for-a-homegrown-rival",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "France’s domestic intelligence agency is dropping Palantir. The DGSI will replace the American firm’s data-analysis tools with software from ChapsVision, a French company, Prime Minister Sebastien Lecornu said on Tuesday, framing the switch as part of a wider push to put sovereign technology at the centre of the French state. The timing is the part [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2020/05/drapeau-francais-13384961510Hm-e1589443554115.avif",
+      "published": "2026-06-16T09:21:40+00:00",
+      "firstSeen": "2026-06-16T10:00:01.277680+00:00",
+      "lastSeen": "2026-06-16T10:00:01.277680+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 3.5306
+    },
+    {
+      "title": "SpaceX overtakes Amazon as its post-IPO rally rolls on",
+      "url": "https://thenextweb.com/news/spacex-overtakes-amazon-as-its-post-ipo-rally-rolls-on",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "SpaceX is now worth more than Amazon, at least for as long as the rally holds. Shares of the rocket company rose more than 10% on Tuesday, extending a run that began at its market debut and putting it on course to become the world’s fifth most valuable listed company, four trading days after it [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/spacex-cursor-acquisition-ipo-60-billion-ai-coding.avif",
+      "published": "2026-06-16T09:14:22+00:00",
+      "firstSeen": "2026-06-16T10:00:01.277680+00:00",
+      "lastSeen": "2026-06-16T10:00:01.277680+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.827
+    },
+    {
+      "title": "China signs up 26 financial institutions for digital-yuan cross-border payments",
+      "url": "https://thenextweb.com/news/china-signs-up-26-financial-institutions-for-digital-yuan-cross-border-payments",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "China’s central bank has brought a fresh batch of financial institutions into its digital-yuan network for cross-border payments, extending a currency that began life as a way to buy noodles in Shenzhen towards the far harder business of moving money between countries. Reuters reported the expansion on Monday, the latest in a steady run of [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2013/11/shutterstock_141608113-e1451303698498.avif",
+      "published": "2026-06-16T09:07:18+00:00",
+      "firstSeen": "2026-06-16T10:00:01.277680+00:00",
+      "lastSeen": "2026-06-16T10:00:01.277680+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1235
+    },
+    {
+      "title": "OpenAI spent $34bn last year as it lines up for an IPO",
+      "url": "https://thenextweb.com/news/openai-spent-34bn-last-year-as-it-lines-up-for-an-ipo",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "OpenAI spent $34bn in 2025, more than two and a half times what it took in, as it prepares to file for one of the largest public listings ever attempted. The figure, reported by the Financial Times, lays out in stark terms what the race to build frontier AI now costs the company leading it. The [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/OpenAI.avif",
+      "published": "2026-06-16T09:00:00+00:00",
+      "firstSeen": "2026-06-16T10:00:01.277680+00:00",
+      "lastSeen": "2026-06-16T10:00:01.277680+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.1199
+    },
+    {
+      "title": "Want to get a data center online quickly? Give it some flex.",
+      "url": "https://www.technologyreview.com/2026/06/16/1138591/data-center-online-quickly-electric-grid-flex",
+      "source": "MIT Technology Review AI",
+      "sourceUrl": "https://www.technologyreview.com/topic/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "At the end of a tense and scoreless first half of a soccer match between the English men’s team and rival Germany, millions of Brits let out a collective sigh and did what they so often do in moments of stress: They made tea. That wave of electric kettles clicking on, however, caused a different&#8230;",
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/06/26-05-25-MIT-TECH-01-Interior-2-thumb.jpg?resize=1200%2C600",
+      "published": "2026-06-16T09:00:00+00:00",
+      "firstSeen": "2026-06-16T10:00:01.277680+00:00",
+      "lastSeen": "2026-06-16T10:00:01.277680+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2599
+    },
+    {
+      "title": "As Europe rearms, the ‘wingman’ drone takes centre stage at the Berlin airshow",
+      "url": "https://thenextweb.com/news/as-europe-rearms-the-wingman-drone-takes-centre-stage-at-the-berlin-airshow",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The aircraft drawing crowds at last week’s Berlin airshow was not the one with a pilot in it. The “loyal wingman,” an uncrewed jet built to fly beside a manned fighter and carry the extra sensors, jammers, and weapons the fighter cannot, has become Europe’s defence obsession, and four companies turned up to sell it. [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/Airbus-wingman.avif",
+      "published": "2026-06-16T08:55:56+00:00",
+      "firstSeen": "2026-06-16T10:00:01.277680+00:00",
+      "lastSeen": "2026-06-16T10:00:01.277680+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1178
+    },
+    {
+      "title": "France to spend €655m on AI and a single chatbot for the whole civil service",
+      "url": "https://thenextweb.com/news/france-to-spend-e655m-on-ai",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "France wants its civil servants to share a chatbot. On Monday, Prime Minister Sebastien Lecornu announced an additional €655m for artificial intelligence, the headline use of which is a single sovereign conversational assistant intended for every public agent in the country, roughly a million people. The assistant, according to the announcement, is meant to help with [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/Prime-Minister-Sebastien-Lecornu.avif",
+      "published": "2026-06-16T08:47:25+00:00",
+      "firstSeen": "2026-06-16T10:00:01.277680+00:00",
+      "lastSeen": "2026-06-16T10:00:01.277680+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.9136
     },
     {
       "title": "Ukraine gains access to EU emergency cyber response for major attacks",
@@ -28,10 +156,10 @@
       "image": "https://media.thenextweb.com/2026/05/European-Commision.avif",
       "published": "2026-06-16T08:11:48+00:00",
       "firstSeen": "2026-06-16T09:00:01.431059+00:00",
-      "lastSeen": "2026-06-16T09:00:01.431059+00:00",
+      "lastSeen": "2026-06-16T10:00:01.277680+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.6257
+      "score": 4.5962
     },
     {
       "title": "AlphaGo’s David Silver puts his superintelligence bet on Google Cloud",
@@ -44,10 +172,10 @@
       "image": "https://media.thenextweb.com/2026/02/David-Silver-is-chasing-superhuman-intelligence-with-a-1bn-seed.avif",
       "published": "2026-06-16T08:04:43+00:00",
       "firstSeen": "2026-06-16T09:00:01.431059+00:00",
-      "lastSeen": "2026-06-16T09:00:01.431059+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 5.5222
+      "lastSeen": "2026-06-16T10:00:01.277680+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.4928
     },
     {
       "title": "TCS takes a $70m hit after US Supreme Court rejects its appeal",
@@ -60,10 +188,10 @@
       "image": "https://media.thenextweb.com/2026/06/Tata-Consultancy-Services.avif",
       "published": "2026-06-16T07:54:14+00:00",
       "firstSeen": "2026-06-16T09:00:01.431059+00:00",
-      "lastSeen": "2026-06-16T09:00:01.431059+00:00",
+      "lastSeen": "2026-06-16T10:00:01.277680+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.217
+      "score": 3.1878
     },
     {
       "title": "India blocks Telegram until 22 June over medical exam-cheating rackets",
@@ -76,10 +204,10 @@
       "image": "https://media.thenextweb.com/2026/04/Telegram.avif",
       "published": "2026-06-16T07:46:47+00:00",
       "firstSeen": "2026-06-16T09:00:01.431059+00:00",
-      "lastSeen": "2026-06-16T09:00:01.431059+00:00",
+      "lastSeen": "2026-06-16T10:00:01.277680+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2133
+      "score": 3.1842
     },
     {
       "title": "Italy’s antitrust regulator opens a probe into Apple’s cloud services",
@@ -95,7 +223,7 @@
       "lastSeen": "2026-06-16T09:00:01.431059+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 0.1105
+      "score": 0.0814
     },
     {
       "title": "DeepSeek closes $7bn-plus round with an unusual structure",
@@ -111,7 +239,7 @@
       "lastSeen": "2026-06-16T09:00:01.431059+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.107
+      "score": 5.0781
     },
     {
       "title": "Florida sues TikTok over its child social-media law",
@@ -127,7 +255,7 @@
       "lastSeen": "2026-06-16T09:00:01.431059+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.204
+      "score": 3.1751
     },
     {
       "title": "Alibaba unveils AI models for robots as China’s focus shifts to agents",
@@ -141,9 +269,9 @@
       "published": "2026-06-16T07:21:20+00:00",
       "firstSeen": "2026-06-16T08:00:01.285617+00:00",
       "lastSeen": "2026-06-16T09:00:01.431059+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 5.5009
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.4721
     },
     {
       "title": "Anthropic curbs make the case for sovereign AI, Upstage chief says",
@@ -159,7 +287,7 @@
       "lastSeen": "2026-06-16T09:00:01.431059+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0982
+      "score": 5.0695
     },
     {
       "title": "Exclusive: Optiak raises €4m to build an orchestration layer for enterprise AI",
@@ -175,7 +303,7 @@
       "lastSeen": "2026-06-16T09:00:01.431059+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7909
+      "score": 2.7623
     },
     {
       "title": "Malaysia’s AI agent-powered messaging app Respond.io raises $62.5M, eyes acquisitions",
@@ -188,10 +316,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/respond-team-comp-2.webp?resize=1200%2C800",
       "published": "2026-06-16T06:59:00+00:00",
       "firstSeen": "2026-06-16T07:00:01.843155+00:00",
-      "lastSeen": "2026-06-16T09:00:01.431059+00:00",
+      "lastSeen": "2026-06-16T10:00:01.277680+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.0301
+      "score": 6.0016
     },
     {
       "title": "The Fable 5 Export Controls Harm US Cyber Defense",
@@ -204,10 +332,10 @@
       "image": "",
       "published": "2026-06-16T05:20:29+00:00",
       "firstSeen": "2026-06-16T05:28:13.066998+00:00",
-      "lastSeen": "2026-06-16T09:00:01.431059+00:00",
+      "lastSeen": "2026-06-16T10:00:01.277680+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.5837
+      "score": 7.5565
     },
     {
       "title": "v1.89.1",
@@ -220,10 +348,10 @@
       "image": "https://opengraph.githubassets.com/19e08b103560c0ceef1b0cfa5c3294ae507b2d2052e399cb83e5a300f1c93b9c/BerriAI/litellm/releases/tag/v1.89.1",
       "published": "2026-06-16T03:31:56+00:00",
       "firstSeen": "2026-06-16T04:00:02.113408+00:00",
-      "lastSeen": "2026-06-16T09:00:01.431059+00:00",
+      "lastSeen": "2026-06-16T10:00:01.277680+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.835
+      "score": 2.8091
     },
     {
       "title": "Quoting Matteo Wong, The Atlantic",
@@ -236,10 +364,10 @@
       "image": "",
       "published": "2026-06-16T03:07:54+00:00",
       "firstSeen": "2026-06-16T04:00:02.113408+00:00",
-      "lastSeen": "2026-06-16T09:00:01.431059+00:00",
+      "lastSeen": "2026-06-16T10:00:01.277680+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2245
+      "score": 5.1989
     },
     {
       "title": "DOJ Lawyers Argue xAI Is ‘Vital’ for National Security in NAACP Lawsuit",
@@ -252,10 +380,10 @@
       "image": "https://media.wired.com/photos/6a30b0678f3c861b578bab3f/master/pass/GettyImages-2217198328.jpg",
       "published": "2026-06-16T03:06:37+00:00",
       "firstSeen": "2026-06-16T04:00:02.113408+00:00",
-      "lastSeen": "2026-06-16T09:00:01.431059+00:00",
+      "lastSeen": "2026-06-16T10:00:01.277680+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.124
+      "score": 5.0984
     },
     {
       "title": "Inside the fight over Claude Mythos 5",
@@ -268,11 +396,11 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/STKS515_CYBER_WARFARE2_D.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-16T03:00:00+00:00",
       "firstSeen": "2026-06-16T04:00:02.113408+00:00",
-      "lastSeen": "2026-06-16T09:00:01.431059+00:00",
+      "lastSeen": "2026-06-16T10:00:01.277680+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 19.1911
+      "score": 19.1656
     },
     {
       "title": "Anthropic Is Still at Odds With the White House Over Claude Fable 5",
@@ -285,10 +413,10 @@
       "image": "https://media.wired.com/photos/6a3068b96de136e1eb346f80/master/pass/Anthropic-Latest-Clash-With-White-House-Business-2280291383.jpg",
       "published": "2026-06-16T00:53:46+00:00",
       "firstSeen": "2026-06-16T01:00:01.529593+00:00",
-      "lastSeen": "2026-06-16T09:00:01.431059+00:00",
+      "lastSeen": "2026-06-16T10:00:01.277680+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.0683
+      "score": 11.0442
     },
     {
       "title": "Cloudflare CAPTCHA on at least one ampersand",
@@ -301,10 +429,10 @@
       "image": "",
       "published": "2026-06-16T00:21:36+00:00",
       "firstSeen": "2026-06-16T01:00:01.529593+00:00",
-      "lastSeen": "2026-06-16T09:00:01.431059+00:00",
+      "lastSeen": "2026-06-16T10:00:01.277680+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.5553
+      "score": 8.5316
     },
     {
       "title": "Rocapine raises $13m to build wellness apps that hold instead of hook",
@@ -320,7 +448,7 @@
       "lastSeen": "2026-06-16T08:00:01.285617+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.7067
+      "score": 3.6833
     },
     {
       "title": "Sundar Pichai faces boos, walkout at Stanford graduation ceremony over Google’s Israel, ICE ties",
@@ -333,10 +461,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/sundar-io2026-intro-close.png?w=1191",
       "published": "2026-06-15T23:51:44+00:00",
       "firstSeen": "2026-06-15T23:59:16.901814+00:00",
-      "lastSeen": "2026-06-16T09:00:01.431059+00:00",
+      "lastSeen": "2026-06-16T10:00:01.277680+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0434
+      "score": 2.02
     },
     {
       "title": "Canada wants to stop companies from using your data to charge you more, but the details are still missing",
@@ -352,7 +480,7 @@
       "lastSeen": "2026-06-16T08:00:01.285617+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.903
+      "score": 1.8797
     },
     {
       "title": "Xiaomi built a robotic arm that plugs in your EV at home, delivering on a promise Tesla made in 2014 and never kept",
@@ -368,7 +496,7 @@
       "lastSeen": "2026-06-16T08:00:01.285617+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -1.2039
+      "score": -1.227
     },
     {
       "title": "Rivian CEO says supervised point-to-point self-driving will arrive this year, and he’s comparing it directly to Tesla’s FSD",
@@ -384,7 +512,7 @@
       "lastSeen": "2026-06-16T08:00:01.285617+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8906
+      "score": 1.8676
     },
     {
       "title": "IMEC built a chip platform that works up to 325GHz, and it could make 6G hardware cheap enough to actually deploy",
@@ -400,7 +528,7 @@
       "lastSeen": "2026-06-16T08:00:01.285617+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.2852
+      "score": 3.2623
     },
     {
       "title": "Three Xbox studios are trying to buy their way out of Microsoft’s gaming restructuring",
@@ -416,7 +544,7 @@
       "lastSeen": "2026-06-16T07:00:01.843155+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8758
+      "score": 1.8532
     },
     {
       "title": "Japan’s biggest taxi app raised $553 million in the country’s largest IPO this year",
@@ -432,7 +560,7 @@
       "lastSeen": "2026-06-16T07:00:01.843155+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9673
+      "score": 2.9449
     },
     {
       "title": "A built-in Google Workspace feature became a Chinese espionage group’s favourite exfiltration tool",
@@ -448,7 +576,7 @@
       "lastSeen": "2026-06-16T07:00:01.843155+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.2589
+      "score": 3.2367
     },
     {
       "title": "The US government’s Anthropic models ban was never about an AI jailbreak",
@@ -461,10 +589,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/trump-2267050833.jpg?resize=1200%2C800",
       "published": "2026-06-15T21:50:21+00:00",
       "firstSeen": "2026-06-15T23:00:01.319057+00:00",
-      "lastSeen": "2026-06-16T09:00:01.431059+00:00",
+      "lastSeen": "2026-06-16T10:00:01.277680+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9968
+      "score": 4.9747
     },
     {
       "title": "Meta CTO Andrew Bosworth Admits the Company’s AI Reorg Was ‘Atrocious’",
@@ -477,10 +605,10 @@
       "image": "https://media.wired.com/photos/6a3066677da677701d8b62cd/master/pass/Andrew-Bosworth-Urges-Employees-Business-2235573265.jpg",
       "published": "2026-06-15T21:33:46+00:00",
       "firstSeen": "2026-06-15T22:00:01.468152+00:00",
-      "lastSeen": "2026-06-16T09:00:01.431059+00:00",
+      "lastSeen": "2026-06-16T10:00:01.277680+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9906
+      "score": 1.9687
     },
     {
       "title": "Asian tech stocks surged after the Iran-US deal, and AI chipmakers gained the most",
@@ -496,7 +624,7 @@
       "lastSeen": "2026-06-16T07:00:01.843155+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.848
+      "score": 1.8262
     },
     {
       "title": "The Pentagon’s AI platform went from 80,000 users to 1.5 million in six months",
@@ -512,135 +640,7 @@
       "lastSeen": "2026-06-16T07:00:01.843155+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.2441
-    },
-    {
-      "title": "Facebook’s new AI Mode search gets its info from public posts",
-      "url": "https://www.theverge.com/tech/950264/meta-ai-mode-search-facebook",
-      "source": "The Verge AI",
-      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "Your public Facebook posts could help inform AI-generated results in Meta's new AI Mode. When you search on Facebook, the \"AI Mode\" option will appear alongside the usual search modes like \"People\" and \"Marketplace.\" It's one of several new AI features Meta is rolling out starting today, including photo presets that swap sports jerseys onto [&#8230;]",
-      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/videoframe_7395.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C11.992407477375%2C100%2C76.015185045249&amp%3Bw=1200",
-      "published": "2026-06-15T21:15:08+00:00",
-      "firstSeen": "2026-06-15T22:00:01.468152+00:00",
-      "lastSeen": "2026-06-16T09:00:01.431059+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "editorial_score_pass",
-      "score": 6.6537
-    },
-    {
-      "title": "Musk’s trade secret case against OpenAI is dead, and this time it’s permanent",
-      "url": "https://thenextweb.com/news/xai-openai-trade-secret-lawsuit-dismissed",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "A federal judge has permanently killed xAI’s lawsuit accusing OpenAI of stealing trade secrets related to the Grok chatbot. US District Judge Rita Lin dismissed the case with prejudice on Monday, meaning xAI cannot bring the same claims again. Lin said xAI failed to show that OpenAI induced former xAI senior engineer Xuechen Li to divulge confidential [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/xai-cursor-gun-jumping-antitrust-spacex-ipo.avif",
-      "published": "2026-06-15T21:11:22+00:00",
-      "firstSeen": "2026-06-15T22:00:01.468152+00:00",
-      "lastSeen": "2026-06-16T05:28:13.066998+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 10.8423
-    },
-    {
-      "title": "The MSI Claw 8 EX AI+ costs $1,699 and that is gaming laptop money for a handheld",
-      "url": "https://thenextweb.com/news/msi-claw-8-ex-ai-plus-1699-arc-g3-extreme-handheld-gaming",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "MSI’s Claw 8 EX AI+ will launch on June 23 at $1,699, making it the most expensive handheld gaming PC ever sold at retail. The device is the first to ship with Intel’s Arc G3 Extreme processor, built on the Panther Lake platform with 12 Xe3 GPU cores and a 14-core CPU. It is also [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/msi-claw-8-ex-ai-plus-1699-arc-g3-extreme-handheld-gaming.avif",
-      "published": "2026-06-15T20:54:30+00:00",
-      "firstSeen": "2026-06-15T22:00:01.468152+00:00",
-      "lastSeen": "2026-06-15T23:59:16.901814+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.8362
-    },
-    {
-      "title": "Anthropic heads to Washington for crisis talks as Fable 5 ban spirals into the ugliest AI policy fight in US history",
-      "url": "https://thenextweb.com/news/anthropic-commerce-meeting-fable-mythos-crisis",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Anthropic’s senior technical staff will sit down with Commerce Department officials in Washington on Monday in a bid to resolve the escalating crisis over its suspended Fable 5 and Mythos 5 models. The meeting, confirmed by Reuters and Bloomberg, comes after a week in which the dispute has metastasised from a narrow cybersecurity concern into a [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/04/anthropic-claude-opus-4-7-coding-agentic-benchmarks-release.avif",
-      "published": "2026-06-15T20:47:59+00:00",
-      "firstSeen": "2026-06-15T22:00:01.468152+00:00",
-      "lastSeen": "2026-06-15T23:00:01.319057+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.8338
-    },
-    {
-      "title": "Facebook now has an AI search engine that pulls answers from your Group posts and Reels",
-      "url": "https://thenextweb.com/news/meta-facebook-ai-mode-search-public-posts-groups-reels",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Meta has launched AI Mode on Facebook, a new search experience that uses Meta AI to pull answers from public posts across the platform. The feature surfaces information from Facebook Groups, Reels, and Marketplace listings, turning years of user-generated content into a searchable knowledge base. It is rolling out now to users in the United [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/meta-facebook-ai-mode-search-public-posts-groups-reels.avif",
-      "published": "2026-06-15T20:37:15+00:00",
-      "firstSeen": "2026-06-15T21:00:01.290903+00:00",
-      "lastSeen": "2026-06-15T23:00:01.319057+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "editorial_score_pass",
-      "score": 8.0299
-    },
-    {
-      "title": "LinkedIn just produced its most unlikely success story: a World Cup footballer",
-      "url": "https://thenextweb.com/news/pico-lopes-linkedin-world-cup-cape-verde",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Most LinkedIn messages lead to sales pitches, recruiter spam, or polite rejections. Roberto ‘Pico’ Lopes got a World Cup call-up. The Dublin-born Shamrock Rovers defender made history on Monday when he started for Cape Verde against Spain in the country’s first ever World Cup match, a Group H clash at Mercedes-Benz Stadium in Atlanta. Cape [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/pico-lopes-linkedin-world-cup-cape-verde.avif",
-      "published": "2026-06-15T20:27:20+00:00",
-      "firstSeen": "2026-06-15T21:00:01.290903+00:00",
-      "lastSeen": "2026-06-15T23:00:01.319057+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.8263
-    },
-    {
-      "title": "Polymarket’s $345 million Iran peace bet is stuck because nobody can agree on what “permanent” means",
-      "url": "https://thenextweb.com/news/polymarket-345-million-iran-peace-deal-dispute-uma-whale-voting",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Polymarket, the largest prediction market exchange, has more than $345 million in trading volume stuck in limbo over a question of semantics. Traders bet on whether the United States and Iran would sign a permanent peace deal. Both countries announced an agreement over the weekend, but it is not clear that the announcement meets the [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/polymarket-345-million-iran-peace-deal-dispute-uma-whale-voting.avif",
-      "published": "2026-06-15T20:20:05+00:00",
-      "firstSeen": "2026-06-15T21:00:01.290903+00:00",
-      "lastSeen": "2026-06-15T23:00:01.319057+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.8237
-    },
-    {
-      "title": "100 cybersecurity experts say banning Fable 5 hurts defenders more than hackers",
-      "url": "https://thenextweb.com/news/fable-5-ban-cybersecurity-defenders-open-letter",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Three days after the US government ordered Anthropic to shut down Fable 5 and Mythos 5, roughly 100 of the world’s most prominent cybersecurity professionals have published an open letter demanding the ban be reversed. Their argument is blunt: pulling the best AI tools from defenders while adversaries keep building is not safety, it is sabotage. [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/fable-5-ban-cybersecurity-defenders-open-letter.avif",
-      "published": "2026-06-15T20:16:15+00:00",
-      "firstSeen": "2026-06-15T21:00:01.290903+00:00",
-      "lastSeen": "2026-06-15T21:18:13.883073+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 3.8224
+      "score": 3.2224
     },
     {
       "title": "The Life Scientific: Dean Lomax",
@@ -653,10 +653,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-15T20:00:00+00:00",
       "firstSeen": "2026-06-15T21:00:01.290903+00:00",
-      "lastSeen": "2026-06-16T09:00:01.431059+00:00",
+      "lastSeen": "2026-06-16T10:00:01.277680+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9566
+      "score": 1.9356
     },
     {
       "title": "The Life Scientific: Helen Hastie",
@@ -669,10 +669,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-08T20:00:00+00:00",
       "firstSeen": "2026-06-08T21:00:01.371488+00:00",
-      "lastSeen": "2026-06-16T09:00:01.431059+00:00",
+      "lastSeen": "2026-06-16T10:00:01.277680+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.1972
+      "score": 1.197
     },
     {
       "title": "The Life Scientific: Seth Berkley",
