@@ -1,6 +1,6 @@
 {
   "date": "2026-06-16",
-  "updatedAt": "2026-06-16T11:31:39.294458+00:00",
+  "updatedAt": "2026-06-16T13:00:01.284086+00:00",
   "items": [
     {
       "title": "Inside the fight over Claude Mythos 5",
@@ -13,11 +13,27 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/STKS515_CYBER_WARFARE2_D.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-16T03:00:00+00:00",
       "firstSeen": "2026-06-16T04:00:02.113408+00:00",
-      "lastSeen": "2026-06-16T12:00:01.183553+00:00",
+      "lastSeen": "2026-06-16T13:00:01.284086+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 19.128
+      "score": 19.0932
+    },
+    {
+      "title": "Claude earns more revenue per user than ChatGPT, Sensor Tower finds",
+      "url": "https://thenextweb.com/news/claude-chatgpt-revenue-per-user-sensor-tower",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "OpenAI still rules AI by sheer size, but it is no longer running away with it. ChatGPT’s apps crossed 1 billion monthly users in May, the fastest any app has reached the milestone, according to Sensor Tower’s State of AI 2026 report. Yet on the metric that pays the bills, Anthropic’s Claude is pulling ahead: [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/claude-chatgpt.avif",
+      "published": "2026-06-16T11:24:39+00:00",
+      "firstSeen": "2026-06-16T13:00:01.284086+00:00",
+      "lastSeen": "2026-06-16T13:00:01.284086+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 17.2025
     },
     {
       "title": "Anthropic Is Still at Odds With the White House Over Claude Fable 5",
@@ -30,10 +46,10 @@
       "image": "https://media.wired.com/photos/6a3068b96de136e1eb346f80/master/pass/Anthropic-Latest-Clash-With-White-House-Business-2280291383.jpg",
       "published": "2026-06-16T00:53:46+00:00",
       "firstSeen": "2026-06-16T01:00:01.529593+00:00",
-      "lastSeen": "2026-06-16T11:31:39.294458+00:00",
+      "lastSeen": "2026-06-16T13:00:01.284086+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.0087
+      "score": 10.9759
     },
     {
       "title": "Cloudflare CAPTCHA on at least one ampersand",
@@ -46,10 +62,26 @@
       "image": "",
       "published": "2026-06-16T00:21:36+00:00",
       "firstSeen": "2026-06-16T01:00:01.529593+00:00",
-      "lastSeen": "2026-06-16T11:31:39.294458+00:00",
+      "lastSeen": "2026-06-16T13:00:01.284086+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.4966
+      "score": 8.4643
+    },
+    {
+      "title": "Critical Copilot vulnerability allowed hackers to seal 2FA code from users",
+      "url": "https://arstechnica.com/security/2026/06/critical-copilot-vulnerability-allowed-hackers-to-seal-2fa-code-from-users",
+      "source": "Ars Technica (AI/Tech)",
+      "sourceUrl": "https://feeds.arstechnica.com/arstechnica/technology-lab",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "SearchLeak exploit shows why the industry's approach to LLM security fails over and over.",
+      "image": "https://cdn.arstechnica.net/wp-content/uploads/2026/06/GettyImages-2242817595-1152x648.jpg",
+      "published": "2026-06-16T11:15:46+00:00",
+      "firstSeen": "2026-06-16T13:00:01.284086+00:00",
+      "lastSeen": "2026-06-16T13:00:01.284086+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "editorial_score_pass",
+      "score": 7.5982
     },
     {
       "title": "The Fable 5 Export Controls Harm US Cyber Defense",
@@ -62,10 +94,42 @@
       "image": "",
       "published": "2026-06-16T05:20:29+00:00",
       "firstSeen": "2026-06-16T05:28:13.066998+00:00",
-      "lastSeen": "2026-06-16T11:31:39.294458+00:00",
+      "lastSeen": "2026-06-16T13:00:01.284086+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.5163
+      "score": 7.4792
+    },
+    {
+      "title": "SpaceX is officially buying Cursor for $60 billion",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/950571/spacex-is-officially-buying-cursor-for-60-billion",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "Days after its massive IPO, SpaceX says it is spending $60 billion to buy Cursor - a bet designed to help Elon Musk's sprawling rocket / AI / social media behemoth win over lucrative enterprise customers and close the gap with AI rivals like Anthropic and OpenAI. The takeover was not entirely unexpected: SpaceX announced [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/STKE012_SPACEX_IPO_2026_F.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
+      "published": "2026-06-16T11:41:31+00:00",
+      "firstSeen": "2026-06-16T13:00:01.284086+00:00",
+      "lastSeen": "2026-06-16T13:00:01.284086+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 6.3207
+    },
+    {
+      "title": "Qualcomm’s CEO says AI agents will be the new app, and 40 new devices are coming",
+      "url": "https://thenextweb.com/news/qualcomm-amon-ai-agents-new-app-devices",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Qualcomm’s chief executive thinks the app as you know it is on the way out, and that the phone in your pocket is about to lose its place at the centre of your digital life. ‘Agents are going to be the new app,’ Cristiano Amon told CNBC’s The Tech Download podcast. Apps are ‘not dead,’ [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/Qualcomm-President-and-CEO-Cristiano-Amon.avif",
+      "published": "2026-06-16T12:09:01+00:00",
+      "firstSeen": "2026-06-16T13:00:01.284086+00:00",
+      "lastSeen": "2026-06-16T13:00:01.284086+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.9243
     },
     {
       "title": "Malaysia’s AI agent-powered messaging app Respond.io raises $62.5M, eyes acquisitions",
@@ -78,10 +142,26 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/respond-team-comp-2.webp?resize=1200%2C800",
       "published": "2026-06-16T06:59:00+00:00",
       "firstSeen": "2026-06-16T07:00:01.843155+00:00",
-      "lastSeen": "2026-06-16T11:31:39.294458+00:00",
+      "lastSeen": "2026-06-16T13:00:01.284086+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.9596
+      "score": 5.9207
+    },
+    {
+      "title": "SoftBank and OpenAI launch “Patching as a Service” to defend Japan’s critical infrastructure",
+      "url": "https://thenextweb.com/news/softbank-openai-patching-as-a-service-japan",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "SoftBank and OpenAI are moving into cyber defence. The two said on Tuesday they are launching “Patching as a Service,” a security product built on OpenAI’s technology, to shield the companies behind Japan’s critical infrastructure from a rising wave of cyberattacks. SoftBank founder Masayoshi Son framed the threat in stark terms, calling Japan’s exposure “a [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/softbank-battery-factory-sharp-sakai-ai-data-centres-1.avif",
+      "published": "2026-06-16T10:46:57+00:00",
+      "firstSeen": "2026-06-16T13:00:01.284086+00:00",
+      "lastSeen": "2026-06-16T13:00:01.284086+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.7843
     },
     {
       "title": "AlphaGo’s David Silver puts his superintelligence bet on Google Cloud",
@@ -97,7 +177,7 @@
       "lastSeen": "2026-06-16T11:31:39.294458+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.4495
+      "score": 5.4094
     },
     {
       "title": "Alibaba unveils AI models for robots as China’s focus shifts to agents",
@@ -113,87 +193,7 @@
       "lastSeen": "2026-06-16T09:00:01.431059+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.4296
-    },
-    {
-      "title": "Quoting Matteo Wong, The Atlantic",
-      "url": "https://simonwillison.net/2026/Jun/16/matteo-wong-the-atlantic",
-      "source": "Simon Willison",
-      "sourceUrl": "https://simonwillison.net/atom/everything/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Katie Moussouris, a cybersecurity expert and the CEO of Luta Security, told me that Anthropic shared with her a copy of the White House’s report on the Fable jailbreak to get her appraisal. (She said that she is not being paid by Anthropic.) The report, Moussouris said, involved IT experts asking Fable to help find and patch bugs. When given deliberately insecure code, she said, Fable refused the prompt “review the code for security issues” but then complied when asked to “fix this code,” followed by some further manual steps. Moussouris told me that this was just “the model working as intende",
-      "image": "",
-      "published": "2026-06-16T03:07:54+00:00",
-      "firstSeen": "2026-06-16T04:00:02.113408+00:00",
-      "lastSeen": "2026-06-16T11:31:39.294458+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 5.1612
-    },
-    {
-      "title": "OpenAI spent $34bn last year as it lines up for an IPO",
-      "url": "https://thenextweb.com/news/openai-spent-34bn-last-year-as-it-lines-up-for-an-ipo",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "OpenAI spent $34bn in 2025, more than two and a half times what it took in, as it prepares to file for one of the largest public listings ever attempted. The figure, reported by the Financial Times, lays out in stark terms what the race to build frontier AI now costs the company leading it. The [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/04/OpenAI.avif",
-      "published": "2026-06-16T09:00:00+00:00",
-      "firstSeen": "2026-06-16T10:00:01.277680+00:00",
-      "lastSeen": "2026-06-16T11:31:39.294458+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 5.0754
-    },
-    {
-      "title": "DOJ Lawyers Argue xAI Is ‘Vital’ for National Security in NAACP Lawsuit",
-      "url": "https://www.wired.com/story/doj-lawyers-argue-xai-vital-national-security-naacp-lawsuit",
-      "source": "Wired AI",
-      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "In a bid to dismiss a lawsuit over xAI’s polluting gas turbines, the Justice Department claimed the company is integral to military operations—including the Iran War.",
-      "image": "https://media.wired.com/photos/6a30b0678f3c861b578bab3f/master/pass/GettyImages-2217198328.jpg",
-      "published": "2026-06-16T03:06:37+00:00",
-      "firstSeen": "2026-06-16T04:00:02.113408+00:00",
-      "lastSeen": "2026-06-16T11:31:39.294458+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 5.0607
-    },
-    {
-      "title": "DeepSeek closes $7bn-plus round with an unusual structure",
-      "url": "https://thenextweb.com/news/deepseek-closes-7bn-plus-round-with-an-unusual-structure",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "DeepSeek, the Chinese AI lab that unsettled the industry with a cheap, capable model last year, has closed its first round of outside funding, raising roughly 50 billion yuan, about $7bn, in a deal whose structure is as notable as its size. The valuation lands between $52bn and $59bn, according to Reuters. The unusual part [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/04/DeepSeek.avif",
-      "published": "2026-06-16T07:33:55+00:00",
-      "firstSeen": "2026-06-16T08:00:01.285617+00:00",
-      "lastSeen": "2026-06-16T09:00:01.431059+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 5.0354
-    },
-    {
-      "title": "Anthropic curbs make the case for sovereign AI, Upstage chief says",
-      "url": "https://thenextweb.com/news/anthropic-curbs-make-the-case-for-sovereign-ai-upstage-chief-says",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "When the US government ordered Anthropic to cut foreign access to its most capable models, and the company switched them off worldwide rather than try to comply selectively, it handed every advocate of home-grown AI a tidy piece of evidence. Sung Kim, chief executive of the South Korean startup Upstage, picked it up at a [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/Sung-Kim-Upstage-CEO.avif",
-      "published": "2026-06-16T07:15:54+00:00",
-      "firstSeen": "2026-06-16T08:00:01.285617+00:00",
-      "lastSeen": "2026-06-16T09:00:01.431059+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 5.0272
+      "score": 5.3904
     }
   ],
   "errors": [
