@@ -357,6 +357,18 @@
         bindImages();
       }
 
+      function compareWorldItems(a, b) {
+        const aWorld = String(a.world?.name || '');
+        const bWorld = String(b.world?.name || '');
+        const worldOrder = aWorld.localeCompare(bWorld);
+        if (worldOrder) return worldOrder;
+        const isMirthcap = aWorld === 'Mirthcap Lookingglass Village';
+        const dateOrder = String(a.date || '').localeCompare(String(b.date || ''));
+        if (dateOrder) return isMirthcap ? dateOrder : -dateOrder;
+        const slotOrder = String(a.slot || '').localeCompare(String(b.slot || ''));
+        return isMirthcap ? slotOrder : -slotOrder;
+      }
+
       function bindImages() {
         document.querySelectorAll('.image-wrap img').forEach((thumb) => {
           thumb.setAttribute('tabindex', '0');
@@ -421,7 +433,7 @@
 
       fetch('worlds-data.json', { cache: 'no-cache' })
         .then((r) => r.ok ? r.json() : Promise.reject(new Error('Could not load worlds-data.json')))
-        .then((items) => render(items.sort((a, b) => String(a.world?.name || '').localeCompare(String(b.world?.name || '')) || String(b.date || '').localeCompare(String(a.date || '')) || String(b.slot || '').localeCompare(String(a.slot || '')))))
+        .then((items) => render(items.sort(compareWorldItems)))
         .catch((err) => { worldsRoot.innerHTML = `<p class="empty">${escapeHtml(err.message)}</p>`; });
     })();
   </script>
