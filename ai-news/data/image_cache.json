@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-16T11:00:01.488356+00:00",
+  "updatedAt": "2026-06-16T11:31:39.294458+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -10528,6 +10528,10 @@
     "https://www.artificialintelligence-news.com/news/ai-content-labelling-eu-code-of-practice": {
       "image": "",
       "checkedAt": "2026-06-16T11:00:01.488356+00:00"
+    },
+    "https://techcrunch.com/2026/06/16/spacex-to-acquire-cursor-for-60b-in-stock-days-after-blockbuster-ipo": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/elon-nasdaq-spacex-ipo.jpg?resize=1200,801",
+      "checkedAt": "2026-06-16T11:31:39.294458+00:00"
     }
   }
 }
