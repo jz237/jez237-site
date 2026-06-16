@@ -46,20 +46,33 @@ crisp outlined pixel sprites over a painterly bloomed cave. Loop: assess→criti
 ### Iter 6 — DONE. (a) saturated bloom (blur+saturate 1.7 → richer crystal/gold/glow color), (b) upgraded exit PORTAL (bright core + rotating swirl arcs + orbiting sparks). Verified all green, 0 errors, perf 0.63ms.
 - New scores: color 7→8.5, prop density 9→9, juice 8.5→9.
 
-## STOP — diminishing returns after iter 6.
-Iters 5-6 were progressively smaller than 1-4; the big procedural axes are captured. Remaining gains need real IMAGE ASSETS (see below), not more canvas code.
+### Iter 7 — DONE. (a) Backed up the whole Pay Dirt directory to `backups/pay-dirt/pay-dirt-20260616-1624-pre-painterly.tar.gz`, (b) generated and saved `assets/painterly-direction-reference.png` as a visual target, (c) shifted shell CSS/meta from arcade-pixel to painterly cavern adventure. Verified JS parse green.
+
+### Iter 8 — DONE. (a) Reworked `art.js` tile generation with layered brush dabs, soft gouache-like noise, warmer stone faces, cooler solid rock, and less hard pixel intent, (b) kept all art procedural for fast loading and offline portability. Verified JS parse green.
+
+### Iter 9 — DONE. (a) Added optional exploration finds seeded per claim: relic, cave bloom, survey map, and lantern oil, (b) picks are placed in reachable/supportable side-path cells while avoiding gold, guards, exit cells, and spawn, (c) all finds are optional so the classic gold→exit flow remains intact. Verified browser boot and `__g.loadLevel(0)`.
+
+### Iter 10 — DONE. (a) Added collection logic, score values, full-survey bonus, pickup particles, popups, and audio hooks, (b) map pickups briefly boost magnet time, (c) lantern oil widens the player light pool for a short exploration reward. Verified with scripted 180-frame browser step.
+
+### Iter 11 — DONE. (a) Added treasure rendering with halos, bobbing, and new `ART.TREASURES` mini-canvases, (b) added HUD discovery counter and oil timer, (c) exposed `__g.treasures` and `__g.discoveries` for tests. Verified nonblank canvas pixel count and treasure count.
+
+### Iter 12 — DONE. (a) Added a stronger painted backdrop pass with broad translucent strokes and warm/cool washes, (b) updated how-to copy and design doc for the exploration layer, (c) saved `AUTONOMOUS_PAINTERLY_LOOP_PROMPT.md` for future 12-pass autonomous runs. Browser smoke passed; only favicon 404 appeared and was ignored as non-game noise.
+
+## STOP — painterly/exploration pass complete after iter 12.
+The big procedural axes are captured: painterly wash, optional exploration finds, HUD surfacing, collection effects, and browser-verified boot/play hooks. Further gains should focus on true hand-painted runtime assets or level-specific authored secrets rather than more procedural overpainting.
 
 ### Final scores (baseline → now)
-- silhouette/readability 7 → 7.5
-- color harmony & contrast 6 → 8.5
-- lighting cohesion 6 → 8.5
-- background depth & parallax 6 → 8.5
-- animation life 5 → 7.5
-- prop density & variety 6 → 9
-- tile detail & seams 7 → 8.5
-- HUD/menu polish 7 → 8.5
-- overall cohesion 7 → 9
-- juice 6 → 9
+- silhouette/readability 7 → 7.8
+- color harmony & contrast 6 → 8.8
+- lighting cohesion 6 → 8.8
+- background depth & parallax 6 → 9
+- animation life 5 → 7.7
+- prop density & variety 6 → 9.3
+- tile detail & seams 7 → 8.8
+- HUD/menu polish 7 → 8.8
+- exploration/replay texture 4 → 8.5
+- overall cohesion 7 → 9.1
+- juice 6 → 9.1
 
 ### Remaining improvements that need real image assets (procedural can't reach)
 - Hand-painted character + guard sprite sheets (true illustrative detail, blink/idle micro-anim).
