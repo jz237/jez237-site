@@ -252,8 +252,21 @@ function makeActor(c, r, kind){
 /* ================= movement (shared by player + guards) ================= */
 const RUN_SPEED = 5.4, CLIMB_SPEED = 4.5, FALL_SPEED = 9.5;
 const CENTER_EPS = 0.01;
+const LADDER_GRAB_X = 0.62;
 
 function clamp(v, lo, hi){ return v < lo ? lo : v > hi ? hi : v; }
+
+function nearestLadderColumn(a, r){
+  const base = Math.floor(a.x);
+  let best = null, bestD = 99;
+  for (let c = base - 1; c <= base + 1; c++){
+    if (c < 0 || c >= COLS) continue;
+    if (!isLadder(c, r) && !isLadder(c, r + 1)) continue;
+    const d = Math.abs(a.x - (c + .5));
+    if (d <= LADDER_GRAB_X && d < bestD){ best = c; bestD = d; }
+  }
+  return best;
+}
 
 // can a body move horizontally into cell (c,r) travelling in dir (-1/+1)?
 function canEnterHoriz(c, r, dir){
@@ -273,11 +286,13 @@ function guardSupportAt(c, r){
 
 function hasSupport(a){
   const c = Math.floor(a.x), r = Math.floor(a.y);
+  const lc = nearestLadderColumn(a, r);
   if (Math.abs(a.y - (r + .5)) > 0.05){
     // between rows: ladders hold you — including one your lower half still overlaps
-    return isLadder(c, r) || (a.y > r + .5 && isLadder(c, r + 1));
+    return (lc != null && (isLadder(lc, r) || (a.y > r + .5 && isLadder(lc, r + 1)))) ||
+      isLadder(c, r) || (a.y > r + .5 && isLadder(c, r + 1));
   }
-  return isSupportTile(c, r + 1) || isLadder(c, r) || isBar(c, r) || guardSupportAt(c, r + 1);
+  return isSupportTile(c, r + 1) || (lc != null && isLadder(lc, r)) || isLadder(c, r) || isBar(c, r) || guardSupportAt(c, r + 1);
 }
 
 function tryMoveX(a, dx){
@@ -294,9 +309,9 @@ function tryMoveX(a, dx){
   return moved;
 }
 
-function tryMoveY(a, dy){
+function tryMoveY(a, dy, lockC){
   if (!dy) return false;
-  const c = Math.floor(a.x);
+  const c = lockC == null ? Math.floor(a.x) : lockC;
   let r = Math.floor(a.y);
   let ny = a.y + dy;
   if (dy < 0){
@@ -344,7 +359,9 @@ function moveActor(a, dt, inp, spd){
 
   // vertical intent first (ladder priority, classic feel)
   if (dyIn !== 0){
-    const onLad = isLadder(c, r), ladBelow = isLadder(c, r + 1);
+    const lc = nearestLadderColumn(a, r);
+    const climbC = lc == null ? c : lc;
+    const onLad = isLadder(climbC, r), ladBelow = isLadder(climbC, r + 1);
     const onBar = isBar(c, r);
     if (dyIn > 0 && onBar && !onLad && !isSupportTile(c, r + 1)){
       a.state = 'fall'; a.y += 0.02; a.anim = 0; a.fellFrom = a.y; return; // drop from bar
@@ -353,9 +370,10 @@ function moveActor(a, dt, inp, spd){
       ? (onLad || (ladBelow && a.y > r + .5 + CENTER_EPS))
       : (onLad || ladBelow);
     if (canClimb){
-      movedY = tryMoveY(a, dyIn * climb);
+      a.x += (climbC + .5 - a.x) * Math.min(1, dt * 22);
+      movedY = tryMoveY(a, dyIn * climb, climbC);
       if (movedY){
-        a.x += (c + .5 - a.x) * Math.min(1, dt * 16); // hug the ladder
+        a.x += (climbC + .5 - a.x) * Math.min(1, dt * 22); // hug the ladder
         a.state = 'climb';
       }
     }
@@ -1927,6 +1945,15 @@ function drawPainterlyLadders(){
   }
 }
 
+function shakeOffset(){
+  if (shake <= 0) return {x: 0, y: 0};
+  const amp = shake * shake * (mobileCamera ? 3.2 : 7.5);
+  return {
+    x: Math.sin(clock * 83.0) * amp + Math.sin(clock * 41.0 + 1.7) * amp * 0.35,
+    y: Math.cos(clock * 79.0 + 0.6) * amp * 0.72,
+  };
+}
+
 function renderWorldFrame(includeHUD){
   if (state === 'title'){ renderTitle(); return; }
   ctx.clearRect(0, 0, VIEW_W, VIEW_H);
@@ -1983,8 +2010,8 @@ function renderWorldFrame(includeHUD){
 
   ctx.save();
   if (shake > 0){
-    const s = shake * shake * 9;
-    ctx.translate((Math.random() * 2 - 1) * s, (Math.random() * 2 - 1) * s);
+    const s = shakeOffset();
+    ctx.translate(s.x, s.y);
   }
 
   if (grid.length){
@@ -2189,7 +2216,7 @@ function renderWorldFrame(includeHUD){
   }
 
   // hit flash
-  if (flash > 0){ ctx.fillStyle = 'rgba(255,245,210,' + (flash * .5) + ')'; ctx.fillRect(0, 0, VIEW_W, VIEW_H); }
+  if (flash > 0){ ctx.fillStyle = 'rgba(255,245,210,' + (flash * (mobileCamera ? .28 : .5)) + ')'; ctx.fillRect(0, 0, VIEW_W, VIEW_H); }
   // death red vignette
   if (deathFlash > 0){
     const dv = ctx.createRadialGradient(VIEW_W / 2, VIEW_H / 2, VIEW_H * .2, VIEW_W / 2, VIEW_H / 2, VIEW_H * .75);
