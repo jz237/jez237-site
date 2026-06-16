@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-16T21:16:24.656542+00:00",
+  "updatedAt": "2026-06-16T23:00:01.669836+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -10640,6 +10640,14 @@
     "https://github.com/modelcontextprotocol/python-sdk/releases/tag/v1.28.0": {
       "image": "https://opengraph.githubassets.com/6a802256e034565fc9bf3fc4fbc910144fe164961925084df82344bfd7023c73/modelcontextprotocol/python-sdk/releases/tag/v1.28.0",
       "checkedAt": "2026-06-16T21:16:24.656542+00:00"
+    },
+    "https://techcrunch.com/2026/06/16/anthropics-latest-feud-with-the-trump-admin-may-actually-help-it-sales-data-suggests": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/Dario-Amodei-Anthropic-viva-tech.jpg?w=1024",
+      "checkedAt": "2026-06-16T23:00:01.669836+00:00"
+    },
+    "https://github.com/modelcontextprotocol/python-sdk/releases/tag/v2.0.0a2": {
+      "image": "https://opengraph.githubassets.com/a099b69a21a2680d6e601f59a61ea5ccbce561b635163af242144962caa281e4/modelcontextprotocol/python-sdk/releases/tag/v2.0.0a2",
+      "checkedAt": "2026-06-16T23:00:01.669836+00:00"
     }
   }
 }
