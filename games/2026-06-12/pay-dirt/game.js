@@ -1739,13 +1739,25 @@ function drawActor(a){
 
 /* additive radial glow — cached per color sprite, scaled on draw (cheaper than per-call gradients) */
 const glowCache = {};
+const glowCacheKeys = [];
+const MAX_GLOW_CACHE = 96;
+function glowCacheKey(color){
+  const m = /^rgba\((.*),\s*([0-9.]+)\)$/.exec(color);
+  if (!m) return color;
+  const a = Math.max(0, Math.min(1, parseFloat(m[2])));
+  return 'rgba(' + m[1] + ',' + (Math.round(a * 20) / 20).toFixed(2) + ')';
+}
 function glowSprite(color){
-  if (glowCache[color]) return glowCache[color];
+  const key = glowCacheKey(color);
+  if (glowCache[key]) return glowCache[key];
   const S = 64, c = ART.cv(S, S), x = ART.cx(c);
   const g = x.createRadialGradient(S / 2, S / 2, 0, S / 2, S / 2, S / 2);
-  g.addColorStop(0, color); g.addColorStop(1, 'rgba(0,0,0,0)');
+  g.addColorStop(0, key); g.addColorStop(1, 'rgba(0,0,0,0)');
   x.fillStyle = g; x.fillRect(0, 0, S, S);
-  glowCache[color] = c; return c;
+  glowCache[key] = c;
+  glowCacheKeys.push(key);
+  while (glowCacheKeys.length > MAX_GLOW_CACHE) delete glowCache[glowCacheKeys.shift()];
+  return c;
 }
 function glow(wx, wy, radius, color, alpha){
   const x = px(wx), y = py(wy);
@@ -2841,6 +2853,7 @@ window.__g = {
   get levelTime(){ return levelTime; },
   get dailyDate(){ return dailyDate; },
   get backdrop(){ return painterlyPlateSrc; },
+  get glowCacheSize(){ return glowCacheKeys.length; },
   seedDaily(dateStr){
     const d = LEVELS.generateDaily(dateStr);
     mode = 'daily'; dailyDate = d.date; score = 0; lives = 3;
