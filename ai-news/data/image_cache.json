@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-17T16:00:02.075644+00:00",
+  "updatedAt": "2026-06-17T17:00:01.475707+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -10716,6 +10716,22 @@
     "https://www.anthropic.com/news/seoul-office-partnerships-korean-ai-ecosystem": {
       "image": "https://www.anthropic.com/api/opengraph-illustration?name=Object%20Globe&amp;backgroundColor=heather",
       "checkedAt": "2026-06-17T16:00:02.075644+00:00"
+    },
+    "https://techcrunch.com/2026/06/17/google-bets-on-gemini-to-reinvent-the-smart-home-speaker": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/Google-Home-Speaker-Berry.jpeg?resize=1200,899",
+      "checkedAt": "2026-06-17T17:00:01.475707+00:00"
+    },
+    "https://www.theverge.com/column/951516/trump-anthropic-feud-mythos-fable-white-house": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/gettyimages-2282033342.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.740280282734%2C100%2C78.519439434532&amp;w=1200",
+      "checkedAt": "2026-06-17T17:00:01.475707+00:00"
+    },
+    "https://www.theverge.com/report/951481/snap-specs-wearables-smart-glasses-fashion": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/image-3-1.png?quality=90&amp;strip=all&amp;crop=0%2C3.4892491027825%2C100%2C93.021501794435&amp;w=1200",
+      "checkedAt": "2026-06-17T17:00:01.475707+00:00"
+    },
+    "https://huggingface.co/blog/agentic-resource-discovery-launch": {
+      "image": "https://huggingface.co/blog/assets/agentic-resource-discovery-launch/thumbnail.png",
+      "checkedAt": "2026-06-17T17:00:01.475707+00:00"
     }
   }
 }
