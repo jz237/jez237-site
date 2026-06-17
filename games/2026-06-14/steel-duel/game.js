@@ -386,7 +386,7 @@
   function updateCamera() {
     if (!mobileView) { cam.x = 0; cam.y = 0; cam.zoom = 1; return cam; }
     const portrait = viewH >= viewW;
-    cam.zoom = portrait ? 1.38 : 1.18;
+    cam.zoom = portrait ? 1.08 : 1.0;
     const vw = viewW / cam.zoom, vh = viewH / cam.zoom;
     let target = tanks[0];
     if ((state === 'attract' || mode === 'watch') && tanks[0] && tanks[1]) target = { x: (tanks[0].x + tanks[1].x) / 2, y: (tanks[0].y + tanks[1].y) / 2 };
