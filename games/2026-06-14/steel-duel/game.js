@@ -120,6 +120,7 @@
   let bots = [false, false, true, true];
   let campaign = null;          // campaign run state (null outside campaign mode)
   let mouseX = LW / 2, mouseY = LH / 2, mouseDown = false;
+  let touchHeld = false, touchWX = 0, touchWY = 0;      // mobile hold-to-point (drive + shoot toward the finger)
   let online = { ws: null, room: '', role: null, id: null, mode: 'duel', name: 'PLAYER', names: { p1: 'P1', p2: 'P2' }, ready: { p1: false, p2: false }, status: '', connected: false, started: false, lastInput: 0, lastSnapshot: 0, peers: [] };
 
   let controls = [ctrl(), ctrl(), ctrl(), ctrl()];
@@ -514,9 +515,13 @@
         } else {
           cmd.fire = (autoFire && clearShot(me, ang)) || !!c.fire;   // Space fires; otherwise auto-fire on a clear shot
         }
-      } else if (c.aimVec && c.aimVec.active) {            // mobile twin-stick (auto-fire off): manual aim + fire
+      } else if (touchHeld && i === 0) {                   // mobile: hold finger to drive toward + shoot at the touch point
+        const ang = Math.atan2(touchWY - me.y, touchWX - me.x); cmd.aim = ang; cmd.aimInstant = true;
+        if (Math.hypot(touchWX - me.x, touchWY - me.y) > 24) cmd.moveVec = { ang: ang, mag: 1 };
+        cmd.fire = true;
+      } else if (c.aimVec && c.aimVec.active) {            // mobile twin-stick (duel/coop aim pad): manual aim + fire
         cmd.aim = c.aimVec.angle; cmd.aimInstant = true; cmd.fire = true;
-      } else if (foe) {                                     // auto-aim nearest enemy; fire once the turret is lined up with a clear shot
+      } else if (foe) {                                     // not touching: auto-aim nearest enemy; fire when lined up with a clear shot
         cmd.aim = Math.atan2(foe.y - me.y, foe.x - me.x); cmd.aimInstant = false; cmd.turretTurn = TURRET_TURN;
         const aligned = Math.abs(wrapAngle(me.turret - cmd.aim)) < 0.22;
         cmd.fire = (autoFire && aligned && clearShot(me, cmd.aim)) || !!c.fire;
@@ -1203,10 +1208,12 @@
   function toggleVisual() { visualMode = visualMode === 'hd' ? 'classic' : 'hd'; const b = $('btnClassic'); if (b) b.textContent = visualMode === 'classic' ? '1974' : 'HD'; }
   function mouseAimActive() { return !touchActive && (mode === 'cpu' || (mode === 'campaign' && campaign && campaign.players === 1)); }
   function applyCursor() { if (canvas) canvas.style.cursor = (state === 'playing' && mouseAimActive()) ? 'none' : 'default'; }
-  function updateTouchLayout() {                          // one-thumb modes (campaign / vs-CPU auto-aim) drop the aim stick
-    const sr = $('stickR'); if (!sr) return;
-    const oneThumb = (mode === 'campaign' || mode === 'cpu');
-    sr.style.display = (touchActive && (!oneThumb || !autoFire)) ? '' : 'none';   // auto-fire off → bring the aim/fire stick back
+  function updateTouchLayout() {                          // campaign / vs-CPU use hold-to-point on the field (no sticks); duel/coop keep the twin sticks
+    const sticks = (mode === 'duel' || mode === 'coop');
+    const sl = $('stickL'), sr = $('stickR'), hint = $('touchHint');
+    if (sl) sl.style.display = (touchActive && sticks) ? '' : 'none';
+    if (sr) sr.style.display = (touchActive && sticks) ? '' : 'none';
+    if (hint) hint.style.display = (touchActive && !sticks && (mode === 'campaign' || mode === 'cpu')) ? '' : 'none';
   }
   function persist(k, v) { try { localStorage.setItem(k, v ? '1' : '0'); } catch (e) {} }
   function setMuted(m) {
@@ -1239,6 +1246,22 @@
     if (!isTouch) { wrap.style.display = 'none'; return; }
     touchActive = true; wrap.style.display = 'block'; applyCursor();
     bindStick('stickL', 'driveVec'); bindStick('stickR', 'aimVec');
+    setupFieldTouch();
+  }
+  // Campaign / vs-CPU: hold a finger anywhere on the field to drive toward it and shoot that way.
+  function setupFieldTouch() {
+    if (!canvas) return;
+    const isPointMode = () => (mode === 'campaign' || mode === 'cpu');
+    const set = e => {
+      if (!isPointMode() || state !== 'playing') return;
+      const t = e.changedTouches[0]; if (!t) return;
+      const p = screenToWorld(t.clientX, t.clientY);
+      touchWX = p.x; touchWY = p.y; touchHeld = true; e.preventDefault();
+    };
+    canvas.addEventListener('touchstart', set, { passive: false });
+    canvas.addEventListener('touchmove', set, { passive: false });
+    canvas.addEventListener('touchend', e => { if (e.touches.length === 0) touchHeld = false; });
+    canvas.addEventListener('touchcancel', () => { touchHeld = false; });
   }
   function bindStick(id, prop) {
     const base = $(id), knob = $(id + 'k'); if (!base) return;
@@ -1568,6 +1591,7 @@
     reset(seed) { headless = true; resetMatch(seed || 1); state = 'playing'; return true; },
     setSkill(a, b, c, d) { tankSkill = [a, b == null ? a : b, c == null ? a : c, d == null ? (c == null ? a : c) : d]; },
     setBot(p, on) { bots[p] = !!on; }, input(p, a, d) { if (controls[p]) controls[p][a] = !!d; },
+    touch(wx, wy, down) { touchHeld = down !== false; if (touchHeld) { touchWX = wx; touchWY = wy; } return true; },
     start: startGame, attract: startAttract,
     step(n) { n = n || 1; for (let i = 0; i < n; i++) update(); render(); return true; },
     snap() { render(); return true; }, fire(i) { fire(tanks[i || 0]); }, kill(i) { killTank(i || 0); },
