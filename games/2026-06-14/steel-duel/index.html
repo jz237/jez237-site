@@ -96,6 +96,7 @@
   #stickRk{background:rgba(255,179,71,.6)}
   .sticklbl{position:absolute;bottom:8px;left:20px;width:92px;text-align:center;font-size:9px;letter-spacing:1.2px;color:rgba(238,243,255,.18);pointer-events:none}
   #stickR .sticklbl{color:rgba(255,179,71,.2)}
+  #touchHint{display:none;position:absolute;left:0;right:0;bottom:18px;text-align:center;font-size:11px;letter-spacing:1px;color:rgba(238,243,255,.28);pointer-events:none}
   .knob{display:none}
   input[type=range]{accent-color:var(--amber)}
   .footer{margin-top:12px;color:var(--dim);font-size:11px}
@@ -199,7 +200,7 @@
       <h1 style="font-size:34px">HOW TO PLAY</h1>
       <p class="sub">Campaign: clear every wave and beat the bosses. Versus: outscore the other side.</p>
       <div class="keys">
-        <div><h3 class="p1">CAMPAIGN / vs&nbsp;CPU</h3><b>WASD</b> move · <b>Mouse</b> aims<br><b>Hold mouse</b>: drive + shoot at cursor<br><span style="opacity:.7">Auto-fires with a clear shot.<br>Mobile: one stick, auto-aim &amp; fire</span></div>
+        <div><h3 class="p1">CAMPAIGN / vs&nbsp;CPU</h3><b>WASD</b> move · <b>Mouse</b> aims<br><b>Hold mouse</b>: drive + shoot at cursor<br><span style="opacity:.7">Auto-fires with a clear shot.<br>Mobile: hold &amp; drag to drive +<br>fire toward your finger</span></div>
         <div><h3 class="p2">CO-OP / DUEL</h3>P1 <b>WASD</b> + <b>Space</b><br>P2 <b>↑ ↓ ← →</b> + <b>Enter</b><br><span style="opacity:.7">(faithful tank steering,<br>barrels fire forward)</span></div>
       </div>
       <p class="sub" style="margin-top:14px"><b style="color:var(--amber)">Campaign</b> (1P or 2-player co-op): survive waves of enemy tanks across 12 levels and defeat three bosses. Enemy types differ — <b>scouts</b> are fast, <b>brutes</b> are tanky, <b>snipers</b> keep their distance, <b>mine-layers</b> drop mines, and <b>wardens</b> (and the Mauler boss) have a front armor plate, so <b>hit them from the side or behind</b>. You have shared lives; clear a level to earn one back. Co-op revives a downed teammate next wave.</p>
@@ -215,7 +216,7 @@
       <p class="sub">Saved on this device</p>
       <button id="optSound" class="btn">🔊 SOUND: ON</button>
       <button id="optAutoFire" class="btn">🎯 AUTO-FIRE: ON</button>
-      <p class="sub" style="margin-top:8px;text-align:left;line-height:1.4">In Campaign &amp; vs CPU, <b>auto-fire</b> shoots automatically when enemies are near, so you only steer and aim. Turn it <b>off</b> to fire manually — click / Space on desktop, or a right-stick on mobile.</p>
+      <p class="sub" style="margin-top:8px;text-align:left;line-height:1.4">In Campaign &amp; vs CPU, <b>auto-fire</b> shoots automatically when an enemy is in a clear line of sight, so you only steer. Turn it <b>off</b> to fire only when you choose — click / Space on desktop, or by holding your finger on mobile.</p>
       <button id="btnOptionsBack" class="btn primary">BACK</button>
     </div>
   </div>
@@ -256,10 +257,11 @@
     </div>
   </div>
 
-  <!-- TOUCH (twin sticks) -->
+  <!-- TOUCH (twin sticks for duel/coop; campaign & vs-CPU use hold-to-point on the field) -->
   <div id="touch">
     <div id="stickL" class="stick"><div id="stickLk" class="knob"></div><span class="sticklbl">MOVE</span></div>
     <div id="stickR" class="stick"><div id="stickRk" class="knob"></div><span class="sticklbl">AIM · FIRE</span></div>
+    <div id="touchHint">Hold &amp; drag to move and fire</div>
   </div>
 
   <script src="audio.js?v=22"></script>
