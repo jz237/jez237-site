@@ -73,6 +73,7 @@ let blasted = new Set(); // cells permanently cleared by explosions
 let fuses = [];          // [{c,r,t}] TNT crates about to blow
 let comboN = 0, comboT = 0;
 let discoveryCount = 0, discoveryTotal = 0, discoveryPulse = 0, oilLightT = 0;
+let softlockCheckT = 0, softlockT = 0, softlockReason = '';
 
 function key(c, r){ return c + ',' + r; }
 
@@ -83,6 +84,7 @@ function parseLevel(rows){
   guardSpawns = []; holes = new Map(); crumbles = new Map();
   blasted = new Set(); fuses = [];
   comboN = 0; comboT = 0;
+  softlockCheckT = 0; softlockT = 0; softlockReason = '';
   exitRevealed = false;
   for (let r = 0; r < ROWS; r++){
     const row = rows[r];
@@ -223,7 +225,7 @@ function drawPickupTrails(){
 }
 
 const $ = id => document.getElementById(id);
-const OVERLAYS = ['ovTitle', 'ovHow', 'ovLevels', 'ovScores', 'ovPause', 'ovOver'];
+const OVERLAYS = ['ovTitle', 'ovHow', 'ovLevels', 'ovScores', 'ovPause', 'ovStuck', 'ovOver'];
 function showOnly(id){
   for (const o of OVERLAYS) $(o).classList.toggle('show', o === id);
 }
@@ -246,6 +248,7 @@ addEventListener('keydown', e => {
   }
   if (state === 'playing'){ keys[e.code] = true; return; }
   if (state === 'paused' && k === 'Enter') return resumeGame();
+  if (state === 'stuck' && (k === 'Enter' || k === 'r' || k === 'R')) return restartLevel();
   if (state === 'over' && pendingEntry){
     if (/^[a-zA-Z]$/.test(k)){ setInitial(k); return; }
     if (k === 'Backspace'){ e.preventDefault(); moveCursor(-1); return; }
@@ -993,6 +996,100 @@ function checkWin(){
   if (player.y <= 0.55 && isLadder(c, 0)) levelComplete();
 }
 
+function reachableCellsFromPlayer(){
+  if (!player) return new Uint8Array(COLS * ROWS);
+  const seen = new Uint8Array(COLS * ROWS);
+  const q = [];
+  const add = (c, r) => {
+    if (c < 0 || c >= COLS || r < 0 || r >= ROWS) return;
+    const n = r * COLS + c;
+    if (!seen[n]){ seen[n] = 1; q.push(n); }
+  };
+  const solidBelow = (c, r) => r + 1 >= ROWS || isSupportTile(c, r + 1);
+  const supported = (c, r) => solidBelow(c, r) || isLadder(c, r) || isBar(c, r) || guardSupportAt(c, r + 1);
+  const fallTo = (c, r) => {
+    let rr = r;
+    while (rr < ROWS - 1 && !supported(c, rr) && canOccupy(c, rr + 1)) rr++;
+    return rr;
+  };
+  const diggableFrom = (c, r, dir) => {
+    const tc = c + dir, tr = r + 1;
+    const target = tileAt(tc, tr);
+    if (!(target === '#' || isBottomDiggable(tc, tr)) || isDug(tc, tr) || isBlasted(tc, tr)) return false;
+    const above = tileAt(tc, r);
+    if (above === '#' && !isDug(tc, r) && !isBlasted(tc, r)) return false;
+    if (above === 'X') return false;
+    if (above === 'B' && !isBlasted(tc, r)) return false;
+    if (above === 'C' && !isCrumbleGone(tc, r) && !isBlasted(tc, r)) return false;
+    return true;
+  };
+  add(Math.floor(player.x), Math.floor(player.y));
+  for (let qi = 0; qi < q.length; qi++){
+    const n = q[qi], c = n % COLS, r = (n / COLS) | 0;
+    if (!supported(c, r)){ add(c, fallTo(c, r)); continue; }
+    for (const dir of [-1, 1]){
+      const nc = c + dir;
+      if (canEnterHoriz(nc, r, dir)) add(nc, fallTo(nc, r));
+    }
+    if (isLadder(c, r) && canOccupy(c, r - 1)) add(c, r - 1);
+    if (canOccupy(c, r + 1) && (isLadder(c, r) || isLadder(c, r + 1))) add(c, r + 1);
+    if (isBar(c, r) && canOccupy(c, r + 1) && !solidBelow(c, r)) add(c, fallTo(c, r + 1));
+    if (solidBelow(c, r) && r + 1 < ROWS){
+      for (const dir of [-1, 1]){
+        if (diggableFrom(c, r, dir)) add(c + dir, fallTo(c + dir, r + 1));
+      }
+    }
+    if (tileAt(c, r + 1) === 'C' && !isCrumbleGone(c, r + 1) && !isBlasted(c, r + 1))
+      add(c, fallTo(c, r + 1));
+  }
+  return seen;
+}
+
+function currentNoWayOutReason(){
+  if (!player || player.state === 'dead' || player.state === 'fall' || player.digT > 0) return '';
+  if (golds.some(gd => !gd.taken && gd.held)) return '';
+  const seen = reachableCellsFromPlayer();
+  if (!exitRevealed){
+    for (const gd of golds){
+      if (!gd.taken && !gd.held && !seen[gd.r * COLS + gd.c])
+        return 'A remaining nugget is cut off from your current route.';
+    }
+    return '';
+  }
+  if (!exitCells.length) return 'The exit ladder is missing.';
+  for (const e of exitCells){
+    if (e.r === 0 && seen[e.r * COLS + e.c]) return '';
+  }
+  return 'The exit ladder cannot be reached from here.';
+}
+
+function clearSoftlock(){
+  softlockCheckT = 0;
+  softlockT = 0;
+  softlockReason = '';
+}
+
+function showSoftlock(reason){
+  state = 'stuck';
+  softlockReason = reason || 'This claim cannot be completed from here.';
+  for (const k in keys) keys[k] = false;
+  $('stuckReason').textContent = softlockReason;
+  showOnly('ovStuck');
+  AUDIO.sfx('warn');
+}
+
+function updateSoftlockDetector(dt){
+  if (levelTime < 2.0){ clearSoftlock(); return; }
+  softlockCheckT -= dt;
+  if (softlockCheckT > 0) return;
+  softlockCheckT = 0.45;
+  const reason = currentNoWayOutReason();
+  if (!reason){ softlockT = 0; softlockReason = ''; return; }
+  if (reason !== softlockReason){ softlockReason = reason; softlockT = 0; }
+  softlockT += softlockCheckT;
+  if (softlockT >= 1.8) showSoftlock(reason);
+}
+
 let campaignDone = [];
 try { campaignDone = JSON.parse(localStorage.getItem('paydirt-done') || '[]'); } catch (e) {}
 function markLevelDone(i){
@@ -1465,7 +1562,7 @@ function startCampaignAt(i){
 }
 function pauseGame(){ if (state !== 'playing') return; state = 'paused'; showOnly('ovPause'); }
 function resumeGame(){ if (state !== 'paused') return; state = 'playing'; hideOverlays(); }
-function restartLevel(){ loadCampaignLevel(levelIndex); state = 'playing'; hideOverlays(); }
+function restartLevel(){ reloadCurrentLevel(); state = 'playing'; hideOverlays(); }
 function quitToTitle(){ state = 'title'; AUDIO.stopMusic(); showOnly('ovTitle'); refreshTitleBoard(); }
 function toggleMute(){
   AUDIO.ensure(); AUDIO.setMuted(!AUDIO.muted);
@@ -1514,6 +1611,8 @@ bindButton('bLevelsBack', quitToTitle);
 bindButton('bScoresBack', quitToTitle);
 bindButton('bResume', resumeGame);
 bindButton('bRestartLvl', restartLevel);
+bindButton('bStuckRestart', restartLevel);
+bindButton('bStuckMenu', quitToTitle);
 bindButton('bQuit', quitToTitle);
 bindButton('bAgain', () => startGame(mode));
 bindButton('bOverMenu', quitToTitle);
@@ -1600,6 +1699,7 @@ function update(dt){
     updatePowerups(dt);
     checkGold();
     checkWin();
+    if (state === 'playing') updateSoftlockDetector(dt);
   }
 }
 
@@ -3695,6 +3795,8 @@ window.__g = {
   get dailyDate(){ return dailyDate; },
   get backdrop(){ return painterlyPlateSrc; },
   get glowCacheSize(){ return glowCacheKeys.length; },
+  noWayOut(){ return currentNoWayOutReason(); },
+  showNoWayOut(reason){ showSoftlock(reason || currentNoWayOutReason() || 'This claim cannot be completed from here.'); return state; },
   get mobileZoom(){ return mobileZoomAdjust; },
   set mobileZoom(v){ mobileZoomAdjust = clamp(Number(v) || 1, 0.72, 1.35); },
   seedDaily(dateStr){
