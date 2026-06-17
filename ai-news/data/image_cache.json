@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-17T17:00:01.475707+00:00",
+  "updatedAt": "2026-06-17T17:19:35.295995+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -10732,6 +10732,10 @@
     "https://huggingface.co/blog/agentic-resource-discovery-launch": {
       "image": "https://huggingface.co/blog/assets/agentic-resource-discovery-launch/thumbnail.png",
       "checkedAt": "2026-06-17T17:00:01.475707+00:00"
+    },
+    "https://techcrunch.com/2026/06/17/only-16-percent-of-americans-think-ai-will-have-a-positive-impact-on-society-a-new-study-shows": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/spacexipo-nasdaq.jpg?resize=1200,800",
+      "checkedAt": "2026-06-17T17:19:35.295995+00:00"
     }
   }
 }
