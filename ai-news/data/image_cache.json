@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-17T06:00:01.802382+00:00",
+  "updatedAt": "2026-06-17T07:00:01.679932+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -10660,6 +10660,10 @@
     "https://simonwillison.net/2026/Jun/17/netnewswire-status": {
       "image": "",
       "checkedAt": "2026-06-17T04:00:02.018851+00:00"
+    },
+    "https://simonwillison.net/2026/Jun/17/click-to-play-component": {
+      "image": "",
+      "checkedAt": "2026-06-17T07:00:01.679932+00:00"
     }
   }
 }
