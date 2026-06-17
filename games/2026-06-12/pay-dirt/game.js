@@ -1167,6 +1167,7 @@ function loadLevelData(rows){
   particles = []; popups = [];
   shake = 0; hitStop = 0; flash = 0; deathFlash = 0;
   digBuffer = 0; runDustT = 0;
+  selectPainterlyBackdrop();
   buildBackdrop();
   computeDecor();
   // intro banner
@@ -1318,10 +1319,33 @@ function drawTile(img, c, r){ ctx.drawImage(img, c * TILE, r * TILE + HUD_H); }
 
 /* parallax cave backdrop, baked per level */
 let bg = null, bloomCv = null, bloomCx = null;
+const PAINTERLY_BACKDROPS = [
+  'assets/painterly-cavern-bg-01.png',
+  'assets/painterly-cavern-bg-02.png',
+  'assets/painterly-cavern-bg-03.png',
+  'assets/painterly-cavern-bg-04.png',
+  'assets/painterly-cavern-bg-05.png',
+  'assets/painterly-cavern-bg-06.png',
+  'assets/painterly-cavern-bg-07.png',
+];
 const painterlyPlate = new Image();
-let painterlyPlateReady = false;
+let painterlyPlateReady = false, painterlyPlateSrc = '';
 painterlyPlate.onload = () => { painterlyPlateReady = true; bg = null; if (booted) render(); };
-painterlyPlate.src = 'assets/painterly-cavern-runtime-v2.png';
+
+function painterlyBackdropIndex(){
+  if (mode === 'campaign') return Math.min(PAINTERLY_BACKDROPS.length - 1, Math.floor(levelIndex / 2));
+  return Math.abs(LEVELS.hashStr(dailyDate || LEVELS.dailyDateUTC())) % PAINTERLY_BACKDROPS.length;
+}
+function selectPainterlyBackdrop(){
+  const src = PAINTERLY_BACKDROPS[painterlyBackdropIndex()] || PAINTERLY_BACKDROPS[0];
+  if (src === painterlyPlateSrc) return;
+  painterlyPlateReady = false;
+  painterlyPlateSrc = src;
+  bg = null;
+  painterlyPlate.src = src;
+}
+painterlyPlateSrc = PAINTERLY_BACKDROPS[0];
+painterlyPlate.src = painterlyPlateSrc;
 
 function drawCoverImage(x, img, dx, dy, dw, dh){
   if (!img || !img.naturalWidth || !img.naturalHeight) return;
@@ -2697,6 +2721,7 @@ window.__g = {
   boom(c, r){ boom(c, r); },
   get levelTime(){ return levelTime; },
   get dailyDate(){ return dailyDate; },
+  get backdrop(){ return painterlyPlateSrc; },
   seedDaily(dateStr){
     const d = LEVELS.generateDaily(dateStr);
     mode = 'daily'; dailyDate = d.date; score = 0; lives = 3;
