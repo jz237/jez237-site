@@ -273,6 +273,22 @@ existing online duel/survival co-op untouched and still work. Campaign arenas us
 walls (more *open*, not sub-tile *thinner*) — a finer collision grid was deemed out of scope; logged.
 True sub-tile-thin walls + per-type enemy *silhouettes* (beyond color) are the main future polish.
 
+## Post-ship — simpler controls (user request)  ✅ 25/25 tests green
+Reworked controls for campaign + vs-CPU (Versus duel/coop keep faithful 1974 tank steering):
+- **Direct/omnidirectional movement** — WASD (8-way) or the mobile stick moves the tank straight where
+  you point; hull eases toward travel direction. New `cmd.moveVec` path in `applyCommand` +
+  `moveTankVel`/`pushApart`; gated to campaign/cpu human control so `T-F2` (duel tank-steering) stays
+  green. Enemies/bosses keep AI tank-steering.
+- **Desktop:** mouse aims the turret + **auto-fire** while any enemy is alive (no button to hold;
+  click/Space still work). Reticle + hidden cursor now also apply in campaign 1P.
+- **Mobile:** **one-thumb** — left stick moves, turret **auto-aims the nearest enemy and auto-fires**;
+  the aim stick is hidden (`updateTouchLayout`). Co-op players (no mouse) also auto-aim.
+- Fixes: reset `controls` on `startCampaign` (stale held-key leak); reset shared `cmd.moveVec` per tank
+  in the sim loop (a stale moveVec was freezing bot enemies — caught by T-AI); patched the T-AI dummy
+  (now auto-fires) so it stays passive. How-to text updated.
+Verified: 8-way movement exact (right/left/up/down/diagonal), auto-fire fires, co-op P2 auto-aims,
+enemies move, full playthrough → victory, 0 console errors.
+
 **Shipping:** runTests 25/25, playable end-to-end, perf + stability + determinism green → commit+push
 `jez237-site main` (→ GitHub + jez237.com). Note: jez237.com is behind Cloudflare
 ([[jez237-cloudflare-cache]]) — the domain needs a one-time CF cache purge (or its ~4h TTL) to show
