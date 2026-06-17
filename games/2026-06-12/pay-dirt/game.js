@@ -282,6 +282,7 @@ function makeActor(c, r, kind){
     jitter: 0.96 + rnd() * 0.08,
     lastC: c, lastR: r,
     digT: 0, squashT: 0,
+    alertT: 0, alertCool: 0,
   };
 }
 
@@ -581,6 +582,11 @@ function updateCrumbles(dt){
 function updateHoles(dt){
   for (const h of [...holes.values()]){
     h.t += dt;
+    if (!h.warned && h.t >= HOLE_LIFE - HOLE_WARN){
+      h.warned = true;
+      AUDIO.sfx('warn');
+      spawnParticles(h.c + .5, h.r + .55, 8, {color: ['#ffcf73', '#a06e42', '#5b3922'], spd: 2.4, ang: -Math.PI / 2, spread: 2.2, life: .38, size: 2.8, grav: 20, glow: true});
+    }
     if (h.t >= HOLE_LIFE){
       holes.delete(key(h.c, h.r));
       AUDIO.sfx('refill');
@@ -614,6 +620,14 @@ const DEATH_TEXT = {
 };
 function guardMeta(g){ return GUARD_META[g.kind] || GUARD_META.guard; }
 function deathText(reason){ return DEATH_TEXT[reason] || 'CLAIM LOST'; }
+function guardSpotted(g, dist){
+  if (g.alertCool > 0 || g.state === 'dead' || g.state === 'stun') return;
+  g.alertT = 0.9;
+  g.alertCool = 2.4;
+  AUDIO.sfx('alert');
+  const meta = guardMeta(g);
+  popup(g.x, g.y - .8, dist < 3.2 ? meta.label + '!' : '!', meta.color);
+}
 
 /* Guard's-eye geometry: holes are PRETEND-FILLED so guards path straight into them
    (classic behaviour — they don't see traps). Crumbled/blasted tiles use real state. */
@@ -685,6 +699,8 @@ function guardPathStep(gc, gr, pc, pr){
 }
 
 function updateGuard(g, dt){
+  if (g.alertT > 0) g.alertT = Math.max(0, g.alertT - dt);
+  if (g.alertCool > 0) g.alertCool = Math.max(0, g.alertCool - dt);
   if (g.state === 'dead'){
     g.deadT += dt;
     if (g.deadT >= GUARD_RESPAWN_T) respawnGuard(g);
@@ -727,6 +743,8 @@ function updateGuard(g, dt){
   if (g.repath <= 0 && player && player.state !== 'dead'){
     g.repath = 0.35 + rnd() * 0.15;
     const wp = guardPathStep(c, r, Math.floor(player.x), Math.floor(player.y));
+    const dist = Math.hypot(player.x - g.x, player.y - g.y);
+    if (wp && dist < (g.kind === 'scout' ? 8.5 : 6.8)) guardSpotted(g, dist);
     g.wp = wp;
   }
 
@@ -2079,10 +2097,24 @@ function drawActor(a){
     ctx.fillStyle = meta.color;
     ctx.font = '900 12px system-ui, sans-serif';
     ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText(meta.icon, cx2, badgeY + .5);
-    ctx.restore();
-  }
+	    ctx.textBaseline = 'middle';
+	    ctx.fillText(meta.icon, cx2, badgeY + .5);
+	    if (a.alertT > 0){
+	      const p = a.alertT / 0.9;
+	      const ay = badgeY - 20 - (1 - p) * 8;
+	      ctx.globalAlpha = Math.min(1, p * 1.8);
+	      ctx.fillStyle = 'rgba(8,5,14,.82)';
+	      ctx.beginPath(); ctx.arc(cx2, ay, 10 + (1 - p) * 3, 0, Math.PI * 2); ctx.fill();
+	      ctx.strokeStyle = meta.color;
+	      ctx.lineWidth = 2;
+	      ctx.stroke();
+	      ctx.fillStyle = '#fff6d0';
+	      ctx.font = '900 15px system-ui, sans-serif';
+	      ctx.fillText('!', cx2, ay + .5);
+	      ctx.globalAlpha = 1;
+	    }
+	    ctx.restore();
+	  }
   // carried gold — show which guard pocketed your nugget
   if (a.gold){
     drawGoldGem(cx2, footY - h * 0.62, 8.5, gameTime + a.x);
@@ -3185,11 +3217,23 @@ function drawPit(c, r, dark, h){
 
   if (warn > 0){
     const tremble = Math.sin(h.t * 34) * 1.2;
-    ctx.globalAlpha = Math.min(.48, warn * .55);
+    const pulse = 0.55 + 0.45 * Math.sin(gameTime * (12 + warn * 10));
+    ctx.globalAlpha = Math.min(.72, warn * (.5 + pulse * .35));
+    ctx.strokeStyle = 'rgba(255,190,70,.78)';
+    ctx.lineWidth = 1.2 + warn * 2;
+    ctx.beginPath();
+    ctx.moveTo(x + topL + tremble, y + 7);
+    ctx.quadraticCurveTo(x + TILE * .5, y + 1 - warn * 2, x + topR - tremble, y + 8);
+    ctx.stroke();
     ctx.fillStyle = '#7d5230';
     const m = 5 + warn * 10;
     ctx.fillRect(x + 4 + tremble, y + TILE - m, TILE - 8, m * .5);
-    ctx.fillRect(x + 8 - tremble, y + 5, TILE - 16, 3);
+    ctx.fillRect(x + 8 - tremble, y + 5 + warn * 2, TILE - 16, 3 + warn * 2);
+    ctx.fillStyle = 'rgba(255,210,105,.8)';
+    for (let i = 0; i < 3; i++){
+      const rx = x + 9 + ((n >> (i * 6 + 3)) % 18) + tremble * (i - 1);
+      ctx.fillRect(rx, y + 6 + i * 7 + pulse * 2, 3, 2);
+    }
     ctx.globalAlpha = 1;
   }
   ctx.restore();
