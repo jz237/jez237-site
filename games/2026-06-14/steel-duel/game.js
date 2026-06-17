@@ -386,10 +386,11 @@
   function updateCamera() {
     if (!mobileView) { cam.x = 0; cam.y = 0; cam.zoom = 1; return cam; }
     const portrait = viewH >= viewW;
-    cam.zoom = portrait ? 1.08 : 1.0;
+    cam.zoom = portrait ? 0.92 : 0.86;
     const vw = viewW / cam.zoom, vh = viewH / cam.zoom;
     let target = tanks[0];
-    if ((state === 'attract' || mode === 'watch') && tanks[0] && tanks[1]) target = { x: (tanks[0].x + tanks[1].x) / 2, y: (tanks[0].y + tanks[1].y) / 2 };
+    if (online.connected && online.role === 'p2' && tanks[1]) target = tanks[1];
+    if (((state === 'attract' || mode === 'watch') || (online.connected && online.role === 'spectator')) && tanks[0] && tanks[1]) target = { x: (tanks[0].x + tanks[1].x) / 2, y: (tanks[0].y + tanks[1].y) / 2 };
     if (!target) target = { x: LW / 2, y: LH / 2 };
     cam.x = clampCam(target.x - vw * 0.5, LW - vw);
     cam.y = clampCam(target.y - vh * 0.5, LH - vh);
