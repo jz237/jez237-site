@@ -2403,11 +2403,6 @@ function renderWorldFrame(includeHUD){
           if (dug){
             const h = holes.get(key(c, r));
             drawPit(c, r, 1, h);
-            if (h && h.t > HOLE_LIFE - HOLE_WARN){
-              const u = (h.t - (HOLE_LIFE - HOLE_WARN)) / HOLE_WARN;
-              ctx.globalAlpha = .3 + .7 * u * (0.6 + 0.4 * Math.sin(h.t * 24));
-              drawTile(T.brick, c, r); ctx.globalAlpha = 1;
-            }
             continue;
           }
           if (t === 'C' && isCrumbleGone(c, r)){ continue; }
@@ -2486,7 +2481,6 @@ function renderWorldFrame(includeHUD){
       const total = Math.max(0.01, player.pendingDig.total || DIG_TIME);
       const p = clamp(1 - player.digT / total, 0, 1);
       const x = player.pendingDig.c * TILE, y = player.pendingDig.r * TILE + HUD_H;
-      drawTile(T.brick, player.pendingDig.c, player.pendingDig.r);
       ctx.globalAlpha = .22 + p * .5;
       ctx.fillStyle = '#2b1710';
       ctx.fillRect(x + 6 + p * 5, y + 12, 14 + p * 8, 3);
