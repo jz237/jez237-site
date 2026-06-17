@@ -2646,15 +2646,28 @@ function renderWorldFrame(includeHUD){
       const rx = baseX + drift;
       ctx.beginPath(); ctx.moveTo(rx, 0); ctx.lineTo(rx + 60, 0); ctx.lineTo(rx + 150, VIEW_H); ctx.lineTo(rx + 70, VIEW_H); ctx.closePath(); ctx.fill();
     }
-    // far waterfall shimmer — scrolling streaks at the sides
-    ctx.globalCompositeOperation = 'lighter';
-    for (const wx of [VIEW_W * 0.13, VIEW_W * 0.87]){
-      for (let i = 0; i < 7; i++){
-        const yy = ((i * 64 + clock * 130) % (VIEW_H * 0.62)) + 30;
-        ctx.globalAlpha = 0.07 + 0.03 * Math.sin(clock * 4 + i);
-        ctx.fillStyle = '#cfe6f6'; ctx.fillRect(wx, yy, 9, 22);
-      }
-    }
+	    // far waterfall shimmer — scrolling streaks at the sides
+	    ctx.globalCompositeOperation = 'lighter';
+	    for (const wx of [VIEW_W * 0.13, VIEW_W * 0.87]){
+	      for (let i = 0; i < 7; i++){
+	        const yy = ((i * 64 + clock * 130) % (VIEW_H * 0.62)) + 30;
+	        const sway = Math.sin(clock * 1.8 + i * 1.9) * 5;
+	        const len = 26 + (i % 3) * 10;
+	        ctx.globalAlpha = 0.055 + 0.028 * Math.sin(clock * 4 + i);
+	        ctx.strokeStyle = '#d9f2ff';
+	        ctx.lineWidth = 1.4 + (i % 2) * 0.8;
+	        ctx.lineCap = 'round';
+	        ctx.beginPath();
+	        ctx.moveTo(wx + sway, yy);
+	        ctx.bezierCurveTo(wx + sway + 4, yy + len * .3, wx + sway - 3, yy + len * .68, wx + sway + 1, yy + len);
+	        ctx.stroke();
+	        ctx.globalAlpha *= 0.45;
+	        ctx.beginPath();
+	        ctx.moveTo(wx + sway + 8, yy + 9);
+	        ctx.bezierCurveTo(wx + sway + 11, yy + 18, wx + sway + 6, yy + 28, wx + sway + 9, yy + len + 6);
+	        ctx.stroke();
+	      }
+	    }
     ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over';
     // drifting mist blobs
     for (let i = 0; i < 3; i++){
