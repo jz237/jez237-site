@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-17T20:00:01.737926+00:00",
+  "updatedAt": "2026-06-17T20:28:20.690365+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -10804,6 +10804,22 @@
     "https://www.techrepublic.com/article/news-spacex-amazon-ai-valuation": {
       "image": "https://assets.techrepublic.com/uploads/2026/06/spacex.png?f=jpeg",
       "checkedAt": "2026-06-17T20:00:01.737926+00:00"
+    },
+    "https://techcrunch.com/video/neas-tiffany-luck-says-enterprises-are-still-figuring-out-their-ai-roi": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/03/Tiffany-Luck_headshot.jpg?resize=1200,800",
+      "checkedAt": "2026-06-17T20:28:20.690365+00:00"
+    },
+    "https://github.com/BerriAI/litellm/releases/tag/v1.88.3": {
+      "image": "https://opengraph.githubassets.com/9e8d1c68595085dad4830d15051a9c16b21d49cd4018c0b64eeb9ee23e4fc0b0/BerriAI/litellm/releases/tag/v1.88.3",
+      "checkedAt": "2026-06-17T20:28:20.690365+00:00"
+    },
+    "https://github.com/ollama/ollama/releases/tag/v0.30.10-rc1": {
+      "image": "https://opengraph.githubassets.com/264cdc6e59fc08bd4db336f6ef2b4eac14c03657fdf322bb9b7d5dc12a7e8c56/ollama/ollama",
+      "checkedAt": "2026-06-17T20:28:20.690365+00:00"
+    },
+    "https://techcrunch.com/podcast/neas-tiffany-luck-on-ai-ipos-personal-agents-and-the-roi-reckoning": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/09/GettyImages-640351099.jpg?resize=1200,849",
+      "checkedAt": "2026-06-17T20:28:20.690365+00:00"
     }
   }
 }
