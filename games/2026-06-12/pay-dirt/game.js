@@ -113,6 +113,7 @@ function tileAt(c, r){
   return grid[r][c];
 }
 function isDug(c, r){ return holes.has(key(c, r)); }
+function isBottomDiggable(c, r){ return r === ROWS - 1 && tileAt(c, r) === 'X'; }
 function isCrumbleGone(c, r){ const s = crumbles.get(key(c, r)); return !!(s && s.gone); }
 function isBlasted(c, r){ return blasted.has(key(c, r)); }
 // solid for standing-on (support from below)
@@ -120,7 +121,8 @@ function isSupportTile(c, r){
   const t = tileAt(c, r);
   if (t === '#' || t === 'B') return !isDug(c, r) && !isBlasted(c, r);
   if (t === 'C') return !isCrumbleGone(c, r) && !isBlasted(c, r);
-  return t === 'X' || t === 'H' || t === '<' || t === '>' || (t === 'E' && exitRevealed);
+  if (t === 'X') return !(isBottomDiggable(c, r) && (isDug(c, r) || isBlasted(c, r)));
+  return t === 'H' || t === '<' || t === '>' || (t === 'E' && exitRevealed);
   // note: 'T' trapdoor intentionally gives NO support
 }
 // can an entity's body occupy this cell?
@@ -129,7 +131,7 @@ function canOccupy(c, r){
   const t = tileAt(c, r);
   if (t === '#' || t === 'B') return isDug(c, r) || isBlasted(c, r);
   if (t === 'C') return isCrumbleGone(c, r) || isBlasted(c, r);
-  if (t === 'X') return false;
+  if (t === 'X') return isBottomDiggable(c, r) && (isDug(c, r) || isBlasted(c, r));
   if (t === 'T') return true; // fall-through cell: enterable (you drop straight through)
   return true;
 }
@@ -490,10 +492,11 @@ function tryDig(dir){
   if (!player || player.state === 'dead' || player.digT > 0) return false;
   if (player.state !== 'idle' && player.state !== 'run') return false;
   const c = Math.floor(player.x), r = Math.floor(player.y);
-  if (Math.abs(player.y - (r + .5)) > 0.1) return false;
-  if (!isSupportTile(c, r + 1) && !guardSupportAt(c, r + 1)) return false;
-  const tc = c + dir, tr = r + 1;
-  if (tileAt(tc, tr) !== '#' || isDug(tc, tr) || isBlasted(tc, tr)) return false;
+	  if (Math.abs(player.y - (r + .5)) > 0.1) return false;
+	  if (!isSupportTile(c, r + 1) && !guardSupportAt(c, r + 1)) return false;
+	  const tc = c + dir, tr = r + 1;
+	  const target = tileAt(tc, tr);
+	  if (!(target === '#' || isBottomDiggable(tc, tr)) || isDug(tc, tr) || isBlasted(tc, tr)) return false;
   const above = tileAt(tc, r);
   if (above === '#' && !isDug(tc, r) && !isBlasted(tc, r)) return false;
   if (above === 'X') return false;
@@ -503,10 +506,10 @@ function tryDig(dir){
   if (player.tnt > 0){
     // TNT charge: instant 3-wide excavation
     player.tnt--;
-    for (let k = -1; k <= 1; k++){
-      const cc = tc + k;
-      if (tileAt(cc, tr) === '#' && !isDug(cc, tr) && !isBlasted(cc, tr)) openHole(cc, tr);
-    }
+	    for (let k = -1; k <= 1; k++){
+	      const cc = tc + k;
+	      if ((tileAt(cc, tr) === '#' || isBottomDiggable(cc, tr)) && !isDug(cc, tr) && !isBlasted(cc, tr)) openHole(cc, tr);
+	    }
     shake = Math.max(shake, .5);
     return true;
   }
@@ -2233,7 +2236,7 @@ function rendersSolid(c, r){
   if (t === '#' || t === 'B') return !isBlasted(c, r);
   if (t === 'C') return !isCrumbleGone(c, r) && !isBlasted(c, r);
   if (t === 'T') return true;
-  return t === 'X';
+  return t === 'X' && !(isBottomDiggable(c, r) && (isDug(c, r) || isBlasted(c, r)));
 }
 function coveredAbove(c, r){ return rendersSolid(c, r - 1); }
 
@@ -2705,14 +2708,15 @@ function renderWorldFrame(includeHUD){
       for (let c = 0; c < COLS; c++){
         const t = grid[r][c];
         const dug = isDug(c, r), blast = isBlasted(c, r);
-        if (t === '#' || t === 'T' || t === 'B' || t === 'C'){
-          if (blast){ drawPit(c, r, .9); continue; }
-          if (dug){
-            const h = holes.get(key(c, r));
-            drawPit(c, r, 1, h);
-            continue;
-          }
-          if (t === 'C' && isCrumbleGone(c, r)){ continue; }
+	        if (t === '#' || t === 'T' || t === 'B' || t === 'C' || isBottomDiggable(c, r)){
+	          if (blast){ drawPit(c, r, .9); continue; }
+	          if (dug){
+	            const h = holes.get(key(c, r));
+	            drawPit(c, r, 1, h);
+	            continue;
+	          }
+	          if (t === 'X') continue;
+	          if (t === 'C' && isCrumbleGone(c, r)){ continue; }
           if (t === 'B') drawPainterlyCrate(c, r);
           else if (t === 'C'){
             const cr = crumbles.get(key(c, r));
