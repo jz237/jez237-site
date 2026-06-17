@@ -76,7 +76,7 @@
   let freezeT = 0, winner = null, tick = 0, shake = 0;
   let bots = [false, false, true, true];
   let mouseX = LW / 2, mouseY = LH / 2;
-  let online = { ws: null, room: '', role: null, id: null, mode: 'duel', name: 'PLAYER', names: { p1: 'P1', p2: 'P2' }, status: '', connected: false, lastInput: 0, lastSnapshot: 0, peers: [] };
+  let online = { ws: null, room: '', role: null, id: null, mode: 'duel', name: 'PLAYER', names: { p1: 'P1', p2: 'P2' }, ready: { p1: false, p2: false }, status: '', connected: false, started: false, lastInput: 0, lastSnapshot: 0, peers: [] };
 
   let controls = [ctrl(), ctrl(), ctrl(), ctrl()];
   function ctrl() { return { fwd: false, back: false, left: false, right: false, fire: false, driveVec: null, aimVec: null }; }
@@ -535,6 +535,46 @@
     online.status = text || '';
     const el = $('onlineStatus'); if (el) el.textContent = online.status;
   }
+  function onlinePlayer(role) { return online.peers.find(p => p.role === role); }
+  function syncPeerNames() {
+    for (const peer of online.peers) {
+      if ((peer.role === 'p1' || peer.role === 'p2') && peer.name) online.names[peer.role] = cleanName(peer.name);
+    }
+  }
+  function renderOnlineLobby() {
+    const lobby = $('onlineLobby'), slots = $('lobbySlots'), label = $('lobbyRoomLabel'), readyBtn = $('btnOnlineReady'), startBtn = $('btnOnlineStart');
+    if (!lobby || !slots) return;
+    const show = !!online.connected && !online.started;
+    lobby.classList.toggle('on', show);
+    if (!show) return;
+    if (label) label.textContent = online.room || '';
+    syncPeerNames();
+    const rows = [
+      { role: 'p1', title: 'P1' },
+      { role: 'p2', title: 'P2' },
+    ].map(slot => {
+      const peer = onlinePlayer(slot.role);
+      const name = peer ? cleanName(peer.name || online.names[slot.role] || slot.title) : 'OPEN';
+      const ready = !!online.ready[slot.role];
+      return '<div class="slot-row"><div class="slot-role">' + slot.title + '</div><div class="slot-name">' + escapeHtml(name) + '</div><div class="slot-state ' + (ready ? 'ready' : '') + '">' + (peer ? (ready ? 'READY' : 'NOT READY') : 'WAITING') + '</div></div>';
+    });
+    const spectators = online.peers.filter(p => p.role === 'spectator');
+    if (spectators.length) rows.push('<div class="slot-row"><div class="slot-role">WATCH</div><div class="slot-name">' + escapeHtml(spectators.map(p => cleanName(p.name || 'SPECTATOR')).join(', ')) + '</div><div class="slot-state">' + spectators.length + '/2</div></div>');
+    slots.innerHTML = rows.join('');
+    const playerRole = online.role === 'p1' || online.role === 'p2';
+    if (readyBtn) {
+      readyBtn.style.display = playerRole ? '' : 'none';
+      readyBtn.textContent = online.ready[online.role] ? 'READY ✓' : 'READY';
+      readyBtn.classList.toggle('primary', !!online.ready[online.role]);
+    }
+    const p1 = !!onlinePlayer('p1'), p2 = !!onlinePlayer('p2');
+    const canStart = online.role === 'p1' && p1 && p2 && online.ready.p1 && online.ready.p2;
+    if (startBtn) {
+      startBtn.style.display = online.role === 'p1' ? '' : 'none';
+      startBtn.disabled = !canStart;
+      startBtn.textContent = canStart ? 'START MATCH' : 'WAITING FOR READY';
+    }
+  }
   function onlineUrl(room) { return ONLINE_WS.replace(/\/+$/, '') + '/' + encodeURIComponent(room); }
   function onlineHttpBase() { return ONLINE_WS.replace(/^wss:/, 'https:').replace(/^ws:/, 'http:').replace(/\/ws\/?$/, ''); }
   function escapeHtml(v) {
@@ -567,14 +607,29 @@
     onlineSend({ type: 'snapshot', snapshot: makeSnapshot() });
   }
   function startOnlineHost(m) {
+    if (online.role !== 'p1') return;
+    if (!onlinePlayer('p2') || !online.ready.p1 || !online.ready.p2) {
+      setOnlineStatus('Waiting for both players to ready up');
+      renderOnlineLobby();
+      return;
+    }
     const seed = crypto.getRandomValues(new Uint32Array(1))[0] | 0;
     online.mode = m || online.mode || 'duel';
     online.names.p1 = online.name;
+    online.started = true;
+    renderOnlineLobby();
     startGame(online.mode, seed);
     onlineSend({ type: 'hello', name: online.name });
     onlineSend({ type: 'start', mode: online.mode, seed });
     sendOnlineSnapshot(perfNow(), true);
-    setOnlineStatus('Room ' + online.room + ' · you are P1 · waiting for P2');
+    setOnlineStatus('Room ' + online.room + ' · match started');
+  }
+  function toggleOnlineReady() {
+    if (!online.connected || (online.role !== 'p1' && online.role !== 'p2')) return;
+    online.ready[online.role] = !online.ready[online.role];
+    onlineSend({ type: 'ready', ready: online.ready[online.role] });
+    setOnlineStatus(online.ready[online.role] ? 'Ready in room ' + online.room : 'Not ready in room ' + online.room);
+    renderOnlineLobby();
   }
   function disconnectOnline() {
     const keepName = online.name || 'PLAYER';
@@ -582,28 +637,43 @@
     if (online.ws) {
       try { online.ws.close(1000, 'menu'); } catch {}
     }
-    online = { ws: null, room: '', role: null, id: null, mode: keepMode, name: keepName, names: { p1: 'P1', p2: 'P2' }, status: '', connected: false, lastInput: 0, lastSnapshot: 0, peers: [] };
+    online = { ws: null, room: '', role: null, id: null, mode: keepMode, name: keepName, names: { p1: 'P1', p2: 'P2' }, ready: { p1: false, p2: false }, status: '', connected: false, started: false, lastInput: 0, lastSnapshot: 0, peers: [] };
     setOnlineStatus('');
+    renderOnlineLobby();
   }
   function handleOnlineMessage(data) {
     if (!data || !data.type) return;
     if (data.type === 'welcome') {
       online.connected = true; online.role = data.role; online.id = data.id; online.peers = data.peers || [];
+      online.started = false; online.ready = { p1: false, p2: false };
       if (online.role === 'p1' || online.role === 'p2') online.names[online.role] = online.name;
       onlineSend({ type: 'hello', name: online.name });
-      if (online.role === 'p1') startOnlineHost(online.mode);
+      renderOnlineLobby();
+      if (online.role === 'p1') setOnlineStatus('Room ' + online.room + ' · you are P1 · waiting for P2');
       else if (online.role === 'p2') setOnlineStatus('Room ' + online.room + ' · you are P2 · waiting for host');
       else setOnlineStatus('Room ' + online.room + ' · spectating');
       return;
     }
-    if (data.type === 'hello' && (data.role === 'p1' || data.role === 'p2')) {
+    if (data.type === 'hello' && (data.role === 'p1' || data.role === 'p2' || data.role === 'spectator')) {
       online.names[data.role] = cleanName(data.name);
+      const peer = online.peers.find(p => p.id === data.from);
+      if (peer) peer.name = cleanName(data.name);
+      renderOnlineLobby();
       if (online.role === 'p1') sendOnlineSnapshot(perfNow(), true);
+      return;
+    }
+    if (data.type === 'ready' && (data.role === 'p1' || data.role === 'p2')) {
+      online.ready[data.role] = !!data.ready;
+      renderOnlineLobby();
       return;
     }
     if (data.type === 'peer') {
       online.peers = data.peers || [];
-      if (online.role === 'p1' && state === 'playing') {
+      if (!onlinePlayer('p1')) online.ready.p1 = false;
+      if (!onlinePlayer('p2')) online.ready.p2 = false;
+      renderOnlineLobby();
+      if (online.role === 'p1' && !online.started && online.ready.p1) onlineSend({ type: 'ready', ready: true });
+      if (online.role === 'p1' && state === 'playing' && online.started) {
         onlineSend({ type: 'start', mode, seed: tick || 1 });
         sendOnlineSnapshot(perfNow(), true);
       }
@@ -611,6 +681,8 @@
     }
     if (data.type === 'start' && online.role !== 'p1') {
       online.mode = data.mode === 'coop' ? 'coop' : 'duel';
+      online.started = true;
+      renderOnlineLobby();
       startGame(online.mode, Number(data.seed) || 1);
       setOnlineStatus('Room ' + online.room + ' · you are ' + (online.role === 'p2' ? 'P2' : 'spectating'));
       return;
@@ -629,6 +701,10 @@
     if (online.ws) disconnectOnline();
     setOnlineStatus('Connecting to room ' + room + '...');
     online.room = room;
+    online.ready = { p1: false, p2: false };
+    online.started = false;
+    online.peers = [];
+    renderOnlineLobby();
     const ws = new WebSocket(onlineUrl(room));
     online.ws = ws;
     ws.addEventListener('open', () => setOnlineStatus('Connected · assigning slot...'));
@@ -639,6 +715,8 @@
     ws.addEventListener('close', () => {
       const wasRoom = online.room;
       online.connected = false; online.ws = null; online.role = null;
+      online.started = false; online.ready = { p1: false, p2: false }; online.peers = [];
+      renderOnlineLobby();
       if (wasRoom) setOnlineStatus('Disconnected from room ' + wasRoom);
     });
     ws.addEventListener('error', () => setOnlineStatus('Online connection failed'));
@@ -937,6 +1015,8 @@
     click('btnOnline', () => { showOverlay('online'); refreshOpenRooms(); const r = $('onlineRoom'); if (r) r.focus(); });
     click('btnOnlineConnect', connectOnline);
     click('btnRoomsRefresh', refreshOpenRooms);
+    click('btnOnlineReady', toggleOnlineReady);
+    click('btnOnlineStart', () => startOnlineHost(online.mode));
     click('btnOnlineBack', () => { disconnectOnline(); startAttract(); showOverlay('title'); });
     click('btnHow', () => { state = 'how'; showOverlay('how'); }); click('btnHowBack', () => { startAttract(); showOverlay('title'); });
     click('btnScores', () => { state = 'scores'; showOverlay('scores'); refreshBoard(); }); click('btnScoresBack', () => { startAttract(); showOverlay('title'); });
