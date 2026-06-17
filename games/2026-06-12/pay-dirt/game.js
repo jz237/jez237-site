@@ -1667,7 +1667,7 @@ function minerFrameIndex(a, pose, fi){
   if (pose === 'dig') return a.dir < 0 ? MINER_SHEET.cells.digLeft : MINER_SHEET.cells.digRight;
   if (a.gold) return MINER_SHEET.cells.carry;
   if (pose === 'run') return fi % 2 ? MINER_SHEET.cells.run1 : MINER_SHEET.cells.run0;
-  if (pose === 'climb') return MINER_SHEET.cells.climb;
+  if (pose === 'climb') return MINER_SHEET.cells.idle;
   if (pose === 'fall' || pose === 'stun') return MINER_SHEET.cells.stun;
   return MINER_SHEET.cells.idle;
 }
@@ -2491,6 +2491,77 @@ function drawMobileHUD(){
   ctx.font = '900 20px system-ui, sans-serif';
   ctx.fillText(mm + ':' + ss, screenW - 14, 47);
 }
+function worldToMobileScreen(wx, wy){
+  if (!mobileView) return {x: px(wx), y: py(wy)};
+  return {
+    x: (px(wx) - mobileView.x) / mobileView.w * screenW,
+    y: mobileView.hudH + (py(wy) - mobileView.y) / mobileView.h * mobileView.playH,
+  };
+}
+function mobileRadarDot(x, y, color, r){
+  ctx.fillStyle = 'rgba(0,0,0,.55)';
+  ctx.beginPath(); ctx.arc(x + 1, y + 1, r + 1, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = color;
+  ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill();
+}
+function drawMobileRadar(){
+  if (!grid.length || !mobileView) return;
+  const w = Math.min(116, Math.max(92, screenW * 0.3));
+  const h = Math.round(w * ((VIEW_H - HUD_H) / VIEW_W));
+  const x = screenW - w - 10, y = mobileView.hudH + 10;
+  ctx.save();
+  ctx.fillStyle = 'rgba(6,8,14,.58)';
+  ctx.fillRect(x, y, w, h);
+  ctx.strokeStyle = 'rgba(255,216,107,.38)';
+  ctx.lineWidth = 1;
+  ctx.strokeRect(x + .5, y + .5, w - 1, h - 1);
+
+  const sx = w / VIEW_W, sy = h / (VIEW_H - HUD_H);
+  ctx.fillStyle = 'rgba(255,255,255,.16)';
+  ctx.fillRect(x + mobileView.x * sx, y + (mobileView.y - HUD_H) * sy, mobileView.w * sx, mobileView.h * sy);
+  ctx.strokeStyle = 'rgba(255,255,255,.5)';
+  ctx.strokeRect(x + mobileView.x * sx, y + (mobileView.y - HUD_H) * sy, mobileView.w * sx, mobileView.h * sy);
+
+  for (const gd of golds) if (!gd.taken && !gd.held) mobileRadarDot(x + (gd.c + .5) * TILE * sx, y + (gd.r + .5) * TILE * sy, '#ffd23f', 2);
+  for (const tr of treasures) if (!tr.taken) mobileRadarDot(x + (tr.c + .5) * TILE * sx, y + (tr.r + .5) * TILE * sy, '#43e0d4', 1.8);
+  for (const gu of guards) if (gu.state !== 'dead') mobileRadarDot(x + px(gu.x) * sx, y + (py(gu.y) - HUD_H) * sy, '#ff405a', 2.5);
+  if (player) mobileRadarDot(x + px(player.x) * sx, y + (py(player.y) - HUD_H) * sy, '#ffffff', 2.4);
+  ctx.restore();
+}
+function drawMobileAwareness(){
+  if (!mobileView || state !== 'playing') return;
+  const items = [];
+  for (const gu of guards) if (gu.state !== 'dead') items.push({x: gu.x, y: gu.y, color: '#ff405a', kind: 'guard', priority: 0});
+  for (const gd of golds) if (!gd.taken && !gd.held) items.push({x: gd.c + .5, y: gd.r + .5, color: '#ffd23f', kind: 'gold', priority: 1});
+  for (const tr of treasures) if (!tr.taken) items.push({x: tr.c + .5, y: tr.r + .5, color: '#43e0d4', kind: 'treasure', priority: 2});
+  const shown = [];
+  for (const item of items){
+    const p = worldToMobileScreen(item.x, item.y);
+    const on = p.x >= 12 && p.x <= screenW - 12 && p.y >= mobileView.hudH + 12 && p.y <= screenH - 12;
+    if (on) continue;
+    const cx = clamp(p.x, 16, screenW - 16);
+    const cy = clamp(p.y, mobileView.hudH + 18, screenH - 18);
+    const dist = player ? Math.hypot(item.x - player.x, item.y - player.y) : 0;
+    shown.push({...item, cx, cy, dist});
+  }
+  shown.sort((a, b) => a.priority - b.priority || a.dist - b.dist);
+  ctx.save();
+  ctx.globalAlpha = .92;
+  for (const item of shown.slice(0, 10)){
+    ctx.fillStyle = 'rgba(5,7,12,.68)';
+    ctx.beginPath(); ctx.arc(item.cx, item.cy, item.kind === 'guard' ? 9 : 7, 0, Math.PI * 2); ctx.fill();
+    if (item.kind === 'guard'){
+      ctx.fillStyle = item.color;
+      ctx.beginPath(); ctx.moveTo(item.cx, item.cy - 7); ctx.lineTo(item.cx + 7, item.cy + 6); ctx.lineTo(item.cx - 7, item.cy + 6); ctx.closePath(); ctx.fill();
+    } else if (item.kind === 'gold') {
+      drawGemIcon(item.cx, item.cy, 6, item.color);
+    } else {
+      ctx.fillStyle = item.color;
+      ctx.fillRect(item.cx - 4, item.cy - 4, 8, 8);
+    }
+  }
+  ctx.restore();
+}
 function renderMobileCamera(){
   ensureWorldCanvas();
   const oldCtx = ctx;
@@ -2525,6 +2596,8 @@ function renderMobileCamera(){
     ctx.fillStyle = 'rgba(8,5,14,.38)';
     ctx.fillRect(0, hudH, screenW, playH);
   }
+  drawMobileRadar();
+  drawMobileAwareness();
   drawMobileHUD();
 }
 function render(){
