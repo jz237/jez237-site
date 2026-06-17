@@ -368,9 +368,10 @@
     const foe = nearestFoe(t); if (!foe) return;
     const aim = Math.atan2(foe.y - t.y, foe.x - t.x);
     if (t.bossType === 'bastion') {
-      const k = t.phase >= 2 ? 10 : 8, off = (tick * 0.03) % (Math.PI * 2 / k);
-      for (let j = 0; j < k; j++) bossFire(t, off + j / k * Math.PI * 2);
-      t.atkCd = t.phase >= 2 ? 1.5 : 2.3;
+      const muzzle = t.turret;
+      if (t.phase === 1) { bossFire(t, muzzle); t.atkCd = 1.8; }
+      else if (t.phase === 2) { for (let j = -1; j <= 1; j++) bossFire(t, muzzle + j * 0.16); t.atkCd = 1.35; }
+      else { for (let j = -2; j <= 2; j++) bossFire(t, muzzle + j * 0.13); t.atkCd = 1.05; }
     } else if (t.bossType === 'mauler') {
       for (let j = -1; j <= 1; j++) bossFire(t, aim + j * 0.2);
       t.atkCd = 1.9;
@@ -1469,6 +1470,17 @@
     for (const t of tanks) if (t.team === 'enemy') { t.alive = false; t.hp = 0; }   // defeat boss (+ any adds)
     let bossCleared = false; for (let j = 0; j < 240; j++) { update(); if (campaign.levelIdx > lvl0 || (state === 'over' && campaign.phase === 'won')) { bossCleared = true; break; } }
     ok('T-C3 boss', bossSpawned && bossSurvived && bossPhased && bossCleared, 'spawn=' + bossSpawned + ' surv=' + bossSurvived + ' phase=' + (bss ? bss.phase : '?') + ' cleared=' + bossCleared);
+
+    startCampaign(bossLevelIdx, 1, 45, 34); headless = true;
+    bss = tanks.find(t => t.boss && t.bossType === 'bastion');
+    shells = []; bss.hp = bss.maxHp; bss.phase = 1; bss.turret = 0.42; bss.atkCd = 0;
+    bossAttack(bss);
+    const bastionFirst = shells.slice();
+    const firstAligned = bastionFirst.length === 1 && Math.abs(wrapAngle(Math.atan2(bastionFirst[0].vy, bastionFirst[0].vx) - bss.turret)) < 0.001;
+    shells = []; bss.hp = 1; bss.phase = 3; bss.turret = -0.75; bss.atkCd = 0;
+    bossAttack(bss);
+    const bastionSpreadAligned = shells.length === 5 && shells.every(s => Math.abs(wrapAngle(Math.atan2(s.vy, s.vx) - bss.turret)) <= 0.27);
+    ok('T-C3 bastion cannon alignment', firstAligned && bastionSpreadAligned, 'first=' + bastionFirst.length + ' spread=' + shells.length);
 
     // T-C5 co-op scaling: more players → more enemies + larger shared life pool; one death ≠ game over; shared score
     startCampaign(0, 1, 45, 5); headless = true; const soloEnemies = aliveCount('enemy');
