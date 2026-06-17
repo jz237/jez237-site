@@ -111,7 +111,7 @@
   let aiLevel = 45;             // 0..100 difficulty slider
   let watchLevel = [45, 45];    // CPU 1 / CPU 2 watch-mode sliders
   let visualMode = 'hd';
-  let muted = false, headless = false, touchActive = false;
+  let muted = false, headless = false, touchActive = false, autoFire = true;
   let tanks = [], shells = [], mines = [];
   let tankSkill = [0.45, 0.45, 0.55, 0.62];
   let score = { p1: 0, p2: 0 };
@@ -495,12 +495,13 @@
       if (c.driveVec && c.driveVec.active) { mvx = Math.cos(c.driveVec.angle); mvy = Math.sin(c.driveVec.angle); mag = c.driveVec.mag; }
       else { mvx = (c.right ? 1 : 0) - (c.left ? 1 : 0); mvy = (c.back ? 1 : 0) - (c.fwd ? 1 : 0); const m = Math.hypot(mvx, mvy); if (m > 0) { mvx /= m; mvy /= m; mag = 1; } }
       cmd.moveVec = { ang: mag > 0.01 ? Math.atan2(mvy, mvx) : me.heading, mag: Math.min(1, mag) };
-      // ---- aim + auto-fire ----
+      // ---- aim + fire (auto-fire toggle in Options) ----
       const foe = nearestFoe(me);
       const mouseAim = (i === 0 && !touchActive && (!campaign || campaign.players === 1));   // 1P desktop steers the turret with the mouse
-      if (mouseAim) { cmd.aim = Math.atan2(mouseY - me.y, mouseX - me.x); cmd.aimInstant = true; cmd.fire = !!foe || !!c.fire; }
-      else if (foe) { cmd.aim = Math.atan2(foe.y - me.y, foe.x - me.x); cmd.aimInstant = false; cmd.turretTurn = TURRET_TURN; cmd.fire = true; }   // mobile/co-op: auto-aim nearest + auto-fire
-      else { cmd.aim = null; cmd.fire = false; }
+      if (mouseAim) { cmd.aim = Math.atan2(mouseY - me.y, mouseX - me.x); cmd.aimInstant = true; cmd.fire = autoFire ? (!!foe || !!c.fire) : !!c.fire; }
+      else if (c.aimVec && c.aimVec.active) { cmd.aim = c.aimVec.angle; cmd.aimInstant = true; cmd.fire = true; }   // mobile twin-stick (auto-fire off): manual aim + fire
+      else if (foe) { cmd.aim = Math.atan2(foe.y - me.y, foe.x - me.x); cmd.aimInstant = false; cmd.turretTurn = TURRET_TURN; cmd.fire = autoFire ? true : !!c.fire; }   // auto-aim nearest
+      else { cmd.aim = null; cmd.fire = !!c.fire; }
       return;
     }
     // Versus duel / survival co-op keep the faithful 1974 tank steering + hull-locked barrel.
@@ -847,12 +848,12 @@
 
   /* ===================== UI ===================== */
   function $(id) { return document.getElementById(id); }
-  const OVS = ['ovTitle', 'ovOnline', 'ovHow', 'ovPause', 'ovOver', 'ovScores'];
+  const OVS = ['ovTitle', 'ovOnline', 'ovHow', 'ovOptions', 'ovPause', 'ovOver', 'ovScores'];
   function hideAllOverlays() { OVS.forEach(id => { const e = $(id); if (e) e.classList.add('hidden'); }); }
   function showOverlay(which) {
     if (headless) return;
     hideAllOverlays();
-    const map = { title: 'ovTitle', online: 'ovOnline', how: 'ovHow', paused: 'ovPause', over: 'ovOver', scores: 'ovScores' };
+    const map = { title: 'ovTitle', online: 'ovOnline', how: 'ovHow', options: 'ovOptions', paused: 'ovPause', over: 'ovOver', scores: 'ovScores' };
     if (map[which]) { const e = $(map[which]); if (e) e.classList.remove('hidden'); }
     if (which === 'over') {
       const w = $('overResult');
@@ -1177,7 +1178,7 @@
     }
     if (!down) return;
     if (c === 'KeyP' || c === 'Escape') { if (state === 'playing') { state = 'paused'; showOverlay('paused'); } else if (state === 'paused') { state = 'playing'; hideAllOverlays(); } }
-    if (c === 'KeyM') { muted = !muted; SDAudio.setMuted(muted); const b = $('btnMute'); if (b) b.textContent = muted ? '🔇' : '🔊'; }
+    if (c === 'KeyM') setMuted(!muted);
     if (c === 'KeyC') toggleVisual();
   }
   function toggleVisual() { visualMode = visualMode === 'hd' ? 'classic' : 'hd'; const b = $('btnClassic'); if (b) b.textContent = visualMode === 'classic' ? '1974' : 'HD'; }
@@ -1186,7 +1187,22 @@
   function updateTouchLayout() {                          // one-thumb modes (campaign / vs-CPU auto-aim) drop the aim stick
     const sr = $('stickR'); if (!sr) return;
     const oneThumb = (mode === 'campaign' || mode === 'cpu');
-    sr.style.display = (touchActive && !oneThumb) ? '' : 'none';
+    sr.style.display = (touchActive && (!oneThumb || !autoFire)) ? '' : 'none';   // auto-fire off → bring the aim/fire stick back
+  }
+  function persist(k, v) { try { localStorage.setItem(k, v ? '1' : '0'); } catch (e) {} }
+  function setMuted(m) {
+    muted = !!m; if (SDAudio) SDAudio.setMuted(muted);
+    const b = $('btnMute'); if (b) b.textContent = muted ? '🔇' : '🔊';
+    const o = $('optSound'); if (o) o.textContent = muted ? '🔇 SOUND: OFF' : '🔊 SOUND: ON';
+    persist('sd_muted', muted);
+  }
+  function setAutoFire(v) {
+    autoFire = !!v;
+    const o = $('optAutoFire'); if (o) o.textContent = autoFire ? '🎯 AUTO-FIRE: ON' : '🎯 AUTO-FIRE: OFF';
+    persist('sd_autofire', autoFire); updateTouchLayout();
+  }
+  function loadSettings() {
+    try { const m = localStorage.getItem('sd_muted'); if (m != null) muted = m === '1'; const a = localStorage.getItem('sd_autofire'); if (a != null) autoFire = a === '1'; } catch (e) {}
   }
 
   function setupMouse() {
@@ -1488,6 +1504,8 @@
     click('btnOnlineBack', () => { disconnectOnline(); startAttract(); showOverlay('title'); });
     click('btnHow', () => { state = 'how'; showOverlay('how'); }); click('btnHowBack', () => { startAttract(); showOverlay('title'); });
     click('btnScores', () => { state = 'scores'; showOverlay('scores'); refreshBoard(); }); click('btnScoresBack', () => { startAttract(); showOverlay('title'); });
+    click('btnOptions', () => { state = 'options'; showOverlay('options'); }); click('btnOptionsBack', () => { startAttract(); showOverlay('title'); });
+    click('optSound', () => setMuted(!muted)); click('optAutoFire', () => setAutoFire(!autoFire));
     click('btnResume', () => { state = 'playing'; hideAllOverlays(); }); click('btnQuit', () => { disconnectOnline(); startAttract(); showOverlay('title'); });
     click('btnAgain', () => (online.connected && online.role === 'p1') ? startOnlineHost(mode) : startGame(mode)); click('btnMenu', () => { disconnectOnline(); startAttract(); showOverlay('title'); });
     const room = $('onlineRoom'); if (room && !room.value) room.value = randomRoom();
@@ -1501,9 +1519,10 @@
       upd(); sl.addEventListener('input', upd);
     };
     bindWatch(0, 'watchSliderA', 'watchLabelA'); bindWatch(1, 'watchSliderB', 'watchLabelB');
-    const mb = $('btnMute'); if (mb) mb.addEventListener('click', () => { muted = !muted; SDAudio.setMuted(muted); mb.textContent = muted ? '🔇' : '🔊'; });
+    const mb = $('btnMute'); if (mb) mb.addEventListener('click', () => { SDAudio.ui(); setMuted(!muted); });
     const cb = $('btnClassic'); if (cb) cb.addEventListener('click', toggleVisual);
     const sub = $('btnSubmit'); if (sub) sub.addEventListener('click', async () => { const inp = $('initials'); const nm = (inp && inp.value || 'YOU').toUpperCase().slice(0, 3) || 'YOU'; await Scores.submit(nm, scoreValue()); const f = $('overScoreForm'); if (f) f.classList.add('hidden'); state = 'scores'; showOverlay('scores'); refreshBoard(); });
+    loadSettings(); setMuted(muted); setAutoFire(autoFire);   // restore + sync persisted options
 
     const q = new URLSearchParams(location.search);
     headless = q.has('headless');
