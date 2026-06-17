@@ -625,8 +625,6 @@ function guardSpotted(g, dist){
   g.alertT = 0.9;
   g.alertCool = 2.4;
   AUDIO.sfx('alert');
-  const meta = guardMeta(g);
-  popup(g.x, g.y - .8, dist < 3.2 ? meta.label + '!' : '!', meta.color);
 }
 
 /* Guard's-eye geometry: holes are PRETEND-FILLED so guards path straight into them
@@ -927,13 +925,29 @@ function trapGuard(g){
 }
 
 function respawnGuard(g){
+  if (player && player.state !== 'dead' && player.y < 3.25){
+    g.deadT = GUARD_RESPAWN_T - 0.35;
+    return;
+  }
   const cols = [];
-  for (let c = 0; c < COLS; c++)
-    if (gOccupy(c, 0) && !(player && Math.abs(player.x - (c + .5)) < 3)) cols.push(c);
-  const c = cols.length ? cols[(rnd() * cols.length) | 0] : (rnd() * COLS) | 0;
+  for (let c = 0; c < COLS; c++){
+    if (!gOccupy(c, 0)) continue;
+    if (player && player.state !== 'dead'){
+      const dx = Math.abs(player.x - (c + .5));
+      const minDx = player.y < 5 ? 10 : 6;
+      if (dx < minDx) continue;
+    }
+    cols.push(c);
+  }
+  if (!cols.length){
+    g.deadT = GUARD_RESPAWN_T - 0.35;
+    return;
+  }
+  const c = cols[(rnd() * cols.length) | 0];
   g.x = c + .5; g.y = 0.5;
   g.state = 'fall'; g.anim = 0; g.wp = null; g.repath = 0;
   g.invuln = 1.2;
+  g.alertT = 0; g.alertCool = 1.2;
 }
 
 function sealGuard(g){
@@ -2000,18 +2014,6 @@ function drawGuardAccents(a, cx2, footY, h, w){
   ctx.lineCap = 'round';
   ctx.lineJoin = 'round';
   ctx.globalCompositeOperation = 'source-over';
-  ctx.strokeStyle = 'rgba(5,4,8,.78)';
-  ctx.lineWidth = 5;
-  ctx.beginPath();
-  ctx.ellipse(cx2, footY - h * .48, w * .31, h * .42, 0, 0, Math.PI * 2);
-  ctx.stroke();
-  ctx.strokeStyle = meta.color;
-  ctx.lineWidth = 2.2;
-  ctx.globalAlpha = .85;
-  ctx.beginPath();
-  ctx.ellipse(cx2, footY - h * .48, w * .31, h * .42, 0, 0, Math.PI * 2);
-  ctx.stroke();
-  ctx.globalAlpha = 1;
 
   if (a.kind === 'scout'){
     ctx.fillStyle = meta.color;
@@ -2108,40 +2110,33 @@ function drawActor(a){
     ctx.drawImage(img, 0, 0, w, h);
   }
   ctx.restore();
-  if (a.kind === 'player') drawDigStroke(a, cx2, footY);
-  if (a.kind !== 'player' && a.state !== 'dead'){
-    const meta = guardMeta(a);
-    drawGuardAccents(a, cx2, footY, h, w);
-    const badgeY = footY - h - 10 + Math.sin(gameTime * 5 + a.x) * 1.2;
-    ctx.save();
-    ctx.globalCompositeOperation = 'source-over';
-    ctx.fillStyle = 'rgba(8,5,14,.72)';
-    ctx.beginPath();
-    ctx.arc(cx2, badgeY, 9, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.strokeStyle = meta.color;
-    ctx.lineWidth = 2;
-    ctx.stroke();
-    ctx.fillStyle = meta.color;
-    ctx.font = '900 12px system-ui, sans-serif';
-    ctx.textAlign = 'center';
-	    ctx.textBaseline = 'middle';
-	    ctx.fillText(meta.icon, cx2, badgeY + .5);
+	  if (a.kind === 'player') drawDigStroke(a, cx2, footY);
+	  if (a.kind !== 'player' && a.state !== 'dead'){
+	    const meta = guardMeta(a);
+	    drawGuardAccents(a, cx2, footY, h, w);
 	    if (a.alertT > 0){
 	      const p = a.alertT / 0.9;
-	      const ay = badgeY - 20 - (1 - p) * 8;
+	      const ay = footY - h - 12 - (1 - p) * 7;
+	      ctx.save();
+	      ctx.globalCompositeOperation = 'source-over';
 	      ctx.globalAlpha = Math.min(1, p * 1.8);
-	      ctx.fillStyle = 'rgba(8,5,14,.82)';
-	      ctx.beginPath(); ctx.arc(cx2, ay, 10 + (1 - p) * 3, 0, Math.PI * 2); ctx.fill();
+	      ctx.strokeStyle = 'rgba(8,5,14,.88)';
+	      ctx.lineWidth = 4;
+	      ctx.font = '900 22px system-ui, sans-serif';
+	      ctx.textAlign = 'center';
+	      ctx.textBaseline = 'middle';
+	      ctx.strokeText('!', cx2, ay);
+	      ctx.fillStyle = meta.color;
+	      ctx.fillText('!', cx2, ay);
+	      ctx.globalAlpha = Math.min(.7, p);
 	      ctx.strokeStyle = meta.color;
 	      ctx.lineWidth = 2;
+	      ctx.beginPath();
+	      ctx.moveTo(cx2 - 9, ay - 7); ctx.lineTo(cx2 - 15, ay - 13);
+	      ctx.moveTo(cx2 + 9, ay - 7); ctx.lineTo(cx2 + 15, ay - 13);
 	      ctx.stroke();
-	      ctx.fillStyle = '#fff6d0';
-	      ctx.font = '900 15px system-ui, sans-serif';
-	      ctx.fillText('!', cx2, ay + .5);
-	      ctx.globalAlpha = 1;
+	      ctx.restore();
 	    }
-	    ctx.restore();
 	  }
   // carried gold — show which guard pocketed your nugget
   if (a.gold){
