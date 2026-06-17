@@ -12,9 +12,9 @@
   }
   *{box-sizing:border-box}
   html,body{margin:0;height:100%;background:#05070c;color:var(--ink);
-    font-family:Menlo,Consolas,"SF Mono",monospace;overflow:hidden;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;touch-action:none}
-  #stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 30%,#0d1320,#05070c 70%)}
-  canvas{display:block;image-rendering:auto;border-radius:6px;box-shadow:0 0 60px rgba(70,120,200,.18),0 14px 40px rgba(0,0,0,.6)}
+    font-family:Menlo,Consolas,"SF Mono",monospace;overflow:hidden;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+  #stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 30%,#0d1320,#05070c 70%);touch-action:none}
+  canvas{display:block;image-rendering:auto;border-radius:6px;box-shadow:0 0 60px rgba(70,120,200,.18),0 14px 40px rgba(0,0,0,.6);touch-action:none}
   body.mobile-play #stage{align-items:stretch;justify-content:stretch}
   body.mobile-play canvas{width:100vw!important;height:100dvh!important;border-radius:0;box-shadow:none}
   /* top-right toolbar */
@@ -27,11 +27,11 @@
   body.classic-mode #bar{opacity:.72}
   /* overlays */
   .ov{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:30;
-    background:rgba(4,7,12,.72);backdrop-filter:blur(3px);padding:18px}
+    background:rgba(4,7,12,.72);backdrop-filter:blur(3px);padding:18px;overflow-y:auto;overscroll-behavior:contain;touch-action:pan-y}
   .ov.hidden{display:none}
   #ovTitle{background:rgba(4,7,12,.42);backdrop-filter:none}
   .card{width:min(560px,94vw);background:var(--panel);border:1px solid var(--edge);
-    border-radius:16px;padding:26px 26px 22px;text-align:center;box-shadow:0 24px 60px rgba(0,0,0,.55)}
+    border-radius:16px;padding:26px 26px 22px;text-align:center;box-shadow:0 24px 60px rgba(0,0,0,.55);max-height:calc(100dvh - 36px);overflow-y:auto;-webkit-overflow-scrolling:touch;touch-action:pan-y}
   h1{margin:0 0 2px;font-size:clamp(34px,7vw,56px);letter-spacing:3px;
     background:linear-gradient(120deg,var(--amber),#fff,var(--teal));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
   .sub{color:var(--dim);font-size:13px;margin:0 0 18px;letter-spacing:1px}
@@ -100,6 +100,18 @@
   input[type=range]{accent-color:var(--amber)}
   .footer{margin-top:12px;color:var(--dim);font-size:11px}
   a{color:var(--teal)}
+  @media (max-width:480px),(max-height:760px){
+    .ov{align-items:flex-start;padding:10px}
+    .card{width:min(560px,96vw);border-radius:12px;padding:16px 16px 14px;max-height:calc(100dvh - 20px)}
+    h1{font-size:clamp(30px,10vw,44px);letter-spacing:2px}
+    .sub{font-size:11px;margin-bottom:10px}
+    .btn{margin:6px 0;padding:10px;font-size:14px}
+    .opt{margin-top:6px;font-size:11px}
+    .watch-options{margin-top:8px;padding-top:8px}
+    .watch-grid{gap:8px}
+    .watch-opt{font-size:10px}
+    .footer{margin-top:8px;font-size:10px}
+  }
 </style>
 </head>
 <body>
@@ -139,7 +151,7 @@
         <button id="btnHow" class="btn">HOW TO PLAY</button>
         <button id="btnScores" class="btn">🏆 SCORES</button>
       </div>
-      <div class="footer">v19 · First tank-combat arcade game, Kee&nbsp;Games 1974. Drive your foe into the mines.</div>
+      <div class="footer">v20 · First tank-combat arcade game, Kee&nbsp;Games 1974. Drive your foe into the mines.</div>
     </div>
   </div>
 
