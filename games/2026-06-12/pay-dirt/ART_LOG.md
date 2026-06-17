@@ -204,3 +204,17 @@ Verification:
 - Chroma-key removal produced an RGBA sheet with transparent corners.
 - `node --check game.js`, `art.js`, and `audio.js` passed.
 - Mobile Chrome screenshot rendered `/tmp/pay-dirt-miner-mobile.png` with the new painterly miner visible in-game.
+
+## Mobile Controls + Rich Render Restore
+Jez reported Android saying the installed WebView version caused Chrome to crash, so the earlier low-power-background theory was likely wrong. He asked to put the rich visuals back and replace the mobile button pad with direct finger controls.
+
+Changes:
+- Restored rich mobile rendering by removing the coarse-pointer/mobile-user-agent low-power shortcut; mobile no longer automatically disables painterly platform sampling and bloom.
+- Kept low-power rendering only for genuinely tiny scaled views.
+- Hid the old on-screen touch buttons.
+- Added canvas gesture controls: drag to move/climb, quick-tap beside the miner to dig left or right.
+- Added phone-control instructions to the How To Play panel.
+
+Verification:
+- `node --check game.js`, `audio.js`, and `art.js` passed.
+- Chrome DevTools mobile smoke confirmed `mobileCamera=true`, `lowPower=false`, hidden touch pad, drag-to-move, and tap-to-dig creating a hole.
