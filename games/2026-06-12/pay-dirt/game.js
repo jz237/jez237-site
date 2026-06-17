@@ -1875,40 +1875,48 @@ function drawDigStroke(a, cx2, footY){
   const total = Math.max(0.01, a.pendingDig.total || DIG_TIME);
   const p = clamp(1 - a.digT / total, 0, 1);
   const dir = a.pendingDig.dir || a.dir || 1;
-  const tx = px(a.pendingDig.c + 0.5), ty = py(a.pendingDig.r + 0.34);
-  const hx = cx2 + dir * 16, hy = footY - 34;
+  const tx = px(a.pendingDig.c + 0.5), ty = py(a.pendingDig.r + 0.32);
+  const handX = cx2 + dir * 14, handY = footY - 34;
   const swing = Math.sin(p * Math.PI);
-  const bx = hx + (tx - hx) * (0.35 + p * 0.62);
-  const by = hy + (ty - hy) * (0.25 + p * 0.74) - swing * 16;
+  const headX = handX + (tx - handX) * (0.35 + p * 0.65);
+  const headY = handY + (ty - handY) * (0.18 + p * 0.82) - swing * 20;
+  const angle = Math.atan2(headY - handY, headX - handX);
 
   ctx.save();
   ctx.lineCap = 'round';
   ctx.lineJoin = 'round';
-  ctx.globalAlpha = 0.48 + swing * 0.35;
-  ctx.strokeStyle = 'rgba(20,15,12,.7)';
-  ctx.lineWidth = 5;
+  ctx.globalAlpha = 0.9;
+  ctx.strokeStyle = 'rgba(18,12,8,.78)';
+  ctx.lineWidth = 5.2;
+  ctx.beginPath(); ctx.moveTo(handX, handY); ctx.lineTo(headX, headY); ctx.stroke();
+  ctx.strokeStyle = '#c98b43';
+  ctx.lineWidth = 3;
+  ctx.beginPath(); ctx.moveTo(handX, handY); ctx.lineTo(headX, headY); ctx.stroke();
+
+  ctx.translate(headX, headY);
+  ctx.rotate(angle + Math.PI * 0.5);
+  ctx.strokeStyle = 'rgba(18,22,24,.75)';
+  ctx.lineWidth = 7;
   ctx.beginPath();
-  ctx.moveTo(hx, hy);
-  ctx.quadraticCurveTo((hx + bx) * .5, hy - 18 * swing, bx, by);
+  ctx.moveTo(-13, 0);
+  ctx.quadraticCurveTo(-6, -5, 0, 0);
+  ctx.quadraticCurveTo(7, 6, 15, 1);
   ctx.stroke();
-  ctx.strokeStyle = '#d8c08a';
-  ctx.lineWidth = 2.4;
-  ctx.stroke();
-  ctx.translate(bx, by);
-  ctx.rotate(dir * (0.55 - p * 1.1));
-  ctx.fillStyle = '#aeb7ba';
-  ctx.strokeStyle = 'rgba(32,28,24,.65)';
-  ctx.lineWidth = 1.2;
+  ctx.strokeStyle = '#dbe2df';
+  ctx.lineWidth = 4;
   ctx.beginPath();
-  ctx.ellipse(0, 0, 7, 4, 0, 0, Math.PI * 2);
-  ctx.fill();
+  ctx.moveTo(-13, 0);
+  ctx.quadraticCurveTo(-6, -5, 0, 0);
+  ctx.quadraticCurveTo(7, 6, 15, 1);
   ctx.stroke();
+  ctx.fillStyle = '#f8fff3';
+  ctx.fillRect(-2, -3, 4, 6);
   ctx.restore();
 
   ctx.save();
-  ctx.globalAlpha = 0.25 + p * 0.45;
+  ctx.globalAlpha = 0.3 + p * 0.48;
   ctx.strokeStyle = '#ffe09a';
-  ctx.lineWidth = 1.5;
+  ctx.lineWidth = 2;
   ctx.beginPath();
   ctx.moveTo(tx - 9, ty + 7);
   ctx.lineTo(tx - 1, ty + 2);
@@ -2526,16 +2534,15 @@ function renderWorldFrame(includeHUD){
       const total = Math.max(0.01, player.pendingDig.total || DIG_TIME);
       const p = clamp(1 - player.digT / total, 0, 1);
       const x = player.pendingDig.c * TILE, y = player.pendingDig.r * TILE + HUD_H;
-      ctx.globalAlpha = 1 - p * .36;
       drawTile(T.brick, player.pendingDig.c, player.pendingDig.r);
-      ctx.globalAlpha = .28 + p * .46;
+      ctx.globalAlpha = .22 + p * .5;
       ctx.fillStyle = '#2b1710';
       ctx.fillRect(x + 6 + p * 5, y + 12, 14 + p * 8, 3);
       ctx.fillRect(x + 14, y + 21, 12 + p * 10, 3);
       ctx.fillRect(x + 20 - p * 4, y + 8, 3, 22);
-      ctx.globalAlpha = .18 + p * .28;
+      ctx.globalAlpha = .26 + p * .34;
       ctx.fillStyle = '#d3a15d';
-      ctx.fillRect(x + 5, y + TILE - 6 - p * 6, TILE - 10, 4);
+      ctx.fillRect(x + 6, y + 5, TILE - 12, 3);
       ctx.globalAlpha = 1;
     }
     // gold — gentle float bob + breathing pulse + drifting twinkle
@@ -2942,40 +2949,40 @@ function render(){
 
 function drawPit(c, r, dark, h){
   const x = c * TILE, y = r * TILE + HUD_H;
-  const age = h ? Math.max(0, Math.min(1, h.t / HOLE_LIFE)) : 0;
   const warn = h ? Math.max(0, (h.t - (HOLE_LIFE - HOLE_WARN)) / HOLE_WARN) : 0;
   const tremble = warn > 0 ? Math.sin(h.t * 34) * 1.5 : 0;
-  if (ART && ART.tiles && ART.tiles.brick) ctx.drawImage(ART.tiles.brick, x, y);
-  else { ctx.fillStyle = '#806443'; ctx.fillRect(x, y, TILE, TILE); }
-
-  ctx.save();
-  ctx.beginPath();
-  ctx.ellipse(x + TILE * 0.5 + tremble, y + TILE * (0.5 - warn * 0.04), TILE * (0.34 - age * 0.08), TILE * (0.23 - age * 0.06), 0, 0, Math.PI * 2);
-  ctx.clip();
-  const pit = ctx.createRadialGradient(x + TILE * 0.5, y + TILE * 0.38, 1, x + TILE * 0.5, y + TILE * 0.54, TILE * 0.4);
-  pit.addColorStop(0, 'rgba(37,27,21,' + (0.9 * dark) + ')');
-  pit.addColorStop(0.58, 'rgba(10,7,10,' + (0.92 * dark) + ')');
-  pit.addColorStop(1, 'rgba(0,0,0,' + (0.98 * dark) + ')');
+  const shrink = warn * 4;
+  const left = x + 2 + shrink + tremble;
+  const top = y + 2 + shrink * .7;
+  const w = TILE - 4 - shrink * 2;
+  const hh = TILE - 4 - shrink * 1.4;
+  const pit = ctx.createLinearGradient(x, y, x, y + TILE);
+  pit.addColorStop(0, 'rgba(35,22,17,' + (0.94 * dark) + ')');
+  pit.addColorStop(0.45, 'rgba(11,8,12,' + (0.96 * dark) + ')');
+  pit.addColorStop(1, 'rgba(0,0,0,' + dark + ')');
   ctx.fillStyle = pit;
-  ctx.fillRect(x + 5, y + 5, TILE - 10, TILE - 7);
-  ctx.restore();
+  ctx.fillRect(left, top, w, hh);
 
-  if (age > 0.28){
-    ctx.globalAlpha = Math.min(.42, age * .55);
+  if (warn > 0){
+    ctx.globalAlpha = Math.min(.48, warn * .6);
     ctx.fillStyle = '#7d5230';
-    const m = 5 + age * 7;
-    ctx.fillRect(x + 6, y + TILE - m, TILE - 12, m * .45);
-    ctx.fillRect(x + TILE * .5 - m * .35, y + 7, m * .7, 4);
+    const m = 5 + warn * 10;
+    ctx.fillRect(x + 5, y + TILE - m, TILE - 10, m * .5);
+    ctx.fillRect(x + 8, y + 5, TILE - 16, 3);
     ctx.globalAlpha = 1;
   }
 
-  ctx.strokeStyle = warn > 0 ? 'rgba(255,210,63,' + (0.55 + 0.35 * Math.sin(h.t * 24)) + ')' : 'rgba(235,154,86,' + (0.45 * dark) + ')';
+  ctx.strokeStyle = warn > 0 ? 'rgba(255,210,63,' + (0.55 + 0.35 * Math.sin(h.t * 24)) + ')' : 'rgba(235,154,86,' + (0.55 * dark) + ')';
   ctx.lineWidth = 2;
-  ctx.beginPath();
-  ctx.ellipse(x + TILE * 0.5 + tremble, y + TILE * (0.5 - warn * 0.04), TILE * (0.34 - age * 0.08), TILE * (0.23 - age * 0.06), 0, 0, Math.PI * 2);
-  ctx.stroke();
+  ctx.strokeRect(left + .5, top + .5, w - 1, hh - 1);
+  ctx.fillStyle = 'rgba(220,150,80,' + (0.4 * dark) + ')';
+  ctx.fillRect(x + 1 + tremble, y + 1, TILE - 2, 3);
+  ctx.fillRect(x + 1 + tremble, y + 1, 3, TILE - 2);
+  ctx.fillStyle = 'rgba(0,0,0,' + (0.55 * dark) + ')';
+  ctx.fillRect(x + 4 + tremble, y + 5, TILE - 8, 5);
+  ctx.fillRect(x + TILE - 7 + tremble, y + 5, 4, TILE - 8);
   ctx.fillStyle = 'rgba(0,0,0,' + (0.32 * dark) + ')';
-  ctx.fillRect(x + 8, y + 6, TILE - 16, 4);            // top inner shadow
+  ctx.fillRect(x + 4 + tremble, y + TILE - 8, TILE - 8, 4);
 }
 
 function hexA(hex, a){
