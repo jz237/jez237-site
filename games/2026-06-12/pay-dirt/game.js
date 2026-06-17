@@ -542,6 +542,22 @@ function updateHoles(dt){
 /* ================= guard AI ================= */
 const GUARD_SPEED = { guard: 0.68, scout: 0.901, mason: 0.527 };
 const STUN_TIME = 3.2, GUARD_RESPAWN_T = 1.4;
+const GUARD_META = {
+  guard: {color: '#ff405a', glow: 'rgba(255,64,90,.24)', icon: '!', label: 'JUMPER'},
+  scout: {color: '#ff9d2e', glow: 'rgba(255,157,46,.25)', icon: '»', label: 'SCOUT'},
+  mason: {color: '#b07fff', glow: 'rgba(176,127,255,.25)', icon: '◆', label: 'MASON'},
+};
+const DEATH_TEXT = {
+  caught: 'CAUGHT',
+  sealed: 'SEALED IN',
+  blast: 'BLASTED',
+  guard: 'CAUGHT',
+  fall: 'FELL',
+  crush: 'CRUSHED',
+  debug: 'DEBUG DROP',
+};
+function guardMeta(g){ return GUARD_META[g.kind] || GUARD_META.guard; }
+function deathText(reason){ return DEATH_TEXT[reason] || 'CLAIM LOST'; }
 
 /* Guard's-eye geometry: holes are PRETEND-FILLED so guards path straight into them
    (classic behaviour — they don't see traps). Crumbled/blasted tiles use real state. */
@@ -919,6 +935,7 @@ function killPlayer(reason){
   shake = Math.max(shake, .6); flash = Math.max(flash, .4); hitStop = Math.max(hitStop, .08);
   deathFlash = 1;
   spawnParticles(player.x, player.y, 24, {color: ['#3fd2c7', '#ffd23f', '#ff4f6b', '#fff'], spd: 5.5, life: .8, size: 4, grav: 10, glow: true});
+  popup(player.x, player.y - .9, deathText(reason), '#ff6b5a');
   AUDIO.sfx('die');
 }
 
@@ -1855,6 +1872,39 @@ function drawActor(a){
     ctx.drawImage(img, 0, 0, w, h);
   }
   ctx.restore();
+  if (a.kind !== 'player' && a.state !== 'dead'){
+    const meta = guardMeta(a);
+    const badgeY = footY - h - 10 + Math.sin(gameTime * 5 + a.x) * 1.2;
+    ctx.save();
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.fillStyle = 'rgba(8,5,14,.72)';
+    ctx.beginPath();
+    ctx.arc(cx2, badgeY, 9, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = meta.color;
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    ctx.fillStyle = meta.color;
+    ctx.font = '900 12px system-ui, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(meta.icon, cx2, badgeY + .5);
+    if (a.kind === 'mason'){
+      ctx.fillStyle = '#d8c08a';
+      ctx.fillRect(cx2 + 11, footY - h * .48, 7, 3);
+      ctx.fillRect(cx2 + 15, footY - h * .48, 3, 10);
+    } else if (a.kind === 'scout'){
+      ctx.strokeStyle = meta.color;
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(cx2 - 16, footY - h * .76);
+      ctx.lineTo(cx2 - 7, footY - h * .76);
+      ctx.moveTo(cx2 + 7, footY - h * .76);
+      ctx.lineTo(cx2 + 16, footY - h * .76);
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
   // carried gold — show which guard pocketed your nugget
   if (a.gold){
     ctx.drawImage(ART.tiles.gold, cx2 - 9, footY - h * 0.62 - 9, 18, 18);
@@ -2299,8 +2349,8 @@ function renderWorldFrame(includeHUD){
         if (t === '#' || t === 'T' || t === 'B' || t === 'C'){
           if (blast){ drawPit(c, r, .9); continue; }
           if (dug){
-            drawPit(c, r, 1);
             const h = holes.get(key(c, r));
+            drawPit(c, r, 1, h);
             if (h && h.t > HOLE_LIFE - HOLE_WARN){
               const u = (h.t - (HOLE_LIFE - HOLE_WARN)) / HOLE_WARN;
               ctx.globalAlpha = .3 + .7 * u * (0.6 + 0.4 * Math.sin(h.t * 24));
@@ -2462,8 +2512,8 @@ function renderWorldFrame(includeHUD){
     for (const d of decor) if (d.type === 'torch'){ const fl = 0.85 + 0.15 * Math.sin(gameTime * 14 + d.c * 3); glow(d.c + .5, d.r - 0.5, 58 * fl, 'rgba(255,150,50,.5)', 1); }
     // exit portal aura
     if (exitRevealed && exitCells.length){ const e = topExitCell(); glow(e.c + .5, e.r + .5, 44, 'rgba(80,230,210,' + (0.4 + 0.2 * Math.sin(gameTime * 4)) + ')', 1); }
-    // faint danger underglow so guards read at a glance
-    for (const gu of guards) if (gu.state !== 'dead') glow(gu.x, gu.y + .15, 26, 'rgba(255,60,80,' + (gu.state === 'stun' ? .1 : .22) + ')', 1);
+    // faint danger underglow so guard type reads at a glance
+    for (const gu of guards) if (gu.state !== 'dead') glow(gu.x, gu.y + .15, 26, gu.state === 'stun' ? 'rgba(255,255,255,.08)' : guardMeta(gu).glow, 1);
     for (const p of particles) if (p.glow) glow(p.x, p.y, p.size * 3.5, hexA(p.color, .6), 1);
     ctx.restore();
 
@@ -2649,14 +2699,17 @@ function drawMobileRadar(){
 
   for (const gd of golds) if (!gd.taken && !gd.held) mobileRadarDot(x + (gd.c + .5) * TILE * sx, y + (gd.r + .5) * TILE * sy, '#ffd23f', 2);
   for (const tr of treasures) if (!tr.taken) mobileRadarDot(x + (tr.c + .5) * TILE * sx, y + (tr.r + .5) * TILE * sy, '#43e0d4', 1.8);
-  for (const gu of guards) if (gu.state !== 'dead') mobileRadarDot(x + px(gu.x) * sx, y + (py(gu.y) - HUD_H) * sy, '#ff405a', 2.5);
+  for (const gu of guards) if (gu.state !== 'dead') mobileRadarDot(x + px(gu.x) * sx, y + (py(gu.y) - HUD_H) * sy, guardMeta(gu).color, gu.kind === 'scout' ? 3 : 2.5);
   if (player) mobileRadarDot(x + px(player.x) * sx, y + (py(player.y) - HUD_H) * sy, '#ffffff', 2.4);
   ctx.restore();
 }
 function drawMobileAwareness(){
   if (!mobileView || state !== 'playing') return;
   const items = [];
-  for (const gu of guards) if (gu.state !== 'dead') items.push({x: gu.x, y: gu.y, color: '#ff405a', kind: 'guard', priority: 0});
+  for (const gu of guards) if (gu.state !== 'dead') {
+    const meta = guardMeta(gu);
+    items.push({x: gu.x, y: gu.y, color: meta.color, icon: meta.icon, label: meta.label, kind: 'guard', priority: 0});
+  }
   for (const gd of golds) if (!gd.taken && !gd.held) items.push({x: gd.c + .5, y: gd.r + .5, color: '#ffd23f', kind: 'gold', priority: 1});
   for (const tr of treasures) if (!tr.taken) items.push({x: tr.c + .5, y: tr.r + .5, color: '#43e0d4', kind: 'treasure', priority: 2});
   const shown = [];
@@ -2678,6 +2731,18 @@ function drawMobileAwareness(){
     if (item.kind === 'guard'){
       ctx.fillStyle = item.color;
       ctx.beginPath(); ctx.moveTo(item.cx, item.cy - 7); ctx.lineTo(item.cx + 7, item.cy + 6); ctx.lineTo(item.cx - 7, item.cy + 6); ctx.closePath(); ctx.fill();
+      if (item.dist < 4.5){
+        ctx.strokeStyle = 'rgba(255,255,255,.85)';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(item.cx, item.cy, 12 + Math.sin(gameTime * 8) * 2, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+      ctx.fillStyle = '#08050e';
+      ctx.font = '900 9px system-ui, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(item.icon, item.cx, item.cy + 1);
     } else if (item.kind === 'gold') {
       drawGemIcon(item.cx, item.cy, 6, item.color);
     } else {
@@ -2733,14 +2798,17 @@ function render(){
   else renderWorldFrame(true);
 }
 
-function drawPit(c, r, dark){
+function drawPit(c, r, dark, h){
   const x = c * TILE, y = r * TILE + HUD_H;
+  const age = h ? Math.max(0, Math.min(1, h.t / HOLE_LIFE)) : 0;
+  const warn = h ? Math.max(0, (h.t - (HOLE_LIFE - HOLE_WARN)) / HOLE_WARN) : 0;
+  const tremble = warn > 0 ? Math.sin(h.t * 34) * 1.5 : 0;
   if (ART && ART.tiles && ART.tiles.brick) ctx.drawImage(ART.tiles.brick, x, y);
   else { ctx.fillStyle = '#806443'; ctx.fillRect(x, y, TILE, TILE); }
 
   ctx.save();
   ctx.beginPath();
-  ctx.ellipse(x + TILE * 0.5, y + TILE * 0.5, TILE * 0.34, TILE * 0.23, 0, 0, Math.PI * 2);
+  ctx.ellipse(x + TILE * 0.5 + tremble, y + TILE * (0.5 - warn * 0.04), TILE * (0.34 - age * 0.08), TILE * (0.23 - age * 0.06), 0, 0, Math.PI * 2);
   ctx.clip();
   const pit = ctx.createRadialGradient(x + TILE * 0.5, y + TILE * 0.38, 1, x + TILE * 0.5, y + TILE * 0.54, TILE * 0.4);
   pit.addColorStop(0, 'rgba(37,27,21,' + (0.9 * dark) + ')');
@@ -2750,10 +2818,19 @@ function drawPit(c, r, dark){
   ctx.fillRect(x + 5, y + 5, TILE - 10, TILE - 7);
   ctx.restore();
 
-  ctx.strokeStyle = 'rgba(235,154,86,' + (0.45 * dark) + ')';
+  if (age > 0.28){
+    ctx.globalAlpha = Math.min(.42, age * .55);
+    ctx.fillStyle = '#7d5230';
+    const m = 5 + age * 7;
+    ctx.fillRect(x + 6, y + TILE - m, TILE - 12, m * .45);
+    ctx.fillRect(x + TILE * .5 - m * .35, y + 7, m * .7, 4);
+    ctx.globalAlpha = 1;
+  }
+
+  ctx.strokeStyle = warn > 0 ? 'rgba(255,210,63,' + (0.55 + 0.35 * Math.sin(h.t * 24)) + ')' : 'rgba(235,154,86,' + (0.45 * dark) + ')';
   ctx.lineWidth = 2;
   ctx.beginPath();
-  ctx.ellipse(x + TILE * 0.5, y + TILE * 0.5, TILE * 0.34, TILE * 0.23, 0, 0, Math.PI * 2);
+  ctx.ellipse(x + TILE * 0.5 + tremble, y + TILE * (0.5 - warn * 0.04), TILE * (0.34 - age * 0.08), TILE * (0.23 - age * 0.06), 0, 0, Math.PI * 2);
   ctx.stroke();
   ctx.fillStyle = 'rgba(0,0,0,' + (0.32 * dark) + ')';
   ctx.fillRect(x + 8, y + 6, TILE - 16, 4);            // top inner shadow
@@ -3013,6 +3090,18 @@ function drawHUD(){
   if (oilLightT > 0){
     ctx.textAlign = 'center'; ctx.fillStyle = '#f1b34e'; ctx.font = '900 12px system-ui, sans-serif';
     ctx.fillText('LANTERN +' + Math.ceil(oilLightT), VIEW_W / 2 + 230, cy + 1);
+  }
+  if (player && player.state === 'dead'){
+    const msg = deathText(player.deathReason);
+    const pulse = 0.75 + 0.25 * Math.sin(gameTime * 22);
+    ctx.textAlign = 'center';
+    ctx.fillStyle = 'rgba(8,5,14,.72)';
+    ctx.fillRect(VIEW_W / 2 - 72, HUD_H - 25, 144, 20);
+    ctx.strokeStyle = 'rgba(255,95,80,' + pulse + ')';
+    ctx.strokeRect(VIEW_W / 2 - 72.5, HUD_H - 25.5, 145, 21);
+    ctx.fillStyle = '#ff6b5a';
+    ctx.font = '900 12px system-ui, sans-serif';
+    ctx.fillText(msg, VIEW_W / 2, HUD_H - 15);
   }
 
   drawHotbar();
