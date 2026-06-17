@@ -1901,52 +1901,80 @@ function drawDigStroke(a, cx2, footY){
   const p = clamp(1 - a.digT / total, 0, 1);
   const dir = a.pendingDig.dir || a.dir || 1;
   const tx = px(a.pendingDig.c + 0.5), ty = py(a.pendingDig.r + 0.32);
-  const handX = cx2 + dir * 14, handY = footY - 34;
-  const swing = Math.sin(p * Math.PI);
-  const headX = handX + (tx - handX) * (0.35 + p * 0.65);
-  const headY = handY + (ty - handY) * (0.18 + p * 0.82) - swing * 20;
-  const angle = Math.atan2(headY - handY, headX - handX);
+  const ease = p < 0.82
+    ? 0.5 - Math.cos((p / 0.82) * Math.PI) * 0.5
+    : 1 - (1 - p) * 0.16;
+  const backswing = -2.05, impact = 0.78;
+  const baseAngle = backswing + (impact - backswing) * ease;
+  const angle = dir > 0 ? baseAngle : Math.PI - baseAngle;
+  const pivotX = cx2 + dir * 7;
+  const pivotY = footY - 41 + Math.sin(p * Math.PI) * 3;
+  const len = 49;
+  const tailLen = 13;
+  const headX = pivotX + Math.cos(angle) * len;
+  const headY = pivotY + Math.sin(angle) * len;
+  const tailX = pivotX - Math.cos(angle) * tailLen;
+  const tailY = pivotY - Math.sin(angle) * tailLen;
+  const gripX = pivotX + Math.cos(angle) * 13;
+  const gripY = pivotY + Math.sin(angle) * 13;
+  const impactA = clamp((p - 0.72) / 0.28, 0, 1);
 
   ctx.save();
   ctx.lineCap = 'round';
   ctx.lineJoin = 'round';
-  ctx.globalAlpha = 0.9;
-  ctx.strokeStyle = 'rgba(18,12,8,.78)';
-  ctx.lineWidth = 5.2;
-  ctx.beginPath(); ctx.moveTo(handX, handY); ctx.lineTo(headX, headY); ctx.stroke();
-  ctx.strokeStyle = '#c98b43';
-  ctx.lineWidth = 3;
-  ctx.beginPath(); ctx.moveTo(handX, handY); ctx.lineTo(headX, headY); ctx.stroke();
 
+  ctx.strokeStyle = 'rgba(18,12,8,.82)';
+  ctx.lineWidth = 7.2;
+  ctx.beginPath(); ctx.moveTo(tailX, tailY); ctx.lineTo(headX, headY); ctx.stroke();
+  ctx.strokeStyle = '#c98b43';
+  ctx.lineWidth = 4.2;
+  ctx.beginPath(); ctx.moveTo(tailX, tailY); ctx.lineTo(headX, headY); ctx.stroke();
+  ctx.strokeStyle = 'rgba(255,226,150,.45)';
+  ctx.lineWidth = 1.2;
+  ctx.beginPath(); ctx.moveTo(gripX, gripY); ctx.lineTo(headX - Math.cos(angle) * 11, headY - Math.sin(angle) * 11); ctx.stroke();
+
+  ctx.fillStyle = 'rgba(20,12,8,.82)';
+  ctx.beginPath(); ctx.arc(pivotX - dir * 2, pivotY + 1, 4.6, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = '#f0c46f';
+  ctx.beginPath(); ctx.arc(gripX, gripY, 3.8, 0, Math.PI * 2); ctx.fill();
+
+  ctx.save();
   ctx.translate(headX, headY);
   ctx.rotate(angle + Math.PI * 0.5);
   ctx.strokeStyle = 'rgba(18,22,24,.75)';
-  ctx.lineWidth = 7;
+  ctx.lineWidth = 8;
   ctx.beginPath();
-  ctx.moveTo(-13, 0);
-  ctx.quadraticCurveTo(-6, -5, 0, 0);
-  ctx.quadraticCurveTo(7, 6, 15, 1);
+  ctx.moveTo(-17, 1);
+  ctx.quadraticCurveTo(-8, -8, 1, -1);
+  ctx.quadraticCurveTo(10, 8, 18, 0);
   ctx.stroke();
   ctx.strokeStyle = '#dbe2df';
-  ctx.lineWidth = 4;
+  ctx.lineWidth = 4.6;
   ctx.beginPath();
-  ctx.moveTo(-13, 0);
-  ctx.quadraticCurveTo(-6, -5, 0, 0);
-  ctx.quadraticCurveTo(7, 6, 15, 1);
+  ctx.moveTo(-17, 1);
+  ctx.quadraticCurveTo(-8, -8, 1, -1);
+  ctx.quadraticCurveTo(10, 8, 18, 0);
   ctx.stroke();
   ctx.fillStyle = '#f8fff3';
-  ctx.fillRect(-2, -3, 4, 6);
+  ctx.fillRect(-3, -4, 6, 8);
   ctx.restore();
 
-  ctx.save();
-  ctx.globalAlpha = 0.3 + p * 0.48;
-  ctx.strokeStyle = '#ffe09a';
-  ctx.lineWidth = 2;
-  ctx.beginPath();
-  ctx.moveTo(tx - 9, ty + 7);
-  ctx.lineTo(tx - 1, ty + 2);
-  ctx.lineTo(tx + 7, ty + 8);
-  ctx.stroke();
+  if (impactA > 0){
+    ctx.globalAlpha = impactA;
+    ctx.strokeStyle = '#ffe09a';
+    ctx.lineWidth = 2.3;
+    ctx.beginPath();
+    ctx.moveTo(tx - 10 * dir, ty + 6);
+    ctx.lineTo(tx - 2 * dir, ty + 1);
+    ctx.lineTo(tx + 7 * dir, ty + 8);
+    ctx.stroke();
+    ctx.fillStyle = '#fff3b0';
+    for (let i = 0; i < 4; i++){
+      const sx = tx + dir * (2 + i * 4) + Math.sin(gameTime * 15 + i) * 2;
+      const sy = ty + 2 + i % 2 * 4;
+      ctx.fillRect(sx, sy, 2, 2);
+    }
+  }
   ctx.restore();
 }
 function actorBodyMotion(a, pose){
