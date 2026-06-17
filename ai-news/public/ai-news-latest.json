@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-17T20:00:01.737926+00:00",
+  "updatedAt": "2026-06-17T21:00:01.553059+00:00",
   "items": [
     {
       "title": "Models Take Notes at Prefill: KV Cache Can Be Editable and Composable",
@@ -10,12 +10,108 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-17T20:00:11.535020+00:00",
+      "published": "2026-06-17T21:00:09.652803+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-17T20:00:01.737926+00:00",
+      "lastSeen": "2026-06-17T21:00:01.553059+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
+    },
+    {
+      "title": "Roelof Botha joins SpaceX’s board of directors",
+      "url": "https://techcrunch.com/2026/06/17/roelof-botha-joins-spacexs-board-of-directors",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "The former Sequoia Capital leader is filling an \"existing vacancy\" on SpaceX's board, days after the company went public in the largest IPO ever.",
+      "image": "https://techcrunch.com/wp-content/uploads/2025/10/2243688557.jpg?resize=1200%2C800",
+      "published": "2026-06-17T20:32:52+00:00",
+      "firstSeen": "2026-06-17T21:00:01.553059+00:00",
+      "lastSeen": "2026-06-17T21:00:01.553059+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.9763
+    },
+    {
+      "title": "NEA’s Tiffany Luck says enterprises are still figuring out their AI ROI",
+      "url": "https://techcrunch.com/video/neas-tiffany-luck-says-enterprises-are-still-figuring-out-their-ai-roi",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Tokenmaxxing&#160;was&#160;the hottest trend in Silicon Valley earlier this year, with CEOs encouraging employees to push AI usage as far&#160;as it would go.&#160;Then the bill came due. Uber&#160;reportedly blew&#160;through its annual AI budget in a few months, some companies cut Claude licenses for parts of their org, and Meta killed its internal leaderboard.&#160; This tension between [&#8230;]",
+      "image": "https://techcrunch.com/wp-content/uploads/2025/03/Tiffany-Luck_headshot.jpg?resize=1200%2C800",
+      "published": "2026-06-17T20:17:38+00:00",
+      "firstSeen": "2026-06-17T21:00:01.553059+00:00",
+      "lastSeen": "2026-06-17T21:00:01.553059+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 3.1686
+    },
+    {
+      "title": "v1.88.3",
+      "url": "https://github.com/BerriAI/litellm/releases/tag/v1.88.3",
+      "source": "LiteLLM Releases",
+      "sourceUrl": "https://github.com/BerriAI/litellm/releases.atom",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Verify Docker Image Signature\nAll LiteLLM Docker images are signed with cosign. Every release is signed with the same key introduced in commit 0112e53.\nVerify using the pinned commit hash (recommended):\nA commit hash is cryptographically immutable, so this is the strongest way to ensure you are using the original signing key:\ncosign verify \\\n  --key https://raw.githubusercontent.com/BerriAI/litellm/0112e53046018d726492c814b3644b7d376029d0/cosign.pub \\\n  ghcr.io/berriai/litellm:v1.88.3\nVerify using the release tag (convenience):\nTags are protected in this repository and resolve to the same key.",
+      "image": "https://opengraph.githubassets.com/9e8d1c68595085dad4830d15051a9c16b21d49cd4018c0b64eeb9ee23e4fc0b0/BerriAI/litellm/releases/tag/v1.88.3",
+      "published": "2026-06-17T20:06:39+00:00",
+      "firstSeen": "2026-06-17T21:00:01.553059+00:00",
+      "lastSeen": "2026-06-17T21:00:01.553059+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.9632
+    },
+    {
+      "title": "Behavox raises $175 million from BlackRock’s HPS to expand its AI compliance platform",
+      "url": "https://thenextweb.com/news/behavox-175m-hps-blackrock-ai-compliance",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Behavox has raised $175 million in preferred equity from HPS Investment Partners, the private credit firm that BlackRock acquired for $12 billion last year. The funding will go toward expanding Behavox’s unified AI compliance platform and pursuing acquisitions. It is the company’s first equity raise in six years. As part of the deal, Behavox fully repaid and [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/behavox-175m-hps-blackrock-ai-compliance.avif",
+      "published": "2026-06-17T20:03:48+00:00",
+      "firstSeen": "2026-06-17T21:00:01.553059+00:00",
+      "lastSeen": "2026-06-17T21:00:01.553059+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1217
+    },
+    {
+      "title": "v0.30.10-rc1",
+      "url": "https://github.com/ollama/ollama/releases/tag/v0.30.10-rc1",
+      "source": "Ollama Releases",
+      "sourceUrl": "https://github.com/ollama/ollama/releases.atom",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "ci: pin darwin release xcode (#16788)",
+      "image": "https://opengraph.githubassets.com/f13a5dbd9947960080eb8d1587e20b07aeb2d6f115eab475165734f7fc9c39fc/ollama/ollama",
+      "published": "2026-06-17T20:01:10+00:00",
+      "firstSeen": "2026-06-17T21:00:01.553059+00:00",
+      "lastSeen": "2026-06-17T21:00:01.553059+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.0304
+    },
+    {
+      "title": "PsiQuantum breaks ground in Australia on what it says will be the world’s first utility-scale quantum computer",
+      "url": "https://thenextweb.com/news/psiquantum-aupsiquantum-australia-groundbreaking-quantum-computerstralia-groundbreaking-quantum-computer",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "PsiQuantum has broken ground on a facility in Moreton Bay, Queensland, where it plans to build and deploy what it calls the world’s first utility-scale, fault-tolerant quantum computer. The site will eventually hold tens of thousands of photonic quantum chips cooled by one of the largest cryogenic systems ever constructed for quantum computing. Victor Peng, PsiQuantum’s [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/psiquantum-australia-groundbreaking-quantum-computer.avif",
+      "published": "2026-06-17T19:47:22+00:00",
+      "firstSeen": "2026-06-17T21:00:01.553059+00:00",
+      "lastSeen": "2026-06-17T21:00:01.553059+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1136
     },
     {
       "title": "Apple investors are running out of patience with its AI promises",
@@ -28,10 +124,10 @@
       "image": "https://media.thenextweb.com/2026/05/apple-record-quarter-cook-ternus-ai-strategy.avif",
       "published": "2026-06-17T19:27:38+00:00",
       "firstSeen": "2026-06-17T20:00:01.737926+00:00",
-      "lastSeen": "2026-06-17T20:00:01.737926+00:00",
+      "lastSeen": "2026-06-17T21:00:01.553059+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2336
+      "score": 3.2039
     },
     {
       "title": "France breaks EDF’s grip on hydropower with law to auction 6 GW a year",
@@ -44,10 +140,10 @@
       "image": "https://media.thenextweb.com/2026/06/france-edf-hydropower-law-auction-6gw.avif",
       "published": "2026-06-17T19:18:06+00:00",
       "firstSeen": "2026-06-17T20:00:01.737926+00:00",
-      "lastSeen": "2026-06-17T20:00:01.737926+00:00",
+      "lastSeen": "2026-06-17T21:00:01.553059+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.5289
+      "score": 3.4993
     },
     {
       "title": "World leaders want American AI. They just don’t want America to be able to turn it off.",
@@ -60,10 +156,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/GettyImages-2281424015.jpg?w=1024",
       "published": "2026-06-17T19:01:19+00:00",
       "firstSeen": "2026-06-17T20:00:01.737926+00:00",
-      "lastSeen": "2026-06-17T20:00:01.737926+00:00",
+      "lastSeen": "2026-06-17T21:00:01.553059+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.2605
+      "score": 4.2312
     },
     {
       "title": "Anthropic and Google DeepMind called for a US-led AI coalition at the G7, and Canada said yes",
@@ -76,10 +172,10 @@
       "image": "https://media.thenextweb.com/2026/06/anthropic-google-us-led-ai-coalition-g7-amodei-hassabis.avif",
       "published": "2026-06-17T18:53:44+00:00",
       "firstSeen": "2026-06-17T20:00:01.737926+00:00",
-      "lastSeen": "2026-06-17T20:00:01.737926+00:00",
+      "lastSeen": "2026-06-17T21:00:01.553059+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 11.1168
+      "score": 11.0875
     },
     {
       "title": "Allbirds sells its shoes, renames itself Smartbird, and says it is now an AI infrastructure company",
@@ -92,10 +188,10 @@
       "image": "https://media.thenextweb.com/2026/06/allbirds-smartbird-ai-infrastructure-pivot.avif",
       "published": "2026-06-17T18:53:10+00:00",
       "firstSeen": "2026-06-17T20:00:01.737926+00:00",
-      "lastSeen": "2026-06-17T20:00:01.737926+00:00",
+      "lastSeen": "2026-06-17T21:00:01.553059+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2165
+      "score": 3.1873
     },
     {
       "title": "Meloni says banning kids from social media is not a solution on its own",
@@ -108,10 +204,10 @@
       "image": "https://media.thenextweb.com/2026/06/Giorgia-Meloni.avif",
       "published": "2026-06-17T18:37:46+00:00",
       "firstSeen": "2026-06-17T19:00:01.463621+00:00",
-      "lastSeen": "2026-06-17T20:00:01.737926+00:00",
+      "lastSeen": "2026-06-17T21:00:01.553059+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2089
+      "score": 3.1799
     },
     {
       "title": "IBM Report: Most EMEA Executives Don’t Fully Understand Their AI Dependencies",
@@ -124,10 +220,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/06/emea-ai.jpg?f=jpeg",
       "published": "2026-06-17T18:31:44+00:00",
       "firstSeen": "2026-06-17T20:00:01.737926+00:00",
-      "lastSeen": "2026-06-17T20:00:01.737926+00:00",
+      "lastSeen": "2026-06-17T21:00:01.553059+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.6059
+      "score": 4.577
     },
     {
       "title": "Anthropic becomes first AI startup to join the Frontier carbon removal coalition",
@@ -140,10 +236,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/GettyImages-2278736523.jpeg?resize=1200%2C798",
       "published": "2026-06-17T18:30:56+00:00",
       "firstSeen": "2026-06-17T19:00:01.463621+00:00",
-      "lastSeen": "2026-06-17T20:00:01.737926+00:00",
+      "lastSeen": "2026-06-17T21:00:01.553059+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2456
+      "score": 5.2166
     },
     {
       "title": "Anthropic got hit by export rules nobody understands",
@@ -156,10 +252,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/STKB364_CLAUDE_2_A_3800fc.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-17T18:28:50+00:00",
       "firstSeen": "2026-06-17T19:00:01.463621+00:00",
-      "lastSeen": "2026-06-17T20:00:01.737926+00:00",
+      "lastSeen": "2026-06-17T21:00:01.553059+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.4145
+      "score": 6.3856
     },
     {
       "title": "Amazon admits its AI models lag behind OpenAI and Anthropic, but says it can catch up",
@@ -172,10 +268,10 @@
       "image": "https://media.thenextweb.com/2026/06/amazon-ai-frontier-models-catch-up.avif",
       "published": "2026-06-17T18:26:41+00:00",
       "firstSeen": "2026-06-17T19:00:01.463621+00:00",
-      "lastSeen": "2026-06-17T20:00:01.737926+00:00",
+      "lastSeen": "2026-06-17T21:00:01.553059+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.1035
+      "score": 8.0746
     },
     {
       "title": "Operating a Humanoid With Your Body Is a Hot Job in China’s Hardware Capital",
@@ -188,10 +284,10 @@
       "image": "https://media.wired.com/photos/6a31de8a8b1536f155402681/master/pass/AI-Lab-Operating-Humanoid-With-Your-Body-is-Hot-Job-in-China-Hardware-Capital-Business.jpg",
       "published": "2026-06-17T18:25:35+00:00",
       "firstSeen": "2026-06-17T19:00:01.463621+00:00",
-      "lastSeen": "2026-06-17T20:00:01.737926+00:00",
+      "lastSeen": "2026-06-17T21:00:01.553059+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9429
+      "score": 2.9141
     },
     {
       "title": "Social media’s next evolution: user-controlled algorithms",
@@ -204,10 +300,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2024/06/social-media-icons.jpg?resize=1200%2C798",
       "published": "2026-06-17T18:19:48+00:00",
       "firstSeen": "2026-06-17T19:00:01.463621+00:00",
-      "lastSeen": "2026-06-17T20:00:01.737926+00:00",
+      "lastSeen": "2026-06-17T21:00:01.553059+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2401
+      "score": 2.2114
     },
     {
       "title": "Britain lobbied Trump for an exemption from the Anthropic AI ban. The answer was no.",
@@ -220,10 +316,10 @@
       "image": "https://media.thenextweb.com/2026/06/starmer-uk-anthropic-ban-carveout-rejected.avif",
       "published": "2026-06-17T18:18:45+00:00",
       "firstSeen": "2026-06-17T19:00:01.463621+00:00",
-      "lastSeen": "2026-06-17T20:00:01.737926+00:00",
+      "lastSeen": "2026-06-17T21:00:01.553059+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0996
+      "score": 5.0709
     },
     {
       "title": "Modernizing Meeting Spaces: How Agentic Control and Intelligent Framing Redefine Hybrid Work",
@@ -236,10 +332,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/06/group-of-asia-team-people-chat-online-with-casual-2026-01-05-06-24-16-utc-1.jpg?f=jpeg",
       "published": "2026-06-17T18:18:32+00:00",
       "firstSeen": "2026-06-17T20:00:01.737926+00:00",
-      "lastSeen": "2026-06-17T20:00:01.737926+00:00",
+      "lastSeen": "2026-06-17T21:00:01.553059+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.8995
+      "score": 5.8708
     },
     {
       "title": "Mastodon adds email newsletters so people who don’t want an account can still follow creators on the open social web",
@@ -252,10 +348,10 @@
       "image": "https://media.thenextweb.com/2026/06/mastodon-4-6-email-newsletters-collections-fediverse-growth.avif",
       "published": "2026-06-17T18:17:36+00:00",
       "firstSeen": "2026-06-17T19:00:01.463621+00:00",
-      "lastSeen": "2026-06-17T20:00:01.737926+00:00",
+      "lastSeen": "2026-06-17T21:00:01.553059+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7991
+      "score": 2.7703
     },
     {
       "title": "Gary Marcus warns OpenAI’s IPO could drag Nvidia, Oracle, and CoreWeave down with it",
@@ -271,7 +367,23 @@
       "lastSeen": "2026-06-17T20:00:01.737926+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 1.9948
+      "score": 1.9662
+    },
+    {
+      "title": "NEA’s Tiffany Luck on AI IPOs, personal agents, and the ROI reckoning",
+      "url": "https://techcrunch.com/podcast/neas-tiffany-luck-on-ai-ipos-personal-agents-and-the-roi-reckoning",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Tokenmaxxing&#160;was&#160;the hottest trend in Silicon Valley earlier this year, with CEOs encouraging employees to push AI usage as far&#160;as it would go.&#160;Then the bill came due. Uber&#160;reportedly blew&#160;through its annual AI budget in a few months, some companies cut Claude licenses for parts of their org, and Meta killed its internal leaderboard.&#160; This tension between [&#8230;]",
+      "image": "https://techcrunch.com/wp-content/uploads/2025/09/GettyImages-640351099.jpg?resize=1200%2C849",
+      "published": "2026-06-17T18:00:00+00:00",
+      "firstSeen": "2026-06-17T21:00:01.553059+00:00",
+      "lastSeen": "2026-06-17T21:00:01.553059+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 5.802
     },
     {
       "title": "A 21-year-old Stanford grad just raised $11.6M to build a wearable hormone monitor that doesn’t need blood",
@@ -287,7 +399,7 @@
       "lastSeen": "2026-06-17T20:00:01.737926+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7875
+      "score": 2.7591
     },
     {
       "title": "\"Dangerous\" AI models are coming no matter what",
@@ -300,10 +412,10 @@
       "image": "https://cdn.arstechnica.net/wp-content/uploads/2026/05/Dario-Amodei-Code-with-Claude-SF-2026-1152x648.jpg",
       "published": "2026-06-17T17:50:46+00:00",
       "firstSeen": "2026-06-17T20:00:01.737926+00:00",
-      "lastSeen": "2026-06-17T20:00:01.737926+00:00",
+      "lastSeen": "2026-06-17T21:00:01.553059+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0861
+      "score": 2.0577
     },
     {
       "title": "SpaceX’s surging stock just turned its valuation into an acquisition weapon",
@@ -319,7 +431,7 @@
       "lastSeen": "2026-06-17T19:00:01.463621+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0835
+      "score": 2.0551
     },
     {
       "title": "World model maker Odyssey nabs $1.45B valuation backed by Amazon and other big names",
@@ -332,10 +444,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2024/11/ODYSSEY-INTHEWILD-974_Retouched_V1.00.jpg?resize=1200%2C800",
       "published": "2026-06-17T17:43:07+00:00",
       "firstSeen": "2026-06-17T18:00:01.431578+00:00",
-      "lastSeen": "2026-06-17T20:00:01.737926+00:00",
+      "lastSeen": "2026-06-17T21:00:01.553059+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2224
+      "score": 2.1942
     },
     {
       "title": "Half of Americans now use AI chatbots, but 40% think AI will make society worse and two-thirds don’t trust the government to regulate it",
@@ -351,7 +463,7 @@
       "lastSeen": "2026-06-17T19:00:01.463621+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.2791
+      "score": 3.2509
     },
     {
       "title": "A million Dutch adults get news solely from social media. Only 12% trust what they see.",
@@ -367,7 +479,7 @@
       "lastSeen": "2026-06-17T19:00:01.463621+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.4782
+      "score": 3.45
     },
     {
       "title": "Two-thirds of Americans think AI is advancing too quickly",
@@ -380,10 +492,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/STK_414_AI_J-copy.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-17T17:20:24+00:00",
       "firstSeen": "2026-06-17T18:00:01.431578+00:00",
-      "lastSeen": "2026-06-17T20:00:01.737926+00:00",
+      "lastSeen": "2026-06-17T21:00:01.553059+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.6816
+      "score": 7.6537
     },
     {
       "title": "Quoting Charity Majors",
@@ -396,10 +508,10 @@
       "image": "",
       "published": "2026-06-17T17:12:41+00:00",
       "firstSeen": "2026-06-17T18:00:01.431578+00:00",
-      "lastSeen": "2026-06-17T20:00:01.737926+00:00",
+      "lastSeen": "2026-06-17T21:00:01.553059+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.308
+      "score": 3.2801
     },
     {
       "title": "Only 16 percent of Americans think AI will have a positive impact on society, a new study shows",
@@ -412,10 +524,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/spacexipo-nasdaq.jpg?resize=1200%2C800",
       "published": "2026-06-17T17:00:01+00:00",
       "firstSeen": "2026-06-17T17:19:35.295995+00:00",
-      "lastSeen": "2026-06-17T20:00:01.737926+00:00",
+      "lastSeen": "2026-06-17T21:00:01.553059+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.602
+      "score": 3.5743
     },
     {
       "title": "The White House Wants Anthropic to Block All Jailbreaks. That May Not Be Possible",
@@ -428,10 +540,10 @@
       "image": "https://media.wired.com/photos/6a31d49a95ac419546b42eb7/master/pass/politics_white_house_anthropic.jpg",
       "published": "2026-06-17T17:00:00+00:00",
       "firstSeen": "2026-06-17T17:19:35.295995+00:00",
-      "lastSeen": "2026-06-17T20:00:01.737926+00:00",
+      "lastSeen": "2026-06-17T21:00:01.553059+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.902
+      "score": 5.8743
     },
     {
       "title": "Apple to Merge Private Mail Domains for Sign In and Hide My Email",
@@ -444,10 +556,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/06/ios-26-iphone-16-pro-ipad-pro-sign-in-with-apple-hero.jpg?f=jpeg",
       "published": "2026-06-17T16:59:53+00:00",
       "firstSeen": "2026-06-17T20:00:01.737926+00:00",
-      "lastSeen": "2026-06-17T20:00:01.737926+00:00",
+      "lastSeen": "2026-06-17T21:00:01.553059+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.162
+      "score": 3.1343
     },
     {
       "title": "Arcade raised $60M to fix the real wall blocking enterprise AI agents: what they’re allowed to do",
@@ -463,7 +575,7 @@
       "lastSeen": "2026-06-17T19:00:01.463621+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.7491
+      "score": 4.7217
     },
     {
       "title": "Google bets on Gemini to reinvent the smart home speaker",
@@ -476,10 +588,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/Google-Home-Speaker-Berry.jpeg?resize=1200%2C899",
       "published": "2026-06-17T16:30:09+00:00",
       "firstSeen": "2026-06-17T17:00:01.475707+00:00",
-      "lastSeen": "2026-06-17T20:00:01.737926+00:00",
+      "lastSeen": "2026-06-17T21:00:01.553059+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.2881
+      "score": 9.2608
     },
     {
       "title": "Vibe-decoding the White House-Anthropic fight over Fable",
@@ -492,10 +604,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/gettyimages-2282033342.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.740280282734%2C100%2C78.519439434532&amp%3Bw=1200",
       "published": "2026-06-17T16:27:00+00:00",
       "firstSeen": "2026-06-17T17:00:01.475707+00:00",
-      "lastSeen": "2026-06-17T20:00:01.737926+00:00",
+      "lastSeen": "2026-06-17T21:00:01.553059+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.7567
+      "score": 8.7294
     },
     {
       "title": "The bottleneck in geothermal moved from the drill to the turbine. This SpaceX alum raised $22M to fix it",
@@ -511,7 +623,7 @@
       "lastSeen": "2026-06-17T18:00:01.431578+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0419
+      "score": 2.0147
     },
     {
       "title": "Why CMOs need a new operating system for accountability",
@@ -527,119 +639,7 @@
       "lastSeen": "2026-06-17T18:00:01.431578+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0414
-    },
-    {
-      "title": "Can anyone look cool wearing Snap’s $2,000 glasses?",
-      "url": "https://www.theverge.com/report/951481/snap-specs-wearables-smart-glasses-fashion",
-      "source": "The Verge AI",
-      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "Yesterday, Snap debuted its new $2,195 Specs glasses. In an interview with CNBC, Snap CEO Evan Spiegel described the Specs as something the company had been working on for more than 12 years, an attempt to \"bring computing into the world\" and \"make it more human.\" He positioned them as a device to help people [&#8230;]",
-      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/image-3-1.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C3.4892491027825%2C100%2C93.021501794435&amp%3Bw=1200",
-      "published": "2026-06-17T16:13:34+00:00",
-      "firstSeen": "2026-06-17T17:00:01.475707+00:00",
-      "lastSeen": "2026-06-17T20:00:01.737926+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.9505
-    },
-    {
-      "title": "Ozempic Maker Novo Nordisk Confirms Security Incident After $25M Hacker Demand",
-      "url": "https://www.techrepublic.com/article/news-novo-nordisk-1-3tb-theft-25m-demand-emea",
-      "source": "TechRepublic AI",
-      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Hackers claim they stole 1.3TB of Novo Nordisk data, including clinical trial and AI model information, after issuing a $25 million demand.\nThe post Ozempic Maker Novo Nordisk Confirms Security Incident After $25M Hacker Demand appeared first on TechRepublic.",
-      "image": "https://assets.techrepublic.com/uploads/2026/06/novo-nordisk-1.jpg?f=jpeg",
-      "published": "2026-06-17T16:06:36+00:00",
-      "firstSeen": "2026-06-17T20:00:01.737926+00:00",
-      "lastSeen": "2026-06-17T20:00:01.737926+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.1373
-    },
-    {
-      "title": "China’s new five-year plan makes tracking AI’s hit to jobs a national priority",
-      "url": "https://thenextweb.com/news/china-five-year-plan-ai-jobs-employment-monitoring",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "China has spent two years telling the world it intends to win the AI race. Its new five-year employment plan is the quieter admission that winning it could cost a lot of people their jobs. The State Council, effectively China’s cabinet, has issued its blueprint for employment policy from 2026 to 2030. Buried in a [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/china-humanoid-robot-boom-commercialisation-reality-check.avif",
-      "published": "2026-06-17T15:54:08+00:00",
-      "firstSeen": "2026-06-17T17:00:01.475707+00:00",
-      "lastSeen": "2026-06-17T18:00:01.431578+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.0316
-    },
-    {
-      "title": "Henrique Schmaiske and the human work behind Meteor 3.0",
-      "url": "https://thenextweb.com/news/henrique-schmaiske-and-the-human-work-behind-meteor-3-0",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Meteor.js is one of those open-source projects developers have lived with for years. It has over 44,800 GitHub stars, more than 500,000 active installations worldwide, and still sits inside products across many countries. Behind its largest release in over ten years, Meteor 3.0, is Henrique Schmaiske, CTO of Meteor Software, who started the work in April 2022 [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/henrique-schmaiske-meteor-3-human-work.avif",
-      "published": "2026-06-17T15:41:53+00:00",
-      "firstSeen": "2026-06-17T16:00:02.075644+00:00",
-      "lastSeen": "2026-06-17T18:00:01.431578+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.7261
-    },
-    {
-      "title": "MolmoMotion: Language-guided 3D motion forecasting",
-      "url": "https://huggingface.co/blog/allenai/molmomotion",
-      "source": "Hugging Face Blog",
-      "sourceUrl": "https://huggingface.co/blog/feed.xml",
-      "sourceWeight": 0.95,
-      "category": "AI",
-      "summary": "",
-      "image": "https://cdn-uploads.huggingface.co/production/uploads/638e39b249de7ae552d977b5/wdq3AFZcDZAekGTb16VDy.png",
-      "published": "2026-06-17T15:26:44+00:00",
-      "firstSeen": "2026-06-17T16:00:02.075644+00:00",
-      "lastSeen": "2026-06-17T20:00:01.737926+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.2993
-    },
-    {
-      "title": "The slowtech revolution is here to kill your phone addiction and rescue your attention span",
-      "url": "https://techcrunch.com/2026/06/17/the-slowtech-revolution-is-here-to-kill-your-phone-addiction-and-rescue-your-attention-span",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "“People just really want to take back control of their time, their lives, their attention... They’re down for whatever helps them do that.”",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/06/GettyImages-2238192342.jpg?resize=1200%2C800",
-      "published": "2026-06-17T15:24:41+00:00",
-      "firstSeen": "2026-06-17T16:00:02.075644+00:00",
-      "lastSeen": "2026-06-17T20:00:01.737926+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.1583
-    },
-    {
-      "title": "Poland bought a stake in ElevenLabs to grow its next AI champion",
-      "url": "https://thenextweb.com/news/poland-elevenlabs-stake-ai-lab-poland",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Poland produced one of the world’s most valuable AI companies almost by accident. Now it is spending public money to make sure the next one stays closer to home. Vinci, the venture arm of Poland’s state development bank BGK, has taken an $11mn stake in ElevenLabs, the AI-voice firm valued at $11bn. The same day, [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/ElevenLabs-team-puglia.avif",
-      "published": "2026-06-17T15:16:00+00:00",
-      "firstSeen": "2026-06-17T16:00:02.075644+00:00",
-      "lastSeen": "2026-06-17T18:00:01.431578+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.0145
+      "score": 2.0143
     },
     {
       "title": "The Life Scientific: Dean Lomax",
@@ -652,10 +652,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-15T20:00:00+00:00",
       "firstSeen": "2026-06-15T21:00:01.290903+00:00",
-      "lastSeen": "2026-06-17T20:00:01.737926+00:00",
+      "lastSeen": "2026-06-17T21:00:01.553059+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.48
+      "score": 1.472
     },
     {
       "title": "The Life Scientific: Helen Hastie",
@@ -668,7 +668,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-08T20:00:00+00:00",
       "firstSeen": "2026-06-08T21:00:01.371488+00:00",
-      "lastSeen": "2026-06-17T20:00:01.737926+00:00",
+      "lastSeen": "2026-06-17T21:00:01.553059+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 1.1927
