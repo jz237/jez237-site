@@ -144,7 +144,10 @@
 
   /* ---- tank: hull at heading, turret/barrel at turret angle ---- */
   function drawTank(ctx, tk, t, mode) {
-    const T = theme(mode), main = tk.id === 0 ? T.p1 : T.p2, dark = tk.id === 0 ? T.p1d : T.p2d, glow = tk.id === 0 ? T.p1g : T.p2g;
+    const T = theme(mode);
+    let main = tk.id === 0 ? T.p1 : T.p2, dark = tk.id === 0 ? T.p1d : T.p2d, glow = tk.id === 0 ? T.p1g : T.p2g;
+    if (tk.team === 'ally' && tk.id === 1) { main = '#a8f06f'; dark = '#4c7f2f'; glow = 'rgba(168,240,111,.5)'; }
+    if (tk.team === 'enemy') { main = '#ff5277'; dark = '#8a2238'; glow = 'rgba(255,82,119,.5)'; }
     const damage = Math.max(0, 4 - (tk.hp == null ? 4 : tk.hp));
     if (mode === 'classic') {
       ctx.save();
