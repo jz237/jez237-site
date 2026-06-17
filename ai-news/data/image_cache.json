@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-17T17:19:35.295995+00:00",
+  "updatedAt": "2026-06-17T18:00:01.431578+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -10736,6 +10736,22 @@
     "https://techcrunch.com/2026/06/17/only-16-percent-of-americans-think-ai-will-have-a-positive-impact-on-society-a-new-study-shows": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/spacexipo-nasdaq.jpg?resize=1200,800",
       "checkedAt": "2026-06-17T17:19:35.295995+00:00"
+    },
+    "https://techcrunch.com/2026/06/17/world-model-maker-odyssey-nabs-1-45b-valuation-backed-by-amazon-and-other-big-names": {
+      "image": "https://techcrunch.com/wp-content/uploads/2024/11/ODYSSEY-INTHEWILD-974_Retouched_V1.00.jpg?resize=1200,800",
+      "checkedAt": "2026-06-17T18:00:01.431578+00:00"
+    },
+    "https://www.theverge.com/ai-artificial-intelligence/951653/pew-research-ai-chatbot-usage-advancing-too-quickly": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/STK_414_AI_J-copy.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-06-17T18:00:01.431578+00:00"
+    },
+    "https://simonwillison.net/2026/Jun/17/charity-majors": {
+      "image": "",
+      "checkedAt": "2026-06-17T18:00:01.431578+00:00"
+    },
+    "https://openai.com/index/ai-chemist-improves-reaction": {
+      "image": "",
+      "checkedAt": "2026-06-17T18:00:01.431578+00:00"
     }
   }
 }
