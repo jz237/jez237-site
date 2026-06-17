@@ -9,6 +9,10 @@
       {
         "name": "ROOM",
         "class_name": "SteelDuelRoom"
+      },
+      {
+        "name": "LOBBY",
+        "class_name": "SteelDuelLobby"
       }
     ]
   },
@@ -16,6 +20,10 @@
     {
       "tag": "v1",
       "new_sqlite_classes": ["SteelDuelRoom"]
+    },
+    {
+      "tag": "v2",
+      "new_sqlite_classes": ["SteelDuelLobby"]
     }
   ],
   "observability": {

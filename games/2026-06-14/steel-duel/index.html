@@ -52,6 +52,16 @@
   .online-labels{display:grid;grid-template-columns:1fr 120px;gap:8px;margin-bottom:4px;color:var(--dim);font-size:10px;text-align:left}
   .online-hint{margin-top:7px;color:var(--dim);font-size:10px;text-align:left;line-height:1.35}
   .online-status{min-height:16px;margin-top:7px;color:var(--dim);font-size:11px;text-align:left}
+  .open-rooms{margin-top:10px;padding-top:10px;border-top:1px solid var(--edge)}
+  .open-rooms-head{display:flex;align-items:center;justify-content:space-between;gap:8px;color:var(--dim);font-size:10px;text-align:left}
+  .mini-btn{border:1px solid var(--edge);border-radius:8px;background:#161d2b;color:var(--ink);font:inherit;font-size:10px;padding:5px 8px;cursor:pointer}
+  .mini-btn:hover,.room-join:hover{border-color:var(--amber)}
+  .room-list{display:grid;gap:6px;margin-top:7px}
+  .room-row{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;padding:7px 8px;border:1px solid var(--edge);border-radius:8px;background:rgba(12,16,25,.74);text-align:left}
+  .room-main{font-size:12px;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .room-meta{margin-top:2px;font-size:9px;color:var(--dim)}
+  .room-join{border:1px solid var(--edge);border-radius:8px;background:#203042;color:var(--ink);font:inherit;font-size:10px;padding:6px 8px;cursor:pointer}
+  .room-empty{padding:8px;border:1px dashed var(--edge);border-radius:8px;color:var(--dim);font-size:10px;text-align:left}
   select,input{background:#0c1019;color:var(--ink);border:1px solid var(--edge);border-radius:8px;padding:8px;font:inherit}
   .keys{display:grid;grid-template-columns:1fr 1fr;gap:14px;text-align:left;margin:8px 0 4px;font-size:13px;color:var(--dim)}
   .keys b{color:var(--ink)} .keys h3{margin:0 0 6px;font-size:12px;letter-spacing:1px}
@@ -117,7 +127,7 @@
         <button id="btnHow" class="btn">HOW TO PLAY</button>
         <button id="btnScores" class="btn">🏆 SCORES</button>
       </div>
-      <div class="footer">v17 · First tank-combat arcade game, Kee&nbsp;Games 1974. Drive your foe into the mines.</div>
+      <div class="footer">v18 · First tank-combat arcade game, Kee&nbsp;Games 1974. Drive your foe into the mines.</div>
     </div>
   </div>
 
@@ -137,8 +147,12 @@
         </div>
         <label class="online-name-row"><span>NAME</span><input id="onlineName" class="online-name" maxlength="12" placeholder="PLAYER NAME" /></label>
         <button id="btnOnlineConnect" class="btn primary">START / JOIN ROOM</button>
-        <div class="online-hint">Same room code joins the same match. First player is P1; second player is P2; two more can spectate.</div>
         <div id="onlineStatus" class="online-status"></div>
+        <div class="open-rooms">
+          <div class="open-rooms-head"><span>OPEN ROOMS</span><button id="btnRoomsRefresh" class="mini-btn">REFRESH</button></div>
+          <div id="openRooms" class="room-list"><div class="room-empty">Checking for waiting players...</div></div>
+        </div>
+        <div class="online-hint">Open rooms show a waiting P1. Same room code joins the same match. First player is P1; second player is P2; two more can spectate.</div>
       </div>
       <button id="btnOnlineBack" class="btn">BACK</button>
     </div>
@@ -200,8 +214,8 @@
     <div id="stickR" class="stick"><div id="stickRk" class="knob"></div><span class="sticklbl">AIM · FIRE</span></div>
   </div>
 
-  <script src="audio.js?v=17"></script>
-  <script src="art.js?v=17"></script>
-  <script src="game.js?v=17"></script>
+  <script src="audio.js?v=18"></script>
+  <script src="art.js?v=18"></script>
+  <script src="game.js?v=18"></script>
 </body>
 </html>
