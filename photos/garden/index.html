@@ -129,7 +129,7 @@
 
     <section class="intro-card">
       <strong>How this works:</strong>
-      <p class="muted" style="margin-bottom:0;">Drop garden photos into <code>photos/garden/images/YYYY/MM/</code> and add entries to the photo list below. Each month becomes its own timeline section automatically.</p>
+      <p class="muted" style="margin-bottom:0;">Garden photos are hosted in Cloudflare R2 at the same <code>photos/garden/images/YYYY/MM/</code> paths, with GitHub keeping the captions and image pointers. Each month becomes its own timeline section automatically.</p>
     </section>
 
     <div id="timeline" class="timeline"></div>
@@ -137,7 +137,7 @@
     <div class="empty-state" id="empty-state">
       <div class="emoji">🌱</div>
       <p>No garden timeline photos yet.</p>
-      <p>Add images under <code>photos/garden/images/YYYY/MM/</code> and they’ll slot into the right month.</p>
+      <p>Upload images to Cloudflare R2 under <code>photos/garden/images/YYYY/MM/</code>, then add their pointers here and they’ll slot into the right month.</p>
     </div>
 
     <footer>
