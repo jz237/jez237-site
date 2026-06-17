@@ -119,7 +119,7 @@
   let freezeT = 0, winner = null, tick = 0, shake = 0;
   let bots = [false, false, true, true];
   let campaign = null;          // campaign run state (null outside campaign mode)
-  let mouseX = LW / 2, mouseY = LH / 2;
+  let mouseX = LW / 2, mouseY = LH / 2, mouseDown = false;
   let online = { ws: null, room: '', role: null, id: null, mode: 'duel', name: 'PLAYER', names: { p1: 'P1', p2: 'P2' }, ready: { p1: false, p2: false }, status: '', connected: false, started: false, lastInput: 0, lastSnapshot: 0, peers: [] };
 
   let controls = [ctrl(), ctrl(), ctrl(), ctrl()];
@@ -507,8 +507,13 @@
       const foe = nearestFoe(me);
       const mouseAim = (i === 0 && !touchActive && (!campaign || campaign.players === 1));   // 1P desktop steers the turret with the mouse
       if (mouseAim) {
-        cmd.aim = Math.atan2(mouseY - me.y, mouseX - me.x); cmd.aimInstant = true;
-        cmd.fire = (autoFire && clearShot(me, cmd.aim)) || !!c.fire;
+        const ang = Math.atan2(mouseY - me.y, mouseX - me.x); cmd.aim = ang; cmd.aimInstant = true;
+        if (mouseDown) {                                  // hold LMB: drive toward the pointer AND shoot that way
+          if (Math.hypot(mouseX - me.x, mouseY - me.y) > 24) cmd.moveVec = { ang: ang, mag: 1 };   // override WASD; deadzone near the cursor
+          cmd.fire = true;
+        } else {
+          cmd.fire = (autoFire && clearShot(me, ang)) || !!c.fire;   // Space fires; otherwise auto-fire on a clear shot
+        }
       } else if (c.aimVec && c.aimVec.active) {            // mobile twin-stick (auto-fire off): manual aim + fire
         cmd.aim = c.aimVec.angle; cmd.aimInstant = true; cmd.fire = true;
       } else if (foe) {                                     // auto-aim nearest enemy; fire once the turret is lined up with a clear shot
@@ -1223,8 +1228,8 @@
     if (!canvas) return;
     const toLogical = e => { const p = screenToWorld(e.clientX, e.clientY); mouseX = p.x; mouseY = p.y; };
     window.addEventListener('mousemove', toLogical);
-    canvas.addEventListener('mousedown', e => { if (e.button === 0) { controls[0].fire = true; toLogical(e); e.preventDefault(); } });
-    window.addEventListener('mouseup', e => { if (e.button === 0) controls[0].fire = false; });
+    canvas.addEventListener('mousedown', e => { if (e.button === 0) { mouseDown = true; controls[0].fire = true; toLogical(e); e.preventDefault(); } });
+    window.addEventListener('mouseup', e => { if (e.button === 0) { mouseDown = false; controls[0].fire = false; } });
   }
 
   /* ===================== touch (twin-stick) ===================== */
