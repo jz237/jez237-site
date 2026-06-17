@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-17T10:00:01.692067+00:00",
+  "updatedAt": "2026-06-17T11:00:01.167375+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -10672,6 +10672,10 @@
     "https://huggingface.co/blog/zai-org/glm-52-blog": {
       "image": "https://cdn-uploads.huggingface.co/production/uploads/67066ea38a79951d7b8d4195/iaTHtYOBgeY0C3Xx3vymr.png",
       "checkedAt": "2026-06-17T10:00:01.692067+00:00"
+    },
+    "https://huggingface.co/blog/amazon/strands-lerobot-hub-to-hardware": {
+      "image": "https://cdn-uploads.huggingface.co/production/uploads/6a1dc0f2b4238bb17ff94794/qvSGZ0tZsgr4U4BCx_bVX.png",
+      "checkedAt": "2026-06-17T11:00:01.167375+00:00"
     }
   }
 }
