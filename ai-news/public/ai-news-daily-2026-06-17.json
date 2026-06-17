@@ -1,6 +1,6 @@
 {
   "date": "2026-06-17",
-  "updatedAt": "2026-06-17T06:00:01.802382+00:00",
+  "updatedAt": "2026-06-17T07:00:01.679932+00:00",
   "items": [
     {
       "title": "v0.30.9",
@@ -13,10 +13,10 @@
       "image": "https://opengraph.githubassets.com/87b871e255361fe6bd02fa5c9ba9295bc8c46d922ce7c800119a605faffc3b16/ollama/ollama",
       "published": "2026-06-17T00:25:33+00:00",
       "firstSeen": "2026-06-16T23:45:42.524352+00:00",
-      "lastSeen": "2026-06-17T06:00:01.802382+00:00",
+      "lastSeen": "2026-06-17T07:00:01.679932+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 13.1022
+      "score": 13.0764
     },
     {
       "title": "NetNewsWire Status",
@@ -25,14 +25,14 @@
       "sourceUrl": "https://simonwillison.net/atom/everything/",
       "sourceWeight": 0.85,
       "category": "AI",
-      "summary": "NetNewsWire Status\nI find this inspiring. Brent Simmons retired a year ago, and his retirement project is making one piece of software really, really good - free from any commercial pressure.\nThe software is NetNewsWire, first released in 2002 and made open source in 2018. I've been using it on Mac and iPhone for several years now and I'm finding it indispensable.\n\n    Via Lobste.rs\n\n\n    Tags: brent-simmons, netnewswire, open-source",
+      "summary": "NetNewsWire Status\nI find this inspiring. Brent Simmons retired a year ago, and his retirement project is making one piece of software really, really good - free from any commercial pressure.\nThe software is NetNewsWire - \"it's like podcasts, but for reading\" - first released in 2002 and made open source in 2018.\nI've been using it on Mac and iPhone for several years now and I'm finding it indispensable.\n\n    Via Lobste.rs\n\n\n    Tags: brent-simmons, netnewswire, open-source",
       "image": "",
       "published": "2026-06-17T03:36:09+00:00",
       "firstSeen": "2026-06-17T04:00:02.018851+00:00",
-      "lastSeen": "2026-06-17T06:00:01.802382+00:00",
+      "lastSeen": "2026-06-17T07:00:01.679932+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.6191
+      "score": 3.5909
     },
     {
       "title": "Informative Missingness to Generate Irregular Clinical Time Series",
@@ -43,12 +43,28 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-17T06:00:12.069066+00:00",
+      "published": "2026-06-17T07:00:18.445066+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-17T06:00:01.802382+00:00",
+      "lastSeen": "2026-06-17T07:00:01.679932+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
+    },
+    {
+      "title": "<click-to-play> — a still that plays",
+      "url": "https://simonwillison.net/2026/Jun/17/click-to-play-component",
+      "source": "Simon Willison",
+      "sourceUrl": "https://simonwillison.net/atom/everything/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Tool: &lt;click-to-play&gt; — a still that plays\n        A progressive enchantment Web Component that turns this markup:\n&lt;click-to-play&gt;\n  &lt;a href=\"URL to GIF\"&gt;\n    &lt;img src=\"URL to first frame\" alt=\"...\"&gt;\n  &lt;/a&gt;\n&lt;/click-to-play&gt;\n\nInto a still frame with a click to play button which loads the GIF on demand. For when you don't want big GIFs to be loaded unless people want to play them.\nHere's an example that demonstrates the new row editing tools in Datasette - in fact I built this Web Component for that post.\n    \n    \n        Tags: gif, javascript, progressive-en",
+      "image": "",
+      "published": "2026-06-17T03:56:10+00:00",
+      "firstSeen": "2026-06-17T07:00:01.679932+00:00",
+      "lastSeen": "2026-06-17T07:00:01.679932+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2002
     }
   ],
   "errors": [
