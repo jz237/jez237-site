@@ -1108,16 +1108,26 @@ function buildHowTo(){
 function buildLevelSelect(){
   const grid = $('lvlGrid');
   grid.innerHTML = '';
+  const hintEl = $('lvlHint');
   const maxDone = campaignDone.length ? Math.max(...campaignDone) : -1;
   const unlockTo = Math.min(LEVELS.campaign.length - 1, maxDone + 1);
+  const setHint = i => {
+    if (!hintEl) return;
+    const name = LEVELS.names[i] || ('Claim ' + (i + 1));
+    const brief = LEVELS.briefs && LEVELS.briefs[i] ? LEVELS.briefs[i] : 'clear a claim to unlock the next';
+    hintEl.textContent = 'Claim ' + (i + 1) + ': ' + name + ' — ' + brief;
+  };
+  if (hintEl) hintEl.textContent = 'clear a claim to unlock the next';
   for (let i = 0; i < LEVELS.campaign.length; i++){
     const b = document.createElement('button');
     const done = campaignDone.includes(i);
     const locked = i > unlockTo;
     b.textContent = locked ? '🔒' : (i + 1);
-    b.title = LEVELS.names[i] || ('Claim ' + (i + 1));
+    b.title = (LEVELS.names[i] || ('Claim ' + (i + 1))) + (LEVELS.briefs && LEVELS.briefs[i] ? ' — ' + LEVELS.briefs[i] : '');
     if (locked) b.classList.add('locked');
     if (done) b.classList.add('done');
+    b.addEventListener('pointerenter', () => setHint(i));
+    b.addEventListener('focus', () => setHint(i));
     if (!locked) b.addEventListener('click', e => { e.preventDefault(); AUDIO.ensure(); AUDIO.sfx('ui'); startCampaignAt(i); });
     grid.appendChild(b);
   }
@@ -1318,9 +1328,15 @@ function loadLevelData(rows){
   computeDecor();
   // intro banner
   if (mode === 'daily') banner = {text: 'DAILY DIG', sub: dailyDate || LEVELS.dailyDateUTC(), life: 2.4};
-  else banner = {text: 'CLAIM ' + (levelIndex + 1), sub: (LEVELS.names[levelIndex] || '').toUpperCase(), life: 2.4};
-  // first-claim onboarding hint
-  hint = (mode === 'campaign' && levelIndex === 0) ? {life: 7} : null;
+  else banner = {text: 'CLAIM ' + (levelIndex + 1), sub: (LEVELS.names[levelIndex] || '').toUpperCase(), brief: LEVELS.briefs && LEVELS.briefs[levelIndex], life: 2.4};
+  hint = null;
+  if (mode === 'campaign'){
+    const brief = LEVELS.briefs && LEVELS.briefs[levelIndex];
+    hint = {
+      life: levelIndex === 0 ? 7 : 4.8,
+      text: levelIndex === 0 ? '◀ ▶ run   ↑ ↓ ladders   Z / X  dig left / right' : brief,
+    };
+  }
 }
 
 function loadCampaignLevel(i){
@@ -2653,16 +2669,20 @@ function renderWorldFrame(includeHUD){
     ctx.fillStyle = '#ffd23f'; ctx.font = '900 40px Consolas, monospace';
     ctx.fillText(banner.text, VIEW_W / 2, VIEW_H / 2 - 18);
     if (banner.sub){ ctx.fillStyle = '#d8cfe4'; ctx.font = '600 18px Consolas, monospace'; ctx.fillText(banner.sub, VIEW_W / 2, VIEW_H / 2 + 16); }
+    if (banner.brief){ ctx.fillStyle = '#ffe98a'; ctx.font = '700 14px system-ui, sans-serif'; ctx.fillText(banner.brief, VIEW_W / 2, VIEW_H / 2 + 43); }
     ctx.globalAlpha = 1;
   }
 
-  // first-claim onboarding hint
+  // compact claim hint
   if (hint && !banner){
     ctx.globalAlpha = Math.min(1, hint.life / 1.5) * 0.85;
     ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-    ctx.fillStyle = '#0c0a12cc'; ctx.fillRect(VIEW_W / 2 - 235, VIEW_H - 70, 470, 34);
+    const text = hint.text || '';
+    ctx.font = '700 16px Consolas, monospace';
+    const w = Math.min(620, Math.max(360, ctx.measureText(text).width + 44));
+    ctx.fillStyle = '#0c0a12cc'; ctx.fillRect(VIEW_W / 2 - w / 2, VIEW_H - 70, w, 34);
     ctx.fillStyle = '#ffe98a'; ctx.font = '700 16px Consolas, monospace';
-    ctx.fillText('◀ ▶ run   ↑ ↓ ladders   Z / X  dig left / right', VIEW_W / 2, VIEW_H - 53);
+    ctx.fillText(text, VIEW_W / 2, VIEW_H - 53);
     ctx.globalAlpha = 1;
   }
 
