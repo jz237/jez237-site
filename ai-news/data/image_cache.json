@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-16T23:45:42.524352+00:00",
+  "updatedAt": "2026-06-17T00:00:01.776837+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -10652,6 +10652,10 @@
     "https://github.com/ollama/ollama/releases/tag/v0.30.9": {
       "image": "https://opengraph.githubassets.com/87b871e255361fe6bd02fa5c9ba9295bc8c46d922ce7c800119a605faffc3b16/ollama/ollama",
       "checkedAt": "2026-06-16T23:45:42.524352+00:00"
+    },
+    "https://simonwillison.net/2026/Jun/16/datasette-tailscale": {
+      "image": "",
+      "checkedAt": "2026-06-17T00:00:01.776837+00:00"
     }
   }
 }
