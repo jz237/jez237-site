@@ -15,6 +15,7 @@ build/
 
 # Externally hosted media
 /experiments/image-gen-2-benchmark/images/
+/photos/garden/images/
 
 # macOS
 .DS_Store
