@@ -143,11 +143,24 @@
   }
 
   /* ---- tank: hull at heading, turret/barrel at turret angle ---- */
+  function shadeHex(hex, amt) {                      // amt<0 darkens toward black, amt>0 lightens toward white
+    const h = String(hex).replace('#', ''); if (h.length < 6) return hex;
+    let r = parseInt(h.slice(0, 2), 16), g = parseInt(h.slice(2, 4), 16), b = parseInt(h.slice(4, 6), 16);
+    if (amt < 0) { const f = 1 + amt; r = Math.round(r * f); g = Math.round(g * f); b = Math.round(b * f); }
+    else { r = Math.round(r + (255 - r) * amt); g = Math.round(g + (255 - g) * amt); b = Math.round(b + (255 - b) * amt); }
+    return 'rgb(' + r + ',' + g + ',' + b + ')';
+  }
+  function hexToGlow(hex, a) {
+    const h = String(hex).replace('#', ''); if (h.length < 6) return 'rgba(255,82,119,' + a + ')';
+    return 'rgba(' + parseInt(h.slice(0, 2), 16) + ',' + parseInt(h.slice(2, 4), 16) + ',' + parseInt(h.slice(4, 6), 16) + ',' + a + ')';
+  }
   function drawTank(ctx, tk, t, mode) {
     const T = theme(mode);
     let main = tk.id === 0 ? T.p1 : T.p2, dark = tk.id === 0 ? T.p1d : T.p2d, glow = tk.id === 0 ? T.p1g : T.p2g;
     if (tk.team === 'ally' && tk.id === 1) { main = '#a8f06f'; dark = '#4c7f2f'; glow = 'rgba(168,240,111,.5)'; }
-    if (tk.team === 'enemy') { main = '#ff5277'; dark = '#8a2238'; glow = 'rgba(255,82,119,.5)'; }
+    else if (tk.team === 'ally' && tk.id === 2) { main = '#6fb7f0'; dark = '#2f5c84'; glow = 'rgba(111,183,240,.5)'; }
+    else if (tk.team === 'ally' && tk.id === 3) { main = '#f0d96f'; dark = '#84762f'; glow = 'rgba(240,217,111,.5)'; }
+    if (tk.team === 'enemy') { main = tk.enemyColor || '#ff5277'; dark = shadeHex(main, -0.45); glow = hexToGlow(main, 0.5); }
     const damage = Math.max(0, 4 - (tk.hp == null ? 4 : tk.hp));
     if (mode === 'classic') {
       ctx.save();

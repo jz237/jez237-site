@@ -45,6 +45,8 @@
     pillars:   [[5, 4, 1, 1], [22, 4, 1, 1], [5, 13, 1, 1], [22, 13, 1, 1], [10, 6, 1, 1], [17, 6, 1, 1], [10, 11, 1, 1], [17, 11, 1, 1], [13, 8, 2, 2]],
     corridors: [[8, 2, 1, 6], [19, 10, 1, 6], [8, 12, 1, 4], [19, 2, 1, 4], [13, 8, 2, 2]],
     arena:     [[4, 4, 1, 10], [23, 4, 1, 10], [4, 4, 20, 1], [4, 13, 20, 1], [13, 8, 2, 2]],
+    cross:     [[13, 3, 2, 4], [13, 11, 2, 4], [5, 8, 4, 2], [19, 8, 4, 2]],
+    flanks:    [[7, 3, 1, 5], [20, 3, 1, 5], [7, 10, 1, 5], [20, 10, 1, 5], [13, 8, 2, 2]],
   };
   // Enemy tank types: each a variant of the tank with its own stats/behavior. Versus is untouched.
   const ENEMY_TYPES = {
@@ -68,12 +70,12 @@
     { name: 'Skirmish',      arena: 'pillars',   mines: 0, waves: [['grunt', 'grunt'], ['scout', 'scout', 'grunt']] },
     { name: 'Heavy Metal',   arena: 'corridors', mines: 4, waves: [['grunt', 'brute'], ['brute', 'scout', 'scout']] },
     { name: 'The Bastion',   arena: 'arena',     mines: 0, boss: 'bastion', waves: [['__boss__']] },
-    { name: 'Sharpshooters', arena: 'open',      mines: 0, waves: [['sniper', 'grunt'], ['sniper', 'sniper', 'scout']] },
+    { name: 'Sharpshooters', arena: 'flanks',    mines: 0, waves: [['sniper', 'grunt'], ['sniper', 'sniper', 'scout']] },
     { name: 'Minefield',     arena: 'pillars',   mines: 6, waves: [['layer', 'scout'], ['layer', 'layer', 'grunt']] },
     { name: 'Wardens',       arena: 'corridors', mines: 2, waves: [['warden', 'grunt'], ['warden', 'warden', 'brute']] },
     { name: 'Mauler',        arena: 'arena',     mines: 2, boss: 'mauler', waves: [['__boss__']] },
     { name: 'Onslaught',     arena: 'arena',     mines: 6, waves: [['grunt', 'scout', 'brute'], ['sniper', 'layer', 'scout', 'grunt'], ['brute', 'warden', 'sniper']] },
-    { name: 'Gauntlet',      arena: 'open',      mines: 4, waves: [['scout', 'scout', 'grunt'], ['brute', 'sniper', 'layer'], ['warden', 'brute', 'scout', 'grunt']] },
+    { name: 'Gauntlet',      arena: 'cross',     mines: 4, waves: [['scout', 'scout', 'grunt'], ['brute', 'sniper', 'layer'], ['warden', 'brute', 'scout', 'grunt']] },
     { name: 'Last Stand',    arena: 'corridors', mines: 4, waves: [['brute', 'sniper', 'warden'], ['warden', 'warden', 'layer'], ['brute', 'brute', 'sniper', 'sniper']] },
     { name: 'Iron Warlord',  arena: 'arena',     mines: 0, boss: 'warlord', waves: [['__boss__']] },
   ];
@@ -315,7 +317,7 @@
   const BOSS_SPAWN = { c: 14, r: 5, a: Math.PI / 2 };
   const BOSS_DEFS = {
     bastion: { hp: 18, spd: 0.00, color: '#ff7043', name: 'THE BASTION',  hitR: 30, stationary: true, score: 200 },
-    mauler:  { hp: 22, spd: 1.25, color: '#ef5350', name: 'MAULER',       hitR: 26, frontArmor: true, score: 320 },
+    mauler:  { hp: 16, spd: 1.05, color: '#ef5350', name: 'MAULER',       hitR: 26, frontArmor: true, armorArc: 0.6, score: 320 },
     warlord: { hp: 32, spd: 0.70, color: '#ab47bc', name: 'IRON WARLORD', hitR: 33, score: 600 },
   };
   function bossTank(id, type, s) {
@@ -324,7 +326,7 @@
     return {
       id, team: 'enemy', type: 'boss', bossType: type, boss: true, bossName: d.name, x: p.x, y: p.y, heading: s.a, turret: s.a,
       speed: 0, vx: 0, vy: 0, dist: 0, cd: 0, flash: 0, hp, maxHp: hp, alive: true, path: null, pathTick: -999,
-      spdMul: d.spd, fireCd: FIRE_CD, dmg: 1, skill: 0.7, range: [0, 9999], hitR: d.hitR, frontArmor: !!d.frontArmor,
+      spdMul: d.spd, fireCd: FIRE_CD, dmg: 1, skill: 0.7, range: [0, 9999], hitR: d.hitR, frontArmor: !!d.frontArmor, armorArc: d.armorArc || WARDEN_ARC,
       stationary: !!d.stationary, scoreVal: d.score, phase: 1, atkCd: 1.6, invuln: 0, enemyColor: d.color,
     };
   }
@@ -368,8 +370,8 @@
       for (let j = 0; j < k; j++) bossFire(t, off + j / k * Math.PI * 2);
       t.atkCd = t.phase >= 2 ? 1.5 : 2.3;
     } else if (t.bossType === 'mauler') {
-      for (let j = -1; j <= 1; j++) bossFire(t, aim + j * 0.18);
-      t.atkCd = 1.4;
+      for (let j = -1; j <= 1; j++) bossFire(t, aim + j * 0.2);
+      t.atkCd = 1.9;
     } else {                                                    // warlord
       if (t.phase === 1) { for (let j = 0; j < 4; j++) bossFire(t, aim + j * Math.PI / 2); t.atkCd = 1.7; }
       else if (t.phase === 2) { bossFire(t, aim); bossFire(t, aim + 0.5); bossFire(t, aim - 0.5); t.atkCd = 1.1; }
@@ -540,7 +542,11 @@
       for (let i = 0; i < tanks.length; i++) {
         const t = tanks[i], owner = tanks[sh.owner];
         if (t.alive && i !== sh.owner && opposing(owner, t) && Math.hypot(t.x - sh.x, t.y - sh.y) < (t.hitR || TANK_R) + SHELL_R) {
-          if (t.frontArmor && Math.abs(wrapAngle(Math.atan2(sh.y - t.y, sh.x - t.x) - t.heading)) < WARDEN_ARC) {   // front plate deflects — must be flanked
+          if (t.frontArmor && Math.abs(wrapAngle(Math.atan2(sh.y - t.y, sh.x - t.x) - t.heading)) < (t.armorArc || WARDEN_ARC)) {   // front plate — flank for full damage
+            if (t.boss) {                                       // boss armor chips through slowly (never a hard-lock); flanking is far faster
+              t.armorChip = (t.armorChip || 0) + 0.4;
+              if (t.armorChip >= 1) { t.armorChip -= 1; damageTank(i, sh.owner, 1); hit = true; break; }
+            }
             t.flash = Math.max(t.flash, 0.5); if (SDArt) PARTS.chips(sh.x, sh.y, '#cfe0ff'); if (!silent()) SDAudio.wall(); shake = Math.max(shake, 1.5); hit = true; break;
           }
           damageTank(i, sh.owner, sh.dmg || 1); hit = true; break;
@@ -1080,9 +1086,10 @@
 
   /* ===================== scores ===================== */
   const Scores = {
-    BASE: 'https://game-scores.jez237.workers.dev/scores/', NS: 'steel-duel', cache: null, last: null,
-    async fetch() { try { const r = await fetch(this.BASE + this.NS, { cache: 'no-store' }); const d = await r.json(); this.cache = (Array.isArray(d) ? d : (d.scores || [])).map(s => ({ name: String(s.initials || s.name || '???').slice(0, 3).toUpperCase(), score: s.score | 0 })).sort((a, b) => b.score - a.score).slice(0, 8); } catch (e) { this.cache = 'offline'; } return this.cache; },
-    async submit(name, sc) { this.last = { name, score: sc }; try { await fetch(this.BASE + this.NS, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ initials: name, score: sc }) }); this.cache = null; } catch (e) {} },
+    BASE: 'https://game-scores.jez237.workers.dev/scores/', NS: 'steel-duel', cache: {}, last: null,
+    ns() { return mode === 'campaign' ? 'steel-duel-campaign' : 'steel-duel'; },   // campaign ranks on its own board
+    async fetch() { const ns = this.ns(); try { const r = await fetch(this.BASE + ns, { cache: 'no-store' }); const d = await r.json(); this.cache[ns] = (Array.isArray(d) ? d : (d.scores || [])).map(s => ({ name: String(s.initials || s.name || '???').slice(0, 3).toUpperCase(), score: s.score | 0 })).sort((a, b) => b.score - a.score).slice(0, 8); } catch (e) { this.cache[ns] = 'offline'; } return this.cache[ns]; },
+    async submit(name, sc) { const ns = this.ns(); this.last = { name, score: sc }; try { await fetch(this.BASE + ns, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ initials: name, score: sc }) }); this.cache[ns] = null; } catch (e) {} },
   };
   function scoreSubject() {
     if (mode === 'campaign' && campaign) return { points: Math.max(0, campaign.score), label: campaign.players > 1 ? 'Co-op' : 'You', mode: 'campaign Lv' + (campaign.levelIdx + 1) };
@@ -1108,10 +1115,11 @@
   }
   async function refreshBoard() {
     const box = $('scoreBoard'); if (!box) return; box.innerHTML = '<div class="sb-row">loading…</div>';
+    const head = `<div class="sb-row" style="opacity:.55;font-size:11px;letter-spacing:1px"><span>${mode === 'campaign' ? 'CAMPAIGN' : 'VERSUS'} BOARD</span><span>${mode === 'campaign' ? 'score / lvl' : 'pts'}</span></div>`;
     const list = await Scores.fetch();
-    if (list === 'offline') { box.innerHTML = '<div class="sb-row">leaderboard offline</div>'; return; }
-    if (!list.length) { box.innerHTML = '<div class="sb-row">no scores yet — be the first</div>'; return; }
-    box.innerHTML = list.map((s, i) => `<div class="sb-row"><span>${i + 1}. ${s.name}</span><span>${Math.floor(s.score / 100)} <small style="opacity:.5">/${s.score % 100}</small></span></div>`).join('');
+    if (list === 'offline') { box.innerHTML = head + '<div class="sb-row">leaderboard offline</div>'; return; }
+    if (!list.length) { box.innerHTML = head + '<div class="sb-row">no scores yet — be the first</div>'; return; }
+    box.innerHTML = head + list.map((s, i) => `<div class="sb-row"><span>${i + 1}. ${s.name}</span><span>${Math.floor(s.score / 100)} <small style="opacity:.5">/${s.score % 100}</small></span></div>`).join('');
   }
   function diffName(v) { return v <= 8 ? 'Stupid' : v <= 30 ? 'Rookie' : v <= 55 ? 'Seasoned' : v <= 80 ? 'Crack Shot' : v < 100 ? 'Lethal' : "Can't Defeat"; }
 
@@ -1383,6 +1391,14 @@
     const sharedScore = campaign.score > sc0;
     ok('T-C5 co-op scaling', trioEnemies > soloEnemies && trioAllies === 3 && trioLives >= 4 && survivesOneDown && sharedScore,
       'solo=' + soloEnemies + ' trio=' + trioEnemies + ' allies=' + trioAllies + ' lives=' + trioLives + ' survive=' + survivesOneDown + ' shared=' + sharedScore);
+
+    // T-perf+ campaign: heaviest frame (4-player boss level + extra adds, all AI-driven) under sim budget
+    startCampaign(LEVELS.findIndex(l => l.boss), 4, 80, 77); headless = true;
+    for (let i = 0; i < 4; i++) bots[i] = true;                   // all players AI-driven → max pathfinding load
+    spawnAdds('scout', 4); spawnAdds('brute', 2);
+    let pnan = false; const tpc = perfNow(); for (let i = 0; i < 400; i++) { update(); for (const t of tanks) if (!isFinite(t.x)) pnan = true; }
+    const perCamp = (perfNow() - tpc) / 400;
+    ok('T-perf+ campaign sim<=8ms', perCamp <= 8 && !pnan, perCamp.toFixed(3) + 'ms, ' + tanks.length + ' tanks');
 
     campaign = pcamp;
     online = ponline;
