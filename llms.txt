@@ -2,7 +2,7 @@
 
 Site: jez237-site
 Repository: https://github.com/jz237/jez237-site
-Live URL: https://jz237.github.io/jez237-site/
+Live URL: https://jez237.com/
 Owner: Jez
 Timezone: America/New_York
 
@@ -39,12 +39,13 @@ use these instructions before writing code or snippets.
 
 ## Path rules
 
-The site is served locally from the repo root and on GitHub Pages at the
-`/jez237-site/` subpath. There is no `<base>` tag. Use depth-aware
+The site is served locally from the repo root and deployed to Cloudflare
+Pages at the domain root. There is no `<base>` tag. Use depth-aware
 relative paths in HTML, CSS, JS, and inline styles.
 
 Never use root-absolute paths like `/assets/...`, `/photos/...`, or
-`/plants/...` inside site files. They break on GitHub Pages.
+`/plants/...` inside site files. They break local previews and nested
+pages.
 
 Examples:
 
@@ -115,6 +116,13 @@ Destination rules:
 Garden image path:
 
 `photos/garden/images/YYYY/MM/<slug>-YYYY-MM-DD[-variant].jpg`
+
+Garden image storage rule: do not commit new garden image binaries to
+Git. Upload them to Cloudflare R2 with `scripts/upload_garden_image_to_r2.py`
+using the same `photos/garden/images/YYYY/MM/...` key, then commit only
+the HTML/metadata pointer. Cloudflare Pages redirects
+`/photos/garden/images/*` to the R2 object, so existing relative image
+paths continue to work on the live site.
 
 Examples:
 
