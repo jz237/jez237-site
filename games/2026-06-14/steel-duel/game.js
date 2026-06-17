@@ -536,6 +536,10 @@
     const el = $('onlineStatus'); if (el) el.textContent = online.status;
   }
   function onlineUrl(room) { return ONLINE_WS.replace(/\/+$/, '') + '/' + encodeURIComponent(room); }
+  function onlineHttpBase() { return ONLINE_WS.replace(/^wss:/, 'https:').replace(/^ws:/, 'http:').replace(/\/ws\/?$/, ''); }
+  function escapeHtml(v) {
+    return String(v == null ? '' : v).replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
+  }
   function onlineSend(data) {
     if (!online.ws || online.ws.readyState !== WebSocket.OPEN) return false;
     online.ws.send(JSON.stringify(data)); return true;
@@ -638,6 +642,36 @@
       if (wasRoom) setOnlineStatus('Disconnected from room ' + wasRoom);
     });
     ws.addEventListener('error', () => setOnlineStatus('Online connection failed'));
+  }
+  async function refreshOpenRooms() {
+    const box = $('openRooms');
+    if (!box) return;
+    box.innerHTML = '<div class="room-empty">Checking for waiting players...</div>';
+    try {
+      const res = await fetch(onlineHttpBase() + '/rooms', { cache: 'no-store' });
+      const data = await res.json();
+      const rooms = Array.isArray(data.rooms) ? data.rooms : [];
+      if (!rooms.length) {
+        box.innerHTML = '<div class="room-empty">No open rooms right now</div>';
+        return;
+      }
+      box.innerHTML = rooms.map(room => {
+        const code = cleanRoom(room.room);
+        const host = cleanName(room.host);
+        const roomMode = room.mode === 'coop' ? 'coop' : 'duel';
+        const label = roomMode === 'coop' ? 'CO-OP' : 'DUEL';
+        const spec = Math.max(0, Number(room.spectators) || 0);
+        return '<div class="room-row"><div><div class="room-main">' + escapeHtml(code) + ' · ' + escapeHtml(host) + ' waiting</div><div class="room-meta">' + label + (spec ? ' · ' + spec + ' watching' : '') + '</div></div><button class="room-join" data-room="' + escapeHtml(code) + '" data-mode="' + roomMode + '">JOIN</button></div>';
+      }).join('');
+      box.querySelectorAll('.room-join').forEach(btn => btn.addEventListener('click', () => {
+        const roomInput = $('onlineRoom'), modeInput = $('onlineMode');
+        if (roomInput) roomInput.value = btn.dataset.room || '';
+        if (modeInput) modeInput.value = btn.dataset.mode === 'coop' ? 'coop' : 'duel';
+        connectOnline();
+      }));
+    } catch (e) {
+      box.innerHTML = '<div class="room-empty">Open rooms unavailable</div>';
+    }
   }
 
   /* ===================== scores ===================== */
@@ -900,8 +934,9 @@
 
     const click = (id, fn) => { const e = $(id); if (e) e.addEventListener('click', () => { SDAudio.ui(); fn(); }); };
     click('btnDuel', () => { disconnectOnline(); startGame('duel'); }); click('btnCoop', () => { disconnectOnline(); startGame('coop'); }); click('btnCpu', () => { disconnectOnline(); startGame('cpu'); }); click('btnWatch', () => { disconnectOnline(); startGame('watch'); });
-    click('btnOnline', () => { showOverlay('online'); const r = $('onlineRoom'); if (r) r.focus(); });
+    click('btnOnline', () => { showOverlay('online'); refreshOpenRooms(); const r = $('onlineRoom'); if (r) r.focus(); });
     click('btnOnlineConnect', connectOnline);
+    click('btnRoomsRefresh', refreshOpenRooms);
     click('btnOnlineBack', () => { disconnectOnline(); startAttract(); showOverlay('title'); });
     click('btnHow', () => { state = 'how'; showOverlay('how'); }); click('btnHowBack', () => { startAttract(); showOverlay('title'); });
     click('btnScores', () => { state = 'scores'; showOverlay('scores'); refreshBoard(); }); click('btnScoresBack', () => { startAttract(); showOverlay('title'); });
