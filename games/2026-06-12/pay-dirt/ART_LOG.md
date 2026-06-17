@@ -175,3 +175,18 @@ Verification:
 - `git diff --check` passed for the touched Pay Dirt files.
 - Chrome DevTools mobile smoke placed the player slightly outside a ladder column, held up, and confirmed the player climbed.
 - Chrome DevTools mobile movement smoke ran 240 simulation steps and sampled nonblank HUD/gameplay pixels.
+
+## Campaign Backdrop Variety — two-level visual chapters
+Jez asked for the 13 campaign levels to change background image every two levels.
+
+Changes:
+- Added seven painterly cavern backdrop images: original, blue waterfall, violet crystal, moss lantern, ember mine, teal ruins, and moonstone hollow.
+- Campaign levels now select backdrop images by pair: 1-2, 3-4, 5-6, 7-8, 9-10, 11-12, and 13.
+- The selected backdrop also feeds the tile texture sampling so ledges inherit each chapter's color mood.
+- Daily Dig still gets a deterministic backdrop choice based on the daily date.
+- Added `__g.backdrop` for headless verification.
+
+Verification:
+- `node --check game.js` passed after wiring.
+- Generated a contact sheet at `/tmp/pay-dirt-bg-contact.jpg` to inspect all seven variants.
+- Chrome DevTools smoke loaded all 13 campaign levels and confirmed the expected backdrop mapping, including level 13 using `painterly-cavern-bg-07.png`.
