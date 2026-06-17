@@ -27,6 +27,21 @@ const LEVELS = (() => {
     'The Belt Line', 'Rotten Rock', 'One Way Out', 'Powder Keg', 'Quick Hands',
     'The Mason', 'Deep Vein', 'Mother Lode',
   ];
+  const briefs = [
+    'Collect the vein and reach the exit.',
+    'Use bars and ladders to shake your first jumper.',
+    'Dig side pockets, then climb out clean.',
+    'Trap two jumpers before they pocket the gold.',
+    'Read the false floors before you commit.',
+    'Let belts help you instead of fighting them.',
+    'Cross rotten rock once, then move on.',
+    'One-way gates reward planning over panic.',
+    'Use TNT to crack the vault fast.',
+    'Keep moving; scouts punish hesitation.',
+    'Masons seal your work, so dig with intent.',
+    'Route the whole cavern before the guards swarm.',
+    'Use every tool; this is the full claim.',
+  ];
 
   // L1 — run, climb, collect. No guards, no digging.
   function lvl1(){
@@ -512,5 +527,5 @@ const LEVELS = (() => {
     return {rows: campaign[3], date, attempt: -1};
   }
 
-  return { campaign, names, solvable, generateDaily, dailyDateUTC, generate, hashStr };
+  return { campaign, names, briefs, solvable, generateDaily, dailyDateUTC, generate, hashStr };
 })();
