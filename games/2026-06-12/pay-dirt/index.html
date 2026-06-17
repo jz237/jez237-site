@@ -113,6 +113,12 @@ body.touch #touch{display:none;}
 #initials span.cur{border-color:var(--gold); box-shadow:0 0 14px rgba(255,210,63,.35); background:rgba(255,210,63,.1);}
 .statline{display:flex; gap:22px; justify-content:center; font-size:15px; color:#d8cfe4;}
 .statline b{color:var(--gold); font-size:20px;}
+.volumes{display:flex; justify-content:center; gap:12px; flex-wrap:wrap; margin-top:2px;}
+.volumes label{
+  display:flex; align-items:center; gap:7px; color:#d8cfe4; font-size:12px; font-weight:800;
+  letter-spacing:1px; text-transform:uppercase;
+}
+.volumes input{width:112px; accent-color:var(--gold);}
 @media (max-height:520px){ .panel{padding:12px 18px;} h1.logo{font-size:30px;} button{min-height:42px; padding:8px 18px;} }
 /* compact touch controls on short viewports so they don't crowd the play area */
 @media (max-height:560px){
@@ -144,6 +150,10 @@ body.touch #touch{display:none;}
         <button id="bHow" class="ghost small">How To Play</button>
         <button id="bScores" class="ghost small">The Ledger</button>
         <button id="bMute" class="ghost small">🔊 Sound</button>
+      </div>
+      <div class="volumes">
+        <label>Music <input id="musicVol" type="range" min="0" max="100" value="58"></label>
+        <label>SFX <input id="sfxVol" type="range" min="0" max="100" value="88"></label>
       </div>
       <div style="height:8px"></div>
       <div class="board" id="titleBoard"></div>
@@ -189,6 +199,10 @@ body.touch #touch{display:none;}
         <button id="bRestartLvl" class="ghost small">Restart Level</button>
         <button id="bPauseMute" class="ghost small">🔊 Sound</button>
         <button id="bQuit" class="ghost small">Quit to Camp</button>
+      </div>
+      <div class="volumes">
+        <label>Music <input id="pauseMusicVol" type="range" min="0" max="100" value="58"></label>
+        <label>SFX <input id="pauseSfxVol" type="range" min="0" max="100" value="88"></label>
       </div>
     </div>
   </div>
