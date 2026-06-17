@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-17T15:00:01.995771+00:00",
+  "updatedAt": "2026-06-17T16:00:02.075644+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -10700,6 +10700,22 @@
     "https://techcrunch.com/2026/06/17/pramaana-labs-raises-27-million-seed-round-from-khosla-ventures-to-bring-formal-verification-to-ai": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/Screenshot-2026-06-17-at-9.53.46-AM.jpg?resize=1200,560",
       "checkedAt": "2026-06-17T15:00:01.995771+00:00"
+    },
+    "https://huggingface.co/blog/allenai/molmomotion": {
+      "image": "https://cdn-uploads.huggingface.co/production/uploads/638e39b249de7ae552d977b5/wdq3AFZcDZAekGTb16VDy.png",
+      "checkedAt": "2026-06-17T16:00:02.075644+00:00"
+    },
+    "https://techcrunch.com/2026/06/17/the-slowtech-revolution-is-here-to-kill-your-phone-addiction-and-rescue-your-attention-span": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/GettyImages-2238192342.jpg?resize=1200,800",
+      "checkedAt": "2026-06-17T16:00:02.075644+00:00"
+    },
+    "https://techcrunch.com/2026/06/17/collecting-robot-training-data-is-dirty-unglamorous-work-some-ai-labs-are-already-paying-xdof-to-do-it": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/DSC_2479.jpg?resize=1200,800",
+      "checkedAt": "2026-06-17T16:00:02.075644+00:00"
+    },
+    "https://www.anthropic.com/news/seoul-office-partnerships-korean-ai-ecosystem": {
+      "image": "https://www.anthropic.com/api/opengraph-illustration?name=Object%20Globe&amp;backgroundColor=heather",
+      "checkedAt": "2026-06-17T16:00:02.075644+00:00"
     }
   }
 }
