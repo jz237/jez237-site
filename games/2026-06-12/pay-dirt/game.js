@@ -1959,7 +1959,7 @@ function drawActor(a){
   }
   // carried gold — show which guard pocketed your nugget
   if (a.gold){
-    ctx.drawImage(ART.tiles.gold, cx2 - 9, footY - h * 0.62 - 9, 18, 18);
+    drawGoldGem(cx2, footY - h * 0.62, 8.5, gameTime + a.x);
   }
 }
 
@@ -2498,11 +2498,7 @@ function renderWorldFrame(includeHUD){
       const bob = Math.sin(ph) * 2.2;
       const s = 1 + Math.sin(ph * 1.3) * 0.06;
       const cx0 = gd.c * TILE + 18, cy0 = gd.r * TILE + HUD_H + 18 + bob;
-      const w = 36 * s;
-      ctx.save();
-      ctx.imageSmoothingEnabled = true;
-      ctx.drawImage(T.gold, cx0 - w / 2, cy0 - w / 2, w, w);
-      ctx.restore();
+      drawGoldGem(cx0, cy0, 15 * s, ph);
       const tw = Math.sin(ph * 1.7);
       if (tw > 0.5){
         ctx.globalAlpha = (tw - 0.5) / 0.5;
@@ -2970,6 +2966,64 @@ function drawGemIcon(cx, cy, s, col){
   ctx.fillStyle = col;
   ctx.beginPath(); ctx.moveTo(cx, cy - s); ctx.lineTo(cx + s * .8, cy - s * .2); ctx.lineTo(cx, cy + s); ctx.lineTo(cx - s * .8, cy - s * .2); ctx.closePath(); ctx.fill();
   ctx.fillStyle = 'rgba(255,255,255,.6)'; ctx.fillRect(cx - s * .3, cy - s * .5, s * .3, 2);
+}
+function drawGoldGem(cx, cy, s, phase){
+  const shimmer = 0.5 + 0.5 * Math.sin((phase || 0) * 2.4);
+  ctx.save();
+  ctx.translate(cx, cy);
+  ctx.rotate(Math.sin((phase || 0) * 0.7) * 0.08);
+  ctx.globalCompositeOperation = 'lighter';
+  const glowG = ctx.createRadialGradient(0, 0, 0, 0, 0, s * 1.55);
+  glowG.addColorStop(0, 'rgba(255,232,118,.38)');
+  glowG.addColorStop(1, 'rgba(255,190,32,0)');
+  ctx.fillStyle = glowG;
+  ctx.beginPath(); ctx.arc(0, 0, s * 1.55, 0, Math.PI * 2); ctx.fill();
+  ctx.globalCompositeOperation = 'source-over';
+
+  ctx.fillStyle = 'rgba(0,0,0,.34)';
+  ctx.beginPath(); ctx.ellipse(0, s * .82, s * .74, s * .18, 0, 0, Math.PI * 2); ctx.fill();
+
+  const pts = [
+    [0, -s], [s * .72, -s * .42], [s * .86, s * .18],
+    [s * .18, s * .95], [-s * .58, s * .55], [-s * .82, -s * .25],
+  ];
+  ctx.strokeStyle = 'rgba(82,47,7,.72)';
+  ctx.lineWidth = Math.max(1, s * .09);
+  ctx.fillStyle = '#d99716';
+  ctx.beginPath();
+  ctx.moveTo(pts[0][0], pts[0][1]);
+  for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i][0], pts[i][1]);
+  ctx.closePath(); ctx.fill(); ctx.stroke();
+
+  const facet = (poly, color) => {
+    ctx.fillStyle = color;
+    ctx.beginPath(); ctx.moveTo(poly[0][0], poly[0][1]);
+    for (let i = 1; i < poly.length; i++) ctx.lineTo(poly[i][0], poly[i][1]);
+    ctx.closePath(); ctx.fill();
+  };
+  facet([[0, -s], [s * .72, -s * .42], [s * .12, -s * .15], [-s * .16, -s * .32]], '#fff0a4');
+  facet([[-s * .82, -s * .25], [-s * .16, -s * .32], [0, s * .16], [-s * .58, s * .55]], '#f0b42d');
+  facet([[s * .72, -s * .42], [s * .86, s * .18], [s * .18, s * .95], [0, s * .16], [s * .12, -s * .15]], '#c77410');
+  facet([[-s * .58, s * .55], [0, s * .16], [s * .18, s * .95]], '#8f510b');
+  facet([[-s * .16, -s * .32], [s * .12, -s * .15], [0, s * .16]], '#ffd84e');
+
+  ctx.strokeStyle = 'rgba(255,255,230,.62)';
+  ctx.lineWidth = Math.max(1, s * .07);
+  ctx.beginPath();
+  ctx.moveTo(-s * .34, -s * .2); ctx.lineTo(-s * .05, -s * .48);
+  ctx.moveTo(s * .18, -s * .58); ctx.lineTo(s * .42, -s * .42);
+  ctx.stroke();
+  if (shimmer > .72){
+    ctx.globalAlpha = (shimmer - .72) / .28;
+    ctx.strokeStyle = '#fffbe8';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(s * .5, -s * .72); ctx.lineTo(s * .5, -s * .34);
+    ctx.moveTo(s * .31, -s * .53); ctx.lineTo(s * .69, -s * .53);
+    ctx.stroke();
+    ctx.globalAlpha = 1;
+  }
+  ctx.restore();
 }
 function drawHotbar(){
   if (!player) return;
