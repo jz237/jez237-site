@@ -238,3 +238,18 @@ v2 verification:
 - Chrome DevTools mobile stress at 390x844 / DPR 3 ran title plus live play for about 47 seconds.
 - `__g.glowCacheSize` rose from 26 to 96 and then stayed capped instead of growing without bound.
 - The page stayed in `playing`, sampled a nonblank canvas pixel, and did not report a page crash.
+
+## Mobile Readability + Climb Pose Polish
+Jez confirmed the crash was fixed, then called out two playability/art issues: the climb pose looked like the miner was holding a fake ladder piece, and the zoomed phone camera made enemies and gems too hard to anticipate.
+
+Changes:
+- Stopped using the generated climb-frame cell that included a baked ladder segment.
+- Added a compact mobile radar showing the viewport, remaining gems/treasures, guards, and player position.
+- Added edge indicators for offscreen guards, gems, and treasures so the zoomed camera gives advance warning.
+
+Verification:
+- `node --check game.js`, `audio.js`, and `art.js` passed.
+- `git diff --check` passed.
+- Chrome DevTools mobile smoke confirmed the game started on a 390x844 phone viewport.
+- The climb pose now resolves to miner sheet frame 0 instead of the baked-ladder climb frame.
+- Radar/gameplay canvas pixels sampled nonblank with no page crash.
