@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-17T19:00:01.463621+00:00",
+  "updatedAt": "2026-06-17T20:00:01.737926+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -1262,8 +1262,8 @@
       "checkedAt": "2026-03-19T08:59:37.199570+00:00"
     },
     "https://www.techrepublic.com/article/best-ai-art-generators": {
-      "image": "https://assets.techrepublic.com/uploads/2024/11/tr_20241105-best-ai-art-generators.jpg",
-      "checkedAt": "2026-03-19T12:00:01.144039+00:00"
+      "image": "https://assets.techrepublic.com/uploads/2024/11/tr_20241105-best-ai-art-generators.jpg?f=jpeg",
+      "checkedAt": "2026-06-17T20:00:01.737926+00:00"
     },
     "https://www.techrepublic.com/article/browsercopilot-ai-lifetime-subscription": {
       "image": "https://assets.techrepublic.com/uploads/2026/02/Copy-of-Untitled-Design-40.png",
@@ -10768,6 +10768,42 @@
     "https://www.together.ai/blog/kimi-k2-7-code-vs-claude-fable-5": {
       "image": "https://cdn.prod.website-files.com/69654e88dce9154b5f12070c/6a31bb3eae99f5eba56ab3ee_OG-image_20260616_Kimi%20vs.%20Claude.png",
       "checkedAt": "2026-06-17T19:00:01.463621+00:00"
+    },
+    "https://techcrunch.com/2026/06/17/world-leaders-want-american-ai-they-just-dont-want-america-to-be-able-to-turn-it-off": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/GettyImages-2281424015.jpg?w=1024",
+      "checkedAt": "2026-06-17T20:00:01.737926+00:00"
+    },
+    "https://www.techrepublic.com/article/news-ibm-emea-ai-dependencies-sovereignty-risk": {
+      "image": "https://assets.techrepublic.com/uploads/2026/06/emea-ai.jpg?f=jpeg",
+      "checkedAt": "2026-06-17T20:00:01.737926+00:00"
+    },
+    "https://www.techrepublic.com/article/news-neat-infocomm-ai-meeting-rooms": {
+      "image": "https://assets.techrepublic.com/uploads/2026/06/group-of-asia-team-people-chat-online-with-casual-2026-01-05-06-24-16-utc-1.jpg?f=jpeg",
+      "checkedAt": "2026-06-17T20:00:01.737926+00:00"
+    },
+    "https://www.techrepublic.com/article/news-apple-private-icloud-email-domain": {
+      "image": "https://assets.techrepublic.com/uploads/2026/06/ios-26-iphone-16-pro-ipad-pro-sign-in-with-apple-hero.jpg?f=jpeg",
+      "checkedAt": "2026-06-17T20:00:01.737926+00:00"
+    },
+    "https://www.techrepublic.com/article/news-novo-nordisk-1-3tb-theft-25m-demand-emea": {
+      "image": "https://assets.techrepublic.com/uploads/2026/06/novo-nordisk-1.jpg?f=jpeg",
+      "checkedAt": "2026-06-17T20:00:01.737926+00:00"
+    },
+    "https://www.techrepublic.com/article/news-snap-specs-ar-ai-glasses-price": {
+      "image": "https://assets.techrepublic.com/uploads/2026/06/Untitled-design-8-4.png?f=jpeg",
+      "checkedAt": "2026-06-17T20:00:01.737926+00:00"
+    },
+    "https://www.techrepublic.com/article/news-google-android-june-2026-system-updates": {
+      "image": "https://assets.techrepublic.com/uploads/2026/06/tr-06172026-google-android-june-2026-system-updates-2.jpg?f=jpeg",
+      "checkedAt": "2026-06-17T20:00:01.737926+00:00"
+    },
+    "https://www.techrepublic.com/article/singapore-ai-security-risk-apac": {
+      "image": "https://assets.techrepublic.com/uploads/2026/06/unnamed-8-1.png?f=jpeg",
+      "checkedAt": "2026-06-17T20:00:01.737926+00:00"
+    },
+    "https://www.techrepublic.com/article/news-spacex-amazon-ai-valuation": {
+      "image": "https://assets.techrepublic.com/uploads/2026/06/spacex.png?f=jpeg",
+      "checkedAt": "2026-06-17T20:00:01.737926+00:00"
     }
   }
 }
