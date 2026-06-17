@@ -22,15 +22,6 @@ function wantsMobileCamera(vw, vh){
     /Android|iPhone|iPod|Mobile/i.test(navigator.userAgent || '');
   return coarse && Math.min(vw, vh) <= 760 && Math.max(vw, vh) <= 980;
 }
-function mobileGpuRisk(){
-  return mobileCamera ||
-    matchMedia('(pointer: coarse)').matches ||
-    /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent || '');
-}
-function avoidCanvasFilters(){
-  // Android Chrome/WebView can blink or lose the canvas after sustained filtered 2D draws.
-  return mobileGpuRisk();
-}
 
 function resize(){
   // Logical resolution is fixed at 1008x624; scale to fit the window, letterbox the rest.
@@ -50,7 +41,7 @@ function resize(){
   const cssH = mobileCamera ? vh : Math.round(VIEW_H * viewScale);
   canvasLeft = mobileCamera ? 0 : Math.round((vw - cssW) / 2);
   canvasTop = mobileCamera ? 0 : Math.round((vh - cssH) / 2);
-  const maxDpr = mobileCamera ? 1.6 : (lowPowerRender() ? 1.35 : 2.5);
+  const maxDpr = lowPowerRender() ? 1.35 : 2.5;
   DPR = Math.min((mobileCamera ? 1 : viewScale) * (devicePixelRatio || 1), maxDpr);
   canvas.width = Math.floor(screenW * DPR); canvas.height = Math.floor(screenH * DPR);
   canvas.style.width = cssW + 'px'; canvas.style.height = cssH + 'px';
@@ -1452,7 +1443,7 @@ function buildBackdrop(){
   // 1) generated painterly direction plate, dimmed into a playable background
   if (painterlyPlateReady){
     x.save();
-    if (!avoidCanvasFilters()) x.filter = 'saturate(1.36) contrast(1.1)';
+    x.filter = 'saturate(1.36) contrast(1.1)';
     drawCoverImage(x, painterlyPlate, 0, HUD_H, W, H - HUD_H);
     x.filter = 'none';
     x.globalCompositeOperation = 'multiply';
@@ -1726,7 +1717,7 @@ function drawActor(a){
   ctx.restore();
   ctx.save();
   ctx.imageSmoothingEnabled = true;            // smooth the hi-res sprite downscale (less blocky)
-  ctx.filter = painterlyPlateReady && !avoidCanvasFilters() ? 'saturate(1.12) contrast(1.03)' : 'none';
+  ctx.filter = painterlyPlateReady ? 'saturate(1.12) contrast(1.03)' : 'none';
   if (a.kind === 'player' && a.cloakT > 0) ctx.globalAlpha = 0.45 + 0.2 * Math.sin(gameTime * 12);
   if (a.state === 'dead'){ ctx.globalAlpha = Math.max(0, 1 - a.deadT); footY -= a.deadT * 10; }
   if (a.state === 'stun'){ ctx.globalAlpha = 0.6 + 0.2 * Math.sin(gameTime * 16); }
@@ -1966,11 +1957,10 @@ function drawOrganicPlatformRun(c0, c1, r, kind){
     const sw = Math.min(nw, Math.max(260, w * 2.2)), sh = Math.min(nh, 220);
     const sx = (seed % Math.max(1, nw - sw));
     const sy = (((seed >>> 9) + (kind === 'wall' ? nh * .32 : nh * .55)) % Math.max(1, nh - sh));
-    const filteredTexture = !avoidCanvasFilters();
     ctx.imageSmoothingEnabled = true;
-    if (filteredTexture) ctx.filter = kind === 'wall' ? 'saturate(1.12) contrast(1.08)' : 'saturate(1.28) contrast(1.08)';
+    ctx.filter = kind === 'wall' ? 'saturate(1.12) contrast(1.08)' : 'saturate(1.28) contrast(1.08)';
     ctx.drawImage(painterlyPlate, sx, sy, sw, sh, x0 - 8, y0 - 8, w + 16, h + 16);
-    if (filteredTexture) ctx.filter = 'none';
+    ctx.filter = 'none';
     ctx.globalCompositeOperation = 'multiply';
     ctx.globalAlpha = kind === 'wall' ? .24 : .12;
     ctx.fillStyle = kind === 'wall' ? '#102036' : '#41200d';
@@ -2342,7 +2332,7 @@ function renderWorldFrame(includeHUD){
     ctx.restore();
 
     // bloom — downscale + blur the scene and add it back so bright things glow (painterly haze)
-    if (!lowPowerRender() && !mobileGpuRisk()){
+    if (!lowPowerRender()){
       const bw = VIEW_W >> 1, bh = VIEW_H >> 1;
       if (!bloomCv){ bloomCv = ART.cv(bw, bh); bloomCx = bloomCv.getContext('2d'); }
       bloomCx.setTransform(1, 0, 0, 1, 0, 0);
