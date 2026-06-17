@@ -47,6 +47,9 @@
   .online-panel{margin-top:10px;padding:10px;border:1px solid var(--edge);border-radius:8px;background:rgba(8,12,20,.62)}
   .online-panel.hidden{display:none}
   .online-grid{display:grid;grid-template-columns:1fr 120px;gap:8px}
+  .online-name{margin-top:8px}
+  .online-labels{display:grid;grid-template-columns:1fr 120px;gap:8px;margin-bottom:4px;color:var(--dim);font-size:10px;text-align:left}
+  .online-hint{margin-top:7px;color:var(--dim);font-size:10px;text-align:left;line-height:1.35}
   .online-status{min-height:16px;margin-top:7px;color:var(--dim);font-size:11px;text-align:left}
   select,input{background:#0c1019;color:var(--ink);border:1px solid var(--edge);border-radius:8px;padding:8px;font:inherit}
   .keys{display:grid;grid-template-columns:1fr 1fr;gap:14px;text-align:left;margin:8px 0 4px;font-size:13px;color:var(--dim)}
@@ -93,6 +96,7 @@
       <button id="btnCoop" class="btn">🤝 CO-OP vs ENEMY TANKS</button>
       <button id="btnOnline" class="btn">🌐 ONLINE ROOM</button>
       <div id="onlinePanel" class="online-panel hidden">
+        <div class="online-labels"><span>ROOM CODE</span><span>MODE</span></div>
         <div class="online-grid">
           <input id="onlineRoom" maxlength="24" placeholder="ROOM CODE" />
           <select id="onlineMode">
@@ -100,7 +104,9 @@
             <option value="coop">CO-OP</option>
           </select>
         </div>
-        <button id="btnOnlineConnect" class="btn primary">CONNECT</button>
+        <input id="onlineName" class="online-name" maxlength="12" placeholder="PLAYER NAME" />
+        <button id="btnOnlineConnect" class="btn primary">START / JOIN ROOM</button>
+        <div class="online-hint">Same room code joins the same match. First player is P1; second player is P2; two more can spectate.</div>
         <div id="onlineStatus" class="online-status"></div>
       </div>
       <button id="btnCpu" class="btn">🤖 PLAY vs CPU</button>
@@ -124,7 +130,7 @@
         <button id="btnHow" class="btn">HOW TO PLAY</button>
         <button id="btnScores" class="btn">🏆 SCORES</button>
       </div>
-      <div class="footer">v13 · First tank-combat arcade game, Kee&nbsp;Games 1974. Drive your foe into the mines.</div>
+      <div class="footer">v15 · First tank-combat arcade game, Kee&nbsp;Games 1974. Drive your foe into the mines.</div>
     </div>
   </div>
 
@@ -187,8 +193,8 @@
     <div id="stickR" class="stick"><div id="stickRk" class="knob"></div><span class="sticklbl">AIM · FIRE</span></div>
   </div>
 
-  <script src="audio.js?v=14"></script>
-  <script src="art.js?v=14"></script>
-  <script src="game.js?v=14"></script>
+  <script src="audio.js?v=15"></script>
+  <script src="art.js?v=15"></script>
+  <script src="game.js?v=15"></script>
 </body>
 </html>
