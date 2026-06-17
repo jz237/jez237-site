@@ -2896,39 +2896,24 @@ function render(){
 function drawPit(c, r, dark, h){
   const x = c * TILE, y = r * TILE + HUD_H;
   const warn = h ? Math.max(0, (h.t - (HOLE_LIFE - HOLE_WARN)) / HOLE_WARN) : 0;
-  const tremble = warn > 0 ? Math.sin(h.t * 34) * 1.5 : 0;
-  const shrink = warn * 4;
-  const left = x + 2 + shrink + tremble;
-  const top = y + 2 + shrink * .7;
-  const w = TILE - 4 - shrink * 2;
-  const hh = TILE - 4 - shrink * 1.4;
   const pit = ctx.createLinearGradient(x, y, x, y + TILE);
   pit.addColorStop(0, 'rgba(35,22,17,' + (0.94 * dark) + ')');
   pit.addColorStop(0.45, 'rgba(11,8,12,' + (0.96 * dark) + ')');
   pit.addColorStop(1, 'rgba(0,0,0,' + dark + ')');
   ctx.fillStyle = pit;
-  ctx.fillRect(left, top, w, hh);
+  ctx.fillRect(x, y, TILE, TILE);
+  ctx.fillStyle = 'rgba(0,0,0,' + (0.42 * dark) + ')';
+  ctx.fillRect(x + 2, y + 2, TILE - 4, 6);
 
   if (warn > 0){
-    ctx.globalAlpha = Math.min(.48, warn * .6);
+    const tremble = Math.sin(h.t * 34) * 1.2;
+    ctx.globalAlpha = Math.min(.48, warn * .55);
     ctx.fillStyle = '#7d5230';
     const m = 5 + warn * 10;
-    ctx.fillRect(x + 5, y + TILE - m, TILE - 10, m * .5);
-    ctx.fillRect(x + 8, y + 5, TILE - 16, 3);
+    ctx.fillRect(x + 4 + tremble, y + TILE - m, TILE - 8, m * .5);
+    ctx.fillRect(x + 8 - tremble, y + 5, TILE - 16, 3);
     ctx.globalAlpha = 1;
   }
-
-  ctx.strokeStyle = warn > 0 ? 'rgba(255,210,63,' + (0.55 + 0.35 * Math.sin(h.t * 24)) + ')' : 'rgba(235,154,86,' + (0.55 * dark) + ')';
-  ctx.lineWidth = 2;
-  ctx.strokeRect(left + .5, top + .5, w - 1, hh - 1);
-  ctx.fillStyle = 'rgba(220,150,80,' + (0.4 * dark) + ')';
-  ctx.fillRect(x + 1 + tremble, y + 1, TILE - 2, 3);
-  ctx.fillRect(x + 1 + tremble, y + 1, 3, TILE - 2);
-  ctx.fillStyle = 'rgba(0,0,0,' + (0.55 * dark) + ')';
-  ctx.fillRect(x + 4 + tremble, y + 5, TILE - 8, 5);
-  ctx.fillRect(x + TILE - 7 + tremble, y + 5, 4, TILE - 8);
-  ctx.fillStyle = 'rgba(0,0,0,' + (0.32 * dark) + ')';
-  ctx.fillRect(x + 4 + tremble, y + TILE - 8, TILE - 8, 4);
 }
 
 function hexA(hex, a){
