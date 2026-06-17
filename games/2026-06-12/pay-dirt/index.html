@@ -91,8 +91,7 @@ button.small{min-width:0; padding:8px 16px; font-size:13px; min-height:44px;}
 #lvlGrid button.done{outline:2px solid var(--teal);}
 /* touch controls */
 #touch{position:absolute; inset:0; display:none; z-index:8; pointer-events:none;}
-body.touch.playing #touch{display:block;}
-@media (pointer:coarse){ body.playing #touch{display:block;} }
+body.touch.playing #touch{display:none;}
 .tbtn{
   display:none; position:absolute; pointer-events:auto; border-radius:50%;
   background:radial-gradient(circle at 35% 25%, rgba(255,241,175,.22), rgba(255,233,138,.08) 58%, rgba(8,10,18,.62));
