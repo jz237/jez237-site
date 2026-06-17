@@ -270,3 +270,18 @@ Verification:
 - Local HTTP checks returned both MP3 assets as `audio/mpeg`.
 - Chrome DevTools mobile smoke confirmed title/pause sliders stay synced and update `AUDIO.musicVolume` / `AUDIO.sfxVolume`.
 - Game entered `playing`, reported the first MP3 track, and rendered a nonblank climb frame.
+
+## Guard Pace + Pinch Zoom
+Jez asked for enemies to move 15 percent slower and, if possible, for mobile pinch zoom on the playfield.
+
+Changes:
+- Reduced guard, scout, and mason movement speeds to 85% of their previous values.
+- Added two-finger pinch zoom to the mobile camera path.
+- Pinch zoom adjusts the camera crop, not the whole canvas, so HUD and touch behavior stay stable.
+- Added debug `__g.mobileZoom` access for browser verification.
+
+Verification:
+- `node --check game.js`, `audio.js`, and `art.js` passed.
+- `git diff --check` passed.
+- Chrome DevTools mobile smoke dispatched two touch pointers and confirmed zoom changed from `1` to `1.35`, then to `0.72`.
+- Game stayed in `playing` and rendered a nonblank canvas pixel after the pinch sequence.
