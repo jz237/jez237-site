@@ -116,7 +116,7 @@ export class SteelDuelRoom extends DurableObject {
 
   allowed(data, meta) {
     if (!data || typeof data.type !== "string") return false;
-    if (data.type === "ping") return true;
+    if (data.type === "ping" || data.type === "hello") return true;
     if (meta.role === "p1") return ["start", "snapshot", "chat"].includes(data.type);
     if (meta.role === "p2") return ["input", "chat"].includes(data.type);
     return data.type === "chat";
