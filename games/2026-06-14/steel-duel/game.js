@@ -30,6 +30,15 @@
   ];
   const MINE_RECT = { c0: 10, r0: 6, c1: 17, r1: 11 };
   const SPAWNS = [{ c: 2, r: 2, a: 0 }, { c: 25, r: 15, a: Math.PI }];
+  const COOP_SPAWNS = [
+    { c: 2, r: 2, a: 0, team: 'ally' },
+    { c: 2, r: 15, a: 0, team: 'ally' },
+    { c: 25, r: 2, a: Math.PI, team: 'enemy' },
+    { c: 25, r: 15, a: Math.PI, team: 'enemy' },
+  ];
+  const ONLINE_WS = window.STEEL_DUEL_WS || ((location.hostname === 'localhost' || location.hostname === '127.0.0.1')
+    ? 'ws://127.0.0.1:8787/ws'
+    : 'wss://steel-duel-online.jez237.workers.dev/ws');
 
   /* ===================== rng ===================== */
   function mulberry32(a) {
@@ -54,34 +63,78 @@
 
   /* ===================== state ===================== */
   let state = 'attract';        // attract | playing | paused | over | how | scores
-  let mode = 'cpu';             // cpu | duel | watch
+  let mode = 'cpu';             // cpu | duel | coop | watch
   let aiLevel = 45;             // 0..100 difficulty slider
   let watchLevel = [45, 45];    // CPU 1 / CPU 2 watch-mode sliders
   let visualMode = 'hd';
   let muted = false, headless = false, touchActive = false;
   let tanks = [], shells = [], mines = [];
-  let tankSkill = [0.45, 0.45];
+  let tankSkill = [0.45, 0.45, 0.55, 0.62];
   let score = { p1: 0, p2: 0 };
   let timeLeft = DEFAULT_TIME, matchTime = DEFAULT_TIME;
   let freezeT = 0, winner = null, tick = 0, shake = 0;
-  let bots = [false, false];
+  let bots = [false, false, true, true];
   let mouseX = LW / 2, mouseY = LH / 2;
+  let online = { ws: null, room: '', role: null, id: null, mode: 'duel', status: '', connected: false, lastInput: 0, lastSnapshot: 0, peers: [] };
 
-  let controls = [ctrl(), ctrl()];
+  let controls = [ctrl(), ctrl(), ctrl(), ctrl()];
   function ctrl() { return { fwd: false, back: false, left: false, right: false, fire: false, driveVec: null, aimVec: null }; }
   function silent() { return headless || state === 'attract'; }
 
   /* ===================== entities ===================== */
-  function makeTank(id) { const s = SPAWNS[id], p = tileCenter(s.c, s.r); return { id, x: p.x, y: p.y, heading: s.a, turret: s.a, speed: 0, vx: 0, vy: 0, dist: 0, cd: 0, flash: 0, hp: TANK_MAX_HP, alive: true, path: null, pathTick: -999 }; }
+  function spawnFor(id) { return mode === 'coop' ? COOP_SPAWNS[id] : SPAWNS[id]; }
+  function makeTank(id) {
+    const s = spawnFor(id), p = tileCenter(s.c, s.r);
+    const team = s.team || (id === 0 ? 'p1' : 'p2');
+    return { id, team, x: p.x, y: p.y, heading: s.a, turret: s.a, speed: 0, vx: 0, vy: 0, dist: 0, cd: 0, flash: 0, hp: TANK_MAX_HP, alive: true, path: null, pathTick: -999 };
+  }
   function resetMatch(seed) {
     rng = mulberry32((seed | 0) || 1);
     buildMaze();
-    tanks = [makeTank(0), makeTank(1)];
+    const count = mode === 'coop' ? 4 : 2;
+    tanks = Array.from({ length: count }, (_, id) => makeTank(id));
     shells = []; mines = [];
     placeMines();
     score = { p1: 0, p2: 0 };
     timeLeft = matchTime; freezeT = 0; winner = null; tick = 0; shake = 0;
     if (SDArt) { TRACKS.clear(); PARTS.clear(); DECALS.clear(); }
+  }
+  function copyGrid(g) { return g.map(row => row.slice()); }
+  function encodeHPGrid(g) { return g.map(row => row.map(v => v === Infinity ? 'I' : v)); }
+  function decodeHPGrid(g) { return g.map(row => row.map(v => v === 'I' ? Infinity : v)); }
+  function tankNet(t) {
+    return {
+      id: t.id, team: t.team, x: t.x, y: t.y, heading: t.heading, turret: t.turret,
+      speed: t.speed, vx: t.vx, vy: t.vy, dist: t.dist, cd: t.cd, flash: t.flash,
+      hp: t.hp, alive: t.alive, path: null, pathTick: -999,
+    };
+  }
+  function makeSnapshot() {
+    return {
+      mode, state, score, timeLeft, matchTime, freezeT, winner, tick,
+      tanks: tanks.map(tankNet),
+      shells: shells.map(s => ({ ...s })),
+      mines: mines.map(m => ({ ...m })),
+      solid: copyGrid(solid),
+      wallHP: encodeHPGrid(wallHP),
+    };
+  }
+  function applySnapshot(s) {
+    if (!s || !Array.isArray(s.tanks)) return;
+    mode = s.mode || mode; state = s.state || state;
+    score = { p1: Number(s.score && s.score.p1) || 0, p2: Number(s.score && s.score.p2) || 0 };
+    timeLeft = Number(s.timeLeft) || 0; matchTime = Number(s.matchTime) || DEFAULT_TIME;
+    freezeT = Number(s.freezeT) || 0; winner = s.winner || null; tick = Number(s.tick) || tick;
+    tanks = s.tanks.map(t => ({ ...t, path: null, pathTick: -999 }));
+    shells = Array.isArray(s.shells) ? s.shells.map(sh => ({ ...sh })) : [];
+    mines = Array.isArray(s.mines) ? s.mines.map(m => ({ ...m })) : [];
+    if (Array.isArray(s.solid)) for (let r = 0; r < ROWS; r++) solid[r] = s.solid[r].slice();
+    if (Array.isArray(s.wallHP)) {
+      const hp = decodeHPGrid(s.wallHP);
+      for (let r = 0; r < ROWS; r++) wallHP[r] = hp[r].slice();
+    }
+    if (state === 'over') showOverlay('over');
+    else if (state === 'playing') hideAllOverlays();
   }
   function placeMines() {
     const cand = [];
@@ -152,8 +205,18 @@
     let idx = 1; while (idx < p.length - 1) { const c = tileCenter(p[idx].c, p[idx].r); if (Math.hypot(c.x - me.x, c.y - me.y) < 16) idx++; else break; }
     return tileCenter(p[idx].c, p[idx].r);
   }
+  function opposing(a, b) { return a && b && a.team !== b.team; }
+  function nearestFoe(me) {
+    let best = null, bestD = Infinity;
+    for (const t of tanks) {
+      if (!t || !t.alive || !opposing(me, t)) continue;
+      const d = Math.hypot(t.x - me.x, t.y - me.y);
+      if (d < bestD) { best = t; bestD = d; }
+    }
+    return best;
+  }
   function aiCommand(i, cmd) {
-    const me = tanks[i], foe = tanks[1 - i], skill = tankSkill[i];
+    const me = tanks[i], foe = nearestFoe(me), skill = tankSkill[i] == null ? 0.5 : tankSkill[i];
     cmd.turn = 0; cmd.throttle = 0; cmd.aim = null; cmd.fire = false; cmd.aimInstant = false;
     if (!foe || !me.alive) return;
     const dx = foe.x - me.x, dy = foe.y - me.y, dist = Math.hypot(dx, dy), los = lineClear(me.x, me.y, foe.x, foe.y);
@@ -189,7 +252,7 @@
     cmd.turn = 0; cmd.throttle = 0; cmd.aim = null; cmd.fire = false; cmd.aimInstant = true;
     if (c.driveVec && c.driveVec.active) { const da = wrapAngle(c.driveVec.angle - me.heading); cmd.turn = Math.max(-1, Math.min(1, da / 0.4)); cmd.throttle = c.driveVec.mag * Math.max(0, Math.cos(da)); }
     else { cmd.turn = (c.right ? 1 : 0) - (c.left ? 1 : 0); cmd.throttle = (c.fwd ? 1 : 0) - (c.back ? 1 : 0); }
-    if (mode === 'duel') { cmd.aim = null; cmd.fire = c.fire; }      // turret locked to hull (faithful)
+    if (mode === 'duel' || mode === 'coop') { cmd.aim = null; cmd.fire = c.fire; }      // turret locked to hull (faithful)
     else {                                                            // 1P vs CPU: independent turret
       if (c.aimVec && c.aimVec.active) { cmd.aim = c.aimVec.angle; cmd.fire = true; }
       else if (touchActive) { cmd.aim = null; cmd.fire = c.fire; }
@@ -201,10 +264,11 @@
   function update() {
     tick++;
     if (state !== 'playing' && state !== 'attract') return;
+    if (online.connected && online.role !== 'p1' && state === 'playing') return;
     if (freezeT > 0) { freezeT -= STEP; if (freezeT <= 0) reviveTanks(); }
     let moving = 0;
     const cmd = { turn: 0, throttle: 0, aim: null, fire: false, aimInstant: false, turretTurn: TURRET_TURN };
-    for (let i = 0; i < 2; i++) {
+    for (let i = 0; i < tanks.length; i++) {
       const t = tanks[i]; if (!t.alive) continue;
       cmd.turn = 0; cmd.throttle = 0; cmd.aim = null; cmd.fire = false; cmd.aimInstant = false; cmd.turretTurn = TURRET_TURN;
       if (bots[i]) aiCommand(i, cmd); else humanCommand(i, cmd);
@@ -229,7 +293,10 @@
       if (sh.life <= 0) { shells.splice(s, 1); continue; }
       if (isSolidAt(sh.x, sh.y)) { damageWall(sh.x, sh.y); shells.splice(s, 1); continue; }
       let hit = false;
-      for (let i = 0; i < 2; i++) { const t = tanks[i]; if (t.alive && i !== sh.owner && Math.hypot(t.x - sh.x, t.y - sh.y) < TANK_R + SHELL_R) { damageTank(i); hit = true; break; } }
+      for (let i = 0; i < tanks.length; i++) {
+        const t = tanks[i], owner = tanks[sh.owner];
+        if (t.alive && i !== sh.owner && opposing(owner, t) && Math.hypot(t.x - sh.x, t.y - sh.y) < TANK_R + SHELL_R) { damageTank(i, sh.owner); hit = true; break; }
+      }
       if (hit) shells.splice(s, 1);
     }
     if (shake > 0) shake *= 0.85;
@@ -253,8 +320,11 @@
     const nx = t.x + Math.cos(t.heading) * t.speed, ny = t.y + Math.sin(t.heading) * t.speed;
     if (!circleHitsWall(nx, t.y)) t.x = nx; else t.speed *= 0.3;
     if (!circleHitsWall(t.x, ny)) t.y = ny; else t.speed *= 0.3;
-    const o = tanks[1 - t.id];
-    if (o && o.alive) { const dx = t.x - o.x, dy = t.y - o.y, d = Math.hypot(dx, dy); if (d > 0 && d < TANK_R * 2) { const push = (TANK_R * 2 - d) / 2; t.x += dx / d * push; t.y += dy / d * push; } }
+    for (const o of tanks) {
+      if (!o || o.id === t.id || !o.alive) continue;
+      const dx = t.x - o.x, dy = t.y - o.y, d = Math.hypot(dx, dy);
+      if (d > 0 && d < TANK_R * 2) { const push = (TANK_R * 2 - d) / 2; t.x += dx / d * push; t.y += dy / d * push; }
+    }
   }
   function circleHitsWall(x, y) { for (let a = 0; a < 8; a++) { const ang = a / 8 * 7; if (isSolidAt(x + Math.cos(ang) * TANK_R, y + Math.sin(ang) * TANK_R)) return true; } return isSolidAt(x, y); }
   function fire(t) {
@@ -272,22 +342,36 @@
     if (wallHP[r][c] <= 0) { solid[r][c] = false; wallHP[r][c] = 0; if (SDArt) { PARTS.chips(x, y, '#8a93a6'); DECALS.add(c * TILE + TILE / 2, HUD_H + r * TILE + TILE / 2, 22); } }
     else if (SDArt) PARTS.chips(x, y, '#8a93a6');
   }
-  function damageTank(i) {
+  function tankColor(i) {
+    const t = tanks[i];
+    if (t && t.team === 'enemy') return '#ff5277';
+    if (t && t.team === 'ally' && i === 1) return '#a8f06f';
+    return i === 0 ? '#ffb347' : '#46d6e8';
+  }
+  function damageTank(i, owner) {
     const t = tanks[i]; if (!t.alive) return;
     t.hp = Math.max(0, (t.hp == null ? TANK_MAX_HP : t.hp) - 1);
     t.flash = 1; shake = Math.max(shake, 3);
-    if (t.hp <= 0) { killTank(i); return; }
-    if (SDArt) { PARTS.chips(t.x, t.y, i === 0 ? '#ffb347' : '#46d6e8'); DECALS.add(t.x, t.y, 12); }
+    if (t.hp <= 0) { killTank(i, owner); return; }
+    if (SDArt) { PARTS.chips(t.x, t.y, tankColor(i)); DECALS.add(t.x, t.y, 12); }
     if (!silent()) SDAudio.tankHit();
+  }
+  function awardDeath(i) {
+    if (mode === 'coop') {
+      if (tanks[i] && tanks[i].team === 'enemy') score.p1++;
+      else score.p2++;
+      return;
+    }
+    if (i === 0) score.p2++; else score.p1++;
   }
   function killTank(i) {
     const t = tanks[i]; if (!t.alive) return; t.alive = false; t.hp = 0;
-    if (SDArt) { PARTS.explosion(t.x, t.y, i === 0 ? '#ffb347' : '#46d6e8'); DECALS.add(t.x, t.y, 30); }
+    if (SDArt) { PARTS.explosion(t.x, t.y, tankColor(i)); DECALS.add(t.x, t.y, 30); }
     if (!silent()) { SDAudio.explosion(); SDAudio.point(); }
-    shake = 9; if (i === 0) score.p2++; else score.p1++; freezeT = FREEZE;
+    shake = 9; awardDeath(i); freezeT = FREEZE;
   }
   function reviveTanks() {
-    for (let i = 0; i < 2; i++) if (!tanks[i].alive) { const s = SPAWNS[i], p = tileCenter(s.c, s.r); const t = tanks[i]; t.x = p.x; t.y = p.y; t.heading = s.a; t.turret = s.a; t.speed = 0; t.hp = TANK_MAX_HP; t.alive = true; t.cd = 0.3; t.path = null; }
+    for (let i = 0; i < tanks.length; i++) if (!tanks[i].alive) { const s = spawnFor(i), p = tileCenter(s.c, s.r); const t = tanks[i]; t.x = p.x; t.y = p.y; t.heading = s.a; t.turret = s.a; t.speed = 0; t.hp = TANK_MAX_HP; t.alive = true; t.cd = 0.3; t.path = null; }
   }
   function endMatch() { state = 'over'; winner = score.p1 === score.p2 ? 'draw' : (score.p1 > score.p2 ? 'p1' : 'p2'); if (!headless) { SDAudio.roundEnd(); SDAudio.engine(0); maybeOfferScore(); } showOverlay('over'); }
 
@@ -356,13 +440,15 @@
     ctx.fillStyle = 'rgba(0,0,0,0.48)'; ctx.fillRect(0, 0, w, h);
     ctx.font = 'bold 40px Menlo,Consolas,monospace'; ctx.textBaseline = 'middle';
     ctx.fillStyle = visualMode === 'classic' ? '#fff' : T.p1; ctx.textAlign = 'left'; ctx.fillText(String(score.p1).padStart(2, '0'), mobileView ? 14 : 28, h / 2);
-    ctx.fillStyle = visualMode === 'classic' ? '#bdbdbd' : T.p2; ctx.textAlign = 'right'; ctx.fillText(String(score.p2).padStart(2, '0'), w - (mobileView ? 14 : 28), h / 2);
+    ctx.fillStyle = visualMode === 'classic' ? '#bdbdbd' : (mode === 'coop' ? '#ff5277' : T.p2); ctx.textAlign = 'right'; ctx.fillText(String(score.p2).padStart(2, '0'), w - (mobileView ? 14 : 28), h / 2);
     drawHealthPips(T, w, h);
     const flash = timeLeft <= FLASH_AT && Math.floor(timeLeft * 2) % 2 === 0;
     ctx.fillStyle = timeLeft <= FLASH_AT ? (flash ? '#ff5277' : '#7a2236') : T.ink;
     ctx.font = 'bold 34px Menlo,Consolas,monospace'; ctx.textAlign = 'center'; ctx.fillText(Math.ceil(timeLeft).toString().padStart(2, '0'), w / 2, h / 2);
     ctx.fillStyle = T.inkDim; ctx.font = '11px Menlo,Consolas,monospace';
-    ctx.fillText(state === 'attract' ? 'ATTRACT - CPU vs CPU' : (mode === 'cpu' ? 'P1  vs  CPU' : (mode === 'watch' ? 'CPU 1  vs  CPU 2' : 'P1  vs  P2')), w / 2, h - 10);
+    const onlineLabel = online.connected ? 'ONLINE ' + String(online.role || '').toUpperCase() + '  ·  ' : '';
+    const modeLabel = state === 'attract' ? 'ATTRACT - CPU vs CPU' : onlineLabel + (mode === 'cpu' ? 'P1  vs  CPU' : (mode === 'watch' ? 'CPU 1  vs  CPU 2' : (mode === 'coop' ? 'CO-OP  vs  ENEMY TANKS' : 'P1  vs  P2')));
+    ctx.fillText(modeLabel, w / 2, h - 10);
     if (freezeT > 0 && state === 'playing') { ctx.fillStyle = T.inkDim; ctx.font = 'bold 13px Menlo,Consolas,monospace'; ctx.fillText('- RELOADING -', w / 2, h / 2 + 22); }
   }
   function drawHealthPips(T, w, h) {
@@ -374,6 +460,14 @@
         ctx.fillRect(px, y, size, size);
       }
     };
+    if (mode === 'coop') {
+      const left = mobileView ? 14 : 30, right = w - (mobileView ? 14 : 30) - size;
+      draw(left, tanks[0] ? tanks[0].hp : TANK_MAX_HP, T.p1, 1);
+      draw(left + 52, tanks[1] ? tanks[1].hp : TANK_MAX_HP, '#a8f06f', 1);
+      draw(right, tanks[2] ? tanks[2].hp : TANK_MAX_HP, '#ff5277', -1);
+      draw(right - 52, tanks[3] ? tanks[3].hp : TANK_MAX_HP, '#ff8a4f', -1);
+      return;
+    }
     draw(mobileView ? 14 : 30, tanks[0] ? tanks[0].hp : TANK_MAX_HP, T.p1, 1);
     draw(w - (mobileView ? 14 : 30) - size, tanks[1] ? tanks[1].hp : TANK_MAX_HP, T.p2, -1);
   }
@@ -388,20 +482,127 @@
     const map = { title: 'ovTitle', how: 'ovHow', paused: 'ovPause', over: 'ovOver', scores: 'ovScores' };
     if (map[which]) { const e = $(map[which]); if (e) e.classList.remove('hidden'); }
     if (which === 'over') {
-      const w = $('overResult'); if (w) w.textContent = winner === 'draw' ? 'DRAW' : (winner === 'p1' ? (mode === 'cpu' ? 'YOU WIN' : (mode === 'watch' ? 'CPU 1 WINS' : 'PLAYER 1 WINS')) : (mode === 'cpu' ? 'CPU WINS' : (mode === 'watch' ? 'CPU 2 WINS' : 'PLAYER 2 WINS')));
+      const w = $('overResult'); if (w) w.textContent = winner === 'draw' ? 'DRAW' : (winner === 'p1' ? (mode === 'cpu' ? 'YOU WIN' : (mode === 'watch' ? 'CPU 1 WINS' : (mode === 'coop' ? 'TEAM WINS' : 'PLAYER 1 WINS'))) : (mode === 'cpu' ? 'CPU WINS' : (mode === 'watch' ? 'CPU 2 WINS' : (mode === 'coop' ? 'ENEMY TANKS WIN' : 'PLAYER 2 WINS'))));
       const sc = $('overScore'); if (sc) sc.textContent = score.p1 + ' — ' + score.p2;
     }
   }
   function startAttract() { state = 'attract'; mode = 'cpu'; bots = [true, true]; tankSkill = [0.72, 0.6]; matchTime = DEFAULT_TIME; resetMatch((tick + 7) * 2654435761 >>> 0 || 11); state = 'attract'; }
-  function startGame(m) {
+  function startGame(m, seed) {
     mode = m || mode;
-    bots = mode === 'cpu' ? [false, true] : (mode === 'watch' ? [true, true] : [false, false]);
-    const sk = aiLevel / 100; tankSkill = mode === 'watch' ? [watchLevel[0] / 100, watchLevel[1] / 100] : [sk, sk];
+    bots = mode === 'cpu' ? [false, true] : (mode === 'watch' ? [true, true] : (mode === 'coop' ? [false, false, true, true] : [false, false]));
+    controls = fresh();
+    const sk = aiLevel / 100;
+    tankSkill = mode === 'watch' ? [watchLevel[0] / 100, watchLevel[1] / 100] : (mode === 'coop' ? [0, 0, Math.max(0.25, sk), Math.min(1, sk + 0.12)] : [sk, sk]);
     matchTime = DEFAULT_TIME;
-    resetMatch((Math.random() * 1e9) | 0);
+    resetMatch(seed == null ? ((Math.random() * 1e9) | 0) : seed);
     state = 'playing'; hideAllOverlays();
     if (!headless) { SDAudio.init(); SDAudio.start(); }
     applyCursor();
+  }
+
+  /* ===================== online rooms ===================== */
+  function randomRoom() {
+    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    let out = '';
+    const bytes = new Uint8Array(5); crypto.getRandomValues(bytes);
+    for (const b of bytes) out += chars[b % chars.length];
+    return out;
+  }
+  function cleanRoom(v) { return String(v || '').toUpperCase().replace(/[^A-Z0-9-]/g, '').slice(0, 24) || randomRoom(); }
+  function setOnlineStatus(text) {
+    online.status = text || '';
+    const el = $('onlineStatus'); if (el) el.textContent = online.status;
+  }
+  function onlineUrl(room) { return ONLINE_WS.replace(/\/+$/, '') + '/' + encodeURIComponent(room); }
+  function onlineSend(data) {
+    if (!online.ws || online.ws.readyState !== WebSocket.OPEN) return false;
+    online.ws.send(JSON.stringify(data)); return true;
+  }
+  function controlPacket(c) {
+    return {
+      fwd: !!c.fwd, back: !!c.back, left: !!c.left, right: !!c.right, fire: !!c.fire,
+      driveVec: c.driveVec ? { active: !!c.driveVec.active, angle: +c.driveVec.angle || 0, mag: +c.driveVec.mag || 0 } : null,
+      aimVec: c.aimVec ? { active: !!c.aimVec.active, angle: +c.aimVec.angle || 0, mag: +c.aimVec.mag || 0 } : null,
+    };
+  }
+  function applyRemoteControl(packet) {
+    if (!packet) return;
+    controls[1] = { ...ctrl(), ...packet };
+  }
+  function sendOnlineInput(now) {
+    if (!online.connected || online.role !== 'p2' || now - online.lastInput < 45) return;
+    online.lastInput = now;
+    onlineSend({ type: 'input', control: controlPacket(controls[0]) });
+  }
+  function sendOnlineSnapshot(now, force) {
+    if (!online.connected || online.role !== 'p1' || (state !== 'playing' && !force)) return;
+    if (!force && now - online.lastSnapshot < 66) return;
+    online.lastSnapshot = now;
+    onlineSend({ type: 'snapshot', snapshot: makeSnapshot() });
+  }
+  function startOnlineHost(m) {
+    const seed = crypto.getRandomValues(new Uint32Array(1))[0] | 0;
+    online.mode = m || online.mode || 'duel';
+    startGame(online.mode, seed);
+    onlineSend({ type: 'start', mode: online.mode, seed });
+    sendOnlineSnapshot(perfNow(), true);
+    setOnlineStatus('Room ' + online.room + ' · you are P1 · waiting for P2');
+  }
+  function disconnectOnline() {
+    if (online.ws) {
+      try { online.ws.close(1000, 'menu'); } catch {}
+    }
+    online = { ws: null, room: '', role: null, id: null, mode: online.mode || 'duel', status: '', connected: false, lastInput: 0, lastSnapshot: 0, peers: [] };
+    setOnlineStatus('');
+  }
+  function handleOnlineMessage(data) {
+    if (!data || !data.type) return;
+    if (data.type === 'welcome') {
+      online.connected = true; online.role = data.role; online.id = data.id; online.peers = data.peers || [];
+      if (online.role === 'p1') startOnlineHost(online.mode);
+      else if (online.role === 'p2') setOnlineStatus('Room ' + online.room + ' · you are P2 · waiting for host');
+      else setOnlineStatus('Room ' + online.room + ' · spectating');
+      return;
+    }
+    if (data.type === 'peer') {
+      online.peers = data.peers || [];
+      if (online.role === 'p1' && state === 'playing') {
+        onlineSend({ type: 'start', mode, seed: tick || 1 });
+        sendOnlineSnapshot(perfNow(), true);
+      }
+      return;
+    }
+    if (data.type === 'start' && online.role !== 'p1') {
+      online.mode = data.mode === 'coop' ? 'coop' : 'duel';
+      startGame(online.mode, Number(data.seed) || 1);
+      setOnlineStatus('Room ' + online.room + ' · you are ' + (online.role === 'p2' ? 'P2' : 'spectating'));
+      return;
+    }
+    if (data.type === 'input' && online.role === 'p1' && data.role === 'p2') applyRemoteControl(data.control);
+    if (data.type === 'snapshot' && online.role !== 'p1') applySnapshot(data.snapshot);
+    if (data.type === 'error') setOnlineStatus('Online error: ' + data.message);
+  }
+  function connectOnline() {
+    const inp = $('onlineRoom'), sel = $('onlineMode');
+    const room = cleanRoom(inp && inp.value);
+    if (inp) inp.value = room;
+    online.mode = sel && sel.value === 'coop' ? 'coop' : 'duel';
+    if (online.ws) disconnectOnline();
+    setOnlineStatus('Connecting to room ' + room + '...');
+    online.room = room;
+    const ws = new WebSocket(onlineUrl(room));
+    online.ws = ws;
+    ws.addEventListener('open', () => setOnlineStatus('Connected · assigning slot...'));
+    ws.addEventListener('message', e => {
+      try { handleOnlineMessage(JSON.parse(e.data)); }
+      catch { setOnlineStatus('Online error: bad server message'); }
+    });
+    ws.addEventListener('close', () => {
+      const wasRoom = online.room;
+      online.connected = false; online.ws = null; online.role = null;
+      if (wasRoom) setOnlineStatus('Disconnected from room ' + wasRoom);
+    });
+    ws.addEventListener('error', () => setOnlineStatus('Online connection failed'));
   }
 
   /* ===================== scores ===================== */
@@ -427,6 +628,8 @@
     rafId = requestAnimationFrame(frame);
     const dt = Math.min(0.05, (t - lastT) / 1000) || 0; lastT = t;
     if (state === 'playing' || state === 'attract') { acc += dt; let n = 0; while (acc >= STEP && n < 5) { update(); acc -= STEP; n++; } }
+    sendOnlineInput(t);
+    sendOnlineSnapshot(t, false);
     if (SDArt) { PARTS.update(dt); TRACKS.update(dt); }
     render();
   }
@@ -439,7 +642,12 @@
     keys[c] = down;
     const c0 = controls[0], c1 = controls[1];
     c0.fwd = !!keys['KeyW']; c0.back = !!keys['KeyS']; c0.left = !!keys['KeyA']; c0.right = !!keys['KeyD'];
-    if (mode === 'duel') { c0.fire = !!keys['Space']; c1.fwd = !!keys['ArrowUp']; c1.back = !!keys['ArrowDown']; c1.left = !!keys['ArrowLeft']; c1.right = !!keys['ArrowRight']; c1.fire = !!(keys['Enter'] || keys['ShiftRight']); }
+    if (mode === 'duel' || mode === 'coop') {
+      c0.fire = !!keys['Space'];
+      if (!(online.connected && online.role === 'p1')) {
+        c1.fwd = !!keys['ArrowUp']; c1.back = !!keys['ArrowDown']; c1.left = !!keys['ArrowLeft']; c1.right = !!keys['ArrowRight']; c1.fire = !!(keys['Enter'] || keys['ShiftRight']);
+      }
+    }
     else { c0.fire = !!keys['Space']; }
     if (!down) return;
     if (c === 'KeyP' || c === 'Escape') { if (state === 'playing') { state = 'paused'; showOverlay('paused'); } else if (state === 'paused') { state = 'playing'; hideAllOverlays(); } }
@@ -503,10 +711,10 @@
 
   /* ===================== self-tests ===================== */
   function snapHash() { const r2 = n => Math.round(n * 100) / 100; return JSON.stringify({ s: score, t: tanks.map(t => [r2(t.x), r2(t.y), r2(t.heading), r2(t.turret), t.hp, t.alive]), m: mines.length, sh: shells.length }); }
-  function fresh() { return [ctrl(), ctrl()]; }
+  function fresh() { return [ctrl(), ctrl(), ctrl(), ctrl()]; }
   function perfNow() { try { return performance.now(); } catch (e) { return 0; } }
   function runTests() {
-    const ph = headless, pmode = mode, ps = state; headless = true;
+    const ph = headless, pmode = mode, ps = state, ponline = { ...online }; headless = true;
     const out = [], ok = (n, c, m) => out.push({ name: n, pass: !!c, msg: m || '' });
     mode = 'duel'; bots = [false, false];
 
@@ -585,6 +793,18 @@
     watchLevel = [15, 85]; startGame('watch'); headless = true;
     ok('T-watch mode', mode === 'watch' && bots[0] && bots[1] && Math.abs(tankSkill[0] - 0.15) < 0.001 && Math.abs(tankSkill[1] - 0.85) < 0.001, 'mode=' + mode + ' bots=' + bots.join(',') + ' skill=' + tankSkill.join(','));
 
+    startGame('coop'); headless = true;
+    const coopSpawnOk = mode === 'coop' && tanks.length === 4 && tanks[0].team === 'ally' && tanks[1].team === 'ally' && tanks[2].team === 'enemy' && tanks[3].team === 'enemy' && !bots[0] && !bots[1] && bots[2] && bots[3];
+    killTank(2); const coopTeamPoint = score.p1 === 1 && score.p2 === 0;
+    killTank(0); const coopEnemyPoint = score.p1 === 1 && score.p2 === 1;
+    ok('T-coop mode', coopSpawnOk && coopTeamPoint && coopEnemyPoint, 'spawn=' + coopSpawnOk + ' score=' + score.p1 + '-' + score.p2);
+
+    startGame('coop', 1234); headless = true; tanks[0].x += 5; damageWall(tileCenter(9, 9).x, tileCenter(9, 9).y);
+    const snap = makeSnapshot();
+    startGame('duel', 9); applySnapshot(snap);
+    ok('T-online snapshot', mode === 'coop' && tanks.length === 4 && tanks[0].team === 'ally' && wallHP[9][9] === snap.wallHP[9][9], 'mode=' + mode + ' tanks=' + tanks.length);
+
+    online = ponline;
     headless = ph; mode = pmode; state = ps;
     const pass = out.filter(o => o.pass).length;
     const res = { pass, fail: out.length - pass, total: out.length, details: out }; window.__testResults = res; return res;
@@ -616,11 +836,14 @@
     resize(); window.addEventListener('resize', resize);
 
     const click = (id, fn) => { const e = $(id); if (e) e.addEventListener('click', () => { SDAudio.ui(); fn(); }); };
-    click('btnDuel', () => startGame('duel')); click('btnCpu', () => startGame('cpu')); click('btnWatch', () => startGame('watch'));
+    click('btnDuel', () => { disconnectOnline(); startGame('duel'); }); click('btnCoop', () => { disconnectOnline(); startGame('coop'); }); click('btnCpu', () => { disconnectOnline(); startGame('cpu'); }); click('btnWatch', () => { disconnectOnline(); startGame('watch'); });
+    click('btnOnline', () => { const p = $('onlinePanel'); if (p) p.classList.toggle('hidden'); });
+    click('btnOnlineConnect', connectOnline);
     click('btnHow', () => { state = 'how'; showOverlay('how'); }); click('btnHowBack', () => { startAttract(); showOverlay('title'); });
     click('btnScores', () => { state = 'scores'; showOverlay('scores'); refreshBoard(); }); click('btnScoresBack', () => { startAttract(); showOverlay('title'); });
-    click('btnResume', () => { state = 'playing'; hideAllOverlays(); }); click('btnQuit', () => { startAttract(); showOverlay('title'); });
-    click('btnAgain', () => startGame(mode)); click('btnMenu', () => { startAttract(); showOverlay('title'); });
+    click('btnResume', () => { state = 'playing'; hideAllOverlays(); }); click('btnQuit', () => { disconnectOnline(); startAttract(); showOverlay('title'); });
+    click('btnAgain', () => (online.connected && online.role === 'p1') ? startOnlineHost(mode) : startGame(mode)); click('btnMenu', () => { disconnectOnline(); startAttract(); showOverlay('title'); });
+    const room = $('onlineRoom'); if (room && !room.value) room.value = randomRoom();
     const sl = $('diffSlider'), lab = $('diffLabel');
     if (sl) { sl.value = aiLevel; const upd = () => { aiLevel = +sl.value; if (lab) lab.textContent = diffName(aiLevel) + ' (' + aiLevel + ')'; }; upd(); sl.addEventListener('input', upd); }
     const bindWatch = (idx, sid, lid) => {
@@ -649,14 +872,14 @@
   window.__g = {
     get state() { return state; }, set state(s) { state = s; },
     get mode() { return mode; }, set mode(m) { mode = m; },
-    get aiLevel() { return aiLevel; }, set aiLevel(v) { aiLevel = v; tankSkill = [v / 100, v / 100]; },
+    get aiLevel() { return aiLevel; }, set aiLevel(v) { aiLevel = v; tankSkill = mode === 'coop' ? [0, 0, Math.max(0.25, v / 100), Math.min(1, v / 100 + 0.12)] : [v / 100, v / 100]; },
     get watchLevel() { return watchLevel.slice(); }, set watchLevel(v) { if (Array.isArray(v)) watchLevel = [Number(v[0]) || 0, Number(v[1]) || 0]; },
     get visualMode() { return visualMode; }, set visualMode(v) { visualMode = v; },
     get score() { return score; }, get timeLeft() { return timeLeft; }, get winner() { return winner; },
     get tanks() { return tanks; }, get shells() { return shells; }, get mines() { return mines; },
     get solid() { return solid; }, get wallHP() { return wallHP; }, get freeze() { return freezeT; },
     reset(seed) { headless = true; resetMatch(seed || 1); state = 'playing'; return true; },
-    setSkill(a, b) { tankSkill = [a, b == null ? a : b]; },
+    setSkill(a, b, c, d) { tankSkill = [a, b == null ? a : b, c == null ? a : c, d == null ? (c == null ? a : c) : d]; },
     setBot(p, on) { bots[p] = !!on; }, input(p, a, d) { if (controls[p]) controls[p][a] = !!d; },
     start: startGame, attract: startAttract,
     step(n) { n = n || 1; for (let i = 0; i < n; i++) update(); render(); return true; },
