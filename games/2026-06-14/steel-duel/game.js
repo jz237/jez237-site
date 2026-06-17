@@ -495,12 +495,12 @@
 
   /* ===================== UI ===================== */
   function $(id) { return document.getElementById(id); }
-  const OVS = ['ovTitle', 'ovHow', 'ovPause', 'ovOver', 'ovScores'];
+  const OVS = ['ovTitle', 'ovOnline', 'ovHow', 'ovPause', 'ovOver', 'ovScores'];
   function hideAllOverlays() { OVS.forEach(id => { const e = $(id); if (e) e.classList.add('hidden'); }); }
   function showOverlay(which) {
     if (headless) return;
     hideAllOverlays();
-    const map = { title: 'ovTitle', how: 'ovHow', paused: 'ovPause', over: 'ovOver', scores: 'ovScores' };
+    const map = { title: 'ovTitle', online: 'ovOnline', how: 'ovHow', paused: 'ovPause', over: 'ovOver', scores: 'ovScores' };
     if (map[which]) { const e = $(map[which]); if (e) e.classList.remove('hidden'); }
     if (which === 'over') {
       const w = $('overResult'); if (w) w.textContent = winner === 'draw' ? 'DRAW' : (winner === 'p1' ? (mode === 'cpu' ? 'YOU WIN' : (mode === 'watch' ? 'CPU 1 WINS' : (mode === 'coop' ? 'TEAM WINS' : 'PLAYER 1 WINS'))) : (mode === 'cpu' ? 'CPU WINS' : (mode === 'watch' ? 'CPU 2 WINS' : (mode === 'coop' ? 'ENEMY TANKS WIN' : 'PLAYER 2 WINS'))));
@@ -875,8 +875,9 @@
 
     const click = (id, fn) => { const e = $(id); if (e) e.addEventListener('click', () => { SDAudio.ui(); fn(); }); };
     click('btnDuel', () => { disconnectOnline(); startGame('duel'); }); click('btnCoop', () => { disconnectOnline(); startGame('coop'); }); click('btnCpu', () => { disconnectOnline(); startGame('cpu'); }); click('btnWatch', () => { disconnectOnline(); startGame('watch'); });
-    click('btnOnline', () => { const p = $('onlinePanel'); if (p) p.classList.remove('hidden'); const r = $('onlineRoom'); if (r) r.focus(); });
+    click('btnOnline', () => { showOverlay('online'); const r = $('onlineRoom'); if (r) r.focus(); });
     click('btnOnlineConnect', connectOnline);
+    click('btnOnlineBack', () => { disconnectOnline(); startAttract(); showOverlay('title'); });
     click('btnHow', () => { state = 'how'; showOverlay('how'); }); click('btnHowBack', () => { startAttract(); showOverlay('title'); });
     click('btnScores', () => { state = 'scores'; showOverlay('scores'); refreshBoard(); }); click('btnScoresBack', () => { startAttract(); showOverlay('title'); });
     click('btnResume', () => { state = 'playing'; hideAllOverlays(); }); click('btnQuit', () => { disconnectOnline(); startAttract(); showOverlay('title'); });
