@@ -1,19 +1,32 @@
 /* Pay Dirt — audio.js
-   WebAudio: procedural SFX + a looping sequenced cavern theme. No external assets.
+   WebAudio: procedural SFX + an MP3 music playlist, with procedural music fallback.
    Everything degrades to a safe no-op if the context can't start (e.g. headless). */
 'use strict';
 const AUDIO = (() => {
   let ctx = null, master = null, musicGain = null, sfxGain = null;
   let muted = false;
+  let musicVolume = 0.58, sfxVolume = 0.88;
   try { muted = localStorage.getItem('paydirt-muted') === '1'; } catch (e) {}
+  try {
+    const mv = parseFloat(localStorage.getItem('paydirt-music-volume'));
+    const sv = parseFloat(localStorage.getItem('paydirt-sfx-volume'));
+    if (Number.isFinite(mv)) musicVolume = Math.max(0, Math.min(1, mv));
+    if (Number.isFinite(sv)) sfxVolume = Math.max(0, Math.min(1, sv));
+  } catch (e) {}
+
+  const MUSIC_TRACKS = [
+    'assets/music-solving-for-blue.mp3',
+    'assets/music-waiting-for-input.mp3',
+  ];
+  let musicAudio = null, musicSource = null, trackIndex = 0;
 
   function ensure(){
     if (ctx){ if (ctx.state === 'suspended') ctx.resume().catch(() => {}); return ctx.state === 'running'; }
     try {
       ctx = new (window.AudioContext || window.webkitAudioContext)();
       master = ctx.createGain(); master.gain.value = muted ? 0 : 0.9; master.connect(ctx.destination);
-      sfxGain = ctx.createGain(); sfxGain.gain.value = 0.9; sfxGain.connect(master);
-      musicGain = ctx.createGain(); musicGain.gain.value = 0.5; musicGain.connect(master);
+      sfxGain = ctx.createGain(); sfxGain.gain.value = sfxVolume; sfxGain.connect(master);
+      musicGain = ctx.createGain(); musicGain.gain.value = musicVolume; musicGain.connect(master);
     } catch (e){ ctx = null; return false; }
     return ctx.state === 'running';
   }
@@ -22,6 +35,16 @@ const AUDIO = (() => {
     muted = m;
     try { localStorage.setItem('paydirt-muted', m ? '1' : '0'); } catch (e) {}
     if (master) master.gain.setTargetAtTime(m ? 0 : 0.9, ctx.currentTime, 0.02);
+  }
+  function setMusicVolume(v){
+    musicVolume = Math.max(0, Math.min(1, Number(v)));
+    try { localStorage.setItem('paydirt-music-volume', String(musicVolume)); } catch (e) {}
+    if (musicGain && ctx) musicGain.gain.setTargetAtTime(musicVolume, ctx.currentTime, 0.02);
+  }
+  function setSfxVolume(v){
+    sfxVolume = Math.max(0, Math.min(1, Number(v)));
+    try { localStorage.setItem('paydirt-sfx-volume', String(sfxVolume)); } catch (e) {}
+    if (sfxGain && ctx) sfxGain.gain.setTargetAtTime(sfxVolume, ctx.currentTime, 0.02);
   }
 
   /* ---------- synthesis helpers ---------- */
@@ -90,7 +113,7 @@ const AUDIO = (() => {
 
   /* ---------- music: looping cavern theme ---------- */
   // A minor pentatonic, slow brooding loop. Lookahead scheduler on the audio clock.
-  let playing = false, timer = null, step = 0, nextTime = 0;
+  let playing = false, proceduralActive = false, timer = null, step = 0, nextTime = 0;
   const BPM = 96, SPB = 60 / BPM, STEP = SPB / 2; // eighth notes
   const LOOKAHEAD = 0.42;
   const SCHED_MS = 55;
@@ -130,7 +153,7 @@ const AUDIO = (() => {
   }
 
   function scheduler(){
-    if (!ctx || !playing) return;
+    if (!ctx || !proceduralActive) return;
     while (nextTime < ctx.currentTime + LOOKAHEAD){
       scheduleStep(step, nextTime);
       nextTime += STEP;
@@ -138,16 +161,60 @@ const AUDIO = (() => {
     }
   }
 
-  function startMusic(){
-    if (!ensure() || playing) return;
-    playing = true; step = 0; nextTime = ctx.currentTime + 0.06;
+  function ensureMusicElement(){
+    if (!MUSIC_TRACKS.length) return null;
+    if (!musicAudio){
+      musicAudio = new Audio(MUSIC_TRACKS[trackIndex]);
+      musicAudio.preload = 'auto';
+      musicAudio.volume = 1;
+      musicAudio.addEventListener('ended', () => {
+        if (!playing) return;
+        trackIndex = (trackIndex + 1) % MUSIC_TRACKS.length;
+        musicAudio.src = MUSIC_TRACKS[trackIndex];
+        musicAudio.play().catch(() => startProceduralMusic());
+      });
+      musicAudio.addEventListener('error', () => {
+        if (playing) startProceduralMusic();
+      });
+    }
+    if (ctx && musicGain && !musicSource){
+      try {
+        musicSource = ctx.createMediaElementSource(musicAudio);
+        musicSource.connect(musicGain);
+      } catch (e) {}
+    }
+    return musicAudio;
+  }
+  function startProceduralMusic(){
+    if (proceduralActive || !ctx) return;
+    proceduralActive = true; step = 0; nextTime = ctx.currentTime + 0.06;
     scheduler();
     timer = setInterval(scheduler, SCHED_MS);
   }
-  function stopMusic(){
-    playing = false;
+  function stopProceduralMusic(){
+    proceduralActive = false;
     if (timer){ clearInterval(timer); timer = null; }
   }
+  function startMusic(){
+    if (!ensure() || playing) return;
+    playing = true;
+    stopProceduralMusic();
+    const audio = ensureMusicElement();
+    if (!audio){ startProceduralMusic(); return; }
+    audio.play().catch(() => startProceduralMusic());
+  }
+  function stopMusic(){
+    playing = false;
+    stopProceduralMusic();
+    if (musicAudio) musicAudio.pause();
+  }
 
-  return { ensure, sfx, startMusic, stopMusic, setMuted, get muted(){ return muted; }, get running(){ return !!(ctx && ctx.state === 'running'); } };
+  return {
+    ensure, sfx, startMusic, stopMusic, setMuted, setMusicVolume, setSfxVolume,
+    get muted(){ return muted; },
+    get musicVolume(){ return musicVolume; },
+    get sfxVolume(){ return sfxVolume; },
+    get track(){ return MUSIC_TRACKS[trackIndex] || ''; },
+    get running(){ return !!(ctx && ctx.state === 'running'); },
+  };
 })();
