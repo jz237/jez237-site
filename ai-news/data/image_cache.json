@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-17T23:00:02.030459+00:00",
+  "updatedAt": "2026-06-17T22:51:20.369049+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -10823,19 +10823,15 @@
     },
     "https://techcrunch.com/2026/06/17/roelof-botha-joins-spacexs-board-of-directors": {
       "image": "https://techcrunch.com/wp-content/uploads/2025/10/2243688557.jpg?resize=1200,800",
-      "checkedAt": "2026-06-17T23:00:02.030459+00:00"
+      "checkedAt": "2026-06-17T22:51:20.369049+00:00"
     },
     "https://techcrunch.com/2026/06/17/after-unveiling-ridiculously-expensive-ar-glasses-snaps-stock-takes-a-dive": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/GettyImages-2281915461.jpg?resize=1200,800",
-      "checkedAt": "2026-06-17T23:00:02.030459+00:00"
-    },
-    "https://github.com/ollama/ollama/releases/tag/v0.30.10": {
-      "image": "https://opengraph.githubassets.com/f4547e3a64713995e73656474d39d197577b353e005b16b726559428aae7f5a1/ollama/ollama",
-      "checkedAt": "2026-06-17T23:00:02.030459+00:00"
+      "checkedAt": "2026-06-17T22:51:20.369049+00:00"
     },
     "https://openai.com/index/introducing-life-sci-bench": {
       "image": "",
-      "checkedAt": "2026-06-17T23:00:02.030459+00:00"
+      "checkedAt": "2026-06-17T22:51:20.369049+00:00"
     }
   }
 }
