@@ -230,9 +230,10 @@
       score: 0, phase: 'fight', timer: 0, banner: '',
     };
     rng = mulberry32((seed | 0) || 1);
+    controls = fresh();
     loadCampaignLevel();
     if (!headless) { SDAudio.init(); SDAudio.start(); }
-    applyCursor();
+    applyCursor(); updateTouchLayout();
     return true;
   }
   function loadCampaignLevel() {
@@ -486,22 +487,26 @@
   /* ===================== human command ===================== */
   function humanCommand(i, cmd) {
     const c = controls[i], me = tanks[i];
-    cmd.turn = 0; cmd.throttle = 0; cmd.aim = null; cmd.fire = false; cmd.aimInstant = true;
+    cmd.turn = 0; cmd.throttle = 0; cmd.aim = null; cmd.fire = false; cmd.aimInstant = true; cmd.moveVec = null;
+    // Campaign & vs-CPU use simplified controls: DIRECT movement (go where you point) + assisted aim/auto-fire.
+    if (mode === 'campaign' || mode === 'cpu') {
+      // ---- direct movement: stick angle, or WASD/arrows as an 8-way vector ----
+      let mvx = 0, mvy = 0, mag = 0;
+      if (c.driveVec && c.driveVec.active) { mvx = Math.cos(c.driveVec.angle); mvy = Math.sin(c.driveVec.angle); mag = c.driveVec.mag; }
+      else { mvx = (c.right ? 1 : 0) - (c.left ? 1 : 0); mvy = (c.back ? 1 : 0) - (c.fwd ? 1 : 0); const m = Math.hypot(mvx, mvy); if (m > 0) { mvx /= m; mvy /= m; mag = 1; } }
+      cmd.moveVec = { ang: mag > 0.01 ? Math.atan2(mvy, mvx) : me.heading, mag: Math.min(1, mag) };
+      // ---- aim + auto-fire ----
+      const foe = nearestFoe(me);
+      const mouseAim = (i === 0 && !touchActive && (!campaign || campaign.players === 1));   // 1P desktop steers the turret with the mouse
+      if (mouseAim) { cmd.aim = Math.atan2(mouseY - me.y, mouseX - me.x); cmd.aimInstant = true; cmd.fire = !!foe || !!c.fire; }
+      else if (foe) { cmd.aim = Math.atan2(foe.y - me.y, foe.x - me.x); cmd.aimInstant = false; cmd.turretTurn = TURRET_TURN; cmd.fire = true; }   // mobile/co-op: auto-aim nearest + auto-fire
+      else { cmd.aim = null; cmd.fire = false; }
+      return;
+    }
+    // Versus duel / survival co-op keep the faithful 1974 tank steering + hull-locked barrel.
     if (c.driveVec && c.driveVec.active) { const da = wrapAngle(c.driveVec.angle - me.heading); cmd.turn = Math.max(-1, Math.min(1, da / 0.4)); cmd.throttle = c.driveVec.mag * Math.max(0, Math.cos(da)); }
     else { cmd.turn = (c.right ? 1 : 0) - (c.left ? 1 : 0); cmd.throttle = (c.fwd ? 1 : 0) - (c.back ? 1 : 0); }
-    if (mode === 'duel' || mode === 'coop') { cmd.aim = null; cmd.fire = c.fire; }      // turret locked to hull (faithful)
-    else if (mode === 'campaign') {                                  // campaign 1P: mouse/twin-stick turret for P1; co-op locals hull-locked
-      if (i === 0 && campaign && campaign.players === 1) {
-        if (c.aimVec && c.aimVec.active) { cmd.aim = c.aimVec.angle; cmd.fire = true; }
-        else if (touchActive) { cmd.aim = null; cmd.fire = c.fire; }
-        else { cmd.aim = Math.atan2(mouseY - me.y, mouseX - me.x); cmd.fire = c.fire; }
-      } else { cmd.aim = null; cmd.fire = c.fire; }
-    }
-    else {                                                            // 1P vs CPU: independent turret
-      if (c.aimVec && c.aimVec.active) { cmd.aim = c.aimVec.angle; cmd.fire = true; }
-      else if (touchActive) { cmd.aim = null; cmd.fire = c.fire; }
-      else { cmd.aim = Math.atan2(mouseY - me.y, mouseX - me.x); cmd.fire = c.fire; }
-    }
+    cmd.aim = null; cmd.fire = c.fire;
   }
 
   /* ===================== sim ===================== */
@@ -514,7 +519,7 @@
     const cmd = { turn: 0, throttle: 0, aim: null, fire: false, aimInstant: false, turretTurn: TURRET_TURN };
     for (let i = 0; i < tanks.length; i++) {
       const t = tanks[i]; if (!t.alive) continue;
-      cmd.turn = 0; cmd.throttle = 0; cmd.aim = null; cmd.fire = false; cmd.aimInstant = false; cmd.turretTurn = TURRET_TURN;
+      cmd.turn = 0; cmd.throttle = 0; cmd.aim = null; cmd.fire = false; cmd.aimInstant = false; cmd.turretTurn = TURRET_TURN; cmd.moveVec = null;
       if (t.boss) bossCommand(i, cmd); else if (bots[i]) aiCommand(i, cmd); else humanCommand(i, cmd);
       applyCommand(t, cmd);
       if (t.boss) bossAttack(t);
@@ -563,6 +568,18 @@
   }
 
   function applyCommand(t, cmd) {
+    if (cmd.moveVec) {                                   // direct (omnidirectional) movement — campaign / vs-CPU human
+      const mag = Math.min(1, cmd.moveVec.mag || 0), sp = MAX_FWD * (t.spdMul || 1);
+      if (mag > 0.01) { const tx = Math.cos(cmd.moveVec.ang) * sp * mag, ty = Math.sin(cmd.moveVec.ang) * sp * mag; t.vx += (tx - t.vx) * ACCEL; t.vy += (ty - t.vy) * ACCEL; }
+      else { t.vx *= FRICTION; t.vy *= FRICTION; if (Math.abs(t.vx) < 0.02) t.vx = 0; if (Math.abs(t.vy) < 0.02) t.vy = 0; }
+      moveTankVel(t);
+      t.speed = Math.hypot(t.vx, t.vy);
+      if (t.speed > 0.12) t.heading = rotToward(t.heading, Math.atan2(t.vy, t.vx), HULL_TURN * 2.6);   // hull eases toward travel direction
+      if (cmd.aim == null) t.turret = t.heading;
+      else if (cmd.aimInstant) t.turret = cmd.aim;
+      else t.turret = rotToward(t.turret, cmd.aim, cmd.turretTurn || TURRET_TURN);
+      return;
+    }
     t.heading += Math.max(-1, Math.min(1, cmd.turn)) * HULL_TURN;
     const th = Math.max(-1, Math.min(1, cmd.throttle)), target = th * (th >= 0 ? MAX_FWD : MAX_REV) * (t.spdMul || 1);
     t.speed += (target - t.speed) * ACCEL;
@@ -577,6 +594,15 @@
     const nx = t.x + Math.cos(t.heading) * t.speed, ny = t.y + Math.sin(t.heading) * t.speed;
     if (!circleHitsWall(nx, t.y)) t.x = nx; else t.speed *= 0.3;
     if (!circleHitsWall(t.x, ny)) t.y = ny; else t.speed *= 0.3;
+    pushApart(t);
+  }
+  function moveTankVel(t) {
+    const nx = t.x + t.vx, ny = t.y + t.vy;
+    if (!circleHitsWall(nx, t.y)) t.x = nx; else t.vx *= 0.2;
+    if (!circleHitsWall(t.x, ny)) t.y = ny; else t.vy *= 0.2;
+    pushApart(t);
+  }
+  function pushApart(t) {
     for (const o of tanks) {
       if (!o || o.id === t.id || !o.alive) continue;
       const dx = t.x - o.x, dy = t.y - o.y, d = Math.hypot(dx, dy);
@@ -684,7 +710,7 @@
     drawPlayerNames();
     for (const s of shells) SDArt.drawShell(ctx, s, visualMode);
     if (SDArt && visualMode !== 'classic') PARTS.draw(ctx);
-    if (visualMode !== 'classic' && state === 'playing' && mode === 'cpu' && !touchActive && tanks[0] && tanks[0].alive) SDArt.drawReticle(ctx, mouseX, mouseY, T.p1);
+    if (visualMode !== 'classic' && state === 'playing' && mouseAimActive() && tanks[0] && tanks[0].alive) SDArt.drawReticle(ctx, mouseX, mouseY, T.p1);
     ctx.restore();
     drawHUD(T);
     if (visualMode === 'classic') SDArt.classicOverlay(ctx, viewW, viewH);
@@ -850,7 +876,7 @@
     resetMatch(seed == null ? ((Math.random() * 1e9) | 0) : seed);
     state = 'playing'; hideAllOverlays();
     if (!headless) { SDAudio.init(); SDAudio.start(); }
-    applyCursor();
+    applyCursor(); updateTouchLayout();
   }
 
   /* ===================== online rooms ===================== */
@@ -1155,7 +1181,13 @@
     if (c === 'KeyC') toggleVisual();
   }
   function toggleVisual() { visualMode = visualMode === 'hd' ? 'classic' : 'hd'; const b = $('btnClassic'); if (b) b.textContent = visualMode === 'classic' ? '1974' : 'HD'; }
-  function applyCursor() { if (canvas) canvas.style.cursor = (state === 'playing' && mode === 'cpu' && !touchActive) ? 'none' : 'default'; }
+  function mouseAimActive() { return !touchActive && (mode === 'cpu' || (mode === 'campaign' && campaign && campaign.players === 1)); }
+  function applyCursor() { if (canvas) canvas.style.cursor = (state === 'playing' && mouseAimActive()) ? 'none' : 'default'; }
+  function updateTouchLayout() {                          // one-thumb modes (campaign / vs-CPU auto-aim) drop the aim stick
+    const sr = $('stickR'); if (!sr) return;
+    const oneThumb = (mode === 'campaign' || mode === 'cpu');
+    sr.style.display = (touchActive && !oneThumb) ? '' : 'none';
+  }
 
   function setupMouse() {
     if (!canvas) return;
@@ -1278,9 +1310,9 @@
     ok('T-WALL destructible', damaged && destroyed && hp0 === WALL_MAX, 'hp0=' + hp0 + ' dmg=' + damaged + ' destroyed=' + destroyed);
 
     // T-AI: navigates toward foe around walls and never suicides on a mine
-    mode = 'cpu'; tankSkill = [0.0, 0.0]; resetMatch(55); state = 'playing'; bots = [false, true];
+    mode = 'cpu'; tankSkill = [0.0, 0.0]; resetMatch(55); state = 'playing'; bots = [false, true]; controls = fresh();
     tanks[1].x = tileCenter(25, 15).x; tanks[1].y = tileCenter(25, 15).y; // bot far corner
-    tanks[0].x = tileCenter(2, 2).x; tanks[0].y = tileCenter(2, 2).y; tanks[0].alive = true; // dummy human, stays put
+    tanks[0].x = tileCenter(2, 2).x; tanks[0].y = tileCenter(2, 2).y; tanks[0].alive = true; tanks[0].cd = 1e9; // passive dummy: no input, never auto-fires
     const d0 = Math.hypot(tanks[1].x - tanks[0].x, tanks[1].y - tanks[0].y);
     for (let i = 0; i < 300; i++) update();
     const dEnd = Math.hypot(tanks[1].x - tanks[0].x, tanks[1].y - tanks[0].y);
