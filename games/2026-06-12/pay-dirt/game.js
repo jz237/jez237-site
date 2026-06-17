@@ -2049,7 +2049,7 @@ function renderTitle(){
 // does this cell render as a solid block?
 function rendersSolid(c, r){
   const t = tileAt(c, r);
-  if (t === '#' || t === 'B') return !isDug(c, r) && !isBlasted(c, r);
+  if (t === '#' || t === 'B') return !isBlasted(c, r);
   if (t === 'C') return !isCrumbleGone(c, r) && !isBlasted(c, r);
   if (t === 'T') return true;
   return t === 'X';
@@ -2160,7 +2160,7 @@ function drawPainterlySolid(base, c, r, kind){
 function platformKindAt(c, r){
   if (c < 0 || c >= COLS || r < 0 || r >= ROWS) return null;
   const t = tileAt(c, r);
-  if (t === '#') return (!isDug(c, r) && !isBlasted(c, r)) ? 'earth' : null;
+  if (t === '#') return !isBlasted(c, r) ? 'earth' : null;
   if (t === 'X') return 'wall';
   return null;
 }
