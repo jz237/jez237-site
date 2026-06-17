@@ -253,3 +253,20 @@ Verification:
 - Chrome DevTools mobile smoke confirmed the game started on a 390x844 phone viewport.
 - The climb pose now resolves to miner sheet frame 0 instead of the baked-ladder climb frame.
 - Radar/gameplay canvas pixels sampled nonblank with no page crash.
+
+## Climb Animation + MP3 Music Mixer
+Jez asked for actual climb animation and for the two attached songs to become background music with separate music/effects volume sliders.
+
+Changes:
+- Added `music-solving-for-blue.mp3` and `music-waiting-for-input.mp3` to the Pay Dirt asset folder.
+- Reworked music playback to use the MP3s as a looping playlist through the existing WebAudio music gain.
+- Kept the procedural theme as a fallback if browser media playback fails.
+- Added saved Music and SFX sliders on the title and pause panels.
+- Added a clean climbing animation using the non-ladder miner art with alternating hand/boot motion instead of the baked fake-ladder frame.
+
+Verification:
+- `node --check game.js`, `audio.js`, and `art.js` passed.
+- `git diff --check` passed.
+- Local HTTP checks returned both MP3 assets as `audio/mpeg`.
+- Chrome DevTools mobile smoke confirmed title/pause sliders stay synced and update `AUDIO.musicVolume` / `AUDIO.sfxVolume`.
+- Game entered `playing`, reported the first MP3 track, and rendered a nonblank climb frame.
