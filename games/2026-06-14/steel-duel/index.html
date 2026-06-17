@@ -47,6 +47,8 @@
   .online-panel{margin-top:10px;padding:10px;border:1px solid var(--edge);border-radius:8px;background:rgba(8,12,20,.62)}
   .online-grid{display:grid;grid-template-columns:1fr 120px;gap:8px}
   .online-name{margin-top:8px}
+  .online-name-row{display:grid;grid-template-columns:64px 1fr;gap:8px;align-items:center;margin-top:8px;color:var(--dim);font-size:10px;text-align:left}
+  .online-name-row input{margin:0}
   .online-labels{display:grid;grid-template-columns:1fr 120px;gap:8px;margin-bottom:4px;color:var(--dim);font-size:10px;text-align:left}
   .online-hint{margin-top:7px;color:var(--dim);font-size:10px;text-align:left;line-height:1.35}
   .online-status{min-height:16px;margin-top:7px;color:var(--dim);font-size:11px;text-align:left}
@@ -115,7 +117,7 @@
         <button id="btnHow" class="btn">HOW TO PLAY</button>
         <button id="btnScores" class="btn">🏆 SCORES</button>
       </div>
-      <div class="footer">v16 · First tank-combat arcade game, Kee&nbsp;Games 1974. Drive your foe into the mines.</div>
+      <div class="footer">v17 · First tank-combat arcade game, Kee&nbsp;Games 1974. Drive your foe into the mines.</div>
     </div>
   </div>
 
@@ -133,7 +135,7 @@
             <option value="coop">CO-OP</option>
           </select>
         </div>
-        <input id="onlineName" class="online-name" maxlength="12" placeholder="PLAYER NAME" />
+        <label class="online-name-row"><span>NAME</span><input id="onlineName" class="online-name" maxlength="12" placeholder="PLAYER NAME" /></label>
         <button id="btnOnlineConnect" class="btn primary">START / JOIN ROOM</button>
         <div class="online-hint">Same room code joins the same match. First player is P1; second player is P2; two more can spectate.</div>
         <div id="onlineStatus" class="online-status"></div>
@@ -146,15 +148,12 @@
   <div id="ovHow" class="ov hidden">
     <div class="card">
       <h1 style="font-size:34px">HOW TO PLAY</h1>
-      <p class="sub">Outscore your rival before the clock hits zero</p>
+      <p class="sub">Outscore the other side before the clock hits zero</p>
       <div class="keys">
         <div><h3 class="p1">vs CPU&nbsp;(1P)</h3><b>W</b> drive · <b>A/D</b> steer<br><b>S</b> reverse<br><b>Mouse</b> aims turret<br><b>Click</b> / <b>Space</b> fire</div>
         <div><h3 class="p2">2-PLAYER DUEL</h3>P1 <b>WASD</b> + <b>Space</b><br>P2 <b>↑ ↓ ← →</b> + <b>Enter</b><br><span style="opacity:.7">(barrels fire forward)</span></div>
       </div>
-      <p class="sub" style="margin-top:14px">Co-op uses the 2-player controls: P1 and P2 fight together against two enemy tanks.
-        On mobile: <b>left stick</b> drives, <b>right stick</b> aims &amp; fires.
-        Shells are stopped by walls — and chip them, so walls can be blasted open. A hit, or driving your
-        rival into a mine, scores <i>them</i> a point; mines never come back. <b>P</b> pause · <b>C</b> 1974 mode · <b>M</b> mute.</p>
+      <p class="sub" style="margin-top:14px">Co-op uses the 2-player controls: P1 and P2 fight together against two enemy tanks. Online rooms use the room code, mode, and name fields; each player uses WASD + Space on their own keyboard. Shells travel half the arena width, stop at walls, and chip walls open. Mine kills score for the other side; mines never come back. Scores can be submitted after CPU, duel, and co-op matches. <b>P</b> pause · <b>C</b> 1974 mode · <b>M</b> mute.</p>
       <button id="btnHowBack" class="btn primary">BACK</button>
     </div>
   </div>
@@ -189,7 +188,7 @@
   <div id="ovScores" class="ov hidden">
     <div class="card">
       <h1 style="font-size:34px">🏆 SCORES</h1>
-      <p class="sub">Most points scored vs CPU</p>
+      <p class="sub">Best CPU, duel, and co-op match scores</p>
       <div id="scoreBoard"></div>
       <button id="btnScoresBack" class="btn primary" style="margin-top:14px">BACK</button>
     </div>
@@ -201,8 +200,8 @@
     <div id="stickR" class="stick"><div id="stickRk" class="knob"></div><span class="sticklbl">AIM · FIRE</span></div>
   </div>
 
-  <script src="audio.js?v=16"></script>
-  <script src="art.js?v=16"></script>
-  <script src="game.js?v=16"></script>
+  <script src="audio.js?v=17"></script>
+  <script src="art.js?v=17"></script>
+  <script src="game.js?v=17"></script>
 </body>
 </html>

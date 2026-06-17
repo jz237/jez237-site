@@ -35,7 +35,7 @@
     { c: 2, r: 2, a: 0, team: 'ally' },
     { c: 2, r: 15, a: 0, team: 'ally' },
     { c: 25, r: 2, a: Math.PI, team: 'enemy' },
-    { c: 25, r: 15, a: Math.PI, team: 'enemy' },
+    { c: 25, r: 13, a: Math.PI, team: 'enemy' },
   ];
   const ONLINE_WS = window.STEEL_DUEL_WS || ((location.hostname === 'localhost' || location.hostname === '127.0.0.1')
     ? 'ws://127.0.0.1:8787/ws'
@@ -136,7 +136,7 @@
       const hp = decodeHPGrid(s.wallHP);
       for (let r = 0; r < ROWS; r++) wallHP[r] = hp[r].slice();
     }
-    if (state === 'over') showOverlay('over');
+    if (state === 'over') { if (!headless) maybeOfferScore(); showOverlay('over'); }
     else if (state === 'playing') hideAllOverlays();
   }
   function placeMines() {
@@ -646,8 +646,26 @@
     async fetch() { try { const r = await fetch(this.BASE + this.NS, { cache: 'no-store' }); const d = await r.json(); this.cache = (Array.isArray(d) ? d : (d.scores || [])).map(s => ({ name: String(s.initials || s.name || '???').slice(0, 3).toUpperCase(), score: s.score | 0 })).sort((a, b) => b.score - a.score).slice(0, 8); } catch (e) { this.cache = 'offline'; } return this.cache; },
     async submit(name, sc) { this.last = { name, score: sc }; try { await fetch(this.BASE + this.NS, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ initials: name, score: sc }) }); this.cache = null; } catch (e) {} },
   };
-  function scoreValue() { return Math.max(0, score.p1) * 100 + Math.round(aiLevel); }  // points vs CPU, broken ties by difficulty
-  function maybeOfferScore() { if (mode !== 'cpu' || score.p1 <= 0) return; const el = $('overScoreForm'); if (el) el.classList.remove('hidden'); const v = $('overYourScore'); if (v) v.textContent = 'You scored ' + score.p1 + ' vs CPU (' + diffName(aiLevel) + ')'; }
+  function scoreSubject() {
+    if (mode === 'coop') return { points: Math.max(0, score.p1), label: 'Team', mode: 'co-op' };
+    if (mode === 'duel') {
+      const p2Win = winner === 'p2' || score.p2 > score.p1;
+      return { points: Math.max(0, p2Win ? score.p2 : score.p1), label: p2Win ? 'Player 2' : 'Player 1', mode: online.connected ? 'online duel' : 'duel' };
+    }
+    return { points: Math.max(0, score.p1), label: 'You', mode: 'CPU ' + diffName(aiLevel) };
+  }
+  function scoreValue() {
+    const s = scoreSubject();
+    const modeBonus = mode === 'cpu' ? Math.round(aiLevel) : (mode === 'coop' ? 75 : 40);
+    return s.points * 100 + modeBonus;
+  }
+  function maybeOfferScore() {
+    const el = $('overScoreForm'); if (el) el.classList.add('hidden');
+    if (mode === 'watch' || (online.connected && online.role === 'spectator')) return;
+    const s = scoreSubject(); if (s.points <= 0) return;
+    if (el) el.classList.remove('hidden');
+    const v = $('overYourScore'); if (v) v.textContent = s.label + ' scored ' + s.points + ' in ' + s.mode;
+  }
   async function refreshBoard() {
     const box = $('scoreBoard'); if (!box) return; box.innerHTML = '<div class="sb-row">loading…</div>';
     const list = await Scores.fetch();
@@ -831,10 +849,17 @@
     ok('T-watch mode', mode === 'watch' && bots[0] && bots[1] && Math.abs(tankSkill[0] - 0.15) < 0.001 && Math.abs(tankSkill[1] - 0.85) < 0.001, 'mode=' + mode + ' bots=' + bots.join(',') + ' skill=' + tankSkill.join(','));
 
     startGame('coop'); headless = true;
-    const coopSpawnOk = mode === 'coop' && tanks.length === 4 && tanks[0].team === 'ally' && tanks[1].team === 'ally' && tanks[2].team === 'enemy' && tanks[3].team === 'enemy' && !bots[0] && !bots[1] && bots[2] && bots[3];
+    const enemySpawn = tileCenter(COOP_SPAWNS[3].c, COOP_SPAWNS[3].r);
+    const coopSpawnOk = mode === 'coop' && tanks.length === 4 && tanks[0].team === 'ally' && tanks[1].team === 'ally' && tanks[2].team === 'enemy' && tanks[3].team === 'enemy' && Math.hypot(tanks[3].x - enemySpawn.x, tanks[3].y - enemySpawn.y) < 2 && !bots[0] && !bots[1] && bots[2] && bots[3];
     killTank(2); const coopTeamPoint = score.p1 === 1 && score.p2 === 0;
     killTank(0); const coopEnemyPoint = score.p1 === 1 && score.p2 === 1;
     ok('T-coop mode', coopSpawnOk && coopTeamPoint && coopEnemyPoint, 'spawn=' + coopSpawnOk + ' score=' + score.p1 + '-' + score.p2);
+
+    mode = 'duel'; winner = 'p2'; score = { p1: 2, p2: 5 };
+    const duelScoreOk = scoreSubject().points === 5 && scoreValue() === 540;
+    mode = 'coop'; score = { p1: 3, p2: 5 };
+    const coopScoreOk = scoreSubject().points === 3 && scoreValue() === 375;
+    ok('T-multiplayer scores', duelScoreOk && coopScoreOk, 'duel=' + duelScoreOk + ' coop=' + coopScoreOk);
 
     online.names = { p1: 'JEZ', p2: 'CLAW' };
     startGame('coop', 1234); headless = true; tanks[0].x += 5; damageWall(tileCenter(9, 9).x, tileCenter(9, 9).y);
