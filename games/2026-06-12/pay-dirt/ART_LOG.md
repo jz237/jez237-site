@@ -190,3 +190,17 @@ Verification:
 - `node --check game.js` passed after wiring.
 - Generated a contact sheet at `/tmp/pay-dirt-bg-contact.jpg` to inspect all seven variants.
 - Chrome DevTools smoke loaded all 13 campaign levels and confirmed the expected backdrop mapping, including level 13 using `painterly-cavern-bg-07.png`.
+
+## Painterly Miner Sheet — higher-res player character
+Jez pointed out that the player still looked too low-resolution compared with the painterly cave art.
+
+Changes:
+- Generated a new painterly miner/prospector sprite sheet with idle, two run frames, climb, dig left/right, carry, and stun poses.
+- Removed the chroma-key background, normalized each pose into a tighter 4x2 transparent sheet, and saved it as `assets/painterly-miner-sheet.png`.
+- Wired the generated sheet into player rendering only; guards still use the procedural enemy sprites.
+- Updated the HUD portrait to use the new generated miner when loaded, with the old procedural sprite as fallback.
+
+Verification:
+- Chroma-key removal produced an RGBA sheet with transparent corners.
+- `node --check game.js`, `art.js`, and `audio.js` passed.
+- Mobile Chrome screenshot rendered `/tmp/pay-dirt-miner-mobile.png` with the new painterly miner visible in-game.
