@@ -218,3 +218,20 @@ Changes:
 Verification:
 - `node --check game.js`, `audio.js`, and `art.js` passed.
 - Chrome DevTools mobile smoke confirmed `mobileCamera=true`, `lowPower=false`, hidden touch pad, drag-to-move, and tap-to-dig creating a hole.
+
+## Mobile GPU Safety Pass — stop WebView blink/crash path
+Jez reported mobile playing normally for 10-20 seconds, then the graphics blinking on and off before Chrome/WebView crashed. That pattern points away from missing assets and toward a sustained canvas/GPU path, especially filtered 2D draws and the per-frame blur+bloom copy.
+
+Changes:
+- Kept the restored painterly backgrounds, tile texture sampling, mobile camera, and finger controls.
+- Added a mobile/touch GPU-risk path that avoids Canvas 2D `filter` usage on phones.
+- Mobile still draws painterly sampled platform textures, but without `saturate()`/`contrast()` filters.
+- Mobile skips the per-frame downscaled blur+bloom pass, which was the most likely crash trigger.
+- Capped mobile camera DPR lower to reduce phone canvas memory pressure while keeping desktop sharp.
+- Desktop keeps the richer filter and bloom treatment.
+
+Verification:
+- `node --check game.js` passed before browser testing.
+- `node --check audio.js`, `node --check art.js`, and `git diff --check` passed.
+- Chrome DevTools mobile smoke at 390x844 / DPR 3 confirmed phone canvas CSS stayed full-screen while backing pixels dropped to 624x1350.
+- The mobile smoke ran 32 seconds with `avoidCanvasFilters=true`, sampled nonblank canvas pixels, and did not report a page crash.
