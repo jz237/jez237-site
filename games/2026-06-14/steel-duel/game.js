@@ -37,6 +37,46 @@
     { c: 25, r: 2, a: Math.PI, team: 'enemy' },
     { c: 25, r: 13, a: Math.PI, team: 'enemy' },
   ];
+
+  /* ===================== campaign data ===================== */
+  // Campaign arenas are sparser/thinner than the duel maze → more open room to maneuver.
+  const ARENAS = {
+    open:      [[6, 4, 3, 1], [19, 4, 3, 1], [6, 13, 3, 1], [19, 13, 3, 1], [13, 6, 2, 1], [13, 11, 2, 1]],
+    pillars:   [[5, 4, 1, 1], [22, 4, 1, 1], [5, 13, 1, 1], [22, 13, 1, 1], [10, 6, 1, 1], [17, 6, 1, 1], [10, 11, 1, 1], [17, 11, 1, 1], [13, 8, 2, 2]],
+    corridors: [[8, 2, 1, 6], [19, 10, 1, 6], [8, 12, 1, 4], [19, 2, 1, 4], [13, 8, 2, 2]],
+    arena:     [[4, 4, 1, 10], [23, 4, 1, 10], [4, 4, 20, 1], [4, 13, 20, 1], [13, 8, 2, 2]],
+  };
+  // Enemy tank types: each a variant of the tank with its own stats/behavior. Versus is untouched.
+  const ENEMY_TYPES = {
+    grunt:  { hp: 1, spd: 1.00, skill: 0.45, fireMul: 1.0, dmg: 1, range: [110, 320], color: '#ff5277', score: 10 },
+    scout:  { hp: 1, spd: 1.70, skill: 0.30, fireMul: 1.4, dmg: 1, range: [70, 240],  color: '#ff8a4f', score: 15, flank: true },
+    brute:  { hp: 4, spd: 0.62, skill: 0.42, fireMul: 0.6, dmg: 2, range: [90, 999],  color: '#c0466a', score: 30, push: true },
+    sniper: { hp: 2, spd: 0.85, skill: 0.85, fireMul: 0.5, dmg: 1, range: [260, 999], color: '#d65ce8', score: 25, keepFar: true },
+    layer:  { hp: 2, spd: 1.05, skill: 0.28, fireMul: 0.7, dmg: 1, range: [200, 540], color: '#7ad6a0', score: 22, lays: true },
+    warden: { hp: 3, spd: 0.80, skill: 0.46, fireMul: 0.9, dmg: 1, range: [120, 300], color: '#6f8cf0', score: 28, frontArmor: true, faceFoe: true },
+  };
+  const CAMP_LIVES = 3;
+  const WARDEN_ARC = 1.05;      // front-armor half-arc (rad); shells inside it deflect
+  const CAMP_ALLY_SPAWNS = [{ c: 2, r: 8, a: 0 }, { c: 2, r: 5, a: 0 }, { c: 2, r: 11, a: 0 }, { c: 4, r: 8, a: 0 }];
+  const CAMP_ENEMY_SPAWNS = [
+    { c: 25, r: 3, a: Math.PI }, { c: 25, r: 14, a: Math.PI }, { c: 25, r: 8, a: Math.PI },
+    { c: 14, r: 2, a: Math.PI / 2 }, { c: 14, r: 15, a: -Math.PI / 2 }, { c: 20, r: 5, a: Math.PI }, { c: 20, r: 12, a: Math.PI },
+  ];
+  // Level table (engine is generic; bosses & more levels are added in later iterations).
+  const LEVELS = [
+    { name: 'Boot Camp',     arena: 'open',      mines: 0, waves: [['grunt', 'grunt', 'grunt']] },
+    { name: 'Skirmish',      arena: 'pillars',   mines: 0, waves: [['grunt', 'grunt'], ['scout', 'scout', 'grunt']] },
+    { name: 'Heavy Metal',   arena: 'corridors', mines: 4, waves: [['grunt', 'brute'], ['brute', 'scout', 'scout']] },
+    { name: 'The Bastion',   arena: 'arena',     mines: 0, boss: 'bastion', waves: [['__boss__']] },
+    { name: 'Sharpshooters', arena: 'open',      mines: 0, waves: [['sniper', 'grunt'], ['sniper', 'sniper', 'scout']] },
+    { name: 'Minefield',     arena: 'pillars',   mines: 6, waves: [['layer', 'scout'], ['layer', 'layer', 'grunt']] },
+    { name: 'Wardens',       arena: 'corridors', mines: 2, waves: [['warden', 'grunt'], ['warden', 'warden', 'brute']] },
+    { name: 'Mauler',        arena: 'arena',     mines: 2, boss: 'mauler', waves: [['__boss__']] },
+    { name: 'Onslaught',     arena: 'arena',     mines: 6, waves: [['grunt', 'scout', 'brute'], ['sniper', 'layer', 'scout', 'grunt'], ['brute', 'warden', 'sniper']] },
+    { name: 'Gauntlet',      arena: 'open',      mines: 4, waves: [['scout', 'scout', 'grunt'], ['brute', 'sniper', 'layer'], ['warden', 'brute', 'scout', 'grunt']] },
+    { name: 'Last Stand',    arena: 'corridors', mines: 4, waves: [['brute', 'sniper', 'warden'], ['warden', 'warden', 'layer'], ['brute', 'brute', 'sniper', 'sniper']] },
+    { name: 'Iron Warlord',  arena: 'arena',     mines: 0, boss: 'warlord', waves: [['__boss__']] },
+  ];
   const ONLINE_WS = window.STEEL_DUEL_WS || ((location.hostname === 'localhost' || location.hostname === '127.0.0.1')
     ? 'ws://127.0.0.1:8787/ws'
     : 'wss://steel-duel-online.jez237.workers.dev/ws');
@@ -50,10 +90,11 @@
   /* ===================== maze ===================== */
   const solid = [], wallHP = [];
   function isBorder(c, r) { return r === 0 || r === ROWS - 1 || c === 0 || c === COLS - 1; }
-  function buildMaze() {
+  function buildMazeFrom(def) {
     for (let r = 0; r < ROWS; r++) { solid[r] = []; wallHP[r] = []; for (let c = 0; c < COLS; c++) { const b = isBorder(c, r); solid[r][c] = b; wallHP[r][c] = b ? Infinity : 0; } }
-    for (const [c, r, w, h] of WALL_DEF) for (let y = r; y < r + h; y++) for (let x = c; x < c + w; x++) { solid[y][x] = true; wallHP[y][x] = WALL_MAX; }
+    for (const [c, r, w, h] of def) for (let y = r; y < r + h; y++) for (let x = c; x < c + w; x++) { if (y > 0 && y < ROWS - 1 && x > 0 && x < COLS - 1) { solid[y][x] = true; wallHP[y][x] = WALL_MAX; } }
   }
+  function buildMaze() { buildMazeFrom(WALL_DEF); }
   function tileCenter(c, r) { return { x: c * TILE + TILE / 2, y: HUD_H + r * TILE + TILE / 2 }; }
   function tileOf(t) { return { c: Math.max(0, Math.min(COLS - 1, Math.floor(t.x / TILE))), r: Math.max(0, Math.min(ROWS - 1, Math.floor((t.y - HUD_H) / TILE))) }; }
   function isSolidAt(x, y) {
@@ -75,6 +116,7 @@
   let timeLeft = DEFAULT_TIME, matchTime = DEFAULT_TIME;
   let freezeT = 0, winner = null, tick = 0, shake = 0;
   let bots = [false, false, true, true];
+  let campaign = null;          // campaign run state (null outside campaign mode)
   let mouseX = LW / 2, mouseY = LH / 2;
   let online = { ws: null, room: '', role: null, id: null, mode: 'duel', name: 'PLAYER', names: { p1: 'P1', p2: 'P2' }, ready: { p1: false, p2: false }, status: '', connected: false, started: false, lastInput: 0, lastSnapshot: 0, peers: [] };
 
@@ -144,6 +186,195 @@
     for (let r = MINE_RECT.r0; r <= MINE_RECT.r1; r++) for (let c = MINE_RECT.c0; c <= MINE_RECT.c1; c++) if (!solid[r][c]) cand.push(tileCenter(c, r));
     for (let i = cand.length - 1; i > 0; i--) { const j = Math.floor(rng() * (i + 1)); const t = cand[i]; cand[i] = cand[j]; cand[j] = t; }
     for (let i = 0; i < Math.min(16, cand.length); i++) mines.push({ x: cand[i].x, y: cand[i].y, ph: rng() * 7 });
+  }
+
+  /* ===================== campaign engine ===================== */
+  function playerTank(id, s) {
+    const p = tileCenter(s.c, s.r);
+    return {
+      id, team: 'ally', type: 'player', x: p.x, y: p.y, heading: s.a, turret: s.a, speed: 0, vx: 0, vy: 0, dist: 0, cd: 0, flash: 0,
+      hp: TANK_MAX_HP, maxHp: TANK_MAX_HP, alive: true, path: null, pathTick: -999, spdMul: 1, fireCd: FIRE_CD, dmg: 1, invuln: 0, respawnT: null, spawn: s,
+    };
+  }
+  function enemyTank(id, type, s) {
+    const d = ENEMY_TYPES[type] || ENEMY_TYPES.grunt, p = tileCenter(s.c, s.r);
+    const sk = Math.max(0.05, Math.min(1, d.skill + (campaign ? (campaign.difficulty - 45) / 160 : 0)));
+    return {
+      id, team: 'enemy', type, x: p.x, y: p.y, heading: s.a, turret: s.a, speed: 0, vx: 0, vy: 0, dist: 0, cd: 0.3 + rng() * 0.5, flash: 0,
+      hp: d.hp, maxHp: d.hp, alive: true, path: null, pathTick: -999, spdMul: d.spd, fireCd: FIRE_CD / d.fireMul, dmg: d.dmg, skill: sk,
+      range: d.range, flank: !!d.flank, push: !!d.push, keepFar: !!d.keepFar, lays: !!d.lays, frontArmor: !!d.frontArmor, faceFoe: !!d.faceFoe,
+      mineCd: 1.6 + rng() * 1.4, minesLeft: 4, enemyColor: d.color, scoreVal: d.score, invuln: 0,
+    };
+  }
+  function placeCampaignMines(n) {
+    const cand = [];
+    for (let r = 4; r < ROWS - 4; r++) for (let c = 8; c < COLS - 8; c++) if (!solid[r][c]) cand.push(tileCenter(c, r));
+    for (let i = cand.length - 1; i > 0; i--) { const j = Math.floor(rng() * (i + 1)); const t = cand[i]; cand[i] = cand[j]; cand[j] = t; }
+    for (let i = 0; i < Math.min(n, cand.length); i++) mines.push({ x: cand[i].x, y: cand[i].y, ph: rng() * 7 });
+  }
+  function dropMine(t) {
+    const mx = t.x - Math.cos(t.heading) * 24, my = t.y - Math.sin(t.heading) * 24;   // drop behind so the layer doesn't self-detonate
+    if (isSolidAt(mx, my)) return;
+    mines.push({ x: mx, y: my, ph: rng() * 7 });
+    if (SDArt) DECALS.add(mx, my, 10);
+  }
+  function startCampaign(levelIdx, players, difficulty, seed) {
+    mode = 'campaign';
+    if (online && online.ws) disconnectOnline();
+    const np = Math.max(1, Math.min(4, players || 1));
+    campaign = {
+      levelIdx: Math.max(0, Math.min(LEVELS.length - 1, levelIdx | 0)), waveIdx: 0, lives: 2 + np,   // shared pool scales with players
+      players: np, difficulty: difficulty == null ? aiLevel : difficulty,
+      score: 0, phase: 'fight', timer: 0, banner: '',
+    };
+    rng = mulberry32((seed | 0) || 1);
+    loadCampaignLevel();
+    if (!headless) { SDAudio.init(); SDAudio.start(); }
+    applyCursor();
+    return true;
+  }
+  function loadCampaignLevel() {
+    const lv = LEVELS[campaign.levelIdx];
+    buildMazeFrom(ARENAS[lv.arena] || ARENAS.open);
+    shells = []; mines = [];
+    if (lv.mines) placeCampaignMines(lv.mines);
+    tanks = [];
+    for (let i = 0; i < campaign.players; i++) tanks.push(playerTank(i, CAMP_ALLY_SPAWNS[i] || CAMP_ALLY_SPAWNS[0]));
+    bots = tanks.map(() => false);
+    campaign.waveIdx = 0; campaign.phase = 'fight'; campaign.timer = 0; campaign.banner = lv.name;
+    spawnCampaignWave();
+    score = { p1: campaign.score, p2: 0 }; timeLeft = 9999; matchTime = 9999; freezeT = 0; winner = null; tick = 0; shake = 0;
+    state = 'playing';
+    if (SDArt) { TRACKS.clear(); PARTS.clear(); DECALS.clear(); }
+    if (!headless) hideAllOverlays();
+  }
+  function waveScaled(types) {
+    const extra = campaign.players > 1 ? Math.round(types.length * 0.35 * (campaign.players - 1)) : 0;
+    const out = types.slice();
+    for (let i = 0; i < extra; i++) out.push(types[i % types.length]);
+    return out;
+  }
+  function spawnCampaignWave() {
+    const lv = LEVELS[campaign.levelIdx];
+    const raw = lv.waves[campaign.waveIdx] || [];
+    if (raw.indexOf('__boss__') >= 0) {                         // boss wave: spawn the level's boss (never scaled by count)
+      const id = tanks.length;
+      tanks.push(bossTank(id, lv.boss, BOSS_SPAWN));
+      bots[id] = false;
+      return;
+    }
+    const types = waveScaled(raw);
+    let si = 0;
+    for (const type of types) {
+      const s = CAMP_ENEMY_SPAWNS[si % CAMP_ENEMY_SPAWNS.length]; si++;
+      const id = tanks.length;
+      tanks.push(enemyTank(id, type, s));
+      bots[id] = true;
+    }
+  }
+  function aliveCount(team) { let n = 0; for (const t of tanks) if (t.team === team && t.alive) n++; return n; }
+  function onCampaignKill(t) {
+    if (t.team === 'enemy') {
+      campaign.score += t.scoreVal || 10; score.p1 = campaign.score;
+      if (!silent()) SDAudio.point();
+    } else {
+      campaign.lives--;
+      t.respawnT = campaign.lives > 0 ? 1.6 : null;
+    }
+  }
+  function respawnAlly(t) {
+    const s = t.spawn || CAMP_ALLY_SPAWNS[0], p = tileCenter(s.c, s.r);
+    t.x = p.x; t.y = p.y; t.heading = s.a; t.turret = s.a; t.speed = 0; t.vx = 0; t.vy = 0;
+    t.hp = t.maxHp; t.alive = true; t.cd = 0.3; t.path = null; t.respawnT = null; t.invuln = 1.2;
+  }
+  function endCampaign(won) {
+    state = 'over'; campaign.phase = won ? 'won' : 'lost';
+    winner = won ? 'p1' : 'p2'; score.p1 = campaign.score;
+    if (!headless) { SDAudio.roundEnd(); SDAudio.engine(0); maybeOfferScore(); showOverlay('over'); }
+  }
+  function campaignTick() {
+    if (!campaign || state !== 'playing') return;
+    for (const t of tanks) {
+      if (t.invuln > 0) t.invuln -= STEP;
+      if (t.team === 'ally' && !t.alive && t.respawnT != null) { t.respawnT -= STEP; if (t.respawnT <= 0) respawnAlly(t); }
+    }
+    const enemies = aliveCount('enemy');
+    const pendingRespawn = tanks.some(t => t.team === 'ally' && t.respawnT != null);
+    if (aliveCount('ally') === 0 && !pendingRespawn) { endCampaign(false); return; }
+    if (campaign.phase === 'fight' && enemies === 0) {
+      const lv = LEVELS[campaign.levelIdx];
+      if (campaign.waveIdx < lv.waves.length - 1) { campaign.phase = 'clear'; campaign.timer = 1.3; campaign.banner = 'WAVE CLEAR'; }
+      else if (campaign.levelIdx < LEVELS.length - 1) { campaign.phase = 'levelclear'; campaign.timer = 2.2; campaign.banner = 'LEVEL CLEAR'; }
+      else { endCampaign(true); return; }
+    }
+    if (campaign.phase === 'clear') { campaign.timer -= STEP; if (campaign.timer <= 0) { campaign.waveIdx++; campaign.phase = 'fight'; campaign.banner = ''; spawnCampaignWave(); } }
+    if (campaign.phase === 'levelclear') { campaign.timer -= STEP; if (campaign.timer <= 0) { campaign.levelIdx++; campaign.lives = Math.min(2 + campaign.players + 2, campaign.lives + 1); loadCampaignLevel(); } }
+  }
+
+  /* ===================== bosses ===================== */
+  const BOSS_SPAWN = { c: 14, r: 5, a: Math.PI / 2 };
+  const BOSS_DEFS = {
+    bastion: { hp: 18, spd: 0.00, color: '#ff7043', name: 'THE BASTION',  hitR: 30, stationary: true, score: 200 },
+    mauler:  { hp: 22, spd: 1.25, color: '#ef5350', name: 'MAULER',       hitR: 26, frontArmor: true, score: 320 },
+    warlord: { hp: 32, spd: 0.70, color: '#ab47bc', name: 'IRON WARLORD', hitR: 33, score: 600 },
+  };
+  function bossTank(id, type, s) {
+    const d = BOSS_DEFS[type] || BOSS_DEFS.bastion, p = tileCenter(s.c, s.r);
+    const hp = Math.round(d.hp * (1 + 0.5 * ((campaign ? campaign.players : 1) - 1)));
+    return {
+      id, team: 'enemy', type: 'boss', bossType: type, boss: true, bossName: d.name, x: p.x, y: p.y, heading: s.a, turret: s.a,
+      speed: 0, vx: 0, vy: 0, dist: 0, cd: 0, flash: 0, hp, maxHp: hp, alive: true, path: null, pathTick: -999,
+      spdMul: d.spd, fireCd: FIRE_CD, dmg: 1, skill: 0.7, range: [0, 9999], hitR: d.hitR, frontArmor: !!d.frontArmor,
+      stationary: !!d.stationary, scoreVal: d.score, phase: 1, atkCd: 1.6, invuln: 0, enemyColor: d.color,
+    };
+  }
+  function bossCommand(i, cmd) {
+    const t = tanks[i], foe = nearestFoe(t);
+    cmd.turn = 0; cmd.throttle = 0; cmd.aim = null; cmd.fire = false; cmd.aimInstant = false; cmd.turretTurn = TURRET_TURN * 1.1;
+    if (!foe) return;
+    const dx = foe.x - t.x, dy = foe.y - t.y, dist = Math.hypot(dx, dy), toFoe = Math.atan2(dy, dx);
+    cmd.aim = toFoe;
+    if (t.stationary) return;                                   // Bastion holds position
+    const da = wrapAngle(toFoe - t.heading);
+    if (t.bossType === 'mauler') { cmd.turn = Math.max(-1, Math.min(1, da / 0.5)); cmd.throttle = Math.abs(da) < 1.0 ? 1 : 0.25; }
+    else { cmd.turn = Math.max(-1, Math.min(1, da / 0.7)); cmd.throttle = dist > 200 ? 0.5 : (dist < 120 ? -0.4 : 0); }
+  }
+  function bossFire(t, ang) {
+    const bx = t.x + Math.cos(ang) * ((t.hitR || 22) + 4), by = t.y + Math.sin(ang) * ((t.hitR || 22) + 4);
+    shells.push({ x: bx, y: by, vx: Math.cos(ang) * SHELL_SPD * 0.85, vy: Math.sin(ang) * SHELL_SPD * 0.85, life: SHELL_LIFE * 1.4, owner: t.id, dmg: 1 });
+    if (!silent()) SDAudio.fire();
+  }
+  function spawnAdds(type, n) {
+    for (let k = 0; k < n; k++) { const s = CAMP_ENEMY_SPAWNS[(tanks.length + k) % CAMP_ENEMY_SPAWNS.length]; const id = tanks.length; tanks.push(enemyTank(id, type, s)); bots[id] = true; }
+  }
+  function mineRing(t) {
+    for (let j = 0; j < 8; j++) { const a = j / 8 * Math.PI * 2, mx = t.x + Math.cos(a) * 64, my = t.y + Math.sin(a) * 64; if (!isSolidAt(mx, my) && mines.length < 30) mines.push({ x: mx, y: my, ph: rng() * 7 }); }
+  }
+  function onBossPhase(t, phase) {
+    shake = Math.max(shake, 7); if (!silent()) SDAudio.explosion();
+    if (t.bossType === 'bastion' && phase === 2) spawnAdds('grunt', 2);
+    if (t.bossType === 'mauler' && phase === 2) { mineRing(t); spawnAdds('scout', 2); }
+    if (t.bossType === 'warlord' && phase === 2) spawnAdds('scout', 3);
+  }
+  function bossAttack(t) {
+    if (mode !== 'campaign') return;
+    const ratio = t.hp / t.maxHp, newPhase = ratio > 0.66 ? 1 : ratio > 0.33 ? 2 : 3;
+    if (newPhase > t.phase) { onBossPhase(t, newPhase); t.phase = newPhase; }
+    t.atkCd -= STEP; if (t.atkCd > 0) return;
+    const foe = nearestFoe(t); if (!foe) return;
+    const aim = Math.atan2(foe.y - t.y, foe.x - t.x);
+    if (t.bossType === 'bastion') {
+      const k = t.phase >= 2 ? 10 : 8, off = (tick * 0.03) % (Math.PI * 2 / k);
+      for (let j = 0; j < k; j++) bossFire(t, off + j / k * Math.PI * 2);
+      t.atkCd = t.phase >= 2 ? 1.5 : 2.3;
+    } else if (t.bossType === 'mauler') {
+      for (let j = -1; j <= 1; j++) bossFire(t, aim + j * 0.18);
+      t.atkCd = 1.4;
+    } else {                                                    // warlord
+      if (t.phase === 1) { for (let j = 0; j < 4; j++) bossFire(t, aim + j * Math.PI / 2); t.atkCd = 1.7; }
+      else if (t.phase === 2) { bossFire(t, aim); bossFire(t, aim + 0.5); bossFire(t, aim - 0.5); t.atkCd = 1.1; }
+      else { for (let j = -2; j <= 2; j++) bossFire(t, aim + j * 0.16); t.atkCd = 0.9; }
+    }
   }
 
   /* ===================== geometry helpers ===================== */
@@ -219,7 +450,7 @@
     return best;
   }
   function aiCommand(i, cmd) {
-    const me = tanks[i], foe = nearestFoe(me), skill = tankSkill[i] == null ? 0.5 : tankSkill[i];
+    const me = tanks[i], foe = nearestFoe(me), skill = me.skill != null ? me.skill : (tankSkill[i] == null ? 0.5 : tankSkill[i]);
     cmd.turn = 0; cmd.throttle = 0; cmd.aim = null; cmd.fire = false; cmd.aimInstant = false;
     if (!foe || !me.alive) return;
     const dx = foe.x - me.x, dy = foe.y - me.y, dist = Math.hypot(dx, dy), los = lineClear(me.x, me.y, foe.x, foe.y);
@@ -232,7 +463,7 @@
     const cadence = Math.abs(Math.sin(tick * 0.41 + i * 1.7)) < (0.4 + 0.6 * skill);
     cmd.fire = onTarget && los && me.cd <= 0 && freezeT <= 0 && cadence;
     // ---- movement ----
-    let driveAngle = null, throttle = 0; const IDEAL_MIN = 110, IDEAL_MAX = 320;
+    let driveAngle = null, throttle = 0; const _rg = me.range || [110, 320], IDEAL_MIN = _rg[0], IDEAL_MAX = _rg[1];
     let dodge = null;
     if (skill > 0.5) {
       for (const s of shells) { if (s.owner === i) continue; const toward = s.vx * (me.x - s.x) + s.vy * (me.y - s.y); const d = Math.hypot(me.x - s.x, me.y - s.y); if (toward > 0 && d < 150) { dodge = Math.atan2(s.vy, s.vx) + Math.PI / 2; break; } }
@@ -241,6 +472,7 @@
     else if (!los || dist > IDEAL_MAX) { const wp = nextWaypoint(me, foe); driveAngle = wp ? Math.atan2(wp.y - me.y, wp.x - me.x) : Math.atan2(dy, dx); throttle = 1; }
     else if (dist < IDEAL_MIN) { driveAngle = Math.atan2(-dy, -dx); throttle = 1; }
     else if (skill > 0.4) { driveAngle = Math.atan2(dy, dx) + Math.PI / 2 * ((Math.floor(tick / 45 + i) % 2) ? 1 : -1); throttle = 0.75; }
+    if (me.faceFoe && dodge == null && los && dist <= IDEAL_MAX) { driveAngle = Math.atan2(dy, dx); throttle = dist > IDEAL_MIN ? 0.45 : 0; }   // warden keeps its front plate toward the foe
     if (driveAngle != null) {
       driveAngle = safeDir(me, driveAngle);
       const da = wrapAngle(driveAngle - me.heading);
@@ -256,6 +488,13 @@
     if (c.driveVec && c.driveVec.active) { const da = wrapAngle(c.driveVec.angle - me.heading); cmd.turn = Math.max(-1, Math.min(1, da / 0.4)); cmd.throttle = c.driveVec.mag * Math.max(0, Math.cos(da)); }
     else { cmd.turn = (c.right ? 1 : 0) - (c.left ? 1 : 0); cmd.throttle = (c.fwd ? 1 : 0) - (c.back ? 1 : 0); }
     if (mode === 'duel' || mode === 'coop') { cmd.aim = null; cmd.fire = c.fire; }      // turret locked to hull (faithful)
+    else if (mode === 'campaign') {                                  // campaign 1P: mouse/twin-stick turret for P1; co-op locals hull-locked
+      if (i === 0 && campaign && campaign.players === 1) {
+        if (c.aimVec && c.aimVec.active) { cmd.aim = c.aimVec.angle; cmd.fire = true; }
+        else if (touchActive) { cmd.aim = null; cmd.fire = c.fire; }
+        else { cmd.aim = Math.atan2(mouseY - me.y, mouseX - me.x); cmd.fire = c.fire; }
+      } else { cmd.aim = null; cmd.fire = c.fire; }
+    }
     else {                                                            // 1P vs CPU: independent turret
       if (c.aimVec && c.aimVec.active) { cmd.aim = c.aimVec.angle; cmd.fire = true; }
       else if (touchActive) { cmd.aim = null; cmd.fire = c.fire; }
@@ -274,14 +513,16 @@
     for (let i = 0; i < tanks.length; i++) {
       const t = tanks[i]; if (!t.alive) continue;
       cmd.turn = 0; cmd.throttle = 0; cmd.aim = null; cmd.fire = false; cmd.aimInstant = false; cmd.turretTurn = TURRET_TURN;
-      if (bots[i]) aiCommand(i, cmd); else humanCommand(i, cmd);
+      if (t.boss) bossCommand(i, cmd); else if (bots[i]) aiCommand(i, cmd); else humanCommand(i, cmd);
       applyCommand(t, cmd);
+      if (t.boss) bossAttack(t);
       if (Math.abs(t.speed) > 0.4) { t.dist += Math.abs(t.speed); if (SDArt && tick % 3 === 0) TRACKS.add(t.x, t.y, t.heading); moving += Math.abs(t.speed); }
       if (t.flash > 0) t.flash -= STEP * 6;
       if (t.cd > 0) t.cd -= STEP;
       const inFlight = shells.filter(s => s.owner === i).length;
       if (cmd.fire && t.cd <= 0 && freezeT <= 0 && inFlight < MAX_SHELLS) fire(t);
-      for (let m = mines.length - 1; m >= 0; m--) {
+      if (t.lays && mode === 'campaign') { t.mineCd -= STEP; if (t.mineCd <= 0 && t.minesLeft > 0 && mines.length < 30) { dropMine(t); t.minesLeft--; t.mineCd = 2.4 + rng() * 1.4; } }
+      if (!t.boss) for (let m = mines.length - 1; m >= 0; m--) {
         if (Math.hypot(mines[m].x - t.x, mines[m].y - t.y) < MINE_R + TANK_R - 4) {
           const mx = mines[m].x, my = mines[m].y; mines.splice(m, 1);
           if (SDArt) { PARTS.explosion(mx, my, '#ff8a4f'); DECALS.add(mx, my, 26); }
@@ -298,11 +539,18 @@
       let hit = false;
       for (let i = 0; i < tanks.length; i++) {
         const t = tanks[i], owner = tanks[sh.owner];
-        if (t.alive && i !== sh.owner && opposing(owner, t) && Math.hypot(t.x - sh.x, t.y - sh.y) < TANK_R + SHELL_R) { damageTank(i, sh.owner); hit = true; break; }
+        if (t.alive && i !== sh.owner && opposing(owner, t) && Math.hypot(t.x - sh.x, t.y - sh.y) < (t.hitR || TANK_R) + SHELL_R) {
+          if (t.frontArmor && Math.abs(wrapAngle(Math.atan2(sh.y - t.y, sh.x - t.x) - t.heading)) < WARDEN_ARC) {   // front plate deflects — must be flanked
+            t.flash = Math.max(t.flash, 0.5); if (SDArt) PARTS.chips(sh.x, sh.y, '#cfe0ff'); if (!silent()) SDAudio.wall(); shake = Math.max(shake, 1.5); hit = true; break;
+          }
+          damageTank(i, sh.owner, sh.dmg || 1); hit = true; break;
+        }
       }
       if (hit) shells.splice(s, 1);
     }
     if (shake > 0) shake *= 0.85;
+
+    if (mode === 'campaign') { campaignTick(); return; }
 
     timeLeft -= STEP;
     if (timeLeft <= 0) { timeLeft = 0; if (state === 'attract') startAttract(); else endMatch(); }
@@ -310,7 +558,7 @@
 
   function applyCommand(t, cmd) {
     t.heading += Math.max(-1, Math.min(1, cmd.turn)) * HULL_TURN;
-    const th = Math.max(-1, Math.min(1, cmd.throttle)), target = th * (th >= 0 ? MAX_FWD : MAX_REV);
+    const th = Math.max(-1, Math.min(1, cmd.throttle)), target = th * (th >= 0 ? MAX_FWD : MAX_REV) * (t.spdMul || 1);
     t.speed += (target - t.speed) * ACCEL;
     if (Math.abs(target) < 0.01) { t.speed *= FRICTION; if (Math.abs(t.speed) < 0.02) t.speed = 0; }
     moveTank(t);
@@ -331,9 +579,9 @@
   }
   function circleHitsWall(x, y) { for (let a = 0; a < 8; a++) { const ang = a / 8 * 7; if (isSolidAt(x + Math.cos(ang) * TANK_R, y + Math.sin(ang) * TANK_R)) return true; } return isSolidAt(x, y); }
   function fire(t) {
-    t.cd = FIRE_CD; t.flash = 1;
+    t.cd = t.fireCd || FIRE_CD; t.flash = 1;
     const bx = t.x + Math.cos(t.turret) * 21, by = t.y + Math.sin(t.turret) * 21;
-    shells.push({ x: bx, y: by, vx: Math.cos(t.turret) * SHELL_SPD, vy: Math.sin(t.turret) * SHELL_SPD, life: SHELL_LIFE, owner: t.id });
+    shells.push({ x: bx, y: by, vx: Math.cos(t.turret) * SHELL_SPD, vy: Math.sin(t.turret) * SHELL_SPD, life: SHELL_LIFE, owner: t.id, dmg: t.dmg || 1 });
     if (!silent()) SDAudio.fire();
   }
   function damageWall(x, y) {
@@ -347,13 +595,15 @@
   }
   function tankColor(i) {
     const t = tanks[i];
-    if (t && t.team === 'enemy') return '#ff5277';
+    if (t && t.team === 'enemy') return t.enemyColor || '#ff5277';
     if (t && t.team === 'ally' && i === 1) return '#a8f06f';
+    if (t && t.team === 'ally' && i === 2) return '#6fb7f0';
+    if (t && t.team === 'ally' && i === 3) return '#f0d96f';
     return i === 0 ? '#ffb347' : '#46d6e8';
   }
-  function damageTank(i, owner) {
-    const t = tanks[i]; if (!t.alive) return;
-    t.hp = Math.max(0, (t.hp == null ? TANK_MAX_HP : t.hp) - 1);
+  function damageTank(i, owner, dmg) {
+    const t = tanks[i]; if (!t.alive || t.invuln > 0) return;
+    t.hp = Math.max(0, (t.hp == null ? TANK_MAX_HP : t.hp) - (dmg || 1));
     t.flash = 1; shake = Math.max(shake, 3);
     if (t.hp <= 0) { killTank(i, owner); return; }
     if (SDArt) { PARTS.chips(t.x, t.y, tankColor(i)); DECALS.add(t.x, t.y, 12); }
@@ -370,7 +620,9 @@
   function killTank(i) {
     const t = tanks[i]; if (!t.alive) return; t.alive = false; t.hp = 0;
     if (SDArt) { PARTS.explosion(t.x, t.y, tankColor(i)); DECALS.add(t.x, t.y, 30); }
-    if (!silent()) { SDAudio.explosion(); SDAudio.point(); }
+    if (!silent()) SDAudio.explosion();
+    if (mode === 'campaign') { shake = Math.max(shake, 6); onCampaignKill(t); return; }
+    if (!silent()) SDAudio.point();
     shake = 9; awardDeath(i); freezeT = FREEZE;
   }
   function reviveTanks() {
@@ -422,7 +674,7 @@
     if (SDArt && visualMode !== 'classic') TRACKS.draw(ctx);
     const tm = tick * STEP;
     for (const m of mines) SDArt.drawMine(ctx, m, tm, visualMode);
-    for (const t of tanks) if (t.alive) SDArt.drawTank(ctx, t, tm, visualMode);
+    for (const t of tanks) if (t.alive) { if (t.boss) drawBossEntity(t, tm); else SDArt.drawTank(ctx, t, tm, visualMode); }
     drawPlayerNames();
     for (const s of shells) SDArt.drawShell(ctx, s, visualMode);
     if (SDArt && visualMode !== 'classic') PARTS.draw(ctx);
@@ -430,6 +682,30 @@
     ctx.restore();
     drawHUD(T);
     if (visualMode === 'classic') SDArt.classicOverlay(ctx, viewW, viewH);
+  }
+  function drawBossEntity(t, tm) {
+    const r = t.hitR || 26, hit = t.flash > 0;
+    ctx.save();
+    ctx.translate(t.x, t.y);
+    // ground shadow
+    ctx.fillStyle = 'rgba(0,0,0,.35)'; ctx.beginPath(); ctx.ellipse(3, 5, r + 2, r - 2, 0, 0, Math.PI * 2); ctx.fill();
+    // hull
+    const g = ctx.createRadialGradient(-r * 0.3, -r * 0.3, r * 0.2, 0, 0, r);
+    g.addColorStop(0, hit ? '#fff' : '#ffd9cf'); g.addColorStop(0.5, t.enemyColor); g.addColorStop(1, '#3a0d10');
+    ctx.fillStyle = g; ctx.strokeStyle = 'rgba(0,0,0,.55)'; ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+    // segmented armor plating
+    ctx.strokeStyle = 'rgba(0,0,0,.30)'; ctx.lineWidth = 2;
+    for (let a = 0; a < 8; a++) { const ang = a / 8 * Math.PI * 2; ctx.beginPath(); ctx.moveTo(Math.cos(ang) * (r * 0.45), Math.sin(ang) * (r * 0.45)); ctx.lineTo(Math.cos(ang) * r, Math.sin(ang) * r); ctx.stroke(); }
+    // front-armor highlight (Mauler)
+    if (t.frontArmor) { ctx.fillStyle = 'rgba(190,215,255,.5)'; ctx.beginPath(); ctx.arc(0, 0, r, t.heading - WARDEN_ARC, t.heading + WARDEN_ARC); ctx.arc(0, 0, r - 8, t.heading + WARDEN_ARC, t.heading - WARDEN_ARC, true); ctx.closePath(); ctx.fill(); }
+    // core glow keyed to phase
+    ctx.fillStyle = t.phase >= 3 ? 'rgba(255,90,40,.9)' : t.phase >= 2 ? 'rgba(255,170,60,.75)' : 'rgba(255,230,180,.5)';
+    ctx.beginPath(); ctx.arc(0, 0, r * 0.28 + (t.phase >= 3 ? 2 : 0), 0, Math.PI * 2); ctx.fill();
+    // turret barrel
+    ctx.rotate(t.turret); ctx.fillStyle = '#1b1b1f'; ctx.fillRect(0, -5, r + 16, 10);
+    ctx.fillStyle = '#2a2a30'; ctx.fillRect(-8, -9, 18, 18);
+    ctx.restore();
   }
   function drawPlayerNames() {
     if (!online.connected || visualMode === 'classic') return;
@@ -450,6 +726,7 @@
   }
   function drawHUD(T) {
     const w = viewW, h = mobileView ? 56 : HUD_H;
+    if (mode === 'campaign' && campaign && visualMode !== 'classic') { drawCampaignHUD(T, w, h); return; }
     if (visualMode === 'classic') {
       ctx.fillStyle = '#000'; ctx.fillRect(0, 0, w, h);
       const s = mobileView ? 5 : 7;
@@ -472,6 +749,48 @@
     const modeLabel = state === 'attract' ? 'ATTRACT - CPU vs CPU' : onlineLabel + (mode === 'cpu' ? 'P1  vs  CPU' : (mode === 'watch' ? 'CPU 1  vs  CPU 2' : (mode === 'coop' ? 'CO-OP  vs  ENEMY TANKS' : 'P1  vs  P2')));
     ctx.fillText(modeLabel, w / 2, h - 10);
     if (freezeT > 0 && state === 'playing') { ctx.fillStyle = T.inkDim; ctx.font = 'bold 13px Menlo,Consolas,monospace'; ctx.fillText('- RELOADING -', w / 2, h / 2 + 22); }
+  }
+  function drawCampaignHUD(T, w, h) {
+    ctx.fillStyle = 'rgba(0,0,0,0.52)'; ctx.fillRect(0, 0, w, h);
+    ctx.textBaseline = 'middle';
+    const padL = mobileView ? 12 : 22, padR = mobileView ? 12 : 22;
+    // left: score + lives
+    ctx.fillStyle = T.p1; ctx.font = 'bold ' + (mobileView ? 22 : 30) + 'px Menlo,Consolas,monospace'; ctx.textAlign = 'left';
+    ctx.fillText(String(campaign.score).padStart(5, '0'), padL, h / 2 - 8);
+    ctx.font = 'bold 11px Menlo,Consolas,monospace'; ctx.fillStyle = T.inkDim; ctx.fillText('LIVES', padL, h / 2 + 13);
+    for (let i = 0; i < Math.max(0, campaign.lives); i++) { ctx.fillStyle = '#ff5277'; ctx.fillRect(padL + 44 + i * 13, h / 2 + 8, 9, 9); }
+    // center: level + wave / banner
+    const lv = LEVELS[campaign.levelIdx];
+    ctx.textAlign = 'center'; ctx.fillStyle = T.ink; ctx.font = 'bold ' + (mobileView ? 13 : 16) + 'px Menlo,Consolas,monospace';
+    ctx.fillText('LV' + (campaign.levelIdx + 1) + ' · ' + lv.name.toUpperCase(), w / 2, h / 2 - 9);
+    ctx.fillStyle = T.inkDim; ctx.font = '12px Menlo,Consolas,monospace';
+    const sub = campaign.banner && campaign.phase !== 'fight' ? campaign.banner
+      : 'WAVE ' + (campaign.waveIdx + 1) + '/' + lv.waves.length + '  ·  ENEMIES ' + aliveCount('enemy');
+    ctx.fillText(sub, w / 2, h / 2 + 11);
+    // right: player health pips (all allies)
+    const allies = tanks.filter(t => t.team === 'ally');
+    let rx = w - padR;
+    for (let a = 0; a < allies.length; a++) {
+      const t = allies[a];
+      for (let i = TANK_MAX_HP - 1; i >= 0; i--) { ctx.fillStyle = i < t.hp && t.alive ? tankColor(t.id) : 'rgba(255,255,255,.16)'; ctx.fillRect(rx - 11, h / 2 - 4, 9, 9); rx -= 12; }
+      rx -= 8;
+    }
+    // boss health bar (top of the field) when a boss is active
+    const boss = tanks.find(t => t.boss && t.alive);
+    if (boss) {
+      const bw = Math.min(w * 0.62, 380), bx = (w - bw) / 2, by = h + 6;
+      ctx.fillStyle = 'rgba(0,0,0,.55)'; ctx.fillRect(bx - 3, by - 3, bw + 6, 14);
+      ctx.fillStyle = '#2a0c12'; ctx.fillRect(bx, by, bw, 8);
+      ctx.fillStyle = boss.enemyColor; ctx.fillRect(bx, by, bw * Math.max(0, boss.hp / boss.maxHp), 8);
+      ctx.fillStyle = '#fff'; ctx.font = 'bold 10px Menlo,Consolas,monospace'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillText(boss.bossName + '  ·  PHASE ' + boss.phase + '/3', w / 2, by + 19);
+    }
+    // big mid-field banner during clear / level-clear
+    if (campaign.phase === 'clear' || campaign.phase === 'levelclear') {
+      ctx.fillStyle = campaign.phase === 'levelclear' ? '#a8f06f' : T.ink;
+      ctx.font = 'bold 34px Menlo,Consolas,monospace'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillText(campaign.banner, w / 2, HUD_H + FIELD_H / 2);
+    }
   }
   function drawHealthPips(T, w, h) {
     const y = h - 17, size = 6, gap = 4;
@@ -504,8 +823,14 @@
     const map = { title: 'ovTitle', online: 'ovOnline', how: 'ovHow', paused: 'ovPause', over: 'ovOver', scores: 'ovScores' };
     if (map[which]) { const e = $(map[which]); if (e) e.classList.remove('hidden'); }
     if (which === 'over') {
-      const w = $('overResult'); if (w) w.textContent = winner === 'draw' ? 'DRAW' : (winner === 'p1' ? (mode === 'cpu' ? 'YOU WIN' : (mode === 'watch' ? 'CPU 1 WINS' : (mode === 'coop' ? 'TEAM WINS' : 'PLAYER 1 WINS'))) : (mode === 'cpu' ? 'CPU WINS' : (mode === 'watch' ? 'CPU 2 WINS' : (mode === 'coop' ? 'ENEMY TANKS WIN' : 'PLAYER 2 WINS'))));
-      const sc = $('overScore'); if (sc) sc.textContent = score.p1 + ' — ' + score.p2;
+      const w = $('overResult');
+      if (mode === 'campaign' && campaign) {
+        if (w) w.textContent = campaign.phase === 'won' ? 'CAMPAIGN COMPLETE' : 'GAME OVER';
+        const sc = $('overScore'); if (sc) sc.textContent = 'SCORE ' + campaign.score + ' · REACHED LV' + (campaign.levelIdx + 1);
+      } else {
+        if (w) w.textContent = winner === 'draw' ? 'DRAW' : (winner === 'p1' ? (mode === 'cpu' ? 'YOU WIN' : (mode === 'watch' ? 'CPU 1 WINS' : (mode === 'coop' ? 'TEAM WINS' : 'PLAYER 1 WINS'))) : (mode === 'cpu' ? 'CPU WINS' : (mode === 'watch' ? 'CPU 2 WINS' : (mode === 'coop' ? 'ENEMY TANKS WIN' : 'PLAYER 2 WINS'))));
+        const sc = $('overScore'); if (sc) sc.textContent = score.p1 + ' — ' + score.p2;
+      }
     }
   }
   function startAttract() { state = 'attract'; mode = 'cpu'; bots = [true, true]; tankSkill = [0.72, 0.6]; matchTime = DEFAULT_TIME; resetMatch((tick + 7) * 2654435761 >>> 0 || 11); state = 'attract'; }
@@ -760,6 +1085,7 @@
     async submit(name, sc) { this.last = { name, score: sc }; try { await fetch(this.BASE + this.NS, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ initials: name, score: sc }) }); this.cache = null; } catch (e) {} },
   };
   function scoreSubject() {
+    if (mode === 'campaign' && campaign) return { points: Math.max(0, campaign.score), label: campaign.players > 1 ? 'Co-op' : 'You', mode: 'campaign Lv' + (campaign.levelIdx + 1) };
     if (mode === 'coop') return { points: Math.max(0, score.p1), label: 'Team', mode: 'co-op' };
     if (mode === 'duel') {
       const p2Win = winner === 'p2' || score.p2 > score.p1;
@@ -769,6 +1095,7 @@
   }
   function scoreValue() {
     const s = scoreSubject();
+    if (mode === 'campaign' && campaign) return s.points * 100 + Math.min(99, (campaign.levelIdx + 1));
     const modeBonus = mode === 'cpu' ? Math.round(aiLevel) : (mode === 'coop' ? 75 : 40);
     return s.points * 100 + modeBonus;
   }
@@ -808,13 +1135,12 @@
     keys[c] = down;
     const c0 = controls[0], c1 = controls[1];
     c0.fwd = !!keys['KeyW']; c0.back = !!keys['KeyS']; c0.left = !!keys['KeyA']; c0.right = !!keys['KeyD'];
-    if (mode === 'duel' || mode === 'coop') {
-      c0.fire = !!keys['Space'];
-      if (!(online.connected && online.role === 'p1')) {
-        c1.fwd = !!keys['ArrowUp']; c1.back = !!keys['ArrowDown']; c1.left = !!keys['ArrowLeft']; c1.right = !!keys['ArrowRight']; c1.fire = !!(keys['Enter'] || keys['ShiftRight']);
-      }
+    c0.fire = !!keys['Space'];
+    // local two-player keyboard: P2 on arrows + Enter/RShift (duel, survival co-op, and campaign co-op)
+    const twoLocal = (mode === 'duel' || mode === 'coop' || (mode === 'campaign' && campaign && campaign.players > 1)) && !(online.connected && online.role === 'p1');
+    if (twoLocal) {
+      c1.fwd = !!keys['ArrowUp']; c1.back = !!keys['ArrowDown']; c1.left = !!keys['ArrowLeft']; c1.right = !!keys['ArrowRight']; c1.fire = !!(keys['Enter'] || keys['ShiftRight']);
     }
-    else { c0.fire = !!keys['Space']; }
     if (!down) return;
     if (c === 'KeyP' || c === 'Escape') { if (state === 'playing') { state = 'paused'; showOverlay('paused'); } else if (state === 'paused') { state = 'playing'; hideAllOverlays(); } }
     if (c === 'KeyM') { muted = !muted; SDAudio.setMuted(muted); const b = $('btnMute'); if (b) b.textContent = muted ? '🔇' : '🔊'; }
@@ -980,6 +1306,85 @@
     startGame('duel', 9); applySnapshot(snap);
     ok('T-online snapshot', mode === 'coop' && tanks.length === 4 && tanks[0].team === 'ally' && online.names.p1 === 'JEZ' && wallHP[9][9] === snap.wallHP[9][9], 'mode=' + mode + ' tanks=' + tanks.length);
 
+    // ---- Campaign tests ----
+    const pcamp = campaign;
+
+    // T-C6 determinism: same seed + scripted bot run → identical campaign outcome hash
+    const campHash = () => { startCampaign(0, 1, 45, 4242); headless = true; bots[0] = true; tankSkill[0] = 0.7; for (let i = 0; i < 400; i++) { update(); if (state !== 'playing') break; } return snapHash() + '|' + campaign.score + '|' + campaign.levelIdx + '|' + campaign.waveIdx; };
+    const cA = campHash(), cB = campHash();
+    ok('T-C6 campaign determinism', cA === cB, cA === cB ? '' : 'mismatch');
+
+    // T-C1 progression: clearing enemies advances wave/level; losing all lives → game over
+    startCampaign(0, 1, 45, 7); headless = true;
+    const startLv = campaign.levelIdx, startWave = campaign.waveIdx, e0 = aliveCount('enemy');
+    for (const t of tanks) if (t.team === 'enemy') { t.alive = false; t.hp = 0; }
+    let advanced = false; for (let i = 0; i < 200; i++) { update(); if (campaign.levelIdx > startLv || campaign.waveIdx > startWave) { advanced = true; break; } }
+    startCampaign(2, 1, 45, 7); headless = true; const reachedL3 = campaign.levelIdx === 2 && campaign.name !== undefined;
+    startCampaign(0, 1, 45, 7); headless = true; campaign.lives = 1;
+    let gameOver = false; for (let g = 0; g < 5 && !gameOver; g++) { const a = tanks.find(t => t.team === 'ally' && t.alive); if (a) killTank(tanks.indexOf(a)); for (let i = 0; i < 200; i++) { update(); if (state === 'over') { gameOver = true; break; } } }
+    ok('T-C1 progression', e0 > 0 && advanced && gameOver, 'e0=' + e0 + ' adv=' + advanced + ' over=' + gameOver);
+
+    // T-C2 enemy types: distinct stats (scout fast/fragile, brute tanky/slow, sniper long-range)
+    const scoutE = enemyTank(99, 'scout', { c: 14, r: 8, a: Math.PI }), bruteE = enemyTank(98, 'brute', { c: 14, r: 8, a: Math.PI });
+    ok('T-C2 enemy types', scoutE.spdMul > bruteE.spdMul && bruteE.hp > scoutE.hp && ENEMY_TYPES.sniper.range[0] > ENEMY_TYPES.grunt.range[0] + 100, 'scoutSpd=' + scoutE.spdMul + ' bruteHp=' + bruteE.hp + ' sniperMin=' + ENEMY_TYPES.sniper.range[0]);
+
+    // T-C2 layer: drops mines over time
+    startCampaign(0, 1, 45, 21); headless = true;
+    for (const t of tanks) if (t.team === 'enemy') { t.alive = false; t.hp = 0; }
+    const lidx = tanks.length, layerE = enemyTank(lidx, 'layer', { c: 14, r: 8, a: 0 }); layerE.mineCd = 0.05; tanks.push(layerE); bots[lidx] = true; controls[lidx] = ctrl();
+    const lm0 = mines.length;
+    for (let i = 0; i < 50; i++) update();
+    ok('T-C2 layer drops mines', mines.length > lm0, 'm0=' + lm0 + ' now=' + mines.length);
+
+    // T-C2 warden: front plate deflects shells, flank shots damage
+    startCampaign(0, 1, 45, 22); headless = true;
+    for (const t of tanks) if (t.team === 'enemy') { t.alive = false; t.hp = 0; }
+    const widx = tanks.length, wardenE = enemyTank(widx, 'warden', { c: 14, r: 8, a: 0 }); wardenE.heading = 0; wardenE.turret = 0; tanks.push(wardenE); bots[widx] = false; controls[widx] = ctrl();
+    const whp0 = wardenE.hp;
+    shells.push({ x: wardenE.x + TANK_R + 3, y: wardenE.y, vx: -SHELL_SPD, vy: 0, life: SHELL_LIFE, owner: 0, dmg: 1 });
+    for (let i = 0; i < 8 && shells.length; i++) update();
+    const frontSafe = wardenE.alive && wardenE.hp === whp0;
+    shells.push({ x: wardenE.x - TANK_R - 3, y: wardenE.y, vx: SHELL_SPD, vy: 0, life: SHELL_LIFE, owner: 0, dmg: 1 });
+    for (let i = 0; i < 8 && shells.length; i++) update();
+    ok('T-C2 warden front armor', frontSafe && wardenE.hp < whp0, 'front=' + frontSafe + ' flankHp=' + wardenE.hp + '/' + whp0);
+
+    // T-C4 campaign-arena walls solid: drive a tank into the walls of every arena, never breach the border
+    let clipFree = true;
+    for (const akey of Object.keys(ARENAS)) {
+      mode = 'campaign'; campaign = null; buildMazeFrom(ARENAS[akey]); shells = []; mines = []; state = 'playing';
+      for (let dir = 0; dir < 4; dir++) {
+        tanks = [playerTank(0, { c: 2, r: 8, a: dir * Math.PI / 2 })]; bots = [false]; controls = fresh(); controls[0].fwd = true;
+        for (let i = 0; i < 70; i++) { update(); const t = tanks[0]; if (t.x < 3 || t.x > FIELD_W - 3 || t.y < HUD_H + 3 || t.y > HUD_H + FIELD_H - 3) clipFree = false; }
+      }
+    }
+    ok('T-C4 campaign walls solid', clipFree);
+
+    // T-C3 boss: spawns big, survives hits, transitions phases, defeat advances/wins
+    const bossLevelIdx = LEVELS.findIndex(l => l.boss);
+    startCampaign(bossLevelIdx, 1, 45, 33); headless = true;
+    let bss = tanks.find(t => t.boss);
+    const bossSpawned = !!bss && bss.maxHp >= 12 && aliveCount('enemy') === 1;
+    bss.hp -= 2; const bossSurvived = bss.alive && bss.hp > 0;
+    bss.hp = Math.max(1, Math.floor(bss.maxHp * 0.2)); for (let i = 0; i < 20; i++) update();
+    bss = tanks.find(t => t.boss); const bossPhased = !!bss && bss.phase >= 3;
+    const lvl0 = campaign.levelIdx;
+    for (const t of tanks) if (t.team === 'enemy') { t.alive = false; t.hp = 0; }   // defeat boss (+ any adds)
+    let bossCleared = false; for (let j = 0; j < 240; j++) { update(); if (campaign.levelIdx > lvl0 || (state === 'over' && campaign.phase === 'won')) { bossCleared = true; break; } }
+    ok('T-C3 boss', bossSpawned && bossSurvived && bossPhased && bossCleared, 'spawn=' + bossSpawned + ' surv=' + bossSurvived + ' phase=' + (bss ? bss.phase : '?') + ' cleared=' + bossCleared);
+
+    // T-C5 co-op scaling: more players → more enemies + larger shared life pool; one death ≠ game over; shared score
+    startCampaign(0, 1, 45, 5); headless = true; const soloEnemies = aliveCount('enemy');
+    startCampaign(0, 3, 45, 5); headless = true; const trioEnemies = aliveCount('enemy'), trioAllies = aliveCount('ally'), trioLives = campaign.lives;
+    startCampaign(1, 2, 45, 5); headless = true;
+    killTank(0);                                                  // one ally down
+    let coopOver = false; for (let i = 0; i < 60; i++) { update(); if (state === 'over') { coopOver = true; break; } }
+    const survivesOneDown = !coopOver && aliveCount('ally') >= 1;
+    const sc0 = campaign.score, foe = tanks.find(t => t.team === 'enemy' && t.alive); if (foe) killTank(tanks.indexOf(foe));
+    const sharedScore = campaign.score > sc0;
+    ok('T-C5 co-op scaling', trioEnemies > soloEnemies && trioAllies === 3 && trioLives >= 4 && survivesOneDown && sharedScore,
+      'solo=' + soloEnemies + ' trio=' + trioEnemies + ' allies=' + trioAllies + ' lives=' + trioLives + ' survive=' + survivesOneDown + ' shared=' + sharedScore);
+
+    campaign = pcamp;
     online = ponline;
     headless = ph; mode = pmode; state = ps;
     const pass = out.filter(o => o.pass).length;
@@ -990,6 +1395,18 @@
   function setupShot(scene) {
     headless = true; if (SDArt) PARTS.clear();
     hideAllOverlays(); if (scene === 'title') { const e = $('ovTitle'); if (e) e.classList.remove('hidden'); }
+    if (scene === 'campaign' || scene === 'coop' || scene === 'boss') {
+      visualMode = 'hd';
+      if (scene === 'boss') { const bi = LEVELS.findIndex(l => l.boss); startCampaign(bi, 1, 60, 5); const b = tanks.find(t => t.boss); if (b) b.hp = Math.round(b.maxHp * 0.55); }
+      else startCampaign(scene === 'coop' ? 4 : 2, scene === 'coop' ? 2 : 1, 60, scene === 'coop' ? 8 : 4);
+      headless = true;
+      for (let i = 0; i < 80; i++) update();
+      if (tanks[0] && tanks[0].alive) { tanks[0].turret = scene === 'boss' ? -1.2 : -0.35; tanks[0].cd = 0; fire(tanks[0]); }
+      let fired = 0; for (const t of tanks) if (t.team === 'enemy' && t.alive && (t.boss || fired++ < 2)) { if (t.boss) { t.atkCd = 0; bossAttack(t); } else { t.cd = 0; fire(t); } }
+      for (let i = 0; i < 5; i++) update();
+      if (SDArt) for (let i = 0; i < 6; i++) { PARTS.update(STEP); TRACKS.update(STEP); }
+      render(); return;
+    }
     mode = scene === 'classic' ? 'duel' : 'cpu'; visualMode = scene === 'classic' ? 'classic' : 'hd';
     tankSkill = [0.75, 0.7];
     resetMatch(scene === 'duel' ? 5 : scene === 'explosion' ? 11 : scene === 'minefield' ? 3 : 7);
@@ -1013,6 +1430,8 @@
 
     const click = (id, fn) => { const e = $(id); if (e) e.addEventListener('click', () => { SDAudio.ui(); fn(); }); };
     click('btnDuel', () => { disconnectOnline(); startGame('duel'); }); click('btnCoop', () => { disconnectOnline(); startGame('coop'); }); click('btnCpu', () => { disconnectOnline(); startGame('cpu'); }); click('btnWatch', () => { disconnectOnline(); startGame('watch'); });
+    click('btnCampaign', () => { disconnectOnline(); startCampaign(0, 1, aiLevel, (Math.random() * 1e9) | 0); });
+    click('btnCampaign2', () => { disconnectOnline(); startCampaign(0, 2, aiLevel, (Math.random() * 1e9) | 0); });
     click('btnOnline', () => { showOverlay('online'); refreshOpenRooms(); const r = $('onlineRoom'); if (r) r.focus(); });
     click('btnOnlineConnect', connectOnline);
     click('btnRoomsRefresh', refreshOpenRooms);
@@ -1042,6 +1461,7 @@
     headless = q.has('headless');
     if (q.has('test')) { const r = runTests(); console.log('[Steel Duel] tests ' + r.pass + '/' + r.total, r.details.filter(d => !d.pass)); }
     if (q.has('shot')) { setupShot(q.get('shot')); window.__shotReady = true; }
+    else if (q.has('campaign')) { startCampaign((parseInt(q.get('campaign'), 10) || 1) - 1, parseInt(q.get('players'), 10) || 1, aiLevel, 1); }
     else { startAttract(); showOverlay('title'); }
     if (q.has('bots')) { startGame('cpu'); bots = [true, true]; tankSkill = [0.8, 0.8]; }
 
@@ -1066,6 +1486,16 @@
     step(n) { n = n || 1; for (let i = 0; i < n; i++) update(); render(); return true; },
     snap() { render(); return true; }, fire(i) { fire(tanks[i || 0]); }, kill(i) { killTank(i || 0); },
     shot: setupShot, runTests, hash: snapHash, scores: () => Scores,
+    // ---- campaign hooks ----
+    startCampaign(level, players, difficulty, seed) { headless = headless || false; return startCampaign(level || 0, players || 1, difficulty == null ? 45 : difficulty, seed == null ? 1 : seed); },
+    get campaign() { return campaign ? { levelIdx: campaign.levelIdx, level: campaign.levelIdx + 1, name: LEVELS[campaign.levelIdx].name, waveIdx: campaign.waveIdx, wave: campaign.waveIdx + 1, waves: LEVELS[campaign.levelIdx].waves.length, lives: campaign.lives, players: campaign.players, phase: campaign.phase, score: campaign.score, enemiesLeft: aliveCount('enemy'), alliesLeft: aliveCount('ally') } : null; },
+    get enemies() { return tanks.filter(t => t.team === 'enemy'); },
+    get allies() { return tanks.filter(t => t.team === 'ally'); },
+    get boss() { return tanks.find(t => t.team === 'enemy' && t.boss) || null; },
+    spawnEnemy(type, c, r) { if (!campaign) return null; const id = tanks.length; const t = enemyTank(id, type || 'grunt', { c: c == null ? 20 : c, r: r == null ? 8 : r, a: Math.PI }); tanks.push(t); bots[id] = true; return t; },
+    clearEnemies() { for (const t of tanks) if (t.team === 'enemy') { t.alive = false; t.hp = 0; } },
+    loseLife() { const a = tanks.find(t => t.team === 'ally' && t.alive); if (a) killTank(tanks.indexOf(a)); },
+    levels: () => LEVELS,
   };
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot); else boot();
