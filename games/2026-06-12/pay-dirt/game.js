@@ -15,8 +15,7 @@ let ctx = mainCtx;
 let viewScale = 1, DPR = 1, canvasLeft = 0, canvasTop = 0, screenW = VIEW_W, screenH = VIEW_H;
 let mobileCamera = false;
 function lowPowerRender(){
-  return mobileCamera || viewScale < 0.78 || matchMedia('(pointer: coarse)').matches ||
-    /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent || '');
+  return viewScale < 0.58;
 }
 function wantsMobileCamera(vw, vh){
   const coarse = matchMedia('(pointer: coarse)').matches ||
@@ -1069,6 +1068,7 @@ function buildHowTo(){
     '<span style="color:#3fd2c7">Boots</span> speed · <span style="color:#b07fff">Cloak</span> phase through guards · ' +
     '<span style="color:#ffd23f">Magnet</span> grabs gold · <span style="color:#7fd24a">Shovel</span> instant digs.</p>' +
     '<p><b>Lantern oil</b> briefly widens the painted light pool; maps briefly boost magnet pull. Chain nuggets fast for a <b>combo multiplier</b>.</p>' +
+    '<p><b>Phone:</b> drag to move or climb; tap the ground left/right of the miner to dig that side.</p>' +
     '<p><span class="k">P</span> pause · <span class="k">M</span> mute · <span class="k">R</span> restart.</p>';
 }
 
@@ -1106,6 +1106,80 @@ function initTouch(){
   const spans = $('initials').children;
   for (let i = 0; i < 3; i++)
     spans[i].addEventListener('click', () => { initCursor = i; cycleInitial(i, 1); });
+  initTouchGestures();
+}
+
+function clearTouchMoveKeys(){
+  keys.ArrowLeft = keys.ArrowRight = keys.ArrowUp = keys.ArrowDown = false;
+}
+function pulseDigKey(code){
+  keys[code] = true;
+  setTimeout(() => { keys[code] = false; }, 150);
+}
+function clientToGameScreen(clientX, clientY){
+  const rect = canvas.getBoundingClientRect();
+  const sx = rect.width ? (clientX - rect.left) / rect.width * screenW : clientX;
+  const sy = rect.height ? (clientY - rect.top) / rect.height * screenH : clientY;
+  return {x: sx, y: sy};
+}
+function playerScreenX(){
+  if (!player) return screenW / 2;
+  if (mobileCamera && mobileView){
+    return (px(player.x) - mobileView.x) / mobileView.w * screenW;
+  }
+  return px(player.x);
+}
+function handleTouchDig(clientX, clientY){
+  if (state !== 'playing' || !player) return false;
+  const p = clientToGameScreen(clientX, clientY);
+  const hudH = mobileCamera ? mobileHudHeight() : HUD_H;
+  if (p.y < hudH + 24) return false;
+  AUDIO.ensure();
+  pulseDigKey(p.x < playerScreenX() ? 'KeyZ' : 'KeyX');
+  return true;
+}
+function initTouchGestures(){
+  const gesture = {id: null, sx: 0, sy: 0, x: 0, y: 0, t: 0, moved: false};
+  const setMove = (dx, dy) => {
+    clearTouchMoveKeys();
+    const ax = Math.abs(dx), ay = Math.abs(dy);
+    if (ax > 18 && ax >= ay * 0.72) keys[dx < 0 ? 'ArrowLeft' : 'ArrowRight'] = true;
+    if (ay > 22 && ay > ax * 0.62) keys[dy < 0 ? 'ArrowUp' : 'ArrowDown'] = true;
+  };
+  const reset = () => {
+    gesture.id = null;
+    clearTouchMoveKeys();
+  };
+  canvas.addEventListener('pointerdown', e => {
+    if (e.pointerType === 'mouse' || e.target.closest('button,.panel')) return;
+    if (state !== 'playing') return;
+    e.preventDefault();
+    document.body.classList.add('touch');
+    AUDIO.ensure();
+    gesture.id = e.pointerId; gesture.sx = gesture.x = e.clientX; gesture.sy = gesture.y = e.clientY;
+    gesture.t = performance.now(); gesture.moved = false;
+    try { canvas.setPointerCapture(e.pointerId); } catch (err) {}
+  });
+  canvas.addEventListener('pointermove', e => {
+    if (e.pointerId !== gesture.id) return;
+    e.preventDefault();
+    gesture.x = e.clientX; gesture.y = e.clientY;
+    const dx = gesture.x - gesture.sx, dy = gesture.y - gesture.sy;
+    if (Math.hypot(dx, dy) > 13) gesture.moved = true;
+    if (gesture.moved) setMove(dx, dy);
+  });
+  const finish = e => {
+    if (e.pointerId !== gesture.id) return;
+    e.preventDefault();
+    const elapsed = performance.now() - gesture.t;
+    const dist = Math.hypot(e.clientX - gesture.sx, e.clientY - gesture.sy);
+    clearTouchMoveKeys();
+    if (elapsed < 280 && dist < 16) handleTouchDig(e.clientX, e.clientY);
+    reset();
+  };
+  canvas.addEventListener('pointerup', finish);
+  canvas.addEventListener('pointercancel', reset);
+  canvas.addEventListener('lostpointercapture', reset);
 }
 
 function playerInput(){
@@ -2336,6 +2410,7 @@ function renderWorldFrame(includeHUD){
 
 let worldCv = null, worldCx = null;
 let camX = 0, camY = HUD_H;
+let mobileView = null;
 function ensureWorldCanvas(){
   if (worldCv) return;
   worldCv = document.createElement('canvas');
@@ -2426,6 +2501,7 @@ function renderMobileCamera(){
   const playH = Math.max(1, screenH - hudH);
   const zoom = mobileCameraScale();
   const cam = updateMobileCamera(playH, zoom);
+  mobileView = {x: cam.x, y: cam.y, w: cam.w, h: cam.h, hudH, playH};
   ctx.save();
   ctx.beginPath();
   ctx.rect(0, hudH, screenW, playH);
