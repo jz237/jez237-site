@@ -218,3 +218,23 @@ Changes:
 Verification:
 - `node --check game.js`, `audio.js`, and `art.js` passed.
 - Chrome DevTools mobile smoke confirmed `mobileCamera=true`, `lowPower=false`, hidden touch pad, drag-to-move, and tap-to-dig creating a hole.
+
+## v1 Revert + v2 Glow Cache Fix — mobile crash follow-up
+Jez tested the mobile GPU safety pass and reported the exact same crash, so v1 was reverted before making a different fix.
+
+v2 finding:
+- The glow sprite cache keyed off full color strings.
+- Several painterly light effects build `rgba(...)` strings with pulsing alpha values every frame.
+- That meant the game could create a new 64x64 cached glow canvas every frame instead of reusing one, which fits the delayed "plays fine, then blinks, then crashes" report much better than a bad image load.
+
+v2 changes:
+- Quantized dynamic glow alpha values into reusable cache keys.
+- Capped the glow sprite cache at 96 entries.
+- Added a debug `__g.glowCacheSize` counter for stress tests.
+
+v2 verification:
+- `node --check game.js`, `audio.js`, and `art.js` passed.
+- `git diff --check` passed.
+- Chrome DevTools mobile stress at 390x844 / DPR 3 ran title plus live play for about 47 seconds.
+- `__g.glowCacheSize` rose from 26 to 96 and then stayed capped instead of growing without bound.
+- The page stayed in `playing`, sampled a nonblank canvas pixel, and did not report a page crash.
