@@ -154,7 +154,7 @@ export class SteelDuelRoom extends DurableObject {
       t: Date.now(),
     }, ws);
 
-    if (data.type === "hello" || data.type === "start") {
+    if (data.type === "hello" || data.type === "start" || data.type === "ready") {
       await this.syncLobby(meta.room);
     }
   }
@@ -187,8 +187,8 @@ export class SteelDuelRoom extends DurableObject {
   allowed(data, meta) {
     if (!data || typeof data.type !== "string") return false;
     if (data.type === "ping" || data.type === "hello") return true;
-    if (meta.role === "p1") return ["start", "snapshot", "chat"].includes(data.type);
-    if (meta.role === "p2") return ["input", "chat"].includes(data.type);
+    if (meta.role === "p1") return ["ready", "start", "snapshot", "chat"].includes(data.type);
+    if (meta.role === "p2") return ["ready", "input", "chat"].includes(data.type);
     return data.type === "chat";
   }
 
