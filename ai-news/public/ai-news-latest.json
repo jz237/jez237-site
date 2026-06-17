@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-17T15:00:01.995771+00:00",
+  "updatedAt": "2026-06-17T16:00:02.075644+00:00",
   "items": [
     {
       "title": "Hadi Mehdizavareh, Gabriele Santangelo, Giovanna Nicora, Simon Lebech Cichosz, Arianna Dagliati, Arijit Khan, Riccard...",
@@ -10,12 +10,140 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-17T15:00:09.682216+00:00",
+      "published": "2026-06-17T16:00:11.398711+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-17T15:00:01.995771+00:00",
+      "lastSeen": "2026-06-17T16:00:02.075644+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
+    },
+    {
+      "title": "Henrique Schmaiske and the human work behind Meteor 3.0",
+      "url": "https://thenextweb.com/news/henrique-schmaiske-and-the-human-work-behind-meteor-3-0",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Meteor.js is one of those open-source projects developers have lived with for years. It has over 44,800 GitHub stars, more than 500,000 active installations worldwide, and still sits inside products across many countries. Behind its largest release in over ten years, Meteor 3.0, is Henrique Schmaiske, CTO of Meteor Software, who started the work in April 2022 [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/henrique-schmaiske-meteor-3-human-work.avif",
+      "published": "2026-06-17T15:41:53+00:00",
+      "firstSeen": "2026-06-17T16:00:02.075644+00:00",
+      "lastSeen": "2026-06-17T16:00:02.075644+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.8408
+    },
+    {
+      "title": "MolmoMotion: Language-guided 3D motion forecasting",
+      "url": "https://huggingface.co/blog/allenai/molmomotion",
+      "source": "Hugging Face Blog",
+      "sourceUrl": "https://huggingface.co/blog/feed.xml",
+      "sourceWeight": 0.95,
+      "category": "AI",
+      "summary": "",
+      "image": "https://cdn-uploads.huggingface.co/production/uploads/638e39b249de7ae552d977b5/wdq3AFZcDZAekGTb16VDy.png",
+      "published": "2026-06-17T15:26:44+00:00",
+      "firstSeen": "2026-06-17T16:00:02.075644+00:00",
+      "lastSeen": "2026-06-17T16:00:02.075644+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.4132
+    },
+    {
+      "title": "The slowtech revolution is here to kill your phone addiction and rescue your attention span",
+      "url": "https://techcrunch.com/2026/06/17/the-slowtech-revolution-is-here-to-kill-your-phone-addiction-and-rescue-your-attention-span",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "“People just really want to take back control of their time, their lives, their attention... They’re down for whatever helps them do that.”",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/GettyImages-2238192342.jpg?resize=1200%2C800",
+      "published": "2026-06-17T15:24:41+00:00",
+      "firstSeen": "2026-06-17T16:00:02.075644+00:00",
+      "lastSeen": "2026-06-17T16:00:02.075644+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2721
+    },
+    {
+      "title": "Poland bought a stake in ElevenLabs to grow its next AI champion",
+      "url": "https://thenextweb.com/news/poland-elevenlabs-stake-ai-lab-poland",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Poland produced one of the world’s most valuable AI companies almost by accident. Now it is spending public money to make sure the next one stays closer to home. Vinci, the venture arm of Poland’s state development bank BGK, has taken an $11mn stake in ElevenLabs, the AI-voice firm valued at $11bn. The same day, [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/ElevenLabs-team-puglia.avif",
+      "published": "2026-06-17T15:16:00+00:00",
+      "firstSeen": "2026-06-17T16:00:02.075644+00:00",
+      "lastSeen": "2026-06-17T16:00:02.075644+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1278
+    },
+    {
+      "title": "New research shows how AMIE, our medical AI, could help manage health conditions.",
+      "url": "https://blog.google/innovation-and-ai/models-and-research/google-research/amie-for-disease-management-in-nature",
+      "source": "Google AI Blog",
+      "sourceUrl": "https://blog.google/technology/ai/rss/",
+      "sourceWeight": 0.95,
+      "category": "AI",
+      "summary": "Research in “Nature” shows our conversational AI system matches primary care physicians in complex disease management.",
+      "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/AMIE_Mx_Nature_Social_Visual_Va.max-600x600.format-webp.webp",
+      "published": "2026-06-17T15:00:00+00:00",
+      "firstSeen": "2026-06-17T16:00:02.075644+00:00",
+      "lastSeen": "2026-06-17T16:00:02.075644+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.7998
+    },
+    {
+      "title": "Collecting robot training data is dirty, unglamorous work. Some AI labs are already paying XDOF to do it.",
+      "url": "https://techcrunch.com/2026/06/17/collecting-robot-training-data-is-dirty-unglamorous-work-some-ai-labs-are-already-paying-xdof-to-do-it",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "If physical AI is going to match the accomplishments of LLMs, there's a data problem that needs to be solved.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/DSC_2479.jpg?resize=1200%2C800",
+      "published": "2026-06-17T15:00:00+00:00",
+      "firstSeen": "2026-06-17T16:00:02.075644+00:00",
+      "lastSeen": "2026-06-17T16:00:02.075644+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.5598
+    },
+    {
+      "title": "a16z is betting $38M that you want an AI ‘teammate’, not another agent",
+      "url": "https://thenextweb.com/news/convey-38-million-series-a-a16z-ai-teammates",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The word “agent” is everywhere in enterprise software right now, which is exactly why Convey does not want to use it. The startup has raised a $38mn Series A led by Andreessen Horowitz, with Khosla Ventures and Pear VC joining. Its pitch is a deliberate rebrand: not AI agents that complete tasks, but AI “teammates” [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/Convey-team.avif",
+      "published": "2026-06-17T14:47:50+00:00",
+      "firstSeen": "2026-06-17T16:00:02.075644+00:00",
+      "lastSeen": "2026-06-17T16:00:02.075644+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.8138
+    },
+    {
+      "title": "SAP just funded a startup built to help its own customers escape SAP",
+      "url": "https://thenextweb.com/news/conduct-60-million-series-a-index-iconiq-sap",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "There is an unglamorous deadline bearing down on corporate IT, and it has just produced one of London’s more interesting AI raises. Conduct, a 35-person startup founded by three former Palantir engineers, has raised a $60mn Series A co-led by Index Ventures and ICONIQ, with SAP itself investing. The round takes its total funding to [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/Conduct-team.avif",
+      "published": "2026-06-17T14:45:40+00:00",
+      "firstSeen": "2026-06-17T16:00:02.075644+00:00",
+      "lastSeen": "2026-06-17T16:00:02.075644+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1128
     },
     {
       "title": "State of the blog, mid-2026",
@@ -28,10 +156,10 @@
       "image": "https://substack-post-media.s3.amazonaws.com/public/images/06077e73-d656-4396-bda7-34b45e920822_3182x1790.png",
       "published": "2026-06-17T14:29:06+00:00",
       "firstSeen": "2026-06-17T15:00:01.995771+00:00",
-      "lastSeen": "2026-06-17T15:00:01.995771+00:00",
+      "lastSeen": "2026-06-17T16:00:02.075644+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3444
+      "score": 2.3147
     },
     {
       "title": "Google’s first speaker in six years is really a $10-a-month Gemini subscription",
@@ -44,10 +172,10 @@
       "image": "https://media.thenextweb.com/2026/06/Google_Home_Speakers.avif",
       "published": "2026-06-17T14:27:58+00:00",
       "firstSeen": "2026-06-17T15:00:01.995771+00:00",
-      "lastSeen": "2026-06-17T15:00:01.995771+00:00",
+      "lastSeen": "2026-06-17T16:00:02.075644+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.1338
+      "score": 8.1041
     },
     {
       "title": "Pramaana Labs raises $27M seed round from Khosla Ventures to bring formal verification to AI",
@@ -60,10 +188,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/Screenshot-2026-06-17-at-9.53.46-AM.jpg?resize=1200%2C560",
       "published": "2026-06-17T14:15:22+00:00",
       "firstSeen": "2026-06-17T15:00:01.995771+00:00",
-      "lastSeen": "2026-06-17T15:00:01.995771+00:00",
+      "lastSeen": "2026-06-17T16:00:02.075644+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2675
+      "score": 2.238
     },
     {
       "title": "The US is paying an AI startup $500M to break China’s grip on chip materials",
@@ -76,10 +204,10 @@
       "image": "https://media.thenextweb.com/2026/06/SandboxAQ-logo-semiconductors.avif",
       "published": "2026-06-17T14:12:14+00:00",
       "firstSeen": "2026-06-17T15:00:01.995771+00:00",
-      "lastSeen": "2026-06-17T15:00:01.995771+00:00",
+      "lastSeen": "2026-06-17T16:00:02.075644+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1259
+      "score": 2.0964
     },
     {
       "title": "Estonia wants to give every AI agent its own ID number",
@@ -92,10 +220,10 @@
       "image": "https://media.thenextweb.com/2026/06/Eastern_Flank_Summit_16_December_2025_54987714621.avif",
       "published": "2026-06-17T14:03:42+00:00",
       "firstSeen": "2026-06-17T15:00:01.995771+00:00",
-      "lastSeen": "2026-06-17T15:00:01.995771+00:00",
+      "lastSeen": "2026-06-17T16:00:02.075644+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.9217
+      "score": 5.8923
     },
     {
       "title": "Grok helped strike 2,000 targets at Iran. Now its pollution is ‘national security’.",
@@ -108,10 +236,10 @@
       "image": "https://media.thenextweb.com/2026/05/pentagon-ai-deals-anthropic-safety-limits.avif",
       "published": "2026-06-17T13:43:40+00:00",
       "firstSeen": "2026-06-17T13:57:21.948268+00:00",
-      "lastSeen": "2026-06-17T15:00:01.995771+00:00",
+      "lastSeen": "2026-06-17T16:00:02.075644+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.8118
+      "score": 8.7827
     },
     {
       "title": "Neuralink finally has a real rival: Paradromics just put a brain chip in its first patient",
@@ -124,10 +252,10 @@
       "image": "https://media.thenextweb.com/2026/06/BCI-IMPLANT-BCI13115.avif",
       "published": "2026-06-17T13:41:14+00:00",
       "firstSeen": "2026-06-17T13:57:21.948268+00:00",
-      "lastSeen": "2026-06-17T15:00:01.995771+00:00",
+      "lastSeen": "2026-06-17T16:00:02.075644+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2106
+      "score": 3.1815
     },
     {
       "title": "A startup that builds offensive cyber weapons just became a $1bn unicorn",
@@ -140,10 +268,10 @@
       "image": "https://media.thenextweb.com/2026/06/Twenty-team.avif",
       "published": "2026-06-17T13:34:00+00:00",
       "firstSeen": "2026-06-17T13:57:21.948268+00:00",
-      "lastSeen": "2026-06-17T15:00:01.995771+00:00",
+      "lastSeen": "2026-06-17T16:00:02.075644+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.807
+      "score": 2.7781
     },
     {
       "title": "AI search grounded in Facebook posts? What could go wrong?",
@@ -156,10 +284,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/DSC03787_processed.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.723165084465%2C100%2C78.55366983107&amp%3Bw=1200",
       "published": "2026-06-17T13:30:00+00:00",
       "firstSeen": "2026-06-17T13:57:21.948268+00:00",
-      "lastSeen": "2026-06-17T13:57:21.948268+00:00",
+      "lastSeen": "2026-06-17T16:00:02.075644+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.7151
+      "score": 4.6862
     },
     {
       "title": "Jeff Bezos is backing a two-year-old Cambridge AI lab at a $2.6bn valuation",
@@ -175,7 +303,7 @@
       "lastSeen": "2026-06-17T15:00:01.995771+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1997
+      "score": 3.171
     },
     {
       "title": "v1.89.0",
@@ -188,10 +316,10 @@
       "image": "https://opengraph.githubassets.com/1a96245655b47976f7e5cd71fd6aff87c69b60e2020bf0e1fab0f425bb6eb5db/BerriAI/litellm/releases/tag/v1.89.0",
       "published": "2026-06-17T13:16:36+00:00",
       "firstSeen": "2026-06-14T00:19:04.421568+00:00",
-      "lastSeen": "2026-06-17T15:00:01.995771+00:00",
+      "lastSeen": "2026-06-17T16:00:02.075644+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9386
+      "score": 2.9098
     },
     {
       "title": "Odyssey took Nvidia’s money. Now it’s raised $310M betting on Amazon and AMD",
@@ -207,7 +335,7 @@
       "lastSeen": "2026-06-17T15:00:01.995771+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7937
+      "score": 2.7651
     },
     {
       "title": "The Gemini-Powered Google Home Speaker Is Finally Here",
@@ -220,10 +348,10 @@
       "image": "https://media.wired.com/photos/6a2c15a23c737ad4c6d98c56/master/pass/Google%20Home%20Speaker%20-%20Porcelain%20copy.jpg",
       "published": "2026-06-17T13:00:00+00:00",
       "firstSeen": "2026-06-17T13:57:21.948268+00:00",
-      "lastSeen": "2026-06-17T15:00:01.995771+00:00",
+      "lastSeen": "2026-06-17T16:00:02.075644+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.2305
+      "score": 8.202
     },
     {
       "title": "Google’s first smart speaker in six years arrives next week",
@@ -232,14 +360,14 @@
       "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
       "sourceWeight": 0.9,
       "category": "AI",
-      "summary": "Google's first new smart speaker in six years starts shipping on June 29th, narrowly missing its promised spring launch window. Preorders for the Google Home Speaker open today, June 17th. Nothing has changed hardware-wise in the nine months since the $99 speaker was announced. It has the same slightly squished round design, with touch-capacitive buttons [&#8230;]",
+      "summary": "Google's first new smart speaker in six years starts shipping on June 25th, narrowly missing its promised spring launch window. Preorders for the Google Home Speaker open today, June 17th. Nothing has changed hardware-wise in the nine months since the $99 speaker was announced. It has the same slightly squished round design, with touch-capacitive buttons [&#8230;]",
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/10/IMG_0204.jpeg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C15.095986038394%2C100%2C69.808027923211&amp%3Bw=1200",
       "published": "2026-06-17T13:00:00+00:00",
       "firstSeen": "2026-06-17T13:57:21.948268+00:00",
-      "lastSeen": "2026-06-17T13:57:21.948268+00:00",
+      "lastSeen": "2026-06-17T16:00:02.075644+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0005
+      "score": 2.972
     },
     {
       "title": "The tokenmaxxing era is over. Now companies are ‘tokenminimizing’",
@@ -255,7 +383,7 @@
       "lastSeen": "2026-06-17T15:00:01.995771+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1877
+      "score": 3.1593
     },
     {
       "title": "Microsoft might put China’s DeepSeek inside Copilot to tame its AI bills",
@@ -271,7 +399,7 @@
       "lastSeen": "2026-06-17T15:00:01.995771+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 10.8812
+      "score": 10.853
     },
     {
       "title": "Canadian pension giant joins race to fund India’s AI-fueled data center boom",
@@ -284,10 +412,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2024/05/GettyImages-1468360413.jpg?resize=1200%2C857",
       "published": "2026-06-17T12:38:09+00:00",
       "firstSeen": "2026-06-17T13:00:01.801218+00:00",
-      "lastSeen": "2026-06-17T15:00:01.995771+00:00",
+      "lastSeen": "2026-06-17T16:00:02.075644+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2201
+      "score": 2.1918
     },
     {
       "title": "Amazon could face billions in fines as the FTC eyes its ad business",
@@ -303,7 +431,7 @@
       "lastSeen": "2026-06-17T13:57:21.948268+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0701
+      "score": 2.0422
     },
     {
       "title": "DeepL acquires Mixhalo for live-event audio streaming and translation",
@@ -316,10 +444,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/Mixhalo-Billboard-2-1200x627-2.jpeg?resize=1200%2C675",
       "published": "2026-06-17T12:14:44+00:00",
       "firstSeen": "2026-06-17T13:00:01.801218+00:00",
-      "lastSeen": "2026-06-17T15:00:01.995771+00:00",
+      "lastSeen": "2026-06-17T16:00:02.075644+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.209
+      "score": 2.181
     },
     {
       "title": "Helion just got the world’s first licences to run a fusion power plant",
@@ -335,7 +463,7 @@
       "lastSeen": "2026-06-17T13:57:21.948268+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0635
+      "score": 2.0357
     },
     {
       "title": "Uber’s robotaxi service is heading to Houston to take another swing at Waymo",
@@ -351,7 +479,7 @@
       "lastSeen": "2026-06-17T13:57:21.948268+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7547
+      "score": 2.7272
     },
     {
       "title": "Mistral spent two years warning the US could switch off its rivals. A fat-cat meme just made the point for it.",
@@ -367,7 +495,7 @@
       "lastSeen": "2026-06-17T13:00:01.801218+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.042
+      "score": 7.0148
     },
     {
       "title": "Windows and Linux users: The deadline to update Secure Boot keys is near",
@@ -380,10 +508,10 @@
       "image": "https://cdn.arstechnica.net/wp-content/uploads/2023/12/computer-power-button-1000x648.jpg",
       "published": "2026-06-17T11:15:17+00:00",
       "firstSeen": "2026-06-17T13:00:01.801218+00:00",
-      "lastSeen": "2026-06-17T15:00:01.995771+00:00",
+      "lastSeen": "2026-06-17T16:00:02.075644+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0413
+      "score": 2.0141
     },
     {
       "title": "Pinterest launches an experimental AI shopping app called ‘Ask Pinterest’",
@@ -396,10 +524,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/ask-pinterest.jpg?resize=1200%2C922",
       "published": "2026-06-17T11:00:00+00:00",
       "firstSeen": "2026-06-17T13:00:01.801218+00:00",
-      "lastSeen": "2026-06-17T15:00:01.995771+00:00",
+      "lastSeen": "2026-06-17T16:00:02.075644+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0743
+      "score": 5.0473
     },
     {
       "title": "Microsoft’s talks to lease Oracle cloud capacity have collapsed, report says",
@@ -415,7 +543,7 @@
       "lastSeen": "2026-06-17T13:00:01.801218+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -1.0695
+      "score": -1.0964
     },
     {
       "title": "The FCC reopens the door to Chinese toy drones, but only the tiniest ones",
@@ -432,7 +560,7 @@
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 11.0236
+      "score": 10.9969
     },
     {
       "title": "Interpol reports a sharp rise in cybercrime and scams across Asia",
@@ -448,7 +576,7 @@
       "lastSeen": "2026-06-17T13:00:01.801218+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.1161
+      "score": 1.0897
     },
     {
       "title": "From the Hugging Face Hub to robot hardware with Strands Agents and LeRobot",
@@ -461,10 +589,10 @@
       "image": "https://cdn-uploads.huggingface.co/production/uploads/6a1dc0f2b4238bb17ff94794/qvSGZ0tZsgr4U4BCx_bVX.png",
       "published": "2026-06-17T10:18:05+00:00",
       "firstSeen": "2026-06-17T11:00:01.167375+00:00",
-      "lastSeen": "2026-06-17T15:00:01.995771+00:00",
+      "lastSeen": "2026-06-17T16:00:02.075644+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9954
+      "score": 4.9689
     },
     {
       "title": "US holds off blacklisting DeepSeek and 100-plus Chinese firms",
@@ -480,7 +608,7 @@
       "lastSeen": "2026-06-17T13:00:01.801218+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 4.4061
+      "score": 4.3799
     },
     {
       "title": "The next humanoid robot might not look human at all",
@@ -493,10 +621,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/Genesis-Eno-Home-Pebble-Beach-CA-06062026-Pouring.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.761594140703%2C100%2C78.476811718594&amp%3Bw=1200",
       "published": "2026-06-17T09:46:56+00:00",
       "firstSeen": "2026-06-17T10:00:01.692067+00:00",
-      "lastSeen": "2026-06-17T13:57:21.948268+00:00",
+      "lastSeen": "2026-06-17T16:00:02.075644+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2116
+      "score": 2.1855
     },
     {
       "title": "G7 leaders weigh a ‘trusted partners’ route to America’s top AI models",
@@ -512,135 +640,7 @@
       "lastSeen": "2026-06-17T13:00:01.801218+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1011
-    },
-    {
-      "title": "OpenAI burned $3.7bn in the first quarter, The Information reports",
-      "url": "https://thenextweb.com/news/openai-burned-3-7-billion-q1-2026",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "OpenAI burned through $3.7bn in the first three months of 2026, more than half its revenue of $5.7bn over the same period, according to The Information, which cited documents the company shared with shareholders. Both numbers tripled from a year earlier, a symmetry that captures the company’s peculiar position: growing faster than almost any business [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/04/OpenAI-lawsuite.avif",
-      "published": "2026-06-17T09:28:47+00:00",
-      "firstSeen": "2026-06-17T10:00:01.692067+00:00",
-      "lastSeen": "2026-06-17T12:00:01.819188+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.9936
-    },
-    {
-      "title": "Microsoft sued by shareholders over Azure slowdown and AI spending",
-      "url": "https://thenextweb.com/news/microsoft-shareholder-suit-azure-ai-spending",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The number that anchors the case is a single day. On 29 January, Microsoft shares fell about 10%, the company’s steepest one-day drop in nearly six years, wiping out roughly $357bn in market value after a quarterly earnings report the previous evening. A securities class action filed on 12 June in Seattle federal court argues [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/04/microsoft-voluntary-retirement-us-workers-ai.avif",
-      "published": "2026-06-17T09:05:42+00:00",
-      "firstSeen": "2026-06-17T10:00:01.692067+00:00",
-      "lastSeen": "2026-06-17T12:00:01.819188+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.9836
-    },
-    {
-      "title": "GLM-5.2: Built for Long-Horizon Tasks",
-      "url": "https://huggingface.co/blog/zai-org/glm-52-blog",
-      "source": "Hugging Face Blog",
-      "sourceUrl": "https://huggingface.co/blog/feed.xml",
-      "sourceWeight": 0.95,
-      "category": "AI",
-      "summary": "",
-      "image": "https://cdn-uploads.huggingface.co/production/uploads/67066ea38a79951d7b8d4195/iaTHtYOBgeY0C3Xx3vymr.png",
-      "published": "2026-06-17T09:01:25+00:00",
-      "firstSeen": "2026-06-17T10:00:01.692067+00:00",
-      "lastSeen": "2026-06-17T15:00:01.995771+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.2617
-    },
-    {
-      "title": "Telegram challenges India’s order temporarily blocking the app",
-      "url": "https://thenextweb.com/news/telegram-challenges-indias-order-temporarily-blocking-the-app",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The company has gone to the Delhi High Court over a block tied to alleged cheating on a national medical-entrance exam, a measure affecting more than 150 million users. Telegram has asked the Delhi High Court to overturn an Indian government order that has temporarily blocked the messaging app, the company’s most direct legal confrontation [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/04/Telegram.avif",
-      "published": "2026-06-17T08:56:01+00:00",
-      "firstSeen": "2026-06-17T10:00:01.692067+00:00",
-      "lastSeen": "2026-06-17T12:00:01.819188+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.0794
-    },
-    {
-      "title": "Intel pushes 18A-P into risk production to prove its manufacturing pitch",
-      "url": "https://thenextweb.com/news/intel-pushes-18a-p-into-risk-production",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Intel said on Tuesday that the next iteration of its 18A manufacturing process, designated 18A-P, has entered risk production, the stage at which a chipmaker runs the process on real hardware to prove it works before committing to mass volumes. The announcement is less about a single chip than about a promise Intel has spent [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/04/Intel.avif",
-      "published": "2026-06-17T08:48:30+00:00",
-      "firstSeen": "2026-06-17T10:00:01.692067+00:00",
-      "lastSeen": "2026-06-17T12:00:01.819188+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.9762
-    },
-    {
-      "title": "Everlab raises AU$65m to turn primary care from treatment to prevention",
-      "url": "https://thenextweb.com/news/everlab-65m-series-a-preventative-health",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The Melbourne healthtech’s oversubscribed Series A, led by Airtree, funds a move into the UK and a pitch to coordinate a patient’s health data over a lifetime rather than a single appointment. Most healthcare systems are built to wait. They are organised around the moment something goes wrong, the appointment booked because a symptom appeared, [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/Everlab.avif",
-      "published": "2026-06-17T08:40:33+00:00",
-      "firstSeen": "2026-06-17T09:00:01.102841+00:00",
-      "lastSeen": "2026-06-17T10:02:03.791269+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.0728
-    },
-    {
-      "title": "Hacking group claims it breached Novo Nordisk and demanded $25m",
-      "url": "https://thenextweb.com/news/novo-nordisk-hack-fulcrumsec-extortion",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "A cyber-extortion group calling itself FulcrumSec said on Monday that it had stolen roughly 1.3 terabytes of data from Novo Nordisk, the Danish maker of the weight-loss drugs Wegovy and Ozempic, and had demanded $25 million to keep it private. Novo Nordisk did not pay. The group, by its own account, is now looking for [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/Novo-Nordisk.avif",
-      "published": "2026-06-17T08:22:25+00:00",
-      "firstSeen": "2026-06-17T09:00:01.102841+00:00",
-      "lastSeen": "2026-06-17T10:02:03.791269+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.9651
-    },
-    {
-      "title": "Europe frets over American AI as the tech world descends on France",
-      "url": "https://thenextweb.com/news/europe-ai-sovereignty-g7-vivatech",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The timing was almost too neat. Days before more than 180,000 people were due to file into VivaTech in Paris, and before G7 leaders sat down at the lakeside resort of Evian-les-Bains, the United States tightened access to Anthropic’s most advanced models for foreign nationals. Europe arrived at its own party having just been reminded, [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/G7-Evian-2026.avif",
-      "published": "2026-06-17T08:18:16+00:00",
-      "firstSeen": "2026-06-17T09:00:01.102841+00:00",
-      "lastSeen": "2026-06-17T10:02:03.791269+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 3.9633
+      "score": 3.075
     },
     {
       "title": "The Life Scientific: Dean Lomax",
@@ -653,10 +653,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-15T20:00:00+00:00",
       "firstSeen": "2026-06-15T21:00:01.290903+00:00",
-      "lastSeen": "2026-06-17T15:00:01.995771+00:00",
+      "lastSeen": "2026-06-17T16:00:02.075644+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.5232
+      "score": 1.514
     },
     {
       "title": "The Life Scientific: Helen Hastie",
@@ -669,10 +669,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-08T20:00:00+00:00",
       "firstSeen": "2026-06-08T21:00:01.371488+00:00",
-      "lastSeen": "2026-06-17T15:00:01.995771+00:00",
+      "lastSeen": "2026-06-17T16:00:02.075644+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.1931
+      "score": 1.193
     },
     {
       "title": "The Life Scientific: Seth Berkley",
