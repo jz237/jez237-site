@@ -1294,6 +1294,31 @@ function toggleMute(){
   const label = (AUDIO.muted ? '🔇 Muted' : '🔊 Sound');
   $('bMute').textContent = label; $('bPauseMute').textContent = label;
 }
+function syncVolumeSliders(){
+  const music = Math.round(AUDIO.musicVolume * 100);
+  const sfx = Math.round(AUDIO.sfxVolume * 100);
+  for (const id of ['musicVol', 'pauseMusicVol']) if ($(id)) $(id).value = music;
+  for (const id of ['sfxVol', 'pauseSfxVol']) if ($(id)) $(id).value = sfx;
+}
+function bindVolumeSlider(id, kind){
+  const el = $(id);
+  if (!el) return;
+  el.addEventListener('pointerdown', e => { e.stopPropagation(); AUDIO.ensure(); });
+  el.addEventListener('input', e => {
+    e.stopPropagation();
+    const v = Number(el.value) / 100;
+    if (kind === 'music') AUDIO.setMusicVolume(v);
+    else AUDIO.setSfxVolume(v);
+    syncVolumeSliders();
+  });
+}
+function initVolumeControls(){
+  bindVolumeSlider('musicVol', 'music');
+  bindVolumeSlider('pauseMusicVol', 'music');
+  bindVolumeSlider('sfxVol', 'sfx');
+  bindVolumeSlider('pauseSfxVol', 'sfx');
+  syncVolumeSliders();
+}
 
 function bindButton(id, fn){
   const b = $(id);
@@ -1320,6 +1345,7 @@ bindButton('bLedgerDaily', () => refreshBoardInto('scoreBoard', 'daily'));
 
 buildHowTo();
 initTouch();
+initVolumeControls();
 refreshTitleBoard();
 
 /* ================= sim ================= */
@@ -1679,9 +1705,30 @@ function drawGeneratedMiner(a, pose, fi, cx2, footY){
   const sy = Math.floor(idx / MINER_SHEET.cols) * cellH;
   const h = pose === 'climb' ? 78 : 74;
   const w = h * (cellW / cellH);
-  ctx.translate(cx2, footY - h);
+  const climbPhase = pose === 'climb' ? Math.floor(a.anim * 8) & 1 : 0;
+  const climbBob = pose === 'climb' ? Math.sin(a.anim * 16) * 3 : 0;
+  const climbLean = pose === 'climb' ? (climbPhase ? .035 : -.035) : 0;
+  ctx.translate(cx2 + (pose === 'climb' ? (climbPhase ? 1.5 : -1.5) : 0), footY - h + climbBob);
+  if (pose === 'climb') ctx.rotate(climbLean);
   if (a.dir < 0) ctx.scale(-1, 1);
   ctx.drawImage(painterlyMiner, sx, sy, cellW, cellH, -w * 0.5, 0, w, h);
+  if (pose === 'climb'){
+    ctx.save();
+    ctx.fillStyle = '#7a5630';
+    ctx.strokeStyle = 'rgba(34,22,13,.6)';
+    ctx.lineWidth = 1.5;
+    const handY1 = 25 + (climbPhase ? 8 : 0);
+    const handY2 = 34 + (climbPhase ? 0 : 8);
+    const bootY1 = 59 + (climbPhase ? 0 : 6);
+    const bootY2 = 65 + (climbPhase ? 6 : 0);
+    for (const [x, y, rx, ry] of [[-17, handY1, 6, 4], [16, handY2, 6, 4], [-12, bootY1, 7, 4], [14, bootY2, 7, 4]]){
+      ctx.beginPath();
+      ctx.ellipse(x, y, rx, ry, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
   return {w, h};
 }
 function drawActor(a){
