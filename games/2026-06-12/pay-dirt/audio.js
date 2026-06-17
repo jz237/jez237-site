@@ -94,6 +94,7 @@ const AUDIO = (() => {
     const t = ctx.currentTime;
     switch (name){
       case 'dig':    noise(t, 0.16, 0.5, 1400, 200); slide(180, 90, t, 0.16, 'square', 0.18); break;
+      case 'chip':   noise(t, 0.055, 0.26, 1800, 320); tone(165, t, 0.04, 'triangle', 0.12); break;
       case 'land':   noise(t, 0.08, 0.3, 700); tone(110, t, 0.07, 'sine', 0.25); break;
       case 'gold':   tone(740, t, 0.08, 'triangle', 0.3); tone(1180, t + 0.06, 0.12, 'triangle', 0.28); break;
       case 'goldhi': tone(990, t, 0.07, 'triangle', 0.3); tone(1480, t + 0.05, 0.1, 'triangle', 0.3); tone(1980, t + 0.1, 0.12, 'sine', 0.2); break;
@@ -101,6 +102,7 @@ const AUDIO = (() => {
       case 'reveal': [392, 523, 659, 784, 988].forEach((f, i) => tone(f, t + i * 0.06, 0.3, 'sine', 0.22)); break;
       case 'trap':   slide(440, 140, t, 0.22, 'square', 0.26); noise(t, 0.1, 0.25, 900); break;
       case 'seal':   tone(90, t, 0.18, 'sine', 0.34); noise(t, 0.18, 0.4, 800, 120); break;
+      case 'refill': slide(140, 65, t, 0.28, 'triangle', 0.24); noise(t, 0.22, 0.34, 600, 90); break;
       case 'boom':   slide(220, 30, t, 0.5, 'sawtooth', 0.4); noise(t, 0.45, 0.6, 1200); noise(t, 0.45, 0.4, 300); break;
       case 'die':    slide(330, 70, t, 0.6, 'sawtooth', 0.32); tone(110, t + 0.1, 0.5, 'square', 0.2); break;
       case 'win':    [523, 659, 784, 1047, 1319].forEach((f, i) => tone(f, t + i * 0.09, 0.4, 'triangle', 0.28)); break;
