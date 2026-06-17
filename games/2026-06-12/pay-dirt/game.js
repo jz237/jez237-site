@@ -1577,6 +1577,39 @@ function poseFor(a){
     default: return 'idle';
   }
 }
+
+const painterlyMiner = new Image();
+let painterlyMinerReady = false;
+painterlyMiner.onload = () => { painterlyMinerReady = true; if (booted) render(); };
+painterlyMiner.src = 'assets/painterly-miner-sheet.png';
+const MINER_SHEET = {
+  cols: 4, rows: 2,
+  cells: {
+    idle: 0, run0: 1, run1: 2, climb: 3,
+    digLeft: 4, digRight: 5, carry: 6, stun: 7,
+  },
+};
+function minerFrameIndex(a, pose, fi){
+  if (pose === 'dig') return a.dir < 0 ? MINER_SHEET.cells.digLeft : MINER_SHEET.cells.digRight;
+  if (a.gold) return MINER_SHEET.cells.carry;
+  if (pose === 'run') return fi % 2 ? MINER_SHEET.cells.run1 : MINER_SHEET.cells.run0;
+  if (pose === 'climb') return MINER_SHEET.cells.climb;
+  if (pose === 'fall' || pose === 'stun') return MINER_SHEET.cells.stun;
+  return MINER_SHEET.cells.idle;
+}
+function drawGeneratedMiner(a, pose, fi, cx2, footY){
+  const cellW = painterlyMiner.naturalWidth / MINER_SHEET.cols;
+  const cellH = painterlyMiner.naturalHeight / MINER_SHEET.rows;
+  const idx = minerFrameIndex(a, pose, fi);
+  const sx = (idx % MINER_SHEET.cols) * cellW;
+  const sy = Math.floor(idx / MINER_SHEET.cols) * cellH;
+  const h = pose === 'climb' ? 78 : 74;
+  const w = h * (cellW / cellH);
+  ctx.translate(cx2, footY - h);
+  if (a.dir < 0) ctx.scale(-1, 1);
+  ctx.drawImage(painterlyMiner, sx, sy, cellW, cellH, -w * 0.5, 0, w, h);
+  return {w, h};
+}
 function drawActor(a){
   const set = ART.frames[a.kind] || ART.frames.guard;
   const pose = poseFor(a);
@@ -1585,8 +1618,9 @@ function drawActor(a){
   const fi = a.moved || pose === 'idle' || pose === 'fall' || pose === 'stun'
     ? Math.floor(a.anim * rate) % frames.length : 0;
   const img = frames[fi] || frames[0];
-  const h = a.kind === 'player' ? 64 : 58;
-  const w = h * ART.FW / ART.FH;       // larger + downscaled from hi-res source
+  const generatedPlayer = a.kind === 'player' && painterlyMinerReady && painterlyMiner.naturalWidth;
+  const h = generatedPlayer ? (pose === 'climb' ? 78 : 74) : (a.kind === 'player' ? 64 : 58);
+  const w = generatedPlayer ? h * ((painterlyMiner.naturalWidth / MINER_SHEET.cols) / (painterlyMiner.naturalHeight / MINER_SHEET.rows)) : h * ART.FW / ART.FH;
   const cx2 = px(a.x);
   let footY = py(a.y) + TILE * 0.5;
   ctx.save();
@@ -1616,9 +1650,12 @@ function drawActor(a){
   if (a.invuln > 0 && Math.floor(gameTime * 16) % 2) ctx.globalAlpha *= 0.4;
   // landing squash-and-stretch (juice)
   if (a.squashT > 0){ const s = a.squashT / 0.15; ctx.translate(cx2, footY); ctx.scale(1 + 0.18 * s, 1 - 0.22 * s); ctx.translate(-cx2, -footY); }
-  ctx.translate(cx2, footY - h);
-  if (a.dir < 0){ ctx.translate(w, 0); ctx.scale(-1, 1); }
-  ctx.drawImage(img, 0, 0, w, h);
+  if (generatedPlayer) drawGeneratedMiner(a, pose, fi, cx2, footY);
+  else {
+    ctx.translate(cx2, footY - h);
+    if (a.dir < 0){ ctx.translate(w, 0); ctx.scale(-1, 1); }
+    ctx.drawImage(img, 0, 0, w, h);
+  }
   ctx.restore();
   // carried gold — show which guard pocketed your nugget
   if (a.gold){
@@ -2538,7 +2575,13 @@ function drawPlayerPortrait(x, y){
   glow((x + 35) / TILE, (y + 35 - HUD_H) / TILE, 34, 'rgba(255,190,95,.35)', 1);
   ctx.globalCompositeOperation = 'source-over';
   ctx.imageSmoothingEnabled = true;
-  ctx.drawImage(ART.frames.player.idle[0], x + 16, y + 6, 35, 50);
+  if (painterlyMinerReady && painterlyMiner.naturalWidth){
+    const cellW = painterlyMiner.naturalWidth / MINER_SHEET.cols;
+    const cellH = painterlyMiner.naturalHeight / MINER_SHEET.rows;
+    ctx.drawImage(painterlyMiner, 0, 0, cellW, cellH, x + 2, y + 2, 64, 52);
+  } else {
+    ctx.drawImage(ART.frames.player.idle[0], x + 16, y + 6, 35, 50);
+  }
   ctx.restore();
   ctx.strokeStyle = 'rgba(255,216,107,.75)';
   ctx.lineWidth = 2;
