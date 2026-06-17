@@ -1194,11 +1194,11 @@ function buildLevelSelect(){
 
 /* ================= touch controls ================= */
 function initTouch(){
-  const map = { tLeft: 'ArrowLeft', tRight: 'ArrowRight', tUp: 'ArrowUp', tDown: 'ArrowDown', tDigL: 'KeyZ', tDigR: 'KeyX' };
-  for (const id in map){
-    const el = $(id), code = map[id];
-    const on = e => { e.preventDefault(); keys[code] = true; el.classList.add('on'); AUDIO.ensure(); };
-    const off = e => { e.preventDefault(); keys[code] = false; el.classList.remove('on'); };
+	  const map = { tLeft: 'ArrowLeft', tRight: 'ArrowRight', tUp: 'ArrowUp', tDown: 'ArrowDown', tDigL: 'KeyZ', tDigR: 'KeyX' };
+	  for (const id in map){
+	    const el = $(id), code = map[id];
+	    const on = e => { e.preventDefault(); e.stopPropagation(); keys[code] = true; el.classList.add('on'); document.body.classList.add('touch'); AUDIO.ensure(); };
+	    const off = e => { e.preventDefault(); e.stopPropagation(); keys[code] = false; el.classList.remove('on'); };
     el.addEventListener('pointerdown', on);
     el.addEventListener('pointerup', off);
     el.addEventListener('pointerleave', off);
@@ -2943,7 +2943,7 @@ function ensureWorldCanvas(){
   worldCx = worldCv.getContext('2d');
   worldCx.imageSmoothingEnabled = false;
 }
-function mobileHudHeight(){ return Math.max(74, Math.min(92, Math.round(screenH * 0.1))); }
+function mobileHudHeight(){ return Math.max(86, Math.min(104, Math.round(screenH * 0.12))); }
 function mobileCameraScale(){
   const portrait = screenH >= screenW;
   const base = portrait ? 1.36 : 1.55;
@@ -3013,22 +3013,49 @@ function drawMobileHUD(){
   for (let i = 0, n = Math.min(lives, 4); i < n; i++) drawHeart(94 + i * 22, 45, 17, true);
 
   ctx.textAlign = 'center';
-  ctx.fillStyle = 'rgba(255,216,107,.9)';
-  ctx.font = '900 11px system-ui, sans-serif';
-  ctx.fillText('SCORE', screenW / 2, 18);
-  ctx.fillStyle = '#fff';
-  ctx.font = '900 23px system-ui, sans-serif';
-  ctx.fillText(String(score).padStart(6, '0'), screenW / 2, 47);
+	  ctx.fillStyle = 'rgba(255,216,107,.9)';
+	  ctx.font = '900 11px system-ui, sans-serif';
+	  ctx.fillText('SCORE', screenW / 2, 18);
+	  ctx.fillStyle = '#fff';
+	  ctx.font = '900 21px system-ui, sans-serif';
+	  ctx.fillText(String(score).padStart(6, '0'), screenW / 2, 43);
 
   const tt = Math.max(0, levelTime | 0), mm = String((tt / 60) | 0).padStart(2, '0'), ss = String(tt % 60).padStart(2, '0');
   ctx.textAlign = 'right';
   ctx.fillStyle = 'rgba(216,207,228,.72)';
   ctx.font = '900 11px system-ui, sans-serif';
   ctx.fillText(mode === 'daily' ? 'DAILY' : 'TIME', screenW - 14, 18);
-  ctx.fillStyle = '#f6f0ff';
-  ctx.font = '900 20px system-ui, sans-serif';
-  ctx.fillText(mm + ':' + ss, screenW - 14, 47);
-}
+	  ctx.fillStyle = '#f6f0ff';
+	  ctx.font = '900 20px system-ui, sans-serif';
+	  ctx.fillText(mm + ':' + ss, screenW - 14, 47);
+
+	  if (grid.length){
+	    const compact = screenW < 360;
+	    const chips = [
+	      {label: compact ? 'F' : 'FINDS', value: discoveryCount + '/' + discoveryTotal, col: '#9ef0c8', done: discoveryTotal && discoveryCount >= discoveryTotal},
+	      {label: 'EXIT', value: exitRevealed ? 'OPEN' : 'LOCKED', col: '#3fd2c7', done: exitRevealed},
+	    ];
+	    const gap = 6, chipW = compact ? 70 : 82, totalW = chipW * chips.length + gap;
+	    let x = screenW / 2 - totalW / 2, y = h - 15;
+	    ctx.font = '900 9px system-ui, sans-serif';
+	    ctx.textAlign = 'left';
+	    for (const chip of chips){
+	      roundRect(x, y - 7, chipW, 14, 4);
+	      ctx.fillStyle = 'rgba(8,10,18,.58)';
+	      ctx.fill();
+	      ctx.strokeStyle = chip.done ? chip.col : 'rgba(255,214,110,.28)';
+	      ctx.lineWidth = 1;
+	      ctx.stroke();
+	      ctx.fillStyle = '#f5eddd';
+	      ctx.fillText(chip.label, x + 7, y + 1);
+	      ctx.fillStyle = chip.col;
+	      ctx.textAlign = 'right';
+	      ctx.fillText(chip.value, x + chipW - 6, y + 1);
+	      ctx.textAlign = 'left';
+	      x += chipW + gap;
+	    }
+	  }
+	}
 function worldToMobileScreen(wx, wy){
   if (!mobileView) return {x: px(wx), y: py(wy)};
   return {
@@ -3581,6 +3608,7 @@ function drawHUD(){
 let last = 0, acc = 0, clock = 0;
 function frame(t){
   requestAnimationFrame(frame);
+  document.body.classList.toggle('playing', state === 'playing');
   if (canvas.width === 0 || canvas.height === 0) resize(); // recover from a 0-size boot
   const dt = Math.min((t - last) / 1000, .25); last = t;
   clock += dt;  // purely-visual clock; advances even when the sim is paused (title/menus)
