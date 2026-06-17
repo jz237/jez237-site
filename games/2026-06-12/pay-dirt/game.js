@@ -1783,6 +1783,10 @@ const painterlyMiner = new Image();
 let painterlyMinerReady = false;
 painterlyMiner.onload = () => { painterlyMinerReady = true; if (booted) render(); };
 painterlyMiner.src = 'assets/painterly-miner-sheet.png';
+const painterlyMinerClimb = new Image();
+let painterlyMinerClimbReady = false;
+painterlyMinerClimb.onload = () => { painterlyMinerClimbReady = true; if (booted) render(); };
+painterlyMinerClimb.src = 'assets/painterly-miner-climb-back.png';
 const MINER_SHEET = {
   cols: 4, rows: 2,
   cells: {
@@ -1812,62 +1816,10 @@ function drawGeneratedMiner(a, pose, fi, cx2, footY){
   ctx.translate(cx2 + (pose === 'climb' ? (climbPhase ? 1.5 : -1.5) : 0), footY - h + climbBob);
   if (pose === 'climb') ctx.rotate(climbLean);
   if (a.dir < 0) ctx.scale(-1, 1);
-  ctx.drawImage(painterlyMiner, sx, sy, cellW, cellH, -w * 0.5, 0, w, h);
-  if (pose === 'climb'){
-    // The generated sheet's clean idle cell is front-facing; cover it with a rear-view read while climbing.
-    const left = -w * 0.5;
-    ctx.save();
-    ctx.globalAlpha = 0.96;
-    ctx.fillStyle = '#225f58';
-    ctx.beginPath();
-    ctx.ellipse(0, h * 0.48, w * 0.24, h * 0.17, 0, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.strokeStyle = 'rgba(210,255,235,.24)';
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    ctx.moveTo(left + w * 0.34, h * 0.36);
-    ctx.lineTo(0, h * 0.43);
-    ctx.lineTo(left + w * 0.66, h * 0.36);
-    ctx.stroke();
-    ctx.strokeStyle = 'rgba(10,35,32,.32)';
-    ctx.lineWidth = 1.4;
-    ctx.beginPath();
-    ctx.moveTo(0, h * 0.42);
-    ctx.lineTo(0, h * 0.61);
-    ctx.stroke();
-    ctx.fillStyle = '#8a5b38';
-    ctx.beginPath();
-    ctx.ellipse(0, h * 0.245, w * 0.145, h * 0.082, 0, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.fillStyle = 'rgba(58,34,18,.42)';
-    ctx.beginPath();
-    ctx.ellipse(0, h * 0.235, w * 0.13, h * 0.05, 0, 0, Math.PI);
-    ctx.fill();
-    ctx.fillStyle = '#d8902c';
-    ctx.beginPath();
-    ctx.ellipse(0, h * 0.17, w * 0.18, h * 0.055, 0, Math.PI, 0);
-    ctx.fill();
-    ctx.fillRect(left + w * 0.31, h * 0.17, w * 0.38, h * 0.03);
-    ctx.fillStyle = 'rgba(83,55,12,.24)';
-    ctx.fillRect(left + w * 0.46, h * 0.105, w * 0.08, h * 0.075);
-    ctx.restore();
-
-    ctx.save();
-    ctx.fillStyle = '#7a5630';
-    ctx.strokeStyle = 'rgba(34,22,13,.6)';
-    ctx.lineWidth = 1.5;
-    const handY1 = 25 + (climbPhase ? 8 : 0);
-    const handY2 = 34 + (climbPhase ? 0 : 8);
-    const bootY1 = 59 + (climbPhase ? 0 : 6);
-    const bootY2 = 65 + (climbPhase ? 6 : 0);
-    for (const [x, y, rx, ry] of [[-17, handY1, 6, 4], [16, handY2, 6, 4], [-12, bootY1, 7, 4], [14, bootY2, 7, 4]]){
-      ctx.beginPath();
-      ctx.ellipse(x, y, rx, ry, 0, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.stroke();
-    }
-    ctx.restore();
-  }
+  if (pose === 'climb' && painterlyMinerClimbReady && painterlyMinerClimb.naturalWidth)
+    ctx.drawImage(painterlyMinerClimb, -w * 0.5, 0, w, h);
+  else
+    ctx.drawImage(painterlyMiner, sx, sy, cellW, cellH, -w * 0.5, 0, w, h);
   return {w, h};
 }
 function drawDigStroke(a, cx2, footY){
