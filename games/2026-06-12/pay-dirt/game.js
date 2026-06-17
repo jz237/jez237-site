@@ -540,7 +540,7 @@ function updateHoles(dt){
 }
 
 /* ================= guard AI ================= */
-const GUARD_SPEED = { guard: 0.8, scout: 1.06, mason: 0.62 };
+const GUARD_SPEED = { guard: 0.68, scout: 0.901, mason: 0.527 };
 const STUN_TIME = 3.2, GUARD_RESPAWN_T = 1.4;
 
 /* Guard's-eye geometry: holes are PRETEND-FILLED so guards path straight into them
@@ -1140,11 +1140,33 @@ function handleTouchDig(clientX, clientY){
 }
 function initTouchGestures(){
   const gesture = {id: null, sx: 0, sy: 0, x: 0, y: 0, t: 0, moved: false};
+  const touches = new Map();
+  const pinch = {active: false, startDist: 1, startZoom: 1, changed: false};
   const setMove = (dx, dy) => {
     clearTouchMoveKeys();
     const ax = Math.abs(dx), ay = Math.abs(dy);
     if (ax > 18 && ax >= ay * 0.72) keys[dx < 0 ? 'ArrowLeft' : 'ArrowRight'] = true;
     if (ay > 22 && ay > ax * 0.62) keys[dy < 0 ? 'ArrowUp' : 'ArrowDown'] = true;
+  };
+  const pinchDistance = () => {
+    const pts = [...touches.values()];
+    if (pts.length < 2) return 0;
+    return Math.hypot(pts[0].x - pts[1].x, pts[0].y - pts[1].y);
+  };
+  const beginPinch = () => {
+    pinch.active = true;
+    pinch.changed = false;
+    pinch.startDist = Math.max(1, pinchDistance());
+    pinch.startZoom = mobileZoomAdjust;
+    gesture.id = null;
+    clearTouchMoveKeys();
+  };
+  const updatePinch = () => {
+    if (!pinch.active) return;
+    const d = pinchDistance();
+    if (d <= 0) return;
+    mobileZoomAdjust = clamp(pinch.startZoom * (d / pinch.startDist), 0.72, 1.35);
+    pinch.changed = true;
   };
   const reset = () => {
     gesture.id = null;
@@ -1156,11 +1178,22 @@ function initTouchGestures(){
     e.preventDefault();
     document.body.classList.add('touch');
     AUDIO.ensure();
+    touches.set(e.pointerId, {x: e.clientX, y: e.clientY});
+    if (mobileCamera && touches.size >= 2){
+      beginPinch();
+      return;
+    }
     gesture.id = e.pointerId; gesture.sx = gesture.x = e.clientX; gesture.sy = gesture.y = e.clientY;
     gesture.t = performance.now(); gesture.moved = false;
     try { canvas.setPointerCapture(e.pointerId); } catch (err) {}
   });
   canvas.addEventListener('pointermove', e => {
+    if (touches.has(e.pointerId)) touches.set(e.pointerId, {x: e.clientX, y: e.clientY});
+    if (pinch.active){
+      e.preventDefault();
+      updatePinch();
+      return;
+    }
     if (e.pointerId !== gesture.id) return;
     e.preventDefault();
     gesture.x = e.clientX; gesture.y = e.clientY;
@@ -1169,6 +1202,12 @@ function initTouchGestures(){
     if (gesture.moved) setMove(dx, dy);
   });
   const finish = e => {
+    touches.delete(e.pointerId);
+    if (pinch.active){
+      e.preventDefault();
+      if (touches.size < 2) pinch.active = false;
+      if (pinch.changed) { reset(); return; }
+    }
     if (e.pointerId !== gesture.id) return;
     e.preventDefault();
     const elapsed = performance.now() - gesture.t;
@@ -1178,8 +1217,8 @@ function initTouchGestures(){
     reset();
   };
   canvas.addEventListener('pointerup', finish);
-  canvas.addEventListener('pointercancel', reset);
-  canvas.addEventListener('lostpointercapture', reset);
+  canvas.addEventListener('pointercancel', e => { touches.delete(e.pointerId); reset(); pinch.active = false; });
+  canvas.addEventListener('lostpointercapture', e => { touches.delete(e.pointerId); reset(); if (touches.size < 2) pinch.active = false; });
 }
 
 function playerInput(){
@@ -2470,6 +2509,7 @@ function renderWorldFrame(includeHUD){
 let worldCv = null, worldCx = null;
 let camX = 0, camY = HUD_H;
 let mobileView = null;
+let mobileZoomAdjust = 1;
 function ensureWorldCanvas(){
   if (worldCv) return;
   worldCv = document.createElement('canvas');
@@ -2482,7 +2522,7 @@ function mobileHudHeight(){ return Math.max(74, Math.min(92, Math.round(screenH 
 function mobileCameraScale(){
   const portrait = screenH >= screenW;
   const base = portrait ? 1.36 : 1.55;
-  return Math.max(1.18, Math.min(1.7, base + (screenW < 380 ? 0.08 : 0)));
+  return Math.max(0.95, Math.min(1.95, (base + (screenW < 380 ? 0.08 : 0)) * mobileZoomAdjust));
 }
 function updateMobileCamera(playH, zoom){
   const srcW = Math.min(VIEW_W, screenW / zoom);
@@ -2974,6 +3014,8 @@ window.__g = {
   get dailyDate(){ return dailyDate; },
   get backdrop(){ return painterlyPlateSrc; },
   get glowCacheSize(){ return glowCacheKeys.length; },
+  get mobileZoom(){ return mobileZoomAdjust; },
+  set mobileZoom(v){ mobileZoomAdjust = clamp(Number(v) || 1, 0.72, 1.35); },
   seedDaily(dateStr){
     const d = LEVELS.generateDaily(dateStr);
     mode = 'daily'; dailyDate = d.date; score = 0; lives = 3;
