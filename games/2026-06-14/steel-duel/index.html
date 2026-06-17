@@ -45,7 +45,6 @@
   .watch-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
   .watch-opt{display:flex;flex-direction:column;gap:5px;color:var(--dim);font-size:12px}
   .online-panel{margin-top:10px;padding:10px;border:1px solid var(--edge);border-radius:8px;background:rgba(8,12,20,.62)}
-  .online-panel.hidden{display:none}
   .online-grid{display:grid;grid-template-columns:1fr 120px;gap:8px}
   .online-name{margin-top:8px}
   .online-labels{display:grid;grid-template-columns:1fr 120px;gap:8px;margin-bottom:4px;color:var(--dim);font-size:10px;text-align:left}
@@ -95,20 +94,6 @@
       <button id="btnDuel" class="btn primary">⚔️ 2-PLAYER DUEL</button>
       <button id="btnCoop" class="btn">🤝 CO-OP vs ENEMY TANKS</button>
       <button id="btnOnline" class="btn">🌐 ONLINE ROOM</button>
-      <div id="onlinePanel" class="online-panel hidden">
-        <div class="online-labels"><span>ROOM CODE</span><span>MODE</span></div>
-        <div class="online-grid">
-          <input id="onlineRoom" maxlength="24" placeholder="ROOM CODE" />
-          <select id="onlineMode">
-            <option value="duel">DUEL</option>
-            <option value="coop">CO-OP</option>
-          </select>
-        </div>
-        <input id="onlineName" class="online-name" maxlength="12" placeholder="PLAYER NAME" />
-        <button id="btnOnlineConnect" class="btn primary">START / JOIN ROOM</button>
-        <div class="online-hint">Same room code joins the same match. First player is P1; second player is P2; two more can spectate.</div>
-        <div id="onlineStatus" class="online-status"></div>
-      </div>
       <button id="btnCpu" class="btn">🤖 PLAY vs CPU</button>
       <div class="opt" style="flex-direction:column;gap:6px;margin-top:12px">
         <div>Opponent CPU skill — <b id="diffLabel" style="color:var(--amber)">Seasoned (45)</b></div>
@@ -130,7 +115,30 @@
         <button id="btnHow" class="btn">HOW TO PLAY</button>
         <button id="btnScores" class="btn">🏆 SCORES</button>
       </div>
-      <div class="footer">v15 · First tank-combat arcade game, Kee&nbsp;Games 1974. Drive your foe into the mines.</div>
+      <div class="footer">v16 · First tank-combat arcade game, Kee&nbsp;Games 1974. Drive your foe into the mines.</div>
+    </div>
+  </div>
+
+  <!-- ONLINE -->
+  <div id="ovOnline" class="ov hidden">
+    <div class="card">
+      <h1 style="font-size:34px">ONLINE ROOM</h1>
+      <p class="sub">Duel or co-op with a shared room code</p>
+      <div class="online-panel">
+        <div class="online-labels"><span>ROOM CODE</span><span>MODE</span></div>
+        <div class="online-grid">
+          <input id="onlineRoom" maxlength="24" placeholder="ROOM CODE" />
+          <select id="onlineMode">
+            <option value="duel">DUEL</option>
+            <option value="coop">CO-OP</option>
+          </select>
+        </div>
+        <input id="onlineName" class="online-name" maxlength="12" placeholder="PLAYER NAME" />
+        <button id="btnOnlineConnect" class="btn primary">START / JOIN ROOM</button>
+        <div class="online-hint">Same room code joins the same match. First player is P1; second player is P2; two more can spectate.</div>
+        <div id="onlineStatus" class="online-status"></div>
+      </div>
+      <button id="btnOnlineBack" class="btn">BACK</button>
     </div>
   </div>
 
@@ -193,8 +201,8 @@
     <div id="stickR" class="stick"><div id="stickRk" class="knob"></div><span class="sticklbl">AIM · FIRE</span></div>
   </div>
 
-  <script src="audio.js?v=15"></script>
-  <script src="art.js?v=15"></script>
-  <script src="game.js?v=15"></script>
+  <script src="audio.js?v=16"></script>
+  <script src="art.js?v=16"></script>
+  <script src="game.js?v=16"></script>
 </body>
 </html>
