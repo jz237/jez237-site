@@ -209,6 +209,19 @@ body.touch.playing #touch{display:none;}
     </div>
   </div>
 
+  <div class="overlay" id="ovStuck">
+    <div class="panel">
+      <h2 style="color:var(--danger); letter-spacing:2px;">NO WAY OUT</h2>
+      <div class="tiny" id="stuckReason">this claim cannot be completed from here</div>
+      <div class="row" style="margin-top:10px;">
+        <button id="bStuckRestart">Restart Claim</button>
+      </div>
+      <div class="row">
+        <button id="bStuckMenu" class="ghost small">Camp</button>
+      </div>
+    </div>
+  </div>
+
   <div class="overlay" id="ovOver">
     <div class="panel">
       <h2 id="overTitle" style="color:var(--gold); letter-spacing:2px;">CLAIM LOST</h2>
