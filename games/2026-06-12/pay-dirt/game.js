@@ -3206,35 +3206,42 @@ function drawPlayerPortrait(x, y){
   ctx.stroke();
 }
 
-function drawObjectivePanel(){
-  if (!grid.length) return;
-  const x = 14, y = HUD_H + 16, w = 174, h = 112;
-  panelBox(x, y, w, h, 'OBJECTIVES');
+function objectiveRows(){
   const total = golds.length, got = total - goldLeft;
-  const rows = [
-    {label: 'Gold vein', value: got + '/' + total, done: goldLeft <= 0, col: '#ffd23f'},
-    {label: 'Hidden finds', value: discoveryCount + '/' + discoveryTotal, done: discoveryTotal && discoveryCount >= discoveryTotal, col: '#9ef0c8'},
-    {label: 'Reach exit', value: exitRevealed ? 'open' : 'locked', done: exitRevealed, col: '#3fd2c7'},
+  return [
+    {label: 'GOLD', value: got + '/' + total, done: goldLeft <= 0, col: '#ffd23f'},
+    {label: 'FINDS', value: discoveryCount + '/' + discoveryTotal, done: discoveryTotal && discoveryCount >= discoveryTotal, col: '#9ef0c8'},
+    {label: 'EXIT', value: exitRevealed ? 'OPEN' : 'LOCKED', done: exitRevealed, col: '#3fd2c7'},
   ];
-  ctx.font = '800 12px system-ui, sans-serif';
+}
+function drawObjectiveStrip(){
+  if (!grid.length) return;
+  const rows = objectiveRows();
+  const widths = [96, 104, 118], gap = 8;
+  const totalW = widths.reduce((a, b) => a + b, 0) + gap * (widths.length - 1);
+  let x = (VIEW_W - totalW) / 2, y = HUD_H - 20;
+  ctx.save();
+  ctx.font = '900 10px system-ui, sans-serif';
   ctx.textBaseline = 'middle';
   for (let i = 0; i < rows.length; i++){
-    const ry = y + 43 + i * 23, it = rows[i];
-    ctx.strokeStyle = it.done ? it.col : 'rgba(220,230,245,.55)';
-    ctx.lineWidth = 1.5;
-    roundRect(x + 14, ry - 8, 14, 14, 3);
+    const it = rows[i], w = widths[i];
+    roundRect(x, y, w, 15, 5);
+    ctx.fillStyle = 'rgba(8,10,18,.58)';
+    ctx.fill();
+    ctx.strokeStyle = it.done ? it.col : 'rgba(255,214,110,.32)';
+    ctx.lineWidth = 1;
     ctx.stroke();
-    if (it.done){
-      ctx.fillStyle = it.col;
-      ctx.fillRect(x + 17, ry - 3, 8, 4);
-    }
+    ctx.fillStyle = it.done ? it.col : 'rgba(220,230,245,.72)';
+    ctx.beginPath(); ctx.arc(x + 9, y + 7.5, 3.2, 0, Math.PI * 2); ctx.fill();
     ctx.fillStyle = '#f5eddd';
     ctx.textAlign = 'left';
-    ctx.fillText(it.label, x + 37, ry + 1);
+    ctx.fillText(it.label, x + 17, y + 8);
     ctx.fillStyle = it.col;
     ctx.textAlign = 'right';
-    ctx.fillText(it.value, x + w - 14, ry + 1);
+    ctx.fillText(it.value, x + w - 7, y + 8);
+    x += w + gap;
   }
+  ctx.restore();
 }
 
 function drawMiniMapPanel(){
@@ -3304,8 +3311,9 @@ function drawHUD(){
 
   // centre score
   ctx.textAlign = 'center';
-  ctx.fillStyle = 'rgba(255,216,107,.9)'; ctx.font = '900 12px system-ui, sans-serif'; ctx.fillText('SCORE', VIEW_W / 2, 18);
-  ctx.fillStyle = '#fff'; ctx.font = '900 30px system-ui, sans-serif'; ctx.fillText(String(score).padStart(6, '0'), VIEW_W / 2, 47);
+  ctx.fillStyle = 'rgba(255,216,107,.9)'; ctx.font = '900 11px system-ui, sans-serif'; ctx.fillText('SCORE', VIEW_W / 2, 13);
+  ctx.fillStyle = '#fff'; ctx.font = '900 26px system-ui, sans-serif'; ctx.fillText(String(score).padStart(6, '0'), VIEW_W / 2, 36);
+  drawObjectiveStrip();
 
   // right: time / daily, escape flag
   ctx.textAlign = 'right';
@@ -3341,7 +3349,6 @@ function drawHUD(){
   }
 
   drawHotbar();
-  drawObjectivePanel();
   drawMiniMapPanel();
 }
 
