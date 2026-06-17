@@ -2612,11 +2612,37 @@ function mobileCameraScale(){
   const base = portrait ? 1.36 : 1.55;
   return Math.max(0.95, Math.min(1.95, (base + (screenW < 380 ? 0.08 : 0)) * mobileZoomAdjust));
 }
+function mobileCameraLead(srcW, srcH){
+  if (!player || state !== 'playing') return {x: 0, y: 0};
+  const moveIntent = (keys.ArrowRight ? 1 : 0) - (keys.ArrowLeft ? 1 : 0);
+  const climbIntent = (keys.ArrowDown ? 1 : 0) - (keys.ArrowUp ? 1 : 0);
+  let leadX = (moveIntent || player.dir || 0) * srcW * 0.12;
+  let leadY = climbIntent * srcH * 0.08;
+
+  let nearest = null, best = Infinity;
+  for (const gu of guards){
+    if (gu.state === 'dead' || gu.state === 'stun') continue;
+    const dx = gu.x - player.x, dy = gu.y - player.y;
+    const dist = Math.hypot(dx, dy);
+    const pressure = dist + Math.abs(dy) * 0.45 - (gu.kind === 'scout' ? 1.2 : 0) - (gu.kind === 'mason' ? 0.4 : 0);
+    if (pressure < best){ best = pressure; nearest = {gu, dx, dy, dist}; }
+  }
+  if (nearest && nearest.dist < 9){
+    const urgency = Math.max(0, 1 - nearest.dist / 9);
+    leadX += Math.sign(nearest.dx) * srcW * (0.08 + urgency * 0.13);
+    if (Math.abs(nearest.dy) > 1.25) leadY += Math.sign(nearest.dy) * srcH * (0.04 + urgency * 0.08);
+  }
+  return {
+    x: Math.max(-srcW * 0.28, Math.min(srcW * 0.28, leadX)),
+    y: Math.max(-srcH * 0.18, Math.min(srcH * 0.18, leadY)),
+  };
+}
 function updateMobileCamera(playH, zoom){
   const srcW = Math.min(VIEW_W, screenW / zoom);
   const srcH = Math.min(VIEW_H - HUD_H, playH / zoom);
-  const targetX = player ? px(player.x) - srcW * 0.5 : (VIEW_W - srcW) * 0.5;
-  const targetY = player ? py(player.y) - srcH * 0.56 : HUD_H;
+  const lead = mobileCameraLead(srcW, srcH);
+  const targetX = player ? px(player.x) - srcW * 0.5 + lead.x : (VIEW_W - srcW) * 0.5;
+  const targetY = player ? py(player.y) - srcH * 0.56 + lead.y : HUD_H;
   const nextX = clamp(targetX, 0, VIEW_W - srcW);
   const nextY = clamp(targetY, HUD_H, VIEW_H - srcH);
   const follow = state === 'playing' ? 0.18 : 0.32;
@@ -2743,6 +2769,14 @@ function drawMobileAwareness(){
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
       ctx.fillText(item.icon, item.cx, item.cy + 1);
+      if (item.dist < 6){
+        const labelY = item.cy + (item.cy < mobileView.hudH + 42 ? 18 : -16);
+        ctx.fillStyle = 'rgba(5,7,12,.72)';
+        ctx.fillRect(item.cx - 25, labelY - 7, 50, 13);
+        ctx.fillStyle = item.color;
+        ctx.font = '900 8px system-ui, sans-serif';
+        ctx.fillText(item.label, item.cx, labelY);
+      }
     } else if (item.kind === 'gold') {
       drawGemIcon(item.cx, item.cy, 6, item.color);
     } else {
