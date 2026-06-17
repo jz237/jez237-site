@@ -1894,5 +1894,17 @@
     "slot": "afternoon",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-06-16-evening-clockwork-herb-drying-rack",
+    "title": "Clockwork Herb Drying Rack",
+    "tests": "Reusable non-photo physical visual template: a tactile clockwork herb drying rack product/workshop scene, no paper-forward composition.",
+    "prompt": "Create a finished cinematic square product/workshop photograph of a compact brass-and-walnut clockwork herb drying rack in a narrow apartment kitchen at night. Build it like a practical miniature mechanical greenhouse: rotating circular fine-mesh drying tiers holding rosemary, thyme, sage, mint, lavender, bay leaves, and tiny chili strings at different drying stages; warm brass gears, slow chain drives, porcelain humidity beads, glass bell jars, copper ventilation fins, unlabeled ceramic weights, linen twine, dark walnut rails, a worn hand crank, an open wooden drawer of small replacement parts, condensation on a nearby window, chipped enamel tiles, scattered herb crumbs, worn patina, warm under-cabinet tungsten light, and cool blue rain reflections. Do not render title text, labels, paper, signage, logos, people, hands, or readable writing.\n\nSource photo needed: none.\n\nReusable fill-in-the-blank template: Create a finished reusable physical visual about [TOPIC] using [DATA OR DETAILS], set in [SETTING] with [MOOD] lighting. Build the scene around a tactile functional object, rack, cabinet, shelf system, display case, tool bench, miniature set, or product mockup rather than a document. Include [MATERIALS], [TOOLS OR PROPS], [SURFACE DETAILS], and [LIGHTING DETAILS]. Preserve supplied categories, labels, relationships, practical constraints, mood, and any factual details when provided; invent coherent specifics when not supplied. Avoid paper sheets, placards, readable labels, logos, private data, people or hands unless requested, and generic stock-photo styling.\n\nWhat to preserve: the supplied topic, categories, relationships, object functions, mood, setting, material logic, and any user-provided factual details.\n\nWhat to change: transform the topic into a richly detailed photographed physical arrangement with coherent construction, tactile materials, environmental context, believable wear, specific props, and cinematic lighting.\n\nExample substitution: [TOPIC] = Clockwork Herb Drying Rack; [DATA OR DETAILS] = rotating mesh tiers, rosemary, thyme, sage, mint, lavender, bay leaves, chili strings, brass gears, chain drives, porcelain humidity beads, bell jars, copper ventilation fins, ceramic weights, linen twine, walnut rails, and a worn hand crank; [SETTING] = narrow apartment kitchen at night; [MOOD] = warm tungsten under-cabinet glow mixed with cool blue rain reflections.",
+    "image": "images/2026-06-16-evening-clockwork-herb-drying-rack.png",
+    "date": "2026-06-16",
+    "batch": "Daily Prompt",
+    "slot": "evening",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
