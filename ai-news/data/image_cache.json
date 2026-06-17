@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-17T09:00:01.102841+00:00",
+  "updatedAt": "2026-06-17T10:00:01.692067+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -10664,6 +10664,14 @@
     "https://simonwillison.net/2026/Jun/17/click-to-play-component": {
       "image": "",
       "checkedAt": "2026-06-17T07:00:01.679932+00:00"
+    },
+    "https://www.theverge.com/ai-artificial-intelligence/951283/genesis-ai-humanoid-robot-eno": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/Genesis-Eno-Home-Pebble-Beach-CA-06062026-Pouring.png?quality=90&amp;strip=all&amp;crop=0%2C10.761594140703%2C100%2C78.476811718594&amp;w=1200",
+      "checkedAt": "2026-06-17T10:00:01.692067+00:00"
+    },
+    "https://huggingface.co/blog/zai-org/glm-52-blog": {
+      "image": "https://cdn-uploads.huggingface.co/production/uploads/67066ea38a79951d7b8d4195/iaTHtYOBgeY0C3Xx3vymr.png",
+      "checkedAt": "2026-06-17T10:00:01.692067+00:00"
     }
   }
 }
