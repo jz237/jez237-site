@@ -434,6 +434,19 @@ let prevDigL = false, prevDigR = false;
 let levelTime = 0;
 let currentRows = null;   // source rows of the live level (for clean restarts)
 
+function chipDig(c, r, dir, heavy){
+  const x = c + 0.5 - dir * 0.22, y = r + 0.2;
+  spawnParticles(x, y, heavy ? 10 : 5, {
+    color: heavy ? ['#d3a15d', '#a06e42', '#6d4426'] : ['#b6814b', '#7d5230'],
+    spd: heavy ? 4.1 : 2.4,
+    ang: -Math.PI / 2 - dir * 0.35,
+    spread: heavy ? 1.55 : 1.1,
+    life: heavy ? .42 : .24,
+    size: heavy ? 3.2 : 2.3,
+    grav: heavy ? 28 : 24,
+  });
+}
+
 function tryDig(dir){
   if (!player || player.state === 'dead' || player.digT > 0) return false;
   if (player.state !== 'idle' && player.state !== 'run') return false;
@@ -459,14 +472,17 @@ function tryDig(dir){
     return true;
   }
   player.digT = player.shovelT > 0 ? 0.05 : DIG_TIME;
-  player.pendingDig = {c: tc, r: tr};
+  player.pendingDig = {c: tc, r: tr, dir, total: player.digT, fx: 0};
+  chipDig(tc, tr, dir, player.shovelT > 0);
+  shake = Math.max(shake, player.shovelT > 0 ? .16 : .08);
   return true;
 }
 
 function openHole(c, r){
   holes.set(key(c, r), {c, r, t: 0});
-  shake = Math.max(shake, .25);
-  spawnParticles(c + .5, r + .5, 10, {color: ['#7d5230', '#532f1a', '#a06e42'], spd: 3.5, life: .5, size: 3.5, grav: 30});
+  shake = Math.max(shake, .32);
+  spawnParticles(c + .5, r + .46, 14, {color: ['#7d5230', '#532f1a', '#a06e42', '#d3a15d'], spd: 4.2, life: .54, size: 3.7, grav: 30});
+  spawnParticles(c + .5, r + .34, 4, {color: '#ffcf73', spd: 2.5, life: .18, size: 2, grav: 10, glow: true});
   AUDIO.sfx('dig');
   // digging beside a TNT crate lights its fuse
   for (const [dc, dr] of [[-1, 0], [1, 0], [0, -1], [0, 1]]){
@@ -1436,6 +1452,19 @@ function update(dt){
 
   if (player.digT > 0){
     player.digT -= dt;
+    if (player.pendingDig){
+      const total = Math.max(0.01, player.pendingDig.total || DIG_TIME);
+      const progress = clamp(1 - player.digT / total, 0, 1);
+      if (progress >= 0.38 && player.pendingDig.fx < 1){
+        chipDig(player.pendingDig.c, player.pendingDig.r, player.pendingDig.dir || player.dir, false);
+        player.pendingDig.fx = 1;
+      }
+      if (progress >= 0.72 && player.pendingDig.fx < 2){
+        chipDig(player.pendingDig.c, player.pendingDig.r, player.pendingDig.dir || player.dir, true);
+        player.pendingDig.fx = 2;
+        shake = Math.max(shake, .14);
+      }
+    }
     if (player.digT <= 0 && player.pendingDig){
       openHole(player.pendingDig.c, player.pendingDig.r);
       player.pendingDig = null;
@@ -1825,6 +1854,52 @@ function drawGeneratedMiner(a, pose, fi, cx2, footY){
   }
   return {w, h};
 }
+function drawDigStroke(a, cx2, footY){
+  if (!a.pendingDig || a.digT <= 0) return;
+  const total = Math.max(0.01, a.pendingDig.total || DIG_TIME);
+  const p = clamp(1 - a.digT / total, 0, 1);
+  const dir = a.pendingDig.dir || a.dir || 1;
+  const tx = px(a.pendingDig.c + 0.5), ty = py(a.pendingDig.r + 0.34);
+  const hx = cx2 + dir * 16, hy = footY - 34;
+  const swing = Math.sin(p * Math.PI);
+  const bx = hx + (tx - hx) * (0.35 + p * 0.62);
+  const by = hy + (ty - hy) * (0.25 + p * 0.74) - swing * 16;
+
+  ctx.save();
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+  ctx.globalAlpha = 0.48 + swing * 0.35;
+  ctx.strokeStyle = 'rgba(20,15,12,.7)';
+  ctx.lineWidth = 5;
+  ctx.beginPath();
+  ctx.moveTo(hx, hy);
+  ctx.quadraticCurveTo((hx + bx) * .5, hy - 18 * swing, bx, by);
+  ctx.stroke();
+  ctx.strokeStyle = '#d8c08a';
+  ctx.lineWidth = 2.4;
+  ctx.stroke();
+  ctx.translate(bx, by);
+  ctx.rotate(dir * (0.55 - p * 1.1));
+  ctx.fillStyle = '#aeb7ba';
+  ctx.strokeStyle = 'rgba(32,28,24,.65)';
+  ctx.lineWidth = 1.2;
+  ctx.beginPath();
+  ctx.ellipse(0, 0, 7, 4, 0, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.stroke();
+  ctx.restore();
+
+  ctx.save();
+  ctx.globalAlpha = 0.25 + p * 0.45;
+  ctx.strokeStyle = '#ffe09a';
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.moveTo(tx - 9, ty + 7);
+  ctx.lineTo(tx - 1, ty + 2);
+  ctx.lineTo(tx + 7, ty + 8);
+  ctx.stroke();
+  ctx.restore();
+}
 function drawActor(a){
   const set = ART.frames[a.kind] || ART.frames.guard;
   const pose = poseFor(a);
@@ -1872,6 +1947,7 @@ function drawActor(a){
     ctx.drawImage(img, 0, 0, w, h);
   }
   ctx.restore();
+  if (a.kind === 'player') drawDigStroke(a, cx2, footY);
   if (a.kind !== 'player' && a.state !== 'dead'){
     const meta = guardMeta(a);
     const badgeY = footY - h - 10 + Math.sin(gameTime * 5 + a.x) * 1.2;
@@ -2431,8 +2507,20 @@ function renderWorldFrame(includeHUD){
     }
     // dig-in-progress
     if (player && player.digT > 0 && player.pendingDig){
-      ctx.globalAlpha = Math.max(0, player.digT / DIG_TIME);
-      drawTile(T.brick, player.pendingDig.c, player.pendingDig.r); ctx.globalAlpha = 1;
+      const total = Math.max(0.01, player.pendingDig.total || DIG_TIME);
+      const p = clamp(1 - player.digT / total, 0, 1);
+      const x = player.pendingDig.c * TILE, y = player.pendingDig.r * TILE + HUD_H;
+      ctx.globalAlpha = 1 - p * .36;
+      drawTile(T.brick, player.pendingDig.c, player.pendingDig.r);
+      ctx.globalAlpha = .28 + p * .46;
+      ctx.fillStyle = '#2b1710';
+      ctx.fillRect(x + 6 + p * 5, y + 12, 14 + p * 8, 3);
+      ctx.fillRect(x + 14, y + 21, 12 + p * 10, 3);
+      ctx.fillRect(x + 20 - p * 4, y + 8, 3, 22);
+      ctx.globalAlpha = .18 + p * .28;
+      ctx.fillStyle = '#d3a15d';
+      ctx.fillRect(x + 5, y + TILE - 6 - p * 6, TILE - 10, 4);
+      ctx.globalAlpha = 1;
     }
     // gold — gentle float bob + breathing pulse + drifting twinkle
     for (const gd of golds){
