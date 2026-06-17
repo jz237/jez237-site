@@ -149,7 +149,7 @@ let runDustT = 0, digBuffer = 0, digBufDir = 0;
 let titleRunner = null;     // attract-scene actor
 
 /* ================= particles + floating text ================= */
-let particles = [], popups = [];
+let particles = [], popups = [], pickupTrails = [];
 function spawnParticles(wx, wy, n, opt){
   opt = opt || {};
   for (let i = 0; i < n; i++){
@@ -180,8 +180,45 @@ function updateParticles(dt){
     t.life -= dt; t.y -= dt * 0.9;
     if (t.life <= 0) popups.splice(i, 1);
   }
+  for (let i = pickupTrails.length - 1; i >= 0; i--){
+    const tr = pickupTrails[i];
+    tr.t += dt;
+    if (tr.t >= tr.life) pickupTrails.splice(i, 1);
+  }
 }
 function popup(wx, wy, text, color){ popups.push({x: wx, y: wy, text, color: color || '#ffd23f', life: 1.1}); }
+function pickupTrail(wx, wy, color){
+  for (let i = 0; i < 4; i++){
+    pickupTrails.push({
+      sx: px(wx) + (rnd() - .5) * 12,
+      sy: py(wy) + (rnd() - .5) * 10,
+      ex: 108 + i * 5,
+      ey: 50 + Math.sin(i) * 2,
+      t: -i * 0.045,
+      life: .56 + i * .04,
+      color: color || '#ffd23f',
+      bend: 28 + rnd() * 26,
+    });
+  }
+}
+function drawPickupTrails(){
+  if (!pickupTrails.length) return;
+  ctx.save();
+  ctx.globalCompositeOperation = 'lighter';
+  for (const tr of pickupTrails){
+    const p = clamp(tr.t / tr.life, 0, 1);
+    if (tr.t < 0 || p >= 1) continue;
+    const ease = 1 - Math.pow(1 - p, 3);
+    const x = tr.sx + (tr.ex - tr.sx) * ease;
+    const y = tr.sy + (tr.ey - tr.sy) * ease - Math.sin(p * Math.PI) * tr.bend;
+    const a = Math.sin(p * Math.PI);
+    ctx.globalAlpha = a;
+    drawGoldGem(x, y, 4.8 + a * 2, gameTime + p * 5);
+  }
+  ctx.globalAlpha = 1;
+  ctx.globalCompositeOperation = 'source-over';
+  ctx.restore();
+}
 
 const $ = id => document.getElementById(id);
 const OVERLAYS = ['ovTitle', 'ovHow', 'ovLevels', 'ovScores', 'ovPause', 'ovOver'];
@@ -436,6 +473,7 @@ let currentRows = null;   // source rows of the live level (for clean restarts)
 
 function chipDig(c, r, dir, heavy){
   const x = c + 0.5 - dir * 0.22, y = r + 0.2;
+  AUDIO.sfx('chip');
   spawnParticles(x, y, heavy ? 10 : 5, {
     color: heavy ? ['#d3a15d', '#a06e42', '#6d4426'] : ['#b6814b', '#7d5230'],
     spd: heavy ? 4.1 : 2.4,
@@ -545,6 +583,8 @@ function updateHoles(dt){
     h.t += dt;
     if (h.t >= HOLE_LIFE){
       holes.delete(key(h.c, h.r));
+      AUDIO.sfx('refill');
+      spawnParticles(h.c + .5, h.r + .55, 12, {color: ['#5b3922', '#8a6038', '#c18a52'], spd: 2.8, ang: -Math.PI / 2, spread: 2.6, life: .36, size: 3.2, grav: 22});
       if (player && player.state !== 'dead' &&
           Math.floor(player.x) === h.c && Math.floor(player.y) === h.r)
         killPlayer('sealed');
@@ -848,6 +888,7 @@ function collectGold(gd){
   // juicy pickup burst: gold shards + a quick bright sparkle ring
   spawnParticles(gd.c + .5, gd.r + .5, 16, {color: ['#ffd23f', '#fff3b0', '#ff9d2e'], spd: 3.4, life: .55, size: 3, grav: -2, glow: true});
   spawnParticles(gd.c + .5, gd.r + .5, 7, {color: ['#ffffff'], spd: 5.5, life: .3, size: 2, grav: 0, glow: true});
+  pickupTrail(gd.c + .5, gd.r + .5, '#ffd23f');
   popup(gd.c + .5, gd.r + .3, comboN > 1 ? val + ' ×' + comboMult().toFixed(1).replace('.0', '') : '' + val, comboN > 2 ? '#ff9d2e' : '#ffd23f');
   AUDIO.sfx(comboN > 2 ? 'goldhi' : 'gold');
   if (goldLeft <= 0) revealExit();
@@ -1311,6 +1352,15 @@ function seedTreasures(){
   discoveryPulse = 0;
   oilLightT = 0;
 }
+function claimThreatLabel(){
+  const counts = {guard: 0, scout: 0, mason: 0};
+  for (const g of guardSpawns) counts[g.kind || 'guard']++;
+  const parts = [];
+  if (counts.scout) parts.push(counts.scout + ' scout' + (counts.scout > 1 ? 's' : ''));
+  if (counts.mason) parts.push(counts.mason + ' mason' + (counts.mason > 1 ? 's' : ''));
+  if (counts.guard) parts.push(counts.guard + ' jumper' + (counts.guard > 1 ? 's' : ''));
+  return parts.length ? parts.join(' / ') : 'quiet claim';
+}
 
 function loadLevelData(rows){
   currentRows = rows;
@@ -1327,8 +1377,13 @@ function loadLevelData(rows){
   buildBackdrop();
   computeDecor();
   // intro banner
-  if (mode === 'daily') banner = {text: 'DAILY DIG', sub: dailyDate || LEVELS.dailyDateUTC(), life: 2.4};
-  else banner = {text: 'CLAIM ' + (levelIndex + 1), sub: (LEVELS.names[levelIndex] || '').toUpperCase(), brief: LEVELS.briefs && LEVELS.briefs[levelIndex], life: 2.4};
+  const stats = [
+    {label: 'GOLD', value: golds.length},
+    {label: 'FINDS', value: discoveryTotal},
+    {label: 'THREAT', value: claimThreatLabel().toUpperCase()},
+  ];
+  if (mode === 'daily') banner = {text: 'DAILY DIG', sub: dailyDate || LEVELS.dailyDateUTC(), stats, life: 2.4};
+  else banner = {text: 'CLAIM ' + (levelIndex + 1), sub: (LEVELS.names[levelIndex] || '').toUpperCase(), brief: LEVELS.briefs && LEVELS.briefs[levelIndex], stats, life: 2.4};
   hint = null;
   if (mode === 'campaign'){
     const brief = LEVELS.briefs && LEVELS.briefs[levelIndex];
@@ -1876,6 +1931,83 @@ function drawDigStroke(a, cx2, footY){
   ctx.stroke();
   ctx.restore();
 }
+function actorBodyMotion(a, pose){
+  if (a.kind !== 'player') return {rot: 0, sx: 1, sy: 1, ox: 0, oy: 0};
+  if (pose === 'dig'){
+    const total = Math.max(0.01, a.pendingDig && a.pendingDig.total || DIG_TIME);
+    const p = clamp(1 - a.digT / total, 0, 1);
+    const brace = Math.sin(p * Math.PI);
+    return {rot: (a.dir || 1) * (-0.11 - brace * 0.07), sx: 1 + brace * 0.08, sy: 1 - brace * 0.06, ox: -(a.dir || 1) * (2 + brace * 4), oy: brace * 2};
+  }
+  if (pose === 'run'){
+    const bob = Math.sin(a.anim * 18);
+    return {rot: (a.dir || 1) * 0.055, sx: 1, sy: 1, ox: 0, oy: bob > 0 ? -1.5 : 0};
+  }
+  if (pose === 'climb') return {rot: Math.sin(a.anim * 8) * 0.035, sx: 1, sy: 1, ox: Math.sin(a.anim * 8) * 1.5, oy: 0};
+  if (pose === 'fall') return {rot: (a.dir || 1) * 0.12, sx: 0.98, sy: 1.03, ox: 0, oy: 0};
+  if (a.gold) return {rot: Math.sin(a.anim * 5) * 0.035, sx: 1.03, sy: .98, ox: 0, oy: 1};
+  return {rot: 0, sx: 1, sy: 1, ox: 0, oy: 0};
+}
+function drawGuardAccents(a, cx2, footY, h, w){
+  const meta = guardMeta(a);
+  ctx.save();
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+  ctx.globalCompositeOperation = 'source-over';
+  ctx.strokeStyle = 'rgba(5,4,8,.78)';
+  ctx.lineWidth = 5;
+  ctx.beginPath();
+  ctx.ellipse(cx2, footY - h * .48, w * .31, h * .42, 0, 0, Math.PI * 2);
+  ctx.stroke();
+  ctx.strokeStyle = meta.color;
+  ctx.lineWidth = 2.2;
+  ctx.globalAlpha = .85;
+  ctx.beginPath();
+  ctx.ellipse(cx2, footY - h * .48, w * .31, h * .42, 0, 0, Math.PI * 2);
+  ctx.stroke();
+  ctx.globalAlpha = 1;
+
+  if (a.kind === 'scout'){
+    ctx.fillStyle = meta.color;
+    ctx.beginPath();
+    ctx.moveTo(cx2 - 10, footY - h * .8);
+    ctx.lineTo(cx2 + 10, footY - h * .8);
+    ctx.lineTo(cx2 + 17, footY - h * .7);
+    ctx.lineTo(cx2 - 17, footY - h * .7);
+    ctx.closePath();
+    ctx.fill();
+    ctx.strokeStyle = '#d7fffb';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(cx2 - 18, footY - h * .66);
+    ctx.lineTo(cx2 - 6, footY - h * .66);
+    ctx.moveTo(cx2 + 6, footY - h * .66);
+    ctx.lineTo(cx2 + 18, footY - h * .66);
+    ctx.stroke();
+  } else if (a.kind === 'mason'){
+    ctx.fillStyle = '#b89a62';
+    ctx.fillRect(cx2 - 21, footY - h * .64, 12, 8);
+    ctx.fillRect(cx2 + 9, footY - h * .64, 12, 8);
+    ctx.fillStyle = '#d8c08a';
+    ctx.fillRect(cx2 + 12, footY - h * .44, 9, 4);
+    ctx.fillRect(cx2 + 18, footY - h * .44, 4, 15);
+  } else {
+    ctx.strokeStyle = '#ff8fa0';
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.moveTo(cx2 - 14, footY - h * .78);
+    ctx.lineTo(cx2 + 14, footY - h * .78);
+    ctx.stroke();
+    ctx.fillStyle = meta.color;
+    ctx.beginPath();
+    ctx.moveTo(cx2, footY - h * .9);
+    ctx.lineTo(cx2 - 7, footY - h * .79);
+    ctx.lineTo(cx2 + 7, footY - h * .79);
+    ctx.closePath();
+    ctx.fill();
+  }
+  ctx.restore();
+}
 function drawActor(a){
   const set = ART.frames[a.kind] || ART.frames.guard;
   const pose = poseFor(a);
@@ -1916,6 +2048,13 @@ function drawActor(a){
   if (a.invuln > 0 && Math.floor(gameTime * 16) % 2) ctx.globalAlpha *= 0.4;
   // landing squash-and-stretch (juice)
   if (a.squashT > 0){ const s = a.squashT / 0.15; ctx.translate(cx2, footY); ctx.scale(1 + 0.18 * s, 1 - 0.22 * s); ctx.translate(-cx2, -footY); }
+  const motion = actorBodyMotion(a, pose);
+  if (motion.rot || motion.sx !== 1 || motion.sy !== 1 || motion.ox || motion.oy){
+    ctx.translate(cx2 + motion.ox, footY + motion.oy);
+    ctx.rotate(motion.rot);
+    ctx.scale(motion.sx, motion.sy);
+    ctx.translate(-cx2, -footY);
+  }
   if (generatedPlayer) drawGeneratedMiner(a, pose, fi, cx2, footY);
   else {
     ctx.translate(cx2, footY - h);
@@ -1926,6 +2065,7 @@ function drawActor(a){
   if (a.kind === 'player') drawDigStroke(a, cx2, footY);
   if (a.kind !== 'player' && a.state !== 'dead'){
     const meta = guardMeta(a);
+    drawGuardAccents(a, cx2, footY, h, w);
     const badgeY = footY - h - 10 + Math.sin(gameTime * 5 + a.x) * 1.2;
     ctx.save();
     ctx.globalCompositeOperation = 'source-over';
@@ -1941,20 +2081,6 @@ function drawActor(a){
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillText(meta.icon, cx2, badgeY + .5);
-    if (a.kind === 'mason'){
-      ctx.fillStyle = '#d8c08a';
-      ctx.fillRect(cx2 + 11, footY - h * .48, 7, 3);
-      ctx.fillRect(cx2 + 15, footY - h * .48, 3, 10);
-    } else if (a.kind === 'scout'){
-      ctx.strokeStyle = meta.color;
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      ctx.moveTo(cx2 - 16, footY - h * .76);
-      ctx.lineTo(cx2 - 7, footY - h * .76);
-      ctx.moveTo(cx2 + 7, footY - h * .76);
-      ctx.lineTo(cx2 + 16, footY - h * .76);
-      ctx.stroke();
-    }
     ctx.restore();
   }
   // carried gold — show which guard pocketed your nugget
@@ -2623,6 +2749,7 @@ function renderWorldFrame(includeHUD){
       ctx.fillRect(px(p.x) - p.size / 2, py(p.y) - p.size / 2, p.size, p.size);
     }
     ctx.globalAlpha = 1;
+    if (includeHUD) drawPickupTrails();
 
     // floating score popups (with a quick scale-pop)
     ctx.font = '900 16px Consolas, monospace'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
@@ -2720,7 +2847,26 @@ function renderWorldFrame(includeHUD){
     ctx.fillStyle = '#ffd23f'; ctx.font = '900 40px Consolas, monospace';
     ctx.fillText(banner.text, VIEW_W / 2, VIEW_H / 2 - 18);
     if (banner.sub){ ctx.fillStyle = '#d8cfe4'; ctx.font = '600 18px Consolas, monospace'; ctx.fillText(banner.sub, VIEW_W / 2, VIEW_H / 2 + 16); }
-    if (banner.brief){ ctx.fillStyle = '#ffe98a'; ctx.font = '700 14px system-ui, sans-serif'; ctx.fillText(banner.brief, VIEW_W / 2, VIEW_H / 2 + 43); }
+    if (banner.stats && banner.stats.length){
+      ctx.font = '900 10px system-ui, sans-serif';
+      const chipY = VIEW_H / 2 + 43;
+      const widths = banner.stats.map(s => Math.max(64, Math.min(158, ctx.measureText(s.label + ' ' + s.value).width + 22)));
+      const gap = 7, totalW = widths.reduce((sum, w) => sum + w, 0) + gap * (widths.length - 1);
+      let bx = VIEW_W / 2 - totalW / 2;
+      for (let i = 0; i < banner.stats.length; i++){
+        const s = banner.stats[i], w = widths[i];
+        roundRect(bx, chipY - 9, w, 18, 5);
+        ctx.fillStyle = 'rgba(8,10,18,.74)';
+        ctx.fill();
+        ctx.strokeStyle = i === 2 ? 'rgba(255,64,90,.46)' : 'rgba(255,210,63,.36)';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+        ctx.fillStyle = i === 2 ? '#ff8fa0' : '#ffd86b';
+        ctx.fillText(s.label + ' ' + s.value, bx + w / 2, chipY + 1);
+        bx += w + gap;
+      }
+    }
+    if (banner.brief){ ctx.fillStyle = '#ffe98a'; ctx.font = '700 14px system-ui, sans-serif'; ctx.fillText(banner.brief, VIEW_W / 2, VIEW_H / 2 + 72); }
     ctx.globalAlpha = 1;
   }
 
@@ -2994,14 +3140,48 @@ function render(){
 function drawPit(c, r, dark, h){
   const x = c * TILE, y = r * TILE + HUD_H;
   const warn = h ? Math.max(0, (h.t - (HOLE_LIFE - HOLE_WARN)) / HOLE_WARN) : 0;
+  const n = (c * 73856093 ^ r * 19349663 ^ levelIndex * 83492791) >>> 0;
+  const topL = 3 + (n & 3), topR = TILE - 3 - ((n >> 3) & 3);
+  const botR = TILE - 2 - ((n >> 6) & 3), botL = 2 + ((n >> 9) & 3);
+  const midL = 1 + ((n >> 12) & 3), midR = TILE - 1 - ((n >> 15) & 3);
+  ctx.save();
+  ctx.beginPath();
+  ctx.moveTo(x + topL, y + 5);
+  ctx.quadraticCurveTo(x + TILE * .28, y - 1, x + TILE * .5, y + 3 + ((n >> 18) & 3));
+  ctx.quadraticCurveTo(x + TILE * .76, y + 1, x + topR, y + 6);
+  ctx.lineTo(x + midR, y + TILE * .55);
+  ctx.quadraticCurveTo(x + botR, y + TILE - 2, x + TILE * .52, y + TILE - 1);
+  ctx.quadraticCurveTo(x + TILE * .2, y + TILE - 3, x + botL, y + TILE * .72);
+  ctx.lineTo(x + midL, y + TILE * .32);
+  ctx.closePath();
   const pit = ctx.createLinearGradient(x, y, x, y + TILE);
   pit.addColorStop(0, 'rgba(35,22,17,' + (0.94 * dark) + ')');
   pit.addColorStop(0.45, 'rgba(11,8,12,' + (0.96 * dark) + ')');
   pit.addColorStop(1, 'rgba(0,0,0,' + dark + ')');
   ctx.fillStyle = pit;
-  ctx.fillRect(x, y, TILE, TILE);
-  ctx.fillStyle = 'rgba(0,0,0,' + (0.42 * dark) + ')';
-  ctx.fillRect(x + 2, y + 2, TILE - 4, 6);
+  ctx.fill();
+
+  ctx.lineWidth = 2.5;
+  ctx.strokeStyle = 'rgba(18,10,6,' + (0.58 * dark) + ')';
+  ctx.stroke();
+  ctx.strokeStyle = 'rgba(214,151,82,' + (0.32 * dark) + ')';
+  ctx.lineWidth = 1.4;
+  ctx.beginPath();
+  ctx.moveTo(x + topL + 3, y + 7);
+  ctx.quadraticCurveTo(x + TILE * .42, y + 2, x + topR - 4, y + 8);
+  ctx.stroke();
+
+  ctx.fillStyle = 'rgba(0,0,0,' + (0.34 * dark) + ')';
+  ctx.beginPath();
+  ctx.ellipse(x + TILE * .5, y + TILE * .62, TILE * .32, TILE * .2, 0, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.fillStyle = 'rgba(196,134,75,' + (0.42 * dark) + ')';
+  for (let i = 0; i < 5; i++){
+    const rx = x + 5 + ((n >> (i * 5)) % 27);
+    const ry = y + 4 + ((n >> (i * 4 + 2)) % 27);
+    ctx.fillRect(rx, ry, 2 + (i & 1), 1 + (i % 3 === 0 ? 2 : 1));
+  }
 
   if (warn > 0){
     const tremble = Math.sin(h.t * 34) * 1.2;
@@ -3012,6 +3192,7 @@ function drawPit(c, r, dark, h){
     ctx.fillRect(x + 8 - tremble, y + 5, TILE - 16, 3);
     ctx.globalAlpha = 1;
   }
+  ctx.restore();
 }
 
 function hexA(hex, a){
