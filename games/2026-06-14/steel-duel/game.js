@@ -388,6 +388,14 @@
     for (let i = 1; i < n; i++) { const t = i / n; if (isSolidAt(x0 + dx * t, y0 + dy * t)) return false; }
     return true;
   }
+  function clearShot(me, ang) {                            // true if a shell fired along `ang` reaches an enemy before any wall
+    for (let d = TANK_R + 6; d < SHELL_MAX_DIST; d += 9) {
+      const x = me.x + Math.cos(ang) * d, y = me.y + Math.sin(ang) * d;
+      if (isSolidAt(x, y)) return false;                  // wall blocks the line of fire
+      for (const t of tanks) if (t.alive && opposing(me, t) && Math.hypot(t.x - x, t.y - y) < (t.hitR || TANK_R) + 7) return true;
+    }
+    return false;
+  }
 
   /* ===================== A* pathfinding ===================== */
   function aStar(s, g, blocked) {
@@ -486,7 +494,7 @@
 
   /* ===================== human command ===================== */
   function humanCommand(i, cmd) {
-    const c = controls[i], me = tanks[i];
+    const c = controls[i] || (controls[i] = ctrl()), me = tanks[i];
     cmd.turn = 0; cmd.throttle = 0; cmd.aim = null; cmd.fire = false; cmd.aimInstant = true; cmd.moveVec = null;
     // Campaign & vs-CPU use simplified controls: DIRECT movement (go where you point) + assisted aim/auto-fire.
     if (mode === 'campaign' || mode === 'cpu') {
@@ -495,13 +503,19 @@
       if (c.driveVec && c.driveVec.active) { mvx = Math.cos(c.driveVec.angle); mvy = Math.sin(c.driveVec.angle); mag = c.driveVec.mag; }
       else { mvx = (c.right ? 1 : 0) - (c.left ? 1 : 0); mvy = (c.back ? 1 : 0) - (c.fwd ? 1 : 0); const m = Math.hypot(mvx, mvy); if (m > 0) { mvx /= m; mvy /= m; mag = 1; } }
       cmd.moveVec = { ang: mag > 0.01 ? Math.atan2(mvy, mvx) : me.heading, mag: Math.min(1, mag) };
-      // ---- aim + fire (auto-fire toggle in Options) ----
+      // ---- aim + fire: auto-fire only with a clear line of fire to an enemy; manual fire (click/Space) always works ----
       const foe = nearestFoe(me);
       const mouseAim = (i === 0 && !touchActive && (!campaign || campaign.players === 1));   // 1P desktop steers the turret with the mouse
-      if (mouseAim) { cmd.aim = Math.atan2(mouseY - me.y, mouseX - me.x); cmd.aimInstant = true; cmd.fire = autoFire ? (!!foe || !!c.fire) : !!c.fire; }
-      else if (c.aimVec && c.aimVec.active) { cmd.aim = c.aimVec.angle; cmd.aimInstant = true; cmd.fire = true; }   // mobile twin-stick (auto-fire off): manual aim + fire
-      else if (foe) { cmd.aim = Math.atan2(foe.y - me.y, foe.x - me.x); cmd.aimInstant = false; cmd.turretTurn = TURRET_TURN; cmd.fire = autoFire ? true : !!c.fire; }   // auto-aim nearest
-      else { cmd.aim = null; cmd.fire = !!c.fire; }
+      if (mouseAim) {
+        cmd.aim = Math.atan2(mouseY - me.y, mouseX - me.x); cmd.aimInstant = true;
+        cmd.fire = (autoFire && clearShot(me, cmd.aim)) || !!c.fire;
+      } else if (c.aimVec && c.aimVec.active) {            // mobile twin-stick (auto-fire off): manual aim + fire
+        cmd.aim = c.aimVec.angle; cmd.aimInstant = true; cmd.fire = true;
+      } else if (foe) {                                     // auto-aim nearest enemy; fire once the turret is lined up with a clear shot
+        cmd.aim = Math.atan2(foe.y - me.y, foe.x - me.x); cmd.aimInstant = false; cmd.turretTurn = TURRET_TURN;
+        const aligned = Math.abs(wrapAngle(me.turret - cmd.aim)) < 0.22;
+        cmd.fire = (autoFire && aligned && clearShot(me, cmd.aim)) || !!c.fire;
+      } else { cmd.aim = null; cmd.fire = !!c.fire; }
       return;
     }
     // Versus duel / survival co-op keep the faithful 1974 tank steering + hull-locked barrel.
