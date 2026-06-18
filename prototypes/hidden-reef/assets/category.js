@@ -31,6 +31,7 @@
       sub: p.get('sub') || '',
       filter: p.get('filter') || '',
       brand: p.get('brand') || '',
+      search: p.get('search') || '',
       page: parseInt(p.get('page')) || 1
     };
   }
@@ -1002,6 +1003,7 @@
 
     const searchInput = document.getElementById('search');
     if (searchInput) {
+      if (params.search) searchInput.value = params.search;
       searchInput.addEventListener('input', () => updateProductView(1));
     }
 
