@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-18T19:00:01.626117+00:00",
+  "updatedAt": "2026-06-18T20:00:01.945108+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -10928,6 +10928,14 @@
     "https://techcrunch.com/2026/06/18/almost-half-of-u-s-singles-feel-negatively-about-ai-in-dating-match-says": {
       "image": "https://techcrunch.com/wp-content/uploads/2023/05/GettyImages-1131615694.jpg?resize=1200,800",
       "checkedAt": "2026-06-18T19:00:01.626117+00:00"
+    },
+    "https://techcrunch.com/2026/06/18/openai-is-bringing-on-some-big-guns-in-the-lead-up-to-its-ipo": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/noam-shazeer-deal-ball.png?resize=1200,800",
+      "checkedAt": "2026-06-18T20:00:01.945108+00:00"
+    },
+    "https://openai.com/index/chatgpt-enterprise-spend-controls": {
+      "image": "",
+      "checkedAt": "2026-06-18T20:00:01.945108+00:00"
     }
   }
 }
