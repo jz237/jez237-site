@@ -916,5 +916,23 @@
       "continuity": "Preserves Vesperglass Array's suspended reef habitat, cobalt gas giant, cyan/violet auroras, copper-black induction coils, ceramic-white pressure ribs, pressure membranes, pulse-lanterns, prism ecology, and ribbon-bodied electroceptive inhabitants.",
       "entryDescription": "A calm overnight resonance-clinic checkup showing how Vesperglass inhabitants receive electroreceptor crest scans in a practical, lived-in medical bay."
     }
+  },
+  {
+    "id": "2026-06-18-morning-vesperglass-array-night-side-anchor-garden",
+    "title": "Vesperglass Array: Night-Side Anchor Garden",
+    "tests": "Weekly-world daily-life image for Vesperglass Array; tests coherent alien garden maintenance, night-side ecology, ribbon-bodied non-human inhabitants, glass/refraction lighting, and lived-in practical habitat detail. Exact generated PNG provenance verified.",
+    "prompt": "Create a realistic cinematic daily-life view from Vesperglass Array: show ribbon-bodied electroceptive inhabitants maintaining magnetic dust moss and conductive lace-vines in the Night-Side Anchor Garden, a dim low-gravity garden on the night-side edge of a suspended transparent mineral-reef megahabitat above a turbulent cobalt gas giant. Preserve Vesperglass Array canon: curved vesperglass membranes, ceramic-white pressure ribs, copper-black induction coils, pulse-lantern wayfinding, frost-edged airlocks, warm amber interior pools, luminous fluid conduits, polished hand-grip rails, prism fronds, floating blue seed curtains, cyan/violet auroras, storm clouds far below, and non-human ribbon-bodied inhabitants with translucent skin, electroreceptor crests, handling tendrils, and pressure-wrap garments. Make it photographed, practical, intimate, tactile, alien, and lived-in with graphite tools, clipped tethers, condensation halos, repaired membrane patches, nutrient basins, coil-warmed root cradles, dust-moss sparkling with magnetic particles, lace-vines on copper induction pins, and realistic reflections/refractions. Avoid human astronauts, Earth signage, generic neon cyberpunk, franchise cues, mushroom/fairytale motifs, horror, readable text, logos, prompt-card composition, and dancing.\n\nSource photo needed: none.\n\nReusable prompt template: Create a realistic cinematic daily-life view from [WORLD_NAME]: show [INHABITANTS] doing [EVERYDAY_ACTIVITY] in [SPECIFIC_LOCATION], preserving the world's canon geography, settlements, transit logic, vegetation/ecology, body plans, materials, palette, lighting, and recurring motifs. Include tactile work or domestic details, environmental scale cues, practical tools, worn surfaces, weather behavior, and believable photographic lens depth. Avoid generic sci-fi, human-dominated society unless canon requires it, franchise references, logos, readable text artifacts, prompt-card composition, and dancing.\n\nWhat to preserve: Vesperglass Array continuity: suspended transparent reef-plates above a cobalt gas giant, cyan/violet auroras, Vesperglass panels, copper-black induction coils, ceramic-white pressure ribs, pressure membranes, pulse-lit infrastructure, conductive alien gardens, magnetic dust moss, prism fronds, and ribbon-bodied electroceptive inhabitants with translucent pressure-wrap garments.\n\nWhat to change: focus this view on Night-Side Anchor Garden maintenance: magnetic dust moss, conductive lace-vines, low-gravity garden care, coil-warmed root cradles, graphite tools, clipped tethers, floating pollen beads, dark garden atmosphere, and aurora reflections.\n\nExample substitution: [WORLD_NAME] = Vesperglass Array; [INHABITANTS] = ribbon-bodied electroceptive night-garden caretakers; [EVERYDAY_ACTIVITY] = maintaining magnetic dust moss and conductive lace-vines during a quiet shift; [SPECIFIC_LOCATION] = Night-Side Anchor Garden on the dim edge of the habitat.",
+    "image": "images/2026-06-18-morning-vesperglass-array-night-side-anchor-garden.png",
+    "date": "2026-06-18",
+    "batch": "Daily Prompt",
+    "slot": "morning",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "world": {
+      "name": "Vesperglass Array",
+      "description": "A hard-sci-fi alien megahabitat of transparent reef plates, glass transit tubes, and ribbon-bodied electroceptive inhabitants suspended above a cobalt gas giant.",
+      "continuity": "Preserves Vesperglass Array suspended reef habitat, cobalt gas giant, cyan/violet auroras, copper-black induction coils, pulse-lanterns, conductive garden life, and ribbon-bodied electroceptive inhabitants.",
+      "entryDescription": "Night-garden caretakers maintain magnetic dust moss, conductive lace-vines, prism fronds, and floating seed curtains during a quiet shift inside the Vesperglass Array."
+    }
   }
 ]
