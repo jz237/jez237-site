@@ -1,8 +1,8 @@
 {
-  "updatedAt": "2026-06-18T13:00:01.890957+00:00",
+  "updatedAt": "2026-06-18T14:00:01.846539+00:00",
   "items": [
     {
-      "title": "Gyojin Han, Dong-Jae Lee, Changho Choi, Jongsuk Kim, Junmo Kim",
+      "title": "Lorenz Wolf, Connor Watts, Roger Creus Castanyer, Geoffrey Bradway, Maxwill Lin, Augustine N. Mavor-Parker, Matthew D...",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -10,12 +10,156 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-18T13:00:15.663784+00:00",
+      "published": "2026-06-18T14:00:10.470957+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-18T13:00:01.890957+00:00",
+      "lastSeen": "2026-06-18T14:00:01.846539+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
+    },
+    {
+      "title": "ByteDance is Microsoft’s biggest AI customer, even as Washington treats Chinese AI as a threat",
+      "url": "https://thenextweb.com/news/bytedance-microsoft-biggest-ai-customer-china-openai",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "ByteDance has generally been Microsoft’s single biggest AI customer in recent years, and it is on track to spend more than $1bn a year on Microsoft’s AI and cloud services, Bloomberg reports. The striking part is what the TikTok owner is mostly buying: OpenAI models, sold through Microsoft’s Azure cloud, in a market that OpenAI [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2021/08/d2674dd1014d53b65f57922c2eaabdac_noop-e1628498009410.avif",
+      "published": "2026-06-18T13:46:33+00:00",
+      "firstSeen": "2026-06-18T14:00:01.846539+00:00",
+      "lastSeen": "2026-06-18T14:00:01.846539+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.1432
+    },
+    {
+      "title": "GTA VI pre-orders open June 25. Rockstar revealed the cover art. No price yet.",
+      "url": "https://thenextweb.com/news/gta-vi-pre-orders-june-25-cover-art-november",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Rockstar Games confirmed that pre-orders for Grand Theft Auto VI open on June 25. The game will be available on the PlayStation Store, Microsoft Store, and at select retailers. Rockstar also revealed the official cover art, which features protagonists Jason and Lucia alongside scenes from the game’s Vice City setting. GTA VI launches November 19, [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/gta-vi-pre-orders-june-25-cover-art-november.avif",
+      "published": "2026-06-18T13:37:38+00:00",
+      "firstSeen": "2026-06-18T14:00:01.846539+00:00",
+      "lastSeen": "2026-06-18T14:00:01.846539+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.9387
+    },
+    {
+      "title": "Waymo issues its sixth recall after robotaxis drove into highway construction zones 13 times",
+      "url": "https://thenextweb.com/news/waymo-sixth-recall-construction-zones-3800-robotaxis",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Waymo has issued its sixth recall, covering nearly 4,000 robotaxis that drove into highway construction zones at least 13 times across two cities. Six incidents occurred in Phoenix in April. Seven happened in the San Francisco Bay Area on a single day in May. A fix is “currently under development,” according to NHTSA filings. The [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/waymo-sixth-recall-construction-zones-3800-robotaxis.avif",
+      "published": "2026-06-18T13:22:44+00:00",
+      "firstSeen": "2026-06-18T14:00:01.846539+00:00",
+      "lastSeen": "2026-06-18T14:00:01.846539+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.2312
+    },
+    {
+      "title": "Pramaana Labs raised $27M to wrap AI in mathematical proof for law, tax, and drug discovery",
+      "url": "https://thenextweb.com/news/pramaana-labs-27m-seed-formal-verification-ai",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "As companies struggle to turn AI pilots into things they can actually rely on, a new startup is betting the fix looks less like a better chatbot and more like a mathematical proof. Pramaana Labs announced $27mn in seed funding on Wednesday, led by Khosla Ventures, with Accel, BoldCap, Nexus Venture Partners, Premji Invest, and [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/pramaana-labs.avif",
+      "published": "2026-06-18T13:21:01+00:00",
+      "firstSeen": "2026-06-18T14:00:01.846539+00:00",
+      "lastSeen": "2026-06-18T14:00:01.846539+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1303
+    },
+    {
+      "title": "At Cannes Lions, NVIDIA Partners Reshape Advertising and Marketing With AI",
+      "url": "https://blogs.nvidia.com/blog/nvidia-ai-marketing-advertising-cannes-lions",
+      "source": "NVIDIA Blog",
+      "sourceUrl": "https://blogs.nvidia.com/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "The digital era gave the advertising and marketing industry speed; the AI era is giving it autonomous operations.  For companies building next-generation technologies for advertising and marketing, the question is no longer whether to adopt AI but whether their infrastructure can support it at the speed and scale the industry demands.  At Cannes Lions, running [&#8230;]",
+      "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/cannes-lions-featured-visual-still-1920x1080-1.jpg",
+      "published": "2026-06-18T13:00:43+00:00",
+      "firstSeen": "2026-06-18T14:00:01.846539+00:00",
+      "lastSeen": "2026-06-18T14:00:01.846539+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2602
+    },
+    {
+      "title": "Sync and Stream: GeForce NOW Connects to Members’ Game Libraries Across Devices",
+      "url": "https://blogs.nvidia.com/blog/geforce-now-thursday-game-stores",
+      "source": "NVIDIA Blog",
+      "sourceUrl": "https://blogs.nvidia.com/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Play favorite titles from popular game libraries, keep progress synced and jump back into gaming sessions on virtually any device. That’s the power of GeForce NOW cloud gaming. From providing access to members’ favorite game libraries to offering some of the season’s best membership pricing, GeForce NOW is making it easier than ever to get [&#8230;]",
+      "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/GFN_Thursday-June_18.jpg",
+      "published": "2026-06-18T13:00:32+00:00",
+      "firstSeen": "2026-06-18T14:00:01.846539+00:00",
+      "lastSeen": "2026-06-18T14:00:01.846539+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2601
+    },
+    {
+      "title": "Photoshop and Premiere now have AI assistants",
+      "url": "https://www.theverge.com/tech/952099/adobe-ai-assistants-photoshop-premiere-illustrator-beta-launch",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "Adobe's plan to stick AI assistants into all of its Creative Cloud suite is now fully underway, with new chatbots now rolling out to its biggest editing and design apps. As part of a public beta launching today, Photoshop, Premiere, Illustrator, InDesign, and Frame.io now each have a bespoke AI Assistant that can be used [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/Adobe-Photoshop-AI-assistant-hero.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
+      "published": "2026-06-18T13:00:00+00:00",
+      "firstSeen": "2026-06-18T14:00:01.846539+00:00",
+      "lastSeen": "2026-06-18T14:00:01.846539+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "editorial_score_pass",
+      "score": 6.3298
+    },
+    {
+      "title": "Adobe’s redesigned AI studio remembers what your creations look like",
+      "url": "https://www.theverge.com/tech/952104/adobe-firefly-ai-agent-elements-projects-update",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "Adobe is introducing some new capabilities for its Firefly AI assistant, alongside a \"reimagined\" AI studio that lets you edit and generate new designs from a single interface. The new Firefly experience launching today in private beta is designed to give you \"persistent context, reusable assets, and organized workflows\" across your projects, according to Adobe, [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/Adobe-Firefly-AI-studio-updates-lede.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
+      "published": "2026-06-18T13:00:00+00:00",
+      "firstSeen": "2026-06-18T14:00:01.846539+00:00",
+      "lastSeen": "2026-06-18T14:00:01.846539+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 4.1298
+    },
+    {
+      "title": "Epic is building Claude and Gemini into Unreal Engine 6, whether developers like it or not",
+      "url": "https://thenextweb.com/news/epic-unreal-engine-6-ai-claude-gemini",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Epic will let studios plug Claude, Gemini, or any model they like into the next Unreal Engine to do the ‘tedious work’ of building games. More than half of developers think that is a bad idea. Epic Games has laid out its plans for Unreal Engine 6, and generative AI sits right at the centre [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/unreal-engine-6.avif",
+      "published": "2026-06-18T12:57:24+00:00",
+      "firstSeen": "2026-06-18T14:00:01.846539+00:00",
+      "lastSeen": "2026-06-18T14:00:01.846539+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 14.1186
     },
     {
       "title": "Pixi’s new iOS app turns text messages into interactive AR experiences",
@@ -28,10 +172,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/pixi-app-screen-6-e1781642459181.jpeg?w=796",
       "published": "2026-06-18T12:00:00+00:00",
       "firstSeen": "2026-06-18T13:00:01.890957+00:00",
-      "lastSeen": "2026-06-18T13:00:01.890957+00:00",
+      "lastSeen": "2026-06-18T14:00:01.846539+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3598
+      "score": 3.3305
     },
     {
       "title": "NeuralTrust raised $20M to police the AI agents companies can’t even count",
@@ -44,10 +188,10 @@
       "image": "https://media.thenextweb.com/2026/06/NeuralTrust-team.avif",
       "published": "2026-06-18T11:56:33+00:00",
       "firstSeen": "2026-06-18T13:00:01.890957+00:00",
-      "lastSeen": "2026-06-18T13:00:01.890957+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 5.5181
+      "lastSeen": "2026-06-18T14:00:01.846539+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.4889
     },
     {
       "title": "NASA picked Eric Schmidt’s Relativity Space to fly to Mars. It has never reached orbit.",
@@ -60,10 +204,10 @@
       "image": "https://media.thenextweb.com/2026/06/Relativity-Space-Terran-R-rocket.avif",
       "published": "2026-06-18T11:49:48+00:00",
       "firstSeen": "2026-06-18T13:00:01.890957+00:00",
-      "lastSeen": "2026-06-18T13:00:01.890957+00:00",
+      "lastSeen": "2026-06-18T14:00:01.846539+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1148
+      "score": 2.0856
     },
     {
       "title": "MIT built a memory system that lets robots remember where you left your keys",
@@ -76,10 +220,10 @@
       "image": "https://media.thenextweb.com/2026/06/mit-daaam-robot-long-term-memory-objects.avif",
       "published": "2026-06-18T11:44:19+00:00",
       "firstSeen": "2026-06-18T12:00:01.167360+00:00",
-      "lastSeen": "2026-06-18T13:00:01.890957+00:00",
+      "lastSeen": "2026-06-18T14:00:01.846539+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.9121
+      "score": 5.883
     },
     {
       "title": "Attackers cracked 75,000 Fortinet firewalls with old passwords, not a zero-day",
@@ -92,10 +236,10 @@
       "image": "https://media.thenextweb.com/2026/06/fortinet-hq.avif",
       "published": "2026-06-18T11:36:13+00:00",
       "firstSeen": "2026-06-18T12:00:01.167360+00:00",
-      "lastSeen": "2026-06-18T13:00:01.890957+00:00",
+      "lastSeen": "2026-06-18T14:00:01.846539+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.5081
+      "score": 3.4791
     },
     {
       "title": "EU tells Big Tech to align AI data centres with climate goals or stay away",
@@ -108,10 +252,10 @@
       "image": "https://media.thenextweb.com/2026/05/European-flag.avif",
       "published": "2026-06-18T11:29:40+00:00",
       "firstSeen": "2026-06-18T12:00:01.167360+00:00",
-      "lastSeen": "2026-06-18T13:00:01.890957+00:00",
+      "lastSeen": "2026-06-18T14:00:01.846539+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1049
+      "score": 2.076
     },
     {
       "title": "Midjourney says its new full-body scanner beats an MRI. It has never built hardware before.",
@@ -127,7 +271,7 @@
       "lastSeen": "2026-06-18T13:00:01.890957+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.5012
+      "score": 3.4724
     },
     {
       "title": "Swiss startup Prem AI is raising $100M so hedge funds and law firms can own their AI instead of renting it",
@@ -143,7 +287,7 @@
       "lastSeen": "2026-06-18T13:00:01.890957+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1005
+      "score": 2.0717
     },
     {
       "title": "Sequoia’s Roelof Botha joins the SpaceX board, days after the record IPO",
@@ -159,7 +303,7 @@
       "lastSeen": "2026-06-18T13:00:01.890957+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.795
+      "score": 2.7664
     },
     {
       "title": "The portal is the product: inside the operating model rewriting digital agencies",
@@ -175,7 +319,7 @@
       "lastSeen": "2026-06-18T13:00:01.890957+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0924
+      "score": 2.0638
     },
     {
       "title": "Tesco is migrating 40,000 servers off VMware and suing Broadcom for over GBP 100 million",
@@ -191,7 +335,7 @@
       "lastSeen": "2026-06-18T13:00:01.890957+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1825
+      "score": 3.1542
     },
     {
       "title": "Blackstone’s AirTrunk seeks $3bn loan for one Sydney data centre",
@@ -207,7 +351,7 @@
       "lastSeen": "2026-06-18T11:16:05.627954+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0751
+      "score": 2.047
     },
     {
       "title": "Lenovo taps $2bn convertible market to refinance and buy back stock",
@@ -223,7 +367,7 @@
       "lastSeen": "2026-06-18T11:16:05.627954+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0727
+      "score": 2.0447
     },
     {
       "title": "What to know about budgeting for pentesting: tools vs services",
@@ -239,7 +383,7 @@
       "lastSeen": "2026-06-18T11:16:05.627954+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.1713
+      "score": 4.1433
     },
     {
       "title": "Dream raises $260m at $3bn, tripling its value in 16 months",
@@ -255,7 +399,7 @@
       "lastSeen": "2026-06-18T11:16:05.627954+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.4195
+      "score": 2.3916
     },
     {
       "title": "China’s 618 festival is all-in on AI. Its shoppers are not.",
@@ -271,7 +415,7 @@
       "lastSeen": "2026-06-18T11:16:05.627954+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0633
+      "score": 2.0356
     },
     {
       "title": "HSBC expands AI banking partnership with Google Cloud",
@@ -284,10 +428,10 @@
       "image": "",
       "published": "2026-06-18T10:00:00+00:00",
       "firstSeen": "2026-06-18T11:00:01.932515+00:00",
-      "lastSeen": "2026-06-18T13:00:01.890957+00:00",
+      "lastSeen": "2026-06-18T14:00:01.846539+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 7.26
+      "score": 7.2323
     },
     {
       "title": "7 best receipt photobooths for commercial use in 2026",
@@ -303,7 +447,7 @@
       "lastSeen": "2026-06-18T11:16:05.627954+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.454
+      "score": 3.4265
     },
     {
       "title": "Huawei CFO’s admissions can be used against the company, US judge rules",
@@ -319,7 +463,7 @@
       "lastSeen": "2026-06-18T11:16:05.627954+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.4494
+      "score": 3.422
     },
     {
       "title": "Bosch to pay US $36m over unlicensed shipments to Huawei",
@@ -335,7 +479,7 @@
       "lastSeen": "2026-06-18T11:16:05.627954+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0442
+      "score": 2.017
     },
     {
       "title": "EU cybersecurity agency to meet Anthropic under a US export cloud",
@@ -351,7 +495,7 @@
       "lastSeen": "2026-06-18T11:16:05.627954+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0369
+      "score": 5.0099
     },
     {
       "title": "JPMorgan cuts off Anthropic access for Hong Kong staff",
@@ -367,7 +511,7 @@
       "lastSeen": "2026-06-18T10:00:01.620236+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.1308
+      "score": 10.1039
     },
     {
       "title": "Apple to raise prices as memory chip shortage bites, Tim Cook says",
@@ -383,7 +527,7 @@
       "lastSeen": "2026-06-18T10:00:01.620236+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 2.4173
+      "score": 2.3908
     },
     {
       "title": "Google’s Gemini co-lead Noam Shazeer is leaving for OpenAI",
@@ -399,7 +543,7 @@
       "lastSeen": "2026-06-18T10:00:01.620236+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.3653
+      "score": 11.3389
     },
     {
       "title": "SK Hynix ships first 12-layer HBM4E samples to AI customers",
@@ -415,7 +559,7 @@
       "lastSeen": "2026-06-18T10:00:01.620236+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.4107
+      "score": 3.3844
     },
     {
       "title": "Meta executive leading internal AI overhaul departs after two months",
@@ -431,7 +575,7 @@
       "lastSeen": "2026-06-18T10:00:01.620236+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.7047
+      "score": 3.6785
     },
     {
       "title": "Trump says Apple will build chips with Intel in the US",
@@ -447,7 +591,7 @@
       "lastSeen": "2026-06-18T10:00:01.620236+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.101
+      "score": 3.0749
     },
     {
       "title": "France Advances Europe’s AI Future With NVIDIA Technologies",
@@ -460,10 +604,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/5383050-vivatech26-digital-nv-blog-image-1920x1080-1.jpg",
       "published": "2026-06-18T06:00:59+00:00",
       "firstSeen": "2026-06-18T07:00:01.381962+00:00",
-      "lastSeen": "2026-06-18T13:00:01.890957+00:00",
+      "lastSeen": "2026-06-18T14:00:01.846539+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.896
+      "score": 4.8712
     },
     {
       "title": "The UK Will Scan Asylum-Seekers’ Faces for Age Checks—Despite Knowing the Tech Is Flawed",
@@ -476,10 +620,10 @@
       "image": "https://media.wired.com/photos/6a32f1cdd9e60209eb61b7f3/master/pass/GettyImages-2151441286.jpg",
       "published": "2026-06-18T06:00:00+00:00",
       "firstSeen": "2026-06-18T07:00:01.381962+00:00",
-      "lastSeen": "2026-06-18T13:00:01.890957+00:00",
+      "lastSeen": "2026-06-18T14:00:01.846539+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0956
+      "score": 2.0708
     },
     {
       "title": "Midjourney goes from generating cat images to full-body ultrasound scans",
@@ -492,154 +636,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/ultrasound_phantom_segmentation-b254a71d083eb5c9.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=28.441715022566%2C0%2C70.316569954868%2C100",
       "published": "2026-06-18T03:12:31+00:00",
       "firstSeen": "2026-06-18T04:00:01.937470+00:00",
-      "lastSeen": "2026-06-18T13:00:01.890957+00:00",
+      "lastSeen": "2026-06-18T14:00:01.846539+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.098
-    },
-    {
-      "title": "v1.89.2",
-      "url": "https://github.com/BerriAI/litellm/releases/tag/v1.89.2",
-      "source": "LiteLLM Releases",
-      "sourceUrl": "https://github.com/BerriAI/litellm/releases.atom",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Verify Docker Image Signature\nAll LiteLLM Docker images are signed with cosign. Every release is signed with the same key introduced in commit 0112e53.\nVerify using the pinned commit hash (recommended):\nA commit hash is cryptographically immutable, so this is the strongest way to ensure you are using the original signing key:\ncosign verify \\\n  --key https://raw.githubusercontent.com/BerriAI/litellm/0112e53046018d726492c814b3644b7d376029d0/cosign.pub \\\n  ghcr.io/berriai/litellm:v1.89.2\nVerify using the release tag (convenience):\nTags are protected in this repository and resolve to the same key.",
-      "image": "https://opengraph.githubassets.com/8837481e2f59d87ba742520523e66197f5f5d64eed881ee8fbb7de08cada9f5a/BerriAI/litellm/releases/tag/v1.89.2",
-      "published": "2026-06-18T02:46:30+00:00",
-      "firstSeen": "2026-06-18T03:00:01.346740+00:00",
-      "lastSeen": "2026-06-18T13:00:01.890957+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.718
-    },
-    {
-      "title": "How to turn off AI in your Google Docs",
-      "url": "https://techcrunch.com/2026/06/17/how-to-turn-off-ai-in-your-google-docs",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Here's what you need to do to get those pesky \"write with Gemini\" pop-ups to go away.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/06/GettyImages-182884083.jpg?resize=1200%2C800",
-      "published": "2026-06-18T01:23:51+00:00",
-      "firstSeen": "2026-06-18T01:37:59.526403+00:00",
-      "lastSeen": "2026-06-18T13:00:01.890957+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 5.9869
-    },
-    {
-      "title": "Is it agentic enough? Benchmarking open models on your own tooling",
-      "url": "https://huggingface.co/blog/is-it-agentic-enough",
-      "source": "Hugging Face Blog",
-      "sourceUrl": "https://huggingface.co/blog/feed.xml",
-      "sourceWeight": 0.95,
-      "category": "AI",
-      "summary": "",
-      "image": "https://huggingface.co/blog/assets/is-it-agentic-enough/thumbnail.png",
-      "published": "2026-06-18T00:00:00+00:00",
-      "firstSeen": "2026-06-18T13:00:01.890957+00:00",
-      "lastSeen": "2026-06-18T13:00:01.890957+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 5.1466
-    },
-    {
-      "title": "GLM-5.2 is probably the most powerful text-only open weights LLM",
-      "url": "https://simonwillison.net/2026/Jun/17/glm-52",
-      "source": "Simon Willison",
-      "sourceUrl": "https://simonwillison.net/atom/everything/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Chinese AI lab Z.ai released GLM-5.2 to their coding plan subscribers on June 13th, and then yesterday (June 16th) released the full open weights under an MIT license. Similar in size to their previous GLM-5 and GLM-5.1 releases, this is 753B parameter, 1.51TB monster - with 40 active parameters (Mixture of Experts). GLM-5.2 is a text input only model - Z.ai have a separate vision family most recently represented by GLM-5V-Turbo, but that one isn't open weights. GLM-5.2 has a 1 million token context window, up from GLM-5.1's 200,000.\nThe buzz around this model is strong.\nArtificial Analysis, w",
-      "image": "https://static.simonwillison.net/static/2026/glm-5.2-pelican.svg",
-      "published": "2026-06-17T23:58:39+00:00",
-      "firstSeen": "2026-06-18T01:00:01.621226+00:00",
-      "lastSeen": "2026-06-18T13:00:01.890957+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 5.4561
-    },
-    {
-      "title": "Parafin lands a Goldman Sachs credit facility to embed lending inside Amazon, DoorDash, and Walmart",
-      "url": "https://thenextweb.com/news/parafin-goldman-sachs-credit-facility-embedded-lending",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Parafin, an embedded financial infrastructure company on the 2026 Forbes Fintech 50 list, has secured a new credit facility led by Goldman Sachs alongside One William Street Capital Management. The facility will expand access to embedded lending for small businesses through platforms including Amazon, DoorDash, Gusto, TikTok Shop, and Walmart. The company’s model is straightforward. [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/parafin-goldman-sachs-credit-facility-embedded-lending.avif",
-      "published": "2026-06-17T23:40:11+00:00",
-      "firstSeen": "2026-06-18T00:00:01.260284+00:00",
-      "lastSeen": "2026-06-18T09:00:02.049187+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.5096
-    },
-    {
-      "title": "ECB’s Lagarde says AI could trigger financial crises and calls for Cold War-style non-proliferation governance",
-      "url": "https://thenextweb.com/news/ecb-lagarde-ai-financial-crisis-non-proliferation",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "ECB President Christine Lagarde warned on Wednesday that artificial intelligence could trigger dangerous financial crises and called for global AI governance modelled on the Cold War-era non-proliferation agreements that kept the world safe from nuclear weapons. She spoke in Venice, the sharpest framing yet from a central bank chief on the systemic risks AI poses [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/ecb-lagarde-ai-financial-crisis-non-proliferation.avif",
-      "published": "2026-06-17T23:18:51+00:00",
-      "firstSeen": "2026-06-18T00:00:01.260284+00:00",
-      "lastSeen": "2026-06-18T09:00:02.049187+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.8021
-    },
-    {
-      "title": "The Korean Telecom Giant at the Center of Anthropic’s Mythos Controversy",
-      "url": "https://www.wired.com/story/sk-telecom-anthropic-mythos-export-controls",
-      "source": "Wired AI",
-      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Days before Anthropic took its most advanced AI models offline, the White House ordered the company to revoke SK Telecom’s access to Claude Mythos over claims of alleged ties to China.",
-      "image": "https://media.wired.com/photos/6a22ce03ffc48019a74127a3/master/pass/GettyImages-2272066793.jpg",
-      "published": "2026-06-17T22:52:00+00:00",
-      "firstSeen": "2026-06-18T00:00:01.260284+00:00",
-      "lastSeen": "2026-06-18T13:00:01.890957+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 8.9328
-    },
-    {
-      "title": "The Trump Mobile T1 was supposed to be made in America. It’s a Taiwanese phone with a gold coat.",
-      "url": "https://thenextweb.com/news/trump-phone-t1-htc-rebrand-review",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The Trump Mobile T1 is here, and it is not what was promised. When Donald Trump’s eldest sons unveiled it at Trump Tower a year ago, the pitch was a gold-coloured handset with an iPhone resemblance, proudly made in the US. What shipped is a rebranded HTC U24 Pro, a Taiwanese midrange phone from mid-2024, [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/trump-phone-t1-htc-rebrand-review.avif",
-      "published": "2026-06-17T22:49:30+00:00",
-      "firstSeen": "2026-06-18T00:00:01.260284+00:00",
-      "lastSeen": "2026-06-18T09:00:02.049187+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.792
-    },
-    {
-      "title": "A Colombian AI startup wants to assist half of Latin America’s doctors. Andreessen Horowitz just backed it.",
-      "url": "https://thenextweb.com/news/telepatia-ai-healthcare-latin-america-33m-a16z",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Telepatia, an AI clinical assistant built for Latin American healthcare, has raised $33 million in a Series A led by Andreessen Horowitz. The company wants to reach half of the region’s 1.9 million doctors by the end of 2027. Total funding is now $42 million, with early backers including Palantir CTO Shyam Sankar, Rappi founder [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/telepatia-ai-healthcare-latin-america-33m-a16z.avif",
-      "published": "2026-06-17T22:19:57+00:00",
-      "firstSeen": "2026-06-17T22:51:20.369049+00:00",
-      "lastSeen": "2026-06-18T09:00:02.049187+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 3.9819
+      "score": 2.0751
     },
     {
       "title": "The Life Scientific: Dean Lomax",
@@ -652,10 +652,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-15T20:00:00+00:00",
       "firstSeen": "2026-06-15T21:00:01.290903+00:00",
-      "lastSeen": "2026-06-18T13:00:01.890957+00:00",
+      "lastSeen": "2026-06-18T14:00:01.846539+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.3708
+      "score": 1.3659
     },
     {
       "title": "The Life Scientific: Helen Hastie",
@@ -668,7 +668,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-08T20:00:00+00:00",
       "firstSeen": "2026-06-08T21:00:01.371488+00:00",
-      "lastSeen": "2026-06-18T13:00:01.890957+00:00",
+      "lastSeen": "2026-06-18T14:00:01.846539+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 1.1917
