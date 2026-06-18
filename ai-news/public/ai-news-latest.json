@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-18T11:16:05.627954+00:00",
+  "updatedAt": "2026-06-18T13:00:01.890957+00:00",
   "items": [
     {
       "title": "Gyojin Han, Dong-Jae Lee, Changho Choi, Jongsuk Kim, Junmo Kim",
@@ -10,12 +10,60 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-18T11:16:10.344607+00:00",
+      "published": "2026-06-18T13:00:15.663784+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-18T11:16:05.627954+00:00",
+      "lastSeen": "2026-06-18T13:00:01.890957+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
+    },
+    {
+      "title": "Pixi’s new iOS app turns text messages into interactive AR experiences",
+      "url": "https://techcrunch.com/2026/06/18/pixis-new-ios-app-turns-text-messages-into-interactive-ar-experiences",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Forget stickers, GIFs, and emoji reactions. Pixi is betting that the next evolution of messaging is interactive augmented reality (AR).",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/pixi-app-screen-6-e1781642459181.jpeg?w=796",
+      "published": "2026-06-18T12:00:00+00:00",
+      "firstSeen": "2026-06-18T13:00:01.890957+00:00",
+      "lastSeen": "2026-06-18T13:00:01.890957+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.3598
+    },
+    {
+      "title": "NeuralTrust raised $20M to police the AI agents companies can’t even count",
+      "url": "https://thenextweb.com/news/neuraltrust-20-million-seed-ai-agent-security",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "NeuralTrust, a Barcelona startup, has raised $20mn to secure the AI agents that big companies are now deploying faster than they can keep track of. The seed round, worth €17.2mn, was led by Munich’s Alstin Capital, with VentureFriends, Seaya, Kibo Ventures, Banc Sabadell, the EA Ventures Plug and Play Fund and Finaves, plus public money [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/NeuralTrust-team.avif",
+      "published": "2026-06-18T11:56:33+00:00",
+      "firstSeen": "2026-06-18T13:00:01.890957+00:00",
+      "lastSeen": "2026-06-18T13:00:01.890957+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.5181
+    },
+    {
+      "title": "NASA picked Eric Schmidt’s Relativity Space to fly to Mars. It has never reached orbit.",
+      "url": "https://thenextweb.com/news/nasa-relativity-space-eric-schmidt-mars-aeolus",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "NASA is partnering with Relativity Space, the rocket company run by former Google chief Eric Schmidt, to fly a science mission to Mars. Announced on June 17, the mission is called Aeolus, the first flight in Relativity’s new Interplanetary Sciences Program. The company will build the spacecraft, provide its Terran R rocket, and fly the [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/Relativity-Space-Terran-R-rocket.avif",
+      "published": "2026-06-18T11:49:48+00:00",
+      "firstSeen": "2026-06-18T13:00:01.890957+00:00",
+      "lastSeen": "2026-06-18T13:00:01.890957+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1148
     },
     {
       "title": "MIT built a memory system that lets robots remember where you left your keys",
@@ -28,10 +76,10 @@
       "image": "https://media.thenextweb.com/2026/06/mit-daaam-robot-long-term-memory-objects.avif",
       "published": "2026-06-18T11:44:19+00:00",
       "firstSeen": "2026-06-18T12:00:01.167360+00:00",
-      "lastSeen": "2026-06-18T12:00:01.167360+00:00",
+      "lastSeen": "2026-06-18T13:00:01.890957+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.942
+      "score": 5.9121
     },
     {
       "title": "Attackers cracked 75,000 Fortinet firewalls with old passwords, not a zero-day",
@@ -44,10 +92,10 @@
       "image": "https://media.thenextweb.com/2026/06/fortinet-hq.avif",
       "published": "2026-06-18T11:36:13+00:00",
       "firstSeen": "2026-06-18T12:00:01.167360+00:00",
-      "lastSeen": "2026-06-18T12:00:01.167360+00:00",
+      "lastSeen": "2026-06-18T13:00:01.890957+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.5379
+      "score": 3.5081
     },
     {
       "title": "EU tells Big Tech to align AI data centres with climate goals or stay away",
@@ -60,10 +108,10 @@
       "image": "https://media.thenextweb.com/2026/05/European-flag.avif",
       "published": "2026-06-18T11:29:40+00:00",
       "firstSeen": "2026-06-18T12:00:01.167360+00:00",
-      "lastSeen": "2026-06-18T12:00:01.167360+00:00",
+      "lastSeen": "2026-06-18T13:00:01.890957+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1347
+      "score": 2.1049
     },
     {
       "title": "Midjourney says its new full-body scanner beats an MRI. It has never built hardware before.",
@@ -76,10 +124,10 @@
       "image": "https://media.thenextweb.com/2026/06/midjourney-medical-ai-ultrasound-scan.avif",
       "published": "2026-06-18T11:21:56+00:00",
       "firstSeen": "2026-06-18T12:00:01.167360+00:00",
-      "lastSeen": "2026-06-18T12:00:01.167360+00:00",
+      "lastSeen": "2026-06-18T13:00:01.890957+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.5308
+      "score": 3.5012
     },
     {
       "title": "Swiss startup Prem AI is raising $100M so hedge funds and law firms can own their AI instead of renting it",
@@ -92,10 +140,10 @@
       "image": "https://media.thenextweb.com/2026/06/prem-ai-swiss-100m-series-a-private-ai.avif",
       "published": "2026-06-18T11:20:30+00:00",
       "firstSeen": "2026-06-18T12:00:01.167360+00:00",
-      "lastSeen": "2026-06-18T12:00:01.167360+00:00",
+      "lastSeen": "2026-06-18T13:00:01.890957+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1301
+      "score": 2.1005
     },
     {
       "title": "Sequoia’s Roelof Botha joins the SpaceX board, days after the record IPO",
@@ -108,10 +156,10 @@
       "image": "https://media.thenextweb.com/2026/06/roelofbotha.avif",
       "published": "2026-06-18T11:09:19+00:00",
       "firstSeen": "2026-06-18T12:00:01.167360+00:00",
-      "lastSeen": "2026-06-18T12:00:01.167360+00:00",
+      "lastSeen": "2026-06-18T13:00:01.890957+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8245
+      "score": 2.795
     },
     {
       "title": "The portal is the product: inside the operating model rewriting digital agencies",
@@ -124,10 +172,10 @@
       "image": "https://media.thenextweb.com/2026/06/portal-product-operating-model-digital-agencies.avif",
       "published": "2026-06-18T11:03:50+00:00",
       "firstSeen": "2026-06-18T12:00:01.167360+00:00",
-      "lastSeen": "2026-06-18T12:00:01.167360+00:00",
+      "lastSeen": "2026-06-18T13:00:01.890957+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1218
+      "score": 2.0924
     },
     {
       "title": "Tesco is migrating 40,000 servers off VMware and suing Broadcom for over GBP 100 million",
@@ -140,10 +188,10 @@
       "image": "https://media.thenextweb.com/2026/06/tesco-vmware-broadcom-40000-servers-migration-lawsuit.avif",
       "published": "2026-06-18T10:43:09+00:00",
       "firstSeen": "2026-06-18T11:00:01.932515+00:00",
-      "lastSeen": "2026-06-18T11:16:05.627954+00:00",
+      "lastSeen": "2026-06-18T13:00:01.890957+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2334
+      "score": 3.1825
     },
     {
       "title": "Blackstone’s AirTrunk seeks $3bn loan for one Sydney data centre",
@@ -159,7 +207,7 @@
       "lastSeen": "2026-06-18T11:16:05.627954+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1256
+      "score": 2.0751
     },
     {
       "title": "Lenovo taps $2bn convertible market to refinance and buy back stock",
@@ -175,7 +223,7 @@
       "lastSeen": "2026-06-18T11:16:05.627954+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1232
+      "score": 2.0727
     },
     {
       "title": "What to know about budgeting for pentesting: tools vs services",
@@ -191,7 +239,7 @@
       "lastSeen": "2026-06-18T11:16:05.627954+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.2216
+      "score": 4.1713
     },
     {
       "title": "Dream raises $260m at $3bn, tripling its value in 16 months",
@@ -207,7 +255,7 @@
       "lastSeen": "2026-06-18T11:16:05.627954+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.4697
+      "score": 2.4195
     },
     {
       "title": "China’s 618 festival is all-in on AI. Its shoppers are not.",
@@ -223,7 +271,7 @@
       "lastSeen": "2026-06-18T11:16:05.627954+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1133
+      "score": 2.0633
     },
     {
       "title": "HSBC expands AI banking partnership with Google Cloud",
@@ -236,10 +284,10 @@
       "image": "",
       "published": "2026-06-18T10:00:00+00:00",
       "firstSeen": "2026-06-18T11:00:01.932515+00:00",
-      "lastSeen": "2026-06-18T11:16:05.627954+00:00",
+      "lastSeen": "2026-06-18T13:00:01.890957+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 7.3099
+      "score": 7.26
     },
     {
       "title": "7 best receipt photobooths for commercial use in 2026",
@@ -255,7 +303,7 @@
       "lastSeen": "2026-06-18T11:16:05.627954+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.5035
+      "score": 3.454
     },
     {
       "title": "Huawei CFO’s admissions can be used against the company, US judge rules",
@@ -271,7 +319,7 @@
       "lastSeen": "2026-06-18T11:16:05.627954+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.4987
+      "score": 3.4494
     },
     {
       "title": "Bosch to pay US $36m over unlicensed shipments to Huawei",
@@ -287,7 +335,7 @@
       "lastSeen": "2026-06-18T11:16:05.627954+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0933
+      "score": 2.0442
     },
     {
       "title": "EU cybersecurity agency to meet Anthropic under a US export cloud",
@@ -303,7 +351,7 @@
       "lastSeen": "2026-06-18T11:16:05.627954+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0856
+      "score": 5.0369
     },
     {
       "title": "JPMorgan cuts off Anthropic access for Hong Kong staff",
@@ -319,7 +367,7 @@
       "lastSeen": "2026-06-18T10:00:01.620236+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.1791
+      "score": 10.1308
     },
     {
       "title": "Apple to raise prices as memory chip shortage bites, Tim Cook says",
@@ -335,7 +383,7 @@
       "lastSeen": "2026-06-18T10:00:01.620236+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 2.465
+      "score": 2.4173
     },
     {
       "title": "Google’s Gemini co-lead Noam Shazeer is leaving for OpenAI",
@@ -351,7 +399,7 @@
       "lastSeen": "2026-06-18T10:00:01.620236+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.4129
+      "score": 11.3653
     },
     {
       "title": "SK Hynix ships first 12-layer HBM4E samples to AI customers",
@@ -367,7 +415,7 @@
       "lastSeen": "2026-06-18T10:00:01.620236+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.4581
+      "score": 3.4107
     },
     {
       "title": "Meta executive leading internal AI overhaul departs after two months",
@@ -383,7 +431,7 @@
       "lastSeen": "2026-06-18T10:00:01.620236+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.7517
+      "score": 3.7047
     },
     {
       "title": "Trump says Apple will build chips with Intel in the US",
@@ -399,7 +447,7 @@
       "lastSeen": "2026-06-18T10:00:01.620236+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1478
+      "score": 3.101
     },
     {
       "title": "France Advances Europe’s AI Future With NVIDIA Technologies",
@@ -412,10 +460,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/5383050-vivatech26-digital-nv-blog-image-1920x1080-1.jpg",
       "published": "2026-06-18T06:00:59+00:00",
       "firstSeen": "2026-06-18T07:00:01.381962+00:00",
-      "lastSeen": "2026-06-18T11:16:05.627954+00:00",
+      "lastSeen": "2026-06-18T13:00:01.890957+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9407
+      "score": 4.896
     },
     {
       "title": "The UK Will Scan Asylum-Seekers’ Faces for Age Checks—Despite Knowing the Tech Is Flawed",
@@ -428,10 +476,10 @@
       "image": "https://media.wired.com/photos/6a32f1cdd9e60209eb61b7f3/master/pass/GettyImages-2151441286.jpg",
       "published": "2026-06-18T06:00:00+00:00",
       "firstSeen": "2026-06-18T07:00:01.381962+00:00",
-      "lastSeen": "2026-06-18T11:16:05.627954+00:00",
+      "lastSeen": "2026-06-18T13:00:01.890957+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1403
+      "score": 2.0956
     },
     {
       "title": "Midjourney goes from generating cat images to full-body ultrasound scans",
@@ -444,10 +492,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/ultrasound_phantom_segmentation-b254a71d083eb5c9.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=28.441715022566%2C0%2C70.316569954868%2C100",
       "published": "2026-06-18T03:12:31+00:00",
       "firstSeen": "2026-06-18T04:00:01.937470+00:00",
-      "lastSeen": "2026-06-18T11:16:05.627954+00:00",
+      "lastSeen": "2026-06-18T13:00:01.890957+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1394
+      "score": 2.098
     },
     {
       "title": "v1.89.2",
@@ -460,10 +508,10 @@
       "image": "https://opengraph.githubassets.com/8837481e2f59d87ba742520523e66197f5f5d64eed881ee8fbb7de08cada9f5a/BerriAI/litellm/releases/tag/v1.89.2",
       "published": "2026-06-18T02:46:30+00:00",
       "firstSeen": "2026-06-18T03:00:01.346740+00:00",
-      "lastSeen": "2026-06-18T11:16:05.627954+00:00",
+      "lastSeen": "2026-06-18T13:00:01.890957+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7588
+      "score": 2.718
     },
     {
       "title": "How to turn off AI in your Google Docs",
@@ -476,10 +524,26 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/GettyImages-182884083.jpg?resize=1200%2C800",
       "published": "2026-06-18T01:23:51+00:00",
       "firstSeen": "2026-06-18T01:37:59.526403+00:00",
-      "lastSeen": "2026-06-18T11:16:05.627954+00:00",
+      "lastSeen": "2026-06-18T13:00:01.890957+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.0262
+      "score": 5.9869
+    },
+    {
+      "title": "Is it agentic enough? Benchmarking open models on your own tooling",
+      "url": "https://huggingface.co/blog/is-it-agentic-enough",
+      "source": "Hugging Face Blog",
+      "sourceUrl": "https://huggingface.co/blog/feed.xml",
+      "sourceWeight": 0.95,
+      "category": "AI",
+      "summary": "",
+      "image": "https://huggingface.co/blog/assets/is-it-agentic-enough/thumbnail.png",
+      "published": "2026-06-18T00:00:00+00:00",
+      "firstSeen": "2026-06-18T13:00:01.890957+00:00",
+      "lastSeen": "2026-06-18T13:00:01.890957+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.1466
     },
     {
       "title": "GLM-5.2 is probably the most powerful text-only open weights LLM",
@@ -492,10 +556,10 @@
       "image": "https://static.simonwillison.net/static/2026/glm-5.2-pelican.svg",
       "published": "2026-06-17T23:58:39+00:00",
       "firstSeen": "2026-06-18T01:00:01.621226+00:00",
-      "lastSeen": "2026-06-18T11:16:05.627954+00:00",
+      "lastSeen": "2026-06-18T13:00:01.890957+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.4939
+      "score": 5.4561
     },
     {
       "title": "Parafin lands a Goldman Sachs credit facility to embed lending inside Amazon, DoorDash, and Walmart",
@@ -511,7 +575,7 @@
       "lastSeen": "2026-06-18T09:00:02.049187+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.547
+      "score": 2.5096
     },
     {
       "title": "ECB’s Lagarde says AI could trigger financial crises and calls for Cold War-style non-proliferation governance",
@@ -527,7 +591,7 @@
       "lastSeen": "2026-06-18T09:00:02.049187+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8392
+      "score": 1.8021
     },
     {
       "title": "The Korean Telecom Giant at the Center of Anthropic’s Mythos Controversy",
@@ -540,10 +604,10 @@
       "image": "https://media.wired.com/photos/6a22ce03ffc48019a74127a3/master/pass/GettyImages-2272066793.jpg",
       "published": "2026-06-17T22:52:00+00:00",
       "firstSeen": "2026-06-18T00:00:01.260284+00:00",
-      "lastSeen": "2026-06-18T11:16:05.627954+00:00",
+      "lastSeen": "2026-06-18T13:00:01.890957+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.9694
+      "score": 8.9328
     },
     {
       "title": "The Trump Mobile T1 was supposed to be made in America. It’s a Taiwanese phone with a gold coat.",
@@ -559,7 +623,7 @@
       "lastSeen": "2026-06-18T09:00:02.049187+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8285
+      "score": 1.792
     },
     {
       "title": "A Colombian AI startup wants to assist half of Latin America’s doctors. Andreessen Horowitz just backed it.",
@@ -575,183 +639,7 @@
       "lastSeen": "2026-06-18T09:00:02.049187+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.018
-    },
-    {
-      "title": "Europe’s carmakers are pivoting to defence as EV demand slows and military budgets soar",
-      "url": "https://thenextweb.com/news/european-automakers-defence-pivot-ineos-daimler-mercedes",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Four European automakers announced military vehicle partnerships in the past week. Ineos is bidding for a UK Ministry of Defence contract. Daimler Truck launched a dedicated defence brand. Renault partnered with Thales for armoured vehicles. Mercedes-Benz teamed up with a German startup to build anti-drone platforms. The European car industry is retooling for rearmament. Ineos [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/european-automakers-defence-pivot-ineos-daimler-mercedes.avif",
-      "published": "2026-06-17T21:52:54+00:00",
-      "firstSeen": "2026-06-17T22:51:20.369049+00:00",
-      "lastSeen": "2026-06-18T09:00:02.049187+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.5084
-    },
-    {
-      "title": "China pitches free AI for the developing world as the G7 debates who gets access to American models",
-      "url": "https://thenextweb.com/news/china-ai-global-cooperation-vs-g7-export-controls",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "China’s top diplomat Wang Yi announced on Wednesday that Beijing is “accelerating the establishment of a global AI cooperation organization” and invited all countries to join. The comments came as the G7 summit in France wrapped up with discussions about giving “trusted partners” access to leading US AI models, according to Reuters. Two competing visions [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/china-ai-global-cooperation-vs-g7-export-controls.avif",
-      "published": "2026-06-17T21:36:15+00:00",
-      "firstSeen": "2026-06-17T22:51:20.369049+00:00",
-      "lastSeen": "2026-06-18T07:03:21.709469+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.3026
-    },
-    {
-      "title": "FTC freezes sprawling subscription enterprise built on Cyprus and Delaware shells",
-      "url": "https://thenextweb.com/news/ftc-genesis-tech-subscription-schemes",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "A federal court has temporarily shut down what the US Federal Trade Commission describes as a sprawling enterprise of deceptive subscription apps, freezing the operations of 15 corporations and eight individuals accused of charging consumers without permission and making cancellation deliberately hard. The order, granted at the agency’s request, came alongside a complaint filed on [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/04/FTC-settles-OkCupid-data-scandal.avif",
-      "published": "2026-06-17T21:03:26+00:00",
-      "firstSeen": "2026-06-17T22:51:20.369049+00:00",
-      "lastSeen": "2026-06-18T07:03:21.709469+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.8912
-    },
-    {
-      "title": "Roelof Botha joins SpaceX’s board of directors",
-      "url": "https://techcrunch.com/2026/06/17/roelof-botha-joins-spacexs-board-of-directors",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "The former Sequoia Capital leader is filling an \"existing vacancy\" on SpaceX's board, days after the company went public in the largest IPO ever.",
-      "image": "https://techcrunch.com/wp-content/uploads/2025/10/2243688557.jpg?resize=1200%2C800",
-      "published": "2026-06-17T20:32:52+00:00",
-      "firstSeen": "2026-06-17T22:51:20.369049+00:00",
-      "lastSeen": "2026-06-18T11:16:05.627954+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.6208
-    },
-    {
-      "title": "After unveiling ridiculously expensive AR glasses, Snap’s stock takes a dive",
-      "url": "https://techcrunch.com/2026/06/17/after-unveiling-ridiculously-expensive-ar-glasses-snaps-stock-takes-a-dive",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Snap's long-awaited smart glasses debut hasn't exactly done wonders for the company's stock.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/06/GettyImages-2281915461.jpg?resize=1200%2C800",
-      "published": "2026-06-17T20:24:28+00:00",
-      "firstSeen": "2026-06-17T22:51:20.369049+00:00",
-      "lastSeen": "2026-06-18T11:16:05.627954+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.618
-    },
-    {
-      "title": "NEA’s Tiffany Luck says enterprises are still figuring out their AI ROI",
-      "url": "https://techcrunch.com/video/neas-tiffany-luck-says-enterprises-are-still-figuring-out-their-ai-roi",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Tokenmaxxing&#160;was&#160;the hottest trend in Silicon Valley earlier this year, with CEOs encouraging employees to push AI usage as far&#160;as it would go.&#160;Then the bill came due. Uber&#160;reportedly blew&#160;through its annual AI budget in a few months, some companies cut Claude licenses for parts of their org, and Meta killed its internal leaderboard.&#160; This tension between [&#8230;]",
-      "image": "https://techcrunch.com/wp-content/uploads/2025/03/Tiffany-Luck_headshot.jpg?resize=1200%2C800",
-      "published": "2026-06-17T20:17:38+00:00",
-      "firstSeen": "2026-06-17T20:28:20.690365+00:00",
-      "lastSeen": "2026-06-18T11:16:05.627954+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 2.8157
-    },
-    {
-      "title": "v1.88.3",
-      "url": "https://github.com/BerriAI/litellm/releases/tag/v1.88.3",
-      "source": "LiteLLM Releases",
-      "sourceUrl": "https://github.com/BerriAI/litellm/releases.atom",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Verify Docker Image Signature\nAll LiteLLM Docker images are signed with cosign. Every release is signed with the same key introduced in commit 0112e53.\nVerify using the pinned commit hash (recommended):\nA commit hash is cryptographically immutable, so this is the strongest way to ensure you are using the original signing key:\ncosign verify \\\n  --key https://raw.githubusercontent.com/BerriAI/litellm/0112e53046018d726492c814b3644b7d376029d0/cosign.pub \\\n  ghcr.io/berriai/litellm:v1.88.3\nVerify using the release tag (convenience):\nTags are protected in this repository and resolve to the same key.",
-      "image": "https://opengraph.githubassets.com/9e8d1c68595085dad4830d15051a9c16b21d49cd4018c0b64eeb9ee23e4fc0b0/BerriAI/litellm/releases/tag/v1.88.3",
-      "published": "2026-06-17T20:06:39+00:00",
-      "firstSeen": "2026-06-17T20:28:20.690365+00:00",
-      "lastSeen": "2026-06-18T11:16:05.627954+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.612
-    },
-    {
-      "title": "Behavox raises $175 million from BlackRock’s HPS to expand its AI compliance platform",
-      "url": "https://thenextweb.com/news/behavox-175m-hps-blackrock-ai-compliance",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Behavox has raised $175 million in preferred equity from HPS Investment Partners, the private credit firm that BlackRock acquired for $12 billion last year. The funding will go toward expanding Behavox’s unified AI compliance platform and pursuing acquisitions. It is the company’s first equity raise in six years. As part of the deal, Behavox fully repaid and [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/behavox-175m-hps-blackrock-ai-compliance.avif",
-      "published": "2026-06-17T20:03:48+00:00",
-      "firstSeen": "2026-06-17T22:51:20.369049+00:00",
-      "lastSeen": "2026-06-18T07:03:21.709469+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.771
-    },
-    {
-      "title": "v0.30.10-rc1",
-      "url": "https://github.com/ollama/ollama/releases/tag/v0.30.10-rc1",
-      "source": "Ollama Releases",
-      "sourceUrl": "https://github.com/ollama/ollama/releases.atom",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "ci: pin darwin release xcode (#16788)",
-      "image": "https://opengraph.githubassets.com/264cdc6e59fc08bd4db336f6ef2b4eac14c03657fdf322bb9b7d5dc12a7e8c56/ollama/ollama",
-      "published": "2026-06-17T20:01:10+00:00",
-      "firstSeen": "2026-06-18T01:00:01.621226+00:00",
-      "lastSeen": "2026-06-18T11:16:05.627954+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.6802
-    },
-    {
-      "title": "Massive breach spills credentials for thousands of sensitive networks",
-      "url": "https://arstechnica.com/security/2026/06/massive-breach-spills-credentials-for-thousands-of-sensitive-networks",
-      "source": "Ars Technica (AI/Tech)",
-      "sourceUrl": "https://feeds.arstechnica.com/arstechnica/technology-lab",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The affected include Oracle, Lenovo, FedEx, a NATO contractor, and Fortinet.",
-      "image": "https://cdn.arstechnica.net/wp-content/uploads/2023/07/exploit-vulnerability-security.jpg",
-      "published": "2026-06-17T19:54:31+00:00",
-      "firstSeen": "2026-06-17T22:51:20.369049+00:00",
-      "lastSeen": "2026-06-18T11:16:05.627954+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.768
-    },
-    {
-      "title": "PsiQuantum breaks ground in Australia on what it says will be the world’s first utility-scale quantum computer",
-      "url": "https://thenextweb.com/news/psiquantum-aupsiquantum-australia-groundbreaking-quantum-computerstralia-groundbreaking-quantum-computer",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "PsiQuantum has broken ground on a facility in Moreton Bay, Queensland, where it plans to build and deploy what it calls the world’s first utility-scale, fault-tolerant quantum computer. The site will eventually hold tens of thousands of photonic quantum chips cooled by one of the largest cryogenic systems ever constructed for quantum computing. Victor Peng, PsiQuantum’s [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/psiquantum-australia-groundbreaking-quantum-computer.avif",
-      "published": "2026-06-17T19:47:22+00:00",
-      "firstSeen": "2026-06-17T22:51:20.369049+00:00",
-      "lastSeen": "2026-06-18T07:03:21.709469+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.7656
+      "score": 3.9819
     },
     {
       "title": "The Life Scientific: Dean Lomax",
@@ -764,10 +652,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-15T20:00:00+00:00",
       "firstSeen": "2026-06-15T21:00:01.290903+00:00",
-      "lastSeen": "2026-06-18T11:16:05.627954+00:00",
+      "lastSeen": "2026-06-18T13:00:01.890957+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.3797
+      "score": 1.3708
     },
     {
       "title": "The Life Scientific: Helen Hastie",
@@ -780,7 +668,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-08T20:00:00+00:00",
       "firstSeen": "2026-06-08T21:00:01.371488+00:00",
-      "lastSeen": "2026-06-18T11:16:05.627954+00:00",
+      "lastSeen": "2026-06-18T13:00:01.890957+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 1.1917
