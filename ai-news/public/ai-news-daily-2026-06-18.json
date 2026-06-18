@@ -1,6 +1,6 @@
 {
   "date": "2026-06-18",
-  "updatedAt": "2026-06-18T11:16:05.627954+00:00",
+  "updatedAt": "2026-06-18T13:00:01.890957+00:00",
   "items": [
     {
       "title": "Google’s Gemini co-lead Noam Shazeer is leaving for OpenAI",
@@ -16,7 +16,7 @@
       "lastSeen": "2026-06-18T10:00:01.620236+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.4129
+      "score": 11.3653
     },
     {
       "title": "JPMorgan cuts off Anthropic access for Hong Kong staff",
@@ -32,7 +32,7 @@
       "lastSeen": "2026-06-18T10:00:01.620236+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.1791
+      "score": 10.1308
     },
     {
       "title": "HSBC expands AI banking partnership with Google Cloud",
@@ -45,10 +45,10 @@
       "image": "",
       "published": "2026-06-18T10:00:00+00:00",
       "firstSeen": "2026-06-18T11:00:01.932515+00:00",
-      "lastSeen": "2026-06-18T11:16:05.627954+00:00",
+      "lastSeen": "2026-06-18T13:00:01.890957+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 7.3099
+      "score": 7.26
     },
     {
       "title": "How to turn off AI in your Google Docs",
@@ -61,10 +61,58 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/GettyImages-182884083.jpg?resize=1200%2C800",
       "published": "2026-06-18T01:23:51+00:00",
       "firstSeen": "2026-06-18T01:37:59.526403+00:00",
-      "lastSeen": "2026-06-18T11:16:05.627954+00:00",
+      "lastSeen": "2026-06-18T13:00:01.890957+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.0262
+      "score": 5.9869
+    },
+    {
+      "title": "MIT built a memory system that lets robots remember where you left your keys",
+      "url": "https://thenextweb.com/news/mit-daaam-robot-long-term-memory-objects",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Robots are still surprisingly bad at remembering where things are. You might recall that your keys were on the kitchen counter last night. A robot working beside you would struggle to connect that object and location in a useful way. MIT researchers built a system called DAAAM to fix that. DAAAM stands for Describe Anything, [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/mit-daaam-robot-long-term-memory-objects.avif",
+      "published": "2026-06-18T11:44:19+00:00",
+      "firstSeen": "2026-06-18T12:00:01.167360+00:00",
+      "lastSeen": "2026-06-18T13:00:01.890957+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.9121
+    },
+    {
+      "title": "NeuralTrust raised $20M to police the AI agents companies can’t even count",
+      "url": "https://thenextweb.com/news/neuraltrust-20-million-seed-ai-agent-security",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "NeuralTrust, a Barcelona startup, has raised $20mn to secure the AI agents that big companies are now deploying faster than they can keep track of. The seed round, worth €17.2mn, was led by Munich’s Alstin Capital, with VentureFriends, Seaya, Kibo Ventures, Banc Sabadell, the EA Ventures Plug and Play Fund and Finaves, plus public money [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/NeuralTrust-team.avif",
+      "published": "2026-06-18T11:56:33+00:00",
+      "firstSeen": "2026-06-18T13:00:01.890957+00:00",
+      "lastSeen": "2026-06-18T13:00:01.890957+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.5181
+    },
+    {
+      "title": "Is it agentic enough? Benchmarking open models on your own tooling",
+      "url": "https://huggingface.co/blog/is-it-agentic-enough",
+      "source": "Hugging Face Blog",
+      "sourceUrl": "https://huggingface.co/blog/feed.xml",
+      "sourceWeight": 0.95,
+      "category": "AI",
+      "summary": "",
+      "image": "https://huggingface.co/blog/assets/is-it-agentic-enough/thumbnail.png",
+      "published": "2026-06-18T00:00:00+00:00",
+      "firstSeen": "2026-06-18T13:00:01.890957+00:00",
+      "lastSeen": "2026-06-18T13:00:01.890957+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.1466
     },
     {
       "title": "EU cybersecurity agency to meet Anthropic under a US export cloud",
@@ -80,7 +128,7 @@
       "lastSeen": "2026-06-18T11:16:05.627954+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0856
+      "score": 5.0369
     },
     {
       "title": "France Advances Europe’s AI Future With NVIDIA Technologies",
@@ -93,10 +141,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/5383050-vivatech26-digital-nv-blog-image-1920x1080-1.jpg",
       "published": "2026-06-18T06:00:59+00:00",
       "firstSeen": "2026-06-18T07:00:01.381962+00:00",
-      "lastSeen": "2026-06-18T11:16:05.627954+00:00",
+      "lastSeen": "2026-06-18T13:00:01.890957+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9407
+      "score": 4.896
     },
     {
       "title": "What to know about budgeting for pentesting: tools vs services",
@@ -112,7 +160,7 @@
       "lastSeen": "2026-06-18T11:16:05.627954+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.2216
+      "score": 4.1713
     },
     {
       "title": "Meta executive leading internal AI overhaul departs after two months",
@@ -128,71 +176,23 @@
       "lastSeen": "2026-06-18T10:00:01.620236+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.7517
+      "score": 3.7047
     },
     {
-      "title": "7 best receipt photobooths for commercial use in 2026",
-      "url": "https://thenextweb.com/news/7-best-receipt-photobooths-for-commercial-use-in-2026",
+      "title": "Attackers cracked 75,000 Fortinet firewalls with old passwords, not a zero-day",
+      "url": "https://thenextweb.com/news/fortibleed-fortinet-firewall-credentials-leak",
       "source": "The Next Web",
       "sourceUrl": "https://thenextweb.com/feed",
       "sourceWeight": 0.75,
       "category": "AI",
-      "summary": "Searches for “receipt photo booth” climbed more than 680% over the past year, and the category jumped from a niche TikTok trend to a real fixture in cafes, flagship stores, and brand activations. If you run a space or a marketing team, picking from the best receipt photobooths for commercial use now means weighing build quality, [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/Photobooths.avif",
-      "published": "2026-06-18T09:42:52+00:00",
-      "firstSeen": "2026-06-18T10:00:01.620236+00:00",
-      "lastSeen": "2026-06-18T11:16:05.627954+00:00",
+      "summary": "Security researchers have uncovered a sprawling cache of stolen credentials for Fortinet firewalls, exposing login details for tens of thousands of organisations around the world. The dataset, dubbed “FortiBleed,” contains plaintext usernames, emails and passwords for 73,932 unique Fortinet FortiGate firewall and VPN devices across 194 countries, touching more than 21,000 domains. Researchers estimate that [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/fortinet-hq.avif",
+      "published": "2026-06-18T11:36:13+00:00",
+      "firstSeen": "2026-06-18T12:00:01.167360+00:00",
+      "lastSeen": "2026-06-18T13:00:01.890957+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.5035
-    },
-    {
-      "title": "Huawei CFO’s admissions can be used against the company, US judge rules",
-      "url": "https://thenextweb.com/news/huawei-cfo-admissions-trial",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "A statement Meng Wanzhou signed to make her own legal jeopardy go away can now be used against the company she helps run. A US judge in Brooklyn ruled on Tuesday that admissions made by Huawei’s chief financial officer, as part of the 2021 deal that let her walk free, are admissible in the criminal [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/Meng-Wanzhou.avif",
-      "published": "2026-06-18T09:32:50+00:00",
-      "firstSeen": "2026-06-18T10:00:01.620236+00:00",
-      "lastSeen": "2026-06-18T11:16:05.627954+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 3.4987
-    },
-    {
-      "title": "SK Hynix ships first 12-layer HBM4E samples to AI customers",
-      "url": "https://thenextweb.com/news/sk-hynix-ships-first-12-layer-hbm4e-samples-to-ai-customers",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "SK Hynix said on Thursday that it had begun shipping samples of HBM4E, its next generation of high-bandwidth memory for AI, to major customers. The number that matters is the one the chipmaker is leading with: a 12-layer stack reaching 48GB of capacity, running at up to 16Gbps per pin, with power efficiency improved by [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/SK-Hynix.avif",
-      "published": "2026-06-18T08:07:35+00:00",
-      "firstSeen": "2026-06-18T09:00:02.049187+00:00",
-      "lastSeen": "2026-06-18T10:00:01.620236+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 3.4581
-    },
-    {
-      "title": "Tesco is migrating 40,000 servers off VMware and suing Broadcom for over GBP 100 million",
-      "url": "https://thenextweb.com/news/tesco-vmware-broadcom-40000-servers-migration-lawsuit",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Tesco, one of Britain’s largest supermarkets, is migrating approximately 40,000 servers away from VMware. It is also suing Broadcom in the UK High Court for more than GBP 100 million, accusing the company of “abusive conduct.” It is one of the largest publicly disclosed VMware migrations since Broadcom completed its acquisition of VMware in late [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/tesco-vmware-broadcom-40000-servers-migration-lawsuit.avif",
-      "published": "2026-06-18T10:43:09+00:00",
-      "firstSeen": "2026-06-18T11:00:01.932515+00:00",
-      "lastSeen": "2026-06-18T11:16:05.627954+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.2334
+      "score": 3.5081
     }
   ],
   "errors": [

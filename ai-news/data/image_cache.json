@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-18T11:16:05.627954+00:00",
+  "updatedAt": "2026-06-18T13:00:01.890957+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -10852,6 +10852,14 @@
     "https://www.artificialintelligence-news.com/news/hsbc-google-cloud-ai-partnership": {
       "image": "",
       "checkedAt": "2026-06-18T11:00:01.932515+00:00"
+    },
+    "https://techcrunch.com/2026/06/18/pixis-new-ios-app-turns-text-messages-into-interactive-ar-experiences": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/pixi-app-screen-6-e1781642459181.jpeg?w=796",
+      "checkedAt": "2026-06-18T13:00:01.890957+00:00"
+    },
+    "https://huggingface.co/blog/is-it-agentic-enough": {
+      "image": "https://huggingface.co/blog/assets/is-it-agentic-enough/thumbnail.png",
+      "checkedAt": "2026-06-18T13:00:01.890957+00:00"
     }
   }
 }
