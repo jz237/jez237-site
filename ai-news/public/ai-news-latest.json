@@ -1,8 +1,8 @@
 {
-  "updatedAt": "2026-06-18T15:50:17.281064+00:00",
+  "updatedAt": "2026-06-18T17:00:01.646340+00:00",
   "items": [
     {
-      "title": "Lorenz Wolf, Connor Watts, Roger Creus Castanyer, Geoffrey Bradway, Maxwill Lin, Augustine N. Mavor-Parker, Matthew D...",
+      "title": "Breaking the Solver Bottleneck: Training Task Generators at the Learnable Frontier",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -10,12 +10,124 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-18T15:50:23.487075+00:00",
+      "published": "2026-06-18T17:00:10.233365+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-18T15:50:17.281064+00:00",
+      "lastSeen": "2026-06-18T17:00:01.646340+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.36
+      "score": 2.66
+    },
+    {
+      "title": "‘Queer Eye’s’ life coach Karamo Brown launches Kē, a wellness app featuring his AI digital clone",
+      "url": "https://techcrunch.com/2026/06/18/queer-eyes-life-coach-karamo-brown-launches-ke-a-wellness-app-featuring-his-ai-digital-clone",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Karamo Brown, famous for his pep talks on Netflix&#8217;s “Queer Eye,” has jumped into the wellness and AI space with his new app, Kē. After spending a year and a half focusing on his own journey—from fitness and nutrition to meditation, sobriety, relationships, and personal growth—Brown wants to help others do the same.&#160; Kē offers [&#8230;]",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/KaramoBrown-Ke.jpg?resize=1200%2C800",
+      "published": "2026-06-18T16:55:04+00:00",
+      "firstSeen": "2026-06-18T17:00:01.646340+00:00",
+      "lastSeen": "2026-06-18T17:00:01.646340+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.1875
+    },
+    {
+      "title": "Nvidia-backed Verse raises $54M to help AI data centres skip the power queue",
+      "url": "https://thenextweb.com/news/verse-54m-series-b-ai-data-centre-power",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "For years, the scarce resource in AI was chips. Now it is power. Verse Enterprises wants to unblock that bottleneck. The San Francisco startup has raised an oversubscribed $54mn Series B. Bessemer Venture Partners led the round. GV, Nvidia and Norrsken VC also took part. The race to AI is now a race to power [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/Verse-founders.avif",
+      "published": "2026-06-18T16:35:05+00:00",
+      "firstSeen": "2026-06-18T17:00:01.646340+00:00",
+      "lastSeen": "2026-06-18T17:00:01.646340+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1374
+    },
+    {
+      "title": "Architect Labs raises $24M to let any company design its own AI chip",
+      "url": "https://thenextweb.com/news/architect-labs-24m-seed-ai-custom-chip-design",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Designing a chip is hard. It takes years, hundreds of millions of dollars, and a tiny pool of experts. Most of them sit inside a few large companies. Architect Labs wants to change that with AI. The Palo Alto startup left stealth on Thursday with a $24mn seed round. Its plan is to build an [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/Architect-Labs.avif",
+      "published": "2026-06-18T16:21:13+00:00",
+      "firstSeen": "2026-06-18T17:00:01.646340+00:00",
+      "lastSeen": "2026-06-18T17:00:01.646340+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1304
+    },
+    {
+      "title": "Gradial raises $65M to be the ‘AI glue’ for enterprise marketing",
+      "url": "https://thenextweb.com/news/gradial-65m-series-c-agentic-enterprise-marketing",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Every software company is racing to bolt an AI agent onto its own product. Gradial is betting the real money is in the gaps between them. The Seattle startup has raised $65mn in Series C funding to build what it calls an operating system for marketing: a layer of AI agents that execute work across [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/gradial-team.avif",
+      "published": "2026-06-18T16:07:25+00:00",
+      "firstSeen": "2026-06-18T17:00:01.646340+00:00",
+      "lastSeen": "2026-06-18T17:00:01.646340+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 3.8235
+    },
+    {
+      "title": "3 Amazon Workers Say They’re Under Investigation for Speaking Out About Data Centers",
+      "url": "https://www.wired.com/story/amazon-workers-under-internal-investigation-after-speaking-out-about-data-centers",
+      "source": "Wired AI",
+      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "The software engineers filed a complaint with Seattle’s civil rights office accusing Amazon of illegally retaliating against them for expressing their personal political beliefs.",
+      "image": "https://media.wired.com/photos/6a33fb3a3fe23d3ce2a1cf59/master/pass/Business_AmazonWorkersUnder_v2.jpg",
+      "published": "2026-06-18T16:03:27+00:00",
+      "firstSeen": "2026-06-18T17:00:01.646340+00:00",
+      "lastSeen": "2026-06-18T17:00:01.646340+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2616
+    },
+    {
+      "title": "Amazon employees say they’re facing termination for backing data center limits",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/952180/amazon-seattle-data-center-moratorium-aecj-disciplinary-action",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "When three Amazon software engineers testified earlier this month at Seattle City Council hearings about data centers, they started their testimony by citing a city law barring employment discrimination over political speech. Now, they're accusing their employer of breaking that law by retaliating against them. On June 10th - one week after the hearing, and [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/STKS528_DATA_CENTERS2_C.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
+      "published": "2026-06-18T16:00:00+00:00",
+      "firstSeen": "2026-06-18T17:00:01.646340+00:00",
+      "lastSeen": "2026-06-18T17:00:01.646340+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.3299
+    },
+    {
+      "title": "‘It’s literally the gulag’: inside the revolt at Meta’s AI unit, where elite engineers were drafted to label data",
+      "url": "https://thenextweb.com/news/meta-applied-ai-unit-revolt-data-labeling-draftees",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "It takes a particular kind of dysfunction for an employee to hijack a company-wide livestream and demand the hosts pass a message to a senior executive: that he is, in not so many words, garbage. That happened inside Meta this month. According to a recording heard by WIRED, the outburst, on a call open to [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/meta-ai-spending-child-safety-lawsuits.avif",
+      "published": "2026-06-18T15:53:21+00:00",
+      "firstSeen": "2026-06-18T17:00:01.646340+00:00",
+      "lastSeen": "2026-06-18T17:00:01.646340+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.2166
     },
     {
       "title": "Life360 now lets parents order Uber rides for teens without leaving the app",
@@ -27,91 +139,11 @@
       "summary": "Life360 and Uber launched an integration that lets parents request and coordinate Uber rides for teens and other family members directly inside the Life360 app. Parents can tap a family member’s real-time location on the Life360 map, and the pickup details auto-fill in the Uber app. Trip progress is visible on either platform. Uber’s teen [&hellip;]\nThis story continues at The Next Web",
       "image": "https://media.thenextweb.com/2026/06/life360-uber-teen-rides-family-integration.avif",
       "published": "2026-06-18T15:44:41+00:00",
-      "firstSeen": "2026-06-18T16:00:01.529132+00:00",
-      "lastSeen": "2026-06-18T16:00:01.529132+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.9422
-    },
-    {
-      "title": "Adobe just made its biggest AI push yet, and it stretches from Photoshop to Disney World",
-      "url": "https://thenextweb.com/news/adobe-ai-week-firefly-agent-disney-semrush-genstudio-linkedin",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Adobe has spent two years bolting AI onto its software. This week it tried to become the AI layer underneath everything creative and marketing, in five announcements stretched across three days. The headline is an agent inside the apps. The rest of the week shows what Adobe is really building: a single creative and marketing [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/adobe-firefly-ai-updates.avif",
-      "published": "2026-06-18T15:28:24+00:00",
-      "firstSeen": "2026-06-18T16:00:01.529132+00:00",
-      "lastSeen": "2026-06-18T16:00:01.529132+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.934
-    },
-    {
-      "title": "General Intuition in talks to raise $300M at around $2B valuation",
-      "url": "https://techcrunch.com/2026/06/18/general-intuition-in-talks-to-raise-300m-at-around-2b-valuation",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "General Intuition is in talks to raise around $300 million at a roughly $2 billion valuation from backers including Jeff Bezos. The startup trains AI agents on spatial-temporal reasoning.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/06/General-intuition.png?w=880",
-      "published": "2026-06-18T15:20:37+00:00",
-      "firstSeen": "2026-06-18T16:00:01.529132+00:00",
-      "lastSeen": "2026-06-18T16:00:01.529132+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 5.6701
-    },
-    {
-      "title": "A tech worker-backed PAC is bringing a $5M knife to Big Tech’s $100M gunfight",
-      "url": "https://techcrunch.com/2026/06/18/a-tech-worker-backed-pac-is-bringing-a-5m-knife-to-big-techs-100m-gunfight",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Guardrails positions itself as a populist political movement that runs on small donations from people in the trenches of the AI boom.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/06/GettyImages-2264911748.jpg?resize=1200%2C705",
-      "published": "2026-06-18T15:13:21+00:00",
-      "firstSeen": "2026-06-18T16:00:01.529132+00:00",
-      "lastSeen": "2026-06-18T16:00:01.529132+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.2665
-    },
-    {
-      "title": "The EU is about to declare AWS and Azure gatekeepers under the Digital Markets Act",
-      "url": "https://thenextweb.com/news/eu-dma-aws-azure-cloud-gatekeeper-probe",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The European Commission is set to unveil preliminary findings as early as next week stating that Amazon Web Services and Microsoft Azure appear to meet the requirements to be designated as gatekeepers under the Digital Markets Act, Bloomberg reported. A final decision is expected by the end of 2026, though timelines could shift. If designated, [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/eu-dma-aws-azure-cloud-gatekeeper-probe.avif",
-      "published": "2026-06-18T15:11:03+00:00",
-      "firstSeen": "2026-06-18T16:00:01.529132+00:00",
-      "lastSeen": "2026-06-18T16:00:01.529132+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.2253
-    },
-    {
-      "title": "Life360 now lets parents order Uber rides for teens without leaving the app",
-      "url": "https://thenextweb.com/news/life360-uber-teen-rides-family-integration",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Life360 and Uber launched an integration that lets parents request and coordinate Uber rides for teens and other family members directly inside the Life360 app. Parents can tap a family member’s real-time location on the Life360 map, and the pickup details auto-fill in the Uber app. Trip progress is visible on either platform. Uber’s teen [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/life360-uber-teen-rides-family-integration.avif",
-      "published": "2026-06-18T15:44:41+00:00",
       "firstSeen": "2026-06-18T15:50:17.281064+00:00",
-      "lastSeen": "2026-06-18T15:50:17.281064+00:00",
+      "lastSeen": "2026-06-18T17:00:01.646340+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.9471
+      "score": 3.9123
     },
     {
       "title": "Adobe just made its biggest AI push yet, and it stretches from Photoshop to Disney World",
@@ -124,10 +156,10 @@
       "image": "https://media.thenextweb.com/2026/06/adobe-firefly-ai-updates.avif",
       "published": "2026-06-18T15:28:24+00:00",
       "firstSeen": "2026-06-18T15:50:17.281064+00:00",
-      "lastSeen": "2026-06-18T15:50:17.281064+00:00",
+      "lastSeen": "2026-06-18T17:00:01.646340+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9389
+      "score": 4.9043
     },
     {
       "title": "General Intuition in talks to raise $300M at around $2B valuation",
@@ -136,14 +168,14 @@
       "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
       "sourceWeight": 0.85,
       "category": "AI",
-      "summary": "General Intuition is in talks to raise around $300 million at a roughly $2 billion valuation from backers including Jeff Bezos. The startup trains AI agents on spatial-temporal reasoning.",
+      "summary": "The startup trains embodied AI and world models using Medal’s dataset of 2 billion videos per year from 10 million monthly active users.",
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/General-intuition.png?w=880",
       "published": "2026-06-18T15:20:37+00:00",
       "firstSeen": "2026-06-18T15:50:17.281064+00:00",
-      "lastSeen": "2026-06-18T15:50:17.281064+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 5.675
+      "lastSeen": "2026-06-18T17:00:01.646340+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2405
     },
     {
       "title": "A tech worker-backed PAC is bringing a $5M knife to Big Tech’s $100M gunfight",
@@ -156,10 +188,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/GettyImages-2264911748.jpg?resize=1200%2C705",
       "published": "2026-06-18T15:13:21+00:00",
       "firstSeen": "2026-06-18T15:50:17.281064+00:00",
-      "lastSeen": "2026-06-18T15:50:17.281064+00:00",
+      "lastSeen": "2026-06-18T17:00:01.646340+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2713
+      "score": 2.237
     },
     {
       "title": "The EU is about to declare AWS and Azure gatekeepers under the Digital Markets Act",
@@ -172,10 +204,10 @@
       "image": "https://media.thenextweb.com/2026/06/eu-dma-aws-azure-cloud-gatekeeper-probe.avif",
       "published": "2026-06-18T15:11:03+00:00",
       "firstSeen": "2026-06-18T15:50:17.281064+00:00",
-      "lastSeen": "2026-06-18T15:50:17.281064+00:00",
+      "lastSeen": "2026-06-18T17:00:01.646340+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2302
+      "score": 3.1959
     },
     {
       "title": "Accenture had its worst stock day ever on fears AI is eating consulting. Hours earlier, it spent $4.18bn trying to escape that.",
@@ -188,10 +220,10 @@
       "image": "https://media.thenextweb.com/2011/09/accenture.avif",
       "published": "2026-06-18T14:40:46+00:00",
       "firstSeen": "2026-06-18T15:00:01.300544+00:00",
-      "lastSeen": "2026-06-18T15:50:17.281064+00:00",
+      "lastSeen": "2026-06-18T17:00:01.646340+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1152
+      "score": 2.0813
     },
     {
       "title": "The ‘godfather of AI’ called xAI a failure and warned of a bubble. He’s also selling the alternative.",
@@ -204,10 +236,10 @@
       "image": "https://media.thenextweb.com/2026/06/Conférence_IP_Paris_22AI_Science_and_Society22_à_lEcole_polytechnique_54320377276.avif",
       "published": "2026-06-18T14:31:14+00:00",
       "firstSeen": "2026-06-18T15:00:01.300544+00:00",
-      "lastSeen": "2026-06-18T15:50:17.281064+00:00",
+      "lastSeen": "2026-06-18T17:00:01.646340+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 9.1105
+      "score": 9.0768
     },
     {
       "title": "Anthropic Adds Brand Controls, Code Sync to Claude Design",
@@ -220,10 +252,10 @@
       "image": "",
       "published": "2026-06-18T14:25:18+00:00",
       "firstSeen": "2026-06-18T15:50:17.281064+00:00",
-      "lastSeen": "2026-06-18T15:50:17.281064+00:00",
+      "lastSeen": "2026-06-18T17:00:01.646340+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.2076
+      "score": 12.174
     },
     {
       "title": "California expected a tax bonanza from AI IPOs. Modern compensation structures may blunt the windfall.",
@@ -236,10 +268,10 @@
       "image": "https://media.thenextweb.com/2026/06/california-ipo-tax-windfall-spacex-openai-anthropic.avif",
       "published": "2026-06-18T14:23:52+00:00",
       "firstSeen": "2026-06-18T15:00:01.300544+00:00",
-      "lastSeen": "2026-06-18T15:50:17.281064+00:00",
+      "lastSeen": "2026-06-18T17:00:01.646340+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 7.2069
+      "score": 7.1733
     },
     {
       "title": "While Helsing and Anduril chase billion-dollar valuations, Comand AI raised €32M for the layer above them",
@@ -255,7 +287,7 @@
       "lastSeen": "2026-06-18T15:50:17.281064+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8053
+      "score": 2.7717
     },
     {
       "title": "85% of NATO’s defence-tech funding goes to the US. AVP and Earlybird raised €500M to change that.",
@@ -271,7 +303,7 @@
       "lastSeen": "2026-06-18T15:50:17.281064+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1025
+      "score": 2.0691
     },
     {
       "title": "An ex-Palantir leader raised $16M to point AI at the NHS’s paperwork, not its doctors",
@@ -287,7 +319,7 @@
       "lastSeen": "2026-06-18T15:50:17.281064+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1474
+      "score": 3.1142
     },
     {
       "title": "Who decides when AI is too dangerous?",
@@ -300,10 +332,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/DCD_0617_Fable5.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-18T14:00:00+00:00",
       "firstSeen": "2026-06-18T15:00:01.300544+00:00",
-      "lastSeen": "2026-06-18T16:00:01.529132+00:00",
+      "lastSeen": "2026-06-18T17:00:01.646340+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.3052
+      "score": 4.272
     },
     {
       "title": "Baseten is raising $1.5bn at up to $13bn, betting AI’s profits lie in cheap inference",
@@ -319,7 +351,7 @@
       "lastSeen": "2026-06-18T15:50:17.281064+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3932
+      "score": 2.3601
     },
     {
       "title": "LinkedIn will now show recruiters which apps you actually use, not just which skills you claim",
@@ -335,7 +367,7 @@
       "lastSeen": "2026-06-18T15:00:01.300544+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.8916
+      "score": 3.8585
     },
     {
       "title": "ByteDance is Microsoft’s biggest AI customer, even as Washington treats Chinese AI as a threat",
@@ -351,7 +383,7 @@
       "lastSeen": "2026-06-18T15:00:01.300544+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.0888
+      "score": 4.0558
     },
     {
       "title": "GTA VI pre-orders open June 25. Rockstar revealed the cover art. No price yet.",
@@ -367,7 +399,7 @@
       "lastSeen": "2026-06-18T15:00:01.300544+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.8845
+      "score": 3.8516
     },
     {
       "title": "Waymo issues its sixth recall after robotaxis drove into highway construction zones 13 times",
@@ -383,7 +415,7 @@
       "lastSeen": "2026-06-18T14:00:01.846539+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1774
+      "score": 3.1447
     },
     {
       "title": "Pramaana Labs raised $27M to wrap AI in mathematical proof for law, tax, and drug discovery",
@@ -399,7 +431,7 @@
       "lastSeen": "2026-06-18T14:00:01.846539+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0765
+      "score": 2.0439
     },
     {
       "title": "At Cannes Lions, NVIDIA Partners Reshape Advertising and Marketing With AI",
@@ -412,10 +444,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/cannes-lions-featured-visual-still-1920x1080-1.jpg",
       "published": "2026-06-18T13:00:43+00:00",
       "firstSeen": "2026-06-18T14:00:01.846539+00:00",
-      "lastSeen": "2026-06-18T15:50:17.281064+00:00",
+      "lastSeen": "2026-06-18T17:00:01.646340+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2069
+      "score": 2.1746
     },
     {
       "title": "Sync and Stream: GeForce NOW Connects to Members’ Game Libraries Across Devices",
@@ -428,10 +460,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/GFN_Thursday-June_18.jpg",
       "published": "2026-06-18T13:00:32+00:00",
       "firstSeen": "2026-06-18T14:00:01.846539+00:00",
-      "lastSeen": "2026-06-18T15:50:17.281064+00:00",
+      "lastSeen": "2026-06-18T17:00:01.646340+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2069
+      "score": 2.1746
     },
     {
       "title": "Stop Juggling AI Tools — This Lifetime Deal Puts GPT‑4o and More in One Place",
@@ -444,10 +476,10 @@
       "image": "",
       "published": "2026-06-18T13:00:24+00:00",
       "firstSeen": "2026-06-18T15:50:17.281064+00:00",
-      "lastSeen": "2026-06-18T15:50:17.281064+00:00",
+      "lastSeen": "2026-06-18T17:00:01.646340+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.1668
+      "score": 11.1345
     },
     {
       "title": "Photoshop and Premiere now have AI assistants",
@@ -460,10 +492,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/Adobe-Photoshop-AI-assistant-hero.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-18T13:00:00+00:00",
       "firstSeen": "2026-06-18T14:00:01.846539+00:00",
-      "lastSeen": "2026-06-18T16:00:01.529132+00:00",
+      "lastSeen": "2026-06-18T17:00:01.646340+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 6.2766
+      "score": 6.2443
     },
     {
       "title": "Adobe’s redesigned AI studio remembers what your creations look like",
@@ -476,10 +508,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/Adobe-Firefly-AI-studio-updates-lede.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-18T13:00:00+00:00",
       "firstSeen": "2026-06-18T14:00:01.846539+00:00",
-      "lastSeen": "2026-06-18T16:00:01.529132+00:00",
+      "lastSeen": "2026-06-18T17:00:01.646340+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 4.0766
+      "score": 4.0443
     },
     {
       "title": "Epic is building Claude and Gemini into Unreal Engine 6, whether developers like it or not",
@@ -495,7 +527,7 @@
       "lastSeen": "2026-06-18T14:00:01.846539+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 14.0654
+      "score": 14.0331
     },
     {
       "title": "Pixi’s new iOS app turns text messages into interactive AR experiences",
@@ -508,10 +540,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/pixi-app-screen-6-e1781642459181.jpeg?w=796",
       "published": "2026-06-18T12:00:00+00:00",
       "firstSeen": "2026-06-18T13:00:01.890957+00:00",
-      "lastSeen": "2026-06-18T15:50:17.281064+00:00",
+      "lastSeen": "2026-06-18T17:00:01.646340+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2788
+      "score": 3.2473
     },
     {
       "title": "NeuralTrust raised $20M to police the AI agents companies can’t even count",
@@ -527,7 +559,7 @@
       "lastSeen": "2026-06-18T14:00:01.846539+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.4372
+      "score": 5.4058
     },
     {
       "title": "NASA picked Eric Schmidt’s Relativity Space to fly to Mars. It has never reached orbit.",
@@ -543,7 +575,7 @@
       "lastSeen": "2026-06-18T14:00:01.846539+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0341
+      "score": 2.0028
     },
     {
       "title": "MIT built a memory system that lets robots remember where you left your keys",
@@ -559,7 +591,7 @@
       "lastSeen": "2026-06-18T14:00:01.846539+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.8316
+      "score": 5.8004
     },
     {
       "title": "Attackers cracked 75,000 Fortinet firewalls with old passwords, not a zero-day",
@@ -575,7 +607,7 @@
       "lastSeen": "2026-06-18T14:00:01.846539+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.4279
+      "score": 3.3969
     },
     {
       "title": "EU tells Big Tech to align AI data centres with climate goals or stay away",
@@ -591,7 +623,7 @@
       "lastSeen": "2026-06-18T14:00:01.846539+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.025
+      "score": 1.994
     },
     {
       "title": "Midjourney says its new full-body scanner beats an MRI. It has never built hardware before.",
@@ -607,119 +639,7 @@
       "lastSeen": "2026-06-18T13:00:01.890957+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.4215
-    },
-    {
-      "title": "Swiss startup Prem AI is raising $100M so hedge funds and law firms can own their AI instead of renting it",
-      "url": "https://thenextweb.com/news/prem-ai-swiss-100m-series-a-private-ai",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Prem AI, a Swiss startup that helps hedge funds and law firms run AI models on their own infrastructure, is raising $100 million in a Series A at a valuation of at least $500 million. The company expects to close the round in the third quarter. CEO and founder Simone Giacomelli said the pitch is [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/prem-ai-swiss-100m-series-a-private-ai.avif",
-      "published": "2026-06-18T11:20:30+00:00",
-      "firstSeen": "2026-06-18T12:00:01.167360+00:00",
-      "lastSeen": "2026-06-18T13:00:01.890957+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.0208
-    },
-    {
-      "title": "Sequoia’s Roelof Botha joins the SpaceX board, days after the record IPO",
-      "url": "https://thenextweb.com/news/spacex-board-roelof-botha-independent-director",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "SpaceX has named its first new board member since going public, and the word doing the heavy lifting in the announcement is “independent.” In a filing on June 17, the company said its board had elected Roelof Botha, the former Sequoia Capital steward, as an independent director and a member of its audit committee. The [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/roelofbotha.avif",
-      "published": "2026-06-18T11:09:19+00:00",
-      "firstSeen": "2026-06-18T12:00:01.167360+00:00",
-      "lastSeen": "2026-06-18T13:00:01.890957+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.7158
-    },
-    {
-      "title": "The portal is the product: inside the operating model rewriting digital agencies",
-      "url": "https://thenextweb.com/news/portal-product-operating-model-digital-agencies",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Most digital agencies hit a wall somewhere between their fiftieth and hundredth active client. Sales is fine; the pitch deck still works, the services still convert. The breakdown is on the delivery side. The operation behind the scenes starts to crack under the weight of clients it was never designed to hold. It’s a wall [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/portal-product-operating-model-digital-agencies.avif",
-      "published": "2026-06-18T11:03:50+00:00",
-      "firstSeen": "2026-06-18T12:00:01.167360+00:00",
-      "lastSeen": "2026-06-18T13:00:01.890957+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.0134
-    },
-    {
-      "title": "Tesco is migrating 40,000 servers off VMware and suing Broadcom for over GBP 100 million",
-      "url": "https://thenextweb.com/news/tesco-vmware-broadcom-40000-servers-migration-lawsuit",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Tesco, one of Britain’s largest supermarkets, is migrating approximately 40,000 servers away from VMware. It is also suing Broadcom in the UK High Court for more than GBP 100 million, accusing the company of “abusive conduct.” It is one of the largest publicly disclosed VMware migrations since Broadcom completed its acquisition of VMware in late [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/tesco-vmware-broadcom-40000-servers-migration-lawsuit.avif",
-      "published": "2026-06-18T10:43:09+00:00",
-      "firstSeen": "2026-06-18T11:00:01.932515+00:00",
-      "lastSeen": "2026-06-18T13:00:01.890957+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.1042
-    },
-    {
-      "title": "Blackstone’s AirTrunk seeks $3bn loan for one Sydney data centre",
-      "url": "https://thenextweb.com/news/blackstones-airtrunk-seeks-3bn-loan-for-one-sydney-data-centre",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "AirTrunk wants to borrow A$4.3bn, roughly $3bn, to build a single data centre in Sydney. The Blackstone-owned operator is in talks with banks to fund SYD3, a hyperscale facility of more than 400 megawatts, according to people familiar with the matter. The scale of the loan is a measure of how large, and how power-hungry, [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/04/AirTrunk.avif",
-      "published": "2026-06-18T10:27:37+00:00",
-      "firstSeen": "2026-06-18T11:00:01.932515+00:00",
-      "lastSeen": "2026-06-18T11:16:05.627954+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.9974
-    },
-    {
-      "title": "Lenovo taps $2bn convertible market to refinance and buy back stock",
-      "url": "https://thenextweb.com/news/lenovo-2bn-convertible-market-to-refinance-and-buy-back-stock",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Lenovo has raised $2bn through seven-year convertible bonds, and the most notable thing about the debt is that it pays nothing. The Beijing-based maker of computers and AI servers sold zero-coupon notes due in 2033, priced at a conversion premium of 47.5% to Wednesday’s closing share price. Investors are lending the company money for free, [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/Lenovo.avif",
-      "published": "2026-06-18T10:22:45+00:00",
-      "firstSeen": "2026-06-18T11:00:01.932515+00:00",
-      "lastSeen": "2026-06-18T11:16:05.627954+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.9952
-    },
-    {
-      "title": "What to know about budgeting for pentesting: tools vs services",
-      "url": "https://thenextweb.com/news/budgeting-pentesting-tools-vs-services",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Budgeting for pentesting is no longer a simple choice between buying a tool or hiring an outside firm once a year. Pentesting, or searching for vulnerabilities in one’s cybersecurity defenses by launching a mock cyberattack against it, has become a fundamental method of improving an organization’s security posture. Budgeting for it can present some unique challenges, however, as [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/budgeting-pentesting-tools-vs-services.avif",
-      "published": "2026-06-18T10:19:40+00:00",
-      "firstSeen": "2026-06-18T11:00:01.932515+00:00",
-      "lastSeen": "2026-06-18T11:16:05.627954+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.0939
+      "score": 3.3906
     },
     {
       "title": "The Life Scientific: Dean Lomax",
@@ -732,10 +652,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-15T20:00:00+00:00",
       "firstSeen": "2026-06-15T21:00:01.290903+00:00",
-      "lastSeen": "2026-06-18T15:50:17.281064+00:00",
+      "lastSeen": "2026-06-18T17:00:01.646340+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.3571
+      "score": 1.3518
     },
     {
       "title": "The Life Scientific: Helen Hastie",
@@ -748,10 +668,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-08T20:00:00+00:00",
       "firstSeen": "2026-06-08T21:00:01.371488+00:00",
-      "lastSeen": "2026-06-18T15:50:17.281064+00:00",
+      "lastSeen": "2026-06-18T17:00:01.646340+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.1916
+      "score": 1.1915
     },
     {
       "title": "The Life Scientific: Seth Berkley",
