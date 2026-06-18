@@ -55,7 +55,7 @@ const PHYS = (() => {
      circ: {t:'circ', x,y, r, mat, id?, off?}
      id → switch / device hook, off → collision disabled (dropped target)   */
   let segs = [], circs = [];
-  function clear(){ segs = []; circs = []; flippers.length = 0; events = []; }
+  function clear(){ segs = []; circs = []; }
   function addSeg(ax,ay,bx,by,r,mat,id){ const s={t:'seg',ax,ay,bx,by,r,mat:mat||'wood',id:id||null,off:false}; segs.push(s); return s; }
   function addCirc(x,y,r,mat,id){ const c={t:'circ',x,y,r,mat:mat||'wood',id:id||null,off:false}; circs.push(c); return c; }
 
