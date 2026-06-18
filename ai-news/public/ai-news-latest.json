@@ -1,8 +1,8 @@
 {
-  "updatedAt": "2026-06-18T09:00:02.049187+00:00",
+  "updatedAt": "2026-06-18T10:00:01.620236+00:00",
   "items": [
     {
-      "title": "Gaussian Mixture Attention: Linear-Time Sequence Mixing via Probabilistic Latent Routing",
+      "title": "Gyojin Han, Dong-Jae Lee, Changho Choi, Jongsuk Kim, Junmo Kim",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -10,12 +10,92 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-18T09:00:11.548061+00:00",
+      "published": "2026-06-18T10:00:11.749162+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-18T09:00:02.049187+00:00",
+      "lastSeen": "2026-06-18T10:00:01.620236+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
+    },
+    {
+      "title": "7 best receipt photobooths for commercial use in 2026",
+      "url": "https://thenextweb.com/news/7-best-receipt-photobooths-for-commercial-use-in-2026",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Searches for “receipt photo booth” climbed more than 680% over the past year, and the category jumped from a niche TikTok trend to a real fixture in cafes, flagship stores, and brand activations. If you run a space or a marketing team, picking from the best receipt photobooths for commercial use now means weighing build quality, [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/Photobooths.avif",
+      "published": "2026-06-18T09:42:52+00:00",
+      "firstSeen": "2026-06-18T10:00:01.620236+00:00",
+      "lastSeen": "2026-06-18T10:00:01.620236+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 3.5413
+    },
+    {
+      "title": "Huawei CFO’s admissions can be used against the company, US judge rules",
+      "url": "https://thenextweb.com/news/huawei-cfo-admissions-trial",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "A statement Meng Wanzhou signed to make her own legal jeopardy go away can now be used against the company she helps run. A US judge in Brooklyn ruled on Tuesday that admissions made by Huawei’s chief financial officer, as part of the 2021 deal that let her walk free, are admissible in the criminal [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/Meng-Wanzhou.avif",
+      "published": "2026-06-18T09:32:50+00:00",
+      "firstSeen": "2026-06-18T10:00:01.620236+00:00",
+      "lastSeen": "2026-06-18T10:00:01.620236+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 3.5362
+    },
+    {
+      "title": "Bosch to pay US $36m over unlicensed shipments to Huawei",
+      "url": "https://thenextweb.com/news/bosch-to-pay-us-36m-over-unlicensed-shipments-to-huawei",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Robert Bosch, the German engineering group, has agreed to pay the United States $36m to settle claims that two of its non-US subsidiaries shipped sensor products and software to China’s Huawei without the required licences. The US Commerce Department announced the settlement on Wednesday. The goods, worth more than $70m, went out on over 100 [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2021/01/Untitled-design-2021-01-13T145309.087.avif",
+      "published": "2026-06-18T09:21:41+00:00",
+      "firstSeen": "2026-06-18T10:00:01.620236+00:00",
+      "lastSeen": "2026-06-18T10:00:01.620236+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1306
+    },
+    {
+      "title": "EU cybersecurity agency to meet Anthropic under a US export cloud",
+      "url": "https://thenextweb.com/news/eu-cybersecurity-agency-to-meet-anthropic-under-a-us-export-cloud",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The European Union’s cybersecurity agency was due to meet Anthropic on Thursday, the European Commission confirmed, a meeting arranged before Washington made it considerably more awkward. ENISA, the EU’s cybersecurity body, had been invited to talks with the AI company that were set in motion weeks earlier, well ahead of the US export directive now [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/European-Parliament.avif",
+      "published": "2026-06-18T09:05:41+00:00",
+      "firstSeen": "2026-06-18T10:00:01.620236+00:00",
+      "lastSeen": "2026-06-18T10:00:01.620236+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.1227
+    },
+    {
+      "title": "JPMorgan cuts off Anthropic access for Hong Kong staff",
+      "url": "https://thenextweb.com/news/jpmorgan-cuts-off-anthropic-access-for-hong-kong-staff",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "JPMorgan Chase has stopped its staff in Hong Kong from using Anthropic’s AI models, according to the Financial Times, a quiet decision with loud implications. The bank removed Anthropic’s Claude from the internal drop-down list of approved large language models available to employees in the territory, the FT reported, leaving them without access to one [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/JPMorgan.avif",
+      "published": "2026-06-18T08:52:14+00:00",
+      "firstSeen": "2026-06-18T10:00:01.620236+00:00",
+      "lastSeen": "2026-06-18T10:00:01.620236+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 10.216
     },
     {
       "title": "Apple to raise prices as memory chip shortage bites, Tim Cook says",
@@ -28,10 +108,10 @@
       "image": "https://media.thenextweb.com/2026/05/apple-record-quarter-cook-ternus-ai-strategy.avif",
       "published": "2026-06-18T08:22:26+00:00",
       "firstSeen": "2026-06-18T09:00:02.049187+00:00",
-      "lastSeen": "2026-06-18T09:00:02.049187+00:00",
+      "lastSeen": "2026-06-18T10:00:01.620236+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 2.531
+      "score": 2.5014
     },
     {
       "title": "Google’s Gemini co-lead Noam Shazeer is leaving for OpenAI",
@@ -44,10 +124,10 @@
       "image": "https://media.thenextweb.com/2026/04/OpenAI.avif",
       "published": "2026-06-18T08:17:57+00:00",
       "firstSeen": "2026-06-18T09:00:02.049187+00:00",
-      "lastSeen": "2026-06-18T09:00:02.049187+00:00",
+      "lastSeen": "2026-06-18T10:00:01.620236+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.4788
+      "score": 11.4492
     },
     {
       "title": "SK Hynix ships first 12-layer HBM4E samples to AI customers",
@@ -60,10 +140,10 @@
       "image": "https://media.thenextweb.com/2026/06/SK-Hynix.avif",
       "published": "2026-06-18T08:07:35+00:00",
       "firstSeen": "2026-06-18T09:00:02.049187+00:00",
-      "lastSeen": "2026-06-18T09:00:02.049187+00:00",
+      "lastSeen": "2026-06-18T10:00:01.620236+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.5236
+      "score": 3.4942
     },
     {
       "title": "Meta executive leading internal AI overhaul departs after two months",
@@ -76,10 +156,10 @@
       "image": "https://media.thenextweb.com/2026/06/Emily-Dalton-Smith.avif",
       "published": "2026-06-18T07:53:58+00:00",
       "firstSeen": "2026-06-18T09:00:02.049187+00:00",
-      "lastSeen": "2026-06-18T09:00:02.049187+00:00",
+      "lastSeen": "2026-06-18T10:00:01.620236+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.8169
+      "score": 3.7876
     },
     {
       "title": "Trump says Apple will build chips with Intel in the US",
@@ -92,10 +172,10 @@
       "image": "https://media.thenextweb.com/2026/06/Donald-Trump.avif",
       "published": "2026-06-18T07:45:33+00:00",
       "firstSeen": "2026-06-18T08:00:01.712934+00:00",
-      "lastSeen": "2026-06-18T09:00:02.049187+00:00",
+      "lastSeen": "2026-06-18T10:00:01.620236+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2127
+      "score": 3.1836
     },
     {
       "title": "France Advances Europe’s AI Future With NVIDIA Technologies",
@@ -108,10 +188,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/5383050-vivatech26-digital-nv-blog-image-1920x1080-1.jpg",
       "published": "2026-06-18T06:00:59+00:00",
       "firstSeen": "2026-06-18T07:00:01.381962+00:00",
-      "lastSeen": "2026-06-18T09:00:02.049187+00:00",
+      "lastSeen": "2026-06-18T10:00:01.620236+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0025
+      "score": 4.9748
     },
     {
       "title": "The UK Will Scan Asylum-Seekers’ Faces for Age Checks—Despite Knowing the Tech Is Flawed",
@@ -124,10 +204,10 @@
       "image": "https://media.wired.com/photos/6a32f1cdd9e60209eb61b7f3/master/pass/GettyImages-2151441286.jpg",
       "published": "2026-06-18T06:00:00+00:00",
       "firstSeen": "2026-06-18T07:00:01.381962+00:00",
-      "lastSeen": "2026-06-18T09:00:02.049187+00:00",
+      "lastSeen": "2026-06-18T10:00:01.620236+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.202
+      "score": 2.1743
     },
     {
       "title": "Midjourney goes from generating cat images to full-body ultrasound scans",
@@ -140,10 +220,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/ultrasound_phantom_segmentation-b254a71d083eb5c9.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=28.441715022566%2C0%2C70.316569954868%2C100",
       "published": "2026-06-18T03:12:31+00:00",
       "firstSeen": "2026-06-18T04:00:01.937470+00:00",
-      "lastSeen": "2026-06-18T09:00:02.049187+00:00",
+      "lastSeen": "2026-06-18T10:00:01.620236+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1965
+      "score": 2.1709
     },
     {
       "title": "v1.89.2",
@@ -156,10 +236,10 @@
       "image": "https://opengraph.githubassets.com/8837481e2f59d87ba742520523e66197f5f5d64eed881ee8fbb7de08cada9f5a/BerriAI/litellm/releases/tag/v1.89.2",
       "published": "2026-06-18T02:46:30+00:00",
       "firstSeen": "2026-06-18T03:00:01.346740+00:00",
-      "lastSeen": "2026-06-18T09:00:02.049187+00:00",
+      "lastSeen": "2026-06-18T10:00:01.620236+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8153
+      "score": 2.79
     },
     {
       "title": "How to turn off AI in your Google Docs",
@@ -172,10 +252,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/GettyImages-182884083.jpg?resize=1200%2C800",
       "published": "2026-06-18T01:23:51+00:00",
       "firstSeen": "2026-06-18T01:37:59.526403+00:00",
-      "lastSeen": "2026-06-18T09:00:02.049187+00:00",
+      "lastSeen": "2026-06-18T10:00:01.620236+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.0806
+      "score": 6.0562
     },
     {
       "title": "GLM-5.2 is probably the most powerful text-only open weights LLM",
@@ -188,10 +268,10 @@
       "image": "https://static.simonwillison.net/static/2026/glm-5.2-pelican.svg",
       "published": "2026-06-17T23:58:39+00:00",
       "firstSeen": "2026-06-18T01:00:01.621226+00:00",
-      "lastSeen": "2026-06-18T09:00:02.049187+00:00",
+      "lastSeen": "2026-06-18T10:00:01.620236+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.5461
+      "score": 5.5227
     },
     {
       "title": "Parafin lands a Goldman Sachs credit facility to embed lending inside Amazon, DoorDash, and Walmart",
@@ -207,7 +287,7 @@
       "lastSeen": "2026-06-18T09:00:02.049187+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.5988
+      "score": 2.5756
     },
     {
       "title": "ECB’s Lagarde says AI could trigger financial crises and calls for Cold War-style non-proliferation governance",
@@ -223,7 +303,7 @@
       "lastSeen": "2026-06-18T09:00:02.049187+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8905
+      "score": 1.8675
     },
     {
       "title": "The Korean Telecom Giant at the Center of Anthropic’s Mythos Controversy",
@@ -236,10 +316,10 @@
       "image": "https://media.wired.com/photos/6a22ce03ffc48019a74127a3/master/pass/GettyImages-2272066793.jpg",
       "published": "2026-06-17T22:52:00+00:00",
       "firstSeen": "2026-06-18T00:00:01.260284+00:00",
-      "lastSeen": "2026-06-18T09:00:02.049187+00:00",
+      "lastSeen": "2026-06-18T10:00:01.620236+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.0201
+      "score": 8.9974
     },
     {
       "title": "The Trump Mobile T1 was supposed to be made in America. It’s a Taiwanese phone with a gold coat.",
@@ -255,7 +335,7 @@
       "lastSeen": "2026-06-18T09:00:02.049187+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8792
+      "score": 1.8564
     },
     {
       "title": "A Colombian AI startup wants to assist half of Latin America’s doctors. Andreessen Horowitz just backed it.",
@@ -271,7 +351,7 @@
       "lastSeen": "2026-06-18T09:00:02.049187+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.0679
+      "score": 4.0455
     },
     {
       "title": "Europe’s carmakers are pivoting to defence as EV demand slows and military budgets soar",
@@ -287,7 +367,7 @@
       "lastSeen": "2026-06-18T09:00:02.049187+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.5577
+      "score": 2.5356
     },
     {
       "title": "China pitches free AI for the developing world as the G7 debates who gets access to American models",
@@ -303,7 +383,7 @@
       "lastSeen": "2026-06-18T07:03:21.709469+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.3515
+      "score": 4.3296
     },
     {
       "title": "FTC freezes sprawling subscription enterprise built on Cyprus and Delaware shells",
@@ -319,7 +399,7 @@
       "lastSeen": "2026-06-18T07:03:21.709469+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9394
+      "score": 2.9178
     },
     {
       "title": "Roelof Botha joins SpaceX’s board of directors",
@@ -332,10 +412,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/10/2243688557.jpg?resize=1200%2C800",
       "published": "2026-06-17T20:32:52+00:00",
       "firstSeen": "2026-06-17T22:51:20.369049+00:00",
-      "lastSeen": "2026-06-18T09:00:02.049187+00:00",
+      "lastSeen": "2026-06-18T10:00:01.620236+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.6683
+      "score": 2.647
     },
     {
       "title": "After unveiling ridiculously expensive AR glasses, Snap’s stock takes a dive",
@@ -348,10 +428,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/GettyImages-2281915461.jpg?resize=1200%2C800",
       "published": "2026-06-17T20:24:28+00:00",
       "firstSeen": "2026-06-17T22:51:20.369049+00:00",
-      "lastSeen": "2026-06-18T09:00:02.049187+00:00",
+      "lastSeen": "2026-06-18T10:00:01.620236+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.6653
+      "score": 2.6441
     },
     {
       "title": "NEA’s Tiffany Luck says enterprises are still figuring out their AI ROI",
@@ -364,10 +444,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/03/Tiffany-Luck_headshot.jpg?resize=1200%2C800",
       "published": "2026-06-17T20:17:38+00:00",
       "firstSeen": "2026-06-17T20:28:20.690365+00:00",
-      "lastSeen": "2026-06-18T09:00:02.049187+00:00",
+      "lastSeen": "2026-06-18T10:00:01.620236+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 2.8629
+      "score": 2.8417
     },
     {
       "title": "v1.88.3",
@@ -380,10 +460,10 @@
       "image": "https://opengraph.githubassets.com/9e8d1c68595085dad4830d15051a9c16b21d49cd4018c0b64eeb9ee23e4fc0b0/BerriAI/litellm/releases/tag/v1.88.3",
       "published": "2026-06-17T20:06:39+00:00",
       "firstSeen": "2026-06-17T20:28:20.690365+00:00",
-      "lastSeen": "2026-06-18T09:00:02.049187+00:00",
+      "lastSeen": "2026-06-18T10:00:01.620236+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.6589
+      "score": 2.6379
     },
     {
       "title": "Behavox raises $175 million from BlackRock’s HPS to expand its AI compliance platform",
@@ -399,7 +479,7 @@
       "lastSeen": "2026-06-18T07:03:21.709469+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8179
+      "score": 1.7969
     },
     {
       "title": "v0.30.10-rc1",
@@ -412,10 +492,10 @@
       "image": "https://opengraph.githubassets.com/264cdc6e59fc08bd4db336f6ef2b4eac14c03657fdf322bb9b7d5dc12a7e8c56/ollama/ollama",
       "published": "2026-06-17T20:01:10+00:00",
       "firstSeen": "2026-06-18T01:00:01.621226+00:00",
-      "lastSeen": "2026-06-18T09:00:02.049187+00:00",
+      "lastSeen": "2026-06-18T10:00:01.620236+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.727
+      "score": 2.706
     },
     {
       "title": "Massive breach spills credentials for thousands of sensitive networks",
@@ -428,10 +508,10 @@
       "image": "https://cdn.arstechnica.net/wp-content/uploads/2023/07/exploit-vulnerability-security.jpg",
       "published": "2026-06-17T19:54:31+00:00",
       "firstSeen": "2026-06-17T22:51:20.369049+00:00",
-      "lastSeen": "2026-06-18T09:00:02.049187+00:00",
+      "lastSeen": "2026-06-18T10:00:01.620236+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8146
+      "score": 1.7937
     },
     {
       "title": "PsiQuantum breaks ground in Australia on what it says will be the world’s first utility-scale quantum computer",
@@ -447,7 +527,7 @@
       "lastSeen": "2026-06-18T07:03:21.709469+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8121
+      "score": 1.7912
     },
     {
       "title": "Tesco moving 40,000 server workloads off VMware amid Broadcom's “abusive conduct”",
@@ -460,10 +540,10 @@
       "image": "https://cdn.arstechnica.net/wp-content/uploads/2026/06/GettyImages-1265241057-1152x648.jpg",
       "published": "2026-06-17T19:43:13+00:00",
       "firstSeen": "2026-06-17T22:51:20.369049+00:00",
-      "lastSeen": "2026-06-18T09:00:02.049187+00:00",
+      "lastSeen": "2026-06-18T10:00:01.620236+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8106
+      "score": 1.7898
     },
     {
       "title": "Apple investors are running out of patience with its AI promises",
@@ -479,7 +559,7 @@
       "lastSeen": "2026-06-18T07:03:21.709469+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9052
+      "score": 2.8845
     },
     {
       "title": "France breaks EDF’s grip on hydropower with law to auction 6 GW a year",
@@ -495,7 +575,7 @@
       "lastSeen": "2026-06-17T22:51:20.369049+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.2019
+      "score": 3.1813
     },
     {
       "title": "World leaders want American AI. They just don’t want America to be able to turn it off.",
@@ -508,10 +588,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/GettyImages-2281424015.jpg?w=1024",
       "published": "2026-06-17T19:01:19+00:00",
       "firstSeen": "2026-06-17T20:00:01.737926+00:00",
-      "lastSeen": "2026-06-18T09:00:02.049187+00:00",
+      "lastSeen": "2026-06-18T10:00:01.620236+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.936
+      "score": 3.9156
     },
     {
       "title": "Anthropic and Google DeepMind called for a US-led AI coalition at the G7, and Canada said yes",
@@ -527,7 +607,7 @@
       "lastSeen": "2026-06-17T22:51:20.369049+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 10.7934
+      "score": 10.7731
     },
     {
       "title": "Allbirds sells its shoes, renames itself Smartbird, and says it is now an AI infrastructure company",
@@ -543,7 +623,7 @@
       "lastSeen": "2026-06-17T22:51:20.369049+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8932
+      "score": 2.8729
     },
     {
       "title": "Meloni says banning kids from social media is not a solution on its own",
@@ -559,87 +639,7 @@
       "lastSeen": "2026-06-17T20:28:20.690365+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8879
-    },
-    {
-      "title": "IBM Report: Most EMEA Executives Don’t Fully Understand Their AI Dependencies",
-      "url": "https://www.techrepublic.com/article/news-ibm-emea-ai-dependencies-sovereignty-risk",
-      "source": "TechRepublic AI",
-      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "IBM research finds many EMEA executives lack visibility into AI dependencies, raising risks around cost, outages, vendor lock-in, and sovereignty.\nThe post IBM Report: Most EMEA Executives Don’t Fully Understand Their AI Dependencies appeared first on TechRepublic.",
-      "image": "https://assets.techrepublic.com/uploads/2026/06/emea-ai.jpg?f=jpeg",
-      "published": "2026-06-17T18:31:44+00:00",
-      "firstSeen": "2026-06-17T20:00:01.737926+00:00",
-      "lastSeen": "2026-06-18T09:00:02.049187+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.2859
-    },
-    {
-      "title": "Anthropic becomes first AI startup to join the Frontier carbon removal coalition",
-      "url": "https://techcrunch.com/2026/06/17/anthropic-becomes-first-ai-startup-to-join-the-frontier-carbon-removal-coalition",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Anthropic has joined the Frontier coalition, which received another $915M in pledges to fund carbon removal projects.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/06/GettyImages-2278736523.jpeg?resize=1200%2C798",
-      "published": "2026-06-17T18:30:56+00:00",
-      "firstSeen": "2026-06-17T19:00:01.463621+00:00",
-      "lastSeen": "2026-06-18T09:00:02.049187+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.9256
-    },
-    {
-      "title": "Anthropic got hit by export rules nobody understands",
-      "url": "https://www.theverge.com/ai-artificial-intelligence/951703/anthropic-shutdown-export-controls",
-      "source": "The Verge AI",
-      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "Anthropic has spent much of this week fighting to get its newest AI models back online after the Trump administration abruptly ordered the company to cut access for all foreign nationals, including users inside the US and its own employees, forcing Anthropic to block access to Fable 5 and Mythos 5 for everyone. \"To my [&#8230;]",
-      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/STKB364_CLAUDE_2_A_3800fc.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
-      "published": "2026-06-17T18:28:50+00:00",
-      "firstSeen": "2026-06-17T19:00:01.463621+00:00",
-      "lastSeen": "2026-06-18T09:00:02.049187+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 6.0949
-    },
-    {
-      "title": "Amazon admits its AI models lag behind OpenAI and Anthropic, but says it can catch up",
-      "url": "https://thenextweb.com/news/amazon-ai-frontier-models-catch-up",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Amazon’s AI chief has said what the market long suspected. Peter DeSantis, the senior vice president who oversees the company’s AI models, custom chips, and quantum computing, told CNBC that Amazon’s models “haven’t been at the very frontier for the very largest, most demanding workloads.” He added that he hopes Amazon will be “in the conversation about [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/amazon-ai-frontier-models-catch-up.avif",
-      "published": "2026-06-17T18:26:41+00:00",
-      "firstSeen": "2026-06-17T19:00:01.463621+00:00",
-      "lastSeen": "2026-06-17T20:28:20.690365+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 7.7842
-    },
-    {
-      "title": "Operating a Humanoid With Your Body Is a Hot Job in China’s Hardware Capital",
-      "url": "https://www.wired.com/story/humanoid-robot-training-in-chinas-hardware-capital",
-      "source": "Wired AI",
-      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "In Shenzhen, workers at IO-AI Tech control humanoid robots using a VR rig reminiscent of Ready Player One.",
-      "image": "https://media.wired.com/photos/6a31de8a8b1536f155402681/master/pass/AI-Lab-Operating-Humanoid-With-Your-Body-is-Hot-Job-in-China-Hardware-Capital-Business.jpg",
-      "published": "2026-06-17T18:25:35+00:00",
-      "firstSeen": "2026-06-17T19:00:01.463621+00:00",
-      "lastSeen": "2026-06-18T09:00:02.049187+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.6238
+      "score": 2.8677
     },
     {
       "title": "The Life Scientific: Dean Lomax",
@@ -652,10 +652,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-15T20:00:00+00:00",
       "firstSeen": "2026-06-15T21:00:01.290903+00:00",
-      "lastSeen": "2026-06-18T09:00:02.049187+00:00",
+      "lastSeen": "2026-06-18T10:00:01.620236+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.3921
+      "score": 1.3865
     },
     {
       "title": "The Life Scientific: Helen Hastie",
@@ -668,10 +668,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-08T20:00:00+00:00",
       "firstSeen": "2026-06-08T21:00:01.371488+00:00",
-      "lastSeen": "2026-06-18T09:00:02.049187+00:00",
+      "lastSeen": "2026-06-18T10:00:01.620236+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.1919
+      "score": 1.1918
     },
     {
       "title": "The Life Scientific: Seth Berkley",
