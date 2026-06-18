@@ -1995,7 +1995,113 @@ function minerFrameIndex(a, pose, fi){
   if (pose === 'fall' || pose === 'stun') return MINER_SHEET.cells.stun;
   return MINER_SHEET.cells.idle;
 }
+function drawGeneratedMinerBar(a, fi, cx2, footY){
+  const h = 74, w = 48;
+  const top = footY - h;
+  const swing = Math.sin(a.anim * 12);
+  const reach = Math.floor(a.anim * 8) & 1;
+  const faceDir = a.dir || 1;
+  const handY = top + 8;
+  const shoulderY = top + 26;
+  const hipY = top + 49;
+
+  ctx.save();
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+  ctx.translate(cx2, 0);
+  if (faceDir < 0) ctx.scale(-1, 1);
+
+  // small contact shadows on the brass bar so the grip reads clearly
+  ctx.strokeStyle = 'rgba(16,10,6,.55)';
+  ctx.lineWidth = 5;
+  ctx.beginPath();
+  ctx.moveTo(-15, handY - 1);
+  ctx.lineTo(-6, handY - 1);
+  ctx.moveTo(6, handY - 1);
+  ctx.lineTo(15, handY - 1);
+  ctx.stroke();
+
+  // arms: overhead, hand-over-hand instead of a walking silhouette
+  ctx.strokeStyle = '#12302c';
+  ctx.lineWidth = 8;
+  ctx.beginPath();
+  ctx.moveTo(-8, shoulderY);
+  ctx.quadraticCurveTo(-15 - reach * 2, top + 18, -14, handY);
+  ctx.moveTo(8, shoulderY);
+  ctx.quadraticCurveTo(15 + reach * 2, top + 18, 14, handY);
+  ctx.stroke();
+  ctx.strokeStyle = '#46b3a8';
+  ctx.lineWidth = 4.5;
+  ctx.beginPath();
+  ctx.moveTo(-8, shoulderY);
+  ctx.quadraticCurveTo(-15 - reach * 2, top + 18, -14, handY);
+  ctx.moveTo(8, shoulderY);
+  ctx.quadraticCurveTo(15 + reach * 2, top + 18, 14, handY);
+  ctx.stroke();
+  ctx.fillStyle = '#e8b07a';
+  ctx.beginPath();
+  ctx.ellipse(-14, handY - 1, 5.5, 4, 0, 0, Math.PI * 2);
+  ctx.ellipse(14, handY - 1, 5.5, 4, 0, 0, Math.PI * 2);
+  ctx.fill();
+
+  // torso and head hang below the bar with a little body swing
+  ctx.translate(swing * 1.5, 0);
+  const bodyGrad = ctx.createLinearGradient(0, shoulderY, 0, hipY);
+  bodyGrad.addColorStop(0, '#46b3a8');
+  bodyGrad.addColorStop(1, '#1d5f59');
+  ctx.fillStyle = '#0b0712';
+  roundRect(-15, shoulderY - 2, 30, 29, 10);
+  ctx.fill();
+  ctx.fillStyle = bodyGrad;
+  roundRect(-13, shoulderY, 26, 25, 9);
+  ctx.fill();
+  ctx.fillStyle = 'rgba(255,255,255,.16)';
+  ctx.fillRect(-8, shoulderY + 3, 16, 2);
+  ctx.fillStyle = '#13302c';
+  ctx.fillRect(0, shoulderY + 5, 2, 18);
+
+  ctx.fillStyle = '#e8b07a';
+  roundRect(-10, top + 17, 20, 15, 7);
+  ctx.fill();
+  ctx.fillStyle = 'rgba(80,40,18,.55)';
+  ctx.fillRect(-9, top + 18, 18, 3);
+  ctx.fillStyle = '#ffb02e';
+  roundRect(-14, top + 9, 28, 8, 5);
+  ctx.fill();
+  ctx.fillStyle = '#ffd676';
+  ctx.fillRect(-12, top + 10, 24, 2);
+  ctx.fillStyle = '#ffb02e';
+  ctx.fillRect(-18, top + 16, 36, 3);
+  ctx.fillStyle = '#10202a';
+  ctx.fillRect(2, top + 24, 3, 3);
+  ctx.fillStyle = '#5b351b';
+  ctx.fillRect(-7, top + 28, 15, 3);
+
+  // dangling legs, slightly bicycling as he moves along the pipe
+  const l1 = swing * 4;
+  const l2 = -swing * 4;
+  ctx.strokeStyle = '#26405a';
+  ctx.lineWidth = 8;
+  ctx.beginPath();
+  ctx.moveTo(-7, hipY);
+  ctx.quadraticCurveTo(-10 + l1, hipY + 12, -8 + l1, footY - 9);
+  ctx.moveTo(7, hipY);
+  ctx.quadraticCurveTo(11 + l2, hipY + 12, 9 + l2, footY - 9);
+  ctx.stroke();
+  ctx.strokeStyle = '#161f2e';
+  ctx.lineWidth = 6;
+  ctx.beginPath();
+  ctx.moveTo(-8 + l1, footY - 9);
+  ctx.lineTo(-16 + l1, footY - 6);
+  ctx.moveTo(9 + l2, footY - 9);
+  ctx.lineTo(17 + l2, footY - 6);
+  ctx.stroke();
+
+  ctx.restore();
+  return {w, h};
+}
 function drawGeneratedMiner(a, pose, fi, cx2, footY){
+  if (pose === 'bar') return drawGeneratedMinerBar(a, fi, cx2, footY);
   const cellW = painterlyMiner.naturalWidth / MINER_SHEET.cols;
   const cellH = painterlyMiner.naturalHeight / MINER_SHEET.rows;
   const idx = minerFrameIndex(a, pose, fi);
@@ -2109,6 +2215,7 @@ function actorBodyMotion(a, pose){
     const bob = Math.sin(a.anim * 18);
     return {rot: (a.dir || 1) * 0.055, sx: 1, sy: 1, ox: 0, oy: bob > 0 ? -1.5 : 0};
   }
+  if (pose === 'bar') return {rot: Math.sin(a.anim * 10) * 0.025, sx: 1, sy: 1, ox: Math.sin(a.anim * 12) * 1.2, oy: 0};
   if (pose === 'climb') return {rot: Math.sin(a.anim * 8) * 0.035, sx: 1, sy: 1, ox: Math.sin(a.anim * 8) * 1.5, oy: 0};
   if (pose === 'fall') return {rot: (a.dir || 1) * 0.12, sx: 0.98, sy: 1.03, ox: 0, oy: 0};
   if (a.gold) return {rot: Math.sin(a.anim * 5) * 0.035, sx: 1.03, sy: .98, ox: 0, oy: 1};
@@ -2166,7 +2273,7 @@ function drawActor(a){
   const set = ART.frames[a.kind] || ART.frames.guard;
   const pose = poseFor(a);
   const frames = set[pose] || set.idle;
-  const rate = pose === 'run' ? 14 : (pose === 'climb' ? 9 : 4);
+  const rate = pose === 'run' ? 14 : (pose === 'climb' ? 9 : (pose === 'bar' ? 8 : 4));
   const fi = a.moved || pose === 'idle' || pose === 'fall' || pose === 'stun'
     ? Math.floor(a.anim * rate) % frames.length : 0;
   const img = frames[fi] || frames[0];
@@ -2175,6 +2282,7 @@ function drawActor(a){
   const w = generatedPlayer ? h * ((painterlyMiner.naturalWidth / MINER_SHEET.cols) / (painterlyMiner.naturalHeight / MINER_SHEET.rows)) : h * ART.FW / ART.FH;
   const cx2 = px(a.x);
   let footY = py(a.y) + TILE * 0.5;
+  if (pose === 'bar') footY = py(Math.floor(a.y)) + 72;
   ctx.save();
   ctx.globalCompositeOperation = 'lighter';
   const aura = ctx.createRadialGradient(cx2, footY - h * .46, 0, cx2, footY - h * .46, h * .58);
