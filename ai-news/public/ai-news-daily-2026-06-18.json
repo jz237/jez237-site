@@ -1,6 +1,6 @@
 {
   "date": "2026-06-18",
-  "updatedAt": "2026-06-18T20:00:01.945108+00:00",
+  "updatedAt": "2026-06-18T21:00:01.302903+00:00",
   "items": [
     {
       "title": "Improving health intelligence in ChatGPT",
@@ -13,11 +13,11 @@
       "image": "",
       "published": "2026-06-18T11:00:00+00:00",
       "firstSeen": "2026-06-18T18:33:39.051639+00:00",
-      "lastSeen": "2026-06-18T20:00:01.945108+00:00",
+      "lastSeen": "2026-06-18T21:00:01.302903+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 21.7067
+      "score": 21.6832
     },
     {
       "title": "Epic is building Claude and Gemini into Unreal Engine 6, whether developers like it or not",
@@ -33,7 +33,7 @@
       "lastSeen": "2026-06-18T14:00:01.846539+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 13.9545
+      "score": 13.9297
     },
     {
       "title": "Anthropic Adds Brand Controls, Code Sync to Claude Design",
@@ -46,10 +46,10 @@
       "image": "",
       "published": "2026-06-18T14:25:18+00:00",
       "firstSeen": "2026-06-18T15:50:17.281064+00:00",
-      "lastSeen": "2026-06-18T20:00:01.945108+00:00",
+      "lastSeen": "2026-06-18T21:00:01.302903+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.0921
+      "score": 12.0663
     },
     {
       "title": "Google’s Gemini co-lead Noam Shazeer is leaving for OpenAI",
@@ -65,7 +65,7 @@
       "lastSeen": "2026-06-18T10:00:01.620236+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.1947
+      "score": 11.173
     },
     {
       "title": "Stop Juggling AI Tools — This Lifetime Deal Puts GPT‑4o and More in One Place",
@@ -78,10 +78,10 @@
       "image": "",
       "published": "2026-06-18T13:00:24+00:00",
       "firstSeen": "2026-06-18T15:50:17.281064+00:00",
-      "lastSeen": "2026-06-18T20:00:01.945108+00:00",
+      "lastSeen": "2026-06-18T21:00:01.302903+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.0558
+      "score": 11.031
     },
     {
       "title": "JPMorgan cuts off Anthropic access for Hong Kong staff",
@@ -97,7 +97,7 @@
       "lastSeen": "2026-06-18T10:00:01.620236+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.9575
+      "score": 9.9353
     },
     {
       "title": "General Intuition is raising $300 million to train AI agents on the video game data OpenAI tried to buy",
@@ -110,10 +110,10 @@
       "image": "https://media.thenextweb.com/2026/06/general-intuition-300m-world-models-gaming-data.avif",
       "published": "2026-06-18T18:49:03+00:00",
       "firstSeen": "2026-06-18T20:00:01.945108+00:00",
-      "lastSeen": "2026-06-18T20:00:01.945108+00:00",
+      "lastSeen": "2026-06-18T21:00:01.302903+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 9.6144
+      "score": 9.5853
     },
     {
       "title": "OpenAI is bringing on some big guns in the lead-up to its IPO",
@@ -126,10 +126,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/noam-shazeer-deal-ball.png?resize=1200%2C800",
       "published": "2026-06-18T19:59:22+00:00",
       "firstSeen": "2026-06-18T20:00:01.945108+00:00",
-      "lastSeen": "2026-06-18T20:00:01.945108+00:00",
+      "lastSeen": "2026-06-18T21:00:01.302903+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 9.2897
+      "score": 9.2595
     },
     {
       "title": "New usage analytics and updated spend controls for enterprises",
@@ -142,10 +142,10 @@
       "image": "",
       "published": "2026-06-18T17:00:00+00:00",
       "firstSeen": "2026-06-18T20:00:01.945108+00:00",
-      "lastSeen": "2026-06-18T20:00:01.945108+00:00",
+      "lastSeen": "2026-06-18T21:00:01.302903+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.112
+      "score": 9.0843
     },
     {
       "title": "The ‘godfather of AI’ called xAI a failure and warned of a bubble. He’s also selling the alternative.",
@@ -161,7 +161,7 @@
       "lastSeen": "2026-06-18T18:33:39.051639+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.9947
+      "score": 8.9688
     },
     {
       "title": "MosaicLeaks: Can your research agent keep a secret?",
@@ -174,10 +174,10 @@
       "image": "https://cdn-uploads.huggingface.co/production/uploads/680ba1729f7688275d2ce0f4/hGCO4pOyJjijLPCbRT07v.webp",
       "published": "2026-06-18T18:13:13+00:00",
       "firstSeen": "2026-06-18T18:33:39.051639+00:00",
-      "lastSeen": "2026-06-18T20:00:01.945108+00:00",
+      "lastSeen": "2026-06-18T21:00:01.302903+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.4769
+      "score": 7.4483
     },
     {
       "title": "Using AI to help physicians diagnose rare genetic diseases affecting children",
@@ -190,10 +190,10 @@
       "image": "",
       "published": "2026-06-18T08:00:00+00:00",
       "firstSeen": "2026-06-18T15:50:17.281064+00:00",
-      "lastSeen": "2026-06-18T20:00:01.945108+00:00",
+      "lastSeen": "2026-06-18T21:00:01.302903+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 7.2882
+      "score": 7.2666
     }
   ],
   "errors": [
