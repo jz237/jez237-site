@@ -37,20 +37,8 @@ const TABLE = (() => {
   function zone(id,x,y,r){ zones.push({id,x,y,r,inside:false,cool:0}); }
 
   /* ---------------- build ---------------- */
-  function resetRegistries(){
+  function build(){
     PHYS.clear();
-    drops7.length = deluxe.length = inline.length = bumpers.length = slings.length = zones.length = posts.length = 0;
-    for (const id in lamps) delete lamps[id];
-    lone = saucer = gateSeg = bankTop = FL = FR = FU = null;
-  }
-
-  function build(which){
-    resetRegistries();
-    if (which === 'painted-moon') buildPaintedMoon();
-    else buildCornerPocket();
-  }
-
-  function buildCornerPocket(){
     const S = PHYS.addSeg, C = PHYS.addCirc;
 
     /* outer shell */
@@ -217,130 +205,6 @@ const TABLE = (() => {
     for (let i=0;i<6;i++) lamp('dl'+i, 238+i*29, 706-i*10, DLET[i]);
     for (let i=0;i<7;i++) lamp('bk'+i, 38, 360+i*32, ((i+1)*10)+'K');
     lamp('again', 280,1002, 'SHOOT AGAIN', '#ff5a3c');
-  }
-
-  function buildPaintedMoon(){
-    const S = PHYS.addSeg, C = PHYS.addCirc;
-
-    /* Same cabinet envelope, different interior shot map. */
-    S(16,300, 16,1010, 6, 'metal');
-    arc(280,300, 264, Math.PI, 0, 30, 6, 'metal');
-    S(544,300, 544,1098, 6, 'metal');
-    arc(280,300, 222, Math.PI, Math.PI*118/180, 10, 5, 'metal');
-    arc(280,300, 222, Math.PI*62/180, 0, 10, 5, 'metal');
-    S(502,300, 502,1108, 5, 'metal');
-    S(504,1102, 544,1096, 5, 'metal');
-
-    gateSeg = S(388,104, 407,68, 4, 'metal', 'gate');
-    gateSeg.pass = { x:-0.88, y:-0.47 };
-
-    /* Three brush-wash top lanes feeding the moon field. */
-    S(220,72, 220,158, 5, 'plastic');
-    S(280,72, 280,164, 5, 'plastic');
-    S(340,72, 340,158, 5, 'plastic');
-    zone('zoneA', 190,140, 17);
-    zone('zoneB', 280,142, 17);
-    zone('top25', 370,140, 18);
-
-    /* Moon target and varnish saucer: top-centre, not the original corner pocket. */
-    S(214,228, 246,204, 6, 'plastic');
-    S(246,204, 330,204, 6, 'plastic');
-    S(330,204, 362,228, 6, 'plastic');
-    S(220,284, 246,250, 5, 'plastic');
-    S(340,250, 366,284, 5, 'plastic');
-    lone = { seg: S(252,266, 312,266, 4, 'target', 'lone'), up:true, cx:282, cy:266 };
-    saucer = { x:286, y:224, r:17, holding:false, timer:0, cool:0 };
-    lamp('eightL', 286,318, 'MOON');
-    lamp('saucerL', 286,352, 'VARNISH');
-
-    /* Constellation bumpers form a loose triangle around the moon lane. */
-    [[185,292],[324,302],[410,238]].forEach(([x,y],i)=>{
-      const c = C(x,y, 28, 'rubberHard', 'bump'+i);
-      bumpers.push({circ:c, x,y, cool:0});
-    });
-
-    /* Right-side Gallery Loop with ladder lamps, replacing the original left orbit. */
-    S(474,318, 474,540, 5, 'metal');
-    S(474,540, 438,668, 5, 'metal');
-    S(438,668, 402,755, 5, 'metal');
-    zone('bank', 462,480, 18);
-    zone('bank2', 468,604, 20);
-    for (let i=0;i<7;i++) lamp('bk'+i, 522, 360+i*34, ((i+1)*10)+'K');
-
-    /* Horizontal glaze drop lane across the lower-middle playfield. */
-    {
-      const y=725, x0=172, x1=352;
-      S(x0-18,y-34, x1+24,y-34, 6, 'plastic');
-      S(x0-34,y+34, x1+12,y+34, 6, 'plastic');
-      bankTop = { seg:S(372,y-26, 388,y+26, 4, 'target', 'bankT'), cx:380, cy:y };
-      for (let i=0;i<4;i++){
-        const cx = x0 + i*48, cy = y + (i%2 ? 9 : -9);
-        const seg = S(cx-18,cy-6, cx+18,cy+6, 4, 'target', 'inl'+i);
-        inline.push({seg, up:true, cx, cy});
-      }
-      lamp('bankT', 392, y-58, 'GALLERY');
-    }
-
-    /* Crescent pigment bank: a different shot face from the diagonal pool bank. */
-    {
-      const pts = [[148,574],[181,536],[225,514],[276,516],[324,544],[360,590],[382,642]];
-      const stand = [[160,640],[198,624],[238,608],[280,608],[320,624],[356,650]];
-      S(128,620, 156,548, 5, 'metal');
-      S(392,590, 406,668, 5, 'metal');
-      C(134,626, 9, 'rubber'); C(397,674, 9, 'rubber');
-      pts.forEach(([cx,cy],i)=>{
-        const nx = i<3 ? -0.65 : i>3 ? 0.65 : 0;
-        const ny = -0.76;
-        const ux = -ny, uy = nx;
-        const seg = S(cx-ux*12, cy-uy*12, cx+ux*12, cy+uy*12, 4, 'target', 'drop'+i);
-        drops7.push({seg, up:true, cx, cy, ux, uy});
-        lamp('pool'+i, cx, cy-45, String(i+1));
-      });
-      stand.forEach(([cx,cy],i)=>{
-        const seg = S(cx-16, cy+5, cx+16, cy-5, 4, 'target', 'dlx'+i);
-        deluxe.push({seg, cx, cy});
-        lamp('dl'+i, cx, cy+44, 'ARTIST'[i]);
-      });
-    }
-
-    /* Upper brush flipper: lives on the right and fires back across the glaze lane. */
-    S(444,646, 458,674, 6, 'metal');
-    FU = PHYS.addFlipper(432,700, 64, Math.PI-0.24, Math.PI+0.54, 'FU');
-    FU.maxAV = 58; FU.accel = 1600; FU.rTip = 9;
-
-    /* Lower slings and return lanes, reshaped to frame the central palette. */
-    {
-      const f1 = S(104,880, 174,944, 5, 'rubber', 'slingL');
-      S(94,890, 96,950, 5, 'plastic'); S(96,950, 170,968, 5, 'plastic');
-      const n1 = norm(62,-50);
-      slings.push({seg:f1, nx:n1.x, ny:n1.y, cool:0});
-      const f2 = S(454,880, 384,944, 5, 'rubber', 'slingR');
-      S(464,890, 462,950, 5, 'plastic'); S(462,950, 388,968, 5, 'plastic');
-      const n2 = norm(-62,-50);
-      slings.push({seg:f2, nx:n2.x, ny:n2.y, cool:0});
-    }
-
-    S(58,836, 72,976, 6, 'metal');
-    S(72,976, 180,1010, 6, 'metal');
-    S(118,876, 128,944, 6, 'metal');
-    S(460,836, 446,976, 5, 'metal');
-    S(446,976, 380,1010, 5, 'metal');
-    S(400,876, 390,944, 5, 'metal');
-    zone('zoneC', 92,930, 16);   zone('zoneD', 428,930, 16);
-    zone('outL', 38,985, 17);    zone('outR', 481,985, 17);
-    C(34,806, 11, 'rubber'); C(486,806, 11, 'rubber');
-
-    FL = PHYS.addFlipper(162,1016, 96, 0.54, -0.50, 'FL');
-    FR = PHYS.addFlipper(398,1016, 96, Math.PI-0.60, Math.PI+0.46, 'FR');
-    S(16,1010, 190,1128, 6, 'metal');
-    S(502,1010, 370,1128, 6, 'metal');
-
-    lamp('arrowL', 370,156, '25,000');
-    lamp('A', 190,182, 'A'); lamp('B', 280,184, 'B');
-    lamp('C', 92,912, 'C');  lamp('D', 428,912, 'D');
-    lamp('x2', 204,944, '2X'); lamp('x3', 240,968, '3X');
-    lamp('x4', 320,968, '4X'); lamp('x5', 356,944, '5X');
-    lamp('again', 280,1002, 'PAINT AGAIN', '#e76f8e');
   }
 
   function norm(x,y){ const l=Math.hypot(x,y)||1; return {x:x/l, y:y/l}; }
