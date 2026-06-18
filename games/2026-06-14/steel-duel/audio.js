@@ -1,7 +1,14 @@
-/* Steel Duel — WebAudio synth (no asset files). window.SDAudio */
+/* Steel Duel — WebAudio synth + sampled tank SFX. window.SDAudio */
 (function () {
   'use strict';
   let ctx = null, master = null, muted = false, engineNode = null, engineGain = null, engineFilt = null;
+  let sampleLoadStarted = false;
+  const samples = { fire: [], tankHit: [] };
+  const sampleCursor = { fire: 0, tankHit: 0 };
+  const sampleUrls = {
+    fire: ['sfx/tank-shot-01.mp3', 'sfx/tank-shot-02.mp3', 'sfx/tank-shot-03.mp3'],
+    tankHit: ['sfx/tank-hit-01.mp3', 'sfx/tank-hit-02.mp3', 'sfx/tank-hit-03.mp3', 'sfx/tank-hit-04.mp3'],
+  };
 
   function ensure() {
     if (ctx) return ctx;
@@ -10,10 +17,24 @@
       master = ctx.createGain();
       master.gain.value = muted ? 0 : 0.6;
       master.connect(ctx.destination);
+      loadSamples();
     } catch (e) { ctx = null; }
     return ctx;
   }
   function resume() { if (ctx && ctx.state === 'suspended') ctx.resume(); }
+  function loadSamples() {
+    if (!ctx || sampleLoadStarted) return;
+    sampleLoadStarted = true;
+    Object.keys(sampleUrls).forEach(kind => {
+      sampleUrls[kind].forEach(url => {
+        fetch(url)
+          .then(r => r.ok ? r.arrayBuffer() : Promise.reject(new Error('SFX ' + r.status)))
+          .then(buf => ctx.decodeAudioData(buf))
+          .then(audio => samples[kind].push(audio))
+          .catch(() => {});
+      });
+    });
+  }
 
   function tone(freq, dur, type, gain, slideTo) {
     if (!ensure() || muted) return;
@@ -36,14 +57,27 @@
     const g = ctx.createGain(); g.gain.value = gain || 0.3;
     src.connect(f); f.connect(g); g.connect(master); src.start(t);
   }
+  function playSample(kind, gain, fallback) {
+    if (!ensure() || muted) return;
+    const bank = samples[kind] || [];
+    if (!bank.length) { fallback(); return; }
+    const src = ctx.createBufferSource(), g = ctx.createGain();
+    const idx = sampleCursor[kind]++ % bank.length;
+    src.buffer = bank[idx];
+    src.playbackRate.value = 0.96 + Math.random() * 0.08;
+    g.gain.value = gain == null ? 0.9 : gain;
+    src.connect(g); g.connect(master); src.start(ctx.currentTime);
+  }
+  function synthFire() { tone(620, 0.12, 'square', 0.18, 180); noise(0.06, 0.12, 2200); }
+  function synthTankHit() { noise(0.055, 0.22, 3600, 'highpass'); tone(260, 0.07, 'square', 0.11, 140); tone(740, 0.035, 'triangle', 0.07, 520); }
 
   const SDAudio = {
     init() { ensure(); resume(); },
     resume,
     setMuted(b) { muted = !!b; if (master) master.gain.value = muted ? 0 : 0.6; if (engineGain) engineGain.gain.value = 0; },
     isMuted() { return muted; },
-    fire() { tone(620, 0.12, 'square', 0.18, 180); noise(0.06, 0.12, 2200); },
-    tankHit() { noise(0.055, 0.22, 3600, 'highpass'); tone(260, 0.07, 'square', 0.11, 140); tone(740, 0.035, 'triangle', 0.07, 520); },
+    fire() { playSample('fire', 0.82, synthFire); },
+    tankHit() { playSample('tankHit', 0.86, synthTankHit); },
     wall() { noise(0.09, 0.18, 500); tone(120, 0.08, 'sine', 0.12, 70); },
     explosion() { noise(0.5, 0.5, 900); tone(90, 0.5, 'sawtooth', 0.3, 30); tone(160, 0.35, 'square', 0.15, 40); },
     mine() { noise(0.45, 0.55, 2600, 'highpass'); noise(0.4, 0.4, 700); tone(70, 0.45, 'sawtooth', 0.3, 28); },
