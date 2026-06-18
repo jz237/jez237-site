@@ -6,7 +6,7 @@ import process from "node:process";
 
 const root = path.dirname(new URL(import.meta.url).pathname);
 const dataPath = path.join(root, "data", "issues.json");
-const publicUrl = "https://jz237.github.io/jez237-site/computer-chronicle/";
+const publicUrl = "https://jez237.com/computer-chronicle/";
 
 function usage() {
   console.error(`Usage: node computer-chronicle/build-discord-caption.mjs [--send --target channel:ID] [--dry-run] [--json]
