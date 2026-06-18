@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-18T18:00:02.034921+00:00",
+  "updatedAt": "2026-06-18T18:33:39.051639+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -10912,6 +10912,18 @@
     "https://techcrunch.com/2026/06/18/the-smartphone-era-created-an-attention-crisis-slowtech-is-fixing-it": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/GettyImages-2238192342.jpg?resize=1200,800",
       "checkedAt": "2026-06-18T18:00:02.034921+00:00"
+    },
+    "https://techcrunch.com/2026/06/18/amazon-hopes-to-challenge-nvidia-more-directly-by-selling-its-ai-chips": {
+      "image": "https://techcrunch.com/wp-content/uploads/2022/11/GettyImages-1421680585.jpg?resize=1200,675",
+      "checkedAt": "2026-06-18T18:33:39.051639+00:00"
+    },
+    "https://huggingface.co/blog/ServiceNow/mosaicleaks": {
+      "image": "https://cdn-uploads.huggingface.co/production/uploads/680ba1729f7688275d2ce0f4/hGCO4pOyJjijLPCbRT07v.webp",
+      "checkedAt": "2026-06-18T18:33:39.051639+00:00"
+    },
+    "https://openai.com/index/improving-health-intelligence-in-chatgpt": {
+      "image": "",
+      "checkedAt": "2026-06-18T18:33:39.051639+00:00"
     }
   }
 }
