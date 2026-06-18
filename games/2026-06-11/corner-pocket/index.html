@@ -8,6 +8,7 @@
 <meta property="og:title" content="Corner Pocket — Pinball">
 <meta property="og:description" content="A trash-talking pool-hall pinball table in the style of Amiga Pinball Illusions. Real physics, voice callouts, global scores.">
 <meta name="theme-color" content="#0a0805">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23110b07'/%3E%3Ccircle cx='32' cy='32' r='22' fill='%23f5e9d0'/%3E%3Ccircle cx='32' cy='32' r='13' fill='%23131316'/%3E%3Ctext x='32' y='38' text-anchor='middle' font-family='Georgia' font-size='18' font-weight='700' fill='%23fff'%3E8%3C/text%3E%3C/svg%3E">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <style>
@@ -55,6 +56,14 @@
   .btn.ghost:active{background:rgba(255,179,71,.16)}
   .prow{display:flex;gap:8px;margin-top:10px}
   .prow .btn{flex:1 1 0;width:auto;min-width:0;margin:0;padding:12px 0;font-size:14px}
+  .machinePick{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:14px 0 4px}
+  .machine{min-width:0;text-align:left;padding:10px;border-radius:10px;cursor:pointer;
+    background:rgba(255,179,71,.06);border:1px solid rgba(255,179,71,.22);color:#d8c8a4}
+  .machine.on{background:rgba(255,179,71,.15);border-color:rgba(255,217,138,.78);
+    box-shadow:0 0 16px rgba(255,179,71,.16)}
+  .machine strong{display:block;color:var(--amber-hot);font-size:12px;letter-spacing:.1em;text-transform:uppercase}
+  .machine span{display:block;margin-top:3px;font-size:11px;line-height:1.25;color:#a9946f}
+  @media (max-width:380px){.machinePick{grid-template-columns:1fr}.machine span{display:none}}
   .rows{display:flex;flex-direction:column;gap:5px;margin:12px 0 4px;font-size:13.5px}
   .rows>div{display:flex;justify-content:space-between;gap:10px;color:#e8d9b8}
   .rows>div span:last-child{color:var(--amber-hot);font-variant-numeric:tabular-nums}
@@ -96,8 +105,16 @@
 <div class="overlay" id="title">
   <div class="card">
     <div class="eight"></div>
-    <h1 class="logo">Corner<br>Pocket</h1>
-    <p class="sub">pool-hall pinball · Amiga Pinball Illusions style</p>
+    <h1 class="logo" id="machineLogo">Corner<br>Pocket</h1>
+    <p class="sub" id="machineSub">pool-hall pinball · Amiga Pinball Illusions style</p>
+    <div class="machinePick" aria-label="Choose table">
+      <button class="machine on" data-table="corner-pocket" type="button">
+        <strong>Corner Pocket</strong><span>Pool-hall rack rules</span>
+      </button>
+      <button class="machine" data-table="painted-moon" type="button">
+        <strong>Painted Moon</strong><span>Painterly art table</span>
+      </button>
+    </div>
     <div class="prow">
       <button class="btn" data-p="1">1 Player</button>
       <button class="btn ghost" data-p="2">2P</button>
@@ -106,7 +123,7 @@
     </div>
     <button class="btn ghost" id="bHow">How to play</button>
     <button class="btn ghost" id="bScores">Pool hall legends</button>
-    <p class="tiny" id="titleHint">Flippers <span class="kbd">⇧ Shift</span> · plunger hold <span class="kbd">Space</span> · nudge <span class="kbd">◀ ▲ ▶</span>… arrows&nbsp;&nbsp;<span class="kbd">V</span> view · <span class="kbd">P</span> pause · <span class="kbd">M</span> mute</p>
+    <p class="tiny" id="titleHint">v5 · Flippers <span class="kbd">⇧ Shift</span> · plunger hold <span class="kbd">Space</span> · nudge <span class="kbd">◀ ▲ ▶</span>… arrows&nbsp;&nbsp;<span class="kbd">V</span> view · <span class="kbd">P</span> pause · <span class="kbd">M</span> mute</p>
   </div>
 </div>
 
@@ -116,10 +133,10 @@
     <p class="sub">House rules</p>
     <h1 class="logo" style="font-size:30px">Rack 'em up</h1>
     <div class="howrows">
-      <b>Sink the rack.</b> Knock down the 7 pool-ball drop targets, then shoot the lone 8-BALL target and the saucer behind it to clear the rack — your bonus carries the whole game.<br><br>
+      <span id="howCopy"><b>Sink the rack.</b> Knock down the 7 pool-ball drop targets, then shoot the lone 8-BALL target and the saucer behind it to clear the rack — your bonus carries the whole game.<br><br>
       <b>POCKET.</b> Downed targets expose the P-O-C-K-E-T standups behind the bank. Spell it for a replay — and listen for the knocker.<br><br>
       <b>Multipliers.</b> The 4 in-line drops on the left (backhand them from the upper flipper) push your bonus to 5×. The left orbit is the <b>Bank Shot</b> — it climbs 10K→70K.<br><br>
-      <b>A-B-C-D</b> lanes spot you a pool ball. Tilt warnings are real. The machine <i>will</i> talk trash.
+      <b>A-B-C-D</b> lanes spot you a pool ball. Tilt warnings are real. The machine <i>will</i> talk trash.</span>
     </div>
     <button class="btn ghost" id="bGuide">Table guide</button>
     <button class="btn" id="bHowBack">Got it</button>
@@ -142,7 +159,7 @@
 <!-- ---------- SCORES ---------- -->
 <div class="overlay hide" id="scores">
   <div class="card">
-    <p class="sub">the pool hall wall</p>
+    <p class="sub" id="scoresSub">the pool hall wall</p>
     <h1 class="logo" style="font-size:30px">Legends</h1>
     <div class="board" id="tBoard"></div>
     <button class="btn" id="bScoresBack">Back</button>
@@ -164,10 +181,10 @@
   <div class="card" id="overCard"></div>
 </div>
 
-<script src="physics.js?v=4"></script>
-<script src="table.js?v=4"></script>
-<script src="art.js?v=4"></script>
-<script src="audio.js?v=4"></script>
-<script src="game.js?v=4"></script>
+<script src="physics.js?v=5"></script>
+<script src="table.js?v=5"></script>
+<script src="art.js?v=5"></script>
+<script src="audio.js?v=5"></script>
+<script src="game.js?v=5"></script>
 </body>
 </html>
