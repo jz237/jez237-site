@@ -1,6 +1,6 @@
 {
   "date": "2026-06-18",
-  "updatedAt": "2026-06-18T05:00:01.805813+00:00",
+  "updatedAt": "2026-06-18T06:00:01.361576+00:00",
   "items": [
     {
       "title": "How to turn off AI in your Google Docs",
@@ -13,10 +13,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/GettyImages-182884083.jpg?resize=1200%2C800",
       "published": "2026-06-18T01:23:51+00:00",
       "firstSeen": "2026-06-18T01:37:59.526403+00:00",
-      "lastSeen": "2026-06-18T05:00:01.805813+00:00",
+      "lastSeen": "2026-06-18T06:00:01.361576+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.1852
+      "score": 6.158
     },
     {
       "title": "v1.89.2",
@@ -29,13 +29,13 @@
       "image": "https://opengraph.githubassets.com/8837481e2f59d87ba742520523e66197f5f5d64eed881ee8fbb7de08cada9f5a/BerriAI/litellm/releases/tag/v1.89.2",
       "published": "2026-06-18T02:46:30+00:00",
       "firstSeen": "2026-06-18T03:00:01.346740+00:00",
-      "lastSeen": "2026-06-18T05:00:01.805813+00:00",
+      "lastSeen": "2026-06-18T06:00:01.361576+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9241
+      "score": 2.8957
     },
     {
-      "title": "CODEBLOCK: Learning to Supervise Code at the Right Granularity",
+      "title": "Lorenz Wolf, Connor Watts, Roger Creus Castanyer, Geoffrey Bradway, Maxwill Lin, Augustine N. Mavor-Parker, Matthew D...",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -43,15 +43,15 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-18T05:00:10.388675+00:00",
+      "published": "2026-06-18T06:00:09.603591+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-18T05:00:01.805813+00:00",
+      "lastSeen": "2026-06-18T06:00:01.361576+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
     },
     {
-      "title": "Midjourney Medical goes from generating ‘cat images’ to full-body ultrasound scans",
+      "title": "Midjourney goes from generating cat images to full-body ultrasound scans",
       "url": "https://www.theverge.com/ai-artificial-intelligence/952011/midjourney-medical-ai-ultrasound-scan",
       "source": "The Verge AI",
       "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
@@ -61,10 +61,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/ultrasound_phantom_segmentation-b254a71d083eb5c9.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=28.441715022566%2C0%2C70.316569954868%2C100",
       "published": "2026-06-18T03:12:31+00:00",
       "firstSeen": "2026-06-18T04:00:01.937470+00:00",
-      "lastSeen": "2026-06-18T05:00:01.805813+00:00",
+      "lastSeen": "2026-06-18T06:00:01.361576+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3066
+      "score": 2.2779
     }
   ],
   "errors": [
