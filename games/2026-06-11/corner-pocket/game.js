@@ -55,7 +55,7 @@ const GAME = (() => {
       taunts:['Paint with velocity','Find the moon shot','The canvas is still wet'],
       how:`<b>Finish the canvas.</b> Knock down the 7 pigment drops, then hit the moon target and land in the varnish saucer to complete a masterpiece.<br><br>
       <b>ARTIST.</b> Downed pigment drops uncover A-R-T-I-S-T standups. Spell the word for a replay and a fresh blank canvas.<br><br>
-      <b>Glazes.</b> The 4 left drops layer your bonus from 2× to 5×. The left orbit is the <b>Gallery Loop</b> — it climbs 10K→70K and pays an extra ball at the top value.<br><br>
+      <b>Glazes.</b> The 4 horizontal glaze drops layer your bonus from 2× to 5×. The right-side <b>Gallery Loop</b> climbs 10K→70K and pays an extra ball at the top value.<br><br>
       <b>Inspiration.</b> Bumper play fills the inspiration meter; every full meter spots a missing pigment. Completing ARTIST or sealing a masterpiece starts <b>Studio Frenzy</b>, a timed 1.5× scoring mode.<br><br>
       <b>A-B-C-D</b> lanes spot a missing pigment. This table is all brushwork, oil glow, and moonlit color.`,
       guide:[
@@ -65,10 +65,10 @@ const GAME = (() => {
         ['inline','Glaze drops + Gallery target','4 drops raise bonus to 5×; the gallery target behind them scores 50,000.'],
         ['bumpers','Inspiration bumpers','Bumper hits fill Inspiration. At 12/12, the table spots a missing pigment and awards 15,000.'],
         ['frenzy','Studio Frenzy','ARTIST and completed canvases start timed 1.5× scoring. Watch the DMD countdown.'],
-        [[38,470],'Gallery Loop value','Climbs 10K→70K per trip; 70K awards paint again.'],
+        [[462,480],'Gallery Loop value','Climbs 10K→70K per trip; 70K awards paint again.'],
         ['top','A-B top lanes & moon crown','A-B-C-D completion spots a missing pigment. The crown rollover pays 25,000 when lit.'],
         ['inlanes','C / D return strokes','Complete A-B-C-D with the flipper-return lanes.'],
-        [[280,946],'Layered bonus glazes','2× to 5× from the glaze drops — applied to bonus at ball end.'],
+        [[280,725],'Layered bonus glazes','2× to 5× from the glaze drops — applied to bonus at ball end.'],
       ]
     }
   };
@@ -77,10 +77,16 @@ const GAME = (() => {
   const machine = () => MACHINES[machineId];
 
   function setMachine(id){
+    const oldId = machineId;
     machineId = MACHINES[id] ? id : 'corner-pocket';
     const m = machine();
     document.body.dataset.table = machineId;
     Scores.ns = m.scoreNs;
+    if (typeof TABLE !== 'undefined' && (oldId !== machineId || !TABLE.lone)){
+      if (TABLE.FL) releaseAllInputs();
+      TABLE.build(machineId);
+      cam.y = 0;
+    }
     if (typeof ART !== 'undefined' && ART.setTheme){ ART.setTheme(machineId); ART.build(); }
     const logo = document.getElementById('machineLogo');
     const sub = document.getElementById('machineSub');
@@ -486,7 +492,7 @@ const GAME = (() => {
         const val = Math.min(7, p.bankLvl+1)*10000;
         score(val); AU.sfx.bankshot(); major();
         dmdShow([machine().bankLane,'+'+fmt(val)],1.4);
-        addFlash(86, 580, 90, '120,190,255');
+        addFlash(TABLE.bankTop.cx, TABLE.bankTop.cy, 90, '120,190,255');
         if (p.bankLvl < 7) p.bankLvl++;
         if (val === 70000 && !p._bank70){ p._bank70 = true; extraBall(); }
         return;
@@ -496,7 +502,7 @@ const GAME = (() => {
         if (TABLE.lamps.arrowL.on){
           score(25000); AU.sfx.standup(); major();
           dmdShow(['25,000'],1);
-          addFlash(280,60, 60, '255,217,138');
+          addFlash(TABLE.lamps.arrowL.x, TABLE.lamps.arrowL.y, 60, '255,217,138');
         } else { score(1000); AU.sfx.rollover(); }
         return;
       }
@@ -531,7 +537,7 @@ const GAME = (() => {
           if (machineId === 'painted-moon'){
             p.bonusX = Math.max(p.bonusX, 5);
             p.studioFrenzy = 20;
-            addFlash(300,620,150,'225,96,130');
+            addFlash(TABLE.lamps.dl3.x, TABLE.lamps.dl3.y, 150, '225,96,130');
           }
           /* resetting the bank lets bonus keep building (real rule) */
           p.drops = p.drops.map(()=>true);
@@ -559,7 +565,7 @@ const GAME = (() => {
       if (TABLE.lone.up && ev.speed > 55){
         TABLE.resetLone(false); p.lone = false;
         score(5000); AU.sfx.drop(); major();
-        addFlash(429,296, 50, '255,255,255');
+        addFlash(TABLE.lone.cx, TABLE.lone.cy, 50, '255,255,255');
         if (p.drops.every(d=>!d)) dmdShow(['SAUCER LIT',machine().saucerLit],1.6);
       }
       return;
@@ -780,7 +786,8 @@ const GAME = (() => {
       /* lower flippers: strike when the ball is in the window and not rising fast */
       const zoneL = b.y > 935 && b.y < 1058 && b.vy > -60 && b.x > 160 && b.x < 295;
       const zoneR = b.y > 935 && b.y < 1058 && b.vy > -60 && b.x > 265 && b.x < 400;
-      const nearFU = b.x > 330 && b.x < 432 && b.y > 425 && b.y < 515 && b.vy > -40;
+      const fu = TABLE.FU;
+      const nearFU = fu && Math.abs(b.x-fu.px) < fu.len+42 && Math.abs(b.y-fu.py) < 72 && b.vy > -80;
       if (zoneL && this.coolL <= 0){ flip('L', true); this.holdL = 0.10 + PHYS.rng()*0.10; this.coolL = 0.5; }
       if ((zoneR || nearFU) && this.coolR <= 0){ flip('R', true); this.holdR = 0.09 + PHYS.rng()*0.10; this.coolR = 0.5; }
       if (this.holdL > 0){ this.holdL -= PHYS.DT; if (this.holdL <= 0) flip('L', false); }
@@ -852,7 +859,7 @@ const GAME = (() => {
     const p = plr();
     TABLE.drops7.forEach((d,i)=> ART.drawDropTarget(ctx,d, ['#f2b03c','#2467c4','#cf3a28','#7b3fa0','#e06a1f','#2e7d4f','#8c2f23'][i], String(i+1)));
     TABLE.inline.forEach(d=> ART.drawDropTarget(ctx,d,'#2467c4',''));
-    ART.drawDropTarget(ctx, TABLE.lone, '#16161a','8');
+    ART.drawDropTarget(ctx, TABLE.lone, machineId === 'painted-moon' ? '#f5e7c7' : '#16161a', machineId === 'painted-moon' ? 'M' : '8');
     TABLE.deluxe.forEach((st,i)=> ART.drawStandup(ctx,st,machine().spellWord[i], p? !!(p.letters&(1<<i)) : false));
     ART.drawStandup(ctx, TABLE.bankTop, '50', TABLE.lamps.bankT.on);
     TABLE.bumpers.forEach((b,i)=>{ ART.drawBumper(ctx,b,bumpGlow[i],tNow); });
@@ -1185,7 +1192,7 @@ const GAME = (() => {
   });
   if ('ontouchstart' in window){
     document.getElementById('titleHint').innerHTML =
-      'v6 · Hold <b>left / right half</b> for flippers · hold anywhere &amp; release to plunge · <b>swipe up</b> to nudge · top buttons: view · sound · pause';
+      'v7 · Hold <b>left / right half</b> for flippers · hold anywhere &amp; release to plunge · <b>swipe up</b> to nudge · top buttons: view · sound · pause';
   }
   document.getElementById('bHow').onclick = ()=>{ hide('title'); show('how'); };
   document.getElementById('bHowBack').onclick = ()=>{ hide('how'); show('title'); };
@@ -1324,7 +1331,6 @@ const GAME = (() => {
   };
 
   /* ================= boot ================= */
-  TABLE.build();
   setMachine(machineId);
   resize();
   requestAnimationFrame(frame);
