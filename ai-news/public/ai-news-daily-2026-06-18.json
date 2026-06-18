@@ -1,6 +1,6 @@
 {
   "date": "2026-06-18",
-  "updatedAt": "2026-06-18T02:00:01.481559+00:00",
+  "updatedAt": "2026-06-18T01:37:59.526403+00:00",
   "items": [
     {
       "title": "How to turn off AI in your Google Docs",
@@ -12,11 +12,11 @@
       "summary": "Here's what you need to do to get those pesky \"write with Gemini\" pop-ups to go away.",
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/GettyImages-182884083.jpg?resize=1200%2C800",
       "published": "2026-06-18T01:23:51+00:00",
-      "firstSeen": "2026-06-18T02:00:01.481559+00:00",
-      "lastSeen": "2026-06-18T02:00:01.481559+00:00",
+      "firstSeen": "2026-06-18T01:37:59.526403+00:00",
+      "lastSeen": "2026-06-18T01:37:59.526403+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.2717
+      "score": 6.2828
     },
     {
       "title": "Models Take Notes at Prefill: KV Cache Can Be Editable and Composable",
@@ -27,9 +27,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-18T02:00:09.076822+00:00",
+      "published": "2026-06-18T01:38:04.900977+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-18T02:00:01.481559+00:00",
+      "lastSeen": "2026-06-18T01:37:59.526403+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
