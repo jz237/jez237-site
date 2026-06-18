@@ -1,6 +1,6 @@
 {
   "date": "2026-06-18",
-  "updatedAt": "2026-06-18T16:00:01.529132+00:00",
+  "updatedAt": "2026-06-18T15:50:17.281064+00:00",
   "items": [
     {
       "title": "Epic is building Claude and Gemini into Unreal Engine 6, whether developers like it or not",
@@ -16,7 +16,7 @@
       "lastSeen": "2026-06-18T14:00:01.846539+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 14.0608
+      "score": 14.0654
     },
     {
       "title": "Anthropic Adds Brand Controls, Code Sync to Claude Design",
@@ -26,13 +26,13 @@
       "sourceWeight": 0.75,
       "category": "AI",
       "summary": "Anthropic updated Claude Design with design system imports, Claude Code syncing, canvas editing, and more export options for enterprise teams.\nThe post Anthropic Adds Brand Controls, Code Sync to Claude Design appeared first on TechRepublic.",
-      "image": "https://assets.techrepublic.com/uploads/2026/06/tr-06182026-anthropic-claude-design-overhaul.jpg?f=jpeg",
+      "image": "",
       "published": "2026-06-18T14:25:18+00:00",
-      "firstSeen": "2026-06-18T16:00:01.529132+00:00",
-      "lastSeen": "2026-06-18T16:00:01.529132+00:00",
+      "firstSeen": "2026-06-18T15:50:17.281064+00:00",
+      "lastSeen": "2026-06-18T15:50:17.281064+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.2028
+      "score": 12.2076
     },
     {
       "title": "Google’s Gemini co-lead Noam Shazeer is leaving for OpenAI",
@@ -48,7 +48,7 @@
       "lastSeen": "2026-06-18T10:00:01.620236+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.2882
+      "score": 11.2922
     },
     {
       "title": "Stop Juggling AI Tools — This Lifetime Deal Puts GPT‑4o and More in One Place",
@@ -58,13 +58,13 @@
       "sourceWeight": 0.75,
       "category": "AI",
       "summary": "Harness multiple top-tier models like GPT‑4o, Claude, Gemini, and more in one unified platform, now $55.\nThe post Stop Juggling AI Tools — This Lifetime Deal Puts GPT‑4o and More in One Place appeared first on TechRepublic.",
-      "image": "https://assets.techrepublic.com/uploads/2025/09/unnamed.jpg?f=jpeg",
+      "image": "",
       "published": "2026-06-18T13:00:24+00:00",
-      "firstSeen": "2026-06-18T16:00:01.529132+00:00",
-      "lastSeen": "2026-06-18T16:00:01.529132+00:00",
+      "firstSeen": "2026-06-18T15:50:17.281064+00:00",
+      "lastSeen": "2026-06-18T15:50:17.281064+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.1622
+      "score": 11.1668
     },
     {
       "title": "JPMorgan cuts off Anthropic access for Hong Kong staff",
@@ -80,7 +80,7 @@
       "lastSeen": "2026-06-18T10:00:01.620236+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.0524
+      "score": 10.0564
     },
     {
       "title": "The ‘godfather of AI’ called xAI a failure and warned of a bubble. He’s also selling the alternative.",
@@ -93,10 +93,10 @@
       "image": "https://media.thenextweb.com/2026/06/Conférence_IP_Paris_22AI_Science_and_Society22_à_lEcole_polytechnique_54320377276.avif",
       "published": "2026-06-18T14:31:14+00:00",
       "firstSeen": "2026-06-18T15:00:01.300544+00:00",
-      "lastSeen": "2026-06-18T16:00:01.529132+00:00",
+      "lastSeen": "2026-06-18T15:50:17.281064+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 9.1057
+      "score": 9.1105
     },
     {
       "title": "Using AI to help physicians diagnose rare genetic diseases affecting children",
@@ -108,11 +108,11 @@
       "summary": "Researchers used an OpenAI reasoning model to help diagnose rare diseases, identifying 18 new diagnoses in previously unsolved cases.",
       "image": "",
       "published": "2026-06-18T08:00:00+00:00",
-      "firstSeen": "2026-06-18T16:00:01.529132+00:00",
-      "lastSeen": "2026-06-18T16:00:01.529132+00:00",
+      "firstSeen": "2026-06-18T15:50:17.281064+00:00",
+      "lastSeen": "2026-06-18T15:50:17.281064+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 7.3808
+      "score": 7.3848
     },
     {
       "title": "California expected a tax bonanza from AI IPOs. Modern compensation structures may blunt the windfall.",
@@ -125,10 +125,10 @@
       "image": "https://media.thenextweb.com/2026/06/california-ipo-tax-windfall-spacex-openai-anthropic.avif",
       "published": "2026-06-18T14:23:52+00:00",
       "firstSeen": "2026-06-18T15:00:01.300544+00:00",
-      "lastSeen": "2026-06-18T16:00:01.529132+00:00",
+      "lastSeen": "2026-06-18T15:50:17.281064+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 7.2021
+      "score": 7.2069
     },
     {
       "title": "HSBC expands AI banking partnership with Google Cloud",
@@ -141,10 +141,10 @@
       "image": "",
       "published": "2026-06-18T10:00:00+00:00",
       "firstSeen": "2026-06-18T11:00:01.932515+00:00",
-      "lastSeen": "2026-06-18T16:00:01.529132+00:00",
+      "lastSeen": "2026-06-18T15:50:17.281064+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 7.1791
+      "score": 7.1833
     },
     {
       "title": "Photoshop and Premiere now have AI assistants",
@@ -160,7 +160,7 @@
       "lastSeen": "2026-06-18T16:00:01.529132+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 6.272
+      "score": 6.2766
     },
     {
       "title": "How to turn off AI in your Google Docs",
@@ -173,10 +173,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/GettyImages-182884083.jpg?resize=1200%2C800",
       "published": "2026-06-18T01:23:51+00:00",
       "firstSeen": "2026-06-18T01:37:59.526403+00:00",
-      "lastSeen": "2026-06-18T16:00:01.529132+00:00",
+      "lastSeen": "2026-06-18T15:50:17.281064+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.9232
+      "score": 5.9265
     },
     {
       "title": "MIT built a memory system that lets robots remember where you left your keys",
@@ -192,7 +192,7 @@
       "lastSeen": "2026-06-18T14:00:01.846539+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.8272
+      "score": 5.8316
     }
   ],
   "errors": [
