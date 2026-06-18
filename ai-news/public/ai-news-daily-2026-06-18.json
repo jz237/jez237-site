@@ -1,6 +1,6 @@
 {
   "date": "2026-06-18",
-  "updatedAt": "2026-06-18T11:00:01.932515+00:00",
+  "updatedAt": "2026-06-18T11:16:05.627954+00:00",
   "items": [
     {
       "title": "Google’s Gemini co-lead Noam Shazeer is leaving for OpenAI",
@@ -16,7 +16,7 @@
       "lastSeen": "2026-06-18T10:00:01.620236+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.4205
+      "score": 11.4129
     },
     {
       "title": "JPMorgan cuts off Anthropic access for Hong Kong staff",
@@ -32,7 +32,7 @@
       "lastSeen": "2026-06-18T10:00:01.620236+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.1868
+      "score": 10.1791
     },
     {
       "title": "HSBC expands AI banking partnership with Google Cloud",
@@ -45,10 +45,10 @@
       "image": "",
       "published": "2026-06-18T10:00:00+00:00",
       "firstSeen": "2026-06-18T11:00:01.932515+00:00",
-      "lastSeen": "2026-06-18T11:00:01.932515+00:00",
+      "lastSeen": "2026-06-18T11:16:05.627954+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 7.3178
+      "score": 7.3099
     },
     {
       "title": "How to turn off AI in your Google Docs",
@@ -61,10 +61,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/GettyImages-182884083.jpg?resize=1200%2C800",
       "published": "2026-06-18T01:23:51+00:00",
       "firstSeen": "2026-06-18T01:37:59.526403+00:00",
-      "lastSeen": "2026-06-18T11:00:01.932515+00:00",
+      "lastSeen": "2026-06-18T11:16:05.627954+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.0325
+      "score": 6.0262
     },
     {
       "title": "EU cybersecurity agency to meet Anthropic under a US export cloud",
@@ -77,10 +77,10 @@
       "image": "https://media.thenextweb.com/2026/06/European-Parliament.avif",
       "published": "2026-06-18T09:05:41+00:00",
       "firstSeen": "2026-06-18T10:00:01.620236+00:00",
-      "lastSeen": "2026-06-18T11:00:01.932515+00:00",
+      "lastSeen": "2026-06-18T11:16:05.627954+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0933
+      "score": 5.0856
     },
     {
       "title": "France Advances Europe’s AI Future With NVIDIA Technologies",
@@ -93,10 +93,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/5383050-vivatech26-digital-nv-blog-image-1920x1080-1.jpg",
       "published": "2026-06-18T06:00:59+00:00",
       "firstSeen": "2026-06-18T07:00:01.381962+00:00",
-      "lastSeen": "2026-06-18T11:00:01.932515+00:00",
+      "lastSeen": "2026-06-18T11:16:05.627954+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9478
+      "score": 4.9407
     },
     {
       "title": "What to know about budgeting for pentesting: tools vs services",
@@ -109,10 +109,10 @@
       "image": "https://media.thenextweb.com/2026/06/budgeting-pentesting-tools-vs-services.avif",
       "published": "2026-06-18T10:19:40+00:00",
       "firstSeen": "2026-06-18T11:00:01.932515+00:00",
-      "lastSeen": "2026-06-18T11:00:01.932515+00:00",
+      "lastSeen": "2026-06-18T11:16:05.627954+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.2296
+      "score": 4.2216
     },
     {
       "title": "Meta executive leading internal AI overhaul departs after two months",
@@ -128,7 +128,7 @@
       "lastSeen": "2026-06-18T10:00:01.620236+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.7592
+      "score": 3.7517
     },
     {
       "title": "7 best receipt photobooths for commercial use in 2026",
@@ -141,10 +141,10 @@
       "image": "https://media.thenextweb.com/2026/06/Photobooths.avif",
       "published": "2026-06-18T09:42:52+00:00",
       "firstSeen": "2026-06-18T10:00:01.620236+00:00",
-      "lastSeen": "2026-06-18T11:00:01.932515+00:00",
+      "lastSeen": "2026-06-18T11:16:05.627954+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.5114
+      "score": 3.5035
     },
     {
       "title": "Huawei CFO’s admissions can be used against the company, US judge rules",
@@ -157,10 +157,10 @@
       "image": "https://media.thenextweb.com/2026/06/Meng-Wanzhou.avif",
       "published": "2026-06-18T09:32:50+00:00",
       "firstSeen": "2026-06-18T10:00:01.620236+00:00",
-      "lastSeen": "2026-06-18T11:00:01.932515+00:00",
+      "lastSeen": "2026-06-18T11:16:05.627954+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.5065
+      "score": 3.4987
     },
     {
       "title": "SK Hynix ships first 12-layer HBM4E samples to AI customers",
@@ -176,7 +176,7 @@
       "lastSeen": "2026-06-18T10:00:01.620236+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.4656
+      "score": 3.4581
     },
     {
       "title": "Tesco is migrating 40,000 servers off VMware and suing Broadcom for over GBP 100 million",
@@ -189,10 +189,10 @@
       "image": "https://media.thenextweb.com/2026/06/tesco-vmware-broadcom-40000-servers-migration-lawsuit.avif",
       "published": "2026-06-18T10:43:09+00:00",
       "firstSeen": "2026-06-18T11:00:01.932515+00:00",
-      "lastSeen": "2026-06-18T11:00:01.932515+00:00",
+      "lastSeen": "2026-06-18T11:16:05.627954+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2414
+      "score": 3.2334
     }
   ],
   "errors": [
