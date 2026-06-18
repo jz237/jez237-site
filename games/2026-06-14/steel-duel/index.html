@@ -97,6 +97,11 @@
   .sticklbl{position:absolute;bottom:8px;left:20px;width:92px;text-align:center;font-size:9px;letter-spacing:1.2px;color:rgba(238,243,255,.18);pointer-events:none}
   #stickR .sticklbl{color:rgba(255,179,71,.2)}
   #touchHint{display:none;position:absolute;left:0;right:0;bottom:18px;text-align:center;font-size:11px;letter-spacing:1px;color:rgba(238,243,255,.28);pointer-events:none}
+  #forceFire{display:none;position:absolute;right:18px;bottom:22px;width:104px;height:104px;border:1px solid rgba(255,179,71,.36);
+    border-radius:50%;background:radial-gradient(circle at 35% 28%,rgba(255,210,120,.28),rgba(255,105,70,.16) 52%,rgba(12,16,25,.55));
+    color:#ffd9a4;font:800 13px/1 Menlo,Consolas,monospace;letter-spacing:1.6px;text-transform:uppercase;pointer-events:auto;touch-action:none;
+    box-shadow:0 0 26px rgba(255,120,70,.14),inset 0 0 18px rgba(255,179,71,.08)}
+  #forceFire:active,.force-fire-on #forceFire{background:radial-gradient(circle at 35% 28%,rgba(255,230,150,.45),rgba(255,88,58,.34) 56%,rgba(40,16,14,.75));color:#fff3d4}
   .knob{display:none}
   input[type=range]{accent-color:var(--amber)}
   .footer{margin-top:12px;color:var(--dim);font-size:11px}
@@ -155,7 +160,7 @@
         <button id="btnOptions" class="btn">⚙️ OPTIONS</button>
         <button id="btnScores" class="btn">🏆 SCORES</button>
       </div>
-      <div class="footer">v27 · First tank-combat arcade game, Kee&nbsp;Games 1974. Drive your foe into the mines.</div>
+      <div class="footer">v28 · First tank-combat arcade game, Kee&nbsp;Games 1974. Drive your foe into the mines.</div>
     </div>
   </div>
 
@@ -200,7 +205,7 @@
       <h1 style="font-size:34px">HOW TO PLAY</h1>
       <p class="sub">Campaign: clear every wave and beat the bosses. Versus: outscore the other side.</p>
       <div class="keys">
-        <div><h3 class="p1">CAMPAIGN / SURVIVAL / vs&nbsp;CPU</h3><b>WASD</b> / arrows or <b>drag anywhere</b> to drive<br><b>Mouse</b> aims · <b>Click</b>/<b>Space</b>/<b>F</b> force-fire<br><span style="opacity:.7">Auto-fires with a clear shot.<br>Mobile: touch &amp; drag anywhere;<br>turret fires on its own.</span></div>
+        <div><h3 class="p1">CAMPAIGN / SURVIVAL / vs&nbsp;CPU</h3><b>WASD</b> / arrows or <b>drag anywhere</b> to drive<br><b>Mouse</b> aims · <b>Click</b>/<b>Space</b>/<b>F</b> force-fire<br><span style="opacity:.7">Auto-fires with a clear shot.<br>Mobile: drag anywhere to drive;<br><b>FIRE</b> button blasts walls.</span></div>
         <div><h3 class="p2">DUEL / LOCAL P2</h3>P1 <b>WASD</b> + <b>Space</b><br>P2 <b>↑ ↓ ← →</b> + <b>Enter</b><br><span style="opacity:.7">(duel keeps faithful tank steering,<br>barrels fire forward)</span></div>
       </div>
       <p class="sub" style="margin-top:14px"><b style="color:var(--amber)">Campaign</b> (1P or 2-player co-op): survive waves of enemy tanks across 12 levels and defeat three bosses. Enemy types differ — <b>scouts</b> are fast, <b>brutes</b> are tanky, <b>snipers</b> keep their distance, <b>mine-layers</b> drop mines, and <b>wardens</b> (and the Mauler boss) have a front armor plate, so <b>hit them from the side or behind</b>. You have shared lives; clear a level to earn one back. Co-op revives a downed teammate next wave.</p>
@@ -216,7 +221,7 @@
       <p class="sub">Saved on this device</p>
       <button id="optSound" class="btn">🔊 SOUND: ON</button>
       <button id="optAutoFire" class="btn">🎯 AUTO-FIRE: ON</button>
-      <p class="sub" style="margin-top:8px;text-align:left;line-height:1.4">In Campaign &amp; vs CPU, <b>auto-fire</b> shoots automatically when an enemy is in a clear line of sight, so you can just drive. Turn it <b>off</b> to fire only when you choose — click, Space, or F on desktop; touch-drag still force-fires on mobile.</p>
+      <p class="sub" style="margin-top:8px;text-align:left;line-height:1.4">In Campaign, Survival &amp; vs CPU, <b>auto-fire</b> shoots automatically when an enemy is in a clear line of sight, so you can just drive. Use click, Space, F, or the mobile FIRE button to force-fire through walls.</p>
       <button id="btnOptionsBack" class="btn primary">BACK</button>
     </div>
   </div>
@@ -261,11 +266,12 @@
   <div id="touch">
     <div id="stickL" class="stick"><div id="stickLk" class="knob"></div><span class="sticklbl">MOVE</span></div>
     <div id="stickR" class="stick"><div id="stickRk" class="knob"></div><span class="sticklbl">AIM · FIRE</span></div>
-    <div id="touchHint">Drag anywhere to drive · turret auto-fires</div>
+    <button id="forceFire" aria-label="force fire">Fire</button>
+    <div id="touchHint">Drag anywhere to drive · FIRE blasts walls</div>
   </div>
 
-  <script src="audio.js?v=27"></script>
-  <script src="art.js?v=27"></script>
-  <script src="game.js?v=27"></script>
+  <script src="audio.js?v=28"></script>
+  <script src="art.js?v=28"></script>
+  <script src="game.js?v=28"></script>
 </body>
 </html>

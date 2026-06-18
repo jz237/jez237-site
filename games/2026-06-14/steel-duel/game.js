@@ -1234,10 +1234,14 @@
   function applyCursor() { if (canvas) canvas.style.cursor = (state === 'playing' && mouseAimActive()) ? 'none' : 'default'; }
   function updateTouchLayout() {                          // assisted modes use floating drag anywhere; duel keeps twin sticks for two local players
     const sticks = mode === 'duel';
-    const sl = $('stickL'), sr = $('stickR'), hint = $('touchHint');
-    if (sl) sl.style.display = (touchActive && sticks) ? '' : 'none';
-    if (sr) sr.style.display = (touchActive && sticks) ? '' : 'none';
-    if (hint) hint.style.display = (touchActive && !sticks && assistedControls(0)) ? '' : 'none';
+    const touchReady = touchActive || hasTouchScreen();
+    const assisted = touchReady && !sticks && assistedControls(0);
+    const wrap = $('touch'), sl = $('stickL'), sr = $('stickR'), hint = $('touchHint'), ff = $('forceFire');
+    if (wrap) wrap.style.display = touchReady ? 'block' : 'none';
+    if (sl) sl.style.display = (touchReady && sticks) ? '' : 'none';
+    if (sr) sr.style.display = (touchReady && sticks) ? '' : 'none';
+    if (hint) hint.style.display = assisted ? 'block' : 'none';
+    if (ff) ff.style.display = assisted ? 'block' : 'none';
   }
   function persist(k, v) { try { localStorage.setItem(k, v ? '1' : '0'); } catch (e) {} }
   function setMuted(m) {
@@ -1302,6 +1306,25 @@
     window.addEventListener('pointerup', endStick);
     window.addEventListener('pointercancel', endStick);
     window.addEventListener('blur', () => { mouseDown = false; controls[0].fire = false; endStick(); });
+  }
+
+  function setupForceFireButton() {
+    const b = $('forceFire'); if (!b) return;
+    const down = e => {
+      if (!assistedControls(0) || state !== 'playing') return;
+      controls[0].fire = true;
+      document.body.classList.add('force-fire-on');
+      e.preventDefault();
+    };
+    const up = e => {
+      controls[0].fire = false;
+      document.body.classList.remove('force-fire-on');
+      if (e) e.preventDefault();
+    };
+    b.addEventListener('pointerdown', down, { passive: false });
+    window.addEventListener('pointerup', up, { passive: false });
+    window.addEventListener('pointercancel', up, { passive: false });
+    window.addEventListener('blur', up);
   }
 
   /* ===================== touch (twin-stick) ===================== */
@@ -1447,6 +1470,11 @@
     for (let i = 0; i < 45; i++) update();
     const coopAssistedMove = Math.hypot(tanks[0].x - coopStartX, tanks[0].y - coopStartY) > 25;
     ok('T-coop assisted controls', coopAssistedMove, 'move=' + Math.round(Math.hypot(tanks[0].x - coopStartX, tanks[0].y - coopStartY)));
+
+    startGame('coop'); headless = true; controls = fresh(); shells = [];
+    tanks[0].cd = 0; controls[0].fire = true; update();
+    const coopForceFire = shells.some(s => s.owner === 0);
+    ok('T-coop assisted force fire', coopForceFire, 'shells=' + shells.length);
 
     startGame('coop'); headless = true; controls = fresh(); shells = [];
     const a0 = tanks[0], a1 = tanks[1], en = tanks[2];
@@ -1611,7 +1639,7 @@
     canvas = $('game'); if (!canvas) return; ctx = canvas.getContext('2d');
     TRACKS = new SDArt.Tracks(); PARTS = new SDArt.Particles(); DECALS = new SDArt.Decals();
     window.addEventListener('keydown', e => onKey(e, true)); window.addEventListener('keyup', e => onKey(e, false));
-    setupPointerControls(); setupTouch();
+    setupPointerControls(); setupTouch(); setupForceFireButton();
     resize(); window.addEventListener('resize', resize);
 
     const click = (id, fn) => { const e = $(id); if (e) e.addEventListener('click', () => { SDAudio.ui(); fn(); }); };
