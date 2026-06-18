@@ -1,8 +1,8 @@
 {
-  "updatedAt": "2026-06-18T15:00:01.300544+00:00",
+  "updatedAt": "2026-06-18T16:00:01.529132+00:00",
   "items": [
     {
-      "title": "Breaking the Solver Bottleneck: Training Task Generators at the Learnable Frontier",
+      "title": "Lorenz Wolf, Connor Watts, Roger Creus Castanyer, Geoffrey Bradway, Maxwill Lin, Augustine N. Mavor-Parker, Matthew D...",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -10,12 +10,92 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-18T15:00:08.533684+00:00",
+      "published": "2026-06-18T16:00:14.466430+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-18T15:00:01.300544+00:00",
+      "lastSeen": "2026-06-18T16:00:01.529132+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.66
+      "score": 2.36
+    },
+    {
+      "title": "Life360 now lets parents order Uber rides for teens without leaving the app",
+      "url": "https://thenextweb.com/news/life360-uber-teen-rides-family-integration",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Life360 and Uber launched an integration that lets parents request and coordinate Uber rides for teens and other family members directly inside the Life360 app. Parents can tap a family member’s real-time location on the Life360 map, and the pickup details auto-fill in the Uber app. Trip progress is visible on either platform. Uber’s teen [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/life360-uber-teen-rides-family-integration.avif",
+      "published": "2026-06-18T15:44:41+00:00",
+      "firstSeen": "2026-06-18T16:00:01.529132+00:00",
+      "lastSeen": "2026-06-18T16:00:01.529132+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.9422
+    },
+    {
+      "title": "Adobe just made its biggest AI push yet, and it stretches from Photoshop to Disney World",
+      "url": "https://thenextweb.com/news/adobe-ai-week-firefly-agent-disney-semrush-genstudio-linkedin",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Adobe has spent two years bolting AI onto its software. This week it tried to become the AI layer underneath everything creative and marketing, in five announcements stretched across three days. The headline is an agent inside the apps. The rest of the week shows what Adobe is really building: a single creative and marketing [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/adobe-firefly-ai-updates.avif",
+      "published": "2026-06-18T15:28:24+00:00",
+      "firstSeen": "2026-06-18T16:00:01.529132+00:00",
+      "lastSeen": "2026-06-18T16:00:01.529132+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.934
+    },
+    {
+      "title": "General Intuition in talks to raise $300M at around $2B valuation",
+      "url": "https://techcrunch.com/2026/06/18/general-intuition-in-talks-to-raise-300m-at-around-2b-valuation",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "General Intuition is in talks to raise around $300 million at a roughly $2 billion valuation from backers including Jeff Bezos. The startup trains AI agents on spatial-temporal reasoning.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/General-intuition.png?w=880",
+      "published": "2026-06-18T15:20:37+00:00",
+      "firstSeen": "2026-06-18T16:00:01.529132+00:00",
+      "lastSeen": "2026-06-18T16:00:01.529132+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.6701
+    },
+    {
+      "title": "A tech worker-backed PAC is bringing a $5M knife to Big Tech’s $100M gunfight",
+      "url": "https://techcrunch.com/2026/06/18/a-tech-worker-backed-pac-is-bringing-a-5m-knife-to-big-techs-100m-gunfight",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Guardrails positions itself as a populist political movement that runs on small donations from people in the trenches of the AI boom.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/GettyImages-2264911748.jpg?resize=1200%2C705",
+      "published": "2026-06-18T15:13:21+00:00",
+      "firstSeen": "2026-06-18T16:00:01.529132+00:00",
+      "lastSeen": "2026-06-18T16:00:01.529132+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2665
+    },
+    {
+      "title": "The EU is about to declare AWS and Azure gatekeepers under the Digital Markets Act",
+      "url": "https://thenextweb.com/news/eu-dma-aws-azure-cloud-gatekeeper-probe",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The European Commission is set to unveil preliminary findings as early as next week stating that Amazon Web Services and Microsoft Azure appear to meet the requirements to be designated as gatekeepers under the Digital Markets Act, Bloomberg reported. A final decision is expected by the end of 2026, though timelines could shift. If designated, [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/eu-dma-aws-azure-cloud-gatekeeper-probe.avif",
+      "published": "2026-06-18T15:11:03+00:00",
+      "firstSeen": "2026-06-18T16:00:01.529132+00:00",
+      "lastSeen": "2026-06-18T16:00:01.529132+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.2253
     },
     {
       "title": "Accenture had its worst stock day ever on fears AI is eating consulting. Hours earlier, it spent $4.18bn trying to escape that.",
@@ -28,10 +108,10 @@
       "image": "https://media.thenextweb.com/2011/09/accenture.avif",
       "published": "2026-06-18T14:40:46+00:00",
       "firstSeen": "2026-06-18T15:00:01.300544+00:00",
-      "lastSeen": "2026-06-18T15:00:01.300544+00:00",
+      "lastSeen": "2026-06-18T16:00:01.529132+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1402
+      "score": 2.1104
     },
     {
       "title": "The ‘godfather of AI’ called xAI a failure and warned of a bubble. He’s also selling the alternative.",
@@ -44,10 +124,26 @@
       "image": "https://media.thenextweb.com/2026/06/Conférence_IP_Paris_22AI_Science_and_Society22_à_lEcole_polytechnique_54320377276.avif",
       "published": "2026-06-18T14:31:14+00:00",
       "firstSeen": "2026-06-18T15:00:01.300544+00:00",
-      "lastSeen": "2026-06-18T15:00:01.300544+00:00",
+      "lastSeen": "2026-06-18T16:00:01.529132+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 9.1354
+      "score": 9.1057
+    },
+    {
+      "title": "Anthropic Adds Brand Controls, Code Sync to Claude Design",
+      "url": "https://www.techrepublic.com/article/news-anthropic-claude-design-overhaul-enterprise-teams",
+      "source": "TechRepublic AI",
+      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Anthropic updated Claude Design with design system imports, Claude Code syncing, canvas editing, and more export options for enterprise teams.\nThe post Anthropic Adds Brand Controls, Code Sync to Claude Design appeared first on TechRepublic.",
+      "image": "https://assets.techrepublic.com/uploads/2026/06/tr-06182026-anthropic-claude-design-overhaul.jpg?f=jpeg",
+      "published": "2026-06-18T14:25:18+00:00",
+      "firstSeen": "2026-06-18T16:00:01.529132+00:00",
+      "lastSeen": "2026-06-18T16:00:01.529132+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 12.2028
     },
     {
       "title": "California expected a tax bonanza from AI IPOs. Modern compensation structures may blunt the windfall.",
@@ -60,10 +156,10 @@
       "image": "https://media.thenextweb.com/2026/06/california-ipo-tax-windfall-spacex-openai-anthropic.avif",
       "published": "2026-06-18T14:23:52+00:00",
       "firstSeen": "2026-06-18T15:00:01.300544+00:00",
-      "lastSeen": "2026-06-18T15:00:01.300544+00:00",
+      "lastSeen": "2026-06-18T16:00:01.529132+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 7.2317
+      "score": 7.2021
     },
     {
       "title": "While Helsing and Anduril chase billion-dollar valuations, Comand AI raised €32M for the layer above them",
@@ -76,10 +172,10 @@
       "image": "https://media.thenextweb.com/2026/06/Comand-AI.avif",
       "published": "2026-06-18T14:20:37+00:00",
       "firstSeen": "2026-06-18T15:00:01.300544+00:00",
-      "lastSeen": "2026-06-18T15:00:01.300544+00:00",
+      "lastSeen": "2026-06-18T16:00:01.529132+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8301
+      "score": 2.8005
     },
     {
       "title": "85% of NATO’s defence-tech funding goes to the US. AVP and Earlybird raised €500M to change that.",
@@ -92,10 +188,10 @@
       "image": "https://media.thenextweb.com/2026/06/AVP-Earlybid.avif",
       "published": "2026-06-18T14:14:59+00:00",
       "firstSeen": "2026-06-18T15:00:01.300544+00:00",
-      "lastSeen": "2026-06-18T15:00:01.300544+00:00",
+      "lastSeen": "2026-06-18T16:00:01.529132+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1273
+      "score": 2.0978
     },
     {
       "title": "An ex-Palantir leader raised $16M to point AI at the NHS’s paperwork, not its doctors",
@@ -108,10 +204,10 @@
       "image": "https://media.thenextweb.com/2026/06/frontierhealth-team.avif",
       "published": "2026-06-18T14:04:33+00:00",
       "firstSeen": "2026-06-18T15:00:01.300544+00:00",
-      "lastSeen": "2026-06-18T15:00:01.300544+00:00",
+      "lastSeen": "2026-06-18T16:00:01.529132+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1721
+      "score": 3.1427
     },
     {
       "title": "Who decides when AI is too dangerous?",
@@ -124,10 +220,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/DCD_0617_Fable5.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-18T14:00:00+00:00",
       "firstSeen": "2026-06-18T15:00:01.300544+00:00",
-      "lastSeen": "2026-06-18T15:00:01.300544+00:00",
+      "lastSeen": "2026-06-18T16:00:01.529132+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.3299
+      "score": 4.3005
     },
     {
       "title": "Baseten is raising $1.5bn at up to $13bn, betting AI’s profits lie in cheap inference",
@@ -140,10 +236,10 @@
       "image": "https://media.thenextweb.com/2026/06/baseten-team.avif",
       "published": "2026-06-18T13:55:46+00:00",
       "firstSeen": "2026-06-18T15:00:01.300544+00:00",
-      "lastSeen": "2026-06-18T15:00:01.300544+00:00",
+      "lastSeen": "2026-06-18T16:00:01.529132+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.4178
+      "score": 2.3885
     },
     {
       "title": "LinkedIn will now show recruiters which apps you actually use, not just which skills you claim",
@@ -159,7 +255,7 @@
       "lastSeen": "2026-06-18T15:00:01.300544+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.9161
+      "score": 3.8869
     },
     {
       "title": "ByteDance is Microsoft’s biggest AI customer, even as Washington treats Chinese AI as a threat",
@@ -175,7 +271,7 @@
       "lastSeen": "2026-06-18T15:00:01.300544+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.1132
+      "score": 4.0841
     },
     {
       "title": "GTA VI pre-orders open June 25. Rockstar revealed the cover art. No price yet.",
@@ -191,7 +287,7 @@
       "lastSeen": "2026-06-18T15:00:01.300544+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.9088
+      "score": 3.8798
     },
     {
       "title": "Waymo issues its sixth recall after robotaxis drove into highway construction zones 13 times",
@@ -207,7 +303,7 @@
       "lastSeen": "2026-06-18T14:00:01.846539+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2016
+      "score": 3.1727
     },
     {
       "title": "Pramaana Labs raised $27M to wrap AI in mathematical proof for law, tax, and drug discovery",
@@ -223,7 +319,7 @@
       "lastSeen": "2026-06-18T14:00:01.846539+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1007
+      "score": 2.0719
     },
     {
       "title": "At Cannes Lions, NVIDIA Partners Reshape Advertising and Marketing With AI",
@@ -236,10 +332,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/cannes-lions-featured-visual-still-1920x1080-1.jpg",
       "published": "2026-06-18T13:00:43+00:00",
       "firstSeen": "2026-06-18T14:00:01.846539+00:00",
-      "lastSeen": "2026-06-18T15:00:01.300544+00:00",
+      "lastSeen": "2026-06-18T16:00:01.529132+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2309
+      "score": 2.2024
     },
     {
       "title": "Sync and Stream: GeForce NOW Connects to Members’ Game Libraries Across Devices",
@@ -252,10 +348,26 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/GFN_Thursday-June_18.jpg",
       "published": "2026-06-18T13:00:32+00:00",
       "firstSeen": "2026-06-18T14:00:01.846539+00:00",
-      "lastSeen": "2026-06-18T15:00:01.300544+00:00",
+      "lastSeen": "2026-06-18T16:00:01.529132+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2308
+      "score": 2.2023
+    },
+    {
+      "title": "Stop Juggling AI Tools — This Lifetime Deal Puts GPT‑4o and More in One Place",
+      "url": "https://www.techrepublic.com/article/chatplayground-ai",
+      "source": "TechRepublic AI",
+      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Harness multiple top-tier models like GPT‑4o, Claude, Gemini, and more in one unified platform, now $55.\nThe post Stop Juggling AI Tools — This Lifetime Deal Puts GPT‑4o and More in One Place appeared first on TechRepublic.",
+      "image": "https://assets.techrepublic.com/uploads/2025/09/unnamed.jpg?f=jpeg",
+      "published": "2026-06-18T13:00:24+00:00",
+      "firstSeen": "2026-06-18T16:00:01.529132+00:00",
+      "lastSeen": "2026-06-18T16:00:01.529132+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 11.1622
     },
     {
       "title": "Photoshop and Premiere now have AI assistants",
@@ -268,10 +380,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/Adobe-Photoshop-AI-assistant-hero.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-18T13:00:00+00:00",
       "firstSeen": "2026-06-18T14:00:01.846539+00:00",
-      "lastSeen": "2026-06-18T15:00:01.300544+00:00",
+      "lastSeen": "2026-06-18T16:00:01.529132+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 6.3005
+      "score": 6.272
     },
     {
       "title": "Adobe’s redesigned AI studio remembers what your creations look like",
@@ -284,10 +396,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/Adobe-Firefly-AI-studio-updates-lede.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-18T13:00:00+00:00",
       "firstSeen": "2026-06-18T14:00:01.846539+00:00",
-      "lastSeen": "2026-06-18T15:00:01.300544+00:00",
+      "lastSeen": "2026-06-18T16:00:01.529132+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 4.1005
+      "score": 4.072
     },
     {
       "title": "Epic is building Claude and Gemini into Unreal Engine 6, whether developers like it or not",
@@ -303,7 +415,7 @@
       "lastSeen": "2026-06-18T14:00:01.846539+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 14.0893
+      "score": 14.0608
     },
     {
       "title": "Pixi’s new iOS app turns text messages into interactive AR experiences",
@@ -316,10 +428,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/pixi-app-screen-6-e1781642459181.jpeg?w=796",
       "published": "2026-06-18T12:00:00+00:00",
       "firstSeen": "2026-06-18T13:00:01.890957+00:00",
-      "lastSeen": "2026-06-18T15:00:01.300544+00:00",
+      "lastSeen": "2026-06-18T16:00:01.529132+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.302
+      "score": 3.2743
     },
     {
       "title": "NeuralTrust raised $20M to police the AI agents companies can’t even count",
@@ -335,7 +447,7 @@
       "lastSeen": "2026-06-18T14:00:01.846539+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.4604
+      "score": 5.4327
     },
     {
       "title": "NASA picked Eric Schmidt’s Relativity Space to fly to Mars. It has never reached orbit.",
@@ -351,7 +463,7 @@
       "lastSeen": "2026-06-18T14:00:01.846539+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0573
+      "score": 2.0297
     },
     {
       "title": "MIT built a memory system that lets robots remember where you left your keys",
@@ -367,7 +479,7 @@
       "lastSeen": "2026-06-18T14:00:01.846539+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.8547
+      "score": 5.8272
     },
     {
       "title": "Attackers cracked 75,000 Fortinet firewalls with old passwords, not a zero-day",
@@ -383,7 +495,7 @@
       "lastSeen": "2026-06-18T14:00:01.846539+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.451
+      "score": 3.4235
     },
     {
       "title": "EU tells Big Tech to align AI data centres with climate goals or stay away",
@@ -399,7 +511,7 @@
       "lastSeen": "2026-06-18T14:00:01.846539+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0479
+      "score": 2.0206
     },
     {
       "title": "Midjourney says its new full-body scanner beats an MRI. It has never built hardware before.",
@@ -415,7 +527,7 @@
       "lastSeen": "2026-06-18T13:00:01.890957+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.4444
+      "score": 3.4171
     },
     {
       "title": "Swiss startup Prem AI is raising $100M so hedge funds and law firms can own their AI instead of renting it",
@@ -431,7 +543,7 @@
       "lastSeen": "2026-06-18T13:00:01.890957+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0437
+      "score": 2.0165
     },
     {
       "title": "Sequoia’s Roelof Botha joins the SpaceX board, days after the record IPO",
@@ -447,7 +559,7 @@
       "lastSeen": "2026-06-18T13:00:01.890957+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7386
+      "score": 2.7115
     },
     {
       "title": "The portal is the product: inside the operating model rewriting digital agencies",
@@ -463,7 +575,7 @@
       "lastSeen": "2026-06-18T13:00:01.890957+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0361
+      "score": 2.009
     },
     {
       "title": "Tesco is migrating 40,000 servers off VMware and suing Broadcom for over GBP 100 million",
@@ -479,7 +591,7 @@
       "lastSeen": "2026-06-18T13:00:01.890957+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1267
+      "score": 3.0999
     },
     {
       "title": "Blackstone’s AirTrunk seeks $3bn loan for one Sydney data centre",
@@ -495,7 +607,7 @@
       "lastSeen": "2026-06-18T11:16:05.627954+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0197
+      "score": 1.9931
     },
     {
       "title": "Lenovo taps $2bn convertible market to refinance and buy back stock",
@@ -511,7 +623,7 @@
       "lastSeen": "2026-06-18T11:16:05.627954+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0175
+      "score": 1.991
     },
     {
       "title": "What to know about budgeting for pentesting: tools vs services",
@@ -527,119 +639,7 @@
       "lastSeen": "2026-06-18T11:16:05.627954+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.1161
-    },
-    {
-      "title": "Dream raises $260m at $3bn, tripling its value in 16 months",
-      "url": "https://thenextweb.com/news/dream-raises-260m-at-3bn-tripling-its-value-in-16-months",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Sixteen months ago, Dream was a billion-dollar company. This week it is worth three. The Israeli AI and cybersecurity firm has raised $260m in a round that valued it at $3bn, nearly tripling the $1.1bn it commanded in February 2025, a pace of revaluation that says as much about the market for defensive AI as [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/Dream-Security.avif",
-      "published": "2026-06-18T10:15:51+00:00",
-      "firstSeen": "2026-06-18T11:00:01.932515+00:00",
-      "lastSeen": "2026-06-18T11:16:05.627954+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.3644
-    },
-    {
-      "title": "China’s 618 festival is all-in on AI. Its shoppers are not.",
-      "url": "https://thenextweb.com/news/chinas-618-festival-is-all-in-on-ai-its-shoppers-are-not",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "China’s ‘618’ shopping festival, the mid-year sales event named for 18 June and now stretched across several weeks, has become two things at once this year: a showcase for how thoroughly AI has been threaded through online retail, and a reminder of how cautious the Chinese consumer still is. The technology is everywhere. The demand [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/Chinas-618-festival.avif",
-      "published": "2026-06-18T10:02:44+00:00",
-      "firstSeen": "2026-06-18T11:00:01.932515+00:00",
-      "lastSeen": "2026-06-18T11:16:05.627954+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.0086
-    },
-    {
-      "title": "HSBC expands AI banking partnership with Google Cloud",
-      "url": "https://www.artificialintelligence-news.com/news/hsbc-google-cloud-ai-partnership",
-      "source": "Artificial Intelligence News",
-      "sourceUrl": "https://www.artificialintelligence-news.com/categories/artificial-intelligence/feed/",
-      "sourceWeight": 0.82,
-      "category": "AI",
-      "summary": "HSBC has entered a multi-year partnership with Google Cloud to develop and deploy artificial intelligence tools across its global operations. Announced at Google Cloud Summit London 2026, the agreement covers work in wealth management, financial crime risk management, and internal decision support. HSBC will work with Google Cloud and Google DeepMind engineering teams on AI [&#8230;]\nThe post HSBC expands AI banking partnership with Google Cloud appeared first on AI News.",
-      "image": "",
-      "published": "2026-06-18T10:00:00+00:00",
-      "firstSeen": "2026-06-18T11:00:01.932515+00:00",
-      "lastSeen": "2026-06-18T15:00:01.300544+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "big_name_with_impact",
-      "score": 7.2053
-    },
-    {
-      "title": "7 best receipt photobooths for commercial use in 2026",
-      "url": "https://thenextweb.com/news/7-best-receipt-photobooths-for-commercial-use-in-2026",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Searches for “receipt photo booth” climbed more than 680% over the past year, and the category jumped from a niche TikTok trend to a real fixture in cafes, flagship stores, and brand activations. If you run a space or a marketing team, picking from the best receipt photobooths for commercial use now means weighing build quality, [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/Photobooths.avif",
-      "published": "2026-06-18T09:42:52+00:00",
-      "firstSeen": "2026-06-18T10:00:01.620236+00:00",
-      "lastSeen": "2026-06-18T11:16:05.627954+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 3.3998
-    },
-    {
-      "title": "Huawei CFO’s admissions can be used against the company, US judge rules",
-      "url": "https://thenextweb.com/news/huawei-cfo-admissions-trial",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "A statement Meng Wanzhou signed to make her own legal jeopardy go away can now be used against the company she helps run. A US judge in Brooklyn ruled on Tuesday that admissions made by Huawei’s chief financial officer, as part of the 2021 deal that let her walk free, are admissible in the criminal [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/Meng-Wanzhou.avif",
-      "published": "2026-06-18T09:32:50+00:00",
-      "firstSeen": "2026-06-18T10:00:01.620236+00:00",
-      "lastSeen": "2026-06-18T11:16:05.627954+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 3.3954
-    },
-    {
-      "title": "Bosch to pay US $36m over unlicensed shipments to Huawei",
-      "url": "https://thenextweb.com/news/bosch-to-pay-us-36m-over-unlicensed-shipments-to-huawei",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Robert Bosch, the German engineering group, has agreed to pay the United States $36m to settle claims that two of its non-US subsidiaries shipped sensor products and software to China’s Huawei without the required licences. The US Commerce Department announced the settlement on Wednesday. The goods, worth more than $70m, went out on over 100 [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2021/01/Untitled-design-2021-01-13T145309.087.avif",
-      "published": "2026-06-18T09:21:41+00:00",
-      "firstSeen": "2026-06-18T10:00:01.620236+00:00",
-      "lastSeen": "2026-06-18T11:16:05.627954+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.9905
-    },
-    {
-      "title": "EU cybersecurity agency to meet Anthropic under a US export cloud",
-      "url": "https://thenextweb.com/news/eu-cybersecurity-agency-to-meet-anthropic-under-a-us-export-cloud",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The European Union’s cybersecurity agency was due to meet Anthropic on Thursday, the European Commission confirmed, a meeting arranged before Washington made it considerably more awkward. ENISA, the EU’s cybersecurity body, had been invited to talks with the AI company that were set in motion weeks earlier, well ahead of the US export directive now [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/European-Parliament.avif",
-      "published": "2026-06-18T09:05:41+00:00",
-      "firstSeen": "2026-06-18T10:00:01.620236+00:00",
-      "lastSeen": "2026-06-18T11:16:05.627954+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.9836
+      "score": 4.0896
     },
     {
       "title": "The Life Scientific: Dean Lomax",
@@ -652,10 +652,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-15T20:00:00+00:00",
       "firstSeen": "2026-06-15T21:00:01.290903+00:00",
-      "lastSeen": "2026-06-18T15:00:01.300544+00:00",
+      "lastSeen": "2026-06-18T16:00:01.529132+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.361
+      "score": 1.3564
     },
     {
       "title": "The Life Scientific: Helen Hastie",
@@ -668,7 +668,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-08T20:00:00+00:00",
       "firstSeen": "2026-06-08T21:00:01.371488+00:00",
-      "lastSeen": "2026-06-18T15:00:01.300544+00:00",
+      "lastSeen": "2026-06-18T16:00:01.529132+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 1.1916
