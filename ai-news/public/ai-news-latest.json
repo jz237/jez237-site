@@ -1,8 +1,8 @@
 {
-  "updatedAt": "2026-06-18T21:00:01.302903+00:00",
+  "updatedAt": "2026-06-18T21:26:35.954324+00:00",
   "items": [
     {
-      "title": "Gyojin Han, Dong-Jae Lee, Changho Choi, Jongsuk Kim, Junmo Kim",
+      "title": "Breaking the Solver Bottleneck: Training Task Generators at the Learnable Frontier",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -10,12 +10,60 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-18T21:00:08.532334+00:00",
+      "published": "2026-06-18T21:26:46.331897+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-18T21:00:01.302903+00:00",
+      "lastSeen": "2026-06-18T21:26:35.954324+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.36
+      "score": 2.66
+    },
+    {
+      "title": "AI inference startup Baseten reportedly raising $1.5B months after its last mega round",
+      "url": "https://techcrunch.com/2026/06/18/ai-inference-startup-baseten-reportedly-raising-1-5b-months-after-its-last-mega-round",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Startup Baseten is reportedly close to finalizing a $1.5 billion round at a $13 billion as the “inference gold rush\" marches on.",
+      "image": "https://techcrunch.com/wp-content/uploads/2024/03/GettyImages-1502217391.jpg?resize=1200%2C800",
+      "published": "2026-06-18T21:20:13+00:00",
+      "firstSeen": "2026-06-18T21:26:35.954324+00:00",
+      "lastSeen": "2026-06-18T21:26:35.954324+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.5868
+    },
+    {
+      "title": "The White House Is Making Up Its Rules for AI in Real Time",
+      "url": "https://www.wired.com/story/anthropic-mythos-export-controls-ai-regulations",
+      "source": "Wired AI",
+      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Anthropic still can’t distribute Claude Mythos or Fable 5 after running afoul of the Trump administration. But no one can say exactly what the company did wrong.",
+      "image": "https://media.wired.com/photos/6a342bff039398b1addb3ba2/master/pass/Model-Behavior-SB.jpg",
+      "published": "2026-06-18T21:03:43+00:00",
+      "firstSeen": "2026-06-18T21:26:35.954324+00:00",
+      "lastSeen": "2026-06-18T21:26:35.954324+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 8.2784
+    },
+    {
+      "title": "Snap spins off AI video team into new company, Dotmo, due to costs",
+      "url": "https://techcrunch.com/2026/06/18/snap-spins-off-ai-video-team-into-new-company-dotmo-due-to-costs",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "The Snapchat maker is spinning off yet another internal unit. Dotmo will be comprised of current Snap staff who are leaving the social media company to focus on AI video development.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/GettyImages-2281911508.jpg?resize=1200%2C856",
+      "published": "2026-06-18T20:30:00+00:00",
+      "firstSeen": "2026-06-18T21:26:35.954324+00:00",
+      "lastSeen": "2026-06-18T21:26:35.954324+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2616
     },
     {
       "title": "How FERC’s Large-Load Interconnection Actions Help Address Grid Stress, Improve Affordability",
@@ -28,10 +76,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2025/09/nvidiaheadquarters.jpg",
       "published": "2026-06-18T20:00:27+00:00",
       "firstSeen": "2026-06-18T21:00:01.302903+00:00",
-      "lastSeen": "2026-06-18T21:00:01.302903+00:00",
+      "lastSeen": "2026-06-18T21:26:35.954324+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2601
+      "score": 2.247
     },
     {
       "title": "OpenAI is bringing on some big guns in the lead-up to its IPO",
@@ -44,10 +92,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/noam-shazeer-deal-ball.png?resize=1200%2C800",
       "published": "2026-06-18T19:59:22+00:00",
       "firstSeen": "2026-06-18T20:00:01.945108+00:00",
-      "lastSeen": "2026-06-18T21:00:01.302903+00:00",
+      "lastSeen": "2026-06-18T21:26:35.954324+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 9.2595
+      "score": 9.2465
     },
     {
       "title": "Apple patches high-severity eavesdropping vulnerability in Beats Studio Buds",
@@ -60,10 +108,10 @@
       "image": "https://cdn.arstechnica.net/wp-content/uploads/2021/11/Beats-Studio-Buds-1152x648.jpg",
       "published": "2026-06-18T19:41:35+00:00",
       "firstSeen": "2026-06-18T21:00:01.302903+00:00",
-      "lastSeen": "2026-06-18T21:00:01.302903+00:00",
+      "lastSeen": "2026-06-18T21:26:35.954324+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2108
+      "score": 3.1978
     },
     {
       "title": "A 201-year-old mutual bank just launched an AI Center of Excellence with a startup partner",
@@ -76,10 +124,10 @@
       "image": "https://media.thenextweb.com/2026/06/liberty-bank-ai-center-excellence-flare-partnership.avif",
       "published": "2026-06-18T19:34:40+00:00",
       "firstSeen": "2026-06-18T20:00:01.945108+00:00",
-      "lastSeen": "2026-06-18T21:00:01.302903+00:00",
+      "lastSeen": "2026-06-18T21:26:35.954324+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8074
+      "score": 2.7944
     },
     {
       "title": "Meta’s AI Workers Are Revolting, Peter Thiel’s Secret Society, and SBF’s Plea to Trump",
@@ -92,10 +140,10 @@
       "image": "https://media.wired.com/photos/6a3308960b213b93014c14d7/master/pass/Uncanny-Valley-Meta%E2%80%99s%20Internal%20Unit%20Spiral-v1.jpg",
       "published": "2026-06-18T19:29:51+00:00",
       "firstSeen": "2026-06-18T20:00:01.945108+00:00",
-      "lastSeen": "2026-06-18T21:00:01.302903+00:00",
+      "lastSeen": "2026-06-18T21:26:35.954324+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.245
+      "score": 2.2321
     },
     {
       "title": "Spotify launches Reserved, a ticketing feature that rewards superfans with early concert access",
@@ -108,10 +156,10 @@
       "image": "https://media.thenextweb.com/2026/06/spotify-removed-57000-fake-podcast-episodes-drug-spam.avif",
       "published": "2026-06-18T19:16:39+00:00",
       "firstSeen": "2026-06-18T20:00:01.945108+00:00",
-      "lastSeen": "2026-06-18T21:00:01.302903+00:00",
+      "lastSeen": "2026-06-18T21:26:35.954324+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.8986
+      "score": 3.8858
     },
     {
       "title": "UPS is building a real-time digital twin of its entire logistics network, updated every 10 minutes",
@@ -124,10 +172,10 @@
       "image": "https://media.thenextweb.com/2026/06/ups-ai-digital-twin-agentic-logistics-network.avif",
       "published": "2026-06-18T19:08:20+00:00",
       "firstSeen": "2026-06-18T20:00:01.945108+00:00",
-      "lastSeen": "2026-06-18T21:00:01.302903+00:00",
+      "lastSeen": "2026-06-18T21:26:35.954324+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0946
+      "score": 2.0818
     },
     {
       "title": "Apple opens iOS to rival app stores in Brazil after antitrust settlement with CADE",
@@ -140,10 +188,10 @@
       "image": "https://media.thenextweb.com/2026/06/apple-brazil-cade-sideloading-alternative-app-stores.avif",
       "published": "2026-06-18T18:59:38+00:00",
       "firstSeen": "2026-06-18T20:00:01.945108+00:00",
-      "lastSeen": "2026-06-18T21:00:01.302903+00:00",
+      "lastSeen": "2026-06-18T21:26:35.954324+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1904
+      "score": 3.1776
     },
     {
       "title": "Rivian sued for allegedly promising self-driving features its first-generation vehicles can never deliver",
@@ -156,10 +204,10 @@
       "image": "https://media.thenextweb.com/2026/05/volkswagen-rivian-top-shareholder-amazon-software.avif",
       "published": "2026-06-18T18:52:47+00:00",
       "firstSeen": "2026-06-18T20:00:01.945108+00:00",
-      "lastSeen": "2026-06-18T21:00:01.302903+00:00",
+      "lastSeen": "2026-06-18T21:26:35.954324+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0871
+      "score": 2.0744
     },
     {
       "title": "Almost half of U.S. singles feel negatively about AI in dating, Match says",
@@ -172,10 +220,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2023/05/GettyImages-1131615694.jpg?resize=1200%2C800",
       "published": "2026-06-18T18:51:46+00:00",
       "firstSeen": "2026-06-18T19:00:01.626117+00:00",
-      "lastSeen": "2026-06-18T21:00:01.302903+00:00",
+      "lastSeen": "2026-06-18T21:26:35.954324+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3266
+      "score": 3.3139
     },
     {
       "title": "General Intuition is raising $300 million to train AI agents on the video game data OpenAI tried to buy",
@@ -188,10 +236,10 @@
       "image": "https://media.thenextweb.com/2026/06/general-intuition-300m-world-models-gaming-data.avif",
       "published": "2026-06-18T18:49:03+00:00",
       "firstSeen": "2026-06-18T20:00:01.945108+00:00",
-      "lastSeen": "2026-06-18T21:00:01.302903+00:00",
+      "lastSeen": "2026-06-18T21:26:35.954324+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 9.5853
+      "score": 9.5726
     },
     {
       "title": "FERC orders a fast lane for data centre grid connections, but the electricity to fill them is another matter",
@@ -204,10 +252,10 @@
       "image": "https://media.thenextweb.com/2026/06/ferc-data-centre-grid-fast-lane-ai.avif",
       "published": "2026-06-18T18:36:48+00:00",
       "firstSeen": "2026-06-18T19:00:01.626117+00:00",
-      "lastSeen": "2026-06-18T21:00:01.302903+00:00",
+      "lastSeen": "2026-06-18T21:26:35.954324+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1794
+      "score": 3.1668
     },
     {
       "title": "BMW slashes profit forecast as China’s EV makers squeeze European carmakers on two fronts",
@@ -220,10 +268,10 @@
       "image": "https://media.thenextweb.com/2026/04/bmw-i7-gen6-battery-rimac-range-charging.avif",
       "published": "2026-06-18T18:29:45+00:00",
       "firstSeen": "2026-06-18T19:00:01.626117+00:00",
-      "lastSeen": "2026-06-18T21:00:01.302903+00:00",
+      "lastSeen": "2026-06-18T21:26:35.954324+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0761
+      "score": 2.0635
     },
     {
       "title": "Amazon hopes to challenge Nvidia more directly by selling its AI chips",
@@ -236,10 +284,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2022/11/GettyImages-1421680585.jpg?resize=1200%2C675",
       "published": "2026-06-18T18:22:13+00:00",
       "firstSeen": "2026-06-18T18:33:39.051639+00:00",
-      "lastSeen": "2026-06-18T21:00:01.302903+00:00",
+      "lastSeen": "2026-06-18T21:26:35.954324+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2125
+      "score": 2.2
     },
     {
       "title": "MosaicLeaks: Can your research agent keep a secret?",
@@ -252,10 +300,10 @@
       "image": "https://cdn-uploads.huggingface.co/production/uploads/680ba1729f7688275d2ce0f4/hGCO4pOyJjijLPCbRT07v.webp",
       "published": "2026-06-18T18:13:13+00:00",
       "firstSeen": "2026-06-18T18:33:39.051639+00:00",
-      "lastSeen": "2026-06-18T21:00:01.302903+00:00",
+      "lastSeen": "2026-06-18T21:26:35.954324+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.4483
+      "score": 7.4358
     },
     {
       "title": "Ford pivots its Kentucky battery plant from EVs to AI data centre storage in a $2 billion bet",
@@ -268,10 +316,10 @@
       "image": "https://media.thenextweb.com/2026/06/ford-energy-battery-storage-ai-data-centres.avif",
       "published": "2026-06-18T18:00:52+00:00",
       "firstSeen": "2026-06-18T19:00:01.626117+00:00",
-      "lastSeen": "2026-06-18T21:00:01.302903+00:00",
+      "lastSeen": "2026-06-18T21:26:35.954324+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -0.3376
+      "score": -0.3499
     },
     {
       "title": "AI data centers just got a government-mandated fast lane to the grid",
@@ -284,10 +332,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2024/12/Energy-sector-Getty.jpg?resize=1200%2C801",
       "published": "2026-06-18T17:49:23+00:00",
       "firstSeen": "2026-06-18T18:00:02.034921+00:00",
-      "lastSeen": "2026-06-18T21:00:01.302903+00:00",
+      "lastSeen": "2026-06-18T21:26:35.954324+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1971
+      "score": 2.1848
     },
     {
       "title": "SpaceX adds Sequoia’s Roelof Botha to its board, days after record $75 billion IPO",
@@ -303,7 +351,7 @@
       "lastSeen": "2026-06-18T19:00:01.626117+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.8566
+      "score": 3.8443
     },
     {
       "title": "Before SpaceX IPO, investors in China secretly acquired stakes",
@@ -316,10 +364,10 @@
       "image": "https://cdn.arstechnica.net/wp-content/uploads/2026/06/GettyImages-2281248250-1024x648.jpg",
       "published": "2026-06-18T17:42:18+00:00",
       "firstSeen": "2026-06-18T18:00:02.034921+00:00",
-      "lastSeen": "2026-06-18T21:00:01.302903+00:00",
+      "lastSeen": "2026-06-18T21:26:35.954324+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0538
+      "score": 2.0415
     },
     {
       "title": "The smartphone era created an attention crisis. Slowtech is fixing it",
@@ -332,10 +380,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/GettyImages-2238192342.jpg?resize=1200%2C800",
       "published": "2026-06-18T17:16:30+00:00",
       "firstSeen": "2026-06-18T18:00:02.034921+00:00",
-      "lastSeen": "2026-06-18T21:00:01.302903+00:00",
+      "lastSeen": "2026-06-18T21:26:35.954324+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1819
+      "score": 2.1697
     },
     {
       "title": "Your email landed in the inbox. Your links didn’t.",
@@ -348,10 +396,10 @@
       "image": "https://media.thenextweb.com/2026/06/surbl-email-blacklist-links-delivery-failure.avif",
       "published": "2026-06-18T17:12:51+00:00",
       "firstSeen": "2026-06-18T18:00:02.034921+00:00",
-      "lastSeen": "2026-06-18T21:00:01.302903+00:00",
+      "lastSeen": "2026-06-18T21:26:35.954324+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0402
+      "score": 2.0281
     },
     {
       "title": "New usage analytics and updated spend controls for enterprises",
@@ -364,10 +412,10 @@
       "image": "",
       "published": "2026-06-18T17:00:00+00:00",
       "firstSeen": "2026-06-18T20:00:01.945108+00:00",
-      "lastSeen": "2026-06-18T21:00:01.302903+00:00",
+      "lastSeen": "2026-06-18T21:26:35.954324+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.0843
+      "score": 9.0723
     },
     {
       "title": "‘Queer Eye’s’ life coach Karamo Brown launches Kē, a wellness app featuring his AI digital clone",
@@ -380,10 +428,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/KaramoBrown-Ke.jpg?resize=1200%2C800",
       "published": "2026-06-18T16:55:04+00:00",
       "firstSeen": "2026-06-18T17:00:01.646340+00:00",
-      "lastSeen": "2026-06-18T21:00:01.302903+00:00",
+      "lastSeen": "2026-06-18T21:26:35.954324+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0721
+      "score": 5.0601
     },
     {
       "title": "Nvidia-backed Verse raises $54M to help AI data centres skip the power queue",
@@ -399,7 +447,7 @@
       "lastSeen": "2026-06-18T19:00:01.626117+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.023
+      "score": 2.0111
     },
     {
       "title": "Architect Labs raises $24M to let any company design its own AI chip",
@@ -415,7 +463,7 @@
       "lastSeen": "2026-06-18T19:00:01.626117+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0168
+      "score": 2.005
     },
     {
       "title": "Gradial raises $65M to be the ‘AI glue’ for enterprise marketing",
@@ -431,7 +479,23 @@
       "lastSeen": "2026-06-18T19:00:01.626117+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.7106
+      "score": 3.6989
+    },
+    {
+      "title": "Alibaba Cloud Bets on France as Europe Seeks More Control Over AI",
+      "url": "https://www.techrepublic.com/article/news-alibaba-cloud-ai-sovereignty-emea-france",
+      "source": "TechRepublic AI",
+      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Alibaba Cloud opened two Paris availability zones as European enterprises weigh data sovereignty, resilience, and AI infrastructure needs.\nThe post Alibaba Cloud Bets on France as Europe Seeks More Control Over AI appeared first on TechRepublic.",
+      "image": "",
+      "published": "2026-06-18T16:04:10+00:00",
+      "firstSeen": "2026-06-18T21:26:35.954324+00:00",
+      "lastSeen": "2026-06-18T21:26:35.954324+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.0975
     },
     {
       "title": "3 Amazon Workers Say They’re Under Investigation for Speaking Out About Data Centers",
@@ -444,10 +508,10 @@
       "image": "https://media.wired.com/photos/6a33fb3a3fe23d3ce2a1cf59/master/pass/Business_AmazonWorkersUnder_v2.jpg",
       "published": "2026-06-18T16:03:27+00:00",
       "firstSeen": "2026-06-18T17:00:01.646340+00:00",
-      "lastSeen": "2026-06-18T21:00:01.302903+00:00",
+      "lastSeen": "2026-06-18T21:26:35.954324+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1489
+      "score": 2.1372
     },
     {
       "title": "Amazon employees say they’re facing termination for backing data center limits",
@@ -460,10 +524,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/STKS528_DATA_CENTERS2_C.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-18T16:00:00+00:00",
       "firstSeen": "2026-06-18T17:00:01.646340+00:00",
-      "lastSeen": "2026-06-18T21:00:01.302903+00:00",
+      "lastSeen": "2026-06-18T21:26:35.954324+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2173
+      "score": 2.2056
     },
     {
       "title": "‘It’s literally the gulag’: inside the revolt at Meta’s AI unit, where elite engineers were drafted to label data",
@@ -479,7 +543,7 @@
       "lastSeen": "2026-06-18T19:00:01.626117+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1044
+      "score": 3.0927
     },
     {
       "title": "Life360 now lets parents order Uber rides for teens without leaving the app",
@@ -495,7 +559,7 @@
       "lastSeen": "2026-06-18T19:00:01.626117+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.8006
+      "score": 3.789
     },
     {
       "title": "Adobe just made its biggest AI push yet, and it stretches from Photoshop to Disney World",
@@ -511,7 +575,7 @@
       "lastSeen": "2026-06-18T18:33:39.051639+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.7934
+      "score": 4.7819
     },
     {
       "title": "General Intuition in talks to raise $300M at around $2B valuation",
@@ -524,10 +588,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/General-intuition.png?w=880",
       "published": "2026-06-18T15:20:37+00:00",
       "firstSeen": "2026-06-18T15:50:17.281064+00:00",
-      "lastSeen": "2026-06-18T21:00:01.302903+00:00",
+      "lastSeen": "2026-06-18T21:26:35.954324+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1301
+      "score": 2.1186
     },
     {
       "title": "A tech worker-backed PAC is bringing a $5M knife to Big Tech’s $100M gunfight",
@@ -540,10 +604,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/GettyImages-2264911748.jpg?resize=1200%2C705",
       "published": "2026-06-18T15:13:21+00:00",
       "firstSeen": "2026-06-18T15:50:17.281064+00:00",
-      "lastSeen": "2026-06-18T21:00:01.302903+00:00",
+      "lastSeen": "2026-06-18T21:26:35.954324+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1269
+      "score": 2.1154
     },
     {
       "title": "The EU is about to declare AWS and Azure gatekeepers under the Digital Markets Act",
@@ -559,7 +623,7 @@
       "lastSeen": "2026-06-18T18:33:39.051639+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0859
+      "score": 3.0745
     },
     {
       "title": "Accenture had its worst stock day ever on fears AI is eating consulting. Hours earlier, it spent $4.18bn trying to escape that.",
@@ -575,71 +639,7 @@
       "lastSeen": "2026-06-18T18:33:39.051639+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9729
-    },
-    {
-      "title": "The ‘godfather of AI’ called xAI a failure and warned of a bubble. He’s also selling the alternative.",
-      "url": "https://thenextweb.com/news/yann-lecun-xai-failure-ai-bubble-explosion",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Yann LeCun has never been quiet about his doubts, and his latest target is one of the most valuable companies on earth. Elon Musk’s xAI is “kind of a failure” that will not be able to compete on the frontier with OpenAI and Anthropic, LeCun, the founder of AMI Labs and a former chief AI [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/Conférence_IP_Paris_22AI_Science_and_Society22_à_lEcole_polytechnique_54320377276.avif",
-      "published": "2026-06-18T14:31:14+00:00",
-      "firstSeen": "2026-06-18T15:00:01.300544+00:00",
-      "lastSeen": "2026-06-18T18:33:39.051639+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "editorial_score_pass",
-      "score": 8.9688
-    },
-    {
-      "title": "Anthropic Adds Brand Controls, Code Sync to Claude Design",
-      "url": "https://www.techrepublic.com/article/news-anthropic-claude-design-overhaul-enterprise-teams",
-      "source": "TechRepublic AI",
-      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Anthropic updated Claude Design with design system imports, Claude Code syncing, canvas editing, and more export options for enterprise teams.\nThe post Anthropic Adds Brand Controls, Code Sync to Claude Design appeared first on TechRepublic.",
-      "image": "",
-      "published": "2026-06-18T14:25:18+00:00",
-      "firstSeen": "2026-06-18T15:50:17.281064+00:00",
-      "lastSeen": "2026-06-18T21:00:01.302903+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 12.0663
-    },
-    {
-      "title": "California expected a tax bonanza from AI IPOs. Modern compensation structures may blunt the windfall.",
-      "url": "https://thenextweb.com/news/california-ipo-tax-windfall-spacex-openai-anthropic",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "SpaceX is now valued at $2.5 trillion. OpenAI and Anthropic are expected to go public later this year at valuations approaching $1 trillion each. California, where all three companies are based or have significant operations, should be looking at the largest IPO tax windfall in state history. The reality may be more complicated. Facebook’s 2012 [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/california-ipo-tax-windfall-spacex-openai-anthropic.avif",
-      "published": "2026-06-18T14:23:52+00:00",
-      "firstSeen": "2026-06-18T15:00:01.300544+00:00",
-      "lastSeen": "2026-06-18T17:00:01.646340+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "big_name_with_impact",
-      "score": 7.0657
-    },
-    {
-      "title": "While Helsing and Anduril chase billion-dollar valuations, Comand AI raised €32M for the layer above them",
-      "url": "https://thenextweb.com/news/comand-ai-32m-series-a-prevail-c2-saab",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The defence-tech land grab has a new front, and it sits above the drones and sensors that get the headlines. Comand AI, a Paris startup building AI software for military command, has raised a €32mn Series A led by Blossom Capital, with a strategic investment from Sweden’s Saab and renewed backing from Expeditions. The round [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/Comand-AI.avif",
-      "published": "2026-06-18T14:20:37+00:00",
-      "firstSeen": "2026-06-18T15:00:01.300544+00:00",
-      "lastSeen": "2026-06-18T15:50:17.281064+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.6643
+      "score": 1.9616
     },
     {
       "title": "The Life Scientific: Dean Lomax",
@@ -652,10 +652,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-15T20:00:00+00:00",
       "firstSeen": "2026-06-15T21:00:01.290903+00:00",
-      "lastSeen": "2026-06-18T21:00:01.302903+00:00",
+      "lastSeen": "2026-06-18T21:26:35.954324+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.3348
+      "score": 1.333
     },
     {
       "title": "The Life Scientific: Helen Hastie",
@@ -668,10 +668,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-08T20:00:00+00:00",
       "firstSeen": "2026-06-08T21:00:01.371488+00:00",
-      "lastSeen": "2026-06-18T21:00:01.302903+00:00",
+      "lastSeen": "2026-06-18T21:26:35.954324+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.1914
+      "score": 1.1913
     },
     {
       "title": "The Life Scientific: Seth Berkley",
