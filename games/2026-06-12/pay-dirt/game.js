@@ -1047,6 +1047,9 @@ function reachableCellsFromPlayer(){
 
 function currentNoWayOutReason(){
   if (!player || player.state === 'dead' || player.state === 'fall' || player.digT > 0) return '';
+  // Dig holes are temporary. A route blocked by open holes may reopen a few
+  // seconds later, so only judge true softlocks after the board has settled.
+  if (holes.size || fuses.length) return '';
   if (golds.some(gd => !gd.taken && gd.held)) return '';
   const seen = reachableCellsFromPlayer();
   if (!exitRevealed){
