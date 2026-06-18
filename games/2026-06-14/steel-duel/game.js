@@ -119,8 +119,8 @@
   let freezeT = 0, winner = null, tick = 0, shake = 0;
   let bots = [false, false, true, true];
   let campaign = null;          // campaign run state (null outside campaign mode)
-  let mouseX = LW / 2, mouseY = LH / 2, mouseDown = false;
-  let touchHeld = false, touchWX = 0, touchWY = 0;      // mobile hold-to-point (drive + shoot toward the finger)
+  let mouseX = LW / 2, mouseY = LH / 2, mouseDown = false, mouseFresh = 0;
+  const stick = { active: false, id: null, ox: 0, oy: 0, dx: 0, dy: 0 };
   let online = { ws: null, room: '', role: null, id: null, mode: 'duel', name: 'PLAYER', names: { p1: 'P1', p2: 'P2' }, ready: { p1: false, p2: false }, status: '', connected: false, started: false, lastInput: 0, lastSnapshot: 0, peers: [] };
 
   let controls = [ctrl(), ctrl(), ctrl(), ctrl()];
@@ -500,32 +500,31 @@
     cmd.turn = 0; cmd.throttle = 0; cmd.aim = null; cmd.fire = false; cmd.aimInstant = true; cmd.moveVec = null;
     // Campaign & vs-CPU use simplified controls: DIRECT movement (go where you point) + assisted aim/auto-fire.
     if (mode === 'campaign' || mode === 'cpu') {
-      // ---- direct movement: stick angle, or WASD/arrows as an 8-way vector ----
+      // ---- Subway Siege-style direct movement: floating drag stick, mobile stick, or WASD/arrows as an 8-way vector ----
       let mvx = 0, mvy = 0, mag = 0;
-      if (c.driveVec && c.driveVec.active) { mvx = Math.cos(c.driveVec.angle); mvy = Math.sin(c.driveVec.angle); mag = c.driveVec.mag; }
+      if (i === 0 && stick.active) {
+        const len = Math.hypot(stick.dx, stick.dy);
+        mag = Math.min(1, len / 48);
+        if (mag > 0.12) { mvx = stick.dx / Math.max(1, len); mvy = stick.dy / Math.max(1, len); }
+        else mag = 0;
+      }
+      else if (c.driveVec && c.driveVec.active) { mvx = Math.cos(c.driveVec.angle); mvy = Math.sin(c.driveVec.angle); mag = c.driveVec.mag; }
       else { mvx = (c.right ? 1 : 0) - (c.left ? 1 : 0); mvy = (c.back ? 1 : 0) - (c.fwd ? 1 : 0); const m = Math.hypot(mvx, mvy); if (m > 0) { mvx /= m; mvy /= m; mag = 1; } }
       cmd.moveVec = { ang: mag > 0.01 ? Math.atan2(mvy, mvx) : me.heading, mag: Math.min(1, mag) };
-      // ---- aim + fire: auto-fire only with a clear line of fire to an enemy; manual fire (click/Space) always works ----
+      // ---- aim + fire: mouse steers aim/searchlight; auto-fire uses line of sight; click/Space/F force-fires ----
       const foe = nearestFoe(me);
       const mouseAim = (i === 0 && !touchActive && (!campaign || campaign.players === 1));   // 1P desktop steers the turret with the mouse
       if (mouseAim) {
-        const ang = Math.atan2(mouseY - me.y, mouseX - me.x); cmd.aim = ang; cmd.aimInstant = true;
-        if (mouseDown) {                                  // hold LMB: drive toward the pointer AND shoot that way
-          if (Math.hypot(mouseX - me.x, mouseY - me.y) > 24) cmd.moveVec = { ang: ang, mag: 1 };   // override WASD; deadzone near the cursor
-          cmd.fire = true;
-        } else {
-          cmd.fire = (autoFire && clearShot(me, ang)) || !!c.fire;   // Space fires; otherwise auto-fire on a clear shot
-        }
-      } else if (touchHeld && i === 0) {                   // mobile: hold finger to drive toward + shoot at the touch point
-        const ang = Math.atan2(touchWY - me.y, touchWX - me.x); cmd.aim = ang; cmd.aimInstant = true;
-        if (Math.hypot(touchWX - me.x, touchWY - me.y) > 24) cmd.moveVec = { ang: ang, mag: 1 };
-        cmd.fire = true;
+        const hasMouseAim = mouseFresh > 0 || mouseDown;
+        const ang = hasMouseAim && !touchActive ? Math.atan2(mouseY - me.y, mouseX - me.x) : (foe ? Math.atan2(foe.y - me.y, foe.x - me.x) : me.turret);
+        cmd.aim = ang; cmd.aimInstant = hasMouseAim;
+        cmd.fire = mouseDown || !!c.fire || (autoFire && clearShot(me, ang));
       } else if (c.aimVec && c.aimVec.active) {            // mobile twin-stick (duel/coop aim pad): manual aim + fire
         cmd.aim = c.aimVec.angle; cmd.aimInstant = true; cmd.fire = true;
       } else if (foe) {                                     // not touching: auto-aim nearest enemy; fire when lined up with a clear shot
         cmd.aim = Math.atan2(foe.y - me.y, foe.x - me.x); cmd.aimInstant = false; cmd.turretTurn = TURRET_TURN;
         const aligned = Math.abs(wrapAngle(me.turret - cmd.aim)) < 0.22;
-        cmd.fire = (autoFire && aligned && clearShot(me, cmd.aim)) || !!c.fire;
+        cmd.fire = (autoFire && aligned && clearShot(me, cmd.aim)) || !!c.fire || (!autoFire && i === 0 && stick.active);
       } else { cmd.aim = null; cmd.fire = !!c.fire; }
       return;
     }
@@ -538,6 +537,7 @@
   /* ===================== sim ===================== */
   function update() {
     tick++;
+    if (mouseFresh > 0) mouseFresh--;
     if (state !== 'playing' && state !== 'attract') return;
     if (online.connected && online.role !== 'p1' && state === 'playing') return;
     if (freezeT > 0) { freezeT -= STEP; if (freezeT <= 0) reviveTanks(); }
@@ -736,10 +736,26 @@
     drawPlayerNames();
     for (const s of shells) SDArt.drawShell(ctx, s, visualMode);
     if (SDArt && visualMode !== 'classic') PARTS.draw(ctx);
-    if (visualMode !== 'classic' && state === 'playing' && mouseAimActive() && tanks[0] && tanks[0].alive) SDArt.drawReticle(ctx, mouseX, mouseY, T.p1);
+    if (visualMode !== 'classic' && state === 'playing' && mouseAimActive() && tanks[0] && tanks[0].alive && mouseFresh > 0) SDArt.drawReticle(ctx, mouseX, mouseY, T.p1);
     ctx.restore();
     drawHUD(T);
+    drawFloatingStick();
     if (visualMode === 'classic') SDArt.classicOverlay(ctx, viewW, viewH);
+  }
+
+  function drawFloatingStick() {
+    if (!stick.active) return;
+    ctx.save();
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.globalAlpha = 0.85;
+    ctx.strokeStyle = 'rgba(255,200,120,.52)';
+    ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.arc(stick.ox, stick.oy, 48, 0, Math.PI * 2); ctx.stroke();
+    ctx.fillStyle = 'rgba(255,200,120,.24)';
+    ctx.beginPath(); ctx.arc(stick.ox + stick.dx, stick.oy + stick.dy, 22, 0, Math.PI * 2); ctx.fill();
+    ctx.strokeStyle = 'rgba(255,225,170,.82)';
+    ctx.beginPath(); ctx.arc(stick.ox + stick.dx, stick.oy + stick.dy, 22, 0, Math.PI * 2); ctx.stroke();
+    ctx.restore();
   }
   function drawBossEntity(t, tm) {
     const r = t.hitR || 26, hit = t.flash > 0;
@@ -1191,11 +1207,11 @@
   const keys = {};
   function onKey(e, down) {
     const c = e.code;
-    if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Space'].includes(c)) e.preventDefault();
+    if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Space', 'KeyF'].includes(c)) e.preventDefault();
     keys[c] = down;
     const c0 = controls[0], c1 = controls[1];
     c0.fwd = !!keys['KeyW']; c0.back = !!keys['KeyS']; c0.left = !!keys['KeyA']; c0.right = !!keys['KeyD'];
-    c0.fire = !!keys['Space'];
+    c0.fire = !!(keys['Space'] || keys['KeyF']);
     // local two-player keyboard: P2 on arrows + Enter/RShift (duel, survival co-op, and campaign co-op)
     const twoLocal = (mode === 'duel' || mode === 'coop' || (mode === 'campaign' && campaign && campaign.players > 1)) && !(online.connected && online.role === 'p1');
     if (twoLocal) {
@@ -1209,7 +1225,7 @@
   function toggleVisual() { visualMode = visualMode === 'hd' ? 'classic' : 'hd'; const b = $('btnClassic'); if (b) b.textContent = visualMode === 'classic' ? '1974' : 'HD'; }
   function mouseAimActive() { return !touchActive && (mode === 'cpu' || (mode === 'campaign' && campaign && campaign.players === 1)); }
   function applyCursor() { if (canvas) canvas.style.cursor = (state === 'playing' && mouseAimActive()) ? 'none' : 'default'; }
-  function updateTouchLayout() {                          // campaign / vs-CPU use hold-to-point on the field (no sticks); duel/coop keep the twin sticks
+  function updateTouchLayout() {                          // campaign / vs-CPU use floating drag anywhere; duel/coop keep twin sticks for two local players
     const sticks = (mode === 'duel' || mode === 'coop');
     const sl = $('stickL'), sr = $('stickR'), hint = $('touchHint');
     if (sl) sl.style.display = (touchActive && sticks) ? '' : 'none';
@@ -1232,12 +1248,53 @@
     try { const m = localStorage.getItem('sd_muted'); if (m != null) muted = m === '1'; const a = localStorage.getItem('sd_autofire'); if (a != null) autoFire = a === '1'; } catch (e) {}
   }
 
-  function setupMouse() {
+  function screenPoint(clientX, clientY) {
     if (!canvas) return;
-    const toLogical = e => { const p = screenToWorld(e.clientX, e.clientY); mouseX = p.x; mouseY = p.y; };
-    window.addEventListener('mousemove', toLogical);
-    canvas.addEventListener('mousedown', e => { if (e.button === 0) { mouseDown = true; controls[0].fire = true; toLogical(e); e.preventDefault(); } });
-    window.addEventListener('mouseup', e => { if (e.button === 0) { mouseDown = false; controls[0].fire = false; } });
+    const r = canvas.getBoundingClientRect();
+    return {
+      x: (clientX - r.left) / Math.max(1, r.width) * viewW,
+      y: (clientY - r.top) / Math.max(1, r.height) * viewH,
+    };
+  }
+  function setupPointerControls() {
+    if (!canvas) return;
+    const uiTarget = e => e.target && e.target.closest && e.target.closest('button, input, select, .ov');
+    const aimAt = e => { const p = screenToWorld(e.clientX, e.clientY); mouseX = p.x; mouseY = p.y; if (e.pointerType === 'mouse') mouseFresh = 120; };
+    const stickMove = e => {
+      const p = screenPoint(e.clientX, e.clientY);
+      if (!p) return;
+      let dx = p.x - stick.ox, dy = p.y - stick.oy;
+      const len = Math.hypot(dx, dy), max = 58;
+      if (len > max) {
+        const ex = len - max;
+        stick.ox += dx / len * ex; stick.oy += dy / len * ex;
+        dx = dx / len * max; dy = dy / len * max;
+      }
+      stick.dx = dx; stick.dy = dy;
+    };
+    const startStick = e => {
+      if (uiTarget(e) || state !== 'playing' || !(mode === 'campaign' || mode === 'cpu')) return;
+      aimAt(e);
+      if (e.pointerType === 'mouse') { mouseDown = true; controls[0].fire = true; }
+      const p = screenPoint(e.clientX, e.clientY); if (!p) return;
+      stick.active = true; stick.id = e.pointerId; stick.ox = p.x; stick.oy = p.y; stick.dx = 0; stick.dy = 0;
+      try { canvas.setPointerCapture(e.pointerId); } catch (err) {}
+      e.preventDefault();
+    };
+    const endStick = e => {
+      if (e && e.pointerType === 'mouse') { mouseDown = false; controls[0].fire = false; }
+      if (e && stick.active && e.pointerId !== stick.id) return;
+      stick.active = false; stick.id = null; stick.dx = 0; stick.dy = 0;
+    };
+    window.addEventListener('pointermove', e => {
+      aimAt(e);
+      if (!stick.active || e.pointerId !== stick.id) return;
+      stickMove(e); e.preventDefault();
+    }, { passive: false });
+    canvas.addEventListener('pointerdown', startStick, { passive: false });
+    window.addEventListener('pointerup', endStick);
+    window.addEventListener('pointercancel', endStick);
+    window.addEventListener('blur', () => { mouseDown = false; controls[0].fire = false; endStick(); });
   }
 
   /* ===================== touch (twin-stick) ===================== */
@@ -1247,22 +1304,6 @@
     if (!isTouch) { wrap.style.display = 'none'; return; }
     touchActive = true; wrap.style.display = 'block'; applyCursor();
     bindStick('stickL', 'driveVec'); bindStick('stickR', 'aimVec');
-    setupFieldTouch();
-  }
-  // Campaign / vs-CPU: hold a finger anywhere on the field to drive toward it and shoot that way.
-  function setupFieldTouch() {
-    if (!canvas) return;
-    const isPointMode = () => (mode === 'campaign' || mode === 'cpu');
-    const set = e => {
-      if (!isPointMode() || state !== 'playing') return;
-      const t = e.changedTouches[0]; if (!t) return;
-      const p = screenToWorld(t.clientX, t.clientY);
-      touchWX = p.x; touchWY = p.y; touchHeld = true; e.preventDefault();
-    };
-    canvas.addEventListener('touchstart', set, { passive: false });
-    canvas.addEventListener('touchmove', set, { passive: false });
-    canvas.addEventListener('touchend', e => { if (e.touches.length === 0) touchHeld = false; });
-    canvas.addEventListener('touchcancel', () => { touchHeld = false; });
   }
   function bindStick(id, prop) {
     const base = $(id), knob = $(id + 'k'); if (!base) return;
@@ -1543,7 +1584,7 @@
     canvas = $('game'); if (!canvas) return; ctx = canvas.getContext('2d');
     TRACKS = new SDArt.Tracks(); PARTS = new SDArt.Particles(); DECALS = new SDArt.Decals();
     window.addEventListener('keydown', e => onKey(e, true)); window.addEventListener('keyup', e => onKey(e, false));
-    setupMouse(); setupTouch();
+    setupPointerControls(); setupTouch();
     resize(); window.addEventListener('resize', resize);
 
     const click = (id, fn) => { const e = $(id); if (e) e.addEventListener('click', () => { SDAudio.ui(); fn(); }); };
@@ -1603,7 +1644,7 @@
     reset(seed) { headless = true; resetMatch(seed || 1); state = 'playing'; return true; },
     setSkill(a, b, c, d) { tankSkill = [a, b == null ? a : b, c == null ? a : c, d == null ? (c == null ? a : c) : d]; },
     setBot(p, on) { bots[p] = !!on; }, input(p, a, d) { if (controls[p]) controls[p][a] = !!d; },
-    touch(wx, wy, down) { touchHeld = down !== false; if (touchHeld) { touchWX = wx; touchWY = wy; } return true; },
+    touch(x, y, down) { stick.active = down !== false; if (stick.active) { stick.ox = x; stick.oy = y; stick.dx = 32; stick.dy = 0; } else { stick.dx = 0; stick.dy = 0; } return true; },
     start: startGame, attract: startAttract,
     step(n) { n = n || 1; for (let i = 0; i < n; i++) update(); render(); return true; },
     snap() { render(); return true; }, fire(i) { fire(tanks[i || 0]); }, kill(i) { killTank(i || 0); },
