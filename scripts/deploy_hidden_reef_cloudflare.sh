@@ -25,6 +25,9 @@ if [[ -f "$SECRET_ENV" ]]; then
   set +a
 fi
 
+CLOUDFLARE_ACCOUNT_ID="${CLOUDFLARE_ACCOUNT_ID:-39a03cfe0f3854622f3a4f72491f48a6}"
+export CLOUDFLARE_ACCOUNT_ID
+
 npx --yes wrangler@latest pages deploy "$BUILD_DIR" \
   --project-name hidden-reef \
   --branch main \
