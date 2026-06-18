@@ -1,6 +1,6 @@
 {
   "date": "2026-06-18",
-  "updatedAt": "2026-06-18T10:00:01.620236+00:00",
+  "updatedAt": "2026-06-18T11:00:01.932515+00:00",
   "items": [
     {
       "title": "Google’s Gemini co-lead Noam Shazeer is leaving for OpenAI",
@@ -16,7 +16,7 @@
       "lastSeen": "2026-06-18T10:00:01.620236+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.4492
+      "score": 11.4205
     },
     {
       "title": "JPMorgan cuts off Anthropic access for Hong Kong staff",
@@ -32,7 +32,23 @@
       "lastSeen": "2026-06-18T10:00:01.620236+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.216
+      "score": 10.1868
+    },
+    {
+      "title": "HSBC expands AI banking partnership with Google Cloud",
+      "url": "https://www.artificialintelligence-news.com/news/hsbc-google-cloud-ai-partnership",
+      "source": "Artificial Intelligence News",
+      "sourceUrl": "https://www.artificialintelligence-news.com/categories/artificial-intelligence/feed/",
+      "sourceWeight": 0.82,
+      "category": "AI",
+      "summary": "HSBC has entered a multi-year partnership with Google Cloud to develop and deploy artificial intelligence tools across its global operations. Announced at Google Cloud Summit London 2026, the agreement covers work in wealth management, financial crime risk management, and internal decision support. HSBC will work with Google Cloud and Google DeepMind engineering teams on AI [&#8230;]\nThe post HSBC expands AI banking partnership with Google Cloud appeared first on AI News.",
+      "image": "",
+      "published": "2026-06-18T10:00:00+00:00",
+      "firstSeen": "2026-06-18T11:00:01.932515+00:00",
+      "lastSeen": "2026-06-18T11:00:01.932515+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "big_name_with_impact",
+      "score": 7.3178
     },
     {
       "title": "How to turn off AI in your Google Docs",
@@ -45,10 +61,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/GettyImages-182884083.jpg?resize=1200%2C800",
       "published": "2026-06-18T01:23:51+00:00",
       "firstSeen": "2026-06-18T01:37:59.526403+00:00",
-      "lastSeen": "2026-06-18T10:00:01.620236+00:00",
+      "lastSeen": "2026-06-18T11:00:01.932515+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.0562
+      "score": 6.0325
     },
     {
       "title": "EU cybersecurity agency to meet Anthropic under a US export cloud",
@@ -61,10 +77,10 @@
       "image": "https://media.thenextweb.com/2026/06/European-Parliament.avif",
       "published": "2026-06-18T09:05:41+00:00",
       "firstSeen": "2026-06-18T10:00:01.620236+00:00",
-      "lastSeen": "2026-06-18T10:00:01.620236+00:00",
+      "lastSeen": "2026-06-18T11:00:01.932515+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1227
+      "score": 5.0933
     },
     {
       "title": "France Advances Europe’s AI Future With NVIDIA Technologies",
@@ -77,10 +93,26 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/5383050-vivatech26-digital-nv-blog-image-1920x1080-1.jpg",
       "published": "2026-06-18T06:00:59+00:00",
       "firstSeen": "2026-06-18T07:00:01.381962+00:00",
-      "lastSeen": "2026-06-18T10:00:01.620236+00:00",
+      "lastSeen": "2026-06-18T11:00:01.932515+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9748
+      "score": 4.9478
+    },
+    {
+      "title": "What to know about budgeting for pentesting: tools vs services",
+      "url": "https://thenextweb.com/news/budgeting-pentesting-tools-vs-services",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Budgeting for pentesting is no longer a simple choice between buying a tool or hiring an outside firm once a year. Pentesting, or searching for vulnerabilities in one’s cybersecurity defenses by launching a mock cyberattack against it, has become a fundamental method of improving an organization’s security posture. Budgeting for it can present some unique challenges, however, as [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/budgeting-pentesting-tools-vs-services.avif",
+      "published": "2026-06-18T10:19:40+00:00",
+      "firstSeen": "2026-06-18T11:00:01.932515+00:00",
+      "lastSeen": "2026-06-18T11:00:01.932515+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.2296
     },
     {
       "title": "Meta executive leading internal AI overhaul departs after two months",
@@ -96,7 +128,7 @@
       "lastSeen": "2026-06-18T10:00:01.620236+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.7876
+      "score": 3.7592
     },
     {
       "title": "7 best receipt photobooths for commercial use in 2026",
@@ -109,10 +141,10 @@
       "image": "https://media.thenextweb.com/2026/06/Photobooths.avif",
       "published": "2026-06-18T09:42:52+00:00",
       "firstSeen": "2026-06-18T10:00:01.620236+00:00",
-      "lastSeen": "2026-06-18T10:00:01.620236+00:00",
+      "lastSeen": "2026-06-18T11:00:01.932515+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.5413
+      "score": 3.5114
     },
     {
       "title": "Huawei CFO’s admissions can be used against the company, US judge rules",
@@ -125,10 +157,10 @@
       "image": "https://media.thenextweb.com/2026/06/Meng-Wanzhou.avif",
       "published": "2026-06-18T09:32:50+00:00",
       "firstSeen": "2026-06-18T10:00:01.620236+00:00",
-      "lastSeen": "2026-06-18T10:00:01.620236+00:00",
+      "lastSeen": "2026-06-18T11:00:01.932515+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.5362
+      "score": 3.5065
     },
     {
       "title": "SK Hynix ships first 12-layer HBM4E samples to AI customers",
@@ -144,55 +176,23 @@
       "lastSeen": "2026-06-18T10:00:01.620236+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.4942
+      "score": 3.4656
     },
     {
-      "title": "Trump says Apple will build chips with Intel in the US",
-      "url": "https://thenextweb.com/news/trump-says-apple-will-build-chips-with-intel-in-the-us",
+      "title": "Tesco is migrating 40,000 servers off VMware and suing Broadcom for over GBP 100 million",
+      "url": "https://thenextweb.com/news/tesco-vmware-broadcom-40000-servers-migration-lawsuit",
       "source": "The Next Web",
       "sourceUrl": "https://thenextweb.com/feed",
       "sourceWeight": 0.75,
       "category": "AI",
-      "summary": "The news that Apple had agreed to make its chips in the United States did not come from Apple. It came, on Thursday, from a post by President Donald Trump on Truth Social, announcing that the company had agreed to work with Intel to design and manufacture chips on American soil. Apple, for its part, [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/Donald-Trump.avif",
-      "published": "2026-06-18T07:45:33+00:00",
-      "firstSeen": "2026-06-18T08:00:01.712934+00:00",
-      "lastSeen": "2026-06-18T10:00:01.620236+00:00",
+      "summary": "Tesco, one of Britain’s largest supermarkets, is migrating approximately 40,000 servers away from VMware. It is also suing Broadcom in the UK High Court for more than GBP 100 million, accusing the company of “abusive conduct.” It is one of the largest publicly disclosed VMware migrations since Broadcom completed its acquisition of VMware in late [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/tesco-vmware-broadcom-40000-servers-migration-lawsuit.avif",
+      "published": "2026-06-18T10:43:09+00:00",
+      "firstSeen": "2026-06-18T11:00:01.932515+00:00",
+      "lastSeen": "2026-06-18T11:00:01.932515+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1836
-    },
-    {
-      "title": "v1.89.2",
-      "url": "https://github.com/BerriAI/litellm/releases/tag/v1.89.2",
-      "source": "LiteLLM Releases",
-      "sourceUrl": "https://github.com/BerriAI/litellm/releases.atom",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Verify Docker Image Signature\nAll LiteLLM Docker images are signed with cosign. Every release is signed with the same key introduced in commit 0112e53.\nVerify using the pinned commit hash (recommended):\nA commit hash is cryptographically immutable, so this is the strongest way to ensure you are using the original signing key:\ncosign verify \\\n  --key https://raw.githubusercontent.com/BerriAI/litellm/0112e53046018d726492c814b3644b7d376029d0/cosign.pub \\\n  ghcr.io/berriai/litellm:v1.89.2\nVerify using the release tag (convenience):\nTags are protected in this repository and resolve to the same key.",
-      "image": "https://opengraph.githubassets.com/8837481e2f59d87ba742520523e66197f5f5d64eed881ee8fbb7de08cada9f5a/BerriAI/litellm/releases/tag/v1.89.2",
-      "published": "2026-06-18T02:46:30+00:00",
-      "firstSeen": "2026-06-18T03:00:01.346740+00:00",
-      "lastSeen": "2026-06-18T10:00:01.620236+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.79
-    },
-    {
-      "title": "Apple to raise prices as memory chip shortage bites, Tim Cook says",
-      "url": "https://thenextweb.com/news/apple-to-raise-prices-as-memory-chip-shortage-bites-tim-cook-says",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Apple is going to raise prices, and Tim Cook is no longer pretending otherwise. In an interview with the Wall Street Journal, the chief executive said the company could not keep absorbing the soaring cost of memory and storage chips. “Unfortunately, price increases are unavoidable,” he said. The line is notable mostly because Apple has [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/apple-record-quarter-cook-ternus-ai-strategy.avif",
-      "published": "2026-06-18T08:22:26+00:00",
-      "firstSeen": "2026-06-18T09:00:02.049187+00:00",
-      "lastSeen": "2026-06-18T10:00:01.620236+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "framework_or_plumbing",
-      "score": 2.5014
+      "score": 3.2414
     }
   ],
   "errors": [
