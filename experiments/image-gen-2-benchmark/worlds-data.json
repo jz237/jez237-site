@@ -898,5 +898,23 @@
       "continuity": "Preserves the transparent reef habitat, cobalt gas giant, cyan/violet auroras, vesperglass panels, ceramic-white pressure ribs, copper-black coils, conductive nursery ecology, pulse-lanterns, and ribbon-bodied electroceptive inhabitants.",
       "entryDescription": "Caregivers and juveniles tend blue bioluminescent seed curtains in Bluewake Nursery, showing early education, ecology care, pulse-language learning, and domestic life inside the Vesperglass Array."
     }
+  },
+  {
+    "id": "2026-06-18-overnight-vesperglass-array-resonance-clinic-checkup",
+    "title": "Vesperglass Array: Resonance Clinic Checkup",
+    "tests": "World-life entry for Vesperglass Array showing everyday healthcare and electroreceptor crest scanning inside Resonance Clinic.",
+    "prompt": "Create a detailed realistic cinematic daily-life view from Vesperglass Array: Show a calm resonance clinic medical bay where electroreceptor crests are scanned by soft field instruments beside translucent privacy membranes. Anchor the scene in Vesperglass Array canon: suspended transparent reef-plates above a cobalt gas giant, cyan/violet aurora weather, copper-black induction coils, ceramic-white pressure ribs, pressure membranes, prism frond planters, pulse-lantern wayfinding, and non-human ribbon-bodied inhabitants with translucent skin, sensory nodes, electroreceptor crests, tendrils, and pressure-wrap garments. Make the clinic feel gentle, practical, alien, inhabited, and coherent with warm amber interior pools mixed with blue-white storm glare, realistic glass reflections, tactile wear, condensation, graphite tools, luminous conduits, and believable low-gravity medical equipment. Avoid human astronauts, Earth hospital signage, generic neon cyberpunk, horror, gore, mushroom/fairytale motifs, readable text artifacts, logos, paper prompt-card framing, poster layout, cartoon/concept-art rendering, and dancing.",
+    "image": "images/2026-06-18-overnight-vesperglass-array-resonance-clinic-checkup.png",
+    "date": "2026-06-18",
+    "batch": "Daily Prompt",
+    "slot": "overnight",
+    "model": "gpt-image-2",
+    "size": "1024x1024",
+    "world": {
+      "name": "Vesperglass Array",
+      "description": "A hard-sci-fi alien megahabitat where ribbon-bodied electroceptive inhabitants live across suspended transparent mineral reef-plates inside the magnetosphere of a cobalt gas giant.",
+      "continuity": "Preserves Vesperglass Array's suspended reef habitat, cobalt gas giant, cyan/violet auroras, copper-black induction coils, ceramic-white pressure ribs, pressure membranes, pulse-lanterns, prism ecology, and ribbon-bodied electroceptive inhabitants.",
+      "entryDescription": "A calm overnight resonance-clinic checkup showing how Vesperglass inhabitants receive electroreceptor crest scans in a practical, lived-in medical bay."
+    }
   }
 ]
