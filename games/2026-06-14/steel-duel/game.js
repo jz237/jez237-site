@@ -498,11 +498,15 @@
   }
 
   /* ===================== human command ===================== */
+  function assistedControls(i) {
+    return mode === 'campaign' || mode === 'cpu' || (mode === 'coop' && i === 0);
+  }
+
   function humanCommand(i, cmd) {
     const c = controls[i] || (controls[i] = ctrl()), me = tanks[i];
     cmd.turn = 0; cmd.throttle = 0; cmd.aim = null; cmd.fire = false; cmd.aimInstant = true; cmd.moveVec = null;
-    // Campaign & vs-CPU use simplified controls: DIRECT movement (go where you point) + assisted aim/auto-fire.
-    if (mode === 'campaign' || mode === 'cpu') {
+    // Assisted modes use simplified controls: direct movement + assisted aim/auto-fire.
+    if (assistedControls(i)) {
       // ---- Subway Siege-style direct movement: floating drag stick, mobile stick, or WASD/arrows as an 8-way vector ----
       let mvx = 0, mvy = 0, mag = 0;
       if (i === 0 && stick.active) {
@@ -516,7 +520,7 @@
       cmd.moveVec = { ang: mag > 0.01 ? Math.atan2(mvy, mvx) : me.heading, mag: Math.min(1, mag) };
       // ---- aim + fire: mouse steers aim/searchlight; auto-fire uses line of sight; click/Space/F force-fires ----
       const foe = nearestFoe(me);
-      const mouseAim = (i === 0 && !touchActive && (!campaign || campaign.players === 1));   // 1P desktop steers the turret with the mouse
+      const mouseAim = (i === 0 && !touchActive && (mode === 'coop' || !campaign || campaign.players === 1));   // desktop P1 steers the turret with the mouse
       if (mouseAim) {
         const hasMouseAim = mouseFresh > 0 || mouseDown;
         const ang = hasMouseAim && !touchActive ? Math.atan2(mouseY - me.y, mouseX - me.x) : (foe ? Math.atan2(foe.y - me.y, foe.x - me.x) : me.turret);
@@ -531,7 +535,7 @@
       } else { cmd.aim = null; cmd.fire = !!c.fire; }
       return;
     }
-    // Versus duel / survival co-op keep the faithful 1974 tank steering + hull-locked barrel.
+    // Versus duel and local P2 keep the faithful 1974 tank steering + hull-locked barrel.
     if (c.driveVec && c.driveVec.active) { const da = wrapAngle(c.driveVec.angle - me.heading); cmd.turn = Math.max(-1, Math.min(1, da / 0.4)); cmd.throttle = c.driveVec.mag * Math.max(0, Math.cos(da)); }
     else { cmd.turn = (c.right ? 1 : 0) - (c.left ? 1 : 0); cmd.throttle = (c.fwd ? 1 : 0) - (c.back ? 1 : 0); }
     cmd.aim = null; cmd.fire = c.fire;
@@ -1226,14 +1230,14 @@
     if (c === 'KeyC') toggleVisual();
   }
   function toggleVisual() { visualMode = visualMode === 'hd' ? 'classic' : 'hd'; const b = $('btnClassic'); if (b) b.textContent = visualMode === 'classic' ? '1974' : 'HD'; }
-  function mouseAimActive() { return !touchActive && (mode === 'cpu' || (mode === 'campaign' && campaign && campaign.players === 1)); }
+  function mouseAimActive() { return !touchActive && (mode === 'cpu' || mode === 'coop' || (mode === 'campaign' && campaign && campaign.players === 1)); }
   function applyCursor() { if (canvas) canvas.style.cursor = (state === 'playing' && mouseAimActive()) ? 'none' : 'default'; }
-  function updateTouchLayout() {                          // campaign / vs-CPU use floating drag anywhere; duel/coop keep twin sticks for two local players
-    const sticks = (mode === 'duel' || mode === 'coop');
+  function updateTouchLayout() {                          // assisted modes use floating drag anywhere; duel keeps twin sticks for two local players
+    const sticks = mode === 'duel';
     const sl = $('stickL'), sr = $('stickR'), hint = $('touchHint');
     if (sl) sl.style.display = (touchActive && sticks) ? '' : 'none';
     if (sr) sr.style.display = (touchActive && sticks) ? '' : 'none';
-    if (hint) hint.style.display = (touchActive && !sticks && (mode === 'campaign' || mode === 'cpu')) ? '' : 'none';
+    if (hint) hint.style.display = (touchActive && !sticks && assistedControls(0)) ? '' : 'none';
   }
   function persist(k, v) { try { localStorage.setItem(k, v ? '1' : '0'); } catch (e) {} }
   function setMuted(m) {
@@ -1276,7 +1280,7 @@
       stick.dx = dx; stick.dy = dy;
     };
     const startStick = e => {
-      if (uiTarget(e) || state !== 'playing' || !(mode === 'campaign' || mode === 'cpu')) return;
+      if (uiTarget(e) || state !== 'playing' || !assistedControls(0)) return;
       aimAt(e);
       if (e.pointerType === 'mouse') { mouseDown = true; controls[0].fire = true; }
       const p = screenPoint(e.clientX, e.clientY); if (!p) return;
@@ -1436,6 +1440,13 @@
     killTank(2); const coopTeamPoint = score.p1 === 1 && score.p2 === 0;
     killTank(0); const coopEnemyPoint = score.p1 === 1 && score.p2 === 1;
     ok('T-coop mode', coopSpawnOk && coopTeamPoint && coopEnemyPoint, 'spawn=' + coopSpawnOk + ' score=' + score.p1 + '-' + score.p2);
+
+    startGame('coop'); headless = true; controls = fresh(); shells = [];
+    const coopStartX = tanks[0].x, coopStartY = tanks[0].y;
+    controls[0].driveVec = { active: true, angle: 0, mag: 1 };
+    for (let i = 0; i < 45; i++) update();
+    const coopAssistedMove = Math.hypot(tanks[0].x - coopStartX, tanks[0].y - coopStartY) > 25;
+    ok('T-coop assisted controls', coopAssistedMove, 'move=' + Math.round(Math.hypot(tanks[0].x - coopStartX, tanks[0].y - coopStartY)));
 
     startGame('coop'); headless = true; controls = fresh(); shells = [];
     const a0 = tanks[0], a1 = tanks[1], en = tanks[2];
