@@ -155,7 +155,7 @@
         <button id="btnOptions" class="btn">⚙️ OPTIONS</button>
         <button id="btnScores" class="btn">🏆 SCORES</button>
       </div>
-      <div class="footer">v22 · First tank-combat arcade game, Kee&nbsp;Games 1974. Drive your foe into the mines.</div>
+      <div class="footer">v25 · First tank-combat arcade game, Kee&nbsp;Games 1974. Drive your foe into the mines.</div>
     </div>
   </div>
 
@@ -200,7 +200,7 @@
       <h1 style="font-size:34px">HOW TO PLAY</h1>
       <p class="sub">Campaign: clear every wave and beat the bosses. Versus: outscore the other side.</p>
       <div class="keys">
-        <div><h3 class="p1">CAMPAIGN / vs&nbsp;CPU</h3><b>WASD</b> move · <b>Mouse</b> aims<br><b>Hold mouse</b>: drive + shoot at cursor<br><span style="opacity:.7">Auto-fires with a clear shot.<br>Mobile: hold &amp; drag to drive +<br>fire toward your finger</span></div>
+        <div><h3 class="p1">CAMPAIGN / vs&nbsp;CPU</h3><b>WASD</b> / arrows or <b>drag anywhere</b> to drive<br><b>Mouse</b> aims · <b>Click</b>/<b>Space</b>/<b>F</b> force-fire<br><span style="opacity:.7">Auto-fires with a clear shot.<br>Mobile: touch &amp; drag anywhere;<br>turret fires on its own.</span></div>
         <div><h3 class="p2">CO-OP / DUEL</h3>P1 <b>WASD</b> + <b>Space</b><br>P2 <b>↑ ↓ ← →</b> + <b>Enter</b><br><span style="opacity:.7">(faithful tank steering,<br>barrels fire forward)</span></div>
       </div>
       <p class="sub" style="margin-top:14px"><b style="color:var(--amber)">Campaign</b> (1P or 2-player co-op): survive waves of enemy tanks across 12 levels and defeat three bosses. Enemy types differ — <b>scouts</b> are fast, <b>brutes</b> are tanky, <b>snipers</b> keep their distance, <b>mine-layers</b> drop mines, and <b>wardens</b> (and the Mauler boss) have a front armor plate, so <b>hit them from the side or behind</b>. You have shared lives; clear a level to earn one back. Co-op revives a downed teammate next wave.</p>
@@ -216,7 +216,7 @@
       <p class="sub">Saved on this device</p>
       <button id="optSound" class="btn">🔊 SOUND: ON</button>
       <button id="optAutoFire" class="btn">🎯 AUTO-FIRE: ON</button>
-      <p class="sub" style="margin-top:8px;text-align:left;line-height:1.4">In Campaign &amp; vs CPU, <b>auto-fire</b> shoots automatically when an enemy is in a clear line of sight, so you only steer. Turn it <b>off</b> to fire only when you choose — click / Space on desktop, or by holding your finger on mobile.</p>
+      <p class="sub" style="margin-top:8px;text-align:left;line-height:1.4">In Campaign &amp; vs CPU, <b>auto-fire</b> shoots automatically when an enemy is in a clear line of sight, so you can just drive. Turn it <b>off</b> to fire only when you choose — click, Space, or F on desktop; touch-drag still force-fires on mobile.</p>
       <button id="btnOptionsBack" class="btn primary">BACK</button>
     </div>
   </div>
@@ -257,15 +257,15 @@
     </div>
   </div>
 
-  <!-- TOUCH (twin sticks for duel/coop; campaign & vs-CPU use hold-to-point on the field) -->
+  <!-- TOUCH (campaign/vs-CPU use Subway-style drag anywhere; duel/coop keep twin sticks for two local players) -->
   <div id="touch">
     <div id="stickL" class="stick"><div id="stickLk" class="knob"></div><span class="sticklbl">MOVE</span></div>
     <div id="stickR" class="stick"><div id="stickRk" class="knob"></div><span class="sticklbl">AIM · FIRE</span></div>
-    <div id="touchHint">Hold &amp; drag to move and fire</div>
+    <div id="touchHint">Drag anywhere to drive · turret auto-fires</div>
   </div>
 
-  <script src="audio.js?v=24"></script>
-  <script src="art.js?v=22"></script>
-  <script src="game.js?v=22"></script>
+  <script src="audio.js?v=25"></script>
+  <script src="art.js?v=25"></script>
+  <script src="game.js?v=25"></script>
 </body>
 </html>
