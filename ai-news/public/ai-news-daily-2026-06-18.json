@@ -1,6 +1,6 @@
 {
   "date": "2026-06-18",
-  "updatedAt": "2026-06-18T15:50:17.281064+00:00",
+  "updatedAt": "2026-06-18T17:00:01.646340+00:00",
   "items": [
     {
       "title": "Epic is building Claude and Gemini into Unreal Engine 6, whether developers like it or not",
@@ -16,7 +16,7 @@
       "lastSeen": "2026-06-18T14:00:01.846539+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 14.0654
+      "score": 14.0331
     },
     {
       "title": "Anthropic Adds Brand Controls, Code Sync to Claude Design",
@@ -29,10 +29,10 @@
       "image": "",
       "published": "2026-06-18T14:25:18+00:00",
       "firstSeen": "2026-06-18T15:50:17.281064+00:00",
-      "lastSeen": "2026-06-18T15:50:17.281064+00:00",
+      "lastSeen": "2026-06-18T17:00:01.646340+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.2076
+      "score": 12.174
     },
     {
       "title": "Google’s Gemini co-lead Noam Shazeer is leaving for OpenAI",
@@ -48,7 +48,7 @@
       "lastSeen": "2026-06-18T10:00:01.620236+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.2922
+      "score": 11.2638
     },
     {
       "title": "Stop Juggling AI Tools — This Lifetime Deal Puts GPT‑4o and More in One Place",
@@ -61,10 +61,10 @@
       "image": "",
       "published": "2026-06-18T13:00:24+00:00",
       "firstSeen": "2026-06-18T15:50:17.281064+00:00",
-      "lastSeen": "2026-06-18T15:50:17.281064+00:00",
+      "lastSeen": "2026-06-18T17:00:01.646340+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.1668
+      "score": 11.1345
     },
     {
       "title": "JPMorgan cuts off Anthropic access for Hong Kong staff",
@@ -80,7 +80,7 @@
       "lastSeen": "2026-06-18T10:00:01.620236+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.0564
+      "score": 10.0276
     },
     {
       "title": "The ‘godfather of AI’ called xAI a failure and warned of a bubble. He’s also selling the alternative.",
@@ -93,10 +93,10 @@
       "image": "https://media.thenextweb.com/2026/06/Conférence_IP_Paris_22AI_Science_and_Society22_à_lEcole_polytechnique_54320377276.avif",
       "published": "2026-06-18T14:31:14+00:00",
       "firstSeen": "2026-06-18T15:00:01.300544+00:00",
-      "lastSeen": "2026-06-18T15:50:17.281064+00:00",
+      "lastSeen": "2026-06-18T17:00:01.646340+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 9.1105
+      "score": 9.0768
     },
     {
       "title": "Using AI to help physicians diagnose rare genetic diseases affecting children",
@@ -109,10 +109,10 @@
       "image": "",
       "published": "2026-06-18T08:00:00+00:00",
       "firstSeen": "2026-06-18T15:50:17.281064+00:00",
-      "lastSeen": "2026-06-18T15:50:17.281064+00:00",
+      "lastSeen": "2026-06-18T17:00:01.646340+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 7.3848
+      "score": 7.3567
     },
     {
       "title": "California expected a tax bonanza from AI IPOs. Modern compensation structures may blunt the windfall.",
@@ -125,10 +125,10 @@
       "image": "https://media.thenextweb.com/2026/06/california-ipo-tax-windfall-spacex-openai-anthropic.avif",
       "published": "2026-06-18T14:23:52+00:00",
       "firstSeen": "2026-06-18T15:00:01.300544+00:00",
-      "lastSeen": "2026-06-18T15:50:17.281064+00:00",
+      "lastSeen": "2026-06-18T17:00:01.646340+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 7.2069
+      "score": 7.1733
     },
     {
       "title": "HSBC expands AI banking partnership with Google Cloud",
@@ -141,10 +141,10 @@
       "image": "",
       "published": "2026-06-18T10:00:00+00:00",
       "firstSeen": "2026-06-18T11:00:01.932515+00:00",
-      "lastSeen": "2026-06-18T15:50:17.281064+00:00",
+      "lastSeen": "2026-06-18T17:00:01.646340+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 7.1833
+      "score": 7.1536
     },
     {
       "title": "Photoshop and Premiere now have AI assistants",
@@ -157,10 +157,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/Adobe-Photoshop-AI-assistant-hero.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-18T13:00:00+00:00",
       "firstSeen": "2026-06-18T14:00:01.846539+00:00",
-      "lastSeen": "2026-06-18T16:00:01.529132+00:00",
+      "lastSeen": "2026-06-18T17:00:01.646340+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 6.2766
+      "score": 6.2443
     },
     {
       "title": "How to turn off AI in your Google Docs",
@@ -173,10 +173,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/GettyImages-182884083.jpg?resize=1200%2C800",
       "published": "2026-06-18T01:23:51+00:00",
       "firstSeen": "2026-06-18T01:37:59.526403+00:00",
-      "lastSeen": "2026-06-18T15:50:17.281064+00:00",
+      "lastSeen": "2026-06-18T17:00:01.646340+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.9265
+      "score": 5.9031
     },
     {
       "title": "MIT built a memory system that lets robots remember where you left your keys",
@@ -192,7 +192,7 @@
       "lastSeen": "2026-06-18T14:00:01.846539+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.8316
+      "score": 5.8004
     }
   ],
   "errors": [
