@@ -19,10 +19,11 @@ const GAME = (() => {
       sub:'pool-hall pinball · Amiga Pinball Illusions style',
       scoreNs:'corner-pocket', bestKey:'ebd-best',
       attract:'CORNER POCKET', startLine:'RACK EM UP', overTitle:'Chalk it up',
-      legends:'Pool hall legends', initialsHint:'carve your initials into the pool hall wall',
+      legends:'Pool hall legends', scoreWall:'the pool hall wall', initialsHint:'carve your initials into the pool hall wall',
       callStart:'Corner Pocket', callComplete:'Corner Pocket',
       targetName:'EIGHT BALL', saucerLit:'COLLECT THE RACK', completeLine:'CORNER POCKET',
       spellWord:'POCKET', replayWord:'POCKET', bankName:'Bank Shot', bankLane:'LEFT LANE',
+      unitName:'rack', spotLine:'POOL BALL SPOTTED', glazeLine:'BONUS', fullGlazeLine:'Get the chalk',
       inlineName:'In-line drops + Bank Shot', bankDmd:'BANK SHOT',
       taunts:['Stop talking and start chalking','Quit playing with yourself','Shoot the eight ball'],
       how:`<b>Sink the rack.</b> Knock down the 7 pool-ball drop targets, then shoot the lone 8-BALL target and the saucer behind it to clear the rack — your bonus carries the whole game.<br><br>
@@ -45,21 +46,25 @@ const GAME = (() => {
       sub:'entirely painterly table · original gallery rules',
       scoreNs:'painted-moon', bestKey:'painted-moon-best',
       attract:'PAINTED MOON', startLine:'WET PAINT', overTitle:'Signed canvas',
-      legends:'Gallery masters', initialsHint:'sign the wet varnish before it dries',
+      legends:'Gallery masters', scoreWall:'the gallery wall', initialsHint:'sign the wet varnish before it dries',
       callStart:'Painted Moon', callComplete:'Masterpiece',
       targetName:'MOON', saucerLit:'VARNISH THE CANVAS', completeLine:'MASTERPIECE',
       spellWord:'ARTIST', replayWord:'ARTIST', bankName:'Gallery Loop', bankLane:'GALLERY LOOP',
+      unitName:'canvas', spotLine:'PIGMENT SPOTTED', glazeLine:'GLAZE', fullGlazeLine:'Final glaze',
       inlineName:'Glaze drops + Gallery target', bankDmd:'GALLERY',
       taunts:['Paint with velocity','Find the moon shot','The canvas is still wet'],
       how:`<b>Finish the canvas.</b> Knock down the 7 pigment drops, then hit the moon target and land in the varnish saucer to complete a masterpiece.<br><br>
       <b>ARTIST.</b> Downed pigment drops uncover A-R-T-I-S-T standups. Spell the word for a replay and a fresh blank canvas.<br><br>
       <b>Glazes.</b> The 4 left drops layer your bonus from 2× to 5×. The left orbit is the <b>Gallery Loop</b> — it climbs 10K→70K and pays an extra ball at the top value.<br><br>
+      <b>Inspiration.</b> Bumper play fills the inspiration meter; every full meter spots a missing pigment. Completing ARTIST or sealing a masterpiece starts <b>Studio Frenzy</b>, a timed 1.5× scoring mode.<br><br>
       <b>A-B-C-D</b> lanes spot a missing pigment. This table is all brushwork, oil glow, and moonlit color.`,
       guide:[
         ['dropbank','Pigment drop bank','2,000 each + 7,000 bonus. Clear all 7 to light the MOON target.'],
         ['lone','MOON target & varnish saucer','Hit the moon, then drop into the saucer to seal the masterpiece.'],
         ['letters','ARTIST standups','Exposed behind downed pigments. Spell A-R-T-I-S-T for a replay.'],
         ['inline','Glaze drops + Gallery target','4 drops raise bonus to 5×; the gallery target behind them scores 50,000.'],
+        ['bumpers','Inspiration bumpers','Bumper hits fill Inspiration. At 12/12, the table spots a missing pigment and awards 15,000.'],
+        ['frenzy','Studio Frenzy','ARTIST and completed canvases start timed 1.5× scoring. Watch the DMD countdown.'],
         [[38,470],'Gallery Loop value','Climbs 10K→70K per trip; 70K awards paint again.'],
         ['top','A-B top lanes & moon crown','A-B-C-D completion spots a missing pigment. The crown rollover pays 25,000 when lit.'],
         ['inlanes','C / D return strokes','Complete A-B-C-D with the flipper-return lanes.'],
@@ -82,11 +87,13 @@ const GAME = (() => {
     const how = document.getElementById('howCopy');
     const scores = document.getElementById('bScores');
     const scoresSub = document.getElementById('scoresSub');
+    const orb = document.querySelector('.eight');
     if (logo) logo.innerHTML = m.logo;
     if (sub) sub.textContent = m.sub;
     if (how) how.innerHTML = m.how;
     if (scores) scores.textContent = m.legends;
     if (scoresSub) scoresSub.textContent = m.scoreWall;
+    if (orb) orb.classList.toggle('moon', machineId === 'painted-moon');
     document.querySelectorAll('[data-table]').forEach(b=>b.classList.toggle('on', b.dataset.table===machineId));
   }
 
@@ -198,7 +205,11 @@ const GAME = (() => {
       if (state==='play'||state==='serve'||state==='bonus'){
         const P = cur ? null : plr();
         dmdText(g, demoMode ? 'DEMO MODE' : 'PLAYER '+(curP+1)+'  BALL '+ballNo, DMD.W/2, 2);
-        dmdText(g, demoMode ? 'PRESS START' : fmt(P.bonusBalls*7000)+' × '+P.bonusX, DMD.W/2, 12);
+        let statusLine = fmt(P.bonusBalls*7000)+' × '+P.bonusX;
+        if (machineId === 'painted-moon'){
+          statusLine = P.studioFrenzy > 0 ? 'FRENZY '+Math.ceil(P.studioFrenzy)+'S' : 'INSPIRE '+P.inspiration+'/12';
+        }
+        dmdText(g, demoMode ? 'PRESS START' : statusLine, DMD.W/2, 12);
       } else {
         dmdText(g, machine().attract, DMD.W/2, 2);
         const hs = best();
@@ -230,6 +241,7 @@ const GAME = (() => {
     return { score:0, bonusBalls:0, bonusX:1, racks:0,
              letters:0, abcd:0, bankLvl:0, extraBalls:0,
              replays:0, stripes: i%2===1,
+             inspiration:0, studioFrenzy:0,
              /* physical rack state persists per player between balls */
              drops:[true,true,true,true,true,true,true], lone:true };
   }
@@ -241,6 +253,7 @@ const GAME = (() => {
   const REPLAY_AT = [450000, 900000];
   function score(n){
     const p = plr(); if (!p || tilted) return;
+    if (machineId === 'painted-moon' && p.studioFrenzy > 0) n = Math.round(n * 1.5);
     const before = p.score; p.score += n;
     for (const r of REPLAY_AT) if (before < r && p.score >= r) replay('REPLAY');
   }
@@ -362,7 +375,7 @@ const GAME = (() => {
     if (bestScore > best()) localStorage.setItem(machine().bestKey, bestScore);
     const card = document.getElementById('overCard');
     let rows = players.map((p,i)=>
-      `<div><span>PLAYER ${i+1} · ${p.racks} rack${p.racks!==1?'s':''}</span><span>${fmt(p.score)}</span></div>`).join('');
+      `<div><span>PLAYER ${i+1} · ${p.racks} ${machine().unitName}${p.racks!==1?'s':''}</span><span>${fmt(p.score)}</span></div>`).join('');
     card.innerHTML =
       `<p class="sub">game over</p><h1 class="logo" style="font-size:30px">${machine().overTitle}</h1>`+
       `<div class="rows">${rows}</div>`+
@@ -396,6 +409,14 @@ const GAME = (() => {
     } else if (spotted){
       AU.sfx.spot();
     }
+    if (machineId === 'painted-moon'){
+      p.inspiration = Math.min(12, p.inspiration + 1);
+      if (p.inspiration === 7){
+        score(12000);
+        dmdShow(['FULL PALETTE','+12,000'],1.6);
+        addFlash(280,820,120,'255,210,104');
+      }
+    }
   }
 
   function handleEvent(ev){
@@ -419,9 +440,14 @@ const GAME = (() => {
         rackPending = rackDone;
         if (rackDone){
           p.racks++; p.bonusBalls++; score(25000);
+          if (machineId === 'painted-moon'){
+            const glazeBonus = 10000 * Math.max(1, p.bonusX);
+            score(glazeBonus);
+            p.studioFrenzy = Math.max(p.studioFrenzy, 12);
+          }
           AU.sfx.eight();
           AU.say(machine().callComplete, 2);
-          dmdShow(['RACK '+p.racks+' COMPLETE',machine().completeLine],2.4,{ballAnim:true});
+          dmdShow([machine().unitName.toUpperCase()+' '+p.racks+' COMPLETE',machine().completeLine],2.4,{ballAnim:true});
           addFlash(TABLE.saucer.x, TABLE.saucer.y, 130, '255,220,150');
         } else {
           dmdShow(['BONUS HOLD','+3000'],1.2);
@@ -445,7 +471,7 @@ const GAME = (() => {
           if (p.abcd === 15){
             p.abcd = 0; score(10000);
             AU.sfx.spot();
-            dmdShow(['A-B-C-D','POOL BALL SPOTTED'],1.8);
+            dmdShow(['A-B-C-D',machine().spotLine],1.8);
             const i = p.drops.findIndex(d=>d);
             if (i>=0) poolDown(i, true);
           }
@@ -497,11 +523,16 @@ const GAME = (() => {
         addFlash(st.cx, st.cy, 40, '255,217,138');
         if (p.letters === 63){
           p.letters = 0;
-          score(50000);
+          score(machineId === 'painted-moon' ? 75000 : 50000);
           p.replays++;
           replay(machine().replayWord);
           AU.say(machine().callComplete, 2);
           dmdShow([machine().spellWord.split('').join('-'),'REPLAY'],2.4,{blink:true});
+          if (machineId === 'painted-moon'){
+            p.bonusX = Math.max(p.bonusX, 5);
+            p.studioFrenzy = 20;
+            addFlash(300,620,150,'225,96,130');
+          }
           /* resetting the bank lets bonus keep building (real rule) */
           p.drops = p.drops.map(()=>true);
           TABLE.resetBank();
@@ -517,8 +548,8 @@ const GAME = (() => {
         score(8000); AU.sfx.drop(); major();
         if (p.bonusX < 5){
           p.bonusX++;
-          dmdShow(['BONUS '+p.bonusX+'×'],1.2);
-          if (p.bonusX===5) AU.say('Get the chalk', 0);
+          dmdShow([machine().glazeLine+' '+p.bonusX+'×'],1.2);
+          if (p.bonusX===5) AU.say(machine().fullGlazeLine, 0);
         }
         addFlash(d.cx, d.cy, 40, '120,190,255');
       }
@@ -545,6 +576,16 @@ const GAME = (() => {
         ball.vy = ball.vy*0.3 + dy/dl*kick;
         ball.slide = 0.34;        // kicked ball SLIDES before it rolls — sheds speed fast
         score(100); AU.sfx.bumper();
+        if (machineId === 'painted-moon'){
+          p.inspiration++;
+          if (p.inspiration >= 12){
+            p.inspiration = 0;
+            score(15000);
+            const open = p.drops.findIndex(d=>d);
+            if (open >= 0) poolDown(open, true);
+            dmdShow(['INSPIRATION','PIGMENT FOUND'],1.7,{blink:true});
+          }
+        }
         bumpGlow[i] = 1;
         addFlash(b.x,b.y, 56, '255,160,80');
       }
@@ -643,6 +684,10 @@ const GAME = (() => {
     for (const e of evs) handleEvent(e);
     tNow += PHYS.DT;
     tiltBob = Math.max(0, tiltBob - PHYS.DT*0.4);
+    const activePlayer = plr();
+    if (activePlayer && activePlayer.studioFrenzy > 0){
+      activePlayer.studioFrenzy = Math.max(0, activePlayer.studioFrenzy - PHYS.DT);
+    }
 
     /* timers driven at sim rate for determinism */
     if (state==='bonus-wait'){
@@ -1140,7 +1185,7 @@ const GAME = (() => {
   });
   if ('ontouchstart' in window){
     document.getElementById('titleHint').innerHTML =
-      'v5 · Hold <b>left / right half</b> for flippers · hold anywhere &amp; release to plunge · <b>swipe up</b> to nudge · top buttons: view · sound · pause';
+      'v6 · Hold <b>left / right half</b> for flippers · hold anywhere &amp; release to plunge · <b>swipe up</b> to nudge · top buttons: view · sound · pause';
   }
   document.getElementById('bHow').onclick = ()=>{ hide('title'); show('how'); };
   document.getElementById('bHowBack').onclick = ()=>{ hide('how'); show('title'); };
@@ -1155,6 +1200,8 @@ const GAME = (() => {
       if (key === 'lone') return [TABLE.lone.cx, TABLE.lone.cy];
       if (key === 'letters') return [TABLE.deluxe[2].cx, TABLE.deluxe[2].cy];
       if (key === 'inline') return [TABLE.inline[1].cx, TABLE.inline[1].cy];
+      if (key === 'bumpers') return [TABLE.bumpers[1].x, TABLE.bumpers[1].y];
+      if (key === 'frenzy') return [280, 820];
       if (key === 'top') return [TABLE.lamps.A.x, TABLE.lamps.A.y-18];
       if (key === 'inlanes') return [TABLE.lamps.C.x, TABLE.lamps.C.y+18];
       return [280,580];
@@ -1234,7 +1281,7 @@ const GAME = (() => {
       <button class="btn ghost" id="bTitle2">Title</button>`;
     document.getElementById('bAgain2').onclick = ()=>{ hide('over'); startGame(players.length); };
     document.getElementById('bTitle2').onclick = quitToTitle;
-    await Scores.submit(name, bestP.score, bestP.racks+' rack'+(bestP.racks!==1?'s':''));
+    await Scores.submit(name, bestP.score, bestP.racks+' '+machine().unitName+(bestP.racks!==1?'s':''));
     await Scores.fetchBoard();
     document.getElementById('finalBoard').innerHTML = Scores.html(name, bestP.score);
   }
@@ -1305,7 +1352,8 @@ const GAME = (() => {
     get state(){
       const p = plr();
       return { mode:state, ball:{x:PHYS.ball.x,y:PHYS.ball.y,vx:PHYS.ball.vx,vy:PHYS.ball.vy,active:PHYS.ball.active,held:PHYS.ball.held},
-        player: p? {score:p.score,bonusBalls:p.bonusBalls,bonusX:p.bonusX,racks:p.racks,letters:p.letters,abcd:p.abcd,bankLvl:p.bankLvl,drops:p.drops.slice(),lone:p.lone,extraBalls:p.extraBalls} : null,
+        player: p? {score:p.score,bonusBalls:p.bonusBalls,bonusX:p.bonusX,racks:p.racks,letters:p.letters,abcd:p.abcd,bankLvl:p.bankLvl,drops:p.drops.slice(),lone:p.lone,extraBalls:p.extraBalls,
+          inspiration:p.inspiration, studioFrenzy:+p.studioFrenzy.toFixed(2)} : null,
         curP, ballNo, credits, tilted, nanCount, nan:nanCount, drainCount, drains:drainCount, saucerHolding:TABLE.saucer.holding,
         machine:machineId, scoreNs:Scores.ns };
     },
