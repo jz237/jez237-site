@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-18T18:33:39.051639+00:00",
+  "updatedAt": "2026-06-18T19:00:01.626117+00:00",
   "items": [
     {
       "title": "Zhijie Deng, Ling Li, Jinlong Pang, Kaiqin Hu, Qi Xuan, Zhaowei Zhu, Jiaheng Wei",
@@ -10,12 +10,60 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-18T18:33:46.496670+00:00",
+      "published": "2026-06-18T19:00:08.286962+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-18T18:33:39.051639+00:00",
+      "lastSeen": "2026-06-18T19:00:01.626117+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
+    },
+    {
+      "title": "Almost half of U.S. singles feel negatively about AI in dating, Match says",
+      "url": "https://techcrunch.com/2026/06/18/almost-half-of-u-s-singles-feel-negatively-about-ai-in-dating-match-says",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "About 47% of singles look negatively at the use of AI in dating -- but, many dating app users are open to AI helping with profile punch-ups and conversation starters.",
+      "image": "https://techcrunch.com/wp-content/uploads/2023/05/GettyImages-1131615694.jpg?resize=1200%2C800",
+      "published": "2026-06-18T18:51:46+00:00",
+      "firstSeen": "2026-06-18T19:00:01.626117+00:00",
+      "lastSeen": "2026-06-18T19:00:01.626117+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.3858
+    },
+    {
+      "title": "FERC orders a fast lane for data centre grid connections, but the electricity to fill them is another matter",
+      "url": "https://thenextweb.com/news/ferc-data-centre-grid-fast-lane-ai",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The Federal Energy Regulatory Commission on Thursday ordered six major grid operators to fast-track interconnection requests from data centres and other large electricity users. Under the directive, approved unanimously, grid operators must demonstrate that data centres are “able to connect to the transmission system in a timely and orderly manner.” Data centres will be responsible for paying [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/ferc-data-centre-grid-fast-lane-ai.avif",
+      "published": "2026-06-18T18:36:48+00:00",
+      "firstSeen": "2026-06-18T19:00:01.626117+00:00",
+      "lastSeen": "2026-06-18T19:00:01.626117+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.2382
+    },
+    {
+      "title": "BMW slashes profit forecast as China’s EV makers squeeze European carmakers on two fronts",
+      "url": "https://thenextweb.com/news/bmw-profit-warning-china-european-carmakers",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "BMW on Tuesday cut its full-year profit forecast for the car business, lowering its expected automotive EBIT margin to a corridor of 1 to 3 per cent from prior guidance of 4 to 6 per cent. The company blamed an accelerating decline in the Chinese market and the widening economic fallout from the conflict in the Middle [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/bmw-i7-gen6-battery-rimac-range-charging.avif",
+      "published": "2026-06-18T18:29:45+00:00",
+      "firstSeen": "2026-06-18T19:00:01.626117+00:00",
+      "lastSeen": "2026-06-18T19:00:01.626117+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1347
     },
     {
       "title": "Amazon hopes to challenge Nvidia more directly by selling its AI chips",
@@ -28,10 +76,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2022/11/GettyImages-1421680585.jpg?resize=1200%2C675",
       "published": "2026-06-18T18:22:13+00:00",
       "firstSeen": "2026-06-18T18:33:39.051639+00:00",
-      "lastSeen": "2026-06-18T18:33:39.051639+00:00",
+      "lastSeen": "2026-06-18T19:00:01.626117+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2842
+      "score": 2.2709
     },
     {
       "title": "MosaicLeaks: Can your research agent keep a secret?",
@@ -44,10 +92,26 @@
       "image": "https://cdn-uploads.huggingface.co/production/uploads/680ba1729f7688275d2ce0f4/hGCO4pOyJjijLPCbRT07v.webp",
       "published": "2026-06-18T18:13:13+00:00",
       "firstSeen": "2026-06-18T18:33:39.051639+00:00",
-      "lastSeen": "2026-06-18T18:33:39.051639+00:00",
+      "lastSeen": "2026-06-18T19:00:01.626117+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.5196
+      "score": 7.5064
+    },
+    {
+      "title": "Ford pivots its Kentucky battery plant from EVs to AI data centre storage in a $2 billion bet",
+      "url": "https://thenextweb.com/news/ford-energy-battery-storage-ai-data-centres",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Ford has launched Ford Energy, a wholly owned subsidiary that will manufacture large-scale battery energy storage systems for utilities, data centres, and industrial customers. The company has committed roughly $2 billion to the operation, which repurposes a Kentucky plant originally built for electric vehicle batteries. The subsidiary is led by Lisa Drake, who reports directly to Ford [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/ford-energy-battery-storage-ai-data-centres.avif",
+      "published": "2026-06-18T18:00:52+00:00",
+      "firstSeen": "2026-06-18T19:00:01.626117+00:00",
+      "lastSeen": "2026-06-18T19:00:01.626117+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "framework_or_plumbing",
+      "score": -0.2797
     },
     {
       "title": "AI data centers just got a government-mandated fast lane to the grid",
@@ -60,10 +124,26 @@
       "image": "https://techcrunch.com/wp-content/uploads/2024/12/Energy-sector-Getty.jpg?resize=1200%2C801",
       "published": "2026-06-18T17:49:23+00:00",
       "firstSeen": "2026-06-18T18:00:02.034921+00:00",
-      "lastSeen": "2026-06-18T18:33:39.051639+00:00",
+      "lastSeen": "2026-06-18T19:00:01.626117+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2677
+      "score": 2.2546
+    },
+    {
+      "title": "SpaceX adds Sequoia’s Roelof Botha to its board, days after record $75 billion IPO",
+      "url": "https://thenextweb.com/news/spacex-adds-sequoias-roelof-botha-to-its-board-days-after-record-75-billion-ipo",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "SpaceX has appointed Roelof Botha, the former steward of Sequoia Capital, to its board of directors. The appointment, disclosed in an 8-K filing on 17 June, comes less than a week after the company’s record-breaking $75 billion IPO. Botha will serve as an independent director and join SpaceX’s audit committee immediately. He fills an existing vacancy on the [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/spacex-roelof-botha-board-sequoia-ipo.avif",
+      "published": "2026-06-18T17:48:17+00:00",
+      "firstSeen": "2026-06-18T19:00:01.626117+00:00",
+      "lastSeen": "2026-06-18T19:00:01.626117+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.9141
     },
     {
       "title": "Before SpaceX IPO, investors in China secretly acquired stakes",
@@ -76,10 +156,10 @@
       "image": "https://cdn.arstechnica.net/wp-content/uploads/2026/06/GettyImages-2281248250-1024x648.jpg",
       "published": "2026-06-18T17:42:18+00:00",
       "firstSeen": "2026-06-18T18:00:02.034921+00:00",
-      "lastSeen": "2026-06-18T18:33:39.051639+00:00",
+      "lastSeen": "2026-06-18T19:00:01.626117+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1242
+      "score": 2.1111
     },
     {
       "title": "The smartphone era created an attention crisis. Slowtech is fixing it",
@@ -92,10 +172,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/GettyImages-2238192342.jpg?resize=1200%2C800",
       "published": "2026-06-18T17:16:30+00:00",
       "firstSeen": "2026-06-18T18:00:02.034921+00:00",
-      "lastSeen": "2026-06-18T18:33:39.051639+00:00",
+      "lastSeen": "2026-06-18T19:00:01.626117+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2514
+      "score": 2.2385
     },
     {
       "title": "Your email landed in the inbox. Your links didn’t.",
@@ -108,10 +188,10 @@
       "image": "https://media.thenextweb.com/2026/06/surbl-email-blacklist-links-delivery-failure.avif",
       "published": "2026-06-18T17:12:51+00:00",
       "firstSeen": "2026-06-18T18:00:02.034921+00:00",
-      "lastSeen": "2026-06-18T18:33:39.051639+00:00",
+      "lastSeen": "2026-06-18T19:00:01.626117+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1096
+      "score": 2.0968
     },
     {
       "title": "‘Queer Eye’s’ life coach Karamo Brown launches Kē, a wellness app featuring his AI digital clone",
@@ -124,10 +204,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/KaramoBrown-Ke.jpg?resize=1200%2C800",
       "published": "2026-06-18T16:55:04+00:00",
       "firstSeen": "2026-06-18T17:00:01.646340+00:00",
-      "lastSeen": "2026-06-18T18:33:39.051639+00:00",
+      "lastSeen": "2026-06-18T19:00:01.626117+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1409
+      "score": 5.1282
     },
     {
       "title": "Nvidia-backed Verse raises $54M to help AI data centres skip the power queue",
@@ -140,10 +220,10 @@
       "image": "https://media.thenextweb.com/2026/06/Verse-founders.avif",
       "published": "2026-06-18T16:35:05+00:00",
       "firstSeen": "2026-06-18T17:00:01.646340+00:00",
-      "lastSeen": "2026-06-18T18:33:39.051639+00:00",
+      "lastSeen": "2026-06-18T19:00:01.626117+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0912
+      "score": 2.0786
     },
     {
       "title": "Architect Labs raises $24M to let any company design its own AI chip",
@@ -156,10 +236,10 @@
       "image": "https://media.thenextweb.com/2026/06/Architect-Labs.avif",
       "published": "2026-06-18T16:21:13+00:00",
       "firstSeen": "2026-06-18T17:00:01.646340+00:00",
-      "lastSeen": "2026-06-18T18:33:39.051639+00:00",
+      "lastSeen": "2026-06-18T19:00:01.626117+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0846
+      "score": 2.072
     },
     {
       "title": "Gradial raises $65M to be the ‘AI glue’ for enterprise marketing",
@@ -172,10 +252,10 @@
       "image": "https://media.thenextweb.com/2026/06/gradial-team.avif",
       "published": "2026-06-18T16:07:25+00:00",
       "firstSeen": "2026-06-18T17:00:01.646340+00:00",
-      "lastSeen": "2026-06-18T18:33:39.051639+00:00",
+      "lastSeen": "2026-06-18T19:00:01.626117+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.778
+      "score": 3.7655
     },
     {
       "title": "3 Amazon Workers Say They’re Under Investigation for Speaking Out About Data Centers",
@@ -188,10 +268,10 @@
       "image": "https://media.wired.com/photos/6a33fb3a3fe23d3ce2a1cf59/master/pass/Business_AmazonWorkersUnder_v2.jpg",
       "published": "2026-06-18T16:03:27+00:00",
       "firstSeen": "2026-06-18T17:00:01.646340+00:00",
-      "lastSeen": "2026-06-18T18:33:39.051639+00:00",
+      "lastSeen": "2026-06-18T19:00:01.626117+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2161
+      "score": 2.2037
     },
     {
       "title": "Amazon employees say they’re facing termination for backing data center limits",
@@ -204,10 +284,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/STKS528_DATA_CENTERS2_C.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-18T16:00:00+00:00",
       "firstSeen": "2026-06-18T17:00:01.646340+00:00",
-      "lastSeen": "2026-06-18T18:33:39.051639+00:00",
+      "lastSeen": "2026-06-18T19:00:01.626117+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2845
+      "score": 2.272
     },
     {
       "title": "‘It’s literally the gulag’: inside the revolt at Meta’s AI unit, where elite engineers were drafted to label data",
@@ -220,10 +300,10 @@
       "image": "https://media.thenextweb.com/2026/05/meta-ai-spending-child-safety-lawsuits.avif",
       "published": "2026-06-18T15:53:21+00:00",
       "firstSeen": "2026-06-18T17:00:01.646340+00:00",
-      "lastSeen": "2026-06-18T18:33:39.051639+00:00",
+      "lastSeen": "2026-06-18T19:00:01.626117+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1713
+      "score": 3.1589
     },
     {
       "title": "Life360 now lets parents order Uber rides for teens without leaving the app",
@@ -236,10 +316,10 @@
       "image": "https://media.thenextweb.com/2026/06/life360-uber-teen-rides-family-integration.avif",
       "published": "2026-06-18T15:44:41+00:00",
       "firstSeen": "2026-06-18T15:50:17.281064+00:00",
-      "lastSeen": "2026-06-18T18:33:39.051639+00:00",
+      "lastSeen": "2026-06-18T19:00:01.626117+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.8672
+      "score": 3.8549
     },
     {
       "title": "Adobe just made its biggest AI push yet, and it stretches from Photoshop to Disney World",
@@ -255,7 +335,7 @@
       "lastSeen": "2026-06-18T18:33:39.051639+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8596
+      "score": 4.8473
     },
     {
       "title": "General Intuition in talks to raise $300M at around $2B valuation",
@@ -268,10 +348,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/General-intuition.png?w=880",
       "published": "2026-06-18T15:20:37+00:00",
       "firstSeen": "2026-06-18T15:50:17.281064+00:00",
-      "lastSeen": "2026-06-18T18:33:39.051639+00:00",
+      "lastSeen": "2026-06-18T19:00:01.626117+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.196
+      "score": 2.1838
     },
     {
       "title": "A tech worker-backed PAC is bringing a $5M knife to Big Tech’s $100M gunfight",
@@ -284,10 +364,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/GettyImages-2264911748.jpg?resize=1200%2C705",
       "published": "2026-06-18T15:13:21+00:00",
       "firstSeen": "2026-06-18T15:50:17.281064+00:00",
-      "lastSeen": "2026-06-18T18:33:39.051639+00:00",
+      "lastSeen": "2026-06-18T19:00:01.626117+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1926
+      "score": 2.1804
     },
     {
       "title": "The EU is about to declare AWS and Azure gatekeepers under the Digital Markets Act",
@@ -303,7 +383,7 @@
       "lastSeen": "2026-06-18T18:33:39.051639+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1515
+      "score": 3.1394
     },
     {
       "title": "Accenture had its worst stock day ever on fears AI is eating consulting. Hours earlier, it spent $4.18bn trying to escape that.",
@@ -319,7 +399,7 @@
       "lastSeen": "2026-06-18T18:33:39.051639+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0376
+      "score": 2.0256
     },
     {
       "title": "The ‘godfather of AI’ called xAI a failure and warned of a bubble. He’s also selling the alternative.",
@@ -335,7 +415,7 @@
       "lastSeen": "2026-06-18T18:33:39.051639+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 9.0332
+      "score": 9.0213
     },
     {
       "title": "Anthropic Adds Brand Controls, Code Sync to Claude Design",
@@ -348,10 +428,10 @@
       "image": "",
       "published": "2026-06-18T14:25:18+00:00",
       "firstSeen": "2026-06-18T15:50:17.281064+00:00",
-      "lastSeen": "2026-06-18T18:33:39.051639+00:00",
+      "lastSeen": "2026-06-18T19:00:01.626117+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.1305
+      "score": 12.1186
     },
     {
       "title": "California expected a tax bonanza from AI IPOs. Modern compensation structures may blunt the windfall.",
@@ -367,7 +447,7 @@
       "lastSeen": "2026-06-18T17:00:01.646340+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 7.1299
+      "score": 7.118
     },
     {
       "title": "While Helsing and Anduril chase billion-dollar valuations, Comand AI raised €32M for the layer above them",
@@ -383,7 +463,7 @@
       "lastSeen": "2026-06-18T15:50:17.281064+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7284
+      "score": 2.7165
     },
     {
       "title": "85% of NATO’s defence-tech funding goes to the US. AVP and Earlybird raised €500M to change that.",
@@ -399,7 +479,7 @@
       "lastSeen": "2026-06-18T15:50:17.281064+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0259
+      "score": 2.014
     },
     {
       "title": "An ex-Palantir leader raised $16M to point AI at the NHS’s paperwork, not its doctors",
@@ -415,7 +495,7 @@
       "lastSeen": "2026-06-18T15:50:17.281064+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0712
+      "score": 3.0594
     },
     {
       "title": "Who decides when AI is too dangerous?",
@@ -428,10 +508,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/DCD_0617_Fable5.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-18T14:00:00+00:00",
       "firstSeen": "2026-06-18T15:00:01.300544+00:00",
-      "lastSeen": "2026-06-18T18:33:39.051639+00:00",
+      "lastSeen": "2026-06-18T19:00:01.626117+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.2291
+      "score": 4.2173
     },
     {
       "title": "Baseten is raising $1.5bn at up to $13bn, betting AI’s profits lie in cheap inference",
@@ -447,7 +527,7 @@
       "lastSeen": "2026-06-18T15:50:17.281064+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3172
+      "score": 2.3055
     },
     {
       "title": "LinkedIn will now show recruiters which apps you actually use, not just which skills you claim",
@@ -463,7 +543,7 @@
       "lastSeen": "2026-06-18T15:00:01.300544+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.8157
+      "score": 3.804
     },
     {
       "title": "ByteDance is Microsoft’s biggest AI customer, even as Washington treats Chinese AI as a threat",
@@ -479,7 +559,7 @@
       "lastSeen": "2026-06-18T15:00:01.300544+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.0131
+      "score": 4.0014
     },
     {
       "title": "GTA VI pre-orders open June 25. Rockstar revealed the cover art. No price yet.",
@@ -495,7 +575,7 @@
       "lastSeen": "2026-06-18T15:00:01.300544+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.8091
+      "score": 3.7975
     },
     {
       "title": "Waymo issues its sixth recall after robotaxis drove into highway construction zones 13 times",
@@ -511,7 +591,7 @@
       "lastSeen": "2026-06-18T14:00:01.846539+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1025
+      "score": 3.091
     },
     {
       "title": "Pramaana Labs raised $27M to wrap AI in mathematical proof for law, tax, and drug discovery",
@@ -527,7 +607,7 @@
       "lastSeen": "2026-06-18T14:00:01.846539+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0018
+      "score": 1.9902
     },
     {
       "title": "At Cannes Lions, NVIDIA Partners Reshape Advertising and Marketing With AI",
@@ -540,10 +620,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/cannes-lions-featured-visual-still-1920x1080-1.jpg",
       "published": "2026-06-18T13:00:43+00:00",
       "firstSeen": "2026-06-18T14:00:01.846539+00:00",
-      "lastSeen": "2026-06-18T18:33:39.051639+00:00",
+      "lastSeen": "2026-06-18T19:00:01.626117+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1329
+      "score": 2.1214
     },
     {
       "title": "Sync and Stream: GeForce NOW Connects to Members’ Game Libraries Across Devices",
@@ -556,90 +636,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/GFN_Thursday-June_18.jpg",
       "published": "2026-06-18T13:00:32+00:00",
       "firstSeen": "2026-06-18T14:00:01.846539+00:00",
-      "lastSeen": "2026-06-18T18:33:39.051639+00:00",
+      "lastSeen": "2026-06-18T19:00:01.626117+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1328
-    },
-    {
-      "title": "Stop Juggling AI Tools — This Lifetime Deal Puts GPT‑4o and More in One Place",
-      "url": "https://www.techrepublic.com/article/chatplayground-ai",
-      "source": "TechRepublic AI",
-      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Harness multiple top-tier models like GPT‑4o, Claude, Gemini, and more in one unified platform, now $55.\nThe post Stop Juggling AI Tools — This Lifetime Deal Puts GPT‑4o and More in One Place appeared first on TechRepublic.",
-      "image": "",
-      "published": "2026-06-18T13:00:24+00:00",
-      "firstSeen": "2026-06-18T15:50:17.281064+00:00",
-      "lastSeen": "2026-06-18T18:33:39.051639+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 11.0927
-    },
-    {
-      "title": "Photoshop and Premiere now have AI assistants",
-      "url": "https://www.theverge.com/tech/952099/adobe-ai-assistants-photoshop-premiere-illustrator-beta-launch",
-      "source": "The Verge AI",
-      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "Adobe's plan to stick AI assistants into all of its Creative Cloud suite is now fully underway, with new chatbots now rolling out to its biggest editing and design apps. As part of a public beta launching today, Photoshop, Premiere, Illustrator, InDesign, and Frame.io now each have a bespoke AI Assistant that can be used [&#8230;]",
-      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/Adobe-Photoshop-AI-assistant-hero.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
-      "published": "2026-06-18T13:00:00+00:00",
-      "firstSeen": "2026-06-18T14:00:01.846539+00:00",
-      "lastSeen": "2026-06-18T18:33:39.051639+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "editorial_score_pass",
-      "score": 6.2026
-    },
-    {
-      "title": "Adobe’s redesigned AI studio remembers what your creations look like",
-      "url": "https://www.theverge.com/tech/952104/adobe-firefly-ai-agent-elements-projects-update",
-      "source": "The Verge AI",
-      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "Adobe is introducing some new capabilities for its Firefly AI assistant, alongside a \"reimagined\" AI studio that lets you edit and generate new designs from a single interface. The new Firefly experience launching today in private beta is designed to give you \"persistent context, reusable assets, and organized workflows\" across your projects, according to Adobe, [&#8230;]",
-      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/Adobe-Firefly-AI-studio-updates-lede.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
-      "published": "2026-06-18T13:00:00+00:00",
-      "firstSeen": "2026-06-18T14:00:01.846539+00:00",
-      "lastSeen": "2026-06-18T18:33:39.051639+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 4.0026
-    },
-    {
-      "title": "Epic is building Claude and Gemini into Unreal Engine 6, whether developers like it or not",
-      "url": "https://thenextweb.com/news/epic-unreal-engine-6-ai-claude-gemini",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Epic will let studios plug Claude, Gemini, or any model they like into the next Unreal Engine to do the ‘tedious work’ of building games. More than half of developers think that is a bad idea. Epic Games has laid out its plans for Unreal Engine 6, and generative AI sits right at the centre [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/unreal-engine-6.avif",
-      "published": "2026-06-18T12:57:24+00:00",
-      "firstSeen": "2026-06-18T14:00:01.846539+00:00",
-      "lastSeen": "2026-06-18T14:00:01.846539+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 13.9914
-    },
-    {
-      "title": "Pixi’s new iOS app turns text messages into interactive AR experiences",
-      "url": "https://techcrunch.com/2026/06/18/pixis-new-ios-app-turns-text-messages-into-interactive-ar-experiences",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Forget stickers, GIFs, and emoji reactions. Pixi is betting that the next evolution of messaging is interactive augmented reality (AR).",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/06/pixi-app-screen-6-e1781642459181.jpeg?w=796",
-      "published": "2026-06-18T12:00:00+00:00",
-      "firstSeen": "2026-06-18T13:00:01.890957+00:00",
-      "lastSeen": "2026-06-18T18:33:39.051639+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.2067
+      "score": 2.1213
     },
     {
       "title": "The Life Scientific: Dean Lomax",
@@ -652,10 +652,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-15T20:00:00+00:00",
       "firstSeen": "2026-06-15T21:00:01.290903+00:00",
-      "lastSeen": "2026-06-18T18:33:39.051639+00:00",
+      "lastSeen": "2026-06-18T19:00:01.626117+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.3449
+      "score": 1.3431
     },
     {
       "title": "The Life Scientific: Helen Hastie",
@@ -668,10 +668,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-08T20:00:00+00:00",
       "firstSeen": "2026-06-08T21:00:01.371488+00:00",
-      "lastSeen": "2026-06-18T18:33:39.051639+00:00",
+      "lastSeen": "2026-06-18T19:00:01.626117+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.1915
+      "score": 1.1914
     },
     {
       "title": "The Life Scientific: Seth Berkley",
