@@ -129,7 +129,7 @@
 
     <section class="intro-card">
       <strong>How this works:</strong>
-      <p class="muted" style="margin-bottom:0;">Garden photos are hosted in Cloudflare R2 at the same <code>photos/garden/images/YYYY/MM/</code> paths, with GitHub keeping the captions and image pointers. Each month becomes its own timeline section automatically.</p>
+      <p class="muted" style="margin-bottom:0;">Garden photos are hosted in Cloudflare R2 and referenced with absolute public URLs, so the same image links work from GitHub and from jez237.com. Each month becomes its own timeline section automatically.</p>
     </section>
 
     <div id="timeline" class="timeline"></div>
@@ -137,7 +137,7 @@
     <div class="empty-state" id="empty-state">
       <div class="emoji">🌱</div>
       <p>No garden timeline photos yet.</p>
-      <p>Upload images to Cloudflare R2 under <code>photos/garden/images/YYYY/MM/</code>, then add their pointers here and they’ll slot into the right month.</p>
+      <p>Upload images to Cloudflare R2 under <code>photos/garden/images/YYYY/MM/</code>, then add the printed public URL here and they’ll slot into the right month.</p>
     </div>
 
     <footer>
@@ -155,187 +155,187 @@
     <script>
     const photos = [
       {
-        src: "images/2026/06/hosta-variegated-shade-border-2026-06-10.jpg",
+        src: "https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/06/hosta-variegated-shade-border-2026-06-10.jpg",
         alt: "Variegated hostas filling the shaded border in June",
         caption: "The hosta border is fully lush in early June, with clean ribbed leaves, green centers, cream margins, and enough chartreuse variation to keep the shade bed bright.",
         date: "2026-06-10"
       },
       {
-        src: "images/2026/06/cucumber-vine-trellis-2026-06-10.jpg",
+        src: "https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/06/cucumber-vine-trellis-2026-06-10.jpg",
         alt: "Cucumber vine climbing a green trellis in the vegetable bed",
         caption: "Cucumber vine settling into the vegetable bed, with broad healthy leaves, fresh top growth, and tendrils already reaching for the green cage support.",
         date: "2026-06-10"
       },
       {
-        src: "images/2026/06/hostas-under-gold-dust-aucuba-2026-06-10.jpg",
+        src: "https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/06/hostas-under-gold-dust-aucuba-2026-06-10.jpg",
         alt: "Hostas growing under Gold Dust aucuba in the shaded border",
         caption: "Hostas under the Gold Dust aucuba, where the speckled evergreen canopy and broad variegated leaves make a layered green-and-gold shade composition.",
         date: "2026-06-10"
       },
       {
-        src: "images/2026/06/hosta-aucuba-shade-border-wide-2026-06-10.jpg",
+        src: "https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/06/hosta-aucuba-shade-border-wide-2026-06-10.jpg",
         alt: "Wide shaded border with hostas beneath Gold Dust aucuba",
         caption: "The wide shade-border view: hostas tucked along the brick edge beneath Gold Dust aucuba, with different leaf sizes and variegation patterns carrying the whole low layer.",
         date: "2026-06-10"
       },
       {
-        src: "images/2026/06/small-blue-butterfly-catmint-macro-2026-06-09.png",
+        src: "https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/06/small-blue-butterfly-catmint-macro-2026-06-09.png",
         alt: "Small blue butterfly close-up feeding on purple catmint flowers",
         caption: "A small blue/azure-type butterfly feeding on purple catmint, with the pale blue-white wing underside, fine dark markings, and striped antennae sharp in the macro crop.",
         date: "2026-06-09"
       },
       {
-        src: "images/2026/06/small-blue-butterfly-catmint-close-2026-06-09.png",
+        src: "https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/06/small-blue-butterfly-catmint-close-2026-06-09.png",
         alt: "Close side view of a small blue butterfly on catmint buds",
         caption: "Another tight angle on the small blue butterfly, showing the fuzzy wing edge, dark dash markings, and the tiny scale of the visitor against the catmint flowers.",
         date: "2026-06-09"
       },
       {
-        src: "images/2026/06/small-blue-butterfly-on-catmint-2026-06-09.jpg",
+        src: "https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/06/small-blue-butterfly-on-catmint-2026-06-09.jpg",
         alt: "Small blue butterfly on purple catmint flowers above brown mulch",
         caption: "The wider context frame: a small blue butterfly tucked onto a purple catmint flower spike above the mulch, easy to miss until the wings catch the light.",
         date: "2026-06-09"
       },
       {
-        src: "images/2026/06/lemony-lace-elderberry-summer-form-2026-06-09.jpg",
+        src: "https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/06/lemony-lace-elderberry-summer-form-2026-06-09.jpg",
         alt: "Lemony Lace elderberry in bright chartreuse summer foliage on the brick patio",
         caption: "Lemony Lace elderberry showing its early-summer form: airy upright branching, clean cutleaf chartreuse foliage, and bright new growth at the tips against the back garden beds.",
         date: "2026-06-09"
       },
       {
-        src: "images/2026/06/garden-arbor-grapevine-threshold-2026-06-09.jpg",
+        src: "https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/06/garden-arbor-grapevine-threshold-2026-06-09.jpg",
         alt: "Garden arbor and gate enclosed by grapevine and Rising Sun redbud foliage",
         caption: "The garden entry has turned into a green threshold: grapevine leaves and young clusters filling the arbor, Rising Sun redbud glowing on the left, and the path still pulling through the shade.",
         date: "2026-06-09"
       },
       {
-        src: "images/2026/06/grapevine-arbor-view-2026-06-09.jpg",
+        src: "https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/06/grapevine-arbor-view-2026-06-09.jpg",
         alt: "View through the grapevine-covered arbor into the June garden",
         caption: "Looking through the arbor into the June garden, with grape leaves overhead, redbud foliage along the right, hostas and daylily foliage at the path edge, and the raised beds opening beyond.",
         date: "2026-06-09"
       },
       {
-        src: "images/2026/06/grapevine-green-clusters-2026-06-09.jpg",
+        src: "https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/06/grapevine-green-clusters-2026-06-09.jpg",
         alt: "Close grapevine clusters with small green grapes under broad leaves",
         caption: "Grapevine fruit set is strong: tight green clusters are already sizing up under broad, clean leaves on the arbor.",
         date: "2026-06-09"
       },
       {
-        src: "images/2026/06/back-garden-raised-beds-2026-06-09.jpg",
+        src: "https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/06/back-garden-raised-beds-2026-06-09.jpg",
         alt: "Back garden raised beds in full early summer growth",
         caption: "The raised beds have moved into full early-summer density, with orange milkweed in bloom, purple speedwell and salvia tones still showing, tomatoes climbing the fence, and the potted Lemony Lace elderberry anchoring the patio edge.",
         date: "2026-06-09"
       },
       {
-        src: "images/2026/06/rising-sun-redbud-summer-canopy-2026-06-08.jpg",
+        src: "https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/06/rising-sun-redbud-summer-canopy-2026-06-08.jpg",
         alt: "Rising Sun redbud glowing yellow green above the June garden",
         caption: "Rising Sun redbud still acting like the garden's overhead light in early June, with the bright canopy over hostas, purple blooms, daylily foliage, and the layered path-side planting below.",
         date: "2026-06-08"
       },
       {
-        src: "images/2026/06/orange-milkweed-full-bloom-2026-06-08.jpg",
+        src: "https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/06/orange-milkweed-full-bloom-2026-06-08.jpg",
         alt: "Orange milkweed blooming heavily in the raised mixed bed",
         caption: "Orange milkweed has hit full early-summer bloom, throwing hot orange clusters across the raised bed while the surrounding foliage fills in thick behind it.",
         date: "2026-06-08"
       },
       {
-        src: "images/2026/06/carpenter-bee-on-orange-milkweed-2026-06-08.jpg",
+        src: "https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/06/carpenter-bee-on-orange-milkweed-2026-06-08.jpg",
         alt: "Large carpenter bee on orange milkweed flowers",
         caption: "A large carpenter bee-type visitor working the orange milkweed, dusted with pollen and pressed deep into the bright flowers.",
         date: "2026-06-08"
       },
       {
-        src: "images/2026/05/front-planter-pugster-barberry-2026-05-31.jpg",
+        src: "https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/05/front-planter-pugster-barberry-2026-05-31.jpg",
         alt: "Front raised planter with Pugster butterfly bush and Orange Rocket barberry",
         caption: "Front raised planter in late-May sun: Pugster butterfly bush is dense and budded in front, while Orange Rocket barberry throws a strong red vertical backdrop by the steps.",
         date: "2026-05-31"
       },
       {
-        src: "images/2026/05/side-house-foundation-bed-color-blocks-2026-05-30.jpg",
+        src: "https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/05/side-house-foundation-bed-color-blocks-2026-05-30.jpg",
         alt: "Side-house foundation bed with Sunshine ligustrum and Shaina maple",
         caption: "Side-house foundation bed settling into color blocks: Sunshine ligustrum bright on the left, Shaina Japanese maple red on the right, and burgundy low shrubs, heuchera, and liriope beginning to stitch the front edge together.",
         date: "2026-05-30"
       },
       {
-        src: "images/2026/05/speedwell-bloom-pollinator-2026-05-30.jpg",
+        src: "https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/05/speedwell-bloom-pollinator-2026-05-30.jpg",
         alt: "Purple speedwell blooming below Gold Dust aucuba with a small pollinator",
         caption: "Purple speedwell still throwing fresh flower spikes below the Gold Dust aucuba, with a small pollinator visible among the blooms.",
         date: "2026-05-30"
       },
       {
-        src: "images/2026/05/side-house-foundation-bed-2026-05-27.jpg",
+        src: "https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/05/side-house-foundation-bed-2026-05-27.jpg",
         alt: "Side-house foundation bed under the rhododendron in late May",
         caption: "The side-house foundation bed reading as a full layered planting: rhododendron canopy overhead, Shaina maple and Sunshine ligustrum glowing behind, hostas, heuchera, sweetspire, and low front growth filling the edge.",
         date: "2026-05-27"
       },
       {
-        src: "images/2026/05/little-henry-sweetspire-bloom-2026-05-27.jpg",
+        src: "https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/05/little-henry-sweetspire-bloom-2026-05-27.jpg",
         alt: "Little Henry sweetspire blooming with white flower racemes",
         caption: "Little Henry sweetspire has moved from bud stage into bloom, with white racemes arching out over clean green foliage after rain.",
         date: "2026-05-27"
       },
       {
-        src: "images/2026/05/sunshine-ligustrum-liriope-2026-05-27.jpg",
+        src: "https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/05/sunshine-ligustrum-liriope-2026-05-27.jpg",
         alt: "Sunshine ligustrum with variegated liriope in the side-house bed",
         caption: "Sunshine ligustrum at peak chartreuse against the brick, with variegated liriope repeating along the front edge and dark loropetalum tucked below.",
         date: "2026-05-27"
       },
       {
-        src: "images/2026/05/grapevine-arbor-gate-lush-2026-05-27.jpg",
+        src: "https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/05/grapevine-arbor-gate-lush-2026-05-27.jpg",
         alt: "Lush grapevine arbor and garden gate in late May",
         caption: "The garden gate fully framed by late-May growth: Rising Sun redbud glowing on the left, grapevine leaves and young clusters filling the arbor and lattice, and the path still holding a clear line through the dense planting.",
         date: "2026-05-27"
       },
       {
-        src: "images/2026/05/bobo-heuchera-salvia-front-bed-2026-05-26.jpg",
+        src: "https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/05/bobo-heuchera-salvia-front-bed-2026-05-26.jpg",
         alt: "Front raised bed with Bobo hydrangea, heuchera, and salvia",
         caption: "The front raised box filling in with Bobo hydrangea, burgundy heuchera, and purple salvia holding the edge by the railing.",
         date: "2026-05-26"
       },
       {
-        src: "images/2026/05/raised-mixed-perennial-bed-pugster-milkweed-2026-05-25.jpg",
+        src: "https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/05/raised-mixed-perennial-bed-pugster-milkweed-2026-05-25.jpg",
         alt: "Raised mixed perennial bed with Pugster and milkweed",
         caption: "The raised mixed perennial bed moving into late-May fullness: Pugster foliage, milkweed buds, speedwell in the back, and sedum at the front edge.",
         date: "2026-05-25"
       },
       {
-        src: "images/2026/05/speedwell-bloom-close-2026-05-24.jpg",
+        src: "https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/05/speedwell-bloom-close-2026-05-24.jpg",
         alt: "Purple speedwell flower spikes in bloom",
         caption: "Purple speedwell in a strong late-May bloom flush, with violet spikes still carrying fresh buds at the tips after rain.",
         date: "2026-05-24"
       },
       {
-        src: "images/2026/05/speedwell-aucuba-corner-2026-05-24.jpg",
+        src: "https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/05/speedwell-aucuba-corner-2026-05-24.jpg",
         alt: "Purple speedwell blooming below Gold Dust aucuba",
         caption: "The shaded aucuba corner with speedwell blooming in front, hostas tucked behind, and the raised-bed edge keeping the dense planting tidy.",
         date: "2026-05-24"
       },
       {
-        src: "images/2026/05/hoverfly-on-purple-salvia-2026-05-23.png",
+        src: "https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/05/hoverfly-on-purple-salvia-2026-05-23.png",
         alt: "Hoverfly visiting purple salvia flowers",
         caption: "Hoverfly working the purple salvia in full sun, wings shining and yellow markings clear against the magenta blooms.",
         date: "2026-05-23"
       },
       {
-        src: "images/2026/05/garden-overview-lush-2026-05-23.jpg",
+        src: "https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/05/garden-overview-lush-2026-05-23.jpg",
         alt: "Lush late-May garden overview with redbud and grapevine",
         caption: "The back garden in full late-May leaf, with Rising Sun redbud glowing, grapevine softening the lattice, and the lower perennial layers filling in around the path.",
         date: "2026-05-23"
       },
       {
-        src: "images/2026/05/raised-beds-and-white-rose-2026-05-23.jpg",
+        src: "https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/05/raised-beds-and-white-rose-2026-05-23.jpg",
         alt: "Raised beds with vegetables, white rose, and coreopsis",
         caption: "Raised beds settling in after rain, white rose blooming along the fence, coreopsis lighting the front edge, and the vines starting to claim the backdrop.",
         date: "2026-05-23"
       },
       {
-        src: "images/2026/04/rising-sun-redbud-2026-04-12.jpg",
+        src: "https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/04/rising-sun-redbud-2026-04-12.jpg",
         alt: "Rising Sun redbud in bloom with golden new leaves",
         caption: "Rising Sun redbud hitting that electric overlap of hot pink bloom and golden new foliage. One of those brief spring windows where it looks lit from inside.",
         date: "2026-04-12"
       },
       {
-        src: "images/2026/04/climbing-hydrangea-2026-04-12.jpg",
+        src: "https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/04/climbing-hydrangea-2026-04-12.jpg",
         alt: "Climbing hydrangea training up a trellis fence",
         caption: "Climbing hydrangea in a clean spring push, bright foliage, good upward reach, and just starting to claim its support with real confidence.",
         date: "2026-04-12"
