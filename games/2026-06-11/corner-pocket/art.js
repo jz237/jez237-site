@@ -736,7 +736,7 @@ const ART = (() => {
         ctx.fillStyle='rgba(255,240,200,.92)';
         ctx.font='700 '+(id.startsWith('bk')?9: id==='again'||id==='saucerL'||id==='arrowL'?8:11)+'px sans-serif';
         ctx.textAlign='center'; ctx.textBaseline='middle';
-        ctx.fillText(lp.label, lp.x, lp.y+0.5);
+        ctx.fillText(lampLabel(id, lp.label), lp.x, lp.y+0.5);
       }
     }
     ctx.restore();
@@ -744,6 +744,17 @@ const ART = (() => {
   function hexA(hex,a){
     const n=parseInt(hex.slice(1),16);
     return `rgba(${n>>16},${(n>>8)&255},${n&255},${a})`;
+  }
+
+  function lampLabel(id, fallback){
+    if (!painterly()) return fallback;
+    if (id === 'bankT') return 'GALLERY';
+    if (id === 'saucerL') return 'VARNISH';
+    if (id === 'eightL') return 'M';
+    if (id === 'again') return 'AGAIN';
+    if (id === 'arrowL') return '25K';
+    if (id.startsWith('dl')) return 'ARTIST'[+id.slice(2)] || fallback;
+    return fallback;
   }
 
   function drawDropTarget(ctx,d,col,num){
