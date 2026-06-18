@@ -390,11 +390,14 @@
     for (let i = 1; i < n; i++) { const t = i / n; if (isSolidAt(x0 + dx * t, y0 + dy * t)) return false; }
     return true;
   }
-  function clearShot(me, ang) {                            // true if a shell fired along `ang` reaches an enemy before any wall
+  function clearShot(me, ang) {                            // true if a shell fired along `ang` reaches an enemy before any wall/friendly
     for (let d = TANK_R + 6; d < SHELL_MAX_DIST; d += 9) {
       const x = me.x + Math.cos(ang) * d, y = me.y + Math.sin(ang) * d;
       if (isSolidAt(x, y)) return false;                  // wall blocks the line of fire
-      for (const t of tanks) if (t.alive && opposing(me, t) && Math.hypot(t.x - x, t.y - y) < (t.hitR || TANK_R) + 7) return true;
+      for (const t of tanks) {
+        if (!t.alive || t.id === me.id) continue;
+        if (Math.hypot(t.x - x, t.y - y) < (t.hitR || TANK_R) + 7) return opposing(me, t);
+      }
     }
     return false;
   }
@@ -1433,6 +1436,19 @@
     killTank(2); const coopTeamPoint = score.p1 === 1 && score.p2 === 0;
     killTank(0); const coopEnemyPoint = score.p1 === 1 && score.p2 === 1;
     ok('T-coop mode', coopSpawnOk && coopTeamPoint && coopEnemyPoint, 'spawn=' + coopSpawnOk + ' score=' + score.p1 + '-' + score.p2);
+
+    startGame('coop'); headless = true; controls = fresh(); shells = [];
+    const a0 = tanks[0], a1 = tanks[1], en = tanks[2];
+    a0.x = tileCenter(3, 2).x; a0.y = tileCenter(3, 2).y; a0.turret = 0; a0.heading = 0;
+    a1.x = tileCenter(6, 2).x; a1.y = a0.y; a1.hp = TANK_MAX_HP; a1.alive = true;
+    en.x = tileCenter(9, 2).x; en.y = a0.y; en.hp = TANK_MAX_HP; en.alive = true;
+    const friendlyBlocksShot = !clearShot(a0, 0);
+    a1.y += TILE * 2;
+    const enemyClearShot = clearShot(a0, 0);
+    a1.x = a0.x + 80; a1.y = a0.y; a1.hp = TANK_MAX_HP; a0.cd = 0; shells = []; fire(a0);
+    for (let i = 0; i < 24 && shells.length; i++) update();
+    const friendlyUnhurt = a1.alive && a1.hp === TANK_MAX_HP;
+    ok('T-coop friendly fire blocked', friendlyBlocksShot && enemyClearShot && friendlyUnhurt, 'blocked=' + friendlyBlocksShot + ' clear=' + enemyClearShot + ' hp=' + a1.hp);
 
     mode = 'duel'; winner = 'p2'; score = { p1: 2, p2: 5 };
     const duelScoreOk = scoreSubject().points === 5 && scoreValue() === 540;
