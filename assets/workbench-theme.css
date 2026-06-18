@@ -322,7 +322,7 @@ body:has(.page-shell)::before { opacity: 0.55 !important; }
   background:
     linear-gradient(115deg, rgba(7,17,25,0.16), rgba(7,17,25,0.48)),
     linear-gradient(180deg, rgba(0,0,0,0.02), rgba(0,0,0,0.38)),
-    url('../photos/garden/images/2026/04/rising-sun-redbud-2026-04-12.jpg') center/cover no-repeat !important;
+    url('https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/04/rising-sun-redbud-2026-04-12.jpg') center/cover no-repeat !important;
 }
 .page-shell .hero::after { background: linear-gradient(180deg, rgba(0,0,0,0.0), rgba(7,17,25,0.54)) !important; }
 .btn-earth,

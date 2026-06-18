@@ -167,7 +167,7 @@ Template for an existing plant page:
       </div>
     </div>
     <div>
-      <img class="photo" src="../../photos/garden/images/2026/05/<slug>-2026-05-31.jpg" alt="Short descriptive alt text" loading="lazy" decoding="async">
+      <img class="photo" src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/05/front-planter-pugster-barberry-2026-05-31.jpg" alt="Short descriptive alt text" loading="lazy" decoding="async">
     </div>
   </div>
   <ul class="bullet-list">
