@@ -1,13 +1,14 @@
 /* Steel Duel — WebAudio synth + sampled tank SFX. window.SDAudio */
 (function () {
   'use strict';
-  let ctx = null, master = null, muted = false, engineNode = null, engineGain = null, engineFilt = null;
+  let ctx = null, master = null, muted = false, engineNode = null, engineGain = null, engineFilt = null, engineSampleNode = null, engineSampleGain = null;
   let sampleLoadStarted = false;
-  const samples = { fire: [], tankHit: [] };
+  const samples = { fire: [], tankHit: [], engine: [] };
   const sampleCursor = { fire: 0, tankHit: 0 };
   const sampleUrls = {
     fire: ['sfx/tank-shot-01.mp3', 'sfx/tank-shot-02.mp3', 'sfx/tank-shot-03.mp3'],
     tankHit: ['sfx/tank-hit-01.mp3', 'sfx/tank-hit-02.mp3', 'sfx/tank-hit-03.mp3', 'sfx/tank-hit-04.mp3'],
+    engine: ['sfx/tank-move-04.mp3'],
   };
 
   function ensure() {
@@ -70,11 +71,27 @@
   }
   function synthFire() { tone(620, 0.12, 'square', 0.18, 180); noise(0.06, 0.12, 2200); }
   function synthTankHit() { noise(0.055, 0.22, 3600, 'highpass'); tone(260, 0.07, 'square', 0.11, 140); tone(740, 0.035, 'triangle', 0.07, 520); }
+  function ensureEngineSample() {
+    if (!ctx || engineSampleNode || !samples.engine.length) return;
+    engineSampleNode = ctx.createBufferSource();
+    engineSampleNode.buffer = samples.engine[0];
+    engineSampleNode.loop = true;
+    engineSampleNode.playbackRate.value = 0.92;
+    engineSampleGain = ctx.createGain();
+    engineSampleGain.gain.value = 0;
+    engineSampleNode.connect(engineSampleGain); engineSampleGain.connect(master);
+    engineSampleNode.start();
+  }
 
   const SDAudio = {
     init() { ensure(); resume(); },
     resume,
-    setMuted(b) { muted = !!b; if (master) master.gain.value = muted ? 0 : 0.6; if (engineGain) engineGain.gain.value = 0; },
+    setMuted(b) {
+      muted = !!b;
+      if (master) master.gain.value = muted ? 0 : 0.6;
+      if (engineGain) engineGain.gain.value = 0;
+      if (engineSampleGain) engineSampleGain.gain.value = 0;
+    },
     isMuted() { return muted; },
     fire() { playSample('fire', 0.82, synthFire); },
     tankHit() { playSample('tankHit', 0.86, synthTankHit); },
@@ -94,8 +111,10 @@
         engineNode.connect(engineFilt); engineFilt.connect(engineGain); engineGain.connect(master);
         engineNode.start();
       }
+      ensureEngineSample();
       const g = Math.max(0, Math.min(0.12, level));
-      engineGain.gain.setTargetAtTime(muted ? 0 : g, ctx.currentTime, 0.08);
+      engineGain.gain.setTargetAtTime(muted ? 0 : g * 0.45, ctx.currentTime, 0.08);
+      if (engineSampleGain) engineSampleGain.gain.setTargetAtTime(muted ? 0 : g * 1.8, ctx.currentTime, 0.08);
     },
   };
   window.SDAudio = SDAudio;
