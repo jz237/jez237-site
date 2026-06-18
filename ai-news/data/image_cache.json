@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-18T16:00:01.529132+00:00",
+  "updatedAt": "2026-06-18T15:50:17.281064+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -3006,8 +3006,8 @@
       "checkedAt": "2026-04-08T13:59:54.505487+00:00"
     },
     "https://www.techrepublic.com/article/chatplayground-ai": {
-      "image": "https://assets.techrepublic.com/uploads/2025/09/unnamed.jpg?f=jpeg",
-      "checkedAt": "2026-06-18T16:00:01.529132+00:00"
+      "image": "",
+      "checkedAt": "2026-06-18T15:50:17.281064+00:00"
     },
     "https://huggingface.co/blog/ibm-research/altk-evolve": {
       "image": "https://cdn-uploads.huggingface.co/production/uploads/6435a1131860001f144239ea/hNoPqYEH7TYWM8ayDpZgF.png",
@@ -10875,27 +10875,27 @@
     },
     "https://techcrunch.com/2026/06/18/general-intuition-in-talks-to-raise-300m-at-around-2b-valuation": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/General-intuition.png?w=880",
-      "checkedAt": "2026-06-18T16:00:01.529132+00:00"
+      "checkedAt": "2026-06-18T15:50:17.281064+00:00"
     },
     "https://techcrunch.com/2026/06/18/a-tech-worker-backed-pac-is-bringing-a-5m-knife-to-big-techs-100m-gunfight": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/GettyImages-2264911748.jpg?resize=1200,705",
-      "checkedAt": "2026-06-18T16:00:01.529132+00:00"
+      "checkedAt": "2026-06-18T15:50:17.281064+00:00"
     },
     "https://www.techrepublic.com/article/news-anthropic-claude-design-overhaul-enterprise-teams": {
-      "image": "https://assets.techrepublic.com/uploads/2026/06/tr-06182026-anthropic-claude-design-overhaul.jpg?f=jpeg",
-      "checkedAt": "2026-06-18T16:00:01.529132+00:00"
+      "image": "",
+      "checkedAt": "2026-06-18T15:50:17.281064+00:00"
     },
     "https://openai.com/index/diagnose-rare-childhood-diseases": {
       "image": "",
-      "checkedAt": "2026-06-18T16:00:01.529132+00:00"
+      "checkedAt": "2026-06-18T15:50:17.281064+00:00"
     },
     "https://www.techrepublic.com/article/news-ai-data-centers-power-cooling-omdia": {
-      "image": "https://assets.techrepublic.com/uploads/2026/06/tr-06172026-ai-data-centers-power-cooling-omdia-1.jpg?f=jpeg",
-      "checkedAt": "2026-06-18T16:00:01.529132+00:00"
+      "image": "",
+      "checkedAt": "2026-06-18T15:50:17.281064+00:00"
     },
     "https://huggingface.co/blog/peft-beyond-lora": {
       "image": "https://huggingface.co/blog/assets/peft-beyond-lora/thumbnail.png",
-      "checkedAt": "2026-06-18T16:00:01.529132+00:00"
+      "checkedAt": "2026-06-18T15:50:17.281064+00:00"
     }
   }
 }
