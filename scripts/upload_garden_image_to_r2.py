@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Upload garden images to Cloudflare R2 while preserving site-relative paths.
+"""Upload garden images to Cloudflare R2 and print GitHub-safe public URLs.
 
 Examples:
   scripts/upload_garden_image_to_r2.py photos/garden/images/2026/06/example.jpg
@@ -89,7 +89,6 @@ def main() -> None:
         raise SystemExit(f"Image not found: {src}")
 
     key = infer_key(src, args)
-    site_path = key.removeprefix("photos/garden/")
     public_url = args.public_base_url.rstrip("/") + "/" + key
 
     if not args.dry_run:
@@ -99,7 +98,7 @@ def main() -> None:
         "uploaded": not args.dry_run,
         "bucket": args.r2_bucket,
         "key": key,
-        "site_path_for_photos_garden_index": site_path,
+        "public_url_for_site_pages": public_url,
         "site_relative_path": key,
         "public_url": public_url,
     }, indent=2))
