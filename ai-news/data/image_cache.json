@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-18T10:00:01.620236+00:00",
+  "updatedAt": "2026-06-18T11:00:01.932515+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -10848,6 +10848,10 @@
     "https://www.theverge.com/ai-artificial-intelligence/952011/midjourney-medical-ai-ultrasound-scan": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/ultrasound_phantom_segmentation-b254a71d083eb5c9.png?quality=90&amp;strip=all&amp;crop=28.441715022566,0,70.316569954868,100",
       "checkedAt": "2026-06-18T04:00:01.937470+00:00"
+    },
+    "https://www.artificialintelligence-news.com/news/hsbc-google-cloud-ai-partnership": {
+      "image": "",
+      "checkedAt": "2026-06-18T11:00:01.932515+00:00"
     }
   }
 }
