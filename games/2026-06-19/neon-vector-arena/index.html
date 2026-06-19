@@ -156,7 +156,7 @@
     <p class="fine">Drag anywhere to fly. Shots auto-aim at the nearest threat. Survive the lightstorm.</p>
   </div>
 </div>
-<div class="version">v2.3</div>
+<div class="version">v2.4</div>
 
 <script>
 'use strict';
@@ -196,7 +196,7 @@ let camera = { x: 0, y: 0 };
 
 const FIREFOX_PERF = /\bFirefox\//i.test(navigator.userAgent);
 const GLOW_SCALE = FIREFOX_PERF ? .22 : .32;
-const MAX_ENEMIES = FIREFOX_PERF ? 34 : 42;
+const MAX_ENEMIES = FIREFOX_PERF ? 42 : 56;
 const MAX_PARTICLES = FIREFOX_PERF ? 170 : 260;
 const MAX_FRAGMENTS = FIREFOX_PERF ? 420 : 640;
 const MAX_DT = FIREFOX_PERF ? .07 : .04;
@@ -295,6 +295,7 @@ function reset() {
     fire: 0,
     inv: 1.3,
     angle: -Math.PI / 2,
+    aimAngle: -Math.PI / 2,
     trail: []
   };
   enemies = [];
@@ -312,7 +313,7 @@ function reset() {
   aimSwitchLock = 0;
   camera.x = player.x - innerWidth * .5;
   camera.y = player.y - innerHeight * .52;
-  for (let i = 0; i < 8; i++) spawnEnemy(true);
+  for (let i = 0; i < 18; i++) spawnEnemy(true);
   updateHud();
 }
 
@@ -332,16 +333,9 @@ function start() {
 
 function spawnEnemy(initial = false) {
   if (!initial && enemies.length >= MAX_ENEMIES) return;
-  const edge = Math.floor(Math.random() * 4);
-  const pad = 90;
-  let x = edge === 0 ? camera.x - pad : edge === 1 ? camera.x + innerWidth + pad : rand(camera.x - pad, camera.x + innerWidth + pad);
-  let y = edge === 2 ? camera.y - pad : edge === 3 ? camera.y + innerHeight + pad : rand(camera.y - pad, camera.y + innerHeight + pad);
-  if (initial) {
-    const a = rand(0, TAU);
-    const d = rand(290, Math.max(430, Math.min(innerWidth, innerHeight) * .82));
-    x = (player?.x || 0) + Math.cos(a) * d;
-    y = (player?.y || 0) + Math.sin(a) * d;
-  }
+  const spot = pickSpawnPoint(initial);
+  const x = spot.x;
+  const y = spot.y;
   const type = chooseEnemyType();
   const def = shapeDef(type);
   const baseR = def.baseR;
@@ -370,6 +364,37 @@ function spawnEnemy(initial = false) {
     pulse: rand(0, TAU),
     trail: []
   });
+}
+
+function pickSpawnPoint(initial = false) {
+  const fieldPad = initial ? Math.max(innerWidth, innerHeight) * .72 : Math.max(560, Math.min(920, Math.max(innerWidth, innerHeight) * .82));
+  const minPlayer = initial ? 230 : 260;
+  const minEnemy = initial ? 118 : 92;
+  const left = camera.x - fieldPad;
+  const right = camera.x + innerWidth + fieldPad;
+  const top = camera.y - fieldPad;
+  const bottom = camera.y + innerHeight + fieldPad;
+  for (let i = 0; i < 26; i++) {
+    let x, y;
+    if (!initial && Math.random() < .28) {
+      const edge = Math.floor(Math.random() * 4);
+      const pad = 120;
+      x = edge === 0 ? camera.x - pad : edge === 1 ? camera.x + innerWidth + pad : rand(camera.x - pad, camera.x + innerWidth + pad);
+      y = edge === 2 ? camera.y - pad : edge === 3 ? camera.y + innerHeight + pad : rand(camera.y - pad, camera.y + innerHeight + pad);
+    } else {
+      x = rand(left, right);
+      y = rand(top, bottom);
+    }
+    if (player && dist2(x, y, player.x, player.y) < minPlayer * minPlayer) continue;
+    if (enemies.some(e => dist2(x, y, e.x, e.y) < minEnemy * minEnemy)) continue;
+    return { x, y };
+  }
+  const a = rand(0, TAU);
+  const d = rand(minPlayer * 1.3, fieldPad);
+  return {
+    x: (player?.x || camera.x + innerWidth * .5) + Math.cos(a) * d,
+    y: (player?.y || camera.y + innerHeight * .5) + Math.sin(a) * d
+  };
 }
 
 function fireShot(targetAngle, target = null) {
@@ -708,16 +733,25 @@ function update(dt) {
   player.y += player.vy * dt;
   updateCamera(dt);
   player.inv -= dt;
+  if (speed > 24) {
+    const moveAngle = Math.atan2(player.vy, player.vx);
+    player.angle = turnTowardAngle(player.angle, moveAngle, 6.4 * dt);
+  }
 
   const aim = selectAimTarget(dt);
+  let fireAngle = player.aimAngle;
   if (aim) {
     const desiredAngle = Math.atan2(aim.y - player.y, aim.x - player.x);
-    player.angle = turnTowardAngle(player.angle, desiredAngle, AIM_TURN_RATE * dt);
+    player.aimAngle = turnTowardAngle(player.aimAngle, desiredAngle, AIM_TURN_RATE * dt);
+    fireAngle = desiredAngle;
+  } else {
+    player.aimAngle = turnTowardAngle(player.aimAngle, player.angle, AIM_TURN_RATE * dt);
+    fireAngle = player.aimAngle;
   }
   player.fire -= dt;
   if (player.fire <= 0 && enemies.length) {
     player.fire = Math.max(.1, .17 - wave * .002);
-    fireShot(player.angle, aim);
+    fireShot(fireAngle, aim);
   }
   player.trail.unshift({ x: player.x, y: player.y, a: player.angle });
   player.trail.length = Math.min(FIREFOX_PERF ? 11 : 18, player.trail.length);
@@ -937,6 +971,10 @@ function drawPlayer(c, p, ghost = false) {
   c.globalAlpha = alpha;
   poly(c, pts, `hsla(184,100%,${ghost ? 60 : 78}%,${ghost ? .34 : 1})`, ghost ? 1.3 : 2.5, ghost ? null : 'rgba(37, 248, 255, .12)', ghost ? 8 : 18);
   line(c, x - ca * 10, y - sa * 10, x - ca * 26, y - sa * 26, `hsla(315,100%,70%,${ghost ? .2 : .9})`, ghost ? 2 : 4, ghost ? 5 : 16);
+  if (!ghost) {
+    const aa = player.aimAngle ?? a;
+    line(c, x + Math.cos(aa) * 4, y + Math.sin(aa) * 4, x + Math.cos(aa) * 17, y + Math.sin(aa) * 17, 'rgba(255,255,255,.88)', 1.4, 8);
+  }
   c.beginPath();
   c.arc(x, y, ghost ? 2 : 4, 0, TAU);
   c.fillStyle = `hsla(0,100%,96%,${ghost ? .28 : 1})`;
