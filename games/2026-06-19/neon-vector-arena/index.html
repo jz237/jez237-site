@@ -151,12 +151,12 @@
 <div class="overlay" id="overlay">
   <div class="panel">
     <h1>NEON<br>VECTOR<br>ARENA</h1>
-    <p class="sub">A live graphics demo: crisp wireframe enemies, clean HUD text, fast motion, and shapes that fracture into smaller vector pieces.</p>
+    <p class="sub">A live graphics demo: crisp wireframe enemies, clean HUD text, fast motion, cheap bloom, and shapes that fracture into smaller vector pieces.</p>
     <button id="start">Start Demo</button>
     <p class="fine">Drag anywhere to move. Mouse aims. On touch, the ship auto-aims at the nearest threat. Survive the lightstorm.</p>
   </div>
 </div>
-<div class="version">v1.1</div>
+<div class="version">v1.2</div>
 
 <script>
 'use strict';
@@ -191,6 +191,10 @@ let pickups = [];
 let stars = [];
 let player;
 
+const GLOW_SCALE = .32;
+const MAX_ENEMIES = 28;
+const MAX_PARTICLES = 145;
+const MAX_FRAGMENTS = 220;
 const TAU = Math.PI * 2;
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 const rand = (a, b) => a + Math.random() * (b - a);
@@ -201,15 +205,17 @@ const dist2 = (a, b, c, d) => {
 };
 
 function resize() {
-  DPR = Math.min(2, window.devicePixelRatio || 1);
+  DPR = Math.min(1.15, window.devicePixelRatio || 1);
   W = Math.floor(innerWidth * DPR);
   H = Math.floor(innerHeight * DPR);
-  canvas.width = glow.width = W;
-  canvas.height = glow.height = H;
-  canvas.style.width = glow.style.width = innerWidth + 'px';
-  canvas.style.height = glow.style.height = innerHeight + 'px';
+  canvas.width = W;
+  canvas.height = H;
+  glow.width = Math.max(1, Math.floor(W * GLOW_SCALE));
+  glow.height = Math.max(1, Math.floor(H * GLOW_SCALE));
+  canvas.style.width = innerWidth + 'px';
+  canvas.style.height = innerHeight + 'px';
   ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
-  gtx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  gtx.setTransform(DPR * GLOW_SCALE, 0, 0, DPR * GLOW_SCALE, 0, 0);
   buildStars();
   if (player) {
     player.x = clamp(player.x, 40, innerWidth - 40);
@@ -274,6 +280,7 @@ function start() {
 }
 
 function spawnEnemy(initial = false) {
+  if (!initial && enemies.length >= MAX_ENEMIES) return;
   const edge = Math.floor(Math.random() * 4);
   const pad = 34;
   let x = edge === 0 ? -pad : edge === 1 ? innerWidth + pad : rand(0, innerWidth);
@@ -337,6 +344,7 @@ function nearestEnemy() {
 }
 
 function addSpark(x, y, n, hue, force = 1) {
+  if (particles.length > MAX_PARTICLES) particles.splice(0, particles.length - MAX_PARTICLES);
   for (let i = 0; i < n; i++) {
     const a = rand(0, TAU);
     const s = rand(40, 240) * force;
@@ -381,6 +389,7 @@ function worldShapePoints(e, scale = 1) {
 }
 
 function addVectorFragments(e) {
+  if (fragments.length > MAX_FRAGMENTS) fragments.splice(0, fragments.length - MAX_FRAGMENTS);
   const pts = worldShapePoints(e, 1);
   const count = e.type === 'splitter' ? 2 : 1;
   for (let pass = 0; pass < count; pass++) {
@@ -441,6 +450,7 @@ function addVectorFragments(e) {
       kind: 'cross'
     });
   }
+  if (fragments.length > MAX_FRAGMENTS) fragments.splice(0, fragments.length - MAX_FRAGMENTS);
 }
 
 function explode(x, y, hue, big = false) {
@@ -607,6 +617,7 @@ function update(dt) {
     p.vy *= Math.pow(.08, dt);
   }
   particles = particles.filter(p => p.life > 0);
+  if (particles.length > MAX_PARTICLES) particles.splice(0, particles.length - MAX_PARTICLES);
   for (const f of fragments) {
     f.life -= dt;
     f.x += f.vx * dt;
@@ -616,16 +627,17 @@ function update(dt) {
     f.rot += f.spin * dt;
   }
   fragments = fragments.filter(f => f.life > 0);
+  if (fragments.length > MAX_FRAGMENTS) fragments.splice(0, fragments.length - MAX_FRAGMENTS);
   updateHud();
 }
 
 function line(c, x1, y1, x2, y2, color, width, glowWidth = 0) {
+  const glowPass = c === gtx;
   c.strokeStyle = color;
-  c.lineWidth = width;
+  c.lineWidth = glowPass ? width * 2.7 : width;
   c.lineCap = 'round';
   c.lineJoin = 'round';
-  c.shadowBlur = glowWidth;
-  c.shadowColor = color;
+  c.shadowBlur = 0;
   c.beginPath();
   c.moveTo(x1, y1);
   c.lineTo(x2, y2);
@@ -634,13 +646,13 @@ function line(c, x1, y1, x2, y2, color, width, glowWidth = 0) {
 }
 
 function poly(c, pts, color, width = 2, fill = null, glowWidth = 0) {
+  const glowPass = c === gtx;
   c.strokeStyle = color;
   c.fillStyle = fill || 'transparent';
-  c.lineWidth = width;
+  c.lineWidth = glowPass ? width * 2.3 : width;
   c.lineJoin = 'round';
   c.lineCap = 'round';
-  c.shadowBlur = glowWidth;
-  c.shadowColor = color;
+  c.shadowBlur = 0;
   c.beginPath();
   c.moveTo(pts[0][0], pts[0][1]);
   for (let i = 1; i < pts.length; i++) c.lineTo(pts[i][0], pts[i][1]);
@@ -717,8 +729,7 @@ function drawPlayer(c, p, ghost = false) {
   c.beginPath();
   c.arc(x, y, ghost ? 2 : 4, 0, TAU);
   c.fillStyle = `hsla(0,100%,96%,${ghost ? .28 : 1})`;
-  c.shadowColor = '#fff';
-  c.shadowBlur = ghost ? 4 : 12;
+  c.shadowBlur = 0;
   c.fill();
   c.restore();
 }
@@ -737,8 +748,7 @@ function drawEnemy(c, e, ghost = false) {
   c.lineWidth = ghost ? .9 : 1.65;
   c.lineJoin = 'miter';
   c.lineCap = 'butt';
-  c.shadowColor = color;
-  c.shadowBlur = ghost ? 2 : 7;
+  c.shadowBlur = 0;
   if (e.type === 'cube') {
     const skew = Math.sin(e.pulse) * r * .22;
     const pts = [[-r + skew,-r], [r,-r + skew], [r - skew,r], [-r,r - skew]];
@@ -779,8 +789,7 @@ function drawEnemy(c, e, ghost = false) {
   }
   if (!ghost) {
     c.fillStyle = hot;
-    c.shadowColor = hot;
-    c.shadowBlur = 6;
+    c.shadowBlur = 0;
     for (let i = 0; i < 4; i++) {
       const a = i * TAU / 4 + e.pulse * .2;
       c.fillRect(Math.cos(a) * r * .72 - 1.2, Math.sin(a) * r * .72 - 1.2, 2.4, 2.4);
@@ -808,8 +817,7 @@ function drawParticle(c, p) {
   if (p.kind === 'ring') {
     c.strokeStyle = `hsla(${p.hue},100%,70%,${t * .85})`;
     c.lineWidth = 3 * t;
-    c.shadowColor = c.strokeStyle;
-    c.shadowBlur = 18;
+    c.shadowBlur = 0;
     c.beginPath();
     c.arc(p.x, p.y, p.r * (1 - t), 0, TAU);
     c.stroke();
@@ -825,8 +833,7 @@ function drawParticle(c, p) {
     c.fill();
   } else {
     c.fillStyle = `hsla(${p.hue},100%,72%,${t})`;
-    c.shadowColor = c.fillStyle;
-    c.shadowBlur = 5;
+    c.shadowBlur = 0;
     c.save();
     c.translate(p.x, p.y);
     c.rotate((1 - t) * 3);
@@ -849,8 +856,7 @@ function drawFragment(c, f) {
   c.lineWidth = Math.max(.8, 1.7 * t);
   c.lineCap = 'butt';
   c.lineJoin = 'miter';
-  c.shadowColor = color;
-  c.shadowBlur = 4;
+  c.shadowBlur = 0;
   if (f.kind === 'line') {
     c.beginPath();
     c.moveTo(f.ax, f.ay);
@@ -880,18 +886,14 @@ function render() {
   const sx = shake ? rand(-shake, shake) : 0;
   const sy = shake ? rand(-shake, shake) : 0;
   ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
-  gtx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  gtx.setTransform(DPR * GLOW_SCALE, 0, 0, DPR * GLOW_SCALE, 0, 0);
   ctx.clearRect(0, 0, innerWidth, innerHeight);
   gtx.clearRect(0, 0, innerWidth, innerHeight);
   drawGrid(ctx);
 
-  ctx.save();
   gtx.save();
-  ctx.translate(sx, sy);
   gtx.translate(sx, sy);
-  ctx.globalCompositeOperation = 'lighter';
   gtx.globalCompositeOperation = 'lighter';
-
   for (const e of enemies) {
     for (let i = e.trail.length - 1; i >= 0; i--) {
       const t = e.trail[i];
@@ -912,22 +914,34 @@ function render() {
   }
   for (const p of particles) drawParticle(gtx, p);
   drawPlayer(gtx, player);
+  gtx.restore();
 
   ctx.save();
   ctx.globalCompositeOperation = 'lighter';
-  ctx.globalAlpha = .28;
-  ctx.filter = 'blur(4px) saturate(1.3)';
+  ctx.globalAlpha = .74;
+  ctx.imageSmoothingEnabled = true;
   ctx.drawImage(glow, 0, 0, innerWidth, innerHeight);
-  ctx.globalAlpha = .13;
-  ctx.filter = 'blur(12px) saturate(1.45)';
+  ctx.globalAlpha = .24;
   ctx.drawImage(glow, 0, 0, innerWidth, innerHeight);
   ctx.restore();
 
+  ctx.save();
+  ctx.translate(sx, sy);
   ctx.globalCompositeOperation = 'lighter';
   ctx.globalAlpha = 1;
   ctx.filter = 'none';
-  ctx.drawImage(glow, 0, 0, innerWidth, innerHeight);
-  ctx.globalCompositeOperation = 'source-over';
+  for (const s of shots) drawShot(ctx, s);
+  for (const e of enemies) drawEnemy(ctx, e);
+  for (const f of fragments) drawFragment(ctx, f);
+  for (const p of pickups) {
+    ctx.save();
+    ctx.translate(p.x, p.y);
+    ctx.rotate(time * 5);
+    poly(ctx, [[0,-p.r], [p.r,0], [0,p.r], [-p.r,0]], `hsla(${p.hue},100%,72%,${clamp(p.life, 0, 1)})`, 1.5, 'rgba(255,235,95,.08)', 0);
+    ctx.restore();
+  }
+  for (const p of particles) drawParticle(ctx, p);
+  drawPlayer(ctx, player);
 
   if (player.inv > 0) {
     ctx.strokeStyle = `rgba(255,255,255,${.25 + Math.sin(time * 24) * .16})`;
@@ -938,7 +952,7 @@ function render() {
   }
 
   ctx.restore();
-  gtx.restore();
+  ctx.globalCompositeOperation = 'source-over';
 
   ctx.fillStyle = 'rgba(255,255,255,.85)';
   ctx.fillRect(18, innerHeight - 18, clamp(player.hp, 0, 100) * 1.6, 3);
