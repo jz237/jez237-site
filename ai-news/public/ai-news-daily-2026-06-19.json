@@ -1,6 +1,6 @@
 {
   "date": "2026-06-19",
-  "updatedAt": "2026-06-19T14:00:01.882579+00:00",
+  "updatedAt": "2026-06-19T14:19:50.442215+00:00",
   "items": [
     {
       "title": "Barret Zoph is out at OpenAI again after just five months",
@@ -13,10 +13,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/STK155_OPEN_AI_CVirginia_C.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-19T04:49:33+00:00",
       "firstSeen": "2026-06-19T05:00:01.341117+00:00",
-      "lastSeen": "2026-06-19T14:00:01.882579+00:00",
+      "lastSeen": "2026-06-19T14:19:50.442215+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1125
+      "score": 5.1048
     },
     {
       "title": "Early users of Anthropic’s Mythos still have access after US order",
@@ -32,7 +32,7 @@
       "lastSeen": "2026-06-19T10:55:06.047694+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0233
+      "score": 5.0144
     },
     {
       "title": "Patch release v5.10.4",
@@ -45,10 +45,26 @@
       "image": "https://repository-images.githubusercontent.com/155220641/a16c4880-a501-11ea-9e8f-646cf611702e",
       "published": "2026-06-19T13:25:50+00:00",
       "firstSeen": "2026-06-15T17:00:01.632650+00:00",
-      "lastSeen": "2026-06-19T14:00:01.882579+00:00",
+      "lastSeen": "2026-06-19T14:19:50.442215+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9727
+      "score": 4.9628
+    },
+    {
+      "title": "The film about Sam Altman has been dropped by Amazon MGM",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/952906/sam-altman-film-artificial-openai-amazon-mgm-dropped",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "Luca Guadagnino's film about OpenAI CEO Sam Altman, Artificial, has reportedly been dropped by Amazon MGM. The film, which stars Andrew Garfield and covers the rollercoaster five days in 2023 spanning Altman's termination and reinstatement as CEO, had been in the works for about a year. The cast also includes A Complete Unknown actress Monica [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/STK201_SAM_ALTMAN_CVIRGINIA2D_717b98.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
+      "published": "2026-06-19T14:15:29+00:00",
+      "firstSeen": "2026-06-19T14:19:50.442215+00:00",
+      "lastSeen": "2026-06-19T14:19:50.442215+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.3578
     },
     {
       "title": "Disney is joining the AI-ad arms race, just as audiences turn on ‘slop’",
@@ -61,10 +77,10 @@
       "image": "https://media.thenextweb.com/2018/11/Disney-Plus.avif",
       "published": "2026-06-19T11:31:31+00:00",
       "firstSeen": "2026-06-19T12:00:01.610529+00:00",
-      "lastSeen": "2026-06-19T14:00:01.882579+00:00",
+      "lastSeen": "2026-06-19T14:19:50.442215+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.1769
+      "score": 4.1675
     },
     {
       "title": "The AI bubble didn’t pop. It sent the bill",
@@ -80,7 +96,7 @@
       "lastSeen": "2026-06-19T12:00:01.610529+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.0377
+      "score": 4.0287
     },
     {
       "title": "Retailers want AI-generated ads exempt from EU transparency rules",
@@ -96,7 +112,7 @@
       "lastSeen": "2026-06-19T12:00:01.610529+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.4322
+      "score": 3.4232
     },
     {
       "title": "Alibaba Cloud opens first data centres in France as the EU tightens rules on foreign cloud providers",
@@ -112,7 +128,7 @@
       "lastSeen": "2026-06-19T10:00:01.793889+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3853
+      "score": 3.3768
     },
     {
       "title": "Turkey clears Uber’s acquisition of Getir’s delivery business",
@@ -128,7 +144,7 @@
       "lastSeen": "2026-06-19T10:55:06.047694+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1152
+      "score": 3.1064
     },
     {
       "title": "As the World Claims Tech Sovereignty, Where Does Australia Stand?",
@@ -141,10 +157,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/06/tr-06192026-data-tech-sovereignty-australia-apac.jpg?f=jpeg",
       "published": "2026-06-19T08:10:36+00:00",
       "firstSeen": "2026-06-19T12:00:01.610529+00:00",
-      "lastSeen": "2026-06-19T14:00:01.882579+00:00",
+      "lastSeen": "2026-06-19T14:19:50.442215+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0857
+      "score": 3.0772
     },
     {
       "title": "US court rules Ohio can restrict children’s use of social media",
@@ -160,7 +176,7 @@
       "lastSeen": "2026-06-19T10:00:01.793889+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0825
+      "score": 3.074
     },
     {
       "title": "Banning Open Source AI Would Be A Mistake",
@@ -173,26 +189,10 @@
       "image": "https://substack-post-media.s3.amazonaws.com/public/images/2cf763f4-5f1e-47ec-b6e1-b14a69443d00_3182x1790.png",
       "published": "2026-06-19T13:02:47+00:00",
       "firstSeen": "2026-06-19T14:00:01.882579+00:00",
-      "lastSeen": "2026-06-19T14:00:01.882579+00:00",
+      "lastSeen": "2026-06-19T14:19:50.442215+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0312
-    },
-    {
-      "title": "Warren raises €10M to fix Belgium’s broken workplace pensions",
-      "url": "https://thenextweb.com/news/warren-10m-seed-belgium-workplace-pensions",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The typical Belgian works for about 40 years and retires with a workplace pension worth less than a second-hand car. Warren, a Ghent-based fintech, wants to fix that. The company has raised €10mn in a seed round led by Motive Ventures, the venture arm of transatlantic investor Motive Partners. F Capital joined, alongside returning backers [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/Warren-team.avif",
-      "published": "2026-06-19T12:33:37+00:00",
-      "firstSeen": "2026-06-19T13:00:01.583658+00:00",
-      "lastSeen": "2026-06-19T14:00:01.882579+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.8069
+      "score": 3.0214
     }
   ],
   "errors": [

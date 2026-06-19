@@ -1,8 +1,8 @@
 {
-  "updatedAt": "2026-06-19T14:00:01.882579+00:00",
+  "updatedAt": "2026-06-19T14:19:50.442215+00:00",
   "items": [
     {
-      "title": "Zhyar Rzgar K. Rostam, M\\'arta P\\'entek, J\\'anos Tibor Czere, Zsombor Zrubka, L\\'aszl\\'o Gul\\'acsi, G\\'abor Kert\\'esz",
+      "title": "Disentangling Linguistic Relatedness from Task Alignment in Cross-Lingual Transfer",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -10,12 +10,28 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-19T14:00:17.556702+00:00",
+      "published": "2026-06-19T14:19:54.951298+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-19T14:00:01.882579+00:00",
+      "lastSeen": "2026-06-19T14:19:50.442215+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
+    },
+    {
+      "title": "The film about Sam Altman has been dropped by Amazon MGM",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/952906/sam-altman-film-artificial-openai-amazon-mgm-dropped",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "Luca Guadagnino's film about OpenAI CEO Sam Altman, Artificial, has reportedly been dropped by Amazon MGM. The film, which stars Andrew Garfield and covers the rollercoaster five days in 2023 spanning Altman's termination and reinstatement as CEO, had been in the works for about a year. The cast also includes A Complete Unknown actress Monica [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/STK201_SAM_ALTMAN_CVIRGINIA2D_717b98.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
+      "published": "2026-06-19T14:15:29+00:00",
+      "firstSeen": "2026-06-19T14:19:50.442215+00:00",
+      "lastSeen": "2026-06-19T14:19:50.442215+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.3578
     },
     {
       "title": "A city hit pause on AI data centres. Amazon responded by investigating its own engineers.",
@@ -28,10 +44,10 @@
       "image": "https://media.thenextweb.com/2026/06/data-centre.avif",
       "published": "2026-06-19T13:37:53+00:00",
       "firstSeen": "2026-06-19T14:00:01.882579+00:00",
-      "lastSeen": "2026-06-19T14:00:01.882579+00:00",
+      "lastSeen": "2026-06-19T14:19:50.442215+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1388
+      "score": 2.1288
     },
     {
       "title": "Patch release v5.10.4",
@@ -44,10 +60,10 @@
       "image": "https://repository-images.githubusercontent.com/155220641/a16c4880-a501-11ea-9e8f-646cf611702e",
       "published": "2026-06-19T13:25:50+00:00",
       "firstSeen": "2026-06-15T17:00:01.632650+00:00",
-      "lastSeen": "2026-06-19T14:00:01.882579+00:00",
+      "lastSeen": "2026-06-19T14:19:50.442215+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9727
+      "score": 4.9628
     },
     {
       "title": "Big Tech spent two years warning AI would take your job. Now its bosses say the opposite.",
@@ -60,10 +76,10 @@
       "image": "https://media.thenextweb.com/2026/05/Jeff-bezos.avif",
       "published": "2026-06-19T13:15:08+00:00",
       "firstSeen": "2026-06-19T14:00:01.882579+00:00",
-      "lastSeen": "2026-06-19T14:00:01.882579+00:00",
+      "lastSeen": "2026-06-19T14:19:50.442215+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1274
+      "score": 2.1175
     },
     {
       "title": "Banning Open Source AI Would Be A Mistake",
@@ -76,10 +92,10 @@
       "image": "https://substack-post-media.s3.amazonaws.com/public/images/2cf763f4-5f1e-47ec-b6e1-b14a69443d00_3182x1790.png",
       "published": "2026-06-19T13:02:47+00:00",
       "firstSeen": "2026-06-19T14:00:01.882579+00:00",
-      "lastSeen": "2026-06-19T14:00:01.882579+00:00",
+      "lastSeen": "2026-06-19T14:19:50.442215+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0312
+      "score": 3.0214
     },
     {
       "title": "The CEO of Allbirds’ new AI biz has a plan, but no employees",
@@ -92,10 +108,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/Nadia-Carlsten-HS.png?w=1024",
       "published": "2026-06-19T13:00:00+00:00",
       "firstSeen": "2026-06-19T14:00:01.882579+00:00",
-      "lastSeen": "2026-06-19T14:00:01.882579+00:00",
+      "lastSeen": "2026-06-19T14:19:50.442215+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2598
+      "score": 2.2501
     },
     {
       "title": "AI cheating tools are winning. Detection was never the point.",
@@ -108,10 +124,10 @@
       "image": "https://media.thenextweb.com/2026/06/ai-cheating-tools-detectors-students-schools.avif",
       "published": "2026-06-19T12:47:21+00:00",
       "firstSeen": "2026-06-19T13:00:01.583658+00:00",
-      "lastSeen": "2026-06-19T14:00:01.882579+00:00",
+      "lastSeen": "2026-06-19T14:19:50.442215+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1136
+      "score": 2.1039
     },
     {
       "title": "Warren raises €10M to fix Belgium’s broken workplace pensions",
@@ -124,10 +140,10 @@
       "image": "https://media.thenextweb.com/2026/06/Warren-team.avif",
       "published": "2026-06-19T12:33:37+00:00",
       "firstSeen": "2026-06-19T13:00:01.583658+00:00",
-      "lastSeen": "2026-06-19T14:00:01.882579+00:00",
+      "lastSeen": "2026-06-19T14:19:50.442215+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8069
+      "score": 2.7972
     },
     {
       "title": "The world thinks China is winning the AI race. It just doesn’t trust the winner.",
@@ -140,10 +156,10 @@
       "image": "https://media.thenextweb.com/2026/06/US-China-AI.avif",
       "published": "2026-06-19T12:25:28+00:00",
       "firstSeen": "2026-06-19T13:00:01.583658+00:00",
-      "lastSeen": "2026-06-19T14:00:01.882579+00:00",
+      "lastSeen": "2026-06-19T14:19:50.442215+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1029
+      "score": 2.0933
     },
     {
       "title": "Two AIs just matched or beat doctors on diagnosis. The catch: none of the patients were real.",
@@ -156,10 +172,10 @@
       "image": "https://media.thenextweb.com/2026/06/AI-in-medicine.avif",
       "published": "2026-06-19T12:02:19+00:00",
       "firstSeen": "2026-06-19T13:00:01.583658+00:00",
-      "lastSeen": "2026-06-19T14:00:01.882579+00:00",
+      "lastSeen": "2026-06-19T14:19:50.442215+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0917
+      "score": 2.0821
     },
     {
       "title": "A $5M tech-worker PAC is taking on Big Tech’s $100M war chest over AI rules",
@@ -172,10 +188,10 @@
       "image": "https://media.thenextweb.com/2026/06/guardrails-alliance-tech-worker-pac-ai-regulation.avif",
       "published": "2026-06-19T11:52:23+00:00",
       "firstSeen": "2026-06-19T13:00:01.583658+00:00",
-      "lastSeen": "2026-06-19T14:00:01.882579+00:00",
+      "lastSeen": "2026-06-19T14:19:50.442215+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7869
+      "score": 2.7774
     },
     {
       "title": "Disney is joining the AI-ad arms race, just as audiences turn on ‘slop’",
@@ -188,10 +204,10 @@
       "image": "https://media.thenextweb.com/2018/11/Disney-Plus.avif",
       "published": "2026-06-19T11:31:31+00:00",
       "firstSeen": "2026-06-19T12:00:01.610529+00:00",
-      "lastSeen": "2026-06-19T14:00:01.882579+00:00",
+      "lastSeen": "2026-06-19T14:19:50.442215+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.1769
+      "score": 4.1675
     },
     {
       "title": "GitHub for the factory floor: Copia raises $26M to protect the code that runs industry",
@@ -204,10 +220,10 @@
       "image": "https://media.thenextweb.com/2026/06/copia-Leadership-Team.avif",
       "published": "2026-06-19T11:23:35+00:00",
       "firstSeen": "2026-06-19T12:00:01.610529+00:00",
-      "lastSeen": "2026-06-19T14:00:01.882579+00:00",
+      "lastSeen": "2026-06-19T14:19:50.442215+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0731
+      "score": 2.0638
     },
     {
       "title": "‘Fight fire with fire’: Databricks is buying Panther Labs to challenge Splunk and CrowdStrike with AI",
@@ -220,10 +236,10 @@
       "image": "https://media.thenextweb.com/2026/06/databricks-agrees-acquire-panther.avif",
       "published": "2026-06-19T11:12:11+00:00",
       "firstSeen": "2026-06-19T12:00:01.610529+00:00",
-      "lastSeen": "2026-06-19T14:00:01.882579+00:00",
+      "lastSeen": "2026-06-19T14:19:50.442215+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0678
+      "score": 2.0585
     },
     {
       "title": "The Big Four bill by the hour. Andera just raised $37M to let AI do the audit.",
@@ -239,7 +255,7 @@
       "lastSeen": "2026-06-19T13:00:01.583658+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0633
+      "score": 2.054
     },
     {
       "title": "He spent 15 months hunting for compliance software that didn’t exist. So he built Flagright, which just raised $12.5M.",
@@ -255,7 +271,7 @@
       "lastSeen": "2026-06-19T13:00:01.583658+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0599
+      "score": 2.0507
     },
     {
       "title": "VivaTech turns 10 and bets everything on AI that actually works",
@@ -271,7 +287,7 @@
       "lastSeen": "2026-06-19T12:00:01.610529+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0575
+      "score": 2.0483
     },
     {
       "title": "General Atlantic wants to back China’s Kling AI at $18bn. Beijing is telling its AI firms to refuse US money.",
@@ -287,7 +303,7 @@
       "lastSeen": "2026-06-19T12:00:01.610529+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0563
+      "score": 2.0471
     },
     {
       "title": "A startup claims it broke through a bottleneck that’s holding back LLMs",
@@ -300,10 +316,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/06/cheetah-speed2a.jpg?resize=1200%2C600",
       "published": "2026-06-19T10:40:24+00:00",
       "firstSeen": "2026-06-19T12:00:01.610529+00:00",
-      "lastSeen": "2026-06-19T14:00:01.882579+00:00",
+      "lastSeen": "2026-06-19T14:19:50.442215+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1929
+      "score": 2.1837
     },
     {
       "title": "Rejected by 180 investors, Bland just raised $50M to prove voice AI is the future",
@@ -319,7 +335,7 @@
       "lastSeen": "2026-06-19T12:00:01.610529+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7522
+      "score": 2.7431
     },
     {
       "title": "The AI bubble didn’t pop. It sent the bill",
@@ -335,7 +351,7 @@
       "lastSeen": "2026-06-19T12:00:01.610529+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.0377
+      "score": 4.0287
     },
     {
       "title": "Retailers want AI-generated ads exempt from EU transparency rules",
@@ -351,7 +367,7 @@
       "lastSeen": "2026-06-19T12:00:01.610529+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.4322
+      "score": 3.4232
     },
     {
       "title": "Early users of Anthropic’s Mythos still have access after US order",
@@ -367,7 +383,7 @@
       "lastSeen": "2026-06-19T10:55:06.047694+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0233
+      "score": 5.0144
     },
     {
       "title": "Meta signs new AI computing deals with data-centre firm Crusoe",
@@ -383,7 +399,7 @@
       "lastSeen": "2026-06-19T10:55:06.047694+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0194
+      "score": 2.0106
     },
     {
       "title": "Higgsfield launches enterprise marketing agents built on NVIDIA, claiming 78 per cent of Fortune 500 as clients",
@@ -399,7 +415,7 @@
       "lastSeen": "2026-06-19T10:55:06.047694+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 0.317
+      "score": 0.3082
     },
     {
       "title": "Turkey clears Uber’s acquisition of Getir’s delivery business",
@@ -415,7 +431,7 @@
       "lastSeen": "2026-06-19T10:55:06.047694+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1152
+      "score": 3.1064
     },
     {
       "title": "Hyundai to buy SoftBank’s last Boston Dynamics stake for $325m",
@@ -431,7 +447,7 @@
       "lastSeen": "2026-06-19T10:55:06.047694+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3545
+      "score": 2.3458
     },
     {
       "title": "China tightens indium phosphide checks as AI demand climbs",
@@ -447,7 +463,7 @@
       "lastSeen": "2026-06-19T10:55:06.047694+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9907
+      "score": 1.9821
     },
     {
       "title": "As the World Claims Tech Sovereignty, Where Does Australia Stand?",
@@ -460,10 +476,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/06/tr-06192026-data-tech-sovereignty-australia-apac.jpg?f=jpeg",
       "published": "2026-06-19T08:10:36+00:00",
       "firstSeen": "2026-06-19T12:00:01.610529+00:00",
-      "lastSeen": "2026-06-19T14:00:01.882579+00:00",
+      "lastSeen": "2026-06-19T14:19:50.442215+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0857
+      "score": 3.0772
     },
     {
       "title": "Alibaba Cloud opens first data centres in France as the EU tightens rules on foreign cloud providers",
@@ -479,7 +495,7 @@
       "lastSeen": "2026-06-19T10:00:01.793889+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3853
+      "score": 3.3768
     },
     {
       "title": "US court rules Ohio can restrict children’s use of social media",
@@ -495,7 +511,7 @@
       "lastSeen": "2026-06-19T10:00:01.793889+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0825
+      "score": 3.074
     },
     {
       "title": "The US says ASML’s top chip tool may be in China. ASML says it isn’t",
@@ -508,10 +524,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/GettyImages-2250757778.jpg?resize=1200%2C800",
       "published": "2026-06-19T07:59:12+00:00",
       "firstSeen": "2026-06-19T08:00:01.652387+00:00",
-      "lastSeen": "2026-06-19T14:00:01.882579+00:00",
+      "lastSeen": "2026-06-19T14:19:50.442215+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1208
+      "score": 2.1123
     },
     {
       "title": "Meta lobbies Congress for protection from child-harm lawsuits",
@@ -527,7 +543,7 @@
       "lastSeen": "2026-06-19T10:00:01.793889+00:00",
       "editorial_allow": false,
       "editorial_reason": "fluff",
-      "score": -0.6254
+      "score": -0.6339
     },
     {
       "title": "SpaceX falls more than 6% as the record IPO rally cools",
@@ -543,7 +559,7 @@
       "lastSeen": "2026-06-19T10:00:01.793889+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9715
+      "score": 1.9631
     },
     {
       "title": "Leaked licences show Bulgaria greenlit surveillance exports to governments accused of repression",
@@ -559,7 +575,7 @@
       "lastSeen": "2026-06-19T09:00:01.265680+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9606
+      "score": 1.9523
     },
     {
       "title": "Barret Zoph is out at OpenAI again after just five months",
@@ -572,10 +588,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/STK155_OPEN_AI_CVirginia_C.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-19T04:49:33+00:00",
       "firstSeen": "2026-06-19T05:00:01.341117+00:00",
-      "lastSeen": "2026-06-19T14:00:01.882579+00:00",
+      "lastSeen": "2026-06-19T14:19:50.442215+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1125
+      "score": 5.1048
     },
     {
       "title": "SpaceX wants to build AI data centers in space. Will it work?",
@@ -588,10 +604,10 @@
       "image": "https://www.sciencedaily.com/images/1920/spacecraft-satellite-orbiting-earth.webp",
       "published": "2026-06-19T03:43:09+00:00",
       "firstSeen": "2026-06-19T05:00:01.341117+00:00",
-      "lastSeen": "2026-06-19T14:00:01.882579+00:00",
+      "lastSeen": "2026-06-19T14:19:50.442215+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9467
+      "score": 1.9392
     },
     {
       "title": "Source: Elastic agrees to buy CRV-backed DeductiveAI for up to $85M",
@@ -604,10 +620,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2018/03/gettyimages-824355868.jpg?resize=1200%2C760",
       "published": "2026-06-19T00:51:11+00:00",
       "firstSeen": "2026-06-19T01:00:01.939122+00:00",
-      "lastSeen": "2026-06-19T14:00:01.882579+00:00",
+      "lastSeen": "2026-06-19T14:19:50.442215+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9535
+      "score": 1.9465
     },
     {
       "title": "Datasette Apps: Host custom HTML applications inside Datasette",
@@ -620,26 +636,10 @@
       "image": "https://static.simonwillison.net/static/2026/datasette-timeline-app.jpg",
       "published": "2026-06-18T23:58:38+00:00",
       "firstSeen": "2026-06-19T01:00:01.939122+00:00",
-      "lastSeen": "2026-06-19T14:00:01.882579+00:00",
+      "lastSeen": "2026-06-19T14:19:50.442215+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.7351
-    },
-    {
-      "title": "Microsoft discovers new lightweight backdoor that steals cryptocurrency",
-      "url": "https://arstechnica.com/security/2026/06/microsoft-spots-new-self-propagating-malware-for-stealing-cryptocurrency",
-      "source": "Ars Technica (AI/Tech)",
-      "sourceUrl": "https://feeds.arstechnica.com/arstechnica/technology-lab",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Crypto Clipper spreads over USB and communicates over Tor.",
-      "image": "https://cdn.arstechnica.net/wp-content/uploads/2026/02/cryptocurrency-theft-heist-1152x648.jpg",
-      "published": "2026-06-18T23:28:52+00:00",
-      "firstSeen": "2026-06-19T02:00:01.823995+00:00",
-      "lastSeen": "2026-06-19T14:00:01.882579+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.7849
+      "score": 3.7283
     },
     {
       "title": "The Life Scientific: Dean Lomax",
@@ -652,10 +652,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-15T20:00:00+00:00",
       "firstSeen": "2026-06-15T21:00:01.290903+00:00",
-      "lastSeen": "2026-06-19T14:00:01.882579+00:00",
+      "lastSeen": "2026-06-19T14:19:50.442215+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.2803
+      "score": 1.2795
     },
     {
       "title": "The Life Scientific: Helen Hastie",
@@ -668,7 +668,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-08T20:00:00+00:00",
       "firstSeen": "2026-06-08T21:00:01.371488+00:00",
-      "lastSeen": "2026-06-19T14:00:01.882579+00:00",
+      "lastSeen": "2026-06-19T14:19:50.442215+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 1.1908
