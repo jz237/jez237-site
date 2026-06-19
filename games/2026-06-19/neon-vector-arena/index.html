@@ -156,7 +156,7 @@
     <p class="fine">Drag anywhere to move. Shots auto-aim at the nearest threat. Survive the lightstorm.</p>
   </div>
 </div>
-<div class="version">v2.0</div>
+<div class="version">v2.1</div>
 
 <script>
 'use strict';
@@ -190,6 +190,8 @@ let fragments = [];
 let pickups = [];
 let stars = [];
 let player;
+let aimTarget = null;
+let aimSwitchLock = 0;
 
 const FIREFOX_PERF = /\bFirefox\//i.test(navigator.userAgent);
 const GLOW_SCALE = FIREFOX_PERF ? .22 : .32;
@@ -200,6 +202,9 @@ const MAX_DT = FIREFOX_PERF ? .07 : .04;
 const SHOT_BLAST_RADIUS = 105;
 const SHOT_BLAST_FORCE = 430;
 const SHOT_SPEED = 660;
+const AIM_SWITCH_LOCK = .26;
+const AIM_TURN_RATE = 9.5;
+const SHOT_STEER_RATE = 5.2;
 const DEMO_EXTRA_SECONDS = 20;
 const TAU = Math.PI * 2;
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
@@ -303,6 +308,8 @@ function reset() {
   comboTimer = 0;
   spawnTimer = 0;
   shake = 0;
+  aimTarget = null;
+  aimSwitchLock = 0;
   for (let i = 0; i < 8; i++) spawnEnemy(true);
   updateHud();
 }
@@ -362,7 +369,7 @@ function spawnEnemy(initial = false) {
   });
 }
 
-function fireShot(targetAngle) {
+function fireShot(targetAngle, target = null) {
   const spread = combo >= 8 ? .12 : 0;
   const count = combo >= 8 ? 3 : 1;
   for (let i = 0; i < count; i++) {
@@ -375,6 +382,8 @@ function fireShot(targetAngle) {
       r: 3.2,
       hue: i === 1 ? 316 : 186,
       angle: a,
+      age: 0,
+      target,
       trail: []
     });
   }
@@ -392,6 +401,37 @@ function nearestEnemy() {
     }
   }
   return best;
+}
+
+function selectAimTarget(dt) {
+  aimSwitchLock = Math.max(0, aimSwitchLock - dt);
+  const nearest = nearestEnemy();
+  if (!nearest) {
+    aimTarget = null;
+    return null;
+  }
+  if (!aimTarget || !enemies.includes(aimTarget)) {
+    aimTarget = nearest;
+    aimSwitchLock = AIM_SWITCH_LOCK;
+    return aimTarget;
+  }
+  if (nearest !== aimTarget) {
+    const currentD = dist2(player.x, player.y, aimTarget.x, aimTarget.y);
+    const nearestD = dist2(player.x, player.y, nearest.x, nearest.y);
+    if (aimSwitchLock <= 0 && nearestD < currentD * .58) {
+      aimTarget = nearest;
+      aimSwitchLock = AIM_SWITCH_LOCK;
+    }
+  }
+  return aimTarget;
+}
+
+function angleDelta(from, to) {
+  return Math.atan2(Math.sin(to - from), Math.cos(to - from));
+}
+
+function turnTowardAngle(from, to, maxStep) {
+  return from + clamp(angleDelta(from, to), -maxStep, maxStep);
 }
 
 function addSpark(x, y, n, hue, force = 1) {
@@ -649,12 +689,15 @@ function update(dt) {
   player.y = clamp(player.y + player.vy * dt, 58, innerHeight - 26);
   player.inv -= dt;
 
-  const aim = nearestEnemy();
-  if (aim) player.angle = Math.atan2(aim.y - player.y, aim.x - player.x);
+  const aim = selectAimTarget(dt);
+  if (aim) {
+    const desiredAngle = Math.atan2(aim.y - player.y, aim.x - player.x);
+    player.angle = turnTowardAngle(player.angle, desiredAngle, AIM_TURN_RATE * dt);
+  }
   player.fire -= dt;
   if (player.fire <= 0 && enemies.length) {
     player.fire = Math.max(.1, .17 - wave * .002);
-    fireShot(player.angle);
+    fireShot(player.angle, aim);
   }
   player.trail.unshift({ x: player.x, y: player.y, a: player.angle });
   player.trail.length = Math.min(FIREFOX_PERF ? 11 : 18, player.trail.length);
@@ -715,6 +758,14 @@ function update(dt) {
   }
 
   for (const s of shots) {
+    s.age += dt;
+    if (s.target && enemies.includes(s.target) && s.age < .45) {
+      const desired = Math.atan2(s.target.y - s.y, s.target.x - s.x);
+      const steered = turnTowardAngle(s.angle, desired, SHOT_STEER_RATE * dt);
+      s.angle = steered;
+      s.vx = Math.cos(steered) * SHOT_SPEED;
+      s.vy = Math.sin(steered) * SHOT_SPEED;
+    }
     s.trail.unshift({ x: s.x, y: s.y });
     s.trail.length = FIREFOX_PERF ? 5 : 7;
     s.x += s.vx * dt;
