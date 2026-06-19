@@ -1428,7 +1428,7 @@
         : base;
       const released = list.filter(g => g.status !== 'unfinished');
       const unfinished = list.filter(g => g.status === 'unfinished');
-      sections.innerHTML = renderSection('Playable Games', released) + (unfinished.length ? renderSection('Unreleased Games', unfinished) : '');
+      sections.innerHTML = renderSection('Playable Games', released) + (unfinished.length ? renderSection('Unfinished', unfinished) : '');
       count.textContent = `${list.length} game${list.length === 1 ? '' : 's'}${currentFilter === 'all' ? '' : ' · ' + currentFilter}${q ? ' matching \"' + q + '\"' : ''}`;
       requestAnimationFrame(() => {
         document.querySelectorAll('.game-card').forEach((el,i) => {
