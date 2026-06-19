@@ -156,7 +156,7 @@
     <p class="fine">Drag anywhere to move. Mouse aims. On touch, the ship auto-aims at the nearest threat. Survive the lightstorm.</p>
   </div>
 </div>
-<div class="version">v1.3</div>
+<div class="version">v1.4</div>
 
 <script>
 'use strict';
@@ -192,7 +192,7 @@ let stars = [];
 let player;
 
 const GLOW_SCALE = .32;
-const MAX_ENEMIES = 28;
+const MAX_ENEMIES = 42;
 const MAX_PARTICLES = 145;
 const MAX_FRAGMENTS = 220;
 const SHOT_BLAST_RADIUS = 105;
@@ -294,21 +294,21 @@ function spawnEnemy(initial = false) {
     if (dist2(x, y, player?.x || innerWidth / 2, player?.y || innerHeight / 2) < 260 * 260) x = innerWidth - x;
   }
   const typeRoll = Math.random();
-  const type = typeRoll < .12 + wave * .006 ? 'splitter' : typeRoll < .37 ? 'spinner' : typeRoll < .56 ? 'dart' : 'cube';
-  const speed = type === 'dart' ? rand(96, 142) : type === 'splitter' ? rand(48, 76) : rand(62, 105);
-  const hp = type === 'splitter' ? 4 + Math.floor(wave / 2) : type === 'spinner' ? 2 : 1;
+  const type = typeRoll < .1 + wave * .008 ? 'splitter' : typeRoll < .36 ? 'spinner' : typeRoll < .56 ? 'dart' : 'cube';
+  const speed = type === 'dart' ? rand(96, 142) : type === 'splinter' ? rand(160, 215) : type === 'splitter' ? rand(36, 58) : rand(62, 105);
+  const hp = type === 'splitter' ? 5 + Math.floor(wave / 2) : type === 'spinner' ? 2 : 1;
   enemies.push({
     x, y,
     vx: rand(-20, 20),
     vy: rand(-20, 20),
-    r: type === 'splitter' ? 18 : type === 'spinner' ? 14 : type === 'dart' ? 11 : 13,
+    r: type === 'splitter' ? 31 : type === 'splinter' ? 7.2 : type === 'spinner' ? 14 : type === 'dart' ? 11 : 13,
     hp,
     maxHp: hp,
     type,
     speed: speed + wave * 4,
     rot: rand(0, TAU),
     spin: rand(-2.8, 2.8),
-    hue: type === 'splitter' ? 54 : type === 'spinner' ? 292 : type === 'dart' ? 18 : 182,
+    hue: type === 'splitter' ? 54 : type === 'splinter' ? 38 : type === 'spinner' ? 292 : type === 'dart' ? 18 : 182,
     pulse: rand(0, TAU),
     trail: []
   });
@@ -327,6 +327,7 @@ function fireShot(targetAngle) {
       life: .72,
       r: 3.2,
       hue: i === 1 ? 316 : 186,
+      angle: a,
       trail: []
     });
   }
@@ -366,7 +367,7 @@ function addSpark(x, y, n, hue, force = 1) {
 
 function localShapePoints(e, scale = 1) {
   const r = e.r * scale;
-  if (e.type === 'dart') return [[r * 1.45, 0], [-r, .75 * r], [-.42 * r, 0], [-r, -.75 * r]];
+  if (e.type === 'dart' || e.type === 'splinter') return [[r * 1.45, 0], [-r, .75 * r], [-.42 * r, 0], [-r, -.75 * r]];
   if (e.type === 'cube') return [[-r, -r], [r, -r], [r, r], [-r, r]];
   if (e.type === 'spinner') return [[0, -r * 1.35], [r * 1.2, r * .64], [0, r * .24], [-r * 1.2, r * .64]];
   const pts = [];
@@ -507,25 +508,29 @@ function explode(x, y, hue, big = false) {
 }
 
 function splitEnemy(e) {
-  for (let i = 0; i < 3; i++) {
-    const a = i * TAU / 3 + rand(-.25, .25);
+  const count = 9;
+  for (let i = 0; i < count && enemies.length < MAX_ENEMIES + 12; i++) {
+    const a = i * TAU / count + rand(-.18, .18);
+    const burst = rand(190, 310);
     enemies.push({
-      x: e.x + Math.cos(a) * 16,
-      y: e.y + Math.sin(a) * 16,
-      vx: Math.cos(a) * 150,
-      vy: Math.sin(a) * 150,
-      r: 9,
+      x: e.x + Math.cos(a) * rand(18, 34),
+      y: e.y + Math.sin(a) * rand(18, 34),
+      vx: Math.cos(a) * burst + e.vx * .22,
+      vy: Math.sin(a) * burst + e.vy * .22,
+      r: rand(6.2, 8.4),
       hp: 1,
       maxHp: 1,
-      type: 'dart',
-      speed: 132 + wave * 5,
+      type: 'splinter',
+      speed: rand(168, 220) + wave * 5,
       rot: a,
-      spin: rand(-4, 4),
-      hue: 24,
+      spin: rand(-8, 8),
+      hue: rand(24, 48),
       pulse: rand(0, TAU),
       trail: []
     });
   }
+  addSpark(e.x, e.y, 30, 44, 1.45);
+  particles.push({ x: e.x, y: e.y, vx: 0, vy: 0, life: .42, max: .42, r: 112, hue: 54, kind: 'ring' });
 }
 
 function update(dt) {
@@ -591,7 +596,7 @@ function update(dt) {
     e.trail.unshift({ x: e.x, y: e.y, rot: e.rot });
     e.trail.length = 9;
     if (dist2(e.x, e.y, player.x, player.y) < (e.r + player.r) ** 2 && player.inv <= 0) {
-      player.hp -= e.type === 'splitter' ? 18 : 10;
+      player.hp -= e.type === 'splitter' ? 22 : e.type === 'splinter' ? 6 : 10;
       player.inv = 1.05;
       blastEnemies(player.x, player.y, SHOT_BLAST_FORCE * .7, SHOT_BLAST_RADIUS * .9);
       explode(player.x, player.y, 188, false);
@@ -650,7 +655,7 @@ function update(dt) {
           if (e.type === 'splitter') splitEnemy(e);
           comboTimer = 2.2;
           combo = clamp(combo + 1, 1, 12);
-          score += 100 * combo + wave * 15;
+          score += (e.type === 'splinter' ? 35 : 100) * combo + wave * 15;
           explode(e.x, e.y, e.hue, e.type === 'splitter');
           if (Math.random() < .08) pickups.push({ x: e.x, y: e.y, r: 9, life: 6, hue: 54 });
         }
@@ -825,11 +830,12 @@ function drawEnemy(c, e, ghost = false) {
     line(c, pts[0][0], pts[0][1], pts[2][0], pts[2][1], color, ghost ? .6 : 1, 2);
     line(c, pts[1][0], pts[1][1], pts[3][0], pts[3][1], color, ghost ? .6 : 1, 2);
     c.strokeRect(-r * .42, -r * .42, r * .84, r * .84);
-  } else if (e.type === 'dart') {
+  } else if (e.type === 'dart' || e.type === 'splinter') {
     const pts = localShapePoints(e);
     poly(c, pts, color, ghost ? .9 : 1.8, null, ghost ? 1 : 5);
     line(c, pts[0][0], pts[0][1], pts[2][0], pts[2][1], color, ghost ? .6 : 1, 2);
-    line(c, -r * 1.15, 0, -r * 2.35, 0, `hsla(54,100%,76%,${alpha})`, ghost ? .7 : 1.4, ghost ? 1 : 6);
+    const tailHue = e.type === 'splinter' ? 314 : 54;
+    line(c, -r * 1.15, 0, -r * (e.type === 'splinter' ? 3.25 : 2.35), 0, `hsla(${tailHue},100%,76%,${alpha})`, ghost ? .7 : 1.4, ghost ? 1 : 6);
   } else if (e.type === 'spinner') {
     for (let i = 0; i < 6; i++) {
       c.save();
@@ -868,16 +874,23 @@ function drawEnemy(c, e, ghost = false) {
 }
 
 function drawShot(c, s) {
+  const a0 = s.angle ?? Math.atan2(s.vy, s.vx);
+  const hotX = Math.cos(a0);
+  const hotY = Math.sin(a0);
   for (let i = s.trail.length - 1; i > 0; i--) {
     const a = i / s.trail.length;
     const tail = s.trail[i];
     const head = s.trail[i - 1];
     if (!tail || !head) continue;
-    line(c, tail.x, tail.y, head.x, head.y, `hsla(${s.hue},100%,72%,${(1 - a) * .7})`, Math.max(1, 3.2 * (1 - a)), 5);
+    line(c, tail.x, tail.y, head.x, head.y, `hsla(${s.hue},100%,72%,${(1 - a) * .92})`, Math.max(1.1, 5.4 * (1 - a)), 8);
   }
   const color = `hsl(${s.hue},100%,82%)`;
-  line(c, s.x - 4, s.y, s.x + 4, s.y, color, 1.8, 7);
-  line(c, s.x, s.y - 4, s.x, s.y + 4, color, 1.8, 7);
+  line(c, s.x - hotX * 18, s.y - hotY * 18, s.x + hotX * 8, s.y + hotY * 8, color, 3.2, 12);
+  line(c, s.x - hotY * 4, s.y + hotX * 4, s.x + hotY * 4, s.y - hotX * 4, 'rgba(255,255,255,.95)', 1.6, 7);
+  c.fillStyle = 'rgba(255,255,255,.96)';
+  c.beginPath();
+  c.arc(s.x + hotX * 6, s.y + hotY * 6, 2.2, 0, TAU);
+  c.fill();
   c.shadowBlur = 0;
 }
 
