@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-19T13:00:01.583658+00:00",
+  "updatedAt": "2026-06-19T14:00:01.882579+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -10976,6 +10976,10 @@
     "https://www.technologyreview.com/2026/06/19/1139313/a-startup-claims-it-broke-through-a-bottleneck-thats-holding-back-llms": {
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/06/cheetah-speed2a.jpg?resize=1200,600",
       "checkedAt": "2026-06-19T12:00:01.610529+00:00"
+    },
+    "https://techcrunch.com/2026/06/19/the-ceo-of-allbirds-new-ai-biz-has-a-plan-but-no-employees": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/Nadia-Carlsten-HS.png?w=1024",
+      "checkedAt": "2026-06-19T14:00:01.882579+00:00"
     }
   }
 }
