@@ -156,7 +156,7 @@
     <p class="fine">Drag anywhere to fly. Shots auto-aim at the nearest threat. Survive the lightstorm.</p>
   </div>
 </div>
-<div class="version">v2.8</div>
+<div class="version">v2.9</div>
 
 <script>
 'use strict';
@@ -437,6 +437,12 @@ function nearestEnemy() {
 
 function selectAimTarget(dt) {
   aimSwitchLock = Math.max(0, aimSwitchLock - dt);
+  const threat = selectCollisionThreat();
+  if (threat) {
+    aimTarget = threat.seed;
+    aimSwitchLock = AIM_SWITCH_LOCK;
+    return threat;
+  }
   let best = null;
   for (const e of enemies) {
     const cluster = scoreAimCluster(e);
@@ -460,6 +466,29 @@ function selectAimTarget(dt) {
     }
   }
   return current;
+}
+
+function selectCollisionThreat() {
+  let best = null;
+  let bestScore = 0;
+  for (const e of enemies) {
+    const dx = e.x - player.x;
+    const dy = e.y - player.y;
+    const d = Math.hypot(dx, dy) || 1;
+    if (d > 320) continue;
+    const rvx = e.vx - player.vx;
+    const rvy = e.vy - player.vy;
+    const closing = -(dx * rvx + dy * rvy) / d;
+    const collisionBand = e.r + player.r + 92;
+    const imminent = d < collisionBand || (d < 290 && closing > 35);
+    if (!imminent) continue;
+    const score = (320 - d) * .024 + Math.max(0, closing) * .018 + (d < collisionBand ? 4 : 0);
+    if (score > bestScore) {
+      best = e;
+      bestScore = score;
+    }
+  }
+  return best ? { seed: best, x: best.x, y: best.y, score: bestScore, rank: Infinity, count: 1, danger: 1, threat: true } : null;
 }
 
 function scoreAimCluster(seed) {
