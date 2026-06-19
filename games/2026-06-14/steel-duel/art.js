@@ -162,6 +162,9 @@
     else if (tk.team === 'ally' && tk.id === 3) { main = '#f0d96f'; dark = '#84762f'; glow = 'rgba(240,217,111,.5)'; }
     if (tk.team === 'enemy') { main = tk.enemyColor || '#ff5277'; dark = shadeHex(main, -0.45); glow = hexToGlow(main, 0.5); }
     const damage = Math.max(0, 4 - (tk.hp == null ? 4 : tk.hp));
+    const sz = Math.max(0.55, Math.min(1.7, tk.scale || 1));
+    const scaled = Math.abs(sz - 1) > 0.01;
+    if (scaled) { ctx.save(); ctx.translate(tk.x, tk.y); ctx.scale(sz, sz); ctx.translate(-tk.x, -tk.y); }
     if (mode === 'classic') {
       ctx.save();
       ctx.translate(Math.round(tk.x), Math.round(tk.y));
@@ -178,6 +181,7 @@
         }
       }
       ctx.restore();
+      if (scaled) ctx.restore();
       return;
     }
     // glow ring
@@ -228,6 +232,7 @@
       ctx.beginPath(); ctx.arc(23, 0, 8 * tk.flash + 3, 0, 7); ctx.fill();
     }
     ctx.restore();
+    if (scaled) ctx.restore();
   }
 
   function drawReticle(ctx, x, y, color) {
