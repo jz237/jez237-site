@@ -1954,5 +1954,17 @@
     "slot": "afternoon",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-06-18-evening-cloud-sample-storage-rack",
+    "title": "Cloud Sample Storage Rack",
+    "tests": "Non-paper reusable visual-layout template; exact generated PNG provenance verified; R2 upload required",
+    "prompt": "Create a finished cinematic square photograph of a Cloud Sample Storage Rack, a tactile non-paper laboratory shelf system for preserving tiny weather specimens. Show a wall-mounted rack of blown-glass cloud jars and pressure capsules in a cramped rooftop meteorology workshop at night: small cumulonimbus curls, fog threads, pearl rain beads, violet storm wisps, amber sunset vapor, and frost halos suspended in individual sealed vessels. Build the rack from dark walnut rails, brushed aluminum brackets, brass valve wheels, ceramic pressure collars, copper condensation tubes, rubber gaskets, unlabeled color swatches, small barometer dials without readable text, glass pipettes, cotton gloves, mineral trays, water stains, chipped enamel tiles, roof-window condensation, and a distant city rain glow through wired glass. Make the scene look physically photographed with shallow depth of field, realistic glass refraction, fine dust, condensation beads, scratches, subtle vapor movement inside the jars, warm bench-lamp pools, and cool blue lightning spill from outside. The storage rack is the main subject; do not render signs, labels, captions, title text, paper sheets, prompt cards, logos, brand marks, people, hands, QR codes, barcodes, watermarks, or readable writing.\n\nSource photo needed: none.\n\nReusable fill-in-the-blank template: Create a finished reusable physical visual about [TOPIC] using [DATA OR DETAILS], set in [SETTING] with [MOOD] lighting. Build the scene around a tactile non-paper installation, rack, shelf system, display case, workbench, miniature set, product mockup, or functional object. Include [MATERIALS], [TOOLS OR PROPS], [SURFACE DETAILS], [LIGHTING DETAILS], and any [MOVING OR LIVING ELEMENTS] that make sense for the topic. Preserve supplied categories, relationships, practical constraints, mood, setting, material logic, and any factual details when provided; invent coherent specifics when not supplied. Avoid paper sheets, placards, readable labels, logos, private data, people or hands unless requested, prompt-card framing, and generic stock-photo styling.\n\nWhat to preserve: the supplied topic, categories, relationships, mood, setting, material logic, and any user-provided factual details.\n\nWhat to change: transform the topic into a richly detailed photographed physical arrangement with coherent construction, tactile materials, environmental context, believable wear, specific props, and cinematic lighting.\n\nExample substitution: [TOPIC] = Cloud Sample Storage Rack; [DATA OR DETAILS] = cumulonimbus curls, fog threads, pearl rain beads, violet storm wisps, amber sunset vapor, frost halos, blown-glass jars, pressure capsules, brass valves, copper condensation tubes, ceramic pressure collars, barometer dials, pipettes, mineral trays, and rooftop workshop rain light; [SETTING] = cramped rooftop meteorology workshop at night; [MOOD] = warm bench-lamp pools mixed with cool blue lightning spill.",
+    "image": "images/2026-06-18-evening-cloud-sample-storage-rack.png",
+    "date": "2026-06-18",
+    "batch": "Daily Prompt",
+    "slot": "evening",
+    "model": "gpt-image-2",
+    "size": "1024x1024"
   }
 ]
