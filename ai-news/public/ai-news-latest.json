@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-19T11:00:01.781337+00:00",
+  "updatedAt": "2026-06-19T10:55:06.047694+00:00",
   "items": [
     {
       "title": "Disentangling Linguistic Relatedness from Task Alignment in Cross-Lingual Transfer",
@@ -10,9 +10,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-19T11:00:09.953055+00:00",
+      "published": "2026-06-19T10:55:11.036565+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-19T11:00:01.781337+00:00",
+      "lastSeen": "2026-06-19T10:55:06.047694+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
@@ -27,11 +27,11 @@
       "summary": "A US investor wants to buy into China’s most successful AI-video company. The timing could hardly be more awkward. General Atlantic is in talks to lead the first outside funding round for Kling AI, the video arm of Chinese tech group Kuaishou, Bloomberg reported. Kling is seeking more than $2bn at a valuation of $18bn, [&hellip;]\nThis story continues at The Next Web",
       "image": "https://media.thenextweb.com/2026/06/KlingAI-logo.avif",
       "published": "2026-06-19T10:47:43+00:00",
-      "firstSeen": "2026-06-19T11:00:01.781337+00:00",
-      "lastSeen": "2026-06-19T11:00:01.781337+00:00",
+      "firstSeen": "2026-06-19T10:55:06.047694+00:00",
+      "lastSeen": "2026-06-19T10:55:06.047694+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1437
+      "score": 2.1462
     },
     {
       "title": "Rejected by 180 investors, Bland just raised $50M to prove voice AI is the future",
@@ -43,11 +43,11 @@
       "summary": "Isaiah Granet spent three weeks at Y Combinator getting turned down by 180 investors. Their reason was always the same: phone calls would not exist in a year. He has now raised more than $100mn to prove them wrong. His startup, Bland, has closed a $50mn Series C led by Dell Technologies Capital, Fortune reported. [&hellip;]\nThis story continues at The Next Web",
       "image": "https://media.thenextweb.com/2026/06/Bland-seriesC.avif",
       "published": "2026-06-19T10:39:00+00:00",
-      "firstSeen": "2026-06-19T11:00:01.781337+00:00",
-      "lastSeen": "2026-06-19T11:00:01.781337+00:00",
+      "firstSeen": "2026-06-19T10:55:06.047694+00:00",
+      "lastSeen": "2026-06-19T10:55:06.047694+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8393
+      "score": 2.8418
     },
     {
       "title": "The AI bubble didn’t pop. It sent the bill",
@@ -59,11 +59,11 @@
       "summary": "Until last week, about 200 organisations could use a preview of Anthropic’s most capable model, Mythos. They got in through a programme called Glasswing, after the system flagged thousands of software vulnerabilities. Then, on the evening of 12 June, the US Commerce Department ordered Anthropic to cut off every foreign national, anywhere. The company could [&hellip;]\nThis story continues at The Next Web",
       "image": "https://media.thenextweb.com/2026/06/AI-Chip.avif",
       "published": "2026-06-19T10:07:24+00:00",
-      "firstSeen": "2026-06-19T11:00:01.781337+00:00",
-      "lastSeen": "2026-06-19T11:00:01.781337+00:00",
+      "firstSeen": "2026-06-19T10:55:06.047694+00:00",
+      "lastSeen": "2026-06-19T10:55:06.047694+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.1235
+      "score": 4.126
     },
     {
       "title": "Retailers want AI-generated ads exempt from EU transparency rules",
@@ -75,11 +75,11 @@
       "summary": "Europe’s retailers would like the law to make an exception for them. AI-generated advertising should be carved out of the European Union’s incoming transparency rules, a retail association has argued, according to Reuters, taking aim at provisions that would require companies to label commercial content produced by artificial intelligence before those rules begin to bite [&hellip;]\nThis story continues at The Next Web",
       "image": "https://media.thenextweb.com/2026/04/european-commission-breach-trivy-supply-chain.avif",
       "published": "2026-06-19T09:55:16+00:00",
-      "firstSeen": "2026-06-19T11:00:01.781337+00:00",
-      "lastSeen": "2026-06-19T11:00:01.781337+00:00",
+      "firstSeen": "2026-06-19T10:55:06.047694+00:00",
+      "lastSeen": "2026-06-19T10:55:06.047694+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.5175
+      "score": 3.5199
     },
     {
       "title": "Early users of Anthropic’s Mythos still have access after US order",
@@ -92,10 +92,10 @@
       "image": "https://media.thenextweb.com/2026/06/anthropic-mythos-eu-enisa-cybersecurity-access.avif",
       "published": "2026-06-19T09:35:39+00:00",
       "firstSeen": "2026-06-19T10:00:01.793889+00:00",
-      "lastSeen": "2026-06-19T11:00:01.781337+00:00",
+      "lastSeen": "2026-06-19T10:55:06.047694+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1079
+      "score": 5.1103
     },
     {
       "title": "Meta signs new AI computing deals with data-centre firm Crusoe",
@@ -108,10 +108,10 @@
       "image": "https://media.thenextweb.com/2026/04/meta-users.avif",
       "published": "2026-06-19T09:27:03+00:00",
       "firstSeen": "2026-06-19T10:00:01.793889+00:00",
-      "lastSeen": "2026-06-19T11:00:01.781337+00:00",
+      "lastSeen": "2026-06-19T10:55:06.047694+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1037
+      "score": 2.1061
     },
     {
       "title": "Higgsfield launches enterprise marketing agents built on NVIDIA, claiming 78 per cent of Fortune 500 as clients",
@@ -124,10 +124,10 @@
       "image": "https://media.thenextweb.com/2026/06/higgsfield-supercomputer-enterprise-marketing-nvidia.avif",
       "published": "2026-06-19T09:21:43+00:00",
       "firstSeen": "2026-06-19T10:00:01.793889+00:00",
-      "lastSeen": "2026-06-19T11:00:01.781337+00:00",
+      "lastSeen": "2026-06-19T10:55:06.047694+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 0.4011
+      "score": 0.4035
     },
     {
       "title": "Turkey clears Uber’s acquisition of Getir’s delivery business",
@@ -140,10 +140,10 @@
       "image": "https://media.thenextweb.com/2026/05/Uber.avif",
       "published": "2026-06-19T09:17:37+00:00",
       "firstSeen": "2026-06-19T10:00:01.793889+00:00",
-      "lastSeen": "2026-06-19T11:00:01.781337+00:00",
+      "lastSeen": "2026-06-19T10:55:06.047694+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1991
+      "score": 3.2015
     },
     {
       "title": "Hyundai to buy SoftBank’s last Boston Dynamics stake for $325m",
@@ -156,10 +156,10 @@
       "image": "https://media.thenextweb.com/2026/06/Hyundai.avif",
       "published": "2026-06-19T08:53:33+00:00",
       "firstSeen": "2026-06-19T10:00:01.793889+00:00",
-      "lastSeen": "2026-06-19T11:00:01.781337+00:00",
+      "lastSeen": "2026-06-19T10:55:06.047694+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.4374
+      "score": 2.4398
     },
     {
       "title": "China tightens indium phosphide checks as AI demand climbs",
@@ -172,26 +172,10 @@
       "image": "https://media.thenextweb.com/2021/12/chinaAIflag.avif",
       "published": "2026-06-19T08:22:11+00:00",
       "firstSeen": "2026-06-19T09:00:01.265680+00:00",
-      "lastSeen": "2026-06-19T11:00:01.781337+00:00",
+      "lastSeen": "2026-06-19T10:55:06.047694+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0725
-    },
-    {
-      "title": "As the World Claims Tech Sovereignty, Where Does Australia Stand?",
-      "url": "https://www.techrepublic.com/article/data-tech-sovereignty-australia-apac",
-      "source": "TechRepublic AI",
-      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Australian enterprises remain dependent on foreign technology infrastructure, while major economies treat that dependency as a strategic liability.\nThe post As the World Claims Tech Sovereignty, Where Does Australia Stand? appeared first on TechRepublic.",
-      "image": "https://assets.techrepublic.com/uploads/2026/06/tr-06192026-data-tech-sovereignty-australia-apac.jpg?f=jpeg",
-      "published": "2026-06-19T08:10:36+00:00",
-      "firstSeen": "2026-06-19T11:00:01.781337+00:00",
-      "lastSeen": "2026-06-19T11:00:01.781337+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.167
+      "score": 2.0748
     },
     {
       "title": "Alibaba Cloud opens first data centres in France as the EU tightens rules on foreign cloud providers",
@@ -207,7 +191,7 @@
       "lastSeen": "2026-06-19T10:00:01.793889+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.4666
+      "score": 3.4689
     },
     {
       "title": "US court rules Ohio can restrict children’s use of social media",
@@ -223,7 +207,7 @@
       "lastSeen": "2026-06-19T10:00:01.793889+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1635
+      "score": 3.1658
     },
     {
       "title": "The US says ASML’s top chip tool may be in China. ASML says it isn’t",
@@ -236,10 +220,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/GettyImages-2250757778.jpg?resize=1200%2C800",
       "published": "2026-06-19T07:59:12+00:00",
       "firstSeen": "2026-06-19T08:00:01.652387+00:00",
-      "lastSeen": "2026-06-19T11:00:01.781337+00:00",
+      "lastSeen": "2026-06-19T10:55:06.047694+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2017
+      "score": 2.204
     },
     {
       "title": "Meta lobbies Congress for protection from child-harm lawsuits",
@@ -255,7 +239,7 @@
       "lastSeen": "2026-06-19T10:00:01.793889+00:00",
       "editorial_allow": false,
       "editorial_reason": "fluff",
-      "score": -0.5451
+      "score": -0.5428
     },
     {
       "title": "SpaceX falls more than 6% as the record IPO rally cools",
@@ -271,7 +255,7 @@
       "lastSeen": "2026-06-19T10:00:01.793889+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0516
+      "score": 2.0539
     },
     {
       "title": "Leaked licences show Bulgaria greenlit surveillance exports to governments accused of repression",
@@ -287,7 +271,7 @@
       "lastSeen": "2026-06-19T09:00:01.265680+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0398
+      "score": 2.042
     },
     {
       "title": "Barret Zoph is out at OpenAI again after just five months",
@@ -300,10 +284,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/STK155_OPEN_AI_CVirginia_C.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-19T04:49:33+00:00",
       "firstSeen": "2026-06-19T05:00:01.341117+00:00",
-      "lastSeen": "2026-06-19T11:00:01.781337+00:00",
+      "lastSeen": "2026-06-19T10:55:06.047694+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1866
+      "score": 5.1887
     },
     {
       "title": "SpaceX wants to build AI data centers in space. Will it work?",
@@ -316,10 +300,10 @@
       "image": "https://www.sciencedaily.com/images/1920/spacecraft-satellite-orbiting-earth.webp",
       "published": "2026-06-19T03:43:09+00:00",
       "firstSeen": "2026-06-19T05:00:01.341117+00:00",
-      "lastSeen": "2026-06-19T11:00:01.781337+00:00",
+      "lastSeen": "2026-06-19T10:55:06.047694+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0186
+      "score": 2.0206
     },
     {
       "title": "Source: Elastic agrees to buy CRV-backed DeductiveAI for up to $85M",
@@ -332,10 +316,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2018/03/gettyimages-824355868.jpg?resize=1200%2C760",
       "published": "2026-06-19T00:51:11+00:00",
       "firstSeen": "2026-06-19T01:00:01.939122+00:00",
-      "lastSeen": "2026-06-19T11:00:01.781337+00:00",
+      "lastSeen": "2026-06-19T10:55:06.047694+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0198
+      "score": 2.0217
     },
     {
       "title": "Datasette Apps: Host custom HTML applications inside Datasette",
@@ -348,10 +332,10 @@
       "image": "https://static.simonwillison.net/static/2026/datasette-timeline-app.jpg",
       "published": "2026-06-18T23:58:38+00:00",
       "firstSeen": "2026-06-19T01:00:01.939122+00:00",
-      "lastSeen": "2026-06-19T11:00:01.781337+00:00",
+      "lastSeen": "2026-06-19T10:55:06.047694+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.7999
+      "score": 3.8017
     },
     {
       "title": "Microsoft discovers new lightweight backdoor that steals cryptocurrency",
@@ -364,10 +348,10 @@
       "image": "https://cdn.arstechnica.net/wp-content/uploads/2026/02/cryptocurrency-theft-heist-1152x648.jpg",
       "published": "2026-06-18T23:28:52+00:00",
       "firstSeen": "2026-06-19T02:00:01.823995+00:00",
-      "lastSeen": "2026-06-19T11:00:01.781337+00:00",
+      "lastSeen": "2026-06-19T10:55:06.047694+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8488
+      "score": 1.8506
     },
     {
       "title": "How the Peter Thiel-Linked Dialog Club Secretly Ranks Its Members",
@@ -380,10 +364,10 @@
       "image": "https://media.wired.com/photos/6a33038a1f4e7aecefeb3113/master/pass/061726-peter-thiel-secret-society-ranked.jpg",
       "published": "2026-06-18T22:12:45+00:00",
       "firstSeen": "2026-06-18T23:00:01.561733+00:00",
-      "lastSeen": "2026-06-19T11:00:01.781337+00:00",
+      "lastSeen": "2026-06-19T10:55:06.047694+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.6611
+      "score": 2.6629
     },
     {
       "title": "AI inference startup Baseten reportedly raising $1.5B months after its last mega-round",
@@ -396,10 +380,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2024/03/GettyImages-1502217391.jpg?resize=1200%2C800",
       "published": "2026-06-18T21:20:13+00:00",
       "firstSeen": "2026-06-18T21:26:35.954324+00:00",
-      "lastSeen": "2026-06-19T11:00:01.781337+00:00",
+      "lastSeen": "2026-06-19T10:55:06.047694+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2426
+      "score": 2.2443
     },
     {
       "title": "The White House Is Making Up Its Rules for AI in Real Time",
@@ -412,26 +396,10 @@
       "image": "https://media.wired.com/photos/6a342bff039398b1addb3ba2/master/pass/Model-Behavior-SB.jpg",
       "published": "2026-06-18T21:03:43+00:00",
       "firstSeen": "2026-06-18T21:26:35.954324+00:00",
-      "lastSeen": "2026-06-19T11:00:01.781337+00:00",
+      "lastSeen": "2026-06-19T10:55:06.047694+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.9369
-    },
-    {
-      "title": "Top 5 Prompt Engineering Certifications That Are Worth Taking (2026)",
-      "url": "https://www.techrepublic.com/article/top-prompt-engineering-certifications",
-      "source": "TechRepublic AI",
-      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "These prompt engineering courses can help you refine and structure natural language requests to get the most out of generative AI.\nThe post Top 5 Prompt Engineering Certifications That Are Worth Taking (2026) appeared first on TechRepublic.",
-      "image": "https://assets.techrepublic.com/uploads/2024/06/tr_20240627-top-prompt-engineering-certifications.jpg?f=jpeg",
-      "published": "2026-06-18T20:59:21+00:00",
-      "firstSeen": "2026-05-30T16:14:44.220303+00:00",
-      "lastSeen": "2026-06-19T11:00:01.781337+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.8954
+      "score": 7.9386
     },
     {
       "title": "Snap spins off AI video team into new company, Dotmo, due to costs",
@@ -444,10 +412,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/GettyImages-2281911508.jpg?resize=1200%2C856",
       "published": "2026-06-18T20:30:00+00:00",
       "firstSeen": "2026-06-18T21:26:35.954324+00:00",
-      "lastSeen": "2026-06-19T11:00:01.781337+00:00",
+      "lastSeen": "2026-06-19T10:55:06.047694+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9253
+      "score": 1.927
     },
     {
       "title": "How FERC’s Large-Load Interconnection Actions Help Address Grid Stress, Improve Affordability",
@@ -460,10 +428,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2025/09/nvidiaheadquarters.jpg",
       "published": "2026-06-18T20:00:27+00:00",
       "firstSeen": "2026-06-18T21:00:01.302903+00:00",
-      "lastSeen": "2026-06-19T11:00:01.781337+00:00",
+      "lastSeen": "2026-06-19T10:55:06.047694+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9153
+      "score": 1.917
     },
     {
       "title": "OpenAI is bringing on some big guns in the lead-up to its IPO",
@@ -476,10 +444,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/noam-shazeer-deal-ball.png?resize=1200%2C800",
       "published": "2026-06-18T19:59:22+00:00",
       "firstSeen": "2026-06-18T20:00:01.945108+00:00",
-      "lastSeen": "2026-06-19T11:00:01.781337+00:00",
+      "lastSeen": "2026-06-19T10:55:06.047694+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.9149
+      "score": 8.9166
     },
     {
       "title": "Apple patches high-severity eavesdropping vulnerability in Beats Studio Buds",
@@ -492,10 +460,10 @@
       "image": "https://cdn.arstechnica.net/wp-content/uploads/2021/11/Beats-Studio-Buds-1152x648.jpg",
       "published": "2026-06-18T19:41:35+00:00",
       "firstSeen": "2026-06-18T21:00:01.302903+00:00",
-      "lastSeen": "2026-06-19T11:00:01.781337+00:00",
+      "lastSeen": "2026-06-19T10:55:06.047694+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.869
+      "score": 2.8706
     },
     {
       "title": "A 201-year-old mutual bank just launched an AI Center of Excellence with a startup partner",
@@ -511,7 +479,7 @@
       "lastSeen": "2026-06-19T09:00:01.265680+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.4667
+      "score": 2.4683
     },
     {
       "title": "Meta’s AI Workers Are Revolting, Peter Thiel’s Secret Society, and SBF’s Plea to Trump",
@@ -524,10 +492,10 @@
       "image": "https://media.wired.com/photos/6a3308960b213b93014c14d7/master/pass/Uncanny-Valley-Meta%E2%80%99s%20Internal%20Unit%20Spiral-v1.jpg",
       "published": "2026-06-18T19:29:51+00:00",
       "firstSeen": "2026-06-18T20:00:01.945108+00:00",
-      "lastSeen": "2026-06-19T11:00:01.781337+00:00",
+      "lastSeen": "2026-06-19T10:55:06.047694+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9051
+      "score": 1.9067
     },
     {
       "title": "Spotify launches Reserved, a ticketing feature that rewards superfans with early concert access",
@@ -543,7 +511,7 @@
       "lastSeen": "2026-06-19T09:00:01.265680+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.5607
+      "score": 3.5624
     },
     {
       "title": "UPS is building a real-time digital twin of its entire logistics network, updated every 10 minutes",
@@ -559,7 +527,7 @@
       "lastSeen": "2026-06-19T09:00:01.265680+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.758
+      "score": 1.7596
     },
     {
       "title": "datasette-acl 0.6a0",
@@ -572,10 +540,10 @@
       "image": "",
       "published": "2026-06-18T19:03:13+00:00",
       "firstSeen": "2026-06-19T01:00:01.939122+00:00",
-      "lastSeen": "2026-06-19T11:00:01.781337+00:00",
+      "lastSeen": "2026-06-19T10:55:06.047694+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.5963
+      "score": 2.598
     },
     {
       "title": "Apple opens iOS to rival app stores in Brazil after antitrust settlement with CADE",
@@ -591,7 +559,7 @@
       "lastSeen": "2026-06-19T09:00:01.265680+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8552
+      "score": 2.8568
     },
     {
       "title": "Rivian sued for allegedly promising self-driving features its first-generation vehicles can never deliver",
@@ -607,7 +575,7 @@
       "lastSeen": "2026-06-19T08:00:01.652387+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7529
+      "score": 1.7545
     },
     {
       "title": "Almost half of US singles feel negatively about AI in dating, Match says",
@@ -620,10 +588,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2023/05/GettyImages-1131615694.jpg?resize=1200%2C800",
       "published": "2026-06-18T18:51:46+00:00",
       "firstSeen": "2026-06-18T19:00:01.626117+00:00",
-      "lastSeen": "2026-06-19T11:00:01.781337+00:00",
+      "lastSeen": "2026-06-19T10:55:06.047694+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9926
+      "score": 2.9942
     },
     {
       "title": "General Intuition is raising $300 million to train AI agents on the video game data OpenAI tried to buy",
@@ -639,7 +607,39 @@
       "lastSeen": "2026-06-19T08:00:01.652387+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 9.2517
+      "score": 9.2533
+    },
+    {
+      "title": "FERC orders a fast lane for data centre grid connections, but the electricity to fill them is another matter",
+      "url": "https://thenextweb.com/news/ferc-data-centre-grid-fast-lane-ai",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The Federal Energy Regulatory Commission on Thursday ordered six major grid operators to fast-track interconnection requests from data centres and other large electricity users. Under the directive, approved unanimously, grid operators must demonstrate that data centres are “able to connect to the transmission system in a timely and orderly manner.” Data centres will be responsible for paying [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/ferc-data-centre-grid-fast-lane-ai.avif",
+      "published": "2026-06-18T18:36:48+00:00",
+      "firstSeen": "2026-06-18T19:00:01.626117+00:00",
+      "lastSeen": "2026-06-19T08:00:01.652387+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.8493
+    },
+    {
+      "title": "BMW slashes profit forecast as China’s EV makers squeeze European carmakers on two fronts",
+      "url": "https://thenextweb.com/news/bmw-profit-warning-china-european-carmakers",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "BMW on Tuesday cut its full-year profit forecast for the car business, lowering its expected automotive EBIT margin to a corridor of 1 to 3 per cent from prior guidance of 4 to 6 per cent. The company blamed an accelerating decline in the Chinese market and the widening economic fallout from the conflict in the Middle [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/bmw-i7-gen6-battery-rimac-range-charging.avif",
+      "published": "2026-06-18T18:29:45+00:00",
+      "firstSeen": "2026-06-18T19:00:01.626117+00:00",
+      "lastSeen": "2026-06-19T07:00:01.435261+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 1.7471
     },
     {
       "title": "The Life Scientific: Dean Lomax",
@@ -652,10 +652,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-15T20:00:00+00:00",
       "firstSeen": "2026-06-15T21:00:01.290903+00:00",
-      "lastSeen": "2026-06-19T11:00:01.781337+00:00",
+      "lastSeen": "2026-06-19T10:55:06.047694+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.2881
+      "score": 1.2884
     },
     {
       "title": "The Life Scientific: Helen Hastie",
@@ -668,7 +668,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-08T20:00:00+00:00",
       "firstSeen": "2026-06-08T21:00:01.371488+00:00",
-      "lastSeen": "2026-06-19T11:00:01.781337+00:00",
+      "lastSeen": "2026-06-19T10:55:06.047694+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 1.1909
