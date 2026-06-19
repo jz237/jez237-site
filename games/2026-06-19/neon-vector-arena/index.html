@@ -156,7 +156,7 @@
     <p class="fine">Drag anywhere to move. Mouse aims. On touch, the ship auto-aims at the nearest threat. Survive the lightstorm.</p>
   </div>
 </div>
-<div class="version">v1.4</div>
+<div class="version">v1.5</div>
 
 <script>
 'use strict';
@@ -193,8 +193,8 @@ let player;
 
 const GLOW_SCALE = .32;
 const MAX_ENEMIES = 42;
-const MAX_PARTICLES = 145;
-const MAX_FRAGMENTS = 220;
+const MAX_PARTICLES = 260;
+const MAX_FRAGMENTS = 640;
 const SHOT_BLAST_RADIUS = 105;
 const SHOT_BLAST_FORCE = 430;
 const DEMO_EXTRA_SECONDS = 15;
@@ -295,16 +295,24 @@ function spawnEnemy(initial = false) {
   }
   const typeRoll = Math.random();
   const type = typeRoll < .1 + wave * .008 ? 'splitter' : typeRoll < .36 ? 'spinner' : typeRoll < .56 ? 'dart' : 'cube';
-  const speed = type === 'dart' ? rand(96, 142) : type === 'splinter' ? rand(160, 215) : type === 'splitter' ? rand(36, 58) : rand(62, 105);
-  const hp = type === 'splitter' ? 5 + Math.floor(wave / 2) : type === 'spinner' ? 2 : 1;
+  const baseR = type === 'splitter' ? 24 : type === 'spinner' ? 14 : type === 'dart' ? 11 : 13;
+  let scale = type === 'splitter' ? rand(1.25, 1.9) : rand(.72, 1.42);
+  if (Math.random() < .18 + wave * .012) scale = rand(1.45, type === 'splitter' ? 2.25 : 2.05);
+  const largeSplits = scale >= 1.34;
+  const speedBase = type === 'dart' ? rand(96, 142) : type === 'splitter' ? rand(36, 58) : rand(62, 105);
+  const speed = speedBase / Math.sqrt(scale);
+  const baseHp = type === 'splitter' ? 5 + Math.floor(wave / 2) : type === 'spinner' ? 2 : 1;
+  const hp = Math.max(1, Math.ceil(baseHp * (largeSplits ? scale : Math.max(.8, scale))));
   enemies.push({
     x, y,
     vx: rand(-20, 20),
     vy: rand(-20, 20),
-    r: type === 'splitter' ? 31 : type === 'splinter' ? 7.2 : type === 'spinner' ? 14 : type === 'dart' ? 11 : 13,
+    r: baseR * scale,
     hp,
     maxHp: hp,
     type,
+    scale,
+    largeSplits,
     speed: speed + wave * 4,
     rot: rand(0, TAU),
     spin: rand(-2.8, 2.8),
@@ -395,7 +403,7 @@ function worldShapePoints(e, scale = 1) {
 function addVectorFragments(e) {
   if (fragments.length > MAX_FRAGMENTS) fragments.splice(0, fragments.length - MAX_FRAGMENTS);
   const pts = worldShapePoints(e, 1);
-  const count = e.type === 'splitter' ? 2 : 1;
+  const count = e.type === 'splitter' ? 6 : e.largeSplits ? 4 : 1;
   for (let pass = 0; pass < count; pass++) {
     for (let i = 0; i < pts.length; i++) {
       const a = pts[i];
@@ -403,7 +411,7 @@ function addVectorFragments(e) {
       const mx = (a[0] + b[0]) * .5;
       const my = (a[1] + b[1]) * .5;
       const out = Math.atan2(my - e.y, mx - e.x) + rand(-.55, .55);
-      const speed = rand(90, e.type === 'splitter' ? 330 : 250);
+      const speed = rand(90, e.type === 'splitter' || e.largeSplits ? 430 : 250);
       fragments.push({
         x: mx,
         y: my,
@@ -438,7 +446,8 @@ function addVectorFragments(e) {
       }
     }
   }
-  for (let i = 0; i < 10; i++) {
+  const dust = e.type === 'splitter' || e.largeSplits ? 36 : 10;
+  for (let i = 0; i < dust; i++) {
     const a = rand(0, TAU);
     const d = rand(0, e.r * 1.2);
     fragments.push({
@@ -459,7 +468,7 @@ function addVectorFragments(e) {
 
 function addHitShards(e, x, y, hue) {
   if (fragments.length > MAX_FRAGMENTS) fragments.splice(0, fragments.length - MAX_FRAGMENTS);
-  const count = e.type === 'splitter' ? 10 : 6;
+  const count = e.type === 'splitter' || e.largeSplits ? Math.round(clamp(e.r * .9, 18, 42)) : 6;
   for (let i = 0; i < count; i++) {
     const a = rand(0, TAU);
     const speed = rand(120, 300);
@@ -501,26 +510,28 @@ function blastEnemies(x, y, force, radius, sourceVX = 0, sourceVY = 0) {
 }
 
 function explode(x, y, hue, big = false) {
-  addSpark(x, y, big ? 18 : 9, hue, big ? 1.05 : .82);
-  particles.push({ x, y, vx: 0, vy: 0, life: big ? .38 : .28, max: big ? .38 : .28, r: big ? 58 : 34, hue, kind: 'ring' });
-  particles.push({ x, y, vx: 0, vy: 0, life: .09, max: .09, r: big ? 90 : 58, hue: 0, kind: 'flash' });
+  addSpark(x, y, big ? 34 : 9, hue, big ? 1.28 : .82);
+  particles.push({ x, y, vx: 0, vy: 0, life: big ? .46 : .28, max: big ? .46 : .28, r: big ? 88 : 34, hue, kind: 'ring' });
+  particles.push({ x, y, vx: 0, vy: 0, life: .11, max: .11, r: big ? 140 : 58, hue: 0, kind: 'flash' });
   shake = Math.max(shake, big ? 8 : 4);
 }
 
 function splitEnemy(e) {
-  const count = 9;
-  for (let i = 0; i < count && enemies.length < MAX_ENEMIES + 12; i++) {
+  const count = Math.round(clamp(e.r * (e.type === 'splitter' ? .95 : .72), 14, e.type === 'splitter' ? 36 : 28));
+  for (let i = 0; i < count && enemies.length < MAX_ENEMIES + 32; i++) {
     const a = i * TAU / count + rand(-.18, .18);
-    const burst = rand(190, 310);
+    const burst = rand(220, 390);
     enemies.push({
-      x: e.x + Math.cos(a) * rand(18, 34),
-      y: e.y + Math.sin(a) * rand(18, 34),
+      x: e.x + Math.cos(a) * rand(e.r * .45, e.r * 1.05),
+      y: e.y + Math.sin(a) * rand(e.r * .45, e.r * 1.05),
       vx: Math.cos(a) * burst + e.vx * .22,
       vy: Math.sin(a) * burst + e.vy * .22,
-      r: rand(6.2, 8.4),
+      r: rand(4.6, 7.4),
       hp: 1,
       maxHp: 1,
       type: 'splinter',
+      scale: rand(.42, .68),
+      largeSplits: false,
       speed: rand(168, 220) + wave * 5,
       rot: a,
       spin: rand(-8, 8),
@@ -529,8 +540,12 @@ function splitEnemy(e) {
       trail: []
     });
   }
-  addSpark(e.x, e.y, 30, 44, 1.45);
-  particles.push({ x: e.x, y: e.y, vx: 0, vy: 0, life: .42, max: .42, r: 112, hue: 54, kind: 'ring' });
+  addSpark(e.x, e.y, 60, e.hue, 1.75);
+  particles.push({ x: e.x, y: e.y, vx: 0, vy: 0, life: .55, max: .55, r: Math.max(118, e.r * 4.2), hue: e.hue, kind: 'ring' });
+}
+
+function shouldSplitEnemy(e) {
+  return e.type !== 'splinter' && (e.type === 'splitter' || e.largeSplits || e.r >= 18);
 }
 
 function update(dt) {
@@ -652,11 +667,12 @@ function update(dt) {
         if (e.hp <= 0) {
           addVectorFragments(e);
           enemies.splice(i, 1);
-          if (e.type === 'splitter') splitEnemy(e);
+          const bigBreak = shouldSplitEnemy(e);
+          if (bigBreak) splitEnemy(e);
           comboTimer = 2.2;
           combo = clamp(combo + 1, 1, 12);
-          score += (e.type === 'splinter' ? 35 : 100) * combo + wave * 15;
-          explode(e.x, e.y, e.hue, e.type === 'splitter');
+          score += (e.type === 'splinter' ? 35 : 100 + Math.round(e.r * 4)) * combo + wave * 15;
+          explode(e.x, e.y, e.hue, bigBreak);
           if (Math.random() < .08) pickups.push({ x: e.x, y: e.y, r: 9, life: 6, hue: 54 });
         }
         break;
