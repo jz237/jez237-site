@@ -42,22 +42,30 @@
       position: static;
       z-index: auto;
       backdrop-filter: none;
-      padding: 46px 22px 24px;
-      background: linear-gradient(180deg, rgba(255,255,255,.94), rgba(233,248,252,.88)) !important;
+      padding: 30px 22px 24px;
+      background:
+        radial-gradient(circle at 82% 0%, rgba(19,184,223,.2), transparent 25rem),
+        linear-gradient(180deg, rgba(255,255,255,.94), rgba(233,248,252,.88)) !important;
       border: 1px solid rgba(216,232,239,.9) !important;
       border-radius: 0 0 8px 8px;
       box-shadow: var(--shadow);
     }
+    .hero-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(280px, 410px);
+      gap: clamp(18px, 4vw, 36px);
+      align-items: end;
+    }
     h1 {
       margin: 0 0 10px;
       color: var(--accent-strong);
-      font-size: clamp(2rem, 5vw, 4.2rem);
-      letter-spacing: -.06em;
+      font-size: clamp(2rem, 5vw, 3.9rem);
+      letter-spacing: -.04em;
       line-height: .95;
     }
-    .lede { max-width: 760px; color: #4e6f82; font-size: 1.04rem; font-weight: 560; }
+    .lede { max-width: 760px; color: #4e6f82; font-size: clamp(.98rem, 2.1vw, 1.08rem); font-weight: 560; margin: 0; }
     .meta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
-    .pill {
+    .pill, .control {
       border: 1px solid var(--line);
       background: rgba(255,255,255,.82);
       color: var(--accent);
@@ -65,8 +73,44 @@
       border-radius: 999px;
       text-decoration: none;
       box-shadow: 0 8px 18px rgba(0,65,105,.08);
+      font: inherit;
+    }
+    .pill.stat {
+      color: #31546a;
+      font-weight: 760;
+    }
+    .pill.featured {
+      border-color: rgba(0,122,176,.4);
+      background: linear-gradient(135deg, #ffffff, #dff8ff);
+      color: #005f8c;
+      font-weight: 850;
+      box-shadow: 0 12px 26px rgba(0,122,176,.16);
+    }
+    .hero-panel {
+      border: 1px solid rgba(216,232,239,.92);
+      border-radius: 8px;
+      background: rgba(255,255,255,.72);
+      box-shadow: 0 12px 24px rgba(0,65,105,.09);
+      padding: 12px;
+    }
+    .hero-panel-label {
+      margin: 0 0 8px;
+      color: #31546a;
+      font-size: .78rem;
+      font-weight: 850;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .control {
+      width: 100%;
+      min-height: 40px;
+      color: #47677a;
+      outline: none;
     }
     main { padding: 26px 22px 70px; }
+    .world {
+      scroll-margin-top: calc(var(--nav-height, 64px) + 14px);
+    }
     .world + .world { margin-top: 34px; }
     .world-hero {
       position: relative;
@@ -224,6 +268,14 @@
     .lightbox.actual .lightbox-stage { align-items: flex-start; justify-content: flex-start; }
     .lightbox.actual .lightbox-stage img { max-width: none; max-height: none; cursor: zoom-out; }
     @media (max-width: 680px) {
+      .hero { padding-top: 24px; }
+      .hero-layout {
+        grid-template-columns: 1fr;
+        gap: 18px;
+      }
+      .meta { gap: 8px; margin-top: 16px; }
+      .pill, .control { padding: 8px 10px; }
+      .pill.stat { font-size: .92rem; }
       .world-hero { min-height: 62vh; }
       .world-hero::after {
         background:
@@ -241,12 +293,23 @@
 <body>
   <header id="site-nav"></header>
   <header class="hero">
-    <h1>Fictional Worlds</h1>
-    <p class="lede">Cataloged settings from the GPT Image 2 prompt archive, grouped by world name with their scenes, maps, artifacts, and continuity notes.</p>
-    <div class="meta">
-      <a class="pill" href="mirthcap-story.html">Mirthcap story</a>
-      <a class="pill" href="index.html">GPT Image 2 archive</a>
-      <a class="pill" href="../../">Home</a>
+    <div class="hero-layout">
+      <div>
+        <h1>Fictional Worlds</h1>
+        <p class="lede">Recurring GPT Image 2 settings grouped by world, with scenes, maps, artifacts, and continuity notes.</p>
+        <div class="meta">
+          <span class="pill stat" id="world-count-pill">Worlds: loading...</span>
+          <span class="pill stat" id="image-count-pill">Images: loading...</span>
+          <a class="pill featured" href="mirthcap-story.html">Mirthcap story</a>
+          <a class="pill" href="index.html">GPT Image 2 archive</a>
+        </div>
+      </div>
+      <div class="hero-panel">
+        <p class="hero-panel-label">Jump to world</p>
+        <select class="control" id="world-picker" aria-label="Jump to fictional world">
+          <option value="">Loading worlds...</option>
+        </select>
+      </div>
     </div>
   </header>
   <main id="worlds" aria-live="polite">
@@ -268,6 +331,10 @@
   <script>
     (function () {
       const worldsRoot = document.getElementById('worlds');
+      const worldPicker = document.getElementById('world-picker');
+      const worldCountPill = document.getElementById('world-count-pill');
+      const imageCountPill = document.getElementById('image-count-pill');
+      const siteNav = document.getElementById('site-nav');
       const viewer = document.getElementById('image-lightbox');
       const stage = document.getElementById('lightbox-stage');
       const image = document.getElementById('lightbox-image');
@@ -282,6 +349,14 @@
         const base = IMAGE_BASE_URL.endsWith('/') ? IMAGE_BASE_URL : `${IMAGE_BASE_URL}/`;
         return `${base}${path.slice('images/'.length)}`;
       };
+      const slugify = (value) => String(value || 'world').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'world';
+
+      function updateNavHeight() {
+        if (siteNav) document.documentElement.style.setProperty('--nav-height', `${siteNav.offsetHeight || 64}px`);
+      }
+      window.addEventListener('resize', updateNavHeight);
+      window.addEventListener('load', updateNavHeight);
+      setTimeout(updateNavHeight, 0);
 
       function cardHtml(item) {
         const world = item.world || {};
@@ -338,10 +413,17 @@
         });
         if (!groups.size) {
           worldsRoot.innerHTML = '<p class="empty">No fictional world images have been archived yet.</p>';
+          worldPicker.innerHTML = '<option value="">No worlds archived</option>';
+          worldCountPill.textContent = 'Worlds: 0';
+          imageCountPill.textContent = 'Images: 0';
           return;
         }
+        const worlds = Array.from(groups.values()).map((world) => ({ ...world, slug: slugify(world.name) }));
+        worldCountPill.textContent = `Worlds: ${worlds.length}`;
+        imageCountPill.textContent = `Images: ${items.length}`;
+        worldPicker.innerHTML = '<option value="">Choose a world...</option>' + worlds.map((world) => `<option value="${escapeHtml(world.slug)}">${escapeHtml(world.name)} (${world.items.length})</option>`).join('');
         worldsRoot.innerHTML = Array.from(groups.values()).map((world) => `
-          <section class="world">
+          <section class="world" id="${escapeHtml(slugify(world.name))}">
             ${heroHtml(world)}
             <div class="world-head">
               <div>
@@ -355,7 +437,14 @@
           </section>
         `).join('');
         bindImages();
+        updateNavHeight();
       }
+
+      worldPicker.addEventListener('change', () => {
+        const id = worldPicker.value;
+        if (!id) return;
+        document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
 
       function compareWorldItems(a, b) {
         const aWorld = String(a.world?.name || '');

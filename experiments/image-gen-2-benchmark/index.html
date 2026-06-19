@@ -50,7 +50,7 @@
       position: relative;
       top: auto;
       z-index: 1;
-      padding: 54px 22px 30px;
+      padding: 30px 22px 24px;
       background:
         radial-gradient(circle at 82% 0%, rgba(19,184,223,.18), transparent 26rem),
         linear-gradient(180deg, rgba(255,255,255,.92), rgba(233,248,252,.86)) !important;
@@ -61,9 +61,15 @@
       -webkit-backdrop-filter: none !important;
     }
     .gallery-hero-inner { max-width: 1180px; margin: 0 auto; }
-    h1 { margin: 0 0 12px; color: var(--accent-strong); font-size: clamp(2.2rem, 6vw, 5rem); letter-spacing: -0.07em; line-height: .92; }
-    .lede { max-width: 850px; color: #4e6f82; font-size: 1.1rem; font-weight: 560; }
-    .meta, .controls { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
+    .hero-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(280px, 410px);
+      gap: clamp(18px, 4vw, 36px);
+      align-items: end;
+    }
+    h1 { margin: 0 0 10px; color: var(--accent-strong); font-size: clamp(2rem, 5vw, 3.9rem); letter-spacing: -0.04em; line-height: .96; }
+    .lede { max-width: 760px; color: #4e6f82; font-size: clamp(.98rem, 2.1vw, 1.08rem); font-weight: 560; margin: 0; }
+    .meta, .controls { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
     .pill, .control, button.control {
       border: 1px solid var(--line);
       background: rgba(255,255,255,.82);
@@ -74,6 +80,38 @@
       box-shadow: 0 8px 18px rgba(0,65,105,.08);
     }
     a.pill { text-decoration: none; color: var(--accent); }
+    .pill.stat {
+      color: #31546a;
+      font-weight: 760;
+    }
+    .pill.featured {
+      border-color: rgba(0,122,176,.4);
+      background: linear-gradient(135deg, #ffffff, #dff8ff);
+      color: #005f8c;
+      font-weight: 850;
+      box-shadow: 0 12px 26px rgba(0,122,176,.16);
+    }
+    .hero-panel {
+      border: 1px solid rgba(216,232,239,.92);
+      border-radius: 8px;
+      background: rgba(255,255,255,.72);
+      box-shadow: 0 12px 24px rgba(0,65,105,.09);
+      padding: 12px;
+    }
+    .hero-panel-label {
+      margin: 0 0 8px;
+      color: #31546a;
+      font-size: .78rem;
+      font-weight: 850;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .hero-panel .controls {
+      margin-top: 0;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 9px;
+    }
     .control { min-height: 40px; }
     select.control, input.control { outline: none; }
     button.control { cursor: pointer; color: var(--text); }
@@ -222,6 +260,18 @@
     .lightbox.actual .lightbox-stage { align-items: flex-start; justify-content: flex-start; }
     .lightbox.actual .lightbox-stage img { max-width: none; max-height: none; cursor: zoom-out; }
     @media (max-width: 680px) {
+      .gallery-hero { padding-top: 24px; }
+      .hero-layout {
+        grid-template-columns: 1fr;
+        gap: 18px;
+      }
+      .meta { gap: 8px; }
+      .pill, .control, button.control {
+        padding: 8px 10px;
+      }
+      .pill.stat {
+        font-size: .92rem;
+      }
       .compact-toolbar-inner {
         grid-template-columns: 1fr;
         align-items: stretch;
@@ -238,18 +288,24 @@
 
   <header class="gallery-hero">
     <div class="gallery-hero-inner">
-      <h1>GPT Image 2<br>Daily Image Prompts</h1>
-      <p class="lede">A growing archive of creative GPT Image 2 prompts and generated images. Five evenly spaced prompts are scheduled throughout each day, then posted here and in the AI photos Discord channel.</p>
-      <div class="meta">
-        <span class="pill">Model: openai/gpt-image-2</span>
-        <span class="pill" id="count-pill">Images: loading…</span>
-        <span class="pill">Prompts collapsed by default</span>
-        <a class="pill" href="worlds.html">Fictional worlds</a>
-        <a class="pill" href="../../">← Home</a>
-      </div>
-      <div class="controls" aria-label="Gallery controls">
-        <input class="control" id="search" type="search" placeholder="Search prompts…">
-        <select class="control" id="date-filter"><option value="all">All dates</option></select>
+      <div class="hero-layout">
+        <div>
+          <h1>GPT Image 2<br>Daily Image Prompts</h1>
+          <p class="lede">A compact archive of GPT Image 2 prompts, generated images, and recurring fictional-world experiments.</p>
+          <div class="meta">
+            <span class="pill stat">Model: openai/gpt-image-2</span>
+            <span class="pill stat" id="count-pill">Images: loading...</span>
+            <a class="pill featured" href="worlds.html">Fictional worlds</a>
+            <a class="pill" href="../../">Home</a>
+          </div>
+        </div>
+        <div class="hero-panel">
+          <p class="hero-panel-label">Browse archive</p>
+          <div class="controls" aria-label="Gallery controls">
+            <input class="control" id="search" type="search" placeholder="Search prompts...">
+            <select class="control" id="date-filter"><option value="all">All dates</option></select>
+          </div>
+        </div>
       </div>
     </div>
   </header>
