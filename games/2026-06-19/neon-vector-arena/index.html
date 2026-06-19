@@ -278,7 +278,7 @@
     <p class="fine" id="overlayFine">Drag anywhere to fly. Keyboard: WASD or arrows to thrust, P to pause. Shots auto-aim at the highest danger cluster.</p>
   </div>
 </div>
-<div class="version">v3.1</div>
+<div class="version">v3.2</div>
 
 <script>
 'use strict';
@@ -345,6 +345,8 @@ let player;
 let aimTarget = null;
 let aimSwitchLock = 0;
 let camera = { x: 0, y: 0 };
+let nextWaveScore = 6500;
+let waveCooldown = 0;
 
 const FIREFOX_PERF = /\bFirefox\//i.test(navigator.userAgent);
 const GLOW_SCALE = FIREFOX_PERF ? .22 : .32;
@@ -363,6 +365,7 @@ const AIM_TURN_RATE = 9.5;
 const AIM_CLUSTER_RADIUS = 360;
 const SHOT_STEER_RATE = 5.2;
 const DEMO_EXTRA_SECONDS = 20;
+const FIRST_WAVE_SCORE = 6500;
 const TAU = Math.PI * 2;
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 const rand = (a, b) => a + Math.random() * (b - a);
@@ -844,6 +847,8 @@ function reset() {
   combo = 1;
   comboTimer = 0;
   spawnTimer = 0;
+  nextWaveScore = FIRST_WAVE_SCORE;
+  waveCooldown = 8;
   shake = 0;
   aimTarget = null;
   aimSwitchLock = 0;
@@ -1218,6 +1223,7 @@ function addSpark(x, y, n, hue, force = 1) {
 }
 
 function addHitCallout(x, y) {
+  if (hasActiveBanner()) return;
   if (Math.random() > .84) return;
   if (callouts.length > 7) callouts.shift();
   callouts.push({
@@ -1231,11 +1237,13 @@ function addHitCallout(x, y) {
     life: .82,
     max: .82,
     size: 44,
-    hue: Math.random() < .5 ? 188 : 316
+    hue: Math.random() < .5 ? 188 : 316,
+    kind: 'hit'
   });
 }
 
 function addEnemyHitCallout(x, y, hue) {
+  if (hasActiveBanner()) return;
   if (Math.random() > .012) return;
   if (callouts.length > 7) callouts.shift();
   callouts.push({
@@ -1249,17 +1257,20 @@ function addEnemyHitCallout(x, y, hue) {
     life: .68,
     max: .68,
     size: 34,
-    hue
+    hue,
+    kind: 'enemy'
   });
 }
 
 function addRewardCallout(x, y, type = 'shield', hue = 54) {
+  if (hasActiveBanner()) return;
   const words = REWARD_CALLOUTS[type] || REWARD_CALLOUTS.shield;
   if (callouts.length > 7) callouts.shift();
+  const close = callouts.filter(o => o.life > .25 && dist2(o.x, o.y, x, y - 40) < 110 * 110).length;
   callouts.push({
     text: words[Math.floor(Math.random() * words.length)],
     x: x + rand(-14, 14),
-    y: y - 40 + rand(-8, 8),
+    y: y - 40 - close * 42 + rand(-8, 8),
     vx: rand(-12, 12),
     vy: rand(-72, -46),
     rot: rand(-.1, .1),
@@ -1267,24 +1278,31 @@ function addRewardCallout(x, y, type = 'shield', hue = 54) {
     life: .74,
     max: .74,
     size: 34,
-    hue
+    hue,
+    kind: 'reward'
   });
 }
 
+function hasActiveBanner() {
+  return callouts.some(o => o.kind === 'banner' && o.life > .2);
+}
+
 function addBanner(text, hue = 188) {
-  if (callouts.length > 7) callouts.shift();
+  callouts = callouts.filter(o => o.kind !== 'banner' && o.life > 0);
+  if (callouts.length > 5) callouts.splice(0, callouts.length - 5);
   callouts.push({
     text,
-    x: player.x,
-    y: player.y - 90,
+    x: camera.x + innerWidth * .5,
+    y: camera.y + innerHeight * .23,
     vx: 0,
-    vy: -42,
+    vy: -18,
     rot: 0,
     spin: 0,
-    life: 1.05,
-    max: 1.05,
-    size: 48,
-    hue
+    life: .82,
+    max: .82,
+    size: 38,
+    hue,
+    kind: 'banner'
   });
 }
 
@@ -1498,7 +1516,9 @@ function shouldSplitEnemy(e) {
 
 function advanceWave() {
   wave++;
-  spawnTimer = Math.min(spawnTimer, .12);
+  nextWaveScore += 5500 + wave * 3500;
+  waveCooldown = 11;
+  spawnTimer = Math.min(spawnTimer, .26);
   player.hp = Math.min(MAX_SHIELD, player.hp + 8);
   addBanner('WAVE ' + String(wave).padStart(2, '0'), wave % 2 ? 188 : 316);
   particles.push({ x: player.x, y: player.y, vx: 0, vy: 0, life: .42, max: .42, r: 120, hue: wave % 2 ? 188 : 316, kind: 'ring' });
@@ -1617,6 +1637,7 @@ function update(dt) {
   updateCamera(dt);
   player.inv -= dt;
   player.power = Math.max(0, (player.power || 0) - dt);
+  waveCooldown = Math.max(0, waveCooldown - dt);
   if (speed > 24) {
     const moveAngle = Math.atan2(player.vy, player.vx);
     player.angle = turnTowardAngle(player.angle, moveAngle, 6.4 * dt);
@@ -1659,7 +1680,7 @@ function update(dt) {
     spawnTimer = Math.max(.3, .86 - wave * .012);
     spawnEnemy();
   }
-  while (score > wave * 2800) advanceWave();
+  if (score >= nextWaveScore && waveCooldown <= 0) advanceWave();
 
   for (const e of enemies) {
     const dx = player.x - e.x;
