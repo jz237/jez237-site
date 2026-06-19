@@ -1,6 +1,6 @@
 {
   "date": "2026-06-19",
-  "updatedAt": "2026-06-19T00:00:01.200322+00:00",
+  "updatedAt": "2026-06-19T01:00:01.939122+00:00",
   "items": [
     {
       "title": "Breaking the Solver Bottleneck: Training Task Generators at the Learnable Frontier",
@@ -11,12 +11,28 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-19T00:00:11.841365+00:00",
+      "published": "2026-06-19T01:00:09.071096+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-19T00:00:01.200322+00:00",
+      "lastSeen": "2026-06-19T01:00:01.939122+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.66
+    },
+    {
+      "title": "Source: Elastic agrees to buy CRV-backed DeductiveAI for up to $85M",
+      "url": "https://techcrunch.com/2026/06/18/source-elastic-agrees-to-buy-crv-backed-deductiveai-for-up-to-85m",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "DeductiveAI, a startup that uses AI to catch and resolve bugs in software, was founded just three years ago.",
+      "image": "https://techcrunch.com/wp-content/uploads/2018/03/gettyimages-824355868.jpg?resize=1200%2C760",
+      "published": "2026-06-19T00:51:11+00:00",
+      "firstSeen": "2026-06-19T01:00:01.939122+00:00",
+      "lastSeen": "2026-06-19T01:00:01.939122+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2855
     }
   ],
   "errors": [
