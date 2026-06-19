@@ -151,12 +151,12 @@
 <div class="overlay" id="overlay">
   <div class="panel">
     <h1>NEON<br>VECTOR<br>ARENA</h1>
-    <p class="sub">A live graphics demo: crisp wireframe enemies, clean HUD text, fast motion, cheap bloom, and shapes that fracture into smaller vector pieces.</p>
+    <p class="sub">A live graphics demo: endless vector space, crisp wireframe enemies, clean HUD text, fast motion, cheap bloom, and shapes that fracture into smaller vector pieces.</p>
     <button id="start">Start Demo</button>
-    <p class="fine">Drag anywhere to move. Shots auto-aim at the nearest threat. Survive the lightstorm.</p>
+    <p class="fine">Drag anywhere to fly. Shots auto-aim at the nearest threat. Survive the lightstorm.</p>
   </div>
 </div>
-<div class="version">v2.1</div>
+<div class="version">v2.2</div>
 
 <script>
 'use strict';
@@ -181,7 +181,7 @@ let wave = 1;
 let combo = 1;
 let comboTimer = 0;
 let shake = 0;
-let pointer = { active: false, x: 0, y: 0, usingTouch: false };
+let pointer = { active: false, x: 0, y: 0, sx: 0, sy: 0, usingTouch: false };
 let keys = new Set();
 let enemies = [];
 let shots = [];
@@ -192,6 +192,7 @@ let stars = [];
 let player;
 let aimTarget = null;
 let aimSwitchLock = 0;
+let camera = { x: 0, y: 0 };
 
 const FIREFOX_PERF = /\bFirefox\//i.test(navigator.userAgent);
 const GLOW_SCALE = FIREFOX_PERF ? .22 : .32;
@@ -264,10 +265,7 @@ function resize() {
   ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
   gtx.setTransform(DPR * GLOW_SCALE, 0, 0, DPR * GLOW_SCALE, 0, 0);
   buildStars();
-  if (player) {
-    player.x = clamp(player.x, 40, innerWidth - 40);
-    player.y = clamp(player.y, 68, innerHeight - 40);
-  }
+  updateCamera(1, true);
 }
 
 function buildStars() {
@@ -286,8 +284,8 @@ function buildStars() {
 
 function reset() {
   player = {
-    x: innerWidth * .5,
-    y: innerHeight * .58,
+    x: 0,
+    y: 0,
     vx: 0,
     vy: 0,
     r: 12,
@@ -310,6 +308,8 @@ function reset() {
   shake = 0;
   aimTarget = null;
   aimSwitchLock = 0;
+  camera.x = player.x - innerWidth * .5;
+  camera.y = player.y - innerHeight * .52;
   for (let i = 0; i < 8; i++) spawnEnemy(true);
   updateHud();
 }
@@ -331,13 +331,14 @@ function start() {
 function spawnEnemy(initial = false) {
   if (!initial && enemies.length >= MAX_ENEMIES) return;
   const edge = Math.floor(Math.random() * 4);
-  const pad = 34;
-  let x = edge === 0 ? -pad : edge === 1 ? innerWidth + pad : rand(0, innerWidth);
-  let y = edge === 2 ? -pad : edge === 3 ? innerHeight + pad : rand(0, innerHeight);
+  const pad = 90;
+  let x = edge === 0 ? camera.x - pad : edge === 1 ? camera.x + innerWidth + pad : rand(camera.x - pad, camera.x + innerWidth + pad);
+  let y = edge === 2 ? camera.y - pad : edge === 3 ? camera.y + innerHeight + pad : rand(camera.y - pad, camera.y + innerHeight + pad);
   if (initial) {
-    x = rand(60, innerWidth - 60);
-    y = rand(90, innerHeight - 70);
-    if (dist2(x, y, player?.x || innerWidth / 2, player?.y || innerHeight / 2) < 260 * 260) x = innerWidth - x;
+    const a = rand(0, TAU);
+    const d = rand(290, Math.max(430, Math.min(innerWidth, innerHeight) * .82));
+    x = (player?.x || 0) + Math.cos(a) * d;
+    y = (player?.y || 0) + Math.sin(a) * d;
   }
   const type = chooseEnemyType();
   const def = shapeDef(type);
@@ -432,6 +433,19 @@ function angleDelta(from, to) {
 
 function turnTowardAngle(from, to, maxStep) {
   return from + clamp(angleDelta(from, to), -maxStep, maxStep);
+}
+
+function updateCamera(dt = 1, snap = false) {
+  if (!player) return;
+  const tx = player.x - innerWidth * .5;
+  const ty = player.y - innerHeight * .52;
+  const follow = snap ? 1 : clamp(dt * 5.8, 0, 1);
+  camera.x += (tx - camera.x) * follow;
+  camera.y += (ty - camera.y) * follow;
+}
+
+function screenToWorld(x, y) {
+  return { x: x + camera.x, y: y + camera.y };
 }
 
 function addSpark(x, y, n, hue, force = 1) {
@@ -669,6 +683,9 @@ function update(dt) {
   if (keys.has('ArrowUp') || keys.has('KeyW')) ay -= accel;
   if (keys.has('ArrowDown') || keys.has('KeyS')) ay += accel;
   if (pointer.active) {
+    const pointerWorld = screenToWorld(pointer.sx, pointer.sy);
+    pointer.x = pointerWorld.x;
+    pointer.y = pointerWorld.y;
     const dx = pointer.x - player.x;
     const dy = pointer.y - player.y;
     const d = Math.hypot(dx, dy) || 1;
@@ -685,8 +702,9 @@ function update(dt) {
     player.vx = player.vx / speed * 440;
     player.vy = player.vy / speed * 440;
   }
-  player.x = clamp(player.x + player.vx * dt, 26, innerWidth - 26);
-  player.y = clamp(player.y + player.vy * dt, 58, innerHeight - 26);
+  player.x += player.vx * dt;
+  player.y += player.vy * dt;
+  updateCamera(dt);
   player.inv -= dt;
 
   const aim = selectAimTarget(dt);
@@ -772,7 +790,7 @@ function update(dt) {
     s.y += s.vy * dt;
   }
   const shotPad = Math.max(90, Math.hypot(innerWidth, innerHeight) * .08);
-  shots = shots.filter(s => s.x > -shotPad && s.x < innerWidth + shotPad && s.y > -shotPad && s.y < innerHeight + shotPad);
+  shots = shots.filter(s => s.x > camera.x - shotPad && s.x < camera.x + innerWidth + shotPad && s.y > camera.y - shotPad && s.y < camera.y + innerHeight + shotPad);
 
   for (let i = enemies.length - 1; i >= 0; i--) {
     const e = enemies[i];
@@ -887,36 +905,41 @@ function drawGrid(c) {
   for (const s of stars) {
     const tw = .45 + Math.sin(time * (1.2 + s.z) + s.p) * .35;
     c.fillStyle = `hsla(${s.hue},100%,${68 + s.z * 18}%,${(.18 + tw * .38) * s.z})`;
-    c.fillRect(s.x, s.y, 1.2 + s.z * 1.4, 1.2 + s.z * 1.4);
-    s.y += (8 + s.z * 18) / 60;
-    if (s.y > h + 5) s.y = -5;
+    const sx = ((s.x - camera.x * (.045 + s.z * .13)) % w + w) % w;
+    const sy = ((s.y - camera.y * (.045 + s.z * .13) + time * (4 + s.z * 8)) % h + h) % h;
+    c.fillRect(sx, sy, 1.2 + s.z * 1.4, 1.2 + s.z * 1.4);
   }
 
   c.globalCompositeOperation = 'lighter';
-  const spacing = 38;
-  const off = (time * 18) % spacing;
-  c.strokeStyle = 'rgba(46, 255, 121, .13)';
+  const spacing = 88;
+  const offX = ((-camera.x * .32) % spacing + spacing) % spacing;
+  const offY = ((-camera.y * .32) % spacing + spacing) % spacing;
+  c.strokeStyle = 'rgba(46, 255, 121, .095)';
   c.lineWidth = 1;
   c.beginPath();
   for (let x = -spacing; x < w + spacing; x += spacing) {
-    c.moveTo(x + off, 0);
-    c.lineTo(x + off, h);
+    c.moveTo(x + offX, 0);
+    c.lineTo(x + offX, h);
   }
   for (let y = -spacing; y < h + spacing; y += spacing) {
-    c.moveTo(0, y + off);
-    c.lineTo(w, y + off);
+    c.moveTo(0, y + offY);
+    c.lineTo(w, y + offY);
   }
   c.stroke();
 
-  c.strokeStyle = 'rgba(255, 235, 54, .66)';
-  c.lineWidth = 2.2;
-  c.shadowColor = '#fff04d';
-  c.shadowBlur = 10;
-  c.strokeRect(18, 52, w - 36, h - 70);
-  c.strokeStyle = 'rgba(46, 255, 121, .32)';
+  c.strokeStyle = 'rgba(255, 235, 54, .13)';
   c.lineWidth = 1;
-  c.strokeRect(25, 59, w - 50, h - 84);
-  c.shadowBlur = 0;
+  c.beginPath();
+  for (let i = 0; i < 9; i++) {
+    const a = i * TAU / 9 + time * .08;
+    const cx = ((Math.cos(a) * 420 - camera.x * .08) % (w + 240) + w + 240) % (w + 240) - 120;
+    const cy = ((Math.sin(a * 1.7) * 280 - camera.y * .08) % (h + 240) + h + 240) % (h + 240) - 120;
+    c.moveTo(cx - 6, cy);
+    c.lineTo(cx + 6, cy);
+    c.moveTo(cx, cy - 6);
+    c.lineTo(cx, cy + 6);
+  }
+  c.stroke();
   c.restore();
 }
 
@@ -1152,7 +1175,7 @@ function render() {
   drawGrid(ctx);
 
   gtx.save();
-  gtx.translate(sx, sy);
+  gtx.translate(sx - camera.x, sy - camera.y);
   gtx.globalCompositeOperation = 'lighter';
   if (!FIREFOX_PERF) {
     for (const e of enemies) {
@@ -1190,7 +1213,7 @@ function render() {
   ctx.restore();
 
   ctx.save();
-  ctx.translate(sx, sy);
+  ctx.translate(sx - camera.x, sy - camera.y);
   ctx.globalCompositeOperation = 'lighter';
   ctx.globalAlpha = 1;
   ctx.filter = 'none';
@@ -1235,8 +1258,11 @@ function frame(now) {
 
 function setPointer(e, active) {
   const touch = e.changedTouches ? e.changedTouches[0] : e;
-  pointer.x = touch.clientX;
-  pointer.y = touch.clientY;
+  pointer.sx = touch.clientX;
+  pointer.sy = touch.clientY;
+  const world = screenToWorld(touch.clientX, touch.clientY);
+  pointer.x = world.x;
+  pointer.y = world.y;
   pointer.active = active;
   pointer.usingTouch = !!e.changedTouches;
 }
