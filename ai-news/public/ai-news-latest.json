@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-19T05:00:01.341117+00:00",
+  "updatedAt": "2026-06-19T05:20:36.686760+00:00",
   "items": [
     {
       "title": "Ahmed Haj Ahmed, Ruochen Zhang, Alvin Grissom II",
@@ -10,9 +10,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-19T05:00:07.145211+00:00",
+      "published": "2026-06-19T05:20:46.321799+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-19T05:00:01.341117+00:00",
+      "lastSeen": "2026-06-19T05:20:36.686760+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
@@ -28,10 +28,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/STK155_OPEN_AI_CVirginia_C.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-19T04:49:33+00:00",
       "firstSeen": "2026-06-19T05:00:01.341117+00:00",
-      "lastSeen": "2026-06-19T05:00:01.341117+00:00",
+      "lastSeen": "2026-06-19T05:20:36.686760+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.3547
+      "score": 5.3443
     },
     {
       "title": "SpaceX wants to build AI data centers in space. Will it work?",
@@ -44,10 +44,10 @@
       "image": "https://www.sciencedaily.com/images/1920/spacecraft-satellite-orbiting-earth.webp",
       "published": "2026-06-19T03:43:09+00:00",
       "firstSeen": "2026-06-19T05:00:01.341117+00:00",
-      "lastSeen": "2026-06-19T05:00:01.341117+00:00",
+      "lastSeen": "2026-06-19T05:20:36.686760+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1815
+      "score": 2.1715
     },
     {
       "title": "Source: Elastic agrees to buy CRV-backed DeductiveAI for up to $85M",
@@ -60,10 +60,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2018/03/gettyimages-824355868.jpg?resize=1200%2C760",
       "published": "2026-06-19T00:51:11+00:00",
       "firstSeen": "2026-06-19T01:00:01.939122+00:00",
-      "lastSeen": "2026-06-19T05:00:01.341117+00:00",
+      "lastSeen": "2026-06-19T05:20:36.686760+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1703
+      "score": 2.161
     },
     {
       "title": "Datasette Apps: Host custom HTML applications inside Datasette",
@@ -76,10 +76,10 @@
       "image": "https://static.simonwillison.net/static/2026/datasette-timeline-app.jpg",
       "published": "2026-06-18T23:58:38+00:00",
       "firstSeen": "2026-06-19T01:00:01.939122+00:00",
-      "lastSeen": "2026-06-19T05:00:01.341117+00:00",
+      "lastSeen": "2026-06-19T05:20:36.686760+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.9467
+      "score": 3.9377
     },
     {
       "title": "Microsoft discovers new lightweight backdoor that steals cryptocurrency",
@@ -92,10 +92,10 @@
       "image": "https://cdn.arstechnica.net/wp-content/uploads/2026/02/cryptocurrency-theft-heist-1152x648.jpg",
       "published": "2026-06-18T23:28:52+00:00",
       "firstSeen": "2026-06-19T02:00:01.823995+00:00",
-      "lastSeen": "2026-06-19T05:00:01.341117+00:00",
+      "lastSeen": "2026-06-19T05:20:36.686760+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9936
+      "score": 1.9847
     },
     {
       "title": "How the Peter Thiel-Linked Dialog Club Secretly Ranks Its Members",
@@ -108,10 +108,10 @@
       "image": "https://media.wired.com/photos/6a33038a1f4e7aecefeb3113/master/pass/061726-peter-thiel-secret-society-ranked.jpg",
       "published": "2026-06-18T22:12:45+00:00",
       "firstSeen": "2026-06-18T23:00:01.561733+00:00",
-      "lastSeen": "2026-06-19T05:00:01.341117+00:00",
+      "lastSeen": "2026-06-19T05:20:36.686760+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.801
+      "score": 2.7923
     },
     {
       "title": "AI inference startup Baseten reportedly raising $1.5B months after its last mega-round",
@@ -124,10 +124,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2024/03/GettyImages-1502217391.jpg?resize=1200%2C800",
       "published": "2026-06-18T21:20:13+00:00",
       "firstSeen": "2026-06-18T21:26:35.954324+00:00",
-      "lastSeen": "2026-06-19T05:00:01.341117+00:00",
+      "lastSeen": "2026-06-19T05:20:36.686760+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3791
+      "score": 2.3707
     },
     {
       "title": "The White House Is Making Up Its Rules for AI in Real Time",
@@ -140,10 +140,10 @@
       "image": "https://media.wired.com/photos/6a342bff039398b1addb3ba2/master/pass/Model-Behavior-SB.jpg",
       "published": "2026-06-18T21:03:43+00:00",
       "firstSeen": "2026-06-18T21:26:35.954324+00:00",
-      "lastSeen": "2026-06-19T05:00:01.341117+00:00",
+      "lastSeen": "2026-06-19T05:20:36.686760+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.0723
+      "score": 8.0639
     },
     {
       "title": "Snap spins off AI video team into new company, Dotmo, due to costs",
@@ -156,10 +156,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/GettyImages-2281911508.jpg?resize=1200%2C856",
       "published": "2026-06-18T20:30:00+00:00",
       "firstSeen": "2026-06-18T21:26:35.954324+00:00",
-      "lastSeen": "2026-06-19T05:00:01.341117+00:00",
+      "lastSeen": "2026-06-19T05:20:36.686760+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0587
+      "score": 2.0504
     },
     {
       "title": "How FERC’s Large-Load Interconnection Actions Help Address Grid Stress, Improve Affordability",
@@ -172,10 +172,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2025/09/nvidiaheadquarters.jpg",
       "published": "2026-06-18T20:00:27+00:00",
       "firstSeen": "2026-06-18T21:00:01.302903+00:00",
-      "lastSeen": "2026-06-19T05:00:01.341117+00:00",
+      "lastSeen": "2026-06-19T05:20:36.686760+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0469
+      "score": 2.0387
     },
     {
       "title": "OpenAI is bringing on some big guns in the lead-up to its IPO",
@@ -188,10 +188,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/noam-shazeer-deal-ball.png?resize=1200%2C800",
       "published": "2026-06-18T19:59:22+00:00",
       "firstSeen": "2026-06-18T20:00:01.945108+00:00",
-      "lastSeen": "2026-06-19T05:00:01.341117+00:00",
+      "lastSeen": "2026-06-19T05:20:36.686760+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 9.0464
+      "score": 9.0383
     },
     {
       "title": "Apple patches high-severity eavesdropping vulnerability in Beats Studio Buds",
@@ -204,10 +204,10 @@
       "image": "https://cdn.arstechnica.net/wp-content/uploads/2021/11/Beats-Studio-Buds-1152x648.jpg",
       "published": "2026-06-18T19:41:35+00:00",
       "firstSeen": "2026-06-18T21:00:01.302903+00:00",
-      "lastSeen": "2026-06-19T05:00:01.341117+00:00",
+      "lastSeen": "2026-06-19T05:20:36.686760+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9994
+      "score": 2.9913
     },
     {
       "title": "A 201-year-old mutual bank just launched an AI Center of Excellence with a startup partner",
@@ -220,10 +220,10 @@
       "image": "https://media.thenextweb.com/2026/06/liberty-bank-ai-center-excellence-flare-partnership.avif",
       "published": "2026-06-18T19:34:40+00:00",
       "firstSeen": "2026-06-18T20:00:01.945108+00:00",
-      "lastSeen": "2026-06-19T05:00:01.341117+00:00",
+      "lastSeen": "2026-06-19T05:20:36.686760+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.5967
+      "score": 2.5887
     },
     {
       "title": "Meta’s AI Workers Are Revolting, Peter Thiel’s Secret Society, and SBF’s Plea to Trump",
@@ -236,10 +236,10 @@
       "image": "https://media.wired.com/photos/6a3308960b213b93014c14d7/master/pass/Uncanny-Valley-Meta%E2%80%99s%20Internal%20Unit%20Spiral-v1.jpg",
       "published": "2026-06-18T19:29:51+00:00",
       "firstSeen": "2026-06-18T20:00:01.945108+00:00",
-      "lastSeen": "2026-06-19T05:00:01.341117+00:00",
+      "lastSeen": "2026-06-19T05:20:36.686760+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0348
+      "score": 2.0268
     },
     {
       "title": "Spotify launches Reserved, a ticketing feature that rewards superfans with early concert access",
@@ -252,10 +252,10 @@
       "image": "https://media.thenextweb.com/2026/06/spotify-removed-57000-fake-podcast-episodes-drug-spam.avif",
       "published": "2026-06-18T19:16:39+00:00",
       "firstSeen": "2026-06-18T20:00:01.945108+00:00",
-      "lastSeen": "2026-06-19T05:00:01.341117+00:00",
+      "lastSeen": "2026-06-19T05:20:36.686760+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.6897
+      "score": 3.6817
     },
     {
       "title": "UPS is building a real-time digital twin of its entire logistics network, updated every 10 minutes",
@@ -268,10 +268,10 @@
       "image": "https://media.thenextweb.com/2026/06/ups-ai-digital-twin-agentic-logistics-network.avif",
       "published": "2026-06-18T19:08:20+00:00",
       "firstSeen": "2026-06-18T20:00:01.945108+00:00",
-      "lastSeen": "2026-06-19T05:00:01.341117+00:00",
+      "lastSeen": "2026-06-19T05:20:36.686760+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8864
+      "score": 1.8785
     },
     {
       "title": "datasette-acl 0.6a0",
@@ -284,10 +284,10 @@
       "image": "",
       "published": "2026-06-18T19:03:13+00:00",
       "firstSeen": "2026-06-19T01:00:01.939122+00:00",
-      "lastSeen": "2026-06-19T05:00:01.341117+00:00",
+      "lastSeen": "2026-06-19T05:20:36.686760+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7244
+      "score": 2.7165
     },
     {
       "title": "Apple opens iOS to rival app stores in Brazil after antitrust settlement with CADE",
@@ -300,10 +300,10 @@
       "image": "https://media.thenextweb.com/2026/06/apple-brazil-cade-sideloading-alternative-app-stores.avif",
       "published": "2026-06-18T18:59:38+00:00",
       "firstSeen": "2026-06-18T20:00:01.945108+00:00",
-      "lastSeen": "2026-06-19T05:00:01.341117+00:00",
+      "lastSeen": "2026-06-19T05:20:36.686760+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9831
+      "score": 2.9752
     },
     {
       "title": "Rivian sued for allegedly promising self-driving features its first-generation vehicles can never deliver",
@@ -316,10 +316,10 @@
       "image": "https://media.thenextweb.com/2026/05/volkswagen-rivian-top-shareholder-amazon-software.avif",
       "published": "2026-06-18T18:52:47+00:00",
       "firstSeen": "2026-06-18T20:00:01.945108+00:00",
-      "lastSeen": "2026-06-19T05:00:01.341117+00:00",
+      "lastSeen": "2026-06-19T05:20:36.686760+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8804
+      "score": 1.8725
     },
     {
       "title": "Almost half of US singles feel negatively about AI in dating, Match says",
@@ -332,10 +332,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2023/05/GettyImages-1131615694.jpg?resize=1200%2C800",
       "published": "2026-06-18T18:51:46+00:00",
       "firstSeen": "2026-06-18T19:00:01.626117+00:00",
-      "lastSeen": "2026-06-19T05:00:01.341117+00:00",
+      "lastSeen": "2026-06-19T05:20:36.686760+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.12
+      "score": 3.1122
     },
     {
       "title": "General Intuition is raising $300 million to train AI agents on the video game data OpenAI tried to buy",
@@ -348,10 +348,10 @@
       "image": "https://media.thenextweb.com/2026/06/general-intuition-300m-world-models-gaming-data.avif",
       "published": "2026-06-18T18:49:03+00:00",
       "firstSeen": "2026-06-18T20:00:01.945108+00:00",
-      "lastSeen": "2026-06-19T05:00:01.341117+00:00",
+      "lastSeen": "2026-06-19T05:20:36.686760+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 9.379
+      "score": 9.3711
     },
     {
       "title": "FERC orders a fast lane for data centre grid connections, but the electricity to fill them is another matter",
@@ -364,10 +364,10 @@
       "image": "https://media.thenextweb.com/2026/06/ferc-data-centre-grid-fast-lane-ai.avif",
       "published": "2026-06-18T18:36:48+00:00",
       "firstSeen": "2026-06-18T19:00:01.626117+00:00",
-      "lastSeen": "2026-06-19T05:00:01.341117+00:00",
+      "lastSeen": "2026-06-19T05:20:36.686760+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9743
+      "score": 2.9665
     },
     {
       "title": "BMW slashes profit forecast as China’s EV makers squeeze European carmakers on two fronts",
@@ -380,10 +380,10 @@
       "image": "https://media.thenextweb.com/2026/04/bmw-i7-gen6-battery-rimac-range-charging.avif",
       "published": "2026-06-18T18:29:45+00:00",
       "firstSeen": "2026-06-18T19:00:01.626117+00:00",
-      "lastSeen": "2026-06-19T05:00:01.341117+00:00",
+      "lastSeen": "2026-06-19T05:20:36.686760+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8716
+      "score": 1.8638
     },
     {
       "title": "Amazon hopes to challenge Nvidia more directly by selling its AI chips",
@@ -396,10 +396,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2022/11/GettyImages-1421680585.jpg?resize=1200%2C675",
       "published": "2026-06-18T18:22:13+00:00",
       "firstSeen": "2026-06-18T18:33:39.051639+00:00",
-      "lastSeen": "2026-06-19T05:00:01.341117+00:00",
+      "lastSeen": "2026-06-19T05:20:36.686760+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0088
+      "score": 2.001
     },
     {
       "title": "MosaicLeaks: Can your research agent keep a secret?",
@@ -412,10 +412,10 @@
       "image": "https://cdn-uploads.huggingface.co/production/uploads/680ba1729f7688275d2ce0f4/hGCO4pOyJjijLPCbRT07v.webp",
       "published": "2026-06-18T18:13:13+00:00",
       "firstSeen": "2026-06-18T18:33:39.051639+00:00",
-      "lastSeen": "2026-06-19T05:00:01.341117+00:00",
+      "lastSeen": "2026-06-19T05:20:36.686760+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.2454
+      "score": 7.2376
     },
     {
       "title": "Ford pivots its Kentucky battery plant from EVs to AI data centre storage in a $2 billion bet",
@@ -428,10 +428,10 @@
       "image": "https://media.thenextweb.com/2026/06/ford-energy-battery-storage-ai-data-centres.avif",
       "published": "2026-06-18T18:00:52+00:00",
       "firstSeen": "2026-06-18T19:00:01.626117+00:00",
-      "lastSeen": "2026-06-19T05:00:01.341117+00:00",
+      "lastSeen": "2026-06-19T05:20:36.686760+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -0.5393
+      "score": -0.547
     },
     {
       "title": "AI data centers just got a government-mandated fast lane to the grid",
@@ -444,10 +444,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2024/12/Energy-sector-Getty.jpg?resize=1200%2C801",
       "published": "2026-06-18T17:49:23+00:00",
       "firstSeen": "2026-06-18T18:00:02.034921+00:00",
-      "lastSeen": "2026-06-19T05:00:01.341117+00:00",
+      "lastSeen": "2026-06-19T05:20:36.686760+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9964
+      "score": 1.9888
     },
     {
       "title": "SpaceX adds Sequoia’s Roelof Botha to its board, days after record $75 billion IPO",
@@ -463,7 +463,7 @@
       "lastSeen": "2026-06-18T19:00:01.626117+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.656
+      "score": 3.6483
     },
     {
       "title": "Before SpaceX IPO, investors in China secretly acquired stakes",
@@ -476,10 +476,10 @@
       "image": "https://cdn.arstechnica.net/wp-content/uploads/2026/06/GettyImages-2281248250-1024x648.jpg",
       "published": "2026-06-18T17:42:18+00:00",
       "firstSeen": "2026-06-18T18:00:02.034921+00:00",
-      "lastSeen": "2026-06-19T05:00:01.341117+00:00",
+      "lastSeen": "2026-06-19T05:20:36.686760+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8538
+      "score": 1.8461
     },
     {
       "title": "The smartphone era created an attention crisis — slow tech is fixing it",
@@ -492,10 +492,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/GettyImages-2238192342.jpg?resize=1200%2C800",
       "published": "2026-06-18T17:16:30+00:00",
       "firstSeen": "2026-06-18T18:00:02.034921+00:00",
-      "lastSeen": "2026-06-19T05:00:01.341117+00:00",
+      "lastSeen": "2026-06-19T05:20:36.686760+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9842
+      "score": 1.9767
     },
     {
       "title": "Your email landed in the inbox. Your links didn’t.",
@@ -508,10 +508,10 @@
       "image": "https://media.thenextweb.com/2026/06/surbl-email-blacklist-links-delivery-failure.avif",
       "published": "2026-06-18T17:12:51+00:00",
       "firstSeen": "2026-06-18T18:00:02.034921+00:00",
-      "lastSeen": "2026-06-19T05:00:01.341117+00:00",
+      "lastSeen": "2026-06-19T05:20:36.686760+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8429
+      "score": 1.8354
     },
     {
       "title": "New usage analytics and updated spend controls for enterprises",
@@ -524,10 +524,10 @@
       "image": "",
       "published": "2026-06-18T17:00:00+00:00",
       "firstSeen": "2026-06-18T20:00:01.945108+00:00",
-      "lastSeen": "2026-06-19T05:00:01.341117+00:00",
+      "lastSeen": "2026-06-19T05:20:36.686760+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.8882
+      "score": 8.8807
     },
     {
       "title": "‘Queer Eye’ life coach Karamo Brown launches Kē, a wellness app featuring his AI digital clone",
@@ -540,10 +540,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/KaramoBrown-Ke.jpg?resize=1200%2C800",
       "published": "2026-06-18T16:55:04+00:00",
       "firstSeen": "2026-06-18T17:00:01.646340+00:00",
-      "lastSeen": "2026-06-19T05:00:01.341117+00:00",
+      "lastSeen": "2026-06-19T05:20:36.686760+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8764
+      "score": 4.8689
     },
     {
       "title": "Nvidia-backed Verse raises $54M to help AI data centres skip the power queue",
@@ -559,7 +559,7 @@
       "lastSeen": "2026-06-18T19:00:01.626117+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8291
+      "score": 1.8217
     },
     {
       "title": "Architect Labs raises $24M to let any company design its own AI chip",
@@ -575,7 +575,7 @@
       "lastSeen": "2026-06-18T19:00:01.626117+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8242
+      "score": 1.8168
     },
     {
       "title": "Gradial raises $65M to be the ‘AI glue’ for enterprise marketing",
@@ -591,7 +591,7 @@
       "lastSeen": "2026-06-18T19:00:01.626117+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.5192
+      "score": 3.5119
     },
     {
       "title": "Alibaba Cloud Bets on France as Europe Seeks More Control Over AI",
@@ -604,10 +604,10 @@
       "image": "",
       "published": "2026-06-18T16:04:10+00:00",
       "firstSeen": "2026-06-18T21:26:35.954324+00:00",
-      "lastSeen": "2026-06-18T21:26:35.954324+00:00",
+      "lastSeen": "2026-06-19T05:20:36.686760+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9181
+      "score": 2.9108
     },
     {
       "title": "3 Amazon Workers Say They’re Under Investigation for Speaking Out About Data Centers",
@@ -620,10 +620,10 @@
       "image": "https://media.wired.com/photos/6a33fb3a3fe23d3ce2a1cf59/master/pass/Business_AmazonWorkersUnder_v2.jpg",
       "published": "2026-06-18T16:03:27+00:00",
       "firstSeen": "2026-06-18T17:00:01.646340+00:00",
-      "lastSeen": "2026-06-19T05:00:01.341117+00:00",
+      "lastSeen": "2026-06-19T05:20:36.686760+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9578
+      "score": 1.9505
     },
     {
       "title": "Amazon employees say they’re facing termination for backing data center limits",
@@ -636,10 +636,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/STKS528_DATA_CENTERS2_C.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-18T16:00:00+00:00",
       "firstSeen": "2026-06-18T17:00:01.646340+00:00",
-      "lastSeen": "2026-06-19T05:00:01.341117+00:00",
+      "lastSeen": "2026-06-19T05:20:36.686760+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0266
+      "score": 2.0193
     },
     {
       "title": "The Life Scientific: Dean Lomax",
@@ -652,10 +652,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-15T20:00:00+00:00",
       "firstSeen": "2026-06-15T21:00:01.290903+00:00",
-      "lastSeen": "2026-06-19T05:00:01.341117+00:00",
+      "lastSeen": "2026-06-19T05:20:36.686760+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.3059
+      "score": 1.3048
     },
     {
       "title": "The Life Scientific: Helen Hastie",
@@ -668,7 +668,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-08T20:00:00+00:00",
       "firstSeen": "2026-06-08T21:00:01.371488+00:00",
-      "lastSeen": "2026-06-19T05:00:01.341117+00:00",
+      "lastSeen": "2026-06-19T05:20:36.686760+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 1.1911
