@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-19T10:00:01.793889+00:00",
+  "updatedAt": "2026-06-19T11:00:01.781337+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -8594,8 +8594,8 @@
       "checkedAt": "2026-05-30T16:00:01.437838+00:00"
     },
     "https://www.techrepublic.com/article/top-prompt-engineering-certifications": {
-      "image": "",
-      "checkedAt": "2026-05-30T16:14:44.220303+00:00"
+      "image": "https://assets.techrepublic.com/uploads/2024/06/tr_20240627-top-prompt-engineering-certifications.jpg?f=jpeg",
+      "checkedAt": "2026-06-19T11:00:01.781337+00:00"
     },
     "https://simonwillison.net/2026/May/30/daniel-jalkut": {
       "image": "",
@@ -10968,6 +10968,10 @@
     "https://techcrunch.com/2026/06/19/the-us-says-asmls-top-chip-tool-may-be-in-china-asml-says-it-isnt": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/GettyImages-2250757778.jpg?resize=1200,800",
       "checkedAt": "2026-06-19T08:00:01.652387+00:00"
+    },
+    "https://www.techrepublic.com/article/data-tech-sovereignty-australia-apac": {
+      "image": "https://assets.techrepublic.com/uploads/2026/06/tr-06192026-data-tech-sovereignty-australia-apac.jpg?f=jpeg",
+      "checkedAt": "2026-06-19T11:00:01.781337+00:00"
     }
   }
 }
