@@ -205,6 +205,20 @@
       font-size: clamp(2.6rem, 7vw, 5.6rem);
       line-height: 0.94;
     }
+    .construction-note {
+      display: inline-flex;
+      align-items: center;
+      margin-top: 12px;
+      padding: 5px 9px;
+      border: 1px solid rgba(230,189,103,0.38);
+      border-radius: 999px;
+      color: #f4d18a;
+      background: rgba(230,189,103,0.1);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
     @keyframes galaxy-slow-turn {
       from { transform: rotate(-1deg) scale(1.03); }
       to { transform: rotate(359deg) scale(1.03); }
@@ -1242,6 +1256,7 @@
           <div class="hero-copy">
             <span class="kicker">Interactive AI lab</span>
             <h1>How AI Works</h1>
+            <span class="construction-note">Under construction</span>
             <p>AI feels mysterious until you separate the parts: tokens, context, model prediction, tool use, memory, and verification. This page lets you poke each part directly.</p>
             <div class="hero-actions">
               <button class="lab-button primary" id="startTour" type="button">Start guided tour</button>
