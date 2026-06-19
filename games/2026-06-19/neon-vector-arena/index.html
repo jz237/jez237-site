@@ -156,7 +156,7 @@
     <p class="fine">Drag anywhere to fly. Shots auto-aim at the nearest threat. Survive the lightstorm.</p>
   </div>
 </div>
-<div class="version">v2.11</div>
+<div class="version">v2.12</div>
 
 <script>
 'use strict';
@@ -201,12 +201,12 @@ const MAX_ENEMIES = FIREFOX_PERF ? 42 : 56;
 const MAX_PARTICLES = FIREFOX_PERF ? 170 : 260;
 const MAX_FRAGMENTS = FIREFOX_PERF ? 420 : 640;
 const MAX_DT = FIREFOX_PERF ? .07 : .04;
-const SHOT_BLAST_RADIUS = 105;
-const SHOT_BLAST_FORCE = 430;
+const SHOT_BLAST_RADIUS = 78;
+const SHOT_BLAST_FORCE = 290;
 const SHOT_SPEED = 660;
-const ENEMY_SPEED_CAP = FIREFOX_PERF ? 176 : 192;
-const CHILD_SPEED_CAP = FIREFOX_PERF ? 218 : 238;
-const ENEMY_VELOCITY_CAP = FIREFOX_PERF ? 245 : 270;
+const ENEMY_SPEED_CAP = FIREFOX_PERF ? 188 : 205;
+const CHILD_SPEED_CAP = FIREFOX_PERF ? 232 : 252;
+const ENEMY_VELOCITY_CAP = FIREFOX_PERF ? 260 : 286;
 const AIM_SWITCH_LOCK = .26;
 const AIM_TURN_RATE = 9.5;
 const AIM_CLUSTER_RADIUS = 360;
@@ -216,6 +216,7 @@ const TAU = Math.PI * 2;
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 const rand = (a, b) => a + Math.random() * (b - a);
 const HIT_CALLOUTS = ['OUCH', 'ZAP', 'BZZT', 'NOPE', 'YIKES', 'GLITCH', 'STATIC', 'WHAM', 'CLANG'];
+const ENEMY_HIT_CALLOUTS = ['NICE', 'CRACK', 'POP', 'SHRED', 'SPLIT', 'BANG', 'GONE'];
 const SIZE_TIERS = [
   { name: 'small', normal: .72, splitter: 1.0 },
   { name: 'medium', normal: 1.08, splitter: 1.45 },
@@ -481,14 +482,14 @@ function selectCollisionThreat() {
     const dx = e.x - player.x;
     const dy = e.y - player.y;
     const d = Math.hypot(dx, dy) || 1;
-    if (d > 320) continue;
+    if (d > 250) continue;
     const rvx = e.vx - player.vx;
     const rvy = e.vy - player.vy;
     const closing = -(dx * rvx + dy * rvy) / d;
-    const collisionBand = e.r + player.r + 92;
-    const imminent = d < collisionBand || (d < 290 && closing > 35);
+    const collisionBand = e.r + player.r + 50;
+    const imminent = d < collisionBand || (d < 220 && closing > 80);
     if (!imminent) continue;
-    const score = (320 - d) * .024 + Math.max(0, closing) * .018 + (d < collisionBand ? 4 : 0);
+    const score = (250 - d) * .022 + Math.max(0, closing) * .014 + (d < collisionBand ? 3.2 : 0);
     if (score > bestScore) {
       best = e;
       bestScore = score;
@@ -573,7 +574,7 @@ function addSpark(x, y, n, hue, force = 1) {
 }
 
 function addHitCallout(x, y) {
-  if (Math.random() > .58) return;
+  if (Math.random() > .84) return;
   if (callouts.length > 7) callouts.shift();
   callouts.push({
     text: HIT_CALLOUTS[Math.floor(Math.random() * HIT_CALLOUTS.length)],
@@ -586,6 +587,23 @@ function addHitCallout(x, y) {
     life: .82,
     max: .82,
     hue: Math.random() < .5 ? 188 : 316
+  });
+}
+
+function addEnemyHitCallout(x, y, hue) {
+  if (Math.random() > .012) return;
+  if (callouts.length > 7) callouts.shift();
+  callouts.push({
+    text: ENEMY_HIT_CALLOUTS[Math.floor(Math.random() * ENEMY_HIT_CALLOUTS.length)],
+    x: x + rand(-12, 12),
+    y: y - 22 + rand(-10, 6),
+    vx: rand(-14, 14),
+    vy: rand(-64, -38),
+    rot: rand(-.12, .12),
+    spin: rand(-.42, .42),
+    life: .68,
+    max: .68,
+    hue
   });
 }
 
@@ -849,7 +867,7 @@ function update(dt) {
   }
   player.fire -= dt;
   if (player.fire <= 0 && enemies.length) {
-    player.fire = Math.max(.1, .17 - wave * .002);
+    player.fire = Math.max(.15, .24 - wave * .001);
     fireShot(fireAngle, aim);
   }
   player.trail.unshift({ x: player.x, y: player.y, a: player.angle });
@@ -941,6 +959,7 @@ function update(dt) {
         addHitShards(e, s.x, s.y, s.hue);
         e.hp--;
         addSpark(s.x, s.y, 5, s.hue, .55);
+        addEnemyHitCallout(s.x, s.y, e.hue);
         if (e.hp <= 0) {
           addVectorFragments(e);
           enemies.splice(i, 1);
