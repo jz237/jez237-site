@@ -1,7 +1,39 @@
 {
   "date": "2026-06-19",
-  "updatedAt": "2026-06-19T14:00:01.882579+00:00",
+  "updatedAt": "2026-06-19T15:00:01.806558+00:00",
   "items": [
+    {
+      "title": "Bernie Sanders’ AI bill would hand the public half of OpenAI, Anthropic and xAI",
+      "url": "https://thenextweb.com/news/bernie-sanders-ai-wealth-fund-bill-50-percent-stake",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Bernie Sanders has turned a talking point into a bill, and it goes further than anything Silicon Valley or the White House has put on the table. On Thursday, the Vermont senator introduced legislation that would hit the largest AI companies with a one-time 50 per cent tax on their stock, paid in shares rather [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/Bernie_sanders_and_ro_khanna_stanford_2026-02-21_003.avif",
+      "published": "2026-06-19T14:23:41+00:00",
+      "firstSeen": "2026-06-19T15:00:01.806558+00:00",
+      "lastSeen": "2026-06-19T15:00:01.806558+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "editorial_score_pass",
+      "score": 11.1316
+    },
+    {
+      "title": "AI’s memory crunch just killed a phone. Even Apple flinched.",
+      "url": "https://thenextweb.com/news/ai-memory-crunch-nothing-phone-apple-unsustainable",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "For a year, AI’s hunger for memory chips was a price story: your next laptop or phone would cost more. This week it became a product story. Nothing has scrapped its planned CMF Phone 3 Pro, with a co-founder saying the company could not build a budget phone that felt like “a genuine step forward” [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/chinese-dram-cxmt-corsair-ddr5-memory-prices.avif",
+      "published": "2026-06-19T14:09:12+00:00",
+      "firstSeen": "2026-06-19T15:00:01.806558+00:00",
+      "lastSeen": "2026-06-19T15:00:01.806558+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.6244
+    },
     {
       "title": "Barret Zoph is out at OpenAI again after just five months",
       "url": "https://www.theverge.com/ai-artificial-intelligence/952837/barret-zoph-openai-thinking-machines-lab",
@@ -13,10 +45,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/STK155_OPEN_AI_CVirginia_C.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-19T04:49:33+00:00",
       "firstSeen": "2026-06-19T05:00:01.341117+00:00",
-      "lastSeen": "2026-06-19T14:00:01.882579+00:00",
+      "lastSeen": "2026-06-19T15:00:01.806558+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1125
+      "score": 5.0892
     },
     {
       "title": "Early users of Anthropic’s Mythos still have access after US order",
@@ -32,7 +64,7 @@
       "lastSeen": "2026-06-19T10:55:06.047694+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0233
+      "score": 4.9966
     },
     {
       "title": "Patch release v5.10.4",
@@ -45,10 +77,26 @@
       "image": "https://repository-images.githubusercontent.com/155220641/a16c4880-a501-11ea-9e8f-646cf611702e",
       "published": "2026-06-19T13:25:50+00:00",
       "firstSeen": "2026-06-15T17:00:01.632650+00:00",
-      "lastSeen": "2026-06-19T14:00:01.882579+00:00",
+      "lastSeen": "2026-06-19T15:00:01.806558+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9727
+      "score": 4.9431
+    },
+    {
+      "title": "The film about Sam Altman has been dropped by Amazon MGM",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/952906/sam-altman-film-artificial-openai-amazon-mgm-dropped",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "Luca Guadagnino's film about OpenAI CEO Sam Altman, Artificial, has reportedly been dropped by Amazon MGM. The film, which stars Andrew Garfield and covers the rollercoaster five days in 2023 spanning Altman's termination and reinstatement as CEO, had been in the works for about a year. The cast also includes A Complete Unknown actress Monica [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/STK201_SAM_ALTMAN_CVIRGINIA2D_717b98.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
+      "published": "2026-06-19T14:15:29+00:00",
+      "firstSeen": "2026-06-19T15:00:01.806558+00:00",
+      "lastSeen": "2026-06-19T15:00:01.806558+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.3375
     },
     {
       "title": "Disney is joining the AI-ad arms race, just as audiences turn on ‘slop’",
@@ -64,7 +112,7 @@
       "lastSeen": "2026-06-19T14:00:01.882579+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.1769
+      "score": 4.1488
     },
     {
       "title": "The AI bubble didn’t pop. It sent the bill",
@@ -80,7 +128,7 @@
       "lastSeen": "2026-06-19T12:00:01.610529+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.0377
+      "score": 4.0106
     },
     {
       "title": "Retailers want AI-generated ads exempt from EU transparency rules",
@@ -96,7 +144,7 @@
       "lastSeen": "2026-06-19T12:00:01.610529+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.4322
+      "score": 3.4052
     },
     {
       "title": "Alibaba Cloud opens first data centres in France as the EU tightens rules on foreign cloud providers",
@@ -112,7 +160,23 @@
       "lastSeen": "2026-06-19T10:00:01.793889+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3853
+      "score": 3.3597
+    },
+    {
+      "title": "The US says one of ASML’s top chip tools is in China. ASML says it isn’t.",
+      "url": "https://thenextweb.com/news/asml-euv-china-us-export-control-dispute-lutnick",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The US has accused the one company on Earth that makes the machines behind cutting-edge chips of letting one slip into China. It has not shown its proof, and the company says it never happened. In a series of recent meetings, Commerce Secretary Howard Lutnick told ASML’s senior leaders that Washington believes one of its [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2024/04/Untitled-design-57.avif",
+      "published": "2026-06-19T14:38:06+00:00",
+      "firstSeen": "2026-06-19T15:00:01.806558+00:00",
+      "lastSeen": "2026-06-19T15:00:01.806558+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.2389
     },
     {
       "title": "Turkey clears Uber’s acquisition of Getir’s delivery business",
@@ -128,71 +192,7 @@
       "lastSeen": "2026-06-19T10:55:06.047694+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1152
-    },
-    {
-      "title": "As the World Claims Tech Sovereignty, Where Does Australia Stand?",
-      "url": "https://www.techrepublic.com/article/data-tech-sovereignty-australia-apac",
-      "source": "TechRepublic AI",
-      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Australian enterprises remain dependent on foreign technology infrastructure, while major economies treat that dependency as a strategic liability.\nThe post As the World Claims Tech Sovereignty, Where Does Australia Stand? appeared first on TechRepublic.",
-      "image": "https://assets.techrepublic.com/uploads/2026/06/tr-06192026-data-tech-sovereignty-australia-apac.jpg?f=jpeg",
-      "published": "2026-06-19T08:10:36+00:00",
-      "firstSeen": "2026-06-19T12:00:01.610529+00:00",
-      "lastSeen": "2026-06-19T14:00:01.882579+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.0857
-    },
-    {
-      "title": "US court rules Ohio can restrict children’s use of social media",
-      "url": "https://thenextweb.com/news/us-court-rules-ohio-can-restrict-childrens-use-of-social-media",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Ohio can require social media companies to get a parent’s permission before letting children under 16 onto their platforms, a US appeals court ruled on Thursday, reviving a law the tech industry had managed to freeze. The decision from the Cincinnati-based 6th US Circuit Court of Appeals overturns a lower court that had blocked the [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/USA-flag.avif",
-      "published": "2026-06-19T08:03:08+00:00",
-      "firstSeen": "2026-06-19T09:00:01.265680+00:00",
-      "lastSeen": "2026-06-19T10:00:01.793889+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.0825
-    },
-    {
-      "title": "Banning Open Source AI Would Be A Mistake",
-      "url": "https://www.interconnects.ai/p/banning-open-source-ai-would-be-a",
-      "source": "Interconnects AI",
-      "sourceUrl": "https://www.interconnects.ai/feed",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "This post was originally an op-ed co-authored with Kevin Xu of Interconnected for a general, non-technical audience.",
-      "image": "https://substack-post-media.s3.amazonaws.com/public/images/2cf763f4-5f1e-47ec-b6e1-b14a69443d00_3182x1790.png",
-      "published": "2026-06-19T13:02:47+00:00",
-      "firstSeen": "2026-06-19T14:00:01.882579+00:00",
-      "lastSeen": "2026-06-19T14:00:01.882579+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.0312
-    },
-    {
-      "title": "Warren raises €10M to fix Belgium’s broken workplace pensions",
-      "url": "https://thenextweb.com/news/warren-10m-seed-belgium-workplace-pensions",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The typical Belgian works for about 40 years and retires with a workplace pension worth less than a second-hand car. Warren, a Ghent-based fintech, wants to fix that. The company has raised €10mn in a seed round led by Motive Ventures, the venture arm of transatlantic investor Motive Partners. F Capital joined, alongside returning backers [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/Warren-team.avif",
-      "published": "2026-06-19T12:33:37+00:00",
-      "firstSeen": "2026-06-19T13:00:01.583658+00:00",
-      "lastSeen": "2026-06-19T14:00:01.882579+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.8069
+      "score": 3.0887
     }
   ],
   "errors": [
