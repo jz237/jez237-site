@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-19T14:00:01.882579+00:00",
+  "updatedAt": "2026-06-19T15:00:01.806558+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -10980,6 +10980,10 @@
     "https://techcrunch.com/2026/06/19/the-ceo-of-allbirds-new-ai-biz-has-a-plan-but-no-employees": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/Nadia-Carlsten-HS.png?w=1024",
       "checkedAt": "2026-06-19T14:00:01.882579+00:00"
+    },
+    "https://www.theverge.com/ai-artificial-intelligence/952906/sam-altman-film-artificial-openai-amazon-mgm-dropped": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/STK201_SAM_ALTMAN_CVIRGINIA2D_717b98.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-06-19T15:00:01.806558+00:00"
     }
   }
 }
