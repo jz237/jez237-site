@@ -1,6 +1,6 @@
 {
   "date": "2026-06-19",
-  "updatedAt": "2026-06-19T12:00:01.610529+00:00",
+  "updatedAt": "2026-06-19T13:00:01.583658+00:00",
   "items": [
     {
       "title": "Barret Zoph is out at OpenAI again after just five months",
@@ -13,10 +13,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/STK155_OPEN_AI_CVirginia_C.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-19T04:49:33+00:00",
       "firstSeen": "2026-06-19T05:00:01.341117+00:00",
-      "lastSeen": "2026-06-19T12:00:01.610529+00:00",
+      "lastSeen": "2026-06-19T13:00:01.583658+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1612
+      "score": 5.1365
     },
     {
       "title": "Early users of Anthropic’s Mythos still have access after US order",
@@ -32,7 +32,7 @@
       "lastSeen": "2026-06-19T10:55:06.047694+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0789
+      "score": 5.0507
     },
     {
       "title": "Disney is joining the AI-ad arms race, just as audiences turn on ‘slop’",
@@ -45,10 +45,10 @@
       "image": "https://media.thenextweb.com/2018/11/Disney-Plus.avif",
       "published": "2026-06-19T11:31:31+00:00",
       "firstSeen": "2026-06-19T12:00:01.610529+00:00",
-      "lastSeen": "2026-06-19T12:00:01.610529+00:00",
+      "lastSeen": "2026-06-19T13:00:01.583658+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.2356
+      "score": 4.2058
     },
     {
       "title": "The AI bubble didn’t pop. It sent the bill",
@@ -64,7 +64,7 @@
       "lastSeen": "2026-06-19T12:00:01.610529+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.0941
+      "score": 4.0655
     },
     {
       "title": "Retailers want AI-generated ads exempt from EU transparency rules",
@@ -80,7 +80,7 @@
       "lastSeen": "2026-06-19T12:00:01.610529+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.4883
+      "score": 3.4598
     },
     {
       "title": "Alibaba Cloud opens first data centres in France as the EU tightens rules on foreign cloud providers",
@@ -96,7 +96,7 @@
       "lastSeen": "2026-06-19T10:00:01.793889+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.4388
+      "score": 3.4117
     },
     {
       "title": "Turkey clears Uber’s acquisition of Getir’s delivery business",
@@ -112,7 +112,7 @@
       "lastSeen": "2026-06-19T10:55:06.047694+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1703
+      "score": 3.1424
     },
     {
       "title": "As the World Claims Tech Sovereignty, Where Does Australia Stand?",
@@ -125,10 +125,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/06/tr-06192026-data-tech-sovereignty-australia-apac.jpg?f=jpeg",
       "published": "2026-06-19T08:10:36+00:00",
       "firstSeen": "2026-06-19T12:00:01.610529+00:00",
-      "lastSeen": "2026-06-19T12:00:01.610529+00:00",
+      "lastSeen": "2026-06-19T13:00:01.583658+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1392
+      "score": 3.1121
     },
     {
       "title": "US court rules Ohio can restrict children’s use of social media",
@@ -144,7 +144,39 @@
       "lastSeen": "2026-06-19T10:00:01.793889+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1357
+      "score": 3.1087
+    },
+    {
+      "title": "Warren raises €10M to fix Belgium’s broken workplace pensions",
+      "url": "https://thenextweb.com/news/warren-10m-seed-belgium-workplace-pensions",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The typical Belgian works for about 40 years and retires with a workplace pension worth less than a second-hand car. Warren, a Ghent-based fintech, wants to fix that. The company has raised €10mn in a seed round led by Motive Ventures, the venture arm of transatlantic investor Motive Partners. F Capital joined, alongside returning backers [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/Warren-team.avif",
+      "published": "2026-06-19T12:33:37+00:00",
+      "firstSeen": "2026-06-19T13:00:01.583658+00:00",
+      "lastSeen": "2026-06-19T13:00:01.583658+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.8366
+    },
+    {
+      "title": "A $5M tech-worker PAC is taking on Big Tech’s $100M war chest over AI rules",
+      "url": "https://thenextweb.com/news/guardrails-alliance-tech-worker-pac-ai-regulation",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Silicon Valley is spending more than $100mn to elect politicians who will leave AI alone. A new group of tech workers wants to fight back with a fraction of that. The Guardrails Alliance, a super PAC that supports AI regulation, launched on Thursday with money from tech employees, labour unions and parents. Democratic operatives Shaunna [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/guardrails-alliance-tech-worker-pac-ai-regulation.avif",
+      "published": "2026-06-19T11:52:23+00:00",
+      "firstSeen": "2026-06-19T13:00:01.583658+00:00",
+      "lastSeen": "2026-06-19T13:00:01.583658+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.8161
     },
     {
       "title": "Rejected by 180 investors, Bland just raised $50M to prove voice AI is the future",
@@ -160,39 +192,7 @@
       "lastSeen": "2026-06-19T12:00:01.610529+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8095
-    },
-    {
-      "title": "Hyundai to buy SoftBank’s last Boston Dynamics stake for $325m",
-      "url": "https://thenextweb.com/news/hyundai-to-buy-softbanks-last-boston-dynamics-stake-for-325m",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Hyundai is preparing to buy out the last piece of Boston Dynamics it does not already own. The South Korean carmaker plans to acquire SoftBank’s remaining 9.65% stake in the US robotics firm for $325m, a deal that would make the maker of the Atlas humanoid a wholly owned Hyundai subsidiary, according to a newspaper [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/Hyundai.avif",
-      "published": "2026-06-19T08:53:33+00:00",
-      "firstSeen": "2026-06-19T10:00:01.793889+00:00",
-      "lastSeen": "2026-06-19T10:55:06.047694+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.409
-    },
-    {
-      "title": "Disentangling Linguistic Relatedness from Task Alignment in Cross-Lingual Transfer",
-      "url": "https://llm-stats.com/ai-news",
-      "source": "LLM Stats AI News",
-      "sourceUrl": "https://llm-stats.com/ai-news",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "",
-      "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-19T12:00:10.475481+00:00",
-      "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-19T12:00:01.610529+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.36
+      "score": 2.7805
     }
   ],
   "errors": [
