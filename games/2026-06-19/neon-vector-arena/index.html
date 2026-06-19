@@ -156,7 +156,7 @@
     <p class="fine">Drag anywhere to fly. Shots auto-aim at the nearest threat. Survive the lightstorm.</p>
   </div>
 </div>
-<div class="version">v2.9</div>
+<div class="version">v2.10</div>
 
 <script>
 'use strict';
@@ -203,6 +203,9 @@ const MAX_DT = FIREFOX_PERF ? .07 : .04;
 const SHOT_BLAST_RADIUS = 105;
 const SHOT_BLAST_FORCE = 430;
 const SHOT_SPEED = 660;
+const ENEMY_SPEED_CAP = FIREFOX_PERF ? 176 : 192;
+const CHILD_SPEED_CAP = FIREFOX_PERF ? 218 : 238;
+const ENEMY_VELOCITY_CAP = FIREFOX_PERF ? 245 : 270;
 const AIM_SWITCH_LOCK = .26;
 const AIM_TURN_RATE = 9.5;
 const AIM_CLUSTER_RADIUS = 360;
@@ -358,7 +361,7 @@ function spawnEnemy(initial = false) {
     scale,
     sizeTier: tier.name,
     largeSplits,
-    speed: speed + wave * 2.2,
+    speed: Math.min(speed + wave * 2.2, ENEMY_SPEED_CAP),
     rot: rand(0, TAU),
     spin: rand(-2.8, 2.8),
     hue: def.hue,
@@ -525,6 +528,14 @@ function angleDelta(from, to) {
 
 function turnTowardAngle(from, to, maxStep) {
   return from + clamp(angleDelta(from, to), -maxStep, maxStep);
+}
+
+function capEnemyVelocity(e) {
+  const ev = Math.hypot(e.vx, e.vy);
+  if (ev > ENEMY_VELOCITY_CAP) {
+    e.vx = e.vx / ev * ENEMY_VELOCITY_CAP;
+    e.vy = e.vy / ev * ENEMY_VELOCITY_CAP;
+  }
 }
 
 function updateCamera(dt = 1, snap = false) {
@@ -717,6 +728,7 @@ function blastEnemies(x, y, force, radius, sourceVX = 0, sourceVY = 0) {
     target.vx += nx * force * falloff + sourceVX * .09 * falloff;
     target.vy += ny * force * falloff + sourceVY * .09 * falloff;
     target.rot += falloff * rand(-1.4, 1.4);
+    capEnemyVelocity(target);
   }
 }
 
@@ -736,7 +748,7 @@ function splitEnemy(e) {
     const a = i * TAU / count + rand(-.18, .18);
     const burst = rand(220, 390);
     const childScale = rand(.58, .92);
-    enemies.push({
+    const child = {
       x: e.x + Math.cos(a) * rand(e.r * .45, e.r * 1.05),
       y: e.y + Math.sin(a) * rand(e.r * .45, e.r * 1.05),
       vx: Math.cos(a) * burst + e.vx * .22,
@@ -747,13 +759,15 @@ function splitEnemy(e) {
       type: childType,
       scale: childScale,
       largeSplits: false,
-      speed: rand(142, 192) + wave * 2.8,
+      speed: Math.min(rand(142, 192) + wave * 2.8, CHILD_SPEED_CAP),
       rot: a,
       spin: rand(-8, 8),
       hue: e.hue + rand(-10, 10),
       pulse: rand(0, TAU),
       trail: []
-    });
+    };
+    capEnemyVelocity(child);
+    enemies.push(child);
   }
   addSpark(e.x, e.y, 60, e.hue, 1.75);
   particles.push({ x: e.x, y: e.y, vx: 0, vy: 0, life: .55, max: .55, r: Math.max(118, e.r * 4.2), hue: e.hue, kind: 'ring' });
@@ -835,6 +849,7 @@ function update(dt) {
     const wobble = Math.sin(time * 3 + e.pulse) * shapeDef(e.type).wobble;
     e.vx += (dx / d * e.speed + Math.cos(e.rot + Math.PI / 2) * wobble - e.vx) * dt * 1.8;
     e.vy += (dy / d * e.speed + Math.sin(e.rot + Math.PI / 2) * wobble - e.vy) * dt * 1.8;
+    capEnemyVelocity(e);
     e.x += e.vx * dt;
     e.y += e.vy * dt;
     e.rot += e.spin * dt;
@@ -873,6 +888,8 @@ function update(dt) {
       a.vy -= ny * push;
       b.vx += nx * push;
       b.vy += ny * push;
+      capEnemyVelocity(a);
+      capEnemyVelocity(b);
     }
   }
 
