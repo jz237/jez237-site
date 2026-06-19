@@ -156,7 +156,7 @@
     <p class="fine">Drag anywhere to move. Mouse aims. On touch, the ship auto-aims at the nearest threat. Survive the lightstorm.</p>
   </div>
 </div>
-<div class="version">v1.5</div>
+<div class="version">v1.6</div>
 
 <script>
 'use strict';
@@ -301,8 +301,7 @@ function spawnEnemy(initial = false) {
   const largeSplits = scale >= 1.34;
   const speedBase = type === 'dart' ? rand(96, 142) : type === 'splitter' ? rand(36, 58) : rand(62, 105);
   const speed = speedBase / Math.sqrt(scale);
-  const baseHp = type === 'splitter' ? 5 + Math.floor(wave / 2) : type === 'spinner' ? 2 : 1;
-  const hp = Math.max(1, Math.ceil(baseHp * (largeSplits ? scale : Math.max(.8, scale))));
+  const hp = 1;
   enemies.push({
     x, y,
     vx: rand(-20, 20),
@@ -316,7 +315,7 @@ function spawnEnemy(initial = false) {
     speed: speed + wave * 4,
     rot: rand(0, TAU),
     spin: rand(-2.8, 2.8),
-    hue: type === 'splitter' ? 54 : type === 'splinter' ? 38 : type === 'spinner' ? 292 : type === 'dart' ? 18 : 182,
+    hue: type === 'splitter' ? 54 : type === 'spinner' ? 292 : type === 'dart' ? 18 : 182,
     pulse: rand(0, TAU),
     trail: []
   });
@@ -518,24 +517,27 @@ function explode(x, y, hue, big = false) {
 
 function splitEnemy(e) {
   const count = Math.round(clamp(e.r * (e.type === 'splitter' ? .95 : .72), 14, e.type === 'splitter' ? 36 : 28));
+  const childType = e.type;
+  const childBaseR = childType === 'splitter' ? 8.5 : childType === 'spinner' ? 7.6 : childType === 'dart' ? 6.8 : 7.4;
   for (let i = 0; i < count && enemies.length < MAX_ENEMIES + 32; i++) {
     const a = i * TAU / count + rand(-.18, .18);
     const burst = rand(220, 390);
+    const childScale = rand(.58, .92);
     enemies.push({
       x: e.x + Math.cos(a) * rand(e.r * .45, e.r * 1.05),
       y: e.y + Math.sin(a) * rand(e.r * .45, e.r * 1.05),
       vx: Math.cos(a) * burst + e.vx * .22,
       vy: Math.sin(a) * burst + e.vy * .22,
-      r: rand(4.6, 7.4),
+      r: childBaseR * childScale,
       hp: 1,
       maxHp: 1,
-      type: 'splinter',
-      scale: rand(.42, .68),
+      type: childType,
+      scale: childScale,
       largeSplits: false,
       speed: rand(168, 220) + wave * 5,
       rot: a,
       spin: rand(-8, 8),
-      hue: rand(24, 48),
+      hue: e.hue + rand(-10, 10),
       pulse: rand(0, TAU),
       trail: []
     });
@@ -545,7 +547,7 @@ function splitEnemy(e) {
 }
 
 function shouldSplitEnemy(e) {
-  return e.type !== 'splinter' && (e.type === 'splitter' || e.largeSplits || e.r >= 18);
+  return e.largeSplits || e.r >= 18;
 }
 
 function update(dt) {
