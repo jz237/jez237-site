@@ -1,0 +1,30 @@
+{
+  "$schema": "https://unpkg.com/wrangler@latest/config-schema.json",
+  "name": "neon-vector-arena-online",
+  "main": "src/index.js",
+  "compatibility_date": "2026-06-01",
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "ROOM",
+        "class_name": "NeonVectorRoom"
+      },
+      {
+        "name": "LOBBY",
+        "class_name": "NeonVectorLobby"
+      }
+    ]
+  },
+  "migrations": [
+    {
+      "tag": "v1",
+      "new_sqlite_classes": [
+        "NeonVectorRoom",
+        "NeonVectorLobby"
+      ]
+    }
+  ],
+  "observability": {
+    "enabled": true
+  }
+}
