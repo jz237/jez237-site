@@ -156,7 +156,7 @@
     <p class="fine">Drag anywhere to fly. Shots auto-aim at the nearest threat. Survive the lightstorm.</p>
   </div>
 </div>
-<div class="version">v2.12</div>
+<div class="version">v2.13</div>
 
 <script>
 'use strict';
@@ -586,6 +586,7 @@ function addHitCallout(x, y) {
     spin: rand(-.55, .55),
     life: .82,
     max: .82,
+    size: 44,
     hue: Math.random() < .5 ? 188 : 316
   });
 }
@@ -603,6 +604,7 @@ function addEnemyHitCallout(x, y, hue) {
     spin: rand(-.42, .42),
     life: .68,
     max: .68,
+    size: 34,
     hue
   });
 }
@@ -1316,7 +1318,7 @@ function drawCallout(c, o, glowPass = false) {
   const t = clamp(o.life / o.max, 0, 1);
   const pop = 1 - Math.abs(t - .78) * .7;
   const alpha = Math.min(1, t * 1.35);
-  const size = (glowPass ? 24 : 20) * clamp(pop, .72, 1.12);
+  const size = (o.size || 36) * (glowPass ? 1.18 : 1) * clamp(pop, .72, 1.12);
   c.save();
   c.translate(o.x, o.y);
   c.rotate(o.rot);
