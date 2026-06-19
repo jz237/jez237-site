@@ -28,28 +28,28 @@
   }
   .hud {
     position: fixed;
-    inset: 14px 14px auto 14px;
+    inset: 20px 22px auto 22px;
     display: flex;
     justify-content: space-between;
+    align-items: flex-start;
     gap: 12px;
     pointer-events: none;
     z-index: 3;
     font-weight: 900;
     letter-spacing: .08em;
     text-transform: uppercase;
-    text-shadow: 0 0 12px rgba(68, 240, 255, .9), 0 0 26px rgba(255, 66, 206, .45);
+    text-shadow: 0 0 5px currentColor, 0 0 13px currentColor;
   }
   .hud span {
-    min-width: 92px;
-    padding: 8px 10px;
-    border: 1px solid rgba(95, 243, 255, .36);
-    border-radius: 8px;
-    background: linear-gradient(180deg, rgba(3, 12, 28, .7), rgba(3, 5, 14, .34));
-    box-shadow: inset 0 0 18px rgba(76, 230, 255, .12), 0 0 18px rgba(76, 230, 255, .12);
-    font-size: clamp(11px, 2.6vw, 13px);
+    min-width: 88px;
+    padding: 0;
+    color: #dcfdff;
+    font-size: clamp(10px, 2.7vw, 15px);
+    line-height: 1.18;
+    white-space: nowrap;
   }
   .hud span:nth-child(2) { text-align: center; color: #ffef75; }
-  .hud span:nth-child(3) { text-align: right; color: #ff7bdc; }
+  .hud span:nth-child(3) { min-width: 165px; text-align: right; color: #ff7bdc; }
   .overlay {
     position: fixed;
     inset: 0;
@@ -133,8 +133,10 @@
     pointer-events: none;
   }
   @media (max-width: 600px) {
-    .hud { inset: 9px 8px auto 8px; gap: 6px; }
-    .hud span { min-width: 0; flex: 1; padding: 7px 6px; }
+    .hud { inset: 14px 12px auto 12px; gap: 6px; }
+    .hud span { min-width: 0; flex: 1; }
+    .hud span:nth-child(2) { flex: .55; }
+    .hud span:nth-child(3) { min-width: 140px; flex: 1.4; }
     .panel { padding-block: 22px; }
   }
 </style>
@@ -142,19 +144,19 @@
 <body>
 <canvas id="game"></canvas>
 <div class="hud">
-  <span id="score">Score 000000</span>
+  <span id="score">Shield: 100</span>
   <span id="wave">Wave 01</span>
-  <span id="combo">Combo x1</span>
+  <span id="combo">Anonymous 000000 Δx1</span>
 </div>
 <div class="overlay" id="overlay">
   <div class="panel">
     <h1>NEON<br>VECTOR<br>ARENA</h1>
-    <p class="sub">A live graphics demo: glowing vectors, fast enemies, trails, particles, bloom, and readable arcade chaos.</p>
+    <p class="sub">A live graphics demo: crisp wireframe enemies, clean HUD text, fast motion, and shapes that fracture into smaller vector pieces.</p>
     <button id="start">Start Demo</button>
     <p class="fine">Drag anywhere to move. Mouse aims. On touch, the ship auto-aims at the nearest threat. Survive the lightstorm.</p>
   </div>
 </div>
-<div class="version">v1.0</div>
+<div class="version">v1.1</div>
 
 <script>
 'use strict';
@@ -184,6 +186,7 @@ let keys = new Set();
 let enemies = [];
 let shots = [];
 let particles = [];
+let fragments = [];
 let pickups = [];
 let stars = [];
 let player;
@@ -244,6 +247,7 @@ function reset() {
   enemies = [];
   shots = [];
   particles = [];
+  fragments = [];
   pickups = [];
   score = 0;
   wave = 1;
@@ -256,9 +260,9 @@ function reset() {
 }
 
 function updateHud() {
-  scoreEl.textContent = 'Score ' + String(Math.floor(score)).padStart(6, '0');
+  scoreEl.textContent = 'Shield: ' + String(Math.max(0, Math.ceil(player?.hp ?? 100))).padStart(3, '0');
   waveEl.textContent = 'Wave ' + String(wave).padStart(2, '0');
-  comboEl.textContent = 'Combo x' + combo;
+  comboEl.textContent = 'Anonymous ' + String(Math.floor(score)).padStart(6, '0') + ' Δx' + combo;
 }
 
 function start() {
@@ -349,11 +353,101 @@ function addSpark(x, y, n, hue, force = 1) {
   }
 }
 
+function localShapePoints(e, scale = 1) {
+  const r = e.r * scale;
+  if (e.type === 'dart') return [[r * 1.45, 0], [-r, .75 * r], [-.42 * r, 0], [-r, -.75 * r]];
+  if (e.type === 'cube') return [[-r, -r], [r, -r], [r, r], [-r, r]];
+  if (e.type === 'spinner') return [[0, -r * 1.35], [r * 1.2, r * .64], [0, r * .24], [-r * 1.2, r * .64]];
+  const pts = [];
+  for (let i = 0; i < 10; i++) {
+    const a = i * TAU / 10;
+    const rr = i % 2 ? r * .7 : r * 1.22;
+    pts.push([Math.cos(a) * rr, Math.sin(a) * rr]);
+  }
+  return pts;
+}
+
+function rotatePoint(x, y, a) {
+  const ca = Math.cos(a);
+  const sa = Math.sin(a);
+  return [x * ca - y * sa, x * sa + y * ca];
+}
+
+function worldShapePoints(e, scale = 1) {
+  return localShapePoints(e, scale).map(([x, y]) => {
+    const [rx, ry] = rotatePoint(x, y, e.rot);
+    return [e.x + rx, e.y + ry];
+  });
+}
+
+function addVectorFragments(e) {
+  const pts = worldShapePoints(e, 1);
+  const count = e.type === 'splitter' ? 2 : 1;
+  for (let pass = 0; pass < count; pass++) {
+    for (let i = 0; i < pts.length; i++) {
+      const a = pts[i];
+      const b = pts[(i + 1) % pts.length];
+      const mx = (a[0] + b[0]) * .5;
+      const my = (a[1] + b[1]) * .5;
+      const out = Math.atan2(my - e.y, mx - e.x) + rand(-.55, .55);
+      const speed = rand(90, e.type === 'splitter' ? 330 : 250);
+      fragments.push({
+        x: mx,
+        y: my,
+        vx: Math.cos(out) * speed + e.vx * .22,
+        vy: Math.sin(out) * speed + e.vy * .22,
+        ax: a[0] - mx,
+        ay: a[1] - my,
+        bx: b[0] - mx,
+        by: b[1] - my,
+        rot: rand(-.4, .4),
+        spin: rand(-7, 7),
+        hue: e.hue + rand(-10, 10),
+        life: rand(.55, 1.15),
+        max: rand(.75, 1.2),
+        kind: 'line'
+      });
+      if (i % 2 === 0) {
+        const [cx, cy] = rotatePoint(rand(-e.r * .34, e.r * .34), rand(-e.r * .34, e.r * .34), e.rot);
+        fragments.push({
+          x: mx,
+          y: my,
+          vx: Math.cos(out + rand(-.25, .25)) * speed * .72,
+          vy: Math.sin(out + rand(-.25, .25)) * speed * .72,
+          pts: [[a[0] - mx, a[1] - my], [b[0] - mx, b[1] - my], [cx, cy]],
+          rot: rand(0, TAU),
+          spin: rand(-8, 8),
+          hue: e.hue + rand(-18, 18),
+          life: rand(.42, .9),
+          max: rand(.6, 1),
+          kind: 'poly'
+        });
+      }
+    }
+  }
+  for (let i = 0; i < 10; i++) {
+    const a = rand(0, TAU);
+    const d = rand(0, e.r * 1.2);
+    fragments.push({
+      x: e.x + Math.cos(a) * d,
+      y: e.y + Math.sin(a) * d,
+      vx: Math.cos(a) * rand(120, 360),
+      vy: Math.sin(a) * rand(120, 360),
+      rot: rand(0, TAU),
+      spin: rand(-10, 10),
+      hue: e.hue + rand(-16, 16),
+      life: rand(.35, .8),
+      max: rand(.55, .9),
+      kind: 'cross'
+    });
+  }
+}
+
 function explode(x, y, hue, big = false) {
-  addSpark(x, y, big ? 46 : 24, hue, big ? 1.35 : 1);
-  particles.push({ x, y, vx: 0, vy: 0, life: big ? .55 : .38, max: big ? .55 : .38, r: big ? 60 : 35, hue, kind: 'ring' });
-  particles.push({ x, y, vx: 0, vy: 0, life: .16, max: .16, r: big ? 120 : 80, hue: 0, kind: 'flash' });
-  shake = Math.max(shake, big ? 12 : 6);
+  addSpark(x, y, big ? 18 : 9, hue, big ? 1.05 : .82);
+  particles.push({ x, y, vx: 0, vy: 0, life: big ? .38 : .28, max: big ? .38 : .28, r: big ? 58 : 34, hue, kind: 'ring' });
+  particles.push({ x, y, vx: 0, vy: 0, life: .09, max: .09, r: big ? 90 : 58, hue: 0, kind: 'flash' });
+  shake = Math.max(shake, big ? 8 : 4);
 }
 
 function splitEnemy(e) {
@@ -472,6 +566,7 @@ function update(dt) {
         e.hp--;
         addSpark(s.x, s.y, 7, s.hue, .7);
         if (e.hp <= 0) {
+          addVectorFragments(e);
           enemies.splice(i, 1);
           if (e.type === 'splitter') splitEnemy(e);
           comboTimer = 2.2;
@@ -512,6 +607,15 @@ function update(dt) {
     p.vy *= Math.pow(.08, dt);
   }
   particles = particles.filter(p => p.life > 0);
+  for (const f of fragments) {
+    f.life -= dt;
+    f.x += f.vx * dt;
+    f.y += f.vy * dt;
+    f.vx *= Math.pow(.18, dt);
+    f.vy *= Math.pow(.18, dt);
+    f.rot += f.spin * dt;
+  }
+  fragments = fragments.filter(f => f.life > 0);
   updateHud();
 }
 
@@ -567,9 +671,9 @@ function drawGrid(c) {
   }
 
   c.globalCompositeOperation = 'lighter';
-  const spacing = 42;
-  const off = (time * 28) % spacing;
-  c.strokeStyle = 'rgba(48, 224, 255, .11)';
+  const spacing = 38;
+  const off = (time * 18) % spacing;
+  c.strokeStyle = 'rgba(46, 255, 121, .13)';
   c.lineWidth = 1;
   c.beginPath();
   for (let x = -spacing; x < w + spacing; x += spacing) {
@@ -582,11 +686,14 @@ function drawGrid(c) {
   }
   c.stroke();
 
-  c.strokeStyle = 'rgba(255, 73, 220, .42)';
-  c.lineWidth = 2;
-  c.shadowColor = '#ff49dc';
-  c.shadowBlur = 18;
+  c.strokeStyle = 'rgba(255, 235, 54, .66)';
+  c.lineWidth = 2.2;
+  c.shadowColor = '#fff04d';
+  c.shadowBlur = 10;
   c.strokeRect(18, 52, w - 36, h - 70);
+  c.strokeStyle = 'rgba(46, 255, 121, .32)';
+  c.lineWidth = 1;
+  c.strokeRect(25, 59, w - 50, h - 84);
   c.shadowBlur = 0;
   c.restore();
 }
@@ -620,50 +727,64 @@ function drawEnemy(c, e, ghost = false) {
   const x = e.x, y = e.y;
   const r = e.r;
   const alpha = ghost ? e.alpha : 1;
-  const color = `hsla(${e.hue},100%,${ghost ? 62 : 68}%,${alpha})`;
+  const color = `hsla(${e.hue},100%,${ghost ? 60 : 70}%,${alpha})`;
+  const hot = `hsla(${e.hue + 18},100%,82%,${alpha})`;
   c.save();
   c.translate(x, y);
   c.rotate(e.rot);
   c.globalAlpha = alpha;
+  c.strokeStyle = color;
+  c.lineWidth = ghost ? .9 : 1.65;
+  c.lineJoin = 'miter';
+  c.lineCap = 'butt';
+  c.shadowColor = color;
+  c.shadowBlur = ghost ? 2 : 7;
   if (e.type === 'cube') {
-    poly(c, [[-r,-r], [r,-r], [r,r], [-r,r]], color, ghost ? 1 : 2.3, ghost ? null : `hsla(${e.hue},100%,55%,.1)`, ghost ? 5 : 16);
-    line(c, -r, 0, r, 0, color, ghost ? .8 : 1.4, 4);
-    line(c, 0, -r, 0, r, color, ghost ? .8 : 1.4, 4);
+    const skew = Math.sin(e.pulse) * r * .22;
+    const pts = [[-r + skew,-r], [r,-r + skew], [r - skew,r], [-r,r - skew]];
+    poly(c, pts, color, ghost ? .9 : 1.7, null, ghost ? 1 : 5);
+    line(c, pts[0][0], pts[0][1], pts[2][0], pts[2][1], color, ghost ? .6 : 1, 2);
+    line(c, pts[1][0], pts[1][1], pts[3][0], pts[3][1], color, ghost ? .6 : 1, 2);
+    c.strokeRect(-r * .42, -r * .42, r * .84, r * .84);
   } else if (e.type === 'dart') {
-    poly(c, [[r * 1.45,0], [-r,.75*r], [-.42*r,0], [-r,-.75*r]], color, ghost ? 1 : 2.4, ghost ? null : `hsla(${e.hue},100%,58%,.12)`, ghost ? 5 : 16);
-    line(c, -r * 1.2, 0, -r * 2.2, 0, `hsla(54,100%,75%,${alpha})`, ghost ? 1 : 2, ghost ? 4 : 12);
+    const pts = localShapePoints(e);
+    poly(c, pts, color, ghost ? .9 : 1.8, null, ghost ? 1 : 5);
+    line(c, pts[0][0], pts[0][1], pts[2][0], pts[2][1], color, ghost ? .6 : 1, 2);
+    line(c, -r * 1.15, 0, -r * 2.35, 0, `hsla(54,100%,76%,${alpha})`, ghost ? .7 : 1.4, ghost ? 1 : 6);
   } else if (e.type === 'spinner') {
-    c.strokeStyle = color;
-    c.lineWidth = ghost ? 1 : 2.4;
-    c.shadowColor = color;
-    c.shadowBlur = ghost ? 5 : 18;
-    for (let i = 0; i < 3; i++) {
-      c.rotate(TAU / 3);
+    for (let i = 0; i < 6; i++) {
+      c.save();
+      c.rotate(i * TAU / 6);
       c.beginPath();
-      c.moveTo(0, 0);
-      c.lineTo(r * 1.4, -r * .3);
-      c.lineTo(r * .75, r * .55);
+      c.moveTo(r * .2, 0);
+      c.lineTo(r * 1.4, -r * .24);
+      c.lineTo(r * .8, r * .42);
       c.closePath();
       c.stroke();
+      c.restore();
     }
-  } else {
-    c.strokeStyle = color;
-    c.lineWidth = ghost ? 1 : 2.5;
-    c.shadowColor = color;
-    c.shadowBlur = ghost ? 6 : 20;
     c.beginPath();
-    for (let i = 0; i < 8; i++) {
-      const rr = i % 2 ? r * .58 : r * 1.18;
-      const a = i * TAU / 8;
-      const px = Math.cos(a) * rr;
-      const py = Math.sin(a) * rr;
-      if (i) c.lineTo(px, py); else c.moveTo(px, py);
-    }
+    c.arc(0, 0, r * .55, 0, TAU);
+    c.stroke();
+  } else {
+    const pts = localShapePoints(e);
+    c.beginPath();
+    pts.forEach(([px, py], i) => i ? c.lineTo(px, py) : c.moveTo(px, py));
     c.closePath();
     c.stroke();
+    for (let i = 0; i < pts.length; i += 2) line(c, pts[i][0], pts[i][1], pts[(i + 4) % pts.length][0], pts[(i + 4) % pts.length][1], color, ghost ? .5 : .9, 2);
     c.beginPath();
     c.arc(0, 0, r * .52, 0, TAU);
     c.stroke();
+  }
+  if (!ghost) {
+    c.fillStyle = hot;
+    c.shadowColor = hot;
+    c.shadowBlur = 6;
+    for (let i = 0; i < 4; i++) {
+      const a = i * TAU / 4 + e.pulse * .2;
+      c.fillRect(Math.cos(a) * r * .72 - 1.2, Math.sin(a) * r * .72 - 1.2, 2.4, 2.4);
+    }
   }
   c.restore();
 }
@@ -674,14 +795,11 @@ function drawShot(c, s) {
     const tail = s.trail[i];
     const head = s.trail[i - 1];
     if (!tail || !head) continue;
-    line(c, tail.x, tail.y, head.x, head.y, `hsla(${s.hue},100%,72%,${(1 - a) * .8})`, 5 * (1 - a), 12);
+    line(c, tail.x, tail.y, head.x, head.y, `hsla(${s.hue},100%,72%,${(1 - a) * .7})`, Math.max(1, 3.2 * (1 - a)), 5);
   }
-  c.beginPath();
-  c.arc(s.x, s.y, s.r, 0, TAU);
-  c.fillStyle = `hsl(${s.hue},100%,82%)`;
-  c.shadowColor = c.fillStyle;
-  c.shadowBlur = 16;
-  c.fill();
+  const color = `hsl(${s.hue},100%,82%)`;
+  line(c, s.x - 4, s.y, s.x + 4, s.y, color, 1.8, 7);
+  line(c, s.x, s.y - 4, s.x, s.y + 4, color, 1.8, 7);
   c.shadowBlur = 0;
 }
 
@@ -708,12 +826,54 @@ function drawParticle(c, p) {
   } else {
     c.fillStyle = `hsla(${p.hue},100%,72%,${t})`;
     c.shadowColor = c.fillStyle;
-    c.shadowBlur = 10;
-    c.beginPath();
-    c.arc(p.x, p.y, p.r * t, 0, TAU);
-    c.fill();
+    c.shadowBlur = 5;
+    c.save();
+    c.translate(p.x, p.y);
+    c.rotate((1 - t) * 3);
+    const r = p.r * t;
+    c.fillRect(-r, -.7, r * 2, 1.4);
+    c.fillRect(-.7, -r, 1.4, r * 2);
+    c.restore();
     c.shadowBlur = 0;
   }
+}
+
+function drawFragment(c, f) {
+  const t = clamp(f.life / f.max, 0, 1);
+  const color = `hsla(${f.hue},100%,72%,${t})`;
+  c.save();
+  c.translate(f.x, f.y);
+  c.rotate(f.rot);
+  c.strokeStyle = color;
+  c.fillStyle = `hsla(${f.hue},100%,62%,${t * .1})`;
+  c.lineWidth = Math.max(.8, 1.7 * t);
+  c.lineCap = 'butt';
+  c.lineJoin = 'miter';
+  c.shadowColor = color;
+  c.shadowBlur = 4;
+  if (f.kind === 'line') {
+    c.beginPath();
+    c.moveTo(f.ax, f.ay);
+    c.lineTo(f.bx, f.by);
+    c.stroke();
+  } else if (f.kind === 'poly') {
+    c.beginPath();
+    c.moveTo(f.pts[0][0], f.pts[0][1]);
+    c.lineTo(f.pts[1][0], f.pts[1][1]);
+    c.lineTo(f.pts[2][0], f.pts[2][1]);
+    c.closePath();
+    c.fill();
+    c.stroke();
+  } else {
+    const r = 4.5 * t;
+    c.beginPath();
+    c.moveTo(-r, 0);
+    c.lineTo(r, 0);
+    c.moveTo(0, -r);
+    c.lineTo(0, r);
+    c.stroke();
+  }
+  c.restore();
 }
 
 function render() {
@@ -742,6 +902,7 @@ function render() {
   for (const t of player.trail.map((v, i) => ({ ...v, alpha: (1 - i / player.trail.length) * .32 })).reverse()) drawPlayer(gtx, t, true);
   for (const s of shots) drawShot(gtx, s);
   for (const e of enemies) drawEnemy(gtx, e);
+  for (const f of fragments) drawFragment(gtx, f);
   for (const p of pickups) {
     gtx.save();
     gtx.translate(p.x, p.y);
@@ -752,20 +913,21 @@ function render() {
   for (const p of particles) drawParticle(gtx, p);
   drawPlayer(gtx, player);
 
-  ctx.drawImage(glow, 0, 0, innerWidth, innerHeight);
   ctx.save();
-  ctx.globalAlpha = .72;
-  ctx.filter = 'blur(7px) saturate(1.65)';
+  ctx.globalCompositeOperation = 'lighter';
+  ctx.globalAlpha = .28;
+  ctx.filter = 'blur(4px) saturate(1.3)';
   ctx.drawImage(glow, 0, 0, innerWidth, innerHeight);
-  ctx.globalAlpha = .36;
-  ctx.filter = 'blur(18px) saturate(1.9)';
+  ctx.globalAlpha = .13;
+  ctx.filter = 'blur(12px) saturate(1.45)';
   ctx.drawImage(glow, 0, 0, innerWidth, innerHeight);
   ctx.restore();
 
-  ctx.globalCompositeOperation = 'source-over';
+  ctx.globalCompositeOperation = 'lighter';
   ctx.globalAlpha = 1;
   ctx.filter = 'none';
   ctx.drawImage(glow, 0, 0, innerWidth, innerHeight);
+  ctx.globalCompositeOperation = 'source-over';
 
   if (player.inv > 0) {
     ctx.strokeStyle = `rgba(255,255,255,${.25 + Math.sin(time * 24) * .16})`;
