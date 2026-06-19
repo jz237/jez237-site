@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-18T23:58:25.470842+00:00",
+  "updatedAt": "2026-06-19T01:00:01.939122+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -10948,6 +10948,14 @@
     "https://www.techrepublic.com/article/news-alibaba-cloud-ai-sovereignty-emea-france": {
       "image": "",
       "checkedAt": "2026-06-18T21:26:35.954324+00:00"
+    },
+    "https://techcrunch.com/2026/06/18/source-elastic-agrees-to-buy-crv-backed-deductiveai-for-up-to-85m": {
+      "image": "https://techcrunch.com/wp-content/uploads/2018/03/gettyimages-824355868.jpg?resize=1200,760",
+      "checkedAt": "2026-06-19T01:00:01.939122+00:00"
+    },
+    "https://simonwillison.net/2026/Jun/18/datasette-acl": {
+      "image": "",
+      "checkedAt": "2026-06-19T01:00:01.939122+00:00"
     }
   }
 }
