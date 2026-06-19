@@ -156,7 +156,7 @@
     <p class="fine">Drag anywhere to move. Mouse aims. On touch, the ship auto-aims at the nearest threat. Survive the lightstorm.</p>
   </div>
 </div>
-<div class="version">v1.6</div>
+<div class="version">v1.7</div>
 
 <script>
 'use strict';
@@ -197,10 +197,15 @@ const MAX_PARTICLES = 260;
 const MAX_FRAGMENTS = 640;
 const SHOT_BLAST_RADIUS = 105;
 const SHOT_BLAST_FORCE = 430;
-const DEMO_EXTRA_SECONDS = 15;
+const DEMO_EXTRA_SECONDS = 20;
 const TAU = Math.PI * 2;
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 const rand = (a, b) => a + Math.random() * (b - a);
+const SIZE_TIERS = [
+  { name: 'small', normal: .72, splitter: 1.0 },
+  { name: 'medium', normal: 1.08, splitter: 1.45 },
+  { name: 'large', normal: 1.76, splitter: 2.12 }
+];
 const dist2 = (a, b, c, d) => {
   const x = a - c;
   const y = b - d;
@@ -296,9 +301,10 @@ function spawnEnemy(initial = false) {
   const typeRoll = Math.random();
   const type = typeRoll < .1 + wave * .008 ? 'splitter' : typeRoll < .36 ? 'spinner' : typeRoll < .56 ? 'dart' : 'cube';
   const baseR = type === 'splitter' ? 24 : type === 'spinner' ? 14 : type === 'dart' ? 11 : 13;
-  let scale = type === 'splitter' ? rand(1.25, 1.9) : rand(.72, 1.42);
-  if (Math.random() < .18 + wave * .012) scale = rand(1.45, type === 'splitter' ? 2.25 : 2.05);
-  const largeSplits = scale >= 1.34;
+  const sizeRoll = Math.random();
+  const tier = SIZE_TIERS[sizeRoll < .34 ? 0 : sizeRoll < .72 ? 1 : 2];
+  const scale = (type === 'splitter' ? tier.splitter : tier.normal) * rand(.94, 1.06);
+  const largeSplits = tier.name === 'large';
   const speedBase = type === 'dart' ? rand(96, 142) : type === 'splitter' ? rand(36, 58) : rand(62, 105);
   const speed = speedBase / Math.sqrt(scale);
   const hp = 1;
@@ -311,8 +317,9 @@ function spawnEnemy(initial = false) {
     maxHp: hp,
     type,
     scale,
+    sizeTier: tier.name,
     largeSplits,
-    speed: speed + wave * 4,
+    speed: speed + wave * 2.2,
     rot: rand(0, TAU),
     spin: rand(-2.8, 2.8),
     hue: type === 'splitter' ? 54 : type === 'spinner' ? 292 : type === 'dart' ? 18 : 182,
@@ -534,7 +541,7 @@ function splitEnemy(e) {
       type: childType,
       scale: childScale,
       largeSplits: false,
-      speed: rand(168, 220) + wave * 5,
+      speed: rand(142, 192) + wave * 2.8,
       rot: a,
       spin: rand(-8, 8),
       hue: e.hue + rand(-10, 10),
@@ -586,7 +593,7 @@ function update(dt) {
   if (aim) player.angle = Math.atan2(aim.y - player.y, aim.x - player.x);
   player.fire -= dt;
   if (player.fire <= 0 && enemies.length) {
-    player.fire = Math.max(.07, .15 - wave * .004);
+    player.fire = Math.max(.1, .17 - wave * .002);
     fireShot(player.angle);
   }
   player.trail.unshift({ x: player.x, y: player.y, a: player.angle });
@@ -594,10 +601,10 @@ function update(dt) {
 
   spawnTimer -= dt;
   if (spawnTimer <= 0) {
-    spawnTimer = Math.max(.15, .62 - wave * .025);
+    spawnTimer = Math.max(.3, .86 - wave * .012);
     spawnEnemy();
   }
-  if (score > wave * 1800) wave++;
+  if (score > wave * 2800) wave++;
 
   for (const e of enemies) {
     const dx = player.x - e.x;
