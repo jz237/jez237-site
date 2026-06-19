@@ -1,8 +1,8 @@
 {
-  "updatedAt": "2026-06-19T14:19:50.442215+00:00",
+  "updatedAt": "2026-06-19T16:00:01.974230+00:00",
   "items": [
     {
-      "title": "Disentangling Linguistic Relatedness from Task Alignment in Cross-Lingual Transfer",
+      "title": "Zhyar Rzgar K. Rostam, M\\'arta P\\'entek, J\\'anos Tibor Czere, Zsombor Zrubka, L\\'aszl\\'o Gul\\'acsi, G\\'abor Kert\\'esz",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -10,12 +10,140 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-19T14:19:54.951298+00:00",
+      "published": "2026-06-19T16:00:13.424637+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-19T14:19:50.442215+00:00",
+      "lastSeen": "2026-06-19T16:00:01.974230+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
+    },
+    {
+      "title": "Trump mocked Zuckerberg and Bezos for ‘first-class groveling’, new book claims",
+      "url": "https://thenextweb.com/news/trump-mocked-zuckerberg-bezos-groveling-book-regime-change",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "A new book paints an unflattering picture of how Silicon Valley’s most powerful men handled Donald Trump’s return to power. According to its authors, they grovelled. And Trump, they write, mocked them for it behind their backs. The book is “Regime Change: Inside the Imperial Presidency of Donald Trump”, by the New York Times reporters [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2025/04/Untitled-design-26.avif",
+      "published": "2026-06-19T15:43:58+00:00",
+      "firstSeen": "2026-06-19T16:00:01.974230+00:00",
+      "lastSeen": "2026-06-19T16:00:01.974230+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1418
+    },
+    {
+      "title": "A startup says it cracked the maths bottleneck holding back AI. It finally has the receipts.",
+      "url": "https://thenextweb.com/news/subquadratic-subq-sparse-attention-llm-bottleneck",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "A Miami startup says it has cracked a maths problem that has made AI models slow and power-hungry for almost a decade. The claim was bold enough to draw comparisons with Theranos. Now, though, the company has independent test results that back much of it up. The startup is called Subquadratic. It came out of [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/Subquadratic.avif",
+      "published": "2026-06-19T15:27:38+00:00",
+      "firstSeen": "2026-06-19T16:00:01.974230+00:00",
+      "lastSeen": "2026-06-19T16:00:01.974230+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1336
+    },
+    {
+      "title": "Billionaire Ambani wants AI in every call, app, and home",
+      "url": "https://techcrunch.com/2026/06/19/billionaire-ambani-wants-ai-in-every-call-app-and-home",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Reliance is weaving AI into telecom services used by more than 500 million people.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/02/reliance-mukesh-ambani.jpg?resize=1200%2C800",
+      "published": "2026-06-19T15:23:28+00:00",
+      "firstSeen": "2026-06-19T16:00:01.974230+00:00",
+      "lastSeen": "2026-06-19T16:00:01.974230+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.3715
+    },
+    {
+      "title": "As Jio files for India’s biggest-ever IPO, it’s planning a Starlink rival in orbit",
+      "url": "https://thenextweb.com/news/jio-ipo-filing-leo-satellite-constellation-starlink-india",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "At its annual shareholder meeting on Friday, Reliance unveiled two things at once: paperwork for what could be India’s biggest-ever stock-market listing, and a plan to put a Starlink rival into orbit. Jio Platforms, the digital and telecom arm of Mukesh Ambani’s Reliance Industries, filed draft papers for an initial public offering widely expected to [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/Jio_World_Centre_Mumbai.avif",
+      "published": "2026-06-19T15:13:54+00:00",
+      "firstSeen": "2026-06-19T16:00:01.974230+00:00",
+      "lastSeen": "2026-06-19T16:00:01.974230+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.4768
+    },
+    {
+      "title": "Google is using Nvidia’s own playbook to break its grip on AI chips",
+      "url": "https://thenextweb.com/news/google-nvidia-playbook-tpu-circular-financing-anthropic",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "To build a serious rival to Nvidia, Google has reached for Nvidia’s own playbook. A Wall Street Journal investigation lays out how Google is using financial guarantees and what the industry calls “circular financing”, the very tactics that helped make demand for Nvidia’s chips unstoppable, to win data-centre customers for its own silicon. The clearest [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/03/Alphabet-handed-Sundar-Pichai-a-692M-pay-package.avif",
+      "published": "2026-06-19T14:59:11+00:00",
+      "firstSeen": "2026-06-19T16:00:01.974230+00:00",
+      "lastSeen": "2026-06-19T16:00:01.974230+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1194
+    },
+    {
+      "title": "Immigrant-focused VC Geek Ventures returns with larger checks",
+      "url": "https://thenextweb.com/news/immigrant-focused-vc-geek-ventures-returns-with-larger-checks",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Immigrant founders have long played a significant role in U.S. technology, but access to early-stage capital often still depends on local networks, customer introductions and proximity to established investors. That gap has created room for a small number of venture firms focused on immigrant, diaspora and cross-border founders, a category that has grown in recent years. [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/geek-ventures-immigrant-vc-fund-two-larger-checks.avif",
+      "published": "2026-06-19T14:50:32+00:00",
+      "firstSeen": "2026-06-19T16:00:01.974230+00:00",
+      "lastSeen": "2026-06-19T16:00:01.974230+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.8152
+    },
+    {
+      "title": "The US says one of ASML’s top chip tools is in China. ASML says it isn’t.",
+      "url": "https://thenextweb.com/news/asml-euv-china-us-export-control-dispute-lutnick",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The US has accused the one company on Earth that makes the machines behind cutting-edge chips of letting one slip into China. It has not shown its proof, and the company says it never happened. In a series of recent meetings, Commerce Secretary Howard Lutnick told ASML’s senior leaders that Washington believes one of its [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2024/04/Untitled-design-57.avif",
+      "published": "2026-06-19T14:38:06+00:00",
+      "firstSeen": "2026-06-19T16:00:01.974230+00:00",
+      "lastSeen": "2026-06-19T16:00:01.974230+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.2091
+    },
+    {
+      "title": "Bernie Sanders’ AI bill would hand the public half of OpenAI, Anthropic and xAI",
+      "url": "https://thenextweb.com/news/bernie-sanders-ai-wealth-fund-bill-50-percent-stake",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Bernie Sanders has turned a talking point into a bill, and it goes further than anything Silicon Valley or the White House has put on the table. On Thursday, the Vermont senator introduced legislation that would hit the largest AI companies with a one-time 50 per cent tax on their stock, paid in shares rather [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/Bernie_sanders_and_ro_khanna_stanford_2026-02-21_003.avif",
+      "published": "2026-06-19T14:23:41+00:00",
+      "firstSeen": "2026-06-19T16:00:01.974230+00:00",
+      "lastSeen": "2026-06-19T16:00:01.974230+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "editorial_score_pass",
+      "score": 11.102
     },
     {
       "title": "The film about Sam Altman has been dropped by Amazon MGM",
@@ -28,10 +156,26 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/STK201_SAM_ALTMAN_CVIRGINIA2D_717b98.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-19T14:15:29+00:00",
       "firstSeen": "2026-06-19T14:19:50.442215+00:00",
-      "lastSeen": "2026-06-19T14:19:50.442215+00:00",
+      "lastSeen": "2026-06-19T16:00:01.974230+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.3578
+      "score": 4.308
+    },
+    {
+      "title": "AI’s memory crunch just killed a phone. Even Apple flinched.",
+      "url": "https://thenextweb.com/news/ai-memory-crunch-nothing-phone-apple-unsustainable",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "For a year, AI’s hunger for memory chips was a price story: your next laptop or phone would cost more. This week it became a product story. Nothing has scrapped its planned CMF Phone 3 Pro, with a co-founder saying the company could not build a budget phone that felt like “a genuine step forward” [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/chinese-dram-cxmt-corsair-ddr5-memory-prices.avif",
+      "published": "2026-06-19T14:09:12+00:00",
+      "firstSeen": "2026-06-19T16:00:01.974230+00:00",
+      "lastSeen": "2026-06-19T16:00:01.974230+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.595
     },
     {
       "title": "A city hit pause on AI data centres. Amazon responded by investigating its own engineers.",
@@ -44,10 +188,10 @@
       "image": "https://media.thenextweb.com/2026/06/data-centre.avif",
       "published": "2026-06-19T13:37:53+00:00",
       "firstSeen": "2026-06-19T14:00:01.882579+00:00",
-      "lastSeen": "2026-06-19T14:19:50.442215+00:00",
+      "lastSeen": "2026-06-19T16:00:01.974230+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1288
+      "score": 2.0799
     },
     {
       "title": "Patch release v5.10.4",
@@ -60,10 +204,10 @@
       "image": "https://repository-images.githubusercontent.com/155220641/a16c4880-a501-11ea-9e8f-646cf611702e",
       "published": "2026-06-19T13:25:50+00:00",
       "firstSeen": "2026-06-15T17:00:01.632650+00:00",
-      "lastSeen": "2026-06-19T14:19:50.442215+00:00",
+      "lastSeen": "2026-06-19T16:00:01.974230+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9628
+      "score": 4.9142
     },
     {
       "title": "Big Tech spent two years warning AI would take your job. Now its bosses say the opposite.",
@@ -76,10 +220,10 @@
       "image": "https://media.thenextweb.com/2026/05/Jeff-bezos.avif",
       "published": "2026-06-19T13:15:08+00:00",
       "firstSeen": "2026-06-19T14:00:01.882579+00:00",
-      "lastSeen": "2026-06-19T14:19:50.442215+00:00",
+      "lastSeen": "2026-06-19T16:00:01.974230+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1175
+      "score": 2.0691
     },
     {
       "title": "Banning Open Source AI Would Be A Mistake",
@@ -92,10 +236,10 @@
       "image": "https://substack-post-media.s3.amazonaws.com/public/images/2cf763f4-5f1e-47ec-b6e1-b14a69443d00_3182x1790.png",
       "published": "2026-06-19T13:02:47+00:00",
       "firstSeen": "2026-06-19T14:00:01.882579+00:00",
-      "lastSeen": "2026-06-19T14:19:50.442215+00:00",
+      "lastSeen": "2026-06-19T16:00:01.974230+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0214
+      "score": 2.9733
     },
     {
       "title": "The CEO of Allbirds’ new AI biz has a plan, but no employees",
@@ -108,10 +252,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/Nadia-Carlsten-HS.png?w=1024",
       "published": "2026-06-19T13:00:00+00:00",
       "firstSeen": "2026-06-19T14:00:01.882579+00:00",
-      "lastSeen": "2026-06-19T14:19:50.442215+00:00",
+      "lastSeen": "2026-06-19T16:00:01.974230+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2501
+      "score": 2.202
     },
     {
       "title": "AI cheating tools are winning. Detection was never the point.",
@@ -127,7 +271,7 @@
       "lastSeen": "2026-06-19T14:19:50.442215+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1039
+      "score": 2.0561
     },
     {
       "title": "Warren raises €10M to fix Belgium’s broken workplace pensions",
@@ -143,7 +287,7 @@
       "lastSeen": "2026-06-19T14:19:50.442215+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7972
+      "score": 2.7497
     },
     {
       "title": "The world thinks China is winning the AI race. It just doesn’t trust the winner.",
@@ -159,7 +303,7 @@
       "lastSeen": "2026-06-19T14:19:50.442215+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0933
+      "score": 2.046
     },
     {
       "title": "Two AIs just matched or beat doctors on diagnosis. The catch: none of the patients were real.",
@@ -175,7 +319,7 @@
       "lastSeen": "2026-06-19T14:19:50.442215+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0821
+      "score": 2.0354
     },
     {
       "title": "A $5M tech-worker PAC is taking on Big Tech’s $100M war chest over AI rules",
@@ -191,7 +335,7 @@
       "lastSeen": "2026-06-19T14:19:50.442215+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7774
+      "score": 2.7308
     },
     {
       "title": "Disney is joining the AI-ad arms race, just as audiences turn on ‘slop’",
@@ -207,7 +351,7 @@
       "lastSeen": "2026-06-19T14:19:50.442215+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.1675
+      "score": 4.1214
     },
     {
       "title": "GitHub for the factory floor: Copia raises $26M to protect the code that runs industry",
@@ -223,7 +367,7 @@
       "lastSeen": "2026-06-19T14:19:50.442215+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0638
+      "score": 2.0179
     },
     {
       "title": "‘Fight fire with fire’: Databricks is buying Panther Labs to challenge Splunk and CrowdStrike with AI",
@@ -239,7 +383,7 @@
       "lastSeen": "2026-06-19T14:19:50.442215+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0585
+      "score": 2.0128
     },
     {
       "title": "The Big Four bill by the hour. Andera just raised $37M to let AI do the audit.",
@@ -255,7 +399,7 @@
       "lastSeen": "2026-06-19T13:00:01.583658+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.054
+      "score": 2.0085
     },
     {
       "title": "He spent 15 months hunting for compliance software that didn’t exist. So he built Flagright, which just raised $12.5M.",
@@ -271,7 +415,7 @@
       "lastSeen": "2026-06-19T13:00:01.583658+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0507
+      "score": 2.0053
     },
     {
       "title": "VivaTech turns 10 and bets everything on AI that actually works",
@@ -287,7 +431,7 @@
       "lastSeen": "2026-06-19T12:00:01.610529+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0483
+      "score": 2.003
     },
     {
       "title": "General Atlantic wants to back China’s Kling AI at $18bn. Beijing is telling its AI firms to refuse US money.",
@@ -303,7 +447,7 @@
       "lastSeen": "2026-06-19T12:00:01.610529+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0471
+      "score": 2.0019
     },
     {
       "title": "A startup claims it broke through a bottleneck that’s holding back LLMs",
@@ -316,10 +460,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/06/cheetah-speed2a.jpg?resize=1200%2C600",
       "published": "2026-06-19T10:40:24+00:00",
       "firstSeen": "2026-06-19T12:00:01.610529+00:00",
-      "lastSeen": "2026-06-19T14:19:50.442215+00:00",
+      "lastSeen": "2026-06-19T16:00:01.974230+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1837
+      "score": 2.1387
     },
     {
       "title": "Rejected by 180 investors, Bland just raised $50M to prove voice AI is the future",
@@ -335,7 +479,7 @@
       "lastSeen": "2026-06-19T12:00:01.610529+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7431
+      "score": 2.6981
     },
     {
       "title": "The AI bubble didn’t pop. It sent the bill",
@@ -351,7 +495,7 @@
       "lastSeen": "2026-06-19T12:00:01.610529+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.0287
+      "score": 3.9843
     },
     {
       "title": "Retailers want AI-generated ads exempt from EU transparency rules",
@@ -367,7 +511,7 @@
       "lastSeen": "2026-06-19T12:00:01.610529+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.4232
+      "score": 3.3791
     },
     {
       "title": "Early users of Anthropic’s Mythos still have access after US order",
@@ -383,7 +527,7 @@
       "lastSeen": "2026-06-19T10:55:06.047694+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0144
+      "score": 4.9707
     },
     {
       "title": "Meta signs new AI computing deals with data-centre firm Crusoe",
@@ -399,7 +543,7 @@
       "lastSeen": "2026-06-19T10:55:06.047694+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0106
+      "score": 1.967
     },
     {
       "title": "Higgsfield launches enterprise marketing agents built on NVIDIA, claiming 78 per cent of Fortune 500 as clients",
@@ -415,7 +559,7 @@
       "lastSeen": "2026-06-19T10:55:06.047694+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 0.3082
+      "score": 0.2648
     },
     {
       "title": "Turkey clears Uber’s acquisition of Getir’s delivery business",
@@ -431,7 +575,7 @@
       "lastSeen": "2026-06-19T10:55:06.047694+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1064
+      "score": 3.063
     },
     {
       "title": "Hyundai to buy SoftBank’s last Boston Dynamics stake for $325m",
@@ -447,7 +591,7 @@
       "lastSeen": "2026-06-19T10:55:06.047694+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3458
+      "score": 2.3029
     },
     {
       "title": "China tightens indium phosphide checks as AI demand climbs",
@@ -463,7 +607,7 @@
       "lastSeen": "2026-06-19T10:55:06.047694+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9821
+      "score": 1.9399
     },
     {
       "title": "As the World Claims Tech Sovereignty, Where Does Australia Stand?",
@@ -476,10 +620,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/06/tr-06192026-data-tech-sovereignty-australia-apac.jpg?f=jpeg",
       "published": "2026-06-19T08:10:36+00:00",
       "firstSeen": "2026-06-19T12:00:01.610529+00:00",
-      "lastSeen": "2026-06-19T14:19:50.442215+00:00",
+      "lastSeen": "2026-06-19T16:00:01.974230+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0772
+      "score": 3.0351
     },
     {
       "title": "Alibaba Cloud opens first data centres in France as the EU tightens rules on foreign cloud providers",
@@ -495,151 +639,7 @@
       "lastSeen": "2026-06-19T10:00:01.793889+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3768
-    },
-    {
-      "title": "US court rules Ohio can restrict children’s use of social media",
-      "url": "https://thenextweb.com/news/us-court-rules-ohio-can-restrict-childrens-use-of-social-media",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Ohio can require social media companies to get a parent’s permission before letting children under 16 onto their platforms, a US appeals court ruled on Thursday, reviving a law the tech industry had managed to freeze. The decision from the Cincinnati-based 6th US Circuit Court of Appeals overturns a lower court that had blocked the [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/USA-flag.avif",
-      "published": "2026-06-19T08:03:08+00:00",
-      "firstSeen": "2026-06-19T09:00:01.265680+00:00",
-      "lastSeen": "2026-06-19T10:00:01.793889+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.074
-    },
-    {
-      "title": "The US says ASML’s top chip tool may be in China. ASML says it isn’t",
-      "url": "https://techcrunch.com/2026/06/19/the-us-says-asmls-top-chip-tool-may-be-in-china-asml-says-it-isnt",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "There's a commercial logic that cuts against the idea that ASML would risk its export license to arm a Chinese customer.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/05/GettyImages-2250757778.jpg?resize=1200%2C800",
-      "published": "2026-06-19T07:59:12+00:00",
-      "firstSeen": "2026-06-19T08:00:01.652387+00:00",
-      "lastSeen": "2026-06-19T14:19:50.442215+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.1123
-    },
-    {
-      "title": "Meta lobbies Congress for protection from child-harm lawsuits",
-      "url": "https://thenextweb.com/news/meta-lobbies-congress-for-protection-from-child-harm-lawsuits",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Meta is asking Congress for something it cannot win in court: protection from the lawsuits that accuse its products of harming children. The company has been lobbying lawmakers for legal immunity from child-harm claims tied to platforms such as Instagram, according to people familiar with the effort, as it faces thousands of suits from young [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/04/Meta.avif",
-      "published": "2026-06-19T07:44:47+00:00",
-      "firstSeen": "2026-06-19T08:00:01.652387+00:00",
-      "lastSeen": "2026-06-19T10:00:01.793889+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "fluff",
-      "score": -0.6339
-    },
-    {
-      "title": "SpaceX falls more than 6% as the record IPO rally cools",
-      "url": "https://thenextweb.com/news/spacex-falls-more-than-6-as-the-record-ipo-rally-cools",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "For two days, SpaceX was one of the five most valuable companies on Earth. On Thursday, the market began to reconsider. Shares in Elon Musk’s rocket-and-satellite company fell more than 6%, last trading down 6.5% at $178.50, as the frenzy that followed the largest initial public offering in history started to cool. The drop was [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/spacex-cursor-acquisition-ipo-60-billion-ai-coding.avif",
-      "published": "2026-06-19T07:37:40+00:00",
-      "firstSeen": "2026-06-19T08:00:01.652387+00:00",
-      "lastSeen": "2026-06-19T10:00:01.793889+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.9631
-    },
-    {
-      "title": "Leaked licences show Bulgaria greenlit surveillance exports to governments accused of repression",
-      "url": "https://thenextweb.com/news/bulgaria-circles-bg-surveillance-exports-spy-agencies",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Bulgaria’s export control authority licensed a Sofia-based surveillance firm to sell phone-tracking tools, interception systems, and monitoring infrastructure to intelligence agencies in countries with documented records of suppressing dissent. The licences, published by Human Rights Watch on Wednesday, cover exports by Circles BG to government buyers in Azerbaijan, Serbia, Malaysia, Mexico, the UAE, and at least [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/bulgaria-circles-bg-surveillance-exports-spy-agencies.avif",
-      "published": "2026-06-19T07:11:56+00:00",
-      "firstSeen": "2026-06-19T08:00:01.652387+00:00",
-      "lastSeen": "2026-06-19T09:00:01.265680+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.9523
-    },
-    {
-      "title": "Barret Zoph is out at OpenAI again after just five months",
-      "url": "https://www.theverge.com/ai-artificial-intelligence/952837/barret-zoph-openai-thinking-machines-lab",
-      "source": "The Verge AI",
-      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "Five months after returning to OpenAI, Barret Zoph - the company's head of enterprise AI sales - has departed, The Verge has learned. Zoph returned to OpenAI in mid-January after a stint as co-founder and CTO of Thinking Machines Lab, the competing AI company founded by former OpenAI CTO Mira Murati. Shortly after Zoph returned [&#8230;]",
-      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/STK155_OPEN_AI_CVirginia_C.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
-      "published": "2026-06-19T04:49:33+00:00",
-      "firstSeen": "2026-06-19T05:00:01.341117+00:00",
-      "lastSeen": "2026-06-19T14:19:50.442215+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 5.1048
-    },
-    {
-      "title": "SpaceX wants to build AI data centers in space. Will it work?",
-      "url": "https://www.sciencedaily.com/releases/2026/06/260618041501.htm",
-      "source": "ScienceDaily AI",
-      "sourceUrl": "https://www.sciencedaily.com/rss/computers_math/artificial_intelligence.xml",
-      "sourceWeight": 0.8,
-      "category": "AI",
-      "summary": "The race to build data centers in space is gaining momentum as AI drives unprecedented demand for computing power. Orbital facilities could tap into abundant solar energy and avoid many of the environmental challenges faced on Earth. Yet space remains a harsh and expensive place to operate, with major hurdles including cooling, maintenance, radiation exposure, and orbital debris.",
-      "image": "https://www.sciencedaily.com/images/1920/spacecraft-satellite-orbiting-earth.webp",
-      "published": "2026-06-19T03:43:09+00:00",
-      "firstSeen": "2026-06-19T05:00:01.341117+00:00",
-      "lastSeen": "2026-06-19T14:19:50.442215+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.9392
-    },
-    {
-      "title": "Source: Elastic agrees to buy CRV-backed DeductiveAI for up to $85M",
-      "url": "https://techcrunch.com/2026/06/18/source-elastic-agrees-to-buy-crv-backed-deductiveai-for-up-to-85m",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "DeductiveAI, a startup that uses AI to catch and resolve bugs in software, was founded just three years ago.",
-      "image": "https://techcrunch.com/wp-content/uploads/2018/03/gettyimages-824355868.jpg?resize=1200%2C760",
-      "published": "2026-06-19T00:51:11+00:00",
-      "firstSeen": "2026-06-19T01:00:01.939122+00:00",
-      "lastSeen": "2026-06-19T14:19:50.442215+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.9465
-    },
-    {
-      "title": "Datasette Apps: Host custom HTML applications inside Datasette",
-      "url": "https://simonwillison.net/2026/Jun/18/datasette-apps",
-      "source": "Simon Willison",
-      "sourceUrl": "https://simonwillison.net/atom/everything/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Today we launched a new plugin for Datasette, datasette-apps, with this launch announcement post on the Datasette project blog. That post has the what, but I'm going to expand on that a little bit here to provide the why.\nThe TL;DR\nDatasette Apps are self-contained HTML+JavaScript applications that run in a tightly constrained &lt;iframe&gt; sandbox hosted on your Datasette application. They can use JavaScript to run read-only SQL queries against data in Datasette, and can run write queries too if you configure them with some stored queries.\nHere's a very simple example and a more complex cust",
-      "image": "https://static.simonwillison.net/static/2026/datasette-timeline-app.jpg",
-      "published": "2026-06-18T23:58:38+00:00",
-      "firstSeen": "2026-06-19T01:00:01.939122+00:00",
-      "lastSeen": "2026-06-19T14:19:50.442215+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.7283
+      "score": 3.3348
     },
     {
       "title": "The Life Scientific: Dean Lomax",
@@ -652,10 +652,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-15T20:00:00+00:00",
       "firstSeen": "2026-06-15T21:00:01.290903+00:00",
-      "lastSeen": "2026-06-19T14:19:50.442215+00:00",
+      "lastSeen": "2026-06-19T16:00:01.974230+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.2795
+      "score": 1.2754
     },
     {
       "title": "The Life Scientific: Helen Hastie",
@@ -668,7 +668,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-08T20:00:00+00:00",
       "firstSeen": "2026-06-08T21:00:01.371488+00:00",
-      "lastSeen": "2026-06-19T14:19:50.442215+00:00",
+      "lastSeen": "2026-06-19T16:00:01.974230+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 1.1908
