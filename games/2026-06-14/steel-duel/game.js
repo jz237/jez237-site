@@ -56,8 +56,6 @@
     sniper: { hp: 2, spd: 0.85, skill: 0.85, fireMul: 0.5, dmg: 1, range: [260, 999], color: '#d65ce8', score: 25, keepFar: true },
     layer:  { hp: 2, spd: 1.05, skill: 0.28, fireMul: 0.7, dmg: 1, range: [200, 540], color: '#7ad6a0', score: 22, lays: true },
     warden: { hp: 3, spd: 0.80, skill: 0.46, fireMul: 0.9, dmg: 1, range: [120, 300], color: '#6f8cf0', score: 28, frontArmor: true, faceFoe: true },
-    splitter: { hp: 3, spd: 0.56, skill: 0.38, fireMul: 0.55, dmg: 1, range: [90, 320], color: '#ffcf5a', score: 36, scale: 1.55, hitR: 19, splitInto: 'splinter', splitCount: 6 },
-    splinter: { hp: 1, spd: 1.85, skill: 0.34, fireMul: 1.6, dmg: 1, range: [70, 220], color: '#ffe27a', score: 6, scale: 0.68, hitR: 8, flank: true },
   };
   const CAMP_LIVES = 3;
   const WARDEN_ARC = 1.05;      // front-armor half-arc (rad); shells inside it deflect
@@ -74,11 +72,11 @@
     { name: 'The Bastion',   arena: 'arena',     mines: 0, boss: 'bastion', waves: [['__boss__']] },
     { name: 'Sharpshooters', arena: 'flanks',    mines: 0, waves: [['sniper', 'grunt'], ['sniper', 'sniper', 'scout']] },
     { name: 'Minefield',     arena: 'pillars',   mines: 6, waves: [['layer', 'scout'], ['layer', 'layer', 'grunt']] },
-    { name: 'Wardens',       arena: 'corridors', mines: 2, waves: [['warden', 'grunt'], ['warden', 'splitter', 'brute']] },
+    { name: 'Wardens',       arena: 'corridors', mines: 2, waves: [['warden', 'grunt'], ['warden', 'warden', 'brute']] },
     { name: 'Mauler',        arena: 'arena',     mines: 2, boss: 'mauler', waves: [['__boss__']] },
     { name: 'Onslaught',     arena: 'arena',     mines: 6, waves: [['grunt', 'scout', 'brute'], ['sniper', 'layer', 'scout', 'grunt'], ['brute', 'warden', 'sniper']] },
     { name: 'Gauntlet',      arena: 'cross',     mines: 4, waves: [['scout', 'scout', 'grunt'], ['brute', 'sniper', 'layer'], ['warden', 'brute', 'scout', 'grunt']] },
-    { name: 'Last Stand',    arena: 'corridors', mines: 4, waves: [['brute', 'sniper', 'warden'], ['warden', 'splitter', 'layer'], ['splitter', 'brute', 'sniper', 'sniper']] },
+    { name: 'Last Stand',    arena: 'corridors', mines: 4, waves: [['brute', 'sniper', 'warden'], ['warden', 'warden', 'layer'], ['brute', 'brute', 'sniper', 'sniper']] },
     { name: 'Iron Warlord',  arena: 'arena',     mines: 0, boss: 'warlord', waves: [['__boss__']] },
   ];
   const ONLINE_WS = window.STEEL_DUEL_WS || ((location.hostname === 'localhost' || location.hostname === '127.0.0.1')
@@ -141,7 +139,6 @@
     buildMaze();
     const count = mode === 'coop' ? 4 : 2;
     tanks = Array.from({ length: count }, (_, id) => makeTank(id));
-    if (mode === 'coop') configureSurvivalEnemies();
     shells = []; mines = [];
     placeMines();
     score = { p1: 0, p2: 0 };
@@ -156,8 +153,6 @@
       id: t.id, team: t.team, x: t.x, y: t.y, heading: t.heading, turret: t.turret,
       speed: t.speed, vx: t.vx, vy: t.vy, dist: t.dist, cd: t.cd, flash: t.flash,
       hp: t.hp, alive: t.alive, path: null, pathTick: -999,
-      type: t.type, maxHp: t.maxHp, spdMul: t.spdMul, fireCd: t.fireCd, dmg: t.dmg, skill: t.skill, range: t.range,
-      enemyColor: t.enemyColor, scoreVal: t.scoreVal, scale: t.scale, hitR: t.hitR, splitInto: t.splitInto, splitCount: t.splitCount,
     };
   }
   function makeSnapshot() {
@@ -212,21 +207,7 @@
       hp: d.hp, maxHp: d.hp, alive: true, path: null, pathTick: -999, spdMul: d.spd, fireCd: FIRE_CD / d.fireMul, dmg: d.dmg, skill: sk,
       range: d.range, flank: !!d.flank, push: !!d.push, keepFar: !!d.keepFar, lays: !!d.lays, frontArmor: !!d.frontArmor, faceFoe: !!d.faceFoe,
       mineCd: 1.6 + rng() * 1.4, minesLeft: 4, enemyColor: d.color, scoreVal: d.score, invuln: 0,
-      scale: d.scale || 1, hitR: d.hitR || TANK_R, splitInto: d.splitInto || null, splitCount: d.splitCount || 0,
     };
-  }
-  function applyEnemyType(t, type) {
-    const d = ENEMY_TYPES[type] || ENEMY_TYPES.grunt;
-    t.type = type; t.maxHp = d.hp; t.hp = d.hp; t.spdMul = d.spd; t.fireCd = FIRE_CD / d.fireMul; t.dmg = d.dmg;
-    t.skill = Math.max(0.05, Math.min(1, d.skill + (aiLevel - 45) / 160));
-    t.range = d.range; t.flank = !!d.flank; t.push = !!d.push; t.keepFar = !!d.keepFar; t.lays = !!d.lays;
-    t.frontArmor = !!d.frontArmor; t.faceFoe = !!d.faceFoe; t.mineCd = 1.6 + rng() * 1.4; t.minesLeft = 4;
-    t.enemyColor = d.color; t.scoreVal = d.score; t.scale = d.scale || 1; t.hitR = d.hitR || TANK_R;
-    t.splitInto = d.splitInto || null; t.splitCount = d.splitCount || 0;
-  }
-  function configureSurvivalEnemies() {
-    if (tanks[2]) applyEnemyType(tanks[2], 'splitter');
-    if (tanks[3]) applyEnemyType(tanks[3], 'scout');
   }
   function placeCampaignMines(n) {
     const cand = [];
@@ -296,29 +277,6 @@
     }
   }
   function aliveCount(team) { let n = 0; for (const t of tanks) if (t.team === team && t.alive) n++; return n; }
-  function spawnSplitChildren(t) {
-    if ((mode !== 'campaign' && mode !== 'coop') || !t.splitInto || !t.splitCount) return 0;
-    const childType = t.splitInto, count = t.splitCount | 0;
-    let made = 0;
-    for (let k = 0; k < count; k++) {
-      const a = t.heading + (k / count) * Math.PI * 2 + (rng() - 0.5) * 0.35;
-      const childR = ENEMY_TYPES[childType] && ENEMY_TYPES[childType].hitR || TANK_R;
-      let x = t.x + Math.cos(a) * 30, y = t.y + Math.sin(a) * 30;
-      for (let step = 0; step < 4 && circleHitsWall(x, y, childR); step++) {
-        x = t.x + Math.cos(a) * (18 + step * 10);
-        y = t.y + Math.sin(a) * (18 + step * 10);
-      }
-      if (circleHitsWall(x, y, childR)) continue;
-      const id = tanks.length, child = enemyTank(id, childType, { c: 1, r: 1, a });
-      child.x = x; child.y = y; child.heading = a; child.turret = a; child.speed = 1.8;
-      child.vx = Math.cos(a) * 1.8; child.vy = Math.sin(a) * 1.8; child.cd = 0.25 + rng() * 0.45;
-      tanks.push(child); bots[id] = true; controls[id] = ctrl(); made++;
-      if (SDArt) PARTS.chips(x, y, child.enemyColor || t.enemyColor || '#ffe27a');
-    }
-    if (made && SDArt) { PARTS.explosion(t.x, t.y, t.enemyColor || '#ffcf5a'); DECALS.add(t.x, t.y, 38); }
-    if (made) shake = Math.max(shake, 8);
-    return made;
-  }
   function onCampaignKill(t) {
     if (t.team === 'enemy') {
       campaign.score += t.scoreVal || 10; score.p1 = campaign.score;
@@ -605,7 +563,7 @@
       if (cmd.fire && t.cd <= 0 && freezeT <= 0 && inFlight < MAX_SHELLS) fire(t);
       if (t.lays && mode === 'campaign') { t.mineCd -= STEP; if (t.mineCd <= 0 && t.minesLeft > 0 && mines.length < 30) { dropMine(t); t.minesLeft--; t.mineCd = 2.4 + rng() * 1.4; } }
       if (!t.boss) for (let m = mines.length - 1; m >= 0; m--) {
-        if (Math.hypot(mines[m].x - t.x, mines[m].y - t.y) < MINE_R + tankRadius(t) - 4) {
+        if (Math.hypot(mines[m].x - t.x, mines[m].y - t.y) < MINE_R + TANK_R - 4) {
           const mx = mines[m].x, my = mines[m].y; mines.splice(m, 1);
           if (SDArt) { PARTS.explosion(mx, my, '#ff8a4f'); DECALS.add(mx, my, 26); }
           if (!silent()) SDAudio.mine(); killTank(i); break;
@@ -667,33 +625,24 @@
   }
   function moveTank(t) {
     const nx = t.x + Math.cos(t.heading) * t.speed, ny = t.y + Math.sin(t.heading) * t.speed;
-    const r = tankRadius(t);
-    if (!circleHitsWall(nx, t.y, r)) t.x = nx; else t.speed *= 0.3;
-    if (!circleHitsWall(t.x, ny, r)) t.y = ny; else t.speed *= 0.3;
+    if (!circleHitsWall(nx, t.y)) t.x = nx; else t.speed *= 0.3;
+    if (!circleHitsWall(t.x, ny)) t.y = ny; else t.speed *= 0.3;
     pushApart(t);
   }
   function moveTankVel(t) {
     const nx = t.x + t.vx, ny = t.y + t.vy;
-    const r = tankRadius(t);
-    if (!circleHitsWall(nx, t.y, r)) t.x = nx; else t.vx *= 0.2;
-    if (!circleHitsWall(t.x, ny, r)) t.y = ny; else t.vy *= 0.2;
+    if (!circleHitsWall(nx, t.y)) t.x = nx; else t.vx *= 0.2;
+    if (!circleHitsWall(t.x, ny)) t.y = ny; else t.vy *= 0.2;
     pushApart(t);
   }
   function pushApart(t) {
-    const tr = tankRadius(t);
     for (const o of tanks) {
       if (!o || o.id === t.id || !o.alive) continue;
       const dx = t.x - o.x, dy = t.y - o.y, d = Math.hypot(dx, dy);
-      const minD = tr + tankRadius(o);
-      if (d > 0 && d < minD) { const push = (minD - d) / 2; t.x += dx / d * push; t.y += dy / d * push; }
+      if (d > 0 && d < TANK_R * 2) { const push = (TANK_R * 2 - d) / 2; t.x += dx / d * push; t.y += dy / d * push; }
     }
   }
-  function tankRadius(t) { return Math.max(6, (t && t.hitR) || TANK_R); }
-  function circleHitsWall(x, y, r) {
-    r = r || TANK_R;
-    for (let a = 0; a < 8; a++) { const ang = a / 8 * 7; if (isSolidAt(x + Math.cos(ang) * r, y + Math.sin(ang) * r)) return true; }
-    return isSolidAt(x, y);
-  }
+  function circleHitsWall(x, y) { for (let a = 0; a < 8; a++) { const ang = a / 8 * 7; if (isSolidAt(x + Math.cos(ang) * TANK_R, y + Math.sin(ang) * TANK_R)) return true; } return isSolidAt(x, y); }
   function fire(t) {
     t.cd = t.fireCd || FIRE_CD; t.flash = 1;
     const bx = t.x + Math.cos(t.turret) * 21, by = t.y + Math.sin(t.turret) * 21;
@@ -737,23 +686,12 @@
     const t = tanks[i]; if (!t.alive) return; t.alive = false; t.hp = 0;
     if (SDArt) { PARTS.explosion(t.x, t.y, tankColor(i)); DECALS.add(t.x, t.y, 30); }
     if (!silent()) SDAudio.explosion();
-    if (mode === 'campaign') { shake = Math.max(shake, 6); spawnSplitChildren(t); onCampaignKill(t); return; }
-    if (mode === 'coop' && t.team === 'enemy') {
-      spawnSplitChildren(t);
-      if (!silent()) SDAudio.point();
-      shake = Math.max(shake, 7); awardDeath(i);
-      if (aliveCount('enemy') === 0) freezeT = FREEZE;
-      return;
-    }
+    if (mode === 'campaign') { shake = Math.max(shake, 6); onCampaignKill(t); return; }
     if (!silent()) SDAudio.point();
     shake = 9; awardDeath(i); freezeT = FREEZE;
   }
   function reviveTanks() {
-    for (let i = 0; i < tanks.length; i++) if (!tanks[i].alive) {
-      const s = spawnFor(i); if (!s) continue;
-      const p = tileCenter(s.c, s.r), t = tanks[i];
-      t.x = p.x; t.y = p.y; t.heading = s.a; t.turret = s.a; t.speed = 0; t.hp = t.maxHp || TANK_MAX_HP; t.alive = true; t.cd = 0.3; t.path = null;
-    }
+    for (let i = 0; i < tanks.length; i++) if (!tanks[i].alive) { const s = spawnFor(i), p = tileCenter(s.c, s.r); const t = tanks[i]; t.x = p.x; t.y = p.y; t.heading = s.a; t.turret = s.a; t.speed = 0; t.hp = TANK_MAX_HP; t.alive = true; t.cd = 0.3; t.path = null; }
   }
   function endMatch() { state = 'over'; winner = score.p1 === score.p2 ? 'draw' : (score.p1 > score.p2 ? 'p1' : 'p2'); if (!headless) { SDAudio.roundEnd(); SDAudio.engine(0); maybeOfferScore(); } showOverlay('over'); }
 
@@ -1551,15 +1489,6 @@
     const friendlyUnhurt = a1.alive && a1.hp === TANK_MAX_HP;
     ok('T-coop friendly fire blocked', friendlyBlocksShot && enemyClearShot && friendlyUnhurt, 'blocked=' + friendlyBlocksShot + ' clear=' + enemyClearShot + ' hp=' + a1.hp);
 
-    startGame('coop', 4321); headless = true;
-    const survSplitter = tanks[2], survLarge = survSplitter.type === 'splitter' && survSplitter.scale > 1.4;
-    killTank(2);
-    const survShards = tanks.filter(t => t.type === 'splinter' && t.alive);
-    const survSwarm = survShards.length >= 4 && aliveCount('enemy') >= survShards.length && freezeT <= 0;
-    for (const t of survShards) killTank(tanks.indexOf(t));
-    const survClears = aliveCount('enemy') === 1 || freezeT > 0; // the second starting enemy may still be alive
-    ok('T-coop splitter swarms', survLarge && survSwarm && survClears, 'large=' + survLarge + ' shards=' + survShards.length + ' freeze=' + freezeT);
-
     mode = 'duel'; winner = 'p2'; score = { p1: 2, p2: 5 };
     const duelScoreOk = scoreSubject().points === 5 && scoreValue() === 540;
     mode = 'coop'; score = { p1: 3, p2: 5 };
@@ -1613,18 +1542,6 @@
     shells.push({ x: wardenE.x - TANK_R - 3, y: wardenE.y, vx: SHELL_SPD, vy: 0, life: SHELL_LIFE, owner: 0, dmg: 1 });
     for (let i = 0; i < 8 && shells.length; i++) update();
     ok('T-C2 warden front armor', frontSafe && wardenE.hp < whp0, 'front=' + frontSafe + ' flankHp=' + wardenE.hp + '/' + whp0);
-
-    // T-C2 splitter: large enemies break into lots of small active splinters, then the wave clears when those are destroyed
-    startCampaign(0, 1, 45, 23); headless = true;
-    for (const t of tanks) if (t.team === 'enemy') { t.alive = false; t.hp = 0; }
-    const sidx = tanks.length, splitE = enemyTank(sidx, 'splitter', { c: 14, r: 8, a: 0 }); tanks.push(splitE); bots[sidx] = false; controls[sidx] = ctrl();
-    const bigEnough = splitE.scale > 1.4 && splitE.hitR > TANK_R;
-    killTank(sidx);
-    const shards = tanks.filter(t => t.type === 'splinter' && t.alive);
-    const swarmMade = shards.length >= 4 && shards.every(t => t.scale < 0.8 && t.hitR < TANK_R && bots[t.id]);
-    for (const t of shards) killTank(tanks.indexOf(t));
-    let splitterCleared = false; for (let i = 0; i < 200; i++) { update(); if (campaign.waveIdx > 0 || campaign.levelIdx > 0 || campaign.phase !== 'fight') { splitterCleared = true; break; } }
-    ok('T-C2 splitter swarms', bigEnough && swarmMade && splitterCleared, 'big=' + bigEnough + ' shards=' + shards.length + ' clear=' + splitterCleared);
 
     // T-C4 campaign-arena walls solid: drive a tank into the walls of every arena, never breach the border
     let clipFree = true;
