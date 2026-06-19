@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-19T07:00:01.435261+00:00",
+  "updatedAt": "2026-06-19T08:00:01.652387+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -10964,6 +10964,10 @@
     "https://www.sciencedaily.com/releases/2026/06/260618041501.htm": {
       "image": "https://www.sciencedaily.com/images/1920/spacecraft-satellite-orbiting-earth.webp",
       "checkedAt": "2026-06-19T05:00:01.341117+00:00"
+    },
+    "https://techcrunch.com/2026/06/19/the-us-says-asmls-top-chip-tool-may-be-in-china-asml-says-it-isnt": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/GettyImages-2250757778.jpg?resize=1200,800",
+      "checkedAt": "2026-06-19T08:00:01.652387+00:00"
     }
   }
 }
