@@ -934,5 +934,23 @@
       "continuity": "Preserves Vesperglass Array suspended reef habitat, cobalt gas giant, cyan/violet auroras, copper-black induction coils, pulse-lanterns, conductive garden life, and ribbon-bodied electroceptive inhabitants.",
       "entryDescription": "Night-garden caretakers maintain magnetic dust moss, conductive lace-vines, prism fronds, and floating seed curtains during a quiet shift inside the Vesperglass Array."
     }
+  },
+  {
+    "id": "2026-06-19-overnight-vesperglass-array-quiet-lens-observation-shift",
+    "title": "Vesperglass Array: Quiet Lens Observation Shift",
+    "tests": "World-life entry showing Vesperglass Array observation labor, storm-reading infrastructure, non-human inhabitants, and recurring vesperglass/copper/aurora continuity.",
+    "prompt": "Vesperglass Array: Quiet Lens Observation Shift. Weekly world: Vesperglass Array. Create a realistic cinematic square photograph of everyday work inside Vesperglass Array, a hard-sci-fi alien megahabitat of transparent mineral reef-plates suspended above a turbulent cobalt gas giant. Show the Quiet Lens observation chamber during an overnight storm-pattern reading shift: a vast curved vesperglass membrane window fills the background with blue-white gas-giant glare, deep cobalt storm bands far below, and cyan/violet aurora currents reflected across the floor. Three non-human ribbon-bodied astronomer-technicians with translucent skin, dark sensory nodes, branching electroreceptor crests, six to ten delicate handling tendrils, and flexible pressure-wrap garments float and brace themselves at polished hand-grip rails, quietly reading magnetic weather through luminous fluid conduits, graphite instruments, copper-black induction coils, pulse-lantern signals, matte graphite tool clips, and translucent data crystals with no readable text. Include worn ceramic-white pressure ribs, frost-edged airlock seams, living circuit textile wraps, tiny folded-kite repair drones docked in a side alcove, low-gravity domestic details like tethered cups and soft amber heat pads, delicate hand-worn rails, realistic refractions through curved glass, shallow depth of field, physical lens flare, atmospheric scale, crisp high-altitude light, fine scratches, condensation crystals, and believable material wear. Make it feel like a practical inhabited alien workplace, not a generic space station and not concept art. No humans, no human astronauts, no Earth city, no copyrighted sci-fi franchise cues, no neon cyberpunk skyline, no mushroom or fairytale motifs, no horror, no brand logos, no signage, no readable text artifacts, no poster, no document page, no prompt card.",
+    "image": "images/2026-06-19-overnight-vesperglass-array-quiet-lens-observation-shift.png",
+    "date": "2026-06-19",
+    "batch": "Daily Prompt",
+    "slot": "overnight",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "world": {
+      "name": "Vesperglass Array",
+      "description": "A suspended glass-reef megahabitat above a cobalt gas giant, inhabited by electroceptive ribbon-bodied beings who live among auroras, induction coils, pressure membranes, and low-gravity domestic infrastructure.",
+      "continuity": "Preserves the suspended vesperglass reef habitat, cobalt gas giant, cyan/violet auroras, copper-black induction coils, ribbon-bodied electroceptive inhabitants, pressure-wrap garments, pulse-lantern communication, and practical worn hard-sci-fi materials.",
+      "entryDescription": "A Quiet Lens observation shift where alien astronomer-technicians read magnetic storm patterns through a vast membrane window."
+    }
   }
 ]
