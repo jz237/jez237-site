@@ -156,7 +156,7 @@
     <p class="fine">Drag anywhere to fly. Shots auto-aim at the nearest threat. Survive the lightstorm.</p>
   </div>
 </div>
-<div class="version">v2.6</div>
+<div class="version">v2.7</div>
 
 <script>
 'use strict';
@@ -399,10 +399,11 @@ function pickSpawnPoint(initial = false) {
 }
 
 function fireShot(targetAngle, target = null) {
-  const spread = combo >= 8 ? .16 : .12;
+  const spread = combo >= 8 ? .22 : .18;
   const count = combo >= 8 ? 5 : 3;
   for (let i = 0; i < count; i++) {
-    const a = targetAngle + (i - (count - 1) / 2) * spread;
+    const laneOffset = (i - (count - 1) / 2) * spread;
+    const a = targetAngle + laneOffset;
     shots.push({
       x: player.x + Math.cos(a) * 17,
       y: player.y + Math.sin(a) * 17,
@@ -412,7 +413,8 @@ function fireShot(targetAngle, target = null) {
       hue: i === 1 ? 316 : 186,
       angle: a,
       age: 0,
-      steerDelay: count > 1 ? .08 : .025,
+      laneOffset,
+      steerDelay: count > 1 ? 99 : .025,
       target,
       trail: []
     });
@@ -483,8 +485,8 @@ function scoreAimCluster(seed) {
   const cx = x / weight;
   const cy = y / weight;
   const playerD = Math.hypot(cx - player.x, cy - player.y);
-  const danger = clamp((680 - playerD) / 680, 0, 1);
-  const rank = score * (1 + danger * 1.35) + danger * 1.6;
+  const danger = clamp((760 - playerD) / 760, 0, 1);
+  const rank = score * (1 + danger * 2) + danger * 2.4;
   return { seed, x: cx, y: cy, score, rank, count, danger };
 }
 
@@ -848,7 +850,7 @@ function update(dt) {
   for (const s of shots) {
     s.age += dt;
     if (s.target && s.age > (s.steerDelay || 0) && s.age < .45) {
-      const desired = Math.atan2(s.target.y - s.y, s.target.x - s.x);
+      const desired = Math.atan2(s.target.y - s.y, s.target.x - s.x) + (s.laneOffset || 0) * 1.25;
       const steered = turnTowardAngle(s.angle, desired, SHOT_STEER_RATE * dt);
       s.angle = steered;
       s.vx = Math.cos(steered) * SHOT_SPEED;
