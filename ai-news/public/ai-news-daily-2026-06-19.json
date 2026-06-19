@@ -1,6 +1,6 @@
 {
   "date": "2026-06-19",
-  "updatedAt": "2026-06-19T15:00:01.806558+00:00",
+  "updatedAt": "2026-06-19T14:19:50.442215+00:00",
   "items": [
     {
       "title": "Bernie Sanders’ AI bill would hand the public half of OpenAI, Anthropic and xAI",
@@ -45,10 +45,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/STK155_OPEN_AI_CVirginia_C.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-19T04:49:33+00:00",
       "firstSeen": "2026-06-19T05:00:01.341117+00:00",
-      "lastSeen": "2026-06-19T15:00:01.806558+00:00",
+      "lastSeen": "2026-06-19T14:19:50.442215+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0892
+      "score": 5.1048
     },
     {
       "title": "Early users of Anthropic’s Mythos still have access after US order",
@@ -64,7 +64,7 @@
       "lastSeen": "2026-06-19T10:55:06.047694+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9966
+      "score": 5.0144
     },
     {
       "title": "Patch release v5.10.4",
@@ -77,10 +77,10 @@
       "image": "https://repository-images.githubusercontent.com/155220641/a16c4880-a501-11ea-9e8f-646cf611702e",
       "published": "2026-06-19T13:25:50+00:00",
       "firstSeen": "2026-06-15T17:00:01.632650+00:00",
-      "lastSeen": "2026-06-19T15:00:01.806558+00:00",
+      "lastSeen": "2026-06-19T14:19:50.442215+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9431
+      "score": 4.9628
     },
     {
       "title": "The film about Sam Altman has been dropped by Amazon MGM",
@@ -92,11 +92,11 @@
       "summary": "Luca Guadagnino's film about OpenAI CEO Sam Altman, Artificial, has reportedly been dropped by Amazon MGM. The film, which stars Andrew Garfield and covers the rollercoaster five days in 2023 spanning Altman's termination and reinstatement as CEO, had been in the works for about a year. The cast also includes A Complete Unknown actress Monica [&#8230;]",
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/STK201_SAM_ALTMAN_CVIRGINIA2D_717b98.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-19T14:15:29+00:00",
-      "firstSeen": "2026-06-19T15:00:01.806558+00:00",
-      "lastSeen": "2026-06-19T15:00:01.806558+00:00",
+      "firstSeen": "2026-06-19T14:19:50.442215+00:00",
+      "lastSeen": "2026-06-19T14:19:50.442215+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.3375
+      "score": 4.3578
     },
     {
       "title": "Disney is joining the AI-ad arms race, just as audiences turn on ‘slop’",
@@ -109,10 +109,10 @@
       "image": "https://media.thenextweb.com/2018/11/Disney-Plus.avif",
       "published": "2026-06-19T11:31:31+00:00",
       "firstSeen": "2026-06-19T12:00:01.610529+00:00",
-      "lastSeen": "2026-06-19T14:00:01.882579+00:00",
+      "lastSeen": "2026-06-19T14:19:50.442215+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.1488
+      "score": 4.1675
     },
     {
       "title": "The AI bubble didn’t pop. It sent the bill",
@@ -128,7 +128,7 @@
       "lastSeen": "2026-06-19T12:00:01.610529+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.0106
+      "score": 4.0287
     },
     {
       "title": "Retailers want AI-generated ads exempt from EU transparency rules",
@@ -144,7 +144,7 @@
       "lastSeen": "2026-06-19T12:00:01.610529+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.4052
+      "score": 3.4232
     },
     {
       "title": "Alibaba Cloud opens first data centres in France as the EU tightens rules on foreign cloud providers",
@@ -160,23 +160,7 @@
       "lastSeen": "2026-06-19T10:00:01.793889+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3597
-    },
-    {
-      "title": "The US says one of ASML’s top chip tools is in China. ASML says it isn’t.",
-      "url": "https://thenextweb.com/news/asml-euv-china-us-export-control-dispute-lutnick",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The US has accused the one company on Earth that makes the machines behind cutting-edge chips of letting one slip into China. It has not shown its proof, and the company says it never happened. In a series of recent meetings, Commerce Secretary Howard Lutnick told ASML’s senior leaders that Washington believes one of its [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2024/04/Untitled-design-57.avif",
-      "published": "2026-06-19T14:38:06+00:00",
-      "firstSeen": "2026-06-19T15:00:01.806558+00:00",
-      "lastSeen": "2026-06-19T15:00:01.806558+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.2389
+      "score": 3.3768
     },
     {
       "title": "Turkey clears Uber’s acquisition of Getir’s delivery business",
@@ -192,7 +176,55 @@
       "lastSeen": "2026-06-19T10:55:06.047694+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0887
+      "score": 3.1064
+    },
+    {
+      "title": "As the World Claims Tech Sovereignty, Where Does Australia Stand?",
+      "url": "https://www.techrepublic.com/article/data-tech-sovereignty-australia-apac",
+      "source": "TechRepublic AI",
+      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Australian enterprises remain dependent on foreign technology infrastructure, while major economies treat that dependency as a strategic liability.\nThe post As the World Claims Tech Sovereignty, Where Does Australia Stand? appeared first on TechRepublic.",
+      "image": "https://assets.techrepublic.com/uploads/2026/06/tr-06192026-data-tech-sovereignty-australia-apac.jpg?f=jpeg",
+      "published": "2026-06-19T08:10:36+00:00",
+      "firstSeen": "2026-06-19T12:00:01.610529+00:00",
+      "lastSeen": "2026-06-19T14:19:50.442215+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.0772
+    },
+    {
+      "title": "US court rules Ohio can restrict children’s use of social media",
+      "url": "https://thenextweb.com/news/us-court-rules-ohio-can-restrict-childrens-use-of-social-media",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Ohio can require social media companies to get a parent’s permission before letting children under 16 onto their platforms, a US appeals court ruled on Thursday, reviving a law the tech industry had managed to freeze. The decision from the Cincinnati-based 6th US Circuit Court of Appeals overturns a lower court that had blocked the [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/USA-flag.avif",
+      "published": "2026-06-19T08:03:08+00:00",
+      "firstSeen": "2026-06-19T09:00:01.265680+00:00",
+      "lastSeen": "2026-06-19T10:00:01.793889+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.074
+    },
+    {
+      "title": "Banning Open Source AI Would Be A Mistake",
+      "url": "https://www.interconnects.ai/p/banning-open-source-ai-would-be-a",
+      "source": "Interconnects AI",
+      "sourceUrl": "https://www.interconnects.ai/feed",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "This post was originally an op-ed co-authored with Kevin Xu of Interconnected for a general, non-technical audience.",
+      "image": "https://substack-post-media.s3.amazonaws.com/public/images/2cf763f4-5f1e-47ec-b6e1-b14a69443d00_3182x1790.png",
+      "published": "2026-06-19T13:02:47+00:00",
+      "firstSeen": "2026-06-19T14:00:01.882579+00:00",
+      "lastSeen": "2026-06-19T14:19:50.442215+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.0214
     }
   ],
   "errors": [
