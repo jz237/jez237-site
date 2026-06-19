@@ -156,7 +156,7 @@
     <p class="fine">Drag anywhere to fly. Shots auto-aim at the nearest threat. Survive the lightstorm.</p>
   </div>
 </div>
-<div class="version">v2.4</div>
+<div class="version">v2.5</div>
 
 <script>
 'use strict';
@@ -205,6 +205,7 @@ const SHOT_BLAST_FORCE = 430;
 const SHOT_SPEED = 660;
 const AIM_SWITCH_LOCK = .26;
 const AIM_TURN_RATE = 9.5;
+const AIM_CLUSTER_RADIUS = 360;
 const SHOT_STEER_RATE = 5.2;
 const DEMO_EXTRA_SECONDS = 20;
 const TAU = Math.PI * 2;
@@ -433,25 +434,52 @@ function nearestEnemy() {
 
 function selectAimTarget(dt) {
   aimSwitchLock = Math.max(0, aimSwitchLock - dt);
-  const nearest = nearestEnemy();
-  if (!nearest) {
+  let best = null;
+  for (const e of enemies) {
+    const cluster = scoreAimCluster(e);
+    if (!best || cluster.score > best.score || (cluster.score === best.score && dist2(player.x, player.y, cluster.x, cluster.y) < dist2(player.x, player.y, best.x, best.y))) best = cluster;
+  }
+  if (!best) {
     aimTarget = null;
     return null;
   }
   if (!aimTarget || !enemies.includes(aimTarget)) {
-    aimTarget = nearest;
+    aimTarget = best.seed;
     aimSwitchLock = AIM_SWITCH_LOCK;
-    return aimTarget;
+    return best;
   }
-  if (nearest !== aimTarget) {
-    const currentD = dist2(player.x, player.y, aimTarget.x, aimTarget.y);
-    const nearestD = dist2(player.x, player.y, nearest.x, nearest.y);
-    if (aimSwitchLock <= 0 && nearestD < currentD * .58) {
-      aimTarget = nearest;
+  const current = scoreAimCluster(aimTarget);
+  if (best.seed !== aimTarget) {
+    if (aimSwitchLock <= 0 && best.score > current.score * 1.14) {
+      aimTarget = best.seed;
       aimSwitchLock = AIM_SWITCH_LOCK;
+      return best;
     }
   }
-  return aimTarget;
+  return current;
+}
+
+function scoreAimCluster(seed) {
+  const radius = Math.max(240, Math.min(AIM_CLUSTER_RADIUS, Math.hypot(innerWidth, innerHeight) * .42));
+  const r2 = radius * radius;
+  let score = 1.4;
+  let weight = 1.4;
+  let x = seed.x * weight;
+  let y = seed.y * weight;
+  let count = 1;
+  for (const e of enemies) {
+    if (e === seed) continue;
+    const d2 = dist2(seed.x, seed.y, e.x, e.y);
+    if (d2 > r2) continue;
+    const d = Math.sqrt(d2);
+    const w = .32 + (1 - d / radius) * 1.18 + (e.largeSplits ? .18 : 0);
+    score += w;
+    weight += w;
+    x += e.x * w;
+    y += e.y * w;
+    count++;
+  }
+  return { seed, x: x / weight, y: y / weight, score, count };
 }
 
 function angleDelta(from, to) {
@@ -813,7 +841,7 @@ function update(dt) {
 
   for (const s of shots) {
     s.age += dt;
-    if (s.target && enemies.includes(s.target) && s.age < .45) {
+    if (s.target && s.age < .45) {
       const desired = Math.atan2(s.target.y - s.y, s.target.x - s.x);
       const steered = turnTowardAngle(s.angle, desired, SHOT_STEER_RATE * dt);
       s.angle = steered;
