@@ -156,7 +156,7 @@
     <p class="fine">Drag anywhere to fly. Shots auto-aim at the nearest threat. Survive the lightstorm.</p>
   </div>
 </div>
-<div class="version">v2.10</div>
+<div class="version">v2.11</div>
 
 <script>
 'use strict';
@@ -188,6 +188,7 @@ let shots = [];
 let particles = [];
 let fragments = [];
 let pickups = [];
+let callouts = [];
 let stars = [];
 let player;
 let aimTarget = null;
@@ -214,6 +215,7 @@ const DEMO_EXTRA_SECONDS = 20;
 const TAU = Math.PI * 2;
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 const rand = (a, b) => a + Math.random() * (b - a);
+const HIT_CALLOUTS = ['OUCH', 'ZAP', 'BZZT', 'NOPE', 'YIKES', 'GLITCH', 'STATIC', 'WHAM', 'CLANG'];
 const SIZE_TIERS = [
   { name: 'small', normal: .72, splitter: 1.0 },
   { name: 'medium', normal: 1.08, splitter: 1.45 },
@@ -307,6 +309,7 @@ function reset() {
   particles = [];
   fragments = [];
   pickups = [];
+  callouts = [];
   score = 0;
   wave = 1;
   combo = 1;
@@ -567,6 +570,23 @@ function addSpark(x, y, n, hue, force = 1) {
       kind: 'dot'
     });
   }
+}
+
+function addHitCallout(x, y) {
+  if (Math.random() > .58) return;
+  if (callouts.length > 7) callouts.shift();
+  callouts.push({
+    text: HIT_CALLOUTS[Math.floor(Math.random() * HIT_CALLOUTS.length)],
+    x: x + rand(-18, 18),
+    y: y - 36 + rand(-12, 8),
+    vx: rand(-20, 20),
+    vy: rand(-86, -54),
+    rot: rand(-.16, .16),
+    spin: rand(-.55, .55),
+    life: .82,
+    max: .82,
+    hue: Math.random() < .5 ? 188 : 316
+  });
 }
 
 function localShapePoints(e, scale = 1) {
@@ -861,6 +881,7 @@ function update(dt) {
       player.inv = 1.05;
       blastEnemies(player.x, player.y, SHOT_BLAST_FORCE * .7, SHOT_BLAST_RADIUS * .9);
       explode(player.x, player.y, 188, false);
+      addHitCallout(player.x, player.y);
       if (player.hp <= 0) {
         running = false;
         overlay.querySelector('h1').innerHTML = 'VECTOR<br>OVER';
@@ -964,6 +985,15 @@ function update(dt) {
   }
   particles = particles.filter(p => p.life > 0);
   if (particles.length > MAX_PARTICLES) particles.splice(0, particles.length - MAX_PARTICLES);
+  for (const o of callouts) {
+    o.life -= dt;
+    o.x += o.vx * dt;
+    o.y += o.vy * dt;
+    o.vx *= Math.pow(.22, dt);
+    o.vy *= Math.pow(.32, dt);
+    o.rot += o.spin * dt;
+  }
+  callouts = callouts.filter(o => o.life > 0);
   for (const f of fragments) {
     f.life -= dt;
     f.x += f.vx * dt;
@@ -1263,6 +1293,30 @@ function drawFragment(c, f) {
   c.restore();
 }
 
+function drawCallout(c, o, glowPass = false) {
+  const t = clamp(o.life / o.max, 0, 1);
+  const pop = 1 - Math.abs(t - .78) * .7;
+  const alpha = Math.min(1, t * 1.35);
+  const size = (glowPass ? 24 : 20) * clamp(pop, .72, 1.12);
+  c.save();
+  c.translate(o.x, o.y);
+  c.rotate(o.rot);
+  c.globalAlpha = alpha * (glowPass ? .55 : 1);
+  c.font = `950 ${size}px Inter, ui-sans-serif, system-ui, sans-serif`;
+  c.textAlign = 'center';
+  c.textBaseline = 'middle';
+  c.lineJoin = 'miter';
+  c.lineWidth = glowPass ? 5 : 2.4;
+  c.strokeStyle = `hsla(${o.hue},100%,72%,${glowPass ? .52 : .95})`;
+  c.fillStyle = glowPass ? `hsla(${o.hue + 36},100%,82%,.2)` : 'rgba(255,255,255,.92)';
+  c.strokeText(o.text, 0, 0);
+  c.fillText(o.text, 0, 0);
+  const w = c.measureText(o.text).width;
+  line(c, -w * .58, size * .62, -w * .18, size * .62, `hsla(${o.hue + 42},100%,75%,${alpha})`, glowPass ? 3 : 1.5, 4);
+  line(c, w * .18, size * .62, w * .58, size * .62, `hsla(${o.hue + 42},100%,75%,${alpha})`, glowPass ? 3 : 1.5, 4);
+  c.restore();
+}
+
 function render() {
   const sx = shake ? rand(-shake, shake) : 0;
   const sy = shake ? rand(-shake, shake) : 0;
@@ -1296,6 +1350,7 @@ function render() {
     gtx.restore();
   }
   for (const p of particles) drawParticle(gtx, p);
+  for (const o of callouts) drawCallout(gtx, o, true);
   drawPlayer(gtx, player);
   gtx.restore();
 
@@ -1326,6 +1381,7 @@ function render() {
     ctx.restore();
   }
   for (const p of particles) drawParticle(ctx, p);
+  for (const o of callouts) drawCallout(ctx, o);
   drawPlayer(ctx, player);
 
   if (player.inv > 0) {
