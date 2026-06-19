@@ -156,7 +156,7 @@
     <p class="fine">Drag anywhere to fly. Shots auto-aim at the nearest threat. Survive the lightstorm.</p>
   </div>
 </div>
-<div class="version">v2.7</div>
+<div class="version">v2.8</div>
 
 <script>
 'use strict';
@@ -399,7 +399,7 @@ function pickSpawnPoint(initial = false) {
 }
 
 function fireShot(targetAngle, target = null) {
-  const spread = combo >= 8 ? .22 : .18;
+  const spread = combo >= 8 ? .16 : .11;
   const count = combo >= 8 ? 5 : 3;
   for (let i = 0; i < count; i++) {
     const laneOffset = (i - (count - 1) / 2) * spread;
