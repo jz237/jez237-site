@@ -156,7 +156,7 @@
     <p class="fine">Drag anywhere to move. Mouse aims. On touch, the ship auto-aims at the nearest threat. Survive the lightstorm.</p>
   </div>
 </div>
-<div class="version">v1.7</div>
+<div class="version">v1.8</div>
 
 <script>
 'use strict';
@@ -191,10 +191,12 @@ let pickups = [];
 let stars = [];
 let player;
 
-const GLOW_SCALE = .32;
-const MAX_ENEMIES = 42;
-const MAX_PARTICLES = 260;
-const MAX_FRAGMENTS = 640;
+const FIREFOX_PERF = /\bFirefox\//i.test(navigator.userAgent);
+const GLOW_SCALE = FIREFOX_PERF ? .22 : .32;
+const MAX_ENEMIES = FIREFOX_PERF ? 34 : 42;
+const MAX_PARTICLES = FIREFOX_PERF ? 170 : 260;
+const MAX_FRAGMENTS = FIREFOX_PERF ? 420 : 640;
+const MAX_DT = FIREFOX_PERF ? .07 : .04;
 const SHOT_BLAST_RADIUS = 105;
 const SHOT_BLAST_FORCE = 430;
 const DEMO_EXTRA_SECONDS = 20;
@@ -213,7 +215,7 @@ const dist2 = (a, b, c, d) => {
 };
 
 function resize() {
-  DPR = Math.min(1.15, window.devicePixelRatio || 1);
+  DPR = Math.min(FIREFOX_PERF ? 1 : 1.15, window.devicePixelRatio || 1);
   W = Math.floor(innerWidth * DPR);
   H = Math.floor(innerHeight * DPR);
   canvas.width = W;
@@ -523,10 +525,11 @@ function explode(x, y, hue, big = false) {
 }
 
 function splitEnemy(e) {
-  const count = Math.round(clamp(e.r * (e.type === 'splitter' ? .95 : .72), 14, e.type === 'splitter' ? 36 : 28));
+  const maxSplit = FIREFOX_PERF ? 28 : (e.type === 'splitter' ? 36 : 28);
+  const count = Math.round(clamp(e.r * (e.type === 'splitter' ? .95 : .72), 14, maxSplit));
   const childType = e.type;
   const childBaseR = childType === 'splitter' ? 8.5 : childType === 'spinner' ? 7.6 : childType === 'dart' ? 6.8 : 7.4;
-  for (let i = 0; i < count && enemies.length < MAX_ENEMIES + 32; i++) {
+  for (let i = 0; i < count && enemies.length < MAX_ENEMIES + (FIREFOX_PERF ? 20 : 32); i++) {
     const a = i * TAU / count + rand(-.18, .18);
     const burst = rand(220, 390);
     const childScale = rand(.58, .92);
@@ -597,7 +600,7 @@ function update(dt) {
     fireShot(player.angle);
   }
   player.trail.unshift({ x: player.x, y: player.y, a: player.angle });
-  player.trail.length = Math.min(18, player.trail.length);
+  player.trail.length = Math.min(FIREFOX_PERF ? 11 : 18, player.trail.length);
 
   spawnTimer -= dt;
   if (spawnTimer <= 0) {
@@ -618,7 +621,7 @@ function update(dt) {
     e.rot += e.spin * dt;
     e.pulse += dt * 4;
     e.trail.unshift({ x: e.x, y: e.y, rot: e.rot });
-    e.trail.length = 9;
+    e.trail.length = FIREFOX_PERF ? 5 : 9;
     if (dist2(e.x, e.y, player.x, player.y) < (e.r + player.r) ** 2 && player.inv <= 0) {
       player.hp -= e.type === 'splitter' ? 22 : e.type === 'splinter' ? 6 : 10;
       player.inv = 1.05;
@@ -657,7 +660,7 @@ function update(dt) {
   for (const s of shots) {
     s.life -= dt;
     s.trail.unshift({ x: s.x, y: s.y });
-    s.trail.length = 7;
+    s.trail.length = FIREFOX_PERF ? 5 : 7;
     s.x += s.vx * dt;
     s.y += s.vy * dt;
   }
@@ -1001,17 +1004,19 @@ function render() {
   gtx.save();
   gtx.translate(sx, sy);
   gtx.globalCompositeOperation = 'lighter';
-  for (const e of enemies) {
-    for (let i = e.trail.length - 1; i >= 0; i--) {
-      const t = e.trail[i];
-      if (!t) continue;
-      drawEnemy(gtx, { ...e, x: t.x, y: t.y, rot: t.rot, alpha: (1 - i / e.trail.length) * .24 }, true);
+  if (!FIREFOX_PERF) {
+    for (const e of enemies) {
+      for (let i = e.trail.length - 1; i >= 0; i--) {
+        const t = e.trail[i];
+        if (!t) continue;
+        drawEnemy(gtx, { ...e, x: t.x, y: t.y, rot: t.rot, alpha: (1 - i / e.trail.length) * .24 }, true);
+      }
     }
+    for (const t of player.trail.map((v, i) => ({ ...v, alpha: (1 - i / player.trail.length) * .32 })).reverse()) drawPlayer(gtx, t, true);
   }
-  for (const t of player.trail.map((v, i) => ({ ...v, alpha: (1 - i / player.trail.length) * .32 })).reverse()) drawPlayer(gtx, t, true);
   for (const s of shots) drawShot(gtx, s);
   for (const e of enemies) drawEnemy(gtx, e);
-  for (const f of fragments) drawFragment(gtx, f);
+  if (!FIREFOX_PERF) for (const f of fragments) drawFragment(gtx, f);
   for (const p of pickups) {
     gtx.save();
     gtx.translate(p.x, p.y);
@@ -1028,8 +1033,10 @@ function render() {
   ctx.globalAlpha = .74;
   ctx.imageSmoothingEnabled = true;
   ctx.drawImage(glow, 0, 0, innerWidth, innerHeight);
-  ctx.globalAlpha = .24;
-  ctx.drawImage(glow, 0, 0, innerWidth, innerHeight);
+  if (!FIREFOX_PERF) {
+    ctx.globalAlpha = .24;
+    ctx.drawImage(glow, 0, 0, innerWidth, innerHeight);
+  }
   ctx.restore();
 
   ctx.save();
@@ -1069,7 +1076,7 @@ function render() {
 
 function frame(now) {
   if (!running) return;
-  const dt = Math.min(.033, (now - last) / 1000 || .016);
+  const dt = Math.min(MAX_DT, (now - last) / 1000 || .016);
   last = now;
   update(dt);
   render();
