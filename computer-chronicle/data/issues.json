@@ -1,8 +1,498 @@
 {
-  "generatedAt": "2026-06-18T12:02:47.578Z",
+  "generatedAt": "2026-06-19T12:02:48.020Z",
   "editorialPriority": "When there is a choice, prefer personal computers, home computing, office PC software, and personal computer or console gaming over broad enterprise technology.",
   "fallbackPolicy": "Use exact-day computer news when verified. If none exists, use same-week or same-month personal-computing items with confidence labels, then fall back to a wider world/business headline.",
   "issues": [
+    {
+      "currentDate": "2026-06-19",
+      "historicDate": "1982-11-01",
+      "displayDate": "Week of November 1-7, 1982",
+      "edition": "Issue 014 - Weekly 1982 Computer & Culture Chronicle",
+      "visualProfile": {
+        "layout": "weekly-newsprint-front",
+        "accent": "black-red-blue",
+        "paper": "halftone-cream",
+        "strapline": "Compaq enters the IBM-compatible race, Atari shelves new hardware, and Joe Cocker & Jennifer Warnes top radio"
+      },
+      "masthead": {
+        "kicker": "A weekly 1982 archive dispatch",
+        "title": "Computer Chronicle",
+        "deck": "Video games, home computers, software counters, and culture for the week of November 1-7, 1982"
+      },
+      "layoutPlan": {
+        "main": [
+          "editor-note",
+          "lead",
+          "picture-desk",
+          "computer-items",
+          "software",
+          "store-shelves"
+        ],
+        "sidebar": [
+          "price-watch",
+          "market",
+          "bbs",
+          "curiosity",
+          "briefs",
+          "music",
+          "period-ad",
+          "classifieds",
+          "fallback",
+          "accuracy",
+          "sources"
+        ]
+      },
+      "sectionChrome": {
+        "lead": {
+          "label": "Lead Story"
+        },
+        "pictureDesk": {
+          "label": "Picture Desk",
+          "title": "Scenes From the Week"
+        },
+        "computerItems": {
+          "label": "Computers & Hardware",
+          "title": "Personal Computing Desk"
+        },
+        "software": {
+          "label": "Software Top 5",
+          "title": "Programs on the Editor's Pad"
+        },
+        "storeShelves": {
+          "label": "Top Games This Week",
+          "title": "Arcade, Console & Computer Games"
+        },
+        "priceWatch": {
+          "label": "Price Watch",
+          "title": "What It Cost"
+        },
+        "bbs": {
+          "label": "Modem Desk"
+        },
+        "curiosity": {
+          "label": "Movies / TV / Culture"
+        },
+        "briefs": {
+          "label": "Magazine Rack",
+          "title": "Culture & Shelf Talk"
+        },
+        "music": {
+          "label": "Top Rock This Week",
+          "title": "Hot 100, November 6"
+        },
+        "periodAd": {
+          "label": "Retail / Ads"
+        },
+        "classifieds": {
+          "label": "Classifieds",
+          "title": "Small Ads"
+        },
+        "fallback": {
+          "label": "Editorial Screen"
+        },
+        "accuracy": {
+          "label": "Accuracy Ledger",
+          "title": "What Is Date-Specific"
+        },
+        "sources": {
+          "label": "Source Trail",
+          "title": "Research Log"
+        },
+        "market": {
+          "label": "Retail / Ads",
+          "title": "Counter Watch"
+        }
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1982-11-01.png",
+        "alt": "GPT Image 2 newspaper-style Computer Chronicle front page for the week of November 1-7, 1982",
+        "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "The first week of November brings the office micro and the living-room console into the same holiday newspaper frame: IBM compatibility, cartridge shelves, vector graphics, and pop charts all crowd the counter.",
+      "morningLine": "This week the luggable PC clone becomes the serious office rumor, while game departments prepare Atari 5200 and Vectrex demonstrations for Christmas shoppers.",
+      "lead": {
+        "headline": "Compaq Shows a Portable Route Into the IBM PC World",
+        "summary": "Compaq used November 1982 to unveil a 28-pound portable computer built for strong IBM PC compatibility, a $2,995 luggable that pointed toward the coming clone market while business buyers still measured software shelves by WordStar, spreadsheets, and databases.",
+        "confidence": "November 1982 announcement; price and compatibility details from retrospective hardware reporting",
+        "sourceRefs": [
+          0
+        ]
+      },
+      "computerItems": [
+        {
+          "label": "Console Counter",
+          "headline": "Atari 5200 Reaches Holiday Shelves",
+          "summary": "Atari’s higher-end 5200 was appearing in limited store distribution around October and November, bundled with Super Breakout and aimed at ColecoVision and Intellivision shoppers.",
+          "confidence": "Late-1982 release-window context",
+          "sourceRefs": [
+            1,
+            2
+          ]
+        },
+        {
+          "label": "Vector Display",
+          "headline": "Vectrex Adds a Tiny Arcade Monitor to the Living Room",
+          "summary": "The Vectrex arrives as one of 1982’s strangest home systems, using its own monochrome vector screen and overlay sheets instead of the family television.",
+          "confidence": "November 1982 console release context",
+          "sourceRefs": [
+            3
+          ]
+        },
+        {
+          "label": "Home Computer Desk",
+          "headline": "Sub-$100 and 64K Machines Pull New Buyers In",
+          "summary": "The Timex Sinclair 1000 and Commodore 64 keep widening the home-computing ladder, from bargain BASIC experimentation to a more ambitious color-and-sound machine.",
+          "confidence": "1982 home-computer release context",
+          "sourceRefs": [
+            4
+          ]
+        },
+        {
+          "label": "Magazine Rack",
+          "headline": "November Computer Magazines Crowd the Desk",
+          "summary": "Personal Computer World’s November issue points to DEC Rainbow, Apple II, HP-75, calculators, and portable-computing talk as readers compare practical machines.",
+          "confidence": "November 1982 magazine issue metadata",
+          "sourceRefs": [
+            5
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "WordStar",
+          "platform": "CP/M / business micros",
+          "detail": "Still a key word-processing name for office buyers comparing portable and desktop machines.",
+          "confidence": "Period business-software context",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "name": "VisiCalc",
+          "platform": "Apple II / business micros",
+          "detail": "The spreadsheet remains the demonstration program that sells microcomputers as business tools.",
+          "confidence": "Period business-software context",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "name": "SuperCalc",
+          "platform": "CP/M / business micros",
+          "detail": "A common bundled or advertised spreadsheet name around CP/M luggables and business systems.",
+          "confidence": "Period business-software context",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "name": "dBASE II",
+          "platform": "CP/M / business micros",
+          "detail": "Database work gives the office counter another reason to ask about disks, printers, and memory.",
+          "confidence": "Period business-software context",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "name": "Apple Writer II",
+          "platform": "Apple II",
+          "detail": "Apple II buyers still weigh practical word processing beside the game disk case.",
+          "confidence": "Period Apple II software context",
+          "sourceRefs": [
+            5
+          ]
+        }
+      ],
+      "storeShelves": [
+        {
+          "name": "Donkey Kong",
+          "platform": "ColecoVision / arcade",
+          "detail": "ColecoVision’s pack-in and arcade fame keep it the visual comparison point for holiday console shoppers.",
+          "confidence": "1982 console shelf context",
+          "sourceRefs": [
+            4,
+            6
+          ]
+        },
+        {
+          "name": "Frogger",
+          "platform": "Arcade / home cartridge",
+          "detail": "A family-recognizable arcade hit and home-game name in late-1982 holiday coverage.",
+          "confidence": "Late-1982 popular-game context",
+          "sourceRefs": [
+            6
+          ]
+        },
+        {
+          "name": "Pac-Man",
+          "platform": "Atari / arcade",
+          "detail": "Pac-Man remains the mass-market character every cartridge shelf has to answer to.",
+          "confidence": "Late-1982 popular-game context",
+          "sourceRefs": [
+            6
+          ]
+        },
+        {
+          "name": "Super Breakout",
+          "platform": "Atari 5200",
+          "detail": "The pack-in title gives Atari’s new 5200 its immediate demonstration game.",
+          "confidence": "Atari 5200 launch-bundle context",
+          "sourceRefs": [
+            1,
+            2
+          ]
+        },
+        {
+          "name": "Galaxian",
+          "platform": "Atari 5200",
+          "detail": "A new 5200 cartridge name tied to Computer Entertainer’s November 1982 listings.",
+          "confidence": "November 1982 cartridge listing",
+          "sourceRefs": [
+            2
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "Compaq Portable",
+          "price": "$2,995 announced price",
+          "note": "A serious office luggable pitched on IBM PC compatibility."
+        },
+        {
+          "item": "Atari 5200",
+          "price": "$269.95 reported retail",
+          "note": "The premium Atari console began appearing in select department stores."
+        },
+        {
+          "item": "Home video hardware",
+          "price": "About $150-$300 in holiday coverage",
+          "note": "Late-1982 shoppers compared Atari, Intellivision, and ColecoVision hardware."
+        },
+        {
+          "item": "Game cartridges",
+          "price": "About $25-$40",
+          "note": "Cartridge software was the recurring add-on cost after the console purchase."
+        }
+      ],
+      "market": {
+        "headline": "The Holiday Counter Splits Between IBM Compatibility and Cartridge Play",
+        "summary": "Business buyers ask whether a portable can run PC software; families ask which machine has the arcade names. The same store may be explaining WordStar in one aisle and Donkey Kong in the next.",
+        "confidence": "November 1982 hardware and holiday retail context",
+        "sourceRefs": [
+          0,
+          1,
+          6
+        ]
+      },
+      "bbsNote": {
+        "headline": "Modem Desk: Compatibility Becomes a Password",
+        "summary": "The Compaq story makes compatibility sound less like a spec-sheet footnote and more like an everyday buying question for offices swapping disks and software advice.",
+        "confidence": "Interpretive note from verified Compaq announcement context",
+        "sourceRefs": [
+          0
+        ]
+      },
+      "curiosity": {
+        "headline": "First Blood Leads the November Movie Counter",
+        "summary": "Domestic November box-office totals put First Blood ahead for the month, with E.T. still showing extraordinary staying power after its summer opening.",
+        "confidence": "November 1982 domestic box-office chart",
+        "sourceRefs": [
+          7
+        ]
+      },
+      "briefs": [
+        {
+          "headline": "Joe Cocker and Jennifer Warnes Reach No. 1",
+          "summary": "The November 6 Hot 100 has “Up Where We Belong” at the top, moving ahead of Men at Work’s “Who Can It Be Now?”",
+          "confidence": "Dated Hot 100 list",
+          "sourceRefs": [
+            8
+          ]
+        },
+        {
+          "headline": "The Girl Is Mine Debuts",
+          "summary": "Michael Jackson and Paul McCartney enter the Hot 100 this week with “The Girl Is Mine,” an early signal of the next pop season.",
+          "confidence": "Dated Hot 100 list",
+          "sourceRefs": [
+            8
+          ]
+        },
+        {
+          "headline": "Arcade Language Enters Holiday Shopping",
+          "summary": "Late-year coverage treats hardware, cartridges, and arcade rankings as ordinary family-shopping vocabulary.",
+          "confidence": "December 1982 holiday culture context",
+          "sourceRefs": [
+            6
+          ]
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "Up Where We Belong",
+          "artist": "Joe Cocker and Jennifer Warnes"
+        },
+        {
+          "rank": 2,
+          "title": "Who Can It Be Now?",
+          "artist": "Men at Work"
+        },
+        {
+          "rank": 3,
+          "title": "Heart Attack",
+          "artist": "Olivia Newton-John"
+        },
+        {
+          "rank": 4,
+          "title": "I Keep Forgettin’ (Every Time You’re Near)",
+          "artist": "Michael McDonald"
+        },
+        {
+          "rank": 5,
+          "title": "Jack & Diane",
+          "artist": "John Cougar"
+        }
+      ],
+      "movieChart": [
+        {
+          "title": "First Blood"
+        },
+        {
+          "title": "E.T. the Extra-Terrestrial"
+        },
+        {
+          "title": "An Officer and a Gentleman"
+        },
+        {
+          "title": "Creepshow"
+        },
+        {
+          "title": "Halloween III: Season of the Witch"
+        }
+      ],
+      "periodAd": {
+        "headline": "This Week at the Micro Counter",
+        "summary": "Ask about IBM-compatible software, CP/M word processing, Atari 5200 demonstrations, Vectrex overlays, and cartridge prices before the December rush.",
+        "confidence": "Styled from verified period retail and hardware context",
+        "sourceRefs": [
+          0,
+          1,
+          3,
+          6
+        ]
+      },
+      "classifieds": [
+        {
+          "headline": "Portable PC Curiosity",
+          "copy": "Office manager seeks demonstration of IBM-compatible luggable before year-end purchase."
+        },
+        {
+          "headline": "Console Night",
+          "copy": "Atari 5200, ColecoVision, and Vectrex comparisons wanted; bring cartridges and patience."
+        }
+      ],
+      "worldFallback": {
+        "headline": "No Routine World Desk",
+        "summary": "This issue keeps the front page on personal computers, games, retail shelves, movies, and radio because the week has enough computing and culture material.",
+        "confidence": "Editorial scope note"
+      },
+      "accuracyLedger": {
+        "items": [
+          {
+            "claim": "Compaq Portable was announced in November 1982 with a $2,995 price and IBM PC compatibility pitch",
+            "status": "Verified by retrospective hardware reporting"
+          },
+          {
+            "claim": "Atari 5200 reached shelves in late 1982 with Super Breakout and $269.95 retail reporting",
+            "status": "Release-window context, not claimed as a single nationwide day"
+          },
+          {
+            "claim": "Music chart uses the Hot 100 dated November 6, 1982",
+            "status": "Dated chart"
+          },
+          {
+            "claim": "Movie chart uses domestic November 1982 box-office ranking",
+            "status": "Monthly chart, not a single-weekend chart"
+          }
+        ]
+      },
+      "sources": [
+        {
+          "name": "Tom’s Hardware - Compaq Portable announced in November 1982",
+          "url": "https://www.tomshardware.com/desktops/pc-building/this-week-in-1982-compaq-announced-the-first-true-ibm-pc-clone-it-was-a-portable-too-as-long-as-you-were-comfortable-lugging-28-pounds"
+        },
+        {
+          "name": "Atari 5200 - release and retail context",
+          "url": "https://en.wikipedia.org/wiki/Atari_5200"
+        },
+        {
+          "name": "Atari Archive - Atari 5200 game release dates",
+          "url": "https://www.atariarchive.org/atari-5200-game-release-dates/"
+        },
+        {
+          "name": "1982 in video games - Vectrex and console context",
+          "url": "https://en.wikipedia.org/wiki/1982_in_video_games"
+        },
+        {
+          "name": "1982 in video games - computer release context",
+          "url": "https://en.wikipedia.org/wiki/1982_in_video_games"
+        },
+        {
+          "name": "Centre for Computing History - Personal Computer World November 1982",
+          "url": "https://www.computinghistory.org.uk/det/618/Personal-Computer-World-November-1982/"
+        },
+        {
+          "name": "The New Yorker - Under the Children’s Christmas Tree, 1982 game retail context",
+          "url": "https://www.newyorker.com/magazine/1982/12/13/under-the-childrens-christmas-tree"
+        },
+        {
+          "name": "Box Office Mojo - Domestic Box Office for November 1982",
+          "url": "https://www.boxofficemojo.com/month/november/1982/"
+        },
+        {
+          "name": "Top40Weekly - US Top 40 Singles for November 6, 1982",
+          "url": "https://top40weekly.com/2013/11/06/us-top-40-singles-for-the-week-ending-november-6-1982/"
+        }
+      ],
+      "pictureDesk": [
+        {
+          "src": "media/computer-chronicle-gpt-image-2-week-1982-11-01.png",
+          "alt": "GPT Image 2 newspaper-style Computer Chronicle front page for the week of November 1-7, 1982",
+          "caption": "GPT Image 2 front-page artifact showing the Compaq portable, Atari 5200 and Vectrex holiday hardware, software shelves, charts, and price-watch modules.",
+          "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+        }
+      ],
+      "frontPageStories": [
+        {
+          "headline": "Compaq Shows a Portable Route Into the IBM PC World",
+          "summary": "A 28-pound IBM-compatible luggable points to the PC clone market before the term feels ordinary.",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "headline": "Atari and Vectrex Crowd the Holiday Hardware Shelf",
+          "summary": "Atari 5200 demonstrations and Vectrex vector-screen novelty give game buyers more than one showroom question.",
+          "sourceRefs": [
+            1,
+            2,
+            3
+          ]
+        },
+        {
+          "headline": "Up Where We Belong Tops the Week’s Radio",
+          "summary": "Joe Cocker and Jennifer Warnes take the November 6 Hot 100 lead as “The Girl Is Mine” debuts lower down the chart.",
+          "sourceRefs": [
+            8
+          ]
+        }
+      ],
+      "musicChartSourceRefs": [
+        8
+      ]
+    },
     {
       "currentDate": "2026-06-18",
       "historicDate": "1982-10-25",
