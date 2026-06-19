@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-19T16:00:01.974230+00:00",
+  "updatedAt": "2026-06-19T17:00:01.294780+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -10988,6 +10988,14 @@
     "https://techcrunch.com/2026/06/19/billionaire-ambani-wants-ai-in-every-call-app-and-home": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/02/reliance-mukesh-ambani.jpg?resize=1200,800",
       "checkedAt": "2026-06-19T16:00:01.974230+00:00"
+    },
+    "https://techcrunch.com/video/is-the-us-governments-anthropic-ban-accidentally-helping-the-brand": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/04/GettyImages-2269811684.jpg?w=1024",
+      "checkedAt": "2026-06-19T17:00:01.294780+00:00"
+    },
+    "https://techcrunch.com/podcast/the-us-banned-anthropics-fable-5-release-but-the-numbers-dont-seem-to-care": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/Dario-2280291125.jpg?w=1024",
+      "checkedAt": "2026-06-19T17:00:01.294780+00:00"
     }
   }
 }
