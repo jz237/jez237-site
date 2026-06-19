@@ -101,13 +101,15 @@
     letter-spacing: .09em;
     font-size: clamp(12px, 2.8vw, 14px);
   }
+  button, input {
+    font: inherit;
+  }
   button {
     appearance: none;
     border: 1px solid rgba(255, 255, 255, .8);
     border-radius: 8px;
     background: linear-gradient(135deg, #1ff6ff, #6d63ff 48%, #ff3bd1);
     color: #fff;
-    font: inherit;
     font-weight: 950;
     letter-spacing: .08em;
     text-transform: uppercase;
@@ -115,6 +117,94 @@
     box-shadow: 0 0 18px rgba(31, 246, 255, .45), 0 0 34px rgba(255, 59, 209, .3);
     cursor: pointer;
     touch-action: manipulation;
+  }
+  button.secondary {
+    background: rgba(8, 18, 34, .82);
+    border-color: rgba(136, 232, 255, .5);
+    box-shadow: inset 0 0 16px rgba(31, 246, 255, .08), 0 0 18px rgba(31, 246, 255, .18);
+  }
+  button:disabled {
+    opacity: .48;
+    cursor: not-allowed;
+    filter: saturate(.55);
+  }
+  input {
+    width: 100%;
+    min-height: 42px;
+    border: 1px solid rgba(136, 232, 255, .5);
+    border-radius: 8px;
+    background: rgba(3, 7, 18, .74);
+    color: #eaffff;
+    padding: 10px 12px;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    outline: none;
+  }
+  input:focus {
+    border-color: rgba(255, 74, 218, .88);
+    box-shadow: 0 0 16px rgba(255, 74, 218, .26);
+  }
+  .menu-actions {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+  }
+  .panel-section {
+    display: none;
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid rgba(136, 232, 255, .22);
+  }
+  .panel-section.on { display: block; }
+  .mini-grid {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 8px;
+    align-items: center;
+  }
+  .score-board {
+    display: grid;
+    gap: 6px;
+    margin-top: 10px;
+    text-align: left;
+  }
+  .score-row {
+    display: grid;
+    grid-template-columns: 34px 1fr auto;
+    gap: 8px;
+    align-items: center;
+    color: #dffcff;
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: .06em;
+  }
+  .score-row span:first-child { color: #ffef75; }
+  .slot-list {
+    display: grid;
+    gap: 7px;
+    margin-top: 10px;
+    text-align: left;
+  }
+  .slot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 8px 10px;
+    border: 1px solid rgba(136, 232, 255, .24);
+    border-radius: 8px;
+    background: rgba(3, 10, 24, .62);
+    color: #dffcff;
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: .06em;
+  }
+  .online-status {
+    min-height: 18px;
+    margin-top: 10px;
+    color: rgba(229, 255, 255, .68);
+    font-size: 12px;
+    text-align: left;
   }
   .fine {
     margin: 18px 0 0;
@@ -134,10 +224,12 @@
   }
   @media (max-width: 600px) {
     .hud { inset: 14px 12px auto 12px; gap: 6px; }
-    .hud span { min-width: 0; flex: 1; }
-    .hud span:nth-child(2) { flex: .55; }
-    .hud span:nth-child(3) { min-width: 140px; flex: 1.4; }
+    .hud span { min-width: 0; flex: 1; font-size: 10px; }
+    .hud span:nth-child(2) { flex: .7; }
+    .hud span:nth-child(3) { min-width: 0; flex: 1.1; }
     .panel { padding-block: 22px; }
+    .menu-actions { grid-template-columns: 1fr; }
+    .mini-grid { grid-template-columns: 1fr; }
   }
 </style>
 </head>
@@ -150,13 +242,43 @@
 </div>
 <div class="overlay" id="overlay">
   <div class="panel">
-    <h1>NEON<br>VECTOR<br>ARENA</h1>
-    <p class="sub">A live graphics demo: endless vector space, crisp wireframe enemies, clean HUD text, fast motion, cheap bloom, and shapes that fracture into smaller vector pieces.</p>
-    <button id="start">Start Demo</button>
-    <p class="fine">Drag anywhere to fly. Shots auto-aim at the nearest threat. Survive the lightstorm.</p>
+    <h1 id="overlayTitle">NEON<br>VECTOR<br>ARENA</h1>
+    <p class="sub" id="overlaySub">Solo survival in endless vector space. Move smart, chain combos, and shatter oversized geometry before it reaches you.</p>
+    <div class="menu-actions">
+      <button id="start">Solo Run</button>
+      <button id="onlineBtn" class="secondary">Online</button>
+      <button id="scoresBtn" class="secondary">Scores</button>
+    </div>
+    <div class="panel-section" id="scoreSubmit">
+      <div class="mini-grid">
+        <input id="initials" maxlength="3" placeholder="AAA" inputmode="text" autocomplete="nickname">
+        <button id="submitScore" class="secondary">Submit</button>
+      </div>
+    </div>
+    <div class="panel-section" id="scorePanel">
+      <div id="scoreBoard" class="score-board"></div>
+    </div>
+    <div class="panel-section" id="onlinePanel">
+      <div class="mini-grid">
+        <input id="onlineRoom" maxlength="24" placeholder="ROOM CODE" inputmode="text" autocomplete="off">
+        <button id="connectOnline" class="secondary">Connect</button>
+      </div>
+      <div class="mini-grid" style="margin-top:8px">
+        <input id="onlineName" maxlength="12" placeholder="PLAYER NAME" inputmode="text" autocomplete="nickname">
+        <button id="readyOnline" class="secondary" disabled>Ready</button>
+      </div>
+      <div class="menu-actions" style="margin-top:8px">
+        <button id="startOnline" disabled>Start</button>
+        <button id="roomsOnline" class="secondary">Rooms</button>
+        <button id="disconnectOnline" class="secondary" disabled>Leave</button>
+      </div>
+      <div id="onlineStatus" class="online-status">Dedicated Neon worker is local-only until deployment approval.</div>
+      <div id="onlineSlots" class="slot-list"></div>
+    </div>
+    <p class="fine" id="overlayFine">Drag anywhere to fly. Keyboard: WASD or arrows to thrust, P to pause. Shots auto-aim at the highest danger cluster.</p>
   </div>
 </div>
-<div class="version">v2.13</div>
+<div class="version">v3.0-local</div>
 
 <script>
 'use strict';
@@ -169,15 +291,41 @@ const scoreEl = document.getElementById('score');
 const waveEl = document.getElementById('wave');
 const comboEl = document.getElementById('combo');
 const overlay = document.getElementById('overlay');
+const overlayTitle = document.getElementById('overlayTitle');
+const overlaySub = document.getElementById('overlaySub');
+const overlayFine = document.getElementById('overlayFine');
 const startBtn = document.getElementById('start');
+const onlineBtn = document.getElementById('onlineBtn');
+const scoresBtn = document.getElementById('scoresBtn');
+const scoreSubmit = document.getElementById('scoreSubmit');
+const scorePanel = document.getElementById('scorePanel');
+const onlinePanel = document.getElementById('onlinePanel');
+const scoreBoard = document.getElementById('scoreBoard');
+const initialsInput = document.getElementById('initials');
+const submitScoreBtn = document.getElementById('submitScore');
+const onlineRoomInput = document.getElementById('onlineRoom');
+const onlineNameInput = document.getElementById('onlineName');
+const connectOnlineBtn = document.getElementById('connectOnline');
+const readyOnlineBtn = document.getElementById('readyOnline');
+const startOnlineBtn = document.getElementById('startOnline');
+const roomsOnlineBtn = document.getElementById('roomsOnline');
+const disconnectOnlineBtn = document.getElementById('disconnectOnline');
+const onlineStatusEl = document.getElementById('onlineStatus');
+const onlineSlotsEl = document.getElementById('onlineSlots');
 
 let W = 0, H = 0, DPR = 1;
 let running = false;
+let menuState = 'menu';
+let gameMode = 'solo';
+let globalScoreCache = null;
+let partner = null;
+let online = { ws: null, room: '', role: null, id: null, name: 'PLAYER', connected: false, started: false, ready: { p1: false, p2: false }, peers: [], lastInput: 0, lastSnapshot: 0, remoteInput: null, status: '' };
 let last = 0;
 let time = 0;
 let spawnTimer = 0;
 let score = 0;
 let wave = 1;
+let kills = 0;
 let combo = 1;
 let comboTimer = 0;
 let shake = 0;
@@ -217,6 +365,12 @@ const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 const rand = (a, b) => a + Math.random() * (b - a);
 const HIT_CALLOUTS = ['OUCH', 'ZAP', 'BZZT', 'NOPE', 'YIKES', 'GLITCH', 'STATIC', 'WHAM', 'CLANG'];
 const ENEMY_HIT_CALLOUTS = ['NICE', 'CRACK', 'POP', 'SHRED', 'SPLIT', 'BANG', 'GONE'];
+const LOCAL_SCORE_KEY = 'neon-vector-arena-local-scores-v1';
+const NAME_KEY = 'neon-vector-arena-initials';
+const SCORES_API = 'https://game-scores.jez237.workers.dev/scores/neon-vector-arena';
+const ONLINE_WS = window.NEON_VECTOR_WS || ((location.hostname === 'localhost' || location.hostname === '127.0.0.1')
+  ? 'ws://127.0.0.1:8788/ws'
+  : 'wss://neon-vector-arena-online.jez237.workers.dev/ws');
 const SIZE_TIERS = [
   { name: 'small', normal: .72, splitter: 1.0 },
   { name: 'medium', normal: 1.08, splitter: 1.45 },
@@ -291,6 +445,328 @@ function buildStars() {
   }
 }
 
+function setPanel(section = 'menu') {
+  menuState = section;
+  scoreSubmit.classList.toggle('on', section === 'over');
+  scorePanel.classList.toggle('on', section === 'scores');
+  onlinePanel.classList.toggle('on', section === 'online');
+  startBtn.disabled = false;
+  if (section === 'menu') {
+    overlayTitle.innerHTML = 'NEON<br>VECTOR<br>ARENA';
+    overlaySub.textContent = 'Solo survival in endless vector space. Move smart, chain combos, and shatter oversized geometry before it reaches you.';
+    overlayFine.textContent = 'Drag anywhere to fly. Keyboard: WASD or arrows to thrust, P to pause. Shots auto-aim at the highest danger cluster.';
+    startBtn.textContent = 'Solo Run';
+  } else if (section === 'paused') {
+    overlayTitle.innerHTML = 'PAUSED';
+    overlaySub.textContent = 'The vector storm is frozen. Resume or restart the solo run.';
+    overlayFine.textContent = 'Press P, Space, or Enter to resume.';
+    startBtn.textContent = 'Resume';
+  } else if (section === 'over') {
+    overlayTitle.innerHTML = 'VECTOR<br>OVER';
+    overlaySub.textContent = `Score ${Math.floor(score)} · Wave ${String(wave).padStart(2, '0')} · ${kills} shapes destroyed.`;
+    overlayFine.textContent = 'Submit initials for the local board, or restart instantly.';
+    startBtn.textContent = 'Restart Solo';
+    initialsInput.value = cleanInitials(localStorage.getItem(NAME_KEY) || initialsInput.value || 'YOU');
+  } else if (section === 'scores') {
+    overlayTitle.innerHTML = 'SCORES';
+    overlaySub.textContent = 'Global leaderboard with local fallback. Solo runs submit initials, score, wave, and shapes destroyed.';
+    overlayFine.textContent = 'If the global board is unavailable, your local score still saves on this device.';
+    startBtn.textContent = 'Solo Run';
+    refreshScoreBoard();
+  } else if (section === 'online') {
+    overlayTitle.innerHTML = 'ONLINE';
+    overlaySub.textContent = 'Dedicated Neon room service is approved and will be built after the solo and score layers are verified.';
+    overlayFine.textContent = 'No backend has been deployed yet.';
+    startBtn.textContent = 'Solo Run';
+  }
+}
+
+function showOverlay(section = 'menu') {
+  setPanel(section);
+  overlay.style.display = '';
+  overlay.classList.remove('hidden');
+}
+
+function hideOverlay() {
+  overlay.classList.add('hidden');
+  overlay.style.display = 'none';
+}
+
+function cleanInitials(raw) {
+  return (raw || 'YOU').toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 3) || 'YOU';
+}
+
+function localScores() {
+  try { return JSON.parse(localStorage.getItem(LOCAL_SCORE_KEY) || '[]'); }
+  catch { return []; }
+}
+
+function saveLocalScore(name, value) {
+  const row = { name: cleanInitials(name), score: Math.max(0, Math.floor(value)), wave, kills, ts: Date.now() };
+  const rows = localScores().concat(row).sort((a, b) => b.score - a.score).slice(0, 10);
+  localStorage.setItem(LOCAL_SCORE_KEY, JSON.stringify(rows));
+  localStorage.setItem(NAME_KEY, row.name);
+  return rows;
+}
+
+async function fetchGlobalScores(force = false) {
+  if (globalScoreCache && !force) return globalScoreCache;
+  try {
+    const ctl = new AbortController();
+    const timer = setTimeout(() => ctl.abort(), 7000);
+    const res = await fetch(SCORES_API, { cache: 'no-store', signal: ctl.signal });
+    clearTimeout(timer);
+    const data = await res.json();
+    const rows = Array.isArray(data) ? data : (data.scores || []);
+    globalScoreCache = rows
+      .map(row => ({
+        name: cleanInitials(row.initials || row.name || '???'),
+        score: Math.max(0, Number(row.score) || 0),
+        global: true
+      }))
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 10);
+    return globalScoreCache;
+  } catch {
+    globalScoreCache = null;
+    return null;
+  }
+}
+
+async function submitGlobalScore(name, value) {
+  try {
+    const ctl = new AbortController();
+    const timer = setTimeout(() => ctl.abort(), 7000);
+    await fetch(SCORES_API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        initials: cleanInitials(name),
+        score: Math.max(0, Math.floor(value)),
+        extra: { wave, kills, mode: gameMode }
+      }),
+      signal: ctl.signal
+    });
+    clearTimeout(timer);
+    globalScoreCache = null;
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function scoreRowsHtml(rows, source) {
+  if (!rows.length) {
+    return `<div class="score-row"><span>--</span><b>No ${source} scores yet</b><em>solo</em></div>`;
+  }
+  return rows.slice(0, 10).map((row, index) => (
+    `<div class="score-row"><span>${String(index + 1).padStart(2, '0')}</span><b>${escapeHtml(row.name || 'YOU')}</b><em>${Math.floor(row.score || 0)}</em></div>`
+  )).join('');
+}
+
+function renderScoreBoard(rows = null, source = 'local') {
+  const list = rows || localScores();
+  scoreBoard.innerHTML = `<div class="score-row"><span>${source === 'global' ? 'GL' : 'LC'}</span><b>${source.toUpperCase()} BOARD</b><em>${list.length}/10</em></div>` + scoreRowsHtml(list, source);
+}
+
+async function refreshScoreBoard() {
+  renderScoreBoard(localScores(), 'local');
+  const rows = await fetchGlobalScores(true);
+  if (rows) renderScoreBoard(rows, 'global');
+  else scoreBoard.innerHTML += '<div class="score-row"><span>!</span><b>Global board unavailable</b><em>local</em></div>';
+}
+
+function escapeHtml(value) {
+  return String(value).replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
+}
+
+function cleanRoom(raw) {
+  return String(raw || 'VECTOR')
+    .toUpperCase()
+    .replace(/[^A-Z0-9-]/g, '')
+    .slice(0, 24) || 'VECTOR';
+}
+
+function cleanName(raw) {
+  return String(raw || 'PLAYER')
+    .toUpperCase()
+    .replace(/[^A-Z0-9 _-]/g, '')
+    .trim()
+    .slice(0, 12) || 'PLAYER';
+}
+
+function randomRoom() {
+  return 'NEON-' + Math.random().toString(36).slice(2, 6).toUpperCase();
+}
+
+function onlineUrl(room) {
+  return ONLINE_WS.replace(/\/+$/, '') + '/' + encodeURIComponent(cleanRoom(room));
+}
+
+function onlineHttpBase() {
+  return ONLINE_WS.replace(/^wss:/, 'https:').replace(/^ws:/, 'http:').replace(/\/ws\/?$/, '');
+}
+
+function setOnlineStatus(text) {
+  online.status = text || '';
+  onlineStatusEl.textContent = online.status;
+}
+
+function onlinePlayer(role) {
+  return online.peers.find(peer => peer.role === role);
+}
+
+function renderOnlineSlots() {
+  const slots = ['p1', 'p2'].map(role => {
+    const peer = onlinePlayer(role);
+    const name = peer ? cleanName(peer.name || role) : 'OPEN';
+    const ready = !!online.ready[role];
+    return `<div class="slot"><span>${role.toUpperCase()} · ${escapeHtml(name)}</span><em>${peer ? (ready ? 'READY' : 'WAIT') : 'EMPTY'}</em></div>`;
+  });
+  const spectators = online.peers.filter(peer => peer.role === 'spectator').length;
+  if (spectators) slots.push(`<div class="slot"><span>SPECTATORS</span><em>${spectators}</em></div>`);
+  onlineSlotsEl.innerHTML = slots.join('');
+  readyOnlineBtn.disabled = !online.connected || !(online.role === 'p1' || online.role === 'p2');
+  startOnlineBtn.disabled = !(online.connected && online.role === 'p1' && online.ready.p1 && online.ready.p2 && onlinePlayer('p1') && onlinePlayer('p2'));
+  disconnectOnlineBtn.disabled = !online.connected;
+}
+
+function onlineSend(data) {
+  if (!online.ws || online.ws.readyState !== WebSocket.OPEN) return false;
+  online.ws.send(JSON.stringify(data));
+  return true;
+}
+
+function resetOnlineState(keepInputs = true) {
+  const keepRoom = keepInputs ? online.room : '';
+  const keepName = keepInputs ? online.name : 'PLAYER';
+  online = { ws: null, room: keepRoom, role: null, id: null, name: keepName, connected: false, started: false, ready: { p1: false, p2: false }, peers: [], lastInput: 0, lastSnapshot: 0, remoteInput: null, status: '' };
+  renderOnlineSlots();
+}
+
+function disconnectOnline() {
+  if (online.ws) {
+    try { online.ws.close(1000, 'leave'); } catch {}
+  }
+  setOnlineStatus(online.room ? `Left room ${online.room}` : 'Disconnected');
+  resetOnlineState(true);
+}
+
+function connectOnline() {
+  const room = cleanRoom(onlineRoomInput.value || randomRoom());
+  const name = cleanName(onlineNameInput.value || localStorage.getItem(NAME_KEY) || 'PLAYER');
+  onlineRoomInput.value = room;
+  onlineNameInput.value = name;
+  if (online.ws) disconnectOnline();
+  online.room = room;
+  online.name = name;
+  online.ready = { p1: false, p2: false };
+  online.peers = [];
+  setOnlineStatus(`Connecting to ${room}...`);
+  const ws = new WebSocket(onlineUrl(room));
+  online.ws = ws;
+  ws.onopen = () => setOnlineStatus(`Connected to ${room}`);
+  ws.onmessage = event => handleOnlineMessage(event.data);
+  ws.onerror = () => setOnlineStatus('Online connection error');
+  ws.onclose = () => {
+    const roomLabel = online.room;
+    resetOnlineState(true);
+    setOnlineStatus(roomLabel ? `Disconnected from ${roomLabel}` : 'Disconnected');
+  };
+}
+
+function handleOnlineMessage(raw) {
+  let data;
+  try { data = JSON.parse(raw); } catch { return; }
+  if (data.type === 'welcome') {
+    online.connected = true;
+    online.id = data.id;
+    online.role = data.role;
+    online.peers = data.peers || [];
+    online.started = false;
+    if (!online.peers.some(peer => peer.id === online.id)) online.peers.push({ id: online.id, role: online.role, name: online.name, joinedAt: Date.now() });
+    onlineSend({ type: 'hello', name: online.name });
+    setOnlineStatus(`Room ${online.room} · you are ${String(online.role).toUpperCase()}`);
+    renderOnlineSlots();
+  } else if (data.type === 'hello') {
+    const peer = online.peers.find(item => item.id === data.from);
+    if (peer) peer.name = cleanName(data.name);
+    renderOnlineSlots();
+  } else if (data.type === 'peer') {
+    online.peers = data.peers || [];
+    if (online.connected && !online.peers.some(peer => peer.id === online.id)) online.peers.push({ id: online.id, role: online.role, name: online.name, joinedAt: Date.now() });
+    if (!onlinePlayer('p2')) online.ready.p2 = false;
+    renderOnlineSlots();
+    if (data.left && online.started) setOnlineStatus(`${String(data.left).toUpperCase()} disconnected. Match can continue solo.`);
+  } else if (data.type === 'ready') {
+    online.ready[data.role] = !!data.ready;
+    renderOnlineSlots();
+  } else if (data.type === 'start' && online.role !== 'p1') {
+    online.started = true;
+    startOnlineClient(data.seed || 1);
+  } else if (data.type === 'input' && online.role === 'p1') {
+    online.remoteInput = data.control || null;
+  } else if (data.type === 'snapshot' && online.role !== 'p1') {
+    applyNetSnapshot(data.snapshot);
+  } else if (data.type === 'over' && online.role !== 'p1') {
+    finishRun();
+  } else if (data.type === 'error') {
+    setOnlineStatus(data.message || 'Online error');
+  }
+}
+
+async function refreshOnlineRooms() {
+  setOnlineStatus('Checking open rooms...');
+  try {
+    const res = await fetch(onlineHttpBase() + '/rooms', { cache: 'no-store' });
+    const data = await res.json();
+    const rooms = Array.isArray(data.rooms) ? data.rooms : [];
+    onlineSlotsEl.innerHTML = rooms.length ? rooms.map(room => {
+      const code = cleanRoom(room.room);
+      return `<div class="slot"><span>${escapeHtml(code)} · ${escapeHtml(cleanName(room.host))}</span><button class="secondary" data-room="${escapeHtml(code)}">Join</button></div>`;
+    }).join('') : '<div class="slot"><span>No open rooms</span><em>HOST ONE</em></div>';
+    onlineSlotsEl.querySelectorAll('button[data-room]').forEach(btn => btn.addEventListener('click', () => {
+      onlineRoomInput.value = btn.dataset.room || '';
+      connectOnline();
+    }));
+    setOnlineStatus(rooms.length ? 'Open rooms loaded' : 'No open rooms right now');
+  } catch {
+    setOnlineStatus('Room list unavailable');
+  }
+}
+
+function toggleOnlineReady() {
+  if (!online.connected || !(online.role === 'p1' || online.role === 'p2')) return;
+  online.ready[online.role] = !online.ready[online.role];
+  onlineSend({ type: 'ready', ready: online.ready[online.role] });
+  renderOnlineSlots();
+}
+
+function startOnlineHost() {
+  if (!(online.connected && online.role === 'p1')) return;
+  const seed = Math.floor(Math.random() * 1_000_000) + 1;
+  online.started = true;
+  gameMode = 'online';
+  reset();
+  createPartner();
+  running = true;
+  hideOverlay();
+  last = performance.now();
+  onlineSend({ type: 'start', seed });
+  requestAnimationFrame(frame);
+}
+
+function startOnlineClient(seed = 1) {
+  gameMode = 'online';
+  reset();
+  createPartner();
+  running = true;
+  hideOverlay();
+  last = performance.now();
+  setOnlineStatus(`Room ${online.room} · match running`);
+  requestAnimationFrame(frame);
+}
+
 function reset() {
   player = {
     x: 0,
@@ -305,6 +781,7 @@ function reset() {
     aimAngle: -Math.PI / 2,
     trail: []
   };
+  partner = null;
   enemies = [];
   shots = [];
   particles = [];
@@ -313,6 +790,7 @@ function reset() {
   callouts = [];
   score = 0;
   wave = 1;
+  kills = 0;
   combo = 1;
   comboTimer = 0;
   spawnTimer = 0;
@@ -325,18 +803,56 @@ function reset() {
   updateHud();
 }
 
+function createPartner() {
+  partner = {
+    x: player.x - 44,
+    y: player.y + 32,
+    vx: 0,
+    vy: 0,
+    r: 12,
+    hp: 100 + DEMO_EXTRA_SECONDS,
+    fire: .08,
+    inv: 1.3,
+    angle: -Math.PI / 2,
+    aimAngle: -Math.PI / 2,
+    trail: [],
+    hue: 316
+  };
+}
+
 function updateHud() {
   scoreEl.textContent = 'Shield: ' + String(Math.max(0, Math.ceil(player?.hp ?? 100))).padStart(3, '0');
   waveEl.textContent = 'Wave ' + String(wave).padStart(2, '0');
-  comboEl.textContent = 'Anonymous ' + String(Math.floor(score)).padStart(6, '0') + ' Δx' + combo;
+  const label = innerWidth < 520 ? '' : 'Anonymous ';
+  comboEl.textContent = label + String(Math.floor(score)).padStart(6, '0') + ' Δx' + combo;
 }
 
-function start() {
-  overlay.classList.add('hidden');
+function startSolo() {
+  gameMode = 'solo';
   reset();
   running = true;
+  hideOverlay();
   last = performance.now();
   requestAnimationFrame(frame);
+}
+
+function resumeGame() {
+  if (menuState !== 'paused') return;
+  running = true;
+  hideOverlay();
+  last = performance.now();
+  requestAnimationFrame(frame);
+}
+
+function pauseGame() {
+  if (!running || menuState === 'over') return;
+  running = false;
+  showOverlay('paused');
+}
+
+function finishRun() {
+  running = false;
+  showOverlay('over');
 }
 
 function spawnEnemy(initial = false) {
@@ -405,19 +921,19 @@ function pickSpawnPoint(initial = false) {
   };
 }
 
-function fireShot(targetAngle, target = null) {
+function fireShot(targetAngle, target = null, shooter = player) {
   const spread = combo >= 8 ? .16 : .11;
   const count = combo >= 8 ? 5 : 3;
   for (let i = 0; i < count; i++) {
     const laneOffset = (i - (count - 1) / 2) * spread;
     const a = targetAngle + laneOffset;
     shots.push({
-      x: player.x + Math.cos(a) * 17,
-      y: player.y + Math.sin(a) * 17,
+      x: shooter.x + Math.cos(a) * 17,
+      y: shooter.y + Math.sin(a) * 17,
       vx: Math.cos(a) * SHOT_SPEED,
       vy: Math.sin(a) * SHOT_SPEED,
       r: 3.2,
-      hue: i === 1 ? 316 : 186,
+      hue: shooter === partner ? 316 : (i === 1 ? 316 : 186),
       angle: a,
       age: 0,
       laneOffset,
@@ -426,7 +942,7 @@ function fireShot(targetAngle, target = null) {
       trail: []
     });
   }
-  addSpark(player.x + Math.cos(targetAngle) * 17, player.y + Math.sin(targetAngle) * 17, 6, 184, .5);
+  addSpark(shooter.x + Math.cos(targetAngle) * 17, shooter.y + Math.sin(targetAngle) * 17, 6, shooter === partner ? 316 : 184, .5);
 }
 
 function nearestEnemy() {
@@ -434,6 +950,20 @@ function nearestEnemy() {
   let bd = Infinity;
   for (const e of enemies) {
     const d = dist2(player.x, player.y, e.x, e.y);
+    if (d < bd) {
+      best = e;
+      bd = d;
+    }
+  }
+  return best;
+}
+
+function nearestEnemyTo(ship) {
+  let best = null;
+  let bd = Infinity;
+  if (!ship) return null;
+  for (const e of enemies) {
+    const d = dist2(ship.x, ship.y, e.x, e.y);
     if (d < bd) {
       best = e;
       bd = d;
@@ -543,9 +1073,10 @@ function capEnemyVelocity(e) {
 }
 
 function updateCamera(dt = 1, snap = false) {
-  if (!player) return;
-  const tx = player.x - innerWidth * .5;
-  const ty = player.y - innerHeight * .52;
+  const focus = online.connected && online.role === 'p2' && partner ? partner : player;
+  if (!focus) return;
+  const tx = focus.x - innerWidth * .5;
+  const ty = focus.y - innerHeight * .52;
   const follow = snap ? 1 : clamp(dt * 5.8, 0, 1);
   camera.x += (tx - camera.x) * follow;
   camera.y += (ty - camera.y) * follow;
@@ -553,6 +1084,44 @@ function updateCamera(dt = 1, snap = false) {
 
 function screenToWorld(x, y) {
   return { x: x + camera.x, y: y + camera.y };
+}
+
+function controlPacket() {
+  let ax = 0, ay = 0;
+  if (keys.has('ArrowLeft') || keys.has('KeyA')) ax -= 1;
+  if (keys.has('ArrowRight') || keys.has('KeyD')) ax += 1;
+  if (keys.has('ArrowUp') || keys.has('KeyW')) ay -= 1;
+  if (keys.has('ArrowDown') || keys.has('KeyS')) ay += 1;
+  if (pointer.active) {
+    ax += clamp((pointer.sx - innerWidth * .5) / 120, -1, 1);
+    ay += clamp((pointer.sy - innerHeight * .52) / 120, -1, 1);
+  }
+  const d = Math.hypot(ax, ay);
+  if (d > 1) {
+    ax /= d;
+    ay /= d;
+  }
+  return { ax, ay, active: pointer.active || d > 0 };
+}
+
+function applyShipInput(ship, input, dt) {
+  if (!ship || !input) return;
+  const accel = 2200;
+  ship.vx += (Number(input.ax) || 0) * accel * dt;
+  ship.vy += (Number(input.ay) || 0) * accel * dt;
+  ship.vx *= Math.pow(.028, dt);
+  ship.vy *= Math.pow(.028, dt);
+  const speed = Math.hypot(ship.vx, ship.vy);
+  if (speed > 440) {
+    ship.vx = ship.vx / speed * 440;
+    ship.vy = ship.vy / speed * 440;
+  }
+  ship.x += ship.vx * dt;
+  ship.y += ship.vy * dt;
+  ship.inv -= dt;
+  if (speed > 24) ship.angle = turnTowardAngle(ship.angle, Math.atan2(ship.vy, ship.vx), 6.4 * dt);
+  ship.trail.unshift({ x: ship.x, y: ship.y, a: ship.angle, alpha: 1 });
+  ship.trail.length = Math.min(FIREFOX_PERF ? 11 : 18, ship.trail.length);
 }
 
 function addSpark(x, y, n, hue, force = 1) {
@@ -817,8 +1386,83 @@ function shouldSplitEnemy(e) {
   return e.largeSplits || e.r >= 18;
 }
 
+function packShip(ship) {
+  return ship ? {
+    x: ship.x, y: ship.y, vx: ship.vx, vy: ship.vy, r: ship.r, hp: ship.hp,
+    fire: ship.fire, inv: ship.inv, angle: ship.angle, aimAngle: ship.aimAngle,
+    trail: ship.trail.slice(0, 10), hue: ship.hue
+  } : null;
+}
+
+function unpackShip(data) {
+  return data ? {
+    x: Number(data.x) || 0, y: Number(data.y) || 0, vx: Number(data.vx) || 0, vy: Number(data.vy) || 0,
+    r: Number(data.r) || 12, hp: Number(data.hp) || 0, fire: Number(data.fire) || 0, inv: Number(data.inv) || 0,
+    angle: Number(data.angle) || 0, aimAngle: Number(data.aimAngle) || 0,
+    trail: Array.isArray(data.trail) ? data.trail.slice(0, 12) : [], hue: Number(data.hue) || 184
+  } : null;
+}
+
+function makeNetSnapshot() {
+  return {
+    player: packShip(player),
+    partner: packShip(partner),
+    enemies: enemies.slice(0, MAX_ENEMIES + 40),
+    shots: shots.slice(0, 120),
+    pickups: pickups.slice(0, 20),
+    particles: particles.slice(-80),
+    fragments: fragments.slice(-120),
+    callouts: callouts.slice(-8),
+    camera,
+    score, wave, combo, comboTimer, kills, time,
+    running, menuState
+  };
+}
+
+function applyNetSnapshot(snapshot) {
+  if (!snapshot) return;
+  player = unpackShip(snapshot.player) || player;
+  partner = unpackShip(snapshot.partner);
+  enemies = Array.isArray(snapshot.enemies) ? snapshot.enemies : [];
+  shots = Array.isArray(snapshot.shots) ? snapshot.shots : [];
+  pickups = Array.isArray(snapshot.pickups) ? snapshot.pickups : [];
+  particles = Array.isArray(snapshot.particles) ? snapshot.particles : [];
+  fragments = Array.isArray(snapshot.fragments) ? snapshot.fragments : [];
+  callouts = Array.isArray(snapshot.callouts) ? snapshot.callouts : [];
+  score = Number(snapshot.score) || 0;
+  wave = Number(snapshot.wave) || 1;
+  combo = Number(snapshot.combo) || 1;
+  comboTimer = Number(snapshot.comboTimer) || 0;
+  kills = Number(snapshot.kills) || 0;
+  time = Number(snapshot.time) || time;
+  if (snapshot.camera) camera = { x: Number(snapshot.camera.x) || 0, y: Number(snapshot.camera.y) || 0 };
+  if (online.connected && online.role === 'p2' && partner) updateCamera(1, true);
+  running = !!snapshot.running;
+  if (!running && snapshot.menuState === 'over') showOverlay('over');
+  updateHud();
+}
+
+function sendOnlineInput(now) {
+  if (!online.connected || online.role !== 'p2' || !running || now - online.lastInput < 45) return;
+  online.lastInput = now;
+  onlineSend({ type: 'input', control: controlPacket() });
+}
+
+function sendOnlineSnapshot(now, force = false) {
+  if (!online.connected || online.role !== 'p1' || !running) return;
+  if (!force && now - online.lastSnapshot < 66) return;
+  online.lastSnapshot = now;
+  onlineSend({ type: 'snapshot', snapshot: makeNetSnapshot() });
+}
+
 function update(dt) {
   time += dt;
+  if (gameMode === 'online' && online.connected && online.role !== 'p1') {
+    sendOnlineInput(performance.now());
+    updateCamera(dt);
+    updateHud();
+    return;
+  }
   shake = Math.max(0, shake - dt * 22);
   comboTimer -= dt;
   if (comboTimer <= 0) combo = 1;
@@ -875,6 +1519,20 @@ function update(dt) {
   player.trail.unshift({ x: player.x, y: player.y, a: player.angle });
   player.trail.length = Math.min(FIREFOX_PERF ? 11 : 18, player.trail.length);
 
+  if (gameMode === 'online' && online.role === 'p1' && partner) {
+    applyShipInput(partner, online.remoteInput || { ax: 0, ay: 0 }, dt);
+    const partnerTarget = nearestEnemyTo(partner);
+    if (partnerTarget) {
+      const partnerAngle = Math.atan2(partnerTarget.y - partner.y, partnerTarget.x - partner.x);
+      partner.aimAngle = turnTowardAngle(partner.aimAngle, partnerAngle, AIM_TURN_RATE * dt);
+      partner.fire -= dt;
+      if (partner.fire <= 0) {
+        partner.fire = Math.max(.17, .27 - wave * .001);
+        fireShot(partnerAngle, partnerTarget, partner);
+      }
+    }
+  }
+
   spawnTimer -= dt;
   if (spawnTimer <= 0) {
     spawnTimer = Math.max(.3, .86 - wave * .012);
@@ -896,18 +1554,18 @@ function update(dt) {
     e.pulse += dt * 4;
     e.trail.unshift({ x: e.x, y: e.y, rot: e.rot });
     e.trail.length = FIREFOX_PERF ? 5 : 9;
-    if (dist2(e.x, e.y, player.x, player.y) < (e.r + player.r) ** 2 && player.inv <= 0) {
-      player.hp -= e.type === 'splitter' ? 22 : e.type === 'splinter' ? 6 : 10;
-      player.inv = 1.05;
-      blastEnemies(player.x, player.y, SHOT_BLAST_FORCE * .7, SHOT_BLAST_RADIUS * .9);
-      explode(player.x, player.y, 188, false);
-      addHitCallout(player.x, player.y);
-      if (player.hp <= 0) {
-        running = false;
-        overlay.querySelector('h1').innerHTML = 'VECTOR<br>OVER';
-        overlay.querySelector('.sub').textContent = 'Final score ' + Math.floor(score) + '. The arena can restart instantly.';
-        startBtn.textContent = 'Restart Demo';
-        overlay.classList.remove('hidden');
+    for (const ship of [player, partner].filter(Boolean)) {
+      if (ship.hp <= 0 || ship.inv > 0) continue;
+      if (dist2(e.x, e.y, ship.x, ship.y) < (e.r + ship.r) ** 2) {
+        ship.hp -= e.type === 'splitter' ? 22 : e.type === 'splinter' ? 6 : 10;
+        ship.inv = 1.05;
+        blastEnemies(ship.x, ship.y, SHOT_BLAST_FORCE * .7, SHOT_BLAST_RADIUS * .9);
+        explode(ship.x, ship.y, ship === partner ? 316 : 188, false);
+        addHitCallout(ship.x, ship.y);
+        if (ship === player && player.hp <= 0) {
+          finishRun();
+          if (online.connected && online.role === 'p1') onlineSend({ type: 'over', snapshot: makeNetSnapshot() });
+        }
       }
     }
   }
@@ -967,6 +1625,7 @@ function update(dt) {
           enemies.splice(i, 1);
           const bigBreak = shouldSplitEnemy(e);
           if (bigBreak) splitEnemy(e);
+          kills++;
           comboTimer = 2.2;
           combo = clamp(combo + 1, 1, 12);
           score += (e.type === 'splinter' ? 35 : 100 + Math.round(e.r * 4)) * combo + wave * 15;
@@ -1089,7 +1748,7 @@ function drawGrid(c) {
 }
 
 function drawPlayer(c, p, ghost = false) {
-  const a = p.a ?? player.angle;
+  const a = p.a ?? p.angle ?? player.angle;
   const x = p.x;
   const y = p.y;
   const alpha = ghost ? p.alpha : 1;
@@ -1102,10 +1761,11 @@ function drawPlayer(c, p, ghost = false) {
   ];
   c.save();
   c.globalAlpha = alpha;
-  poly(c, pts, `hsla(184,100%,${ghost ? 60 : 78}%,${ghost ? .34 : 1})`, ghost ? 1.3 : 2.5, ghost ? null : 'rgba(37, 248, 255, .12)', ghost ? 8 : 18);
-  line(c, x - ca * 10, y - sa * 10, x - ca * 26, y - sa * 26, `hsla(315,100%,70%,${ghost ? .2 : .9})`, ghost ? 2 : 4, ghost ? 5 : 16);
+  const hue = p.hue || 184;
+  poly(c, pts, `hsla(${hue},100%,${ghost ? 60 : 78}%,${ghost ? .34 : 1})`, ghost ? 1.3 : 2.5, ghost ? null : `hsla(${hue},100%,58%,.12)`, ghost ? 8 : 18);
+  line(c, x - ca * 10, y - sa * 10, x - ca * 26, y - sa * 26, `hsla(${hue + 130},100%,70%,${ghost ? .2 : .9})`, ghost ? 2 : 4, ghost ? 5 : 16);
   if (!ghost) {
-    const aa = player.aimAngle ?? a;
+    const aa = p.aimAngle ?? a;
     line(c, x + Math.cos(aa) * 4, y + Math.sin(aa) * 4, x + Math.cos(aa) * 17, y + Math.sin(aa) * 17, 'rgba(255,255,255,.88)', 1.4, 8);
   }
   c.beginPath();
@@ -1358,7 +2018,8 @@ function render() {
         drawEnemy(gtx, { ...e, x: t.x, y: t.y, rot: t.rot, alpha: (1 - i / e.trail.length) * .24 }, true);
       }
     }
-    for (const t of player.trail.map((v, i) => ({ ...v, alpha: (1 - i / player.trail.length) * .32 })).reverse()) drawPlayer(gtx, t, true);
+    for (const t of player.trail.map((v, i) => ({ ...v, hue: player.hue || 184, alpha: (1 - i / player.trail.length) * .32 })).reverse()) drawPlayer(gtx, t, true);
+    if (partner) for (const t of partner.trail.map((v, i) => ({ ...v, hue: partner.hue || 316, alpha: (1 - i / partner.trail.length) * .32 })).reverse()) drawPlayer(gtx, t, true);
   }
   for (const s of shots) drawShot(gtx, s);
   for (const e of enemies) drawEnemy(gtx, e);
@@ -1372,6 +2033,7 @@ function render() {
   }
   for (const p of particles) drawParticle(gtx, p);
   for (const o of callouts) drawCallout(gtx, o, true);
+  if (partner) drawPlayer(gtx, partner);
   drawPlayer(gtx, player);
   gtx.restore();
 
@@ -1403,6 +2065,7 @@ function render() {
   }
   for (const p of particles) drawParticle(ctx, p);
   for (const o of callouts) drawCallout(ctx, o);
+  if (partner) drawPlayer(ctx, partner);
   drawPlayer(ctx, player);
 
   if (player.inv > 0) {
@@ -1427,6 +2090,7 @@ function frame(now) {
   const dt = Math.min(MAX_DT, (now - last) / 1000 || .016);
   last = now;
   update(dt);
+  sendOnlineSnapshot(now);
   render();
   requestAnimationFrame(frame);
 }
@@ -1442,8 +2106,32 @@ function setPointer(e, active) {
   pointer.usingTouch = !!e.changedTouches;
 }
 
-startBtn.addEventListener('click', start);
-startBtn.addEventListener('touchend', e => { e.preventDefault(); start(); }, { passive: false });
+function primaryAction() {
+  if (menuState === 'paused') resumeGame();
+  else startSolo();
+}
+
+startBtn.addEventListener('click', primaryAction);
+startBtn.addEventListener('touchend', e => { e.preventDefault(); primaryAction(); }, { passive: false });
+scoresBtn.addEventListener('click', () => showOverlay('scores'));
+onlineBtn.addEventListener('click', () => showOverlay('online'));
+connectOnlineBtn.addEventListener('click', connectOnline);
+readyOnlineBtn.addEventListener('click', toggleOnlineReady);
+startOnlineBtn.addEventListener('click', startOnlineHost);
+roomsOnlineBtn.addEventListener('click', refreshOnlineRooms);
+disconnectOnlineBtn.addEventListener('click', disconnectOnline);
+submitScoreBtn.addEventListener('click', async () => {
+  const name = cleanInitials(initialsInput.value);
+  initialsInput.value = name;
+  saveLocalScore(name, score);
+  submitScoreBtn.disabled = true;
+  submitScoreBtn.textContent = 'Sending';
+  const ok = await submitGlobalScore(name, score);
+  submitScoreBtn.disabled = false;
+  submitScoreBtn.textContent = 'Submit';
+  showOverlay('scores');
+  overlayFine.textContent = ok ? 'Score saved locally and submitted globally.' : 'Score saved locally. Global submit is unavailable right now.';
+});
 window.addEventListener('resize', resize);
 window.addEventListener('pointerdown', e => { setPointer(e, true); });
 window.addEventListener('pointermove', e => { if (pointer.active || e.pointerType === 'mouse') setPointer(e, pointer.active); });
@@ -1452,13 +2140,41 @@ window.addEventListener('pointercancel', e => { setPointer(e, false); });
 window.addEventListener('touchmove', e => e.preventDefault(), { passive: false });
 window.addEventListener('keydown', e => {
   keys.add(e.code);
-  if (!running && (e.code === 'Space' || e.code === 'Enter')) start();
+  if (e.code === 'KeyP' || e.code === 'Escape') {
+    if (running) pauseGame();
+    else if (menuState === 'paused') resumeGame();
+  }
+  if (!running && (e.code === 'Space' || e.code === 'Enter')) primaryAction();
 });
 window.addEventListener('keyup', e => keys.delete(e.code));
 
 resize();
 reset();
+onlineRoomInput.value = randomRoom();
+onlineNameInput.value = cleanName(localStorage.getItem(NAME_KEY) || 'PLAYER');
+renderOnlineSlots();
 render();
+window.__neon = {
+  startSolo,
+  pauseGame,
+  resumeGame,
+  finishRun,
+  showOverlay,
+  makeNetSnapshot,
+  applyNetSnapshot,
+  connectOnline,
+  disconnectOnline,
+  state: () => ({ running, menuState, gameMode, score, wave, kills, online: { ...online, ws: !!online.ws }, enemies: enemies.length, shots: shots.length })
+};
+if (new URLSearchParams(location.search).get('autostart') === '1') {
+  startSolo();
+} else if (location.hash === '#scores') {
+  showOverlay('scores');
+} else if (location.hash === '#online') {
+  showOverlay('online');
+} else {
+  showOverlay('menu');
+}
 </script>
 </body>
 </html>
