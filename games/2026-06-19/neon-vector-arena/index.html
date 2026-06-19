@@ -153,10 +153,10 @@
     <h1>NEON<br>VECTOR<br>ARENA</h1>
     <p class="sub">A live graphics demo: crisp wireframe enemies, clean HUD text, fast motion, cheap bloom, and shapes that fracture into smaller vector pieces.</p>
     <button id="start">Start Demo</button>
-    <p class="fine">Drag anywhere to move. Mouse aims. On touch, the ship auto-aims at the nearest threat. Survive the lightstorm.</p>
+    <p class="fine">Drag anywhere to move. Shots auto-aim at the nearest threat. Survive the lightstorm.</p>
   </div>
 </div>
-<div class="version">v1.8</div>
+<div class="version">v1.9</div>
 
 <script>
 'use strict';
@@ -199,6 +199,7 @@ const MAX_FRAGMENTS = FIREFOX_PERF ? 420 : 640;
 const MAX_DT = FIREFOX_PERF ? .07 : .04;
 const SHOT_BLAST_RADIUS = 105;
 const SHOT_BLAST_FORCE = 430;
+const SHOT_SPEED = 660;
 const DEMO_EXTRA_SECONDS = 20;
 const TAU = Math.PI * 2;
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
@@ -338,9 +339,8 @@ function fireShot(targetAngle) {
     shots.push({
       x: player.x + Math.cos(a) * 17,
       y: player.y + Math.sin(a) * 17,
-      vx: Math.cos(a) * 660,
-      vy: Math.sin(a) * 660,
-      life: .72,
+      vx: Math.cos(a) * SHOT_SPEED,
+      vy: Math.sin(a) * SHOT_SPEED,
       r: 3.2,
       hue: i === 1 ? 316 : 186,
       angle: a,
@@ -592,7 +592,7 @@ function update(dt) {
   player.y = clamp(player.y + player.vy * dt, 58, innerHeight - 26);
   player.inv -= dt;
 
-  const aim = pointer.usingTouch || !pointer.active ? nearestEnemy() : pointer;
+  const aim = nearestEnemy();
   if (aim) player.angle = Math.atan2(aim.y - player.y, aim.x - player.x);
   player.fire -= dt;
   if (player.fire <= 0 && enemies.length) {
@@ -658,13 +658,13 @@ function update(dt) {
   }
 
   for (const s of shots) {
-    s.life -= dt;
     s.trail.unshift({ x: s.x, y: s.y });
     s.trail.length = FIREFOX_PERF ? 5 : 7;
     s.x += s.vx * dt;
     s.y += s.vy * dt;
   }
-  shots = shots.filter(s => s.life > 0 && s.x > -60 && s.x < innerWidth + 60 && s.y > -60 && s.y < innerHeight + 60);
+  const shotPad = Math.max(90, Math.hypot(innerWidth, innerHeight) * .08);
+  shots = shots.filter(s => s.x > -shotPad && s.x < innerWidth + shotPad && s.y > -shotPad && s.y < innerHeight + shotPad);
 
   for (let i = enemies.length - 1; i >= 0; i--) {
     const e = enemies[i];
