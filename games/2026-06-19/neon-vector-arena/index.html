@@ -286,7 +286,7 @@
     <p class="fine" id="overlayFine">Drag anywhere to fly. Keyboard: WASD or arrows to thrust, P to pause. Shots auto-aim at the highest danger cluster.</p>
   </div>
 </div>
-<div class="version">v3.6</div>
+<div class="version">v3.7</div>
 
 <script>
 'use strict';
@@ -358,10 +358,10 @@ let nextWaveScore = 6500;
 let waveCooldown = 0;
 
 const FIREFOX_PERF = /\bFirefox\//i.test(navigator.userAgent);
-const GLOW_SCALE = FIREFOX_PERF ? .22 : .32;
+const GLOW_SCALE = FIREFOX_PERF ? .2 : .24;
 const MAX_ENEMIES = FIREFOX_PERF ? 42 : 56;
-const MAX_PARTICLES = FIREFOX_PERF ? 140 : 210;
-const MAX_FRAGMENTS = FIREFOX_PERF ? 220 : 340;
+const MAX_PARTICLES = FIREFOX_PERF ? 120 : 170;
+const MAX_FRAGMENTS = FIREFOX_PERF ? 180 : 260;
 const MAX_DT = FIREFOX_PERF ? .07 : .04;
 const SHOT_BLAST_RADIUS = 78;
 const SHOT_BLAST_FORCE = 290;
@@ -434,7 +434,8 @@ function chooseEnemyType() {
 }
 
 function resize() {
-  DPR = Math.min(FIREFOX_PERF ? 1 : 1.15, window.devicePixelRatio || 1);
+  const mobileFit = innerWidth < 700 || innerHeight < 520;
+  DPR = Math.min(FIREFOX_PERF ? .9 : (mobileFit ? .9 : 1), window.devicePixelRatio || 1);
   W = Math.floor(innerWidth * DPR);
   H = Math.floor(innerHeight * DPR);
   canvas.width = W;
@@ -451,7 +452,7 @@ function resize() {
 
 function buildStars() {
   stars = [];
-  const count = Math.floor((innerWidth * innerHeight) / (FIREFOX_PERF ? 2100 : 1250));
+  const count = Math.floor((innerWidth * innerHeight) / (FIREFOX_PERF ? 2300 : 1500));
   for (let i = 0; i < count; i++) {
     const bright = Math.random() > .84;
     stars.push({
@@ -1222,7 +1223,7 @@ function applyShipInput(ship, input, dt) {
   ship.inv -= dt;
   if (speed > 24) ship.angle = turnTowardAngle(ship.angle, Math.atan2(ship.vy, ship.vx), 6.4 * dt);
   ship.trail.unshift({ x: ship.x, y: ship.y, a: ship.angle, alpha: 1 });
-  ship.trail.length = Math.min(FIREFOX_PERF ? 11 : 18, ship.trail.length);
+  ship.trail.length = Math.min(FIREFOX_PERF ? 8 : 12, ship.trail.length);
 }
 
 function addSpark(x, y, n, hue, force = 1) {
@@ -1683,11 +1684,11 @@ function update(dt) {
   }
   player.fire -= dt;
   if (player.fire <= 0 && enemies.length) {
-    player.fire = Math.max(.15, .24 - wave * .001);
+    player.fire = Math.max(.105, .17 - wave * .0015);
     fireShot(fireAngle, aim);
   }
   player.trail.unshift({ x: player.x, y: player.y, a: player.angle });
-  player.trail.length = Math.min(FIREFOX_PERF ? 11 : 18, player.trail.length);
+  player.trail.length = Math.min(FIREFOX_PERF ? 8 : 12, player.trail.length);
 
   if (gameMode === 'online' && online.role === 'p1' && partner) {
     applyShipInput(partner, online.remoteInput || { ax: 0, ay: 0 }, dt);
@@ -1697,7 +1698,7 @@ function update(dt) {
       partner.aimAngle = turnTowardAngle(partner.aimAngle, partnerAngle, AIM_TURN_RATE * dt);
       partner.fire -= dt;
       if (partner.fire <= 0) {
-        partner.fire = Math.max(.17, .27 - wave * .001);
+        partner.fire = Math.max(.12, .19 - wave * .0015);
         fireShot(partnerAngle, partnerTarget, partner);
       }
     }
@@ -1723,7 +1724,7 @@ function update(dt) {
     e.rot += e.spin * dt;
     e.pulse += dt * 4;
     e.trail.unshift({ x: e.x, y: e.y, rot: e.rot });
-    e.trail.length = FIREFOX_PERF ? 5 : 9;
+    e.trail.length = FIREFOX_PERF ? 4 : 6;
     for (const ship of [player, partner].filter(Boolean)) {
       if (ship.hp <= 0 || ship.inv > 0) continue;
       if (dist2(e.x, e.y, ship.x, ship.y) < (e.r + ship.r) ** 2) {
@@ -1773,7 +1774,7 @@ function update(dt) {
       s.vy = Math.sin(steered) * SHOT_SPEED;
     }
     s.trail.unshift({ x: s.x, y: s.y });
-    s.trail.length = FIREFOX_PERF ? 5 : 7;
+    s.trail.length = FIREFOX_PERF ? 4 : 5;
     s.x += s.vx * dt;
     s.y += s.vy * dt;
   }
@@ -2194,7 +2195,7 @@ function render() {
   gtx.save();
   gtx.translate(sx - camera.x, sy - camera.y);
   gtx.globalCompositeOperation = 'lighter';
-  if (!FIREFOX_PERF) {
+  if (!FIREFOX_PERF && enemies.length < 46) {
     for (const e of enemies) {
       for (let i = e.trail.length - 1; i >= 0; i--) {
         const t = e.trail[i];
@@ -2207,7 +2208,6 @@ function render() {
   }
   for (const s of shots) drawShot(gtx, s);
   for (const e of enemies) drawEnemy(gtx, e);
-  if (!FIREFOX_PERF) for (const f of fragments) drawFragment(gtx, f);
   for (const p of pickups) {
     gtx.save();
     gtx.translate(p.x, p.y);
@@ -2230,10 +2230,6 @@ function render() {
   ctx.globalAlpha = .74;
   ctx.imageSmoothingEnabled = true;
   ctx.drawImage(glow, 0, 0, innerWidth, innerHeight);
-  if (!FIREFOX_PERF) {
-    ctx.globalAlpha = .24;
-    ctx.drawImage(glow, 0, 0, innerWidth, innerHeight);
-  }
   ctx.restore();
 
   ctx.save();
