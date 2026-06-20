@@ -1,9 +1,9 @@
 {
   "date": "2026-06-20",
-  "updatedAt": "2026-06-20T04:00:01.829257+00:00",
+  "updatedAt": "2026-06-20T05:00:01.317385+00:00",
   "items": [
     {
-      "title": "Zhyar Rzgar K. Rostam, M\\'arta P\\'entek, J\\'anos Tibor Czere, Zsombor Zrubka, L\\'aszl\\'o Gul\\'acsi, G\\'abor Kert\\'esz",
+      "title": "LLM research updates, large language model evaluation news, leaderboards, and AI model insights",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -11,12 +11,12 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-20T04:00:10.191732+00:00",
+      "published": "2026-06-20T05:00:09.462665+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-20T04:00:01.829257+00:00",
+      "lastSeen": "2026-06-20T05:00:01.317385+00:00",
       "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.36
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.11
     }
   ],
   "errors": [
