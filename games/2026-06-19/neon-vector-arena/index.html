@@ -286,15 +286,15 @@
     <p class="fine" id="overlayFine">Drag anywhere to fly. Keyboard: WASD or arrows to thrust, P to pause. Shots auto-aim at the highest danger cluster.</p>
   </div>
 </div>
-<div class="version">v3.7</div>
+<div class="version">v3.8</div>
 
 <script>
 'use strict';
 
 const canvas = document.getElementById('game');
-const ctx = canvas.getContext('2d', { alpha: false });
+const ctx = canvas.getContext('2d', { alpha: false, desynchronized: true });
 const glow = document.createElement('canvas');
-const gtx = glow.getContext('2d', { alpha: true });
+const gtx = glow.getContext('2d', { alpha: true, desynchronized: true });
 const scoreEl = document.getElementById('score');
 const waveEl = document.getElementById('wave');
 const comboEl = document.getElementById('combo');
@@ -334,6 +334,11 @@ let audioMuted = false;
 let last = 0;
 let time = 0;
 let spawnTimer = 0;
+let frameMsAvg = 16.7;
+let fpsDisplay = 60;
+let hudTimer = 0;
+let renderFrame = 0;
+let effectsQuality = 1;
 let score = 0;
 let wave = 1;
 let kills = 0;
@@ -358,10 +363,10 @@ let nextWaveScore = 6500;
 let waveCooldown = 0;
 
 const FIREFOX_PERF = /\bFirefox\//i.test(navigator.userAgent);
-const GLOW_SCALE = FIREFOX_PERF ? .2 : .24;
+const GLOW_SCALE = FIREFOX_PERF ? .16 : .18;
 const MAX_ENEMIES = FIREFOX_PERF ? 42 : 56;
-const MAX_PARTICLES = FIREFOX_PERF ? 120 : 170;
-const MAX_FRAGMENTS = FIREFOX_PERF ? 180 : 260;
+const MAX_PARTICLES = FIREFOX_PERF ? 96 : 138;
+const MAX_FRAGMENTS = FIREFOX_PERF ? 142 : 210;
 const MAX_DT = FIREFOX_PERF ? .07 : .04;
 const SHOT_BLAST_RADIUS = 78;
 const SHOT_BLAST_FORCE = 290;
@@ -452,7 +457,7 @@ function resize() {
 
 function buildStars() {
   stars = [];
-  const count = Math.floor((innerWidth * innerHeight) / (FIREFOX_PERF ? 2300 : 1500));
+  const count = Math.floor((innerWidth * innerHeight) / (FIREFOX_PERF ? 3100 : 2300));
   for (let i = 0; i < count; i++) {
     const bright = Math.random() > .84;
     stars.push({
@@ -899,11 +904,14 @@ function createPartner() {
 }
 
 function updateHud() {
+  if (running && hudTimer > 0) return;
+  hudTimer = running ? .1 : 0;
   scoreEl.textContent = 'Shield: ' + String(Math.max(0, Math.ceil(player?.hp ?? 100))).padStart(3, '0') + ' L' + lives;
   waveEl.textContent = 'Wave ' + String(wave).padStart(2, '0');
   const label = innerWidth < 520 ? '' : 'Anonymous ';
   const power = player?.power > 0 ? ' OD' + Math.ceil(player.power) : '';
-  comboEl.textContent = label + String(Math.floor(score)).padStart(6, '0') + ' Δx' + combo + power;
+  const fps = innerWidth < 520 ? '' : ' ' + fpsDisplay + 'fps';
+  comboEl.textContent = label + String(Math.floor(score)).padStart(6, '0') + ' Δx' + combo + power + fps;
 }
 
 function startSolo() {
@@ -1228,7 +1236,8 @@ function applyShipInput(ship, input, dt) {
 
 function addSpark(x, y, n, hue, force = 1) {
   if (particles.length > MAX_PARTICLES) particles.splice(0, particles.length - MAX_PARTICLES);
-  for (let i = 0; i < n; i++) {
+  const count = Math.max(1, Math.round(n * effectsQuality));
+  for (let i = 0; i < count; i++) {
     const a = rand(0, TAU);
     const s = rand(40, 240) * force;
     particles.push({
@@ -1391,7 +1400,7 @@ function worldShapePoints(e, scale = 1) {
 function addVectorFragments(e) {
   if (fragments.length > MAX_FRAGMENTS) fragments.splice(0, fragments.length - MAX_FRAGMENTS);
   const pts = worldShapePoints(e, 1);
-  const count = e.type === 'splitter' ? 4 : e.largeSplits ? 3 : 1;
+  const count = Math.max(1, Math.round((e.type === 'splitter' ? 4 : e.largeSplits ? 3 : 1) * effectsQuality));
   for (let pass = 0; pass < count; pass++) {
     for (let i = 0; i < pts.length; i++) {
       const a = pts[i];
@@ -1434,7 +1443,7 @@ function addVectorFragments(e) {
       }
     }
   }
-  const dust = e.type === 'splitter' || e.largeSplits ? 22 : 7;
+  const dust = Math.round((e.type === 'splitter' || e.largeSplits ? 18 : 5) * effectsQuality);
   for (let i = 0; i < dust; i++) {
     const a = rand(0, TAU);
     const d = rand(0, e.r * 1.2);
@@ -1456,7 +1465,7 @@ function addVectorFragments(e) {
 
 function addHitShards(e, x, y, hue) {
   if (fragments.length > MAX_FRAGMENTS) fragments.splice(0, fragments.length - MAX_FRAGMENTS);
-  const count = e.type === 'splitter' || e.largeSplits ? Math.round(clamp(e.r * .9, 18, 42)) : 6;
+  const count = Math.max(3, Math.round((e.type === 'splitter' || e.largeSplits ? clamp(e.r * .72, 14, 32) : 5) * effectsQuality));
   for (let i = 0; i < count; i++) {
     const a = rand(0, TAU);
     const speed = rand(120, 300);
@@ -1499,7 +1508,7 @@ function blastEnemies(x, y, force, radius, sourceVX = 0, sourceVY = 0) {
 }
 
 function explode(x, y, hue, big = false) {
-  addSpark(x, y, big ? 34 : 9, hue, big ? 1.28 : .82);
+  addSpark(x, y, big ? 26 : 7, hue, big ? 1.18 : .76);
   particles.push({ x, y, vx: 0, vy: 0, life: big ? .46 : .28, max: big ? .46 : .28, r: big ? 88 : 34, hue, kind: 'ring' });
   particles.push({ x, y, vx: 0, vy: 0, life: .11, max: .11, r: big ? 140 : 58, hue: 0, kind: 'flash' });
   shake = Math.max(shake, big ? 8 : 4);
@@ -1633,6 +1642,7 @@ function update(dt) {
     return;
   }
   shake = Math.max(0, shake - dt * 22);
+  hudTimer = Math.max(0, hudTimer - dt);
   comboTimer -= dt;
   if (comboTimer <= 0) combo = 1;
   const accel = 2200;
@@ -1684,7 +1694,7 @@ function update(dt) {
   }
   player.fire -= dt;
   if (player.fire <= 0 && enemies.length) {
-    player.fire = Math.max(.105, .17 - wave * .0015);
+    player.fire = Math.max(.085, .135 - wave * .0012);
     fireShot(fireAngle, aim);
   }
   player.trail.unshift({ x: player.x, y: player.y, a: player.angle });
@@ -1698,7 +1708,7 @@ function update(dt) {
       partner.aimAngle = turnTowardAngle(partner.aimAngle, partnerAngle, AIM_TURN_RATE * dt);
       partner.fire -= dt;
       if (partner.fire <= 0) {
-        partner.fire = Math.max(.12, .19 - wave * .0015);
+        partner.fire = Math.max(.095, .15 - wave * .0012);
         fireShot(partnerAngle, partnerTarget, partner);
       }
     }
@@ -2184,8 +2194,12 @@ function drawCallout(c, o, glowPass = false) {
 }
 
 function render() {
+  renderFrame++;
   const sx = shake ? rand(-shake, shake) : 0;
   const sy = shake ? rand(-shake, shake) : 0;
+  const objectLoad = enemies.length + shots.length + fragments.length * .5 + particles.length * .35;
+  const heavyGlow = objectLoad > 180 || effectsQuality < .86;
+  const showGlowTrails = !FIREFOX_PERF && !heavyGlow && enemies.length < 38;
   ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
   gtx.setTransform(DPR * GLOW_SCALE, 0, 0, DPR * GLOW_SCALE, 0, 0);
   ctx.clearRect(0, 0, innerWidth, innerHeight);
@@ -2195,18 +2209,38 @@ function render() {
   gtx.save();
   gtx.translate(sx - camera.x, sy - camera.y);
   gtx.globalCompositeOperation = 'lighter';
-  if (!FIREFOX_PERF && enemies.length < 46) {
+  if (showGlowTrails) {
     for (const e of enemies) {
       for (let i = e.trail.length - 1; i >= 0; i--) {
         const t = e.trail[i];
         if (!t) continue;
-        drawEnemy(gtx, { ...e, x: t.x, y: t.y, rot: t.rot, alpha: (1 - i / e.trail.length) * .24 }, true);
+        const ox = e.x, oy = e.y, or = e.rot, oa = e.alpha;
+        e.x = t.x;
+        e.y = t.y;
+        e.rot = t.rot;
+        e.alpha = (1 - i / e.trail.length) * .24;
+        drawEnemy(gtx, e, true);
+        e.x = ox;
+        e.y = oy;
+        e.rot = or;
+        e.alpha = oa;
       }
     }
-    for (const t of player.trail.map((v, i) => ({ ...v, hue: player.hue || 184, alpha: (1 - i / player.trail.length) * .32 })).reverse()) drawPlayer(gtx, t, true);
-    if (partner) for (const t of partner.trail.map((v, i) => ({ ...v, hue: partner.hue || 316, alpha: (1 - i / partner.trail.length) * .32 })).reverse()) drawPlayer(gtx, t, true);
+    for (let i = player.trail.length - 1; i >= 0; i--) {
+      const t = player.trail[i];
+      drawPlayer(gtx, { x: t.x, y: t.y, a: t.a, hue: player.hue || 184, alpha: (1 - i / player.trail.length) * .32 }, true);
+    }
+    if (partner) {
+      for (let i = partner.trail.length - 1; i >= 0; i--) {
+        const t = partner.trail[i];
+        drawPlayer(gtx, { x: t.x, y: t.y, a: t.a, hue: partner.hue || 316, alpha: (1 - i / partner.trail.length) * .32 }, true);
+      }
+    }
   }
-  for (const s of shots) drawShot(gtx, s);
+  for (let i = 0; i < shots.length; i++) {
+    if (heavyGlow && i % 2) continue;
+    drawShot(gtx, shots[i]);
+  }
   for (const e of enemies) drawEnemy(gtx, e);
   for (const p of pickups) {
     gtx.save();
@@ -2219,7 +2253,7 @@ function render() {
     }
     gtx.restore();
   }
-  for (const p of particles) drawParticle(gtx, p);
+  if (!heavyGlow || renderFrame % 2 === 0) for (const p of particles) drawParticle(gtx, p);
   for (const o of callouts) drawCallout(gtx, o, true);
   if (partner) drawPlayer(gtx, partner);
   drawPlayer(gtx, player);
@@ -2271,7 +2305,11 @@ function render() {
 
 function frame(now) {
   if (!running) return;
-  const dt = Math.min(MAX_DT, (now - last) / 1000 || .016);
+  const rawMs = now - last || 16.7;
+  frameMsAvg += (rawMs - frameMsAvg) * .08;
+  fpsDisplay = Math.round(1000 / Math.max(1, frameMsAvg));
+  effectsQuality = frameMsAvg > 22 ? .55 : frameMsAvg > 18 ? .75 : 1;
+  const dt = Math.min(MAX_DT, rawMs / 1000 || .016);
   last = now;
   update(dt);
   sendOnlineSnapshot(now);
