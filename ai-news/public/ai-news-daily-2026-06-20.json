@@ -1,9 +1,25 @@
 {
   "date": "2026-06-20",
-  "updatedAt": "2026-06-20T08:00:01.364282+00:00",
+  "updatedAt": "2026-06-20T09:00:01.353167+00:00",
   "items": [
     {
-      "title": "LLM research updates, large language model evaluation news, leaderboards, and AI model insights",
+      "title": "The developer behind VLC’s 6 billion downloads now wants to connect hundreds of millions of robots",
+      "url": "https://thenextweb.com/news/vlc-developer-kyber-5-million-lightspeed-robotics-remote-control",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Jean-Baptiste Kempf, the lead developer of VLC Media Player, has raised $5 million for his startup Kyber, an infrastructure layer for controlling remote devices in real time. The round was led by Lightspeed Venture Partners, which also led Mistral AI’s record-breaking seed round and has since invested in Anthropic. OVNI Capital and Kima Ventures also [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/vlc-developer-kyber-5-million-lightspeed-robotics-remote-control.avif",
+      "published": "2026-06-20T08:22:44+00:00",
+      "firstSeen": "2026-06-20T09:00:01.353167+00:00",
+      "lastSeen": "2026-06-20T09:00:01.353167+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 6.8312
+    },
+    {
+      "title": "A verified subset of 500 software engineering problems from real GitHub issues, validated by human annotators for evaluating language models' ability to resolve real-world coding issues by generating patches for Python codebases.",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -11,12 +27,28 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-20T08:00:08.170841+00:00",
+      "published": "2026-06-20T09:00:08.134744+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-20T08:00:01.364282+00:00",
+      "lastSeen": "2026-06-20T09:00:01.353167+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.11
+      "score": 4.76
+    },
+    {
+      "title": "BYD rejects claims it violated Hungary’s environmental rules at its Szeged EV factory",
+      "url": "https://thenextweb.com/news/byd-rejects-hungary-environmental-violations-szeged-factory",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "BYD executive vice president Stella Li said the Chinese automaker has complied with all environmental regulations at its Szeged factory in Hungary, pushing back against allegations that the company violated its obligations during construction. Li made the comments at a press conference in Belgrade on Friday, where she met with Serbian President Aleksandar Vucic to [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/byd-rejects-hungary-environmental-violations-szeged-factory.avif",
+      "published": "2026-06-20T08:49:55+00:00",
+      "firstSeen": "2026-06-20T09:00:01.353167+00:00",
+      "lastSeen": "2026-06-20T09:00:01.353167+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1449
     }
   ],
   "errors": [
