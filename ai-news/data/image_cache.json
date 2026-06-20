@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-20T16:00:01.372165+00:00",
+  "updatedAt": "2026-06-20T17:00:01.693685+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -11008,6 +11008,10 @@
     "https://techcrunch.com/2026/06/18/how-to-turn-off-ai-in-your-google-docs": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/GettyImages-182884083.jpg?resize=1200,800",
       "checkedAt": "2026-06-20T03:00:01.448991+00:00"
+    },
+    "https://techcrunch.com/2026/06/20/nobel-laureate-john-jumper-is-leaving-deepmind-for-rival-anthropic": {
+      "image": "https://techcrunch.com/wp-content/uploads/2024/10/GettyImages-2148577076-e1728469833661.jpg?resize=1200,676",
+      "checkedAt": "2026-06-20T17:00:01.693685+00:00"
     }
   }
 }
