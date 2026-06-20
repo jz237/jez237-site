@@ -278,7 +278,7 @@
     <p class="fine" id="overlayFine">Drag anywhere to fly. Keyboard: WASD or arrows to thrust, P to pause. Shots auto-aim at the highest danger cluster.</p>
   </div>
 </div>
-<div class="version">v3.2</div>
+<div class="version">v3.4</div>
 
 <script>
 'use strict';
@@ -351,8 +351,8 @@ let waveCooldown = 0;
 const FIREFOX_PERF = /\bFirefox\//i.test(navigator.userAgent);
 const GLOW_SCALE = FIREFOX_PERF ? .22 : .32;
 const MAX_ENEMIES = FIREFOX_PERF ? 42 : 56;
-const MAX_PARTICLES = FIREFOX_PERF ? 170 : 260;
-const MAX_FRAGMENTS = FIREFOX_PERF ? 420 : 640;
+const MAX_PARTICLES = FIREFOX_PERF ? 140 : 210;
+const MAX_FRAGMENTS = FIREFOX_PERF ? 220 : 340;
 const MAX_DT = FIREFOX_PERF ? .07 : .04;
 const SHOT_BLAST_RADIUS = 78;
 const SHOT_BLAST_FORCE = 290;
@@ -365,7 +365,7 @@ const AIM_TURN_RATE = 9.5;
 const AIM_CLUSTER_RADIUS = 360;
 const SHOT_STEER_RATE = 5.2;
 const DEMO_EXTRA_SECONDS = 20;
-const FIRST_WAVE_SCORE = 6500;
+const FIRST_WAVE_SCORE = 12000;
 const TAU = Math.PI * 2;
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 const rand = (a, b) => a + Math.random() * (b - a);
@@ -1224,6 +1224,7 @@ function addSpark(x, y, n, hue, force = 1) {
 
 function addHitCallout(x, y) {
   if (hasActiveBanner()) return;
+  if (hasNearbyCallout(x, y - 36, 140)) return;
   if (Math.random() > .84) return;
   if (callouts.length > 7) callouts.shift();
   callouts.push({
@@ -1244,6 +1245,7 @@ function addHitCallout(x, y) {
 
 function addEnemyHitCallout(x, y, hue) {
   if (hasActiveBanner()) return;
+  if (hasNearbyCallout(x, y - 22, 150)) return;
   if (Math.random() > .012) return;
   if (callouts.length > 7) callouts.shift();
   callouts.push({
@@ -1266,11 +1268,12 @@ function addRewardCallout(x, y, type = 'shield', hue = 54) {
   if (hasActiveBanner()) return;
   const words = REWARD_CALLOUTS[type] || REWARD_CALLOUTS.shield;
   if (callouts.length > 7) callouts.shift();
-  const close = callouts.filter(o => o.life > .25 && dist2(o.x, o.y, x, y - 40) < 110 * 110).length;
+  const close = callouts.filter(o => o.life > .25 && dist2(o.x, o.y, x, y - 40) < 150 * 150).length;
+  if (close > 1) return;
   callouts.push({
     text: words[Math.floor(Math.random() * words.length)],
     x: x + rand(-14, 14),
-    y: y - 40 - close * 42 + rand(-8, 8),
+    y: y - 50 - close * 64 + rand(-8, 8),
     vx: rand(-12, 12),
     vy: rand(-72, -46),
     rot: rand(-.1, .1),
@@ -1285,6 +1288,10 @@ function addRewardCallout(x, y, type = 'shield', hue = 54) {
 
 function hasActiveBanner() {
   return callouts.some(o => o.kind === 'banner' && o.life > .2);
+}
+
+function hasNearbyCallout(x, y, radius) {
+  return callouts.some(o => o.kind !== 'banner' && o.life > .22 && dist2(o.x, o.y, x, y) < radius * radius);
 }
 
 function addBanner(text, hue = 188) {
@@ -1362,7 +1369,7 @@ function worldShapePoints(e, scale = 1) {
 function addVectorFragments(e) {
   if (fragments.length > MAX_FRAGMENTS) fragments.splice(0, fragments.length - MAX_FRAGMENTS);
   const pts = worldShapePoints(e, 1);
-  const count = e.type === 'splitter' ? 6 : e.largeSplits ? 4 : 1;
+  const count = e.type === 'splitter' ? 4 : e.largeSplits ? 3 : 1;
   for (let pass = 0; pass < count; pass++) {
     for (let i = 0; i < pts.length; i++) {
       const a = pts[i];
@@ -1370,7 +1377,7 @@ function addVectorFragments(e) {
       const mx = (a[0] + b[0]) * .5;
       const my = (a[1] + b[1]) * .5;
       const out = Math.atan2(my - e.y, mx - e.x) + rand(-.55, .55);
-      const speed = rand(90, e.type === 'splitter' || e.largeSplits ? 430 : 250);
+      const speed = rand(80, e.type === 'splitter' || e.largeSplits ? 340 : 220);
       fragments.push({
         x: mx,
         y: my,
@@ -1383,8 +1390,8 @@ function addVectorFragments(e) {
         rot: rand(-.4, .4),
         spin: rand(-7, 7),
         hue: e.hue + rand(-10, 10),
-        life: rand(.55, 1.15),
-        max: rand(.75, 1.2),
+        life: rand(.38, .82),
+        max: rand(.58, .92),
         kind: 'line'
       });
       if (i % 2 === 0) {
@@ -1398,27 +1405,27 @@ function addVectorFragments(e) {
           rot: rand(0, TAU),
           spin: rand(-8, 8),
           hue: e.hue + rand(-18, 18),
-          life: rand(.42, .9),
-          max: rand(.6, 1),
+          life: rand(.28, .68),
+          max: rand(.46, .78),
           kind: 'poly'
         });
       }
     }
   }
-  const dust = e.type === 'splitter' || e.largeSplits ? 36 : 10;
+  const dust = e.type === 'splitter' || e.largeSplits ? 22 : 7;
   for (let i = 0; i < dust; i++) {
     const a = rand(0, TAU);
     const d = rand(0, e.r * 1.2);
     fragments.push({
       x: e.x + Math.cos(a) * d,
       y: e.y + Math.sin(a) * d,
-      vx: Math.cos(a) * rand(120, 360),
-      vy: Math.sin(a) * rand(120, 360),
+      vx: Math.cos(a) * rand(90, 280),
+      vy: Math.sin(a) * rand(90, 280),
       rot: rand(0, TAU),
       spin: rand(-10, 10),
       hue: e.hue + rand(-16, 16),
-      life: rand(.35, .8),
-      max: rand(.55, .9),
+      life: rand(.25, .58),
+      max: rand(.42, .68),
       kind: 'cross'
     });
   }
@@ -1516,7 +1523,7 @@ function shouldSplitEnemy(e) {
 
 function advanceWave() {
   wave++;
-  nextWaveScore += 5500 + wave * 3500;
+  nextWaveScore += 9000 + wave * 5200;
   waveCooldown = 11;
   spawnTimer = Math.min(spawnTimer, .26);
   player.hp = Math.min(MAX_SHIELD, player.hp + 8);
@@ -1771,7 +1778,8 @@ function update(dt) {
           kills++;
           comboTimer = 2.2;
           combo = clamp(combo + 1, 1, 12);
-          score += (e.type === 'splinter' ? 35 : 100 + Math.round(e.r * 4)) * combo + wave * 15;
+          const baseScore = e.type === 'splinter' ? 8 : 28 + Math.round(e.r * 1.2);
+          score += Math.round(baseScore * (1 + combo * .16) + wave * 3);
           explode(e.x, e.y, e.hue, bigBreak);
           sfx(bigBreak ? 'boom' : 'hit');
           if (Math.random() < .08) {
@@ -1794,7 +1802,7 @@ function update(dt) {
       p.y += dy / d * 220 * dt;
     }
     if (d < player.r + p.r) {
-      score += 500 * combo;
+      score += 100 + combo * 15;
       if (p.type === 'overdrive') {
         player.power = Math.max(player.power || 0, 7.5);
         player.hp = Math.min(MAX_SHIELD, player.hp + 8);
