@@ -4,6 +4,501 @@
   "fallbackPolicy": "Use exact-day computer news when verified. If none exists, use same-week or same-month personal-computing items with confidence labels, then fall back to a wider world/business headline.",
   "issues": [
     {
+      "currentDate": "2026-06-20",
+      "historicDate": "1982-11-15",
+      "displayDate": "Week of November 15-21, 1982",
+      "edition": "Issue 016 - Weekly 1982 Computer & Culture Chronicle",
+      "visualProfile": {
+        "layout": "weekly-newsprint-front",
+        "accent": "black-red-blue",
+        "paper": "halftone-cream",
+        "strapline": "Atari renames the VCS, River Raid strafes the cartridge wall, and E.T. keeps cinemas busy"
+      },
+      "masthead": {
+        "kicker": "A weekly 1982 archive dispatch",
+        "title": "Computer Chronicle",
+        "deck": "Video games, home computers, software counters, and culture for the week of November 15-21, 1982"
+      },
+      "layoutPlan": {
+        "lead": "Atari turns the VCS nameplate into 2600 for a 5200 holiday season",
+        "secondary": [
+          "River Raid and E.T. cartridges crowd the VCS shelf",
+          "Vectrex and Atari 5200 press the console counter",
+          "Top 40 radio keeps Joe Cocker and Jennifer Warnes at No. 1"
+        ],
+        "rails": [
+          "Top 5 games",
+          "Price watch",
+          "Software shelf"
+        ]
+      },
+      "sectionChrome": {
+        "lead": {
+          "label": "Lead Story"
+        },
+        "pictureDesk": {
+          "label": "Picture Desk",
+          "title": "Scenes From the Week"
+        },
+        "computerItems": {
+          "label": "Computers & Hardware",
+          "title": "Personal Computing Desk"
+        },
+        "software": {
+          "label": "Software Top 5",
+          "title": "Programs on the Editor's Pad"
+        },
+        "storeShelves": {
+          "label": "Top Games This Week",
+          "title": "Arcade, Console & Computer Games"
+        },
+        "priceWatch": {
+          "label": "Price Watch",
+          "title": "What It Cost"
+        },
+        "bbs": {
+          "label": "Modem Desk"
+        },
+        "curiosity": {
+          "label": "Movies / TV / Culture"
+        },
+        "briefs": {
+          "label": "Magazine Rack",
+          "title": "Culture & Shelf Talk"
+        },
+        "music": {
+          "label": "Top Rock This Week",
+          "title": "Hot 100, November 20"
+        },
+        "periodAd": {
+          "label": "Retail / Ads"
+        },
+        "classifieds": {
+          "label": "Classifieds",
+          "title": "Small Ads"
+        },
+        "fallback": {
+          "label": "Editorial Screen"
+        },
+        "accuracy": {
+          "label": "Accuracy Ledger",
+          "title": "What Is Date-Specific"
+        },
+        "sources": {
+          "label": "Source Trail",
+          "title": "Research Log"
+        },
+        "market": {
+          "label": "Retail / Ads",
+          "title": "Counter Watch"
+        }
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1982-11-15.png",
+        "alt": "GPT Image 2 newspaper-style Computer Chronicle front page for the week of November 15-21, 1982",
+        "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "The week before Thanksgiving finds Atari selling both a renamed 2600 and the new 5200, while Activision-style cartridge energy and vector-console curiosity make the game counter the liveliest corner of the computer store.",
+      "morningLine": "A black Atari 2600 nameplate, Carol Shaw's River Raid, and a built-in-vector Vectrex give holiday shoppers plenty to compare before they ever reach the office-software shelf.",
+      "lead": {
+        "headline": "Atari Puts the 2600 Name on the VCS Era",
+        "summary": "In November 1982, Atari recast the long-running Video Computer System as the Atari 2600 while the 5200 SuperSystem arrived for the holiday market. The renamed four-switch console kept the older cartridge library visible just as ColecoVision, Intellivision, Vectrex, and Atari's own 5200 pressed shoppers toward newer hardware.",
+        "confidence": "Month-specific November 1982 rename and 5200 launch; exact store timing varies by account.",
+        "sourceRefs": [
+          0,
+          1,
+          2
+        ]
+      },
+      "computerItems": [
+        {
+          "label": "Cartridge Desk",
+          "headline": "River Raid Gives Activision a Fast Holiday Flyer",
+          "summary": "Carol Shaw's River Raid, released for the Atari VCS/2600 in 1982, turns the screen into a vertically scrolling river run of fuel depots, bridges, and enemy craft. By late 1982 it fit the season's best story: third-party VCS games could still feel new even as new consoles arrived.",
+          "confidence": "1982 release context; November shelf emphasis inferred from late-1982 cartridge coverage.",
+          "sourceRefs": [
+            3,
+            4
+          ]
+        },
+        {
+          "label": "Console Counter",
+          "headline": "Atari 5200 Lands Beside Its Older Sibling",
+          "summary": "The 5200 SuperSystem reached shelves in November with Atari 8-bit computer-derived hardware, analog controllers, and a higher suggested price than the older VCS line.",
+          "confidence": "Month-specific November 1982 console launch and period price summary.",
+          "sourceRefs": [
+            2,
+            5
+          ]
+        },
+        {
+          "label": "Vector Screen",
+          "headline": "Vectrex Makes the Television Optional",
+          "summary": "General Consumer Electronics' Vectrex also joined the 1982 console field with its own monochrome vector display and color overlays, a striking pitch for families whose television was already booked.",
+          "confidence": "Month-specific November 1982 North American release.",
+          "sourceRefs": [
+            2
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "VisiCalc",
+          "platform": "Apple II / IBM PC",
+          "detail": "The spreadsheet name still explains why small offices buy personal computers.",
+          "confidence": "Period-appropriate software context.",
+          "sourceRefs": [
+            6
+          ]
+        },
+        {
+          "name": "EasyWriter",
+          "platform": "IBM PC",
+          "detail": "IBM PC buyers see word processing as a practical home-office reason to add disks and a printer.",
+          "confidence": "IBM PC launch-era software context.",
+          "sourceRefs": [
+            6
+          ]
+        },
+        {
+          "name": "Microsoft Flight Simulator",
+          "platform": "IBM PC",
+          "detail": "A 1982 PC title that doubles as a compatibility test for the growing IBM-compatible market.",
+          "confidence": "1982 release context.",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "name": "WordStar",
+          "platform": "CP/M and microcomputers",
+          "detail": "A familiar office word processor name while CP/M and IBM PC ecosystems overlap.",
+          "confidence": "Period-appropriate software context.",
+          "sourceRefs": [
+            8
+          ]
+        },
+        {
+          "name": "Zork",
+          "platform": "Personal computers",
+          "detail": "Infocom adventures remain a disk-drive staple for text-game players.",
+          "confidence": "Period-appropriate software context.",
+          "sourceRefs": [
+            8
+          ]
+        }
+      ],
+      "storeShelves": [
+        {
+          "rank": 1,
+          "title": "River Raid",
+          "platform": "Atari VCS / 2600",
+          "note": "Activision's fast scrolling shooter gives the older Atari line a fresh showpiece.",
+          "sourceRefs": [
+            3,
+            4
+          ]
+        },
+        {
+          "rank": 2,
+          "title": "Pole Position",
+          "platform": "Arcade",
+          "note": "Namco/Atari racing cabinets keep pseudo-3D driving prominent in arcades.",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "rank": 3,
+          "title": "Q*bert",
+          "platform": "Arcade",
+          "note": "Gottlieb's isometric hopper remains a fresh 1982 arcade draw.",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "rank": 4,
+          "title": "Donkey Kong",
+          "platform": "ColecoVision / Arcade",
+          "note": "ColecoVision owners prize the packed-in arcade conversion.",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "rank": 5,
+          "title": "E.T. The Extra-Terrestrial",
+          "platform": "Atari VCS / 2600",
+          "note": "Atari's movie tie-in was in late-1982 cartridge discussion before its troubled reputation hardened.",
+          "sourceRefs": [
+            4
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "Atari 5200 suggested retail",
+          "price": "about $349.95",
+          "note": "Reported introductory price for the November 1982 SuperSystem.",
+          "sourceRefs": [
+            5
+          ]
+        },
+        {
+          "item": "Vectrex launch price",
+          "price": "about $199",
+          "note": "Self-contained vector console with built-in screen.",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "item": "IBM PC base configuration",
+          "price": "$1,565",
+          "note": "IBM launch-era base price before display, drives, and printer.",
+          "sourceRefs": [
+            6
+          ]
+        },
+        {
+          "item": "Video game cartridges",
+          "price": "about $25-$40",
+          "note": "Late-1982 holiday retail range cited in period toy-market coverage.",
+          "sourceRefs": [
+            7
+          ]
+        }
+      ],
+      "market": {
+        "headline": "Game Hardware Splits the Holiday Pitch",
+        "summary": "Retailers can sell continuity and novelty at once: the renamed Atari 2600 keeps the huge VCS cartridge library alive, the 5200 promises a premium Atari step-up, and Vectrex brings a screen of its own.",
+        "confidence": "Synthesized from November 1982 console launches and period retail reporting.",
+        "sourceRefs": [
+          0,
+          2,
+          5,
+          7
+        ]
+      },
+      "bbsNote": {
+        "headline": "Modem Note",
+        "summary": "Local bulletin-board culture remains a hobbyist lane, with 300-baud callers trading tips while mass-market attention sits on cartridges and packaged software.",
+        "confidence": "Period-appropriate home-computing context.",
+        "sourceRefs": [
+          8
+        ]
+      },
+      "curiosity": {
+        "headline": "Cinema Lobby",
+        "summary": "E.T. was still a daily box-office force on November 19, even as the same name appeared on Atari cartridge shelves for the holiday rush.",
+        "confidence": "Date-specific daily box-office listing and late-1982 cartridge context.",
+        "sourceRefs": [
+          4,
+          10
+        ]
+      },
+      "briefs": [
+        {
+          "headline": "Top 40 Holds Its Movie Ballad",
+          "summary": "Joe Cocker and Jennifer Warnes kept \"Up Where We Belong\" at No. 1 on the Hot 100 for the week ending November 20, 1982.",
+          "confidence": "Week-specific Top 40 chart.",
+          "sourceRefs": [
+            9
+          ]
+        },
+        {
+          "headline": "E.T. Leads the Friday Box Office",
+          "summary": "Box Office Mojo lists E.T. the Extra-Terrestrial at No. 1 for the domestic daily chart dated November 19, 1982.",
+          "confidence": "Date-specific box-office chart.",
+          "sourceRefs": [
+            10
+          ]
+        },
+        {
+          "headline": "Electronic Fun Marks a New Rack",
+          "summary": "Electronic Fun with Computers and Games had just debuted with its November 1982 first issue, matching the sense that games and home computers could support a dedicated newsstand.",
+          "confidence": "Month-specific magazine issue.",
+          "sourceRefs": [
+            11
+          ]
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "Up Where We Belong",
+          "artist": "Joe Cocker and Jennifer Warnes"
+        },
+        {
+          "rank": 2,
+          "title": "Truly",
+          "artist": "Lionel Richie"
+        },
+        {
+          "rank": 3,
+          "title": "Heart Attack",
+          "artist": "Olivia Newton-John"
+        },
+        {
+          "rank": 4,
+          "title": "Gloria",
+          "artist": "Laura Branigan"
+        },
+        {
+          "rank": 5,
+          "title": "Heartlight",
+          "artist": "Neil Diamond"
+        }
+      ],
+      "movieChart": [
+        {
+          "rank": 1,
+          "title": "E.T. the Extra-Terrestrial"
+        },
+        {
+          "rank": 2,
+          "title": "First Blood"
+        },
+        {
+          "rank": 3,
+          "title": "Creepshow"
+        },
+        {
+          "rank": 4,
+          "title": "An Officer and a Gentleman"
+        },
+        {
+          "rank": 5,
+          "title": "The Missionary"
+        }
+      ],
+      "periodAd": {
+        "headline": "Two Atari Choices Under One Roof",
+        "summary": "Dealer copy this week pairs the renamed 2600's cartridge wall with the premium 5200 SuperSystem: keep the familiar library, or step up to the new Atari box.",
+        "confidence": "Ad-style copy derived from November 1982 Atari hardware context.",
+        "sourceRefs": [
+          0,
+          5
+        ]
+      },
+      "classifieds": [
+        {
+          "headline": "Wanted: 300-baud modem tips",
+          "copy": "Local users seek reliable evening dial-up numbers and terminal settings."
+        },
+        {
+          "headline": "For sale: Apple II software lot",
+          "copy": "Spreadsheet, word processing, and adventure disks; printer cable included."
+        }
+      ],
+      "worldFallback": {
+        "headline": "Editors Hold the Front to Games",
+        "summary": "No routine world or sports item displaces this week's console and cartridge story.",
+        "confidence": "Editorial scope note."
+      },
+      "accuracyLedger": {
+        "items": [
+          {
+            "claim": "Atari renamed the VCS as the Atari 2600 in November 1982 alongside the 5200 launch.",
+            "status": "Verified month-specific"
+          },
+          {
+            "claim": "Atari 5200 reached shelves in November 1982 with a reported $349.95 suggested price.",
+            "status": "Verified month-specific"
+          },
+          {
+            "claim": "River Raid was a 1982 Carol Shaw / Activision Atari VCS title.",
+            "status": "Verified year-specific; shelf emphasis is late-1982 context"
+          },
+          {
+            "claim": "Top 5 singles for November 20, 1982 are listed from dated Top 40 sources.",
+            "status": "Verified week-specific"
+          },
+          {
+            "claim": "E.T. led the domestic daily box office on November 19, 1982.",
+            "status": "Verified date-specific"
+          }
+        ]
+      },
+      "sources": [
+        {
+          "name": "Atari 2600 historical summary",
+          "url": "https://en.wikipedia.org/wiki/Atari_2600"
+        },
+        {
+          "name": "1982 in video games",
+          "url": "https://en.wikipedia.org/wiki/1982_in_video_games"
+        },
+        {
+          "name": "Vectrex November 1982 release context",
+          "url": "https://en.wikipedia.org/wiki/Vectrex"
+        },
+        {
+          "name": "Strong Museum - Carol Shaw Papers / River Raid",
+          "url": "https://museumofplay.org/app/uploads/2021/09/Finding-Aid-to-the-Carol-Shaw-papers_101217.pdf"
+        },
+        {
+          "name": "Atari Archive - Atari VCS game release dates",
+          "url": "https://www.atariarchive.org/atari-vcs-game-release-dates/"
+        },
+        {
+          "name": "The Dot Eaters - Atari 5200 Supersystem",
+          "url": "https://thedoteaters.com/?bitstory=console%2F5200-supersystem"
+        },
+        {
+          "name": "IBM History - The IBM PC",
+          "url": "https://www.ibm.com/history/personal-computer"
+        },
+        {
+          "name": "The New Yorker - Under the Children's Christmas Tree",
+          "url": "https://www.newyorker.com/magazine/1982/12/13/under-the-childrens-christmas-tree"
+        },
+        {
+          "name": "Period software context from Chronicle archive research",
+          "url": "https://jez237.com/computer-chronicle/"
+        },
+        {
+          "name": "Top40Weekly - US Top 40 Singles for November 20, 1982",
+          "url": "https://top40weekly.com/2013/11/20/us-top-40-singles-for-the-week-ending-november-20-1982/"
+        },
+        {
+          "name": "Box Office Mojo - Domestic Box Office for Nov 19, 1982",
+          "url": "https://www.boxofficemojo.com/date/1982-11-19/"
+        },
+        {
+          "name": "Internet Archive - Electronic Fun with Computers and Games, November 1982",
+          "url": "https://archive.org/details/electronic-fun-with-computers-and-games-volume-1-number-1-november-1982"
+        }
+      ],
+      "pictureDesk": [
+        {
+          "src": "media/computer-chronicle-gpt-image-2-week-1982-11-15.png",
+          "alt": "GPT Image 2 newspaper-style Computer Chronicle front page for the week of November 15-21, 1982",
+          "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+          "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+        }
+      ],
+      "frontPageStories": [
+        {
+          "headline": "Atari Puts the 2600 Name on the VCS Era",
+          "summary": "The familiar VCS line gets its 2600 name as Atari sells the 5200 SuperSystem for the holiday season."
+        },
+        {
+          "headline": "River Raid Gives Activision a Fast Holiday Flyer",
+          "summary": "Carol Shaw's scrolling shooter keeps the older cartridge wall feeling alive."
+        },
+        {
+          "headline": "E.T. Rules Friday Matinees",
+          "summary": "The film remains a box-office anchor while its Atari cartridge reaches shoppers."
+        }
+      ],
+      "musicChartSourceRefs": [
+        9
+      ]
+    },
+    {
       "currentDate": "2026-06-19",
       "historicDate": "1982-11-08",
       "displayDate": "Week of November 8-14, 1982",
