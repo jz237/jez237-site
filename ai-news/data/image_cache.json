@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-20T20:00:01.826299+00:00",
+  "updatedAt": "2026-06-20T21:00:01.539526+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -11020,6 +11020,10 @@
     "https://techcrunch.com/2026/06/20/in-the-weights-is-your-new-ai-centric-vanity-search": {
       "image": "https://techcrunch.com/wp-content/uploads/2021/10/GettyImages-1278815846.jpg?resize=1200,800",
       "checkedAt": "2026-06-20T20:00:01.826299+00:00"
+    },
+    "https://techcrunch.com/2026/06/20/signals-meredith-whittaker-wants-you-to-remember-that-ai-chatbots-are-not-your-friends": {
+      "image": "https://techcrunch.com/wp-content/uploads/2024/03/meredith-whittaker-1.jpg?resize=1200,800",
+      "checkedAt": "2026-06-20T21:00:01.539526+00:00"
     }
   }
 }
