@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-20T22:00:01.853184+00:00",
+  "updatedAt": "2026-06-20T23:00:01.404378+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -11024,6 +11024,14 @@
     "https://techcrunch.com/2026/06/20/signals-meredith-whittaker-wants-you-to-remember-that-ai-chatbots-are-not-your-friends": {
       "image": "https://techcrunch.com/wp-content/uploads/2024/03/meredith-whittaker-1.jpg?resize=1200,800",
       "checkedAt": "2026-06-20T20:39:04.013104+00:00"
+    },
+    "https://github.com/BerriAI/litellm/releases/tag/v1.88.4": {
+      "image": "https://opengraph.githubassets.com/5f23f7293f884192f074e8db6b590582f4b79be99286882498276d5a18b0b63c/BerriAI/litellm/releases/tag/v1.88.4",
+      "checkedAt": "2026-06-20T23:00:01.404378+00:00"
+    },
+    "https://github.com/BerriAI/litellm/releases/tag/v1.87.4": {
+      "image": "https://opengraph.githubassets.com/ac6d1523fb4fcefcb174470c25f197c9f7fd25eb6251ff275006e3f0a16e53d8/BerriAI/litellm/releases/tag/v1.87.4",
+      "checkedAt": "2026-06-20T23:00:01.404378+00:00"
     }
   }
 }
