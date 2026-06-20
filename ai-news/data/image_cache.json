@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-20T18:00:01.680546+00:00",
+  "updatedAt": "2026-06-20T19:00:01.239874+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -11012,6 +11012,10 @@
     "https://techcrunch.com/2026/06/20/nobel-laureate-john-jumper-is-leaving-deepmind-for-rival-anthropic": {
       "image": "https://techcrunch.com/wp-content/uploads/2024/10/GettyImages-2148577076-e1728469833661.jpg?resize=1200,676",
       "checkedAt": "2026-06-20T16:45:38.847242+00:00"
+    },
+    "https://www.theverge.com/ai-artificial-intelligence/953183/the-atlantic-searchable-database-music-ai-training-data": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/01/STK467_AI_MUSIC_CVirginia_B.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-06-20T19:00:01.239874+00:00"
     }
   }
 }
