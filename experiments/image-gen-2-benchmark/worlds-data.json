@@ -970,5 +970,41 @@
       "continuity": "Preserves the suspended Vesperglass reef-plates, cobalt gas giant below, cyan/violet auroras, copper-black coils, pressure-shell transit, pulse-lantern wayfinding, prism vegetation, and ribbon-bodied inhabitants.",
       "entryDescription": "A lived-in commuter scene at Prismfall Concourse as ribbon-bodied inhabitants board pressure-shell ferries through frost-edged airlock gates."
     }
+  },
+  {
+    "id": "2026-06-19-manual-alien-world-extra-vesperglass-array-vesperglass-fabr",
+    "title": "Vesperglass Array: Vesperglass Fabrication Bay",
+    "tests": "Manual extra alien-world run requested by Jez; verifies GPT Image 2 can extend the Vesperglass Array world catalog with a realistic inhabited fabrication/work scene while preserving weekly world continuity.",
+    "prompt": "Create a detailed realistic cinematic daily-life view from Vesperglass Array: show ribbon-bodied electroceptive craft workers growing and polishing curved vesperglass reef panels in a clean industrial bay above a cobalt gas giant. Preserve Vesperglass Array continuity: transparent mineral reef-plates, ceramic-white pressure ribs, copper-black induction coils, pulse-lit non-human communication, cyan/violet aurora currents, and practical low-gravity daily work routines. Avoid human astronaut society, generic franchise sci-fi, mushroom/fairytale motifs, readable text, and logos.",
+    "image": "images/2026-06-19-manual-alien-world-extra-vesperglass-array-vesperglass-fabr.png",
+    "date": "2026-06-19",
+    "batch": "Daily Prompt",
+    "slot": "manual-alien-world-extra",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "world": {
+      "name": "Vesperglass Array",
+      "description": "A hard-sci-fi alien megahabitat where ribbon-bodied electroceptive inhabitants live across suspended glass reefs inside the magnetosphere of a blue-white gas giant.",
+      "continuity": "Preserves the Vesperglass Array palette, suspended reef megastructure, cobalt gas giant, aurora weather, vesperglass materials, copper-black induction coils, and ribbon-bodied electroceptive inhabitants.",
+      "entryDescription": "Craft workers grow and polish curved vesperglass reef panels in an amber-lit industrial bay above the gas giant."
+    }
+  },
+  {
+    "id": "2026-06-19-manual-alien-world-extra-vesperglass-array-magnetic-weather",
+    "title": "Vesperglass Array: Magnetic Weather Shelter",
+    "tests": "Manual extra alien-world run requested by Jez; verifies GPT Image 2 can extend the Vesperglass Array world catalog with a realistic communal weather-shelter scene while preserving weekly world continuity.",
+    "prompt": "Create a detailed realistic cinematic daily-life view from Vesperglass Array: show everyday ribbon-bodied residents sheltering in a reinforced amber-lit concourse while violet and cyan magnetic weather surges ripple outside transparent vesperglass membranes. Preserve Vesperglass Array continuity: ceramic-white pressure ribs, copper-black induction coils, pulse-lanterns, living circuit textiles, non-human electroceptive inhabitants, cobalt storms below, and ion-kite rigs in safe cradles. Avoid human astronauts, generic neon cyberpunk, franchise cues, mushroom/fairytale motifs, horror, readable text, and logos.",
+    "image": "images/2026-06-19-manual-alien-world-extra-vesperglass-array-magnetic-weather.png",
+    "date": "2026-06-19",
+    "batch": "Daily Prompt",
+    "slot": "manual-alien-world-extra",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "world": {
+      "name": "Vesperglass Array",
+      "description": "A hard-sci-fi alien megahabitat where ribbon-bodied electroceptive inhabitants live across suspended glass reefs inside the magnetosphere of a blue-white gas giant.",
+      "continuity": "Preserves the Vesperglass Array palette, suspended reef megastructure, cobalt gas giant, aurora weather, vesperglass materials, copper-black induction coils, and ribbon-bodied electroceptive inhabitants.",
+      "entryDescription": "Residents wait out a magnetic weather surge inside an amber-lit reinforced concourse, sharing supplies and shielding young inhabitants."
+    }
   }
 ]
