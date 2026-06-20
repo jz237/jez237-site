@@ -180,6 +180,13 @@
     letter-spacing: .06em;
   }
   .score-row span:first-child { color: #ffef75; }
+  .score-row small {
+    display: block;
+    margin-top: 2px;
+    color: rgba(188, 248, 255, .68);
+    font-size: 10px;
+    letter-spacing: .04em;
+  }
   .slot-list {
     display: grid;
     gap: 7px;
@@ -279,7 +286,7 @@
     <p class="fine" id="overlayFine">Drag anywhere to fly. Keyboard: WASD or arrows to thrust, P to pause. Shots auto-aim at the highest danger cluster.</p>
   </div>
 </div>
-<div class="version">v3.5</div>
+<div class="version">v3.6</div>
 
 <script>
 'use strict';
@@ -524,6 +531,17 @@ function saveLocalScore(name, value) {
   return rows;
 }
 
+function normalizeScoreRow(row, global = false) {
+  const extra = row && typeof row.extra === 'object' ? row.extra : {};
+  return {
+    name: cleanInitials(row?.initials || row?.name || '???'),
+    score: Math.max(0, Number(row?.score) || 0),
+    wave: Math.max(0, Number(row?.wave ?? extra.wave) || 0),
+    kills: Math.max(0, Number(row?.kills ?? extra.kills) || 0),
+    global
+  };
+}
+
 async function fetchGlobalScores(force = false) {
   if (globalScoreCache && !force) return globalScoreCache;
   try {
@@ -534,11 +552,8 @@ async function fetchGlobalScores(force = false) {
     const data = await res.json();
     const rows = Array.isArray(data) ? data : (data.scores || []);
     globalScoreCache = rows
-      .map(row => ({
-        name: cleanInitials(row.initials || row.name || '???'),
-        score: Math.max(0, Number(row.score) || 0),
-        global: true
-      }))
+      .map(row => normalizeScoreRow(row, true))
+      .filter(row => !(row.name === 'TST' && row.score <= 1 && row.wave === 0 && row.kills === 0))
       .sort((a, b) => b.score - a.score)
       .slice(0, 10);
     return globalScoreCache;
@@ -574,20 +589,23 @@ function scoreRowsHtml(rows, source) {
   if (!rows.length) {
     return `<div class="score-row"><span>--</span><b>No ${source} scores yet</b><em>solo</em></div>`;
   }
-  return rows.slice(0, 10).map((row, index) => (
-    `<div class="score-row"><span>${String(index + 1).padStart(2, '0')}</span><b>${escapeHtml(row.name || 'YOU')}</b><em>${Math.floor(row.score || 0)}</em></div>`
-  )).join('');
+  return rows.slice(0, 10).map((raw, index) => {
+    const row = normalizeScoreRow(raw, source === 'global');
+    const meta = row.wave || row.kills ? `<small>W${String(row.wave || 1).padStart(2, '0')} · ${row.kills} KO</small>` : '<small>RUN DATA PENDING</small>';
+    return `<div class="score-row"><span>${String(index + 1).padStart(2, '0')}</span><b>${escapeHtml(row.name || 'YOU')}${meta}</b><em>${Math.floor(row.score || 0)}</em></div>`;
+  }).join('');
 }
 
-function renderScoreBoard(rows = null, source = 'local') {
+function renderScoreBoard(rows = null, source = 'local', append = false) {
   const list = rows || localScores();
-  scoreBoard.innerHTML = `<div class="score-row"><span>${source === 'global' ? 'GL' : 'LC'}</span><b>${source.toUpperCase()} BOARD</b><em>${list.length}/10</em></div>` + scoreRowsHtml(list, source);
+  const html = `<div class="score-row"><span>${source === 'global' ? 'GL' : 'LC'}</span><b>${source.toUpperCase()} BOARD</b><em>${list.length}/10</em></div>` + scoreRowsHtml(list, source);
+  scoreBoard.innerHTML = append ? scoreBoard.innerHTML + html : html;
 }
 
 async function refreshScoreBoard() {
   renderScoreBoard(localScores(), 'local');
   const rows = await fetchGlobalScores(true);
-  if (rows) renderScoreBoard(rows, 'global');
+  if (rows) renderScoreBoard(rows, 'global', true);
   else scoreBoard.innerHTML += '<div class="score-row"><span>!</span><b>Global board unavailable</b><em>local</em></div>';
 }
 
