@@ -1,0 +1,19 @@
+[
+  {
+    "id": "2026-06-21-manual-0837-basil-adoption-notice",
+    "title": "Basil Adoption Notice",
+    "tests": "Subject-as-artifact sample: a living basil plant's identity rendered as an adoption notice, plant passport, care card, leaf sample, placement map, and botanical keepsake packet.",
+    "prompt": "Use case: product-mockup\nAsset type: GPT Image 2 subject-as-artifact archive image\nPrimary request: Create a polished 1024x1536 vertical image titled conceptually \"Basil Adoption Notice\", where a living basil plant's identity becomes a handled adoption packet and botanical keepsake.\n\nScene/backdrop: an overhead archival photograph on a small kitchen table in soft morning light. The subject is not just a plant portrait; it is represented through a physical packet of artifacts: an adoption notice, tiny passport booklet, pressed leaf sleeve, pot-placement map, watering stamp card, handwritten care tag, seed envelope, and a small instant photo of the basil in its pot. Include a few real basil leaves and a bit of soil dust around the packet.\n\nSubject identity: make the basil feel like a specific little character without making it cartoonish. Its identity should come through the records: a name line, growth habit notes, favorite window, leaf scent swatch, watering history stamps, pruning marks, and \"kitchen placement\" diagram. Use sparse large readable labels only: \"BASIL ADOPTION NOTICE\", \"NAME\", \"SUN\", \"WATER\", \"WINDOW\", \"LEAF SAMPLE\", \"CARE CARD\", \"ADOPTED\". Other small marks may be believable pseudo-notation.\n\nComposition/framing: vertical 9:16, straight-down with real paper thickness, creases, translucent sleeve glare, pressed leaf texture, stamped ink, paper fibers, folded corners, green pencil marks, twine, and a small brass clip. The adoption notice should be the main artifact, with the passport and care card partly tucked beneath it. Make it immediately read as subject identity becoming a record/keepsake, not a generic plant care poster.\n\nLighting/mood: warm morning kitchen light, fresh green basil, cream paper, soft terra-cotta accents, botanical ink, gentle shadows, tactile realism, hopeful and slightly funny but not cute-cartoon.\n\nConstraints: no generic infographic poster, no measuring device, no dashboard, no app UI, no real logos, no brand names, no watermark, no signature, no people, no copyrighted characters, no dancing or performance imagery, no dense tiny text. The plant's identity must visibly become the artifact.",
+    "image": "images/2026-06-21-manual-0837-basil-adoption-notice.jpg",
+    "date": "2026-06-21",
+    "batch": "Subject as Artifact",
+    "slot": "manual-0837",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1536",
+    "subjectArtifact": {
+      "kind": "Plant",
+      "description": "A specific basil plant represented through an adoption notice, plant passport, care card, pressed leaf sample, placement map, and small keepsake photo.",
+      "continuity": "Subject as Artifact images turn a human, animal, plant, or hybrid subject's identity into a handled record, specimen, keepsake, display, or archive object."
+    }
+  }
+]
