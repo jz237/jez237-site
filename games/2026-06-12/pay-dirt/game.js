@@ -74,6 +74,9 @@ let fuses = [];          // [{c,r,t}] TNT crates about to blow
 let comboN = 0, comboT = 0;
 let discoveryCount = 0, discoveryTotal = 0, discoveryPulse = 0, oilLightT = 0;
 let softlockCheckT = 0, softlockT = 0, softlockReason = '';
+let special = null;
+let specialNuggets = [];
+let specialRocks = [];
 
 function key(c, r){ return c + ',' + r; }
 
@@ -145,7 +148,7 @@ function isBar(c, r){ return tileAt(c, r) === '-'; }
 
 /* ================= state machine + overlays ================= */
 let state = 'title';   // title | playing | paused | over | how | levels | scores | win
-let score = 0, lives = 3, levelIndex = 0, mode = 'campaign'; // campaign | daily
+let score = 0, lives = 3, levelIndex = 0, mode = 'campaign'; // campaign | daily | special
 let gameTime = 0, shake = 0, hitStop = 0, flash = 0, deathFlash = 0;
 let banner = null;          // {text, sub, life}
 let hint = null;            // {life} first-level control hint
@@ -223,6 +226,68 @@ function drawPickupTrails(){
   ctx.globalCompositeOperation = 'source-over';
   ctx.restore();
 }
+
+function isSpecialMode(){ return mode === 'special'; }
+
+function resetSpecialState(){
+  special = null;
+  specialNuggets = [];
+  specialRocks = [];
+}
+
+function spawnSpecialNuggets(wx, wy, n, value){
+  if (!isSpecialMode()) return;
+  for (let i = 0; i < n; i++){
+    const a = -Math.PI * .82 + (rnd() - .5) * 2.2;
+    const sp = 2.6 + rnd() * 5.2;
+    specialNuggets.push({
+      x: wx + (rnd() - .5) * .3,
+      y: wy + (rnd() - .5) * .25,
+      vx: Math.cos(a) * sp,
+      vy: Math.sin(a) * sp - rnd() * 1.2,
+      value: value || 35,
+      life: 10 + rnd() * 6,
+      spin: rnd() * 6.28,
+      r: .16 + rnd() * .08,
+    });
+  }
+}
+
+function triggerCaveIn(reason){
+  if (!special || special.caveT != null || special.escapeT > 0) return;
+  special.caveT = 46;
+  special.rockT = .35;
+  banner = {
+    text: 'CAVE-IN!',
+    sub: reason || 'THE CLAIM IS COMING DOWN',
+    stats: [
+      {label: 'ESCAPE', value: 'CART'},
+      {label: 'TIMER', value: '46'},
+      {label: 'DRILL', value: 'SPACE'},
+    ],
+    life: 2.8,
+  };
+  flash = Math.max(flash, .4);
+  shake = Math.max(shake, .75);
+  AUDIO.sfx('warn');
+}
+
+function spawnSpecialRock(){
+  if (!special) return;
+  const c = 1 + ((rnd() * (COLS - 2)) | 0);
+  specialRocks.push({
+    x: c + .5 + (rnd() - .5) * .35,
+    y: -0.6,
+    vy: 4.5 + rnd() * 3.2,
+    size: .22 + rnd() * .22,
+    rot: rnd() * Math.PI,
+    spin: (rnd() - .5) * 6,
+    life: 5,
+  });
+  spawnParticles(c + .5, .25, 4, {color: ['#4b3426', '#8a6038', '#d3a15d'], spd: 1.4, life: .42, size: 2.4, grav: 10});
+}
+
+function specialCartReady(){ return !!(special && special.cartReady); }
 
 const $ = id => document.getElementById(id);
 const OVERLAYS = ['ovTitle', 'ovHow', 'ovLevels', 'ovScores', 'ovPause', 'ovStuck', 'ovOver'];
@@ -474,6 +539,7 @@ function onPlayerLand(a){
 /* ================= dig + holes ================= */
 const DIG_TIME = 0.3, HOLE_LIFE = 5.4, HOLE_WARN = 1.1;
 let prevDigL = false, prevDigR = false;
+let prevDash = false;
 let levelTime = 0;
 let currentRows = null;   // source rows of the live level (for clean restarts)
 
@@ -551,6 +617,8 @@ function boom(c, r){
   }
   spawnParticles(c + .5, r + .5, 26, {color: ['#ff5c33', '#ff9d2e', '#ffd23f', '#fff3b0'], spd: 7, life: .6, size: 5, grav: 8, glow: true});
   spawnParticles(c + .5, r + .5, 14, {color: ['#4a4452', '#2c2937'], spd: 4, life: .9, size: 4, grav: 6});
+  spawnSpecialNuggets(c + .5, r + .35, 5 + ((rnd() * 4) | 0), 40);
+  if (isSpecialMode()) triggerCaveIn('POWDER VEIN AWAKENED');
   flash = Math.max(flash, .5);
   hitStop = Math.max(hitStop, 0.06);
   AUDIO.sfx('boom');
@@ -565,6 +633,72 @@ function boom(c, r){
     }
   }
   shake = Math.max(shake, .8);
+}
+
+function breakSpecialCell(c, r, forceBoom){
+  const t = tileAt(c, r);
+  if (t === '#' || t === 'C' || (t === 'X' && isBottomDiggable(c, r))){
+    blasted.add(key(c, r));
+    holes.delete(key(c, r));
+    spawnParticles(c + .5, r + .48, 12, {color: ['#d3a15d', '#8a6038', '#4b2b18'], spd: 5.2, life: .58, size: 3.8, grav: 24});
+    spawnSpecialNuggets(c + .5, r + .22, 2 + ((rnd() * 3) | 0), 25);
+    return true;
+  }
+  if (t === 'B' && !isBlasted(c, r)){
+    if (forceBoom || !fuses.some(f => f.c === c && f.r === r)) fuses.push({c, r, t: forceBoom ? 0.05 : 0.18});
+    return true;
+  }
+  return false;
+}
+
+function startDrillDash(inp){
+  if (!isSpecialMode() || !player || player.state === 'dead' || player.digT > 0) return false;
+  if ((player.drillCd || 0) > 0 || player.drillT > 0) return false;
+  const dir = inp.left && !inp.right ? -1 : inp.right && !inp.left ? 1 : (player.dir || 1);
+  player.drillT = .24;
+  player.drillDir = dir;
+  player.drillCd = .72;
+  player.invuln = Math.max(player.invuln || 0, .18);
+  player.state = 'run';
+  player.dir = dir;
+  shake = Math.max(shake, .25);
+  flash = Math.max(flash, .08);
+  spawnParticles(player.x - dir * .28, player.y + .25, 16, {color: ['#ffd23f', '#ff9d2e', '#3fd2c7', '#fff3b0'], spd: 4.4, ang: dir > 0 ? Math.PI : 0, spread: 1.2, life: .45, size: 3, grav: 5, glow: true});
+  AUDIO.sfx('power');
+  return true;
+}
+
+function updateDrillDash(dt){
+  if (!player || !player.drillT) return false;
+  const dir = player.drillDir || player.dir || 1;
+  player.drillT = Math.max(0, player.drillT - dt);
+  const r = Math.floor(player.y);
+  const front = Math.floor(player.x + dir * .68);
+  breakSpecialCell(front, r, false);
+  breakSpecialCell(front, r + 1, false);
+  for (const gd of golds){
+    if (!gd.taken && !gd.held && Math.abs((gd.c + .5) - player.x) < 1.05 && Math.abs((gd.r + .5) - player.y) < .95)
+      collectGold(gd);
+  }
+  for (const g of guards){
+    if (g.state !== 'dead' && Math.abs(g.x - player.x) < 1.1 && Math.abs(g.y - player.y) < .85){
+      if (g.gold){ g.gold.held = null; g.gold.c = Math.floor(g.x); g.gold.r = Math.max(0, Math.floor(g.y) - 1); g.gold = null; }
+      g.state = 'dead'; g.deadT = 0; addScore(250);
+      popup(g.x, g.y - .5, 'DRILLED 250', '#ff9d2e');
+      spawnParticles(g.x, g.y, 18, {color: ['#ff405a', '#ffd23f', '#fff'], spd: 5.6, life: .62, size: 3.8, grav: 8, glow: true});
+    }
+  }
+  tryMoveX(player, dir * 13.5 * dt);
+  player.y += (r + .5 - player.y) * Math.min(1, dt * 18);
+  player.state = 'run';
+  player.anim += dt * 2.4;
+  if (rnd() < .85)
+    spawnParticles(player.x - dir * .55, player.y + .34, 3, {color: ['#ffd23f', '#ff9d2e', '#3fd2c7'], spd: 2.8, ang: dir > 0 ? Math.PI : 0, spread: 1, life: .28, size: 2.5, grav: 4, glow: true});
+  if (player.drillT <= 0){
+    player.drillT = 0;
+    shake = Math.max(shake, .18);
+  }
+  return true;
 }
 
 function updateFuses(dt){
@@ -583,6 +717,170 @@ function updateCrumbles(dt){
     cr.t += dt;
     if (cr.t >= 0.55) cr.gone = true;
   }
+}
+
+function updateSpecialNuggets(dt){
+  for (let i = specialNuggets.length - 1; i >= 0; i--){
+    const n = specialNuggets[i];
+    n.life -= dt;
+    if (n.life <= 0){ specialNuggets.splice(i, 1); continue; }
+    n.vy += 8.8 * dt;
+    n.x += n.vx * dt;
+    n.y += n.vy * dt;
+    n.spin += dt * 8;
+    if (n.x < .55){ n.x = .55; n.vx = Math.abs(n.vx) * .45; }
+    if (n.x > COLS - .55){ n.x = COLS - .55; n.vx = -Math.abs(n.vx) * .45; }
+    const c = Math.floor(n.x), r = Math.floor(n.y);
+    if (n.vy > 0 && isSupportTile(c, r + 1) && n.y > r + .34){
+      n.y = r + .34;
+      n.vy *= -.34;
+      n.vx *= .82;
+      if (Math.abs(n.vy) < .8) n.vy = 0;
+    }
+    if (player && player.state !== 'dead' && Math.hypot(n.x - player.x, n.y - player.y) < .72){
+      addScore(n.value);
+      comboN++; comboT = 2.5;
+      popup(n.x, n.y - .25, '+' + n.value, '#ffd23f');
+      pickupTrail(n.x, n.y, '#ffd23f');
+      spawnParticles(n.x, n.y, 7, {color: ['#ffd23f', '#fff3b0', '#ff9d2e'], spd: 2.8, life: .42, size: 2.5, grav: -1, glow: true});
+      AUDIO.sfx(comboN > 2 ? 'goldhi' : 'gold');
+      specialNuggets.splice(i, 1);
+    }
+  }
+}
+
+function updateSpecialRocks(dt){
+  for (let i = specialRocks.length - 1; i >= 0; i--){
+    const rock = specialRocks[i];
+    rock.life -= dt;
+    rock.vy += 7.8 * dt;
+    rock.y += rock.vy * dt;
+    rock.rot += rock.spin * dt;
+    const c = Math.floor(rock.x), r = Math.floor(rock.y);
+    if (player && player.state !== 'dead' && Math.abs(rock.x - player.x) < .5 + rock.size && Math.abs(rock.y - player.y) < .55 + rock.size)
+      killPlayer('crush');
+    if (r >= 0 && r < ROWS && (isSupportTile(c, r) || isSupportTile(c, r + 1) || rock.y > ROWS - .4)){
+      shake = Math.max(shake, .22);
+      spawnParticles(rock.x, Math.min(ROWS - .35, rock.y), 13, {color: ['#4b3426', '#8a6038', '#d3a15d'], spd: 4.2, life: .55, size: 3.5, grav: 22});
+      if (rnd() < .65) breakSpecialCell(c, r, false);
+      specialRocks.splice(i, 1);
+      continue;
+    }
+    if (rock.life <= 0 || rock.y > ROWS + 2) specialRocks.splice(i, 1);
+  }
+}
+
+function updateSpecialSetpieces(dt){
+  if (!special || !player || player.state === 'dead') return;
+  const pc = Math.floor(player.x), pr = Math.floor(player.y);
+  for (const plate of special.plates || []){
+    if (!plate.used && pc === plate.c && pr === plate.r){
+      plate.used = true;
+      triggerCaveIn('PRESSURE PLATE TRIPPED');
+      popup(plate.c + .5, plate.r - .15, 'PLATE!', '#ff9d2e');
+      spawnParticles(plate.c + .5, plate.r + .4, 20, {color: ['#ff9d2e', '#ffd23f', '#4b3426'], spd: 5, life: .68, size: 3.5, grav: 16, glow: true});
+      for (const [dc, dr] of [[-1, -6], [7, -6], [9, -2]]){
+        const c = plate.c + dc, r = plate.r + dr;
+        if (tileAt(c, r) === 'B' && !fuses.some(f => f.c === c && f.r === r)) fuses.push({c, r, t: .22});
+      }
+    }
+  }
+  for (const lava of special.lava || []){
+    if (pr === lava.r - 1 && pc >= lava.c0 && pc <= lava.c1 && Math.abs(player.y - (pr + .5)) < .55)
+      killPlayer('blast');
+  }
+  for (const vent of special.vents || []){
+    vent.t -= dt;
+    if (vent.t <= 0){
+      vent.t = 2.4 + rnd() * 1.2;
+      spawnParticles(vent.x, vent.y, 24, {color: ['#cffff5', '#71d7cc', '#fff3b0'], spd: 5.8, ang: -Math.PI / 2, spread: .75, life: .72, size: 4, grav: -9, glow: true});
+      if (Math.abs(player.x - vent.x) < .75 && Math.abs(player.y - vent.y) < 1.35){
+        player.y = Math.max(.55, player.y - .35);
+        player.squashT = .18;
+        shake = Math.max(shake, .18);
+      }
+      AUDIO.sfx('steam');
+    }
+  }
+  for (const cr of special.crushers || []){
+    cr.t = (cr.t + dt) % 2.6;
+    const down = cr.t > 1.52 && cr.t < 2.02;
+    if (down && Math.abs(player.x - (cr.c + .5)) < .58 && Math.abs(player.y - (cr.r + 1.25)) < 1.1)
+      killPlayer('crush');
+    if (down && rnd() < .35)
+      spawnParticles(cr.c + .5, cr.r + 1.8, 2, {color: ['#d3a15d', '#8a6038'], spd: 2, life: .3, size: 2.5, grav: 22});
+  }
+  const w = special.worm;
+  if (w){
+    w.t += dt;
+    if (!w.active){
+      w.cooldown -= dt;
+      if (special.caveT != null && w.cooldown <= 0){
+        w.active = true;
+        w.dir = rnd() < .5 ? 1 : -1;
+        w.x = w.dir > 0 ? -2 : COLS + 2;
+        w.y = 10.5 + ((rnd() * 3) | 0);
+        w.t = 0;
+        w.cooldown = 9 + rnd() * 4;
+        banner = {text: 'DRILL WORM!', sub: 'THE DEEP CLAIM BITES BACK', life: 1.6};
+        AUDIO.sfx('warn');
+      }
+    } else {
+      w.x += w.dir * 7.2 * dt;
+      const wc = Math.floor(w.x), wr = Math.floor(w.y);
+      breakSpecialCell(wc, wr, false);
+      breakSpecialCell(wc, wr + 1, false);
+      spawnParticles(w.x - w.dir * .75, w.y + .35, 2, {color: ['#ff9d2e', '#d3a15d', '#4b3426'], spd: 3.8, ang: w.dir > 0 ? Math.PI : 0, spread: 1.1, life: .38, size: 3, grav: 12, glow: true});
+      if (Math.abs(player.x - w.x) < 1.0 && Math.abs(player.y - w.y) < .9) killPlayer('crush');
+      if (w.x < -3 || w.x > COLS + 3) w.active = false;
+    }
+  }
+}
+
+function updateSpecial(dt, inp){
+  if (!special || !player) return;
+  player.drillCd = Math.max(0, (player.drillCd || 0) - dt);
+  if (special.drillHintT > 0) special.drillHintT = Math.max(0, special.drillHintT - dt);
+  updateSpecialNuggets(dt);
+  updateSpecialRocks(dt);
+  updateSpecialSetpieces(dt);
+  if (special.caveT == null && golds.length && goldLeft <= special.triggeredAtGold)
+    triggerCaveIn('GREED WOKE THE MINE');
+  if (special.caveT != null && special.escapeT <= 0){
+    special.caveT = Math.max(0, special.caveT - dt);
+    special.rockT -= dt;
+    const urgency = special.caveT < 16 ? .38 : special.caveT < 28 ? .58 : .86;
+    if (special.rockT <= 0){
+      special.rockT = urgency + rnd() * .45;
+      spawnSpecialRock();
+      if (special.caveT < 13 && rnd() < .55) spawnSpecialRock();
+    }
+    if (special.caveT <= 0 && player.state !== 'dead') killPlayer('crush');
+  }
+  if (special.cartReady && special.escapeT <= 0 && exitRevealed && player.state !== 'dead'){
+    const d = Math.hypot(player.x - special.cart.x, player.y - special.cart.y);
+    if (d < .95) startCartEscape();
+  }
+  if (special.escapeT > 0){
+    special.escapeT -= dt;
+    player.x += (COLS + 1 - player.x) * Math.min(1, dt * 1.8);
+    player.y += (special.cart.y - player.y) * Math.min(1, dt * 8);
+    player.state = 'run';
+    player.invuln = 1;
+    shake = Math.max(shake, .1);
+    if (special.escapeT <= 0) levelComplete();
+  }
+}
+
+function startCartEscape(){
+  if (!special || special.escapeT > 0) return;
+  special.escapeT = special.escapeDur;
+  banner = {text: 'PAY DIRT!', sub: 'MINE CART ESCAPE', life: 1.3};
+  addScore(750);
+  flash = Math.max(flash, .45);
+  shake = Math.max(shake, .6);
+  spawnParticles(special.cart.x, special.cart.y, 32, {color: ['#ffd23f', '#ff9d2e', '#3fd2c7', '#fff3b0'], spd: 6.2, life: .9, size: 4, grav: 8, glow: true});
+  AUDIO.sfx('win');
 }
 
 function updateHoles(dt){
@@ -975,6 +1273,12 @@ function addScore(n){ score += n; }
 /* ================= gold + exit + win/lose ================= */
 function revealExit(){
   exitRevealed = true;
+  if (special){
+    special.cartReady = true;
+    triggerCaveIn('HAUL SECURED');
+    spawnParticles(special.cart.x, special.cart.y, 26, {color: ['#3fd2c7', '#ffd23f', '#fff3b0'], spd: 4.8, life: .8, size: 3.5, grav: -2, glow: true});
+    popup(special.cart.x, special.cart.y - .7, 'CART READY', '#3fd2c7');
+  }
   shake = Math.max(shake, .3); flash = Math.max(flash, .35);
   for (const e of exitCells) spawnParticles(e.c + .5, e.r + .5, 5, {color: ['#3fd2c7', '#9ff7ec'], spd: 2.5, life: .8, size: 3, grav: -3, glow: true});
   AUDIO.sfx('reveal');
@@ -991,6 +1295,11 @@ function checkGold(){
 }
 
 function checkWin(){
+  if (special){
+    if (specialCartReady() && Math.hypot(player.x - special.cart.x, player.y - special.cart.y) < .95)
+      startCartEscape();
+    return;
+  }
   if (!exitRevealed) return;
   const c = Math.floor(player.x);
   if (player.y <= 0.55 && isLadder(c, 0)) levelComplete();
@@ -1082,6 +1391,7 @@ function showSoftlock(reason){
 }
 
 function updateSoftlockDetector(dt){
+  if (isSpecialMode()) return;
   if (levelTime < 2.0){ clearSoftlock(); return; }
   softlockCheckT -= dt;
   if (softlockCheckT > 0) return;
@@ -1106,7 +1416,9 @@ function levelComplete(){
   const bonus = 1000 + Math.max(0, 600 - (levelTime | 0) * 10);
   addScore(bonus);
   if (player) popup(player.x, player.y - 1, '+' + bonus + ' CLEAR', '#3fd2c7');
-  if (mode === 'campaign'){
+  if (mode === 'special'){
+    endGame(true);
+  } else if (mode === 'campaign'){
     markLevelDone(levelIndex);
     if (levelIndex + 1 < LEVELS.campaign.length){
       AUDIO.sfx('win');
@@ -1149,7 +1461,9 @@ function endGame(won){
   $('overTitle').textContent = won ? 'CLAIM CLEARED!' : 'CLAIM LOST';
   $('overStats').innerHTML =
     '<div>HAUL<br><b>' + score + '</b></div>' +
-    (mode === 'campaign' ? '<div>CLAIM<br><b>' + (levelIndex + 1) + '</b></div>' : '<div>MODE<br><b>DAILY</b></div>');
+    (mode === 'daily' ? '<div>MODE<br><b>DAILY</b></div>' :
+      mode === 'special' ? '<div>MODE<br><b>BOOM</b></div>' :
+      '<div>CLAIM<br><b>' + (levelIndex + 1) + '</b></div>');
   beginEntry();
   showOnly('ovOver');
 }
@@ -1196,7 +1510,7 @@ function submitEntry(){
 let ledgerView = 'campaign';
 function refreshBoardInto(id, forceMode){
   if (forceMode) ledgerView = forceMode;
-  else if (id === 'overBoard') ledgerView = (mode === 'daily' ? 'daily' : 'campaign');
+  else if (id === 'overBoard') ledgerView = (mode === 'daily' ? 'daily' : mode === 'special' ? 'special' : 'campaign');
   Scores.render(id, ledgerView);
 }
 function refreshTitleBoard(){ Scores.render('titleBoard', 'campaign'); }
@@ -1209,6 +1523,7 @@ const Scores = {
   // The scores worker only persists initials/score/ts (it drops `extra`), so the
   // Daily Dig date is encoded into the namespace instead — one board per UTC day.
   nsFor(view, date){
+    if (view === 'special') return 'pay-dirt-boom-rush';
     if (view !== 'daily') return 'pay-dirt';
     return 'pay-dirt-daily-' + (date || dailyDate || LEVELS.dailyDateUTC());
   },
@@ -1230,7 +1545,7 @@ const Scores = {
     return this.cache[ns];
   },
   async submit(name, score, mode, date){
-    const ns = this.nsFor(mode === 'daily' ? 'daily' : 'campaign', date);
+    const ns = this.nsFor(mode === 'daily' ? 'daily' : mode === 'special' ? 'special' : 'campaign', date);
     this.last = {name, score, ns};
     try {
       await fetch(this.url(ns), {
@@ -1256,7 +1571,11 @@ const Scores = {
     const el = document.getElementById(id);
     if (!el) return;
     const ns = this.nsFor(view);
-    const head = view === 'daily' ? '<div class="tiny" style="color:var(--teal)">DAILY DIG · ' + (dailyDate || LEVELS.dailyDateUTC()) + '</div>' : '';
+    const head = view === 'daily'
+      ? '<div class="tiny" style="color:var(--teal)">DAILY DIG · ' + (dailyDate || LEVELS.dailyDateUTC()) + '</div>'
+      : view === 'special'
+        ? '<div class="tiny" style="color:var(--gold)">BOOM RUSH SPECIAL</div>'
+        : '';
     const paint = (board) => { el.innerHTML = head + this.rowsHTML(board, ns); };
     if (this.cache[ns]) paint(this.cache[ns]);
     else { paint(null); this.fetchBoard(ns).then(b => paint(b)); }
@@ -1277,6 +1596,7 @@ function buildHowTo(){
     '<span style="color:#3fd2c7">Boots</span> speed · <span style="color:#b07fff">Cloak</span> phase through guards · ' +
     '<span style="color:#ffd23f">Magnet</span> grabs gold · <span style="color:#7fd24a">Shovel</span> instant digs.</p>' +
     '<p><b>Lantern oil</b> briefly widens the painted light pool; maps briefly boost magnet pull. Chain nuggets fast for a <b>combo multiplier</b>.</p>' +
+    '<p><b>Boom Rush:</b> the special claim adds <span class="k">Space</span>/<span class="k">Shift</span> drill dash, tumbling bonus nuggets, pressure plates, steam vents, lava seams, crushers, a drill worm, falling cave-in rock, and a mine-cart escape.</p>' +
     '<p><b>Phone:</b> drag to move or climb; tap the ground left/right of the miner to dig that side.</p>' +
     '<p><span class="k">P</span> pause · <span class="k">M</span> mute · <span class="k">R</span> restart.</p>';
 }
@@ -1448,6 +1768,7 @@ function playerInput(){
     down: keys.ArrowDown || keys.KeyS,
     digL: keys.KeyZ || keys.Comma,
     digR: keys.KeyX || keys.Period,
+    dash: keys.Space || keys.ShiftLeft || keys.ShiftRight,
   };
 }
 
@@ -1499,15 +1820,37 @@ function claimThreatLabel(){
 
 function loadLevelData(rows){
   currentRows = rows;
+  resetSpecialState();
   srand(rows.join('').length * 2654435761 + rows[0].charCodeAt(0));
   parseLevel(rows);
   seedTreasures();
   player = makeActor(spawnPoint.c, spawnPoint.r, 'player');
   guards = guardSpawns.map(g => makeActor(g.c, g.r, g.kind));
+  if (isSpecialMode()){
+    player.tnt = 4;
+    player.speedT = 6;
+    player.shovelT = 8;
+    player.drillCd = 0;
+    special = {
+      caveT: null,
+      rockT: 0,
+      cart: {c: 25, r: 14, x: 25.5, y: 14.5},
+      cartReady: false,
+      escapeT: 0,
+      escapeDur: 1.45,
+      drillHintT: 8,
+      triggeredAtGold: Math.ceil(golds.length * .52),
+      plates: [{c: 12, r: 14, used: false}, {c: 22, r: 7, used: false}],
+      vents: [{x: 9.5, y: 11.55, t: .3}, {x: 17.5, y: 7.55, t: 1.4}],
+      lava: [{c0: 10, c1: 12, r: 12}, {c0: 21, c1: 22, r: 12}],
+      crushers: [{c: 13, r: 5, t: 0}, {c: 21, r: 9, t: .9}],
+      worm: {t: 0, active: false, x: -2, y: 10.5, dir: 1, cooldown: 7},
+    };
+  }
   levelTime = 0;
   particles = []; popups = [];
   shake = 0; hitStop = 0; flash = 0; deathFlash = 0;
-  digBuffer = 0; runDustT = 0;
+  digBuffer = 0; runDustT = 0; prevDash = false;
   selectPainterlyBackdrop();
   buildBackdrop();
   computeDecor();
@@ -1517,10 +1860,16 @@ function loadLevelData(rows){
     {label: 'FINDS', value: discoveryTotal},
     {label: 'THREAT', value: claimThreatLabel().toUpperCase()},
   ];
-  if (mode === 'daily') banner = {text: 'DAILY DIG', sub: dailyDate || LEVELS.dailyDateUTC(), stats, life: 2.4};
+  if (mode === 'special') banner = {text: 'BOOM RUSH', sub: 'DRILL, BLAST, LOOT, RIDE OUT', stats, life: 2.8};
+  else if (mode === 'daily') banner = {text: 'DAILY DIG', sub: dailyDate || LEVELS.dailyDateUTC(), stats, life: 2.4};
   else banner = {text: 'CLAIM ' + (levelIndex + 1), sub: (LEVELS.names[levelIndex] || '').toUpperCase(), brief: LEVELS.briefs && LEVELS.briefs[levelIndex], stats, life: 2.4};
   hint = null;
-  if (mode === 'campaign'){
+  if (mode === 'special'){
+    hint = {
+      life: 9,
+      text: 'SPACE / SHIFT drill dash   Z / X dig or TNT   grab gold to wake the cave-in   escape by cart',
+    };
+  } else if (mode === 'campaign'){
     const brief = LEVELS.briefs && LEVELS.briefs[levelIndex];
     hint = {
       life: levelIndex === 0 ? 7 : 4.8,
@@ -1540,7 +1889,11 @@ let dailyDate = null;
 function startGame(m){
   mode = m || 'campaign';
   score = 0; lives = 3;
-  if (mode === 'daily'){
+  if (mode === 'special'){
+    levelIndex = 0;
+    dailyDate = null;
+    loadLevelData(LEVELS.special.rows);
+  } else if (mode === 'daily'){
     const d = LEVELS.generateDaily();
     dailyDate = d.date;
     levelIndex = 0;
@@ -1603,6 +1956,7 @@ function bindButton(id, fn){
   b.addEventListener('click', e => { e.preventDefault(); AUDIO.ensure(); AUDIO.sfx('ui'); fn(); });
 }
 bindButton('bPlay', () => startGame('campaign'));
+bindButton('bSpecial', () => startGame('special'));
 bindButton('bDaily', () => startGame('daily'));
 bindButton('bLevels', () => { state = 'levels'; buildLevelSelect(); showOnly('ovLevels'); });
 bindButton('bHow', () => { state = 'how'; showOnly('ovHow'); });
@@ -1652,6 +2006,8 @@ function update(dt){
   }
 
   const inp = playerInput();
+  if (isSpecialMode() && inp.dash && !prevDash) startDrillDash(inp);
+  prevDash = !!inp.dash;
   // Dig attempts every tick the button is held (classic): tap = one dig, hold = repeats
   // as the cooldown frees, and a held button digs the instant you land. tryDig() self-gates.
   if (inp.digL) tryDig(-1);
@@ -1678,7 +2034,7 @@ function update(dt){
       player.pendingDig = null;
     }
   } else {
-    moveActor(player, dt, inp, player.speedT > 0 ? 1.45 : 1);
+    if (!updateDrillDash(dt)) moveActor(player, dt, inp, player.speedT > 0 ? 1.45 : 1);
     // running dust puffs + footstep ticks
     if (player.state === 'run'){
       runDustT -= dt;
@@ -1697,6 +2053,7 @@ function update(dt){
   updateHoles(dt);
   updateFuses(dt);
   updateCrumbles(dt);
+  if (isSpecialMode()) updateSpecial(dt, inp);
   if (comboT > 0){ comboT -= dt; if (comboT <= 0) comboN = 0; }
   if (player.state !== 'dead'){
     updatePowerups(dt);
@@ -1727,6 +2084,7 @@ let painterlyPlateReady = false, painterlyPlateSrc = '';
 painterlyPlate.onload = () => { painterlyPlateReady = true; bg = null; if (booted) render(); };
 
 function painterlyBackdropIndex(){
+  if (mode === 'special') return 4; // ember mine: warm, dangerous Boom Rush palette
   if (mode === 'campaign') return Math.min(PAINTERLY_BACKDROPS.length - 1, Math.floor(levelIndex / 2));
   return Math.abs(LEVELS.hashStr(dailyDate || LEVELS.dailyDateUTC())) % PAINTERLY_BACKDROPS.length;
 }
@@ -3028,6 +3386,8 @@ function renderWorldFrame(includeHUD){
     // decorative set-dressing (behind gold/entities) + glowing exit portal
     drawDecor();
     drawPortal();
+    drawSpecialSetpieces();
+    drawMineCart();
 
     // power-ups: icon + bob + halo
     for (const pu of powerups){
@@ -3087,10 +3447,12 @@ function renderWorldFrame(includeHUD){
         ctx.globalAlpha = 1;
       }
     }
+    drawSpecialNuggets();
 
     // entities — guards behind player
     for (const gu of guards) if (gu.state !== 'dead' || gu.deadT < 1) drawActor(gu);
     if (player) drawActor(player);
+    drawSpecialRocks();
 
     // particles
     for (const p of particles){
@@ -3138,7 +3500,16 @@ function renderWorldFrame(includeHUD){
       if (oilLightT > 0) glow(player.x, player.y + .1, 168, 'rgba(255,191,90,.18)', 0.6 + 0.18 * Math.sin(gameTime * 5));
     }
     for (const gd of golds) if (!gd.taken && !gd.held) glow(gd.c + .5, gd.r + .5, 26, 'rgba(255,200,60,.3)', 1);
+    for (const n of specialNuggets) glow(n.x, n.y, 22, 'rgba(255,205,70,.28)', 1);
     for (const tr of treasures) if (!tr.taken){ const meta = TKINDS[tr.kind] || TKINDS.relic; glow(tr.c + .5, tr.r + .5, 20, hexA(meta.color, .18), 1); }
+    if (special){
+      glow(special.cart.x, special.cart.y, special.cartReady ? 78 : 36, 'rgba(255,190,64,' + (special.cartReady ? .24 : .08) + ')', 1);
+      for (const lava of special.lava || []) for (let c = lava.c0; c <= lava.c1; c++) glow(c + .5, lava.r + .5, 36, 'rgba(255,82,26,.25)', 1);
+      for (const vent of special.vents || []) glow(vent.x, vent.y - .3, 32, 'rgba(180,255,240,.18)', 1);
+      for (const plate of special.plates || []) if (!plate.used) glow(plate.c + .5, plate.r + .72, 28, 'rgba(63,210,199,.18)', 1);
+      for (const cr of special.crushers || []) glow(cr.c + .5, cr.r + 1.2, 26, 'rgba(255,157,46,.1)', 1);
+      if (special.worm?.active) glow(special.worm.x, special.worm.y, 72, 'rgba(255,95,28,.28)', 1);
+    }
     if (exitRevealed){ const pulse = 0.35 + 0.2 * Math.sin(gameTime * 5); for (const e of exitCells) glow(e.c + .5, e.r + .5, 38, 'rgba(63,210,199,' + pulse + ')', 1); }
     for (const h of holes.values()) glow(h.c + .5, h.r + .6, 20, 'rgba(255,90,40,.22)', 1);
     // torch pools
@@ -3183,6 +3554,15 @@ function renderWorldFrame(includeHUD){
     const a = Math.min(.28, (comboN - 2) * 0.06) * (0.7 + 0.3 * Math.sin(gameTime * 8));
     ct.addColorStop(0, 'rgba(0,0,0,0)'); ct.addColorStop(1, 'rgba(255,140,40,' + a + ')');
     ctx.fillStyle = ct; ctx.fillRect(0, 0, VIEW_W, VIEW_H);
+  }
+  if (special && special.caveT != null){
+    const panic = clamp(1 - special.caveT / 46, 0, 1);
+    const pulse = 0.5 + 0.5 * Math.sin(gameTime * (5 + panic * 10));
+    const cg = ctx.createRadialGradient(VIEW_W / 2, VIEW_H * .42, VIEW_H * .2, VIEW_W / 2, VIEW_H / 2, VIEW_H * .85);
+    cg.addColorStop(0, 'rgba(0,0,0,0)');
+    cg.addColorStop(1, 'rgba(210,60,24,' + ((.08 + panic * .2) * pulse) + ')');
+    ctx.fillStyle = cg;
+    ctx.fillRect(0, 0, VIEW_W, VIEW_H);
   }
   // foreground framing layer (near, dark — frames the scene without covering the action)
   if (grid.length) drawForeground();
@@ -3343,16 +3723,16 @@ function drawMobileHUD(){
   ctx.textAlign = 'right';
   ctx.fillStyle = 'rgba(216,207,228,.72)';
   ctx.font = '900 11px system-ui, sans-serif';
-  ctx.fillText(mode === 'daily' ? 'DAILY' : 'TIME', screenW - 14, 18);
+  ctx.fillText(special && special.caveT != null ? 'CAVE-IN' : mode === 'daily' ? 'DAILY' : 'TIME', screenW - 14, 18);
 	  ctx.fillStyle = '#f6f0ff';
 	  ctx.font = '900 20px system-ui, sans-serif';
-	  ctx.fillText(mm + ':' + ss, screenW - 14, 47);
+	  ctx.fillText(special && special.caveT != null ? Math.ceil(special.caveT) + 's' : mm + ':' + ss, screenW - 14, 47);
 
 	  if (grid.length){
 	    const compact = screenW < 360;
 	    const chips = [
 	      {label: compact ? 'F' : 'FINDS', value: discoveryCount + '/' + discoveryTotal, col: '#9ef0c8', done: discoveryTotal && discoveryCount >= discoveryTotal},
-	      {label: 'EXIT', value: exitRevealed ? 'OPEN' : 'LOCKED', col: '#3fd2c7', done: exitRevealed},
+	      {label: isSpecialMode() ? 'CART' : 'EXIT', value: isSpecialMode() ? (specialCartReady() ? 'READY' : 'LOCKED') : (exitRevealed ? 'OPEN' : 'LOCKED'), col: '#3fd2c7', done: exitRevealed},
 	    ];
 	    const gap = 6, chipW = compact ? 70 : 82, totalW = chipW * chips.length + gap;
 	    let x = screenW / 2 - totalW / 2, y = h - 15;
@@ -3698,6 +4078,195 @@ function drawGoldGem(cx, cy, s, phase){
   }
   ctx.restore();
 }
+
+function drawSpecialNuggets(){
+  if (!specialNuggets.length) return;
+  for (const n of specialNuggets){
+    const a = clamp(n.life / 10, .18, 1);
+    ctx.globalAlpha = a;
+    drawGoldGem(px(n.x), py(n.y), 7 + n.r * 14, n.spin + gameTime);
+  }
+  ctx.globalAlpha = 1;
+}
+
+function drawSpecialRocks(){
+  if (!specialRocks.length) return;
+  ctx.save();
+  for (const rock of specialRocks){
+    const x = px(rock.x), y = py(rock.y), s = rock.size * TILE;
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.rotate(rock.rot);
+    const g = ctx.createLinearGradient(-s, -s, s, s);
+    g.addColorStop(0, '#c99557');
+    g.addColorStop(.42, '#70503a');
+    g.addColorStop(1, '#21150f');
+    ctx.fillStyle = g;
+    ctx.beginPath();
+    ctx.moveTo(-s * .8, -s * .35);
+    ctx.lineTo(-s * .1, -s * .9);
+    ctx.lineTo(s * .75, -s * .52);
+    ctx.lineTo(s * .88, s * .24);
+    ctx.lineTo(s * .16, s * .82);
+    ctx.lineTo(-s * .7, s * .58);
+    ctx.closePath();
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(255,220,150,.28)';
+    ctx.lineWidth = 1.4;
+    ctx.stroke();
+    ctx.fillStyle = 'rgba(255,235,180,.18)';
+    ctx.fillRect(-s * .32, -s * .52, s * .38, 2);
+    ctx.restore();
+  }
+  ctx.restore();
+}
+
+function drawMineCart(){
+  if (!special) return;
+  const ready = special.cartReady || exitRevealed;
+  const escape = special.escapeT > 0 ? 1 - special.escapeT / special.escapeDur : 0;
+  const baseX = special.cart.x + escape * 4.5;
+  const baseY = special.cart.y;
+  const x = px(baseX), y = py(baseY) + 4 + Math.sin(gameTime * 18) * escape * 2;
+  const glowA = ready ? .34 + .18 * Math.sin(gameTime * 7) : .1;
+  glow(baseX, baseY, ready ? 64 : 34, 'rgba(255,190,64,' + glowA + ')', 1);
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.fillStyle = 'rgba(0,0,0,.4)';
+  ctx.beginPath();
+  ctx.ellipse(0, 16, 34, 7, 0, 0, Math.PI * 2);
+  ctx.fill();
+  const body = ctx.createLinearGradient(0, -18, 0, 14);
+  body.addColorStop(0, ready ? '#d9a457' : '#7d6040');
+  body.addColorStop(.45, '#5c3b24');
+  body.addColorStop(1, '#1b1410');
+  ctx.fillStyle = body;
+  ctx.beginPath();
+  ctx.moveTo(-34, -10);
+  ctx.lineTo(34, -10);
+  ctx.lineTo(25, 12);
+  ctx.lineTo(-24, 12);
+  ctx.closePath();
+  ctx.fill();
+  ctx.strokeStyle = ready ? 'rgba(255,235,160,.78)' : 'rgba(220,170,95,.32)';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+  ctx.fillStyle = ready ? '#ffd23f' : '#8a6038';
+  for (let i = -2; i <= 2; i++) drawGoldGem(i * 9, -15 - Math.abs(i) * 2 + Math.sin(gameTime * 5 + i) * 1.5, 6, gameTime + i);
+  ctx.fillStyle = '#111';
+  for (const wx of [-21, 21]){
+    ctx.beginPath(); ctx.arc(wx, 15, 7, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = ready ? '#ff9d2e' : '#54402e';
+    ctx.beginPath(); ctx.arc(wx, 15, 3, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#111';
+  }
+  if (ready){
+    ctx.globalCompositeOperation = 'lighter';
+    ctx.strokeStyle = 'rgba(63,210,199,.76)';
+    ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.arc(0, -6, 42 + Math.sin(gameTime * 6) * 4, -.4, Math.PI + .5); ctx.stroke();
+    ctx.fillStyle = '#fff3b0';
+    ctx.font = '900 10px system-ui, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('RIDE OUT', 0, -32);
+  }
+  ctx.restore();
+}
+
+function drawSpecialSetpieces(){
+  if (!special) return;
+  ctx.save();
+  for (const lava of special.lava || []){
+    const x = lava.c0 * TILE, y = lava.r * TILE + HUD_H;
+    const w = (lava.c1 - lava.c0 + 1) * TILE;
+    const g = ctx.createLinearGradient(0, y, 0, y + TILE);
+    g.addColorStop(0, 'rgba(255,210,63,.42)');
+    g.addColorStop(.35, 'rgba(255,93,30,.85)');
+    g.addColorStop(1, 'rgba(80,12,4,.92)');
+    ctx.fillStyle = g;
+    roundRect(x + 4, y + 8, w - 8, TILE - 12, 9);
+    ctx.fill();
+    ctx.globalCompositeOperation = 'lighter';
+    for (let i = 0; i < 7; i++){
+      const bx = x + 8 + ((i * 31 + gameTime * 46) % Math.max(1, w - 16));
+      const by = y + 18 + Math.sin(gameTime * 5 + i) * 5;
+      glow(bx / TILE, (by - HUD_H) / TILE, 18, 'rgba(255,95,28,.45)', 1);
+      ctx.fillStyle = '#fff3b0';
+      ctx.globalAlpha = .35 + .35 * Math.sin(gameTime * 8 + i);
+      ctx.fillRect(bx, by, 3, 3);
+    }
+    ctx.globalAlpha = 1;
+    ctx.globalCompositeOperation = 'source-over';
+  }
+  for (const plate of special.plates || []){
+    const x = plate.c * TILE + 8, y = plate.r * TILE + HUD_H + 25;
+    ctx.fillStyle = plate.used ? 'rgba(255,157,46,.45)' : 'rgba(63,210,199,.72)';
+    ctx.strokeStyle = plate.used ? 'rgba(255,216,107,.5)' : 'rgba(207,255,245,.9)';
+    roundRect(x, y, TILE - 16, 8, 4);
+    ctx.fill();
+    ctx.stroke();
+    if (!plate.used) glow(plate.c + .5, plate.r + .75, 25, 'rgba(63,210,199,.25)', 1);
+  }
+  for (const vent of special.vents || []){
+    const x = px(vent.x), y = py(vent.y);
+    ctx.fillStyle = '#22170f';
+    ctx.beginPath();
+    ctx.ellipse(x, y + 5, 16, 6, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(255,216,107,.55)';
+    ctx.lineWidth = 1.5;
+    for (let i = -1; i <= 1; i++){
+      ctx.beginPath();
+      ctx.moveTo(x + i * 7, y + 2);
+      ctx.lineTo(x + i * 7 + Math.sin(gameTime * 6 + i) * 4, y - 18 - Math.max(0, 2.4 - vent.t) * 5);
+      ctx.stroke();
+    }
+  }
+  for (const cr of special.crushers || []){
+    const p = cr.t > 1.52 && cr.t < 2.02 ? 1 : cr.t < 1.52 ? cr.t / 1.52 : Math.max(0, 1 - (cr.t - 2.02) / .58);
+    const x = cr.c * TILE + 18, y = cr.r * TILE + HUD_H;
+    ctx.strokeStyle = '#4b3426';
+    ctx.lineWidth = 5;
+    ctx.beginPath(); ctx.moveTo(x, y - 38); ctx.lineTo(x, y + p * 48); ctx.stroke();
+    const headY = y + p * 48;
+    const g = ctx.createLinearGradient(x - 18, headY - 8, x + 18, headY + 18);
+    g.addColorStop(0, '#d3a15d'); g.addColorStop(.5, '#70503a'); g.addColorStop(1, '#21150f');
+    ctx.fillStyle = g;
+    roundRect(x - 18, headY, 36, 18, 4);
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(255,220,150,.42)';
+    ctx.stroke();
+  }
+  const w = special.worm;
+  if (w && w.active){
+    ctx.save();
+    ctx.translate(px(w.x), py(w.y));
+    if (w.dir < 0) ctx.scale(-1, 1);
+    for (let i = 0; i < 7; i++){
+      const bx = -i * 14;
+      const by = Math.sin(gameTime * 12 + i) * 4;
+      const seg = ctx.createLinearGradient(bx - 11, by - 11, bx + 11, by + 11);
+      seg.addColorStop(0, '#ffb84a');
+      seg.addColorStop(.5, '#9b4a25');
+      seg.addColorStop(1, '#2a120b');
+      ctx.fillStyle = seg;
+      ctx.beginPath();
+      ctx.ellipse(bx, by, 16 - i * .8, 11 - i * .45, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(255,230,150,.28)';
+      ctx.stroke();
+    }
+    ctx.fillStyle = '#fff3b0';
+    ctx.beginPath();
+    ctx.moveTo(20, 0); ctx.lineTo(0, -14); ctx.lineTo(4, 0); ctx.lineTo(0, 14); ctx.closePath();
+    ctx.fill();
+    ctx.fillStyle = '#130905';
+    ctx.beginPath(); ctx.arc(3, -5, 2.5, 0, Math.PI * 2); ctx.arc(3, 5, 2.5, 0, Math.PI * 2); ctx.fill();
+    ctx.restore();
+  }
+  ctx.restore();
+}
+
 function drawHotbar(){
   if (!player) return;
   const slots = [];
@@ -3779,10 +4348,14 @@ function drawPlayerPortrait(x, y){
 
 function objectiveRows(){
   const total = golds.length, got = total - goldLeft;
+  const exitLabel = isSpecialMode() ? 'CART' : 'EXIT';
+  const exitValue = isSpecialMode()
+    ? (specialCartReady() ? 'READY' : 'LOCKED')
+    : (exitRevealed ? 'OPEN' : 'LOCKED');
   return [
     {label: 'GOLD', value: got + '/' + total, done: goldLeft <= 0, col: '#ffd23f'},
     {label: 'FINDS', value: discoveryCount + '/' + discoveryTotal, done: discoveryTotal && discoveryCount >= discoveryTotal, col: '#9ef0c8'},
-    {label: 'EXIT', value: exitRevealed ? 'OPEN' : 'LOCKED', done: exitRevealed, col: '#3fd2c7'},
+    {label: exitLabel, value: exitValue, done: exitRevealed, col: '#3fd2c7'},
   ];
 }
 function drawObjectiveStrip(){
@@ -3906,6 +4479,17 @@ function drawHUD(){
     ctx.textAlign = 'center'; ctx.fillStyle = '#f1b34e'; ctx.font = '900 12px system-ui, sans-serif';
     ctx.fillText('LANTERN +' + Math.ceil(oilLightT), VIEW_W / 2 + 230, cy + 1);
   }
+  if (special){
+    ctx.textAlign = 'center';
+    const cave = special.caveT == null ? 'DORMANT' : Math.ceil(special.caveT) + 's';
+    const danger = special.caveT != null && special.caveT < 16;
+    ctx.fillStyle = danger ? '#ff6b5a' : '#ff9d2e';
+    ctx.font = '900 12px system-ui, sans-serif';
+    ctx.fillText('CAVE-IN ' + cave, VIEW_W / 2 + 320, cy + 1);
+    const drillReady = !player || (player.drillCd || 0) <= 0;
+    ctx.fillStyle = drillReady ? '#3fd2c7' : 'rgba(216,207,228,.78)';
+    ctx.fillText(drillReady ? 'DRILL READY' : 'DRILL ' + Math.ceil((player.drillCd || 0) * 10) / 10, VIEW_W / 2 - 235, cy + 1);
+  }
   if (player && player.state === 'dead'){
     const msg = deathText(player.deathReason);
     const pulse = 0.75 + 0.25 * Math.sin(gameTime * 22);
@@ -3968,6 +4552,7 @@ window.__g = {
   get powerups(){ return powerups; },
   get fuses(){ return fuses; },
   get blasted(){ return [...blasted]; },
+  get special(){ return special ? {...special, nuggets: specialNuggets.length, rocks: specialRocks.length} : null; },
   get combo(){ return {n: comboN, t: comboT, mult: comboMult()}; },
   boom(c, r){ boom(c, r); },
   get levelTime(){ return levelTime; },
@@ -3987,6 +4572,7 @@ window.__g = {
   },
   solvable(rows){ return LEVELS.solvable(rows || currentRows); },
   startAt: startCampaignAt,
+  startSpecial(){ startGame('special'); return {mode, state, golds: golds.length, special: !!special}; },
   scores: () => Scores,
 };
 
