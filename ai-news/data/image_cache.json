@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-21T13:16:57.599177+00:00",
+  "updatedAt": "2026-06-21T15:00:01.506845+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -11040,6 +11040,10 @@
     "https://github.com/BerriAI/litellm/releases/tag/v1.90.0-rc.1": {
       "image": "https://opengraph.githubassets.com/4d00699251ffe5b97a3010662ff4e517b90a749bd025f3cf9a0f09315b2a4132/BerriAI/litellm/releases/tag/v1.90.0-rc.1",
       "checkedAt": "2026-06-21T02:00:01.288921+00:00"
+    },
+    "https://techcrunch.com/2026/06/21/beyond-siri-here-are-the-practical-ai-features-coming-to-your-iphone-in-ios-27": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/01/tim-cook-iphone-GettyImages-2234563479.jpg?w=1024",
+      "checkedAt": "2026-06-21T15:00:01.506845+00:00"
     }
   }
 }
