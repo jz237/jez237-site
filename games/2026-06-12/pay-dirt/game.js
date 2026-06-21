@@ -1975,11 +1975,23 @@ function poseFor(a){
 const painterlyMiner = new Image();
 let painterlyMinerReady = false;
 painterlyMiner.onload = () => { painterlyMinerReady = true; if (booted) render(); };
-painterlyMiner.src = 'assets/painterly-miner-sheet.png';
+painterlyMiner.src = 'assets/vibe-court-miner-sheet.png';
 const painterlyMinerClimb = new Image();
 let painterlyMinerClimbReady = false;
 painterlyMinerClimb.onload = () => { painterlyMinerClimbReady = true; if (booted) render(); };
-painterlyMinerClimb.src = 'assets/painterly-miner-climb-back.png';
+painterlyMinerClimb.src = 'assets/vibe-court-miner-climb-back.png';
+const vibeMinerRun = new Image();
+let vibeMinerRunReady = false;
+vibeMinerRun.onload = () => { vibeMinerRunReady = true; if (booted) render(); };
+vibeMinerRun.src = 'assets/vibe-court-miner-run-side-strip.png';
+const vibeMinerDig = new Image();
+let vibeMinerDigReady = false;
+vibeMinerDig.onload = () => { vibeMinerDigReady = true; if (booted) render(); };
+vibeMinerDig.src = 'assets/vibe-court-miner-dig-side-strip.png';
+const vibeMinerClimbHang = new Image();
+let vibeMinerClimbHangReady = false;
+vibeMinerClimbHang.onload = () => { vibeMinerClimbHangReady = true; if (booted) render(); };
+vibeMinerClimbHang.src = 'assets/vibe-court-miner-climb-hang-strip.png';
 const MINER_SHEET = {
   cols: 4, rows: 2,
   cells: {
@@ -1987,6 +1999,9 @@ const MINER_SHEET = {
     digLeft: 4, digRight: 5, carry: 6, stun: 7,
   },
 };
+const VIBE_MINER_RUN = { cols: 4 };
+const VIBE_MINER_DIG = { cols: 4 };
+const VIBE_MINER_CLIMB_HANG = { cols: 4, climbStart: 0, hangStart: 2 };
 function minerFrameIndex(a, pose, fi){
   if (pose === 'dig') return a.dir < 0 ? MINER_SHEET.cells.digLeft : MINER_SHEET.cells.digRight;
   if (a.gold) return MINER_SHEET.cells.carry;
@@ -2101,7 +2116,47 @@ function drawGeneratedMinerBar(a, fi, cx2, footY){
   return {w, h};
 }
 function drawGeneratedMiner(a, pose, fi, cx2, footY){
+  if ((pose === 'climb' || pose === 'bar') && vibeMinerClimbHangReady && vibeMinerClimbHang.naturalWidth){
+    const cellW = vibeMinerClimbHang.naturalWidth / VIBE_MINER_CLIMB_HANG.cols;
+    const cellH = vibeMinerClimbHang.naturalHeight;
+    const start = pose === 'bar' ? VIBE_MINER_CLIMB_HANG.hangStart : VIBE_MINER_CLIMB_HANG.climbStart;
+    const idx = start + (fi % 2);
+    const sx = idx * cellW;
+    const h = pose === 'bar' ? 76 : 80;
+    const w = h * (cellW / cellH);
+    const bob = pose === 'climb' ? Math.sin(a.anim * 16) * 2 : Math.sin(a.anim * 10) * 1.5;
+    ctx.translate(cx2 + (pose === 'climb' ? ((fi % 2) ? 1.2 : -1.2) : 0), footY - h + bob);
+    if (pose === 'bar' && a.dir < 0) ctx.scale(-1, 1);
+    ctx.drawImage(vibeMinerClimbHang, sx, 0, cellW, cellH, -w * 0.5, 0, w, h);
+    return {w, h};
+  }
   if (pose === 'bar') return drawGeneratedMinerBar(a, fi, cx2, footY);
+  if (pose === 'dig' && vibeMinerDigReady && vibeMinerDig.naturalWidth){
+    const cellW = vibeMinerDig.naturalWidth / VIBE_MINER_DIG.cols;
+    const cellH = vibeMinerDig.naturalHeight;
+    const total = Math.max(0.01, a.pendingDig?.total || DIG_TIME);
+    const progress = clamp(1 - a.digT / total, 0, 0.999);
+    const idx = Math.floor(progress * VIBE_MINER_DIG.cols);
+    const sx = idx * cellW;
+    const h = 76;
+    const w = h * (cellW / cellH);
+    const dir = a.pendingDig?.dir || a.dir || 1;
+    ctx.translate(cx2, footY - h + 2);
+    if (dir < 0) ctx.scale(-1, 1);
+    ctx.drawImage(vibeMinerDig, sx, 0, cellW, cellH, -w * 0.5, 0, w, h);
+    return {w, h};
+  }
+  if (pose === 'run' && vibeMinerRunReady && vibeMinerRun.naturalWidth){
+    const cellW = vibeMinerRun.naturalWidth / VIBE_MINER_RUN.cols;
+    const cellH = vibeMinerRun.naturalHeight;
+    const sx = (fi % VIBE_MINER_RUN.cols) * cellW;
+    const h = 70;
+    const w = h * (cellW / cellH);
+    ctx.translate(cx2, footY - h + 2);
+    if (a.dir < 0) ctx.scale(-1, 1);
+    ctx.drawImage(vibeMinerRun, sx, 0, cellW, cellH, -w * 0.5, 0, w, h);
+    return {w, h};
+  }
   const cellW = painterlyMiner.naturalWidth / MINER_SHEET.cols;
   const cellH = painterlyMiner.naturalHeight / MINER_SHEET.rows;
   const idx = minerFrameIndex(a, pose, fi);
@@ -2278,8 +2333,21 @@ function drawActor(a){
     ? Math.floor(a.anim * rate) % frames.length : 0;
   const img = frames[fi] || frames[0];
   const generatedPlayer = a.kind === 'player' && painterlyMinerReady && painterlyMiner.naturalWidth;
-  const h = generatedPlayer ? (pose === 'climb' ? 78 : 74) : (a.kind === 'player' ? 64 : 58);
-  const w = generatedPlayer ? h * ((painterlyMiner.naturalWidth / MINER_SHEET.cols) / (painterlyMiner.naturalHeight / MINER_SHEET.rows)) : h * ART.FW / ART.FH;
+  const generatedRunPlayer = generatedPlayer && pose === 'run' && vibeMinerRunReady && vibeMinerRun.naturalWidth;
+  const generatedDigPlayer = generatedPlayer && pose === 'dig' && vibeMinerDigReady && vibeMinerDig.naturalWidth;
+  const generatedClimbHangPlayer = generatedPlayer && (pose === 'climb' || pose === 'bar') &&
+    vibeMinerClimbHangReady && vibeMinerClimbHang.naturalWidth;
+  const generatedRatio = generatedRunPlayer
+    ? ((vibeMinerRun.naturalWidth / VIBE_MINER_RUN.cols) / vibeMinerRun.naturalHeight)
+    : (generatedDigPlayer
+      ? ((vibeMinerDig.naturalWidth / VIBE_MINER_DIG.cols) / vibeMinerDig.naturalHeight)
+      : (generatedClimbHangPlayer
+        ? ((vibeMinerClimbHang.naturalWidth / VIBE_MINER_CLIMB_HANG.cols) / vibeMinerClimbHang.naturalHeight)
+        : ((painterlyMiner.naturalWidth / MINER_SHEET.cols) / (painterlyMiner.naturalHeight / MINER_SHEET.rows))));
+  const h = generatedPlayer
+    ? (generatedClimbHangPlayer ? (pose === 'bar' ? 76 : 80) : (generatedRunPlayer ? 70 : (generatedDigPlayer ? 76 : 74)))
+    : (a.kind === 'player' ? 64 : 58);
+  const w = generatedPlayer ? h * generatedRatio : h * ART.FW / ART.FH;
   const cx2 = px(a.x);
   let footY = py(a.y) + TILE * 0.5;
   if (pose === 'bar') footY = py(Math.floor(a.y)) + 72;
@@ -2324,34 +2392,34 @@ function drawActor(a){
     ctx.drawImage(img, 0, 0, w, h);
   }
   ctx.restore();
-	  if (a.kind === 'player') drawDigStroke(a, cx2, footY);
-	  if (a.kind !== 'player' && a.state !== 'dead'){
-	    const meta = guardMeta(a);
-	    drawGuardAccents(a, cx2, footY, h, w);
-	    if (a.alertT > 0){
-	      const p = a.alertT / 0.9;
-	      const ay = footY - h - 12 - (1 - p) * 7;
-	      ctx.save();
-	      ctx.globalCompositeOperation = 'source-over';
-	      ctx.globalAlpha = Math.min(1, p * 1.8);
-	      ctx.strokeStyle = 'rgba(8,5,14,.88)';
-	      ctx.lineWidth = 4;
-	      ctx.font = '900 22px system-ui, sans-serif';
-	      ctx.textAlign = 'center';
-	      ctx.textBaseline = 'middle';
-	      ctx.strokeText('!', cx2, ay);
-	      ctx.fillStyle = meta.color;
-	      ctx.fillText('!', cx2, ay);
-	      ctx.globalAlpha = Math.min(.7, p);
-	      ctx.strokeStyle = meta.color;
-	      ctx.lineWidth = 2;
-	      ctx.beginPath();
-	      ctx.moveTo(cx2 - 9, ay - 7); ctx.lineTo(cx2 - 15, ay - 13);
-	      ctx.moveTo(cx2 + 9, ay - 7); ctx.lineTo(cx2 + 15, ay - 13);
-	      ctx.stroke();
-	      ctx.restore();
-	    }
-	  }
+  if (a.kind === 'player' && !(generatedPlayer && pose === 'dig' && vibeMinerDigReady && vibeMinerDig.naturalWidth)) drawDigStroke(a, cx2, footY);
+  if (a.kind !== 'player' && a.state !== 'dead'){
+    const meta = guardMeta(a);
+    drawGuardAccents(a, cx2, footY, h, w);
+    if (a.alertT > 0){
+      const p = a.alertT / 0.9;
+      const ay = footY - h - 12 - (1 - p) * 7;
+      ctx.save();
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.globalAlpha = Math.min(1, p * 1.8);
+      ctx.strokeStyle = 'rgba(8,5,14,.88)';
+      ctx.lineWidth = 4;
+      ctx.font = '900 22px system-ui, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.strokeText('!', cx2, ay);
+      ctx.fillStyle = meta.color;
+      ctx.fillText('!', cx2, ay);
+      ctx.globalAlpha = Math.min(.7, p);
+      ctx.strokeStyle = meta.color;
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(cx2 - 9, ay - 7); ctx.lineTo(cx2 - 15, ay - 13);
+      ctx.moveTo(cx2 + 9, ay - 7); ctx.lineTo(cx2 + 15, ay - 13);
+      ctx.stroke();
+      ctx.restore();
+    }
+  }
   // carried gold — show which guard pocketed your nugget
   if (a.gold){
     drawGoldGem(cx2, footY - h * 0.62, 8.5, gameTime + a.x);
