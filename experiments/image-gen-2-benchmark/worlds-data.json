@@ -1060,5 +1060,23 @@
       "continuity": "Preserves the suspended vesperglass reef habitat, cobalt gas-giant storms, cyan/violet auroras, copper-black induction coils, pulse-lanterns, prism fronds, and ribbon-bodied electroceptive inhabitants.",
       "entryDescription": "A low-gravity Prismfall Concourse food hall where Vesperglass inhabitants share floating nutrient globes and vapor bowls during an ordinary communal meal."
     }
+  },
+  {
+    "id": "2026-06-21-morning-vesperglass-array-tether-elevator-maintenance",
+    "title": "Vesperglass Array: Tether Elevator Maintenance",
+    "tests": "Weekly-world life image for 2026-06-21 morning slot; catalog-only Vesperglass Array entry showing tether elevator maintenance while preserving the glass reef megahabitat, non-human ribbon inhabitants, pressure-shell harnesses, induction coils, aurora weather, and realistic cinematic photography.",
+    "prompt": "Create a realistic photographed/cinematic daily-life image set in Vesperglass Array, showing tether elevator maintenance at the edge of a suspended transparent mineral reef-plate above the cobalt gas giant. Include non-human ribbon-bodied and fan-limbed inhabitants in pressure-shell harnesses replacing copper-black induction coil segments, tightening ceramic-white pressure ribs, inspecting frost-edged airlock collars, and guiding folded-kite repair drones along the kilometer-scale tether. Preserve Vesperglass Array continuity: transparent vesperglass panels, tension-spire towers, vacuum shadow gardens, storm-lit docking terraces, walking membranes, ion-kite infrastructure, pulse-lantern wayfinding, prism fronds, conductive lace-vines, blue-white gas-giant glare, cyan and violet auroras, warm amber work lights, transparent glass shadows, and polished hand-grip rails. Render as a real documentary photograph with diagonal depth down the tether, realistic reflections/refractions, material wear, atmospheric scale, coherent alien anatomy, and no readable text.\n\nWeekly world: Vesperglass Array.\n\nSource photo needed: none.\n\nReusable fill-in-the-blank template: Create a realistic photographed/cinematic daily-life image set in [WORLD_NAME], showing [EVERYDAY SCENE] at [LOCATION], with [INHABITANTS], [LOCAL MATERIALS], [VEGETATION], [INFRASTRUCTURE], and [TIME_OF_DAY] lighting. Preserve the world geography, settlements, transit/infrastructure logic, vegetation, life forms, materials/technology, palette, lighting, recurring motifs, and hard avoid rules; vary the exact activity, viewpoint, weather, props, and social moment while staying inside the canon. Make it look like a real camera captured an alien society, not an illustration or prompt card.\n\nWhat to preserve: Vesperglass Array world name, suspended glass reef megahabitat, transparent mineral plates, cobalt gas giant below, cyan/violet auroras, copper-black induction coils, ceramic-white pressure ribs, pressure membranes, ion-kite infrastructure, pulse-lantern communication, ribbon-bodied inhabitants with electroreceptor crests and handling tendrils, pressure-wrap garments, prism fronds, conductive lace-vines, glass reflections, and realistic photographic rendering.\n\nWhat to change: the exact daily-life subject, settlement, maintenance task, camera viewpoint, local props, time of day, weather intensity, crowd rhythm, and infrastructure focus can change while preserving the same world bible.\n\nExample substitution: [EVERYDAY SCENE] = tether elevator maintenance; [LOCATION] = a maintenance platform below Prismfall Concourse; include ribbon-bodied crew in pressure-shell harnesses, folded-kite repair drones, copper-black induction coils, ceramic pressure ribs, tool tethers, frost crystals, and blue-white gas-giant glare.",
+    "image": "images/2026-06-21-morning-vesperglass-array-tether-elevator-maintenance.jpg",
+    "date": "2026-06-21",
+    "batch": "Daily Prompt",
+    "slot": "morning",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "world": {
+      "name": "Vesperglass Array",
+      "description": "A hard-sci-fi alien megahabitat where ribbon-bodied electroceptive inhabitants live across suspended glass reefs inside the magnetosphere of a blue-white gas giant.",
+      "continuity": "Preserves the suspended vesperglass reef-plates, cobalt gas giant, cyan/violet auroras, ribbon-bodied inhabitants, pulse-lantern communication, copper-black induction infrastructure, ceramic pressure ribs, prism vegetation, and practical low-gravity work culture.",
+      "entryDescription": "A maintenance crew works on a kilometer-scale tether elevator beneath Prismfall Concourse, showing how Vesperglass inhabitants service transit infrastructure above the gas giant."
+    }
   }
 ]
