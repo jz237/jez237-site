@@ -20,6 +20,12 @@ body{
 }
 #wrap{position:fixed; inset:0; display:flex; align-items:center; justify-content:center; overflow:hidden;}
 canvas#game{position:absolute; image-rendering:auto; background:#000;}
+.version{
+  position:absolute; right:10px; bottom:8px; z-index:4;
+  color:rgba(255,241,175,.7); font:800 11px/1 system-ui,sans-serif;
+  letter-spacing:.08em; text-transform:uppercase; text-shadow:0 2px 8px rgba(0,0,0,.85);
+  pointer-events:none;
+}
 .overlay{
   position:absolute; display:none; flex-direction:column; align-items:center; justify-content:center;
   gap:14px; text-align:center; padding:20px; z-index:5;
@@ -137,6 +143,7 @@ body.touch.playing #touch{display:none;}
 <body>
 <div id="wrap">
   <canvas id="game"></canvas>
+  <div class="version">v3.0 Boom Rush</div>
 
   <div class="overlay show" id="ovTitle">
     <div class="panel" id="titlePanel">
@@ -145,6 +152,7 @@ body.touch.playing #touch{display:none;}
       <div style="height:12px"></div>
       <div class="row">
         <button id="bPlay">⛏ Prospect</button>
+        <button id="bSpecial">💥 Boom Rush</button>
         <button id="bDaily" class="ghost">📅 Daily Dig</button>
       </div>
       <div class="row">

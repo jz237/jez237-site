@@ -220,6 +220,52 @@ const LEVELS = (() => {
     return L;
   }
 
+  // Special — Boom Rush: one loud showcase claim with TNT veins, belts, bars,
+  // unstable rock, and a mine-cart escape handled by game.js.
+  function boomRush(){
+    const L = base();
+    tier(L, 4, 1, 25);
+    tier(L, 8, 0, 23);
+    tier(L, 12, 3, 27);
+    put(L, 4, 8, '...');
+    put(L, 4, 18, '..');
+    put(L, 8, 5, '..');
+    put(L, 8, 15, '...');
+    put(L, 12, 10, '...');
+    put(L, 12, 21, '..');
+    bar(L, 3, 8, 11);
+    bar(L, 6, 8, 18);
+    bar(L, 10, 12, 21);
+    lad(L, 3, 4, 7);
+    lad(L, 14, 4, 11);
+    lad(L, 24, 8, 14);
+    lad(L, 6, 12, 14);
+    lad(L, 20, 12, 14);
+    put(L, 4, 4, 'C');
+    put(L, 4, 20, 'C');
+    put(L, 8, 9, 'B');
+    put(L, 8, 10, 'B');
+    put(L, 8, 21, 'B');
+    put(L, 12, 7, 'B');
+    put(L, 12, 8, 'B');
+    put(L, 12, 24, 'B');
+    put(L, 4, 13, '>>>');
+    put(L, 8, 2, '<<<');
+    put(L, 12, 15, '>>>>');
+    g$(L, 2, 3); g$(L, 6, 3); g$(L, 12, 3); g$(L, 22, 3);
+    g$(L, 4, 7); g$(L, 11, 7); g$(L, 19, 7); g$(L, 22, 7);
+    g$(L, 5, 11); g$(L, 14, 11); g$(L, 20, 11); g$(L, 26, 11);
+    g$(L, 8, 14); g$(L, 16, 14); g$(L, 23, 14);
+    put(L, 14, 2, 'P');
+    put(L, 14, 4, '1'); put(L, 14, 5, '2'); put(L, 14, 6, '4');
+    put(L, 7, 13, '5');
+    put(L, 3, 24, '3');
+    put(L, 3, 21, 'S');
+    put(L, 7, 3, 'G');
+    put(L, 11, 18, 'M');
+    return L;
+  }
+
   // L10 — quick hands: scouts and combo lines.
   function lvl10(){
     const L = base();
@@ -527,5 +573,11 @@ const LEVELS = (() => {
     return {rows: campaign[3], date, attempt: -1};
   }
 
-  return { campaign, names, briefs, solvable, generateDaily, dailyDateUTC, generate, hashStr };
+  const special = {
+    rows: boomRush(),
+    name: 'Boom Rush',
+    brief: 'Drill dash, chain TNT, wake the cave-in, then ride the mine cart out.',
+  };
+
+  return { campaign, names, briefs, special, solvable, generateDaily, dailyDateUTC, generate, hashStr };
 })();
