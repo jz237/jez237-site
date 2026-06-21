@@ -106,6 +106,7 @@ const AUDIO = (() => {
       case 'warn':   tone(220, t, 0.055, 'square', 0.14); tone(165, t + 0.055, 0.08, 'sine', 0.12); break;
       case 'refill': slide(140, 65, t, 0.28, 'triangle', 0.24); noise(t, 0.22, 0.34, 600, 90); break;
       case 'boom':   slide(220, 30, t, 0.5, 'sawtooth', 0.4); noise(t, 0.45, 0.6, 1200); noise(t, 0.45, 0.4, 300); break;
+      case 'steam':  noise(t, 0.42, 0.28, 2600, 460); slide(1240, 620, t, 0.18, 'triangle', 0.08); break;
       case 'die':    slide(330, 70, t, 0.6, 'sawtooth', 0.32); tone(110, t + 0.1, 0.5, 'square', 0.2); break;
       case 'win':    [523, 659, 784, 1047, 1319].forEach((f, i) => tone(f, t + i * 0.09, 0.4, 'triangle', 0.28)); break;
       case 'ui':     tone(660, t, 0.05, 'square', 0.16); break;
