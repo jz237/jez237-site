@@ -1042,5 +1042,23 @@
       "continuity": "Preserves suspended vesperglass reef plates, cobalt gas-giant storms, cyan/violet auroras, ceramic-white pressure ribs, copper-black induction coils, pulse-lantern wayfinding, conductive alien gardens, and ribbon-bodied non-human inhabitants with electroreceptor crests and pressure-wrap garments.",
       "entryDescription": "A lived-in maintenance bench where Vesperglass Array workers inspect graphite tools, coil testers, pressure-wrap patches, repair drones, and cracked vesperglass components under gas-giant light."
     }
+  },
+  {
+    "id": "2026-06-21-overnight-vesperglass-array-low-gravity-food-hall",
+    "title": "Vesperglass Array: Low-Gravity Food Hall",
+    "tests": "Realistic weekly-world daily-life image; preserves Vesperglass Array continuity, non-human inhabitants, glass reef megahabitat, low-gravity food culture, and cinematic photographic rendering.",
+    "prompt": "Create a finished realistic cinematic square photograph from the weekly invented world Vesperglass Array: a busy low-gravity food hall inside Prismfall Concourse, built along a transparent suspended mineral reef plate above a turbulent cobalt gas giant. Show curved vesperglass walls and floor membranes, ceramic-white pressure ribs, copper-black induction coils, luminous fluid conduits, worn hand-grip rails, pulse-lantern wayfinding shifting cyan and violet with magnetic weather, suspended prism fronds, conductive lace-vines, and wide membrane windows with storm bands and auroras far below. Non-human ribbon-bodied and fan-limbed inhabitants with translucent skin, dark sensory nodes, branching electroreceptor crests, six to ten delicate handling tendrils, and flexible pressure-wrap garments share floating nutrient globes, warm vapor bowls in magnetic ceramic cradles, ballast-kelp ribbons, mineral-salt flakes, and amber broth spheres around anchored crescent tables. Add condensation, polished rails, contained spills, graphite utensils clipped to loops, kite-like repair drones, service alcoves, pressure seals, scuffed membranes, blue-white gas-giant glare, deep cobalt storm light, warm amber interior pools, realistic reflections/refractions, shallow depth of field, atmospheric scale, and documentary-lens realism. Avoid human astronauts, Earth cafeteria design, generic neon cyberpunk, franchise aesthetics, mushroom/fairytale motifs, readable text, logos, posters, watermarks, dancing, flat illustration, cartoon, painting, and concept-art styling.\n\nSource photo needed: none.\n\nReusable prompt template: Create a finished realistic cinematic daily-life view from [WEEKLY WORLD NAME]: show [SPECIFIC EVERYDAY LOCATION OR ROUTINE] using the established world bible as canon. Preserve the world's geography, inhabitants, materials, transit/infrastructure, palette, lighting, recurring motifs, and hard avoid rules. Make the scene feel inhabited, practical, alien, and coherent rather than generic sci-fi; include lived-in tools, wear, lighting, and environmental details.\n\nExample substitution: Vesperglass Array: Low-Gravity Food Hall - a busy Prismfall Concourse food hall where ribbon-bodied inhabitants share floating nutrient globes and warm vapor bowls under suspended prism fronds above cobalt gas-giant storms.",
+    "image": "images/2026-06-21-overnight-vesperglass-array-low-gravity-food-hall.png",
+    "date": "2026-06-21",
+    "batch": "Daily Prompt",
+    "slot": "overnight",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "world": {
+      "name": "Vesperglass Array",
+      "description": "A hard-sci-fi alien megahabitat where ribbon-bodied electroceptive inhabitants live across suspended glass reefs inside the magnetosphere of a blue-white gas giant.",
+      "continuity": "Preserves the suspended vesperglass reef habitat, cobalt gas-giant storms, cyan/violet auroras, copper-black induction coils, pulse-lanterns, prism fronds, and ribbon-bodied electroceptive inhabitants.",
+      "entryDescription": "A low-gravity Prismfall Concourse food hall where Vesperglass inhabitants share floating nutrient globes and vapor bowls during an ordinary communal meal."
+    }
   }
 ]
