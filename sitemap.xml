@@ -37,6 +37,18 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://jez237.com/experiments/image-gen-2-benchmark/</loc>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://jez237.com/experiments/image-gen-2-benchmark/worlds.html</loc>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://jez237.com/experiments/image-gen-2-benchmark/data-artifacts.html</loc>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://jez237.com/ai-sounds/</loc>
     <priority>0.7</priority>
   </url>
