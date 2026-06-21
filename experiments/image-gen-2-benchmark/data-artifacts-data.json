@@ -15,5 +15,22 @@
       "description": "A fictional municipal field ledger that turns daily light, heat, walking comfort, and street material samples into a handled planning artifact.",
       "continuity": "Data as Artifact images treat information as something filed, carried, measured, stamped, repaired, or displayed in the physical world."
     }
+  },
+  {
+    "id": "2026-06-21-manual-0804-household-noise-thermometer",
+    "title": "Household Noise Thermometer",
+    "tests": "Data-as-artifact example: fictional room-by-room household sound data embodied as a vintage tabletop instrument with gauge, room dial, pins, ticker tape, vials, and calibration ephemera.",
+    "prompt": "Use case: product-mockup\nAsset type: GPT Image 2 data-as-artifact archive image\nPrimary request: Create a square 1024x1024 polished image titled conceptually \"Household Noise Thermometer\", where a fictional day's room-by-room sound data has been embodied as a believable vintage tabletop instrument rather than a chart or poster.\n\nScene/backdrop: a close studio photograph of a compact mid-century desktop measuring instrument on a kitchen counter at dusk. It should look like an object someone could have bought from a municipal home-science catalog: brushed enamel body, bakelite knobs, glass meter window, paper roll slot, tiny brass feet, and a few detachable colored room tokens beside it. No people.\n\nSubject and information design: the instrument translates household sound into physical readings. It has a large analog needle gauge labeled \"HOUSEHOLD NOISE\", a segmented dial with room labels such as \"KITCHEN\", \"HALL\", \"BEDROOM\", \"WINDOW\", and \"CELLAR\", colored pins showing quiet/active periods, a small ticker-tape strip emerging from the side with simplified marks, and a row of small glass vials filled to different levels like captured sound samples. Use only short readable labels: \"HOUSEHOLD NOISE\", \"QUIET\", \"ACTIVE\", \"KITCHEN\", \"HALL\", \"BEDROOM\", \"WINDOW\", \"CELLAR\". Other fine marks may be decorative pseudo-notation.\n\nComposition/framing: square product-style photo, three-quarter view from slightly above, instrument centered but surrounded by meaningful parts: room tokens, a calibration card, coiled cloth cord, two tiny screwdrivers, a folded guarantee slip, and soft reflections on the counter. The data should feel baked into the object through needles, pins, vials, dials, and ticker tape, not printed as a flat infographic.\n\nLighting/mood: warm kitchen dusk light with cool blue window reflection, enamel cream, muted teal, burgundy pin marks, aged brass, black bakelite, glass highlights, subtle wear, dust in seams, crisp tactile detail, plausible manufacturing design.\n\nConstraints: no real logos, no brand names, no app UI, no smartphone, no people, no watermark, no signature, no generic glossy sci-fi dashboard, no dense tiny text, no copyrighted characters, no dancing or performance imagery. Make the artifact immediately understandable at a glance.",
+    "image": "images/2026-06-21-manual-0804-household-noise-thermometer.jpg",
+    "date": "2026-06-21",
+    "batch": "Data as Artifact",
+    "slot": "manual-0804",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "artifact": {
+      "category": "Domestic Instruments",
+      "description": "A fictional tabletop instrument that turns room-by-room household sound data into needles, pins, vials, dials, and ticker tape.",
+      "continuity": "Data as Artifact images treat information as something filed, carried, measured, stamped, repaired, or displayed in the physical world."
+    }
   }
 ]
