@@ -1,0 +1,36 @@
+[
+  {
+    "id": "2026-06-21-manual-0837-basil-adoption-notice",
+    "title": "Basil Adoption Notice",
+    "tests": "Subject-as-artifact sample: a living basil plant's identity rendered as an adoption notice, plant passport, care card, leaf sample, placement map, and botanical keepsake packet.",
+    "prompt": "Use case: product-mockup\nAsset type: GPT Image 2 subject-as-artifact archive image\nPrimary request: Create a polished 1024x1536 vertical image titled conceptually \"Basil Adoption Notice\", where a living basil plant's identity becomes a handled adoption packet and botanical keepsake.\n\nScene/backdrop: an overhead archival photograph on a small kitchen table in soft morning light. The subject is not just a plant portrait; it is represented through a physical packet of artifacts: an adoption notice, tiny passport booklet, pressed leaf sleeve, pot-placement map, watering stamp card, handwritten care tag, seed envelope, and a small instant photo of the basil in its pot. Include a few real basil leaves and a bit of soil dust around the packet.\n\nSubject identity: make the basil feel like a specific little character without making it cartoonish. Its identity should come through the records: a name line, growth habit notes, favorite window, leaf scent swatch, watering history stamps, pruning marks, and \"kitchen placement\" diagram. Use sparse large readable labels only: \"BASIL ADOPTION NOTICE\", \"NAME\", \"SUN\", \"WATER\", \"WINDOW\", \"LEAF SAMPLE\", \"CARE CARD\", \"ADOPTED\". Other small marks may be believable pseudo-notation.\n\nComposition/framing: vertical 9:16, straight-down with real paper thickness, creases, translucent sleeve glare, pressed leaf texture, stamped ink, paper fibers, folded corners, green pencil marks, twine, and a small brass clip. The adoption notice should be the main artifact, with the passport and care card partly tucked beneath it. Make it immediately read as subject identity becoming a record/keepsake, not a generic plant care poster.\n\nLighting/mood: warm morning kitchen light, fresh green basil, cream paper, soft terra-cotta accents, botanical ink, gentle shadows, tactile realism, hopeful and slightly funny but not cute-cartoon.\n\nConstraints: no generic infographic poster, no measuring device, no dashboard, no app UI, no real logos, no brand names, no watermark, no signature, no people, no copyrighted characters, no dancing or performance imagery, no dense tiny text. The plant's identity must visibly become the artifact.",
+    "image": "images/2026-06-21-manual-0837-basil-adoption-notice.jpg",
+    "date": "2026-06-21",
+    "batch": "Subject as Artifact",
+    "slot": "manual-0837",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1536",
+    "subjectArtifact": {
+      "kind": "Plant",
+      "description": "A specific basil plant represented through an adoption notice, plant passport, care card, pressed leaf sample, placement map, and small keepsake photo.",
+      "continuity": "Subject as Artifact images turn a human, animal, plant, or hybrid subject's identity into a handled record, specimen, keepsake, display, or archive object."
+    }
+  },
+  {
+    "id": "2026-06-21-manual-0844-night-shift-newspaper-profile",
+    "title": "Night Shift Newspaper Profile",
+    "tests": "Subject-as-artifact sample: a fictional night-shift bridge operator's identity rendered as a newspaper clipping packet, archive folder, press-photo fragments, reporter notes, transit stubs, and workplace tokens.",
+    "prompt": "Use case: historical-scene\nAsset type: GPT Image 2 subject-as-artifact archive image\nPrimary request: Create a polished 1024x1536 vertical image titled conceptually \"Night Shift Newspaper Profile\", where a fictional human subject's identity becomes a newspaper clipping packet and newsroom archive object.\n\nScene/backdrop: an overhead archival photograph on an old newsroom desk. The subject is not a normal portrait; their identity is represented through a physical packet of artifacts: a folded local newspaper feature, clipped portrait halftone, annotated press photo, coffee-ringed reporter notes, union punch card, transit ticket stubs, small envelope of workplace tokens, and a red pencil editor mark sheet.\n\nHuman subject identity: invent a specific but non-famous person: a middle-aged night-shift bridge operator with tired kind eyes, weathered hands, a raincoat, and a thermos. Show them only through the newspaper halftone portrait and press-photo fragments, not as a live person in the scene. The artifact should reveal identity through occupation, routine, small stats, quotes, places, and objects: bridge opening count, favorite thermos, radio call sign, rainy commute route, years on night shift, handwritten quote, and a small civic award clipping.\n\nReadable labels: use sparse readable newspaper-style labels only: \"NIGHT SHIFT PROFILE\", \"BRIDGE OPERATOR\", \"LOCAL EDITION\", \"YEARS ON DUTY\", \"COMMUTE\", \"QUOTE\", \"ARCHIVE COPY\". Other text can be believable pseudo-newsprint and notes.\n\nComposition/framing: vertical 9:16, straight-down with real paper thickness, folded newspaper edges, halftone dots, torn clipping edges, graphite annotations, red editor pencil, paperclips, date stamps, file tab, and a stamped archive folder beneath. The largest object should be the folded newspaper feature, with smaller identity artifacts tucked around it. Make it immediately read as a human life translated into a newspaper/archive object, not a generic poster or magazine cover.\n\nLighting/mood: warm desk lamp over cool pre-dawn newsroom shadows, gray newsprint, red pencil marks, blue-black ink, worn manila folder, coffee stains, tactile realism, thoughtful and humane but not sentimental.\n\nConstraints: no real person, no celebrity, no real newspaper logo, no brand names, no app UI, no smartphone, no measuring device, no dashboard, no watermark, no signature, no dense tiny text, no dancing or performance imagery. The person's identity must visibly become the artifact.",
+    "image": "images/2026-06-21-manual-0844-night-shift-newspaper-profile.jpg",
+    "date": "2026-06-21",
+    "batch": "Subject as Artifact",
+    "slot": "manual-0844",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1536",
+    "subjectArtifact": {
+      "kind": "Human",
+      "description": "A fictional night-shift bridge operator represented through a newspaper feature, archive folder, press-photo fragments, reporter notes, transit stubs, and workplace tokens.",
+      "continuity": "Subject as Artifact images turn a human, animal, plant, or hybrid subject's identity into a handled record, specimen, keepsake, display, or archive object."
+    }
+  }
+]
