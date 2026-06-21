@@ -2485,6 +2485,16 @@ for (const [kind, src] of Object.entries(enemySpriteSrcs)){
   img.src = src;
   enemySprites[kind] = img;
 }
+const ENEMY_POSE_SHEET = {
+  src: 'assets/enemy-pose-sheet-gpt-v1.png',
+  cols: 4,
+  rows: 3,
+  row: {guard: 0, scout: 1, mason: 2},
+};
+const enemyPoseSheet = new Image();
+let enemyPoseSheetReady = false;
+enemyPoseSheet.onload = () => { enemyPoseSheetReady = true; if (booted) render(); };
+enemyPoseSheet.src = ENEMY_POSE_SHEET.src;
 function minerFrameIndex(a, pose, fi){
   if (pose === 'dig') return a.dir < 0 ? MINER_SHEET.cells.digLeft : MINER_SHEET.cells.digRight;
   if (a.gold) return MINER_SHEET.cells.carry;
@@ -2811,6 +2821,26 @@ function generatedEnemyImage(kind){
   const img = enemySprites[kind];
   return img && img.ready && img.naturalWidth && img.naturalHeight ? img : null;
 }
+function generatedEnemyFrame(a, pose, fi){
+  const row = ENEMY_POSE_SHEET.row[a.kind];
+  if (enemyPoseSheetReady && Number.isFinite(row)){
+    const col = pose === 'run' ? fi % 2 : (pose === 'climb' ? 2 : (pose === 'bar' ? 3 : -1));
+    if (col >= 0){
+      const sw = enemyPoseSheet.naturalWidth / ENEMY_POSE_SHEET.cols;
+      const sh = enemyPoseSheet.naturalHeight / ENEMY_POSE_SHEET.rows;
+      return {
+        img: enemyPoseSheet,
+        sx: col * sw,
+        sy: row * sh,
+        sw,
+        sh,
+        sheet: true
+      };
+    }
+  }
+  const img = generatedEnemyImage(a.kind);
+  return img ? {img, sx: 0, sy: 0, sw: img.naturalWidth, sh: img.naturalHeight, sheet: false} : null;
+}
 function generatedEnemyHeight(a, pose){
   if (pose === 'bar') return a.kind === 'mason' ? 64 : 60;
   if (a.kind === 'scout') return 66;
@@ -2855,14 +2885,14 @@ function generatedEnemyMotion(a, pose){
   const breathe = 0.01 + Math.sin(t * 3) * 0.006;
   return {rot: 0, sx: 1 + breathe, sy: 1 - breathe, ox: 0, oy: 0};
 }
-function drawGeneratedEnemy(a, img, cx2, footY, h, w, pose){
+function drawGeneratedEnemy(a, sprite, cx2, footY, h, w, pose){
   const motion = generatedEnemyMotion(a, pose);
   ctx.save();
   ctx.translate(cx2 + motion.ox, footY + motion.oy);
   if (a.dir < 0) ctx.scale(-1, 1);
   ctx.rotate(motion.rot);
   ctx.scale(motion.sx, motion.sy);
-  ctx.drawImage(img, -w * .5, -h, w, h);
+  ctx.drawImage(sprite.img, sprite.sx, sprite.sy, sprite.sw, sprite.sh, -w * .5, -h, w, h);
   ctx.restore();
 }
 function drawActor(a){
@@ -2878,7 +2908,7 @@ function drawActor(a){
   const generatedDigPlayer = generatedPlayer && pose === 'dig' && vibeMinerDigReady && vibeMinerDig.naturalWidth;
   const generatedClimbHangPlayer = generatedPlayer && (pose === 'climb' || pose === 'bar') &&
     vibeMinerClimbHangReady && vibeMinerClimbHang.naturalWidth;
-  const generatedEnemy = a.kind !== 'player' ? generatedEnemyImage(a.kind) : null;
+  const generatedEnemy = a.kind !== 'player' ? generatedEnemyFrame(a, pose, fi) : null;
   const generatedRatio = generatedRunPlayer
     ? ((vibeMinerRun.naturalWidth / VIBE_MINER_RUN.cols) / vibeMinerRun.naturalHeight)
     : (generatedDigPlayer
@@ -2886,7 +2916,7 @@ function drawActor(a){
       : (generatedClimbHangPlayer
         ? ((vibeMinerClimbHang.naturalWidth / VIBE_MINER_CLIMB_HANG.cols) / vibeMinerClimbHang.naturalHeight)
         : ((painterlyMiner.naturalWidth / MINER_SHEET.cols) / (painterlyMiner.naturalHeight / MINER_SHEET.rows))));
-  const enemyRatio = generatedEnemy ? generatedEnemy.naturalWidth / generatedEnemy.naturalHeight : 1;
+  const enemyRatio = generatedEnemy ? generatedEnemy.sw / generatedEnemy.sh : 1;
   const h = generatedPlayer
     ? (generatedClimbHangPlayer ? (pose === 'bar' ? 76 : 80) : (generatedRunPlayer ? 70 : (generatedDigPlayer ? 76 : 74)))
     : generatedEnemy ? generatedEnemyHeight(a, pose)
