@@ -459,10 +459,12 @@
     if (els.pictureDesk) {
       els.pictureDesk.innerHTML = pictureDeskItems.map((item) => `
         <article class="picture-desk-item">
-          <h3>${escapeHtml(item.title || item.caption || "Picture")}</h3>
           ${articleVisual(item.image || item)}
-          ${item.note ? `<p>${escapeHtml(item.note)}</p>` : ""}
-          ${sourceLinks(issue, item.sourceRefs)}
+          <div class="picture-desk-copy">
+            <h3>${escapeHtml(item.title || item.caption || "Picture")}</h3>
+            ${item.note ? `<p>${escapeHtml(item.note)}</p>` : ""}
+            ${sourceLinks(issue, item.sourceRefs)}
+          </div>
         </article>
       `).join("");
     }
