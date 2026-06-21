@@ -572,8 +572,8 @@ function tryDig(dir){
   if (above === 'B' && !isBlasted(tc, r)) return false;
   if (above === 'C' && !isCrumbleGone(tc, r) && !isBlasted(tc, r)) return false;
   player.dir = dir;
-  if (player.tnt > 0){
-    // TNT charge: instant 3-wide excavation
+  if (player.tnt > 0 && (keys.ArrowDown || keys.KeyS)){
+    // TNT charge: deliberate down+dig 3-wide excavation.
     player.tnt--;
 	    for (let k = -1; k <= 1; k++){
 	      const cc = tc + k;
@@ -1592,12 +1592,12 @@ function buildHowTo(){
     '<p><b>Dig</b> a trap to the lower-left <span class="k">Z</span> or lower-right <span class="k">X</span> ' +
     '(also <span class="k">,</span> <span class="k">.</span>). Holes seal shut — a guard caught inside is trapped, then lost.</p>' +
     '<p><b>Jumpers</b> chase you and pocket gold. <b>Scouts</b> are quick; <b>masons</b> re-seal your holes.</p>' +
-    '<p><b>Pick-ups:</b> <span style="color:#ff5c33">TNT</span> blasts 3 wide · ' +
+    '<p><b>Pick-ups:</b> <span style="color:#ff5c33">TNT</span> blasts 3 wide with <span class="k">↓</span> + dig · ' +
     '<span style="color:#3fd2c7">Boots</span> speed · <span style="color:#b07fff">Cloak</span> phase through guards · ' +
     '<span style="color:#ffd23f">Magnet</span> grabs gold · <span style="color:#7fd24a">Shovel</span> instant digs.</p>' +
     '<p><b>Lantern oil</b> briefly widens the painted light pool; maps briefly boost magnet pull. Chain nuggets fast for a <b>combo multiplier</b>.</p>' +
     '<p><b>Boom Rush:</b> the special claim adds <span class="k">Space</span>/<span class="k">Shift</span> drill dash, tumbling bonus nuggets, pressure plates, steam vents, lava seams, crushers, a drill worm, falling cave-in rock, and a mine-cart escape.</p>' +
-    '<p><b>Phone:</b> drag to move or climb; tap the ground left/right of the miner to dig that side.</p>' +
+    '<p><b>Phone:</b> drag to move or climb; tap the ground left/right of the miner to dig that side; tap ladder tiles to climb.</p>' +
     '<p><span class="k">P</span> pause · <span class="k">M</span> mute · <span class="k">R</span> restart.</p>';
 }
 
@@ -1651,15 +1651,47 @@ function initTouch(){
 function clearTouchMoveKeys(){
   keys.ArrowLeft = keys.ArrowRight = keys.ArrowUp = keys.ArrowDown = false;
 }
-function pulseDigKey(code){
+const touchPulseTimers = {};
+function pulseTouchKey(code, ms){
+  clearTimeout(touchPulseTimers[code]);
   keys[code] = true;
-  setTimeout(() => { keys[code] = false; }, 150);
+  touchPulseTimers[code] = setTimeout(() => { keys[code] = false; }, ms || 180);
 }
 function clientToGameScreen(clientX, clientY){
   const rect = canvas.getBoundingClientRect();
   const sx = rect.width ? (clientX - rect.left) / rect.width * screenW : clientX;
   const sy = rect.height ? (clientY - rect.top) / rect.height * screenH : clientY;
   return {x: sx, y: sy};
+}
+function screenToWorldPoint(p){
+  if (mobileCamera && mobileView){
+    return {
+      x: mobileView.x + (p.x / screenW) * mobileView.w,
+      y: mobileView.y + ((p.y - mobileView.hudH) / mobileView.playH) * mobileView.h,
+    };
+  }
+  return {x: p.x, y: p.y};
+}
+function ladderTapTarget(clientX, clientY){
+  if (state !== 'playing' || !player || !grid.length) return null;
+  const p = clientToGameScreen(clientX, clientY);
+  const hudH = mobileCamera ? mobileHudHeight() : HUD_H;
+  if (p.y < hudH + 12) return null;
+  const w = screenToWorldPoint(p);
+  const c0 = Math.floor(w.x / TILE);
+  const r0 = Math.floor((w.y - HUD_H) / TILE);
+  let best = null, bestD = Infinity;
+  for (let dr = -1; dr <= 1; dr++){
+    for (let dc = -1; dc <= 1; dc++){
+      const c = c0 + dc, r = r0 + dr;
+      if (!isLadder(c, r)) continue;
+      const sx = mobileCamera && mobileView ? (px(c + .5) - mobileView.x) / mobileView.w * screenW : px(c + .5);
+      const sy = mobileCamera && mobileView ? mobileView.hudH + (py(r + .5) - mobileView.y) / mobileView.h * mobileView.playH : py(r + .5);
+      const d = Math.hypot(sx - p.x, sy - p.y);
+      if (d < bestD){ bestD = d; best = {c, r}; }
+    }
+  }
+  return bestD <= 58 ? best : null;
 }
 function playerScreenX(){
   if (!player) return screenW / 2;
@@ -1668,19 +1700,33 @@ function playerScreenX(){
   }
   return px(player.x);
 }
+function handleTouchLadder(clientX, clientY){
+  const lad = ladderTapTarget(clientX, clientY);
+  if (!lad) return false;
+  AUDIO.ensure();
+  const targetX = lad.c + .5;
+  if (Math.abs(player.x - targetX) > 0.32){
+    pulseTouchKey(targetX < player.x ? 'ArrowLeft' : 'ArrowRight', 260);
+  }
+  const code = lad.r + .5 < player.y ? 'ArrowUp' : 'ArrowDown';
+  pulseTouchKey(code, 420);
+  return true;
+}
 function handleTouchDig(clientX, clientY){
   if (state !== 'playing' || !player) return false;
   const p = clientToGameScreen(clientX, clientY);
   const hudH = mobileCamera ? mobileHudHeight() : HUD_H;
   if (p.y < hudH + 24) return false;
   AUDIO.ensure();
-  pulseDigKey(p.x < playerScreenX() ? 'KeyZ' : 'KeyX');
+  pulseTouchKey(p.x < playerScreenX() ? 'KeyZ' : 'KeyX', 180);
   return true;
 }
 function initTouchGestures(){
   const gesture = {id: null, sx: 0, sy: 0, x: 0, y: 0, t: 0, moved: false};
+  const touchTap = {id: null, sx: 0, sy: 0, t: 0, moved: false};
   const touches = new Map();
   const pinch = {active: false, startDist: 1, startZoom: 1, changed: false};
+  let lastTapAction = 0;
   const setMove = (dx, dy) => {
     clearTouchMoveKeys();
     const ax = Math.abs(dx), ay = Math.abs(dy);
@@ -1710,6 +1756,14 @@ function initTouchGestures(){
   const reset = () => {
     gesture.id = null;
     clearTouchMoveKeys();
+  };
+  const runTapAction = (clientX, clientY) => {
+    const now = performance.now();
+    if (now - lastTapAction < 140) return true;
+    lastTapAction = now;
+    clearTouchMoveKeys();
+    if (!handleTouchLadder(clientX, clientY)) handleTouchDig(clientX, clientY);
+    return true;
   };
   canvas.addEventListener('pointerdown', e => {
     if (e.pointerType === 'mouse' || e.target.closest('button,.panel')) return;
@@ -1751,13 +1805,46 @@ function initTouchGestures(){
     e.preventDefault();
     const elapsed = performance.now() - gesture.t;
     const dist = Math.hypot(e.clientX - gesture.sx, e.clientY - gesture.sy);
-    clearTouchMoveKeys();
-    if (elapsed < 280 && dist < 16) handleTouchDig(e.clientX, e.clientY);
-    reset();
+    if (elapsed < 280 && dist < 16){
+      runTapAction(e.clientX, e.clientY);
+      gesture.id = null;
+    } else {
+      reset();
+    }
   };
   canvas.addEventListener('pointerup', finish);
   canvas.addEventListener('pointercancel', e => { touches.delete(e.pointerId); reset(); pinch.active = false; });
   canvas.addEventListener('lostpointercapture', e => { touches.delete(e.pointerId); reset(); if (touches.size < 2) pinch.active = false; });
+  canvas.addEventListener('touchstart', e => {
+    if (state !== 'playing' || e.touches.length !== 1) return;
+    const t = e.changedTouches[0];
+    touchTap.id = t.identifier;
+    touchTap.sx = t.clientX;
+    touchTap.sy = t.clientY;
+    touchTap.t = performance.now();
+    touchTap.moved = false;
+    document.body.classList.add('touch');
+  }, {passive: true});
+  canvas.addEventListener('touchmove', e => {
+    if (touchTap.id == null) return;
+    for (const t of e.changedTouches){
+      if (t.identifier !== touchTap.id) continue;
+      if (Math.hypot(t.clientX - touchTap.sx, t.clientY - touchTap.sy) > 16) touchTap.moved = true;
+      break;
+    }
+  }, {passive: true});
+  canvas.addEventListener('touchend', e => {
+    if (touchTap.id == null) return;
+    for (const t of e.changedTouches){
+      if (t.identifier !== touchTap.id) continue;
+      const elapsed = performance.now() - touchTap.t;
+      const dist = Math.hypot(t.clientX - touchTap.sx, t.clientY - touchTap.sy);
+      touchTap.id = null;
+      if (!touchTap.moved && elapsed < 320 && dist < 18) runTapAction(t.clientX, t.clientY);
+      break;
+    }
+  }, {passive: true});
+  canvas.addEventListener('touchcancel', () => { touchTap.id = null; }, {passive: true});
 }
 
 function playerInput(){
@@ -1867,7 +1954,7 @@ function loadLevelData(rows){
   if (mode === 'special'){
     hint = {
       life: 9,
-      text: 'SPACE / SHIFT drill dash   Z / X dig or TNT   grab gold to wake the cave-in   escape by cart',
+      text: 'SPACE / SHIFT drill dash   Z / X dig   DOWN + dig spends TNT   escape by cart',
     };
   } else if (mode === 'campaign'){
     const brief = LEVELS.briefs && LEVELS.briefs[levelIndex];
@@ -4574,6 +4661,7 @@ window.__g = {
   noWayOut(){ return currentNoWayOutReason(); },
   showNoWayOut(reason){ showSoftlock(reason || currentNoWayOutReason() || 'This claim cannot be completed from here.'); return state; },
   get mobileZoom(){ return mobileZoomAdjust; },
+  get mobileView(){ return mobileView ? {...mobileView} : null; },
   set mobileZoom(v){ mobileZoomAdjust = clamp(Number(v) || 1, 0.72, 1.35); },
   seedDaily(dateStr){
     const d = LEVELS.generateDaily(dateStr);
