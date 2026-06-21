@@ -1953,7 +1953,19 @@ function initVolumeControls(){
 
 function bindButton(id, fn){
   const b = $(id);
-  b.addEventListener('click', e => { e.preventDefault(); AUDIO.ensure(); AUDIO.sfx('ui'); fn(); });
+  let lastFire = 0;
+  const fire = e => {
+    e.preventDefault();
+    e.stopPropagation();
+    const now = performance.now();
+    if (now - lastFire < 260) return;
+    lastFire = now;
+    AUDIO.ensure();
+    AUDIO.sfx('ui');
+    fn();
+  };
+  b.addEventListener('pointerup', fire);
+  b.addEventListener('click', fire);
 }
 bindButton('bPlay', () => startGame('campaign'));
 bindButton('bSpecial', () => startGame('special'));
