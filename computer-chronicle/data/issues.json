@@ -1,8 +1,498 @@
 {
-  "generatedAt": "2026-06-20T02:12:59.068Z",
+  "generatedAt": "2026-06-21T12:02:17.731Z",
   "editorialPriority": "When there is a choice, prefer personal computers, home computing, office PC software, and personal computer or console gaming over broad enterprise technology.",
   "fallbackPolicy": "Use exact-day computer news when verified. If none exists, use same-week or same-month personal-computing items with confidence labels, then fall back to a wider world/business headline.",
   "issues": [
+    {
+      "currentDate": "2026-06-21",
+      "historicDate": "1982-11-22",
+      "displayDate": "Week of November 22-28, 1982",
+      "edition": "Issue 017 - Weekly 1982 Computer & Culture Chronicle",
+      "visualProfile": {
+        "layout": "weekly-newsprint-front",
+        "accent": "black-red-blue",
+        "paper": "halftone-cream",
+        "strapline": "Vectrex vectors, Atari holiday shelves, Choplifter on the Apple II, and Lionel Richie at No. 1"
+      },
+      "masthead": {
+        "kicker": "A weekly 1982 archive dispatch",
+        "title": "Computer Chronicle",
+        "deck": "Video games, home computers, software counters, and culture for the week of November 22-28, 1982"
+      },
+      "layoutPlan": {
+        "lead": "Vectrex turns a built-in vector screen into a holiday counter spectacle",
+        "secondary": [
+          "Atari 5200 and the renamed 2600 share the November aisle",
+          "Choplifter keeps the Apple II game chart lively"
+        ],
+        "rails": [
+          "Top 5 games",
+          "Price watch"
+        ]
+      },
+      "sectionChrome": {
+        "lead": {
+          "label": "Lead Story"
+        },
+        "pictureDesk": {
+          "label": "Picture Desk",
+          "title": "Scenes From the Week"
+        },
+        "computerItems": {
+          "label": "Computers & Hardware",
+          "title": "Personal Computing Desk"
+        },
+        "software": {
+          "label": "Software Top 5",
+          "title": "Programs on the Editor's Pad"
+        },
+        "storeShelves": {
+          "label": "Top Games This Week",
+          "title": "Arcade, Console & Computer Games"
+        },
+        "priceWatch": {
+          "label": "Price Watch",
+          "title": "What It Cost"
+        },
+        "bbs": {
+          "label": "Modem Desk"
+        },
+        "curiosity": {
+          "label": "Movies / TV / Culture"
+        },
+        "briefs": {
+          "label": "Magazine Rack",
+          "title": "Culture & Shelf Talk"
+        },
+        "music": {
+          "label": "Top Rock This Week",
+          "title": "Hot 100, November 20"
+        },
+        "periodAd": {
+          "label": "Retail / Ads"
+        },
+        "classifieds": {
+          "label": "Classifieds",
+          "title": "Small Ads"
+        },
+        "fallback": {
+          "label": "Editorial Screen"
+        },
+        "accuracy": {
+          "label": "Accuracy Ledger",
+          "title": "What Is Date-Specific"
+        },
+        "sources": {
+          "label": "Source Trail",
+          "title": "Research Log"
+        },
+        "market": {
+          "label": "Retail / Ads",
+          "title": "Counter Watch"
+        }
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1982-11-22.png",
+        "alt": "GPT Image 2 newspaper-style Computer Chronicle front page for the week of November 22-28, 1982",
+        "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "Thanksgiving week keeps the Chronicle at the holiday electronics counter: GCE's Vectrex brings a self-contained vector display, Atari sells both a premium 5200 and the newly named 2600, and Apple II players keep Choplifter high on the year's software shelf.",
+      "morningLine": "A built-in vector monitor, a crowded Atari cartridge wall, Apple II rescue missions, E.T. at the box office, and Lionel Richie on the radio define the week of November 22, 1982.",
+      "lead": {
+        "headline": "Vectrex Brings Vector Arcade Lines Home",
+        "summary": "General Consumer Electronics' Vectrex reached the 1982 holiday market as a self-contained game system with its own black-and-white vector monitor and color screen overlays, giving store demonstrators a sharp contrast to television-based consoles.",
+        "confidence": "Month-specific November 1982 launch; holiday-week emphasis inferred from release timing and retail context.",
+        "sourceRefs": [
+          0,
+          1
+        ]
+      },
+      "computerItems": [
+        {
+          "label": "Console Counter",
+          "headline": "Atari 5200 Shares the Aisle With the Renamed 2600",
+          "summary": "Atari's November hardware story is split: the 5200 SuperSystem courts premium buyers while the former VCS carries the Atari 2600 name and the familiar cartridge library into the same shopping season.",
+          "confidence": "Month-specific November 1982 5200 release and VCS-to-2600 rename.",
+          "sourceRefs": [
+            0,
+            2
+          ]
+        },
+        {
+          "label": "Home Computer Desk",
+          "headline": "Commodore 64 Becomes the New Memory Pitch",
+          "summary": "The Commodore 64, introduced in 1982, gives dealers an easy showroom line: 64K of RAM, color graphics, sound, and a price aimed at families comparing computers and game machines.",
+          "confidence": "1982 release and period positioning; not exact-day specific.",
+          "sourceRefs": [
+            0,
+            3
+          ]
+        },
+        {
+          "label": "Apple II Games",
+          "headline": "Choplifter Keeps the Apple II in the Game Conversation",
+          "summary": "Dan Gorlin's Choplifter, published by Broderbund for the Apple II in 1982, remains a showcase for computer-first action design while console shoppers fill the holiday aisles.",
+          "confidence": "1982 Apple II release and Softalk reader-poll prominence.",
+          "sourceRefs": [
+            4,
+            5
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "VisiCalc",
+          "platform": "Apple II / IBM PC",
+          "detail": "The spreadsheet remains the software answer for small offices justifying a personal computer purchase.",
+          "confidence": "Period-appropriate business software context.",
+          "sourceRefs": [
+            6
+          ]
+        },
+        {
+          "name": "EasyWriter",
+          "platform": "IBM PC",
+          "detail": "Word processing remains a practical selling point for disk drives, printers, and office desks.",
+          "confidence": "IBM PC launch-era software context.",
+          "sourceRefs": [
+            6
+          ]
+        },
+        {
+          "name": "Deadline",
+          "platform": "Apple II / TRS-80 / IBM PC",
+          "detail": "Infocom's 1982 mystery keeps text adventures visible as serious boxed software.",
+          "confidence": "1982 release context.",
+          "sourceRefs": [
+            7
+          ]
+        },
+        {
+          "name": "Choplifter",
+          "platform": "Apple II",
+          "detail": "Broderbund's rescue shooter shows how home-computer games can lead arcade-style design.",
+          "confidence": "1982 Apple II release context.",
+          "sourceRefs": [
+            4,
+            5
+          ]
+        },
+        {
+          "name": "Zork II",
+          "platform": "Apple II / TRS-80 / CP/M",
+          "detail": "Infocom's adventure catalog continues to occupy the enthusiast shelf.",
+          "confidence": "Period-appropriate 1982 software shelf context.",
+          "sourceRefs": [
+            5,
+            7
+          ]
+        }
+      ],
+      "storeShelves": [
+        {
+          "rank": 1,
+          "title": "Choplifter",
+          "platform": "Apple II",
+          "note": "Softalk readers placed Broderbund's helicopter rescue game at the top of 1982 Apple II software.",
+          "sourceRefs": [
+            5
+          ]
+        },
+        {
+          "rank": 2,
+          "title": "Donkey Kong",
+          "platform": "ColecoVision / Arcade",
+          "note": "ColecoVision's bundled arcade conversion remains the new console's strongest sales demonstration.",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "rank": 3,
+          "title": "River Raid",
+          "platform": "Atari VCS / 2600",
+          "note": "Activision's scrolling shooter gives the older Atari cartridge wall a late-1982 draw.",
+          "sourceRefs": [
+            8
+          ]
+        },
+        {
+          "rank": 4,
+          "title": "Pole Position",
+          "platform": "Arcade",
+          "note": "Namco/Atari racing cabinets keep pseudo-3D driving prominent in arcades.",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "rank": 5,
+          "title": "Mine Storm",
+          "platform": "Vectrex",
+          "note": "The built-in Vectrex game helps show off crisp vector lines without a separate cartridge.",
+          "sourceRefs": [
+            1
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "Vectrex launch price",
+          "price": "about $199",
+          "note": "Self-contained vector console with built-in monitor.",
+          "sourceRefs": [
+            1
+          ]
+        },
+        {
+          "item": "Atari 5200 suggested retail",
+          "price": "about $349.95",
+          "note": "Reported introductory price for the November 1982 SuperSystem.",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "item": "Timex Sinclair 1000",
+          "price": "$99.95",
+          "note": "The U.S. ZX81 derivative keeps the sub-$100 home-computer pitch alive.",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "item": "Commodore 64 launch-era price",
+          "price": "about $595",
+          "note": "Early list pricing before later price cuts.",
+          "sourceRefs": [
+            3
+          ]
+        }
+      ],
+      "market": {
+        "headline": "Holiday Counters Sell Screens, Memory, and Libraries",
+        "summary": "Retailers can stage three different arguments at once: Vectrex has its own screen, Atari has a huge cartridge back catalog plus the 5200, and Commodore sells 64K as a family-computer number.",
+        "confidence": "Synthesized from 1982 hardware launches and period retail positioning.",
+        "sourceRefs": [
+          0,
+          1,
+          2,
+          3
+        ]
+      },
+      "bbsNote": {
+        "headline": "Modem Note",
+        "summary": "The mass market is still focused on consoles and low-cost computers, while 300-baud bulletin-board callers trade settings, game hints, and local phone numbers after hours.",
+        "confidence": "Period-appropriate home-computing context.",
+        "sourceRefs": [
+          9
+        ]
+      },
+      "curiosity": {
+        "headline": "Cinema Lobby",
+        "summary": "Box Office Mojo lists E.T. the Extra-Terrestrial as the weekly domestic box-office leader for November 26-December 2, 1982, keeping the film in front of the same families seeing E.T. cartridge ads.",
+        "confidence": "Week-specific box-office chart.",
+        "sourceRefs": [
+          10
+        ]
+      },
+      "briefs": [
+        {
+          "headline": "Lionel Richie Takes the Hot 100",
+          "summary": "Billboard's Hot 100 for November 27, 1982 puts Lionel Richie's \"Truly\" at No. 1, followed by Laura Branigan's \"Gloria\" and Olivia Newton-John's \"Heart Attack.\"",
+          "confidence": "Week-specific Hot 100 chart.",
+          "sourceRefs": [
+            11,
+            12
+          ]
+        },
+        {
+          "headline": "E.T. Leads the Holiday Box Office",
+          "summary": "For the domestic week of November 26-December 2, E.T. the Extra-Terrestrial is listed as the top film, with First Blood continuing its fall run.",
+          "confidence": "Week-specific box-office chart.",
+          "sourceRefs": [
+            10
+          ]
+        },
+        {
+          "headline": "Apple II Poll Favors Action",
+          "summary": "Softalk's 1982 reader-poll summary placed Choplifter first among popular Apple II software, ahead of a mix of arcade, adventure, and utility titles.",
+          "confidence": "Year-specific reader-poll summary used as late-1982 shelf context.",
+          "sourceRefs": [
+            5
+          ]
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "Truly",
+          "artist": "Lionel Richie"
+        },
+        {
+          "rank": 2,
+          "title": "Gloria",
+          "artist": "Laura Branigan"
+        },
+        {
+          "rank": 3,
+          "title": "Heart Attack",
+          "artist": "Olivia Newton-John"
+        },
+        {
+          "rank": 4,
+          "title": "Up Where We Belong",
+          "artist": "Joe Cocker and Jennifer Warnes"
+        },
+        {
+          "rank": 5,
+          "title": "Heartlight",
+          "artist": "Neil Diamond"
+        }
+      ],
+      "movieChart": [
+        {
+          "rank": 1,
+          "title": "E.T. the Extra-Terrestrial"
+        },
+        {
+          "rank": 2,
+          "title": "First Blood"
+        },
+        {
+          "rank": 3,
+          "title": "An Officer and a Gentleman"
+        },
+        {
+          "rank": 4,
+          "title": "Creepshow"
+        },
+        {
+          "rank": 5,
+          "title": "The Missionary"
+        }
+      ],
+      "periodAd": {
+        "headline": "See the Game Without the Family Television",
+        "summary": "Dealer copy for Thanksgiving week can pitch Vectrex as the console with its own screen: plug it in, add overlays, and watch vector lines draw the arcade right on the counter.",
+        "confidence": "Ad-style copy derived from November 1982 Vectrex launch context.",
+        "sourceRefs": [
+          1
+        ]
+      },
+      "classifieds": [
+        {
+          "headline": "Wanted: Vectrex overlays",
+          "copy": "New owner seeks spare color overlays and launch cartridges."
+        },
+        {
+          "headline": "Apple II disk swap",
+          "copy": "Choplifter, Zork, and utility disks discussed; no pirated copies."
+        }
+      ],
+      "worldFallback": {
+        "headline": "Editors Hold the Front to Games",
+        "summary": "No routine world or sports item displaces this week's console, software, and culture story.",
+        "confidence": "Editorial scope note."
+      },
+      "accuracyLedger": {
+        "items": [
+          {
+            "claim": "Vectrex was released in November 1982 with a built-in vector monitor.",
+            "status": "Verified month-specific"
+          },
+          {
+            "claim": "Atari renamed the VCS as the Atari 2600 in November 1982 and released the 5200 in the same period.",
+            "status": "Verified month-specific"
+          },
+          {
+            "claim": "Lionel Richie's Truly was No. 1 on the Billboard Hot 100 dated November 27, 1982.",
+            "status": "Verified week-specific"
+          },
+          {
+            "claim": "E.T. the Extra-Terrestrial led the domestic weekly box office for November 26-December 2, 1982.",
+            "status": "Verified week-specific"
+          }
+        ]
+      },
+      "sources": [
+        {
+          "name": "1982 in video games",
+          "url": "https://en.wikipedia.org/wiki/1982_in_video_games"
+        },
+        {
+          "name": "Vectrex historical summary",
+          "url": "https://en.wikipedia.org/wiki/Vectrex"
+        },
+        {
+          "name": "Atari 5200 historical summary",
+          "url": "https://en.wikipedia.org/wiki/Atari_5200"
+        },
+        {
+          "name": "Commodore 64 historical summary",
+          "url": "https://en.wikipedia.org/wiki/Commodore_64"
+        },
+        {
+          "name": "Choplifter historical summary",
+          "url": "https://en.wikipedia.org/wiki/Choplifter"
+        },
+        {
+          "name": "Apple II History: 1982 Softalk reader poll",
+          "url": "https://www.apple2history.org/appendix/aha/aha82/"
+        },
+        {
+          "name": "IBM PC software context",
+          "url": "https://en.wikipedia.org/wiki/IBM_Personal_Computer"
+        },
+        {
+          "name": "Infocom bibliography",
+          "url": "https://en.wikipedia.org/wiki/Infocom"
+        },
+        {
+          "name": "River Raid historical summary",
+          "url": "https://en.wikipedia.org/wiki/River_Raid"
+        },
+        {
+          "name": "BBS history context",
+          "url": "https://en.wikipedia.org/wiki/Bulletin_board_system"
+        },
+        {
+          "name": "Box Office Mojo domestic weekly 1982",
+          "url": "https://www.boxofficemojo.com/weekly/by-year/1982/"
+        },
+        {
+          "name": "Billboard Hot 100: November 27, 1982",
+          "url": "https://www.billboard.com/charts/hot-100/1982-11-27/"
+        },
+        {
+          "name": "American Top 40 archive: November 27, 1982",
+          "url": "https://therealamericantop40.fandom.com/wiki/November_27%2C_1982"
+        }
+      ],
+      "pictureDesk": [
+        {
+          "src": "media/computer-chronicle-gpt-image-2-week-1982-11-22.png",
+          "alt": "GPT Image 2 newspaper-style Computer Chronicle front page for the week of November 22-28, 1982",
+          "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+          "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+        }
+      ],
+      "frontPageStories": [
+        {
+          "headline": "Vectrex Brings Vector Arcade Lines Home",
+          "summary": "A self-contained vector monitor gives GCE's new system a striking holiday-store demo."
+        },
+        {
+          "headline": "Choplifter Keeps Apple II Players Busy",
+          "summary": "Broderbund's rescue shooter shows how home computers can launch arcade-style hits."
+        }
+      ],
+      "musicChartSourceRefs": [
+        11,
+        12
+      ]
+    },
     {
       "currentDate": "2026-06-20",
       "historicDate": "1982-11-15",
