@@ -408,11 +408,18 @@
     }
     .picture-desk-grid {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: 1fr;
       gap: 14px;
       margin-top: 12px;
     }
     .picture-desk-item {
+      min-width: 0;
+      display: grid;
+      grid-template-columns: minmax(220px, 42%) minmax(0, 1fr);
+      gap: 14px;
+      align-items: start;
+    }
+    .picture-desk-copy {
       min-width: 0;
     }
     .picture-desk-item h3 {
@@ -424,7 +431,14 @@
       overflow-wrap: anywhere;
     }
     .picture-desk-item .article-visual {
-      margin-bottom: 8px;
+      margin: 0;
+    }
+    .picture-desk-item .article-visual img {
+      aspect-ratio: 2 / 3;
+      object-fit: contain;
+      background:
+        radial-gradient(circle at 50% 42%, rgba(255, 248, 220, 0.38), transparent 58%),
+        var(--cc-ink);
     }
     .classified-list {
       display: grid;
@@ -1152,6 +1166,15 @@
     html body .chart-list span {
       color: var(--cc-muted) !important;
     }
+    html body .picture-desk-copy h3 {
+      color: var(--cc-ink) !important;
+      -webkit-text-fill-color: var(--cc-ink) !important;
+    }
+    html body .picture-desk-copy p,
+    html body .picture-desk-copy .source-list {
+      color: var(--cc-muted) !important;
+      -webkit-text-fill-color: var(--cc-muted) !important;
+    }
     html body .chronicle-hero h1 {
       color: var(--cc-ink) !important;
       -webkit-text-fill-color: var(--cc-ink) !important;
@@ -1456,6 +1479,9 @@
         font-size: 6.8pt;
       }
       .picture-desk-grid {
+        grid-template-columns: 1fr;
+      }
+      .picture-desk-item {
         grid-template-columns: 1fr;
       }
       .confidence {
