@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-21T15:00:01.506845+00:00",
+  "updatedAt": "2026-06-21T16:00:01.167058+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -11044,6 +11044,10 @@
     "https://techcrunch.com/2026/06/21/beyond-siri-here-are-the-practical-ai-features-coming-to-your-iphone-in-ios-27": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/01/tim-cook-iphone-GettyImages-2234563479.jpg?w=1024",
       "checkedAt": "2026-06-21T15:00:01.506845+00:00"
+    },
+    "https://techcrunch.com/2026/06/21/when-the-trump-administration-cracks-down-on-anthropic-who-benefits": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/anthropic-claude-fable.jpg?resize=1200,798",
+      "checkedAt": "2026-06-21T16:00:01.167058+00:00"
     }
   }
 }
