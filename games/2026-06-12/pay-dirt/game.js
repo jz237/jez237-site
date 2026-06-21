@@ -559,10 +559,13 @@ function chipDig(c, r, dir, heavy){
 
 function tryDig(dir){
   if (!player || player.state === 'dead' || player.digT > 0) return false;
-  if (player.state !== 'idle' && player.state !== 'run') return false;
+  if (!['idle', 'run', 'climb', 'bar'].includes(player.state)) return false;
   const c = Math.floor(player.x), r = Math.floor(player.y);
-	  if (Math.abs(player.y - (r + .5)) > 0.1) return false;
-	  if (!isSupportTile(c, r + 1) && !guardSupportAt(c, r + 1)) return false;
+	  if (Math.abs(player.y - (r + .5)) > 0.28) return false;
+  if (Math.abs(player.y - (r + .5)) > 0.04) player.y += (r + .5 - player.y) * 0.45;
+  const stableForDig = isSupportTile(c, r + 1) || isLadder(c, r) || isBar(c, r) ||
+    guardSupportAt(c, r + 1) || hasSupport(player);
+	  if (!stableForDig) return false;
 	  const tc = c + dir, tr = r + 1;
 	  const target = tileAt(tc, tr);
 	  if (!(target === '#' || isBottomDiggable(tc, tr)) || isDug(tc, tr) || isBlasted(tc, tr)) return false;
@@ -814,24 +817,34 @@ function updateSpecialSetpieces(dt){
   if (w){
     w.t += dt;
     if (!w.active){
-      w.cooldown -= dt;
-      if (special.caveT != null && w.cooldown <= 0){
-        w.active = true;
-        w.dir = rnd() < .5 ? 1 : -1;
-        w.x = w.dir > 0 ? -2 : COLS + 2;
-        w.y = 10.5 + ((rnd() * 3) | 0);
-        w.t = 0;
-        w.cooldown = 9 + rnd() * 4;
-        banner = {text: 'DRILL WORM!', sub: 'THE DEEP CLAIM BITES BACK', life: 1.6};
-        AUDIO.sfx('warn');
+      if (w.warnT > 0){
+        w.warnT = Math.max(0, w.warnT - dt);
+        if (rnd() < .28)
+          spawnParticles(w.dir > 0 ? .6 : COLS - .6, w.y + .25, 1, {color: ['#ff9d2e', '#d3a15d'], spd: 2.2, life: .32, size: 3, grav: 8, glow: true});
+        if (w.warnT <= 0){
+          w.active = true;
+          w.t = 0;
+          AUDIO.sfx('boom');
+        }
+      } else {
+        w.cooldown -= dt;
+        if (special.caveT != null && w.cooldown <= 0){
+          w.dir = rnd() < .5 ? 1 : -1;
+          w.x = w.dir > 0 ? -2 : COLS + 2;
+          w.y = 9.5 + ((rnd() * 4) | 0);
+          w.warnT = 2.25;
+          w.cooldown = 10 + rnd() * 5;
+          banner = {text: 'DRILL WORM!', sub: 'WARNING LANE - CLIMB OR DROP', life: 2.0};
+          AUDIO.sfx('warn');
+        }
       }
     } else {
-      w.x += w.dir * 7.2 * dt;
+      w.x += w.dir * 5.2 * dt;
       const wc = Math.floor(w.x), wr = Math.floor(w.y);
       breakSpecialCell(wc, wr, false);
       breakSpecialCell(wc, wr + 1, false);
       spawnParticles(w.x - w.dir * .75, w.y + .35, 2, {color: ['#ff9d2e', '#d3a15d', '#4b3426'], spd: 3.8, ang: w.dir > 0 ? Math.PI : 0, spread: 1.1, life: .38, size: 3, grav: 12, glow: true});
-      if (Math.abs(player.x - w.x) < 1.0 && Math.abs(player.y - w.y) < .9) killPlayer('crush');
+      if (Math.abs(player.x - w.x) < .82 && Math.abs(player.y - w.y) < .72) killPlayer('crush');
       if (w.x < -3 || w.x > COLS + 3) w.active = false;
     }
   }
@@ -1596,7 +1609,7 @@ function buildHowTo(){
     '<span style="color:#3fd2c7">Boots</span> speed · <span style="color:#b07fff">Cloak</span> phase through guards · ' +
     '<span style="color:#ffd23f">Magnet</span> grabs gold · <span style="color:#7fd24a">Shovel</span> instant digs.</p>' +
     '<p><b>Lantern oil</b> briefly widens the painted light pool; maps briefly boost magnet pull. Chain nuggets fast for a <b>combo multiplier</b>.</p>' +
-    '<p><b>Boom Rush:</b> the special claim adds <span class="k">Space</span>/<span class="k">Shift</span> drill dash, tumbling bonus nuggets, pressure plates, steam vents, lava seams, crushers, a drill worm, falling cave-in rock, and a mine-cart escape.</p>' +
+    '<p><b>Boom Rush:</b> the special claim adds <span class="k">Space</span>/<span class="k">Shift</span> drill dash, tumbling bonus nuggets, pressure plates, steam vents, lava seams, crushers, a telegraphed drill worm lane, falling cave-in rock, and a mine-cart escape.</p>' +
     '<p><b>Phone:</b> drag to move or climb; tap the ground left/right of the miner to dig that side; tap ladder tiles to climb.</p>' +
     '<p><span class="k">P</span> pause · <span class="k">M</span> mute · <span class="k">R</span> restart.</p>';
 }
@@ -1931,7 +1944,7 @@ function loadLevelData(rows){
       vents: [{x: 9.5, y: 11.55, t: .3}, {x: 17.5, y: 7.55, t: 1.4}],
       lava: [{c0: 10, c1: 12, r: 12}, {c0: 21, c1: 22, r: 12}],
       crushers: [{c: 13, r: 5, t: 0}, {c: 21, r: 9, t: .9}],
-      worm: {t: 0, active: false, x: -2, y: 10.5, dir: 1, cooldown: 7},
+      worm: {t: 0, active: false, warnT: 0, x: -2, y: 10.5, dir: 1, cooldown: 7},
     };
   }
   levelTime = 0;
@@ -2460,6 +2473,18 @@ const MINER_SHEET = {
 const VIBE_MINER_RUN = { cols: 4 };
 const VIBE_MINER_DIG = { cols: 4 };
 const VIBE_MINER_CLIMB_HANG = { cols: 4, climbStart: 0, hangStart: 2 };
+const enemySpriteSrcs = {
+  guard: 'assets/enemy-guard-gpt-v1.png',
+  scout: 'assets/enemy-scout-gpt-v1.png',
+  mason: 'assets/enemy-mason-gpt-v1.png',
+};
+const enemySprites = {};
+for (const [kind, src] of Object.entries(enemySpriteSrcs)){
+  const img = new Image();
+  img.onload = () => { img.ready = true; if (booted) render(); };
+  img.src = src;
+  enemySprites[kind] = img;
+}
 function minerFrameIndex(a, pose, fi){
   if (pose === 'dig') return a.dir < 0 ? MINER_SHEET.cells.digLeft : MINER_SHEET.cells.digRight;
   if (a.gold) return MINER_SHEET.cells.carry;
@@ -2782,6 +2807,23 @@ function drawGuardAccents(a, cx2, footY, h, w){
   }
   ctx.restore();
 }
+function generatedEnemyImage(kind){
+  const img = enemySprites[kind];
+  return img && img.ready && img.naturalWidth && img.naturalHeight ? img : null;
+}
+function generatedEnemyHeight(a, pose){
+  if (pose === 'bar') return a.kind === 'mason' ? 64 : 60;
+  if (a.kind === 'scout') return 66;
+  if (a.kind === 'mason') return 74;
+  return 70;
+}
+function drawGeneratedEnemy(a, img, cx2, footY, h, w){
+  ctx.save();
+  ctx.translate(cx2, footY - h);
+  if (a.dir < 0){ ctx.translate(w * .5, 0); ctx.scale(-1, 1); ctx.translate(-w * .5, 0); }
+  ctx.drawImage(img, -w * .5, 0, w, h);
+  ctx.restore();
+}
 function drawActor(a){
   const set = ART.frames[a.kind] || ART.frames.guard;
   const pose = poseFor(a);
@@ -2795,6 +2837,7 @@ function drawActor(a){
   const generatedDigPlayer = generatedPlayer && pose === 'dig' && vibeMinerDigReady && vibeMinerDig.naturalWidth;
   const generatedClimbHangPlayer = generatedPlayer && (pose === 'climb' || pose === 'bar') &&
     vibeMinerClimbHangReady && vibeMinerClimbHang.naturalWidth;
+  const generatedEnemy = a.kind !== 'player' ? generatedEnemyImage(a.kind) : null;
   const generatedRatio = generatedRunPlayer
     ? ((vibeMinerRun.naturalWidth / VIBE_MINER_RUN.cols) / vibeMinerRun.naturalHeight)
     : (generatedDigPlayer
@@ -2802,10 +2845,12 @@ function drawActor(a){
       : (generatedClimbHangPlayer
         ? ((vibeMinerClimbHang.naturalWidth / VIBE_MINER_CLIMB_HANG.cols) / vibeMinerClimbHang.naturalHeight)
         : ((painterlyMiner.naturalWidth / MINER_SHEET.cols) / (painterlyMiner.naturalHeight / MINER_SHEET.rows))));
+  const enemyRatio = generatedEnemy ? generatedEnemy.naturalWidth / generatedEnemy.naturalHeight : 1;
   const h = generatedPlayer
     ? (generatedClimbHangPlayer ? (pose === 'bar' ? 76 : 80) : (generatedRunPlayer ? 70 : (generatedDigPlayer ? 76 : 74)))
+    : generatedEnemy ? generatedEnemyHeight(a, pose)
     : (a.kind === 'player' ? 64 : 58);
-  const w = generatedPlayer ? h * generatedRatio : h * ART.FW / ART.FH;
+  const w = generatedPlayer ? h * generatedRatio : generatedEnemy ? h * enemyRatio : h * ART.FW / ART.FH;
   const cx2 = px(a.x);
   let footY = py(a.y) + TILE * 0.5;
   if (pose === 'bar') footY = py(Math.floor(a.y)) + 72;
@@ -2832,7 +2877,7 @@ function drawActor(a){
   ctx.filter = painterlyPlateReady ? 'saturate(1.12) contrast(1.03)' : 'none';
   if (a.kind === 'player' && a.cloakT > 0) ctx.globalAlpha = 0.45 + 0.2 * Math.sin(gameTime * 12);
   if (a.state === 'dead'){ ctx.globalAlpha = Math.max(0, 1 - a.deadT); footY -= a.deadT * 10; }
-  if (a.state === 'stun'){ ctx.globalAlpha = 0.6 + 0.2 * Math.sin(gameTime * 16); }
+  if (a.state === 'stun'){ ctx.globalAlpha = a.kind === 'player' ? 0.6 + 0.2 * Math.sin(gameTime * 16) : 0.74; }
   if (a.invuln > 0 && Math.floor(gameTime * 16) % 2) ctx.globalAlpha *= 0.4;
   // landing squash-and-stretch (juice)
   if (a.squashT > 0){ const s = a.squashT / 0.15; ctx.translate(cx2, footY); ctx.scale(1 + 0.18 * s, 1 - 0.22 * s); ctx.translate(-cx2, -footY); }
@@ -2844,6 +2889,7 @@ function drawActor(a){
     ctx.translate(-cx2, -footY);
   }
   if (generatedPlayer) drawGeneratedMiner(a, pose, fi, cx2, footY);
+  else if (generatedEnemy) drawGeneratedEnemy(a, generatedEnemy, cx2, footY, h, w);
   else {
     ctx.translate(cx2, footY - h);
     if (a.dir < 0){ ctx.translate(w, 0); ctx.scale(-1, 1); }
@@ -2853,7 +2899,7 @@ function drawActor(a){
   if (a.kind === 'player' && !(generatedPlayer && pose === 'dig' && vibeMinerDigReady && vibeMinerDig.naturalWidth)) drawDigStroke(a, cx2, footY);
   if (a.kind !== 'player' && a.state !== 'dead'){
     const meta = guardMeta(a);
-    drawGuardAccents(a, cx2, footY, h, w);
+    if (!generatedEnemy) drawGuardAccents(a, cx2, footY, h, w);
     if (a.alertT > 0){
       const p = a.alertT / 0.9;
       const ay = footY - h - 12 - (1 - p) * 7;
@@ -4343,6 +4389,25 @@ function drawSpecialSetpieces(){
     ctx.stroke();
   }
   const w = special.worm;
+  if (w && !w.active && w.warnT > 0){
+    const y = py(w.y);
+    const pulse = 0.45 + 0.35 * Math.sin(gameTime * 18);
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+    ctx.strokeStyle = 'rgba(255,93,48,' + pulse + ')';
+    ctx.lineWidth = 4;
+    ctx.setLineDash([12, 12]);
+    ctx.beginPath();
+    ctx.moveTo(0, y);
+    ctx.lineTo(VIEW_W, y);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = 'rgba(255,243,176,.9)';
+    ctx.font = '900 11px system-ui, sans-serif';
+    ctx.textAlign = w.dir > 0 ? 'left' : 'right';
+    ctx.fillText('DRILL WORM INCOMING', w.dir > 0 ? 16 : VIEW_W - 16, y - 12);
+    ctx.restore();
+  }
   if (w && w.active){
     ctx.save();
     ctx.translate(px(w.x), py(w.y));
