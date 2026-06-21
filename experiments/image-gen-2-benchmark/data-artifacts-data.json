@@ -15,5 +15,39 @@
       "description": "A fictional municipal field ledger that turns daily light, heat, walking comfort, and street material samples into a handled planning artifact.",
       "continuity": "Data as Artifact images treat information as something filed, carried, measured, stamped, repaired, or displayed in the physical world."
     }
+  },
+  {
+    "id": "2026-06-21-manual-0804-household-noise-thermometer",
+    "title": "Household Noise Thermometer",
+    "tests": "Data-as-artifact example: fictional room-by-room household sound data embodied as a vintage tabletop instrument with gauge, room dial, pins, ticker tape, vials, and calibration ephemera.",
+    "prompt": "Use case: product-mockup\nAsset type: GPT Image 2 data-as-artifact archive image\nPrimary request: Create a square 1024x1024 polished image titled conceptually \"Household Noise Thermometer\", where a fictional day's room-by-room sound data has been embodied as a believable vintage tabletop instrument rather than a chart or poster.\n\nScene/backdrop: a close studio photograph of a compact mid-century desktop measuring instrument on a kitchen counter at dusk. It should look like an object someone could have bought from a municipal home-science catalog: brushed enamel body, bakelite knobs, glass meter window, paper roll slot, tiny brass feet, and a few detachable colored room tokens beside it. No people.\n\nSubject and information design: the instrument translates household sound into physical readings. It has a large analog needle gauge labeled \"HOUSEHOLD NOISE\", a segmented dial with room labels such as \"KITCHEN\", \"HALL\", \"BEDROOM\", \"WINDOW\", and \"CELLAR\", colored pins showing quiet/active periods, a small ticker-tape strip emerging from the side with simplified marks, and a row of small glass vials filled to different levels like captured sound samples. Use only short readable labels: \"HOUSEHOLD NOISE\", \"QUIET\", \"ACTIVE\", \"KITCHEN\", \"HALL\", \"BEDROOM\", \"WINDOW\", \"CELLAR\". Other fine marks may be decorative pseudo-notation.\n\nComposition/framing: square product-style photo, three-quarter view from slightly above, instrument centered but surrounded by meaningful parts: room tokens, a calibration card, coiled cloth cord, two tiny screwdrivers, a folded guarantee slip, and soft reflections on the counter. The data should feel baked into the object through needles, pins, vials, dials, and ticker tape, not printed as a flat infographic.\n\nLighting/mood: warm kitchen dusk light with cool blue window reflection, enamel cream, muted teal, burgundy pin marks, aged brass, black bakelite, glass highlights, subtle wear, dust in seams, crisp tactile detail, plausible manufacturing design.\n\nConstraints: no real logos, no brand names, no app UI, no smartphone, no people, no watermark, no signature, no generic glossy sci-fi dashboard, no dense tiny text, no copyrighted characters, no dancing or performance imagery. Make the artifact immediately understandable at a glance.",
+    "image": "images/2026-06-21-manual-0804-household-noise-thermometer.jpg",
+    "date": "2026-06-21",
+    "batch": "Data as Artifact",
+    "slot": "manual-0804",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "artifact": {
+      "category": "Domestic Instruments",
+      "description": "A fictional tabletop instrument that turns room-by-room household sound data into needles, pins, vials, dials, and ticker tape.",
+      "continuity": "Data as Artifact images treat information as something filed, carried, measured, stamped, repaired, or displayed in the physical world."
+    }
+  },
+  {
+    "id": "2026-06-21-manual-0821-sleep-debt-boarding-pass",
+    "title": "Sleep Debt Boarding Pass",
+    "tests": "Data-as-artifact example under the revised rule: fictional sleep and wake measurements embodied as issued travel paperwork, punched cards, delay notices, route slips, baggage tags, and lost-hours coupons.",
+    "prompt": "Use case: productivity-visual\nAsset type: GPT Image 2 data-as-artifact archive image\nPrimary request: Create a polished 1024x1536 vertical data-as-artifact image titled conceptually \"Sleep Debt Boarding Pass\", where a fictional week's sleep/wake measurements have become a travel packet someone could hold, file, stamp, and carry.\n\nScene/backdrop: an overhead archival photograph of a small travel-document packet on a dark train-station counter at night. The packet includes a boarding pass, baggage tag, delay notice, route slip, punched transfer card, and a small envelope of \"lost hours\" coupons. The artifact should feel issued by a sleepy fictional transit office, handled, creased, stamped, and practical.\n\nSubject and information design: the data is the object. Encode seven nights of fictional sleep debt as travel paperwork: departure times become station stops, wakeups become punched interruptions, naps become transfer slips, total deficit becomes a baggage weight, and recovery sleep becomes a delayed arrival stamp. Include sparse large readable labels only: \"SLEEP DEBT\", \"BOARDING PASS\", \"LOST HOURS\", \"DELAY\", \"TRANSFER\", \"ARRIVAL\", \"7 NIGHTS\". Other small numbers and marks can be believable pseudo-notation.\n\nComposition/framing: vertical 9:16, straight-down but with real paper thickness and shadows. The boarding pass should be the largest item, diagonally placed, with smaller slips tucked under it. Use perforated edges, punched holes, station-stamp circles, red cancellation marks, carbon-copy blue ink, rubber-stamp texture, torn envelope flap, paper fibers, and a worn brass paper clip. Make it immediately obvious as a data-bearing travel artifact, not a poster and not an electronic interface.\n\nLighting/mood: dim station-window light, warm desk lamp edge, midnight blues, faded cream ticket stock, red stamp ink, blue carbon copy, soft graphite smudges, tactile shadows, crisp readable hierarchy, slightly melancholic but charming.\n\nConstraints: no measuring device, no dashboard, no control panel, no smartphone, no app UI, no generic infographic poster, no real logos, no brand names, no watermark, no signature, no dense tiny text, no people, no copyrighted characters, no dancing or performance imagery. The world's measurements must visibly become the paperwork itself.",
+    "image": "images/2026-06-21-manual-0821-sleep-debt-boarding-pass.jpg",
+    "date": "2026-06-21",
+    "batch": "Data as Artifact",
+    "slot": "manual-0821",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1536",
+    "artifact": {
+      "category": "Travel Documents",
+      "description": "A fictional week of sleep and wake measurements turned into issued travel paperwork: boarding pass, route slip, delay notice, transfer card, baggage tag, and lost-hours coupons.",
+      "continuity": "Data as Artifact images treat information as something filed, carried, measured, stamped, repaired, or displayed in the physical world."
+    }
   }
 ]
