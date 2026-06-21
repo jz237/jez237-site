@@ -2817,11 +2817,52 @@ function generatedEnemyHeight(a, pose){
   if (a.kind === 'mason') return 74;
   return 70;
 }
-function drawGeneratedEnemy(a, img, cx2, footY, h, w){
+function generatedEnemyMotion(a, pose){
+  const t = a.anim || gameTime;
+  const dir = a.dir || 1;
+  if (pose === 'run'){
+    const step = Math.sin(t * 16);
+    const stride = Math.sin(t * 8);
+    const force = Math.abs(step);
+    return {
+      rot: dir * (0.035 + stride * 0.014),
+      sx: 1 + force * 0.032,
+      sy: 1 - force * 0.024,
+      ox: dir * stride * 1.15,
+      oy: Math.max(0, step) * -2.4
+    };
+  }
+  if (pose === 'climb'){
+    return {
+      rot: Math.sin(t * 6) * 0.02,
+      sx: 1,
+      sy: 1,
+      ox: Math.sin(t * 8) * 0.8,
+      oy: Math.sin(t * 10) * 1.2
+    };
+  }
+  if (pose === 'bar'){
+    return {
+      rot: Math.sin(t * 4) * 0.012,
+      sx: 1,
+      sy: 1,
+      ox: Math.sin(t * 5) * 0.45,
+      oy: 0
+    };
+  }
+  if (pose === 'fall') return {rot: dir * 0.08, sx: 0.98, sy: 1.03, ox: 0, oy: 1};
+  if (pose === 'stun') return {rot: Math.sin(t * 8) * 0.018, sx: 1.02, sy: 0.98, ox: 0, oy: 1};
+  const breathe = 0.01 + Math.sin(t * 3) * 0.006;
+  return {rot: 0, sx: 1 + breathe, sy: 1 - breathe, ox: 0, oy: 0};
+}
+function drawGeneratedEnemy(a, img, cx2, footY, h, w, pose){
+  const motion = generatedEnemyMotion(a, pose);
   ctx.save();
-  ctx.translate(cx2, footY - h);
-  if (a.dir < 0){ ctx.translate(w * .5, 0); ctx.scale(-1, 1); ctx.translate(-w * .5, 0); }
-  ctx.drawImage(img, -w * .5, 0, w, h);
+  ctx.translate(cx2 + motion.ox, footY + motion.oy);
+  if (a.dir < 0) ctx.scale(-1, 1);
+  ctx.rotate(motion.rot);
+  ctx.scale(motion.sx, motion.sy);
+  ctx.drawImage(img, -w * .5, -h, w, h);
   ctx.restore();
 }
 function drawActor(a){
@@ -2889,7 +2930,7 @@ function drawActor(a){
     ctx.translate(-cx2, -footY);
   }
   if (generatedPlayer) drawGeneratedMiner(a, pose, fi, cx2, footY);
-  else if (generatedEnemy) drawGeneratedEnemy(a, generatedEnemy, cx2, footY, h, w);
+  else if (generatedEnemy) drawGeneratedEnemy(a, generatedEnemy, cx2, footY, h, w, pose);
   else {
     ctx.translate(cx2, footY - h);
     if (a.dir < 0){ ctx.translate(w, 0); ctx.scale(-1, 1); }
