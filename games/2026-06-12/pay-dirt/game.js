@@ -1750,7 +1750,7 @@ function initTouchGestures(){
     if (!pinch.active) return;
     const d = pinchDistance();
     if (d <= 0) return;
-    mobileZoomAdjust = clamp(pinch.startZoom * (d / pinch.startDist), 0.72, 1.35);
+    mobileZoomAdjust = clamp(pinch.startZoom * (d / pinch.startDist), 0.68, 1.45);
     pinch.changed = true;
   };
   const reset = () => {
@@ -3744,8 +3744,8 @@ function ensureWorldCanvas(){
 function mobileHudHeight(){ return Math.max(86, Math.min(104, Math.round(screenH * 0.12))); }
 function mobileCameraScale(){
   const portrait = screenH >= screenW;
-  const base = portrait ? 1.36 : 1.55;
-  return Math.max(0.95, Math.min(1.95, (base + (screenW < 380 ? 0.08 : 0)) * mobileZoomAdjust));
+  const base = portrait ? 1.18 : 1.36;
+  return Math.max(0.82, Math.min(1.95, (base + (screenW < 380 ? 0.04 : 0)) * mobileZoomAdjust));
 }
 function mobileCameraLead(srcW, srcH){
   if (!player || state !== 'playing') return {x: 0, y: 0};
@@ -4662,7 +4662,7 @@ window.__g = {
   showNoWayOut(reason){ showSoftlock(reason || currentNoWayOutReason() || 'This claim cannot be completed from here.'); return state; },
   get mobileZoom(){ return mobileZoomAdjust; },
   get mobileView(){ return mobileView ? {...mobileView} : null; },
-  set mobileZoom(v){ mobileZoomAdjust = clamp(Number(v) || 1, 0.72, 1.35); },
+  set mobileZoom(v){ mobileZoomAdjust = clamp(Number(v) || 1, 0.68, 1.45); },
   seedDaily(dateStr){
     const d = LEVELS.generateDaily(dateStr);
     mode = 'daily'; dailyDate = d.date; score = 0; lives = 3;
