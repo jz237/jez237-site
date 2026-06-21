@@ -236,11 +236,6 @@ const LEVELS = (() => {
     bar(L, 3, 8, 11);
     bar(L, 6, 8, 18);
     bar(L, 10, 12, 21);
-    lad(L, 3, 4, 7);
-    lad(L, 14, 4, 11);
-    lad(L, 24, 8, 14);
-    lad(L, 6, 12, 14);
-    lad(L, 20, 12, 14);
     put(L, 4, 4, 'C');
     put(L, 4, 20, 'C');
     put(L, 8, 9, 'B');
@@ -252,6 +247,12 @@ const LEVELS = (() => {
     put(L, 4, 13, '>>>');
     put(L, 8, 2, '<<<');
     put(L, 12, 15, '>>>>');
+    // Continuous rescue shafts keep Boom Rush from trapping the player in one pocket.
+    lad(L, 3, 4, 14);
+    lad(L, 6, 4, 14);
+    lad(L, 14, 4, 14);
+    lad(L, 20, 4, 14);
+    lad(L, 24, 4, 14);
     g$(L, 2, 3); g$(L, 6, 3); g$(L, 12, 3); g$(L, 22, 3);
     g$(L, 4, 7); g$(L, 11, 7); g$(L, 19, 7); g$(L, 22, 7);
     g$(L, 5, 11); g$(L, 14, 11); g$(L, 20, 11); g$(L, 26, 11);

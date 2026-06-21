@@ -1938,6 +1938,7 @@ function loadLevelData(rows){
   particles = []; popups = [];
   shake = 0; hitStop = 0; flash = 0; deathFlash = 0;
   digBuffer = 0; runDustT = 0; prevDash = false;
+  mobileLeadX = 0; mobileLeadY = 0;
   selectPainterlyBackdrop();
   buildBackdrop();
   computeDecor();
@@ -3733,6 +3734,7 @@ let worldCv = null, worldCx = null;
 let camX = 0, camY = HUD_H;
 let mobileView = null;
 let mobileZoomAdjust = 1;
+let mobileLeadX = 0, mobileLeadY = 0;
 function ensureWorldCanvas(){
   if (worldCv) return;
   worldCv = document.createElement('canvas');
@@ -3751,8 +3753,8 @@ function mobileCameraLead(srcW, srcH){
   if (!player || state !== 'playing') return {x: 0, y: 0};
   const moveIntent = (keys.ArrowRight ? 1 : 0) - (keys.ArrowLeft ? 1 : 0);
   const climbIntent = (keys.ArrowDown ? 1 : 0) - (keys.ArrowUp ? 1 : 0);
-  let leadX = (moveIntent || player.dir || 0) * srcW * 0.12;
-  let leadY = climbIntent * srcH * 0.08;
+  let leadX = moveIntent * srcW * 0.08;
+  let leadY = climbIntent * srcH * 0.07;
 
   let nearest = null, best = Infinity;
   for (const gu of guards){
@@ -3764,8 +3766,8 @@ function mobileCameraLead(srcW, srcH){
   }
   if (nearest && nearest.dist < 9){
     const urgency = Math.max(0, 1 - nearest.dist / 9);
-    leadX += Math.sign(nearest.dx) * srcW * (0.08 + urgency * 0.13);
-    if (Math.abs(nearest.dy) > 1.25) leadY += Math.sign(nearest.dy) * srcH * (0.04 + urgency * 0.08);
+    leadX += Math.sign(nearest.dx) * srcW * (0.04 + urgency * 0.07);
+    if (Math.abs(nearest.dy) > 1.25) leadY += Math.sign(nearest.dy) * srcH * (0.025 + urgency * 0.05);
   }
   return {
     x: Math.max(-srcW * 0.28, Math.min(srcW * 0.28, leadX)),
@@ -3775,12 +3777,16 @@ function mobileCameraLead(srcW, srcH){
 function updateMobileCamera(playH, zoom){
   const srcW = Math.min(VIEW_W, screenW / zoom);
   const srcH = Math.min(VIEW_H - HUD_H, playH / zoom);
-  const lead = mobileCameraLead(srcW, srcH);
+  const rawLead = mobileCameraLead(srcW, srcH);
+  const leadFollow = state === 'playing' ? 0.055 : 0.14;
+  mobileLeadX += (rawLead.x - mobileLeadX) * leadFollow;
+  mobileLeadY += (rawLead.y - mobileLeadY) * leadFollow;
+  const lead = {x: mobileLeadX, y: mobileLeadY};
   const targetX = player ? px(player.x) - srcW * 0.5 + lead.x : (VIEW_W - srcW) * 0.5;
   const targetY = player ? py(player.y) - srcH * 0.56 + lead.y : HUD_H;
   const nextX = clamp(targetX, 0, VIEW_W - srcW);
   const nextY = clamp(targetY, HUD_H, VIEW_H - srcH);
-  const follow = state === 'playing' ? 0.18 : 0.32;
+  const follow = state === 'playing' ? 0.12 : 0.26;
   camX += (nextX - camX) * follow;
   camY += (nextY - camY) * follow;
   camX = clamp(camX, 0, VIEW_W - srcW);
