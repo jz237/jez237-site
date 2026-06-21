@@ -1,6 +1,6 @@
 {
   "date": "2026-06-21",
-  "updatedAt": "2026-06-21T13:00:02.008329+00:00",
+  "updatedAt": "2026-06-21T13:16:57.599177+00:00",
   "items": [
     {
       "title": "28 Tips to Take Your ChatGPT Prompts to the Next Level",
@@ -13,10 +13,10 @@
       "image": "https://media.wired.com/photos/641df3ef11b9b75446f8f278/master/pass/11-Creative-ChatGPT-Prompts-Gear-GettyImages-1433912783.jpg",
       "published": "2026-06-21T10:30:00+00:00",
       "firstSeen": "2026-06-21T10:41:52.474415+00:00",
-      "lastSeen": "2026-06-21T13:00:02.008329+00:00",
+      "lastSeen": "2026-06-21T13:16:57.599177+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.2162
+      "score": 10.2082
     },
     {
       "title": "Signal’s Meredith Whittaker says AI chatbots ‘are not your friends’ and calls Copilot agents a backdoor",
@@ -29,10 +29,10 @@
       "image": "https://media.thenextweb.com/2026/06/signal-whittaker-ai-chatbots-not-friends-copilot-backdoor-privacy.avif",
       "published": "2026-06-21T09:15:40+00:00",
       "firstSeen": "2026-06-21T10:00:01.874180+00:00",
-      "lastSeen": "2026-06-21T13:00:02.008329+00:00",
+      "lastSeen": "2026-06-21T13:16:57.599177+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.7415
+      "score": 7.7337
     },
     {
       "title": "Amazon says human-in-the-loop AI oversight is failing because humans stop paying attention",
@@ -45,10 +45,10 @@
       "image": "https://media.thenextweb.com/2026/06/amazon-human-in-the-loop-ai-governance-normalization-deviance.avif",
       "published": "2026-06-21T12:35:10+00:00",
       "firstSeen": "2026-06-21T13:00:02.008329+00:00",
-      "lastSeen": "2026-06-21T13:00:02.008329+00:00",
+      "lastSeen": "2026-06-21T13:16:57.599177+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.8374
+      "score": 3.8289
     },
     {
       "title": "Humanity's Last Exam (HLE) is a multi-modal academic benchmark with 2,500 questions across mathematics, humanities, and natural sciences, designed to test LLM capabilities at the frontier of human knowledge with unambiguous, verifiable solutions",
@@ -59,9 +59,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-21T13:00:12.241975+00:00",
+      "published": "2026-06-21T13:17:03.784447+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-21T13:00:02.008329+00:00",
+      "lastSeen": "2026-06-21T13:16:57.599177+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.71
@@ -77,10 +77,10 @@
       "image": "https://opengraph.githubassets.com/4d00699251ffe5b97a3010662ff4e517b90a749bd025f3cf9a0f09315b2a4132/BerriAI/litellm/releases/tag/v1.90.0-rc.1",
       "published": "2026-06-21T01:40:32+00:00",
       "firstSeen": "2026-06-21T02:00:01.288921+00:00",
-      "lastSeen": "2026-06-21T13:00:02.008329+00:00",
+      "lastSeen": "2026-06-21T13:16:57.599177+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.6931
+      "score": 2.6868
     },
     {
       "title": "New York City has defeated Waymo, and the taxi lobby is the reason",
@@ -93,10 +93,10 @@
       "image": "https://media.thenextweb.com/2026/06/waymo-new-york-city-political-roadblocks-robotaxi.avif",
       "published": "2026-06-21T09:58:14+00:00",
       "firstSeen": "2026-06-21T12:00:01.772795+00:00",
-      "lastSeen": "2026-06-21T13:00:02.008329+00:00",
+      "lastSeen": "2026-06-21T13:16:57.599177+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0612
+      "score": 2.0533
     },
     {
       "title": "Hackers hijacked Brazil’s emergency alert system and sent ‘misanthropy’ to millions of phones",
@@ -109,10 +109,10 @@
       "image": "https://media.thenextweb.com/2026/06/brazil-civil-defense-alert-hack-misanthropy-cell-broadcast.avif",
       "published": "2026-06-21T09:30:24+00:00",
       "firstSeen": "2026-06-21T10:00:01.874180+00:00",
-      "lastSeen": "2026-06-21T13:00:02.008329+00:00",
+      "lastSeen": "2026-06-21T13:16:57.599177+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0483
+      "score": 2.0405
     }
   ],
   "errors": [
