@@ -1,0 +1,19 @@
+[
+  {
+    "id": "2026-06-21-manual-0755-neighborhood-shadow-ledger",
+    "title": "Neighborhood Shadow Ledger",
+    "tests": "Data-as-artifact example: a fictional city-block light and shadow dataset rendered as a believable municipal field ledger with maps, gauges, stamps, sample packets, and handled archival materials.",
+    "prompt": "Use case: infographic-diagram\nAsset type: GPT Image 2 data-as-artifact archive image\nPrimary request: Create a vertical 1024x1536 polished image titled conceptually \"Neighborhood Shadow Ledger\" where fictional daily light-and-shadow data has been turned into a believable physical civic artifact.\n\nScene/backdrop: a careful overhead studio photograph of an opened municipal field ledger resting on a worn oak planning desk, surrounded by small brass measuring tools, translucent acetate overlays, sun-path strings, annotated vellum tabs, a pocket sundial, pencil shavings, and tiny sample envelopes of street dust and leaf fragments. The object should feel archived, handled, and useful, not like a generic poster.\n\nSubject and information design: the ledger page records one imaginary city block across a full day. Make the data visible as an artifact: a foldout block map with shadow bands stretching from buildings, small hourly sun-position stamps, a vertical strip of tree-canopy silhouettes, a little receipt-like column of \"minutes of shade,\" a porch-warmth gauge, and a few museum-label callouts. Include only short, large, readable labels such as \"SHADOW LEDGER\", \"06:00\", \"NOON\", \"18:00\", \"TREE SHADE\", \"BRICK HEAT\", and \"COOL WALK\". Other fine marks may be decorative pseudo-notation and do not need to be readable.\n\nComposition/framing: vertical 9:16, photographed straight down with slight lens depth and real page curvature. The ledger occupies most of the frame, but the surrounding tools make it obvious this is a physical artifact. Use layered paper edges, cotton rag texture, stamped ink, thin red and cyan pencil routes, brass clips, index tabs, and translucent overlays casting faint shadows.\n\nLighting/mood: late afternoon window light crossing the desk, warm highlights on brass, cool blue-gray shadow ink, cream paper, brick red accents, graphite smudges, subtle dust, crisp tactile detail. It should feel like data someone could file in a drawer and care about later.\n\nConstraints: no real logos, no brand names, no watermark, no signature, no tiny unreadable wall of text, no app UI, no generic glossy AI concept art, no copyrighted characters, no people, no dancing or implied performance. Prioritize readable hierarchy and physical plausibility.",
+    "image": "images/2026-06-21-manual-0755-neighborhood-shadow-ledger.jpg",
+    "date": "2026-06-21",
+    "batch": "Data as Artifact",
+    "slot": "manual-0755",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1536",
+    "artifact": {
+      "category": "Civic Field Records",
+      "description": "A fictional municipal field ledger that turns daily light, heat, walking comfort, and street material samples into a handled planning artifact.",
+      "continuity": "Data as Artifact images treat information as something filed, carried, measured, stamped, repaired, or displayed in the physical world."
+    }
+  }
+]
