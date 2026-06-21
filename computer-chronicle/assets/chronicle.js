@@ -259,13 +259,13 @@
 
     const gameItem = (issue.computerItems || []).find((item) => /game/i.test(item.label || ""))
       || (issue.storeShelves || [])[0];
-    const shelfNames = (issue.storeShelves || []).slice(0, 2).map((item) => item.name).filter(Boolean).join(" / ");
+    const shelfNames = (issue.storeShelves || []).slice(0, 2).map(itemTitle).filter(Boolean).join(" / ");
     const rockPick = (issue.musicChart || [])[0];
 
     return [
       {
         kicker: "Games",
-        text: gameItem && (gameItem.headline || `${gameItem.name}${shelfNames ? ` leads a shelf with ${shelfNames}` : ""}`),
+        text: gameItem && (gameItem.headline || `${itemTitle(gameItem) || "Games"}${shelfNames ? ` leads a shelf with ${shelfNames}` : ""}`),
       },
       {
         kicker: chrome(issue, "lead", "label", "Top Story"),
@@ -305,14 +305,18 @@
     return (issue.storeShelves || [])[0] || null;
   }
 
+  function itemTitle(item) {
+    return item && (item.title || item.name || item.item || item.headline || "");
+  }
+
   function gameLead(issue) {
     const game = topGame(issue);
     if (!game) return null;
-    const title = game.headline || `${game.name} Moves Onto the Front Page`;
+    const title = game.headline || `${itemTitle(game) || "Games"} Moves Onto the Front Page`;
     return {
       label: "Games Lead",
       headline: title,
-      summary: game.detail || "",
+      summary: game.detail || game.note || "",
       confidence: game.confidence || "",
       sourceRefs: game.sourceRefs || [],
       image: game.image || issue.storeShelvesImage || null,
