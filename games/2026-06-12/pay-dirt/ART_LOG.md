@@ -285,3 +285,54 @@ Verification:
 - `git diff --check` passed.
 - Chrome DevTools mobile smoke dispatched two touch pointers and confirmed zoom changed from `1` to `1.35`, then to `0.72`.
 - Game stayed in `playing` and rendered a nonblank canvas pixel after the pinch sequence.
+
+## Vibe Court Miner Sprite
+Jez asked to turn the generated orange-shirt pickaxe portrait into a computer sprite and use it in Pay Dirt.
+
+Changes:
+- Converted the generated pickaxe sprite into a transparent 4x2 player sheet at `assets/vibe-court-miner-sheet.png`.
+- Added a matching climb fallback image at `assets/vibe-court-miner-climb-back.png`.
+- Swapped the player image loader from the prior painterly miner assets to the new Vibe Court miner files.
+
+Verification:
+- `node --check game.js` passed.
+- Local browser smoke entered `playing`, loaded both new PNG assets with HTTP 200, rendered a nonblank canvas, and saved `/tmp/pay-dirt-vibe-court-miner.png`.
+
+## Vibe Court Side-Run Animation
+Jez asked for the sprite to switch to a side view when moving and to generate additional frames for a running illusion.
+
+Changes:
+- Generated a four-frame right-facing side-view run strip from the Vibe Court pickaxe miner.
+- Normalized it into `assets/vibe-court-miner-run-side-strip.png` with transparency.
+- Added a side-run image loader and made the player `run` pose draw from the four-frame strip, with existing horizontal flipping for left movement.
+- Kept idle, dig, climb, stun, and HUD portrait on the front-view Vibe Court sprite sheet.
+
+Verification:
+- `node --check game.js` and `git diff --check` passed.
+- Local browser smoke held right input until the player reported `state=run`, loaded all three Vibe Court PNG assets with HTTP 200, rendered a nonblank canvas, and saved `/tmp/pay-dirt-vibe-court-side-run.png`.
+
+## Vibe Court Pickaxe Dig Animation
+Jez asked for additional sprite frames so the character visibly uses the pickaxe when digging.
+
+Changes:
+- Generated a four-frame side-view pickaxe swing strip: wind-up, downswing, impact, and recovery.
+- Normalized it into `assets/vibe-court-miner-dig-side-strip.png` with transparency.
+- Added a dig-strip image loader and made player dig rendering choose a frame from actual dig progress.
+- Suppressed the old procedural pickaxe stroke while the generated dig strip is available, so the sprite animation carries the digging action.
+
+Verification:
+- `node --check game.js` and `git diff --check` passed.
+- Local browser smoke on the stable `8080` server started the game, triggered a dig, confirmed active `digT`/`pendingDig`, loaded all four Vibe Court PNG assets with HTTP 200, created a dug hole, and saved `/tmp/pay-dirt-vibe-court-dig-early.png`.
+
+## Vibe Court Climb + Hang Poses
+Jez reminded us not to forget the back pose for ladders and the hanging pose for crossing ropes/bars.
+
+Changes:
+- Generated a four-frame climb/hang strip with two back-view ladder poses and two side-view overhead hanging poses.
+- Normalized it into `assets/vibe-court-miner-climb-hang-strip.png` with transparency.
+- Added a shared climb/hang image loader.
+- Wired `climb` to use frames 0-1 and `bar` to use frames 2-3, with the old procedural hanging figure kept as fallback.
+
+Verification:
+- `node --check game.js` and `git diff --check` passed.
+- Local browser smoke on the stable `8080` server loaded the new climb/hang strip with HTTP 200, froze the live player into `climb` and `bar` render states, produced non-error screenshots at `/tmp/pay-dirt-vibe-court-climb-back-freeze.png` and `/tmp/pay-dirt-vibe-court-hang-freeze.png`, and kept the canvas nonblank.
