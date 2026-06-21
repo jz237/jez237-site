@@ -303,10 +303,10 @@
       <div id="onlineStatus" class="online-status">Dedicated Neon worker is live. Connect, ready up, then launch.</div>
       <div id="onlineSlots" class="slot-list"></div>
     </div>
-    <p class="fine" id="overlayFine">Drag anywhere to fly. Keyboard: WASD or arrows to thrust, P to pause. Shots auto-aim at the highest danger cluster.</p>
+    <p class="fine" id="overlayFine">Dual Stick: left side flies, right side aims and fires. Desktop: WASD plus hold mouse to aim.</p>
   </div>
 </div>
-<div class="version">v3.9</div>
+<div class="version">v4.0</div>
 
 <script>
 'use strict';
@@ -369,7 +369,8 @@ let lives = 3;
 let combo = 1;
 let comboTimer = 0;
 let shake = 0;
-let controlMode = localStorage.getItem('neon-vector-arena-control-mode') === 'dual' ? 'dual' : 'auto';
+const storedControlMode = localStorage.getItem('neon-vector-arena-control-mode');
+let controlMode = storedControlMode === 'auto' ? 'auto' : 'dual';
 let pointer = { active: false, id: null, x: 0, y: 0, sx: 0, sy: 0, usingTouch: false };
 let moveStick = { active: false, id: null, sx: 0, sy: 0, ox: 0, oy: 0 };
 let aimStick = { active: false, id: null, sx: 0, sy: 0, ox: 0, oy: 0, angle: -Math.PI / 2, strength: 0 };
@@ -886,10 +887,45 @@ function tone(freq, dur = .055, type = 'square', gain = .035, slide = 1) {
   osc.stop(now + dur + .02);
 }
 
+function noiseBurst(dur = .18, gain = .04, filterFreq = 520, filterType = 'lowpass') {
+  const ac = ensureAudio();
+  if (!ac) return;
+  const len = Math.max(1, Math.floor(ac.sampleRate * dur));
+  const buffer = ac.createBuffer(1, len, ac.sampleRate);
+  const data = buffer.getChannelData(0);
+  for (let i = 0; i < len; i++) {
+    const decay = 1 - i / len;
+    data[i] = (Math.random() * 2 - 1) * decay * decay;
+  }
+  const src = ac.createBufferSource();
+  const filter = ac.createBiquadFilter();
+  const amp = ac.createGain();
+  const now = ac.currentTime;
+  src.buffer = buffer;
+  filter.type = filterType;
+  filter.frequency.setValueAtTime(filterFreq, now);
+  filter.frequency.exponentialRampToValueAtTime(Math.max(60, filterFreq * .28), now + dur);
+  amp.gain.setValueAtTime(0.0001, now);
+  amp.gain.exponentialRampToValueAtTime(gain, now + .01);
+  amp.gain.exponentialRampToValueAtTime(0.0001, now + dur);
+  src.connect(filter).connect(amp).connect(ac.destination);
+  src.start(now);
+}
+
 function sfx(kind) {
-  if (kind === 'shot') tone(740 + Math.random() * 90, .045, 'square', .018, 1.35);
+  if (kind === 'shot') {
+    tone(1240 + Math.random() * 180, .052, 'sawtooth', .022, .46);
+    tone(2480 + Math.random() * 220, .026, 'square', .009, .64);
+    noiseBurst(.032, .012, 3600, 'highpass');
+  }
   else if (kind === 'hit') tone(170, .09, 'sawtooth', .04, .55);
-  else if (kind === 'boom') { tone(98, .16, 'sawtooth', .055, .42); tone(340, .08, 'triangle', .025, .72); }
+  else if (kind === 'boom') {
+    tone(82, .34, 'sawtooth', .075, .22);
+    tone(46, .42, 'sine', .065, .38);
+    tone(260, .13, 'triangle', .03, .52);
+    noiseBurst(.36, .085, 640, 'lowpass');
+    setTimeout(() => noiseBurst(.16, .038, 1800, 'bandpass'), 35);
+  }
   else if (kind === 'pickup') { tone(520, .06, 'triangle', .028, 1.35); setTimeout(() => tone(780, .07, 'triangle', .026, 1.22), 45); }
   else if (kind === 'over') tone(110, .32, 'sawtooth', .05, .35);
 }
