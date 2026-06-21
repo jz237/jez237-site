@@ -20,27 +20,35 @@
       overflow: hidden;
       position: relative;
       cursor: pointer;
+      background: rgba(12, 18, 28, 0.92);
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.22);
     }
     .masonry-item img {
       width: 100%;
       display: block;
-      border-radius: 10px;
+      border-radius: 10px 10px 0 0;
     }
     .masonry-item .caption {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      padding: 24px 12px 10px;
-      background: linear-gradient(transparent, rgba(0,0,0,0.7));
+      padding: 10px 12px 12px;
+      background: linear-gradient(180deg, rgba(18, 28, 42, 0.96), rgba(6, 9, 15, 0.98));
       color: #fff;
       font-size: 13px;
-      opacity: 0;
-      transition: opacity 0.25s ease;
       border-radius: 0 0 10px 10px;
+      line-height: 1.35;
+      overflow-wrap: anywhere;
+      word-break: break-word;
     }
-    .masonry-item:hover .caption {
-      opacity: 1;
+    .masonry-item .caption-title {
+      display: block;
+      font-weight: 700;
+    }
+    .masonry-item .caption-file {
+      display: block;
+      margin-top: 4px;
+      color: rgba(255, 255, 255, 0.78);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      font-size: 11px;
+      line-height: 1.3;
     }
 
     .load-more-wrap {
@@ -133,7 +141,7 @@
 
   <!-- Lightbox -->
   <div class="lightbox-overlay" id="lightbox">
-    <img id="lightbox-img" src="" alt="" / loading="lazy" decoding="async">
+    <img id="lightbox-img" src="" alt="" loading="lazy" decoding="async" />
     <div class="lightbox-caption" id="lightbox-cap"></div>
   </div>
 
@@ -186,11 +194,12 @@
       const end = Math.min(loaded + BATCH_SIZE, photos.length);
       for (let i = loaded; i < end; i++) {
         const p = photos[i];
+        const filename = p.src.split('/').pop();
         const div = document.createElement('div');
         div.className = 'masonry-item';
         div.dataset.caption = p.caption;
-        div.innerHTML = `<img src="${p.src}" alt="${p.alt}" loading="lazy" / decoding="async"><div class="caption">${p.caption}</div>`;
-        div.addEventListener('click', () => openLightbox(p.src, p.caption));
+        div.innerHTML = `<img src="${p.src}" alt="${p.alt}" loading="lazy" decoding="async"><div class="caption"><span class="caption-title">${p.caption}</span><span class="caption-file">${filename}</span></div>`;
+        div.addEventListener('click', () => openLightbox(p.src, `${p.caption} · ${filename}`));
         gallery.appendChild(div);
       }
       loaded = end;
