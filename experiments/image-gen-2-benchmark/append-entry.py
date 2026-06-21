@@ -22,6 +22,7 @@ ROOT = Path(__file__).resolve().parent
 DATA = ROOT / "gallery-data.json"
 PROMPTS = ROOT / "prompts.json"
 WORLDS = ROOT / "worlds-data.json"
+DATA_ARTIFACTS = ROOT / "data-artifacts-data.json"
 IMAGES = ROOT / "images"
 DEFAULT_R2_ACCOUNT_ID = "ac73a259dff5a3cbeccbb78824ac0db6"
 DEFAULT_R2_BUCKET = "jez237-site-media"
@@ -97,6 +98,10 @@ def main() -> None:
     ap.add_argument("--world-continuity", default="")
     ap.add_argument("--world-entry-description", default="")
     ap.add_argument("--world-only", action="store_true", help="Append to worlds-data.json only, not the main prompt gallery")
+    ap.add_argument("--artifact-category", default="")
+    ap.add_argument("--artifact-description", default="")
+    ap.add_argument("--artifact-continuity", default="")
+    ap.add_argument("--data-artifact-only", action="store_true", help="Append to data-artifacts-data.json only, not the main prompt gallery")
     ap.add_argument("--skip-r2-upload", action="store_true", help="Copy the image locally but do not upload it to Cloudflare R2")
     ap.add_argument("--r2-bucket", default=os.environ.get("IMAGE_ARCHIVE_R2_BUCKET", DEFAULT_R2_BUCKET))
     ap.add_argument("--r2-prefix", default=os.environ.get("IMAGE_ARCHIVE_R2_PREFIX", DEFAULT_R2_PREFIX))
@@ -140,8 +145,21 @@ def main() -> None:
             "continuity": args.world_continuity.strip(),
             "entryDescription": args.world_entry_description.strip() or args.tests,
         }
+    if args.artifact_category.strip():
+        entry["artifact"] = {
+            "category": args.artifact_category.strip(),
+            "description": args.artifact_description.strip(),
+            "continuity": args.artifact_continuity.strip(),
+        }
 
-    paths = (WORLDS,) if args.world_only else (DATA, PROMPTS)
+    if args.world_only and args.data_artifact_only:
+        raise SystemExit("--world-only and --data-artifact-only are mutually exclusive")
+    if args.world_only:
+        paths = (WORLDS,)
+    elif args.data_artifact_only:
+        paths = (DATA_ARTIFACTS,)
+    else:
+        paths = (DATA, PROMPTS)
     for path in paths:
         data = load(path)
         data.append(entry)
