@@ -14,9 +14,9 @@ import mimetypes
 import os
 import re
 import shlex
-import shutil
 import subprocess
 from pathlib import Path
+from PIL import Image, ImageOps
 
 ROOT = Path(__file__).resolve().parent
 DATA = ROOT / "gallery-data.json"
@@ -68,6 +68,19 @@ def upload_to_r2(dest: Path, bucket: str, prefix: str, wrangler_bin: str) -> str
     return key
 
 
+def save_archive_jpeg(src: Path, dest: Path) -> None:
+    with Image.open(src) as im:
+        im = ImageOps.exif_transpose(im)
+        if im.mode in ("RGBA", "LA") or (im.mode == "P" and "transparency" in im.info):
+            rgba = im.convert("RGBA")
+            bg = Image.new("RGB", rgba.size, (255, 255, 255))
+            bg.paste(rgba, mask=rgba.getchannel("A"))
+            im = bg
+        elif im.mode != "RGB":
+            im = im.convert("RGB")
+        im.save(dest, "JPEG", quality=92, optimize=True, progressive=True, subsampling=0)
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--title", required=True)
@@ -97,12 +110,12 @@ def main() -> None:
 
     IMAGES.mkdir(parents=True, exist_ok=True)
     base_slug = slugify(f"{args.date}-{args.slot}-{args.title}")
-    dest = IMAGES / f"{base_slug}{src.suffix.lower() or '.png'}"
+    dest = IMAGES / f"{base_slug}.jpg"
     n = 2
     while dest.exists():
-        dest = IMAGES / f"{base_slug}-{n}{src.suffix.lower() or '.png'}"
+        dest = IMAGES / f"{base_slug}-{n}.jpg"
         n += 1
-    shutil.copy2(src, dest)
+    save_archive_jpeg(src, dest)
     if args.skip_r2_upload:
         r2_key = ""
     else:
