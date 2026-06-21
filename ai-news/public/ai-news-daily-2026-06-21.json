@@ -1,6 +1,6 @@
 {
   "date": "2026-06-21",
-  "updatedAt": "2026-06-21T00:00:01.655174+00:00",
+  "updatedAt": "2026-06-21T00:19:39.377370+00:00",
   "items": [
     {
       "title": "GLM-5.2 vs Claude Opus 4.8 on price, benchmarks, context, and openness. Opus leads most of the table; GLM-5.2 costs up to 5.7x less and ships MIT weights.",
@@ -11,9 +11,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-21T00:00:10.509290+00:00",
+      "published": "2026-06-21T00:19:45.576243+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-21T00:00:01.655174+00:00",
+      "lastSeen": "2026-06-21T00:19:39.377370+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
@@ -22,9 +22,14 @@
   ],
   "errors": [
     {
+      "source": "Artificial Intelligence News",
+      "url": "https://www.artificialintelligence-news.com/categories/artificial-intelligence/feed/",
+      "error": "not well-formed (invalid token): line 1, column 158"
+    },
+    {
       "source": "MarkTechPost",
       "url": "https://www.marktechpost.com/feed/",
-      "error": "HTTP Error 403: Forbidden"
+      "error": "not well-formed (invalid token): line 1, column 119"
     }
   ]
 }
