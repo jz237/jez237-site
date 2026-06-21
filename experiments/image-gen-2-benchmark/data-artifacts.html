@@ -91,23 +91,39 @@
     }
     .control { width: 100%; min-height: 40px; color: #47677a; outline: none; }
     main { padding: 26px 22px 70px; }
-    .category { scroll-margin-top: calc(var(--nav-height, 64px) + 14px); }
-    .category + .category { margin-top: 34px; }
-    .category-head {
-      display: flex;
-      justify-content: space-between;
+    .featured-artifact {
+      display: grid;
+      grid-template-columns: minmax(0, .95fr) minmax(280px, .55fr);
       gap: 18px;
-      align-items: flex-end;
-      padding: 20px;
-      border: 1px solid var(--line);
+      align-items: stretch;
+      margin-bottom: 24px;
+      border: 1px solid rgba(216,232,239,.86);
       border-radius: 8px;
-      background: linear-gradient(180deg, rgba(247,251,255,.95), rgba(231,244,255,.9));
+      background: linear-gradient(180deg, rgba(247,251,255,.95), rgba(231,244,255,.88));
       box-shadow: var(--shadow);
-      margin-bottom: 18px;
+      overflow: hidden;
     }
-    .category-head h2 { margin: 0; color: #183b52; font-size: clamp(1.5rem, 3vw, 2.6rem); letter-spacing: -.04em; }
-    .category-head p { margin: 8px 0 0; color: var(--muted); max-width: 780px; }
-    .category-count { color: var(--muted); white-space: nowrap; }
+    .featured-media {
+      min-height: 300px;
+      max-height: 460px;
+      background: #05070a;
+    }
+    .featured-media img { object-fit: cover; cursor: zoom-in; }
+    .featured-copy {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: clamp(18px, 3vw, 30px);
+    }
+    .featured-copy .kicker { margin-bottom: 8px; }
+    .featured-copy h2 {
+      margin: 0 0 10px;
+      color: #183b52;
+      font-size: clamp(1.8rem, 4vw, 3.4rem);
+      line-height: .96;
+      letter-spacing: -.04em;
+    }
+    .featured-copy p { margin: 0; color: var(--muted); }
     .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; }
     .card {
       overflow: hidden;
@@ -174,8 +190,8 @@
       .meta { gap: 8px; margin-top: 16px; }
       .pill, .control { padding: 8px 10px; }
       .pill.stat { font-size: .92rem; }
-      .category-head { display: block; }
-      .category-count { display: inline-block; margin-top: 10px; }
+      .featured-artifact { grid-template-columns: 1fr; }
+      .featured-media { min-height: 230px; max-height: 340px; }
       .grid { grid-template-columns: 1fr; }
       .lightbox-hint { display: none; }
     }
@@ -189,22 +205,23 @@
         <h1>Data as Artifact</h1>
         <p class="lede">Generated images where information becomes a believable object: almanacs, specimens, tickets, maps, ledgers, labels, instruments, and other data with a physical life.</p>
         <div class="meta">
-          <span class="pill stat" id="category-count-pill">Categories: loading...</span>
+          <span class="pill stat" id="artifact-count-pill">Artifacts: loading...</span>
           <span class="pill stat" id="image-count-pill">Images: loading...</span>
           <a class="pill featured" href="index.html">Image archive</a>
           <a class="pill" href="worlds.html">Fictional worlds</a>
         </div>
       </div>
       <div class="hero-panel">
-        <p class="hero-panel-label">Jump to category</p>
-        <select class="control" id="category-picker" aria-label="Jump to artifact category">
-          <option value="">Loading categories...</option>
-        </select>
+        <p class="hero-panel-label">Archive mode</p>
+        <p class="lede">Newest first, with the latest artifact featured below.</p>
       </div>
     </div>
   </header>
-  <main id="artifacts" aria-live="polite">
-    <p class="empty">Loading data artifacts...</p>
+  <main>
+    <section class="featured-artifact" id="featured-artifact" aria-live="polite"></section>
+    <div id="artifacts" class="grid" aria-live="polite">
+      <p class="empty">Loading data artifacts...</p>
+    </div>
   </main>
   <footer>
     Artifact entries are generated from <code>data-artifacts-data.json</code>. Click any image for fullscreen, then click it again for true 1:1 size.
@@ -222,8 +239,8 @@
   <script>
     (function () {
       const artifactsRoot = document.getElementById('artifacts');
-      const categoryPicker = document.getElementById('category-picker');
-      const categoryCountPill = document.getElementById('category-count-pill');
+      const featuredRoot = document.getElementById('featured-artifact');
+      const artifactCountPill = document.getElementById('artifact-count-pill');
       const imageCountPill = document.getElementById('image-count-pill');
       const siteNav = document.getElementById('site-nav');
       const viewer = document.getElementById('image-lightbox');
@@ -233,7 +250,6 @@
       const close = document.getElementById('lightbox-close');
       const IMAGE_BASE_URL = 'https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/image-gen-2-benchmark/images/';
       const escapeHtml = (value) => String(value || '').replace(/[&<>'"]/g, (ch) => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[ch]));
-      const slugify = (value) => String(value || 'artifact').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'artifact';
       const imageUrl = (value) => {
         const path = String(value || '');
         if (/^(?:[a-z]+:)?\/\//i.test(path) || path.startsWith('data:') || path.startsWith('/')) return path;
@@ -270,49 +286,33 @@
       }
 
       function render(items) {
-        const groups = new Map();
-        items.forEach((item) => {
-          const category = String(item.artifact?.category || 'Unsorted artifacts').trim();
-          if (!groups.has(category)) groups.set(category, { category, description: item.artifact?.continuity || '', items: [] });
-          const group = groups.get(category);
-          if (!group.description && item.artifact?.continuity) group.description = item.artifact.continuity;
-          group.items.push(item);
-        });
-        if (!groups.size) {
+        if (!items.length) {
+          featuredRoot.innerHTML = '';
           artifactsRoot.innerHTML = '<p class="empty">No data artifact images have been archived yet.</p>';
-          categoryPicker.innerHTML = '<option value="">No categories archived</option>';
-          categoryCountPill.textContent = 'Categories: 0';
+          artifactCountPill.textContent = 'Artifacts: 0';
           imageCountPill.textContent = 'Images: 0';
           return;
         }
-        const categories = Array.from(groups.values()).map((group) => ({ ...group, slug: slugify(group.category) }));
-        categoryCountPill.textContent = `Categories: ${categories.length}`;
+        const [featured, ...rest] = items;
+        const featuredArtifact = featured.artifact || {};
+        const featuredSrc = imageUrl(featured.image);
+        featuredRoot.innerHTML = `
+          <div class="featured-media"><img src="${escapeHtml(featuredSrc)}" alt="${escapeHtml(featured.title)}"></div>
+          <div class="featured-copy">
+            <div class="kicker">Latest artifact · ${escapeHtml(featured.date || '')}</div>
+            <h2>${escapeHtml(featured.title)}</h2>
+            ${featuredArtifact.description ? `<p>${escapeHtml(featuredArtifact.description)}</p>` : ''}
+          </div>
+        `;
+        artifactCountPill.textContent = `Artifacts: ${items.length}`;
         imageCountPill.textContent = `Images: ${items.length}`;
-        categoryPicker.innerHTML = '<option value="">Choose a category...</option>' + categories.map((group) => `<option value="${escapeHtml(group.slug)}">${escapeHtml(group.category)} (${group.items.length})</option>`).join('');
-        artifactsRoot.innerHTML = categories.map((group) => `
-          <section class="category" id="${escapeHtml(group.slug)}">
-            <div class="category-head">
-              <div>
-                <h2>${escapeHtml(group.category)}</h2>
-                ${group.description ? `<p>${escapeHtml(group.description)}</p>` : ''}
-              </div>
-              <span class="category-count">${group.items.length} image${group.items.length === 1 ? '' : 's'}</span>
-            </div>
-            <div class="grid">${group.items.map(cardHtml).join('')}</div>
-          </section>
-        `).join('');
+        artifactsRoot.innerHTML = rest.length ? rest.map(cardHtml).join('') : '<p class="empty">No older artifacts yet.</p>';
         bindImages();
         updateNavHeight();
       }
 
-      categoryPicker.addEventListener('change', () => {
-        const id = categoryPicker.value;
-        if (!id) return;
-        document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      });
-
       function bindImages() {
-        document.querySelectorAll('.image-wrap img').forEach((thumb) => {
+        document.querySelectorAll('.image-wrap img, .featured-media img').forEach((thumb) => {
           thumb.setAttribute('tabindex', '0');
           thumb.addEventListener('click', () => openViewer(thumb.currentSrc || thumb.src, thumb.alt));
           thumb.addEventListener('keydown', (event) => {
