@@ -107,3 +107,6 @@ Sim is fixed-timestep (60Hz accumulator); `__g.step(n)` drives ticks headlessly.
   remaining nuggets. `window.__g.lastNuggetCue` returns active cue target cells for tests.
 - 2026-06-22: Mine-cart escape polish adds render-only speed streaks, rail sparks, and a
   collapse dust plume while the cart escape is active, preserving the No Way Out escape guard.
+- 2026-06-22: Audio polish adds richer procedural gold sparkle, heavier TNT/explosion
+  impact, and named `life`, `cave`, and `cart` SFX. `window.__g.sfx(name)` exists for
+  headless no-throw checks.
