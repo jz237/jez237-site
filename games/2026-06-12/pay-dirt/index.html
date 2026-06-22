@@ -67,6 +67,11 @@ h1.logo::after{
 @keyframes logoShine{ 0%,55%{background-position:200% 0;} 85%,100%{background-position:-80% 0;} }
 @keyframes logoBob{ 0%,100%{transform:translateY(0);} 50%{transform:translateY(-4px);} }
 .tag{color:var(--dim); font-size:14px; letter-spacing:1px; margin-top:-6px;}
+.titleVersion{
+  display:inline-block; margin-top:7px; padding:3px 9px; border:1px solid rgba(255,210,63,.34);
+  border-radius:6px; color:rgba(255,241,175,.86); background:rgba(255,216,107,.08);
+  font:900 11px/1.2 system-ui,sans-serif; letter-spacing:.12em; text-transform:uppercase;
+}
 button{
   font:inherit; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; font-size:15px;
   color:var(--ink); background:linear-gradient(180deg,var(--gold-hi),var(--gold) 55%,var(--amber));
@@ -144,12 +149,13 @@ body.touch.playing #touch{display:none;}
 <body>
 <div id="wrap">
   <canvas id="game"></canvas>
-  <div class="version">v3.9 Boom Rush</div>
+  <div class="version">v3.10 Boom Rush</div>
 
   <div class="overlay show" id="ovTitle">
     <div class="panel" id="titlePanel">
       <h1 class="logo">Pay Dirt</h1>
       <div class="tag">painted caverns · hidden relics · claim-jumpers in the dark</div>
+      <div class="titleVersion">v3.10 Boom Rush</div>
       <div style="height:12px"></div>
       <div class="row">
         <button id="bPlay">⛏ Prospect</button>
@@ -257,9 +263,9 @@ body.touch.playing #touch{display:none;}
     <div class="tbtn" id="tDigR">▶⛏</div>
   </div>
 </div>
-<script src="art.js?v=39"></script>
-<script src="audio.js?v=39"></script>
-<script src="levels.js?v=39"></script>
-<script src="game.js?v=39"></script>
+<script src="art.js?v=310"></script>
+<script src="audio.js?v=310"></script>
+<script src="levels.js?v=310"></script>
+<script src="game.js?v=310"></script>
 </body>
 </html>
