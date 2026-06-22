@@ -132,6 +132,6 @@ Sim is fixed-timestep (60Hz accumulator); `__g.step(n)` drives ticks headlessly.
 - 2026-06-22: Claim-jumpers now get deterministic names by rival type. Nameplates appear
   briefly at level start, when a rival spots the player, when close to the player, and always
   for Baron Brim; debug hook `window.__g.rivalNames` exposes the assigned names.
-- 2026-06-22: Cybertech/Jerry polish pass renamed campaign upgrades as Jerry-rigged gear,
+- 2026-06-22: Cyber-security/Jerry polish pass renamed campaign upgrades as Jerry-rigged gear,
   added small Upgrade Camp story beats, made the first-claim hint more goal-focused, gave
-  secret caves named discoveries, and tied the campaign win line back to Cybertech staying lit.
+  secret caves named discoveries, and tied the campaign win line back to keeping Jerry's bills paid.
