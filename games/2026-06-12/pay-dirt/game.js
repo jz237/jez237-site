@@ -3004,6 +3004,7 @@ bindButton('bAgain', () => startGame(mode));
 bindButton('bOverMenu', quitToTitle);
 bindButton('bSubmit', submitEntry);
 bindButton('bLedgerCampaign', () => refreshBoardInto('scoreBoard', 'campaign'));
+bindButton('bLedgerSpecial', () => refreshBoardInto('scoreBoard', 'special'));
 bindButton('bLedgerDaily', () => refreshBoardInto('scoreBoard', 'daily'));
 
 buildHowTo();
