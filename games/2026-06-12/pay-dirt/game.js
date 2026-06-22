@@ -1330,9 +1330,9 @@ const TKINDS = {
   oil:   {name: 'OIL',   color: '#f1b34e', score: 100},
 };
 const SECRET_CAVES = [
-  {name: 'ECHO CAVE', color: '#58d8ff', score: 650},
-  {name: 'GILDED NOOK', color: '#ffd86b', score: 725},
-  {name: 'LANTERN CACHE', color: '#f1b34e', score: 575, oil: 7},
+  {name: 'CYBERTECH CACHE', color: '#58d8ff', score: 650, find: 'OLD SECURITY GEAR STILL HUMS'},
+  {name: 'LOST CLAIM NOTE', color: '#ffd86b', score: 725, find: 'A RICHER VEIN IS MARKED DEEPER'},
+  {name: 'LANTERN CACHE', color: '#f1b34e', score: 575, oil: 7, find: 'JERRY POCKETS FRESH OIL'},
 ];
 
 function applyPowerup(kind){
@@ -1432,9 +1432,11 @@ function collectSecretCave(cave){
   discoveryPulse = 1;
   const meta = SECRET_CAVES[cave.kind % SECRET_CAVES.length] || SECRET_CAVES[0];
   if (meta.oil) oilLightT = Math.max(oilLightT, meta.oil);
-  let val = meta.score + surveyBonusValue();
+  const surveyBonus = surveyBonusValue();
+  let val = meta.score + surveyBonus;
   addScore(val);
   flash = Math.max(flash, .18);
+  if (meta.find && !surveyBonus) banner = {text: meta.name, sub: meta.find, life: 1.8};
   spawnParticles(cave.c + .5, cave.r + .46, 24, {
     color: [meta.color, '#ffffff', '#2b1b12'],
     spd: 3.1,
@@ -2017,7 +2019,7 @@ function endingCopy(won){
   if (!won) return {title: 'CLAIM LOST', sub: 'The lantern goes dark. The mine waits.'};
   if (mode === 'special') return {title: 'BOOM RUSH CLEARED!', sub: 'The cart tears out under a golden sky.'};
   if (mode === 'daily') return {title: 'DAILY VEIN SEALED!', sub: 'One clean mark in the ledger for today.'};
-  return {title: 'PAY DIRT CLAIMED!', sub: 'The claim is yours, and the camp is glowing.'};
+  return {title: 'PAY DIRT CLAIMED!', sub: 'Cybertech stays lit, and Jerry keeps the map.'};
 }
 function startEndingScene(won){
   const copy = endingCopy(won);
@@ -2099,9 +2101,16 @@ try { campaignDone = JSON.parse(localStorage.getItem('paydirt-done') || '[]'); }
 let runUpgrades = {boots: 0, pick: 0, satchel: 0};
 let pendingUpgrade = null;
 const UPGRADE_OPTIONS = [
-  {id: 'boots', icon: '⚡', name: 'Quick Boots', desc: 'move and climb faster', max: 3},
-  {id: 'pick', icon: '⛏', name: 'Sharp Pick', desc: 'dig faster', max: 3},
-  {id: 'satchel', icon: '💥', name: 'Blast Satchel', desc: 'start claims with TNT', max: 3},
+  {id: 'boots', icon: '⚡', name: 'Signal Boots', desc: 'Cybertech-tuned footing', max: 3},
+  {id: 'pick', icon: '⛏', name: 'Bypass Pick', desc: 'cuts rock and old locks faster', max: 3},
+  {id: 'satchel', icon: '💥', name: 'Cybertech Satchel', desc: 'starts claims with rigged TNT', max: 3},
+];
+const UPGRADE_STORY_LINES = [
+  'Jerry solders a Cybertech fix by lantern light before the next claim.',
+  'A dead keypad blinks once. Jerry knows that circuit.',
+  'Old alarm wire runs deeper than the claim map admits.',
+  'Cybertech scrap becomes mining gear when the bills are due.',
+  'Jerry marks another locked door and grins at the dust.',
 ];
 
 function freshUpgrades(){ return {boots: 0, pick: 0, satchel: 0}; }
@@ -2164,6 +2173,11 @@ function showUpgradeChoice(nextLevel){
   pendingUpgrade = {nextLevel};
   state = 'upgrade';
   for (const k in keys) keys[k] = false;
+  const hintEl = $('upgradeHint');
+  if (hintEl){
+    const line = UPGRADE_STORY_LINES[(Math.max(1, nextLevel) - 1) % UPGRADE_STORY_LINES.length];
+    hintEl.textContent = line;
+  }
   renderUpgradeChoices();
   showOnly('ovUpgrade');
 }
@@ -2880,7 +2894,7 @@ function loadLevelData(rows){
     const brief = LEVELS.briefs && LEVELS.briefs[levelIndex];
     hint = {
       life: levelIndex === 0 ? 7 : 4.8,
-      text: levelIndex === 0 ? '◀ ▶ run   ↑ ↓ ladders   Z / X  dig left / right' : brief,
+      text: levelIndex === 0 ? 'Grab every nugget. Z / X dig side traps. When the ladder opens, climb out.' : brief,
     };
   }
 }
