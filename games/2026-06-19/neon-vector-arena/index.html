@@ -390,10 +390,10 @@ let nextWaveScore = 6500;
 let waveCooldown = 0;
 
 const FIREFOX_PERF = /\bFirefox\//i.test(navigator.userAgent);
-const GLOW_SCALE = FIREFOX_PERF ? .2 : .24;
+const GLOW_SCALE = FIREFOX_PERF ? .14 : .16;
 const MAX_ENEMIES = FIREFOX_PERF ? 42 : 56;
-const MAX_PARTICLES = FIREFOX_PERF ? 96 : 138;
-const MAX_FRAGMENTS = FIREFOX_PERF ? 142 : 210;
+const MAX_PARTICLES = FIREFOX_PERF ? 84 : 118;
+const MAX_FRAGMENTS = FIREFOX_PERF ? 76 : 118;
 const MAX_DT = FIREFOX_PERF ? .07 : .04;
 const SHOT_BLAST_RADIUS = 78;
 const SHOT_BLAST_FORCE = 290;
@@ -486,12 +486,12 @@ function buildStars() {
   stars = [];
   const count = Math.floor((innerWidth * innerHeight) / (FIREFOX_PERF ? 3600 : 2700));
   for (let i = 0; i < count; i++) {
-    const bright = Math.random() > .84;
+    const bright = Math.random() > .9;
     stars.push({
       x: Math.random() * innerWidth,
       y: Math.random() * innerHeight,
       z: bright ? rand(.82, 1.35) : rand(.18, .82),
-      hue: bright ? (Math.random() < .24 ? 48 : rand(184, 226)) : (Math.random() < .62 ? rand(190, 228) : rand(286, 330)),
+      hue: bright ? rand(184, 218) : rand(196, 226),
       bright,
       p: Math.random() * TAU
     });
@@ -1353,18 +1353,18 @@ function applyShipInput(ship, input, dt) {
 
 function addSpark(x, y, n, hue, force = 1) {
   if (particles.length > MAX_PARTICLES) particles.splice(0, particles.length - MAX_PARTICLES);
-  const count = Math.max(1, Math.round(n * effectsQuality));
+  const count = Math.max(1, Math.round(n * effectsQuality * .72));
   for (let i = 0; i < count; i++) {
     const a = rand(0, TAU);
-    const s = rand(40, 240) * force;
+    const s = rand(34, 190) * force;
     particles.push({
       x, y,
       vx: Math.cos(a) * s,
       vy: Math.sin(a) * s,
-      life: rand(.25, .75),
-      max: rand(.35, .9),
-      r: rand(1, 3.4) * force,
-      hue: hue + rand(-22, 22),
+      life: rand(.22, .58),
+      max: rand(.32, .72),
+      r: rand(1, 2.7) * force,
+      hue: hue + rand(-8, 8),
       kind: 'dot'
     });
   }
@@ -1517,15 +1517,15 @@ function worldShapePoints(e, scale = 1) {
 function addVectorFragments(e) {
   if (fragments.length > MAX_FRAGMENTS) fragments.splice(0, fragments.length - MAX_FRAGMENTS);
   const pts = worldShapePoints(e, 1);
-  const count = Math.max(1, Math.round((e.type === 'splitter' ? 4 : e.largeSplits ? 3 : 1) * effectsQuality));
+  const count = Math.max(1, Math.round((e.type === 'splitter' ? 1.5 : e.largeSplits ? 1.25 : .7) * effectsQuality));
   for (let pass = 0; pass < count; pass++) {
-    for (let i = 0; i < pts.length; i++) {
+    for (let i = 0; i < pts.length; i += pass ? 2 : 1) {
       const a = pts[i];
       const b = pts[(i + 1) % pts.length];
       const mx = (a[0] + b[0]) * .5;
       const my = (a[1] + b[1]) * .5;
-      const out = Math.atan2(my - e.y, mx - e.x) + rand(-.55, .55);
-      const speed = rand(80, e.type === 'splitter' || e.largeSplits ? 340 : 220);
+      const out = Math.atan2(my - e.y, mx - e.x) + rand(-.32, .32);
+      const speed = rand(62, e.type === 'splitter' || e.largeSplits ? 240 : 170);
       fragments.push({
         x: mx,
         y: my,
@@ -1536,13 +1536,13 @@ function addVectorFragments(e) {
         bx: b[0] - mx,
         by: b[1] - my,
         rot: rand(-.4, .4),
-        spin: rand(-7, 7),
-        hue: e.hue + rand(-10, 10),
-        life: rand(.38, .82),
-        max: rand(.58, .92),
+        spin: rand(-4.5, 4.5),
+        hue: e.hue + rand(-5, 5),
+        life: rand(.22, .52),
+        max: rand(.42, .68),
         kind: 'line'
       });
-      if (i % 2 === 0) {
+      if (pass === 0 && i % 3 === 0) {
         const [cx, cy] = rotatePoint(rand(-e.r * .34, e.r * .34), rand(-e.r * .34, e.r * .34), e.rot);
         fragments.push({
           x: mx,
@@ -1551,29 +1551,29 @@ function addVectorFragments(e) {
           vy: Math.sin(out + rand(-.25, .25)) * speed * .72,
           pts: [[a[0] - mx, a[1] - my], [b[0] - mx, b[1] - my], [cx, cy]],
           rot: rand(0, TAU),
-          spin: rand(-8, 8),
-          hue: e.hue + rand(-18, 18),
-          life: rand(.28, .68),
-          max: rand(.46, .78),
+          spin: rand(-4, 4),
+          hue: e.hue + rand(-6, 6),
+          life: rand(.2, .42),
+          max: rand(.36, .56),
           kind: 'poly'
         });
       }
     }
   }
-  const dust = Math.round((e.type === 'splitter' || e.largeSplits ? 18 : 5) * effectsQuality);
+  const dust = Math.round((e.type === 'splitter' || e.largeSplits ? 5 : 1) * effectsQuality);
   for (let i = 0; i < dust; i++) {
     const a = rand(0, TAU);
     const d = rand(0, e.r * 1.2);
     fragments.push({
       x: e.x + Math.cos(a) * d,
       y: e.y + Math.sin(a) * d,
-      vx: Math.cos(a) * rand(90, 280),
-      vy: Math.sin(a) * rand(90, 280),
+      vx: Math.cos(a) * rand(70, 190),
+      vy: Math.sin(a) * rand(70, 190),
       rot: rand(0, TAU),
-      spin: rand(-10, 10),
-      hue: e.hue + rand(-16, 16),
-      life: rand(.25, .58),
-      max: rand(.42, .68),
+      spin: rand(-4, 4),
+      hue: e.hue + rand(-5, 5),
+      life: rand(.18, .38),
+      max: rand(.32, .52),
       kind: 'cross'
     });
   }
@@ -1582,11 +1582,11 @@ function addVectorFragments(e) {
 
 function addHitShards(e, x, y, hue) {
   if (fragments.length > MAX_FRAGMENTS) fragments.splice(0, fragments.length - MAX_FRAGMENTS);
-  const count = Math.max(3, Math.round((e.type === 'splitter' || e.largeSplits ? clamp(e.r * .72, 14, 32) : 5) * effectsQuality));
+  const count = Math.max(1, Math.round((e.type === 'splitter' || e.largeSplits ? clamp(e.r * .28, 5, 12) : 2) * effectsQuality));
   for (let i = 0; i < count; i++) {
     const a = rand(0, TAU);
-    const speed = rand(120, 300);
-    const len = rand(4, 11);
+    const speed = rand(90, 210);
+    const len = rand(3, 7);
     fragments.push({
       x: x + rand(-4, 4),
       y: y + rand(-4, 4),
@@ -1597,11 +1597,11 @@ function addHitShards(e, x, y, hue) {
       bx: len * .5,
       by: 0,
       rot: a,
-      spin: rand(-10, 10),
-      hue: hue + rand(-18, 18),
-      life: rand(.28, .55),
-      max: rand(.42, .65),
-      kind: i % 3 === 0 ? 'cross' : 'line'
+      spin: rand(-4, 4),
+      hue: hue + rand(-6, 6),
+      life: rand(.2, .38),
+      max: rand(.32, .5),
+      kind: 'line'
     });
   }
 }
@@ -1625,10 +1625,10 @@ function blastEnemies(x, y, force, radius, sourceVX = 0, sourceVY = 0) {
 }
 
 function explode(x, y, hue, big = false) {
-  addSpark(x, y, big ? 24 : 6, hue, big ? 1.12 : .66);
-  particles.push({ x, y, vx: 0, vy: 0, life: big ? .44 : .24, max: big ? .44 : .24, r: big ? 84 : 30, hue, kind: 'ring' });
+  addSpark(x, y, big ? 18 : 5, hue, big ? 1.05 : .68);
+  particles.push({ x, y, vx: 0, vy: 0, life: big ? .38 : .24, max: big ? .38 : .24, r: big ? 76 : 30, hue, kind: 'ring' });
   if (big) particles.push({ x, y, vx: 0, vy: 0, life: .1, max: .1, r: 126, hue: 0, kind: 'flash' });
-  shake = Math.max(shake, big ? 6 : 1.4);
+  shake = Math.max(shake, big ? 5 : 1.2);
 }
 
 function splitEnemy(e) {
@@ -2063,8 +2063,8 @@ function drawGrid(c) {
 
   for (const s of stars) {
     const tw = .55 + Math.sin(time * (.55 + s.z * .45) + s.p) * .18;
-    const alpha = (s.bright ? .26 : .12) + tw * (s.bright ? .34 : .18);
-    const size = s.bright ? 1.1 + s.z * 1.45 : .55 + s.z * .85;
+    const alpha = (s.bright ? .24 : .1) + tw * (s.bright ? .32 : .18);
+    const size = s.bright ? 1.1 + s.z * 1.3 : .65 + s.z * .85;
     const sx = ((s.x - camera.x * (.045 + s.z * .13)) % w + w) % w;
     const sy = ((s.y - camera.y * (.045 + s.z * .13) + time * (4 + s.z * 8)) % h + h) % h;
     c.fillStyle = `hsla(${s.hue},100%,${64 + Math.min(s.z, 1) * 24}%,${alpha * Math.min(s.z, 1.08)})`;
@@ -2072,9 +2072,10 @@ function drawGrid(c) {
     c.arc(sx, sy, size * .55, 0, TAU);
     c.fill();
     if (s.bright) {
-      c.fillStyle = `hsla(${s.hue},100%,88%,${alpha * .16})`;
-      c.fillRect(sx - size * 1.05, sy - size * .08, size * 2.5, Math.max(.45, size * .18));
-      c.fillRect(sx - size * .08, sy - size * 1.05, Math.max(.45, size * .18), size * 2.5);
+      c.fillStyle = `hsla(${s.hue},100%,88%,${alpha * .18})`;
+      c.beginPath();
+      c.arc(sx, sy, size * 1.35, 0, TAU);
+      c.fill();
     }
   }
   c.restore();
@@ -2240,7 +2241,7 @@ function drawShot(c, s) {
 function drawParticle(c, p) {
   const t = clamp(p.life / p.max, 0, 1);
   if (p.kind === 'ring') {
-    c.strokeStyle = `hsla(${p.hue},100%,72%,${t * .68})`;
+    c.strokeStyle = `hsla(${p.hue},100%,70%,${t * .58})`;
     c.lineWidth = 2.2 * t;
     c.shadowBlur = 0;
     c.beginPath();
@@ -2257,14 +2258,15 @@ function drawParticle(c, p) {
     c.arc(p.x, p.y, p.r * (1 - t), 0, TAU);
     c.fill();
   } else {
-    c.fillStyle = `hsla(${p.hue},100%,72%,${t * .86})`;
+    c.fillStyle = `hsla(${p.hue},100%,72%,${t * .72})`;
     c.shadowBlur = 0;
     c.save();
     c.translate(p.x, p.y);
     c.rotate((1 - t) * 3);
     const r = p.r * t;
-    c.fillRect(-r, -.7, r * 2, 1.4);
-    c.fillRect(-.7, -r, 1.4, r * 2);
+    c.beginPath();
+    c.arc(0, 0, Math.max(.7, r), 0, TAU);
+    c.fill();
     c.restore();
     c.shadowBlur = 0;
   }
@@ -2272,15 +2274,15 @@ function drawParticle(c, p) {
 
 function drawFragment(c, f) {
   const t = clamp(f.life / f.max, 0, 1);
-  const color = `hsla(${f.hue},100%,72%,${t})`;
+  const color = `hsla(${f.hue},88%,72%,${t * .5})`;
   c.save();
   c.translate(f.x, f.y);
   c.rotate(f.rot);
   c.strokeStyle = color;
   c.fillStyle = `hsla(${f.hue},100%,62%,${t * .1})`;
-  c.lineWidth = Math.max(.8, 1.7 * t);
-  c.lineCap = 'butt';
-  c.lineJoin = 'miter';
+  c.lineWidth = Math.max(.7, 1.25 * t);
+  c.lineCap = 'round';
+  c.lineJoin = 'round';
   c.shadowBlur = 0;
   if (f.kind === 'line') {
     c.beginPath();
@@ -2296,13 +2298,11 @@ function drawFragment(c, f) {
     c.fill();
     c.stroke();
   } else {
-    const r = 4.5 * t;
+    const r = Math.max(.8, 2.7 * t);
+    c.fillStyle = `hsla(${f.hue},88%,72%,${t * .45})`;
     c.beginPath();
-    c.moveTo(-r, 0);
-    c.lineTo(r, 0);
-    c.moveTo(0, -r);
-    c.lineTo(0, r);
-    c.stroke();
+    c.arc(0, 0, r, 0, TAU);
+    c.fill();
   }
   c.restore();
 }
@@ -2366,7 +2366,7 @@ function render() {
   const sy = shakePulse ? Math.cos(time * 47) * shakePulse : 0;
   const objectLoad = enemies.length + shots.length + fragments.length * .5 + particles.length * .35;
   const heavyGlow = objectLoad > 180 || effectsQuality < .86;
-  const showGlowTrails = !FIREFOX_PERF && !heavyGlow && enemies.length < 38;
+  const showGlowTrails = !FIREFOX_PERF && !heavyGlow && enemies.length < 20 && fragments.length < 30;
   ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
   gtx.setTransform(DPR * GLOW_SCALE, 0, 0, DPR * GLOW_SCALE, 0, 0);
   ctx.clearRect(0, 0, innerWidth, innerHeight);
@@ -2385,7 +2385,7 @@ function render() {
         e.x = t.x;
         e.y = t.y;
         e.rot = t.rot;
-        e.alpha = (1 - i / e.trail.length) * .24;
+        e.alpha = (1 - i / e.trail.length) * .12;
         drawEnemy(gtx, e, true);
         e.x = ox;
         e.y = oy;
@@ -2395,12 +2395,12 @@ function render() {
     }
     for (let i = player.trail.length - 1; i >= 0; i--) {
       const t = player.trail[i];
-      drawPlayer(gtx, { x: t.x, y: t.y, a: t.a, hue: player.hue || 184, alpha: (1 - i / player.trail.length) * .32 }, true);
+      drawPlayer(gtx, { x: t.x, y: t.y, a: t.a, hue: player.hue || 184, alpha: (1 - i / player.trail.length) * .2 }, true);
     }
     if (partner) {
       for (let i = partner.trail.length - 1; i >= 0; i--) {
         const t = partner.trail[i];
-        drawPlayer(gtx, { x: t.x, y: t.y, a: t.a, hue: partner.hue || 316, alpha: (1 - i / partner.trail.length) * .32 }, true);
+        drawPlayer(gtx, { x: t.x, y: t.y, a: t.a, hue: partner.hue || 316, alpha: (1 - i / partner.trail.length) * .2 }, true);
       }
     }
   }
@@ -2428,7 +2428,7 @@ function render() {
 
   ctx.save();
   ctx.globalCompositeOperation = 'lighter';
-  ctx.globalAlpha = .74;
+  ctx.globalAlpha = .56;
   ctx.imageSmoothingEnabled = true;
   ctx.drawImage(glow, 0, 0, innerWidth, innerHeight);
   ctx.restore();
