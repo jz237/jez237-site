@@ -61,6 +61,7 @@ let grid = [];          // grid[r][c] = base tile char
 let golds = [];         // [{c,r,taken}]
 let powerups = [];      // [{c,r,kind,taken}]  kind 1..5
 let treasures = [];     // optional exploration finds: relic, bloom, map, oil
+let secretCaves = [];   // hidden optional side-room bonuses
 let exitCells = [];     // [{c,r}]
 let exitRevealed = false;
 let holes = new Map();  // 'c,r' -> {c,r,t}
@@ -84,7 +85,7 @@ function key(c, r){ return c + ',' + r; }
 function parseLevel(rows){
   if (!Array.isArray(rows) || rows.length !== ROWS)
     throw new Error('level must have ' + ROWS + ' rows, got ' + (rows && rows.length));
-  grid = []; golds = []; powerups = []; treasures = []; exitCells = [];
+  grid = []; golds = []; powerups = []; treasures = []; secretCaves = []; exitCells = [];
   guardSpawns = []; holes = new Map(); crumbles = new Map();
   blasted = new Set(); fuses = [];
   comboN = 0; comboT = 0;
@@ -1303,6 +1304,11 @@ const TKINDS = {
   map:   {name: 'MAP',   color: '#d8bf86', score: 175},
   oil:   {name: 'OIL',   color: '#f1b34e', score: 100},
 };
+const SECRET_CAVES = [
+  {name: 'ECHO CAVE', color: '#58d8ff', score: 650},
+  {name: 'GILDED NOOK', color: '#ffd86b', score: 725},
+  {name: 'LANTERN CACHE', color: '#f1b34e', score: 575, oil: 7},
+];
 
 function applyPowerup(kind){
   const meta = PKINDS[kind] || PKINDS[1];
@@ -1348,6 +1354,12 @@ function updatePowerups(dt){
       collectTreasure(tr);
     }
   }
+  for (const cave of secretCaves){
+    if (!cave.taken && cave.c === c && cave.r === r &&
+        Math.abs(player.x - (cave.c + .5)) < .5 && Math.abs(player.y - (cave.r + .5)) < .52){
+      collectSecretCave(cave);
+    }
+  }
   // gold magnet: nearby gold leaps to you
   if (player.magnetT > 0){
     for (const gd of golds){
@@ -1367,11 +1379,7 @@ function collectTreasure(tr){
   let val = meta.score;
   if (tr.kind === 'oil') oilLightT = 9;
   if (tr.kind === 'map') player.magnetT = Math.max(player.magnetT || 0, 3.5);
-  if (discoveryCount === discoveryTotal && discoveryTotal > 0){
-    val += 650;
-    flash = Math.max(flash, .28);
-    banner = {text: 'CAVERN SURVEYED', sub: '+650 EXPLORER BONUS', life: 2.0};
-  }
+  val += surveyBonusValue();
   addScore(val);
   spawnParticles(tr.c + .5, tr.r + .5, tr.kind === 'bloom' ? 18 : 12, {
     color: [meta.color, '#ffffff', tr.kind === 'relic' ? '#ffd86b' : '#71d7cc'],
@@ -1383,6 +1391,35 @@ function collectTreasure(tr){
   });
   popup(tr.c + .5, tr.r + .2, meta.name + ' +' + val, meta.color);
   AUDIO.sfx(tr.kind === 'oil' ? 'power' : 'goldhi');
+}
+
+function surveyBonusValue(){
+  if (discoveryCount !== discoveryTotal || discoveryTotal <= 0) return 0;
+  flash = Math.max(flash, .28);
+  banner = {text: 'CAVERN SURVEYED', sub: '+650 EXPLORER BONUS', life: 2.0};
+  return 650;
+}
+
+function collectSecretCave(cave){
+  cave.taken = true;
+  discoveryCount++;
+  resetRouteHint();
+  discoveryPulse = 1;
+  const meta = SECRET_CAVES[cave.kind % SECRET_CAVES.length] || SECRET_CAVES[0];
+  if (meta.oil) oilLightT = Math.max(oilLightT, meta.oil);
+  let val = meta.score + surveyBonusValue();
+  addScore(val);
+  flash = Math.max(flash, .18);
+  spawnParticles(cave.c + .5, cave.r + .46, 24, {
+    color: [meta.color, '#ffffff', '#2b1b12'],
+    spd: 3.1,
+    life: .72,
+    size: 3,
+    grav: -3,
+    glow: true,
+  });
+  popup(cave.c + .5, cave.r + .1, meta.name + ' +' + val, meta.color);
+  AUDIO.sfx(meta.oil ? 'power' : 'cave');
 }
 
 /* ================= combo ================= */
@@ -2411,8 +2448,42 @@ function seedExtraLife(candidates, occ){
   occ.add(key(spot.c, spot.r));
 }
 
+function secretCaveCount(){
+  if (mode === 'daily'){
+    const seed = Math.abs(LEVELS.hashStr('secret:' + (dailyDate || LEVELS.dailyDateUTC())));
+    return seed % 3 === 0 ? 2 : 1;
+  }
+  if (mode === 'special') return levelIndex > 0 && levelIndex % 5 === 4 ? 1 : 0;
+  return levelIndex > 0 && levelIndex % 3 === 1 ? 1 : 0;
+}
+
+function seedSecretCaves(candidates, occ){
+  secretCaves = [];
+  const want = secretCaveCount();
+  if (!want) return;
+  const seed = Math.abs(LEVELS.hashStr(mode + ':secret:' + levelIndex + ':' + (dailyDate || 'campaign')));
+  const choices = candidates.filter(spot => {
+    if (occ.has(key(spot.c, spot.r))) return false;
+    if (Math.abs(spot.c - spawnPoint.c) + Math.abs(spot.r - spawnPoint.r) < 6) return false;
+    if (exitCells.some(e => Math.abs(e.c - spot.c) + Math.abs(e.r - spot.r) < 5)) return false;
+    if (golds.some(g => Math.abs(g.c - spot.c) + Math.abs(g.r - spot.r) < 2)) return false;
+    const wallNook = tileAt(spot.c - 1, spot.r) === 'X' || tileAt(spot.c + 1, spot.r) === 'X';
+    const rim = spot.c < 5 || spot.c > COLS - 6 || spot.r < 4 || spot.r > ROWS - 5;
+    return wallNook || rim;
+  });
+  choices.sort((a, b) => ((b.weight * 17 + ((seed + b.c * 11 + b.r * 19) % 37)) -
+                          (a.weight * 17 + ((seed + a.c * 11 + a.r * 19) % 37))));
+  for (const spot of choices){
+    if (secretCaves.length >= want) break;
+    if (secretCaves.some(c => Math.abs(c.c - spot.c) + Math.abs(c.r - spot.r) < 5)) continue;
+    secretCaves.push({c: spot.c, r: spot.r, kind: (seed + secretCaves.length) % SECRET_CAVES.length, taken: false});
+    occ.add(key(spot.c, spot.r));
+  }
+}
+
 function seedTreasures(){
   treasures = [];
+  secretCaves = [];
   const rr = ART.rng(8603 + levelIndex * 211 + (mode === 'daily' ? 991 : 0));
   const occ = new Set();
   for (const gd of golds) occ.add(key(gd.c, gd.r));
@@ -2436,6 +2507,7 @@ function seedTreasures(){
   }
   candidates.sort((a, b) => (b.weight + rr() * .2) - (a.weight + rr() * .2));
   seedExtraLife(candidates, occ);
+  seedSecretCaves(candidates, occ);
   const kinds = ['relic', 'bloom', 'map', 'oil'];
   const want = Math.min(5 + Math.min(levelIndex, 3), Math.max(2, candidates.length));
   for (const spot of candidates){
@@ -2445,7 +2517,7 @@ function seedTreasures(){
     treasures.push({c: spot.c, r: spot.r, kind: kinds[treasures.length % kinds.length], taken: false});
   }
   discoveryCount = 0;
-  discoveryTotal = treasures.length;
+  discoveryTotal = treasures.length + secretCaves.length;
   discoveryPulse = 0;
   oilLightT = 0;
 }
@@ -4347,6 +4419,9 @@ function renderWorldFrame(includeHUD){
       glow(pu.c + .5, pu.r + .5 + bobv / TILE, 26, hexA(meta.color, .5), .6);
       drawPowerupToken(pu.c * TILE + TILE / 2, pu.r * TILE + HUD_H + TILE / 2 + bobv, pu.kind, 13);
     }
+    for (const cave of secretCaves){
+      if (!cave.taken) drawSecretCave(cave);
+    }
     for (const tr of treasures){
       if (tr.taken) continue;
       const meta = TKINDS[tr.kind] || TKINDS.relic;
@@ -4457,6 +4532,7 @@ function renderWorldFrame(includeHUD){
     for (const gd of golds) if (!gd.taken && !gd.held) glow(gd.c + .5, gd.r + .5, 26, 'rgba(255,200,60,.3)', 1);
     for (const n of specialNuggets) glow(n.x, n.y, 22, 'rgba(255,205,70,.28)', 1);
     for (const tr of treasures) if (!tr.taken){ const meta = TKINDS[tr.kind] || TKINDS.relic; glow(tr.c + .5, tr.r + .5, 20, hexA(meta.color, .18), 1); }
+    for (const cave of secretCaves) if (!cave.taken){ const meta = SECRET_CAVES[cave.kind % SECRET_CAVES.length] || SECRET_CAVES[0]; glow(cave.c + .5, cave.r + .47, 24, hexA(meta.color, .16), 1); }
     if (special){
       glow(special.cart.x, special.cart.y, special.cartReady ? 78 : 36, 'rgba(255,190,64,' + (special.cartReady ? .24 : .08) + ')', 1);
       for (const lava of special.lava || []) for (let c = lava.c0; c <= lava.c1; c++) glow(c + .5, lava.r + .5, 36, 'rgba(255,82,26,.25)', 1);
@@ -4752,6 +4828,7 @@ function drawMobileRadar(){
 
   for (const gd of golds) if (!gd.taken && !gd.held) mobileRadarDot(x + (gd.c + .5) * TILE * sx, y + (gd.r + .5) * TILE * sy, '#ffd23f', 2);
   for (const tr of treasures) if (!tr.taken) mobileRadarDot(x + (tr.c + .5) * TILE * sx, y + (tr.r + .5) * TILE * sy, '#43e0d4', 1.8);
+  for (const cave of secretCaves) if (!cave.taken) mobileRadarDot(x + (cave.c + .5) * TILE * sx, y + (cave.r + .5) * TILE * sy, '#58d8ff', 2);
   for (const gu of guards) if (gu.state !== 'dead') mobileRadarDot(x + px(gu.x) * sx, y + (py(gu.y) - HUD_H) * sy, guardMeta(gu).color, gu.kind === 'scout' ? 3 : 2.5);
   if (player) mobileRadarDot(x + px(player.x) * sx, y + (py(player.y) - HUD_H) * sy, '#ffffff', 2.4);
   ctx.restore();
@@ -4765,6 +4842,7 @@ function drawMobileAwareness(){
   }
   for (const gd of golds) if (!gd.taken && !gd.held) items.push({x: gd.c + .5, y: gd.r + .5, color: '#ffd23f', kind: 'gold', priority: 1});
   for (const tr of treasures) if (!tr.taken) items.push({x: tr.c + .5, y: tr.r + .5, color: '#43e0d4', kind: 'treasure', priority: 2});
+  for (const cave of secretCaves) if (!cave.taken) items.push({x: cave.c + .5, y: cave.r + .5, color: '#58d8ff', kind: 'secret', priority: 2});
   const shown = [];
   for (const item of items){
     const p = worldToMobileScreen(item.x, item.y);
@@ -4949,6 +5027,34 @@ function stepWorldForQa(){
     if (state === 'playing') update(TICK);
   }
   render();
+}
+
+function drawSecretCave(cave){
+  const meta = SECRET_CAVES[cave.kind % SECRET_CAVES.length] || SECRET_CAVES[0];
+  const x = cave.c * TILE, y = cave.r * TILE + HUD_H;
+  const pulse = .5 + .5 * Math.sin(gameTime * 3 + cave.c * .7 + cave.r);
+  glow(cave.c + .5, cave.r + .47, 28, hexA(meta.color, .22 + pulse * .12), .72);
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.fillStyle = 'rgba(8,7,12,.84)';
+  ctx.beginPath();
+  ctx.moveTo(5, 27);
+  ctx.quadraticCurveTo(8, 9, 19, 8);
+  ctx.quadraticCurveTo(31, 8, 34, 27);
+  ctx.closePath();
+  ctx.fill();
+  ctx.strokeStyle = hexA(meta.color, .52 + pulse * .22);
+  ctx.lineWidth = 2;
+  ctx.stroke();
+  ctx.fillStyle = 'rgba(255,238,178,.62)';
+  ctx.fillRect(17, 13 + pulse * 2, 5, 2);
+  ctx.fillStyle = 'rgba(255,255,255,.55)';
+  ctx.fillRect(10, 25, 18, 2);
+  ctx.globalAlpha = .48 + pulse * .28;
+  ctx.fillStyle = meta.color;
+  ctx.fillRect(7, 29, 4, 2);
+  ctx.fillRect(28, 28, 3, 2);
+  ctx.restore();
 }
 
 function drawPit(c, r, dark, h){
@@ -5692,6 +5798,7 @@ window.__g = {
   get boss(){ const b = guards.find(g => g.kind === 'boss'); return b ? {x: b.x, y: b.y, state: b.state, name: b.name, tnt: b.bossTntT, dig: b.bossDigT, gold: !!b.gold} : null; },
   get golds(){ return golds; },
   get treasures(){ return treasures; },
+  get secretCaves(){ return secretCaves; },
   get discoveries(){ return {count: discoveryCount, total: discoveryTotal, oilLightT}; },
   get goldLeft(){ return goldLeft; },
   get holes(){ return [...holes.values()]; },
@@ -5707,6 +5814,7 @@ window.__g = {
   dig(dir){ return tryDig(dir < 0 ? -1 : 1); },
   kill(){ killPlayer('debug'); },
   give(kind){ applyPowerup(kind); },
+  collectSecret(i){ const cave = secretCaves[i || 0]; if (!cave || cave.taken) return null; collectSecretCave(cave); return cave; },
   get powerups(){ return powerups; },
   get fuses(){ return fuses; },
   get blasted(){ return [...blasted]; },

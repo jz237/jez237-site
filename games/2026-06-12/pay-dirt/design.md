@@ -117,3 +117,6 @@ Sim is fixed-timestep (60Hz accumulator); `__g.step(n)` drives ticks headlessly.
 - 2026-06-22: Audio polish adds richer procedural gold sparkle, heavier TNT/explosion
   impact, and named `life`, `cave`, and `cart` SFX. `window.__g.sfx(name)` exists for
   headless no-throw checks.
+- 2026-06-22: Secret bonus caves seed as optional side-room discoveries in campaign,
+  Daily Dig, and selected Boom Rush waves. They count toward FINDS, award larger bonus
+  scores, never gate the exit/cart, and are exposed as `window.__g.secretCaves`.
