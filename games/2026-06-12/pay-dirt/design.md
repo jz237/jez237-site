@@ -94,3 +94,6 @@ Sim is fixed-timestep (60Hz accumulator); `__g.step(n)` drives ticks headlessly.
   It loads campaign, Daily Dig, and Boom Rush levels, checks solver health, false No Way Out
   reasons, and nonblank canvas rendering so future changes can be tested without a full
   manual playthrough.
+- 2026-06-22: Smart stuck help uses a subtle prospector hunch after sustained no-progress
+  play. It highlights a reachable remaining nugget, or the exit/cart after the haul is
+  complete, and can be forced in tests with `window.__g.hunch()`.
