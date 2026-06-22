@@ -515,7 +515,7 @@
 <div class="overlay" id="overlay">
   <div class="panel">
 	    <h1 id="overlayTitle">NEON<br>VECTOR<br>ARENA</h1>
-	    <div class="title-version" id="titleVersion">v4.16</div>
+	    <div class="title-version" id="titleVersion">v4.17</div>
 	    <p class="sub" id="overlaySub">Solo survival in endless vector space. Move smart, chain combos, and shatter oversized geometry before it reaches you.</p>
     <div class="menu-actions" id="mainActions">
       <button id="start">Solo Run</button>
@@ -567,7 +567,7 @@
     <p class="fine" id="overlayFine">Dual Stick: left side flies, right side aims and fires. Desktop: WASD plus hold mouse to aim.</p>
   </div>
 </div>
-<div class="version">v4.16</div>
+<div class="version">v4.17</div>
 
 <script>
 'use strict';
@@ -3091,8 +3091,8 @@ function update(dt) {
         ship.hp -= Math.ceil(hitDamage * DAMAGE_TAKEN_MULT);
         ship.inv = HIT_INV_SECONDS;
         ship.hitFlash = .48;
-        ship.vx -= nx * 150;
-        ship.vy -= ny * 150;
+        ship.vx += nx * 150;
+        ship.vy += ny * 150;
         shake = Math.max(shake, ship === player ? 6.4 : 4.2);
         sfx('hit');
         blastEnemies(ship.x, ship.y, SHOT_BLAST_FORCE * .7, blastRadius() * .9);
