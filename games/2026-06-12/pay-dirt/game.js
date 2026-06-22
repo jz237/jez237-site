@@ -980,9 +980,14 @@ function updateSpecial(dt, inp){
   }
 }
 
+function specialEscapeInProgress(){
+  return !!(isSpecialMode() && special && special.escapeT > 0);
+}
+
 function startCartEscape(){
   if (!special || special.escapeT > 0) return;
   special.escapeT = special.escapeDur;
+  clearSoftlock();
   banner = {
     text: special.final ? 'FINAL HAUL!' : 'PAY DIRT!',
     sub: special.final ? 'RUN THE COLLAPSING RAIL' : 'MINE CART ESCAPE',
@@ -1469,6 +1474,7 @@ function reachableCellsFromPlayer(){
 
 function currentNoWayOutReason(){
   if (!player || player.state === 'dead' || player.state === 'fall' || player.digT > 0) return '';
+  if (specialEscapeInProgress()) return '';
   // Dig holes are temporary. A route blocked by open holes may reopen a few
   // seconds later, so only judge true softlocks after the board has settled.
   if (holes.size || fuses.length) return '';
@@ -1511,6 +1517,7 @@ function showSoftlock(reason){
 }
 
 function updateSoftlockDetector(dt){
+  if (specialEscapeInProgress()){ clearSoftlock(); return; }
   if (levelTime < 2.0){ clearSoftlock(); return; }
   softlockCheckT -= dt;
   if (softlockCheckT > 0) return;
