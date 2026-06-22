@@ -80,6 +80,7 @@ let specialNuggets = [];
 let specialRocks = [];
 let specialRockWarnings = [];
 let ghostTrail = [], ghostReplay = null, ghostSampleT = 0;
+let endingScene = null;
 
 function key(c, r){ return c + ',' + r; }
 
@@ -1993,6 +1994,87 @@ function drawGhostReplay(){
   ctx.restore();
 }
 
+function endingCopy(won){
+  if (!won) return {title: 'CLAIM LOST', sub: 'The lantern goes dark. The mine waits.'};
+  if (mode === 'special') return {title: 'BOOM RUSH CLEARED!', sub: 'The cart tears out under a golden sky.'};
+  if (mode === 'daily') return {title: 'DAILY VEIN SEALED!', sub: 'One clean mark in the ledger for today.'};
+  return {title: 'PAY DIRT CLAIMED!', sub: 'The claim is yours, and the camp is glowing.'};
+}
+function startEndingScene(won){
+  const copy = endingCopy(won);
+  endingScene = {
+    won: !!won,
+    mode,
+    score,
+    level: levelIndex,
+    title: copy.title,
+    sub: copy.sub,
+    seed: Math.abs(LEVELS.hashStr(mode + ':' + levelIndex + ':' + score + ':' + (dailyDate || ''))),
+  };
+}
+function drawEndingScene(){
+  if (!endingScene) return;
+  const won = endingScene.won;
+  const t = clock;
+  ctx.save();
+  ctx.globalCompositeOperation = 'source-over';
+  const shade = ctx.createLinearGradient(0, 0, 0, VIEW_H);
+  shade.addColorStop(0, won ? 'rgba(16,12,28,.28)' : 'rgba(8,4,12,.62)');
+  shade.addColorStop(.56, won ? 'rgba(54,30,14,.38)' : 'rgba(24,8,14,.72)');
+  shade.addColorStop(1, won ? 'rgba(255,178,72,.18)' : 'rgba(0,0,0,.78)');
+  ctx.fillStyle = shade;
+  ctx.fillRect(0, 0, VIEW_W, VIEW_H);
+  ctx.globalCompositeOperation = 'lighter';
+  if (won){
+    const sweep = (Math.sin(t * .8) * .5 + .5) * VIEW_W;
+    const beam = ctx.createRadialGradient(sweep, HUD_H + 40, 20, sweep, HUD_H + 80, VIEW_H * .72);
+    beam.addColorStop(0, 'rgba(255,232,150,.26)');
+    beam.addColorStop(.45, 'rgba(255,184,76,.12)');
+    beam.addColorStop(1, 'rgba(255,184,76,0)');
+    ctx.fillStyle = beam;
+    ctx.fillRect(0, HUD_H, VIEW_W, VIEW_H - HUD_H);
+    for (let i = 0; i < 42; i++){
+      const n = endingScene.seed + i * 7919;
+      const x = (n % VIEW_W + Math.sin(t * (0.8 + (i % 5) * .11) + i) * 18 + VIEW_W) % VIEW_W;
+      const y = HUD_H + 34 + ((n >> 7) % (VIEW_H - HUD_H - 80));
+      const a = .18 + .28 * (0.5 + 0.5 * Math.sin(t * 2.1 + i));
+      ctx.fillStyle = 'rgba(255,221,107,' + a + ')';
+      ctx.fillRect(x, y, 2 + (i % 3), 2 + (i % 2));
+    }
+    const cartX = VIEW_W * .5 + Math.sin(t * .7) * 24;
+    const cartY = VIEW_H - 88;
+    ctx.fillStyle = 'rgba(255,205,70,.16)';
+    ctx.fillRect(cartX - 110, cartY + 28, 220, 8);
+    ctx.fillStyle = '#301b12';
+    roundRect(cartX - 54, cartY, 108, 38, 5);
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(255,216,107,.7)';
+    ctx.lineWidth = 3;
+    ctx.stroke();
+    ctx.fillStyle = '#ffd86b';
+    for (let i = 0; i < 8; i++) drawGemIcon(cartX - 36 + i * 10, cartY + 9 + (i % 2) * 8, 5, '#ffd23f');
+  } else {
+    for (let i = 0; i < 18; i++){
+      const x = (endingScene.seed + i * 97 + t * (12 + i % 3)) % VIEW_W;
+      const y = HUD_H + ((endingScene.seed >> (i % 12)) + i * 37 + t * 22) % (VIEW_H - HUD_H);
+      ctx.fillStyle = 'rgba(122,82,54,.18)';
+      ctx.fillRect(x, y, 3, 3);
+    }
+  }
+  ctx.globalCompositeOperation = 'source-over';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.font = '900 30px system-ui, sans-serif';
+  ctx.fillStyle = 'rgba(0,0,0,.52)';
+  ctx.fillText(endingScene.title, VIEW_W / 2 + 2, HUD_H + 78 + 2);
+  ctx.fillStyle = won ? '#ffe98a' : '#ff8b72';
+  ctx.fillText(endingScene.title, VIEW_W / 2, HUD_H + 78);
+  ctx.font = '800 15px system-ui, sans-serif';
+  ctx.fillStyle = '#f5eddd';
+  ctx.fillText(endingScene.sub, VIEW_W / 2, HUD_H + 112);
+  ctx.restore();
+}
+
 let campaignDone = [];
 try { campaignDone = JSON.parse(localStorage.getItem('paydirt-done') || '[]'); } catch (e) {}
 let runUpgrades = {boots: 0, pick: 0, satchel: 0};
@@ -2141,6 +2223,7 @@ function reloadCurrentLevel(opts){
 
 function endGame(won){
   state = 'over';
+  startEndingScene(won);
   continueRun = won ? null : {
     mode,
     levelIndex,
@@ -2151,14 +2234,14 @@ function endGame(won){
   };
   AUDIO.sfx(won ? 'win' : 'die');
   AUDIO.stopMusic();
-  $('overTitle').textContent = won ? 'CLAIM CLEARED!' : 'CLAIM LOST';
+  $('overTitle').textContent = endingScene ? endingScene.title : (won ? 'CLAIM CLEARED!' : 'CLAIM LOST');
   $('overStats').innerHTML =
     '<div>HAUL<br><b>' + score + '</b></div>' +
     (mode === 'daily' ? '<div>MODE<br><b>DAILY</b></div>' :
       mode === 'special' ? '<div>MODE<br><b>BOOM</b></div>' :
       '<div>CLAIM<br><b>' + (levelIndex + 1) + '</b></div>');
   const choice = $('overChoice');
-  if (choice) choice.textContent = won ? '' : 'Continue this level with a zero score, or start over.';
+  if (choice) choice.textContent = won && endingScene ? endingScene.sub : 'Continue this level with a zero score, or start over.';
   const cb = $('bContinue');
   if (cb){
     cb.style.display = continueRun ? '' : 'none';
@@ -2696,6 +2779,7 @@ function claimThreatLabel(){
 
 function loadLevelData(rows){
   currentRows = rows;
+  endingScene = null;
   resetSpecialState();
   const specialLevel = isSpecialMode() && LEVELS.special.levels
     ? LEVELS.special.levels[levelIndex]
@@ -5104,6 +5188,7 @@ function render(){
   ctx.imageSmoothingEnabled = false;
   if (mobileCamera) renderMobileCamera();
   else renderWorldFrame(true);
+  drawEndingScene();
 }
 
 /* ================= QA Mine (debug-only polish loop checks) ================= */
@@ -5974,6 +6059,7 @@ window.__g = {
   get upgrades(){ return copyUpgrades(runUpgrades); },
   get pendingUpgrade(){ return pendingUpgrade ? {...pendingUpgrade} : null; },
   get ghost(){ return {recorded: ghostTrail.length, replay: ghostReplay ? {time: ghostReplay.time, score: ghostReplay.score, points: ghostReplay.points.length} : null}; },
+  get ending(){ return endingScene ? {...endingScene} : null; },
   get goldLeft(){ return goldLeft; },
   get holes(){ return [...holes.values()]; },
   get exitRevealed(){ return exitRevealed; },
@@ -5987,6 +6073,7 @@ window.__g = {
   loadSpecial(i){ mode = 'special'; loadSpecialLevel(i); state = 'playing'; hideOverlays(); return grid.length === ROWS; },
   completeLevel(){ levelComplete(); return state; },
   chooseUpgrade(id){ return chooseUpgrade(id); },
+  end(won){ endGame(!!won); return endingScene ? {...endingScene} : null; },
   saveGhost(){ return saveGhostReplay(); },
   dig(dir){ return tryDig(dir < 0 ? -1 : 1); },
   kill(){ killPlayer('debug'); },
