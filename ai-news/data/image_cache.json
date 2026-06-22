@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-22T12:23:25.443602+00:00",
+  "updatedAt": "2026-06-22T14:00:01.422625+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -11072,6 +11072,10 @@
     "https://www.techrepublic.com/article/fable-5-withdrawal-underscores-difficulty-sovereign-ai": {
       "image": "",
       "checkedAt": "2026-06-22T12:23:25.443602+00:00"
+    },
+    "https://huggingface.co/blog/PaddlePaddle/pp-ocrv6": {
+      "image": "https://cdn-uploads.huggingface.co/production/uploads/652b2e9166313ebb6197e706/l156KP0e5PRyDrE4woHoM.jpeg",
+      "checkedAt": "2026-06-22T14:00:01.422625+00:00"
     }
   }
 }

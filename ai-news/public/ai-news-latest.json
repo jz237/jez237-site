@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-22T12:23:25.443602+00:00",
+  "updatedAt": "2026-06-22T14:00:01.422625+00:00",
   "items": [
     {
       "title": "LLM research updates, large language model evaluation news, leaderboards, and AI model insights",
@@ -10,12 +10,140 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-22T12:23:32.954711+00:00",
+      "published": "2026-06-22T14:00:10.975407+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-22T12:23:25.443602+00:00",
+      "lastSeen": "2026-06-22T14:00:01.422625+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 5.11
+    },
+    {
+      "title": "PP-OCRv6 on Hugging Face: 50-Language OCR from 1.5M to 34.5M Parameters",
+      "url": "https://huggingface.co/blog/PaddlePaddle/pp-ocrv6",
+      "source": "Hugging Face Blog",
+      "sourceUrl": "https://huggingface.co/blog/feed.xml",
+      "sourceWeight": 0.95,
+      "category": "AI",
+      "summary": "",
+      "image": "https://cdn-uploads.huggingface.co/production/uploads/652b2e9166313ebb6197e706/l156KP0e5PRyDrE4woHoM.jpeg",
+      "published": "2026-06-22T13:18:56+00:00",
+      "firstSeen": "2026-06-22T14:00:01.422625+00:00",
+      "lastSeen": "2026-06-22T14:00:01.422625+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.4093
+    },
+    {
+      "title": "At ISC, JUPITER Shows What Exascale Science Looks Like",
+      "url": "https://blogs.nvidia.com/blog/jupiter-exascale-supercomputing-science",
+      "source": "NVIDIA Blog",
+      "sourceUrl": "https://blogs.nvidia.com/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "JUPITER, Europe’s first exascale supercomputer at Germany’s Forschungszentrum Jülich, runs on NVIDIA Grace Hopper Superchips and NVIDIA Quantum-X800 InfiniBand networking — and it’s had a busy year. As the international supercomputing community gathers at ISC in Hamburg this week, four projects running on JUPITER point to what exascale computing can actually do: map the human [&#8230;]",
+      "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/hpc-corp-blog-isc26-julich-supercomputer-1280x680-5359150.png",
+      "published": "2026-06-22T13:00:48+00:00",
+      "firstSeen": "2026-06-22T14:00:01.422625+00:00",
+      "lastSeen": "2026-06-22T14:00:01.422625+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2602
+    },
+    {
+      "title": "NAIRR Science Program Reshapes Scientific Research, Powered by NVIDIA AI Infrastructure",
+      "url": "https://blogs.nvidia.com/blog/nairr-scientific-research-ai-infrastructure",
+      "source": "NVIDIA Blog",
+      "sourceUrl": "https://blogs.nvidia.com/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "For the past two years, the U.S. National Science Foundation’s National Artificial Intelligence Research Resource (NAIRR) pilot program has driven innovative research across the U.S. for over 700 projects — spanning protein prediction and infectious disease outbreak management.  NVIDIA contributed to the NAIRR pilot through a cloud-based resource that gives researchers dedicated access to a [&#8230;]",
+      "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/nairr.png",
+      "published": "2026-06-22T13:00:38+00:00",
+      "firstSeen": "2026-06-22T14:00:01.422625+00:00",
+      "lastSeen": "2026-06-22T14:00:01.422625+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.6602
+    },
+    {
+      "title": "NVIDIA Vera CPU Opens the Way for Agentic Scientific AI at Los Alamos National Laboratory",
+      "url": "https://blogs.nvidia.com/blog/nvidia-vera-cpu-los-alamos-national-laboratory",
+      "source": "NVIDIA Blog",
+      "sourceUrl": "https://blogs.nvidia.com/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Mission, Vision and Veritas — new Los Alamos National Laboratory (LANL) supercomputers to be built with HPE and NVIDIA — are tapping NVIDIA Vera CPUs to accelerate scientific discovery, unlocking agentic AI for science. The supercomputers will use the HPE Cray Supercomputing GX5000 architecture with the NVIDIA Vera Rubin platform, combining NVIDIA Vera CPUs, NVIDIA [&#8230;]",
+      "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/vera-cpu-lanl-1920x1080-1.jpg",
+      "published": "2026-06-22T13:00:20+00:00",
+      "firstSeen": "2026-06-22T14:00:01.422625+00:00",
+      "lastSeen": "2026-06-22T14:00:01.422625+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "editorial_score_pass",
+      "score": 7.46
+    },
+    {
+      "title": "From Materials Simulation to Experimental Astronomy, New NVIDIA AI Software Unlocks Scientific Discoveries",
+      "url": "https://blogs.nvidia.com/blog/ai-for-science-software-cuda",
+      "source": "NVIDIA Blog",
+      "sourceUrl": "https://blogs.nvidia.com/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "At the ISC conference running in Hamburg this week, NVIDIA is introducing new software that speeds AI for science, from chemistry and materials discovery to the search for dark matter.  The NVIDIA DAQIRI library and new NVIDIA ALCHEMI NIM microservices — as well as the NVIDIA cuPhoton reference code, coming soon — turn work that [&#8230;]",
+      "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/cuda-press-corp-blog-isc26-1920x1080-1.jpg",
+      "published": "2026-06-22T13:00:20+00:00",
+      "firstSeen": "2026-06-22T14:00:01.422625+00:00",
+      "lastSeen": "2026-06-22T14:00:01.422625+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "framework_or_plumbing",
+      "score": 0.56
+    },
+    {
+      "title": "Eco Wave Power Turns Waves Into Watts With NVIDIA AI Infrastructure and Digital Twins",
+      "url": "https://blogs.nvidia.com/blog/eco-wave-power-ai-digital-twins",
+      "source": "NVIDIA Blog",
+      "sourceUrl": "https://blogs.nvidia.com/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "The next era of AI will not be defined by compute alone. Its growth will be determined by energy.  As accelerated computing scales across AI factories, agentic AI, industrial AI, edge computing and physical AI — including robotics and autonomous systems — global electricity demand is rising at unprecedented speed.  In many regions, expanding grid [&#8230;]",
+      "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/eco-wave-1920x1080-1.jpg",
+      "published": "2026-06-22T13:00:13+00:00",
+      "firstSeen": "2026-06-22T14:00:01.422625+00:00",
+      "lastSeen": "2026-06-22T14:00:01.422625+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 3.96
+    },
+    {
+      "title": "Microsoft’s Nadella turns on the AI giants he helped build",
+      "url": "https://thenextweb.com/news/nadella-ai-giants-eat-economy",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "In a blunt interview, Satya Nadella warned that the AI giants cannot keep promising mass job losses while demanding the power to build whatever they want. Microsoft’s answer: cheaper models, more control for customers, and a pitch for the public’s trust. Satya Nadella helped start the AI boom. Now he has a warning for the [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/microsoft-voluntary-retirement-us-workers-ai.avif",
+      "published": "2026-06-22T12:50:06+00:00",
+      "firstSeen": "2026-06-22T14:00:01.422625+00:00",
+      "lastSeen": "2026-06-22T14:00:01.422625+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.115
+    },
+    {
+      "title": "Microsoft turns to Chevron’s gas to power a Texas data centre",
+      "url": "https://thenextweb.com/news/chevron-microsoft-gas-deal-texas-data-centre",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The Chevron Microsoft gas deal hands the oil major a 20-year contract to power a giant West Texas data centre. For a company that built its AI plans on renewables and nuclear, that is a sharp turn. Chevron will power one of the largest data centres in the United States by burning natural gas. The [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/chevron-logo.avif",
+      "published": "2026-06-22T12:36:06+00:00",
+      "firstSeen": "2026-06-22T14:00:01.422625+00:00",
+      "lastSeen": "2026-06-22T14:00:01.422625+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1081
     },
     {
       "title": "Anthropic’s Fable 5 Withdrawal Underscores Importance and Difficulty of ‘sovereign AI’ Strategies",
@@ -31,7 +159,7 @@
       "lastSeen": "2026-06-22T12:23:25.443602+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.2197
+      "score": 6.1729
     },
     {
       "title": "Read this before you vibe-code another app",
@@ -44,10 +172,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/268570_vibe_coding_security_CVirginia2.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-22T11:00:00+00:00",
       "firstSeen": "2026-06-22T12:00:01.863571+00:00",
-      "lastSeen": "2026-06-22T13:00:01.579187+00:00",
+      "lastSeen": "2026-06-22T14:00:01.422625+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 4.1183
+      "score": 4.072
     },
     {
       "title": "Getty Images soars after striking a deal with the kind of company it sued",
@@ -60,10 +188,10 @@
       "image": "https://media.thenextweb.com/2026/06/Getty-Images.avif",
       "published": "2026-06-22T10:49:01+00:00",
       "firstSeen": "2026-06-22T11:00:01.198563+00:00",
-      "lastSeen": "2026-06-22T12:23:25.443602+00:00",
+      "lastSeen": "2026-06-22T14:00:01.422625+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.103
+      "score": 2.0569
     },
     {
       "title": "L’Oréal brings Maybelline virtual try-on to ChatGPT",
@@ -76,10 +204,10 @@
       "image": "",
       "published": "2026-06-22T10:00:00+00:00",
       "firstSeen": "2026-06-22T11:00:01.198563+00:00",
-      "lastSeen": "2026-06-22T12:23:25.443602+00:00",
+      "lastSeen": "2026-06-22T14:00:01.422625+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.6773
+      "score": 12.6323
     },
     {
       "title": "SpaceX shares slide again as the post-IPO rally keeps unwinding",
@@ -92,10 +220,10 @@
       "image": "https://media.thenextweb.com/2026/06/spacex-ipo-oversubscribed-orders-close.avif",
       "published": "2026-06-22T09:59:30+00:00",
       "firstSeen": "2026-06-22T10:00:01.707125+00:00",
-      "lastSeen": "2026-06-22T12:23:25.443602+00:00",
+      "lastSeen": "2026-06-22T14:00:01.422625+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7791
+      "score": 2.7341
     },
     {
       "title": "Baden Bower tracks 12,040 AI citations across six engines to rank top publications for AI visibility",
@@ -108,10 +236,10 @@
       "image": "https://media.thenextweb.com/2026/06/baden-bower-ai-visibility-index-citations-publications.avif",
       "published": "2026-06-22T09:57:16+00:00",
       "firstSeen": "2026-06-22T10:00:01.707125+00:00",
-      "lastSeen": "2026-06-22T12:23:25.443602+00:00",
+      "lastSeen": "2026-06-22T14:00:01.422625+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.178
+      "score": 3.1331
     },
     {
       "title": "Spiro takes $55M from China’s NewTrails as it nears a $1bn valuation",
@@ -124,10 +252,10 @@
       "image": "https://media.thenextweb.com/2026/06/Spiro.avif",
       "published": "2026-06-22T09:46:02+00:00",
       "firstSeen": "2026-06-22T10:00:01.707125+00:00",
-      "lastSeen": "2026-06-22T12:23:25.443602+00:00",
+      "lastSeen": "2026-06-22T14:00:01.422625+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1727
+      "score": 3.128
     },
     {
       "title": "The Bank of England backs down on its toughest stablecoin rules",
@@ -140,10 +268,10 @@
       "image": "https://media.thenextweb.com/2026/06/The-Bank-of-England.avif",
       "published": "2026-06-22T09:37:52+00:00",
       "firstSeen": "2026-06-22T10:00:01.707125+00:00",
-      "lastSeen": "2026-06-22T12:23:25.443602+00:00",
+      "lastSeen": "2026-06-22T14:00:01.422625+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0688
+      "score": 2.0243
     },
     {
       "title": "Some Electricians Think Building Data Centers Is for Sellouts",
@@ -156,10 +284,10 @@
       "image": "https://media.wired.com/photos/6a317f4a898b4be9664d5a85/master/pass/Business_ElectriciansHaveaLotofComplicatedFeelingsAboutBuildingDataCenters-v1.jpg",
       "published": "2026-06-22T09:30:00+00:00",
       "firstSeen": "2026-06-22T10:00:01.707125+00:00",
-      "lastSeen": "2026-06-22T12:23:25.443602+00:00",
+      "lastSeen": "2026-06-22T14:00:01.422625+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2051
+      "score": 2.1607
     },
     {
       "title": "World Cup Scams Are Getting Harder to Spot",
@@ -172,10 +300,10 @@
       "image": "https://media.wired.com/clips/6a33f50cfdecea08d2cf6a9a/master/pass/WorldcupScam_lead.mp4",
       "published": "2026-06-22T09:30:00+00:00",
       "firstSeen": "2026-06-22T10:00:01.707125+00:00",
-      "lastSeen": "2026-06-22T12:23:25.443602+00:00",
+      "lastSeen": "2026-06-22T14:00:01.422625+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2051
+      "score": 2.1607
     },
     {
       "title": "Indonesia turns to AI to deliver Prabowo’s biggest promises",
@@ -188,10 +316,10 @@
       "image": "https://media.thenextweb.com/2026/06/Prabowo-Subianto.avif",
       "published": "2026-06-22T09:20:18+00:00",
       "firstSeen": "2026-06-22T10:00:01.707125+00:00",
-      "lastSeen": "2026-06-22T12:23:25.443602+00:00",
+      "lastSeen": "2026-06-22T14:00:01.422625+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0606
+      "score": 2.0164
     },
     {
       "title": "China’s green-power target for AI data centres runs into the grid",
@@ -204,10 +332,10 @@
       "image": "https://media.thenextweb.com/2026/06/China-flag.avif",
       "published": "2026-06-22T08:50:18+00:00",
       "firstSeen": "2026-06-22T09:00:01.595854+00:00",
-      "lastSeen": "2026-06-22T12:23:25.443602+00:00",
+      "lastSeen": "2026-06-22T14:00:01.422625+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0466
+      "score": 2.0031
     },
     {
       "title": "Seedcamp raises $320M and builds out a transatlantic bridge",
@@ -220,10 +348,10 @@
       "image": "https://media.thenextweb.com/2026/06/Seedcamp-team.avif",
       "published": "2026-06-22T08:37:52+00:00",
       "firstSeen": "2026-06-22T09:00:01.595854+00:00",
-      "lastSeen": "2026-06-22T12:23:25.443602+00:00",
+      "lastSeen": "2026-06-22T14:00:01.422625+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0409
+      "score": 1.9976
     },
     {
       "title": "Canada buys Australian Arctic radar in A$2.5bn defence-export first",
@@ -239,7 +367,7 @@
       "lastSeen": "2026-06-22T12:23:25.443602+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0379
+      "score": 1.9947
     },
     {
       "title": "Korea’s policy chief warns chip windfall could inflate housing",
@@ -255,7 +383,7 @@
       "lastSeen": "2026-06-22T12:23:25.443602+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0281
+      "score": 1.9854
     },
     {
       "title": "WeChat begins testing Xiaowei as Tencent eyes a Q3 AI rollout",
@@ -271,7 +399,7 @@
       "lastSeen": "2026-06-22T10:00:01.707125+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.2104
+      "score": 4.1684
     },
     {
       "title": "SK Hynix overtakes Samsung as Korea’s most valuable company",
@@ -287,7 +415,7 @@
       "lastSeen": "2026-06-22T09:00:01.595854+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.1065
+      "score": 4.0647
     },
     {
       "title": "London’s Isometric lands $40M to certify the industrial economy with AI",
@@ -303,7 +431,7 @@
       "lastSeen": "2026-06-22T09:00:01.595854+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.389
+      "score": 3.3479
     },
     {
       "title": "Hotter Than a Hot Tub: The 45°C Breakthrough to Cool AI’s Biggest Machines",
@@ -316,10 +444,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/45CLiquidCooling.jpg",
       "published": "2026-06-22T05:00:22+00:00",
       "firstSeen": "2026-06-22T05:26:35.285589+00:00",
-      "lastSeen": "2026-06-22T12:23:25.443602+00:00",
+      "lastSeen": "2026-06-22T14:00:01.422625+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.086
+      "score": 2.0468
     },
     {
       "title": "sqlite-utils 4.0rc1 adds migrations and nested transactions",
@@ -332,10 +460,10 @@
       "image": "",
       "published": "2026-06-21T23:35:47+00:00",
       "firstSeen": "2026-06-21T23:42:02.044001+00:00",
-      "lastSeen": "2026-06-22T12:23:25.443602+00:00",
+      "lastSeen": "2026-06-22T14:00:01.422625+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -0.439
+      "score": -0.4727
     },
     {
       "title": "sqlite-utils 4.0rc1",
@@ -348,10 +476,10 @@
       "image": "",
       "published": "2026-06-21T23:30:04+00:00",
       "firstSeen": "2026-06-21T23:42:02.044001+00:00",
-      "lastSeen": "2026-06-22T12:23:25.443602+00:00",
+      "lastSeen": "2026-06-22T14:00:01.422625+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.659
+      "score": 2.6253
     },
     {
       "title": "Samsung Electronics brings ChatGPT and Codex to employees",
@@ -364,10 +492,10 @@
       "image": "",
       "published": "2026-06-21T23:00:00+00:00",
       "firstSeen": "2026-06-21T23:42:02.044001+00:00",
-      "lastSeen": "2026-06-22T12:23:25.443602+00:00",
+      "lastSeen": "2026-06-22T14:00:01.422625+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.1583
+      "score": 10.1252
     },
     {
       "title": "Temporary Cloudflare Accounts for AI agents",
@@ -380,11 +508,11 @@
       "image": "https://static.simonwillison.net/static/2026/cloudflare-claim.jpg",
       "published": "2026-06-21T22:01:04+00:00",
       "firstSeen": "2026-06-21T23:00:01.940325+00:00",
-      "lastSeen": "2026-06-22T12:23:25.443602+00:00",
+      "lastSeen": "2026-06-22T14:00:01.422625+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 18.5279
+      "score": 18.4956
     },
     {
       "title": "The American dream is ‘very dead’ for young Americans, says Mrs. Dow Jones",
@@ -400,7 +528,7 @@
       "lastSeen": "2026-06-22T09:00:01.595854+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7468
+      "score": 1.7163
     },
     {
       "title": "Nearly 60% of TikTok videos shown to new users are AI slop, study finds",
@@ -416,7 +544,7 @@
       "lastSeen": "2026-06-22T09:00:01.595854+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.6779
+      "score": 1.6504
     },
     {
       "title": "When the Trump administration cracks down on Anthropic, who benefits?",
@@ -429,10 +557,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/anthropic-claude-fable.jpg?resize=1200%2C798",
       "published": "2026-06-21T15:28:17+00:00",
       "firstSeen": "2026-06-21T16:00:01.167058+00:00",
-      "lastSeen": "2026-06-22T12:23:25.443602+00:00",
+      "lastSeen": "2026-06-22T14:00:01.422625+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8052
+      "score": 4.7783
     },
     {
       "title": "Apple’s design studio has lost nearly every Jony Ive-era designer. Incoming CEO John Ternus says he’ll fix it.",
@@ -448,7 +576,7 @@
       "lastSeen": "2026-06-22T09:00:01.595854+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7538
+      "score": 2.7274
     },
     {
       "title": "Beyond Siri: Here are the practical AI features coming to your iPhone in iOS 27",
@@ -461,10 +589,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/01/tim-cook-iphone-GettyImages-2234563479.jpg?w=1024",
       "published": "2026-06-21T14:40:28+00:00",
       "firstSeen": "2026-06-21T15:00:01.506845+00:00",
-      "lastSeen": "2026-06-22T12:23:25.443602+00:00",
+      "lastSeen": "2026-06-22T14:00:01.422625+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8918
+      "score": 2.8654
     },
     {
       "title": "Microsoft’s June update fixed 208 security flaws and introduced a cascade of new bugs across all Windows versions",
@@ -480,7 +608,7 @@
       "lastSeen": "2026-06-22T08:00:01.491811+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3405
+      "score": 2.3146
     },
     {
       "title": "Amazon says human-in-the-loop AI oversight is failing because humans stop paying attention",
@@ -496,7 +624,7 @@
       "lastSeen": "2026-06-22T08:00:01.491811+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.3178
+      "score": 3.293
     },
     {
       "title": "28 Tips to Take Your ChatGPT Prompts to the Next Level",
@@ -509,138 +637,10 @@
       "image": "https://media.wired.com/photos/641df3ef11b9b75446f8f278/master/pass/11-Creative-ChatGPT-Prompts-Gear-GettyImages-1433912783.jpg",
       "published": "2026-06-21T10:30:00+00:00",
       "firstSeen": "2026-06-21T10:41:52.474415+00:00",
-      "lastSeen": "2026-06-22T12:23:25.443602+00:00",
+      "lastSeen": "2026-06-22T14:00:01.422625+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.7259
-    },
-    {
-      "title": "New York City has defeated Waymo, and the taxi lobby is the reason",
-      "url": "https://thenextweb.com/news/waymo-new-york-city-political-roadblocks-robotaxi",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Waymo delivers more than 500,000 paid rides per week across 10 US cities, raised $16 billion in February, and is expanding internationally to Tokyo and London. It cannot operate in New York City. The reason is not technical, it is political. As the New York Times reported this week, opposition from local politicians, labor unions, [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/waymo-new-york-city-political-roadblocks-robotaxi.avif",
-      "published": "2026-06-21T09:58:14+00:00",
-      "firstSeen": "2026-06-21T12:00:01.772795+00:00",
-      "lastSeen": "2026-06-22T08:00:01.491811+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.578
-    },
-    {
-      "title": "Hackers hijacked Brazil’s emergency alert system and sent ‘misanthropy’ to millions of phones",
-      "url": "https://thenextweb.com/news/brazil-civil-defense-alert-hack-misanthropy-cell-broadcast",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Hackers breached Brazil’s national civil defense alert system overnight, sending fake “Extreme Alert” notifications containing the word “misantropi4” to millions of mobile phones across at least seven states. The Civil Defense Alert platform was taken offline at 1:30 am on Saturday after the Ministry of Integration and Regional Development confirmed the intrusion. The Federal Police [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/brazil-civil-defense-alert-hack-misanthropy-cell-broadcast.avif",
-      "published": "2026-06-21T09:30:24+00:00",
-      "firstSeen": "2026-06-21T10:00:01.874180+00:00",
-      "lastSeen": "2026-06-22T08:00:01.491811+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.5713
-    },
-    {
-      "title": "Signal’s Meredith Whittaker says AI chatbots ‘are not your friends’ and calls Copilot agents a backdoor",
-      "url": "https://thenextweb.com/news/signal-whittaker-ai-chatbots-not-friends-copilot-backdoor-privacy",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Signal president Meredith Whittaker has warned that AI chatbots “are not your friends,” “are not conscious beings,” and “are not sentient interlocutors,” pushing back against the growing tendency of users to treat AI systems as trusted companions. The comments came in a Bloomberg interview published this week in which Whittaker laid out her case that [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/signal-whittaker-ai-chatbots-not-friends-copilot-backdoor-privacy.avif",
-      "published": "2026-06-21T09:15:40+00:00",
-      "firstSeen": "2026-06-21T10:00:01.874180+00:00",
-      "lastSeen": "2026-06-22T07:00:01.194603+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 7.2677
-    },
-    {
-      "title": "v1.90.0-rc.1",
-      "url": "https://github.com/BerriAI/litellm/releases/tag/v1.90.0-rc.1",
-      "source": "LiteLLM Releases",
-      "sourceUrl": "https://github.com/BerriAI/litellm/releases.atom",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Verify Docker Image Signature\nAll LiteLLM Docker images are signed with cosign. Every release is signed with the same key introduced in commit 0112e53.\nVerify using the pinned commit hash (recommended):\nA commit hash is cryptographically immutable, so this is the strongest way to ensure you are using the original signing key:\ncosign verify \\\n  --key https://raw.githubusercontent.com/BerriAI/litellm/0112e53046018d726492c814b3644b7d376029d0/cosign.pub \\\n  ghcr.io/berriai/litellm:v1.90.0-rc.1\nVerify using the release tag (convenience):\nTags are protected in this repository and resolve to the same",
-      "image": "https://opengraph.githubassets.com/4d00699251ffe5b97a3010662ff4e517b90a749bd025f3cf9a0f09315b2a4132/BerriAI/litellm/releases/tag/v1.90.0-rc.1",
-      "published": "2026-06-21T01:40:32+00:00",
-      "firstSeen": "2026-06-21T02:00:01.288921+00:00",
-      "lastSeen": "2026-06-22T12:23:25.443602+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.3094
-    },
-    {
-      "title": "v1.89.3",
-      "url": "https://github.com/BerriAI/litellm/releases/tag/v1.89.3",
-      "source": "LiteLLM Releases",
-      "sourceUrl": "https://github.com/BerriAI/litellm/releases.atom",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Verify Docker Image Signature\nAll LiteLLM Docker images are signed with cosign. Every release is signed with the same key introduced in commit 0112e53.\nVerify using the pinned commit hash (recommended):\nA commit hash is cryptographically immutable, so this is the strongest way to ensure you are using the original signing key:\ncosign verify \\\n  --key https://raw.githubusercontent.com/BerriAI/litellm/0112e53046018d726492c814b3644b7d376029d0/cosign.pub \\\n  ghcr.io/berriai/litellm:v1.89.3\nVerify using the release tag (convenience):\nTags are protected in this repository and resolve to the same key.",
-      "image": "https://opengraph.githubassets.com/0985260e7bd54cf57994ffc48619b9dfede75cabd6073dedac0ae936cf341aa7/BerriAI/litellm/releases/tag/v1.89.3",
-      "published": "2026-06-20T23:00:10+00:00",
-      "firstSeen": "2026-06-21T00:00:01.655174+00:00",
-      "lastSeen": "2026-06-22T12:23:25.443602+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.2794
-    },
-    {
-      "title": "v1.88.4",
-      "url": "https://github.com/BerriAI/litellm/releases/tag/v1.88.4",
-      "source": "LiteLLM Releases",
-      "sourceUrl": "https://github.com/BerriAI/litellm/releases.atom",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Verify Docker Image Signature\nAll LiteLLM Docker images are signed with cosign. Every release is signed with the same key introduced in commit 0112e53.\nVerify using the pinned commit hash (recommended):\nA commit hash is cryptographically immutable, so this is the strongest way to ensure you are using the original signing key:\ncosign verify \\\n  --key https://raw.githubusercontent.com/BerriAI/litellm/0112e53046018d726492c814b3644b7d376029d0/cosign.pub \\\n  ghcr.io/berriai/litellm:v1.88.4\nVerify using the release tag (convenience):\nTags are protected in this repository and resolve to the same key.",
-      "image": "https://opengraph.githubassets.com/5f23f7293f884192f074e8db6b590582f4b79be99286882498276d5a18b0b63c/BerriAI/litellm/releases/tag/v1.88.4",
-      "published": "2026-06-20T22:07:48+00:00",
-      "firstSeen": "2026-06-20T22:19:47.099961+00:00",
-      "lastSeen": "2026-06-22T12:23:25.443602+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.27
-    },
-    {
-      "title": "v1.87.4",
-      "url": "https://github.com/BerriAI/litellm/releases/tag/v1.87.4",
-      "source": "LiteLLM Releases",
-      "sourceUrl": "https://github.com/BerriAI/litellm/releases.atom",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Verify Docker Image Signature\nAll LiteLLM Docker images are signed with cosign. Every release is signed with the same key introduced in commit 0112e53.\nVerify using the pinned commit hash (recommended):\nA commit hash is cryptographically immutable, so this is the strongest way to ensure you are using the original signing key:\ncosign verify \\\n  --key https://raw.githubusercontent.com/BerriAI/litellm/0112e53046018d726492c814b3644b7d376029d0/cosign.pub \\\n  ghcr.io/berriai/litellm:v1.87.4\nVerify using the release tag (convenience):\nTags are protected in this repository and resolve to the same key.",
-      "image": "https://opengraph.githubassets.com/ac6d1523fb4fcefcb174470c25f197c9f7fd25eb6251ff275006e3f0a16e53d8/BerriAI/litellm/releases/tag/v1.87.4",
-      "published": "2026-06-20T22:05:56+00:00",
-      "firstSeen": "2026-06-20T22:19:47.099961+00:00",
-      "lastSeen": "2026-06-22T12:23:25.443602+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.2697
-    },
-    {
-      "title": "Signal’s Meredith Whittaker wants you to remember that AI chatbots ‘are not your friends’",
-      "url": "https://techcrunch.com/2026/06/20/signals-meredith-whittaker-wants-you-to-remember-that-ai-chatbots-are-not-your-friends",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "\"These are not your friends. These are not conscious beings. These are not sentient interlocutors.”",
-      "image": "https://techcrunch.com/wp-content/uploads/2024/03/meredith-whittaker-1.jpg?resize=1200%2C800",
-      "published": "2026-06-20T20:32:29+00:00",
-      "firstSeen": "2026-06-20T20:39:04.013104+00:00",
-      "lastSeen": "2026-06-22T12:23:25.443602+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.5536
+      "score": 9.7024
     },
     {
       "title": "The Life Scientific: Dean Lomax",
@@ -653,10 +653,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-15T20:00:00+00:00",
       "firstSeen": "2026-06-15T21:00:01.290903+00:00",
-      "lastSeen": "2026-06-22T12:23:25.443602+00:00",
+      "lastSeen": "2026-06-22T14:00:01.422625+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.2028
+      "score": 1.2022
     },
     {
       "title": "The Life Scientific: Helen Hastie",
@@ -669,7 +669,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-08T20:00:00+00:00",
       "firstSeen": "2026-06-08T21:00:01.371488+00:00",
-      "lastSeen": "2026-06-22T12:23:25.443602+00:00",
+      "lastSeen": "2026-06-22T14:00:01.422625+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 1.1901
@@ -695,7 +695,7 @@
     {
       "source": "MarkTechPost",
       "url": "https://www.marktechpost.com/feed/",
-      "error": "not well-formed (invalid token): line 1, column 119"
+      "error": "HTTP Error 403: Forbidden"
     }
   ]
 }
