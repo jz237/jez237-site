@@ -1447,17 +1447,20 @@ function addBanner(text, hue = 188) {
   if (callouts.length > 5) callouts.splice(0, callouts.length - 5);
   callouts.push({
     text,
-    x: camera.x + innerWidth * .5,
-    y: camera.y + innerHeight * .23,
+    x: innerWidth * .5,
+    y: innerHeight * .48,
+    anchorX: .5,
+    anchorY: .48,
     vx: 0,
-    vy: -18,
+    vy: 0,
     rot: 0,
     spin: 0,
-    life: .82,
-    max: .82,
-    size: 38,
+    life: 1.12,
+    max: 1.12,
+    size: clamp(innerWidth * .12, 56, 116),
     hue,
-    kind: 'banner'
+    kind: 'banner',
+    screen: true
   });
 }
 
@@ -1998,10 +2001,16 @@ function update(dt) {
   if (particles.length > MAX_PARTICLES) particles.splice(0, particles.length - MAX_PARTICLES);
   for (const o of callouts) {
     o.life -= dt;
-    o.x += o.vx * dt;
-    o.y += o.vy * dt;
-    o.vx *= Math.pow(.22, dt);
-    o.vy *= Math.pow(.32, dt);
+    if (o.screen) {
+      o.x = innerWidth * (o.anchorX ?? .5);
+      o.y = innerHeight * (o.anchorY ?? .48);
+      if (o.kind === 'banner') o.size = clamp(innerWidth * .12, 56, 116);
+    } else {
+      o.x += o.vx * dt;
+      o.y += o.vy * dt;
+      o.vx *= Math.pow(.22, dt);
+      o.vy *= Math.pow(.32, dt);
+    }
     o.rot += o.spin * dt;
   }
   callouts = callouts.filter(o => o.life > 0);
@@ -2309,9 +2318,10 @@ function drawFragment(c, f) {
 
 function drawCallout(c, o, glowPass = false) {
   const t = clamp(o.life / o.max, 0, 1);
-  const pop = 1 - Math.abs(t - .78) * .7;
+  const isBanner = o.kind === 'banner';
+  const pop = isBanner ? 1.08 + Math.sin((1 - t) * Math.PI) * .18 : 1 - Math.abs(t - .78) * .7;
   const alpha = Math.min(1, t * 1.35);
-  const size = (o.size || 36) * (glowPass ? 1.18 : 1) * clamp(pop, .72, 1.12);
+  let size = (o.size || 36) * (glowPass ? 1.18 : 1) * clamp(pop, .72, isBanner ? 1.24 : 1.12);
   c.save();
   c.translate(o.x, o.y);
   c.rotate(o.rot);
@@ -2320,7 +2330,12 @@ function drawCallout(c, o, glowPass = false) {
   c.textAlign = 'center';
   c.textBaseline = 'middle';
   c.lineJoin = 'miter';
-  c.lineWidth = glowPass ? 5 : 2.4;
+  const maxWidth = isBanner ? innerWidth - 36 : Infinity;
+  if (isBanner && c.measureText(o.text).width > maxWidth) {
+    size *= maxWidth / c.measureText(o.text).width;
+    c.font = `950 ${size}px Inter, ui-sans-serif, system-ui, sans-serif`;
+  }
+  c.lineWidth = isBanner ? (glowPass ? 9 : 3.4) : (glowPass ? 5 : 2.4);
   c.strokeStyle = `hsla(${o.hue},100%,72%,${glowPass ? .52 : .95})`;
   c.fillStyle = glowPass ? `hsla(${o.hue + 36},100%,82%,.2)` : 'rgba(255,255,255,.92)';
   c.strokeText(o.text, 0, 0);
@@ -2421,7 +2436,7 @@ function render() {
     gtx.restore();
   }
   if (!heavyGlow || renderFrame % 2 === 0) for (const p of particles) drawParticle(gtx, p);
-  for (const o of callouts) drawCallout(gtx, o, true);
+  for (const o of callouts) if (!o.screen) drawCallout(gtx, o, true);
   if (partner) drawPlayer(gtx, partner);
   drawPlayer(gtx, player);
   gtx.restore();
@@ -2449,7 +2464,7 @@ function render() {
     ctx.restore();
   }
   for (const p of particles) drawParticle(ctx, p);
-  for (const o of callouts) drawCallout(ctx, o);
+  for (const o of callouts) if (!o.screen) drawCallout(ctx, o);
   if (partner) drawPlayer(ctx, partner);
   drawPlayer(ctx, player);
 
@@ -2463,6 +2478,12 @@ function render() {
 
   ctx.restore();
   ctx.globalCompositeOperation = 'source-over';
+
+  ctx.save();
+  ctx.globalCompositeOperation = 'lighter';
+  for (const o of callouts) if (o.screen) drawCallout(ctx, o, true);
+  for (const o of callouts) if (o.screen) drawCallout(ctx, o);
+  ctx.restore();
 
   ctx.fillStyle = 'rgba(255,255,255,.85)';
   ctx.fillRect(18, innerHeight - 18, clamp(player.hp, 0, 100) * 1.6, 3);
