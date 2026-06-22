@@ -550,6 +550,25 @@ let prevDash = false;
 let levelTime = 0;
 let currentRows = null;   // source rows of the live level (for clean restarts)
 
+function snapshotCollectedGold(){
+  return new Set(golds.filter(gd => gd.taken).map(gd => key(gd.c, gd.r)));
+}
+
+function restoreCollectedGold(taken){
+  if (!taken || !taken.size) return;
+  for (const gd of golds){
+    if (taken.has(key(gd.c, gd.r))){
+      gd.taken = true;
+      gd.held = null;
+    }
+  }
+  goldLeft = golds.reduce((n, gd) => n + (gd.taken ? 0 : 1), 0);
+  if (goldLeft <= 0){
+    exitRevealed = true;
+    if (special) special.cartReady = true;
+  }
+}
+
 function chipDig(c, r, dir, heavy){
   const x = c + 0.5 - dir * 0.22, y = r + 0.2;
   AUDIO.sfx('chip');
@@ -1491,12 +1510,16 @@ function killPlayer(reason){
 
 function respawnOrGameOver(){
   lives--;
-  if (lives > 0) reloadCurrentLevel();
+  if (lives > 0) reloadCurrentLevel({preserveGold: true});
   else endGame(false);
 }
 
-function reloadCurrentLevel(){
-  if (currentRows) loadLevelData(currentRows);
+function reloadCurrentLevel(opts){
+  const takenGold = opts && opts.preserveGold ? snapshotCollectedGold() : null;
+  if (currentRows){
+    loadLevelData(currentRows);
+    restoreCollectedGold(takenGold);
+  }
   levelTime = 0;
 }
 
