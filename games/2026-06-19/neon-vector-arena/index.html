@@ -48,15 +48,16 @@
     text-shadow: 0 0 5px currentColor, 0 0 13px currentColor;
   }
   .hud span {
-    min-width: 88px;
+    min-width: 180px;
+    max-width: 32vw;
     padding: 0;
     color: #dcfdff;
-    font-size: clamp(10px, 2.7vw, 15px);
-    line-height: 1.18;
-    white-space: nowrap;
+    font-size: clamp(9px, 2vw, 14px);
+    line-height: 1.22;
+    white-space: pre-line;
   }
-  .hud span:nth-child(2) { text-align: center; color: #ffef75; }
-  .hud span:nth-child(3) { min-width: 165px; text-align: right; color: #ff7bdc; }
+  .hud span:nth-child(2) { min-width: 86px; max-width: 16vw; text-align: center; color: #ffef75; }
+  .hud span:nth-child(3) { min-width: 260px; max-width: 45vw; text-align: right; color: #ff7bdc; }
   .overlay {
     position: fixed;
     inset: 0;
@@ -346,10 +347,10 @@
     pointer-events: none;
   }
   @media (max-width: 600px) {
-    .hud { inset: 14px 12px auto 12px; gap: 6px; }
-    .hud span { min-width: 0; flex: 1; font-size: 10px; }
+    .hud { inset: 14px 10px auto 10px; gap: 6px; }
+    .hud span { min-width: 0; max-width: none; flex: 1; font-size: 9px; line-height: 1.18; }
     .hud span:nth-child(2) { flex: .7; }
-    .hud span:nth-child(3) { min-width: 0; flex: 1.1; }
+    .hud span:nth-child(3) { min-width: 0; max-width: none; flex: 1.35; }
     .panel { padding-block: 22px; }
     .menu-actions { grid-template-columns: 1fr; }
     .control-mode { grid-template-columns: 1fr; }
@@ -462,14 +463,14 @@
 <body>
 <canvas id="game"></canvas>
 <div class="hud">
-  <span id="score">Shield: 100</span>
+  <span id="score">Shield 100 | Lives 3 | Bombs 1</span>
   <span id="wave">Wave 01</span>
-	  <span id="combo">Score 000000 Δx1</span>
+  <span id="combo">Score 000000 | Combo 1</span>
 </div>
 <div class="overlay" id="overlay">
   <div class="panel">
 	    <h1 id="overlayTitle">NEON<br>VECTOR<br>ARENA</h1>
-	    <div class="title-version" id="titleVersion">v4.9</div>
+	    <div class="title-version" id="titleVersion">v4.10</div>
 	    <p class="sub" id="overlaySub">Solo survival in endless vector space. Move smart, chain combos, and shatter oversized geometry before it reaches you.</p>
     <div class="menu-actions" id="mainActions">
       <button id="start">Solo Run</button>
@@ -516,7 +517,7 @@
     <p class="fine" id="overlayFine">Dual Stick: left side flies, right side aims and fires. Desktop: WASD plus hold mouse to aim.</p>
   </div>
 </div>
-<div class="version">v4.9</div>
+<div class="version">v4.10</div>
 
 <script>
 'use strict';
@@ -1431,23 +1432,40 @@ function createPartner() {
 function bossHudText() {
   const boss = enemies.find(e => e.boss);
   if (!boss) return '';
-  return ' Boss ' + Math.ceil(clamp(boss.hp / Math.max(1, boss.maxHp), 0, 1) * 100) + '%';
+  return 'Boss ' + Math.ceil(clamp(boss.hp / Math.max(1, boss.maxHp), 0, 1) * 100) + '%';
+}
+
+function hudParts(parts, separator = ' | ') {
+  return parts.filter(Boolean).join(separator);
 }
 
 function updateHud(force = false) {
   if (!force && running && hudTimer > 0) return;
   hudTimer = running ? .1 : 0;
-  const bombText = bombs > 0 ? ' B' + bombs : ' B0';
-  scoreEl.textContent = 'Shield: ' + String(Math.max(0, Math.ceil(player?.hp ?? 100))).padStart(3, '0') + ' L' + lives + bombText;
+  const hudSeparator = innerWidth < 520 ? '\n' : ' | ';
+  scoreEl.textContent = hudParts([
+    'Shield ' + String(Math.max(0, Math.ceil(player?.hp ?? 100))).padStart(3, '0'),
+    'Lives ' + lives,
+    'Bombs ' + bombs
+  ], hudSeparator);
   waveEl.textContent = 'Wave ' + String(wave).padStart(2, '0');
-  const label = innerWidth < 520 ? '' : (gameMode === 'online' ? cleanName(online.name || 'PILOT') + ' ' : 'Score ');
-  const power = player?.power > 0 ? ' OD' + Math.ceil(player.power) : '';
-  const mod = activeModifier && innerWidth >= 620 ? ' ' + activeModifier.label : '';
-  const breath = waveBreather > 0 && innerWidth >= 520 ? ' READY' : '';
+  const scoreLabel = gameMode === 'online' && innerWidth >= 520 ? cleanName(online.name || 'Pilot') + ' score' : 'Score';
+  const power = player?.power > 0 ? 'Overdrive ' + Math.ceil(player.power) : '';
+  const mod = activeModifier && innerWidth >= 620 ? activeModifier.label : '';
+  const breath = waveBreather > 0 && innerWidth >= 520 ? 'Wave ready' : '';
   const boss = innerWidth >= 620 ? bossHudText() : '';
-  const ko = innerWidth >= 620 ? ' KO' + kills : '';
-  const fps = innerWidth < 520 ? '' : ' ' + fpsDisplay + 'fps';
-  comboEl.textContent = label + String(Math.floor(score)).padStart(6, '0') + ' Δx' + combo + ko + boss + power + mod + breath + fps;
+  const destroyed = innerWidth >= 620 ? 'Destroyed ' + kills : '';
+  const frames = innerWidth < 520 ? '' : 'Frames ' + fpsDisplay;
+  comboEl.textContent = hudParts([
+    scoreLabel + ' ' + String(Math.floor(score)).padStart(6, '0'),
+    'Combo ' + combo,
+    destroyed,
+    boss,
+    power,
+    mod,
+    breath,
+    frames
+  ], hudSeparator);
 }
 
 function startSolo() {
