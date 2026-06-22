@@ -2050,5 +2050,17 @@
     "slot": "evening",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-06-21-evening-pet-shadow-puppet-engineering",
+    "title": "Pet Shadow Puppet Engineering",
+    "tests": "Reference-photo transformation template; tests identity preservation through a physical puppet mechanism plus projected silhouette, tactile workshop staging, non-paper reusable formula, and no rendered instructions.",
+    "prompt": "Use the uploaded reference photo and preserve the pet identity, side-profile pose, body silhouette, distinctive markings, face shape, ear position, tail shape, proportions, expression, camera angle, and most recognizable features, then engineer the pet into an articulated shadow-puppet study on a working maker's bench. For this filled-in example, use a clear side-profile photo of a small elderly brindle greyhound; preserve its long narrow muzzle, deep chest, folded ears, thin legs, curled tail, brindle stripe pattern, calm alert expression, and lean proportions. Build both the physical puppet mechanism and the projected shadow: layered translucent vellum and smoked-wood cutout pieces, tiny brass pivots, bamboo control rods, spare replacement joints, fur-marking masks, paint swatches, a warm backlight screen, and a crisp silhouette that still matches the original pet. Keep the source pet recognizable while changing fur and body into a tactile articulated puppet and shadow system. Avoid extra animals, extra limbs, distorted anatomy, readable text/logo artifacts, people, hands, dancing, and losing the source identity.\n\nSource photo needed: a clear pet profile photo.\n\nReusable fill-in-the-blank template: Use the uploaded reference photo and preserve the [PET] identity, pose, silhouette, key markings, face shape, ear position, tail shape, proportions, expression, camera angle, and most recognizable features, then engineer [PET] into an articulated shadow-puppet study on [SETTING]. Show both the physical mechanism and projected silhouette using [MATERIALS], [JOINTS/RODS], [REFERENCE SWATCHES], [WORKSHOP TOOLS], and [LIGHTING/MOOD]. Keep the source recognizable while changing fur/body into a tactile puppet-and-shadow system. Avoid extra animals, extra limbs, distorted anatomy, readable logos, prompt-card framing, people or hands unless requested, dancing, and losing recognizability.\n\nWhat to preserve: pet identity, pose, silhouette, markings, face shape, ear position, tail shape, proportions, expression, camera angle, and distinctive source-photo details.\n\nWhat to change: transform the pet into layered vellum and smoked-wood puppet pieces, brass pivots, bamboo rods, projected silhouette, pattern masks, maker's-bench tools, tactile material tests, and cinematic workshop lighting.\n\nExample substitution: Upload a clear side-profile photo of a small elderly brindle greyhound; preserve the long muzzle, deep chest, folded ears, curled tail, brindle stripes, lean legs, and calm alert expression, then turn it into a shadow-puppet engineering bench with articulated cutouts, brass pivots, bamboo rods, vellum layers, a matching projected silhouette, and warm rainy workshop light.",
+    "image": "images/2026-06-21-evening-pet-shadow-puppet-engineering.jpg",
+    "date": "2026-06-21",
+    "batch": "Daily Prompt",
+    "slot": "evening",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
