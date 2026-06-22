@@ -58,6 +58,8 @@ Sim is fixed-timestep (60Hz accumulator); `__g.step(n)` drives ticks headlessly.
 - Power-ups (timed unless noted): TNT charge (next dig = 3-wide blast, 1 charge),
   Speed Boots (8s, 1.45×), Phase Cloak (6s, pass guards), Gold Magnet (8s, r=2.5 auto-grab),
   Power Shovel (10s, instant digs), and occasional extra-life heart tokens.
+- Mobile tap-dig feedback briefly marks the target dirt cell so touch players can see
+  what the game understood before the dig starts or the input pulse rejects it.
 - Exploration finds are seeded per claim in reachable side paths: relics, cave blooms,
   survey maps, and lantern oil. They add score, visual feedback, and a full-survey
   bonus without blocking the exit. Oil temporarily widens the player light pool; maps
