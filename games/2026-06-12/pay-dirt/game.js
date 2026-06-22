@@ -77,6 +77,7 @@ let softlockCheckT = 0, softlockT = 0, softlockReason = '';
 let special = null;
 let specialNuggets = [];
 let specialRocks = [];
+let specialRockWarnings = [];
 
 function key(c, r){ return c + ',' + r; }
 
@@ -233,6 +234,7 @@ function resetSpecialState(){
   special = null;
   specialNuggets = [];
   specialRocks = [];
+  specialRockWarnings = [];
 }
 
 function spawnSpecialNuggets(wx, wy, n, value){
@@ -272,19 +274,38 @@ function triggerCaveIn(reason){
   AUDIO.sfx('warn');
 }
 
-function spawnSpecialRock(){
+function queueSpecialRockWarning(delay){
   if (!special) return;
+  if (specialRockWarnings.length + specialRocks.length > 8) return;
   const c = 1 + ((rnd() * (COLS - 2)) | 0);
-  specialRocks.push({
-    x: c + .5 + (rnd() - .5) * .35,
-    y: -0.6,
-    vy: 4.5 + rnd() * 3.2,
-    size: .22 + rnd() * .22,
+  const size = .22 + rnd() * .22;
+  const x = c + .5 + (rnd() - .5) * .35;
+  const dur = delay || .95;
+  specialRockWarnings.push({
+    c,
+    x,
+    t: dur,
+    dur,
+    size,
     rot: rnd() * Math.PI,
     spin: (rnd() - .5) * 6,
+  });
+  spawnParticles(c + .5, .25, 6, {color: ['#d3a15d', '#ffcf7a', '#8a6038'], spd: 1.9, life: .58, size: 2.8, grav: 9, glow: true});
+}
+
+function spawnSpecialRock(warning){
+  if (!special) return;
+  if (!warning) return queueSpecialRockWarning();
+  specialRocks.push({
+    x: warning.x,
+    y: -0.6,
+    vy: 4.5 + rnd() * 3.2,
+    size: warning.size,
+    rot: warning.rot,
+    spin: warning.spin,
     life: 5,
   });
-  spawnParticles(c + .5, .25, 4, {color: ['#4b3426', '#8a6038', '#d3a15d'], spd: 1.4, life: .42, size: 2.4, grav: 10});
+  spawnParticles(warning.x, .25, 10, {color: ['#4b3426', '#8a6038', '#d3a15d', '#ffcf7a'], spd: 2.4, life: .42, size: 2.8, grav: 10});
 }
 
 function specialCartReady(){ return !!(special && special.cartReady); }
@@ -803,6 +824,19 @@ function updateSpecialNuggets(dt){
   }
 }
 
+function updateSpecialRockWarnings(dt){
+  for (let i = specialRockWarnings.length - 1; i >= 0; i--){
+    const warning = specialRockWarnings[i];
+    warning.t -= dt;
+    if (warning.t <= 0){
+      spawnSpecialRock(warning);
+      specialRockWarnings.splice(i, 1);
+    } else if (warning.t < .35 && rnd() < .45){
+      spawnParticles(warning.x, .28, 1, {color: ['#ffcf7a', '#d3a15d'], spd: 1.7, life: .24, size: 2.2, grav: 8, glow: true});
+    }
+  }
+}
+
 function updateSpecialRocks(dt){
   for (let i = specialRocks.length - 1; i >= 0; i--){
     const rock = specialRocks[i];
@@ -906,6 +940,7 @@ function updateSpecial(dt, inp){
   player.drillCd = Math.max(0, (player.drillCd || 0) - dt);
   if (special.drillHintT > 0) special.drillHintT = Math.max(0, special.drillHintT - dt);
   updateSpecialNuggets(dt);
+  updateSpecialRockWarnings(dt);
   updateSpecialRocks(dt);
   updateSpecialSetpieces(dt);
   if (special.caveT == null && golds.length && goldLeft <= special.triggeredAtGold)
@@ -1683,7 +1718,7 @@ function buildHowTo(){
     '<span style="color:#3fd2c7">Boots</span> speed · <span style="color:#b07fff">Cloak</span> phase through guards · ' +
     '<span style="color:#ffd23f">Magnet</span> grabs gold · <span style="color:#7fd24a">Shovel</span> instant digs.</p>' +
     '<p><b>Lantern oil</b> briefly widens the painted light pool; maps briefly boost magnet pull. Chain nuggets fast for a <b>combo multiplier</b>.</p>' +
-    '<p><b>Boom Rush:</b> a 20-claim run that starts gentle, then adds <span class="k">Space</span>/<span class="k">Shift</span> drill dash pressure, tumbling bonus nuggets, pressure plates, steam vents, lava seams, crushers, a telegraphed drill worm lane, falling cave-in rock, and mine-cart escape finales.</p>' +
+    '<p><b>Boom Rush:</b> a 20-claim run that starts gentle, then adds <span class="k">Space</span>/<span class="k">Shift</span> drill dash pressure, tumbling bonus nuggets, pressure plates, steam vents, lava seams, crushers, a telegraphed drill worm lane, warned cave-in boulders, and mine-cart escape finales.</p>' +
     '<p><b>Phone:</b> drag to move or climb; tap the ground left/right of the miner to dig that side; tap ladder tiles to climb.</p>' +
     '<p><span class="k">P</span> pause · <span class="k">M</span> mute · <span class="k">R</span> restart.</p>';
 }
@@ -3768,6 +3803,7 @@ function renderWorldFrame(includeHUD){
       }
     }
     drawSpecialNuggets();
+    drawSpecialRockWarnings();
 
     // entities — guards behind player
     for (const gu of guards) if (gu.state !== 'dead' || gu.deadT < 1) drawActor(gu);
@@ -4414,6 +4450,51 @@ function drawSpecialNuggets(){
   ctx.globalAlpha = 1;
 }
 
+function drawSpecialRockWarnings(){
+  if (!specialRockWarnings.length) return;
+  ctx.save();
+  ctx.globalCompositeOperation = 'lighter';
+  for (const w of specialRockWarnings){
+    const p = clamp(1 - w.t / w.dur, 0, 1);
+    const pulse = .5 + .5 * Math.sin(gameTime * 28 + w.c);
+    const x = px(w.x), top = HUD_H + 3;
+    const colX = px(w.c + .5);
+    ctx.globalAlpha = .18 + p * .32;
+    const lane = ctx.createLinearGradient(0, HUD_H, 0, HUD_H + TILE * 4.8);
+    lane.addColorStop(0, 'rgba(255,207,122,.55)');
+    lane.addColorStop(.45, 'rgba(211,161,93,.18)');
+    lane.addColorStop(1, 'rgba(211,161,93,0)');
+    ctx.fillStyle = lane;
+    ctx.fillRect(colX - TILE * .42, HUD_H, TILE * .84, TILE * 4.8);
+
+    ctx.globalAlpha = .55 + pulse * .35;
+    ctx.strokeStyle = '#ffcf7a';
+    ctx.lineWidth = 2.5 + p * 1.4;
+    ctx.beginPath();
+    ctx.moveTo(x - 17, top + 6);
+    ctx.lineTo(x - 8, top + 1 + pulse * 2);
+    ctx.lineTo(x + 1, top + 7);
+    ctx.lineTo(x + 12, top + 2);
+    ctx.lineTo(x + 21, top + 8);
+    ctx.stroke();
+
+    ctx.globalAlpha = .72 + pulse * .2;
+    ctx.fillStyle = '#fff3b0';
+    ctx.beginPath();
+    ctx.moveTo(x, top + 12);
+    ctx.lineTo(x - 9, top + 30);
+    ctx.lineTo(x + 9, top + 30);
+    ctx.closePath();
+    ctx.fill();
+    ctx.fillStyle = '#8a6038';
+    ctx.fillRect(x - 1.5, top + 17, 3, 8);
+    ctx.fillRect(x - 1.5, top + 27, 3, 3);
+  }
+  ctx.globalAlpha = 1;
+  ctx.globalCompositeOperation = 'source-over';
+  ctx.restore();
+}
+
 function drawSpecialRocks(){
   if (!specialRocks.length) return;
   ctx.save();
@@ -4910,7 +4991,7 @@ window.__g = {
   get powerups(){ return powerups; },
   get fuses(){ return fuses; },
   get blasted(){ return [...blasted]; },
-  get special(){ return special ? {...special, nuggets: specialNuggets.length, rocks: specialRocks.length} : null; },
+  get special(){ return special ? {...special, nuggets: specialNuggets.length, rocks: specialRocks.length, rockWarnings: specialRockWarnings.length} : null; },
   get combo(){ return {n: comboN, t: comboT, mult: comboMult()}; },
   boom(c, r){ boom(c, r); },
   get levelTime(){ return levelTime; },
