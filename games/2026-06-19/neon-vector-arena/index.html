@@ -609,7 +609,7 @@ const MOBILE_PERF = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || mat
 const GLOW_SCALE = FIREFOX_PERF ? .12 : (MOBILE_PERF ? .12 : .15);
 const MAX_ENEMIES = FIREFOX_PERF ? 42 : 56;
 const MAX_PARTICLES = FIREFOX_PERF ? 72 : (MOBILE_PERF ? 84 : 108);
-const MAX_FRAGMENTS = FIREFOX_PERF ? 68 : (MOBILE_PERF ? 78 : 124);
+const MAX_FRAGMENTS = FIREFOX_PERF ? 92 : (MOBILE_PERF ? 104 : 156);
 const MAX_DT = FIREFOX_PERF ? .07 : .04;
 const SHOT_BLAST_RADIUS = 78;
 const SHOT_BLAST_FORCE = 290;
@@ -2033,7 +2033,7 @@ function worldShapePoints(e, scale = 1) {
 function addVectorFragments(e) {
   if (fragments.length > MAX_FRAGMENTS) fragments.splice(0, fragments.length - MAX_FRAGMENTS);
   const pts = worldShapePoints(e, 1);
-  const edgeStep = MOBILE_PERF && pts.length > 8 && !e.boss ? 2 : 1;
+  const edgeStep = 1;
   for (let i = 0; i < pts.length; i += edgeStep) {
     const a = pts[i];
     const b = pts[(i + 1) % pts.length];
@@ -2053,14 +2053,15 @@ function addVectorFragments(e) {
       rot: rand(-.32, .32),
       spin: rand(-4.2, 4.2),
       hue: e.hue + rand(-4, 4),
-      life: rand(.32, e.boss ? .68 : .52),
-      max: rand(.48, e.boss ? .9 : .72),
-      width: e.boss ? 1.75 : 1.2,
+      life: rand(.5, e.boss ? .9 : .72),
+      max: rand(.62, e.boss ? 1.05 : .84),
+      width: e.boss ? 2.2 : 1.7,
+      hold: .07,
       bright: true,
       kind: 'line'
     });
   }
-  const seamStep = MOBILE_PERF && !e.boss ? 2 : 1;
+  const seamStep = 1;
   for (let i = 0; i < pts.length; i += seamStep) {
     const a = pts[i];
     const mx = (a[0] + e.x) * .5;
@@ -2079,9 +2080,10 @@ function addVectorFragments(e) {
       rot: rand(-.22, .22),
       spin: rand(-2.4, 2.4),
       hue: e.hue + 22 + rand(-5, 5),
-      life: rand(.22, e.boss ? .54 : .42),
-      max: rand(.42, e.boss ? .78 : .62),
-      width: e.boss ? 1.15 : .82,
+      life: rand(.42, e.boss ? .72 : .58),
+      max: rand(.54, e.boss ? .9 : .74),
+      width: e.boss ? 1.5 : 1.1,
+      hold: .07,
       seam: true,
       kind: 'line'
     });
@@ -2706,11 +2708,15 @@ function update(dt) {
   callouts = callouts.filter(o => o.life > 0);
   for (const f of fragments) {
     f.life -= dt;
-    f.x += f.vx * dt;
-    f.y += f.vy * dt;
-    f.vx *= Math.pow(.18, dt);
-    f.vy *= Math.pow(.18, dt);
-    f.rot += f.spin * dt;
+    if (f.hold > 0) {
+      f.hold -= dt;
+    } else {
+      f.x += f.vx * dt;
+      f.y += f.vy * dt;
+      f.vx *= Math.pow(.18, dt);
+      f.vy *= Math.pow(.18, dt);
+      f.rot += f.spin * dt;
+    }
   }
   fragments = fragments.filter(f => f.life > 0);
   if (fragments.length > MAX_FRAGMENTS) fragments.splice(0, fragments.length - MAX_FRAGMENTS);
@@ -3013,14 +3019,15 @@ function drawParticle(c, p) {
 
 function drawFragment(c, f) {
   const t = clamp(f.life / f.max, 0, 1);
-  const alpha = t * (f.bright ? (MOBILE_PERF ? .62 : .78) : f.seam ? (MOBILE_PERF ? .44 : .6) : (MOBILE_PERF ? .28 : .38));
+  const glowPass = c === gtx;
+  const alpha = t * (f.bright ? (glowPass ? .72 : (MOBILE_PERF ? .78 : .95)) : f.seam ? (glowPass ? .58 : (MOBILE_PERF ? .62 : .76)) : (MOBILE_PERF ? .28 : .38));
   const color = `hsla(${f.hue},${f.bright ? 100 : 80}%,${f.seam ? 82 : 72}%,${alpha})`;
   c.save();
   c.translate(f.x, f.y);
   c.rotate(f.rot);
   c.strokeStyle = color;
   c.fillStyle = `hsla(${f.hue},86%,62%,${t * .08})`;
-  c.lineWidth = Math.max(.55, (f.width || 1.05) * t);
+  c.lineWidth = Math.max(.55, (f.width || 1.05) * t * (glowPass ? 2.4 : 1));
   c.lineCap = 'round';
   c.lineJoin = 'round';
   c.shadowBlur = 0;
@@ -3249,10 +3256,11 @@ function render() {
     if (i % shotGlowStride) continue;
     drawShot(gtx, shots[i]);
   }
-  for (const warning of spawnWarnings) drawSpawnWarning(gtx, warning);
-  for (const e of enemies) drawEnemy(gtx, e);
-  for (const p of pickups) drawPickup(gtx, p, true);
-  if (!heavyGlow || renderFrame % 2 === 0) for (const p of particles) drawParticle(gtx, p);
+	  for (const warning of spawnWarnings) drawSpawnWarning(gtx, warning);
+	  for (const e of enemies) drawEnemy(gtx, e);
+	  for (const p of pickups) drawPickup(gtx, p, true);
+	  if (!heavyGlow || renderFrame % 2 === 0) for (const p of particles) drawParticle(gtx, p);
+	  for (const f of fragments) if (f.bright || f.seam) drawFragment(gtx, f);
   for (const o of callouts) if (!o.screen) drawCallout(gtx, o, true);
   if (partner) drawPlayer(gtx, partner);
   drawPlayer(gtx, player);
@@ -3270,12 +3278,12 @@ function render() {
   ctx.globalCompositeOperation = 'source-over';
   ctx.globalAlpha = 1;
   ctx.filter = 'none';
-  for (const s of shots) drawShot(ctx, s);
-  for (const warning of spawnWarnings) drawSpawnWarning(ctx, warning);
-  for (const e of enemies) drawEnemy(ctx, e);
-  for (const f of fragments) drawFragment(ctx, f);
-  for (const p of pickups) drawPickup(ctx, p);
-  for (const p of particles) drawParticle(ctx, p);
+	  for (const s of shots) drawShot(ctx, s);
+	  for (const warning of spawnWarnings) drawSpawnWarning(ctx, warning);
+	  for (const e of enemies) drawEnemy(ctx, e);
+	  for (const p of pickups) drawPickup(ctx, p);
+	  for (const p of particles) drawParticle(ctx, p);
+	  for (const f of fragments) drawFragment(ctx, f);
   for (const o of callouts) if (!o.screen) drawCallout(ctx, o);
   if (partner) drawPlayer(ctx, partner);
   drawPlayer(ctx, player);
