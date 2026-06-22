@@ -2001,7 +2001,7 @@ function endingCopy(won){
   if (!won) return {title: 'CLAIM LOST', sub: 'The lantern goes dark. The mine waits.'};
   if (mode === 'special') return {title: 'BOOM RUSH CLEARED!', sub: 'The cart tears out under a golden sky.'};
   if (mode === 'daily') return {title: 'DAILY VEIN SEALED!', sub: 'One clean mark in the ledger for today.'};
-  return {title: 'PAY DIRT CLAIMED!', sub: 'Cybertech stays lit, and Jerry keeps the map.'};
+  return {title: 'PAY DIRT CLAIMED!', sub: 'The bills stay paid, and Jerry keeps the map.'};
 }
 function startEndingScene(won){
   const copy = endingCopy(won);
@@ -2083,15 +2083,15 @@ try { campaignDone = JSON.parse(localStorage.getItem('paydirt-done') || '[]'); }
 let runUpgrades = {boots: 0, pick: 0, satchel: 0};
 let pendingUpgrade = null;
 const UPGRADE_OPTIONS = [
-  {id: 'boots', icon: '⚡', name: 'Signal Boots', desc: 'Cybertech-tuned footing', max: 3},
+  {id: 'boots', icon: '⚡', name: 'Signal Boots', desc: 'security-tech footing', max: 3},
   {id: 'pick', icon: '⛏', name: 'Bypass Pick', desc: 'cuts rock and old locks faster', max: 3},
-  {id: 'satchel', icon: '💥', name: 'Cybertech Satchel', desc: 'starts claims with rigged TNT', max: 3},
+  {id: 'satchel', icon: '💥', name: 'Security Satchel', desc: 'starts claims with rigged TNT', max: 3},
 ];
 const UPGRADE_STORY_LINES = [
-  'Jerry solders a Cybertech fix by lantern light before the next claim.',
+  'Jerry solders a cyber security fix by lantern light before the next claim.',
   'A dead keypad blinks once. Jerry knows that circuit.',
   'Old alarm wire runs deeper than the claim map admits.',
-  'Cybertech scrap becomes mining gear when the bills are due.',
+  'Security scrap becomes mining gear when the bills are due.',
   'Jerry marks another locked door and grins at the dust.',
 ];
 
