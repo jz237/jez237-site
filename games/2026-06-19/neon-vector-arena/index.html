@@ -1331,6 +1331,11 @@ function sfx(kind) {
     setTimeout(() => tone(820, .04, 'sine', .018, .9), 24);
     setTimeout(() => tone(260, .07, 'triangle', .014, .58), 48);
   }
+  else if (kind === 'bossHit') {
+    tone(180, .07, 'sawtooth', .034, .82);
+    tone(720 + Math.random() * 90, .045, 'triangle', .022, .64);
+    noiseBurst(.09, .018, 1380, 'bandpass');
+  }
   else if (kind === 'boom') {
     tone(82, .32, 'triangle', .068, .24);
     tone(46, .42, 'sine', .065, .38);
@@ -2135,6 +2140,38 @@ function addHitShards(e, x, y, hue) {
   }
 }
 
+function addBossHitEffect(e, x, y, shotHue) {
+  const hue = e.hue;
+  addSpark(x, y, MOBILE_PERF ? 12 : 18, shotHue, .92);
+  particles.push({ x, y, vx: 0, vy: 0, life: .18, max: .18, r: Math.max(28, e.r * .58), hue, kind: 'ring' });
+  particles.push({ x, y, vx: 0, vy: 0, life: .08, max: .08, r: Math.max(22, e.r * .36), hue: shotHue, kind: 'flash' });
+  const count = MOBILE_PERF ? 5 : 8;
+  for (let i = 0; i < count; i++) {
+    const a = i * TAU / count + rand(-.18, .18);
+    const len = rand(8, 18);
+    const speed = rand(120, 245);
+    fragments.push({
+      x,
+      y,
+      vx: Math.cos(a) * speed + e.vx * .12,
+      vy: Math.sin(a) * speed + e.vy * .12,
+      ax: -len * .5,
+      ay: 0,
+      bx: len * .5,
+      by: 0,
+      rot: a,
+      spin: rand(-3.8, 3.8),
+      hue: hue + rand(-8, 18),
+      life: rand(.18, .32),
+      max: rand(.34, .5),
+      width: 1.4,
+      bright: true,
+      kind: 'line'
+    });
+  }
+  if (fragments.length > MAX_FRAGMENTS) fragments.splice(0, fragments.length - MAX_FRAGMENTS);
+}
+
 function addDeathChunks(x, y, hue, big = false) {
   if (fragments.length > MAX_FRAGMENTS) fragments.splice(0, fragments.length - MAX_FRAGMENTS);
   const count = Math.round((big ? 42 : 34) * effectsQuality * (MOBILE_PERF ? .82 : 1));
@@ -2611,13 +2648,21 @@ function update(dt) {
     const e = enemies[i];
     for (let j = shots.length - 1; j >= 0; j--) {
       const s = shots[j];
-      if (dist2(e.x, e.y, s.x, s.y) < (e.r + s.r) ** 2) {
-        shots.splice(j, 1);
-        blastEnemies(s.x, s.y, SHOT_BLAST_FORCE, SHOT_BLAST_RADIUS, s.vx, s.vy);
-        addHitShards(e, s.x, s.y, s.hue);
-        e.hp--;
-        addSpark(s.x, s.y, 5, s.hue, .55);
-        addEnemyHitCallout(s.x, s.y, e.hue);
+	    if (dist2(e.x, e.y, s.x, s.y) < (e.r + s.r) ** 2) {
+	        shots.splice(j, 1);
+	        blastEnemies(s.x, s.y, SHOT_BLAST_FORCE, SHOT_BLAST_RADIUS, s.vx, s.vy);
+	        addHitShards(e, s.x, s.y, s.hue);
+	        e.hp--;
+	        if (e.boss) {
+	          addBossHitEffect(e, s.x, s.y, s.hue);
+	          if (!e.lastBossHitSfx || time - e.lastBossHitSfx > .085) {
+	            sfx('bossHit');
+	            e.lastBossHitSfx = time;
+	          }
+	        } else {
+	          addSpark(s.x, s.y, 5, s.hue, .55);
+	        }
+	        addEnemyHitCallout(s.x, s.y, e.hue);
         if (e.hp <= 0) {
           addVectorFragments(e);
           enemies.splice(i, 1);
@@ -3146,14 +3191,46 @@ function drawSpawnWarning(c, warning) {
 }
 
 function drawThreatIndicators(c) {
+  const boss = enemies.find(e => e.boss);
   const items = enemies
+    .filter(e => e !== boss)
     .map(e => ({ e, sx: e.x - camera.x, sy: e.y - camera.y, d: Math.hypot(e.x - player.x, e.y - player.y) }))
     .filter(item => item.sx < -22 || item.sx > innerWidth + 22 || item.sy < -22 || item.sy > innerHeight + 22)
     .sort((a, b) => a.d - b.d)
     .slice(0, 5);
-  if (!items.length) return;
+  const bossSx = boss ? boss.x - camera.x : 0;
+  const bossSy = boss ? boss.y - camera.y : 0;
+  const bossOffscreen = boss && (bossSx < -34 || bossSx > innerWidth + 34 || bossSy < -34 || bossSy > innerHeight + 34);
+  if (!items.length && !bossOffscreen) return;
   c.save();
   c.globalCompositeOperation = 'lighter';
+  if (bossOffscreen) {
+    const a = Math.atan2(bossSy - innerHeight * .5, bossSx - innerWidth * .5);
+    const x = clamp(bossSx, 34, innerWidth - 34);
+    const y = clamp(bossSy, 56, innerHeight - 42);
+    const pulse = .74 + Math.sin(time * 8) * .16;
+    c.save();
+    c.translate(x, y);
+    c.rotate(a);
+    c.fillStyle = `hsla(${boss.hue},100%,58%,${pulse})`;
+    c.strokeStyle = `hsla(${boss.hue + 52},100%,90%,${pulse})`;
+    c.lineWidth = 2.2;
+    for (let k = 0; k < 2; k++) {
+      const back = k * -9;
+      c.beginPath();
+      c.moveTo(20 + back, 0);
+      c.lineTo(-9 + back, -13);
+      c.lineTo(-3 + back, 0);
+      c.lineTo(-9 + back, 13);
+      c.closePath();
+      c.fill();
+      c.stroke();
+    }
+    c.beginPath();
+    c.arc(-16, 0, 15 + Math.sin(time * 6) * 2, 0, TAU);
+    c.stroke();
+    c.restore();
+  }
   for (const { e, sx, sy, d } of items) {
     const x = clamp(sx, 18, innerWidth - 18);
     const y = clamp(sy, 42, innerHeight - 26);
