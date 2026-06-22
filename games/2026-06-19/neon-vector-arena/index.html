@@ -507,7 +507,7 @@
 <div class="overlay" id="overlay">
   <div class="panel">
 	    <h1 id="overlayTitle">NEON<br>VECTOR<br>ARENA</h1>
-	    <div class="title-version" id="titleVersion">v4.13</div>
+	    <div class="title-version" id="titleVersion">v4.14</div>
 	    <p class="sub" id="overlaySub">Solo survival in endless vector space. Move smart, chain combos, and shatter oversized geometry before it reaches you.</p>
     <div class="menu-actions" id="mainActions">
       <button id="start">Solo Run</button>
@@ -559,7 +559,7 @@
     <p class="fine" id="overlayFine">Dual Stick: left side flies, right side aims and fires. Desktop: WASD plus hold mouse to aim.</p>
   </div>
 </div>
-<div class="version">v4.13</div>
+<div class="version">v4.14</div>
 
 <script>
 'use strict';
@@ -836,7 +836,9 @@ function enemyTrait(type) {
 }
 
 function waveShapeCount(value = wave) {
-  return clamp(value + 1, 2, Math.min(MAX_ENEMIES, 34));
+  const cappedWave = Math.min(Math.max(1, value), 40);
+  const count = cappedWave <= 4 ? 1 + cappedWave * 2 : 9 + (cappedWave - 4);
+  return clamp(count, 3, Math.min(MAX_ENEMIES, 45));
 }
 
 function unlockedShapeTypes(value = wave) {
