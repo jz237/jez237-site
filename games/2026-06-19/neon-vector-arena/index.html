@@ -1495,7 +1495,7 @@ function spawnEnemy(initial = false, prepared = null) {
   const trait = enemyTrait(type);
   const speedMod = (activeModifier?.speed || 1) * (elite ? .92 : 1) * (boss ? .58 : 1);
   const speed = speedBase / Math.sqrt(scale) * speedMod * (trait?.speedMul || 1);
-  const hp = boss ? Math.round(9 + wave * 1.8 + (trait?.bonusHp || 0) * 2) : Math.max(1, (elite ? 2 : 1) + (trait?.bonusHp || 0));
+  const hp = boss ? Math.round(56 + wave * 4.2 + (trait?.bonusHp || 0) * 8) : Math.max(1, (elite ? 2 : 1) + (trait?.bonusHp || 0));
   enemies.push({
     x, y,
     vx: rand(-20, 20),
