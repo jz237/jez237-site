@@ -177,6 +177,12 @@ body.touch.playing #touch{display:none;}
 #initials span.cur{border-color:var(--gold); box-shadow:0 0 14px rgba(255,210,63,.35); background:rgba(255,210,63,.1);}
 .statline{display:flex; gap:22px; justify-content:center; font-size:15px; color:#d8cfe4;}
 .statline b{color:var(--gold); font-size:20px;}
+.upgradeGrid{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; margin:10px 0 4px;}
+.upgradeGrid button{min-width:0; min-height:104px; padding:10px 9px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:5px;}
+.upgradeGrid .uIcon{font-size:26px; line-height:1;}
+.upgradeGrid .uName{font-size:13px; letter-spacing:.8px; text-transform:uppercase;}
+.upgradeGrid .uDesc{font-size:11px; line-height:1.2; color:#d8cfe4;}
+.upgradeGrid .uRank{font:900 11px Consolas,monospace; color:var(--teal);}
 .volumes{display:flex; justify-content:center; gap:12px; flex-wrap:wrap; margin-top:2px;}
 .volumes label{
   display:flex; align-items:center; gap:7px; color:#d8cfe4; font-size:12px; font-weight:800;
@@ -206,7 +212,7 @@ body.touch.playing #touch{display:none;}
 <body>
 <div id="wrap">
   <canvas id="game"></canvas>
-  <div class="version">v3.35 Secret Caves</div>
+  <div class="version">v3.36 Upgrade Camp</div>
 
   <div class="overlay show" id="ovTitle">
     <div class="panel" id="titlePanel">
@@ -215,7 +221,7 @@ body.touch.playing #touch{display:none;}
       </div>
       <h1 class="logo">Pay Dirt</h1>
       <div class="tag">painted caverns · hidden relics · claim-jumpers in the dark</div>
-      <div class="titleVersion">v3.35 Secret Caves</div>
+      <div class="titleVersion">v3.36 Upgrade Camp</div>
       <div class="row titlePrimary">
         <button id="bPlay">⛏ Prospect</button>
         <button id="bSpecial">💥 Boom Rush ×20</button>
@@ -295,6 +301,14 @@ body.touch.playing #touch{display:none;}
     </div>
   </div>
 
+  <div class="overlay" id="ovUpgrade">
+    <div class="panel">
+      <h2 style="color:var(--gold); letter-spacing:2px;">UPGRADE CAMP</h2>
+      <div class="tiny" id="upgradeHint">choose one improvement for the rest of this run</div>
+      <div class="upgradeGrid" id="upgradeGrid"></div>
+    </div>
+  </div>
+
   <div class="overlay" id="ovOver">
     <div class="panel">
       <h2 id="overTitle" style="color:var(--gold); letter-spacing:2px;">CLAIM LOST</h2>
@@ -323,9 +337,9 @@ body.touch.playing #touch{display:none;}
     <div class="tbtn" id="tDigR">▶⛏</div>
   </div>
 </div>
-<script src="art.js?v=335"></script>
-<script src="audio.js?v=335"></script>
-<script src="levels.js?v=335"></script>
-<script src="game.js?v=335"></script>
+<script src="art.js?v=336"></script>
+<script src="audio.js?v=336"></script>
+<script src="levels.js?v=336"></script>
+<script src="game.js?v=336"></script>
 </body>
 </html>
