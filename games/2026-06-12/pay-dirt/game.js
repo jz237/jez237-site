@@ -255,14 +255,14 @@ function spawnSpecialNuggets(wx, wy, n, value){
 
 function triggerCaveIn(reason){
   if (!special || special.caveT != null || special.escapeT > 0) return;
-  special.caveT = 46;
+  special.caveT = special.caveLimit || 46;
   special.rockT = .35;
   banner = {
     text: 'CAVE-IN!',
     sub: reason || 'THE CLAIM IS COMING DOWN',
     stats: [
       {label: 'ESCAPE', value: 'CART'},
-      {label: 'TIMER', value: '46'},
+      {label: 'TIMER', value: String(Math.ceil(special.caveLimit || 46))},
       {label: 'DRILL', value: 'SPACE'},
     ],
     life: 2.8,
@@ -913,7 +913,8 @@ function updateSpecial(dt, inp){
   if (special.caveT != null && special.escapeT <= 0){
     special.caveT = Math.max(0, special.caveT - dt);
     special.rockT -= dt;
-    const urgency = special.caveT < 16 ? .38 : special.caveT < 28 ? .58 : .86;
+    const limit = special.caveLimit || 46;
+    const urgency = special.caveT < limit * .34 ? .38 : special.caveT < limit * .62 ? .58 : .86;
     if (special.rockT <= 0){
       special.rockT = urgency + rnd() * .45;
       spawnSpecialRock();
@@ -927,11 +928,18 @@ function updateSpecial(dt, inp){
   }
   if (special.escapeT > 0){
     special.escapeT -= dt;
-    player.x += (COLS + 1 - player.x) * Math.min(1, dt * 1.8);
+    const escapeP = 1 - Math.max(0, special.escapeT) / special.escapeDur;
+    const targetX = special.cart.x + (special.escapeDist || 4.5) + (special.final ? 1.8 : 0);
+    player.x += (targetX - player.x) * Math.min(1, dt * (special.final ? 2.6 : 2.0));
     player.y += (special.cart.y - player.y) * Math.min(1, dt * 8);
     player.state = 'run';
     player.invuln = 1;
-    shake = Math.max(shake, .1);
+    shake = Math.max(shake, special.final ? .22 : .13);
+    if (rnd() < (special.final ? .62 : .34)){
+      spawnParticles(player.x - .75, player.y + .42, special.final ? 4 : 2, {color: ['#ffd23f', '#ff9d2e', '#8a6038', '#fff3b0'], spd: 4.4 + escapeP * 2.2, ang: Math.PI, spread: .95, life: .42, size: 2.8, grav: 12, glow: true});
+    }
+    if (special.final && rnd() < .25)
+      spawnSpecialRock();
     if (special.escapeT <= 0) levelComplete();
   }
 }
@@ -939,11 +947,15 @@ function updateSpecial(dt, inp){
 function startCartEscape(){
   if (!special || special.escapeT > 0) return;
   special.escapeT = special.escapeDur;
-  banner = {text: 'PAY DIRT!', sub: 'MINE CART ESCAPE', life: 1.3};
-  addScore(750);
-  flash = Math.max(flash, .45);
-  shake = Math.max(shake, .6);
-  spawnParticles(special.cart.x, special.cart.y, 32, {color: ['#ffd23f', '#ff9d2e', '#3fd2c7', '#fff3b0'], spd: 6.2, life: .9, size: 4, grav: 8, glow: true});
+  banner = {
+    text: special.final ? 'FINAL HAUL!' : 'PAY DIRT!',
+    sub: special.final ? 'RUN THE COLLAPSING RAIL' : 'MINE CART ESCAPE',
+    life: special.final ? 2.2 : 1.5,
+  };
+  addScore(special.final ? 2000 : 900);
+  flash = Math.max(flash, special.final ? .7 : .45);
+  shake = Math.max(shake, special.final ? 1 : .6);
+  spawnParticles(special.cart.x, special.cart.y, special.final ? 58 : 36, {color: ['#ffd23f', '#ff9d2e', '#3fd2c7', '#fff3b0'], spd: special.final ? 8.4 : 6.2, life: special.final ? 1.2 : .9, size: special.final ? 4.8 : 4, grav: 8, glow: true});
   AUDIO.sfx('win');
 }
 
@@ -1482,7 +1494,13 @@ function levelComplete(){
   addScore(bonus);
   if (player) popup(player.x, player.y - 1, '+' + bonus + ' CLEAR', '#3fd2c7');
   if (mode === 'special'){
-    endGame(true);
+    const levels = LEVELS.special.levels || [LEVELS.special];
+    if (levelIndex + 1 < levels.length){
+      AUDIO.sfx('win');
+      loadSpecialLevel(levelIndex + 1);
+    } else {
+      endGame(true);
+    }
   } else if (mode === 'campaign'){
     markLevelDone(levelIndex);
     if (levelIndex + 1 < LEVELS.campaign.length){
@@ -1665,7 +1683,7 @@ function buildHowTo(){
     '<span style="color:#3fd2c7">Boots</span> speed · <span style="color:#b07fff">Cloak</span> phase through guards · ' +
     '<span style="color:#ffd23f">Magnet</span> grabs gold · <span style="color:#7fd24a">Shovel</span> instant digs.</p>' +
     '<p><b>Lantern oil</b> briefly widens the painted light pool; maps briefly boost magnet pull. Chain nuggets fast for a <b>combo multiplier</b>.</p>' +
-    '<p><b>Boom Rush:</b> the special claim adds <span class="k">Space</span>/<span class="k">Shift</span> drill dash, tumbling bonus nuggets, pressure plates, steam vents, lava seams, crushers, a telegraphed drill worm lane, falling cave-in rock, and a mine-cart escape.</p>' +
+    '<p><b>Boom Rush:</b> a 20-claim run that starts gentle, then adds <span class="k">Space</span>/<span class="k">Shift</span> drill dash pressure, tumbling bonus nuggets, pressure plates, steam vents, lava seams, crushers, a telegraphed drill worm lane, falling cave-in rock, and mine-cart escape finales.</p>' +
     '<p><b>Phone:</b> drag to move or climb; tap the ground left/right of the miner to dig that side; tap ladder tiles to climb.</p>' +
     '<p><span class="k">P</span> pause · <span class="k">M</span> mute · <span class="k">R</span> restart.</p>';
 }
@@ -1987,30 +2005,38 @@ function claimThreatLabel(){
 function loadLevelData(rows){
   currentRows = rows;
   resetSpecialState();
+  const specialLevel = isSpecialMode() && LEVELS.special.levels
+    ? LEVELS.special.levels[levelIndex]
+    : null;
+  const specialCfg = specialLevel && specialLevel.config ? specialLevel.config : {};
   srand(rows.join('').length * 2654435761 + rows[0].charCodeAt(0));
   parseLevel(rows);
   seedTreasures();
   player = makeActor(spawnPoint.c, spawnPoint.r, 'player');
   guards = guardSpawns.map(g => makeActor(g.c, g.r, g.kind));
   if (isSpecialMode()){
-    player.tnt = 4;
-    player.speedT = 6;
-    player.shovelT = 8;
+    player.tnt = specialCfg.tnt == null ? 4 : specialCfg.tnt;
+    player.speedT = specialCfg.speed == null ? 6 : specialCfg.speed;
+    player.shovelT = specialCfg.shovel == null ? 8 : specialCfg.shovel;
     player.drillCd = 0;
+    const cart = specialCfg.cart || {c: 25, r: 14, x: 25.5, y: 14.5};
     special = {
       caveT: null,
+      caveLimit: specialCfg.caveTime || 46,
       rockT: 0,
-      cart: {c: 25, r: 14, x: 25.5, y: 14.5},
+      cart: {c: cart.c, r: cart.r, x: cart.x == null ? cart.c + .5 : cart.x, y: cart.y == null ? cart.r + .5 : cart.y},
       cartReady: false,
       escapeT: 0,
-      escapeDur: 1.45,
+      escapeDur: specialCfg.escapeDur || 1.45,
+      escapeDist: specialCfg.escapeDist || 4.5,
+      final: !!specialCfg.final,
       drillHintT: 8,
-      triggeredAtGold: Math.ceil(golds.length * .52),
-      plates: [{c: 12, r: 14, used: false}, {c: 22, r: 7, used: false}],
-      vents: [{x: 9.5, y: 11.55, t: .3}, {x: 17.5, y: 7.55, t: 1.4}],
-      lava: [{c0: 10, c1: 12, r: 12}, {c0: 21, c1: 22, r: 12}],
-      crushers: [{c: 13, r: 5, t: 0}, {c: 21, r: 9, t: .9}],
-      worm: {t: 0, active: false, warnT: 0, x: -2, y: 10.5, dir: 1, cooldown: 7},
+      triggeredAtGold: Math.ceil(golds.length * (specialCfg.triggerPct || .52)),
+      plates: (specialCfg.plates || []).map(p => ({...p})),
+      vents: (specialCfg.vents || []).map(v => ({...v})),
+      lava: (specialCfg.lava || []).map(l => ({...l})),
+      crushers: (specialCfg.crushers || []).map(c => ({...c})),
+      worm: specialCfg.worm ? {...specialCfg.worm} : null,
     };
   }
   levelTime = 0;
@@ -2027,14 +2053,14 @@ function loadLevelData(rows){
     {label: 'FINDS', value: discoveryTotal},
     {label: 'THREAT', value: claimThreatLabel().toUpperCase()},
   ];
-  if (mode === 'special') banner = {text: 'BOOM RUSH', sub: 'DRILL, BLAST, LOOT, RIDE OUT', stats, life: 2.8};
+  if (mode === 'special') banner = {text: 'BOOM RUSH ' + (levelIndex + 1) + '/' + (LEVELS.special.levels?.length || 1), sub: (specialLevel?.brief || 'DRILL, BLAST, LOOT, RIDE OUT').toUpperCase(), stats, life: 2.8};
   else if (mode === 'daily') banner = {text: 'DAILY DIG', sub: dailyDate || LEVELS.dailyDateUTC(), stats, life: 2.4};
   else banner = {text: 'CLAIM ' + (levelIndex + 1), sub: (LEVELS.names[levelIndex] || '').toUpperCase(), brief: LEVELS.briefs && LEVELS.briefs[levelIndex], stats, life: 2.4};
   hint = null;
   if (mode === 'special'){
     hint = {
       life: 9,
-      text: 'SPACE / SHIFT drill dash   Z / X dig   DOWN + dig spends TNT   escape by cart',
+      text: (specialLevel?.brief || 'SPACE / SHIFT drill dash   Z / X dig   DOWN + dig spends TNT   escape by cart'),
     };
   } else if (mode === 'campaign'){
     const brief = LEVELS.briefs && LEVELS.briefs[levelIndex];
@@ -2050,6 +2076,12 @@ function loadCampaignLevel(i){
   loadLevelData(LEVELS.campaign[levelIndex]);
 }
 
+function loadSpecialLevel(i){
+  const levels = LEVELS.special.levels || [{rows: LEVELS.special.rows}];
+  levelIndex = Math.max(0, Math.min(levels.length - 1, i | 0));
+  loadLevelData(levels[levelIndex].rows);
+}
+
 /* ================= flow ================= */
 let dailyDate = null;
 
@@ -2057,9 +2089,8 @@ function startGame(m){
   mode = m || 'campaign';
   score = 0; lives = 3;
   if (mode === 'special'){
-    levelIndex = 0;
     dailyDate = null;
-    loadLevelData(LEVELS.special.rows);
+    loadSpecialLevel(0);
   } else if (mode === 'daily'){
     const d = LEVELS.generateDaily();
     dailyDate = d.date;
@@ -3845,7 +3876,7 @@ function renderWorldFrame(includeHUD){
     ctx.fillStyle = ct; ctx.fillRect(0, 0, VIEW_W, VIEW_H);
   }
   if (special && special.caveT != null){
-    const panic = clamp(1 - special.caveT / 46, 0, 1);
+    const panic = clamp(1 - special.caveT / (special.caveLimit || 46), 0, 1);
     const pulse = 0.5 + 0.5 * Math.sin(gameTime * (5 + panic * 10));
     const cg = ctx.createRadialGradient(VIEW_W / 2, VIEW_H * .42, VIEW_H * .2, VIEW_W / 2, VIEW_H / 2, VIEW_H * .85);
     cg.addColorStop(0, 'rgba(0,0,0,0)');
@@ -4419,7 +4450,7 @@ function drawMineCart(){
   if (!special) return;
   const ready = special.cartReady || exitRevealed;
   const escape = special.escapeT > 0 ? 1 - special.escapeT / special.escapeDur : 0;
-  const baseX = special.cart.x + escape * 4.5;
+  const baseX = special.cart.x + escape * (special.escapeDist || 4.5);
   const baseY = special.cart.y;
   const x = px(baseX), y = py(baseY) + 4 + Math.sin(gameTime * 18) * escape * 2;
   const glowA = ready ? .34 + .18 * Math.sin(gameTime * 7) : .1;
@@ -4459,6 +4490,19 @@ function drawMineCart(){
     ctx.strokeStyle = 'rgba(63,210,199,.76)';
     ctx.lineWidth = 2;
     ctx.beginPath(); ctx.arc(0, -6, 42 + Math.sin(gameTime * 6) * 4, -.4, Math.PI + .5); ctx.stroke();
+    if (escape > 0){
+      ctx.strokeStyle = 'rgba(255,210,63,.72)';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(-62, 21);
+      ctx.lineTo(64, 21 + Math.sin(gameTime * 32) * 2);
+      ctx.stroke();
+      ctx.fillStyle = 'rgba(255,157,46,.7)';
+      for (let i = 0; i < 7; i++){
+        const sx = -54 + i * 18 - escape * 22;
+        ctx.fillRect(sx, 23 + Math.sin(gameTime * 18 + i) * 2, 9, 2);
+      }
+    }
     ctx.fillStyle = '#fff3b0';
     ctx.font = '900 10px system-ui, sans-serif';
     ctx.textAlign = 'center';
@@ -4859,6 +4903,7 @@ window.__g = {
   snap(){ render(); return true; },
   input(code, down){ keys[code] = !!down; },
   loadLevel(i){ mode = 'campaign'; loadCampaignLevel(i); state = 'playing'; hideOverlays(); return grid.length === ROWS; },
+  loadSpecial(i){ mode = 'special'; loadSpecialLevel(i); state = 'playing'; hideOverlays(); return grid.length === ROWS; },
   dig(dir){ return tryDig(dir < 0 ? -1 : 1); },
   kill(){ killPlayer('debug'); },
   give(kind){ applyPowerup(kind); },
@@ -4885,6 +4930,7 @@ window.__g = {
     return {date: d.date, attempt: d.attempt};
   },
   solvable(rows){ return LEVELS.solvable(rows || currentRows); },
+  specialSolvable(i){ const levels = LEVELS.special.levels || [LEVELS.special]; return LEVELS.specialSolvable(levels[i == null ? levelIndex : i]); },
   startAt: startCampaignAt,
   startSpecial(){ startGame('special'); return {mode, state, golds: golds.length, special: !!special}; },
   scores: () => Scores,
