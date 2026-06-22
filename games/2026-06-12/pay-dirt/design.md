@@ -68,6 +68,8 @@ Sim is fixed-timestep (60Hz accumulator); `__g.step(n)` drives ticks headlessly.
 - Campaign: 13 levels, one mechanic introduced at a time.
 - Visual chapters change every two levels through backdrop selection, chapter tint,
   region-specific small set dressing, and the intro banner's `VEIN` chip.
+- Boom Rush 20 adds Baron Brim, a boss claim-jumper who steals gold, cuts rock,
+  drops timed TNT, and targets the cart once the final ride-out opens.
 - Daily Dig: mulberry32(UTC date) seeds the generator; solvability checker
   (reachability over walk/climb/bar/fall/dig-down edges) gates every emitted level;
   global board namespace `pay-dirt-daily`, date in `extra`.
