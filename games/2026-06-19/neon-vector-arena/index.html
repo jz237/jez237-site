@@ -324,7 +324,7 @@
     <p class="fine" id="overlayFine">Dual Stick: left side flies, right side aims and fires. Desktop: WASD plus hold mouse to aim.</p>
   </div>
 </div>
-<div class="version">v4.2</div>
+<div class="version">v4.3</div>
 
 <script>
 'use strict';
@@ -1740,21 +1740,21 @@ function addHitShards(e, x, y, hue) {
 
 function addDeathChunks(x, y, hue, big = false) {
   if (fragments.length > MAX_FRAGMENTS) fragments.splice(0, fragments.length - MAX_FRAGMENTS);
-  const count = Math.round((big ? 16 : 12) * effectsQuality * (MOBILE_PERF ? .72 : 1));
+  const count = Math.round((big ? 42 : 34) * effectsQuality * (MOBILE_PERF ? .82 : 1));
   for (let i = 0; i < count; i++) {
     const a = i * TAU / Math.max(1, count) + rand(-.22, .22);
-    const speed = rand(big ? 120 : 88, big ? 275 : 210);
+    const speed = rand(big ? 145 : 115, big ? 360 : 285);
     fragments.push({
-      x: x + Math.cos(a) * rand(2, big ? 16 : 9),
-      y: y + Math.sin(a) * rand(2, big ? 16 : 9),
+      x: x + Math.cos(a) * rand(3, big ? 22 : 15),
+      y: y + Math.sin(a) * rand(3, big ? 22 : 15),
       vx: Math.cos(a) * speed,
       vy: Math.sin(a) * speed,
       rot: rand(0, TAU),
       spin: rand(-5.5, 5.5),
-      size: rand(big ? 2.2 : 1.6, big ? 5.2 : 3.8),
-      hue: hue + rand(-5, 5),
-      life: rand(big ? .32 : .24, big ? .62 : .48),
-      max: rand(big ? .5 : .38, big ? .78 : .62),
+      size: rand(big ? 4.8 : 3.8, big ? 10.8 : 8.8),
+      hue: hue + rand(-3, 3),
+      life: rand(big ? .5 : .42, big ? .92 : .78),
+      max: rand(big ? .74 : .62, big ? 1.12 : .96),
       kind: 'chunk'
     });
   }
@@ -1817,12 +1817,12 @@ function usePanicBomb() {
 }
 
 function explode(x, y, hue, big = false) {
-  addSpark(x, y, big ? 38 : 26, hue, big ? 1.18 : .96);
+  addSpark(x, y, big ? 54 : 38, hue, big ? 1.22 : 1.04);
   addDeathChunks(x, y, hue, big);
-  particles.push({ x, y, vx: 0, vy: 0, life: big ? .18 : .14, max: big ? .18 : .14, r: big ? 36 : 24, hue, kind: 'core' });
-  particles.push({ x, y, vx: 0, vy: 0, life: big ? .46 : .36, max: big ? .46 : .36, r: big ? 88 : 58, hue, kind: 'ring' });
-  particles.push({ x, y, vx: 0, vy: 0, life: big ? .14 : .11, max: big ? .14 : .11, r: big ? 126 : 70, hue: big ? 0 : hue, kind: 'flash' });
-  shake = Math.max(shake, big ? 5 : 1.8);
+  particles.push({ x, y, vx: 0, vy: 0, life: big ? .24 : .18, max: big ? .24 : .18, r: big ? 48 : 34, hue, kind: 'core' });
+  particles.push({ x, y, vx: 0, vy: 0, life: big ? .58 : .46, max: big ? .58 : .46, r: big ? 112 : 78, hue, kind: 'ring' });
+  particles.push({ x, y, vx: 0, vy: 0, life: big ? .18 : .14, max: big ? .18 : .14, r: big ? 152 : 96, hue: big ? 0 : hue, kind: 'flash' });
+  shake = Math.max(shake, big ? 5 : 2.2);
 }
 
 function splitEnemy(e) {
@@ -2565,7 +2565,9 @@ function drawFragment(c, f) {
     c.stroke();
   } else if (f.kind === 'chunk') {
     const r = Math.max(1.1, (f.size || 3) * t);
-    c.fillStyle = `hsla(${f.hue},96%,76%,${t * (MOBILE_PERF ? .5 : .62)})`;
+    c.fillStyle = `hsla(${f.hue},96%,76%,${t * (MOBILE_PERF ? .68 : .78)})`;
+    c.strokeStyle = `hsla(${f.hue + 28},100%,88%,${t * (MOBILE_PERF ? .42 : .54)})`;
+    c.lineWidth = Math.max(.7, 1.25 * t);
     c.beginPath();
     c.moveTo(0, -r);
     c.lineTo(r * .9, 0);
@@ -2573,6 +2575,7 @@ function drawFragment(c, f) {
     c.lineTo(-r * .9, 0);
     c.closePath();
     c.fill();
+    c.stroke();
   } else {
     const r = Math.max(.7, 2.1 * t);
     c.fillStyle = `hsla(${f.hue},78%,72%,${t * .34})`;
@@ -2586,6 +2589,7 @@ function drawFragment(c, f) {
 function drawCallout(c, o, glowPass = false) {
   const t = clamp(o.life / o.max, 0, 1);
   const isBanner = o.kind === 'banner';
+  if (isBanner && glowPass) return;
   const pop = isBanner ? 1.08 + Math.sin((1 - t) * Math.PI) * .18 : 1 - Math.abs(t - .78) * .7;
   const alpha = Math.min(1, t * 1.35);
   let size = (o.size || 36) * (glowPass ? 1.18 : 1) * clamp(pop, .72, isBanner ? 1.24 : 1.12);
@@ -2602,14 +2606,14 @@ function drawCallout(c, o, glowPass = false) {
     size *= maxWidth / c.measureText(o.text).width;
     c.font = `950 ${size}px Inter, ui-sans-serif, system-ui, sans-serif`;
   }
-  c.lineWidth = isBanner ? (glowPass ? 9 : 3.4) : (glowPass ? 5 : 2.4);
+  c.lineWidth = isBanner ? 2.4 : (glowPass ? 5 : 2.4);
   c.strokeStyle = `hsla(${o.hue},100%,72%,${glowPass ? .52 : .95})`;
   c.fillStyle = glowPass ? `hsla(${o.hue + 36},100%,82%,.2)` : 'rgba(255,255,255,.92)';
   c.strokeText(o.text, 0, 0);
   c.fillText(o.text, 0, 0);
   const w = c.measureText(o.text).width;
-  line(c, -w * .58, size * .62, -w * .18, size * .62, `hsla(${o.hue + 42},100%,75%,${alpha})`, glowPass ? 3 : 1.5, 4);
-  line(c, w * .18, size * .62, w * .58, size * .62, `hsla(${o.hue + 42},100%,75%,${alpha})`, glowPass ? 3 : 1.5, 4);
+  line(c, -w * .58, size * .62, -w * .18, size * .62, `hsla(${o.hue + 42},100%,75%,${alpha})`, glowPass ? 3 : 1.5, isBanner ? 0 : 4);
+  line(c, w * .18, size * .62, w * .58, size * .62, `hsla(${o.hue + 42},100%,75%,${alpha})`, glowPass ? 3 : 1.5, isBanner ? 0 : 4);
   c.restore();
 }
 
