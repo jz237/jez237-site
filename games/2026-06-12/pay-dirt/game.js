@@ -149,7 +149,7 @@ function isLadder(c, r){
 function isBar(c, r){ return tileAt(c, r) === '-'; }
 
 /* ================= state machine + overlays ================= */
-let state = 'title';   // title | playing | paused | over | how | levels | scores | win
+let state = 'title';   // title | playing | paused | over | how | levels | scores | upgrade | win
 let score = 0, lives = 4, levelIndex = 0, mode = 'campaign'; // campaign | daily | special
 const START_LIVES = 4;
 const MAX_LIVES = 7;
@@ -319,7 +319,7 @@ function spawnSpecialRock(warning){
 function specialCartReady(){ return !!(special && special.cartReady); }
 
 const $ = id => document.getElementById(id);
-const OVERLAYS = ['ovTitle', 'ovHow', 'ovLevels', 'ovScores', 'ovPause', 'ovStuck', 'ovOver'];
+const OVERLAYS = ['ovTitle', 'ovHow', 'ovLevels', 'ovScores', 'ovPause', 'ovStuck', 'ovUpgrade', 'ovOver'];
 function showOnly(id){
   for (const o of OVERLAYS) $(o).classList.toggle('show', o === id);
 }
@@ -343,6 +343,10 @@ addEventListener('keydown', e => {
   if (state === 'playing'){ keys[e.code] = true; return; }
   if (state === 'paused' && k === 'Enter') return resumeGame();
   if (state === 'stuck' && (k === 'Enter' || k === 'r' || k === 'R')) return restartLevel();
+  if (state === 'upgrade' && (k === 'Enter' || k === ' ')){
+    const next = UPGRADE_OPTIONS.find(o => (runUpgrades[o.id] || 0) < o.max) || UPGRADE_OPTIONS[0];
+    return chooseUpgrade(next.id);
+  }
   if (state === 'over' && pendingEntry){
     if (/^[a-zA-Z]$/.test(k)){ setInitial(k); return; }
     if (k === 'Backspace'){ e.preventDefault(); moveCursor(-1); return; }
@@ -635,7 +639,7 @@ function beginDigAt(tc, tr, dir){
     shake = Math.max(shake, .5);
     return true;
   }
-  player.digT = player.shovelT > 0 ? 0.05 : DIG_TIME;
+  player.digT = player.shovelT > 0 ? 0.05 : playerDigTime();
   player.pendingDig = {c: tc, r: tr, dir, total: player.digT, fx: 0};
   chipDig(tc, tr, dir, player.shovelT > 0);
   shake = Math.max(shake, player.shovelT > 0 ? .16 : .08);
@@ -1912,6 +1916,36 @@ function updateSoftlockDetector(dt){
 
 let campaignDone = [];
 try { campaignDone = JSON.parse(localStorage.getItem('paydirt-done') || '[]'); } catch (e) {}
+let runUpgrades = {boots: 0, pick: 0, satchel: 0};
+let pendingUpgrade = null;
+const UPGRADE_OPTIONS = [
+  {id: 'boots', icon: '⚡', name: 'Quick Boots', desc: 'move and climb faster', max: 3},
+  {id: 'pick', icon: '⛏', name: 'Sharp Pick', desc: 'dig faster', max: 3},
+  {id: 'satchel', icon: '💥', name: 'Blast Satchel', desc: 'start claims with TNT', max: 3},
+];
+
+function freshUpgrades(){ return {boots: 0, pick: 0, satchel: 0}; }
+function resetRunUpgrades(){ runUpgrades = freshUpgrades(); pendingUpgrade = null; }
+function copyUpgrades(src){
+  src = src || {};
+  return {
+    boots: Math.max(0, Math.min(3, src.boots | 0)),
+    pick: Math.max(0, Math.min(3, src.pick | 0)),
+    satchel: Math.max(0, Math.min(3, src.satchel | 0)),
+  };
+}
+function playerSpeedUpgradeScale(){
+  return 1 + ((runUpgrades.boots || 0) * 0.07);
+}
+function playerDigTime(){
+  return Math.max(0.16, DIG_TIME * Math.pow(0.86, runUpgrades.pick || 0));
+}
+function applyRunUpgradesToPlayer(){
+  if (!player || mode !== 'campaign') return;
+  player.upgrades = copyUpgrades(runUpgrades);
+  if (runUpgrades.satchel) player.tnt = (player.tnt || 0) + runUpgrades.satchel;
+}
+
 function markLevelDone(i){
   if (!campaignDone.includes(i)){
     campaignDone.push(i);
@@ -1936,13 +1970,60 @@ function levelComplete(){
     markLevelDone(levelIndex);
     if (levelIndex + 1 < LEVELS.campaign.length){
       AUDIO.sfx('win');
-      loadCampaignLevel(levelIndex + 1);
+      showUpgradeChoice(levelIndex + 1);
     } else {
       endGame(true);
     }
   } else {
     endGame(true);
   }
+}
+
+function showUpgradeChoice(nextLevel){
+  pendingUpgrade = {nextLevel};
+  state = 'upgrade';
+  for (const k in keys) keys[k] = false;
+  renderUpgradeChoices();
+  showOnly('ovUpgrade');
+}
+
+function renderUpgradeChoices(){
+  const gridEl = $('upgradeGrid');
+  if (!gridEl) return;
+  gridEl.innerHTML = '';
+  for (const opt of UPGRADE_OPTIONS){
+    const rank = runUpgrades[opt.id] || 0;
+    const next = Math.min(opt.max, rank + 1);
+    const b = document.createElement('button');
+    b.dataset.upgrade = opt.id;
+    b.disabled = rank >= opt.max;
+    b.className = b.disabled ? 'ghost' : '';
+    b.innerHTML =
+      '<span class="uIcon">' + opt.icon + '</span>' +
+      '<span class="uName">' + opt.name + '</span>' +
+      '<span class="uDesc">' + opt.desc + '</span>' +
+      '<span class="uRank">' + (rank >= opt.max ? 'MAX' : ('RANK ' + next + '/' + opt.max)) + '</span>';
+    b.addEventListener('click', e => {
+      e.preventDefault();
+      e.stopPropagation();
+      chooseUpgrade(opt.id);
+    });
+    gridEl.appendChild(b);
+  }
+}
+
+function chooseUpgrade(id){
+  if (state !== 'upgrade' || !pendingUpgrade) return false;
+  const opt = UPGRADE_OPTIONS.find(o => o.id === id) || UPGRADE_OPTIONS[0];
+  if ((runUpgrades[opt.id] || 0) < opt.max) runUpgrades[opt.id]++;
+  const nextLevel = pendingUpgrade.nextLevel;
+  pendingUpgrade = null;
+  loadCampaignLevel(nextLevel);
+  state = 'playing';
+  banner = {text: 'UPGRADED', sub: opt.name.toUpperCase() + ' RANK ' + runUpgrades[opt.id], life: 1.8};
+  hideOverlays();
+  AUDIO.sfx('power');
+  return true;
 }
 
 function killPlayer(reason){
@@ -1986,6 +2067,7 @@ function endGame(won){
     score,
     dailyDate,
     rows: currentRows ? currentRows.slice() : null,
+    upgrades: copyUpgrades(runUpgrades),
   };
   AUDIO.sfx(won ? 'win' : 'die');
   AUDIO.stopMusic();
@@ -2016,6 +2098,7 @@ function continueLastLevel(){
   levelIndex = continueRun.levelIndex | 0;
   score = 0;
   lives = START_LIVES;
+  runUpgrades = copyUpgrades(continueRun.upgrades);
   dailyDate = continueRun.dailyDate || null;
   if (mode === 'special') loadSpecialLevel(levelIndex);
   else if (mode === 'daily' && continueRun.rows) loadLevelData(continueRun.rows);
@@ -2575,6 +2658,7 @@ function loadLevelData(rows){
       worm: specialCfg.worm ? {...specialCfg.worm} : null,
     };
   }
+  applyRunUpgradesToPlayer();
   levelTime = 0;
   particles = []; popups = [];
   shake = 0; hitStop = 0; flash = 0; deathFlash = 0;
@@ -2632,6 +2716,7 @@ let dailyDate = null;
 
 function startGame(m){
   continueRun = null;
+  resetRunUpgrades();
   mode = m || 'campaign';
   score = 0; lives = START_LIVES;
   if (mode === 'special'){
@@ -2653,6 +2738,7 @@ function startGame(m){
 
 function startCampaignAt(i){
   continueRun = null;
+  resetRunUpgrades();
   mode = 'campaign';
   score = 0; lives = START_LIVES;
   loadCampaignLevel(i);
@@ -2794,7 +2880,7 @@ function update(dt){
       player.pendingDig = null;
     }
   } else {
-    if (!updateDrillDash(dt)) moveActor(player, dt, inp, player.speedT > 0 ? 1.45 : 1);
+    if (!updateDrillDash(dt)) moveActor(player, dt, inp, (player.speedT > 0 ? 1.45 : 1) * playerSpeedUpgradeScale());
     // running dust puffs + footstep ticks
     if (player.state === 'run'){
       runDustT -= dt;
@@ -5550,6 +5636,8 @@ function drawHotbar(){
   if (player.cloakT > 0) slots.push({icon: ART.PUPS[3], col: '#b07fff', ratio: player.cloakT / 6});
   if (player.magnetT > 0) slots.push({icon: ART.PUPS[4], col: '#ffd23f', ratio: player.magnetT / 8});
   if (player.shovelT > 0) slots.push({icon: ART.PUPS[5], col: '#7fd24a', ratio: player.shovelT / 10});
+  if (mode === 'campaign' && runUpgrades.boots) slots.push({icon: ART.PUPS[2], badge: '+' + runUpgrades.boots, col: '#3fd2c7', ratio: 1});
+  if (mode === 'campaign' && runUpgrades.pick) slots.push({icon: ART.PUPS[5], badge: '+' + runUpgrades.pick, col: '#7fd24a', ratio: 1});
   if (!slots.length) return;
   const sw = 44, gap = 8, totalW = slots.length * sw + (slots.length - 1) * gap;
   let sx = (VIEW_W - totalW) / 2; const sy = VIEW_H - sw - 12;
@@ -5800,6 +5888,8 @@ window.__g = {
   get treasures(){ return treasures; },
   get secretCaves(){ return secretCaves; },
   get discoveries(){ return {count: discoveryCount, total: discoveryTotal, oilLightT}; },
+  get upgrades(){ return copyUpgrades(runUpgrades); },
+  get pendingUpgrade(){ return pendingUpgrade ? {...pendingUpgrade} : null; },
   get goldLeft(){ return goldLeft; },
   get holes(){ return [...holes.values()]; },
   get exitRevealed(){ return exitRevealed; },
@@ -5811,6 +5901,8 @@ window.__g = {
   input(code, down){ keys[code] = !!down; },
   loadLevel(i){ mode = 'campaign'; loadCampaignLevel(i); state = 'playing'; hideOverlays(); return grid.length === ROWS; },
   loadSpecial(i){ mode = 'special'; loadSpecialLevel(i); state = 'playing'; hideOverlays(); return grid.length === ROWS; },
+  completeLevel(){ levelComplete(); return state; },
+  chooseUpgrade(id){ return chooseUpgrade(id); },
   dig(dir){ return tryDig(dir < 0 ? -1 : 1); },
   kill(){ killPlayer('debug'); },
   give(kind){ applyPowerup(kind); },
