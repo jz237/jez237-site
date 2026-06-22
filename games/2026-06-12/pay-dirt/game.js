@@ -102,7 +102,7 @@ function parseLevel(rows){
       else if (ch === 'S'){ guardSpawns.push({c, r, kind: 'scout'}); ch = '.'; }
       else if (ch === 'M'){ guardSpawns.push({c, r, kind: 'mason'}); ch = '.'; }
       else if (ch === '$'){ golds.push({c, r, taken: false}); ch = '.'; }
-      else if (ch >= '1' && ch <= '5'){ powerups.push({c, r, kind: +ch, taken: false}); ch = '.'; }
+      else if (ch >= '1' && ch <= '6'){ powerups.push({c, r, kind: +ch, taken: false}); ch = '.'; }
       else if (ch === 'E'){ exitCells.push({c, r}); }
       else if (!TILE_CHARS.includes(ch))
         throw new Error('level row ' + r + ' col ' + c + ': unknown tile "' + ch + '"');
@@ -149,7 +149,9 @@ function isBar(c, r){ return tileAt(c, r) === '-'; }
 
 /* ================= state machine + overlays ================= */
 let state = 'title';   // title | playing | paused | over | how | levels | scores | win
-let score = 0, lives = 3, levelIndex = 0, mode = 'campaign'; // campaign | daily | special
+let score = 0, lives = 4, levelIndex = 0, mode = 'campaign'; // campaign | daily | special
+const START_LIVES = 4;
+const MAX_LIVES = 7;
 let gameTime = 0, shake = 0, hitStop = 0, flash = 0, deathFlash = 0;
 let continueRun = null;
 let banner = null;          // {text, sub, life}
@@ -1238,6 +1240,7 @@ const PKINDS = {
   3: {name: 'CLOAK',   color: '#b07fff'},
   4: {name: 'MAGNET',  color: '#ffd23f'},
   5: {name: 'SHOVEL',  color: '#7fd24a'},
+  6: {name: 'EXTRA LIFE', color: '#ff6b9d'},
 };
 
 const TKINDS = {
@@ -1248,15 +1251,27 @@ const TKINDS = {
 };
 
 function applyPowerup(kind){
+  const meta = PKINDS[kind] || PKINDS[1];
   if (kind === 1) player.tnt = Math.min(3, (player.tnt || 0) + 1);
   else if (kind === 2) player.speedT = 8;
   else if (kind === 3) player.cloakT = 6;
   else if (kind === 4) player.magnetT = 8;
   else if (kind === 5) player.shovelT = 10;
+  else if (kind === 6){
+    const gained = lives < MAX_LIVES;
+    lives = Math.min(MAX_LIVES, lives + 1);
+    addScore(gained ? 250 : 100);
+    flash = Math.max(flash, .32);
+    banner = {text: gained ? 'EXTRA LIFE' : 'HEART FULL', sub: gained ? '+1 HEART' : 'MAX LIVES', life: 1.55};
+    spawnParticles(player.x, player.y - .2, 18, {color: ['#fff', meta.color, '#fff3b0'], spd: 4.2, life: .75, size: 3.5, grav: -5, glow: true});
+    popup(player.x, player.y - .55, gained ? '+1 LIFE' : 'FULL', meta.color);
+    AUDIO.sfx('power');
+    return;
+  }
   addScore(50);
   flash = Math.max(flash, .25);
-  spawnParticles(player.x, player.y - .2, 12, {color: [ART.PAL ? '#fff' : '#fff', PKINDS[kind].color, '#fff3b0'], spd: 3.5, life: .6, size: 3, grav: -4, glow: true});
-  popup(player.x, player.y - .5, PKINDS[kind].name, PKINDS[kind].color);
+  spawnParticles(player.x, player.y - .2, 12, {color: [ART.PAL ? '#fff' : '#fff', meta.color, '#fff3b0'], spd: 3.5, life: .6, size: 3, grav: -4, glow: true});
+  popup(player.x, player.y - .5, meta.name, meta.color);
   AUDIO.sfx('power');
 }
 
@@ -1625,7 +1640,7 @@ function continueLastLevel(){
   mode = continueRun.mode;
   levelIndex = continueRun.levelIndex | 0;
   score = continueRun.score | 0;
-  lives = 3;
+  lives = START_LIVES;
   dailyDate = continueRun.dailyDate || null;
   if (mode === 'special') loadSpecialLevel(levelIndex);
   else if (mode === 'daily' && continueRun.rows) loadLevelData(continueRun.rows);
@@ -1759,7 +1774,7 @@ function buildHowTo(){
     '<p><b>Move:</b> <span class="k">←</span><span class="k">→</span> run · <span class="k">↑</span><span class="k">↓</span> climb. On phone, drag where you want to go.</p>' +
     '<p><b>Dig:</b> <span class="k">Z</span> left · <span class="k">X</span> right. Drop traps under claim-jumpers, then move before the hole seals.</p>' +
     '<p><b>Watch out:</b> jumpers chase you, scouts are fast, masons repair holes, and carried gold must be knocked loose.</p>' +
-    '<p><b>Power-ups:</b> TNT, boots, cloak, magnet, shovel, oil, and maps give short bursts of help.</p>' +
+    '<p><b>Find:</b> TNT, boots, cloak, magnet, shovel, oil, maps, and heart tokens.</p>' +
     '<p><b>Boom Rush:</b> drill dash with <span class="k">Space</span>/<span class="k">Shift</span>, grab the haul, and reach the cart before the cave wins.</p>' +
     '<p><span class="k">P</span> pause · <span class="k">M</span> mute · <span class="k">R</span> restart.</p>';
 }
@@ -2032,6 +2047,29 @@ function playerInput(){
   return inp;
 }
 
+function shouldSeedExtraLife(){
+  if (mode === 'daily'){
+    return Math.abs(LEVELS.hashStr('life:' + (dailyDate || LEVELS.dailyDateUTC()))) % 4 === 0;
+  }
+  if (mode === 'special') return levelIndex > 0 && levelIndex % 4 === 2;
+  return levelIndex > 0 && levelIndex % 5 === 3;
+}
+
+function seedExtraLife(candidates, occ){
+  if (!shouldSeedExtraLife()) return;
+  const choices = candidates.filter(spot => {
+    if (occ.has(key(spot.c, spot.r))) return false;
+    if (Math.abs(spot.c - spawnPoint.c) + Math.abs(spot.r - spawnPoint.r) < 5) return false;
+    if (exitCells.some(e => Math.abs(e.c - spot.c) + Math.abs(e.r - spot.r) < 4)) return false;
+    return true;
+  });
+  if (!choices.length) return;
+  const seed = Math.abs(LEVELS.hashStr(mode + ':life:' + levelIndex + ':' + (dailyDate || 'campaign')));
+  const spot = choices[seed % choices.length];
+  powerups.push({c: spot.c, r: spot.r, kind: 6, taken: false});
+  occ.add(key(spot.c, spot.r));
+}
+
 function seedTreasures(){
   treasures = [];
   const rr = ART.rng(8603 + levelIndex * 211 + (mode === 'daily' ? 991 : 0));
@@ -2056,10 +2094,12 @@ function seedTreasures(){
     }
   }
   candidates.sort((a, b) => (b.weight + rr() * .2) - (a.weight + rr() * .2));
+  seedExtraLife(candidates, occ);
   const kinds = ['relic', 'bloom', 'map', 'oil'];
   const want = Math.min(5 + Math.min(levelIndex, 3), Math.max(2, candidates.length));
   for (const spot of candidates){
     if (treasures.length >= want) break;
+    if (occ.has(key(spot.c, spot.r))) continue;
     if (treasures.some(t => Math.abs(t.c - spot.c) + Math.abs(t.r - spot.r) < 3)) continue;
     treasures.push({c: spot.c, r: spot.r, kind: kinds[treasures.length % kinds.length], taken: false});
   }
@@ -2164,7 +2204,7 @@ let dailyDate = null;
 function startGame(m){
   continueRun = null;
   mode = m || 'campaign';
-  score = 0; lives = 3;
+  score = 0; lives = START_LIVES;
   if (mode === 'special'){
     dailyDate = null;
     loadSpecialLevel(0);
@@ -2185,7 +2225,7 @@ function startGame(m){
 function startCampaignAt(i){
   continueRun = null;
   mode = 'campaign';
-  score = 0; lives = 3;
+  score = 0; lives = START_LIVES;
   loadCampaignLevel(i);
   gameTime = 0;
   state = 'playing';
@@ -3650,6 +3690,13 @@ function drawPowerupToken(cx, cy, kind, s){
   else if (kind === 2){ ctx.moveTo(-7, 2); ctx.lineTo(-1, 2); ctx.lineTo(1, 6); ctx.moveTo(2, 0); ctx.lineTo(8, 2); ctx.lineTo(8, 6); }
   else if (kind === 3){ ctx.arc(1, 0, 6, Math.PI * .35, Math.PI * 1.65); ctx.moveTo(1, -6); ctx.quadraticCurveTo(6, 0, 1, 6); }
   else if (kind === 4){ ctx.arc(0, 0, 7, Math.PI * .12, Math.PI * .88, true); ctx.moveTo(-6, 3); ctx.lineTo(-6, 7); ctx.moveTo(6, 3); ctx.lineTo(6, 7); }
+  else if (kind === 6){
+    ctx.moveTo(0, 7);
+    ctx.bezierCurveTo(-9, 0, -8, -8, -2, -6);
+    ctx.bezierCurveTo(0, -5, 0, -3, 0, -3);
+    ctx.bezierCurveTo(0, -3, 0, -5, 2, -6);
+    ctx.bezierCurveTo(8, -8, 9, 0, 0, 7);
+  }
   else { ctx.moveTo(-6, 6); ctx.lineTo(5, -5); ctx.moveTo(1, -8); ctx.lineTo(8, -1); }
   ctx.stroke();
   ctx.strokeStyle = 'rgba(255,255,245,.72)'; ctx.lineWidth = 1.2; ctx.stroke();
@@ -3797,7 +3844,8 @@ function renderWorldFrame(includeHUD){
     for (const pu of powerups){
       if (pu.taken) continue;
       const bobv = Math.sin(gameTime * 3 + pu.c) * 3;
-      glow(pu.c + .5, pu.r + .5 + bobv / TILE, 26, hexA(PKINDS[pu.kind].color, .5), .6);
+      const meta = PKINDS[pu.kind] || PKINDS[1];
+      glow(pu.c + .5, pu.r + .5 + bobv / TILE, 26, hexA(meta.color, .5), .6);
       drawPowerupToken(pu.c * TILE + TILE / 2, pu.r * TILE + HUD_H + TILE / 2 + bobv, pu.kind, 13);
     }
     for (const tr of treasures){
@@ -4119,7 +4167,7 @@ function drawMobileHUD(){
   ctx.fillStyle = '#fff1af';
   ctx.font = '900 18px system-ui, sans-serif';
   ctx.fillText(got + '/' + total, 36, 47);
-  for (let i = 0, n = Math.min(lives, 4); i < n; i++) drawHeart(94 + i * 22, 45, 17, true);
+  for (let i = 0, n = Math.min(lives, MAX_LIVES); i < n; i++) drawHeart(94 + i * 20, 45, 16, true);
 
   ctx.textAlign = 'center';
 	  ctx.fillStyle = 'rgba(255,216,107,.9)';
@@ -4919,7 +4967,7 @@ function drawHUD(){
   // lives as hearts
   drawPlayerPortrait(10, 5);
   let hx = 94;
-  for (let i = 0, n = Math.min(lives, 6); i < n; i++){ drawHeart(hx + 8, 23, 18, true); hx += 24; }
+  for (let i = 0, n = Math.min(lives, MAX_LIVES); i < n; i++){ drawHeart(hx + 8, 23, 18, true); hx += 24; }
   hx = 96;
 
   // gold counter with gem icon
@@ -5054,7 +5102,7 @@ window.__g = {
   set mobileZoom(v){ mobileZoomAdjust = clamp(Number(v) || 1, 0.68, 1.45); },
   seedDaily(dateStr){
     const d = LEVELS.generateDaily(dateStr);
-    mode = 'daily'; dailyDate = d.date; score = 0; lives = 3;
+    mode = 'daily'; dailyDate = d.date; score = 0; lives = START_LIVES;
     loadLevelData(d.rows);
     state = 'playing'; hideOverlays();
     return {date: d.date, attempt: d.attempt};
