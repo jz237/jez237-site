@@ -123,3 +123,6 @@ Sim is fixed-timestep (60Hz accumulator); `__g.step(n)` drives ticks headlessly.
 - 2026-06-22: Campaign clears now pause at Upgrade Camp before the next claim. The player
   chooses Quick Boots, Sharp Pick, or Blast Satchel ranks for the rest of that run; debug
   hooks expose `window.__g.upgrades`, `pendingUpgrade`, `completeLevel()`, and `chooseUpgrade()`.
+- 2026-06-22: Best-run ghost shadows record player positions during play, save the fastest
+  cleared route per campaign/daily/Boom Rush level in localStorage, and replay as a translucent
+  miner on later attempts. Debug hooks expose `window.__g.ghost` and `saveGhost()`.

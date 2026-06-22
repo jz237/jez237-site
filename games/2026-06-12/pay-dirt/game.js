@@ -79,6 +79,7 @@ let special = null;
 let specialNuggets = [];
 let specialRocks = [];
 let specialRockWarnings = [];
+let ghostTrail = [], ghostReplay = null, ghostSampleT = 0;
 
 function key(c, r){ return c + ',' + r; }
 
@@ -1914,6 +1915,84 @@ function updateSoftlockDetector(dt){
   if (softlockT >= 1.8) showSoftlock(reason);
 }
 
+function ghostStorageKey(){
+  if (mode === 'daily') return 'paydirt-ghost:daily:' + (dailyDate || LEVELS.dailyDateUTC());
+  return 'paydirt-ghost:' + mode + ':' + levelIndex;
+}
+function resetGhostTrail(){
+  ghostTrail = [];
+  ghostSampleT = 0;
+  ghostReplay = null;
+  try {
+    const saved = JSON.parse(localStorage.getItem(ghostStorageKey()) || 'null');
+    if (saved && Array.isArray(saved.points) && saved.points.length >= 3) ghostReplay = saved;
+  } catch (e) {
+    ghostReplay = null;
+  }
+}
+function recordGhostSample(dt){
+  if (!player || player.state === 'dead' || state !== 'playing') return;
+  ghostSampleT -= dt;
+  if (ghostSampleT > 0) return;
+  ghostSampleT = 0.16;
+  ghostTrail.push({
+    t: Math.round(levelTime * 100) / 100,
+    x: Math.round(player.x * 100) / 100,
+    y: Math.round(player.y * 100) / 100,
+    dir: player.dir < 0 ? -1 : 1,
+    state: player.state,
+  });
+  if (ghostTrail.length > 720) ghostTrail.shift();
+}
+function saveGhostReplay(){
+  if (ghostTrail.length < 3 || levelTime < 0.5) return false;
+  const keyName = ghostStorageKey();
+  let old = null;
+  try { old = JSON.parse(localStorage.getItem(keyName) || 'null'); } catch (e) {}
+  if (old && old.time <= levelTime && Array.isArray(old.points) && old.points.length) return false;
+  const saved = {time: Math.round(levelTime * 100) / 100, score, points: ghostTrail.slice(-720)};
+  try {
+    localStorage.setItem(keyName, JSON.stringify(saved));
+    ghostReplay = saved;
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+function ghostPointAt(t){
+  if (!ghostReplay || !ghostReplay.points || !ghostReplay.points.length) return null;
+  const pts = ghostReplay.points;
+  if (t <= pts[0].t) return pts[0];
+  for (let i = 1; i < pts.length; i++){
+    if (pts[i].t >= t){
+      const a = pts[i - 1], b = pts[i];
+      const p = clamp((t - a.t) / Math.max(0.01, b.t - a.t), 0, 1);
+      return {x: a.x + (b.x - a.x) * p, y: a.y + (b.y - a.y) * p, dir: b.dir, state: b.state || a.state};
+    }
+  }
+  return pts[pts.length - 1];
+}
+function drawGhostReplay(){
+  if (state !== 'playing' || !ghostReplay) return;
+  const p = ghostPointAt(levelTime);
+  if (!p || !player) return;
+  if (Math.hypot(player.x - p.x, player.y - p.y) < .22 && levelTime < 1.2) return;
+  ctx.save();
+  ctx.globalAlpha = .28;
+  glow(p.x, p.y - .12, 42, 'rgba(88,216,255,.32)', .8);
+  drawActor({
+    kind: 'player',
+    x: p.x,
+    y: p.y,
+    dir: p.dir || 1,
+    state: p.state || 'run',
+    anim: gameTime,
+    moved: true,
+    squashT: 0,
+  });
+  ctx.restore();
+}
+
 let campaignDone = [];
 try { campaignDone = JSON.parse(localStorage.getItem('paydirt-done') || '[]'); } catch (e) {}
 let runUpgrades = {boots: 0, pick: 0, satchel: 0};
@@ -1956,6 +2035,7 @@ function markLevelDone(i){
 function levelComplete(){
   const bonus = 1000 + Math.max(0, 600 - (levelTime | 0) * 10);
   addScore(bonus);
+  saveGhostReplay();
   if (player) popup(player.x, player.y - 1, '+' + bonus + ' CLEAR', '#3fd2c7');
   if (mode === 'special'){
     const levels = LEVELS.special.levels || [LEVELS.special];
@@ -2660,6 +2740,7 @@ function loadLevelData(rows){
   }
   applyRunUpgradesToPlayer();
   levelTime = 0;
+  resetGhostTrail();
   particles = []; popups = [];
   shake = 0; hitStop = 0; flash = 0; deathFlash = 0;
   digBuffer = 0; runDustT = 0; prevDash = false;
@@ -2852,6 +2933,7 @@ function update(dt){
   }
 
   const inp = playerInput();
+  recordGhostSample(dt);
   if (isSpecialMode() && inp.dash && !prevDash) startDrillDash(inp);
   prevDash = !!inp.dash;
   // Dig attempts every tick the button is held (classic): tap = one dig, hold = repeats
@@ -4566,6 +4648,7 @@ function renderWorldFrame(includeHUD){
     drawSpecialRockWarnings();
 
     // entities — guards behind player
+    drawGhostReplay();
     for (const gu of guards) if (gu.state !== 'dead' || gu.deadT < 1) drawActor(gu);
     if (player) drawActor(player);
     drawSpecialRocks();
@@ -5890,6 +5973,7 @@ window.__g = {
   get discoveries(){ return {count: discoveryCount, total: discoveryTotal, oilLightT}; },
   get upgrades(){ return copyUpgrades(runUpgrades); },
   get pendingUpgrade(){ return pendingUpgrade ? {...pendingUpgrade} : null; },
+  get ghost(){ return {recorded: ghostTrail.length, replay: ghostReplay ? {time: ghostReplay.time, score: ghostReplay.score, points: ghostReplay.points.length} : null}; },
   get goldLeft(){ return goldLeft; },
   get holes(){ return [...holes.values()]; },
   get exitRevealed(){ return exitRevealed; },
@@ -5903,6 +5987,7 @@ window.__g = {
   loadSpecial(i){ mode = 'special'; loadSpecialLevel(i); state = 'playing'; hideOverlays(); return grid.length === ROWS; },
   completeLevel(){ levelComplete(); return state; },
   chooseUpgrade(id){ return chooseUpgrade(id); },
+  saveGhost(){ return saveGhostReplay(); },
   dig(dir){ return tryDig(dir < 0 ? -1 : 1); },
   kill(){ killPlayer('debug'); },
   give(kind){ applyPowerup(kind); },
