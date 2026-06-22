@@ -49,14 +49,17 @@ canvas#game{position:absolute; image-rendering:auto; background:#000;}
 .panel::before{ top:7px; left:7px; border-right:0; border-bottom:0; }
 .panel::after{ bottom:7px; right:7px; border-left:0; border-top:0; }
 #titlePanel{
+  display:flex; flex-direction:column; align-items:center;
+  gap:7px;
   padding:14px 22px 18px;
   max-width:min(92vw,540px);
 }
 .titleHero{
   height:clamp(112px,22vh,178px);
   display:flex; align-items:flex-end; justify-content:center;
-  margin:-6px 0 4px;
+  margin:-6px 0 2px;
   overflow:visible;
+  flex:none;
 }
 .titleMiner{
   width:clamp(92px,17vh,142px);
@@ -113,10 +116,27 @@ button.small{min-width:0; padding:8px 16px; font-size:13px; min-height:44px;}
 #titlePanel .row{gap:8px;}
 #titlePanel button{min-width:148px; min-height:40px; padding:8px 16px; font-size:13px;}
 #titlePanel button.small{min-width:0; min-height:38px; padding:7px 12px; font-size:12px;}
-#titlePanel .tag{font-size:12px; letter-spacing:.8px;}
-#titlePanel .titleVersion{margin-top:5px;}
-#titlePanel .volumes{margin-top:0;}
-#titlePanel .board{font-size:12px; line-height:1.5; max-height:96px; overflow:hidden;}
+#titlePanel .tag{font-size:12px; letter-spacing:.8px; margin-top:-3px;}
+#titlePanel .titleVersion{margin:0 0 3px;}
+#titlePanel .titlePrimary{margin-top:3px;}
+#titlePanel .titleSecondary{margin-top:1px;}
+#titlePanel .volumes{
+  margin:5px 0 4px;
+  gap:16px;
+  align-items:center;
+}
+#titlePanel .volumes label{
+  min-width:152px;
+  justify-content:space-between;
+}
+#titlePanel .volumes input{width:88px;}
+#titlePanel .board{
+  font-size:12px; line-height:1.45;
+  max-height:92px; overflow:hidden;
+  min-width:300px;
+  margin-top:4px; padding-top:8px;
+  border-top:1px solid rgba(255,216,107,.18);
+}
 .row{display:flex; gap:10px; flex-wrap:wrap; justify-content:center;}
 .tiny{font-size:12px; color:var(--dim); letter-spacing:.5px;}
 .board{font:600 14px/1.7 Consolas, monospace; min-width:260px; text-align:left; white-space:pre;}
@@ -164,7 +184,13 @@ body.touch.playing #touch{display:none;}
 }
 .volumes input{width:112px; accent-color:var(--gold);}
 @media (max-height:620px){ #titlePanel .board{display:none;} }
-@media (max-height:520px){ .panel{padding:12px 18px;} h1.logo{font-size:30px;} button{min-height:42px; padding:8px 18px;} #titlePanel{padding:10px 18px 12px;} .titleHero{height:104px;} .titleMiner{width:96px;} }
+@media (max-width:480px){
+  #titlePanel{gap:6px;}
+  #titlePanel .volumes{gap:8px; margin:4px 0 2px;}
+  #titlePanel .volumes label{min-width:132px;}
+  #titlePanel .volumes input{width:74px;}
+}
+@media (max-height:520px){ .panel{padding:12px 18px;} h1.logo{font-size:30px;} button{min-height:42px; padding:8px 18px;} #titlePanel{gap:5px; padding:10px 18px 12px;} .titleHero{height:104px;} .titleMiner{width:96px;} #titlePanel .volumes{margin:4px 0 2px;} }
 /* compact touch controls on short viewports so they don't crowd the play area */
 @media (max-height:560px){
   #tLeft {left:calc(14px + env(safe-area-inset-left));  bottom:calc(48px + env(safe-area-inset-bottom)); width:54px; height:54px;}
@@ -180,7 +206,7 @@ body.touch.playing #touch{display:none;}
 <body>
 <div id="wrap">
   <canvas id="game"></canvas>
-  <div class="version">v3.20 Boom Rush</div>
+  <div class="version">v3.21 Boom Rush</div>
 
   <div class="overlay show" id="ovTitle">
     <div class="panel" id="titlePanel">
@@ -189,14 +215,13 @@ body.touch.playing #touch{display:none;}
       </div>
       <h1 class="logo">Pay Dirt</h1>
       <div class="tag">painted caverns · hidden relics · claim-jumpers in the dark</div>
-      <div class="titleVersion">v3.20 Boom Rush</div>
-      <div style="height:12px"></div>
-      <div class="row">
+      <div class="titleVersion">v3.21 Boom Rush</div>
+      <div class="row titlePrimary">
         <button id="bPlay">⛏ Prospect</button>
         <button id="bSpecial">💥 Boom Rush ×20</button>
         <button id="bDaily" class="ghost">📅 Daily Dig</button>
       </div>
-      <div class="row">
+      <div class="row titleSecondary">
         <button id="bLevels" class="ghost small">Level Select</button>
         <button id="bHow" class="ghost small">How To Play</button>
         <button id="bScores" class="ghost small">The Ledger</button>
@@ -206,7 +231,6 @@ body.touch.playing #touch{display:none;}
         <label>Music <input id="musicVol" type="range" min="0" max="100" value="58"></label>
         <label>SFX <input id="sfxVol" type="range" min="0" max="100" value="88"></label>
       </div>
-      <div style="height:8px"></div>
       <div class="board" id="titleBoard"></div>
     </div>
   </div>
@@ -298,9 +322,9 @@ body.touch.playing #touch{display:none;}
     <div class="tbtn" id="tDigR">▶⛏</div>
   </div>
 </div>
-<script src="art.js?v=320"></script>
-<script src="audio.js?v=320"></script>
-<script src="levels.js?v=320"></script>
-<script src="game.js?v=320"></script>
+<script src="art.js?v=321"></script>
+<script src="audio.js?v=321"></script>
+<script src="levels.js?v=321"></script>
+<script src="game.js?v=321"></script>
 </body>
 </html>
