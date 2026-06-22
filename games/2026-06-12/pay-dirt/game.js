@@ -1030,12 +1030,13 @@ function updateHoles(dt){
 
 /* ================= guard AI ================= */
 const GUARD_SPEED_SCALE = 0.8;
-const GUARD_SPEED = { guard: 0.68 * GUARD_SPEED_SCALE, scout: 0.901 * GUARD_SPEED_SCALE, mason: 0.527 * GUARD_SPEED_SCALE };
+const GUARD_SPEED = { guard: 0.68 * GUARD_SPEED_SCALE, scout: 0.901 * GUARD_SPEED_SCALE, mason: 0.527 * GUARD_SPEED_SCALE, boss: 0.74 * GUARD_SPEED_SCALE };
 const STUN_TIME = 3.2, GUARD_RESPAWN_T = 1.4;
 const GUARD_META = {
   guard: {color: '#ff405a', glow: 'rgba(255,64,90,.24)', icon: '!', label: 'JUMPER'},
   scout: {color: '#ff9d2e', glow: 'rgba(255,157,46,.25)', icon: '»', label: 'SCOUT'},
   mason: {color: '#b07fff', glow: 'rgba(176,127,255,.25)', icon: '◆', label: 'MASON'},
+  boss: {color: '#ffcf5a', glow: 'rgba(255,207,90,.36)', icon: '♛', label: 'BARON'},
 };
 const DEATH_TEXT = {
   caught: 'CAUGHT',
@@ -1048,6 +1049,11 @@ const DEATH_TEXT = {
 };
 function guardMeta(g){ return GUARD_META[g.kind] || GUARD_META.guard; }
 function deathText(reason){ return DEATH_TEXT[reason] || 'CLAIM LOST'; }
+function bossTarget(g){
+  if (g && g.kind === 'boss' && special && special.cartReady && exitRevealed)
+    return special.cart;
+  return player;
+}
 function guardSpotted(g, dist){
   if (g.alertCool > 0 || g.state === 'dead' || g.state === 'stun') return;
   g.alertT = 0.9;
@@ -1124,6 +1130,48 @@ function guardPathStep(gc, gr, pc, pr){
   return {c: n % COLS, r: (n / COLS) | 0};
 }
 
+function bossDropTnt(g, target){
+  if (!g || g.kind !== 'boss' || !target || !special || special.escapeT > 0) return false;
+  const dist = Math.hypot(target.x - g.x, target.y - g.y);
+  if (dist < 2.2 || dist > 8.8) return false;
+  const c = clamp(Math.floor((target.x * 0.68 + g.x * 0.32) + (rnd() - .5) * 1.6), 1, COLS - 2) | 0;
+  const r = clamp(Math.floor(target.y) + 1, 1, ROWS - 2) | 0;
+  if (fuses.some(f => f.c === c && f.r === r)) return false;
+  fuses.push({c, r, t: 1.12, boss: true});
+  popup(g.x, g.y - .75, 'TNT!', '#ffcf5a');
+  spawnParticles(g.x, g.y - .2, 14, {color: ['#ffcf5a', '#ff7148', '#fff3b0'], spd: 4.2, life: .55, size: 3.2, grav: 9, glow: true});
+  AUDIO.sfx('warn');
+  return true;
+}
+
+function bossDig(g){
+  if (!g || g.kind !== 'boss' || !special || special.escapeT > 0) return false;
+  const dir = g.dir || 1;
+  const c = Math.floor(g.x + dir * .78);
+  const r = Math.floor(g.y);
+  const broke = breakSpecialCell(c, r + 1, false) || breakSpecialCell(c, r, false);
+  if (!broke) return false;
+  popup(g.x, g.y - .62, 'CLAIM CUT', '#ffcf5a');
+  spawnParticles(c + .5, r + .55, 16, {color: ['#ffcf5a', '#a06e42', '#4b2b18'], spd: 4.6, life: .62, size: 3.6, grav: 18, glow: true});
+  shake = Math.max(shake, .16);
+  AUDIO.sfx('chip');
+  return true;
+}
+
+function updateBossTactics(g, target, dt){
+  if (!g || g.kind !== 'boss' || g.state === 'dead' || g.state === 'stun' || g.state === 'climbout') return;
+  if (!special || !special.final) return;
+  g.bossTntT = Math.max(0, (g.bossTntT == null ? 2.4 : g.bossTntT) - dt);
+  g.bossDigT = Math.max(0, (g.bossDigT == null ? 1.0 : g.bossDigT) - dt);
+  if (g.bossDigT <= 0){
+    g.bossDigT = 2.15 + rnd() * 1.2;
+    bossDig(g);
+  }
+  if (g.bossTntT <= 0){
+    g.bossTntT = bossDropTnt(g, target) ? 4.3 + rnd() * 1.2 : .7;
+  }
+}
+
 function updateGuard(g, dt){
   if (g.alertT > 0) g.alertT = Math.max(0, g.alertT - dt);
   if (g.alertCool > 0) g.alertCool = Math.max(0, g.alertCool - dt);
@@ -1165,11 +1213,13 @@ function updateGuard(g, dt){
   }
 
   // re-plan
+  const target = bossTarget(g);
+  updateBossTactics(g, target, dt);
   g.repath -= dt;
-  if (g.repath <= 0 && player && player.state !== 'dead'){
+  if (g.repath <= 0 && target && (!player || player.state !== 'dead')){
     g.repath = 0.35 + rnd() * 0.15;
-    const wp = guardPathStep(c, r, Math.floor(player.x), Math.floor(player.y));
-    const dist = Math.hypot(player.x - g.x, player.y - g.y);
+    const wp = guardPathStep(c, r, Math.floor(target.x), Math.floor(target.y));
+    const dist = Math.hypot(target.x - g.x, target.y - g.y);
     if (wp && dist < (g.kind === 'scout' ? 8.5 : 6.8)) guardSpotted(g, dist);
     g.wp = wp;
   }
@@ -1185,14 +1235,14 @@ function updateGuard(g, dt){
       if (Math.abs(g.x - (wp.c + .5)) > 0.08) (g.x < wp.c + .5) ? inp.right = true : inp.left = true;
       else g.repath = 0;
     }
-  } else if (player){
+  } else if (target){
     // no path: pace toward the player's column
-    if (Math.floor(player.x) < c) inp.left = true;
-    else if (Math.floor(player.x) > c) inp.right = true;
+    if (Math.floor(target.x) < c) inp.left = true;
+    else if (Math.floor(target.x) > c) inp.right = true;
   }
 
   const wasFalling = g.state === 'fall';
-  moveActor(g, dt, inp, GUARD_SPEED[g.kind] * (g.jitter || 1));
+  moveActor(g, dt, inp, (GUARD_SPEED[g.kind] || GUARD_SPEED.guard) * (g.jitter || 1));
 
   // landed inside an open hole?
   const nc = Math.floor(g.x), nr = Math.floor(g.y);
@@ -1525,6 +1575,7 @@ function drawDeathCue(){
 
 function boomHazardLabel(cfg, levelNumber){
   const hazards = [];
+  if (cfg.boss) hazards.push('BOSS JUMPER');
   if (cfg.worm) hazards.push('DRILL WORM');
   if (cfg.crushers && cfg.crushers.length) hazards.push('CRUSHERS');
   if (cfg.lava && cfg.lava.length) hazards.push('LAVA');
@@ -2420,6 +2471,13 @@ function loadLevelData(rows){
   seedTreasures();
   player = makeActor(spawnPoint.c, spawnPoint.r, 'player');
   guards = guardSpawns.map(g => makeActor(g.c, g.r, g.kind));
+  if (isSpecialMode() && specialCfg.boss){
+    const boss = makeActor(specialCfg.boss.c, specialCfg.boss.r, 'boss');
+    boss.name = specialCfg.boss.name || 'BARON BRIM';
+    boss.bossTntT = 2.1;
+    boss.bossDigT = 1.2;
+    guards.push(boss);
+  }
   if (isSpecialMode()){
     player.tnt = specialCfg.tnt == null ? 4 : specialCfg.tnt;
     player.speedT = specialCfg.speed == null ? 6 : specialCfg.speed;
@@ -3111,6 +3169,7 @@ const enemyAnimSheet = new Image();
 let enemyAnimSheetReady = false;
 enemyAnimSheet.onload = () => { enemyAnimSheetReady = true; if (booted) render(); };
 enemyAnimSheet.src = ENEMY_ANIM_SHEET.src;
+function enemyVisualKind(kind){ return kind === 'boss' ? 'guard' : kind; }
 function minerFrameIndex(a, pose, fi){
   if (pose === 'dig') return a.dir < 0 ? MINER_SHEET.cells.digLeft : MINER_SHEET.cells.digRight;
   if (a.gold) return MINER_SHEET.cells.carry;
@@ -3426,6 +3485,24 @@ function drawGuardAccents(a, cx2, footY, h, w){
     ctx.fillStyle = '#d8c08a';
     ctx.fillRect(cx2 + 12, footY - h * .44, 9, 4);
     ctx.fillRect(cx2 + 18, footY - h * .44, 4, 15);
+  } else if (a.kind === 'boss'){
+    ctx.strokeStyle = '#2b1710';
+    ctx.lineWidth = 5;
+    ctx.beginPath();
+    ctx.moveTo(cx2 - 18, footY - h * .8);
+    ctx.lineTo(cx2 + 18, footY - h * .8);
+    ctx.stroke();
+    ctx.strokeStyle = meta.color;
+    ctx.lineWidth = 3;
+    ctx.stroke();
+    ctx.fillStyle = meta.color;
+    ctx.beginPath();
+    ctx.moveTo(cx2, footY - h * .95);
+    ctx.lineTo(cx2 - 10, footY - h * .78);
+    ctx.lineTo(cx2, footY - h * .85);
+    ctx.lineTo(cx2 + 10, footY - h * .78);
+    ctx.closePath();
+    ctx.fill();
   } else {
     ctx.strokeStyle = '#ff8fa0';
     ctx.lineWidth = 3;
@@ -3444,11 +3521,11 @@ function drawGuardAccents(a, cx2, footY, h, w){
   ctx.restore();
 }
 function generatedEnemyImage(kind){
-  const img = enemySprites[kind];
+  const img = enemySprites[enemyVisualKind(kind)];
   return img && img.ready && img.naturalWidth && img.naturalHeight ? img : null;
 }
 function generatedEnemyFrame(a, pose, fi){
-  const row = ENEMY_ANIM_SHEET.row[a.kind];
+  const row = ENEMY_ANIM_SHEET.row[enemyVisualKind(a.kind)];
   if (enemyAnimSheetReady && Number.isFinite(row)){
     const col = pose === 'run'
       ? fi % 4
@@ -3471,6 +3548,7 @@ function generatedEnemyFrame(a, pose, fi){
 }
 function generatedEnemyHeight(a, pose){
   if (pose === 'bar') return a.kind === 'mason' ? 64 : 60;
+  if (a.kind === 'boss') return 86;
   if (a.kind === 'scout') return 66;
   if (a.kind === 'mason') return 74;
   return 70;
@@ -3624,6 +3702,22 @@ function drawActor(a){
       ctx.moveTo(cx2 - 9, ay - 7); ctx.lineTo(cx2 - 15, ay - 13);
       ctx.moveTo(cx2 + 9, ay - 7); ctx.lineTo(cx2 + 15, ay - 13);
       ctx.stroke();
+      ctx.restore();
+    }
+    if (a.kind === 'boss'){
+      ctx.save();
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.fillStyle = 'rgba(8,5,14,.82)';
+      roundRect(cx2 - 39, footY - h - 22, 78, 15, 5);
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(255,207,90,.62)';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+      ctx.fillStyle = '#ffcf5a';
+      ctx.font = '900 9px system-ui, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(a.name || 'BARON BRIM', cx2, footY - h - 14);
       ctx.restore();
     }
   }
@@ -5595,6 +5689,7 @@ window.__g = {
   get mode(){ return mode; },
   get player(){ return player; },
   get guards(){ return guards; },
+  get boss(){ const b = guards.find(g => g.kind === 'boss'); return b ? {x: b.x, y: b.y, state: b.state, name: b.name, tnt: b.bossTntT, dig: b.bossDigT, gold: !!b.gold} : null; },
   get golds(){ return golds; },
   get treasures(){ return treasures; },
   get discoveries(){ return {count: discoveryCount, total: discoveryTotal, oilLightT}; },

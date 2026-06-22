@@ -290,7 +290,7 @@ const LEVELS = (() => {
         : d <= 8 ? 'TNT veins and bars start bending the route.'
         : d <= 13 ? 'Steam, belts, and heavier claim-jumpers pressure the haul.'
         : d <= 18 ? 'The mine is unstable: lava, crushers, masons, and cave-in timing matter.'
-        : 'Final claim: grab the haul and survive the full ride-out.',
+        : 'Final claim: Baron Brim wants the cart. Grab the haul and survive the full ride-out.',
       config: boomRushConfig(i),
     };
   }
@@ -313,6 +313,7 @@ const LEVELS = (() => {
       lava: d >= 10 ? [{c0: 10, c1: 11 + (i % 2), r: 12}] : [],
       crushers: d >= 12 ? [{c: 13 + (i % 4), r: 5, t: (i % 3) * .4}] : [],
       worm: d >= 15 ? {t: 0, active: false, warnT: 0, x: -2, y: 10.5, dir: 1, cooldown: final ? 4.5 : 7.5} : null,
+      boss: final ? {c: 24, r: 3, name: 'BARON BRIM'} : null,
     };
   }
 
