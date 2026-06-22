@@ -126,3 +126,6 @@ Sim is fixed-timestep (60Hz accumulator); `__g.step(n)` drives ticks headlessly.
 - 2026-06-22: Best-run ghost shadows record player positions during play, save the fastest
   cleared route per campaign/daily/Boom Rush level in localStorage, and replay as a translucent
   miner on later attempts. Debug hooks expose `window.__g.ghost` and `saveGhost()`.
+- 2026-06-22: End-game presentation now creates a canvas cinematic behind the results panel:
+  win scenes get golden cart/spotlight/spark effects with mode-specific copy, losses get a
+  darker mine-fade treatment. Debug hook `window.__g.ending` exposes the active ending scene.
