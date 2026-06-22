@@ -515,7 +515,7 @@
 <div class="overlay" id="overlay">
   <div class="panel">
 	    <h1 id="overlayTitle">NEON<br>VECTOR<br>ARENA</h1>
-	    <div class="title-version" id="titleVersion">v4.15</div>
+	    <div class="title-version" id="titleVersion">v4.16</div>
 	    <p class="sub" id="overlaySub">Solo survival in endless vector space. Move smart, chain combos, and shatter oversized geometry before it reaches you.</p>
     <div class="menu-actions" id="mainActions">
       <button id="start">Solo Run</button>
@@ -567,7 +567,7 @@
     <p class="fine" id="overlayFine">Dual Stick: left side flies, right side aims and fires. Desktop: WASD plus hold mouse to aim.</p>
   </div>
 </div>
-<div class="version">v4.15</div>
+<div class="version">v4.16</div>
 
 <script>
 'use strict';
@@ -697,6 +697,7 @@ const START_INV_SECONDS = .85;
 const HIT_INV_SECONDS = .72;
 const REVIVE_INV_SECONDS = 1.55;
 const MAX_FIRE_UPGRADES = 3;
+const DAMAGE_TAKEN_MULT = 1.16;
 const TAU = Math.PI * 2;
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 const rand = (a, b) => a + Math.random() * (b - a);
@@ -3086,7 +3087,8 @@ function update(dt) {
       if (ship.hp <= 0 || ship.inv > 0) continue;
       if (dist2(e.x, e.y, ship.x, ship.y) < (e.r + ship.r) ** 2) {
         const sizeHit = e.sizeTier === 'giant' ? 5 : e.sizeTier === 'large' ? 3 : e.sizeTier === 'tiny' ? -2 : 0;
-        ship.hp -= (e.type === 'splitter' ? 24 : e.type === 'splinter' ? 7 : 12) + sizeHit + (e.elite ? 5 : 0) + (trait?.damage || 0);
+        const hitDamage = (e.type === 'splitter' ? 24 : e.type === 'splinter' ? 7 : 12) + sizeHit + (e.elite ? 5 : 0) + (trait?.damage || 0);
+        ship.hp -= Math.ceil(hitDamage * DAMAGE_TAKEN_MULT);
         ship.inv = HIT_INV_SECONDS;
         ship.hitFlash = .48;
         ship.vx -= nx * 150;
