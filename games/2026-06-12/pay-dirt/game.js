@@ -4353,6 +4353,98 @@ function render(){
   else renderWorldFrame(true);
 }
 
+/* ================= QA Mine (debug-only polish loop checks) ================= */
+function canvasHealth(){
+  render();
+  const w = canvas.width | 0, h = canvas.height | 0;
+  if (!w || !h) return {ok: false, why: 'canvas has zero size', w, h, nonzero: 0, samples: 0};
+  let data;
+  try { data = mainCtx.getImageData(0, 0, w, h).data; }
+  catch (e) { return {ok: false, why: 'canvas read failed: ' + e.message, w, h, nonzero: 0, samples: 0}; }
+  let nonzero = 0, samples = 0;
+  const stride = Math.max(4, Math.floor(data.length / 24000) & ~3);
+  for (let i = 0; i < data.length; i += stride){
+    samples++;
+    if (data[i] || data[i + 1] || data[i + 2] || data[i + 3]) nonzero++;
+  }
+  const ratio = samples ? nonzero / samples : 0;
+  return {ok: ratio > 0.05, why: ratio > 0.05 ? '' : 'canvas appears blank', w, h, nonzero, samples, ratio};
+}
+
+function qaMine(options){
+  const opts = options || {};
+  const startT = (typeof performance !== 'undefined' ? performance.now() : Date.now());
+  const result = {
+    ok: true,
+    version: document.querySelector('.version')?.textContent || '',
+    dailyDates: opts.dailyDates || [LEVELS.dailyDateUTC()],
+    totals: {passed: 0, failed: 0},
+    cases: [],
+  };
+  const mark = (group, name, details) => {
+    const d = details || {};
+    const ok = d.ok !== false;
+    result.cases.push({group, name, ok, ...d});
+    result.totals[ok ? 'passed' : 'failed']++;
+    if (!ok) result.ok = false;
+  };
+  const runCase = (group, name, setup, solver) => {
+    try {
+      setup();
+      state = 'playing';
+      hideOverlays();
+      clearSoftlock();
+      if (!grid.length || !player) throw new Error('level did not load');
+      stepWorldForQa();
+      const solved = solver ? solver() : {ok: true};
+      const renderCheck = canvasHealth();
+      const wayOut = currentNoWayOutReason();
+      const details = {
+        ok: !!solved.ok && renderCheck.ok && !wayOut,
+        solver: solved,
+        render: renderCheck,
+        noWayOut: wayOut,
+        mode,
+        levelIndex,
+        golds: golds.length,
+        goldLeft,
+        powerups: powerups.length,
+        discoveries: discoveryTotal,
+      };
+      if (isSpecialMode()) details.cart = special && special.cart ? {c: special.cart.c, r: special.cart.r, ready: !!special.cartReady} : null;
+      mark(group, name, details);
+    } catch (e) {
+      mark(group, name, {ok: false, error: e && e.stack ? e.stack : String(e)});
+    }
+  };
+  const campaignCount = LEVELS.campaign.length;
+  for (let i = 0; i < campaignCount; i++){
+    runCase('campaign', 'Claim ' + (i + 1), () => { mode = 'campaign'; loadCampaignLevel(i); }, () => LEVELS.solvable(LEVELS.campaign[i]));
+  }
+  for (const date of result.dailyDates){
+    runCase('daily', date, () => {
+      const d = LEVELS.generateDaily(date);
+      mode = 'daily'; dailyDate = d.date; levelIndex = 0; loadLevelData(d.rows);
+    }, () => LEVELS.solvable(currentRows));
+  }
+  const specialLevels = LEVELS.special.levels || [{rows: LEVELS.special.rows, config: LEVELS.special.config || {}}];
+  for (let i = 0; i < specialLevels.length; i++){
+    runCase('boom', 'Boom Rush ' + (i + 1), () => { mode = 'special'; dailyDate = null; loadSpecialLevel(i); }, () => LEVELS.specialSolvable(specialLevels[i]));
+  }
+  state = 'title';
+  showOnly('ovTitle');
+  refreshTitleBoard();
+  result.elapsedMs = Math.round(((typeof performance !== 'undefined' ? performance.now() : Date.now()) - startT) * 10) / 10;
+  return result;
+}
+
+function stepWorldForQa(){
+  for (let i = 0; i < 8; i++){
+    if (state === 'playing') update(TICK);
+  }
+  render();
+}
+
 function drawPit(c, r, dark, h){
   const x = c * TILE, y = r * TILE + HUD_H;
   const warn = h ? Math.max(0, (h.t - (HOLE_LIFE - HOLE_WARN)) / HOLE_WARN) : 0;
@@ -5109,6 +5201,7 @@ window.__g = {
   },
   solvable(rows){ return LEVELS.solvable(rows || currentRows); },
   specialSolvable(i){ const levels = LEVELS.special.levels || [LEVELS.special]; return LEVELS.specialSolvable(levels[i == null ? levelIndex : i]); },
+  qaMine,
   startAt: startCampaignAt,
   startSpecial(){ startGame('special'); return {mode, state, golds: golds.length, special: !!special}; },
   scores: () => Scores,
