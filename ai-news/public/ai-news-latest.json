@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-22T07:00:01.194603+00:00",
+  "updatedAt": "2026-06-22T08:00:01.491811+00:00",
   "items": [
     {
       "title": "LLM research updates, large language model evaluation news, leaderboards, and AI model insights",
@@ -10,12 +10,44 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-22T07:00:21.451749+00:00",
+      "published": "2026-06-22T08:00:14.938817+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-22T07:00:01.194603+00:00",
+      "lastSeen": "2026-06-22T08:00:01.491811+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 5.11
+    },
+    {
+      "title": "WeChat begins testing Xiaowei as Tencent eyes a Q3 AI rollout",
+      "url": "https://thenextweb.com/news/tencent-tests-wechat-ai-assistant-xiaowei",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "WeChat is the rare app that already does almost everything. Chinese users message, pay, book, shop, and summon a taxi without ever leaving it, which is exactly what makes Tencent’s next move interesting: rather than build a separate chatbot and fight for downloads, it is putting an AI assistant on top of the app a [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/tencent-clawpro-openclaw-enterprise-ai-agents.avif",
+      "published": "2026-06-22T07:30:20+00:00",
+      "firstSeen": "2026-06-22T08:00:01.491811+00:00",
+      "lastSeen": "2026-06-22T08:00:01.491811+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.335
+    },
+    {
+      "title": "SK Hynix overtakes Samsung as Korea’s most valuable company",
+      "url": "https://thenextweb.com/news/sk-hynix-overtakes-samsung-as-koreas-most-valuable-company",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "For a quarter of a century, the most valuable company in South Korea was Samsung Electronics, and the question was never really open. On Wednesday it became open, and then it closed the other way. SK Hynix, the smaller of the country’s two memory-chip makers, passed Samsung in market capitalisation during intraday trading, taking the [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/SK-Hynix.avif",
+      "published": "2026-06-22T07:21:36+00:00",
+      "firstSeen": "2026-06-22T08:00:01.491811+00:00",
+      "lastSeen": "2026-06-22T08:00:01.491811+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.2306
     },
     {
       "title": "London’s Isometric lands $40M to certify the industrial economy with AI",
@@ -28,10 +60,10 @@
       "image": "https://media.thenextweb.com/2026/06/Isometric.avif",
       "published": "2026-06-22T06:41:37+00:00",
       "firstSeen": "2026-06-22T07:00:01.194603+00:00",
-      "lastSeen": "2026-06-22T07:00:01.194603+00:00",
+      "lastSeen": "2026-06-22T08:00:01.491811+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.5407
+      "score": 3.5108
     },
     {
       "title": "Hotter Than a Hot Tub: The 45°C Breakthrough to Cool AI’s Biggest Machines",
@@ -44,10 +76,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/45CLiquidCooling.jpg",
       "published": "2026-06-22T05:00:22+00:00",
       "firstSeen": "2026-06-22T05:26:35.285589+00:00",
-      "lastSeen": "2026-06-22T07:00:01.194603+00:00",
+      "lastSeen": "2026-06-22T08:00:01.491811+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2307
+      "score": 2.2022
     },
     {
       "title": "sqlite-utils 4.0rc1 adds migrations and nested transactions",
@@ -60,10 +92,10 @@
       "image": "",
       "published": "2026-06-21T23:35:47+00:00",
       "firstSeen": "2026-06-21T23:42:02.044001+00:00",
-      "lastSeen": "2026-06-22T07:00:01.194603+00:00",
+      "lastSeen": "2026-06-22T08:00:01.491811+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -0.3145
+      "score": -0.339
     },
     {
       "title": "sqlite-utils 4.0rc1",
@@ -76,10 +108,10 @@
       "image": "",
       "published": "2026-06-21T23:30:04+00:00",
       "firstSeen": "2026-06-21T23:42:02.044001+00:00",
-      "lastSeen": "2026-06-22T07:00:01.194603+00:00",
+      "lastSeen": "2026-06-22T08:00:01.491811+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7831
+      "score": 2.7587
     },
     {
       "title": "Samsung Electronics brings ChatGPT and Codex to employees",
@@ -92,10 +124,10 @@
       "image": "",
       "published": "2026-06-21T23:00:00+00:00",
       "firstSeen": "2026-06-21T23:42:02.044001+00:00",
-      "lastSeen": "2026-06-22T07:00:01.194603+00:00",
+      "lastSeen": "2026-06-22T08:00:01.491811+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.2808
+      "score": 10.2567
     },
     {
       "title": "Temporary Cloudflare Accounts for AI agents",
@@ -108,11 +140,11 @@
       "image": "https://static.simonwillison.net/static/2026/cloudflare-claim.jpg",
       "published": "2026-06-21T22:01:04+00:00",
       "firstSeen": "2026-06-21T23:00:01.940325+00:00",
-      "lastSeen": "2026-06-22T07:00:01.194603+00:00",
+      "lastSeen": "2026-06-22T08:00:01.491811+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 18.6471
+      "score": 18.6236
     },
     {
       "title": "The American dream is ‘very dead’ for young Americans, says Mrs. Dow Jones",
@@ -125,10 +157,10 @@
       "image": "https://media.thenextweb.com/2026/06/mrs-dow-jones-american-dream-dead-millennials-gen-z-gambling.avif",
       "published": "2026-06-21T19:57:07+00:00",
       "firstSeen": "2026-06-21T21:00:01.865853+00:00",
-      "lastSeen": "2026-06-22T07:00:01.194603+00:00",
+      "lastSeen": "2026-06-22T08:00:01.491811+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8593
+      "score": 1.8371
     },
     {
       "title": "Nearly 60% of TikTok videos shown to new users are AI slop, study finds",
@@ -141,10 +173,10 @@
       "image": "https://media.thenextweb.com/2026/06/tiktok-ai-slop-59-percent-new-users-kapwing-study.avif",
       "published": "2026-06-21T16:12:14+00:00",
       "firstSeen": "2026-06-21T17:49:17.412617+00:00",
-      "lastSeen": "2026-06-22T07:00:01.194603+00:00",
+      "lastSeen": "2026-06-22T08:00:01.491811+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7793
+      "score": 1.7593
     },
     {
       "title": "When the Trump administration cracks down on Anthropic, who benefits?",
@@ -157,10 +189,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/anthropic-claude-fable.jpg?resize=1200%2C798",
       "published": "2026-06-21T15:28:17+00:00",
       "firstSeen": "2026-06-21T16:00:01.167058+00:00",
-      "lastSeen": "2026-06-22T07:00:01.194603+00:00",
+      "lastSeen": "2026-06-22T08:00:01.491811+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9046
+      "score": 4.885
     },
     {
       "title": "Apple’s design studio has lost nearly every Jony Ive-era designer. Incoming CEO John Ternus says he’ll fix it.",
@@ -173,10 +205,10 @@
       "image": "https://media.thenextweb.com/2026/06/apple-design-team-crisis-ternus-ceo-rebuild.avif",
       "published": "2026-06-21T14:47:53+00:00",
       "firstSeen": "2026-06-21T15:00:01.506845+00:00",
-      "lastSeen": "2026-06-22T07:00:01.194603+00:00",
+      "lastSeen": "2026-06-22T08:00:01.491811+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8513
+      "score": 2.8321
     },
     {
       "title": "Beyond Siri: Here are the practical AI features coming to your iPhone in iOS 27",
@@ -189,10 +221,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/01/tim-cook-iphone-GettyImages-2234563479.jpg?w=1024",
       "published": "2026-06-21T14:40:28+00:00",
       "firstSeen": "2026-06-21T15:00:01.506845+00:00",
-      "lastSeen": "2026-06-22T07:00:01.194603+00:00",
+      "lastSeen": "2026-06-22T08:00:01.491811+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9889
+      "score": 2.9698
     },
     {
       "title": "Microsoft’s June update fixed 208 security flaws and introduced a cascade of new bugs across all Windows versions",
@@ -205,10 +237,10 @@
       "image": "https://media.thenextweb.com/2026/06/windows-11-kb5094126-recycle-bin-bug-patch-tuesday.avif",
       "published": "2026-06-21T13:59:33+00:00",
       "firstSeen": "2026-06-21T15:00:01.506845+00:00",
-      "lastSeen": "2026-06-22T07:00:01.194603+00:00",
+      "lastSeen": "2026-06-22T08:00:01.491811+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.4358
+      "score": 2.417
     },
     {
       "title": "Amazon says human-in-the-loop AI oversight is failing because humans stop paying attention",
@@ -221,10 +253,10 @@
       "image": "https://media.thenextweb.com/2026/06/amazon-human-in-the-loop-ai-governance-normalization-deviance.avif",
       "published": "2026-06-21T12:35:10+00:00",
       "firstSeen": "2026-06-21T13:00:02.008329+00:00",
-      "lastSeen": "2026-06-22T07:00:01.194603+00:00",
+      "lastSeen": "2026-06-22T08:00:01.491811+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.4096
+      "score": 3.3915
     },
     {
       "title": "28 Tips to Take Your ChatGPT Prompts to the Next Level",
@@ -237,10 +269,10 @@
       "image": "https://media.wired.com/photos/641df3ef11b9b75446f8f278/master/pass/11-Creative-ChatGPT-Prompts-Gear-GettyImages-1433912783.jpg",
       "published": "2026-06-21T10:30:00+00:00",
       "firstSeen": "2026-06-21T10:41:52.474415+00:00",
-      "lastSeen": "2026-06-22T07:00:01.194603+00:00",
+      "lastSeen": "2026-06-22T08:00:01.491811+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.8124
+      "score": 9.7954
     },
     {
       "title": "New York City has defeated Waymo, and the taxi lobby is the reason",
@@ -253,10 +285,10 @@
       "image": "https://media.thenextweb.com/2026/06/waymo-new-york-city-political-roadblocks-robotaxi.avif",
       "published": "2026-06-21T09:58:14+00:00",
       "firstSeen": "2026-06-21T12:00:01.772795+00:00",
-      "lastSeen": "2026-06-22T07:00:01.194603+00:00",
+      "lastSeen": "2026-06-22T08:00:01.491811+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.6633
+      "score": 1.6465
     },
     {
       "title": "Hackers hijacked Brazil’s emergency alert system and sent ‘misanthropy’ to millions of phones",
@@ -269,10 +301,10 @@
       "image": "https://media.thenextweb.com/2026/06/brazil-civil-defense-alert-hack-misanthropy-cell-broadcast.avif",
       "published": "2026-06-21T09:30:24+00:00",
       "firstSeen": "2026-06-21T10:00:01.874180+00:00",
-      "lastSeen": "2026-06-22T07:00:01.194603+00:00",
+      "lastSeen": "2026-06-22T08:00:01.491811+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.6555
+      "score": 1.6389
     },
     {
       "title": "Signal’s Meredith Whittaker says AI chatbots ‘are not your friends’ and calls Copilot agents a backdoor",
@@ -288,7 +320,7 @@
       "lastSeen": "2026-06-22T07:00:01.194603+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.3514
+      "score": 7.3349
     },
     {
       "title": "v1.90.0-rc.1",
@@ -301,10 +333,10 @@
       "image": "https://opengraph.githubassets.com/4d00699251ffe5b97a3010662ff4e517b90a749bd025f3cf9a0f09315b2a4132/BerriAI/litellm/releases/tag/v1.90.0-rc.1",
       "published": "2026-06-21T01:40:32+00:00",
       "firstSeen": "2026-06-21T02:00:01.288921+00:00",
-      "lastSeen": "2026-06-22T07:00:01.194603+00:00",
+      "lastSeen": "2026-06-22T08:00:01.491811+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3771
+      "score": 2.3638
     },
     {
       "title": "v1.89.3",
@@ -317,10 +349,10 @@
       "image": "https://opengraph.githubassets.com/0985260e7bd54cf57994ffc48619b9dfede75cabd6073dedac0ae936cf341aa7/BerriAI/litellm/releases/tag/v1.89.3",
       "published": "2026-06-20T23:00:10+00:00",
       "firstSeen": "2026-06-21T00:00:01.655174+00:00",
-      "lastSeen": "2026-06-22T07:00:01.194603+00:00",
+      "lastSeen": "2026-06-22T08:00:01.491811+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3423
+      "score": 2.3299
     },
     {
       "title": "v1.88.4",
@@ -333,10 +365,10 @@
       "image": "https://opengraph.githubassets.com/5f23f7293f884192f074e8db6b590582f4b79be99286882498276d5a18b0b63c/BerriAI/litellm/releases/tag/v1.88.4",
       "published": "2026-06-20T22:07:48+00:00",
       "firstSeen": "2026-06-20T22:19:47.099961+00:00",
-      "lastSeen": "2026-06-22T07:00:01.194603+00:00",
+      "lastSeen": "2026-06-22T08:00:01.491811+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3314
+      "score": 2.3193
     },
     {
       "title": "v1.87.4",
@@ -349,10 +381,10 @@
       "image": "https://opengraph.githubassets.com/ac6d1523fb4fcefcb174470c25f197c9f7fd25eb6251ff275006e3f0a16e53d8/BerriAI/litellm/releases/tag/v1.87.4",
       "published": "2026-06-20T22:05:56+00:00",
       "firstSeen": "2026-06-20T22:19:47.099961+00:00",
-      "lastSeen": "2026-06-22T07:00:01.194603+00:00",
+      "lastSeen": "2026-06-22T08:00:01.491811+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.331
+      "score": 2.319
     },
     {
       "title": "Signal’s Meredith Whittaker wants you to remember that AI chatbots ‘are not your friends’",
@@ -365,10 +397,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2024/03/meredith-whittaker-1.jpg?resize=1200%2C800",
       "published": "2026-06-20T20:32:29+00:00",
       "firstSeen": "2026-06-20T20:39:04.013104+00:00",
-      "lastSeen": "2026-06-22T07:00:01.194603+00:00",
+      "lastSeen": "2026-06-22T08:00:01.491811+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.6124
+      "score": 1.6008
     },
     {
       "title": "In the Weights is your new AI-centric vanity search",
@@ -381,10 +413,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2021/10/GettyImages-1278815846.jpg?resize=1200%2C800",
       "published": "2026-06-20T19:41:11+00:00",
       "firstSeen": "2026-06-20T20:00:01.826299+00:00",
-      "lastSeen": "2026-06-22T07:00:01.194603+00:00",
+      "lastSeen": "2026-06-22T08:00:01.491811+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.0025
+      "score": 3.9912
     },
     {
       "title": "The Atlantic created a searchable database of the music used to train AI",
@@ -397,10 +429,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/01/STK467_AI_MUSIC_CVirginia_B.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-20T18:46:48+00:00",
       "firstSeen": "2026-06-20T19:00:01.239874+00:00",
-      "lastSeen": "2026-06-22T07:00:01.194603+00:00",
+      "lastSeen": "2026-06-22T08:00:01.491811+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.3622
+      "score": 4.3512
     },
     {
       "title": "Ubisoft co-founder Claude Guillemot dies at 69 in plane crash near La Baule",
@@ -416,7 +448,7 @@
       "lastSeen": "2026-06-22T07:00:01.194603+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.436
+      "score": 7.4254
     },
     {
       "title": "Hackers are mass-exploiting a Gravity SMTP flaw to steal API keys from 100,000 WordPress sites",
@@ -432,7 +464,7 @@
       "lastSeen": "2026-06-22T06:00:01.819378+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1322
+      "score": 2.1217
     },
     {
       "title": "Nobel laureate John Jumper is leaving DeepMind for rival Anthropic",
@@ -445,10 +477,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2024/10/GettyImages-2148577076-e1728469833661.jpg?resize=1200%2C676",
       "published": "2026-06-20T16:39:57+00:00",
       "firstSeen": "2026-06-20T16:45:38.847242+00:00",
-      "lastSeen": "2026-06-22T07:00:01.194603+00:00",
+      "lastSeen": "2026-06-22T08:00:01.491811+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 9.5693
+      "score": 9.5589
     },
     {
       "title": "Harvard Business Review warns AI ‘workslop’ is rotting companies from the inside",
@@ -464,7 +496,7 @@
       "lastSeen": "2026-06-21T19:59:05.050878+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.4276
+      "score": 1.4172
     },
     {
       "title": "Microsoft finds USB worm that steals cryptocurrency through clipboard hijacking and Tor",
@@ -480,7 +512,7 @@
       "lastSeen": "2026-06-21T16:07:08.291771+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.4245
+      "score": 1.4142
     },
     {
       "title": "AirPods Pro 3 heart rate sensor nearly matches Apple Watch in accuracy test",
@@ -496,7 +528,7 @@
       "lastSeen": "2026-06-21T13:16:57.599177+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -0.577
+      "score": -0.5872
     },
     {
       "title": "Jio Platforms files for India’s largest-ever IPO, with nearly $3 billion earmarked for debt repayment",
@@ -512,7 +544,7 @@
       "lastSeen": "2026-06-21T13:16:57.599177+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.3778
+      "score": 1.3688
     },
     {
       "title": "ShinyHunters published 45GB of Madison Square Garden data, including facial recognition surveillance records",
@@ -528,7 +560,7 @@
       "lastSeen": "2026-06-21T12:00:01.772795+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.3658
+      "score": 1.3571
     },
     {
       "title": "Siri AI Hands On: A Smart, Helpful Assistant",
@@ -541,10 +573,10 @@
       "image": "https://media.wired.com/photos/6a33443c27f7de3a00911dff/master/pass/Gear_TestingSiriAI-v1.jpg",
       "published": "2026-06-20T10:00:00+00:00",
       "firstSeen": "2026-06-20T11:00:01.438959+00:00",
-      "lastSeen": "2026-06-22T07:00:01.194603+00:00",
+      "lastSeen": "2026-06-22T08:00:01.491811+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.6052
+      "score": 2.5965
     },
     {
       "title": "Wharton researchers coined ‘cognitive surrender’ to describe what happens when people let AI think for them",
@@ -560,7 +592,7 @@
       "lastSeen": "2026-06-21T10:41:52.474415+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8616
+      "score": 4.853
     },
     {
       "title": "BYD rejects claims it violated Hungary’s environmental rules at its Szeged EV factory",
@@ -576,7 +608,7 @@
       "lastSeen": "2026-06-21T09:00:01.509816+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.3551
+      "score": 1.3467
     },
     {
       "title": "The developer behind VLC’s 6 billion downloads now wants to connect hundreds of millions of robots",
@@ -592,7 +624,7 @@
       "lastSeen": "2026-06-21T09:00:01.509816+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.0513
+      "score": 6.043
     },
     {
       "title": "Quoting Sean Lynch",
@@ -605,42 +637,10 @@
       "image": "",
       "published": "2026-06-19T22:45:49+00:00",
       "firstSeen": "2026-06-19T23:00:01.951873+00:00",
-      "lastSeen": "2026-06-22T07:00:01.194603+00:00",
+      "lastSeen": "2026-06-22T08:00:01.491811+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.8207
-    },
-    {
-      "title": "From PGP to Mythos: a brief history of export controls that didn’t stop anyone",
-      "url": "https://techcrunch.com/2026/06/19/encryption-spyware-and-now-mythos-history-shows-why-cyber-export-control-doesnt-work",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "For the last 30 years, stopping the flow of cybersecurity-related software has proven to be ineffective. It's unclear why it would work now with Anthropic’s cybersecurity model Mythos.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/06/donald-trump-open-mouth.jpg?resize=1200%2C800",
-      "published": "2026-06-19T22:40:14+00:00",
-      "firstSeen": "2026-06-19T23:00:01.951873+00:00",
-      "lastSeen": "2026-06-22T07:00:01.194603+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 3.4201
-    },
-    {
-      "title": "Trump says he no longer views Anthropic as a national security threat after G7 meeting with CEO",
-      "url": "https://thenextweb.com/news/trump-anthropic-not-national-security-threat-axios-interview",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "President Donald Trump said in a pretaped Axios interview that he no longer views Anthropic as a national security threat, marking a sharp reversal from the administration’s aggressive posture toward the AI company over the past three months. Asked whether he considers Anthropic a threat, Trump replied, “Well, not now. But a week ago, maybe.” [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/trump-anthropic-not-national-security-threat-axios-interview.avif",
-      "published": "2026-06-19T21:42:23+00:00",
-      "firstSeen": "2026-06-19T22:00:01.819553+00:00",
-      "lastSeen": "2026-06-20T16:45:38.847242+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.274
+      "score": 3.8143
     },
     {
       "title": "The Life Scientific: Dean Lomax",
@@ -653,10 +653,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-15T20:00:00+00:00",
       "firstSeen": "2026-06-15T21:00:01.290903+00:00",
-      "lastSeen": "2026-06-22T07:00:01.194603+00:00",
+      "lastSeen": "2026-06-22T08:00:01.491811+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.2048
+      "score": 1.2044
     },
     {
       "title": "The Life Scientific: Helen Hastie",
@@ -669,7 +669,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-08T20:00:00+00:00",
       "firstSeen": "2026-06-08T21:00:01.371488+00:00",
-      "lastSeen": "2026-06-22T07:00:01.194603+00:00",
+      "lastSeen": "2026-06-22T08:00:01.491811+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 1.1901
