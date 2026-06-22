@@ -321,7 +321,7 @@ function spawnSpecialRock(warning){
 function specialCartReady(){ return !!(special && special.cartReady); }
 
 const $ = id => document.getElementById(id);
-const OVERLAYS = ['ovTitle', 'ovHow', 'ovLevels', 'ovScores', 'ovPause', 'ovStuck', 'ovUpgrade', 'ovOver'];
+const OVERLAYS = ['ovTitle', 'ovHow', 'ovStory', 'ovLevels', 'ovScores', 'ovPause', 'ovStuck', 'ovUpgrade', 'ovOver'];
 function showOnly(id){
   for (const o of OVERLAYS) $(o).classList.toggle('show', o === id);
 }
@@ -2987,10 +2987,12 @@ bindButton('bPlay', () => startGame('campaign'));
 bindButton('bSpecial', () => startGame('special'));
 bindButton('bDaily', () => startGame('daily'));
 bindButton('bLevels', () => { state = 'levels'; buildLevelSelect(); showOnly('ovLevels'); });
+bindButton('bStory', () => { state = 'story'; showOnly('ovStory'); });
 bindButton('bHow', () => { state = 'how'; showOnly('ovHow'); });
 bindButton('bScores', () => { state = 'scores'; showOnly('ovScores'); refreshBoardInto('scoreBoard'); });
 bindButton('bMute', toggleMute);
 bindButton('bPauseMute', toggleMute);
+bindButton('bStoryBack', quitToTitle);
 bindButton('bHowBack', quitToTitle);
 bindButton('bLevelsBack', quitToTitle);
 bindButton('bScoresBack', quitToTitle);

@@ -154,6 +154,13 @@ button.small{min-width:0; padding:8px 16px; font-size:13px; min-height:44px;}
   display:inline-block; border:1px solid rgba(255,255,255,.3); border-bottom-width:3px; border-radius:5px;
   padding:0 7px; font:700 12px/20px Consolas,monospace; background:rgba(255,255,255,.07); margin:0 1px;
 }
+.story{ text-align:left; max-width:460px; color:#e5dbc9; font-size:15px; line-height:1.62;}
+.story p{margin:0 0 12px;}
+.story b{color:var(--gold);}
+.story .mapLine{
+  margin:8px 0 14px; padding:9px 12px; border-left:3px solid var(--teal);
+  background:rgba(113,215,204,.08); color:#cffff7; font-weight:800; letter-spacing:.5px;
+}
 #lvlGrid{display:grid; grid-template-columns:repeat(5,1fr); gap:8px; margin:6px 0;}
 #lvlGrid button{min-width:0; width:58px; height:48px; padding:0; font-size:15px;}
 #lvlGrid button.locked{filter:grayscale(1) brightness(.5); cursor:default;}
@@ -219,7 +226,7 @@ body.touch.playing #touch{display:none;}
 <body>
 <div id="wrap">
   <canvas id="game"></canvas>
-  <div class="version">v3.40 Ledger Tabs</div>
+  <div class="version">v3.41 Jerry Story</div>
 
   <div class="overlay show" id="ovTitle">
     <div class="panel" id="titlePanel">
@@ -228,7 +235,7 @@ body.touch.playing #touch{display:none;}
       </div>
       <h1 class="logo">Pay Dirt</h1>
       <div class="tag">painted caverns · hidden relics · claim-jumpers in the dark</div>
-      <div class="titleVersion">v3.40 Ledger Tabs</div>
+      <div class="titleVersion">v3.41 Jerry Story</div>
       <div class="row titlePrimary">
         <button id="bPlay">⛏ Prospect</button>
         <button id="bSpecial">💥 Boom Rush ×20</button>
@@ -236,6 +243,7 @@ body.touch.playing #touch{display:none;}
       </div>
       <div class="row titleSecondary">
         <button id="bLevels" class="ghost small">Level Select</button>
+        <button id="bStory" class="ghost small">Jerry</button>
         <button id="bHow" class="ghost small">How To Play</button>
         <button id="bScores" class="ghost small">The Ledger</button>
         <button id="bMute" class="ghost small">🔊 Sound</button>
@@ -253,6 +261,21 @@ body.touch.playing #touch{display:none;}
       <h2 style="color:var(--gold); letter-spacing:2px;">HOW TO PLAY</h2>
       <div class="howto" id="howBody"></div>
       <button id="bHowBack" class="ghost small">Back</button>
+    </div>
+  </div>
+
+  <div class="overlay" id="ovStory">
+    <div class="panel">
+      <h2 style="color:var(--gold); letter-spacing:2px;">JERRY</h2>
+      <div class="story">
+        <p>Jerry came up as a late hippie in the 1970s: long hair, solder burns, cheap weed, and a van full of scavenged electronics.</p>
+        <p>He could fix radios, alarms, keypads, and busted circuit boards before most people around him even trusted computers.</p>
+        <p>That talent became <b>Cybertech Systems</b>, a small security company that installed alarms and custom gadgets for shops, warehouses, and old industrial sites. But work got thin, bills piled up, and Jerry needed a new way to keep the lights on.</p>
+        <p>While repairing a security panel in an abandoned mine, he found an old claim map marked with sealed tunnels, lost gold, and one warning:</p>
+        <div class="mapLine">There is always a way out.</div>
+        <p>Jerry grabbed his tools, a pickaxe, and the last of his nerve. Now he is underground chasing pay dirt with a hacker's brain and a prospector's grit.</p>
+      </div>
+      <button id="bStoryBack" class="ghost small">Back</button>
     </div>
   </div>
 
@@ -345,9 +368,9 @@ body.touch.playing #touch{display:none;}
     <div class="tbtn" id="tDigR">▶⛏</div>
   </div>
 </div>
-<script src="art.js?v=340"></script>
-<script src="audio.js?v=340"></script>
-<script src="levels.js?v=340"></script>
-<script src="game.js?v=340"></script>
+<script src="art.js?v=341"></script>
+<script src="audio.js?v=341"></script>
+<script src="levels.js?v=341"></script>
+<script src="game.js?v=341"></script>
 </body>
 </html>
