@@ -120,8 +120,8 @@
   .overlay.score-screen .fine {
     display: none;
   }
-  h1 {
-    margin: 0 0 10px;
+	  h1 {
+	    margin: 0 0 10px;
     font-size: clamp(2.2rem, 9vw, 4.5rem);
     line-height: .92;
     letter-spacing: .02em;
@@ -129,8 +129,16 @@
     text-shadow:
       0 0 8px #fff,
       0 0 18px #40f7ff,
-      0 0 36px #ff34cd;
-  }
+	      0 0 36px #ff34cd;
+	  }
+	  .title-version {
+	    margin: -2px 0 14px;
+	    color: rgba(215, 246, 255, .58);
+	    font-size: 10px;
+	    font-weight: 900;
+	    letter-spacing: .18em;
+	    text-transform: uppercase;
+	  }
   .sub {
     margin: 0 auto 20px;
     max-width: 420px;
@@ -456,12 +464,13 @@
 <div class="hud">
   <span id="score">Shield: 100</span>
   <span id="wave">Wave 01</span>
-  <span id="combo">Anonymous 000000 Δx1</span>
+	  <span id="combo">Score 000000 Δx1</span>
 </div>
 <div class="overlay" id="overlay">
   <div class="panel">
-    <h1 id="overlayTitle">NEON<br>VECTOR<br>ARENA</h1>
-    <p class="sub" id="overlaySub">Solo survival in endless vector space. Move smart, chain combos, and shatter oversized geometry before it reaches you.</p>
+	    <h1 id="overlayTitle">NEON<br>VECTOR<br>ARENA</h1>
+	    <div class="title-version" id="titleVersion">v4.9</div>
+	    <p class="sub" id="overlaySub">Solo survival in endless vector space. Move smart, chain combos, and shatter oversized geometry before it reaches you.</p>
     <div class="menu-actions" id="mainActions">
       <button id="start">Solo Run</button>
       <button id="fullscreenBtn" class="secondary" type="button">Full Screen</button>
@@ -507,7 +516,7 @@
     <p class="fine" id="overlayFine">Dual Stick: left side flies, right side aims and fires. Desktop: WASD plus hold mouse to aim.</p>
   </div>
 </div>
-<div class="version">v4.8</div>
+<div class="version">v4.9</div>
 
 <script>
 'use strict';
