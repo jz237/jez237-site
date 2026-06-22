@@ -9,18 +9,6 @@
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://jez237.com/how-ai-works/</loc>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://jez237.com/stock-market/</loc>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://jez237.com/ai-news/</loc>
-    <priority>0.9</priority>
-  </url>
-  <url>
     <loc>https://jez237.com/garden/</loc>
     <priority>0.8</priority>
   </url>
@@ -29,15 +17,11 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://jez237.com/photos/</loc>
-    <priority>0.7</priority>
+    <loc>https://jez237.com/experiments/image-gen-2-benchmark/</loc>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://jez237.com/experiments/image-gen-2-benchmark/mirthcap-story.html</loc>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://jez237.com/experiments/image-gen-2-benchmark/</loc>
     <priority>0.7</priority>
   </url>
   <url>
@@ -49,11 +33,27 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://jez237.com/ai-sounds/</loc>
+    <loc>https://jez237.com/photos/</loc>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://jez237.com/weather/</loc>
+    <loc>https://jez237.com/photos/cats/</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://jez237.com/photos/garden/</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://jez237.com/how-ai-works/</loc>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://jez237.com/ai-news/</loc>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://jez237.com/ai-sounds/</loc>
     <priority>0.6</priority>
   </url>
   <url>
@@ -61,27 +61,183 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://jez237.com/ops/</loc>
-    <priority>0.4</priority>
+    <loc>https://jez237.com/weather/</loc>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://jez237.com/stock-market/</loc>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://jez237.com/experiments/ai-explainer/</loc>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://jez237.com/samples/aquarium/</loc>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://jez237.com/games/2026-06-12/pay-dirt/</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jez237.com/games/2026-06-19/neon-vector-arena/</loc>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://jez237.com/games/2026-06-14/steel-duel/</loc>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://jez237.com/games/2026-06-11/corner-pocket/</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://jez237.com/games/2026-06-11/eight-ball-deluxe/</loc>
+    <priority>0.6</priority>
   </url>
   <url>
     <loc>https://jez237.com/games/2026-06-10/eddy/</loc>
-    <priority>0.7</priority>
+    <priority>0.6</priority>
   </url>
   <url>
     <loc>https://jez237.com/games/2026-06-10/iron-ridge/</loc>
-    <priority>0.7</priority>
+    <priority>0.6</priority>
   </url>
   <url>
     <loc>https://jez237.com/games/2026-06-10/glimmer-grotto/</loc>
-    <priority>0.7</priority>
+    <priority>0.6</priority>
   </url>
   <url>
     <loc>https://jez237.com/games/2026-06-10/hollow-deep/</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://jez237.com/games/2026-06-09/choplifter/</loc>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://jez237.com/games/2026-06-09/fluid/</loc>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://jez237.com/games/2026-06-09/subway-siege-blackout/</loc>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://jez237.com/games/2026-06-05/invaders/</loc>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://jez237.com/games/2026-06-05/neon-invaders/</loc>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://jez237.com/games/hard-hat-mac/</loc>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://jez237.com/plants/garden-beds/</loc>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://jez237.com/prototypes/hidden-reef/</loc>
+    <loc>https://jez237.com/plants/hostas/</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://jez237.com/plants/orange-milkweed/</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://jez237.com/plants/salvia/</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://jez237.com/plants/coreopsis/</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://jez237.com/plants/baptisia/</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://jez237.com/plants/climbing-hydrangea/</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://jez237.com/plants/rising-sun-redbud/</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://jez237.com/plants/grapevine/</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://jez237.com/plants/dwarf-peach-tree/</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://jez237.com/plants/little-henry-sweetspire/</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://jez237.com/plants/pugster-butterfly-bushes/</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://jez237.com/plants/narrow-upright-yew/</loc>
     <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://jez237.com/plants/rhododendron/</loc>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://jez237.com/plants/speedwell/</loc>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://jez237.com/plants/white-rose-bush/</loc>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://jez237.com/plants/forsythia/</loc>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://jez237.com/plants/lemony-lace-elderberry/</loc>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://jez237.com/plants/sunshine-ligustrum/</loc>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://jez237.com/plants/variegated-japanese-euonymus/</loc>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://jez237.com/plants/twomblys-red-sentinel/</loc>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://jez237.com/plants/shaina/</loc>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://jez237.com/plants/orange-rocket-barberry/</loc>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://jez237.com/plants/interesting-insects/</loc>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://jez237.com/plants/past-years/</loc>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://jez237.com/ops/</loc>
+    <priority>0.3</priority>
   </url>
 </urlset>
