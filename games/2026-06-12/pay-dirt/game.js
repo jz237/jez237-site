@@ -1994,24 +1994,7 @@ function ghostPointAt(t){
   return pts[pts.length - 1];
 }
 function drawGhostReplay(){
-  if (state !== 'playing' || !ghostReplay) return;
-  const p = ghostPointAt(levelTime);
-  if (!p || !player) return;
-  if (Math.hypot(player.x - p.x, player.y - p.y) < .22 && levelTime < 1.2) return;
-  ctx.save();
-  ctx.globalAlpha = .28;
-  glow(p.x, p.y - .12, 42, 'rgba(88,216,255,.32)', .8);
-  drawActor({
-    kind: 'player',
-    x: p.x,
-    y: p.y,
-    dir: p.dir || 1,
-    state: p.state || 'run',
-    anim: gameTime,
-    moved: true,
-    squashT: 0,
-  });
-  ctx.restore();
+  return false;
 }
 
 function endingCopy(won){
