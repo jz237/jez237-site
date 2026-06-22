@@ -120,3 +120,6 @@ Sim is fixed-timestep (60Hz accumulator); `__g.step(n)` drives ticks headlessly.
 - 2026-06-22: Secret bonus caves seed as optional side-room discoveries in campaign,
   Daily Dig, and selected Boom Rush waves. They count toward FINDS, award larger bonus
   scores, never gate the exit/cart, and are exposed as `window.__g.secretCaves`.
+- 2026-06-22: Campaign clears now pause at Upgrade Camp before the next claim. The player
+  chooses Quick Boots, Sharp Pick, or Blast Satchel ranks for the rest of that run; debug
+  hooks expose `window.__g.upgrades`, `pendingUpgrade`, `completeLevel()`, and `chooseUpgrade()`.
