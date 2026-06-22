@@ -380,6 +380,18 @@ const ART = (() => {
       x.fillStyle = g; x.beginPath(); x.moveTo(9, 18); x.quadraticCurveTo(15, 15, 21, 18); x.quadraticCurveTo(19, 25, 15, 27); x.quadraticCurveTo(11, 25, 9, 18); x.fill();
       x.fillStyle = '#efffd8'; x.fillRect(13, 18, 2, 6);
     });
+    PUPS[6] = mk(x => { // extra life heart
+      const g = x.createLinearGradient(6, 6, 24, 26); g.addColorStop(0, '#ffd8eb'); g.addColorStop(.45, '#ff6b9d'); g.addColorStop(1, '#8d2149');
+      x.fillStyle = g; x.beginPath();
+      x.moveTo(15, 25);
+      x.bezierCurveTo(3, 16, 4, 6, 11, 6);
+      x.bezierCurveTo(14, 6, 15, 9, 15, 9);
+      x.bezierCurveTo(15, 9, 16, 6, 19, 6);
+      x.bezierCurveTo(26, 6, 27, 16, 15, 25);
+      x.fill();
+      x.strokeStyle = '#fff7c7'; x.lineWidth = 2; x.stroke();
+      x.fillStyle = 'rgba(255,255,255,.72)'; x.beginPath(); x.ellipse(12, 11, 3, 2, -.7, 0, 7); x.fill();
+    });
   }
   buildPups();
 

@@ -50,14 +50,14 @@ Sim is fixed-timestep (60Hz accumulator); `__g.step(n)` drives ticks headlessly.
 - Guards: BFS chase over the movement graph (classic column-seeking feel),
   can pick up/carry/drop gold, fall into holes (stunned → climb out), die if sealed.
   Guard-carried gold must be shaken loose by trapping the guard.
-- Death restarts the level fully while lives remain; after game over, Continue Claim
+- The player starts with four lives. Death restarts the level fully while lives remain; after game over, Continue Claim
   restarts the exact current campaign/daily/Boom Rush level with fresh lives.
 
 ## Modern layer
 
 - Power-ups (timed unless noted): TNT charge (next dig = 3-wide blast, 1 charge),
   Speed Boots (8s, 1.45×), Phase Cloak (6s, pass guards), Gold Magnet (8s, r=2.5 auto-grab),
-  Power Shovel (10s, instant digs).
+  Power Shovel (10s, instant digs), and occasional extra-life heart tokens.
 - Exploration finds are seeded per claim in reachable side paths: relics, cave blooms,
   survey maps, and lantern oil. They add score, visual feedback, and a full-survey
   bonus without blocking the exit. Oil temporarily widens the player light pool; maps
