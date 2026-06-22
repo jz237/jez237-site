@@ -557,31 +557,26 @@ function chipDig(c, r, dir, heavy){
   });
 }
 
-function tryDig(dir){
-  if (!player || player.state === 'dead' || player.digT > 0) return false;
-  if (!['idle', 'run', 'climb', 'bar'].includes(player.state)) return false;
-  const c = Math.floor(player.x), r = Math.floor(player.y);
-	  if (Math.abs(player.y - (r + .5)) > 0.28) return false;
-  if (Math.abs(player.y - (r + .5)) > 0.04) player.y += (r + .5 - player.y) * 0.45;
-  const stableForDig = isSupportTile(c, r + 1) || isLadder(c, r) || isBar(c, r) ||
-    guardSupportAt(c, r + 1) || hasSupport(player);
-	  if (!stableForDig) return false;
-	  const tc = c + dir, tr = r + 1;
-	  const target = tileAt(tc, tr);
-	  if (!(target === '#' || isBottomDiggable(tc, tr)) || isDug(tc, tr) || isBlasted(tc, tr)) return false;
-  const above = tileAt(tc, r);
-  if (above === '#' && !isDug(tc, r) && !isBlasted(tc, r)) return false;
+function canDigTarget(tc, tr, baseR){
+  const target = tileAt(tc, tr);
+  if (!(target === '#' || isBottomDiggable(tc, tr)) || isDug(tc, tr) || isBlasted(tc, tr)) return false;
+  const above = tileAt(tc, baseR);
+  if (above === '#' && !isDug(tc, baseR) && !isBlasted(tc, baseR)) return false;
   if (above === 'X') return false;
-  if (above === 'B' && !isBlasted(tc, r)) return false;
-  if (above === 'C' && !isCrumbleGone(tc, r) && !isBlasted(tc, r)) return false;
+  if (above === 'B' && !isBlasted(tc, baseR)) return false;
+  if (above === 'C' && !isCrumbleGone(tc, baseR) && !isBlasted(tc, baseR)) return false;
+  return true;
+}
+
+function beginDigAt(tc, tr, dir){
   player.dir = dir;
   if (player.tnt > 0 && (keys.ArrowDown || keys.KeyS)){
     // TNT charge: deliberate down+dig 3-wide excavation.
     player.tnt--;
-	    for (let k = -1; k <= 1; k++){
-	      const cc = tc + k;
-	      if ((tileAt(cc, tr) === '#' || isBottomDiggable(cc, tr)) && !isDug(cc, tr) && !isBlasted(cc, tr)) openHole(cc, tr);
-	    }
+    for (let k = -1; k <= 1; k++){
+      const cc = tc + k;
+      if ((tileAt(cc, tr) === '#' || isBottomDiggable(cc, tr)) && !isDug(cc, tr) && !isBlasted(cc, tr)) openHole(cc, tr);
+    }
     shake = Math.max(shake, .5);
     return true;
   }
@@ -590,6 +585,36 @@ function tryDig(dir){
   chipDig(tc, tr, dir, player.shovelT > 0);
   shake = Math.max(shake, player.shovelT > 0 ? .16 : .08);
   return true;
+}
+
+function tryDig(dir, preferredTarget){
+  if (!player || player.state === 'dead' || player.digT > 0) return false;
+  if (!['idle', 'run', 'climb', 'bar'].includes(player.state)) return false;
+  const c = Math.floor(player.x), r = Math.floor(player.y);
+  if (Math.abs(player.y - (r + .5)) > 0.28) return false;
+  if (Math.abs(player.y - (r + .5)) > 0.04) player.y += (r + .5 - player.y) * 0.45;
+  const stableForDig = isSupportTile(c, r + 1) || isLadder(c, r) || isBar(c, r) ||
+    guardSupportAt(c, r + 1) || hasSupport(player);
+  if (!stableForDig) return false;
+  const tr = r + 1;
+  const candidates = [];
+  const addCandidate = tc => {
+    if (tc < 0 || tc >= COLS) return;
+    if (!candidates.some(o => o.tc === tc)) candidates.push({tc});
+  };
+  if (preferredTarget && Math.abs(preferredTarget.r - tr) <= 1 &&
+      preferredTarget.c !== c && Math.abs((preferredTarget.c + .5) - player.x) <= 1.85){
+    addCandidate(preferredTarget.c);
+  }
+  addCandidate(c + dir);
+  addCandidate(Math.floor(player.x + dir * 0.62));
+  for (const cand of candidates){
+    if (canDigTarget(cand.tc, tr, r)){
+      const targetDir = cand.tc + .5 < player.x ? -1 : 1;
+      return beginDigAt(cand.tc, tr, targetDir || dir);
+    }
+  }
+  return false;
 }
 
 function openHole(c, r){
@@ -919,7 +944,8 @@ function updateHoles(dt){
 }
 
 /* ================= guard AI ================= */
-const GUARD_SPEED = { guard: 0.68, scout: 0.901, mason: 0.527 };
+const GUARD_SPEED_SCALE = 0.8;
+const GUARD_SPEED = { guard: 0.68 * GUARD_SPEED_SCALE, scout: 0.901 * GUARD_SPEED_SCALE, mason: 0.527 * GUARD_SPEED_SCALE };
 const STUN_TIME = 3.2, GUARD_RESPAWN_T = 1.4;
 const GUARD_META = {
   guard: {color: '#ff405a', glow: 'rgba(255,64,90,.24)', icon: '!', label: 'JUMPER'},
@@ -1035,7 +1061,7 @@ function updateGuard(g, dt){
     return;
   }
   if (g.state === 'climbout'){
-    g.y -= CLIMB_SPEED * 0.7 * dt;
+    g.y -= CLIMB_SPEED * 0.7 * GUARD_SPEED_SCALE * dt;
     g.anim += dt;
     const r = Math.floor(g.y);
     if (g.y <= r + .5 && !isDug(Math.floor(g.x), r)){
@@ -1731,7 +1757,13 @@ function handleTouchDig(clientX, clientY){
   const hudH = mobileCamera ? mobileHudHeight() : HUD_H;
   if (p.y < hudH + 24) return false;
   AUDIO.ensure();
-  pulseTouchKey(p.x < playerScreenX() ? 'KeyZ' : 'KeyX', 180);
+  const w = screenToWorldPoint(p);
+  const target = {
+    c: Math.floor(w.x / TILE),
+    r: Math.floor((w.y - HUD_H) / TILE),
+  };
+  const dir = p.x < playerScreenX() ? -1 : 1;
+  if (!tryDig(dir, target)) pulseTouchKey(dir < 0 ? 'KeyZ' : 'KeyX', 240);
   return true;
 }
 function initTouchGestures(){
