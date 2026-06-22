@@ -220,51 +220,100 @@ const LEVELS = (() => {
     return L;
   }
 
-  // Special — Boom Rush: one loud showcase claim with TNT veins, belts, bars,
-  // unstable rock, and a mine-cart escape handled by game.js.
-  function boomRush(){
+  // Special — Boom Rush: a fixed 20-claim arc. These are generated from one
+  // deterministic builder so the difficulty curve is consistent and testable.
+  function boomRushLevel(i){
     const L = base();
-    tier(L, 4, 1, 25);
-    tier(L, 8, 0, 23);
-    tier(L, 12, 3, 27);
-    put(L, 4, 8, '...');
-    put(L, 4, 18, '..');
-    put(L, 8, 5, '..');
-    put(L, 8, 15, '...');
-    put(L, 12, 10, '...');
-    put(L, 12, 21, '..');
-    bar(L, 3, 8, 11);
-    bar(L, 6, 8, 18);
-    bar(L, 10, 12, 21);
-    put(L, 4, 4, 'C');
-    put(L, 4, 20, 'C');
-    put(L, 8, 9, 'B');
-    put(L, 8, 10, 'B');
-    put(L, 8, 21, 'B');
-    put(L, 12, 7, 'B');
-    put(L, 12, 8, 'B');
-    put(L, 12, 24, 'B');
-    put(L, 4, 13, '>>>');
-    put(L, 8, 2, '<<<');
-    put(L, 12, 15, '>>>>');
-    // Continuous rescue shafts keep Boom Rush from trapping the player in one pocket.
-    lad(L, 3, 4, 14);
-    lad(L, 6, 4, 14);
-    lad(L, 14, 4, 14);
-    lad(L, 20, 4, 14);
-    lad(L, 24, 4, 14);
-    g$(L, 2, 3); g$(L, 6, 3); g$(L, 12, 3); g$(L, 22, 3);
-    g$(L, 4, 7); g$(L, 11, 7); g$(L, 19, 7); g$(L, 22, 7);
-    g$(L, 5, 11); g$(L, 14, 11); g$(L, 20, 11); g$(L, 26, 11);
-    g$(L, 8, 14); g$(L, 16, 14); g$(L, 23, 14);
+    const d = i + 1;
+    const at = (r, c) => L[r][c];
+    const open = (r, c, w) => put(L, r, c, '.'.repeat(w));
+    const safe = (r, c, ch) => { if (at(r, c) === '.') put(L, r, c, ch); };
+
+    tier(L, 4, 1, 26);
+    tier(L, 8, 0, 26);
+    tier(L, 12, 1, 27);
+    if (d >= 3) open(4, 8 + (i % 4), 2);
+    if (d >= 5) open(8, 15 - (i % 5), 3);
+    if (d >= 8) open(12, 8 + (i % 6), 2 + (i % 2));
+    if (d >= 11) open(4, 19, 2);
+    if (d >= 14) open(8, 4, 2);
+    if (d >= 17) open(12, 21, 2);
+
+    const ladders = d <= 3 ? [3, 10, 17, 24]
+      : d <= 8 ? [3, 9, 14, 20, 24]
+      : [3, 8 + (i % 2), 14, 20 - (i % 2), 24];
+    if (d >= 15) ladders.push(5, 22);
+    for (const c of ladders) lad(L, c, 4, 14);
+    if (d >= 4) bar(L, 3, 9, 13);
+    if (d >= 7) bar(L, 7, 5 + (i % 3), 11 + (i % 3));
+    if (d >= 10) bar(L, 11, 15, 22);
+
+    if (d >= 4) put(L, 4, 13, i % 2 ? '<<<' : '>>>');
+    if (d >= 7) put(L, 8, 2, i % 2 ? '>>>' : '<<<');
+    if (d >= 10) put(L, 12, 15, i % 2 ? '>>>>' : '<<<<');
+    if (d >= 5){ put(L, 8, 9, 'B'); put(L, 8, 10, 'B'); }
+    if (d >= 8){ put(L, 12, 7, 'B'); put(L, 12, 24, 'B'); }
+    if (d >= 12){ put(L, 4, 4, 'C'); put(L, 4, 20, 'C'); }
+    if (d >= 15){ put(L, 8, 21, 'B'); put(L, 12, 8, 'B'); }
+    if (d >= 18){ put(L, 4, 23, 'T'); put(L, 8, 12, 'T'); }
+
+    const goldSpots = [
+      [5, 3], [12, 3], [22, 3], [3, 7], [10, 7], [18, 7], [23, 7],
+      [5, 11], [13, 11], [20, 11], [26, 11], [8, 14], [16, 14], [23, 14],
+      [6, 3], [15, 7], [11, 11], [21, 14],
+    ];
+    const wantGold = Math.min(goldSpots.length, 6 + Math.floor(i * 0.55));
+    for (let n = 0, tries = 0; n < wantGold && tries < goldSpots.length * 3; tries++){
+      const [c, r] = goldSpots[(tries * 5 + i) % goldSpots.length];
+      if (at(r, c) === '.' && '#X<>HCB'.includes(at(r + 1, c))){ g$(L, c, r); n++; }
+    }
+
     put(L, 14, 2, 'P');
-    put(L, 14, 4, '1'); put(L, 14, 5, '2'); put(L, 14, 6, '4');
-    put(L, 7, 13, '5');
-    put(L, 3, 24, '3');
-    put(L, 3, 21, 'S');
-    put(L, 7, 3, 'G');
-    put(L, 11, 18, 'M');
-    return L;
+    safe(14, 4, '1');
+    if (d <= 8) safe(14, 5, '2');
+    if (d <= 13) safe(14, 6, '4');
+    if (d >= 6) safe(7, 13, '5');
+    if (d >= 10) safe(3, 24, '3');
+
+    if (d >= 3) safe(3, 21, 'G');
+    if (d >= 5) safe(7, 3, 'G');
+    if (d >= 7) safe(11, 18, 'S');
+    if (d >= 10) safe(3, 6, 'S');
+    if (d >= 12) safe(11, 22, 'M');
+    if (d >= 15) safe(7, 23, 'M');
+    if (d >= 18) safe(11, 5, 'S');
+
+    return {
+      rows: L,
+      name: 'Boom Rush ' + d,
+      brief: d <= 3 ? 'Warm-up claim: learn the cart route before the mine turns mean.'
+        : d <= 8 ? 'TNT veins and bars start bending the route.'
+        : d <= 13 ? 'Steam, belts, and heavier claim-jumpers pressure the haul.'
+        : d <= 18 ? 'The mine is unstable: lava, crushers, masons, and cave-in timing matter.'
+        : 'Final claim: grab the haul and survive the full ride-out.',
+      config: boomRushConfig(i),
+    };
+  }
+
+  function boomRushConfig(i){
+    const d = i + 1;
+    const final = d === 20;
+    return {
+      cart: {c: 25, r: 14, x: 25.5, y: 14.5},
+      tnt: d <= 4 ? 2 : d <= 10 ? 3 : 4,
+      speed: d <= 5 ? 3.5 : d <= 12 ? 5 : 6,
+      shovel: d <= 6 ? 4 : d <= 14 ? 6 : 8,
+      caveTime: final ? 62 : Math.max(34, 64 - d * 1.4),
+      triggerPct: Math.max(.42, .86 - d * .022),
+      escapeDur: final ? 4.6 : 2.1 + Math.min(1.2, d * .05),
+      escapeDist: final ? 9.5 : 5.4,
+      final,
+      plates: d >= 6 ? [{c: 12, r: 14, used: false}] : [],
+      vents: d >= 8 ? [{x: 9.5, y: 11.55, t: .3 + (i % 3) * .35}] : [],
+      lava: d >= 10 ? [{c0: 10, c1: 11 + (i % 2), r: 12}] : [],
+      crushers: d >= 12 ? [{c: 13 + (i % 4), r: 5, t: (i % 3) * .4}] : [],
+      worm: d >= 15 ? {t: 0, active: false, warnT: 0, x: -2, y: 10.5, dir: 1, cooldown: final ? 4.5 : 7.5} : null,
+    };
   }
 
   // L10 — quick hands: scouts and combo lines.
@@ -574,11 +623,75 @@ const LEVELS = (() => {
     return {rows: campaign[3], date, attempt: -1};
   }
 
+  function specialSolvable(level){
+    const rows = level.rows || level;
+    const cart = (level.config && level.config.cart) || {c: 25, r: 14};
+    const A = analyze(rows);
+    if (!A.spawn) return {ok: false, why: 'no spawn'};
+    if (!A.golds.length) return {ok: false, why: 'no gold'};
+    const tile = (c, r) => (c < 0 || c >= COLS || r < 0 || r >= ROWS) ? 'X' : A.grid[r][c];
+    const ladder = (c, r) => tile(c, r) === 'H';
+    const occ = (c, r) => { const t = tile(c, r); return !(t === '#' || t === 'X' || t === 'B' || t === 'C'); };
+    const solidBelow = (c, r) => {
+      if (r + 1 >= ROWS) return true;
+      const t = tile(c, r + 1);
+      return t === '#' || t === 'X' || t === 'B' || t === 'C' || t === 'H' || t === '<' || t === '>';
+    };
+    const supported = (c, r) => solidBelow(c, r) || ladder(c, r) || tile(c, r) === '-';
+    const enterH = (c, r, dir) => {
+      if (!occ(c, r)) return false;
+      const t = tile(c, r);
+      if (t === '[') return dir < 0;
+      if (t === ']') return dir > 0;
+      return true;
+    };
+    const fallTo = (c, r) => { let rr = r; while (rr < ROWS - 1 && !supported(c, rr) && occ(c, rr + 1)) rr++; return rr; };
+
+    function bfs(sc, sr){
+      const seen = new Uint8Array(COLS * ROWS);
+      const q = [sr * COLS + sc];
+      seen[q[0]] = 1;
+      for (let qi = 0; qi < q.length; qi++){
+        const n = q[qi], c = n % COLS, r = (n / COLS) | 0;
+        const add = (nc, nr) => {
+          if (nc < 0 || nc >= COLS || nr < 0 || nr >= ROWS) return;
+          const m = nr * COLS + nc;
+          if (!seen[m]){ seen[m] = 1; q.push(m); }
+        };
+        if (!supported(c, r)){ add(c, fallTo(c, r)); continue; }
+        for (const dir of [-1, 1]) if (enterH(c + dir, r, dir)) add(c + dir, fallTo(c + dir, r));
+        if (ladder(c, r) && occ(c, r - 1)) add(c, r - 1);
+        if (occ(c, r + 1) && (ladder(c, r) || ladder(c, r + 1))) add(c, r + 1);
+        if (tile(c, r) === '-' && occ(c, r + 1) && !solidBelow(c, r)) add(c, fallTo(c, r + 1));
+        if (solidBelow(c, r) && r + 1 < ROWS){
+          for (const dir of [-1, 1]){
+            const hc = c + dir;
+            if (tile(hc, r + 1) === '#' && occ(hc, r)) add(hc, fallTo(hc, r + 1));
+          }
+        }
+        if (tile(c, r + 1) === 'C') add(c, fallTo(c, r + 1));
+      }
+      return seen;
+    }
+
+    const startReach = bfs(A.spawn.c, A.spawn.r);
+    for (const g of A.golds)
+      if (!startReach[g.r * COLS + g.c]) return {ok: false, why: 'gold unreachable at ' + g.c + ',' + g.r};
+    for (const g of A.golds.concat([A.spawn])){
+      const R = bfs(g.c, g.r);
+      if (!R[cart.r * COLS + cart.c]) return {ok: false, why: 'cart unreachable from ' + g.c + ',' + g.r};
+    }
+    return {ok: true};
+  }
+
+  const boomRushLevels = Array.from({length: 20}, (_, i) => boomRushLevel(i));
+
   const special = {
-    rows: boomRush(),
+    levels: boomRushLevels,
+    rows: boomRushLevels[0].rows,
     name: 'Boom Rush',
-    brief: 'Drill dash, chain TNT, wake the cave-in, then ride the mine cart out.',
+    brief: 'Twenty escalating claims: drill, blast, loot, and ride out.',
   };
 
-  return { campaign, names, briefs, special, solvable, generateDaily, dailyDateUTC, generate, hashStr };
+  return { campaign, names, briefs, special, solvable, specialSolvable, generateDaily, dailyDateUTC, generate, hashStr };
 })();
