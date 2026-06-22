@@ -156,6 +156,8 @@ let gameTime = 0, shake = 0, hitStop = 0, flash = 0, deathFlash = 0;
 let continueRun = null;
 let banner = null;          // {text, sub, life}
 let hint = null;            // {life} first-level control hint
+let routeHint = null;       // {c, r, kind, label, life, manual}
+let routeHintIdleT = 0, routeHintCheckT = 0, routeHintProgress = '', routeHintManualT = 0;
 let runDustT = 0, digBuffer = 0, digBufDir = 0;
 let titleRunner = null;     // attract-scene actor
 
@@ -1307,6 +1309,7 @@ function updatePowerups(dt){
 function collectTreasure(tr){
   tr.taken = true;
   discoveryCount++;
+  resetRouteHint();
   discoveryPulse = 1;
   const meta = TKINDS[tr.kind] || TKINDS.relic;
   let val = meta.score;
@@ -1335,6 +1338,7 @@ function comboMult(){ return Math.min(1 + 0.5 * Math.max(0, comboN - 1), 5); }
 
 function collectGold(gd){
   gd.taken = true; goldLeft--;
+  resetRouteHint();
   comboN++; comboT = 2.5;
   const val = Math.round(100 * comboMult());
   addScore(val);
@@ -1345,6 +1349,117 @@ function collectGold(gd){
   popup(gd.c + .5, gd.r + .3, comboN > 1 ? val + ' ×' + comboMult().toFixed(1).replace('.0', '') : '' + val, comboN > 2 ? '#ff9d2e' : '#ffd23f');
   AUDIO.sfx(comboN > 2 ? 'goldhi' : 'gold');
   if (goldLeft <= 0) revealExit();
+}
+
+/* ================= prospector hunch / stuck help ================= */
+function routeProgressKey(){
+  return [
+    mode,
+    levelIndex,
+    goldLeft,
+    discoveryCount,
+    exitRevealed ? 1 : 0,
+    specialCartReady() ? 1 : 0,
+  ].join('|');
+}
+
+function resetRouteHint(){
+  routeHint = null;
+  routeHintIdleT = 0;
+  routeHintCheckT = 0;
+  routeHintManualT = 0;
+  routeHintProgress = routeProgressKey();
+}
+
+function routeHintTarget(){
+  if (!player || !grid.length || player.state === 'dead') return null;
+  const seen = reachableCellsFromPlayer();
+  if (!exitRevealed){
+    let best = null, bestD = Infinity;
+    for (const gd of golds){
+      if (gd.taken || gd.held) continue;
+      if (!seen[gd.r * COLS + gd.c]) continue;
+      const d = Math.abs(gd.c + .5 - player.x) + Math.abs(gd.r + .5 - player.y);
+      if (d < bestD){ bestD = d; best = {c: gd.c, r: gd.r, kind: 'gold', label: 'NUGGET'}; }
+    }
+    return best;
+  }
+  if (isSpecialMode()){
+    const cart = special && special.cart;
+    if (!cart) return null;
+    const c = Math.max(0, Math.min(COLS - 1, Math.floor(cart.x == null ? cart.c : cart.x)));
+    const r = Math.max(0, Math.min(ROWS - 1, Math.floor(cart.y == null ? cart.r : cart.y)));
+    return seen[r * COLS + c] ? {c, r, kind: 'cart', label: 'CART'} : null;
+  }
+  if (!exitCells.length) return null;
+  const e = topExitCell();
+  return seen[e.r * COLS + e.c] ? {c: e.c, r: e.r, kind: 'exit', label: 'EXIT'} : null;
+}
+
+function triggerRouteHint(manual){
+  const target = routeHintTarget();
+  if (!target) return null;
+  routeHint = {...target, life: manual ? 6.0 : 4.8, manual: !!manual};
+  if (manual) routeHintManualT = routeHint.life;
+  popup(target.c + .5, target.r + .1, 'HUNCH: ' + target.label, target.kind === 'gold' ? '#ffd23f' : '#3fd2c7');
+  spawnParticles(target.c + .5, target.r + .5, 10, {
+    color: [target.kind === 'gold' ? '#ffd23f' : '#3fd2c7', '#fff3b0', '#ffffff'],
+    spd: 2.6,
+    life: .7,
+    size: 2.6,
+    grav: -3,
+    glow: true,
+  });
+  return routeHint;
+}
+
+function updateRouteHint(dt){
+  if (!player || player.state === 'dead' || state !== 'playing'){ resetRouteHint(); return; }
+  const progress = routeProgressKey();
+  if (progress !== routeHintProgress){
+    resetRouteHint();
+    routeHintProgress = progress;
+    return;
+  }
+  routeHintIdleT += dt;
+  routeHintCheckT -= dt;
+  if (routeHint){
+    routeHint.life -= dt;
+    if (routeHint.life <= 0) routeHint = null;
+  }
+  if (routeHintManualT > 0) routeHintManualT = Math.max(0, routeHintManualT - dt);
+  if (routeHintCheckT > 0 || routeHint) return;
+  routeHintCheckT = 1.0;
+  if (routeHintIdleT >= 24 || routeHintManualT > 0) triggerRouteHint(routeHintManualT > 0);
+}
+
+function drawRouteHint(){
+  if (!routeHint || routeHint.life <= 0) return;
+  const a = Math.min(1, routeHint.life / 1.2);
+  const wx = routeHint.c + .5, wy = routeHint.r + .5;
+  const sx = px(wx), sy = py(wy);
+  const col = routeHint.kind === 'gold' ? '#ffd23f' : '#3fd2c7';
+  const pulse = 0.5 + 0.5 * Math.sin(gameTime * 7);
+  ctx.save();
+  ctx.globalAlpha = 0.42 * a;
+  glow(wx, wy, 42 + pulse * 10, hexA(col, .65), 1);
+  ctx.globalAlpha = 0.78 * a;
+  ctx.strokeStyle = col;
+  ctx.lineWidth = 2;
+  ctx.setLineDash([4, 5]);
+  ctx.beginPath();
+  ctx.arc(sx, sy, 18 + pulse * 5, 0, Math.PI * 2);
+  ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = 'rgba(8,10,18,.72)';
+  roundRect(sx - 34, sy - 39, 68, 17, 5);
+  ctx.fill();
+  ctx.fillStyle = col;
+  ctx.font = '900 10px system-ui, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(routeHint.label, sx, sy - 30);
+  ctx.restore();
 }
 
 function trapGuard(g){
@@ -2159,6 +2274,7 @@ function loadLevelData(rows){
   particles = []; popups = [];
   shake = 0; hitStop = 0; flash = 0; deathFlash = 0;
   digBuffer = 0; runDustT = 0; prevDash = false;
+  resetRouteHint();
   mobileLeadX = 0; mobileLeadY = 0;
   selectPainterlyBackdrop();
   buildBackdrop();
@@ -2388,6 +2504,7 @@ function update(dt){
     updatePowerups(dt);
     checkGold();
     checkWin();
+    updateRouteHint(dt);
     if (state === 'playing') updateSoftlockDetector(dt);
   }
 }
@@ -3860,6 +3977,7 @@ function renderWorldFrame(includeHUD){
       ctx.drawImage(ART.TREASURES[tr.kind] || ART.TREASURES.relic, tr.c * TILE + 3, tr.r * TILE + HUD_H + 3 + bobv, 30, 30);
       ctx.restore();
     }
+    drawRouteHint();
     // lit fuses
     for (const f of fuses){
       const a = 0.5 + 0.5 * Math.sin(f.t * 50);
@@ -5189,6 +5307,8 @@ window.__g = {
   get glowCacheSize(){ return glowCacheKeys.length; },
   noWayOut(){ return currentNoWayOutReason(); },
   showNoWayOut(reason){ showSoftlock(reason || currentNoWayOutReason() || 'This claim cannot be completed from here.'); return state; },
+  hunch(){ return triggerRouteHint(true); },
+  get hunchState(){ return routeHint ? {...routeHint} : null; },
   get mobileZoom(){ return mobileZoomAdjust; },
   get mobileView(){ return mobileView ? {...mobileView} : null; },
   set mobileZoom(v){ mobileZoomAdjust = clamp(Number(v) || 1, 0.68, 1.45); },
