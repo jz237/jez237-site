@@ -2000,7 +2000,7 @@ function drawGhostReplay(){
 function endingCopy(won){
   if (!won) return {title: 'CLAIM LOST', sub: 'The lantern goes dark. The mine waits.'};
   if (mode === 'special') return {title: 'BOOM RUSH CLEARED!', sub: 'The cart tears out under a golden sky.'};
-  if (mode === 'daily') return {title: 'DAILY VEIN SEALED!', sub: 'One clean mark in the ledger for today.'};
+  if (mode === 'daily') return {title: 'DAILY VEIN SEALED!', sub: 'One clean mark on the high scores for today.'};
   return {title: 'PAY DIRT CLAIMED!', sub: 'The bills stay paid, and Jerry keeps the map.'};
 }
 function startEndingScene(won){
@@ -2378,8 +2378,8 @@ const Scores = {
     } catch (e) {}
   },
   rowsHTML(board, ns){
-    if (board === 'offline') return '<div class="tiny">the ledger is unreachable — score kept locally</div>';
-    if (!board) return '<div class="tiny">reading the ledger…</div>';
+    if (board === 'offline') return '<div class="tiny">high scores are unreachable — score kept locally</div>';
+    if (!board) return '<div class="tiny">reading high scores…</div>';
     if (!board.length) return '<div class="tiny">no claims filed yet — stake the first</div>';
     return board.map((s, i) => {
       const me = this.last && this.last.ns === ns && s.name === this.last.name && s.score === this.last.score;
