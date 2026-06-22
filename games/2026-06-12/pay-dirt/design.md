@@ -129,3 +129,6 @@ Sim is fixed-timestep (60Hz accumulator); `__g.step(n)` drives ticks headlessly.
 - 2026-06-22: End-game presentation now creates a canvas cinematic behind the results panel:
   win scenes get golden cart/spotlight/spark effects with mode-specific copy, losses get a
   darker mine-fade treatment. Debug hook `window.__g.ending` exposes the active ending scene.
+- 2026-06-22: Claim-jumpers now get deterministic names by rival type. Nameplates appear
+  briefly at level start, when a rival spots the player, when close to the player, and always
+  for Baron Brim; debug hook `window.__g.rivalNames` exposes the assigned names.
