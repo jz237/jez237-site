@@ -1,6 +1,6 @@
 {
   "date": "2026-06-22",
-  "updatedAt": "2026-06-22T12:23:25.443602+00:00",
+  "updatedAt": "2026-06-22T14:00:01.422625+00:00",
   "items": [
     {
       "title": "L’Oréal brings Maybelline virtual try-on to ChatGPT",
@@ -13,10 +13,26 @@
       "image": "",
       "published": "2026-06-22T10:00:00+00:00",
       "firstSeen": "2026-06-22T11:00:01.198563+00:00",
-      "lastSeen": "2026-06-22T12:23:25.443602+00:00",
+      "lastSeen": "2026-06-22T14:00:01.422625+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.6773
+      "score": 12.6323
+    },
+    {
+      "title": "NVIDIA Vera CPU Opens the Way for Agentic Scientific AI at Los Alamos National Laboratory",
+      "url": "https://blogs.nvidia.com/blog/nvidia-vera-cpu-los-alamos-national-laboratory",
+      "source": "NVIDIA Blog",
+      "sourceUrl": "https://blogs.nvidia.com/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Mission, Vision and Veritas — new Los Alamos National Laboratory (LANL) supercomputers to be built with HPE and NVIDIA — are tapping NVIDIA Vera CPUs to accelerate scientific discovery, unlocking agentic AI for science. The supercomputers will use the HPE Cray Supercomputing GX5000 architecture with the NVIDIA Vera Rubin platform, combining NVIDIA Vera CPUs, NVIDIA [&#8230;]",
+      "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/vera-cpu-lanl-1920x1080-1.jpg",
+      "published": "2026-06-22T13:00:20+00:00",
+      "firstSeen": "2026-06-22T14:00:01.422625+00:00",
+      "lastSeen": "2026-06-22T14:00:01.422625+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "editorial_score_pass",
+      "score": 7.46
     },
     {
       "title": "Anthropic’s Fable 5 Withdrawal Underscores Importance and Difficulty of ‘sovereign AI’ Strategies",
@@ -32,7 +48,7 @@
       "lastSeen": "2026-06-22T12:23:25.443602+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.2197
+      "score": 6.1729
     },
     {
       "title": "LLM research updates, large language model evaluation news, leaderboards, and AI model insights",
@@ -43,12 +59,28 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-22T12:23:32.954711+00:00",
+      "published": "2026-06-22T14:00:10.975407+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-22T12:23:25.443602+00:00",
+      "lastSeen": "2026-06-22T14:00:01.422625+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 5.11
+    },
+    {
+      "title": "NAIRR Science Program Reshapes Scientific Research, Powered by NVIDIA AI Infrastructure",
+      "url": "https://blogs.nvidia.com/blog/nairr-scientific-research-ai-infrastructure",
+      "source": "NVIDIA Blog",
+      "sourceUrl": "https://blogs.nvidia.com/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "For the past two years, the U.S. National Science Foundation’s National Artificial Intelligence Research Resource (NAIRR) pilot program has driven innovative research across the U.S. for over 700 projects — spanning protein prediction and infectious disease outbreak management.  NVIDIA contributed to the NAIRR pilot through a cloud-based resource that gives researchers dedicated access to a [&#8230;]",
+      "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/nairr.png",
+      "published": "2026-06-22T13:00:38+00:00",
+      "firstSeen": "2026-06-22T14:00:01.422625+00:00",
+      "lastSeen": "2026-06-22T14:00:01.422625+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.6602
     },
     {
       "title": "WeChat begins testing Xiaowei as Tencent eyes a Q3 AI rollout",
@@ -64,7 +96,7 @@
       "lastSeen": "2026-06-22T10:00:01.707125+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.2104
+      "score": 4.1684
     },
     {
       "title": "Read this before you vibe-code another app",
@@ -77,10 +109,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/268570_vibe_coding_security_CVirginia2.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-22T11:00:00+00:00",
       "firstSeen": "2026-06-22T12:00:01.863571+00:00",
-      "lastSeen": "2026-06-22T13:00:01.579187+00:00",
+      "lastSeen": "2026-06-22T14:00:01.422625+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 4.1183
+      "score": 4.072
     },
     {
       "title": "SK Hynix overtakes Samsung as Korea’s most valuable company",
@@ -96,7 +128,23 @@
       "lastSeen": "2026-06-22T09:00:01.595854+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.1065
+      "score": 4.0647
+    },
+    {
+      "title": "Eco Wave Power Turns Waves Into Watts With NVIDIA AI Infrastructure and Digital Twins",
+      "url": "https://blogs.nvidia.com/blog/eco-wave-power-ai-digital-twins",
+      "source": "NVIDIA Blog",
+      "sourceUrl": "https://blogs.nvidia.com/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "The next era of AI will not be defined by compute alone. Its growth will be determined by energy.  As accelerated computing scales across AI factories, agentic AI, industrial AI, edge computing and physical AI — including robotics and autonomous systems — global electricity demand is rising at unprecedented speed.  In many regions, expanding grid [&#8230;]",
+      "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/eco-wave-1920x1080-1.jpg",
+      "published": "2026-06-22T13:00:13+00:00",
+      "firstSeen": "2026-06-22T14:00:01.422625+00:00",
+      "lastSeen": "2026-06-22T14:00:01.422625+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 3.96
     },
     {
       "title": "London’s Isometric lands $40M to certify the industrial economy with AI",
@@ -112,7 +160,7 @@
       "lastSeen": "2026-06-22T09:00:01.595854+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.389
+      "score": 3.3479
     },
     {
       "title": "Baden Bower tracks 12,040 AI citations across six engines to rank top publications for AI visibility",
@@ -125,10 +173,10 @@
       "image": "https://media.thenextweb.com/2026/06/baden-bower-ai-visibility-index-citations-publications.avif",
       "published": "2026-06-22T09:57:16+00:00",
       "firstSeen": "2026-06-22T10:00:01.707125+00:00",
-      "lastSeen": "2026-06-22T12:23:25.443602+00:00",
+      "lastSeen": "2026-06-22T14:00:01.422625+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.178
+      "score": 3.1331
     },
     {
       "title": "Spiro takes $55M from China’s NewTrails as it nears a $1bn valuation",
@@ -141,65 +189,17 @@
       "image": "https://media.thenextweb.com/2026/06/Spiro.avif",
       "published": "2026-06-22T09:46:02+00:00",
       "firstSeen": "2026-06-22T10:00:01.707125+00:00",
-      "lastSeen": "2026-06-22T12:23:25.443602+00:00",
+      "lastSeen": "2026-06-22T14:00:01.422625+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1727
-    },
-    {
-      "title": "SpaceX shares slide again as the post-IPO rally keeps unwinding",
-      "url": "https://thenextweb.com/news/spacex-shares-slide-again-as-the-post-ipo-rally-keeps-unwinding",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "SpaceX shares looked poised to fall again as US markets reopened after the long weekend, extending a slide that has already erased much of the euphoria from the largest stock-market debut in history. The stock closed last week around $185, down roughly 18 per cent from the $225.64 it touched on 16 June, four days [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/spacex-ipo-oversubscribed-orders-close.avif",
-      "published": "2026-06-22T09:59:30+00:00",
-      "firstSeen": "2026-06-22T10:00:01.707125+00:00",
-      "lastSeen": "2026-06-22T12:23:25.443602+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.7791
-    },
-    {
-      "title": "Some Electricians Think Building Data Centers Is for Sellouts",
-      "url": "https://www.wired.com/story/data-center-buildout-electricians-selling-out",
-      "source": "Wired AI",
-      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Big Tech is throwing big money into data center buildouts. As national opposition to the facilities grows, some workers are beginning to question whether it’s worth it.",
-      "image": "https://media.wired.com/photos/6a317f4a898b4be9664d5a85/master/pass/Business_ElectriciansHaveaLotofComplicatedFeelingsAboutBuildingDataCenters-v1.jpg",
-      "published": "2026-06-22T09:30:00+00:00",
-      "firstSeen": "2026-06-22T10:00:01.707125+00:00",
-      "lastSeen": "2026-06-22T12:23:25.443602+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.2051
-    },
-    {
-      "title": "World Cup Scams Are Getting Harder to Spot",
-      "url": "https://www.wired.com/story/world-cup-scams-are-getting-harder-to-spot",
-      "source": "Wired AI",
-      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "From fake tickets to cloned websites, AI is magnifying World Cup scams. Can fans distinguish between what’s real and what’s not?",
-      "image": "https://media.wired.com/clips/6a33f50cfdecea08d2cf6a9a/master/pass/WorldcupScam_lead.mp4",
-      "published": "2026-06-22T09:30:00+00:00",
-      "firstSeen": "2026-06-22T10:00:01.707125+00:00",
-      "lastSeen": "2026-06-22T12:23:25.443602+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.2051
+      "score": 3.128
     }
   ],
   "errors": [
     {
       "source": "MarkTechPost",
       "url": "https://www.marktechpost.com/feed/",
-      "error": "not well-formed (invalid token): line 1, column 119"
+      "error": "HTTP Error 403: Forbidden"
     }
   ]
 }
