@@ -66,6 +66,8 @@ Sim is fixed-timestep (60Hz accumulator); `__g.step(n)` drives ticks headlessly.
   briefly boost magnet time.
 - Combo: gold chained within 2.5s → ×1, ×1.5, ×2 … capped ×5.
 - Campaign: 13 levels, one mechanic introduced at a time.
+- Visual chapters change every two levels through backdrop selection, chapter tint,
+  region-specific small set dressing, and the intro banner's `VEIN` chip.
 - Daily Dig: mulberry32(UTC date) seeds the generator; solvability checker
   (reachability over walk/climb/bar/fall/dig-down edges) gates every emitted level;
   global board namespace `pay-dirt-daily`, date in `extra`.
