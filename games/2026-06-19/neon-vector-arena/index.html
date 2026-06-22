@@ -617,8 +617,8 @@ const FIREFOX_PERF = /\bFirefox\//i.test(navigator.userAgent);
 const MOBILE_PERF = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || matchMedia('(hover: none) and (pointer: coarse)').matches;
 const GLOW_SCALE = FIREFOX_PERF ? .12 : (MOBILE_PERF ? .12 : .15);
 const MAX_ENEMIES = FIREFOX_PERF ? 42 : 56;
-const MAX_PARTICLES = FIREFOX_PERF ? 72 : (MOBILE_PERF ? 84 : 108);
-const MAX_FRAGMENTS = FIREFOX_PERF ? 92 : (MOBILE_PERF ? 104 : 156);
+const MAX_PARTICLES = FIREFOX_PERF ? 84 : (MOBILE_PERF ? 96 : 128);
+const MAX_FRAGMENTS = FIREFOX_PERF ? 118 : (MOBILE_PERF ? 138 : 210);
 const MAX_DT = FIREFOX_PERF ? .07 : .04;
 const SHOT_BLAST_RADIUS = 78;
 const SHOT_BLAST_FORCE = 290;
@@ -2369,18 +2369,20 @@ function launchBossShapes(e) {
 
 function addBossDeathBurst(e) {
   const pool = unlockedShapeTypes();
-  const count = MOBILE_PERF ? 7 : 11;
+  addSpark(e.x, e.y, MOBILE_PERF ? 48 : 76, e.hue, 1.85);
+  addSpark(e.x, e.y, MOBILE_PERF ? 28 : 44, e.hue + 72, 1.45);
+  const count = MOBILE_PERF ? 12 : 18;
   for (let i = 0; i < count; i++) {
     const a = i * TAU / count + rand(-.16, .16);
     const type = pool[i % pool.length] || e.type;
     const fake = {
       ...e,
       type,
-      x: e.x + Math.cos(a) * rand(e.r * .15, e.r * .72),
-      y: e.y + Math.sin(a) * rand(e.r * .15, e.r * .72),
-      r: rand(e.r * .18, e.r * .38),
-      vx: Math.cos(a) * rand(160, 340) + e.vx * .18,
-      vy: Math.sin(a) * rand(160, 340) + e.vy * .18,
+      x: e.x + Math.cos(a) * rand(e.r * .12, e.r * 1.05),
+      y: e.y + Math.sin(a) * rand(e.r * .12, e.r * 1.05),
+      r: rand(e.r * .22, e.r * .52),
+      vx: Math.cos(a) * rand(220, 520) + e.vx * .18,
+      vy: Math.sin(a) * rand(220, 520) + e.vy * .18,
       rot: rand(0, TAU),
       hue: e.hue + rand(-34, 46),
       boss: false,
@@ -2388,10 +2390,41 @@ function addBossDeathBurst(e) {
     };
     addVectorFragments(fake);
   }
+  const spokes = MOBILE_PERF ? 18 : 30;
+  for (let i = 0; i < spokes; i++) {
+    const a = i * TAU / spokes + rand(-.08, .08);
+    const dist = rand(e.r * .45, e.r * 1.35);
+    const len = rand(e.r * .75, e.r * 1.8);
+    const speed = rand(260, 620);
+    fragments.push({
+      x: e.x + Math.cos(a) * dist,
+      y: e.y + Math.sin(a) * dist,
+      vx: Math.cos(a) * speed + e.vx * .12,
+      vy: Math.sin(a) * speed + e.vy * .12,
+      ax: -len * .5,
+      ay: 0,
+      bx: len * .5,
+      by: 0,
+      rot: a + rand(-.16, .16),
+      spin: rand(-5.5, 5.5),
+      hue: e.hue + rand(-18, 72),
+      life: rand(.62, 1.05),
+      max: rand(.86, 1.32),
+      width: rand(1.5, 2.8),
+      hold: .04,
+      bright: true,
+      kind: 'line'
+    });
+  }
   addDeathChunks(e.x, e.y, e.hue, true);
-  particles.push({ x: e.x, y: e.y, vx: 0, vy: 0, life: .78, max: .78, r: Math.max(220, e.r * 5.4), hue: e.hue, kind: 'ring' });
-  particles.push({ x: e.x, y: e.y, vx: 0, vy: 0, life: .22, max: .22, r: Math.max(180, e.r * 4.4), hue: 0, kind: 'flash' });
-  shake = Math.max(shake, 8);
+  particles.push({ x: e.x, y: e.y, vx: 0, vy: 0, life: .95, max: .95, r: Math.max(260, e.r * 6.8), hue: e.hue, kind: 'ring' });
+  particles.push({ x: e.x, y: e.y, vx: 0, vy: 0, life: .72, max: .72, r: Math.max(190, e.r * 4.9), hue: e.hue + 52, kind: 'ring' });
+  particles.push({ x: e.x, y: e.y, vx: 0, vy: 0, life: .46, max: .46, r: Math.max(120, e.r * 3.2), hue: e.hue + 104, kind: 'ring' });
+  particles.push({ x: e.x, y: e.y, vx: 0, vy: 0, life: .28, max: .28, r: Math.max(220, e.r * 5.2), hue: 0, kind: 'flash' });
+  particles.push({ x: e.x, y: e.y, vx: 0, vy: 0, life: .18, max: .18, r: Math.max(140, e.r * 3.6), hue: e.hue + 48, kind: 'core' });
+  if (fragments.length > MAX_FRAGMENTS) fragments.splice(0, fragments.length - MAX_FRAGMENTS);
+  if (particles.length > MAX_PARTICLES) particles.splice(0, particles.length - MAX_PARTICLES);
+  shake = Math.max(shake, 12);
 }
 
 function shouldSplitEnemy(e) {
@@ -2773,7 +2806,7 @@ function update(dt) {
           const trait = enemyTrait(e.type);
           const baseScore = e.type === 'splinter' ? 8 : 28 + Math.round(e.r * (e.boss ? 3.8 : 1.2)) + (e.elite ? 70 : 0) + (e.boss ? 420 + wave * 55 : 0);
           score += Math.round((baseScore * (trait?.scoreMul || 1) * (1 + combo * .16) + wave * 3) * (activeModifier?.score || 1));
-          explode(e.x, e.y, e.hue, bigBreak, true);
+          if (!e.boss) explode(e.x, e.y, e.hue, bigBreak, true);
           if (e.boss) {
             addBanner('BOSS DOWN', e.hue);
             bombs = Math.min(MAX_BOMBS, bombs + 1);
