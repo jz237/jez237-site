@@ -1,6 +1,6 @@
 {
   "date": "2026-06-22",
-  "updatedAt": "2026-06-22T13:00:01.579187+00:00",
+  "updatedAt": "2026-06-22T12:23:25.443602+00:00",
   "items": [
     {
       "title": "L’Oréal brings Maybelline virtual try-on to ChatGPT",
@@ -13,10 +13,26 @@
       "image": "",
       "published": "2026-06-22T10:00:00+00:00",
       "firstSeen": "2026-06-22T11:00:01.198563+00:00",
-      "lastSeen": "2026-06-22T13:00:01.579187+00:00",
+      "lastSeen": "2026-06-22T12:23:25.443602+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.66
+      "score": 12.6773
+    },
+    {
+      "title": "Anthropic’s Fable 5 Withdrawal Underscores Importance and Difficulty of ‘sovereign AI’ Strategies",
+      "url": "https://www.techrepublic.com/article/fable-5-withdrawal-underscores-difficulty-sovereign-ai",
+      "source": "TechRepublic AI",
+      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Anthropic’s abrupt Fable 5 withdrawal due to US export controls underscores the urgent need for UK and European sovereign AI infrastructure.\nThe post Anthropic’s Fable 5 Withdrawal Underscores Importance and Difficulty of ‘sovereign AI’ Strategies appeared first on TechRepublic.",
+      "image": "",
+      "published": "2026-06-22T11:23:08+00:00",
+      "firstSeen": "2026-06-22T12:23:25.443602+00:00",
+      "lastSeen": "2026-06-22T12:23:25.443602+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 6.2197
     },
     {
       "title": "LLM research updates, large language model evaluation news, leaderboards, and AI model insights",
@@ -27,9 +43,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-22T13:00:16.265320+00:00",
+      "published": "2026-06-22T12:23:32.954711+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-22T13:00:01.579187+00:00",
+      "lastSeen": "2026-06-22T12:23:25.443602+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 5.11
@@ -48,7 +64,7 @@
       "lastSeen": "2026-06-22T10:00:01.707125+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.1943
+      "score": 4.2104
     },
     {
       "title": "Read this before you vibe-code another app",
@@ -64,7 +80,7 @@
       "lastSeen": "2026-06-22T13:00:01.579187+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 4.1005
+      "score": 4.1183
     },
     {
       "title": "SK Hynix overtakes Samsung as Korea’s most valuable company",
@@ -80,7 +96,7 @@
       "lastSeen": "2026-06-22T09:00:01.595854+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.0905
+      "score": 4.1065
     },
     {
       "title": "London’s Isometric lands $40M to certify the industrial economy with AI",
@@ -96,7 +112,7 @@
       "lastSeen": "2026-06-22T09:00:01.595854+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3732
+      "score": 3.389
     },
     {
       "title": "Baden Bower tracks 12,040 AI citations across six engines to rank top publications for AI visibility",
@@ -109,10 +125,10 @@
       "image": "https://media.thenextweb.com/2026/06/baden-bower-ai-visibility-index-citations-publications.avif",
       "published": "2026-06-22T09:57:16+00:00",
       "firstSeen": "2026-06-22T10:00:01.707125+00:00",
-      "lastSeen": "2026-06-22T13:00:01.579187+00:00",
+      "lastSeen": "2026-06-22T12:23:25.443602+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1608
+      "score": 3.178
     },
     {
       "title": "Spiro takes $55M from China’s NewTrails as it nears a $1bn valuation",
@@ -125,10 +141,10 @@
       "image": "https://media.thenextweb.com/2026/06/Spiro.avif",
       "published": "2026-06-22T09:46:02+00:00",
       "firstSeen": "2026-06-22T10:00:01.707125+00:00",
-      "lastSeen": "2026-06-22T13:00:01.579187+00:00",
+      "lastSeen": "2026-06-22T12:23:25.443602+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1555
+      "score": 3.1727
     },
     {
       "title": "SpaceX shares slide again as the post-IPO rally keeps unwinding",
@@ -141,10 +157,10 @@
       "image": "https://media.thenextweb.com/2026/06/spacex-ipo-oversubscribed-orders-close.avif",
       "published": "2026-06-22T09:59:30+00:00",
       "firstSeen": "2026-06-22T10:00:01.707125+00:00",
-      "lastSeen": "2026-06-22T13:00:01.579187+00:00",
+      "lastSeen": "2026-06-22T12:23:25.443602+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7618
+      "score": 2.7791
     },
     {
       "title": "Some Electricians Think Building Data Centers Is for Sellouts",
@@ -157,10 +173,10 @@
       "image": "https://media.wired.com/photos/6a317f4a898b4be9664d5a85/master/pass/Business_ElectriciansHaveaLotofComplicatedFeelingsAboutBuildingDataCenters-v1.jpg",
       "published": "2026-06-22T09:30:00+00:00",
       "firstSeen": "2026-06-22T10:00:01.707125+00:00",
-      "lastSeen": "2026-06-22T13:00:01.579187+00:00",
+      "lastSeen": "2026-06-22T12:23:25.443602+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1881
+      "score": 2.2051
     },
     {
       "title": "World Cup Scams Are Getting Harder to Spot",
@@ -173,33 +189,17 @@
       "image": "https://media.wired.com/clips/6a33f50cfdecea08d2cf6a9a/master/pass/WorldcupScam_lead.mp4",
       "published": "2026-06-22T09:30:00+00:00",
       "firstSeen": "2026-06-22T10:00:01.707125+00:00",
-      "lastSeen": "2026-06-22T13:00:01.579187+00:00",
+      "lastSeen": "2026-06-22T12:23:25.443602+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1881
-    },
-    {
-      "title": "Microsoft’s Nadella turns on the AI giants he helped build",
-      "url": "https://thenextweb.com/news/nadella-ai-giants-eat-economy",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "In a blunt interview, Satya Nadella warned that the AI giants cannot keep promising mass job losses while demanding the power to build whatever they want. Microsoft’s answer: cheaper models, more control for customers, and a pitch for the public’s trust. Satya Nadella helped start the AI boom. Now he has a warning for the [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/04/microsoft-voluntary-retirement-us-workers-ai.avif",
-      "published": "2026-06-22T12:50:06+00:00",
-      "firstSeen": "2026-06-22T13:00:01.579187+00:00",
-      "lastSeen": "2026-06-22T13:00:01.579187+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.145
+      "score": 2.2051
     }
   ],
   "errors": [
     {
       "source": "MarkTechPost",
       "url": "https://www.marktechpost.com/feed/",
-      "error": "HTTP Error 403: Forbidden"
+      "error": "not well-formed (invalid token): line 1, column 119"
     }
   ]
 }
