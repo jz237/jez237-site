@@ -360,13 +360,13 @@ function makeActor(c, r, kind){
 const RUN_SPEED = 5.4, CLIMB_SPEED = 4.5, FALL_SPEED = 9.5;
 const CENTER_EPS = 0.01;
 const LADDER_SUPPORT_X = 0.62;
-const LADDER_GRAB_X = 0.72;
+const LADDER_TOUCH_X = 0.54;
 
 function clamp(v, lo, hi){ return v < lo ? lo : v > hi ? hi : v; }
 
 function nearestLadderColumn(a, r, dir = 0, radius){
   const base = Math.floor(a.x);
-  const grab = radius == null ? (dir ? LADDER_GRAB_X : LADDER_SUPPORT_X) : radius;
+  const grab = radius == null ? (dir ? LADDER_TOUCH_X : LADDER_SUPPORT_X) : radius;
   let best = null, bestD = 99;
   for (let c = base - 1; c <= base + 1; c++){
     if (c < 0 || c >= COLS) continue;
@@ -1698,18 +1698,10 @@ function clearTouchMoveKeys(){
   keys.ArrowLeft = keys.ArrowRight = keys.ArrowUp = keys.ArrowDown = false;
 }
 const touchPulseTimers = {};
-let ladderTouchAssist = null;
 function pulseTouchKey(code, ms){
   clearTimeout(touchPulseTimers[code]);
   keys[code] = true;
   touchPulseTimers[code] = setTimeout(() => { keys[code] = false; }, ms || 180);
-}
-function queueLadderAssist(c, dir, ms){
-  ladderTouchAssist = {
-    c,
-    dir: dir < 0 ? -1 : 1,
-    until: gameTime + (ms || 950) / 1000,
-  };
 }
 function clientToGameScreen(clientX, clientY){
   const rect = canvas.getBoundingClientRect();
@@ -1759,17 +1751,14 @@ function handleTouchLadder(clientX, clientY){
   if (!lad) return false;
   AUDIO.ensure();
   const targetX = lad.c + .5;
+  if (Math.abs(player.x - targetX) > LADDER_TOUCH_X) return false;
   const p = clientToGameScreen(clientX, clientY);
   const w = screenToWorldPoint(p);
   const tapY = (w.y - HUD_H) / TILE;
   const dir = Math.abs(tapY - player.y) > 0.2
     ? (tapY < player.y ? -1 : 1)
     : (lad.r + .5 < player.y ? -1 : 1);
-  queueLadderAssist(lad.c, dir, 720);
-  if (Math.abs(player.x - targetX) > 0.32){
-    pulseTouchKey(targetX < player.x ? 'ArrowLeft' : 'ArrowRight', 340);
-  }
-  pulseTouchKey(dir < 0 ? 'ArrowUp' : 'ArrowDown', 520);
+  pulseTouchKey(dir < 0 ? 'ArrowUp' : 'ArrowDown', 260);
   return true;
 }
 function handleTouchDig(clientX, clientY){
@@ -1923,27 +1912,6 @@ function playerInput(){
     digR: keys.KeyX || keys.Period,
     dash: keys.Space || keys.ShiftLeft || keys.ShiftRight,
   };
-  if (ladderTouchAssist && player && state === 'playing'){
-    if (ladderTouchAssist.until <= gameTime){
-      ladderTouchAssist = null;
-      clearTouchMoveKeys();
-    } else {
-      const targetX = ladderTouchAssist.c + .5;
-      const dx = targetX - player.x;
-      if (Math.abs(dx) > 0.08){
-        if (dx < 0) inp.left = true;
-        else inp.right = true;
-      } else {
-        keys.ArrowLeft = keys.ArrowRight = false;
-        inp.left = false;
-        inp.right = false;
-      }
-      if (Math.abs(dx) <= LADDER_GRAB_X + 0.08){
-        if (ladderTouchAssist.dir < 0) inp.up = true;
-        else inp.down = true;
-      }
-    }
-  }
   return inp;
 }
 
