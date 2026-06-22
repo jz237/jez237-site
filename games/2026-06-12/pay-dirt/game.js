@@ -159,6 +159,7 @@ let hint = null;            // {life} first-level control hint
 let routeHint = null;       // {c, r, kind, label, life, manual}
 let routeHintIdleT = 0, routeHintCheckT = 0, routeHintProgress = '', routeHintManualT = 0;
 let wavePreview = null;     // Boom Rush pre-wave card
+let tapDigMarker = null;    // short-lived mobile tap target feedback
 let runDustT = 0, digBuffer = 0, digBufDir = 0;
 let titleRunner = null;     // attract-scene actor
 
@@ -1463,6 +1464,36 @@ function drawRouteHint(){
   ctx.restore();
 }
 
+function showTapDigMarker(c, r, ok){
+  tapDigMarker = {c, r, ok: !!ok, life: 0.42, max: 0.42};
+}
+
+function drawTapDigMarker(){
+  if (!tapDigMarker || tapDigMarker.life <= 0) return;
+  const a = clamp(tapDigMarker.life / (tapDigMarker.max || 0.42), 0, 1);
+  const col = tapDigMarker.ok ? '#3fd2c7' : '#ff8a5c';
+  const sx = tapDigMarker.c * TILE + TILE / 2;
+  const sy = tapDigMarker.r * TILE + HUD_H + TILE / 2;
+  const pulse = 1 - a;
+  ctx.save();
+  ctx.globalAlpha = 0.36 * a;
+  glow(tapDigMarker.c + .5, tapDigMarker.r + .5, 28 + pulse * 9, hexA(col, .55), 1);
+  ctx.globalAlpha = 0.9 * a;
+  ctx.strokeStyle = col;
+  ctx.lineWidth = 3;
+  ctx.beginPath();
+  ctx.arc(sx, sy, 9 + pulse * 8, 0, Math.PI * 2);
+  ctx.stroke();
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(sx - 14, sy); ctx.lineTo(sx - 7, sy);
+  ctx.moveTo(sx + 7, sy); ctx.lineTo(sx + 14, sy);
+  ctx.moveTo(sx, sy - 14); ctx.lineTo(sx, sy - 7);
+  ctx.moveTo(sx, sy + 7); ctx.lineTo(sx, sy + 14);
+  ctx.stroke();
+  ctx.restore();
+}
+
 function drawDeathCue(){
   if (!player || player.state !== 'dead') return;
   const p = clamp(player.deadT / 0.9, 0, 1);
@@ -2159,7 +2190,10 @@ function handleTouchDig(clientX, clientY){
     r: Math.floor((w.y - HUD_H) / TILE),
   };
   const dir = p.x < playerScreenX() ? -1 : 1;
-  if (!tryDig(dir, target)) pulseTouchKey(dir < 0 ? 'KeyZ' : 'KeyX', 240);
+  const ok = tryDig(dir, target);
+  const markedOk = ok || !!(player.pendingDig && player.pendingDig.c === target.c && player.pendingDig.r === target.r);
+  showTapDigMarker(target.c, target.r, markedOk);
+  if (!ok) pulseTouchKey(dir < 0 ? 'KeyZ' : 'KeyX', 240);
   return true;
 }
 function initTouchGestures(){
@@ -2583,6 +2617,7 @@ function update(dt){
   if (banner){ banner.life -= dt; if (banner.life <= 0) banner = null; }
   if (hint){ hint.life -= dt; if (hint.life <= 0) hint = null; }
   if (wavePreview){ wavePreview.life -= dt; if (wavePreview.life <= 0) wavePreview = null; }
+  if (tapDigMarker){ tapDigMarker.life -= dt; if (tapDigMarker.life <= 0) tapDigMarker = null; }
   updateParticles(dt);
   if (!player) return;
   // hit-pause: freeze entity sim for a few frames on big impacts (deterministic under step)
@@ -4135,6 +4170,7 @@ function renderWorldFrame(includeHUD){
       ctx.restore();
     }
     drawRouteHint();
+    drawTapDigMarker();
     // lit fuses
     for (const f of fuses){
       const a = 0.5 + 0.5 * Math.sin(f.t * 50);
@@ -5495,6 +5531,21 @@ window.__g = {
   get hunchState(){ return routeHint ? {...routeHint} : null; },
   get wavePreview(){ return wavePreview ? {...wavePreview} : null; },
   get lastNuggetCue(){ return lastNuggetCueTargets(); },
+  get tapDigMarker(){ return tapDigMarker ? {...tapDigMarker} : null; },
+  tapDig(c, r, dir){
+    if (!player) return null;
+    const tc = Math.floor(Number(c) || 0);
+    const tr = Math.floor(Number(r) || 0);
+    const d = dir == null ? (tc + .5 < player.x ? -1 : 1) : (dir < 0 ? -1 : 1);
+    const ok = tryDig(d, {c: tc, r: tr});
+    const markedOk = ok || !!(player.pendingDig && player.pendingDig.c === tc && player.pendingDig.r === tr);
+    showTapDigMarker(tc, tr, markedOk);
+    return {
+      ok,
+      marker: tapDigMarker ? {...tapDigMarker} : null,
+      pending: player.pendingDig ? {...player.pendingDig} : null,
+    };
+  },
   sfx(name){ AUDIO.ensure(); AUDIO.sfx(name); return true; },
   get mobileZoom(){ return mobileZoomAdjust; },
   get mobileView(){ return mobileView ? {...mobileView} : null; },
