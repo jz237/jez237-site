@@ -135,3 +135,5 @@ Sim is fixed-timestep (60Hz accumulator); `__g.step(n)` drives ticks headlessly.
 - 2026-06-22: Cyber-security/Jerry polish pass renamed campaign upgrades as Jerry-rigged gear,
   added small Upgrade Camp story beats, made the first-claim hint more goal-focused, gave
   secret caves named discoveries, and tied the campaign win line back to keeping Jerry's bills paid.
+- 2026-06-22: Jerry story panel revised to be more directly about Jerry's character,
+  habits, cyber-security background, and why the mine map pulls him underground.
