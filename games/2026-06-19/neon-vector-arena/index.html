@@ -61,8 +61,9 @@
     position: fixed;
     inset: 0;
     z-index: 4;
-    display: grid;
-    place-items: center;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
     padding: 22px;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
@@ -80,7 +81,9 @@
   .panel {
     width: min(620px, 100%);
     max-height: calc(100dvh - 44px);
+    margin: auto 0;
     overflow-y: auto;
+    scrollbar-gutter: stable both-edges;
     overscroll-behavior: contain;
     touch-action: pan-y;
     text-align: center;
@@ -218,6 +221,17 @@
     overflow-y: auto;
     padding-right: 4px;
   }
+  .score-tabs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin: 0 0 10px;
+  }
+  .score-tabs button {
+    min-height: 38px;
+    padding: 9px 10px;
+    font-size: 11px;
+  }
   .score-row {
     display: grid;
     grid-template-columns: 38px 1fr auto;
@@ -247,6 +261,9 @@
     display: grid;
     gap: 7px;
     margin-top: 10px;
+    max-height: min(34dvh, 280px);
+    overflow-y: auto;
+    padding-right: 4px;
     text-align: left;
   }
   .slot {
@@ -306,7 +323,6 @@
   }
   @media (max-height: 560px) and (orientation: landscape) {
     .overlay {
-      place-items: start center;
       padding: 8px max(10px, env(safe-area-inset-right)) 8px max(10px, env(safe-area-inset-left));
     }
     .panel {
@@ -350,7 +366,19 @@
       padding-top: 8px;
     }
     .overlay.score-screen .score-board {
-      max-height: 42dvh;
+      max-height: 36dvh;
+    }
+    .score-tabs {
+      margin-bottom: 6px;
+      gap: 6px;
+    }
+    .score-tabs button {
+      min-height: 30px;
+      padding: 6px 8px;
+      font-size: 10px;
+    }
+    .slot-list {
+      max-height: 28dvh;
     }
     .score-row {
       min-height: 20px;
@@ -397,6 +425,10 @@
       </div>
     </div>
     <div class="panel-section" id="scorePanel">
+      <div class="score-tabs" id="scoreTabs">
+        <button id="soloScoresBtn" class="secondary" type="button">Solo</button>
+        <button id="multiScoresBtn" class="secondary" type="button">Multiplayer</button>
+      </div>
       <div id="scoreBoard" class="score-board"></div>
     </div>
     <div class="panel-section" id="onlinePanel">
@@ -419,7 +451,7 @@
     <p class="fine" id="overlayFine">Dual Stick: left side flies, right side aims and fires. Desktop: WASD plus hold mouse to aim.</p>
   </div>
 </div>
-<div class="version">v4.6</div>
+<div class="version">v4.7</div>
 
 <script>
 'use strict';
@@ -445,6 +477,8 @@ const autoModeBtn = document.getElementById('autoMode');
 const dualModeBtn = document.getElementById('dualMode');
 const scoreSubmit = document.getElementById('scoreSubmit');
 const scorePanel = document.getElementById('scorePanel');
+const soloScoresBtn = document.getElementById('soloScoresBtn');
+const multiScoresBtn = document.getElementById('multiScoresBtn');
 const onlinePanel = document.getElementById('onlinePanel');
 const scoreBoard = document.getElementById('scoreBoard');
 const initialsInput = document.getElementById('initials');
@@ -463,7 +497,8 @@ let W = 0, H = 0, DPR = 1;
 let running = false;
 let menuState = 'menu';
 let gameMode = 'solo';
-let globalScoreCache = null;
+let scoreMode = 'solo';
+let globalScoreCache = {};
 let partner = null;
 let online = { ws: null, room: '', role: null, id: null, name: 'PLAYER', connected: false, started: false, ready: { p1: false, p2: false }, peers: [], lastInput: 0, lastSnapshot: 0, remoteInput: null, status: '' };
 let audioCtx = null;
@@ -554,7 +589,11 @@ const WAVE_MODIFIERS = [
 ];
 const LOCAL_SCORE_KEY = 'neon-vector-arena-local-scores-v1';
 const NAME_KEY = 'neon-vector-arena-initials';
-const SCORES_API = 'https://game-scores.jez237.workers.dev/scores/neon-vector-arena';
+const SCORE_MODE_KEY = 'neon-vector-arena-score-mode';
+const SCORE_APIS = {
+  solo: 'https://game-scores.jez237.workers.dev/scores/neon-vector-arena',
+  multiplayer: 'https://game-scores.jez237.workers.dev/scores/neon-vector-arena-multiplayer'
+};
 const ONLINE_WS = window.NEON_VECTOR_WS || ((location.hostname === 'localhost' || location.hostname === '127.0.0.1')
   ? 'ws://127.0.0.1:8788/ws'
   : 'wss://neon-vector-arena-online.jez237.workers.dev/ws');
@@ -693,14 +732,14 @@ function setPanel(section = 'menu') {
     startBtn.textContent = 'Resume';
   } else if (section === 'over') {
     overlayTitle.innerHTML = 'ENTER<br>INITIALS';
-    overlaySub.textContent = `Score ${Math.floor(score)} · Wave ${String(wave).padStart(2, '0')} · ${kills} shapes destroyed · Best Δx${bestCombo} · ${modifiersCleared} mods cleared · ${bombsUsed} bomb${bombsUsed === 1 ? '' : 's'} used.`;
+    overlaySub.textContent = `${gameMode === 'online' ? 'Multiplayer' : 'Solo'} score ${Math.floor(score)} · Wave ${String(wave).padStart(2, '0')} · ${kills} shapes destroyed · Best Δx${bestCombo} · ${modifiersCleared} mods cleared · ${bombsUsed} bomb${bombsUsed === 1 ? '' : 's'} used.`;
     overlayFine.textContent = 'Submit to save your score, or restart solo.';
     startBtn.textContent = 'Restart Solo';
     initialsInput.value = cleanInitials(localStorage.getItem(NAME_KEY) || initialsInput.value || 'YOU');
   } else if (section === 'scores') {
     overlayTitle.innerHTML = 'TOP 20<br>SCORES';
-    overlaySub.textContent = 'Best Neon Vector Arena solo runs by score, with wave reached and shapes destroyed.';
-    overlayFine.textContent = 'Global leaderboard is shown when available; local scores appear as fallback.';
+    overlaySub.textContent = 'Best Neon Vector Arena runs by score, with separate solo and multiplayer boards.';
+    overlayFine.textContent = 'Global multiplayer and solo leaderboards are shown when available; local scores appear as fallback.';
     startBtn.textContent = 'Solo Run';
     refreshScoreBoard();
   } else if (section === 'online') {
@@ -795,67 +834,103 @@ function cleanInitials(raw) {
   return (raw || 'YOU').toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 3) || 'YOU';
 }
 
+function normalizeScoreMode(mode) {
+  return mode === 'multiplayer' || mode === 'online' ? 'multiplayer' : 'solo';
+}
+
+function currentRunScoreMode() {
+  return normalizeScoreMode(gameMode);
+}
+
+function scoreApiFor(mode = scoreMode) {
+  return SCORE_APIS[normalizeScoreMode(mode)] || SCORE_APIS.solo;
+}
+
+function setScoreMode(mode, refresh = false) {
+  scoreMode = normalizeScoreMode(mode);
+  localStorage.setItem(SCORE_MODE_KEY, scoreMode);
+  soloScoresBtn.classList.toggle('mode-active', scoreMode === 'solo');
+  multiScoresBtn.classList.toggle('mode-active', scoreMode === 'multiplayer');
+  if (refresh) refreshScoreBoard();
+}
+
 function localScores() {
-  try { return JSON.parse(localStorage.getItem(LOCAL_SCORE_KEY) || '[]'); }
+  try {
+    return JSON.parse(localStorage.getItem(LOCAL_SCORE_KEY) || '[]')
+      .map(row => ({ ...row, mode: normalizeScoreMode(row?.mode) }));
+  }
   catch { return []; }
 }
 
-function saveLocalScore(name, value) {
-  const row = { name: cleanInitials(name), score: Math.max(0, Math.floor(value)), wave, kills, ts: Date.now() };
-  const rows = localScores().concat(row).sort((a, b) => b.score - a.score).slice(0, 20);
+function saveLocalScore(name, value, mode = currentRunScoreMode()) {
+  const row = { name: cleanInitials(name), score: Math.max(0, Math.floor(value)), wave, kills, mode: normalizeScoreMode(mode), ts: Date.now() };
+  const boardRows = localScores()
+    .filter(item => normalizeScoreMode(item.mode) === row.mode)
+    .concat(row)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 20);
+  const otherRows = localScores()
+    .filter(item => normalizeScoreMode(item.mode) !== row.mode)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 20);
+  const rows = otherRows.concat(boardRows);
   localStorage.setItem(LOCAL_SCORE_KEY, JSON.stringify(rows));
   localStorage.setItem(NAME_KEY, row.name);
   return rows;
 }
 
-function normalizeScoreRow(row, global = false) {
+function normalizeScoreRow(row, global = false, fallbackMode = scoreMode) {
   const extra = row && typeof row.extra === 'object' ? row.extra : {};
   return {
     name: cleanInitials(row?.initials || row?.name || '???'),
     score: Math.max(0, Number(row?.score) || 0),
     wave: Math.max(0, Number(row?.wave ?? extra.wave) || 0),
     kills: Math.max(0, Number(row?.kills ?? extra.kills) || 0),
+    mode: normalizeScoreMode(row?.mode ?? extra.mode ?? fallbackMode),
     global
   };
 }
 
-async function fetchGlobalScores(force = false) {
-  if (globalScoreCache && !force) return globalScoreCache;
+async function fetchGlobalScores(force = false, mode = scoreMode) {
+  const boardMode = normalizeScoreMode(mode);
+  if (globalScoreCache[boardMode] && !force) return globalScoreCache[boardMode];
   try {
     const ctl = new AbortController();
     const timer = setTimeout(() => ctl.abort(), 7000);
-    const res = await fetch(`${SCORES_API}?limit=20`, { cache: 'no-store', signal: ctl.signal });
+    const res = await fetch(`${scoreApiFor(boardMode)}?limit=20`, { cache: 'no-store', signal: ctl.signal });
     clearTimeout(timer);
     const data = await res.json();
     const rows = Array.isArray(data) ? data : (data.scores || []);
-    globalScoreCache = rows
-      .map(row => normalizeScoreRow(row, true))
+    globalScoreCache[boardMode] = rows
+      .map(row => normalizeScoreRow(row, true, boardMode))
       .filter(row => !(row.name === 'TST' && row.score <= 1 && row.wave === 0 && row.kills === 0))
       .sort((a, b) => b.score - a.score)
       .slice(0, 20);
-    return globalScoreCache;
+    return globalScoreCache[boardMode];
   } catch {
-    globalScoreCache = null;
+    delete globalScoreCache[boardMode];
     return null;
   }
 }
 
-async function submitGlobalScore(name, value) {
+async function submitGlobalScore(name, value, mode = currentRunScoreMode()) {
+  const boardMode = normalizeScoreMode(mode);
   try {
     const ctl = new AbortController();
     const timer = setTimeout(() => ctl.abort(), 7000);
-    await fetch(SCORES_API, {
+    await fetch(scoreApiFor(boardMode), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         initials: cleanInitials(name),
         score: Math.max(0, Math.floor(value)),
-        extra: { wave, kills, mode: gameMode }
+        mode: boardMode,
+        extra: { wave, kills, mode: boardMode, room: boardMode === 'multiplayer' ? online.room : '' }
       }),
       signal: ctl.signal
     });
     clearTimeout(timer);
-    globalScoreCache = null;
+    delete globalScoreCache[boardMode];
     return true;
   } catch {
     return false;
@@ -864,27 +939,31 @@ async function submitGlobalScore(name, value) {
 
 function scoreRowsHtml(rows, source) {
   if (!rows.length) {
-    return `<div class="score-row"><span>--</span><b>No ${source} scores yet</b><em>solo</em></div>`;
+    return `<div class="score-row"><span>--</span><b>No ${source} scores yet</b><em>${scoreMode === 'multiplayer' ? 'multi' : 'solo'}</em></div>`;
   }
   return rows.slice(0, 20).map((raw, index) => {
-    const row = normalizeScoreRow(raw, source === 'global');
+    const row = normalizeScoreRow(raw, source === 'global', scoreMode);
     const meta = row.wave || row.kills ? `<small>W${String(row.wave || 1).padStart(2, '0')} · ${row.kills} KO</small>` : '<small>RUN DATA PENDING</small>';
     return `<div class="score-row"><span>${String(index + 1).padStart(2, '0')}</span><b>${escapeHtml(row.name || 'YOU')}${meta}</b><em>${Math.floor(row.score || 0)}</em></div>`;
   }).join('');
 }
 
 function renderScoreBoard(rows = null, source = 'local') {
-  const list = (rows || localScores()).slice(0, 20);
-  const label = source === 'global' ? 'GLOBAL TOP 20' : 'LOCAL TOP 20';
+  setScoreMode(scoreMode, false);
+  const list = (rows || localScores().filter(row => normalizeScoreMode(row.mode) === scoreMode)).slice(0, 20);
+  const modeLabel = scoreMode === 'multiplayer' ? 'MULTIPLAYER' : 'SOLO';
+  const label = source === 'global' ? `GLOBAL ${modeLabel} TOP 20` : `LOCAL ${modeLabel} TOP 20`;
   scoreBoard.innerHTML = `<div class="score-row header"><span>#</span><b>${label}</b><em>${list.length}/20</em></div>` + scoreRowsHtml(list, source);
 }
 
 async function refreshScoreBoard() {
-  scoreBoard.innerHTML = '<div class="score-row header"><span>...</span><b>LOADING TOP 20</b><em>wait</em></div>';
-  const rows = await fetchGlobalScores(true);
+  const modeLabel = scoreMode === 'multiplayer' ? 'MULTIPLAYER' : 'SOLO';
+  setScoreMode(scoreMode, false);
+  scoreBoard.innerHTML = `<div class="score-row header"><span>...</span><b>LOADING ${modeLabel} TOP 20</b><em>wait</em></div>`;
+  const rows = await fetchGlobalScores(true, scoreMode);
   if (rows) renderScoreBoard(rows, 'global');
   else {
-    renderScoreBoard(localScores(), 'local');
+    renderScoreBoard(localScores().filter(row => normalizeScoreMode(row.mode) === scoreMode), 'local');
     scoreBoard.innerHTML += '<div class="score-row"><span>!</span><b>Global board unavailable</b><em>local</em></div>';
   }
 }
@@ -3069,6 +3148,8 @@ fullscreenBtn.addEventListener('click', toggleFullscreen);
 autoModeBtn.addEventListener('click', () => setControlMode('auto'));
 dualModeBtn.addEventListener('click', () => setControlMode('dual'));
 scoresBtn.addEventListener('click', () => showOverlay('scores'));
+soloScoresBtn.addEventListener('click', () => setScoreMode('solo', true));
+multiScoresBtn.addEventListener('click', () => setScoreMode('multiplayer', true));
 onlineBtn.addEventListener('click', () => showOverlay('online'));
 connectOnlineBtn.addEventListener('click', connectOnline);
 readyOnlineBtn.addEventListener('click', toggleOnlineReady);
@@ -3077,15 +3158,17 @@ roomsOnlineBtn.addEventListener('click', refreshOnlineRooms);
 disconnectOnlineBtn.addEventListener('click', disconnectOnline);
 submitScoreBtn.addEventListener('click', async () => {
   const name = cleanInitials(initialsInput.value);
+  const boardMode = currentRunScoreMode();
   initialsInput.value = name;
-  saveLocalScore(name, score);
+  saveLocalScore(name, score, boardMode);
+  setScoreMode(boardMode, false);
   submitScoreBtn.disabled = true;
   submitScoreBtn.textContent = 'Sending';
-  const ok = await submitGlobalScore(name, score);
+  const ok = await submitGlobalScore(name, score, boardMode);
   submitScoreBtn.disabled = false;
   submitScoreBtn.textContent = 'Submit';
   showOverlay('scores');
-  overlayFine.textContent = ok ? 'Score saved locally and submitted globally.' : 'Score saved locally. Global submit is unavailable right now.';
+  overlayFine.textContent = ok ? `${boardMode === 'multiplayer' ? 'Multiplayer' : 'Solo'} score saved locally and submitted globally.` : 'Score saved locally. Global submit is unavailable right now.';
 });
 window.addEventListener('resize', resize);
 document.addEventListener('fullscreenchange', () => {
@@ -3133,6 +3216,7 @@ onlineRoomInput.value = randomRoom();
 onlineNameInput.value = cleanName(localStorage.getItem(NAME_KEY) || 'PLAYER');
 updateControlModeButtons();
 updateFullscreenButton();
+setScoreMode(localStorage.getItem(SCORE_MODE_KEY), false);
 overlayFine.textContent = controlHelpText();
 renderOnlineSlots();
 render();
