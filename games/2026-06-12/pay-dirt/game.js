@@ -1045,6 +1045,11 @@ const GUARD_META = {
   mason: {color: '#b07fff', glow: 'rgba(176,127,255,.25)', icon: '◆', label: 'MASON'},
   boss: {color: '#ffcf5a', glow: 'rgba(255,207,90,.36)', icon: '♛', label: 'BARON'},
 };
+const CLAIM_JUMPER_NAMES = {
+  guard: ['Red Rusk', 'Milo Grint', 'Dusty Vail', 'Nash Flint', 'Caldera Cole', 'Rye Cutter'],
+  scout: ['Zip Pike', 'Oro Finch', 'Needle Knox', 'Skim Vale', 'Quill Jett'],
+  mason: ['Maul Briggs', 'Mortar May', 'Brick Harlan', 'Tess Tamping', 'Grout Bell'],
+};
 const DEATH_TEXT = {
   caught: 'CAUGHT',
   sealed: 'SEALED IN',
@@ -1056,6 +1061,20 @@ const DEATH_TEXT = {
 };
 function guardMeta(g){ return GUARD_META[g.kind] || GUARD_META.guard; }
 function deathText(reason){ return DEATH_TEXT[reason] || 'CLAIM LOST'; }
+function claimJumperName(kind, ordinal){
+  const list = CLAIM_JUMPER_NAMES[kind] || CLAIM_JUMPER_NAMES.guard;
+  const seed = Math.abs(LEVELS.hashStr(mode + ':' + levelIndex + ':' + kind + ':' + ordinal + ':' + (dailyDate || '')));
+  return list[seed % list.length];
+}
+function assignClaimJumperNames(){
+  const counts = {guard: 0, scout: 0, mason: 0};
+  for (const g of guards){
+    if (g.kind === 'boss') continue;
+    const kind = CLAIM_JUMPER_NAMES[g.kind] ? g.kind : 'guard';
+    counts[kind]++;
+    g.name = claimJumperName(kind, counts[kind]);
+  }
+}
 function bossTarget(g){
   if (g && g.kind === 'boss' && special && special.cartReady && exitRevealed)
     return special.cart;
@@ -2797,6 +2816,7 @@ function loadLevelData(rows){
     boss.bossDigT = 1.2;
     guards.push(boss);
   }
+  assignClaimJumperNames();
   if (isSpecialMode()){
     player.tnt = specialCfg.tnt == null ? 4 : specialCfg.tnt;
     player.speedT = specialCfg.speed == null ? 6 : specialCfg.speed;
@@ -3927,6 +3947,35 @@ function drawGeneratedEnemy(a, sprite, cx2, footY, h, w, pose){
   ctx.drawImage(sprite.img, sprite.sx, sprite.sy, sprite.sw, sprite.sh, -w * .5, -h, w, h);
   ctx.restore();
 }
+
+function shouldShowGuardName(a){
+  if (!a.name || a.state === 'dead') return false;
+  if (a.kind === 'boss') return true;
+  if (gameTime < 2.6) return true;
+  if (a.alertT > 0) return true;
+  return player && Math.hypot(player.x - a.x, player.y - a.y) < 4.2;
+}
+
+function drawGuardNameplate(a, cx2, y, meta){
+  const label = a.name || (a.kind === 'boss' ? 'BARON BRIM' : '');
+  if (!label) return;
+  ctx.save();
+  ctx.globalCompositeOperation = 'source-over';
+  ctx.font = '900 9px system-ui, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  const w = Math.min(96, Math.max(48, ctx.measureText(label).width + 14));
+  roundRect(cx2 - w / 2, y, w, 15, 5);
+  ctx.fillStyle = 'rgba(8,5,14,.82)';
+  ctx.fill();
+  ctx.strokeStyle = hexA(meta.color, a.kind === 'boss' ? .72 : .5);
+  ctx.lineWidth = 1;
+  ctx.stroke();
+  ctx.fillStyle = a.kind === 'boss' ? '#ffcf5a' : '#f5eddd';
+  ctx.fillText(label, cx2, y + 8);
+  ctx.restore();
+}
+
 function drawActor(a){
   const set = ART.frames[a.kind] || ART.frames.guard;
   const pose = poseFor(a);
@@ -4028,22 +4077,7 @@ function drawActor(a){
       ctx.stroke();
       ctx.restore();
     }
-    if (a.kind === 'boss'){
-      ctx.save();
-      ctx.globalCompositeOperation = 'source-over';
-      ctx.fillStyle = 'rgba(8,5,14,.82)';
-      roundRect(cx2 - 39, footY - h - 22, 78, 15, 5);
-      ctx.fill();
-      ctx.strokeStyle = 'rgba(255,207,90,.62)';
-      ctx.lineWidth = 1;
-      ctx.stroke();
-      ctx.fillStyle = '#ffcf5a';
-      ctx.font = '900 9px system-ui, sans-serif';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillText(a.name || 'BARON BRIM', cx2, footY - h - 14);
-      ctx.restore();
-    }
+    if (shouldShowGuardName(a)) drawGuardNameplate(a, cx2, footY - h - 22, meta);
   }
   // carried gold — show which guard pocketed your nugget
   if (a.gold){
@@ -6051,6 +6085,7 @@ window.__g = {
   get mode(){ return mode; },
   get player(){ return player; },
   get guards(){ return guards; },
+  get rivalNames(){ return guards.map(g => ({kind: g.kind, name: g.name || '', x: g.x, y: g.y})); },
   get boss(){ const b = guards.find(g => g.kind === 'boss'); return b ? {x: b.x, y: b.y, state: b.state, name: b.name, tnt: b.bossTntT, dig: b.bossDigT, gold: !!b.gold} : null; },
   get golds(){ return golds; },
   get treasures(){ return treasures; },
