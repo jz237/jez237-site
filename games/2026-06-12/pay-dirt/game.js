@@ -164,7 +164,6 @@ let routeHintIdleT = 0, routeHintCheckT = 0, routeHintProgress = '', routeHintMa
 let wavePreview = null;     // Boom Rush pre-wave card
 let tapDigMarker = null;    // short-lived mobile tap target feedback
 let runDustT = 0, digBuffer = 0, digBufDir = 0;
-let titleRunner = null;     // attract-scene actor
 
 /* ================= particles + floating text ================= */
 let particles = [], popups = [], pickupTrails = [];
@@ -4157,21 +4156,6 @@ function renderTitle(){
     ctx.fillStyle = 'rgba(255,250,210,1)'; ctx.beginPath(); ctx.ellipse(bx, by - 28, 1.6, 4 * fl, 0, 0, 7); ctx.fill();
     ctx.restore();
   }
-  // a prospector pacing the lower ledge
-  const span = VIEW_W - 4 * TILE;
-  const phase = (clock * 0.18) % 2;
-  const tx = (phase < 1 ? phase : 2 - phase);
-  const rx = (2 * TILE + tx * span) / TILE;
-  titleRunner = titleRunner || makeActor(2, ROWS - 2, 'player');
-  titleRunner.x = rx; titleRunner.y = ROWS - 1.5;
-  titleRunner.state = 'run'; titleRunner.moved = true; titleRunner.anim = clock;
-  titleRunner.dir = phase < 1 ? 1 : -1;
-  // warm lantern pool under the runner
-  ctx.save(); ctx.globalCompositeOperation = 'lighter';
-  glow(rx, ROWS - 1.6, 100, 'rgba(255,205,130,.45)', 1);
-  glow(rx, ROWS - 1.7, 40, 'rgba(255,235,180,.4)', 1);
-  ctx.restore();
-  drawActor(titleRunner);
   // a few sparkles of gold scattered
   for (let i = 0; i < 5; i++){
     const gx = (3 + i * 5.3) , gy = ROWS - 1.5;
