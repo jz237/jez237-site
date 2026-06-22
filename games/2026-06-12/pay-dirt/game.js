@@ -158,6 +158,7 @@ let banner = null;          // {text, sub, life}
 let hint = null;            // {life} first-level control hint
 let routeHint = null;       // {c, r, kind, label, life, manual}
 let routeHintIdleT = 0, routeHintCheckT = 0, routeHintProgress = '', routeHintManualT = 0;
+let wavePreview = null;     // Boom Rush pre-wave card
 let runDustT = 0, digBuffer = 0, digBufDir = 0;
 let titleRunner = null;     // attract-scene actor
 
@@ -1491,6 +1492,75 @@ function drawDeathCue(){
   ctx.restore();
 }
 
+function boomHazardLabel(cfg, levelNumber){
+  const hazards = [];
+  if (cfg.worm) hazards.push('DRILL WORM');
+  if (cfg.crushers && cfg.crushers.length) hazards.push('CRUSHERS');
+  if (cfg.lava && cfg.lava.length) hazards.push('LAVA');
+  if (cfg.vents && cfg.vents.length) hazards.push('VENTS');
+  if (cfg.plates && cfg.plates.length) hazards.push('PRESSURE PLATE');
+  if (levelNumber >= 12) hazards.push('MASONS');
+  else if (levelNumber >= 7) hazards.push('SCOUTS');
+  else if (levelNumber >= 5) hazards.push('TNT VEINS');
+  else hazards.push('CART ROUTE');
+  return hazards.slice(0, 2).join(' + ');
+}
+
+function boomGoalLabel(cfg){
+  if (cfg.final) return 'FULL RIDE-OUT';
+  return 'RIDE TO CART';
+}
+
+function makeWavePreview(level, cfg, brief){
+  const n = levelIndex + 1;
+  const total = LEVELS.special.levels?.length || 1;
+  return {
+    title: 'BOOM RUSH ' + n + '/' + total,
+    hazard: boomHazardLabel(cfg || {}, n),
+    goal: boomGoalLabel(cfg || {}),
+    brief: brief || 'DRILL, BLAST, LOOT, RIDE OUT',
+    life: 4.2,
+  };
+}
+
+function drawWavePreview(){
+  if (!wavePreview || wavePreview.life <= 0) return;
+  const fadeIn = Math.min(1, (4.2 - wavePreview.life) * 5);
+  const fadeOut = Math.min(1, wavePreview.life / .7);
+  const a = Math.min(fadeIn, fadeOut);
+  const w = 410, h = 74;
+  const x = VIEW_W / 2 - w / 2, y = HUD_H + 10;
+  const fitText = (text, maxW) => {
+    text = String(text || '');
+    if (ctx.measureText(text).width <= maxW) return text;
+    while (text.length > 4 && ctx.measureText(text + '...').width > maxW) text = text.slice(0, -1);
+    return text + '...';
+  };
+  ctx.save();
+  ctx.globalAlpha = a;
+  roundRect(x, y, w, h, 8);
+  ctx.fillStyle = 'rgba(8,10,18,.76)';
+  ctx.fill();
+  ctx.strokeStyle = 'rgba(255,210,63,.58)';
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+  ctx.fillStyle = '#ffd86b';
+  ctx.font = '900 15px system-ui, sans-serif';
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(wavePreview.title, x + 18, y + 18);
+  ctx.fillStyle = '#ff9d2e';
+  ctx.font = '900 11px system-ui, sans-serif';
+  ctx.fillText(fitText('HAZARD  ' + wavePreview.hazard, 190), x + 18, y + 43);
+  ctx.fillStyle = '#3fd2c7';
+  ctx.textAlign = 'right';
+  ctx.fillText(fitText('GOAL  ' + wavePreview.goal, 155), x + w - 18, y + 43);
+  ctx.fillStyle = 'rgba(235,229,214,.78)';
+  ctx.font = '700 10px system-ui, sans-serif';
+  ctx.fillText(fitText(wavePreview.brief.toUpperCase(), w - 36), x + w - 18, y + 61);
+  ctx.restore();
+}
+
 function trapGuard(g){
   g.state = 'stun'; g.stunT = 0; g.anim = 0;
   addScore(150);
@@ -2320,9 +2390,16 @@ function loadLevelData(rows){
     {label: 'FINDS', value: discoveryTotal},
     {label: 'THREAT', value: claimThreatLabel().toUpperCase()},
   ];
-  if (mode === 'special') banner = {text: 'BOOM RUSH ' + (levelIndex + 1) + '/' + (LEVELS.special.levels?.length || 1), sub: (specialLevel?.brief || 'DRILL, BLAST, LOOT, RIDE OUT').toUpperCase(), stats, life: 2.8};
-  else if (mode === 'daily') banner = {text: 'DAILY DIG', sub: dailyDate || LEVELS.dailyDateUTC(), stats, life: 2.4};
-  else banner = {text: 'CLAIM ' + (levelIndex + 1), sub: (LEVELS.names[levelIndex] || '').toUpperCase(), brief: LEVELS.briefs && LEVELS.briefs[levelIndex], stats, life: 2.4};
+  if (mode === 'special'){
+    wavePreview = makeWavePreview(specialLevel, specialCfg, specialLevel?.brief);
+    banner = {text: 'BOOM RUSH ' + (levelIndex + 1) + '/' + (LEVELS.special.levels?.length || 1), sub: (specialLevel?.brief || 'DRILL, BLAST, LOOT, RIDE OUT').toUpperCase(), stats, life: 2.0};
+  } else if (mode === 'daily'){
+    wavePreview = null;
+    banner = {text: 'DAILY DIG', sub: dailyDate || LEVELS.dailyDateUTC(), stats, life: 2.4};
+  } else {
+    wavePreview = null;
+    banner = {text: 'CLAIM ' + (levelIndex + 1), sub: (LEVELS.names[levelIndex] || '').toUpperCase(), brief: LEVELS.briefs && LEVELS.briefs[levelIndex], stats, life: 2.4};
+  }
   hint = null;
   if (mode === 'special'){
     hint = {
@@ -2471,6 +2548,7 @@ function update(dt){
   if (discoveryPulse > 0) discoveryPulse = Math.max(0, discoveryPulse - dt * 1.8);
   if (banner){ banner.life -= dt; if (banner.life <= 0) banner = null; }
   if (hint){ hint.life -= dt; if (hint.life <= 0) hint = null; }
+  if (wavePreview){ wavePreview.life -= dt; if (wavePreview.life <= 0) wavePreview = null; }
   updateParticles(dt);
   if (!player) return;
   // hit-pause: freeze entity sim for a few frames on big impacts (deterministic under step)
@@ -4187,6 +4265,8 @@ function renderWorldFrame(includeHUD){
   // pause scrim
   if (state === 'paused'){ ctx.fillStyle = 'rgba(8,5,14,.55)'; ctx.fillRect(0, 0, VIEW_W, VIEW_H); }
 
+  drawWavePreview();
+
   // intro banner
   if (banner){
     const a = Math.min(1, banner.life) * Math.min(1, (2.4 - banner.life) * 4);
@@ -5342,6 +5422,7 @@ window.__g = {
   showNoWayOut(reason){ showSoftlock(reason || currentNoWayOutReason() || 'This claim cannot be completed from here.'); return state; },
   hunch(){ return triggerRouteHint(true); },
   get hunchState(){ return routeHint ? {...routeHint} : null; },
+  get wavePreview(){ return wavePreview ? {...wavePreview} : null; },
   get mobileZoom(){ return mobileZoomAdjust; },
   get mobileView(){ return mobileView ? {...mobileView} : null; },
   set mobileZoom(v){ mobileZoomAdjust = clamp(Number(v) || 1, 0.68, 1.45); },
