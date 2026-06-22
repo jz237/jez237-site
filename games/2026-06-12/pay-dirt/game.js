@@ -1561,6 +1561,39 @@ function drawWavePreview(){
   ctx.restore();
 }
 
+function lastNuggetCueTargets(){
+  if (goldLeft <= 0 || goldLeft > 2) return [];
+  return golds
+    .filter(gd => !gd.taken && !gd.held)
+    .map(gd => ({c: gd.c, r: gd.r}));
+}
+
+function drawLastNuggetCue(cx0, cy0, phase){
+  const pulse = 0.5 + 0.5 * Math.sin(gameTime * 5.6 + phase);
+  ctx.save();
+  ctx.globalCompositeOperation = 'lighter';
+  ctx.globalAlpha = 0.34 + pulse * 0.26;
+  ctx.strokeStyle = '#fff3b0';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.arc(cx0, cy0, 22 + pulse * 6, 0, Math.PI * 2);
+  ctx.stroke();
+  ctx.globalAlpha = 0.45 + pulse * 0.38;
+  ctx.strokeStyle = '#ffd23f';
+  ctx.lineWidth = 1.6;
+  ctx.beginPath();
+  ctx.moveTo(cx0 - 18, cy0);
+  ctx.lineTo(cx0 - 8, cy0);
+  ctx.moveTo(cx0 + 8, cy0);
+  ctx.lineTo(cx0 + 18, cy0);
+  ctx.moveTo(cx0, cy0 - 18);
+  ctx.lineTo(cx0, cy0 - 8);
+  ctx.moveTo(cx0, cy0 + 8);
+  ctx.lineTo(cx0, cy0 + 18);
+  ctx.stroke();
+  ctx.restore();
+}
+
 function trapGuard(g){
   g.state = 'stun'; g.stunT = 0; g.anim = 0;
   addScore(150);
@@ -4130,6 +4163,7 @@ function renderWorldFrame(includeHUD){
       const bob = Math.sin(ph) * 2.2;
       const s = 1 + Math.sin(ph * 1.3) * 0.06;
       const cx0 = gd.c * TILE + 18, cy0 = gd.r * TILE + HUD_H + 18 + bob;
+      if (goldLeft > 0 && goldLeft <= 2) drawLastNuggetCue(cx0, cy0, ph);
       drawGoldGem(cx0, cy0, 15 * s, ph);
       const tw = Math.sin(ph * 1.7);
       if (tw > 0.5){
@@ -5423,6 +5457,7 @@ window.__g = {
   hunch(){ return triggerRouteHint(true); },
   get hunchState(){ return routeHint ? {...routeHint} : null; },
   get wavePreview(){ return wavePreview ? {...wavePreview} : null; },
+  get lastNuggetCue(){ return lastNuggetCueTargets(); },
   get mobileZoom(){ return mobileZoomAdjust; },
   get mobileView(){ return mobileView ? {...mobileView} : null; },
   set mobileZoom(v){ mobileZoomAdjust = clamp(Number(v) || 1, 0.68, 1.45); },
