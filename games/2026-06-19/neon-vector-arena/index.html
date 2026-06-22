@@ -324,7 +324,7 @@
     <p class="fine" id="overlayFine">Dual Stick: left side flies, right side aims and fires. Desktop: WASD plus hold mouse to aim.</p>
   </div>
 </div>
-<div class="version">v4.1</div>
+<div class="version">v4.2</div>
 
 <script>
 'use strict';
@@ -1738,6 +1738,29 @@ function addHitShards(e, x, y, hue) {
   }
 }
 
+function addDeathChunks(x, y, hue, big = false) {
+  if (fragments.length > MAX_FRAGMENTS) fragments.splice(0, fragments.length - MAX_FRAGMENTS);
+  const count = Math.round((big ? 16 : 12) * effectsQuality * (MOBILE_PERF ? .72 : 1));
+  for (let i = 0; i < count; i++) {
+    const a = i * TAU / Math.max(1, count) + rand(-.22, .22);
+    const speed = rand(big ? 120 : 88, big ? 275 : 210);
+    fragments.push({
+      x: x + Math.cos(a) * rand(2, big ? 16 : 9),
+      y: y + Math.sin(a) * rand(2, big ? 16 : 9),
+      vx: Math.cos(a) * speed,
+      vy: Math.sin(a) * speed,
+      rot: rand(0, TAU),
+      spin: rand(-5.5, 5.5),
+      size: rand(big ? 2.2 : 1.6, big ? 5.2 : 3.8),
+      hue: hue + rand(-5, 5),
+      life: rand(big ? .32 : .24, big ? .62 : .48),
+      max: rand(big ? .5 : .38, big ? .78 : .62),
+      kind: 'chunk'
+    });
+  }
+  if (fragments.length > MAX_FRAGMENTS) fragments.splice(0, fragments.length - MAX_FRAGMENTS);
+}
+
 function blastEnemies(x, y, force, radius, sourceVX = 0, sourceVY = 0) {
   const r2 = radius * radius;
   for (const target of enemies) {
@@ -1772,6 +1795,7 @@ function usePanicBomb() {
     const d = Math.hypot(e.x - player.x, e.y - player.y);
     if (d <= PANIC_RADIUS) {
       addVectorFragments(e);
+      explode(e.x, e.y, e.hue, false);
       enemies.splice(i, 1);
       kills++;
       const reward = e.elite ? 120 : 42;
@@ -1793,10 +1817,12 @@ function usePanicBomb() {
 }
 
 function explode(x, y, hue, big = false) {
-  addSpark(x, y, big ? 18 : 5, hue, big ? 1.05 : .68);
-  particles.push({ x, y, vx: 0, vy: 0, life: big ? .38 : .24, max: big ? .38 : .24, r: big ? 76 : 30, hue, kind: 'ring' });
-  if (big) particles.push({ x, y, vx: 0, vy: 0, life: .1, max: .1, r: 126, hue: 0, kind: 'flash' });
-  shake = Math.max(shake, big ? 5 : 1.2);
+  addSpark(x, y, big ? 38 : 26, hue, big ? 1.18 : .96);
+  addDeathChunks(x, y, hue, big);
+  particles.push({ x, y, vx: 0, vy: 0, life: big ? .18 : .14, max: big ? .18 : .14, r: big ? 36 : 24, hue, kind: 'core' });
+  particles.push({ x, y, vx: 0, vy: 0, life: big ? .46 : .36, max: big ? .46 : .36, r: big ? 88 : 58, hue, kind: 'ring' });
+  particles.push({ x, y, vx: 0, vy: 0, life: big ? .14 : .11, max: big ? .14 : .11, r: big ? 126 : 70, hue: big ? 0 : hue, kind: 'flash' });
+  shake = Math.max(shake, big ? 5 : 1.8);
 }
 
 function splitEnemy(e) {
@@ -2488,6 +2514,15 @@ function drawParticle(c, p) {
     c.beginPath();
     c.arc(p.x, p.y, p.r * (1 - t), 0, TAU);
     c.fill();
+  } else if (p.kind === 'core') {
+    const rg = c.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * (.7 + (1 - t) * .45));
+    rg.addColorStop(0, `rgba(255,255,255,${.82 * t})`);
+    rg.addColorStop(.28, `hsla(${p.hue},100%,82%,${.46 * t})`);
+    rg.addColorStop(1, `hsla(${p.hue + 28},100%,60%,0)`);
+    c.fillStyle = rg;
+    c.beginPath();
+    c.arc(p.x, p.y, p.r * (.7 + (1 - t) * .45), 0, TAU);
+    c.fill();
   } else {
     c.fillStyle = `hsla(${p.hue},100%,72%,${t * .72})`;
     c.shadowBlur = 0;
@@ -2528,6 +2563,16 @@ function drawFragment(c, f) {
     c.closePath();
     c.fill();
     c.stroke();
+  } else if (f.kind === 'chunk') {
+    const r = Math.max(1.1, (f.size || 3) * t);
+    c.fillStyle = `hsla(${f.hue},96%,76%,${t * (MOBILE_PERF ? .5 : .62)})`;
+    c.beginPath();
+    c.moveTo(0, -r);
+    c.lineTo(r * .9, 0);
+    c.lineTo(0, r);
+    c.lineTo(-r * .9, 0);
+    c.closePath();
+    c.fill();
   } else {
     const r = Math.max(.7, 2.1 * t);
     c.fillStyle = `hsla(${f.hue},78%,72%,${t * .34})`;
