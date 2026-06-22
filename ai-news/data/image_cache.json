@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-22T17:00:01.840128+00:00",
+  "updatedAt": "2026-06-22T17:46:50.991171+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -11084,6 +11084,18 @@
     "https://techcrunch.com/2026/06/22/spacex-inks-compute-deal-with-reflection-ai-an-open-source-ai-lab": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/GettyImages-2259661359.jpg?w=1024",
       "checkedAt": "2026-06-22T17:00:01.840128+00:00"
+    },
+    "https://techcrunch.com/2026/06/22/amazon-is-testing-alexa-in-india-with-hindi-support": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/08/alexa-plus-event.png?resize=1200,675",
+      "checkedAt": "2026-06-22T17:46:50.991171+00:00"
+    },
+    "https://openai.com/index/patch-the-planet": {
+      "image": "",
+      "checkedAt": "2026-06-22T17:46:50.991171+00:00"
+    },
+    "https://openai.com/index/daybreak-securing-the-world": {
+      "image": "",
+      "checkedAt": "2026-06-22T17:46:50.991171+00:00"
     }
   }
 }
