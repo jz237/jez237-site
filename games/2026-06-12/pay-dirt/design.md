@@ -50,7 +50,8 @@ Sim is fixed-timestep (60Hz accumulator); `__g.step(n)` drives ticks headlessly.
 - Guards: BFS chase over the movement graph (classic column-seeking feel),
   can pick up/carry/drop gold, fall into holes (stunned → climb out), die if sealed.
   Guard-carried gold must be shaken loose by trapping the guard.
-- Death restarts the level fully (score kept), lives = 3 + extra at score milestones.
+- Death restarts the level fully while lives remain; after game over, Continue Claim
+  restarts the exact current campaign/daily/Boom Rush level with fresh lives.
 
 ## Modern layer
 
@@ -86,3 +87,6 @@ Sim is fixed-timestep (60Hz accumulator); `__g.step(n)` drives ticks headlessly.
 - 2026-06-16: Painterly pass keeps runtime self-contained. Image Gen 2 output is saved as
   `assets/painterly-direction-reference.png` for visual direction; the playable art remains
   procedural so the game stays fast and portable.
+- 2026-06-22: Game over offers Continue Claim from the exact level where the run ended.
+  Boom Rush and campaign visuals now use two-level visual chapters; the softlock/No Way Out
+  detector also protects Boom Rush by checking route access to remaining gold and the cart.

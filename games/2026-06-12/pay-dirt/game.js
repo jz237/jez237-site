@@ -151,6 +151,7 @@ function isBar(c, r){ return tileAt(c, r) === '-'; }
 let state = 'title';   // title | playing | paused | over | how | levels | scores | win
 let score = 0, lives = 3, levelIndex = 0, mode = 'campaign'; // campaign | daily | special
 let gameTime = 0, shake = 0, hitStop = 0, flash = 0, deathFlash = 0;
+let continueRun = null;
 let banner = null;          // {text, sub, life}
 let hint = null;            // {life} first-level control hint
 let runDustT = 0, digBuffer = 0, digBufDir = 0;
@@ -1480,6 +1481,13 @@ function currentNoWayOutReason(){
     }
     return '';
   }
+  if (isSpecialMode()){
+    const cart = special && special.cart;
+    if (!cart) return 'The mine cart is missing.';
+    const cc = Math.max(0, Math.min(COLS - 1, Math.floor(cart.x == null ? cart.c : cart.x)));
+    const cr = Math.max(0, Math.min(ROWS - 1, Math.floor(cart.y == null ? cart.r : cart.y)));
+    return seen[cr * COLS + cc] ? '' : 'The mine cart cannot be reached from here.';
+  }
   if (!exitCells.length) return 'The exit ladder is missing.';
   for (const e of exitCells){
     if (e.r === 0 && seen[e.r * COLS + e.c]) return '';
@@ -1503,7 +1511,6 @@ function showSoftlock(reason){
 }
 
 function updateSoftlockDetector(dt){
-  if (isSpecialMode()) return;
   if (levelTime < 2.0){ clearSoftlock(); return; }
   softlockCheckT -= dt;
   if (softlockCheckT > 0) return;
@@ -1578,6 +1585,13 @@ function reloadCurrentLevel(opts){
 
 function endGame(won){
   state = 'over';
+  continueRun = won ? null : {
+    mode,
+    levelIndex,
+    score,
+    dailyDate,
+    rows: currentRows ? currentRows.slice() : null,
+  };
   AUDIO.sfx(won ? 'win' : 'die');
   AUDIO.stopMusic();
   $('overTitle').textContent = won ? 'CLAIM CLEARED!' : 'CLAIM LOST';
@@ -1586,8 +1600,35 @@ function endGame(won){
     (mode === 'daily' ? '<div>MODE<br><b>DAILY</b></div>' :
       mode === 'special' ? '<div>MODE<br><b>BOOM</b></div>' :
       '<div>CLAIM<br><b>' + (levelIndex + 1) + '</b></div>');
+  const cb = $('bContinue');
+  if (cb){
+    cb.style.display = continueRun ? '' : 'none';
+    cb.textContent = mode === 'special'
+      ? 'Continue Boom ' + (levelIndex + 1)
+      : mode === 'daily'
+        ? 'Continue Daily'
+        : 'Continue Claim ' + (levelIndex + 1);
+  }
   beginEntry();
   showOnly('ovOver');
+}
+
+function continueLastLevel(){
+  if (!continueRun) return startGame(mode);
+  mode = continueRun.mode;
+  levelIndex = continueRun.levelIndex | 0;
+  score = continueRun.score | 0;
+  lives = 3;
+  dailyDate = continueRun.dailyDate || null;
+  if (mode === 'special') loadSpecialLevel(levelIndex);
+  else if (mode === 'daily' && continueRun.rows) loadLevelData(continueRun.rows);
+  else loadCampaignLevel(levelIndex);
+  continueRun = null;
+  gameTime = 0;
+  state = 'playing';
+  banner = {text: 'CONTINUE', sub: 'FRESH LIVES - SAME CLAIM', life: 1.9};
+  hideOverlays();
+  AUDIO.ensure(); AUDIO.startMusic();
 }
 
 /* ================= high-score entry UI ================= */
@@ -2121,6 +2162,7 @@ function loadSpecialLevel(i){
 let dailyDate = null;
 
 function startGame(m){
+  continueRun = null;
   mode = m || 'campaign';
   score = 0; lives = 3;
   if (mode === 'special'){
@@ -2141,6 +2183,7 @@ function startGame(m){
 }
 
 function startCampaignAt(i){
+  continueRun = null;
   mode = 'campaign';
   score = 0; lives = 3;
   loadCampaignLevel(i);
@@ -2216,6 +2259,7 @@ bindButton('bRestartLvl', restartLevel);
 bindButton('bStuckRestart', restartLevel);
 bindButton('bStuckMenu', quitToTitle);
 bindButton('bQuit', quitToTitle);
+bindButton('bContinue', continueLastLevel);
 bindButton('bAgain', () => startGame(mode));
 bindButton('bOverMenu', quitToTitle);
 bindButton('bSubmit', submitEntry);
@@ -2328,10 +2372,15 @@ const painterlyPlate = new Image();
 let painterlyPlateReady = false, painterlyPlateSrc = '';
 painterlyPlate.onload = () => { painterlyPlateReady = true; bg = null; if (booted) render(); };
 
+function levelVisualChapter(){
+  if (mode === 'daily') return Math.abs(LEVELS.hashStr(dailyDate || LEVELS.dailyDateUTC())) % PAINTERLY_BACKDROPS.length;
+  return Math.max(0, Math.floor(levelIndex / 2));
+}
+
 function painterlyBackdropIndex(){
-  if (mode === 'special') return 4; // ember mine: warm, dangerous Boom Rush palette
+  if (mode === 'special') return (levelVisualChapter() + 4) % PAINTERLY_BACKDROPS.length;
   if (mode === 'campaign') return Math.min(PAINTERLY_BACKDROPS.length - 1, Math.floor(levelIndex / 2));
-  return Math.abs(LEVELS.hashStr(dailyDate || LEVELS.dailyDateUTC())) % PAINTERLY_BACKDROPS.length;
+  return levelVisualChapter();
 }
 function selectPainterlyBackdrop(){
   const src = PAINTERLY_BACKDROPS[painterlyBackdropIndex()] || PAINTERLY_BACKDROPS[0];
@@ -2466,7 +2515,7 @@ function buildBackdrop(){
 
   // per-level mood tint so claims don't all look identical
   const hues = ['rgba(60,90,150,', 'rgba(96,72,150,', 'rgba(48,116,124,', 'rgba(120,84,58,', 'rgba(72,108,90,'];
-  const h = hues[(mode === 'daily' ? 2 : levelIndex) % hues.length];
+  const h = hues[(mode === 'daily' ? 2 : levelVisualChapter()) % hues.length];
   x.save(); x.globalCompositeOperation = 'overlay'; x.fillStyle = h + '0.16)'; x.fillRect(0, 0, W, H); x.restore();
 }
 
@@ -2474,7 +2523,7 @@ function buildBackdrop(){
 let decor = [];
 function computeDecor(){
   decor = [];
-  const rr = ART.rng(4242 + levelIndex * 131 + (mode === 'daily' ? 777 : 0));
+  const rr = ART.rng(4242 + levelIndex * 131 + levelVisualChapter() * 503 + (mode === 'daily' ? 777 : 0));
   const isBlk = (c, r) => { const t = tileAt(c, r); return t === '#' || t === 'X' || t === 'B' || t === 'C'; };
   const occ = new Set();
   for (const g of golds) occ.add(g.c + ',' + g.r);
