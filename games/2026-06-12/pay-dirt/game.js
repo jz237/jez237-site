@@ -5003,6 +5003,33 @@ function drawMineCart(){
   const x = px(baseX), y = py(baseY) + 4 + Math.sin(gameTime * 18) * escape * 2;
   const glowA = ready ? .34 + .18 * Math.sin(gameTime * 7) : .1;
   glow(baseX, baseY, ready ? 64 : 34, 'rgba(255,190,64,' + glowA + ')', 1);
+  if (escape > 0){
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+    const trail = 90 + escape * (special.final ? 190 : 120);
+    for (let i = 0; i < 8; i++){
+      const yy = y + 4 + (i - 3.5) * 5 + Math.sin(gameTime * 18 + i) * 2;
+      const len = trail * (0.35 + (i % 3) * .18);
+      ctx.globalAlpha = (0.12 + escape * .18) * (1 - i * .07);
+      ctx.strokeStyle = i % 2 ? '#ffd23f' : '#3fd2c7';
+      ctx.lineWidth = 1.4 + (i % 3) * .7;
+      ctx.beginPath();
+      ctx.moveTo(x - 26 - len, yy);
+      ctx.lineTo(x - 28 - escape * 28, yy + Math.sin(gameTime * 9 + i) * 3);
+      ctx.stroke();
+    }
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.globalAlpha = 0.28 + escape * .2;
+    ctx.fillStyle = '#3b2418';
+    for (let i = 0; i < 10; i++){
+      const sx = x - 44 - i * 15 - escape * 18;
+      const sy = y + 19 + Math.sin(gameTime * 11 + i) * 8;
+      ctx.beginPath();
+      ctx.ellipse(sx, sy, 8 + (i % 3) * 4, 3 + (i % 2) * 3, 0, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.restore();
+  }
   ctx.save();
   ctx.translate(x, y);
   ctx.fillStyle = 'rgba(0,0,0,.4)';
@@ -5049,6 +5076,15 @@ function drawMineCart(){
       for (let i = 0; i < 7; i++){
         const sx = -54 + i * 18 - escape * 22;
         ctx.fillRect(sx, 23 + Math.sin(gameTime * 18 + i) * 2, 9, 2);
+      }
+      ctx.strokeStyle = 'rgba(255,243,176,.8)';
+      ctx.lineWidth = 1.4;
+      for (let i = 0; i < 5; i++){
+        const sx = -42 + i * 18 - (gameTime * 90 % 18);
+        ctx.beginPath();
+        ctx.moveTo(sx, 18 + (i % 2) * 5);
+        ctx.lineTo(sx - 12 - escape * 16, 23 + Math.sin(gameTime * 12 + i) * 4);
+        ctx.stroke();
       }
     }
     ctx.fillStyle = '#fff3b0';
