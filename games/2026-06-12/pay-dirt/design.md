@@ -103,3 +103,5 @@ Sim is fixed-timestep (60Hz accumulator); `__g.step(n)` drives ticks headlessly.
 - 2026-06-22: Boom Rush waves show a compact pre-wave card with wave number, main hazard,
   and ride-out goal. The debug hook `window.__g.wavePreview` exposes the current card for
   verification.
+- 2026-06-22: Last nugget finder adds a render-only glint/ring around the final one or two
+  remaining nuggets. `window.__g.lastNuggetCue` returns active cue target cells for tests.
