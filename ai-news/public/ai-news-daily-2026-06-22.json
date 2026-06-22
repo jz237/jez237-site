@@ -1,6 +1,6 @@
 {
   "date": "2026-06-22",
-  "updatedAt": "2026-06-22T05:26:35.285589+00:00",
+  "updatedAt": "2026-06-22T06:00:01.819378+00:00",
   "items": [
     {
       "title": "LLM research updates, large language model evaluation news, leaderboards, and AI model insights",
@@ -11,9 +11,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-22T05:26:44.387589+00:00",
+      "published": "2026-06-22T06:00:12.211691+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-22T05:26:35.285589+00:00",
+      "lastSeen": "2026-06-22T06:00:01.819378+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 5.11
@@ -29,10 +29,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/45CLiquidCooling.jpg",
       "published": "2026-06-22T05:00:22+00:00",
       "firstSeen": "2026-06-22T05:26:35.285589+00:00",
-      "lastSeen": "2026-06-22T05:26:35.285589+00:00",
+      "lastSeen": "2026-06-22T06:00:01.819378+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2767
+      "score": 2.26
     }
   ],
   "errors": [
