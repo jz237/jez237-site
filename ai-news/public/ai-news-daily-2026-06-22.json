@@ -1,6 +1,6 @@
 {
   "date": "2026-06-22",
-  "updatedAt": "2026-06-22T18:00:01.425397+00:00",
+  "updatedAt": "2026-06-22T19:00:01.782862+00:00",
   "items": [
     {
       "title": "OpenAI Launches Full-Scale Effort to Patch Open-Source Bugs as It Takes on Anthropic’s Mythos",
@@ -13,11 +13,11 @@
       "image": "https://media.wired.com/photos/6a2fc599a8e3255f0ac3665f/master/pass/061526_OpenAI%20Hires%20an%20Army%20to%20Patch%20Open%20Source%20Bugs%20as%20It%20Battles%20Mythos%20for%20Cyber%20AI%20Supremacy.jpg",
       "published": "2026-06-22T17:00:00+00:00",
       "firstSeen": "2026-06-22T17:46:50.991171+00:00",
-      "lastSeen": "2026-06-22T18:00:01.425397+00:00",
+      "lastSeen": "2026-06-22T19:00:01.782862+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 20.3599
+      "score": 20.3305
     },
     {
       "title": "Daybreak: Tools for securing every organization in the world",
@@ -30,11 +30,11 @@
       "image": "",
       "published": "2026-06-22T10:00:00+00:00",
       "firstSeen": "2026-06-22T17:46:50.991171+00:00",
-      "lastSeen": "2026-06-22T18:00:01.425397+00:00",
+      "lastSeen": "2026-06-22T19:00:01.782862+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 15.2808
+      "score": 15.2567
     },
     {
       "title": "L’Oréal brings Maybelline virtual try-on to ChatGPT",
@@ -47,10 +47,10 @@
       "image": "",
       "published": "2026-06-22T10:00:00+00:00",
       "firstSeen": "2026-06-22T11:00:01.198563+00:00",
-      "lastSeen": "2026-06-22T18:00:01.425397+00:00",
+      "lastSeen": "2026-06-22T19:00:01.782862+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.5288
+      "score": 12.5047
     },
     {
       "title": "OpenAI’s suspiciously clean balance sheet is about to get a hard look",
@@ -63,10 +63,10 @@
       "image": "https://media.thenextweb.com/2026/06/gary-marcus-openai-ipo-ai-stocks-risk.avif",
       "published": "2026-06-22T14:59:35+00:00",
       "firstSeen": "2026-06-22T16:00:01.550547+00:00",
-      "lastSeen": "2026-06-22T18:00:01.425397+00:00",
+      "lastSeen": "2026-06-22T19:00:01.782862+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.1118
+      "score": 10.0841
     },
     {
       "title": "Amazon is testing Alexa+ in India with Hindi support",
@@ -75,14 +75,30 @@
       "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
       "sourceWeight": 0.85,
       "category": "AI",
-      "summary": "Amazon sent emails to customers inviting them to test Alexa+",
+      "summary": "Amazon is planning to increase the footprint of its new conversational AI assistant Alexa+ to India and is inviting users in the country to test out a Hindi-language version.",
       "image": "https://techcrunch.com/wp-content/uploads/2025/08/alexa-plus-event.png?resize=1200%2C675",
       "published": "2026-06-22T17:31:29+00:00",
       "firstSeen": "2026-06-22T17:46:50.991171+00:00",
-      "lastSeen": "2026-06-22T18:00:01.425397+00:00",
+      "lastSeen": "2026-06-22T19:00:01.782862+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 9.3458
+    },
+    {
+      "title": "Google DeepMind bets $75M on AI’s future in Hollywood with A24 deal",
+      "url": "https://techcrunch.com/2026/06/22/google-deepmind-bets-75m-on-ais-future-in-hollywood-with-a24-deal",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Google DeepMind and A24 are teaming up to build AI filmmaking tools.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/GettyImages-2252299302.jpg?w=1024",
+      "published": "2026-06-22T18:49:44+00:00",
+      "firstSeen": "2026-06-22T19:00:01.782862+00:00",
+      "lastSeen": "2026-06-22T19:00:01.782862+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.2756
+      "score": 8.2848
     },
     {
       "title": "NVIDIA Vera CPU Opens the Way for Agentic Scientific AI at Los Alamos National Laboratory",
@@ -95,10 +111,26 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/vera-cpu-lanl-1920x1080-1.jpg",
       "published": "2026-06-22T13:00:20+00:00",
       "firstSeen": "2026-06-22T14:00:01.422625+00:00",
-      "lastSeen": "2026-06-22T18:00:01.425397+00:00",
+      "lastSeen": "2026-06-22T19:00:01.782862+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 7.3475
+      "score": 7.3213
+    },
+    {
+      "title": "Three things to watch amid Anthropic’s latest feud with the government",
+      "url": "https://www.technologyreview.com/2026/06/22/1139424/three-things-to-watch-amid-anthropics-latest-feud-with-the-government",
+      "source": "MIT Technology Review AI",
+      "sourceUrl": "https://www.technologyreview.com/topic/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "This story originally appeared in The Algorithm, our weekly newsletter on AI. To get stories like this in your inbox first, sign up here. For those of you enjoying your summer unaware of Anthropic’s latest feud with the US government, here’s a recap: In April the company said it had built an AI model called Mythos&#8230;",
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/06/WH-v-Anthropic.jpg?resize=1200%2C600",
+      "published": "2026-06-22T18:00:00+00:00",
+      "firstSeen": "2026-06-22T19:00:01.782862+00:00",
+      "lastSeen": "2026-06-22T19:00:01.782862+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 6.3599
     },
     {
       "title": "Anthropic’s Fable 5 Withdrawal Underscores Importance and Difficulty of ‘sovereign AI’ Strategies",
@@ -114,7 +146,7 @@
       "lastSeen": "2026-06-22T12:23:25.443602+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.0654
+      "score": 6.0403
     },
     {
       "title": "Patch the Planet: a Daybreak initiative to support open source maintainers",
@@ -127,10 +159,10 @@
       "image": "",
       "published": "2026-06-22T10:00:00+00:00",
       "firstSeen": "2026-06-22T17:46:50.991171+00:00",
-      "lastSeen": "2026-06-22T18:00:01.425397+00:00",
+      "lastSeen": "2026-06-22T19:00:01.782862+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.6808
+      "score": 5.6567
     },
     {
       "title": "GLM-5.2 is the step change for open agents",
@@ -143,10 +175,10 @@
       "image": "https://substack-post-media.s3.amazonaws.com/public/images/267cdc82-6fbc-4f68-bcba-160091396dfd_3182x1790.png",
       "published": "2026-06-22T14:52:45+00:00",
       "firstSeen": "2026-06-22T15:00:01.475123+00:00",
-      "lastSeen": "2026-06-22T18:00:01.425397+00:00",
+      "lastSeen": "2026-06-22T19:00:01.782862+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9686
+      "score": 4.941
     },
     {
       "title": "NAIRR Science Program Reshapes Scientific Research, Powered by NVIDIA AI Infrastructure",
@@ -159,42 +191,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/nairr.png",
       "published": "2026-06-22T13:00:38+00:00",
       "firstSeen": "2026-06-22T14:00:01.422625+00:00",
-      "lastSeen": "2026-06-22T18:00:01.425397+00:00",
+      "lastSeen": "2026-06-22T19:00:01.782862+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.5476
-    },
-    {
-      "title": "The AI memory crisis just hit DDR2, a standard from 2003, with 60% price hikes",
-      "url": "https://thenextweb.com/news/ddr2-memory-prices-surge-ai-shortage-legacy-dram",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The AI-driven memory shortage has now reached the oldest DRAM standard still in production. DDR2 contract prices rose 55 to 60 percent in the second quarter of 2026, according to Taiwanese market intelligence firm TrendForce, with a further 35 to 40 percent increase forecast for the third quarter. The price surge is being driven by [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/ddr2-memory-prices-surge-ai-shortage-legacy-dram.avif",
-      "published": "2026-06-22T16:53:01+00:00",
-      "firstSeen": "2026-06-22T17:46:50.991171+00:00",
-      "lastSeen": "2026-06-22T18:00:01.425397+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.5164
-    },
-    {
-      "title": "WeChat begins testing Xiaowei as Tencent eyes a Q3 AI rollout",
-      "url": "https://thenextweb.com/news/tencent-tests-wechat-ai-assistant-xiaowei",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "WeChat is the rare app that already does almost everything. Chinese users message, pay, book, shop, and summon a taxi without ever leaving it, which is exactly what makes Tencent’s next move interesting: rather than build a separate chatbot and fight for downloads, it is putting an AI assistant on top of the app a [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/04/tencent-clawpro-openclaw-enterprise-ai-agents.avif",
-      "published": "2026-06-22T07:30:20+00:00",
-      "firstSeen": "2026-06-22T08:00:01.491811+00:00",
-      "lastSeen": "2026-06-22T10:00:01.707125+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.0718
+      "score": 4.5214
     }
   ],
   "errors": [
