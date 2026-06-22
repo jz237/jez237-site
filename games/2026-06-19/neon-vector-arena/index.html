@@ -609,7 +609,7 @@ const MOBILE_PERF = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || mat
 const GLOW_SCALE = FIREFOX_PERF ? .12 : (MOBILE_PERF ? .12 : .15);
 const MAX_ENEMIES = FIREFOX_PERF ? 42 : 56;
 const MAX_PARTICLES = FIREFOX_PERF ? 72 : (MOBILE_PERF ? 84 : 108);
-const MAX_FRAGMENTS = FIREFOX_PERF ? 52 : (MOBILE_PERF ? 62 : 92);
+const MAX_FRAGMENTS = FIREFOX_PERF ? 68 : (MOBILE_PERF ? 78 : 124);
 const MAX_DT = FIREFOX_PERF ? .07 : .04;
 const SHOT_BLAST_RADIUS = 78;
 const SHOT_BLAST_FORCE = 290;
@@ -626,6 +626,7 @@ const FIRST_WAVE_SCORE = 650;
 const BREATHER_SECONDS = 1.05;
 const MAX_BOMBS = 3;
 const PANIC_RADIUS = 430;
+const BOSS_INTERVAL = 5;
 const START_INV_SECONDS = .85;
 const HIT_INV_SECONDS = .72;
 const REVIVE_INV_SECONDS = 1.55;
@@ -679,10 +680,47 @@ const SHAPE_DEFS = {
   star: { baseR: 13.5, childR: 7.2, hue: 306, speed: [64, 112], wobble: 54, weight: .72 },
   blade: { baseR: 12, childR: 7, hue: 76, speed: [104, 152], wobble: 30, weight: .72 },
   kite: { baseR: 13, childR: 7.3, hue: 202, speed: [78, 124], wobble: 42, weight: .7 },
-  hourglass: { baseR: 13.5, childR: 7.2, hue: 354, speed: [62, 112], wobble: 50, weight: .66 }
+  hourglass: { baseR: 13.5, childR: 7.2, hue: 354, speed: [62, 112], wobble: 50, weight: .66 },
+  bolt: { baseR: 12, childR: 7, hue: 48, speed: [106, 156], wobble: 40, weight: .68 },
+  arrow: { baseR: 12.8, childR: 7.2, hue: 12, speed: [92, 138], wobble: 22, weight: .7 },
+  crown: { baseR: 13.5, childR: 7.3, hue: 284, speed: [58, 102], wobble: 34, weight: .62 },
+  needle: { baseR: 11.5, childR: 6.8, hue: 174, speed: [116, 168], wobble: 18, weight: .66 },
+  shard: { baseR: 12.4, childR: 7, hue: 224, speed: [86, 132], wobble: 44, weight: .68 },
+  bracket: { baseR: 13.2, childR: 7.1, hue: 144, speed: [70, 116], wobble: 30, weight: .64 },
+  spear: { baseR: 12.3, childR: 7, hue: 358, speed: [104, 150], wobble: 26, weight: .66 },
+  wedge: { baseR: 13.2, childR: 7.2, hue: 92, speed: [76, 118], wobble: 28, weight: .66 },
+  gate: { baseR: 14, childR: 7.5, hue: 194, speed: [56, 94], wobble: 18, weight: .62 },
+  trident: { baseR: 13.4, childR: 7.2, hue: 318, speed: [82, 126], wobble: 48, weight: .6 },
+  hook: { baseR: 13.3, childR: 7.1, hue: 68, speed: [80, 124], wobble: 52, weight: .62 },
+  crescent: { baseR: 14, childR: 7.4, hue: 252, speed: [64, 108], wobble: 36, weight: .6 },
+  bowtie: { baseR: 13, childR: 7.1, hue: 26, speed: [74, 122], wobble: 42, weight: .64 },
+  saucer: { baseR: 14.2, childR: 7.5, hue: 112, speed: [62, 104], wobble: 24, weight: .62 },
+  zigzag: { baseR: 12.8, childR: 7, hue: 338, speed: [90, 138], wobble: 58, weight: .6 }
 };
 const SPAWN_TYPES = Object.keys(SHAPE_DEFS).filter(type => SHAPE_DEFS[type].weight > 0);
-const SHAPE_UNLOCK_ORDER = ['cube', 'dart', 'spinner', 'triangle', 'diamond', 'hexagon', 'chevron', 'cross', 'ring', 'prism', 'octagon', 'star', 'blade', 'kite', 'hourglass'];
+const SHAPE_UNLOCK_ORDER = ['cube', 'dart', 'spinner', 'triangle', 'diamond', 'hexagon', 'chevron', 'cross', 'ring', 'prism', 'octagon', 'star', 'blade', 'kite', 'hourglass', 'bolt', 'arrow', 'crown', 'needle', 'shard', 'bracket', 'spear', 'wedge', 'gate', 'trident', 'hook', 'crescent', 'bowtie', 'saucer', 'zigzag'];
+const ENEMY_TRAITS = {
+  dart: { family: 'lunge', speedMul: 1.08, lunge: 1.28, damage: 1, scoreMul: 1.08 },
+  needle: { family: 'lunge', speedMul: 1.16, lunge: 1.42, damage: 2, scoreMul: 1.14 },
+  blade: { family: 'lunge', speedMul: 1.18, lunge: 1.36, damage: 2, scoreMul: 1.14 },
+  arrow: { family: 'lunge', speedMul: 1.12, lunge: 1.32, damage: 1, scoreMul: 1.1 },
+  spear: { family: 'lunge', speedMul: 1.14, lunge: 1.38, damage: 2, scoreMul: 1.16 },
+  spinner: { family: 'erratic', weave: .9, weaveRate: 7.2, scoreMul: 1.08 },
+  bolt: { family: 'erratic', speedMul: 1.12, weave: 1.05, weaveRate: 8.8, damage: 1, scoreMul: 1.14 },
+  zigzag: { family: 'erratic', speedMul: 1.08, weave: 1.18, weaveRate: 9.6, damage: 1, scoreMul: 1.16 },
+  hook: { family: 'erratic', weave: 1, weaveRate: 6.4, damage: 1, scoreMul: 1.12 },
+  shard: { family: 'erratic', speedMul: 1.06, weave: .92, weaveRate: 7.8, scoreMul: 1.1 },
+  ring: { family: 'orbit', bonusHp: 1, orbit: .86, orbitRadius: 128, damage: 1, scoreMul: 1.18 },
+  gate: { family: 'orbit', bonusHp: 2, orbit: .62, orbitRadius: 146, damage: 2, scoreMul: 1.26 },
+  crescent: { family: 'orbit', bonusHp: 1, orbit: .92, orbitRadius: 136, damage: 1, scoreMul: 1.2 },
+  saucer: { family: 'orbit', bonusHp: 1, orbit: .74, orbitRadius: 154, scoreMul: 1.18 },
+  hourglass: { family: 'split', splitR: 15, damage: 1, scoreMul: 1.16 },
+  bowtie: { family: 'split', splitR: 15, damage: 1, scoreMul: 1.16 },
+  crown: { family: 'elite', bonusHp: 1, damage: 2, scoreMul: 1.34 },
+  trident: { family: 'elite', bonusHp: 1, damage: 3, scoreMul: 1.38 },
+  prism: { family: 'elite', bonusHp: 1, scoreMul: 1.2 },
+  star: { family: 'elite', bonusHp: 1, damage: 1, scoreMul: 1.24 }
+};
 const dist2 = (a, b, c, d) => {
   const x = a - c;
   const y = b - d;
@@ -693,12 +731,28 @@ function shapeDef(type) {
   return SHAPE_DEFS[type] || SHAPE_DEFS.cube;
 }
 
+function enemyTrait(type) {
+  return ENEMY_TRAITS[type] || null;
+}
+
 function waveShapeCount(value = wave) {
   return clamp(value + 1, 2, Math.min(MAX_ENEMIES, 34));
 }
 
 function unlockedShapeTypes(value = wave) {
   return SHAPE_UNLOCK_ORDER.slice(0, clamp(value + 1, 2, SHAPE_UNLOCK_ORDER.length));
+}
+
+function isBossWave(value = wave) {
+  return value > 1 && value % BOSS_INTERVAL === 0;
+}
+
+function bossTypeForWave(value = wave) {
+  const unlocked = unlockedShapeTypes(value);
+  const preferred = ['crown', 'trident', 'star', 'prism', 'gate', 'saucer', 'hourglass', 'bolt', 'blade', 'ring']
+    .filter(type => unlocked.includes(type));
+  const pool = preferred.length ? preferred : unlocked;
+  return pool[(Math.floor(value / BOSS_INTERVAL) - 1) % pool.length] || 'cube';
 }
 
 function chooseSizeTier(initial = false) {
@@ -1425,7 +1479,8 @@ function finishRun() {
 
 function spawnEnemy(initial = false, prepared = null) {
   const targetCount = waveShapeCount();
-  if (!initial && enemies.length >= targetCount) return;
+  const boss = !!prepared?.boss;
+  if (!initial && !boss && enemies.length >= targetCount) return;
   const spot = prepared?.spot || pickSpawnPoint(initial);
   const x = spot.x;
   const y = spot.y;
@@ -1433,13 +1488,14 @@ function spawnEnemy(initial = false, prepared = null) {
   const def = shapeDef(type);
   const baseR = def.baseR;
   const tier = SIZE_TIERS.find(item => item.name === prepared?.sizeTier) || chooseSizeTier(initial);
-  const elite = !initial && wave >= 4 && Math.random() < clamp(.025 + wave * .002 + (wave % 5 === 0 ? .05 : 0), .025, .11);
-  const scale = (type === 'splitter' ? tier.splitter : tier.normal) * rand(.94, 1.06) * (elite ? 1.16 : 1);
-  const largeSplits = tier.name === 'large';
+  const elite = boss || (!initial && wave >= 4 && Math.random() < clamp(.025 + wave * .002 + (wave % 5 === 0 ? .05 : 0), .025, .11));
+  const scale = (type === 'splitter' ? tier.splitter : tier.normal) * rand(.94, 1.06) * (elite ? 1.16 : 1) * (boss ? 1.78 + Math.min(wave, 40) * .012 : 1);
+  const largeSplits = !boss && tier.name === 'large';
   const speedBase = rand(def.speed[0], def.speed[1]);
-  const speedMod = (activeModifier?.speed || 1) * (elite ? .92 : 1);
-  const speed = speedBase / Math.sqrt(scale) * speedMod;
-  const hp = elite ? 2 : 1;
+  const trait = enemyTrait(type);
+  const speedMod = (activeModifier?.speed || 1) * (elite ? .92 : 1) * (boss ? .58 : 1);
+  const speed = speedBase / Math.sqrt(scale) * speedMod * (trait?.speedMul || 1);
+  const hp = boss ? Math.round(9 + wave * 1.8 + (trait?.bonusHp || 0) * 2) : Math.max(1, (elite ? 2 : 1) + (trait?.bonusHp || 0));
   enemies.push({
     x, y,
     vx: rand(-20, 20),
@@ -1448,15 +1504,18 @@ function spawnEnemy(initial = false, prepared = null) {
     hp,
     maxHp: hp,
     type,
+    boss,
     elite,
     scale,
     sizeTier: tier.name,
     largeSplits,
-    speed: Math.min(speed + wave * 2.2, ENEMY_SPEED_CAP),
+    speed: Math.min(speed + wave * (boss ? 1.1 : 2.2), boss ? ENEMY_SPEED_CAP * .82 : ENEMY_SPEED_CAP),
     rot: rand(0, TAU),
-    spin: rand(-2.8, 2.8),
+    spin: rand(-2.8, 2.8) * (boss ? .45 : 1),
     hue: prepared?.hue ?? enemyHue(def, tier),
     pulse: rand(0, TAU),
+    traitTimer: rand(.45, 1.7),
+    traitBurst: 0,
     trail: []
   });
 }
@@ -1475,6 +1534,25 @@ function queueSpawnWarning() {
     max: .68,
     r: def.baseR * (type === 'splitter' ? tier.splitter : tier.normal) * 1.7
   });
+}
+
+function queueBossWarning() {
+  if (!isBossWave() || enemies.some(e => e.boss) || spawnWarnings.some(w => w.boss)) return;
+  const type = bossTypeForWave();
+  const def = shapeDef(type);
+  const tier = SIZE_TIERS[4];
+  const scale = tier.normal * (1.78 + Math.min(wave, 40) * .012);
+  spawnWarnings.push({
+    spot: pickSpawnPoint(false),
+    type,
+    boss: true,
+    hue: enemyHue(def, tier),
+    sizeTier: tier.name,
+    life: 1.28,
+    max: 1.28,
+    r: def.baseR * scale * 1.55
+  });
+  addScreenNotice('BOSS INBOUND', def.hue, .38, 36, 1.4);
 }
 
 function pickSpawnPoint(initial = false) {
@@ -1886,6 +1964,21 @@ function localShapePoints(e, scale = 1) {
   if (e.type === 'kite') return [[0, -r * 1.7], [r * .98, -r * .12], [0, r * 1.1], [-r * .98, -r * .12]];
   if (e.type === 'hourglass') return [[-r, -r * 1.1], [r, -r * 1.1], [r * .22, 0], [r, r * 1.1], [-r, r * 1.1], [-r * .22, 0]];
   if (e.type === 'star') return regularStarPoints(10, r * 1.24, r * .62);
+  if (e.type === 'bolt') return [[r * .1, -r * 1.45], [r * .92, -r * .18], [r * .32, -r * .12], [r * .9, r * 1.34], [-r * .16, r * .12], [r * .35, r * .08], [-r * .72, -r * 1.28]];
+  if (e.type === 'arrow') return [[r * 1.58, 0], [r * .35, r * .96], [r * .35, r * .38], [-r * 1.18, r * .38], [-r * 1.18, -r * .38], [r * .35, -r * .38], [r * .35, -r * .96]];
+  if (e.type === 'crown') return [[-r * 1.2, r * .72], [-r * 1.05, -r * .68], [-r * .48, r * .04], [0, -r * 1.18], [r * .48, r * .04], [r * 1.05, -r * .68], [r * 1.2, r * .72]];
+  if (e.type === 'needle') return [[r * 1.8, 0], [r * .14, r * .34], [-r * 1.35, r * .18], [-r * 1.72, 0], [-r * 1.35, -r * .18], [r * .14, -r * .34]];
+  if (e.type === 'shard') return [[-r * .58, -r * 1.3], [r * 1.12, -r * .66], [r * .72, r * .28], [r * 1.18, r * 1.14], [-r * .38, r * .78], [-r * 1.12, r * .1]];
+  if (e.type === 'bracket') return [[-r * 1.05, -r * 1.15], [r * .64, -r * 1.15], [r * .64, -r * .54], [-r * .36, -r * .54], [-r * .36, r * .54], [r * .64, r * .54], [r * .64, r * 1.15], [-r * 1.05, r * 1.15]];
+  if (e.type === 'spear') return [[r * 1.55, 0], [r * .48, r * .55], [r * .18, r * 1.04], [-r * .08, r * .5], [-r * 1.28, r * .32], [-r * .66, 0], [-r * 1.28, -r * .32], [-r * .08, -r * .5], [r * .18, -r * 1.04], [r * .48, -r * .55]];
+  if (e.type === 'wedge') return [[r * 1.3, -r * .92], [r * 1.04, r * .98], [-r * 1.22, r * .42], [-r * .64, -r * .34]];
+  if (e.type === 'gate') return [[-r * 1.14, -r * 1.1], [r * 1.14, -r * 1.1], [r * 1.14, r * 1.1], [r * .48, r * 1.1], [r * .48, -r * .4], [-r * .48, -r * .4], [-r * .48, r * 1.1], [-r * 1.14, r * 1.1]];
+  if (e.type === 'trident') return [[r * 1.5, 0], [r * .42, r * .34], [r * .78, r * .9], [r * .08, r * .48], [-r * .98, r * .95], [-r * .5, r * .24], [-r * 1.32, 0], [-r * .5, -r * .24], [-r * .98, -r * .95], [r * .08, -r * .48], [r * .78, -r * .9], [r * .42, -r * .34]];
+  if (e.type === 'hook') return [[r * .22, -r * 1.28], [r * 1.14, -r * .52], [r * .76, r * .34], [r * .18, r * .2], [r * .4, -r * .24], [-r * .18, -r * .58], [-r * 1.04, r * .24], [-r * .54, r * 1.18], [r * .38, r * 1.08], [r * .08, r * .62], [-r * .3, r * .54], [-r * .52, r * .18]];
+  if (e.type === 'crescent') return [[r * .98, -r * 1.04], [r * .42, -r * .58], [r * .18, 0], [r * .42, r * .58], [r * .98, r * 1.04], [-r * .28, r * .78], [-r * 1.18, 0], [-r * .28, -r * .78]];
+  if (e.type === 'bowtie') return [[-r * 1.24, -r * .96], [-r * .18, -r * .32], [0, -r * .06], [r * .18, -r * .32], [r * 1.24, -r * .96], [r * .72, 0], [r * 1.24, r * .96], [r * .18, r * .32], [0, r * .06], [-r * .18, r * .32], [-r * 1.24, r * .96], [-r * .72, 0]];
+  if (e.type === 'saucer') return [[-r * 1.48, 0], [-r * .72, -r * .52], [r * .72, -r * .52], [r * 1.48, 0], [r * .72, r * .52], [-r * .72, r * .52]];
+  if (e.type === 'zigzag') return [[-r * 1.28, -r * .92], [-r * .38, -r * .92], [-r * .78, -r * .18], [r * .2, -r * .18], [-r * .18, r * .92], [r * 1.2, r * .92], [r * .52, r * .16], [r * 1.18, r * .16], [r * .58, -r * .92], [r * 1.28, -r * .92]];
   const pts = [];
   for (let i = 0; i < 10; i++) {
     const a = i * TAU / 10;
@@ -1940,50 +2033,60 @@ function worldShapePoints(e, scale = 1) {
 function addVectorFragments(e) {
   if (fragments.length > MAX_FRAGMENTS) fragments.splice(0, fragments.length - MAX_FRAGMENTS);
   const pts = worldShapePoints(e, 1);
-  const count = Math.max(1, Math.round((e.type === 'splitter' ? 1 : e.largeSplits ? .85 : .45) * effectsQuality * (MOBILE_PERF ? .7 : 1)));
-  for (let pass = 0; pass < count; pass++) {
-    for (let i = 0; i < pts.length; i += pass ? 2 : 1) {
-      const a = pts[i];
-      const b = pts[(i + 1) % pts.length];
-      const mx = (a[0] + b[0]) * .5;
-      const my = (a[1] + b[1]) * .5;
-      const out = Math.atan2(my - e.y, mx - e.x) + rand(-.32, .32);
-      const speed = rand(62, e.type === 'splitter' || e.largeSplits ? 240 : 170);
-      fragments.push({
-        x: mx,
-        y: my,
-        vx: Math.cos(out) * speed + e.vx * .22,
-        vy: Math.sin(out) * speed + e.vy * .22,
-        ax: a[0] - mx,
-        ay: a[1] - my,
-        bx: b[0] - mx,
-        by: b[1] - my,
-        rot: rand(-.4, .4),
-        spin: rand(-2.8, 2.8),
-        hue: e.hue + rand(-3, 3),
-        life: rand(.18, .38),
-        max: rand(.34, .54),
-        kind: 'line'
-      });
-      if (!MOBILE_PERF && pass === 0 && i % 3 === 0) {
-        const [cx, cy] = rotatePoint(rand(-e.r * .34, e.r * .34), rand(-e.r * .34, e.r * .34), e.rot);
-        fragments.push({
-          x: mx,
-          y: my,
-          vx: Math.cos(out + rand(-.25, .25)) * speed * .72,
-          vy: Math.sin(out + rand(-.25, .25)) * speed * .72,
-          pts: [[a[0] - mx, a[1] - my], [b[0] - mx, b[1] - my], [cx, cy]],
-          rot: rand(0, TAU),
-          spin: rand(-4, 4),
-          hue: e.hue + rand(-3, 3),
-          life: rand(.2, .42),
-          max: rand(.36, .56),
-          kind: 'poly'
-        });
-      }
-    }
+  const edgeStep = MOBILE_PERF && pts.length > 8 && !e.boss ? 2 : 1;
+  for (let i = 0; i < pts.length; i += edgeStep) {
+    const a = pts[i];
+    const b = pts[(i + 1) % pts.length];
+    const mx = (a[0] + b[0]) * .5;
+    const my = (a[1] + b[1]) * .5;
+    const out = Math.atan2(my - e.y, mx - e.x) + rand(-.24, .24);
+    const speed = rand(e.boss ? 120 : 82, e.boss ? 320 : (e.largeSplits ? 260 : 205));
+    fragments.push({
+      x: mx,
+      y: my,
+      vx: Math.cos(out) * speed + e.vx * .2,
+      vy: Math.sin(out) * speed + e.vy * .2,
+      ax: a[0] - mx,
+      ay: a[1] - my,
+      bx: b[0] - mx,
+      by: b[1] - my,
+      rot: rand(-.32, .32),
+      spin: rand(-4.2, 4.2),
+      hue: e.hue + rand(-4, 4),
+      life: rand(.32, e.boss ? .68 : .52),
+      max: rand(.48, e.boss ? .9 : .72),
+      width: e.boss ? 1.75 : 1.2,
+      bright: true,
+      kind: 'line'
+    });
   }
-  const dust = Math.round((e.type === 'splitter' || e.largeSplits ? 3 : 1) * effectsQuality * (MOBILE_PERF ? .55 : 1));
+  const seamStep = MOBILE_PERF && !e.boss ? 2 : 1;
+  for (let i = 0; i < pts.length; i += seamStep) {
+    const a = pts[i];
+    const mx = (a[0] + e.x) * .5;
+    const my = (a[1] + e.y) * .5;
+    const out = Math.atan2(my - e.y, mx - e.x) + rand(-.18, .18);
+    const speed = rand(e.boss ? 95 : 58, e.boss ? 240 : 150);
+    fragments.push({
+      x: mx,
+      y: my,
+      vx: Math.cos(out) * speed + e.vx * .14,
+      vy: Math.sin(out) * speed + e.vy * .14,
+      ax: e.x - mx,
+      ay: e.y - my,
+      bx: a[0] - mx,
+      by: a[1] - my,
+      rot: rand(-.22, .22),
+      spin: rand(-2.4, 2.4),
+      hue: e.hue + 22 + rand(-5, 5),
+      life: rand(.22, e.boss ? .54 : .42),
+      max: rand(.42, e.boss ? .78 : .62),
+      width: e.boss ? 1.15 : .82,
+      seam: true,
+      kind: 'line'
+    });
+  }
+  const dust = Math.round((e.boss ? 4 : e.type === 'splitter' || e.largeSplits ? 2 : .8) * effectsQuality * (MOBILE_PERF ? .45 : 1));
   for (let i = 0; i < dust; i++) {
     const a = rand(0, TAU);
     const d = rand(0, e.r * 1.2);
@@ -2082,12 +2185,23 @@ function usePanicBomb() {
   sfx('boom');
   particles.push({ x: player.x, y: player.y, vx: 0, vy: 0, life: .55, max: .55, r: PANIC_RADIUS, hue: 188, kind: 'ring' });
   particles.push({ x: player.x, y: player.y, vx: 0, vy: 0, life: .14, max: .14, r: PANIC_RADIUS * .75, hue: 0, kind: 'flash' });
-  for (let i = enemies.length - 1; i >= 0; i--) {
-    const e = enemies[i];
-    const d = Math.hypot(e.x - player.x, e.y - player.y);
-    if (d <= PANIC_RADIUS) {
-      addVectorFragments(e);
-      explode(e.x, e.y, e.hue, false);
+	  for (let i = enemies.length - 1; i >= 0; i--) {
+	    const e = enemies[i];
+	    const d = Math.hypot(e.x - player.x, e.y - player.y);
+	    if (d <= PANIC_RADIUS) {
+	      if (e.boss) {
+	        e.hp = Math.max(1, e.hp - Math.max(3, Math.round(e.maxHp * .28)));
+	        addHitShards(e, e.x, e.y, 188);
+	        explode(e.x, e.y, e.hue, false, true);
+	        const nx = d > .001 ? (e.x - player.x) / d : Math.cos(e.rot);
+	        const ny = d > .001 ? (e.y - player.y) / d : Math.sin(e.rot);
+	        e.vx += nx * SHOT_BLAST_FORCE * 1.7;
+	        e.vy += ny * SHOT_BLAST_FORCE * 1.7;
+	        capEnemyVelocity(e);
+	        continue;
+	      }
+	      addVectorFragments(e);
+	      explode(e.x, e.y, e.hue, false, true);
       enemies.splice(i, 1);
       kills++;
       const reward = e.elite ? 120 : 42;
@@ -2108,9 +2222,9 @@ function usePanicBomb() {
   return true;
 }
 
-function explode(x, y, hue, big = false) {
+function explode(x, y, hue, big = false, lineDebrisOnly = false) {
   addSpark(x, y, big ? 54 : 38, hue, big ? 1.22 : 1.04);
-  addDeathChunks(x, y, hue, big);
+  if (!lineDebrisOnly) addDeathChunks(x, y, hue, big);
   particles.push({ x, y, vx: 0, vy: 0, life: big ? .24 : .18, max: big ? .24 : .18, r: big ? 48 : 34, hue, kind: 'core' });
   particles.push({ x, y, vx: 0, vy: 0, life: big ? .58 : .46, max: big ? .58 : .46, r: big ? 112 : 78, hue, kind: 'ring' });
   particles.push({ x, y, vx: 0, vy: 0, life: big ? .18 : .14, max: big ? .18 : .14, r: big ? 152 : 96, hue: big ? 0 : hue, kind: 'flash' });
@@ -2152,7 +2266,9 @@ function splitEnemy(e) {
 }
 
 function shouldSplitEnemy(e) {
-  return e.largeSplits || e.r >= 18;
+  if (e.boss) return false;
+  const trait = enemyTrait(e.type);
+  return e.largeSplits || e.r >= 18 || (trait?.family === 'split' && e.r >= (trait.splitR || 15));
 }
 
 function advanceWave() {
@@ -2169,6 +2285,7 @@ function advanceWave() {
   if (wave % 4 === 0) bombs = Math.min(MAX_BOMBS, bombs + 1);
   addBanner('WAVE ' + String(wave).padStart(2, '0'), wave % 2 ? 188 : 316);
   if (activeModifier) setTimeout(() => { if (running && activeModifier) addScreenNotice(activeModifier.label, activeModifier.hue, .63, 34, 1.25); }, 520);
+  if (isBossWave()) setTimeout(() => { if (running && isBossWave()) queueBossWarning(); }, 760);
   particles.push({ x: player.x, y: player.y, vx: 0, vy: 0, life: .42, max: .42, r: 120, hue: wave % 2 ? 188 : 316, kind: 'ring' });
   sfx('pickup');
   updateHud(true);
@@ -2383,9 +2500,47 @@ function update(dt) {
     const dx = player.x - e.x;
     const dy = player.y - e.y;
     const d = Math.hypot(dx, dy) || 1;
-    const wobble = Math.sin(time * 3 + e.pulse) * shapeDef(e.type).wobble;
-    e.vx += (dx / d * e.speed + Math.cos(e.rot + Math.PI / 2) * wobble - e.vx) * dt * 1.8;
-    e.vy += (dy / d * e.speed + Math.sin(e.rot + Math.PI / 2) * wobble - e.vy) * dt * 1.8;
+    const nx = dx / d;
+    const ny = dy / d;
+    const tx = -ny;
+    const ty = nx;
+    const trait = enemyTrait(e.type);
+    e.traitTimer = Math.max(0, (e.traitTimer || 0) - dt);
+    e.traitBurst = Math.max(0, (e.traitBurst || 0) - dt);
+    if (trait?.family === 'lunge' && e.traitTimer <= 0 && d < 760) {
+      e.traitBurst = rand(.18, .28);
+      e.traitTimer = rand(1.15, 2.05) * (e.elite ? .82 : 1);
+      e.spin += rand(-1.2, 1.2);
+    }
+    const baseWobble = shapeDef(e.type).wobble * (trait?.family === 'split' ? 1.25 : 1);
+    let wobble = Math.sin(time * 3 + e.pulse) * baseWobble;
+    let desiredX = nx * e.speed;
+    let desiredY = ny * e.speed;
+    let steer = 1.8;
+    if (trait?.family === 'orbit') {
+      const orbitRadius = (trait.orbitRadius || 130) + e.r * .8;
+      const radial = clamp((d - orbitRadius) / orbitRadius, -.55, 1.15);
+      const orbitMix = d < orbitRadius * 2.1 ? trait.orbit : trait.orbit * .35;
+      desiredX = nx * e.speed * radial + tx * e.speed * orbitMix;
+      desiredY = ny * e.speed * radial + ty * e.speed * orbitMix;
+      steer = 2.15;
+    } else if (trait?.family === 'erratic') {
+      const waveSide = Math.sin(time * (trait.weaveRate || 7) + e.pulse) * e.speed * (trait.weave || .8);
+      desiredX += tx * waveSide;
+      desiredY += ty * waveSide;
+      steer = 2.35;
+    } else if (trait?.family === 'lunge' && e.traitBurst > 0) {
+      desiredX += nx * e.speed * (trait.lunge || 1.25);
+      desiredY += ny * e.speed * (trait.lunge || 1.25);
+      wobble *= .35;
+      steer = 3.3;
+    } else if (trait?.family === 'elite') {
+      desiredX *= 1.04;
+      desiredY *= 1.04;
+      steer = 1.95;
+    }
+    e.vx += (desiredX + tx * wobble - e.vx) * dt * steer;
+    e.vy += (desiredY + ty * wobble - e.vy) * dt * steer;
     capEnemyVelocity(e);
     e.x += e.vx * dt;
     e.y += e.vy * dt;
@@ -2397,7 +2552,7 @@ function update(dt) {
       if (ship.hp <= 0 || ship.inv > 0) continue;
       if (dist2(e.x, e.y, ship.x, ship.y) < (e.r + ship.r) ** 2) {
         const sizeHit = e.sizeTier === 'giant' ? 5 : e.sizeTier === 'large' ? 3 : e.sizeTier === 'tiny' ? -2 : 0;
-        ship.hp -= (e.type === 'splitter' ? 24 : e.type === 'splinter' ? 7 : 12) + sizeHit + (e.elite ? 5 : 0);
+        ship.hp -= (e.type === 'splitter' ? 24 : e.type === 'splinter' ? 7 : 12) + sizeHit + (e.elite ? 5 : 0) + (trait?.damage || 0);
         ship.inv = HIT_INV_SECONDS;
         sfx('hit');
         blastEnemies(ship.x, ship.y, SHOT_BLAST_FORCE * .7, SHOT_BLAST_RADIUS * .9);
@@ -2470,9 +2625,15 @@ function update(dt) {
           comboTimer = 2.2;
           combo = clamp(combo + 1, 1, 12);
           bestCombo = Math.max(bestCombo, combo);
-          const baseScore = e.type === 'splinter' ? 8 : 28 + Math.round(e.r * 1.2) + (e.elite ? 70 : 0);
-          score += Math.round((baseScore * (1 + combo * .16) + wave * 3) * (activeModifier?.score || 1));
-          explode(e.x, e.y, e.hue, bigBreak);
+          const trait = enemyTrait(e.type);
+          const baseScore = e.type === 'splinter' ? 8 : 28 + Math.round(e.r * (e.boss ? 3.8 : 1.2)) + (e.elite ? 70 : 0) + (e.boss ? 420 + wave * 55 : 0);
+          score += Math.round((baseScore * (trait?.scoreMul || 1) * (1 + combo * .16) + wave * 3) * (activeModifier?.score || 1));
+          explode(e.x, e.y, e.hue, bigBreak, true);
+          if (e.boss) {
+            addBanner('BOSS DOWN', e.hue);
+            bombs = Math.min(MAX_BOMBS, bombs + 1);
+            pickups.push({ x: e.x, y: e.y, r: 10, life: 7, hue: 188, type: 'bomb' });
+          }
           sfx(bigBreak ? 'boom' : 'hit');
           if (Math.random() < .08) {
             const roll = Math.random();
@@ -2758,6 +2919,25 @@ function drawEnemy(c, e, ghost = false) {
       c.arc(0, 0, r * (1.48 + Math.sin(time * 5 + e.pulse) * .08), 0, TAU);
       c.stroke();
     }
+    if (e.boss) {
+      c.strokeStyle = `hsla(${e.hue + 70},100%,88%,.82)`;
+      c.lineWidth = 2.2;
+      c.beginPath();
+      c.arc(0, 0, r * (1.72 + Math.sin(time * 4 + e.pulse) * .05), 0, TAU);
+      c.stroke();
+      c.beginPath();
+      c.arc(0, 0, r * (1.98 + Math.cos(time * 3.2 + e.pulse) * .04), 0, TAU);
+      c.stroke();
+      const barW = clamp(r * 2.2, 62, 128);
+      const barY = -r * 1.92;
+      const fill = clamp(e.hp / Math.max(1, e.maxHp), 0, 1);
+      c.rotate(-e.rot);
+      c.lineWidth = 1.2;
+      c.strokeStyle = `hsla(${e.hue},100%,78%,.75)`;
+      c.strokeRect(-barW * .5, barY, barW, 5);
+      c.fillStyle = `hsla(${e.hue + 42},100%,66%,.86)`;
+      c.fillRect(-barW * .5 + 1, barY + 1, Math.max(0, barW - 2) * fill, 3);
+    }
   }
   c.restore();
 }
@@ -2833,13 +3013,14 @@ function drawParticle(c, p) {
 
 function drawFragment(c, f) {
   const t = clamp(f.life / f.max, 0, 1);
-  const color = `hsla(${f.hue},80%,72%,${t * (MOBILE_PERF ? .28 : .38)})`;
+  const alpha = t * (f.bright ? (MOBILE_PERF ? .62 : .78) : f.seam ? (MOBILE_PERF ? .44 : .6) : (MOBILE_PERF ? .28 : .38));
+  const color = `hsla(${f.hue},${f.bright ? 100 : 80}%,${f.seam ? 82 : 72}%,${alpha})`;
   c.save();
   c.translate(f.x, f.y);
   c.rotate(f.rot);
   c.strokeStyle = color;
   c.fillStyle = `hsla(${f.hue},86%,62%,${t * .08})`;
-  c.lineWidth = Math.max(.55, 1.05 * t);
+  c.lineWidth = Math.max(.55, (f.width || 1.05) * t);
   c.lineCap = 'round';
   c.lineJoin = 'round';
   c.shadowBlur = 0;
@@ -2940,13 +3121,19 @@ function drawSpawnWarning(c, warning) {
   c.translate(warning.spot.x, warning.spot.y);
   c.globalCompositeOperation = 'lighter';
   c.strokeStyle = `hsla(${warning.hue},100%,76%,${.25 + pulse * .65})`;
-  c.lineWidth = 2 + pulse * 2.5;
+  c.lineWidth = (warning.boss ? 3.4 : 2) + pulse * (warning.boss ? 4.5 : 2.5);
   c.beginPath();
   c.arc(0, 0, warning.r * (.65 + pulse * .45), 0, TAU);
   c.stroke();
-  for (let i = 0; i < 4; i++) {
-    const a = i * TAU / 4 + time * 4;
-    line(c, Math.cos(a) * warning.r * .25, Math.sin(a) * warning.r * .25, Math.cos(a) * warning.r * .72, Math.sin(a) * warning.r * .72, `hsla(${warning.hue + 30},100%,82%,${.35 + pulse * .55})`, 1.2 + pulse, 4);
+  if (warning.boss) {
+    c.beginPath();
+    c.arc(0, 0, warning.r * (.38 + pulse * .28), 0, TAU);
+    c.stroke();
+  }
+  const spokes = warning.boss ? 8 : 4;
+  for (let i = 0; i < spokes; i++) {
+    const a = i * TAU / spokes + time * (warning.boss ? 2.4 : 4);
+    line(c, Math.cos(a) * warning.r * .25, Math.sin(a) * warning.r * .25, Math.cos(a) * warning.r * (warning.boss ? .86 : .72), Math.sin(a) * warning.r * (warning.boss ? .86 : .72), `hsla(${warning.hue + 30},100%,82%,${.35 + pulse * .55})`, 1.2 + pulse, warning.boss ? 8 : 4);
   }
   c.restore();
 }
