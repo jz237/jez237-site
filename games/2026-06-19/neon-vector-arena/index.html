@@ -357,6 +357,7 @@ let audioMuted = false;
 let last = 0;
 let time = 0;
 let spawnTimer = 0;
+let waveBreather = 0;
 let frameMsAvg = 16.7;
 let fpsDisplay = 60;
 let hudTimer = 0;
@@ -368,6 +369,11 @@ let kills = 0;
 let lives = 3;
 let combo = 1;
 let comboTimer = 0;
+let bestCombo = 1;
+let bombs = 1;
+let bombCooldown = 0;
+let bombsUsed = 0;
+let modifiersCleared = 0;
 let shake = 0;
 const storedControlMode = localStorage.getItem('neon-vector-arena-control-mode');
 let controlMode = storedControlMode === 'auto' ? 'auto' : 'dual';
@@ -381,6 +387,7 @@ let particles = [];
 let fragments = [];
 let pickups = [];
 let callouts = [];
+let spawnWarnings = [];
 let stars = [];
 let player;
 let aimTarget = null;
@@ -388,6 +395,8 @@ let aimSwitchLock = 0;
 let camera = { x: 0, y: 0 };
 let nextWaveScore = 6500;
 let waveCooldown = 0;
+let activeModifier = null;
+let lastTouchBomb = 0;
 
 const FIREFOX_PERF = /\bFirefox\//i.test(navigator.userAgent);
 const GLOW_SCALE = FIREFOX_PERF ? .14 : .16;
@@ -407,6 +416,9 @@ const AIM_CLUSTER_RADIUS = 360;
 const SHOT_STEER_RATE = 5.2;
 const DEMO_EXTRA_SECONDS = 20;
 const FIRST_WAVE_SCORE = 12000;
+const BREATHER_SECONDS = 1.05;
+const MAX_BOMBS = 3;
+const PANIC_RADIUS = 430;
 const TAU = Math.PI * 2;
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 const rand = (a, b) => a + Math.random() * (b - a);
@@ -414,8 +426,14 @@ const HIT_CALLOUTS = ['OUCH', 'ZAP', 'BZZT', 'NOPE', 'YIKES', 'GLITCH', 'STATIC'
 const ENEMY_HIT_CALLOUTS = ['NICE', 'CRACK', 'POP', 'SHRED', 'SPLIT', 'BANG', 'GONE'];
 const REWARD_CALLOUTS = {
   shield: ['SHIELD', 'BOOST', 'CHARGED'],
-  overdrive: ['OVERDRIVE', 'HOT GUNS', 'MAX FIRE']
+  overdrive: ['OVERDRIVE', 'HOT GUNS', 'MAX FIRE'],
+  bomb: ['PANIC BOMB', 'CLEAR', 'BOMB UP']
 };
+const WAVE_MODIFIERS = [
+  { key: 'fast', label: 'FAST SHAPES', hue: 18, speed: 1.18, spawn: .88, score: 1.12 },
+  { key: 'splitter', label: 'SPLITTER STORM', hue: 54, splitter: .14, spawn: .94, score: 1.16 },
+  { key: 'lowShield', label: 'LOW SHIELD', hue: 330, shieldCap: 82, score: 1.24 }
+];
 const LOCAL_SCORE_KEY = 'neon-vector-arena-local-scores-v1';
 const NAME_KEY = 'neon-vector-arena-initials';
 const SCORES_API = 'https://game-scores.jez237.workers.dev/scores/neon-vector-arena';
@@ -454,7 +472,7 @@ function shapeDef(type) {
 }
 
 function chooseEnemyType() {
-  const splitterChance = clamp(.09 + wave * .006, .09, .18);
+  const splitterChance = clamp(.09 + wave * .006 + (activeModifier?.splitter || 0), .09, .32);
   if (Math.random() < splitterChance) return 'splitter';
   const total = SPAWN_TYPES.reduce((sum, type) => sum + shapeDef(type).weight, 0);
   let roll = Math.random() * total;
@@ -463,6 +481,12 @@ function chooseEnemyType() {
     if (roll <= 0) return type;
   }
   return 'cube';
+}
+
+function modifierForWave(value) {
+  if (value % 3 !== 0) return null;
+  const index = Math.floor(value / 3 - 1) % WAVE_MODIFIERS.length;
+  return WAVE_MODIFIERS[index];
 }
 
 function resize() {
@@ -519,7 +543,7 @@ function setPanel(section = 'menu') {
     startBtn.textContent = 'Resume';
   } else if (section === 'over') {
     overlayTitle.innerHTML = 'VECTOR<br>OVER';
-    overlaySub.textContent = `Score ${Math.floor(score)} · Wave ${String(wave).padStart(2, '0')} · ${kills} shapes destroyed · ${Math.max(0, lives)} lives left.`;
+    overlaySub.textContent = `Score ${Math.floor(score)} · Wave ${String(wave).padStart(2, '0')} · ${kills} shapes destroyed · Best Δx${bestCombo} · ${modifiersCleared} mods cleared · ${bombsUsed} bomb${bombsUsed === 1 ? '' : 's'} used.`;
     overlayFine.textContent = 'Submit initials for the local board, or restart instantly.';
     startBtn.textContent = 'Restart Solo';
     initialsInput.value = cleanInitials(localStorage.getItem(NAME_KEY) || initialsInput.value || 'YOU');
@@ -539,8 +563,8 @@ function setPanel(section = 'menu') {
 
 function controlHelpText() {
   return controlMode === 'dual'
-    ? 'Dual Stick: left side flies, right side aims and fires. Desktop: WASD plus hold mouse to aim.'
-    : 'Auto Fire: drag anywhere to fly. Shots smart-aim at the highest danger cluster.';
+    ? 'Dual Stick: left side flies, right side aims and fires. Desktop: WASD plus hold mouse to aim. B or Shift fires a panic bomb.'
+    : 'Auto Fire: drag anywhere to fly. Shots smart-aim at the highest danger cluster. B or Shift fires a panic bomb.';
 }
 
 function updateControlModeButtons() {
@@ -960,22 +984,30 @@ function reset() {
   fragments = [];
   pickups = [];
   callouts = [];
+  spawnWarnings = [];
   score = 0;
   wave = 1;
   kills = 0;
   lives = 3;
   combo = 1;
   comboTimer = 0;
+  bestCombo = 1;
+  bombs = 1;
+  bombCooldown = 0;
+  bombsUsed = 0;
+  modifiersCleared = 0;
   spawnTimer = 0;
+  waveBreather = 0;
   nextWaveScore = FIRST_WAVE_SCORE;
   waveCooldown = 8;
+  activeModifier = null;
   shake = 0;
   aimTarget = null;
   aimSwitchLock = 0;
   camera.x = player.x - innerWidth * .5;
   camera.y = player.y - innerHeight * .52;
   for (let i = 0; i < 18; i++) spawnEnemy(true);
-  updateHud();
+  updateHud(true);
 }
 
 function createPartner() {
@@ -996,15 +1028,18 @@ function createPartner() {
   };
 }
 
-function updateHud() {
-  if (running && hudTimer > 0) return;
+function updateHud(force = false) {
+  if (!force && running && hudTimer > 0) return;
   hudTimer = running ? .1 : 0;
-  scoreEl.textContent = 'Shield: ' + String(Math.max(0, Math.ceil(player?.hp ?? 100))).padStart(3, '0') + ' L' + lives;
+  const bombText = bombs > 0 ? ' B' + bombs : ' B0';
+  scoreEl.textContent = 'Shield: ' + String(Math.max(0, Math.ceil(player?.hp ?? 100))).padStart(3, '0') + ' L' + lives + bombText;
   waveEl.textContent = 'Wave ' + String(wave).padStart(2, '0');
   const label = innerWidth < 520 ? '' : 'Anonymous ';
   const power = player?.power > 0 ? ' OD' + Math.ceil(player.power) : '';
+  const mod = activeModifier && innerWidth >= 620 ? ' ' + activeModifier.label : '';
+  const breath = waveBreather > 0 && innerWidth >= 520 ? ' READY' : '';
   const fps = innerWidth < 520 ? '' : ' ' + fpsDisplay + 'fps';
-  comboEl.textContent = label + String(Math.floor(score)).padStart(6, '0') + ' Δx' + combo + power + fps;
+  comboEl.textContent = label + String(Math.floor(score)).padStart(6, '0') + ' Δx' + combo + power + mod + breath + fps;
 }
 
 function startSolo() {
@@ -1047,7 +1082,7 @@ function loseLife() {
   blastEnemies(player.x, player.y, SHOT_BLAST_FORCE * 1.15, SHOT_BLAST_RADIUS * 1.6);
   particles.push({ x: player.x, y: player.y, vx: 0, vy: 0, life: .62, max: .62, r: 150, hue: 188, kind: 'ring' });
   callouts.push({ text: 'REVIVE', x: player.x, y: player.y - 48, vx: 0, vy: -64, rot: 0, spin: 0, life: .82, max: .82, size: 42, hue: 188 });
-  updateHud();
+  updateHud(true);
 }
 
 function finishRun() {
@@ -1056,21 +1091,23 @@ function finishRun() {
   showOverlay('over');
 }
 
-function spawnEnemy(initial = false) {
+function spawnEnemy(initial = false, prepared = null) {
   if (!initial && enemies.length >= MAX_ENEMIES) return;
-  const spot = pickSpawnPoint(initial);
+  const spot = prepared?.spot || pickSpawnPoint(initial);
   const x = spot.x;
   const y = spot.y;
-  const type = chooseEnemyType();
+  const type = prepared?.type || chooseEnemyType();
   const def = shapeDef(type);
   const baseR = def.baseR;
   const sizeRoll = Math.random();
   const tier = SIZE_TIERS[sizeRoll < .34 ? 0 : sizeRoll < .72 ? 1 : 2];
-  const scale = (type === 'splitter' ? tier.splitter : tier.normal) * rand(.94, 1.06);
+  const elite = !initial && wave >= 4 && Math.random() < clamp(.025 + wave * .002 + (wave % 5 === 0 ? .05 : 0), .025, .11);
+  const scale = (type === 'splitter' ? tier.splitter : tier.normal) * rand(.94, 1.06) * (elite ? 1.16 : 1);
   const largeSplits = tier.name === 'large';
   const speedBase = rand(def.speed[0], def.speed[1]);
-  const speed = speedBase / Math.sqrt(scale);
-  const hp = 1;
+  const speedMod = (activeModifier?.speed || 1) * (elite ? .92 : 1);
+  const speed = speedBase / Math.sqrt(scale) * speedMod;
+  const hp = elite ? 2 : 1;
   enemies.push({
     x, y,
     vx: rand(-20, 20),
@@ -1079,6 +1116,7 @@ function spawnEnemy(initial = false) {
     hp,
     maxHp: hp,
     type,
+    elite,
     scale,
     sizeTier: tier.name,
     largeSplits,
@@ -1088,6 +1126,20 @@ function spawnEnemy(initial = false) {
     hue: def.hue,
     pulse: rand(0, TAU),
     trail: []
+  });
+}
+
+function queueSpawnWarning() {
+  if (enemies.length + spawnWarnings.length >= MAX_ENEMIES) return;
+  const type = chooseEnemyType();
+  const def = shapeDef(type);
+  spawnWarnings.push({
+    spot: pickSpawnPoint(false),
+    type,
+    hue: def.hue,
+    life: .68,
+    max: .68,
+    r: def.baseR * 1.7
   });
 }
 
@@ -1464,6 +1516,26 @@ function addBanner(text, hue = 188) {
   });
 }
 
+function addScreenNotice(text, hue = 188, anchorY = .62, size = 34, life = 1.1) {
+  callouts.push({
+    text,
+    x: innerWidth * .5,
+    y: innerHeight * anchorY,
+    anchorX: .5,
+    anchorY,
+    vx: 0,
+    vy: 0,
+    rot: 0,
+    spin: 0,
+    life,
+    max: life,
+    size,
+    hue,
+    kind: 'notice',
+    screen: true
+  });
+}
+
 function localShapePoints(e, scale = 1) {
   const r = e.r * scale;
   if (e.type === 'dart' || e.type === 'splinter') return [[r * 1.45, 0], [-r, .75 * r], [-.42 * r, 0], [-r, -.75 * r]];
@@ -1627,6 +1699,42 @@ function blastEnemies(x, y, force, radius, sourceVX = 0, sourceVY = 0) {
   }
 }
 
+function usePanicBomb() {
+  if (!running || bombs <= 0 || bombCooldown > 0 || !player) return false;
+  bombs--;
+  bombsUsed++;
+  bombCooldown = .85;
+  player.inv = Math.max(player.inv, 1.1);
+  shake = Math.max(shake, 5.5);
+  addBanner('PANIC BOMB', 188);
+  sfx('boom');
+  particles.push({ x: player.x, y: player.y, vx: 0, vy: 0, life: .55, max: .55, r: PANIC_RADIUS, hue: 188, kind: 'ring' });
+  particles.push({ x: player.x, y: player.y, vx: 0, vy: 0, life: .14, max: .14, r: PANIC_RADIUS * .75, hue: 0, kind: 'flash' });
+  for (let i = enemies.length - 1; i >= 0; i--) {
+    const e = enemies[i];
+    const d = Math.hypot(e.x - player.x, e.y - player.y);
+    if (d <= PANIC_RADIUS) {
+      addVectorFragments(e);
+      enemies.splice(i, 1);
+      kills++;
+      const reward = e.elite ? 120 : 42;
+      score += Math.round((reward + wave * 4) * (activeModifier?.score || 1));
+      if (Math.random() < .12 && bombs < MAX_BOMBS) pickups.push({ x: e.x, y: e.y, r: 10, life: 7, hue: 188, type: 'bomb' });
+    } else if (d <= PANIC_RADIUS * 1.45) {
+      const nx = (e.x - player.x) / d;
+      const ny = (e.y - player.y) / d;
+      e.vx += nx * SHOT_BLAST_FORCE * 1.2;
+      e.vy += ny * SHOT_BLAST_FORCE * 1.2;
+      capEnemyVelocity(e);
+    }
+  }
+  combo = clamp(combo + 1, 1, 12);
+  bestCombo = Math.max(bestCombo, combo);
+  comboTimer = Math.max(comboTimer, 1.4);
+  updateHud(true);
+  return true;
+}
+
 function explode(x, y, hue, big = false) {
   addSpark(x, y, big ? 18 : 5, hue, big ? 1.05 : .68);
   particles.push({ x, y, vx: 0, vy: 0, life: big ? .38 : .24, max: big ? .38 : .24, r: big ? 76 : 30, hue, kind: 'ring' });
@@ -1673,14 +1781,22 @@ function shouldSplitEnemy(e) {
 }
 
 function advanceWave() {
+  if (activeModifier) modifiersCleared++;
   wave++;
   nextWaveScore += 9000 + wave * 5200;
+  activeModifier = modifierForWave(wave);
   waveCooldown = 11;
-  spawnTimer = Math.min(spawnTimer, .26);
+  waveBreather = BREATHER_SECONDS;
+  spawnTimer = Math.max(spawnTimer, BREATHER_SECONDS);
+  spawnWarnings = [];
   player.hp = Math.min(MAX_SHIELD, player.hp + 8);
+  if (activeModifier?.shieldCap) player.hp = Math.min(player.hp, activeModifier.shieldCap);
+  if (wave % 4 === 0) bombs = Math.min(MAX_BOMBS, bombs + 1);
   addBanner('WAVE ' + String(wave).padStart(2, '0'), wave % 2 ? 188 : 316);
+  if (activeModifier) setTimeout(() => { if (running && activeModifier) addScreenNotice(activeModifier.label, activeModifier.hue, .63, 34, 1.25); }, 520);
   particles.push({ x: player.x, y: player.y, vx: 0, vy: 0, life: .42, max: .42, r: 120, hue: wave % 2 ? 188 : 316, kind: 'ring' });
   sfx('pickup');
+  updateHud(true);
 }
 
 function packShip(ship) {
@@ -1705,13 +1821,14 @@ function makeNetSnapshot() {
     player: packShip(player),
     partner: packShip(partner),
     enemies: enemies.slice(0, MAX_ENEMIES + 40),
+    spawnWarnings: spawnWarnings.slice(0, 20),
     shots: shots.slice(0, 120),
     pickups: pickups.slice(0, 20),
     particles: particles.slice(-80),
     fragments: fragments.slice(-120),
     callouts: callouts.slice(-8),
     camera,
-    score, wave, combo, comboTimer, kills, lives, time,
+    score, wave, combo, comboTimer, bestCombo, kills, lives, bombs, bombsUsed, modifiersCleared, waveBreather, activeModifier, time,
     running, menuState
   };
 }
@@ -1721,6 +1838,7 @@ function applyNetSnapshot(snapshot) {
   player = unpackShip(snapshot.player) || player;
   partner = unpackShip(snapshot.partner);
   enemies = Array.isArray(snapshot.enemies) ? snapshot.enemies : [];
+  spawnWarnings = Array.isArray(snapshot.spawnWarnings) ? snapshot.spawnWarnings : [];
   shots = Array.isArray(snapshot.shots) ? snapshot.shots : [];
   pickups = Array.isArray(snapshot.pickups) ? snapshot.pickups : [];
   particles = Array.isArray(snapshot.particles) ? snapshot.particles : [];
@@ -1730,8 +1848,14 @@ function applyNetSnapshot(snapshot) {
   wave = Number(snapshot.wave) || 1;
   combo = Number(snapshot.combo) || 1;
   comboTimer = Number(snapshot.comboTimer) || 0;
+  bestCombo = Number(snapshot.bestCombo) || combo;
   kills = Number(snapshot.kills) || 0;
   lives = Number(snapshot.lives) || 0;
+  bombs = Number(snapshot.bombs) || 0;
+  bombsUsed = Number(snapshot.bombsUsed) || 0;
+  modifiersCleared = Number(snapshot.modifiersCleared) || 0;
+  waveBreather = Number(snapshot.waveBreather) || 0;
+  activeModifier = snapshot.activeModifier || null;
   time = Number(snapshot.time) || time;
   if (snapshot.camera) camera = { x: Number(snapshot.camera.x) || 0, y: Number(snapshot.camera.y) || 0 };
   if (online.connected && online.role === 'p2' && partner) updateCamera(1, true);
@@ -1762,9 +1886,18 @@ function update(dt) {
     return;
   }
   shake = Math.max(0, shake - dt * 22);
+  bombCooldown = Math.max(0, bombCooldown - dt);
+  waveBreather = Math.max(0, waveBreather - dt);
   hudTimer = Math.max(0, hudTimer - dt);
   comboTimer -= dt;
-  if (comboTimer <= 0) combo = 1;
+  if (comboTimer <= 0) {
+    if (combo > 1) {
+      combo--;
+      comboTimer = .45;
+    } else {
+      combo = 1;
+    }
+  }
   const accel = 2200;
   const localInput = controlPacket();
   let ax = 0, ay = 0;
@@ -1853,10 +1986,21 @@ function update(dt) {
     }
   }
 
-  spawnTimer -= dt;
-  if (spawnTimer <= 0) {
-    spawnTimer = Math.max(.3, .86 - wave * .012);
-    spawnEnemy();
+  for (const warning of spawnWarnings) warning.life -= dt;
+  for (let i = spawnWarnings.length - 1; i >= 0; i--) {
+    const warning = spawnWarnings[i];
+    if (warning.life <= 0) {
+      spawnEnemy(false, warning);
+      spawnWarnings.splice(i, 1);
+    }
+  }
+
+  if (waveBreather <= 0) {
+    spawnTimer -= dt;
+    if (spawnTimer <= 0) {
+      spawnTimer = Math.max(.24, (.86 - wave * .012) * (activeModifier?.spawn || 1));
+      queueSpawnWarning();
+    }
   }
   if (score >= nextWaveScore && waveCooldown <= 0) advanceWave();
 
@@ -1877,7 +2021,7 @@ function update(dt) {
     for (const ship of [player, partner].filter(Boolean)) {
       if (ship.hp <= 0 || ship.inv > 0) continue;
       if (dist2(e.x, e.y, ship.x, ship.y) < (e.r + ship.r) ** 2) {
-        ship.hp -= e.type === 'splitter' ? 22 : e.type === 'splinter' ? 6 : 10;
+        ship.hp -= (e.type === 'splitter' ? 22 : e.type === 'splinter' ? 6 : 10) + (e.elite ? 4 : 0);
         ship.inv = 1.05;
         sfx('hit');
         blastEnemies(ship.x, ship.y, SHOT_BLAST_FORCE * .7, SHOT_BLAST_RADIUS * .9);
@@ -1949,13 +2093,16 @@ function update(dt) {
           kills++;
           comboTimer = 2.2;
           combo = clamp(combo + 1, 1, 12);
-          const baseScore = e.type === 'splinter' ? 8 : 28 + Math.round(e.r * 1.2);
-          score += Math.round(baseScore * (1 + combo * .16) + wave * 3);
+          bestCombo = Math.max(bestCombo, combo);
+          const baseScore = e.type === 'splinter' ? 8 : 28 + Math.round(e.r * 1.2) + (e.elite ? 70 : 0);
+          score += Math.round((baseScore * (1 + combo * .16) + wave * 3) * (activeModifier?.score || 1));
           explode(e.x, e.y, e.hue, bigBreak);
           sfx(bigBreak ? 'boom' : 'hit');
           if (Math.random() < .08) {
-            const overdrive = Math.random() < .26;
-            pickups.push({ x: e.x, y: e.y, r: overdrive ? 10 : 9, life: 6, hue: overdrive ? 316 : 54, type: overdrive ? 'overdrive' : 'shield' });
+            const roll = Math.random();
+            const bomb = roll < .12 && bombs < MAX_BOMBS;
+            const overdrive = !bomb && roll < .38;
+            pickups.push({ x: e.x, y: e.y, r: bomb ? 10 : overdrive ? 10 : 9, life: bomb ? 7 : 6, hue: bomb ? 188 : overdrive ? 316 : 54, type: bomb ? 'bomb' : overdrive ? 'overdrive' : 'shield' });
           }
         }
         break;
@@ -1964,23 +2111,29 @@ function update(dt) {
   }
 
   for (const p of pickups) {
-    p.life -= dt;
+    p.life -= waveBreather > 0 ? dt * .18 : dt;
     const dx = player.x - p.x;
     const dy = player.y - p.y;
     const d = Math.hypot(dx, dy) || 1;
-    if (d < 90) {
-      p.x += dx / d * 220 * dt;
-      p.y += dy / d * 220 * dt;
+    const magnet = p.type === 'bomb' ? 190 : p.type === 'overdrive' ? 170 : 145;
+    if (d < magnet) {
+      const pull = clamp(1 - d / magnet, .25, 1);
+      p.x += dx / d * (260 + 160 * pull) * dt;
+      p.y += dy / d * (260 + 160 * pull) * dt;
     }
     if (d < player.r + p.r) {
       score += 100 + combo * 15;
-      if (p.type === 'overdrive') {
+      if (p.type === 'bomb') {
+        bombs = Math.min(MAX_BOMBS, bombs + 1);
+        player.hp = Math.min(MAX_SHIELD, player.hp + 6);
+      } else if (p.type === 'overdrive') {
         player.power = Math.max(player.power || 0, 7.5);
         player.hp = Math.min(MAX_SHIELD, player.hp + 8);
       } else {
         player.hp = Math.min(MAX_SHIELD, player.hp + 18);
       }
       combo = clamp(combo + 2, 1, 12);
+      bestCombo = Math.max(bestCombo, combo);
       comboTimer = 3;
       addSpark(p.x, p.y, p.type === 'overdrive' ? 34 : 24, p.hue, 1.1);
       addRewardCallout(player.x, player.y, p.type, p.hue);
@@ -2222,6 +2375,13 @@ function drawEnemy(c, e, ghost = false) {
       const a = i * TAU / 4 + e.pulse * .2;
       c.fillRect(Math.cos(a) * r * .72 - 1.2, Math.sin(a) * r * .72 - 1.2, 2.4, 2.4);
     }
+    if (e.elite) {
+      c.strokeStyle = `hsla(${e.hue + 44},100%,84%,.72)`;
+      c.lineWidth = 1.4;
+      c.beginPath();
+      c.arc(0, 0, r * (1.48 + Math.sin(time * 5 + e.pulse) * .08), 0, TAU);
+      c.stroke();
+    }
   }
   c.restore();
 }
@@ -2346,6 +2506,80 @@ function drawCallout(c, o, glowPass = false) {
   c.restore();
 }
 
+function drawPickup(c, p, glowPass = false) {
+  c.save();
+  c.translate(p.x, p.y);
+  c.rotate(time * (p.type === 'bomb' ? 3.2 : 5));
+  const alpha = clamp(p.life, 0, 1);
+  if (p.type === 'overdrive') {
+    poly(c, [[0,-p.r * 1.2], [p.r * .42,-p.r * .22], [p.r * 1.25,0], [p.r * .42,p.r * .22], [0,p.r * 1.2], [-p.r * .42,p.r * .22], [-p.r * 1.25,0], [-p.r * .42,-p.r * .22]], `hsla(${p.hue},100%,74%,${alpha})`, glowPass ? 2.2 : 1.5, glowPass ? 'rgba(255,70,245,.16)' : 'rgba(255,70,245,.08)', glowPass ? 18 : 0);
+  } else if (p.type === 'bomb') {
+    c.strokeStyle = `hsla(${p.hue},100%,78%,${alpha})`;
+    c.fillStyle = glowPass ? `hsla(${p.hue},100%,62%,.12)` : `hsla(${p.hue},100%,62%,.07)`;
+    c.lineWidth = glowPass ? 2.4 : 1.7;
+    c.beginPath();
+    c.arc(0, 0, p.r * 1.05, 0, TAU);
+    c.fill();
+    c.stroke();
+    line(c, -p.r * .82, 0, p.r * .82, 0, `hsla(${p.hue + 34},100%,86%,${alpha})`, glowPass ? 2.6 : 1.4, glowPass ? 8 : 0);
+    line(c, 0, -p.r * .82, 0, p.r * .82, `hsla(${p.hue + 34},100%,86%,${alpha})`, glowPass ? 2.6 : 1.4, glowPass ? 8 : 0);
+  } else {
+    poly(c, [[0,-p.r], [p.r,0], [0,p.r], [-p.r,0]], `hsla(${p.hue},100%,72%,${alpha})`, glowPass ? 2 : 1.5, glowPass ? 'rgba(255,235,95,.14)' : 'rgba(255,235,95,.08)', glowPass ? 16 : 0);
+  }
+  c.restore();
+}
+
+function drawSpawnWarning(c, warning) {
+  const t = clamp(warning.life / warning.max, 0, 1);
+  const pulse = 1 - t;
+  c.save();
+  c.translate(warning.spot.x, warning.spot.y);
+  c.globalCompositeOperation = 'lighter';
+  c.strokeStyle = `hsla(${warning.hue},100%,76%,${.25 + pulse * .65})`;
+  c.lineWidth = 2 + pulse * 2.5;
+  c.beginPath();
+  c.arc(0, 0, warning.r * (.65 + pulse * .45), 0, TAU);
+  c.stroke();
+  for (let i = 0; i < 4; i++) {
+    const a = i * TAU / 4 + time * 4;
+    line(c, Math.cos(a) * warning.r * .25, Math.sin(a) * warning.r * .25, Math.cos(a) * warning.r * .72, Math.sin(a) * warning.r * .72, `hsla(${warning.hue + 30},100%,82%,${.35 + pulse * .55})`, 1.2 + pulse, 4);
+  }
+  c.restore();
+}
+
+function drawThreatIndicators(c) {
+  const items = enemies
+    .map(e => ({ e, sx: e.x - camera.x, sy: e.y - camera.y, d: Math.hypot(e.x - player.x, e.y - player.y) }))
+    .filter(item => item.sx < -22 || item.sx > innerWidth + 22 || item.sy < -22 || item.sy > innerHeight + 22)
+    .sort((a, b) => a.d - b.d)
+    .slice(0, 5);
+  if (!items.length) return;
+  c.save();
+  c.globalCompositeOperation = 'lighter';
+  for (const { e, sx, sy, d } of items) {
+    const x = clamp(sx, 18, innerWidth - 18);
+    const y = clamp(sy, 42, innerHeight - 26);
+    const a = Math.atan2(sy - innerHeight * .5, sx - innerWidth * .5);
+    const alpha = clamp(1.2 - d / 900, .28, .82);
+    c.save();
+    c.translate(x, y);
+    c.rotate(a);
+    c.fillStyle = `hsla(${e.hue},100%,72%,${alpha})`;
+    c.strokeStyle = `hsla(${e.hue + 30},100%,88%,${alpha})`;
+    c.lineWidth = 1.2;
+    c.beginPath();
+    c.moveTo(9, 0);
+    c.lineTo(-7, -6);
+    c.lineTo(-4, 0);
+    c.lineTo(-7, 6);
+    c.closePath();
+    c.fill();
+    c.stroke();
+    c.restore();
+  }
+  c.restore();
+}
+
 function drawStick(c, stick, hue, label) {
   if (controlMode !== 'dual' || !stick.active) return;
   const v = stickVector(stick);
@@ -2423,18 +2657,9 @@ function render() {
     if (heavyGlow && i % 2) continue;
     drawShot(gtx, shots[i]);
   }
+  for (const warning of spawnWarnings) drawSpawnWarning(gtx, warning);
   for (const e of enemies) drawEnemy(gtx, e);
-  for (const p of pickups) {
-    gtx.save();
-    gtx.translate(p.x, p.y);
-    gtx.rotate(time * 5);
-    if (p.type === 'overdrive') {
-      poly(gtx, [[0,-p.r * 1.2], [p.r * .42,-p.r * .22], [p.r * 1.25,0], [p.r * .42,p.r * .22], [0,p.r * 1.2], [-p.r * .42,p.r * .22], [-p.r * 1.25,0], [-p.r * .42,-p.r * .22]], `hsla(${p.hue},100%,74%,${clamp(p.life, 0, 1)})`, 2.2, 'rgba(255,70,245,.16)', 18);
-    } else {
-      poly(gtx, [[0,-p.r], [p.r,0], [0,p.r], [-p.r,0]], `hsla(${p.hue},100%,72%,${clamp(p.life, 0, 1)})`, 2, 'rgba(255,235,95,.14)', 16);
-    }
-    gtx.restore();
-  }
+  for (const p of pickups) drawPickup(gtx, p, true);
   if (!heavyGlow || renderFrame % 2 === 0) for (const p of particles) drawParticle(gtx, p);
   for (const o of callouts) if (!o.screen) drawCallout(gtx, o, true);
   if (partner) drawPlayer(gtx, partner);
@@ -2454,15 +2679,10 @@ function render() {
   ctx.globalAlpha = 1;
   ctx.filter = 'none';
   for (const s of shots) drawShot(ctx, s);
+  for (const warning of spawnWarnings) drawSpawnWarning(ctx, warning);
   for (const e of enemies) drawEnemy(ctx, e);
   for (const f of fragments) drawFragment(ctx, f);
-  for (const p of pickups) {
-    ctx.save();
-    ctx.translate(p.x, p.y);
-    ctx.rotate(time * 5);
-    poly(ctx, [[0,-p.r], [p.r,0], [0,p.r], [-p.r,0]], `hsla(${p.hue},100%,72%,${clamp(p.life, 0, 1)})`, 1.5, 'rgba(255,235,95,.08)', 0);
-    ctx.restore();
-  }
+  for (const p of pickups) drawPickup(ctx, p);
   for (const p of particles) drawParticle(ctx, p);
   for (const o of callouts) if (!o.screen) drawCallout(ctx, o);
   if (partner) drawPlayer(ctx, partner);
@@ -2481,6 +2701,7 @@ function render() {
 
   ctx.save();
   ctx.globalCompositeOperation = 'lighter';
+  drawThreatIndicators(ctx);
   for (const o of callouts) if (o.screen) drawCallout(ctx, o, true);
   for (const o of callouts) if (o.screen) drawCallout(ctx, o);
   ctx.restore();
@@ -2594,6 +2815,15 @@ submitScoreBtn.addEventListener('click', async () => {
 window.addEventListener('resize', resize);
 window.addEventListener('pointerdown', e => {
   if (e.target.closest('button') || e.target.closest('input')) return;
+  if (running && e.pointerType === 'touch' && e.clientY > innerHeight * .68 && Math.abs(e.clientX - innerWidth * .5) < 120) {
+    const now = performance.now();
+    if (now - lastTouchBomb < 330) {
+      usePanicBomb();
+      lastTouchBomb = 0;
+    } else {
+      lastTouchBomb = now;
+    }
+  }
   try { canvas.setPointerCapture?.(e.pointerId); } catch {}
   setPointer(e, true);
 });
@@ -2606,6 +2836,9 @@ window.addEventListener('touchmove', e => {
 }, { passive: false });
 window.addEventListener('keydown', e => {
   keys.add(e.code);
+  if (running && !e.repeat && (e.code === 'KeyB' || e.code === 'ShiftLeft' || e.code === 'ShiftRight')) {
+    usePanicBomb();
+  }
   if (e.code === 'KeyP' || e.code === 'Escape') {
     if (running) pauseGame();
     else if (menuState === 'paused') resumeGame();
@@ -2633,7 +2866,8 @@ window.__neon = {
   applyNetSnapshot,
   connectOnline,
   disconnectOnline,
-  state: () => ({ running, menuState, gameMode, score, wave, kills, online: { ...online, ws: !!online.ws }, enemies: enemies.length, shots: shots.length })
+  usePanicBomb,
+  state: () => ({ running, menuState, gameMode, score, wave, kills, combo, bestCombo, bombs, activeModifier, waveBreather, online: { ...online, ws: !!online.ws }, enemies: enemies.length, spawnWarnings: spawnWarnings.length, shots: shots.length })
 };
 if (new URLSearchParams(location.search).get('autostart') === '1') {
   startSolo();
