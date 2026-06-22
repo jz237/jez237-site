@@ -359,18 +359,23 @@ function makeActor(c, r, kind){
 /* ================= movement (shared by player + guards) ================= */
 const RUN_SPEED = 5.4, CLIMB_SPEED = 4.5, FALL_SPEED = 9.5;
 const CENTER_EPS = 0.01;
-const LADDER_GRAB_X = 0.62;
+const LADDER_SUPPORT_X = 0.62;
+const LADDER_GRAB_X = 0.92;
 
 function clamp(v, lo, hi){ return v < lo ? lo : v > hi ? hi : v; }
 
-function nearestLadderColumn(a, r){
+function nearestLadderColumn(a, r, dir = 0, radius){
   const base = Math.floor(a.x);
+  const grab = radius == null ? (dir ? LADDER_GRAB_X : LADDER_SUPPORT_X) : radius;
   let best = null, bestD = 99;
   for (let c = base - 1; c <= base + 1; c++){
     if (c < 0 || c >= COLS) continue;
-    if (!isLadder(c, r) && !isLadder(c, r + 1)) continue;
+    const ok = dir < 0
+      ? (isLadder(c, r) || isLadder(c, r + 1) || (isLadder(c, r - 1) && canOccupy(c, r - 1)))
+      : (isLadder(c, r) || isLadder(c, r + 1));
+    if (!ok) continue;
     const d = Math.abs(a.x - (c + .5));
-    if (d <= LADDER_GRAB_X && d < bestD){ best = c; bestD = d; }
+    if (d <= grab && d < bestD){ best = c; bestD = d; }
   }
   return best;
 }
@@ -422,8 +427,10 @@ function tryMoveY(a, dy, lockC){
   let r = Math.floor(a.y);
   let ny = a.y + dy;
   if (dy < 0){
-    // rising: clamp at current cell center unless this cell is ladder with occupiable above
-    if (!isLadder(c, r) || !canOccupy(c, r - 1)) ny = Math.max(ny, r + .5);
+    // rising: allow a small bottom-of-ladder grab when the ladder visually starts above you
+    const ladderHere = isLadder(c, r);
+    const ladderAbove = isLadder(c, r - 1) && a.y <= r + .58;
+    if (!(ladderHere || ladderAbove) || !canOccupy(c, r - 1)) ny = Math.max(ny, r + .5);
     ny = Math.max(ny, .5);
   } else {
     if (!canOccupy(c, r + 1)) ny = Math.min(ny, r + .5);
@@ -466,15 +473,15 @@ function moveActor(a, dt, inp, spd){
 
   // vertical intent first (ladder priority, classic feel)
   if (dyIn !== 0){
-    const lc = nearestLadderColumn(a, r);
+    const lc = nearestLadderColumn(a, r, dyIn);
     const climbC = lc == null ? c : lc;
-    const onLad = isLadder(climbC, r), ladBelow = isLadder(climbC, r + 1);
+    const onLad = isLadder(climbC, r), ladBelow = isLadder(climbC, r + 1), ladAbove = isLadder(climbC, r - 1);
     const onBar = isBar(c, r);
     if (dyIn > 0 && onBar && !onLad && !isSupportTile(c, r + 1)){
       a.state = 'fall'; a.y += 0.02; a.anim = 0; a.fellFrom = a.y; return; // drop from bar
     }
     const canClimb = dyIn < 0
-      ? (onLad || (ladBelow && a.y > r + .5 + CENTER_EPS))
+      ? (onLad || (ladBelow && a.y > r + .5 + CENTER_EPS) || (ladAbove && a.y <= r + .58 && canOccupy(climbC, r - 1)))
       : (onLad || ladBelow);
     if (canClimb){
       a.x += (climbC + .5 - a.x) * Math.min(1, dt * 22);
@@ -1691,10 +1698,18 @@ function clearTouchMoveKeys(){
   keys.ArrowLeft = keys.ArrowRight = keys.ArrowUp = keys.ArrowDown = false;
 }
 const touchPulseTimers = {};
+let ladderTouchAssist = null;
 function pulseTouchKey(code, ms){
   clearTimeout(touchPulseTimers[code]);
   keys[code] = true;
   touchPulseTimers[code] = setTimeout(() => { keys[code] = false; }, ms || 180);
+}
+function queueLadderAssist(c, dir, ms){
+  ladderTouchAssist = {
+    c,
+    dir: dir < 0 ? -1 : 1,
+    until: gameTime + (ms || 950) / 1000,
+  };
 }
 function clientToGameScreen(clientX, clientY){
   const rect = canvas.getBoundingClientRect();
@@ -1720,7 +1735,7 @@ function ladderTapTarget(clientX, clientY){
   const c0 = Math.floor(w.x / TILE);
   const r0 = Math.floor((w.y - HUD_H) / TILE);
   let best = null, bestD = Infinity;
-  for (let dr = -1; dr <= 1; dr++){
+  for (let dr = -2; dr <= 2; dr++){
     for (let dc = -1; dc <= 1; dc++){
       const c = c0 + dc, r = r0 + dr;
       if (!isLadder(c, r)) continue;
@@ -1730,7 +1745,7 @@ function ladderTapTarget(clientX, clientY){
       if (d < bestD){ bestD = d; best = {c, r}; }
     }
   }
-  return bestD <= 58 ? best : null;
+  return bestD <= 78 ? best : null;
 }
 function playerScreenX(){
   if (!player) return screenW / 2;
@@ -1744,11 +1759,17 @@ function handleTouchLadder(clientX, clientY){
   if (!lad) return false;
   AUDIO.ensure();
   const targetX = lad.c + .5;
+  const p = clientToGameScreen(clientX, clientY);
+  const w = screenToWorldPoint(p);
+  const tapY = (w.y - HUD_H) / TILE;
+  const dir = Math.abs(tapY - player.y) > 0.2
+    ? (tapY < player.y ? -1 : 1)
+    : (lad.r + .5 < player.y ? -1 : 1);
+  queueLadderAssist(lad.c, dir, 1050);
   if (Math.abs(player.x - targetX) > 0.32){
-    pulseTouchKey(targetX < player.x ? 'ArrowLeft' : 'ArrowRight', 260);
+    pulseTouchKey(targetX < player.x ? 'ArrowLeft' : 'ArrowRight', 520);
   }
-  const code = lad.r + .5 < player.y ? 'ArrowUp' : 'ArrowDown';
-  pulseTouchKey(code, 420);
+  pulseTouchKey(dir < 0 ? 'ArrowUp' : 'ArrowDown', 720);
   return true;
 }
 function handleTouchDig(clientX, clientY){
@@ -1893,7 +1914,7 @@ function initTouchGestures(){
 }
 
 function playerInput(){
-  return {
+  const inp = {
     left: keys.ArrowLeft || keys.KeyA,
     right: keys.ArrowRight || keys.KeyD,
     up: keys.ArrowUp || keys.KeyW,
@@ -1902,6 +1923,23 @@ function playerInput(){
     digR: keys.KeyX || keys.Period,
     dash: keys.Space || keys.ShiftLeft || keys.ShiftRight,
   };
+  if (ladderTouchAssist && player && state === 'playing'){
+    if (ladderTouchAssist.until <= gameTime){
+      ladderTouchAssist = null;
+    } else {
+      const targetX = ladderTouchAssist.c + .5;
+      const dx = targetX - player.x;
+      if (Math.abs(dx) > 0.08){
+        if (dx < 0) inp.left = true;
+        else inp.right = true;
+      }
+      if (Math.abs(dx) <= LADDER_GRAB_X + 0.18){
+        if (ladderTouchAssist.dir < 0) inp.up = true;
+        else inp.down = true;
+      }
+    }
+  }
+  return inp;
 }
 
 function seedTreasures(){
