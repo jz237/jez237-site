@@ -2486,7 +2486,7 @@ for (const [kind, src] of Object.entries(enemySpriteSrcs)){
   enemySprites[kind] = img;
 }
 const ENEMY_POSE_SHEET = {
-  src: 'assets/enemy-pose-sheet-gpt-v1.png',
+  src: 'assets/enemy-pose-sheet-gpt-v2.png',
   cols: 4,
   rows: 3,
   row: {guard: 0, scout: 1, mason: 2},
@@ -2847,9 +2847,14 @@ function generatedEnemyHeight(a, pose){
   if (a.kind === 'mason') return 74;
   return 70;
 }
-function generatedEnemyMotion(a, pose){
+function generatedEnemyMotion(a, pose, sheetFrame){
   const t = a.anim || gameTime;
   const dir = a.dir || 1;
+  if (sheetFrame){
+    if (pose === 'run') return {rot: 0, sx: 1, sy: 1, ox: 0, oy: Math.sin(t * 12) * 0.45};
+    if (pose === 'climb') return {rot: 0, sx: 1, sy: 1, ox: Math.sin(t * 8) * 0.35, oy: Math.sin(t * 10) * 0.45};
+    if (pose === 'bar') return {rot: 0, sx: 1, sy: 1, ox: 0, oy: 0};
+  }
   if (pose === 'run'){
     const step = Math.sin(t * 16);
     const stride = Math.sin(t * 8);
@@ -2886,7 +2891,7 @@ function generatedEnemyMotion(a, pose){
   return {rot: 0, sx: 1 + breathe, sy: 1 - breathe, ox: 0, oy: 0};
 }
 function drawGeneratedEnemy(a, sprite, cx2, footY, h, w, pose){
-  const motion = generatedEnemyMotion(a, pose);
+  const motion = generatedEnemyMotion(a, pose, sprite.sheet);
   ctx.save();
   ctx.translate(cx2 + motion.ox, footY + motion.oy);
   if (a.dir < 0) ctx.scale(-1, 1);
@@ -2902,13 +2907,15 @@ function drawActor(a){
   const rate = pose === 'run' ? 14 : (pose === 'climb' ? 9 : (pose === 'bar' ? 8 : 4));
   const fi = a.moved || pose === 'idle' || pose === 'fall' || pose === 'stun'
     ? Math.floor(a.anim * rate) % frames.length : 0;
+  const enemyFi = a.moved || pose === 'idle' || pose === 'fall' || pose === 'stun'
+    ? Math.floor(a.anim * (pose === 'run' ? 6 : (pose === 'climb' ? 5 : 4))) : 0;
   const img = frames[fi] || frames[0];
   const generatedPlayer = a.kind === 'player' && painterlyMinerReady && painterlyMiner.naturalWidth;
   const generatedRunPlayer = generatedPlayer && pose === 'run' && vibeMinerRunReady && vibeMinerRun.naturalWidth;
   const generatedDigPlayer = generatedPlayer && pose === 'dig' && vibeMinerDigReady && vibeMinerDig.naturalWidth;
   const generatedClimbHangPlayer = generatedPlayer && (pose === 'climb' || pose === 'bar') &&
     vibeMinerClimbHangReady && vibeMinerClimbHang.naturalWidth;
-  const generatedEnemy = a.kind !== 'player' ? generatedEnemyFrame(a, pose, fi) : null;
+  const generatedEnemy = a.kind !== 'player' ? generatedEnemyFrame(a, pose, enemyFi) : null;
   const generatedRatio = generatedRunPlayer
     ? ((vibeMinerRun.naturalWidth / VIBE_MINER_RUN.cols) / vibeMinerRun.naturalHeight)
     : (generatedDigPlayer
