@@ -1,6 +1,6 @@
 {
   "date": "2026-06-22",
-  "updatedAt": "2026-06-22T21:00:01.381447+00:00",
+  "updatedAt": "2026-06-22T21:11:30.012601+00:00",
   "items": [
     {
       "title": "OpenAI Launches Full-Scale Effort to Patch Open-Source Bugs as It Takes on Anthropic’s Mythos",
@@ -13,11 +13,11 @@
       "image": "https://media.wired.com/photos/6a2fc599a8e3255f0ac3665f/master/pass/061526_OpenAI%20Hires%20an%20Army%20to%20Patch%20Open%20Source%20Bugs%20as%20It%20Battles%20Mythos%20for%20Cyber%20AI%20Supremacy.jpg",
       "published": "2026-06-22T17:00:00+00:00",
       "firstSeen": "2026-06-22T17:46:50.991171+00:00",
-      "lastSeen": "2026-06-22T21:00:01.381447+00:00",
+      "lastSeen": "2026-06-22T21:11:30.012601+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 20.2743
+      "score": 20.2691
     },
     {
       "title": "Daybreak: Tools for securing every organization in the world",
@@ -30,11 +30,11 @@
       "image": "",
       "published": "2026-06-22T10:00:00+00:00",
       "firstSeen": "2026-06-22T17:46:50.991171+00:00",
-      "lastSeen": "2026-06-22T21:00:01.381447+00:00",
+      "lastSeen": "2026-06-22T21:11:30.012601+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 15.2104
+      "score": 15.2061
     },
     {
       "title": "L’Oréal brings Maybelline virtual try-on to ChatGPT",
@@ -47,10 +47,26 @@
       "image": "",
       "published": "2026-06-22T10:00:00+00:00",
       "firstSeen": "2026-06-22T11:00:01.198563+00:00",
-      "lastSeen": "2026-06-22T21:00:01.381447+00:00",
+      "lastSeen": "2026-06-22T21:11:30.012601+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.4584
+      "score": 12.4541
+    },
+    {
+      "title": "Anthropic’s new privacy policy collects biometric data from flagged Claude users",
+      "url": "https://thenextweb.com/news/anthropic-claude-id-verification-privacy-policy-persona-biometric",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Anthropic has updated its privacy policy to allow the company to require some Claude users to upload government-issued identification and submit selfie photos or videos for identity verification. The updated policy, which takes effect on July 8, introduces a new category of personal data collection that includes facial geometry templates, a data type that may [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/anthropic-claude-id-verification-privacy-policy-persona-biometric.avif",
+      "published": "2026-06-22T20:27:41+00:00",
+      "firstSeen": "2026-06-22T21:11:30.012601+00:00",
+      "lastSeen": "2026-06-22T21:11:30.012601+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 11.8279
     },
     {
       "title": "Google invests $75 million in A24 as DeepMind launches AI filmmaking research partnership",
@@ -63,10 +79,10 @@
       "image": "https://media.thenextweb.com/2026/06/google-75-million-a24-deepmind-ai-filmmaking-partnership.avif",
       "published": "2026-06-22T18:14:23+00:00",
       "firstSeen": "2026-06-22T20:00:02.111727+00:00",
-      "lastSeen": "2026-06-22T21:00:01.381447+00:00",
+      "lastSeen": "2026-06-22T21:11:30.012601+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 11.2688
+      "score": 11.2634
     },
     {
       "title": "OpenAI’s suspiciously clean balance sheet is about to get a hard look",
@@ -82,7 +98,7 @@
       "lastSeen": "2026-06-22T20:00:02.111727+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.0309
+      "score": 10.026
     },
     {
       "title": "Amazon is testing Alexa+ in India with Hindi support",
@@ -95,10 +111,26 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/08/alexa-plus-event.png?resize=1200%2C675",
       "published": "2026-06-22T17:31:29+00:00",
       "firstSeen": "2026-06-22T17:46:50.991171+00:00",
-      "lastSeen": "2026-06-22T21:00:01.381447+00:00",
+      "lastSeen": "2026-06-22T21:11:30.012601+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.2888
+      "score": 9.2835
+    },
+    {
+      "title": "Amazon invites Indian users to beta-test a Hindi version of Alexa+",
+      "url": "https://thenextweb.com/news/amazon-alexa-plus-india-hindi-beta-testing",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Amazon is testing Alexa+ in India with Hindi-language support, the company’s first move to bring its generative AI assistant to a non-Western-language market. The company sent emails to select Indian customers inviting them to join a beta-testing programme, according to TechCrunch, which viewed the invitations. The emails asked users to fill out a form in [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/amazon-alexa-plus-india-hindi-beta-testing.avif",
+      "published": "2026-06-22T20:49:23+00:00",
+      "firstSeen": "2026-06-22T21:11:30.012601+00:00",
+      "lastSeen": "2026-06-22T21:11:30.012601+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 9.2388
     },
     {
       "title": "Google DeepMind bets $75M on AI’s future in Hollywood with A24 deal",
@@ -111,10 +143,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/GettyImages-2252299302.jpg?w=1024",
       "published": "2026-06-22T18:49:44+00:00",
       "firstSeen": "2026-06-22T19:00:01.782862+00:00",
-      "lastSeen": "2026-06-22T21:00:01.381447+00:00",
+      "lastSeen": "2026-06-22T21:11:30.012601+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.2256
+      "score": 8.2201
     },
     {
       "title": "NVIDIA Vera CPU Opens the Way for Agentic Scientific AI at Los Alamos National Laboratory",
@@ -127,10 +159,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/vera-cpu-lanl-1920x1080-1.jpg",
       "published": "2026-06-22T13:00:20+00:00",
       "firstSeen": "2026-06-22T14:00:01.422625+00:00",
-      "lastSeen": "2026-06-22T21:00:01.381447+00:00",
+      "lastSeen": "2026-06-22T21:11:30.012601+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 7.2709
+      "score": 7.2663
     },
     {
       "title": "Three things to watch amid Anthropic’s latest feud with the government",
@@ -143,10 +175,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/06/WH-v-Anthropic.jpg?resize=1200%2C600",
       "published": "2026-06-22T18:00:00+00:00",
       "firstSeen": "2026-06-22T19:00:01.782862+00:00",
-      "lastSeen": "2026-06-22T21:00:01.381447+00:00",
+      "lastSeen": "2026-06-22T21:11:30.012601+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.302
+      "score": 6.2967
     },
     {
       "title": "Anthropic’s Fable 5 Withdrawal Underscores Importance and Difficulty of ‘sovereign AI’ Strategies",
@@ -159,42 +191,10 @@
       "image": "",
       "published": "2026-06-22T11:23:08+00:00",
       "firstSeen": "2026-06-22T12:23:25.443602+00:00",
-      "lastSeen": "2026-06-22T21:00:01.381447+00:00",
+      "lastSeen": "2026-06-22T21:11:30.012601+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.9922
-    },
-    {
-      "title": "Mukesh Ambani’s Reliance AI Roadmap Puts Jio CallAgent Inside the Network",
-      "url": "https://www.techrepublic.com/article/news-reliance-jio-callagent-ai-apac-india",
-      "source": "TechRepublic AI",
-      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Reliance’s AI roadmap puts Jio CallAgent inside the telecom network while tying India-scale AI ambitions to Jamnagar compute, local-language services, and enterprise compliance questions.\nThe post Mukesh Ambani’s Reliance AI Roadmap Puts Jio CallAgent Inside the Network appeared first on TechRepublic.",
-      "image": "https://assets.techrepublic.com/uploads/2026/06/RCP-mumbai-1024x576.jpg?f=jpeg",
-      "published": "2026-06-22T14:23:44+00:00",
-      "firstSeen": "2026-06-22T20:00:02.111727+00:00",
-      "lastSeen": "2026-06-22T21:00:01.381447+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 5.7656
-    },
-    {
-      "title": "Patch the Planet: a Daybreak initiative to support open source maintainers",
-      "url": "https://openai.com/index/patch-the-planet",
-      "source": "OpenAI News",
-      "sourceUrl": "https://openai.com/news/rss.xml",
-      "sourceWeight": 1.0,
-      "category": "AI",
-      "summary": "OpenAI introduces Patch the Planet, a Daybreak initiative helping open-source maintainers find, validate, and fix vulnerabilities with AI and expert review.",
-      "image": "",
-      "published": "2026-06-22T10:00:00+00:00",
-      "firstSeen": "2026-06-22T17:46:50.991171+00:00",
-      "lastSeen": "2026-06-22T21:00:01.381447+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 5.6104
+      "score": 5.9877
     }
   ],
   "errors": [
