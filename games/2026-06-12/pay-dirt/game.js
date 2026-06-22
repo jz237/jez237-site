@@ -360,7 +360,7 @@ function makeActor(c, r, kind){
 const RUN_SPEED = 5.4, CLIMB_SPEED = 4.5, FALL_SPEED = 9.5;
 const CENTER_EPS = 0.01;
 const LADDER_SUPPORT_X = 0.62;
-const LADDER_GRAB_X = 0.92;
+const LADDER_GRAB_X = 0.72;
 
 function clamp(v, lo, hi){ return v < lo ? lo : v > hi ? hi : v; }
 
@@ -429,7 +429,7 @@ function tryMoveY(a, dy, lockC){
   if (dy < 0){
     // rising: allow a small bottom-of-ladder grab when the ladder visually starts above you
     const ladderHere = isLadder(c, r);
-    const ladderAbove = isLadder(c, r - 1) && a.y <= r + .58;
+    const ladderAbove = isLadder(c, r - 1) && a.y <= r + .53;
     if (!(ladderHere || ladderAbove) || !canOccupy(c, r - 1)) ny = Math.max(ny, r + .5);
     ny = Math.max(ny, .5);
   } else {
@@ -481,13 +481,13 @@ function moveActor(a, dt, inp, spd){
       a.state = 'fall'; a.y += 0.02; a.anim = 0; a.fellFrom = a.y; return; // drop from bar
     }
     const canClimb = dyIn < 0
-      ? (onLad || (ladBelow && a.y > r + .5 + CENTER_EPS) || (ladAbove && a.y <= r + .58 && canOccupy(climbC, r - 1)))
+      ? (onLad || (ladBelow && a.y > r + .5 + CENTER_EPS) || (ladAbove && a.y <= r + .53 && canOccupy(climbC, r - 1)))
       : (onLad || ladBelow);
     if (canClimb){
-      a.x += (climbC + .5 - a.x) * Math.min(1, dt * 22);
+      a.x += (climbC + .5 - a.x) * Math.min(1, dt * 16);
       movedY = tryMoveY(a, dyIn * climb, climbC);
       if (movedY){
-        a.x += (climbC + .5 - a.x) * Math.min(1, dt * 22); // hug the ladder
+        a.x += (climbC + .5 - a.x) * Math.min(1, dt * 16); // hug the ladder
         a.state = 'climb';
       }
     }
@@ -1735,7 +1735,7 @@ function ladderTapTarget(clientX, clientY){
   const c0 = Math.floor(w.x / TILE);
   const r0 = Math.floor((w.y - HUD_H) / TILE);
   let best = null, bestD = Infinity;
-  for (let dr = -2; dr <= 2; dr++){
+  for (let dr = -1; dr <= 1; dr++){
     for (let dc = -1; dc <= 1; dc++){
       const c = c0 + dc, r = r0 + dr;
       if (!isLadder(c, r)) continue;
@@ -1745,7 +1745,7 @@ function ladderTapTarget(clientX, clientY){
       if (d < bestD){ bestD = d; best = {c, r}; }
     }
   }
-  return bestD <= 78 ? best : null;
+  return bestD <= 64 ? best : null;
 }
 function playerScreenX(){
   if (!player) return screenW / 2;
@@ -1765,11 +1765,11 @@ function handleTouchLadder(clientX, clientY){
   const dir = Math.abs(tapY - player.y) > 0.2
     ? (tapY < player.y ? -1 : 1)
     : (lad.r + .5 < player.y ? -1 : 1);
-  queueLadderAssist(lad.c, dir, 1050);
+  queueLadderAssist(lad.c, dir, 720);
   if (Math.abs(player.x - targetX) > 0.32){
-    pulseTouchKey(targetX < player.x ? 'ArrowLeft' : 'ArrowRight', 520);
+    pulseTouchKey(targetX < player.x ? 'ArrowLeft' : 'ArrowRight', 340);
   }
-  pulseTouchKey(dir < 0 ? 'ArrowUp' : 'ArrowDown', 720);
+  pulseTouchKey(dir < 0 ? 'ArrowUp' : 'ArrowDown', 520);
   return true;
 }
 function handleTouchDig(clientX, clientY){
@@ -1926,14 +1926,19 @@ function playerInput(){
   if (ladderTouchAssist && player && state === 'playing'){
     if (ladderTouchAssist.until <= gameTime){
       ladderTouchAssist = null;
+      clearTouchMoveKeys();
     } else {
       const targetX = ladderTouchAssist.c + .5;
       const dx = targetX - player.x;
       if (Math.abs(dx) > 0.08){
         if (dx < 0) inp.left = true;
         else inp.right = true;
+      } else {
+        keys.ArrowLeft = keys.ArrowRight = false;
+        inp.left = false;
+        inp.right = false;
       }
-      if (Math.abs(dx) <= LADDER_GRAB_X + 0.18){
+      if (Math.abs(dx) <= LADDER_GRAB_X + 0.08){
         if (ladderTouchAssist.dir < 0) inp.up = true;
         else inp.down = true;
       }
