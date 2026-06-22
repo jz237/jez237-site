@@ -277,7 +277,7 @@ function triggerCaveIn(reason){
   };
   flash = Math.max(flash, .4);
   shake = Math.max(shake, .75);
-  AUDIO.sfx('warn');
+  AUDIO.sfx('cave');
 }
 
 function queueSpecialRockWarning(delay){
@@ -1268,7 +1268,7 @@ function applyPowerup(kind){
     banner = {text: gained ? 'EXTRA LIFE' : 'HEART FULL', sub: gained ? '+1 HEART' : 'MAX LIVES', life: 1.55};
     spawnParticles(player.x, player.y - .2, 18, {color: ['#fff', meta.color, '#fff3b0'], spd: 4.2, life: .75, size: 3.5, grav: -5, glow: true});
     popup(player.x, player.y - .55, gained ? '+1 LIFE' : 'FULL', meta.color);
-    AUDIO.sfx('power');
+    AUDIO.sfx(gained ? 'life' : 'power');
     return;
   }
   addScore(50);
@@ -1807,7 +1807,8 @@ function levelComplete(){
   if (mode === 'special'){
     const levels = LEVELS.special.levels || [LEVELS.special];
     if (levelIndex + 1 < levels.length){
-      AUDIO.sfx('win');
+  AUDIO.sfx('cart');
+  if (special.final) AUDIO.sfx('win');
       loadSpecialLevel(levelIndex + 1);
     } else {
       endGame(true);
@@ -5494,6 +5495,7 @@ window.__g = {
   get hunchState(){ return routeHint ? {...routeHint} : null; },
   get wavePreview(){ return wavePreview ? {...wavePreview} : null; },
   get lastNuggetCue(){ return lastNuggetCueTargets(); },
+  sfx(name){ AUDIO.ensure(); AUDIO.sfx(name); return true; },
   get mobileZoom(){ return mobileZoomAdjust; },
   get mobileView(){ return mobileView ? {...mobileView} : null; },
   set mobileZoom(v){ mobileZoomAdjust = clamp(Number(v) || 1, 0.68, 1.45); },
