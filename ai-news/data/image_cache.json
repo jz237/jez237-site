@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-22T14:00:01.422625+00:00",
+  "updatedAt": "2026-06-22T15:00:01.475123+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -11076,6 +11076,10 @@
     "https://huggingface.co/blog/PaddlePaddle/pp-ocrv6": {
       "image": "https://cdn-uploads.huggingface.co/production/uploads/652b2e9166313ebb6197e706/l156KP0e5PRyDrE4woHoM.jpeg",
       "checkedAt": "2026-06-22T14:00:01.422625+00:00"
+    },
+    "https://techcrunch.com/2026/06/22/the-founder-conference-built-for-growth-techcrunch-founder-summit-pass-rates-increase-june-26": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/03/Early-Stage-2024-audience.jpg?resize=1200,800",
+      "checkedAt": "2026-06-22T15:00:01.475123+00:00"
     }
   }
 }

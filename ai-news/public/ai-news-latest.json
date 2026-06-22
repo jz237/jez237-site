@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-22T14:00:01.422625+00:00",
+  "updatedAt": "2026-06-22T15:00:01.475123+00:00",
   "items": [
     {
       "title": "LLM research updates, large language model evaluation news, leaderboards, and AI model insights",
@@ -10,12 +10,92 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-22T14:00:10.975407+00:00",
+      "published": "2026-06-22T15:00:09.474325+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-22T14:00:01.422625+00:00",
+      "lastSeen": "2026-06-22T15:00:01.475123+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 5.11
+    },
+    {
+      "title": "GLM-5.2 is the step change for open agents",
+      "url": "https://www.interconnects.ai/p/glm-52-is-the-step-change-for-open",
+      "source": "Interconnects AI",
+      "sourceUrl": "https://www.interconnects.ai/feed",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "A capability threshold I've been carefully monitoring.",
+      "image": "https://substack-post-media.s3.amazonaws.com/public/images/267cdc82-6fbc-4f68-bcba-160091396dfd_3182x1790.png",
+      "published": "2026-06-22T14:52:45+00:00",
+      "firstSeen": "2026-06-22T15:00:01.475123+00:00",
+      "lastSeen": "2026-06-22T15:00:01.475123+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.0563
+    },
+    {
+      "title": "The founder conference built for growth: TechCrunch Founder Summit pass rates increase June 26",
+      "url": "https://techcrunch.com/2026/06/22/the-founder-conference-built-for-growth-techcrunch-founder-summit-pass-rates-increase-june-26",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Save up to $190 on your pass to TechCrunch Founder Summit 2026 by June 26, 11:59 p.m. PT. Designed for founders first on November 4 in Boston. Register here.",
+      "image": "https://techcrunch.com/wp-content/uploads/2025/03/Early-Stage-2024-audience.jpg?resize=1200%2C800",
+      "published": "2026-06-22T14:00:00+00:00",
+      "firstSeen": "2026-06-22T15:00:01.475123+00:00",
+      "lastSeen": "2026-06-22T15:00:01.475123+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2599
+    },
+    {
+      "title": "Ireland takes the EU presidency with Big Tech paying 40 per cent of its tax bill",
+      "url": "https://thenextweb.com/news/ireland-eu-presidency-big-tech-conflict",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Ireland takes over the rotating presidency of the Council of the EU on 1 July, inheriting a legislative agenda that includes proposals to curb Europe’s reliance on American tech, simplify the bloc’s digital rulebook, decide whether to ban children from social media, and overhaul telecom regulations. The country holding the presidency is supposed to act as [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/ireland-eu-presidency-big-tech-conflict.avif",
+      "published": "2026-06-22T13:56:18+00:00",
+      "firstSeen": "2026-06-22T15:00:01.475123+00:00",
+      "lastSeen": "2026-06-22T15:00:01.475123+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.118
+    },
+    {
+      "title": "JD.com says robots will replace its 700,000 couriers",
+      "url": "https://thenextweb.com/news/jd-com-robots-replace-delivery-workers",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "JD.com robots will eventually replace the company’s 700,000 couriers, its founder says. It is a rare admission that automation is coming for blue-collar jobs. Most tech bosses hedge when asked whether machines will take people’s jobs. Richard Liu just said it plainly. He chairs JD.com, one of China’s biggest e-commerce groups. At the APEC China [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/JD-com-autonomus-delivery.avif",
+      "published": "2026-06-22T13:40:28+00:00",
+      "firstSeen": "2026-06-22T15:00:01.475123+00:00",
+      "lastSeen": "2026-06-22T15:00:01.475123+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1102
+    },
+    {
+      "title": "Uber anchors Lime’s IPO as the scooter firm goes public",
+      "url": "https://thenextweb.com/news/lime-ipo-uber-anchor-investor",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The Lime IPO has a price and an anchor investor: Uber, the ride-hailing giant that already owns a chunk of the scooter firm and is now backing its market debut. Lime is going public, and an old backer is helping carry it across the line: Uber. The scooter and bike-rental firm, formally Neutron Holdings, has [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/Seattle-LimeGlider.avif",
+      "published": "2026-06-22T13:21:24+00:00",
+      "firstSeen": "2026-06-22T15:00:01.475123+00:00",
+      "lastSeen": "2026-06-22T15:00:01.475123+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.8009
     },
     {
       "title": "PP-OCRv6 on Hugging Face: 50-Language OCR from 1.5M to 34.5M Parameters",
@@ -28,10 +108,26 @@
       "image": "https://cdn-uploads.huggingface.co/production/uploads/652b2e9166313ebb6197e706/l156KP0e5PRyDrE4woHoM.jpeg",
       "published": "2026-06-22T13:18:56+00:00",
       "firstSeen": "2026-06-22T14:00:01.422625+00:00",
-      "lastSeen": "2026-06-22T14:00:01.422625+00:00",
+      "lastSeen": "2026-06-22T15:00:01.475123+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.4093
+      "score": 2.3797
+    },
+    {
+      "title": "China hits back at the Pentagon with curbs on 56 US firms",
+      "url": "https://thenextweb.com/news/china-trade-curbs-us-firms-pentagon-list",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "China’s new trade curbs target 56 US companies, from rare-earth miners to drone makers. It is direct retaliation for Washington adding Chinese firms to its military blacklist. China has answered the Pentagon’s blacklist with one of its own. On Monday, Beijing aimed trade curbs at 56 American companies. The measures hit drone makers and defence [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/china-us.avif",
+      "published": "2026-06-22T13:03:42+00:00",
+      "firstSeen": "2026-06-22T15:00:01.475123+00:00",
+      "lastSeen": "2026-06-22T15:00:01.475123+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.0923
     },
     {
       "title": "At ISC, JUPITER Shows What Exascale Science Looks Like",
@@ -44,10 +140,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/hpc-corp-blog-isc26-julich-supercomputer-1280x680-5359150.png",
       "published": "2026-06-22T13:00:48+00:00",
       "firstSeen": "2026-06-22T14:00:01.422625+00:00",
-      "lastSeen": "2026-06-22T14:00:01.422625+00:00",
+      "lastSeen": "2026-06-22T15:00:01.475123+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2602
+      "score": 2.2309
     },
     {
       "title": "NAIRR Science Program Reshapes Scientific Research, Powered by NVIDIA AI Infrastructure",
@@ -60,10 +156,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/nairr.png",
       "published": "2026-06-22T13:00:38+00:00",
       "firstSeen": "2026-06-22T14:00:01.422625+00:00",
-      "lastSeen": "2026-06-22T14:00:01.422625+00:00",
+      "lastSeen": "2026-06-22T15:00:01.475123+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.6602
+      "score": 4.6308
     },
     {
       "title": "NVIDIA Vera CPU Opens the Way for Agentic Scientific AI at Los Alamos National Laboratory",
@@ -76,10 +172,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/vera-cpu-lanl-1920x1080-1.jpg",
       "published": "2026-06-22T13:00:20+00:00",
       "firstSeen": "2026-06-22T14:00:01.422625+00:00",
-      "lastSeen": "2026-06-22T14:00:01.422625+00:00",
+      "lastSeen": "2026-06-22T15:00:01.475123+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 7.46
+      "score": 7.4307
     },
     {
       "title": "From Materials Simulation to Experimental Astronomy, New NVIDIA AI Software Unlocks Scientific Discoveries",
@@ -92,10 +188,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/cuda-press-corp-blog-isc26-1920x1080-1.jpg",
       "published": "2026-06-22T13:00:20+00:00",
       "firstSeen": "2026-06-22T14:00:01.422625+00:00",
-      "lastSeen": "2026-06-22T14:00:01.422625+00:00",
+      "lastSeen": "2026-06-22T15:00:01.475123+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 0.56
+      "score": 0.5307
     },
     {
       "title": "Eco Wave Power Turns Waves Into Watts With NVIDIA AI Infrastructure and Digital Twins",
@@ -108,10 +204,26 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/eco-wave-1920x1080-1.jpg",
       "published": "2026-06-22T13:00:13+00:00",
       "firstSeen": "2026-06-22T14:00:01.422625+00:00",
-      "lastSeen": "2026-06-22T14:00:01.422625+00:00",
+      "lastSeen": "2026-06-22T15:00:01.475123+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.96
+      "score": 3.9306
+    },
+    {
+      "title": "Prosper AI raises $30M from a16z to automate the patient journey",
+      "url": "https://thenextweb.com/news/prosper-ai-raises-30m-to-automate-the-patient-journey",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Most of what makes American healthcare expensive happens before a doctor is ever in the room, and after. Someone schedules the appointment, confirms the insurance, works out what the patient owes, and chases the payer when a claim stalls. It is slow, fragmented work, and by most estimates it wastes hundreds of billions of dollars [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/Prosper-AI.avif",
+      "published": "2026-06-22T13:00:10+00:00",
+      "firstSeen": "2026-06-22T15:00:01.475123+00:00",
+      "lastSeen": "2026-06-22T15:00:01.475123+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "framework_or_plumbing",
+      "score": 0.0906
     },
     {
       "title": "Microsoft’s Nadella turns on the AI giants he helped build",
@@ -124,10 +236,10 @@
       "image": "https://media.thenextweb.com/2026/04/microsoft-voluntary-retirement-us-workers-ai.avif",
       "published": "2026-06-22T12:50:06+00:00",
       "firstSeen": "2026-06-22T14:00:01.422625+00:00",
-      "lastSeen": "2026-06-22T14:00:01.422625+00:00",
+      "lastSeen": "2026-06-22T15:00:01.475123+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.115
+      "score": 2.0858
     },
     {
       "title": "Microsoft turns to Chevron’s gas to power a Texas data centre",
@@ -140,10 +252,10 @@
       "image": "https://media.thenextweb.com/2026/06/chevron-logo.avif",
       "published": "2026-06-22T12:36:06+00:00",
       "firstSeen": "2026-06-22T14:00:01.422625+00:00",
-      "lastSeen": "2026-06-22T14:00:01.422625+00:00",
+      "lastSeen": "2026-06-22T15:00:01.475123+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1081
+      "score": 2.0791
     },
     {
       "title": "Anthropic’s Fable 5 Withdrawal Underscores Importance and Difficulty of ‘sovereign AI’ Strategies",
@@ -159,7 +271,7 @@
       "lastSeen": "2026-06-22T12:23:25.443602+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.1729
+      "score": 6.1449
     },
     {
       "title": "Read this before you vibe-code another app",
@@ -172,10 +284,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/268570_vibe_coding_security_CVirginia2.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-22T11:00:00+00:00",
       "firstSeen": "2026-06-22T12:00:01.863571+00:00",
-      "lastSeen": "2026-06-22T14:00:01.422625+00:00",
+      "lastSeen": "2026-06-22T15:00:01.475123+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 4.072
+      "score": 4.0443
     },
     {
       "title": "Getty Images soars after striking a deal with the kind of company it sued",
@@ -188,10 +300,10 @@
       "image": "https://media.thenextweb.com/2026/06/Getty-Images.avif",
       "published": "2026-06-22T10:49:01+00:00",
       "firstSeen": "2026-06-22T11:00:01.198563+00:00",
-      "lastSeen": "2026-06-22T14:00:01.422625+00:00",
+      "lastSeen": "2026-06-22T15:00:01.475123+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0569
+      "score": 2.0293
     },
     {
       "title": "L’Oréal brings Maybelline virtual try-on to ChatGPT",
@@ -204,10 +316,10 @@
       "image": "",
       "published": "2026-06-22T10:00:00+00:00",
       "firstSeen": "2026-06-22T11:00:01.198563+00:00",
-      "lastSeen": "2026-06-22T14:00:01.422625+00:00",
+      "lastSeen": "2026-06-22T15:00:01.475123+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.6323
+      "score": 12.6053
     },
     {
       "title": "SpaceX shares slide again as the post-IPO rally keeps unwinding",
@@ -220,10 +332,10 @@
       "image": "https://media.thenextweb.com/2026/06/spacex-ipo-oversubscribed-orders-close.avif",
       "published": "2026-06-22T09:59:30+00:00",
       "firstSeen": "2026-06-22T10:00:01.707125+00:00",
-      "lastSeen": "2026-06-22T14:00:01.422625+00:00",
+      "lastSeen": "2026-06-22T15:00:01.475123+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7341
+      "score": 2.7071
     },
     {
       "title": "Baden Bower tracks 12,040 AI citations across six engines to rank top publications for AI visibility",
@@ -236,10 +348,10 @@
       "image": "https://media.thenextweb.com/2026/06/baden-bower-ai-visibility-index-citations-publications.avif",
       "published": "2026-06-22T09:57:16+00:00",
       "firstSeen": "2026-06-22T10:00:01.707125+00:00",
-      "lastSeen": "2026-06-22T14:00:01.422625+00:00",
+      "lastSeen": "2026-06-22T15:00:01.475123+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1331
+      "score": 3.1061
     },
     {
       "title": "Spiro takes $55M from China’s NewTrails as it nears a $1bn valuation",
@@ -255,7 +367,7 @@
       "lastSeen": "2026-06-22T14:00:01.422625+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.128
+      "score": 3.1012
     },
     {
       "title": "The Bank of England backs down on its toughest stablecoin rules",
@@ -271,7 +383,7 @@
       "lastSeen": "2026-06-22T14:00:01.422625+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0243
+      "score": 1.9976
     },
     {
       "title": "Some Electricians Think Building Data Centers Is for Sellouts",
@@ -284,10 +396,10 @@
       "image": "https://media.wired.com/photos/6a317f4a898b4be9664d5a85/master/pass/Business_ElectriciansHaveaLotofComplicatedFeelingsAboutBuildingDataCenters-v1.jpg",
       "published": "2026-06-22T09:30:00+00:00",
       "firstSeen": "2026-06-22T10:00:01.707125+00:00",
-      "lastSeen": "2026-06-22T14:00:01.422625+00:00",
+      "lastSeen": "2026-06-22T15:00:01.475123+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1607
+      "score": 2.1341
     },
     {
       "title": "World Cup Scams Are Getting Harder to Spot",
@@ -300,10 +412,10 @@
       "image": "https://media.wired.com/clips/6a33f50cfdecea08d2cf6a9a/master/pass/WorldcupScam_lead.mp4",
       "published": "2026-06-22T09:30:00+00:00",
       "firstSeen": "2026-06-22T10:00:01.707125+00:00",
-      "lastSeen": "2026-06-22T14:00:01.422625+00:00",
+      "lastSeen": "2026-06-22T15:00:01.475123+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1607
+      "score": 2.1341
     },
     {
       "title": "Indonesia turns to AI to deliver Prabowo’s biggest promises",
@@ -319,7 +431,7 @@
       "lastSeen": "2026-06-22T14:00:01.422625+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0164
+      "score": 1.9899
     },
     {
       "title": "China’s green-power target for AI data centres runs into the grid",
@@ -335,7 +447,7 @@
       "lastSeen": "2026-06-22T14:00:01.422625+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0031
+      "score": 1.9769
     },
     {
       "title": "Seedcamp raises $320M and builds out a transatlantic bridge",
@@ -351,7 +463,7 @@
       "lastSeen": "2026-06-22T14:00:01.422625+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9976
+      "score": 1.9716
     },
     {
       "title": "Canada buys Australian Arctic radar in A$2.5bn defence-export first",
@@ -367,7 +479,7 @@
       "lastSeen": "2026-06-22T12:23:25.443602+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9947
+      "score": 1.9688
     },
     {
       "title": "Korea’s policy chief warns chip windfall could inflate housing",
@@ -383,7 +495,7 @@
       "lastSeen": "2026-06-22T12:23:25.443602+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9854
+      "score": 1.9597
     },
     {
       "title": "WeChat begins testing Xiaowei as Tencent eyes a Q3 AI rollout",
@@ -399,7 +511,7 @@
       "lastSeen": "2026-06-22T10:00:01.707125+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.1684
+      "score": 4.1433
     },
     {
       "title": "SK Hynix overtakes Samsung as Korea’s most valuable company",
@@ -415,7 +527,7 @@
       "lastSeen": "2026-06-22T09:00:01.595854+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.0647
+      "score": 4.0397
     },
     {
       "title": "London’s Isometric lands $40M to certify the industrial economy with AI",
@@ -431,7 +543,7 @@
       "lastSeen": "2026-06-22T09:00:01.595854+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3479
+      "score": 3.3233
     },
     {
       "title": "Hotter Than a Hot Tub: The 45°C Breakthrough to Cool AI’s Biggest Machines",
@@ -444,10 +556,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/45CLiquidCooling.jpg",
       "published": "2026-06-22T05:00:22+00:00",
       "firstSeen": "2026-06-22T05:26:35.285589+00:00",
-      "lastSeen": "2026-06-22T14:00:01.422625+00:00",
+      "lastSeen": "2026-06-22T15:00:01.475123+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0468
+      "score": 2.0233
     },
     {
       "title": "sqlite-utils 4.0rc1 adds migrations and nested transactions",
@@ -460,10 +572,10 @@
       "image": "",
       "published": "2026-06-21T23:35:47+00:00",
       "firstSeen": "2026-06-21T23:42:02.044001+00:00",
-      "lastSeen": "2026-06-22T14:00:01.422625+00:00",
+      "lastSeen": "2026-06-22T15:00:01.475123+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -0.4727
+      "score": -0.4929
     },
     {
       "title": "sqlite-utils 4.0rc1",
@@ -476,10 +588,10 @@
       "image": "",
       "published": "2026-06-21T23:30:04+00:00",
       "firstSeen": "2026-06-21T23:42:02.044001+00:00",
-      "lastSeen": "2026-06-22T14:00:01.422625+00:00",
+      "lastSeen": "2026-06-22T15:00:01.475123+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.6253
+      "score": 2.6052
     },
     {
       "title": "Samsung Electronics brings ChatGPT and Codex to employees",
@@ -492,10 +604,10 @@
       "image": "",
       "published": "2026-06-21T23:00:00+00:00",
       "firstSeen": "2026-06-21T23:42:02.044001+00:00",
-      "lastSeen": "2026-06-22T14:00:01.422625+00:00",
+      "lastSeen": "2026-06-22T15:00:01.475123+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.1252
+      "score": 10.1053
     },
     {
       "title": "Temporary Cloudflare Accounts for AI agents",
@@ -508,11 +620,11 @@
       "image": "https://static.simonwillison.net/static/2026/cloudflare-claim.jpg",
       "published": "2026-06-21T22:01:04+00:00",
       "firstSeen": "2026-06-21T23:00:01.940325+00:00",
-      "lastSeen": "2026-06-22T14:00:01.422625+00:00",
+      "lastSeen": "2026-06-22T15:00:01.475123+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 18.4956
+      "score": 18.4763
     },
     {
       "title": "The American dream is ‘very dead’ for young Americans, says Mrs. Dow Jones",
@@ -528,119 +640,7 @@
       "lastSeen": "2026-06-22T09:00:01.595854+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7163
-    },
-    {
-      "title": "Nearly 60% of TikTok videos shown to new users are AI slop, study finds",
-      "url": "https://thenextweb.com/news/tiktok-ai-slop-59-percent-new-users-kapwing-study",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Nearly six out of every ten videos TikTok serves to a brand-new account are AI-generated junk. That is the central finding of a report published by video editing platform Kapwing, which analysed 10,742 TikTok videos across 20 popular categories and separately examined the first 500 videos shown on the For You page of a freshly [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/tiktok-ai-slop-59-percent-new-users-kapwing-study.avif",
-      "published": "2026-06-21T16:12:14+00:00",
-      "firstSeen": "2026-06-21T17:49:17.412617+00:00",
-      "lastSeen": "2026-06-22T09:00:01.595854+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.6504
-    },
-    {
-      "title": "When the Trump administration cracks down on Anthropic, who benefits?",
-      "url": "https://techcrunch.com/2026/06/21/when-the-trump-administration-cracks-down-on-anthropic-who-benefits",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "On the new episode of Equity, we discussed what actually prompted the administration's latest moves against Anthropic, and what this might mean for the AI ecosystem.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/06/anthropic-claude-fable.jpg?resize=1200%2C798",
-      "published": "2026-06-21T15:28:17+00:00",
-      "firstSeen": "2026-06-21T16:00:01.167058+00:00",
-      "lastSeen": "2026-06-22T14:00:01.422625+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.7783
-    },
-    {
-      "title": "Apple’s design studio has lost nearly every Jony Ive-era designer. Incoming CEO John Ternus says he’ll fix it.",
-      "url": "https://thenextweb.com/news/apple-design-team-crisis-ternus-ceo-rebuild",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Apple’s industrial design studio, once the most influential product design operation in the technology industry, has been gutted. Bloomberg’s Mark Gurman reports that the team no longer has a true seat at the executive table, has less influence and credibility than at any point in decades, and has become a service bureau where other teams [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/apple-design-team-crisis-ternus-ceo-rebuild.avif",
-      "published": "2026-06-21T14:47:53+00:00",
-      "firstSeen": "2026-06-21T15:00:01.506845+00:00",
-      "lastSeen": "2026-06-22T09:00:01.595854+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.7274
-    },
-    {
-      "title": "Beyond Siri: Here are the practical AI features coming to your iPhone in iOS 27",
-      "url": "https://techcrunch.com/2026/06/21/beyond-siri-here-are-the-practical-ai-features-coming-to-your-iphone-in-ios-27",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Siri’s AI overhaul may have grabbed the headlines at WWDC, but some of Apple’s most useful AI features are arriving elsewhere in iOS 27.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/01/tim-cook-iphone-GettyImages-2234563479.jpg?w=1024",
-      "published": "2026-06-21T14:40:28+00:00",
-      "firstSeen": "2026-06-21T15:00:01.506845+00:00",
-      "lastSeen": "2026-06-22T14:00:01.422625+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.8654
-    },
-    {
-      "title": "Microsoft’s June update fixed 208 security flaws and introduced a cascade of new bugs across all Windows versions",
-      "url": "https://thenextweb.com/news/windows-11-kb5094126-recycle-bin-bug-patch-tuesday",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Microsoft’s June 2026 Patch Tuesday update is causing problems across every supported version of Windows. KB5094126, released on June 9, patched a record 208 security vulnerabilities, but the update has introduced a string of bugs that range from cosmetic annoyances to machines locked out of their own drives. The most visible issue affects the Recycle [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/windows-11-kb5094126-recycle-bin-bug-patch-tuesday.avif",
-      "published": "2026-06-21T13:59:33+00:00",
-      "firstSeen": "2026-06-21T15:00:01.506845+00:00",
-      "lastSeen": "2026-06-22T08:00:01.491811+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.3146
-    },
-    {
-      "title": "Amazon says human-in-the-loop AI oversight is failing because humans stop paying attention",
-      "url": "https://thenextweb.com/news/amazon-human-in-the-loop-ai-governance-normalization-deviance",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Amazon’s security leadership is arguing against one of the most widely accepted principles in AI governance. Eric Brandwine, VP and distinguished engineer at Amazon Security, told The Register that human-in-the-loop oversight is not the gold standard companies think it is. “Humans are not terribly consistent,” Brandwine said. “Human-in-the-loop isn’t necessarily the gold standard.” His reasoning [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/amazon-human-in-the-loop-ai-governance-normalization-deviance.avif",
-      "published": "2026-06-21T12:35:10+00:00",
-      "firstSeen": "2026-06-21T13:00:02.008329+00:00",
-      "lastSeen": "2026-06-22T08:00:01.491811+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 3.293
-    },
-    {
-      "title": "28 Tips to Take Your ChatGPT Prompts to the Next Level",
-      "url": "https://www.wired.com/story/28-tips-to-take-your-chatgpt-prompts-to-the-next-level",
-      "source": "Wired AI",
-      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Sure, anyone can use OpenAI’s chatbot. But with smart engineering, you can get way more interesting results.",
-      "image": "https://media.wired.com/photos/641df3ef11b9b75446f8f278/master/pass/11-Creative-ChatGPT-Prompts-Gear-GettyImages-1433912783.jpg",
-      "published": "2026-06-21T10:30:00+00:00",
-      "firstSeen": "2026-06-21T10:41:52.474415+00:00",
-      "lastSeen": "2026-06-22T14:00:01.422625+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 9.7024
+      "score": 1.698
     },
     {
       "title": "The Life Scientific: Dean Lomax",
@@ -653,10 +653,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-15T20:00:00+00:00",
       "firstSeen": "2026-06-15T21:00:01.290903+00:00",
-      "lastSeen": "2026-06-22T14:00:01.422625+00:00",
+      "lastSeen": "2026-06-22T15:00:01.475123+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.2022
+      "score": 1.2019
     },
     {
       "title": "The Life Scientific: Helen Hastie",
@@ -669,7 +669,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-08T20:00:00+00:00",
       "firstSeen": "2026-06-08T21:00:01.371488+00:00",
-      "lastSeen": "2026-06-22T14:00:01.422625+00:00",
+      "lastSeen": "2026-06-22T15:00:01.475123+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 1.1901
