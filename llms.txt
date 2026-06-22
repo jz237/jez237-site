@@ -9,33 +9,68 @@ Timezone: America/New_York
 Purpose: this is Jez's personal web workbench. It includes a garden and
 plant progress journal, photo archive, AI news stream, AI sound archive,
 image-generation prompt gallery, playable experiments, weather console,
-operations pages, and prototypes.
+stock/market tools, operations pages, and prototypes.
 
 If the user asks you to add, update, or organize something on this site,
 use these instructions before writing code or snippets.
 
 ## Current site map
 
-- `/` - home dashboard and section hub.
+- `/` - home dashboard and section hub. The footer has a tiny contact
+  link for `jez@jez237.com`; do not add contact pitch copy unless Jez
+  explicitly asks for it.
 - `/plants/` - 2026 garden progress, plant timelines, garden scenes,
   insects, wildlife, and past-year references.
 - `/garden/` - practical garden calendar and timing notes.
 - `/photos/` - casual photo archive, including cats and garden images.
 - `/experiments/image-gen-2-benchmark/` - daily GPT Image 2 prompts and
   generated image gallery.
+- `/experiments/image-gen-2-benchmark/worlds.html` - fictional-world
+  image archive views.
+- `/experiments/image-gen-2-benchmark/subject-artifacts.html` - subject
+  artifact archive views.
+- `/experiments/image-gen-2-benchmark/data-artifacts.html` - data
+  artifact archive views.
+- `/experiments/image-gen-2-benchmark/mirthcap-story.html` - Mirthcap
+  story/artifact page.
 - `/ai-news/` - curated AI model and tooling news feed.
 - `/computer-chronicle/` - daily historical computer newspaper section,
   focused on personal computers and personal computer gaming from 40
   years ago today.
 - `/ai-sounds/` - AI-generated music and sound archive copied from
   Discord's AI Sounds channel.
+- `/ai-sounds/player-lab.html` - player UI lab for AI sounds.
 - `/games/` - GameMaster Arcade and playable prototypes.
 - `/weather/` - local weather console.
+- `/stock-market/` - Stock Command Center.
 - `/ops/` - operations, stats, runtime notes, and dashboard material.
+- `/plex/` - Plex/media utility page.
+- `/how-ai-works/` - interactive "How AI Works" explainer.
+- `/how-ai-works/training-alignment.html` - alignment/training
+  interactive explainer.
 - `/experiments/ai-explainer/` - interactive "How AI Works" explainer.
+- `/experiments/ai-explainer/training-alignment.html` - alternate
+  training/alignment explainer route.
+- `/samples/aquarium/` - aquarium sample page.
 - `/prototypes/hidden-reef/` - Hidden Reef aquarium store prototype.
-- External cards on the home page point to Bauder Signs and Stock
-  Command Center.
+- Hidden Reef prototype subpages include
+  `/prototypes/hidden-reef/about/`,
+  `/prototypes/hidden-reef/brands/`,
+  `/prototypes/hidden-reef/category/`,
+  `/prototypes/hidden-reef/contact/`,
+  `/prototypes/hidden-reef/decor/`,
+  `/prototypes/hidden-reef/equipment/`,
+  `/prototypes/hidden-reef/food/`,
+  `/prototypes/hidden-reef/freshwater/`,
+  `/prototypes/hidden-reef/maintenance/`,
+  `/prototypes/hidden-reef/pond/`,
+  `/prototypes/hidden-reef/sales/`,
+  `/prototypes/hidden-reef/saltwater/`, and
+  `/prototypes/hidden-reef/lightspeed-integration/`.
+- `/prototypes/hidden-reef/learn/` and its topic pages - Hidden Reef
+  learn-center prototype articles.
+- The home page links to Bauder Signs externally and Stock Command Center
+  internally.
 
 ## Path rules
 
@@ -58,6 +93,19 @@ Examples:
 Fully qualified external URLs are fine. Existing navigation scripts may
 build their own links; do not rewrite those unless you understand the
 pattern.
+
+GitHub repo `jz237/jez237-site` is the source of truth, but the live
+custom domain is Cloudflare Pages project `jez237-site`, not GitHub
+Pages. After pushing a user-facing change, deploy the committed repo to
+Cloudflare Pages with:
+
+```bash
+/home/jez237/.openclaw/workspace/scripts/deploy_cloudflare_pages_site.sh /home/jez237/.openclaw/workspace/jez237-website
+```
+
+The helper creates a clean upload snapshot and excludes local temp,
+script, data-source, and generated-image folders. Verify live changes on
+`https://jez237.com/`, not only on GitHub Pages or a Pages preview URL.
 
 ## Garden and plant photos
 
@@ -83,6 +131,7 @@ Current plant/reference slugs:
 | `forsythia` | Forsythia trained on lattice |
 | `garden-beds` | Multi-plant beds and compositions |
 | `grapevine` | Grapevine and arbor/lattice views |
+| `hostas` | Hostas |
 | `interesting-insects` | Pollinators, butterflies, caterpillars, wildlife |
 | `lemony-lace-elderberry` | Lemony Lace elderberry |
 | `little-henry-sweetspire` | Little Henry sweetspire |
@@ -357,8 +406,13 @@ The Daily GPT Image 2 prompt gallery lives at
 Important files:
 
 - `experiments/image-gen-2-benchmark/index.html`
+- `experiments/image-gen-2-benchmark/worlds.html`
+- `experiments/image-gen-2-benchmark/subject-artifacts.html`
+- `experiments/image-gen-2-benchmark/data-artifacts.html`
+- `experiments/image-gen-2-benchmark/mirthcap-story.html`
 - `experiments/image-gen-2-benchmark/prompts.json`
 - `experiments/image-gen-2-benchmark/gallery-data.json`
+- `experiments/image-gen-2-benchmark/worlds-data.json`
 - Image assets under that experiment's folders.
 
 Keep prompt records factual: prompt text, date, model/context if already
@@ -380,8 +434,31 @@ Jez provided or explicitly approved.
 
 - Add new playable experiments through `/games/index.html` using the
   existing card and link patterns.
+- Current shipped game directories with pages include:
+  `/games/2026-06-05/invaders/`,
+  `/games/2026-06-05/neon-invaders/`,
+  `/games/2026-06-09/choplifter/`,
+  `/games/2026-06-09/fluid/`,
+  `/games/2026-06-09/subway-siege-blackout/`,
+  `/games/2026-06-10/eddy/`,
+  `/games/2026-06-10/glimmer-grotto/`,
+  `/games/2026-06-10/hollow-deep/`,
+  `/games/2026-06-10/iron-ridge/`,
+  `/games/2026-06-11/corner-pocket/`,
+  `/games/2026-06-11/eight-ball-deluxe/`,
+  `/games/2026-06-12/pay-dirt/`,
+  `/games/2026-06-14/steel-duel/`,
+  `/games/2026-06-19/neon-vector-arena/`, and
+  `/games/hard-hat-mac/`.
+- Games that use global high scores point to
+  `https://game-scores.jez237.workers.dev/scores/<namespace>`. Keep new
+  score namespaces stable and game-specific. Do not submit fake public
+  scores just to test; use GET/OPTIONS/CORS checks unless Jez approves a
+  test entry.
 - Weather console changes should stay inside `/weather/` unless the
   home-page card also needs copy or art updates.
+- Stock Command Center changes should stay inside `/stock-market/`
+  unless the home-page card also needs copy or art updates.
 - Ops/stat pages should stay inside `/ops/` unless promoted to the home
   page.
 - Hidden Reef prototype work belongs under `/prototypes/hidden-reef/`
@@ -398,6 +475,11 @@ update both:
 Do not use `content/site.json` as the only source of truth for the
 current home page; the live home card grid is currently hardcoded in
 `index.html`.
+
+The homepage footer intentionally keeps contact minimal: GitHub repo
+link, separator, and `mailto:jez@jez237.com`. Cloudflare may obfuscate
+the raw HTML with its email-protection wrapper on the live domain; this
+is expected as long as the browser displays the address normally.
 
 ## Output to Jez
 
