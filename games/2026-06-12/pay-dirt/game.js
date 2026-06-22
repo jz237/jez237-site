@@ -2518,7 +2518,7 @@ for (const [kind, src] of Object.entries(enemySpriteSrcs)){
   enemySprites[kind] = img;
 }
 const ENEMY_ANIM_SHEET = {
-  src: 'assets/enemy-animation-sheet-gpt-v3.png',
+  src: 'assets/enemy-animation-sheet-gpt-v4.png',
   cols: 8,
   rows: 3,
   row: {guard: 0, scout: 1, mason: 2},
