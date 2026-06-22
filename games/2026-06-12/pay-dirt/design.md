@@ -100,3 +100,6 @@ Sim is fixed-timestep (60Hz accumulator); `__g.step(n)` drives ticks headlessly.
 - 2026-06-22: Death/respawn polish adds a miner tumble, dust burst, clear center death
   cue with remaining lives, and a short respawn banner while preserving current lives and
   collected-gold rules.
+- 2026-06-22: Boom Rush waves show a compact pre-wave card with wave number, main hazard,
+  and ride-out goal. The debug hook `window.__g.wavePreview` exposes the current card for
+  verification.
