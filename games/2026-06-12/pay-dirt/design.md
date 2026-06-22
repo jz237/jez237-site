@@ -97,3 +97,6 @@ Sim is fixed-timestep (60Hz accumulator); `__g.step(n)` drives ticks headlessly.
 - 2026-06-22: Smart stuck help uses a subtle prospector hunch after sustained no-progress
   play. It highlights a reachable remaining nugget, or the exit/cart after the haul is
   complete, and can be forced in tests with `window.__g.hunch()`.
+- 2026-06-22: Death/respawn polish adds a miner tumble, dust burst, clear center death
+  cue with remaining lives, and a short respawn banner while preserving current lives and
+  collected-gold rules.
