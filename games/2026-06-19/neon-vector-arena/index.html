@@ -507,7 +507,7 @@
 <div class="overlay" id="overlay">
   <div class="panel">
 	    <h1 id="overlayTitle">NEON<br>VECTOR<br>ARENA</h1>
-	    <div class="title-version" id="titleVersion">v4.14</div>
+	    <div class="title-version" id="titleVersion">v4.15</div>
 	    <p class="sub" id="overlaySub">Solo survival in endless vector space. Move smart, chain combos, and shatter oversized geometry before it reaches you.</p>
     <div class="menu-actions" id="mainActions">
       <button id="start">Solo Run</button>
@@ -559,7 +559,7 @@
     <p class="fine" id="overlayFine">Dual Stick: left side flies, right side aims and fires. Desktop: WASD plus hold mouse to aim.</p>
   </div>
 </div>
-<div class="version">v4.14</div>
+<div class="version">v4.15</div>
 
 <script>
 'use strict';
@@ -688,6 +688,7 @@ const BOSS_INTERVAL = 5;
 const START_INV_SECONDS = .85;
 const HIT_INV_SECONDS = .72;
 const REVIVE_INV_SECONDS = 1.55;
+const MAX_FIRE_UPGRADES = 3;
 const TAU = Math.PI * 2;
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 const rand = (a, b) => a + Math.random() * (b - a);
@@ -900,7 +901,8 @@ function blastRadius() {
 }
 
 function fireDelay() {
-  return Math.max(.062, (.135 - wave * .0012) * Math.pow(.88, runUpgrades.fire || 0));
+  const fireLevel = Math.min(runUpgrades.fire || 0, MAX_FIRE_UPGRADES);
+  return Math.max(.062, (.135 - wave * .0012) * Math.pow(.88, fireLevel));
 }
 
 function updateBombButton() {
@@ -908,6 +910,15 @@ function updateBombButton() {
   bombButton.classList.toggle('on', show);
   bombButton.disabled = !show || bombs <= 0 || bombCooldown > 0;
   bombButton.textContent = bombs > 0 ? 'Bomb ' + bombs : 'No Bomb';
+}
+
+function updateUpgradeChoices() {
+  for (const btn of upgradeChoices) {
+    const kind = btn.dataset.upgrade;
+    const maxed = kind === 'fire' && (runUpgrades.fire || 0) >= MAX_FIRE_UPGRADES;
+    btn.hidden = maxed;
+    btn.disabled = maxed;
+  }
 }
 
 function resize() {
@@ -952,6 +963,7 @@ function setPanel(section = 'menu') {
   upgradePanel.classList.toggle('on', section === 'upgrade');
   mainActions.classList.toggle('menu-hidden', section === 'online' || section === 'scores' || section === 'upgrade');
   controlModeEl.style.display = (section === 'menu' || section === 'online') ? 'grid' : 'none';
+  updateUpgradeChoices();
   updateControlModeButtons();
   startBtn.disabled = false;
   if (section === 'menu') {
@@ -978,7 +990,9 @@ function setPanel(section = 'menu') {
   } else if (section === 'upgrade') {
     overlayTitle.innerHTML = 'BOSS<br>REWARD';
     overlaySub.textContent = 'Pick one quick upgrade, then the run resumes.';
-    overlayFine.textContent = 'Faster Shots improves fire rate. Wider Blast pushes enemies farther. Extra Bomb raises bomb capacity and gives one now.';
+    overlayFine.textContent = (runUpgrades.fire || 0) >= MAX_FIRE_UPGRADES
+      ? 'Faster Shots is maxed. Wider Blast pushes enemies farther. Extra Bomb raises bomb capacity and gives one now.'
+      : 'Faster Shots improves fire rate up to three times. Wider Blast pushes enemies farther. Extra Bomb raises bomb capacity and gives one now.';
   } else if (section === 'online') {
     overlayTitle.innerHTML = 'ONLINE';
     overlaySub.textContent = 'Create or join a Neon room, ready both pilots, then launch into co-op vector space.';
@@ -1081,6 +1095,7 @@ function showBossUpgrade() {
 function applyUpgrade(kind) {
   if (!pendingUpgrade) return;
   if (kind === 'fire') {
+    if ((runUpgrades.fire || 0) >= MAX_FIRE_UPGRADES) return;
     runUpgrades.fire++;
     addBanner('FASTER SHOTS', 188);
   } else if (kind === 'blast') {
@@ -3065,10 +3080,14 @@ function update(dt) {
         const sizeHit = e.sizeTier === 'giant' ? 5 : e.sizeTier === 'large' ? 3 : e.sizeTier === 'tiny' ? -2 : 0;
         ship.hp -= (e.type === 'splitter' ? 24 : e.type === 'splinter' ? 7 : 12) + sizeHit + (e.elite ? 5 : 0) + (trait?.damage || 0);
         ship.inv = HIT_INV_SECONDS;
-        ship.hitFlash = .34;
+        ship.hitFlash = .48;
+        ship.vx -= nx * 150;
+        ship.vy -= ny * 150;
+        shake = Math.max(shake, ship === player ? 6.4 : 4.2);
         sfx('hit');
         blastEnemies(ship.x, ship.y, SHOT_BLAST_FORCE * .7, blastRadius() * .9);
         explode(ship.x, ship.y, ship === partner ? 316 : 188, false);
+        particles.push({ x: ship.x, y: ship.y, vx: 0, vy: 0, life: .34, max: .34, r: 74, hue: ship === partner ? 316 : 188, kind: 'ring' });
         addHitCallout(ship.x, ship.y);
         if (ship === player && player.hp <= 0) {
           loseLife();
@@ -3334,7 +3353,7 @@ function drawPlayer(c, p, ghost = false) {
     const aa = p.aimAngle ?? a;
     line(c, x + Math.cos(aa) * 4, y + Math.sin(aa) * 4, x + Math.cos(aa) * 17, y + Math.sin(aa) * 17, 'rgba(255,255,255,.88)', 1.4, 8);
     if ((p.hitFlash || 0) > 0) {
-      const flash = clamp(p.hitFlash / .34, 0, 1);
+      const flash = clamp(p.hitFlash / .48, 0, 1);
       c.strokeStyle = `rgba(255,255,255,${.35 + flash * .45})`;
       c.lineWidth = 1.6 + flash * 2.2;
       c.beginPath();
