@@ -1,6 +1,6 @@
 {
   "date": "2026-06-22",
-  "updatedAt": "2026-06-22T21:11:30.012601+00:00",
+  "updatedAt": "2026-06-22T22:00:01.756300+00:00",
   "items": [
     {
       "title": "OpenAI Launches Full-Scale Effort to Patch Open-Source Bugs as It Takes on Anthropic’s Mythos",
@@ -13,11 +13,11 @@
       "image": "https://media.wired.com/photos/6a2fc599a8e3255f0ac3665f/master/pass/061526_OpenAI%20Hires%20an%20Army%20to%20Patch%20Open%20Source%20Bugs%20as%20It%20Battles%20Mythos%20for%20Cyber%20AI%20Supremacy.jpg",
       "published": "2026-06-22T17:00:00+00:00",
       "firstSeen": "2026-06-22T17:46:50.991171+00:00",
-      "lastSeen": "2026-06-22T21:11:30.012601+00:00",
+      "lastSeen": "2026-06-22T22:00:01.756300+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 20.2691
+      "score": 20.2473
     },
     {
       "title": "Daybreak: Tools for securing every organization in the world",
@@ -30,11 +30,11 @@
       "image": "",
       "published": "2026-06-22T10:00:00+00:00",
       "firstSeen": "2026-06-22T17:46:50.991171+00:00",
-      "lastSeen": "2026-06-22T21:11:30.012601+00:00",
+      "lastSeen": "2026-06-22T22:00:01.756300+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 15.2061
+      "score": 15.1882
     },
     {
       "title": "L’Oréal brings Maybelline virtual try-on to ChatGPT",
@@ -47,10 +47,10 @@
       "image": "",
       "published": "2026-06-22T10:00:00+00:00",
       "firstSeen": "2026-06-22T11:00:01.198563+00:00",
-      "lastSeen": "2026-06-22T21:11:30.012601+00:00",
+      "lastSeen": "2026-06-22T22:00:01.756300+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.4541
+      "score": 12.4362
     },
     {
       "title": "Anthropic’s new privacy policy collects biometric data from flagged Claude users",
@@ -63,10 +63,10 @@
       "image": "https://media.thenextweb.com/2026/06/anthropic-claude-id-verification-privacy-policy-persona-biometric.avif",
       "published": "2026-06-22T20:27:41+00:00",
       "firstSeen": "2026-06-22T21:11:30.012601+00:00",
-      "lastSeen": "2026-06-22T21:11:30.012601+00:00",
+      "lastSeen": "2026-06-22T22:00:01.756300+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.8279
+      "score": 11.804
     },
     {
       "title": "Google invests $75 million in A24 as DeepMind launches AI filmmaking research partnership",
@@ -79,10 +79,10 @@
       "image": "https://media.thenextweb.com/2026/06/google-75-million-a24-deepmind-ai-filmmaking-partnership.avif",
       "published": "2026-06-22T18:14:23+00:00",
       "firstSeen": "2026-06-22T20:00:02.111727+00:00",
-      "lastSeen": "2026-06-22T21:11:30.012601+00:00",
+      "lastSeen": "2026-06-22T22:00:01.756300+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 11.2634
+      "score": 11.2409
     },
     {
       "title": "OpenAI’s suspiciously clean balance sheet is about to get a hard look",
@@ -98,7 +98,7 @@
       "lastSeen": "2026-06-22T20:00:02.111727+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.026
+      "score": 10.0054
     },
     {
       "title": "Amazon is testing Alexa+ in India with Hindi support",
@@ -111,10 +111,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/08/alexa-plus-event.png?resize=1200%2C675",
       "published": "2026-06-22T17:31:29+00:00",
       "firstSeen": "2026-06-22T17:46:50.991171+00:00",
-      "lastSeen": "2026-06-22T21:11:30.012601+00:00",
+      "lastSeen": "2026-06-22T22:00:01.756300+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.2835
+      "score": 9.2614
     },
     {
       "title": "Amazon invites Indian users to beta-test a Hindi version of Alexa+",
@@ -127,10 +127,10 @@
       "image": "https://media.thenextweb.com/2026/06/amazon-alexa-plus-india-hindi-beta-testing.avif",
       "published": "2026-06-22T20:49:23+00:00",
       "firstSeen": "2026-06-22T21:11:30.012601+00:00",
-      "lastSeen": "2026-06-22T21:11:30.012601+00:00",
+      "lastSeen": "2026-06-22T22:00:01.756300+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.2388
+      "score": 9.2146
     },
     {
       "title": "Google DeepMind bets $75M on AI’s future in Hollywood with A24 deal",
@@ -143,10 +143,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/GettyImages-2252299302.jpg?w=1024",
       "published": "2026-06-22T18:49:44+00:00",
       "firstSeen": "2026-06-22T19:00:01.782862+00:00",
-      "lastSeen": "2026-06-22T21:11:30.012601+00:00",
+      "lastSeen": "2026-06-22T22:00:01.756300+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.2201
+      "score": 8.1972
     },
     {
       "title": "NVIDIA Vera CPU Opens the Way for Agentic Scientific AI at Los Alamos National Laboratory",
@@ -159,10 +159,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/vera-cpu-lanl-1920x1080-1.jpg",
       "published": "2026-06-22T13:00:20+00:00",
       "firstSeen": "2026-06-22T14:00:01.422625+00:00",
-      "lastSeen": "2026-06-22T21:11:30.012601+00:00",
+      "lastSeen": "2026-06-22T22:00:01.756300+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 7.2663
+      "score": 7.2468
     },
     {
       "title": "Three things to watch amid Anthropic’s latest feud with the government",
@@ -175,10 +175,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/06/WH-v-Anthropic.jpg?resize=1200%2C600",
       "published": "2026-06-22T18:00:00+00:00",
       "firstSeen": "2026-06-22T19:00:01.782862+00:00",
-      "lastSeen": "2026-06-22T21:11:30.012601+00:00",
+      "lastSeen": "2026-06-22T22:00:01.756300+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.2967
+      "score": 6.2743
     },
     {
       "title": "Anthropic’s Fable 5 Withdrawal Underscores Importance and Difficulty of ‘sovereign AI’ Strategies",
@@ -191,10 +191,10 @@
       "image": "",
       "published": "2026-06-22T11:23:08+00:00",
       "firstSeen": "2026-06-22T12:23:25.443602+00:00",
-      "lastSeen": "2026-06-22T21:11:30.012601+00:00",
+      "lastSeen": "2026-06-22T22:00:01.756300+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.9877
+      "score": 5.9691
     }
   ],
   "errors": [

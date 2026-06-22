@@ -1,8 +1,8 @@
 {
-  "updatedAt": "2026-06-22T21:11:30.012601+00:00",
+  "updatedAt": "2026-06-22T22:00:01.756300+00:00",
   "items": [
     {
-      "title": "A challenging dataset of 448 multiple-choice questions written by domain experts in biology, physics, and chemistry. Questions are Google-proof and extremely difficult, with PhD experts reaching 65% accuracy.",
+      "title": "Massive Multitask Language Understanding benchmark testing knowledge across 57 diverse subjects including STEM, humanities, social sciences, and professional domains",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -10,12 +10,12 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-22T21:11:35.034225+00:00",
+      "published": "2026-06-22T22:00:15.186842+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-22T21:11:30.012601+00:00",
+      "lastSeen": "2026-06-22T22:00:01.756300+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.36
+      "score": 2.71
     },
     {
       "title": "Meta Pauses Employee-Tracking Program Following Internal Data Leak",
@@ -28,10 +28,10 @@
       "image": "https://media.wired.com/photos/6a39a2a46c59c72c499e05ba/master/pass/2281617231",
       "published": "2026-06-22T21:08:09+00:00",
       "firstSeen": "2026-06-22T21:11:30.012601+00:00",
-      "lastSeen": "2026-06-22T21:11:30.012601+00:00",
+      "lastSeen": "2026-06-22T22:00:01.756300+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2883
+      "score": 2.2639
     },
     {
       "title": "The AI world is getting ‘loopy’",
@@ -40,14 +40,14 @@
       "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
       "sourceWeight": 0.85,
       "category": "AI",
-      "summary": "The loop takes agentic AI a step further, by authorizing a swarm of agents to work continuously in the background, endlessly.",
+      "summary": "The loop takes agentic AI a step further by authorizing a swarm of agents to work continuously in the background, endlessly.",
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/Screenshot-2026-06-22-at-3.44.39-PM.jpg?resize=1200%2C676",
       "published": "2026-06-22T20:53:11+00:00",
       "firstSeen": "2026-06-22T21:00:01.381447+00:00",
-      "lastSeen": "2026-06-22T21:11:30.012601+00:00",
+      "lastSeen": "2026-06-22T22:00:01.756300+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.9807
+      "score": 3.9565
     },
     {
       "title": "Amazon invites Indian users to beta-test a Hindi version of Alexa+",
@@ -60,10 +60,10 @@
       "image": "https://media.thenextweb.com/2026/06/amazon-alexa-plus-india-hindi-beta-testing.avif",
       "published": "2026-06-22T20:49:23+00:00",
       "firstSeen": "2026-06-22T21:11:30.012601+00:00",
-      "lastSeen": "2026-06-22T21:11:30.012601+00:00",
+      "lastSeen": "2026-06-22T22:00:01.756300+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.2388
+      "score": 9.2146
     },
     {
       "title": "Meta Exposed Data Internally From Its Controversial Employee-Tracking Program",
@@ -76,10 +76,26 @@
       "image": "https://media.wired.com/photos/6a39919203c4ca2994a792a9/master/pass/GettyImages-1297676683.jpg",
       "published": "2026-06-22T20:28:53+00:00",
       "firstSeen": "2026-06-22T21:00:01.381447+00:00",
-      "lastSeen": "2026-06-22T21:11:30.012601+00:00",
+      "lastSeen": "2026-06-22T22:00:01.756300+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2685
+      "score": 2.2445
+    },
+    {
+      "title": "Apple’s iPhone 18 Pro Features: Everything We Know So Far",
+      "url": "https://www.techrepublic.com/article/news-apple-iphone-18-pro-features-what-we-know-so-far",
+      "source": "TechRepublic AI",
+      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "iPhone 18 Pro rumors point to AI upgrades, a 2nm A20 Pro chip, camera changes, a smaller Dynamic Island, and possible pricing shifts.\nThe post Apple’s iPhone 18 Pro Features: Everything We Know So Far appeared first on TechRepublic.",
+      "image": "https://assets.techrepublic.com/uploads/2026/06/18-pro.jpg?f=jpeg",
+      "published": "2026-06-22T20:28:22+00:00",
+      "firstSeen": "2026-06-22T22:00:01.756300+00:00",
+      "lastSeen": "2026-06-22T22:00:01.756300+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.2043
     },
     {
       "title": "Anthropic’s new privacy policy collects biometric data from flagged Claude users",
@@ -92,10 +108,26 @@
       "image": "https://media.thenextweb.com/2026/06/anthropic-claude-id-verification-privacy-policy-persona-biometric.avif",
       "published": "2026-06-22T20:27:41+00:00",
       "firstSeen": "2026-06-22T21:11:30.012601+00:00",
-      "lastSeen": "2026-06-22T21:11:30.012601+00:00",
+      "lastSeen": "2026-06-22T22:00:01.756300+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.8279
+      "score": 11.804
+    },
+    {
+      "title": "X Targets ‘Neglected’ Meta Engineers in Public Recruiting Pitch",
+      "url": "https://www.techrepublic.com/article/news-x-meta-recruiting-snack-budget-layoffs",
+      "source": "TechRepublic AI",
+      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "X product head Nikita Bier targeted “neglected” Meta employees with a snack-budget hiring pitch as Meta works to improve morale.\nThe post X Targets ‘Neglected’ Meta Engineers in Public Recruiting Pitch appeared first on TechRepublic.",
+      "image": "https://assets.techrepublic.com/uploads/2026/06/x-meta.jpg?f=jpeg",
+      "published": "2026-06-22T20:22:50+00:00",
+      "firstSeen": "2026-06-22T22:00:01.756300+00:00",
+      "lastSeen": "2026-06-22T22:00:01.756300+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.2016
     },
     {
       "title": "AI chipmaker Groq confirms $650M raise, re-staffs after Nvidia’s $20B not-acqui-hire deal",
@@ -108,10 +140,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2018/08/safetynet.jpg?resize=1200%2C1058",
       "published": "2026-06-22T20:13:58+00:00",
       "firstSeen": "2026-06-22T21:00:01.381447+00:00",
-      "lastSeen": "2026-06-22T21:11:30.012601+00:00",
+      "lastSeen": "2026-06-22T22:00:01.756300+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2611
+      "score": 2.2373
     },
     {
       "title": "Nvidia wants to cut data center water use, but that’s not the same as fixing AI’s water problem",
@@ -124,10 +156,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2024/12/GettyImages-155376474.jpeg?resize=1200%2C800",
       "published": "2026-06-22T20:08:15+00:00",
       "firstSeen": "2026-06-22T21:00:01.381447+00:00",
-      "lastSeen": "2026-06-22T21:11:30.012601+00:00",
+      "lastSeen": "2026-06-22T22:00:01.756300+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2583
+      "score": 2.2345
     },
     {
       "title": "Delivery robot startup Robot.com bets its next act on wheeled humanoids for kitchens and warehouses",
@@ -140,10 +172,10 @@
       "image": "https://media.thenextweb.com/2026/06/robot-com-kiwibot-r-noid-humanoid-workplace-physical-intelligence.avif",
       "published": "2026-06-22T20:05:56+00:00",
       "firstSeen": "2026-06-22T21:11:30.012601+00:00",
-      "lastSeen": "2026-06-22T21:11:30.012601+00:00",
+      "lastSeen": "2026-06-22T22:00:01.756300+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8171
+      "score": 2.7934
     },
     {
       "title": "AI is cursing renters with the promise of impossible homes",
@@ -156,10 +188,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/268589_Vitual_staging_AParkin.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-22T20:00:00+00:00",
       "firstSeen": "2026-06-22T21:00:01.381447+00:00",
-      "lastSeen": "2026-06-22T21:11:30.012601+00:00",
+      "lastSeen": "2026-06-22T22:00:01.756300+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3242
+      "score": 2.3005
     },
     {
       "title": "Lovable CEO says Europe’s AI startups have a confidence problem, not a talent problem",
@@ -172,10 +204,10 @@
       "image": "https://media.thenextweb.com/2026/06/lovable-ceo-europe-ai-confidence-problem-talent-silicon-valley.avif",
       "published": "2026-06-22T19:49:12+00:00",
       "firstSeen": "2026-06-22T21:00:01.381447+00:00",
-      "lastSeen": "2026-06-22T21:11:30.012601+00:00",
+      "lastSeen": "2026-06-22T22:00:01.756300+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1089
+      "score": 2.0854
     },
     {
       "title": "A Tesla on Autopilot plowed into a Texas home. The woman inside didn’t survive.",
@@ -188,10 +220,10 @@
       "image": "https://media.thenextweb.com/2026/06/tesla-autopilot-crash-kills-woman-texas-home-nhtsa-investigation.avif",
       "published": "2026-06-22T19:28:14+00:00",
       "firstSeen": "2026-06-22T21:00:01.381447+00:00",
-      "lastSeen": "2026-06-22T21:11:30.012601+00:00",
+      "lastSeen": "2026-06-22T22:00:01.756300+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0986
+      "score": 2.0754
     },
     {
       "title": "Apple Supplier Bets on Robots, AI Servers in $1.1B Hong Kong Listing",
@@ -204,10 +236,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/06/lingyi.jpg?f=jpeg",
       "published": "2026-06-22T19:17:45+00:00",
       "firstSeen": "2026-06-22T20:00:02.111727+00:00",
-      "lastSeen": "2026-06-22T21:11:30.012601+00:00",
+      "lastSeen": "2026-06-22T22:00:01.756300+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1936
+      "score": 3.1704
     },
     {
       "title": "Following user outcry, AMD reinstates memory encryption in consumer CPUs",
@@ -220,10 +252,10 @@
       "image": "https://cdn.arstechnica.net/wp-content/uploads/2025/07/GettyImages-1952157610-1152x648-1753386930.jpg",
       "published": "2026-06-22T19:16:52+00:00",
       "firstSeen": "2026-06-22T20:00:02.111727+00:00",
-      "lastSeen": "2026-06-22T21:11:30.012601+00:00",
+      "lastSeen": "2026-06-22T22:00:01.756300+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.4931
+      "score": 4.47
     },
     {
       "title": "Google DeepMind bets $75M on AI’s future in Hollywood with A24 deal",
@@ -236,10 +268,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/GettyImages-2252299302.jpg?w=1024",
       "published": "2026-06-22T18:49:44+00:00",
       "firstSeen": "2026-06-22T19:00:01.782862+00:00",
-      "lastSeen": "2026-06-22T21:11:30.012601+00:00",
+      "lastSeen": "2026-06-22T22:00:01.756300+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.2201
+      "score": 8.1972
     },
     {
       "title": "India’s Ultrahuman Launches No-Prescription Glucose Tracking Platform in the US",
@@ -252,10 +284,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/06/ultrahuman.jpg?f=jpeg",
       "published": "2026-06-22T18:48:17+00:00",
       "firstSeen": "2026-06-22T20:00:02.111727+00:00",
-      "lastSeen": "2026-06-22T21:11:30.012601+00:00",
+      "lastSeen": "2026-06-22T22:00:01.756300+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9794
+      "score": 4.9566
     },
     {
       "title": "Bending Spoons prices IPO at up to $1.62 billion, targeting $19 billion Nasdaq valuation",
@@ -268,10 +300,10 @@
       "image": "https://media.thenextweb.com/2026/06/bending-spoons-ipo-pricing-19-billion-valuation-nasdaq.avif",
       "published": "2026-06-22T18:42:11+00:00",
       "firstSeen": "2026-06-22T20:00:02.111727+00:00",
-      "lastSeen": "2026-06-22T21:11:30.012601+00:00",
+      "lastSeen": "2026-06-22T22:00:01.756300+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7765
+      "score": 2.7537
     },
     {
       "title": "Google invests $75 million in A24 as DeepMind launches AI filmmaking research partnership",
@@ -284,10 +316,10 @@
       "image": "https://media.thenextweb.com/2026/06/google-75-million-a24-deepmind-ai-filmmaking-partnership.avif",
       "published": "2026-06-22T18:14:23+00:00",
       "firstSeen": "2026-06-22T20:00:02.111727+00:00",
-      "lastSeen": "2026-06-22T21:11:30.012601+00:00",
+      "lastSeen": "2026-06-22T22:00:01.756300+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 11.2634
+      "score": 11.2409
     },
     {
       "title": "Three things to watch amid Anthropic’s latest feud with the government",
@@ -300,10 +332,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/06/WH-v-Anthropic.jpg?resize=1200%2C600",
       "published": "2026-06-22T18:00:00+00:00",
       "firstSeen": "2026-06-22T19:00:01.782862+00:00",
-      "lastSeen": "2026-06-22T21:11:30.012601+00:00",
+      "lastSeen": "2026-06-22T22:00:01.756300+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.2967
+      "score": 6.2743
     },
     {
       "title": "Nearly 7,000 fake Amazon domains registered ahead of Prime Day 2026, researchers warn",
@@ -316,10 +348,10 @@
       "image": "https://media.thenextweb.com/2026/06/amazon-prime-day-2026-scam-domains-check-point-phishing.avif",
       "published": "2026-06-22T17:33:55+00:00",
       "firstSeen": "2026-06-22T19:00:01.782862+00:00",
-      "lastSeen": "2026-06-22T21:11:30.012601+00:00",
+      "lastSeen": "2026-06-22T22:00:01.756300+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.4446
+      "score": 4.4225
     },
     {
       "title": "Amazon is testing Alexa+ in India with Hindi support",
@@ -332,10 +364,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/08/alexa-plus-event.png?resize=1200%2C675",
       "published": "2026-06-22T17:31:29+00:00",
       "firstSeen": "2026-06-22T17:46:50.991171+00:00",
-      "lastSeen": "2026-06-22T21:11:30.012601+00:00",
+      "lastSeen": "2026-06-22T22:00:01.756300+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.2835
+      "score": 9.2614
     },
     {
       "title": "OpenAI Launches Full-Scale Effort to Patch Open-Source Bugs as It Takes on Anthropic’s Mythos",
@@ -348,11 +380,11 @@
       "image": "https://media.wired.com/photos/6a2fc599a8e3255f0ac3665f/master/pass/061526_OpenAI%20Hires%20an%20Army%20to%20Patch%20Open%20Source%20Bugs%20as%20It%20Battles%20Mythos%20for%20Cyber%20AI%20Supremacy.jpg",
       "published": "2026-06-22T17:00:00+00:00",
       "firstSeen": "2026-06-22T17:46:50.991171+00:00",
-      "lastSeen": "2026-06-22T21:11:30.012601+00:00",
+      "lastSeen": "2026-06-22T22:00:01.756300+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 20.2691
+      "score": 20.2473
     },
     {
       "title": "The AI memory crisis just hit DDR2, a standard from 2003, with 60% price hikes",
@@ -365,10 +397,10 @@
       "image": "https://media.thenextweb.com/2026/06/ddr2-memory-prices-surge-ai-shortage-legacy-dram.avif",
       "published": "2026-06-22T16:53:01+00:00",
       "firstSeen": "2026-06-22T17:46:50.991171+00:00",
-      "lastSeen": "2026-06-22T21:11:30.012601+00:00",
+      "lastSeen": "2026-06-22T22:00:01.756300+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.4259
+      "score": 4.4043
     },
     {
       "title": "SpaceX inks compute deal with Reflection AI, an open source AI lab",
@@ -381,10 +413,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/GettyImages-2259661359.jpg?w=1024",
       "published": "2026-06-22T16:51:29+00:00",
       "firstSeen": "2026-06-22T17:00:01.840128+00:00",
-      "lastSeen": "2026-06-22T21:11:30.012601+00:00",
+      "lastSeen": "2026-06-22T22:00:01.756300+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8652
+      "score": 2.8436
     },
     {
       "title": "A Kazakh fund-of-funds just made its first public venture bet on Central Asia’s startup boom",
@@ -397,10 +429,10 @@
       "image": "https://media.thenextweb.com/2026/06/kazakhstan-alem-capital-sturgeon-central-asia-venture-fund.avif",
       "published": "2026-06-22T16:34:25+00:00",
       "firstSeen": "2026-06-22T17:46:50.991171+00:00",
-      "lastSeen": "2026-06-22T21:11:30.012601+00:00",
+      "lastSeen": "2026-06-22T22:00:01.756300+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7176
+      "score": 2.6961
     },
     {
       "title": "Robinhood is raising $2 billion in zero-coupon convertible bonds to buy back stock",
@@ -416,7 +448,7 @@
       "lastSeen": "2026-06-22T21:00:01.381447+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0054
+      "score": 1.9842
     },
     {
       "title": "Instagram is coming for your living room with episodic series and live TV on Samsung",
@@ -432,7 +464,7 @@
       "lastSeen": "2026-06-22T21:00:01.381447+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0944
+      "score": 3.0734
     },
     {
       "title": "Lucid Motors cuts 18% of workforce as new CEO dismantles second production shift",
@@ -448,7 +480,7 @@
       "lastSeen": "2026-06-22T21:00:01.381447+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0857
+      "score": 3.0649
     },
     {
       "title": "OpenAI’s suspiciously clean balance sheet is about to get a hard look",
@@ -464,7 +496,7 @@
       "lastSeen": "2026-06-22T20:00:02.111727+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.026
+      "score": 10.0054
     },
     {
       "title": "GLM-5.2 is the step change for open agents",
@@ -477,10 +509,10 @@
       "image": "https://substack-post-media.s3.amazonaws.com/public/images/267cdc82-6fbc-4f68-bcba-160091396dfd_3182x1790.png",
       "published": "2026-06-22T14:52:45+00:00",
       "firstSeen": "2026-06-22T15:00:01.475123+00:00",
-      "lastSeen": "2026-06-22T21:11:30.012601+00:00",
+      "lastSeen": "2026-06-22T22:00:01.756300+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8831
+      "score": 4.8626
     },
     {
       "title": "SpaceX taps the bond market for the first time to fund AI",
@@ -496,7 +528,7 @@
       "lastSeen": "2026-06-22T20:00:02.111727+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.6659
+      "score": 2.6455
     },
     {
       "title": "UPS pours $48 million into cold chain facilities as the biologics boom reshapes logistics",
@@ -512,7 +544,7 @@
       "lastSeen": "2026-06-22T19:00:01.782862+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -1.1345
+      "score": -1.1548
     },
     {
       "title": "Mukesh Ambani’s Reliance AI Roadmap Puts Jio CallAgent Inside the Network",
@@ -525,10 +557,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/06/RCP-mumbai-1024x576.jpg?f=jpeg",
       "published": "2026-06-22T14:23:44+00:00",
       "firstSeen": "2026-06-22T20:00:02.111727+00:00",
-      "lastSeen": "2026-06-22T21:11:30.012601+00:00",
+      "lastSeen": "2026-06-22T22:00:01.756300+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.7608
+      "score": 5.7405
     },
     {
       "title": "Germany tells Trump: you cannot get to the moon without us",
@@ -544,7 +576,7 @@
       "lastSeen": "2026-06-22T19:00:01.782862+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9594
+      "score": 1.9392
     },
     {
       "title": "Meta buys a fifth of Cred, and a new WhatsApp boss",
@@ -560,7 +592,7 @@
       "lastSeen": "2026-06-22T18:00:01.425397+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0582
+      "score": 3.038
     },
     {
       "title": "The founder conference built for growth: TechCrunch Founder Summit pass rates increase June 26",
@@ -573,10 +605,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/03/Early-Stage-2024-audience.jpg?resize=1200%2C800",
       "published": "2026-06-22T14:00:00+00:00",
       "firstSeen": "2026-06-22T15:00:01.475123+00:00",
-      "lastSeen": "2026-06-22T21:11:30.012601+00:00",
+      "lastSeen": "2026-06-22T22:00:01.756300+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0908
+      "score": 2.0708
     },
     {
       "title": "Ireland takes the EU presidency with Big Tech paying 40 per cent of its tax bill",
@@ -592,7 +624,7 @@
       "lastSeen": "2026-06-22T17:00:01.840128+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9493
+      "score": 1.9293
     },
     {
       "title": "JD.com says robots will replace its 700,000 couriers",
@@ -608,39 +640,7 @@
       "lastSeen": "2026-06-22T17:00:01.840128+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9427
-    },
-    {
-      "title": "Uber anchors Lime’s IPO as the scooter firm goes public",
-      "url": "https://thenextweb.com/news/lime-ipo-uber-anchor-investor",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The Lime IPO has a price and an anchor investor: Uber, the ride-hailing giant that already owns a chunk of the scooter firm and is now backing its market debut. Lime is going public, and an old backer is helping carry it across the line: Uber. The scooter and bike-rental firm, formally Neutron Holdings, has [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/Seattle-LimeGlider.avif",
-      "published": "2026-06-22T13:21:24+00:00",
-      "firstSeen": "2026-06-22T15:00:01.475123+00:00",
-      "lastSeen": "2026-06-22T17:00:01.840128+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.6349
-    },
-    {
-      "title": "PP-OCRv6 on Hugging Face: 50-Language OCR from 1.5M to 34.5M Parameters",
-      "url": "https://huggingface.co/blog/PaddlePaddle/pp-ocrv6",
-      "source": "Hugging Face Blog",
-      "sourceUrl": "https://huggingface.co/blog/feed.xml",
-      "sourceWeight": 0.95,
-      "category": "AI",
-      "summary": "",
-      "image": "https://cdn-uploads.huggingface.co/production/uploads/652b2e9166313ebb6197e706/l156KP0e5PRyDrE4woHoM.jpeg",
-      "published": "2026-06-22T13:18:56+00:00",
-      "firstSeen": "2026-06-22T14:00:01.422625+00:00",
-      "lastSeen": "2026-06-22T21:11:30.012601+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.2138
+      "score": 1.9229
     },
     {
       "title": "The friendly virus",
@@ -653,10 +653,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-22T20:00:00+00:00",
       "firstSeen": "2026-06-22T21:00:01.381447+00:00",
-      "lastSeen": "2026-06-22T21:11:30.012601+00:00",
+      "lastSeen": "2026-06-22T22:00:01.756300+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2542
+      "score": 2.2305
     },
     {
       "title": "The Life Scientific: Dean Lomax",
@@ -669,10 +669,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-15T20:00:00+00:00",
       "firstSeen": "2026-06-15T21:00:01.290903+00:00",
-      "lastSeen": "2026-06-22T21:11:30.012601+00:00",
+      "lastSeen": "2026-06-22T22:00:01.756300+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.2
+      "score": 1.1998
     },
     {
       "title": "The Life Scientific: Helen Hastie",

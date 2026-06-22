@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-22T21:11:30.012601+00:00",
+  "updatedAt": "2026-06-22T22:00:01.756300+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -11140,6 +11140,14 @@
     "https://www.theverge.com/report/953888/ai-virtual-staging-real-estate-apartment-listings": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/268589_Vitual_staging_AParkin.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
       "checkedAt": "2026-06-22T21:00:01.381447+00:00"
+    },
+    "https://www.techrepublic.com/article/news-apple-iphone-18-pro-features-what-we-know-so-far": {
+      "image": "https://assets.techrepublic.com/uploads/2026/06/18-pro.jpg?f=jpeg",
+      "checkedAt": "2026-06-22T22:00:01.756300+00:00"
+    },
+    "https://www.techrepublic.com/article/news-x-meta-recruiting-snack-budget-layoffs": {
+      "image": "https://assets.techrepublic.com/uploads/2026/06/x-meta.jpg?f=jpeg",
+      "checkedAt": "2026-06-22T22:00:01.756300+00:00"
     }
   }
 }
