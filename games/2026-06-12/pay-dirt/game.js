@@ -1462,6 +1462,35 @@ function drawRouteHint(){
   ctx.restore();
 }
 
+function drawDeathCue(){
+  if (!player || player.state !== 'dead') return;
+  const p = clamp(player.deadT / 0.9, 0, 1);
+  const a = Math.min(1, p * 7) * Math.min(1, (1 - p) * 5 + .25);
+  const left = Math.max(0, lives - 1);
+  const msg = deathText(player.deathReason);
+  const sub = left > 0
+    ? left + ' ' + (left === 1 ? 'LIFE' : 'LIVES') + ' LEFT'
+    : 'NO LIVES LEFT';
+  const y = VIEW_H * .46;
+  ctx.save();
+  ctx.globalAlpha = a;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillStyle = 'rgba(8,5,14,.68)';
+  roundRect(VIEW_W / 2 - 154, y - 35, 308, 70, 8);
+  ctx.fill();
+  ctx.strokeStyle = 'rgba(255,107,90,.82)';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+  ctx.fillStyle = '#ff6b5a';
+  ctx.font = '900 27px system-ui, sans-serif';
+  ctx.fillText(msg, VIEW_W / 2, y - 9);
+  ctx.fillStyle = left > 0 ? '#ffd86b' : '#ff8fa0';
+  ctx.font = '900 13px system-ui, sans-serif';
+  ctx.fillText(sub, VIEW_W / 2, y + 20);
+  ctx.restore();
+}
+
 function trapGuard(g){
   g.state = 'stun'; g.stunT = 0; g.anim = 0;
   addScore(150);
@@ -1698,17 +1727,23 @@ function killPlayer(reason){
   player.state = 'dead';
   player.deadT = 0;
   player.deathReason = reason;
+  banner = null;
+  hint = null;
+  routeHint = null;
   shake = Math.max(shake, .6); flash = Math.max(flash, .4); hitStop = Math.max(hitStop, .08);
   deathFlash = 1;
   spawnParticles(player.x, player.y, 24, {color: ['#3fd2c7', '#ffd23f', '#ff4f6b', '#fff'], spd: 5.5, life: .8, size: 4, grav: 10, glow: true});
+  spawnParticles(player.x, player.y + .38, 22, {color: ['#5b3820', '#8a6038', '#c09253', '#2d1b14'], spd: 3.8, life: .75, size: 4.2, grav: 18});
   popup(player.x, player.y - .9, deathText(reason), '#ff6b5a');
   AUDIO.sfx('die');
 }
 
 function respawnOrGameOver(){
   lives--;
-  if (lives > 0) reloadCurrentLevel({preserveGold: true});
-  else endGame(false);
+  if (lives > 0){
+    reloadCurrentLevel({preserveGold: true});
+    banner = {text: 'BACK IN THE MINE', sub: lives + ' ' + (lives === 1 ? 'LIFE' : 'LIVES') + ' LEFT', life: 1.55};
+  } else endGame(false);
 }
 
 function reloadCurrentLevel(opts){
@@ -3091,6 +3126,16 @@ function drawDigStroke(a, cx2, footY){
 }
 function actorBodyMotion(a, pose){
   if (a.kind !== 'player') return {rot: 0, sx: 1, sy: 1, ox: 0, oy: 0};
+  if (a.state === 'dead'){
+    const p = clamp(a.deadT / 0.9, 0, 1);
+    return {
+      rot: (a.dir || 1) * (0.38 + p * 0.9),
+      sx: 1 + Math.sin(p * Math.PI) * 0.08,
+      sy: 1 - Math.sin(p * Math.PI) * 0.05,
+      ox: (a.dir || 1) * p * 7,
+      oy: -Math.sin(p * Math.PI) * 9 + p * 12,
+    };
+  }
   if (pose === 'dig'){
     const total = Math.max(0.01, a.pendingDig && a.pendingDig.total || DIG_TIME);
     const p = clamp(1 - a.digT / total, 0, 1);
@@ -4119,6 +4164,7 @@ function renderWorldFrame(includeHUD){
     dv.addColorStop(0, 'rgba(0,0,0,0)'); dv.addColorStop(1, 'rgba(180,20,40,' + (deathFlash * .5) + ')');
     ctx.fillStyle = dv; ctx.fillRect(0, 0, VIEW_W, VIEW_H);
   }
+  drawDeathCue();
   // combo escalation tint
   if (comboN >= 3){
     const ct = ctx.createRadialGradient(VIEW_W / 2, VIEW_H / 2, VIEW_H * .35, VIEW_W / 2, VIEW_H / 2, VIEW_H * .8);
@@ -5235,19 +5281,6 @@ function drawHUD(){
     ctx.fillStyle = drillReady ? '#3fd2c7' : 'rgba(216,207,228,.78)';
     ctx.fillText(drillReady ? 'DRILL READY' : 'DRILL ' + Math.ceil((player.drillCd || 0) * 10) / 10, VIEW_W / 2 - 235, cy + 1);
   }
-  if (player && player.state === 'dead'){
-    const msg = deathText(player.deathReason);
-    const pulse = 0.75 + 0.25 * Math.sin(gameTime * 22);
-    ctx.textAlign = 'center';
-    ctx.fillStyle = 'rgba(8,5,14,.72)';
-    ctx.fillRect(VIEW_W / 2 - 72, HUD_H - 25, 144, 20);
-    ctx.strokeStyle = 'rgba(255,95,80,' + pulse + ')';
-    ctx.strokeRect(VIEW_W / 2 - 72.5, HUD_H - 25.5, 145, 21);
-    ctx.fillStyle = '#ff6b5a';
-    ctx.font = '900 12px system-ui, sans-serif';
-    ctx.fillText(msg, VIEW_W / 2, HUD_H - 15);
-  }
-
   drawHotbar();
   drawMiniMapPanel();
 }
