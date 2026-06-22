@@ -90,3 +90,7 @@ Sim is fixed-timestep (60Hz accumulator); `__g.step(n)` drives ticks headlessly.
 - 2026-06-22: Game over offers Continue Claim from the exact level where the run ended.
   Boom Rush and campaign visuals now use two-level visual chapters; the softlock/No Way Out
   detector also protects Boom Rush by checking route access to remaining gold and the cart.
+- 2026-06-22: `window.__g.qaMine()` is the debug-only QA Mine runner for polish passes.
+  It loads campaign, Daily Dig, and Boom Rush levels, checks solver health, false No Way Out
+  reasons, and nonblank canvas rendering so future changes can be tested without a full
+  manual playthrough.
