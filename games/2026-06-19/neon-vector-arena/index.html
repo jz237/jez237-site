@@ -2,7 +2,12 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Neon Vector Arena">
+<meta name="theme-color" content="#02030a">
+<link rel="manifest" href="./manifest.webmanifest">
 <title>Neon Vector Arena Demo</title>
 <style>
   * { box-sizing: border-box; }
@@ -10,6 +15,7 @@
     margin: 0;
     width: 100%;
     height: 100%;
+    min-height: 100dvh;
     overflow: hidden;
     background: #02030a;
     color: #eaffff;
@@ -22,6 +28,7 @@
     inset: 0;
     width: 100%;
     height: 100%;
+    min-height: 100dvh;
     display: block;
     background: #02030a;
     cursor: crosshair;
@@ -154,6 +161,9 @@
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 10px;
   }
+  #fullscreenBtn {
+    display: none;
+  }
   .menu-actions.menu-hidden { display: none; }
   .panel-section {
     display: none;
@@ -255,6 +265,13 @@
     .control-mode { grid-template-columns: 1fr; }
     .mini-grid { grid-template-columns: 1fr; }
   }
+  @media (hover: none), (max-width: 900px) {
+    #fullscreenBtn { display: block; }
+    .menu-actions { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (hover: none) and (max-width: 600px) {
+    .menu-actions { grid-template-columns: 1fr; }
+  }
 </style>
 </head>
 <body>
@@ -270,6 +287,7 @@
     <p class="sub" id="overlaySub">Solo survival in endless vector space. Move smart, chain combos, and shatter oversized geometry before it reaches you.</p>
     <div class="menu-actions" id="mainActions">
       <button id="start">Solo Run</button>
+      <button id="fullscreenBtn" class="secondary" type="button">Full Screen</button>
       <button id="onlineBtn" class="secondary">Online</button>
       <button id="scoresBtn" class="secondary">Scores</button>
     </div>
@@ -306,15 +324,15 @@
     <p class="fine" id="overlayFine">Dual Stick: left side flies, right side aims and fires. Desktop: WASD plus hold mouse to aim.</p>
   </div>
 </div>
-<div class="version">v4.0</div>
+<div class="version">v4.1</div>
 
 <script>
 'use strict';
 
 const canvas = document.getElementById('game');
-const ctx = canvas.getContext('2d', { alpha: false, desynchronized: true });
+const ctx = canvas.getContext('2d', { alpha: false });
 const glow = document.createElement('canvas');
-const gtx = glow.getContext('2d', { alpha: true, desynchronized: true });
+const gtx = glow.getContext('2d', { alpha: true });
 const scoreEl = document.getElementById('score');
 const waveEl = document.getElementById('wave');
 const comboEl = document.getElementById('combo');
@@ -325,6 +343,7 @@ const overlayTitle = document.getElementById('overlayTitle');
 const overlaySub = document.getElementById('overlaySub');
 const overlayFine = document.getElementById('overlayFine');
 const startBtn = document.getElementById('start');
+const fullscreenBtn = document.getElementById('fullscreenBtn');
 const onlineBtn = document.getElementById('onlineBtn');
 const scoresBtn = document.getElementById('scoresBtn');
 const autoModeBtn = document.getElementById('autoMode');
@@ -399,10 +418,11 @@ let activeModifier = null;
 let lastTouchBomb = 0;
 
 const FIREFOX_PERF = /\bFirefox\//i.test(navigator.userAgent);
-const GLOW_SCALE = FIREFOX_PERF ? .14 : .16;
+const MOBILE_PERF = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || matchMedia('(hover: none) and (pointer: coarse)').matches;
+const GLOW_SCALE = FIREFOX_PERF ? .12 : (MOBILE_PERF ? .12 : .15);
 const MAX_ENEMIES = FIREFOX_PERF ? 42 : 56;
-const MAX_PARTICLES = FIREFOX_PERF ? 84 : 118;
-const MAX_FRAGMENTS = FIREFOX_PERF ? 76 : 118;
+const MAX_PARTICLES = FIREFOX_PERF ? 72 : (MOBILE_PERF ? 84 : 108);
+const MAX_FRAGMENTS = FIREFOX_PERF ? 52 : (MOBILE_PERF ? 62 : 92);
 const MAX_DT = FIREFOX_PERF ? .07 : .04;
 const SHOT_BLAST_RADIUS = 78;
 const SHOT_BLAST_FORCE = 290;
@@ -491,7 +511,7 @@ function modifierForWave(value) {
 
 function resize() {
   const mobileFit = innerWidth < 700 || innerHeight < 520;
-  DPR = Math.min(FIREFOX_PERF ? .9 : (mobileFit ? .9 : 1), window.devicePixelRatio || 1);
+  DPR = Math.min(FIREFOX_PERF ? .9 : (mobileFit ? .82 : 1), window.devicePixelRatio || 1);
   W = Math.floor(innerWidth * DPR);
   H = Math.floor(innerHeight * DPR);
   canvas.width = W;
@@ -585,6 +605,42 @@ function setControlMode(mode) {
   if (!running && (menuState === 'menu' || menuState === 'online')) {
     overlayFine.textContent = (menuState === 'online' ? 'P1 runs the world; P2 sends controls and receives live snapshots. ' : '') + controlHelpText();
   }
+}
+
+function canUseFullscreen() {
+  return !!(document.fullscreenEnabled && document.documentElement.requestFullscreen);
+}
+
+function shouldOfferFullscreen() {
+  return MOBILE_PERF || innerWidth < 900 || new URLSearchParams(location.search).get('fullscreen') === '1';
+}
+
+function updateFullscreenButton() {
+  if (!fullscreenBtn) return;
+  fullscreenBtn.textContent = document.fullscreenElement ? 'Exit Full' : 'Full Screen';
+  fullscreenBtn.disabled = !canUseFullscreen();
+}
+
+async function enterFullscreen() {
+  if (!canUseFullscreen() || document.fullscreenElement || !shouldOfferFullscreen()) return false;
+  try {
+    await document.documentElement.requestFullscreen({ navigationUI: 'hide' });
+    try { await screen.orientation?.lock?.('landscape'); } catch {}
+    setTimeout(resize, 120);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+async function toggleFullscreen() {
+  if (document.fullscreenElement) {
+    try { await document.exitFullscreen(); } catch {}
+  } else {
+    await enterFullscreen();
+  }
+  updateFullscreenButton();
+  resize();
 }
 
 function showOverlay(section = 'menu') {
@@ -1405,7 +1461,7 @@ function applyShipInput(ship, input, dt) {
 
 function addSpark(x, y, n, hue, force = 1) {
   if (particles.length > MAX_PARTICLES) particles.splice(0, particles.length - MAX_PARTICLES);
-  const count = Math.max(1, Math.round(n * effectsQuality * .72));
+  const count = Math.max(1, Math.round(n * effectsQuality * (MOBILE_PERF ? .42 : .6)));
   for (let i = 0; i < count; i++) {
     const a = rand(0, TAU);
     const s = rand(34, 190) * force;
@@ -1416,7 +1472,7 @@ function addSpark(x, y, n, hue, force = 1) {
       life: rand(.22, .58),
       max: rand(.32, .72),
       r: rand(1, 2.7) * force,
-      hue: hue + rand(-8, 8),
+      hue: hue + rand(-4, 4),
       kind: 'dot'
     });
   }
@@ -1592,7 +1648,7 @@ function worldShapePoints(e, scale = 1) {
 function addVectorFragments(e) {
   if (fragments.length > MAX_FRAGMENTS) fragments.splice(0, fragments.length - MAX_FRAGMENTS);
   const pts = worldShapePoints(e, 1);
-  const count = Math.max(1, Math.round((e.type === 'splitter' ? 1.5 : e.largeSplits ? 1.25 : .7) * effectsQuality));
+  const count = Math.max(1, Math.round((e.type === 'splitter' ? 1 : e.largeSplits ? .85 : .45) * effectsQuality * (MOBILE_PERF ? .7 : 1)));
   for (let pass = 0; pass < count; pass++) {
     for (let i = 0; i < pts.length; i += pass ? 2 : 1) {
       const a = pts[i];
@@ -1611,13 +1667,13 @@ function addVectorFragments(e) {
         bx: b[0] - mx,
         by: b[1] - my,
         rot: rand(-.4, .4),
-        spin: rand(-4.5, 4.5),
-        hue: e.hue + rand(-5, 5),
-        life: rand(.22, .52),
-        max: rand(.42, .68),
+        spin: rand(-2.8, 2.8),
+        hue: e.hue + rand(-3, 3),
+        life: rand(.18, .38),
+        max: rand(.34, .54),
         kind: 'line'
       });
-      if (pass === 0 && i % 3 === 0) {
+      if (!MOBILE_PERF && pass === 0 && i % 3 === 0) {
         const [cx, cy] = rotatePoint(rand(-e.r * .34, e.r * .34), rand(-e.r * .34, e.r * .34), e.rot);
         fragments.push({
           x: mx,
@@ -1627,7 +1683,7 @@ function addVectorFragments(e) {
           pts: [[a[0] - mx, a[1] - my], [b[0] - mx, b[1] - my], [cx, cy]],
           rot: rand(0, TAU),
           spin: rand(-4, 4),
-          hue: e.hue + rand(-6, 6),
+          hue: e.hue + rand(-3, 3),
           life: rand(.2, .42),
           max: rand(.36, .56),
           kind: 'poly'
@@ -1635,7 +1691,7 @@ function addVectorFragments(e) {
       }
     }
   }
-  const dust = Math.round((e.type === 'splitter' || e.largeSplits ? 5 : 1) * effectsQuality);
+  const dust = Math.round((e.type === 'splitter' || e.largeSplits ? 3 : 1) * effectsQuality * (MOBILE_PERF ? .55 : 1));
   for (let i = 0; i < dust; i++) {
     const a = rand(0, TAU);
     const d = rand(0, e.r * 1.2);
@@ -1645,8 +1701,8 @@ function addVectorFragments(e) {
       vx: Math.cos(a) * rand(70, 190),
       vy: Math.sin(a) * rand(70, 190),
       rot: rand(0, TAU),
-      spin: rand(-4, 4),
-      hue: e.hue + rand(-5, 5),
+      spin: rand(-2.5, 2.5),
+      hue: e.hue + rand(-3, 3),
       life: rand(.18, .38),
       max: rand(.32, .52),
       kind: 'cross'
@@ -1657,7 +1713,8 @@ function addVectorFragments(e) {
 
 function addHitShards(e, x, y, hue) {
   if (fragments.length > MAX_FRAGMENTS) fragments.splice(0, fragments.length - MAX_FRAGMENTS);
-  const count = Math.max(1, Math.round((e.type === 'splitter' || e.largeSplits ? clamp(e.r * .28, 5, 12) : 2) * effectsQuality));
+  const base = e.type === 'splitter' || e.largeSplits ? clamp(e.r * .14, 3, 7) : 1;
+  const count = Math.max(1, Math.round(base * effectsQuality * (MOBILE_PERF ? .55 : 1)));
   for (let i = 0; i < count; i++) {
     const a = rand(0, TAU);
     const speed = rand(90, 210);
@@ -1673,10 +1730,10 @@ function addHitShards(e, x, y, hue) {
       by: 0,
       rot: a,
       spin: rand(-4, 4),
-      hue: hue + rand(-6, 6),
-      life: rand(.2, .38),
-      max: rand(.32, .5),
-      kind: 'line'
+      hue: hue + rand(-3, 3),
+      life: rand(.16, .3),
+      max: rand(.28, .42),
+      kind: MOBILE_PERF ? 'dot' : 'line'
     });
   }
 }
@@ -1772,7 +1829,7 @@ function splitEnemy(e) {
     capEnemyVelocity(child);
     enemies.push(child);
   }
-  addSpark(e.x, e.y, 60, e.hue, 1.75);
+  addSpark(e.x, e.y, MOBILE_PERF ? 22 : 36, e.hue, 1.35);
   particles.push({ x: e.x, y: e.y, vx: 0, vy: 0, life: .55, max: .55, r: Math.max(118, e.r * 4.2), hue: e.hue, kind: 'ring' });
 }
 
@@ -2183,7 +2240,7 @@ function update(dt) {
 function line(c, x1, y1, x2, y2, color, width, glowWidth = 0) {
   const glowPass = c === gtx;
   c.strokeStyle = color;
-  c.lineWidth = glowPass ? width * 2.7 : width;
+  c.lineWidth = glowPass ? width * 1.55 : width;
   c.lineCap = 'round';
   c.lineJoin = 'round';
   c.shadowBlur = 0;
@@ -2198,7 +2255,7 @@ function poly(c, pts, color, width = 2, fill = null, glowWidth = 0) {
   const glowPass = c === gtx;
   c.strokeStyle = color;
   c.fillStyle = fill || 'transparent';
-  c.lineWidth = glowPass ? width * 2.3 : width;
+  c.lineWidth = glowPass ? width * 1.55 : width;
   c.lineJoin = 'round';
   c.lineCap = 'round';
   c.shadowBlur = 0;
@@ -2387,23 +2444,28 @@ function drawEnemy(c, e, ghost = false) {
 }
 
 function drawShot(c, s) {
+  const glowPass = c === gtx;
   const a0 = s.angle ?? Math.atan2(s.vy, s.vx);
   const hotX = Math.cos(a0);
   const hotY = Math.sin(a0);
-  for (let i = s.trail.length - 1; i > 0; i--) {
-    const a = i / s.trail.length;
+  const trailMax = Math.min(s.trail.length, glowPass ? 3 : (MOBILE_PERF ? 3 : 4));
+  for (let i = trailMax - 1; i > 0; i--) {
+    const a = i / trailMax;
     const tail = s.trail[i];
     const head = s.trail[i - 1];
     if (!tail || !head) continue;
-    line(c, tail.x, tail.y, head.x, head.y, `hsla(${s.hue},100%,72%,${(1 - a) * .92})`, Math.max(1.1, 5.4 * (1 - a)), 8);
+    const alpha = (1 - a) * (glowPass ? .34 : .48);
+    line(c, tail.x, tail.y, head.x, head.y, `hsla(${s.hue},100%,72%,${alpha})`, Math.max(.8, (glowPass ? 2.8 : 3.8) * (1 - a)), 4);
   }
-  const color = `hsl(${s.hue},100%,82%)`;
-  line(c, s.x - hotX * 18, s.y - hotY * 18, s.x + hotX * 8, s.y + hotY * 8, color, 3.2, 12);
-  line(c, s.x - hotY * 4, s.y + hotX * 4, s.x + hotY * 4, s.y - hotX * 4, 'rgba(255,255,255,.95)', 1.6, 7);
-  c.fillStyle = 'rgba(255,255,255,.96)';
-  c.beginPath();
-  c.arc(s.x + hotX * 6, s.y + hotY * 6, 2.2, 0, TAU);
-  c.fill();
+  const color = glowPass ? `hsla(${s.hue},100%,78%,.52)` : `hsl(${s.hue},100%,82%)`;
+  line(c, s.x - hotX * 14, s.y - hotY * 14, s.x + hotX * 7, s.y + hotY * 7, color, glowPass ? 2 : 2.4, 6);
+  if (!glowPass) {
+    line(c, s.x - hotY * 3, s.y + hotX * 3, s.x + hotY * 3, s.y - hotX * 3, 'rgba(255,255,255,.78)', 1.1, 4);
+    c.fillStyle = 'rgba(255,255,255,.9)';
+    c.beginPath();
+    c.arc(s.x + hotX * 5, s.y + hotY * 5, 1.8, 0, TAU);
+    c.fill();
+  }
   c.shadowBlur = 0;
 }
 
@@ -2443,13 +2505,13 @@ function drawParticle(c, p) {
 
 function drawFragment(c, f) {
   const t = clamp(f.life / f.max, 0, 1);
-  const color = `hsla(${f.hue},88%,72%,${t * .5})`;
+  const color = `hsla(${f.hue},80%,72%,${t * (MOBILE_PERF ? .28 : .38)})`;
   c.save();
   c.translate(f.x, f.y);
   c.rotate(f.rot);
   c.strokeStyle = color;
-  c.fillStyle = `hsla(${f.hue},100%,62%,${t * .1})`;
-  c.lineWidth = Math.max(.7, 1.25 * t);
+  c.fillStyle = `hsla(${f.hue},86%,62%,${t * .08})`;
+  c.lineWidth = Math.max(.55, 1.05 * t);
   c.lineCap = 'round';
   c.lineJoin = 'round';
   c.shadowBlur = 0;
@@ -2467,8 +2529,8 @@ function drawFragment(c, f) {
     c.fill();
     c.stroke();
   } else {
-    const r = Math.max(.8, 2.7 * t);
-    c.fillStyle = `hsla(${f.hue},88%,72%,${t * .45})`;
+    const r = Math.max(.7, 2.1 * t);
+    c.fillStyle = `hsla(${f.hue},78%,72%,${t * .34})`;
     c.beginPath();
     c.arc(0, 0, r, 0, TAU);
     c.fill();
@@ -2610,12 +2672,12 @@ function drawStick(c, stick, hue, label) {
 
 function render() {
   renderFrame++;
-  const shakePulse = shake > .05 ? shake * (.45 + .55 * Math.sin(time * 43) ** 2) : 0;
-  const sx = shakePulse ? Math.sin(time * 59) * shakePulse : 0;
-  const sy = shakePulse ? Math.cos(time * 47) * shakePulse : 0;
+  const shakePulse = shake > .05 ? shake * (MOBILE_PERF ? .12 : .22) : 0;
+  const sx = shakePulse ? Math.sin(time * 18) * shakePulse : 0;
+  const sy = shakePulse ? Math.cos(time * 16) * shakePulse : 0;
   const objectLoad = enemies.length + shots.length + fragments.length * .5 + particles.length * .35;
-  const heavyGlow = objectLoad > 180 || effectsQuality < .86;
-  const showGlowTrails = !FIREFOX_PERF && !heavyGlow && enemies.length < 20 && fragments.length < 30;
+  const heavyGlow = objectLoad > (MOBILE_PERF ? 120 : 170) || effectsQuality < .86;
+  const showGlowTrails = !MOBILE_PERF && !FIREFOX_PERF && !heavyGlow && enemies.length < 18 && fragments.length < 24;
   ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
   gtx.setTransform(DPR * GLOW_SCALE, 0, 0, DPR * GLOW_SCALE, 0, 0);
   ctx.clearRect(0, 0, innerWidth, innerHeight);
@@ -2653,8 +2715,9 @@ function render() {
       }
     }
   }
+  const shotGlowStride = MOBILE_PERF ? 3 : (heavyGlow ? 2 : 1);
   for (let i = 0; i < shots.length; i++) {
-    if (heavyGlow && i % 2) continue;
+    if (i % shotGlowStride) continue;
     drawShot(gtx, shots[i]);
   }
   for (const warning of spawnWarnings) drawSpawnWarning(gtx, warning);
@@ -2668,14 +2731,14 @@ function render() {
 
   ctx.save();
   ctx.globalCompositeOperation = 'lighter';
-  ctx.globalAlpha = .56;
+  ctx.globalAlpha = MOBILE_PERF ? .38 : .48;
   ctx.imageSmoothingEnabled = true;
   ctx.drawImage(glow, 0, 0, innerWidth, innerHeight);
   ctx.restore();
 
   ctx.save();
   ctx.translate(sx - camera.x, sy - camera.y);
-  ctx.globalCompositeOperation = 'lighter';
+  ctx.globalCompositeOperation = 'source-over';
   ctx.globalAlpha = 1;
   ctx.filter = 'none';
   for (const s of shots) drawShot(ctx, s);
@@ -2783,14 +2846,18 @@ function movePointer(e) {
   if (aimStick.id === e.pointerId || (e.pointerType === 'mouse' && aimStick.active)) updateStick(aimStick, e);
 }
 
-function primaryAction() {
+async function primaryAction() {
   if (menuState === 'paused') resumeGame();
   else if (menuState === 'online') return;
-  else startSolo();
+  else {
+    await enterFullscreen();
+    startSolo();
+  }
 }
 
 startBtn.addEventListener('click', primaryAction);
 startBtn.addEventListener('touchend', e => { e.preventDefault(); primaryAction(); }, { passive: false });
+fullscreenBtn.addEventListener('click', toggleFullscreen);
 autoModeBtn.addEventListener('click', () => setControlMode('auto'));
 dualModeBtn.addEventListener('click', () => setControlMode('dual'));
 scoresBtn.addEventListener('click', () => showOverlay('scores'));
@@ -2813,6 +2880,10 @@ submitScoreBtn.addEventListener('click', async () => {
   overlayFine.textContent = ok ? 'Score saved locally and submitted globally.' : 'Score saved locally. Global submit is unavailable right now.';
 });
 window.addEventListener('resize', resize);
+document.addEventListener('fullscreenchange', () => {
+  updateFullscreenButton();
+  setTimeout(resize, 80);
+});
 window.addEventListener('pointerdown', e => {
   if (e.target.closest('button') || e.target.closest('input')) return;
   if (running && e.pointerType === 'touch' && e.clientY > innerHeight * .68 && Math.abs(e.clientX - innerWidth * .5) < 120) {
@@ -2853,6 +2924,7 @@ reset();
 onlineRoomInput.value = randomRoom();
 onlineNameInput.value = cleanName(localStorage.getItem(NAME_KEY) || 'PLAYER');
 updateControlModeButtons();
+updateFullscreenButton();
 overlayFine.textContent = controlHelpText();
 renderOnlineSlots();
 render();
