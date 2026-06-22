@@ -4130,10 +4130,40 @@ function glow(wx, wy, radius, color, alpha){
   ctx.globalAlpha = 1;
 }
 
+function coverTitleLeftSilhouette(){
+  ctx.save();
+  const g = ctx.createLinearGradient(0, VIEW_H * .64, 0, VIEW_H);
+  g.addColorStop(0, 'rgba(8,9,18,.1)');
+  g.addColorStop(.35, 'rgba(6,7,14,.78)');
+  g.addColorStop(1, 'rgba(4,5,10,.98)');
+  ctx.fillStyle = g;
+  ctx.beginPath();
+  ctx.moveTo(0, VIEW_H);
+  ctx.lineTo(0, VIEW_H * .72);
+  ctx.bezierCurveTo(25, VIEW_H * .68, 51, VIEW_H * .72, 76, VIEW_H * .76);
+  ctx.bezierCurveTo(112, VIEW_H * .8, 145, VIEW_H * .73, 183, VIEW_H * .81);
+  ctx.lineTo(224, VIEW_H);
+  ctx.closePath();
+  ctx.fill();
+  ctx.fillStyle = 'rgba(3,4,9,.94)';
+  for (let i = 0; i < 6; i++){
+    const x = 8 + i * 32;
+    const h = 72 + (i % 3) * 36;
+    ctx.beginPath();
+    ctx.moveTo(x, VIEW_H);
+    ctx.lineTo(x + 16 + (i % 2) * 10, VIEW_H - h);
+    ctx.lineTo(x + 42, VIEW_H);
+    ctx.closePath();
+    ctx.fill();
+  }
+  ctx.restore();
+}
+
 function renderTitle(){
   if (!bg) buildBackdrop();
   ctx.clearRect(0, 0, VIEW_W, VIEW_H);
   ctx.drawImage(bg, 0, 0);
+  coverTitleLeftSilhouette();
   // drifting embers
   for (let i = 0; i < 26; i++){
     const ex = (i * 211 + clock * (10 + i % 6 * 4)) % VIEW_W;
@@ -4143,8 +4173,8 @@ function renderTitle(){
     glow(ex / TILE, (ey - HUD_H) / TILE, 8, 'rgba(255,150,60,' + a + ')', 1);
     ctx.globalCompositeOperation = 'source-over';
   }
-  // flickering torches flanking the lower ledge
-  for (const txc of [2.4, COLS - 2.4]){
+  // flickering torch on the lower ledge
+  for (const txc of [COLS - 2.4]){
     const fl = 0.7 + 0.3 * Math.sin(clock * 13 + txc);
     ctx.save(); ctx.globalCompositeOperation = 'lighter';
     glow(txc, ROWS - 2.0, 70 * fl, 'rgba(255,150,50,.5)', 1); ctx.restore();
