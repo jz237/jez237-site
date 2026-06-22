@@ -1,0 +1,11 @@
+{
+  "name": "Neon Vector Arena",
+  "short_name": "Neon Arena",
+  "start_url": "./?fullscreen=1",
+  "scope": "./",
+  "display": "fullscreen",
+  "orientation": "landscape",
+  "background_color": "#02030a",
+  "theme_color": "#02030a",
+  "description": "A neon vector survival arcade game."
+}
