@@ -98,7 +98,27 @@
     backdrop-filter: blur(10px);
   }
   .overlay.score-screen .panel {
-    width: min(760px, 100%);
+    width: min(920px, 100%);
+    height: calc(100dvh - 44px);
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    padding-block: 18px;
+  }
+  .overlay.score-screen h1 {
+    margin-bottom: 6px;
+    font-size: clamp(1.65rem, 5.6vw, 3.1rem);
+    line-height: .98;
+  }
+  .overlay.score-screen .sub {
+    max-width: 720px;
+    margin-bottom: 10px;
+    font-size: clamp(10px, 2vw, 12px);
+    line-height: 1.25;
+  }
+  .overlay.score-screen .fine {
+    display: none;
   }
   h1 {
     margin: 0 0 10px;
@@ -185,6 +205,14 @@
     border-top: 1px solid rgba(136, 232, 255, .22);
   }
   .panel-section.on { display: block; }
+  .overlay.score-screen #scorePanel.on {
+    display: flex;
+    flex: 1;
+    min-height: 0;
+    flex-direction: column;
+    margin-top: 6px;
+    padding-top: 6px;
+  }
   .control-mode {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -217,17 +245,23 @@
     text-align: left;
   }
   .overlay.score-screen .score-board {
-    max-height: min(62dvh, 520px);
+    flex: 1;
+    min-height: 0;
+    max-height: none;
     overflow-y: auto;
-    padding-right: 4px;
+    padding-right: 6px;
+    overscroll-behavior: contain;
   }
-  .score-tabs {
+  .overlay.score-screen .score-row {
+    min-height: 22px;
+  }
+  .score-tools {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1fr auto;
     gap: 8px;
     margin: 0 0 10px;
   }
-  .score-tabs button {
+  .score-tools button {
     min-height: 38px;
     padding: 9px 10px;
     font-size: 11px;
@@ -365,14 +399,32 @@
       margin-top: 8px;
       padding-top: 8px;
     }
-    .overlay.score-screen .score-board {
-      max-height: 36dvh;
+    .overlay.score-screen .panel {
+      height: calc(100dvh - 16px);
+      padding-block: 8px;
     }
-    .score-tabs {
+    .overlay.score-screen h1 {
+      font-size: clamp(1.15rem, 8vh, 1.85rem);
+      margin-bottom: 3px;
+    }
+    .overlay.score-screen .sub {
+      margin-bottom: 5px;
+      font-size: 9px;
+      line-height: 1.15;
+    }
+    .overlay.score-screen #scorePanel.on {
+      margin-top: 4px;
+      padding-top: 4px;
+    }
+    .overlay.score-screen .score-board {
+      max-height: none;
+    }
+    .score-tools {
+      grid-template-columns: 1fr 1fr auto;
       margin-bottom: 6px;
       gap: 6px;
     }
-    .score-tabs button {
+    .score-tools button {
       min-height: 30px;
       padding: 6px 8px;
       font-size: 10px;
@@ -384,6 +436,9 @@
       min-height: 20px;
       font-size: 10px;
       grid-template-columns: 32px 1fr auto;
+    }
+    .overlay.score-screen .score-row {
+      min-height: 18px;
     }
     .score-row small {
       font-size: 9px;
@@ -425,9 +480,10 @@
       </div>
     </div>
     <div class="panel-section" id="scorePanel">
-      <div class="score-tabs" id="scoreTabs">
+      <div class="score-tools" id="scoreTools">
         <button id="soloScoresBtn" class="secondary" type="button">Solo</button>
         <button id="multiScoresBtn" class="secondary" type="button">Multiplayer</button>
+        <button id="scoreBackBtn" class="secondary" type="button">Back</button>
       </div>
       <div id="scoreBoard" class="score-board"></div>
     </div>
@@ -451,7 +507,7 @@
     <p class="fine" id="overlayFine">Dual Stick: left side flies, right side aims and fires. Desktop: WASD plus hold mouse to aim.</p>
   </div>
 </div>
-<div class="version">v4.7</div>
+<div class="version">v4.8</div>
 
 <script>
 'use strict';
@@ -479,6 +535,7 @@ const scoreSubmit = document.getElementById('scoreSubmit');
 const scorePanel = document.getElementById('scorePanel');
 const soloScoresBtn = document.getElementById('soloScoresBtn');
 const multiScoresBtn = document.getElementById('multiScoresBtn');
+const scoreBackBtn = document.getElementById('scoreBackBtn');
 const onlinePanel = document.getElementById('onlinePanel');
 const scoreBoard = document.getElementById('scoreBoard');
 const initialsInput = document.getElementById('initials');
@@ -594,6 +651,7 @@ const SCORE_APIS = {
   solo: 'https://game-scores.jez237.workers.dev/scores/neon-vector-arena',
   multiplayer: 'https://game-scores.jez237.workers.dev/scores/neon-vector-arena-multiplayer'
 };
+const SCORE_LIMIT = 100;
 const ONLINE_WS = window.NEON_VECTOR_WS || ((location.hostname === 'localhost' || location.hostname === '127.0.0.1')
   ? 'ws://127.0.0.1:8788/ws'
   : 'wss://neon-vector-arena-online.jez237.workers.dev/ws');
@@ -716,7 +774,7 @@ function setPanel(section = 'menu') {
   scoreSubmit.classList.toggle('on', section === 'over');
   scorePanel.classList.toggle('on', section === 'scores');
   onlinePanel.classList.toggle('on', section === 'online');
-  mainActions.classList.toggle('menu-hidden', section === 'online');
+  mainActions.classList.toggle('menu-hidden', section === 'online' || section === 'scores');
   controlModeEl.style.display = (section === 'menu' || section === 'online') ? 'grid' : 'none';
   updateControlModeButtons();
   startBtn.disabled = false;
@@ -737,10 +795,9 @@ function setPanel(section = 'menu') {
     startBtn.textContent = 'Restart Solo';
     initialsInput.value = cleanInitials(localStorage.getItem(NAME_KEY) || initialsInput.value || 'YOU');
   } else if (section === 'scores') {
-    overlayTitle.innerHTML = 'TOP 20<br>SCORES';
-    overlaySub.textContent = 'Best Neon Vector Arena runs by score, with separate solo and multiplayer boards.';
+    overlayTitle.innerHTML = 'SCORES';
+    overlaySub.textContent = 'Separate solo and multiplayer leaderboards.';
     overlayFine.textContent = 'Global multiplayer and solo leaderboards are shown when available; local scores appear as fallback.';
-    startBtn.textContent = 'Solo Run';
     refreshScoreBoard();
   } else if (section === 'online') {
     overlayTitle.innerHTML = 'ONLINE';
@@ -868,11 +925,11 @@ function saveLocalScore(name, value, mode = currentRunScoreMode()) {
     .filter(item => normalizeScoreMode(item.mode) === row.mode)
     .concat(row)
     .sort((a, b) => b.score - a.score)
-    .slice(0, 20);
+    .slice(0, SCORE_LIMIT);
   const otherRows = localScores()
     .filter(item => normalizeScoreMode(item.mode) !== row.mode)
     .sort((a, b) => b.score - a.score)
-    .slice(0, 20);
+    .slice(0, SCORE_LIMIT);
   const rows = otherRows.concat(boardRows);
   localStorage.setItem(LOCAL_SCORE_KEY, JSON.stringify(rows));
   localStorage.setItem(NAME_KEY, row.name);
@@ -897,7 +954,7 @@ async function fetchGlobalScores(force = false, mode = scoreMode) {
   try {
     const ctl = new AbortController();
     const timer = setTimeout(() => ctl.abort(), 7000);
-    const res = await fetch(`${scoreApiFor(boardMode)}?limit=20`, { cache: 'no-store', signal: ctl.signal });
+    const res = await fetch(`${scoreApiFor(boardMode)}?limit=${SCORE_LIMIT}`, { cache: 'no-store', signal: ctl.signal });
     clearTimeout(timer);
     const data = await res.json();
     const rows = Array.isArray(data) ? data : (data.scores || []);
@@ -905,7 +962,7 @@ async function fetchGlobalScores(force = false, mode = scoreMode) {
       .map(row => normalizeScoreRow(row, true, boardMode))
       .filter(row => !(row.name === 'TST' && row.score <= 1 && row.wave === 0 && row.kills === 0))
       .sort((a, b) => b.score - a.score)
-      .slice(0, 20);
+      .slice(0, SCORE_LIMIT);
     return globalScoreCache[boardMode];
   } catch {
     delete globalScoreCache[boardMode];
@@ -941,7 +998,7 @@ function scoreRowsHtml(rows, source) {
   if (!rows.length) {
     return `<div class="score-row"><span>--</span><b>No ${source} scores yet</b><em>${scoreMode === 'multiplayer' ? 'multi' : 'solo'}</em></div>`;
   }
-  return rows.slice(0, 20).map((raw, index) => {
+  return rows.slice(0, SCORE_LIMIT).map((raw, index) => {
     const row = normalizeScoreRow(raw, source === 'global', scoreMode);
     const meta = row.wave || row.kills ? `<small>W${String(row.wave || 1).padStart(2, '0')} · ${row.kills} KO</small>` : '<small>RUN DATA PENDING</small>';
     return `<div class="score-row"><span>${String(index + 1).padStart(2, '0')}</span><b>${escapeHtml(row.name || 'YOU')}${meta}</b><em>${Math.floor(row.score || 0)}</em></div>`;
@@ -950,16 +1007,16 @@ function scoreRowsHtml(rows, source) {
 
 function renderScoreBoard(rows = null, source = 'local') {
   setScoreMode(scoreMode, false);
-  const list = (rows || localScores().filter(row => normalizeScoreMode(row.mode) === scoreMode)).slice(0, 20);
+  const list = (rows || localScores().filter(row => normalizeScoreMode(row.mode) === scoreMode)).slice(0, SCORE_LIMIT);
   const modeLabel = scoreMode === 'multiplayer' ? 'MULTIPLAYER' : 'SOLO';
-  const label = source === 'global' ? `GLOBAL ${modeLabel} TOP 20` : `LOCAL ${modeLabel} TOP 20`;
-  scoreBoard.innerHTML = `<div class="score-row header"><span>#</span><b>${label}</b><em>${list.length}/20</em></div>` + scoreRowsHtml(list, source);
+  const label = source === 'global' ? `GLOBAL ${modeLabel} SCORES` : `LOCAL ${modeLabel} SCORES`;
+  scoreBoard.innerHTML = `<div class="score-row header"><span>#</span><b>${label}</b><em>${list.length}/${SCORE_LIMIT}</em></div>` + scoreRowsHtml(list, source);
 }
 
 async function refreshScoreBoard() {
   const modeLabel = scoreMode === 'multiplayer' ? 'MULTIPLAYER' : 'SOLO';
   setScoreMode(scoreMode, false);
-  scoreBoard.innerHTML = `<div class="score-row header"><span>...</span><b>LOADING ${modeLabel} TOP 20</b><em>wait</em></div>`;
+  scoreBoard.innerHTML = `<div class="score-row header"><span>...</span><b>LOADING ${modeLabel} SCORES</b><em>wait</em></div>`;
   const rows = await fetchGlobalScores(true, scoreMode);
   if (rows) renderScoreBoard(rows, 'global');
   else {
@@ -3150,6 +3207,7 @@ dualModeBtn.addEventListener('click', () => setControlMode('dual'));
 scoresBtn.addEventListener('click', () => showOverlay('scores'));
 soloScoresBtn.addEventListener('click', () => setScoreMode('solo', true));
 multiScoresBtn.addEventListener('click', () => setScoreMode('multiplayer', true));
+scoreBackBtn.addEventListener('click', () => showOverlay('menu'));
 onlineBtn.addEventListener('click', () => showOverlay('online'));
 connectOnlineBtn.addEventListener('click', connectOnline);
 readyOnlineBtn.addEventListener('click', toggleOnlineReady);
