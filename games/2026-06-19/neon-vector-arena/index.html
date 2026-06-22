@@ -507,7 +507,7 @@
 <div class="overlay" id="overlay">
   <div class="panel">
 	    <h1 id="overlayTitle">NEON<br>VECTOR<br>ARENA</h1>
-	    <div class="title-version" id="titleVersion">v4.12</div>
+	    <div class="title-version" id="titleVersion">v4.13</div>
 	    <p class="sub" id="overlaySub">Solo survival in endless vector space. Move smart, chain combos, and shatter oversized geometry before it reaches you.</p>
     <div class="menu-actions" id="mainActions">
       <button id="start">Solo Run</button>
@@ -559,7 +559,7 @@
     <p class="fine" id="overlayFine">Dual Stick: left side flies, right side aims and fires. Desktop: WASD plus hold mouse to aim.</p>
   </div>
 </div>
-<div class="version">v4.12</div>
+<div class="version">v4.13</div>
 
 <script>
 'use strict';
@@ -755,10 +755,30 @@ const SHAPE_DEFS = {
   crescent: { baseR: 14, childR: 7.4, hue: 252, speed: [64, 108], wobble: 36, weight: .6 },
   bowtie: { baseR: 13, childR: 7.1, hue: 26, speed: [74, 122], wobble: 42, weight: .64 },
   saucer: { baseR: 14.2, childR: 7.5, hue: 112, speed: [62, 104], wobble: 24, weight: .62 },
-  zigzag: { baseR: 12.8, childR: 7, hue: 338, speed: [90, 138], wobble: 58, weight: .6 }
+  zigzag: { baseR: 12.8, childR: 7, hue: 338, speed: [90, 138], wobble: 58, weight: .6 },
+  comet: { baseR: 12.8, childR: 7, hue: 42, speed: [112, 166], wobble: 36, weight: .58 },
+  talon: { baseR: 13.1, childR: 7.1, hue: 8, speed: [96, 148], wobble: 54, weight: .58 },
+  lantern: { baseR: 14.4, childR: 7.6, hue: 166, speed: [54, 92], wobble: 24, weight: .56 },
+  helix: { baseR: 13.2, childR: 7.1, hue: 276, speed: [78, 128], wobble: 72, weight: .58 },
+  compass: { baseR: 13.6, childR: 7.3, hue: 204, speed: [68, 112], wobble: 30, weight: .58 },
+  reactor: { baseR: 14.8, childR: 7.8, hue: 96, speed: [52, 90], wobble: 28, weight: .54 },
+  fang: { baseR: 12.4, childR: 6.9, hue: 346, speed: [110, 164], wobble: 30, weight: .58 },
+  lanternFish: { baseR: 13.6, childR: 7.3, hue: 188, speed: [74, 122], wobble: 46, weight: .56 },
+  hammer: { baseR: 13.8, childR: 7.3, hue: 64, speed: [66, 106], wobble: 22, weight: .54 },
+  anvil: { baseR: 14.4, childR: 7.6, hue: 238, speed: [48, 86], wobble: 18, weight: .52 },
+  rotor: { baseR: 13.4, childR: 7.2, hue: 312, speed: [76, 124], wobble: 86, weight: .56 },
+  mask: { baseR: 14.1, childR: 7.5, hue: 128, speed: [58, 102], wobble: 34, weight: .52 },
+  claw: { baseR: 13.2, childR: 7.1, hue: 22, speed: [92, 142], wobble: 52, weight: .56 },
+  quasar: { baseR: 14.6, childR: 7.7, hue: 258, speed: [60, 104], wobble: 64, weight: .54 },
+  satellite: { baseR: 13.8, childR: 7.4, hue: 152, speed: [62, 108], wobble: 26, weight: .54 },
+  scythe: { baseR: 13, childR: 7, hue: 328, speed: [98, 150], wobble: 48, weight: .56 },
+  keyhole: { baseR: 14, childR: 7.4, hue: 82, speed: [56, 96], wobble: 20, weight: .52 },
+  vortex: { baseR: 13.6, childR: 7.3, hue: 286, speed: [82, 132], wobble: 78, weight: .54 },
+  shield: { baseR: 14.4, childR: 7.6, hue: 218, speed: [52, 90], wobble: 18, weight: .52 },
+  doubleArrow: { baseR: 13, childR: 7.1, hue: 358, speed: [102, 154], wobble: 28, weight: .56 }
 };
 const SPAWN_TYPES = Object.keys(SHAPE_DEFS).filter(type => SHAPE_DEFS[type].weight > 0);
-const SHAPE_UNLOCK_ORDER = ['cube', 'dart', 'spinner', 'triangle', 'diamond', 'hexagon', 'chevron', 'cross', 'ring', 'prism', 'octagon', 'star', 'blade', 'kite', 'hourglass', 'bolt', 'arrow', 'crown', 'needle', 'shard', 'bracket', 'spear', 'wedge', 'gate', 'trident', 'hook', 'crescent', 'bowtie', 'saucer', 'zigzag'];
+const SHAPE_UNLOCK_ORDER = ['cube', 'dart', 'spinner', 'triangle', 'diamond', 'hexagon', 'chevron', 'cross', 'ring', 'prism', 'octagon', 'star', 'blade', 'kite', 'hourglass', 'bolt', 'arrow', 'crown', 'needle', 'shard', 'bracket', 'spear', 'wedge', 'gate', 'trident', 'hook', 'crescent', 'bowtie', 'saucer', 'zigzag', 'comet', 'talon', 'lantern', 'helix', 'compass', 'reactor', 'fang', 'lanternFish', 'hammer', 'anvil', 'rotor', 'mask', 'claw', 'quasar', 'satellite', 'scythe', 'keyhole', 'vortex', 'shield', 'doubleArrow'];
 const ENEMY_TRAITS = {
   dart: { family: 'lunge', speedMul: 1.08, lunge: 1.28, damage: 1, scoreMul: 1.08 },
   needle: { family: 'lunge', speedMul: 1.16, lunge: 1.42, damage: 2, scoreMul: 1.14 },
@@ -768,18 +788,38 @@ const ENEMY_TRAITS = {
   spinner: { family: 'erratic', weave: .9, weaveRate: 7.2, scoreMul: 1.08 },
   bolt: { family: 'erratic', speedMul: 1.12, weave: 1.05, weaveRate: 8.8, damage: 1, scoreMul: 1.14 },
   zigzag: { family: 'erratic', speedMul: 1.08, weave: 1.18, weaveRate: 9.6, damage: 1, scoreMul: 1.16 },
+  helix: { family: 'erratic', speedMul: 1.08, weave: 1.14, weaveRate: 8.9, damage: 1, scoreMul: 1.16 },
+  rotor: { family: 'erratic', speedMul: 1.05, weave: 1.22, weaveRate: 10.2, damage: 1, scoreMul: 1.16 },
+  vortex: { family: 'erratic', speedMul: 1.08, weave: 1.18, weaveRate: 9.1, damage: 1, scoreMul: 1.18 },
   hook: { family: 'erratic', weave: 1, weaveRate: 6.4, damage: 1, scoreMul: 1.12 },
   shard: { family: 'erratic', speedMul: 1.06, weave: .92, weaveRate: 7.8, scoreMul: 1.1 },
+  comet: { family: 'lunge', speedMul: 1.16, lunge: 1.36, damage: 2, scoreMul: 1.16 },
+  fang: { family: 'lunge', speedMul: 1.18, lunge: 1.42, damage: 2, scoreMul: 1.18 },
+  scythe: { family: 'lunge', speedMul: 1.15, lunge: 1.32, damage: 2, scoreMul: 1.16 },
+  doubleArrow: { family: 'lunge', speedMul: 1.14, lunge: 1.34, damage: 1, scoreMul: 1.14 },
   ring: { family: 'orbit', bonusHp: 1, orbit: .86, orbitRadius: 128, damage: 1, scoreMul: 1.18 },
   gate: { family: 'orbit', bonusHp: 2, orbit: .62, orbitRadius: 146, damage: 2, scoreMul: 1.26 },
   crescent: { family: 'orbit', bonusHp: 1, orbit: .92, orbitRadius: 136, damage: 1, scoreMul: 1.2 },
   saucer: { family: 'orbit', bonusHp: 1, orbit: .74, orbitRadius: 154, scoreMul: 1.18 },
+  lanternFish: { family: 'orbit', bonusHp: 1, orbit: .88, orbitRadius: 138, damage: 1, scoreMul: 1.18 },
+  satellite: { family: 'orbit', bonusHp: 1, orbit: .78, orbitRadius: 158, scoreMul: 1.18 },
+  quasar: { family: 'orbit', bonusHp: 1, orbit: .96, orbitRadius: 132, damage: 1, scoreMul: 1.2 },
   hourglass: { family: 'split', splitR: 15, damage: 1, scoreMul: 1.16 },
   bowtie: { family: 'split', splitR: 15, damage: 1, scoreMul: 1.16 },
+  talon: { family: 'split', splitR: 15, damage: 1, scoreMul: 1.16 },
+  claw: { family: 'split', splitR: 15, damage: 1, scoreMul: 1.16 },
   crown: { family: 'elite', bonusHp: 1, damage: 2, scoreMul: 1.34 },
   trident: { family: 'elite', bonusHp: 1, damage: 3, scoreMul: 1.38 },
   prism: { family: 'elite', bonusHp: 1, scoreMul: 1.2 },
-  star: { family: 'elite', bonusHp: 1, damage: 1, scoreMul: 1.24 }
+  star: { family: 'elite', bonusHp: 1, damage: 1, scoreMul: 1.24 },
+  lantern: { family: 'elite', bonusHp: 1, scoreMul: 1.2 },
+  compass: { family: 'elite', bonusHp: 1, damage: 1, scoreMul: 1.24 },
+  reactor: { family: 'elite', bonusHp: 2, damage: 2, scoreMul: 1.32 },
+  hammer: { family: 'elite', bonusHp: 1, damage: 2, scoreMul: 1.26 },
+  anvil: { family: 'elite', bonusHp: 2, damage: 2, scoreMul: 1.32 },
+  mask: { family: 'elite', bonusHp: 1, damage: 1, scoreMul: 1.22 },
+  keyhole: { family: 'elite', bonusHp: 2, scoreMul: 1.28 },
+  shield: { family: 'elite', bonusHp: 2, damage: 1, scoreMul: 1.3 }
 };
 const dist2 = (a, b, c, d) => {
   const x = a - c;
@@ -809,7 +849,7 @@ function isBossWave(value = wave) {
 
 function bossTypeForWave(value = wave) {
   const unlocked = unlockedShapeTypes(value);
-  const preferred = ['crown', 'trident', 'star', 'prism', 'gate', 'saucer', 'hourglass', 'bolt', 'blade', 'ring']
+  const preferred = ['crown', 'trident', 'reactor', 'anvil', 'shield', 'quasar', 'compass', 'keyhole', 'star', 'prism', 'gate', 'saucer', 'hourglass', 'bolt', 'blade', 'ring']
     .filter(type => unlocked.includes(type));
   const pool = preferred.length ? preferred : unlocked;
   return pool[(Math.floor(value / BOSS_INTERVAL) - 1) % pool.length] || 'cube';
@@ -2138,6 +2178,26 @@ function localShapePoints(e, scale = 1) {
   if (e.type === 'bowtie') return [[-r * 1.24, -r * .96], [-r * .18, -r * .32], [0, -r * .06], [r * .18, -r * .32], [r * 1.24, -r * .96], [r * .72, 0], [r * 1.24, r * .96], [r * .18, r * .32], [0, r * .06], [-r * .18, r * .32], [-r * 1.24, r * .96], [-r * .72, 0]];
   if (e.type === 'saucer') return [[-r * 1.48, 0], [-r * .72, -r * .52], [r * .72, -r * .52], [r * 1.48, 0], [r * .72, r * .52], [-r * .72, r * .52]];
   if (e.type === 'zigzag') return [[-r * 1.28, -r * .92], [-r * .38, -r * .92], [-r * .78, -r * .18], [r * .2, -r * .18], [-r * .18, r * .92], [r * 1.2, r * .92], [r * .52, r * .16], [r * 1.18, r * .16], [r * .58, -r * .92], [r * 1.28, -r * .92]];
+  if (e.type === 'comet') return [[r * 1.62, 0], [r * .38, r * .48], [-r * .48, r * .82], [-r * .14, r * .22], [-r * 1.45, r * .52], [-r * .52, 0], [-r * 1.45, -r * .52], [-r * .14, -r * .22], [-r * .48, -r * .82], [r * .38, -r * .48]];
+  if (e.type === 'talon') return [[r * 1.28, -r * .86], [r * .62, -r * .18], [r * 1.12, r * .86], [r * .16, r * .42], [-r * .28, r * 1.16], [-r * .5, r * .34], [-r * 1.18, r * .12], [-r * .52, -r * .2], [-r * .22, -r * 1.12], [r * .14, -r * .38]];
+  if (e.type === 'lantern') return [[0, -r * 1.38], [r * .72, -r * .82], [r * .98, 0], [r * .68, r * .88], [0, r * 1.32], [-r * .68, r * .88], [-r * .98, 0], [-r * .72, -r * .82]];
+  if (e.type === 'helix') return [[-r * .95, -r * 1.16], [r * .16, -r * .76], [r * .92, -r * 1.1], [r * .52, -r * .14], [r * 1.08, r * .72], [-r * .04, r * .36], [-r * .96, r * 1.1], [-r * .54, r * .12], [-r * 1.1, -r * .72], [r * .02, -r * .34]];
+  if (e.type === 'compass') return [[0, -r * 1.52], [r * .28, -r * .34], [r * 1.52, 0], [r * .28, r * .34], [0, r * 1.52], [-r * .28, r * .34], [-r * 1.52, 0], [-r * .28, -r * .34]];
+  if (e.type === 'reactor') return [[0, -r * 1.34], [r * .42, -r * .42], [r * 1.34, 0], [r * .42, r * .42], [0, r * 1.34], [-r * .42, r * .42], [-r * 1.34, 0], [-r * .42, -r * .42]];
+  if (e.type === 'fang') return [[r * 1.42, 0], [r * .5, r * .32], [r * .02, r * 1.28], [-r * .34, r * .38], [-r * 1.16, r * .74], [-r * .72, 0], [-r * 1.16, -r * .74], [-r * .34, -r * .38], [r * .02, -r * 1.28], [r * .5, -r * .32]];
+  if (e.type === 'lanternFish') return [[r * 1.32, 0], [r * .66, r * .58], [-r * .36, r * .72], [-r * .86, r * 1.04], [-r * .7, r * .32], [-r * 1.36, 0], [-r * .7, -r * .32], [-r * .86, -r * 1.04], [-r * .36, -r * .72], [r * .66, -r * .58]];
+  if (e.type === 'hammer') return [[r * .44, -r * 1.18], [r * 1.2, -r * 1.18], [r * 1.2, -r * .5], [r * .38, -r * .5], [r * .38, r * 1.18], [-r * .38, r * 1.18], [-r * .38, -r * .5], [-r * 1.2, -r * .5], [-r * 1.2, -r * 1.18], [-r * .44, -r * 1.18]];
+  if (e.type === 'anvil') return [[-r * 1.36, -r * .56], [r * .84, -r * .56], [r * 1.36, -r * .18], [r * .72, r * .18], [r * .38, r * .82], [-r * .86, r * .82], [-r * .56, r * .18], [-r * 1.36, r * .18]];
+  if (e.type === 'rotor') return [[0, -r * .42], [r * .28, -r * 1.34], [r * .72, -r * .48], [r * 1.34, -r * .2], [r * .48, r * .28], [r * .2, r * 1.34], [-r * .28, r * .48], [-r * 1.34, r * .2], [-r * .48, -r * .28], [-r * .2, -r * 1.34]];
+  if (e.type === 'mask') return [[0, -r * 1.24], [r * .94, -r * .72], [r * 1.08, r * .22], [r * .48, r * 1.08], [r * .1, r * .56], [-r * .1, r * .56], [-r * .48, r * 1.08], [-r * 1.08, r * .22], [-r * .94, -r * .72]];
+  if (e.type === 'claw') return [[r * 1.18, -r * .95], [r * .78, -r * .18], [r * 1.12, r * .78], [r * .42, r * .34], [r * .22, r * 1.22], [-r * .16, r * .42], [-r * .86, r * .96], [-r * .5, r * .18], [-r * 1.22, -r * .12], [-r * .42, -r * .32], [-r * .78, -r * 1.02], [-r * .02, -r * .5]];
+  if (e.type === 'quasar') return [[0, -r * 1.4], [r * .36, -r * .34], [r * 1.4, 0], [r * .36, r * .34], [0, r * 1.4], [-r * .36, r * .34], [-r * 1.4, 0], [-r * .36, -r * .34], [-r * .72, -r * .72], [0, -r * .48], [r * .72, -r * .72], [r * .48, 0], [r * .72, r * .72], [0, r * .48], [-r * .72, r * .72], [-r * .48, 0]];
+  if (e.type === 'satellite') return [[-r * 1.38, -r * .48], [-r * .52, -r * .48], [-r * .26, -r * .9], [r * .26, -r * .9], [r * .52, -r * .48], [r * 1.38, -r * .48], [r * 1.38, r * .48], [r * .52, r * .48], [r * .26, r * .9], [-r * .26, r * .9], [-r * .52, r * .48], [-r * 1.38, r * .48]];
+  if (e.type === 'scythe') return [[r * 1.38, -r * .9], [r * .68, -r * .44], [r * .12, -r * .12], [r * 1.22, r * .82], [r * .42, r * .58], [-r * .08, r * .08], [-r * 1.22, r * .66], [-r * .58, 0], [-r * 1.22, -r * .66], [-r * .08, -r * .08]];
+  if (e.type === 'keyhole') return [[0, -r * 1.24], [r * .78, -r * .7], [r * .82, r * .02], [r * .32, r * .48], [r * .5, r * 1.16], [-r * .5, r * 1.16], [-r * .32, r * .48], [-r * .82, r * .02], [-r * .78, -r * .7]];
+  if (e.type === 'vortex') return [[r * .88, -r * 1.08], [r * 1.24, -r * .22], [r * .38, -r * .2], [r * .86, r * .72], [r * .04, r * 1.24], [-r * .2, r * .36], [-r * 1.08, r * .72], [-r * 1.18, -r * .18], [-r * .34, -r * .06], [-r * .72, -r * 1.02], [r * .02, -r * 1.26], [r * .22, -r * .38]];
+  if (e.type === 'shield') return [[0, -r * 1.35], [r * 1.04, -r * .82], [r * .96, r * .26], [r * .54, r * .96], [0, r * 1.36], [-r * .54, r * .96], [-r * .96, r * .26], [-r * 1.04, -r * .82]];
+  if (e.type === 'doubleArrow') return [[r * 1.45, 0], [r * .56, r * .82], [r * .56, r * .36], [-r * .56, r * .36], [-r * .56, r * .82], [-r * 1.45, 0], [-r * .56, -r * .82], [-r * .56, -r * .36], [r * .56, -r * .36], [r * .56, -r * .82]];
   const pts = [];
   for (let i = 0; i < 10; i++) {
     const a = i * TAU / 10;
