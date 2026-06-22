@@ -1748,19 +1748,12 @@ const Scores = {
 /* ================= how-to + level select ================= */
 function buildHowTo(){
   $('howBody').innerHTML =
-    '<p><b>Goal:</b> grab every <b>nugget</b>, then climb the revealed <b>exit ladder</b> off the top — without getting caught.</p>' +
-    '<p><b>Explore:</b> relics, cave blooms, survey maps, and lantern oil are tucked into side paths. Find them all for a <b>cavern survey</b> bonus.</p>' +
-    '<p><b>Move</b> <span class="k">←</span><span class="k">→</span> or <span class="k">A</span><span class="k">D</span> · ' +
-    '<b>climb</b> <span class="k">↑</span><span class="k">↓</span> / <span class="k">W</span><span class="k">S</span> · hang &amp; cross bars.</p>' +
-    '<p><b>Dig</b> a trap to the lower-left <span class="k">Z</span> or lower-right <span class="k">X</span> ' +
-    '(also <span class="k">,</span> <span class="k">.</span>). Holes seal shut — a guard caught inside is trapped, then lost.</p>' +
-    '<p><b>Jumpers</b> chase you and pocket gold. <b>Scouts</b> are quick; <b>masons</b> re-seal your holes.</p>' +
-    '<p><b>Pick-ups:</b> <span style="color:#ff5c33">TNT</span> blasts 3 wide with <span class="k">↓</span> + dig · ' +
-    '<span style="color:#3fd2c7">Boots</span> speed · <span style="color:#b07fff">Cloak</span> phase through guards · ' +
-    '<span style="color:#ffd23f">Magnet</span> grabs gold · <span style="color:#7fd24a">Shovel</span> instant digs.</p>' +
-    '<p><b>Lantern oil</b> briefly widens the painted light pool; maps briefly boost magnet pull. Chain nuggets fast for a <b>combo multiplier</b>.</p>' +
-    '<p><b>Boom Rush:</b> a 20-claim run that starts gentle, then adds <span class="k">Space</span>/<span class="k">Shift</span> drill dash pressure, tumbling bonus nuggets, pressure plates, steam vents, lava seams, crushers, a telegraphed drill worm lane, warned cave-in boulders, and mine-cart escape finales.</p>' +
-    '<p><b>Phone:</b> drag to move or climb; tap the ground left/right of the miner to dig that side; tap ladder tiles to climb.</p>' +
+    '<p><b>Goal:</b> collect every nugget, then escape by the ladder or mine cart.</p>' +
+    '<p><b>Move:</b> <span class="k">←</span><span class="k">→</span> run · <span class="k">↑</span><span class="k">↓</span> climb. On phone, drag where you want to go.</p>' +
+    '<p><b>Dig:</b> <span class="k">Z</span> left · <span class="k">X</span> right. Drop traps under claim-jumpers, then move before the hole seals.</p>' +
+    '<p><b>Watch out:</b> jumpers chase you, scouts are fast, masons repair holes, and carried gold must be knocked loose.</p>' +
+    '<p><b>Power-ups:</b> TNT, boots, cloak, magnet, shovel, oil, and maps give short bursts of help.</p>' +
+    '<p><b>Boom Rush:</b> drill dash with <span class="k">Space</span>/<span class="k">Shift</span>, grab the haul, and reach the cart before the cave wins.</p>' +
     '<p><span class="k">P</span> pause · <span class="k">M</span> mute · <span class="k">R</span> restart.</p>';
 }
 
