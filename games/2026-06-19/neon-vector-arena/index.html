@@ -1054,7 +1054,7 @@ function scoreRowsHtml(rows, source) {
   }
   return rows.slice(0, SCORE_LIMIT).map((raw, index) => {
     const row = normalizeScoreRow(raw, source === 'global', scoreMode);
-    const meta = row.wave || row.kills ? `<small>W${String(row.wave || 1).padStart(2, '0')} · ${row.kills} KO</small>` : '<small>RUN DATA PENDING</small>';
+    const meta = row.wave || row.kills ? `<small>W${String(row.wave || 1).padStart(2, '0')} · ${row.kills} KO</small>` : '';
     return `<div class="score-row"><span>${String(index + 1).padStart(2, '0')}</span><b>${escapeHtml(row.name || 'YOU')}${meta}</b><em>${Math.floor(row.score || 0)}</em></div>`;
   }).join('');
 }
@@ -1419,18 +1419,26 @@ function createPartner() {
   };
 }
 
+function bossHudText() {
+  const boss = enemies.find(e => e.boss);
+  if (!boss) return '';
+  return ' Boss ' + Math.ceil(clamp(boss.hp / Math.max(1, boss.maxHp), 0, 1) * 100) + '%';
+}
+
 function updateHud(force = false) {
   if (!force && running && hudTimer > 0) return;
   hudTimer = running ? .1 : 0;
   const bombText = bombs > 0 ? ' B' + bombs : ' B0';
   scoreEl.textContent = 'Shield: ' + String(Math.max(0, Math.ceil(player?.hp ?? 100))).padStart(3, '0') + ' L' + lives + bombText;
   waveEl.textContent = 'Wave ' + String(wave).padStart(2, '0');
-  const label = innerWidth < 520 ? '' : 'Anonymous ';
+  const label = innerWidth < 520 ? '' : (gameMode === 'online' ? cleanName(online.name || 'PILOT') + ' ' : 'Score ');
   const power = player?.power > 0 ? ' OD' + Math.ceil(player.power) : '';
   const mod = activeModifier && innerWidth >= 620 ? ' ' + activeModifier.label : '';
   const breath = waveBreather > 0 && innerWidth >= 520 ? ' READY' : '';
+  const boss = innerWidth >= 620 ? bossHudText() : '';
+  const ko = innerWidth >= 620 ? ' KO' + kills : '';
   const fps = innerWidth < 520 ? '' : ' ' + fpsDisplay + 'fps';
-  comboEl.textContent = label + String(Math.floor(score)).padStart(6, '0') + ' Δx' + combo + power + mod + breath + fps;
+  comboEl.textContent = label + String(Math.floor(score)).padStart(6, '0') + ' Δx' + combo + ko + boss + power + mod + breath + fps;
 }
 
 function startSolo() {
@@ -1521,6 +1529,7 @@ function spawnEnemy(initial = false, prepared = null) {
     pulse: rand(0, TAU),
     traitTimer: rand(.45, 1.7),
     traitBurst: 0,
+    bossAttackTimer: boss ? rand(1.05, 1.75) : 0,
     trail: []
   });
 }
@@ -2304,6 +2313,78 @@ function splitEnemy(e) {
   particles.push({ x: e.x, y: e.y, vx: 0, vy: 0, life: .55, max: .55, r: Math.max(118, e.r * 4.2), hue: e.hue, kind: 'ring' });
 }
 
+function launchBossShapes(e) {
+  if (!player) return;
+  const pool = unlockedShapeTypes().filter(type => type !== e.type);
+  if (!pool.length) return;
+  const count = Math.round(clamp(6 + wave * .28, 7, MOBILE_PERF ? 10 : 14));
+  const baseAngle = Math.atan2(player.y - e.y, player.x - e.x);
+  addSpark(e.x, e.y, MOBILE_PERF ? 18 : 28, e.hue + 38, 1.2);
+  particles.push({ x: e.x, y: e.y, vx: 0, vy: 0, life: .22, max: .22, r: e.r * 1.45, hue: e.hue + 32, kind: 'ring' });
+  for (let i = 0; i < count && enemies.length < MAX_ENEMIES + (MOBILE_PERF ? 18 : 34); i++) {
+    const type = pool[Math.floor(Math.random() * pool.length)];
+    const def = shapeDef(type);
+    const spread = (i - (count - 1) * .5) * (MOBILE_PERF ? .09 : .075) + rand(-.06, .06);
+    const a = baseAngle + spread;
+    const side = a + Math.PI / 2;
+    const launchSpeed = rand(180, 250) + wave * 2.2;
+    const scale = rand(.55, .82);
+    const r = def.childR * scale;
+    const x = e.x + Math.cos(a) * (e.r * .9 + r * 2) + Math.cos(side) * rand(-e.r * .22, e.r * .22);
+    const y = e.y + Math.sin(a) * (e.r * .9 + r * 2) + Math.sin(side) * rand(-e.r * .22, e.r * .22);
+    const trait = enemyTrait(type);
+    enemies.push({
+      x, y,
+      vx: Math.cos(a) * launchSpeed + e.vx * .1,
+      vy: Math.sin(a) * launchSpeed + e.vy * .1,
+      r,
+      hp: 1,
+      maxHp: 1,
+      type,
+      bossMinion: true,
+      elite: false,
+      scale,
+      sizeTier: 'tiny',
+      largeSplits: false,
+      speed: Math.min((rand(def.speed[0], def.speed[1]) + wave * 2.2) * (trait?.speedMul || 1), CHILD_SPEED_CAP),
+      rot: a,
+      spin: rand(-5.5, 5.5),
+      hue: (def.hue + rand(-14, 14) + 360) % 360,
+      pulse: rand(0, TAU),
+      traitTimer: rand(.32, 1.1),
+      traitBurst: .12,
+      trail: []
+    });
+  }
+}
+
+function addBossDeathBurst(e) {
+  const pool = unlockedShapeTypes();
+  const count = MOBILE_PERF ? 7 : 11;
+  for (let i = 0; i < count; i++) {
+    const a = i * TAU / count + rand(-.16, .16);
+    const type = pool[i % pool.length] || e.type;
+    const fake = {
+      ...e,
+      type,
+      x: e.x + Math.cos(a) * rand(e.r * .15, e.r * .72),
+      y: e.y + Math.sin(a) * rand(e.r * .15, e.r * .72),
+      r: rand(e.r * .18, e.r * .38),
+      vx: Math.cos(a) * rand(160, 340) + e.vx * .18,
+      vy: Math.sin(a) * rand(160, 340) + e.vy * .18,
+      rot: rand(0, TAU),
+      hue: e.hue + rand(-34, 46),
+      boss: false,
+      largeSplits: false
+    };
+    addVectorFragments(fake);
+  }
+  addDeathChunks(e.x, e.y, e.hue, true);
+  particles.push({ x: e.x, y: e.y, vx: 0, vy: 0, life: .78, max: .78, r: Math.max(220, e.r * 5.4), hue: e.hue, kind: 'ring' });
+  particles.push({ x: e.x, y: e.y, vx: 0, vy: 0, life: .22, max: .22, r: Math.max(180, e.r * 4.4), hue: 0, kind: 'flash' });
+  shake = Math.max(shake, 8);
+}
+
 function shouldSplitEnemy(e) {
   if (e.boss) return false;
   const trait = enemyTrait(e.type);
@@ -2544,9 +2625,16 @@ function update(dt) {
     const tx = -ny;
     const ty = nx;
     const trait = enemyTrait(e.type);
-    e.traitTimer = Math.max(0, (e.traitTimer || 0) - dt);
-    e.traitBurst = Math.max(0, (e.traitBurst || 0) - dt);
-    if (trait?.family === 'lunge' && e.traitTimer <= 0 && d < 760) {
+	    e.traitTimer = Math.max(0, (e.traitTimer || 0) - dt);
+	    e.traitBurst = Math.max(0, (e.traitBurst || 0) - dt);
+	    if (e.boss && waveBreather <= 0) {
+	      e.bossAttackTimer = Math.max(0, (e.bossAttackTimer || 0) - dt);
+	      if (e.bossAttackTimer <= 0) {
+	        launchBossShapes(e);
+	        e.bossAttackTimer = rand(1.65, 2.45) * (e.hp < e.maxHp * .45 ? .72 : 1);
+	      }
+	    }
+	    if (trait?.family === 'lunge' && e.traitTimer <= 0 && d < 760) {
       e.traitBurst = rand(.18, .28);
       e.traitTimer = rand(1.15, 2.05) * (e.elite ? .82 : 1);
       e.spin += rand(-1.2, 1.2);
@@ -2648,23 +2736,24 @@ function update(dt) {
     const e = enemies[i];
     for (let j = shots.length - 1; j >= 0; j--) {
       const s = shots[j];
-	    if (dist2(e.x, e.y, s.x, s.y) < (e.r + s.r) ** 2) {
-	        shots.splice(j, 1);
-	        blastEnemies(s.x, s.y, SHOT_BLAST_FORCE, SHOT_BLAST_RADIUS, s.vx, s.vy);
-	        addHitShards(e, s.x, s.y, s.hue);
-	        e.hp--;
-	        if (e.boss) {
-	          addBossHitEffect(e, s.x, s.y, s.hue);
-	          if (!e.lastBossHitSfx || time - e.lastBossHitSfx > .085) {
-	            sfx('bossHit');
-	            e.lastBossHitSfx = time;
-	          }
-	        } else {
-	          addSpark(s.x, s.y, 5, s.hue, .55);
-	        }
-	        addEnemyHitCallout(s.x, s.y, e.hue);
+      if (dist2(e.x, e.y, s.x, s.y) < (e.r + s.r) ** 2) {
+        shots.splice(j, 1);
+        blastEnemies(s.x, s.y, SHOT_BLAST_FORCE, SHOT_BLAST_RADIUS, s.vx, s.vy);
+        addHitShards(e, s.x, s.y, s.hue);
+        e.hp--;
+        if (e.boss) {
+          addBossHitEffect(e, s.x, s.y, s.hue);
+          if (!e.lastBossHitSfx || time - e.lastBossHitSfx > .085) {
+            sfx('bossHit');
+            e.lastBossHitSfx = time;
+          }
+        } else {
+          addSpark(s.x, s.y, 5, s.hue, .55);
+        }
+        addEnemyHitCallout(s.x, s.y, e.hue);
         if (e.hp <= 0) {
           addVectorFragments(e);
+          if (e.boss) addBossDeathBurst(e);
           enemies.splice(i, 1);
           const bigBreak = shouldSplitEnemy(e);
           if (bigBreak) splitEnemy(e);
@@ -2681,7 +2770,7 @@ function update(dt) {
             bombs = Math.min(MAX_BOMBS, bombs + 1);
             pickups.push({ x: e.x, y: e.y, r: 10, life: 7, hue: 188, type: 'bomb' });
           }
-          sfx(bigBreak ? 'boom' : 'hit');
+          sfx(e.boss || bigBreak ? 'boom' : 'hit');
           if (Math.random() < .08) {
             const roll = Math.random();
             const bomb = roll < .12 && bombs < MAX_BOMBS;
