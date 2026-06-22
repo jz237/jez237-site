@@ -2454,6 +2454,7 @@ function loadLevelData(rows){
   computeDecor();
   // intro banner
   const stats = [
+    {label: 'VEIN', value: chapterProfile().name.toUpperCase()},
     {label: 'GOLD', value: golds.length},
     {label: 'FINDS', value: discoveryTotal},
     {label: 'THREAT', value: claimThreatLabel().toUpperCase()},
@@ -2707,6 +2708,15 @@ const PAINTERLY_BACKDROPS = [
   'assets/painterly-cavern-bg-06.png',
   'assets/painterly-cavern-bg-07.png',
 ];
+const CHAPTER_PROFILES = [
+  {name: 'Lantern Vein', motif: 'lantern', tint: 'rgba(180,113,52,.17)', accent: '#ffb65c', accent2: '#3fd2c7'},
+  {name: 'Glasswater Shaft', motif: 'glass', tint: 'rgba(45,136,166,.17)', accent: '#58d8ff', accent2: '#ffd86b'},
+  {name: 'Ember Claim', motif: 'ember', tint: 'rgba(173,61,36,.18)', accent: '#ff7148', accent2: '#ffe28a'},
+  {name: 'Fern-Gold Grotto', motif: 'fern', tint: 'rgba(72,135,78,.17)', accent: '#83d86c', accent2: '#ffd23f'},
+  {name: 'Frostline Cut', motif: 'frost', tint: 'rgba(112,166,198,.18)', accent: '#b8f2ff', accent2: '#8f7cff'},
+  {name: 'Violet Hollow', motif: 'violet', tint: 'rgba(119,78,170,.17)', accent: '#b782ff', accent2: '#68f0c8'},
+  {name: 'Ironroot Deep', motif: 'iron', tint: 'rgba(126,91,65,.17)', accent: '#c89464', accent2: '#7ed4b2'},
+];
 const painterlyPlate = new Image();
 let painterlyPlateReady = false, painterlyPlateSrc = '';
 painterlyPlate.onload = () => { painterlyPlateReady = true; bg = null; if (booted) render(); };
@@ -2720,6 +2730,10 @@ function painterlyBackdropIndex(){
   if (mode === 'special') return (levelVisualChapter() + 4) % PAINTERLY_BACKDROPS.length;
   if (mode === 'campaign') return Math.min(PAINTERLY_BACKDROPS.length - 1, Math.floor(levelIndex / 2));
   return levelVisualChapter();
+}
+function chapterProfile(){
+  const idx = painterlyBackdropIndex() % CHAPTER_PROFILES.length;
+  return {...CHAPTER_PROFILES[idx], index: idx};
 }
 function selectPainterlyBackdrop(){
   const src = PAINTERLY_BACKDROPS[painterlyBackdropIndex()] || PAINTERLY_BACKDROPS[0];
@@ -2744,6 +2758,7 @@ function buildBackdrop(){
   bg = ART.cv(VIEW_W, VIEW_H);
   const x = ART.cx(bg), r = ART.rng(1234 + levelIndex * 97 + (mode === 'daily' ? 555 : 0));
   const W = VIEW_W, H = VIEW_H;
+  const chapter = chapterProfile();
   const lift = (cx2, cy, rad, col, a) => {
     const rg = x.createRadialGradient(cx2, cy, 0, cx2, cy, rad);
     rg.addColorStop(0, col); rg.addColorStop(1, 'rgba(0,0,0,0)');
@@ -2781,10 +2796,10 @@ function buildBackdrop(){
   }
   x.globalAlpha = 1;
 
-  // 3) distant cavern light (far openings glowing cold blue)
-  lift(W * 0.5, H * 0.30, H * 0.62, 'rgba(58,116,158,.5)', 1);
-  lift(W * 0.17, H * 0.24, H * 0.34, 'rgba(44,92,134,.4)', 1);
-  lift(W * 0.84, H * 0.40, H * 0.34, 'rgba(50,84,124,.34)', 1);
+  // 3) distant cavern light (far openings borrow the two-level chapter color)
+  lift(W * 0.5, H * 0.30, H * 0.62, hexA(chapter.accent, .42), 1);
+  lift(W * 0.17, H * 0.24, H * 0.34, hexA(chapter.accent2, .28), 1);
+  lift(W * 0.84, H * 0.40, H * 0.34, hexA(chapter.accent, .24), 1);
 
   // 4) waterfalls drifting through the far light
   for (let i = 0; i < 3; i++){
@@ -2852,26 +2867,30 @@ function buildBackdrop(){
   }
   x.restore();
 
-  // per-level mood tint so claims don't all look identical
-  const hues = ['rgba(60,90,150,', 'rgba(96,72,150,', 'rgba(48,116,124,', 'rgba(120,84,58,', 'rgba(72,108,90,'];
-  const h = hues[(mode === 'daily' ? 2 : levelVisualChapter()) % hues.length];
-  x.save(); x.globalCompositeOperation = 'overlay'; x.fillStyle = h + '0.16)'; x.fillRect(0, 0, W, H); x.restore();
+  // two-level chapter mood tint so claims feel like distinct mine regions
+  x.save(); x.globalCompositeOperation = 'overlay'; x.fillStyle = chapter.tint; x.fillRect(0, 0, W, H); x.restore();
 }
 
 /* ================= decorative set-dressing (deterministic per level) ================= */
 let decor = [];
 function computeDecor(){
   decor = [];
+  const chapter = chapterProfile();
   const rr = ART.rng(4242 + levelIndex * 131 + levelVisualChapter() * 503 + (mode === 'daily' ? 777 : 0));
   const isBlk = (c, r) => { const t = tileAt(c, r); return t === '#' || t === 'X' || t === 'B' || t === 'C'; };
   const occ = new Set();
   for (const g of golds) occ.add(g.c + ',' + g.r);
   for (const p of powerups) occ.add(p.c + ',' + p.r);
-  let torches = 0, plants = 0, vines = 0, lastTorchC = -9;
+  for (const t of treasures) occ.add(t.c + ',' + t.r);
+  let torches = 0, plants = 0, vines = 0, chapterProps = 0, lastTorchC = -9;
   for (let r = 0; r < ROWS; r++) for (let c = 0; c < COLS; c++){
     if (!isBlk(c, r)) continue;
     const aboveAir = !isBlk(c, r - 1) && tileAt(c, r - 1) !== 'H' && tileAt(c, r - 1) !== 'E' && tileAt(c, r - 1) !== '-';
     if (aboveAir && plants < 11 && !occ.has(c + ',' + (r - 1)) && rr() < 0.22){ decor.push({type: 'plant', c, r, k: (rr() * 3) | 0, s: rr()}); plants++; }
+    if (aboveAir && chapterProps < 8 && !occ.has(c + ',' + (r - 1)) && rr() < 0.18){
+      decor.push({type: 'chapter', c, r, motif: chapter.motif, k: (rr() * 3) | 0, s: rr()});
+      chapterProps++;
+    }
     if (!isBlk(c, r + 1) && tileAt(c, r + 1) !== 'H' && vines < 7 && rr() < 0.13){ decor.push({type: 'vine', c, r, len: 14 + rr() * 22, s: rr()}); vines++; }
     // standing brazier on a platform END (top exposed + a side open), spaced out
     if (aboveAir && torches < 5 && c - lastTorchC >= 4 && !occ.has(c + ',' + (r - 1))){
@@ -2926,11 +2945,86 @@ function drawTorch(d){
   ctx.globalAlpha = 1;
   ctx.restore();
 }
+function drawChapterProp(d){
+  const chapter = chapterProfile();
+  const bx = d.c * TILE, by = d.r * TILE + HUD_H;
+  const ax = bx + 18, top = by - 2;
+  ctx.save();
+  if (d.motif === 'glass' || d.motif === 'frost'){
+    const col = d.motif === 'frost' ? '#d9fbff' : chapter.accent;
+    ctx.globalCompositeOperation = 'lighter';
+    glow(d.c + .5, d.r - .08, d.motif === 'frost' ? 22 : 18, hexA(col, .22), 1);
+    ctx.globalCompositeOperation = 'source-over';
+    for (let i = -1; i <= 1; i++){
+      const h = 12 + ((d.k + i + 3) % 3) * 5;
+      ctx.fillStyle = i === 0 ? hexA(col, .82) : hexA(chapter.accent2, .58);
+      ctx.beginPath();
+      ctx.moveTo(ax + i * 6, top - h);
+      ctx.lineTo(ax + i * 6 + 4, top);
+      ctx.lineTo(ax + i * 6 - 4, top);
+      ctx.closePath();
+      ctx.fill();
+    }
+  } else if (d.motif === 'ember'){
+    ctx.globalCompositeOperation = 'lighter';
+    glow(d.c + .5, d.r - .02, 24, 'rgba(255,103,42,.28)', 1);
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.fillStyle = '#3a2117';
+    roundRect(bx + 9, by - 9, 18, 8, 4);
+    ctx.fill();
+    ctx.fillStyle = '#ff7148';
+    for (let i = 0; i < 4; i++) ctx.fillRect(bx + 11 + i * 4, by - 7 + ((i + d.k) % 2), 2, 2);
+  } else if (d.motif === 'fern'){
+    ctx.strokeStyle = chapter.accent;
+    ctx.lineWidth = 2;
+    for (let i = -2; i <= 2; i++){
+      ctx.beginPath();
+      ctx.moveTo(ax, top);
+      ctx.quadraticCurveTo(ax + i * 5, top - 12 - Math.abs(i) * 2, ax + i * 8, top - 18 + Math.abs(i));
+      ctx.stroke();
+    }
+    ctx.fillStyle = chapter.accent2;
+    ctx.fillRect(ax - 2, top - 12, 4, 3);
+  } else if (d.motif === 'violet'){
+    ctx.globalCompositeOperation = 'lighter';
+    glow(d.c + .5, d.r - .06, 20, hexA(chapter.accent, .24), 1);
+    ctx.globalCompositeOperation = 'source-over';
+    for (let i = -1; i <= 1; i++){
+      ctx.fillStyle = i === 0 ? chapter.accent : chapter.accent2;
+      ctx.beginPath();
+      ctx.ellipse(ax + i * 7, top - 4 - Math.abs(i) * 2, 5, 7 + (i === 0 ? 2 : 0), 0, Math.PI, 0);
+      ctx.fill();
+    }
+  } else if (d.motif === 'iron'){
+    ctx.strokeStyle = '#2a221e';
+    ctx.lineWidth = 4;
+    ctx.beginPath();
+    ctx.moveTo(bx + 8, by - 2);
+    ctx.lineTo(bx + 28, by - 16);
+    ctx.stroke();
+    ctx.strokeStyle = chapter.accent;
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    ctx.fillStyle = chapter.accent2;
+    ctx.fillRect(bx + 12, by - 7, 3, 3);
+    ctx.fillRect(bx + 23, by - 14, 3, 3);
+  } else {
+    ctx.fillStyle = '#3a2a16';
+    ctx.fillRect(ax - 2, by - 18, 4, 18);
+    ctx.fillStyle = chapter.accent;
+    ctx.fillRect(ax - 7, by - 21, 14, 4);
+    ctx.globalCompositeOperation = 'lighter';
+    glow(d.c + .5, d.r - .12, 22, hexA(chapter.accent, .28), 1);
+    ctx.globalCompositeOperation = 'source-over';
+  }
+  ctx.restore();
+}
 function drawDecor(){
   for (const d of decor){
     if (d.type === 'vine') drawVine(d);
     else if (d.type === 'plant') drawPlant(d);
     else if (d.type === 'torch') drawTorch(d);
+    else if (d.type === 'chapter') drawChapterProp(d);
   }
 }
 function topExitCell(){ let e = exitCells[0]; for (const c2 of exitCells) if (c2.r < e.r) e = c2; return e; }
@@ -4357,10 +4451,11 @@ function renderWorldFrame(includeHUD){
         roundRect(bx, chipY - 9, w, 18, 5);
         ctx.fillStyle = 'rgba(8,10,18,.74)';
         ctx.fill();
-        ctx.strokeStyle = i === 2 ? 'rgba(255,64,90,.46)' : 'rgba(255,210,63,.36)';
+        const hot = s.label === 'THREAT';
+        ctx.strokeStyle = hot ? 'rgba(255,64,90,.46)' : 'rgba(255,210,63,.36)';
         ctx.lineWidth = 1;
         ctx.stroke();
-        ctx.fillStyle = i === 2 ? '#ff8fa0' : '#ffd86b';
+        ctx.fillStyle = hot ? '#ff8fa0' : '#ffd86b';
         ctx.fillText(s.label + ' ' + s.value, bx + w / 2, chipY + 1);
         bx += w + gap;
       }
@@ -5531,6 +5626,7 @@ window.__g = {
   get hunchState(){ return routeHint ? {...routeHint} : null; },
   get wavePreview(){ return wavePreview ? {...wavePreview} : null; },
   get lastNuggetCue(){ return lastNuggetCueTargets(); },
+  get chapter(){ return chapterProfile(); },
   get tapDigMarker(){ return tapDigMarker ? {...tapDigMarker} : null; },
   tapDig(c, r, dir){
     if (!player) return null;
