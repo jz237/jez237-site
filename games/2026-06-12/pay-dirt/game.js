@@ -1907,14 +1907,16 @@ function endGame(won){
     (mode === 'daily' ? '<div>MODE<br><b>DAILY</b></div>' :
       mode === 'special' ? '<div>MODE<br><b>BOOM</b></div>' :
       '<div>CLAIM<br><b>' + (levelIndex + 1) + '</b></div>');
+  const choice = $('overChoice');
+  if (choice) choice.textContent = won ? '' : 'Continue this level with a zero score, or start over.';
   const cb = $('bContinue');
   if (cb){
     cb.style.display = continueRun ? '' : 'none';
     cb.textContent = mode === 'special'
-      ? 'Continue Boom ' + (levelIndex + 1)
+      ? 'Continue Boom ' + (levelIndex + 1) + ' · Score 0'
       : mode === 'daily'
-        ? 'Continue Daily'
-        : 'Continue Claim ' + (levelIndex + 1);
+        ? 'Continue Daily · Score 0'
+        : 'Continue Claim ' + (levelIndex + 1) + ' · Score 0';
   }
   beginEntry();
   showOnly('ovOver');
@@ -1924,7 +1926,7 @@ function continueLastLevel(){
   if (!continueRun) return startGame(mode);
   mode = continueRun.mode;
   levelIndex = continueRun.levelIndex | 0;
-  score = continueRun.score | 0;
+  score = 0;
   lives = START_LIVES;
   dailyDate = continueRun.dailyDate || null;
   if (mode === 'special') loadSpecialLevel(levelIndex);
@@ -1933,7 +1935,7 @@ function continueLastLevel(){
   continueRun = null;
   gameTime = 0;
   state = 'playing';
-  banner = {text: 'CONTINUE', sub: 'FRESH LIVES - SAME CLAIM', life: 1.9};
+  banner = {text: 'CONTINUE', sub: 'SAME CLAIM - SCORE RESET', life: 1.9};
   hideOverlays();
   AUDIO.ensure(); AUDIO.startMusic();
 }
