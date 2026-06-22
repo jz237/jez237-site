@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-22T20:00:02.111727+00:00",
+  "updatedAt": "2026-06-22T21:00:01.381447+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -11120,6 +11120,26 @@
     "https://www.techrepublic.com/article/news-reliance-jio-callagent-ai-apac-india": {
       "image": "https://assets.techrepublic.com/uploads/2026/06/RCP-mumbai-1024x576.jpg?f=jpeg",
       "checkedAt": "2026-06-22T20:00:02.111727+00:00"
+    },
+    "https://techcrunch.com/2026/06/22/the-ai-world-is-getting-loopy": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/Screenshot-2026-06-22-at-3.44.39-PM.jpg?resize=1200,676",
+      "checkedAt": "2026-06-22T21:00:01.381447+00:00"
+    },
+    "https://techcrunch.com/2026/06/22/ai-chipmaker-groq-confirms-650m-raise-re-staffs-after-nvidias-20b-not-acqui-hire-deal": {
+      "image": "https://techcrunch.com/wp-content/uploads/2018/08/safetynet.jpg?resize=1200,1058",
+      "checkedAt": "2026-06-22T21:00:01.381447+00:00"
+    },
+    "https://techcrunch.com/2026/06/22/nvidia-wants-to-cut-data-center-water-use-but-thats-not-the-same-as-fixing-ais-water-problem": {
+      "image": "https://techcrunch.com/wp-content/uploads/2024/12/GettyImages-155376474.jpeg?resize=1200,800",
+      "checkedAt": "2026-06-22T21:00:01.381447+00:00"
+    },
+    "http://www.bbc.co.uk/programmes/w3ct8jsj": {
+      "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
+      "checkedAt": "2026-06-22T21:00:01.381447+00:00"
+    },
+    "https://www.theverge.com/report/953888/ai-virtual-staging-real-estate-apartment-listings": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/268589_Vitual_staging_AParkin.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-06-22T21:00:01.381447+00:00"
     }
   }
 }
