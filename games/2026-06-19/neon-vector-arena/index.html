@@ -198,6 +198,15 @@
     gap: 8px;
     align-items: center;
   }
+  .score-prompt {
+    margin: 0 0 9px;
+    color: #ffef75;
+    font-size: 12px;
+    font-weight: 950;
+    letter-spacing: .1em;
+    text-align: left;
+    text-transform: uppercase;
+  }
   .score-board {
     display: grid;
     gap: 6px;
@@ -286,6 +295,7 @@
     .menu-actions { grid-template-columns: 1fr; }
     .control-mode { grid-template-columns: 1fr; }
     .mini-grid { grid-template-columns: 1fr; }
+    .score-prompt { text-align: center; }
   }
   @media (hover: none), (max-width: 900px) {
     #fullscreenBtn { display: block; }
@@ -380,6 +390,7 @@
       <button id="dualMode" class="secondary" type="button">Dual Stick</button>
     </div>
     <div class="panel-section" id="scoreSubmit">
+      <div class="score-prompt">Enter initials for the leaderboard</div>
       <div class="mini-grid">
         <input id="initials" maxlength="3" placeholder="AAA" inputmode="text" autocomplete="nickname">
         <button id="submitScore" class="secondary">Submit</button>
@@ -408,7 +419,7 @@
     <p class="fine" id="overlayFine">Dual Stick: left side flies, right side aims and fires. Desktop: WASD plus hold mouse to aim.</p>
   </div>
 </div>
-<div class="version">v4.5</div>
+<div class="version">v4.6</div>
 
 <script>
 'use strict';
@@ -681,9 +692,9 @@ function setPanel(section = 'menu') {
     overlayFine.textContent = 'Press P, Space, or Enter to resume.';
     startBtn.textContent = 'Resume';
   } else if (section === 'over') {
-    overlayTitle.innerHTML = 'VECTOR<br>OVER';
+    overlayTitle.innerHTML = 'ENTER<br>INITIALS';
     overlaySub.textContent = `Score ${Math.floor(score)} · Wave ${String(wave).padStart(2, '0')} · ${kills} shapes destroyed · Best Δx${bestCombo} · ${modifiersCleared} mods cleared · ${bombsUsed} bomb${bombsUsed === 1 ? '' : 's'} used.`;
-    overlayFine.textContent = 'Submit initials for the local board, or restart instantly.';
+    overlayFine.textContent = 'Submit to save your score, or restart solo.';
     startBtn.textContent = 'Restart Solo';
     initialsInput.value = cleanInitials(localStorage.getItem(NAME_KEY) || initialsInput.value || 'YOU');
   } else if (section === 'scores') {
@@ -766,6 +777,12 @@ function showOverlay(section = 'menu') {
   setPanel(section);
   overlay.style.display = '';
   overlay.classList.remove('hidden');
+  if (section === 'over') {
+    requestAnimationFrame(() => {
+      initialsInput.focus({ preventScroll: true });
+      initialsInput.select();
+    });
+  }
 }
 
 function hideOverlay() {
