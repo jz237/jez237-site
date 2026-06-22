@@ -2,6 +2,7 @@
   const state = {
     issue: null,
     issues: [],
+    lightboxReturnFocus: null,
   };
 
   const els = {
@@ -120,6 +121,18 @@
     `;
   }
 
+  function pictureDeskVisual(image) {
+    if (!image || !image.src) return "";
+    const alt = image.alt || image.caption || "Computer Chronicle newspaper visual";
+    return `
+      <figure class="article-visual picture-desk-visual">
+        <button class="picture-desk-image-button" type="button" data-open-picture-desk-image data-image-src="${escapeHtml(image.src)}" data-image-alt="${escapeHtml(alt)}" aria-label="Open picture desk visual full screen">
+          <img src="${escapeHtml(image.src)}" alt="${escapeHtml(alt)}" loading="lazy">
+        </button>
+      </figure>
+    `;
+  }
+
   function chrome(issue, key, field, fallback) {
     return (issue && issue.sectionChrome && issue.sectionChrome[key] && issue.sectionChrome[key][field]) || fallback;
   }
@@ -180,10 +193,11 @@
     }
   }
 
-  async function openHeroLightbox() {
-    if (!els.heroLightbox || !els.heroImage || !els.lightboxImage || !els.heroImage.src) return;
-    els.lightboxImage.src = els.heroImage.src;
-    els.lightboxImage.alt = els.heroImage.alt || "Computer Chronicle newspaper visual";
+  async function openImageLightbox(src, alt, returnFocus) {
+    if (!els.heroLightbox || !els.lightboxImage || !src) return;
+    state.lightboxReturnFocus = returnFocus || null;
+    els.lightboxImage.src = src;
+    els.lightboxImage.alt = alt || "Computer Chronicle newspaper visual";
     els.heroLightbox.setAttribute("aria-hidden", "false");
     document.body.style.overflow = "hidden";
     if (els.closeHeroImage) els.closeHeroImage.focus({ preventScroll: true });
@@ -197,6 +211,15 @@
     }
   }
 
+  async function openHeroLightbox() {
+    if (!els.heroImage || !els.heroImage.src) return;
+    await openImageLightbox(
+      els.heroImage.src,
+      els.heroImage.alt || "Computer Chronicle newspaper visual",
+      els.openHeroImage
+    );
+  }
+
   async function closeHeroLightbox() {
     if (!els.heroLightbox) return;
     els.heroLightbox.setAttribute("aria-hidden", "true");
@@ -208,7 +231,8 @@
         // Ignore fullscreen exit failures; hiding the overlay is enough.
       }
     }
-    if (els.openHeroImage) els.openHeroImage.focus({ preventScroll: true });
+    if (state.lightboxReturnFocus) state.lightboxReturnFocus.focus({ preventScroll: true });
+    state.lightboxReturnFocus = null;
   }
 
   function applyLayoutPlan(issue) {
@@ -463,7 +487,7 @@
     if (els.pictureDesk) {
       els.pictureDesk.innerHTML = pictureDeskItems.map((item) => `
         <article class="picture-desk-item">
-          ${articleVisual(item.image || item)}
+          ${pictureDeskVisual(item.image || item)}
           <div class="picture-desk-copy">
             <h3>${escapeHtml(item.title || item.caption || "Picture")}</h3>
             ${item.note ? `<p>${escapeHtml(item.note)}</p>` : ""}
@@ -730,6 +754,14 @@
 
   if (els.openHeroImage) {
     els.openHeroImage.addEventListener("click", openHeroLightbox);
+  }
+
+  if (els.pictureDesk) {
+    els.pictureDesk.addEventListener("click", (event) => {
+      const opener = event.target.closest("[data-open-picture-desk-image]");
+      if (!opener) return;
+      openImageLightbox(opener.dataset.imageSrc, opener.dataset.imageAlt, opener);
+    });
   }
 
   if (els.closeHeroImage) {
