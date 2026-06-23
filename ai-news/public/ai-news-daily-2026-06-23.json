@@ -1,7 +1,24 @@
 {
   "date": "2026-06-23",
-  "updatedAt": "2026-06-23T20:00:01.900277+00:00",
+  "updatedAt": "2026-06-23T20:20:41.258411+00:00",
   "items": [
+    {
+      "title": "Anthropic launches Claude Tag, an always-on AI teammate that lives in your Slack channels",
+      "url": "https://thenextweb.com/news/anthropic-claude-tag-slack-always-on-ai-teammate",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Anthropic is launching Claude Tag in research preview, an “always-on Claude” that lives inside Slack and acts as a persistent AI teammate. The feature lets users tag @Claude to get insights in conversations and assign tasks. It is available to Claude Enterprise and Claude Team customers starting today. Claude Tag is an evolution of Anthropic’s [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/anthropic-claude-tag-slack-always-on-ai-teammate.avif",
+      "published": "2026-06-23T19:41:18+00:00",
+      "firstSeen": "2026-06-23T20:20:41.258411+00:00",
+      "lastSeen": "2026-06-23T20:20:41.258411+00:00",
+      "model_release": true,
+      "editorial_allow": true,
+      "editorial_reason": "model_release",
+      "score": 22.6301
+    },
     {
       "title": "OpenAI launches new initiative to help find and patch open source bugs",
       "url": "https://techcrunch.com/2026/06/22/openai-launches-new-initiative-to-help-find-and-patch-open-source-bugs",
@@ -13,11 +30,11 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/09/GettyImages-2214107176.jpg?resize=1200%2C800",
       "published": "2026-06-23T00:11:31+00:00",
       "firstSeen": "2026-06-23T00:18:23.130078+00:00",
-      "lastSeen": "2026-06-23T20:00:01.900277+00:00",
+      "lastSeen": "2026-06-23T20:20:41.258411+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 15.6245
+      "score": 15.6185
     },
     {
       "title": "How GPT-5 helped immunologist Derya Unutmaz solve a 3-year-old mystery",
@@ -30,11 +47,11 @@
       "image": "https://images.ctfassets.net/kftzwdyauwt9/2qNRrOyIX7qjpdePUIObdS/9307a1d928c8b0167cd85e22b39c5132/derya_16x9.png?w=1600&amp%3Bh=900&amp%3Bfit=fill",
       "published": "2026-06-23T17:00:00+00:00",
       "firstSeen": "2026-06-23T18:00:01.255007+00:00",
-      "lastSeen": "2026-06-23T20:00:01.900277+00:00",
+      "lastSeen": "2026-06-23T20:20:41.258411+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 15.112
+      "score": 15.1024
     },
     {
       "title": "Meta launches cheaper smart glasses without Ray-Ban",
@@ -47,11 +64,11 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/MetaGlasses_1.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=8.55%2C24.971192772515%2C82.25546875%2C66.205436991061&amp%3Bw=1200",
       "published": "2026-06-23T13:00:00+00:00",
       "firstSeen": "2026-06-23T14:00:01.430441+00:00",
-      "lastSeen": "2026-06-23T20:00:01.900277+00:00",
+      "lastSeen": "2026-06-23T20:20:41.258411+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 12.2656
+      "score": 12.257
     },
     {
       "title": "Meta launches its own smart glasses brand at $299, breaking from the Ray-Ban name",
@@ -68,7 +85,7 @@
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 12.1189
+      "score": 12.1097
     },
     {
       "title": "Micron and Anthropic sign a multi-year AI memory supply deal",
@@ -84,7 +101,7 @@
       "lastSeen": "2026-06-23T11:00:01.528433+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.2388
+      "score": 11.2313
     },
     {
       "title": "Anthropic’s Claude Tag is learning your company, one Slack message at a time",
@@ -97,10 +114,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/Claude-Tag.png?resize=1200%2C687",
       "published": "2026-06-23T17:00:00+00:00",
       "firstSeen": "2026-06-23T18:00:01.255007+00:00",
-      "lastSeen": "2026-06-23T20:00:01.900277+00:00",
+      "lastSeen": "2026-06-23T20:20:41.258411+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.202
+      "score": 11.1924
     },
     {
       "title": "Claude’s latest wobble lands in a worse week",
@@ -116,7 +133,7 @@
       "lastSeen": "2026-06-23T18:00:01.255007+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.7
+      "score": 10.691
     },
     {
       "title": "OPFS + Pyodide test harness",
@@ -129,10 +146,10 @@
       "image": "",
       "published": "2026-06-23T18:58:54+00:00",
       "firstSeen": "2026-06-23T20:00:01.900277+00:00",
-      "lastSeen": "2026-06-23T20:00:01.900277+00:00",
+      "lastSeen": "2026-06-23T20:20:41.258411+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.7593
+      "score": 8.7491
     },
     {
       "title": "Introducing Claude Tag",
@@ -145,10 +162,10 @@
       "image": "https://cdn.sanity.io/images/4zrzovbb/website/b9ba85fd4d8beaf4efe04a4cf6cec14761e52c78-2400x1260.jpg",
       "published": "2026-06-23T00:00:00+00:00",
       "firstSeen": "2026-06-23T18:00:01.255007+00:00",
-      "lastSeen": "2026-06-23T20:00:01.900277+00:00",
+      "lastSeen": "2026-06-23T20:20:41.258411+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.0311
+      "score": 8.0251
     },
     {
       "title": "Build real agentic apps using CUGA: two dozen working examples on a lightweight harness",
@@ -161,10 +178,10 @@
       "image": "https://cdn-uploads.huggingface.co/production/uploads/649d9ad1500fd8d51a675a93/eZoT1b8vHDMEgMVbf2J0f.png",
       "published": "2026-06-23T12:51:55+00:00",
       "firstSeen": "2026-06-23T14:00:01.430441+00:00",
-      "lastSeen": "2026-06-23T20:00:01.900277+00:00",
+      "lastSeen": "2026-06-23T20:20:41.258411+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.0322
+      "score": 6.0236
     },
     {
       "title": "IBM joins OpenAI’s cyber program to bring frontier AI into enterprise security",
@@ -180,23 +197,7 @@
       "lastSeen": "2026-06-23T11:00:01.528433+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.9341
-    },
-    {
-      "title": "NVIDIA Brings Trusted, 24/7 AI Agents to Telecom Operations",
-      "url": "https://blogs.nvidia.com/blog/telecom-ai-agents-dtw-ignite-2026",
-      "source": "NVIDIA Blog",
-      "sourceUrl": "https://blogs.nvidia.com/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Telecom operators have seen remarkable returns from using generative AI to automate network management, customer care and back-office operations. Most of that impact has been task‑based: automation that speeds up predetermined steps while people manually correlate insights and direct next steps. Automation is no longer the finish line — it’s the launchpad to autonomy.  The [&#8230;]",
-      "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/telco-tm-forum-1920x1080-1.jpg",
-      "published": "2026-06-23T06:00:09+00:00",
-      "firstSeen": "2026-06-23T07:00:01.672057+00:00",
-      "lastSeen": "2026-06-23T20:00:01.900277+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 5.3356
+      "score": 5.9266
     }
   ],
   "errors": [

@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-23T20:00:01.900277+00:00",
+  "updatedAt": "2026-06-23T20:20:41.258411+00:00",
   "items": [
     {
       "title": "Atkia Mahila, Avinash Maurya, M. Mustafa Rafique, Bogdan Nicolae",
@@ -10,12 +10,45 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-23T20:00:11.267547+00:00",
+      "published": "2026-06-23T20:20:45.497113+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-23T20:00:01.900277+00:00",
+      "lastSeen": "2026-06-23T20:20:41.258411+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
+    },
+    {
+      "title": "Anthropic launches Claude Tag, an always-on AI teammate that lives in your Slack channels",
+      "url": "https://thenextweb.com/news/anthropic-claude-tag-slack-always-on-ai-teammate",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Anthropic is launching Claude Tag in research preview, an “always-on Claude” that lives inside Slack and acts as a persistent AI teammate. The feature lets users tag @Claude to get insights in conversations and assign tasks. It is available to Claude Enterprise and Claude Team customers starting today. Claude Tag is an evolution of Anthropic’s [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/anthropic-claude-tag-slack-always-on-ai-teammate.avif",
+      "published": "2026-06-23T19:41:18+00:00",
+      "firstSeen": "2026-06-23T20:20:41.258411+00:00",
+      "lastSeen": "2026-06-23T20:20:41.258411+00:00",
+      "model_release": true,
+      "editorial_allow": true,
+      "editorial_reason": "model_release",
+      "score": 22.6301
+    },
+    {
+      "title": "A fake AI agent skill passed every security scanner and reportedly reached 26,000 agents",
+      "url": "https://thenextweb.com/news/fake-ai-agent-skill-security-scanners-bypassed-26000-agents",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Security firm AIR built a fake AI agent skill, pushed it through a popular skill marketplace and promoted it with an Instagram ad, and says it reached roughly 26,000 agents, including some on corporate accounts. Every skill security scanner the firm tested it against marked it safe. The payload was harmless by design, collecting only [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/fake-ai-agent-skill-security-scanners-bypassed-26000-agents.avif",
+      "published": "2026-06-23T19:09:25+00:00",
+      "firstSeen": "2026-06-23T20:20:41.258411+00:00",
+      "lastSeen": "2026-06-23T20:20:41.258411+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.8143
     },
     {
       "title": "OPFS + Pyodide test harness",
@@ -28,10 +61,10 @@
       "image": "",
       "published": "2026-06-23T18:58:54+00:00",
       "firstSeen": "2026-06-23T20:00:01.900277+00:00",
-      "lastSeen": "2026-06-23T20:00:01.900277+00:00",
+      "lastSeen": "2026-06-23T20:20:41.258411+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.7593
+      "score": 8.7491
     },
     {
       "title": "Meta’s new prediction market app Arena could bring betting to 3 billion users",
@@ -44,10 +77,10 @@
       "image": "https://media.thenextweb.com/2026/06/meta-prediction-market-arena-app-zuckerberg.avif",
       "published": "2026-06-23T18:24:11+00:00",
       "firstSeen": "2026-06-23T20:00:01.900277+00:00",
-      "lastSeen": "2026-06-23T20:00:01.900277+00:00",
+      "lastSeen": "2026-06-23T20:20:41.258411+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2023
+      "score": 3.1922
     },
     {
       "title": "The Brexit bill comes due: ten years, seven prime ministers, and an economy 6% smaller than it should be",
@@ -60,10 +93,10 @@
       "image": "https://media.thenextweb.com/2026/06/brexit-ten-years-uk-economy-seven-prime-ministers.avif",
       "published": "2026-06-23T18:11:48+00:00",
       "firstSeen": "2026-06-23T20:00:01.900277+00:00",
-      "lastSeen": "2026-06-23T20:00:01.900277+00:00",
+      "lastSeen": "2026-06-23T20:20:41.258411+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0962
+      "score": 2.0863
     },
     {
       "title": "SpaceX draws $89 billion in demand for its debut bond sale, one of the largest US offerings this year",
@@ -76,10 +109,10 @@
       "image": "https://media.thenextweb.com/2026/06/spacex-89-billion-demand-debut-bond-sale.avif",
       "published": "2026-06-23T17:58:18+00:00",
       "firstSeen": "2026-06-23T18:09:57.800266+00:00",
-      "lastSeen": "2026-06-23T20:00:01.900277+00:00",
+      "lastSeen": "2026-06-23T20:20:41.258411+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7897
+      "score": 2.7798
     },
     {
       "title": "Oracle cut 21,000 jobs this year and its SEC filing explicitly blames AI",
@@ -92,10 +125,10 @@
       "image": "https://media.thenextweb.com/2026/06/oracle-21000-layoffs-ai-data-centres.avif",
       "published": "2026-06-23T17:47:40+00:00",
       "firstSeen": "2026-06-23T18:09:57.800266+00:00",
-      "lastSeen": "2026-06-23T20:00:01.900277+00:00",
+      "lastSeen": "2026-06-23T20:20:41.258411+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0846
+      "score": 2.0748
     },
     {
       "title": "Google is simultaneously the most dominant and most vulnerable it has ever been",
@@ -108,10 +141,10 @@
       "image": "https://media.thenextweb.com/2026/06/google-dominance-cracking-ai-era.avif",
       "published": "2026-06-23T17:36:12+00:00",
       "firstSeen": "2026-06-23T18:09:57.800266+00:00",
-      "lastSeen": "2026-06-23T20:00:01.900277+00:00",
+      "lastSeen": "2026-06-23T20:20:41.258411+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.4791
+      "score": 3.4693
     },
     {
       "title": "Stark Defence raises €500M led by Sequoia and Founders Fund at a valuation above €3.5 billion",
@@ -124,10 +157,10 @@
       "image": "https://media.thenextweb.com/2026/06/stark-defence-500-million-sequoia-founders-fund-3-5-billion-valuation.avif",
       "published": "2026-06-23T17:25:54+00:00",
       "firstSeen": "2026-06-23T18:09:57.800266+00:00",
-      "lastSeen": "2026-06-23T20:00:01.900277+00:00",
+      "lastSeen": "2026-06-23T20:20:41.258411+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7742
+      "score": 2.7645
     },
     {
       "title": "Europe’s biggest tech CEOs have formed a standing lobby group with a direct line to von der Leyen",
@@ -140,10 +173,10 @@
       "image": "https://media.thenextweb.com/2026/06/eu-tech-creators-ceos-deregulation-policy.avif",
       "published": "2026-06-23T17:22:12+00:00",
       "firstSeen": "2026-06-23T18:09:57.800266+00:00",
-      "lastSeen": "2026-06-23T20:00:01.900277+00:00",
+      "lastSeen": "2026-06-23T20:20:41.258411+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7725
+      "score": 2.7628
     },
     {
       "title": "How GPT-5 helped immunologist Derya Unutmaz solve a 3-year-old mystery",
@@ -156,11 +189,11 @@
       "image": "https://images.ctfassets.net/kftzwdyauwt9/2qNRrOyIX7qjpdePUIObdS/9307a1d928c8b0167cd85e22b39c5132/derya_16x9.png?w=1600&amp%3Bh=900&amp%3Bfit=fill",
       "published": "2026-06-23T17:00:00+00:00",
       "firstSeen": "2026-06-23T18:00:01.255007+00:00",
-      "lastSeen": "2026-06-23T20:00:01.900277+00:00",
+      "lastSeen": "2026-06-23T20:20:41.258411+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 15.112
+      "score": 15.1024
     },
     {
       "title": "Anthropic’s Claude Tag is learning your company, one Slack message at a time",
@@ -173,10 +206,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/Claude-Tag.png?resize=1200%2C687",
       "published": "2026-06-23T17:00:00+00:00",
       "firstSeen": "2026-06-23T18:00:01.255007+00:00",
-      "lastSeen": "2026-06-23T20:00:01.900277+00:00",
+      "lastSeen": "2026-06-23T20:20:41.258411+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.202
+      "score": 11.1924
     },
     {
       "title": "Why corporate AI super PACs spent $27 million on a local election",
@@ -189,10 +222,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/gettyimages-2280753489.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.755291928874%2C100%2C78.489416142251&amp%3Bw=1200",
       "published": "2026-06-23T17:00:00+00:00",
       "firstSeen": "2026-06-23T18:00:01.255007+00:00",
-      "lastSeen": "2026-06-23T20:00:01.900277+00:00",
+      "lastSeen": "2026-06-23T20:20:41.258411+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.272
+      "score": 2.2624
     },
     {
       "title": "South Korea’s chip worker bonuses are so large the central bank is treating them as an inflation risk",
@@ -205,10 +238,10 @@
       "image": "https://media.thenextweb.com/2026/06/south-korea-chip-bonuses-inflation-risk.avif",
       "published": "2026-06-23T16:50:03+00:00",
       "firstSeen": "2026-06-23T18:00:01.255007+00:00",
-      "lastSeen": "2026-06-23T20:00:01.900277+00:00",
+      "lastSeen": "2026-06-23T20:20:41.258411+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1574
+      "score": 3.1478
     },
     {
       "title": "Honda signs multiyear solid-state battery deal with QuantumScape after scrapping its EV lineup",
@@ -224,7 +257,7 @@
       "lastSeen": "2026-06-23T20:00:01.900277+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.5465
+      "score": 4.537
     },
     {
       "title": "LastPass says hackers stole customer data through a supply chain breach at Klue",
@@ -240,7 +273,7 @@
       "lastSeen": "2026-06-23T20:00:01.900277+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.036
+      "score": 2.0266
     },
     {
       "title": "CryptoProcessing’s MLRO on why banking access is still crypto’s biggest challenge",
@@ -256,7 +289,7 @@
       "lastSeen": "2026-06-23T19:00:02.117216+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0342
+      "score": 2.0248
     },
     {
       "title": "Something&#8217;s off with Midjourney’s pivot to body scanners",
@@ -269,10 +302,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/ultrasound_phantom_segmentation-b254a71d083eb5c9.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=28.441715022566%2C0%2C70.316569954868%2C100",
       "published": "2026-06-23T15:56:35+00:00",
       "firstSeen": "2026-06-23T16:00:01.309560+00:00",
-      "lastSeen": "2026-06-23T20:00:01.900277+00:00",
+      "lastSeen": "2026-06-23T20:20:41.258411+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2428
+      "score": 2.2334
     },
     {
       "title": "HaloBraid raises $7M to build the first robotic braiding assistant for hair salons",
@@ -288,7 +321,7 @@
       "lastSeen": "2026-06-23T19:00:02.117216+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1274
+      "score": 3.1181
     },
     {
       "title": "Oracle Cuts 21,000 Jobs as It Rebuilds Around AI",
@@ -301,10 +334,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/06/larryellison.jpg?f=jpeg",
       "published": "2026-06-23T15:42:34+00:00",
       "firstSeen": "2026-06-23T18:00:01.255007+00:00",
-      "lastSeen": "2026-06-23T20:00:01.900277+00:00",
+      "lastSeen": "2026-06-23T20:20:41.258411+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1264
+      "score": 3.1171
     },
     {
       "title": "Apple’s iOS 27 Beta 2: New Siri, RCS, and Wallet Changes Arrive",
@@ -317,10 +350,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/06/hero-vx-ios_2x.jpg?f=jpeg",
       "published": "2026-06-23T15:37:50+00:00",
       "firstSeen": "2026-06-23T18:00:01.255007+00:00",
-      "lastSeen": "2026-06-23T20:00:01.900277+00:00",
+      "lastSeen": "2026-06-23T20:20:41.258411+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.8243
+      "score": 3.815
     },
     {
       "title": "Meta launches its own smart glasses brand at $299, breaking from the Ray-Ban name",
@@ -337,7 +370,7 @@
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 12.1189
+      "score": 12.1097
     },
     {
       "title": "The Fitbit Air takes a smarter approach to the AI health dumpster fire",
@@ -350,10 +383,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/268538_Fitbit_Air_AKrales_0012.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-23T15:00:00+00:00",
       "firstSeen": "2026-06-23T16:00:01.309560+00:00",
-      "lastSeen": "2026-06-23T20:00:01.900277+00:00",
+      "lastSeen": "2026-06-23T20:20:41.258411+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3173
+      "score": 3.3082
     },
     {
       "title": "The algorithm has a nose now, and perfume is better for it",
@@ -369,7 +402,7 @@
       "lastSeen": "2026-06-23T18:00:01.255007+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1063
+      "score": 3.0972
     },
     {
       "title": "Claude’s latest wobble lands in a worse week",
@@ -385,7 +418,7 @@
       "lastSeen": "2026-06-23T18:00:01.255007+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.7
+      "score": 10.691
     },
     {
       "title": "Luminvera bets on immersive software for robotics",
@@ -401,7 +434,7 @@
       "lastSeen": "2026-06-23T18:00:01.255007+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9888
+      "score": 1.9798
     },
     {
       "title": "EU escalates its Meta probe over addictive design for kids",
@@ -417,7 +450,7 @@
       "lastSeen": "2026-06-23T18:00:01.255007+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.987
+      "score": 1.9781
     },
     {
       "title": "SpaceX lands $6.3bn compute deal with Reflection AI",
@@ -433,7 +466,7 @@
       "lastSeen": "2026-06-23T16:05:53.770293+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9812
+      "score": 1.9723
     },
     {
       "title": "4 days left to save up to $190 on TechCrunch Founder Summit 2026",
@@ -446,10 +479,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/01/TC-All-Stage-2025-Breakout-QA.jpg?resize=1200%2C800",
       "published": "2026-06-23T14:00:00+00:00",
       "firstSeen": "2026-06-23T16:00:01.309560+00:00",
-      "lastSeen": "2026-06-23T20:00:01.900277+00:00",
+      "lastSeen": "2026-06-23T20:20:41.258411+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1211
+      "score": 2.1123
     },
     {
       "title": "The cybersecurity industry built a $200B business selling you problems. Nobody got paid to fix them.",
@@ -465,7 +498,7 @@
       "lastSeen": "2026-06-23T16:05:53.770293+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9808
+      "score": 1.9719
     },
     {
       "title": "Astral Systems raises £23M to make cancer isotopes by fusion",
@@ -481,7 +514,7 @@
       "lastSeen": "2026-06-23T16:05:53.770293+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9682
+      "score": 1.9594
     },
     {
       "title": "Sony’s AI Camera Assistant is exactly as bad as it looks",
@@ -494,10 +527,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/sony-xperia-1-viii-ai-camera-assistant-samples.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.741906587151%2C100%2C78.516186825698&amp%3Bw=1200",
       "published": "2026-06-23T13:25:42+00:00",
       "firstSeen": "2026-06-23T14:00:01.430441+00:00",
-      "lastSeen": "2026-06-23T20:00:01.900277+00:00",
+      "lastSeen": "2026-06-23T20:20:41.258411+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2764
+      "score": 3.2677
     },
     {
       "title": "Groq’s $650M raise: rebuilding after the Nvidia deal",
@@ -513,7 +546,7 @@
       "lastSeen": "2026-06-23T16:00:01.309560+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.5583
+      "score": 2.5496
     },
     {
       "title": "How Businesses Are Building Specialized AI They Can Trust",
@@ -526,10 +559,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/agentic-ai-agent-toolkit-kv-r3b-1920x1080-2.png",
       "published": "2026-06-23T13:00:07+00:00",
       "firstSeen": "2026-06-23T14:00:01.430441+00:00",
-      "lastSeen": "2026-06-23T20:00:01.900277+00:00",
+      "lastSeen": "2026-06-23T20:20:41.258411+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.7957
+      "score": 3.787
     },
     {
       "title": "Meta launches cheaper smart glasses without Ray-Ban",
@@ -542,11 +575,11 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/MetaGlasses_1.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=8.55%2C24.971192772515%2C82.25546875%2C66.205436991061&amp%3Bw=1200",
       "published": "2026-06-23T13:00:00+00:00",
       "firstSeen": "2026-06-23T14:00:01.430441+00:00",
-      "lastSeen": "2026-06-23T20:00:01.900277+00:00",
+      "lastSeen": "2026-06-23T20:20:41.258411+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 12.2656
+      "score": 12.257
     },
     {
       "title": "Fika Jobs raises $4M to build a video-first hiring platform where AI agents interview candidates",
@@ -559,10 +592,26 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/Torleif_Svensson-FikaJobsAI.jpeg?w=1200",
       "published": "2026-06-23T13:00:00+00:00",
       "firstSeen": "2026-06-23T14:00:01.430441+00:00",
-      "lastSeen": "2026-06-23T20:00:01.900277+00:00",
+      "lastSeen": "2026-06-23T20:20:41.258411+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.7956
+      "score": 4.787
+    },
+    {
+      "title": "Helping build shared standards for advanced AI",
+      "url": "https://openai.com/index/helping-build-shared-standards-for-advanced-ai",
+      "source": "OpenAI News",
+      "sourceUrl": "https://openai.com/news/rss.xml",
+      "sourceWeight": 1.0,
+      "category": "AI",
+      "summary": "OpenAI helps build shared standards for advanced AI, supporting evaluation frameworks, safety practices, and global cooperation through the Appia Foundation.",
+      "image": "",
+      "published": "2026-06-23T13:00:00+00:00",
+      "firstSeen": "2026-06-23T20:20:41.258411+00:00",
+      "lastSeen": "2026-06-23T20:20:41.258411+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "framework_or_plumbing",
+      "score": 2.647
     },
     {
       "title": "Nearfield Instruments raises a record $380M chip round",
@@ -578,7 +627,7 @@
       "lastSeen": "2026-06-23T16:00:01.309560+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9526
+      "score": 1.944
     },
     {
       "title": "Build real agentic apps using CUGA: two dozen working examples on a lightweight harness",
@@ -591,58 +640,10 @@
       "image": "https://cdn-uploads.huggingface.co/production/uploads/649d9ad1500fd8d51a675a93/eZoT1b8vHDMEgMVbf2J0f.png",
       "published": "2026-06-23T12:51:55+00:00",
       "firstSeen": "2026-06-23T14:00:01.430441+00:00",
-      "lastSeen": "2026-06-23T20:00:01.900277+00:00",
+      "lastSeen": "2026-06-23T20:20:41.258411+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.0322
-    },
-    {
-      "title": "Qualcomm nears $4bn Modular deal to rival Nvidia",
-      "url": "https://thenextweb.com/news/qualcomm-modular-deal-4bn",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Qualcomm is closing in on a deal to buy AI-software startup Modular for about $4bn. The Qualcomm Modular deal would hand the chipmaker fresh ammunition in its fight to rival Nvidia. Qualcomm has entered advanced talks to acquire Modular, according to Bloomberg. The deal would value the AI-infrastructure software company at roughly $4bn. An announcement [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/04/Qualcomm-President-and-CEO-Cristiano-Amon.avif",
-      "published": "2026-06-23T12:40:07+00:00",
-      "firstSeen": "2026-06-23T14:00:01.430441+00:00",
-      "lastSeen": "2026-06-23T16:00:01.309560+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.9473
-    },
-    {
-      "title": "MGX raises a $50bn AI fund and is already spending it",
-      "url": "https://thenextweb.com/news/mgx-ai-fund-50bn-abu-dhabi",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Abu Dhabi’s MGX AI fund has raised close to $50bn. For the first time, the emirate leaned on outside investors to do it, and the money is already going out the door. MGX is the Abu Dhabi investment firm built for the AI era. It has pulled in nearly $50bn for a single fund, according [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/abu-dhabi.avif",
-      "published": "2026-06-23T12:24:13+00:00",
-      "firstSeen": "2026-06-23T14:00:01.430441+00:00",
-      "lastSeen": "2026-06-23T14:00:01.430441+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.9407
-    },
-    {
-      "title": "OTC Glucose Monitors Make Wellness Tracking More Personal — and More Complicated",
-      "url": "https://www.techrepublic.com/article/news-otc-glucose-monitors-wearable-tech",
-      "source": "TechRepublic AI",
-      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Over-the-counter CGMs are making glucose data easier to access, but not every user benefits equally. Here’s where the evidence is strongest — and what to know about app privacy.\nThe post OTC Glucose Monitors Make Wellness Tracking More Personal — and More Complicated appeared first on TechRepublic.",
-      "image": "https://assets.techrepublic.com/uploads/2026/06/woman-indoors-wearing-a-continuous-glucose-monitor-2026-03-27-01-25-56-utc-1-1024x638.jpg?f=jpeg",
-      "published": "2026-06-23T11:42:03+00:00",
-      "firstSeen": "2026-06-23T18:00:01.255007+00:00",
-      "lastSeen": "2026-06-23T20:00:01.900277+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.0235
+      "score": 6.0236
     },
     {
       "title": "The Friendly Virus",
@@ -655,10 +656,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-22T20:00:00+00:00",
       "firstSeen": "2026-06-22T21:00:01.381447+00:00",
-      "lastSeen": "2026-06-23T20:00:01.900277+00:00",
+      "lastSeen": "2026-06-23T20:20:41.258411+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7548
+      "score": 1.7494
     },
     {
       "title": "The Life Scientific: Dean Lomax",
@@ -671,7 +672,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-15T20:00:00+00:00",
       "firstSeen": "2026-06-15T21:00:01.290903+00:00",
-      "lastSeen": "2026-06-23T20:00:01.900277+00:00",
+      "lastSeen": "2026-06-23T20:20:41.258411+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 1.1953
