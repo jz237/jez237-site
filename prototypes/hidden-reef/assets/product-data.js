@@ -1,10 +1,10 @@
 // The Hidden Reef - Product Data (scraped from thehiddenreef.com)
 // Each product links back to the original Hidden Reef product page
 // Total: 4593 unique products across 36 subcategories
-// Presentation refresh: 35 subcategories refreshed 2026-06-22T04:15:00.525Z
+// Presentation refresh: 35 subcategories refreshed 2026-06-23T00:21:02.437Z
 // Gallery refresh: product image galleries refreshed 2026-05-27T14:49:37.209Z
 // Removed stale 404 product URLs: 7 removed 2026-05-27
-// Public sitemap import: 4075 products checked 2026-06-22T04:15:32.318Z
+// Public sitemap import: 4075 products checked 2026-06-23T00:22:30.882Z
 
 const THR_PRODUCTS = {
   "starter-kits": [
@@ -3100,7 +3100,7 @@ const THR_PRODUCTS = {
     {"name":"Zoo Med NATURAL BUSH MEX PHYLLO PLANT L","price":"$7.99","productUrl":"https://www.thehiddenreef.com/zoo-natur-bush-mex-phyllo-l.html","imageUrl":"https://cdn.shoplightspeed.com/shops/648211/files/65279025/600x800x2/zoo-med-natural-bush-mex-phyllo-plant-l.jpg","page":2},
     {"name":"Zoo Med TIMER REPTICARE DAY/NIGHT","price":"$19.98","productUrl":"https://www.thehiddenreef.com/zoo-med-timer-repticare-day-night.html","imageUrl":"https://cdn.shoplightspeed.com/shops/648211/files/62339596/600x800x2/zoo-med-timer-repticare-day-night.jpg","page":2},
     {"name":"Zoo Med TURTLE DOCK SMALL","price":"$16.99","productUrl":"https://www.thehiddenreef.com/zoo-med-turtle-dock-small.html","imageUrl":"https://cdn.shoplightspeed.com/shops/648211/files/62338868/600x800x2/zoo-med-turtle-dock-small.jpg","page":2},
-    {"name":"Zoo Med FOOD GRMT BOX TURTLE 15 OZ","price":"$14.99","productUrl":"https://www.thehiddenreef.com/zoo-food-grmt-box-turtle-15-oz.html","imageUrl":"https://cdn.shoplightspeed.com/shops/648211/files/61424066/600x800x2/zoo-med-food-grmt-box-turtle-15-oz.jpg","page":2},
+    {"name":"Zoo Med FOOD GRMT BOX TURTLE 15 OZ","price":"$16.99","productUrl":"https://www.thehiddenreef.com/zoo-food-grmt-box-turtle-15-oz.html","imageUrl":"https://cdn.shoplightspeed.com/shops/648211/files/61424066/600x800x2/zoo-med-food-grmt-box-turtle-15-oz.jpg","page":2},
     {"name":"Zoo Med GOURMET BEARDED DRAGON 15 OZ","price":"$13.99","productUrl":"https://www.thehiddenreef.com/zoo-med-gourmet-bearded-dragon-15-oz.html","imageUrl":"https://cdn.shoplightspeed.com/shops/648211/files/60585428/600x800x2/zoo-med-gourmet-bearded-dragon-15-oz.jpg","page":2},
     {"name":"Oase BIORB EARTH CARBON FILTER BACK 2PK","price":"$7.99","productUrl":"https://www.thehiddenreef.com/oase-biorb-earth-carbon-filter-back-2pk.html","imageUrl":"https://cdn.shoplightspeed.com/shops/648211/files/59401772/600x800x2/oase-biorb-earth-carbon-filter-back-2pk.jpg","page":2},
     {"name":"Komodo COCONUT CHIP REPTILE BEDDING BRICK 6PK","price":"$14.99","productUrl":"https://www.thehiddenreef.com/komodo-coconut-chip-reptile-bedding-brick-6pk.html","imageUrl":"https://cdn.shoplightspeed.com/shops/648211/files/56662205/600x800x2/komodo-coconut-chip-reptile-bedding-brick-6pk.jpg","page":2},
@@ -3374,7 +3374,7 @@ const THR_PRODUCTS = {
     {"name":"Zoo Med TURTLE EYE DROPS 2.25 OZ","price":"$5.99","productUrl":"https://www.thehiddenreef.com/zoo-med-turtle-eye-drops-225-oz.html","imageUrl":"https://cdn.shoplightspeed.com/shops/648211/files/55904886/600x800x2/zoo-med-turtle-eye-drops-225-oz.jpg","page":13},
     {"name":"Zoo Med HABBA HUT LOG SMALL","price":"$5.99","productUrl":"https://www.thehiddenreef.com/zoo-med-habba-hut-log-small.html","imageUrl":"https://cdn.shoplightspeed.com/shops/648211/files/55904607/600x800x2/zoo-med-habba-hut-log-small.jpg","page":13},
     {"name":"Zoo Med CAN O MINI CRICKETS 200 CT","price":"$4.99","productUrl":"https://www.thehiddenreef.com/zoo-med-can-o-mini-crickets-200-ct.html","imageUrl":"https://cdn.shoplightspeed.com/shops/648211/files/55903795/600x800x2/zoo-med-can-o-mini-crickets-200-ct.jpg","page":13},
-    {"name":"Zoo Med FOOD BEAR DRAGON JUV 10 OZ","price":"$4.99","productUrl":"https://www.thehiddenreef.com/zoo-med-food-bear-dragon-juv-10-oz.html","imageUrl":"https://cdn.shoplightspeed.com/shops/648211/files/55903608/600x800x2/zoo-med-food-bear-dragon-juv-10-oz.jpg","page":13},
+    {"name":"Zoo Med FOOD BEAR DRAGON JUV 10 OZ","price":"$5.99","productUrl":"https://www.thehiddenreef.com/zoo-med-food-bear-dragon-juv-10-oz.html","imageUrl":"https://cdn.shoplightspeed.com/shops/648211/files/55903608/600x800x2/zoo-med-food-bear-dragon-juv-10-oz.jpg","page":13},
     {"name":"Zoo Med ECO CARPET TAN 10 GAL","price":"$3.99","productUrl":"https://www.thehiddenreef.com/zoo-med-eco-carpet-tan-10-gal.html","imageUrl":"https://cdn.shoplightspeed.com/shops/648211/files/55903439/600x800x2/zoo-med-eco-carpet-tan-10-gal.jpg","page":13},
     {"name":"Zoo Med WIPE OUT 1 TERRARIUM CLEANER 4 OZ","price":"$4.49","productUrl":"https://www.thehiddenreef.com/zoo-med-wipeout-1-terrarium-cleaner-4-oz.html","imageUrl":"https://cdn.shoplightspeed.com/shops/648211/files/55875231/600x800x2/zoo-med-wipe-out-1-terrarium-cleaner-4-oz.jpg","page":13},
     {"name":"Zoo Med CAN O MEALIES 1.20 OZ","price":"$4.99","productUrl":"https://www.thehiddenreef.com/zoo-med-can-o-mealies-120-oz.html","imageUrl":"https://cdn.shoplightspeed.com/shops/648211/files/55850597/600x800x2/zoo-med-can-o-mealies-120-oz.jpg","page":14},
@@ -4676,5 +4676,5 @@ const THR_PRODUCTS = {
 
 window.THR_PRODUCTS = THR_PRODUCTS;
 
-const THR_PRODUCT_META = {"total":4593,"subcategories":36,"refreshedAt":"2026-06-22T04:15:00.525Z","publicSitemapCheckedAt":"2026-06-22T04:15:32.318Z","publicSitemapProducts":4075};
+const THR_PRODUCT_META = {"total":4593,"subcategories":36,"refreshedAt":"2026-06-23T00:21:02.437Z","publicSitemapCheckedAt":"2026-06-23T00:22:30.882Z","publicSitemapProducts":4075};
 window.THR_PRODUCT_META = THR_PRODUCT_META;
