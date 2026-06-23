@@ -1,3 +1,22 @@
+const GOOGLE_ANALYTICS_ID = "G-S7VKNPPZHV";
+
+class GoogleAnalyticsInjector {
+  element(element) {
+    element.append(
+      `
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=${GOOGLE_ANALYTICS_ID}"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', '${GOOGLE_ANALYTICS_ID}');
+</script>`,
+      { html: true },
+    );
+  }
+}
+
 export async function onRequest(context) {
   const url = new URL(context.request.url);
   const retiredPaths = [
@@ -22,5 +41,14 @@ export async function onRequest(context) {
     });
   }
 
-  return context.next();
+  const response = await context.next();
+  const contentType = response.headers.get("content-type") || "";
+
+  if (!contentType.includes("text/html")) {
+    return response;
+  }
+
+  return new HTMLRewriter()
+    .on("head", new GoogleAnalyticsInjector())
+    .transform(response);
 }
