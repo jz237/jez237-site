@@ -1114,5 +1114,23 @@
       "continuity": "Preserves Korrun Silt Choir canon: black-green tidal basins, basalt ribs, brine-glass, silt ceramic, reed wraps, bell buoys, clay memory tiles, resonance causeways, fin-keel ferry transit, and non-human opaline amphibious inhabitants.",
       "entryDescription": "A dawn public-transit scene at Brinebell Quay, showing opaline amphibious commuters boarding fin-keel sled ferries through rose salt fog with cargo tripods, bell buoys, clay memory tiles, and tidal-mud infrastructure."
     }
+  },
+  {
+    "id": "2026-06-23-overnight-korrun-silt-choir-lowtide-kiln-ceramic-shift",
+    "title": "Korrun Silt Choir: Lowtide Kiln Ceramic Shift",
+    "tests": "Weekly world: Korrun Silt Choir. World-life image for 2026-06-23 overnight slot showing low-tide ceramic workshop life while preserving the resonant mudflat geography, amphibious inhabitants, silt ceramic technology, copper sunrise haze, rose salt fog, basalt ribs, and brine-glass material canon.",
+    "prompt": "Create a finished realistic cinematic square photograph for the fictional weekly world Korrun Silt Choir. Title/context: Korrun Silt Choir: Lowtide Kiln Ceramic Shift. Do not render title text, labels, captions, or instructional text in the image.\n\nScene: inside Lowtide Kiln at low tide, a wet amphibious ceramic workshop built into terraced black basalt ribs and mirror-brine mud shelves. Non-human Korrun inhabitants with low oval bodies, six jointed walking limbs, two broad paddle-limbs, ridged resonator throats, wet opaline skin, crown-like sensory whiskers, and small black bead eyes are firing sintered silt ceramics in a shallow tidal kiln. Several craft workers rhythmically drum safe harmonics through the mud with their feet while young helpers arrange wet clay memory tiles on delicate tripods above the incoming tide.\n\nWorld continuity to preserve: endless black-green tidal basins, rose salt fog, slow prism tides, thunder-polished mud shelves, hollow stone chimneys, copper sunrise haze, pale fan reeds, brine-glass vessels, basalt tuning ribs, shell-horn tools, woven reed pressure wraps, pumice flotation blocks, bone-white frequency markers, ripple-written mud, bell buoys, and domestic objects kept above the tide on thin tripods.\n\nReusable template: Create a finished realistic cinematic daily-life image from Korrun Silt Choir showing [LOCATION OR WORKPLACE] during [DAILY ROUTINE]. Preserve the world bible: black-green tidal mudflats, rose salt fog, basalt ribs, brine pools, resonant infrastructure, non-human amphibious inhabitants with low oval bodies, six walking limbs, paddle-limbs, resonator throats, sensory whiskers, wet opaline skin, mud-ripple communication, sintered silt ceramic, brine-glass, shell-horn tools, reed wraps, pumice supports, copper sunrise haze, and practical lived-in details. Make it photographed, tactile, coherent, and alien rather than generic sci-fi. Avoid humans, astronauts, Earth wetland props, mushroom motifs, readable text, logos, and concept-art styling.\n\nExample substitution: [LOCATION OR WORKPLACE] = Lowtide Kiln ceramic workshop; [DAILY ROUTINE] = craft workers firing sintered silt ceramics while young helpers dry clay memory tiles on tripods above the incoming tide.",
+    "image": "images/2026-06-23-overnight-korrun-silt-choir-lowtide-kiln-ceramic-shift.jpg",
+    "date": "2026-06-23",
+    "batch": "Daily Prompt",
+    "slot": "overnight",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "world": {
+      "name": "Korrun Silt Choir",
+      "description": "A tidal alien world where resonant mineral mudflats, silt ceramics, brine-glass, and harmonic causeways shape daily life for many-legged amphibious inhabitants.",
+      "continuity": "Preserves Korrun Silt Choir's black-green tidal basins, rose salt fog, copper low sun, basalt ribs, brine-glass, shell-horn tools, reed wraps, clay memory tiles, and non-human amphibious inhabitants who communicate through throat harmonics, foot drumming, mud ripples, and side-membrane color.",
+      "entryDescription": "Craft workers at Lowtide Kiln fire sintered silt ceramics while young helpers dry clay memory tiles above the incoming tide."
+    }
   }
 ]
