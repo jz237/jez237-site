@@ -1,8 +1,8 @@
 {
-  "updatedAt": "2026-06-23T14:00:01.430441+00:00",
+  "updatedAt": "2026-06-23T16:00:01.309560+00:00",
   "items": [
     {
-      "title": "Investigating Linguistic Steering: An Analysis of Adjectival Effects Across Large Language Model Architectures",
+      "title": "Atkia Mahila, Avinash Maurya, M. Mustafa Rafique, Bogdan Nicolae",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -10,12 +10,172 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-23T14:00:10.330165+00:00",
+      "published": "2026-06-23T16:00:10.500722+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-23T14:00:01.430441+00:00",
+      "lastSeen": "2026-06-23T16:00:01.309560+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
+    },
+    {
+      "title": "Something&#8217;s off with Midjourney’s pivot to body scanners",
+      "url": "https://www.theverge.com/report/954826/midjourney-medical-ai-ultrasound-body-scanner-lacks-evidence",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "Last week, Midjourney, an AI startup best known for its image generator, made an unusual pivot: medical imaging. The company announced a futuristic ultrasound scanner that would dunk users into a vat of water and, hopefully, produce \"something as powerful as MRI\" yet \"as casual as a trip to the spa.\" Midjourney says the goal [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/ultrasound_phantom_segmentation-b254a71d083eb5c9.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=28.441715022566%2C0%2C70.316569954868%2C100",
+      "published": "2026-06-23T15:56:35+00:00",
+      "firstSeen": "2026-06-23T16:00:01.309560+00:00",
+      "lastSeen": "2026-06-23T16:00:01.309560+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.3583
+    },
+    {
+      "title": "The Fitbit Air takes a smarter approach to the AI health dumpster fire",
+      "url": "https://www.theverge.com/tech/954768/google-fitbit-air-review-fitness-tracker-wearable-ai-health-coach",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "Google Health Coach seems to think I'm on the verge of physical collapse. My sleep is not where it needs to be, hence my unimpressive readiness score. My heart rate variability, a measure of how recovered I am, is below baseline. I'm spending too much time in a hot, humid environment, it says, reminding me [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/268538_Fitbit_Air_AKrales_0012.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
+      "published": "2026-06-23T15:00:00+00:00",
+      "firstSeen": "2026-06-23T16:00:01.309560+00:00",
+      "lastSeen": "2026-06-23T16:00:01.309560+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.4299
+    },
+    {
+      "title": "The algorithm has a nose now, and perfume is better for it",
+      "url": "https://thenextweb.com/news/algorithmic-perfumery-ai-fragrance-scentronix",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "In a former shop on Ginnekenstraat, a pedestrian street in the Dutch city of Breda, you can answer a short questionnaire about yourself and walk out less than an hour later holding a perfume that did not exist when you arrived. The questions are not the ones a sales assistant asks. What colour best represents [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/Copy-of-TNW-Article-Banner.avif",
+      "published": "2026-06-23T14:57:41+00:00",
+      "firstSeen": "2026-06-23T16:00:01.309560+00:00",
+      "lastSeen": "2026-06-23T16:00:01.309560+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.2187
+    },
+    {
+      "title": "Claude’s latest wobble lands in a worse week",
+      "url": "https://thenextweb.com/news/claude-outage-anthropic",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Anthropic says it has identified a fix for elevated errors across multiple Claude models, just as the company is still explaining why it suspended access to Claude Mythos 5 and Claude Fable 5. Anthropic’s status page says the company began investigating elevated error rates across multiple models at 14:19 UTC on 23 June and moved to identified [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/anthropic-claude-opus-4-7-coding-agentic-benchmarks-release.avif",
+      "published": "2026-06-23T14:43:24+00:00",
+      "firstSeen": "2026-06-23T16:00:01.309560+00:00",
+      "lastSeen": "2026-06-23T16:00:01.309560+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 10.1117
+    },
+    {
+      "title": "Luminvera bets on immersive software for robotics",
+      "url": "https://thenextweb.com/news/luminvera-bets-on-immersive-software-for-robotics",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "For most of Luminvera’s short life, the pitch came with an AR wearable. The company, incorporated in March 2026 and run out of Silicon Valley, started as a bet that the right device could pull an industrial engineer out of what its founder, Lu Yang, likes to call the “2D Stone Age.” A flat monitor [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/luminvera-immersive-software-robotics-founder-institute.avif",
+      "published": "2026-06-23T14:17:41+00:00",
+      "firstSeen": "2026-06-23T16:00:01.309560+00:00",
+      "lastSeen": "2026-06-23T16:00:01.309560+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.0991
+    },
+    {
+      "title": "EU escalates its Meta probe over addictive design for kids",
+      "url": "https://thenextweb.com/news/eu-meta-addictive-design-probe-children",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The European Commission is preparing preliminary findings that accuse Facebook and Instagram of exploitative design that hooks children. The Meta addictive design probe could end in a fine worth up to 6% of global sales. Brussels is about to turn up the heat on Meta. The European Commission is preparing preliminary findings that accuse Facebook [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2023/09/Untitled-design-15-1.avif",
+      "published": "2026-06-23T14:13:32+00:00",
+      "firstSeen": "2026-06-23T16:00:01.309560+00:00",
+      "lastSeen": "2026-06-23T16:00:01.309560+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.0971
+    },
+    {
+      "title": "SpaceX lands $6.3bn compute deal with Reflection AI",
+      "url": "https://thenextweb.com/news/spacex-reflection-ai-6-3bn-compute-deal",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Reflection AI will pay SpaceX $150mn a month for Nvidia chips at Colossus 2, a deal worth roughly $6.3bn by 2029. The SpaceX Reflection AI deal puts Nvidia on both sides of the trade. SpaceX has signed another giant compute tenant. This time it is Reflection AI, an open-source startup barely two years old. Reflection [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/spacex-colossus-1-technical-problems-rented-anthropic.avif",
+      "published": "2026-06-23T14:00:11+00:00",
+      "firstSeen": "2026-06-23T16:00:01.309560+00:00",
+      "lastSeen": "2026-06-23T16:00:01.309560+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.0906
+    },
+    {
+      "title": "4 days left to save up to $190 on TechCrunch Founder Summit 2026",
+      "url": "https://techcrunch.com/2026/06/23/4-days-left-to-save-up-to-190-on-techcrunch-founder-summit-2026",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Four days left to save up to $190 on your pass to TechCrunch Founder Summit 2026 - the ultimate founder bootcamp - before Early Bird rates end on June 26 at 11:59 p.m. PT. Register here.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/01/TC-All-Stage-2025-Breakout-QA.jpg?resize=1200%2C800",
+      "published": "2026-06-23T14:00:00+00:00",
+      "firstSeen": "2026-06-23T16:00:01.309560+00:00",
+      "lastSeen": "2026-06-23T16:00:01.309560+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2305
+    },
+    {
+      "title": "The cybersecurity industry built a $200B business selling you problems. Nobody got paid to fix them.",
+      "url": "https://thenextweb.com/news/cybersecurity-200b-selling-problems-remediation-gap",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Cybersecurity has never been better at finding risk. Organizations can identify vulnerable servers, dormant user accounts, excessive privileges, exposed cloud assets, and software flaws in near real time. The market has rewarded that capability handsomely, with global cybersecurity spending projected to exceed the half-trillion-dollar range as enterprises continue investing in tools that promise greater visibility [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/cybersecurity-200b-selling-problems-remediation-gap.avif",
+      "published": "2026-06-23T13:59:12+00:00",
+      "firstSeen": "2026-06-23T16:00:01.309560+00:00",
+      "lastSeen": "2026-06-23T16:00:01.309560+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.0902
+    },
+    {
+      "title": "Astral Systems raises £23M to make cancer isotopes by fusion",
+      "url": "https://thenextweb.com/news/astral-systems-23m-fusion-cancer-isotopes",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Bristol fusion startup Astral Systems has raised £23mn to scale the medical isotopes that cancer scans depend on. The Astral Systems £23M round backs a rare fusion company that already runs reactors and earns revenue. Most fusion companies promise clean power in a decade or two. Astral Systems is trying something different, and getting paid [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/astralsystems.avif",
+      "published": "2026-06-23T13:29:44+00:00",
+      "firstSeen": "2026-06-23T16:00:01.309560+00:00",
+      "lastSeen": "2026-06-23T16:00:01.309560+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.0761
     },
     {
       "title": "Sony’s AI Camera Assistant is exactly as bad as it looks",
@@ -28,10 +188,26 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/sony-xperia-1-viii-ai-camera-assistant-samples.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.741906587151%2C100%2C78.516186825698&amp%3Bw=1200",
       "published": "2026-06-23T13:25:42+00:00",
       "firstSeen": "2026-06-23T14:00:01.430441+00:00",
-      "lastSeen": "2026-06-23T14:00:01.430441+00:00",
+      "lastSeen": "2026-06-23T16:00:01.309560+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.4427
+      "score": 3.3842
+    },
+    {
+      "title": "Groq’s $650M raise: rebuilding after the Nvidia deal",
+      "url": "https://thenextweb.com/news/groq-650m-raise-nvidia-pivot",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Groq has confirmed a $650mn raise to rebuild itself as an AI inference cloud, six months after Nvidia paid out its investors and hired away its founder. The Groq $650M round is a bet that purpose-built chips still beat GPUs. Groq spent years as one of the loudest challengers to Nvidia. Then, last December, Nvidia [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/groq-650-million-raise-nvidia-20-billion-inference-cloud-1.avif",
+      "published": "2026-06-23T13:06:20+00:00",
+      "firstSeen": "2026-06-23T16:00:01.309560+00:00",
+      "lastSeen": "2026-06-23T16:00:01.309560+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.665
     },
     {
       "title": "How Businesses Are Building Specialized AI They Can Trust",
@@ -44,10 +220,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/agentic-ai-agent-toolkit-kv-r3b-1920x1080-2.png",
       "published": "2026-06-23T13:00:07+00:00",
       "firstSeen": "2026-06-23T14:00:01.430441+00:00",
-      "lastSeen": "2026-06-23T14:00:01.430441+00:00",
+      "lastSeen": "2026-06-23T16:00:01.309560+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.9599
+      "score": 3.9021
     },
     {
       "title": "Meta launches cheaper smart glasses without Ray-Ban",
@@ -60,11 +236,11 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/MetaGlasses_1.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=8.55%2C24.971192772515%2C82.25546875%2C66.205436991061&amp%3Bw=1200",
       "published": "2026-06-23T13:00:00+00:00",
       "firstSeen": "2026-06-23T14:00:01.430441+00:00",
-      "lastSeen": "2026-06-23T14:00:01.430441+00:00",
+      "lastSeen": "2026-06-23T16:00:01.309560+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 12.4299
+      "score": 12.372
     },
     {
       "title": "Fika Jobs raises $4M to build a video-first hiring platform where AI agents interview candidates",
@@ -77,10 +253,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/Torleif_Svensson-FikaJobsAI.jpeg?w=1200",
       "published": "2026-06-23T13:00:00+00:00",
       "firstSeen": "2026-06-23T14:00:01.430441+00:00",
-      "lastSeen": "2026-06-23T14:00:01.430441+00:00",
+      "lastSeen": "2026-06-23T16:00:01.309560+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9599
+      "score": 4.902
     },
     {
       "title": "Nearfield Instruments raises a record $380M chip round",
@@ -93,10 +269,10 @@
       "image": "https://media.thenextweb.com/2026/06/Nearfield-Instruments-380M.avif",
       "published": "2026-06-23T12:52:54+00:00",
       "firstSeen": "2026-06-23T14:00:01.430441+00:00",
-      "lastSeen": "2026-06-23T14:00:01.430441+00:00",
+      "lastSeen": "2026-06-23T16:00:01.309560+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1163
+      "score": 2.0587
     },
     {
       "title": "Build real agentic apps using CUGA: two dozen working examples on a lightweight harness",
@@ -109,10 +285,10 @@
       "image": "https://cdn-uploads.huggingface.co/production/uploads/649d9ad1500fd8d51a675a93/eZoT1b8vHDMEgMVbf2J0f.png",
       "published": "2026-06-23T12:51:55+00:00",
       "firstSeen": "2026-06-23T14:00:01.430441+00:00",
-      "lastSeen": "2026-06-23T14:00:01.430441+00:00",
+      "lastSeen": "2026-06-23T16:00:01.309560+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.1959
+      "score": 6.1383
     },
     {
       "title": "Qualcomm nears $4bn Modular deal to rival Nvidia",
@@ -125,10 +301,10 @@
       "image": "https://media.thenextweb.com/2026/04/Qualcomm-President-and-CEO-Cristiano-Amon.avif",
       "published": "2026-06-23T12:40:07+00:00",
       "firstSeen": "2026-06-23T14:00:01.430441+00:00",
-      "lastSeen": "2026-06-23T14:00:01.430441+00:00",
+      "lastSeen": "2026-06-23T16:00:01.309560+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1101
+      "score": 2.0528
     },
     {
       "title": "MGX raises a $50bn AI fund and is already spending it",
@@ -144,7 +320,7 @@
       "lastSeen": "2026-06-23T14:00:01.430441+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1023
+      "score": 2.0454
     },
     {
       "title": "Google taps its alumni network for a new AI startup incubator",
@@ -160,7 +336,7 @@
       "lastSeen": "2026-06-23T14:00:01.430441+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0531
+      "score": 1.9988
     },
     {
       "title": "TensorX raises €8M to build sovereign AI inference for Europe on Nvidia Blackwell",
@@ -176,7 +352,7 @@
       "lastSeen": "2026-06-23T14:00:01.430441+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.6485
+      "score": 2.5945
     },
     {
       "title": "Tsuga raises $35m to keep AI-era observability inside the customer’s own cloud",
@@ -192,7 +368,7 @@
       "lastSeen": "2026-06-23T14:00:01.430441+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.743
+      "score": 3.6894
     },
     {
       "title": "Tencent weighs exit from Marvelous and other Japanese game bets",
@@ -208,7 +384,7 @@
       "lastSeen": "2026-06-23T14:00:01.430441+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0404
+      "score": 1.9869
     },
     {
       "title": "WiseTech shares fall as founder Richard White denies a trafficking claim",
@@ -224,7 +400,7 @@
       "lastSeen": "2026-06-23T14:00:01.430441+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0382
+      "score": 1.9848
     },
     {
       "title": "Prosus launches ToqanClaw, an OpenClaw-style tool builder for its 5m merchants",
@@ -240,7 +416,7 @@
       "lastSeen": "2026-06-23T14:00:01.430441+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9327
+      "score": 4.8796
     },
     {
       "title": "Workday must face California lawsuit over AI hiring bias, judge rules",
@@ -256,7 +432,7 @@
       "lastSeen": "2026-06-23T14:00:01.430441+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1265
+      "score": 3.0738
     },
     {
       "title": "UN urges AI firms to come clean on their environmental costs",
@@ -272,7 +448,7 @@
       "lastSeen": "2026-06-23T12:45:30.718004+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0173
+      "score": 1.965
     },
     {
       "title": "Masayoshi Son dismisses Musk’s space data centres as an AI-race bet",
@@ -288,7 +464,7 @@
       "lastSeen": "2026-06-23T12:45:30.718004+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0097
+      "score": 1.9578
     },
     {
       "title": "NVIDIA Powers Over 400 of the World’s 500 Fastest Supercomputers",
@@ -301,10 +477,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/hpc-corp-blog-isc26-wrap-up-blog-1280x680-5375050.png",
       "published": "2026-06-23T09:00:38+00:00",
       "firstSeen": "2026-06-23T10:00:01.189312+00:00",
-      "lastSeen": "2026-06-23T14:00:01.430441+00:00",
+      "lastSeen": "2026-06-23T16:00:01.309560+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.4476
+      "score": 2.3959
     },
     {
       "title": "The $400 million machine powering the future of chipmaking",
@@ -317,10 +493,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/06/JA26-asml-01.jpg?resize=1200%2C600",
       "published": "2026-06-23T09:00:00+00:00",
       "firstSeen": "2026-06-23T10:00:01.189312+00:00",
-      "lastSeen": "2026-06-23T14:00:01.430441+00:00",
+      "lastSeen": "2026-06-23T16:00:01.309560+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1473
+      "score": 2.0956
     },
     {
       "title": "Tata Electronics breach claims to expose Apple and Tesla trade secrets",
@@ -336,7 +512,7 @@
       "lastSeen": "2026-06-23T12:45:30.718004+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0898
+      "score": 3.0391
     },
     {
       "title": "UK weighs forcing social media platforms to surface trusted news",
@@ -352,7 +528,7 @@
       "lastSeen": "2026-06-23T11:00:01.528433+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9848
+      "score": 1.9343
     },
     {
       "title": "Micron and Anthropic sign a multi-year AI memory supply deal",
@@ -368,7 +544,7 @@
       "lastSeen": "2026-06-23T11:00:01.528433+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.3819
+      "score": 11.3315
     },
     {
       "title": "Top spy agencies say AI cyber threats will impact you within months. Here’s why",
@@ -381,10 +557,10 @@
       "image": "",
       "published": "2026-06-23T08:00:00+00:00",
       "firstSeen": "2026-06-23T09:00:02.066656+00:00",
-      "lastSeen": "2026-06-23T14:00:01.430441+00:00",
+      "lastSeen": "2026-06-23T16:00:01.309560+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1791
+      "score": 3.1288
     },
     {
       "title": "Five Eyes alliance warns frontier AI cyber threats are ‘months’ away",
@@ -400,7 +576,7 @@
       "lastSeen": "2026-06-23T11:00:01.528433+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9795
+      "score": 1.9293
     },
     {
       "title": "IBM joins OpenAI’s cyber program to bring frontier AI into enterprise security",
@@ -416,7 +592,7 @@
       "lastSeen": "2026-06-23T11:00:01.528433+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.0763
+      "score": 6.0262
     },
     {
       "title": "BP, Walmart and 7-Eleven sued over AI-set petrol prices in California",
@@ -432,7 +608,7 @@
       "lastSeen": "2026-06-23T11:00:01.528433+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.974
+      "score": 1.924
     },
     {
       "title": "AI infrastructure startup Baseten raises $1.5bn at up to $13bn valuation as Blackbird makes its biggest-ever bet",
@@ -448,7 +624,7 @@
       "lastSeen": "2026-06-23T10:00:01.189312+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9687
+      "score": 1.919
     },
     {
       "title": "Meta pauses its employee mouse-tracking program over data-security fears",
@@ -464,184 +640,7 @@
       "lastSeen": "2026-06-23T10:00:01.189312+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9611
-    },
-    {
-      "title": "Trump signs orders calling for a powerful quantum computer by 2028",
-      "url": "https://thenextweb.com/news/trump-quantum-computer-orders-2028",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Two executive orders set a research-grade target, push the post-quantum cryptography deadline to 2031, and tie $2bn in grants to government equity stakes. President Donald Trump signed two executive orders on quantum computing on 22 June 2026, the first directing the federal government to help build a quantum computer “powerful enough for scientific research” by [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/Donald-Trump.avif",
-      "published": "2026-06-23T07:03:10+00:00",
-      "firstSeen": "2026-06-23T09:00:02.066656+00:00",
-      "lastSeen": "2026-06-23T10:00:01.189312+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 3.3569
-    },
-    {
-      "title": "Oracle’s workforce shrank by about 13% as it bankrolls its AI buildout",
-      "url": "https://thenextweb.com/news/oracle-workforce-shrinks-13-percent-ai-buildout",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Oracle ended its 2026 fiscal year with about 21,000 fewer employees than it started with, a reduction of roughly 13% that ranks among the deepest in the company’s history. The figure, disclosed in the company’s annual filing, puts a number on a process staff had been living through since the spring, when termination emails began [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/Oracle.avif",
-      "published": "2026-06-23T06:56:13+00:00",
-      "firstSeen": "2026-06-23T08:00:01.500705+00:00",
-      "lastSeen": "2026-06-23T10:00:01.189312+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.954
-    },
-    {
-      "title": "NVIDIA Brings Trusted, 24/7 AI Agents to Telecom Operations",
-      "url": "https://blogs.nvidia.com/blog/telecom-ai-agents-dtw-ignite-2026",
-      "source": "NVIDIA Blog",
-      "sourceUrl": "https://blogs.nvidia.com/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Telecom operators have seen remarkable returns from using generative AI to automate network management, customer care and back-office operations. Most of that impact has been task‑based: automation that speeds up predetermined steps while people manually correlate insights and direct next steps. Automation is no longer the finish line — it’s the launchpad to autonomy.  The [&#8230;]",
-      "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/telco-tm-forum-1920x1080-1.jpg",
-      "published": "2026-06-23T06:00:09+00:00",
-      "firstSeen": "2026-06-23T07:00:01.672057+00:00",
-      "lastSeen": "2026-06-23T14:00:01.430441+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 5.4709
-    },
-    {
-      "title": "The running list: Major tech layoffs in 2026 where employers cited AI",
-      "url": "https://techcrunch.com/2026/06/22/the-running-list-major-tech-layoffs-in-2026-where-employers-cited-ai",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "A running look — in reverse chronological order — at the bigger tech companies that have announced significant layoffs this year with AI as a stated factor.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/06/Robot-hand.png?resize=1200%2C800",
-      "published": "2026-06-23T01:27:55+00:00",
-      "firstSeen": "2026-06-23T02:00:01.571885+00:00",
-      "lastSeen": "2026-06-23T14:00:01.430441+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.9666
-    },
-    {
-      "title": "OpenAI launches new initiative to help find and patch open source bugs",
-      "url": "https://techcrunch.com/2026/06/22/openai-launches-new-initiative-to-help-find-and-patch-open-source-bugs",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "OpenAI is using AI to help the open source community better protect itself.",
-      "image": "https://techcrunch.com/wp-content/uploads/2025/09/GettyImages-2214107176.jpg?resize=1200%2C800",
-      "published": "2026-06-23T00:11:31+00:00",
-      "firstSeen": "2026-06-23T00:18:23.130078+00:00",
-      "lastSeen": "2026-06-23T14:00:01.430441+00:00",
-      "model_release": true,
-      "editorial_allow": true,
-      "editorial_reason": "model_release",
-      "score": 15.7396
-    },
-    {
-      "title": "How Omio is building the future of conversational travel",
-      "url": "https://openai.com/index/omio",
-      "source": "OpenAI News",
-      "sourceUrl": "https://openai.com/news/rss.xml",
-      "sourceWeight": 1.0,
-      "category": "AI",
-      "summary": "Discover how Omio uses OpenAI to power conversational travel experiences, accelerate product development, and transform into an AI-native company.",
-      "image": "https://images.ctfassets.net/kftzwdyauwt9/6wFIgOcT1xK5IvZQIDJ2xQ/edf82561f00cdb27cf3ffcfcad7cd215/oai_Omio_SEO.png?w=1600&amp%3Bh=900&amp%3Bfit=fill",
-      "published": "2026-06-23T00:00:00+00:00",
-      "firstSeen": "2026-06-23T09:00:02.066656+00:00",
-      "lastSeen": "2026-06-23T14:00:01.430441+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.1456
-    },
-    {
-      "title": "Shipping huggingface_hub every week with AI, open tools, and a human in the loop",
-      "url": "https://huggingface.co/blog/huggingface-hub-release-ci",
-      "source": "Hugging Face Blog",
-      "sourceUrl": "https://huggingface.co/blog/feed.xml",
-      "sourceWeight": 0.95,
-      "category": "AI",
-      "summary": "",
-      "image": "https://huggingface.co/blog/assets/huggingface-hub-release-ci/thumbnail.png",
-      "published": "2026-06-23T00:00:00+00:00",
-      "firstSeen": "2026-06-23T08:00:01.500705+00:00",
-      "lastSeen": "2026-06-23T14:00:01.430441+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.0756
-    },
-    {
-      "title": "Prompt Injection as Role Confusion",
-      "url": "https://simonwillison.net/2026/Jun/22/prompt-injection-as-role-confusion",
-      "source": "Simon Willison",
-      "sourceUrl": "https://simonwillison.net/atom/everything/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Prompt Injection as Role Confusion\nFirst, I absolutely love this:\n\nThis is a blog-style writeup of the paper.\n\nI wish every paper would come with one of these. Academic writing is pretty dry - the impact of a paper can be so much higher if you publish a readable version to accompany the formal one.\nCharles Ye, Jasmine Cui, and Dylan Hadfield-Menell present some fascinating research into the challenge of having models distinguish their own privileged text (here wrapped in role tags like &lt;system&gt;, &lt;think&gt;, and &lt;assistant&gt;) from untrusted user input wrapped in &lt;user&gt;.\nThe ",
-      "image": "",
-      "published": "2026-06-22T23:59:53+00:00",
-      "firstSeen": "2026-06-23T00:18:23.130078+00:00",
-      "lastSeen": "2026-06-23T14:00:01.430441+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "editorial_score_pass",
-      "score": 5.8855
-    },
-    {
-      "title": "Porting the Moebius 0.2B image inpainting model to run in the browser with Claude Code",
-      "url": "https://simonwillison.net/2026/Jun/22/porting-moebius",
-      "source": "Simon Willison",
-      "sourceUrl": "https://simonwillison.net/atom/everything/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "This morning on Hacker News I saw Moebius: 0.2B Lightweight Image Inpainting Framework with 10B-Level Performance, describing a small but effective inpainting model - a model where you can mark regions of an image to remove and the model imagines what should fill the space. The released model required PyTorch and NVIDIA CUDA, but since it described itself as 0.2B I decided to try and get it running using WebGPU in a browser. TL;DR: I got it working, and you can try the demo at simonw.github.io/moebius-web/. Read on for the details.\nThe finished tool\nHere's a video demo of the finished tool:\n\n\n",
-      "image": "https://static.simonwillison.net/static/2026/inpainter.jpg",
-      "published": "2026-06-22T23:43:51+00:00",
-      "firstSeen": "2026-06-23T00:00:01.736552+00:00",
-      "lastSeen": "2026-06-23T14:00:01.430441+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 8.23
-    },
-    {
-      "title": "Nvidia says its AI data center design runs hotter to use a lot less water",
-      "url": "https://www.theverge.com/tech/954139/nvidia-data-centers-rubin-liquid-cooling",
-      "source": "The Verge AI",
-      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "Public pushback against data centers has emphasized their water and energy consumption, and now Nvidia is highlighting its claim that the Rubin generation reference design for a fully liquid-cooled data center has \"eliminated massive amounts of power usage and pretty much all water usage.\" Still, it doesn't address all of the concerns around AI data [&#8230;]",
-      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/STKS528_DATA_CENTERS2_D.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
-      "published": "2026-06-22T23:24:32+00:00",
-      "firstSeen": "2026-06-23T00:00:01.736552+00:00",
-      "lastSeen": "2026-06-23T14:00:01.430441+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.9934
-    },
-    {
-      "title": "Cloudflare teams up with Chrome, Firefox, and Edge on a privacy-first anti-bot protocol",
-      "url": "https://thenextweb.com/news/cloudflare-pact-browser-privacy-bot-traffic-protocol",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Cloudflare has announced a joint initiative with Mozilla Firefox, Google Chrome, and Microsoft Edge to develop a new internet protocol that verifies whether web traffic is legitimate without tracking users. The protocol, called Private Access Control Tokens, is designed to replace CAPTCHAs and forced logins with anonymous tokens that prove a visitor is human or [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/cloudflare-pact-browser-privacy-bot-traffic-protocol.avif",
-      "published": "2026-06-22T21:24:32+00:00",
-      "firstSeen": "2026-06-22T22:54:20.075950+00:00",
-      "lastSeen": "2026-06-23T09:00:02.066656+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.7438
+      "score": 1.9119
     },
     {
       "title": "The Friendly Virus",
@@ -654,10 +653,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-22T20:00:00+00:00",
       "firstSeen": "2026-06-22T21:00:01.381447+00:00",
-      "lastSeen": "2026-06-23T14:00:01.430441+00:00",
+      "lastSeen": "2026-06-23T16:00:01.309560+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8572
+      "score": 1.8211
     },
     {
       "title": "The Life Scientific: Dean Lomax",
@@ -670,10 +669,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-15T20:00:00+00:00",
       "firstSeen": "2026-06-15T21:00:01.290903+00:00",
-      "lastSeen": "2026-06-23T14:00:01.430441+00:00",
+      "lastSeen": "2026-06-23T16:00:01.309560+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.1963
+      "score": 1.1959
     },
     {
       "title": "The Life Scientific: Helen Hastie",
