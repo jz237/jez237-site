@@ -83,7 +83,7 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
     </div>
     <button id="actBtn">ACT</button>
   </div>
-  <div class="version">v2.2 Awakening Events</div>
+  <div class="version">v2.3 High-Res Grid</div>
 
   <div class="overlay show" id="title">
     <div class="panel">
@@ -130,11 +130,14 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
 (() => {
   const canvas = document.getElementById('game');
   const ctx = canvas.getContext('2d');
-  const W = 960, H = 640, HUD = 64, COLS = 30, ROWS = 18;
+  const W = 960, H = 640, HUD = 64;
+  const DESKTOP_GRID = window.matchMedia && window.matchMedia('(min-width: 900px)').matches;
+  const COLS = DESKTOP_GRID ? 40 : 30;
+  const ROWS = DESKTOP_GRID ? 24 : 18;
   const TILE = Math.floor(Math.min(W / COLS, (H - HUD) / ROWS));
   const OX = Math.floor((W - COLS * TILE) / 2);
   const OY = HUD + Math.floor((H - HUD - ROWS * TILE) / 2);
-  const VERSION = 'v2.2 Awakening Events';
+  const VERSION = 'v2.3 High-Res Grid';
   const HS_KEY = 'snake-awakening-highscores-v1';
   const SCORE_API = 'https://game-scores.jez237.workers.dev/scores/snake-awakening';
   const SCORE_LIMIT = 10;
@@ -1040,7 +1043,7 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
   resetAttract();
   requestAnimationFrame(frame);
 
-  window.__snakeAwakening = {start, step, command, triggerAwakeningEvent, get stage(){return stage}, get score(){return score}, get state(){return state}, get autoPlay(){return autoPlay}, get highScores(){return getScores()}, get globalScores(){return globalScores}, get directorHistory(){return directorHistory.slice()}, get thinkingHistory(){return thinkingHistory.slice()}, get eventHistory(){return eventHistory.slice()}, get activeEvent(){return awakeningEvent && awakeningEvent.name}, get eventApples(){return eventApples.length}, get attractLength(){return attract.snake.length}, get medals(){return earnedMedals.slice()}, get escapeActive(){return escapeAnim.active}, version:VERSION, needs:modes.map(m=>m.need), eventTypes:awakeningEvents.map(e=>e.type), qa(){ reset(); state='play'; for(let s=0;s<modes.length;s++){ stage=s; progress=0; spawnStageObjects(); updateHUD(); draw(performance.now()); } const event = triggerAwakeningEvent('appleRain'); return {ok:true, modes:modes.length, version:VERSION, needs:modes.map(m=>m.need), directorLines:directorLines.length, thinkingLines:thinkingLines.length, eventTypes:awakeningEvents.length, forcedEvent:event && event.name, eventApples:eventApples.length, attractReady:attract.snake.length > 0, medals:finishMedals(), endingState:'ending'}; }, autoRun(steps=750){ start(true); for(let i=0;i<steps && state==='play';i++) step(); return {state, stage, score, progress, autoPlay, version:VERSION, needs:modes.map(m=>m.need), directorHistory:directorHistory.slice(), thinkingHistory:thinkingHistory.slice(), eventHistory:eventHistory.slice(), medals:earnedMedals.slice(), escapeActive:escapeAnim.active}; }};
+  window.__snakeAwakening = {start, step, command, triggerAwakeningEvent, get stage(){return stage}, get score(){return score}, get state(){return state}, get autoPlay(){return autoPlay}, get highScores(){return getScores()}, get globalScores(){return globalScores}, get directorHistory(){return directorHistory.slice()}, get thinkingHistory(){return thinkingHistory.slice()}, get eventHistory(){return eventHistory.slice()}, get activeEvent(){return awakeningEvent && awakeningEvent.name}, get eventApples(){return eventApples.length}, get attractLength(){return attract.snake.length}, get medals(){return earnedMedals.slice()}, get escapeActive(){return escapeAnim.active}, version:VERSION, grid:{cols:COLS, rows:ROWS, tile:TILE, desktop:DESKTOP_GRID}, needs:modes.map(m=>m.need), eventTypes:awakeningEvents.map(e=>e.type), qa(){ reset(); state='play'; for(let s=0;s<modes.length;s++){ stage=s; progress=0; spawnStageObjects(); updateHUD(); draw(performance.now()); } const event = triggerAwakeningEvent('appleRain'); return {ok:true, modes:modes.length, version:VERSION, grid:{cols:COLS, rows:ROWS, tile:TILE, desktop:DESKTOP_GRID}, needs:modes.map(m=>m.need), directorLines:directorLines.length, thinkingLines:thinkingLines.length, eventTypes:awakeningEvents.length, forcedEvent:event && event.name, eventApples:eventApples.length, attractReady:attract.snake.length > 0, medals:finishMedals(), endingState:'ending'}; }, autoRun(steps=750){ start(true); for(let i=0;i<steps && state==='play';i++) step(); return {state, stage, score, progress, autoPlay, version:VERSION, grid:{cols:COLS, rows:ROWS, tile:TILE, desktop:DESKTOP_GRID}, needs:modes.map(m=>m.need), directorHistory:directorHistory.slice(), thinkingHistory:thinkingHistory.slice(), eventHistory:eventHistory.slice(), medals:earnedMedals.slice(), escapeActive:escapeAnim.active}; }};
 })();
 </script>
 </body>
