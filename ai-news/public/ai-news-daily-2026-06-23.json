@@ -1,6 +1,6 @@
 {
   "date": "2026-06-23",
-  "updatedAt": "2026-06-23T09:00:02.066656+00:00",
+  "updatedAt": "2026-06-23T10:00:01.189312+00:00",
   "items": [
     {
       "title": "OpenAI launches new initiative to help find and patch open source bugs",
@@ -13,11 +13,11 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/09/GettyImages-2214107176.jpg?resize=1200%2C800",
       "published": "2026-06-23T00:11:31+00:00",
       "firstSeen": "2026-06-23T00:18:23.130078+00:00",
-      "lastSeen": "2026-06-23T09:00:02.066656+00:00",
+      "lastSeen": "2026-06-23T10:00:01.189312+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 15.8512
+      "score": 15.8277
     },
     {
       "title": "Micron and Anthropic sign a multi-year AI memory supply deal",
@@ -30,10 +30,10 @@
       "image": "https://media.thenextweb.com/2026/05/Micron.avif",
       "published": "2026-06-23T08:01:45+00:00",
       "firstSeen": "2026-06-23T09:00:02.066656+00:00",
-      "lastSeen": "2026-06-23T09:00:02.066656+00:00",
+      "lastSeen": "2026-06-23T10:00:01.189312+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.5207
+      "score": 11.4914
     },
     {
       "title": "IBM joins OpenAI’s cyber program to bring frontier AI into enterprise security",
@@ -46,10 +46,10 @@
       "image": "https://media.thenextweb.com/2026/05/IBM.avif",
       "published": "2026-06-23T07:48:43+00:00",
       "firstSeen": "2026-06-23T09:00:02.066656+00:00",
-      "lastSeen": "2026-06-23T09:00:02.066656+00:00",
+      "lastSeen": "2026-06-23T10:00:01.189312+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.2143
+      "score": 6.1851
     },
     {
       "title": "NVIDIA Brings Trusted, 24/7 AI Agents to Telecom Operations",
@@ -62,10 +62,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/telco-tm-forum-1920x1080-1.jpg",
       "published": "2026-06-23T06:00:09+00:00",
       "firstSeen": "2026-06-23T07:00:01.672057+00:00",
-      "lastSeen": "2026-06-23T09:00:02.066656+00:00",
+      "lastSeen": "2026-06-23T10:00:01.189312+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.6021
+      "score": 5.5744
     },
     {
       "title": "How Omio is building the future of conversational travel",
@@ -78,10 +78,10 @@
       "image": "https://images.ctfassets.net/kftzwdyauwt9/6wFIgOcT1xK5IvZQIDJ2xQ/edf82561f00cdb27cf3ffcfcad7cd215/oai_Omio_SEO.png?w=1600&amp%3Bh=900&amp%3Bfit=fill",
       "published": "2026-06-23T00:00:00+00:00",
       "firstSeen": "2026-06-23T09:00:02.066656+00:00",
-      "lastSeen": "2026-06-23T09:00:02.066656+00:00",
+      "lastSeen": "2026-06-23T10:00:01.189312+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.2567
+      "score": 4.2332
     },
     {
       "title": "Trump signs orders calling for a powerful quantum computer by 2028",
@@ -94,10 +94,10 @@
       "image": "https://media.thenextweb.com/2026/06/Donald-Trump.avif",
       "published": "2026-06-23T07:03:10+00:00",
       "firstSeen": "2026-06-23T09:00:02.066656+00:00",
-      "lastSeen": "2026-06-23T09:00:02.066656+00:00",
+      "lastSeen": "2026-06-23T10:00:01.189312+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.4921
+      "score": 3.4635
     },
     {
       "title": "Top spy agencies say AI cyber threats will impact you within months. Here’s why",
@@ -110,13 +110,45 @@
       "image": "",
       "published": "2026-06-23T08:00:00+00:00",
       "firstSeen": "2026-06-23T09:00:02.066656+00:00",
-      "lastSeen": "2026-06-23T09:00:02.066656+00:00",
+      "lastSeen": "2026-06-23T10:00:01.189312+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3178
+      "score": 3.2885
     },
     {
-      "title": "Humanity's Last Exam (HLE) is a multi-modal academic benchmark with 2,500 questions across mathematics, humanities, and natural sciences, designed to test LLM capabilities at the frontier of human knowledge with unambiguous, verifiable solutions",
+      "title": "Tata Electronics breach claims to expose Apple and Tesla trade secrets",
+      "url": "https://thenextweb.com/news/tata-electronics-cyber-breach-apple-tesla",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "A ransomware group says it lifted more than 630 gigabytes from the Indian manufacturer, including purported design files belonging to two of its biggest customers. The authenticity of those files is unconfirmed. India’s Tata Electronics has confirmed that it detected a cybersecurity incident on some of its systems a few weeks ago, after a ransomware [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/Tata-Electronics.avif",
+      "published": "2026-06-23T08:20:08+00:00",
+      "firstSeen": "2026-06-23T10:00:01.189312+00:00",
+      "lastSeen": "2026-06-23T10:00:01.189312+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.2003
+    },
+    {
+      "title": "NVIDIA Powers Over 400 of the World’s 500 Fastest Supercomputers",
+      "url": "https://blogs.nvidia.com/blog/top500-green500-supercomputers-isc-2026",
+      "source": "NVIDIA Blog",
+      "sourceUrl": "https://blogs.nvidia.com/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "News Highlights: NVIDIA technology runs 81% of the TOP500 and 90% of the systems new to the list. 26 systems on the TOP500 adopted the NVIDIA Grace CPU, up eight from the previous list. The top eight systems on the Green500 run on NVIDIA GPUs and nine of the top 10 use NVIDIA technologies. No. [&#8230;]",
+      "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/hpc-corp-blog-isc26-wrap-up-blog-1280x680-5375050.png",
+      "published": "2026-06-23T09:00:38+00:00",
+      "firstSeen": "2026-06-23T10:00:01.189312+00:00",
+      "lastSeen": "2026-06-23T10:00:01.189312+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.5602
+    },
+    {
+      "title": "Atkia Mahila, Avinash Maurya, M. Mustafa Rafique, Bogdan Nicolae",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -124,12 +156,28 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-23T09:00:12.064182+00:00",
+      "published": "2026-06-23T10:00:08.567563+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-23T09:00:02.066656+00:00",
+      "lastSeen": "2026-06-23T10:00:01.189312+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.71
+      "score": 2.36
+    },
+    {
+      "title": "The $400 million machine powering the future of chipmaking",
+      "url": "https://www.technologyreview.com/2026/06/23/1138837/asml-400-million-dollar-machine-powering-future-of-chipmaking",
+      "source": "MIT Technology Review AI",
+      "sourceUrl": "https://www.technologyreview.com/topic/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Jos Benschop is climbing a ladder to get to the top of his newest machine.&#160; It’s a bit of a schlep. The contraption is the size of a double-decker bus—more than 150 tons of gleaming precision-milled aluminum covered in thousands of snaking tubes, colored cables, and pressurized tanks. From the ground, it looks like a&#8230;",
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/06/JA26-asml-01.jpg?resize=1200%2C600",
+      "published": "2026-06-23T09:00:00+00:00",
+      "firstSeen": "2026-06-23T10:00:01.189312+00:00",
+      "lastSeen": "2026-06-23T10:00:01.189312+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2599
     },
     {
       "title": "Shipping huggingface_hub every week with AI, open tools, and a human in the loop",
@@ -142,58 +190,10 @@
       "image": "https://huggingface.co/blog/assets/huggingface-hub-release-ci/thumbnail.png",
       "published": "2026-06-23T00:00:00+00:00",
       "firstSeen": "2026-06-23T08:00:01.500705+00:00",
-      "lastSeen": "2026-06-23T09:00:02.066656+00:00",
+      "lastSeen": "2026-06-23T10:00:01.189312+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1867
-    },
-    {
-      "title": "Five Eyes alliance warns frontier AI cyber threats are ‘months’ away",
-      "url": "https://thenextweb.com/news/five-eyes-alliance-warns-frontier-ai-cyber-threats-are-months-away",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The Five Eyes intelligence alliance has issued a joint warning that the next generation of artificial intelligence is poised to supercharge offensive hacking, and that the window to prepare for it is closing fast. In a coordinated statement, the agencies of the United States, the United Kingdom, Canada, Australia, and New Zealand said urgent action [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/The-Five-Eyes-intelligence-alliance.avif",
-      "published": "2026-06-23T07:56:12+00:00",
-      "firstSeen": "2026-06-23T09:00:02.066656+00:00",
-      "lastSeen": "2026-06-23T09:00:02.066656+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.118
-    },
-    {
-      "title": "BP, Walmart and 7-Eleven sued over AI-set petrol prices in California",
-      "url": "https://thenextweb.com/news/ai-gas-prices-lawsuit-california",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "A group of California drivers has sued six of the country’s biggest fuel retailers, accusing them of using an artificial-intelligence pricing tool to coordinate the cost of petrol and keep it artificially high. The complaint, filed on 22 June 2026 in federal court in Sacramento, names BP, Circle K, Marathon Petroleum, 7-Eleven, Walmart, and Albertsons [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/BP.avif",
-      "published": "2026-06-23T07:43:22+00:00",
-      "firstSeen": "2026-06-23T09:00:02.066656+00:00",
-      "lastSeen": "2026-06-23T09:00:02.066656+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.1116
-    },
-    {
-      "title": "AI infrastructure startup Baseten raises $1.5bn at up to $13bn valuation as Blackbird makes its biggest-ever bet",
-      "url": "https://thenextweb.com/news/baseten-13-billion-valuation-blackbird",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The AI infrastructure startup raised $1.5bn in a Series F, with Australia’s Blackbird VC putting in what may be the largest single outlay yet by an Australian firm. Baseten has raised $1.5bn in a Series F round that values the AI infrastructure startup at up to $13bn, a number that arrives barely 18 months and [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/Baseten.avif",
-      "published": "2026-06-23T07:30:59+00:00",
-      "firstSeen": "2026-06-23T09:00:02.066656+00:00",
-      "lastSeen": "2026-06-23T09:00:02.066656+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.1056
+      "score": 2.1632
     }
   ],
   "errors": [
