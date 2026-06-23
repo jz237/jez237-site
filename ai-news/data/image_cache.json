@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-23T21:00:01.441206+00:00",
+  "updatedAt": "2026-06-23T22:00:01.741568+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -11264,6 +11264,14 @@
     "https://techcrunch.com/2026/06/23/kiwibits-ai-powered-bird-feeder-is-my-new-backyard-buddy": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/Solar-Roof-Beako-Lifestyle-Image-3.png?w=1200",
       "checkedAt": "2026-06-23T20:20:41.258411+00:00"
+    },
+    "https://www.techrepublic.com/article/news-coupang-fine-ai-governance-board-risk": {
+      "image": "https://assets.techrepublic.com/uploads/2026/06/young-caucasian-female-programmer-in-glasses-write-2026-03-13-04-14-49-utc-1.jpg?f=jpeg",
+      "checkedAt": "2026-06-23T22:00:01.741568+00:00"
+    },
+    "https://www.techrepublic.com/article/news-google-a24-ai-filmmaking-deepmind-investment": {
+      "image": "https://assets.techrepublic.com/uploads/2026/06/a24.jpg?f=jpeg",
+      "checkedAt": "2026-06-23T22:00:01.741568+00:00"
     }
   }
 }
