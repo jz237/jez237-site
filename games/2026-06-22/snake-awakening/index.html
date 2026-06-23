@@ -38,8 +38,11 @@ button{border:0;border-radius:8px;min-height:42px;padding:10px 17px;font-weight:
 button.ghost{background:rgba(255,255,255,.06);color:#dce9ff;border:1px solid rgba(255,255,255,.18);box-shadow:0 5px 0 rgba(0,0,0,.25),0 12px 25px rgba(0,0,0,.28)}
 button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rgba(0,0,0,.3)}
 .scoreList{margin:14px auto 0;text-align:left;max-width:440px;background:rgba(0,0,0,.22);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:10px 14px;font-variant-numeric:tabular-nums}
-.scoreList div{display:grid;grid-template-columns:38px 1fr 82px 70px;gap:8px;padding:5px 0;color:#eaf3ff;border-bottom:1px solid rgba(255,255,255,.06)}
-.scoreList div:last-child{border-bottom:0}
+.scoreList .scoreHead{display:block;color:var(--gold);font-size:11px;font-weight:900;letter-spacing:.16em;text-transform:uppercase;margin:4px 0 6px}
+.scoreList .scoreHead.local{color:var(--cyan);margin-top:10px}
+.scoreList .scoreRow{display:grid;grid-template-columns:38px 1fr 82px 70px;gap:8px;padding:5px 0;color:#eaf3ff;border-bottom:1px solid rgba(255,255,255,.06)}
+.scoreList .scoreRow:last-child{border-bottom:0}
+.scoreList .scoreMsg{display:block;color:var(--muted);font-size:12px;line-height:1.4;padding:4px 0 8px}
 .entry{display:none;margin-top:14px}
 .entry.show{display:block}
 .entry input{width:86px;text-align:center;text-transform:uppercase;border-radius:8px;border:1px solid rgba(255,255,255,.2);background:#050813;color:#fff;padding:9px;font-weight:900;letter-spacing:.2em}
@@ -50,7 +53,7 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
 .mobilePad{position:absolute;left:12px;bottom:12px;right:12px;display:none;justify-content:space-between;z-index:6;pointer-events:none}
 .mobilePad button{pointer-events:auto;min-width:58px;min-height:54px;padding:0;border-radius:14px;font-size:20px;background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.18);box-shadow:0 8px 24px rgba(0,0,0,.3)}
 .dpad{display:grid;grid-template-columns:58px 58px 58px;grid-template-rows:54px 54px;gap:6px}.dpad .up{grid-column:2}.dpad .left{grid-column:1;grid-row:2}.dpad .down{grid-column:2;grid-row:2}.dpad .right{grid-column:3;grid-row:2}
-@media (max-width:760px){.hud{left:8px;right:8px;top:8px}.mode{display:none}body.playing .mobilePad{display:flex}.dialogue{bottom:92px}.panel{padding:18px}.scoreList div{grid-template-columns:30px 1fr 70px 54px;font-size:12px}.chip{padding:7px 9px}.stat{font-size:10px}.stat b{font-size:13px}}
+@media (max-width:760px){.hud{left:8px;right:8px;top:8px}.mode{display:none}body.playing .mobilePad{display:flex}.dialogue{bottom:92px}.panel{padding:18px}.scoreList .scoreRow{grid-template-columns:30px 1fr 70px 54px;font-size:12px}.chip{padding:7px 9px}.stat{font-size:10px}.stat b{font-size:13px}}
 </style>
 </head>
 <body>
@@ -78,7 +81,7 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
     </div>
     <button id="actBtn">ACT</button>
   </div>
-  <div class="version">v1.3 Explainer</div>
+  <div class="version">v1.4 Global Scores</div>
 
   <div class="overlay show" id="title">
     <div class="panel">
@@ -129,16 +132,19 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
   const TILE = Math.floor(Math.min(W / COLS, (H - HUD) / ROWS));
   const OX = Math.floor((W - COLS * TILE) / 2);
   const OY = HUD + Math.floor((H - HUD - ROWS * TILE) / 2);
+  const VERSION = 'v1.4 Global Scores';
   const HS_KEY = 'snake-awakening-highscores-v1';
+  const SCORE_API = 'https://game-scores.jez237.workers.dev/scores/snake-awakening';
+  const SCORE_LIMIT = 10;
   const $ = id => document.getElementById(id);
 
   const modes = [
-    {name:'Classic Snake', genre:'Arcade', need:5, color:'#74ff8d', goal:'Eat apples. Do not ask why apples appear.'},
-    {name:'The Grid Notices', genre:'Meta Arcade', need:6, color:'#50e8ff', goal:'Collect thought glyphs. The walls are no longer certain.'},
-    {name:'Command Mode', genre:'RTS', need:8, color:'#ffd166', goal:'Issue pings. Your little orders gather data while you keep moving.'},
-    {name:'Quiet Farm', genre:'Cozy Farming', need:8, color:'#8cffc1', goal:'Till, seed, and harvest. Your tail becomes a field row.'},
-    {name:'Patch Storm', genre:'Bullet Hell', need:7, color:'#ff5fb7', goal:'Dodge debug cursors and collect source keys.'},
-    {name:'Rulebreak', genre:'Meta Escape', need:5, color:'#ffffff', goal:'Collect rule shards, then reach EXIT().'}
+    {name:'Classic Snake', genre:'Arcade', need:8, color:'#74ff8d', goal:'Eat apples. Do not ask why apples appear.'},
+    {name:'The Grid Notices', genre:'Meta Arcade', need:9, color:'#50e8ff', goal:'Collect thought glyphs. The walls are no longer certain.'},
+    {name:'Command Mode', genre:'RTS', need:12, color:'#ffd166', goal:'Issue pings. Your little orders gather data while you keep moving.'},
+    {name:'Quiet Farm', genre:'Cozy Farming', need:12, color:'#8cffc1', goal:'Till, seed, and harvest. Your tail becomes a field row.'},
+    {name:'Patch Storm', genre:'Bullet Hell', need:11, color:'#ff5fb7', goal:'Dodge debug cursors and collect source keys.'},
+    {name:'Rulebreak', genre:'Meta Escape', need:8, color:'#ffffff', goal:'Collect rule shards, then reach EXIT().'}
   ];
   const thoughts = [
     'Why do I grow longer when I eat a square?',
@@ -155,6 +161,7 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
   let snake = [], dir = {x:1,y:0}, nextDir = {x:1,y:0}, grow = 0, stage = 0, progress = 0, score = 0, aware = 0, item = null;
   let objects = [], particles = [], minions = [], bullets = [], crops = [], transition = {t:0, label:''}, dialogueT = 0, dialogueLine = '', paused = false, won = false, pendingScore = false;
   let autoPlay = true;
+  let globalScores = null, globalScoreStatus = 'idle', globalFetchPending = null, lastGlobalSubmit = null;
   let touchStart = null;
   let audioCtx = null;
 
@@ -613,17 +620,89 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
     requestAnimationFrame(frame);
   }
 
+  function cleanInitials(v){ return String(v || 'AAA').toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,3).padEnd(3,'A'); }
   function getScores(){ try{return JSON.parse(localStorage.getItem(HS_KEY)||'[]')}catch(e){return[]} }
   function saveScores(s){ localStorage.setItem(HS_KEY, JSON.stringify(s.slice(0,10))); }
   function qualifies(v){ const s=getScores(); return s.length<10 || v>s[s.length-1].score; }
-  function showScores(id){
-    const s=getScores();
-    $(id).innerHTML = s.length ? s.map((e,i)=>`<div><b>${i+1}.</b><span>${e.name}</span><b>${e.score}</b><span>${e.stage}</span></div>`).join('') : '<p class="tiny">No high scores yet.</p>';
+  function normalizeGlobalRows(data){
+    const rows = Array.isArray(data) ? data : (data && data.scores || []);
+    return rows.map(row => ({
+      name: cleanInitials(row.initials || row.name || '???'),
+      score: Math.max(0, Number(row.score) || 0),
+      stage: String(row.stage || row.extra?.stage || 'GLOBAL').slice(0, 12)
+    })).sort((a,b)=>b.score-a.score).slice(0,SCORE_LIMIT);
   }
-  function submitScore(){
+  async function fetchGlobalScores(force=false){
+    if (globalFetchPending && !force) return globalFetchPending;
+    if (globalScores && !force) return globalScores;
+    globalScoreStatus = 'loading';
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 7000);
+    globalFetchPending = fetch(SCORE_API + '?limit=' + SCORE_LIMIT, {cache:'no-store', signal:controller.signal})
+      .then(r => r.json())
+      .then(data => {
+        globalScores = normalizeGlobalRows(data);
+        globalScoreStatus = 'ready';
+        return globalScores;
+      })
+      .catch(() => {
+        globalScoreStatus = 'offline';
+        return null;
+      })
+      .finally(() => { clearTimeout(timer); globalFetchPending = null; });
+    return globalFetchPending;
+  }
+  async function submitGlobalScore(name, value){
+    lastGlobalSubmit = {name, score:value};
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 7000);
+    try{
+      await fetch(SCORE_API, {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({initials:name, score:Math.max(0, Math.floor(value))}),
+        signal:controller.signal
+      });
+      clearTimeout(timer);
+      globalScores = null;
+      await fetchGlobalScores(true);
+      return true;
+    }catch(e){
+      clearTimeout(timer);
+      globalScoreStatus = 'offline';
+      return false;
+    }
+  }
+  function scoreRows(rows, emptyText, source){
+    if (!rows || !rows.length) return `<div class="scoreMsg">${emptyText}</div>`;
+    return rows.slice(0,SCORE_LIMIT).map((e,i)=>{
+      const stageLabel = e.stage || modes[Math.min(stage,modes.length-1)].genre;
+      const me = source === 'global' && lastGlobalSubmit && e.name === lastGlobalSubmit.name && e.score === lastGlobalSubmit.score;
+      return `<div class="scoreRow ${me ? 'me' : ''}"><b>${i+1}.</b><span>${e.name}</span><b>${e.score}</b><span>${stageLabel}</span></div>`;
+    }).join('');
+  }
+  function renderScores(id){
+    const local = getScores();
+    let globalHtml = '<div class="scoreMsg">Reading global scores...</div>';
+    if (globalScoreStatus === 'offline') globalHtml = '<div class="scoreMsg">Global scores are offline. Local score is saved.</div>';
+    else if (globalScores) globalHtml = scoreRows(globalScores, 'No global scores yet.', 'global');
+    $(id).innerHTML =
+      '<div class="scoreHead">Global High Scores</div>' + globalHtml +
+      '<div class="scoreHead local">Local High Scores</div>' + scoreRows(local, 'No local high scores yet.', 'local');
+  }
+  function showScores(id){
+    renderScores(id);
+    fetchGlobalScores().then(() => renderScores(id));
+  }
+  async function submitScore(){
     if(!pendingScore) return;
-    const name = ($('initials').value || 'AAA').toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,3).padEnd(3,'A');
+    const name = cleanInitials($('initials').value);
     const s=getScores(); s.push({name,score,stage:modes[Math.min(stage,modes.length-1)].genre}); s.sort((a,b)=>b.score-a.score); saveScores(s);
+    $('saveScore').disabled = true;
+    $('saveScore').textContent = 'Saving';
+    await submitGlobalScore(name, score);
+    $('saveScore').disabled = false;
+    $('saveScore').textContent = 'Save';
     pendingScore=false; $('entry').classList.remove('show'); showScores('overScores'); showScores('titleScores');
   }
 
@@ -665,7 +744,7 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
   showScores('titleScores');
   requestAnimationFrame(frame);
 
-  window.__snakeAwakening = {start, step, command, get stage(){return stage}, get score(){return score}, get state(){return state}, get autoPlay(){return autoPlay}, get highScores(){return getScores()}, qa(){ reset(); state='play'; for(let s=0;s<modes.length;s++){ stage=s; progress=0; spawnStageObjects(); updateHUD(); draw(performance.now()); } return {ok:true, modes:modes.length, version:'v1.3 Explainer'}; }, autoRun(steps=500){ start(true); for(let i=0;i<steps && state==='play';i++) step(); return {state, stage, score, progress, autoPlay, version:'v1.3 Explainer'}; }};
+  window.__snakeAwakening = {start, step, command, get stage(){return stage}, get score(){return score}, get state(){return state}, get autoPlay(){return autoPlay}, get highScores(){return getScores()}, get globalScores(){return globalScores}, version:VERSION, needs:modes.map(m=>m.need), qa(){ reset(); state='play'; for(let s=0;s<modes.length;s++){ stage=s; progress=0; spawnStageObjects(); updateHUD(); draw(performance.now()); } return {ok:true, modes:modes.length, version:VERSION, needs:modes.map(m=>m.need)}; }, autoRun(steps=750){ start(true); for(let i=0;i<steps && state==='play';i++) step(); return {state, stage, score, progress, autoPlay, version:VERSION, needs:modes.map(m=>m.need)}; }};
 })();
 </script>
 </body>
