@@ -239,8 +239,8 @@
       </label>
       <label class="field">
         Patch
-        <input id="patch" type="range" min="0" max="1.6" value="1" step="0.05" />
-        <output id="patchValue">1.00</output>
+        <input id="patch" type="range" min="0" max="2.2" value="1.45" step="0.05" />
+        <output id="patchValue">1.45</output>
       </label>
     </section>
   </main>
@@ -493,9 +493,27 @@
     }
 
     function addCrownPatch() {
-      addFilledEllipsoid([4.34, 2.16, 0], [0.58, 0.14, 0.34], 4200, 8, palette.crown, 16, 0.012);
-      addFilledEllipsoid([4.82, 2.02, -0.2], [0.24, 0.08, 0.16], 900, 8, palette.crown, 15, 0.008);
-      addFilledEllipsoid([3.9, 2.03, 0.2], [0.24, 0.08, 0.14], 760, 8, palette.crown, 15, 0.008);
+      const center = [4.34, 1.18, 0];
+      const radius = [1.35, 1.18, 1.22];
+      const addSurfacePatch = (offsetX, offsetZ, widthX, widthZ, count, size) => {
+        for (let i = 0; i < count; i++) {
+          const angle = rand() * Math.PI * 2;
+          const spread = Math.sqrt(rand());
+          const x = center[0] + offsetX + Math.cos(angle) * widthX * spread;
+          const z = center[2] + offsetZ + Math.sin(angle) * widthZ * spread;
+          const nx = (x - center[0]) / radius[0];
+          const nz = (z - center[2]) / radius[2];
+          const cap = Math.max(0.08, 1 - nx * nx - nz * nz);
+          const y = center[1] + Math.sqrt(cap) * radius[1] + 0.075;
+          pushPoint(x, y, z, palette.crown, size, 8, 0.018);
+        }
+      };
+
+      addSurfacePatch(0.02, 0, 0.72, 0.48, 9200, 19);
+      addSurfacePatch(0.44, -0.22, 0.35, 0.23, 2600, 18);
+      addSurfacePatch(-0.42, 0.24, 0.36, 0.23, 2400, 18);
+      addSurfacePatch(0.22, 0.18, 0.38, 0.24, 2600, 18);
+      addFilledEllipsoid([4.36, 2.22, 0], [0.64, 0.08, 0.42], 2600, 8, palette.crown, 18, 0.008);
     }
 
     function buildCat() {
