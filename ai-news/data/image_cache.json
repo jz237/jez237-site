@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-23T20:00:01.900277+00:00",
+  "updatedAt": "2026-06-23T20:20:41.258411+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -11256,6 +11256,14 @@
     "https://simonwillison.net/2026/Jun/23/opfs-pyodide": {
       "image": "",
       "checkedAt": "2026-06-23T20:00:01.900277+00:00"
+    },
+    "https://openai.com/index/helping-build-shared-standards-for-advanced-ai": {
+      "image": "",
+      "checkedAt": "2026-06-23T20:20:41.258411+00:00"
+    },
+    "https://techcrunch.com/2026/06/23/kiwibits-ai-powered-bird-feeder-is-my-new-backyard-buddy": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/Solar-Roof-Beako-Lifestyle-Image-3.png?w=1200",
+      "checkedAt": "2026-06-23T20:20:41.258411+00:00"
     }
   }
 }
