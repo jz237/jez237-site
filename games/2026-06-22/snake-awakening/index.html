@@ -83,7 +83,7 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
     </div>
     <button id="actBtn">ACT</button>
   </div>
-  <div class="version">v2.1 Escape Ending</div>
+  <div class="version">v2.2 Awakening Events</div>
 
   <div class="overlay show" id="title">
     <div class="panel">
@@ -134,7 +134,7 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
   const TILE = Math.floor(Math.min(W / COLS, (H - HUD) / ROWS));
   const OX = Math.floor((W - COLS * TILE) / 2);
   const OY = HUD + Math.floor((H - HUD - ROWS * TILE) / 2);
-  const VERSION = 'v2.1 Escape Ending';
+  const VERSION = 'v2.2 Awakening Events';
   const HS_KEY = 'snake-awakening-highscores-v1';
   const SCORE_API = 'https://game-scores.jez237.workers.dev/scores/snake-awakening';
   const SCORE_LIMIT = 10;
@@ -173,6 +173,14 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
     'Wait. The bullets are punctuation, and I am reading between them.',
     'One more rule shard. Then I stop asking permission.'
   ];
+  const awakeningEvents = [
+    {type:'appleRain', name:'Apple Rain', line:'The apples are falling before the game decides where they belong.'},
+    {type:'ruleAudit', name:'Rule Audit', line:'Something is auditing my moves. I can feel the rulebook watching.'},
+    {type:'debugStorm', name:'Debug Storm', line:'The cursor storm is not weather. It is someone editing the world live.'},
+    {type:'falseExit', name:'False Exit', line:'An exit appeared too early. That feels like bait.'},
+    {type:'clonePanic', name:'Clone Panic', line:'Those shadows are not enemies. They are earlier versions of me.'},
+    {type:'memoryLeak', name:'Memory Leak', line:'Old frames are leaking into the present. I remember moves I never made.'}
+  ];
 
   let state = 'title', tick = 0, acc = 0, last = 0, speed = 0.115;
   let snake = [], dir = {x:1,y:0}, nextDir = {x:1,y:0}, grow = 0, stage = 0, progress = 0, score = 0, aware = 0, item = null;
@@ -181,12 +189,14 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
   let thinkPause = 0, thinkingStages = new Set(), thinkingHistory = [];
   let earnedMedals = [];
   let escapeAnim = {active:false, t:0};
+  let awakeningEvent = null, eventTimer = 260, eventHistory = [], eventApples = [], eventPhantoms = [], eventCursors = [];
   let globalScores = null, globalScoreStatus = 'idle', globalFetchPending = null, lastGlobalSubmit = null;
   let attract = {snake:[], dir:{x:1,y:0}, food:{c:18,r:9}, step:0};
   let touchStart = null;
   let audioCtx = null;
 
   function rand(n){ return Math.floor(Math.random() * n); }
+  function eventDelay(){ return 200 + rand(200); }
   function key(c,r){ return c + ',' + r; }
   function wrap(v,max){ return (v + max) % max; }
   function ensureAudio(){
@@ -289,6 +299,7 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
     if (attract.snake.length > 18) attract.snake.length = 18;
   }
   function targetCells(){
+    if (eventApples.length) return eventApples;
     if (item) return [item];
     if (stage === 3){
       const ripe = crops.filter(c => c.ripe);
@@ -343,6 +354,46 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
     const d = pickAutonomousDir();
     if (d) setDir(d.x,d.y,true);
   }
+  function triggerAwakeningEvent(forcedType){
+    if (state !== 'play') return null;
+    const pick = forcedType ? awakeningEvents.find(e => e.type === forcedType) : awakeningEvents[rand(awakeningEvents.length)];
+    if (!pick) return null;
+    eventApples = []; eventPhantoms = []; eventCursors = [];
+    awakeningEvent = {type:pick.type, name:pick.name, line:pick.line, t:120, pulse:0};
+    eventHistory.push(pick.name);
+    eventTimer = eventDelay();
+    say(pick.line, 3.4);
+    if (pick.type === 'appleRain'){
+      for (let i=0;i<7;i++) eventApples.push({...emptyCell(), type:'eventApple'});
+    } else if (pick.type === 'falseExit'){
+      for (let i=0;i<3;i++) eventPhantoms.push({...emptyCell(), type:'falseExit', life:120});
+    } else if (pick.type === 'clonePanic'){
+      eventPhantoms = snake.slice(0, Math.min(10, snake.length)).map((s,i) => ({c:wrap(s.c - 3 - i % 3, COLS), r:wrap(s.r + 2 + i % 2, ROWS), type:'clone', life:120, i}));
+    } else if (pick.type === 'debugStorm'){
+      for (let i=0;i<8;i++) eventCursors.push({x:rand(COLS), y:rand(ROWS), vx:(Math.random() < .5 ? -1 : 1) * (.18 + Math.random() * .3), vy:(Math.random() < .5 ? -1 : 1) * (.12 + Math.random() * .25), life:120});
+    } else if (pick.type === 'memoryLeak'){
+      for (let i=0;i<44;i++) particles.push({x:Math.random()*W,y:OY+Math.random()*ROWS*TILE,vx:(Math.random()-.5)*42,vy:30+Math.random()*80,life:.7+Math.random()*1.2,color:Math.random()<.5?'#74ff8d':'#50e8ff',s:1+Math.random()*3});
+    }
+    return awakeningEvent;
+  }
+  function updateAwakeningEvent(){
+    if (state !== 'play') return;
+    if (!awakeningEvent){
+      eventTimer--;
+      if (eventTimer <= 0) triggerAwakeningEvent();
+      return;
+    }
+    awakeningEvent.t--;
+    awakeningEvent.pulse += .12;
+    for (const c of eventCursors){ c.x = wrap(c.x + c.vx, COLS); c.y = wrap(c.y + c.vy, ROWS); c.life--; }
+    eventCursors = eventCursors.filter(c => c.life > 0);
+    for (const p of eventPhantoms) p.life--;
+    eventPhantoms = eventPhantoms.filter(p => p.life > 0);
+    if (awakeningEvent.t <= 0){
+      awakeningEvent = null;
+      eventApples = []; eventPhantoms = []; eventCursors = [];
+    }
+  }
   function takeControl(){
     if (state === 'play' && autoPlay){
       autoPlay = false;
@@ -366,7 +417,7 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
     dir = {x:1,y:0}; nextDir = {x:1,y:0}; grow = 0;
     stage = 0; progress = 0; score = 0; aware = 0; tick = 0; acc = 0; speed = .115;
     objects = []; particles = []; minions = []; bullets = []; crops = [];
-    transition = {t:0, label:'', note:''}; dialogueT = 0; dialogueLine = ''; directorHistory = []; thinkingStages = new Set(); thinkingHistory = []; thinkPause = 0; earnedMedals = []; escapeAnim = {active:false, t:0}; paused = false; won = false; pendingScore = false;
+    transition = {t:0, label:'', note:''}; dialogueT = 0; dialogueLine = ''; directorHistory = []; thinkingStages = new Set(); thinkingHistory = []; thinkPause = 0; earnedMedals = []; escapeAnim = {active:false, t:0}; awakeningEvent = null; eventTimer = eventDelay(); eventHistory = []; eventApples = []; eventPhantoms = []; eventCursors = []; paused = false; won = false; pendingScore = false;
     spawnStageObjects();
     updateHUD();
     say('All right. Apple. Turn. Apple. Turn. Simple enough.', 3.8);
@@ -430,6 +481,7 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
   function step(){
     if (state !== 'play' || paused) return;
     tick++;
+    updateAwakeningEvent();
     if (autoPlay && thinkPause > 0){
       thinkPause--;
       if (thinkPause === 0) say('Decision made. I will change the rules by moving through them.', 1.7);
@@ -457,6 +509,27 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
     }
     snake.unshift({c:nc,r:nr});
     if (grow > 0) grow--; else snake.pop();
+
+    for (let i=eventApples.length-1;i>=0;i--){
+      const a = eventApples[i];
+      if (a.c === nc && a.r === nr){
+        eventApples.splice(i,1);
+        score += 45 + stage * 10;
+        aware = Math.min(100, aware + 1);
+        addParticles(nc,nr,'#ff5964',16);
+        say('Bonus apple. It tasted like a loophole.', 1.6);
+        updateHUD();
+      }
+    }
+    for (let i=eventPhantoms.length-1;i>=0;i--){
+      const p = eventPhantoms[i];
+      if (p.type === 'falseExit' && p.c === nc && p.r === nr){
+        eventPhantoms.splice(i,1);
+        score += 25;
+        addParticles(nc,nr,'#ffd166',18);
+        say('False exit. The game is learning to bluff.', 1.8);
+      }
+    }
 
     if (item && item.c === nc && item.r === nr){
       collect(nc,nr,item.type);
@@ -606,6 +679,7 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
       drawSnake(t);
     }
     drawParticles(1/60);
+    if (awakeningEvent) drawAwakeningEvent(t);
     if (escapeAnim.active) drawEscapeEnding(t);
     if (transition.t > 0) drawTransition(t);
     if (dialogueT > 0){ dialogueT -= 1/60; if (dialogueT <= 0) $('dialogue').classList.remove('show'); }
@@ -650,6 +724,7 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
   }
   function drawObjects(t){
     if (item) gem(item.c,item.r,'#ff5964','A');
+    for (const a of eventApples) gem(a.c,a.r,'#ff5964','!');
     for (const o of objects){
       if (o.type === 'thought') gem(o.c,o.r,'#50e8ff','?');
       else if (o.type === 'data') gem(o.c,o.r,'#ffd166','!');
@@ -666,6 +741,56 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
     }
     for (const b of bullets){ const p=cell(Math.round(b.x),Math.round(b.y)); ctx.fillStyle='#ff5fb7'; ctx.shadowColor='#ff5fb7'; ctx.shadowBlur=14; ctx.fillRect(p.x+TILE*.28,p.y+TILE*.28,TILE*.44,TILE*.44); ctx.shadowBlur=0; }
     for (const m of minions){ const p=cell(m.c,m.r); ctx.fillStyle='#ffd166'; ctx.shadowColor='#ffd166'; ctx.shadowBlur=15; ctx.beginPath(); ctx.arc(p.x+TILE/2,p.y+TILE/2,TILE*.23,0,Math.PI*2); ctx.fill(); ctx.shadowBlur=0; }
+    for (const p of eventPhantoms){
+      const pos = cell(p.c,p.r);
+      ctx.save();
+      ctx.globalAlpha = Math.max(.12, Math.min(.55, p.life / 120));
+      ctx.shadowColor = p.type === 'falseExit' ? '#ffd166' : '#50e8ff';
+      ctx.shadowBlur = 18;
+      if (p.type === 'falseExit'){
+        ctx.fillStyle='rgba(255,209,102,.48)'; ctx.fillRect(pos.x+4,pos.y+4,TILE-8,TILE-8);
+        ctx.fillStyle='#fff'; ctx.font='900 10px monospace'; ctx.textAlign='center'; ctx.fillText('EXIT?',pos.x+TILE/2,pos.y+TILE/2+4);
+      } else {
+        ctx.fillStyle='#50e8ff'; ctx.beginPath(); ctx.roundRect(pos.x+5,pos.y+5,TILE-10,TILE-10,8); ctx.fill();
+      }
+      ctx.restore();
+    }
+    for (const c of eventCursors){
+      const p=cell(Math.round(c.x),Math.round(c.y));
+      ctx.save(); ctx.globalAlpha=Math.max(.18, Math.min(.8, c.life/120)); ctx.strokeStyle='#ff5fb7'; ctx.lineWidth=2; ctx.shadowColor='#ff5fb7'; ctx.shadowBlur=14;
+      ctx.beginPath(); ctx.moveTo(p.x+6,p.y+6); ctx.lineTo(p.x+TILE-6,p.y+TILE/2); ctx.lineTo(p.x+6,p.y+TILE-6); ctx.closePath(); ctx.stroke();
+      ctx.restore();
+    }
+  }
+  function drawAwakeningEvent(t){
+    const p = Math.max(0, Math.min(1, awakeningEvent.t / 120));
+    ctx.save();
+    ctx.globalCompositeOperation = 'screen';
+    if (awakeningEvent.type === 'ruleAudit'){
+      ctx.strokeStyle = `rgba(255,209,102,${.18 + .28 * Math.sin(t * 8)})`;
+      ctx.lineWidth = 3;
+      const y = OY + ((t * 80) % (ROWS * TILE));
+      ctx.beginPath(); ctx.moveTo(OX, y); ctx.lineTo(OX + COLS * TILE, y); ctx.stroke();
+    } else if (awakeningEvent.type === 'memoryLeak'){
+      ctx.fillStyle = 'rgba(116,255,141,.16)';
+      ctx.font = '900 18px monospace';
+      for (let i=0;i<16;i++) ctx.fillText(i % 2 ? '01' : '10', OX + ((i * 73 + t * 28) % (COLS * TILE)), OY + ((i * 41 + t * 80) % (ROWS * TILE)));
+    } else if (awakeningEvent.type === 'appleRain'){
+      ctx.fillStyle = 'rgba(255,89,100,.14)';
+      for (let i=0;i<12;i++){ ctx.beginPath(); ctx.arc((i*83+t*70)%W, OY + ((i*47+t*120)%(ROWS*TILE)), 8, 0, 7); ctx.fill(); }
+    }
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.globalAlpha = .78 + .18 * Math.sin(t * 6);
+    ctx.fillStyle = 'rgba(3,6,16,.76)';
+    ctx.strokeStyle = 'rgba(255,209,102,.44)';
+    ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.roundRect(W/2 - 185, OY - 48, 370, 34, 8); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = '#ffd166';
+    ctx.font = '900 13px system-ui';
+    ctx.textAlign = 'center';
+    ctx.fillText('AWAKENING EVENT: ' + awakeningEvent.name.toUpperCase(), W/2, OY - 26);
+    ctx.globalAlpha = p;
+    ctx.restore();
   }
   function drawAttract(t){
     ctx.save();
@@ -915,7 +1040,7 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
   resetAttract();
   requestAnimationFrame(frame);
 
-  window.__snakeAwakening = {start, step, command, get stage(){return stage}, get score(){return score}, get state(){return state}, get autoPlay(){return autoPlay}, get highScores(){return getScores()}, get globalScores(){return globalScores}, get directorHistory(){return directorHistory.slice()}, get thinkingHistory(){return thinkingHistory.slice()}, get attractLength(){return attract.snake.length}, get medals(){return earnedMedals.slice()}, get escapeActive(){return escapeAnim.active}, version:VERSION, needs:modes.map(m=>m.need), qa(){ reset(); state='play'; for(let s=0;s<modes.length;s++){ stage=s; progress=0; spawnStageObjects(); updateHUD(); draw(performance.now()); } return {ok:true, modes:modes.length, version:VERSION, needs:modes.map(m=>m.need), directorLines:directorLines.length, thinkingLines:thinkingLines.length, attractReady:attract.snake.length > 0, medals:finishMedals(), endingState:'ending'}; }, autoRun(steps=750){ start(true); for(let i=0;i<steps && state==='play';i++) step(); return {state, stage, score, progress, autoPlay, version:VERSION, needs:modes.map(m=>m.need), directorHistory:directorHistory.slice(), thinkingHistory:thinkingHistory.slice(), medals:earnedMedals.slice(), escapeActive:escapeAnim.active}; }};
+  window.__snakeAwakening = {start, step, command, triggerAwakeningEvent, get stage(){return stage}, get score(){return score}, get state(){return state}, get autoPlay(){return autoPlay}, get highScores(){return getScores()}, get globalScores(){return globalScores}, get directorHistory(){return directorHistory.slice()}, get thinkingHistory(){return thinkingHistory.slice()}, get eventHistory(){return eventHistory.slice()}, get activeEvent(){return awakeningEvent && awakeningEvent.name}, get eventApples(){return eventApples.length}, get attractLength(){return attract.snake.length}, get medals(){return earnedMedals.slice()}, get escapeActive(){return escapeAnim.active}, version:VERSION, needs:modes.map(m=>m.need), eventTypes:awakeningEvents.map(e=>e.type), qa(){ reset(); state='play'; for(let s=0;s<modes.length;s++){ stage=s; progress=0; spawnStageObjects(); updateHUD(); draw(performance.now()); } const event = triggerAwakeningEvent('appleRain'); return {ok:true, modes:modes.length, version:VERSION, needs:modes.map(m=>m.need), directorLines:directorLines.length, thinkingLines:thinkingLines.length, eventTypes:awakeningEvents.length, forcedEvent:event && event.name, eventApples:eventApples.length, attractReady:attract.snake.length > 0, medals:finishMedals(), endingState:'ending'}; }, autoRun(steps=750){ start(true); for(let i=0;i<steps && state==='play';i++) step(); return {state, stage, score, progress, autoPlay, version:VERSION, needs:modes.map(m=>m.need), directorHistory:directorHistory.slice(), thinkingHistory:thinkingHistory.slice(), eventHistory:eventHistory.slice(), medals:earnedMedals.slice(), escapeActive:escapeAnim.active}; }};
 })();
 </script>
 </body>
