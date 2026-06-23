@@ -1,0 +1,784 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Animated Particle Cat</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --ink: #f7f1e8;
+      --muted: #beb8af;
+      --panel: rgba(14, 17, 22, 0.72);
+      --line: rgba(255, 255, 255, 0.12);
+      --aqua: #66dfd0;
+      --gold: #f6c85f;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      background: #0f1218;
+      color: var(--ink);
+    }
+
+    #scene {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+      cursor: grab;
+      touch-action: none;
+    }
+
+    #scene:active {
+      cursor: grabbing;
+    }
+
+    .hud {
+      position: fixed;
+      inset: 18px 20px auto;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      pointer-events: none;
+    }
+
+    .title {
+      max-width: min(430px, 58vw);
+      text-shadow: 0 2px 24px rgba(0, 0, 0, 0.55);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(1.45rem, 4vw, 3rem);
+      line-height: 0.95;
+      letter-spacing: 0;
+    }
+
+    .title p {
+      margin: 10px 0 0;
+      color: var(--muted);
+      font-size: clamp(0.82rem, 1.6vw, 1rem);
+      line-height: 1.5;
+    }
+
+    .controls {
+      width: min(392px, 44vw);
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      backdrop-filter: blur(16px);
+      box-shadow: 0 18px 60px rgba(0, 0, 0, 0.32);
+      pointer-events: auto;
+    }
+
+    .button-row {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    button {
+      height: 38px;
+      border: 1px solid rgba(255, 255, 255, 0.13);
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--ink);
+      font: inherit;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+
+    button[aria-pressed="true"] {
+      color: #10151a;
+      background: var(--aqua);
+      border-color: transparent;
+    }
+
+    .field {
+      display: grid;
+      grid-template-columns: 74px 1fr 42px;
+      align-items: center;
+      min-height: 32px;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--gold);
+    }
+
+    output {
+      color: var(--ink);
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .stats {
+      position: fixed;
+      left: 20px;
+      bottom: 18px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      pointer-events: none;
+    }
+
+    .stat {
+      padding: 8px 10px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(14, 17, 22, 0.6);
+      color: var(--muted);
+      backdrop-filter: blur(12px);
+      font-size: 0.78rem;
+    }
+
+    .stat strong {
+      color: var(--ink);
+      font-weight: 700;
+    }
+
+    .credit {
+      position: fixed;
+      right: 18px;
+      bottom: 16px;
+      color: rgba(247, 241, 232, 0.5);
+      font-size: 0.74rem;
+      pointer-events: none;
+    }
+
+    @media (max-width: 720px) {
+      .hud {
+        inset: 12px 12px auto;
+        flex-direction: column;
+      }
+
+      .title {
+        max-width: 100%;
+      }
+
+      .title p {
+        display: none;
+      }
+
+      .controls {
+        width: 100%;
+        padding: 10px;
+      }
+
+      .field {
+        grid-template-columns: 62px 1fr 36px;
+      }
+
+      button {
+        font-size: 0.82rem;
+      }
+
+      .stats {
+        left: 12px;
+        right: 12px;
+        bottom: 12px;
+      }
+
+      .credit {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="scene" aria-label="Animated particle cat demo"></canvas>
+
+  <main class="hud">
+    <section class="title" aria-label="Demo title">
+      <h1>Particle Cat</h1>
+      <p>A cat-shaped point cloud with layered fur, tabby markings, blinking eyes, whiskers, paws, and a ribbon-like animated tail.</p>
+    </section>
+
+    <section class="controls" aria-label="Particle controls">
+      <div class="button-row">
+        <button id="pause" type="button" aria-pressed="false" title="Pause or resume animation">Pause</button>
+        <button id="spin" type="button" aria-pressed="true" title="Toggle automatic turntable">Spin</button>
+        <button id="glow" type="button" aria-pressed="false" title="Toggle stronger particle glow">Glow</button>
+      </div>
+      <label class="field">
+        Speed
+        <input id="speed" type="range" min="0.1" max="2.4" value="1" step="0.05" />
+        <output id="speedValue">1.00</output>
+      </label>
+      <label class="field">
+        Size
+        <input id="size" type="range" min="0.45" max="1.65" value="0.74" step="0.01" />
+        <output id="sizeValue">0.74</output>
+      </label>
+    </section>
+  </main>
+
+  <aside class="stats" aria-label="Particle statistics">
+    <span class="stat"><strong id="particleCount">0</strong> particles</span>
+    <span class="stat"><strong>GPU</strong> animated</span>
+    <span class="stat"><strong>3D</strong> orbit</span>
+  </aside>
+
+  <div class="credit">drag to orbit | wheel to zoom</div>
+
+  <script type="module">
+    import * as THREE from "./three.module.js";
+
+    const canvas = document.querySelector("#scene");
+    const pauseButton = document.querySelector("#pause");
+    const spinButton = document.querySelector("#spin");
+    const glowButton = document.querySelector("#glow");
+    const speedInput = document.querySelector("#speed");
+    const sizeInput = document.querySelector("#size");
+    const speedValue = document.querySelector("#speedValue");
+    const sizeValue = document.querySelector("#sizeValue");
+    const particleCount = document.querySelector("#particleCount");
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x0f1218);
+    scene.fog = new THREE.Fog(0x0f1218, 18, 44);
+
+    const renderer = new THREE.WebGLRenderer({
+      canvas,
+      antialias: true,
+      powerPreference: "high-performance"
+    });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+
+    const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 100);
+    camera.position.set(11, 6.6, 12);
+
+    const floor = new THREE.Mesh(
+      new THREE.PlaneGeometry(86, 86),
+      new THREE.MeshBasicMaterial({ color: 0x171c23, transparent: true, opacity: 0.86 })
+    );
+    floor.rotation.x = -Math.PI / 2;
+    floor.position.y = -2.92;
+    scene.add(floor);
+
+    const grid = new THREE.GridHelper(42, 42, 0x2fd8c5, 0x27323a);
+    grid.position.y = -2.9;
+    scene.add(grid);
+
+    const palette = {
+      fur: new THREE.Color(0x9ea6a7),
+      furLight: new THREE.Color(0xd7e2df),
+      furDark: new THREE.Color(0x343c40),
+      white: new THREE.Color(0xf6f1e7),
+      cream: new THREE.Color(0xe1cda7),
+      pink: new THREE.Color(0xff96b7),
+      nose: new THREE.Color(0xff5f8e),
+      eye: new THREE.Color(0x7dff6f),
+      eyeDark: new THREE.Color(0x102a16),
+      whisker: new THREE.Color(0xfffbf0),
+      collar: new THREE.Color(0x66dfd0),
+      bell: new THREE.Color(0xffcf5a),
+      yarn: new THREE.Color(0xff78b5),
+      spark: new THREE.Color(0xffd46b)
+    };
+
+    function mulberry32(seed) {
+      return function random() {
+        let t = seed += 0x6d2b79f5;
+        t = Math.imul(t ^ t >>> 15, t | 1);
+        t ^= t + Math.imul(t ^ t >>> 7, t | 61);
+        return ((t ^ t >>> 14) >>> 0) / 4294967296;
+      };
+    }
+
+    const rand = mulberry32(982451653);
+    const positions = [];
+    const colors = [];
+    const sizes = [];
+    const regions = [];
+    const seeds = [];
+
+    function pushPoint(x, y, z, color, size, region, jitter = 0) {
+      if (jitter > 0) {
+        x += (rand() - 0.5) * jitter;
+        y += (rand() - 0.5) * jitter;
+        z += (rand() - 0.5) * jitter;
+      }
+      positions.push(x, y, z);
+      const c = color.clone();
+      const lift = (rand() - 0.5) * 0.18;
+      c.offsetHSL(0, 0, lift);
+      colors.push(c.r, c.g, c.b);
+      sizes.push(size * (0.72 + rand() * 0.62));
+      regions.push(region);
+      seeds.push(rand() * 1000);
+    }
+
+    function surfacePointOnEllipsoid(center, radius) {
+      const u = rand();
+      const v = rand();
+      const theta = Math.PI * 2 * u;
+      const phi = Math.acos(2 * v - 1);
+      const x = Math.sin(phi) * Math.cos(theta);
+      const y = Math.cos(phi);
+      const z = Math.sin(phi) * Math.sin(theta);
+      return [
+        center[0] + x * radius[0],
+        center[1] + y * radius[1],
+        center[2] + z * radius[2],
+        x,
+        y,
+        z
+      ];
+    }
+
+    function addEllipsoid(center, radius, count, region, colorFn, size = 18, jitter = 0.045) {
+      for (let i = 0; i < count; i++) {
+        const p = surfacePointOnEllipsoid(center, radius);
+        pushPoint(p[0], p[1], p[2], colorFn(p[0], p[1], p[2], p[3], p[4], p[5]), size, region, jitter);
+      }
+    }
+
+    function addFilledEllipsoid(center, radius, count, region, color, size = 16, jitter = 0.02) {
+      for (let i = 0; i < count; i++) {
+        const p = surfacePointOnEllipsoid([0, 0, 0], [1, 1, 1]);
+        const scale = Math.cbrt(rand());
+        pushPoint(
+          center[0] + p[0] * radius[0] * scale,
+          center[1] + p[1] * radius[1] * scale,
+          center[2] + p[2] * radius[2] * scale,
+          color,
+          size,
+          region,
+          jitter
+        );
+      }
+    }
+
+    function addLine(from, to, count, region, color, size = 11, jitter = 0.025) {
+      for (let i = 0; i < count; i++) {
+        const t = count === 1 ? 0 : i / (count - 1);
+        pushPoint(
+          from[0] + (to[0] - from[0]) * t,
+          from[1] + (to[1] - from[1]) * t,
+          from[2] + (to[2] - from[2]) * t,
+          color,
+          size,
+          region,
+          jitter
+        );
+      }
+    }
+
+    function addTriangleSurface(a, b, c, count, region, colorFn, size = 17, jitter = 0.035) {
+      for (let i = 0; i < count; i++) {
+        let r1 = rand();
+        let r2 = rand();
+        if (r1 + r2 > 1) {
+          r1 = 1 - r1;
+          r2 = 1 - r2;
+        }
+        const r3 = 1 - r1 - r2;
+        const x = a[0] * r1 + b[0] * r2 + c[0] * r3;
+        const y = a[1] * r1 + b[1] * r2 + c[1] * r3;
+        const z = a[2] * r1 + b[2] * r2 + c[2] * r3;
+        pushPoint(x, y, z, colorFn(x, y, z), size, region, jitter);
+      }
+    }
+
+    function addTail() {
+      const steps = 44000;
+      for (let i = 0; i < steps; i++) {
+        const t = rand();
+        const angle = t * Math.PI * 1.55;
+        const center = [
+          -4.1 - t * 3.8,
+          0.05 + Math.sin(t * Math.PI) * 2.85,
+          0.12 + Math.cos(angle) * 0.9
+        ];
+        const ring = rand() * Math.PI * 2;
+        const tube = 0.32 + 0.12 * Math.sin(t * Math.PI);
+        const x = center[0] + Math.cos(ring) * tube * 0.68;
+        const y = center[1] + Math.sin(ring) * tube;
+        const z = center[2] + Math.cos(ring + Math.PI / 2) * tube;
+        const band = Math.floor(t * 12) % 3 === 0;
+        const color = band ? palette.furDark : rand() > 0.65 ? palette.furLight : palette.fur;
+        pushPoint(x, y, z, color, 17, 4, 0.035);
+      }
+    }
+
+    function addYarn() {
+      addFilledEllipsoid([5.45, -2.28, -3.55], [0.7, 0.7, 0.7], 4200, 0, palette.yarn, 16, 0.02);
+      for (let i = 0; i < 1100; i++) {
+        const t = i / 1099;
+        const angle = t * Math.PI * 11;
+        const r = 0.72 + Math.sin(t * 21) * 0.08;
+        pushPoint(
+          5.45 + Math.cos(angle) * r,
+          -2.28 + Math.sin(t * Math.PI * 4) * 0.44,
+          -3.55 + Math.sin(angle) * r,
+          i % 2 ? palette.pink : palette.nose,
+          13,
+          0,
+          0.018
+        );
+      }
+      addLine([5.2, -2.45, -3.0], [4.7, -2.56, -1.1], 420, 0, palette.pink, 10, 0.03);
+    }
+
+    function addSparkles() {
+      for (let i = 0; i < 760; i++) {
+        pushPoint(
+          (rand() - 0.5) * 26,
+          rand() * 11 + 0.2,
+          (rand() - 0.5) * 22,
+          palette.spark,
+          5 + rand() * 8,
+          0,
+          0
+        );
+      }
+    }
+
+    function furColor(x, y, z, nx, ny, nz) {
+      const sideStripe = Math.abs(z) > 1.05 && y > -0.72 && Math.floor((x + 4.9) * 2.2) % 5 <= 1;
+      const backStripe = y > 0.88 && Math.abs(z) < 0.72 && Math.floor((x + 4.2) * 2.8) % 4 === 0;
+      const belly = y < -0.86 && Math.abs(z) < 0.78 && x > -3.1;
+      if (belly) return palette.white;
+      if (sideStripe || backStripe) return palette.furDark;
+      if (rand() > 0.72) return palette.furLight;
+      return palette.fur;
+    }
+
+    function headColor(x, y, z) {
+      const muzzleZone = x > 4.9 && y < 1.05 && Math.abs(z) < 0.88;
+      const foreheadStripe = y > 1.85 && Math.abs(z) < 0.56 && Math.floor((z + x) * 6) % 3 === 0;
+      const cheekStripe = x > 4.05 && Math.abs(z) > 0.85 && y > 0.7;
+      if (muzzleZone) return palette.white;
+      if (foreheadStripe || cheekStripe) return palette.furDark;
+      if (rand() > 0.68) return palette.furLight;
+      return palette.fur;
+    }
+
+    function buildCat() {
+      addEllipsoid([0, 0, 0], [4.6, 1.45, 1.48], 72000, 1, furColor, 17, 0.055);
+      addEllipsoid([2.05, -0.12, 0], [2.4, 1.1, 1.22], 22000, 1, furColor, 16, 0.05);
+      addEllipsoid([4.34, 1.18, 0], [1.35, 1.18, 1.22], 43000, 2, headColor, 16, 0.045);
+      addEllipsoid([5.42, 0.72, 0], [0.48, 0.38, 0.72], 12000, 2, () => palette.white, 15, 0.035);
+
+      addFilledEllipsoid([5.88, 0.78, 0], [0.16, 0.1, 0.22], 1300, 2, palette.nose, 16, 0.018);
+      addFilledEllipsoid([5.72, 1.12, -0.55], [0.16, 0.28, 0.055], 1800, 6, palette.eye, 22, 0.008);
+      addFilledEllipsoid([5.72, 1.12, 0.55], [0.16, 0.28, 0.055], 1800, 6, palette.eye, 22, 0.008);
+      addFilledEllipsoid([5.84, 1.12, -0.57], [0.065, 0.21, 0.026], 720, 6, palette.eyeDark, 22, 0.004);
+      addFilledEllipsoid([5.84, 1.12, 0.57], [0.065, 0.21, 0.026], 720, 6, palette.eyeDark, 22, 0.004);
+
+      const earL = [[3.72, 2.0, -0.72], [4.44, 3.85, -1.12], [5.12, 1.94, -1.12]];
+      const earR = [[3.72, 2.0, 0.72], [4.44, 3.85, 1.12], [5.12, 1.94, 1.12]];
+      addTriangleSurface(...earL, 15000, 3, () => rand() > 0.62 ? palette.furDark : palette.fur, 16, 0.032);
+      addTriangleSurface(...earR, 15000, 3, () => rand() > 0.62 ? palette.furDark : palette.fur, 16, 0.032);
+      addTriangleSurface([3.95, 2.1, -0.82], [4.45, 3.35, -1.04], [4.9, 2.08, -1.02], 5800, 3, () => palette.pink, 15, 0.022);
+      addTriangleSurface([3.95, 2.1, 0.82], [4.45, 3.35, 1.04], [4.9, 2.08, 1.02], 5800, 3, () => palette.pink, 15, 0.022);
+
+      for (const z of [-0.92, 0.92]) {
+        addEllipsoid([2.92, -1.72, z], [0.34, 1.12, 0.34], 10500, 5, (x, y) => y < -2.55 ? palette.white : palette.fur, 15, 0.035);
+        addFilledEllipsoid([3.07, -2.86, z], [0.55, 0.15, 0.38], 3600, 5, palette.white, 15, 0.015);
+        addEllipsoid([-2.68, -1.67, z], [0.42, 1.02, 0.42], 10000, 5, (x, y) => y < -2.55 ? palette.white : palette.fur, 15, 0.035);
+        addFilledEllipsoid([-2.52, -2.82, z], [0.62, 0.15, 0.43], 3600, 5, palette.white, 15, 0.015);
+        for (const toe of [-0.16, 0, 0.16]) {
+          addFilledEllipsoid([3.48, -2.91, z + toe], [0.07, 0.035, 0.06], 170, 5, palette.pink, 13, 0.004);
+          addFilledEllipsoid([-2.08, -2.88, z + toe], [0.07, 0.035, 0.06], 170, 5, palette.pink, 13, 0.004);
+        }
+      }
+
+      addTail();
+
+      for (const side of [-1, 1]) {
+        addLine([5.75, 0.58, side * 0.38], [6.95, 0.92, side * 1.8], 720, 7, palette.whisker, 8, 0.01);
+        addLine([5.75, 0.47, side * 0.42], [7.05, 0.44, side * 1.95], 720, 7, palette.whisker, 8, 0.01);
+        addLine([5.75, 0.36, side * 0.38], [6.8, 0.12, side * 1.8], 720, 7, palette.whisker, 8, 0.01);
+      }
+
+      for (let z = -0.74; z <= 0.74; z += 0.035) {
+        pushPoint(3.28, 0.12, z, palette.collar, 18, 0, 0.006);
+      }
+      addFilledEllipsoid([3.42, -0.1, 0], [0.12, 0.12, 0.12], 900, 0, palette.bell, 17, 0.01);
+
+      addYarn();
+      addSparkles();
+    }
+
+    buildCat();
+
+    const geometry = new THREE.BufferGeometry();
+    geometry.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
+    geometry.setAttribute("color", new THREE.Float32BufferAttribute(colors, 3));
+    geometry.setAttribute("aSize", new THREE.Float32BufferAttribute(sizes, 1));
+    geometry.setAttribute("aRegion", new THREE.Float32BufferAttribute(regions, 1));
+    geometry.setAttribute("aSeed", new THREE.Float32BufferAttribute(seeds, 1));
+
+    const uniforms = {
+      uTime: { value: 0 },
+      uPixelRatio: { value: Math.min(window.devicePixelRatio || 1, 2) },
+      uSizeScale: { value: Number(sizeInput.value) },
+      uPausedMix: { value: 1 },
+      uGlow: { value: 0.16 }
+    };
+
+    const material = new THREE.ShaderMaterial({
+      uniforms,
+      transparent: true,
+      depthTest: true,
+      depthWrite: true,
+      blending: THREE.NormalBlending,
+      vertexColors: true,
+      vertexShader: `
+        attribute float aSize;
+        attribute float aRegion;
+        attribute float aSeed;
+        varying vec3 vColor;
+        varying float vRegion;
+        uniform float uTime;
+        uniform float uPixelRatio;
+        uniform float uSizeScale;
+
+        mat2 rot(float a) {
+          float s = sin(a);
+          float c = cos(a);
+          return mat2(c, -s, s, c);
+        }
+
+        void main() {
+          vec3 p = position;
+          float t = uTime;
+          float wave = sin(t * 3.2 + aSeed);
+          float shimmer = sin(t * 7.0 + aSeed * 1.7) * 0.016;
+
+          if (aRegion < 2.0) {
+            p.y *= 1.0 + sin(t * 2.0) * 0.018;
+            p.y += sin(t * 3.0) * 0.055;
+          } else if (aRegion < 3.0) {
+            p.y += sin(t * 2.6) * 0.075;
+            p.zx = rot(sin(t * 1.4) * 0.055) * p.zx;
+          } else if (aRegion < 4.0) {
+            p.x += sin(t * 5.4 + aSeed) * 0.025;
+            p.y += sin(t * 5.1 + aSeed) * 0.035;
+          } else if (aRegion < 5.0) {
+            float f = clamp((-p.x - 3.7) / 4.5, 0.0, 1.0);
+            p.z += sin(t * 2.1 + f * 4.2 + aSeed * 0.02) * f * 0.52;
+            p.y += cos(t * 1.7 + f * 3.2) * f * 0.25;
+          } else if (aRegion < 6.0) {
+            p.y += max(0.0, sin(t * 4.0 + p.x * 1.3)) * 0.12;
+            p.x += sin(t * 4.0 + p.z * 2.0) * 0.035;
+          } else if (aRegion < 7.0) {
+            float blink = pow(max(0.0, sin(t * 2.7 - 1.2)), 28.0);
+            p.y -= blink * 0.18;
+          } else if (aRegion < 8.0) {
+            p.x += sin(t * 1.8 + aSeed) * 0.035;
+            p.z += sin(t * 2.2 + aSeed) * 0.025;
+          }
+
+          p += normalize(vec3(sin(aSeed), cos(aSeed * 1.3), sin(aSeed * 0.7))) * shimmer;
+          vec4 mvPosition = modelViewMatrix * vec4(p, 1.0);
+          gl_Position = projectionMatrix * mvPosition;
+          gl_PointSize = aSize * uSizeScale * uPixelRatio * (8.0 / max(3.0, -mvPosition.z));
+          vColor = color;
+          vRegion = aRegion;
+        }
+      `,
+      fragmentShader: `
+        varying vec3 vColor;
+        varying float vRegion;
+        uniform float uGlow;
+
+        void main() {
+          vec2 uv = gl_PointCoord - vec2(0.5);
+          float d = length(uv);
+          if (d > 0.5) discard;
+          float core = smoothstep(0.5, 0.04, d);
+          float halo = smoothstep(0.5, 0.18, d) * uGlow;
+          vec3 glowColor = vColor * (1.0 + halo * 0.45);
+          float alpha = core * (0.72 + halo * 0.12);
+          if (alpha < 0.18) discard;
+          gl_FragColor = vec4(glowColor, alpha);
+        }
+      `
+    });
+
+    const catCloud = new THREE.Points(geometry, material);
+    catCloud.renderOrder = 1;
+    scene.add(catCloud);
+
+    function filteredGeometry(predicate) {
+      const filteredPositions = [];
+      const filteredColors = [];
+      const filteredSizes = [];
+      const filteredRegions = [];
+      const filteredSeeds = [];
+
+      for (let i = 0; i < regions.length; i++) {
+        if (!predicate(regions[i], colors[i * 3], colors[i * 3 + 1], colors[i * 3 + 2])) continue;
+        filteredPositions.push(positions[i * 3], positions[i * 3 + 1], positions[i * 3 + 2]);
+        filteredColors.push(colors[i * 3], colors[i * 3 + 1], colors[i * 3 + 2]);
+        filteredSizes.push(sizes[i] * 1.18);
+        filteredRegions.push(regions[i]);
+        filteredSeeds.push(seeds[i]);
+      }
+
+      const detailGeometry = new THREE.BufferGeometry();
+      detailGeometry.setAttribute("position", new THREE.Float32BufferAttribute(filteredPositions, 3));
+      detailGeometry.setAttribute("color", new THREE.Float32BufferAttribute(filteredColors, 3));
+      detailGeometry.setAttribute("aSize", new THREE.Float32BufferAttribute(filteredSizes, 1));
+      detailGeometry.setAttribute("aRegion", new THREE.Float32BufferAttribute(filteredRegions, 1));
+      detailGeometry.setAttribute("aSeed", new THREE.Float32BufferAttribute(filteredSeeds, 1));
+      return detailGeometry;
+    }
+
+    const detailGeometry = filteredGeometry((region, r, g, b) => {
+      const isEyeOrWhisker = region >= 6;
+      const isWarmAccent = r > 0.82 && g < 0.82;
+      const isBrightWhisker = r > 0.88 && g > 0.82 && b > 0.72;
+      const isCollar = g > 0.72 && b > 0.62 && r < 0.55;
+      return isEyeOrWhisker || isWarmAccent || isBrightWhisker || isCollar;
+    });
+    const detailMaterial = material.clone();
+    detailMaterial.uniforms = uniforms;
+    detailMaterial.depthTest = true;
+    detailMaterial.depthWrite = false;
+    detailMaterial.transparent = true;
+    detailMaterial.blending = THREE.NormalBlending;
+    const detailCloud = new THREE.Points(detailGeometry, detailMaterial);
+    detailCloud.renderOrder = 2;
+    scene.add(detailCloud);
+
+    particleCount.textContent = positions.length / 3 > 0 ? (positions.length / 3).toLocaleString() : "0";
+
+    const clock = new THREE.Clock();
+    let targetYaw = 0.62;
+    let targetPitch = 0.42;
+    let yaw = targetYaw;
+    let pitch = targetPitch;
+    let distance = 15.4;
+    let dragging = false;
+    let lastX = 0;
+    let lastY = 0;
+    let paused = false;
+    let autoSpin = true;
+    let speed = Number(speedInput.value);
+
+    function setPressed(button, value) {
+      button.setAttribute("aria-pressed", String(value));
+    }
+
+    function updateCamera() {
+      pitch = Math.max(-0.18, Math.min(1.18, pitch));
+      distance = Math.max(8.5, Math.min(29, distance));
+      const cp = Math.cos(pitch);
+      camera.position.set(
+        Math.sin(yaw) * cp * distance,
+        Math.sin(pitch) * distance + 1.7,
+        Math.cos(yaw) * cp * distance
+      );
+      camera.lookAt(0.9, 0.35, 0);
+    }
+
+    pauseButton.addEventListener("click", () => {
+      paused = !paused;
+      pauseButton.textContent = paused ? "Play" : "Pause";
+      setPressed(pauseButton, paused);
+    });
+
+    spinButton.addEventListener("click", () => {
+      autoSpin = !autoSpin;
+      setPressed(spinButton, autoSpin);
+    });
+
+    glowButton.addEventListener("click", () => {
+      const on = uniforms.uGlow.value < 0.5;
+      uniforms.uGlow.value = on ? 0.85 : 0.16;
+      material.blending = THREE.NormalBlending;
+      material.needsUpdate = true;
+      detailMaterial.blending = THREE.NormalBlending;
+      detailMaterial.needsUpdate = true;
+      setPressed(glowButton, on);
+    });
+
+    speedInput.addEventListener("input", () => {
+      speed = Number(speedInput.value);
+      speedValue.textContent = speed.toFixed(2);
+    });
+
+    sizeInput.addEventListener("input", () => {
+      uniforms.uSizeScale.value = Number(sizeInput.value);
+      sizeValue.textContent = uniforms.uSizeScale.value.toFixed(2);
+    });
+
+    canvas.addEventListener("pointerdown", (event) => {
+      dragging = true;
+      lastX = event.clientX;
+      lastY = event.clientY;
+      canvas.setPointerCapture(event.pointerId);
+    });
+
+    canvas.addEventListener("pointermove", (event) => {
+      if (!dragging) return;
+      const dx = event.clientX - lastX;
+      const dy = event.clientY - lastY;
+      lastX = event.clientX;
+      lastY = event.clientY;
+      targetYaw -= dx * 0.006;
+      targetPitch += dy * 0.0045;
+    });
+
+    canvas.addEventListener("pointerup", (event) => {
+      dragging = false;
+      canvas.releasePointerCapture(event.pointerId);
+    });
+
+    canvas.addEventListener("wheel", (event) => {
+      event.preventDefault();
+      distance += Math.sign(event.deltaY) * 1.1;
+    }, { passive: false });
+
+    function resize() {
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      camera.aspect = width / height;
+      camera.updateProjectionMatrix();
+      renderer.setSize(width, height, false);
+      uniforms.uPixelRatio.value = Math.min(window.devicePixelRatio || 1, 2);
+    }
+
+    window.addEventListener("resize", resize);
+    resize();
+    updateCamera();
+
+    function animate() {
+      requestAnimationFrame(animate);
+      const delta = clock.getDelta();
+      if (!paused) uniforms.uTime.value += delta * speed;
+      if (autoSpin && !dragging && !paused) targetYaw += delta * 0.15 * speed;
+      yaw += (targetYaw - yaw) * 0.08;
+      pitch += (targetPitch - pitch) * 0.08;
+      updateCamera();
+      catCloud.rotation.y = Math.sin(uniforms.uTime.value * 0.42) * 0.018;
+      detailCloud.rotation.y = catCloud.rotation.y;
+      renderer.render(scene, camera);
+    }
+
+    animate();
+  </script>
+</body>
+</html>
