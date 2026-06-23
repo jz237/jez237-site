@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>Pay Dirt — painterly cavern adventure</title>
+<meta name="description" content="A painterly cavern adventure: dig holes, outsmart claim-jumpers, gather gold, relics, blooms, maps, and lantern oil. Campaign + Daily Dig with global scores.">
+<meta name="keywords" content="mining browser game, no download game, retro arcade digging game, browser game experiment, digger game, Pay Dirt">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://jez237.com/games/2026-06-12/pay-dirt/">
+<meta property="og:title" content="Pay Dirt — Mining Browser Game">
+<meta property="og:description" content="Dig through painterly caverns, collect gold, and outsmart claim-jumpers in a rough-but-playable browser game experiment.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://jez237.com/games/2026-06-12/pay-dirt/">
+<style>
+:root{
+  --gold:#ffd86b; --gold-hi:#fff1af; --amber:#d68a3a; --ember:#d9573a;
+  --rock:#293044; --deep:#151726; --ink:#090b13;
+  --ui:#f5eddd; --dim:#a8a8bc; --teal:#71d7cc; --danger:#e75a75;
+}
+*{box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent;}
+html,body{height:100%; overflow:hidden; background:var(--ink);}
+body{
+  font-family:'Segoe UI', system-ui, sans-serif; color:var(--ui);
+  touch-action:none; user-select:none; -webkit-user-select:none;
+  overscroll-behavior:none;
+}
+#wrap{position:fixed; inset:0; display:flex; align-items:center; justify-content:center; overflow:hidden;}
+canvas#game{position:absolute; image-rendering:auto; background:#000;}
+.version{
+  position:absolute; right:10px; bottom:8px; z-index:4;
+  color:rgba(255,241,175,.7); font:800 11px/1 system-ui,sans-serif;
+  letter-spacing:.08em; text-transform:uppercase; text-shadow:0 2px 8px rgba(0,0,0,.85);
+  pointer-events:none;
+}
+.overlay{
+  position:absolute; display:none; flex-direction:column; align-items:center; justify-content:center;
+  gap:14px; text-align:center; padding:20px; z-index:5;
+}
+.overlay.show{display:flex;}
+.panel{
+  position:relative;
+  background:
+    radial-gradient(140% 90% at 50% 0%, rgba(255,210,120,.16), transparent 62%),
+    linear-gradient(180deg, rgba(35,31,44,.95), rgba(12,12,22,.96));
+  border:1px solid rgba(255,216,107,.35);
+  border-radius:12px; padding:22px 30px;
+  box-shadow:0 20px 70px rgba(0,0,0,.72), 0 0 44px rgba(113,215,204,.08) inset, 0 1px 0 rgba(255,241,175,.2) inset;
+  backdrop-filter:blur(5px); max-width:min(92vw,560px); max-height:86vh; overflow-y:auto;
+}
+/* ornate gold corner brackets on every panel */
+.panel::before, .panel::after{
+  content:''; position:absolute; width:26px; height:26px; pointer-events:none;
+  border:2px solid rgba(255,210,63,.55); border-radius:3px;
+}
+.panel::before{ top:7px; left:7px; border-right:0; border-bottom:0; }
+.panel::after{ bottom:7px; right:7px; border-left:0; border-top:0; }
+#titlePanel{
+  display:flex; flex-direction:column; align-items:center;
+  gap:7px;
+  padding:14px 22px 18px;
+  max-width:min(92vw,540px);
+}
+.titleHero{
+  height:clamp(112px,22vh,178px);
+  display:flex; align-items:flex-end; justify-content:center;
+  margin:-6px 0 2px;
+  overflow:visible;
+  flex:none;
+}
+.titleMiner{
+  width:clamp(92px,17vh,142px);
+  aspect-ratio:4/5;
+  background-image:url('assets/vibe-court-miner-sheet.png');
+  background-size:400% 200%;
+  background-position:0 0;
+  background-repeat:no-repeat;
+  filter:
+    drop-shadow(0 12px 16px rgba(0,0,0,.65))
+    drop-shadow(0 0 20px rgba(255,180,72,.14));
+  animation:minerFloat 3.8s ease-in-out infinite;
+}
+h1.logo{
+  font-size:clamp(34px,7vw,58px); letter-spacing:4px; font-weight:900; line-height:1;
+  background:linear-gradient(180deg,var(--gold-hi) 15%,var(--gold) 45%,var(--amber) 75%,#c96a18 100%);
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+  filter:drop-shadow(0 3px 0 #5a3208) drop-shadow(0 6px 14px rgba(0,0,0,.8));
+  text-transform:uppercase; position:relative;
+  animation:logoBob 3.4s ease-in-out infinite;
+}
+/* shine sweep across the logo */
+h1.logo::after{
+  content:'PAY DIRT'; position:absolute; inset:0;
+  background:linear-gradient(105deg, transparent 38%, rgba(255,255,255,.85) 50%, transparent 62%);
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+  background-size:280% 100%; background-position:200% 0;
+  animation:logoShine 4.5s ease-in-out infinite;
+}
+@keyframes logoShine{ 0%,55%{background-position:200% 0;} 85%,100%{background-position:-80% 0;} }
+@keyframes logoBob{ 0%,100%{transform:translateY(0);} 50%{transform:translateY(-4px);} }
+@keyframes minerFloat{ 0%,100%{transform:translateY(0);} 50%{transform:translateY(-5px);} }
+.tag{color:var(--dim); font-size:14px; letter-spacing:1px; margin-top:-6px;}
+.titleVersion{
+  display:inline-block; margin-top:7px; padding:3px 9px; border:1px solid rgba(255,210,63,.34);
+  border-radius:6px; color:rgba(255,241,175,.86); background:rgba(255,216,107,.08);
+  font:900 11px/1.2 system-ui,sans-serif; letter-spacing:.12em; text-transform:uppercase;
+}
+button{
+  font:inherit; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; font-size:15px;
+  color:var(--ink); background:linear-gradient(180deg,var(--gold-hi),var(--gold) 55%,var(--amber));
+  border:0; border-radius:9px; padding:11px 26px; cursor:pointer; min-width:190px; min-height:48px;
+  touch-action:manipulation;
+  box-shadow:0 4px 0 #8a5a10, 0 8px 18px rgba(0,0,0,.5);
+  transition:transform .08s, box-shadow .08s, filter .15s;
+}
+button:hover{filter:brightness(1.08);}
+button:active{transform:translateY(3px); box-shadow:0 1px 0 #8a5a10, 0 4px 10px rgba(0,0,0,.5);}
+button.ghost{
+  background:rgba(255,233,138,.06); color:var(--gold); border:1px solid rgba(255,210,63,.45);
+  box-shadow:0 4px 0 rgba(90,50,8,.45), 0 8px 18px rgba(0,0,0,.4);
+}
+button.small{min-width:0; padding:8px 16px; font-size:13px; min-height:44px;}
+#titlePanel .row{gap:8px;}
+#titlePanel button{min-width:148px; min-height:40px; padding:8px 16px; font-size:13px;}
+#titlePanel button.small{min-width:0; min-height:38px; padding:7px 12px; font-size:12px;}
+#titlePanel .tag{font-size:12px; letter-spacing:.8px; margin-top:-3px;}
+#titlePanel .titleVersion{margin:0 0 3px;}
+#titlePanel .titlePrimary{margin-top:3px;}
+#titlePanel .titleSecondary{margin-top:1px;}
+#titlePanel .volumes{
+  margin:5px 0 4px;
+  gap:16px;
+  align-items:center;
+}
+#titlePanel .volumes label{
+  min-width:152px;
+  justify-content:space-between;
+}
+#titlePanel .volumes input{width:88px;}
+#titlePanel .board{
+  font-size:12px; line-height:1.45;
+  max-height:92px; overflow:hidden;
+  min-width:300px;
+  margin-top:4px; padding-top:8px;
+  border-top:1px solid rgba(255,216,107,.18);
+}
+.row{display:flex; gap:10px; flex-wrap:wrap; justify-content:center;}
+.tiny{font-size:12px; color:var(--dim); letter-spacing:.5px;}
+.board{font:600 14px/1.7 Consolas, monospace; min-width:260px; text-align:left; white-space:pre;}
+.board .me{color:var(--gold);}
+.howto{ text-align:left; font-size:14px; line-height:1.65; color:#d8cfe4; max-width:440px;}
+.howto b{color:var(--gold);}
+.howto .k{
+  display:inline-block; border:1px solid rgba(255,255,255,.3); border-bottom-width:3px; border-radius:5px;
+  padding:0 7px; font:700 12px/20px Consolas,monospace; background:rgba(255,255,255,.07); margin:0 1px;
+}
+.story{ text-align:left; max-width:460px; color:#e5dbc9; font-size:15px; line-height:1.62;}
+.story p{margin:0 0 12px;}
+.story b{color:var(--gold);}
+.story .mapLine{
+  margin:8px 0 14px; padding:9px 12px; border-left:3px solid var(--teal);
+  background:rgba(113,215,204,.08); color:#cffff7; font-weight:800; letter-spacing:.5px;
+}
+#lvlGrid{display:grid; grid-template-columns:repeat(5,1fr); gap:8px; margin:6px 0;}
+#lvlGrid button{min-width:0; width:58px; height:48px; padding:0; font-size:15px;}
+#lvlGrid button.locked{filter:grayscale(1) brightness(.5); cursor:default;}
+#lvlGrid button.done{outline:2px solid var(--teal);}
+/* touch controls */
+#touch{position:absolute; inset:0; display:none; z-index:8; pointer-events:none;}
+body.touch.playing #touch{display:none;}
+.tbtn{
+  display:none; position:absolute; pointer-events:auto; border-radius:50%;
+  background:radial-gradient(circle at 35% 25%, rgba(255,241,175,.22), rgba(255,233,138,.08) 58%, rgba(8,10,18,.62));
+  border:1.5px solid rgba(255,210,63,.52);
+  color:var(--gold); font-weight:900; display:flex; align-items:center; justify-content:center;
+  font-size:22px; text-shadow:0 0 8px rgba(0,0,0,.8); box-shadow:0 6px 18px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.14);
+  backdrop-filter:blur(3px); opacity:.86;
+}
+.tbtn:active,.tbtn.on{background:rgba(255,210,63,.32); opacity:1; transform:scale(.96);}
+#tLeft {left:calc(18px + env(safe-area-inset-left));  bottom:calc(70px + env(safe-area-inset-bottom)); width:66px; height:66px;}
+#tRight{left:calc(124px + env(safe-area-inset-left)); bottom:calc(70px + env(safe-area-inset-bottom)); width:66px; height:66px;}
+#tUp   {left:calc(71px + env(safe-area-inset-left));  bottom:calc(124px + env(safe-area-inset-bottom)); width:66px; height:66px;}
+#tDown {left:calc(71px + env(safe-area-inset-left));  bottom:calc(18px + env(safe-area-inset-bottom));  width:66px; height:66px;}
+#tDigL {right:calc(112px + env(safe-area-inset-right)); bottom:calc(44px + env(safe-area-inset-bottom)); width:82px; height:82px; font-size:15px;}
+#tDigR {right:calc(18px + env(safe-area-inset-right));  bottom:calc(44px + env(safe-area-inset-bottom)); width:82px; height:82px; font-size:15px;}
+#initials{display:flex; gap:10px; justify-content:center; margin:8px 0;}
+#initials span{
+  width:52px; height:64px; border:2px solid rgba(255,210,63,.4); border-radius:8px;
+  font:900 38px/60px Consolas,monospace; color:var(--gold); background:rgba(255,255,255,.04);
+}
+#initials span.cur{border-color:var(--gold); box-shadow:0 0 14px rgba(255,210,63,.35); background:rgba(255,210,63,.1);}
+.statline{display:flex; gap:22px; justify-content:center; font-size:15px; color:#d8cfe4;}
+.statline b{color:var(--gold); font-size:20px;}
+.upgradeGrid{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; margin:10px 0 4px;}
+.upgradeGrid button{min-width:0; min-height:104px; padding:10px 9px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:5px;}
+.upgradeGrid .uIcon{font-size:26px; line-height:1;}
+.upgradeGrid .uName{font-size:13px; letter-spacing:.8px; text-transform:uppercase;}
+.upgradeGrid .uDesc{font-size:11px; line-height:1.2; color:#d8cfe4;}
+.upgradeGrid .uRank{font:900 11px Consolas,monospace; color:var(--teal);}
+.volumes{display:flex; justify-content:center; gap:12px; flex-wrap:wrap; margin-top:2px;}
+.volumes label{
+  display:flex; align-items:center; gap:7px; color:#d8cfe4; font-size:12px; font-weight:800;
+  letter-spacing:1px; text-transform:uppercase;
+}
+.volumes input{width:112px; accent-color:var(--gold);}
+@media (max-height:620px){ #titlePanel .board{display:none;} }
+@media (max-width:480px){
+  #titlePanel{gap:6px;}
+  #titlePanel .volumes{gap:8px; margin:4px 0 2px;}
+  #titlePanel .volumes label{min-width:132px;}
+  #titlePanel .volumes input{width:74px;}
+}
+@media (max-height:520px){ .panel{padding:12px 18px;} h1.logo{font-size:30px;} button{min-height:42px; padding:8px 18px;} #titlePanel{gap:5px; padding:10px 18px 12px;} .titleHero{height:104px;} .titleMiner{width:96px;} #titlePanel .volumes{margin:4px 0 2px;} }
+/* compact touch controls on short viewports so they don't crowd the play area */
+@media (max-height:560px){
+  #tLeft {left:calc(14px + env(safe-area-inset-left));  bottom:calc(48px + env(safe-area-inset-bottom)); width:54px; height:54px;}
+  #tRight{left:calc(90px + env(safe-area-inset-left));  bottom:calc(48px + env(safe-area-inset-bottom)); width:54px; height:54px;}
+  #tUp   {left:calc(52px + env(safe-area-inset-left));  bottom:calc(90px + env(safe-area-inset-bottom)); width:54px; height:54px;}
+  #tDown {left:calc(52px + env(safe-area-inset-left));  bottom:calc(8px + env(safe-area-inset-bottom)); width:54px; height:54px;}
+  #tDigL {right:calc(78px + env(safe-area-inset-right)); bottom:calc(34px + env(safe-area-inset-bottom)); width:62px; height:62px; font-size:13px;}
+  #tDigR {right:calc(12px + env(safe-area-inset-right)); bottom:calc(34px + env(safe-area-inset-bottom)); width:62px; height:62px; font-size:13px;}
+  .tbtn{opacity:.9;}
+}
+</style>
+</head>
+<body>
+<div id="wrap">
+  <canvas id="game"></canvas>
+  <div class="version">v3.53 Jerry</div>
+
+  <div class="overlay show" id="ovTitle">
+    <div class="panel" id="titlePanel">
+      <div class="titleHero">
+        <div class="titleMiner" aria-hidden="true"></div>
+      </div>
+      <h1 class="logo">Pay Dirt</h1>
+      <div class="tag">painted caverns · hidden relics · claim-jumpers in the dark</div>
+      <div class="titleVersion">v3.53 Jerry</div>
+      <div class="row titlePrimary">
+        <button id="bPlay">⛏ Prospect</button>
+        <button id="bSpecial">💥 Boom Rush ×20</button>
+        <button id="bDaily" class="ghost">📅 Daily Dig</button>
+      </div>
+      <div class="row titleSecondary">
+        <button id="bLevels" class="ghost small">Level Select</button>
+        <button id="bStory" class="ghost small">Jerry</button>
+        <button id="bHow" class="ghost small">How To Play</button>
+        <button id="bScores" class="ghost small">High Scores</button>
+        <button id="bMute" class="ghost small">🔊 Sound</button>
+      </div>
+      <div class="volumes">
+        <label>Music <input id="musicVol" type="range" min="0" max="100" value="58"></label>
+        <label>SFX <input id="sfxVol" type="range" min="0" max="100" value="88"></label>
+      </div>
+      <div class="board" id="titleBoard"></div>
+    </div>
+  </div>
+
+  <div class="overlay" id="ovHow">
+    <div class="panel">
+      <h2 style="color:var(--gold); letter-spacing:2px;">HOW TO PLAY</h2>
+      <div class="howto" id="howBody"></div>
+      <button id="bHowBack" class="ghost small">Back</button>
+    </div>
+  </div>
+
+  <div class="overlay" id="ovStory">
+    <div class="panel">
+      <h2 style="color:var(--gold); letter-spacing:2px;">JERRY THE MINER</h2>
+      <div class="story">
+        <p>Jerry is a late-70s holdout: part hippie, part wirehead, part stubborn old prospector before he ever touched a pickaxe.</p>
+        <p>He smells like solder, camp coffee, and cheap smoke. He trusts bad maps, busted circuits, and his own nerve more than he trusts easy answers.</p>
+        <p>He learned cyber security the hard way, fixing alarms and keypads in places nobody else wanted to crawl through. When the jobs dried up and the bills came due, Jerry followed one broken security panel into an abandoned mine.</p>
+        <p>Behind it he found an old claim map marked with sealed tunnels, lost gold, and one promise scratched into the margin:</p>
+        <div class="mapLine">The richest vein is past the door nobody opens.</div>
+        <p>Now Jerry is underground doing what he has always done: reading the wires, beating the locks, and digging his way out of trouble one claim at a time.</p>
+      </div>
+      <button id="bStoryBack" class="ghost small">Back</button>
+    </div>
+  </div>
+
+  <div class="overlay" id="ovLevels">
+    <div class="panel">
+      <h2 style="color:var(--gold); letter-spacing:2px;">CLAIM MAP</h2>
+      <div class="tiny" id="lvlHint">clear a claim to unlock the next</div>
+      <div id="lvlGrid"></div>
+      <button id="bLevelsBack" class="ghost small">Back</button>
+    </div>
+  </div>
+
+  <div class="overlay" id="ovScores">
+    <div class="panel">
+      <h2 style="color:var(--gold); letter-spacing:2px;">HIGH SCORES</h2>
+      <div class="row" style="gap:6px;">
+        <button id="bLedgerCampaign" class="ghost small">Campaign</button>
+        <button id="bLedgerSpecial" class="ghost small">Boom Rush</button>
+        <button id="bLedgerDaily" class="ghost small">Daily Dig</button>
+      </div>
+      <div class="board" id="scoreBoard">checking high scores…</div>
+      <button id="bScoresBack" class="ghost small">Back</button>
+    </div>
+  </div>
+
+  <div class="overlay" id="ovPause">
+    <div class="panel">
+      <h2 style="color:var(--gold); letter-spacing:2px;">PAUSED</h2>
+      <div class="row">
+        <button id="bResume">Resume</button>
+      </div>
+      <div class="row">
+        <button id="bRestartLvl" class="ghost small">Restart Level</button>
+        <button id="bPauseMute" class="ghost small">🔊 Sound</button>
+        <button id="bQuit" class="ghost small">Quit to Camp</button>
+      </div>
+      <div class="volumes">
+        <label>Music <input id="pauseMusicVol" type="range" min="0" max="100" value="58"></label>
+        <label>SFX <input id="pauseSfxVol" type="range" min="0" max="100" value="88"></label>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay" id="ovStuck">
+    <div class="panel">
+      <h2 style="color:var(--danger); letter-spacing:2px;">NO WAY OUT</h2>
+      <div class="tiny" id="stuckReason">this claim cannot be completed from here</div>
+      <div class="row" style="margin-top:10px;">
+        <button id="bStuckRestart">Restart Claim</button>
+      </div>
+      <div class="row">
+        <button id="bStuckMenu" class="ghost small">Camp</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay" id="ovUpgrade">
+    <div class="panel">
+      <h2 style="color:var(--gold); letter-spacing:2px;">UPGRADE CAMP</h2>
+      <div class="tiny" id="upgradeHint">choose one improvement for the rest of this run</div>
+      <div class="upgradeGrid" id="upgradeGrid"></div>
+    </div>
+  </div>
+
+  <div class="overlay" id="ovOver">
+    <div class="panel">
+      <h2 id="overTitle" style="color:var(--gold); letter-spacing:2px;">CLAIM LOST</h2>
+      <div class="statline" id="overStats"></div>
+      <div class="tiny" id="overChoice"></div>
+      <div id="entryWrap" style="display:none;">
+        <div class="tiny">strike it rich — enter high scores</div>
+        <div id="initials"><span>A</span><span>A</span><span>A</span></div>
+        <button id="bSubmit" class="small">Sign ✒</button>
+      </div>
+      <div class="board" id="overBoard"></div>
+      <div class="row">
+        <button id="bContinue">Continue Claim</button>
+        <button id="bAgain">Dig Again</button>
+        <button id="bOverMenu" class="ghost small">Camp</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="touch">
+    <div class="tbtn" id="tUp">▲</div>
+    <div class="tbtn" id="tLeft">◀</div>
+    <div class="tbtn" id="tRight">▶</div>
+    <div class="tbtn" id="tDown">▼</div>
+    <div class="tbtn" id="tDigL">⛏◀</div>
+    <div class="tbtn" id="tDigR">▶⛏</div>
+  </div>
+</div>
+<script src="art.js?v=353"></script>
+<script src="audio.js?v=353"></script>
+<script src="levels.js?v=353"></script>
+<script src="game.js?v=353"></script>
+</body>
+</html>
