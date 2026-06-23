@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-23T16:00:01.309560+00:00",
+  "updatedAt": "2026-06-23T17:00:01.481146+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -11216,6 +11216,18 @@
     "https://techcrunch.com/2026/06/23/4-days-left-to-save-up-to-190-on-techcrunch-founder-summit-2026": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/01/TC-All-Stage-2025-Breakout-QA.jpg?resize=1200%2C800",
       "checkedAt": "2026-06-23T16:00:01.309560+00:00"
+    },
+    "https://www.techrepublic.com/article/news-oracle-cuts-21000-jobs-rebuilds-around-ai": {
+      "image": "https://assets.techrepublic.com/uploads/2026/06/larryellison.jpg?f=jpeg",
+      "checkedAt": "2026-06-23T17:00:01.481146+00:00"
+    },
+    "https://www.techrepublic.com/article/news-ios-27-beta-2-write-with-siri-rcs-upgrades": {
+      "image": "https://assets.techrepublic.com/uploads/2026/06/hero-vx-ios_2x.jpg?f=jpeg",
+      "checkedAt": "2026-06-23T17:00:01.481146+00:00"
+    },
+    "https://www.techrepublic.com/article/news-otc-glucose-monitors-wearable-tech": {
+      "image": "https://assets.techrepublic.com/uploads/2026/06/woman-indoors-wearing-a-continuous-glucose-monitor-2026-03-27-01-25-56-utc-1-1024x638.jpg?f=jpeg",
+      "checkedAt": "2026-06-23T17:00:01.481146+00:00"
     }
   }
 }
