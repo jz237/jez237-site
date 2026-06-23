@@ -208,7 +208,7 @@
   <main class="hud">
     <section class="title" aria-label="Demo title">
       <h1>Particle Graphics Cat</h1>
-      <p>A cat-shaped point cloud with layered fur, tabby markings, blinking eyes, whiskers, paws, and a ribbon-like animated tail.</p>
+      <p>A white cat-shaped point cloud with pale pink ears, green-gray eyes, whiskers, paws, and a small dark crown marking.</p>
     </section>
 
     <section class="controls" aria-label="Particle controls">
@@ -237,6 +237,11 @@
         <input id="hue" type="range" min="-180" max="180" value="0" step="1" />
         <output id="hueValue">0</output>
       </label>
+      <label class="field">
+        Patch
+        <input id="patch" type="range" min="0" max="1.6" value="1" step="0.05" />
+        <output id="patchValue">1.00</output>
+      </label>
     </section>
   </main>
 
@@ -259,10 +264,12 @@
     const sizeInput = document.querySelector("#size");
     const zoomInput = document.querySelector("#zoom");
     const hueInput = document.querySelector("#hue");
+    const patchInput = document.querySelector("#patch");
     const speedValue = document.querySelector("#speedValue");
     const sizeValue = document.querySelector("#sizeValue");
     const zoomValue = document.querySelector("#zoomValue");
     const hueValue = document.querySelector("#hueValue");
+    const patchValue = document.querySelector("#patchValue");
     const particleCount = document.querySelector("#particleCount");
 
     const scene = new THREE.Scene();
@@ -293,20 +300,22 @@
     scene.add(grid);
 
     const palette = {
-      fur: new THREE.Color(0x9ea6a7),
-      furLight: new THREE.Color(0xd7e2df),
-      furDark: new THREE.Color(0x343c40),
-      white: new THREE.Color(0xf6f1e7),
-      cream: new THREE.Color(0xe1cda7),
-      pink: new THREE.Color(0xff96b7),
-      nose: new THREE.Color(0xff5f8e),
-      eye: new THREE.Color(0x7dff6f),
-      eyeDark: new THREE.Color(0x102a16),
+      fur: new THREE.Color(0xf4f0ea),
+      furLight: new THREE.Color(0xfffcf5),
+      furShadow: new THREE.Color(0xd8d4cc),
+      white: new THREE.Color(0xfbF8f1),
+      cream: new THREE.Color(0xe8e0d2),
+      crown: new THREE.Color(0x24272a),
+      pink: new THREE.Color(0xe8b4ae),
+      nose: new THREE.Color(0xc99a9a),
+      noseDark: new THREE.Color(0x3a2325),
+      eye: new THREE.Color(0xa7b29b),
+      eyeDark: new THREE.Color(0x111719),
       whisker: new THREE.Color(0xfffbf0),
-      collar: new THREE.Color(0x66dfd0),
-      bell: new THREE.Color(0xffcf5a),
-      yarn: new THREE.Color(0xff78b5),
-      spark: new THREE.Color(0xffd46b)
+      collar: new THREE.Color(0xbec8ba),
+      bell: new THREE.Color(0xdfc27b),
+      yarn: new THREE.Color(0x9d9182),
+      spark: new THREE.Color(0xcfc7b8)
     };
 
     function mulberry32(seed) {
@@ -428,8 +437,7 @@
         const x = center[0] + Math.cos(ring) * tube * 0.68;
         const y = center[1] + Math.sin(ring) * tube;
         const z = center[2] + Math.cos(ring + Math.PI / 2) * tube;
-        const band = Math.floor(t * 12) % 3 === 0;
-        const color = band ? palette.furDark : rand() > 0.65 ? palette.furLight : palette.fur;
+        const color = rand() > 0.78 ? palette.furShadow : rand() > 0.46 ? palette.furLight : palette.fur;
         pushPoint(x, y, z, color, 17, 4, 0.035);
       }
     }
@@ -468,23 +476,26 @@
     }
 
     function furColor(x, y, z, nx, ny, nz) {
-      const sideStripe = Math.abs(z) > 1.05 && y > -0.72 && Math.floor((x + 4.9) * 2.2) % 5 <= 1;
-      const backStripe = y > 0.88 && Math.abs(z) < 0.72 && Math.floor((x + 4.2) * 2.8) % 4 === 0;
-      const belly = y < -0.86 && Math.abs(z) < 0.78 && x > -3.1;
-      if (belly) return palette.white;
-      if (sideStripe || backStripe) return palette.furDark;
-      if (rand() > 0.72) return palette.furLight;
+      const underside = y < -0.86 && Math.abs(z) < 0.78 && x > -3.1;
+      const softShadow = y < -0.42 || Math.abs(z) > 1.18;
+      if (underside || rand() > 0.76) return palette.white;
+      if (softShadow && rand() > 0.56) return palette.furShadow;
+      if (rand() > 0.55) return palette.furLight;
       return palette.fur;
     }
 
     function headColor(x, y, z) {
       const muzzleZone = x > 4.9 && y < 1.05 && Math.abs(z) < 0.88;
-      const foreheadStripe = y > 1.85 && Math.abs(z) < 0.56 && Math.floor((z + x) * 6) % 3 === 0;
-      const cheekStripe = x > 4.05 && Math.abs(z) > 0.85 && y > 0.7;
       if (muzzleZone) return palette.white;
-      if (foreheadStripe || cheekStripe) return palette.furDark;
-      if (rand() > 0.68) return palette.furLight;
+      if (rand() > 0.72) return palette.white;
+      if (rand() > 0.54) return palette.furLight;
       return palette.fur;
+    }
+
+    function addCrownPatch() {
+      addFilledEllipsoid([4.34, 2.16, 0], [0.58, 0.14, 0.34], 4200, 8, palette.crown, 16, 0.012);
+      addFilledEllipsoid([4.82, 2.02, -0.2], [0.24, 0.08, 0.16], 900, 8, palette.crown, 15, 0.008);
+      addFilledEllipsoid([3.9, 2.03, 0.2], [0.24, 0.08, 0.14], 760, 8, palette.crown, 15, 0.008);
     }
 
     function buildCat() {
@@ -492,8 +503,10 @@
       addEllipsoid([2.05, -0.12, 0], [2.4, 1.1, 1.22], 22000, 1, furColor, 16, 0.05);
       addEllipsoid([4.34, 1.18, 0], [1.35, 1.18, 1.22], 43000, 2, headColor, 16, 0.045);
       addEllipsoid([5.42, 0.72, 0], [0.48, 0.38, 0.72], 12000, 2, () => palette.white, 15, 0.035);
+      addCrownPatch();
 
       addFilledEllipsoid([5.88, 0.78, 0], [0.16, 0.1, 0.22], 1300, 2, palette.nose, 16, 0.018);
+      addFilledEllipsoid([5.98, 0.7, 0], [0.06, 0.06, 0.09], 360, 2, palette.noseDark, 17, 0.006);
       addFilledEllipsoid([5.72, 1.12, -0.55], [0.16, 0.28, 0.055], 1800, 6, palette.eye, 22, 0.008);
       addFilledEllipsoid([5.72, 1.12, 0.55], [0.16, 0.28, 0.055], 1800, 6, palette.eye, 22, 0.008);
       addFilledEllipsoid([5.84, 1.12, -0.57], [0.065, 0.21, 0.026], 720, 6, palette.eyeDark, 22, 0.004);
@@ -501,15 +514,15 @@
 
       const earL = [[3.72, 2.0, -0.72], [4.44, 3.85, -1.12], [5.12, 1.94, -1.12]];
       const earR = [[3.72, 2.0, 0.72], [4.44, 3.85, 1.12], [5.12, 1.94, 1.12]];
-      addTriangleSurface(...earL, 15000, 3, () => rand() > 0.62 ? palette.furDark : palette.fur, 16, 0.032);
-      addTriangleSurface(...earR, 15000, 3, () => rand() > 0.62 ? palette.furDark : palette.fur, 16, 0.032);
+      addTriangleSurface(...earL, 15000, 3, () => rand() > 0.7 ? palette.furShadow : palette.white, 16, 0.032);
+      addTriangleSurface(...earR, 15000, 3, () => rand() > 0.7 ? palette.furShadow : palette.white, 16, 0.032);
       addTriangleSurface([3.95, 2.1, -0.82], [4.45, 3.35, -1.04], [4.9, 2.08, -1.02], 5800, 3, () => palette.pink, 15, 0.022);
       addTriangleSurface([3.95, 2.1, 0.82], [4.45, 3.35, 1.04], [4.9, 2.08, 1.02], 5800, 3, () => palette.pink, 15, 0.022);
 
       for (const z of [-0.92, 0.92]) {
-        addEllipsoid([2.92, -1.72, z], [0.34, 1.12, 0.34], 10500, 5, (x, y) => y < -2.55 ? palette.white : palette.fur, 15, 0.035);
+        addEllipsoid([2.92, -1.72, z], [0.34, 1.12, 0.34], 10500, 5, (x, y) => y < -2.55 || rand() > 0.38 ? palette.white : palette.fur, 15, 0.035);
         addFilledEllipsoid([3.07, -2.86, z], [0.55, 0.15, 0.38], 3600, 5, palette.white, 15, 0.015);
-        addEllipsoid([-2.68, -1.67, z], [0.42, 1.02, 0.42], 10000, 5, (x, y) => y < -2.55 ? palette.white : palette.fur, 15, 0.035);
+        addEllipsoid([-2.68, -1.67, z], [0.42, 1.02, 0.42], 10000, 5, (x, y) => y < -2.55 || rand() > 0.38 ? palette.white : palette.fur, 15, 0.035);
         addFilledEllipsoid([-2.52, -2.82, z], [0.62, 0.15, 0.43], 3600, 5, palette.white, 15, 0.015);
         for (const toe of [-0.16, 0, 0.16]) {
           addFilledEllipsoid([3.48, -2.91, z + toe], [0.07, 0.035, 0.06], 170, 5, palette.pink, 13, 0.004);
@@ -549,7 +562,8 @@
       uSizeScale: { value: Number(sizeInput.value) },
       uPausedMix: { value: 1 },
       uGlow: { value: 0.16 },
-      uHueShift: { value: 0 }
+      uHueShift: { value: 0 },
+      uPatchStrength: { value: Number(patchInput.value) }
     };
 
     const material = new THREE.ShaderMaterial({
@@ -618,6 +632,7 @@
       varying float vRegion;
       uniform float uGlow;
       uniform float uHueShift;
+      uniform float uPatchStrength;
 
       vec3 hueShift(vec3 color, float angle) {
         vec3 axis = normalize(vec3(1.0, 1.0, 1.0));
@@ -635,6 +650,10 @@
         vec3 shiftedColor = clamp(hueShift(vColor, uHueShift), 0.0, 1.0);
         vec3 glowColor = shiftedColor * (1.0 + halo * 0.45);
         float alpha = core * (0.72 + halo * 0.12);
+        if (vRegion >= 8.0 && vRegion < 9.0) {
+          alpha *= uPatchStrength;
+          glowColor = mix(vec3(0.08, 0.08, 0.08), glowColor, min(uPatchStrength, 1.0));
+        }
         if (alpha < 0.18) discard;
         gl_FragColor = vec4(glowColor, alpha);
       }
@@ -775,6 +794,11 @@
       const degrees = Number(hueInput.value);
       uniforms.uHueShift.value = degrees * Math.PI / 180;
       hueValue.textContent = String(degrees);
+    });
+
+    patchInput.addEventListener("input", () => {
+      uniforms.uPatchStrength.value = Number(patchInput.value);
+      patchValue.textContent = uniforms.uPatchStrength.value.toFixed(2);
     });
 
     canvas.addEventListener("pointerdown", (event) => {
