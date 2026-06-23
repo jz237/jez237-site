@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-23T12:00:01.557961+00:00",
+  "updatedAt": "2026-06-23T13:00:01.999269+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -11188,6 +11188,10 @@
     "https://www.technologyreview.com/2026/06/23/1138837/asml-400-million-dollar-machine-powering-future-of-chipmaking": {
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/06/JA26-asml-01.jpg?resize=1200,600",
       "checkedAt": "2026-06-23T10:00:01.189312+00:00"
+    },
+    "https://huggingface.co/blog/ibm-research/cuga-apps": {
+      "image": "https://cdn-uploads.huggingface.co/production/uploads/649d9ad1500fd8d51a675a93/eZoT1b8vHDMEgMVbf2J0f.png",
+      "checkedAt": "2026-06-23T13:00:01.999269+00:00"
     }
   }
 }
