@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-23T16:05:53.770293+00:00",
+  "updatedAt": "2026-06-23T18:00:01.255007+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -11228,6 +11228,30 @@
     "https://www.techrepublic.com/article/news-otc-glucose-monitors-wearable-tech": {
       "image": "https://assets.techrepublic.com/uploads/2026/06/woman-indoors-wearing-a-continuous-glucose-monitor-2026-03-27-01-25-56-utc-1-1024x638.jpg?f=jpeg",
       "checkedAt": "2026-06-23T17:00:01.481146+00:00"
+    },
+    "https://openai.com/index/gpt-5-immunology-mystery": {
+      "image": "https://images.ctfassets.net/kftzwdyauwt9/2qNRrOyIX7qjpdePUIObdS/9307a1d928c8b0167cd85e22b39c5132/derya_16x9.png?w=1600&amp%3Bh=900&amp%3Bfit=fill",
+      "checkedAt": "2026-06-23T18:00:01.255007+00:00"
+    },
+    "https://techcrunch.com/2026/06/23/anthropics-claude-tag-is-learning-your-company-one-slack-message-at-a-time": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/Claude-Tag.png?resize=1200%2C687",
+      "checkedAt": "2026-06-23T18:00:01.255007+00:00"
+    },
+    "https://www.theverge.com/policy/954970/ai-super-pacs-alex-bores-new-york-12th-district": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/gettyimages-2280753489.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.755291928874%2C100%2C78.489416142251&amp%3Bw=1200",
+      "checkedAt": "2026-06-23T18:00:01.255007+00:00"
+    },
+    "https://huggingface.co/blog/cross-origin-storage": {
+      "image": "https://huggingface.co/blog/assets/cross-origin-storage/thumbnail.jpg",
+      "checkedAt": "2026-06-23T18:00:01.255007+00:00"
+    },
+    "https://www.together.ai/blog/parallelkernelbench": {
+      "image": "https://cdn.prod.website-files.com/69654e88dce9154b5f12070c/6a2a4b16ee56bf7e4bcbc6ac_20260610_PKB_1200x630-og.jpg",
+      "checkedAt": "2026-06-23T18:00:01.255007+00:00"
+    },
+    "https://www.anthropic.com/news/introducing-claude-tag": {
+      "image": "https://cdn.sanity.io/images/4zrzovbb/website/b9ba85fd4d8beaf4efe04a4cf6cec14761e52c78-2400x1260.jpg",
+      "checkedAt": "2026-06-23T18:00:01.255007+00:00"
     }
   }
 }
