@@ -1060,26 +1060,14 @@ body.home-page::after {
 .sidebar-note { color: #ffffff; }
 .sidebar-note { margin: -6px 0 0; max-width: 180px; }
 .hub-contact {
-  display: grid;
-  gap: 6px;
-  padding: 12px;
-  border: 1px solid rgba(232,197,122,0.22);
-  border-radius: 10px;
-  background: rgba(255,255,255,0.055);
-}
-.hub-contact span {
-  color: rgba(232,197,122,0.88);
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 0.14em;
-  line-height: 1;
-  text-transform: uppercase;
+  padding: 0 12px;
+  text-align: center;
 }
 .hub-contact a {
-  color: #f4ecdf;
-  font-size: 13px;
-  font-weight: 700;
-  line-height: 1.25;
+  color: rgba(244,236,223,0.58);
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 1.2;
   text-decoration: none;
   overflow-wrap: anywhere;
 }
