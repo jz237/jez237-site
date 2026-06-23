@@ -271,6 +271,15 @@ Verification:
 - Chrome DevTools mobile smoke confirmed title/pause sliders stay synced and update `AUDIO.musicVolume` / `AUDIO.sfxVolume`.
 - Game entered `playing`, reported the first MP3 track, and rendered a nonblank climb frame.
 
+## Third Playlist Track
+Jez sent `hydraulic_heartbeat` and asked to add it as the third Pay Dirt song.
+
+Changes:
+- Added `music-hydraulic-heartbeat.mp3` to the Pay Dirt asset folder.
+- Appended it as track three in the MP3 music playlist.
+- Exposed `AUDIO.tracks` for quick runtime verification of the playlist.
+- Bumped the visible/cache-busted build to `v3.51 Hydraulic Heartbeat`.
+
 ## Guard Pace + Pinch Zoom
 Jez asked for enemies to move 15 percent slower and, if possible, for mobile pinch zoom on the playfield.
 
