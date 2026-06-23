@@ -1132,5 +1132,23 @@
       "continuity": "Preserves Korrun Silt Choir's black-green tidal basins, rose salt fog, copper low sun, basalt ribs, brine-glass, shell-horn tools, reed wraps, clay memory tiles, and non-human amphibious inhabitants who communicate through throat harmonics, foot drumming, mud ripples, and side-membrane color.",
       "entryDescription": "Craft workers at Lowtide Kiln fire sintered silt ceramics while young helpers dry clay memory tiles above the incoming tide."
     }
+  },
+  {
+    "id": "2026-06-23-morning-korrun-silt-choir-listening-flats-school-hour",
+    "title": "Korrun Silt Choir: Listening Flats School Hour",
+    "tests": "Weekly world image: Korrun Silt Choir school-hour daily-life scene; realistic cinematic alien tidal classroom with non-human amphibious inhabitants and consistent world materials.",
+    "prompt": "Korrun Silt Choir: Listening Flats School Hour. Create a realistic photographed/cinematic square image from the invented alien world Korrun Silt Choir, not an illustration and not concept art. Show juvenile non-human amphibious inhabitants learning mud-ripple language on the Listening Flats, with adult teachers using shell-horn tools, foot-drumming stances, and color-shifting side membranes while rings of ripples carry lessons across mirror-brine pools. Preserve the weekly world continuity: black-green tidal basins, terraced basalt ribs, rose salt fog, slow prism tides, brine-glass, silt ceramic, reed pressure wraps, bell buoys, bone-white frequency markers, wet clay memory tiles, and low copper light. Avoid humans, humanoid settlers, astronauts, Earth school furniture, ordinary wetland wildlife, mushrooms, spores, generic sci-fi neon, horror, readable text, logos, posters, diagrams, and flat prompt-card composition.\n\nSource photo needed: none.\n\nReusable template: Show a daily-life scene in Korrun Silt Choir where [INHABITANTS] are doing [ACTIVITY] at [LOCATION], preserving the resonant tidal mudflat ecology, non-human amphibious body plan, silt-ceramic/brine-glass material culture, bell-buoy infrastructure, reed pressure wraps, clay memory tiles, rose salt fog, mirror-brine pools, and low copper cinematic light. Make it realistic and photographed, with tactile wet surfaces and alien social logic.\n\nExample substitution: Show juvenile inhabitants learning mud-ripple language on the Listening Flats while teachers demonstrate with shell-horn tools and foot-drumming patterns.",
+    "image": "images/2026-06-23-morning-korrun-silt-choir-listening-flats-school-hour.jpg",
+    "date": "2026-06-23",
+    "batch": "Daily Prompt",
+    "slot": "morning",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "world": {
+      "name": "Korrun Silt Choir",
+      "description": "A tidal alien world where resonant mineral mudflats, brine-glass tools, silt ceramics, bell-buoy infrastructure, and amphibious many-limbed inhabitants shape everyday life through harmonic communication.",
+      "continuity": "Preserves Korrun Silt Choir canon: black-green tidal basins, terraced basalt ribs, rose salt fog, mirror-brine pools, non-human amphibious inhabitants, shell-horn tools, reed wraps, brine-glass, silt ceramic, clay memory tiles, and copper tidal light.",
+      "entryDescription": "Juvenile inhabitants practice mud-ripple language on the Listening Flats while teachers demonstrate harmonic lessons with shell-horn tools and foot-drumming patterns."
+    }
   }
 ]
