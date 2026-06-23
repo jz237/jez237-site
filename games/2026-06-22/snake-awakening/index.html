@@ -78,7 +78,7 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
     </div>
     <button id="actBtn">ACT</button>
   </div>
-  <div class="version">v1.2 Self-Playing</div>
+  <div class="version">v1.3 Explainer</div>
 
   <div class="overlay show" id="title">
     <div class="panel">
@@ -87,10 +87,23 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
       <div class="row">
         <button id="play">Awaken Snake</button>
         <button id="selfPlay" class="ghost">Self Play</button>
+        <button id="explainBtn" class="ghost">What Is This?</button>
         <button id="scoresBtn" class="ghost">High Scores</button>
       </div>
       <p class="tiny">The snake can play itself. Arrows/WASD or swipe take over. Space/Enter issues special actions after the rules start changing.</p>
       <div class="scoreList" id="titleScores"></div>
+    </div>
+  </div>
+
+  <div class="overlay" id="explain">
+    <div class="panel">
+      <h1>What Is<br>This?</h1>
+      <p class="subtitle">Snake Awakening starts as classic Snake, then the snake notices the grid and mutates the rules.</p>
+      <p class="tiny">It moves through meta arcade, RTS command mode, cozy farming, bullet hell, and a final rule-breaking escape. The snake can even play itself; touch, swipe, or press a key to take control whenever you want.</p>
+      <div class="row">
+        <button id="explainPlay">Awaken Snake</button>
+        <button id="explainBack" class="ghost">Back</button>
+      </div>
     </div>
   </div>
 
@@ -637,19 +650,22 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
   $('play').onclick = () => { ensureAudio(); start(true); };
   $('selfPlay').onclick = () => { ensureAudio(); start(true); };
   $('again').onclick = () => { ensureAudio(); start(true); };
-  $('menu').onclick = () => { $('over').classList.remove('show'); $('title').classList.add('show'); state='title'; showScores('titleScores'); };
+  $('menu').onclick = () => { $('over').classList.remove('show'); $('explain').classList.remove('show'); $('title').classList.add('show'); state='title'; showScores('titleScores'); };
+  $('explainBtn').onclick = () => { $('title').classList.remove('show'); $('explain').classList.add('show'); };
+  $('explainBack').onclick = () => { $('explain').classList.remove('show'); $('title').classList.add('show'); };
+  $('explainPlay').onclick = () => { ensureAudio(); start(true); };
   $('scoresBtn').onclick = () => showScores('titleScores');
   $('saveScore').onclick = submitScore;
   function start(self=true){
     autoPlay = !!self;
-    reset(); state='play'; $('title').classList.remove('show'); $('over').classList.remove('show'); showScores('titleScores');
+    reset(); state='play'; $('title').classList.remove('show'); $('explain').classList.remove('show'); $('over').classList.remove('show'); showScores('titleScores');
     say(autoPlay ? 'I can move myself now. Touch a control if you want the wheel.' : 'Your hands are on the grid. I am listening.', 3.4);
     updateHUD();
   }
   showScores('titleScores');
   requestAnimationFrame(frame);
 
-  window.__snakeAwakening = {start, step, command, get stage(){return stage}, get score(){return score}, get state(){return state}, get autoPlay(){return autoPlay}, get highScores(){return getScores()}, qa(){ reset(); state='play'; for(let s=0;s<modes.length;s++){ stage=s; progress=0; spawnStageObjects(); updateHUD(); draw(performance.now()); } return {ok:true, modes:modes.length, version:'v1.2 Self-Playing'}; }, autoRun(steps=500){ start(true); for(let i=0;i<steps && state==='play';i++) step(); return {state, stage, score, progress, autoPlay, version:'v1.2 Self-Playing'}; }};
+  window.__snakeAwakening = {start, step, command, get stage(){return stage}, get score(){return score}, get state(){return state}, get autoPlay(){return autoPlay}, get highScores(){return getScores()}, qa(){ reset(); state='play'; for(let s=0;s<modes.length;s++){ stage=s; progress=0; spawnStageObjects(); updateHUD(); draw(performance.now()); } return {ok:true, modes:modes.length, version:'v1.3 Explainer'}; }, autoRun(steps=500){ start(true); for(let i=0;i<steps && state==='play';i++) step(); return {state, stage, score, progress, autoPlay, version:'v1.3 Explainer'}; }};
 })();
 </script>
 </body>
