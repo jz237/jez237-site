@@ -139,6 +139,31 @@ def canonicalize_url(url):
         return url.strip()
 
 
+def sanitize_image_url(url):
+    """Return a publishable image URL, or empty string for signed/private URLs."""
+    if not url:
+        return ""
+    url = canonicalize_url(url)
+    try:
+        p = urllib.parse.urlparse(url)
+    except Exception:
+        return ""
+    if p.netloc.lower() == "private-user-images.githubusercontent.com":
+        return ""
+    query_keys = {k.lower() for k, _ in urllib.parse.parse_qsl(p.query, keep_blank_values=True)}
+    signed_keys = {
+        "jwt",
+        "x-amz-credential",
+        "x-amz-signature",
+        "x-amz-security-token",
+        "x-amz-date",
+        "x-amz-expires",
+    }
+    if query_keys & signed_keys:
+        return ""
+    return url
+
+
 def is_excluded_item(item):
     haystack = " ".join([
         item.get("title") or "",
@@ -558,7 +583,7 @@ def main():
             "sourceWeight": item.get("sourceWeight", existing_item.get("sourceWeight", 0.7)),
             "category": item.get("category") or existing_item.get("category", "AI"),
             "summary": item.get("summary") or existing_item.get("summary", ""),
-            "image": canonicalize_url(item.get("image", "")) if item.get("image") else existing_item.get("image", ""),
+            "image": sanitize_image_url(item.get("image", "")) if item.get("image") else sanitize_image_url(existing_item.get("image", "")),
             "published": (dt or now).isoformat(),
             "firstSeen": existing_item.get("firstSeen") or now.isoformat(),
             "lastSeen": now.isoformat(),
@@ -589,16 +614,16 @@ def main():
         if checked_at and checked_at > cache_cutoff:
             cached_image = cached.get("image", "") if isinstance(cached, dict) else ""
             if cached_image:
-                it["image"] = canonicalize_url(cached_image)
+                it["image"] = sanitize_image_url(cached_image)
             continue
 
         img = fetch_og_image(url)
         if img:
-            it["image"] = canonicalize_url(img)
+            it["image"] = sanitize_image_url(img)
             og_fetched += 1
 
         cache_items[url] = {
-            "image": img,
+            "image": sanitize_image_url(img),
             "checkedAt": now.isoformat(),
         }
 
