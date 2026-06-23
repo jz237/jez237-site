@@ -1,8 +1,544 @@
 {
-  "generatedAt": "2026-06-21T12:02:17.731Z",
+  "generatedAt": "2026-06-23T00:36:17.773Z",
   "editorialPriority": "When there is a choice, prefer personal computers, home computing, office PC software, and personal computer or console gaming over broad enterprise technology.",
   "fallbackPolicy": "Use exact-day computer news when verified. If none exists, use same-week or same-month personal-computing items with confidence labels, then fall back to a wider world/business headline.",
   "issues": [
+    {
+      "currentDate": "2026-06-22",
+      "historicDate": "1982-12-06",
+      "displayDate": "Week of December 6-12, 1982",
+      "edition": "Issue 019 - Weekly 1982 Computer & Culture Chronicle",
+      "visualProfile": {
+        "layout": "weekly-newsprint-front",
+        "accent": "black-red-blue",
+        "paper": "halftone-cream",
+        "strapline": "Movie cartridges, Commodore 64 counters, 5200 demos, and Hall & Oates at No. 1"
+      },
+      "masthead": {
+        "kicker": "A weekly 1982 archive dispatch",
+        "title": "Computer Chronicle",
+        "deck": "Video games, home computers, software counters, and culture for the week of December 6-12, 1982"
+      },
+      "layoutPlan": {
+        "lead": "Holiday buyers size up Atari movie cartridges and 64K home computers",
+        "secondary": [
+          "Atari 5200 demos compete with the familiar 2600 aisle",
+          "Commodore 64 keeps 64K memory in the Christmas pitch"
+        ],
+        "rails": [
+          "Top 5 games",
+          "Price watch"
+        ]
+      },
+      "sectionChrome": {
+        "lead": {
+          "label": "Lead Story"
+        },
+        "pictureDesk": {
+          "label": "Picture Desk",
+          "title": "Scenes From the Week"
+        },
+        "computerItems": {
+          "label": "Computers & Hardware",
+          "title": "Personal Computing Desk"
+        },
+        "software": {
+          "label": "Software Top 5",
+          "title": "Programs on the Editor's Pad"
+        },
+        "storeShelves": {
+          "label": "Top Games This Week",
+          "title": "Arcade, Console & Computer Games"
+        },
+        "priceWatch": {
+          "label": "Price Watch",
+          "title": "What It Cost"
+        },
+        "bbs": {
+          "label": "Modem Desk"
+        },
+        "curiosity": {
+          "label": "Movies / TV / Culture"
+        },
+        "briefs": {
+          "label": "Magazine Rack",
+          "title": "Culture & Shelf Talk"
+        },
+        "music": {
+          "label": "Top Rock This Week",
+          "title": "Hot 100, November 20"
+        },
+        "periodAd": {
+          "label": "Retail / Ads"
+        },
+        "classifieds": {
+          "label": "Classifieds",
+          "title": "Small Ads"
+        },
+        "fallback": {
+          "label": "Editorial Screen"
+        },
+        "accuracy": {
+          "label": "Accuracy Ledger",
+          "title": "What Is Date-Specific"
+        },
+        "sources": {
+          "label": "Source Trail",
+          "title": "Research Log"
+        },
+        "market": {
+          "label": "Retail / Ads",
+          "title": "Counter Watch"
+        }
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1982-12-06.png",
+        "alt": "GPT Image 2 newspaper-style Computer Chronicle front page for the week of December 6-12, 1982",
+        "caption": "GPT Image 2 newspaper-style front page generated from structured Computer Chronicle issue data for the week of December 6-12, 1982.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "The second week of December turns the computer counter into a comparison table: Atari movie cartridges, a new premium 5200 system, ColecoVision arcade promises, and Commodore's 64K home-computer pitch all fight for holiday attention.",
+      "morningLine": "Movie cartridges and 64K home computers define the December 6 holiday counter.",
+      "lead": {
+        "headline": "Movie Cartridges Meet the 64K Christmas Pitch",
+        "summary": "In the week of December 6, 1982, Atari's E.T. and Raiders of the Lost Ark cartridges give the 2600 familiar movie names while the Commodore 64 and Atari 5200 ask shoppers to spend more for memory, graphics, sound, and a longer-lived machine.",
+        "confidence": "Week-specific retail framing built from verified November 1982 game releases and 1982 hardware launches.",
+        "sourceRefs": [
+          0,
+          1,
+          4,
+          6
+        ]
+      },
+      "computerItems": [
+        {
+          "label": "Game Shelf",
+          "headline": "E.T. Keeps Atari Tied to the Year's Biggest Movie",
+          "summary": "The Atari 2600 E.T. cartridge remains a high-visibility holiday item because the film is still leading domestic theaters into December.",
+          "confidence": "November 1982 cartridge release and December 1982 box-office context verified.",
+          "sourceRefs": [
+            0,
+            7
+          ]
+        },
+        {
+          "label": "Adventure Counter",
+          "headline": "Raiders Gives the 2600 a Map-and-Inventory Pitch",
+          "summary": "Raiders of the Lost Ark turns a film license into a more elaborate Atari 2600 adventure, a contrast with the simpler action cartridges beside it.",
+          "confidence": "November 1982 Atari 2600 release verified.",
+          "sourceRefs": [
+            1,
+            3
+          ]
+        },
+        {
+          "label": "Home Computer Desk",
+          "headline": "Commodore 64 Sells Memory as the Simple Number",
+          "summary": "Commodore's 1982 machine lets dealers point to 64K RAM, color graphics, and sound when families ask why a home computer costs more than a console.",
+          "confidence": "1982 product context; not exact-day specific.",
+          "sourceRefs": [
+            4
+          ]
+        },
+        {
+          "label": "Console Desk",
+          "headline": "Atari 5200 Tries for Premium Shelf Space",
+          "summary": "The 5200 SuperSystem gives Atari a higher-end console story for shoppers who already know the 2600 name.",
+          "confidence": "1982 launch-era console context.",
+          "sourceRefs": [
+            6
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "VisiCalc",
+          "platform": "Apple II / personal computers",
+          "detail": "Still the spreadsheet name many buyers recognize when a computer is justified for home finance or small business.",
+          "confidence": "Period-appropriate leading application.",
+          "sourceRefs": [
+            4
+          ]
+        },
+        {
+          "name": "WordStar",
+          "platform": "CP/M systems",
+          "detail": "A familiar word-processing package in office and serious home-computing conversations.",
+          "confidence": "Period-appropriate software.",
+          "sourceRefs": [
+            4
+          ]
+        },
+        {
+          "name": "dBASE II",
+          "platform": "CP/M / early personal computers",
+          "detail": "Database software that helps sell micros as office machines rather than only game boxes.",
+          "confidence": "Period-appropriate software.",
+          "sourceRefs": [
+            4
+          ]
+        },
+        {
+          "name": "Microsoft BASIC",
+          "platform": "Home computers",
+          "detail": "A common entry point for owners typing programs from manuals and magazines.",
+          "confidence": "Period-appropriate software.",
+          "sourceRefs": [
+            4
+          ]
+        },
+        {
+          "name": "Choplifter!",
+          "platform": "Apple II",
+          "detail": "Broderbund's rescue game remains a strong computer-game name for the Apple II shelf.",
+          "confidence": "1982 computer-game context.",
+          "sourceRefs": [
+            9
+          ]
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Top 5 Computer Games",
+          "items": [
+            "E.T. the Extra-Terrestrial - Atari 2600",
+            "Raiders of the Lost Ark - Atari 2600",
+            "Pac-Man - Atari 2600",
+            "Zaxxon - arcade",
+            "Choplifter! - Apple II"
+          ]
+        },
+        {
+          "label": "Hardware Watch",
+          "items": [
+            "Atari 2600",
+            "Atari 5200 SuperSystem",
+            "ColecoVision",
+            "Commodore 64",
+            "Vectrex"
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "Commodore 64",
+          "price": "about $595 at introduction",
+          "note": "A 64K memory pitch gives dealers an easy comparison against lower-memory machines.",
+          "confidence": "Commonly cited 1982 launch price.",
+          "sourceRefs": [
+            4
+          ]
+        },
+        {
+          "item": "Atari 5200 SuperSystem",
+          "price": "about $269 at launch",
+          "note": "Premium console positioning for the holiday season.",
+          "confidence": "Period launch-price context.",
+          "sourceRefs": [
+            6
+          ]
+        },
+        {
+          "item": "Atari 2600 movie cartridges",
+          "price": "varied by retailer",
+          "note": "E.T. and Raiders use familiar film titles to pull shoppers toward the 2600 shelf.",
+          "confidence": "Retail price not asserted; release and platform verified.",
+          "sourceRefs": [
+            0,
+            1
+          ]
+        },
+        {
+          "item": "Apple II software",
+          "price": "boxed disk pricing varied widely",
+          "note": "Games such as Choplifter! sit beside practical applications in computer stores.",
+          "confidence": "General period retail context.",
+          "sourceRefs": [
+            9
+          ]
+        }
+      ],
+      "market": {
+        "headline": "Holiday Buyers Compare Consoles With Computers",
+        "summary": "The week's sales floor is a contest between immediate arcade-style fun and the promise that a home computer can play games, teach BASIC, and handle practical work after Christmas.",
+        "confidence": "Synthesis from verified 1982 product releases and holiday timing."
+      },
+      "bbsNote": {
+        "headline": "Modem Note",
+        "summary": "After store hours, 300-baud callers trade cartridge tips, BASIC snippets, and local board numbers while the mass market still learns what a modem can do.",
+        "confidence": "Period-appropriate home-computing context.",
+        "sourceRefs": [
+          4
+        ]
+      },
+      "curiosity": {
+        "headline": "Cinema Lobby",
+        "summary": "E.T. the Extra-Terrestrial remains the No. 1 domestic film for the December 10-12, 1982 weekend, reinforcing why Atari wants the name on game shelves.",
+        "confidence": "Weekend-specific box-office chart.",
+        "sourceRefs": [
+          7
+        ]
+      },
+      "briefs": [
+        {
+          "headline": "E.T. Still Leads Theaters",
+          "summary": "Box Office Mojo lists E.T. the Extra-Terrestrial at No. 1 for the December 10-12 domestic weekend.",
+          "confidence": "Weekend chart dated December 10-12, 1982.",
+          "sourceRefs": [
+            7
+          ]
+        },
+        {
+          "headline": "Tootsie Opens Strong",
+          "summary": "Tootsie appears among the top domestic films for the December 10-12 weekend, adding a new adult-comedy hit to the holiday movie conversation.",
+          "confidence": "Weekend chart dated December 10-12, 1982.",
+          "sourceRefs": [
+            7
+          ]
+        },
+        {
+          "headline": "Hall & Oates Take the Singles Lead",
+          "summary": "The Billboard Hot 100 dated December 11, 1982 puts Maneater by Daryl Hall & John Oates at No. 1.",
+          "confidence": "Week-specific Hot 100 chart.",
+          "sourceRefs": [
+            8
+          ]
+        },
+        {
+          "headline": "Zaxxon Keeps the Isometric Look Fresh",
+          "summary": "Sega's Zaxxon remains a recognizable 1982 arcade name for stores and magazines discussing arcade-style computer entertainment.",
+          "confidence": "1982 game context.",
+          "sourceRefs": [
+            5
+          ]
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "Maneater",
+          "artist": "Daryl Hall & John Oates"
+        },
+        {
+          "rank": 2,
+          "title": "Mickey",
+          "artist": "Toni Basil"
+        },
+        {
+          "rank": 3,
+          "title": "The Girl Is Mine",
+          "artist": "Michael Jackson and Paul McCartney"
+        },
+        {
+          "rank": 4,
+          "title": "Gloria",
+          "artist": "Laura Branigan"
+        },
+        {
+          "rank": 5,
+          "title": "Truly",
+          "artist": "Lionel Richie"
+        }
+      ],
+      "movieChart": [
+        {
+          "rank": 1,
+          "title": "E.T. the Extra-Terrestrial"
+        },
+        {
+          "rank": 2,
+          "title": "Tootsie"
+        },
+        {
+          "rank": 3,
+          "title": "The Toy"
+        },
+        {
+          "rank": 4,
+          "title": "48 Hrs."
+        },
+        {
+          "rank": 5,
+          "title": "An Officer and a Gentleman"
+        }
+      ],
+      "periodAd": {
+        "headline": "Holiday Special: Movie Games and 64K Machines",
+        "summary": "Ask for Atari E.T. and Raiders cartridges, Atari 5200 demonstrations, ColecoVision arcade favorites, and Commodore 64 holiday bundles at your local computer counter.",
+        "confidence": "Composite period-style advertisement based on verified products.",
+        "sourceRefs": [
+          0,
+          1,
+          4,
+          6
+        ]
+      },
+      "classifieds": [
+        {
+          "headline": "BASIC tutoring",
+          "copy": "Evening lessons for new home-computer owners. Bring your manual and cassette recorder."
+        },
+        {
+          "headline": "Cartridge swap",
+          "copy": "2600 owners meet Saturday to trade duplicates before Christmas."
+        }
+      ],
+      "worldFallback": {
+        "headline": "Editors Hold the Front to Games",
+        "summary": "No routine world or sports item displaces this week's console, software, and culture story.",
+        "confidence": "Editorial scope note."
+      },
+      "accuracyLedger": {
+        "items": [
+          {
+            "claim": "Historic issue date follows the Chronicle state file: week beginning 1982-12-06.",
+            "status": "Series state verified"
+          },
+          {
+            "claim": "Atari 2600 E.T. and Raiders releases are treated as November 1982 items with holiday retail emphasis, not exact December release-day events.",
+            "status": "Verified month-specific"
+          },
+          {
+            "claim": "Music chart uses Billboard Hot 100 positions for December 11, 1982 from Music Charts Archive.",
+            "status": "Verified week-specific"
+          },
+          {
+            "claim": "Movie chart uses Box Office Mojo domestic weekend results for December 10-12, 1982.",
+            "status": "Verified week-specific"
+          }
+        ]
+      },
+      "sources": [
+        {
+          "title": "MobyGames - E.T. the Extra-Terrestrial (1982)",
+          "url": "https://www.mobygames.com/game/8874/et-the-extra-terrestrial/",
+          "note": "Release month and platform for Atari 2600 E.T."
+        },
+        {
+          "title": "MobyGames - Raiders of the Lost Ark (1982)",
+          "url": "https://www.mobygames.com/game/14996/raiders-of-the-lost-ark/",
+          "note": "Release month and platform for Atari 2600 Raiders."
+        },
+        {
+          "title": "AtariAge - E.T. The Extra-Terrestrial",
+          "url": "https://www.atariage.com/software_page.php?SoftwareLabelID=157",
+          "note": "Atari 2600 cartridge context."
+        },
+        {
+          "title": "AtariAge - Raiders of the Lost Ark",
+          "url": "https://www.atariage.com/software_page.php?SoftwareLabelID=401",
+          "note": "Atari 2600 cartridge context."
+        },
+        {
+          "title": "Commodore 64 - Computer History Museum",
+          "url": "https://www.computerhistory.org/revolution/personal-computers/17/300",
+          "note": "1982 Commodore 64 context and 64K home-computer positioning."
+        },
+        {
+          "title": "MobyGames - Zaxxon",
+          "url": "https://www.mobygames.com/game/2127/zaxxon/",
+          "note": "1982 arcade/computer game context."
+        },
+        {
+          "title": "AtariAge - Atari 5200",
+          "url": "https://www.atariage.com/5200/",
+          "note": "Atari 5200 launch-era console context."
+        },
+        {
+          "title": "Box Office Mojo - Weekend Box Office December 10-12, 1982",
+          "url": "https://www.boxofficemojo.com/weekend/1982W50/",
+          "note": "Domestic weekend movie rankings for December 10-12, 1982."
+        },
+        {
+          "title": "Music Charts Archive - Billboard Hot 100 December 11, 1982",
+          "url": "https://musicchartsarchive.com/singles-chart/1982-12-11",
+          "note": "Hot 100 top positions for the week of December 11, 1982."
+        },
+        {
+          "title": "MobyGames - Choplifter!",
+          "url": "https://www.mobygames.com/game/32/choplifter/",
+          "note": "Apple II / 1982 computer game context."
+        }
+      ],
+      "pictureDesk": [
+        {
+          "src": "media/computer-chronicle-gpt-image-2-week-1982-12-06.png",
+          "alt": "GPT Image 2 newspaper-style Computer Chronicle front page for the week of December 6-12, 1982",
+          "caption": "GPT Image 2 newspaper-style front page generated from structured Computer Chronicle issue data for the week of December 6-12, 1982.",
+          "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+        }
+      ],
+      "frontPageStories": [
+        {
+          "headline": "Movie Cartridges Meet the 64K Christmas Pitch",
+          "summary": "In the week of December 6, 1982, Atari's E.T. and Raiders of the Lost Ark cartridges give the 2600 familiar movie names while the Commodore 64 and Atari 5200 ask shoppers to spend more for memory, graphics, sound, and a longer-lived machine.",
+          "confidence": "Week-specific retail framing built from verified November 1982 game releases and 1982 hardware launches.",
+          "sourceRefs": [
+            0,
+            1,
+            4,
+            6
+          ]
+        },
+        {
+          "label": "Game Shelf",
+          "headline": "E.T. Keeps Atari Tied to the Year's Biggest Movie",
+          "summary": "The Atari 2600 E.T. cartridge remains a high-visibility holiday item because the film is still leading domestic theaters into December.",
+          "confidence": "November 1982 cartridge release and December 1982 box-office context verified.",
+          "sourceRefs": [
+            0,
+            7
+          ]
+        },
+        {
+          "label": "Adventure Counter",
+          "headline": "Raiders Gives the 2600 a Map-and-Inventory Pitch",
+          "summary": "Raiders of the Lost Ark turns a film license into a more elaborate Atari 2600 adventure, a contrast with the simpler action cartridges beside it.",
+          "confidence": "November 1982 Atari 2600 release verified.",
+          "sourceRefs": [
+            1,
+            3
+          ]
+        },
+        {
+          "label": "Home Computer Desk",
+          "headline": "Commodore 64 Sells Memory as the Simple Number",
+          "summary": "Commodore's 1982 machine lets dealers point to 64K RAM, color graphics, and sound when families ask why a home computer costs more than a console.",
+          "confidence": "1982 product context; not exact-day specific.",
+          "sourceRefs": [
+            4
+          ]
+        },
+        {
+          "label": "Console Desk",
+          "headline": "Atari 5200 Tries for Premium Shelf Space",
+          "summary": "The 5200 SuperSystem gives Atari a higher-end console story for shoppers who already know the 2600 name.",
+          "confidence": "1982 launch-era console context.",
+          "sourceRefs": [
+            6
+          ]
+        },
+        {
+          "headline": "E.T. Still Leads Theaters",
+          "summary": "Box Office Mojo lists E.T. the Extra-Terrestrial at No. 1 for the December 10-12 domestic weekend.",
+          "confidence": "Weekend chart dated December 10-12, 1982.",
+          "sourceRefs": [
+            7
+          ]
+        },
+        {
+          "headline": "Tootsie Opens Strong",
+          "summary": "Tootsie appears among the top domestic films for the December 10-12 weekend, adding a new adult-comedy hit to the holiday movie conversation.",
+          "confidence": "Weekend chart dated December 10-12, 1982.",
+          "sourceRefs": [
+            7
+          ]
+        }
+      ],
+      "musicChartSourceRefs": [
+        8
+      ]
+    },
     {
       "currentDate": "2026-06-22",
       "historicDate": "1982-11-29",
