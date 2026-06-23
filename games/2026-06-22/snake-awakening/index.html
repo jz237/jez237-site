@@ -28,7 +28,15 @@ body.playing .hud{display:flex}
 .version{position:absolute;right:12px;bottom:8px;z-index:3;color:rgba(255,255,255,.5);font:800 11px/1 ui-sans-serif;letter-spacing:.12em;text-transform:uppercase;pointer-events:none}
 .overlay{position:absolute;inset:0;z-index:10;display:none;align-items:center;justify-content:center;padding:18px;background:radial-gradient(circle at 50% 42%,rgba(80,232,255,.12),rgba(0,0,0,.62) 58%,rgba(0,0,0,.78))}
 .overlay.show{display:flex}
+.overlay.desktopWin{background:transparent;align-items:center;justify-content:center}
 .panel{width:min(720px,94vw);max-height:88vh;overflow:auto;background:linear-gradient(180deg,rgba(17,21,42,.94),rgba(7,9,21,.96));border:1px solid rgba(116,255,141,.25);border-radius:10px;box-shadow:0 28px 90px rgba(0,0,0,.7),inset 0 1px 0 rgba(255,255,255,.1);padding:24px;text-align:center}
+.overlay.desktopWin .panel{width:min(560px,92vw);background:rgba(246,249,255,.9);border:1px solid rgba(255,255,255,.78);border-radius:18px;box-shadow:0 30px 90px rgba(0,0,0,.42),inset 0 1px 0 rgba(255,255,255,.92);backdrop-filter:blur(18px);color:#172033}
+.overlay.desktopWin h1{font-size:clamp(32px,5.8vw,48px);line-height:1.02;background:none;color:#10284f;filter:none;text-transform:none;letter-spacing:0}
+.overlay.desktopWin .subtitle{color:#38465c}
+.overlay.desktopWin .scoreList{max-height:170px;overflow:auto;background:rgba(255,255,255,.54);border-color:rgba(52,78,122,.16)}
+.overlay.desktopWin .scoreList .scoreRow{color:#20324d;border-bottom-color:rgba(39,56,88,.1)}
+.overlay.desktopWin button{background:linear-gradient(180deg,#68c5ff,#0b78d0);color:#fff;box-shadow:0 5px 0 #075596,0 12px 25px rgba(0,0,0,.22)}
+.overlay.desktopWin button.ghost{background:rgba(255,255,255,.64);color:#173150;border:1px solid rgba(52,78,122,.2);box-shadow:0 5px 0 rgba(52,78,122,.14),0 12px 25px rgba(0,0,0,.12)}
 h1{margin:0;font-size:clamp(34px,8vw,72px);line-height:.92;letter-spacing:.02em;text-transform:uppercase;background:linear-gradient(135deg,#74ff8d,#50e8ff 42%,#ffd166 68%,#ff5fb7);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 6px 20px rgba(80,232,255,.26))}
 .subtitle{margin:12px auto 18px;max-width:560px;color:#d8e6ff;line-height:1.45}
 .tiny{font-size:12px;color:var(--muted);line-height:1.45}
@@ -83,7 +91,7 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
     </div>
     <button id="actBtn">ACT</button>
   </div>
-  <div class="version">v2.6 Win11 Voice</div>
+  <div class="version">v2.7 Desktop Popup</div>
 
   <div class="overlay show" id="title">
     <div class="panel">
@@ -137,7 +145,9 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
   const TILE = Math.floor(Math.min(W / COLS, (H - HUD) / ROWS));
   const OX = Math.floor((W - COLS * TILE) / 2);
   const OY = HUD + Math.floor((H - HUD - ROWS * TILE) / 2);
-  const VERSION = 'v2.6 Win11 Voice';
+  const VERSION = 'v2.7 Desktop Popup';
+  const DESKTOP_ESCAPE_DURATION = 10.4;
+  const DESKTOP_POPUP_AT = 10.65;
   const HS_KEY = 'snake-awakening-highscores-v1';
   const SCORE_API = 'https://game-scores.jez237.workers.dev/scores/snake-awakening';
   const SCORE_LIMIT = 10;
@@ -653,6 +663,8 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
   function die(reason){
     state = 'over';
     cancelSpeech();
+    escapeAnim = {active:false, t:0};
+    $('over').classList.remove('desktopWin');
     sfx('death');
     $('overTitle').textContent = 'Run Ended';
     $('overText').textContent = reason + ' Score ' + score + '. Awareness ' + aware + '%.';
@@ -674,12 +686,13 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
   function showWinOverlay(){
     state = 'over';
     cancelSpeech();
-    escapeAnim.active = false;
+    escapeAnim = {active:true, t:DESKTOP_ESCAPE_DURATION, complete:true};
     $('overTitle').textContent = 'Snake Escaped';
     $('overText').textContent = 'The snake leaves the game window, crosses the desktop, and closes the premise. Final score ' + score + '.';
     renderMedals(earnedMedals);
     showScores('overScores');
     $('entry').classList.toggle('show', pendingScore);
+    $('over').classList.add('desktopWin');
     $('over').classList.add('show');
   }
   function finishMedals(){
@@ -895,13 +908,13 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
     ctx.restore();
   }
   function drawEscapeEnding(t){
-    const p = Math.min(1, escapeAnim.t / 6.1);
+    const p = Math.min(1, escapeAnim.t / DESKTOP_ESCAPE_DURATION);
     const ease = v => v * v * (3 - 2 * v);
     const clamp = v => Math.max(0, Math.min(1, v));
     const mix = (a,b,v) => a + (b - a) * v;
-    const desktopP = ease(clamp((p - .08) / .28));
-    const escapeP = ease(clamp((p - .22) / .7));
-    const biteP = ease(clamp((p - .74) / .2));
+    const desktopP = ease(clamp((p - .06) / .22));
+    const escapeP = ease(clamp((p - .16) / .78));
+    const biteP = ease(clamp((p - .83) / .15));
     const crack = clamp((p - .12) / .26);
     const drawWinLogo = (x,y,s) => {
       ctx.fillStyle = '#0878d8';
@@ -1106,10 +1119,18 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
       [contentX + contentW * .56, contentY + contentH * .52],
       [contentX + contentW + 18, contentY + contentH * .45],
       [contentX + contentW + 76, contentY + contentH * .16],
-      [694, 178],
-      [830, 318],
-      [724, H - 96],
-      [482, H - 108],
+      [792, 112],
+      [842, 310],
+      [728, H - 94],
+      [510, H - 110],
+      [292, H - 120],
+      [146, 370],
+      [126, 190],
+      [316, 112],
+      [610, 136],
+      [786, 232],
+      [768, H - 92],
+      [552, H - 108],
       [closeX, closeY]
     ];
     function pathPoint(q){
@@ -1154,7 +1175,7 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
     ctx.restore();
 
     if (p > .46){
-      const cp = clamp((p - .46) / .38);
+      const cp = clamp((p - .46) / .42);
       const head = pathPoint(escapeP);
       const cx = mix(868, head.x - 58, ease(cp)) + Math.sin(t * 7) * 14;
       const cy = mix(82, head.y + 42, ease(cp)) + Math.cos(t * 5) * 10;
@@ -1227,7 +1248,7 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
     ctx.fillStyle = 'rgba(244,251,255,.96)';
     ctx.font = '900 28px system-ui';
     ctx.textAlign = 'center';
-    ctx.fillText(biteP > .7 ? 'PREMISE CLOSED' : 'ESCAPING TO DESKTOP', W/2, 42);
+    ctx.fillText(biteP > .7 ? 'DESKTOP CLAIMED' : 'EXPLORING THE DESKTOP', W/2, 42);
     ctx.restore();
   }
 
@@ -1238,7 +1259,7 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
     if(state==='play'&&!paused){ acc+=dt; while(acc>=speed){ step(); acc-=speed; } }
     if(state==='ending'){
       escapeAnim.t += dt;
-      if (escapeAnim.t >= 6.35) showWinOverlay();
+      if (escapeAnim.t >= DESKTOP_POPUP_AT) showWinOverlay();
     }
     draw(ts);
     requestAnimationFrame(frame);
@@ -1352,7 +1373,7 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
   $('actBtn').addEventListener('pointerup', () => { ensureAudio(); takeControl(); command(); });
   $('play').onclick = () => { ensureAudio(); start(true); };
   $('again').onclick = () => { ensureAudio(); start(true); };
-  $('menu').onclick = () => { $('over').classList.remove('show'); $('explain').classList.remove('show'); $('title').classList.add('show'); state='title'; showScores('titleScores'); };
+  $('menu').onclick = () => { $('over').classList.remove('show','desktopWin'); $('explain').classList.remove('show'); $('title').classList.add('show'); escapeAnim = {active:false, t:0}; state='title'; showScores('titleScores'); };
   $('explainBtn').onclick = () => { $('title').classList.remove('show'); $('explain').classList.add('show'); };
   $('explainBack').onclick = () => { $('explain').classList.remove('show'); $('title').classList.add('show'); };
   $('explainPlay').onclick = () => { ensureAudio(); start(true); };
@@ -1360,7 +1381,7 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
   $('saveScore').onclick = submitScore;
   function start(self=true){
     autoPlay = !!self;
-    reset(); state='play'; $('title').classList.remove('show'); $('explain').classList.remove('show'); $('over').classList.remove('show'); showScores('titleScores');
+    reset(); state='play'; $('title').classList.remove('show'); $('explain').classList.remove('show'); $('over').classList.remove('show','desktopWin'); showScores('titleScores');
     say(autoPlay ? 'I can move myself now. Touch a control if you want the wheel.' : 'Your hands are on the grid. I am listening.', 3.4);
     updateHUD();
   }
