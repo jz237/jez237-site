@@ -140,7 +140,7 @@
       "sourceWeight": 0.85,
       "category": "AI",
       "summary": "Release v5.11.0\nNew Model additions\nDiffusionGemma\n\nDiffusionGemma is engineered to reduce the sequential bottlenecks of standard causal language models by employing an encoder-decoder architecture specifically optimized for inference speed. During inference, DiffusionGemma leverages multi-canvas sampling, where rather than generating one token at a time, the model iteratively denoises a full block of tokens using a diffusion sampler. This block-autoregressive approach facilitates text generation at higher speeds compared to traditional sequential generation methods.\nLinks: Documentation\n\nGPU ",
-      "image": "https://private-user-images.githubusercontent.com/73884904/605905881-5081e449-6374-4076-bd96-d295c8334ca4.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3ODExMzI0NTUsIm5iZiI6MTc4MTEzMjE1NSwicGF0aCI6Ii83Mzg4NDkwNC82MDU5MDU4ODEtNTA4MWU0NDktNjM3NC00MDc2LWJkOTYtZDI5NWM4MzM0Y2E0LnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNjA2MTAlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjYwNjEwVDIyNTU1NVomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPWI5MTU0ZTgxM2I4MmUzZTZjNTBjMzk5NDUzMDNkYjA0ZmY0ZWMwNjBhMmEwNWY3MDRkOWZmNGI0Y2ViY2IyZmQmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0JnJlc3BvbnNlLWNvbnRlbnQtdHlwZT1pbWFnZSUyRnBuZyJ9.9_m2E1b0Fj_xdWiNH2iRWN6w4teFkrhLaR3vwJ155jg",
+      "image": "",
       "published": "2026-06-10T16:32:44+00:00",
       "firstSeen": "2026-06-10T17:00:02.053374+00:00",
       "lastSeen": "2026-06-10T22:55:45.504127+00:00",
