@@ -1,6 +1,6 @@
 {
   "date": "2026-06-23",
-  "updatedAt": "2026-06-23T17:00:01.481146+00:00",
+  "updatedAt": "2026-06-23T16:05:53.770293+00:00",
   "items": [
     {
       "title": "OpenAI launches new initiative to help find and patch open source bugs",
@@ -13,11 +13,11 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/09/GettyImages-2214107176.jpg?resize=1200%2C800",
       "published": "2026-06-23T00:11:31+00:00",
       "firstSeen": "2026-06-23T00:18:23.130078+00:00",
-      "lastSeen": "2026-06-23T17:00:01.481146+00:00",
+      "lastSeen": "2026-06-23T16:05:53.770293+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 15.6796
+      "score": 15.6971
     },
     {
       "title": "Meta launches cheaper smart glasses without Ray-Ban",
@@ -30,11 +30,11 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/MetaGlasses_1.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=8.55%2C24.971192772515%2C82.25546875%2C66.205436991061&amp%3Bw=1200",
       "published": "2026-06-23T13:00:00+00:00",
       "firstSeen": "2026-06-23T14:00:01.430441+00:00",
-      "lastSeen": "2026-06-23T17:00:01.481146+00:00",
+      "lastSeen": "2026-06-23T16:05:53.770293+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 12.3443
+      "score": 12.3693
     },
     {
       "title": "Meta launches its own smart glasses brand at $299, breaking from the Ray-Ban name",
@@ -46,12 +46,12 @@
       "summary": "Meta has launched smart glasses under its own brand for the first time, pricing the Adventurer and Fury models at $299 each. The glasses match the hardware specifications of the Ray-Ban Meta Gen 2, which starts at $359, but ship without the Ray-Ban branding and licensing premium. A third model called Starfire, designed in collaboration [&hellip;]\nThis story continues at The Next Web",
       "image": "https://media.thenextweb.com/2026/06/meta-glasses-299-own-brand-smart-glasses-essilorluxottica.avif",
       "published": "2026-06-23T15:25:52+00:00",
-      "firstSeen": "2026-06-23T17:00:01.481146+00:00",
-      "lastSeen": "2026-06-23T17:00:01.481146+00:00",
+      "firstSeen": "2026-06-23T16:05:53.770293+00:00",
+      "lastSeen": "2026-06-23T16:05:53.770293+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 12.2031
+      "score": 12.2298
     },
     {
       "title": "Micron and Anthropic sign a multi-year AI memory supply deal",
@@ -67,7 +67,7 @@
       "lastSeen": "2026-06-23T11:00:01.528433+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.3074
+      "score": 11.3291
     },
     {
       "title": "Claude’s latest wobble lands in a worse week",
@@ -80,10 +80,10 @@
       "image": "https://media.thenextweb.com/2026/04/anthropic-claude-opus-4-7-coding-agentic-benchmarks-release.avif",
       "published": "2026-06-23T14:43:24+00:00",
       "firstSeen": "2026-06-23T16:00:01.309560+00:00",
-      "lastSeen": "2026-06-23T17:00:01.481146+00:00",
+      "lastSeen": "2026-06-23T16:05:53.770293+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.7826
+      "score": 10.8088
     },
     {
       "title": "Build real agentic apps using CUGA: two dozen working examples on a lightweight harness",
@@ -96,10 +96,10 @@
       "image": "https://cdn-uploads.huggingface.co/production/uploads/649d9ad1500fd8d51a675a93/eZoT1b8vHDMEgMVbf2J0f.png",
       "published": "2026-06-23T12:51:55+00:00",
       "firstSeen": "2026-06-23T14:00:01.430441+00:00",
-      "lastSeen": "2026-06-23T17:00:01.481146+00:00",
+      "lastSeen": "2026-06-23T16:05:53.770293+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.1106
+      "score": 6.1355
     },
     {
       "title": "IBM joins OpenAI’s cyber program to bring frontier AI into enterprise security",
@@ -115,7 +115,7 @@
       "lastSeen": "2026-06-23T11:00:01.528433+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.0022
+      "score": 6.0238
     },
     {
       "title": "NVIDIA Brings Trusted, 24/7 AI Agents to Telecom Operations",
@@ -128,10 +128,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/telco-tm-forum-1920x1080-1.jpg",
       "published": "2026-06-23T06:00:09+00:00",
       "firstSeen": "2026-06-23T07:00:01.672057+00:00",
-      "lastSeen": "2026-06-23T17:00:01.481146+00:00",
+      "lastSeen": "2026-06-23T16:05:53.770293+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.4004
+      "score": 5.421
     },
     {
       "title": "Fika Jobs raises $4M to build a video-first hiring platform where AI agents interview candidates",
@@ -144,10 +144,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/Torleif_Svensson-FikaJobsAI.jpeg?w=1200",
       "published": "2026-06-23T13:00:00+00:00",
       "firstSeen": "2026-06-23T14:00:01.430441+00:00",
-      "lastSeen": "2026-06-23T17:00:01.481146+00:00",
+      "lastSeen": "2026-06-23T16:05:53.770293+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8743
+      "score": 4.8993
     },
     {
       "title": "Prosus launches ToqanClaw, an OpenClaw-style tool builder for its 5m merchants",
@@ -163,7 +163,7 @@
       "lastSeen": "2026-06-23T14:00:01.430441+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8542
+      "score": 4.8771
     },
     {
       "title": "How Omio is building the future of conversational travel",
@@ -176,26 +176,26 @@
       "image": "https://images.ctfassets.net/kftzwdyauwt9/6wFIgOcT1xK5IvZQIDJ2xQ/edf82561f00cdb27cf3ffcfcad7cd215/oai_Omio_SEO.png?w=1600&amp%3Bh=900&amp%3Bfit=fill",
       "published": "2026-06-23T00:00:00+00:00",
       "firstSeen": "2026-06-23T09:00:02.066656+00:00",
-      "lastSeen": "2026-06-23T17:00:01.481146+00:00",
+      "lastSeen": "2026-06-23T16:05:53.770293+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.086
+      "score": 4.1034
     },
     {
-      "title": "Apple’s iOS 27 Beta 2: New Siri, RCS, and Wallet Changes Arrive",
-      "url": "https://www.techrepublic.com/article/news-ios-27-beta-2-write-with-siri-rcs-upgrades",
-      "source": "TechRepublic AI",
-      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
-      "sourceWeight": 0.75,
+      "title": "How Businesses Are Building Specialized AI They Can Trust",
+      "url": "https://blogs.nvidia.com/blog/nvidia-agent-toolkit-open-models-tools-skills-secure-runtime-ai-agents",
+      "source": "NVIDIA Blog",
+      "sourceUrl": "https://blogs.nvidia.com/feed/",
+      "sourceWeight": 0.85,
       "category": "AI",
-      "summary": "iOS 27 beta 2 adds Write with Siri, RCS replies, Wallet updates, and Home fixes, giving IT teams more to test before launch.\nThe post Apple’s iOS 27 Beta 2: New Siri, RCS, and Wallet Changes Arrive appeared first on TechRepublic.",
-      "image": "https://assets.techrepublic.com/uploads/2026/06/hero-vx-ios_2x.jpg?f=jpeg",
-      "published": "2026-06-23T15:37:50+00:00",
-      "firstSeen": "2026-06-23T17:00:01.481146+00:00",
-      "lastSeen": "2026-06-23T17:00:01.481146+00:00",
+      "summary": "Companies are asking how to build specialized AI that fits with the way their workflows actually run.  The first wave of enterprise AI was about access. Companies experimented with new frontier and open models, ran pilots and explored how AI can help.  Now, specialized agents — systems of models that can reason, use tools and [&#8230;]",
+      "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/agentic-ai-agent-toolkit-kv-r3b-1920x1080-2.png",
+      "published": "2026-06-23T13:00:07+00:00",
+      "firstSeen": "2026-06-23T14:00:01.430441+00:00",
+      "lastSeen": "2026-06-23T16:05:53.770293+00:00",
       "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.9089
+      "editorial_reason": "did_not_clear_gate",
+      "score": 3.8993
     }
   ],
   "errors": [
