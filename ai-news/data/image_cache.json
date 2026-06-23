@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-23T19:00:02.117216+00:00",
+  "updatedAt": "2026-06-23T20:00:01.900277+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -11252,6 +11252,10 @@
     "https://www.anthropic.com/news/introducing-claude-tag": {
       "image": "https://cdn.sanity.io/images/4zrzovbb/website/b9ba85fd4d8beaf4efe04a4cf6cec14761e52c78-2400x1260.jpg",
       "checkedAt": "2026-06-23T18:00:01.255007+00:00"
+    },
+    "https://simonwillison.net/2026/Jun/23/opfs-pyodide": {
+      "image": "",
+      "checkedAt": "2026-06-23T20:00:01.900277+00:00"
     }
   }
 }
