@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-23T12:45:30.718004+00:00",
+  "updatedAt": "2026-06-23T14:00:01.430441+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -11192,6 +11192,18 @@
     "https://huggingface.co/blog/ibm-research/cuga-apps": {
       "image": "https://cdn-uploads.huggingface.co/production/uploads/649d9ad1500fd8d51a675a93/eZoT1b8vHDMEgMVbf2J0f.png",
       "checkedAt": "2026-06-23T13:00:01.999269+00:00"
+    },
+    "https://www.theverge.com/tech/954676/sony-xperia-1-viii-ai-camera-assistant": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/sony-xperia-1-viii-ai-camera-assistant-samples.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.741906587151%2C100%2C78.516186825698&amp;w=1200",
+      "checkedAt": "2026-06-23T14:00:01.430441+00:00"
+    },
+    "https://techcrunch.com/2026/06/23/fika-jobs-raises-4m-to-build-a-video-first-hiring-platform-where-ai-agents-interview-candidates": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/Torleif_Svensson-FikaJobsAI.jpeg?w=1200",
+      "checkedAt": "2026-06-23T14:00:01.430441+00:00"
+    },
+    "https://www.theverge.com/tech/954052/meta-glasses-hands-on-kylie-jenner-smart-glasses-price-battery-privacy": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/MetaGlasses_1.jpg?quality=90&amp;strip=all&amp;crop=8.55%2C24.971192772515%2C82.25546875%2C66.205436991061&amp;w=1200",
+      "checkedAt": "2026-06-23T14:00:01.430441+00:00"
     }
   }
 }
