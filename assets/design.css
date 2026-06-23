@@ -1059,6 +1059,36 @@ body.home-page::after {
 }
 .sidebar-note { color: #ffffff; }
 .sidebar-note { margin: -6px 0 0; max-width: 180px; }
+.hub-contact {
+  display: grid;
+  gap: 6px;
+  padding: 12px;
+  border: 1px solid rgba(232,197,122,0.22);
+  border-radius: 10px;
+  background: rgba(255,255,255,0.055);
+}
+.hub-contact span {
+  color: rgba(232,197,122,0.88);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+.hub-contact a {
+  color: #f4ecdf;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.25;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+.hub-contact a:hover,
+.hub-contact a:focus-visible {
+  color: var(--brand-gold);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
 .side-nav {
   display: grid;
   gap: 13px;
