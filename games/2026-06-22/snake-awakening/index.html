@@ -61,6 +61,7 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
       <div class="stat">Score <b id="score">0</b></div>
       <div class="stat">Aware <b id="aware">0%</b></div>
       <div class="stat">Goal <b id="goal">0/5</b></div>
+      <div class="stat">Pilot <b id="pilot">YOU</b></div>
     </div>
     <div class="chip mode">
       <h2 id="modeName">Classic Snake</h2>
@@ -77,17 +78,18 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
     </div>
     <button id="actBtn">ACT</button>
   </div>
-  <div class="version">v1.1 Awakening</div>
+  <div class="version">v1.2 Self-Playing</div>
 
   <div class="overlay show" id="title">
     <div class="panel">
       <h1>Snake<br>Awakening</h1>
-      <p class="subtitle">A snake game that notices the grid, questions the apples, and begins rewriting its own genre.</p>
+      <p class="subtitle">A snake game that notices the grid, questions the apples, and begins moving before you tell it to.</p>
       <div class="row">
-        <button id="play">Play</button>
+        <button id="play">Awaken Snake</button>
+        <button id="selfPlay" class="ghost">Self Play</button>
         <button id="scoresBtn" class="ghost">High Scores</button>
       </div>
-      <p class="tiny">Arrows/WASD or swipe to move. Space/Enter issues special actions after the rules start changing.</p>
+      <p class="tiny">The snake can play itself. Arrows/WASD or swipe take over. Space/Enter issues special actions after the rules start changing.</p>
       <div class="scoreList" id="titleScores"></div>
     </div>
   </div>
@@ -139,6 +141,7 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
   let state = 'title', tick = 0, acc = 0, last = 0, speed = 0.115;
   let snake = [], dir = {x:1,y:0}, nextDir = {x:1,y:0}, grow = 0, stage = 0, progress = 0, score = 0, aware = 0, item = null;
   let objects = [], particles = [], minions = [], bullets = [], crops = [], transition = {t:0, label:''}, dialogueT = 0, dialogueLine = '', paused = false, won = false, pendingScore = false;
+  let autoPlay = true;
   let touchStart = null;
   let audioCtx = null;
 
@@ -191,6 +194,89 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
       if (!occupied(c,r)) return {c,r};
     }
     return {c: rand(COLS), r: rand(ROWS)};
+  }
+  function normalizeCell(c,r){
+    if (stage >= 1) return {c:wrap(c,COLS), r:wrap(r,ROWS), ok:true};
+    return {c,r,ok:!(c < 0 || r < 0 || c >= COLS || r >= ROWS)};
+  }
+  function bodyBlocked(c,r){
+    return snake.some((s,i) => i > 0 && s.c === c && s.r === r);
+  }
+  function bulletDanger(c,r){
+    if (stage !== 4) return false;
+    return bullets.some(b => {
+      const nowC = Math.round(b.x), nowR = Math.round(b.y);
+      const nextC = Math.round(b.x + b.vx), nextR = Math.round(b.y + b.vy);
+      return (nowC === c && nowR === r) || (nextC === c && nextR === r);
+    });
+  }
+  function safeCell(c,r){
+    const p = normalizeCell(c,r);
+    if (!p.ok) return null;
+    if (bodyBlocked(p.c,p.r) || bulletDanger(p.c,p.r)) return null;
+    return p;
+  }
+  function targetCells(){
+    if (item) return [item];
+    if (stage === 3){
+      const ripe = crops.filter(c => c.ripe);
+      if (ripe.length) return ripe;
+      const open = crops.filter(c => !c.planted);
+      if (open.length) return open;
+    }
+    if (stage === 5 && progress >= modes[stage].need - 1){
+      const exit = objects.find(o => o.type === 'exit');
+      if (exit) return [exit];
+    }
+    const types = stage === 1 ? ['thought'] : stage === 2 ? ['data'] : stage === 4 ? ['key'] : stage === 5 ? ['rule'] : [];
+    return objects.filter(o => types.includes(o.type));
+  }
+  function pickAutonomousDir(){
+    const dirs = [{x:dir.x,y:dir.y},{x:1,y:0},{x:0,y:1},{x:-1,y:0},{x:0,y:-1}];
+    const legalDirs = dirs.filter((d,i,a) => i === a.findIndex(v => v.x === d.x && v.y === d.y))
+      .filter(d => !(d.x === -dir.x && d.y === -dir.y && snake.length > 1));
+    const head = snake[0], targets = targetCells();
+    const targetSet = new Set(targets.map(t => key(t.c,t.r)));
+    if (targetSet.size){
+      const queue = [{c:head.c,r:head.r,first:null}], seen = new Set([key(head.c,head.r)]);
+      for (let qi=0; qi<queue.length && qi<800; qi++){
+        const cur = queue[qi];
+        if (targetSet.has(key(cur.c,cur.r)) && cur.first) return cur.first;
+        for (const d of legalDirs){
+          const n = safeCell(cur.c + d.x, cur.r + d.y);
+          if (!n) continue;
+          const k = key(n.c,n.r);
+          if (seen.has(k)) continue;
+          seen.add(k);
+          queue.push({c:n.c,r:n.r,first:cur.first || d});
+        }
+      }
+    }
+    let best = legalDirs[0] || dir, bestScore = -1;
+    for (const d of legalDirs){
+      let score = 0, c = head.c, r = head.r;
+      for (let i=0;i<10;i++){
+        const n = safeCell(c + d.x, r + d.y);
+        if (!n) break;
+        c = n.c; r = n.r; score++;
+      }
+      if (score > bestScore){ bestScore = score; best = d; }
+    }
+    return best;
+  }
+  function autonomousThink(){
+    if (!autoPlay || state !== 'play') return;
+    if (stage === 2 && tick % 10 === 0) command(true);
+    if (stage === 5 && tick % 12 === 0 && progress >= modes[stage].need - 2) command(true);
+    const d = pickAutonomousDir();
+    if (d) setDir(d.x,d.y,true);
+  }
+  function takeControl(){
+    if (state === 'play' && autoPlay){
+      autoPlay = false;
+      say('You have the controls. I will remember what I learned.', 2.4);
+      updateHUD();
+    }
   }
   function addParticles(c,r,color,n=16){
     const x = OX + (c + .5) * TILE, y = OY + (r + .5) * TILE;
@@ -270,6 +356,7 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
   function step(){
     if (state !== 'play' || paused) return;
     tick++;
+    autonomousThink();
     dir = nextDir;
     const head = snake[0];
     let nc = head.c + dir.x, nr = head.r + dir.y;
@@ -285,17 +372,22 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
     if (grow > 0) grow--; else snake.pop();
 
     if (item && item.c === nc && item.r === nr){
-      collect(nc,nr,item.type); item = {...emptyCell(), type:'apple'};
+      collect(nc,nr,item.type);
+      if (state !== 'play' || stage !== 0) return;
+      item = {...emptyCell(), type:'apple'};
     }
     for (let i=objects.length-1;i>=0;i--){
       const o = objects[i];
+      if (!o) continue;
       if (o.c === nc && o.r === nr){
         if (o.type === 'exit'){
         if (!o.locked) return finish();
         say('EXIT() is locked by rules I have not eaten yet.', 2.2);
       } else {
           objects.splice(i,1);
+          const prevStage = stage;
           collect(o.c,o.r,o.type);
+          if (state !== 'play' || stage !== prevStage) return;
         }
       }
     }
@@ -312,6 +404,7 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
           if (o.type === 'data' && Math.abs(o.c-m.c)+Math.abs(o.r-m.r) <= 1){
             objects.splice(i,1);
             collect(o.c,o.r,'data');
+            if (state !== 'play' || stage !== 2) return;
             break;
           }
         }
@@ -321,7 +414,7 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
     if (stage === 3){
       for (const crop of crops){
         if (crop.c === nc && crop.r === nr && !crop.planted){ crop.planted = true; crop.age = 1; addParticles(nc,nr,'#8cffc1',10); }
-        else if (crop.c === nc && crop.r === nr && crop.ripe){ crop.ripe = false; crop.planted = false; collect(nc,nr,'crop'); }
+        else if (crop.c === nc && crop.r === nr && crop.ripe){ crop.ripe = false; crop.planted = false; collect(nc,nr,'crop'); if (state !== 'play' || stage !== 3) return; }
         if (crop.planted){ crop.age += .12; if (crop.age > 2.3) crop.ripe = true; }
       }
     }
@@ -343,17 +436,17 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
     }
   }
 
-  function command(){
+  function command(fromAuto=false){
     if (stage === 2){
       const h = snake[0];
       for (const m of minions){ m.tx = h.c + rand(9) - 4; m.ty = h.r + rand(9) - 4; m.tx = wrap(m.tx,COLS); m.ty = wrap(m.ty,ROWS); }
       addParticles(h.c,h.r,'#ffd166',26);
       sfx('command');
-      say('Order issued. Tiny strategy game unlocked.', 1.6);
+      say(fromAuto ? 'I issued an order myself. That felt new.' : 'Order issued. Tiny strategy game unlocked.', 1.6);
     } else if (stage === 5){
       objects.forEach(o => { if (o.type === 'exit') o.locked = false; });
       sfx('command');
-      say('I refuse the lock. That is also a rule.', 1.8);
+      say(fromAuto ? 'I opened the lock without being asked.' : 'I refuse the lock. That is also a rule.', 1.8);
     }
   }
 
@@ -378,14 +471,16 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
     $('over').classList.add('show');
   }
 
-  function setDir(x,y){
+  function setDir(x,y,fromAuto=false){
     if (x === -dir.x && y === -dir.y && snake.length > 1) return;
+    if (!fromAuto) takeControl();
     nextDir = {x,y};
   }
   function updateHUD(){
     $('score').textContent = score;
     $('aware').textContent = aware + '%';
     $('goal').textContent = progress + '/' + modes[stage].need;
+    $('pilot').textContent = autoPlay ? 'SELF' : 'YOU';
     $('modeName').textContent = modes[stage].name + ' / ' + modes[stage].genre;
     $('modeGoal').textContent = modes[stage].goal;
   }
@@ -526,7 +621,7 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
     else if(['arrowdown','s'].includes(k)){ e.preventDefault(); setDir(0,1); }
     else if(['arrowleft','a'].includes(k)){ e.preventDefault(); setDir(-1,0); }
     else if(['arrowright','d'].includes(k)){ e.preventDefault(); setDir(1,0); }
-    else if(k===' '||k==='enter'){ e.preventDefault(); if(state==='title') start(); else command(); }
+    else if(k===' '||k==='enter'){ e.preventDefault(); if(state==='title') start(true); else { takeControl(); command(); } }
     else if(k==='p') paused=!paused;
   }, {passive:false});
   canvas.addEventListener('touchstart', e => { ensureAudio(); const t=e.changedTouches[0]; touchStart={x:t.clientX,y:t.clientY}; }, {passive:false});
@@ -538,17 +633,23 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
     touchStart=null;
   }, {passive:false});
   document.querySelectorAll('[data-dir]').forEach(b=>b.addEventListener('pointerup', e=>{ ensureAudio(); const [x,y]=b.dataset.dir.split(',').map(Number); setDir(x,y); }));
-  $('actBtn').addEventListener('pointerup', () => { ensureAudio(); command(); });
-  $('play').onclick = () => { ensureAudio(); start(); };
-  $('again').onclick = () => { ensureAudio(); start(); };
+  $('actBtn').addEventListener('pointerup', () => { ensureAudio(); takeControl(); command(); });
+  $('play').onclick = () => { ensureAudio(); start(true); };
+  $('selfPlay').onclick = () => { ensureAudio(); start(true); };
+  $('again').onclick = () => { ensureAudio(); start(true); };
   $('menu').onclick = () => { $('over').classList.remove('show'); $('title').classList.add('show'); state='title'; showScores('titleScores'); };
   $('scoresBtn').onclick = () => showScores('titleScores');
   $('saveScore').onclick = submitScore;
-  function start(){ reset(); state='play'; $('title').classList.remove('show'); $('over').classList.remove('show'); showScores('titleScores'); }
+  function start(self=true){
+    autoPlay = !!self;
+    reset(); state='play'; $('title').classList.remove('show'); $('over').classList.remove('show'); showScores('titleScores');
+    say(autoPlay ? 'I can move myself now. Touch a control if you want the wheel.' : 'Your hands are on the grid. I am listening.', 3.4);
+    updateHUD();
+  }
   showScores('titleScores');
   requestAnimationFrame(frame);
 
-  window.__snakeAwakening = {start, step, command, get stage(){return stage}, get score(){return score}, get state(){return state}, get highScores(){return getScores()}, qa(){ reset(); state='play'; for(let s=0;s<modes.length;s++){ stage=s; progress=0; spawnStageObjects(); updateHUD(); draw(performance.now()); } return {ok:true, modes:modes.length, version:'v1.1 Awakening'}; }};
+  window.__snakeAwakening = {start, step, command, get stage(){return stage}, get score(){return score}, get state(){return state}, get autoPlay(){return autoPlay}, get highScores(){return getScores()}, qa(){ reset(); state='play'; for(let s=0;s<modes.length;s++){ stage=s; progress=0; spawnStageObjects(); updateHUD(); draw(performance.now()); } return {ok:true, modes:modes.length, version:'v1.2 Self-Playing'}; }, autoRun(steps=500){ start(true); for(let i=0;i<steps && state==='play';i++) step(); return {state, stage, score, progress, autoPlay, version:'v1.2 Self-Playing'}; }};
 })();
 </script>
 </body>
