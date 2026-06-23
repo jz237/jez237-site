@@ -81,7 +81,7 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
     </div>
     <button id="actBtn">ACT</button>
   </div>
-  <div class="version">v1.4 Global Scores</div>
+  <div class="version">v1.5 What Is This</div>
 
   <div class="overlay show" id="title">
     <div class="panel">
@@ -101,7 +101,7 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
   <div class="overlay" id="explain">
     <div class="panel">
       <h1>What Is<br>This?</h1>
-      <p class="subtitle">Snake Awakening starts as classic Snake, then the snake notices the grid and mutates the rules.</p>
+      <p class="subtitle">Snake Awakening is a meta Snake game where the snake slowly realizes it is inside a game, then starts breaking out of the normal Snake rules. Basically: it is Snake becoming self-aware, hijacking its own genre, and trying to escape the premise.</p>
       <p class="tiny">It moves through meta arcade, RTS command mode, cozy farming, bullet hell, and a final rule-breaking escape. The snake can even play itself; touch, swipe, or press a key to take control whenever you want.</p>
       <div class="row">
         <button id="explainPlay">Awaken Snake</button>
@@ -132,7 +132,7 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
   const TILE = Math.floor(Math.min(W / COLS, (H - HUD) / ROWS));
   const OX = Math.floor((W - COLS * TILE) / 2);
   const OY = HUD + Math.floor((H - HUD - ROWS * TILE) / 2);
-  const VERSION = 'v1.4 Global Scores';
+  const VERSION = 'v1.5 What Is This';
   const HS_KEY = 'snake-awakening-highscores-v1';
   const SCORE_API = 'https://game-scores.jez237.workers.dev/scores/snake-awakening';
   const SCORE_LIMIT = 10;
