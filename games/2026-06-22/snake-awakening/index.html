@@ -91,7 +91,7 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
     </div>
     <button id="actBtn">ACT</button>
   </div>
-  <div class="version">v2.7 Desktop Popup</div>
+  <div class="version">v2.8 Desktop Polish</div>
 
   <div class="overlay show" id="title">
     <div class="panel">
@@ -145,7 +145,7 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
   const TILE = Math.floor(Math.min(W / COLS, (H - HUD) / ROWS));
   const OX = Math.floor((W - COLS * TILE) / 2);
   const OY = HUD + Math.floor((H - HUD - ROWS * TILE) / 2);
-  const VERSION = 'v2.7 Desktop Popup';
+  const VERSION = 'v2.8 Desktop Polish';
   const DESKTOP_ESCAPE_DURATION = 10.4;
   const DESKTOP_POPUP_AT = 10.65;
   const HS_KEY = 'snake-awakening-highscores-v1';
@@ -207,7 +207,7 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
   let attract = {snake:[], dir:{x:1,y:0}, food:{c:18,r:9}, step:0};
   let touchStart = null;
   let audioCtx = null;
-  let speechEnabled = false, speechQueue = [], speechBusy = false, lastSpoken = '';
+  let speechEnabled = false, speechQueue = [], speechBusy = false, lastSpoken = '', lastSpeechLine = '', speechTimer = null, lastSpeechAt = 0;
 
   function rand(n){ return Math.floor(Math.random() * n); }
   function eventDelay(){ return 200 + rand(200); }
@@ -233,18 +233,29 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
   function speakText(text, priority=false){
     const line = cleanSpeechText(text);
     if (!line) return;
+    const now = performance.now();
+    if (line === lastSpeechLine && now - lastSpeechAt < Math.max(2600, Math.min(6500, line.length * 65))) return;
     lastSpoken = line;
     if (!('speechSynthesis' in window) || !('SpeechSynthesisUtterance' in window)) return;
     speechQueue = [];
     if (!speechEnabled) return;
+    lastSpeechLine = line;
+    lastSpeechAt = now;
+    if (speechTimer) clearTimeout(speechTimer);
     try{ window.speechSynthesis.cancel(); }catch(e){}
     const utter = new SpeechSynthesisUtterance(line);
     utter.rate = .92;
     utter.pitch = 1.08;
     utter.volume = .86;
     speechBusy = true;
-    utter.onend = utter.onerror = () => { speechBusy = false; };
+    utter.onend = utter.onerror = () => { speechBusy = false; if (speechTimer) clearTimeout(speechTimer); speechTimer = null; };
     window.speechSynthesis.speak(utter);
+    const maxMs = Math.max(2200, Math.min(8200, 900 + line.split(/\s+/).length * 420));
+    speechTimer = setTimeout(() => {
+      speechBusy = false;
+      try{ window.speechSynthesis.cancel(); }catch(e){}
+      speechTimer = null;
+    }, maxMs);
   }
   function processSpeechQueue(){
     speechQueue = [];
@@ -252,6 +263,8 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
   function cancelSpeech(){
     speechQueue = [];
     speechBusy = false;
+    if (speechTimer) clearTimeout(speechTimer);
+    speechTimer = null;
     try{ if ('speechSynthesis' in window) window.speechSynthesis.cancel(); }catch(e){}
   }
   function tone(freq, dur=.08, type='sine', gain=.045, slide=1){
@@ -455,6 +468,7 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
     for (let i=0;i<n;i++) particles.push({x,y,vx:(Math.random()-.5)*180,vy:(Math.random()-.5)*180,life:.35+Math.random()*.45,color,s:2+Math.random()*4});
   }
   function say(line, t=3.3){
+    if (line === dialogueLine && dialogueT > .25) return;
     dialogueLine = line;
     dialogueT = t;
     $('line').textContent = line;
@@ -924,6 +938,52 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
       ctx.fillRect(x - s/2, y - s/2 + pane + gap, pane, pane);
       ctx.fillRect(x - s/2 + pane + gap, y - s/2 + pane + gap, pane, pane);
     };
+    const drawFolderIcon = (x,y,color='#f7c948',scale=1) => {
+      ctx.save(); ctx.translate(x,y); ctx.scale(scale,scale);
+      ctx.fillStyle = 'rgba(255,255,255,.18)';
+      ctx.beginPath(); ctx.roundRect(-20, -16, 40, 32, 8); ctx.fill();
+      ctx.fillStyle = '#f0b82e';
+      ctx.beginPath(); ctx.roundRect(-18, -14, 18, 8, 4); ctx.fill();
+      ctx.fillStyle = color;
+      ctx.beginPath(); ctx.roundRect(-20, -8, 40, 26, 7); ctx.fill();
+      ctx.fillStyle = 'rgba(255,255,255,.28)';
+      ctx.fillRect(-16, -4, 32, 3);
+      ctx.restore();
+    };
+    const drawFileIcon = (x,y,color,tag,scale=1) => {
+      ctx.save(); ctx.translate(x,y); ctx.scale(scale,scale);
+      ctx.fillStyle = '#eef5ff';
+      ctx.beginPath(); ctx.roundRect(-16, -19, 32, 38, 6); ctx.fill();
+      ctx.fillStyle = 'rgba(31,49,80,.2)';
+      ctx.beginPath(); ctx.moveTo(5, -19); ctx.lineTo(16, -8); ctx.lineTo(5, -8); ctx.closePath(); ctx.fill();
+      ctx.fillStyle = color;
+      ctx.beginPath(); ctx.roundRect(-11, -1, 22, 12, 4); ctx.fill();
+      ctx.fillStyle = '#0b1630';
+      ctx.font = '900 7px monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText(tag, 0, 8);
+      ctx.restore();
+    };
+    const drawEdgeIcon = (x,y,scale=1) => {
+      ctx.save(); ctx.translate(x,y); ctx.scale(scale,scale);
+      const g = ctx.createRadialGradient(0,0,3,0,0,22);
+      g.addColorStop(0,'#70f7ff');
+      g.addColorStop(.48,'#16b3ff');
+      g.addColorStop(1,'#0b58d8');
+      ctx.fillStyle = g;
+      ctx.beginPath(); ctx.arc(0,0,20,0,Math.PI*2); ctx.fill();
+      ctx.fillStyle = 'rgba(255,255,255,.42)';
+      ctx.beginPath(); ctx.arc(4,3,10,0,Math.PI*1.55); ctx.fill();
+      ctx.restore();
+    };
+    const drawNetworkIcon = (x,y) => {
+      ctx.strokeStyle = '#29384f';
+      ctx.lineWidth = 2;
+      for(let i=0;i<3;i++){
+        ctx.beginPath(); ctx.arc(x, y + 10, 7 + i * 6, -2.28, -.86); ctx.stroke();
+      }
+      ctx.fillStyle = '#29384f'; ctx.beginPath(); ctx.arc(x,y + 10,2.5,0,7); ctx.fill();
+    };
     ctx.save();
 
     const sky = ctx.createLinearGradient(0,0,W,H);
@@ -952,12 +1012,20 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
     }
     ctx.globalCompositeOperation = 'source-over';
     ctx.fillStyle = 'rgba(255,255,255,.04)';
-    for (let i=0;i<5;i++){
+    for (let i=0;i<7;i++){
       ctx.beginPath();
-      ctx.moveTo(150 + i * 92, 0);
-      ctx.bezierCurveTo(290 + i * 58, 160, 230 + i * 90, 350, 410 + i * 72, H);
-      ctx.lineWidth = 28 - i * 3;
-      ctx.strokeStyle = `rgba(255,255,255,${.045 - i * .006})`;
+      ctx.moveTo(120 + i * 74, -20);
+      ctx.bezierCurveTo(300 + i * 45, 135, 220 + i * 88, 360, 390 + i * 68, H + 30);
+      ctx.lineWidth = 32 - i * 2.6;
+      ctx.strokeStyle = `rgba(255,255,255,${.055 - i * .005})`;
+      ctx.stroke();
+    }
+    ctx.globalCompositeOperation = 'overlay';
+    ctx.strokeStyle = 'rgba(255,255,255,.12)';
+    ctx.lineWidth = 2;
+    for(let i=0;i<4;i++){
+      ctx.beginPath();
+      ctx.ellipse(520 + i * 20, 282 + i * 12, 360 - i * 38, 74 + i * 8, -.16 + i * .12, 0, Math.PI * 2);
       ctx.stroke();
     }
     ctx.restore();
@@ -966,32 +1034,38 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
     ctx.fillRect(0,0,W,H);
 
     const icons = [
-      [54,72,'RULES.txt','#f4fbff','TXT'],
-      [54,166,'apple.png','#ff5964','PNG'],
-      [54,260,'genre.lock','#ffd166','LOCK'],
-      [54,354,'scores.db','#50e8ff','DB'],
-      [804,76,'exit.exe','#74ff8d','EXE'],
-      [804,170,'old_frames','#b8c7ff','DIR'],
-      [804,264,'premise.tmp','#ff5fb7','TMP']
+      [56,68,'Recycle Bin','#eef5ff','BIN','file'],
+      [56,160,'Microsoft Edge','#2fe6ff','EDGE','edge'],
+      [56,252,'File Explorer','#f7c948','DIR','folder'],
+      [56,344,'RULES.txt','#f4fbff','TXT','file'],
+      [56,436,'scores.db','#50e8ff','DB','file'],
+      [806,74,'exit.exe','#74ff8d','EXE','file'],
+      [806,168,'old_frames','#f7c948','DIR','folder'],
+      [806,262,'premise.tmp','#ff5fb7','TMP','file']
     ];
     ctx.textAlign = 'center';
     ctx.textBaseline = 'alphabetic';
-    for (const [ix,iy,label,color,tag] of icons){
+    for (const [ix,iy,label,color,tag,kind] of icons){
       ctx.save();
       ctx.globalAlpha = .72 + desktopP * .28;
       ctx.shadowColor = 'rgba(0,0,0,.34)';
       ctx.shadowBlur = 12;
-      ctx.fillStyle = 'rgba(255,255,255,.10)';
-      ctx.beginPath(); ctx.roundRect(ix, iy, 58, 52, 12); ctx.fill();
+      ctx.fillStyle = 'rgba(255,255,255,.08)';
+      ctx.beginPath(); ctx.roundRect(ix, iy, 70, 66, 12); ctx.fill();
       ctx.shadowBlur = 0;
-      ctx.fillStyle = color;
-      ctx.beginPath(); ctx.roundRect(ix + 12, iy + 8, 34, 30, 7); ctx.fill();
-      ctx.fillStyle = 'rgba(3,8,18,.82)';
-      ctx.font = '900 8px monospace';
-      ctx.fillText(tag, ix + 29, iy + 28);
+      const cx = ix + 35, cy = iy + 26;
+      if (kind === 'folder') drawFolderIcon(cx, cy, color);
+      else if (kind === 'edge') drawEdgeIcon(cx, cy);
+      else drawFileIcon(cx, cy, color, tag);
       ctx.fillStyle = '#eef7ff';
-      ctx.font = '800 10px system-ui';
-      ctx.fillText(label, ix + 29, iy + 68);
+      ctx.font = '800 10px Segoe UI, system-ui';
+      const words = label.split(' ');
+      if (words.length > 1){
+        ctx.fillText(words[0], cx, iy + 76);
+        ctx.fillText(words.slice(1).join(' '), cx, iy + 89);
+      } else {
+        ctx.fillText(label, cx, iy + 77);
+      }
       ctx.restore();
     }
 
@@ -1004,8 +1078,8 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
     ctx.strokeStyle = 'rgba(255,255,255,.42)';
     ctx.beginPath(); ctx.moveTo(0,H - 56.5); ctx.lineTo(W,H - 56.5); ctx.stroke();
     const taskX = W/2 - 220, taskY = H - 47;
-    ctx.fillStyle = 'rgba(255,255,255,.62)';
-    ctx.beginPath(); ctx.roundRect(taskX, taskY, 440, 38, 15); ctx.fill();
+    ctx.fillStyle = 'rgba(247,250,255,.74)';
+    ctx.beginPath(); ctx.roundRect(taskX - 8, taskY, 456, 38, 15); ctx.fill();
     drawWinLogo(taskX + 28, taskY + 19, 17);
     ctx.fillStyle = 'rgba(255,255,255,.78)';
     ctx.beginPath(); ctx.roundRect(taskX + 54, taskY + 7, 158, 24, 12); ctx.fill();
@@ -1017,20 +1091,43 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
     ctx.font = '800 11px system-ui';
     ctx.textAlign = 'left';
     ctx.fillText('Search', taskX + 92, taskY + 23);
+    const appIcons = [
+      [taskX + 236,'edge'],
+      [taskX + 270,'folder'],
+      [taskX + 304,'store'],
+      [taskX + 338,'snake']
+    ];
+    for (const [ax,type] of appIcons){
+      ctx.fillStyle = type === 'snake' ? 'rgba(0,120,215,.18)' : 'rgba(255,255,255,.62)';
+      ctx.beginPath(); ctx.roundRect(ax - 14, taskY + 6, 28, 26, 9); ctx.fill();
+      if (type === 'edge') drawEdgeIcon(ax, taskY + 19, .42);
+      else if (type === 'folder') drawFolderIcon(ax, taskY + 19, '#f7c948', .42);
+      else if (type === 'store'){
+        ctx.fillStyle = '#6aa7ff';
+        ctx.beginPath(); ctx.roundRect(ax - 10, taskY + 10, 20, 18, 5); ctx.fill();
+        ctx.strokeStyle = '#fff'; ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.arc(ax, taskY + 13, 5, Math.PI, 0); ctx.stroke();
+      } else {
+        ctx.fillStyle = '#74ff8d';
+        ctx.beginPath(); ctx.roundRect(ax - 9, taskY + 10, 18, 18, 7); ctx.fill();
+        ctx.fillStyle = '#0a1720';
+        ctx.beginPath(); ctx.arc(ax + 3, taskY + 16, 2.2, 0, 7); ctx.arc(ax + 8, taskY + 20, 2.2, 0, 7); ctx.fill();
+      }
+    }
     ctx.fillStyle = 'rgba(0,120,215,.18)';
-    ctx.beginPath(); ctx.roundRect(taskX + 226, taskY + 6, 154, 26, 10); ctx.fill();
+    ctx.beginPath(); ctx.roundRect(taskX + 366, taskY + 6, 74, 26, 10); ctx.fill();
     ctx.fillStyle = '#17446f';
     ctx.font = '900 11px system-ui';
     ctx.textAlign = 'center';
-    ctx.fillText('snake_awake.exe', taskX + 303, taskY + 23);
-    for (let i=0;i<3;i++){
-      ctx.fillStyle = ['#4cc2ff','#ffd166','#74ff8d'][i];
-      ctx.beginPath(); ctx.roundRect(taskX + 392 + i * 17, taskY + 11, 10, 16, 4); ctx.fill();
-    }
+    ctx.fillText('snake', taskX + 403, taskY + 23);
     ctx.fillStyle = 'rgba(255,255,255,.66)';
-    ctx.beginPath(); ctx.roundRect(W - 134,H - 47,116,38,12); ctx.fill();
+    ctx.beginPath(); ctx.roundRect(W - 184,H - 47,166,38,12); ctx.fill();
     ctx.fillStyle = '#26324a';
     ctx.font = '800 11px system-ui';
+    drawNetworkIcon(W - 166, H - 35);
+    ctx.fillStyle = '#29384f';
+    ctx.beginPath(); ctx.moveTo(W - 142,H - 35); ctx.lineTo(W - 132,H - 42); ctx.lineTo(W - 132,H - 28); ctx.closePath(); ctx.fill();
+    ctx.fillRect(W - 126,H - 39,14,8); ctx.fillRect(W - 111,H - 37,2,4);
     ctx.textAlign = 'right';
     ctx.fillText('3:50 PM',W - 32,H - 28);
     ctx.fillText('6/23/26',W - 32,H - 14);
