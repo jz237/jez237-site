@@ -1,8 +1,498 @@
 {
-  "generatedAt": "2026-06-23T00:36:17.773Z",
+  "generatedAt": "2026-06-23T12:02:39.423Z",
   "editorialPriority": "When there is a choice, prefer personal computers, home computing, office PC software, and personal computer or console gaming over broad enterprise technology.",
   "fallbackPolicy": "Use exact-day computer news when verified. If none exists, use same-week or same-month personal-computing items with confidence labels, then fall back to a wider world/business headline.",
   "issues": [
+    {
+      "currentDate": "2026-06-23",
+      "historicDate": "1982-12-13",
+      "displayDate": "Week of December 13-19, 1982",
+      "edition": "Issue 020 - Weekly 1982 Computer & Culture Chronicle",
+      "visualProfile": {
+        "layout": "weekly-newsprint-front",
+        "accent": "black-red-blue",
+        "paper": "halftone-cream",
+        "strapline": "Movie cartridges, Commodore 64 counters, 5200 demos, and Hall & Oates at No. 1"
+      },
+      "masthead": {
+        "kicker": "A weekly 1982 archive dispatch",
+        "title": "Computer Chronicle",
+        "deck": "Video games, home computers, software counters, and culture for the week of December 6-12, 1982"
+      },
+      "layoutPlan": {
+        "lead": "Holiday buyers size up Atari movie cartridges and 64K home computers",
+        "secondary": [
+          "Atari 5200 demos compete with the familiar 2600 aisle",
+          "Commodore 64 keeps 64K memory in the Christmas pitch"
+        ],
+        "rails": [
+          "Top 5 games",
+          "Price watch"
+        ]
+      },
+      "sectionChrome": {
+        "lead": {
+          "label": "Lead Story"
+        },
+        "pictureDesk": {
+          "label": "Picture Desk",
+          "title": "Scenes From the Week"
+        },
+        "computerItems": {
+          "label": "Computers & Hardware",
+          "title": "Personal Computing Desk"
+        },
+        "software": {
+          "label": "Software Top 5",
+          "title": "Programs on the Editor's Pad"
+        },
+        "storeShelves": {
+          "label": "Top Games This Week",
+          "title": "Arcade, Console & Computer Games"
+        },
+        "priceWatch": {
+          "label": "Price Watch",
+          "title": "What It Cost"
+        },
+        "bbs": {
+          "label": "Modem Desk"
+        },
+        "curiosity": {
+          "label": "Movies / TV / Culture"
+        },
+        "briefs": {
+          "label": "Magazine Rack",
+          "title": "Culture & Shelf Talk"
+        },
+        "music": {
+          "label": "Top Rock This Week",
+          "title": "Hot 100, November 20"
+        },
+        "periodAd": {
+          "label": "Retail / Ads"
+        },
+        "classifieds": {
+          "label": "Classifieds",
+          "title": "Small Ads"
+        },
+        "fallback": {
+          "label": "Editorial Screen"
+        },
+        "accuracy": {
+          "label": "Accuracy Ledger",
+          "title": "What Is Date-Specific"
+        },
+        "sources": {
+          "label": "Source Trail",
+          "title": "Research Log"
+        },
+        "market": {
+          "label": "Retail / Ads",
+          "title": "Counter Watch"
+        }
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1982-12-13.png",
+        "alt": "GPT Image 2 vintage Computer Chronicle front page for the week of December 13-19, 1982, led by Atari 1200XL holiday computer news.",
+        "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data for the week of December 13-19, 1982.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "A holiday issue follows Atari's 1200XL announcement, crowded software shelves, and the still-booming home video-game aisle.",
+      "morningLine": "Atari puts a new 64K XL machine in the showroom while shoppers compare cartridges, modems, and practical software before Christmas.",
+      "lead": {
+        "headline": "Atari Unveils the 1200XL for Christmas Computer Shoppers",
+        "summary": "Atari announced the 64K 1200XL in New York on December 13, positioning the new XL-line machine as a premium home computer with revised styling, function keys, and compatibility claims for the busy holiday market.",
+        "confidence": "High - dated Atari press-release text and contemporary coverage identify December 13, 1982.",
+        "sourceRefs": [
+          0,
+          1
+        ]
+      },
+      "computerItems": [
+        {
+          "label": "Hardware",
+          "headline": "1200XL Adds 64K Polish to Atari Line",
+          "summary": "The 1200XL pitch stresses a full 64K of RAM, a redesigned keyboard, help and function keys, and an upscale case for buyers comparing serious home computers.",
+          "confidence": "High",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "label": "Games",
+          "headline": "Holiday Aisles Stay Cartridge-Heavy",
+          "summary": "Retailers and shoppers continue to chase video-game cartridges during the December rush, with arcade names and licensed console titles driving attention.",
+          "confidence": "Medium - contemporary newspaper reporting describes the holiday market trend.",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "label": "Peripherals",
+          "headline": "Smartmodem 1200 Signals Faster Home Links",
+          "summary": "Hayes' Smartmodem 1200 appears in period new-product listings, pointing toward faster dial-up sessions for microcomputer owners.",
+          "confidence": "High for period availability in magazine listing.",
+          "sourceRefs": [
+            1
+          ]
+        },
+        {
+          "label": "Software",
+          "headline": "Atari Pascal and File Managers Share Shelf Space",
+          "summary": "Period listings mix programming tools, utilities, education titles, and games, showing how the microcomputer shelf now serves work and play at once.",
+          "confidence": "High for named products in contemporary listings.",
+          "sourceRefs": [
+            1
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "Atari Pascal",
+          "platform": "Atari 8-bit",
+          "detail": "Programming-language package listed among late-1982 Atari products.",
+          "confidence": "High",
+          "sourceRefs": [
+            1
+          ]
+        },
+        {
+          "name": "Filemanager+",
+          "platform": "Atari 8-bit",
+          "detail": "Utility software appearing in contemporary new-product listings.",
+          "confidence": "High",
+          "sourceRefs": [
+            1
+          ]
+        },
+        {
+          "name": "Miner 2049er",
+          "platform": "Atari / home computers",
+          "detail": "Bounty Bob's platform game is visible in the late-1982 software conversation.",
+          "confidence": "High",
+          "sourceRefs": [
+            1
+          ]
+        },
+        {
+          "name": "The Cosmic Balance",
+          "platform": "Apple II / Atari / TRS-80 family",
+          "detail": "Strategic Simulations' space-combat title fits the season's strategy-game shelf.",
+          "confidence": "Medium",
+          "sourceRefs": [
+            1
+          ]
+        },
+        {
+          "name": "Preparing for the SAT",
+          "platform": "Home computers",
+          "detail": "Education software sits beside games and utilities in December listings.",
+          "confidence": "High",
+          "sourceRefs": [
+            1
+          ]
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Top 5 Computer Games",
+          "items": [
+            "Miner 2049er",
+            "Star Raiders",
+            "Zaxxon",
+            "Choplifter!",
+            "The Cosmic Balance"
+          ]
+        },
+        {
+          "label": "Software Counter",
+          "items": [
+            "Atari Pascal",
+            "Filemanager+",
+            "Preparing for the SAT",
+            "VisiCalc",
+            "Home filing utilities"
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "Atari 1200XL",
+          "price": "Announced at $899",
+          "note": "Premium 64K home-computer list price from launch reporting.",
+          "confidence": "Medium",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "item": "Hayes Smartmodem 1200",
+          "price": "Premium modem shelf",
+          "note": "Listed as a new product for users who want faster dial-up links.",
+          "confidence": "Medium",
+          "sourceRefs": [
+            1
+          ]
+        },
+        {
+          "item": "Atari 2600 cartridges",
+          "price": "Holiday sale racks vary by store",
+          "note": "Contemporary retail reporting emphasizes games as a major Christmas purchase.",
+          "confidence": "Medium",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "item": "Computer magazines",
+          "price": "Newsstand monthly",
+          "note": "December issues of COMPUTE! and Atari-focused magazines frame software buying decisions.",
+          "confidence": "Medium",
+          "sourceRefs": [
+            3
+          ]
+        }
+      ],
+      "market": {
+        "headline": "Home Computer Makers Chase the Gift Budget",
+        "summary": "The 1200XL announcement lands in the same Christmas window as console games, educational software, and modem upgrades, making the family electronics budget more crowded.",
+        "confidence": "Medium"
+      },
+      "bbsNote": {
+        "headline": "1200 Baud Becomes the Aspirational Speed",
+        "summary": "Smartmodem 1200 listings make faster bulletin-board and information-service sessions feel newly attainable for serious hobbyists.",
+        "confidence": "Medium",
+        "sourceRefs": [
+          1
+        ]
+      },
+      "curiosity": {
+        "headline": "Function Keys Reach the Living Room",
+        "summary": "Atari's new help and function-key language borrows a little office-computer seriousness for a machine still sold beside games.",
+        "confidence": "Medium",
+        "sourceRefs": [
+          0
+        ]
+      },
+      "briefs": [
+        {
+          "headline": "Atari 1200XL Announced December 13",
+          "summary": "Atari introduces the 64K 1200XL in New York as its higher-end home computer entry.",
+          "confidence": "High",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "headline": "Video Games Sparkle in Holiday Market",
+          "summary": "Contemporary reporting from December 10 captures shoppers and retailers leaning hard into game gifts.",
+          "confidence": "High",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "headline": "New Product Pages Mix Games and Tools",
+          "summary": "Atari magazine listings place Miner 2049er beside Pascal, file management, modems, and education software.",
+          "confidence": "High",
+          "sourceRefs": [
+            1
+          ]
+        },
+        {
+          "headline": "COMPUTE! Keeps Multi-System Focus",
+          "summary": "The December issue covers Apple, Atari, Commodore, TI, and other home-computer owners rather than a single platform.",
+          "confidence": "Medium",
+          "sourceRefs": [
+            3
+          ]
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "Maneater",
+          "artist": "Daryl Hall & John Oates"
+        },
+        {
+          "rank": 2,
+          "title": "Mickey",
+          "artist": "Toni Basil"
+        },
+        {
+          "rank": 3,
+          "title": "The Girl Is Mine",
+          "artist": "Michael Jackson & Paul McCartney"
+        },
+        {
+          "rank": 4,
+          "title": "Steppin' Out",
+          "artist": "Joe Jackson"
+        },
+        {
+          "rank": 5,
+          "title": "Truly",
+          "artist": "Lionel Richie"
+        }
+      ],
+      "movieChart": [
+        {
+          "rank": 1,
+          "title": "Tootsie"
+        },
+        {
+          "rank": 2,
+          "title": "The Toy"
+        },
+        {
+          "rank": 3,
+          "title": "48 Hrs."
+        },
+        {
+          "rank": 4,
+          "title": "Airplane II: The Sequel"
+        },
+        {
+          "rank": 5,
+          "title": "The Dark Crystal"
+        }
+      ],
+      "periodAd": {
+        "headline": "This Christmas, Bring Home 64K",
+        "summary": "A period-style computer-store ad frames the Atari 1200XL as a premium family computer while cartridges and utilities fill the counter below.",
+        "confidence": "Constructed from verified period product cues.",
+        "sourceRefs": [
+          0,
+          1
+        ]
+      },
+      "classifieds": [
+        {
+          "headline": "Wanted: Atari 800 disk drive",
+          "copy": "Local user seeks 810 drive and DOS manuals before holiday break."
+        },
+        {
+          "headline": "For sale: game cartridge bundle",
+          "copy": "Owner offers space, maze, and arcade-action cartridges; will trade for 8-bit software."
+        }
+      ],
+      "worldFallback": {
+        "headline": "Holiday electronics dominate the desk",
+        "summary": "No broad world-news lead is needed; the week's computer and game material is strong enough for the issue.",
+        "confidence": "Editorial note"
+      },
+      "accuracyLedger": {
+        "items": [
+          "Atari 1200XL announcement date and product positioning verified from dated press-release text.",
+          "Holiday video-game retail mood anchored to Christian Science Monitor reporting from December 10, 1982.",
+          "Product shelf items drawn from contemporary Atari magazine new-product listings.",
+          "Music chart uses Billboard Hot 100 week dated December 18, 1982; movie list reflects mid-December 1982 box-office/opening context."
+        ]
+      },
+      "sources": [
+        {
+          "title": "Atari introduces the 1200XL computer - press release, December 13, 1982",
+          "url": "https://mcurrent.name/atari1983/index.htm",
+          "note": "Dated Atari announcement source for the lead item."
+        },
+        {
+          "title": "New Products - Atari Magazine, late 1982",
+          "url": "https://www.atarimagazines.com/v1n5/newproducts.php",
+          "note": "Period product names for software, games, modem, and utilities."
+        },
+        {
+          "title": "Zap! Pow! Video games sparkle in holiday market - Christian Science Monitor, December 10, 1982",
+          "url": "https://www.csmonitor.com/1982/1210/121043.html",
+          "note": "Contemporary retail context for holiday game shopping."
+        },
+        {
+          "title": "COMPUTE! Issue 31 - December 1982 overview",
+          "url": "http://www.megalextoria.com/wordpress/index.php/2016/08/11/compute-issue-number-31-december-1982/",
+          "note": "Period magazine context for home-computer coverage."
+        },
+        {
+          "title": "Billboard Hot 100 chart week of December 18, 1982",
+          "url": "https://elpee.jp/hot100/week/1982-12-18/",
+          "note": "Music chart reference."
+        },
+        {
+          "title": "1982 weekend box office and release context",
+          "url": "https://www.the-numbers.com/box-office-chart/weekend/1982/12/17",
+          "note": "Movie chart context for the issue week."
+        }
+      ],
+      "pictureDesk": [
+        {
+          "src": "media/computer-chronicle-gpt-image-2-week-1982-12-13.png",
+          "alt": "GPT Image 2 vintage Computer Chronicle front page for the week of December 13-19, 1982, led by Atari 1200XL holiday computer news.",
+          "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data for the week of December 13-19, 1982.",
+          "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+        }
+      ],
+      "frontPageStories": [
+        {
+          "headline": "Atari Unveils the 1200XL for Christmas Computer Shoppers",
+          "summary": "Atari announced the 64K 1200XL in New York on December 13, positioning the new XL-line machine as a premium home computer with revised styling, function keys, and compatibility claims for the busy holiday market.",
+          "confidence": "High - dated Atari press-release text and contemporary coverage identify December 13, 1982.",
+          "sourceRefs": [
+            0,
+            1
+          ]
+        },
+        {
+          "headline": "Atari 1200XL Announced December 13",
+          "summary": "Atari introduces the 64K 1200XL in New York as its higher-end home computer entry.",
+          "confidence": "High",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "headline": "Video Games Sparkle in Holiday Market",
+          "summary": "Contemporary reporting from December 10 captures shoppers and retailers leaning hard into game gifts.",
+          "confidence": "High",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "headline": "New Product Pages Mix Games and Tools",
+          "summary": "Atari magazine listings place Miner 2049er beside Pascal, file management, modems, and education software.",
+          "confidence": "High",
+          "sourceRefs": [
+            1
+          ]
+        },
+        {
+          "headline": "COMPUTE! Keeps Multi-System Focus",
+          "summary": "The December issue covers Apple, Atari, Commodore, TI, and other home-computer owners rather than a single platform.",
+          "confidence": "Medium",
+          "sourceRefs": [
+            3
+          ]
+        },
+        {
+          "headline": "Shelf Watch: Miner 2049er, Pascal, and 1200 Baud",
+          "summary": "Games, programming tools, and modem upgrades share the late-1982 buyer's shortlist.",
+          "confidence": "Medium",
+          "sourceRefs": [
+            1
+          ]
+        },
+        {
+          "headline": "Charts: Maneater and Tootsie Lead the Week",
+          "summary": "Hall & Oates sit atop the pop chart while Tootsie opens as a major December movie title.",
+          "confidence": "Medium",
+          "sourceRefs": [
+            4,
+            5
+          ]
+        }
+      ],
+      "musicChartSourceRefs": [
+        4
+      ]
+    },
     {
       "currentDate": "2026-06-22",
       "historicDate": "1982-12-06",
