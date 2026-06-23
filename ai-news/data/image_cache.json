@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-23T07:00:01.672057+00:00",
+  "updatedAt": "2026-06-23T08:00:01.500705+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -11168,6 +11168,14 @@
     "https://techcrunch.com/2026/06/22/the-running-list-major-tech-layoffs-in-2026-where-employers-cited-ai": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/Robot-hand.png?resize=1200,800",
       "checkedAt": "2026-06-23T02:00:01.571885+00:00"
+    },
+    "https://huggingface.co/blog/huggingface-hub-release-ci": {
+      "image": "https://huggingface.co/blog/assets/huggingface-hub-release-ci/thumbnail.png",
+      "checkedAt": "2026-06-23T08:00:01.500705+00:00"
+    },
+    "https://huggingface.co/blog/local-models-pr-triage": {
+      "image": "https://huggingface.co/blog/assets/local-models-pr-triage/thumbnail.png",
+      "checkedAt": "2026-06-23T08:00:01.500705+00:00"
     }
   }
 }
