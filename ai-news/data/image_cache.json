@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-22T23:00:02.032013+00:00",
+  "updatedAt": "2026-06-23T00:00:01.736552+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -11148,6 +11148,14 @@
     "https://www.techrepublic.com/article/news-x-meta-recruiting-snack-budget-layoffs": {
       "image": "https://assets.techrepublic.com/uploads/2026/06/x-meta.jpg?f=jpeg",
       "checkedAt": "2026-06-22T22:00:01.756300+00:00"
+    },
+    "https://simonwillison.net/2026/Jun/22/porting-moebius": {
+      "image": "https://static.simonwillison.net/static/2026/inpainter.jpg",
+      "checkedAt": "2026-06-23T00:00:01.736552+00:00"
+    },
+    "https://www.theverge.com/tech/954139/nvidia-data-centers-rubin-liquid-cooling": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/STKS528_DATA_CENTERS2_D.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-06-23T00:00:01.736552+00:00"
     }
   }
 }
