@@ -1,8 +1,8 @@
 {
-  "updatedAt": "2026-06-23T10:00:01.189312+00:00",
+  "updatedAt": "2026-06-23T11:00:01.528433+00:00",
   "items": [
     {
-      "title": "Atkia Mahila, Avinash Maurya, M. Mustafa Rafique, Bogdan Nicolae",
+      "title": "A verified subset of 500 software engineering problems from real GitHub issues, validated by human annotators for evaluating language models' ability to resolve real-world coding issues by generating patches for Python codebases.",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -10,12 +10,76 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-23T10:00:08.567563+00:00",
+      "published": "2026-06-23T11:00:13.433533+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-23T10:00:01.189312+00:00",
+      "lastSeen": "2026-06-23T11:00:01.528433+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.76
+    },
+    {
+      "title": "Prosus launches ToqanClaw, an OpenClaw-style tool builder for its 5m merchants",
+      "url": "https://thenextweb.com/news/prosus-toqanclaw-launch-business-tools",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The Amsterdam-listed group is putting conversational app-building in front of restaurants and shopkeepers, the users it says AI has so far left behind. Prosus has launched ToqanClaw, a platform that lets people build apps, dashboards, and automations by describing what they want in plain language, the way they would explain a task to a colleague. [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/ToqanClaw.avif",
+      "published": "2026-06-23T09:56:31+00:00",
+      "firstSeen": "2026-06-23T11:00:01.528433+00:00",
+      "lastSeen": "2026-06-23T11:00:01.528433+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.0181
+    },
+    {
+      "title": "Workday must face California lawsuit over AI hiring bias, judge rules",
+      "url": "https://thenextweb.com/news/workday-ai-bias-lawsuit-proceeds",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "A San Francisco judge cleared a proposed class action to proceed, in a case described as the first to broadly target the algorithms behind AI screening software. A US federal judge has ruled that Workday must face claims its AI-powered hiring software screened out job applicants at other companies in ways that allegedly broke California [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/Workday.avif",
+      "published": "2026-06-23T09:42:53+00:00",
+      "firstSeen": "2026-06-23T11:00:01.528433+00:00",
+      "lastSeen": "2026-06-23T11:00:01.528433+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.36
+      "score": 3.2114
+    },
+    {
+      "title": "UN urges AI firms to come clean on their environmental costs",
+      "url": "https://thenextweb.com/news/un-warns-ai-environmental-costs",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The United Nations wants artificial-intelligence companies to stop treating the environmental bill as somebody else’s problem. In a call amplified this week by Secretary-General Antonio Guterres, the organisation is pressing the firms behind the AI boom to disclose the carbon, water, and land their systems consume, and to switch their data centres and supply chains [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/United-Nations.avif",
+      "published": "2026-06-23T09:22:14+00:00",
+      "firstSeen": "2026-06-23T11:00:01.528433+00:00",
+      "lastSeen": "2026-06-23T11:00:01.528433+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1013
+    },
+    {
+      "title": "Masayoshi Son dismisses Musk’s space data centres as an AI-race bet",
+      "url": "https://thenextweb.com/news/son-dismisses-musk-space-data-centres",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Masayoshi Son does not think the future of artificial intelligence is in orbit. The SoftBank Group founder told shareholders on 23 June 2026 that there is little merit in building data centres in space, the idea Elon Musk has been championing, and predicted the AI race would be won by compute kept firmly on the [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/softbank-battery-factory-sharp-sakai-ai-data-centres-1.avif",
+      "published": "2026-06-23T09:05:18+00:00",
+      "firstSeen": "2026-06-23T11:00:01.528433+00:00",
+      "lastSeen": "2026-06-23T11:00:01.528433+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.0931
     },
     {
       "title": "NVIDIA Powers Over 400 of the World’s 500 Fastest Supercomputers",
@@ -28,10 +92,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/hpc-corp-blog-isc26-wrap-up-blog-1280x680-5375050.png",
       "published": "2026-06-23T09:00:38+00:00",
       "firstSeen": "2026-06-23T10:00:01.189312+00:00",
-      "lastSeen": "2026-06-23T10:00:01.189312+00:00",
+      "lastSeen": "2026-06-23T11:00:01.528433+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.5602
+      "score": 2.5308
     },
     {
       "title": "The $400 million machine powering the future of chipmaking",
@@ -44,10 +108,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/06/JA26-asml-01.jpg?resize=1200%2C600",
       "published": "2026-06-23T09:00:00+00:00",
       "firstSeen": "2026-06-23T10:00:01.189312+00:00",
-      "lastSeen": "2026-06-23T10:00:01.189312+00:00",
+      "lastSeen": "2026-06-23T11:00:01.528433+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2599
+      "score": 2.2305
     },
     {
       "title": "Tata Electronics breach claims to expose Apple and Tesla trade secrets",
@@ -60,10 +124,10 @@
       "image": "https://media.thenextweb.com/2026/06/Tata-Electronics.avif",
       "published": "2026-06-23T08:20:08+00:00",
       "firstSeen": "2026-06-23T10:00:01.189312+00:00",
-      "lastSeen": "2026-06-23T10:00:01.189312+00:00",
+      "lastSeen": "2026-06-23T11:00:01.528433+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2003
+      "score": 3.1715
     },
     {
       "title": "UK weighs forcing social media platforms to surface trusted news",
@@ -76,10 +140,10 @@
       "image": "https://media.thenextweb.com/2026/05/UK.avif",
       "published": "2026-06-23T08:08:34+00:00",
       "firstSeen": "2026-06-23T10:00:01.189312+00:00",
-      "lastSeen": "2026-06-23T10:00:01.189312+00:00",
+      "lastSeen": "2026-06-23T11:00:01.528433+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0947
+      "score": 2.0661
     },
     {
       "title": "Micron and Anthropic sign a multi-year AI memory supply deal",
@@ -92,10 +156,10 @@
       "image": "https://media.thenextweb.com/2026/05/Micron.avif",
       "published": "2026-06-23T08:01:45+00:00",
       "firstSeen": "2026-06-23T09:00:02.066656+00:00",
-      "lastSeen": "2026-06-23T10:00:01.189312+00:00",
+      "lastSeen": "2026-06-23T11:00:01.528433+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.4914
+      "score": 11.4629
     },
     {
       "title": "Top spy agencies say AI cyber threats will impact you within months. Here’s why",
@@ -108,10 +172,10 @@
       "image": "",
       "published": "2026-06-23T08:00:00+00:00",
       "firstSeen": "2026-06-23T09:00:02.066656+00:00",
-      "lastSeen": "2026-06-23T10:00:01.189312+00:00",
+      "lastSeen": "2026-06-23T11:00:01.528433+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2885
+      "score": 3.26
     },
     {
       "title": "Five Eyes alliance warns frontier AI cyber threats are ‘months’ away",
@@ -124,10 +188,10 @@
       "image": "https://media.thenextweb.com/2026/06/The-Five-Eyes-intelligence-alliance.avif",
       "published": "2026-06-23T07:56:12+00:00",
       "firstSeen": "2026-06-23T09:00:02.066656+00:00",
-      "lastSeen": "2026-06-23T10:00:01.189312+00:00",
+      "lastSeen": "2026-06-23T11:00:01.528433+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0887
+      "score": 2.0603
     },
     {
       "title": "IBM joins OpenAI’s cyber program to bring frontier AI into enterprise security",
@@ -140,10 +204,10 @@
       "image": "https://media.thenextweb.com/2026/05/IBM.avif",
       "published": "2026-06-23T07:48:43+00:00",
       "firstSeen": "2026-06-23T09:00:02.066656+00:00",
-      "lastSeen": "2026-06-23T10:00:01.189312+00:00",
+      "lastSeen": "2026-06-23T11:00:01.528433+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.1851
+      "score": 6.1568
     },
     {
       "title": "BP, Walmart and 7-Eleven sued over AI-set petrol prices in California",
@@ -156,10 +220,10 @@
       "image": "https://media.thenextweb.com/2026/06/BP.avif",
       "published": "2026-06-23T07:43:22+00:00",
       "firstSeen": "2026-06-23T09:00:02.066656+00:00",
-      "lastSeen": "2026-06-23T10:00:01.189312+00:00",
+      "lastSeen": "2026-06-23T11:00:01.528433+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0826
+      "score": 2.0543
     },
     {
       "title": "AI infrastructure startup Baseten raises $1.5bn at up to $13bn valuation as Blackbird makes its biggest-ever bet",
@@ -175,7 +239,7 @@
       "lastSeen": "2026-06-23T10:00:01.189312+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0767
+      "score": 2.0485
     },
     {
       "title": "Meta pauses its employee mouse-tracking program over data-security fears",
@@ -191,7 +255,7 @@
       "lastSeen": "2026-06-23T10:00:01.189312+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0682
+      "score": 2.0403
     },
     {
       "title": "Trump signs orders calling for a powerful quantum computer by 2028",
@@ -207,7 +271,7 @@
       "lastSeen": "2026-06-23T10:00:01.189312+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.4635
+      "score": 3.4358
     },
     {
       "title": "Oracle’s workforce shrank by about 13% as it bankrolls its AI buildout",
@@ -223,7 +287,7 @@
       "lastSeen": "2026-06-23T10:00:01.189312+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0603
+      "score": 2.0326
     },
     {
       "title": "NVIDIA Brings Trusted, 24/7 AI Agents to Telecom Operations",
@@ -236,10 +300,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/telco-tm-forum-1920x1080-1.jpg",
       "published": "2026-06-23T06:00:09+00:00",
       "firstSeen": "2026-06-23T07:00:01.672057+00:00",
-      "lastSeen": "2026-06-23T10:00:01.189312+00:00",
+      "lastSeen": "2026-06-23T11:00:01.528433+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.5744
+      "score": 5.5474
     },
     {
       "title": "The running list: major tech layoffs in 2026 where employers cited AI",
@@ -252,10 +316,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/Robot-hand.png?resize=1200%2C800",
       "published": "2026-06-23T01:27:55+00:00",
       "firstSeen": "2026-06-23T02:00:01.571885+00:00",
-      "lastSeen": "2026-06-23T10:00:01.189312+00:00",
+      "lastSeen": "2026-06-23T11:00:01.528433+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0578
+      "score": 2.034
     },
     {
       "title": "OpenAI launches new initiative to help find and patch open source bugs",
@@ -268,11 +332,11 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/09/GettyImages-2214107176.jpg?resize=1200%2C800",
       "published": "2026-06-23T00:11:31+00:00",
       "firstSeen": "2026-06-23T00:18:23.130078+00:00",
-      "lastSeen": "2026-06-23T10:00:01.189312+00:00",
+      "lastSeen": "2026-06-23T11:00:01.528433+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 15.8277
+      "score": 15.8047
     },
     {
       "title": "How Omio is building the future of conversational travel",
@@ -285,10 +349,10 @@
       "image": "https://images.ctfassets.net/kftzwdyauwt9/6wFIgOcT1xK5IvZQIDJ2xQ/edf82561f00cdb27cf3ffcfcad7cd215/oai_Omio_SEO.png?w=1600&amp%3Bh=900&amp%3Bfit=fill",
       "published": "2026-06-23T00:00:00+00:00",
       "firstSeen": "2026-06-23T09:00:02.066656+00:00",
-      "lastSeen": "2026-06-23T10:00:01.189312+00:00",
+      "lastSeen": "2026-06-23T11:00:01.528433+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.2332
+      "score": 4.2104
     },
     {
       "title": "Shipping huggingface_hub every week with AI, open tools, and a human in the loop",
@@ -301,10 +365,10 @@
       "image": "https://huggingface.co/blog/assets/huggingface-hub-release-ci/thumbnail.png",
       "published": "2026-06-23T00:00:00+00:00",
       "firstSeen": "2026-06-23T08:00:01.500705+00:00",
-      "lastSeen": "2026-06-23T10:00:01.189312+00:00",
+      "lastSeen": "2026-06-23T11:00:01.528433+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1632
+      "score": 2.1404
     },
     {
       "title": "Prompt Injection as Role Confusion",
@@ -317,10 +381,10 @@
       "image": "",
       "published": "2026-06-22T23:59:53+00:00",
       "firstSeen": "2026-06-23T00:18:23.130078+00:00",
-      "lastSeen": "2026-06-23T10:00:01.189312+00:00",
+      "lastSeen": "2026-06-23T11:00:01.528433+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 5.9732
+      "score": 5.9503
     },
     {
       "title": "Porting the Moebius 0.2B image inpainting model to run in the browser with Claude Code",
@@ -333,10 +397,10 @@
       "image": "https://static.simonwillison.net/static/2026/inpainter.jpg",
       "published": "2026-06-22T23:43:51+00:00",
       "firstSeen": "2026-06-23T00:00:01.736552+00:00",
-      "lastSeen": "2026-06-23T10:00:01.189312+00:00",
+      "lastSeen": "2026-06-23T11:00:01.528433+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.317
+      "score": 8.2943
     },
     {
       "title": "Nvidia says its AI data center design runs hotter to use a lot less water",
@@ -349,10 +413,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/STKS528_DATA_CENTERS2_D.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-22T23:24:32+00:00",
       "firstSeen": "2026-06-23T00:00:01.736552+00:00",
-      "lastSeen": "2026-06-23T10:00:01.189312+00:00",
+      "lastSeen": "2026-06-23T11:00:01.528433+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0796
+      "score": 2.0572
     },
     {
       "title": "Cloudflare teams up with Chrome, Firefox, and Edge on a privacy-first anti-bot protocol",
@@ -368,7 +432,7 @@
       "lastSeen": "2026-06-23T09:00:02.066656+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8253
+      "score": 1.8041
     },
     {
       "title": "Meta Pauses Employee-Tracking Program Following Internal Data Leak",
@@ -381,10 +445,10 @@
       "image": "https://media.wired.com/photos/6a39a2a46c59c72c499e05ba/master/pass/2281617231",
       "published": "2026-06-22T21:08:09+00:00",
       "firstSeen": "2026-06-22T21:11:30.012601+00:00",
-      "lastSeen": "2026-06-23T10:00:01.189312+00:00",
+      "lastSeen": "2026-06-23T11:00:01.528433+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9595
+      "score": 1.9384
     },
     {
       "title": "The AI world is getting ‘loopy’",
@@ -397,10 +461,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/Screenshot-2026-06-22-at-3.44.39-PM.jpg?resize=1200%2C676",
       "published": "2026-06-22T20:53:11+00:00",
       "firstSeen": "2026-06-22T21:00:01.381447+00:00",
-      "lastSeen": "2026-06-23T10:00:01.189312+00:00",
+      "lastSeen": "2026-06-23T11:00:01.528433+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.6542
+      "score": 3.6332
     },
     {
       "title": "Amazon invites Indian users to beta-test a Hindi version of Alexa+",
@@ -416,7 +480,7 @@
       "lastSeen": "2026-06-23T09:00:02.066656+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.9128
+      "score": 8.8919
     },
     {
       "title": "Meta Exposed Data Internally From Its Controversial Employee-Tracking Program",
@@ -429,10 +493,10 @@
       "image": "https://media.wired.com/photos/6a39919203c4ca2994a792a9/master/pass/GettyImages-1297676683.jpg",
       "published": "2026-06-22T20:28:53+00:00",
       "firstSeen": "2026-06-22T21:00:01.381447+00:00",
-      "lastSeen": "2026-06-23T10:00:01.189312+00:00",
+      "lastSeen": "2026-06-23T11:00:01.528433+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9456
+      "score": 1.9249
     },
     {
       "title": "Apple’s iPhone 18 Pro Features: Everything We Know So Far",
@@ -445,10 +509,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/06/18-pro.jpg?f=jpeg",
       "published": "2026-06-22T20:28:22+00:00",
       "firstSeen": "2026-06-22T22:00:01.756300+00:00",
-      "lastSeen": "2026-06-23T10:00:01.189312+00:00",
+      "lastSeen": "2026-06-23T11:00:01.528433+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9054
+      "score": 2.8847
     },
     {
       "title": "Anthropic’s new privacy policy collects biometric data from flagged Claude users",
@@ -464,7 +528,7 @@
       "lastSeen": "2026-06-23T08:00:01.500705+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.5052
+      "score": 11.4845
     },
     {
       "title": "X Targets ‘Neglected’ Meta Engineers in Public Recruiting Pitch",
@@ -477,10 +541,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/06/x-meta.jpg?f=jpeg",
       "published": "2026-06-22T20:22:50+00:00",
       "firstSeen": "2026-06-22T22:00:01.756300+00:00",
-      "lastSeen": "2026-06-23T10:00:01.189312+00:00",
+      "lastSeen": "2026-06-23T11:00:01.528433+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9035
+      "score": 2.8829
     },
     {
       "title": "AI chipmaker Groq confirms $650M raise, re-staffs after Nvidia’s $20B not-acqui-hire deal",
@@ -493,10 +557,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2018/08/safetynet.jpg?resize=1200%2C1058",
       "published": "2026-06-22T20:13:58+00:00",
       "firstSeen": "2026-06-22T21:00:01.381447+00:00",
-      "lastSeen": "2026-06-23T10:00:01.189312+00:00",
+      "lastSeen": "2026-06-23T11:00:01.528433+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9404
+      "score": 1.9199
     },
     {
       "title": "Nvidia wants to cut data center water use, but that’s not the same as fixing AI’s water problem",
@@ -509,10 +573,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2024/12/GettyImages-155376474.jpeg?resize=1200%2C800",
       "published": "2026-06-22T20:08:15+00:00",
       "firstSeen": "2026-06-22T21:00:01.381447+00:00",
-      "lastSeen": "2026-06-23T10:00:01.189312+00:00",
+      "lastSeen": "2026-06-23T11:00:01.528433+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9384
+      "score": 1.9179
     },
     {
       "title": "Delivery robot startup Robot.com bets its next act on wheeled humanoids for kitchens and warehouses",
@@ -528,7 +592,7 @@
       "lastSeen": "2026-06-23T08:00:01.500705+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.4976
+      "score": 2.4772
     },
     {
       "title": "AI is cursing renters with the promise of impossible homes",
@@ -541,10 +605,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/268589_Vitual_staging_AParkin.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-22T20:00:00+00:00",
       "firstSeen": "2026-06-22T21:00:01.381447+00:00",
-      "lastSeen": "2026-06-23T10:00:01.189312+00:00",
+      "lastSeen": "2026-06-23T11:00:01.528433+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0056
+      "score": 1.9852
     },
     {
       "title": "Lovable CEO says Europe’s AI startups have a confidence problem, not a talent problem",
@@ -560,7 +624,7 @@
       "lastSeen": "2026-06-23T08:00:01.500705+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7919
+      "score": 1.7715
     },
     {
       "title": "A Tesla on Autopilot plowed into a Texas home. The woman inside didn’t survive.",
@@ -576,74 +640,10 @@
       "lastSeen": "2026-06-23T08:00:01.500705+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7847
+      "score": 1.7646
     },
     {
-      "title": "Apple Supplier Bets on Robots, AI Servers in $1.1B Hong Kong Listing",
-      "url": "https://www.techrepublic.com/article/news-apple-supplier-lingyi-ai-robotics-apac-china",
-      "source": "TechRepublic AI",
-      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Apple supplier Lingyi iTech seeks a US$1.1B Hong Kong IPO to fund expansion in AI hardware, robotics, smart glasses, and AI servers.\nThe post Apple Supplier Bets on Robots, AI Servers in $1.1B Hong Kong Listing appeared first on TechRepublic.",
-      "image": "https://assets.techrepublic.com/uploads/2026/06/lingyi.jpg?f=jpeg",
-      "published": "2026-06-22T19:17:45+00:00",
-      "firstSeen": "2026-06-22T20:00:02.111727+00:00",
-      "lastSeen": "2026-06-23T10:00:01.189312+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.8811
-    },
-    {
-      "title": "Following user outcry, AMD reinstates memory encryption in consumer CPUs",
-      "url": "https://arstechnica.com/security/2026/06/following-user-outcry-amd-reinstates-memory-encryption-in-consumer-cpus",
-      "source": "Ars Technica (AI/Tech)",
-      "sourceUrl": "https://feeds.arstechnica.com/arstechnica/technology-lab",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Critics saw the move as an underhanded way to steer them toward more costly chips.",
-      "image": "https://cdn.arstechnica.net/wp-content/uploads/2025/07/GettyImages-1952157610-1152x648-1753386930.jpg",
-      "published": "2026-06-22T19:16:52+00:00",
-      "firstSeen": "2026-06-22T20:00:02.111727+00:00",
-      "lastSeen": "2026-06-23T10:00:01.189312+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.1808
-    },
-    {
-      "title": "Google DeepMind bets $75M on AI’s future in Hollywood with A24 deal",
-      "url": "https://techcrunch.com/2026/06/22/google-deepmind-bets-75m-on-ais-future-in-hollywood-with-a24-deal",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Google DeepMind and A24 are teaming up to build AI filmmaking tools.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/06/GettyImages-2252299302.jpg?w=1024",
-      "published": "2026-06-22T18:49:44+00:00",
-      "firstSeen": "2026-06-22T19:00:01.782862+00:00",
-      "lastSeen": "2026-06-23T10:00:01.189312+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 7.9117
-    },
-    {
-      "title": "India’s Ultrahuman Launches No-Prescription Glucose Tracking Platform in the US",
-      "url": "https://www.techrepublic.com/article/news-ultrahuman-m2-live-glucose-tracking-us",
-      "source": "TechRepublic AI",
-      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Ultrahuman M2 Live brings no-prescription glucose tracking to the US using Abbott’s Lingo CGM, with plans starting at $99 per month.\nThe post India’s Ultrahuman Launches No-Prescription Glucose Tracking Platform in the US appeared first on TechRepublic.",
-      "image": "https://assets.techrepublic.com/uploads/2026/06/ultrahuman.jpg?f=jpeg",
-      "published": "2026-06-22T18:48:17+00:00",
-      "firstSeen": "2026-06-22T20:00:02.111727+00:00",
-      "lastSeen": "2026-06-23T10:00:01.189312+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.6712
-    },
-    {
-      "title": "The friendly virus",
+      "title": "The Friendly Virus",
       "url": "http://www.bbc.co.uk/programmes/w3ct8jsj",
       "source": "BBC Discovery",
       "sourceUrl": "https://podcasts.files.bbci.co.uk/p002w557.rss",
@@ -653,10 +653,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-22T20:00:00+00:00",
       "firstSeen": "2026-06-22T21:00:01.381447+00:00",
-      "lastSeen": "2026-06-23T10:00:01.189312+00:00",
+      "lastSeen": "2026-06-23T11:00:01.528433+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9356
+      "score": 1.9152
     },
     {
       "title": "The Life Scientific: Dean Lomax",
@@ -669,10 +669,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-15T20:00:00+00:00",
       "firstSeen": "2026-06-15T21:00:01.290903+00:00",
-      "lastSeen": "2026-06-23T10:00:01.189312+00:00",
+      "lastSeen": "2026-06-23T11:00:01.528433+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.197
+      "score": 1.1968
     },
     {
       "title": "The Life Scientific: Helen Hastie",
