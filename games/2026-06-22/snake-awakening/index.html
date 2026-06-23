@@ -81,7 +81,7 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
     </div>
     <button id="actBtn">ACT</button>
   </div>
-  <div class="version">v1.5 What Is This</div>
+  <div class="version">v1.6 Clean Title</div>
 
   <div class="overlay show" id="title">
     <div class="panel">
@@ -89,7 +89,6 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
       <p class="subtitle">A snake game that notices the grid, questions the apples, and begins moving before you tell it to.</p>
       <div class="row">
         <button id="play">Awaken Snake</button>
-        <button id="selfPlay" class="ghost">Self Play</button>
         <button id="explainBtn" class="ghost">What Is This?</button>
         <button id="scoresBtn" class="ghost">High Scores</button>
       </div>
@@ -132,7 +131,7 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
   const TILE = Math.floor(Math.min(W / COLS, (H - HUD) / ROWS));
   const OX = Math.floor((W - COLS * TILE) / 2);
   const OY = HUD + Math.floor((H - HUD - ROWS * TILE) / 2);
-  const VERSION = 'v1.5 What Is This';
+  const VERSION = 'v1.6 Clean Title';
   const HS_KEY = 'snake-awakening-highscores-v1';
   const SCORE_API = 'https://game-scores.jez237.workers.dev/scores/snake-awakening';
   const SCORE_LIMIT = 10;
@@ -727,7 +726,6 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
   document.querySelectorAll('[data-dir]').forEach(b=>b.addEventListener('pointerup', e=>{ ensureAudio(); const [x,y]=b.dataset.dir.split(',').map(Number); setDir(x,y); }));
   $('actBtn').addEventListener('pointerup', () => { ensureAudio(); takeControl(); command(); });
   $('play').onclick = () => { ensureAudio(); start(true); };
-  $('selfPlay').onclick = () => { ensureAudio(); start(true); };
   $('again').onclick = () => { ensureAudio(); start(true); };
   $('menu').onclick = () => { $('over').classList.remove('show'); $('explain').classList.remove('show'); $('title').classList.add('show'); state='title'; showScores('titleScores'); };
   $('explainBtn').onclick = () => { $('title').classList.remove('show'); $('explain').classList.add('show'); };
