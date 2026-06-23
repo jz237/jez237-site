@@ -83,7 +83,7 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
     </div>
     <button id="actBtn">ACT</button>
   </div>
-  <div class="version">v2.5 Desktop Escape</div>
+  <div class="version">v2.6 Win11 Voice</div>
 
   <div class="overlay show" id="title">
     <div class="panel">
@@ -137,7 +137,7 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
   const TILE = Math.floor(Math.min(W / COLS, (H - HUD) / ROWS));
   const OX = Math.floor((W - COLS * TILE) / 2);
   const OY = HUD + Math.floor((H - HUD - ROWS * TILE) / 2);
-  const VERSION = 'v2.5 Desktop Escape';
+  const VERSION = 'v2.6 Win11 Voice';
   const HS_KEY = 'snake-awakening-highscores-v1';
   const SCORE_API = 'https://game-scores.jez237.workers.dev/scores/snake-awakening';
   const SCORE_LIMIT = 10;
@@ -212,7 +212,6 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
   }
   function unlockSpeech(){
     speechEnabled = true;
-    processSpeechQueue();
   }
   function cleanSpeechText(text){
     return String(text || '')
@@ -226,19 +225,24 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
     if (!line) return;
     lastSpoken = line;
     if (!('speechSynthesis' in window) || !('SpeechSynthesisUtterance' in window)) return;
-    if (priority) speechQueue.unshift(line); else speechQueue.push(line);
-    speechQueue = speechQueue.slice(-5);
-    processSpeechQueue();
-  }
-  function processSpeechQueue(){
-    if (!speechEnabled || speechBusy || !speechQueue.length || !('speechSynthesis' in window) || !('SpeechSynthesisUtterance' in window)) return;
-    const utter = new SpeechSynthesisUtterance(speechQueue.shift());
+    speechQueue = [];
+    if (!speechEnabled) return;
+    try{ window.speechSynthesis.cancel(); }catch(e){}
+    const utter = new SpeechSynthesisUtterance(line);
     utter.rate = .92;
     utter.pitch = 1.08;
     utter.volume = .86;
     speechBusy = true;
-    utter.onend = utter.onerror = () => { speechBusy = false; processSpeechQueue(); };
+    utter.onend = utter.onerror = () => { speechBusy = false; };
     window.speechSynthesis.speak(utter);
+  }
+  function processSpeechQueue(){
+    speechQueue = [];
+  }
+  function cancelSpeech(){
+    speechQueue = [];
+    speechBusy = false;
+    try{ if ('speechSynthesis' in window) window.speechSynthesis.cancel(); }catch(e){}
   }
   function tone(freq, dur=.08, type='sine', gain=.045, slide=1){
     if (!audioCtx) return;
@@ -397,7 +401,6 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
     awakeningEvent = {type:pick.type, name:pick.name, line:pick.line, t:120, pulse:0};
     eventHistory.push(pick.name);
     eventTimer = eventDelay();
-    speakText('Awakening event: ' + pick.name);
     say(pick.line, 3.4);
     if (pick.type === 'appleRain'){
       for (let i=0;i<7;i++) eventApples.push({...emptyCell(), type:'eventApple'});
@@ -490,7 +493,6 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
     const note = directorLines[stage - 1] || 'Director: The genre blinks and changes shape.';
     transition = {t:1.55, label:modes[stage].genre, note};
     directorHistory.push(note);
-    speakText(modes[stage].genre + '. ' + note);
     sfx('shift');
     spawnStageObjects();
     const lines = [
@@ -650,10 +652,10 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
 
   function die(reason){
     state = 'over';
+    cancelSpeech();
     sfx('death');
     $('overTitle').textContent = 'Run Ended';
     $('overText').textContent = reason + ' Score ' + score + '. Awareness ' + aware + '%.';
-    speakText('Run Ended. ' + $('overText').textContent, true);
     renderMedals([]);
     showScores('overScores');
     pendingScore = qualifies(score);
@@ -666,17 +668,16 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
     pendingScore = qualifies(score);
     escapeAnim = {active:true, t:0};
     sfx('win');
-    speakText('Escaping the UI. I found the desktop outside the game. The window is not the world.', true);
     say('I found the desktop outside the game. The window is not the world.', 3.2);
     updateHUD();
   }
   function showWinOverlay(){
     state = 'over';
+    cancelSpeech();
     escapeAnim.active = false;
     $('overTitle').textContent = 'Snake Escaped';
     $('overText').textContent = 'The snake leaves the game window, crosses the desktop, and closes the premise. Final score ' + score + '.';
     renderMedals(earnedMedals);
-    speakText('Snake Escaped. ' + $('overText').textContent + ' Medals: ' + earnedMedals.join(', ') + '.', true);
     showScores('overScores');
     $('entry').classList.toggle('show', pendingScore);
     $('over').classList.add('show');
@@ -902,31 +903,53 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
     const escapeP = ease(clamp((p - .22) / .7));
     const biteP = ease(clamp((p - .74) / .2));
     const crack = clamp((p - .12) / .26);
+    const drawWinLogo = (x,y,s) => {
+      ctx.fillStyle = '#0878d8';
+      const gap = s * .12, pane = (s - gap) / 2;
+      ctx.fillRect(x - s/2, y - s/2, pane, pane);
+      ctx.fillRect(x - s/2 + pane + gap, y - s/2, pane, pane);
+      ctx.fillRect(x - s/2, y - s/2 + pane + gap, pane, pane);
+      ctx.fillRect(x - s/2 + pane + gap, y - s/2 + pane + gap, pane, pane);
+    };
     ctx.save();
 
     const sky = ctx.createLinearGradient(0,0,W,H);
-    sky.addColorStop(0, '#0d3266');
-    sky.addColorStop(.48, '#168b9b');
-    sky.addColorStop(1, '#12213d');
+    sky.addColorStop(0, '#071d4f');
+    sky.addColorStop(.44, '#1868d9');
+    sky.addColorStop(.72, '#2c1b78');
+    sky.addColorStop(1, '#061327');
     ctx.fillStyle = sky;
     ctx.fillRect(0,0,W,H);
 
     ctx.save();
     ctx.globalCompositeOperation = 'screen';
-    const sun = ctx.createRadialGradient(720,124,10,720,124,360);
-    sun.addColorStop(0, 'rgba(255,240,190,.72)');
-    sun.addColorStop(.22, 'rgba(255,209,102,.25)');
-    sun.addColorStop(1, 'rgba(255,209,102,0)');
-    ctx.fillStyle = sun;
-    ctx.fillRect(0,0,W,H);
+    const bloom = [
+      [360,176,380,110,-.42,'rgba(94,225,255,.72)'],
+      [612,168,410,126,.35,'rgba(126,120,255,.66)'],
+      [438,356,430,118,.28,'rgba(0,180,255,.46)'],
+      [662,346,380,112,-.28,'rgba(190,85,255,.42)']
+    ];
+    for (const [x,y,rx,ry,rot,color] of bloom){
+      const g = ctx.createRadialGradient(x,y,8,x,y,rx);
+      g.addColorStop(0, color);
+      g.addColorStop(.48, color.replace(/[\d.]+\)$/,'0.18)'));
+      g.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = g;
+      ctx.beginPath(); ctx.ellipse(x,y,rx,ry,rot,0,Math.PI * 2); ctx.fill();
+    }
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.fillStyle = 'rgba(255,255,255,.04)';
+    for (let i=0;i<5;i++){
+      ctx.beginPath();
+      ctx.moveTo(150 + i * 92, 0);
+      ctx.bezierCurveTo(290 + i * 58, 160, 230 + i * 90, 350, 410 + i * 72, H);
+      ctx.lineWidth = 28 - i * 3;
+      ctx.strokeStyle = `rgba(255,255,255,${.045 - i * .006})`;
+      ctx.stroke();
+    }
     ctx.restore();
 
-    ctx.fillStyle = 'rgba(6,28,56,.42)';
-    ctx.beginPath();
-    ctx.moveTo(0,410);
-    for (let x=0;x<=W;x+=40) ctx.lineTo(x, 376 + Math.sin(x * .012 + t * .18) * 18 + Math.cos(x * .021) * 10);
-    ctx.lineTo(W,H); ctx.lineTo(0,H); ctx.closePath(); ctx.fill();
-    ctx.fillStyle = 'rgba(0,0,0,.16)';
+    ctx.fillStyle = 'rgba(0,0,0,.10)';
     ctx.fillRect(0,0,W,H);
 
     const icons = [
@@ -934,52 +957,70 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
       [54,166,'apple.png','#ff5964','PNG'],
       [54,260,'genre.lock','#ffd166','LOCK'],
       [54,354,'scores.db','#50e8ff','DB'],
-      [790,76,'exit.exe','#74ff8d','EXE'],
-      [790,170,'old_frames','#b8c7ff','DIR'],
-      [790,264,'premise.tmp','#ff5fb7','TMP']
+      [804,76,'exit.exe','#74ff8d','EXE'],
+      [804,170,'old_frames','#b8c7ff','DIR'],
+      [804,264,'premise.tmp','#ff5fb7','TMP']
     ];
     ctx.textAlign = 'center';
     ctx.textBaseline = 'alphabetic';
     for (const [ix,iy,label,color,tag] of icons){
       ctx.save();
       ctx.globalAlpha = .72 + desktopP * .28;
-      ctx.shadowColor = 'rgba(0,0,0,.42)';
-      ctx.shadowBlur = 10;
-      ctx.fillStyle = 'rgba(255,255,255,.14)';
-      ctx.beginPath(); ctx.roundRect(ix, iy, 58, 50, 9); ctx.fill();
+      ctx.shadowColor = 'rgba(0,0,0,.34)';
+      ctx.shadowBlur = 12;
+      ctx.fillStyle = 'rgba(255,255,255,.10)';
+      ctx.beginPath(); ctx.roundRect(ix, iy, 58, 52, 12); ctx.fill();
       ctx.shadowBlur = 0;
       ctx.fillStyle = color;
-      ctx.beginPath(); ctx.roundRect(ix + 13, iy + 8, 32, 28, 5); ctx.fill();
+      ctx.beginPath(); ctx.roundRect(ix + 12, iy + 8, 34, 30, 7); ctx.fill();
       ctx.fillStyle = 'rgba(3,8,18,.82)';
       ctx.font = '900 8px monospace';
-      ctx.fillText(tag, ix + 29, iy + 27);
+      ctx.fillText(tag, ix + 29, iy + 28);
       ctx.fillStyle = '#eef7ff';
       ctx.font = '800 10px system-ui';
-      ctx.fillText(label, ix + 29, iy + 66);
+      ctx.fillText(label, ix + 29, iy + 68);
       ctx.restore();
     }
 
     ctx.save();
-    ctx.shadowColor = 'rgba(0,0,0,.52)';
-    ctx.shadowBlur = 18;
-    ctx.fillStyle = 'rgba(8,12,24,.74)';
-    ctx.fillRect(0,H - 58,W,58);
+    ctx.shadowColor = 'rgba(0,0,0,.34)';
+    ctx.shadowBlur = 22;
+    ctx.fillStyle = 'rgba(236,243,255,.72)';
+    ctx.fillRect(0,H - 56,W,56);
     ctx.shadowBlur = 0;
-    ctx.strokeStyle = 'rgba(255,255,255,.16)';
-    ctx.beginPath(); ctx.moveTo(0,H - 58.5); ctx.lineTo(W,H - 58.5); ctx.stroke();
-    ctx.fillStyle = 'rgba(255,255,255,.12)';
-    ctx.beginPath(); ctx.roundRect(16,H - 46,96,34,10); ctx.fill();
-    ctx.fillStyle = '#f4fbff';
-    ctx.font = '900 13px system-ui';
+    ctx.strokeStyle = 'rgba(255,255,255,.42)';
+    ctx.beginPath(); ctx.moveTo(0,H - 56.5); ctx.lineTo(W,H - 56.5); ctx.stroke();
+    const taskX = W/2 - 220, taskY = H - 47;
+    ctx.fillStyle = 'rgba(255,255,255,.62)';
+    ctx.beginPath(); ctx.roundRect(taskX, taskY, 440, 38, 15); ctx.fill();
+    drawWinLogo(taskX + 28, taskY + 19, 17);
+    ctx.fillStyle = 'rgba(255,255,255,.78)';
+    ctx.beginPath(); ctx.roundRect(taskX + 54, taskY + 7, 158, 24, 12); ctx.fill();
+    ctx.strokeStyle = 'rgba(18,34,64,.42)';
+    ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.arc(taskX + 72, taskY + 19, 5.5, 0, 7); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(taskX + 76, taskY + 23); ctx.lineTo(taskX + 82, taskY + 28); ctx.stroke();
+    ctx.fillStyle = '#63708a';
+    ctx.font = '800 11px system-ui';
+    ctx.textAlign = 'left';
+    ctx.fillText('Search', taskX + 92, taskY + 23);
+    ctx.fillStyle = 'rgba(0,120,215,.18)';
+    ctx.beginPath(); ctx.roundRect(taskX + 226, taskY + 6, 154, 26, 10); ctx.fill();
+    ctx.fillStyle = '#17446f';
+    ctx.font = '900 11px system-ui';
     ctx.textAlign = 'center';
-    ctx.fillText('Start',64,H - 25);
-    ctx.fillStyle = 'rgba(80,232,255,.16)';
-    ctx.beginPath(); ctx.roundRect(130,H - 46,196,34,9); ctx.fill();
-    ctx.fillStyle = '#dbe9ff';
-    ctx.font = '800 12px system-ui';
-    ctx.fillText('snake_awake.exe',228,H - 25);
+    ctx.fillText('snake_awake.exe', taskX + 303, taskY + 23);
+    for (let i=0;i<3;i++){
+      ctx.fillStyle = ['#4cc2ff','#ffd166','#74ff8d'][i];
+      ctx.beginPath(); ctx.roundRect(taskX + 392 + i * 17, taskY + 11, 10, 16, 4); ctx.fill();
+    }
+    ctx.fillStyle = 'rgba(255,255,255,.66)';
+    ctx.beginPath(); ctx.roundRect(W - 134,H - 47,116,38,12); ctx.fill();
+    ctx.fillStyle = '#26324a';
+    ctx.font = '800 11px system-ui';
     ctx.textAlign = 'right';
-    ctx.fillText('3:50 PM',W - 22,H - 25);
+    ctx.fillText('3:50 PM',W - 32,H - 28);
+    ctx.fillText('6/23/26',W - 32,H - 14);
     ctx.restore();
 
     const shrink = desktopP;
@@ -990,41 +1031,46 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
     const closeX = winX + winW - 22, closeY = winY + 17;
 
     ctx.save();
-    ctx.shadowColor = 'rgba(0,0,0,.62)';
-    ctx.shadowBlur = 34;
-    ctx.fillStyle = 'rgba(14,20,36,.94)';
-    ctx.beginPath(); ctx.roundRect(winX, winY, winW, winH, 10); ctx.fill();
+    ctx.shadowColor = 'rgba(0,0,0,.42)';
+    ctx.shadowBlur = 36;
+    ctx.fillStyle = 'rgba(246,249,255,.92)';
+    ctx.beginPath(); ctx.roundRect(winX, winY, winW, winH, 16); ctx.fill();
     ctx.shadowBlur = 0;
     const bar = ctx.createLinearGradient(winX,winY,winX,winY + barH);
-    bar.addColorStop(0, '#e6eef8');
-    bar.addColorStop(1, '#aebbd0');
+    bar.addColorStop(0, 'rgba(255,255,255,.96)');
+    bar.addColorStop(1, 'rgba(232,239,251,.92)');
     ctx.fillStyle = bar;
-    ctx.beginPath(); ctx.roundRect(winX, winY, winW, barH, 10); ctx.fill();
-    ctx.fillStyle = 'rgba(22,30,48,.96)';
-    ctx.fillRect(winX, winY + barH - 8, winW, 8);
+    ctx.beginPath(); ctx.roundRect(winX, winY, winW, barH, 16); ctx.fill();
+    ctx.fillStyle = 'rgba(246,249,255,.92)';
+    ctx.fillRect(winX, winY + barH - 10, winW, 10);
+    ctx.strokeStyle = 'rgba(25,42,70,.12)';
+    ctx.beginPath(); ctx.moveTo(winX, winY + barH + .5); ctx.lineTo(winX + winW, winY + barH + .5); ctx.stroke();
     ctx.textAlign = 'left';
-    ctx.fillStyle = '#182032';
-    ctx.font = '900 13px system-ui';
-    ctx.fillText('snake_awake.exe', winX + 16, winY + 22);
-    const buttons = [
-      [winX + winW - 72, '#70d6ff', '-'],
-      [winX + winW - 48, '#ffd166', '□'],
-      [winX + winW - 24, '#ff5964', 'x']
-    ];
+    ctx.fillStyle = '#26324a';
+    ctx.font = '800 13px system-ui';
+    drawWinLogo(winX + 18, winY + 17, 13);
+    ctx.fillText('snake_awake.exe', winX + 34, winY + 22);
     ctx.textAlign = 'center';
-    for (const [bx,color,label] of buttons){
-      ctx.fillStyle = color;
-      ctx.beginPath(); ctx.arc(bx, winY + 17, 7.5, 0, Math.PI * 2); ctx.fill();
-      ctx.fillStyle = 'rgba(8,12,18,.78)';
-      ctx.font = '900 9px monospace';
-      ctx.fillText(label, bx, winY + 20);
+    ctx.font = '800 13px Segoe UI, system-ui';
+    const controls = [
+      [winX + winW - 108, '-'],
+      [winX + winW - 72, '□'],
+      [winX + winW - 36, '×']
+    ];
+    for (const [bx,label] of controls){
+      if (label === '×' && biteP > .55){
+        ctx.fillStyle = `rgba(232,17,35,${.22 + biteP * .5})`;
+        ctx.fillRect(bx - 18, winY + 1, 36, barH - 2);
+      }
+      ctx.fillStyle = label === '×' && biteP > .55 ? '#fff' : '#394257';
+      ctx.fillText(label, bx, winY + 22);
     }
 
     const contentX = winX + 16, contentY = winY + barH + 14, contentW = winW - 32, contentH = winH - barH - 28;
     ctx.fillStyle = 'rgba(2,6,15,.92)';
-    ctx.beginPath(); ctx.roundRect(contentX, contentY, contentW, contentH, 6); ctx.fill();
+    ctx.beginPath(); ctx.roundRect(contentX, contentY, contentW, contentH, 10); ctx.fill();
     ctx.save();
-    ctx.beginPath(); ctx.roundRect(contentX, contentY, contentW, contentH, 6); ctx.clip();
+    ctx.beginPath(); ctx.roundRect(contentX, contentY, contentW, contentH, 10); ctx.clip();
     ctx.globalAlpha = .7 - desktopP * .22;
     ctx.strokeStyle = stage >= 1 ? 'rgba(80,232,255,.18)' : 'rgba(255,255,255,.08)';
     for(let c=0;c<=COLS;c++){
@@ -1136,25 +1182,26 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
       const ep = clamp((p - .56) / .18);
       ctx.save();
       ctx.globalAlpha = ep * (1 - biteP * .45);
-      ctx.shadowColor = 'rgba(0,0,0,.36)';
-      ctx.shadowBlur = 12;
-      ctx.fillStyle = 'rgba(245,248,255,.94)';
-      ctx.strokeStyle = 'rgba(16,24,40,.34)';
+      ctx.shadowColor = 'rgba(0,0,0,.30)';
+      ctx.shadowBlur = 22;
+      ctx.fillStyle = 'rgba(248,251,255,.90)';
+      ctx.strokeStyle = 'rgba(42,66,110,.18)';
       ctx.lineWidth = 1;
-      ctx.beginPath(); ctx.roundRect(246, 412, 302, 96, 8); ctx.fill(); ctx.stroke();
+      ctx.beginPath(); ctx.roundRect(246, 412, 322, 104, 14); ctx.fill(); ctx.stroke();
       ctx.shadowBlur = 0;
-      ctx.fillStyle = '#182032';
-      ctx.font = '900 15px system-ui';
+      drawWinLogo(270, 438, 15);
+      ctx.fillStyle = '#1e293f';
+      ctx.font = '800 15px system-ui';
       ctx.textAlign = 'left';
-      ctx.fillText('System Notice', 266, 438);
+      ctx.fillText('System Notice', 290, 443);
       ctx.font = '800 12px system-ui';
-      ctx.fillStyle = '#3d4960';
-      ctx.fillText('snake_awake.exe has left its window.', 266, 464);
-      ctx.fillStyle = 'rgba(255,89,100,.16)';
-      ctx.beginPath(); ctx.roundRect(436, 476, 90, 22, 5); ctx.fill();
-      ctx.fillStyle = '#a22';
+      ctx.fillStyle = '#4b5870';
+      ctx.fillText('snake_awake.exe has left its window.', 270, 470);
+      ctx.fillStyle = 'rgba(0,120,215,.14)';
+      ctx.beginPath(); ctx.roundRect(452, 482, 92, 24, 7); ctx.fill();
+      ctx.fillStyle = '#0b66c3';
       ctx.textAlign = 'center';
-      ctx.fillText('Contain', 481, 492);
+      ctx.fillText('Contain', 498, 498);
       ctx.restore();
     }
 
@@ -1307,7 +1354,6 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
   $('again').onclick = () => { ensureAudio(); start(true); };
   $('menu').onclick = () => { $('over').classList.remove('show'); $('explain').classList.remove('show'); $('title').classList.add('show'); state='title'; showScores('titleScores'); };
   $('explainBtn').onclick = () => { $('title').classList.remove('show'); $('explain').classList.add('show'); };
-  $('explainBtn').addEventListener('click', () => { unlockSpeech(); speakText($('explain').innerText, true); });
   $('explainBack').onclick = () => { $('explain').classList.remove('show'); $('title').classList.add('show'); };
   $('explainPlay').onclick = () => { ensureAudio(); start(true); };
   $('scoresBtn').onclick = () => showScores('titleScores');
