@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-23T22:21:25.628722+00:00",
+  "updatedAt": "2026-06-23T23:00:01.860733+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -11276,6 +11276,10 @@
     "https://www.theverge.com/entertainment/954899/luca-guadagnino-artificial-sam-altman-amazon-a24-neon-mubi-chatgpt": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25431704/STK201_SAM_ALTMAN_CVIRGINIA_C.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=4.7487503051758%2C21.869598945592%2C95.251249694824%2C74.804666989327&amp%3Bw=1200",
       "checkedAt": "2026-06-23T22:21:25.628722+00:00"
+    },
+    "https://www.theverge.com/tech/955385/google-home-familiar-faces-clothing": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/23451196/acastro_220510_STK123_0002.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
+      "checkedAt": "2026-06-23T23:00:01.860733+00:00"
     }
   }
 }
