@@ -17,6 +17,7 @@ const AUDIO = (() => {
   const MUSIC_TRACKS = [
     'assets/music-solving-for-blue.mp3',
     'assets/music-waiting-for-input.mp3',
+    'assets/music-hydraulic-heartbeat.mp3',
   ];
   let musicAudio = null, musicSource = null, trackIndex = 0;
 
@@ -223,6 +224,7 @@ const AUDIO = (() => {
     get musicVolume(){ return musicVolume; },
     get sfxVolume(){ return sfxVolume; },
     get track(){ return MUSIC_TRACKS[trackIndex] || ''; },
+    get tracks(){ return MUSIC_TRACKS.slice(); },
     get running(){ return !!(ctx && ctx.state === 'running'); },
   };
 })();
