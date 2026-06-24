@@ -478,10 +478,17 @@
           0.026
         );
       }
-      addFilledEllipsoid([pawX, -2.78, pawZ], [0.58, 0.15, 0.34], 4300, 5 + phase, palette.white, 15, 0.012);
+      addFilledEllipsoid([pawX + 0.08, -2.78, pawZ], [0.72, 0.13, 0.3], 4300, 5 + phase, palette.white, 15, 0.012);
       for (const toe of [-0.15, 0, 0.15]) {
-        addFilledEllipsoid([pawX + 0.36, -2.86, pawZ + toe], [0.065, 0.032, 0.052], 190, 5 + phase, palette.pink, 13, 0.004);
+        addFilledEllipsoid([pawX + 0.52, -2.86, pawZ + toe], [0.062, 0.03, 0.045], 190, 5 + phase, palette.pink, 13, 0.004);
       }
+    }
+
+    function addFaceEye(side) {
+      const z = side * 0.48;
+      addFilledEllipsoid([5.66, 1.15, z], [0.105, 0.19, 0.032], 1200, 6, palette.eye, 18, 0.005);
+      addFilledEllipsoid([5.75, 1.13, z + side * 0.015], [0.036, 0.12, 0.014], 460, 6, palette.eyeDark, 18, 0.003);
+      addLine([5.54, 1.42, z - side * 0.08], [5.82, 1.35, z + side * 0.08], 220, 7, palette.furShadow, 7, 0.008);
     }
 
     function addOrganicHead() {
@@ -489,12 +496,11 @@
       addEllipsoid([4.98, 0.96, -0.55], [0.44, 0.38, 0.38], 7000, 2, () => palette.white, 15, 0.024);
       addEllipsoid([4.98, 0.96, 0.55], [0.44, 0.38, 0.38], 7000, 2, () => palette.white, 15, 0.024);
       addEllipsoid([5.48, 0.72, 0], [0.54, 0.34, 0.62], 12000, 2, () => palette.white, 15, 0.028);
-      addFilledEllipsoid([5.88, 0.78, 0], [0.16, 0.1, 0.22], 1300, 2, palette.nose, 16, 0.018);
-      addFilledEllipsoid([5.98, 0.7, 0], [0.06, 0.06, 0.09], 360, 2, palette.noseDark, 17, 0.006);
-      addFilledEllipsoid([5.72, 1.14, -0.55], [0.16, 0.28, 0.055], 1800, 6, palette.eye, 22, 0.008);
-      addFilledEllipsoid([5.72, 1.14, 0.55], [0.16, 0.28, 0.055], 1800, 6, palette.eye, 22, 0.008);
-      addFilledEllipsoid([5.84, 1.14, -0.57], [0.065, 0.21, 0.026], 720, 6, palette.eyeDark, 22, 0.004);
-      addFilledEllipsoid([5.84, 1.14, 0.57], [0.065, 0.21, 0.026], 720, 6, palette.eyeDark, 22, 0.004);
+      addFilledEllipsoid([5.88, 0.78, 0], [0.14, 0.085, 0.19], 1100, 2, palette.nose, 16, 0.014);
+      addFilledEllipsoid([5.98, 0.7, 0], [0.052, 0.052, 0.08], 320, 2, palette.noseDark, 17, 0.005);
+      addLine([5.86, 0.66, 0], [5.74, 0.53, 0], 130, 7, palette.noseDark, 5, 0.005);
+      addFaceEye(-1);
+      addFaceEye(1);
 
       const earL = [[3.72, 1.95, -0.64], [4.34, 3.62, -0.98], [5.02, 1.92, -1.06]];
       const earR = [[3.72, 1.95, 0.64], [4.34, 3.62, 0.98], [5.02, 1.92, 1.06]];
@@ -610,9 +616,8 @@
       addTail();
 
       for (const side of [-1, 1]) {
-        addLine([5.75, 0.58, side * 0.38], [6.95, 0.92, side * 1.8], 720, 7, palette.whisker, 8, 0.01);
-        addLine([5.75, 0.47, side * 0.42], [7.05, 0.44, side * 1.95], 720, 7, palette.whisker, 8, 0.01);
-        addLine([5.75, 0.36, side * 0.38], [6.8, 0.12, side * 1.8], 720, 7, palette.whisker, 8, 0.01);
+        addLine([5.74, 0.72, side * 0.34], [6.92, 0.82, side * 1.55], 620, 7, palette.whisker, 7, 0.008);
+        addLine([5.74, 0.62, side * 0.38], [7.02, 0.62, side * 1.68], 620, 7, palette.whisker, 7, 0.008);
       }
 
       for (let z = -0.74; z <= 0.74; z += 0.035) {
