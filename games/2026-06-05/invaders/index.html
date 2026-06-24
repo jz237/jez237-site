@@ -556,7 +556,7 @@
       <div class="overlay" id="overlay">
         <div class="panel">
           <h1>Invaders</h1>
-          <div class="title-version">v1.46</div>
+          <div class="title-version">v1.47</div>
           <p class="tagline" id="message">A modernized arcade defense run: punch through waves, catch power cores, and survive the boss carrier.</p>
           <p class="hint" id="controlsHint"></p>
           <div class="enemy-roster" aria-label="Enemy ship guide">
@@ -586,7 +586,7 @@
         <button id="pauseButton" type="button" aria-label="Pause" title="Pause (P)">⏸</button>
         <button id="muteButton" type="button" aria-label="Mute sound" aria-pressed="false" title="Mute (M)">🔊</button>
       </div>
-      <div class="version" aria-hidden="true">v1.46</div>
+      <div class="version" aria-hidden="true">v1.47</div>
     </section>
   </main>
 
@@ -655,6 +655,8 @@
         powerups: [],
         pickupLabels: [],
         waveBanner: null,
+        screenFlash: 0,
+        powerFlash: null,
         shields: [],
         boss: null,
         scoreSubmitted: false,
@@ -832,7 +834,11 @@
         hit() { playTone(520, 0.045, "square", 0.025, 290); },
         boom(big = false) { playNoise(big ? 0.22 : 0.1, big ? 0.075 : 0.045, big ? 420 : 760); },
         pickup() { playTone(640, 0.04, "triangle", 0.03, 1180); },
-        hurt() { playNoise(0.16, 0.065, 520); }
+        hurt() { playNoise(0.16, 0.065, 520); },
+        ace() {
+          playTone(880, 0.05, "square", 0.028, 1320);
+          setTimeout(() => playTone(1180, 0.045, "triangle", 0.022, 760), 38);
+        }
       };
 
       function sanitizeInitials(value) {
@@ -1055,6 +1061,8 @@
         game.powerups = [];
         game.pickupLabels = [];
         game.waveBanner = null;
+        game.screenFlash = 0;
+        game.powerFlash = null;
         game.shields = [];
         game.boss = null;
         game.scoreSubmitted = false;
@@ -1146,6 +1154,13 @@
         game.invaderMarchTimer = 0;
         game.invaderFrame = 0;
         game.nextDive = game.time + rand(2.4, 4.8);
+        game.waveBanner = {
+          text: game.bossWave ? "BOSS CARRIER INBOUND" : `WAVE ${game.wave}`,
+          subtext: game.bossWave ? "Capital ship contact" : game.wave % 3 === 0 ? "Red dive squadron" : game.wave % 2 === 0 ? "Striker pressure rising" : "Alien formation advancing",
+          life: game.bossWave ? 2.8 : 2.05,
+          maxLife: game.bossWave ? 2.8 : 2.05,
+          boss: game.bossWave
+        };
         const mobileFormation = game.compact;
         let cols = game.bossWave
           ? clamp(5 + Math.floor(game.wave / 6), 5, mobileFormation ? 6 : 7)
@@ -1189,21 +1204,18 @@
           }
         }
         if (game.bossWave) {
-          game.waveBanner = {
-            text: "BOSS CARRIER INBOUND",
-            life: 2.2,
-            maxLife: 2.2
-          };
           game.shake = Math.max(game.shake, 7);
           sfx.bossCharge();
           game.boss = {
             x: game.width / 2,
-            y: Math.max(52, 62 * game.scale),
+            y: -88,
+            targetY: Math.max(52, 62 * game.scale),
             r: 58,
             hp: 48 + game.wave * 9,
             maxHp: 48 + game.wave * 9,
             nextPowerDropHp: (48 + game.wave * 9) * rand(0.46, 0.58),
             phase: 0,
+            intro: 1.85,
             shot: 0.8,
             attackIndex: 0,
             warning: 0,
@@ -1344,6 +1356,7 @@
         updatePowerups(dt);
         updatePickupLabels(dt);
         updateWaveBanner(dt);
+        updateVisualEffects(dt);
         updateShields(dt);
         checkWaveClear(dt);
         updateHud();
@@ -1423,14 +1436,16 @@
       }
 
       function startDiverAttack(inv) {
-        inv.divePhase = "circle";
+        inv.divePhase = "warning";
         inv.diveTime = 0;
         inv.diveHit = false;
         inv.diveDir = inv.x < game.width / 2 ? 1 : -1;
         inv.diveCircleStart = rand(0, TAU);
         inv.diveStartX = inv.x;
         inv.diveStartY = inv.y;
+        inv.diveWarning = 0.72;
         inv.tilt = 0;
+        burst(inv.x, inv.y, colors.enemy3, 8, 90);
       }
 
       function updateDiverAttacks(dt) {
@@ -1446,7 +1461,20 @@
           const prevX = inv.x;
           inv.diveTime += dt;
           const p = game.player;
-          if (inv.divePhase === "circle") {
+          if (inv.divePhase === "warning") {
+            const homeX = inv.homeX ?? inv.baseX;
+            const homeY = inv.homeY ?? inv.baseY;
+            inv.x = homeX + Math.sin(game.time * 18 + inv.col) * 2.4;
+            inv.y = homeY + Math.cos(game.time * 14 + inv.row) * 1.4;
+            inv.tilt = Math.sin(game.time * 16) * 0.12;
+            if (inv.diveTime >= (inv.diveWarning || 0.72)) {
+              inv.divePhase = "circle";
+              inv.diveTime = 0;
+              inv.diveCircleStart = rand(0, TAU);
+              inv.diveStartX = inv.x;
+              inv.diveStartY = inv.y;
+            }
+          } else if (inv.divePhase === "circle") {
             const homeX = inv.homeX ?? inv.baseX;
             const homeY = inv.homeY ?? inv.baseY;
             const radius = game.compact ? 28 : 38;
@@ -1498,7 +1526,7 @@
               inv.tilt = 0;
             }
           }
-          if (inv.divePhase) inv.tilt = clamp((inv.x - prevX) * 0.035, -0.38, 0.38);
+          if (inv.divePhase && inv.divePhase !== "warning") inv.tilt = clamp((inv.x - prevX) * 0.035, -0.38, 0.38);
         }
       }
 
@@ -1506,8 +1534,18 @@
         const boss = game.boss;
         if (!boss) return;
         boss.phase += dt;
+        const targetY = boss.targetY ?? Math.max(48, 62 * game.scale);
+        if (boss.intro > 0) {
+          boss.intro = Math.max(0, boss.intro - dt);
+          const t = 1 - boss.intro / 1.85;
+          const ease = 1 - Math.pow(1 - clamp(t, 0, 1), 3);
+          boss.x = game.width / 2 + Math.sin(game.time * 2.2) * 18 * (1 - ease);
+          boss.y = -88 + (targetY - -88) * ease + Math.sin(game.time * 14) * 3;
+          game.shake = Math.max(game.shake, (1 - ease) * 6);
+          return;
+        }
         boss.x = game.width / 2 + Math.sin(boss.phase * 0.9) * game.width * 0.32;
-        boss.y = Math.max(48, 62 * game.scale) + Math.sin(boss.phase * 1.7) * 8;
+        boss.y = targetY + Math.sin(boss.phase * 1.7) * 8;
         if (boss.warning > 0) {
           boss.warning -= dt;
           if (boss.warning <= 0 && boss.pendingBeam) {
@@ -1640,6 +1678,18 @@
         });
       }
 
+      function addFloatText(x, y, text, color, life = 0.9) {
+        game.pickupLabels.push({
+          x,
+          y,
+          vy: -42,
+          text,
+          color,
+          life,
+          maxLife: life
+        });
+      }
+
       function updatePickupLabels(dt) {
         for (const label of game.pickupLabels) {
           label.y += label.vy * dt;
@@ -1655,6 +1705,14 @@
         if (game.waveBanner.life <= 0) game.waveBanner = null;
       }
 
+      function updateVisualEffects(dt) {
+        game.screenFlash = Math.max(0, game.screenFlash - dt * 3.8);
+        if (game.powerFlash) {
+          game.powerFlash.life -= dt;
+          if (game.powerFlash.life <= 0) game.powerFlash = null;
+        }
+      }
+
       function updateShields(dt) {
         for (const shield of game.shields) {
           shield.flash = Math.max(0, (shield.flash || 0) - dt * 4.5);
@@ -1664,8 +1722,20 @@
       function damageShieldBlock(shield, x, y, sparks = 5) {
         shield.hp -= 1;
         shield.flash = 1;
+        shield.scar = rand(0, TAU);
         const color = shield.hp <= 1 ? colors.enemy3 : shield.hp <= 2 ? colors.gold : colors.shield;
-        burst(x, y, color, sparks + (shield.hp <= 0 ? 8 : 0), shield.hp <= 0 ? 150 : 100);
+        burst(x, y, color, sparks + (shield.hp <= 0 ? 12 : 2), shield.hp <= 0 ? 180 : 120);
+        for (let i = 0; i < (shield.hp <= 0 ? 5 : 2); i++) {
+          game.particles.push({
+            x: shield.x + rand(-shield.w * 0.45, shield.w * 0.45),
+            y: shield.y + rand(-shield.h * 0.45, shield.h * 0.45),
+            vx: rand(-80, 80),
+            vy: rand(-120, 40),
+            r: rand(0.8, 2.1),
+            color,
+            life: rand(0.18, 0.44)
+          });
+        }
       }
 
       function craterShieldBlock(shield, x, y, sparks = 4) {
@@ -1745,9 +1815,18 @@
         if (inv.hp > 0) sfx.hit();
         game.shake = Math.max(game.shake, inv.hp > 0 ? 1 : 4);
         if (inv.hp <= 0) {
+          const wasDiving = !!inv.divePhase;
           const idx = game.invaders.indexOf(inv);
           if (idx >= 0) game.invaders.splice(idx, 1);
           addScore(inv.type === "diver" ? 45 : inv.type === "striker" ? 30 : 20);
+          if (wasDiving) {
+            burst(inv.x, inv.y, colors.gold, 32, 270);
+            burst(inv.x, inv.y, "#ffffff", 14, 180);
+            addFloatText(inv.x, inv.y - 22, "DIVE TAG +45", colors.gold, 1.05);
+            game.screenFlash = Math.max(game.screenFlash, 0.55);
+            game.shake = Math.max(game.shake, 9);
+            sfx.ace();
+          }
           maybeDrop(inv.x, inv.y);
           sfx.boom(false);
         }
@@ -1806,6 +1885,12 @@
 
       function applyPowerup(type) {
         const p = game.player;
+        const labels = {
+          spread: ["SPREAD CANNON", "#ff3df2"],
+          laser: ["LASER LANCE", "#35f4ff"],
+          shield: ["SHIELD SURGE", "#a7ff3d"],
+          repair: ["REPAIR CORE", "#ffffff"]
+        };
         if (type === "spread" || type === "laser") {
           p.weapon = type;
           p.weaponTimer = 8;
@@ -1815,6 +1900,9 @@
           game.lives = Math.min(3, game.lives + 1);
           p.shield = Math.min(100, p.shield + 8);
         }
+        const [text, color] = labels[type] || [type.toUpperCase(), colors.gold];
+        game.powerFlash = { type, text, color, life: 0.82, maxLife: 0.82 };
+        game.screenFlash = Math.max(game.screenFlash, 0.22);
         sfx.pickup();
       }
 
@@ -1964,9 +2052,11 @@
         drawBoss();
         drawBullets();
         drawPowerups();
+        drawPowerFlash();
         drawPickupLabels();
         drawParticles();
         drawWaveBanner();
+        drawScreenFlash();
         drawVignette();
         ctx.restore();
       }
@@ -2015,6 +2105,33 @@
           ctx.stroke();
         }
         ctx.restore();
+
+        if (game.boss && game.boss.intro > 0) {
+          const boss = game.boss;
+          const t = clamp(1 - boss.intro / 1.85, 0, 1);
+          ctx.save();
+          ctx.globalAlpha = 0.42 * (1 - t * 0.25);
+          ctx.fillStyle = "rgba(1, 2, 8, 0.72)";
+          ctx.fillRect(0, 0, game.width, game.height);
+          ctx.globalCompositeOperation = "lighter";
+          ctx.globalAlpha = 0.2 + Math.sin(game.time * 18) * 0.04;
+          ctx.strokeStyle = colors.enemy3;
+          ctx.lineWidth = 2;
+          glow(colors.enemy3, 34);
+          for (let i = 0; i < 9; i++) {
+            const y = game.height * 0.18 + i * 23;
+            ctx.beginPath();
+            ctx.moveTo(game.width * 0.18, y);
+            ctx.lineTo(game.width * 0.82, y + Math.sin(game.time * 6 + i) * 5);
+            ctx.stroke();
+          }
+          ctx.globalAlpha = 0.75;
+          ctx.font = `900 ${clamp(game.width * 0.024, 15, 24)}px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace`;
+          ctx.textAlign = "center";
+          ctx.fillStyle = "#fff";
+          ctx.fillText("WARNING: CARRIER SIGNATURE LOCKED", game.width / 2, game.height * 0.12);
+          ctx.restore();
+        }
       }
 
       function drawPlayer() {
@@ -2180,16 +2297,83 @@
         });
       }
 
+      function drawDiverCue(inv, color) {
+        ctx.save();
+        ctx.globalCompositeOperation = "lighter";
+        if (inv.divePhase === "warning") {
+          const t = clamp(inv.diveTime / (inv.diveWarning || 0.72), 0, 1);
+          const pulse = 0.55 + Math.sin(game.time * 30) * 0.18;
+          ctx.globalAlpha = 0.35 + pulse * 0.35;
+          ctx.strokeStyle = color;
+          ctx.lineWidth = 2.5;
+          glow(color, 22);
+          ctx.beginPath();
+          ctx.arc(inv.x, inv.y, inv.r + 10 + t * 16, 0, TAU);
+          ctx.stroke();
+          ctx.setLineDash([8, 8]);
+          ctx.globalAlpha = 0.2 + t * 0.4;
+          ctx.beginPath();
+          const targetX = game.player ? game.player.x : inv.x;
+          const targetY = game.player ? game.player.y - 10 : inv.y + 200;
+          ctx.moveTo(inv.x, inv.y + inv.r);
+          ctx.quadraticCurveTo((inv.x + targetX) / 2 + 60 * inv.diveDir, (inv.y + targetY) / 2 - 38, targetX, targetY);
+          ctx.stroke();
+          ctx.setLineDash([]);
+        } else if (inv.divePhase === "swoop") {
+          const px = inv.prevX ?? inv.x;
+          const py = inv.prevY ?? inv.y;
+          ctx.lineCap = "round";
+          for (let i = 0; i < 4; i++) {
+            const f = i / 4;
+            ctx.globalAlpha = 0.24 * (1 - f);
+            ctx.strokeStyle = i % 2 ? colors.gold : color;
+            ctx.lineWidth = 10 - i * 1.8;
+            glow(ctx.strokeStyle, 18);
+            ctx.beginPath();
+            ctx.moveTo(inv.x + (px - inv.x) * f, inv.y + (py - inv.y) * f);
+            ctx.lineTo(px + (px - inv.x) * (f + 0.55), py + (py - inv.y) * (f + 0.55));
+            ctx.stroke();
+          }
+        } else if (inv.divePhase === "circle") {
+          ctx.globalAlpha = 0.18;
+          ctx.strokeStyle = color;
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.ellipse(inv.homeX ?? inv.baseX, inv.homeY ?? inv.baseY, game.compact ? 28 : 38, game.compact ? 17 : 24, 0, 0, TAU);
+          ctx.stroke();
+        }
+        ctx.restore();
+      }
+
       function drawInvaders() {
         ctx.save();
         for (const inv of game.invaders) {
-          ctx.save();
-          ctx.translate(inv.x, inv.y);
-          if (inv.divePhase) ctx.rotate(inv.tilt || 0);
           const color = inv.type === "drone" ? colors.enemy : inv.type === "striker" ? colors.enemy2 : colors.enemy3;
+          if (inv.divePhase) drawDiverCue(inv, color);
+          ctx.save();
+          let bobX = 0;
+          let bobY = 0;
+          let scale = 1;
+          if (!inv.divePhase) {
+            if (inv.type === "striker") {
+              bobX = Math.sin(game.time * 9 + inv.col * 1.7) * 2.3;
+              bobY = Math.cos(game.time * 7 + inv.row) * 1.1;
+            } else if (inv.type === "diver") {
+              scale = 1 + Math.sin(game.time * 7.5 + inv.col) * 0.055;
+              bobY = Math.sin(game.time * 5 + inv.col) * 1.4;
+            }
+          } else if (inv.divePhase === "warning") {
+            scale = 1 + Math.sin(game.time * 28) * 0.08;
+          }
+          ctx.translate(inv.x + bobX, inv.y + bobY);
+          if (inv.divePhase) ctx.rotate(inv.tilt || 0);
+          ctx.scale(scale, scale);
           const pixel = inv.type === "drone" ? 3 : 3.1;
           const frame = inv.divePhase ? Math.floor(game.time * 12) % 2 : game.invaderFrame;
           const sprite = getInvaderSprite(inv.type, frame, color, pixel);
+          if (inv.type === "diver") {
+            ctx.globalAlpha = inv.divePhase === "warning" ? 0.82 + Math.sin(game.time * 24) * 0.15 : 1;
+          }
           ctx.drawImage(sprite, -sprite.width / 2, -sprite.height / 2);
           ctx.restore();
         }
@@ -2225,6 +2409,11 @@
         ctx.save();
         ctx.translate(boss.x, boss.y);
         ctx.globalCompositeOperation = "lighter";
+        if (boss.intro > 0) {
+          const introT = clamp(1 - boss.intro / 1.85, 0, 1);
+          ctx.rotate(Math.sin(game.time * 7) * 0.03 * (1 - introT));
+          ctx.scale(0.82 + introT * 0.18, 0.82 + introT * 0.18);
+        }
         const pixel = clamp(4.8 * game.scale, 4, 5.6);
         const ox = -bossCarrierPattern[0].length * pixel / 2;
         const oy = -bossCarrierPattern.length * pixel / 2;
@@ -2413,6 +2602,40 @@
         ctx.restore();
       }
 
+      function drawPowerFlash() {
+        const flash = game.powerFlash;
+        if (!flash || !game.player) return;
+        const t = clamp(flash.life / flash.maxLife, 0, 1);
+        const pop = 1 + (1 - t) * 0.22;
+        ctx.save();
+        ctx.globalCompositeOperation = "lighter";
+        ctx.globalAlpha = Math.min(1, t * 1.7);
+        ctx.translate(game.player.x, game.player.y - 74);
+        ctx.scale(pop, pop);
+        glow(flash.color, 30);
+        ctx.strokeStyle = flash.color;
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.arc(0, 0, 30 + (1 - t) * 20, 0, TAU);
+        ctx.stroke();
+        ctx.save();
+        ctx.translate(0, -2);
+        drawPowerupIcon(flash.type, flash.color, 17);
+        ctx.restore();
+        ctx.font = `900 ${clamp(game.width * 0.023, 14, 22)}px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace`;
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.lineWidth = 5;
+        ctx.strokeStyle = "rgba(0,0,0,0.72)";
+        ctx.strokeText(flash.text, 0, 46);
+        ctx.fillStyle = flash.color;
+        ctx.fillText(flash.text, 0, 46);
+        ctx.globalAlpha *= 0.52;
+        ctx.fillStyle = "#fff";
+        ctx.fillText(flash.text, 0, 44);
+        ctx.restore();
+      }
+
       function drawPowerupIcon(type, color, size) {
         ctx.save();
         ctx.fillStyle = color;
@@ -2464,22 +2687,32 @@
         ctx.save();
         ctx.globalCompositeOperation = "lighter";
         ctx.globalAlpha = clamp(Math.min(1, banner.life * 2) * pulse, 0, 1);
-        ctx.fillStyle = "rgba(255, 77, 109, 0.16)";
-        ctx.fillRect(0, game.height * 0.2 - 34, game.width, 68);
-        ctx.strokeStyle = colors.enemy3;
+        const mainColor = banner.boss ? colors.enemy3 : colors.player;
+        const fillColor = banner.boss ? "rgba(255, 77, 109, 0.16)" : "rgba(53, 244, 255, 0.13)";
+        const y = game.height * 0.2;
+        const h = banner.subtext ? 86 : 68;
+        ctx.fillStyle = fillColor;
+        ctx.fillRect(0, y - h / 2, game.width, h);
+        ctx.strokeStyle = mainColor;
         ctx.lineWidth = 2;
-        glow(colors.enemy3, 24);
+        glow(mainColor, 24);
         ctx.beginPath();
-        ctx.moveTo(game.width * (0.08 + (1 - t) * 0.08), game.height * 0.2 - 34);
-        ctx.lineTo(game.width * (0.92 - (1 - t) * 0.08), game.height * 0.2 - 34);
-        ctx.moveTo(game.width * (0.08 + (1 - t) * 0.08), game.height * 0.2 + 34);
-        ctx.lineTo(game.width * (0.92 - (1 - t) * 0.08), game.height * 0.2 + 34);
+        ctx.moveTo(game.width * (0.08 + (1 - t) * 0.08), y - h / 2);
+        ctx.lineTo(game.width * (0.92 - (1 - t) * 0.08), y - h / 2);
+        ctx.moveTo(game.width * (0.08 + (1 - t) * 0.08), y + h / 2);
+        ctx.lineTo(game.width * (0.92 - (1 - t) * 0.08), y + h / 2);
         ctx.stroke();
         ctx.fillStyle = "#fff";
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
         ctx.font = `900 ${clamp(game.width * 0.045, 20, 42)}px system-ui, sans-serif`;
-        ctx.fillText(banner.text, game.width / 2, game.height * 0.2);
+        ctx.fillText(banner.text, game.width / 2, y - (banner.subtext ? 10 : 0));
+        if (banner.subtext) {
+          ctx.font = `800 ${clamp(game.width * 0.02, 13, 20)}px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace`;
+          ctx.fillStyle = mainColor;
+          ctx.globalAlpha *= 0.9;
+          ctx.fillText(banner.subtext.toUpperCase(), game.width / 2, y + 26);
+        }
         ctx.restore();
       }
 
@@ -2527,6 +2760,16 @@
         ctx.restore();
       }
 
+      function drawScreenFlash() {
+        if (game.screenFlash <= 0) return;
+        ctx.save();
+        ctx.globalCompositeOperation = "lighter";
+        ctx.globalAlpha = clamp(game.screenFlash, 0, 0.42);
+        ctx.fillStyle = "rgba(255, 241, 168, 0.42)";
+        ctx.fillRect(0, 0, game.width, game.height);
+        ctx.restore();
+      }
+
       function drawVignette() {
         if (!vignetteGradient) {
           vignetteGradient = ctx.createRadialGradient(game.width / 2, game.height / 2, game.height * 0.22, game.width / 2, game.height / 2, game.height * 0.78);
@@ -2547,7 +2790,8 @@
         scoreEl.textContent = game.score.toLocaleString();
         waveEl.textContent = String(game.wave);
         livesEl.textContent = "◆".repeat(Math.max(0, game.lives));
-        weaponEl.textContent = game.player.weapon.toUpperCase();
+        const weaponLabels = { pulse: "PULSE", spread: "SPRD", laser: "LASER" };
+        weaponEl.textContent = weaponLabels[game.player.weapon] || game.player.weapon.toUpperCase();
         const shieldValue = Math.max(0, Math.round(game.player.shield));
         shieldEl.textContent = `${shieldValue}%`;
         shieldFill.style.transform = `scaleX(${clamp(shieldValue / 100, 0, 1)})`;
@@ -2706,7 +2950,7 @@
       });
 
       window.__invadersQA = {
-        version: "v1.46",
+        version: "v1.47",
         game,
         forceDiverSwoop() {
           if (!game.player) return null;
@@ -2725,6 +2969,14 @@
           inv.hp = 1;
           inv.maxHp = 1;
           return { x: inv.x, y: inv.y, phase: inv.divePhase };
+        },
+        forceDiverWarning() {
+          if (!game.player) return null;
+          if (!game.invaders.length) spawnWave();
+          const inv = game.invaders.find(enemy => enemy.type === "diver") || game.invaders[0];
+          inv.type = "diver";
+          startDiverAttack(inv);
+          return { x: inv.x, y: inv.y, phase: inv.divePhase, warning: inv.diveWarning };
         },
         testMovingDiverHit() {
           const inv = game.invaders.find(enemy => enemy.divePhase === "swoop")
@@ -2753,6 +3005,30 @@
           const hit = game.invaders.length < countBefore;
           game.shields = savedShields;
           return hit;
+        },
+        forceBossWave() {
+          game.wave = 4;
+          game.time = Math.max(game.time, 0.1);
+          spawnWave();
+          return {
+            boss: !!game.boss,
+            intro: game.boss ? game.boss.intro : 0,
+            banner: game.waveBanner ? game.waveBanner.text : null
+          };
+        },
+        triggerPowerFlash(type = "laser") {
+          if (!game.player) return null;
+          applyPowerup(type);
+          return game.powerFlash ? { text: game.powerFlash.text, type: game.powerFlash.type } : null;
+        },
+        testPolishState() {
+          return {
+            version: this.version,
+            waveBannerSubtext: !!(game.waveBanner && game.waveBanner.subtext),
+            powerFlash: !!game.powerFlash,
+            screenFlash: game.screenFlash,
+            diverCueReady: game.invaders.some(enemy => enemy.divePhase === "warning" || enemy.divePhase === "swoop")
+          };
         }
       };
 
