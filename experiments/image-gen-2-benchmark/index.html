@@ -188,31 +188,27 @@
     .gallery-list { display: block; }
     .factual-section {
       margin-bottom: 24px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: linear-gradient(145deg, rgba(255,255,255,.9), rgba(226,246,238,.82));
-      box-shadow: var(--shadow);
-      overflow: hidden;
     }
     .factual-heading {
       display: flex;
-      align-items: center;
+      align-items: baseline;
       justify-content: space-between;
       gap: 14px;
-      padding: 18px 18px 0;
+      padding: 0 4px 12px;
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 18px;
     }
     .factual-heading h2 {
       margin: 0;
-      color: #004c7c;
-      font-size: clamp(1.35rem, 2.4vw, 2rem);
-      letter-spacing: 0;
+      color: #eaf6ff;
+      font-size: clamp(1.35rem, 3vw, 2.2rem);
+      letter-spacing: -.04em;
     }
     .factual-heading a { flex: 0 0 auto; }
     .factual-strip {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 16px;
-      padding: 18px;
     }
     .factual-mini {
       display: grid;
