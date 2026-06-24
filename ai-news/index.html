@@ -67,9 +67,16 @@
           <option value="all">View: Raw feed</option>
         </select>
         <select id="news-source" class="control"></select>
+        <select id="news-tier" class="control">
+          <option value="">All source tiers</option>
+          <option value="primary">Primary sources</option>
+          <option value="secondary">Reported sources</option>
+          <option value="watchlist">Watchlist sources</option>
+        </select>
         <input id="news-query" class="control" type="search" placeholder="Filter headline/summary..." />
         <span id="news-updated" class="news-meta"></span>
       </div>
+      <div id="news-summary" class="news-summary" aria-live="polite"></div>
       <div id="news-grid" class="news-grid"></div>
     </section>
 
