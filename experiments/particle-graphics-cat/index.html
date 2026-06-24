@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Particle Graphics Cat</title>
+  <title>Animated Particle Cat</title>
   <style>
     :root {
       color-scheme: dark;
@@ -84,47 +84,9 @@
       pointer-events: auto;
     }
 
-    .controls summary {
-      min-height: 38px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      color: var(--ink);
-      cursor: pointer;
-      list-style: none;
-      font-size: 0.92rem;
-      font-weight: 700;
-    }
-
-    .controls summary::-webkit-details-marker {
-      display: none;
-    }
-
-    .controls summary::after {
-      content: "+";
-      width: 22px;
-      height: 22px;
-      display: inline-grid;
-      place-items: center;
-      border: 1px solid rgba(255, 255, 255, 0.14);
-      border-radius: 999px;
-      color: var(--aqua);
-      font-size: 1rem;
-      line-height: 1;
-    }
-
-    .controls[open] summary {
-      margin-bottom: 12px;
-    }
-
-    .controls[open] summary::after {
-      content: "-";
-    }
-
     .button-row {
       display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 8px;
       margin-bottom: 12px;
     }
@@ -245,16 +207,14 @@
 
   <main class="hud">
     <section class="title" aria-label="Demo title">
-      <h1>Particle Graphics Cat</h1>
-      <p>A playful particle cat with big blinking muppet eyes, pale pink ears, whiskers, paws, and a dark crown marking.</p>
+      <h1>Particle Cat</h1>
+      <p>A cat-shaped point cloud with layered fur, tabby markings, blinking eyes, whiskers, paws, and a ribbon-like animated tail.</p>
     </section>
 
-    <details class="controls" aria-label="Particle controls">
-      <summary>Controls</summary>
+    <section class="controls" aria-label="Particle controls">
       <div class="button-row">
         <button id="pause" type="button" aria-pressed="false" title="Pause or resume animation">Pause</button>
         <button id="spin" type="button" aria-pressed="true" title="Toggle automatic turntable">Spin</button>
-        <button id="walk" type="button" aria-pressed="true" title="Toggle walking motion">Walk</button>
         <button id="glow" type="button" aria-pressed="false" title="Toggle stronger particle glow">Glow</button>
       </div>
       <label class="field">
@@ -267,22 +227,7 @@
         <input id="size" type="range" min="0.45" max="1.65" value="0.74" step="0.01" />
         <output id="sizeValue">0.74</output>
       </label>
-      <label class="field">
-        Zoom
-        <input id="zoom" type="range" min="8.5" max="32" value="18.8" step="0.1" />
-        <output id="zoomValue">18.8</output>
-      </label>
-      <label class="field">
-        Hue
-        <input id="hue" type="range" min="-180" max="180" value="0" step="1" />
-        <output id="hueValue">0</output>
-      </label>
-      <label class="field">
-        Patch
-        <input id="patch" type="range" min="0" max="2.2" value="1.45" step="0.05" />
-        <output id="patchValue">1.45</output>
-      </label>
-    </details>
+    </section>
   </main>
 
   <aside class="stats" aria-label="Particle statistics">
@@ -291,7 +236,7 @@
     <span class="stat"><strong>3D</strong> orbit</span>
   </aside>
 
-  <div class="credit">drag to orbit | pinch or wheel to zoom</div>
+  <div class="credit">drag to orbit | wheel to zoom</div>
 
   <script type="module">
     import * as THREE from "./three.module.js";
@@ -299,18 +244,11 @@
     const canvas = document.querySelector("#scene");
     const pauseButton = document.querySelector("#pause");
     const spinButton = document.querySelector("#spin");
-    const walkButton = document.querySelector("#walk");
     const glowButton = document.querySelector("#glow");
     const speedInput = document.querySelector("#speed");
     const sizeInput = document.querySelector("#size");
-    const zoomInput = document.querySelector("#zoom");
-    const hueInput = document.querySelector("#hue");
-    const patchInput = document.querySelector("#patch");
     const speedValue = document.querySelector("#speedValue");
     const sizeValue = document.querySelector("#sizeValue");
-    const zoomValue = document.querySelector("#zoomValue");
-    const hueValue = document.querySelector("#hueValue");
-    const patchValue = document.querySelector("#patchValue");
     const particleCount = document.querySelector("#particleCount");
 
     const scene = new THREE.Scene();
@@ -341,23 +279,20 @@
     scene.add(grid);
 
     const palette = {
-      fur: new THREE.Color(0xf4f0ea),
-      furLight: new THREE.Color(0xfffcf5),
-      furShadow: new THREE.Color(0xd8d4cc),
-      white: new THREE.Color(0xfbF8f1),
-      eyeWhite: new THREE.Color(0xfffbef),
-      cream: new THREE.Color(0xe8e0d2),
-      crown: new THREE.Color(0x24272a),
-      pink: new THREE.Color(0xe8b4ae),
-      nose: new THREE.Color(0xc99a9a),
-      noseDark: new THREE.Color(0x3a2325),
-      eye: new THREE.Color(0xa7b29b),
-      eyeDark: new THREE.Color(0x111719),
+      fur: new THREE.Color(0x9ea6a7),
+      furLight: new THREE.Color(0xd7e2df),
+      furDark: new THREE.Color(0x343c40),
+      white: new THREE.Color(0xf6f1e7),
+      cream: new THREE.Color(0xe1cda7),
+      pink: new THREE.Color(0xff96b7),
+      nose: new THREE.Color(0xff5f8e),
+      eye: new THREE.Color(0x7dff6f),
+      eyeDark: new THREE.Color(0x102a16),
       whisker: new THREE.Color(0xfffbf0),
-      collar: new THREE.Color(0xbec8ba),
-      bell: new THREE.Color(0xdfc27b),
-      yarn: new THREE.Color(0x9d9182),
-      spark: new THREE.Color(0xcfc7b8)
+      collar: new THREE.Color(0x66dfd0),
+      bell: new THREE.Color(0xffcf5a),
+      yarn: new THREE.Color(0xff78b5),
+      spark: new THREE.Color(0xffd46b)
     };
 
     function mulberry32(seed) {
@@ -464,108 +399,23 @@
       }
     }
 
-    function organicFurColor(x, y, z) {
-      const belly = y < -0.95 && Math.abs(z) < 0.82;
-      const flankShadow = Math.abs(z) > 1.05 || y < -0.55;
-      if (belly || rand() > 0.78) return palette.white;
-      if (flankShadow && rand() > 0.46) return palette.furShadow;
-      if (rand() > 0.5) return palette.furLight;
-      return palette.fur;
-    }
-
-    function addOrganicBody() {
-      const count = 82000;
-      for (let i = 0; i < count; i++) {
-        const t = rand();
-        const x = -4.15 + t * 7.25;
-        const ring = rand() * Math.PI * 2;
-        const shoulder = Math.exp(-Math.pow((t - 0.78) / 0.18, 2));
-        const haunch = Math.exp(-Math.pow((t - 0.18) / 0.2, 2));
-        const taper = Math.sin(Math.PI * Math.max(0.04, Math.min(0.96, t)));
-        const ry = 0.7 + 0.42 * taper + 0.12 * shoulder + 0.14 * haunch;
-        const rz = 0.58 + 0.62 * taper + 0.14 * shoulder + 0.18 * haunch;
-        const centerY = -0.08 + 0.22 * Math.sin(Math.PI * t) + 0.02 * shoulder - 0.08 * haunch;
-        const backLift = Math.max(0, Math.sin(ring)) * (0.24 + 0.08 * shoulder);
-        const bellyDrop = Math.max(0, -Math.sin(ring)) * (0.12 + 0.08 * haunch);
-        const y = centerY + Math.sin(ring) * ry + backLift - bellyDrop;
-        const z = Math.cos(ring) * rz * (0.92 + 0.08 * Math.sin(t * Math.PI * 2));
-        pushPoint(x, y, z, organicFurColor(x, y, z), 17, 1, 0.045);
-      }
-
-      addEllipsoid([-2.65, 0.06, 0], [1.0, 1.08, 1.12], 15000, 1, organicFurColor, 17, 0.04);
-      addEllipsoid([2.55, 0.16, 0], [1.0, 1.12, 1.1], 15500, 1, organicFurColor, 17, 0.04);
-      addEllipsoid([3.32, 0.52, 0], [0.7, 0.62, 0.82], 8500, 1, organicFurColor, 16, 0.035);
-    }
-
-    function addOrganicLeg(x, z, phase, front = false) {
-      const hipY = front ? -0.55 : -0.48;
-      const pawX = x + (front ? 0.34 : 0.26);
-      const pawZ = z + (z > 0 ? 0.08 : -0.08);
-      for (let i = 0; i < 9500; i++) {
-        const t = rand();
-        const ring = rand() * Math.PI * 2;
-        const bend = Math.sin(t * Math.PI);
-        const legX = x + (front ? 0.16 : -0.12) * t + Math.sin(t * Math.PI * 0.8) * (front ? 0.2 : -0.16);
-        const legY = hipY - t * 1.95 + bend * 0.18;
-        const radius = 0.34 - t * 0.13 + (front ? 0.02 : 0.05);
-        pushPoint(
-          legX + Math.cos(ring) * radius * 0.62,
-          legY + Math.sin(ring) * radius,
-          z + Math.cos(ring + Math.PI / 2) * radius * 0.7,
-          t > 0.8 || rand() > 0.35 ? palette.white : palette.furShadow,
-          15,
-          5 + phase,
-          0.026
-        );
-      }
-      addFilledEllipsoid([pawX + 0.08, -2.78, pawZ], [0.72, 0.13, 0.3], 4300, 5 + phase, palette.white, 15, 0.012);
-      for (const toe of [-0.15, 0, 0.15]) {
-        addFilledEllipsoid([pawX + 0.52, -2.86, pawZ + toe], [0.062, 0.03, 0.045], 190, 5 + phase, palette.pink, 13, 0.004);
-      }
-    }
-
-    function addFaceEye(side) {
-      const z = side * 0.31;
-      addFilledEllipsoid([5.86, 1.22, z], [0.24, 0.38, 0.058], 1650, 6, palette.eyeDark, 23, 0.003);
-      addFilledEllipsoid([5.93, 1.22, z], [0.2, 0.32, 0.045], 2850, 6, palette.eyeWhite, 23, 0.003);
-      addFilledEllipsoid([6.07, 1.1, z + side * 0.012], [0.07, 0.16, 0.018], 980, 6, palette.eyeDark, 22, 0.002);
-      addFilledEllipsoid([6.1, 1.19, z - side * 0.004], [0.025, 0.043, 0.008], 180, 6, palette.white, 20, 0.001);
-    }
-
-    function addOrganicHead() {
-      addEllipsoid([4.48, 1.25, 0], [1.16, 1.0, 1.04], 33000, 2, headColor, 16, 0.035);
-      addEllipsoid([4.98, 0.96, -0.55], [0.44, 0.38, 0.38], 7000, 2, () => palette.white, 15, 0.024);
-      addEllipsoid([4.98, 0.96, 0.55], [0.44, 0.38, 0.38], 7000, 2, () => palette.white, 15, 0.024);
-      addEllipsoid([5.48, 0.72, 0], [0.54, 0.34, 0.62], 12000, 2, () => palette.white, 15, 0.028);
-      addFilledEllipsoid([5.88, 0.78, 0], [0.14, 0.085, 0.19], 1100, 2, palette.nose, 16, 0.014);
-      addFilledEllipsoid([5.98, 0.7, 0], [0.052, 0.052, 0.08], 320, 2, palette.noseDark, 17, 0.005);
-      addFaceEye(-1);
-      addFaceEye(1);
-
-      const earL = [[3.72, 1.95, -0.64], [4.34, 3.62, -0.98], [5.02, 1.92, -1.06]];
-      const earR = [[3.72, 1.95, 0.64], [4.34, 3.62, 0.98], [5.02, 1.92, 1.06]];
-      addTriangleSurface(...earL, 15000, 3, () => rand() > 0.7 ? palette.furShadow : palette.white, 16, 0.032);
-      addTriangleSurface(...earR, 15000, 3, () => rand() > 0.7 ? palette.furShadow : palette.white, 16, 0.032);
-      addTriangleSurface([3.95, 2.1, -0.78], [4.42, 3.18, -0.94], [4.84, 2.08, -0.96], 5800, 3, () => palette.pink, 15, 0.022);
-      addTriangleSurface([3.95, 2.1, 0.78], [4.42, 3.18, 0.94], [4.84, 2.08, 0.96], 5800, 3, () => palette.pink, 15, 0.022);
-    }
-
     function addTail() {
-      const steps = 36000;
+      const steps = 44000;
       for (let i = 0; i < steps; i++) {
         const t = rand();
-        const angle = t * Math.PI * 1.2;
+        const angle = t * Math.PI * 1.55;
         const center = [
-          -4.02 - t * 1.68 + Math.sin(t * Math.PI) * 0.42,
-          -0.08 + Math.sin(t * Math.PI * 0.72) * 2.35,
-          0.08 + Math.sin(angle) * 0.48
+          -4.1 - t * 3.8,
+          0.05 + Math.sin(t * Math.PI) * 2.85,
+          0.12 + Math.cos(angle) * 0.9
         ];
         const ring = rand() * Math.PI * 2;
-        const tube = 0.3 - t * 0.08 + 0.08 * Math.sin(t * Math.PI);
-        const x = center[0] + Math.cos(ring) * tube * 0.58;
+        const tube = 0.32 + 0.12 * Math.sin(t * Math.PI);
+        const x = center[0] + Math.cos(ring) * tube * 0.68;
         const y = center[1] + Math.sin(ring) * tube;
         const z = center[2] + Math.cos(ring + Math.PI / 2) * tube;
-        const color = rand() > 0.78 ? palette.furShadow : rand() > 0.46 ? palette.furLight : palette.fur;
+        const band = Math.floor(t * 12) % 3 === 0;
+        const color = band ? palette.furDark : rand() > 0.65 ? palette.furLight : palette.fur;
         pushPoint(x, y, z, color, 17, 4, 0.035);
       }
     }
@@ -604,60 +454,61 @@
     }
 
     function furColor(x, y, z, nx, ny, nz) {
-      const underside = y < -0.86 && Math.abs(z) < 0.78 && x > -3.1;
-      const softShadow = y < -0.42 || Math.abs(z) > 1.18;
-      if (underside || rand() > 0.76) return palette.white;
-      if (softShadow && rand() > 0.56) return palette.furShadow;
-      if (rand() > 0.55) return palette.furLight;
+      const sideStripe = Math.abs(z) > 1.05 && y > -0.72 && Math.floor((x + 4.9) * 2.2) % 5 <= 1;
+      const backStripe = y > 0.88 && Math.abs(z) < 0.72 && Math.floor((x + 4.2) * 2.8) % 4 === 0;
+      const belly = y < -0.86 && Math.abs(z) < 0.78 && x > -3.1;
+      if (belly) return palette.white;
+      if (sideStripe || backStripe) return palette.furDark;
+      if (rand() > 0.72) return palette.furLight;
       return palette.fur;
     }
 
     function headColor(x, y, z) {
       const muzzleZone = x > 4.9 && y < 1.05 && Math.abs(z) < 0.88;
+      const foreheadStripe = y > 1.85 && Math.abs(z) < 0.56 && Math.floor((z + x) * 6) % 3 === 0;
+      const cheekStripe = x > 4.05 && Math.abs(z) > 0.85 && y > 0.7;
       if (muzzleZone) return palette.white;
-      if (rand() > 0.72) return palette.white;
-      if (rand() > 0.54) return palette.furLight;
+      if (foreheadStripe || cheekStripe) return palette.furDark;
+      if (rand() > 0.68) return palette.furLight;
       return palette.fur;
     }
 
-    function addCrownPatch() {
-      const center = [4.34, 1.18, 0];
-      const radius = [1.35, 1.18, 1.22];
-      const addSurfacePatch = (offsetX, offsetZ, widthX, widthZ, count, size) => {
-        for (let i = 0; i < count; i++) {
-          const angle = rand() * Math.PI * 2;
-          const spread = Math.sqrt(rand());
-          const x = center[0] + offsetX + Math.cos(angle) * widthX * spread;
-          const z = center[2] + offsetZ + Math.sin(angle) * widthZ * spread;
-          const nx = (x - center[0]) / radius[0];
-          const nz = (z - center[2]) / radius[2];
-          const cap = Math.max(0.08, 1 - nx * nx - nz * nz);
-          const y = center[1] + Math.sqrt(cap) * radius[1] + 0.075;
-          pushPoint(x, y, z, palette.crown, size, 8, 0.018);
-        }
-      };
-
-      addSurfacePatch(0.02, 0, 0.72, 0.48, 9200, 19);
-      addSurfacePatch(0.44, -0.22, 0.35, 0.23, 2600, 18);
-      addSurfacePatch(-0.42, 0.24, 0.36, 0.23, 2400, 18);
-      addSurfacePatch(0.22, 0.18, 0.38, 0.24, 2600, 18);
-      addFilledEllipsoid([4.36, 2.22, 0], [0.64, 0.08, 0.42], 2600, 8, palette.crown, 18, 0.008);
-    }
-
     function buildCat() {
-      addOrganicBody();
-      addOrganicHead();
-      addCrownPatch();
-      addOrganicLeg(2.72, -0.82, 0.0, true);
-      addOrganicLeg(2.72, 0.82, 0.25, true);
-      addOrganicLeg(-2.55, -0.88, 0.5, false);
-      addOrganicLeg(-2.55, 0.88, 0.75, false);
+      addEllipsoid([0, 0, 0], [4.6, 1.45, 1.48], 72000, 1, furColor, 17, 0.055);
+      addEllipsoid([2.05, -0.12, 0], [2.4, 1.1, 1.22], 22000, 1, furColor, 16, 0.05);
+      addEllipsoid([4.34, 1.18, 0], [1.35, 1.18, 1.22], 43000, 2, headColor, 16, 0.045);
+      addEllipsoid([5.42, 0.72, 0], [0.48, 0.38, 0.72], 12000, 2, () => palette.white, 15, 0.035);
+
+      addFilledEllipsoid([5.88, 0.78, 0], [0.16, 0.1, 0.22], 1300, 2, palette.nose, 16, 0.018);
+      addFilledEllipsoid([5.72, 1.12, -0.55], [0.16, 0.28, 0.055], 1800, 6, palette.eye, 22, 0.008);
+      addFilledEllipsoid([5.72, 1.12, 0.55], [0.16, 0.28, 0.055], 1800, 6, palette.eye, 22, 0.008);
+      addFilledEllipsoid([5.84, 1.12, -0.57], [0.065, 0.21, 0.026], 720, 6, palette.eyeDark, 22, 0.004);
+      addFilledEllipsoid([5.84, 1.12, 0.57], [0.065, 0.21, 0.026], 720, 6, palette.eyeDark, 22, 0.004);
+
+      const earL = [[3.72, 2.0, -0.72], [4.44, 3.85, -1.12], [5.12, 1.94, -1.12]];
+      const earR = [[3.72, 2.0, 0.72], [4.44, 3.85, 1.12], [5.12, 1.94, 1.12]];
+      addTriangleSurface(...earL, 15000, 3, () => rand() > 0.62 ? palette.furDark : palette.fur, 16, 0.032);
+      addTriangleSurface(...earR, 15000, 3, () => rand() > 0.62 ? palette.furDark : palette.fur, 16, 0.032);
+      addTriangleSurface([3.95, 2.1, -0.82], [4.45, 3.35, -1.04], [4.9, 2.08, -1.02], 5800, 3, () => palette.pink, 15, 0.022);
+      addTriangleSurface([3.95, 2.1, 0.82], [4.45, 3.35, 1.04], [4.9, 2.08, 1.02], 5800, 3, () => palette.pink, 15, 0.022);
+
+      for (const z of [-0.92, 0.92]) {
+        addEllipsoid([2.92, -1.72, z], [0.34, 1.12, 0.34], 10500, 5, (x, y) => y < -2.55 ? palette.white : palette.fur, 15, 0.035);
+        addFilledEllipsoid([3.07, -2.86, z], [0.55, 0.15, 0.38], 3600, 5, palette.white, 15, 0.015);
+        addEllipsoid([-2.68, -1.67, z], [0.42, 1.02, 0.42], 10000, 5, (x, y) => y < -2.55 ? palette.white : palette.fur, 15, 0.035);
+        addFilledEllipsoid([-2.52, -2.82, z], [0.62, 0.15, 0.43], 3600, 5, palette.white, 15, 0.015);
+        for (const toe of [-0.16, 0, 0.16]) {
+          addFilledEllipsoid([3.48, -2.91, z + toe], [0.07, 0.035, 0.06], 170, 5, palette.pink, 13, 0.004);
+          addFilledEllipsoid([-2.08, -2.88, z + toe], [0.07, 0.035, 0.06], 170, 5, palette.pink, 13, 0.004);
+        }
+      }
 
       addTail();
 
       for (const side of [-1, 1]) {
-        addLine([5.74, 0.72, side * 0.34], [6.92, 0.82, side * 1.55], 620, 7, palette.whisker, 7, 0.008);
-        addLine([5.74, 0.62, side * 0.38], [7.02, 0.62, side * 1.68], 620, 7, palette.whisker, 7, 0.008);
+        addLine([5.75, 0.58, side * 0.38], [6.95, 0.92, side * 1.8], 720, 7, palette.whisker, 8, 0.01);
+        addLine([5.75, 0.47, side * 0.42], [7.05, 0.44, side * 1.95], 720, 7, palette.whisker, 8, 0.01);
+        addLine([5.75, 0.36, side * 0.38], [6.8, 0.12, side * 1.8], 720, 7, palette.whisker, 8, 0.01);
       }
 
       for (let z = -0.74; z <= 0.74; z += 0.035) {
@@ -683,10 +534,7 @@
       uPixelRatio: { value: Math.min(window.devicePixelRatio || 1, 2) },
       uSizeScale: { value: Number(sizeInput.value) },
       uPausedMix: { value: 1 },
-      uGlow: { value: 0.16 },
-      uHueShift: { value: 0 },
-      uPatchStrength: { value: Number(patchInput.value) },
-      uWalkStrength: { value: 1 }
+      uGlow: { value: 0.16 }
     };
 
     const material = new THREE.ShaderMaterial({
@@ -705,7 +553,6 @@
         uniform float uTime;
         uniform float uPixelRatio;
         uniform float uSizeScale;
-        uniform float uWalkStrength;
 
         mat2 rot(float a) {
           float s = sin(a);
@@ -717,36 +564,27 @@
           vec3 p = position;
           float t = uTime;
           float wave = sin(t * 3.2 + aSeed);
-          float gait = t * 4.8;
           float shimmer = sin(t * 7.0 + aSeed * 1.7) * 0.016;
 
           if (aRegion < 2.0) {
-            float stride = sin(gait);
-            p.y *= 1.0 + stride * 0.012 * uWalkStrength;
-            p.y += sin(gait * 0.5) * 0.06 * uWalkStrength;
-            p.x += sin(gait + p.x * 0.35) * 0.025 * uWalkStrength;
+            p.y *= 1.0 + sin(t * 2.0) * 0.018;
+            p.y += sin(t * 3.0) * 0.055;
           } else if (aRegion < 3.0) {
-            p.y += sin(gait * 0.5 + 0.7) * 0.085 * uWalkStrength;
-            p.zx = rot(sin(t * 1.4) * 0.04 + sin(gait) * 0.025 * uWalkStrength) * p.zx;
+            p.y += sin(t * 2.6) * 0.075;
+            p.zx = rot(sin(t * 1.4) * 0.055) * p.zx;
           } else if (aRegion < 4.0) {
             p.x += sin(t * 5.4 + aSeed) * 0.025;
             p.y += sin(t * 5.1 + aSeed) * 0.035;
           } else if (aRegion < 5.0) {
             float f = clamp((-p.x - 3.7) / 4.5, 0.0, 1.0);
-            p.z += sin(t * 2.1 + f * 4.2 + aSeed * 0.02) * f * (0.34 + 0.18 * uWalkStrength);
-            p.y += cos(t * 1.7 + f * 3.2) * f * (0.18 + 0.08 * uWalkStrength);
+            p.z += sin(t * 2.1 + f * 4.2 + aSeed * 0.02) * f * 0.52;
+            p.y += cos(t * 1.7 + f * 3.2) * f * 0.25;
           } else if (aRegion < 6.0) {
-            float legPhase = fract(aRegion) * 8.97598;
-            float lower = smoothstep(-1.15, -2.75, p.y);
-            float lift = max(0.0, sin(gait + legPhase));
-            float reach = cos(gait + legPhase);
-            p.x += reach * lower * 0.34 * uWalkStrength;
-            p.y += lift * lower * 0.28 * uWalkStrength;
-            p.z += sin(gait + legPhase) * lower * 0.035 * uWalkStrength;
+            p.y += max(0.0, sin(t * 4.0 + p.x * 1.3)) * 0.12;
+            p.x += sin(t * 4.0 + p.z * 2.0) * 0.035;
           } else if (aRegion < 7.0) {
             float blink = pow(max(0.0, sin(t * 2.7 - 1.2)), 28.0);
-            p.y = mix(p.y, 1.18, blink * 0.88);
-            p.x += blink * 0.035;
+            p.y -= blink * 0.18;
           } else if (aRegion < 8.0) {
             p.x += sin(t * 1.8 + aSeed) * 0.035;
             p.z += sin(t * 2.2 + aSeed) * 0.025;
@@ -761,35 +599,21 @@
         }
       `,
       fragmentShader: `
-      varying vec3 vColor;
-      varying float vRegion;
-      uniform float uGlow;
-      uniform float uHueShift;
-      uniform float uPatchStrength;
+        varying vec3 vColor;
+        varying float vRegion;
+        uniform float uGlow;
 
-      vec3 hueShift(vec3 color, float angle) {
-        vec3 axis = normalize(vec3(1.0, 1.0, 1.0));
-        float s = sin(angle);
-        float c = cos(angle);
-        return color * c + cross(axis, color) * s + axis * dot(axis, color) * (1.0 - c);
-      }
-
-      void main() {
-        vec2 uv = gl_PointCoord - vec2(0.5);
-        float d = length(uv);
-        if (d > 0.5) discard;
-        float core = smoothstep(0.5, 0.04, d);
-        float halo = smoothstep(0.5, 0.18, d) * uGlow;
-        vec3 shiftedColor = clamp(hueShift(vColor, uHueShift), 0.0, 1.0);
-        vec3 glowColor = shiftedColor * (1.0 + halo * 0.45);
-        float alpha = core * (0.72 + halo * 0.12);
-        if (vRegion >= 8.0 && vRegion < 9.0) {
-          alpha *= uPatchStrength;
-          glowColor = mix(vec3(0.08, 0.08, 0.08), glowColor, min(uPatchStrength, 1.0));
+        void main() {
+          vec2 uv = gl_PointCoord - vec2(0.5);
+          float d = length(uv);
+          if (d > 0.5) discard;
+          float core = smoothstep(0.5, 0.04, d);
+          float halo = smoothstep(0.5, 0.18, d) * uGlow;
+          vec3 glowColor = vColor * (1.0 + halo * 0.45);
+          float alpha = core * (0.72 + halo * 0.12);
+          if (alpha < 0.18) discard;
+          gl_FragColor = vec4(glowColor, alpha);
         }
-        if (alpha < 0.18) discard;
-        gl_FragColor = vec4(glowColor, alpha);
-      }
       `
     });
 
@@ -846,19 +670,13 @@
     let targetPitch = 0.42;
     let yaw = targetYaw;
     let pitch = targetPitch;
-    const minDistance = Number(zoomInput.min);
-    const maxDistance = Number(zoomInput.max);
-    let distance = Number(zoomInput.value);
+    let distance = 15.4;
     let dragging = false;
-    let pinching = false;
-    let pinchStartGap = 0;
-    let pinchStartDistance = distance;
     let lastX = 0;
     let lastY = 0;
     let paused = false;
     let autoSpin = true;
     let speed = Number(speedInput.value);
-    const activePointers = new Map();
 
     function setPressed(button, value) {
       button.setAttribute("aria-pressed", String(value));
@@ -866,7 +684,7 @@
 
     function updateCamera() {
       pitch = Math.max(-0.18, Math.min(1.18, pitch));
-      distance = Math.max(minDistance, Math.min(maxDistance, distance));
+      distance = Math.max(8.5, Math.min(29, distance));
       const cp = Math.cos(pitch);
       camera.position.set(
         Math.sin(yaw) * cp * distance,
@@ -874,22 +692,6 @@
         Math.cos(yaw) * cp * distance
       );
       camera.lookAt(0.9, 0.35, 0);
-    }
-
-    function setDistance(value) {
-      distance = Math.max(minDistance, Math.min(maxDistance, value));
-      zoomInput.value = distance.toFixed(1);
-      zoomValue.textContent = distance.toFixed(1);
-    }
-
-    if (window.innerWidth <= 720) {
-      setDistance(25);
-    }
-
-    function getPointerGap() {
-      const points = [...activePointers.values()];
-      if (points.length < 2) return 0;
-      return Math.hypot(points[0].x - points[1].x, points[0].y - points[1].y);
     }
 
     pauseButton.addEventListener("click", () => {
@@ -901,12 +703,6 @@
     spinButton.addEventListener("click", () => {
       autoSpin = !autoSpin;
       setPressed(spinButton, autoSpin);
-    });
-
-    walkButton.addEventListener("click", () => {
-      const walking = uniforms.uWalkStrength.value < 0.5;
-      uniforms.uWalkStrength.value = walking ? 1 : 0;
-      setPressed(walkButton, walking);
     });
 
     glowButton.addEventListener("click", () => {
@@ -929,45 +725,14 @@
       sizeValue.textContent = uniforms.uSizeScale.value.toFixed(2);
     });
 
-    zoomInput.addEventListener("input", () => {
-      setDistance(Number(zoomInput.value));
-    });
-
-    hueInput.addEventListener("input", () => {
-      const degrees = Number(hueInput.value);
-      uniforms.uHueShift.value = degrees * Math.PI / 180;
-      hueValue.textContent = String(degrees);
-    });
-
-    patchInput.addEventListener("input", () => {
-      uniforms.uPatchStrength.value = Number(patchInput.value);
-      patchValue.textContent = uniforms.uPatchStrength.value.toFixed(2);
-    });
-
     canvas.addEventListener("pointerdown", (event) => {
-      activePointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
+      dragging = true;
       lastX = event.clientX;
       lastY = event.clientY;
       canvas.setPointerCapture(event.pointerId);
-      dragging = activePointers.size === 1;
-      if (activePointers.size === 2) {
-        pinching = true;
-        dragging = false;
-        pinchStartGap = getPointerGap();
-        pinchStartDistance = distance;
-      }
     });
 
     canvas.addEventListener("pointermove", (event) => {
-      if (!activePointers.has(event.pointerId)) return;
-      activePointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
-      if (activePointers.size >= 2) {
-        const gap = getPointerGap();
-        if (pinching && gap > 0 && pinchStartGap > 0) {
-          setDistance(pinchStartDistance * pinchStartGap / gap);
-        }
-        return;
-      }
       if (!dragging) return;
       const dx = event.clientX - lastX;
       const dy = event.clientY - lastY;
@@ -977,26 +742,14 @@
       targetPitch += dy * 0.0045;
     });
 
-    function endPointer(event) {
-      activePointers.delete(event.pointerId);
-      if (canvas.hasPointerCapture(event.pointerId)) {
-        canvas.releasePointerCapture(event.pointerId);
-      }
-      pinching = false;
-      dragging = activePointers.size === 1;
-      const remaining = [...activePointers.values()][0];
-      if (remaining) {
-        lastX = remaining.x;
-        lastY = remaining.y;
-      }
-    }
-
-    canvas.addEventListener("pointerup", endPointer);
-    canvas.addEventListener("pointercancel", endPointer);
+    canvas.addEventListener("pointerup", (event) => {
+      dragging = false;
+      canvas.releasePointerCapture(event.pointerId);
+    });
 
     canvas.addEventListener("wheel", (event) => {
       event.preventDefault();
-      setDistance(distance + Math.sign(event.deltaY) * 1.1);
+      distance += Math.sign(event.deltaY) * 1.1;
     }, { passive: false });
 
     function resize() {
