@@ -108,6 +108,47 @@
       border-color: transparent;
     }
 
+    .slider-drawer {
+      border-top: 1px solid var(--line);
+      padding-top: 10px;
+    }
+
+    .slider-drawer summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 34px;
+      color: var(--ink);
+      cursor: pointer;
+      font-size: 0.86rem;
+      list-style: none;
+      user-select: none;
+    }
+
+    .slider-drawer summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .slider-drawer summary::after {
+      content: "";
+      width: 0.46rem;
+      height: 0.46rem;
+      border-right: 2px solid var(--muted);
+      border-bottom: 2px solid var(--muted);
+      transform: rotate(45deg) translateY(-2px);
+      transition: transform 160ms ease;
+    }
+
+    .slider-drawer[open] summary::after {
+      transform: rotate(225deg) translate(-1px, -1px);
+    }
+
+    .slider-stack {
+      display: grid;
+      gap: 2px;
+      padding-top: 6px;
+    }
+
     .field {
       display: grid;
       grid-template-columns: 74px 1fr 42px;
@@ -186,6 +227,10 @@
         grid-template-columns: 62px 1fr 36px;
       }
 
+      .slider-drawer summary {
+        min-height: 32px;
+      }
+
       button {
         font-size: 0.82rem;
       }
@@ -217,16 +262,26 @@
         <button id="spin" type="button" aria-pressed="true" title="Toggle automatic turntable">Spin</button>
         <button id="glow" type="button" aria-pressed="false" title="Toggle stronger particle glow">Glow</button>
       </div>
-      <label class="field">
-        Speed
-        <input id="speed" type="range" min="0.1" max="2.4" value="1" step="0.05" />
-        <output id="speedValue">1.00</output>
-      </label>
-      <label class="field">
-        Size
-        <input id="size" type="range" min="0.45" max="1.65" value="0.74" step="0.01" />
-        <output id="sizeValue">0.74</output>
-      </label>
+      <details class="slider-drawer">
+        <summary>Sliders</summary>
+        <div class="slider-stack">
+          <label class="field">
+            Effect
+            <input id="strength" type="range" min="0" max="2.5" value="1" step="0.05" />
+            <output id="strengthValue">1.00</output>
+          </label>
+          <label class="field">
+            Speed
+            <input id="speed" type="range" min="0.1" max="2.4" value="1" step="0.05" />
+            <output id="speedValue">1.00</output>
+          </label>
+          <label class="field">
+            Size
+            <input id="size" type="range" min="0.45" max="1.65" value="0.74" step="0.01" />
+            <output id="sizeValue">0.74</output>
+          </label>
+        </div>
+      </details>
     </section>
   </main>
 
@@ -245,8 +300,10 @@
     const pauseButton = document.querySelector("#pause");
     const spinButton = document.querySelector("#spin");
     const glowButton = document.querySelector("#glow");
+    const strengthInput = document.querySelector("#strength");
     const speedInput = document.querySelector("#speed");
     const sizeInput = document.querySelector("#size");
+    const strengthValue = document.querySelector("#strengthValue");
     const speedValue = document.querySelector("#speedValue");
     const sizeValue = document.querySelector("#sizeValue");
     const particleCount = document.querySelector("#particleCount");
@@ -540,6 +597,7 @@
       uSizeScale: { value: Number(sizeInput.value) },
       uPausedMix: { value: 1 },
       uGlow: { value: 0.16 },
+      uRippleStrength: { value: Number(strengthInput.value) },
       uRippleCount: { value: 0 },
       uRipples: { value: rippleSlots }
     };
@@ -560,6 +618,7 @@
         uniform float uTime;
         uniform float uPixelRatio;
         uniform float uSizeScale;
+        uniform float uRippleStrength;
         uniform float uRippleCount;
         uniform vec4 uRipples[8];
 
@@ -623,14 +682,14 @@
             float tug = exp(-pow((dist - tugRadius) / 2.4, 2.0));
             float rebound = sin(age * 12.0 - dist * 2.35) * exp(-age * 1.65);
 
-            vec3 blastVector = normalize(direction + jitter * 0.32) * blast * 7.5;
-            vec3 shockVector = direction * shock * fade * 3.15;
-            vec3 neighborVector = -direction * tug * rebound * 1.65;
+            vec3 blastVector = normalize(direction + jitter * 0.32) * blast * 7.5 * uRippleStrength;
+            vec3 shockVector = direction * shock * fade * 3.15 * uRippleStrength;
+            vec3 neighborVector = -direction * tug * rebound * 1.65 * uRippleStrength;
             vec3 swirlAxis = normalize(cross(direction, vec3(0.0, 1.0, 0.2)) + jitter * 0.1);
-            vec3 swirlVector = swirlAxis * shock * fade * sin(age * 9.5 + aSeed) * 0.82;
+            vec3 swirlVector = swirlAxis * shock * fade * sin(age * 9.5 + aSeed) * 0.82 * uRippleStrength;
 
             p += blastVector + shockVector + neighborVector + swirlVector;
-            p.y += (blast * 1.35 + shock * fade * 0.45) * sin(age * 10.0 + aSeed * 0.03);
+            p.y += (blast * 1.35 + shock * fade * 0.45) * sin(age * 10.0 + aSeed * 0.03) * uRippleStrength;
           }
 
           p += normalize(vec3(sin(aSeed), cos(aSeed * 1.3), sin(aSeed * 0.7))) * shimmer;
@@ -861,6 +920,11 @@
       detailMaterial.blending = THREE.NormalBlending;
       detailMaterial.needsUpdate = true;
       setPressed(glowButton, on);
+    });
+
+    strengthInput.addEventListener("input", () => {
+      uniforms.uRippleStrength.value = Number(strengthInput.value);
+      strengthValue.textContent = uniforms.uRippleStrength.value.toFixed(2);
     });
 
     speedInput.addEventListener("input", () => {
