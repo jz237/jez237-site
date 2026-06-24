@@ -480,10 +480,10 @@
       addEllipsoid([5.42, 0.72, 0], [0.48, 0.38, 0.72], 12000, 2, () => palette.white, 15, 0.035);
 
       addFilledEllipsoid([5.88, 0.78, 0], [0.16, 0.1, 0.22], 1300, 2, palette.nose, 16, 0.018);
-      addFilledEllipsoid([5.72, 1.12, -0.55], [0.16, 0.28, 0.055], 1800, 6, palette.eye, 22, 0.008);
-      addFilledEllipsoid([5.72, 1.12, 0.55], [0.16, 0.28, 0.055], 1800, 6, palette.eye, 22, 0.008);
-      addFilledEllipsoid([5.84, 1.12, -0.57], [0.065, 0.21, 0.026], 720, 6, palette.eyeDark, 22, 0.004);
-      addFilledEllipsoid([5.84, 1.12, 0.57], [0.065, 0.21, 0.026], 720, 6, palette.eyeDark, 22, 0.004);
+      addFilledEllipsoid([5.72, 1.12, -0.55], [0.17, 0.2, 0.078], 1900, 6, palette.eye, 22, 0.007);
+      addFilledEllipsoid([5.72, 1.12, 0.55], [0.17, 0.2, 0.078], 1900, 6, palette.eye, 22, 0.007);
+      addFilledEllipsoid([5.84, 1.12, -0.57], [0.058, 0.13, 0.032], 760, 6, palette.eyeDark, 22, 0.004);
+      addFilledEllipsoid([5.84, 1.12, 0.57], [0.058, 0.13, 0.032], 760, 6, palette.eyeDark, 22, 0.004);
 
       const earL = [[3.72, 2.0, -0.72], [4.44, 3.85, -1.12], [5.12, 1.94, -1.12]];
       const earR = [[3.72, 2.0, 0.72], [4.44, 3.85, 1.12], [5.12, 1.94, 1.12]];
@@ -584,7 +584,8 @@
             p.x += sin(t * 4.0 + p.z * 2.0) * 0.035;
           } else if (aRegion < 7.0) {
             float blink = pow(max(0.0, sin(t * 2.7 - 1.2)), 28.0);
-            p.y -= blink * 0.18;
+            p.y = mix(p.y, 1.12, blink * 0.92);
+            p.x += blink * 0.025;
           } else if (aRegion < 8.0) {
             p.x += sin(t * 1.8 + aSeed) * 0.035;
             p.z += sin(t * 2.2 + aSeed) * 0.025;
