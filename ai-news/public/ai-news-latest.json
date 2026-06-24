@@ -1,8 +1,8 @@
 {
-  "updatedAt": "2026-06-24T20:03:08.459351+00:00",
+  "updatedAt": "2026-06-24T21:42:28.473127+00:00",
   "items": [
     {
-      "title": "Rajarshi Misra, Aditya Sharma, Vinti Agarwal, Hari Om Aggrawal",
+      "title": "Self-Recognition Finetuning can Prevent and Reverse Emergent Misalignment",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -10,12 +10,76 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-24T20:03:34.297345+00:00",
+      "published": "2026-06-24T21:42:38.248830+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-24T20:03:08.459351+00:00",
+      "lastSeen": "2026-06-24T21:42:28.473127+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
+    },
+    {
+      "title": "AI researchers continue to leave Google for its rivals",
+      "url": "https://techcrunch.com/2026/06/24/ai-researchers-continue-to-leave-google-for-its-rivals",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Top AI researchers Jonas Adler and Alexander Pritzel are leaving Google for Anthropic, following departures from top scientists Noam Shazeer and John Jumper.",
+      "image": "https://techcrunch.com/wp-content/uploads/2023/02/glitched-google-logo.jpg?resize=1200%2C645",
+      "published": "2026-06-24T21:42:07+00:00",
+      "firstSeen": "2026-06-24T21:42:28.473127+00:00",
+      "lastSeen": "2026-06-24T21:42:28.473127+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 6.6898
+    },
+    {
+      "title": "The memory chip crunch is paying off for this U.S. company",
+      "url": "https://techcrunch.com/2026/06/24/the-memory-chip-crunch-is-paying-off-for-this-u-s-company",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Revenue quadrupled to $41.45 billion compared with the same period a year ago. The company's profit, meanwhile, rose from $1.88 billion to an incredible $28.2 billion year-over-year.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/micron-HQ-GettyImages-2147904174.jpg?resize=1200%2C801",
+      "published": "2026-06-24T21:30:55+00:00",
+      "firstSeen": "2026-06-24T21:42:28.473127+00:00",
+      "lastSeen": "2026-06-24T21:42:28.473127+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.6841
+    },
+    {
+      "title": "A24 Knows You’re Mad About the Google AI Collab",
+      "url": "https://www.wired.com/story/a24-knows-youre-mad-about-the-google-ai-collab",
+      "source": "Wired AI",
+      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Indie movie fans are upset about Google DeepMind’s $75 million investment in the studio, which comes as AI companies are deepening their influence in Hollywood.",
+      "image": "https://media.wired.com/photos/6a3b30e85935a4d59defead5/master/pass/Google-A24-Taste-AI-Partnership-Culture.jpg",
+      "published": "2026-06-24T21:05:51+00:00",
+      "firstSeen": "2026-06-24T21:42:28.473127+00:00",
+      "lastSeen": "2026-06-24T21:42:28.473127+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 6.2715
+    },
+    {
+      "title": "Micron’s revenue quadrupled as AI memory demand pushes gross margins above 81 percent",
+      "url": "https://thenextweb.com/news/micron-q3-fy2026-earnings-revenue-hbm-ai-memory",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Micron Technology posted fiscal third-quarter revenue of nearly $42bn, quadrupling from just over $9bn a year earlier and beating Wall Street estimates by a wide margin. The results, reported on Tuesday, confirm that the company riding the AI memory boom hardest is the one whose stock has already climbed roughly 700 percent over the past [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/micron-q3-fy2026-earnings-revenue-hbm-ai-memory.avif",
+      "published": "2026-06-24T20:37:39+00:00",
+      "firstSeen": "2026-06-24T21:42:28.473127+00:00",
+      "lastSeen": "2026-06-24T21:42:28.473127+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.5175
     },
     {
       "title": "Companies are scrambling to stop employees from maxing out AI budgets with small tasks",
@@ -28,10 +92,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/claude-app-centered-in-ai-apps-GettyImages-2167861906.jpg?resize=1200%2C801",
       "published": "2026-06-24T20:09:45+00:00",
       "firstSeen": "2026-06-24T21:00:01.524740+00:00",
-      "lastSeen": "2026-06-24T21:00:01.524740+00:00",
+      "lastSeen": "2026-06-24T21:42:28.473127+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3647
+      "score": 3.3438
     },
     {
       "title": "Qualcomm lands Meta as first named customer for its Dragonfly data centre chips",
@@ -44,10 +108,10 @@
       "image": "https://media.thenextweb.com/2026/06/qualcomm-dragonfly-meta-ai-data-center-chips-modular.avif",
       "published": "2026-06-24T19:44:19+00:00",
       "firstSeen": "2026-06-24T21:00:01.524740+00:00",
-      "lastSeen": "2026-06-24T21:00:01.524740+00:00",
+      "lastSeen": "2026-06-24T21:42:28.473127+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -0.9879
+      "score": -1.0086
     },
     {
       "title": "Congresswoman denies staff used AI to write defense funding amendment",
@@ -63,7 +127,23 @@
       "lastSeen": "2026-06-24T20:03:08.459351+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3467
+      "score": 2.2978
+    },
+    {
+      "title": "Nvidia CEO Jensen Huang says smuggled data centres are a dead end and national security comes first",
+      "url": "https://thenextweb.com/news/nvidia-huang-national-security-smuggled-chips-dead-end",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Nvidia CEO Jensen Huang told shareholders on Wednesday that if a commercial opportunity conflicts with US national security, the company would prioritise American interests. “National security comes first,” Huang said in a session shortly after the company’s annual stockholder meeting concluded. Huang addressed the chip smuggling problem directly, arguing that anyone trying to build AI [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/nvidia-huang-national-security-smuggled-chips-dead-end.avif",
+      "published": "2026-06-24T19:19:16+00:00",
+      "firstSeen": "2026-06-24T21:42:28.473127+00:00",
+      "lastSeen": "2026-06-24T21:42:28.473127+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.0794
     },
     {
       "title": "Gemini 3.5 Flash can now see and control your screen, and Google wants enterprises to trust it",
@@ -76,11 +156,11 @@
       "image": "https://media.thenextweb.com/2026/06/google-gemini-3-5-flash-computer-use-built-in-tool.avif",
       "published": "2026-06-24T18:46:18+00:00",
       "firstSeen": "2026-06-24T20:00:01.336973+00:00",
-      "lastSeen": "2026-06-24T20:03:08.459351+00:00",
+      "lastSeen": "2026-06-24T21:42:28.473127+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 22.6116
+      "score": 22.5638
     },
     {
       "title": "I Met With China’s Top AI Experts. They’re Freaking Out, Too",
@@ -93,10 +173,10 @@
       "image": "https://media.wired.com/photos/6a3af3bc66e0743c653aa81f/master/pass/AI-Lab-America-China-Have-No-Choice-But-to-Work-Together-to-Secure-AI-Open-Frontier-Business.jpg",
       "published": "2026-06-24T18:45:00+00:00",
       "firstSeen": "2026-06-24T19:00:01.896884+00:00",
-      "lastSeen": "2026-06-24T20:03:08.459351+00:00",
+      "lastSeen": "2026-06-24T21:42:28.473127+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.6509
+      "score": 3.6032
     },
     {
       "title": "v1.86.7",
@@ -109,10 +189,10 @@
       "image": "https://opengraph.githubassets.com/f59c243b0148d5a2fab62753a0c40a915513d167970236a993ecf0171a387056/BerriAI/litellm/releases/tag/v1.86.7",
       "published": "2026-06-24T18:44:09+00:00",
       "firstSeen": "2026-06-24T19:00:01.896884+00:00",
-      "lastSeen": "2026-06-24T20:03:08.459351+00:00",
+      "lastSeen": "2026-06-24T21:42:28.473127+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9505
+      "score": 2.9028
     },
     {
       "title": "Runpod hits $1bn valuation as the AI compute crunch bites",
@@ -125,10 +205,10 @@
       "image": "https://media.thenextweb.com/2026/06/Runpod-Inc-founders.avif",
       "published": "2026-06-24T18:27:41+00:00",
       "firstSeen": "2026-06-24T20:00:01.336973+00:00",
-      "lastSeen": "2026-06-24T20:03:08.459351+00:00",
+      "lastSeen": "2026-06-24T21:42:28.473127+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1024
+      "score": 2.0551
     },
     {
       "title": "Quoting Tom MacWright",
@@ -141,10 +221,10 @@
       "image": "",
       "published": "2026-06-24T18:13:51+00:00",
       "firstSeen": "2026-06-24T19:00:01.896884+00:00",
-      "lastSeen": "2026-06-24T20:03:08.459351+00:00",
+      "lastSeen": "2026-06-24T21:42:28.473127+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3357
+      "score": 3.2887
     },
     {
       "title": "Tissium raises €60M to take its sutureless nerve glue to the US",
@@ -157,10 +237,10 @@
       "image": "https://media.thenextweb.com/2026/06/TISSIUM-logo.avif",
       "published": "2026-06-24T18:12:31+00:00",
       "firstSeen": "2026-06-24T20:00:01.336973+00:00",
-      "lastSeen": "2026-06-24T20:03:08.459351+00:00",
+      "lastSeen": "2026-06-24T21:42:28.473127+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0951
+      "score": 2.0481
     },
     {
       "title": "Congress wants Big Tech to pay AI’s power bills",
@@ -173,10 +253,10 @@
       "image": "https://media.thenextweb.com/2026/06/US-Capitol-Dome.avif",
       "published": "2026-06-24T17:51:43+00:00",
       "firstSeen": "2026-06-24T19:00:01.896884+00:00",
-      "lastSeen": "2026-06-24T20:03:08.459351+00:00",
+      "lastSeen": "2026-06-24T21:42:28.473127+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0851
+      "score": 2.0385
     },
     {
       "title": "Deezer launches a remix tool that does not use AI and pays artists for every stream",
@@ -189,10 +269,10 @@
       "image": "https://media.thenextweb.com/2026/06/deezer-remix-lab-fan-remixes-no-ai-artist-consent.avif",
       "published": "2026-06-24T17:37:56+00:00",
       "firstSeen": "2026-06-24T19:00:01.896884+00:00",
-      "lastSeen": "2026-06-24T20:03:08.459351+00:00",
+      "lastSeen": "2026-06-24T21:42:28.473127+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9785
+      "score": 4.9323
     },
     {
       "title": "Morgan Stanley doubles its China robot forecast again",
@@ -205,10 +285,10 @@
       "image": "https://media.thenextweb.com/2026/05/recycling-humanoid-robots-waste-labour-crisis.avif",
       "published": "2026-06-24T17:26:38+00:00",
       "firstSeen": "2026-06-24T19:00:01.896884+00:00",
-      "lastSeen": "2026-06-24T20:03:08.459351+00:00",
+      "lastSeen": "2026-06-24T21:42:28.473127+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0731
+      "score": 2.0271
     },
     {
       "title": "The $27 million Al proxy war over Alex Bores ends in a draw",
@@ -224,7 +304,7 @@
       "lastSeen": "2026-06-24T20:03:08.459351+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.2823
+      "score": 6.2364
     },
     {
       "title": "Riviera Partners acquires AI startup recruiter Lateral Labs as the talent war reshapes executive search",
@@ -237,10 +317,10 @@
       "image": "https://media.thenextweb.com/2026/06/riviera-partners-acquires-lateral-labs-ai-recruiting.avif",
       "published": "2026-06-24T17:18:48+00:00",
       "firstSeen": "2026-06-24T19:00:01.896884+00:00",
-      "lastSeen": "2026-06-24T20:03:08.459351+00:00",
+      "lastSeen": "2026-06-24T21:42:28.473127+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.4694
+      "score": 4.4236
     },
     {
       "title": "Facebook rolls out an AI companion app for creators",
@@ -253,10 +333,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/03/facebook-logo-on-phone.jpg?resize=1200%2C800",
       "published": "2026-06-24T17:16:24+00:00",
       "firstSeen": "2026-06-24T17:17:13.376808+00:00",
-      "lastSeen": "2026-06-24T20:03:08.459351+00:00",
+      "lastSeen": "2026-06-24T21:42:28.473127+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1083
+      "score": 5.0625
     },
     {
       "title": "Hyundai workers vote to strike over robot fears",
@@ -272,7 +352,7 @@
       "lastSeen": "2026-06-24T20:03:08.459351+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0669
+      "score": 2.0212
     },
     {
       "title": "Your AI coding tools may soon cost more than you",
@@ -288,7 +368,7 @@
       "lastSeen": "2026-06-24T20:03:08.459351+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 1.3617
+      "score": 1.3163
     },
     {
       "title": "Figma adds code layers to the canvas and lets users build custom AI plugins at Config 2026",
@@ -304,7 +384,7 @@
       "lastSeen": "2026-06-24T20:03:08.459351+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.4566
+      "score": 3.4113
     },
     {
       "title": "Mistral OCR 4 targets the enterprise back office",
@@ -321,7 +401,7 @@
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.0561
+      "score": 14.0108
     },
     {
       "title": "Agility Robotics plans to go public via SPAC in a $2.5B deal",
@@ -334,10 +414,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2023/03/Agility-Robotics-DIGIT-9.jpg?resize=1200%2C675",
       "published": "2026-06-24T16:48:43+00:00",
       "firstSeen": "2026-06-24T17:00:01.330867+00:00",
-      "lastSeen": "2026-06-24T20:03:08.459351+00:00",
+      "lastSeen": "2026-06-24T21:42:28.473127+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1953
+      "score": 2.1501
     },
     {
       "title": "xLight’s $350m bet to break ASML’s chip monopoly",
@@ -353,7 +433,7 @@
       "lastSeen": "2026-06-24T19:00:01.896884+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0495
+      "score": 2.0045
     },
     {
       "title": "Introducing computer use in Gemini 3.5 Flash",
@@ -366,11 +446,11 @@
       "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/gemini-3-5__keyword__blog-header__light_7VsKV.width-1300.png",
       "published": "2026-06-24T16:30:01+00:00",
       "firstSeen": "2026-06-24T17:00:01.330867+00:00",
-      "lastSeen": "2026-06-24T20:03:08.459351+00:00",
+      "lastSeen": "2026-06-24T21:42:28.473127+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 17.7266
+      "score": 17.6819
     },
     {
       "title": "Ferrari replaces its marketing chief one month after the Luce EV reveal wiped billions off its stock",
@@ -386,7 +466,7 @@
       "lastSeen": "2026-06-24T19:00:01.896884+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.046
+      "score": 2.0012
     },
     {
       "title": "Figma now has AI motion graphics and shader tools",
@@ -402,7 +482,7 @@
       "lastSeen": "2026-06-24T20:03:08.459351+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.3497
+      "score": 5.3053
     },
     {
       "title": "Figma adds code layers, support for animations, more AI features in new update",
@@ -415,10 +495,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/Config-product-feat.jpg?resize=1200%2C675",
       "published": "2026-06-24T16:15:00+00:00",
       "firstSeen": "2026-06-24T17:00:01.330867+00:00",
-      "lastSeen": "2026-06-24T20:03:08.459351+00:00",
+      "lastSeen": "2026-06-24T21:42:28.473127+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1797
+      "score": 2.1353
     },
     {
       "title": "Accelerating Transformers Fine-Tuning with NVIDIA NeMo AutoModel",
@@ -431,10 +511,10 @@
       "image": "https://cdn-uploads.huggingface.co/production/uploads/690d0a6c2c5acfe0e1f4777d/1N4GjIYBsZ6RCReRx_qBB.png",
       "published": "2026-06-24T16:00:13+00:00",
       "firstSeen": "2026-06-24T17:00:01.330867+00:00",
-      "lastSeen": "2026-06-24T20:03:08.459351+00:00",
+      "lastSeen": "2026-06-24T21:42:28.473127+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.313
+      "score": 2.2688
     },
     {
       "title": "Slate Auto prices its Bezos-backed EV pickup at $24,950 and opens preorders with 180,000 reservations",
@@ -450,7 +530,7 @@
       "lastSeen": "2026-06-24T18:00:01.764061+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0299
+      "score": 1.9858
     },
     {
       "title": "Anthropic Launches Claude Tag, Bringing AI Agents Into Slack",
@@ -463,11 +543,11 @@
       "image": "https://assets.techrepublic.com/uploads/2026/06/claude-tag.jpg?f=jpeg",
       "published": "2026-06-24T15:52:37+00:00",
       "firstSeen": "2026-06-24T17:00:01.330867+00:00",
-      "lastSeen": "2026-06-24T20:03:08.459351+00:00",
+      "lastSeen": "2026-06-24T21:42:28.473127+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 24.9295
+      "score": 24.8855
     },
     {
       "title": "China Telecom’s $1.7bn server deal hands Huawei a big win",
@@ -483,7 +563,7 @@
       "lastSeen": "2026-06-24T18:00:01.764061+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.028
+      "score": 1.9841
     },
     {
       "title": "Alibaba Cloud Adds Fifth Japan Data Center as AI Platform Push Expands",
@@ -496,10 +576,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/06/ChatGPT-Image-Jun-24-2026-11_41_53-PM-1.png?f=jpeg",
       "published": "2026-06-24T15:45:56+00:00",
       "firstSeen": "2026-06-24T17:00:01.330867+00:00",
-      "lastSeen": "2026-06-24T20:03:08.459351+00:00",
+      "lastSeen": "2026-06-24T21:42:28.473127+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1265
+      "score": 3.0826
     },
     {
       "title": "Zoox redesigns its robotaxi interior ahead of commercial launch, with NHTSA approval still pending",
@@ -515,7 +595,7 @@
       "lastSeen": "2026-06-24T18:00:01.764061+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.821
+      "score": 3.7773
     },
     {
       "title": "Qualcomm in talks to design custom chips for ByteDance",
@@ -531,7 +611,7 @@
       "lastSeen": "2026-06-24T18:00:01.764061+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0158
+      "score": 1.9724
     },
     {
       "title": "The Trump White House Is Over Anthropic CEO Dario Amodei",
@@ -544,10 +624,10 @@
       "image": "https://media.wired.com/photos/6a3b1efdfb31b3da3e9adc12/master/pass/politics_white_house_anthropic_dario_amodei.jpg",
       "published": "2026-06-24T15:15:00+00:00",
       "firstSeen": "2026-06-24T16:00:01.138567+00:00",
-      "lastSeen": "2026-06-24T20:03:08.459351+00:00",
+      "lastSeen": "2026-06-24T21:42:28.473127+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1526
+      "score": 5.1094
     },
     {
       "title": "China takes the supercomputer crown without US chips",
@@ -563,119 +643,7 @@
       "lastSeen": "2026-06-24T18:00:01.764061+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0083
-    },
-    {
-      "title": "OpenAI unveils its first custom chip, built by Broadcom",
-      "url": "https://techcrunch.com/2026/06/24/openai-unveils-its-first-custom-chip-built-by-broadcom",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Named Jalapeño, the new processor was designed specifically for the unique needs of OpenAI's inference systems.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/06/Screenshot-2026-06-24-at-9.49.59-AM.jpg?resize=1200%2C670",
-      "published": "2026-06-24T14:54:46+00:00",
-      "firstSeen": "2026-06-24T16:00:01.138567+00:00",
-      "lastSeen": "2026-06-24T20:03:08.459351+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 5.4437
-    },
-    {
-      "title": "Cerebras doubled its revenue. The stock fell anyway.",
-      "url": "https://thenextweb.com/news/cerebras-earnings-margin-data-centre-shortage",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Cerebras nearly doubled its revenue and guided 2026 sales above Wall Street’s estimates. Its stock still fell about 10%. The reason was a margin squeeze, caused not by a shortage of chips but by a shortage of buildings. Cerebras just learned the price of going public into a mania. On Tuesday the AI chipmaker posted [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/Cerebras-team.avif",
-      "published": "2026-06-24T14:47:17+00:00",
-      "firstSeen": "2026-06-24T16:00:01.138567+00:00",
-      "lastSeen": "2026-06-24T17:00:01.330867+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.0004
-    },
-    {
-      "title": "OpenAI reveals its first AI processor: Jalapeño",
-      "url": "https://www.theverge.com/ai-artificial-intelligence/955939/openai-reveals-its-first-ai-processor-jalapeno",
-      "source": "The Verge AI",
-      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "OpenAI has just revealed a new \"intelligence processor\" chip for AI servers made in partnership with Broadcom. The chip, called Jalape&#241;o, is designed to power current and future large language models, according to an announcement on Wednesday. Jalape&#241;o is an ASIC (Application-Specific Integrated Circuit), meaning it's designed for a specific purpose: AI inference. With AI [&#8230;]",
-      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/openai-broadcom-jalapeno-inference-chip-image.webp?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C3.5043662306087%2C100%2C92.991267538783&amp%3Bw=1200",
-      "published": "2026-06-24T14:36:47+00:00",
-      "firstSeen": "2026-06-24T14:51:46.329711+00:00",
-      "lastSeen": "2026-06-24T20:03:08.459351+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 6.6057
-    },
-    {
-      "title": "Midjourney Wants to Scan Your Body in 60 Seconds",
-      "url": "https://www.techrepublic.com/article/news-midjourney-full-body-ultrasonic-scanner",
-      "source": "TechRepublic AI",
-      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Midjourney is developing a 60-second full-body ultrasonic scanner and spa-like scanning locations, raising questions about health data and regulation.\nThe post Midjourney Wants to Scan Your Body in 60 Seconds appeared first on TechRepublic.",
-      "image": "https://assets.techrepublic.com/uploads/2026/06/tr-06242026-midjourney-full-body-ultrasonic-scanner.jpg?f=jpeg",
-      "published": "2026-06-24T14:36:11+00:00",
-      "firstSeen": "2026-06-24T17:00:01.330867+00:00",
-      "lastSeen": "2026-06-24T20:03:08.459351+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.0955
-    },
-    {
-      "title": "OpenAI built its own AI chip. The target is Nvidia.",
-      "url": "https://thenextweb.com/news/openai-jalapeno-chip-broadcom-nvidia",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "OpenAI just showed off Jalapeño, its first home-grown AI chip, built with Broadcom. It is designed for inference, not training. And it is the clearest sign yet that the company most dependent on Nvidia wants a way out. OpenAI has a chip now. On Wednesday it unveiled Jalapeño, the first piece of silicon it has [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/openai-broadcom-jalapeno.avif",
-      "published": "2026-06-24T14:07:15+00:00",
-      "firstSeen": "2026-06-24T16:00:01.138567+00:00",
-      "lastSeen": "2026-06-24T17:00:01.330867+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 5.5829
-    },
-    {
-      "title": "Talos: Scaling rare disease diagnosis with automated, iterative genomic reanalysis",
-      "url": "https://www.microsoft.com/en-us/research/blog/talos-scaling-rare-disease-diagnosis-with-automated-iterative-genomic-reanalysis",
-      "source": "Microsoft Research Blog",
-      "sourceUrl": "https://www.microsoft.com/en-us/research/feed/",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "Talos was built to help resolve a major bottleneck in genomic medicine: human review time. The open-source system recovered 90% of in-scope diagnoses while surfacing just 1.3 candidate variants per patient for expert review. \nThe post Talos: Scaling rare disease diagnosis with automated, iterative genomic reanalysis appeared first on Microsoft Research.",
-      "image": "https://www.microsoft.com/en-us/research/wp-content/uploads/2026/06/Talos-TWLIFB-1200x627-1-scaled.jpg",
-      "published": "2026-06-24T14:00:14+00:00",
-      "firstSeen": "2026-06-24T14:51:46.329711+00:00",
-      "lastSeen": "2026-06-24T20:03:08.459351+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.6899
-    },
-    {
-      "title": "3 days left to save up to $190 on your TechCrunch Founder Summit 2026 pass",
-      "url": "https://techcrunch.com/2026/06/24/3-days-left-to-save-up-to-190-on-techcrunch-founder-summit-2026",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "You have just 3 days left to save up to $190 on your pass to TechCrunch Founder Summit 2026 before Early Bird rates end on June 26 at 11:59 p.m. PT. Register today.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/01/TC-All-Stage-2025-Charles-Hudson-Breakout-Session-Audience.jpg?resize=1200%2C800",
-      "published": "2026-06-24T14:00:00+00:00",
-      "firstSeen": "2026-06-24T14:51:46.329711+00:00",
-      "lastSeen": "2026-06-24T20:03:08.459351+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.1198
+      "score": 1.9652
     },
     {
       "title": "The Friendly Virus",
@@ -688,10 +656,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-22T20:00:00+00:00",
       "firstSeen": "2026-06-22T21:00:01.381447+00:00",
-      "lastSeen": "2026-06-24T20:03:08.459351+00:00",
+      "lastSeen": "2026-06-24T21:42:28.473127+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.4795
+      "score": 1.4665
     },
     {
       "title": "The Life Scientific: Dean Lomax",
@@ -704,10 +672,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-15T20:00:00+00:00",
       "firstSeen": "2026-06-15T21:00:01.290903+00:00",
-      "lastSeen": "2026-06-24T20:03:08.459351+00:00",
+      "lastSeen": "2026-06-24T21:42:28.473127+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.1927
+      "score": 1.1926
     },
     {
       "title": "The Life Scientific: Helen Hastie",
