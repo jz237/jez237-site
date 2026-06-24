@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-24T14:00:01.741376+00:00",
+  "updatedAt": "2026-06-24T14:51:46.329711+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -11312,6 +11312,18 @@
     "https://openai.com/index/openai-broadcom-jalapeno-inference-chip": {
       "image": "",
       "checkedAt": "2026-06-24T14:00:01.741376+00:00"
+    },
+    "https://www.theverge.com/ai-artificial-intelligence/955939/openai-reveals-its-first-ai-processor-jalapeno": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/openai-broadcom-jalapeno-inference-chip-image.webp?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C3.5043662306087%2C100%2C92.991267538783&amp%3Bw=1200",
+      "checkedAt": "2026-06-24T14:51:46.329711+00:00"
+    },
+    "https://www.microsoft.com/en-us/research/blog/talos-scaling-rare-disease-diagnosis-with-automated-iterative-genomic-reanalysis": {
+      "image": "https://www.microsoft.com/en-us/research/wp-content/uploads/2026/06/Talos-TWLIFB-1200x627-1-scaled.jpg",
+      "checkedAt": "2026-06-24T14:51:46.329711+00:00"
+    },
+    "https://techcrunch.com/2026/06/24/3-days-left-to-save-up-to-190-on-techcrunch-founder-summit-2026": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/01/TC-All-Stage-2025-Charles-Hudson-Breakout-Session-Audience.jpg?resize=1200%2C800",
+      "checkedAt": "2026-06-24T14:51:46.329711+00:00"
     }
   }
 }
