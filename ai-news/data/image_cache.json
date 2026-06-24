@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-24T14:51:46.329711+00:00",
+  "updatedAt": "2026-06-24T16:00:01.138567+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -11324,6 +11324,10 @@
     "https://techcrunch.com/2026/06/24/3-days-left-to-save-up-to-190-on-techcrunch-founder-summit-2026": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/01/TC-All-Stage-2025-Charles-Hudson-Breakout-Session-Audience.jpg?resize=1200%2C800",
       "checkedAt": "2026-06-24T14:51:46.329711+00:00"
+    },
+    "https://techcrunch.com/2026/06/24/openai-unveils-its-first-custom-chip-built-by-broadcom": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/Screenshot-2026-06-24-at-9.49.59-AM.jpg?resize=1200%2C670",
+      "checkedAt": "2026-06-24T16:00:01.138567+00:00"
     }
   }
 }
