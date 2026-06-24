@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-24T21:42:28.473127+00:00",
+  "updatedAt": "2026-06-24T23:00:01.536104+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -11400,6 +11400,18 @@
     "https://techcrunch.com/2026/06/24/the-memory-chip-crunch-is-paying-off-for-this-u-s-company": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/micron-HQ-GettyImages-2147904174.jpg?resize=1200%2C801",
       "checkedAt": "2026-06-24T21:42:28.473127+00:00"
+    },
+    "https://techcrunch.com/2026/06/24/cerebras-stock-plunges-after-earnings-as-ceo-says-margin-outlook-was-misunderstood": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/03/GettyImages-1251294592.jpg?w=1024",
+      "checkedAt": "2026-06-24T23:00:01.536104+00:00"
+    },
+    "https://techcrunch.com/2026/06/24/ai-was-supposed-to-kill-engineering-jobs-but-new-data-suggests-theyre-the-most-resilient": {
+      "image": "https://techcrunch.com/wp-content/uploads/2022/01/GettyImages-1250956868.jpg?resize=1200%2C800",
+      "checkedAt": "2026-06-24T23:00:01.536104+00:00"
+    },
+    "https://www.techrepublic.com/article/news-agentic-ai-cx-contact-center-ccw": {
+      "image": "https://assets.techrepublic.com/uploads/2026/06/cx-agentic.jpg?f=jpeg",
+      "checkedAt": "2026-06-24T23:00:01.536104+00:00"
     }
   }
 }
