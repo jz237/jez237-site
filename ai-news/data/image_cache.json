@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-24T08:32:01.451616+00:00",
+  "updatedAt": "2026-06-24T10:00:01.752835+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -11292,6 +11292,10 @@
     "https://techcrunch.com/2026/06/23/indias-moengage-bets-marketings-future-on-millions-of-ai-agents": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/ai-bots-agents-GettyImages-2230799616.jpg?resize=1200%2C800",
       "checkedAt": "2026-06-24T01:00:01.211214+00:00"
+    },
+    "https://www.artificialintelligence-news.com/news/anthropic-slack-workplace-ai-agents": {
+      "image": "",
+      "checkedAt": "2026-06-24T10:00:01.752835+00:00"
     }
   }
 }

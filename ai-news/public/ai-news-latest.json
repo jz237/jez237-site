@@ -1,8 +1,8 @@
 {
-  "updatedAt": "2026-06-24T08:32:01.451616+00:00",
+  "updatedAt": "2026-06-24T10:00:01.752835+00:00",
   "items": [
     {
-      "title": "Quantifying Prior Dominance in RAG Systems",
+      "title": "Self-Recognition Finetuning can Prevent and Reverse Emergent Misalignment",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -10,12 +10,76 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-24T08:32:07.957155+00:00",
+      "published": "2026-06-24T10:00:11.322104+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-24T08:32:01.451616+00:00",
+      "lastSeen": "2026-06-24T10:00:01.752835+00:00",
       "editorial_allow": false,
-      "editorial_reason": "framework_or_plumbing",
-      "score": -0.74
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.36
+    },
+    {
+      "title": "Anthropic drops ‘workplace AI agents’ directly inside Slack",
+      "url": "https://www.artificialintelligence-news.com/news/anthropic-slack-workplace-ai-agents",
+      "source": "Artificial Intelligence News",
+      "sourceUrl": "https://www.artificialintelligence-news.com/categories/artificial-intelligence/feed/",
+      "sourceWeight": 0.82,
+      "category": "AI",
+      "summary": "Anthropic&#160;launched&#160;a beta version of its Claude Tag feature for Enterprise and Team tiers, shifting its chat model into shared Slack channels. Moving away from traditional isolated chat boxes, users pull the artificial intelligence model into active group threads by typing @Claude.&#160; The integration allows any team member in the channel to delegate a task, review [&#8230;]\nThe post Anthropic drops ‘workplace AI agents’ directly inside Slack appeared first on AI News.",
+      "image": "",
+      "published": "2026-06-24T09:00:00+00:00",
+      "firstSeen": "2026-06-24T10:00:01.752835+00:00",
+      "lastSeen": "2026-06-24T10:00:01.752835+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 13.7179
+    },
+    {
+      "title": "SoftBank’s Son says calling AI a bubble is ‘an insult’",
+      "url": "https://thenextweb.com/news/softbanks-son-says-calling-ai-a-bubble-is-an-insult",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "At SoftBank Group’s annual shareholders’ meeting in Tokyo on Wednesday, the founder and chief executive was asked, as he is asked at almost every public appearance now, whether the artificial intelligence boom that has driven his fortune to record highs is a bubble waiting to deflate. He treated the question itself as the problem. To [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/Masayoshi-Son.avif",
+      "published": "2026-06-24T08:58:42+00:00",
+      "firstSeen": "2026-06-24T10:00:01.752835+00:00",
+      "lastSeen": "2026-06-24T10:00:01.752835+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.2192
+    },
+    {
+      "title": "Anthropic’s Mythos found flaws in classified US systems during a government test",
+      "url": "https://thenextweb.com/news/anthropic-mythos-classified-systems-vulnerabilities",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "One of Anthropic’s AI models identified vulnerabilities in highly sensitive, classified US government computer systems during a testing exercise, a US official has told the Associated Press. The model in question was Mythos, Anthropic’s most capable system, and it surfaced the flaws within hours. Crucially, finding a weakness within hours is not the same as [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/anthropic-mythos-eu-enisa-cybersecurity-access.avif",
+      "published": "2026-06-24T08:43:37+00:00",
+      "firstSeen": "2026-06-24T10:00:01.752835+00:00",
+      "lastSeen": "2026-06-24T10:00:01.752835+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.1118
+    },
+    {
+      "title": "Legion LegalTech sues US over Anthropic Fable 5 and Mythos 5 shutdown",
+      "url": "https://thenextweb.com/news/legion-legaltech-sues-us-anthropic-access",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Legion LegalTech says the export directive that shut down Fable 5 and Mythos 5 worldwide has done “immediate, irreparable, and existential” harm to its business. US legal-technology company has sued the federal government over the directive that, two weeks ago, forced Anthropic to switch off its two most capable AI models for everyone on Earth. [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/Capitol.avif",
+      "published": "2026-06-24T08:20:48+00:00",
+      "firstSeen": "2026-06-24T10:00:01.752835+00:00",
+      "lastSeen": "2026-06-24T10:00:01.752835+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 6.2006
     },
     {
       "title": "South Korea is in talks with Samsung and SK Hynix over a second chip cluster",
@@ -28,10 +92,10 @@
       "image": "https://media.thenextweb.com/2026/06/Kim-Yong-beom.avif",
       "published": "2026-06-24T08:04:42+00:00",
       "firstSeen": "2026-06-24T08:32:01.451616+00:00",
-      "lastSeen": "2026-06-24T08:32:01.451616+00:00",
+      "lastSeen": "2026-06-24T10:00:01.752835+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1362
+      "score": 2.0928
     },
     {
       "title": "YouTube settles ahead of California’s second social-media addiction trial",
@@ -44,10 +108,10 @@
       "image": "https://media.thenextweb.com/2026/05/youtube-automatic-ai-labels-c2pa-synthid-deepfake.avif",
       "published": "2026-06-24T07:55:03+00:00",
       "firstSeen": "2026-06-24T08:32:01.451616+00:00",
-      "lastSeen": "2026-06-24T08:32:01.451616+00:00",
+      "lastSeen": "2026-06-24T10:00:01.752835+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1313
+      "score": 2.0882
     },
     {
       "title": "Agility Robotics is reportedly going public via a $2.5B SPAC deal",
@@ -60,10 +124,10 @@
       "image": "https://media.thenextweb.com/2026/06/Agility-Robotics.avif",
       "published": "2026-06-24T07:43:40+00:00",
       "firstSeen": "2026-06-24T08:32:01.451616+00:00",
-      "lastSeen": "2026-06-24T08:32:01.451616+00:00",
+      "lastSeen": "2026-06-24T10:00:01.752835+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1256
+      "score": 2.0827
     },
     {
       "title": "Blackstone plans $30B for Japan AI data centres, and is unbothered by bubble talk",
@@ -76,10 +140,10 @@
       "image": "https://media.thenextweb.com/2026/06/Jonathan-Gray-Blackstone.avif",
       "published": "2026-06-24T07:34:28+00:00",
       "firstSeen": "2026-06-24T08:32:01.451616+00:00",
-      "lastSeen": "2026-06-24T08:32:01.451616+00:00",
+      "lastSeen": "2026-06-24T10:00:01.752835+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1211
+      "score": 2.0783
     },
     {
       "title": "A US spectrum auction just raised $3.5B to pay for ripping out Huawei",
@@ -92,10 +156,10 @@
       "image": "https://media.thenextweb.com/2026/06/US-Federal-Communications-Commission.avif",
       "published": "2026-06-24T07:20:00+00:00",
       "firstSeen": "2026-06-24T08:32:01.451616+00:00",
-      "lastSeen": "2026-06-24T08:32:01.451616+00:00",
+      "lastSeen": "2026-06-24T10:00:01.752835+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2139
+      "score": 3.1714
     },
     {
       "title": "Meta’s $399 Kylie Jenner glasses will talk back in her voice",
@@ -108,10 +172,10 @@
       "image": "https://media.thenextweb.com/2026/06/Starfire-Kylie-Edition-Meta.avif",
       "published": "2026-06-24T07:13:01+00:00",
       "firstSeen": "2026-06-24T08:32:01.451616+00:00",
-      "lastSeen": "2026-06-24T08:32:01.451616+00:00",
+      "lastSeen": "2026-06-24T10:00:01.752835+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8105
+      "score": 2.7682
     },
     {
       "title": "The US is pressing Meta to let it review its AI, and Meta is the last holdout",
@@ -124,10 +188,10 @@
       "image": "https://media.thenextweb.com/2026/04/Meta.avif",
       "published": "2026-06-24T07:03:03+00:00",
       "firstSeen": "2026-06-24T08:00:01.859828+00:00",
-      "lastSeen": "2026-06-24T08:32:01.451616+00:00",
+      "lastSeen": "2026-06-24T10:00:01.752835+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.4556
+      "score": 2.4135
     },
     {
       "title": "NVIDIA and AWS Collaborate to Bring AI to Production at Scale",
@@ -140,10 +204,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/logo-lockup-tech-blog-aws-1920x1080-2.jpg",
       "published": "2026-06-24T00:05:37+00:00",
       "firstSeen": "2026-06-24T00:08:31.662512+00:00",
-      "lastSeen": "2026-06-24T08:32:01.451616+00:00",
+      "lastSeen": "2026-06-24T10:00:01.752835+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 0.9601
+      "score": 0.9254
     },
     {
       "title": "v1.91.0-dev.1",
@@ -156,10 +220,10 @@
       "image": "https://opengraph.githubassets.com/9a78cd956067fceff41336d77c198cfb77ae32b295601dace5ece10928edf74f/BerriAI/litellm/releases/tag/v1.91.0-dev.1",
       "published": "2026-06-24T00:02:08+00:00",
       "firstSeen": "2026-06-24T00:08:31.662512+00:00",
-      "lastSeen": "2026-06-24T08:32:01.451616+00:00",
+      "lastSeen": "2026-06-24T10:00:01.752835+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7587
+      "score": 2.724
     },
     {
       "title": "India’s MoEngage bets that the future of marketing is millions of AI agents",
@@ -172,10 +236,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/ai-bots-agents-GettyImages-2230799616.jpg?resize=1200%2C800",
       "published": "2026-06-23T23:30:00+00:00",
       "firstSeen": "2026-06-24T01:00:01.211214+00:00",
-      "lastSeen": "2026-06-24T08:32:01.451616+00:00",
+      "lastSeen": "2026-06-24T10:00:01.752835+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.7459
+      "score": 4.7117
     },
     {
       "title": "White House drastically shortens deadline for dropping quantum-vulnerable crypto",
@@ -188,10 +252,10 @@
       "image": "https://cdn.arstechnica.net/wp-content/uploads/2024/03/GettyImages-1070527780-1152x648.jpg",
       "published": "2026-06-23T22:30:57+00:00",
       "firstSeen": "2026-06-23T23:00:01.860733+00:00",
-      "lastSeen": "2026-06-24T08:32:01.451616+00:00",
+      "lastSeen": "2026-06-24T10:00:01.752835+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8828
+      "score": 1.8495
     },
     {
       "title": "Google Home will soon get better at recognizing you",
@@ -204,10 +268,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/23451196/acastro_220510_STK123_0002.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-23T22:28:19+00:00",
       "firstSeen": "2026-06-23T23:00:01.860733+00:00",
-      "lastSeen": "2026-06-24T08:32:01.451616+00:00",
+      "lastSeen": "2026-06-24T10:00:01.752835+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -1.0082
+      "score": -1.0414
     },
     {
       "title": "Hollywood is bending the knee to OpenAI",
@@ -220,10 +284,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25431704/STK201_SAM_ALTMAN_CVIRGINIA_C.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=4.7487503051758%2C21.869598945592%2C95.251249694824%2C74.804666989327&amp%3Bw=1200",
       "published": "2026-06-23T22:03:18+00:00",
       "firstSeen": "2026-06-23T22:21:25.628722+00:00",
-      "lastSeen": "2026-06-24T08:32:01.451616+00:00",
+      "lastSeen": "2026-06-24T10:00:01.752835+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0822
+      "score": 5.0494
     },
     {
       "title": "datasette 1.0a35",
@@ -236,10 +300,10 @@
       "image": "https://static.simonwillison.net/static/2026/create-alter-demo-first-frame.jpg",
       "published": "2026-06-23T21:34:37+00:00",
       "firstSeen": "2026-06-24T00:00:01.184142+00:00",
-      "lastSeen": "2026-06-24T08:32:01.451616+00:00",
+      "lastSeen": "2026-06-24T10:00:01.752835+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.4014
+      "score": 3.369
     },
     {
       "title": "Coupang’s $409M Fine Shows the Real Cost of Weak AI Governance",
@@ -252,10 +316,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/06/young-caucasian-female-programmer-in-glasses-write-2026-03-13-04-14-49-utc-1.jpg?f=jpeg",
       "published": "2026-06-23T21:21:59+00:00",
       "firstSeen": "2026-06-23T22:00:01.741568+00:00",
-      "lastSeen": "2026-06-24T08:32:01.451616+00:00",
+      "lastSeen": "2026-06-24T10:00:01.752835+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9566
+      "score": 2.9244
     },
     {
       "title": "AI Goes Hollywood: Google, A24 Strike $75M AI Deal for Filmmaking Tools",
@@ -268,10 +332,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/06/a24.jpg?f=jpeg",
       "published": "2026-06-23T21:10:23+00:00",
       "firstSeen": "2026-06-23T22:00:01.741568+00:00",
-      "lastSeen": "2026-06-24T08:32:01.451616+00:00",
+      "lastSeen": "2026-06-24T10:00:01.752835+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9523
+      "score": 4.9203
     },
     {
       "title": "Oracle’s 21,000 layoffs help drive its debt-fueled AI investments",
@@ -284,10 +348,10 @@
       "image": "https://cdn.arstechnica.net/wp-content/uploads/2026/06/GettyImages-2212917669-1152x648.jpg",
       "published": "2026-06-23T20:17:38+00:00",
       "firstSeen": "2026-06-23T21:00:01.441206+00:00",
-      "lastSeen": "2026-06-24T08:32:01.451616+00:00",
+      "lastSeen": "2026-06-24T10:00:01.752835+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.833
+      "score": 1.8017
     },
     {
       "title": "ByteDance unveils Seedance 2.5, a 30-second native 4K AI video model that accepts 50 reference inputs",
@@ -303,7 +367,7 @@
       "lastSeen": "2026-06-24T08:32:01.451616+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.2304
+      "score": 3.1992
     },
     {
       "title": "Anthropic launches Claude Tag, an always-on AI teammate that lives in your Slack channels",
@@ -320,7 +384,7 @@
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 22.3199
+      "score": 22.2892
     },
     {
       "title": "A fake AI agent skill passed every security scanner and reportedly reached 26,000 agents",
@@ -336,7 +400,7 @@
       "lastSeen": "2026-06-24T08:32:01.451616+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.5086
+      "score": 4.4783
     },
     {
       "title": "OPFS + Pyodide test harness",
@@ -349,10 +413,10 @@
       "image": "",
       "published": "2026-06-23T18:58:54+00:00",
       "firstSeen": "2026-06-23T20:00:01.900277+00:00",
-      "lastSeen": "2026-06-24T08:32:01.451616+00:00",
+      "lastSeen": "2026-06-24T10:00:01.752835+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.4449
+      "score": 8.4148
     },
     {
       "title": "Meta’s new prediction market app Arena could bring betting to 3 billion users",
@@ -368,7 +432,7 @@
       "lastSeen": "2026-06-24T08:00:01.859828+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8929
+      "score": 2.8632
     },
     {
       "title": "The Brexit bill comes due: ten years, seven prime ministers, and an economy 6% smaller than it should be",
@@ -384,7 +448,7 @@
       "lastSeen": "2026-06-24T08:00:01.859828+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7886
+      "score": 1.7592
     },
     {
       "title": "SpaceX draws $89 billion in demand for its debut bond sale, one of the largest US offerings this year",
@@ -400,7 +464,7 @@
       "lastSeen": "2026-06-24T08:00:01.859828+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.484
+      "score": 2.4547
     },
     {
       "title": "Oracle cut 21,000 jobs this year and its SEC filing explicitly blames AI",
@@ -416,7 +480,7 @@
       "lastSeen": "2026-06-24T08:00:01.859828+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7804
+      "score": 1.7513
     },
     {
       "title": "Google is simultaneously the most dominant and most vulnerable it has ever been",
@@ -432,7 +496,7 @@
       "lastSeen": "2026-06-24T08:00:01.859828+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.1766
+      "score": 3.1476
     },
     {
       "title": "Stark Defence raises €500M led by Sequoia and Founders Fund at a valuation above €3.5 billion",
@@ -448,7 +512,7 @@
       "lastSeen": "2026-06-24T08:00:01.859828+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.4731
+      "score": 2.4442
     },
     {
       "title": "Europe’s biggest tech CEOs have formed a standing lobby group with a direct line to von der Leyen",
@@ -464,7 +528,7 @@
       "lastSeen": "2026-06-24T07:00:01.733559+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.4719
+      "score": 2.4431
     },
     {
       "title": "How GPT-5 helped immunologist Derya Unutmaz solve a 3-year-old mystery",
@@ -477,11 +541,11 @@
       "image": "https://images.ctfassets.net/kftzwdyauwt9/2qNRrOyIX7qjpdePUIObdS/9307a1d928c8b0167cd85e22b39c5132/derya_16x9.png?w=1600&amp%3Bh=900&amp%3Bfit=fill",
       "published": "2026-06-23T17:00:00+00:00",
       "firstSeen": "2026-06-23T18:00:01.255007+00:00",
-      "lastSeen": "2026-06-24T08:32:01.451616+00:00",
+      "lastSeen": "2026-06-24T10:00:01.752835+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.8145
+      "score": 14.786
     },
     {
       "title": "Anthropic’s Claude Tag is learning your company, one Slack message at a time",
@@ -494,10 +558,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/Claude-Tag.png?resize=1200%2C687",
       "published": "2026-06-23T17:00:00+00:00",
       "firstSeen": "2026-06-23T18:00:01.255007+00:00",
-      "lastSeen": "2026-06-24T08:32:01.451616+00:00",
+      "lastSeen": "2026-06-24T10:00:01.752835+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.9045
+      "score": 10.876
     },
     {
       "title": "Why corporate AI super PACs spent $27 million on a local election",
@@ -510,10 +574,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/gettyimages-2280753489.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.755291928874%2C100%2C78.489416142251&amp%3Bw=1200",
       "published": "2026-06-23T17:00:00+00:00",
       "firstSeen": "2026-06-23T18:00:01.255007+00:00",
-      "lastSeen": "2026-06-24T08:32:01.451616+00:00",
+      "lastSeen": "2026-06-24T10:00:01.752835+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9745
+      "score": 1.946
     },
     {
       "title": "South Korea’s chip worker bonuses are so large the central bank is treating them as an inflation risk",
@@ -529,7 +593,7 @@
       "lastSeen": "2026-06-23T21:00:01.441206+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8612
+      "score": 2.8328
     },
     {
       "title": "Honda signs multiyear solid-state battery deal with QuantumScape after scrapping its EV lineup",
@@ -545,7 +609,7 @@
       "lastSeen": "2026-06-23T20:00:01.900277+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.2535
+      "score": 4.2254
     },
     {
       "title": "LastPass says hackers stole customer data through a supply chain breach at Klue",
@@ -561,7 +625,7 @@
       "lastSeen": "2026-06-23T20:00:01.900277+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7461
+      "score": 1.7183
     },
     {
       "title": "CryptoProcessing’s MLRO on why banking access is still crypto’s biggest challenge",
@@ -577,71 +641,7 @@
       "lastSeen": "2026-06-23T19:00:02.117216+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7448
-    },
-    {
-      "title": "Something&#8217;s off with Midjourney’s pivot to body scanners",
-      "url": "https://www.theverge.com/report/954826/midjourney-medical-ai-ultrasound-body-scanner-lacks-evidence",
-      "source": "The Verge AI",
-      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "Last week, Midjourney, an AI startup best known for its image generator, made an unusual pivot: medical imaging. The company announced a futuristic ultrasound scanner that would dunk users into a vat of water and, hopefully, produce \"something as powerful as MRI\" yet \"as casual as a trip to the spa.\" Midjourney says the goal [&#8230;]",
-      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/ultrasound_phantom_segmentation-b254a71d083eb5c9.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=28.441715022566%2C0%2C70.316569954868%2C100",
-      "published": "2026-06-23T15:56:35+00:00",
-      "firstSeen": "2026-06-23T16:00:01.309560+00:00",
-      "lastSeen": "2026-06-24T08:32:01.451616+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.9538
-    },
-    {
-      "title": "HaloBraid raises $7M to build the first robotic braiding assistant for hair salons",
-      "url": "https://thenextweb.com/news/halobraid-7m-seed-braiding-robot-seven-seven-six",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "HaloBraid, a robotics startup that builds an automated braiding assistant for hair salons, has raised seven million dollars in a seed round led by Reddit co-founder Alexis Ohanian’s venture firm Seven Seven Six. The device works alongside professional stylists rather than replacing them: a braider starts each braid by hand and then hands off to [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/halobraid-7m-seed-braiding-robot-seven-seven-six.avif",
-      "published": "2026-06-23T15:44:43+00:00",
-      "firstSeen": "2026-06-23T16:05:53.770293+00:00",
-      "lastSeen": "2026-06-23T19:00:02.117216+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.84
-    },
-    {
-      "title": "Oracle Cuts 21,000 Jobs as It Rebuilds Around AI",
-      "url": "https://www.techrepublic.com/article/news-oracle-cuts-21000-jobs-rebuilds-around-ai",
-      "source": "TechRepublic AI",
-      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Oracle cut about 21,000 jobs in fiscal 2026 as it restructures around AI and cloud infrastructure, raising questions for enterprise buyers.\nThe post Oracle Cuts 21,000 Jobs as It Rebuilds Around AI appeared first on TechRepublic.",
-      "image": "https://assets.techrepublic.com/uploads/2026/06/larryellison.jpg?f=jpeg",
-      "published": "2026-06-23T15:42:34+00:00",
-      "firstSeen": "2026-06-23T18:00:01.255007+00:00",
-      "lastSeen": "2026-06-24T08:32:01.451616+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.8393
-    },
-    {
-      "title": "Apple’s iOS 27 Beta 2: New Siri, RCS, and Wallet Changes Arrive",
-      "url": "https://www.techrepublic.com/article/news-ios-27-beta-2-write-with-siri-rcs-upgrades",
-      "source": "TechRepublic AI",
-      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "iOS 27 beta 2 adds Write with Siri, RCS replies, Wallet updates, and Home fixes, giving IT teams more to test before launch.\nThe post Apple’s iOS 27 Beta 2: New Siri, RCS, and Wallet Changes Arrive appeared first on TechRepublic.",
-      "image": "https://assets.techrepublic.com/uploads/2026/06/hero-vx-ios_2x.jpg?f=jpeg",
-      "published": "2026-06-23T15:37:50+00:00",
-      "firstSeen": "2026-06-23T18:00:01.255007+00:00",
-      "lastSeen": "2026-06-24T08:32:01.451616+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.5378
+      "score": 1.7171
     },
     {
       "title": "The Friendly Virus",
@@ -654,10 +654,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-22T20:00:00+00:00",
       "firstSeen": "2026-06-22T21:00:01.381447+00:00",
-      "lastSeen": "2026-06-24T08:32:01.451616+00:00",
+      "lastSeen": "2026-06-24T10:00:01.752835+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.5887
+      "score": 1.5728
     },
     {
       "title": "The Life Scientific: Dean Lomax",
@@ -670,10 +670,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-15T20:00:00+00:00",
       "firstSeen": "2026-06-15T21:00:01.290903+00:00",
-      "lastSeen": "2026-06-24T08:32:01.451616+00:00",
+      "lastSeen": "2026-06-24T10:00:01.752835+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.1937
+      "score": 1.1936
     },
     {
       "title": "The Life Scientific: Helen Hastie",
