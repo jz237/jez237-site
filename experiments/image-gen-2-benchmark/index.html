@@ -186,6 +186,49 @@
     }
     main { padding: 12px 22px 70px; }
     .gallery-list { display: block; }
+    .factual-section {
+      margin-bottom: 24px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: linear-gradient(145deg, rgba(255,255,255,.9), rgba(226,246,238,.82));
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .factual-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 18px 18px 0;
+    }
+    .factual-heading h2 {
+      margin: 0;
+      color: #004c7c;
+      font-size: clamp(1.35rem, 2.4vw, 2rem);
+      letter-spacing: 0;
+    }
+    .factual-heading a { flex: 0 0 auto; }
+    .factual-strip {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      padding: 18px;
+    }
+    .factual-mini {
+      display: grid;
+      grid-template-columns: minmax(120px, .44fr) minmax(0, .56fr);
+      gap: 14px;
+      align-items: stretch;
+      min-height: 170px;
+      border: 1px solid rgba(199,224,218,.9);
+      border-radius: 8px;
+      background: rgba(255,255,255,.68);
+      overflow: hidden;
+    }
+    .factual-mini img { cursor: zoom-in; object-fit: cover; }
+    .factual-mini-copy { padding: 14px 14px 14px 0; }
+    .factual-mini-copy h3 { margin: 6px 0 8px; font-size: 1.05rem; }
+    .factual-mini-copy p { margin: 0; color: var(--muted); font-size: .92rem; }
     .load-more-row { display: flex; justify-content: center; margin: 30px 0 0; }
     .day-group { margin-top: 28px; }
     .day-heading {
@@ -285,6 +328,9 @@
         align-items: stretch;
       }
       #toolbar-search { width: 100%; }
+      .factual-heading { align-items: flex-start; flex-direction: column; }
+      .factual-strip, .factual-mini { grid-template-columns: 1fr; }
+      .factual-mini-copy { padding: 14px; }
       .grid { grid-template-columns: 1fr; }
       .day-heading { display: block; }
       .lightbox-hint { display: none; }
@@ -330,6 +376,15 @@
   </div>
 
   <main>
+    <section class="factual-section" aria-labelledby="factual-section-title">
+      <div class="factual-heading">
+        <h2 id="factual-section-title">Latest factual infographics</h2>
+        <a class="pill featured" href="factual-infographics.html">View all factual infographics</a>
+      </div>
+      <div id="factual-strip" class="factual-strip" aria-live="polite">
+        <p class="empty">Loading factual infographics...</p>
+      </div>
+    </section>
     <div id="gallery" class="gallery-list" aria-live="polite"></div>
     <div class="load-more-row" id="load-more-row">
       <button class="control" id="load-more" type="button">Load more</button>
@@ -361,6 +416,7 @@
       const toolbarCount = document.getElementById('toolbar-count');
       const loadMore = document.getElementById('load-more');
       const loadMoreRow = document.getElementById('load-more-row');
+      const factualStrip = document.getElementById('factual-strip');
       const hero = document.querySelector('.gallery-hero');
       const siteNav = document.getElementById('site-nav');
       const pageSize = 12;
@@ -460,6 +516,28 @@
           </article>`;
       }
 
+      function renderFactual(items) {
+        const latest = items.slice(0, 2);
+        if (!latest.length) {
+          factualStrip.innerHTML = '<p class="empty">No factual infographics have been archived yet.</p>';
+          return;
+        }
+        factualStrip.innerHTML = latest.map((item) => {
+          const factual = item.factualInfographic || {};
+          const src = imageUrl(item.image);
+          return `
+            <article class="factual-mini">
+              <img src="${escapeHtml(src)}" alt="${escapeHtml(item.title)}" loading="lazy">
+              <div class="factual-mini-copy">
+                <div class="kicker">${escapeHtml(item.date || '')}</div>
+                <h3>${escapeHtml(item.title)}</h3>
+                ${factual.description ? `<p>${escapeHtml(factual.description)}</p>` : ''}
+              </div>
+            </article>`;
+        }).join('');
+        bindImages();
+      }
+
       function populateDates() {
         const dates = [...new Set(allItems.map((item) => item.date).filter(Boolean))].sort().reverse();
         const options = '<option value="all">All dates</option>' + dates.map((date) => `<option value="${escapeHtml(date)}">${escapeHtml(formatDate(date))}</option>`).join('');
@@ -491,6 +569,11 @@
         })
         .catch((err) => { gallery.innerHTML = `<p class="empty">${escapeHtml(err.message)}</p>`; });
 
+      fetch('factual-infographics-data.json', { cache: 'no-cache' })
+        .then((r) => r.ok ? r.json() : Promise.reject(new Error('Could not load factual-infographics-data.json')))
+        .then((items) => renderFactual(items.sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')) || String(b.slot || '').localeCompare(String(a.slot || '')))))
+        .catch((err) => { factualStrip.innerHTML = `<p class="empty">${escapeHtml(err.message)}</p>`; });
+
       const viewer = document.getElementById('image-lightbox');
       const stage = document.getElementById('lightbox-stage');
       const image = document.getElementById('lightbox-image');
@@ -498,7 +581,9 @@
       const close = document.getElementById('lightbox-close');
 
       function bindImages() {
-        document.querySelectorAll('.image-wrap img').forEach((thumb) => {
+        document.querySelectorAll('.image-wrap img, .factual-mini img').forEach((thumb) => {
+          if (thumb.dataset.lightboxBound === '1') return;
+          thumb.dataset.lightboxBound = '1';
           thumb.setAttribute('tabindex', '0');
           thumb.addEventListener('click', () => openViewer(thumb.currentSrc || thumb.src, thumb.alt));
           thumb.addEventListener('keydown', (event) => {
