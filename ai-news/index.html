@@ -49,7 +49,7 @@
     <section class="hero-editorial ai-news-hero">
       <div class="eyebrow">Daily refresh</div>
       <h1>AI News</h1>
-      <p class="lede">A curated feed of model releases, developer tooling, and notable research — rebuilt from scratch every morning. Filter by source, search headlines, sort by recency or score.</p>
+      <p class="lede">A curated briefing of model releases, agent tooling, infrastructure, research, and AI industry shifts — grouped by signal, with local thumbnails and short notes on why each story matters.</p>
     </section>
 
     <section class="card col-12" style="margin-top:16px;">
@@ -61,6 +61,10 @@
         <select id="news-sort" class="control">
           <option value="latest">Sort: Latest</option>
           <option value="top">Sort: Top scored</option>
+        </select>
+        <select id="news-view" class="control">
+          <option value="curated">View: Curated</option>
+          <option value="all">View: Raw feed</option>
         </select>
         <select id="news-source" class="control"></select>
         <input id="news-query" class="control" type="search" placeholder="Filter headline/summary..." />
