@@ -1,8 +1,8 @@
 {
-  "updatedAt": "2026-06-24T11:53:01.225563+00:00",
+  "updatedAt": "2026-06-24T13:00:01.323574+00:00",
   "items": [
     {
-      "title": "Quantifying Prior Dominance in RAG Systems",
+      "title": "Rajarshi Misra, Aditya Sharma, Vinti Agarwal, Hari Om Aggrawal",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -10,12 +10,92 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-24T11:53:06.070457+00:00",
+      "published": "2026-06-24T13:00:09.034803+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-24T11:53:01.225563+00:00",
+      "lastSeen": "2026-06-24T13:00:01.323574+00:00",
       "editorial_allow": false,
-      "editorial_reason": "framework_or_plumbing",
-      "score": -0.74
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.36
+    },
+    {
+      "title": "Qualcomm Buys Buzzy Chip Startup Modular for Nearly $4 Billion",
+      "url": "https://www.wired.com/story/qualcomm-buys-buzzy-chip-startup-modular-for-nearly-dollar4-billion",
+      "source": "Wired AI",
+      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Modular, one of the most promising chip software startups of the AI era, heads for a multibillion-dollar exit.",
+      "image": "https://media.wired.com/photos/6a3bc8bcb0d9ff58f6121983/master/pass/GettyImages-2204326766.jpg",
+      "published": "2026-06-24T12:36:07+00:00",
+      "firstSeen": "2026-06-24T13:00:01.323574+00:00",
+      "lastSeen": "2026-06-24T13:00:01.323574+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2779
+    },
+    {
+      "title": "The emergence of the web data infrastructure layer for AI",
+      "url": "https://www.technologyreview.com/2026/06/24/1139202/the-emergence-of-the-web-data-infrastructure-layer-for-ai",
+      "source": "MIT Technology Review AI",
+      "sourceUrl": "https://www.technologyreview.com/topic/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "AI is booming. New use cases are emerging each day. To capitalize on the technology’s potential, enterprises require data at scale. In many cases, though, the relevant information is blocked or unstructured, which limits its use by AI models.&#160; To understand this challenge, consider the foundation of the web itself. The web was not designed&#8230;",
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/06/iStock-1714934690.jpg?resize=1200%2C600",
+      "published": "2026-06-24T11:59:54+00:00",
+      "firstSeen": "2026-06-24T13:00:01.323574+00:00",
+      "lastSeen": "2026-06-24T13:00:01.323574+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.9598
+    },
+    {
+      "title": "Neel Somani breaks down the key factors behind East Coast power price spikes",
+      "url": "https://thenextweb.com/news/neel-somani-east-coast-power-price-spikes-natural-gas",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "If you live on the East Coast, you have probably opened a winter utility bill and wondered how your electricity costs could possibly be that high. Every few years, the story makes headlines: a cold snap hits the Northeast, power prices spike to hundreds of dollars, and politicians demand answers. But the real explanation rarely [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/neel-somani-east-coast-power-price-spikes-natural-gas.avif",
+      "published": "2026-06-24T11:58:43+00:00",
+      "firstSeen": "2026-06-24T13:00:01.323574+00:00",
+      "lastSeen": "2026-06-24T13:00:01.323574+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1192
+    },
+    {
+      "title": "EU moves to turn Europol into an operational police force as digital crime climbs",
+      "url": "https://thenextweb.com/news/eu-strengthen-europol-cross-border-crime",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Brussels wants to double the agency’s staff and widen its data powers. Rights groups say it has written the surveillance before drawing the safeguards. The European Commission moved to give Europol a markedly bigger job. In a proposal set out as part of its drive to harden the bloc against organised, internet-based, and financial crime, [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/Europol.avif",
+      "published": "2026-06-24T11:54:44+00:00",
+      "firstSeen": "2026-06-24T13:00:01.323574+00:00",
+      "lastSeen": "2026-06-24T13:00:01.323574+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1172
+    },
+    {
+      "title": "SK Hynix sets a $29 billion US listing that could top every ADR deal ever done",
+      "url": "https://thenextweb.com/news/sk-hynix-29-billion-us-adr-listing",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "SK Hynix has filed to raise up to 45.45 trillion won, roughly $29bn, through a listing of American depositary receipts on Nasdaq, the South Korean memory maker disclosed in a regulatory filing on Wednesday. The company has tentatively set July 10 for the debut and intends to issue 17.79 million new shares to back the [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/SK-Hynix.avif",
+      "published": "2026-06-24T11:15:46+00:00",
+      "firstSeen": "2026-06-24T13:00:01.323574+00:00",
+      "lastSeen": "2026-06-24T13:00:01.323574+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.1982
     },
     {
       "title": "AI loses out to human wealth managers when the money actually moves, HSBC finds",
@@ -28,10 +108,10 @@
       "image": "https://media.thenextweb.com/2026/06/HSBC.avif",
       "published": "2026-06-24T11:02:13+00:00",
       "firstSeen": "2026-06-24T11:53:01.225563+00:00",
-      "lastSeen": "2026-06-24T11:53:01.225563+00:00",
+      "lastSeen": "2026-06-24T13:00:01.323574+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 2.6244
+      "score": 2.5916
     },
     {
       "title": "Apple’s Eddy Cue says the company wants to make ‘better’ and ‘more’ entertainment",
@@ -44,10 +124,10 @@
       "image": "https://media.thenextweb.com/2026/06/Eddy-Cue.avif",
       "published": "2026-06-24T10:49:19+00:00",
       "firstSeen": "2026-06-24T11:53:01.225563+00:00",
-      "lastSeen": "2026-06-24T11:53:01.225563+00:00",
+      "lastSeen": "2026-06-24T13:00:01.323574+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.218
+      "score": 3.1854
     },
     {
       "title": "Swiss study finds fewer job ads for career starters as AI reshapes entry-level work",
@@ -60,10 +140,10 @@
       "image": "https://media.thenextweb.com/2026/06/Swiss-flag.avif",
       "published": "2026-06-24T10:41:14+00:00",
       "firstSeen": "2026-06-24T11:53:01.225563+00:00",
-      "lastSeen": "2026-06-24T11:53:01.225563+00:00",
+      "lastSeen": "2026-06-24T13:00:01.323574+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -0.986
+      "score": -1.0185
     },
     {
       "title": "ByteDance seeks a record $20bn offshore loan to fund its AI build-out",
@@ -76,10 +156,10 @@
       "image": "https://media.thenextweb.com/2026/06/ByteDance.avif",
       "published": "2026-06-24T10:29:29+00:00",
       "firstSeen": "2026-06-24T11:53:01.225563+00:00",
-      "lastSeen": "2026-06-24T11:53:01.225563+00:00",
+      "lastSeen": "2026-06-24T13:00:01.323574+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1083
+      "score": 2.0759
     },
     {
       "title": "GameStop’s Ryan Cohen gives up a pay package worth up to $35bn to chase eBay",
@@ -92,10 +172,10 @@
       "image": "https://media.thenextweb.com/2026/05/gamestop-ebay-56-billion-bid-amazon-rival.avif",
       "published": "2026-06-24T10:16:38+00:00",
       "firstSeen": "2026-06-24T11:53:01.225563+00:00",
-      "lastSeen": "2026-06-24T11:53:01.225563+00:00",
+      "lastSeen": "2026-06-24T13:00:01.323574+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.202
+      "score": 3.1699
     },
     {
       "title": "Samsung opens ChatGPT Enterprise and Codex access after AI restrictions",
@@ -108,10 +188,10 @@
       "image": "",
       "published": "2026-06-24T10:00:00+00:00",
       "firstSeen": "2026-06-24T11:00:01.663059+00:00",
-      "lastSeen": "2026-06-24T12:00:01.755507+00:00",
+      "lastSeen": "2026-06-24T13:00:01.323574+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.6919
+      "score": 12.66
     },
     {
       "title": "Alibaba sues the Pentagon to get off its Chinese military companies list",
@@ -124,10 +204,10 @@
       "image": "https://media.thenextweb.com/2026/04/uk-biobank-health-data-alibaba-breach.avif",
       "published": "2026-06-24T09:39:47+00:00",
       "firstSeen": "2026-06-24T11:00:01.663059+00:00",
-      "lastSeen": "2026-06-24T11:53:01.225563+00:00",
+      "lastSeen": "2026-06-24T13:00:01.323574+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0842
+      "score": 2.0526
     },
     {
       "title": "Samsung plans a 90 trillion won buyback to fund a chip-worker bonus",
@@ -140,10 +220,10 @@
       "image": "https://media.thenextweb.com/2026/06/Samsung.avif",
       "published": "2026-06-24T09:23:46+00:00",
       "firstSeen": "2026-06-24T11:00:01.663059+00:00",
-      "lastSeen": "2026-06-24T11:53:01.225563+00:00",
+      "lastSeen": "2026-06-24T13:00:01.323574+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0766
+      "score": 2.0452
     },
     {
       "title": "Anthropic drops ‘workplace AI agents’ directly inside Slack",
@@ -156,10 +236,10 @@
       "image": "",
       "published": "2026-06-24T09:00:00+00:00",
       "firstSeen": "2026-06-24T10:00:01.752835+00:00",
-      "lastSeen": "2026-06-24T12:00:01.755507+00:00",
+      "lastSeen": "2026-06-24T13:00:01.323574+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 13.6633
+      "score": 13.6323
     },
     {
       "title": "SoftBank’s Son says calling AI a bubble is ‘an insult’",
@@ -175,7 +255,7 @@
       "lastSeen": "2026-06-24T11:53:01.225563+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1647
+      "score": 3.1337
     },
     {
       "title": "Anthropic’s Mythos found flaws in classified US systems during a government test",
@@ -191,7 +271,7 @@
       "lastSeen": "2026-06-24T11:53:01.225563+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0577
+      "score": 5.0269
     },
     {
       "title": "Legion LegalTech sues US over Anthropic Fable 5 and Mythos 5 shutdown",
@@ -207,7 +287,7 @@
       "lastSeen": "2026-06-24T11:53:01.225563+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.1471
+      "score": 6.1166
     },
     {
       "title": "South Korea is in talks with Samsung and SK Hynix over a second chip cluster",
@@ -223,7 +303,7 @@
       "lastSeen": "2026-06-24T11:00:01.663059+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0397
+      "score": 2.0094
     },
     {
       "title": "YouTube settles ahead of California’s second social-media addiction trial",
@@ -239,7 +319,7 @@
       "lastSeen": "2026-06-24T11:00:01.663059+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0352
+      "score": 2.0052
     },
     {
       "title": "Agility Robotics is reportedly going public via a $2.5B SPAC deal",
@@ -255,7 +335,7 @@
       "lastSeen": "2026-06-24T11:00:01.663059+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0301
+      "score": 2.0001
     },
     {
       "title": "Blackstone plans $30B for Japan AI data centres, and is unbothered by bubble talk",
@@ -271,7 +351,7 @@
       "lastSeen": "2026-06-24T11:00:01.663059+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0259
+      "score": 1.9961
     },
     {
       "title": "A US spectrum auction just raised $3.5B to pay for ripping out Huawei",
@@ -287,7 +367,7 @@
       "lastSeen": "2026-06-24T11:00:01.663059+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1194
+      "score": 3.0898
     },
     {
       "title": "Meta’s $399 Kylie Jenner glasses will talk back in her voice",
@@ -303,7 +383,7 @@
       "lastSeen": "2026-06-24T10:00:01.752835+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7163
+      "score": 2.6867
     },
     {
       "title": "The US is pressing Meta to let it review its AI, and Meta is the last holdout",
@@ -319,7 +399,7 @@
       "lastSeen": "2026-06-24T10:00:01.752835+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3618
+      "score": 2.3324
     },
     {
       "title": "NVIDIA and AWS Collaborate to Bring AI to Production at Scale",
@@ -332,10 +412,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/logo-lockup-tech-blog-aws-1920x1080-2.jpg",
       "published": "2026-06-24T00:05:37+00:00",
       "firstSeen": "2026-06-24T00:08:31.662512+00:00",
-      "lastSeen": "2026-06-24T11:53:01.225563+00:00",
+      "lastSeen": "2026-06-24T13:00:01.323574+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 0.8828
+      "score": 0.8586
     },
     {
       "title": "v1.91.0-dev.1",
@@ -348,10 +428,10 @@
       "image": "https://opengraph.githubassets.com/9a78cd956067fceff41336d77c198cfb77ae32b295601dace5ece10928edf74f/BerriAI/litellm/releases/tag/v1.91.0-dev.1",
       "published": "2026-06-24T00:02:08+00:00",
       "firstSeen": "2026-06-24T00:08:31.662512+00:00",
-      "lastSeen": "2026-06-24T11:53:01.225563+00:00",
+      "lastSeen": "2026-06-24T13:00:01.323574+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.6815
+      "score": 2.6573
     },
     {
       "title": "India’s MoEngage bets that the future of marketing is millions of AI agents",
@@ -364,10 +444,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/ai-bots-agents-GettyImages-2230799616.jpg?resize=1200%2C800",
       "published": "2026-06-23T23:30:00+00:00",
       "firstSeen": "2026-06-24T01:00:01.211214+00:00",
-      "lastSeen": "2026-06-24T11:53:01.225563+00:00",
+      "lastSeen": "2026-06-24T13:00:01.323574+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.6698
+      "score": 4.646
     },
     {
       "title": "White House drastically shortens deadline for dropping quantum-vulnerable crypto",
@@ -380,10 +460,10 @@
       "image": "https://cdn.arstechnica.net/wp-content/uploads/2024/03/GettyImages-1070527780-1152x648.jpg",
       "published": "2026-06-23T22:30:57+00:00",
       "firstSeen": "2026-06-23T23:00:01.860733+00:00",
-      "lastSeen": "2026-06-24T11:53:01.225563+00:00",
+      "lastSeen": "2026-06-24T13:00:01.323574+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8088
+      "score": 1.7856
     },
     {
       "title": "Google Home will soon get better at recognizing you",
@@ -396,10 +476,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/23451196/acastro_220510_STK123_0002.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-23T22:28:19+00:00",
       "firstSeen": "2026-06-23T23:00:01.860733+00:00",
-      "lastSeen": "2026-06-24T11:53:01.225563+00:00",
+      "lastSeen": "2026-06-24T13:00:01.323574+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -1.0821
+      "score": -1.1053
     },
     {
       "title": "Hollywood is bending the knee to OpenAI",
@@ -412,10 +492,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25431704/STK201_SAM_ALTMAN_CVIRGINIA_C.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=4.7487503051758%2C21.869598945592%2C95.251249694824%2C74.804666989327&amp%3Bw=1200",
       "published": "2026-06-23T22:03:18+00:00",
       "firstSeen": "2026-06-23T22:21:25.628722+00:00",
-      "lastSeen": "2026-06-24T11:53:01.225563+00:00",
+      "lastSeen": "2026-06-24T13:00:01.323574+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0091
+      "score": 4.9863
     },
     {
       "title": "datasette 1.0a35",
@@ -428,10 +508,10 @@
       "image": "https://static.simonwillison.net/static/2026/create-alter-demo-first-frame.jpg",
       "published": "2026-06-23T21:34:37+00:00",
       "firstSeen": "2026-06-24T00:00:01.184142+00:00",
-      "lastSeen": "2026-06-24T11:53:01.225563+00:00",
+      "lastSeen": "2026-06-24T13:00:01.323574+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3293
+      "score": 3.3067
     },
     {
       "title": "Coupang’s $409M Fine Shows the Real Cost of Weak AI Governance",
@@ -444,10 +524,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/06/young-caucasian-female-programmer-in-glasses-write-2026-03-13-04-14-49-utc-1.jpg?f=jpeg",
       "published": "2026-06-23T21:21:59+00:00",
       "firstSeen": "2026-06-23T22:00:01.741568+00:00",
-      "lastSeen": "2026-06-24T11:53:01.225563+00:00",
+      "lastSeen": "2026-06-24T13:00:01.323574+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.885
+      "score": 2.8625
     },
     {
       "title": "AI Goes Hollywood: Google, A24 Strike $75M AI Deal for Filmmaking Tools",
@@ -460,10 +540,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/06/a24.jpg?f=jpeg",
       "published": "2026-06-23T21:10:23+00:00",
       "firstSeen": "2026-06-23T22:00:01.741568+00:00",
-      "lastSeen": "2026-06-24T11:53:01.225563+00:00",
+      "lastSeen": "2026-06-24T13:00:01.323574+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.881
+      "score": 4.8587
     },
     {
       "title": "Oracle’s 21,000 layoffs help drive its debt-fueled AI investments",
@@ -476,10 +556,10 @@
       "image": "https://cdn.arstechnica.net/wp-content/uploads/2026/06/GettyImages-2212917669-1152x648.jpg",
       "published": "2026-06-23T20:17:38+00:00",
       "firstSeen": "2026-06-23T21:00:01.441206+00:00",
-      "lastSeen": "2026-06-24T11:53:01.225563+00:00",
+      "lastSeen": "2026-06-24T13:00:01.323574+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7634
+      "score": 1.7416
     },
     {
       "title": "ByteDance unveils Seedance 2.5, a 30-second native 4K AI video model that accepts 50 reference inputs",
@@ -495,7 +575,7 @@
       "lastSeen": "2026-06-24T08:32:01.451616+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.161
+      "score": 3.1393
     },
     {
       "title": "Anthropic launches Claude Tag, an always-on AI teammate that lives in your Slack channels",
@@ -512,7 +592,7 @@
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 22.2515
+      "score": 22.2301
     },
     {
       "title": "A fake AI agent skill passed every security scanner and reportedly reached 26,000 agents",
@@ -528,7 +608,7 @@
       "lastSeen": "2026-06-24T08:32:01.451616+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.4412
+      "score": 4.4201
     },
     {
       "title": "OPFS + Pyodide test harness",
@@ -541,10 +621,10 @@
       "image": "",
       "published": "2026-06-23T18:58:54+00:00",
       "firstSeen": "2026-06-23T20:00:01.900277+00:00",
-      "lastSeen": "2026-06-24T11:53:01.225563+00:00",
+      "lastSeen": "2026-06-24T13:00:01.323574+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.3778
+      "score": 8.3568
     },
     {
       "title": "Meta’s new prediction market app Arena could bring betting to 3 billion users",
@@ -560,87 +640,7 @@
       "lastSeen": "2026-06-24T08:00:01.859828+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8269
-    },
-    {
-      "title": "The Brexit bill comes due: ten years, seven prime ministers, and an economy 6% smaller than it should be",
-      "url": "https://thenextweb.com/news/brexit-ten-years-uk-economy-seven-prime-ministers",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Ten years ago today, 52% of the British electorate voted to leave the European Union. The decade that followed delivered seven prime ministers, a permanently weakened currency, and an economy that a landmark study now estimates is between 6% and 8% smaller than it would have been had the country voted to remain. On Monday, [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/brexit-ten-years-uk-economy-seven-prime-ministers.avif",
-      "published": "2026-06-23T18:11:48+00:00",
-      "firstSeen": "2026-06-23T20:00:01.900277+00:00",
-      "lastSeen": "2026-06-24T08:00:01.859828+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.723
-    },
-    {
-      "title": "SpaceX draws $89 billion in demand for its debut bond sale, one of the largest US offerings this year",
-      "url": "https://thenextweb.com/news/spacex-89-billion-demand-debut-bond-sale",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "SpaceX has drawn roughly $89 billion in investor demand for its debut US bond sale, Bloomberg reported on Tuesday, setting the stage for one of the largest investment-grade offerings this year. The company is seeking to raise between $20 billion and $25 billion from a five-tranche deal expected to price on Tuesday. At the lower [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/spacex-89-billion-demand-debut-bond-sale.avif",
-      "published": "2026-06-23T17:58:18+00:00",
-      "firstSeen": "2026-06-23T18:09:57.800266+00:00",
-      "lastSeen": "2026-06-24T08:00:01.859828+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.4188
-    },
-    {
-      "title": "Oracle cut 21,000 jobs this year and its SEC filing explicitly blames AI",
-      "url": "https://thenextweb.com/news/oracle-21000-layoffs-ai-data-centres",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Oracle’s global workforce fell to 141,000 full-time employees as of 31 May 2026, down from 162,000 a year earlier, a net reduction of roughly 21,000 people. The company’s annual regulatory filing stated plainly that “the adoption and deployment of AI technologies across our operations have resulted, and may continue to result, in reductions to our workforce.” It [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/oracle-21000-layoffs-ai-data-centres.avif",
-      "published": "2026-06-23T17:47:40+00:00",
-      "firstSeen": "2026-06-23T18:09:57.800266+00:00",
-      "lastSeen": "2026-06-24T08:00:01.859828+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.7155
-    },
-    {
-      "title": "Google is simultaneously the most dominant and most vulnerable it has ever been",
-      "url": "https://thenextweb.com/news/google-dominance-cracking-ai-era",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Google’s financial performance has never been stronger. Alphabet posted $109.9 billion in revenue in the first quarter of 2026, up 22 per cent year on year, the fastest growth rate in any quarter since 2022, with search advertising revenue climbing 19.1 per cent and queries hitting an all-time high. And yet the week before these numbers [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/google-dominance-cracking-ai-era.avif",
-      "published": "2026-06-23T17:36:12+00:00",
-      "firstSeen": "2026-06-23T18:09:57.800266+00:00",
-      "lastSeen": "2026-06-24T08:00:01.859828+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 3.112
-    },
-    {
-      "title": "Stark Defence raises €500M led by Sequoia and Founders Fund at a valuation above €3.5 billion",
-      "url": "https://thenextweb.com/news/stark-defence-500-million-sequoia-founders-fund-3-5-billion-valuation",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Stark Defence, the Berlin-based strike drone startup founded in 2024, has raised €500 million in a round led by Sequoia Capital and Peter Thiel’s Founders Fund, Bloomberg reported on Monday. The deal values the company at more than three and a half billion euros, roughly triple the €1 billion mark it crossed earlier this year. [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/stark-defence-500-million-sequoia-founders-fund-3-5-billion-valuation.avif",
-      "published": "2026-06-23T17:25:54+00:00",
-      "firstSeen": "2026-06-23T18:09:57.800266+00:00",
-      "lastSeen": "2026-06-24T08:00:01.859828+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.4089
+      "score": 2.8062
     },
     {
       "title": "The Friendly Virus",
@@ -653,10 +653,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-22T20:00:00+00:00",
       "firstSeen": "2026-06-22T21:00:01.381447+00:00",
-      "lastSeen": "2026-06-24T11:53:01.225563+00:00",
+      "lastSeen": "2026-06-24T13:00:01.323574+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.5533
+      "score": 1.5422
     },
     {
       "title": "The Life Scientific: Dean Lomax",
@@ -669,10 +669,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-15T20:00:00+00:00",
       "firstSeen": "2026-06-15T21:00:01.290903+00:00",
-      "lastSeen": "2026-06-24T11:53:01.225563+00:00",
+      "lastSeen": "2026-06-24T13:00:01.323574+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.1934
+      "score": 1.1933
     },
     {
       "title": "The Life Scientific: Helen Hastie",
@@ -693,14 +693,9 @@
   ],
   "errors": [
     {
-      "source": "Artificial Intelligence News",
-      "url": "https://www.artificialintelligence-news.com/categories/artificial-intelligence/feed/",
-      "error": "not well-formed (invalid token): line 1, column 158"
-    },
-    {
       "source": "MarkTechPost",
       "url": "https://www.marktechpost.com/feed/",
-      "error": "not well-formed (invalid token): line 1, column 119"
+      "error": "HTTP Error 403: Forbidden"
     }
   ]
 }
