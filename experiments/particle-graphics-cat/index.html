@@ -84,6 +84,44 @@
       pointer-events: auto;
     }
 
+    .controls summary {
+      min-height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      color: var(--ink);
+      cursor: pointer;
+      list-style: none;
+      font-size: 0.92rem;
+      font-weight: 700;
+    }
+
+    .controls summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .controls summary::after {
+      content: "+";
+      width: 22px;
+      height: 22px;
+      display: inline-grid;
+      place-items: center;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 999px;
+      color: var(--aqua);
+      font-size: 1rem;
+      line-height: 1;
+    }
+
+    .controls[open] summary {
+      margin-bottom: 12px;
+    }
+
+    .controls[open] summary::after {
+      content: "-";
+    }
+
     .button-row {
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -208,10 +246,11 @@
   <main class="hud">
     <section class="title" aria-label="Demo title">
       <h1>Particle Graphics Cat</h1>
-      <p>A white cat-shaped point cloud with pale pink ears, green-gray eyes, whiskers, paws, and a small dark crown marking.</p>
+      <p>A playful particle cat with big blinking muppet eyes, pale pink ears, whiskers, paws, and a dark crown marking.</p>
     </section>
 
-    <section class="controls" aria-label="Particle controls">
+    <details class="controls" aria-label="Particle controls">
+      <summary>Controls</summary>
       <div class="button-row">
         <button id="pause" type="button" aria-pressed="false" title="Pause or resume animation">Pause</button>
         <button id="spin" type="button" aria-pressed="true" title="Toggle automatic turntable">Spin</button>
@@ -243,7 +282,7 @@
         <input id="patch" type="range" min="0" max="2.2" value="1.45" step="0.05" />
         <output id="patchValue">1.45</output>
       </label>
-    </section>
+    </details>
   </main>
 
   <aside class="stats" aria-label="Particle statistics">
@@ -306,6 +345,7 @@
       furLight: new THREE.Color(0xfffcf5),
       furShadow: new THREE.Color(0xd8d4cc),
       white: new THREE.Color(0xfbF8f1),
+      eyeWhite: new THREE.Color(0xfffbef),
       cream: new THREE.Color(0xe8e0d2),
       crown: new THREE.Color(0x24272a),
       pink: new THREE.Color(0xe8b4ae),
@@ -485,10 +525,11 @@
     }
 
     function addFaceEye(side) {
-      const z = side * 0.48;
-      addFilledEllipsoid([5.66, 1.15, z], [0.105, 0.19, 0.032], 1200, 6, palette.eye, 18, 0.005);
-      addFilledEllipsoid([5.75, 1.13, z + side * 0.015], [0.036, 0.12, 0.014], 460, 6, palette.eyeDark, 18, 0.003);
-      addLine([5.54, 1.42, z - side * 0.08], [5.82, 1.35, z + side * 0.08], 220, 7, palette.furShadow, 7, 0.008);
+      const z = side * 0.31;
+      addFilledEllipsoid([5.86, 1.22, z], [0.24, 0.38, 0.058], 1650, 6, palette.eyeDark, 23, 0.003);
+      addFilledEllipsoid([5.93, 1.22, z], [0.2, 0.32, 0.045], 2850, 6, palette.eyeWhite, 23, 0.003);
+      addFilledEllipsoid([6.07, 1.1, z + side * 0.012], [0.07, 0.16, 0.018], 980, 6, palette.eyeDark, 22, 0.002);
+      addFilledEllipsoid([6.1, 1.19, z - side * 0.004], [0.025, 0.043, 0.008], 180, 6, palette.white, 20, 0.001);
     }
 
     function addOrganicHead() {
@@ -498,7 +539,6 @@
       addEllipsoid([5.48, 0.72, 0], [0.54, 0.34, 0.62], 12000, 2, () => palette.white, 15, 0.028);
       addFilledEllipsoid([5.88, 0.78, 0], [0.14, 0.085, 0.19], 1100, 2, palette.nose, 16, 0.014);
       addFilledEllipsoid([5.98, 0.7, 0], [0.052, 0.052, 0.08], 320, 2, palette.noseDark, 17, 0.005);
-      addLine([5.86, 0.66, 0], [5.74, 0.53, 0], 130, 7, palette.noseDark, 5, 0.005);
       addFaceEye(-1);
       addFaceEye(1);
 
@@ -705,7 +745,8 @@
             p.z += sin(gait + legPhase) * lower * 0.035 * uWalkStrength;
           } else if (aRegion < 7.0) {
             float blink = pow(max(0.0, sin(t * 2.7 - 1.2)), 28.0);
-            p.y -= blink * 0.18;
+            p.y = mix(p.y, 1.18, blink * 0.88);
+            p.x += blink * 0.035;
           } else if (aRegion < 8.0) {
             p.x += sin(t * 1.8 + aSeed) * 0.035;
             p.z += sin(t * 2.2 + aSeed) * 0.025;
