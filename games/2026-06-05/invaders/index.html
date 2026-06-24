@@ -556,7 +556,7 @@
       <div class="overlay" id="overlay">
         <div class="panel">
           <h1>Invaders</h1>
-          <div class="title-version">v1.45</div>
+          <div class="title-version">v1.46</div>
           <p class="tagline" id="message">A modernized arcade defense run: punch through waves, catch power cores, and survive the boss carrier.</p>
           <p class="hint" id="controlsHint"></p>
           <div class="enemy-roster" aria-label="Enemy ship guide">
@@ -586,7 +586,7 @@
         <button id="pauseButton" type="button" aria-label="Pause" title="Pause (P)">⏸</button>
         <button id="muteButton" type="button" aria-label="Mute sound" aria-pressed="false" title="Mute (M)">🔊</button>
       </div>
-      <div class="version" aria-hidden="true">v1.45</div>
+      <div class="version" aria-hidden="true">v1.46</div>
     </section>
   </main>
 
@@ -981,6 +981,38 @@
         return dx * dx + dy * dy;
       }
 
+      function movingCircleHit(b, target, radius) {
+        const bx1 = b.px ?? b.x;
+        const by1 = b.py ?? b.y;
+        const tx1 = target.prevX ?? target.x;
+        const ty1 = target.prevY ?? target.y;
+        return segmentCircleHit(
+          bx1 - tx1,
+          by1 - ty1,
+          b.x - target.x,
+          b.y - target.y,
+          0,
+          0,
+          radius
+        );
+      }
+
+      function invaderHitRadius(inv, bullet) {
+        const diveBonus = inv.divePhase === "swoop" ? 13 : inv.divePhase ? 9 : 3;
+        return (bullet.r || 1) + inv.r + diveBonus;
+      }
+
+      function firstInvaderHit(b) {
+        let best = null;
+        for (const inv of game.invaders) {
+          const radius = invaderHitRadius(inv, b);
+          const t = movingCircleHit(b, inv, radius);
+          if (t === null || (best && t >= best.t)) continue;
+          best = { inv, t };
+        }
+        return best;
+      }
+
       function playerLaneY() {
         const mobile = game.compact;
         const bottomGap = mobile
@@ -1332,6 +1364,10 @@
         const liveCount = Math.max(1, game.invaders.length);
         const urgency = clamp((game.bossWave ? 14 : 52) / liveCount, 1, 3.8);
         game.invaderMarchTimer += dt;
+        for (const inv of game.invaders) {
+          inv.prevX = inv.x;
+          inv.prevY = inv.y;
+        }
         const baseInterval = game.bossWave ? 0.72 : 0.68;
         const waveRamp = clamp(1 + game.wave * 0.075, 1, 2.1);
         const timeRamp = clamp(1 + game.invaderMarchTimer * 0.06, 1, 2.85);
@@ -1424,12 +1460,12 @@
               inv.diveStartY = inv.y;
             }
           } else if (inv.divePhase === "swoop") {
-            const duration = clamp(1.55 - game.wave * 0.012, 1.08, 1.55);
+            const duration = clamp(2.35 - game.wave * 0.012, 1.75, 2.35);
             const t = clamp(inv.diveTime / duration, 0, 1);
             const ease = t * t * (3 - 2 * t);
             const targetX = p.x;
             const targetY = p.y - 8;
-            const sway = Math.sin(t * Math.PI * 2.35) * (game.compact ? 62 : 108) * inv.diveDir * (1 - t * 0.12);
+            const sway = Math.sin(t * Math.PI * 1.65) * (game.compact ? 42 : 72) * inv.diveDir * (1 - t * 0.12);
             const arc = Math.sin(t * Math.PI) * (game.compact ? 24 : 38);
             inv.x = inv.diveStartX + (targetX - inv.diveStartX) * ease + sway;
             inv.y = inv.diveStartY + (targetY - inv.diveStartY) * ease - arc;
@@ -1447,7 +1483,7 @@
           } else {
             const homeX = inv.homeX ?? inv.baseX;
             const homeY = inv.homeY ?? inv.baseY;
-            const duration = 1.05;
+            const duration = 1.25;
             const t = clamp(inv.diveTime / duration, 0, 1);
             const ease = t * t * (3 - 2 * t);
             const returnSway = Math.sin(t * Math.PI * 1.55) * (game.compact ? 30 : 48) * -inv.diveDir * (1 - t);
@@ -1519,20 +1555,19 @@
         }
         for (const b of game.bullets) {
           const shieldHit = firstShieldHit(b);
-          if (shieldHit) {
+          const invaderHit = firstInvaderHit(b);
+          if (invaderHit && (invaderHit.inv.divePhase || !shieldHit || invaderHit.t <= shieldHit.t)) {
+            b.x = (b.px ?? b.x) + (b.x - (b.px ?? b.x)) * invaderHit.t;
+            b.y = (b.py ?? b.y) + (b.y - (b.py ?? b.y)) * invaderHit.t;
+            b.life = 0;
+            damageInvader(invaderHit.inv, b.damage);
+          } else if (shieldHit) {
             b.life = 0;
             b.x = shieldHit.x;
             b.y = shieldHit.y;
             damagePlayerShieldHit(shieldHit);
           }
           if (b.life <= 0) continue;
-          for (const inv of game.invaders) {
-            if (distSq(b, inv) < (b.r + inv.r) * (b.r + inv.r)) {
-              b.life = 0;
-              damageInvader(inv, b.damage);
-              break;
-            }
-          }
           if (b.life > 0 && game.boss && distSq(b, game.boss) < (b.r + game.boss.r) * (b.r + game.boss.r)) {
             b.life = 0;
             damageBoss(b.damage);
@@ -2669,6 +2704,57 @@
         muteButton.blur();
         toggleMute();
       });
+
+      window.__invadersQA = {
+        version: "v1.46",
+        game,
+        forceDiverSwoop() {
+          if (!game.player) return null;
+          if (!game.invaders.length) spawnWave();
+          const inv = game.invaders.find(enemy => enemy.type === "diver") || game.invaders[0];
+          inv.type = "diver";
+          inv.divePhase = "swoop";
+          inv.diveTime = 0.5;
+          inv.diveDir = 1;
+          inv.diveStartX = game.player.x - 90;
+          inv.diveStartY = game.player.y - 180;
+          inv.prevX = inv.diveStartX - 80;
+          inv.prevY = inv.diveStartY + 15;
+          inv.x = game.player.x - 8;
+          inv.y = game.player.y - 92;
+          inv.hp = 1;
+          inv.maxHp = 1;
+          return { x: inv.x, y: inv.y, phase: inv.divePhase };
+        },
+        testMovingDiverHit() {
+          const inv = game.invaders.find(enemy => enemy.divePhase === "swoop")
+            || game.invaders.find(enemy => enemy.type === "diver")
+            || null;
+          if (!inv) return false;
+          const savedShields = game.shields;
+          game.shields = [];
+          inv.prevX = inv.x - 2;
+          inv.prevY = inv.y + 1;
+          const countBefore = game.invaders.length;
+          const bullet = {
+            x: inv.x,
+            y: inv.y + 84,
+            px: inv.x,
+            py: inv.y + 84,
+            vx: 0,
+            vy: -620,
+            r: 4,
+            damage: 99,
+            color: colors.bullet,
+            life: 1
+          };
+          game.bullets.push(bullet);
+          updateBullets(0.22);
+          const hit = game.invaders.length < countBefore;
+          game.shields = savedShields;
+          return hit;
+        }
+      };
 
       resize();
       game.player = {
