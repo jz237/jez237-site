@@ -48,10 +48,7 @@
       box-shadow: var(--shadow);
     }
     .hero-layout {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(280px, 410px);
-      gap: clamp(18px, 4vw, 36px);
-      align-items: end;
+      display: block;
     }
     h1 { margin: 0 0 10px; color: var(--accent-strong); font-size: clamp(2rem, 5vw, 3.9rem); letter-spacing: 0; line-height: .96; }
     .lede { max-width: 760px; color: #4d675e; font-size: clamp(.98rem, 2.1vw, 1.08rem); font-weight: 560; margin: 0; }
@@ -73,21 +70,6 @@
       color: #116044;
       font-weight: 850;
       box-shadow: 0 12px 26px rgba(30,127,90,.15);
-    }
-    .hero-panel {
-      border: 1px solid rgba(215,231,222,.92);
-      border-radius: 8px;
-      background: rgba(255,255,255,.72);
-      box-shadow: 0 12px 24px rgba(7,48,36,.09);
-      padding: 14px;
-    }
-    .hero-panel-label {
-      margin: 0 0 8px;
-      color: #31564a;
-      font-size: .78rem;
-      font-weight: 850;
-      letter-spacing: .08em;
-      text-transform: uppercase;
     }
     main { padding: 26px 22px 70px; }
     .featured-infographic {
@@ -188,10 +170,6 @@
           <a class="pill" href="worlds.html">Fictional worlds</a>
           <a class="pill" href="subject-artifacts.html">Subject as artifact</a>
         </div>
-      </div>
-      <div class="hero-panel">
-        <p class="hero-panel-label">Archive mode</p>
-        <p class="lede">Newest first, with one factual detailed infographic added by the daily image cron when that slot runs.</p>
       </div>
     </div>
   </header>
