@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-24T15:00:01.111748+00:00",
+  "updatedAt": "2026-06-24T14:51:46.329711+00:00",
   "items": [
     {
       "title": "Rajarshi Misra, Aditya Sharma, Vinti Agarwal, Hari Om Aggrawal",
@@ -10,28 +10,12 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-24T15:00:08.856071+00:00",
+      "published": "2026-06-24T14:51:54.297848+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-24T15:00:01.111748+00:00",
+      "lastSeen": "2026-06-24T14:51:46.329711+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
-    },
-    {
-      "title": "OpenAI unveils its first custom chip, built by Broadcom",
-      "url": "https://techcrunch.com/2026/06/24/openai-unveils-its-first-custom-chip-built-by-broadcom",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Named Jalapeño, the new processor was designed specifically for the unique needs of OpenAI's inference systems.",
-      "image": "https://techcrunch.com/wp-content/uploads/2018/02/tc-backlight-e1689786273147.png?w=1200",
-      "published": "2026-06-24T14:54:46+00:00",
-      "firstSeen": "2026-06-24T15:00:01.111748+00:00",
-      "lastSeen": "2026-06-24T15:00:01.111748+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 5.5873
     },
     {
       "title": "OpenAI reveals its first AI processor: Jalapeño",
@@ -43,11 +27,11 @@
       "summary": "OpenAI has just revealed a new \"intelligence processor\" chip for AI servers made in partnership with Broadcom. The chip, called Jalape&#241;o, is designed to power current and future large language models, according to an announcement on Wednesday. Jalape&#241;o is an ASIC (Application-Specific Integrated Circuit), meaning it's designed for a specific purpose: AI inference. With AI [&#8230;]",
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/openai-broadcom-jalapeno-inference-chip-image.webp?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C3.5043662306087%2C100%2C92.991267538783&amp%3Bw=1200",
       "published": "2026-06-24T14:36:47+00:00",
-      "firstSeen": "2026-06-24T15:00:01.111748+00:00",
-      "lastSeen": "2026-06-24T15:00:01.111748+00:00",
+      "firstSeen": "2026-06-24T14:51:46.329711+00:00",
+      "lastSeen": "2026-06-24T14:51:46.329711+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.7482
+      "score": 6.7524
     },
     {
       "title": "Talos: Scaling rare disease diagnosis with automated, iterative genomic reanalysis",
@@ -59,11 +43,11 @@
       "summary": "Talos was built to help resolve a major bottleneck in genomic medicine: human review time. The open-source system recovered 90% of in-scope diagnoses while surfacing just 1.3 candidate variants per patient for expert review. \nThe post Talos: Scaling rare disease diagnosis with automated, iterative genomic reanalysis appeared first on Microsoft Research.",
       "image": "https://www.microsoft.com/en-us/research/wp-content/uploads/2026/06/Talos-TWLIFB-1200x627-1-scaled.jpg",
       "published": "2026-06-24T14:00:14+00:00",
-      "firstSeen": "2026-06-24T15:00:01.111748+00:00",
-      "lastSeen": "2026-06-24T15:00:01.111748+00:00",
+      "firstSeen": "2026-06-24T14:51:46.329711+00:00",
+      "lastSeen": "2026-06-24T14:51:46.329711+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.83
+      "score": 4.8341
     },
     {
       "title": "3 days left to save up to $190 on your TechCrunch Founder Summit 2026 pass",
@@ -75,11 +59,11 @@
       "summary": "You have just 3 days left to save up to $190 on your pass to TechCrunch Founder Summit 2026 before Early Bird rates end on June 26 at 11:59 p.m. PT. Register here.",
       "image": "https://techcrunch.com/wp-content/uploads/2026/01/TC-All-Stage-2025-Charles-Hudson-Breakout-Session-Audience.jpg?resize=1200%2C800",
       "published": "2026-06-24T14:00:00+00:00",
-      "firstSeen": "2026-06-24T15:00:01.111748+00:00",
-      "lastSeen": "2026-06-24T15:00:01.111748+00:00",
+      "firstSeen": "2026-06-24T14:51:46.329711+00:00",
+      "lastSeen": "2026-06-24T14:51:46.329711+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2599
+      "score": 2.2639
     },
     {
       "title": "Apple’s suppliers are racing to Hong Kong to fund their robot pivot",
@@ -91,11 +75,11 @@
       "summary": "Two of Apple’s biggest Chinese suppliers are racing to Hong Kong in the same week. Luxshare wants about $3bn, Lingyi just banked $1.1bn. Both are using the cash to pivot from smartphone parts to AI hardware and humanoid robots. The companies that build your AirPods are quietly raising a fortune. This week two of them [&hellip;]\nThis story continues at The Next Web",
       "image": "https://media.thenextweb.com/2026/06/Exchange_Square-Hong-King.avif",
       "published": "2026-06-24T13:57:08+00:00",
-      "firstSeen": "2026-06-24T15:00:01.111748+00:00",
-      "lastSeen": "2026-06-24T15:00:01.111748+00:00",
+      "firstSeen": "2026-06-24T14:51:46.329711+00:00",
+      "lastSeen": "2026-06-24T14:51:46.329711+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2184
+      "score": 3.2225
     },
     {
       "title": "A Princeton grad’s $30M AI detector is selling to Superhuman",
@@ -107,11 +91,11 @@
       "summary": "Superhuman, the company that used to be Grammarly, just bought GPTZero, the startup that catches AI writing. The contradiction is the point. As the internet fills with machine-made text, proving something is human is becoming a product. There is a neat irony at the centre of this deal. Superhuman’s biggest product helps people write with [&hellip;]\nThis story continues at The Next Web",
       "image": "https://media.thenextweb.com/2026/06/Shishir-Mehrotra-Edward-Tian.avif",
       "published": "2026-06-24T13:41:22+00:00",
-      "firstSeen": "2026-06-24T15:00:01.111748+00:00",
-      "lastSeen": "2026-06-24T15:00:01.111748+00:00",
+      "firstSeen": "2026-06-24T14:51:46.329711+00:00",
+      "lastSeen": "2026-06-24T14:51:46.329711+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1107
+      "score": 2.1147
     },
     {
       "title": "Hadrian’s reported $7.5bn round and the physical-AI rush",
@@ -123,11 +107,11 @@
       "summary": "Bloomberg says defense-factory startup Hadrian is in talks to raise as much as $1bn at a $7.5bn valuation. Hadrian calls that “inaccurate”. Either way, the rumour shows how hot physical AI and US reindustrialisation have become. Here is a number, and a denial, in the same breath. Hadrian Automation has discussed a new funding round [&hellip;]\nThis story continues at The Next Web",
       "image": "https://media.thenextweb.com/2026/06/Hadrian-Arizona-Site.avif",
       "published": "2026-06-24T13:27:50+00:00",
-      "firstSeen": "2026-06-24T15:00:01.111748+00:00",
-      "lastSeen": "2026-06-24T15:00:01.111748+00:00",
+      "firstSeen": "2026-06-24T14:51:46.329711+00:00",
+      "lastSeen": "2026-06-24T14:51:46.329711+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.104
+      "score": 2.1081
     },
     {
       "title": "Main Capital raised the Netherlands’ biggest-ever fund on boring software",
@@ -139,11 +123,11 @@
       "summary": "While public markets panic that AI will gut enterprise software, a quiet Dutch firm just raised €5.25bn on the opposite bet. Main Capital’s pitch: boring, essential software is exactly where the next decade of value sits. Charly Zwemstra has spent 23 years buying software that almost nobody finds exciting. Think hospital appointment systems, municipal tax [&hellip;]\nThis story continues at The Next Web",
       "image": "https://media.thenextweb.com/2026/06/Charly-Zwemstra-Main-Capital-Partners.avif",
       "published": "2026-06-24T13:07:58+00:00",
-      "firstSeen": "2026-06-24T15:00:01.111748+00:00",
-      "lastSeen": "2026-06-24T15:00:01.111748+00:00",
+      "firstSeen": "2026-06-24T14:51:46.329711+00:00",
+      "lastSeen": "2026-06-24T14:51:46.329711+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.8944
+      "score": 3.8984
     },
     {
       "title": "The Google Home Speaker sounds good and looks great — but it’s finicky",
@@ -156,10 +140,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/Google-Home-Speaker.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.728785061485%2C100%2C78.54242987703&amp%3Bw=1200",
       "published": "2026-06-24T13:00:00+00:00",
       "firstSeen": "2026-06-24T14:00:01.741376+00:00",
-      "lastSeen": "2026-06-24T15:00:01.111748+00:00",
+      "lastSeen": "2026-06-24T14:51:46.329711+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3005
+      "score": 2.3045
     },
     {
       "title": "Menlo Ventures raises $3bn on the back of one Anthropic bet",
@@ -172,10 +156,10 @@
       "image": "https://media.thenextweb.com/2026/06/Menlo-Ventures-team.avif",
       "published": "2026-06-24T12:58:09+00:00",
       "firstSeen": "2026-06-24T14:00:01.741376+00:00",
-      "lastSeen": "2026-06-24T15:00:01.111748+00:00",
+      "lastSeen": "2026-06-24T14:51:46.329711+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0897
+      "score": 5.0936
     },
     {
       "title": "Walmart buys Vibe.co for $1.4bn to chase Amazon in ads",
@@ -188,10 +172,10 @@
       "image": "https://media.thenextweb.com/2026/06/walmart-vibe-co-deal-amazon-ads.avif",
       "published": "2026-06-24T12:48:17+00:00",
       "firstSeen": "2026-06-24T14:00:01.741376+00:00",
-      "lastSeen": "2026-06-24T15:00:01.111748+00:00",
+      "lastSeen": "2026-06-24T14:51:46.329711+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0849
+      "score": 2.0889
     },
     {
       "title": "Qualcomm Buys Buzzy Chip Startup Modular for Nearly $4 Billion",
@@ -204,10 +188,10 @@
       "image": "https://media.wired.com/photos/6a3bc8bcb0d9ff58f6121983/master/pass/GettyImages-2204326766.jpg",
       "published": "2026-06-24T12:36:07+00:00",
       "firstSeen": "2026-06-24T13:00:01.323574+00:00",
-      "lastSeen": "2026-06-24T15:00:01.111748+00:00",
+      "lastSeen": "2026-06-24T14:51:46.329711+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2191
+      "score": 2.223
     },
     {
       "title": "Zhipu weighs multibillion-dollar raise after 2,000% surge",
@@ -220,10 +204,10 @@
       "image": "https://media.thenextweb.com/2026/06/zhipu-ai-office.avif",
       "published": "2026-06-24T12:30:27+00:00",
       "firstSeen": "2026-06-24T14:00:01.741376+00:00",
-      "lastSeen": "2026-06-24T15:00:01.111748+00:00",
+      "lastSeen": "2026-06-24T14:51:46.329711+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.0764
+      "score": 4.0803
     },
     {
       "title": "The emergence of the web data infrastructure layer for AI",
@@ -236,10 +220,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/06/iStock-1714934690.jpg?resize=1200%2C600",
       "published": "2026-06-24T11:59:54+00:00",
       "firstSeen": "2026-06-24T13:00:01.323574+00:00",
-      "lastSeen": "2026-06-24T15:00:01.111748+00:00",
+      "lastSeen": "2026-06-24T14:51:46.329711+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.902
+      "score": 2.9059
     },
     {
       "title": "Neel Somani breaks down the key factors behind East Coast power price spikes",
@@ -252,10 +236,10 @@
       "image": "https://media.thenextweb.com/2026/06/neel-somani-east-coast-power-price-spikes-natural-gas.avif",
       "published": "2026-06-24T11:58:43+00:00",
       "firstSeen": "2026-06-24T13:00:01.323574+00:00",
-      "lastSeen": "2026-06-24T15:00:01.111748+00:00",
+      "lastSeen": "2026-06-24T14:51:46.329711+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0614
+      "score": 2.0653
     },
     {
       "title": "EU moves to turn Europol into an operational police force as digital crime climbs",
@@ -268,10 +252,10 @@
       "image": "https://media.thenextweb.com/2026/06/Europol.avif",
       "published": "2026-06-24T11:54:44+00:00",
       "firstSeen": "2026-06-24T13:00:01.323574+00:00",
-      "lastSeen": "2026-06-24T15:00:01.111748+00:00",
+      "lastSeen": "2026-06-24T14:51:46.329711+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0596
+      "score": 2.0634
     },
     {
       "title": "SK Hynix sets a $29 billion US listing that could top every ADR deal ever done",
@@ -284,10 +268,10 @@
       "image": "https://media.thenextweb.com/2026/06/SK-Hynix.avif",
       "published": "2026-06-24T11:15:46+00:00",
       "firstSeen": "2026-06-24T13:00:01.323574+00:00",
-      "lastSeen": "2026-06-24T15:00:01.111748+00:00",
+      "lastSeen": "2026-06-24T14:51:46.329711+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.1415
+      "score": 4.1453
     },
     {
       "title": "AI loses out to human wealth managers when the money actually moves, HSBC finds",
@@ -303,7 +287,7 @@
       "lastSeen": "2026-06-24T14:00:01.741376+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 2.5353
+      "score": 2.5391
     },
     {
       "title": "Apple’s Eddy Cue says the company wants to make ‘better’ and ‘more’ entertainment",
@@ -319,7 +303,7 @@
       "lastSeen": "2026-06-24T14:00:01.741376+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1295
+      "score": 3.1332
     },
     {
       "title": "Swiss study finds fewer job ads for career starters as AI reshapes entry-level work",
@@ -335,7 +319,7 @@
       "lastSeen": "2026-06-24T14:00:01.741376+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -1.0742
+      "score": -1.0705
     },
     {
       "title": "ByteDance seeks a record $20bn offshore loan to fund its AI build-out",
@@ -351,7 +335,7 @@
       "lastSeen": "2026-06-24T14:00:01.741376+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0205
+      "score": 2.0242
     },
     {
       "title": "GameStop’s Ryan Cohen gives up a pay package worth up to $35bn to chase eBay",
@@ -367,7 +351,7 @@
       "lastSeen": "2026-06-24T13:00:01.323574+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1147
+      "score": 3.1184
     },
     {
       "title": "Samsung opens ChatGPT Enterprise and Codex access after AI restrictions",
@@ -380,10 +364,10 @@
       "image": "",
       "published": "2026-06-24T10:00:00+00:00",
       "firstSeen": "2026-06-24T11:00:01.663059+00:00",
-      "lastSeen": "2026-06-24T15:00:01.111748+00:00",
+      "lastSeen": "2026-06-24T14:51:46.329711+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.6053
+      "score": 12.609
     },
     {
       "title": "Alibaba sues the Pentagon to get off its Chinese military companies list",
@@ -399,7 +383,7 @@
       "lastSeen": "2026-06-24T13:00:01.323574+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9984
+      "score": 2.0021
     },
     {
       "title": "Samsung plans a 90 trillion won buyback to fund a chip-worker bonus",
@@ -415,7 +399,7 @@
       "lastSeen": "2026-06-24T13:00:01.323574+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9914
+      "score": 1.995
     },
     {
       "title": "Anthropic drops ‘workplace AI agents’ directly inside Slack",
@@ -428,10 +412,10 @@
       "image": "",
       "published": "2026-06-24T09:00:00+00:00",
       "firstSeen": "2026-06-24T10:00:01.752835+00:00",
-      "lastSeen": "2026-06-24T15:00:01.111748+00:00",
+      "lastSeen": "2026-06-24T14:51:46.329711+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 13.5791
+      "score": 13.5827
     },
     {
       "title": "SoftBank’s Son says calling AI a bubble is ‘an insult’",
@@ -447,7 +431,7 @@
       "lastSeen": "2026-06-24T11:53:01.225563+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0806
+      "score": 3.0841
     },
     {
       "title": "Anthropic’s Mythos found flaws in classified US systems during a government test",
@@ -463,7 +447,7 @@
       "lastSeen": "2026-06-24T11:53:01.225563+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9741
+      "score": 4.9776
     },
     {
       "title": "Legion LegalTech sues US over Anthropic Fable 5 and Mythos 5 shutdown",
@@ -479,7 +463,7 @@
       "lastSeen": "2026-06-24T11:53:01.225563+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.0644
+      "score": 6.0679
     },
     {
       "title": "South Korea is in talks with Samsung and SK Hynix over a second chip cluster",
@@ -495,7 +479,7 @@
       "lastSeen": "2026-06-24T11:00:01.663059+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9576
+      "score": 1.9611
     },
     {
       "title": "YouTube settles ahead of California’s second social-media addiction trial",
@@ -511,7 +495,7 @@
       "lastSeen": "2026-06-24T11:00:01.663059+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9535
+      "score": 1.957
     },
     {
       "title": "Agility Robotics is reportedly going public via a $2.5B SPAC deal",
@@ -527,7 +511,7 @@
       "lastSeen": "2026-06-24T11:00:01.663059+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9488
+      "score": 1.9522
     },
     {
       "title": "Blackstone plans $30B for Japan AI data centres, and is unbothered by bubble talk",
@@ -543,7 +527,7 @@
       "lastSeen": "2026-06-24T11:00:01.663059+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.945
+      "score": 1.9484
     },
     {
       "title": "A US spectrum auction just raised $3.5B to pay for ripping out Huawei",
@@ -559,7 +543,7 @@
       "lastSeen": "2026-06-24T11:00:01.663059+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.039
+      "score": 3.0424
     },
     {
       "title": "Meta’s $399 Kylie Jenner glasses will talk back in her voice",
@@ -575,7 +559,7 @@
       "lastSeen": "2026-06-24T10:00:01.752835+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.6361
+      "score": 2.6395
     },
     {
       "title": "The US is pressing Meta to let it review its AI, and Meta is the last holdout",
@@ -591,7 +575,7 @@
       "lastSeen": "2026-06-24T10:00:01.752835+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.282
+      "score": 2.2854
     },
     {
       "title": "OpenAI and Broadcom unveil LLM-optimized inference chip",
@@ -604,10 +588,10 @@
       "image": "",
       "published": "2026-06-24T06:00:00+00:00",
       "firstSeen": "2026-06-24T14:00:01.741376+00:00",
-      "lastSeen": "2026-06-24T15:00:01.111748+00:00",
+      "lastSeen": "2026-06-24T14:51:46.329711+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.5567
+      "score": 5.56
     },
     {
       "title": "NVIDIA and AWS Collaborate to Bring AI to Production at Scale",
@@ -620,10 +604,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/logo-lockup-tech-blog-aws-1920x1080-2.jpg",
       "published": "2026-06-24T00:05:37+00:00",
       "firstSeen": "2026-06-24T00:08:31.662512+00:00",
-      "lastSeen": "2026-06-24T15:00:01.111748+00:00",
+      "lastSeen": "2026-06-24T14:51:46.329711+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 0.817
+      "score": 0.8198
     },
     {
       "title": "v1.91.0-dev.1",
@@ -636,10 +620,26 @@
       "image": "https://opengraph.githubassets.com/9a78cd956067fceff41336d77c198cfb77ae32b295601dace5ece10928edf74f/BerriAI/litellm/releases/tag/v1.91.0-dev.1",
       "published": "2026-06-24T00:02:08+00:00",
       "firstSeen": "2026-06-24T00:08:31.662512+00:00",
-      "lastSeen": "2026-06-24T15:00:01.111748+00:00",
+      "lastSeen": "2026-06-24T14:51:46.329711+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.6159
+      "score": 2.6187
+    },
+    {
+      "title": "India’s MoEngage bets that the future of marketing is millions of AI agents",
+      "url": "https://techcrunch.com/2026/06/23/indias-moengage-bets-marketings-future-on-millions-of-ai-agents",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "The all-cash deal gives MoEngage access to technology that assigns AI agents to individual customers.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/ai-bots-agents-GettyImages-2230799616.jpg?resize=1200%2C800",
+      "published": "2026-06-23T23:30:00+00:00",
+      "firstSeen": "2026-06-24T01:00:01.211214+00:00",
+      "lastSeen": "2026-06-24T14:51:46.329711+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.6079
     },
     {
       "title": "The Friendly Virus",
@@ -652,10 +652,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-22T20:00:00+00:00",
       "firstSeen": "2026-06-22T21:00:01.381447+00:00",
-      "lastSeen": "2026-06-24T15:00:01.111748+00:00",
+      "lastSeen": "2026-06-24T14:51:46.329711+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.5232
+      "score": 1.5244
     },
     {
       "title": "The Life Scientific: Dean Lomax",
@@ -668,7 +668,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-06-15T20:00:00+00:00",
       "firstSeen": "2026-06-15T21:00:01.290903+00:00",
-      "lastSeen": "2026-06-24T15:00:01.111748+00:00",
+      "lastSeen": "2026-06-24T14:51:46.329711+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 1.1931
