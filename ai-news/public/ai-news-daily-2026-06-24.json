@@ -1,6 +1,6 @@
 {
   "date": "2026-06-24",
-  "updatedAt": "2026-06-24T17:00:01.330867+00:00",
+  "updatedAt": "2026-06-24T17:17:13.376808+00:00",
   "items": [
     {
       "title": "Anthropic Launches Claude Tag, Bringing AI Agents Into Slack",
@@ -13,11 +13,11 @@
       "image": "https://assets.techrepublic.com/uploads/2026/06/claude-tag.jpg?f=jpeg",
       "published": "2026-06-24T15:52:37+00:00",
       "firstSeen": "2026-06-24T17:00:01.330867+00:00",
-      "lastSeen": "2026-06-24T17:00:01.330867+00:00",
+      "lastSeen": "2026-06-24T17:17:13.376808+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 25.0162
+      "score": 25.0077
     },
     {
       "title": "Introducing computer use in Gemini 3.5 Flash",
@@ -30,11 +30,28 @@
       "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/gemini-3-5__keyword__blog-header__light_7VsKV.width-1300.png",
       "published": "2026-06-24T16:30:01+00:00",
       "firstSeen": "2026-06-24T17:00:01.330867+00:00",
-      "lastSeen": "2026-06-24T17:00:01.330867+00:00",
+      "lastSeen": "2026-06-24T17:17:13.376808+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 17.8148
+      "score": 17.8062
+    },
+    {
+      "title": "Mistral OCR 4 targets the enterprise back office",
+      "url": "https://thenextweb.com/news/mistral-ocr-4-document-ai-self-hosted",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Mistral OCR 4 reads a document like a structured map, not a wall of text. It is cheap, speaks 170 languages, and can run entirely on your own servers. Europe’s AI champion is going after the enterprise back office. Mistral has a new model, and it is not a chatbot. The French company on 23 [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/mistral-ocr-4.avif",
+      "published": "2026-06-24T16:50:18+00:00",
+      "firstSeen": "2026-06-24T17:17:13.376808+00:00",
+      "lastSeen": "2026-06-24T17:17:13.376808+00:00",
+      "model_release": true,
+      "editorial_allow": true,
+      "editorial_reason": "model_release",
+      "score": 14.1364
     },
     {
       "title": "Anthropic drops ‘workplace AI agents’ directly inside Slack",
@@ -50,7 +67,7 @@
       "lastSeen": "2026-06-24T17:00:01.330867+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 13.5288
+      "score": 13.5218
     },
     {
       "title": "Samsung opens ChatGPT Enterprise and Codex access after AI restrictions",
@@ -66,7 +83,7 @@
       "lastSeen": "2026-06-24T17:00:01.330867+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.5536
+      "score": 12.5464
     },
     {
       "title": "OpenAI reveals its first AI processor: Jalapeño",
@@ -79,10 +96,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/openai-broadcom-jalapeno-inference-chip-image.webp?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C3.5043662306087%2C100%2C92.991267538783&amp%3Bw=1200",
       "published": "2026-06-24T14:36:47+00:00",
       "firstSeen": "2026-06-24T14:51:46.329711+00:00",
-      "lastSeen": "2026-06-24T17:00:01.330867+00:00",
+      "lastSeen": "2026-06-24T17:17:13.376808+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.6894
+      "score": 6.6813
     },
     {
       "title": "Legion LegalTech sues US over Anthropic Fable 5 and Mythos 5 shutdown",
@@ -98,7 +115,7 @@
       "lastSeen": "2026-06-24T11:53:01.225563+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.015
+      "score": 6.0081
     },
     {
       "title": "OpenAI built its own AI chip. The target is Nvidia.",
@@ -114,7 +131,7 @@
       "lastSeen": "2026-06-24T17:00:01.330867+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.6654
+      "score": 5.6574
     },
     {
       "title": "OpenAI unveils its first custom chip, built by Broadcom",
@@ -127,10 +144,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/Screenshot-2026-06-24-at-9.49.59-AM.jpg?resize=1200%2C670",
       "published": "2026-06-24T14:54:46+00:00",
       "firstSeen": "2026-06-24T16:00:01.138567+00:00",
-      "lastSeen": "2026-06-24T17:00:01.330867+00:00",
+      "lastSeen": "2026-06-24T17:17:13.376808+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.528
+      "score": 5.5198
     },
     {
       "title": "OpenAI and Broadcom unveil LLM-optimized inference chip",
@@ -143,10 +160,10 @@
       "image": "",
       "published": "2026-06-24T06:00:00+00:00",
       "firstSeen": "2026-06-24T14:00:01.741376+00:00",
-      "lastSeen": "2026-06-24T17:00:01.330867+00:00",
+      "lastSeen": "2026-06-24T17:17:13.376808+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.5104
+      "score": 5.5039
     },
     {
       "title": "Figma now has AI motion graphics and shader tools",
@@ -159,49 +176,38 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/Figma-config-2026.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-24T16:15:00+00:00",
       "firstSeen": "2026-06-24T17:00:01.330867+00:00",
-      "lastSeen": "2026-06-24T17:00:01.330867+00:00",
+      "lastSeen": "2026-06-24T17:17:13.376808+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.4373
+      "score": 5.4288
     },
     {
-      "title": "The Trump White House Is Over Anthropic CEO Dario Amodei",
-      "url": "https://www.wired.com/story/the-trump-white-house-is-over-anthropics-dario-amodei",
-      "source": "Wired AI",
-      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
-      "sourceWeight": 0.85,
+      "title": "Weight-Space Geometry of Offline Reasoning Training",
+      "url": "https://llm-stats.com/ai-news",
+      "source": "LLM Stats AI News",
+      "sourceUrl": "https://llm-stats.com/ai-news",
+      "sourceWeight": 0.9,
       "category": "AI",
-      "summary": "At high-stakes meetings with the White House, Anthropic's cofounder—a \"weirdo,\" per one official—has been replaced by cofounder Tom Brown.",
-      "image": "https://media.wired.com/photos/6a3b1efdfb31b3da3e9adc12/master/pass/politics_white_house_anthropic_dario_amodei.jpg",
-      "published": "2026-06-24T15:15:00+00:00",
-      "firstSeen": "2026-06-24T16:00:01.138567+00:00",
-      "lastSeen": "2026-06-24T17:00:01.330867+00:00",
+      "summary": "",
+      "image": "https://llm-stats.com/og/main.png",
+      "published": "2026-06-24T17:17:18.176598+00:00",
+      "firstSeen": "2026-05-29T21:00:01.522609+00:00",
+      "lastSeen": "2026-06-24T17:17:13.376808+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2378
-    },
-    {
-      "title": "Menlo Ventures raises $3bn on the back of one Anthropic bet",
-      "url": "https://thenextweb.com/news/menlo-ventures-3bn-anthropic-ai-funds",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Menlo Ventures has raised $3bn, the biggest haul in its 50-year history. It is funded, in effect, by a single bet on Anthropic that is now worth about $14bn. Most venture funds are sold on a promise. Menlo Ventures’ new $3bn is sold on a receipt. The firm announced the raise on Tuesday, its largest [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/Menlo-Ventures-team.avif",
-      "published": "2026-06-24T12:58:09+00:00",
-      "firstSeen": "2026-06-24T14:00:01.741376+00:00",
-      "lastSeen": "2026-06-24T16:00:01.138567+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 5.0335
+      "score": 5.36
     }
   ],
   "errors": [
     {
+      "source": "Artificial Intelligence News",
+      "url": "https://www.artificialintelligence-news.com/categories/artificial-intelligence/feed/",
+      "error": "not well-formed (invalid token): line 1, column 158"
+    },
+    {
       "source": "MarkTechPost",
       "url": "https://www.marktechpost.com/feed/",
-      "error": "HTTP Error 403: Forbidden"
+      "error": "not well-formed (invalid token): line 1, column 119"
     }
   ]
 }
