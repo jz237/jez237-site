@@ -1,7 +1,71 @@
 {
   "date": "2026-06-24",
-  "updatedAt": "2026-06-24T08:32:01.451616+00:00",
+  "updatedAt": "2026-06-24T10:00:01.752835+00:00",
   "items": [
+    {
+      "title": "Anthropic drops ‘workplace AI agents’ directly inside Slack",
+      "url": "https://www.artificialintelligence-news.com/news/anthropic-slack-workplace-ai-agents",
+      "source": "Artificial Intelligence News",
+      "sourceUrl": "https://www.artificialintelligence-news.com/categories/artificial-intelligence/feed/",
+      "sourceWeight": 0.82,
+      "category": "AI",
+      "summary": "Anthropic&#160;launched&#160;a beta version of its Claude Tag feature for Enterprise and Team tiers, shifting its chat model into shared Slack channels. Moving away from traditional isolated chat boxes, users pull the artificial intelligence model into active group threads by typing @Claude.&#160; The integration allows any team member in the channel to delegate a task, review [&#8230;]\nThe post Anthropic drops ‘workplace AI agents’ directly inside Slack appeared first on AI News.",
+      "image": "",
+      "published": "2026-06-24T09:00:00+00:00",
+      "firstSeen": "2026-06-24T10:00:01.752835+00:00",
+      "lastSeen": "2026-06-24T10:00:01.752835+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 13.7179
+    },
+    {
+      "title": "Legion LegalTech sues US over Anthropic Fable 5 and Mythos 5 shutdown",
+      "url": "https://thenextweb.com/news/legion-legaltech-sues-us-anthropic-access",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Legion LegalTech says the export directive that shut down Fable 5 and Mythos 5 worldwide has done “immediate, irreparable, and existential” harm to its business. US legal-technology company has sued the federal government over the directive that, two weeks ago, forced Anthropic to switch off its two most capable AI models for everyone on Earth. [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/Capitol.avif",
+      "published": "2026-06-24T08:20:48+00:00",
+      "firstSeen": "2026-06-24T10:00:01.752835+00:00",
+      "lastSeen": "2026-06-24T10:00:01.752835+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 6.2006
+    },
+    {
+      "title": "Anthropic’s Mythos found flaws in classified US systems during a government test",
+      "url": "https://thenextweb.com/news/anthropic-mythos-classified-systems-vulnerabilities",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "One of Anthropic’s AI models identified vulnerabilities in highly sensitive, classified US government computer systems during a testing exercise, a US official has told the Associated Press. The model in question was Mythos, Anthropic’s most capable system, and it surfaced the flaws within hours. Crucially, finding a weakness within hours is not the same as [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/anthropic-mythos-eu-enisa-cybersecurity-access.avif",
+      "published": "2026-06-24T08:43:37+00:00",
+      "firstSeen": "2026-06-24T10:00:01.752835+00:00",
+      "lastSeen": "2026-06-24T10:00:01.752835+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.1118
+    },
+    {
+      "title": "SoftBank’s Son says calling AI a bubble is ‘an insult’",
+      "url": "https://thenextweb.com/news/softbanks-son-says-calling-ai-a-bubble-is-an-insult",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "At SoftBank Group’s annual shareholders’ meeting in Tokyo on Wednesday, the founder and chief executive was asked, as he is asked at almost every public appearance now, whether the artificial intelligence boom that has driven his fortune to record highs is a bubble waiting to deflate. He treated the question itself as the problem. To [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/Masayoshi-Son.avif",
+      "published": "2026-06-24T08:58:42+00:00",
+      "firstSeen": "2026-06-24T10:00:01.752835+00:00",
+      "lastSeen": "2026-06-24T10:00:01.752835+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.2192
+    },
     {
       "title": "A US spectrum auction just raised $3.5B to pay for ripping out Huawei",
       "url": "https://thenextweb.com/news/us-spectrum-auction-3-5-billion-rip-replace",
@@ -13,10 +77,10 @@
       "image": "https://media.thenextweb.com/2026/06/US-Federal-Communications-Commission.avif",
       "published": "2026-06-24T07:20:00+00:00",
       "firstSeen": "2026-06-24T08:32:01.451616+00:00",
-      "lastSeen": "2026-06-24T08:32:01.451616+00:00",
+      "lastSeen": "2026-06-24T10:00:01.752835+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2139
+      "score": 3.1714
     },
     {
       "title": "Meta’s $399 Kylie Jenner glasses will talk back in her voice",
@@ -29,10 +93,10 @@
       "image": "https://media.thenextweb.com/2026/06/Starfire-Kylie-Edition-Meta.avif",
       "published": "2026-06-24T07:13:01+00:00",
       "firstSeen": "2026-06-24T08:32:01.451616+00:00",
-      "lastSeen": "2026-06-24T08:32:01.451616+00:00",
+      "lastSeen": "2026-06-24T10:00:01.752835+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8105
+      "score": 2.7682
     },
     {
       "title": "v1.91.0-dev.1",
@@ -45,10 +109,10 @@
       "image": "https://opengraph.githubassets.com/9a78cd956067fceff41336d77c198cfb77ae32b295601dace5ece10928edf74f/BerriAI/litellm/releases/tag/v1.91.0-dev.1",
       "published": "2026-06-24T00:02:08+00:00",
       "firstSeen": "2026-06-24T00:08:31.662512+00:00",
-      "lastSeen": "2026-06-24T08:32:01.451616+00:00",
+      "lastSeen": "2026-06-24T10:00:01.752835+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7587
+      "score": 2.724
     },
     {
       "title": "The US is pressing Meta to let it review its AI, and Meta is the last holdout",
@@ -61,10 +125,26 @@
       "image": "https://media.thenextweb.com/2026/04/Meta.avif",
       "published": "2026-06-24T07:03:03+00:00",
       "firstSeen": "2026-06-24T08:00:01.859828+00:00",
-      "lastSeen": "2026-06-24T08:32:01.451616+00:00",
+      "lastSeen": "2026-06-24T10:00:01.752835+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.4556
+      "score": 2.4135
+    },
+    {
+      "title": "Self-Recognition Finetuning can Prevent and Reverse Emergent Misalignment",
+      "url": "https://llm-stats.com/ai-news",
+      "source": "LLM Stats AI News",
+      "sourceUrl": "https://llm-stats.com/ai-news",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "",
+      "image": "https://llm-stats.com/og/main.png",
+      "published": "2026-06-24T10:00:11.322104+00:00",
+      "firstSeen": "2026-05-29T21:00:01.522609+00:00",
+      "lastSeen": "2026-06-24T10:00:01.752835+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.36
     },
     {
       "title": "South Korea is in talks with Samsung and SK Hynix over a second chip cluster",
@@ -77,10 +157,10 @@
       "image": "https://media.thenextweb.com/2026/06/Kim-Yong-beom.avif",
       "published": "2026-06-24T08:04:42+00:00",
       "firstSeen": "2026-06-24T08:32:01.451616+00:00",
-      "lastSeen": "2026-06-24T08:32:01.451616+00:00",
+      "lastSeen": "2026-06-24T10:00:01.752835+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1362
+      "score": 2.0928
     },
     {
       "title": "YouTube settles ahead of California’s second social-media addiction trial",
@@ -93,10 +173,10 @@
       "image": "https://media.thenextweb.com/2026/05/youtube-automatic-ai-labels-c2pa-synthid-deepfake.avif",
       "published": "2026-06-24T07:55:03+00:00",
       "firstSeen": "2026-06-24T08:32:01.451616+00:00",
-      "lastSeen": "2026-06-24T08:32:01.451616+00:00",
+      "lastSeen": "2026-06-24T10:00:01.752835+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1313
+      "score": 2.0882
     },
     {
       "title": "Agility Robotics is reportedly going public via a $2.5B SPAC deal",
@@ -109,58 +189,10 @@
       "image": "https://media.thenextweb.com/2026/06/Agility-Robotics.avif",
       "published": "2026-06-24T07:43:40+00:00",
       "firstSeen": "2026-06-24T08:32:01.451616+00:00",
-      "lastSeen": "2026-06-24T08:32:01.451616+00:00",
+      "lastSeen": "2026-06-24T10:00:01.752835+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1256
-    },
-    {
-      "title": "Blackstone plans $30B for Japan AI data centres, and is unbothered by bubble talk",
-      "url": "https://thenextweb.com/news/blackstone-30-billion-japan-ai-data-centres",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Blackstone plans to invest roughly $30 billion in artificial-intelligence data centres in Japan over the next three to five years, the firm’s president and chief operating officer, Jonathan Gray, told Nikkei in an interview published on Monday. The world’s largest alternative asset manager is in discussions to develop facilities with a combined capacity exceeding one gigawatt, [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/Jonathan-Gray-Blackstone.avif",
-      "published": "2026-06-24T07:34:28+00:00",
-      "firstSeen": "2026-06-24T08:32:01.451616+00:00",
-      "lastSeen": "2026-06-24T08:32:01.451616+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.1211
-    },
-    {
-      "title": "NVIDIA and AWS Collaborate to Bring AI to Production at Scale",
-      "url": "https://blogs.nvidia.com/blog/nvidia-aws-ai-production-scale",
-      "source": "NVIDIA Blog",
-      "sourceUrl": "https://blogs.nvidia.com/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Building AI systems at scale is demanding, requiring low-latency inference, fast vector search, strong GPU price-performance and infrastructure that can grow without multiplying operational complexity.  NVIDIA’s latest work with Amazon Web Services (AWS) addresses each of those constraints. Across Amazon OpenSearch and Amazon EC2, NVIDIA AI infrastructure is giving enterprises more practical paths to deploy [&#8230;]",
-      "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/logo-lockup-tech-blog-aws-1920x1080-2.jpg",
-      "published": "2026-06-24T00:05:37+00:00",
-      "firstSeen": "2026-06-24T00:08:31.662512+00:00",
-      "lastSeen": "2026-06-24T08:32:01.451616+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "framework_or_plumbing",
-      "score": 0.9601
-    },
-    {
-      "title": "Quantifying Prior Dominance in RAG Systems",
-      "url": "https://llm-stats.com/ai-news",
-      "source": "LLM Stats AI News",
-      "sourceUrl": "https://llm-stats.com/ai-news",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "",
-      "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-24T08:32:07.957155+00:00",
-      "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-24T08:32:01.451616+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "framework_or_plumbing",
-      "score": -0.74
+      "score": 2.0827
     }
   ],
   "errors": [
