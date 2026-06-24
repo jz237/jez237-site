@@ -236,7 +236,7 @@
     <span class="stat"><strong>3D</strong> orbit</span>
   </aside>
 
-  <div class="credit">drag to orbit | wheel to zoom</div>
+  <div class="credit">drag to orbit | wheel or pinch to zoom</div>
 
   <script type="module">
     import * as THREE from "./three.module.js";
@@ -726,14 +726,43 @@
       sizeValue.textContent = uniforms.uSizeScale.value.toFixed(2);
     });
 
+    const activePointers = new Map();
+    let pinchPrevDist = 0;
+
+    function pinchDistance() {
+      const pts = [...activePointers.values()];
+      const dx = pts[0].x - pts[1].x;
+      const dy = pts[0].y - pts[1].y;
+      return Math.hypot(dx, dy);
+    }
+
     canvas.addEventListener("pointerdown", (event) => {
-      dragging = true;
-      lastX = event.clientX;
-      lastY = event.clientY;
+      activePointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
       canvas.setPointerCapture(event.pointerId);
+      if (activePointers.size === 2) {
+        dragging = false;
+        pinchPrevDist = pinchDistance();
+      } else if (activePointers.size === 1) {
+        dragging = true;
+        lastX = event.clientX;
+        lastY = event.clientY;
+      }
     });
 
     canvas.addEventListener("pointermove", (event) => {
+      if (!activePointers.has(event.pointerId)) return;
+      activePointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
+
+      if (activePointers.size >= 2) {
+        const dist = pinchDistance();
+        if (pinchPrevDist > 0) {
+          distance *= pinchPrevDist / dist;
+          distance = Math.max(8.5, Math.min(29, distance));
+        }
+        pinchPrevDist = dist;
+        return;
+      }
+
       if (!dragging) return;
       const dx = event.clientX - lastX;
       const dy = event.clientY - lastY;
@@ -743,10 +772,22 @@
       targetPitch += dy * 0.0045;
     });
 
-    canvas.addEventListener("pointerup", (event) => {
-      dragging = false;
+    function endPointer(event) {
+      activePointers.delete(event.pointerId);
       canvas.releasePointerCapture(event.pointerId);
-    });
+      if (activePointers.size < 2) pinchPrevDist = 0;
+      if (activePointers.size === 1) {
+        dragging = true;
+        const remaining = [...activePointers.values()][0];
+        lastX = remaining.x;
+        lastY = remaining.y;
+      } else if (activePointers.size === 0) {
+        dragging = false;
+      }
+    }
+
+    canvas.addEventListener("pointerup", endPointer);
+    canvas.addEventListener("pointercancel", endPointer);
 
     canvas.addEventListener("wheel", (event) => {
       event.preventDefault();
