@@ -271,6 +271,11 @@
             <output id="strengthValue">1.00</output>
           </label>
           <label class="field">
+            Wave
+            <input id="wave" type="range" min="0.3" max="1.8" value="1" step="0.05" />
+            <output id="waveValue">1.00</output>
+          </label>
+          <label class="field">
             Speed
             <input id="speed" type="range" min="0.1" max="2.4" value="1" step="0.05" />
             <output id="speedValue">1.00</output>
@@ -301,9 +306,11 @@
     const spinButton = document.querySelector("#spin");
     const glowButton = document.querySelector("#glow");
     const strengthInput = document.querySelector("#strength");
+    const waveInput = document.querySelector("#wave");
     const speedInput = document.querySelector("#speed");
     const sizeInput = document.querySelector("#size");
     const strengthValue = document.querySelector("#strengthValue");
+    const waveValue = document.querySelector("#waveValue");
     const speedValue = document.querySelector("#speedValue");
     const sizeValue = document.querySelector("#sizeValue");
     const particleCount = document.querySelector("#particleCount");
@@ -598,6 +605,7 @@
       uPausedMix: { value: 1 },
       uGlow: { value: 0.16 },
       uRippleStrength: { value: Number(strengthInput.value) },
+      uRippleScale: { value: Number(waveInput.value) },
       uRippleCount: { value: 0 },
       uRipples: { value: rippleSlots }
     };
@@ -619,6 +627,7 @@
         uniform float uPixelRatio;
         uniform float uSizeScale;
         uniform float uRippleStrength;
+        uniform float uRippleScale;
         uniform float uRippleCount;
         uniform vec4 uRipples[8];
 
@@ -674,22 +683,24 @@
               0.28 + cos(aSeed),
               cos(aSeed * 1.7)
             ));
+            float waveScale = max(0.18, uRippleScale);
 
-            float blast = exp(-(dist * dist) / 4.8) * exp(-age * 2.15);
-            float shockRadius = age * 6.3;
-            float shock = exp(-pow((dist - shockRadius) / 1.05, 2.0));
-            float tugRadius = shockRadius + 1.35;
-            float tug = exp(-pow((dist - tugRadius) / 2.4, 2.0));
+            float blast = exp(-(dist * dist) / (4.8 * waveScale * waveScale)) * exp(-age * 2.15);
+            float shockRadius = age * 6.3 * waveScale;
+            float shock = exp(-pow((dist - shockRadius) / (1.05 * waveScale), 2.0));
+            float tugRadius = shockRadius + 1.35 * waveScale;
+            float tug = exp(-pow((dist - tugRadius) / (2.4 * waveScale), 2.0));
             float rebound = sin(age * 12.0 - dist * 2.35) * exp(-age * 1.65);
+            float scaleEnergy = mix(0.72, 1.18, smoothstep(0.3, 1.8, waveScale));
 
-            vec3 blastVector = normalize(direction + jitter * 0.32) * blast * 7.5 * uRippleStrength;
-            vec3 shockVector = direction * shock * fade * 3.15 * uRippleStrength;
-            vec3 neighborVector = -direction * tug * rebound * 1.65 * uRippleStrength;
+            vec3 blastVector = normalize(direction + jitter * 0.32) * blast * 7.5 * uRippleStrength * scaleEnergy;
+            vec3 shockVector = direction * shock * fade * 3.15 * uRippleStrength * scaleEnergy;
+            vec3 neighborVector = -direction * tug * rebound * 1.65 * uRippleStrength * scaleEnergy;
             vec3 swirlAxis = normalize(cross(direction, vec3(0.0, 1.0, 0.2)) + jitter * 0.1);
-            vec3 swirlVector = swirlAxis * shock * fade * sin(age * 9.5 + aSeed) * 0.82 * uRippleStrength;
+            vec3 swirlVector = swirlAxis * shock * fade * sin(age * 9.5 + aSeed) * 0.82 * uRippleStrength * scaleEnergy;
 
             p += blastVector + shockVector + neighborVector + swirlVector;
-            p.y += (blast * 1.35 + shock * fade * 0.45) * sin(age * 10.0 + aSeed * 0.03) * uRippleStrength;
+            p.y += (blast * 1.35 + shock * fade * 0.45) * sin(age * 10.0 + aSeed * 0.03) * uRippleStrength * scaleEnergy;
           }
 
           p += normalize(vec3(sin(aSeed), cos(aSeed * 1.3), sin(aSeed * 0.7))) * shimmer;
@@ -925,6 +936,11 @@
     strengthInput.addEventListener("input", () => {
       uniforms.uRippleStrength.value = Number(strengthInput.value);
       strengthValue.textContent = uniforms.uRippleStrength.value.toFixed(2);
+    });
+
+    waveInput.addEventListener("input", () => {
+      uniforms.uRippleScale.value = Number(waveInput.value);
+      waveValue.textContent = uniforms.uRippleScale.value.toFixed(2);
     });
 
     speedInput.addEventListener("input", () => {
