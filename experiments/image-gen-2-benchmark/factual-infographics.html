@@ -33,6 +33,8 @@
       line-height: 1.5;
     }
     header#site-nav {
+      position: static !important;
+      top: auto !important;
       background: rgba(6,17,24,.88) !important;
       border-bottom: 1px solid rgba(80,150,126,.34) !important;
       box-shadow: 0 14px 34px rgba(0,0,0,.22) !important;
@@ -72,23 +74,6 @@
       box-shadow: 0 12px 26px rgba(30,127,90,.15);
     }
     main { padding: 26px 22px 70px; }
-    .featured-infographic {
-      display: grid;
-      grid-template-columns: minmax(0, .95fr) minmax(280px, .55fr);
-      gap: 18px;
-      align-items: stretch;
-      margin-bottom: 24px;
-      border: 1px solid rgba(215,231,222,.86);
-      border-radius: 8px;
-      background: linear-gradient(180deg, rgba(248,251,248,.95), rgba(235,247,240,.9));
-      box-shadow: var(--shadow);
-      overflow: hidden;
-    }
-    .featured-media { min-height: 300px; max-height: 500px; background: #05070a; }
-    .featured-media img { object-fit: contain; cursor: zoom-in; background: #05070a; }
-    .featured-copy { display: flex; flex-direction: column; justify-content: flex-end; padding: clamp(18px, 3vw, 30px); }
-    .featured-copy h2 { margin: 0 0 10px; color: #183d33; font-size: clamp(1.7rem, 3.6vw, 3.1rem); line-height: 1; letter-spacing: 0; }
-    .featured-copy p { margin: 0 0 10px; color: var(--muted); }
     .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; }
     .card {
       overflow: hidden;
@@ -149,10 +134,9 @@
     .lightbox.actual .lightbox-stage { align-items: flex-start; justify-content: flex-start; }
     .lightbox.actual .lightbox-stage img { max-width: none; max-height: none; cursor: zoom-out; }
     @media (max-width: 680px) {
-      .hero-layout, .featured-infographic, .grid { grid-template-columns: 1fr; }
+      .hero-layout, .grid { grid-template-columns: 1fr; }
       .meta { gap: 8px; margin-top: 16px; }
       .pill { padding: 8px 10px; }
-      .featured-media { min-height: 230px; max-height: 380px; }
       .lightbox-hint { display: none; }
     }
   </style>
@@ -174,7 +158,6 @@
     </div>
   </header>
   <main>
-    <section class="featured-infographic" id="featured-infographic" aria-live="polite"></section>
     <div id="infographics" class="grid" aria-live="polite">
       <p class="empty">Loading factual infographics...</p>
     </div>
@@ -195,7 +178,6 @@
   <script>
     (function () {
       const listRoot = document.getElementById('infographics');
-      const featuredRoot = document.getElementById('featured-infographic');
       const countPill = document.getElementById('infographic-count-pill');
       const siteNav = document.getElementById('site-nav');
       const viewer = document.getElementById('image-lightbox');
@@ -241,31 +223,18 @@
 
       function render(items) {
         if (!items.length) {
-          featuredRoot.innerHTML = '';
           listRoot.innerHTML = '<p class="empty">No factual infographics have been archived yet.</p>';
           countPill.textContent = 'Infographics: 0';
           return;
         }
-        const [featured, ...rest] = items;
-        const factual = featured.factualInfographic || {};
-        const src = imageUrl(featured.image);
-        featuredRoot.innerHTML = `
-          <div class="featured-media"><img src="${escapeHtml(src)}" alt="${escapeHtml(featured.title)}"></div>
-          <div class="featured-copy">
-            <div class="kicker">Latest factual infographic · ${escapeHtml(featured.date || '')}</div>
-            <h2>${escapeHtml(featured.title)}</h2>
-            ${factual.description ? `<p>${escapeHtml(factual.description)}</p>` : ''}
-            ${factual.sourceNote ? `<p class="source">${escapeHtml(factual.sourceNote)}</p>` : ''}
-          </div>
-        `;
         countPill.textContent = `Infographics: ${items.length}`;
-        listRoot.innerHTML = rest.length ? rest.map(cardHtml).join('') : '<p class="empty">No older factual infographics yet.</p>';
+        listRoot.innerHTML = items.map(cardHtml).join('');
         bindImages();
         updateNavHeight();
       }
 
       function bindImages() {
-        document.querySelectorAll('.image-wrap img, .featured-media img').forEach((thumb) => {
+        document.querySelectorAll('.image-wrap img').forEach((thumb) => {
           thumb.setAttribute('tabindex', '0');
           thumb.addEventListener('click', () => openViewer(thumb.currentSrc || thumb.src, thumb.alt));
           thumb.addEventListener('keydown', (event) => {
