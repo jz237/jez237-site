@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-24T17:17:13.376808+00:00",
+  "updatedAt": "2026-06-24T18:00:01.764061+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -11372,6 +11372,10 @@
     "https://techcrunch.com/2026/06/24/facebook-rolls-out-an-ai-companion-app-for-creators": {
       "image": "https://techcrunch.com/wp-content/uploads/2025/03/facebook-logo-on-phone.jpg?resize=1200%2C800",
       "checkedAt": "2026-06-24T17:17:13.376808+00:00"
+    },
+    "https://www.theverge.com/ai-artificial-intelligence/956263/alex-bores-new-york-12th-district-congressional-primary-results": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/gettyimages-2282522212.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
+      "checkedAt": "2026-06-24T18:00:01.764061+00:00"
     }
   }
 }
