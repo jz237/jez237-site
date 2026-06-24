@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-24T20:03:08.459351+00:00",
+  "updatedAt": "2026-06-24T22:00:01.126977+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -11392,6 +11392,22 @@
     "https://techcrunch.com/2026/06/24/companies-are-scrambling-to-stop-employees-from-maxing-out-ai-budgets-with-small-tasks": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/claude-app-centered-in-ai-apps-GettyImages-2167861906.jpg?resize=1200%2C801",
       "checkedAt": "2026-06-24T21:00:01.524740+00:00"
+    },
+    "https://techcrunch.com/2026/06/24/ai-was-supposed-to-kill-engineering-jobs-but-new-data-suggests-theyre-the-most-resilient": {
+      "image": "https://techcrunch.com/wp-content/uploads/2022/01/GettyImages-1250956868.jpg?resize=1200%2C800",
+      "checkedAt": "2026-06-24T22:00:01.126977+00:00"
+    },
+    "https://techcrunch.com/2026/06/24/ai-researchers-continue-to-leave-google-for-its-rivals": {
+      "image": "https://techcrunch.com/wp-content/uploads/2023/02/glitched-google-logo.jpg?resize=1200%2C645",
+      "checkedAt": "2026-06-24T22:00:01.126977+00:00"
+    },
+    "https://techcrunch.com/2026/06/24/the-memory-chip-crunch-is-paying-off-for-this-u-s-company": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/micron-HQ-GettyImages-2147904174.jpg?resize=1200%2C801",
+      "checkedAt": "2026-06-24T22:00:01.126977+00:00"
+    },
+    "https://www.techrepublic.com/article/news-agentic-ai-cx-contact-center-ccw": {
+      "image": "https://assets.techrepublic.com/uploads/2026/06/cx-agentic.jpg?f=jpeg",
+      "checkedAt": "2026-06-24T22:00:01.126977+00:00"
     }
   }
 }
