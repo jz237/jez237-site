@@ -267,13 +267,13 @@
         <div class="slider-stack">
           <label class="field">
             Effect
-            <input id="strength" type="range" min="0" max="2.5" value="1" step="0.05" />
-            <output id="strengthValue">1.00</output>
+            <input id="strength" type="range" min="0" max="0.4" value="0.2" step="0.01" />
+            <output id="strengthValue">0.20</output>
           </label>
           <label class="field">
             Wave
-            <input id="wave" type="range" min="0.3" max="1.8" value="1" step="0.05" />
-            <output id="waveValue">1.00</output>
+            <input id="wave" type="range" min="0.1" max="0.9" value="0.5" step="0.01" />
+            <output id="waveValue">0.50</output>
           </label>
           <label class="field">
             Speed
@@ -835,16 +835,17 @@
       return found ? pickedPoint.clone() : null;
     }
 
-    function addRippleFromPointer(event) {
+    function addRippleAtScreen(clientX, clientY) {
       const rect = canvas.getBoundingClientRect();
-      const screenSpacePoint = findScreenSpaceParticle(event, rect);
+      const pointer = { clientX, clientY };
+      const screenSpacePoint = findScreenSpaceParticle(pointer, rect);
       if (screenSpacePoint) {
         addRipple(screenSpacePoint);
         return;
       }
 
-      pointerNdc.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-      pointerNdc.y = -(((event.clientY - rect.top) / rect.height) * 2 - 1);
+      pointerNdc.x = ((clientX - rect.left) / rect.width) * 2 - 1;
+      pointerNdc.y = -(((clientY - rect.top) / rect.height) * 2 - 1);
       raycaster.setFromCamera(pointerNdc, camera);
 
       const hits = raycaster.intersectObjects([detailCloud, catCloud], false);
@@ -880,6 +881,10 @@
       addRipple(localPoint);
     }
 
+    function addRippleFromPointer(event) {
+      addRippleAtScreen(event.clientX, event.clientY);
+    }
+
     const clock = new THREE.Clock();
     let targetYaw = 0.62;
     let targetPitch = 0.42;
@@ -893,8 +898,10 @@
     let autoSpin = true;
     let speed = Number(speedInput.value);
     let lastRippleAt = -Infinity;
+    let heldRipple = null;
     const tapMoveLimit = 9;
     const tapTimeLimit = 560;
+    const holdRippleInterval = 105;
 
     function setPressed(button, value) {
       button.setAttribute("aria-pressed", String(value));
@@ -978,6 +985,12 @@
         pinchPrevDist = pinchDistance();
       } else if (activePointers.size === 1) {
         addRippleFromPointer(event);
+        heldRipple = {
+          pointerId: event.pointerId,
+          x: event.clientX,
+          y: event.clientY,
+          nextAt: performance.now() + holdRippleInterval
+        };
         dragging = true;
         lastX = event.clientX;
         lastY = event.clientY;
@@ -994,6 +1007,10 @@
         y: event.clientY,
         moved: pointer.moved || moved
       });
+      if (heldRipple && heldRipple.pointerId === event.pointerId) {
+        heldRipple.x = event.clientX;
+        heldRipple.y = event.clientY;
+      }
 
       if (activePointers.size >= 2) {
         const dist = pinchDistance();
@@ -1016,6 +1033,9 @@
 
     function endPointer(event) {
       const pointer = activePointers.get(event.pointerId);
+      if (heldRipple && heldRipple.pointerId === event.pointerId) {
+        heldRipple = null;
+      }
       if (pointer && activePointers.size === 1) {
         const elapsed = performance.now() - pointer.startTime;
         const moved = pointer.moved || Math.hypot(event.clientX - pointer.startX, event.clientY - pointer.startY) > tapMoveLimit;
@@ -1070,6 +1090,13 @@
       requestAnimationFrame(animate);
       const delta = clock.getDelta();
       if (!paused) uniforms.uTime.value += delta * speed;
+      if (heldRipple && !paused) {
+        const now = performance.now();
+        if (now >= heldRipple.nextAt) {
+          addRippleAtScreen(heldRipple.x, heldRipple.y);
+          heldRipple.nextAt = now + holdRippleInterval;
+        }
+      }
       if (autoSpin && !dragging && !paused) targetYaw += delta * 0.15 * speed;
       yaw += (targetYaw - yaw) * 0.08;
       pitch += (targetPitch - pitch) * 0.08;
