@@ -3,6 +3,8 @@ import json
 import math
 import os
 import re
+import hashlib
+import html
 import urllib.request
 import urllib.parse
 from datetime import datetime, timedelta, timezone
@@ -12,6 +14,7 @@ import xml.etree.ElementTree as ET
 BASE = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.path.join(BASE, "data")
 PUBLIC_DIR = os.path.join(BASE, "public")
+THUMBNAIL_DIR = os.path.join(PUBLIC_DIR, "thumbnails")
 FEEDS_PATH = os.path.join(BASE, "feeds.json")
 STORE_PATH = os.path.join(DATA_DIR, "items.json")
 IMAGE_CACHE_PATH = os.path.join(DATA_DIR, "image_cache.json")
@@ -22,6 +25,8 @@ MAX_ITEM_AGE_DAYS = 14
 TOP_DAILY_COUNT = 12
 TOP_LATEST_COUNT = 50
 MAX_OG_FETCH_PER_RUN = 20
+MAX_THUMBNAIL_FETCH_PER_RUN = 30
+MAX_THUMBNAIL_BYTES = 4 * 1024 * 1024
 IMAGE_CACHE_TTL_DAYS = 7
 EXCLUDED_TOPIC_PATTERNS = [
     "llama.cpp",
@@ -113,6 +118,7 @@ def now_utc():
 def ensure_dirs():
     os.makedirs(DATA_DIR, exist_ok=True)
     os.makedirs(PUBLIC_DIR, exist_ok=True)
+    os.makedirs(THUMBNAIL_DIR, exist_ok=True)
 
 
 def load_json(path, default):
@@ -143,6 +149,7 @@ def sanitize_image_url(url):
     """Return a publishable image URL, or empty string for signed/private URLs."""
     if not url:
         return ""
+    url = html.unescape(url)
     url = canonicalize_url(url)
     try:
         p = urllib.parse.urlparse(url)
@@ -162,6 +169,167 @@ def sanitize_image_url(url):
     if query_keys & signed_keys:
         return ""
     return url
+
+
+def source_role_bonus(role):
+    if role == "primary":
+        return 1.0
+    if role == "watchlist":
+        return -1.2
+    return 0.0
+
+
+def source_role_label(role):
+    return {
+        "primary": "Primary source",
+        "secondary": "Reported source",
+        "watchlist": "Watchlist source",
+    }.get(role or "secondary", "Reported source")
+
+
+def classify_signal_group(item):
+    title = (item.get("title") or "").lower()
+    summary = (item.get("summary") or "").lower()
+    text_blob = f"{title} {summary}"
+
+    if item.get("model_release"):
+        return "Model releases"
+    if any(w in text_blob for w in ["agent", "computer use", "tool use", "mcp", "claude code", "codex", "browser"]):
+        return "Agents & tooling"
+    if any(w in text_blob for w in ["image generation", "video generation", "voice", "audio", "multimodal", "vision"]):
+        return "Media generation"
+    if any(w in text_blob for w in ["gpu", "chip", "nvidia", "cerebras", "micron", "memory", "compute", "data center", "datacentre"]):
+        return "Infrastructure"
+    if any(w in text_blob for w in ["policy", "lawsuit", "copyright", "regulation", "privacy", "security", "governance", "export control", "distillation"]):
+        return "Policy & risk"
+    if any(w in text_blob for w in ["research", "paper", "benchmark", "arxiv", "evaluation", "study"]):
+        return "Research"
+    if any(w in text_blob for w in ["funding", "valuation", "stock", "earnings", "acquires", "startup", "revenue"]):
+        return "Business"
+    return "Product updates"
+
+
+def make_why_it_matters(item):
+    group = item.get("signalGroup") or classify_signal_group(item)
+    title = (item.get("title") or "").lower()
+    summary = (item.get("summary") or "").lower()
+    text_blob = f"{title} {summary}"
+
+    if item.get("model_release"):
+        return "A model release changes the practical menu: capability, pricing, context, or deployment options may shift for real workflows."
+    if group == "Agents & tooling":
+        return "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill."
+    if group == "Media generation":
+        return "Media-model updates affect what can be made quickly, what still needs craft, and where creative pipelines may change next."
+    if group == "Infrastructure":
+        return "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost."
+    if group == "Policy & risk":
+        return "Policy and risk stories often become product constraints later, especially around data access, safety claims, export rules, and copyright."
+    if group == "Research":
+        return "Research items are useful when they hint at future product behavior, benchmark movement, or techniques likely to show up in tools."
+    if group == "Business":
+        return "Business moves are a map of where the industry thinks the bottlenecks and durable demand will be."
+    if any(w in text_blob for w in ["openai", "anthropic", "google", "gemini", "claude", "chatgpt", "grok"]):
+        return "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental."
+    return "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure."
+
+
+def image_extension(content_type, url):
+    content_type = (content_type or "").split(";")[0].strip().lower()
+    by_type = {
+        "image/jpeg": "jpg",
+        "image/jpg": "jpg",
+        "image/png": "png",
+        "image/webp": "webp",
+        "image/gif": "gif",
+        "image/avif": "avif",
+    }
+    if content_type in by_type:
+        return by_type[content_type]
+
+    path = urllib.parse.urlparse(url).path.lower()
+    for ext in ("jpg", "jpeg", "png", "webp", "gif", "avif"):
+        if path.endswith("." + ext):
+            return "jpg" if ext == "jpeg" else ext
+    return "jpg"
+
+
+def cache_thumbnail(image_url, item_url, cache_items, now):
+    image_url = sanitize_image_url(image_url)
+    if not image_url or image_url.startswith("data:") or image_url.startswith("public/thumbnails/"):
+        return image_url, False
+
+    cache_key = "thumb:" + canonicalize_url(image_url)
+    cached = cache_items.get(cache_key, {})
+    local_path = cached.get("localPath", "") if isinstance(cached, dict) else ""
+    if local_path and os.path.exists(os.path.join(BASE, local_path)):
+        return local_path, False
+
+    try:
+        headers = {
+            "User-Agent": USER_AGENT,
+            "Accept": "image/avif,image/webp,image/*,*/*;q=0.8",
+        }
+        if item_url:
+            parsed = urllib.parse.urlparse(item_url)
+            if parsed.scheme and parsed.netloc:
+                headers["Referer"] = f"{parsed.scheme}://{parsed.netloc}/"
+
+        req = urllib.request.Request(image_url, headers=headers)
+        with urllib.request.urlopen(req, timeout=16) as r:
+            content_type = r.headers.get("Content-Type", "")
+            if not content_type.lower().startswith("image/"):
+                return image_url, False
+            data = r.read(MAX_THUMBNAIL_BYTES + 1)
+            if len(data) > MAX_THUMBNAIL_BYTES:
+                return image_url, False
+
+        ext = image_extension(content_type, image_url)
+        digest = hashlib.sha1(image_url.encode("utf-8")).hexdigest()[:18]
+        filename = f"news-{digest}.{ext}"
+        disk_path = os.path.join(THUMBNAIL_DIR, filename)
+        local_path = f"public/thumbnails/{filename}"
+
+        with open(disk_path, "wb") as f:
+            f.write(data)
+
+        cache_items[cache_key] = {
+            "sourceImage": image_url,
+            "localPath": local_path,
+            "checkedAt": now.isoformat(),
+        }
+        return local_path, True
+    except Exception:
+        return image_url, False
+
+
+def is_local_thumbnail(path):
+    return (path or "").startswith("public/thumbnails/")
+
+
+def restore_non_public_thumbnails(all_items, public_thumbnail_paths):
+    for it in all_items:
+        image = it.get("image", "")
+        if is_local_thumbnail(image) and image not in public_thumbnail_paths and it.get("imageOriginal"):
+            it["image"] = it.get("imageOriginal")
+            it.pop("imageOriginal", None)
+
+
+def cleanup_thumbnail_dir(public_thumbnail_paths):
+    removed = 0
+    if not os.path.isdir(THUMBNAIL_DIR):
+        return removed
+    keep = {os.path.basename(path) for path in public_thumbnail_paths if is_local_thumbnail(path)}
+    for name in os.listdir(THUMBNAIL_DIR):
+        if not name.startswith("news-"):
+            continue
+        if name not in keep:
+            try:
+                os.remove(os.path.join(THUMBNAIL_DIR, name))
+                removed += 1
+            except OSError:
+                pass
+    return removed
 
 
 def is_excluded_item(item):
@@ -398,6 +566,10 @@ def editorial_gate(item):
     if hard_boost_hits >= 1 and (capability_hits >= 1 or impact_hits >= 1 or big_name_hits >= 2):
         return True, "major_product_news"
 
+    # Noisy sources can still surface, but only when the story has a strong signal.
+    if item.get("sourceRole") == "watchlist" and hard_boost_hits == 0 and not item.get("model_release"):
+        return False, "watchlist_low_signal"
+
     # Important big-company AI platform stories.
     if big_name_hits >= 2 and (capability_hits >= 1 or impact_hits >= 1):
         return True, "big_name_with_impact"
@@ -483,7 +655,7 @@ def score_item(item, now):
     hours_old = max(0.0, (now - published).total_seconds() / 3600.0)
     recency = math.exp(-hours_old / 36.0)  # half-ish life ~25h
 
-    return round((item.get("sourceWeight", 0.7) * 1.4) + keyword_score + editorial_score + (recency * 1.1), 4)
+    return round((item.get("sourceWeight", 0.7) * 1.4) + source_role_bonus(item.get("sourceRole")) + keyword_score + editorial_score + (recency * 1.1), 4)
 
 
 def scrape_llm_stats_news(page_url, source_name, weight):
@@ -530,6 +702,7 @@ def main():
     now = now_utc()
 
     feeds = load_json(FEEDS_PATH, [])
+    feed_roles = {f.get("name"): f.get("role", "secondary") for f in feeds if f.get("name")}
     store = load_json(STORE_PATH, {"items": []})
     image_cache = load_json(IMAGE_CACHE_PATH, {"items": {}})
     cache_items = image_cache.get("items", {})
@@ -548,6 +721,7 @@ def main():
         url = feed.get("url")
         weight = float(feed.get("weight", 0.7))
         category = feed.get("category", "AI")
+        role = feed.get("role", "secondary")
         scrape_type = feed.get("type", "rss")
         user_agent = feed.get("userAgent") or feed.get("user_agent")
         if not name or not url:
@@ -560,6 +734,7 @@ def main():
                 items = parse_feed_xml(body, name, url, weight)
             for item in items:
                 item["category"] = category
+                item["sourceRole"] = role
             fetched.extend(items)
         except Exception as e:
             errors.append({"source": name, "url": url, "error": str(e)})
@@ -581,6 +756,7 @@ def main():
             "source": item.get("source") or existing_item.get("source", "Unknown"),
             "sourceUrl": item.get("sourceUrl") or existing_item.get("sourceUrl", ""),
             "sourceWeight": item.get("sourceWeight", existing_item.get("sourceWeight", 0.7)),
+            "sourceRole": item.get("sourceRole") or existing_item.get("sourceRole", "secondary"),
             "category": item.get("category") or existing_item.get("category", "AI"),
             "summary": item.get("summary") or existing_item.get("summary", ""),
             "image": sanitize_image_url(item.get("image", "")) if item.get("image") else sanitize_image_url(existing_item.get("image", "")),
@@ -595,6 +771,9 @@ def main():
         it for it in existing.values()
         if it.get("source") in allowed_sources and not is_excluded_item(it)
     ]
+    for it in all_items:
+        if not it.get("sourceRole"):
+            it["sourceRole"] = feed_roles.get(it.get("source"), "secondary")
 
     # Parse dates first
     for it in all_items:
@@ -644,6 +823,33 @@ def main():
             it["editorial_allow"] = True
             it["editorial_reason"] = "high_score_override"
 
+    # Add structured editorial metadata for the frontend.
+    for it in all_items:
+        it["signalGroup"] = classify_signal_group(it)
+        it["sourceTier"] = source_role_label(it.get("sourceRole"))
+        it["whyItMatters"] = make_why_it_matters(it)
+
+    # Cache thumbnails locally so the browser is not blocked by CSP or hotlink limits.
+    thumb_fetched = 0
+    thumb_candidates = sorted(
+        [
+            it for it in all_items
+            if it.get("image") and (it.get("editorial_allow") or it.get("category") == "Science")
+        ],
+        key=lambda x: (x["published_dt"], x.get("editorial_allow") is True, x.get("score", 0)),
+        reverse=True,
+    )
+    for it in thumb_candidates:
+        if thumb_fetched >= MAX_THUMBNAIL_FETCH_PER_RUN:
+            break
+        local_image, fetched_thumb = cache_thumbnail(it.get("image", ""), it.get("url", ""), cache_items, now)
+        if local_image:
+            if local_image != it.get("image") and not it.get("imageOriginal"):
+                it["imageOriginal"] = it.get("image")
+            it["image"] = local_image
+        if fetched_thumb:
+            thumb_fetched += 1
+
     all_items.sort(key=lambda x: (x["published_dt"], x["score"]), reverse=True)
     all_items = all_items[:MAX_STORE_ITEMS]
 
@@ -658,6 +864,13 @@ def main():
     sci_items = sorted([i for i in all_items if i.get("category") == "Science"],
                        key=lambda x: (x["published_dt"], x["score"]), reverse=True)[:20]
     latest = ai_items + sci_items
+    public_thumbnail_paths = {
+        it.get("image", "")
+        for it in (latest + daily_top)
+        if is_local_thumbnail(it.get("image", ""))
+    }
+    restore_non_public_thumbnails(all_items, public_thumbnail_paths)
+    thumbnails_removed = cleanup_thumbnail_dir(public_thumbnail_paths)
 
     # Strip helper key
     for coll in (all_items, daily_top, latest):
@@ -671,12 +884,12 @@ def main():
 
     # Minimal static page
     html_items = "\n".join(
-        f'<li><a href="{it["url"]}" target="_blank" rel="noopener">{it["title"]}</a> '
-        f'<small>({it["source"]} · score {it["score"]})</small></li>'
+        f'<li><a href="{html.escape(it["url"], quote=True)}" target="_blank" rel="noopener">{html.escape(it["title"])}</a> '
+        f'<small>({html.escape(it["source"])} · score {it["score"]})</small></li>'
         for it in daily_top
     ) or "<li>No items yet.</li>"
 
-    html = f"""<!doctype html>
+    html_doc = f"""<!doctype html>
 <html lang=\"en\">
 <head>
   <meta charset=\"utf-8\" />
@@ -700,12 +913,14 @@ def main():
 </html>
 """
     with open(os.path.join(PUBLIC_DIR, "index.html"), "w", encoding="utf-8") as f:
-        f.write(html)
+        f.write(html_doc)
 
     print(f"Fetched feeds: {len(feeds)}")
     print(f"Stored items: {len(all_items)}")
     print(f"Today's top: {len(daily_top)}")
     print(f"OG images fetched this run: {og_fetched}")
+    print(f"Thumbnails cached this run: {thumb_fetched}")
+    print(f"Unused thumbnails removed: {thumbnails_removed}")
     if errors:
         print(f"Feed errors: {len(errors)}")
 
