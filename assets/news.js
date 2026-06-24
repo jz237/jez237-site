@@ -140,6 +140,27 @@ function groupBySignal(items) {
   return grouped;
 }
 
+function renderSummary(items, mode) {
+  const summary = document.getElementById('news-summary');
+  if (!summary) return;
+
+  const localImages = items.filter(i => (i.image || '').startsWith('public/thumbnails/')).length;
+  const primarySources = items.filter(i => i.sourceRole === 'primary').length;
+  const groups = groupBySignal(items);
+  const topGroups = [...groups.entries()]
+    .sort((a, b) => b[1].length - a[1].length)
+    .slice(0, 3)
+    .map(([group, groupItems]) => `${group}: ${groupItems.length}`);
+
+  summary.innerHTML = '';
+  [
+    `${items.length} ${mode === 'all' ? 'raw' : 'curated'} stories`,
+    `${localImages} with local images`,
+    `${primarySources} primary-source`,
+    ...topGroups
+  ].forEach(label => summary.appendChild(el('span', 'news-summary-pill', label)));
+}
+
 async function init() {
   try {
     const news = await loadJson('public/ai-news-latest.json');
@@ -151,6 +172,7 @@ async function init() {
     const categorySelect = document.getElementById('news-category');
     const viewSelect = document.getElementById('news-view');
     const sourceSelect = document.getElementById('news-source');
+    const tierSelect = document.getElementById('news-tier');
     const queryInput = document.getElementById('news-query');
 
     function populateSources(category, mode) {
@@ -169,10 +191,12 @@ async function init() {
       const category = categorySelect?.value || 'AI';
       const mode = viewSelect?.value || 'curated';
       const source = sourceSelect?.value || '';
+      const tier = tierSelect?.value || '';
       const q = (queryInput?.value || '').trim().toLowerCase();
 
       let items = visibleItemsForCategory(baseItems, category, mode);
       if (source) items = items.filter(i => i.source === source);
+      if (tier) items = items.filter(i => (i.sourceRole || 'secondary') === tier);
       if (q) {
         items = items.filter(i => {
           const t = (i.title || '').toLowerCase();
@@ -194,6 +218,7 @@ async function init() {
       const itemLabel = items.length === 1 ? 'story' : 'stories';
       const modeLabel = mode === 'all' ? 'raw' : 'curated';
       document.getElementById('news-updated').textContent = `Updated: ${fmtDate(news.updatedAt)} · ${items.length} ${modeLabel} ${itemLabel}`;
+      renderSummary(items, mode);
 
       const wrap = document.getElementById('news-grid');
       wrap.innerHTML = '';
@@ -232,6 +257,7 @@ async function init() {
     };
     sortSelect.onchange = applyFilters;
     sourceSelect.onchange = applyFilters;
+    tierSelect.onchange = applyFilters;
     queryInput.oninput = applyFilters;
 
     // Init with default category
