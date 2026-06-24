@@ -482,19 +482,19 @@
         const shoulder = Math.exp(-Math.pow((t - 0.78) / 0.18, 2));
         const haunch = Math.exp(-Math.pow((t - 0.18) / 0.2, 2));
         const taper = Math.sin(Math.PI * Math.max(0.04, Math.min(0.96, t)));
-        const ry = 0.72 + 0.45 * taper + 0.22 * shoulder + 0.28 * haunch;
-        const rz = 0.58 + 0.62 * taper + 0.18 * shoulder + 0.24 * haunch;
-        const centerY = -0.06 + 0.28 * Math.sin(Math.PI * t) + 0.1 * shoulder - 0.06 * haunch;
-        const backLift = Math.max(0, Math.sin(ring)) * (0.32 + 0.18 * shoulder);
+        const ry = 0.7 + 0.42 * taper + 0.12 * shoulder + 0.14 * haunch;
+        const rz = 0.58 + 0.62 * taper + 0.14 * shoulder + 0.18 * haunch;
+        const centerY = -0.08 + 0.22 * Math.sin(Math.PI * t) + 0.02 * shoulder - 0.08 * haunch;
+        const backLift = Math.max(0, Math.sin(ring)) * (0.24 + 0.08 * shoulder);
         const bellyDrop = Math.max(0, -Math.sin(ring)) * (0.12 + 0.08 * haunch);
         const y = centerY + Math.sin(ring) * ry + backLift - bellyDrop;
         const z = Math.cos(ring) * rz * (0.92 + 0.08 * Math.sin(t * Math.PI * 2));
         pushPoint(x, y, z, organicFurColor(x, y, z), 17, 1, 0.045);
       }
 
-      addEllipsoid([-2.65, 0.2, 0], [1.05, 1.3, 1.2], 15000, 1, organicFurColor, 17, 0.04);
-      addEllipsoid([2.55, 0.32, 0], [1.05, 1.32, 1.16], 15500, 1, organicFurColor, 17, 0.04);
-      addEllipsoid([3.32, 0.72, 0], [0.74, 0.78, 0.88], 8500, 1, organicFurColor, 16, 0.035);
+      addEllipsoid([-2.65, 0.06, 0], [1.0, 1.08, 1.12], 15000, 1, organicFurColor, 17, 0.04);
+      addEllipsoid([2.55, 0.16, 0], [1.0, 1.12, 1.1], 15500, 1, organicFurColor, 17, 0.04);
+      addEllipsoid([3.32, 0.52, 0], [0.7, 0.62, 0.82], 8500, 1, organicFurColor, 16, 0.035);
     }
 
     function addOrganicLeg(x, z, phase, front = false) {
