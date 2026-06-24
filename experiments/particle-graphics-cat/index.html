@@ -604,15 +604,15 @@
             if (float(i) >= uRippleCount) continue;
             vec4 ripple = uRipples[i];
             float age = t - ripple.w;
-            if (age < 0.0 || age > 1.85) continue;
+            if (age < 0.0 || age > 2.6) continue;
 
             vec3 fromTap = p - ripple.xyz;
             float dist = length(fromTap);
-            float ring = age * 6.2;
-            float shell = exp(-pow((dist - ring) / 0.9, 2.0));
-            float nearBurst = exp(-dist * 1.05) * exp(-age * 3.4);
-            float fade = smoothstep(1.85, 1.0, age);
-            float force = (shell * 1.55 + nearBurst * 2.35) * fade;
+            float ring = age * 6.6;
+            float shell = exp(-pow((dist - ring) / 1.25, 2.0));
+            float nearBurst = exp(-dist * 0.86) * exp(-age * 2.55);
+            float fade = 1.0 - smoothstep(1.45, 2.6, age);
+            float force = (shell * 4.1 + nearBurst * 6.4) * fade;
             vec3 direction = normalize(fromTap + vec3(
               sin(aSeed * 2.1) * 0.22,
               0.38 + cos(aSeed) * 0.16,
@@ -620,7 +620,7 @@
             ));
 
             p += direction * force;
-            p.y += shell * fade * sin(age * 15.0 - dist * 1.8) * 0.16;
+            p.y += shell * fade * sin(age * 15.0 - dist * 1.8) * 0.34;
           }
 
           p += normalize(vec3(sin(aSeed), cos(aSeed * 1.3), sin(aSeed * 0.7))) * shimmer;
@@ -699,14 +699,24 @@
     particleCount.textContent = positions.length / 3 > 0 ? (positions.length / 3).toLocaleString() : "0";
 
     const raycaster = new THREE.Raycaster();
-    raycaster.params.Points.threshold = 0.42;
+    raycaster.params.Points.threshold = 0.85;
     const pointerNdc = new THREE.Vector2();
+    const inverseCatMatrix = new THREE.Matrix4();
+    const localRay = new THREE.Ray();
+    const sphereHit = new THREE.Vector3();
+    const fallbackSpheres = [
+      new THREE.Sphere(new THREE.Vector3(0.1, -0.05, 0), 4.85),
+      new THREE.Sphere(new THREE.Vector3(4.42, 1.16, 0), 1.85),
+      new THREE.Sphere(new THREE.Vector3(-4.95, 0.88, 0), 2.35),
+      new THREE.Sphere(new THREE.Vector3(5.45, -2.28, -3.55), 0.95)
+    ];
 
     function addRipple(origin) {
       rippleSlots[nextRipple].set(origin.x, origin.y, origin.z, uniforms.uTime.value);
       nextRipple = (nextRipple + 1) % maxRipples;
       rippleCount = Math.min(rippleCount + 1, maxRipples);
       uniforms.uRippleCount.value = rippleCount;
+      lastRippleAt = performance.now();
     }
 
     function addRippleFromPointer(event) {
@@ -716,7 +726,26 @@
       raycaster.setFromCamera(pointerNdc, camera);
 
       const hits = raycaster.intersectObjects([detailCloud, catCloud], false);
-      if (!hits.length) return;
+      if (!hits.length) {
+        catCloud.updateMatrixWorld(true);
+        inverseCatMatrix.copy(catCloud.matrixWorld).invert();
+        localRay.copy(raycaster.ray).applyMatrix4(inverseCatMatrix);
+
+        let bestPoint = null;
+        let bestDistance = Infinity;
+        for (const sphere of fallbackSpheres) {
+          const point = localRay.intersectSphere(sphere, sphereHit);
+          if (!point) continue;
+          const distance = localRay.origin.distanceTo(point);
+          if (distance < bestDistance) {
+            bestDistance = distance;
+            bestPoint = point.clone();
+          }
+        }
+
+        if (bestPoint) addRipple(bestPoint);
+        return;
+      }
 
       const hit = hits[0];
       const localPoint = hit.object.worldToLocal(hit.point.clone());
@@ -735,6 +764,7 @@
     let paused = false;
     let autoSpin = true;
     let speed = Number(speedInput.value);
+    let lastRippleAt = -Infinity;
     const tapMoveLimit = 9;
     const tapTimeLimit = 560;
 
@@ -872,6 +902,12 @@
 
     canvas.addEventListener("pointerup", endPointer);
     canvas.addEventListener("pointercancel", endPointer);
+
+    canvas.addEventListener("click", (event) => {
+      if (performance.now() - lastRippleAt > 90) {
+        addRippleFromPointer(event);
+      }
+    });
 
     canvas.addEventListener("wheel", (event) => {
       event.preventDefault();
