@@ -271,6 +271,26 @@ button:hover { background: #22344d; cursor: pointer; }
   display: block;
 }
 
+.news-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 14px;
+}
+
+.news-summary-pill {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 5px 9px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.04);
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.2;
+}
+
 .news-signal-section + .news-signal-section {
   margin-top: 22px;
 }
