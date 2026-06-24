@@ -24,6 +24,7 @@ PROMPTS = ROOT / "prompts.json"
 WORLDS = ROOT / "worlds-data.json"
 DATA_ARTIFACTS = ROOT / "data-artifacts-data.json"
 SUBJECT_ARTIFACTS = ROOT / "subject-artifacts-data.json"
+FACTUAL_INFOGRAPHICS = ROOT / "factual-infographics-data.json"
 IMAGES = ROOT / "images"
 DEFAULT_R2_ACCOUNT_ID = "ac73a259dff5a3cbeccbb78824ac0db6"
 DEFAULT_R2_BUCKET = "jez237-site-media"
@@ -107,6 +108,10 @@ def main() -> None:
     ap.add_argument("--subject-description", default="")
     ap.add_argument("--subject-continuity", default="")
     ap.add_argument("--subject-artifact-only", action="store_true", help="Append to subject-artifacts-data.json only, not the main prompt gallery")
+    ap.add_argument("--factual-topic", default="")
+    ap.add_argument("--factual-description", default="")
+    ap.add_argument("--factual-source-note", default="")
+    ap.add_argument("--factual-infographic-only", action="store_true", help="Append to factual-infographics-data.json only, not the main prompt gallery")
     ap.add_argument("--skip-r2-upload", action="store_true", help="Copy the image locally but do not upload it to Cloudflare R2")
     ap.add_argument("--r2-bucket", default=os.environ.get("IMAGE_ARCHIVE_R2_BUCKET", DEFAULT_R2_BUCKET))
     ap.add_argument("--r2-prefix", default=os.environ.get("IMAGE_ARCHIVE_R2_PREFIX", DEFAULT_R2_PREFIX))
@@ -162,18 +167,28 @@ def main() -> None:
             "description": args.subject_description.strip(),
             "continuity": args.subject_continuity.strip(),
         }
+    if args.factual_topic.strip() or args.slot == "factual-infographic" or args.title.lower().startswith("factual infographic:"):
+        entry["factualInfographic"] = {
+            "topic": args.factual_topic.strip() or args.title.removeprefix("Factual infographic:").strip(),
+            "description": args.factual_description.strip() or args.tests,
+            "sourceNote": args.factual_source_note.strip() or "Real-world/non-fiction topic; avoid invented data and fictional lore.",
+        }
 
-    exclusive = [args.world_only, args.data_artifact_only, args.subject_artifact_only]
+    exclusive = [args.world_only, args.data_artifact_only, args.subject_artifact_only, args.factual_infographic_only]
     if sum(1 for flag in exclusive if flag) > 1:
-        raise SystemExit("--world-only, --data-artifact-only, and --subject-artifact-only are mutually exclusive")
+        raise SystemExit("--world-only, --data-artifact-only, --subject-artifact-only, and --factual-infographic-only are mutually exclusive")
     if args.world_only:
         paths = (WORLDS,)
     elif args.data_artifact_only:
         paths = (DATA_ARTIFACTS,)
     elif args.subject_artifact_only:
         paths = (SUBJECT_ARTIFACTS,)
+    elif args.factual_infographic_only:
+        paths = (FACTUAL_INFOGRAPHICS,)
     else:
         paths = (DATA, PROMPTS)
+        if entry.get("factualInfographic"):
+            paths = (DATA, PROMPTS, FACTUAL_INFOGRAPHICS)
     for path in paths:
         data = load(path)
         data.append(entry)

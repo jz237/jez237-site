@@ -1,0 +1,36 @@
+[
+  {
+    "id": "2026-06-24-factual-infographic-factual-infographic-cut-vinyl-decal-bui",
+    "title": "Factual infographic: Cut Vinyl Decal Build and Apply",
+    "tests": "Explains real cut-vinyl decal layers, transfer tape, weeding, registration, surface prep, squeegee pressure, and peel angle without fictional data.",
+    "prompt": "Create a detailed factual infographic about real-world vinyl sign/decal construction and application, landscape 3:2 educational poster style, clean professional print-shop visual design. Subject: how a cut vinyl decal is built and applied. Include a large accurate exploded cross-section showing, from top to bottom: transfer tape, cut vinyl film, pressure-sensitive adhesive, cleaned substrate panel. Include a small squeegee-angle diagram showing firm overlapping strokes from center outward. Include a simple workflow strip: clean surface, hinge/tape position, peel liner, squeegee apply, remove transfer tape, post-check edges. Include close-up details: air-release path, edge seal/edge lift warning, substrate examples such as painted aluminum, acrylic, glass. Use clear factual labels with only short words: TRANSFER TAPE, VINYL FILM, ADHESIVE, SUBSTRATE, CLEAN, HINGE, PEEL, SQUEEGEE, REMOVE, CHECK EDGES. Avoid fake exact numbers, invented brands, logos, marketing slogans, fantasy, fictional elements, or decorative clutter. Use crisp vector-like diagrams mixed with realistic material textures, high contrast, readable hierarchy, technical but attractive, print-shop colors of white, graphite, cyan, red-orange, and brushed aluminum.",
+    "image": "images/2026-06-24-factual-infographic-factual-infographic-cut-vinyl-decal-bui.jpg",
+    "date": "2026-06-24",
+    "batch": "Factual Infographic",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "factualInfographic": {
+      "topic": "Cut vinyl decal construction and application",
+      "description": "A real-world sign-shop infographic showing how cut vinyl, adhesive, liner, transfer tape, weeding, alignment, surface prep, pressure, and peel angle fit together.",
+      "sourceNote": "Real-world/non-fiction topic; general sign-shop workflow, no invented statistics."
+    }
+  },
+  {
+    "id": "2026-06-24-factual-infographic-factual-infographic-planted-aquarium-ni",
+    "title": "Factual infographic: Planted Aquarium Nitrogen Cycle",
+    "tests": "Explains the real planted-aquarium nitrogen cycle, bacterial conversion, plant uptake, testing, water changes, oxygen, and overfeeding risk without fictional claims.",
+    "prompt": "Create a detailed factual infographic about the real-world nitrogen cycle in a planted freshwater aquarium, landscape educational poster style, clean modern science illustration. Show a cross-section aquarium scene with substrate, rooted aquatic plants, filter, fish, and water column. Use accurate conservative relationships, no fake exact numbers. Include a clear cycle diagram: fish waste and uneaten food produce AMMONIA, beneficial bacteria convert AMMONIA to NITRITE, other beneficial bacteria convert NITRITE to NITRATE, plants use NITRATE and AMMONIUM for growth, water changes remove excess NITRATE, filter media provides bacterial surface area. Include a small root-zone panel showing roots taking up nutrients from substrate/water. Include a simple warning panel: TEST WATER, AVOID OVERFEEDING, ADD PLANTS SLOWLY. Labels should be short and readable: AMMONIA, NITRITE, NITRATE, BENEFICIAL BACTERIA, PLANT UPTAKE, FILTER MEDIA, WATER CHANGE, ROOT ZONE. No fantasy, no fictional species, no fake exact ppm values, no brand names, no logos, no invented data. Visual style: crisp scientific diagram mixed with realistic aquarium textures, lush green plants, clear blue water, clean arrows, high readability, tasteful color palette of deep green, cyan, white, charcoal, and small amber highlights.",
+    "image": "images/2026-06-24-factual-infographic-factual-infographic-planted-aquarium-ni.jpg",
+    "date": "2026-06-24",
+    "batch": "Factual Infographic",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "factualInfographic": {
+      "topic": "Planted aquarium nitrogen cycle",
+      "description": "A real-world aquarium-care infographic showing how waste becomes ammonia, nitrite, and nitrate, how nitrifying bacteria and plants interact, and why testing and water changes matter.",
+      "sourceNote": "Real-world/non-fiction topic; conservative aquarium-care basics, no invented statistics."
+    }
+  }
+]
