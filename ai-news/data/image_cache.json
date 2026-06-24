@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-24T00:00:01.184142+00:00",
+  "updatedAt": "2026-06-24T00:08:31.662512+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -11284,6 +11284,10 @@
     "https://simonwillison.net/2026/Jun/23/datasette": {
       "image": "https://static.simonwillison.net/static/2026/create-alter-demo-first-frame.jpg",
       "checkedAt": "2026-06-24T00:00:01.184142+00:00"
+    },
+    "https://github.com/BerriAI/litellm/releases/tag/v1.91.0-dev.1": {
+      "image": "https://opengraph.githubassets.com/9a78cd956067fceff41336d77c198cfb77ae32b295601dace5ece10928edf74f/BerriAI/litellm/releases/tag/v1.91.0-dev.1",
+      "checkedAt": "2026-06-24T00:08:31.662512+00:00"
     }
   }
 }

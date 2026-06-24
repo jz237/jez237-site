@@ -1,7 +1,23 @@
 {
   "date": "2026-06-24",
-  "updatedAt": "2026-06-24T00:00:01.184142+00:00",
+  "updatedAt": "2026-06-24T00:08:31.662512+00:00",
   "items": [
+    {
+      "title": "v1.91.0-dev.1",
+      "url": "https://github.com/BerriAI/litellm/releases/tag/v1.91.0-dev.1",
+      "source": "LiteLLM Releases",
+      "sourceUrl": "https://github.com/BerriAI/litellm/releases.atom",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Verify Docker Image Signature\nAll LiteLLM Docker images are signed with cosign. Every release is signed with the same key introduced in commit 0112e53.\nVerify using the pinned commit hash (recommended):\nA commit hash is cryptographically immutable, so this is the strongest way to ensure you are using the original signing key:\ncosign verify \\\n  --key https://raw.githubusercontent.com/BerriAI/litellm/0112e53046018d726492c814b3644b7d376029d0/cosign.pub \\\n  ghcr.io/berriai/litellm:v1.91.0-dev.1\nVerify using the release tag (convenience):\nTags are protected in this repository and resolve to the sam",
+      "image": "https://opengraph.githubassets.com/9a78cd956067fceff41336d77c198cfb77ae32b295601dace5ece10928edf74f/BerriAI/litellm/releases/tag/v1.91.0-dev.1",
+      "published": "2026-06-24T00:02:08+00:00",
+      "firstSeen": "2026-06-24T00:08:31.662512+00:00",
+      "lastSeen": "2026-06-24T00:08:31.662512+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.9867
+    },
     {
       "title": "Investigating Linguistic Steering: An Analysis of Adjectival Effects Across Large Language Model Architectures",
       "url": "https://llm-stats.com/ai-news",
@@ -11,12 +27,28 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-24T00:00:19.136417+00:00",
+      "published": "2026-06-24T00:08:37.629951+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-24T00:00:01.184142+00:00",
+      "lastSeen": "2026-06-24T00:08:31.662512+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
+    },
+    {
+      "title": "NVIDIA and AWS Collaborate to Bring AI to Production at Scale",
+      "url": "https://blogs.nvidia.com/blog/nvidia-aws-ai-production-scale",
+      "source": "NVIDIA Blog",
+      "sourceUrl": "https://blogs.nvidia.com/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Building AI systems at scale is demanding, requiring low-latency inference, fast vector search, strong GPU price-performance and infrastructure that can grow without multiplying operational complexity.  NVIDIA’s latest work with Amazon Web Services (AWS) addresses each of those constraints. Across Amazon OpenSearch and Amazon EC2, NVIDIA AI infrastructure is giving enterprises more practical paths to deploy [&#8230;]",
+      "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/logo-lockup-tech-blog-aws-1920x1080-2.jpg",
+      "published": "2026-06-24T00:05:37+00:00",
+      "firstSeen": "2026-06-24T00:08:31.662512+00:00",
+      "lastSeen": "2026-06-24T00:08:31.662512+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "framework_or_plumbing",
+      "score": 1.1885
     }
   ],
   "errors": [
