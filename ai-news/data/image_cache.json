@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-24T13:00:01.323574+00:00",
+  "updatedAt": "2026-06-24T14:00:01.741376+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -11304,6 +11304,14 @@
     "https://www.technologyreview.com/2026/06/24/1139202/the-emergence-of-the-web-data-infrastructure-layer-for-ai": {
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/06/iStock-1714934690.jpg?resize=1200%2C600",
       "checkedAt": "2026-06-24T13:00:01.323574+00:00"
+    },
+    "https://www.theverge.com/gadgets/955537/google-home-smart-speaker-hands-on": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/Google-Home-Speaker.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.728785061485%2C100%2C78.54242987703&amp%3Bw=1200",
+      "checkedAt": "2026-06-24T14:00:01.741376+00:00"
+    },
+    "https://openai.com/index/openai-broadcom-jalapeno-inference-chip": {
+      "image": "",
+      "checkedAt": "2026-06-24T14:00:01.741376+00:00"
     }
   }
 }
