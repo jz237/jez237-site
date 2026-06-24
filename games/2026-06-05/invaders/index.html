@@ -556,7 +556,7 @@
       <div class="overlay" id="overlay">
         <div class="panel">
           <h1>Invaders</h1>
-          <div class="title-version">v1.47</div>
+          <div class="title-version">v1.48</div>
           <p class="tagline" id="message">A modernized arcade defense run: punch through waves, catch power cores, and survive the boss carrier.</p>
           <p class="hint" id="controlsHint"></p>
           <div class="enemy-roster" aria-label="Enemy ship guide">
@@ -586,7 +586,7 @@
         <button id="pauseButton" type="button" aria-label="Pause" title="Pause (P)">⏸</button>
         <button id="muteButton" type="button" aria-label="Mute sound" aria-pressed="false" title="Mute (M)">🔊</button>
       </div>
-      <div class="version" aria-hidden="true">v1.47</div>
+      <div class="version" aria-hidden="true">v1.48</div>
     </section>
   </main>
 
@@ -2689,8 +2689,8 @@
         ctx.globalAlpha = clamp(Math.min(1, banner.life * 2) * pulse, 0, 1);
         const mainColor = banner.boss ? colors.enemy3 : colors.player;
         const fillColor = banner.boss ? "rgba(255, 77, 109, 0.16)" : "rgba(53, 244, 255, 0.13)";
-        const y = game.height * 0.2;
         const h = banner.subtext ? 86 : 68;
+        const y = waveBannerY(h);
         ctx.fillStyle = fillColor;
         ctx.fillRect(0, y - h / 2, game.width, h);
         ctx.strokeStyle = mainColor;
@@ -2714,6 +2714,21 @@
           ctx.fillText(banner.subtext.toUpperCase(), game.width / 2, y + 26);
         }
         ctx.restore();
+      }
+
+      function waveBannerY(height) {
+        const formationBottoms = game.invaders
+          .filter(inv => inv.divePhase !== "swoop")
+          .map(inv => inv.y + inv.r + 8);
+        if (game.boss) formationBottoms.push(game.boss.y + game.boss.r + 10);
+        const formationBottom = formationBottoms.length ? Math.max(...formationBottoms) : game.height * 0.22;
+        const shieldTop = game.shields.length
+          ? Math.min(...game.shields.map(shield => shield.y - shield.h / 2))
+          : playerLaneY() - 120;
+        const minY = Math.max(game.height * 0.28, formationBottom + height * 0.72);
+        const maxY = Math.max(game.height * 0.34, Math.min(playerLaneY() - 140, shieldTop - height * 0.62));
+        if (minY <= maxY) return clamp(minY, game.height * 0.28, maxY);
+        return clamp(minY, game.height * 0.3, playerLaneY() - height * 0.55);
       }
 
       function drawPickupLabels() {
@@ -2950,7 +2965,7 @@
       });
 
       window.__invadersQA = {
-        version: "v1.47",
+        version: "v1.48",
         game,
         forceDiverSwoop() {
           if (!game.player) return null;
@@ -3028,6 +3043,17 @@
             powerFlash: !!game.powerFlash,
             screenFlash: game.screenFlash,
             diverCueReady: game.invaders.some(enemy => enemy.divePhase === "warning" || enemy.divePhase === "swoop")
+          };
+        },
+        waveBannerPlacement() {
+          const h = game.waveBanner && game.waveBanner.subtext ? 86 : 68;
+          const bottom = game.invaders.length ? Math.max(...game.invaders.map(inv => inv.y + inv.r)) : 0;
+          return {
+            version: this.version,
+            y: waveBannerY(h),
+            top: waveBannerY(h) - h / 2,
+            formationBottom: bottom,
+            belowFormation: waveBannerY(h) - h / 2 > bottom + 8
           };
         }
       };
