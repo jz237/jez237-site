@@ -1,7 +1,23 @@
 {
   "date": "2026-06-24",
-  "updatedAt": "2026-06-24T00:08:31.662512+00:00",
+  "updatedAt": "2026-06-24T01:00:01.211214+00:00",
   "items": [
+    {
+      "title": "Beyond Fixed Budgets: Characterizing the Inelasticity and Limitations of Tree-of-Thought Reasoning Strategies",
+      "url": "https://llm-stats.com/ai-news",
+      "source": "LLM Stats AI News",
+      "sourceUrl": "https://llm-stats.com/ai-news",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "",
+      "image": "https://llm-stats.com/og/main.png",
+      "published": "2026-06-24T01:00:16.407918+00:00",
+      "firstSeen": "2026-05-29T21:00:01.522609+00:00",
+      "lastSeen": "2026-06-24T01:00:01.211214+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.06
+    },
     {
       "title": "v1.91.0-dev.1",
       "url": "https://github.com/BerriAI/litellm/releases/tag/v1.91.0-dev.1",
@@ -13,26 +29,10 @@
       "image": "https://opengraph.githubassets.com/9a78cd956067fceff41336d77c198cfb77ae32b295601dace5ece10928edf74f/BerriAI/litellm/releases/tag/v1.91.0-dev.1",
       "published": "2026-06-24T00:02:08+00:00",
       "firstSeen": "2026-06-24T00:08:31.662512+00:00",
-      "lastSeen": "2026-06-24T00:08:31.662512+00:00",
+      "lastSeen": "2026-06-24T01:00:01.211214+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9867
-    },
-    {
-      "title": "Investigating Linguistic Steering: An Analysis of Adjectival Effects Across Large Language Model Architectures",
-      "url": "https://llm-stats.com/ai-news",
-      "source": "LLM Stats AI News",
-      "sourceUrl": "https://llm-stats.com/ai-news",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "",
-      "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-24T00:08:37.629951+00:00",
-      "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-24T00:08:31.662512+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.36
+      "score": 2.9609
     },
     {
       "title": "NVIDIA and AWS Collaborate to Bring AI to Production at Scale",
@@ -45,10 +45,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/logo-lockup-tech-blog-aws-1920x1080-2.jpg",
       "published": "2026-06-24T00:05:37+00:00",
       "firstSeen": "2026-06-24T00:08:31.662512+00:00",
-      "lastSeen": "2026-06-24T00:08:31.662512+00:00",
+      "lastSeen": "2026-06-24T01:00:01.211214+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 1.1885
+      "score": 1.1626
     }
   ],
   "errors": [
