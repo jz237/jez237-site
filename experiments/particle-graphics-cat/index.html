@@ -86,7 +86,7 @@
 
     .button-row {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 8px;
       margin-bottom: 12px;
     }
@@ -215,6 +215,7 @@
       <div class="button-row">
         <button id="pause" type="button" aria-pressed="false" title="Pause or resume animation">Pause</button>
         <button id="spin" type="button" aria-pressed="true" title="Toggle automatic turntable">Spin</button>
+        <button id="walk" type="button" aria-pressed="true" title="Toggle walking motion">Walk</button>
         <button id="glow" type="button" aria-pressed="false" title="Toggle stronger particle glow">Glow</button>
       </div>
       <label class="field">
@@ -229,8 +230,8 @@
       </label>
       <label class="field">
         Zoom
-        <input id="zoom" type="range" min="8.5" max="29" value="15.4" step="0.1" />
-        <output id="zoomValue">15.4</output>
+        <input id="zoom" type="range" min="8.5" max="32" value="18.8" step="0.1" />
+        <output id="zoomValue">18.8</output>
       </label>
       <label class="field">
         Hue
@@ -259,6 +260,7 @@
     const canvas = document.querySelector("#scene");
     const pauseButton = document.querySelector("#pause");
     const spinButton = document.querySelector("#spin");
+    const walkButton = document.querySelector("#walk");
     const glowButton = document.querySelector("#glow");
     const speedInput = document.querySelector("#speed");
     const sizeInput = document.querySelector("#size");
@@ -422,19 +424,99 @@
       }
     }
 
+    function organicFurColor(x, y, z) {
+      const belly = y < -0.95 && Math.abs(z) < 0.82;
+      const flankShadow = Math.abs(z) > 1.05 || y < -0.55;
+      if (belly || rand() > 0.78) return palette.white;
+      if (flankShadow && rand() > 0.46) return palette.furShadow;
+      if (rand() > 0.5) return palette.furLight;
+      return palette.fur;
+    }
+
+    function addOrganicBody() {
+      const count = 82000;
+      for (let i = 0; i < count; i++) {
+        const t = rand();
+        const x = -4.15 + t * 7.25;
+        const ring = rand() * Math.PI * 2;
+        const shoulder = Math.exp(-Math.pow((t - 0.78) / 0.18, 2));
+        const haunch = Math.exp(-Math.pow((t - 0.18) / 0.2, 2));
+        const taper = Math.sin(Math.PI * Math.max(0.04, Math.min(0.96, t)));
+        const ry = 0.72 + 0.45 * taper + 0.22 * shoulder + 0.28 * haunch;
+        const rz = 0.58 + 0.62 * taper + 0.18 * shoulder + 0.24 * haunch;
+        const centerY = -0.06 + 0.28 * Math.sin(Math.PI * t) + 0.1 * shoulder - 0.06 * haunch;
+        const backLift = Math.max(0, Math.sin(ring)) * (0.32 + 0.18 * shoulder);
+        const bellyDrop = Math.max(0, -Math.sin(ring)) * (0.12 + 0.08 * haunch);
+        const y = centerY + Math.sin(ring) * ry + backLift - bellyDrop;
+        const z = Math.cos(ring) * rz * (0.92 + 0.08 * Math.sin(t * Math.PI * 2));
+        pushPoint(x, y, z, organicFurColor(x, y, z), 17, 1, 0.045);
+      }
+
+      addEllipsoid([-2.65, 0.2, 0], [1.05, 1.3, 1.2], 15000, 1, organicFurColor, 17, 0.04);
+      addEllipsoid([2.55, 0.32, 0], [1.05, 1.32, 1.16], 15500, 1, organicFurColor, 17, 0.04);
+      addEllipsoid([3.32, 0.72, 0], [0.74, 0.78, 0.88], 8500, 1, organicFurColor, 16, 0.035);
+    }
+
+    function addOrganicLeg(x, z, phase, front = false) {
+      const hipY = front ? -0.55 : -0.48;
+      const pawX = x + (front ? 0.34 : 0.26);
+      const pawZ = z + (z > 0 ? 0.08 : -0.08);
+      for (let i = 0; i < 9500; i++) {
+        const t = rand();
+        const ring = rand() * Math.PI * 2;
+        const bend = Math.sin(t * Math.PI);
+        const legX = x + (front ? 0.16 : -0.12) * t + Math.sin(t * Math.PI * 0.8) * (front ? 0.2 : -0.16);
+        const legY = hipY - t * 1.95 + bend * 0.18;
+        const radius = 0.34 - t * 0.13 + (front ? 0.02 : 0.05);
+        pushPoint(
+          legX + Math.cos(ring) * radius * 0.62,
+          legY + Math.sin(ring) * radius,
+          z + Math.cos(ring + Math.PI / 2) * radius * 0.7,
+          t > 0.8 || rand() > 0.35 ? palette.white : palette.furShadow,
+          15,
+          5 + phase,
+          0.026
+        );
+      }
+      addFilledEllipsoid([pawX, -2.78, pawZ], [0.58, 0.15, 0.34], 4300, 5 + phase, palette.white, 15, 0.012);
+      for (const toe of [-0.15, 0, 0.15]) {
+        addFilledEllipsoid([pawX + 0.36, -2.86, pawZ + toe], [0.065, 0.032, 0.052], 190, 5 + phase, palette.pink, 13, 0.004);
+      }
+    }
+
+    function addOrganicHead() {
+      addEllipsoid([4.48, 1.25, 0], [1.16, 1.0, 1.04], 33000, 2, headColor, 16, 0.035);
+      addEllipsoid([4.98, 0.96, -0.55], [0.44, 0.38, 0.38], 7000, 2, () => palette.white, 15, 0.024);
+      addEllipsoid([4.98, 0.96, 0.55], [0.44, 0.38, 0.38], 7000, 2, () => palette.white, 15, 0.024);
+      addEllipsoid([5.48, 0.72, 0], [0.54, 0.34, 0.62], 12000, 2, () => palette.white, 15, 0.028);
+      addFilledEllipsoid([5.88, 0.78, 0], [0.16, 0.1, 0.22], 1300, 2, palette.nose, 16, 0.018);
+      addFilledEllipsoid([5.98, 0.7, 0], [0.06, 0.06, 0.09], 360, 2, palette.noseDark, 17, 0.006);
+      addFilledEllipsoid([5.72, 1.14, -0.55], [0.16, 0.28, 0.055], 1800, 6, palette.eye, 22, 0.008);
+      addFilledEllipsoid([5.72, 1.14, 0.55], [0.16, 0.28, 0.055], 1800, 6, palette.eye, 22, 0.008);
+      addFilledEllipsoid([5.84, 1.14, -0.57], [0.065, 0.21, 0.026], 720, 6, palette.eyeDark, 22, 0.004);
+      addFilledEllipsoid([5.84, 1.14, 0.57], [0.065, 0.21, 0.026], 720, 6, palette.eyeDark, 22, 0.004);
+
+      const earL = [[3.72, 1.95, -0.64], [4.34, 3.62, -0.98], [5.02, 1.92, -1.06]];
+      const earR = [[3.72, 1.95, 0.64], [4.34, 3.62, 0.98], [5.02, 1.92, 1.06]];
+      addTriangleSurface(...earL, 15000, 3, () => rand() > 0.7 ? palette.furShadow : palette.white, 16, 0.032);
+      addTriangleSurface(...earR, 15000, 3, () => rand() > 0.7 ? palette.furShadow : palette.white, 16, 0.032);
+      addTriangleSurface([3.95, 2.1, -0.78], [4.42, 3.18, -0.94], [4.84, 2.08, -0.96], 5800, 3, () => palette.pink, 15, 0.022);
+      addTriangleSurface([3.95, 2.1, 0.78], [4.42, 3.18, 0.94], [4.84, 2.08, 0.96], 5800, 3, () => palette.pink, 15, 0.022);
+    }
+
     function addTail() {
-      const steps = 44000;
+      const steps = 36000;
       for (let i = 0; i < steps; i++) {
         const t = rand();
-        const angle = t * Math.PI * 1.55;
+        const angle = t * Math.PI * 1.2;
         const center = [
-          -4.1 - t * 3.8,
-          0.05 + Math.sin(t * Math.PI) * 2.85,
-          0.12 + Math.cos(angle) * 0.9
+          -4.02 - t * 1.68 + Math.sin(t * Math.PI) * 0.42,
+          -0.08 + Math.sin(t * Math.PI * 0.72) * 2.35,
+          0.08 + Math.sin(angle) * 0.48
         ];
         const ring = rand() * Math.PI * 2;
-        const tube = 0.32 + 0.12 * Math.sin(t * Math.PI);
-        const x = center[0] + Math.cos(ring) * tube * 0.68;
+        const tube = 0.3 - t * 0.08 + 0.08 * Math.sin(t * Math.PI);
+        const x = center[0] + Math.cos(ring) * tube * 0.58;
         const y = center[1] + Math.sin(ring) * tube;
         const z = center[2] + Math.cos(ring + Math.PI / 2) * tube;
         const color = rand() > 0.78 ? palette.furShadow : rand() > 0.46 ? palette.furLight : palette.fur;
@@ -517,36 +599,13 @@
     }
 
     function buildCat() {
-      addEllipsoid([0, 0, 0], [4.6, 1.45, 1.48], 72000, 1, furColor, 17, 0.055);
-      addEllipsoid([2.05, -0.12, 0], [2.4, 1.1, 1.22], 22000, 1, furColor, 16, 0.05);
-      addEllipsoid([4.34, 1.18, 0], [1.35, 1.18, 1.22], 43000, 2, headColor, 16, 0.045);
-      addEllipsoid([5.42, 0.72, 0], [0.48, 0.38, 0.72], 12000, 2, () => palette.white, 15, 0.035);
+      addOrganicBody();
+      addOrganicHead();
       addCrownPatch();
-
-      addFilledEllipsoid([5.88, 0.78, 0], [0.16, 0.1, 0.22], 1300, 2, palette.nose, 16, 0.018);
-      addFilledEllipsoid([5.98, 0.7, 0], [0.06, 0.06, 0.09], 360, 2, palette.noseDark, 17, 0.006);
-      addFilledEllipsoid([5.72, 1.12, -0.55], [0.16, 0.28, 0.055], 1800, 6, palette.eye, 22, 0.008);
-      addFilledEllipsoid([5.72, 1.12, 0.55], [0.16, 0.28, 0.055], 1800, 6, palette.eye, 22, 0.008);
-      addFilledEllipsoid([5.84, 1.12, -0.57], [0.065, 0.21, 0.026], 720, 6, palette.eyeDark, 22, 0.004);
-      addFilledEllipsoid([5.84, 1.12, 0.57], [0.065, 0.21, 0.026], 720, 6, palette.eyeDark, 22, 0.004);
-
-      const earL = [[3.72, 2.0, -0.72], [4.44, 3.85, -1.12], [5.12, 1.94, -1.12]];
-      const earR = [[3.72, 2.0, 0.72], [4.44, 3.85, 1.12], [5.12, 1.94, 1.12]];
-      addTriangleSurface(...earL, 15000, 3, () => rand() > 0.7 ? palette.furShadow : palette.white, 16, 0.032);
-      addTriangleSurface(...earR, 15000, 3, () => rand() > 0.7 ? palette.furShadow : palette.white, 16, 0.032);
-      addTriangleSurface([3.95, 2.1, -0.82], [4.45, 3.35, -1.04], [4.9, 2.08, -1.02], 5800, 3, () => palette.pink, 15, 0.022);
-      addTriangleSurface([3.95, 2.1, 0.82], [4.45, 3.35, 1.04], [4.9, 2.08, 1.02], 5800, 3, () => palette.pink, 15, 0.022);
-
-      for (const z of [-0.92, 0.92]) {
-        addEllipsoid([2.92, -1.72, z], [0.34, 1.12, 0.34], 10500, 5, (x, y) => y < -2.55 || rand() > 0.38 ? palette.white : palette.fur, 15, 0.035);
-        addFilledEllipsoid([3.07, -2.86, z], [0.55, 0.15, 0.38], 3600, 5, palette.white, 15, 0.015);
-        addEllipsoid([-2.68, -1.67, z], [0.42, 1.02, 0.42], 10000, 5, (x, y) => y < -2.55 || rand() > 0.38 ? palette.white : palette.fur, 15, 0.035);
-        addFilledEllipsoid([-2.52, -2.82, z], [0.62, 0.15, 0.43], 3600, 5, palette.white, 15, 0.015);
-        for (const toe of [-0.16, 0, 0.16]) {
-          addFilledEllipsoid([3.48, -2.91, z + toe], [0.07, 0.035, 0.06], 170, 5, palette.pink, 13, 0.004);
-          addFilledEllipsoid([-2.08, -2.88, z + toe], [0.07, 0.035, 0.06], 170, 5, palette.pink, 13, 0.004);
-        }
-      }
+      addOrganicLeg(2.72, -0.82, 0.0, true);
+      addOrganicLeg(2.72, 0.82, 0.25, true);
+      addOrganicLeg(-2.55, -0.88, 0.5, false);
+      addOrganicLeg(-2.55, 0.88, 0.75, false);
 
       addTail();
 
@@ -581,7 +640,8 @@
       uPausedMix: { value: 1 },
       uGlow: { value: 0.16 },
       uHueShift: { value: 0 },
-      uPatchStrength: { value: Number(patchInput.value) }
+      uPatchStrength: { value: Number(patchInput.value) },
+      uWalkStrength: { value: 1 }
     };
 
     const material = new THREE.ShaderMaterial({
@@ -600,6 +660,7 @@
         uniform float uTime;
         uniform float uPixelRatio;
         uniform float uSizeScale;
+        uniform float uWalkStrength;
 
         mat2 rot(float a) {
           float s = sin(a);
@@ -611,24 +672,32 @@
           vec3 p = position;
           float t = uTime;
           float wave = sin(t * 3.2 + aSeed);
+          float gait = t * 4.8;
           float shimmer = sin(t * 7.0 + aSeed * 1.7) * 0.016;
 
           if (aRegion < 2.0) {
-            p.y *= 1.0 + sin(t * 2.0) * 0.018;
-            p.y += sin(t * 3.0) * 0.055;
+            float stride = sin(gait);
+            p.y *= 1.0 + stride * 0.012 * uWalkStrength;
+            p.y += sin(gait * 0.5) * 0.06 * uWalkStrength;
+            p.x += sin(gait + p.x * 0.35) * 0.025 * uWalkStrength;
           } else if (aRegion < 3.0) {
-            p.y += sin(t * 2.6) * 0.075;
-            p.zx = rot(sin(t * 1.4) * 0.055) * p.zx;
+            p.y += sin(gait * 0.5 + 0.7) * 0.085 * uWalkStrength;
+            p.zx = rot(sin(t * 1.4) * 0.04 + sin(gait) * 0.025 * uWalkStrength) * p.zx;
           } else if (aRegion < 4.0) {
             p.x += sin(t * 5.4 + aSeed) * 0.025;
             p.y += sin(t * 5.1 + aSeed) * 0.035;
           } else if (aRegion < 5.0) {
             float f = clamp((-p.x - 3.7) / 4.5, 0.0, 1.0);
-            p.z += sin(t * 2.1 + f * 4.2 + aSeed * 0.02) * f * 0.52;
-            p.y += cos(t * 1.7 + f * 3.2) * f * 0.25;
+            p.z += sin(t * 2.1 + f * 4.2 + aSeed * 0.02) * f * (0.34 + 0.18 * uWalkStrength);
+            p.y += cos(t * 1.7 + f * 3.2) * f * (0.18 + 0.08 * uWalkStrength);
           } else if (aRegion < 6.0) {
-            p.y += max(0.0, sin(t * 4.0 + p.x * 1.3)) * 0.12;
-            p.x += sin(t * 4.0 + p.z * 2.0) * 0.035;
+            float legPhase = fract(aRegion) * 8.97598;
+            float lower = smoothstep(-1.15, -2.75, p.y);
+            float lift = max(0.0, sin(gait + legPhase));
+            float reach = cos(gait + legPhase);
+            p.x += reach * lower * 0.34 * uWalkStrength;
+            p.y += lift * lower * 0.28 * uWalkStrength;
+            p.z += sin(gait + legPhase) * lower * 0.035 * uWalkStrength;
           } else if (aRegion < 7.0) {
             float blink = pow(max(0.0, sin(t * 2.7 - 1.2)), 28.0);
             p.y -= blink * 0.18;
@@ -767,6 +836,10 @@
       zoomValue.textContent = distance.toFixed(1);
     }
 
+    if (window.innerWidth <= 720) {
+      setDistance(25);
+    }
+
     function getPointerGap() {
       const points = [...activePointers.values()];
       if (points.length < 2) return 0;
@@ -782,6 +855,12 @@
     spinButton.addEventListener("click", () => {
       autoSpin = !autoSpin;
       setPressed(spinButton, autoSpin);
+    });
+
+    walkButton.addEventListener("click", () => {
+      const walking = uniforms.uWalkStrength.value < 0.5;
+      uniforms.uWalkStrength.value = walking ? 1 : 0;
+      setPressed(walkButton, walking);
     });
 
     glowButton.addEventListener("click", () => {
