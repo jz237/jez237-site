@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-24T23:20:12.596385+00:00",
+  "updatedAt": "2026-06-24T23:34:22.286544+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -11412,6 +11412,966 @@
     "https://www.techrepublic.com/article/news-agentic-ai-cx-contact-center-ccw": {
       "image": "https://assets.techrepublic.com/uploads/2026/06/cx-agentic.jpg?f=jpeg",
       "checkedAt": "2026-06-24T23:00:01.536104+00:00"
+    },
+    "thumb:https://assets.techrepublic.com/uploads/2026/06/claude-tag.jpg?f=jpeg": {
+      "sourceImage": "https://assets.techrepublic.com/uploads/2026/06/claude-tag.jpg?f=jpeg",
+      "localPath": "public/thumbnails/news-e3b449cc3083c2ac5c.jpg",
+      "checkedAt": "2026-06-24T23:25:19.860103+00:00"
+    },
+    "thumb:https://static.simonwillison.net/static/2026/openai-webrtc-document-context.jpg": {
+      "sourceImage": "https://static.simonwillison.net/static/2026/openai-webrtc-document-context.jpg",
+      "localPath": "public/thumbnails/news-d80d4d158cc322381a.jpg",
+      "checkedAt": "2026-06-24T23:25:19.860103+00:00"
+    },
+    "thumb:https://media.thenextweb.com/2026/06/google-gemini-3-5-flash-computer-use-built-in-tool.avif": {
+      "sourceImage": "https://media.thenextweb.com/2026/06/google-gemini-3-5-flash-computer-use-built-in-tool.avif",
+      "localPath": "public/thumbnails/news-3ae4c12437f36efc37.avif",
+      "checkedAt": "2026-06-24T23:25:19.860103+00:00"
+    },
+    "thumb:https://media.thenextweb.com/2026/06/anthropic-claude-tag-slack-always-on-ai-teammate.avif": {
+      "sourceImage": "https://media.thenextweb.com/2026/06/anthropic-claude-tag-slack-always-on-ai-teammate.avif",
+      "localPath": "public/thumbnails/news-09306073bf661f9710.avif",
+      "checkedAt": "2026-06-24T23:25:19.860103+00:00"
+    },
+    "thumb:https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/STKB364_CLAUDE_2_C_96d15c.jpg?quality=90&%3Bstrip=all&%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&%3Bw=1200": {
+      "sourceImage": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/STKB364_CLAUDE_2_C_96d15c.jpg?quality=90&%3Bstrip=all&%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&%3Bw=1200",
+      "localPath": "public/thumbnails/news-815dc427a41383a194.webp",
+      "checkedAt": "2026-06-24T23:25:19.860103+00:00"
+    },
+    "thumb:https://media.wired.com/photos/6a2fc599a8e3255f0ac3665f/master/pass/061526_OpenAI%20Hires%20an%20Army%20to%20Patch%20Open%20Source%20Bugs%20as%20It%20Battles%20Mythos%20for%20Cyber%20AI%20Supremacy.jpg": {
+      "sourceImage": "https://media.wired.com/photos/6a2fc599a8e3255f0ac3665f/master/pass/061526_OpenAI%20Hires%20an%20Army%20to%20Patch%20Open%20Source%20Bugs%20as%20It%20Battles%20Mythos%20for%20Cyber%20AI%20Supremacy.jpg",
+      "localPath": "public/thumbnails/news-3a49fb598c6a98305f.webp",
+      "checkedAt": "2026-06-24T23:25:19.860103+00:00"
+    },
+    "thumb:https://media.thenextweb.com/2026/06/anthropic-claude-fable-5-mythos-public-release-ipo.avif": {
+      "sourceImage": "https://media.thenextweb.com/2026/06/anthropic-claude-fable-5-mythos-public-release-ipo.avif",
+      "localPath": "public/thumbnails/news-8ae3bc85f333c3c38d.avif",
+      "checkedAt": "2026-06-24T23:25:19.860103+00:00"
+    },
+    "thumb:https://static.simonwillison.net/static/2026/cloudflare-claim.jpg": {
+      "sourceImage": "https://static.simonwillison.net/static/2026/cloudflare-claim.jpg",
+      "localPath": "public/thumbnails/news-eadd874de0a5956cc3.jpg",
+      "checkedAt": "2026-06-24T23:25:19.860103+00:00"
+    },
+    "thumb:https://storage.googleapis.com/gweb-uniblog-publish-prod/images/gemini-3-5__keyword__blog-header__light_7VsKV.width-1300.png": {
+      "sourceImage": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/gemini-3-5__keyword__blog-header__light_7VsKV.width-1300.png",
+      "localPath": "public/thumbnails/news-4cf0a85abf3b00cc6d.png",
+      "checkedAt": "2026-06-24T23:25:19.860103+00:00"
+    },
+    "thumb:https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/NotebookLM-Welcome.png?quality=90&%3Bstrip=all&%3Bcrop=0%2C3.4613147178592%2C100%2C93.077370564282&%3Bw=1200": {
+      "sourceImage": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/NotebookLM-Welcome.png?quality=90&%3Bstrip=all&%3Bcrop=0%2C3.4613147178592%2C100%2C93.077370564282&%3Bw=1200",
+      "localPath": "public/thumbnails/news-5874af474969190710.webp",
+      "checkedAt": "2026-06-24T23:25:19.860103+00:00"
+    },
+    "thumb:https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/STKS515_CYBER_WARFARE2_D.jpg?quality=90&%3Bstrip=all&%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&%3Bw=1200": {
+      "sourceImage": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/STKS515_CYBER_WARFARE2_D.jpg?quality=90&%3Bstrip=all&%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&%3Bw=1200",
+      "localPath": "public/thumbnails/news-464fb054690e8fb43a.webp",
+      "checkedAt": "2026-06-24T23:25:19.860103+00:00"
+    },
+    "thumb:https://static.simonwillison.net/static/2026/extras-explorer.png": {
+      "sourceImage": "https://static.simonwillison.net/static/2026/extras-explorer.png",
+      "localPath": "public/thumbnails/news-86b941e468947e0994.png",
+      "checkedAt": "2026-06-24T23:25:19.860103+00:00"
+    },
+    "thumb:https://techcrunch.com/wp-content/uploads/2026/06/anthropic-claude-fable.jpg?resize=1200%2C798": {
+      "sourceImage": "https://techcrunch.com/wp-content/uploads/2026/06/anthropic-claude-fable.jpg?resize=1200%2C798",
+      "localPath": "public/thumbnails/news-d8293a32187b61b3dc.webp",
+      "checkedAt": "2026-06-24T23:25:19.860103+00:00"
+    },
+    "thumb:https://media.thenextweb.com/2026/06/b2b-brands-earning-citations-chatgpt-claude-ai-overviews.avif": {
+      "sourceImage": "https://media.thenextweb.com/2026/06/b2b-brands-earning-citations-chatgpt-claude-ai-overviews.avif",
+      "localPath": "public/thumbnails/news-c09ca944bdc93efccf.avif",
+      "checkedAt": "2026-06-24T23:25:19.860103+00:00"
+    },
+    "thumb:https://media.thenextweb.com/2026/06/claude-chatgpt.avif": {
+      "sourceImage": "https://media.thenextweb.com/2026/06/claude-chatgpt.avif",
+      "localPath": "public/thumbnails/news-44a822cac485208ad8.avif",
+      "checkedAt": "2026-06-24T23:25:19.860103+00:00"
+    },
+    "thumb:https://storage.googleapis.com/gweb-uniblog-publish-prod/images/3-5_Live_Translate_hero.width-1300.png": {
+      "sourceImage": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/3-5_Live_Translate_hero.width-1300.png",
+      "localPath": "public/thumbnails/news-e5fc6c64c3a5fe646f.png",
+      "checkedAt": "2026-06-24T23:25:19.860103+00:00"
+    },
+    "thumb:https://techcrunch.com/wp-content/uploads/2025/09/GettyImages-2214107176.jpg?resize=1200%2C800": {
+      "sourceImage": "https://techcrunch.com/wp-content/uploads/2025/09/GettyImages-2214107176.jpg?resize=1200%2C800",
+      "localPath": "public/thumbnails/news-5d99c94f6a94221ce7.webp",
+      "checkedAt": "2026-06-24T23:25:19.860103+00:00"
+    },
+    "thumb:https://techcrunch.com/wp-content/uploads/2025/04/GettyImages-2205105208.jpg?resize=1200%2C800": {
+      "sourceImage": "https://techcrunch.com/wp-content/uploads/2025/04/GettyImages-2205105208.jpg?resize=1200%2C800",
+      "localPath": "public/thumbnails/news-0df3d6861a794665af.webp",
+      "checkedAt": "2026-06-24T23:25:19.860103+00:00"
+    },
+    "thumb:https://media.thenextweb.com/2026/06/mistral-ocr-4.avif": {
+      "sourceImage": "https://media.thenextweb.com/2026/06/mistral-ocr-4.avif",
+      "localPath": "public/thumbnails/news-1781cb66cb8c0fe45d.avif",
+      "checkedAt": "2026-06-24T23:25:19.860103+00:00"
+    },
+    "thumb:https://techcrunch.com/wp-content/uploads/2026/02/whatsapp-iphone-icon.jpg?resize=1200%2C800": {
+      "sourceImage": "https://techcrunch.com/wp-content/uploads/2026/02/whatsapp-iphone-icon.jpg?resize=1200%2C800",
+      "localPath": "public/thumbnails/news-5cb26e8446b1d11386.webp",
+      "checkedAt": "2026-06-24T23:25:19.860103+00:00"
+    },
+    "thumb:https://techcrunch.com/wp-content/uploads/2026/06/Claude-photo.jpg?w=1024": {
+      "sourceImage": "https://techcrunch.com/wp-content/uploads/2026/06/Claude-photo.jpg?w=1024",
+      "localPath": "public/thumbnails/news-cc208483fb5eb8feb6.webp",
+      "checkedAt": "2026-06-24T23:25:19.860103+00:00"
+    },
+    "thumb:https://opengraph.githubassets.com/87b871e255361fe6bd02fa5c9ba9295bc8c46d922ce7c800119a605faffc3b16/ollama/ollama": {
+      "sourceImage": "https://opengraph.githubassets.com/87b871e255361fe6bd02fa5c9ba9295bc8c46d922ce7c800119a605faffc3b16/ollama/ollama",
+      "localPath": "public/thumbnails/news-ab45238fd614b081cd.png",
+      "checkedAt": "2026-06-24T23:25:19.860103+00:00"
+    },
+    "thumb:https://media.thenextweb.com/2026/06/unreal-engine-6.avif": {
+      "sourceImage": "https://media.thenextweb.com/2026/06/unreal-engine-6.avif",
+      "localPath": "public/thumbnails/news-37a9ab2aedf5c120e6.avif",
+      "checkedAt": "2026-06-24T23:25:19.860103+00:00"
+    },
+    "thumb:https://media.thenextweb.com/2026/06/visa-openai-partnership.avif": {
+      "sourceImage": "https://media.thenextweb.com/2026/06/visa-openai-partnership.avif",
+      "localPath": "public/thumbnails/news-85d1f3100241bce181.avif",
+      "checkedAt": "2026-06-24T23:25:19.860103+00:00"
+    },
+    "thumb:https://blogs.nvidia.com/wp-content/uploads/2026/06/NVIDIA-XR-AI_Featured-Image-Poster-Alt-scaled.png": {
+      "sourceImage": "https://blogs.nvidia.com/wp-content/uploads/2026/06/NVIDIA-XR-AI_Featured-Image-Poster-Alt-scaled.png",
+      "localPath": "public/thumbnails/news-c1b1136418d70be98d.png",
+      "checkedAt": "2026-06-24T23:25:19.860103+00:00"
+    },
+    "thumb:https://media.wired.com/photos/6a2a474b0ce2fad63750beac/master/pass/Anthropic-Responds-to-Backlash-Business-2276530995.jpg": {
+      "sourceImage": "https://media.wired.com/photos/6a2a474b0ce2fad63750beac/master/pass/Anthropic-Responds-to-Backlash-Business-2276530995.jpg",
+      "localPath": "public/thumbnails/news-6ae56f6afdb6052ba2.webp",
+      "checkedAt": "2026-06-24T23:25:19.860103+00:00"
+    },
+    "thumb:https://media.thenextweb.com/2026/06/ai-safety-problem-conversation-between-models.avif": {
+      "sourceImage": "https://media.thenextweb.com/2026/06/ai-safety-problem-conversation-between-models.avif",
+      "localPath": "public/thumbnails/news-0eb0a8cefe83a93545.avif",
+      "checkedAt": "2026-06-24T23:25:19.860103+00:00"
+    },
+    "thumb:https://wp.technologyreview.com/wp-content/uploads/2026/06/corralling-agents.jpg?resize=1200%2C600": {
+      "sourceImage": "https://wp.technologyreview.com/wp-content/uploads/2026/06/corralling-agents.jpg?resize=1200%2C600",
+      "localPath": "public/thumbnails/news-f5100bea80b091a929.webp",
+      "checkedAt": "2026-06-24T23:25:19.860103+00:00"
+    },
+    "thumb:https://media.thenextweb.com/2026/04/Meta.avif": {
+      "sourceImage": "https://media.thenextweb.com/2026/04/Meta.avif",
+      "localPath": "public/thumbnails/news-0e1c0dd51225669c89.avif",
+      "checkedAt": "2026-06-24T23:25:19.860103+00:00"
+    },
+    "thumb:https://media.thenextweb.com/2026/06/anthropic-fable-5-vs-openai-gpt-5-5-benchmark-comparison.avif": {
+      "sourceImage": "https://media.thenextweb.com/2026/06/anthropic-fable-5-vs-openai-gpt-5-5-benchmark-comparison.avif",
+      "localPath": "public/thumbnails/news-833a1105ef941f4a30.avif",
+      "checkedAt": "2026-06-24T23:25:19.860103+00:00"
+    },
+    "thumb:https://techcrunch.com/wp-content/uploads/2023/02/glitched-google-logo.jpg?resize=1200%2C645": {
+      "sourceImage": "https://techcrunch.com/wp-content/uploads/2023/02/glitched-google-logo.jpg?resize=1200%2C645",
+      "localPath": "public/thumbnails/news-3a4d4d75a0f5fc6e11.webp",
+      "checkedAt": "2026-06-24T23:26:24.901151+00:00"
+    },
+    "thumb:https://media.thenextweb.com/2026/06/anthropic-accuses-alibaba-distillation-claude-qwen.avif": {
+      "sourceImage": "https://media.thenextweb.com/2026/06/anthropic-accuses-alibaba-distillation-claude-qwen.avif",
+      "localPath": "public/thumbnails/news-5072f12ae196a637ae.avif",
+      "checkedAt": "2026-06-24T23:26:24.901151+00:00"
+    },
+    "thumb:https://media.wired.com/photos/6a3b30e85935a4d59defead5/master/pass/Google-A24-Taste-AI-Partnership-Culture.jpg": {
+      "sourceImage": "https://media.wired.com/photos/6a3b30e85935a4d59defead5/master/pass/Google-A24-Taste-AI-Partnership-Culture.jpg",
+      "localPath": "public/thumbnails/news-06b5b6ea1d5fa07445.webp",
+      "checkedAt": "2026-06-24T23:26:24.901151+00:00"
+    },
+    "thumb:https://assets.techrepublic.com/uploads/2026/06/cx-agentic.jpg?f=jpeg": {
+      "sourceImage": "https://assets.techrepublic.com/uploads/2026/06/cx-agentic.jpg?f=jpeg",
+      "localPath": "public/thumbnails/news-78bec699597a1cf453.jpg",
+      "checkedAt": "2026-06-24T23:26:24.901151+00:00"
+    },
+    "thumb:https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/gettyimages-2282522212.jpg?quality=90&%3Bstrip=all&%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&%3Bw=1200": {
+      "sourceImage": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/gettyimages-2282522212.jpg?quality=90&%3Bstrip=all&%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&%3Bw=1200",
+      "localPath": "public/thumbnails/news-66608bd6820db8dbb6.webp",
+      "checkedAt": "2026-06-24T23:26:24.901151+00:00"
+    },
+    "thumb:https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/openai-broadcom-jalapeno-inference-chip-image.webp?quality=90&%3Bstrip=all&%3Bcrop=0%2C3.5043662306087%2C100%2C92.991267538783&%3Bw=1200": {
+      "sourceImage": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/openai-broadcom-jalapeno-inference-chip-image.webp?quality=90&%3Bstrip=all&%3Bcrop=0%2C3.5043662306087%2C100%2C92.991267538783&%3Bw=1200",
+      "localPath": "public/thumbnails/news-e4132fa63e781c374f.webp",
+      "checkedAt": "2026-06-24T23:26:24.901151+00:00"
+    },
+    "thumb:https://media.thenextweb.com/2026/06/Capitol.avif": {
+      "sourceImage": "https://media.thenextweb.com/2026/06/Capitol.avif",
+      "localPath": "public/thumbnails/news-38ddd58b771c80a79e.avif",
+      "checkedAt": "2026-06-24T23:26:24.901151+00:00"
+    },
+    "thumb:https://techcrunch.com/wp-content/uploads/2026/06/Claude-Tag.png?resize=1200%2C687": {
+      "sourceImage": "https://techcrunch.com/wp-content/uploads/2026/06/Claude-Tag.png?resize=1200%2C687",
+      "localPath": "public/thumbnails/news-67d9f5e184ac515dcc.webp",
+      "checkedAt": "2026-06-24T23:26:24.901151+00:00"
+    },
+    "thumb:https://media.thenextweb.com/2026/06/meta-glasses-299-own-brand-smart-glasses-essilorluxottica.avif": {
+      "sourceImage": "https://media.thenextweb.com/2026/06/meta-glasses-299-own-brand-smart-glasses-essilorluxottica.avif",
+      "localPath": "public/thumbnails/news-9065d51036d7c7a128.avif",
+      "checkedAt": "2026-06-24T23:26:24.901151+00:00"
+    },
+    "thumb:https://media.thenextweb.com/2026/04/anthropic-claude-opus-4-7-coding-agentic-benchmarks-release.avif": {
+      "sourceImage": "https://media.thenextweb.com/2026/04/anthropic-claude-opus-4-7-coding-agentic-benchmarks-release.avif",
+      "localPath": "public/thumbnails/news-fdaf37413ebf2a320e.avif",
+      "checkedAt": "2026-06-24T23:26:24.901151+00:00"
+    },
+    "thumb:https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/MetaGlasses_1.jpg?quality=90&%3Bstrip=all&%3Bcrop=8.55%2C24.971192772515%2C82.25546875%2C66.205436991061&%3Bw=1200": {
+      "sourceImage": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/MetaGlasses_1.jpg?quality=90&%3Bstrip=all&%3Bcrop=8.55%2C24.971192772515%2C82.25546875%2C66.205436991061&%3Bw=1200",
+      "localPath": "public/thumbnails/news-9b8375198501273d3f.webp",
+      "checkedAt": "2026-06-24T23:26:24.901151+00:00"
+    },
+    "thumb:https://cdn-uploads.huggingface.co/production/uploads/649d9ad1500fd8d51a675a93/eZoT1b8vHDMEgMVbf2J0f.png": {
+      "sourceImage": "https://cdn-uploads.huggingface.co/production/uploads/649d9ad1500fd8d51a675a93/eZoT1b8vHDMEgMVbf2J0f.png",
+      "localPath": "public/thumbnails/news-93cf4747b9c7fff5b8.png",
+      "checkedAt": "2026-06-24T23:26:24.901151+00:00"
+    },
+    "thumb:https://media.thenextweb.com/2026/05/Micron.avif": {
+      "sourceImage": "https://media.thenextweb.com/2026/05/Micron.avif",
+      "localPath": "public/thumbnails/news-4623e10518daa44d4f.avif",
+      "checkedAt": "2026-06-24T23:26:24.901151+00:00"
+    },
+    "thumb:https://media.thenextweb.com/2026/05/IBM.avif": {
+      "sourceImage": "https://media.thenextweb.com/2026/05/IBM.avif",
+      "localPath": "public/thumbnails/news-a3ba5592fb51b2b267.avif",
+      "checkedAt": "2026-06-24T23:26:24.901151+00:00"
+    },
+    "thumb:https://blogs.nvidia.com/wp-content/uploads/2026/06/telco-tm-forum-1920x1080-1.jpg": {
+      "sourceImage": "https://blogs.nvidia.com/wp-content/uploads/2026/06/telco-tm-forum-1920x1080-1.jpg",
+      "localPath": "public/thumbnails/news-386665e0ef2951779d.jpg",
+      "checkedAt": "2026-06-24T23:26:24.901151+00:00"
+    },
+    "thumb:https://cdn.sanity.io/images/4zrzovbb/website/b9ba85fd4d8beaf4efe04a4cf6cec14761e52c78-2400x1260.jpg": {
+      "sourceImage": "https://cdn.sanity.io/images/4zrzovbb/website/b9ba85fd4d8beaf4efe04a4cf6cec14761e52c78-2400x1260.jpg",
+      "localPath": "public/thumbnails/news-efe95ed30b22d32bd9.jpg",
+      "checkedAt": "2026-06-24T23:26:24.901151+00:00"
+    },
+    "thumb:https://static.simonwillison.net/static/2026/inpainter.jpg": {
+      "sourceImage": "https://static.simonwillison.net/static/2026/inpainter.jpg",
+      "localPath": "public/thumbnails/news-40ffea9943fc662d6c.jpg",
+      "checkedAt": "2026-06-24T23:26:24.901151+00:00"
+    },
+    "thumb:https://media.thenextweb.com/2026/06/amazon-alexa-plus-india-hindi-beta-testing.avif": {
+      "sourceImage": "https://media.thenextweb.com/2026/06/amazon-alexa-plus-india-hindi-beta-testing.avif",
+      "localPath": "public/thumbnails/news-ecbc9b5d5b4e9fe47a.avif",
+      "checkedAt": "2026-06-24T23:26:24.901151+00:00"
+    },
+    "thumb:https://media.thenextweb.com/2026/06/anthropic-claude-id-verification-privacy-policy-persona-biometric.avif": {
+      "sourceImage": "https://media.thenextweb.com/2026/06/anthropic-claude-id-verification-privacy-policy-persona-biometric.avif",
+      "localPath": "public/thumbnails/news-c94bcd12c43dac2c7a.avif",
+      "checkedAt": "2026-06-24T23:26:24.901151+00:00"
+    },
+    "thumb:https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg": {
+      "sourceImage": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
+      "localPath": "public/thumbnails/news-f38c47a2d18e9a1412.jpg",
+      "checkedAt": "2026-06-24T23:26:24.901151+00:00"
+    },
+    "thumb:https://techcrunch.com/wp-content/uploads/2026/06/GettyImages-2252299302.jpg?w=1024": {
+      "sourceImage": "https://techcrunch.com/wp-content/uploads/2026/06/GettyImages-2252299302.jpg?w=1024",
+      "localPath": "public/thumbnails/news-e9257b1232c8240bc6.webp",
+      "checkedAt": "2026-06-24T23:26:24.901151+00:00"
+    },
+    "thumb:https://media.thenextweb.com/2026/06/google-75-million-a24-deepmind-ai-filmmaking-partnership.avif": {
+      "sourceImage": "https://media.thenextweb.com/2026/06/google-75-million-a24-deepmind-ai-filmmaking-partnership.avif",
+      "localPath": "public/thumbnails/news-06dcd546c7d96b6990.avif",
+      "checkedAt": "2026-06-24T23:26:24.901151+00:00"
+    },
+    "thumb:https://wp.technologyreview.com/wp-content/uploads/2026/06/WH-v-Anthropic.jpg?resize=1200%2C600": {
+      "sourceImage": "https://wp.technologyreview.com/wp-content/uploads/2026/06/WH-v-Anthropic.jpg?resize=1200%2C600",
+      "localPath": "public/thumbnails/news-5c05aa732c94110a16.webp",
+      "checkedAt": "2026-06-24T23:26:24.901151+00:00"
+    },
+    "thumb:https://techcrunch.com/wp-content/uploads/2025/08/alexa-plus-event.png?resize=1200%2C675": {
+      "sourceImage": "https://techcrunch.com/wp-content/uploads/2025/08/alexa-plus-event.png?resize=1200%2C675",
+      "localPath": "public/thumbnails/news-a107bd90afc62510e5.webp",
+      "checkedAt": "2026-06-24T23:26:24.901151+00:00"
+    },
+    "thumb:https://media.thenextweb.com/2026/06/gary-marcus-openai-ipo-ai-stocks-risk.avif": {
+      "sourceImage": "https://media.thenextweb.com/2026/06/gary-marcus-openai-ipo-ai-stocks-risk.avif",
+      "localPath": "public/thumbnails/news-0451aa0cbf00ea6bb1.avif",
+      "checkedAt": "2026-06-24T23:26:24.901151+00:00"
+    },
+    "thumb:https://blogs.nvidia.com/wp-content/uploads/2026/06/vera-cpu-lanl-1920x1080-1.jpg": {
+      "sourceImage": "https://blogs.nvidia.com/wp-content/uploads/2026/06/vera-cpu-lanl-1920x1080-1.jpg",
+      "localPath": "public/thumbnails/news-cd1cddb7bf664efc6e.jpg",
+      "checkedAt": "2026-06-24T23:26:24.901151+00:00"
+    },
+    "thumb:https://media.wired.com/photos/641df3ef11b9b75446f8f278/master/pass/11-Creative-ChatGPT-Prompts-Gear-GettyImages-1433912783.jpg": {
+      "sourceImage": "https://media.wired.com/photos/641df3ef11b9b75446f8f278/master/pass/11-Creative-ChatGPT-Prompts-Gear-GettyImages-1433912783.jpg",
+      "localPath": "public/thumbnails/news-df14cf2736446d4b6d.webp",
+      "checkedAt": "2026-06-24T23:26:24.901151+00:00"
+    },
+    "thumb:https://media.thenextweb.com/2026/06/signal-whittaker-ai-chatbots-not-friends-copilot-backdoor-privacy.avif": {
+      "sourceImage": "https://media.thenextweb.com/2026/06/signal-whittaker-ai-chatbots-not-friends-copilot-backdoor-privacy.avif",
+      "localPath": "public/thumbnails/news-5806f5e24795a43f37.avif",
+      "checkedAt": "2026-06-24T23:26:24.901151+00:00"
+    },
+    "thumb:https://media.thenextweb.com/2026/06/claude-guillemot-ubisoft-co-founder-dies-plane-crash-69.avif": {
+      "sourceImage": "https://media.thenextweb.com/2026/06/claude-guillemot-ubisoft-co-founder-dies-plane-crash-69.avif",
+      "localPath": "public/thumbnails/news-799658a0ac2c315cc0.avif",
+      "checkedAt": "2026-06-24T23:26:24.901151+00:00"
+    },
+    "thumb:https://techcrunch.com/wp-content/uploads/2024/10/GettyImages-2148577076-e1728469833661.jpg?resize=1200%2C676": {
+      "sourceImage": "https://techcrunch.com/wp-content/uploads/2024/10/GettyImages-2148577076-e1728469833661.jpg?resize=1200%2C676",
+      "localPath": "public/thumbnails/news-2e39d566503297e893.webp",
+      "checkedAt": "2026-06-24T23:26:24.901151+00:00"
+    },
+    "https://techcrunch.com/2026/06/24/former-infosys-chief-has-a-new-startup-that-wants-to-challenge-the-it-services-world": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/vishal-sikka-indiaai-summit.jpg?resize=1200%2C800",
+      "checkedAt": "2026-06-24T23:27:58.439829+00:00"
+    },
+    "thumb:https://media.thenextweb.com/2026/06/vlc-developer-kyber-5-million-lightspeed-robotics-remote-control.avif": {
+      "sourceImage": "https://media.thenextweb.com/2026/06/vlc-developer-kyber-5-million-lightspeed-robotics-remote-control.avif",
+      "localPath": "public/thumbnails/news-feed07f5478c27f55a.avif",
+      "checkedAt": "2026-06-24T23:27:58.439829+00:00"
+    },
+    "thumb:https://media.thenextweb.com/2026/06/john-jumper-nobel-deepmind-leaves-anthropic-alphafold.avif": {
+      "sourceImage": "https://media.thenextweb.com/2026/06/john-jumper-nobel-deepmind-leaves-anthropic-alphafold.avif",
+      "localPath": "public/thumbnails/news-b32954d46cb36de5d0.avif",
+      "checkedAt": "2026-06-24T23:27:58.439829+00:00"
+    },
+    "thumb:https://techcrunch.com/wp-content/uploads/2026/04/GettyImages-2269811684.jpg?w=1024": {
+      "sourceImage": "https://techcrunch.com/wp-content/uploads/2026/04/GettyImages-2269811684.jpg?w=1024",
+      "localPath": "public/thumbnails/news-629e54341b22222016.webp",
+      "checkedAt": "2026-06-24T23:27:58.439829+00:00"
+    },
+    "thumb:https://techcrunch.com/wp-content/uploads/2026/06/Dario-2280291125.jpg?w=1024": {
+      "sourceImage": "https://techcrunch.com/wp-content/uploads/2026/06/Dario-2280291125.jpg?w=1024",
+      "localPath": "public/thumbnails/news-c4f4d14a90719ca709.webp",
+      "checkedAt": "2026-06-24T23:27:58.439829+00:00"
+    },
+    "thumb:https://media.thenextweb.com/2020/09/Untitled-design-2020-09-03T133902.980.avif": {
+      "sourceImage": "https://media.thenextweb.com/2020/09/Untitled-design-2020-09-03T133902.980.avif",
+      "localPath": "public/thumbnails/news-2ae048bdba034faa37.avif",
+      "checkedAt": "2026-06-24T23:27:58.439829+00:00"
+    },
+    "thumb:https://media.thenextweb.com/2026/06/Bernie_sanders_and_ro_khanna_stanford_2026-02-21_003.avif": {
+      "sourceImage": "https://media.thenextweb.com/2026/06/Bernie_sanders_and_ro_khanna_stanford_2026-02-21_003.avif",
+      "localPath": "public/thumbnails/news-f804131d2d3e2f2fce.avif",
+      "checkedAt": "2026-06-24T23:27:58.439829+00:00"
+    },
+    "thumb:https://media.wired.com/photos/6a342bff039398b1addb3ba2/master/pass/Model-Behavior-SB.jpg": {
+      "sourceImage": "https://media.wired.com/photos/6a342bff039398b1addb3ba2/master/pass/Model-Behavior-SB.jpg",
+      "localPath": "public/thumbnails/news-275cba8a490b21e904.webp",
+      "checkedAt": "2026-06-24T23:27:58.439829+00:00"
+    },
+    "thumb:https://techcrunch.com/wp-content/uploads/2026/06/noam-shazeer-deal-ball.png?resize=1200%2C800": {
+      "sourceImage": "https://techcrunch.com/wp-content/uploads/2026/06/noam-shazeer-deal-ball.png?resize=1200%2C800",
+      "localPath": "public/thumbnails/news-0cbf3dbb3f51182d58.webp",
+      "checkedAt": "2026-06-24T23:27:58.439829+00:00"
+    },
+    "thumb:https://media.thenextweb.com/2026/06/general-intuition-300m-world-models-gaming-data.avif": {
+      "sourceImage": "https://media.thenextweb.com/2026/06/general-intuition-300m-world-models-gaming-data.avif",
+      "localPath": "public/thumbnails/news-1dc32c97e8fb988d7e.avif",
+      "checkedAt": "2026-06-24T23:27:58.439829+00:00"
+    },
+    "thumb:https://cdn-uploads.huggingface.co/production/uploads/680ba1729f7688275d2ce0f4/hGCO4pOyJjijLPCbRT07v.webp": {
+      "sourceImage": "https://cdn-uploads.huggingface.co/production/uploads/680ba1729f7688275d2ce0f4/hGCO4pOyJjijLPCbRT07v.webp",
+      "localPath": "public/thumbnails/news-33b3c7b4e3fec73d61.webp",
+      "checkedAt": "2026-06-24T23:27:58.439829+00:00"
+    },
+    "thumb:https://media.thenextweb.com/2026/06/california-ipo-tax-windfall-spacex-openai-anthropic.avif": {
+      "sourceImage": "https://media.thenextweb.com/2026/06/california-ipo-tax-windfall-spacex-openai-anthropic.avif",
+      "localPath": "public/thumbnails/news-e001107471e2911aab.avif",
+      "checkedAt": "2026-06-24T23:27:58.439829+00:00"
+    },
+    "thumb:https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/Adobe-Photoshop-AI-assistant-hero.jpg?quality=90&%3Bstrip=all&%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&%3Bw=1200": {
+      "sourceImage": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/Adobe-Photoshop-AI-assistant-hero.jpg?quality=90&%3Bstrip=all&%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&%3Bw=1200",
+      "localPath": "public/thumbnails/news-095bb982df53a4d004.webp",
+      "checkedAt": "2026-06-24T23:27:58.439829+00:00"
+    },
+    "thumb:https://media.thenextweb.com/2026/06/JPMorgan.avif": {
+      "sourceImage": "https://media.thenextweb.com/2026/06/JPMorgan.avif",
+      "localPath": "public/thumbnails/news-7643b7840cd1c95bc7.avif",
+      "checkedAt": "2026-06-24T23:27:58.439829+00:00"
+    },
+    "thumb:https://media.thenextweb.com/2026/04/OpenAI.avif": {
+      "sourceImage": "https://media.thenextweb.com/2026/04/OpenAI.avif",
+      "localPath": "public/thumbnails/news-3c72e78d9ef34069cc.avif",
+      "checkedAt": "2026-06-24T23:27:58.439829+00:00"
+    },
+    "thumb:https://static.simonwillison.net/static/2026/glm-5.2-pelican.svg": {
+      "sourceImage": "https://static.simonwillison.net/static/2026/glm-5.2-pelican.svg",
+      "localPath": "public/thumbnails/news-e2979761e616ba8433.jpg",
+      "checkedAt": "2026-06-24T23:27:58.439829+00:00"
+    },
+    "thumb:https://media.wired.com/photos/6a22ce03ffc48019a74127a3/master/pass/GettyImages-2272066793.jpg": {
+      "sourceImage": "https://media.wired.com/photos/6a22ce03ffc48019a74127a3/master/pass/GettyImages-2272066793.jpg",
+      "localPath": "public/thumbnails/news-40ee99afadad33df9a.webp",
+      "checkedAt": "2026-06-24T23:27:58.439829+00:00"
+    },
+    "thumb:https://media.thenextweb.com/2026/06/anthropic-google-us-led-ai-coalition-g7-amodei-hassabis.avif": {
+      "sourceImage": "https://media.thenextweb.com/2026/06/anthropic-google-us-led-ai-coalition-g7-amodei-hassabis.avif",
+      "localPath": "public/thumbnails/news-f37e927cb9dd1a2291.avif",
+      "checkedAt": "2026-06-24T23:27:58.439829+00:00"
+    },
+    "thumb:https://media.thenextweb.com/2026/06/amazon-ai-frontier-models-catch-up.avif": {
+      "sourceImage": "https://media.thenextweb.com/2026/06/amazon-ai-frontier-models-catch-up.avif",
+      "localPath": "public/thumbnails/news-c307cbdf1e5e24f452.avif",
+      "checkedAt": "2026-06-24T23:27:58.439829+00:00"
+    },
+    "thumb:https://techcrunch.com/wp-content/uploads/2025/09/GettyImages-640351099.jpg?resize=1200%2C849": {
+      "sourceImage": "https://techcrunch.com/wp-content/uploads/2025/09/GettyImages-640351099.jpg?resize=1200%2C849",
+      "localPath": "public/thumbnails/news-12baa6f581a548a3e9.webp",
+      "checkedAt": "2026-06-24T23:27:58.439829+00:00"
+    },
+    "thumb:https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/STK_414_AI_J-copy.jpg?quality=90&%3Bstrip=all&%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&%3Bw=1200": {
+      "sourceImage": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/STK_414_AI_J-copy.jpg?quality=90&%3Bstrip=all&%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&%3Bw=1200",
+      "localPath": "public/thumbnails/news-4c624fcaf0a22c68fa.webp",
+      "checkedAt": "2026-06-24T23:27:58.439829+00:00"
+    },
+    "thumb:https://techcrunch.com/wp-content/uploads/2026/06/Google-Home-Speaker-Berry.jpeg?resize=1200%2C899": {
+      "sourceImage": "https://techcrunch.com/wp-content/uploads/2026/06/Google-Home-Speaker-Berry.jpeg?resize=1200%2C899",
+      "localPath": "public/thumbnails/news-7c62a1213d9a597377.webp",
+      "checkedAt": "2026-06-24T23:27:58.439829+00:00"
+    },
+    "thumb:https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/gettyimages-2282033342.jpg?quality=90&%3Bstrip=all&%3Bcrop=0%2C10.740280282734%2C100%2C78.519439434532&%3Bw=1200": {
+      "sourceImage": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/gettyimages-2282033342.jpg?quality=90&%3Bstrip=all&%3Bcrop=0%2C10.740280282734%2C100%2C78.519439434532&%3Bw=1200",
+      "localPath": "public/thumbnails/news-13814476cc7271b5d0.webp",
+      "checkedAt": "2026-06-24T23:27:58.439829+00:00"
+    },
+    "thumb:https://media.thenextweb.com/2026/06/Google_Home_Speakers.avif": {
+      "sourceImage": "https://media.thenextweb.com/2026/06/Google_Home_Speakers.avif",
+      "localPath": "public/thumbnails/news-651190e6d84e8e2ea9.avif",
+      "checkedAt": "2026-06-24T23:27:58.439829+00:00"
+    },
+    "thumb:https://media.thenextweb.com/2026/05/pentagon-ai-deals-anthropic-safety-limits.avif": {
+      "sourceImage": "https://media.thenextweb.com/2026/05/pentagon-ai-deals-anthropic-safety-limits.avif",
+      "localPath": "public/thumbnails/news-f3b3c3914a32f27a5c.avif",
+      "checkedAt": "2026-06-24T23:27:58.439829+00:00"
+    },
+    "thumb:https://assets.techrepublic.com/uploads/2026/06/Untitled-design-8-4.png?f=jpeg": {
+      "sourceImage": "https://assets.techrepublic.com/uploads/2026/06/Untitled-design-8-4.png?f=jpeg",
+      "localPath": "public/thumbnails/news-07bea2f83adccd7662.jpg",
+      "checkedAt": "2026-06-24T23:27:58.439829+00:00"
+    },
+    "thumb:https://media.wired.com/photos/6a2c15a23c737ad4c6d98c56/master/pass/Google%20Home%20Speaker%20-%20Porcelain%20copy.jpg": {
+      "sourceImage": "https://media.wired.com/photos/6a2c15a23c737ad4c6d98c56/master/pass/Google%20Home%20Speaker%20-%20Porcelain%20copy.jpg",
+      "localPath": "public/thumbnails/news-ee84e46b0d269f83d7.webp",
+      "checkedAt": "2026-06-24T23:27:58.439829+00:00"
+    },
+    "thumb:https://media.thenextweb.com/2026/05/microsoft-copilot-uninstall-windows-11-bloatware.avif": {
+      "sourceImage": "https://media.thenextweb.com/2026/05/microsoft-copilot-uninstall-windows-11-bloatware.avif",
+      "localPath": "public/thumbnails/news-5858f8a073172b7906.avif",
+      "checkedAt": "2026-06-24T23:27:58.439829+00:00"
+    },
+    "thumb:https://media.thenextweb.com/2026/05/Mistral-AI.avif": {
+      "sourceImage": "https://media.thenextweb.com/2026/05/Mistral-AI.avif",
+      "localPath": "public/thumbnails/news-ec90fb81b71ffa0206.avif",
+      "checkedAt": "2026-06-24T23:27:58.439829+00:00"
+    },
+    "thumb:https://media.thenextweb.com/2026/06/US-Federal-Communications-Commission.avif": {
+      "sourceImage": "https://media.thenextweb.com/2026/06/US-Federal-Communications-Commission.avif",
+      "localPath": "public/thumbnails/news-cc70e15a450bffbf4c.avif",
+      "checkedAt": "2026-06-24T23:27:58.439829+00:00"
+    },
+    "thumb:https://cdn.prod.website-files.com/69654e88dce9154b5f12070c/6a31bb3eae99f5eba56ab3ee_OG-image_20260616_Kimi%20vs.%20Claude.png": {
+      "sourceImage": "https://cdn.prod.website-files.com/69654e88dce9154b5f12070c/6a31bb3eae99f5eba56ab3ee_OG-image_20260616_Kimi%20vs.%20Claude.png",
+      "localPath": "public/thumbnails/news-6f2f684e271e607e55.png",
+      "checkedAt": "2026-06-24T23:27:58.439829+00:00"
+    },
+    "thumb:https://huggingface.co/blog/assets/agentic-resource-discovery-launch/thumbnail.png": {
+      "sourceImage": "https://huggingface.co/blog/assets/agentic-resource-discovery-launch/thumbnail.png",
+      "localPath": "public/thumbnails/news-31bee127fa9b5e0cbf.png",
+      "checkedAt": "2026-06-24T23:28:29.574933+00:00"
+    },
+    "thumb:https://www.anthropic.com/api/opengraph-illustration?name=Object+Globe&%3BbackgroundColor=heather": {
+      "sourceImage": "https://www.anthropic.com/api/opengraph-illustration?name=Object+Globe&%3BbackgroundColor=heather",
+      "localPath": "public/thumbnails/news-6a4b3e230f668f091e.png",
+      "checkedAt": "2026-06-24T23:28:29.574933+00:00"
+    },
+    "thumb:https://lh3.googleusercontent.com/kc7RMwXGDfJAoCsgs6pUuONGMXePGbvF_q_i8i-bWBBakQ91O8VYPk8cyHfpOD1uF-lw8Mk6pd2JpXofi5n4qNoNziPol46lBMmZuxoG9NKl16CW=w528-h297-n-nu-rw-lo": {
+      "sourceImage": "https://lh3.googleusercontent.com/kc7RMwXGDfJAoCsgs6pUuONGMXePGbvF_q_i8i-bWBBakQ91O8VYPk8cyHfpOD1uF-lw8Mk6pd2JpXofi5n4qNoNziPol46lBMmZuxoG9NKl16CW=w528-h297-n-nu-rw-lo",
+      "localPath": "public/thumbnails/news-4e138152d7a563e4b3.webp",
+      "checkedAt": "2026-06-24T23:28:29.574933+00:00"
+    },
+    "thumb:https://media.thenextweb.com/2026/06/google-android-17-pixel-gemini-intelligence-foldable-gaming.avif": {
+      "sourceImage": "https://media.thenextweb.com/2026/06/google-android-17-pixel-gemini-intelligence-foldable-gaming.avif",
+      "localPath": "public/thumbnails/news-5621101c783416a366.avif",
+      "checkedAt": "2026-06-24T23:28:29.574933+00:00"
+    },
+    "thumb:https://media.thenextweb.com/2026/06/snap-specs-ar-glasses-2195-consumer-launch-augmented-reality.avif": {
+      "sourceImage": "https://media.thenextweb.com/2026/06/snap-specs-ar-glasses-2195-consumer-launch-augmented-reality.avif",
+      "localPath": "public/thumbnails/news-522a19e08bc850c916.avif",
+      "checkedAt": "2026-06-24T23:28:29.574933+00:00"
+    },
+    "thumb:https://techcrunch.com/wp-content/uploads/2026/06/gemini-app-GettyImages-2276204472.jpg?w=1024": {
+      "sourceImage": "https://techcrunch.com/wp-content/uploads/2026/06/gemini-app-GettyImages-2276204472.jpg?w=1024",
+      "localPath": "public/thumbnails/news-2852f1f0bb9c020c25.webp",
+      "checkedAt": "2026-06-24T23:28:29.574933+00:00"
+    },
+    "thumb:https://media.wired.com/photos/6a30202e9402edb0adc1701d/master/pass/GettyImages-2280291188.jpg": {
+      "sourceImage": "https://media.wired.com/photos/6a30202e9402edb0adc1701d/master/pass/GettyImages-2280291188.jpg",
+      "localPath": "public/thumbnails/news-741b5d5b967f97aff5.webp",
+      "checkedAt": "2026-06-24T23:28:29.574933+00:00"
+    },
+    "thumb:https://media.thenextweb.com/2026/06/genesis-ai-eno-robot-humanoid-alternative.avif": {
+      "sourceImage": "https://media.thenextweb.com/2026/06/genesis-ai-eno-robot-humanoid-alternative.avif",
+      "localPath": "public/thumbnails/news-7405d5d893c0d074a8.avif",
+      "checkedAt": "2026-06-24T23:28:29.574933+00:00"
+    },
+    "thumb:https://assets.techrepublic.com/uploads/2026/06/Untitled-design-6-2.png?f=jpeg": {
+      "sourceImage": "https://assets.techrepublic.com/uploads/2026/06/Untitled-design-6-2.png?f=jpeg",
+      "localPath": "public/thumbnails/news-8029114d24685440fc.jpg",
+      "checkedAt": "2026-06-24T23:28:29.574933+00:00"
+    },
+    "thumb:https://cdn.arstechnica.net/wp-content/uploads/2026/06/GettyImages-2242817595-1152x648.jpg": {
+      "sourceImage": "https://cdn.arstechnica.net/wp-content/uploads/2026/06/GettyImages-2242817595-1152x648.jpg",
+      "localPath": "public/thumbnails/news-658eb353beb4d4435d.jpg",
+      "checkedAt": "2026-06-24T23:28:29.574933+00:00"
+    },
+    "thumb:https://media.wired.com/photos/6a3068b96de136e1eb346f80/master/pass/Anthropic-Latest-Clash-With-White-House-Business-2280291383.jpg": {
+      "sourceImage": "https://media.wired.com/photos/6a3068b96de136e1eb346f80/master/pass/Anthropic-Latest-Clash-With-White-House-Business-2280291383.jpg",
+      "localPath": "public/thumbnails/news-d7a7a4a879b8c92c25.webp",
+      "checkedAt": "2026-06-24T23:28:29.574933+00:00"
+    },
+    "thumb:https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/videoframe_7395.jpg?quality=90&%3Bstrip=all&%3Bcrop=0%2C11.992407477375%2C100%2C76.015185045249&%3Bw=1200": {
+      "sourceImage": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/videoframe_7395.jpg?quality=90&%3Bstrip=all&%3Bcrop=0%2C11.992407477375%2C100%2C76.015185045249&%3Bw=1200",
+      "localPath": "public/thumbnails/news-91c38fecc9acbd87ff.webp",
+      "checkedAt": "2026-06-24T23:28:29.574933+00:00"
+    },
+    "thumb:https://media.thenextweb.com/2026/05/xai-cursor-gun-jumping-antitrust-spacex-ipo.avif": {
+      "sourceImage": "https://media.thenextweb.com/2026/05/xai-cursor-gun-jumping-antitrust-spacex-ipo.avif",
+      "localPath": "public/thumbnails/news-f933de7da3f354ee76.avif",
+      "checkedAt": "2026-06-24T23:28:29.574933+00:00"
+    },
+    "thumb:https://media.thenextweb.com/2026/06/meta-facebook-ai-mode-search-public-posts-groups-reels.avif": {
+      "sourceImage": "https://media.thenextweb.com/2026/06/meta-facebook-ai-mode-search-public-posts-groups-reels.avif",
+      "localPath": "public/thumbnails/news-3b3ff81416209d0bfa.avif",
+      "checkedAt": "2026-06-24T23:28:29.574933+00:00"
+    },
+    "thumb:https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/STK269_ANTHROPIC_2_D.webp?quality=90&%3Bstrip=all&%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&%3Bw=1200": {
+      "sourceImage": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/STK269_ANTHROPIC_2_D.webp?quality=90&%3Bstrip=all&%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&%3Bw=1200",
+      "localPath": "public/thumbnails/news-36e796b858329efae5.webp",
+      "checkedAt": "2026-06-24T23:28:29.574933+00:00"
+    },
+    "thumb:https://static.simonwillison.net/static/2026/i-saw-pelicans-agent.jpg": {
+      "sourceImage": "https://static.simonwillison.net/static/2026/i-saw-pelicans-agent.jpg",
+      "localPath": "public/thumbnails/news-da3d94b33f5443c318.jpg",
+      "checkedAt": "2026-06-24T23:28:29.574933+00:00"
+    },
+    "thumb:https://media.thenextweb.com/2026/04/workday-cto-bailis-anthropic-member-technical-staff.avif": {
+      "sourceImage": "https://media.thenextweb.com/2026/04/workday-cto-bailis-anthropic-member-technical-staff.avif",
+      "localPath": "public/thumbnails/news-fa31c54007929a9ef1.avif",
+      "checkedAt": "2026-06-24T23:28:29.574933+00:00"
+    },
+    "thumb:https://media.thenextweb.com/2026/06/USA-flag.avif": {
+      "sourceImage": "https://media.thenextweb.com/2026/06/USA-flag.avif",
+      "localPath": "public/thumbnails/news-06d7c3ae96bcfdebdb.avif",
+      "checkedAt": "2026-06-24T23:28:29.574933+00:00"
+    },
+    "thumb:https://media.thenextweb.com/2026/06/apple-siri-extensions-third-party-ai-missing-wwdc.avif": {
+      "sourceImage": "https://media.thenextweb.com/2026/06/apple-siri-extensions-third-party-ai-missing-wwdc.avif",
+      "localPath": "public/thumbnails/news-4237ffc5306e6de108.avif",
+      "checkedAt": "2026-06-24T23:28:29.574933+00:00"
+    },
+    "thumb:https://platform.theverge.com/wp-content/uploads/sites/2/2026/01/STK269_ANTHROPIC_2_A.jpg?quality=90&%3Bstrip=all&%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&%3Bw=1200": {
+      "sourceImage": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/01/STK269_ANTHROPIC_2_A.jpg?quality=90&%3Bstrip=all&%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&%3Bw=1200",
+      "localPath": "public/thumbnails/news-61bd5496bc2f48a1a3.webp",
+      "checkedAt": "2026-06-24T23:28:29.574933+00:00"
+    },
+    "thumb:https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/268530_SUMMER_UPGRADE_WEEK_VIBECODING_BACKYARD_ADemidova.jpg?quality=90&%3Bstrip=all&%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&%3Bw=1200": {
+      "sourceImage": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/268530_SUMMER_UPGRADE_WEEK_VIBECODING_BACKYARD_ADemidova.jpg?quality=90&%3Bstrip=all&%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&%3Bw=1200",
+      "localPath": "public/thumbnails/news-2fc6a4ba952a6f664b.webp",
+      "checkedAt": "2026-06-24T23:28:29.574933+00:00"
+    },
+    "thumb:https://media.wired.com/photos/6a2cb2e540437fd74449a752/master/pass/Anthropic-Says-US-Gov-Ordered-it-to-Shut-Down-Mythos-Models-Business-2280583841.jpg": {
+      "sourceImage": "https://media.wired.com/photos/6a2cb2e540437fd74449a752/master/pass/Anthropic-Says-US-Gov-Ordered-it-to-Shut-Down-Mythos-Models-Business-2280583841.jpg",
+      "localPath": "public/thumbnails/news-698dfdd9d3412a35fc.webp",
+      "checkedAt": "2026-06-24T23:28:29.574933+00:00"
+    },
+    "thumb:https://opengraph.githubassets.com/b50c7ff6cad6b910728a05e5b8335aa7bfa63b8c19ec4a823a40fbd1a1c2313d/ollama/ollama": {
+      "sourceImage": "https://opengraph.githubassets.com/b50c7ff6cad6b910728a05e5b8335aa7bfa63b8c19ec4a823a40fbd1a1c2313d/ollama/ollama",
+      "localPath": "public/thumbnails/news-a0f97a36b2bd696b7f.png",
+      "checkedAt": "2026-06-24T23:28:29.574933+00:00"
+    },
+    "thumb:https://media.thenextweb.com/2026/06/spacex-colossus-1-technical-problems-rented-anthropic.avif": {
+      "sourceImage": "https://media.thenextweb.com/2026/06/spacex-colossus-1-technical-problems-rented-anthropic.avif",
+      "localPath": "public/thumbnails/news-2ea921e88bf4980a65.avif",
+      "checkedAt": "2026-06-24T23:28:29.574933+00:00"
+    },
+    "thumb:https://media.thenextweb.com/2026/06/google-sues-outsider-enterprise-ai-scam-texts.avif": {
+      "sourceImage": "https://media.thenextweb.com/2026/06/google-sues-outsider-enterprise-ai-scam-texts.avif",
+      "localPath": "public/thumbnails/news-1881376ba7f65e145c.avif",
+      "checkedAt": "2026-06-24T23:28:29.574933+00:00"
+    },
+    "thumb:https://techcrunch.com/wp-content/uploads/2026/05/GettyImages-2275575484.jpg?resize=1200%2C815": {
+      "sourceImage": "https://techcrunch.com/wp-content/uploads/2026/05/GettyImages-2275575484.jpg?resize=1200%2C815",
+      "localPath": "public/thumbnails/news-5d900b8a5e6c0b00a2.webp",
+      "checkedAt": "2026-06-24T23:28:29.574933+00:00"
+    },
+    "thumb:https://media.thenextweb.com/2026/06/developer-terminal.avif": {
+      "sourceImage": "https://media.thenextweb.com/2026/06/developer-terminal.avif",
+      "localPath": "public/thumbnails/news-4452730648611ad6f7.avif",
+      "checkedAt": "2026-06-24T23:28:29.574933+00:00"
+    },
+    "thumb:https://media.thenextweb.com/2026/02/OpenAI-Codex-app.avif": {
+      "sourceImage": "https://media.thenextweb.com/2026/02/OpenAI-Codex-app.avif",
+      "localPath": "public/thumbnails/news-dfc324bc35c1f53dcc.avif",
+      "checkedAt": "2026-06-24T23:28:29.574933+00:00"
+    },
+    "thumb:https://media.thenextweb.com/2026/05/google-io-2026-gemini-intelligence-android-xr-glasses.avif": {
+      "sourceImage": "https://media.thenextweb.com/2026/05/google-io-2026-gemini-intelligence-android-xr-glasses.avif",
+      "localPath": "public/thumbnails/news-4ccde14a8a340081d6.avif",
+      "checkedAt": "2026-06-24T23:28:29.574933+00:00"
+    },
+    "thumb:https://media.thenextweb.com/2026/06/claude-fable-5-mythos-5.avif": {
+      "sourceImage": "https://media.thenextweb.com/2026/06/claude-fable-5-mythos-5.avif",
+      "localPath": "public/thumbnails/news-8d20a751e269ec210f.avif",
+      "checkedAt": "2026-06-24T23:28:29.574933+00:00"
+    },
+    "https://www.latent.space/p/databricks": {
+      "image": "https://substackcdn.com/image/fetch/$s_!ZB3h!,w_1200,h_600,c_fill,f_jpg,q_auto:good,fl_progressive:steep,g_auto/https%3A%2F%2Fsubstack-video.s3.amazonaws.com%2Fvideo_upload%2Fpost%2F203293676%2Fa0ac67fb-7585-4558-a588-d0d9976ba084%2Ftranscoded-1782242806.png",
+      "checkedAt": "2026-06-24T23:32:54.647355+00:00"
+    },
+    "https://aws.amazon.com/blogs/machine-learning/huntington-bank-redacting-sensitive-data-from-400m-documents-with-aws": {
+      "image": "https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2026/06/24/ML-19309.png",
+      "checkedAt": "2026-06-24T23:32:54.647355+00:00"
+    },
+    "https://aws.amazon.com/blogs/machine-learning/build-a-healthcare-appointment-agent-with-amazon-nova-2-sonic": {
+      "image": "https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2026/06/24/ML-19583.png",
+      "checkedAt": "2026-06-24T23:32:54.647355+00:00"
+    },
+    "https://aws.amazon.com/blogs/machine-learning/ai-powered-bi-with-snowflake-and-amazon-quick": {
+      "image": "https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2026/06/09/ML-20803-2.png",
+      "checkedAt": "2026-06-24T23:32:54.647355+00:00"
+    },
+    "https://aws.amazon.com/blogs/machine-learning/how-loka-built-a-natural-low-latency-voice-agent-with-amazon-nova-2-sonic": {
+      "image": "https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2026/06/02/20376.png",
+      "checkedAt": "2026-06-24T23:32:54.647355+00:00"
+    },
+    "https://aws.amazon.com/blogs/machine-learning/build-a-protein-research-copilot-with-amazon-bedrock-agentcore": {
+      "image": "https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2026/06/03/19630.png",
+      "checkedAt": "2026-06-24T23:32:54.647355+00:00"
+    },
+    "https://aws.amazon.com/blogs/machine-learning/shared-infrastructure-isolated-tenants-pool-model-multi-tenancy-with-amazon-bedrock-agentcore": {
+      "image": "https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2026/06/03/19774.png",
+      "checkedAt": "2026-06-24T23:32:54.647355+00:00"
+    },
+    "https://www.latent.space/p/gray-swan": {
+      "image": "https://substackcdn.com/image/fetch/$s_!--5t!,w_1200,h_600,c_fill,f_jpg,q_auto:good,fl_progressive:steep,g_auto/https%3A%2F%2Fsubstack-video.s3.amazonaws.com%2Fvideo_upload%2Fpost%2F202758604%2F70bf6c99-ba2d-44bb-bd81-a7517368a8f0%2Ftranscoded-1781895509.png",
+      "checkedAt": "2026-06-24T23:32:54.647355+00:00"
+    },
+    "https://aws.amazon.com/blogs/machine-learning/building-pay-per-intelligence-for-ai-agents-how-ampersend-uses-amazon-bedrock-agentcore-payments": {
+      "image": "https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2026/06/18/ML-21061.png",
+      "checkedAt": "2026-06-24T23:32:54.647355+00:00"
+    },
+    "https://aws.amazon.com/blogs/machine-learning/embed-the-world-multimodal-ai-for-searchable-aerial-imagery-at-scale": {
+      "image": "https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2026/06/02/20912.png",
+      "checkedAt": "2026-06-24T23:32:54.647355+00:00"
+    },
+    "https://aws.amazon.com/blogs/machine-learning/running-comfyui-workflows-on-amazon-sagemaker-ai-processing-jobs": {
+      "image": "https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2026/06/22/ml-19966.png",
+      "checkedAt": "2026-06-24T23:32:54.647355+00:00"
+    },
+    "thumb:https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2026/06/24/ML-19583.png": {
+      "sourceImage": "https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2026/06/24/ML-19583.png",
+      "localPath": "public/thumbnails/news-c1cb7cc34027d88fbb.png",
+      "checkedAt": "2026-06-24T23:32:54.647355+00:00"
+    },
+    "thumb:https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2026/06/02/20376.png": {
+      "sourceImage": "https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2026/06/02/20376.png",
+      "localPath": "public/thumbnails/news-3fe9fc86097257eeda.png",
+      "checkedAt": "2026-06-24T23:32:54.647355+00:00"
+    },
+    "thumb:https://storage.googleapis.com/gweb-research2023-media/original_images/Thinking-to-recall-1.png": {
+      "sourceImage": "https://storage.googleapis.com/gweb-research2023-media/original_images/Thinking-to-recall-1.png",
+      "localPath": "public/thumbnails/news-718ca57c0eb56d1737.png",
+      "checkedAt": "2026-06-24T23:32:54.647355+00:00"
+    },
+    "thumb:https://substackcdn.com/image/fetch/$s_!q5Em!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F__ss-rehost__tw-video-preview-13_2069465784653348866.jpg": {
+      "sourceImage": "https://substackcdn.com/image/fetch/$s_!q5Em!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F__ss-rehost__tw-video-preview-13_2069465784653348866.jpg",
+      "localPath": "public/thumbnails/news-41858889944dcdc4fa.jpg",
+      "checkedAt": "2026-06-24T23:32:54.647355+00:00"
+    },
+    "thumb:https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2026/06/03/19630.png": {
+      "sourceImage": "https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2026/06/03/19630.png",
+      "localPath": "public/thumbnails/news-cfea1b8e8da1b5fe45.png",
+      "checkedAt": "2026-06-24T23:32:54.647355+00:00"
+    },
+    "thumb:https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2026/06/02/20912.png": {
+      "sourceImage": "https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2026/06/02/20912.png",
+      "localPath": "public/thumbnails/news-13d8983a88613fd52f.png",
+      "checkedAt": "2026-06-24T23:32:54.647355+00:00"
+    },
+    "thumb:https://media.thenextweb.com/2026/06/g7-ai-summit-altman-amodei-hassabis.avif": {
+      "sourceImage": "https://media.thenextweb.com/2026/06/g7-ai-summit-altman-amodei-hassabis.avif",
+      "localPath": "public/thumbnails/news-b21fe640960172997e.avif",
+      "checkedAt": "2026-06-24T23:32:54.647355+00:00"
+    },
+    "thumb:https://www.anthropic.com/api/opengraph-illustration?name=Hand+NodeLine&%3BbackgroundColor=olive": {
+      "sourceImage": "https://www.anthropic.com/api/opengraph-illustration?name=Hand+NodeLine&%3BbackgroundColor=olive",
+      "localPath": "public/thumbnails/news-55777573a0d99a6a5e.png",
+      "checkedAt": "2026-06-24T23:32:54.647355+00:00"
+    },
+    "thumb:https://static.simonwillison.net/static/2026/jump-to-bug.jpg": {
+      "sourceImage": "https://static.simonwillison.net/static/2026/jump-to-bug.jpg",
+      "localPath": "public/thumbnails/news-6b9cb915dfcfcaf788.jpg",
+      "checkedAt": "2026-06-24T23:32:54.647355+00:00"
+    },
+    "thumb:https://media.thenextweb.com/2026/06/anthropic-claude-corps-150m-nonprofit-fellowship.avif": {
+      "sourceImage": "https://media.thenextweb.com/2026/06/anthropic-claude-corps-150m-nonprofit-fellowship.avif",
+      "localPath": "public/thumbnails/news-5fa24544e653b4a665.avif",
+      "checkedAt": "2026-06-24T23:32:54.647355+00:00"
+    },
+    "thumb:https://media.wired.com/photos/6a29dcf7d0be49584df640a0/master/pass/Model-Behavior-OpenAI-Codex-Lead-Tibo-Sottiaux-Business.jpg": {
+      "sourceImage": "https://media.wired.com/photos/6a29dcf7d0be49584df640a0/master/pass/Model-Behavior-OpenAI-Codex-Lead-Tibo-Sottiaux-Business.jpg",
+      "localPath": "public/thumbnails/news-e7c4a559aba778bb1a.webp",
+      "checkedAt": "2026-06-24T23:32:54.647355+00:00"
+    },
+    "thumb:https://media.thenextweb.com/2026/06/google-deepmind-tacticai-football-palmeiras-predict-plays.avif": {
+      "sourceImage": "https://media.thenextweb.com/2026/06/google-deepmind-tacticai-football-palmeiras-predict-plays.avif",
+      "localPath": "public/thumbnails/news-15687c71e5c799ff75.avif",
+      "checkedAt": "2026-06-24T23:32:54.647355+00:00"
+    },
+    "thumb:https://media.wired.com/photos/6a2ae8ee8b0f92b3d6867ab3/master/pass/grok-explicit-videos.jpg": {
+      "sourceImage": "https://media.wired.com/photos/6a2ae8ee8b0f92b3d6867ab3/master/pass/grok-explicit-videos.jpg",
+      "localPath": "public/thumbnails/news-11c25db3e9a0fc982b.webp",
+      "checkedAt": "2026-06-24T23:32:54.647355+00:00"
+    },
+    "thumb:https://media.thenextweb.com/2026/06/coinbase-ai-agent-trading-x402-payments.avif": {
+      "sourceImage": "https://media.thenextweb.com/2026/06/coinbase-ai-agent-trading-x402-payments.avif",
+      "localPath": "public/thumbnails/news-97f9fbe9120a77d259.avif",
+      "checkedAt": "2026-06-24T23:32:54.647355+00:00"
+    },
+    "thumb:https://media.thenextweb.com/2023/10/spacex-europe-deal.avif": {
+      "sourceImage": "https://media.thenextweb.com/2023/10/spacex-europe-deal.avif",
+      "localPath": "public/thumbnails/news-08339ea063efa20b24.avif",
+      "checkedAt": "2026-06-24T23:32:54.647355+00:00"
+    },
+    "thumb:https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/STKB364_CLAUDE_D.jpg?quality=90&%3Bstrip=all&%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&%3Bw=1200": {
+      "sourceImage": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/STKB364_CLAUDE_D.jpg?quality=90&%3Bstrip=all&%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&%3Bw=1200",
+      "localPath": "public/thumbnails/news-7e98990fd15f0a4fe7.webp",
+      "checkedAt": "2026-06-24T23:32:54.647355+00:00"
+    },
+    "thumb:https://media.thenextweb.com/2026/06/openai-anthropic-ai-risk-warnings-ipo-irony.avif": {
+      "sourceImage": "https://media.thenextweb.com/2026/06/openai-anthropic-ai-risk-warnings-ipo-irony.avif",
+      "localPath": "public/thumbnails/news-f804c3467728245631.avif",
+      "checkedAt": "2026-06-24T23:32:54.647355+00:00"
+    },
+    "thumb:https://cdn.sanity.io/images/4zrzovbb/website/eb5d94573805e24cb381cd0676527cfada75c177-3840x2160.jpg": {
+      "sourceImage": "https://cdn.sanity.io/images/4zrzovbb/website/eb5d94573805e24cb381cd0676527cfada75c177-3840x2160.jpg",
+      "localPath": "public/thumbnails/news-9bce2126d479df78b8.jpg",
+      "checkedAt": "2026-06-24T23:32:54.647355+00:00"
+    },
+    "thumb:https://www.anthropic.com/api/opengraph-illustration?name=Hand+Megaphone&%3BbackgroundColor=coral": {
+      "sourceImage": "https://www.anthropic.com/api/opengraph-illustration?name=Hand+Megaphone&%3BbackgroundColor=coral",
+      "localPath": "public/thumbnails/news-027db5b2c56d84653d.png",
+      "checkedAt": "2026-06-24T23:32:54.647355+00:00"
+    },
+    "thumb:https://techcrunch.com/wp-content/uploads/2026/03/grok-getty.jpg?resize=1200%2C800": {
+      "sourceImage": "https://techcrunch.com/wp-content/uploads/2026/03/grok-getty.jpg?resize=1200%2C800",
+      "localPath": "public/thumbnails/news-fa4270367c681a0c18.webp",
+      "checkedAt": "2026-06-24T23:32:54.647355+00:00"
+    },
+    "thumb:https://media.thenextweb.com/2026/06/openai-china-data-center-influence-campaign.avif": {
+      "sourceImage": "https://media.thenextweb.com/2026/06/openai-china-data-center-influence-campaign.avif",
+      "localPath": "public/thumbnails/news-3ae64fe22329a63874.avif",
+      "checkedAt": "2026-06-24T23:32:54.647355+00:00"
+    },
+    "thumb:https://static.simonwillison.net/static/2026/diffusiongemma-pelican.png": {
+      "sourceImage": "https://static.simonwillison.net/static/2026/diffusiongemma-pelican.png",
+      "localPath": "public/thumbnails/news-60afbe5bc25f090b21.png",
+      "checkedAt": "2026-06-24T23:32:54.647355+00:00"
+    },
+    "thumb:https://media.thenextweb.com/2026/06/openclaw-ai-agent-phishing-varonis-pinchy.avif": {
+      "sourceImage": "https://media.thenextweb.com/2026/06/openclaw-ai-agent-phishing-varonis-pinchy.avif",
+      "localPath": "public/thumbnails/news-b3443a5265cc4f4482.avif",
+      "checkedAt": "2026-06-24T23:32:54.647355+00:00"
+    },
+    "thumb:https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/STKB364_CLAUDE_2_A_3800fc.jpg?quality=90&%3Bstrip=all&%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&%3Bw=1200": {
+      "sourceImage": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/STKB364_CLAUDE_2_A_3800fc.jpg?quality=90&%3Bstrip=all&%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&%3Bw=1200",
+      "localPath": "public/thumbnails/news-83054153c021893c71.webp",
+      "checkedAt": "2026-06-24T23:32:54.647355+00:00"
+    },
+    "thumb:https://media.thenextweb.com/2026/06/bnp-paribas-us-mega-ipos-europe-tech-deals.avif": {
+      "sourceImage": "https://media.thenextweb.com/2026/06/bnp-paribas-us-mega-ipos-europe-tech-deals.avif",
+      "localPath": "public/thumbnails/news-da86b3c18b2bb28f31.avif",
+      "checkedAt": "2026-06-24T23:32:54.647355+00:00"
+    },
+    "thumb:https://media.thenextweb.com/2026/05/us-government-chip-shortage-anthropic-nsa-9-billion.avif": {
+      "sourceImage": "https://media.thenextweb.com/2026/05/us-government-chip-shortage-anthropic-nsa-9-billion.avif",
+      "localPath": "public/thumbnails/news-3e3bd90d540f1982c0.avif",
+      "checkedAt": "2026-06-24T23:32:54.647355+00:00"
+    },
+    "thumb:https://platform.theverge.com/wp-content/uploads/sites/2/2025/01/STK095_MICROSOFT_CVirginia_B.jpg?quality=90&%3Bstrip=all&%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&%3Bw=1200": {
+      "sourceImage": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/01/STK095_MICROSOFT_CVirginia_B.jpg?quality=90&%3Bstrip=all&%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&%3Bw=1200",
+      "localPath": "public/thumbnails/news-4debc5a552641c42d9.webp",
+      "checkedAt": "2026-06-24T23:32:54.647355+00:00"
+    },
+    "thumb:https://blogs.nvidia.com/wp-content/uploads/2026/06/diffusiongemma-nv-blog-1280x680-1.jpg": {
+      "sourceImage": "https://blogs.nvidia.com/wp-content/uploads/2026/06/diffusiongemma-nv-blog-1280x680-1.jpg",
+      "localPath": "public/thumbnails/news-b876aaeb126e529af1.jpg",
+      "checkedAt": "2026-06-24T23:32:54.647355+00:00"
+    },
+    "thumb:https://techcrunch.com/wp-content/uploads/2026/06/sajid_conor_photo_niteshift_launch.jpg?resize=1200%2C970": {
+      "sourceImage": "https://techcrunch.com/wp-content/uploads/2026/06/sajid_conor_photo_niteshift_launch.jpg?resize=1200%2C970",
+      "localPath": "public/thumbnails/news-66c7e8c852cd96a9c6.webp",
+      "checkedAt": "2026-06-24T23:32:54.647355+00:00"
+    },
+    "thumb:https://techcrunch.com/wp-content/uploads/2026/06/Decart-Oasis-3.png?resize=1200%2C675": {
+      "sourceImage": "https://techcrunch.com/wp-content/uploads/2026/06/Decart-Oasis-3.png?resize=1200%2C675",
+      "localPath": "public/thumbnails/news-652badd47996bb8d5a.webp",
+      "checkedAt": "2026-06-24T23:32:54.647355+00:00"
+    },
+    "https://aws.amazon.com/blogs/machine-learning/introducing-web-search-on-amazon-bedrock-agentcore": {
+      "image": "https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2026/06/17/ml-21231.png",
+      "checkedAt": "2026-06-24T23:34:22.286544+00:00"
+    },
+    "https://aws.amazon.com/blogs/machine-learning/accelerate-campaign-workflow-with-insights-from-adobe-marketing-agent-for-amazon-quick": {
+      "image": "https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2026/06/18/ML-21232-1-1119x630.png",
+      "checkedAt": "2026-06-24T23:34:22.286544+00:00"
+    },
+    "https://aws.amazon.com/blogs/machine-learning/monitor-and-debug-generative-ai-inference-with-sagemaker-detailed-metrics-and-insights-dashboard-on-cloudwatch": {
+      "image": "https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2026/06/18/ml-21272.png",
+      "checkedAt": "2026-06-24T23:34:22.286544+00:00"
+    },
+    "thumb:https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2026/06/17/ml-21231.png": {
+      "sourceImage": "https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2026/06/17/ml-21231.png",
+      "localPath": "public/thumbnails/news-9aec11d12ea3411322.png",
+      "checkedAt": "2026-06-24T23:34:22.286544+00:00"
+    },
+    "thumb:https://media.thenextweb.com/2026/06/fifa-world-cup-2026-scams-phishing-malware.avif": {
+      "sourceImage": "https://media.thenextweb.com/2026/06/fifa-world-cup-2026-scams-phishing-malware.avif",
+      "localPath": "public/thumbnails/news-3f4bb44dff5e26c7ae.avif",
+      "checkedAt": "2026-06-24T23:34:22.286544+00:00"
+    },
+    "thumb:https://lh3.googleusercontent.com/YgqOl-h3mEKPbpttnT89PtoHDKTc1-2fbhwRgDauUPtagZVWiw0lr1IGgRUDZDqb9Ib4nhaU93T0mJSE8FFbhkDRiaT53BGLnLVdpqliTP8v5kvmwu8=w528-h297-n-nu-rw-lo": {
+      "sourceImage": "https://lh3.googleusercontent.com/YgqOl-h3mEKPbpttnT89PtoHDKTc1-2fbhwRgDauUPtagZVWiw0lr1IGgRUDZDqb9Ib4nhaU93T0mJSE8FFbhkDRiaT53BGLnLVdpqliTP8v5kvmwu8=w528-h297-n-nu-rw-lo",
+      "localPath": "public/thumbnails/news-0de429c8ad0ebecbce.webp",
+      "checkedAt": "2026-06-24T23:34:22.286544+00:00"
+    },
+    "thumb:https://media.wired.com/photos/6a26f2821d5621d5724e9dd9/master/pass/Artificial-Intelligence-Sneaks-into-World-Cup-2279691552.jpg": {
+      "sourceImage": "https://media.wired.com/photos/6a26f2821d5621d5724e9dd9/master/pass/Artificial-Intelligence-Sneaks-into-World-Cup-2279691552.jpg",
+      "localPath": "public/thumbnails/news-31e3e6e4240855cf59.webp",
+      "checkedAt": "2026-06-24T23:34:22.286544+00:00"
+    },
+    "thumb:https://assets.techrepublic.com/uploads/2026/06/tra-06102026-claude-ai-professional-edegree.jpg?f=jpeg": {
+      "sourceImage": "https://assets.techrepublic.com/uploads/2026/06/tra-06102026-claude-ai-professional-edegree.jpg?f=jpeg",
+      "localPath": "public/thumbnails/news-c55016d976da3db863.jpg",
+      "checkedAt": "2026-06-24T23:34:22.286544+00:00"
+    },
+    "thumb:https://static.simonwillison.net/static/2026/agentsview-fable-full-day.jpg": {
+      "sourceImage": "https://static.simonwillison.net/static/2026/agentsview-fable-full-day.jpg",
+      "localPath": "public/thumbnails/news-649d0d00e0dc3d1c1b.jpg",
+      "checkedAt": "2026-06-24T23:34:22.286544+00:00"
+    },
+    "thumb:https://substack-post-media.s3.amazonaws.com/public/images/b9a6c144-02b3-4a08-947c-c517667d2249_3182x1790.png": {
+      "sourceImage": "https://substack-post-media.s3.amazonaws.com/public/images/b9a6c144-02b3-4a08-947c-c517667d2249_3182x1790.png",
+      "localPath": "public/thumbnails/news-ab20812ee8f3b76fcb.png",
+      "checkedAt": "2026-06-24T23:34:22.286544+00:00"
+    },
+    "thumb:https://blogs.nvidia.com/wp-content/uploads/2026/06/nvidia-confidential-computing-apple-pcc.jpeg": {
+      "sourceImage": "https://blogs.nvidia.com/wp-content/uploads/2026/06/nvidia-confidential-computing-apple-pcc.jpeg",
+      "localPath": "public/thumbnails/news-2e2657ca1b8d7c9830.jpg",
+      "checkedAt": "2026-06-24T23:34:22.286544+00:00"
+    },
+    "thumb:https://static.simonwillison.net/static/2026/agentsview-fable.jpg": {
+      "sourceImage": "https://static.simonwillison.net/static/2026/agentsview-fable.jpg",
+      "localPath": "public/thumbnails/news-1bf852b3338f0b3c53.jpg",
+      "checkedAt": "2026-06-24T23:34:22.286544+00:00"
+    },
+    "thumb:https://techcrunch.com/wp-content/uploads/2026/06/Screenshot-2026-06-09-at-11.40.18-AM.png?resize=1200%2C871": {
+      "sourceImage": "https://techcrunch.com/wp-content/uploads/2026/06/Screenshot-2026-06-09-at-11.40.18-AM.png?resize=1200%2C871",
+      "localPath": "public/thumbnails/news-705312ebddba5fed6b.webp",
+      "checkedAt": "2026-06-24T23:34:22.286544+00:00"
+    },
+    "thumb:https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/gettyimages-2207866106.jpg?quality=90&%3Bstrip=all&%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&%3Bw=1200": {
+      "sourceImage": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/gettyimages-2207866106.jpg?quality=90&%3Bstrip=all&%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&%3Bw=1200",
+      "localPath": "public/thumbnails/news-853a95bbe3bd0b3b1a.webp",
+      "checkedAt": "2026-06-24T23:34:22.286544+00:00"
+    },
+    "thumb:https://media.wired.com/photos/6a270618e083d018dff70e49/master/pass/Anthropic-Dangerous-AI-Business-2261854833.jpg": {
+      "sourceImage": "https://media.wired.com/photos/6a270618e083d018dff70e49/master/pass/Anthropic-Dangerous-AI-Business-2261854833.jpg",
+      "localPath": "public/thumbnails/news-a109efdea18bf37a71.webp",
+      "checkedAt": "2026-06-24T23:34:22.286544+00:00"
+    },
+    "thumb:https://techcrunch.com/wp-content/uploads/2026/06/GettyImages-2279025960.jpg?w=1024": {
+      "sourceImage": "https://techcrunch.com/wp-content/uploads/2026/06/GettyImages-2279025960.jpg?w=1024",
+      "localPath": "public/thumbnails/news-a728b8a976e56560a5.webp",
+      "checkedAt": "2026-06-24T23:34:22.286544+00:00"
+    },
+    "thumb:https://techcrunch.com/wp-content/uploads/2026/06/Mango-crushing-fang.png?resize=1200%2C960": {
+      "sourceImage": "https://techcrunch.com/wp-content/uploads/2026/06/Mango-crushing-fang.png?resize=1200%2C960",
+      "localPath": "public/thumbnails/news-d2e9e91cb266039b1d.webp",
+      "checkedAt": "2026-06-24T23:34:22.286544+00:00"
+    },
+    "thumb:https://media.thenextweb.com/2026/06/oneadvanced-partners-nvidia.avif": {
+      "sourceImage": "https://media.thenextweb.com/2026/06/oneadvanced-partners-nvidia.avif",
+      "localPath": "public/thumbnails/news-813eab3a0ca1866b49.avif",
+      "checkedAt": "2026-06-24T23:34:22.286544+00:00"
+    },
+    "thumb:https://assets.techrepublic.com/uploads/2025/10/tr-10282025-news-openai-energy-ai-policy.jpg?f=jpeg": {
+      "sourceImage": "https://assets.techrepublic.com/uploads/2025/10/tr-10282025-news-openai-energy-ai-policy.jpg?f=jpeg",
+      "localPath": "public/thumbnails/news-b051aa50d5b8510fef.jpg",
+      "checkedAt": "2026-06-24T23:34:22.286544+00:00"
+    },
+    "thumb:https://media.thenextweb.com/2026/05/Apple-hq.avif": {
+      "sourceImage": "https://media.thenextweb.com/2026/05/Apple-hq.avif",
+      "localPath": "public/thumbnails/news-3c0069087b88ce3809.avif",
+      "checkedAt": "2026-06-24T23:34:22.286544+00:00"
+    },
+    "thumb:https://media.thenextweb.com/2026/06/perplexity-ipo-2028-openai-anthropic-listings.avif": {
+      "sourceImage": "https://media.thenextweb.com/2026/06/perplexity-ipo-2028-openai-anthropic-listings.avif",
+      "localPath": "public/thumbnails/news-4023bdae5bc5061dd6.avif",
+      "checkedAt": "2026-06-24T23:34:22.286544+00:00"
+    },
+    "thumb:https://media.thenextweb.com/2026/05/Sam-Altman.avif": {
+      "sourceImage": "https://media.thenextweb.com/2026/05/Sam-Altman.avif",
+      "localPath": "public/thumbnails/news-0b6bf158df686ddc61.avif",
+      "checkedAt": "2026-06-24T23:34:22.286544+00:00"
+    },
+    "thumb:https://media.thenextweb.com/2026/06/lucid-gravity-hands-free-driving-dreamdrive-ota.avif": {
+      "sourceImage": "https://media.thenextweb.com/2026/06/lucid-gravity-hands-free-driving-dreamdrive-ota.avif",
+      "localPath": "public/thumbnails/news-390423b82cb6ec4de6.avif",
+      "checkedAt": "2026-06-24T23:34:22.286544+00:00"
+    },
+    "thumb:https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/STK155_OPEN_AI_CVirginia_C.jpg?quality=90&%3Bstrip=all&%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&%3Bw=1200": {
+      "sourceImage": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/STK155_OPEN_AI_CVirginia_C.jpg?quality=90&%3Bstrip=all&%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&%3Bw=1200",
+      "localPath": "public/thumbnails/news-8f479e6fcee9928fef.webp",
+      "checkedAt": "2026-06-24T23:34:22.286544+00:00"
+    },
+    "thumb:https://media.wired.com/photos/6a0f431f2e3deb13670a3fb1/master/pass/OpenAI-IPO-Business-2265445220.jpg": {
+      "sourceImage": "https://media.wired.com/photos/6a0f431f2e3deb13670a3fb1/master/pass/OpenAI-IPO-Business-2265445220.jpg",
+      "localPath": "public/thumbnails/news-42b91c287b411c4c6f.webp",
+      "checkedAt": "2026-06-24T23:34:22.286544+00:00"
+    },
+    "thumb:https://techcrunch.com/wp-content/uploads/2026/02/modi-openai-anthropic-2261854815.jpg?resize=1200%2C800": {
+      "sourceImage": "https://techcrunch.com/wp-content/uploads/2026/02/modi-openai-anthropic-2261854815.jpg?resize=1200%2C800",
+      "localPath": "public/thumbnails/news-2fdf69f30c6f88da14.webp",
+      "checkedAt": "2026-06-24T23:34:22.286544+00:00"
+    },
+    "thumb:https://media.thenextweb.com/2026/06/apple-wwdc-2026-siri-ai-gemini-ios-27.avif": {
+      "sourceImage": "https://media.thenextweb.com/2026/06/apple-wwdc-2026-siri-ai-gemini-ios-27.avif",
+      "localPath": "public/thumbnails/news-1a57c3b5a57245b3c9.avif",
+      "checkedAt": "2026-06-24T23:34:22.286544+00:00"
+    },
+    "thumb:https://media.wired.com/photos/6a2710703d01e9a6c2f2cfec/master/pass/Apple-Siri-AI-architecture-diagram-260608.jpg": {
+      "sourceImage": "https://media.wired.com/photos/6a2710703d01e9a6c2f2cfec/master/pass/Apple-Siri-AI-architecture-diagram-260608.jpg",
+      "localPath": "public/thumbnails/news-03713829355c974551.webp",
+      "checkedAt": "2026-06-24T23:34:22.286544+00:00"
+    },
+    "thumb:https://assets.techrepublic.com/uploads/2026/06/unnamed-44.png?f=jpeg": {
+      "sourceImage": "https://assets.techrepublic.com/uploads/2026/06/unnamed-44.png?f=jpeg",
+      "localPath": "public/thumbnails/news-2def79202c1dc33070.jpg",
+      "checkedAt": "2026-06-24T23:34:22.286544+00:00"
+    },
+    "thumb:https://lh3.googleusercontent.com/5g2RQPPxqVGuOzfaYj1-8r_6B-Ytp79c9mpWXzBIrk2vUhtxZmA7bMywH41h-8b0EJAdW_K4l7kqHZlfS-QTFk8kFB5MA2bgxZ4hxbuAiOuDIn3ohA=w528-h297-n-nu-rw-lo": {
+      "sourceImage": "https://lh3.googleusercontent.com/5g2RQPPxqVGuOzfaYj1-8r_6B-Ytp79c9mpWXzBIrk2vUhtxZmA7bMywH41h-8b0EJAdW_K4l7kqHZlfS-QTFk8kFB5MA2bgxZ4hxbuAiOuDIn3ohA=w528-h297-n-nu-rw-lo",
+      "localPath": "public/thumbnails/news-6b7a2f3876679cf3e6.webp",
+      "checkedAt": "2026-06-24T23:34:22.286544+00:00"
+    },
+    "thumb:https://huggingface.co/blog/assets/openenv/thumbnail_expansion.png": {
+      "sourceImage": "https://huggingface.co/blog/assets/openenv/thumbnail_expansion.png",
+      "localPath": "public/thumbnails/news-4cfe8c8857ba5cd680.png",
+      "checkedAt": "2026-06-24T23:34:22.286544+00:00"
+    },
+    "thumb:https://cdn-uploads.huggingface.co/production/uploads/67b09a0bbac2756ce900a8fa/ozXSsTQid-4zpTQm1JgAZ.png": {
+      "sourceImage": "https://cdn-uploads.huggingface.co/production/uploads/67b09a0bbac2756ce900a8fa/ozXSsTQid-4zpTQm1JgAZ.png",
+      "localPath": "public/thumbnails/news-97cff84b8b45d6261d.png",
+      "checkedAt": "2026-06-24T23:34:22.286544+00:00"
+    },
+    "thumb:https://media.thenextweb.com/2026/06/chatgpt-lockdown-mode-prompt-injection.avif": {
+      "sourceImage": "https://media.thenextweb.com/2026/06/chatgpt-lockdown-mode-prompt-injection.avif",
+      "localPath": "public/thumbnails/news-8e72db52b70a7a61cf.avif",
+      "checkedAt": "2026-06-24T23:34:22.286544+00:00"
     }
   }
 }

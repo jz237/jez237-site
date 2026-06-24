@@ -3,176 +3,232 @@
     "name": "OpenAI News",
     "url": "https://openai.com/news/rss.xml",
     "weight": 1.0,
-    "category": "AI"
+    "category": "AI",
+    "role": "primary"
   },
   {
     "name": "Google AI Blog",
     "url": "https://blog.google/technology/ai/rss/",
     "weight": 0.95,
-    "category": "AI"
+    "category": "AI",
+    "role": "primary"
   },
   {
     "name": "Google DeepMind Blog",
     "url": "https://deepmind.google/blog/rss.xml",
     "weight": 0.95,
-    "category": "AI"
+    "category": "AI",
+    "role": "primary"
+  },
+  {
+    "name": "Google Research Blog",
+    "url": "https://research.google/blog/rss/",
+    "weight": 0.9,
+    "category": "AI",
+    "role": "primary"
   },
   {
     "name": "Hugging Face Blog",
     "url": "https://huggingface.co/blog/feed.xml",
     "weight": 0.95,
-    "category": "AI"
+    "category": "AI",
+    "role": "primary"
   },
   {
     "name": "NVIDIA Blog",
     "url": "https://blogs.nvidia.com/feed/",
     "weight": 0.85,
-    "category": "AI"
+    "category": "AI",
+    "role": "primary"
+  },
+  {
+    "name": "AWS Machine Learning Blog",
+    "url": "https://aws.amazon.com/blogs/machine-learning/feed/",
+    "weight": 0.72,
+    "category": "AI",
+    "role": "secondary"
   },
   {
     "name": "MIT Technology Review AI",
     "url": "https://www.technologyreview.com/topic/artificial-intelligence/feed/",
     "weight": 0.85,
-    "category": "AI"
+    "category": "AI",
+    "role": "secondary"
   },
   {
     "name": "Artificial Intelligence News",
     "url": "https://www.artificialintelligence-news.com/categories/artificial-intelligence/feed/",
     "weight": 0.82,
     "category": "AI",
+    "role": "secondary",
     "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/125 Safari/537.36"
   },
   {
     "name": "Ars Technica (AI/Tech)",
     "url": "https://feeds.arstechnica.com/arstechnica/technology-lab",
     "weight": 0.75,
-    "category": "AI"
+    "category": "AI",
+    "role": "secondary"
   },
   {
     "name": "Together AI Blog",
     "url": "https://www.together.ai/blog/rss.xml",
     "weight": 0.8,
-    "category": "AI"
+    "category": "AI",
+    "role": "primary"
   },
   {
     "name": "TechRepublic AI",
     "url": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
     "weight": 0.75,
-    "category": "AI"
+    "category": "AI",
+    "role": "secondary"
   },
   {
     "name": "ScienceDaily AI",
     "url": "https://www.sciencedaily.com/rss/computers_math/artificial_intelligence.xml",
     "weight": 0.8,
-    "category": "AI"
+    "category": "AI",
+    "role": "watchlist"
   },
   {
     "name": "The Next Web",
     "url": "https://thenextweb.com/feed",
     "weight": 0.75,
-    "category": "AI"
+    "category": "AI",
+    "role": "secondary"
   },
   {
     "name": "BBC Discovery",
     "url": "https://podcasts.files.bbci.co.uk/p002w557.rss",
     "weight": 0.85,
-    "category": "Science"
+    "category": "Science",
+    "role": "primary"
   },
   {
     "name": "BBC Infinite Monkey Cage",
     "url": "https://podcasts.files.bbci.co.uk/b00snr0w.rss",
     "weight": 0.8,
-    "category": "Science"
+    "category": "Science",
+    "role": "primary"
   },
   {
     "name": "BBC The Life Scientific",
     "url": "https://podcasts.files.bbci.co.uk/b015sqc7.rss",
     "weight": 0.8,
-    "category": "Science"
-  },
-  {
-    "name": "MarkTechPost",
-    "url": "https://www.marktechpost.com/feed/",
-    "weight": 0.8,
-    "category": "AI"
+    "category": "Science",
+    "role": "primary"
   },
   {
     "name": "TechCrunch AI",
     "url": "https://techcrunch.com/category/artificial-intelligence/feed/",
     "weight": 0.85,
-    "category": "AI"
+    "category": "AI",
+    "role": "secondary"
   },
   {
     "name": "Anthropic News",
     "url": "https://raw.githubusercontent.com/Olshansk/rss-feeds/main/feeds/feed_anthropic_news.xml",
     "weight": 1.0,
-    "category": "AI"
+    "category": "AI",
+    "role": "primary"
   },
   {
     "name": "The Verge AI",
     "url": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
     "weight": 0.9,
-    "category": "AI"
+    "category": "AI",
+    "role": "secondary"
   },
   {
     "name": "Wired AI",
     "url": "https://www.wired.com/feed/tag/ai/latest/rss",
     "weight": 0.85,
-    "category": "AI"
+    "category": "AI",
+    "role": "secondary"
   },
   {
     "name": "VentureBeat AI",
     "url": "https://venturebeat.com/category/ai/feed/",
     "weight": 0.85,
-    "category": "AI"
+    "category": "AI",
+    "role": "secondary"
   },
   {
     "name": "Simon Willison",
     "url": "https://simonwillison.net/atom/everything/",
     "weight": 0.85,
-    "category": "AI"
-  },
-  {
-    "name": "LLM Stats AI News",
-    "url": "https://llm-stats.com/ai-news",
-    "weight": 0.9,
     "category": "AI",
-    "type": "llm-stats-news"
+    "role": "primary"
   },
   {
     "name": "Interconnects AI",
     "url": "https://www.interconnects.ai/feed",
     "weight": 0.9,
-    "category": "AI"
+    "category": "AI",
+    "role": "primary"
+  },
+  {
+    "name": "Latent Space",
+    "url": "https://www.latent.space/feed",
+    "weight": 0.86,
+    "category": "AI",
+    "role": "secondary"
+  },
+  {
+    "name": "Import AI",
+    "url": "https://importai.substack.com/feed",
+    "weight": 0.82,
+    "category": "AI",
+    "role": "secondary"
   },
   {
     "name": "Microsoft Research Blog",
     "url": "https://www.microsoft.com/en-us/research/feed/",
     "weight": 0.9,
-    "category": "AI"
+    "category": "AI",
+    "role": "secondary"
   },
   {
     "name": "Ollama Releases",
     "url": "https://github.com/ollama/ollama/releases.atom",
     "weight": 0.9,
-    "category": "AI"
+    "category": "AI",
+    "role": "primary"
   },
   {
     "name": "LiteLLM Releases",
     "url": "https://github.com/BerriAI/litellm/releases.atom",
     "weight": 0.85,
-    "category": "AI"
+    "category": "AI",
+    "role": "primary"
   },
   {
     "name": "Hugging Face Transformers Releases",
     "url": "https://github.com/huggingface/transformers/releases.atom",
     "weight": 0.85,
-    "category": "AI"
+    "category": "AI",
+    "role": "primary"
   },
   {
     "name": "Model Context Protocol Python SDK Releases",
     "url": "https://github.com/modelcontextprotocol/python-sdk/releases.atom",
     "weight": 0.8,
-    "category": "AI"
+    "category": "AI",
+    "role": "primary"
+  },
+  {
+    "name": "Model Context Protocol Spec Releases",
+    "url": "https://github.com/modelcontextprotocol/specification/releases.atom",
+    "weight": 0.78,
+    "category": "AI",
+    "role": "primary"
+  },
+  {
+    "name": "OpenAI Cookbook Releases",
+    "url": "https://github.com/openai/openai-cookbook/releases.atom",
+    "weight": 0.76,
+    "category": "AI",
+    "role": "secondary"
   }
 ]

@@ -176,6 +176,7 @@ p,
 .section-sub,
 .news-meta,
 .news-card p,
+.news-card .news-why,
 .tile p,
 .feature p,
 .garden-hero p,
@@ -296,6 +297,7 @@ body:has(.page-shell)::before { opacity: 0.55 !important; }
 .legend,
 .month-nav,
 .news-controls,
+.news-signal-section,
 .gallery-card,
 .photo-tile,
 .game,
@@ -352,6 +354,7 @@ p,
 .bullet-list,
 .section-sub,
 .news-card p,
+.news-card .news-why,
 .tile p,
 .feature p,
 .hero p,
@@ -365,6 +368,16 @@ p,
 .entry-copy,
 .item .muted {
   color: #c3d3da !important;
+}
+
+.news-card .news-why {
+  color: #d7e9ee !important;
+  border-top-color: rgba(160,198,216,0.16) !important;
+}
+
+.signal-badge {
+  color: var(--wb-gold) !important;
+  border-color: rgba(241,209,142,0.32) !important;
 }
 .hero .section-copy { color: #edf6f7 !important; }
 .section-card,
