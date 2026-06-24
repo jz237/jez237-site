@@ -49,13 +49,6 @@
     "role": "secondary"
   },
   {
-    "name": "MIT Technology Review AI",
-    "url": "https://www.technologyreview.com/topic/artificial-intelligence/feed/",
-    "weight": 0.85,
-    "category": "AI",
-    "role": "secondary"
-  },
-  {
     "name": "Artificial Intelligence News",
     "url": "https://www.artificialintelligence-news.com/categories/artificial-intelligence/feed/",
     "weight": 0.82,
@@ -137,13 +130,6 @@
     "name": "The Verge AI",
     "url": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
     "weight": 0.9,
-    "category": "AI",
-    "role": "secondary"
-  },
-  {
-    "name": "Wired AI",
-    "url": "https://www.wired.com/feed/tag/ai/latest/rss",
-    "weight": 0.85,
     "category": "AI",
     "role": "secondary"
   },
