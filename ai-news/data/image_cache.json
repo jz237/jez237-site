@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-24T17:00:01.330867+00:00",
+  "updatedAt": "2026-06-24T17:17:13.376808+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -11368,6 +11368,10 @@
     "https://huggingface.co/blog/ffasr-leaderboard": {
       "image": "https://huggingface.co/blog/assets/ffasr-leaderboard/thumbnail.png",
       "checkedAt": "2026-06-24T17:00:01.330867+00:00"
+    },
+    "https://techcrunch.com/2026/06/24/facebook-rolls-out-an-ai-companion-app-for-creators": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/03/facebook-logo-on-phone.jpg?resize=1200%2C800",
+      "checkedAt": "2026-06-24T17:17:13.376808+00:00"
     }
   }
 }
