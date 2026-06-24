@@ -1,6 +1,6 @@
 {
   "date": "2026-06-24",
-  "updatedAt": "2026-06-24T07:00:01.733559+00:00",
+  "updatedAt": "2026-06-24T08:00:01.859828+00:00",
   "items": [
     {
       "title": "v1.91.0-dev.1",
@@ -13,26 +13,26 @@
       "image": "https://opengraph.githubassets.com/9a78cd956067fceff41336d77c198cfb77ae32b295601dace5ece10928edf74f/BerriAI/litellm/releases/tag/v1.91.0-dev.1",
       "published": "2026-06-24T00:02:08+00:00",
       "firstSeen": "2026-06-24T00:08:31.662512+00:00",
-      "lastSeen": "2026-06-24T07:00:01.733559+00:00",
+      "lastSeen": "2026-06-24T08:00:01.859828+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7965
+      "score": 2.7717
     },
     {
-      "title": "Rajarshi Misra, Aditya Sharma, Vinti Agarwal, Hari Om Aggrawal",
-      "url": "https://llm-stats.com/ai-news",
-      "source": "LLM Stats AI News",
-      "sourceUrl": "https://llm-stats.com/ai-news",
-      "sourceWeight": 0.9,
+      "title": "The US is pressing Meta to let it review its AI, and Meta is the last holdout",
+      "url": "https://thenextweb.com/news/us-presses-meta-ai-security-reviews",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
       "category": "AI",
-      "summary": "",
-      "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-24T07:00:09.266308+00:00",
-      "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-24T07:00:01.733559+00:00",
+      "summary": "The Trump administration has been pressing Meta to submit its most capable AI models for federal security review, leaving the company the only major US developer that has not agreed to do so, according to a New York Times report. The push, the paper says, has come through emails as Washington steps up oversight of frontier [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/Meta.avif",
+      "published": "2026-06-24T07:03:03+00:00",
+      "firstSeen": "2026-06-24T08:00:01.859828+00:00",
+      "lastSeen": "2026-06-24T08:00:01.859828+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.36
+      "score": 2.4714
     },
     {
       "title": "NVIDIA and AWS Collaborate to Bring AI to Production at Scale",
@@ -45,10 +45,26 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/logo-lockup-tech-blog-aws-1920x1080-2.jpg",
       "published": "2026-06-24T00:05:37+00:00",
       "firstSeen": "2026-06-24T00:08:31.662512+00:00",
-      "lastSeen": "2026-06-24T07:00:01.733559+00:00",
+      "lastSeen": "2026-06-24T08:00:01.859828+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 0.998
+      "score": 0.9731
+    },
+    {
+      "title": "Quantifying Prior Dominance in RAG Systems",
+      "url": "https://llm-stats.com/ai-news",
+      "source": "LLM Stats AI News",
+      "sourceUrl": "https://llm-stats.com/ai-news",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "",
+      "image": "https://llm-stats.com/og/main.png",
+      "published": "2026-06-24T08:00:15.486331+00:00",
+      "firstSeen": "2026-05-29T21:00:01.522609+00:00",
+      "lastSeen": "2026-06-24T08:00:01.859828+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "framework_or_plumbing",
+      "score": -0.74
     }
   ],
   "errors": [
