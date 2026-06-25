@@ -146,6 +146,7 @@ Current plant/reference slugs:
 | `orange-milkweed` | Orange milkweed / butterfly weed |
 | `past-years` | 2025 and earlier reference photos |
 | `pugster-butterfly-bushes` | Pugster butterfly bushes |
+| `purple-loropetalum` | Purple loropetalum |
 | `rhododendron` | Rhododendron |
 | `rising-sun-redbud` | Rising Sun redbud |
 | `salvia` | Salvia |
