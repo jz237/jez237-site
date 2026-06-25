@@ -212,15 +212,43 @@ function addWave(pos, color, size=1) {
   mesh.rotation.x = -Math.PI/2;
   mesh.position.set(pos.x, -1.12, pos.z);
   scene.add(mesh);
-  waves.push({ mesh, age:0, size });
+  waves.push({ mesh, age:0, size, kind:"ring" });
 }
 
-function burst(pos, color, count=16, life=.7) {
+function addShockSphere(pos, color, size=1) {
+  const mesh = new THREE.Mesh(new THREE.IcosahedronGeometry(.96,1), basic(color,.55,true));
+  mesh.position.set(pos.x, .42, pos.z);
+  scene.add(mesh);
+  waves.push({ mesh, age:0, size, kind:"sphere" });
+}
+
+function sphereDir(upBias=.18) {
+  const a = rand(Math.PI*2,0);
+  const y = rand(1,-1) * .82 + upBias;
+  const h = Math.sqrt(Math.max(0, 1 - y*y));
+  return new THREE.Vector3(Math.cos(a)*h, y, Math.sin(a)*h).normalize();
+}
+
+function burst(pos, color, count=16, life=.7, scale=1, volumetric=false) {
+  const origin = new THREE.Vector3(pos.x, pos.y + (volumetric ? .32 : .04), pos.z);
   for (let i=0;i<count;i++) {
-    const mesh = new THREE.Mesh(new THREE.TetrahedronGeometry(rand(.11,.035),0), mat(color,.9));
-    mesh.position.copy(pos);
+    const dir = volumetric ? sphereDir(.24) : new THREE.Vector3(rand(1,-1),rand(.8,.05),rand(1,-1)).normalize();
+    const geo = Math.random()>.38 ? new THREE.TetrahedronGeometry(rand(.14,.045)*scale,0) : new THREE.OctahedronGeometry(rand(.12,.04)*scale,0);
+    const mesh = new THREE.Mesh(geo, mat(color,.9));
+    mesh.position.copy(origin).addScaledVector(dir, rand(.28,0) * scale);
     scene.add(mesh);
-    particles.push({ mesh, vel:new THREE.Vector3(rand(1,-1),rand(.8,.05),rand(1,-1)).normalize().multiplyScalar(rand(5,1.8)), spin:new THREE.Vector3(rand(8,-8),rand(8,-8),rand(8,-8)), life:rand(life,.25) });
+    particles.push({ mesh, vel:dir.multiplyScalar(rand(volumetric?9:5,volumetric?2.8:1.8)*scale), spin:new THREE.Vector3(rand(11,-11),rand(11,-11),rand(11,-11)), life:rand(life,.25) });
+  }
+  if (volumetric) {
+    for (let i=0;i<Math.round(count*.45);i++) {
+      const dir = sphereDir(.2);
+      const len = rand(1.25,.48) * scale;
+      const geo = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(), dir.clone().multiplyScalar(len)]);
+      const ray = new THREE.Line(geo, new THREE.LineBasicMaterial({ color, transparent:true, opacity:.72 }));
+      ray.position.copy(origin);
+      scene.add(ray);
+      particles.push({ mesh:ray, vel:dir.multiplyScalar(rand(4.2,1.2)*scale), spin:new THREE.Vector3(rand(3,-3),rand(3,-3),rand(3,-3)), life:rand(life*.86,.22) });
+    }
   }
 }
 
@@ -357,7 +385,16 @@ function updateGame(dt) {
   }
 
   for (let i=waves.length-1;i>=0;i--) {
-    const w=waves[i]; w.age += dt; const scale = 1 + w.age * 7 * w.size; w.mesh.scale.set(scale,scale,1); w.mesh.material.opacity = Math.max(0,.62-w.age*.75); w.mesh.rotation.z += dt*1.4;
+    const w=waves[i]; w.age += dt; const scale = 1 + w.age * (w.kind==="sphere" ? 5.2 : 7) * w.size;
+    if (w.kind==="sphere") {
+      w.mesh.scale.setScalar(scale);
+      w.mesh.rotation.x += dt*.9; w.mesh.rotation.y += dt*1.2;
+      w.mesh.material.opacity = Math.max(0,.55-w.age*.58);
+    } else {
+      w.mesh.scale.set(scale,scale,1);
+      w.mesh.rotation.z += dt*1.4;
+      w.mesh.material.opacity = Math.max(0,.62-w.age*.75);
+    }
     if (w.age>.9) { scene.remove(w.mesh); waves.splice(i,1); }
   }
   for (let i=particles.length-1;i>=0;i--) {
@@ -375,8 +412,9 @@ function killEnemy(index) {
   state.comboTimer = 2.2;
   const reward = e.boss ? 900 + state.wave*80 : e.kind==="splitter" ? 120 : e.kind==="weaver" ? 105 : 80;
   state.score += reward * state.combo;
-  burst(e.pos, e.boss?gold:e.kind==="splitter"?pink:e.kind==="weaver"?violet:cyan, e.boss?46:22);
-  addWave(e.pos, e.boss?gold:cyan, e.boss?1.4:.7);
+  const hue = e.boss?gold:e.kind==="splitter"?pink:e.kind==="weaver"?violet:cyan;
+  burst(e.pos, hue, e.boss?112:58, e.boss?1.4:1.05, e.boss?2.35:1.45, true);
+  addShockSphere(e.pos, hue, e.boss?2.1:1.35);
   if (e.kind==="splitter" && !e.boss) {
     for (let k=0;k<3;k++) {
       const root = new THREE.Group();
