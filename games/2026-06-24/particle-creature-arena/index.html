@@ -101,7 +101,7 @@ arena.add(ring);
 const particleCount = 0;
 let homes = [], particles = [], regions = [], geometry, material, cloud;
 let enemies = [], sparks = [], waves = [], motes = [];
-const regionIds = { body:1, legs:2, eyes:3, core:4, tail:5, detail:6 };
+const regionIds = { body:1, head:2, ears:3, tail:4, legs:5, eyes:6, whisker:7, detail:8, core:9 };
 const scratch = new THREE.Vector3();
 const state = {
   running:false, paused:false, practice:false, ended:false, t:0, score:0, wave:1, waveTimer:0, pulse:1, warned:false,
@@ -110,11 +110,14 @@ const state = {
   keys:new Set(), pointer:null, orbit:{ yaw:.72, pitch:.43, distance:18, dragging:false, x:0, y:0 },
   stick:{ active:false, id:null, dx:0, dy:0 }, messageUntil:0
 };
+state.orbit.distance = innerWidth < 760 ? 21 : 19;
 
 function color(hex){ return new THREE.Color(hex); }
 const palette = {
-  body:color(0x69dfff), core:color(0xa7f7ea), dark:color(0x28687a), eye:color(0x7dff6f),
-  pink:color(0xff78b7), gold:color(0xffd166), white:color(0xeaf8ff), enemy:color(0xff5fa2), spark:color(0xffd166)
+  fur:color(0x9ea6a7), furLight:color(0xd7e2df), furDark:color(0x343c40),
+  core:color(0x8fefff), eye:color(0x7dff6f), eyeDark:color(0x102a16),
+  pink:color(0xff8fb5), gold:color(0xffd166), white:color(0xf6f1e7),
+  enemy:color(0xff5fa2), spark:color(0xffd166), collar:color(0x66dfd0)
 };
 
 function rand(a=1,b=0){ return b + Math.random() * (a-b); }
@@ -124,14 +127,14 @@ function setClass(el,v){ el.classList.toggle("bad",v<.34); el.classList.toggle("
 function addParticle(home, region, c, size=20) {
   const p = home.clone().add(new THREE.Vector3(rand(.08,-.08), rand(.08,-.08), rand(.08,-.08)));
   homes.push(home.clone());
-  particles.push({ pos:p, vel:new THREE.Vector3(rand(.1,-.1),rand(.1,-.1),rand(.1,-.1)), size:size*rand(1.2,.75), color:c.clone(), region, seed:rand(1000,0) });
+  particles.push({ pos:p, vel:new THREE.Vector3(rand(.1,-.1),rand(.1,-.1),rand(.1,-.1)), size:size*rand(1.18,.78), color:c.clone(), region, seed:rand(1000,0) });
   regions.push(regionIds[region] || 0);
 }
 
-function ellipsoid(center, radius, count, region, c, size=20) {
+function ellipsoid(center, radius, count, region, c, size=20, surface=false) {
   for (let i=0;i<count;i++) {
     const u = rand(Math.PI*2,0), v = Math.acos(rand(1,-1));
-    const fill = Math.cbrt(Math.random());
+    const fill = surface ? 1 : Math.cbrt(Math.random());
     addParticle(new THREE.Vector3(
       center.x + Math.sin(v)*Math.cos(u)*radius.x*fill,
       center.y + Math.cos(v)*radius.y*fill,
@@ -144,30 +147,83 @@ function line(a,b,count,region,c,size=14) {
   for (let i=0;i<count;i++) addParticle(a.clone().lerp(b, i/(count-1)).add(new THREE.Vector3(rand(.04,-.04),rand(.04,-.04),rand(.04,-.04))), region, c, size);
 }
 
+function triangleSurface(a,b,c,count,region,paint,size=17) {
+  for (let i=0;i<count;i++) {
+    let r1=Math.random(), r2=Math.random();
+    if (r1+r2>1) { r1=1-r1; r2=1-r2; }
+    const r3=1-r1-r2;
+    const p = a.clone().multiplyScalar(r1).add(b.clone().multiplyScalar(r2)).add(c.clone().multiplyScalar(r3));
+    addParticle(p.add(new THREE.Vector3(rand(.035,-.035),rand(.035,-.035),rand(.035,-.035))), region, paint(p), size);
+  }
+}
+
+function catFur(p) {
+  const belly = p.y < -.52 && Math.abs(p.z) < .34 && p.x > -1.65;
+  const stripe = (p.y > .32 && Math.abs(p.z) < .38 && Math.floor((p.x+2.4)*3.5) % 3 === 0) ||
+    (Math.abs(p.z) > .62 && p.y > -.2 && Math.floor((p.x+2.1)*2.8) % 4 <= 1);
+  if (belly) return palette.white;
+  if (stripe) return palette.furDark;
+  return Math.random() > .68 ? palette.furLight : palette.fur;
+}
+
+function headFur(p) {
+  const muzzle = p.x > 2.58 && p.y < .82 && Math.abs(p.z) < .46;
+  const cheek = p.x > 2.18 && Math.abs(p.z) > .55 && p.y > .62;
+  const forehead = p.y > 1.12 && Math.abs(p.z) < .36 && Math.floor((p.x+p.z+4)*6) % 3 === 0;
+  if (muzzle) return palette.white;
+  if (cheek || forehead) return palette.furDark;
+  return Math.random() > .7 ? palette.furLight : palette.fur;
+}
+
 function buildCreature() {
   homes = []; particles = []; regions = [];
-  ellipsoid(new THREE.Vector3(0,.35,0), new THREE.Vector3(2.25,.72,.76), 1650, "body", palette.body, 20);
-  ellipsoid(new THREE.Vector3(2.05,.55,0), new THREE.Vector3(.82,.66,.72), 780, "core", palette.core, 20);
-  ellipsoid(new THREE.Vector3(2.68,.42,0), new THREE.Vector3(.34,.25,.42), 240, "detail", palette.white, 18);
-  ellipsoid(new THREE.Vector3(2.92,.5,0), new THREE.Vector3(.11,.08,.14), 58, "core", palette.pink, 20);
-  ellipsoid(new THREE.Vector3(2.58,.84,-.33), new THREE.Vector3(.11,.14,.06), 85, "eyes", palette.eye, 25);
-  ellipsoid(new THREE.Vector3(2.58,.84,.33), new THREE.Vector3(.11,.14,.06), 85, "eyes", palette.eye, 25);
-  ellipsoid(new THREE.Vector3(1.72,-.48,-.42), new THREE.Vector3(.19,.55,.2), 230, "legs", palette.dark, 18);
-  ellipsoid(new THREE.Vector3(.55,-.48,-.45), new THREE.Vector3(.19,.55,.2), 230, "legs", palette.dark, 18);
-  ellipsoid(new THREE.Vector3(1.72,-.48,.42), new THREE.Vector3(.19,.55,.2), 230, "legs", palette.dark, 18);
-  ellipsoid(new THREE.Vector3(.55,-.48,.45), new THREE.Vector3(.19,.55,.2), 230, "legs", palette.dark, 18);
-  line(new THREE.Vector3(2.28,1.02,-.38), new THREE.Vector3(2.45,1.85,-.58), 100, "detail", palette.pink, 17);
-  line(new THREE.Vector3(2.28,1.02,.38), new THREE.Vector3(2.45,1.85,.58), 100, "detail", palette.pink, 17);
-  for (let i=0;i<520;i++) {
-    const t = i/519, a = t*Math.PI*1.55, r = .28 + .12*Math.sin(t*Math.PI);
-    const center = new THREE.Vector3(-1.95 - t*2.15, .28 + Math.sin(t*Math.PI)*1.45, Math.cos(a)*.52);
-    const q = rand(Math.PI*2,0);
-    addParticle(center.add(new THREE.Vector3(Math.cos(q)*r, Math.sin(q)*r, Math.sin(q)*r*.7)), "tail", i%4 ? palette.body : palette.gold, 18);
+  for (let i=0;i<6600;i++) {
+    const u=rand(Math.PI*2,0), v=Math.acos(rand(1,-1));
+    const p = new THREE.Vector3(Math.sin(v)*Math.cos(u)*2.75, Math.cos(v)*.9, Math.sin(v)*Math.sin(u)*.92);
+    addParticle(p, "body", catFur(p), 17);
   }
-  line(new THREE.Vector3(2.72,.42,-.22), new THREE.Vector3(3.65,.58,-1.05), 95, "detail", palette.white, 12);
-  line(new THREE.Vector3(2.72,.36,-.22), new THREE.Vector3(3.75,.28,-1.16), 95, "detail", palette.white, 12);
-  line(new THREE.Vector3(2.72,.42,.22), new THREE.Vector3(3.65,.58,1.05), 95, "detail", palette.white, 12);
-  line(new THREE.Vector3(2.72,.36,.22), new THREE.Vector3(3.75,.28,1.16), 95, "detail", palette.white, 12);
+  for (let i=0;i<2100;i++) {
+    const u=rand(Math.PI*2,0), v=Math.acos(rand(1,-1));
+    const p = new THREE.Vector3(1.28 + Math.sin(v)*Math.cos(u)*1.28, -.04 + Math.cos(v)*.66, Math.sin(v)*Math.sin(u)*.78);
+    addParticle(p, "body", catFur(p), 16);
+  }
+  for (let i=0;i<4300;i++) {
+    const u=rand(Math.PI*2,0), v=Math.acos(rand(1,-1));
+    const p = new THREE.Vector3(2.58 + Math.sin(v)*Math.cos(u)*.88, .76 + Math.cos(v)*.75, Math.sin(v)*Math.sin(u)*.78);
+    addParticle(p, "head", headFur(p), 16);
+  }
+  ellipsoid(new THREE.Vector3(3.24,.45,0), new THREE.Vector3(.28,.22,.48), 880, "head", palette.white, 15, true);
+  ellipsoid(new THREE.Vector3(3.48,.5,0), new THREE.Vector3(.09,.065,.14), 170, "head", palette.pink, 17);
+  ellipsoid(new THREE.Vector3(3.18,.84,-.36), new THREE.Vector3(.12,.15,.045), 320, "eyes", palette.eye, 22);
+  ellipsoid(new THREE.Vector3(3.2,.84,-.365), new THREE.Vector3(.045,.09,.02), 130, "eyes", palette.eyeDark, 20);
+  ellipsoid(new THREE.Vector3(3.18,.84,.36), new THREE.Vector3(.12,.15,.045), 320, "eyes", palette.eye, 22);
+  ellipsoid(new THREE.Vector3(3.2,.84,.365), new THREE.Vector3(.045,.09,.02), 130, "eyes", palette.eyeDark, 20);
+
+  triangleSurface(new THREE.Vector3(2.12,1.26,-.48), new THREE.Vector3(2.62,2.18,-.75), new THREE.Vector3(3.02,1.22,-.72), 900, "ears", p => Math.random()>.35?palette.furDark:palette.fur, 16);
+  triangleSurface(new THREE.Vector3(2.12,1.26,.48), new THREE.Vector3(2.62,2.18,.75), new THREE.Vector3(3.02,1.22,.72), 900, "ears", p => Math.random()>.35?palette.furDark:palette.fur, 16);
+  triangleSurface(new THREE.Vector3(2.32,1.32,-.55), new THREE.Vector3(2.62,1.92,-.68), new THREE.Vector3(2.86,1.32,-.68), 360, "ears", () => palette.pink, 14);
+  triangleSurface(new THREE.Vector3(2.32,1.32,.55), new THREE.Vector3(2.62,1.92,.68), new THREE.Vector3(2.86,1.32,.68), 360, "ears", () => palette.pink, 14);
+
+  for (const z of [-.58,.58]) {
+    ellipsoid(new THREE.Vector3(1.42,-.74,z), new THREE.Vector3(.22,.62,.2), 640, "legs", palette.fur, 15, true);
+    ellipsoid(new THREE.Vector3(-1.34,-.74,z), new THREE.Vector3(.26,.58,.22), 640, "legs", palette.furDark, 15, true);
+    ellipsoid(new THREE.Vector3(1.58,-1.28,z), new THREE.Vector3(.42,.12,.28), 300, "legs", palette.white, 14);
+    ellipsoid(new THREE.Vector3(-1.16,-1.28,z), new THREE.Vector3(.42,.12,.28), 300, "legs", palette.white, 14);
+  }
+
+  for (let i=0;i<1900;i++) {
+    const t = i/1899, a = t*Math.PI*1.55, r = .22 + .08*Math.sin(t*Math.PI);
+    const center = new THREE.Vector3(-2.5 - t*2.35, .02 + Math.sin(t*Math.PI)*1.7, .08 + Math.cos(a)*.54);
+    const q = rand(Math.PI*2,0);
+    addParticle(center.add(new THREE.Vector3(Math.cos(q)*r*.7, Math.sin(q)*r, Math.cos(q+Math.PI/2)*r*.7)), "tail", i%5 ? palette.fur : palette.furDark, 15);
+  }
+  for (const side of [-1,1]) {
+    line(new THREE.Vector3(3.33,.47,side*.22), new THREE.Vector3(4.22,.72,side*1.15), 180, "whisker", palette.white, 8);
+    line(new THREE.Vector3(3.33,.4,side*.24), new THREE.Vector3(4.32,.36,side*1.28), 180, "whisker", palette.white, 8);
+    line(new THREE.Vector3(3.33,.33,side*.22), new THREE.Vector3(4.08,.14,side*1.12), 180, "whisker", palette.white, 8);
+  }
+  line(new THREE.Vector3(1.9,.02,-.5), new THREE.Vector3(1.9,.02,.5), 180, "detail", palette.collar, 15);
+  ellipsoid(new THREE.Vector3(2.04,-.12,0), new THREE.Vector3(.12,.12,.12), 170, "core", palette.gold, 15);
 
   const pos = new Float32Array(particles.length*3);
   const colors = new Float32Array(particles.length*3);
@@ -196,7 +252,23 @@ function buildCreature() {
 
 function transformedHome(i, out) {
   const h = homes[i], ca = Math.cos(state.yaw), sa = Math.sin(state.yaw);
-  out.set(h.x*ca - h.z*sa, h.y, h.x*sa + h.z*ca).add(state.player);
+  out.copy(h);
+  const speed = Math.hypot(state.velocity.x, state.velocity.z);
+  const gait = Math.min(1, speed / 5.5);
+  if (particles[i].region === "legs") {
+    const front = h.x > 0 ? 0 : Math.PI;
+    const side = h.z > 0 ? 0 : Math.PI;
+    const step = Math.sin(state.t * 8.5 + front + side) * gait;
+    out.x += step * .12;
+    out.y += Math.max(0, step) * .09;
+  } else if (particles[i].region === "body" || particles[i].region === "head") {
+    out.y += Math.sin(state.t * 8.5) * .035 * gait;
+  } else if (particles[i].region === "tail") {
+    const tail = clamp((-h.x - 2.2) / 2.8, 0, 1);
+    out.z += Math.sin(state.t * (2.4 + gait * 2.2) + tail * 4.6 + particles[i].seed * .02) * tail * (.23 + gait * .18);
+    out.y += Math.cos(state.t * 2.1 + tail * 3.8) * tail * .12;
+  }
+  out.set(out.x*ca - out.z*sa, out.y, out.x*sa + out.z*ca).add(state.player);
   return out;
 }
 
@@ -220,8 +292,8 @@ function spawnSpark() {
 }
 
 function spawnEnemy() {
-  const geo = new THREE.IcosahedronGeometry(.42,1);
-  const mat = new THREE.MeshBasicMaterial({ color:Math.random()<.3?0xff5fa2:0x64e8ff, wireframe:true, transparent:true, opacity:.86 });
+  const geo = new THREE.IcosahedronGeometry(.34,1);
+  const mat = new THREE.MeshBasicMaterial({ color:Math.random()<.3?0xff5fa2:0x64e8ff, wireframe:true, transparent:true, opacity:.66 });
   const mesh = new THREE.Mesh(geo, mat);
   const a=rand(Math.PI*2,0), r=rand(14.5,12.8);
   mesh.position.set(Math.cos(a)*r, .6, Math.sin(a)*r);
@@ -296,8 +368,9 @@ function enemyBlast(e) {
 }
 
 function addWave(origin, strength, hex) {
-  const mesh = new THREE.Mesh(new THREE.SphereGeometry(1,32,16), new THREE.MeshBasicMaterial({ color:hex, wireframe:true, transparent:true, opacity:.72 }));
-  mesh.position.copy(origin);
+  const mesh = new THREE.Mesh(new THREE.RingGeometry(.92,1.0,96), new THREE.MeshBasicMaterial({ color:hex, transparent:true, opacity:.42, side:THREE.DoubleSide, depthWrite:false }));
+  mesh.rotation.x = -Math.PI/2;
+  mesh.position.set(origin.x, -1.76, origin.z);
   scene.add(mesh);
   waves.push({ mesh, age:0, strength });
 }
@@ -348,9 +421,9 @@ function updateGame(dt) {
     if (e.hp<=0) { state.score+=e.kind==="splitter"?180:120; burst(e.mesh.position,e.kind==="splitter"?0xff5fa2:0x64e8ff,34); scene.remove(e.mesh); enemies.splice(i,1); }
   }
   for (let i=waves.length-1;i>=0;i--) {
-    const w=waves[i]; w.age+=dt; const s=1+w.age*(7+w.strength*4);
-    w.mesh.scale.setScalar(s); w.mesh.material.opacity=Math.max(0,.7-w.age*1.4);
-    if (w.age>.62) { scene.remove(w.mesh); waves.splice(i,1); }
+    const w=waves[i]; w.age+=dt; const s=1+w.age*(5.2+w.strength*3);
+    w.mesh.scale.set(s,s,1); w.mesh.material.opacity=Math.max(0,.42-w.age*.62);
+    if (w.age>.78) { scene.remove(w.mesh); waves.splice(i,1); }
   }
   for (let i=motes.length-1;i>=0;i--) {
     const m=motes[i]; m.life-=dt; m.mesh.position.addScaledVector(m.vel,dt); m.vel.multiplyScalar(Math.pow(.14,dt)); m.mesh.material.opacity=Math.max(0,m.life);
@@ -367,7 +440,7 @@ function updateGame(dt) {
 function updateCamera(dt) {
   state.orbit.pitch=clamp(state.orbit.pitch,-.05,1.15); state.orbit.distance=clamp(state.orbit.distance,9,30);
   const cp=Math.cos(state.orbit.pitch);
-  const target=state.player.clone().add(new THREE.Vector3(.8,.4,0));
+  const target=state.player.clone().add(new THREE.Vector3(-.25,.35,0));
   camera.position.set(target.x+Math.sin(state.orbit.yaw)*cp*state.orbit.distance, target.y+Math.sin(state.orbit.pitch)*state.orbit.distance+3.2, target.z+Math.cos(state.orbit.yaw)*cp*state.orbit.distance);
   camera.lookAt(target);
 }
