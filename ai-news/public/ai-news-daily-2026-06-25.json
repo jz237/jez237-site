@@ -1,6 +1,6 @@
 {
   "date": "2026-06-25",
-  "updatedAt": "2026-06-25T08:30:07.563389+00:00",
+  "updatedAt": "2026-06-25T10:00:01.660955+00:00",
   "items": [
     {
       "title": "The math behind the OpenAI Jalapeño chip",
@@ -14,10 +14,10 @@
       "image": "",
       "published": "2026-06-25T06:00:00+00:00",
       "firstSeen": "2026-06-25T07:00:01.940787+00:00",
-      "lastSeen": "2026-06-25T09:00:02.089665+00:00",
+      "lastSeen": "2026-06-25T10:00:01.660955+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 6.9741,
+      "score": 6.9323,
       "signalGroup": "Infrastructure",
       "sourceTier": "Reported source",
       "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
@@ -31,6 +31,35 @@
       "clusterKey": "openai-math-behind-openai-jalape-chip"
     },
     {
+      "title": "Facebook’s Creator Studio has been revived as an AI companion app",
+      "url": "https://www.theverge.com/tech/956668/meta-facebook-creator-studio-ai-app-relaunch",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "sourceRole": "secondary",
+      "category": "AI",
+      "summary": "Meta is bringing back the Facebook Creator Studio page manager, now \"reimagined\" as a standalone AI companion app. The new app aims to make it easier for creators to connect with their audiences and show them \"exactly how to grow on Facebook,\" according to Meta's announcement. Meta's AI Creator Assistant is a central focus of [&#8230;]",
+      "image": "public/thumbnails/news-cab88ca1897c82503d.webp",
+      "published": "2026-06-25T09:06:19+00:00",
+      "firstSeen": "2026-06-25T10:00:01.660955+00:00",
+      "lastSeen": "2026-06-25T10:00:01.660955+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 4.533,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
+      "brief": {
+        "whatHappened": "Facebook’s Creator Studio has been revived as an AI companion app",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via The Verge AI."
+      },
+      "tryWorthy": false,
+      "clusterKey": "facebook-creator-studio-has-been-revived",
+      "imageOriginal": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/Facebook-Creator-Studio-relaunch.jpg?quality=90&strip=all&crop=0%2C10.732984293194%2C100%2C78.534031413613&w=1200"
+    },
+    {
       "title": "Actress Cate Blanchett launches a free registry tool to keep AI from using your likeness",
       "url": "https://thenextweb.com/news/cate-blanchett-human-consent-registry-ai",
       "source": "The Next Web",
@@ -42,10 +71,10 @@
       "image": "https://media.thenextweb.com/2026/06/Cate-Blanchett-EU-Parliament.avif",
       "published": "2026-06-25T06:53:33+00:00",
       "firstSeen": "2026-06-25T08:00:01.845417+00:00",
-      "lastSeen": "2026-06-25T08:30:07.563389+00:00",
+      "lastSeen": "2026-06-25T10:00:01.660955+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.9019,
+      "score": 3.859,
       "signalGroup": "Media generation",
       "sourceTier": "Reported source",
       "whyItMatters": "Media-model updates affect what can be made quickly, what still needs craft, and where creative pipelines may change next.",
@@ -70,10 +99,10 @@
       "image": "https://media.thenextweb.com/2026/04/Tesla.avif",
       "published": "2026-06-25T08:07:50+00:00",
       "firstSeen": "2026-06-25T08:30:07.563389+00:00",
-      "lastSeen": "2026-06-25T08:30:07.563389+00:00",
+      "lastSeen": "2026-06-25T10:00:01.660955+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2387,
+      "score": 3.1943,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
@@ -87,6 +116,62 @@
       "clusterKey": "tesla-sued-fatal-texas-crash-driver"
     },
     {
+      "title": "Tombot raises $7m to bring its robotic dog Jennie to market",
+      "url": "https://thenextweb.com/news/tombot-7-million-series-a3-jennie-robotic-dog",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "category": "AI",
+      "summary": "Tombot, a Los Angeles-area company that makes a robotic dog for people who cannot keep a real one, has closed a $7m Series A3 financing round to move its flagship product from development into manufacturing. The company said on June 24 that the round drew investment from Caduceus Capital Partners, Wavemaker 360, the Lutheran Foundation [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/Tombot.avif",
+      "published": "2026-06-25T08:24:06+00:00",
+      "firstSeen": "2026-06-25T10:00:01.660955+00:00",
+      "lastSeen": "2026-06-25T10:00:01.660955+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.8022,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
+      "brief": {
+        "whatHappened": "Tombot raises $7m to bring its robotic dog Jennie to market",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": true,
+      "clusterKey": "tombot-raises-bring-robotic-dog-jennie"
+    },
+    {
+      "title": "H.B. Fuller nears a $628 million deal for UK wound-care maker AMS, over its own investor’s objections",
+      "url": "https://thenextweb.com/news/hb-fuller-628-million-ams-medtech-deal",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "category": "AI",
+      "summary": "The US adhesives group has agreed a 285 pence-a-share cash offer for Advanced Medical Solutions, even as an activist shareholder demands it abandon the pursuit. H.B. Fuller, the St Paul, Minnesota adhesives maker, is closing in on a takeover of Advanced Medical Solutions Group, the AIM-listed British maker of wound-care and surgical-glue products, in a [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/HB-Fuller.avif",
+      "published": "2026-06-25T08:16:19+00:00",
+      "firstSeen": "2026-06-25T10:00:01.660955+00:00",
+      "lastSeen": "2026-06-25T10:00:01.660955+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.4484,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
+      "brief": {
+        "whatHappened": "H.B. Fuller nears a $628 million deal for UK wound-care maker AMS, over its own investor’s objections",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": false,
+      "clusterKey": "fuller-nears-628-million-deal-wound-care"
+    },
+    {
       "title": "OVHcloud confirms its outlook as public cloud growth accelerates past 20%",
       "url": "https://thenextweb.com/news/ovhcloud-confirms-outlook-public-cloud-growth",
       "source": "The Next Web",
@@ -98,10 +183,10 @@
       "image": "https://media.thenextweb.com/2026/06/OVH-Cloud.avif",
       "published": "2026-06-25T07:58:56+00:00",
       "firstSeen": "2026-06-25T08:30:07.563389+00:00",
-      "lastSeen": "2026-06-25T08:30:07.563389+00:00",
+      "lastSeen": "2026-06-25T10:00:01.660955+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1342,
+      "score": 2.09,
       "signalGroup": "Business",
       "sourceTier": "Reported source",
       "whyItMatters": "Business moves are a map of where the industry thinks the bottlenecks and durable demand will be.",
@@ -128,11 +213,11 @@
       "image": "public/thumbnails/news-3ae4c12437f36efc37.avif",
       "published": "2026-06-24T18:46:18+00:00",
       "firstSeen": "2026-06-24T20:00:01.336973+00:00",
-      "lastSeen": "2026-06-25T08:30:07.563389+00:00",
+      "lastSeen": "2026-06-25T10:00:01.660955+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 22.3012,
+      "score": 22.2706,
       "signalGroup": "Model releases",
       "sourceTier": "Reported source",
       "whyItMatters": "A model release changes the practical menu: capability, pricing, context, or deployment options may shift for real workflows.",
@@ -158,10 +243,10 @@
       "image": "public/thumbnails/news-24b5cb1b280e0447d1.png",
       "published": "2026-06-25T01:52:05+00:00",
       "firstSeen": "2026-06-25T02:00:01.960278+00:00",
-      "lastSeen": "2026-06-25T08:30:07.563389+00:00",
+      "lastSeen": "2026-06-25T10:00:01.660955+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 14.0749,
+      "score": 14.0376,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Primary source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -186,10 +271,10 @@
       "image": "public/thumbnails/news-c1cb7cc34027d88fbb.png",
       "published": "2026-06-24T18:20:27+00:00",
       "firstSeen": "2026-06-24T23:32:54.647355+00:00",
-      "lastSeen": "2026-06-25T08:30:07.563389+00:00",
+      "lastSeen": "2026-06-25T10:00:01.660955+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 6.9503,
+      "score": 6.92,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Reported source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -214,10 +299,10 @@
       "image": "public/thumbnails/news-78bec699597a1cf453.jpg",
       "published": "2026-06-24T20:11:59+00:00",
       "firstSeen": "2026-06-24T23:00:01.536104+00:00",
-      "lastSeen": "2026-06-25T08:30:07.563389+00:00",
+      "lastSeen": "2026-06-25T10:00:01.660955+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.6316,
+      "score": 5.5997,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Reported source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -229,34 +314,6 @@
       },
       "tryWorthy": true,
       "clusterKey": "zoom-salesforce-dialpad-others-bet-big"
-    },
-    {
-      "title": "Facebook rolls out an AI companion app for creators",
-      "url": "https://techcrunch.com/2026/06/24/facebook-rolls-out-an-ai-companion-app-for-creators",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "sourceRole": "secondary",
-      "category": "AI",
-      "summary": "The new app, which is currently being tested with select creators, will have Facebook's recently launched AI creator assistant built into it.",
-      "image": "public/thumbnails/news-2ff5cd852e38e450f4.webp",
-      "published": "2026-06-24T17:16:24+00:00",
-      "firstSeen": "2026-06-24T17:17:13.376808+00:00",
-      "lastSeen": "2026-06-25T08:30:07.563389+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 4.8106,
-      "signalGroup": "Product updates",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
-      "brief": {
-        "whatHappened": "Facebook rolls out an AI companion app for creators",
-        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
-        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
-        "sourceFrame": "Seen via TechCrunch AI."
-      },
-      "tryWorthy": true,
-      "clusterKey": "facebook-rolls-out-companion-app-creators"
     }
   ],
   "sourceHealth": [
@@ -266,8 +323,8 @@
       "role": "primary",
       "category": "AI",
       "status": "ok",
-      "items": 1020,
-      "checkedAt": "2026-06-25T08:30:07.563389+00:00"
+      "items": 1021,
+      "checkedAt": "2026-06-25T10:00:01.660955+00:00"
     },
     {
       "source": "Google AI Blog",
@@ -276,7 +333,7 @@
       "category": "AI",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-06-25T08:30:07.563389+00:00"
+      "checkedAt": "2026-06-25T10:00:01.660955+00:00"
     },
     {
       "source": "Google DeepMind Blog",
@@ -285,7 +342,7 @@
       "category": "AI",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-06-25T08:30:07.563389+00:00"
+      "checkedAt": "2026-06-25T10:00:01.660955+00:00"
     },
     {
       "source": "Google Research Blog",
@@ -294,7 +351,7 @@
       "category": "AI",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-06-25T08:30:07.563389+00:00"
+      "checkedAt": "2026-06-25T10:00:01.660955+00:00"
     },
     {
       "source": "Hugging Face Blog",
@@ -303,7 +360,7 @@
       "category": "AI",
       "status": "ok",
       "items": 810,
-      "checkedAt": "2026-06-25T08:30:07.563389+00:00"
+      "checkedAt": "2026-06-25T10:00:01.660955+00:00"
     },
     {
       "source": "NVIDIA Blog",
@@ -312,7 +369,7 @@
       "category": "AI",
       "status": "ok",
       "items": 18,
-      "checkedAt": "2026-06-25T08:30:07.563389+00:00"
+      "checkedAt": "2026-06-25T10:00:01.660955+00:00"
     },
     {
       "source": "AWS Machine Learning Blog",
@@ -321,17 +378,16 @@
       "category": "AI",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-06-25T08:30:07.563389+00:00"
+      "checkedAt": "2026-06-25T10:00:01.660955+00:00"
     },
     {
       "source": "Artificial Intelligence News",
       "url": "https://www.artificialintelligence-news.com/categories/artificial-intelligence/feed/",
       "role": "secondary",
       "category": "AI",
-      "status": "error",
-      "items": 0,
-      "error": "not well-formed (invalid token): line 1, column 158",
-      "checkedAt": "2026-06-25T08:30:07.563389+00:00"
+      "status": "ok",
+      "items": 12,
+      "checkedAt": "2026-06-25T10:00:01.660955+00:00"
     },
     {
       "source": "Ars Technica (AI/Tech)",
@@ -340,7 +396,7 @@
       "category": "AI",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-06-25T08:30:07.563389+00:00"
+      "checkedAt": "2026-06-25T10:00:01.660955+00:00"
     },
     {
       "source": "Together AI Blog",
@@ -349,7 +405,7 @@
       "category": "AI",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-06-25T08:30:07.563389+00:00"
+      "checkedAt": "2026-06-25T10:00:01.660955+00:00"
     },
     {
       "source": "TechRepublic AI",
@@ -358,7 +414,7 @@
       "category": "AI",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-06-25T08:30:07.563389+00:00"
+      "checkedAt": "2026-06-25T10:00:01.660955+00:00"
     },
     {
       "source": "ScienceDaily AI",
@@ -367,7 +423,7 @@
       "category": "AI",
       "status": "ok",
       "items": 60,
-      "checkedAt": "2026-06-25T08:30:07.563389+00:00"
+      "checkedAt": "2026-06-25T10:00:01.660955+00:00"
     },
     {
       "source": "The Next Web",
@@ -376,7 +432,7 @@
       "category": "AI",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-06-25T08:30:07.563389+00:00"
+      "checkedAt": "2026-06-25T10:00:01.660955+00:00"
     },
     {
       "source": "BBC Discovery",
@@ -385,7 +441,7 @@
       "category": "Science",
       "status": "ok",
       "items": 847,
-      "checkedAt": "2026-06-25T08:30:07.563389+00:00"
+      "checkedAt": "2026-06-25T10:00:01.660955+00:00"
     },
     {
       "source": "BBC Infinite Monkey Cage",
@@ -394,7 +450,7 @@
       "category": "Science",
       "status": "ok",
       "items": 239,
-      "checkedAt": "2026-06-25T08:30:07.563389+00:00"
+      "checkedAt": "2026-06-25T10:00:01.660955+00:00"
     },
     {
       "source": "BBC The Life Scientific",
@@ -403,7 +459,7 @@
       "category": "Science",
       "status": "ok",
       "items": 356,
-      "checkedAt": "2026-06-25T08:30:07.563389+00:00"
+      "checkedAt": "2026-06-25T10:00:01.660955+00:00"
     },
     {
       "source": "TechCrunch AI",
@@ -412,7 +468,7 @@
       "category": "AI",
       "status": "ok",
       "items": 19,
-      "checkedAt": "2026-06-25T08:30:07.563389+00:00"
+      "checkedAt": "2026-06-25T10:00:01.660955+00:00"
     },
     {
       "source": "Anthropic News",
@@ -421,7 +477,7 @@
       "category": "AI",
       "status": "ok",
       "items": 231,
-      "checkedAt": "2026-06-25T08:30:07.563389+00:00"
+      "checkedAt": "2026-06-25T10:00:01.660955+00:00"
     },
     {
       "source": "The Verge AI",
@@ -430,7 +486,7 @@
       "category": "AI",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-06-25T08:30:07.563389+00:00"
+      "checkedAt": "2026-06-25T10:00:01.660955+00:00"
     },
     {
       "source": "VentureBeat AI",
@@ -439,7 +495,7 @@
       "category": "AI",
       "status": "ok",
       "items": 7,
-      "checkedAt": "2026-06-25T08:30:07.563389+00:00"
+      "checkedAt": "2026-06-25T10:00:01.660955+00:00"
     },
     {
       "source": "Simon Willison",
@@ -448,7 +504,7 @@
       "category": "AI",
       "status": "ok",
       "items": 30,
-      "checkedAt": "2026-06-25T08:30:07.563389+00:00"
+      "checkedAt": "2026-06-25T10:00:01.660955+00:00"
     },
     {
       "source": "Interconnects AI",
@@ -457,7 +513,7 @@
       "category": "AI",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-06-25T08:30:07.563389+00:00"
+      "checkedAt": "2026-06-25T10:00:01.660955+00:00"
     },
     {
       "source": "Latent Space",
@@ -466,17 +522,16 @@
       "category": "AI",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-06-25T08:30:07.563389+00:00"
+      "checkedAt": "2026-06-25T10:00:01.660955+00:00"
     },
     {
       "source": "Import AI",
       "url": "https://importai.substack.com/feed",
       "role": "secondary",
       "category": "AI",
-      "status": "error",
-      "items": 0,
-      "error": "HTTP Error 403: Forbidden",
-      "checkedAt": "2026-06-25T08:30:07.563389+00:00"
+      "status": "ok",
+      "items": 20,
+      "checkedAt": "2026-06-25T10:00:01.660955+00:00"
     },
     {
       "source": "Microsoft Research Blog",
@@ -485,7 +540,7 @@
       "category": "AI",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-06-25T08:30:07.563389+00:00"
+      "checkedAt": "2026-06-25T10:00:01.660955+00:00"
     },
     {
       "source": "Ollama Releases",
@@ -494,7 +549,7 @@
       "category": "AI",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-06-25T08:30:07.563389+00:00"
+      "checkedAt": "2026-06-25T10:00:01.660955+00:00"
     },
     {
       "source": "LiteLLM Releases",
@@ -503,7 +558,7 @@
       "category": "AI",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-06-25T08:30:07.563389+00:00"
+      "checkedAt": "2026-06-25T10:00:01.660955+00:00"
     },
     {
       "source": "Hugging Face Transformers Releases",
@@ -512,7 +567,7 @@
       "category": "AI",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-06-25T08:30:07.563389+00:00"
+      "checkedAt": "2026-06-25T10:00:01.660955+00:00"
     },
     {
       "source": "Model Context Protocol Python SDK Releases",
@@ -521,7 +576,7 @@
       "category": "AI",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-06-25T08:30:07.563389+00:00"
+      "checkedAt": "2026-06-25T10:00:01.660955+00:00"
     },
     {
       "source": "Model Context Protocol Spec Releases",
@@ -530,7 +585,7 @@
       "category": "AI",
       "status": "ok",
       "items": 8,
-      "checkedAt": "2026-06-25T08:30:07.563389+00:00"
+      "checkedAt": "2026-06-25T10:00:01.660955+00:00"
     },
     {
       "source": "OpenAI Cookbook Releases",
@@ -539,19 +594,8 @@
       "category": "AI",
       "status": "ok",
       "items": 0,
-      "checkedAt": "2026-06-25T08:30:07.563389+00:00"
+      "checkedAt": "2026-06-25T10:00:01.660955+00:00"
     }
   ],
-  "errors": [
-    {
-      "source": "Artificial Intelligence News",
-      "url": "https://www.artificialintelligence-news.com/categories/artificial-intelligence/feed/",
-      "error": "not well-formed (invalid token): line 1, column 158"
-    },
-    {
-      "source": "Import AI",
-      "url": "https://importai.substack.com/feed",
-      "error": "HTTP Error 403: Forbidden"
-    }
-  ]
+  "errors": []
 }
