@@ -123,7 +123,7 @@ Good next implementation passes:
 ## Cloudy Water Guide Pass - 2026-05-23
 
 - Added `learn/cloudy-water/` as the first full Troubleshooting article.
-- Added GPT Image 2 visual asset `assets/learn/cloudy-water-gpt-image-2.png`.
+- Added GPT Image 2 visual asset `assets/learn/cloudy-water-gpt-image-2.jpg`.
 - Refined the visual section so the four diagnosis cards use realistic crops from the main aquarium image instead of abstract CSS placeholders.
 - Replaced the generated decision infographic with a readable HTML/CSS customer chart: quick diagnosis table, common causes, helpful tools, and safety note.
 - Article structure now includes: hero visual, visual water-clarity display, what to do today, what-to-check-next guidance, common causes, helpful departments, and urgent-help callout.
