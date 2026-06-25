@@ -19,6 +19,10 @@ function uniqueSources(items) {
   return [...new Set(items.map(i => i.source).filter(Boolean))].sort();
 }
 
+function isToolSource(item) {
+  return item?.toolCandidate === true || item?.sourceType === 'tool-directory' || item?.sourceType === 'tool-release';
+}
+
 const FILL_EXCLUDED_REASONS = new Set([
   'fluff',
   'framework_or_plumbing',
@@ -28,7 +32,9 @@ const FILL_EXCLUDED_REASONS = new Set([
 ]);
 
 function visibleItemsForCategory(items, category, mode = 'curated') {
-  const categoryItems = items.filter(i => (i.category || 'AI') === category);
+  const categoryItems = items
+    .filter(i => !isToolSource(i))
+    .filter(i => (i.category || 'AI') === category);
   if (mode === 'all') return categoryItems;
   const curatedItems = categoryItems.filter(i => i.editorial_allow === true);
   if (category !== 'AI') return curatedItems.length ? curatedItems : categoryItems;
@@ -214,7 +220,7 @@ function renderTools(news) {
   const pool = news.items || [];
   const fallback = pool
     .filter(i => (i.category || 'AI') === 'AI')
-    .filter(i => i.toolCandidate === true || i.sourceType === 'tool-directory' || i.sourceType === 'tool-release')
+    .filter(isToolSource)
     .sort((a, b) => {
       const sourceScore = type => type === 'tool-directory' ? 2 : type === 'tool-release' ? 1 : 0;
       return (sourceScore(b.sourceType) - sourceScore(a.sourceType)) || ((b.score || 0) - (a.score || 0));
@@ -269,9 +275,7 @@ async function init() {
 
     document.getElementById('news-updated').textContent = `Updated: ${fmtDate(news.updatedAt)}`;
 
-    const sortSelect = document.getElementById('news-sort');
     const categorySelect = document.getElementById('news-category');
-    const viewSelect = document.getElementById('news-view');
     const sourceSelect = document.getElementById('news-source');
     const tierSelect = document.getElementById('news-tier');
     const archiveSelect = document.getElementById('news-archive');
@@ -298,7 +302,7 @@ async function init() {
 
     function applyFilters() {
       const category = categorySelect?.value || 'AI';
-      const mode = viewSelect?.value || 'curated';
+      const mode = 'curated';
       const source = sourceSelect?.value || '';
       const tier = tierSelect?.value || '';
       const q = (queryInput?.value || '').trim().toLowerCase();
@@ -316,12 +320,9 @@ async function init() {
         });
       }
 
-      const sortMode = sortSelect?.value || 'latest';
-      if (sortMode === 'top') items.sort((a, b) => (b.score || 0) - (a.score || 0));
-      else items.sort((a, b) => (new Date(b.published) - new Date(a.published)));
+      items.sort((a, b) => (new Date(b.published) - new Date(a.published)));
 
-
-      const limit = category === 'Science' ? 30 : (mode === 'all' ? 60 : 36);
+      const limit = category === 'Science' ? 30 : 36;
       items = items.slice(0, limit);
 
       const itemLabel = items.length === 1 ? 'story' : 'stories';
@@ -362,23 +363,17 @@ async function init() {
     }
 
     categorySelect.onchange = () => {
-      populateSources(categorySelect.value, viewSelect?.value || 'curated');
+      populateSources(categorySelect.value, 'curated');
       sourceSelect.value = '';
       applyFilters();
     };
-    viewSelect.onchange = () => {
-      populateSources(categorySelect.value, viewSelect.value);
-      sourceSelect.value = '';
-      applyFilters();
-    };
-    sortSelect.onchange = applyFilters;
     sourceSelect.onchange = applyFilters;
     tierSelect.onchange = applyFilters;
     archiveSelect.onchange = async () => {
       const path = archiveSelect.value || 'public/ai-news-latest.json';
       news = await loadJson(path);
       baseItems = news.items || [];
-      populateSources(categorySelect.value, viewSelect?.value || 'curated');
+      populateSources(categorySelect.value, 'curated');
       sourceSelect.value = '';
       renderTools(news);
       renderHealth(news);
@@ -387,7 +382,7 @@ async function init() {
     queryInput.oninput = applyFilters;
 
     // Init with default category
-    populateSources(categorySelect.value, viewSelect?.value || 'curated');
+    populateSources(categorySelect.value, 'curated');
     renderTools(news);
     renderHealth(news);
 
