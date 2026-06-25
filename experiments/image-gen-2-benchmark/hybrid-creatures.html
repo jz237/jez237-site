@@ -186,11 +186,16 @@
         return `${IMAGE_BASE_URL}${path.slice('images/'.length)}`;
       };
 
+      function isPortraitSize(value) {
+        const match = String(value || '').match(/^(\d+)x(\d+)$/);
+        return match ? Number(match[2]) > Number(match[1]) : false;
+      }
+
       function cardHtml(item) {
         const hybrid = item.hybridCreature || {};
         const kind = hybrid.imageKind === 'wild' ? 'Wild photo' : 'Development map';
         const src = imageUrl(item.image);
-        const portrait = String(item.size || '').includes('1536');
+        const portrait = isPortraitSize(item.size);
         return `
           <article class="card">
             <div class="image-wrap${portrait ? ' portrait' : ''}"><img src="${escapeHtml(src)}" alt="${escapeHtml(item.title)}" loading="lazy"></div>
