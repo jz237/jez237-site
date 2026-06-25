@@ -1,0 +1,19 @@
+[
+  {
+    "id": "2026-06-24-creature-design-nocturnal-limestone-cave-glider",
+    "title": "Nocturnal Limestone-Cave Glider",
+    "tests": "Creature design seed entry; tests whether GPT Image 2 can invent a believable animal from habitat/adaptation constraints with natural-history specimen realism.",
+    "prompt": "Design a believable limestone-cave creature with sensory whiskers, folded membrane wings, gripping feet, damp translucent skin, and faint bioluminescent organs, shown as a realistic natural-history studio specimen. Reusable template: Design a believable [HABITAT] creature with [ADAPTATION 1], [ADAPTATION 2], and [TEXTURE/COLOR], shown as a realistic natural-history creature study.",
+    "image": "images/2026-06-24-creature-design-nocturnal-limestone-cave-glider.jpg",
+    "date": "2026-06-24",
+    "batch": "Creature Design",
+    "slot": "creature-design",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "creatureDesign": {
+      "name": "Nocturnal Limestone-Cave Glider",
+      "description": "A believable limestone-cave animal built from gliding, gripping, sensory, translucent-skin, and faint bioluminescent adaptations.",
+      "template": "Design a believable [HABITAT] creature with [ADAPTATION 1], [ADAPTATION 2], and [TEXTURE/COLOR], shown as a realistic natural-history creature study."
+    }
+  }
+]
