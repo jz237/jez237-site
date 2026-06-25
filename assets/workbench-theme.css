@@ -93,6 +93,19 @@ button,
   border: 1px solid var(--wb-border) !important;
   border-radius: 8px !important;
 }
+select.control {
+  color-scheme: dark !important;
+}
+select.control option,
+select.control optgroup {
+  background: #101d2a !important;
+  color: #edf6f7 !important;
+}
+:root[data-theme="light"] select.control option,
+:root[data-theme="light"] select.control optgroup {
+  background: #ffffff !important;
+  color: #17212b !important;
+}
 .theme-toggle:hover,
 button:hover,
 .control:hover,
@@ -117,6 +130,8 @@ main.container,
 .entry-card,
 .timeline-entry,
 .news-card,
+.news-lead-story,
+.news-health,
 .item,
 .archive,
 .surface,
@@ -150,6 +165,7 @@ article[class*="panel"] {
 .entry-card,
 .timeline-entry,
 .news-card,
+.news-lead-story,
 .panel,
 .day-cell,
 .archive {
@@ -176,6 +192,9 @@ p,
 .section-sub,
 .news-meta,
 .news-card p,
+.news-card .news-why,
+.news-health,
+.news-health summary,
 .tile p,
 .feature p,
 .garden-hero p,
@@ -199,6 +218,8 @@ p,
 }
 .meta-pill,
 .badge,
+.news-summary-pill,
+.news-tool-pill,
 .tag,
 .day-tags .tag {
   background: rgba(255,255,255,0.055) !important;
@@ -296,6 +317,8 @@ body:has(.page-shell)::before { opacity: 0.55 !important; }
 .legend,
 .month-nav,
 .news-controls,
+.news-signal-section,
+.news-tools-strip,
 .gallery-card,
 .photo-tile,
 .game,
@@ -322,7 +345,7 @@ body:has(.page-shell)::before { opacity: 0.55 !important; }
   background:
     linear-gradient(115deg, rgba(7,17,25,0.16), rgba(7,17,25,0.48)),
     linear-gradient(180deg, rgba(0,0,0,0.02), rgba(0,0,0,0.38)),
-    url('../photos/garden/images/2026/04/rising-sun-redbud-2026-04-12.jpg') center/cover no-repeat !important;
+    url('https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/04/rising-sun-redbud-2026-04-12.jpg') center/cover no-repeat !important;
 }
 .page-shell .hero::after { background: linear-gradient(180deg, rgba(0,0,0,0.0), rgba(7,17,25,0.54)) !important; }
 .btn-earth,
@@ -352,6 +375,9 @@ p,
 .bullet-list,
 .section-sub,
 .news-card p,
+.news-card .news-why,
+.news-impact,
+.news-lead-what,
 .tile p,
 .feature p,
 .hero p,
@@ -365,6 +391,16 @@ p,
 .entry-copy,
 .item .muted {
   color: #c3d3da !important;
+}
+
+.news-card .news-why {
+  color: #d7e9ee !important;
+  border-top-color: rgba(160,198,216,0.16) !important;
+}
+
+.signal-badge {
+  color: var(--wb-gold) !important;
+  border-color: rgba(241,209,142,0.32) !important;
 }
 .hero .section-copy { color: #edf6f7 !important; }
 .section-card,
@@ -888,7 +924,6 @@ p,
     width: 100% !important;
     max-width: 100% !important;
     padding: 0 !important;
-    overflow-x: hidden !important;
   }
   .desktop-hub {
     width: 100% !important;
@@ -897,13 +932,11 @@ p,
     border-radius: 0;
     box-shadow: none;
     min-height: auto;
-    overflow-x: hidden !important;
   }
   .hub-main {
     width: 100% !important;
     max-width: 100% !important;
     padding: 14px 10px 28px !important;
-    overflow-x: hidden !important;
   }
   .weather-page-intro {
     margin-bottom: 10px !important;
@@ -1115,5 +1148,60 @@ p,
   }
   .weather-five-day > div {
     min-height: 132px;
+  }
+}
+
+@media (max-width: 760px), (hover: none) and (pointer: coarse) {
+  html.home-root,
+  html.home-root body.home-page {
+    height: auto !important;
+    min-height: 100% !important;
+    overflow-x: clip !important;
+    overflow-y: auto !important;
+    overscroll-behavior-x: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  body.home-page,
+  body.home-page .workbench-home,
+  body.home-page .desktop-hub,
+  body.home-page .hub-main {
+    overflow-x: clip !important;
+    overflow-y: visible !important;
+    touch-action: pan-y;
+  }
+
+  body.home-page {
+    overflow-y: auto !important;
+  }
+
+  body.home-page *,
+  body.home-page *::before,
+  body.home-page *::after {
+    touch-action: pan-y;
+  }
+}
+
+body.garden-backdrop {
+  background:
+    linear-gradient(180deg, rgba(7,25,16,.76) 0%, rgba(19,62,31,.7) 38%, rgba(7,18,10,.9) 100%),
+    linear-gradient(90deg, rgba(5,16,10,.54) 0%, rgba(25,76,35,.2) 46%, rgba(4,15,9,.56) 100%),
+    url("garden/garden-page-bg-20260531.webp") center top / cover no-repeat scroll !important;
+  color: var(--earth-text, var(--wb-text)) !important;
+}
+
+body.garden-backdrop::before {
+  background: none !important;
+}
+
+body.garden-backdrop header#site-nav,
+body.garden-backdrop > header:not(.home-hidden-nav) {
+  background: rgba(27,38,24,.78) !important;
+  border-bottom-color: rgba(202,225,173,.22) !important;
+}
+
+@media (max-width: 760px), (hover: none) and (pointer: coarse) {
+  body.garden-backdrop {
+    background-attachment: scroll !important;
   }
 }
