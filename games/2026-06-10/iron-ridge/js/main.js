@@ -980,7 +980,7 @@ function gameFrame(dt) {
       input.turn = 0;
     } else {
       const stickAng = Math.atan2(input.stickX, input.stickY); // up = 0
-      const want = G.camYaw + stickAng;
+      const want = G.camYaw + stickAng + Math.PI;
       const cur = G.player.visualYaw();
       let err = want - cur;
       err = Math.atan2(Math.sin(err), Math.cos(err));
