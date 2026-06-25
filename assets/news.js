@@ -97,6 +97,7 @@ function renderNews(items, featuredUrlSet = new Set(), container = null) {
     const badges = el('div', 'news-card-badges');
     if (n.signalGroup) badges.appendChild(el('span', 'badge signal-badge', n.signalGroup));
     if (n.sourceTier) badges.appendChild(el('span', `badge source-badge ${(n.sourceRole || '').toLowerCase()}`, n.sourceTier));
+    if ((n.clusterSize || 0) > 1) badges.appendChild(el('span', 'badge cluster-badge', `${n.clusterSize} sources`));
 
     const title = document.createElement('a');
     title.className = 'news-card-title';
@@ -113,9 +114,37 @@ function renderNews(items, featuredUrlSet = new Set(), container = null) {
 
     if (n.summary) body.appendChild(el('p', 'muted', n.summary));
     if (n.whyItMatters) body.appendChild(el('p', 'news-why', n.whyItMatters));
+    if (n.brief?.practicalImpact && isFeatured) body.appendChild(el('p', 'news-impact', n.brief.practicalImpact));
     card.appendChild(body);
     wrap.appendChild(card);
   });
+}
+
+function renderLeadStory(wrap, story) {
+  if (!story) return;
+  const lead = el('article', 'news-lead-story');
+  const img = document.createElement('img');
+  img.alt = '';
+  img.loading = 'lazy';
+  img.referrerPolicy = 'no-referrer';
+  img.src = story.image && !isLikelyBadImage(story.image) ? story.image : placeholderImage(story.source);
+  lead.appendChild(img);
+
+  const body = el('div', 'news-lead-body');
+  body.appendChild(el('div', 'eyebrow', story.signalGroup || 'Top story'));
+  const title = document.createElement('a');
+  title.href = story.url;
+  title.target = '_blank';
+  title.rel = 'noopener';
+  title.className = 'news-lead-title';
+  title.textContent = story.title || 'Untitled';
+  body.appendChild(title);
+  body.appendChild(el('div', 'news-meta', `${story.source || 'Unknown'} · ${fmtDate(story.published)} · score ${story.score ?? '-'}`));
+  if (story.brief?.whatHappened) body.appendChild(el('p', 'news-lead-what', story.brief.whatHappened));
+  if (story.brief?.whoItAffects) body.appendChild(el('p', 'news-why', story.brief.whoItAffects));
+  if (story.brief?.practicalImpact) body.appendChild(el('p', 'news-impact', story.brief.practicalImpact));
+  lead.appendChild(body);
+  wrap.appendChild(lead);
 }
 
 function renderSection(wrap, title, items, featuredSet = new Set()) {
@@ -161,10 +190,52 @@ function renderSummary(items, mode) {
   ].forEach(label => summary.appendChild(el('span', 'news-summary-pill', label)));
 }
 
+function renderTools(news) {
+  const wrap = document.getElementById('news-tools');
+  if (!wrap) return;
+  const tools = (news.tryWorthy || [])
+    .filter(i => i.editorial_allow)
+    .slice(0, 6);
+  wrap.innerHTML = '';
+  if (!tools.length) return;
+  wrap.appendChild(el('h2', 'news-tools-title', 'Tools Worth Trying'));
+  const row = el('div', 'news-tools-row');
+  tools.forEach(item => {
+    const a = document.createElement('a');
+    a.className = 'news-tool-pill';
+    a.href = item.url;
+    a.target = '_blank';
+    a.rel = 'noopener';
+    a.textContent = item.title || 'Untitled';
+    row.appendChild(a);
+  });
+  wrap.appendChild(row);
+}
+
+function renderHealth(news) {
+  const body = document.getElementById('news-health-body');
+  if (!body) return;
+  const health = news.sourceHealth || [];
+  const ok = health.filter(s => s.status === 'ok').length;
+  const errors = health.filter(s => s.status !== 'ok');
+  const itemTotal = health.reduce((sum, s) => sum + (s.items || 0), 0);
+  body.innerHTML = '';
+  body.appendChild(el('p', 'news-health-line', `${ok}/${health.length} sources healthy · ${itemTotal} feed items checked · ${errors.length} errors`));
+  if (errors.length) {
+    const list = el('ul', 'news-health-errors');
+    errors.forEach(error => list.appendChild(el('li', '', `${error.source}: ${error.error || error.status}`)));
+    body.appendChild(list);
+  }
+}
+
 async function init() {
   try {
-    const news = await loadJson('public/ai-news-latest.json');
-    const baseItems = news.items || [];
+    let news = await loadJson('public/ai-news-latest.json');
+    let baseItems = news.items || [];
+    let archiveIndex = { archives: [] };
+    try {
+      archiveIndex = await loadJson('public/archive-index.json');
+    } catch {}
 
     document.getElementById('news-updated').textContent = `Updated: ${fmtDate(news.updatedAt)}`;
 
@@ -173,7 +244,15 @@ async function init() {
     const viewSelect = document.getElementById('news-view');
     const sourceSelect = document.getElementById('news-source');
     const tierSelect = document.getElementById('news-tier');
+    const archiveSelect = document.getElementById('news-archive');
     const queryInput = document.getElementById('news-query');
+
+    (archiveIndex.archives || []).forEach(entry => {
+      const opt = document.createElement('option');
+      opt.value = entry.path;
+      opt.textContent = `${entry.date} (${entry.count})`;
+      archiveSelect.appendChild(opt);
+    });
 
     function populateSources(category, mode) {
       const categoryItems = visibleItemsForCategory(baseItems, category, mode);
@@ -234,7 +313,8 @@ async function init() {
         .slice(0, topCount);
       const topSet = new Set(topStories.map(i => i.url));
 
-      renderSection(wrap, category === 'Science' ? 'Discovery Watch' : 'Top Briefing', topStories, topSet);
+      renderLeadStory(wrap, topStories[0]);
+      renderSection(wrap, category === 'Science' ? 'Discovery Watch' : 'Top Briefing', topStories.slice(1), topSet);
 
       const remaining = items.filter(i => !topSet.has(i.url));
       const grouped = groupBySignal(remaining);
@@ -258,10 +338,22 @@ async function init() {
     sortSelect.onchange = applyFilters;
     sourceSelect.onchange = applyFilters;
     tierSelect.onchange = applyFilters;
+    archiveSelect.onchange = async () => {
+      const path = archiveSelect.value || 'public/ai-news-latest.json';
+      news = await loadJson(path);
+      baseItems = news.items || [];
+      populateSources(categorySelect.value, viewSelect?.value || 'curated');
+      sourceSelect.value = '';
+      renderTools(news);
+      renderHealth(news);
+      applyFilters();
+    };
     queryInput.oninput = applyFilters;
 
     // Init with default category
     populateSources(categorySelect.value, viewSelect?.value || 'curated');
+    renderTools(news);
+    renderHealth(news);
 
     applyFilters();
   } catch (e) {
