@@ -1,6 +1,6 @@
 {
   "date": "2026-06-24",
-  "updatedAt": "2026-06-25T01:00:01.345046+00:00",
+  "updatedAt": "2026-06-25T02:00:01.960278+00:00",
   "items": [
     {
       "title": "Anthropic Launches Claude Tag, Bringing AI Agents Into Slack",
@@ -14,11 +14,11 @@
       "image": "public/thumbnails/news-e3b449cc3083c2ac5c.jpg",
       "published": "2026-06-24T15:52:37+00:00",
       "firstSeen": "2026-06-24T17:00:01.330867+00:00",
-      "lastSeen": "2026-06-25T01:00:01.345046+00:00",
+      "lastSeen": "2026-06-25T02:00:01.960278+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 24.8037,
+      "score": 24.7804,
       "signalGroup": "Model releases",
       "sourceTier": "Reported source",
       "whyItMatters": "A model release changes the practical menu: capability, pricing, context, or deployment options may shift for real workflows.",
@@ -43,11 +43,11 @@
       "image": "public/thumbnails/news-3ae4c12437f36efc37.avif",
       "published": "2026-06-24T18:46:18+00:00",
       "firstSeen": "2026-06-24T20:00:01.336973+00:00",
-      "lastSeen": "2026-06-25T01:00:01.345046+00:00",
+      "lastSeen": "2026-06-25T02:00:01.960278+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 22.4752,
+      "score": 22.4499,
       "signalGroup": "Model releases",
       "sourceTier": "Reported source",
       "whyItMatters": "A model release changes the practical menu: capability, pricing, context, or deployment options may shift for real workflows.",
@@ -73,11 +73,11 @@
       "image": "",
       "published": "2026-06-24T23:59:03+00:00",
       "firstSeen": "2026-06-25T00:13:24.087357+00:00",
-      "lastSeen": "2026-06-25T01:00:01.345046+00:00",
+      "lastSeen": "2026-06-25T02:00:01.960278+00:00",
       "model_release": true,
       "editorial_allow": false,
       "editorial_reason": "missing_image",
-      "score": 20.6594,
+      "score": 20.6301,
       "signalGroup": "Model releases",
       "sourceTier": "Primary source",
       "whyItMatters": "A model release changes the practical menu: capability, pricing, context, or deployment options may shift for real workflows.",
@@ -102,11 +102,11 @@
       "image": "public/thumbnails/news-4cf0a85abf3b00cc6d.png",
       "published": "2026-06-24T16:30:01+00:00",
       "firstSeen": "2026-06-24T17:00:01.330867+00:00",
-      "lastSeen": "2026-06-25T01:00:01.345046+00:00",
+      "lastSeen": "2026-06-25T02:00:01.960278+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 18.5987,
+      "score": 18.5749,
       "signalGroup": "Model releases",
       "sourceTier": "Primary source",
       "whyItMatters": "A model release changes the practical menu: capability, pricing, context, or deployment options may shift for real workflows.",
@@ -118,6 +118,35 @@
       },
       "tryWorthy": true,
       "clusterKey": "gemini-introducing-computer-use-gemini-flash"
+    },
+    {
+      "title": "v0.30.11",
+      "url": "https://github.com/ollama/ollama/releases/tag/v0.30.11-rc0",
+      "source": "Ollama Releases",
+      "sourceUrl": "https://github.com/ollama/ollama/releases.atom",
+      "sourceWeight": 0.9,
+      "sourceRole": "primary",
+      "category": "AI",
+      "summary": "What's Changed\n\nlaunch: add thinking capability detection to opencode by @hoyyeva in #15434\nlaunch: auto-install Claude Code by @hoyyeva in #16802\nlaunch: auto-install opencode when missing by @hoyyeva in #16806\ndiscover: fix inverted iGPU/dGPU Vulkan classification on Windows hybrid graphics by @Sahil170595 in #16669\nmlxrunner: unify and tune speculative decoding by @jessegross in #16791\nlaunch/codex: detect model drift when Codex App UI switches by @BruceMacD in #16864\nllama: add sm_86 architecture to cuda_v13_windows preset by @anishesg in #16834\nllm: size mmproj offload by projector memory",
+      "image": "public/thumbnails/news-24b5cb1b280e0447d1.png",
+      "published": "2026-06-25T01:52:05+00:00",
+      "firstSeen": "2026-06-25T02:00:01.960278+00:00",
+      "lastSeen": "2026-06-25T02:00:01.960278+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 14.256,
+      "signalGroup": "Agents & tooling",
+      "sourceTier": "Primary source",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
+      "brief": {
+        "whatHappened": "v0.30.11",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via Ollama Releases."
+      },
+      "tryWorthy": true,
+      "clusterKey": "df1c1479ac35",
+      "imageOriginal": "https://opengraph.githubassets.com/25c3082525f821c9c3ca97df5151b917525bcbd7b534967a18a22b333991bf7a/ollama/ollama/releases/tag/v0.30.11-rc0"
     },
     {
       "title": "Mistral OCR 4 targets the enterprise back office",
@@ -134,7 +163,7 @@
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 13.9269,
+      "score": 13.9028,
       "signalGroup": "Model releases",
       "sourceTier": "Reported source",
       "whyItMatters": "A model release changes the practical menu: capability, pricing, context, or deployment options may shift for real workflows.",
@@ -161,10 +190,10 @@
       "image": "",
       "published": "2026-06-24T09:00:00+00:00",
       "firstSeen": "2026-06-24T10:00:01.752835+00:00",
-      "lastSeen": "2026-06-25T01:00:01.345046+00:00",
+      "lastSeen": "2026-06-25T02:00:01.960278+00:00",
       "editorial_allow": false,
       "editorial_reason": "missing_image",
-      "score": 13.3533,
+      "score": 13.334,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Reported source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -189,10 +218,10 @@
       "image": "",
       "published": "2026-06-24T10:00:00+00:00",
       "firstSeen": "2026-06-24T11:00:01.663059+00:00",
-      "lastSeen": "2026-06-25T01:00:01.345046+00:00",
+      "lastSeen": "2026-06-25T02:00:01.960278+00:00",
       "editorial_allow": false,
       "editorial_reason": "missing_image",
-      "score": 12.3732,
+      "score": 12.3533,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Reported source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -217,10 +246,10 @@
       "image": "public/thumbnails/news-5072f12ae196a637ae.avif",
       "published": "2026-06-24T21:12:17+00:00",
       "firstSeen": "2026-06-24T23:00:01.536104+00:00",
-      "lastSeen": "2026-06-25T01:00:01.345046+00:00",
+      "lastSeen": "2026-06-25T02:00:01.960278+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.0399,
+      "score": 11.0128,
       "signalGroup": "Policy & risk",
       "sourceTier": "Reported source",
       "whyItMatters": "Policy and risk stories often become product constraints later, especially around data access, safety claims, export rules, and copyright.",
@@ -246,10 +275,10 @@
       "image": "public/thumbnails/news-41858889944dcdc4fa.jpg",
       "published": "2026-06-24T07:14:26+00:00",
       "firstSeen": "2026-06-24T23:32:54.647355+00:00",
-      "lastSeen": "2026-06-25T01:00:01.345046+00:00",
+      "lastSeen": "2026-06-25T02:00:01.960278+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.5756,
+      "score": 10.5572,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Reported source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -275,10 +304,10 @@
       "image": "public/thumbnails/news-c1cb7cc34027d88fbb.png",
       "published": "2026-06-24T18:20:27+00:00",
       "firstSeen": "2026-06-24T23:32:54.647355+00:00",
-      "lastSeen": "2026-06-25T01:00:01.345046+00:00",
+      "lastSeen": "2026-06-25T02:00:01.960278+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 7.1222,
+      "score": 7.0972,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Reported source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -303,10 +332,10 @@
       "image": "public/thumbnails/news-3fe9fc86097257eeda.png",
       "published": "2026-06-24T16:56:24+00:00",
       "firstSeen": "2026-06-24T23:32:54.647355+00:00",
-      "lastSeen": "2026-06-25T01:00:01.345046+00:00",
+      "lastSeen": "2026-06-25T02:00:01.960278+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 6.7873,
+      "score": 6.7632,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Reported source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -318,34 +347,6 @@
       },
       "tryWorthy": true,
       "clusterKey": "how-loka-built-natural-low-latency-voice"
-    },
-    {
-      "title": "AI researchers continue to leave Google for its rivals",
-      "url": "https://techcrunch.com/2026/06/24/ai-researchers-continue-to-leave-google-for-its-rivals",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "sourceRole": "secondary",
-      "category": "AI",
-      "summary": "Top AI researchers Jonas Adler and Alexander Pritzel are leaving Google for Anthropic, following departures from top scientists Noam Shazeer and John Jumper.",
-      "image": "public/thumbnails/news-3a4d4d75a0f5fc6e11.webp",
-      "published": "2026-06-24T21:42:07+00:00",
-      "firstSeen": "2026-06-24T21:42:28.473127+00:00",
-      "lastSeen": "2026-06-25T01:00:01.345046+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 6.5937,
-      "signalGroup": "Research",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Research items are useful when they hint at future product behavior, benchmark movement, or techniques likely to show up in tools.",
-      "brief": {
-        "whatHappened": "AI researchers continue to leave Google for its rivals",
-        "whoItAffects": "People tracking where model behavior, evaluation, or training techniques may head next.",
-        "practicalImpact": "Useful if the idea looks likely to move from paper into products or tooling.",
-        "sourceFrame": "Seen via TechCrunch AI."
-      },
-      "tryWorthy": false,
-      "clusterKey": "google-researchers-continue-leave-google-rivals"
     }
   ],
   "tryWorthy": [
@@ -361,11 +362,11 @@
       "image": "public/thumbnails/news-3ae4c12437f36efc37.avif",
       "published": "2026-06-24T18:46:18+00:00",
       "firstSeen": "2026-06-24T20:00:01.336973+00:00",
-      "lastSeen": "2026-06-25T01:00:01.345046+00:00",
+      "lastSeen": "2026-06-25T02:00:01.960278+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 22.4752,
+      "score": 22.4499,
       "signalGroup": "Model releases",
       "sourceTier": "Reported source",
       "whyItMatters": "A model release changes the practical menu: capability, pricing, context, or deployment options may shift for real workflows.",
@@ -380,33 +381,33 @@
       "imageOriginal": "https://media.thenextweb.com/2026/06/google-gemini-3-5-flash-computer-use-built-in-tool.avif"
     },
     {
-      "title": "Introducing computer use in Gemini 3.5 Flash",
-      "url": "https://deepmind.google/blog/introducing-computer-use-in-gemini-3-5-flash",
-      "source": "Google DeepMind Blog",
-      "sourceUrl": "https://deepmind.google/blog/rss.xml",
-      "sourceWeight": 0.95,
+      "title": "v0.30.11",
+      "url": "https://github.com/ollama/ollama/releases/tag/v0.30.11-rc0",
+      "source": "Ollama Releases",
+      "sourceUrl": "https://github.com/ollama/ollama/releases.atom",
+      "sourceWeight": 0.9,
       "sourceRole": "primary",
       "category": "AI",
-      "summary": "",
-      "image": "public/thumbnails/news-4cf0a85abf3b00cc6d.png",
-      "published": "2026-06-24T16:30:01+00:00",
-      "firstSeen": "2026-06-24T17:00:01.330867+00:00",
-      "lastSeen": "2026-06-25T01:00:01.345046+00:00",
-      "model_release": true,
+      "summary": "What's Changed\n\nlaunch: add thinking capability detection to opencode by @hoyyeva in #15434\nlaunch: auto-install Claude Code by @hoyyeva in #16802\nlaunch: auto-install opencode when missing by @hoyyeva in #16806\ndiscover: fix inverted iGPU/dGPU Vulkan classification on Windows hybrid graphics by @Sahil170595 in #16669\nmlxrunner: unify and tune speculative decoding by @jessegross in #16791\nlaunch/codex: detect model drift when Codex App UI switches by @BruceMacD in #16864\nllama: add sm_86 architecture to cuda_v13_windows preset by @anishesg in #16834\nllm: size mmproj offload by projector memory",
+      "image": "public/thumbnails/news-24b5cb1b280e0447d1.png",
+      "published": "2026-06-25T01:52:05+00:00",
+      "firstSeen": "2026-06-25T02:00:01.960278+00:00",
+      "lastSeen": "2026-06-25T02:00:01.960278+00:00",
       "editorial_allow": true,
-      "editorial_reason": "model_release",
-      "score": 18.5987,
-      "signalGroup": "Model releases",
+      "editorial_reason": "major_product_news",
+      "score": 14.256,
+      "signalGroup": "Agents & tooling",
       "sourceTier": "Primary source",
-      "whyItMatters": "A model release changes the practical menu: capability, pricing, context, or deployment options may shift for real workflows.",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
       "brief": {
-        "whatHappened": "Introducing computer use in Gemini 3.5 Flash",
-        "whoItAffects": "Builders, tool users, and anyone comparing model capability or cost.",
-        "practicalImpact": "Check whether the release changes what is worth trying, routing, or paying for.",
-        "sourceFrame": "Seen via Google DeepMind Blog."
+        "whatHappened": "v0.30.11",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via Ollama Releases."
       },
       "tryWorthy": true,
-      "clusterKey": "gemini-introducing-computer-use-gemini-flash"
+      "clusterKey": "df1c1479ac35",
+      "imageOriginal": "https://opengraph.githubassets.com/25c3082525f821c9c3ca97df5151b917525bcbd7b534967a18a22b333991bf7a/ollama/ollama/releases/tag/v0.30.11-rc0"
     },
     {
       "title": "Mistral OCR 4 targets the enterprise back office",
@@ -423,7 +424,7 @@
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 13.9269,
+      "score": 13.9028,
       "signalGroup": "Model releases",
       "sourceTier": "Reported source",
       "whyItMatters": "A model release changes the practical menu: capability, pricing, context, or deployment options may shift for real workflows.",
@@ -450,10 +451,10 @@
       "image": "public/thumbnails/news-c1cb7cc34027d88fbb.png",
       "published": "2026-06-24T18:20:27+00:00",
       "firstSeen": "2026-06-24T23:32:54.647355+00:00",
-      "lastSeen": "2026-06-25T01:00:01.345046+00:00",
+      "lastSeen": "2026-06-25T02:00:01.960278+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 7.1222,
+      "score": 7.0972,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Reported source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -478,10 +479,10 @@
       "image": "public/thumbnails/news-3fe9fc86097257eeda.png",
       "published": "2026-06-24T16:56:24+00:00",
       "firstSeen": "2026-06-24T23:32:54.647355+00:00",
-      "lastSeen": "2026-06-25T01:00:01.345046+00:00",
+      "lastSeen": "2026-06-25T02:00:01.960278+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 6.7873,
+      "score": 6.7632,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Reported source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -506,10 +507,10 @@
       "image": "public/thumbnails/news-78bec699597a1cf453.jpg",
       "published": "2026-06-24T20:11:59+00:00",
       "firstSeen": "2026-06-24T23:00:01.536104+00:00",
-      "lastSeen": "2026-06-25T01:00:01.345046+00:00",
+      "lastSeen": "2026-06-25T02:00:01.960278+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.8127,
+      "score": 5.7863,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Reported source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -534,10 +535,10 @@
       "image": "public/thumbnails/news-2ff5cd852e38e450f4.webp",
       "published": "2026-06-24T17:16:24+00:00",
       "firstSeen": "2026-06-24T17:17:13.376808+00:00",
-      "lastSeen": "2026-06-25T01:00:01.345046+00:00",
+      "lastSeen": "2026-06-25T02:00:01.960278+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 4.9775,
+      "score": 4.9532,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
@@ -559,7 +560,7 @@
       "category": "AI",
       "status": "ok",
       "items": 1020,
-      "checkedAt": "2026-06-25T01:00:01.345046+00:00"
+      "checkedAt": "2026-06-25T02:00:01.960278+00:00"
     },
     {
       "source": "Google AI Blog",
@@ -568,7 +569,7 @@
       "category": "AI",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-06-25T01:00:01.345046+00:00"
+      "checkedAt": "2026-06-25T02:00:01.960278+00:00"
     },
     {
       "source": "Google DeepMind Blog",
@@ -577,7 +578,7 @@
       "category": "AI",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-06-25T01:00:01.345046+00:00"
+      "checkedAt": "2026-06-25T02:00:01.960278+00:00"
     },
     {
       "source": "Google Research Blog",
@@ -586,7 +587,7 @@
       "category": "AI",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-06-25T01:00:01.345046+00:00"
+      "checkedAt": "2026-06-25T02:00:01.960278+00:00"
     },
     {
       "source": "Hugging Face Blog",
@@ -595,7 +596,7 @@
       "category": "AI",
       "status": "ok",
       "items": 810,
-      "checkedAt": "2026-06-25T01:00:01.345046+00:00"
+      "checkedAt": "2026-06-25T02:00:01.960278+00:00"
     },
     {
       "source": "NVIDIA Blog",
@@ -604,7 +605,7 @@
       "category": "AI",
       "status": "ok",
       "items": 18,
-      "checkedAt": "2026-06-25T01:00:01.345046+00:00"
+      "checkedAt": "2026-06-25T02:00:01.960278+00:00"
     },
     {
       "source": "AWS Machine Learning Blog",
@@ -613,7 +614,7 @@
       "category": "AI",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-06-25T01:00:01.345046+00:00"
+      "checkedAt": "2026-06-25T02:00:01.960278+00:00"
     },
     {
       "source": "Artificial Intelligence News",
@@ -622,7 +623,7 @@
       "category": "AI",
       "status": "ok",
       "items": 12,
-      "checkedAt": "2026-06-25T01:00:01.345046+00:00"
+      "checkedAt": "2026-06-25T02:00:01.960278+00:00"
     },
     {
       "source": "Ars Technica (AI/Tech)",
@@ -631,7 +632,7 @@
       "category": "AI",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-06-25T01:00:01.345046+00:00"
+      "checkedAt": "2026-06-25T02:00:01.960278+00:00"
     },
     {
       "source": "Together AI Blog",
@@ -640,7 +641,7 @@
       "category": "AI",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-06-25T01:00:01.345046+00:00"
+      "checkedAt": "2026-06-25T02:00:01.960278+00:00"
     },
     {
       "source": "TechRepublic AI",
@@ -649,7 +650,7 @@
       "category": "AI",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-06-25T01:00:01.345046+00:00"
+      "checkedAt": "2026-06-25T02:00:01.960278+00:00"
     },
     {
       "source": "ScienceDaily AI",
@@ -658,7 +659,7 @@
       "category": "AI",
       "status": "ok",
       "items": 60,
-      "checkedAt": "2026-06-25T01:00:01.345046+00:00"
+      "checkedAt": "2026-06-25T02:00:01.960278+00:00"
     },
     {
       "source": "The Next Web",
@@ -667,7 +668,7 @@
       "category": "AI",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-06-25T01:00:01.345046+00:00"
+      "checkedAt": "2026-06-25T02:00:01.960278+00:00"
     },
     {
       "source": "BBC Discovery",
@@ -676,7 +677,7 @@
       "category": "Science",
       "status": "ok",
       "items": 847,
-      "checkedAt": "2026-06-25T01:00:01.345046+00:00"
+      "checkedAt": "2026-06-25T02:00:01.960278+00:00"
     },
     {
       "source": "BBC Infinite Monkey Cage",
@@ -685,7 +686,7 @@
       "category": "Science",
       "status": "ok",
       "items": 239,
-      "checkedAt": "2026-06-25T01:00:01.345046+00:00"
+      "checkedAt": "2026-06-25T02:00:01.960278+00:00"
     },
     {
       "source": "BBC The Life Scientific",
@@ -694,7 +695,7 @@
       "category": "Science",
       "status": "ok",
       "items": 356,
-      "checkedAt": "2026-06-25T01:00:01.345046+00:00"
+      "checkedAt": "2026-06-25T02:00:01.960278+00:00"
     },
     {
       "source": "TechCrunch AI",
@@ -703,7 +704,7 @@
       "category": "AI",
       "status": "ok",
       "items": 19,
-      "checkedAt": "2026-06-25T01:00:01.345046+00:00"
+      "checkedAt": "2026-06-25T02:00:01.960278+00:00"
     },
     {
       "source": "Anthropic News",
@@ -712,7 +713,7 @@
       "category": "AI",
       "status": "ok",
       "items": 231,
-      "checkedAt": "2026-06-25T01:00:01.345046+00:00"
+      "checkedAt": "2026-06-25T02:00:01.960278+00:00"
     },
     {
       "source": "The Verge AI",
@@ -721,7 +722,7 @@
       "category": "AI",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-06-25T01:00:01.345046+00:00"
+      "checkedAt": "2026-06-25T02:00:01.960278+00:00"
     },
     {
       "source": "VentureBeat AI",
@@ -730,7 +731,7 @@
       "category": "AI",
       "status": "ok",
       "items": 7,
-      "checkedAt": "2026-06-25T01:00:01.345046+00:00"
+      "checkedAt": "2026-06-25T02:00:01.960278+00:00"
     },
     {
       "source": "Simon Willison",
@@ -739,7 +740,7 @@
       "category": "AI",
       "status": "ok",
       "items": 30,
-      "checkedAt": "2026-06-25T01:00:01.345046+00:00"
+      "checkedAt": "2026-06-25T02:00:01.960278+00:00"
     },
     {
       "source": "Interconnects AI",
@@ -748,7 +749,7 @@
       "category": "AI",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-06-25T01:00:01.345046+00:00"
+      "checkedAt": "2026-06-25T02:00:01.960278+00:00"
     },
     {
       "source": "Latent Space",
@@ -757,7 +758,7 @@
       "category": "AI",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-06-25T01:00:01.345046+00:00"
+      "checkedAt": "2026-06-25T02:00:01.960278+00:00"
     },
     {
       "source": "Import AI",
@@ -766,7 +767,7 @@
       "category": "AI",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-06-25T01:00:01.345046+00:00"
+      "checkedAt": "2026-06-25T02:00:01.960278+00:00"
     },
     {
       "source": "Microsoft Research Blog",
@@ -775,7 +776,7 @@
       "category": "AI",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-06-25T01:00:01.345046+00:00"
+      "checkedAt": "2026-06-25T02:00:01.960278+00:00"
     },
     {
       "source": "Ollama Releases",
@@ -784,7 +785,7 @@
       "category": "AI",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-06-25T01:00:01.345046+00:00"
+      "checkedAt": "2026-06-25T02:00:01.960278+00:00"
     },
     {
       "source": "LiteLLM Releases",
@@ -793,7 +794,7 @@
       "category": "AI",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-06-25T01:00:01.345046+00:00"
+      "checkedAt": "2026-06-25T02:00:01.960278+00:00"
     },
     {
       "source": "Hugging Face Transformers Releases",
@@ -802,7 +803,7 @@
       "category": "AI",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-06-25T01:00:01.345046+00:00"
+      "checkedAt": "2026-06-25T02:00:01.960278+00:00"
     },
     {
       "source": "Model Context Protocol Python SDK Releases",
@@ -811,7 +812,7 @@
       "category": "AI",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-06-25T01:00:01.345046+00:00"
+      "checkedAt": "2026-06-25T02:00:01.960278+00:00"
     },
     {
       "source": "Model Context Protocol Spec Releases",
@@ -820,7 +821,7 @@
       "category": "AI",
       "status": "ok",
       "items": 8,
-      "checkedAt": "2026-06-25T01:00:01.345046+00:00"
+      "checkedAt": "2026-06-25T02:00:01.960278+00:00"
     },
     {
       "source": "OpenAI Cookbook Releases",
@@ -829,7 +830,7 @@
       "category": "AI",
       "status": "ok",
       "items": 0,
-      "checkedAt": "2026-06-25T01:00:01.345046+00:00"
+      "checkedAt": "2026-06-25T02:00:01.960278+00:00"
     }
   ],
   "errors": []
