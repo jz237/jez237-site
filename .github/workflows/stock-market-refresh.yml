@@ -1,0 +1,32 @@
+name: Refresh Stock Market Data
+
+on:
+  schedule:
+    - cron: "32 23 * * 1-5" # after regular U.S. market close
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Refresh stock market data
+        run: node scripts/refresh_stock_market_data.mjs
+
+      - name: Commit changes (if any)
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add stock-market/data/stocks.json stock-market/data/history.json
+          git diff --staged --quiet || git commit -m "chore: refresh stock market data"
+          git push
