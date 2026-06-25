@@ -1092,15 +1092,16 @@ def main():
     all_items.sort(key=lambda x: (x["published_dt"], x["score"]), reverse=True)
     all_items = all_items[:MAX_STORE_ITEMS]
 
-    # Build outputs
+    # Build outputs. Tool-source records belong in the tool strip, not the article grids.
+    article_items = [i for i in all_items if not i.get("toolCandidate")]
     today = now.astimezone(LOCAL_TZ).date()
-    today_items = [it for it in all_items if it["published_dt"].astimezone(LOCAL_TZ).date() == today]
+    today_items = [it for it in article_items if it["published_dt"].astimezone(LOCAL_TZ).date() == today]
     today_items.sort(key=lambda x: x["score"], reverse=True)
     daily_top = today_items[:TOP_DAILY_COUNT]
 
-    ai_items = sorted([i for i in all_items if i.get("category","AI") == "AI"],
+    ai_items = sorted([i for i in article_items if i.get("category","AI") == "AI"],
                       key=lambda x: (x["published_dt"], x["score"]), reverse=True)[:40]
-    sci_items = sorted([i for i in all_items if i.get("category") == "Science"],
+    sci_items = sorted([i for i in article_items if i.get("category") == "Science"],
                        key=lambda x: (x["published_dt"], x["score"]), reverse=True)[:20]
     latest = ai_items + sci_items
     tool_items = sorted(

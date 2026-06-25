@@ -265,6 +265,21 @@ select.control {
   color-scheme: dark;
 }
 
+.archive-control {
+  min-width: 190px;
+  border-color: rgba(72, 160, 255, 0.72);
+  background: linear-gradient(180deg, rgba(28, 88, 142, 0.72), rgba(20, 54, 92, 0.9));
+  box-shadow: 0 0 0 1px rgba(72, 160, 255, 0.18), 0 0 18px rgba(72, 160, 255, 0.16);
+  color: #ffffff;
+  font-weight: 750;
+}
+
+.archive-control:hover,
+.archive-control:focus {
+  border-color: rgba(130, 197, 255, 0.95);
+  outline: none;
+}
+
 .control option,
 .control optgroup {
   background: #101d2a;
