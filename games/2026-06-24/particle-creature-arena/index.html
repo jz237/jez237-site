@@ -154,6 +154,7 @@ function cleanup() {
   if (playerMesh) scene.remove(playerMesh);
   for (const list of [enemies,shots,pickups,particles,warnings,waves]) for (const o of list) scene.remove(o.root || o.mesh);
   enemies=[]; shots=[]; pickups=[]; particles=[]; warnings=[]; waves=[];
+  player=null; playerMesh=null;
 }
 
 function spawnEnemyWarning() {
@@ -413,8 +414,8 @@ function killEnemy(index) {
   const reward = e.boss ? 900 + state.wave*80 : e.kind==="splitter" ? 120 : e.kind==="weaver" ? 105 : 80;
   state.score += reward * state.combo;
   const hue = e.boss?gold:e.kind==="splitter"?pink:e.kind==="weaver"?violet:cyan;
-  burst(e.pos, hue, e.boss?112:58, e.boss?1.4:1.05, e.boss?2.35:1.45, true);
-  addShockSphere(e.pos, hue, e.boss?2.1:1.35);
+  burst(e.pos, hue, e.boss?62:28, e.boss?1.05:.78, e.boss?1.65:.9, true);
+  addShockSphere(e.pos, hue, e.boss?1.35:.75);
   if (e.kind==="splitter" && !e.boss) {
     for (let k=0;k<3;k++) {
       const root = new THREE.Group();
@@ -431,8 +432,8 @@ function hurt(amount) {
   if (state.inv>0 || !state.running) return;
   state.shield -= amount;
   state.inv = .75;
-  burst(player.pos, red, 24);
-  addWave(player.pos, red, 1.1);
+  burst(player.pos, red, 12, .55, .75);
+  addWave(player.pos, red, .72);
   if (state.shield <= 0) {
     state.lives--;
     state.shield = state.lives > 0 ? 100 : 0;
@@ -445,7 +446,7 @@ function hurt(amount) {
 function bomb() {
   if (!state.running || state.bombs <= 0) return;
   state.bombs--;
-  addWave(player.pos, pink, 2.2);
+  addWave(player.pos, pink, 1.45);
   for (let i=enemies.length-1;i>=0;i--) {
     const e=enemies[i], d = Math.sqrt(dist2(e.pos, player.pos));
     if (d < 9.5) { e.hp -= e.boss ? 7 : 99; e.vel.addScaledVector(e.pos.clone().sub(player.pos).normalize(), 12); if (e.hp<=0) killEnemy(i); }
@@ -460,7 +461,7 @@ function advanceWave() {
   state.breather = 2.1;
   state.spawnTimer = .8;
   if (state.wave % 4 === 0) state.bombs = Math.min(4, state.bombs+1);
-  addWave(player.pos, state.wave % 2 ? cyan : pink, 1.6);
+  addWave(player.pos, state.wave % 2 ? cyan : pink, 1.05);
   toast(`Wave ${String(state.wave).padStart(2,"0")}.`, 1.5);
 }
 
@@ -540,6 +541,7 @@ ui.again.addEventListener("click",()=>reset(state.practice));
 ui.menu.addEventListener("click",()=>{ cleanup(); state.running=false; state.ended=false; ui.over.classList.add("hidden"); ui.overlay.classList.remove("hidden"); });
 
 player = makePlayer();
+playerMesh = player.root;
 function animate(){
   const dt=Math.min(.033, clock.getDelta());
   if(state.t>state.messageUntil) ui.toast.classList.remove("show");
