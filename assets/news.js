@@ -19,11 +19,29 @@ function uniqueSources(items) {
   return [...new Set(items.map(i => i.source).filter(Boolean))].sort();
 }
 
+const FILL_EXCLUDED_REASONS = new Set([
+  'fluff',
+  'framework_or_plumbing',
+  'not_ai_story',
+  'watchlist_low_signal',
+  'repo_title_low_context'
+]);
+
 function visibleItemsForCategory(items, category, mode = 'curated') {
   const categoryItems = items.filter(i => (i.category || 'AI') === category);
   if (mode === 'all') return categoryItems;
   const curatedItems = categoryItems.filter(i => i.editorial_allow === true);
-  return curatedItems.length ? curatedItems : categoryItems;
+  if (category !== 'AI') return curatedItems.length ? curatedItems : categoryItems;
+
+  const curatedUrls = new Set(curatedItems.map(i => i.url));
+  const fillItems = categoryItems
+    .filter(i => !curatedUrls.has(i.url))
+    .filter(i => !FILL_EXCLUDED_REASONS.has(i.editorial_reason || ''))
+    .filter(i => (i.score || 0) >= 2.8 || i.tryWorthy === true)
+    .sort((a, b) => (b.score || 0) - (a.score || 0));
+
+  const targetCount = Math.min(18, categoryItems.length);
+  return [...curatedItems, ...fillItems].slice(0, Math.max(curatedItems.length, targetCount));
 }
 
 const SIGNAL_ORDER = [
@@ -193,8 +211,15 @@ function renderSummary(items, mode) {
 function renderTools(news) {
   const wrap = document.getElementById('news-tools');
   if (!wrap) return;
-  const tools = (news.tryWorthy || [])
-    .filter(i => i.editorial_allow)
+  const pool = news.items || [];
+  const fallback = pool
+    .filter(i => (i.category || 'AI') === 'AI')
+    .filter(i => i.tryWorthy === true)
+    .filter(i => !FILL_EXCLUDED_REASONS.has(i.editorial_reason || ''))
+    .sort((a, b) => (b.score || 0) - (a.score || 0));
+  const seen = new Set();
+  const tools = [...(news.tryWorthy || []), ...fallback]
+    .filter(i => i && i.url && !seen.has(i.url) && seen.add(i.url))
     .slice(0, 6);
   wrap.innerHTML = '';
   if (!tools.length) return;
@@ -322,7 +347,13 @@ async function init() {
         ...SIGNAL_ORDER.filter(group => grouped.has(group)),
         ...[...grouped.keys()].filter(group => !SIGNAL_ORDER.includes(group)).sort()
       ];
-      orderedGroups.forEach(group => renderSection(wrap, group, grouped.get(group)));
+      const compactSingles = [];
+      orderedGroups.forEach(group => {
+        const groupItems = grouped.get(group) || [];
+        if (category === 'AI' && groupItems.length === 1) compactSingles.push(groupItems[0]);
+        else renderSection(wrap, group, groupItems);
+      });
+      if (compactSingles.length) renderSection(wrap, 'More AI News', compactSingles);
     }
 
     categorySelect.onchange = () => {
