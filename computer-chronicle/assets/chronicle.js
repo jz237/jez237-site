@@ -334,6 +334,24 @@
     return item && (item.title || item.name || item.item || item.headline || "");
   }
 
+  function itemLabel(item, fallback) {
+    return item && (item.label || item.kicker || item.category || item.slot || item.priority || fallback || "Desk");
+  }
+
+  function itemHeadline(item, fallback) {
+    return item && (item.headline || item.title || item.name || item.item || fallback || "");
+  }
+
+  function itemSummary(item) {
+    return item && (item.summary || item.detail || item.note || item.copy || "");
+  }
+
+  function objectSection(value) {
+    if (!value) return null;
+    if (typeof value === "string") return { summary: value };
+    return typeof value === "object" ? value : null;
+  }
+
   function gameLead(issue) {
     const game = topGame(issue);
     if (!game) return null;
@@ -353,7 +371,7 @@
     const movie = firstBrief(issue, /movie|cinema|box office|marquee|top gun|cobra/);
     const rock = (issue.musicChart || [])[0];
     const pieces = [];
-    if (game && game.name) pieces.push(`gaming leads with ${game.name}`);
+    if (game && itemTitle(game)) pieces.push(`gaming leads with ${itemTitle(game)}`);
     if (issue.lead && issue.lead.headline) pieces.push(issue.lead.headline);
     if (movie && movie.headline) pieces.push(movie.headline);
     if (rock && rock.title && rock.artist) pieces.push(`${rock.title} by ${rock.artist}`);
@@ -387,7 +405,7 @@
     const bbs = issue.bbsNote;
 
     els.weekScan.innerHTML = [
-      scanItem("Games", game && game.name, game && game.platform),
+      scanItem("Games", game && itemTitle(game), game && (game.platform || game.price || "")),
       scanItem("Computers", issue.lead && issue.lead.headline, ""),
       scanItem("Software", software && software.name, software && software.platform),
       scanItem("Movies", movie && movie.headline, movie && movie.label),
@@ -498,12 +516,12 @@
       `).join("");
     }
 
-    els.computerItems.innerHTML = issue.computerItems.map((item) => `
+    els.computerItems.innerHTML = (issue.computerItems || []).map((item) => `
       <article class="chronicle-card">
-        <p class="section-label">${escapeHtml(item.label)}</p>
-        <h3>${escapeHtml(item.headline)}</h3>
+        <p class="section-label">${escapeHtml(itemLabel(item, "Computer Desk"))}</p>
+        <h3>${escapeHtml(itemHeadline(item, "Computer story"))}</h3>
         ${articleVisual(item.image)}
-        <p>${escapeHtml(item.summary)}</p>
+        <p>${escapeHtml(itemSummary(item))}</p>
         ${confidenceBadge(item.confidence)}
         ${sourceLinks(issue, item.sourceRefs)}
       </article>
@@ -554,9 +572,9 @@
 
     els.storeShelves.innerHTML = (issue.storeShelves || []).map((item) => `
       <li>
-        <strong>${escapeHtml(item.name)}</strong>
+        <strong>${escapeHtml(itemTitle(item))}</strong>
         ${item.platform ? `<span class="platform-tag">${escapeHtml(item.platform)}</span>` : ""}
-        <span>${escapeHtml(item.detail)}</span>
+        <span>${escapeHtml(itemSummary(item) || item.price || "")}</span>
         ${confidenceBadge(item.confidence)}
         ${sourceLinks(issue, item.sourceRefs)}
       </li>
@@ -570,14 +588,15 @@
       </li>
     `).join("");
 
-    els.bbs.innerHTML = `
+    const bbsNote = objectSection(issue.bbsNote);
+    els.bbs.innerHTML = bbsNote ? `
       <p class="section-label">${escapeHtml(chrome(issue, "bbs", "label", "Modem Desk"))}</p>
-      <h2>${escapeHtml(issue.bbsNote && issue.bbsNote.headline)}</h2>
-      ${articleVisual(issue.bbsNote && issue.bbsNote.image)}
-      <p>${escapeHtml(issue.bbsNote && issue.bbsNote.summary)}</p>
-      ${issue.bbsNote && Array.isArray(issue.bbsNote.posts) ? `
+      <h2>${escapeHtml(bbsNote.headline || "Modem Notes")}</h2>
+      ${articleVisual(bbsNote.image)}
+      <p>${escapeHtml(bbsNote.summary || "")}</p>
+      ${Array.isArray(bbsNote.posts) ? `
         <ul class="bbs-list">
-          ${issue.bbsNote.posts.map((post) => `
+          ${bbsNote.posts.map((post) => `
             <li>
               <strong>${escapeHtml(post.topic)}</strong>
               ${post.platform ? `<span class="platform-tag">${escapeHtml(post.platform)}</span>` : ""}
@@ -586,9 +605,9 @@
           `).join("")}
         </ul>
       ` : ""}
-      ${confidenceBadge(issue.bbsNote && issue.bbsNote.confidence)}
-      ${sourceLinks(issue, issue.bbsNote && issue.bbsNote.sourceRefs)}
-    `;
+      ${confidenceBadge(bbsNote.confidence)}
+      ${sourceLinks(issue, bbsNote.sourceRefs)}
+    ` : "";
 
     if (els.musicChart) {
       if (els.musicChartImage) els.musicChartImage.innerHTML = articleVisual(issue.musicChartImage);
@@ -625,11 +644,12 @@
       `).join("");
     }
 
-    els.ad.innerHTML = `
+    const periodAd = objectSection(issue.periodAd);
+    els.ad.innerHTML = periodAd ? `
       <p class="ad-kicker">Advertisement</p>
-      <h2>${escapeHtml(issue.periodAd && issue.periodAd.headline)}</h2>
-      <p>${escapeHtml(issue.periodAd && issue.periodAd.summary)}</p>
-    `;
+      <h2>${escapeHtml(periodAd.headline || "Computer Store Notice")}</h2>
+      <p>${escapeHtml(periodAd.summary || "")}</p>
+    ` : "";
 
     const classifiedItems = Array.isArray(issue.classifieds) ? issue.classifieds : [];
     if (els.classifiedsPanel) els.classifiedsPanel.hidden = classifiedItems.length === 0;
@@ -643,14 +663,16 @@
       `).join("");
     }
 
-    els.fallback.innerHTML = `
+    const fallback = objectSection(issue.worldFallback);
+    els.fallback.hidden = !fallback;
+    els.fallback.innerHTML = fallback ? `
       <p class="section-label">${escapeHtml(chrome(issue, "fallback", "label", "Fallback Lead"))}</p>
-      <h2>${escapeHtml(issue.worldFallback.headline)}</h2>
-      ${articleVisual(issue.worldFallback.image)}
-      <p>${escapeHtml(issue.worldFallback.summary)}</p>
-      ${confidenceBadge(issue.worldFallback.confidence)}
-      ${sourceLinks(issue, issue.worldFallback.sourceRefs)}
-    `;
+      <h2>${escapeHtml(fallback.headline || "Other News")}</h2>
+      ${articleVisual(fallback.image)}
+      <p>${escapeHtml(fallback.summary || "")}</p>
+      ${confidenceBadge(fallback.confidence)}
+      ${sourceLinks(issue, fallback.sourceRefs)}
+    ` : "";
 
   }
 
