@@ -139,6 +139,7 @@ export const SCORES_API = 'https://game-scores.jez237.workers.dev/scores/iron-ri
 export const HS_KEY = 'iron_ridge_highscores_v1';
 export const MUTE_KEY = 'iron_ridge_muted';
 export const NAME_KEY = 'iron_ridge_initials';
+export const REVERSE_LOOK_KEY = 'iron_ridge_reverse_look';
 
 // Collision groups
 export const CG = {
