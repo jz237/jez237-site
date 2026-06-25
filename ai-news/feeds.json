@@ -180,41 +180,55 @@
     "url": "https://github.com/ollama/ollama/releases.atom",
     "weight": 0.9,
     "category": "AI",
-    "role": "primary"
+    "role": "primary",
+    "sourceType": "tool-release"
   },
   {
     "name": "LiteLLM Releases",
     "url": "https://github.com/BerriAI/litellm/releases.atom",
     "weight": 0.85,
     "category": "AI",
-    "role": "primary"
+    "role": "primary",
+    "sourceType": "tool-release"
   },
   {
     "name": "Hugging Face Transformers Releases",
     "url": "https://github.com/huggingface/transformers/releases.atom",
     "weight": 0.85,
     "category": "AI",
-    "role": "primary"
+    "role": "primary",
+    "sourceType": "tool-release"
   },
   {
     "name": "Model Context Protocol Python SDK Releases",
     "url": "https://github.com/modelcontextprotocol/python-sdk/releases.atom",
     "weight": 0.8,
     "category": "AI",
-    "role": "primary"
+    "role": "primary",
+    "sourceType": "tool-release"
   },
   {
     "name": "Model Context Protocol Spec Releases",
     "url": "https://github.com/modelcontextprotocol/specification/releases.atom",
     "weight": 0.78,
     "category": "AI",
-    "role": "primary"
+    "role": "primary",
+    "sourceType": "tool-release"
   },
   {
     "name": "OpenAI Cookbook Releases",
     "url": "https://github.com/openai/openai-cookbook/releases.atom",
     "weight": 0.76,
     "category": "AI",
-    "role": "secondary"
+    "role": "secondary",
+    "sourceType": "tool-release"
+  },
+  {
+    "name": "Product Hunt AI",
+    "url": "https://www.producthunt.com/feed?category=artificial-intelligence",
+    "weight": 0.72,
+    "category": "AI",
+    "role": "watchlist",
+    "sourceType": "tool-directory"
   }
 ]
