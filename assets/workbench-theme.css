@@ -93,6 +93,19 @@ button,
   border: 1px solid var(--wb-border) !important;
   border-radius: 8px !important;
 }
+select.control {
+  color-scheme: dark !important;
+}
+select.control option,
+select.control optgroup {
+  background: #101d2a !important;
+  color: #edf6f7 !important;
+}
+:root[data-theme="light"] select.control option,
+:root[data-theme="light"] select.control optgroup {
+  background: #ffffff !important;
+  color: #17212b !important;
+}
 .theme-toggle:hover,
 button:hover,
 .control:hover,

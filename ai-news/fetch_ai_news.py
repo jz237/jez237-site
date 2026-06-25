@@ -9,6 +9,7 @@ import urllib.request
 import urllib.parse
 from datetime import datetime, timedelta, timezone
 from email.utils import parsedate_to_datetime
+from zoneinfo import ZoneInfo
 import xml.etree.ElementTree as ET
 
 BASE = os.path.dirname(os.path.abspath(__file__))
@@ -20,10 +21,12 @@ STORE_PATH = os.path.join(DATA_DIR, "items.json")
 IMAGE_CACHE_PATH = os.path.join(DATA_DIR, "image_cache.json")
 
 USER_AGENT = "Mozilla/5.0 (compatible; AI-News-Bot/1.0; +https://openclaw.ai)"
+LOCAL_TZ = ZoneInfo("America/New_York")
 MAX_STORE_ITEMS = 1500
 MAX_ITEM_AGE_DAYS = 14
 TOP_DAILY_COUNT = 12
 TOP_LATEST_COUNT = 50
+HIGH_SCORE_EDITORIAL_OVERRIDE = 4.0
 MAX_OG_FETCH_PER_RUN = 20
 MAX_THUMBNAIL_FETCH_PER_RUN = 30
 MAX_THUMBNAIL_BYTES = 4 * 1024 * 1024
@@ -562,6 +565,9 @@ def editorial_gate(item):
     hard_downrank_hits = sum(1 for w in EDITORIAL_PRIORITY["hard_downrank"] if w in text_blob)
     fluff_hits = sum(1 for w in EDITORIAL_PRIORITY["fluff_downrank"] if w in text_blob)
 
+    if any(phrase in text_blob for phrase in ["does not use ai", "doesn't use ai", "without ai"]):
+        return False, "not_ai_story"
+
     # Strong product/platform/capability news should pass.
     if hard_boost_hits >= 1 and (capability_hits >= 1 or impact_hits >= 1 or big_name_hits >= 2):
         return True, "major_product_news"
@@ -819,7 +825,12 @@ def main():
 
     # Override editorial gate for high-scoring items
     for it in all_items:
-        if it["score"] >= 5.5 and not it.get("editorial_allow"):
+        if (
+            it["score"] >= HIGH_SCORE_EDITORIAL_OVERRIDE
+            and not it.get("editorial_allow")
+            and it.get("image")
+            and it.get("editorial_reason") not in {"fluff", "framework_or_plumbing", "not_ai_story", "watchlist_low_signal"}
+        ):
             it["editorial_allow"] = True
             it["editorial_reason"] = "high_score_override"
 
@@ -854,8 +865,8 @@ def main():
     all_items = all_items[:MAX_STORE_ITEMS]
 
     # Build outputs
-    today = now.date()
-    today_items = [it for it in all_items if it["published_dt"].date() == today]
+    today = now.astimezone(LOCAL_TZ).date()
+    today_items = [it for it in all_items if it["published_dt"].astimezone(LOCAL_TZ).date() == today]
     today_items.sort(key=lambda x: x["score"], reverse=True)
     daily_top = today_items[:TOP_DAILY_COUNT]
 
