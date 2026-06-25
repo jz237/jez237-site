@@ -15,5 +15,22 @@
       "description": "A believable limestone-cave animal built from gliding, gripping, sensory, translucent-skin, and faint bioluminescent adaptations.",
       "template": "Design a believable [HABITAT] creature with [ADAPTATION 1], [ADAPTATION 2], and [TEXTURE/COLOR], shown as a realistic natural-history creature study."
     }
+  },
+  {
+    "id": "2026-06-25-creature-design-desert-glassback-burrower",
+    "title": "Desert Glassback Burrower",
+    "tests": "Generated via GPT Image 2 shell CLI; exact output path verified before append; JSON parse and public R2 URL verified after append.",
+    "prompt": "Design a believable salt-pan desert creature called the Desert Glassback Burrower with a reflective heat-shield carapace, dew-collecting belly bristles, and a sand-gold shell with violet shadows, shown as a realistic natural-history creature study. Create a richly detailed square natural-history studio-and-habitat study of one adult and two smaller juveniles at the edge of a cracked white salt pan at dawn. The adult is low, broad, shovel-snouted, about the size of a large tortoise, half-emerged from a shallow burrow with loose salt crust pushed aside; its translucent mineral carapace reflects harsh sky light like frosted glass, its digging forelimbs end in dark keratin spades, its protected black eyes sit beneath overhanging shell ridges, and fine belly bristles are visibly beaded with dew. Show juveniles sheltering in the adult's shade, wind-polished salt crystals, tiny desert seed husks, mineral dust, hardy gray-green saltbush shoots, warm dawn rim light, cool violet shadows, and plausible macro field-photography detail. Avoid readable text, labels, prompt cards, fantasy monster tropes, gore, logos, watermark, incoherent anatomy, and generic centered creature-on-blank-background styling.\n\nReusable fill-in-the-blank template: Design a believable [HABITAT] creature with [ADAPTATION 1], [ADAPTATION 2], and [TEXTURE/COLOR], shown as a realistic natural-history creature study. Make the finished image show [LIFE STAGE OR GROUPING] in [SPECIFIC MICROHABITAT], with visible anatomy, scale cues, habitat traces, material textures, and lighting that explain how the adaptations work without turning the image into a labeled prompt card.\n\nWhat the reusable visual operation changes or emphasizes: it turns a habitat-and-adaptation brief into a plausible original animal study, emphasizing ecological logic, coherent anatomy, tactile surface detail, scale, and behavior in context.\n\nOptional negative constraints: no readable private data, no logos, no watermarks, no prompt cards, no incoherent anatomy, no generic fantasy monster, no blank specimen backdrop unless requested.\n\nExample substitution: [HABITAT] = salt-pan desert; [ADAPTATION 1] = reflective heat-shield carapace; [ADAPTATION 2] = dew-collecting belly bristles; [TEXTURE/COLOR] = sand-gold shell with violet shadows; [LIFE STAGE OR GROUPING] = one adult with two juveniles; [SPECIFIC MICROHABITAT] = dawn burrow edge on cracked white salt crust.",
+    "image": "images/2026-06-25-creature-design-desert-glassback-burrower.jpg",
+    "date": "2026-06-25",
+    "batch": "Daily Prompt",
+    "slot": "creature-design",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "creatureDesign": {
+      "name": "Desert Glassback Burrower",
+      "description": "Believable invented salt-pan desert animal with a reflective heat-shield carapace, dew-collecting belly bristles, and sand-gold shell with violet shadows.",
+      "template": "Design a believable [HABITAT] creature with [ADAPTATION 1], [ADAPTATION 2], and [TEXTURE/COLOR], shown as a realistic natural-history creature study."
+    }
   }
 ]
