@@ -8,6 +8,7 @@ import { MUTE_KEY } from './config.js';
 const SAMPLES = {
   fire: ['shot-01', 'shot-02', 'shot-03', 'shot-04', 'shot-05'],
   explosion: ['explosion-01', 'explosion-02', 'explosion-03', 'explosion-04', 'explosion-05'],
+  waveAlert: ['wave-alert'],
 };
 
 export class GameAudio {
@@ -16,7 +17,7 @@ export class GameAudio {
     this.muted = localStorage.getItem(MUTE_KEY) === '1';
     this.engineNodes = null;
     this.windNodes = null;
-    this.buffers = { fire: [], explosion: [] };
+    this.buffers = { fire: [], explosion: [], waveAlert: [] };
   }
 
   ensure() {
@@ -45,7 +46,7 @@ export class GameAudio {
   }
 
   // returns false when the sample set isn't ready (caller falls back to synth)
-  playSample(set, vol = 1, rateJitter = 0.14) {
+  playSample(set, vol = 1, rateJitter = 0.14, maxDuration = 0) {
     const list = this.buffers[set];
     if (!this.ctx || !list || list.length === 0) return false;
     const src = this.ctx.createBufferSource();
@@ -54,7 +55,11 @@ export class GameAudio {
     const g = this.ctx.createGain();
     g.gain.value = Math.min(1.4, vol);
     src.connect(g).connect(this.master);
-    src.start();
+    const t = this.ctx.currentTime;
+    src.start(t);
+    if (maxDuration > 0) {
+      try { src.stop(t + Math.min(maxDuration, src.buffer.duration)); } catch {}
+    }
     return true;
   }
 
@@ -210,5 +215,11 @@ export class GameAudio {
     if (!this.ctx) return;
     this.click();
     setTimeout(() => this.click(), 90);
+  }
+
+  waveAlert() {
+    if (!this.ctx) return;
+    if (this.playSample('waveAlert', 0.9, 0, 2.75)) return;
+    setTimeout(() => this.playSample('waveAlert', 0.9, 0, 2.75), 180);
   }
 }
