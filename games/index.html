@@ -1234,7 +1234,7 @@
       '2026-06-22/snake-awakening/',
       'hard-hat-mac/'
     ]);
-    const gameHref = g => `${SITE_GAME_PATHS.has(g.path) ? SITE_BASE : LEGACY_BASE}${g.path}`;
+    const gameHref = g => g.href || `${SITE_GAME_PATHS.has(g.path) ? SITE_BASE : LEGACY_BASE}${g.path}`;
     const games = [
       // Featured (polished)
       { title: 'Steel Duel',                    path: '2026-06-14/steel-duel/',            emoji: '🔫', date: 'Jun 14', cat: 'arcade',    tag: 'featured',    desc: 'HD remaster of Atari TANK (1974), the first tank-combat arcade game — a top-down duel through a walled maze and a deadly central minefield, now with a full 12-level single-player &amp; co-op CAMPAIGN: fight waves of six distinct enemy tank types (scouts, brutes, snipers, mine-layers, front-armored wardens) across open arenas and battle three multi-phase bosses — the Bastion, the Mauler, and the Iron Warlord. Smart A*-pathfinding CPU with a Stupid→Can\'t-Defeat skill slider (it routes around walls and never suicides on mines), an attract-mode title where two AIs duel, online rooms, local/online co-op against enemy tanks, mouse-aimed independent turret + WASD on desktop, twin-stick on mobile, destructible walls you can blast open, a one-click 1974 CRT mode, particle juice + screen shake, and global scores. Campaign (1P + 2P co-op), 1P vs CPU, 2P duel, survival co-op, keyboard/mouse + touch, synth audio' },
@@ -1259,6 +1259,7 @@
       { title: 'Missile Command 3D',            path: '2026-03-17/missile-command-3d/',        emoji: '🚀', date: 'Mar 17', cat: 'arcade',   tag: 'featured',     desc: '3D perspective with destructible cities' },
       { title: 'Invaders',                      path: '2026-06-05/invaders/',               emoji: '🛸', date: 'Jun 5',  cat: 'arcade',   tag: 'featured',     desc: 'Released mobile-first Space Invaders remix with boss carriers, shield bunkers, power cores, global scores, and arcade particle chaos' },
       { title: 'Fluid Lab',                     path: '2026-06-09/fluid/',                 emoji: '💧', date: 'Jun 9',  cat: 'arcade',   tag: 'demo',         desc: 'Interactive WebGL fluid simulation with dye, bloom, pressure, vorticity, and touchscreen stirring controls' },
+      { title: 'Particle Graphics Cat',         path: 'particle-graphics-cat/', href: '../experiments/particle-graphics-cat/', emoji: '🐈', date: 'Jun 24', cat: 'arcade', tag: 'demo', desc: 'Particle graphics demo — an interactive Three.js point-cloud cat with tap-and-hold ripple physics, collapsible tuning sliders, blinking eyes, whiskers, and GPU particle animation' },
       { title: 'Stellar Drift',                 path: '2026-03-25/stellar-drift/',             emoji: '✨', date: 'Mar 25', cat: 'arcade',   tag: 'featured',     desc: 'One-finger auto-fire space shooter' },
       { title: 'SUPER STAR TREK',               path: '2026-03-27/star-trek/',                 emoji: '🖖', date: 'Mar 27', cat: 'retro70s', tag: 'featured',     desc: 'The 70s computer classic — reborn with LCARS visuals' },
       { title: 'Asteroids',                     path: '2026-03-08/asteroids/',                 emoji: '☄️', date: 'Mar 8',  cat: 'arcade',   tag: 'featured',     desc: 'Classic asteroids, mobile controls' },
@@ -1324,6 +1325,7 @@
       ['blackout', 'tank'], ['subway', 'train'], ['glassrail', 'train'], ['vortex', 'storm'],
       ['slash', 'lightning'], ['void', 'void'], ['gravity', 'web'],
       ['fluid', 'fluid'], ['invaders', 'invaders'], ['choplifter', 'chopper'],
+      ['particle', 'fluid'],
       ['snake awakening', 'serpent'],
       ['serpent', 'serpent']
     ];
