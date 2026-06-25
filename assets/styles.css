@@ -261,6 +261,22 @@ button:hover { background: #22344d; cursor: pointer; }
   min-height: 36px;
 }
 
+select.control {
+  color-scheme: dark;
+}
+
+.control option,
+.control optgroup {
+  background: #101d2a;
+  color: #edf6f7;
+}
+
+:root[data-theme="light"] .control option,
+:root[data-theme="light"] .control optgroup {
+  background: #ffffff;
+  color: #17212b;
+}
+
 #news-query {
   min-width: 220px;
 }
