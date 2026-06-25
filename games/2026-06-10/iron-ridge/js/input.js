@@ -1,6 +1,8 @@
 // Unified input: keyboard + pointer-lock mouse on desktop, twin virtual
 // sticks + fire button on touch. Exposes one normalized state object.
 
+import { REVERSE_LOOK_KEY } from './config.js';
+
 export const isTouch = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
 
 export class Input {
@@ -17,6 +19,7 @@ export class Input {
     this.pauseQueued = false;
     this.keys = new Set();
     this.locked = false;
+    this.reverseLook = localStorage.getItem(REVERSE_LOOK_KEY) === '1';
 
     window.addEventListener('keydown', (e) => {
       if (e.repeat) return;
@@ -63,6 +66,11 @@ export class Input {
     try {
       if (document.pointerLockElement) document.exitPointerLock?.();
     } catch {}
+  }
+
+  setReverseLook(on) {
+    this.reverseLook = !!on;
+    localStorage.setItem(REVERSE_LOOK_KEY, this.reverseLook ? '1' : '0');
   }
 
   setupTouch() {
@@ -185,7 +193,7 @@ export class Input {
   consumeLook() {
     const dx = this.lookDX, dy = this.lookDY;
     this.lookDX = 0; this.lookDY = 0;
-    return { dx, dy };
+    return { dx, dy: this.reverseLook ? -dy : dy };
   }
 
   consumeZoom() {

@@ -53,7 +53,7 @@ export class Hud {
   }
 
   showScreen(name) {
-    for (const id of ['screen-menu', 'screen-over', 'screen-pause']) {
+    for (const id of ['screen-menu', 'screen-over', 'screen-pause', 'screen-options']) {
       $(id).classList.toggle('hidden', id !== name);
     }
     $('overlay').classList.toggle('hidden', !name);

@@ -502,6 +502,7 @@ function startWave(w) {
   if (armor) parts.push(`${armor} hostile${armor > 1 ? 's' : ''} — destroy them to advance`);
   if (spec.targets) parts.push('targets = bonus');
   hud.banner(`WAVE ${w}`, parts.join(' • '));
+  audio.waveAlert();
   announceContacts(waves.enemies.slice(before));
   if (w > 1 && G.player.alive) {
     G.player.hp = Math.min(G.player.maxHp, G.player.hp + SCORING.waveClearHeal);
@@ -890,6 +891,27 @@ for (const b of muteBtns) {
 }
 syncMute();
 
+let optionsReturnScreen = 'screen-menu';
+function syncOptions() {
+  const btn = $('btn-reverse-look');
+  if (!btn) return;
+  btn.textContent = input.reverseLook ? 'ON' : 'OFF';
+  btn.classList.toggle('on', input.reverseLook);
+}
+function showOptions(from) {
+  optionsReturnScreen = from;
+  syncOptions();
+  hud.showScreen('screen-options');
+}
+$('btn-options')?.addEventListener('click', () => showOptions('screen-menu'));
+$('btn-options-pause')?.addEventListener('click', () => showOptions('screen-pause'));
+$('btn-options-back')?.addEventListener('click', () => hud.showScreen(optionsReturnScreen));
+$('btn-reverse-look')?.addEventListener('click', () => {
+  input.setReverseLook(!input.reverseLook);
+  syncOptions();
+});
+syncOptions();
+
 $('btn-submit').addEventListener('click', async () => {
   const name = LB.cleanInitials($('name-input').value);
   $('submit-block').style.display = 'none';
@@ -949,8 +971,8 @@ function gameFrame(dt) {
 
   input.poll();
 
-  // touch drive is camera-relative: push the stick toward where you want
-  // to go on screen and the hull auto-steers that way; pull back to reverse
+  // touch drive is camera-relative: the stick vector is the desired travel
+  // direction. The tank chooses forward or reverse, whichever points closer.
   if ((isTouch || window.__forceTouch) && G.player && G.state === 'playing') {
     const m = Math.hypot(input.stickX ?? 0, input.stickY ?? 0);
     if (m < 0.02) {
@@ -958,19 +980,15 @@ function gameFrame(dt) {
       input.turn = 0;
     } else {
       const stickAng = Math.atan2(input.stickX, input.stickY); // up = 0
-      if (Math.abs(stickAng) > 2.35) {
-        // pulling back: straight reverse with gentle steering
-        input.throttle = -Math.min(1, m);
-        input.turn = THREE.MathUtils.clamp(input.stickX * 0.7, -0.6, 0.6);
-      } else {
-        const want = G.camYaw + stickAng;
-        const cur = G.player.visualYaw();
-        let err = want - cur;
-        err = Math.atan2(Math.sin(err), Math.cos(err));
-        input.turn = THREE.MathUtils.clamp(-err * 1.5, -1, 1);
-        // keep rolling while turning, but don't charge off the wrong way
-        input.throttle = Math.min(1, m) * THREE.MathUtils.clamp(Math.cos(err) + 0.35, 0, 1);
-      }
+      const want = G.camYaw + stickAng;
+      const cur = G.player.visualYaw();
+      let err = want - cur;
+      err = Math.atan2(Math.sin(err), Math.cos(err));
+      const reverse = Math.cos(err) < -0.2;
+      if (reverse) err = Math.atan2(Math.sin(want - cur - Math.PI), Math.cos(want - cur - Math.PI));
+      input.turn = THREE.MathUtils.clamp((reverse ? err : -err) * 1.5, -1, 1);
+      const align = Math.abs(Math.cos(err));
+      input.throttle = (reverse ? -1 : 1) * Math.min(1, m) * THREE.MathUtils.clamp(align + 0.35, 0, 1);
     }
   }
 
