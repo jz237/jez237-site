@@ -29,6 +29,8 @@ use these instructions before writing code or snippets.
   image archive views.
 - `/experiments/image-gen-2-benchmark/hybrid-creatures.html` - hybrid
   creature development-map and wild-photo archive views.
+- `/experiments/image-gen-2-benchmark/creature-designs.html` - creature
+  design archive views.
 - `/experiments/image-gen-2-benchmark/subject-artifacts.html` - subject
   artifact archive views.
 - `/experiments/image-gen-2-benchmark/data-artifacts.html` - data
@@ -410,6 +412,7 @@ Important files:
 - `experiments/image-gen-2-benchmark/index.html`
 - `experiments/image-gen-2-benchmark/worlds.html`
 - `experiments/image-gen-2-benchmark/hybrid-creatures.html`
+- `experiments/image-gen-2-benchmark/creature-designs.html`
 - `experiments/image-gen-2-benchmark/subject-artifacts.html`
 - `experiments/image-gen-2-benchmark/data-artifacts.html`
 - `experiments/image-gen-2-benchmark/mirthcap-story.html`
@@ -417,6 +420,7 @@ Important files:
 - `experiments/image-gen-2-benchmark/gallery-data.json`
 - `experiments/image-gen-2-benchmark/worlds-data.json`
 - `experiments/image-gen-2-benchmark/hybrid-creatures-data.json`
+- `experiments/image-gen-2-benchmark/creature-designs-data.json`
 - Image assets under that experiment's folders.
 
 Keep prompt records factual: prompt text, date, model/context if already
