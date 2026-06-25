@@ -15,5 +15,22 @@
       "description": "A rendering-style example where the style or visual medium is the main variable rather than a separate subject category.",
       "template": "Create [SUBJECT_OR_SCENE] in [STYLE_OR_MEDIUM], with visible medium-specific texture, composition rules, color behavior, and detail level suited to that rendering style."
     }
+  },
+  {
+    "id": "2026-06-25-random-image-style-voxel-rooftop-greenhouse",
+    "title": "Voxel Rooftop Greenhouse",
+    "tests": "Generated with openclaw infer image generate using openai/gpt-image-2; exact PNG output verified before append.",
+    "prompt": "Render a rooftop greenhouse maintenance scene as richly detailed voxel graphics: a compact city roof garden built from crisp cube geometry, translucent glass panels, stepped planters of herbs and dwarf citrus, blocky irrigation tubes, tiny fans, water barrels, seedling trays, and a repair cart with square tools. Use a warm late-afternoon sky, strong readable silhouettes, tactile pixel-cube shadows, varied greens, terracotta, clear aqua glass, and small lived-in details. The image is a finished visual example only: no captions, no labels, no prompt-card text, no logos, no watermarks, no cinematic movie scene.\n\nReusable template: Render [SUBJECT] as a richly detailed [STYLE_OR_MEDIUM] image with tactile format-specific marks, clear subject silhouette, environmental context, and no prompt-card text.\n\nOperation: changes the subject into a finished style/medium showcase where the medium controls geometry, texture, lighting, and surface detail rather than acting like a light filter.\n\nNegative constraints: no readable private data, no logos, no watermarks, no prompt cards, no incoherent anatomy, no generic centered product photo.\n\nExample substitution: Render a neighborhood rooftop greenhouse maintenance scene as richly detailed voxel graphics.",
+    "image": "images/2026-06-25-random-image-style-voxel-rooftop-greenhouse.jpg",
+    "date": "2026-06-25",
+    "batch": "Daily Prompt",
+    "slot": "random-image-style",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "randomRenderingStyle": {
+      "medium": "voxel graphics",
+      "description": "A rooftop greenhouse maintenance scene rebuilt as tactile cube-based voxel art.",
+      "template": "Render [SUBJECT] as a richly detailed [STYLE_OR_MEDIUM] image with tactile format-specific marks, clear subject silhouette, environmental context, and no prompt-card text."
+    }
   }
 ]
