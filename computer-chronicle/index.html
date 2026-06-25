@@ -970,6 +970,25 @@
       background: var(--cc-blue) !important;
       color: var(--cc-paper) !important;
     }
+    .latest-issue {
+      border: 2px solid var(--cc-blue);
+      border-radius: 0;
+      background: var(--cc-blue);
+      color: var(--cc-paper);
+      font-size: 0.82rem;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      padding: 10px 12px;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+    .latest-issue:hover,
+    .latest-issue:focus-visible {
+      background: var(--cc-ink);
+      border-color: var(--cc-ink);
+      color: var(--cc-paper);
+      text-decoration: none;
+    }
     .issue-step-nav {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1638,6 +1657,7 @@
       <select id="issue-picker" data-issue-picker>
         <option>Loading issues...</option>
       </select>
+      <a class="latest-issue" href="./" data-latest-issue>Latest Issue</a>
       <button class="print-issue" type="button" data-print-issue>Print Issue</button>
     </div>
     <nav class="issue-step-nav" aria-label="Previous and next issues">
@@ -1722,7 +1742,7 @@
     <img data-lightbox-image alt="">
   </div>
 
-  <script src="assets/chronicle.js"></script>
+  <script src="assets/chronicle.js?v=20260625-latest-fix"></script>
   <script src="../assets/site-enhance.js" defer></script>
   <script src="../assets/nav.js?v=chronicle-20260612" defer></script>
 </body>
