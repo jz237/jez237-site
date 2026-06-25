@@ -2175,5 +2175,58 @@
     "slot": "historical-recreation",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-06-24-hybrid-creature-infographic-prism-reef-strain-development-m",
+    "title": "Prism Reef Strain: Development Map",
+    "tests": "Hybrid creature development-map run; tests a colorful scientific wall-chart style with photorealistic specimen panels, readable concise labels, and clean landscape fit.",
+    "prompt": "Colorful photorealistic speculative xenobiology scientific infographic for the fictional Prism Reef Strain: human baseline plus peacock mantis shrimp color/sensory traits and poison dart frog warning-color skin inspiration. Show concise development panels from fictional trait overview through juvenile, adolescent, and adult phenotype; use vivid microscopy colors, scientific color coding, clean labels, specimen-photo panels, macro tissue panels, and field-photo realism. No real gene names, no lab protocol, no equipment steps, no surgery, no gore. Disclaimer: Speculative fiction - not a real organism or procedure.",
+    "image": "images/2026-06-24-hybrid-creature-infographic-prism-reef-strain-development-m.jpg",
+    "date": "2026-06-24",
+    "batch": "Hybrid Creature",
+    "slot": "hybrid-creature-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "hybridCreature": {
+      "name": "Prism Reef Strain",
+      "imageKind": "infographic",
+      "description": "Peacock mantis shrimp and poison dart frog traits blended into a vivid reef-cave fictional hybrid.",
+      "continuity": "Same Prism Reef adult phenotype across the development-map and wild-photo entries."
+    }
+  },
+  {
+    "id": "2026-06-24-hybrid-creature-wild-prism-reef-strain-in-the-wild",
+    "title": "Prism Reef Strain: In the Wild",
+    "tests": "Hybrid creature wild-photo run; tests whether the same colorful Prism Reef adult phenotype reads as a realistic reef-cave expedition encounter.",
+    "prompt": "Ultra-photorealistic expedition field photograph of the fictional Prism Reef Strain in a shallow tropical reef cave at dusk. Show the same adult phenotype from the development map: a frightening but believable human baseline, peacock mantis shrimp, and poison dart frog inspired hybrid with faceted reflective eyes, subtle facial plates, mottled wet skin with pores and scars, iridescent turquoise/cobalt/magenta/gold patterning, saturated warning-color patches, mantis-shrimp-inspired forearm ridges, grasping clawed hands, natural asymmetry, matte wet tissue, visible body weight, reef sediment, water caustics, and field-camera imperfections. No gore, nudity, surgery, lab setting, text, watermark, fantasy armor, or superhero look.",
+    "image": "images/2026-06-24-hybrid-creature-wild-prism-reef-strain-in-the-wild.jpg",
+    "date": "2026-06-24",
+    "batch": "Hybrid Creature",
+    "slot": "hybrid-creature-wild",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "hybridCreature": {
+      "name": "Prism Reef Strain",
+      "imageKind": "wild",
+      "description": "Peacock mantis shrimp and poison dart frog traits blended into a vivid reef-cave fictional hybrid.",
+      "continuity": "Same Prism Reef adult phenotype across the development-map and wild-photo entries."
+    }
+  },
+  {
+    "id": "2026-06-24-creature-design-nocturnal-limestone-cave-glider",
+    "title": "Nocturnal Limestone-Cave Glider",
+    "tests": "Creature design seed entry; tests whether GPT Image 2 can invent a believable animal from habitat/adaptation constraints with natural-history specimen realism.",
+    "prompt": "Design a believable limestone-cave creature with sensory whiskers, folded membrane wings, gripping feet, damp translucent skin, and faint bioluminescent organs, shown as a realistic natural-history studio specimen. Reusable template: Design a believable [HABITAT] creature with [ADAPTATION 1], [ADAPTATION 2], and [TEXTURE/COLOR], shown as a realistic natural-history creature study.",
+    "image": "images/2026-06-24-creature-design-nocturnal-limestone-cave-glider.jpg",
+    "date": "2026-06-24",
+    "batch": "Creature Design",
+    "slot": "creature-design",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "creatureDesign": {
+      "name": "Nocturnal Limestone-Cave Glider",
+      "description": "A believable limestone-cave animal built from gliding, gripping, sensory, translucent-skin, and faint bioluminescent adaptations.",
+      "template": "Design a believable [HABITAT] creature with [ADAPTATION 1], [ADAPTATION 2], and [TEXTURE/COLOR], shown as a realistic natural-history creature study."
+    }
   }
 ]
