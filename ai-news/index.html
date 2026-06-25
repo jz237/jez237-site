@@ -58,13 +58,8 @@
           <option value="AI">🤖 AI News</option>
           <option value="Science">🔬 Discovery News</option>
         </select>
-        <select id="news-sort" class="control">
-          <option value="latest">Sort: Latest</option>
-          <option value="top">Sort: Top scored</option>
-        </select>
-        <select id="news-view" class="control">
-          <option value="curated">View: Curated</option>
-          <option value="all">View: Raw feed</option>
+        <select id="news-archive" class="control archive-control">
+          <option value="">Latest briefing</option>
         </select>
         <select id="news-source" class="control"></select>
         <select id="news-tier" class="control">
@@ -74,9 +69,6 @@
           <option value="watchlist">Watchlist sources</option>
         </select>
         <input id="news-query" class="control" type="search" placeholder="Filter headline/summary..." />
-        <select id="news-archive" class="control">
-          <option value="">Latest briefing</option>
-        </select>
         <span id="news-updated" class="news-meta"></span>
       </div>
       <div id="news-summary" class="news-summary" aria-live="polite"></div>
