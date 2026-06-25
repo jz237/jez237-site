@@ -26,6 +26,7 @@ DATA_ARTIFACTS = ROOT / "data-artifacts-data.json"
 SUBJECT_ARTIFACTS = ROOT / "subject-artifacts-data.json"
 FACTUAL_INFOGRAPHICS = ROOT / "factual-infographics-data.json"
 HYBRID_CREATURES = ROOT / "hybrid-creatures-data.json"
+CREATURE_DESIGNS = ROOT / "creature-designs-data.json"
 IMAGES = ROOT / "images"
 DEFAULT_R2_ACCOUNT_ID = "ac73a259dff5a3cbeccbb78824ac0db6"
 DEFAULT_R2_BUCKET = "jez237-site-media"
@@ -118,6 +119,10 @@ def main() -> None:
     ap.add_argument("--hybrid-description", default="")
     ap.add_argument("--hybrid-continuity", default="")
     ap.add_argument("--hybrid-creature-only", action="store_true", help="Append to hybrid-creatures-data.json only, not the main prompt gallery")
+    ap.add_argument("--creature-design-name", default="")
+    ap.add_argument("--creature-design-description", default="")
+    ap.add_argument("--creature-design-template", default="")
+    ap.add_argument("--creature-design-only", action="store_true", help="Append to creature-designs-data.json only, not the main prompt gallery")
     ap.add_argument("--skip-r2-upload", action="store_true", help="Copy the image locally but do not upload it to Cloudflare R2")
     ap.add_argument("--r2-bucket", default=os.environ.get("IMAGE_ARCHIVE_R2_BUCKET", DEFAULT_R2_BUCKET))
     ap.add_argument("--r2-prefix", default=os.environ.get("IMAGE_ARCHIVE_R2_PREFIX", DEFAULT_R2_PREFIX))
@@ -186,10 +191,16 @@ def main() -> None:
             "description": args.hybrid_description.strip() or args.tests,
             "continuity": args.hybrid_continuity.strip(),
         }
+    if args.creature_design_name.strip() or args.slot == "creature-design":
+        entry["creatureDesign"] = {
+            "name": args.creature_design_name.strip() or args.title,
+            "description": args.creature_design_description.strip() or args.tests,
+            "template": args.creature_design_template.strip(),
+        }
 
-    exclusive = [args.world_only, args.data_artifact_only, args.subject_artifact_only, args.factual_infographic_only, args.hybrid_creature_only]
+    exclusive = [args.world_only, args.data_artifact_only, args.subject_artifact_only, args.factual_infographic_only, args.hybrid_creature_only, args.creature_design_only]
     if sum(1 for flag in exclusive if flag) > 1:
-        raise SystemExit("--world-only, --data-artifact-only, --subject-artifact-only, --factual-infographic-only, and --hybrid-creature-only are mutually exclusive")
+        raise SystemExit("--world-only, --data-artifact-only, --subject-artifact-only, --factual-infographic-only, --hybrid-creature-only, and --creature-design-only are mutually exclusive")
     if args.world_only:
         paths = (WORLDS,)
     elif args.data_artifact_only:
@@ -200,12 +211,16 @@ def main() -> None:
         paths = (FACTUAL_INFOGRAPHICS,)
     elif args.hybrid_creature_only:
         paths = (HYBRID_CREATURES,)
+    elif args.creature_design_only:
+        paths = (CREATURE_DESIGNS,)
     else:
         paths = (DATA, PROMPTS)
         if entry.get("factualInfographic"):
             paths = (DATA, PROMPTS, FACTUAL_INFOGRAPHICS)
         if entry.get("hybridCreature"):
             paths = (*paths, HYBRID_CREATURES)
+        if entry.get("creatureDesign"):
+            paths = (*paths, CREATURE_DESIGNS)
     for path in paths:
         data = load(path)
         data.append(entry)
