@@ -1186,5 +1186,23 @@
       "continuity": "Preserves Korrun Silt Choir canon: black-green tidal basins, rose salt fog, basalt ribs, floating pumice gardens, brine-glass, silt ceramic, shell-horn tools, bell buoys, clay memory tiles, and non-human amphibious residents with resonator throats.",
       "entryDescription": "Gardeners maintain floating pumice orchards and bladder-root colonies during a slow prism tide, using shell-horn tools, bone-white frequency markers, brine-glass vessels, and tripod work platforms above resonant mud."
     }
+  },
+  {
+    "id": "2026-06-25-overnight-korrun-silt-choir-murmuration-causeway-rush",
+    "title": "Korrun Silt Choir: Murmuration Causeway Rush",
+    "tests": "A realistic photographed weekly-world commute scene showing Korrun Silt Choir inhabitants using a resonance causeway, tram baskets, fin-keel sleds, and tidal mudflat infrastructure.",
+    "prompt": "Ultra-realistic square expedition photograph from the weekly world Korrun Silt Choir, showing the Murmuration Causeway Rush at low copper sunrise on resonant alien tidal mudflats. The scene is a busy commuter crossing where a long basalt-and-sintered-silt causeway visibly stiffens beneath synchronized footfalls: dozens of non-human amphibious inhabitants with low oval bodies, six jointed walking limbs, two broad paddle-limbs, ridged resonator throats, wet opaline skin, crown-like sensory whiskers, and small black bead eyes move in coordinated clusters, their side membranes shifting muted jade and rose as they drum the path into rigidity. Above them, tidal tram baskets made of brine-glass ribs and woven reed pressure wraps glide along bone-white frequency markers; below the causeway, vibrating fin-keel sled ferries skim mirror-brine pools through black-green mud sheen. Surround the crossing with terraced basalt ribs, bell-buoy navigation posts, pale fan reeds bent by salt wind, floating pumice garden blocks, hollow stone chimneys, ripple-written mud, shell-horn tools tucked into commuters' reed wraps, wet clay memory tiles carried on tripod racks, pink salt fog, opal highlights, low-angle copper light reflected in tidal mirrors, documentary lens depth, damp surface detail, believable motion blur on the crowd, no humans, no Earth city, no readable text, no logos, no fungus motifs, no fantasy armor, no poster layout.",
+    "image": "images/2026-06-25-overnight-korrun-silt-choir-murmuration-causeway-rush.jpg",
+    "date": "2026-06-25",
+    "batch": "Daily Prompt",
+    "slot": "overnight",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "world": {
+      "name": "Korrun Silt Choir",
+      "description": "A tidal alien world where cities, memory, and weather are shaped by resonant mineral mudflats sung into structure by many-legged amphibious inhabitants.",
+      "continuity": "Preserves Korrun's black-green tidal basins, rose salt fog, basalt ribs, brine-glass, silt ceramic, reed wraps, bell buoys, and many-legged amphibious inhabitants with resonator throats.",
+      "entryDescription": "A low-copper-sun commute across a resonance causeway, with coordinated inhabitants, tram baskets overhead, and fin-keel sled ferries below."
+    }
   }
 ]
