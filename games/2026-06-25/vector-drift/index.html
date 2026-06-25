@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover" />
 <meta name="theme-color" content="#02030a" />
 <title>Vector Tempest</title>
-<meta name="description" content="A neon 3D Tempest-style tube shooter prototype with twin on-screen joysticks." />
+<meta name="description" content="A neon 3D Tempest-style tube shooter prototype with auto-fire, twin sticks, and fast vector explosions." />
 <style>
 :root{color-scheme:dark;--ink:#eaffff;--cyan:#40f7ff;--pink:#ff3bd1;--gold:#ffef75;--green:#6dffad;--red:#ff5277;--panel:rgba(3,7,18,.72);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
 *{box-sizing:border-box}
@@ -35,18 +35,18 @@ h1{margin:0 0 8px;font-size:clamp(2.55rem,10vw,5.6rem);line-height:.84;letter-sp
   <span id="score">Score 000000</span>
 </div>
 <div class="stick left" id="moveStick"><span>Move</span><div class="knob" id="moveKnob"></div></div>
-<div class="stick right" id="fireStick"><span>Fire</span><div class="knob" id="fireKnob"></div></div>
+<div class="stick right" id="fireStick"><span>Auto</span><div class="knob" id="fireKnob"></div></div>
 <div class="toast" id="toast"></div>
-<div class="corner">v0.2 tempest prototype</div>
+<div class="corner">v0.3 tempest prototype</div>
 <div class="overlay" id="overlay">
   <div class="panel">
     <h1>VECTOR<br>TEMPEST</h1>
     <p class="version">Neon tube shooter prototype</p>
-    <p class="sub">Ride the rim, sweep around the web, and fire down the lane before the climbers reach your edge.</p>
+    <p class="sub">Ride the rim, sweep around the web, and let the cannon chew glowing lanes before the climbers reach your edge.</p>
     <div class="rules">
       <div class="rule"><b>Move</b>Left joystick or A/D rotates around the tube rim lane by lane.</div>
-      <div class="rule"><b>Fire</b>Right joystick or Space launches vector bolts down your current lane.</div>
-      <div class="rule"><b>Survive</b>Enemies crawl up the web. Clear them for score; missed climbers chew the hull.</div>
+      <div class="rule"><b>Auto-fire</b>The cannon fires continuously. The right stick can force a quick burst.</div>
+      <div class="rule"><b>Survive</b>Enemies crawl up the web. Hits throw fast 3D vector shrapnel.</div>
     </div>
     <div class="row"><button id="startBtn">Start Tempest</button><button class="secondary" id="practiceBtn">Practice</button></div>
   </div>
@@ -77,26 +77,49 @@ const lanes = 16, radius = 7.2, nearZ = 10, farZ = -92;
 const keys = new Set();
 const joy = { move:0, fire:false };
 const state = { running:false, practice:false, ended:false, t:0, score:0, wave:1, hull:100, zaps:0, lane:0, laneVel:0, fireTimer:0, spawnTimer:0, messageUntil:0 };
-let player, web=[], enemies=[], shots=[], sparks=[];
+let player, web=[], enemies=[], shots=[], sparks=[], stars=[];
 
 function clamp(v,a,b){ return Math.max(a, Math.min(b, v)); }
 function rand(a=1,b=0){ return b + Math.random() * (a-b); }
 function angleFor(lane){ return lane / lanes * Math.PI * 2 - Math.PI / 2; }
 function lanePos(lane,z,scale=1){ const a=angleFor(lane); return new THREE.Vector3(Math.cos(a)*radius*scale, Math.sin(a)*radius*scale, z); }
-function basic(color, opacity=1){ return new THREE.LineBasicMaterial({ color, transparent:opacity<1, opacity }); }
-function mat(color, opacity=1){ return new THREE.MeshStandardMaterial({ color, emissive:color, emissiveIntensity:.38, roughness:.28, metalness:.28, transparent:opacity<1, opacity, flatShading:true }); }
+function basic(color, opacity=1){ return new THREE.LineBasicMaterial({ color, transparent:true, opacity, blending:THREE.AdditiveBlending, depthWrite:false }); }
+function mat(color, opacity=1){
+  const m = new THREE.MeshStandardMaterial({ color, emissive:color, emissiveIntensity:.62, roughness:.18, metalness:.34, transparent:opacity<1, opacity, flatShading:true });
+  if (opacity < 1) { m.blending = THREE.AdditiveBlending; m.depthWrite = false; }
+  return m;
+}
 function line(points, color, opacity=1){ const mesh = new THREE.Line(new THREE.BufferGeometry().setFromPoints(points), basic(color, opacity)); scene.add(mesh); return mesh; }
 function toast(text, seconds=1.4){ ui.toast.textContent=text; ui.toast.classList.add("show"); state.messageUntil=state.t+seconds; }
 
 function makeWeb() {
   clearList(web);
-  for (let i=0;i<lanes;i++) web.push(line([lanePos(i, nearZ), lanePos(i, farZ, .2)], i%4===0?cyan:0x143044, i%4===0?.55:.38));
-  for (let z=nearZ; z>=farZ; z-=8.5) {
+  for (let i=0;i<lanes;i++) {
+    const major = i % 4 === 0;
+    web.push(line([lanePos(i, nearZ,1.015), lanePos(i, farZ, .18)], major?cyan:0x184660, major?.95:.46));
+    web.push(line([lanePos(i+.5, nearZ,1.01), lanePos(i+.5, farZ, .18)], major?0x6dffad:0x0d2739, major?.18:.14));
+  }
+  for (let z=nearZ; z>=farZ; z-=6.8) {
     const pts = [];
     const scale = .2 + .8 * ((z - farZ) / (nearZ - farZ));
     for (let i=0;i<=lanes;i++) pts.push(lanePos(i%lanes,z,scale));
-    web.push(line(pts, z===nearZ?gold:0x17354b, z===nearZ?.86:.38));
+    const near = z > nearZ - 1;
+    web.push(line(pts, near?gold:0x225778, near?1:.46));
+    if (near || Math.round(z) % 20 === 0) web.push(line(pts, near?white:cyan, near?.22:.16));
   }
+}
+
+function makeStars() {
+  clearList(stars);
+  const geo = new THREE.BufferGeometry();
+  const pts = [];
+  for (let i=0;i<760;i++) {
+    const a = rand(Math.PI*2), r = rand(46,12), z = rand(10,-120);
+    pts.push(Math.cos(a)*r, Math.sin(a)*r, z);
+  }
+  geo.setAttribute("position", new THREE.Float32BufferAttribute(pts,3));
+  const star = new THREE.Points(geo, new THREE.PointsMaterial({ color:0x9efcff, size:.07, transparent:true, opacity:.72, blending:THREE.AdditiveBlending, depthWrite:false }));
+  scene.add(star); stars.push(star);
 }
 
 function makePlayer() {
@@ -106,7 +129,9 @@ function makePlayer() {
   const wing = new THREE.Mesh(new THREE.BoxGeometry(1.35,.12,.22), mat(pink));
   const crown = new THREE.Mesh(new THREE.OctahedronGeometry(.28,0), mat(gold));
   crown.position.z = .22;
-  for (const mesh of [body,wing,crown]) {
+  const tail = new THREE.Mesh(new THREE.TorusGeometry(.42,.025,4,18), mat(white,.74));
+  tail.position.z = -.34;
+  for (const mesh of [body,wing,crown,tail]) {
     const edges = new THREE.LineSegments(new THREE.EdgesGeometry(mesh.geometry), basic(white,.62));
     mesh.add(edges); root.add(mesh);
   }
@@ -119,6 +144,7 @@ function reset(practice=false) {
   Object.assign(state,{ running:true, practice, ended:false, t:0, score:0, wave:1, hull:100, zaps:0, lane:0, laneVel:0, fireTimer:0, spawnTimer:practice?1.1:.55, messageUntil:0 });
   player = makePlayer();
   makeWeb();
+  makeStars();
   makeEnemy(3, -34);
   makeEnemy(9, -52);
   makeEnemy(13, -68);
@@ -128,8 +154,8 @@ function reset(practice=false) {
 
 function cleanup() {
   if (player) scene.remove(player);
-  clearList(web); clearList(enemies); clearList(shots); clearList(sparks);
-  player=null; enemies=[]; shots=[]; sparks=[];
+  clearList(web); clearList(enemies); clearList(shots); clearList(sparks); clearList(stars);
+  player=null; enemies=[]; shots=[]; sparks=[]; stars=[];
 }
 function clearList(list){ for (const o of list) scene.remove(o.root || o.mesh || o); list.length = 0; }
 
@@ -138,8 +164,9 @@ function makeEnemy(lane=Math.floor(rand(lanes)), z=farZ-rand(9,0)) {
   const color = Math.random()>.78 ? gold : Math.random()>.45 ? pink : green;
   const core = new THREE.Mesh(new THREE.OctahedronGeometry(.45,0), mat(color,.94));
   const ring = new THREE.Mesh(new THREE.TorusGeometry(.62,.035,6,24), mat(color,.72));
+  const cage = new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.IcosahedronGeometry(.78,0)), basic(white,.32));
   ring.rotation.x = Math.PI / 2;
-  root.add(core, ring);
+  root.add(core, ring, cage);
   scene.add(root);
   const speed = (state.practice ? 8.5 : 10.5) + state.wave * .55 + rand(2.4,0);
   const enemy = { root, lane, z, speed, color, spin:rand(2.2,.8) };
@@ -149,18 +176,27 @@ function makeEnemy(lane=Math.floor(rand(lanes)), z=farZ-rand(9,0)) {
 
 function fire() {
   if (state.fireTimer > 0) return;
-  state.fireTimer = .105;
+  state.fireTimer = .135;
   const lane = Math.round(state.lane + lanes * 1000) % lanes;
-  const mesh = line([lanePos(lane, nearZ - 1.2), lanePos(lane, nearZ - 5.6, .96)], cyan, .95);
-  shots.push({ mesh, lane, z:nearZ - 3.4, speed:82, life:1.15 });
+  const mesh = line([lanePos(lane, nearZ - .9,1.02), lanePos(lane, nearZ - 7.4, .92)], cyan, 1);
+  shots.push({ mesh, lane, z:nearZ - 3.9, speed:92, life:1.15 });
 }
 
 function burst(pos, color, count=14) {
+  const ringGeo = new THREE.TorusGeometry(.28,.018,5,36);
+  const ring = new THREE.Mesh(ringGeo, mat(color,.86));
+  ring.position.copy(pos);
+  ring.rotation.set(rand(Math.PI), rand(Math.PI), rand(Math.PI));
+  scene.add(ring);
+  sparks.push({ mesh:ring, life:.34, vel:new THREE.Vector3(), spin:new THREE.Vector3(rand(13,-13),rand(13,-13),rand(13,-13)), grow:34 });
   for (let i=0;i<count;i++) {
-    const mesh = new THREE.Mesh(new THREE.TetrahedronGeometry(rand(.14,.05),0), mat(color,.88));
+    const mesh = new THREE.Mesh(Math.random()>.5 ? new THREE.TetrahedronGeometry(rand(.22,.07),0) : new THREE.OctahedronGeometry(rand(.18,.06),0), mat(Math.random()>.7?white:color,.9));
     mesh.position.copy(pos);
+    const edge = new THREE.LineSegments(new THREE.EdgesGeometry(mesh.geometry), basic(white,.58));
+    mesh.add(edge);
     scene.add(mesh);
-    sparks.push({ mesh, life:rand(.7,.28), vel:new THREE.Vector3(rand(8,-8),rand(8,-8),rand(7,-7)), spin:new THREE.Vector3(rand(8,-8),rand(8,-8),rand(8,-8)) });
+    const dir = new THREE.Vector3(rand(1,-1),rand(1,-1),rand(.8,-.8)).normalize();
+    sparks.push({ mesh, life:rand(.42,.18), vel:dir.multiplyScalar(rand(24,9)), spin:new THREE.Vector3(rand(22,-22),rand(22,-22),rand(22,-22)), grow:0 });
   }
 }
 
@@ -171,7 +207,7 @@ function controls(dt) {
   move = clamp(move,-1,1);
   state.laneVel += (move * 10.8 - state.laneVel) * Math.min(1, dt*9);
   state.lane = (state.lane + state.laneVel * dt + lanes * 1000) % lanes;
-  if (joy.fire || keys.has("Space") || keys.has("Enter")) fire();
+  if (joy.fire || keys.has("Space")) state.fireTimer = Math.min(state.fireTimer, .03);
 }
 
 function update(dt) {
@@ -180,6 +216,7 @@ function update(dt) {
   if (state.t > state.messageUntil) ui.toast.classList.remove("show");
   controls(dt);
   state.fireTimer = Math.max(0, state.fireTimer - dt);
+  fire();
   state.spawnTimer -= dt;
   const spawnRate = Math.max(.34, (state.practice?1.05:.78) - state.wave*.045);
   if (state.spawnTimer <= 0) { makeEnemy(); state.spawnTimer = spawnRate + rand(.45,0); }
@@ -211,7 +248,7 @@ function update(dt) {
         s.life = 0; e.dead = true;
         const pts = 120 + state.wave * 15;
         state.score += pts; state.zaps++;
-        burst(e.root.position, e.color, 16);
+        burst(e.root.position, e.color, 26);
         toast(`Zap +${pts}`, .55);
       }
     }
@@ -219,7 +256,7 @@ function update(dt) {
       const dist = Math.min(Math.abs(e.lane-lane), lanes-Math.abs(e.lane-lane));
       e.dead = true;
       state.hull -= state.practice ? (dist<=1?7:3) : (dist<=1?18:7);
-      burst(e.root.position, red, dist<=1?24:10);
+      burst(e.root.position, red, dist<=1?34:16);
       toast(dist<=1 ? "Rim impact." : "Web damage.", .9);
       if (state.hull <= 0) endRun();
     }
@@ -229,6 +266,7 @@ function update(dt) {
     p.life -= dt;
     p.mesh.position.addScaledVector(p.vel, dt);
     p.mesh.rotation.x += p.spin.x*dt; p.mesh.rotation.y += p.spin.y*dt; p.mesh.rotation.z += p.spin.z*dt;
+    if (p.grow) p.mesh.scale.addScalar(p.grow * dt);
     p.mesh.material.opacity = Math.max(0,p.life);
   }
   prune(shots, o=>o.life>0 && o.z>farZ-10);
@@ -291,7 +329,7 @@ $("menuBtn").addEventListener("click",()=>{ cleanup(); state.running=false; stat
 scene.add(new THREE.AmbientLight(0x9fdcff,.58));
 const key = new THREE.DirectionalLight(0xffffff,1.25); key.position.set(5,8,12); scene.add(key);
 const rim = new THREE.PointLight(0xff3bd1,2.8,80); rim.position.set(-8,7,15); scene.add(rim);
-makeWeb(); updateCamera();
+makeWeb(); makeStars(); updateCamera();
 function animate(){ const dt=Math.min(.033, clock.getDelta()); update(dt); updateCamera(); updateUi(); renderer.render(scene,camera); requestAnimationFrame(animate); }
 animate();
 const params = new URLSearchParams(location.search);
