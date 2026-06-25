@@ -19,6 +19,7 @@ THUMBNAIL_DIR = os.path.join(PUBLIC_DIR, "thumbnails")
 FEEDS_PATH = os.path.join(BASE, "feeds.json")
 STORE_PATH = os.path.join(DATA_DIR, "items.json")
 IMAGE_CACHE_PATH = os.path.join(DATA_DIR, "image_cache.json")
+ARCHIVE_INDEX_PATH = os.path.join(PUBLIC_DIR, "archive-index.json")
 
 USER_AGENT = "Mozilla/5.0 (compatible; AI-News-Bot/1.0; +https://openclaw.ai)"
 LOCAL_TZ = ZoneInfo("America/New_York")
@@ -112,6 +113,12 @@ MODEL_RELEASE_SIGNALS = [
     "now available", "generally available", "publicly available",
     "available today", "available now", "open sourced", "open-sourced",
 ]
+
+CLUSTER_STOPWORDS = {
+    "the", "a", "an", "and", "or", "but", "to", "of", "in", "on", "for", "with", "its",
+    "is", "are", "was", "were", "as", "at", "by", "from", "this", "that", "new", "ai",
+    "artificial", "intelligence", "says", "after", "about", "into", "over", "now"
+}
 
 
 def now_utc():
@@ -235,6 +242,112 @@ def make_why_it_matters(item):
     if any(w in text_blob for w in ["openai", "anthropic", "google", "gemini", "claude", "chatgpt", "grok"]):
         return "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental."
     return "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure."
+
+
+def make_structured_brief(item):
+    title = item.get("title") or "Untitled story"
+    source = item.get("source") or "Unknown source"
+    group = item.get("signalGroup") or classify_signal_group(item)
+
+    what = title.rstrip(".")
+    if group == "Model releases":
+        who = "Builders, tool users, and anyone comparing model capability or cost."
+        impact = "Check whether the release changes what is worth trying, routing, or paying for."
+    elif group == "Agents & tooling":
+        who = "People building or using agent workflows, automation, coding tools, and workplace assistants."
+        impact = "Watch permissions, reliability, and integration details before treating it as production-ready."
+    elif group == "Infrastructure":
+        who = "Anyone affected by AI compute cost, speed, availability, or hardware supply."
+        impact = "Infrastructure shifts often show up later as cheaper tools, higher limits, or new bottlenecks."
+    elif group == "Policy & risk":
+        who = "Product builders, platform users, and anyone depending on model access or data rights."
+        impact = "Policy moves can become tomorrow's product limits, compliance burden, or availability issue."
+    elif group == "Research":
+        who = "People tracking where model behavior, evaluation, or training techniques may head next."
+        impact = "Useful if the idea looks likely to move from paper into products or tooling."
+    elif group == "Business":
+        who = "People reading the industry map: capital, hiring, acquisitions, and market pressure."
+        impact = "The money trail usually points at where companies think the durable demand is."
+    else:
+        who = "AI watchers looking for practical shifts in products, platforms, or adoption."
+        impact = "Skim for whether this changes what to try, trust, buy, or ignore."
+
+    return {
+        "whatHappened": what,
+        "whoItAffects": who,
+        "practicalImpact": impact,
+        "sourceFrame": f"Seen via {source}.",
+    }
+
+
+def try_worthy(item):
+    text_blob = f"{item.get('title') or ''} {item.get('summary') or ''}".lower()
+    if item.get("model_release"):
+        return True
+    return any(w in text_blob for w in [
+        "available", "launch", "released", "api", "tool", "agent", "computer use",
+        "coding", "plugin", "open source", "github", "cookbook", "sdk"
+    ])
+
+
+def story_cluster_key(item):
+    title = (item.get("title") or "").lower()
+    title = re.sub(r"[^a-z0-9\s+-]", " ", title)
+    words = [w for w in title.split() if len(w) > 2 and w not in CLUSTER_STOPWORDS]
+
+    brands = [
+        "openai", "chatgpt", "anthropic", "claude", "google", "gemini", "deepmind",
+        "mistral", "grok", "xai", "meta", "llama", "nvidia", "aws", "figma",
+        "cerebras", "micron", "openrouter", "cursor", "windsurf", "mcp"
+    ]
+    brand_hits = [b for b in brands if b in title]
+    if brand_hits:
+        key_words = brand_hits + words[:5]
+    else:
+        key_words = words[:6]
+    return "-".join(key_words)[:90] or hashlib.sha1((item.get("url") or title).encode("utf-8")).hexdigest()[:12]
+
+
+def attach_cluster_metadata(items):
+    clusters = {}
+    for it in items:
+        key = story_cluster_key(it)
+        it["clusterKey"] = key
+        clusters.setdefault(key, []).append(it)
+
+    for key, members in clusters.items():
+        sources = sorted({m.get("source") for m in members if m.get("source")})
+        if len(members) > 1:
+            members_sorted = sorted(members, key=lambda x: (x.get("score", 0), x.get("published", "")), reverse=True)
+            title = members_sorted[0].get("title", "Related coverage")
+            for m in members:
+                m["clusterTitle"] = title
+                m["clusterSize"] = len(members)
+                m["relatedSources"] = sources
+
+
+def build_archive_index(public_dir):
+    entries = []
+    for name in os.listdir(public_dir):
+        m = re.match(r"ai-news-daily-(\d{4}-\d{2}-\d{2})\.json$", name)
+        if not m:
+            continue
+        path = os.path.join(public_dir, name)
+        try:
+            data = load_json(path, {})
+            count = len(data.get("items", []))
+            if count == 0:
+                continue
+            entries.append({
+                "date": m.group(1),
+                "path": f"public/{name}",
+                "count": count,
+                "updatedAt": data.get("updatedAt", ""),
+            })
+        except Exception:
+            continue
+    entries.sort(key=lambda x: x["date"], reverse=True)
+    return entries[:45]
 
 
 def image_extension(content_type, url):
@@ -721,6 +834,7 @@ def main():
 
     fetched = []
     errors = []
+    source_health = []
 
     for feed in feeds:
         name = feed.get("name")
@@ -742,8 +856,28 @@ def main():
                 item["category"] = category
                 item["sourceRole"] = role
             fetched.extend(items)
+            source_health.append({
+                "source": name,
+                "url": url,
+                "role": role,
+                "category": category,
+                "status": "ok",
+                "items": len(items),
+                "checkedAt": now.isoformat(),
+            })
         except Exception as e:
-            errors.append({"source": name, "url": url, "error": str(e)})
+            error = {"source": name, "url": url, "error": str(e)}
+            errors.append(error)
+            source_health.append({
+                "source": name,
+                "url": url,
+                "role": role,
+                "category": category,
+                "status": "error",
+                "items": 0,
+                "error": str(e),
+                "checkedAt": now.isoformat(),
+            })
 
     # Merge + normalize
     cutoff = now - timedelta(days=MAX_ITEM_AGE_DAYS)
@@ -834,11 +968,20 @@ def main():
             it["editorial_allow"] = True
             it["editorial_reason"] = "high_score_override"
 
+    for it in all_items:
+        if it.get("category") == "AI" and it.get("editorial_allow") and not it.get("image"):
+            it["editorial_allow"] = False
+            it["editorial_reason"] = "missing_image"
+
     # Add structured editorial metadata for the frontend.
     for it in all_items:
         it["signalGroup"] = classify_signal_group(it)
         it["sourceTier"] = source_role_label(it.get("sourceRole"))
         it["whyItMatters"] = make_why_it_matters(it)
+        it["brief"] = make_structured_brief(it)
+        it["tryWorthy"] = try_worthy(it)
+
+    attach_cluster_metadata(all_items)
 
     # Cache thumbnails locally so the browser is not blocked by CSP or hotlink limits.
     thumb_fetched = 0
@@ -875,9 +1018,14 @@ def main():
     sci_items = sorted([i for i in all_items if i.get("category") == "Science"],
                        key=lambda x: (x["published_dt"], x["score"]), reverse=True)[:20]
     latest = ai_items + sci_items
+    try_worthy_items = sorted(
+        [i for i in latest if i.get("category") == "AI" and i.get("editorial_allow") and i.get("tryWorthy")],
+        key=lambda x: (x.get("score", 0), x.get("published", "")),
+        reverse=True,
+    )[:8]
     public_thumbnail_paths = {
         it.get("image", "")
-        for it in (latest + daily_top)
+        for it in (latest + daily_top + try_worthy_items)
         if is_local_thumbnail(it.get("image", ""))
     }
     restore_non_public_thumbnails(all_items, public_thumbnail_paths)
@@ -890,8 +1038,22 @@ def main():
 
     save_json(STORE_PATH, {"updatedAt": now.isoformat(), "items": all_items})
     save_json(IMAGE_CACHE_PATH, {"updatedAt": now.isoformat(), "items": cache_items})
-    save_json(os.path.join(PUBLIC_DIR, "ai-news-latest.json"), {"updatedAt": now.isoformat(), "items": latest, "errors": errors})
-    save_json(os.path.join(PUBLIC_DIR, f"ai-news-daily-{today.isoformat()}.json"), {"date": today.isoformat(), "updatedAt": now.isoformat(), "items": daily_top, "errors": errors})
+    save_json(os.path.join(PUBLIC_DIR, "ai-news-latest.json"), {
+        "updatedAt": now.isoformat(),
+        "items": latest,
+        "tryWorthy": try_worthy_items,
+        "sourceHealth": source_health,
+        "errors": errors,
+    })
+    save_json(os.path.join(PUBLIC_DIR, f"ai-news-daily-{today.isoformat()}.json"), {
+        "date": today.isoformat(),
+        "updatedAt": now.isoformat(),
+        "items": daily_top,
+        "tryWorthy": try_worthy_items,
+        "sourceHealth": source_health,
+        "errors": errors,
+    })
+    save_json(ARCHIVE_INDEX_PATH, {"updatedAt": now.isoformat(), "archives": build_archive_index(PUBLIC_DIR)})
 
     # Minimal static page
     html_items = "\n".join(

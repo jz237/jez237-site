@@ -74,9 +74,17 @@
           <option value="watchlist">Watchlist sources</option>
         </select>
         <input id="news-query" class="control" type="search" placeholder="Filter headline/summary..." />
+        <select id="news-archive" class="control">
+          <option value="">Latest briefing</option>
+        </select>
         <span id="news-updated" class="news-meta"></span>
       </div>
       <div id="news-summary" class="news-summary" aria-live="polite"></div>
+      <div id="news-tools" class="news-tools-strip"></div>
+      <details id="news-health" class="news-health">
+        <summary>Source health</summary>
+        <div id="news-health-body"></div>
+      </details>
       <div id="news-grid" class="news-grid"></div>
     </section>
 
