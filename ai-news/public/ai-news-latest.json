@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-25T14:52:05.644249+00:00",
+  "updatedAt": "2026-06-25T14:53:44.092288+00:00",
   "items": [
     {
       "title": "Cannes insights: What a two-time major champion knows about marketing that CMOs don’t",
@@ -8,15 +8,16 @@
       "sourceUrl": "https://thenextweb.com/feed",
       "sourceWeight": 0.75,
       "sourceRole": "secondary",
+      "sourceType": "",
       "category": "AI",
       "summary": "For one week every June, the advertising industry decamps to the French Riviera to take its own temperature. The Cannes Lions International Festival of Creativity, now in its 72nd year, ran from 16 to 20 June 2025 and drew roughly 15,000 delegates from 90 countries, the sort of crowd that turns a seaside town into [&hellip;]\nThis story continues at The Next Web",
       "image": "https://media.thenextweb.com/2026/06/Bryson-DeChambeau-Youtube-panel-Cannes.avif",
       "published": "2026-06-25T14:07:37+00:00",
       "firstSeen": "2026-06-25T14:24:30.601288+00:00",
-      "lastSeen": "2026-06-25T14:52:05.644249+00:00",
+      "lastSeen": "2026-06-25T14:53:44.092288+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1276,
+      "score": 2.1268,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
@@ -27,6 +28,7 @@
         "sourceFrame": "Seen via The Next Web."
       },
       "tryWorthy": false,
+      "toolCandidate": false,
       "clusterKey": "cannes-insights-what-two-time-major-champion"
     },
     {
@@ -36,15 +38,16 @@
       "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
       "sourceWeight": 0.85,
       "sourceRole": "secondary",
+      "sourceType": "",
       "category": "AI",
       "summary": "2 days left to lock in your spot at TechCrunch Founder Summit 2026 and save up to $190 before Early Bird rates expire on June 26 at 11:59 p.m. PT. Register here.",
       "image": "https://techcrunch.com/wp-content/uploads/2025/12/TC-All-Stage-2025-roundtable.jpg?resize=1200%2C800",
       "published": "2026-06-25T14:00:00+00:00",
       "firstSeen": "2026-06-25T14:24:30.601288+00:00",
-      "lastSeen": "2026-06-25T14:52:05.644249+00:00",
+      "lastSeen": "2026-06-25T14:53:44.092288+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2638,
+      "score": 2.263,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
@@ -55,6 +58,7 @@
         "sourceFrame": "Seen via TechCrunch AI."
       },
       "tryWorthy": false,
+      "toolCandidate": false,
       "clusterKey": "days-left-save-190-join-000+"
     },
     {
@@ -64,15 +68,16 @@
       "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
       "sourceWeight": 0.85,
       "sourceRole": "secondary",
+      "sourceType": "",
       "category": "AI",
       "summary": "Adobe said that it will integrate Topaz Labs' tools across its apps.",
       "image": "https://techcrunch.com/wp-content/uploads/2024/09/GettyImages-2162453288.jpg?resize=1200%2C800",
       "published": "2026-06-25T13:30:00+00:00",
       "firstSeen": "2026-06-25T14:00:01.986504+00:00",
-      "lastSeen": "2026-06-25T14:52:05.644249+00:00",
+      "lastSeen": "2026-06-25T14:53:44.092288+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.349,
+      "score": 3.3482,
       "signalGroup": "Business",
       "sourceTier": "Reported source",
       "whyItMatters": "Business moves are a map of where the industry thinks the bottlenecks and durable demand will be.",
@@ -83,6 +88,7 @@
         "sourceFrame": "Seen via TechCrunch AI."
       },
       "tryWorthy": true,
+      "toolCandidate": false,
       "clusterKey": "adobe-acquires-image-video-enhancement-tool"
     },
     {
@@ -92,15 +98,16 @@
       "sourceUrl": "https://thenextweb.com/feed",
       "sourceWeight": 0.75,
       "sourceRole": "secondary",
+      "sourceType": "",
       "category": "AI",
       "summary": "The AI boom has been an abstract thing for most consumers, a story about data centres and model launches happening somewhere else. This week it arrived somewhere concrete: the price of a Mac. Apple is raising prices on Macs and iPads to offset the soaring cost of memory and storage chips, the bill for an [&hellip;]\nThis story continues at The Next Web",
       "image": "https://media.thenextweb.com/2026/03/Apple-MacBook-Neo-lifestyle.avif",
       "published": "2026-06-25T13:27:50+00:00",
       "firstSeen": "2026-06-25T14:24:30.601288+00:00",
-      "lastSeen": "2026-06-25T14:52:05.644249+00:00",
+      "lastSeen": "2026-06-25T14:53:44.092288+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 4.3079,
+      "score": 4.3071,
       "signalGroup": "Infrastructure",
       "sourceTier": "Reported source",
       "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
@@ -111,6 +118,7 @@
         "sourceFrame": "Seen via The Next Web."
       },
       "tryWorthy": true,
+      "toolCandidate": false,
       "clusterKey": "apple-raises-mac-ipad-prices-memory"
     },
     {
@@ -120,15 +128,16 @@
       "sourceUrl": "https://thenextweb.com/feed",
       "sourceWeight": 0.75,
       "sourceRole": "secondary",
+      "sourceType": "",
       "category": "AI",
       "summary": "The partnership will fund EU AI hardware and data centres, and launch aiUSX, a yield asset that puts companies’ idle AI cash to work as infrastructure lending. Building sovereign AI in Europe takes chips, and chips take capital. TensorX and Solstice said they would supply the second to help buy the first, announcing a partnership [&hellip;]\nThis story continues at The Next Web",
       "image": "https://media.thenextweb.com/2026/06/Solstice-TensorX.avif",
       "published": "2026-06-25T13:03:34+00:00",
       "firstSeen": "2026-06-25T14:00:01.986504+00:00",
-      "lastSeen": "2026-06-25T14:52:05.644249+00:00",
+      "lastSeen": "2026-06-25T14:53:44.092288+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.4961,
+      "score": 3.4953,
       "signalGroup": "Infrastructure",
       "sourceTier": "Reported source",
       "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
@@ -139,6 +148,7 @@
         "sourceFrame": "Seen via The Next Web."
       },
       "tryWorthy": true,
+      "toolCandidate": false,
       "clusterKey": "tensorx-solstice-line-1bn-finance-europe"
     },
     {
@@ -148,15 +158,16 @@
       "sourceUrl": "https://thenextweb.com/feed",
       "sourceWeight": 0.75,
       "sourceRole": "secondary",
+      "sourceType": "",
       "category": "AI",
       "summary": "When cloud computing transformed enterprise IT, security vendors followed the workloads. Visibility into cloud infrastructure became a central requirement as organizations shifted applications and data into new environments. Artificial intelligence is now driving another change, but this time the challenge is not simply where applications run. It is understanding how actions move between developer devices, AI systems, [&hellip;]\nThis story continues at The Next Web",
       "image": "public/thumbnails/news-385170b12f1b334d1b.avif",
       "published": "2026-06-25T13:00:52+00:00",
       "firstSeen": "2026-06-25T14:24:30.601288+00:00",
-      "lastSeen": "2026-06-25T14:52:05.644249+00:00",
+      "lastSeen": "2026-06-25T14:53:44.092288+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 4.9948,
+      "score": 4.994,
       "signalGroup": "Policy & risk",
       "sourceTier": "Reported source",
       "whyItMatters": "Policy and risk stories often become product constraints later, especially around data access, safety claims, export rules, and copyright.",
@@ -167,6 +178,7 @@
         "sourceFrame": "Seen via The Next Web."
       },
       "tryWorthy": true,
+      "toolCandidate": false,
       "clusterKey": "upwind-launches-sensor-endpoints-security-teams",
       "imageOriginal": "https://media.thenextweb.com/2026/06/upwind-ai-sensor-endpoints-mcp-cloud-security-.avif"
     },
@@ -177,15 +189,16 @@
       "sourceUrl": "https://blogs.nvidia.com/feed/",
       "sourceWeight": 0.85,
       "sourceRole": "primary",
+      "sourceType": "",
       "category": "AI",
       "summary": "Summer savings are heating up. From the Steam Summer Sale to GeForce NOW membership discounts, this week’s GFN Thursday delivers double the deals and more ways to get the most value from cloud gaming. Plus, Dark Scrolls joins the growing Devolver lineup, alongside Square Enix’s The Adventures of Elliot: The Millennium Tales. They lead the [&#8230;]",
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/gfn-thursday-6-25-no-copy-kv-1536x920-1.jpg",
       "published": "2026-06-25T13:00:34+00:00",
       "firstSeen": "2026-06-25T14:00:01.986504+00:00",
-      "lastSeen": "2026-06-25T14:52:05.644249+00:00",
+      "lastSeen": "2026-06-25T14:53:44.092288+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2346,
+      "score": 3.2339,
       "signalGroup": "Product updates",
       "sourceTier": "Primary source",
       "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
@@ -196,6 +209,7 @@
         "sourceFrame": "Seen via NVIDIA Blog."
       },
       "tryWorthy": false,
+      "toolCandidate": false,
       "clusterKey": "ultimate-summer-sale-pairing-steam-sale"
     },
     {
@@ -205,15 +219,16 @@
       "sourceUrl": "https://thenextweb.com/feed",
       "sourceWeight": 0.75,
       "sourceRole": "secondary",
+      "sourceType": "",
       "category": "AI",
       "summary": "On Thursday, a clutch of apps belonging to the Russian tech group VK disappeared from Apple’s App Store, and by the afternoon the Kremlin was asking why. Dmitry Peskov, the presidential spokesman, said the government expected an explanation from Apple. He also offered Russians a workaround that doubled as a message: switch operating systems. The [&hellip;]\nThis story continues at The Next Web",
       "image": "https://media.thenextweb.com/2026/05/Apple.avif",
       "published": "2026-06-25T12:47:45+00:00",
       "firstSeen": "2026-06-25T14:00:01.986504+00:00",
-      "lastSeen": "2026-06-25T14:52:05.644249+00:00",
+      "lastSeen": "2026-06-25T14:53:44.092288+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1885,
+      "score": 3.1877,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
@@ -224,6 +239,7 @@
         "sourceFrame": "Seen via The Next Web."
       },
       "tryWorthy": false,
+      "toolCandidate": false,
       "clusterKey": "kremlin-demands-explanation-apple-apps-vanish"
     },
     {
@@ -233,15 +249,16 @@
       "sourceUrl": "https://thenextweb.com/feed",
       "sourceWeight": 0.75,
       "sourceRole": "secondary",
+      "sourceType": "",
       "category": "AI",
       "summary": "The European Commission told Amazon and Microsoft that it takes the preliminary view that their cloud arms, Amazon Web Services and Microsoft Azure, should be designated as gatekeepers under the Digital Markets Act. The wording matters more than it looks. Neither service meets the DMA’s quantitative thresholds. Brussels wants them in anyway. That is the [&hellip;]\nThis story continues at The Next Web",
       "image": "https://media.thenextweb.com/2024/09/Untitled-design-40.avif",
       "published": "2026-06-25T12:38:05+00:00",
       "firstSeen": "2026-06-25T14:00:01.986504+00:00",
-      "lastSeen": "2026-06-25T14:52:05.644249+00:00",
+      "lastSeen": "2026-06-25T14:53:44.092288+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0838,
+      "score": 2.083,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
@@ -252,6 +269,7 @@
         "sourceFrame": "Seen via The Next Web."
       },
       "tryWorthy": false,
+      "toolCandidate": false,
       "clusterKey": "aws-brussels-moves-put-aws-azure"
     },
     {
@@ -261,15 +279,16 @@
       "sourceUrl": "https://thenextweb.com/feed",
       "sourceWeight": 0.75,
       "sourceRole": "secondary",
+      "sourceType": "",
       "category": "AI",
       "summary": "Steve Jarrett, Orange’s chief AI officer since 2019, will join the Claude maker in Paris in late August to adapt its products for European and African markets. The head of artificial intelligence at the French telecoms group Orange is leaving to join Anthropic, a hire that lands squarely inside the US company’s push into Europe. [&hellip;]\nThis story continues at The Next Web",
       "image": "public/thumbnails/news-4fa3dca17f420458c8.avif",
       "published": "2026-06-25T12:33:41+00:00",
       "firstSeen": "2026-06-25T14:00:01.986504+00:00",
-      "lastSeen": "2026-06-25T14:52:05.644249+00:00",
+      "lastSeen": "2026-06-25T14:53:44.092288+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.0817,
+      "score": 9.0809,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
@@ -280,6 +299,7 @@
         "sourceFrame": "Seen via The Next Web."
       },
       "tryWorthy": false,
+      "toolCandidate": false,
       "clusterKey": "anthropic-anthropic-hires-orange-chief-european",
       "imageOriginal": "https://media.thenextweb.com/2026/06/Steve-Jarrett-Oranges-chief-AI.avif"
     },
@@ -290,15 +310,16 @@
       "sourceUrl": "https://thenextweb.com/feed",
       "sourceWeight": 0.75,
       "sourceRole": "secondary",
+      "sourceType": "",
       "category": "AI",
       "summary": "Less than three years ago, residents of Green Charter Township, a rural community of roughly 3,000 people in central Michigan, packed a hall to celebrate what they saw as a victory for local democracy. They had recalled every member of their town board and installed replacements who promptly killed a $2.36 billion electric vehicle battery plant proposed [&hellip;]\nThis story continues at The Next Web",
       "image": "https://media.thenextweb.com/2026/04/Us-china.avif",
       "published": "2026-06-25T12:19:36+00:00",
       "firstSeen": "2026-06-25T14:00:01.986504+00:00",
-      "lastSeen": "2026-06-25T14:52:05.644249+00:00",
+      "lastSeen": "2026-06-25T14:53:44.092288+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.075,
+      "score": 2.0742,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
@@ -309,6 +330,7 @@
         "sourceFrame": "Seen via The Next Web."
       },
       "tryWorthy": false,
+      "toolCandidate": false,
       "clusterKey": "michigan-township-killed-billion-chinese-battery"
     },
     {
@@ -318,15 +340,16 @@
       "sourceUrl": "https://thenextweb.com/feed",
       "sourceWeight": 0.75,
       "sourceRole": "secondary",
+      "sourceType": "",
       "category": "AI",
       "summary": "Brussels is joining a Washington-led effort to secure AI chip supply chains, a fortnight after unveiling a tech-sovereignty agenda built on the opposite instinct. The European Union is set to join Pax Silica, the US-led initiative to coordinate AI chip supply chains and export controls against China. The decision is awkwardly timed. It arrives just [&hellip;]\nThis story continues at The Next Web",
       "image": "https://media.thenextweb.com/2026/06/Pax-Silica.avif",
       "published": "2026-06-25T12:16:58+00:00",
       "firstSeen": "2026-06-25T14:00:01.986504+00:00",
-      "lastSeen": "2026-06-25T14:52:05.644249+00:00",
+      "lastSeen": "2026-06-25T14:53:44.092288+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0738,
+      "score": 2.073,
       "signalGroup": "Infrastructure",
       "sourceTier": "Reported source",
       "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
@@ -337,6 +360,7 @@
         "sourceFrame": "Seen via The Next Web."
       },
       "tryWorthy": false,
+      "toolCandidate": false,
       "clusterKey": "signs-pax-silica-us-led-chip-pact"
     },
     {
@@ -346,15 +370,16 @@
       "sourceUrl": "https://thenextweb.com/feed",
       "sourceWeight": 0.75,
       "sourceRole": "secondary",
+      "sourceType": "",
       "category": "AI",
       "summary": "In the desert outside Zhongwei, in the northwestern region of Ningxia, four dedicated power lines now run from a field of solar panels to a cluster of computers. They do not pass through the public grid. That detail, dull as it sounds, is the whole point. China is encouraging its sprawling data centre industry to [&hellip;]\nThis story continues at The Next Web",
       "image": "https://media.thenextweb.com/2026/06/China-flag.avif",
       "published": "2026-06-25T12:00:48+00:00",
       "firstSeen": "2026-06-25T13:00:01.312721+00:00",
-      "lastSeen": "2026-06-25T14:52:05.644249+00:00",
+      "lastSeen": "2026-06-25T14:53:44.092288+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -1.0339,
+      "score": -1.0346,
       "signalGroup": "Infrastructure",
       "sourceTier": "Reported source",
       "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
@@ -365,6 +390,7 @@
         "sourceFrame": "Seen via The Next Web."
       },
       "tryWorthy": false,
+      "toolCandidate": false,
       "clusterKey": "china-wants-green-power-wired-straight"
     },
     {
@@ -374,15 +400,16 @@
       "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
       "sourceWeight": 0.85,
       "sourceRole": "secondary",
+      "sourceType": "",
       "category": "AI",
       "summary": "Amazon’s latest India investment comes as global tech companies race to expand AI infrastructure in the country.",
       "image": "https://techcrunch.com/wp-content/uploads/2025/06/GettyImages-844105434.jpg?w=1024",
       "published": "2026-06-25T12:00:38+00:00",
       "firstSeen": "2026-06-25T13:00:01.312721+00:00",
-      "lastSeen": "2026-06-25T14:52:05.644249+00:00",
+      "lastSeen": "2026-06-25T14:53:44.092288+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2061,
+      "score": 2.2053,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
@@ -393,6 +420,7 @@
         "sourceFrame": "Seen via TechCrunch AI."
       },
       "tryWorthy": false,
+      "toolCandidate": false,
       "clusterKey": "amazon-ups-india-bet-fresh-13b"
     },
     {
@@ -402,15 +430,16 @@
       "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
       "sourceWeight": 0.9,
       "sourceRole": "secondary",
+      "sourceType": "",
       "category": "AI",
       "summary": "To celebrate its new status as No. 1 in JD Power's initial quality ranking among mainstream automakers, Ford is opening up about the challenges it has faced in recent years, especially around its reliance on automated systems in production and design. It turns out that those automated systems were not as robust as previously assumed, [&#8230;]",
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/08/acastro_STK056_02.jpg?quality=90&strip=all&crop=0%2C10.732984293194%2C100%2C78.534031413613&w=1200",
       "published": "2026-06-25T12:00:00+00:00",
       "firstSeen": "2026-06-25T13:00:01.312721+00:00",
-      "lastSeen": "2026-06-25T14:52:05.644249+00:00",
+      "lastSeen": "2026-06-25T14:53:44.092288+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2758,
+      "score": 2.275,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
@@ -421,6 +450,7 @@
         "sourceFrame": "Seen via The Verge AI."
       },
       "tryWorthy": false,
+      "toolCandidate": false,
       "clusterKey": "ford-had-hire-back-former-engineers"
     },
     {
@@ -438,7 +468,7 @@
       "lastSeen": "2026-06-25T14:00:01.986504+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0619,
+      "score": 2.0612,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
@@ -449,7 +479,9 @@
         "sourceFrame": "Seen via The Next Web."
       },
       "tryWorthy": true,
-      "clusterKey": "russia-cracked-activist-iphone-cellebrite-months"
+      "clusterKey": "russia-cracked-activist-iphone-cellebrite-months",
+      "sourceType": "",
+      "toolCandidate": false
     },
     {
       "title": "Canadian workers have few defences against workplace surveillance",
@@ -466,7 +498,7 @@
       "lastSeen": "2026-06-25T14:00:01.986504+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0317,
+      "score": 2.0309,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
@@ -477,7 +509,9 @@
         "sourceFrame": "Seen via The Next Web."
       },
       "tryWorthy": false,
-      "clusterKey": "canadian-workers-have-few-defences-against"
+      "clusterKey": "canadian-workers-have-few-defences-against",
+      "sourceType": "",
+      "toolCandidate": false
     },
     {
       "title": "Oracle cuts about 500 jobs in Romania as AI restructuring rolls on",
@@ -494,7 +528,7 @@
       "lastSeen": "2026-06-25T14:00:01.986504+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0255,
+      "score": 2.0248,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
@@ -505,7 +539,9 @@
         "sourceFrame": "Seen via The Next Web."
       },
       "tryWorthy": false,
-      "clusterKey": "oracle-cuts-500-jobs-romania-restructuring"
+      "clusterKey": "oracle-cuts-500-jobs-romania-restructuring",
+      "sourceType": "",
+      "toolCandidate": false
     },
     {
       "title": "IBM says it has built the first sub-1nm chip technology",
@@ -522,7 +558,7 @@
       "lastSeen": "2026-06-25T13:00:01.312721+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3232,
+      "score": 2.3225,
       "signalGroup": "Infrastructure",
       "sourceTier": "Reported source",
       "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
@@ -533,7 +569,9 @@
         "sourceFrame": "Seen via The Next Web."
       },
       "tryWorthy": false,
-      "clusterKey": "ibm-has-built-first-sub-1nm-chip"
+      "clusterKey": "ibm-has-built-first-sub-1nm-chip",
+      "sourceType": "",
+      "toolCandidate": false
     },
     {
       "title": "South Korean chip shares rally after Micron’s upbeat earnings",
@@ -550,7 +588,7 @@
       "lastSeen": "2026-06-25T13:00:01.312721+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.7687,
+      "score": 3.7679,
       "signalGroup": "Infrastructure",
       "sourceTier": "Reported source",
       "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
@@ -561,7 +599,9 @@
         "sourceFrame": "Seen via The Next Web."
       },
       "tryWorthy": false,
-      "clusterKey": "micron-south-korean-chip-shares-rally"
+      "clusterKey": "micron-south-korean-chip-shares-rally",
+      "sourceType": "",
+      "toolCandidate": false
     },
     {
       "title": "Berlin’s Almetra raises €16.3M to turn factory video into live data",
@@ -578,7 +618,7 @@
       "lastSeen": "2026-06-25T13:00:01.312721+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.115,
+      "score": 3.1143,
       "signalGroup": "Business",
       "sourceTier": "Reported source",
       "whyItMatters": "Business moves are a map of where the industry thinks the bottlenecks and durable demand will be.",
@@ -589,7 +629,9 @@
         "sourceFrame": "Seen via The Next Web."
       },
       "tryWorthy": false,
-      "clusterKey": "berlin-almetra-raises-turn-factory-video"
+      "clusterKey": "berlin-almetra-raises-turn-factory-video",
+      "sourceType": "",
+      "toolCandidate": false
     },
     {
       "title": "Amazon to invest an extra $13bn in Indian cloud and AI by 2030",
@@ -606,7 +648,7 @@
       "lastSeen": "2026-06-25T13:00:01.312721+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0064,
+      "score": 2.0057,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
@@ -617,7 +659,9 @@
         "sourceFrame": "Seen via The Next Web."
       },
       "tryWorthy": false,
-      "clusterKey": "amazon-invest-extra-13bn-indian-cloud"
+      "clusterKey": "amazon-invest-extra-13bn-indian-cloud",
+      "sourceType": "",
+      "toolCandidate": false
     },
     {
       "title": "Two more Gemini researchers are leaving Google for Anthropic",
@@ -634,7 +678,7 @@
       "lastSeen": "2026-06-25T13:00:01.312721+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 17.4028,
+      "score": 17.4021,
       "signalGroup": "Research",
       "sourceTier": "Reported source",
       "whyItMatters": "Research items are useful when they hint at future product behavior, benchmark movement, or techniques likely to show up in tools.",
@@ -646,7 +690,9 @@
       },
       "tryWorthy": false,
       "clusterKey": "anthropic-google-gemini-two-more-gemini-researchers-leaving",
-      "imageOriginal": "https://media.thenextweb.com/2026/06/Google-mockup.avif"
+      "imageOriginal": "https://media.thenextweb.com/2026/06/Google-mockup.avif",
+      "sourceType": "",
+      "toolCandidate": false
     },
     {
       "title": "Solo-maxxing: How tech taught Gen Z to monetise being alone",
@@ -663,7 +709,7 @@
       "lastSeen": "2026-06-25T13:00:01.312721+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9986,
+      "score": 1.9978,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
@@ -674,7 +720,9 @@
         "sourceFrame": "Seen via The Next Web."
       },
       "tryWorthy": true,
-      "clusterKey": "solo-maxxing-how-tech-taught-gen-monetise"
+      "clusterKey": "solo-maxxing-how-tech-taught-gen-monetise",
+      "sourceType": "",
+      "toolCandidate": false
     },
     {
       "title": "Facebook’s Creator Studio has been revived as an AI companion app",
@@ -683,15 +731,16 @@
       "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
       "sourceWeight": 0.9,
       "sourceRole": "secondary",
+      "sourceType": "",
       "category": "AI",
       "summary": "Meta is bringing back the Facebook Creator Studio page manager, now \"reimagined\" as a standalone AI companion app. The new app aims to make it easier for creators to connect with their audiences and show them \"exactly how to grow on Facebook,\" according to Meta's announcement. Meta's AI Creator Assistant is a central focus of [&#8230;]",
       "image": "public/thumbnails/news-cab88ca1897c82503d.webp",
       "published": "2026-06-25T09:06:19+00:00",
       "firstSeen": "2026-06-25T10:00:01.660955+00:00",
-      "lastSeen": "2026-06-25T14:52:05.644249+00:00",
+      "lastSeen": "2026-06-25T14:53:44.092288+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 4.3973,
+      "score": 4.3966,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
@@ -702,6 +751,7 @@
         "sourceFrame": "Seen via The Verge AI."
       },
       "tryWorthy": false,
+      "toolCandidate": false,
       "clusterKey": "facebook-creator-studio-has-been-revived"
     },
     {
@@ -719,7 +769,7 @@
       "lastSeen": "2026-06-25T11:48:35.527262+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.6691,
+      "score": 2.6684,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
@@ -730,7 +780,9 @@
         "sourceFrame": "Seen via The Next Web."
       },
       "tryWorthy": true,
-      "clusterKey": "tombot-raises-bring-robotic-dog-jennie"
+      "clusterKey": "tombot-raises-bring-robotic-dog-jennie",
+      "sourceType": "",
+      "toolCandidate": false
     },
     {
       "title": "H.B. Fuller nears a $628 million deal for UK wound-care maker AMS, over its own investor’s objections",
@@ -747,7 +799,7 @@
       "lastSeen": "2026-06-25T11:48:35.527262+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3158,
+      "score": 2.3151,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
@@ -758,7 +810,9 @@
         "sourceFrame": "Seen via The Next Web."
       },
       "tryWorthy": false,
-      "clusterKey": "fuller-nears-628-million-deal-wound-care"
+      "clusterKey": "fuller-nears-628-million-deal-wound-care",
+      "sourceType": "",
+      "toolCandidate": false
     },
     {
       "title": "Tesla sued over fatal Texas crash the driver says happened on Autopilot",
@@ -775,7 +829,7 @@
       "lastSeen": "2026-06-25T11:00:01.736476+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0622,
+      "score": 3.0616,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
@@ -786,7 +840,9 @@
         "sourceFrame": "Seen via The Next Web."
       },
       "tryWorthy": false,
-      "clusterKey": "tesla-sued-fatal-texas-crash-driver"
+      "clusterKey": "tesla-sued-fatal-texas-crash-driver",
+      "sourceType": "",
+      "toolCandidate": false
     },
     {
       "title": "OVHcloud confirms its outlook as public cloud growth accelerates past 20%",
@@ -803,7 +859,7 @@
       "lastSeen": "2026-06-25T11:00:01.736476+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9585,
+      "score": 1.9578,
       "signalGroup": "Business",
       "sourceTier": "Reported source",
       "whyItMatters": "Business moves are a map of where the industry thinks the bottlenecks and durable demand will be.",
@@ -814,7 +870,9 @@
         "sourceFrame": "Seen via The Next Web."
       },
       "tryWorthy": false,
-      "clusterKey": "ovhcloud-confirms-outlook-public-cloud-growth"
+      "clusterKey": "ovhcloud-confirms-outlook-public-cloud-growth",
+      "sourceType": "",
+      "toolCandidate": false
     },
     {
       "title": "Actress Cate Blanchett launches a free registry tool to keep AI from using your likeness",
@@ -831,7 +889,7 @@
       "lastSeen": "2026-06-25T11:00:01.736476+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.7314,
+      "score": 3.7307,
       "signalGroup": "Media generation",
       "sourceTier": "Reported source",
       "whyItMatters": "Media-model updates affect what can be made quickly, what still needs craft, and where creative pipelines may change next.",
@@ -842,7 +900,9 @@
         "sourceFrame": "Seen via The Next Web."
       },
       "tryWorthy": true,
-      "clusterKey": "actress-cate-blanchett-launches-free-registry"
+      "clusterKey": "actress-cate-blanchett-launches-free-registry",
+      "sourceType": "",
+      "toolCandidate": false
     },
     {
       "title": "The math behind the OpenAI Jalapeño chip",
@@ -851,15 +911,16 @@
       "sourceUrl": "https://www.artificialintelligence-news.com/categories/artificial-intelligence/feed/",
       "sourceWeight": 0.82,
       "sourceRole": "secondary",
+      "sourceType": "",
       "category": "AI",
       "summary": "OpenAI’s financial trajectory hinges heavily on infrastructure costs, a reality that drove the development of the new custom OpenAI Jalapeño chip. Developed in collaboration with Broadcom, the application-specific integrated circuit (ASIC) represents a direct attempt to mitigate the heavy capital expenditure associated with third-party hardware.&#160; While Nvidia currently commands an estimated 75% profit margin on [&#8230;]\nThe post The math behind the OpenAI Jalapeño chip appeared first on AI News.",
       "image": "",
       "published": "2026-06-25T06:00:00+00:00",
       "firstSeen": "2026-06-25T07:00:01.940787+00:00",
-      "lastSeen": "2026-06-25T14:52:05.644249+00:00",
+      "lastSeen": "2026-06-25T14:53:44.092288+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.8078,
+      "score": 6.8072,
       "signalGroup": "Infrastructure",
       "sourceTier": "Reported source",
       "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
@@ -870,6 +931,7 @@
         "sourceFrame": "Seen via Artificial Intelligence News."
       },
       "tryWorthy": true,
+      "toolCandidate": false,
       "clusterKey": "openai-math-behind-openai-jalape-chip"
     },
     {
@@ -879,15 +941,16 @@
       "sourceUrl": "https://github.com/BerriAI/litellm/releases.atom",
       "sourceWeight": 0.85,
       "sourceRole": "primary",
+      "sourceType": "tool-release",
       "category": "AI",
       "summary": "Verify Docker Image Signature\nAll LiteLLM Docker images are signed with cosign. Every release is signed with the same key introduced in commit 0112e53.\nVerify using the pinned commit hash (recommended):\nA commit hash is cryptographically immutable, so this is the strongest way to ensure you are using the original signing key:\ncosign verify \\\n  --key https://raw.githubusercontent.com/BerriAI/litellm/0112e53046018d726492c814b3644b7d376029d0/cosign.pub \\\n  ghcr.io/berriai/litellm:v1.89.4\nVerify using the release tag (convenience):\nTags are protected in this repository and resolve to the same key.",
       "image": "https://opengraph.githubassets.com/cd861fcf05dd4a193fc9d5cf7cd67b9e98774140a83bd087ee8e7f510063c924/BerriAI/litellm/releases/tag/v1.89.4",
       "published": "2026-06-25T02:56:04+00:00",
       "firstSeen": "2026-06-25T03:00:01.596717+00:00",
-      "lastSeen": "2026-06-25T14:52:05.644249+00:00",
+      "lastSeen": "2026-06-25T14:53:44.092288+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.6796,
+      "score": 3.679,
       "signalGroup": "Product updates",
       "sourceTier": "Primary source",
       "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
@@ -898,6 +961,10 @@
         "sourceFrame": "Seen via LiteLLM Releases."
       },
       "tryWorthy": true,
+      "toolCandidate": true,
+      "toolName": "LiteLLM",
+      "toolLabel": "LiteLLM v1.89.4",
+      "toolSummary": "Verify Docker Image Signature All LiteLLM Docker images are signed with cosign. Every release is signed with the same key introduced in commit 0112...",
       "clusterKey": "8c15f26928e3"
     },
     {
@@ -907,15 +974,16 @@
       "sourceUrl": "https://www.latent.space/feed",
       "sourceWeight": 0.86,
       "sourceRole": "secondary",
+      "sourceType": "",
       "category": "AI",
       "summary": "Move over, Harness Engineering, it is time for the harness of harnesses!",
       "image": "https://substackcdn.com/image/fetch/$s_!LH6a!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fd1a3d909-a54b-4acd-aa2c-33823f9e032e_878x674.png",
       "published": "2026-06-25T02:14:08+00:00",
       "firstSeen": "2026-06-25T03:00:01.596717+00:00",
-      "lastSeen": "2026-06-25T14:52:05.644249+00:00",
+      "lastSeen": "2026-06-25T14:53:44.092288+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9785,
+      "score": 1.9779,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
@@ -926,6 +994,7 @@
         "sourceFrame": "Seen via Latent Space."
       },
       "tryWorthy": false,
+      "toolCandidate": false,
       "clusterKey": "meta-ainews-meta-harness-summer"
     },
     {
@@ -935,15 +1004,16 @@
       "sourceUrl": "https://openai.com/news/rss.xml",
       "sourceWeight": 1.0,
       "sourceRole": "primary",
+      "sourceType": "",
       "category": "AI",
       "summary": "A new OpenAI research paper shows how AI agents are transforming work, enabling longer, more complex tasks and expanding productivity across roles.",
       "image": "",
       "published": "2026-06-25T02:00:00+00:00",
       "firstSeen": "2026-06-25T10:00:01.660955+00:00",
-      "lastSeen": "2026-06-25T14:52:05.644249+00:00",
+      "lastSeen": "2026-06-25T14:53:44.092288+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 9.6194,
+      "score": 9.6188,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Primary source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -954,6 +1024,7 @@
         "sourceFrame": "Seen via OpenAI News."
       },
       "tryWorthy": true,
+      "toolCandidate": false,
       "clusterKey": "how-agents-transforming-work"
     },
     {
@@ -963,15 +1034,16 @@
       "sourceUrl": "https://github.com/ollama/ollama/releases.atom",
       "sourceWeight": 0.9,
       "sourceRole": "primary",
+      "sourceType": "tool-release",
       "category": "AI",
       "summary": "What's Changed\n\nlaunch: add thinking capability detection to opencode by @hoyyeva in #15434\nlaunch: auto-install Claude Code by @hoyyeva in #16802\nlaunch: auto-install opencode when missing by @hoyyeva in #16806\ndiscover: fix inverted iGPU/dGPU Vulkan classification on Windows hybrid graphics by @Sahil170595 in #16669\nmlxrunner: unify and tune speculative decoding by @jessegross in #16791\nlaunch/codex: detect model drift when Codex App UI switches by @BruceMacD in #16864\nllama: add sm_86 architecture to cuda_v13_windows preset by @anishesg in #16834\nllm: size mmproj offload by projector memory",
       "image": "public/thumbnails/news-24b5cb1b280e0447d1.png",
       "published": "2026-06-25T01:52:05+00:00",
       "firstSeen": "2026-06-25T02:00:01.960278+00:00",
-      "lastSeen": "2026-06-25T14:52:05.644249+00:00",
+      "lastSeen": "2026-06-25T14:53:44.092288+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 13.9266,
+      "score": 13.926,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Primary source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -982,7 +1054,44 @@
         "sourceFrame": "Seen via Ollama Releases."
       },
       "tryWorthy": true,
+      "toolCandidate": true,
+      "toolName": "Ollama",
+      "toolLabel": "Ollama v0.30.11",
+      "toolSummary": "What's Changed launch: add thinking capability detection to opencode by @hoyyeva in #15434 launch: auto-install Claude Code by @hoyyeva in #16802 l...",
       "clusterKey": "df1c1479ac35"
+    },
+    {
+      "title": "Paybond CLI",
+      "url": "https://www.producthunt.com/products/paybond",
+      "source": "Product Hunt AI",
+      "sourceUrl": "https://www.producthunt.com/feed?category=artificial-intelligence",
+      "sourceWeight": 0.72,
+      "sourceRole": "watchlist",
+      "sourceType": "tool-directory",
+      "category": "AI",
+      "summary": "Safe agent spend from the terminal\n          \n          \n            Discussion\n            |\n            Link",
+      "image": "https://ph-files.imgix.net/2cb03917-b3e4-417e-a081-1e6df4a15aad.png?auto=format&fit=crop&frame=1&h=512&w=1024",
+      "published": "2026-06-25T01:23:19+00:00",
+      "firstSeen": "2026-06-25T14:53:44.092288+00:00",
+      "lastSeen": "2026-06-25T14:53:44.092288+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "watchlist_low_signal",
+      "score": 2.2639,
+      "signalGroup": "Agents & tooling",
+      "sourceTier": "Watchlist source",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
+      "brief": {
+        "whatHappened": "Paybond CLI",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via Product Hunt AI."
+      },
+      "tryWorthy": true,
+      "toolCandidate": true,
+      "toolName": "Paybond CLI",
+      "toolLabel": "Paybond CLI",
+      "toolSummary": "Safe agent spend from the terminal",
+      "clusterKey": "paybond-cli"
     },
     {
       "title": "v1.88.5",
@@ -991,15 +1100,16 @@
       "sourceUrl": "https://github.com/BerriAI/litellm/releases.atom",
       "sourceWeight": 0.85,
       "sourceRole": "primary",
+      "sourceType": "tool-release",
       "category": "AI",
       "summary": "Verify Docker Image Signature\nAll LiteLLM Docker images are signed with cosign. Every release is signed with the same key introduced in commit 0112e53.\nVerify using the pinned commit hash (recommended):\nA commit hash is cryptographically immutable, so this is the strongest way to ensure you are using the original signing key:\ncosign verify \\\n  --key https://raw.githubusercontent.com/BerriAI/litellm/0112e53046018d726492c814b3644b7d376029d0/cosign.pub \\\n  ghcr.io/berriai/litellm:v1.88.5\nVerify using the release tag (convenience):\nTags are protected in this repository and resolve to the same key.",
       "image": "https://opengraph.githubassets.com/dbbc7a3d0541024781e80b6e9cf48a2b770cdf0dd6c4695049ddae9b34cb08ca/BerriAI/litellm/releases/tag/v1.88.5",
       "published": "2026-06-25T00:16:27+00:00",
       "firstSeen": "2026-06-25T01:00:01.345046+00:00",
-      "lastSeen": "2026-06-25T14:52:05.644249+00:00",
+      "lastSeen": "2026-06-25T14:53:44.092288+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.6234,
+      "score": 3.6228,
       "signalGroup": "Product updates",
       "sourceTier": "Primary source",
       "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
@@ -1010,6 +1120,10 @@
         "sourceFrame": "Seen via LiteLLM Releases."
       },
       "tryWorthy": true,
+      "toolCandidate": true,
+      "toolName": "LiteLLM",
+      "toolLabel": "LiteLLM v1.88.5",
+      "toolSummary": "Verify Docker Image Signature All LiteLLM Docker images are signed with cosign. Every release is signed with the same key introduced in commit 0112...",
       "clusterKey": "468687832073"
     },
     {
@@ -1019,15 +1133,16 @@
       "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
       "sourceWeight": 0.85,
       "sourceRole": "secondary",
+      "sourceType": "",
       "category": "AI",
       "summary": "As ASML CEO Christophe Fouquet told TechCrunch in May, what China can currently buy are older-generation deep ultraviolet tools — gear first shipped about a decade ago — the same machines the MATCH Act would now put off-limits.",
       "image": "https://techcrunch.com/wp-content/uploads/2026/01/ASML-GettyImages-2258043611.jpg?w=1024",
       "published": "2026-06-25T00:08:36+00:00",
       "firstSeen": "2026-06-25T00:13:24.087357+00:00",
-      "lastSeen": "2026-06-25T14:52:05.644249+00:00",
+      "lastSeen": "2026-06-25T14:53:44.092288+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9207,
+      "score": 1.9202,
       "signalGroup": "Infrastructure",
       "sourceTier": "Reported source",
       "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
@@ -1038,6 +1153,7 @@
         "sourceFrame": "Seen via TechCrunch AI."
       },
       "tryWorthy": true,
+      "toolCandidate": false,
       "clusterKey": "europe-pushing-back-washington-chip-war"
     },
     {
@@ -1047,15 +1163,16 @@
       "sourceUrl": "https://simonwillison.net/atom/everything/",
       "sourceWeight": 0.85,
       "sourceRole": "primary",
+      "sourceType": "",
       "category": "AI",
       "summary": "simonw/browser-compat-db\nInspired by Mozilla's new MDN MCP service - source code here - I decided to try converting their comprehensive mdn/browser-compat-data repository full of browser compatibility data into a SQLite database.\nThis new GitHub repo includes a Claude Code for web (Opus 4.8) generated script for doing that using sqlite-utils.\nI wanted the resulting ~66MB SQLite database to be available via the GitHub CDN with open CORS headers. GitHub releases don't have those, but any file stored in a regular GitHub repository does - so I had Codex Desktop (GPT-5.5) build a GitHub Actions wor",
       "image": "",
       "published": "2026-06-24T23:59:03+00:00",
       "firstSeen": "2026-06-25T00:13:24.087357+00:00",
-      "lastSeen": "2026-06-25T14:52:05.644249+00:00",
+      "lastSeen": "2026-06-25T14:53:44.092288+00:00",
       "editorial_allow": false,
       "editorial_reason": "repo_title_low_context",
-      "score": 12.0175,
+      "score": 12.017,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Primary source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -1066,6 +1183,7 @@
         "sourceFrame": "Seen via Simon Willison."
       },
       "tryWorthy": true,
+      "toolCandidate": false,
       "clusterKey": "simonw-browser-compat-db"
     },
     {
@@ -1075,15 +1193,16 @@
       "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
       "sourceWeight": 0.85,
       "sourceRole": "secondary",
+      "sourceType": "",
       "category": "AI",
       "summary": "Backed by Mayfield and Aramco Ventures, Vishal Sikka’s new venture brings together veterans from SAP, Infosys, and VianAI.",
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/vishal-sikka-indiaai-summit.jpg?resize=1200%2C800",
       "published": "2026-06-24T23:26:52+00:00",
       "firstSeen": "2026-06-24T23:27:58.439829+00:00",
-      "lastSeen": "2026-06-25T14:52:05.644249+00:00",
+      "lastSeen": "2026-06-25T14:53:44.092288+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9067,
+      "score": 1.9062,
       "signalGroup": "Business",
       "sourceTier": "Reported source",
       "whyItMatters": "Business moves are a map of where the industry thinks the bottlenecks and durable demand will be.",
@@ -1094,35 +1213,8 @@
         "sourceFrame": "Seen via TechCrunch AI."
       },
       "tryWorthy": false,
+      "toolCandidate": false,
       "clusterKey": "former-infosys-chief-has-startup-wants"
-    },
-    {
-      "title": "Cerebras stock plunges after earnings as CEO says margin outlook was misunderstood",
-      "url": "https://techcrunch.com/2026/06/24/cerebras-stock-plunges-after-earnings-as-ceo-says-margin-outlook-was-misunderstood",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "sourceRole": "secondary",
-      "category": "AI",
-      "summary": "In its first earnings report since going public, the AI chipmaker forecast a narrower gross margin in its core business, scaring investors.",
-      "image": "https://techcrunch.com/wp-content/uploads/2025/03/GettyImages-1251294592.jpg?w=1024",
-      "published": "2026-06-24T22:41:41+00:00",
-      "firstSeen": "2026-06-24T23:00:01.536104+00:00",
-      "lastSeen": "2026-06-25T14:52:05.644249+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.8919,
-      "signalGroup": "Infrastructure",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
-      "brief": {
-        "whatHappened": "Cerebras stock plunges after earnings as CEO says margin outlook was misunderstood",
-        "whoItAffects": "Anyone affected by AI compute cost, speed, availability, or hardware supply.",
-        "practicalImpact": "Infrastructure shifts often show up later as cheaper tools, higher limits, or new bottlenecks.",
-        "sourceFrame": "Seen via TechCrunch AI."
-      },
-      "tryWorthy": false,
-      "clusterKey": "cerebras-cerebras-stock-plunges-earnings-ceo"
     },
     {
       "title": "The Friendly Virus",
@@ -1131,15 +1223,16 @@
       "sourceUrl": "https://podcasts.files.bbci.co.uk/p002w557.rss",
       "sourceWeight": 0.85,
       "sourceRole": "primary",
+      "sourceType": "",
       "category": "Science",
       "summary": "Our antibiotics are failing us. In 2025, the UK Government said antibiotic resistance (AMR) contributes to more than 35,000 deaths each year in the UK. Emergency doctors say they are losing patients on a regular basis when they run out of ways to treat them. Antibiotics have saved countless lives, but alongside them, there is another unlikely sounding ally in this fight: viruses, so small that they can attack and kill the bacteria causing these devastating infections. They are called bacteriophages, or phages for short. There are more of them than any other commonly occurring natural entity on",
       "image": "public/thumbnails/news-f38c47a2d18e9a1412.jpg",
       "published": "2026-06-22T20:00:00+00:00",
       "firstSeen": "2026-06-22T21:00:01.381447+00:00",
-      "lastSeen": "2026-06-25T14:52:05.644249+00:00",
+      "lastSeen": "2026-06-25T14:53:44.092288+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3617,
+      "score": 2.3615,
       "signalGroup": "Product updates",
       "sourceTier": "Primary source",
       "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
@@ -1150,6 +1243,7 @@
         "sourceFrame": "Seen via BBC Discovery."
       },
       "tryWorthy": false,
+      "toolCandidate": false,
       "clusterKey": "friendly-virus"
     },
     {
@@ -1159,12 +1253,13 @@
       "sourceUrl": "https://podcasts.files.bbci.co.uk/p002w557.rss",
       "sourceWeight": 0.85,
       "sourceRole": "primary",
+      "sourceType": "",
       "category": "Science",
       "summary": "Have you ever been told you aren't good enough to do something, then gone ahead and proved the naysayers wrong by doing it anyway - in glorious, headline-grabbing style? That is the satisfying story of Dr Dean Lomax. Dean grew up in Doncaster with a passion for fossils but after failing various school exams, was told by teachers that he'd never make it as a palaeontologist. Undeterred by leaving school with no qualifications, Dean sold his childhood Star Wars collection to fund a fossil-hunting trip to America that changed his life - after which a chance discovery led to him publishing his fir",
       "image": "public/thumbnails/news-f38c47a2d18e9a1412.jpg",
       "published": "2026-06-15T20:00:00+00:00",
       "firstSeen": "2026-06-15T21:00:01.290903+00:00",
-      "lastSeen": "2026-06-25T14:52:05.644249+00:00",
+      "lastSeen": "2026-06-25T14:53:44.092288+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.1916,
@@ -1178,6 +1273,7 @@
         "sourceFrame": "Seen via BBC Discovery."
       },
       "tryWorthy": false,
+      "toolCandidate": false,
       "clusterKey": "life-scientific-dean-lomax"
     },
     {
@@ -1207,122 +1303,541 @@
         "sourceFrame": "Seen via BBC Discovery."
       },
       "tryWorthy": false,
-      "clusterKey": "life-scientific-helen-hastie"
+      "clusterKey": "life-scientific-helen-hastie",
+      "sourceType": "",
+      "toolCandidate": false
+    }
+  ],
+  "tools": [
+    {
+      "title": "Buy by Agentcard",
+      "url": "https://www.producthunt.com/products/agent-card",
+      "source": "Product Hunt AI",
+      "sourceUrl": "https://www.producthunt.com/feed?category=artificial-intelligence",
+      "sourceWeight": 0.72,
+      "sourceRole": "watchlist",
+      "sourceType": "tool-directory",
+      "category": "AI",
+      "summary": "Order DoorDash from Claude\n          \n          \n            Discussion\n            |\n            Link",
+      "image": "",
+      "published": "2026-06-19T18:14:21+00:00",
+      "firstSeen": "2026-06-25T14:53:44.092288+00:00",
+      "lastSeen": "2026-06-25T14:53:44.092288+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 6.5301,
+      "signalGroup": "Agents & tooling",
+      "sourceTier": "Watchlist source",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
+      "brief": {
+        "whatHappened": "Buy by Agentcard",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via Product Hunt AI."
+      },
+      "tryWorthy": true,
+      "toolCandidate": true,
+      "toolName": "Buy by Agentcard",
+      "toolLabel": "Buy by Agentcard",
+      "toolSummary": "Order DoorDash from Claude",
+      "clusterKey": "buy-agentcard"
+    },
+    {
+      "title": "Sipcode",
+      "url": "https://www.producthunt.com/products/sipcode",
+      "source": "Product Hunt AI",
+      "sourceUrl": "https://www.producthunt.com/feed?category=artificial-intelligence",
+      "sourceWeight": 0.72,
+      "sourceRole": "watchlist",
+      "sourceType": "tool-directory",
+      "category": "AI",
+      "summary": "Keep Claude Code's context clean for sharper answers\n          \n          \n            Discussion\n            |\n            Link",
+      "image": "",
+      "published": "2026-06-23T00:11:52+00:00",
+      "firstSeen": "2026-06-25T14:53:44.092288+00:00",
+      "lastSeen": "2026-06-25T14:53:44.092288+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 4.0008,
+      "signalGroup": "Agents & tooling",
+      "sourceTier": "Watchlist source",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
+      "brief": {
+        "whatHappened": "Sipcode",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via Product Hunt AI."
+      },
+      "tryWorthy": false,
+      "toolCandidate": true,
+      "toolName": "Sipcode",
+      "toolLabel": "Sipcode",
+      "toolSummary": "Keep Claude Code's context clean for sharper answers",
+      "clusterKey": "sipcode"
+    },
+    {
+      "title": "BrowserAct",
+      "url": "https://www.producthunt.com/products/browseract",
+      "source": "Product Hunt AI",
+      "sourceUrl": "https://www.producthunt.com/feed?category=artificial-intelligence",
+      "sourceWeight": 0.72,
+      "sourceRole": "watchlist",
+      "sourceType": "tool-directory",
+      "category": "AI",
+      "summary": "Web browser automation for AI agents\n          \n          \n            Discussion\n            |\n            Link",
+      "image": "",
+      "published": "2026-06-16T10:15:38+00:00",
+      "firstSeen": "2026-06-25T14:53:44.092288+00:00",
+      "lastSeen": "2026-06-25T14:53:44.092288+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "watchlist_low_signal",
+      "score": 3.9104,
+      "signalGroup": "Agents & tooling",
+      "sourceTier": "Watchlist source",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
+      "brief": {
+        "whatHappened": "BrowserAct",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via Product Hunt AI."
+      },
+      "tryWorthy": true,
+      "toolCandidate": true,
+      "toolName": "BrowserAct",
+      "toolLabel": "BrowserAct",
+      "toolSummary": "Web browser automation for AI agents",
+      "clusterKey": "browseract"
+    },
+    {
+      "title": "Grass 2.0",
+      "url": "https://www.producthunt.com/products/grass-claude-code-from-your-phone",
+      "source": "Product Hunt AI",
+      "sourceUrl": "https://www.producthunt.com/feed?category=artificial-intelligence",
+      "sourceWeight": 0.72,
+      "sourceRole": "watchlist",
+      "sourceType": "tool-directory",
+      "category": "AI",
+      "summary": "The always-on computer for your coding agents\n          \n          \n            Discussion\n            |\n            Link",
+      "image": "https://ph-files.imgix.net/485cef13-2efd-4400-b312-b348be39447a.jpeg?auto=format&fit=crop&frame=1&h=512&w=1024",
+      "published": "2026-06-24T11:26:29+00:00",
+      "firstSeen": "2026-06-25T14:53:44.092288+00:00",
+      "lastSeen": "2026-06-25T14:53:44.092288+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "watchlist_low_signal",
+      "score": 3.4211,
+      "signalGroup": "Agents & tooling",
+      "sourceTier": "Watchlist source",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
+      "brief": {
+        "whatHappened": "Grass 2.0",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via Product Hunt AI."
+      },
+      "tryWorthy": true,
+      "toolCandidate": true,
+      "toolName": "Grass 2.0",
+      "toolLabel": "Grass 2.0",
+      "toolSummary": "The always-on computer for your coding agents",
+      "clusterKey": "grass"
+    },
+    {
+      "title": "Polygraph",
+      "url": "https://www.producthunt.com/products/polygraph",
+      "source": "Product Hunt AI",
+      "sourceUrl": "https://www.producthunt.com/feed?category=artificial-intelligence",
+      "sourceWeight": 0.72,
+      "sourceRole": "watchlist",
+      "sourceType": "tool-directory",
+      "category": "AI",
+      "summary": "Let AI agents see cross repo and maintain session memory.\n          \n          \n            Discussion\n            |\n            Link",
+      "image": "https://ph-files.imgix.net/151b3416-f9e0-48db-8ae2-8af12e6350d7.png?auto=format&fit=crop&frame=1&h=512&w=1024",
+      "published": "2026-06-24T07:52:07+00:00",
+      "firstSeen": "2026-06-25T14:53:44.092288+00:00",
+      "lastSeen": "2026-06-25T14:53:44.092288+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "watchlist_low_signal",
+      "score": 3.3726,
+      "signalGroup": "Agents & tooling",
+      "sourceTier": "Watchlist source",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
+      "brief": {
+        "whatHappened": "Polygraph",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via Product Hunt AI."
+      },
+      "tryWorthy": true,
+      "toolCandidate": true,
+      "toolName": "Polygraph",
+      "toolLabel": "Polygraph",
+      "toolSummary": "Let AI agents see cross repo and maintain session memory.",
+      "clusterKey": "polygraph"
+    },
+    {
+      "title": "Zaro",
+      "url": "https://www.producthunt.com/products/zaro",
+      "source": "Product Hunt AI",
+      "sourceUrl": "https://www.producthunt.com/feed?category=artificial-intelligence",
+      "sourceWeight": 0.72,
+      "sourceRole": "watchlist",
+      "sourceType": "tool-directory",
+      "category": "AI",
+      "summary": "Build agents & apps on top of your context with one prompt.\n          \n          \n            Discussion\n            |\n            Link",
+      "image": "https://ph-files.imgix.net/37091e78-ea2d-4f96-87d1-40cae53299ef.png?auto=format&fit=crop&frame=1&h=512&w=1024",
+      "published": "2026-06-24T13:54:51+00:00",
+      "firstSeen": "2026-06-25T14:53:44.092288+00:00",
+      "lastSeen": "2026-06-25T14:53:44.092288+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "watchlist_low_signal",
+      "score": 3.1576,
+      "signalGroup": "Agents & tooling",
+      "sourceTier": "Watchlist source",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
+      "brief": {
+        "whatHappened": "Zaro",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via Product Hunt AI."
+      },
+      "tryWorthy": true,
+      "toolCandidate": true,
+      "toolName": "Zaro",
+      "toolLabel": "Zaro",
+      "toolSummary": "Build agents & apps on top of your context with one prompt.",
+      "clusterKey": "zaro"
+    },
+    {
+      "title": "Stripe.Directory",
+      "url": "https://www.producthunt.com/products/stripe",
+      "source": "Product Hunt AI",
+      "sourceUrl": "https://www.producthunt.com/feed?category=artificial-intelligence",
+      "sourceWeight": 0.72,
+      "sourceRole": "watchlist",
+      "sourceType": "tool-directory",
+      "category": "AI",
+      "summary": "New way for you & agents to search for businesses on Stripe\n          \n          \n            Discussion\n            |\n            Link",
+      "image": "",
+      "published": "2026-06-22T20:15:01+00:00",
+      "firstSeen": "2026-06-25T14:53:44.092288+00:00",
+      "lastSeen": "2026-06-25T14:53:44.092288+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "watchlist_low_signal",
+      "score": 3.0807,
+      "signalGroup": "Agents & tooling",
+      "sourceTier": "Watchlist source",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
+      "brief": {
+        "whatHappened": "Stripe.Directory",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via Product Hunt AI."
+      },
+      "tryWorthy": true,
+      "toolCandidate": true,
+      "toolName": "Stripe.Directory",
+      "toolLabel": "Stripe.Directory",
+      "toolSummary": "New way for you & agents to search for businesses on Stripe",
+      "clusterKey": "stripe-directory"
+    },
+    {
+      "title": "Customer Relationship Agents by Clarify",
+      "url": "https://www.producthunt.com/products/clarify-6",
+      "source": "Product Hunt AI",
+      "sourceUrl": "https://www.producthunt.com/feed?category=artificial-intelligence",
+      "sourceWeight": 0.72,
+      "sourceRole": "watchlist",
+      "sourceType": "tool-directory",
+      "category": "AI",
+      "summary": "The M in CRM shouldn't be you\n          \n          \n            Discussion\n            |\n            Link",
+      "image": "",
+      "published": "2026-06-22T19:26:30+00:00",
+      "firstSeen": "2026-06-25T14:53:44.092288+00:00",
+      "lastSeen": "2026-06-25T14:53:44.092288+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "watchlist_low_signal",
+      "score": 2.6769,
+      "signalGroup": "Agents & tooling",
+      "sourceTier": "Watchlist source",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
+      "brief": {
+        "whatHappened": "Customer Relationship Agents by Clarify",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via Product Hunt AI."
+      },
+      "tryWorthy": true,
+      "toolCandidate": true,
+      "toolName": "Customer Relationship Agents by Clarify",
+      "toolLabel": "Customer Relationship Agents by Clarify",
+      "toolSummary": "The M in CRM shouldn't be you",
+      "clusterKey": "customer-relationship-agents-clarify"
     }
   ],
   "tryWorthy": [
     {
-      "title": "v0.30.11",
-      "url": "https://github.com/ollama/ollama/releases/tag/v0.30.11-rc0",
-      "source": "Ollama Releases",
-      "sourceUrl": "https://github.com/ollama/ollama/releases.atom",
-      "sourceWeight": 0.9,
-      "sourceRole": "primary",
+      "title": "Buy by Agentcard",
+      "url": "https://www.producthunt.com/products/agent-card",
+      "source": "Product Hunt AI",
+      "sourceUrl": "https://www.producthunt.com/feed?category=artificial-intelligence",
+      "sourceWeight": 0.72,
+      "sourceRole": "watchlist",
+      "sourceType": "tool-directory",
       "category": "AI",
-      "summary": "What's Changed\n\nlaunch: add thinking capability detection to opencode by @hoyyeva in #15434\nlaunch: auto-install Claude Code by @hoyyeva in #16802\nlaunch: auto-install opencode when missing by @hoyyeva in #16806\ndiscover: fix inverted iGPU/dGPU Vulkan classification on Windows hybrid graphics by @Sahil170595 in #16669\nmlxrunner: unify and tune speculative decoding by @jessegross in #16791\nlaunch/codex: detect model drift when Codex App UI switches by @BruceMacD in #16864\nllama: add sm_86 architecture to cuda_v13_windows preset by @anishesg in #16834\nllm: size mmproj offload by projector memory",
-      "image": "public/thumbnails/news-24b5cb1b280e0447d1.png",
-      "published": "2026-06-25T01:52:05+00:00",
-      "firstSeen": "2026-06-25T02:00:01.960278+00:00",
-      "lastSeen": "2026-06-25T14:52:05.644249+00:00",
+      "summary": "Order DoorDash from Claude\n          \n          \n            Discussion\n            |\n            Link",
+      "image": "",
+      "published": "2026-06-19T18:14:21+00:00",
+      "firstSeen": "2026-06-25T14:53:44.092288+00:00",
+      "lastSeen": "2026-06-25T14:53:44.092288+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 13.9266,
+      "score": 6.5301,
       "signalGroup": "Agents & tooling",
-      "sourceTier": "Primary source",
+      "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
       "brief": {
-        "whatHappened": "v0.30.11",
+        "whatHappened": "Buy by Agentcard",
         "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
         "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
-        "sourceFrame": "Seen via Ollama Releases."
+        "sourceFrame": "Seen via Product Hunt AI."
       },
       "tryWorthy": true,
-      "clusterKey": "df1c1479ac35"
+      "toolCandidate": true,
+      "toolName": "Buy by Agentcard",
+      "toolLabel": "Buy by Agentcard",
+      "toolSummary": "Order DoorDash from Claude",
+      "clusterKey": "buy-agentcard"
     },
     {
-      "title": "How agents are transforming work",
-      "url": "https://openai.com/index/how-agents-are-transforming-work",
-      "source": "OpenAI News",
-      "sourceUrl": "https://openai.com/news/rss.xml",
-      "sourceWeight": 1.0,
-      "sourceRole": "primary",
+      "title": "Sipcode",
+      "url": "https://www.producthunt.com/products/sipcode",
+      "source": "Product Hunt AI",
+      "sourceUrl": "https://www.producthunt.com/feed?category=artificial-intelligence",
+      "sourceWeight": 0.72,
+      "sourceRole": "watchlist",
+      "sourceType": "tool-directory",
       "category": "AI",
-      "summary": "A new OpenAI research paper shows how AI agents are transforming work, enabling longer, more complex tasks and expanding productivity across roles.",
+      "summary": "Keep Claude Code's context clean for sharper answers\n          \n          \n            Discussion\n            |\n            Link",
       "image": "",
-      "published": "2026-06-25T02:00:00+00:00",
-      "firstSeen": "2026-06-25T10:00:01.660955+00:00",
-      "lastSeen": "2026-06-25T14:52:05.644249+00:00",
+      "published": "2026-06-23T00:11:52+00:00",
+      "firstSeen": "2026-06-25T14:53:44.092288+00:00",
+      "lastSeen": "2026-06-25T14:53:44.092288+00:00",
       "editorial_allow": true,
-      "editorial_reason": "editorial_score_pass",
-      "score": 9.6194,
+      "editorial_reason": "high_score_override",
+      "score": 4.0008,
       "signalGroup": "Agents & tooling",
-      "sourceTier": "Primary source",
+      "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
       "brief": {
-        "whatHappened": "How agents are transforming work",
+        "whatHappened": "Sipcode",
         "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
         "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
-        "sourceFrame": "Seen via OpenAI News."
+        "sourceFrame": "Seen via Product Hunt AI."
       },
-      "tryWorthy": true,
-      "clusterKey": "how-agents-transforming-work"
+      "tryWorthy": false,
+      "toolCandidate": true,
+      "toolName": "Sipcode",
+      "toolLabel": "Sipcode",
+      "toolSummary": "Keep Claude Code's context clean for sharper answers",
+      "clusterKey": "sipcode"
     },
     {
-      "title": "The math behind the OpenAI Jalapeño chip",
-      "url": "https://www.artificialintelligence-news.com/news/openai-jalapeno-chip-inference-economics",
-      "source": "Artificial Intelligence News",
-      "sourceUrl": "https://www.artificialintelligence-news.com/categories/artificial-intelligence/feed/",
-      "sourceWeight": 0.82,
-      "sourceRole": "secondary",
+      "title": "BrowserAct",
+      "url": "https://www.producthunt.com/products/browseract",
+      "source": "Product Hunt AI",
+      "sourceUrl": "https://www.producthunt.com/feed?category=artificial-intelligence",
+      "sourceWeight": 0.72,
+      "sourceRole": "watchlist",
+      "sourceType": "tool-directory",
       "category": "AI",
-      "summary": "OpenAI’s financial trajectory hinges heavily on infrastructure costs, a reality that drove the development of the new custom OpenAI Jalapeño chip. Developed in collaboration with Broadcom, the application-specific integrated circuit (ASIC) represents a direct attempt to mitigate the heavy capital expenditure associated with third-party hardware.&#160; While Nvidia currently commands an estimated 75% profit margin on [&#8230;]\nThe post The math behind the OpenAI Jalapeño chip appeared first on AI News.",
+      "summary": "Web browser automation for AI agents\n          \n          \n            Discussion\n            |\n            Link",
       "image": "",
-      "published": "2026-06-25T06:00:00+00:00",
-      "firstSeen": "2026-06-25T07:00:01.940787+00:00",
-      "lastSeen": "2026-06-25T14:52:05.644249+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 6.8078,
-      "signalGroup": "Infrastructure",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
+      "published": "2026-06-16T10:15:38+00:00",
+      "firstSeen": "2026-06-25T14:53:44.092288+00:00",
+      "lastSeen": "2026-06-25T14:53:44.092288+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "watchlist_low_signal",
+      "score": 3.9104,
+      "signalGroup": "Agents & tooling",
+      "sourceTier": "Watchlist source",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
       "brief": {
-        "whatHappened": "The math behind the OpenAI Jalapeño chip",
-        "whoItAffects": "Anyone affected by AI compute cost, speed, availability, or hardware supply.",
-        "practicalImpact": "Infrastructure shifts often show up later as cheaper tools, higher limits, or new bottlenecks.",
-        "sourceFrame": "Seen via Artificial Intelligence News."
+        "whatHappened": "BrowserAct",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via Product Hunt AI."
       },
       "tryWorthy": true,
-      "clusterKey": "openai-math-behind-openai-jalape-chip"
+      "toolCandidate": true,
+      "toolName": "BrowserAct",
+      "toolLabel": "BrowserAct",
+      "toolSummary": "Web browser automation for AI agents",
+      "clusterKey": "browseract"
     },
     {
-      "title": "Upwind launches AI Sensor for Endpoints as security teams grapple with AI’s expanding reach",
-      "url": "https://thenextweb.com/news/upwind-ai-sensor-endpoints-mcp-cloud-security",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "sourceRole": "secondary",
+      "title": "Grass 2.0",
+      "url": "https://www.producthunt.com/products/grass-claude-code-from-your-phone",
+      "source": "Product Hunt AI",
+      "sourceUrl": "https://www.producthunt.com/feed?category=artificial-intelligence",
+      "sourceWeight": 0.72,
+      "sourceRole": "watchlist",
+      "sourceType": "tool-directory",
       "category": "AI",
-      "summary": "When cloud computing transformed enterprise IT, security vendors followed the workloads. Visibility into cloud infrastructure became a central requirement as organizations shifted applications and data into new environments. Artificial intelligence is now driving another change, but this time the challenge is not simply where applications run. It is understanding how actions move between developer devices, AI systems, [&hellip;]\nThis story continues at The Next Web",
-      "image": "public/thumbnails/news-385170b12f1b334d1b.avif",
-      "published": "2026-06-25T13:00:52+00:00",
-      "firstSeen": "2026-06-25T14:24:30.601288+00:00",
-      "lastSeen": "2026-06-25T14:52:05.644249+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 4.9948,
-      "signalGroup": "Policy & risk",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Policy and risk stories often become product constraints later, especially around data access, safety claims, export rules, and copyright.",
+      "summary": "The always-on computer for your coding agents\n          \n          \n            Discussion\n            |\n            Link",
+      "image": "https://ph-files.imgix.net/485cef13-2efd-4400-b312-b348be39447a.jpeg?auto=format&fit=crop&frame=1&h=512&w=1024",
+      "published": "2026-06-24T11:26:29+00:00",
+      "firstSeen": "2026-06-25T14:53:44.092288+00:00",
+      "lastSeen": "2026-06-25T14:53:44.092288+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "watchlist_low_signal",
+      "score": 3.4211,
+      "signalGroup": "Agents & tooling",
+      "sourceTier": "Watchlist source",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
       "brief": {
-        "whatHappened": "Upwind launches AI Sensor for Endpoints as security teams grapple with AI’s expanding reach",
-        "whoItAffects": "Product builders, platform users, and anyone depending on model access or data rights.",
-        "practicalImpact": "Policy moves can become tomorrow's product limits, compliance burden, or availability issue.",
-        "sourceFrame": "Seen via The Next Web."
+        "whatHappened": "Grass 2.0",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via Product Hunt AI."
       },
       "tryWorthy": true,
-      "clusterKey": "upwind-launches-sensor-endpoints-security-teams",
-      "imageOriginal": "https://media.thenextweb.com/2026/06/upwind-ai-sensor-endpoints-mcp-cloud-security-.avif"
+      "toolCandidate": true,
+      "toolName": "Grass 2.0",
+      "toolLabel": "Grass 2.0",
+      "toolSummary": "The always-on computer for your coding agents",
+      "clusterKey": "grass"
+    },
+    {
+      "title": "Polygraph",
+      "url": "https://www.producthunt.com/products/polygraph",
+      "source": "Product Hunt AI",
+      "sourceUrl": "https://www.producthunt.com/feed?category=artificial-intelligence",
+      "sourceWeight": 0.72,
+      "sourceRole": "watchlist",
+      "sourceType": "tool-directory",
+      "category": "AI",
+      "summary": "Let AI agents see cross repo and maintain session memory.\n          \n          \n            Discussion\n            |\n            Link",
+      "image": "https://ph-files.imgix.net/151b3416-f9e0-48db-8ae2-8af12e6350d7.png?auto=format&fit=crop&frame=1&h=512&w=1024",
+      "published": "2026-06-24T07:52:07+00:00",
+      "firstSeen": "2026-06-25T14:53:44.092288+00:00",
+      "lastSeen": "2026-06-25T14:53:44.092288+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "watchlist_low_signal",
+      "score": 3.3726,
+      "signalGroup": "Agents & tooling",
+      "sourceTier": "Watchlist source",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
+      "brief": {
+        "whatHappened": "Polygraph",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via Product Hunt AI."
+      },
+      "tryWorthy": true,
+      "toolCandidate": true,
+      "toolName": "Polygraph",
+      "toolLabel": "Polygraph",
+      "toolSummary": "Let AI agents see cross repo and maintain session memory.",
+      "clusterKey": "polygraph"
+    },
+    {
+      "title": "Zaro",
+      "url": "https://www.producthunt.com/products/zaro",
+      "source": "Product Hunt AI",
+      "sourceUrl": "https://www.producthunt.com/feed?category=artificial-intelligence",
+      "sourceWeight": 0.72,
+      "sourceRole": "watchlist",
+      "sourceType": "tool-directory",
+      "category": "AI",
+      "summary": "Build agents & apps on top of your context with one prompt.\n          \n          \n            Discussion\n            |\n            Link",
+      "image": "https://ph-files.imgix.net/37091e78-ea2d-4f96-87d1-40cae53299ef.png?auto=format&fit=crop&frame=1&h=512&w=1024",
+      "published": "2026-06-24T13:54:51+00:00",
+      "firstSeen": "2026-06-25T14:53:44.092288+00:00",
+      "lastSeen": "2026-06-25T14:53:44.092288+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "watchlist_low_signal",
+      "score": 3.1576,
+      "signalGroup": "Agents & tooling",
+      "sourceTier": "Watchlist source",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
+      "brief": {
+        "whatHappened": "Zaro",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via Product Hunt AI."
+      },
+      "tryWorthy": true,
+      "toolCandidate": true,
+      "toolName": "Zaro",
+      "toolLabel": "Zaro",
+      "toolSummary": "Build agents & apps on top of your context with one prompt.",
+      "clusterKey": "zaro"
+    },
+    {
+      "title": "Stripe.Directory",
+      "url": "https://www.producthunt.com/products/stripe",
+      "source": "Product Hunt AI",
+      "sourceUrl": "https://www.producthunt.com/feed?category=artificial-intelligence",
+      "sourceWeight": 0.72,
+      "sourceRole": "watchlist",
+      "sourceType": "tool-directory",
+      "category": "AI",
+      "summary": "New way for you & agents to search for businesses on Stripe\n          \n          \n            Discussion\n            |\n            Link",
+      "image": "",
+      "published": "2026-06-22T20:15:01+00:00",
+      "firstSeen": "2026-06-25T14:53:44.092288+00:00",
+      "lastSeen": "2026-06-25T14:53:44.092288+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "watchlist_low_signal",
+      "score": 3.0807,
+      "signalGroup": "Agents & tooling",
+      "sourceTier": "Watchlist source",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
+      "brief": {
+        "whatHappened": "Stripe.Directory",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via Product Hunt AI."
+      },
+      "tryWorthy": true,
+      "toolCandidate": true,
+      "toolName": "Stripe.Directory",
+      "toolLabel": "Stripe.Directory",
+      "toolSummary": "New way for you & agents to search for businesses on Stripe",
+      "clusterKey": "stripe-directory"
+    },
+    {
+      "title": "Customer Relationship Agents by Clarify",
+      "url": "https://www.producthunt.com/products/clarify-6",
+      "source": "Product Hunt AI",
+      "sourceUrl": "https://www.producthunt.com/feed?category=artificial-intelligence",
+      "sourceWeight": 0.72,
+      "sourceRole": "watchlist",
+      "sourceType": "tool-directory",
+      "category": "AI",
+      "summary": "The M in CRM shouldn't be you\n          \n          \n            Discussion\n            |\n            Link",
+      "image": "",
+      "published": "2026-06-22T19:26:30+00:00",
+      "firstSeen": "2026-06-25T14:53:44.092288+00:00",
+      "lastSeen": "2026-06-25T14:53:44.092288+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "watchlist_low_signal",
+      "score": 2.6769,
+      "signalGroup": "Agents & tooling",
+      "sourceTier": "Watchlist source",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
+      "brief": {
+        "whatHappened": "Customer Relationship Agents by Clarify",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via Product Hunt AI."
+      },
+      "tryWorthy": true,
+      "toolCandidate": true,
+      "toolName": "Customer Relationship Agents by Clarify",
+      "toolLabel": "Customer Relationship Agents by Clarify",
+      "toolSummary": "The M in CRM shouldn't be you",
+      "clusterKey": "customer-relationship-agents-clarify"
     }
   ],
   "sourceHealth": [
@@ -1331,287 +1846,321 @@
       "url": "https://openai.com/news/rss.xml",
       "role": "primary",
       "category": "AI",
+      "sourceType": "",
       "status": "ok",
       "items": 1021,
-      "checkedAt": "2026-06-25T14:52:05.644249+00:00"
+      "checkedAt": "2026-06-25T14:53:44.092288+00:00"
     },
     {
       "source": "Google AI Blog",
       "url": "https://blog.google/technology/ai/rss/",
       "role": "primary",
       "category": "AI",
+      "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-06-25T14:52:05.644249+00:00"
+      "checkedAt": "2026-06-25T14:53:44.092288+00:00"
     },
     {
       "source": "Google DeepMind Blog",
       "url": "https://deepmind.google/blog/rss.xml",
       "role": "primary",
       "category": "AI",
+      "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-06-25T14:52:05.644249+00:00"
+      "checkedAt": "2026-06-25T14:53:44.092288+00:00"
     },
     {
       "source": "Google Research Blog",
       "url": "https://research.google/blog/rss/",
       "role": "primary",
       "category": "AI",
+      "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-06-25T14:52:05.644249+00:00"
+      "checkedAt": "2026-06-25T14:53:44.092288+00:00"
     },
     {
       "source": "Hugging Face Blog",
       "url": "https://huggingface.co/blog/feed.xml",
       "role": "primary",
       "category": "AI",
+      "sourceType": "",
       "status": "ok",
       "items": 810,
-      "checkedAt": "2026-06-25T14:52:05.644249+00:00"
+      "checkedAt": "2026-06-25T14:53:44.092288+00:00"
     },
     {
       "source": "NVIDIA Blog",
       "url": "https://blogs.nvidia.com/feed/",
       "role": "primary",
       "category": "AI",
+      "sourceType": "",
       "status": "ok",
       "items": 18,
-      "checkedAt": "2026-06-25T14:52:05.644249+00:00"
+      "checkedAt": "2026-06-25T14:53:44.092288+00:00"
     },
     {
       "source": "AWS Machine Learning Blog",
       "url": "https://aws.amazon.com/blogs/machine-learning/feed/",
       "role": "secondary",
       "category": "AI",
+      "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-06-25T14:52:05.644249+00:00"
+      "checkedAt": "2026-06-25T14:53:44.092288+00:00"
     },
     {
       "source": "Artificial Intelligence News",
       "url": "https://www.artificialintelligence-news.com/categories/artificial-intelligence/feed/",
       "role": "secondary",
       "category": "AI",
+      "sourceType": "",
       "status": "ok",
       "items": 12,
-      "checkedAt": "2026-06-25T14:52:05.644249+00:00"
+      "checkedAt": "2026-06-25T14:53:44.092288+00:00"
     },
     {
       "source": "Ars Technica (AI/Tech)",
       "url": "https://feeds.arstechnica.com/arstechnica/technology-lab",
       "role": "secondary",
       "category": "AI",
+      "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-06-25T14:52:05.644249+00:00"
+      "checkedAt": "2026-06-25T14:53:44.092288+00:00"
     },
     {
       "source": "Together AI Blog",
       "url": "https://www.together.ai/blog/rss.xml",
       "role": "primary",
       "category": "AI",
+      "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-06-25T14:52:05.644249+00:00"
+      "checkedAt": "2026-06-25T14:53:44.092288+00:00"
     },
     {
       "source": "TechRepublic AI",
       "url": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
       "role": "secondary",
       "category": "AI",
+      "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-06-25T14:52:05.644249+00:00"
+      "checkedAt": "2026-06-25T14:53:44.092288+00:00"
     },
     {
       "source": "ScienceDaily AI",
       "url": "https://www.sciencedaily.com/rss/computers_math/artificial_intelligence.xml",
       "role": "watchlist",
       "category": "AI",
+      "sourceType": "",
       "status": "ok",
       "items": 60,
-      "checkedAt": "2026-06-25T14:52:05.644249+00:00"
+      "checkedAt": "2026-06-25T14:53:44.092288+00:00"
     },
     {
       "source": "The Next Web",
       "url": "https://thenextweb.com/feed",
       "role": "secondary",
       "category": "AI",
+      "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-06-25T14:52:05.644249+00:00"
+      "checkedAt": "2026-06-25T14:53:44.092288+00:00"
     },
     {
       "source": "BBC Discovery",
       "url": "https://podcasts.files.bbci.co.uk/p002w557.rss",
       "role": "primary",
       "category": "Science",
+      "sourceType": "",
       "status": "ok",
       "items": 847,
-      "checkedAt": "2026-06-25T14:52:05.644249+00:00"
+      "checkedAt": "2026-06-25T14:53:44.092288+00:00"
     },
     {
       "source": "BBC Infinite Monkey Cage",
       "url": "https://podcasts.files.bbci.co.uk/b00snr0w.rss",
       "role": "primary",
       "category": "Science",
+      "sourceType": "",
       "status": "ok",
       "items": 239,
-      "checkedAt": "2026-06-25T14:52:05.644249+00:00"
+      "checkedAt": "2026-06-25T14:53:44.092288+00:00"
     },
     {
       "source": "BBC The Life Scientific",
       "url": "https://podcasts.files.bbci.co.uk/b015sqc7.rss",
       "role": "primary",
       "category": "Science",
+      "sourceType": "",
       "status": "ok",
       "items": 356,
-      "checkedAt": "2026-06-25T14:52:05.644249+00:00"
+      "checkedAt": "2026-06-25T14:53:44.092288+00:00"
     },
     {
       "source": "TechCrunch AI",
       "url": "https://techcrunch.com/category/artificial-intelligence/feed/",
       "role": "secondary",
       "category": "AI",
+      "sourceType": "",
       "status": "ok",
       "items": 19,
-      "checkedAt": "2026-06-25T14:52:05.644249+00:00"
+      "checkedAt": "2026-06-25T14:53:44.092288+00:00"
     },
     {
       "source": "Anthropic News",
       "url": "https://raw.githubusercontent.com/Olshansk/rss-feeds/main/feeds/feed_anthropic_news.xml",
       "role": "primary",
       "category": "AI",
+      "sourceType": "",
       "status": "ok",
       "items": 231,
-      "checkedAt": "2026-06-25T14:52:05.644249+00:00"
+      "checkedAt": "2026-06-25T14:53:44.092288+00:00"
     },
     {
       "source": "The Verge AI",
       "url": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
       "role": "secondary",
       "category": "AI",
+      "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-06-25T14:52:05.644249+00:00"
+      "checkedAt": "2026-06-25T14:53:44.092288+00:00"
     },
     {
       "source": "VentureBeat AI",
       "url": "https://venturebeat.com/category/ai/feed/",
       "role": "secondary",
       "category": "AI",
+      "sourceType": "",
       "status": "ok",
       "items": 7,
-      "checkedAt": "2026-06-25T14:52:05.644249+00:00"
+      "checkedAt": "2026-06-25T14:53:44.092288+00:00"
     },
     {
       "source": "Simon Willison",
       "url": "https://simonwillison.net/atom/everything/",
       "role": "primary",
       "category": "AI",
+      "sourceType": "",
       "status": "ok",
       "items": 30,
-      "checkedAt": "2026-06-25T14:52:05.644249+00:00"
+      "checkedAt": "2026-06-25T14:53:44.092288+00:00"
     },
     {
       "source": "Interconnects AI",
       "url": "https://www.interconnects.ai/feed",
       "role": "primary",
       "category": "AI",
+      "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-06-25T14:52:05.644249+00:00"
+      "checkedAt": "2026-06-25T14:53:44.092288+00:00"
     },
     {
       "source": "Latent Space",
       "url": "https://www.latent.space/feed",
       "role": "secondary",
       "category": "AI",
+      "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-06-25T14:52:05.644249+00:00"
+      "checkedAt": "2026-06-25T14:53:44.092288+00:00"
     },
     {
       "source": "Import AI",
       "url": "https://importai.substack.com/feed",
       "role": "secondary",
       "category": "AI",
-      "status": "error",
-      "items": 0,
-      "error": "HTTP Error 403: Forbidden",
-      "checkedAt": "2026-06-25T14:52:05.644249+00:00"
+      "sourceType": "",
+      "status": "ok",
+      "items": 20,
+      "checkedAt": "2026-06-25T14:53:44.092288+00:00"
     },
     {
       "source": "Microsoft Research Blog",
       "url": "https://www.microsoft.com/en-us/research/feed/",
       "role": "secondary",
       "category": "AI",
+      "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-06-25T14:52:05.644249+00:00"
+      "checkedAt": "2026-06-25T14:53:44.092288+00:00"
     },
     {
       "source": "Ollama Releases",
       "url": "https://github.com/ollama/ollama/releases.atom",
       "role": "primary",
       "category": "AI",
+      "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-06-25T14:52:05.644249+00:00"
+      "checkedAt": "2026-06-25T14:53:44.092288+00:00"
     },
     {
       "source": "LiteLLM Releases",
       "url": "https://github.com/BerriAI/litellm/releases.atom",
       "role": "primary",
       "category": "AI",
+      "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-06-25T14:52:05.644249+00:00"
+      "checkedAt": "2026-06-25T14:53:44.092288+00:00"
     },
     {
       "source": "Hugging Face Transformers Releases",
       "url": "https://github.com/huggingface/transformers/releases.atom",
       "role": "primary",
       "category": "AI",
+      "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-06-25T14:52:05.644249+00:00"
+      "checkedAt": "2026-06-25T14:53:44.092288+00:00"
     },
     {
       "source": "Model Context Protocol Python SDK Releases",
       "url": "https://github.com/modelcontextprotocol/python-sdk/releases.atom",
       "role": "primary",
       "category": "AI",
+      "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-06-25T14:52:05.644249+00:00"
+      "checkedAt": "2026-06-25T14:53:44.092288+00:00"
     },
     {
       "source": "Model Context Protocol Spec Releases",
       "url": "https://github.com/modelcontextprotocol/specification/releases.atom",
       "role": "primary",
       "category": "AI",
+      "sourceType": "tool-release",
       "status": "ok",
       "items": 8,
-      "checkedAt": "2026-06-25T14:52:05.644249+00:00"
+      "checkedAt": "2026-06-25T14:53:44.092288+00:00"
     },
     {
       "source": "OpenAI Cookbook Releases",
       "url": "https://github.com/openai/openai-cookbook/releases.atom",
       "role": "secondary",
       "category": "AI",
+      "sourceType": "tool-release",
       "status": "ok",
       "items": 0,
-      "checkedAt": "2026-06-25T14:52:05.644249+00:00"
+      "checkedAt": "2026-06-25T14:53:44.092288+00:00"
+    },
+    {
+      "source": "Product Hunt AI",
+      "url": "https://www.producthunt.com/feed?category=artificial-intelligence",
+      "role": "watchlist",
+      "category": "AI",
+      "sourceType": "tool-directory",
+      "status": "ok",
+      "items": 50,
+      "checkedAt": "2026-06-25T14:53:44.092288+00:00"
     }
   ],
-  "errors": [
-    {
-      "source": "Import AI",
-      "url": "https://importai.substack.com/feed",
-      "error": "HTTP Error 403: Forbidden"
-    }
-  ]
+  "errors": []
 }

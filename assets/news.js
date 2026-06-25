@@ -214,11 +214,13 @@ function renderTools(news) {
   const pool = news.items || [];
   const fallback = pool
     .filter(i => (i.category || 'AI') === 'AI')
-    .filter(i => i.tryWorthy === true)
-    .filter(i => !FILL_EXCLUDED_REASONS.has(i.editorial_reason || ''))
-    .sort((a, b) => (b.score || 0) - (a.score || 0));
+    .filter(i => i.toolCandidate === true || i.sourceType === 'tool-directory' || i.sourceType === 'tool-release')
+    .sort((a, b) => {
+      const sourceScore = type => type === 'tool-directory' ? 2 : type === 'tool-release' ? 1 : 0;
+      return (sourceScore(b.sourceType) - sourceScore(a.sourceType)) || ((b.score || 0) - (a.score || 0));
+    });
   const seen = new Set();
-  const tools = [...(news.tryWorthy || []), ...fallback]
+  const tools = [...(news.tools || []), ...fallback]
     .filter(i => i && i.url && !seen.has(i.url) && seen.add(i.url))
     .slice(0, 6);
   wrap.innerHTML = '';
@@ -231,7 +233,10 @@ function renderTools(news) {
     a.href = item.url;
     a.target = '_blank';
     a.rel = 'noopener';
-    a.textContent = item.title || 'Untitled';
+    const name = el('span', 'news-tool-name', item.toolLabel || item.title || 'Untitled');
+    const meta = el('span', 'news-tool-meta', item.toolSummary || item.source || 'AI tool');
+    a.appendChild(name);
+    a.appendChild(meta);
     row.appendChild(a);
   });
   wrap.appendChild(row);
