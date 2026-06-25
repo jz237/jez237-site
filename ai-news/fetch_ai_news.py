@@ -290,6 +290,70 @@ def try_worthy(item):
     ])
 
 
+VERSION_TITLE_RE = re.compile(
+    r"^(?:v?\d+(?:\.\d+){1,3}(?:[-+][a-z0-9_.-]+)?|release\s+v?\d+(?:\.\d+){1,3})$",
+    re.IGNORECASE,
+)
+
+
+def source_tool_name(source):
+    name = (source or "").strip()
+    name = re.sub(r"\s+releases?$", "", name, flags=re.IGNORECASE)
+    return {
+        "Model Context Protocol Python SDK": "MCP Python SDK",
+        "Model Context Protocol Spec": "MCP Specification",
+        "Hugging Face Transformers": "Transformers",
+    }.get(name, name)
+
+
+def clean_tool_summary(item):
+    summary = re.sub(r"\s+", " ", item.get("summary") or "").strip()
+    summary = re.sub(r"\bDiscussion\s*\|\s*Link\b", "", summary).strip()
+    summary = re.sub(r"\s+", " ", summary)
+    if not summary:
+        source_type = item.get("sourceType")
+        if source_type == "tool-release":
+            summary = "New release from a known AI/developer tool."
+        elif source_type == "tool-directory":
+            summary = "New AI product listing."
+    if len(summary) > 150:
+        summary = summary[:147].rstrip() + "..."
+    return summary
+
+
+def enrich_tool_metadata(item):
+    source_type = item.get("sourceType") or ""
+    title = (item.get("title") or "").strip()
+    source = item.get("source") or ""
+    is_release = source_type == "tool-release"
+    is_directory = source_type == "tool-directory"
+
+    if not (is_release or is_directory):
+        item["toolCandidate"] = False
+        return
+
+    tool_name = source_tool_name(source) if is_release else re.sub(r"\s+-\s+.*$", "", title).strip()
+    if not tool_name:
+        tool_name = title or source
+
+    if is_release and VERSION_TITLE_RE.match(title):
+        label = f"{tool_name} {title}"
+    else:
+        label = title or tool_name
+
+    item["toolCandidate"] = True
+    item["toolName"] = tool_name
+    item["toolLabel"] = label
+    item["toolSummary"] = clean_tool_summary(item)
+
+
+def tool_rank(item):
+    source_type = item.get("sourceType")
+    source_bonus = 25.0 if source_type == "tool-directory" else 6.0 if source_type == "tool-release" else 0
+    recency = item.get("published", "")
+    return (source_bonus + float(item.get("score", 0)), recency)
+
+
 def story_cluster_key(item):
     title = (item.get("title") or "").lower()
     title = re.sub(r"[^a-z0-9\s+-]", " ", title)
@@ -840,6 +904,7 @@ def main():
 
     feeds = load_json(FEEDS_PATH, [])
     feed_roles = {f.get("name"): f.get("role", "secondary") for f in feeds if f.get("name")}
+    feed_source_types = {f.get("name"): f.get("sourceType", "") for f in feeds if f.get("name")}
     store = load_json(STORE_PATH, {"items": []})
     image_cache = load_json(IMAGE_CACHE_PATH, {"items": {}})
     cache_items = image_cache.get("items", {})
@@ -860,6 +925,7 @@ def main():
         weight = float(feed.get("weight", 0.7))
         category = feed.get("category", "AI")
         role = feed.get("role", "secondary")
+        source_type = feed.get("sourceType", "")
         scrape_type = feed.get("type", "rss")
         user_agent = feed.get("userAgent") or feed.get("user_agent")
         if not name or not url:
@@ -873,12 +939,14 @@ def main():
             for item in items:
                 item["category"] = category
                 item["sourceRole"] = role
+                item["sourceType"] = source_type
             fetched.extend(items)
             source_health.append({
                 "source": name,
                 "url": url,
                 "role": role,
                 "category": category,
+                "sourceType": source_type,
                 "status": "ok",
                 "items": len(items),
                 "checkedAt": now.isoformat(),
@@ -891,6 +959,7 @@ def main():
                 "url": url,
                 "role": role,
                 "category": category,
+                "sourceType": source_type,
                 "status": "error",
                 "items": 0,
                 "error": str(e),
@@ -915,6 +984,7 @@ def main():
             "sourceUrl": item.get("sourceUrl") or existing_item.get("sourceUrl", ""),
             "sourceWeight": item.get("sourceWeight", existing_item.get("sourceWeight", 0.7)),
             "sourceRole": item.get("sourceRole") or existing_item.get("sourceRole", "secondary"),
+            "sourceType": item.get("sourceType") or existing_item.get("sourceType", ""),
             "category": item.get("category") or existing_item.get("category", "AI"),
             "summary": item.get("summary") or existing_item.get("summary", ""),
             "image": sanitize_image_url(item.get("image", "")) if item.get("image") else sanitize_image_url(existing_item.get("image", "")),
@@ -932,6 +1002,8 @@ def main():
     for it in all_items:
         if not it.get("sourceRole"):
             it["sourceRole"] = feed_roles.get(it.get("source"), "secondary")
+        if not it.get("sourceType"):
+            it["sourceType"] = feed_source_types.get(it.get("source"), "")
 
     # Parse dates first
     for it in all_items:
@@ -992,6 +1064,7 @@ def main():
         it["whyItMatters"] = make_why_it_matters(it)
         it["brief"] = make_structured_brief(it)
         it["tryWorthy"] = try_worthy(it)
+        enrich_tool_metadata(it)
 
     attach_cluster_metadata(all_items)
 
@@ -1030,14 +1103,15 @@ def main():
     sci_items = sorted([i for i in all_items if i.get("category") == "Science"],
                        key=lambda x: (x["published_dt"], x["score"]), reverse=True)[:20]
     latest = ai_items + sci_items
-    try_worthy_items = sorted(
-        [i for i in latest if i.get("category") == "AI" and i.get("editorial_allow") and i.get("tryWorthy")],
-        key=lambda x: (x.get("score", 0), x.get("published", "")),
+    tool_items = sorted(
+        [i for i in all_items if i.get("category") == "AI" and i.get("toolCandidate")],
+        key=tool_rank,
         reverse=True,
     )[:8]
+    try_worthy_items = tool_items
     public_thumbnail_paths = {
         it.get("image", "")
-        for it in (latest + daily_top + try_worthy_items)
+        for it in (latest + daily_top + tool_items)
         if is_local_thumbnail(it.get("image", ""))
     }
     restore_non_public_thumbnails(all_items, public_thumbnail_paths)
@@ -1053,6 +1127,7 @@ def main():
     save_json(os.path.join(PUBLIC_DIR, "ai-news-latest.json"), {
         "updatedAt": now.isoformat(),
         "items": latest,
+        "tools": tool_items,
         "tryWorthy": try_worthy_items,
         "sourceHealth": source_health,
         "errors": errors,
@@ -1061,6 +1136,7 @@ def main():
         "date": today.isoformat(),
         "updatedAt": now.isoformat(),
         "items": daily_top,
+        "tools": tool_items,
         "tryWorthy": try_worthy_items,
         "sourceHealth": source_health,
         "errors": errors,
