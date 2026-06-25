@@ -1,0 +1,19 @@
+[
+  {
+    "id": "2026-06-24-random-image-style-retro-animation-look",
+    "title": "Retro Animation Look",
+    "tests": "Random rendering style seed entry; tests whether GPT Image 2 can make the chosen visual medium the main variable without turning it into another named daily category.",
+    "prompt": "Create a finished image of a small neighborhood record shop in a retro animation look: rounded shapes, cel-painted color blocks, warm film-grain texture, simplified expressive characters, hand-painted background detail, and a lively Saturday afternoon mood. Reusable template: Create [SUBJECT_OR_SCENE] in [STYLE_OR_MEDIUM], with visible medium-specific texture, composition rules, color behavior, and detail level suited to that rendering style.",
+    "image": "images/2026-06-24-random-image-style-retro-animation-look.jpg",
+    "date": "2026-06-24",
+    "batch": "Random Rendering Style",
+    "slot": "random-image-style",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "randomRenderingStyle": {
+      "medium": "Retro animation look",
+      "description": "A rendering-style example where the style or visual medium is the main variable rather than a separate subject category.",
+      "template": "Create [SUBJECT_OR_SCENE] in [STYLE_OR_MEDIUM], with visible medium-specific texture, composition rules, color behavior, and detail level suited to that rendering style."
+    }
+  }
+]
