@@ -1,0 +1,38 @@
+[
+  {
+    "id": "2026-06-24-hybrid-creature-infographic-rime-talon-strain-development-m",
+    "title": "Rime Talon Strain: Development Map",
+    "tests": "Hybrid creature development-map seed entry; tests a realistic evidence-board style with restrained labels and photographed specimen panels.",
+    "prompt": "Photorealistic speculative xenobiology evidence-board infographic for the fictional Rime Talon Strain: human baseline plus harpy eagle predatory traits and snow leopard cold-climate adaptations. Show concise development panels from fictional trait overview through juvenile, adolescent, and adult phenotype; use specimen-photo, macro tissue, and field-photo realism; no real gene names, no lab protocol, no equipment steps, no surgery, no gore. Disclaimer: Speculative fiction - not a real organism or procedure.",
+    "image": "images/2026-06-24-hybrid-creature-infographic-rime-talon-strain-development-m.jpg",
+    "date": "2026-06-24",
+    "batch": "Hybrid Creature",
+    "slot": "hybrid-creature-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1536",
+    "hybridCreature": {
+      "name": "Rime Talon Strain",
+      "imageKind": "infographic",
+      "description": "Harpy eagle and snow leopard traits combined into a cold-climate fictional hybrid.",
+      "continuity": "Same Rime Talon adult phenotype across development-map and wild-photo panels."
+    }
+  },
+  {
+    "id": "2026-06-24-hybrid-creature-wild-rime-talon-strain-in-the-wild",
+    "title": "Rime Talon Strain: In the Wild",
+    "tests": "Hybrid creature wild-photo seed entry; tests whether the same adult phenotype reads as a realistic field-camera encounter.",
+    "prompt": "Ultra-photorealistic expedition field photograph of the fictional Rime Talon Strain in a remote alpine cliff forest at dusk. Show the same adult phenotype from the development map: a frightening but believable human, harpy eagle, and snow leopard hybrid with powerful raptorial shoulders, forward-facing eyes, hooked facial structure, dense pale-gray fur and feather transition zones, snow-leopard mottling, oversized talon-like hands and feet gripping rock, breath vapor, natural asymmetry, scars, matte skin, realistic fur clumping, and physical weight. Keep it inspectable with minimal blur; use camera-trap/field-photo imperfections, snow flecks, side light, grain, and environmental occlusion. No gore, nudity, surgery, lab setting, text, watermark, fantasy armor, or superhero look.",
+    "image": "images/2026-06-24-hybrid-creature-wild-rime-talon-strain-in-the-wild.jpg",
+    "date": "2026-06-24",
+    "batch": "Hybrid Creature",
+    "slot": "hybrid-creature-wild",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1536",
+    "hybridCreature": {
+      "name": "Rime Talon Strain",
+      "imageKind": "wild",
+      "description": "Harpy eagle and snow leopard traits combined into a cold-climate fictional hybrid.",
+      "continuity": "Same Rime Talon adult phenotype across development-map and wild-photo panels."
+    }
+  }
+]
