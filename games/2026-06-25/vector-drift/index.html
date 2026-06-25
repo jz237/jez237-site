@@ -35,7 +35,7 @@ h1{margin:0 0 8px;font-size:clamp(2.55rem,10vw,5.6rem);line-height:.84;letter-sp
   <span id="score">Score 000000</span>
 </div>
 <div class="toast" id="toast"></div>
-<div class="corner">v0.4 tempest prototype</div>
+<div class="corner">v0.5 tempest prototype</div>
 <div class="overlay" id="overlay">
   <div class="panel">
     <h1>VECTOR<br>TEMPEST</h1>
@@ -181,6 +181,14 @@ function fire() {
 }
 
 function burst(pos, color, count=14) {
+  const bubble = new THREE.Mesh(
+    new THREE.IcosahedronGeometry(.42,2),
+    new THREE.MeshBasicMaterial({ color, wireframe:true, transparent:true, opacity:.7, blending:THREE.AdditiveBlending, depthWrite:false })
+  );
+  bubble.position.copy(pos);
+  bubble.rotation.set(rand(Math.PI), rand(Math.PI), rand(Math.PI));
+  scene.add(bubble);
+  sparks.push({ mesh:bubble, life:.52, vel:new THREE.Vector3(), spin:new THREE.Vector3(rand(8,-8),rand(8,-8),rand(8,-8)), grow:10 });
   for (let r=0;r<3;r++) {
     const pts = [];
     for (let i=0;i<=36;i++) {
@@ -291,7 +299,7 @@ function prune(list, keep) {
 }
 
 function updateCamera() {
-  camera.position.set(0,0,innerWidth < 760 ? 44 : 29);
+  camera.position.set(0,0,innerWidth < 760 ? 40 : 29);
   camera.lookAt(0,0,-35);
 }
 
