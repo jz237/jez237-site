@@ -35,7 +35,7 @@ h1{margin:0 0 8px;font-size:clamp(2.55rem,10vw,5.6rem);line-height:.84;letter-sp
   <span id="score">Score 000000</span>
 </div>
 <div class="toast" id="toast"></div>
-<div class="corner">v0.5 tempest prototype</div>
+<div class="corner">v0.6 tempest prototype</div>
 <div class="overlay" id="overlay">
   <div class="panel">
     <h1>VECTOR<br>TEMPEST</h1>
@@ -143,7 +143,7 @@ function reset(practice=false) {
   player = makePlayer();
   makeWeb();
   makeStars();
-  makeEnemy(3, -34);
+  makeEnemy(0, -34);
   makeEnemy(9, -52);
   makeEnemy(13, -68);
   ui.overlay.classList.add("hidden"); ui.over.classList.add("hidden");
@@ -174,46 +174,88 @@ function makeEnemy(lane=Math.floor(rand(lanes)), z=farZ-rand(9,0)) {
 
 function fire() {
   if (state.fireTimer > 0) return;
-  state.fireTimer = .135;
+  state.fireTimer = .16;
   const lane = Math.round(state.lane + lanes * 1000) % lanes;
-  const mesh = line([lanePos(lane, nearZ - .9,1.02), lanePos(lane, nearZ - 7.4, .92)], cyan, 1);
-  shots.push({ mesh, lane, z:nearZ - 3.9, speed:92, life:1.15 });
+  for (const [offset, color, opacity, speed] of [[0,cyan,1,96],[-1,gold,.72,88],[1,pink,.72,88]]) {
+    const shotLane = (lane + offset + lanes) % lanes;
+    const mesh = line([lanePos(shotLane, nearZ - .9,1.02), lanePos(shotLane, nearZ - 7.2, .92)], color, opacity);
+    shots.push({ mesh, lane:shotLane, z:nearZ - 3.9, speed, life:1.08 });
+  }
 }
 
-function burst(pos, color, count=14) {
+function addBubble(pos, color, size=.42, life=.52, grow=10) {
   const bubble = new THREE.Mesh(
-    new THREE.IcosahedronGeometry(.42,2),
+    new THREE.IcosahedronGeometry(size,2),
     new THREE.MeshBasicMaterial({ color, wireframe:true, transparent:true, opacity:.7, blending:THREE.AdditiveBlending, depthWrite:false })
   );
   bubble.position.copy(pos);
   bubble.rotation.set(rand(Math.PI), rand(Math.PI), rand(Math.PI));
   scene.add(bubble);
-  sparks.push({ mesh:bubble, life:.52, vel:new THREE.Vector3(), spin:new THREE.Vector3(rand(8,-8),rand(8,-8),rand(8,-8)), grow:10 });
-  for (let r=0;r<3;r++) {
-    const pts = [];
-    for (let i=0;i<=36;i++) {
-      const a = i / 36 * Math.PI * 2;
-      pts.push(new THREE.Vector3(Math.cos(a)*(.3+r*.16), Math.sin(a)*(.3+r*.16), 0));
-    }
-    const ring = new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), basic(r?white:color, r?.54:.92));
-    ring.position.copy(pos);
-    ring.rotation.set(rand(Math.PI), rand(Math.PI), rand(Math.PI));
-    scene.add(ring);
-    sparks.push({ mesh:ring, life:.32 + r*.05, vel:new THREE.Vector3(), spin:new THREE.Vector3(rand(13,-13),rand(13,-13),rand(13,-13)), grow:18 + r*10 });
+  sparks.push({ mesh:bubble, life, vel:new THREE.Vector3(), spin:new THREE.Vector3(rand(8,-8),rand(8,-8),rand(8,-8)), grow });
+}
+
+function addRing(pos, color, radius=.3, life=.36, grow=22) {
+  const pts = [];
+  for (let i=0;i<=40;i++) {
+    const a = i / 40 * Math.PI * 2;
+    pts.push(new THREE.Vector3(Math.cos(a)*radius, Math.sin(a)*radius, 0));
   }
+  const ring = new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), basic(color, .85));
+  ring.position.copy(pos);
+  ring.rotation.set(rand(Math.PI), rand(Math.PI), rand(Math.PI));
+  scene.add(ring);
+  sparks.push({ mesh:ring, life, vel:new THREE.Vector3(), spin:new THREE.Vector3(rand(15,-15),rand(15,-15),rand(15,-15)), grow });
+}
+
+function addRays(pos, color, count=18) {
+  const pts = [];
   for (let i=0;i<count;i++) {
     const dir = new THREE.Vector3(rand(1,-1),rand(1,-1),rand(.8,-.8)).normalize();
-    const side = new THREE.Vector3(-dir.y, dir.x, dir.z*.25).normalize();
-    const len = rand(.9,.32);
-    const geo = new THREE.BufferGeometry().setFromPoints([
-      new THREE.Vector3(0,0,0), dir.clone().multiplyScalar(len),
-      side.clone().multiplyScalar(.13), dir.clone().multiplyScalar(len*.55).add(side.clone().multiplyScalar(-.13)),
-      side.clone().multiplyScalar(-.13), dir.clone().multiplyScalar(len*.55).add(side.clone().multiplyScalar(.13))
-    ]);
-    const shard = new THREE.LineSegments(geo, basic(Math.random()>.72?white:color, .96));
+    pts.push(new THREE.Vector3(), dir.multiplyScalar(rand(1.15,.42)));
+  }
+  const rays = new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(pts), basic(color, .95));
+  rays.position.copy(pos);
+  scene.add(rays);
+  sparks.push({ mesh:rays, life:rand(.48,.25), vel:new THREE.Vector3(), spin:new THREE.Vector3(rand(18,-18),rand(18,-18),rand(18,-18)), grow:rand(16,8) });
+}
+
+function addSpiral(pos, color) {
+  const pts = [];
+  for (let i=0;i<64;i++) {
+    const t = i / 63, a = t * Math.PI * 6;
+    pts.push(new THREE.Vector3(Math.cos(a)*t*.9, Math.sin(a)*t*.9, (t-.5)*.75));
+  }
+  const spiral = new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), basic(color, .88));
+  spiral.position.copy(pos);
+  spiral.rotation.set(rand(Math.PI), rand(Math.PI), rand(Math.PI));
+  scene.add(spiral);
+  sparks.push({ mesh:spiral, life:.46, vel:new THREE.Vector3(), spin:new THREE.Vector3(rand(20,-20),rand(20,-20),rand(20,-20)), grow:8 });
+}
+
+function addWireCage(pos, color) {
+  const shape = Math.random()>.5 ? new THREE.BoxGeometry(.75,.75,.75) : new THREE.DodecahedronGeometry(.62,0);
+  const cage = new THREE.LineSegments(new THREE.EdgesGeometry(shape), basic(Math.random()>.5?white:color, .82));
+  cage.position.copy(pos);
+  cage.rotation.set(rand(Math.PI), rand(Math.PI), rand(Math.PI));
+  scene.add(cage);
+  sparks.push({ mesh:cage, life:.42, vel:new THREE.Vector3(), spin:new THREE.Vector3(rand(16,-16),rand(16,-16),rand(16,-16)), grow:11 });
+}
+
+function burst(pos, color, count=14) {
+  const variant = Math.floor(rand(6));
+  if (variant === 0) { addBubble(pos,color,.46,.56,12); addRing(pos,white,.34,.38,25); addRays(pos,color,count); }
+  if (variant === 1) { addBubble(pos,color,.3,.42,18); addBubble(pos,white,.58,.48,9); addSpiral(pos,color); }
+  if (variant === 2) { for (let i=0;i<5;i++) addRing(pos,i%2?white:color,.24+i*.12,.32+i*.035,18+i*7); addRays(pos,color,Math.ceil(count*.6)); }
+  if (variant === 3) { addWireCage(pos,color); addWireCage(pos,white); addRays(pos,color,count+8); }
+  if (variant === 4) { addSpiral(pos,color); addSpiral(pos,white); addBubble(pos,color,.42,.42,13); }
+  if (variant === 5) { addBubble(pos,color,.5,.5,14); addRing(pos,color,.28,.34,30); addRing(pos,white,.44,.36,18); addWireCage(pos,color); }
+  for (let i=0;i<Math.ceil(count*.35);i++) {
+    const dir = new THREE.Vector3(rand(1,-1),rand(1,-1),rand(.8,-.8)).normalize();
+    const geo = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(), dir.clone().multiplyScalar(rand(.75,.25))]);
+    const shard = new THREE.LineSegments(geo, basic(Math.random()>.72?white:color, .78));
     shard.position.copy(pos);
     scene.add(shard);
-    sparks.push({ mesh:shard, life:rand(.46,.2), vel:dir.multiplyScalar(rand(27,12)), spin:new THREE.Vector3(rand(22,-22),rand(22,-22),rand(22,-22)), grow:0 });
+    sparks.push({ mesh:shard, life:rand(.36,.18), vel:dir.multiplyScalar(rand(24,10)), spin:new THREE.Vector3(rand(22,-22),rand(22,-22),rand(22,-22)), grow:0 });
   }
 }
 
