@@ -4,757 +4,404 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover" />
 <title>Particle Creature Arena</title>
-<meta name="description" content="A particle-body arena game where damage scatters your creature and abilities degrade until the particles reassemble." />
+<meta name="description" content="A 3D particle-body arena game where shockwaves scatter your creature and gravity sparks pull it back together." />
 <link rel="icon" type="image/svg+xml" href="../../../assets/brand.svg" />
 <style>
-:root{
-  color-scheme:dark;
-  --bg:#05070f;
-  --ink:#f6fbff;
-  --muted:#aab8c9;
-  --cyan:#64e8ff;
-  --mint:#8dffb4;
-  --gold:#ffd166;
-  --pink:#ff5fa2;
-  --danger:#ff5d73;
-  --panel:rgba(8,12,24,.72);
-  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-}
+:root{color-scheme:dark;--ink:#f7fbff;--muted:#aab8c9;--cyan:#64e8ff;--mint:#8dffb4;--gold:#ffd166;--pink:#ff6bb6;--danger:#ff5d73;--panel:rgba(5,9,18,.72);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
 *{box-sizing:border-box}
-html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--ink);touch-action:none;user-select:none}
-canvas{position:fixed;inset:0;width:100%;height:100%;display:block;background:#05070f}
-.hud{position:fixed;left:14px;right:14px;top:12px;z-index:5;display:flex;align-items:flex-start;justify-content:space-between;gap:12px;pointer-events:none;opacity:0;transform:translateY(-8px);transition:opacity .22s ease,transform .22s ease}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#060913;color:var(--ink);touch-action:none;user-select:none}
+canvas{position:fixed;inset:0;width:100%;height:100%;display:block;cursor:crosshair}
+.hud{position:fixed;left:14px;right:14px;top:12px;z-index:4;display:flex;justify-content:space-between;gap:12px;pointer-events:none;opacity:0;transform:translateY(-8px);transition:opacity .2s ease,transform .2s ease}
 body.playing .hud{opacity:1;transform:translateY(0)}
-.cluster{display:flex;flex-wrap:wrap;gap:8px;max-width:min(720px,68vw)}
-.chip{min-width:82px;padding:8px 10px;border:1px solid rgba(255,255,255,.13);border-radius:8px;background:var(--panel);box-shadow:0 12px 34px rgba(0,0,0,.32),inset 0 1px 0 rgba(255,255,255,.08);backdrop-filter:blur(12px)}
-.chip span{display:block;color:var(--muted);font-size:10px;letter-spacing:.11em;text-transform:uppercase;font-weight:800}
-.chip b{display:block;margin-top:2px;font-size:18px;line-height:1;color:#fff;font-variant-numeric:tabular-nums}
-.brief{max-width:min(420px,38vw);text-align:right}
-.brief h1{margin:0;color:var(--gold);font-size:13px;letter-spacing:.14em;text-transform:uppercase}
-.brief p{margin:5px 0 0;color:#dce9ff;font-size:12px;line-height:1.35}
-.controls{position:fixed;left:14px;right:14px;bottom:12px;z-index:5;display:flex;align-items:flex-end;justify-content:space-between;gap:12px;pointer-events:none;opacity:0;transform:translateY(8px);transition:opacity .22s ease,transform .22s ease}
-body.playing .controls{opacity:1;transform:translateY(0)}
-.stick{width:132px;height:132px;border-radius:999px;border:1px solid rgba(100,232,255,.22);background:radial-gradient(circle,rgba(100,232,255,.12),rgba(255,255,255,.04));box-shadow:inset 0 0 32px rgba(100,232,255,.08),0 12px 38px rgba(0,0,0,.34);position:relative;display:none;pointer-events:auto}
-.knob{position:absolute;left:50%;top:50%;width:48px;height:48px;margin:-24px;border-radius:999px;background:linear-gradient(135deg,var(--cyan),#7f6bff);box-shadow:0 0 22px rgba(100,232,255,.48)}
-.buttons{display:flex;gap:10px;pointer-events:auto}
-button{border:1px solid rgba(255,255,255,.16);border-radius:8px;min-width:84px;min-height:46px;padding:10px 14px;color:#081018;background:linear-gradient(180deg,#f2ffd1,var(--mint));font-weight:900;letter-spacing:.08em;text-transform:uppercase;box-shadow:0 5px 0 #257449,0 12px 24px rgba(0,0,0,.32);cursor:pointer}
-button.secondary{color:#eaf4ff;background:rgba(255,255,255,.08);box-shadow:0 5px 0 rgba(0,0,0,.22),0 12px 24px rgba(0,0,0,.28)}
-button:active{transform:translateY(3px);box-shadow:0 2px 0 #257449,0 8px 18px rgba(0,0,0,.3)}
-button:disabled{opacity:.48;cursor:not-allowed;filter:saturate(.55)}
-.overlay{position:fixed;inset:0;z-index:10;display:none;place-items:center;padding:18px;background:radial-gradient(circle at 50% 42%,rgba(100,232,255,.16),rgba(4,6,13,.72) 58%,rgba(4,6,13,.9))}
-.overlay.show{display:grid}
-.panel{width:min(760px,94vw);max-height:90vh;overflow:auto;padding:24px;border:1px solid rgba(100,232,255,.28);border-radius:10px;background:linear-gradient(180deg,rgba(14,20,42,.96),rgba(5,8,18,.97));box-shadow:0 30px 90px rgba(0,0,0,.62),inset 0 1px 0 rgba(255,255,255,.12);text-align:center}
-.panel h2{margin:0;font-size:clamp(34px,8vw,78px);line-height:.92;letter-spacing:.01em;text-transform:uppercase;background:linear-gradient(135deg,var(--mint),var(--cyan) 42%,var(--gold) 66%,var(--pink));-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 8px 24px rgba(100,232,255,.18))}
-.panel p{max-width:620px;margin:14px auto;color:#dbe9ff;line-height:1.45}
-.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:16px auto;max-width:650px;text-align:left}
-.rule{padding:11px;border:1px solid rgba(255,255,255,.12);border-radius:8px;background:rgba(255,255,255,.05);font-size:12px;line-height:1.35;color:#cbd8ec}
-.rule strong{display:block;color:#fff;margin-bottom:4px;font-size:11px;letter-spacing:.1em;text-transform:uppercase}
-.row{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:14px}
-.toast{position:fixed;left:50%;bottom:78px;z-index:6;transform:translateX(-50%) translateY(18px);max-width:min(680px,92vw);padding:10px 14px;border:1px solid rgba(255,255,255,.12);border-radius:8px;background:rgba(5,8,18,.78);box-shadow:0 18px 50px rgba(0,0,0,.42);color:#eaf4ff;font-size:13px;line-height:1.35;text-align:center;opacity:0;transition:opacity .18s ease,transform .18s ease;pointer-events:none}
-.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-.best-line{margin-top:8px;color:var(--muted);font-size:12px;letter-spacing:.08em;text-transform:uppercase;font-weight:800}
-.meter-hot b{color:#ff7f91}.meter-warn b{color:#ffd166}.meter-good b{color:#8dffb4}
-.scanlines{position:fixed;inset:0;z-index:4;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(255,255,255,.03) 0 1px,transparent 1px 4px);mix-blend-mode:soft-light;opacity:.45}
-@media(max-width:760px){
-  .hud{left:8px;right:8px;top:8px}.cluster{max-width:100%;gap:5px}.chip{min-width:64px;padding:7px 8px}.chip span{font-size:8px}.chip b{font-size:14px}.brief{display:none}
-  .controls{bottom:8px;left:8px;right:8px}.stick{display:block;width:116px;height:116px}.buttons button{min-width:72px;min-height:44px;font-size:12px}
-  .grid{grid-template-columns:1fr}.panel{padding:18px}.toast{bottom:136px}
-}
+.cluster{display:flex;flex-wrap:wrap;gap:8px;max-width:min(760px,68vw)}
+.chip{min-width:82px;padding:8px 10px;border:1px solid rgba(255,255,255,.13);border-radius:8px;background:var(--panel);box-shadow:0 14px 40px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.08);backdrop-filter:blur(12px)}
+.chip span{display:block;color:var(--muted);font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-weight:800}.chip b{display:block;margin-top:2px;font-size:18px;line-height:1;font-variant-numeric:tabular-nums}
+.good b{color:var(--mint)}.warn b{color:var(--gold)}.bad b{color:var(--danger)}
+.brief{max-width:min(430px,38vw);text-align:right;text-shadow:0 2px 20px rgba(0,0,0,.55)}.brief h1{margin:0;color:var(--gold);font-size:13px;letter-spacing:.14em;text-transform:uppercase}.brief p{margin:5px 0 0;color:#dce9ff;font-size:12px;line-height:1.35}
+.controls{position:fixed;left:14px;right:14px;bottom:12px;z-index:4;display:flex;align-items:flex-end;justify-content:space-between;gap:12px;pointer-events:none;opacity:0;transform:translateY(8px);transition:opacity .2s ease,transform .2s ease}body.playing .controls{opacity:1;transform:translateY(0)}
+.stick{width:126px;height:126px;border-radius:999px;border:1px solid rgba(100,232,255,.22);background:radial-gradient(circle,rgba(100,232,255,.14),rgba(255,255,255,.04));box-shadow:inset 0 0 32px rgba(100,232,255,.08),0 12px 38px rgba(0,0,0,.34);position:relative;display:none;pointer-events:auto}.knob{position:absolute;left:50%;top:50%;width:48px;height:48px;margin:-24px;border-radius:999px;background:linear-gradient(135deg,var(--cyan),#7f6bff);box-shadow:0 0 22px rgba(100,232,255,.48)}
+.buttons{display:flex;gap:10px;pointer-events:auto}button{border:1px solid rgba(255,255,255,.16);border-radius:8px;min-width:86px;min-height:46px;padding:10px 14px;color:#081018;background:linear-gradient(180deg,#f2ffd1,var(--mint));font-weight:900;letter-spacing:.08em;text-transform:uppercase;box-shadow:0 5px 0 #257449,0 12px 24px rgba(0,0,0,.32);cursor:pointer}button.secondary{color:#eaf4ff;background:rgba(255,255,255,.08);box-shadow:0 5px 0 rgba(0,0,0,.22),0 12px 24px rgba(0,0,0,.28)}button:active{transform:translateY(3px);box-shadow:0 2px 0 #257449,0 8px 18px rgba(0,0,0,.3)}button:disabled{opacity:.48;cursor:not-allowed;filter:saturate(.55)}
+.overlay{position:fixed;inset:0;z-index:10;display:none;place-items:center;padding:18px;background:radial-gradient(circle at 50% 42%,rgba(100,232,255,.16),rgba(4,6,13,.64) 58%,rgba(4,6,13,.88));backdrop-filter:blur(2px)}.overlay.show{display:grid}
+.panel{width:min(790px,94vw);max-height:90vh;overflow:auto;padding:24px;border:1px solid rgba(100,232,255,.28);border-radius:10px;background:linear-gradient(180deg,rgba(14,20,42,.95),rgba(5,8,18,.97));box-shadow:0 30px 90px rgba(0,0,0,.62),inset 0 1px 0 rgba(255,255,255,.12);text-align:center}.panel h2{margin:0;font-size:clamp(34px,8vw,78px);line-height:.92;letter-spacing:.01em;text-transform:uppercase;background:linear-gradient(135deg,var(--mint),var(--cyan) 42%,var(--gold) 66%,var(--pink));-webkit-background-clip:text;background-clip:text;color:transparent}.panel p{max-width:630px;margin:14px auto;color:#dbe9ff;line-height:1.45}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:16px auto;max-width:680px;text-align:left}.rule{padding:11px;border:1px solid rgba(255,255,255,.12);border-radius:8px;background:rgba(255,255,255,.05);font-size:12px;line-height:1.35;color:#cbd8ec}.rule strong{display:block;color:#fff;margin-bottom:4px;font-size:11px;letter-spacing:.1em;text-transform:uppercase}.row{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:14px}
+.toast{position:fixed;left:50%;bottom:78px;z-index:6;transform:translateX(-50%) translateY(18px);max-width:min(680px,92vw);padding:10px 14px;border:1px solid rgba(255,255,255,.12);border-radius:8px;background:rgba(5,8,18,.78);box-shadow:0 18px 50px rgba(0,0,0,.42);color:#eaf4ff;font-size:13px;line-height:1.35;text-align:center;opacity:0;transition:opacity .18s ease,transform .18s ease;pointer-events:none}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.scanlines{position:fixed;inset:0;z-index:3;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(255,255,255,.025) 0 1px,transparent 1px 4px);mix-blend-mode:soft-light;opacity:.38}.credit{position:fixed;right:14px;bottom:12px;z-index:3;color:rgba(255,255,255,.48);font-size:11px;pointer-events:none}
+@media(max-width:760px){.hud{left:8px;right:8px;top:8px}.cluster{max-width:100%;gap:5px}.chip{min-width:64px;padding:7px 8px}.chip span{font-size:8px}.chip b{font-size:14px}.brief{display:none}.controls{left:8px;right:8px;bottom:8px}.stick{display:block;width:116px;height:116px}.buttons button{min-width:72px;min-height:44px;font-size:12px}.grid{grid-template-columns:1fr}.panel{padding:18px}.toast{bottom:136px}.credit{display:none}}
 </style>
 </head>
 <body>
-<canvas id="game"></canvas>
+<canvas id="scene"></canvas>
 <div class="scanlines"></div>
 <div class="hud">
   <div class="cluster">
-    <div class="chip"><span>Score</span><b id="score">0</b></div>
-    <div class="chip"><span>Wave</span><b id="wave">1</b></div>
-    <div class="chip"><span>Integrity</span><b id="integrity">100%</b></div>
-    <div class="chip"><span>Speed</span><b id="speed">100%</b></div>
-    <div class="chip"><span>Vision</span><b id="vision">100%</b></div>
-    <div class="chip"><span>Pulse</span><b id="pulse">100%</b></div>
+    <div class="chip" id="scoreBox"><span>Score</span><b id="score">0</b></div>
+    <div class="chip" id="waveBox"><span>Wave</span><b id="wave">1</b></div>
+    <div class="chip good" id="integrityBox"><span>Integrity</span><b id="integrity">100%</b></div>
+    <div class="chip good" id="speedBox"><span>Speed</span><b id="speed">100%</b></div>
+    <div class="chip good" id="visionBox"><span>Vision</span><b id="vision">100%</b></div>
+    <div class="chip good" id="pulseBox"><span>Pulse</span><b id="pulse">100%</b></div>
   </div>
-  <div class="brief">
-    <h1>Particle Creature Arena</h1>
-    <p>Hits scatter your body. Loose legs slow you, loose eyes shrink vision, loose core particles weaken your pulse. Collect gravity sparks to pull yourself together.</p>
-  </div>
+  <div class="brief"><h1>Particle Creature Arena</h1><p>A true 3D point-cloud creature. Shockwaves tear body regions loose; sparks pull the cloud back together.</p></div>
 </div>
 <div class="controls">
   <div class="stick" id="stick"><div class="knob" id="knob"></div></div>
-  <div class="buttons">
-    <button id="pulseBtn" aria-label="Emit recovery pulse">Pulse</button>
-    <button class="secondary" id="pauseBtn" aria-label="Pause or resume">Pause</button>
-  </div>
+  <div class="buttons"><button id="pulseBtn">Pulse</button><button class="secondary" id="pauseBtn">Pause</button></div>
 </div>
 <div class="toast" id="toast"></div>
+<div class="credit">WASD/arrows move | drag to orbit | space pulse</div>
 <div class="overlay show" id="title">
   <div class="panel">
     <h2>Particle<br>Creature Arena</h2>
-    <p>You are a small creature made of recoverable particles. Enemy shockwaves blow chunks of your body apart. Survive by dodging, pulsing, collecting gravity sparks, and letting your scattered particles reassemble.</p>
+    <p>Rebuilt in the 3D particle style of the cat demo. You pilot a living point cloud through an arena of shock drones. Hits physically blast body particles away, and your abilities degrade until the cloud reassembles.</p>
     <div class="grid">
-      <div class="rule"><strong>Damage is physical</strong>There is no normal health bar. If too much of your body is dispersed, the creature collapses.</div>
-      <div class="rule"><strong>Body parts matter</strong>Scattered legs reduce speed. Scattered eyes reduce pickup vision. Scattered core particles weaken your pulse.</div>
-      <div class="rule"><strong>Controls</strong>WASD/arrows or drag to move. Space/tap Pulse. Touch joystick appears on phones.</div>
+      <div class="rule"><strong>3D particle body</strong>Every dot has a home position, velocity, and spring. Damage is visible as real displacement.</div>
+      <div class="rule"><strong>Regions matter</strong>Loose legs slow movement. Loose eyes shrink pickup vision. Loose core weakens your pulse.</div>
+      <div class="rule"><strong>Controls</strong>WASD/arrows move. Drag or touch the field to orbit. Space or Pulse emits a gravity blast.</div>
     </div>
-    <div class="row">
-      <button id="startBtn">Start Run</button>
-      <button class="secondary" id="practiceBtn">Practice</button>
-    </div>
-    <div class="best-line" id="titleBest">Best: 0</div>
+    <div class="row"><button id="startBtn">Start Run</button><button class="secondary" id="practiceBtn">Practice</button></div>
   </div>
 </div>
-<div class="overlay" id="gameover">
-  <div class="panel">
-    <h2 id="overTitle">Collapsed</h2>
-    <p id="overText"></p>
-    <div class="row">
-      <button id="againBtn">Run Again</button>
-      <button class="secondary" id="menuBtn">Title</button>
-    </div>
-  </div>
-</div>
-<script>
-(() => {
-  const canvas = document.getElementById("game");
-  const ctx = canvas.getContext("2d", { alpha: false });
-  const $ = id => document.getElementById(id);
-  const ui = {
-    score: $("score"), wave: $("wave"), integrity: $("integrity"), speed: $("speed"),
-    vision: $("vision"), pulse: $("pulse"), title: $("title"), gameover: $("gameover"),
-    overTitle: $("overTitle"), overText: $("overText"), toast: $("toast"),
-    start: $("startBtn"), practice: $("practiceBtn"), again: $("againBtn"),
-    menu: $("menuBtn"), pause: $("pauseBtn"), pulseBtn: $("pulseBtn"),
-    stick: $("stick"), knob: $("knob"), titleBest: $("titleBest")
-  };
-  const BEST_KEY = "particle-creature-arena-best-v1";
+<div class="overlay" id="gameover"><div class="panel"><h2 id="overTitle">Collapsed</h2><p id="overText"></p><div class="row"><button id="againBtn">Run Again</button><button class="secondary" id="menuBtn">Title</button></div></div></div>
+<script type="module">
+import * as THREE from "../../../experiments/particle-graphics-cat/three.module.js";
 
-  const TAU = Math.PI * 2;
-  const rand = (a=1,b=0) => b + Math.random() * (a - b);
-  const clamp = (v,a,b) => Math.max(a, Math.min(b, v));
-  const lerp = (a,b,t) => a + (b - a) * t;
-  const now = () => performance.now() / 1000;
-  const state = {
-    w: 0, h: 0, dpr: 1, running: false, paused: false, practice: false,
-    t: 0, dt: 0, last: now(), score: 0, wave: 1, waveTimer: 0,
-    shake: 0, flash: 0, pulseCharge: 1, messageUntil: 0, message: "",
-    keys: new Set(), pointer: null, aim: { x: 0, y: 0 }, joystick: { active:false, id:null, x:0, y:0, dx:0, dy:0 },
-    stats: { integrity: 1, legs: 1, eyes: 1, core: 1, tail: 1 },
-    ended: false, warnedLow: false
-  };
+const $ = id => document.getElementById(id);
+const ui = {
+  score:$("score"), wave:$("wave"), integrity:$("integrity"), speed:$("speed"), vision:$("vision"), pulse:$("pulse"),
+  scoreBox:$("scoreBox"), waveBox:$("waveBox"), integrityBox:$("integrityBox"), speedBox:$("speedBox"), visionBox:$("visionBox"), pulseBox:$("pulseBox"),
+  title:$("title"), over:$("gameover"), overTitle:$("overTitle"), overText:$("overText"), toast:$("toast"),
+  start:$("startBtn"), practice:$("practiceBtn"), again:$("againBtn"), menu:$("menuBtn"), pulseBtn:$("pulseBtn"), pauseBtn:$("pauseBtn"),
+  stick:$("stick"), knob:$("knob")
+};
 
-  const player = { x: 0, y: 0, vx: 0, vy: 0, a: 0, r: 46 };
-  let particles = [];
-  let enemies = [];
-  let sparks = [];
-  let blasts = [];
-  let motes = [];
-  let pickupsSeen = 0;
+const canvas = $("scene");
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x060913);
+scene.fog = new THREE.Fog(0x060913, 22, 58);
+const renderer = new THREE.WebGLRenderer({ canvas, antialias:true, powerPreference:"high-performance" });
+renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 2));
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+const camera = new THREE.PerspectiveCamera(45, 1, .1, 120);
+const clock = new THREE.Clock();
 
-  function resize() {
-    state.dpr = Math.min(devicePixelRatio || 1, 2);
-    state.w = innerWidth;
-    state.h = innerHeight;
-    canvas.width = Math.floor(state.w * state.dpr);
-    canvas.height = Math.floor(state.h * state.dpr);
-    canvas.style.width = state.w + "px";
-    canvas.style.height = state.h + "px";
-    ctx.setTransform(state.dpr,0,0,state.dpr,0,0);
+const floor = new THREE.Mesh(new THREE.PlaneGeometry(80,80), new THREE.MeshBasicMaterial({ color:0x07121d, transparent:true, opacity:.92 }));
+floor.rotation.x = -Math.PI/2;
+floor.position.y = -1.9;
+scene.add(floor);
+const grid = new THREE.GridHelper(54, 54, 0x2fd8c5, 0x173344);
+grid.position.y = -1.88;
+scene.add(grid);
+
+const arena = new THREE.Group();
+scene.add(arena);
+const ring = new THREE.Mesh(new THREE.RingGeometry(13.8,14.0,96), new THREE.MeshBasicMaterial({ color:0x2fd8c5, transparent:true, opacity:.24, side:THREE.DoubleSide }));
+ring.rotation.x = -Math.PI/2;
+ring.position.y = -1.82;
+arena.add(ring);
+
+const particleCount = 0;
+let homes = [], particles = [], regions = [], geometry, material, cloud;
+let enemies = [], sparks = [], waves = [], motes = [];
+const regionIds = { body:1, legs:2, eyes:3, core:4, tail:5, detail:6 };
+const scratch = new THREE.Vector3();
+const state = {
+  running:false, paused:false, practice:false, ended:false, t:0, score:0, wave:1, waveTimer:0, pulse:1, warned:false,
+  player:new THREE.Vector3(0,0,0), velocity:new THREE.Vector3(), yaw:0, targetYaw:0,
+  stats:{ integrity:1, legs:1, eyes:1, core:1, tail:1 },
+  keys:new Set(), pointer:null, orbit:{ yaw:.72, pitch:.43, distance:18, dragging:false, x:0, y:0 },
+  stick:{ active:false, id:null, dx:0, dy:0 }, messageUntil:0
+};
+
+function color(hex){ return new THREE.Color(hex); }
+const palette = {
+  body:color(0x69dfff), core:color(0xa7f7ea), dark:color(0x28687a), eye:color(0x7dff6f),
+  pink:color(0xff78b7), gold:color(0xffd166), white:color(0xeaf8ff), enemy:color(0xff5fa2), spark:color(0xffd166)
+};
+
+function rand(a=1,b=0){ return b + Math.random() * (a-b); }
+function clamp(v,a,b){ return Math.max(a, Math.min(b, v)); }
+function setClass(el,v){ el.classList.toggle("bad",v<.34); el.classList.toggle("warn",v>=.34&&v<.68); el.classList.toggle("good",v>=.68); }
+
+function addParticle(home, region, c, size=20) {
+  const p = home.clone().add(new THREE.Vector3(rand(.08,-.08), rand(.08,-.08), rand(.08,-.08)));
+  homes.push(home.clone());
+  particles.push({ pos:p, vel:new THREE.Vector3(rand(.1,-.1),rand(.1,-.1),rand(.1,-.1)), size:size*rand(1.2,.75), color:c.clone(), region, seed:rand(1000,0) });
+  regions.push(regionIds[region] || 0);
+}
+
+function ellipsoid(center, radius, count, region, c, size=20) {
+  for (let i=0;i<count;i++) {
+    const u = rand(Math.PI*2,0), v = Math.acos(rand(1,-1));
+    const fill = Math.cbrt(Math.random());
+    addParticle(new THREE.Vector3(
+      center.x + Math.sin(v)*Math.cos(u)*radius.x*fill,
+      center.y + Math.cos(v)*radius.y*fill,
+      center.z + Math.sin(v)*Math.sin(u)*radius.z*fill
+    ), region, c, size);
   }
-  addEventListener("resize", resize, { passive: true });
-  resize();
+}
 
-  function pointInEllipse(x, y, rx, ry) {
-    return (x*x)/(rx*rx) + (y*y)/(ry*ry) <= 1;
+function line(a,b,count,region,c,size=14) {
+  for (let i=0;i<count;i++) addParticle(a.clone().lerp(b, i/(count-1)).add(new THREE.Vector3(rand(.04,-.04),rand(.04,-.04),rand(.04,-.04))), region, c, size);
+}
+
+function buildCreature() {
+  homes = []; particles = []; regions = [];
+  ellipsoid(new THREE.Vector3(0,.35,0), new THREE.Vector3(2.25,.72,.76), 1650, "body", palette.body, 20);
+  ellipsoid(new THREE.Vector3(2.05,.55,0), new THREE.Vector3(.82,.66,.72), 780, "core", palette.core, 20);
+  ellipsoid(new THREE.Vector3(2.68,.42,0), new THREE.Vector3(.34,.25,.42), 240, "detail", palette.white, 18);
+  ellipsoid(new THREE.Vector3(2.92,.5,0), new THREE.Vector3(.11,.08,.14), 58, "core", palette.pink, 20);
+  ellipsoid(new THREE.Vector3(2.58,.84,-.33), new THREE.Vector3(.11,.14,.06), 85, "eyes", palette.eye, 25);
+  ellipsoid(new THREE.Vector3(2.58,.84,.33), new THREE.Vector3(.11,.14,.06), 85, "eyes", palette.eye, 25);
+  ellipsoid(new THREE.Vector3(1.72,-.48,-.42), new THREE.Vector3(.19,.55,.2), 230, "legs", palette.dark, 18);
+  ellipsoid(new THREE.Vector3(.55,-.48,-.45), new THREE.Vector3(.19,.55,.2), 230, "legs", palette.dark, 18);
+  ellipsoid(new THREE.Vector3(1.72,-.48,.42), new THREE.Vector3(.19,.55,.2), 230, "legs", palette.dark, 18);
+  ellipsoid(new THREE.Vector3(.55,-.48,.45), new THREE.Vector3(.19,.55,.2), 230, "legs", palette.dark, 18);
+  line(new THREE.Vector3(2.28,1.02,-.38), new THREE.Vector3(2.45,1.85,-.58), 100, "detail", palette.pink, 17);
+  line(new THREE.Vector3(2.28,1.02,.38), new THREE.Vector3(2.45,1.85,.58), 100, "detail", palette.pink, 17);
+  for (let i=0;i<520;i++) {
+    const t = i/519, a = t*Math.PI*1.55, r = .28 + .12*Math.sin(t*Math.PI);
+    const center = new THREE.Vector3(-1.95 - t*2.15, .28 + Math.sin(t*Math.PI)*1.45, Math.cos(a)*.52);
+    const q = rand(Math.PI*2,0);
+    addParticle(center.add(new THREE.Vector3(Math.cos(q)*r, Math.sin(q)*r, Math.sin(q)*r*.7)), "tail", i%4 ? palette.body : palette.gold, 18);
   }
+  line(new THREE.Vector3(2.72,.42,-.22), new THREE.Vector3(3.65,.58,-1.05), 95, "detail", palette.white, 12);
+  line(new THREE.Vector3(2.72,.36,-.22), new THREE.Vector3(3.75,.28,-1.16), 95, "detail", palette.white, 12);
+  line(new THREE.Vector3(2.72,.42,.22), new THREE.Vector3(3.65,.58,1.05), 95, "detail", palette.white, 12);
+  line(new THREE.Vector3(2.72,.36,.22), new THREE.Vector3(3.75,.28,1.16), 95, "detail", palette.white, 12);
 
-  function addParticle(hx, hy, region, color, size=2.1) {
-    const c = hexToRgb(color);
-    const ca = Math.cos(player.a), sa = Math.sin(player.a);
-    const homeX = player.x + hx*ca - hy*sa;
-    const homeY = player.y + hx*sa + hy*ca;
-    particles.push({
-      hx, hy, region, color, r:c.r, g:c.g, b:c.b, size: size * rand(1.22,.74),
-      x: homeX + rand(2.4,-2.4), y: homeY + rand(2.4,-2.4),
-      vx: rand(8,-8), vy: rand(8,-8), loose: 0, seed: Math.random() * 1000
-    });
-  }
-
-  function hexToRgb(hex) {
-    const n = parseInt(hex.slice(1), 16);
-    return { r:(n>>16)&255, g:(n>>8)&255, b:n&255 };
-  }
-
-  function buildCreature() {
-    particles = [];
-    player.x = state.w * .5;
-    player.y = state.h * .54;
-    player.vx = player.vy = player.a = 0;
-    const addEllipse = (cx,cy,rx,ry,count,region,color,size) => {
-      for (let i=0;i<count;i++) {
-        let x, y;
-        do { x = rand(rx*2,-rx) + cx; y = rand(ry*2,-ry) + cy; } while (!pointInEllipse(x-cx,y-cy,rx,ry));
-        addParticle(x + rand(2.6,-2.6), y + rand(2.6,-2.6), region, color, size);
-      }
-    };
-    const addLine = (x1,y1,x2,y2,count,region,color,size) => {
-      for (let i=0;i<count;i++) {
-        const t = count === 1 ? 0 : i/(count-1);
-        addParticle(lerp(x1,x2,t)+rand(3,-3), lerp(y1,y2,t)+rand(3,-3), region, color, size);
-      }
-    };
-    addEllipse(-6, 4, 48, 25, 360, "body", "#92f3ff", 2.4);
-    addEllipse(42, -4, 25, 21, 220, "core", "#a7f7ea", 2.35);
-    addEllipse(64, -8, 16, 13, 90, "face", "#dff6ff", 2.2);
-    addEllipse(54, -16, 5, 5, 30, "eyes", "#7cff79", 2.9);
-    addEllipse(68, -16, 5, 5, 30, "eyes", "#7cff79", 2.9);
-    addEllipse(56, 24, 9, 18, 74, "legs", "#6ee4ff", 2.25);
-    addEllipse(21, 27, 9, 20, 84, "legs", "#6ee4ff", 2.25);
-    addEllipse(-25, 28, 9, 19, 82, "legs", "#6ee4ff", 2.25);
-    for (let i=0;i<190;i++) {
-      const t = i / 189;
-      const ang = t * Math.PI * 1.35;
-      const x = -50 - Math.sin(ang) * (18 + t*34);
-      const y = 4 - Math.cos(ang) * (16 + t*18);
-      addParticle(x + rand(4,-4), y + rand(4,-4), "tail", i%3 ? "#68d6ff" : "#fbd166", 2.15);
-    }
-    addLine(56,-25,48,-49,52,"ears","#ff77bb",2.1);
-    addLine(70,-24,79,-48,52,"ears","#ff77bb",2.1);
-    addLine(70,-3,100,-18,44,"whisker","#eaf8ff",1.55);
-    addLine(70,1,104,2,44,"whisker","#eaf8ff",1.55);
-    addLine(70,5,99,20,44,"whisker","#eaf8ff",1.55);
-    addEllipse(76,-5,4,3,20,"core","#ff5d73",2.4);
-  }
-
-  function reset(practice=false) {
-    state.running = true;
-    state.paused = false;
-    state.practice = practice;
-    state.ended = false;
-    state.t = 0;
-    state.last = now();
-    state.score = 0;
-    state.wave = 1;
-    state.waveTimer = 0;
-    state.shake = 0;
-    state.flash = 0;
-    state.pulseCharge = 1;
-    state.warnedLow = false;
-    pickupsSeen = 0;
-    enemies = [];
-    sparks = [];
-    blasts = [];
-    motes = [];
-    buildCreature();
-    for (let i=0;i<6;i++) spawnSpark();
-    for (let i=0;i<3;i++) spawnEnemy();
-    toast(practice ? "Practice mode: slower drones, same particle damage." : "Stay assembled. The arena attacks the parts that matter.");
-    ui.title.classList.remove("show");
-    ui.gameover.classList.remove("show");
-    document.body.classList.add("playing");
-  }
-
-  function toast(text, time=2.8) {
-    state.message = text;
-    state.messageUntil = state.t + time;
-    ui.toast.textContent = text;
-    ui.toast.classList.add("show");
-  }
-
-  function spawnSpark() {
-    const pad = 80;
-    sparks.push({
-      x: rand(state.w-pad, pad), y: rand(state.h-pad, pad),
-      r: rand(11,7), life: rand(10,7), phase: rand(TAU,0), seen:false
-    });
-  }
-
-  function spawnEnemy() {
-    const side = Math.floor(rand(4,0));
-    const pad = 70;
-    const e = { x:0, y:0, vx:0, vy:0, r:rand(24,18), pulse:rand(2.4,1.1), hp:2 + Math.floor(state.wave/2), phase:rand(TAU,0), kind: Math.random()<.28 + state.wave*.025 ? "splitter" : "drone" };
-    if (side===0) { e.x = -pad; e.y = rand(state.h-pad,pad); }
-    if (side===1) { e.x = state.w+pad; e.y = rand(state.h-pad,pad); }
-    if (side===2) { e.x = rand(state.w-pad,pad); e.y = -pad; }
-    if (side===3) { e.x = rand(state.w-pad,pad); e.y = state.h+pad; }
-    enemies.push(e);
-  }
-
-  function worldHome(p) {
-    const ca = Math.cos(player.a), sa = Math.sin(player.a);
-    return { x: player.x + p.hx*ca - p.hy*sa, y: player.y + p.hx*sa + p.hy*ca };
-  }
-
-  function updateStats() {
-    const buckets = { all:[0,0], legs:[0,0], eyes:[0,0], core:[0,0], tail:[0,0] };
-    for (const p of particles) {
-      const home = worldHome(p);
-      const d = Math.hypot(p.x-home.x, p.y-home.y);
-      const attached = clamp(1 - d / 115, 0, 1);
-      buckets.all[0] += attached; buckets.all[1]++;
-      if (buckets[p.region]) { buckets[p.region][0] += attached; buckets[p.region][1]++; }
-    }
-    const ratio = key => buckets[key][1] ? buckets[key][0] / buckets[key][1] : 1;
-    state.stats.integrity = ratio("all");
-    state.stats.legs = ratio("legs");
-    state.stats.eyes = ratio("eyes");
-    state.stats.core = ratio("core");
-    state.stats.tail = ratio("tail");
-  }
-
-  function inputVector() {
-    let x = 0, y = 0;
-    if (state.keys.has("ArrowLeft") || state.keys.has("KeyA")) x--;
-    if (state.keys.has("ArrowRight") || state.keys.has("KeyD")) x++;
-    if (state.keys.has("ArrowUp") || state.keys.has("KeyW")) y--;
-    if (state.keys.has("ArrowDown") || state.keys.has("KeyS")) y++;
-    if (state.pointer && !state.joystick.active) {
-      const dx = state.pointer.x - player.x, dy = state.pointer.y - player.y;
-      const d = Math.hypot(dx, dy);
-      if (d > 12) { x += dx/d; y += dy/d; }
-    }
-    if (state.joystick.active) { x += state.joystick.dx; y += state.joystick.dy; }
-    const len = Math.hypot(x,y);
-    return len > 1 ? { x:x/len, y:y/len } : { x, y };
-  }
-
-  function pulse(strength=1, free=false) {
-    if (!free && state.pulseCharge < .2) return;
-    const core = .48 + state.stats.core * .52;
-    const tail = .55 + state.stats.tail * .45;
-    const amount = free ? strength : state.pulseCharge * strength * core;
-    blasts.push({ x:player.x, y:player.y, r:22, max:150 + amount*90, life:.42, force:amount, color:"mint" });
-    scatterAt(player.x, player.y, 28, -45 * amount, true);
-    for (const e of enemies) {
-      const d = Math.hypot(e.x-player.x, e.y-player.y);
-      if (d < 160 + amount*110) {
-        const push = (1 - d/(170+amount*110)) * 560 * amount * tail;
-        e.vx += (e.x-player.x) / Math.max(d,1) * push;
-        e.vy += (e.y-player.y) / Math.max(d,1) * push;
-        e.hp -= amount * (1.15 + core);
-        burst(e.x, e.y, 12, "#8dffb4");
-      }
-    }
-    state.pulseCharge = free ? state.pulseCharge : 0;
-    state.shake = Math.max(state.shake, 7 + amount*7);
-  }
-
-  function enemyBlast(x,y,force=1.0,radius=145) {
-    blasts.push({ x, y, r:18, max:radius, life:.52, force, color:"danger" });
-    scatterAt(x, y, radius, 520 * force, false);
-    state.flash = Math.max(state.flash, .45);
-    state.shake = Math.max(state.shake, 10 * force);
-  }
-
-  function scatterAt(x,y,radius,force,inward) {
-    for (const p of particles) {
-      const dx = p.x - x, dy = p.y - y;
-      const d = Math.hypot(dx,dy);
-      if (d > radius) continue;
-      const falloff = Math.pow(1 - d / radius, 1.45);
-      const dir = inward ? -1 : 1;
-      const jitter = p.seed + state.t * 7;
-      const nx = d ? dx/d : Math.cos(jitter);
-      const ny = d ? dy/d : Math.sin(jitter);
-      p.vx += (nx * dir + Math.cos(jitter)*.28) * force * falloff;
-      p.vy += (ny * dir + Math.sin(jitter*1.3)*.28) * force * falloff;
-      p.loose = Math.max(p.loose, falloff);
-    }
-  }
-
-  function burst(x,y,count,color) {
-    const c = hexToRgb(color);
-    for (let i=0;i<count;i++) {
-      const a = rand(TAU,0), s = rand(280,60);
-      motes.push({ x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,r:rand(3,1),life:rand(.75,.25),r0:c.r,g:c.g,b:c.b });
-    }
-  }
-
-  function update(dt) {
-    if (!state.running || state.paused || state.ended) return;
-    state.t += dt;
-    state.waveTimer += dt;
-    if (state.t > state.messageUntil) ui.toast.classList.remove("show");
-
-    const iv = inputVector();
-    const speedFactor = .42 + state.stats.legs * .78;
-    const targetSpeed = (state.practice ? 205 : 230) * speedFactor;
-    player.vx += (iv.x * targetSpeed - player.vx) * Math.min(1, dt*7.5);
-    player.vy += (iv.y * targetSpeed - player.vy) * Math.min(1, dt*7.5);
-    player.x = clamp(player.x + player.vx * dt, 58, state.w - 58);
-    player.y = clamp(player.y + player.vy * dt, 72, state.h - 58);
-    if (Math.hypot(player.vx,player.vy) > 8) player.a = Math.atan2(player.vy, player.vx) * .18;
-
-    const spring = 13 + state.stats.integrity * 18;
-    for (const p of particles) {
-      const home = worldHome(p);
-      const dx = home.x - p.x, dy = home.y - p.y;
-      const d = Math.hypot(dx,dy);
-      const recovery = p.region === "eyes" ? 1.3 : p.region === "legs" ? 1.08 : 1;
-      p.vx += dx * spring * recovery * dt;
-      p.vy += dy * spring * recovery * dt;
-      p.vx *= Math.pow(.082, dt);
-      p.vy *= Math.pow(.082, dt);
-      p.x += p.vx * dt;
-      p.y += p.vy * dt;
-      p.loose = Math.max(0, p.loose - dt * (.48 + state.stats.core*.28));
-      if (d > 240) { p.x = lerp(p.x, home.x, dt * .9); p.y = lerp(p.y, home.y, dt * .9); }
-    }
-
-    const targetSparks = 5 + Math.min(6, Math.floor(state.wave/2));
-    while (sparks.length < targetSparks) spawnSpark();
-    for (let i=sparks.length-1;i>=0;i--) {
-      const s = sparks[i];
-      s.life -= dt * .06;
-      s.phase += dt * 3;
-      const vision = 95 + state.stats.eyes * 125;
-      const d = Math.hypot(s.x-player.x, s.y-player.y);
-      if (d < vision) s.seen = true;
-      if (d < player.r + s.r + 8) {
-        sparks.splice(i,1);
-        const recoveryBonus = state.stats.integrity < .55 ? 95 : 0;
-        state.score += 75 + state.wave * 12 + recoveryBonus;
-        pickupsSeen++;
-        state.pulseCharge = clamp(state.pulseCharge + .34, 0, 1);
-        scatterAt(player.x, player.y, state.stats.integrity < .55 ? 150 : 90, state.stats.integrity < .55 ? -260 : -160, true);
-        burst(s.x, s.y, 20, "#ffd166");
-        if (pickupsSeen === 4) toast("Gravity sparks recharge pulse and tighten loose particles.");
-        if (recoveryBonus) toast("Recovery spark: scattered particles snap back harder when integrity is low.", 2.5);
-      }
-    }
-
-    const cap = state.practice ? 3 + Math.floor(state.wave/2) : 4 + Math.floor(state.wave*.75);
-    if (enemies.length < cap && Math.random() < dt * (.25 + state.wave*.045)) spawnEnemy();
-    for (let i=enemies.length-1;i>=0;i--) {
-      const e = enemies[i];
-      const dx = player.x - e.x, dy = player.y - e.y;
-      const d = Math.hypot(dx,dy) || 1;
-      const sp = (state.practice ? 54 : 72) + state.wave * 4 + (e.kind === "splitter" ? 18 : 0);
-      e.vx += dx/d * sp * dt;
-      e.vy += dy/d * sp * dt;
-      e.vx *= Math.pow(.28, dt);
-      e.vy *= Math.pow(.28, dt);
-      e.x += e.vx * dt;
-      e.y += e.vy * dt;
-      e.phase += dt * 4;
-      e.pulse -= dt;
-      if (d < e.r + player.r + 12) {
-        enemyBlast(e.x, e.y, e.kind === "splitter" ? 1.15 : .92, e.kind === "splitter" ? 170 : 135);
-        e.hp -= 1.4;
-        e.pulse = rand(2.5,1.4);
-      } else if (e.pulse <= 0 && d < 260) {
-        enemyBlast(e.x, e.y, e.kind === "splitter" ? .82 : .62, e.kind === "splitter" ? 160 : 125);
-        e.pulse = rand(3.2,1.8) - Math.min(.9, state.wave*.045);
-      }
-      if (e.hp <= 0) {
-        state.score += e.kind === "splitter" ? 160 : 110;
-        burst(e.x, e.y, e.kind === "splitter" ? 34 : 24, e.kind === "splitter" ? "#ff5fa2" : "#64e8ff");
-        enemies.splice(i,1);
-        if (e.kind === "splitter" && state.wave > 2) {
-          for (let j=0;j<2;j++) enemies.push({ x:e.x+rand(30,-30), y:e.y+rand(30,-30), vx:rand(120,-120), vy:rand(120,-120), r:15, pulse:rand(2,1), hp:1.2, phase:rand(TAU,0), kind:"drone" });
-        }
-      }
-    }
-
-    for (let i=blasts.length-1;i>=0;i--) {
-      const b = blasts[i];
-      b.life -= dt;
-      b.r = lerp(b.r, b.max, dt*7);
-      if (b.life <= 0) blasts.splice(i,1);
-    }
-    for (let i=motes.length-1;i>=0;i--) {
-      const m = motes[i];
-      m.life -= dt;
-      m.x += m.vx * dt; m.y += m.vy * dt; m.vx *= Math.pow(.08,dt); m.vy *= Math.pow(.08,dt);
-      if (m.life <= 0) motes.splice(i,1);
-    }
-    state.pulseCharge = clamp(state.pulseCharge + dt * (.08 + state.stats.core*.045), 0, 1);
-    state.score += dt * (8 + state.wave * 2) * clamp(state.stats.integrity, .2, 1);
-    state.shake = Math.max(0, state.shake - dt * 24);
-    state.flash = Math.max(0, state.flash - dt * 1.9);
-
-    if (state.waveTimer > 24 + state.wave * 2.2) {
-      state.wave++;
-      state.waveTimer = 0;
-      state.score += 300 + state.wave * 50;
-      toast(`Wave ${state.wave}: the arena hits harder. Keep your creature assembled.`);
-      for (let i=0;i<2;i++) spawnEnemy();
-      pulse(.7, true);
-    }
-    updateStats();
-    if (!state.warnedLow && state.stats.integrity < .42) {
-      state.warnedLow = true;
-      toast("Warning: integrity low. Find a gravity spark or pulse enemies away.");
-    }
-    if (state.warnedLow && state.stats.integrity > .72) state.warnedLow = false;
-    if (!state.practice && state.stats.integrity < .185 && state.t > 5) endRun("Particle collapse", "Too much of the body stayed scattered. The arena won the shape of you.");
-  }
-
-  function endRun(title, text) {
-    state.ended = true;
-    state.running = false;
-    document.body.classList.remove("playing");
-    saveBest();
-    ui.overTitle.textContent = title;
-    ui.overText.textContent = `${text} Score ${Math.floor(state.score).toLocaleString()} - Wave ${state.wave}. Best ${bestScore().toLocaleString()}.`;
-    ui.gameover.classList.add("show");
-  }
-
-  function drawGrid() {
-    const gap = 42;
-    ctx.save();
-    ctx.globalAlpha = .24;
-    ctx.strokeStyle = "#1a4961";
-    ctx.lineWidth = 1;
-    const ox = (state.t * -18) % gap;
-    const oy = (state.t * 10) % gap;
-    for (let x=ox; x<state.w; x+=gap) { ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,state.h); ctx.stroke(); }
-    for (let y=oy; y<state.h; y+=gap) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(state.w,y); ctx.stroke(); }
-    ctx.restore();
-  }
-
-  function draw() {
-    const sx = state.shake ? rand(state.shake,-state.shake) : 0;
-    const sy = state.shake ? rand(state.shake,-state.shake) : 0;
-    ctx.save();
-    ctx.translate(sx, sy);
-    const bg = ctx.createRadialGradient(player.x, player.y, 40, player.x, player.y, Math.max(state.w,state.h)*.72);
-    bg.addColorStop(0, "#0b1832");
-    bg.addColorStop(.46, "#07101f");
-    bg.addColorStop(1, "#03050b");
-    ctx.fillStyle = bg;
-    ctx.fillRect(-30,-30,state.w+60,state.h+60);
-    drawGrid();
-
-    for (const s of sparks) {
-      if (!s.seen && state.running) continue;
-      const pulse = Math.sin(s.phase) * .25 + .75;
-      ctx.globalAlpha = .78;
-      ctx.fillStyle = "#ffd166";
-      glowCircle(s.x, s.y, s.r * (1.4 + pulse), "rgba(255,209,102,.22)");
-      ctx.beginPath(); ctx.arc(s.x, s.y, s.r * pulse, 0, TAU); ctx.fill();
-      ctx.globalAlpha = 1;
-    }
-
-    for (const b of blasts) {
-      const a = clamp(b.life / .52, 0, 1);
-      ctx.strokeStyle = b.color === "danger" ? `rgba(255,93,115,${a*.85})` : `rgba(141,255,180,${a*.85})`;
-      ctx.lineWidth = 3 + a * 5;
-      ctx.beginPath(); ctx.arc(b.x,b.y,b.r,0,TAU); ctx.stroke();
-      ctx.lineWidth = 1;
-      ctx.globalAlpha = a * .28;
-      ctx.beginPath(); ctx.arc(b.x,b.y,b.r*.62,0,TAU); ctx.stroke();
-      ctx.globalAlpha = 1;
-    }
-
-    for (const e of enemies) drawEnemy(e);
-    drawCreature();
-    for (const m of motes) {
-      ctx.globalAlpha = clamp(m.life * 1.8, 0, 1);
-      ctx.fillStyle = `rgb(${m.r0},${m.g},${m.b})`;
-      ctx.beginPath(); ctx.arc(m.x,m.y,m.r,0,TAU); ctx.fill();
-    }
-    ctx.globalAlpha = 1;
-    ctx.restore();
-    if (state.flash > 0) {
-      ctx.fillStyle = `rgba(255,93,115,${state.flash*.16})`;
-      ctx.fillRect(0,0,state.w,state.h);
-    }
-  }
-
-  function glowCircle(x,y,r,color) {
-    const g = ctx.createRadialGradient(x,y,0,x,y,r);
-    g.addColorStop(0,color);
-    g.addColorStop(1,"rgba(0,0,0,0)");
-    ctx.fillStyle = g;
-    ctx.beginPath(); ctx.arc(x,y,r,0,TAU); ctx.fill();
-  }
-
-  function drawEnemy(e) {
-    if (e.pulse < .85) {
-      const charge = clamp(1 - e.pulse/.85, 0, 1);
-      ctx.save();
-      ctx.globalAlpha = .22 + charge * .42;
-      ctx.strokeStyle = e.kind === "splitter" ? "#ff5fa2" : "#64e8ff";
-      ctx.lineWidth = 1 + charge * 3;
-      ctx.setLineDash([8, 8]);
-      ctx.beginPath();
-      ctx.arc(e.x, e.y, lerp(e.r * 1.6, e.kind === "splitter" ? 160 : 125, charge), 0, TAU);
-      ctx.stroke();
-      ctx.restore();
-    }
-    glowCircle(e.x,e.y,e.r*2.7,e.kind === "splitter" ? "rgba(255,95,162,.18)" : "rgba(100,232,255,.16)");
-    ctx.save();
-    ctx.translate(e.x,e.y);
-    ctx.rotate(e.phase*.32);
-    ctx.strokeStyle = e.kind === "splitter" ? "#ff5fa2" : "#64e8ff";
-    ctx.fillStyle = e.kind === "splitter" ? "rgba(255,95,162,.18)" : "rgba(100,232,255,.16)";
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    for (let i=0;i<6;i++) {
-      const a = i/6*TAU;
-      const r = e.r * (i%2 ? .78 : 1.18);
-      const x = Math.cos(a)*r, y = Math.sin(a)*r;
-      if (i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
-    }
-    ctx.closePath(); ctx.fill(); ctx.stroke();
-    ctx.fillStyle = "#fff";
-    ctx.beginPath(); ctx.arc(0,0,3.2,0,TAU); ctx.fill();
-    ctx.restore();
-  }
-
-  function drawCreature() {
-    const haloColor = state.stats.integrity < .34 ? "255,93,115" : state.stats.integrity < .68 ? "255,209,102" : "100,232,255";
-    glowCircle(player.x, player.y, 74 + state.pulseCharge * 36, `rgba(${haloColor},${.08 + state.stats.integrity*.08})`);
-    ctx.save();
-    ctx.strokeStyle = `rgba(${haloColor},.42)`;
-    ctx.lineWidth = 2;
-    ctx.setLineDash([state.pulseCharge * 22 + 2, 10]);
-    ctx.beginPath();
-    ctx.arc(player.x, player.y, 58 + state.pulseCharge * 22, -Math.PI / 2, -Math.PI / 2 + TAU * Math.max(.04, state.pulseCharge));
-    ctx.stroke();
-    ctx.restore();
-
-    particles.sort((a,b) => a.y - b.y);
-    ctx.save();
-    ctx.globalCompositeOperation = "source-over";
-    for (const p of particles) {
-      const home = worldHome(p);
-      const d = Math.hypot(p.x-home.x,p.y-home.y);
-      const loose = clamp(d/130,0,1);
-      const shimmer = Math.sin(state.t*5 + p.seed) * 18;
-      const alpha = .28 + (1-loose)*.44;
-      ctx.fillStyle = `rgba(${clamp(p.r+shimmer,0,255)},${clamp(p.g+shimmer,0,255)},${clamp(p.b+shimmer,0,255)},${alpha})`;
-      ctx.beginPath(); ctx.arc(p.x,p.y,p.size*(1+loose*.38),0,TAU); ctx.fill();
-    }
-    ctx.globalCompositeOperation = "lighter";
-    for (const p of particles) {
-      if (p.region !== "eyes" && p.region !== "core") continue;
-      const home = worldHome(p);
-      const loose = clamp(Math.hypot(p.x-home.x,p.y-home.y)/130,0,1);
-      ctx.fillStyle = `rgba(${p.r},${p.g},${p.b},${.18 + (1-loose)*.22})`;
-      ctx.beginPath(); ctx.arc(p.x,p.y,p.size*1.85,0,TAU); ctx.fill();
-    }
-    ctx.restore();
-    const vision = 95 + state.stats.eyes * 125;
-    ctx.save();
-    ctx.globalAlpha = .08 + state.stats.eyes*.05;
-    ctx.strokeStyle = "#64e8ff";
-    ctx.setLineDash([7,10]);
-    ctx.beginPath(); ctx.arc(player.x, player.y, vision, 0, TAU); ctx.stroke();
-    ctx.restore();
-  }
-
-  function updateUi() {
-    ui.score.textContent = Math.floor(state.score).toLocaleString();
-    ui.wave.textContent = state.wave;
-    ui.integrity.textContent = `${Math.round(state.stats.integrity*100)}%`;
-    ui.speed.textContent = `${Math.round((.42 + state.stats.legs*.78)/1.2*100)}%`;
-    ui.vision.textContent = `${Math.round(state.stats.eyes*100)}%`;
-    ui.pulse.textContent = `${Math.round(state.pulseCharge*100)}%`;
-    ui.pause.textContent = state.paused ? "Play" : "Pause";
-    ui.pulseBtn.textContent = state.pulseCharge >= .2 ? "Pulse" : "Charge";
-    ui.pulseBtn.disabled = state.running && state.pulseCharge < .08;
-    markMeter(ui.integrity.parentElement, state.stats.integrity);
-    markMeter(ui.speed.parentElement, state.stats.legs);
-    markMeter(ui.vision.parentElement, state.stats.eyes);
-    markMeter(ui.pulse.parentElement, state.pulseCharge);
-  }
-
-  function markMeter(el, value) {
-    el.classList.toggle("meter-hot", value < .34);
-    el.classList.toggle("meter-warn", value >= .34 && value < .68);
-    el.classList.toggle("meter-good", value >= .68);
-  }
-
-  function bestScore() {
-    try {
-      return Number(localStorage.getItem(BEST_KEY) || 0);
-    } catch (err) {
-      return 0;
-    }
-  }
-
-  function saveBest() {
-    const score = Math.floor(state.score);
-    try {
-      if (score > bestScore()) localStorage.setItem(BEST_KEY, String(score));
-    } catch (err) {}
-    ui.titleBest.textContent = `Best: ${bestScore().toLocaleString()}`;
-  }
-
-  function frame() {
-    const n = now();
-    state.dt = Math.min(.033, n - state.last);
-    state.last = n;
-    if (state.paused || !state.running) state.dt = 0;
-    update(state.dt);
-    draw();
-    updateUi();
-    requestAnimationFrame(frame);
-  }
-
-  addEventListener("keydown", e => {
-    state.keys.add(e.code);
-    if (e.code === "Space" || e.code === "Enter") { e.preventDefault(); pulse(); }
-    if (e.code === "Escape" || e.code === "KeyP") togglePause();
+  const pos = new Float32Array(particles.length*3);
+  const colors = new Float32Array(particles.length*3);
+  const sizes = new Float32Array(particles.length);
+  const regionAttr = new Float32Array(particles.length);
+  particles.forEach((p,i)=> {
+    pos[i*3]=p.pos.x; pos[i*3+1]=p.pos.y; pos[i*3+2]=p.pos.z;
+    colors[i*3]=p.color.r; colors[i*3+1]=p.color.g; colors[i*3+2]=p.color.b;
+    sizes[i]=p.size; regionAttr[i]=regions[i];
   });
-  addEventListener("keyup", e => state.keys.delete(e.code));
-  canvas.addEventListener("pointerdown", e => {
-    const rect = canvas.getBoundingClientRect();
-    state.pointer = { id:e.pointerId, x:e.clientX-rect.left, y:e.clientY-rect.top };
-    canvas.setPointerCapture(e.pointerId);
+  if (cloud) scene.remove(cloud);
+  geometry = new THREE.BufferGeometry();
+  geometry.setAttribute("position", new THREE.BufferAttribute(pos,3));
+  geometry.setAttribute("color", new THREE.BufferAttribute(colors,3));
+  geometry.setAttribute("aSize", new THREE.BufferAttribute(sizes,1));
+  geometry.setAttribute("aRegion", new THREE.BufferAttribute(regionAttr,1));
+  material = new THREE.ShaderMaterial({
+    transparent:true, depthWrite:false, vertexColors:true, blending:THREE.NormalBlending,
+    uniforms:{ uPixelRatio:{value:Math.min(devicePixelRatio||1,2)}, uTime:{value:0} },
+    vertexShader:`attribute float aSize; attribute float aRegion; varying vec3 vColor; varying float vRegion; uniform float uPixelRatio; uniform float uTime; void main(){ vec3 p=position; p.y += sin(uTime*3.0 + position.x*1.7 + position.z)*0.018; vec4 mv=modelViewMatrix*vec4(p,1.0); gl_Position=projectionMatrix*mv; gl_PointSize=aSize*uPixelRatio*(8.0/max(3.0,-mv.z)); vColor=color; vRegion=aRegion; }`,
+    fragmentShader:`varying vec3 vColor; varying float vRegion; void main(){ vec2 uv=gl_PointCoord-vec2(.5); float d=length(uv); if(d>.5) discard; float core=smoothstep(.5,.05,d); float halo=smoothstep(.5,.18,d)*.32; vec3 c=vColor*(1.0+halo*.65); float a=core*(.76+halo*.18); gl_FragColor=vec4(c,a); }`
   });
-  canvas.addEventListener("pointermove", e => {
-    if (!state.pointer || state.pointer.id !== e.pointerId) return;
-    const rect = canvas.getBoundingClientRect();
-    state.pointer.x = e.clientX - rect.left; state.pointer.y = e.clientY - rect.top;
-  });
-  function clearPointer(e) { if (state.pointer && state.pointer.id === e.pointerId) state.pointer = null; }
-  canvas.addEventListener("pointerup", clearPointer);
-  canvas.addEventListener("pointercancel", clearPointer);
-  canvas.addEventListener("click", () => { if (state.running && !state.paused) pulse(); });
+  cloud = new THREE.Points(geometry, material);
+  scene.add(cloud);
+}
 
-  ui.stick.addEventListener("pointerdown", e => {
-    state.joystick.active = true; state.joystick.id = e.pointerId;
-    ui.stick.setPointerCapture(e.pointerId); moveStick(e);
-  });
-  ui.stick.addEventListener("pointermove", moveStick);
-  function moveStick(e) {
-    if (!state.joystick.active || state.joystick.id !== e.pointerId) return;
-    const r = ui.stick.getBoundingClientRect();
-    const cx = r.left + r.width/2, cy = r.top + r.height/2;
-    const dx = e.clientX - cx, dy = e.clientY - cy;
-    const d = Math.hypot(dx,dy), lim = r.width*.34;
-    const nx = d ? dx/Math.max(d,lim) : 0, ny = d ? dy/Math.max(d,lim) : 0;
-    state.joystick.dx = clamp(dx/lim,-1,1); state.joystick.dy = clamp(dy/lim,-1,1);
-    ui.knob.style.transform = `translate(${clamp(dx,-lim,lim)}px,${clamp(dy,-lim,lim)}px)`;
-  }
-  function stopStick(e) {
-    if (state.joystick.id !== e.pointerId) return;
-    state.joystick.active = false; state.joystick.dx = state.joystick.dy = 0;
-    ui.knob.style.transform = "translate(0,0)";
-  }
-  ui.stick.addEventListener("pointerup", stopStick);
-  ui.stick.addEventListener("pointercancel", stopStick);
+function transformedHome(i, out) {
+  const h = homes[i], ca = Math.cos(state.yaw), sa = Math.sin(state.yaw);
+  out.set(h.x*ca - h.z*sa, h.y, h.x*sa + h.z*ca).add(state.player);
+  return out;
+}
 
-  function togglePause() {
-    if (!state.running || state.ended) return;
-    state.paused = !state.paused;
-    if (!state.paused) state.last = now();
-    toast(state.paused ? "Paused." : "Back in the arena.", 1.2);
-  }
-  ui.pulseBtn.addEventListener("click", () => pulse());
-  ui.pause.addEventListener("click", togglePause);
-  ui.start.addEventListener("click", () => reset(false));
-  ui.practice.addEventListener("click", () => reset(true));
-  ui.again.addEventListener("click", () => reset(state.practice));
-  ui.menu.addEventListener("click", () => { state.running = false; state.ended = false; document.body.classList.remove("playing"); ui.gameover.classList.remove("show"); ui.title.classList.add("show"); });
-
+function reset(practice=false) {
+  state.running=true; state.paused=false; state.practice=practice; state.ended=false;
+  state.t=0; state.score=0; state.wave=1; state.waveTimer=0; state.pulse=1; state.warned=false;
+  state.player.set(0,0,0); state.velocity.set(0,0,0); state.yaw=0; enemies=[]; sparks=[]; waves=[]; motes=[];
   buildCreature();
-  updateStats();
-  ui.titleBest.textContent = `Best: ${bestScore().toLocaleString()}`;
-  frame();
-})();
+  for (let i=0;i<6;i++) spawnSpark();
+  for (let i=0;i<3;i++) spawnEnemy();
+  document.body.classList.add("playing"); ui.title.classList.remove("show"); ui.over.classList.remove("show");
+  toast(practice ? "Practice mode: slower shock drones." : "3D rebuild online. Stay assembled.");
+}
+
+function spawnSpark() {
+  const mesh = new THREE.Mesh(new THREE.IcosahedronGeometry(.18,1), new THREE.MeshBasicMaterial({ color:0xffd166, transparent:true, opacity:.9 }));
+  const a=rand(Math.PI*2,0), r=rand(11.5,3.2);
+  mesh.position.set(Math.cos(a)*r, rand(1.1,.15), Math.sin(a)*r);
+  scene.add(mesh);
+  sparks.push({ mesh, phase:rand(10,0) });
+}
+
+function spawnEnemy() {
+  const geo = new THREE.IcosahedronGeometry(.42,1);
+  const mat = new THREE.MeshBasicMaterial({ color:Math.random()<.3?0xff5fa2:0x64e8ff, wireframe:true, transparent:true, opacity:.86 });
+  const mesh = new THREE.Mesh(geo, mat);
+  const a=rand(Math.PI*2,0), r=rand(14.5,12.8);
+  mesh.position.set(Math.cos(a)*r, .6, Math.sin(a)*r);
+  scene.add(mesh);
+  enemies.push({ mesh, vel:new THREE.Vector3(), pulse:rand(2.6,1.2), hp:2+Math.floor(state.wave/2), kind:mat.color.getHex()===0xff5fa2?"splitter":"drone" });
+}
+
+function inputVector() {
+  let x=0,z=0;
+  if (state.keys.has("ArrowLeft") || state.keys.has("KeyA")) x--;
+  if (state.keys.has("ArrowRight") || state.keys.has("KeyD")) x++;
+  if (state.keys.has("ArrowUp") || state.keys.has("KeyW")) z--;
+  if (state.keys.has("ArrowDown") || state.keys.has("KeyS")) z++;
+  x += state.stick.dx; z += state.stick.dy;
+  const d=Math.hypot(x,z); return d>1 ? {x:x/d,z:z/d} : {x,z};
+}
+
+function updateParticles(dt) {
+  const buckets = { all:[0,0], legs:[0,0], eyes:[0,0], core:[0,0], tail:[0,0] };
+  const pos = geometry.attributes.position.array;
+  for (let i=0;i<particles.length;i++) {
+    const p = particles[i], home = transformedHome(i, scratch);
+    const dx=home.x-p.pos.x, dy=home.y-p.pos.y, dz=home.z-p.pos.z;
+    const d = Math.hypot(dx,dy,dz);
+    const spring = (p.region==="eyes" ? 25 : p.region==="legs" ? 21 : 18) + state.stats.core*10;
+    p.vel.x += dx*spring*dt; p.vel.y += dy*spring*dt; p.vel.z += dz*spring*dt;
+    p.vel.multiplyScalar(Math.pow(.065,dt));
+    p.pos.addScaledVector(p.vel, dt);
+    if (d>6) p.pos.lerp(home, dt*.65);
+    const attached = clamp(1-d/3.2,0,1);
+    buckets.all[0]+=attached; buckets.all[1]++;
+    if (buckets[p.region]) { buckets[p.region][0]+=attached; buckets[p.region][1]++; }
+    pos[i*3]=p.pos.x; pos[i*3+1]=p.pos.y; pos[i*3+2]=p.pos.z;
+  }
+  geometry.attributes.position.needsUpdate = true;
+  const ratio=k=>buckets[k][1]?buckets[k][0]/buckets[k][1]:1;
+  state.stats.integrity=ratio("all"); state.stats.legs=ratio("legs"); state.stats.eyes=ratio("eyes"); state.stats.core=ratio("core"); state.stats.tail=ratio("tail");
+}
+
+function scatterAt(origin, radius, force, inward=false) {
+  for (const p of particles) {
+    const d = p.pos.distanceTo(origin);
+    if (d>radius) continue;
+    const fall = Math.pow(1-d/radius,1.35);
+    const dir = p.pos.clone().sub(origin).normalize();
+    if (inward) dir.multiplyScalar(-1);
+    dir.x += Math.sin(p.seed)*.25; dir.y += .18 + Math.cos(p.seed)*.25; dir.z += Math.cos(p.seed*1.3)*.25;
+    p.vel.addScaledVector(dir.normalize(), force*fall);
+  }
+}
+
+function pulse(free=false) {
+  if (!free && state.pulse < .18) return;
+  const amount = free ? .72 : state.pulse*(.55+state.stats.core*.55);
+  const origin = state.player.clone().add(new THREE.Vector3(0,.45,0));
+  addWave(origin, amount, 0x8dffb4);
+  scatterAt(origin, .9, -4.8*amount, true);
+  for (const e of enemies) {
+    const d=e.mesh.position.distanceTo(origin);
+    if (d<4.6+amount*3.1) {
+      e.vel.add(e.mesh.position.clone().sub(origin).normalize().multiplyScalar(7*amount));
+      e.hp -= 1.4*amount;
+    }
+  }
+  if (!free) state.pulse=0;
+}
+
+function enemyBlast(e) {
+  const origin=e.mesh.position.clone();
+  addWave(origin, .9, e.kind==="splitter"?0xff5fa2:0x64e8ff);
+  scatterAt(origin, e.kind==="splitter"?4.2:3.4, e.kind==="splitter"?7.4:5.9);
+}
+
+function addWave(origin, strength, hex) {
+  const mesh = new THREE.Mesh(new THREE.SphereGeometry(1,32,16), new THREE.MeshBasicMaterial({ color:hex, wireframe:true, transparent:true, opacity:.72 }));
+  mesh.position.copy(origin);
+  scene.add(mesh);
+  waves.push({ mesh, age:0, strength });
+}
+
+function burst(pos, hex, count=28) {
+  for (let i=0;i<count;i++) {
+    const mesh = new THREE.Mesh(new THREE.SphereGeometry(rand(.055,.025),8,8), new THREE.MeshBasicMaterial({ color:hex, transparent:true, opacity:.9 }));
+    mesh.position.copy(pos);
+    scene.add(mesh);
+    const v = new THREE.Vector3(rand(1,-1),rand(1.1,.05),rand(1,-1)).normalize().multiplyScalar(rand(6,2));
+    motes.push({ mesh, vel:v, life:rand(.85,.35) });
+  }
+}
+
+function updateGame(dt) {
+  if (!state.running || state.paused || state.ended) return;
+  state.t += dt; state.waveTimer += dt;
+  const iv=inputVector(), speed=(3.3+state.stats.legs*4.4)*(state.practice?.72:1);
+  state.velocity.x += (iv.x*speed-state.velocity.x)*Math.min(1,dt*5.5);
+  state.velocity.z += (iv.z*speed-state.velocity.z)*Math.min(1,dt*5.5);
+  state.player.addScaledVector(state.velocity, dt);
+  const dist = Math.hypot(state.player.x,state.player.z);
+  if (dist>12.5) state.player.multiplyScalar(12.5/dist);
+  if (Math.hypot(state.velocity.x,state.velocity.z)>.2) state.targetYaw = Math.atan2(state.velocity.x,state.velocity.z);
+  state.yaw += Math.atan2(Math.sin(state.targetYaw-state.yaw), Math.cos(state.targetYaw-state.yaw))*Math.min(1,dt*6);
+  state.score += dt*(9+state.wave*2)*clamp(state.stats.integrity,.2,1);
+
+  for (let i=sparks.length-1;i>=0;i--) {
+    const s=sparks[i]; s.phase+=dt*3; s.mesh.rotation.y+=dt; s.mesh.position.y=.35+Math.sin(s.phase)*.18;
+    if (s.mesh.position.distanceTo(state.player)<1.15+state.stats.eyes*.85) {
+      state.score += 100 + state.wave*18 + (state.stats.integrity<.55?120:0);
+      state.pulse = clamp(state.pulse+.35,0,1);
+      scatterAt(state.player.clone().add(new THREE.Vector3(0,.35,0)), state.stats.integrity<.55?4.7:3.2, state.stats.integrity<.55?-7.5:-5.2, true);
+      burst(s.mesh.position,0xffd166,22); scene.remove(s.mesh); sparks.splice(i,1); spawnSpark();
+    }
+  }
+  while (enemies.length < (state.practice?3:4)+Math.floor(state.wave*.65)) spawnEnemy();
+  for (let i=enemies.length-1;i>=0;i--) {
+    const e=enemies[i], to=state.player.clone().sub(e.mesh.position); to.y=0;
+    const d=Math.max(to.length(),.01), sp=(e.kind==="splitter"?2.5:2.0)+state.wave*.18;
+    e.vel.addScaledVector(to.normalize(), sp*dt);
+    e.vel.multiplyScalar(Math.pow(.45,dt));
+    e.mesh.position.addScaledVector(e.vel,dt);
+    e.mesh.rotation.x+=dt*(e.kind==="splitter"?2.5:1.6); e.mesh.rotation.y+=dt*1.8;
+    e.pulse-=dt;
+    if (d<1.25) { enemyBlast(e); e.hp-=1.1; e.pulse=rand(2.4,1.3); }
+    else if (e.pulse<=0 && d<7.2) { enemyBlast(e); e.pulse=rand(3.0,1.6)-Math.min(.8,state.wave*.04); }
+    if (e.hp<=0) { state.score+=e.kind==="splitter"?180:120; burst(e.mesh.position,e.kind==="splitter"?0xff5fa2:0x64e8ff,34); scene.remove(e.mesh); enemies.splice(i,1); }
+  }
+  for (let i=waves.length-1;i>=0;i--) {
+    const w=waves[i]; w.age+=dt; const s=1+w.age*(7+w.strength*4);
+    w.mesh.scale.setScalar(s); w.mesh.material.opacity=Math.max(0,.7-w.age*1.4);
+    if (w.age>.62) { scene.remove(w.mesh); waves.splice(i,1); }
+  }
+  for (let i=motes.length-1;i>=0;i--) {
+    const m=motes[i]; m.life-=dt; m.mesh.position.addScaledVector(m.vel,dt); m.vel.multiplyScalar(Math.pow(.14,dt)); m.mesh.material.opacity=Math.max(0,m.life);
+    if (m.life<=0) { scene.remove(m.mesh); motes.splice(i,1); }
+  }
+  state.pulse=clamp(state.pulse+dt*(.075+state.stats.core*.06),0,1);
+  if (state.waveTimer>24+state.wave*2) { state.wave++; state.waveTimer=0; state.score+=350+state.wave*60; pulse(true); toast(`Wave ${state.wave}. The drones hit harder.`); }
+  updateParticles(dt);
+  if (!state.warned && state.stats.integrity<.42) { state.warned=true; toast("Integrity low. Grab a gravity spark or pulse drones away."); }
+  if (state.warned && state.stats.integrity>.72) state.warned=false;
+  if (!state.practice && state.t>5 && state.stats.integrity<.16) endRun("Particle collapse","The creature lost its shape.");
+}
+
+function updateCamera(dt) {
+  state.orbit.pitch=clamp(state.orbit.pitch,-.05,1.15); state.orbit.distance=clamp(state.orbit.distance,9,30);
+  const cp=Math.cos(state.orbit.pitch);
+  const target=state.player.clone().add(new THREE.Vector3(.8,.4,0));
+  camera.position.set(target.x+Math.sin(state.orbit.yaw)*cp*state.orbit.distance, target.y+Math.sin(state.orbit.pitch)*state.orbit.distance+3.2, target.z+Math.cos(state.orbit.yaw)*cp*state.orbit.distance);
+  camera.lookAt(target);
+}
+
+function updateUi() {
+  ui.score.textContent=Math.floor(state.score).toLocaleString(); ui.wave.textContent=state.wave;
+  ui.integrity.textContent=`${Math.round(state.stats.integrity*100)}%`; ui.speed.textContent=`${Math.round((.42+state.stats.legs*.78)/1.2*100)}%`; ui.vision.textContent=`${Math.round(state.stats.eyes*100)}%`; ui.pulse.textContent=`${Math.round(state.pulse*100)}%`;
+  ui.pulseBtn.textContent=state.pulse>=.18?"Pulse":"Charge"; ui.pulseBtn.disabled=state.running&&state.pulse<.06; ui.pauseBtn.textContent=state.paused?"Play":"Pause";
+  setClass(ui.integrityBox,state.stats.integrity); setClass(ui.speedBox,state.stats.legs); setClass(ui.visionBox,state.stats.eyes); setClass(ui.pulseBox,state.pulse);
+}
+
+function toast(text, seconds=2.8){ ui.toast.textContent=text; ui.toast.classList.add("show"); state.messageUntil=state.t+seconds; }
+function endRun(title,text){ state.ended=true; state.running=false; document.body.classList.remove("playing"); ui.overTitle.textContent=title; ui.overText.textContent=`${text} Score ${Math.floor(state.score).toLocaleString()} - Wave ${state.wave}.`; ui.over.classList.add("show"); }
+
+function resize(){ const w=innerWidth,h=innerHeight; renderer.setSize(w,h,false); camera.aspect=w/h; camera.updateProjectionMatrix(); if(material) material.uniforms.uPixelRatio.value=Math.min(devicePixelRatio||1,2); }
+addEventListener("resize",resize,{passive:true}); resize();
+
+addEventListener("keydown",e=>{ state.keys.add(e.code); if(e.code==="Space"||e.code==="Enter"){e.preventDefault();pulse();} if(e.code==="KeyP"||e.code==="Escape") togglePause(); });
+addEventListener("keyup",e=>state.keys.delete(e.code));
+canvas.addEventListener("pointerdown",e=>{ state.orbit.dragging=true; state.orbit.x=e.clientX; state.orbit.y=e.clientY; canvas.setPointerCapture(e.pointerId); });
+canvas.addEventListener("pointermove",e=>{ if(!state.orbit.dragging) return; const dx=e.clientX-state.orbit.x, dy=e.clientY-state.orbit.y; state.orbit.x=e.clientX; state.orbit.y=e.clientY; state.orbit.yaw-=dx*.006; state.orbit.pitch+=dy*.004; });
+function stopOrbit(){ state.orbit.dragging=false; } canvas.addEventListener("pointerup",stopOrbit); canvas.addEventListener("pointercancel",stopOrbit);
+canvas.addEventListener("wheel",e=>{ e.preventDefault(); state.orbit.distance += Math.sign(e.deltaY)*1.1; },{passive:false});
+ui.stick.addEventListener("pointerdown",e=>{ state.stick.active=true; state.stick.id=e.pointerId; ui.stick.setPointerCapture(e.pointerId); moveStick(e); });
+ui.stick.addEventListener("pointermove",moveStick); ui.stick.addEventListener("pointerup",stopStick); ui.stick.addEventListener("pointercancel",stopStick);
+function moveStick(e){ if(!state.stick.active||state.stick.id!==e.pointerId)return; const r=ui.stick.getBoundingClientRect(), cx=r.left+r.width/2, cy=r.top+r.height/2, lim=r.width*.34; const dx=clamp(e.clientX-cx,-lim,lim), dy=clamp(e.clientY-cy,-lim,lim); state.stick.dx=dx/lim; state.stick.dy=dy/lim; ui.knob.style.transform=`translate(${dx}px,${dy}px)`; }
+function stopStick(e){ if(state.stick.id!==e.pointerId)return; state.stick.active=false; state.stick.dx=state.stick.dy=0; ui.knob.style.transform="translate(0,0)"; }
+function togglePause(){ if(!state.running||state.ended)return; state.paused=!state.paused; toast(state.paused?"Paused.":"Back in the arena.",1.2); }
+ui.pulseBtn.addEventListener("click",()=>pulse()); ui.pauseBtn.addEventListener("click",togglePause); ui.start.addEventListener("click",()=>reset(false)); ui.practice.addEventListener("click",()=>reset(true)); ui.again.addEventListener("click",()=>reset(state.practice)); ui.menu.addEventListener("click",()=>{ state.running=false; state.ended=false; document.body.classList.remove("playing"); ui.over.classList.remove("show"); ui.title.classList.add("show"); });
+
+buildCreature();
+updateParticles(0);
+function animate(){ const dt=Math.min(.033, clock.getDelta()); if(state.t>state.messageUntil) ui.toast.classList.remove("show"); if(!state.paused) material.uniforms.uTime.value += dt; updateGame(dt); updateCamera(dt); updateUi(); renderer.render(scene,camera); requestAnimationFrame(animate); }
+animate();
 </script>
 </body>
 </html>
