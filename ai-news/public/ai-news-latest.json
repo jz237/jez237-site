@@ -1,6 +1,62 @@
 {
-  "updatedAt": "2026-06-25T14:00:01.986504+00:00",
+  "updatedAt": "2026-06-25T14:28:36.897615+00:00",
   "items": [
+    {
+      "title": "Cannes insights: What a two-time major champion knows about marketing that CMOs don’t",
+      "url": "https://thenextweb.com/news/dechambeau-cannes-athlete-creator-youtube-session",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "category": "AI",
+      "summary": "For one week every June, the advertising industry decamps to the French Riviera to take its own temperature. The Cannes Lions International Festival of Creativity, now in its 72nd year, ran from 16 to 20 June 2025 and drew roughly 15,000 delegates from 90 countries, the sort of crowd that turns a seaside town into [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/Bryson-DeChambeau-Youtube-panel-Cannes.avif",
+      "published": "2026-06-25T14:07:37+00:00",
+      "firstSeen": "2026-06-25T14:24:30.601288+00:00",
+      "lastSeen": "2026-06-25T14:28:36.897615+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1394,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
+      "brief": {
+        "whatHappened": "Cannes insights: What a two-time major champion knows about marketing that CMOs don’t",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": false,
+      "clusterKey": "cannes-insights-what-two-time-major-champion"
+    },
+    {
+      "title": "2 days left to save up to $190: Join 1,000+ founders and investors at TechCrunch Founder Summit",
+      "url": "https://techcrunch.com/2026/06/25/2-days-left-to-save-up-to-190-join-1000-founders-and-investors-at-techcrunch-founder-summit",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "sourceRole": "secondary",
+      "category": "AI",
+      "summary": "2 days left to lock in your spot at TechCrunch Founder Summit 2026 and save up to $190 before Early Bird rates expire on June 26 at 11:59 p.m. PT. Register here.",
+      "image": "https://techcrunch.com/wp-content/uploads/2025/12/TC-All-Stage-2025-roundtable.jpg?resize=1200%2C800",
+      "published": "2026-06-25T14:00:00+00:00",
+      "firstSeen": "2026-06-25T14:24:30.601288+00:00",
+      "lastSeen": "2026-06-25T14:28:36.897615+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2755,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
+      "brief": {
+        "whatHappened": "2 days left to save up to $190: Join 1,000+ founders and investors at TechCrunch Founder Summit",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via TechCrunch AI."
+      },
+      "tryWorthy": false,
+      "clusterKey": "days-left-save-190-join-000+"
+    },
     {
       "title": "Adobe acquires image and video enhancement tool maker Topaz Labs",
       "url": "https://techcrunch.com/2026/06/25/adobe-acquires-image-and-video-enhancement-tool-maker-topaz-labs",
@@ -13,10 +69,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2024/09/GettyImages-2162453288.jpg?resize=1200%2C800",
       "published": "2026-06-25T13:30:00+00:00",
       "firstSeen": "2026-06-25T14:00:01.986504+00:00",
-      "lastSeen": "2026-06-25T14:00:01.986504+00:00",
+      "lastSeen": "2026-06-25T14:28:36.897615+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3748,
+      "score": 3.3606,
       "signalGroup": "Business",
       "sourceTier": "Reported source",
       "whyItMatters": "Business moves are a map of where the industry thinks the bottlenecks and durable demand will be.",
@@ -30,6 +86,34 @@
       "clusterKey": "adobe-acquires-image-video-enhancement-tool"
     },
     {
+      "title": "Apple raises Mac and iPad prices as the AI memory crunch reaches the shelf",
+      "url": "https://thenextweb.com/news/apple-raises-mac-ipad-prices-memory",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "category": "AI",
+      "summary": "The AI boom has been an abstract thing for most consumers, a story about data centres and model launches happening somewhere else. This week it arrived somewhere concrete: the price of a Mac. Apple is raising prices on Macs and iPads to offset the soaring cost of memory and storage chips, the bill for an [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/03/Apple-MacBook-Neo-lifestyle.avif",
+      "published": "2026-06-25T13:27:50+00:00",
+      "firstSeen": "2026-06-25T14:24:30.601288+00:00",
+      "lastSeen": "2026-06-25T14:28:36.897615+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "framework_or_plumbing",
+      "score": 4.3195,
+      "signalGroup": "Infrastructure",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
+      "brief": {
+        "whatHappened": "Apple raises Mac and iPad prices as the AI memory crunch reaches the shelf",
+        "whoItAffects": "Anyone affected by AI compute cost, speed, availability, or hardware supply.",
+        "practicalImpact": "Infrastructure shifts often show up later as cheaper tools, higher limits, or new bottlenecks.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": true,
+      "clusterKey": "apple-raises-mac-ipad-prices-memory"
+    },
+    {
       "title": "TensorX and Solstice line up $1bn to finance Europe’s sovereign AI buildout",
       "url": "https://thenextweb.com/news/tensorx-and-solstice-line-up-1bn-to-finance-europes-sovereign-ai",
       "source": "The Next Web",
@@ -41,10 +125,10 @@
       "image": "https://media.thenextweb.com/2026/06/Solstice-TensorX.avif",
       "published": "2026-06-25T13:03:34+00:00",
       "firstSeen": "2026-06-25T14:00:01.986504+00:00",
-      "lastSeen": "2026-06-25T14:00:01.986504+00:00",
+      "lastSeen": "2026-06-25T14:28:36.897615+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.5216,
+      "score": 3.5075,
       "signalGroup": "Infrastructure",
       "sourceTier": "Reported source",
       "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
@@ -58,6 +142,35 @@
       "clusterKey": "tensorx-solstice-line-1bn-finance-europe"
     },
     {
+      "title": "Upwind launches AI Sensor for Endpoints as security teams grapple with AI’s expanding reach",
+      "url": "https://thenextweb.com/news/upwind-ai-sensor-endpoints-mcp-cloud-security",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "category": "AI",
+      "summary": "When cloud computing transformed enterprise IT, security vendors followed the workloads. Visibility into cloud infrastructure became a central requirement as organizations shifted applications and data into new environments. Artificial intelligence is now driving another change, but this time the challenge is not simply where applications run. It is understanding how actions move between developer devices, AI systems, [&hellip;]\nThis story continues at The Next Web",
+      "image": "public/thumbnails/news-385170b12f1b334d1b.avif",
+      "published": "2026-06-25T13:00:52+00:00",
+      "firstSeen": "2026-06-25T14:24:30.601288+00:00",
+      "lastSeen": "2026-06-25T14:28:36.897615+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.0062,
+      "signalGroup": "Policy & risk",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Policy and risk stories often become product constraints later, especially around data access, safety claims, export rules, and copyright.",
+      "brief": {
+        "whatHappened": "Upwind launches AI Sensor for Endpoints as security teams grapple with AI’s expanding reach",
+        "whoItAffects": "Product builders, platform users, and anyone depending on model access or data rights.",
+        "practicalImpact": "Policy moves can become tomorrow's product limits, compliance burden, or availability issue.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": true,
+      "clusterKey": "upwind-launches-sensor-endpoints-security-teams",
+      "imageOriginal": "https://media.thenextweb.com/2026/06/upwind-ai-sensor-endpoints-mcp-cloud-security-.avif"
+    },
+    {
       "title": "The Ultimate Summer Sale Pairing: Steam Sale Meets GeForce NOW Discounts",
       "url": "https://blogs.nvidia.com/blog/geforce-now-thursday-steam-summer-sale-2026",
       "source": "NVIDIA Blog",
@@ -69,10 +182,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/06/gfn-thursday-6-25-no-copy-kv-1536x920-1.jpg",
       "published": "2026-06-25T13:00:34+00:00",
       "firstSeen": "2026-06-25T14:00:01.986504+00:00",
-      "lastSeen": "2026-06-25T14:00:01.986504+00:00",
+      "lastSeen": "2026-06-25T14:28:36.897615+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2601,
+      "score": 3.2461,
       "signalGroup": "Product updates",
       "sourceTier": "Primary source",
       "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
@@ -97,10 +210,10 @@
       "image": "https://media.thenextweb.com/2026/05/Apple.avif",
       "published": "2026-06-25T12:47:45+00:00",
       "firstSeen": "2026-06-25T14:00:01.986504+00:00",
-      "lastSeen": "2026-06-25T14:00:01.986504+00:00",
+      "lastSeen": "2026-06-25T14:28:36.897615+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2138,
+      "score": 3.1998,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
@@ -125,10 +238,10 @@
       "image": "https://media.thenextweb.com/2024/09/Untitled-design-40.avif",
       "published": "2026-06-25T12:38:05+00:00",
       "firstSeen": "2026-06-25T14:00:01.986504+00:00",
-      "lastSeen": "2026-06-25T14:00:01.986504+00:00",
+      "lastSeen": "2026-06-25T14:28:36.897615+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.109,
+      "score": 2.0951,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
@@ -153,10 +266,10 @@
       "image": "public/thumbnails/news-4fa3dca17f420458c8.avif",
       "published": "2026-06-25T12:33:41+00:00",
       "firstSeen": "2026-06-25T14:00:01.986504+00:00",
-      "lastSeen": "2026-06-25T14:00:01.986504+00:00",
+      "lastSeen": "2026-06-25T14:28:36.897615+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.1069,
+      "score": 9.093,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
@@ -182,10 +295,10 @@
       "image": "https://media.thenextweb.com/2026/04/Us-china.avif",
       "published": "2026-06-25T12:19:36+00:00",
       "firstSeen": "2026-06-25T14:00:01.986504+00:00",
-      "lastSeen": "2026-06-25T14:00:01.986504+00:00",
+      "lastSeen": "2026-06-25T14:28:36.897615+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1,
+      "score": 2.0862,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
@@ -210,10 +323,10 @@
       "image": "https://media.thenextweb.com/2026/06/Pax-Silica.avif",
       "published": "2026-06-25T12:16:58+00:00",
       "firstSeen": "2026-06-25T14:00:01.986504+00:00",
-      "lastSeen": "2026-06-25T14:00:01.986504+00:00",
+      "lastSeen": "2026-06-25T14:28:36.897615+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0987,
+      "score": 2.085,
       "signalGroup": "Infrastructure",
       "sourceTier": "Reported source",
       "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
@@ -238,10 +351,10 @@
       "image": "https://media.thenextweb.com/2026/06/China-flag.avif",
       "published": "2026-06-25T12:00:48+00:00",
       "firstSeen": "2026-06-25T13:00:01.312721+00:00",
-      "lastSeen": "2026-06-25T14:00:01.986504+00:00",
+      "lastSeen": "2026-06-25T14:28:36.897615+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -1.0091,
+      "score": -1.0228,
       "signalGroup": "Infrastructure",
       "sourceTier": "Reported source",
       "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
@@ -266,10 +379,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/06/GettyImages-844105434.jpg?w=1024",
       "published": "2026-06-25T12:00:38+00:00",
       "firstSeen": "2026-06-25T13:00:01.312721+00:00",
-      "lastSeen": "2026-06-25T14:00:01.986504+00:00",
+      "lastSeen": "2026-06-25T14:28:36.897615+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2308,
+      "score": 2.2172,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
@@ -294,10 +407,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/08/acastro_STK056_02.jpg?quality=90&strip=all&crop=0%2C10.732984293194%2C100%2C78.534031413613&w=1200",
       "published": "2026-06-25T12:00:00+00:00",
       "firstSeen": "2026-06-25T13:00:01.312721+00:00",
-      "lastSeen": "2026-06-25T14:00:01.986504+00:00",
+      "lastSeen": "2026-06-25T14:28:36.897615+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3005,
+      "score": 2.2869,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
@@ -325,7 +438,7 @@
       "lastSeen": "2026-06-25T14:00:01.986504+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0866,
+      "score": 2.073,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
@@ -353,7 +466,7 @@
       "lastSeen": "2026-06-25T14:00:01.986504+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0556,
+      "score": 2.0424,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
@@ -381,7 +494,7 @@
       "lastSeen": "2026-06-25T14:00:01.986504+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0493,
+      "score": 2.0362,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
@@ -409,7 +522,7 @@
       "lastSeen": "2026-06-25T13:00:01.312721+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3469,
+      "score": 2.3338,
       "signalGroup": "Infrastructure",
       "sourceTier": "Reported source",
       "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
@@ -437,7 +550,7 @@
       "lastSeen": "2026-06-25T13:00:01.312721+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.7923,
+      "score": 3.7792,
       "signalGroup": "Infrastructure",
       "sourceTier": "Reported source",
       "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
@@ -465,7 +578,7 @@
       "lastSeen": "2026-06-25T13:00:01.312721+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1386,
+      "score": 3.1256,
       "signalGroup": "Business",
       "sourceTier": "Reported source",
       "whyItMatters": "Business moves are a map of where the industry thinks the bottlenecks and durable demand will be.",
@@ -493,7 +606,7 @@
       "lastSeen": "2026-06-25T13:00:01.312721+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0297,
+      "score": 2.0168,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
@@ -521,7 +634,7 @@
       "lastSeen": "2026-06-25T13:00:01.312721+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 17.426,
+      "score": 17.4132,
       "signalGroup": "Research",
       "sourceTier": "Reported source",
       "whyItMatters": "Research items are useful when they hint at future product behavior, benchmark movement, or techniques likely to show up in tools.",
@@ -550,7 +663,7 @@
       "lastSeen": "2026-06-25T13:00:01.312721+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0217,
+      "score": 2.0089,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
@@ -575,10 +688,10 @@
       "image": "public/thumbnails/news-cab88ca1897c82503d.webp",
       "published": "2026-06-25T09:06:19+00:00",
       "firstSeen": "2026-06-25T10:00:01.660955+00:00",
-      "lastSeen": "2026-06-25T14:00:01.986504+00:00",
+      "lastSeen": "2026-06-25T14:28:36.897615+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 4.4201,
+      "score": 4.4075,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
@@ -606,7 +719,7 @@
       "lastSeen": "2026-06-25T11:48:35.527262+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.6916,
+      "score": 2.6792,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
@@ -634,7 +747,7 @@
       "lastSeen": "2026-06-25T11:48:35.527262+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3382,
+      "score": 2.3258,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
@@ -662,7 +775,7 @@
       "lastSeen": "2026-06-25T11:00:01.736476+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0845,
+      "score": 3.0722,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
@@ -690,7 +803,7 @@
       "lastSeen": "2026-06-25T11:00:01.736476+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9807,
+      "score": 1.9684,
       "signalGroup": "Business",
       "sourceTier": "Reported source",
       "whyItMatters": "Business moves are a map of where the industry thinks the bottlenecks and durable demand will be.",
@@ -718,7 +831,7 @@
       "lastSeen": "2026-06-25T11:00:01.736476+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.7529,
+      "score": 3.741,
       "signalGroup": "Media generation",
       "sourceTier": "Reported source",
       "whyItMatters": "Media-model updates affect what can be made quickly, what still needs craft, and where creative pipelines may change next.",
@@ -743,10 +856,10 @@
       "image": "",
       "published": "2026-06-25T06:00:00+00:00",
       "firstSeen": "2026-06-25T07:00:01.940787+00:00",
-      "lastSeen": "2026-06-25T14:00:01.986504+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 6.8288,
+      "lastSeen": "2026-06-25T14:28:36.897615+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 6.8172,
       "signalGroup": "Infrastructure",
       "sourceTier": "Reported source",
       "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
@@ -771,10 +884,10 @@
       "image": "https://opengraph.githubassets.com/cd861fcf05dd4a193fc9d5cf7cd67b9e98774140a83bd087ee8e7f510063c924/BerriAI/litellm/releases/tag/v1.89.4",
       "published": "2026-06-25T02:56:04+00:00",
       "firstSeen": "2026-06-25T03:00:01.596717+00:00",
-      "lastSeen": "2026-06-25T14:00:01.986504+00:00",
+      "lastSeen": "2026-06-25T14:28:36.897615+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.6989,
+      "score": 3.6883,
       "signalGroup": "Product updates",
       "sourceTier": "Primary source",
       "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
@@ -799,10 +912,10 @@
       "image": "https://substackcdn.com/image/fetch/$s_!LH6a!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fd1a3d909-a54b-4acd-aa2c-33823f9e032e_878x674.png",
       "published": "2026-06-25T02:14:08+00:00",
       "firstSeen": "2026-06-25T03:00:01.596717+00:00",
-      "lastSeen": "2026-06-25T14:00:01.986504+00:00",
+      "lastSeen": "2026-06-25T14:28:36.897615+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9973,
+      "score": 1.9869,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
@@ -827,10 +940,10 @@
       "image": "",
       "published": "2026-06-25T02:00:00+00:00",
       "firstSeen": "2026-06-25T10:00:01.660955+00:00",
-      "lastSeen": "2026-06-25T14:00:01.986504+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "missing_image",
-      "score": 9.6382,
+      "lastSeen": "2026-06-25T14:28:36.897615+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "editorial_score_pass",
+      "score": 9.6278,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Primary source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -855,10 +968,10 @@
       "image": "public/thumbnails/news-24b5cb1b280e0447d1.png",
       "published": "2026-06-25T01:52:05+00:00",
       "firstSeen": "2026-06-25T02:00:01.960278+00:00",
-      "lastSeen": "2026-06-25T14:00:01.986504+00:00",
+      "lastSeen": "2026-06-25T14:28:36.897615+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 13.9453,
+      "score": 13.935,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Primary source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -883,10 +996,10 @@
       "image": "https://opengraph.githubassets.com/dbbc7a3d0541024781e80b6e9cf48a2b770cdf0dd6c4695049ddae9b34cb08ca/BerriAI/litellm/releases/tag/v1.88.5",
       "published": "2026-06-25T00:16:27+00:00",
       "firstSeen": "2026-06-25T01:00:01.345046+00:00",
-      "lastSeen": "2026-06-25T14:00:01.986504+00:00",
+      "lastSeen": "2026-06-25T14:28:36.897615+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.6413,
+      "score": 3.6314,
       "signalGroup": "Product updates",
       "sourceTier": "Primary source",
       "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
@@ -911,10 +1024,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/01/ASML-GettyImages-2258043611.jpg?w=1024",
       "published": "2026-06-25T00:08:36+00:00",
       "firstSeen": "2026-06-25T00:13:24.087357+00:00",
-      "lastSeen": "2026-06-25T14:00:01.986504+00:00",
+      "lastSeen": "2026-06-25T14:28:36.897615+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9386,
+      "score": 1.9287,
       "signalGroup": "Infrastructure",
       "sourceTier": "Reported source",
       "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
@@ -939,18 +1052,17 @@
       "image": "",
       "published": "2026-06-24T23:59:03+00:00",
       "firstSeen": "2026-06-25T00:13:24.087357+00:00",
-      "lastSeen": "2026-06-25T14:00:01.986504+00:00",
-      "model_release": true,
+      "lastSeen": "2026-06-25T14:28:36.897615+00:00",
       "editorial_allow": false,
-      "editorial_reason": "missing_image",
-      "score": 20.3353,
-      "signalGroup": "Model releases",
+      "editorial_reason": "repo_title_low_context",
+      "score": 12.0255,
+      "signalGroup": "Agents & tooling",
       "sourceTier": "Primary source",
-      "whyItMatters": "A model release changes the practical menu: capability, pricing, context, or deployment options may shift for real workflows.",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
       "brief": {
         "whatHappened": "simonw/browser-compat-db",
-        "whoItAffects": "Builders, tool users, and anyone comparing model capability or cost.",
-        "practicalImpact": "Check whether the release changes what is worth trying, routing, or paying for.",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
         "sourceFrame": "Seen via Simon Willison."
       },
       "tryWorthy": true,
@@ -968,10 +1080,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/vishal-sikka-indiaai-summit.jpg?resize=1200%2C800",
       "published": "2026-06-24T23:26:52+00:00",
       "firstSeen": "2026-06-24T23:27:58.439829+00:00",
-      "lastSeen": "2026-06-25T14:00:01.986504+00:00",
+      "lastSeen": "2026-06-25T14:28:36.897615+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9242,
+      "score": 1.9146,
       "signalGroup": "Business",
       "sourceTier": "Reported source",
       "whyItMatters": "Business moves are a map of where the industry thinks the bottlenecks and durable demand will be.",
@@ -996,10 +1108,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/03/GettyImages-1251294592.jpg?w=1024",
       "published": "2026-06-24T22:41:41+00:00",
       "firstSeen": "2026-06-24T23:00:01.536104+00:00",
-      "lastSeen": "2026-06-25T14:00:01.986504+00:00",
+      "lastSeen": "2026-06-25T14:28:36.897615+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.909,
+      "score": 1.8996,
       "signalGroup": "Infrastructure",
       "sourceTier": "Reported source",
       "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
@@ -1013,119 +1125,6 @@
       "clusterKey": "cerebras-cerebras-stock-plunges-earnings-ceo"
     },
     {
-      "title": "AI was supposed to kill engineering jobs, but new data suggests they’re the most resilient",
-      "url": "https://techcrunch.com/2026/06/24/ai-was-supposed-to-kill-engineering-jobs-but-new-data-suggests-theyre-the-most-resilient",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "sourceRole": "secondary",
-      "category": "AI",
-      "summary": "While AI dominates the layoff narrative, engineers are actually making up a larger share of new hires, according to SignalFire data.",
-      "image": "https://techcrunch.com/wp-content/uploads/2022/01/GettyImages-1250956868.jpg?resize=1200%2C800",
-      "published": "2026-06-24T21:56:41+00:00",
-      "firstSeen": "2026-06-24T23:00:01.536104+00:00",
-      "lastSeen": "2026-06-25T14:00:01.986504+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.8942,
-      "signalGroup": "Product updates",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
-      "brief": {
-        "whatHappened": "AI was supposed to kill engineering jobs, but new data suggests they’re the most resilient",
-        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
-        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
-        "sourceFrame": "Seen via TechCrunch AI."
-      },
-      "tryWorthy": false,
-      "clusterKey": "supposed-kill-engineering-jobs-data-suggests"
-    },
-    {
-      "title": "AI researchers continue to leave Google for its rivals",
-      "url": "https://techcrunch.com/2026/06/24/ai-researchers-continue-to-leave-google-for-its-rivals",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "sourceRole": "secondary",
-      "category": "AI",
-      "summary": "Top AI researchers Jonas Adler and Alexander Pritzel are leaving Google for Anthropic, following departures from top scientists Noam Shazeer and John Jumper.",
-      "image": "public/thumbnails/news-3a4d4d75a0f5fc6e11.webp",
-      "published": "2026-06-24T21:42:07+00:00",
-      "firstSeen": "2026-06-24T21:42:28.473127+00:00",
-      "lastSeen": "2026-06-25T14:00:01.986504+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 6.2895,
-      "signalGroup": "Research",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Research items are useful when they hint at future product behavior, benchmark movement, or techniques likely to show up in tools.",
-      "brief": {
-        "whatHappened": "AI researchers continue to leave Google for its rivals",
-        "whoItAffects": "People tracking where model behavior, evaluation, or training techniques may head next.",
-        "practicalImpact": "Useful if the idea looks likely to move from paper into products or tooling.",
-        "sourceFrame": "Seen via TechCrunch AI."
-      },
-      "tryWorthy": false,
-      "clusterKey": "google-researchers-continue-leave-google-rivals"
-    },
-    {
-      "title": "The memory chip crunch is paying off for this US company",
-      "url": "https://techcrunch.com/2026/06/24/the-memory-chip-crunch-is-paying-off-for-this-u-s-company",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "sourceRole": "secondary",
-      "category": "AI",
-      "summary": "Revenue quadrupled to $41.45 billion compared with the same period a year ago. The company's profit, meanwhile, rose from $1.88 billion to an incredible $28.2 billion year-over-year.",
-      "image": "public/thumbnails/news-083885a6c93ec488e0.webp",
-      "published": "2026-06-24T21:30:55+00:00",
-      "firstSeen": "2026-06-24T21:42:28.473127+00:00",
-      "lastSeen": "2026-06-25T14:00:01.986504+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 4.2859,
-      "signalGroup": "Infrastructure",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
-      "brief": {
-        "whatHappened": "The memory chip crunch is paying off for this US company",
-        "whoItAffects": "Anyone affected by AI compute cost, speed, availability, or hardware supply.",
-        "practicalImpact": "Infrastructure shifts often show up later as cheaper tools, higher limits, or new bottlenecks.",
-        "sourceFrame": "Seen via TechCrunch AI."
-      },
-      "tryWorthy": false,
-      "clusterKey": "memory-chip-crunch-paying-off-company"
-    },
-    {
-      "title": "Anthropic accuses Alibaba of running the largest distillation campaign yet against Claude",
-      "url": "https://thenextweb.com/news/anthropic-accuses-alibaba-distillation-claude-qwen",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "sourceRole": "secondary",
-      "category": "AI",
-      "summary": "Anthropic has accused Alibaba of waging the largest distillation campaign yet against a US AI company, telling senators and White House officials that operators linked to Alibaba’s Qwen AI lab used nearly 25,000 fraudulent accounts to extract Claude’s capabilities between April and June. The letter, a copy of which was seen by Bloomberg, described nearly [&hellip;]\nThis story continues at The Next Web",
-      "image": "public/thumbnails/news-5072f12ae196a637ae.avif",
-      "published": "2026-06-24T21:12:17+00:00",
-      "firstSeen": "2026-06-24T23:00:01.536104+00:00",
-      "lastSeen": "2026-06-25T11:00:01.736476+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 10.7399,
-      "signalGroup": "Policy & risk",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Policy and risk stories often become product constraints later, especially around data access, safety claims, export rules, and copyright.",
-      "brief": {
-        "whatHappened": "Anthropic accuses Alibaba of running the largest distillation campaign yet against Claude",
-        "whoItAffects": "Product builders, platform users, and anyone depending on model access or data rights.",
-        "practicalImpact": "Policy moves can become tomorrow's product limits, compliance burden, or availability issue.",
-        "sourceFrame": "Seen via The Next Web."
-      },
-      "tryWorthy": false,
-      "clusterKey": "anthropic-claude-anthropic-accuses-alibaba-running-largest",
-      "imageOriginal": "https://media.thenextweb.com/2026/06/anthropic-accuses-alibaba-distillation-claude-qwen.avif"
-    },
-    {
       "title": "The Friendly Virus",
       "url": "http://www.bbc.co.uk/programmes/w3ct8jsj",
       "source": "BBC Discovery",
@@ -1137,10 +1136,10 @@
       "image": "public/thumbnails/news-f38c47a2d18e9a1412.jpg",
       "published": "2026-06-22T20:00:00+00:00",
       "firstSeen": "2026-06-22T21:00:01.381447+00:00",
-      "lastSeen": "2026-06-25T14:00:01.986504+00:00",
+      "lastSeen": "2026-06-25T14:28:36.897615+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3659,
+      "score": 2.3636,
       "signalGroup": "Product updates",
       "sourceTier": "Primary source",
       "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
@@ -1165,10 +1164,10 @@
       "image": "public/thumbnails/news-f38c47a2d18e9a1412.jpg",
       "published": "2026-06-15T20:00:00+00:00",
       "firstSeen": "2026-06-15T21:00:01.290903+00:00",
-      "lastSeen": "2026-06-25T14:00:01.986504+00:00",
+      "lastSeen": "2026-06-25T14:28:36.897615+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1917,
+      "score": 2.1916,
       "signalGroup": "Product updates",
       "sourceTier": "Primary source",
       "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
@@ -1224,10 +1223,10 @@
       "image": "public/thumbnails/news-24b5cb1b280e0447d1.png",
       "published": "2026-06-25T01:52:05+00:00",
       "firstSeen": "2026-06-25T02:00:01.960278+00:00",
-      "lastSeen": "2026-06-25T14:00:01.986504+00:00",
+      "lastSeen": "2026-06-25T14:28:36.897615+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 13.9453,
+      "score": 13.935,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Primary source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -1239,6 +1238,91 @@
       },
       "tryWorthy": true,
       "clusterKey": "df1c1479ac35"
+    },
+    {
+      "title": "How agents are transforming work",
+      "url": "https://openai.com/index/how-agents-are-transforming-work",
+      "source": "OpenAI News",
+      "sourceUrl": "https://openai.com/news/rss.xml",
+      "sourceWeight": 1.0,
+      "sourceRole": "primary",
+      "category": "AI",
+      "summary": "A new OpenAI research paper shows how AI agents are transforming work, enabling longer, more complex tasks and expanding productivity across roles.",
+      "image": "",
+      "published": "2026-06-25T02:00:00+00:00",
+      "firstSeen": "2026-06-25T10:00:01.660955+00:00",
+      "lastSeen": "2026-06-25T14:28:36.897615+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "editorial_score_pass",
+      "score": 9.6278,
+      "signalGroup": "Agents & tooling",
+      "sourceTier": "Primary source",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
+      "brief": {
+        "whatHappened": "How agents are transforming work",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via OpenAI News."
+      },
+      "tryWorthy": true,
+      "clusterKey": "how-agents-transforming-work"
+    },
+    {
+      "title": "The math behind the OpenAI Jalapeño chip",
+      "url": "https://www.artificialintelligence-news.com/news/openai-jalapeno-chip-inference-economics",
+      "source": "Artificial Intelligence News",
+      "sourceUrl": "https://www.artificialintelligence-news.com/categories/artificial-intelligence/feed/",
+      "sourceWeight": 0.82,
+      "sourceRole": "secondary",
+      "category": "AI",
+      "summary": "OpenAI’s financial trajectory hinges heavily on infrastructure costs, a reality that drove the development of the new custom OpenAI Jalapeño chip. Developed in collaboration with Broadcom, the application-specific integrated circuit (ASIC) represents a direct attempt to mitigate the heavy capital expenditure associated with third-party hardware.&#160; While Nvidia currently commands an estimated 75% profit margin on [&#8230;]\nThe post The math behind the OpenAI Jalapeño chip appeared first on AI News.",
+      "image": "",
+      "published": "2026-06-25T06:00:00+00:00",
+      "firstSeen": "2026-06-25T07:00:01.940787+00:00",
+      "lastSeen": "2026-06-25T14:28:36.897615+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 6.8172,
+      "signalGroup": "Infrastructure",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
+      "brief": {
+        "whatHappened": "The math behind the OpenAI Jalapeño chip",
+        "whoItAffects": "Anyone affected by AI compute cost, speed, availability, or hardware supply.",
+        "practicalImpact": "Infrastructure shifts often show up later as cheaper tools, higher limits, or new bottlenecks.",
+        "sourceFrame": "Seen via Artificial Intelligence News."
+      },
+      "tryWorthy": true,
+      "clusterKey": "openai-math-behind-openai-jalape-chip"
+    },
+    {
+      "title": "Upwind launches AI Sensor for Endpoints as security teams grapple with AI’s expanding reach",
+      "url": "https://thenextweb.com/news/upwind-ai-sensor-endpoints-mcp-cloud-security",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "category": "AI",
+      "summary": "When cloud computing transformed enterprise IT, security vendors followed the workloads. Visibility into cloud infrastructure became a central requirement as organizations shifted applications and data into new environments. Artificial intelligence is now driving another change, but this time the challenge is not simply where applications run. It is understanding how actions move between developer devices, AI systems, [&hellip;]\nThis story continues at The Next Web",
+      "image": "public/thumbnails/news-385170b12f1b334d1b.avif",
+      "published": "2026-06-25T13:00:52+00:00",
+      "firstSeen": "2026-06-25T14:24:30.601288+00:00",
+      "lastSeen": "2026-06-25T14:28:36.897615+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.0062,
+      "signalGroup": "Policy & risk",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Policy and risk stories often become product constraints later, especially around data access, safety claims, export rules, and copyright.",
+      "brief": {
+        "whatHappened": "Upwind launches AI Sensor for Endpoints as security teams grapple with AI’s expanding reach",
+        "whoItAffects": "Product builders, platform users, and anyone depending on model access or data rights.",
+        "practicalImpact": "Policy moves can become tomorrow's product limits, compliance burden, or availability issue.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": true,
+      "clusterKey": "upwind-launches-sensor-endpoints-security-teams",
+      "imageOriginal": "https://media.thenextweb.com/2026/06/upwind-ai-sensor-endpoints-mcp-cloud-security-.avif"
     }
   ],
   "sourceHealth": [
@@ -1249,7 +1333,7 @@
       "category": "AI",
       "status": "ok",
       "items": 1021,
-      "checkedAt": "2026-06-25T14:00:01.986504+00:00"
+      "checkedAt": "2026-06-25T14:28:36.897615+00:00"
     },
     {
       "source": "Google AI Blog",
@@ -1258,7 +1342,7 @@
       "category": "AI",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-06-25T14:00:01.986504+00:00"
+      "checkedAt": "2026-06-25T14:28:36.897615+00:00"
     },
     {
       "source": "Google DeepMind Blog",
@@ -1267,7 +1351,7 @@
       "category": "AI",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-06-25T14:00:01.986504+00:00"
+      "checkedAt": "2026-06-25T14:28:36.897615+00:00"
     },
     {
       "source": "Google Research Blog",
@@ -1276,7 +1360,7 @@
       "category": "AI",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-06-25T14:00:01.986504+00:00"
+      "checkedAt": "2026-06-25T14:28:36.897615+00:00"
     },
     {
       "source": "Hugging Face Blog",
@@ -1285,7 +1369,7 @@
       "category": "AI",
       "status": "ok",
       "items": 810,
-      "checkedAt": "2026-06-25T14:00:01.986504+00:00"
+      "checkedAt": "2026-06-25T14:28:36.897615+00:00"
     },
     {
       "source": "NVIDIA Blog",
@@ -1294,7 +1378,7 @@
       "category": "AI",
       "status": "ok",
       "items": 18,
-      "checkedAt": "2026-06-25T14:00:01.986504+00:00"
+      "checkedAt": "2026-06-25T14:28:36.897615+00:00"
     },
     {
       "source": "AWS Machine Learning Blog",
@@ -1303,7 +1387,7 @@
       "category": "AI",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-06-25T14:00:01.986504+00:00"
+      "checkedAt": "2026-06-25T14:28:36.897615+00:00"
     },
     {
       "source": "Artificial Intelligence News",
@@ -1312,7 +1396,7 @@
       "category": "AI",
       "status": "ok",
       "items": 12,
-      "checkedAt": "2026-06-25T14:00:01.986504+00:00"
+      "checkedAt": "2026-06-25T14:28:36.897615+00:00"
     },
     {
       "source": "Ars Technica (AI/Tech)",
@@ -1321,7 +1405,7 @@
       "category": "AI",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-06-25T14:00:01.986504+00:00"
+      "checkedAt": "2026-06-25T14:28:36.897615+00:00"
     },
     {
       "source": "Together AI Blog",
@@ -1330,7 +1414,7 @@
       "category": "AI",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-06-25T14:00:01.986504+00:00"
+      "checkedAt": "2026-06-25T14:28:36.897615+00:00"
     },
     {
       "source": "TechRepublic AI",
@@ -1339,7 +1423,7 @@
       "category": "AI",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-06-25T14:00:01.986504+00:00"
+      "checkedAt": "2026-06-25T14:28:36.897615+00:00"
     },
     {
       "source": "ScienceDaily AI",
@@ -1348,7 +1432,7 @@
       "category": "AI",
       "status": "ok",
       "items": 60,
-      "checkedAt": "2026-06-25T14:00:01.986504+00:00"
+      "checkedAt": "2026-06-25T14:28:36.897615+00:00"
     },
     {
       "source": "The Next Web",
@@ -1357,7 +1441,7 @@
       "category": "AI",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-06-25T14:00:01.986504+00:00"
+      "checkedAt": "2026-06-25T14:28:36.897615+00:00"
     },
     {
       "source": "BBC Discovery",
@@ -1366,7 +1450,7 @@
       "category": "Science",
       "status": "ok",
       "items": 847,
-      "checkedAt": "2026-06-25T14:00:01.986504+00:00"
+      "checkedAt": "2026-06-25T14:28:36.897615+00:00"
     },
     {
       "source": "BBC Infinite Monkey Cage",
@@ -1375,7 +1459,7 @@
       "category": "Science",
       "status": "ok",
       "items": 239,
-      "checkedAt": "2026-06-25T14:00:01.986504+00:00"
+      "checkedAt": "2026-06-25T14:28:36.897615+00:00"
     },
     {
       "source": "BBC The Life Scientific",
@@ -1384,7 +1468,7 @@
       "category": "Science",
       "status": "ok",
       "items": 356,
-      "checkedAt": "2026-06-25T14:00:01.986504+00:00"
+      "checkedAt": "2026-06-25T14:28:36.897615+00:00"
     },
     {
       "source": "TechCrunch AI",
@@ -1393,7 +1477,7 @@
       "category": "AI",
       "status": "ok",
       "items": 19,
-      "checkedAt": "2026-06-25T14:00:01.986504+00:00"
+      "checkedAt": "2026-06-25T14:28:36.897615+00:00"
     },
     {
       "source": "Anthropic News",
@@ -1402,7 +1486,7 @@
       "category": "AI",
       "status": "ok",
       "items": 231,
-      "checkedAt": "2026-06-25T14:00:01.986504+00:00"
+      "checkedAt": "2026-06-25T14:28:36.897615+00:00"
     },
     {
       "source": "The Verge AI",
@@ -1411,7 +1495,7 @@
       "category": "AI",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-06-25T14:00:01.986504+00:00"
+      "checkedAt": "2026-06-25T14:28:36.897615+00:00"
     },
     {
       "source": "VentureBeat AI",
@@ -1420,7 +1504,7 @@
       "category": "AI",
       "status": "ok",
       "items": 7,
-      "checkedAt": "2026-06-25T14:00:01.986504+00:00"
+      "checkedAt": "2026-06-25T14:28:36.897615+00:00"
     },
     {
       "source": "Simon Willison",
@@ -1429,7 +1513,7 @@
       "category": "AI",
       "status": "ok",
       "items": 30,
-      "checkedAt": "2026-06-25T14:00:01.986504+00:00"
+      "checkedAt": "2026-06-25T14:28:36.897615+00:00"
     },
     {
       "source": "Interconnects AI",
@@ -1438,7 +1522,7 @@
       "category": "AI",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-06-25T14:00:01.986504+00:00"
+      "checkedAt": "2026-06-25T14:28:36.897615+00:00"
     },
     {
       "source": "Latent Space",
@@ -1447,7 +1531,7 @@
       "category": "AI",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-06-25T14:00:01.986504+00:00"
+      "checkedAt": "2026-06-25T14:28:36.897615+00:00"
     },
     {
       "source": "Import AI",
@@ -1456,7 +1540,7 @@
       "category": "AI",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-06-25T14:00:01.986504+00:00"
+      "checkedAt": "2026-06-25T14:28:36.897615+00:00"
     },
     {
       "source": "Microsoft Research Blog",
@@ -1465,7 +1549,7 @@
       "category": "AI",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-06-25T14:00:01.986504+00:00"
+      "checkedAt": "2026-06-25T14:28:36.897615+00:00"
     },
     {
       "source": "Ollama Releases",
@@ -1474,7 +1558,7 @@
       "category": "AI",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-06-25T14:00:01.986504+00:00"
+      "checkedAt": "2026-06-25T14:28:36.897615+00:00"
     },
     {
       "source": "LiteLLM Releases",
@@ -1483,7 +1567,7 @@
       "category": "AI",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-06-25T14:00:01.986504+00:00"
+      "checkedAt": "2026-06-25T14:28:36.897615+00:00"
     },
     {
       "source": "Hugging Face Transformers Releases",
@@ -1492,7 +1576,7 @@
       "category": "AI",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-06-25T14:00:01.986504+00:00"
+      "checkedAt": "2026-06-25T14:28:36.897615+00:00"
     },
     {
       "source": "Model Context Protocol Python SDK Releases",
@@ -1501,7 +1585,7 @@
       "category": "AI",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-06-25T14:00:01.986504+00:00"
+      "checkedAt": "2026-06-25T14:28:36.897615+00:00"
     },
     {
       "source": "Model Context Protocol Spec Releases",
@@ -1510,7 +1594,7 @@
       "category": "AI",
       "status": "ok",
       "items": 8,
-      "checkedAt": "2026-06-25T14:00:01.986504+00:00"
+      "checkedAt": "2026-06-25T14:28:36.897615+00:00"
     },
     {
       "source": "OpenAI Cookbook Releases",
@@ -1519,7 +1603,7 @@
       "category": "AI",
       "status": "ok",
       "items": 0,
-      "checkedAt": "2026-06-25T14:00:01.986504+00:00"
+      "checkedAt": "2026-06-25T14:28:36.897615+00:00"
     }
   ],
   "errors": []

@@ -25,7 +25,7 @@ USER_AGENT = "Mozilla/5.0 (compatible; AI-News-Bot/1.0; +https://openclaw.ai)"
 LOCAL_TZ = ZoneInfo("America/New_York")
 MAX_STORE_ITEMS = 1500
 MAX_ITEM_AGE_DAYS = 14
-TOP_DAILY_COUNT = 12
+TOP_DAILY_COUNT = 18
 TOP_LATEST_COUNT = 50
 HIGH_SCORE_EDITORIAL_OVERRIDE = 4.0
 MAX_OG_FETCH_PER_RUN = 20
@@ -649,10 +649,25 @@ def fetch_url(url, user_agent=None):
 def flag_model_release(item):
     """Detect if an item is specifically about a new AI model release.
     Sets item["model_release"] = True if matched. Returns True/False."""
+    item.pop("model_release", None)
     title = (item.get("title") or "").lower()
     summary = (item.get("summary") or "").lower()
     text_blob = f"{title} {summary}"
-    matched = any(sig in text_blob for sig in MODEL_RELEASE_SIGNALS)
+    trusted_body_signals = {
+        "openai releases", "openai launches", "openai announces",
+        "anthropic releases", "anthropic launches", "anthropic announces",
+        "google releases", "google launches", "google deepmind releases",
+        "meta releases", "meta launches", "meta ai releases",
+        "mistral releases", "mistral launches", "mistral ai releases",
+        "deepseek releases", "deepseek launches",
+        "xai releases", "xai launches", "grok releases",
+        "cohere releases", "cohere launches",
+        "nvidia releases", "nvidia launches",
+        "amazon releases", "amazon launches",
+    }
+    matched = any(sig in title for sig in MODEL_RELEASE_SIGNALS) or any(
+        sig in text_blob for sig in trusted_body_signals
+    )
     if matched:
         item["model_release"] = True
     return matched
@@ -680,6 +695,9 @@ def editorial_gate(item):
 
     if any(phrase in text_blob for phrase in ["does not use ai", "doesn't use ai", "without ai"]):
         return False, "not_ai_story"
+
+    if re.match(r"^[a-z0-9_.-]+/[a-z0-9_.-]+$", title):
+        return False, "repo_title_low_context"
 
     # Strong product/platform/capability news should pass.
     if hard_boost_hits >= 1 and (capability_hits >= 1 or impact_hits >= 1 or big_name_hits >= 2):
@@ -962,16 +980,10 @@ def main():
         if (
             it["score"] >= HIGH_SCORE_EDITORIAL_OVERRIDE
             and not it.get("editorial_allow")
-            and it.get("image")
-            and it.get("editorial_reason") not in {"fluff", "framework_or_plumbing", "not_ai_story", "watchlist_low_signal"}
+            and it.get("editorial_reason") not in {"fluff", "framework_or_plumbing", "not_ai_story", "watchlist_low_signal", "repo_title_low_context"}
         ):
             it["editorial_allow"] = True
             it["editorial_reason"] = "high_score_override"
-
-    for it in all_items:
-        if it.get("category") == "AI" and it.get("editorial_allow") and not it.get("image"):
-            it["editorial_allow"] = False
-            it["editorial_reason"] = "missing_image"
 
     # Add structured editorial metadata for the frontend.
     for it in all_items:
