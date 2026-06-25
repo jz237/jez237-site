@@ -176,14 +176,6 @@
     "role": "secondary"
   },
   {
-    "name": "Ollama Releases",
-    "url": "https://github.com/ollama/ollama/releases.atom",
-    "weight": 0.9,
-    "category": "AI",
-    "role": "primary",
-    "sourceType": "tool-release"
-  },
-  {
     "name": "LiteLLM Releases",
     "url": "https://github.com/BerriAI/litellm/releases.atom",
     "weight": 0.85,
