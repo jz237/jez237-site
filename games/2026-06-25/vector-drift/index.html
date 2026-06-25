@@ -35,7 +35,7 @@ h1{margin:0 0 8px;font-size:clamp(2.55rem,10vw,5.6rem);line-height:.84;letter-sp
   <span id="score">Score 000000</span>
 </div>
 <div class="toast" id="toast"></div>
-<div class="corner">v0.8 tempest prototype</div>
+<div class="corner">v0.9 tempest prototype</div>
 <div class="overlay" id="overlay">
   <div class="panel">
     <h1>VECTOR<br>TEMPEST</h1>
@@ -43,7 +43,7 @@ h1{margin:0 0 8px;font-size:clamp(2.55rem,10vw,5.6rem);line-height:.84;letter-sp
     <p class="sub">Ride the rim, sweep around the web, and let the cannon chew glowing lanes before the climbers reach your edge.</p>
     <div class="rules">
       <div class="rule"><b>Move</b>Press anywhere on the web. The ship sweeps to that radial lane.</div>
-      <div class="rule"><b>Auto-fire</b>The cannon fires continuously while you steer the rim.</div>
+      <div class="rule"><b>Auto-fire</b>The cannon fires only while you press or hold Space.</div>
       <div class="rule"><b>Survive</b>Enemies crawl up the web. Hits throw fast wireframe vector blasts.</div>
     </div>
     <div class="row"><button id="startBtn">Start Tempest</button><button class="secondary" id="practiceBtn">Practice</button></div>
@@ -75,6 +75,7 @@ const lanes = 16, radius = 7.2, nearZ = 10, farZ = -92;
 const keys = new Set();
 const pointer = { down:false };
 const state = { running:false, practice:false, ended:false, t:0, score:0, wave:1, hull:100, zaps:0, lane:0, targetLane:0, laneVel:0, fireTimer:0, spawnTimer:0, messageUntil:0 };
+let audioCtx=null, lastShotSound=0;
 let player, web=[], enemies=[], shots=[], sparks=[], stars=[];
 
 function clamp(v,a,b){ return Math.max(a, Math.min(b, v)); }
@@ -89,6 +90,38 @@ function mat(color, opacity=1){
 }
 function line(points, color, opacity=1){ const mesh = new THREE.Line(new THREE.BufferGeometry().setFromPoints(points), basic(color, opacity)); scene.add(mesh); return mesh; }
 function toast(text, seconds=1.4){ ui.toast.textContent=text; ui.toast.classList.add("show"); state.messageUntil=state.t+seconds; }
+function ensureAudio(){
+  const AC = window.AudioContext || window.webkitAudioContext;
+  if (!AC) return null;
+  if (!audioCtx) audioCtx = new AC();
+  if (audioCtx.state === "suspended") audioCtx.resume();
+  return audioCtx;
+}
+function sfx(kind){
+  if (!audioCtx) return;
+  const ctx = ensureAudio();
+  if (!ctx) return;
+  const now = ctx.currentTime;
+  if (kind === "shoot" && now - lastShotSound < .06) return;
+  if (kind === "shoot") {
+    lastShotSound = now;
+    const g = ctx.createGain(), osc = ctx.createOscillator();
+    osc.type = "triangle"; osc.frequency.setValueAtTime(920, now); osc.frequency.exponentialRampToValueAtTime(1420, now+.035);
+    g.gain.setValueAtTime(.0001, now); g.gain.exponentialRampToValueAtTime(.035, now+.008); g.gain.exponentialRampToValueAtTime(.0001, now+.07);
+    osc.connect(g).connect(ctx.destination); osc.start(now); osc.stop(now+.075);
+    return;
+  }
+  const dur = kind === "damage" ? .32 : .22;
+  const buffer = ctx.createBuffer(1, Math.max(1, Math.floor(ctx.sampleRate*dur)), ctx.sampleRate);
+  const data = buffer.getChannelData(0);
+  for (let i=0;i<data.length;i++) data[i] = (Math.random()*2-1) * (1 - i/data.length);
+  const src = ctx.createBufferSource(), filter = ctx.createBiquadFilter(), g = ctx.createGain(), osc = ctx.createOscillator();
+  src.buffer = buffer; filter.type = kind === "damage" ? "lowpass" : "bandpass"; filter.frequency.setValueAtTime(kind === "damage" ? 180 : 760, now);
+  osc.type = kind === "damage" ? "sawtooth" : "sine"; osc.frequency.setValueAtTime(kind === "damage" ? 90 : 220, now); osc.frequency.exponentialRampToValueAtTime(kind === "damage" ? 42 : 80, now+dur);
+  g.gain.setValueAtTime(.0001, now); g.gain.exponentialRampToValueAtTime(kind === "damage" ? .09 : .06, now+.012); g.gain.exponentialRampToValueAtTime(.0001, now+dur);
+  src.connect(filter).connect(g); osc.connect(g); g.connect(ctx.destination);
+  src.start(now); src.stop(now+dur); osc.start(now); osc.stop(now+dur);
+}
 
 function makeWeb() {
   clearList(web);
@@ -190,6 +223,7 @@ function fire() {
     scene.add(mesh);
     shots.push({ mesh, lane, visualLane, z:nearZ - 3.2 - zOffset, speed, life:1.08, length:.88 });
   }
+  sfx("shoot");
 }
 
 function addBubble(pos, color, size=.55, life=.62, grow=12) {
@@ -277,6 +311,7 @@ function addAtom(pos, color) {
 }
 
 function burst(pos, color, count=14) {
+  sfx(color === red ? "damage" : "burst");
   const variant = Math.floor(rand(8));
   if (variant === 0) { addBubble(pos,color,.7,.7,12); addRing(pos,white,.44,.5,28); addRays(pos,color,count); }
   if (variant === 1) { addBubble(pos,color,.34,.55,20); addBubble(pos,white,.82,.58,8); addSpiral(pos,color); }
@@ -315,7 +350,7 @@ function update(dt) {
   if (state.t > state.messageUntil) ui.toast.classList.remove("show");
   controls(dt);
   state.fireTimer = Math.max(0, state.fireTimer - dt);
-  fire();
+  if (pointer.down || keys.has("Space")) fire();
   state.spawnTimer -= dt;
   const spawnRate = Math.max(.34, (state.practice?1.05:.78) - state.wave*.045);
   if (state.spawnTimer <= 0) { makeEnemy(); state.spawnTimer = spawnRate + rand(.45,0); }
@@ -408,13 +443,13 @@ function resize(){ const w=innerWidth,h=innerHeight; renderer.setSize(w,h,false)
 addEventListener("resize", resize, { passive:true }); resize();
 addEventListener("keydown", e => { keys.add(e.code); if(["ArrowLeft","ArrowRight","Space","Enter"].includes(e.code)) e.preventDefault(); if(e.code==="Enter"&&!state.running) reset(false); });
 addEventListener("keyup", e => keys.delete(e.code));
-addEventListener("pointerdown", e=>{ pointer.down=true; aimFromPointer(e); }, { passive:true });
+addEventListener("pointerdown", e=>{ pointer.down=true; ensureAudio(); aimFromPointer(e); }, { passive:true });
 addEventListener("pointermove", e=>{ if(pointer.down) aimFromPointer(e); }, { passive:true });
 addEventListener("pointerup", ()=>{ pointer.down=false; }, { passive:true });
 addEventListener("pointercancel", ()=>{ pointer.down=false; }, { passive:true });
-$("startBtn").addEventListener("click",()=>reset(false));
-$("practiceBtn").addEventListener("click",()=>reset(true));
-$("againBtn").addEventListener("click",()=>reset(state.practice));
+$("startBtn").addEventListener("click",()=>{ ensureAudio(); reset(false); });
+$("practiceBtn").addEventListener("click",()=>{ ensureAudio(); reset(true); });
+$("againBtn").addEventListener("click",()=>{ ensureAudio(); reset(state.practice); });
 $("menuBtn").addEventListener("click",()=>{ cleanup(); state.running=false; state.ended=false; ui.over.classList.add("hidden"); ui.overlay.classList.remove("hidden"); });
 
 scene.add(new THREE.AmbientLight(0x9fdcff,.58));
