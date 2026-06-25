@@ -35,7 +35,7 @@ h1{margin:0 0 8px;font-size:clamp(2.55rem,10vw,5.6rem);line-height:.84;letter-sp
   <span id="score">Score 000000</span>
 </div>
 <div class="toast" id="toast"></div>
-<div class="corner">v0.6 tempest prototype</div>
+<div class="corner">v0.7 tempest prototype</div>
 <div class="overlay" id="overlay">
   <div class="panel">
     <h1>VECTOR<br>TEMPEST</h1>
@@ -172,18 +172,29 @@ function makeEnemy(lane=Math.floor(rand(lanes)), z=farZ-rand(9,0)) {
   return enemy;
 }
 
+function shotArrowGeometry(visualLane, z, length=.9) {
+  const head = lanePos(visualLane, z - length*.55, .88);
+  const tail = lanePos(visualLane, z + length*.55, 1.02);
+  const left = lanePos(visualLane - .085, z - length*.08, .94);
+  const right = lanePos(visualLane + .085, z - length*.08, .94);
+  return new THREE.BufferGeometry().setFromPoints([tail,head, left,head, right,head]);
+}
+
 function fire() {
   if (state.fireTimer > 0) return;
-  state.fireTimer = .16;
+  state.fireTimer = .145;
   const lane = Math.round(state.lane + lanes * 1000) % lanes;
-  for (const [offset, color, opacity, speed] of [[0,cyan,1,96],[-1,gold,.72,88],[1,pink,.72,88]]) {
-    const shotLane = (lane + offset + lanes) % lanes;
-    const mesh = line([lanePos(shotLane, nearZ - .9,1.02), lanePos(shotLane, nearZ - 7.2, .92)], color, opacity);
-    shots.push({ mesh, lane:shotLane, z:nearZ - 3.9, speed, life:1.08 });
+  for (const [nudge, zOffset, color, speed] of [[0,0,cyan,96],[-.11,.72,gold,91],[.11,1.42,pink,88],[.055,2.08,green,86]]) {
+    const visualLane = lane + nudge;
+    const mesh = new THREE.LineSegments(shotArrowGeometry(visualLane, nearZ - 3.2 - zOffset, .88), basic(color, .95));
+    scene.add(mesh);
+    shots.push({ mesh, lane, visualLane, z:nearZ - 3.2 - zOffset, speed, life:1.08, length:.88 });
   }
 }
 
 function addBubble(pos, color, size=.42, life=.52, grow=10) {
+  life *= 1.45;
+  grow *= .85;
   const bubble = new THREE.Mesh(
     new THREE.IcosahedronGeometry(size,2),
     new THREE.MeshBasicMaterial({ color, wireframe:true, transparent:true, opacity:.7, blending:THREE.AdditiveBlending, depthWrite:false })
@@ -195,6 +206,7 @@ function addBubble(pos, color, size=.42, life=.52, grow=10) {
 }
 
 function addRing(pos, color, radius=.3, life=.36, grow=22) {
+  life *= 1.35;
   const pts = [];
   for (let i=0;i<=40;i++) {
     const a = i / 40 * Math.PI * 2;
@@ -293,10 +305,8 @@ function update(dt) {
   for (const s of shots) {
     s.z -= s.speed * dt;
     s.life -= dt;
-    const p1 = lanePos(s.lane, s.z + 1.6, .92);
-    const p2 = lanePos(s.lane, s.z - 2.6, .76);
     s.mesh.geometry.dispose();
-    s.mesh.geometry = new THREE.BufferGeometry().setFromPoints([p1,p2]);
+    s.mesh.geometry = shotArrowGeometry(s.visualLane, s.z, s.length);
   }
 
   for (const e of enemies) {
