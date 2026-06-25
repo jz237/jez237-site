@@ -1,6 +1,496 @@
 {
   "date": "2026-06-25",
-  "updatedAt": "2026-06-25T00:00:01.337452+00:00",
+  "updatedAt": "2026-06-25T04:21:01.840567+00:00",
   "items": [],
-  "errors": []
+  "tryWorthy": [
+    {
+      "title": "Gemini 3.5 Flash can now see and control your screen, and Google wants enterprises to trust it",
+      "url": "https://thenextweb.com/news/google-gemini-3-5-flash-computer-use-built-in-tool",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "category": "AI",
+      "summary": "Google has made computer use a built-in tool inside Gemini 3.5 Flash, the model it launched at I/O 2026 as its fastest agentic AI model. The capability, which lets AI agents see screens, click, type, and scroll across browsers, mobile devices, and desktops, previously required a separate standalone model and is now available as a [&hellip;]\nThis story continues at The Next Web",
+      "image": "public/thumbnails/news-3ae4c12437f36efc37.avif",
+      "published": "2026-06-24T18:46:18+00:00",
+      "firstSeen": "2026-06-24T20:00:01.336973+00:00",
+      "lastSeen": "2026-06-25T04:21:01.840567+00:00",
+      "model_release": true,
+      "editorial_allow": true,
+      "editorial_reason": "model_release",
+      "score": 22.393,
+      "signalGroup": "Model releases",
+      "sourceTier": "Reported source",
+      "whyItMatters": "A model release changes the practical menu: capability, pricing, context, or deployment options may shift for real workflows.",
+      "brief": {
+        "whatHappened": "Gemini 3.5 Flash can now see and control your screen, and Google wants enterprises to trust it",
+        "whoItAffects": "Builders, tool users, and anyone comparing model capability or cost.",
+        "practicalImpact": "Check whether the release changes what is worth trying, routing, or paying for.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": true,
+      "clusterKey": "google-gemini-gemini-flash-can-see-control",
+      "imageOriginal": "https://media.thenextweb.com/2026/06/google-gemini-3-5-flash-computer-use-built-in-tool.avif"
+    },
+    {
+      "title": "v0.30.11",
+      "url": "https://github.com/ollama/ollama/releases/tag/v0.30.11-rc0",
+      "source": "Ollama Releases",
+      "sourceUrl": "https://github.com/ollama/ollama/releases.atom",
+      "sourceWeight": 0.9,
+      "sourceRole": "primary",
+      "category": "AI",
+      "summary": "What's Changed\n\nlaunch: add thinking capability detection to opencode by @hoyyeva in #15434\nlaunch: auto-install Claude Code by @hoyyeva in #16802\nlaunch: auto-install opencode when missing by @hoyyeva in #16806\ndiscover: fix inverted iGPU/dGPU Vulkan classification on Windows hybrid graphics by @Sahil170595 in #16669\nmlxrunner: unify and tune speculative decoding by @jessegross in #16791\nlaunch/codex: detect model drift when Codex App UI switches by @BruceMacD in #16864\nllama: add sm_86 architecture to cuda_v13_windows preset by @anishesg in #16834\nllm: size mmproj offload by projector memory",
+      "image": "public/thumbnails/news-24b5cb1b280e0447d1.png",
+      "published": "2026-06-25T01:52:05+00:00",
+      "firstSeen": "2026-06-25T02:00:01.960278+00:00",
+      "lastSeen": "2026-06-25T04:21:01.840567+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 14.1867,
+      "signalGroup": "Agents & tooling",
+      "sourceTier": "Primary source",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
+      "brief": {
+        "whatHappened": "v0.30.11",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via Ollama Releases."
+      },
+      "tryWorthy": true,
+      "clusterKey": "df1c1479ac35"
+    },
+    {
+      "title": "Mistral OCR 4 targets the enterprise back office",
+      "url": "https://thenextweb.com/news/mistral-ocr-4-document-ai-self-hosted",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Mistral OCR 4 reads a document like a structured map, not a wall of text. It is cheap, speaks 170 languages, and can run entirely on your own servers. Europe’s AI champion is going after the enterprise back office. Mistral has a new model, and it is not a chatbot. The French company on 23 [&hellip;]\nThis story continues at The Next Web",
+      "image": "public/thumbnails/news-1781cb66cb8c0fe45d.avif",
+      "published": "2026-06-24T16:50:18+00:00",
+      "firstSeen": "2026-06-24T17:17:13.376808+00:00",
+      "lastSeen": "2026-06-24T19:00:01.896884+00:00",
+      "model_release": true,
+      "editorial_allow": true,
+      "editorial_reason": "model_release",
+      "score": 13.8489,
+      "signalGroup": "Model releases",
+      "sourceTier": "Reported source",
+      "whyItMatters": "A model release changes the practical menu: capability, pricing, context, or deployment options may shift for real workflows.",
+      "imageOriginal": "https://media.thenextweb.com/2026/06/mistral-ocr-4.avif",
+      "sourceRole": "secondary",
+      "brief": {
+        "whatHappened": "Mistral OCR 4 targets the enterprise back office",
+        "whoItAffects": "Builders, tool users, and anyone comparing model capability or cost.",
+        "practicalImpact": "Check whether the release changes what is worth trying, routing, or paying for.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": true,
+      "clusterKey": "mistral-mistral-ocr-targets-enterprise-back"
+    },
+    {
+      "title": "Build a healthcare appointment agent with Amazon Nova 2 Sonic",
+      "url": "https://aws.amazon.com/blogs/machine-learning/build-a-healthcare-appointment-agent-with-amazon-nova-2-sonic",
+      "source": "AWS Machine Learning Blog",
+      "sourceUrl": "https://aws.amazon.com/blogs/machine-learning/feed/",
+      "sourceWeight": 0.72,
+      "sourceRole": "secondary",
+      "category": "AI",
+      "summary": "In this post, you will learn how to build a voice agent that handles appointment reminder conversations using Amazon Nova 2 Sonic and Amazon Bedrock AgentCore. The agent authenticates patients by voice, manages appointments (confirm, cancel, or reschedule), collects pre-visit health information, and escalates to human staff when needed. You handle routine calls at scale, which can help reduce no-show rates. This sample focuses on the agentic side of the problem: voice conversation and tool orchestration. A browser-based interface is included for testing. To connect the agent to actual phone li",
+      "image": "public/thumbnails/news-c1cb7cc34027d88fbb.png",
+      "published": "2026-06-24T18:20:27+00:00",
+      "firstSeen": "2026-06-24T23:32:54.647355+00:00",
+      "lastSeen": "2026-06-25T04:21:01.840567+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "editorial_score_pass",
+      "score": 7.041,
+      "signalGroup": "Agents & tooling",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
+      "brief": {
+        "whatHappened": "Build a healthcare appointment agent with Amazon Nova 2 Sonic",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via AWS Machine Learning Blog."
+      },
+      "tryWorthy": true,
+      "clusterKey": "build-healthcare-appointment-agent-amazon-nova"
+    },
+    {
+      "title": "How Loka Built a Natural, Low-Latency Voice Agent with Amazon Nova 2 Sonic",
+      "url": "https://aws.amazon.com/blogs/machine-learning/how-loka-built-a-natural-low-latency-voice-agent-with-amazon-nova-2-sonic",
+      "source": "AWS Machine Learning Blog",
+      "sourceUrl": "https://aws.amazon.com/blogs/machine-learning/feed/",
+      "sourceWeight": 0.72,
+      "sourceRole": "secondary",
+      "category": "AI",
+      "summary": "In this post, we demonstrate the architecture and approach Loka used to solve a common frustration: robotic, slow voice assistants that cause customers to hang up, damaging brand reputation and driving up support costs.",
+      "image": "public/thumbnails/news-3fe9fc86097257eeda.png",
+      "published": "2026-06-24T16:56:24+00:00",
+      "firstSeen": "2026-06-24T23:32:54.647355+00:00",
+      "lastSeen": "2026-06-25T04:21:01.840567+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "editorial_score_pass",
+      "score": 6.7092,
+      "signalGroup": "Agents & tooling",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
+      "brief": {
+        "whatHappened": "How Loka Built a Natural, Low-Latency Voice Agent with Amazon Nova 2 Sonic",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via AWS Machine Learning Blog."
+      },
+      "tryWorthy": true,
+      "clusterKey": "how-loka-built-natural-low-latency-voice"
+    },
+    {
+      "title": "Zoom, Salesforce, Dialpad, and Others Bet Big on Agentic AI for CX",
+      "url": "https://www.techrepublic.com/article/news-agentic-ai-cx-contact-center-ccw",
+      "source": "TechRepublic AI",
+      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "category": "AI",
+      "summary": "CCW showed agentic AI moving deeper into CX platforms. Here’s what IT leaders should know about governance, data, workforce planning, and rollout.\nThe post Zoom, Salesforce, Dialpad, and Others Bet Big on Agentic AI for CX appeared first on TechRepublic.",
+      "image": "public/thumbnails/news-78bec699597a1cf453.jpg",
+      "published": "2026-06-24T20:11:59+00:00",
+      "firstSeen": "2026-06-24T23:00:01.536104+00:00",
+      "lastSeen": "2026-06-25T04:21:01.840567+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.7271,
+      "signalGroup": "Agents & tooling",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
+      "brief": {
+        "whatHappened": "Zoom, Salesforce, Dialpad, and Others Bet Big on Agentic AI for CX",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via TechRepublic AI."
+      },
+      "tryWorthy": true,
+      "clusterKey": "zoom-salesforce-dialpad-others-bet-big"
+    },
+    {
+      "title": "Facebook rolls out an AI companion app for creators",
+      "url": "https://techcrunch.com/2026/06/24/facebook-rolls-out-an-ai-companion-app-for-creators",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "sourceRole": "secondary",
+      "category": "AI",
+      "summary": "The new app, which is currently being tested with select creators, will have Facebook's recently launched AI creator assistant built into it.",
+      "image": "public/thumbnails/news-2ff5cd852e38e450f4.webp",
+      "published": "2026-06-24T17:16:24+00:00",
+      "firstSeen": "2026-06-24T17:17:13.376808+00:00",
+      "lastSeen": "2026-06-25T04:21:01.840567+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 4.8986,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
+      "brief": {
+        "whatHappened": "Facebook rolls out an AI companion app for creators",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via TechCrunch AI."
+      },
+      "tryWorthy": true,
+      "clusterKey": "facebook-rolls-out-companion-app-creators"
+    }
+  ],
+  "sourceHealth": [
+    {
+      "source": "OpenAI News",
+      "url": "https://openai.com/news/rss.xml",
+      "role": "primary",
+      "category": "AI",
+      "status": "ok",
+      "items": 1020,
+      "checkedAt": "2026-06-25T04:21:01.840567+00:00"
+    },
+    {
+      "source": "Google AI Blog",
+      "url": "https://blog.google/technology/ai/rss/",
+      "role": "primary",
+      "category": "AI",
+      "status": "ok",
+      "items": 20,
+      "checkedAt": "2026-06-25T04:21:01.840567+00:00"
+    },
+    {
+      "source": "Google DeepMind Blog",
+      "url": "https://deepmind.google/blog/rss.xml",
+      "role": "primary",
+      "category": "AI",
+      "status": "ok",
+      "items": 100,
+      "checkedAt": "2026-06-25T04:21:01.840567+00:00"
+    },
+    {
+      "source": "Google Research Blog",
+      "url": "https://research.google/blog/rss/",
+      "role": "primary",
+      "category": "AI",
+      "status": "ok",
+      "items": 100,
+      "checkedAt": "2026-06-25T04:21:01.840567+00:00"
+    },
+    {
+      "source": "Hugging Face Blog",
+      "url": "https://huggingface.co/blog/feed.xml",
+      "role": "primary",
+      "category": "AI",
+      "status": "ok",
+      "items": 810,
+      "checkedAt": "2026-06-25T04:21:01.840567+00:00"
+    },
+    {
+      "source": "NVIDIA Blog",
+      "url": "https://blogs.nvidia.com/feed/",
+      "role": "primary",
+      "category": "AI",
+      "status": "ok",
+      "items": 18,
+      "checkedAt": "2026-06-25T04:21:01.840567+00:00"
+    },
+    {
+      "source": "AWS Machine Learning Blog",
+      "url": "https://aws.amazon.com/blogs/machine-learning/feed/",
+      "role": "secondary",
+      "category": "AI",
+      "status": "ok",
+      "items": 20,
+      "checkedAt": "2026-06-25T04:21:01.840567+00:00"
+    },
+    {
+      "source": "Artificial Intelligence News",
+      "url": "https://www.artificialintelligence-news.com/categories/artificial-intelligence/feed/",
+      "role": "secondary",
+      "category": "AI",
+      "status": "ok",
+      "items": 12,
+      "checkedAt": "2026-06-25T04:21:01.840567+00:00"
+    },
+    {
+      "source": "Ars Technica (AI/Tech)",
+      "url": "https://feeds.arstechnica.com/arstechnica/technology-lab",
+      "role": "secondary",
+      "category": "AI",
+      "status": "ok",
+      "items": 20,
+      "checkedAt": "2026-06-25T04:21:01.840567+00:00"
+    },
+    {
+      "source": "Together AI Blog",
+      "url": "https://www.together.ai/blog/rss.xml",
+      "role": "primary",
+      "category": "AI",
+      "status": "ok",
+      "items": 100,
+      "checkedAt": "2026-06-25T04:21:01.840567+00:00"
+    },
+    {
+      "source": "TechRepublic AI",
+      "url": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
+      "role": "secondary",
+      "category": "AI",
+      "status": "ok",
+      "items": 20,
+      "checkedAt": "2026-06-25T04:21:01.840567+00:00"
+    },
+    {
+      "source": "ScienceDaily AI",
+      "url": "https://www.sciencedaily.com/rss/computers_math/artificial_intelligence.xml",
+      "role": "watchlist",
+      "category": "AI",
+      "status": "ok",
+      "items": 60,
+      "checkedAt": "2026-06-25T04:21:01.840567+00:00"
+    },
+    {
+      "source": "The Next Web",
+      "url": "https://thenextweb.com/feed",
+      "role": "secondary",
+      "category": "AI",
+      "status": "ok",
+      "items": 10,
+      "checkedAt": "2026-06-25T04:21:01.840567+00:00"
+    },
+    {
+      "source": "BBC Discovery",
+      "url": "https://podcasts.files.bbci.co.uk/p002w557.rss",
+      "role": "primary",
+      "category": "Science",
+      "status": "ok",
+      "items": 847,
+      "checkedAt": "2026-06-25T04:21:01.840567+00:00"
+    },
+    {
+      "source": "BBC Infinite Monkey Cage",
+      "url": "https://podcasts.files.bbci.co.uk/b00snr0w.rss",
+      "role": "primary",
+      "category": "Science",
+      "status": "ok",
+      "items": 239,
+      "checkedAt": "2026-06-25T04:21:01.840567+00:00"
+    },
+    {
+      "source": "BBC The Life Scientific",
+      "url": "https://podcasts.files.bbci.co.uk/b015sqc7.rss",
+      "role": "primary",
+      "category": "Science",
+      "status": "ok",
+      "items": 356,
+      "checkedAt": "2026-06-25T04:21:01.840567+00:00"
+    },
+    {
+      "source": "TechCrunch AI",
+      "url": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "role": "secondary",
+      "category": "AI",
+      "status": "ok",
+      "items": 19,
+      "checkedAt": "2026-06-25T04:21:01.840567+00:00"
+    },
+    {
+      "source": "Anthropic News",
+      "url": "https://raw.githubusercontent.com/Olshansk/rss-feeds/main/feeds/feed_anthropic_news.xml",
+      "role": "primary",
+      "category": "AI",
+      "status": "ok",
+      "items": 231,
+      "checkedAt": "2026-06-25T04:21:01.840567+00:00"
+    },
+    {
+      "source": "The Verge AI",
+      "url": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "role": "secondary",
+      "category": "AI",
+      "status": "ok",
+      "items": 10,
+      "checkedAt": "2026-06-25T04:21:01.840567+00:00"
+    },
+    {
+      "source": "VentureBeat AI",
+      "url": "https://venturebeat.com/category/ai/feed/",
+      "role": "secondary",
+      "category": "AI",
+      "status": "ok",
+      "items": 7,
+      "checkedAt": "2026-06-25T04:21:01.840567+00:00"
+    },
+    {
+      "source": "Simon Willison",
+      "url": "https://simonwillison.net/atom/everything/",
+      "role": "primary",
+      "category": "AI",
+      "status": "ok",
+      "items": 30,
+      "checkedAt": "2026-06-25T04:21:01.840567+00:00"
+    },
+    {
+      "source": "Interconnects AI",
+      "url": "https://www.interconnects.ai/feed",
+      "role": "primary",
+      "category": "AI",
+      "status": "ok",
+      "items": 20,
+      "checkedAt": "2026-06-25T04:21:01.840567+00:00"
+    },
+    {
+      "source": "Latent Space",
+      "url": "https://www.latent.space/feed",
+      "role": "secondary",
+      "category": "AI",
+      "status": "ok",
+      "items": 20,
+      "checkedAt": "2026-06-25T04:21:01.840567+00:00"
+    },
+    {
+      "source": "Import AI",
+      "url": "https://importai.substack.com/feed",
+      "role": "secondary",
+      "category": "AI",
+      "status": "error",
+      "items": 0,
+      "error": "HTTP Error 403: Forbidden",
+      "checkedAt": "2026-06-25T04:21:01.840567+00:00"
+    },
+    {
+      "source": "Microsoft Research Blog",
+      "url": "https://www.microsoft.com/en-us/research/feed/",
+      "role": "secondary",
+      "category": "AI",
+      "status": "ok",
+      "items": 10,
+      "checkedAt": "2026-06-25T04:21:01.840567+00:00"
+    },
+    {
+      "source": "Ollama Releases",
+      "url": "https://github.com/ollama/ollama/releases.atom",
+      "role": "primary",
+      "category": "AI",
+      "status": "ok",
+      "items": 10,
+      "checkedAt": "2026-06-25T04:21:01.840567+00:00"
+    },
+    {
+      "source": "LiteLLM Releases",
+      "url": "https://github.com/BerriAI/litellm/releases.atom",
+      "role": "primary",
+      "category": "AI",
+      "status": "ok",
+      "items": 10,
+      "checkedAt": "2026-06-25T04:21:01.840567+00:00"
+    },
+    {
+      "source": "Hugging Face Transformers Releases",
+      "url": "https://github.com/huggingface/transformers/releases.atom",
+      "role": "primary",
+      "category": "AI",
+      "status": "ok",
+      "items": 10,
+      "checkedAt": "2026-06-25T04:21:01.840567+00:00"
+    },
+    {
+      "source": "Model Context Protocol Python SDK Releases",
+      "url": "https://github.com/modelcontextprotocol/python-sdk/releases.atom",
+      "role": "primary",
+      "category": "AI",
+      "status": "ok",
+      "items": 10,
+      "checkedAt": "2026-06-25T04:21:01.840567+00:00"
+    },
+    {
+      "source": "Model Context Protocol Spec Releases",
+      "url": "https://github.com/modelcontextprotocol/specification/releases.atom",
+      "role": "primary",
+      "category": "AI",
+      "status": "ok",
+      "items": 8,
+      "checkedAt": "2026-06-25T04:21:01.840567+00:00"
+    },
+    {
+      "source": "OpenAI Cookbook Releases",
+      "url": "https://github.com/openai/openai-cookbook/releases.atom",
+      "role": "secondary",
+      "category": "AI",
+      "status": "ok",
+      "items": 0,
+      "checkedAt": "2026-06-25T04:21:01.840567+00:00"
+    }
+  ],
+  "errors": [
+    {
+      "source": "Import AI",
+      "url": "https://importai.substack.com/feed",
+      "error": "HTTP Error 403: Forbidden"
+    }
+  ]
 }
