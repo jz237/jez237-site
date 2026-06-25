@@ -61,6 +61,7 @@
     editorNote: document.querySelector("[data-editor-note]"),
     weekScan: document.querySelector("[data-week-scan]"),
     issuePicker: document.querySelector("[data-issue-picker]"),
+    latestIssue: document.querySelector("[data-latest-issue]"),
     printIssue: document.querySelector("[data-print-issue]"),
     previousIssue: document.querySelector("[data-previous-issue]"),
     nextIssue: document.querySelector("[data-next-issue]"),
@@ -402,7 +403,7 @@
     const matchesToday = issue && (issue.currentDate === currentIso || issue.historicDate === historicIso);
 
     if (requested) {
-      els.status.textContent = "Archive issue loaded.";
+      els.status.textContent = "Archive issue loaded. Use Latest Issue to return to the newest Chronicle.";
       els.status.dataset.statusState = "archive";
     } else if (matchesToday) {
       els.status.textContent = "Today’s issue is on the stand.";
@@ -725,7 +726,7 @@
       const response = await fetch("data/issues.json", { cache: "no-store" });
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const data = await response.json();
-      state.issues = data.issues || [];
+      state.issues = Array.isArray(data) ? data : (data.issues || []);
       state.issue = pickIssue(state.issues, currentIso, historicIso);
       renderIssuePicker(state.issues, state.issue);
       renderIssueStepNav(state.issues, state.issue);
@@ -741,7 +742,11 @@
       const selected = els.issuePicker.value;
       if (!selected) return;
       const url = new URL(window.location.href);
-      url.searchParams.set("date", selected);
+      if (state.issues[0] && selected === state.issues[0].currentDate) {
+        url.searchParams.delete("date");
+      } else {
+        url.searchParams.set("date", selected);
+      }
       window.location.href = url.toString();
     });
   }
