@@ -1294,7 +1294,8 @@
       'crystal cavern', 'crystal tavern', 'shatter storm', 'plasma pong',
       'super star trek', 'depth charge',
       'subway siege blackout', 'neon invaders', 'vortex storm eater',
-      'void echo', 'gravity weaver', 'storm echo', 'neon vector arena demo'
+      'void echo', 'gravity weaver', 'storm echo', 'neon vector arena demo',
+      'particle creature arena'
     ]);
     const slugTitle = t => t.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
     games.forEach(g => { g.status = UNFINISHED.has(slugTitle(g.title)) ? 'unfinished' : 'released'; });
