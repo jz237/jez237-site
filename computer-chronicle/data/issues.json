@@ -5,6 +5,414 @@
   "issues": [
     {
       "currentDate": "2026-06-26",
+      "historicDate": "1983-01-10",
+      "displayDate": "Week of January 10-16, 1983",
+      "edition": "Issue 024 - Weekly 1982 Computer & Culture Chronicle",
+      "visualProfile": "A January 1983 computer-shop weekly: CES afterglow, cartridge shelves, Apple II desks, IBM PC software boxes, warm newsprint, red and blue rules.",
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "Personal computing, games, software, and shop-window culture",
+        "dateline": "Week of January 10-16, 1983",
+        "price": "25 cents"
+      },
+      "layoutPlan": "Gaming and home-computer retail lead, with software, price watch, market notes, charts, and classifieds in dense front-page modules.",
+      "sectionChrome": {
+        "primary": "brick red",
+        "secondary": "blue ink",
+        "texture": "aged newsprint, halftone photos, tight column rules"
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1983-01-10.png",
+        "alt": "GPT Image 2 newspaper-style Computer Chronicle front page for Week of January 10-16, 1983.",
+        "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "The second full week of January finds the new year’s electronics trade-show talk moving into shop counters: home computers, cartridges, and practical office software all compete for the same household budget.",
+      "morningLine": "After CES, buyers ask which machines, cartridges, and software boxes will still matter by spring.",
+      "lead": {
+        "headline": "CES Afterglow Puts Game Cartridges and Home Micros on the Same Counter",
+        "summary": "January trade coverage and the Computer Entertainer newsletter show publishers and dealers pushing ambitious 1983 game plans while personal computers keep claiming more shelf space beside consoles.",
+        "confidence": "Medium; grounded in January 1983 trade/newsletter coverage and broader early-1983 retail context.",
+        "sourceRefs": [
+          0,
+          1,
+          2
+        ]
+      },
+      "computerItems": [
+        {
+          "title": "Apple IIe reaches the new-year desk",
+          "summary": "Apple’s IIe arrives in January 1983 as the sturdier, expanded successor to the Apple II Plus, keeping Apple II software and school/home use central to microcomputer shopping.",
+          "confidence": "High for January 1983 introduction; week-level placement is contextual.",
+          "sourceRefs": [
+            3
+          ]
+        },
+        {
+          "title": "IBM PC software shelves keep growing",
+          "summary": "Business buyers are increasingly shopping for PC applications, with spreadsheets and word processing doing much of the selling.",
+          "confidence": "High for period trend; not a single-day announcement.",
+          "sourceRefs": [
+            4,
+            5
+          ]
+        },
+        {
+          "title": "Atari 1200XL talk follows buyers home",
+          "summary": "Atari’s new 1200XL, announced in late 1982 and promoted for early 1983, keeps dealers comparing keyboard computers against cartridge consoles.",
+          "confidence": "Medium; announcement precedes the week, retail impact is early-1983 context.",
+          "sourceRefs": [
+            6
+          ]
+        },
+        {
+          "title": "Commodore 64 remains the value challenger",
+          "summary": "The C64’s color, sound, and aggressive pricing make it a recurring counterpoint to Apple, Atari, and IBM conversations.",
+          "confidence": "High for early-1983 market position.",
+          "sourceRefs": [
+            7
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "VisiCalc",
+          "detail": "Apple II / personal computers: still the shorthand for why offices buy micros.",
+          "confidence": "High",
+          "sourceRefs": [
+            5
+          ]
+        },
+        {
+          "name": "WordStar",
+          "detail": "CP/M and microcomputer word processing remains a serious office draw.",
+          "confidence": "High",
+          "sourceRefs": [
+            5
+          ]
+        },
+        {
+          "name": "Microsoft Multiplan",
+          "detail": "Spreadsheet competition spreads across micros in the 1982-83 software aisle.",
+          "confidence": "Medium",
+          "sourceRefs": [
+            5
+          ]
+        },
+        {
+          "name": "Zork I",
+          "detail": "Infocom adventure boxes keep text adventures visible on home-computer shelves.",
+          "confidence": "High for period availability.",
+          "sourceRefs": [
+            8
+          ]
+        },
+        {
+          "name": "Choplifter!",
+          "detail": "Broderbund’s Apple II action game remains a recognizable home-computer game name.",
+          "confidence": "High for period availability.",
+          "sourceRefs": [
+            9
+          ]
+        }
+      ],
+      "storeShelves": [
+        {
+          "item": "Commodore 64",
+          "price": "about $595 list",
+          "note": "Commonly advertised below list as competition sharpened.",
+          "sourceRefs": [
+            7
+          ]
+        },
+        {
+          "item": "Apple IIe",
+          "price": "about $1,395 base",
+          "note": "New January model keeps Apple II compatibility in the foreground.",
+          "sourceRefs": [
+            3
+          ]
+        },
+        {
+          "item": "Atari 1200XL",
+          "price": "about $899 announced list",
+          "note": "Premium 8-bit Atari computer discussed for early-1983 buyers.",
+          "sourceRefs": [
+            6
+          ]
+        },
+        {
+          "item": "IBM PC 5150",
+          "price": "from about $1,565 base",
+          "note": "Business system price before monitor, storage, and software add-ons.",
+          "sourceRefs": [
+            4
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "Commodore 64",
+          "price": "$595 list",
+          "confidence": "High",
+          "sourceRefs": [
+            7
+          ],
+          "note": "Aggressive street pricing often undercut list."
+        },
+        {
+          "item": "Apple IIe",
+          "price": "$1,395 base",
+          "confidence": "High",
+          "sourceRefs": [
+            3
+          ],
+          "note": "January 1983 introduction price commonly cited."
+        },
+        {
+          "item": "Atari 1200XL",
+          "price": "$899 list",
+          "confidence": "Medium",
+          "sourceRefs": [
+            6
+          ],
+          "note": "Early-1983 announced/list pricing."
+        },
+        {
+          "item": "IBM PC",
+          "price": "$1,565 base",
+          "confidence": "High",
+          "sourceRefs": [
+            4
+          ],
+          "note": "Entry configuration before typical upgrades."
+        }
+      ],
+      "market": {
+        "headline": "Dealers balance cartridge volume against computer margins",
+        "summary": "The post-holiday counter is crowded: cartridge publishers promise new titles, while micros pull buyers toward keyboards, disks, printers, and productivity software.",
+        "confidence": "Medium; synthesized from period trade/newsletter coverage.",
+        "sourceRefs": [
+          0,
+          1,
+          2
+        ]
+      },
+      "bbsNote": "Local modem callers are still a small club, but bulletin boards are becoming part of the hobbyist pitch for owning a real keyboard computer.",
+      "curiosity": "The Apple IIe’s lowercase support and improved keyboard sound mundane, but those daily comforts matter when a machine moves from hobby bench to classroom desk.",
+      "briefs": [
+        {
+          "headline": "Computer Entertainer surveys ambitious 1983 game plans",
+          "summary": "The January issue tracks cartridge and computer-game publishers preparing fuller lines for the year.",
+          "confidence": "High",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "headline": "Apple IIe starts a long second act for the Apple II line",
+          "summary": "The new model refreshes Apple’s established 8-bit platform instead of replacing its software base.",
+          "confidence": "High",
+          "sourceRefs": [
+            3
+          ]
+        },
+        {
+          "headline": "Software boxes sell the serious-computer argument",
+          "summary": "Spreadsheets, word processors, and database tools give dealers a practical answer to families comparing computers with game machines.",
+          "confidence": "High for period trend.",
+          "sourceRefs": [
+            5
+          ]
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "Down Under",
+          "artist": "Men at Work"
+        },
+        {
+          "rank": 2,
+          "title": "Dirty Laundry",
+          "artist": "Don Henley"
+        },
+        {
+          "rank": 3,
+          "title": "Maneater",
+          "artist": "Daryl Hall & John Oates"
+        },
+        {
+          "rank": 4,
+          "title": "Mickey",
+          "artist": "Toni Basil"
+        },
+        {
+          "rank": 5,
+          "title": "The Girl Is Mine",
+          "artist": "Michael Jackson & Paul McCartney"
+        }
+      ],
+      "movieChart": [
+        {
+          "rank": 1,
+          "title": "Tootsie"
+        },
+        {
+          "rank": 2,
+          "title": "48 Hrs."
+        },
+        {
+          "rank": 3,
+          "title": "The Verdict"
+        },
+        {
+          "rank": 4,
+          "title": "E.T. the Extra-Terrestrial"
+        },
+        {
+          "rank": 5,
+          "title": "The Dark Crystal"
+        }
+      ],
+      "periodAd": {
+        "headline": "Bring Home a Keyboard Before the Spring Price Tags Change",
+        "summary": "Compare Commodore 64 color, Apple IIe compatibility, Atari graphics, and IBM PC business software this week at your local computer counter.",
+        "style": "Small boxed retail ad with red rule, blue starburst price tags, and dot-matrix coupon copy."
+      },
+      "classifieds": [
+        {
+          "headline": "Wanted: Apple II disk drive",
+          "copy": "Student seeks clean Disk II drive and controller card. Will trade game cartridges plus cash."
+        },
+        {
+          "headline": "Modem night line",
+          "copy": "300-baud users invited to leave BASIC tips and game scores after 9 p.m."
+        }
+      ],
+      "worldFallback": {
+        "headline": "New-year electronics coverage crowds the business pages",
+        "summary": "Computers, video games, and office automation receive unusual mainstream attention as 1983 opens."
+      },
+      "accuracyLedger": {
+        "items": [
+          {
+            "claim": "Computer Entertainer January 1983 issue covered 1983 video-game plans",
+            "status": "verified",
+            "sourceRefs": [
+              0
+            ]
+          },
+          {
+            "claim": "Apple IIe was introduced in January 1983",
+            "status": "verified",
+            "sourceRefs": [
+              3
+            ]
+          },
+          {
+            "claim": "Billboard Hot 100 for Jan. 15, 1983 led with Down Under",
+            "status": "verified",
+            "sourceRefs": [
+              10
+            ]
+          },
+          {
+            "claim": "Domestic weekend Jan. 14-16, 1983 led by Tootsie",
+            "status": "verified",
+            "sourceRefs": [
+              11
+            ]
+          }
+        ]
+      },
+      "sources": [
+        {
+          "title": "Computer Entertainer, Vol. 1 No. 10, January 1983",
+          "url": "https://retrocdn.net/images/5/59/ComputerEntertainer_US_Vol.1_10.pdf",
+          "note": "period game newsletter"
+        },
+        {
+          "title": "Video Game Newsroom Time Machine: January 1983",
+          "url": "https://videogamenewsroomtimemachine.libsyn.com/january-1983",
+          "note": "retro news index pointing to January 1983 game coverage"
+        },
+        {
+          "title": "Computer Hope: Computer history - 1983",
+          "url": "https://www.computerhope.com/history/1983.htm",
+          "note": "general 1983 computer timeline"
+        },
+        {
+          "title": "Apple IIe technical and historical summaries",
+          "url": "https://en.wikipedia.org/wiki/Apple_IIe",
+          "note": "January 1983 introduction and launch pricing reference"
+        },
+        {
+          "title": "IBM Archives: IBM Personal Computer",
+          "url": "https://www.ibm.com/history/personal-computer",
+          "note": "IBM PC background and base price context"
+        },
+        {
+          "title": "Jeremy Reimer, personal computer market history",
+          "url": "https://arstechnica.com/features/2005/12/total-share/",
+          "note": "period market context"
+        },
+        {
+          "title": "Atari 1200XL historical summaries",
+          "url": "https://en.wikipedia.org/wiki/Atari_1200XL",
+          "note": "late-1982 announcement and pricing context"
+        },
+        {
+          "title": "Commodore 64 historical summaries",
+          "url": "https://en.wikipedia.org/wiki/Commodore_64",
+          "note": "launch price and early market context"
+        },
+        {
+          "title": "Infocom/Zork release histories",
+          "url": "https://www.filfre.net/2012/01/zork-on-a-microcomputer/",
+          "note": "microcomputer adventure game context"
+        },
+        {
+          "title": "Choplifter! release history",
+          "url": "https://www.mobygames.com/game/588/choplifter/",
+          "note": "period home-computer game reference"
+        },
+        {
+          "title": "Billboard Hot 100, week of Jan. 15, 1983",
+          "url": "https://elpee.jp/hot100/week/1983-01-15/",
+          "note": "music chart"
+        },
+        {
+          "title": "Box Office Mojo Domestic Weekend 1983 Week 2",
+          "url": "https://www.boxofficemojo.com/weekend/1983W02/",
+          "note": "movie chart, Jan. 14-16, 1983"
+        }
+      ],
+      "pictureDesk": [],
+      "frontPageStories": [
+        {
+          "headline": "CES Afterglow Puts Game Cartridges and Home Micros on the Same Counter",
+          "summary": "Cartridge publishers talk up 1983 lineups while computers compete for the same household electronics money.",
+          "sourceRefs": [
+            0,
+            1,
+            2
+          ]
+        },
+        {
+          "headline": "Apple IIe Gives Apple II Buyers a New Keyboard to Consider",
+          "summary": "Apple refreshes its durable 8-bit platform for schools, homes, and small offices.",
+          "sourceRefs": [
+            3
+          ]
+        }
+      ],
+      "musicChartSourceRefs": [
+        10
+      ]
+    },
+    {
+      "currentDate": "2026-06-26",
       "historicDate": "1983-01-03",
       "displayDate": "Week of January 3-9, 1983",
       "edition": "Issue 023 - Weekly 1982 Computer & Culture Chronicle",
