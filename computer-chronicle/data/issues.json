@@ -390,20 +390,7 @@
           "note": "1982 console game reference"
         }
       ],
-      "pictureDesk": [
-        {
-          "src": "media/computer-chronicle-gpt-image-2-week-1983-01-03.png",
-          "alt": "Halftone computer-store counter with home computer boxes, cartridges, and a small monitor running blocky game graphics.",
-          "caption": "Generated art direction cue 1: Halftone computer-store counter with home computer boxes, cartridges, and a small monitor running blocky game graphics.",
-          "confidence": "Generated visual based on structured issue data"
-        },
-        {
-          "src": "media/computer-chronicle-gpt-image-2-week-1983-01-03.png",
-          "alt": "Boxed chart rail with Top 5 Music, Movies, and Computer Games.",
-          "caption": "Generated art direction cue 2: Boxed chart rail with Top 5 Music, Movies, and Computer Games.",
-          "confidence": "Generated visual based on structured issue data"
-        }
-      ],
+      "pictureDesk": [],
       "frontPageStories": [
         {
           "headline": "Machine of the Year Sends Computers Into 1983",

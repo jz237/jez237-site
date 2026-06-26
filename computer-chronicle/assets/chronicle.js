@@ -134,6 +134,22 @@
     `;
   }
 
+  function visiblePictureDeskItems(issue) {
+    const items = Array.isArray(issue && issue.pictureDesk) ? issue.pictureDesk : [];
+    const heroSrc = issue && issue.heroImage && issue.heroImage.src ? String(issue.heroImage.src).trim() : "";
+    const seenSources = new Set();
+
+    return items.filter((item) => {
+      const image = item.image || item;
+      const src = image && image.src ? String(image.src).trim() : "";
+      if (!src) return true;
+      if (src === heroSrc) return false;
+      if (seenSources.has(src)) return false;
+      seenSources.add(src);
+      return true;
+    });
+  }
+
   function chrome(issue, key, field, fallback) {
     return (issue && issue.sectionChrome && issue.sectionChrome[key] && issue.sectionChrome[key][field]) || fallback;
   }
@@ -309,6 +325,7 @@
 
   function cleanPublicCopy(value) {
     return String(value || "")
+      .replace(/\bGenerated art direction cue\s*\d+\s*:\s*/gi, "")
       .replace(/\s*with confidence labels so [^.]+\.?/gi, ".")
       .replace(/\s*with confidence labels\.?/gi, ".")
       .replace(/\s*and confidence labels\.?/gi, ".")
@@ -501,15 +518,15 @@
       ${sourceLinks(issue, lead.sourceRefs)}
     `;
 
-    const pictureDeskItems = Array.isArray(issue.pictureDesk) ? issue.pictureDesk : [];
+    const pictureDeskItems = visiblePictureDeskItems(issue);
     if (els.pictureDeskPanel) els.pictureDeskPanel.hidden = pictureDeskItems.length === 0;
     if (els.pictureDesk) {
       els.pictureDesk.innerHTML = pictureDeskItems.map((item) => `
         <article class="picture-desk-item">
           ${pictureDeskVisual(item.image || item)}
           <div class="picture-desk-copy">
-            <h3>${escapeHtml(item.title || item.caption || "Picture")}</h3>
-            ${item.note ? `<p>${escapeHtml(item.note)}</p>` : ""}
+            <h3>${escapeHtml(cleanPublicCopy(item.title || item.caption || "Picture"))}</h3>
+            ${item.note ? `<p>${escapeHtml(cleanPublicCopy(item.note))}</p>` : ""}
             ${sourceLinks(issue, item.sourceRefs)}
           </div>
         </article>
