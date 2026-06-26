@@ -2,7 +2,8 @@
 """Publish the newest generated Philly weather almanac image into the site.
 
 This does not generate art. It copies the newest OpenClaw GPT Image output named
-philly-weather-almanac-*.png into weather/almanac/ so GitHub Pages can serve it.
+philly-weather-almanac-*.png into weather/almanac/ as optimized JPG files so
+GitHub Pages can serve it efficiently.
 """
 from __future__ import annotations
 
@@ -10,8 +11,9 @@ import argparse
 import datetime as dt
 import json
 import re
-import shutil
 from pathlib import Path
+
+from PIL import Image
 
 
 DEFAULT_MEDIA_DIR = Path("/home/jez237/.openclaw/media/tool-image-generation")
@@ -42,13 +44,32 @@ def formatted_date(day: dt.date) -> str:
     return f"{day.strftime('%A, %B')} {day.day}, {day.year}"
 
 
+def save_jpeg(source: Path, target: Path) -> None:
+    with Image.open(source) as image:
+        image.convert("RGB").save(
+            target,
+            "JPEG",
+            quality=92,
+            optimize=True,
+            progressive=True,
+            subsampling=1,
+        )
+
+
 def remove_old_archives(current_archive: Path) -> list[Path]:
     removed = []
-    for path in OUT_DIR.glob("philly-weather-almanac-*.png"):
+    for pattern in ("philly-weather-almanac-*.png", "philly-weather-almanac-*.jpg"):
+        for path in OUT_DIR.glob(pattern):
+            if path == current_archive:
+                continue
+            path.unlink()
+            removed.append(path)
+    for path in (OUT_DIR / "latest.png",):
         if path == current_archive:
             continue
-        path.unlink()
-        removed.append(path)
+        if path.exists():
+            path.unlink()
+            removed.append(path)
     return removed
 
 
@@ -60,22 +81,22 @@ def main() -> int:
 
     source = (args.source or newest_almanac(args.media_dir)).resolve()
     day = date_from_name(source)
-    archive_name = f"philly-weather-almanac-{day.isoformat()}.png"
+    archive_name = f"philly-weather-almanac-{day.isoformat()}.jpg"
 
     OUT_DIR.mkdir(parents=True, exist_ok=True)
-    latest = OUT_DIR / "latest.png"
+    latest = OUT_DIR / "latest.jpg"
     archive = OUT_DIR / archive_name
     if source != latest.resolve():
-        shutil.copy2(source, latest)
+        save_jpeg(source, latest)
     if source != archive.resolve():
-        shutil.copy2(source, archive)
+        save_jpeg(source, archive)
     removed = remove_old_archives(archive)
 
     manifest = {
         "title": "Philly Weather Almanac",
         "location": "Philly 19111",
         "date": formatted_date(day),
-        "image": "almanac/latest.png",
+        "image": "almanac/latest.jpg",
         "archiveImage": f"almanac/{archive_name}",
         "source": "GPT Image 2 weather almanac",
     }
