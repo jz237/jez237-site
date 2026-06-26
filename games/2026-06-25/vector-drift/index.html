@@ -609,7 +609,6 @@ function aimFromPointer(e) {
   if (Math.hypot(x,y) < 24) return;
   const angle = Math.atan2(-y,x);
   state.targetLane = ((angle + Math.PI / 2) / (Math.PI * 2) * lanes + lanes * 1000) % lanes;
-  state.fireTimer = Math.min(state.fireTimer, .03);
 }
 
 function resize(){ const w=innerWidth,h=innerHeight; renderer.setSize(w,h,false); camera.aspect=w/h; camera.updateProjectionMatrix(); }
