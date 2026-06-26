@@ -1233,6 +1233,7 @@
       '2026-06-19/neon-vector-arena/',
       '2026-06-22/snake-awakening/',
       '2026-06-24/particle-creature-arena/',
+      '2026-06-25/vector-drift/',
       'hard-hat-mac/'
     ]);
     const gameHref = g => g.href || `${SITE_GAME_PATHS.has(g.path) ? SITE_BASE : LEGACY_BASE}${g.path}`;
@@ -1277,6 +1278,7 @@
       { title: 'Choplifter: Rescue Run',        path: '2026-06-09/choplifter/',            emoji: '🚁', date: 'Jun 9',  cat: 'arcade',   tag: 'experimental', desc: 'Premium remake of the 1982 classic — fly behind enemy lines, land by the barracks, load survivors and bring them home past tanks, jets, and drones. One-finger mobile controls, synth sound, global scores' },
       { title: 'GPT 5.5 Fluid Simulator Demo',  path: '2026-06-09/sci-fi-data-chamber-loop/', emoji: '💧', date: 'Jun 9',  cat: 'arcade',   tag: 'demo',         desc: 'High-resolution WebGL2 fluid dynamics lab with ray-lit refraction, caustics, vorticity, pressure solving, and live sliders' },
       { title: 'Subway Siege: Blackout',        path: '2026-06-09/subway-siege-blackout/', emoji: '🔦', date: 'Jun 9',  cat: 'arcade',   tag: 'experimental', desc: 'Top-down blackout tank combat — sweep your searchlight, hunt raider armor hiding in the dark, and hold the subway through escalating waves. One-finger controls, chain-reaction barrels, synth audio, global scores' },
+      { title: 'Vector Tempest',                path: '2026-06-25/vector-drift/',           emoji: '✳️', date: 'Jun 25', cat: 'arcade',   tag: 'experimental', desc: 'Unfinished neon Tempest-style tube shooter prototype with radial lane movement, typed enemies, combo scoring, vector pulse, wave patterns, and global scores' },
       { title: 'Subway Siege',                  path: '2026-05-30/subway-siege/',          emoji: '🚇', date: 'May 30', cat: 'arcade',   tag: 'experimental', desc: 'Cinematic touch-first subway tunnel defender with raiders, drones, trains, shields, and charge blasts' },
       { title: 'Vortex: Storm Eater',           path: '2026-03-04/vortex/',                    emoji: '🌪️', date: 'Mar 4', cat: 'arcade',   tag: 'experimental', desc: 'Early-build storm shooter' },
       { title: 'Slash',                         path: '2026-03-04/slash/',                     emoji: '⚡', date: 'Mar 4',  cat: 'arcade',   tag: 'experimental', desc: 'Reflex swipe-action test' },
@@ -1295,7 +1297,7 @@
       'super star trek', 'depth charge',
       'subway siege blackout', 'neon invaders', 'vortex storm eater',
       'void echo', 'gravity weaver', 'storm echo', 'neon vector arena demo',
-      'neon vector arena 3d'
+      'neon vector arena 3d', 'vector tempest'
     ]);
     const slugTitle = t => t.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
     games.forEach(g => { g.status = UNFINISHED.has(slugTitle(g.title)) ? 'unfinished' : 'released'; });
