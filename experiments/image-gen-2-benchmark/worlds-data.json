@@ -1222,5 +1222,23 @@
       "continuity": "Preserves the Korrun body plan, resonator throats, opaline wet skin, basalt tuning ribs, brine-glass vessels, wet clay memory tiles, shell-horn tools, rose salt fog, and black-green tidal mud.",
       "entryDescription": "A quiet Kettle-Glass Hospice chamber where elders rest in warm brine pools while caregivers tune basalt ribs and clay memory tiles for comfort."
     }
+  },
+  {
+    "id": "2026-06-26-weekly-world-image-korrun-silt-choir-thrum-gate-nursery-nap",
+    "title": "Korrun Silt Choir: Thrum Gate Nursery Nap Tide",
+    "tests": "Generated with openai/gpt-image-2 via OpenClaw CLI; verified exact same-run PNG path exists and is non-empty before append; weekly-world-only archive append converted/uploaded JPEG.",
+    "prompt": "Create a finished realistic photograph from Korrun Silt Choir showing Thrum Gate Nursery during nap tide: an open-sided tidal nursery on thunder-polished basalt ribs, reed pressure-wrap hammocks above pale jade brine pools, floating pumice toys, silt-ceramic rails, brine-glass bowls on tripods, copper sunrise haze, rose salt fog, and non-human amphibious caregivers with low oval bodies, six jointed walking limbs, two paddle-limbs, ridged resonator throats, wet opaline skin, crown-like sensory whiskers, and small black bead eyes quietly tending sleeping young. Show pressure-harp bridge tuning, foot-drummed calming ripples, wet clay memory tiles, bone-white frequency markers, copper-veined kelp mats, bladder-root nursery floats, shell-horn tools, bell buoys, and floating pumice garden fragments. Render as a square documentary natural-history photograph, eye-level from inside the nursery, 35mm lens feel, tactile wet reflections, humid air, practical wear, and no visible text, humans, Earth wetland props, mushrooms, spores, generic cyberpunk neon, logos, or watermark.\n\nReusable fill-in-the-blank template: Create a finished realistic photographed daily-life scene from [WEEKLY_WORLD_NAME] showing [SPECIFIC PLACE OR ROUTINE], anchored in the world's established geography, materials, non-human inhabitants, ecology, lighting, and recurring motifs. Make the scene lived-in and practical, with [FOREGROUND DETAIL], [MIDGROUND ACTION], and [BACKGROUND WORLD CUE]. Preserve continuity for [INHABITANT BODY PLAN], [TECHNOLOGY/MATERIALS], [PALETTE/LIGHTING], and [HARD AVOIDS]. Avoid prompt-card text, generic Earth settings, stock sci-fi interiors, logos, watermarks, and incoherent anatomy.\n\nWhat this reusable operation emphasizes: translating an alien-world bible into a concrete photographed slice of ordinary life while preserving creature design, materials, lighting, ecology, and social behavior.\n\nExample substitution: Create a finished realistic photographed daily-life scene from Korrun Silt Choir showing a tidal nursery nap hour, with reed hammocks, amphibious caregivers, pressure-harp bridge tuning, basalt ribs, brine-glass bowls, rose salt fog, and a copper low sun.",
+    "image": "images/2026-06-26-weekly-world-image-korrun-silt-choir-thrum-gate-nursery-nap.jpg",
+    "date": "2026-06-26",
+    "batch": "Daily Prompt",
+    "slot": "weekly_world_image",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "world": {
+      "name": "Korrun Silt Choir",
+      "description": "A resonant tidal alien world where amphibious many-limbed inhabitants shape cities, domestic life, memory, and weather through sung mineral mudflats, brine-glass, basalt tuning ribs, and slow prism tides.",
+      "continuity": "Preserves Korrun Silt Choir's black-green tidal basins, basalt ribs, rose salt fog, brine-glass, silt ceramic, reed pressure wraps, bell buoys, pumice gardens, and non-human amphibious inhabitants with resonator throats, six walking limbs, paddle-limbs, opaline wet skin, sensory whiskers, and bead eyes.",
+      "entryDescription": "A nursery nap-tide scene where Korrun caregivers tend sleeping young in reed hammocks above rising brine while tuning pressure-harp structures and foot-drumming calming ripples."
+    }
   }
 ]
