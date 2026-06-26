@@ -217,13 +217,13 @@ function makePlayer() {
 
 function reset(practice=false) {
   cleanup();
-  Object.assign(state,{ running:true, practice, ended:false, t:0, score:0, wave:1, shapeIndex:0, hull:100, zaps:0, combo:0, bestCombo:0, pulse:0, pulseCooldown:0, lane:0, targetLane:0, laneVel:0, fireTimer:0, spawnTimer:practice?1.1:.55, messageUntil:0 });
+  Object.assign(state,{ running:true, practice, ended:false, t:0, score:0, wave:1, shapeIndex:0, hull:100, zaps:0, combo:0, bestCombo:0, pulse:0, pulseCooldown:0, lane:0, targetLane:0, laneVel:0, fireTimer:0, spawnTimer:practice?2.4:1.8, messageUntil:0 });
   player = makePlayer();
   makeWeb();
   makeStars();
-  makeEnemy(0, -22, "crawler");
-  makeEnemy(9, -52, "weaver");
-  makeEnemy(13, -68, "splitter");
+  makeEnemy(0, -54, "crawler");
+  makeEnemy(9, -74, "weaver");
+  makeEnemy(13, -88, "splitter");
   ui.overlay.classList.add("hidden"); ui.over.classList.add("hidden");
   toast(practice ? "Practice web online." : "Tempest web online.");
 }
@@ -289,7 +289,7 @@ function makeEnemy(lane=Math.floor(rand(lanes)), z=farZ-rand(9,0), typeKey=choos
   const root = new THREE.Group();
   root.add(enemyVisual(typeKey, type.color));
   scene.add(root);
-  const speed = ((state.practice ? 8.5 : 10.5) + state.wave * .55 + rand(2.4,0)) * type.speed * (child ? 1.18 : 1);
+  const speed = ((state.practice ? 4.2 : 5.3) + state.wave * .34 + rand(.95,0)) * type.speed * (child ? 1.08 : 1);
   const enemy = { root, lane, baseLane:lane, z, speed, color:type.color, spin:rand(2.2,.8)*type.spin, typeKey, type, hp:type.hp, child, phase:rand(Math.PI*2), laneShift:0 };
   enemies.push(enemy);
   return enemy;
@@ -506,9 +506,9 @@ function update(dt) {
   state.pulseCooldown = Math.max(0, state.pulseCooldown - dt);
   if (pointer.down || keys.has("Space")) fire();
   state.spawnTimer -= dt;
-  const spawnRate = Math.max(.34, (state.practice?1.05:.78) - state.wave*.045);
-  if (state.spawnTimer <= 0) { makeEnemy(); state.spawnTimer = spawnRate + rand(.45,0); }
-  const nextWave = 1 + Math.floor(state.score / 2200);
+  const spawnRate = Math.max(.82, (state.practice?1.75:1.28) - state.wave*.035);
+  if (state.spawnTimer <= 0) { makeEnemy(); state.spawnTimer = spawnRate + rand(.65,0); }
+  const nextWave = 1 + Math.floor(state.score / 2800);
   if (nextWave !== state.wave) {
     state.wave = nextWave;
     const nextShape = (state.wave - 1) % shapes.length;
@@ -556,7 +556,7 @@ function update(dt) {
       e.dead = true;
       state.combo = 0;
       const bomber = e.typeKey === "bomber";
-      state.hull -= state.practice ? (dist<=1?7:3) + (bomber?4:0) : (dist<=1?18:7) + (bomber?8:0);
+      state.hull -= state.practice ? (dist<=1?6:2) + (bomber?4:0) : (dist<=1?14:5) + (bomber?8:0);
       burst(e.root.position, red, bomber?48:dist<=1?34:16);
       toast(bomber ? "Bomber breach." : dist<=1 ? "Rim impact." : "Web damage.", .9);
       if (state.hull <= 0) endRun();
