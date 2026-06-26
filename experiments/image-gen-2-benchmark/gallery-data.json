@@ -2325,5 +2325,41 @@
       "description": "A rooftop greenhouse maintenance scene rebuilt as tactile cube-based voxel art.",
       "template": "Render [SUBJECT] as a richly detailed [STYLE_OR_MEDIUM] image with tactile format-specific marks, clear subject silhouette, environmental context, and no prompt-card text."
     }
+  },
+  {
+    "id": "2026-06-25-hybrid-creature-infographic-blue-fen-strider-development-ma",
+    "title": "Blue Fen Strider: Development Map",
+    "tests": "GPT Image 2 hybrid-creature development map; fictional and non-actionable; landscape scientific wall chart; exact generated PNG converted to JPEG and uploaded to R2.",
+    "prompt": "Colorful photorealistic speculative scientific development-map infographic for the fictional Blue Fen Strider strain. Show a clearly non-actionable trait arc from small marsh juvenile to adult phenotype: a tall wading adult with backward-bending knees, long stiltlike legs, broad paddle feet spreading into mud, a flexible cranial crest used for balance and display, narrow shoulders, reduced forelimbs folded close to the chest, and blue-gray pebbled wet hide. Landscape scientific wall-chart composition with photorealistic specimen panels, macro skin texture panels, anatomical tinting, microscopy-inspired colors, reed-fen habitat swatches, and concise clean labels only. Make the panel hierarchy vivid and organized, with turquoise, marsh green, pale amber, and slate-blue coding. Clearly fictional xenobiology; no real gene names, no lab protocol steps, no equipment instructions, no surgery, no gore, no dark evidence-board style, no prompt-card text. Reusable template: Create a fictional hybrid-creature pair: first a colorful photorealistic speculative development-map infographic with non-actionable trait logic, then a matching in-the-wild field photo of the same adult phenotype. Example substitution: [HYBRID_NAME]=Blue Fen Strider, [HABITAT]=reed-choked fen, [ADULT_PHENOTYPE]=tall wading adult with backward-bending knees, paddle feet, cranial crest, and blue-gray pebbled hide.",
+    "image": "images/2026-06-25-hybrid-creature-infographic-blue-fen-strider-development-ma.jpg",
+    "date": "2026-06-25",
+    "batch": "Daily Prompt",
+    "slot": "hybrid-creature-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "hybridCreature": {
+      "name": "Blue Fen Strider",
+      "imageKind": "infographic",
+      "description": "Fictional strain with a tall wading adult, backward-bending knees, paddle feet, flexible cranial crest, and blue-gray pebbled hide adapted to reed-choked fens.",
+      "continuity": "Same adult phenotype across both images: tall wading body, backward-bending knees, long stiltlike legs, broad paddle feet, flexible cranial crest, narrow shoulders, folded reduced forelimbs, and blue-gray pebbled wet hide in a reed-choked fen."
+    }
+  },
+  {
+    "id": "2026-06-25-hybrid-creature-wild-blue-fen-strider-in-the-wild",
+    "title": "Blue Fen Strider: In the Wild",
+    "tests": "GPT Image 2 hybrid-creature field photo; same fictional adult phenotype as the development map; exact generated PNG converted to JPEG and uploaded to R2.",
+    "prompt": "Photorealistic in-the-wild expedition field photo of the fictional adult Blue Fen Strider in a reed-choked fen at blue hour. Preserve the exact adult phenotype from the development map: tall wading body, backward-bending knees, very long stiltlike legs planted in black mud, broad paddle feet spreading among reeds, flexible cranial crest arcing backward, narrow shoulders, reduced forelimbs folded close to the chest, and blue-gray pebbled wet hide with subtle turquoise sheen. Show it in side-profile and slightly below eye level, walking through shallow water with ripples around the paddle feet, reeds parting around its legs, mist, reflected sky, wet skin detail, and documentary telephoto realism. It should read as a believable fictional gene-splicing outcome, not a person in costume and not an ordinary animal. No people, no text, no labels, no gore, no lab setting, no centered studio product pose. Reusable template: Create a fictional hybrid-creature pair: first a colorful photorealistic speculative development-map infographic with non-actionable trait logic, then a matching in-the-wild field photo of the same adult phenotype. Example substitution: [HYBRID_NAME]=Blue Fen Strider, [HABITAT]=reed-choked fen, [ADULT_PHENOTYPE]=tall wading adult with backward-bending knees, paddle feet, cranial crest, and blue-gray pebbled hide.",
+    "image": "images/2026-06-25-hybrid-creature-wild-blue-fen-strider-in-the-wild.jpg",
+    "date": "2026-06-25",
+    "batch": "Daily Prompt",
+    "slot": "hybrid-creature-wild",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "hybridCreature": {
+      "name": "Blue Fen Strider",
+      "imageKind": "wild",
+      "description": "Fictional strain with a tall wading adult, backward-bending knees, paddle feet, flexible cranial crest, and blue-gray pebbled hide adapted to reed-choked fens.",
+      "continuity": "Same adult phenotype across both images: tall wading body, backward-bending knees, long stiltlike legs, broad paddle feet, flexible cranial crest, narrow shoulders, folded reduced forelimbs, and blue-gray pebbled wet hide in a reed-choked fen."
+    }
   }
 ]
