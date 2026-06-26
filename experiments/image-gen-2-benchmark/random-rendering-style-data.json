@@ -32,5 +32,22 @@
       "description": "A rooftop greenhouse maintenance scene rebuilt as tactile cube-based voxel art.",
       "template": "Render [SUBJECT] as a richly detailed [STYLE_OR_MEDIUM] image with tactile format-specific marks, clear subject silhouette, environmental context, and no prompt-card text."
     }
+  },
+  {
+    "id": "2026-06-26-random-image-style-scratchboard-night-kitchen",
+    "title": "Scratchboard Night Kitchen",
+    "tests": "Generated with openai/gpt-image-2 via OpenClaw CLI; exact source PNG verified under tool-image-generation; appended as random rendering style and converted/uploaded to R2 by append-entry.py.",
+    "prompt": "Render a cramped late-night apartment galley kitchen as a richly detailed scratchboard illustration. The scene is built from black ink with carved white linework and a few restrained warm amber and dull teal hand-tinted accents: an open enamel sink with stacked mugs, a checked dish towel, a tiny windowsill herb pot, steam curling from a dented kettle, tiled backsplash cracks, hanging utensils, a loaf of bread under a cloth, a small table fan, magnets on the refrigerator with no readable text, rain streaks on the dark window, and pools of lamplight scraped out of the black surface. Make the scratchboard medium unmistakable: dense cross-hatched cuts, burr-like scraped highlights, stippled metal reflections, white edge glints on ceramic and glass, uneven hand-engraved textures, and strong graphic silhouettes. Finished visual example only, no captions, no labels, no prompt-card text, no logos, no watermarks, no cinematic movie framing, no people.\n\nReusable template: Render [SUBJECT] as a richly detailed [STYLE_OR_MEDIUM] image with tactile format-specific marks, clear subject silhouette, environmental context, and no prompt-card text.\n\nOperation: changes the subject into a finished style/medium showcase where the medium controls geometry, texture, lighting, and surface detail rather than acting like a light filter.\n\nNegative constraints: no readable private data, no logos, no watermarks, no prompt cards, no incoherent anatomy, no generic centered product photo.\n\nExample substitution: Render a cramped late-night apartment galley kitchen as a richly detailed scratchboard illustration with black ink, carved white linework, amber and dull teal hand-tinted accents, rain-streaked window, enamel sink, steam, utensils, and dense scraped highlights.",
+    "image": "images/2026-06-26-random-image-style-scratchboard-night-kitchen.jpg",
+    "date": "2026-06-26",
+    "batch": "Daily Prompt",
+    "slot": "random-image-style",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1536",
+    "randomRenderingStyle": {
+      "medium": "scratchboard",
+      "description": "A cramped late-night kitchen rendered in carved black-and-white scratchboard with restrained hand-tinted accents.",
+      "template": "Render [SUBJECT] as a richly detailed [STYLE_OR_MEDIUM] image with tactile format-specific marks, clear subject silhouette, environmental context, and no prompt-card text."
+    }
   }
 ]
