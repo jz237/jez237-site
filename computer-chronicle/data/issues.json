@@ -1,8 +1,418 @@
 {
-  "generatedAt": "2026-06-25T12:02:13.681Z",
+  "generatedAt": "2026-06-26T12:00:00.000Z",
   "editorialPriority": "When there is a choice, prefer personal computers, home computing, office PC software, and personal computer or console gaming over broad enterprise technology.",
   "fallbackPolicy": "Use exact-day computer news when verified. If none exists, use same-week or same-month personal-computing items with confidence labels, then fall back to a wider world/business headline.",
   "issues": [
+    {
+      "currentDate": "2026-06-26",
+      "historicDate": "1983-01-03",
+      "displayDate": "Week of January 3-9, 1983",
+      "edition": "Issue 023 - Weekly 1982 Computer & Culture Chronicle",
+      "visualProfile": "Aged 1980s computer-weekly front page with red and blue section furniture, halftone computer-store art, cartridge cues, CES trade-show energy, and dense newsprint columns.",
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "Personal Computers, Video Games, Software, and Pop Culture",
+        "dateline": "Week of January 3-9, 1983",
+        "price": "35 cents"
+      },
+      "layoutPlan": "Machine-of-the-Year lead with gaming and store-shelf rails; sidebars for charts, box office, software, prices, and short technical briefs.",
+      "sectionChrome": {
+        "primary": "red rule",
+        "secondary": "blue rule",
+        "texture": "warm newsprint"
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1983-01-03.png",
+        "alt": "GPT Image 2 vintage newspaper front page for the Computer Chronicle week of January 3-9, 1983",
+        "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data for the week of January 3-9, 1983.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "The first week of 1983 keeps the personal computer on the newsstand: TIME makes the machine the symbol of 1982 while stores sell budget BASIC machines, cartridges, and IBM PC software to new owners.",
+      "morningLine": "The new year opens with computers on magazine covers, cartridges in living rooms, and shoppers learning the price difference between starter micros and office PCs.",
+      "lead": {
+        "headline": "Machine of the Year Sends Home Computers Into 1983",
+        "summary": "TIME’s Jan. 3 issue names the computer its Machine of the Year, turning 1982’s surge of home micros, IBM PCs, school machines, and game cartridges into a mainstream newsstand story for the first shopping week of 1983.",
+        "confidence": "High for TIME issue date and framing; retail emphasis is week-context from period hardware and game-market sources.",
+        "sourceRefs": [
+          0,
+          1,
+          2,
+          3
+        ]
+      },
+      "computerItems": [
+        {
+          "title": "TIME puts the computer where Person of the Year used to stand",
+          "summary": "The Jan. 3, 1983 issue treats the computer as the defining force of 1982, emphasizing its spread through homes, schools, and offices.",
+          "confidence": "High",
+          "sourceRefs": [
+            0,
+            1
+          ]
+        },
+        {
+          "title": "Starter machines make BASIC a counter-top promise",
+          "summary": "Timex Sinclair 1000, VIC-20, and Commodore 64 price points show how stores can sell programming and games to first-time families at very different budgets.",
+          "confidence": "High for models and period prices cited by TIME.",
+          "sourceRefs": [
+            1
+          ]
+        },
+        {
+          "title": "Atari warning chills the game boom’s new year",
+          "summary": "After Atari lowered expectations in December, trade coverage enters January with concern that the cartridge rush may be less stable than holiday aisles suggest.",
+          "confidence": "Medium; January trade reporting ties the warning to late-1982 events.",
+          "sourceRefs": [
+            2,
+            3
+          ]
+        },
+        {
+          "title": "IBM PC owners look for serious software and simulations",
+          "summary": "VisiCalc and Microsoft Flight Simulator remain shorthand for the office-and-hobby split that makes the IBM PC more than a business box.",
+          "confidence": "High for software availability; week placement is period context.",
+          "sourceRefs": [
+            1,
+            8,
+            9
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "VisiCalc",
+          "detail": "Apple II / personal computers: The spreadsheet remains the business-software shorthand for why offices buy micros.",
+          "confidence": "High",
+          "sourceRefs": [
+            1
+          ]
+        },
+        {
+          "name": "Microsoft Flight Simulator 1.0",
+          "detail": "IBM PC: A serious simulation showpiece for IBM PC owners.",
+          "confidence": "High",
+          "sourceRefs": [
+            9
+          ]
+        },
+        {
+          "name": "Choplifter!",
+          "detail": "Apple II / Atari family: Broderbund action game with strong computer-store visibility.",
+          "confidence": "High",
+          "sourceRefs": [
+            8
+          ]
+        },
+        {
+          "name": "River Raid",
+          "detail": "Atari VCS / 2600: Activision shooter gives console shelves a strong late-1982 title.",
+          "confidence": "High",
+          "sourceRefs": [
+            7
+          ]
+        },
+        {
+          "name": "Pac-Man",
+          "detail": "Atari VCS / 2600: The arcade name remains a mass-market cartridge draw even as players debate the home version.",
+          "confidence": "High",
+          "sourceRefs": [
+            10
+          ]
+        }
+      ],
+      "storeShelves": [
+        {
+          "item": "Timex Sinclair 1000",
+          "price": "$99 list",
+          "note": "Low-cost BASIC entry machine highlighted by TIME.",
+          "sourceRefs": [
+            1
+          ]
+        },
+        {
+          "item": "Commodore VIC-20",
+          "price": "$299 list",
+          "note": "Aggressively marketed color home computer.",
+          "sourceRefs": [
+            1
+          ]
+        },
+        {
+          "item": "Commodore 64",
+          "price": "about $595 list",
+          "note": "64K color computer moving from launch buzz into retail competition.",
+          "sourceRefs": [
+            1
+          ]
+        },
+        {
+          "item": "Atari VCS cartridges",
+          "price": "varies by title and store",
+          "note": "Holiday buyers carry arcade-name cartridge demand into January.",
+          "sourceRefs": [
+            3,
+            7,
+            10
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "Timex Sinclair 1000",
+          "price": "$99",
+          "confidence": "High",
+          "sourceRefs": [
+            1
+          ],
+          "note": "High"
+        },
+        {
+          "item": "Commodore VIC-20",
+          "price": "$299",
+          "confidence": "High",
+          "sourceRefs": [
+            1
+          ],
+          "note": "High"
+        },
+        {
+          "item": "Commodore 64",
+          "price": "about $595",
+          "confidence": "High",
+          "sourceRefs": [
+            1
+          ],
+          "note": "High"
+        },
+        {
+          "item": "IBM Personal Computer",
+          "price": "complete systems often cost far above base unit pricing",
+          "confidence": "Medium; configuration-dependent.",
+          "sourceRefs": [
+            1
+          ],
+          "note": "Medium; configuration-dependent."
+        }
+      ],
+      "market": {
+        "headline": "Computer boom gets a cover story while games face questions",
+        "summary": "The home-computer market enters 1983 with broad cultural momentum, but the video-game business carries investor nerves after Atari’s December warning.",
+        "confidence": "Medium",
+        "sourceRefs": [
+          0,
+          1,
+          2
+        ]
+      },
+      "bbsNote": "Local modem culture remains a hobbyist lane: owners trade BASIC listings, game hints, and club notices over slow dial-up connections.",
+      "curiosity": "TIME’s Jan. 3 issue marks a cultural turn by choosing the computer as Machine of the Year instead of naming a traditional person of the year.",
+      "briefs": [
+        {
+          "headline": "CES week puts electronics buyers on alert",
+          "summary": "January trade-show season keeps dealers watching computers, game systems, peripherals, and cartridge lines for the year ahead.",
+          "confidence": "Medium; broad trade-show timing, not a single product announcement.",
+          "sourceRefs": [
+            2,
+            3
+          ]
+        },
+        {
+          "headline": "Computer clubs start the year with BASIC nights",
+          "summary": "User groups continue swapping typed-in programs, cassette tips, and printer advice as new owners bring holiday machines home.",
+          "confidence": "Medium; representative hobbyist practice.",
+          "sourceRefs": [
+            1
+          ]
+        },
+        {
+          "headline": "Arcade names still sell the home shelf",
+          "summary": "Pac-Man, Donkey Kong, River Raid, and Choplifter! remain recognizable anchors for shoppers comparing computer and console games.",
+          "confidence": "High for titles; exact weekly ranking varies by market.",
+          "sourceRefs": [
+            7,
+            8,
+            10
+          ]
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "Maneater",
+          "artist": "Daryl Hall & John Oates"
+        },
+        {
+          "rank": 2,
+          "title": "Down Under",
+          "artist": "Men at Work"
+        },
+        {
+          "rank": 3,
+          "title": "The Girl Is Mine",
+          "artist": "Michael Jackson & Paul McCartney"
+        },
+        {
+          "rank": 4,
+          "title": "Mickey",
+          "artist": "Toni Basil"
+        },
+        {
+          "rank": 5,
+          "title": "Dirty Laundry",
+          "artist": "Don Henley"
+        }
+      ],
+      "movieChart": [
+        {
+          "rank": 1,
+          "title": "Tootsie"
+        },
+        {
+          "rank": 2,
+          "title": "48 Hrs."
+        },
+        {
+          "rank": 3,
+          "title": "The Dark Crystal"
+        },
+        {
+          "rank": 4,
+          "title": "The Toy"
+        },
+        {
+          "rank": 5,
+          "title": "The Verdict"
+        }
+      ],
+      "periodAd": {
+        "headline": "New Year Computer Sale",
+        "summary": "Start with BASIC, a cassette recorder, and a beginner book. Ask about memory packs, joysticks, printer cables, and game cartridges.",
+        "style": "small boxed electronics-store advertisement"
+      },
+      "classifieds": [
+        {
+          "headline": "Wanted",
+          "copy": "Apple II games and manuals; will trade blank disks or BASIC books."
+        },
+        {
+          "headline": "For Sale",
+          "copy": "Used Atari VCS with paddles and assorted cartridges; call evenings."
+        }
+      ],
+      "worldFallback": null,
+      "accuracyLedger": {
+        "items": [
+          {
+            "claim": "TIME Jan. 3, 1983 computer Machine of the Year issue and hardware guide",
+            "status": "verified",
+            "sourceRefs": [
+              0,
+              1
+            ]
+          },
+          {
+            "claim": "Jan. 7-9 box-office ranking led by Tootsie",
+            "status": "verified",
+            "sourceRefs": [
+              5
+            ]
+          },
+          {
+            "claim": "Billboard Hot 100 for week of Jan. 8, 1983 led by Maneater",
+            "status": "verified",
+            "sourceRefs": [
+              6
+            ]
+          },
+          {
+            "claim": "Game-market caution tied to Atari and Imagic",
+            "status": "reported shortly after week, tied to late-1982 and early-1983 trade coverage",
+            "sourceRefs": [
+              2
+            ]
+          }
+        ]
+      },
+      "sources": [
+        {
+          "title": "TIME archive: The Computer, Machine of the Year, Jan. 3, 1983",
+          "url": "https://content.time.com/time/front-pages/0,16641,19830103,00.html",
+          "note": "magazine front-page archive"
+        },
+        {
+          "title": "TIME: The Hottest-Selling Hardware, Jan. 3, 1983",
+          "url": "https://time.com/archive/6699322/the-hottest-selling-hardware/",
+          "note": "period hardware guide"
+        },
+        {
+          "title": "Arcade Express, Volume 1 Number 12, Jan. 16, 1983",
+          "url": "https://www.digitpress.com/library/newsletters/arcadeexpress/arcade_express_v1n12a.pdf",
+          "note": "electronic games trade newsletter reporting Atari and Imagic fallout"
+        },
+        {
+          "title": "Christian Science Monitor: Zap! Pow! Video games sparkle in holiday market, Dec. 10, 1982",
+          "url": "https://www.csmonitor.com/1982/1210/121043.html",
+          "note": "holiday video-game retail context"
+        },
+        {
+          "title": "Box Office Mojo: Domestic 1983 Weekend 1",
+          "url": "https://www.boxofficemojo.com/weekend/1983W01/",
+          "note": "weekend chart for Jan. 7-9, 1983"
+        },
+        {
+          "title": "Box Office Mojo: Domestic 1983 Weekend 2",
+          "url": "https://www.boxofficemojo.com/weekend/1983W02/",
+          "note": "alternate index for early January 1983 weekend verification"
+        },
+        {
+          "title": "Billboard Hot 100, week of Jan. 8, 1983",
+          "url": "https://www.billboard.com/charts/hot-100/1983-01-08/",
+          "note": "weekly singles chart"
+        },
+        {
+          "title": "MobyGames: River Raid",
+          "url": "https://www.mobygames.com/game/8244/river-raid/",
+          "note": "period game release reference"
+        },
+        {
+          "title": "MobyGames: Choplifter!",
+          "url": "https://www.mobygames.com/game/185/choplifter/",
+          "note": "period computer game reference"
+        },
+        {
+          "title": "MobyGames: Microsoft Flight Simulator 1.0",
+          "url": "https://www.mobygames.com/game/504/microsoft-flight-simulator-v10/",
+          "note": "IBM PC software reference"
+        },
+        {
+          "title": "AtariAge: Atari 2600 Pac-Man",
+          "url": "https://www.atariage.com/software_page.php?SoftwareLabelID=340",
+          "note": "1982 console game reference"
+        }
+      ],
+      "pictureDesk": [],
+      "frontPageStories": [
+        {
+          "headline": "Machine of the Year Sends Computers Into 1983",
+          "summary": "TIME’s cover story meets store-counter reality as small computers, IBM PCs, and cartridge systems become mainstream purchases.",
+          "sourceRefs": [
+            0,
+            1,
+            3
+          ]
+        },
+        {
+          "headline": "Atari Warning Rattles Game Boom",
+          "summary": "December’s lowered Atari outlook and Imagic’s delayed offering hint at pressure under the cartridge rush.",
+          "sourceRefs": [
+            2
+          ]
+        }
+      ],
+      "musicChartSourceRefs": [
+        6
+      ]
+    },
     {
       "currentDate": "2026-06-25",
       "historicDate": "1982-12-27",
