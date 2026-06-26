@@ -2373,5 +2373,22 @@
     "slot": "historical-recreation",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-06-26-factual-infographic-factual-infographic-how-a-honeybee-wagg",
+    "title": "Factual infographic: How a Honeybee Waggle Dance Shares a Food Location",
+    "tests": "Daily factual infographic slot; real-world/non-fiction honeybee communication infographic; conservative evergreen facts; no invented statistics, fictional claims, or brand marks.",
+    "prompt": "Create a finished square factual infographic titled HOW A HONEYBEE WAGGLE DANCE SHARES A FOOD LOCATION. Real-world non-fiction only. Show a richly detailed but clean scientific wall-chart style composition with accurate conservative concepts: a honeycomb surface with one worker bee making a straight waggle run, curved return loops back to the start, attentive nestmate bees touching antennae nearby, a small sun-angle reference panel showing that the dance angle relates to the direction of the food source relative to the sun, a distance-cue panel showing longer/more vigorous waggle runs meaning farther food in general, a floral food-source panel, and a small hive-context cutaway. Use photorealistic bee and comb panels combined with restrained vector arrows, warm amber comb colors, black-and-gold bee anatomy, pale blue daylight inset, magnified texture windows for wax cells, pollen grains, antennae, and wing veins. Include concise natural infographic labels only, such as waggle run, return loop, sun angle, food direction, distance cue, nestmate attention, comb surface, and nectar source. Keep it readable, accurate, conservative, organized, and visually dense, like a museum science display photographed under soft even light. Avoid invented statistics, fake exact numbers, fictional claims, brand logos, private data, QR codes, barcodes, watermark, prompt instructions, placeholder boxes, cartoon bees, horror, or cluttered nonsense text.\n\nSource photo needed: none.\n\nReusable fill-in-the-blank template: Create a factual detailed infographic about [REAL_WORLD_TOPIC], using conservative real-world information, clean labels, cutaway panels, magnified detail windows, process arrows, and visual relationship diagrams. Preserve accurate factual relationships, key parts, sequence, scale relationships, and any supplied real data; change the panel structure, color coding, icon language, material callouts, and photographic detail treatment to fit [REAL_WORLD_TOPIC]. Avoid invented statistics, fictional claims, brand logos, private data, watermarks, prompt-card framing, and unreadable filler text.\n\nWhat the reusable visual operation changes or emphasizes: it turns a real-world process into a dense museum-style explanatory infographic with photorealistic subject panels, concise labels, arrows, context cutaways, and magnified texture/detail windows.\n\nExample substitution: [REAL_WORLD_TOPIC] = honeybee waggle dance communication; include the comb surface, waggle run, return loop, sun-angle relationship, distance cue concept, nestmate attention, nectar source, and hive context.",
+    "image": "images/2026-06-26-factual-infographic-factual-infographic-how-a-honeybee-wagg.jpg",
+    "date": "2026-06-26",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "factualInfographic": {
+      "topic": "honeybee waggle dance communication",
+      "description": "Explains how a worker honeybee's waggle run, return loops, dance angle, and waggle duration/vigor communicate food direction and general distance to nestmates.",
+      "sourceNote": "Conservative general entomology knowledge; avoids fake exact statistics and presents only widely accepted concepts."
+    }
   }
 ]
