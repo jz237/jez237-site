@@ -368,9 +368,9 @@ function shotArrowGeometry(visualLane, z, length=.9) {
 
 function fire() {
   if (state.fireTimer > 0) return;
-  state.fireTimer = .145;
+  state.fireTimer = .26;
   const lane = Math.round(state.lane + lanes * 1000) % lanes;
-  for (const [nudge, zOffset, color, speed] of [[0,0,cyan,96],[-.11,.72,gold,91],[.11,1.42,pink,88],[.055,2.08,green,86]]) {
+  for (const [nudge, zOffset, color, speed] of [[0,0,cyan,82],[.045,.62,gold,76]]) {
     const visualLane = lane + nudge;
     const mesh = new THREE.LineSegments(shotArrowGeometry(visualLane, nearZ - 3.2 - zOffset, .88), basic(color, .95));
     scene.add(mesh);
@@ -494,7 +494,6 @@ function controls(dt) {
   }
   let delta = ((state.targetLane - state.lane + lanes * 1.5) % lanes) - lanes * .5;
   state.lane = (state.lane + delta * Math.min(1, dt*13) + lanes * 1000) % lanes;
-  if (keys.has("Space")) state.fireTimer = Math.min(state.fireTimer, .03);
 }
 
 function update(dt) {
@@ -508,7 +507,7 @@ function update(dt) {
   state.spawnTimer -= dt;
   const spawnRate = Math.max(.82, (state.practice?1.75:1.28) - state.wave*.035);
   if (state.spawnTimer <= 0) { makeEnemy(); state.spawnTimer = spawnRate + rand(.65,0); }
-  const nextWave = 1 + Math.floor(state.score / 2800);
+  const nextWave = 1 + Math.floor(state.score / 9000);
   if (nextWave !== state.wave) {
     state.wave = nextWave;
     const nextShape = (state.wave - 1) % shapes.length;
