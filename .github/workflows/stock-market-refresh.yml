@@ -2,7 +2,7 @@ name: Refresh Stock Market Data
 
 on:
   schedule:
-    - cron: "32 23 * * 1-5" # after regular U.S. market close
+    - cron: "31 13-21 * * 1-5" # hourly; gated below to 9:31 AM-4:31 PM Eastern
   workflow_dispatch:
 
 permissions:
@@ -20,10 +20,24 @@ jobs:
         with:
           node-version: "22"
 
+      - name: Check market refresh window
+        id: market_window
+        run: |
+          eastern_hour="$(TZ=America/New_York date +%H)"
+          eastern_minute="$(TZ=America/New_York date +%M)"
+          if [ "$eastern_minute" = "31" ] && [ "$eastern_hour" -ge 9 ] && [ "$eastern_hour" -le 16 ]; then
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "run=false" >> "$GITHUB_OUTPUT"
+            echo "Skipping outside 9:31 AM-4:31 PM Eastern refresh window."
+          fi
+
       - name: Refresh stock market data
+        if: steps.market_window.outputs.run == 'true' || github.event_name == 'workflow_dispatch'
         run: node scripts/refresh_stock_market_data.mjs
 
       - name: Commit changes (if any)
+        if: steps.market_window.outputs.run == 'true' || github.event_name == 'workflow_dispatch'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
