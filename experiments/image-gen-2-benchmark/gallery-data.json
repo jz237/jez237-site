@@ -2424,5 +2424,41 @@
       "description": "Believable invented tidal reed marsh animal with transparent lateral balance fins, vibration-sensing chin whiskers, and wet jade skin with copper speckles.",
       "template": "Design a believable [HABITAT] creature with [ADAPTATION 1], [ADAPTATION 2], and [TEXTURE/COLOR], shown as a realistic natural-history creature study."
     }
+  },
+  {
+    "id": "2026-06-26-hybrid-creature-infographic-quartzback-lantern-ape-developm",
+    "title": "Quartzback Lantern Ape: Development Map",
+    "tests": "Generated with GPT Image 2 primary OpenAI route; exact source PNG verified before append; hybrid development map includes two explicit sources, source-trait map, stage strip, adult specimen panel, macro texture panels, habitat swatches, and field-context vignette.",
+    "prompt": "Create a colorful photorealistic speculative development-map infographic for the fictional Quartzback Lantern Ape, a non-actionable two-source hybrid concept from gorilla + lanternfish. Show a landscape scientific wall chart with a central adult specimen panel, four-stage juvenile-to-adult strip, source-trait map, macro texture windows, moonlit mineral-forest habitat swatches, and a field-context scale vignette. Gorilla contributes heavy knuckle-walking forearms, broad chest, powerful shoulder posture, and ground-dwelling strength; lanternfish contributes glowing throat pouch, dark reflective skin, lateral light organs, and deep-blue mineral shimmer. Keep labels concise and fictional; no real genetics, lab protocols, equipment steps, surgery, or gore.\n\nReusable fill-in-the-blank template: Create a fictional two-source hybrid-creature pair for [HYBRID_NAME], using exactly [SOURCE_A] + [SOURCE_B]. First generate a colorful photorealistic scientific development-map infographic with a source-trait map, juvenile-to-adult stage strip, adult specimen panel, macro texture/color panels, habitat swatches, and field-context scale vignette. Then generate a matching in-the-wild field photo of the same adult phenotype in [HABITAT]. Keep it clearly fictional and non-actionable: no real gene names, no lab protocol steps, no surgery, no gore.\n\nExample substitution: [HYBRID_NAME] = Quartzback Lantern Ape; [SOURCE_A] = gorilla; [SOURCE_B] = lanternfish; [HABITAT] = moonlit mineral forest; adult phenotype = mostly animal-like knuckle-walker with heavy gorilla forearms, broad shoulders, low head carriage, dark reflective blue-black skin, glowing amber throat pouch, turquoise lateral light organs, and quartz-like shoulder plates.",
+    "image": "images/2026-06-26-hybrid-creature-infographic-quartzback-lantern-ape-developm.jpg",
+    "date": "2026-06-26",
+    "batch": "Daily Prompt",
+    "slot": "hybrid-creature-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "hybridCreature": {
+      "name": "Quartzback Lantern Ape",
+      "imageKind": "infographic",
+      "description": "Fictional non-actionable hybrid of gorilla + lanternfish: a mostly animal-like knuckle-walker with heavy forearms, dark reflective skin, glowing throat pouch, lateral light organs, and quartz-like shoulder plates in a moonlit mineral forest.",
+      "continuity": "Sources: gorilla + lanternfish. Same adult phenotype: mostly animal-like knuckle-walker with gorilla-like heavy forearms and shoulders, dark lanternfish shimmer, glowing throat pouch, lateral light organs, quartz shoulder plates, and low forward head carriage; same habitat: moonlit mineral forest."
+    }
+  },
+  {
+    "id": "2026-06-26-hybrid-creature-wild-quartzback-lantern-ape-in-the-wild",
+    "title": "Quartzback Lantern Ape: In the Wild",
+    "tests": "Generated with GPT Image 2 primary OpenAI route; exact source PNG verified before append; matching wild field photo preserves the same adult hybrid phenotype, source pair, and moonlit mineral-forest habitat continuity.",
+    "prompt": "Create a photorealistic in-the-wild expedition field photo of the fictional adult Quartzback Lantern Ape in a moonlit mineral forest, preserving the same two-source phenotype from gorilla + lanternfish. Show a mostly animal-like side-profile knuckle-walker crossing slick black stone roots, with gorilla-derived heavy forearms, broad shoulders, broad chest, low forward head carriage, powerful ground posture, and coarse dark forearm hair, plus lanternfish-derived dark reflective blue-black shimmer, a softly glowing amber throat pouch, small turquoise lateral light organs, deep-blue mineral sheen, and translucent quartz-like shoulder plates. No text, labels, lab setting, real genetics, surgery, gore, people, or costume look.\n\nReusable fill-in-the-blank template: Create a fictional two-source hybrid-creature pair for [HYBRID_NAME], using exactly [SOURCE_A] + [SOURCE_B]. First generate a colorful photorealistic scientific development-map infographic with a source-trait map, juvenile-to-adult stage strip, adult specimen panel, macro texture/color panels, habitat swatches, and field-context scale vignette. Then generate a matching in-the-wild field photo of the same adult phenotype in [HABITAT]. Keep it clearly fictional and non-actionable: no real gene names, no lab protocol steps, no surgery, no gore.\n\nExample substitution: [HYBRID_NAME] = Quartzback Lantern Ape; [SOURCE_A] = gorilla; [SOURCE_B] = lanternfish; [HABITAT] = moonlit mineral forest; adult phenotype = mostly animal-like knuckle-walker with heavy gorilla forearms, broad shoulders, low head carriage, dark reflective blue-black skin, glowing amber throat pouch, turquoise lateral light organs, and quartz-like shoulder plates.",
+    "image": "images/2026-06-26-hybrid-creature-wild-quartzback-lantern-ape-in-the-wild.jpg",
+    "date": "2026-06-26",
+    "batch": "Daily Prompt",
+    "slot": "hybrid-creature-wild",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "hybridCreature": {
+      "name": "Quartzback Lantern Ape",
+      "imageKind": "wild",
+      "description": "Fictional non-actionable hybrid of gorilla + lanternfish: a mostly animal-like knuckle-walker with heavy forearms, dark reflective skin, glowing throat pouch, lateral light organs, and quartz-like shoulder plates in a moonlit mineral forest.",
+      "continuity": "Sources: gorilla + lanternfish. Same adult phenotype: mostly animal-like knuckle-walker with gorilla-like heavy forearms and shoulders, dark lanternfish shimmer, glowing throat pouch, lateral light organs, quartz shoulder plates, and low forward head carriage; same habitat: moonlit mineral forest."
+    }
   }
 ]
