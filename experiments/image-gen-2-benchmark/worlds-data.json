@@ -1240,5 +1240,23 @@
       "continuity": "Preserves Korrun Silt Choir's black-green tidal basins, basalt ribs, rose salt fog, brine-glass, silt ceramic, reed pressure wraps, bell buoys, pumice gardens, and non-human amphibious inhabitants with resonator throats, six walking limbs, paddle-limbs, opaline wet skin, sensory whiskers, and bead eyes.",
       "entryDescription": "A nursery nap-tide scene where Korrun caregivers tend sleeping young in reed hammocks above rising brine while tuning pressure-harp structures and foot-drumming calming ripples."
     }
+  },
+  {
+    "id": "2026-06-26-weekly-world-image-korrun-silt-choir-silt-archive-harbor-fi",
+    "title": "Korrun Silt Choir: Silt Archive Harbor Filing Tide",
+    "tests": "Weekly-world image slot for Korrun Silt Choir; generated via openai/gpt-image-2 primary OpenClaw CLI on first attempt; exact output path verified before append; realistic photographed alien world-life scene with no document layout.",
+    "prompt": "Create a finished realistic square photograph from the invented weekly world Korrun Silt Choir: Silt Archive Harbor Filing Tide. Show non-human amphibious archivists carrying wet clay memory tiles from shallow sled ferries into a harbor archive during a retreating prism tide. The inhabitants have low oval bodies, six jointed walking limbs, two wide paddle-limbs, ridged resonator throats, wet opaline skin, crown-like sensory whiskers, small black bead eyes, and subtle color changes along side membranes. The setting is a black-green tidal basin with terraced basalt ribs, mirror-brine pools, rose salt fog, bell-buoy navigation racks, mud-elevator locks, brine-glass rain shields, sintered silt-ceramic shelves, woven reed pressure wraps, pumice flotation blocks, shell-horn handling tools, and delicate tripods holding domestic objects above the tide. Make the archive feel lived-in and functional: stacks of damp memory tiles with ripple impressions, archivists using padded reed slings, water draining through basalt channels, a ferry worker adjusting a vibrating fin-keel, clay-handling trays, mineral lacquer repairs, wet footprints, opal highlights on skin, copper sunrise haze, pale jade pools, bone-white frequency markers without readable text, and dense tactile surface detail. Photographed field-documentary style with believable lens depth, low-angle tidal reflections, practical wear, wet ceramic texture, and coherent alien scale cues. No humans, no astronauts, no Earth wetland normality, no mushrooms or spores, no generic cyberpunk, no medieval fantasy village, no horror, no brand logos, no readable labels, no prompt-card text, no poster or document layout.",
+    "image": "images/2026-06-26-weekly-world-image-korrun-silt-choir-silt-archive-harbor-fi.jpg",
+    "date": "2026-06-26",
+    "batch": "Daily Prompt",
+    "slot": "weekly_world_image",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "world": {
+      "name": "Korrun Silt Choir",
+      "description": "A tidal alien world where cities, memory, and weather are shaped by resonant mineral mudflats sung into structure by many-legged amphibious inhabitants.",
+      "continuity": "Preserves Korrun Silt Choir's resonant tidal mudflats, basalt ribs, brine-glass, silt ceramic, bell buoys, wet clay memory tiles, and non-human amphibious inhabitants.",
+      "entryDescription": "Archivists move wet clay memory tiles from sled ferries into a harbor archive during a retreating prism tide."
+    }
   }
 ]
