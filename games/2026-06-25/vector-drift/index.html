@@ -24,8 +24,9 @@ h1{margin:0 0 8px;font-size:clamp(2.55rem,10vw,5.6rem);line-height:.84;letter-sp
 .stick{display:none}
 .toast{position:fixed;left:50%;bottom:166px;z-index:6;transform:translateX(-50%) translateY(16px);max-width:min(680px,92vw);padding:10px 14px;border:1px solid rgba(136,232,255,.22);border-radius:8px;background:rgba(3,7,18,.78);color:#eaffff;font-size:13px;line-height:1.35;text-align:center;opacity:0;transition:opacity .18s ease,transform .18s ease;pointer-events:none}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 .powers{position:fixed;left:50%;bottom:18px;z-index:5;display:flex;gap:10px;align-items:center;justify-content:center;transform:translateX(-50%);pointer-events:auto}.power{min-width:132px;min-height:40px;padding:9px 12px;border-radius:8px;border:1px solid rgba(136,232,255,.42);background:rgba(5,12,24,.7);color:#dffcff;font-size:11px;font-weight:950;letter-spacing:.08em;text-transform:uppercase;box-shadow:inset 0 0 18px rgba(64,247,255,.09),0 0 18px rgba(64,247,255,.12)}.power.ready{border-color:rgba(255,239,117,.92);color:#fff1a8;box-shadow:0 0 22px rgba(255,239,117,.3),inset 0 0 18px rgba(255,239,117,.1)}.power:disabled{opacity:.52;cursor:not-allowed}
+.scoreBox{max-width:520px;margin:16px auto 0;padding:12px;border:1px solid rgba(136,232,255,.22);border-radius:8px;background:rgba(3,12,26,.52);text-align:left}.scoreHead{display:flex;justify-content:space-between;margin-bottom:7px;color:#fff;font-size:11px;font-weight:950;letter-spacing:.1em;text-transform:uppercase}.scoreRow{display:grid;grid-template-columns:44px 1fr auto;gap:10px;align-items:center;padding:5px 0;border-top:1px solid rgba(136,232,255,.11);color:#d8f8ff;font-size:12px}.scoreRow.me{color:#ffef75}.scoreMsg{padding:8px 0;color:rgba(216,248,255,.64);font-size:12px;text-align:center}.scoreForm{display:flex;gap:8px;justify-content:center;align-items:center;margin-top:12px}.scoreForm.hidden{display:none}.scoreForm input{width:86px;min-height:42px;border:1px solid rgba(136,232,255,.42);border-radius:8px;background:rgba(1,7,18,.8);color:#fff;text-align:center;font-size:18px;font-weight:950;letter-spacing:.12em;text-transform:uppercase}
 .corner{position:fixed;right:12px;bottom:10px;z-index:3;color:rgba(215,246,255,.46);font-size:11px;letter-spacing:.08em;pointer-events:none}
-@media(max-width:760px){.hud{inset:10px 8px auto 8px;gap:5px}.hud span{font-size:9px}.rules{grid-template-columns:1fr}.panel{padding:20px}.toast{bottom:96px}.powers{bottom:10px}.power{min-width:112px;font-size:10px}.corner{display:none}}
+@media(max-width:760px){.hud{inset:10px 8px auto 8px;gap:5px}.hud span{font-size:9px}.rules{grid-template-columns:1fr}.panel{padding:20px}.toast{bottom:96px}.powers{bottom:10px}.power{min-width:112px;font-size:10px}.scoreBox{font-size:11px}.scoreForm{flex-wrap:wrap}.corner{display:none}}
 </style>
 </head>
 <body>
@@ -48,13 +49,16 @@ h1{margin:0 0 8px;font-size:clamp(2.55rem,10vw,5.6rem);line-height:.84;letter-sp
       <div class="rule"><b>Auto-fire</b>The cannon fires only while you press or hold Space.</div>
       <div class="rule"><b>Survive</b>Enemies crawl up the web. Hits throw fast wireframe vector blasts.</div>
     </div>
-    <div class="row"><button id="startBtn">Start Tempest</button><button class="secondary" id="practiceBtn">Practice</button></div>
+    <div class="row"><button id="startBtn">Start Tempest</button><button class="secondary" id="practiceBtn">Practice</button><button class="secondary" id="scoresBtn">Scores</button></div>
+    <div class="scoreBox" id="titleScores"><div class="scoreMsg">Reading global scores...</div></div>
   </div>
 </div>
 <div class="overlay hidden" id="gameover">
   <div class="panel">
     <h1 id="overTitle">WEB<br>COLLAPSED</h1>
     <p class="sub" id="overText"></p>
+    <div class="scoreForm hidden" id="scoreForm"><input id="initials" maxlength="3" value="YOU" aria-label="Initials" /><button id="submitScore">Save Score</button></div>
+    <div class="scoreBox" id="overScores"><div class="scoreMsg">Reading global scores...</div></div>
     <div class="row"><button id="againBtn">Run Again</button><button class="secondary" id="menuBtn">Title</button></div>
   </div>
 </div>
@@ -74,6 +78,9 @@ const camera = new THREE.PerspectiveCamera(58, 1, .1, 170);
 const clock = new THREE.Clock();
 const cyan=0x40f7ff, pink=0xff3bd1, gold=0xffef75, green=0x6dffad, red=0xff5277, white=0xffffff;
 const lanes = 16, radius = 7.2, nearZ = 10, farZ = -92;
+const SCORE_API = "https://game-scores.jez237.workers.dev/scores/vector-tempest";
+const LOCAL_SCORE_KEY = "vector-tempest-local-scores-v1";
+const SCORE_LIMIT = 8;
 const shapes = [
   { name:"RECT", points:[[0,-1],[.58,-1],[.58,1],[-.58,1],[-.58,-1],[0,-1]] },
   { name:"DIAMOND", points:[[0,-1],[1,0],[0,1],[-1,0],[0,-1]] },
@@ -94,6 +101,7 @@ const pointer = { down:false };
 const state = { running:false, practice:false, ended:false, t:0, score:0, wave:1, shapeIndex:0, hull:100, zaps:0, combo:0, bestCombo:0, pulse:0, pulseCooldown:0, lane:0, targetLane:0, laneVel:0, fireTimer:0, spawnTimer:0, messageUntil:0 };
 let audioCtx=null, lastShotSound=0;
 let player, web=[], enemies=[], shots=[], sparks=[], stars=[];
+let globalScores=null, globalScoreStatus="loading", pendingScore=0, lastSubmit=null;
 
 function clamp(v,a,b){ return Math.max(a, Math.min(b, v)); }
 function rand(a=1,b=0){ return b + Math.random() * (a-b); }
@@ -135,6 +143,69 @@ function mat(color, opacity=1){
 }
 function line(points, color, opacity=1){ const mesh = new THREE.Line(new THREE.BufferGeometry().setFromPoints(points), basic(color, opacity)); scene.add(mesh); return mesh; }
 function toast(text, seconds=1.4){ ui.toast.textContent=text; ui.toast.classList.add("show"); state.messageUntil=state.t+seconds; }
+function cleanInitials(value){ return String(value || "YOU").toUpperCase().replace(/[^A-Z0-9]/g,"").slice(0,3).padEnd(3,"A"); }
+function localScores(){ try { return JSON.parse(localStorage.getItem(LOCAL_SCORE_KEY) || "[]"); } catch { return []; } }
+function saveLocalScore(entry){
+  const rows = localScores();
+  rows.push(entry);
+  rows.sort((a,b)=>b.score-a.score);
+  localStorage.setItem(LOCAL_SCORE_KEY, JSON.stringify(rows.slice(0,SCORE_LIMIT)));
+}
+function normalizeScoreRows(data){
+  const rows = Array.isArray(data) ? data : (data && data.scores || []);
+  return rows.map(row => ({ name:cleanInitials(row.initials || row.name || "???"), score:Math.max(0, Math.floor(Number(row.score) || 0)) }))
+    .sort((a,b)=>b.score-a.score).slice(0,SCORE_LIMIT);
+}
+async function fetchGlobalScores(force=false){
+  if (globalScores && !force) return globalScores;
+  globalScoreStatus = "loading";
+  const controller = new AbortController();
+  const timer = setTimeout(()=>controller.abort(), 7000);
+  try {
+    const response = await fetch(`${SCORE_API}?limit=${SCORE_LIMIT}`, { cache:"no-store", signal:controller.signal });
+    globalScores = normalizeScoreRows(await response.json());
+    globalScoreStatus = "ready";
+  } catch {
+    globalScoreStatus = "offline";
+  } finally {
+    clearTimeout(timer);
+  }
+  return globalScores;
+}
+async function submitGlobalScore(name, score) {
+  lastSubmit = { name, score };
+  const controller = new AbortController();
+  const timer = setTimeout(()=>controller.abort(), 7000);
+  try {
+    await fetch(SCORE_API, { method:"POST", headers:{ "Content-Type":"application/json" }, body:JSON.stringify({ initials:name, score }), signal:controller.signal });
+    globalScores = null;
+    await fetchGlobalScores(true);
+    return true;
+  } catch {
+    globalScoreStatus = "offline";
+    return false;
+  } finally {
+    clearTimeout(timer);
+  }
+}
+function scoreRows(rows, emptyText) {
+  if (!rows || !rows.length) return `<div class="scoreMsg">${emptyText}</div>`;
+  return rows.slice(0,SCORE_LIMIT).map((row,index)=>{
+    const me = lastSubmit && row.name === lastSubmit.name && row.score === lastSubmit.score;
+    return `<div class="scoreRow ${me ? "me" : ""}"><b>${index+1}.</b><span>${row.name}</span><b>${row.score.toLocaleString()}</b></div>`;
+  }).join("");
+}
+function renderScores(targetId) {
+  const target = $(targetId);
+  if (!target) return;
+  const globalHtml = globalScoreStatus === "offline" ? `<div class="scoreMsg">Global scores offline. Local scores saved.</div>`
+    : globalScores ? scoreRows(globalScores, "No global scores yet.") : `<div class="scoreMsg">Reading global scores...</div>`;
+  target.innerHTML = `<div class="scoreHead"><span>Global Scores</span><span>Score</span></div>${globalHtml}<div class="scoreHead" style="margin-top:10px"><span>Local Scores</span><span>Score</span></div>${scoreRows(localScores(), "No local scores yet.")}`;
+}
+function showScores(targetId) {
+  renderScores(targetId);
+  fetchGlobalScores().then(()=>renderScores(targetId));
+}
 function ensureAudio(){
   const AC = window.AudioContext || window.webkitAudioContext;
   if (!AC) return null;
@@ -596,9 +667,14 @@ function updateUi() {
 
 function endRun() {
   state.ended=true; state.running=false;
+  pendingScore = Math.max(0, Math.floor(state.score));
   ui.overTitle.innerHTML = "WEB<br>COLLAPSED";
   ui.overText.textContent = `Score ${Math.floor(state.score).toLocaleString()} | Zaps ${state.zaps} | Wave ${state.wave} | Best combo ${state.bestCombo}.`;
+  $("scoreForm").classList.toggle("hidden", pendingScore <= 0);
+  $("submitScore").disabled = false;
+  $("submitScore").textContent = "Save Score";
   ui.over.classList.remove("hidden");
+  showScores("overScores");
 }
 
 function aimFromPointer(e) {
@@ -622,8 +698,21 @@ addEventListener("pointercancel", ()=>{ pointer.down=false; }, { passive:true })
 $("startBtn").addEventListener("click",()=>{ ensureAudio(); reset(false); });
 $("practiceBtn").addEventListener("click",()=>{ ensureAudio(); reset(true); });
 $("againBtn").addEventListener("click",()=>{ ensureAudio(); reset(state.practice); });
-$("menuBtn").addEventListener("click",()=>{ cleanup(); state.running=false; state.ended=false; ui.over.classList.add("hidden"); ui.overlay.classList.remove("hidden"); });
+$("menuBtn").addEventListener("click",()=>{ cleanup(); state.running=false; state.ended=false; ui.over.classList.add("hidden"); ui.overlay.classList.remove("hidden"); showScores("titleScores"); });
 $("pulseBtn").addEventListener("click",()=>{ ensureAudio(); usePulse(); });
+$("scoresBtn").addEventListener("click",()=>showScores("titleScores"));
+$("submitScore").addEventListener("click",async()=>{
+  if (!pendingScore) return;
+  const name = cleanInitials($("initials").value);
+  const score = pendingScore;
+  saveLocalScore({ name, score });
+  $("submitScore").disabled = true;
+  $("submitScore").textContent = "Saving";
+  await submitGlobalScore(name, score);
+  pendingScore = 0;
+  $("scoreForm").classList.add("hidden");
+  showScores("overScores");
+});
 
 scene.add(new THREE.AmbientLight(0x9fdcff,.58));
 const key = new THREE.DirectionalLight(0xffffff,1.25); key.position.set(5,8,12); scene.add(key);
@@ -631,6 +720,7 @@ const rim = new THREE.PointLight(0xff3bd1,2.8,80); rim.position.set(-8,7,15); sc
 makeWeb(); makeStars(); updateCamera();
 function animate(){ const dt=Math.min(.033, clock.getDelta()); update(dt); updateCamera(); updateUi(); renderer.render(scene,camera); requestAnimationFrame(animate); }
 animate();
+showScores("titleScores");
 const params = new URLSearchParams(location.search);
 if (params.has("autostart")) reset(params.has("practice"));
 </script>
