@@ -32,5 +32,22 @@
       "description": "Believable invented salt-pan desert animal with a reflective heat-shield carapace, dew-collecting belly bristles, and sand-gold shell with violet shadows.",
       "template": "Design a believable [HABITAT] creature with [ADAPTATION 1], [ADAPTATION 2], and [TEXTURE/COLOR], shown as a realistic natural-history creature study."
     }
+  },
+  {
+    "id": "2026-06-26-creature-design-glass-reed-mudskimmer",
+    "title": "Glass-Reed Mudskimmer",
+    "tests": "Creature design study: believable tidal reed-marsh animal with transparent balance fins, vibration-sensing chin whiskers, juveniles, habitat detail, and no prompt-card text.",
+    "prompt": "Design a believable tidal reed-marsh creature called the Glass-Reed Mudskimmer with transparent lateral balance fins, vibration-sensing chin whiskers, and wet jade skin with copper speckles, shown as a realistic natural-history creature study. Create a richly detailed square field-study photograph at low tide in a brackish reed marsh: one adult Glass-Reed Mudskimmer stands half in shallow olive water and half on exposed black mud, about the size of a small otter, with a long flexible body, low amphibious stance, four mud-gripping webbed feet, narrow wedge head, tiny protected side eyes, translucent glassy fins flaring along both flanks for balance, and a curtain of fine chin whiskers touching the mud surface to sense vibration. Show two smaller juveniles partly hidden among pale reed roots, copper-speckled wet jade skin, droplets clinging to the fins, mud smears on the belly, tiny brine snails, broken reed stems, floating seed husks, rippled water, reflected gray sky, and macro documentary detail. Use low morning light filtered through reeds, shallow depth of field, believable anatomy, clear scale cues, tactile skin and mud textures, and a quiet natural-history field-photography mood. The image itself should be the finished creature study, not a prompt card: no readable labels, no captions, no arrows, no poster layout, no fantasy monster styling, no gore, no logos, no watermark, no people, no extra limbs, no incoherent anatomy, no blank studio background.\n\nReusable fill-in-the-blank template: Design a believable [HABITAT] creature with [ADAPTATION 1], [ADAPTATION 2], and [TEXTURE/COLOR], shown as a realistic natural-history creature study. Make the finished image show [LIFE STAGE OR GROUPING] in [SPECIFIC MICROHABITAT], with visible anatomy, scale cues, habitat traces, material textures, and lighting that explain how the adaptations work without turning the image into a labeled prompt card.\n\nWhat the reusable visual operation changes or emphasizes: it turns a habitat-and-adaptation brief into a plausible original animal study, emphasizing ecological logic, coherent anatomy, tactile surface detail, scale, and behavior in context.\n\nOptional negative constraints: no readable private data, no logos, no watermarks, no prompt cards, no incoherent anatomy, no generic fantasy monster, no blank specimen backdrop unless requested.\n\nExample substitution: [HABITAT] = tidal reed marsh; [ADAPTATION 1] = transparent lateral balance fins; [ADAPTATION 2] = vibration-sensing chin whiskers; [TEXTURE/COLOR] = wet jade skin with copper speckles; [LIFE STAGE OR GROUPING] = one adult with two juveniles; [SPECIFIC MICROHABITAT] = low-tide brackish reed roots and exposed black mud.",
+    "image": "images/2026-06-26-creature-design-glass-reed-mudskimmer.jpg",
+    "date": "2026-06-26",
+    "batch": "Daily Prompt",
+    "slot": "creature-design",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "creatureDesign": {
+      "name": "Glass-Reed Mudskimmer",
+      "description": "Believable invented tidal reed marsh animal with transparent lateral balance fins, vibration-sensing chin whiskers, and wet jade skin with copper speckles.",
+      "template": "Design a believable [HABITAT] creature with [ADAPTATION 1], [ADAPTATION 2], and [TEXTURE/COLOR], shown as a realistic natural-history creature study."
+    }
   }
 ]
