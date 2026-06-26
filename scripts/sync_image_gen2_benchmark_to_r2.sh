@@ -83,8 +83,14 @@ while IFS= read -r -d '' file; do
   bytes=$((bytes + size))
 
   if [[ "$apply" -eq 1 ]]; then
+    case "${file,,}" in
+      *.jpg|*.jpeg) content_type="image/jpeg" ;;
+      *.png) content_type="image/png" ;;
+      *.webp) content_type="image/webp" ;;
+      *) content_type="application/octet-stream" ;;
+    esac
     # shellcheck disable=SC2086
-    $wrangler_bin r2 object put "$bucket/$key" --file "$file" --remote --content-type image/png --cache-control 'public, max-age=31536000, immutable'
+    $wrangler_bin r2 object put "$bucket/$key" --file "$file" --remote --content-type "$content_type" --cache-control 'public, max-age=31536000, immutable'
   else
     printf 'DRY RUN: %s -> r2://%s/%s\n' "$rel" "$bucket" "$key"
   fi
