@@ -2,7 +2,7 @@ name: Refresh AI News Feed
 
 on:
   schedule:
-    - cron: "12 * * * *" # hourly
+    - cron: "12 */3 * * *" # every 3 hours
   workflow_dispatch:
 
 permissions:
