@@ -2472,5 +2472,17 @@
     "slot": "historical-recreation",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-06-26-miniature-diorama-tiny-laundromat-under-a-stair",
+    "title": "Tiny Laundromat Under a Stair",
+    "tests": "Generated via openclaw infer image generate using openai/gpt-image-2; verified exact output file exists and is non-empty before append.",
+    "prompt": "Build a visibly handmade miniature diorama of a tiny laundromat tucked under an old staircase, photographed as a finished macro model set rather than a full-size room. Show the stair stringer cutting diagonally across the top, thumb-sized front-loading washers with translucent blue doors, one open dryer with a coil of miniature socks, coin slots made from tiny punched metal, chipped painted basswood walls, a cracked checkerboard tile floor, bent wire laundry baskets, a matchstick bench, thread-spool detergent bottles with no readable labels, cotton batting lint, safety-pin clothes hangers, a thimble trash can, pinhead water droplets near a floor drain, tiny extension cord conduit, and warm practical bulb light under the stairs mixed with cool streetlight through a little frosted window. Make the handmade scale cues unmistakable: visible foamcore edges, glue beads, brush-painted weathering, uneven cut lines, dust specks, tweezers and a craft knife just outside the set for scale, shallow macro depth of field, tactile paper clay, balsa wood grain, acrylic gloss, and miniature fabric fibers. Keep it richly detailed, cozy, slightly worn, and coherent as a physical model photographed on a workbench. Finished image only: no captions, no signs, no readable text, no watermark, no flat poster layout, no life-size ambiguity, no people or hands.\n\nSource photo needed: none.\n\nReusable fill-in-the-blank template: Build a visibly handmade miniature diorama of [SCENE], with scale cues, tiny props, model-making materials, macro photography, and practical lighting. Make [SCENE] clearly small-scale by including [SCALE CUES], [TINY PROPS], [VISIBLE MATERIAL EDGES], [CRAFT TOOLS OR WORKBENCH CUES], [SURFACE WEAR], and [LIGHTING/MOOD]. Avoid full-size realism without scale cues, flat paper/poster composition, readable text/logos, and watermarks.\n\nWhat the reusable visual operation changes or emphasizes: it turns an everyday place or imagined scene into a tactile small-scale model set, emphasizing handmade construction, tiny props, visible craft materials, macro depth of field, and physical lighting.\n\nExample substitution: [SCENE] = a tiny laundromat tucked under an old staircase; [SCALE CUES] = tweezers, craft knife, foamcore edges, glue beads, dust specks, matchstick bench, thimble trash can; [TINY PROPS] = thumb-sized washers, open dryer with miniature socks, bent wire laundry baskets, thread-spool detergent bottles, safety-pin clothes hangers; [LIGHTING/MOOD] = warm under-stair bulb light mixed with cool streetlight through a frosted window.",
+    "image": "images/2026-06-26-miniature-diorama-tiny-laundromat-under-a-stair.jpg",
+    "date": "2026-06-26",
+    "batch": "Daily Prompt",
+    "slot": "miniature-diorama",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024"
   }
 ]
