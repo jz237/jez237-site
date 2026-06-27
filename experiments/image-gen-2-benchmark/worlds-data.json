@@ -1276,5 +1276,23 @@
       "continuity": "Preserves Korrun Silt Choir continuity: resonant black-green tidal mudflats, basalt tuning ribs, brine-glass, silt ceramic, reed wraps, bell buoys, wet clay memory tiles, copper light, rose salt fog, and non-human amphibious inhabitants.",
       "entryDescription": "Maintenance crews tune a pressure-harp bridge, using frequency markers and mud ripples to keep the walkway safe across the tidal flats."
     }
+  },
+  {
+    "id": "2026-06-27-weekly-world-image-korrun-silt-choir-bell-buoy-weather-watc",
+    "title": "Korrun Silt Choir: Bell-Buoy Weather Watch",
+    "tests": "Generated with GPT Image 2 shell CLI; exact output path verified before append; world-only catalog entry.",
+    "prompt": "Create a finished realistic square expedition photograph from the invented weekly world Korrun Silt Choir. Show the Bell-Buoy Weather Watch at dawn on a resonant alien tidal mudflat as prism tide clouds roll in: three non-human amphibious Korrun weather keepers with low oval bodies, six jointed walking limbs, two wide paddle-limbs, ridged resonator throats, wet opaline skin, crown-like sensory whiskers, and small black bead eyes brace on a thunder-polished black-green mud shelf. They listen with throat bands and paddle-limbs to a row of tall bone-white bell-buoy navigation posts vibrating in pale jade brine pools, while brine-glass lenses on reed-wrapped tripods catch reflected cloud colors. Include terraced basalt lookout ribs, rose salt fog, hollow stone chimneys, floating pumice garden rafts in the distance, wet clay memory tiles on a silt-ceramic work tray, shell-horn tools, mineral lacquer wear, ripple-written mud spreading from foot drumming, and low copper sunrise light mirrored in tidal pools. Make it look like a real photographed field scene with believable lens depth, rain-slick tactile materials, scale cues, practical weather-watching work, dense environmental detail, and no humans. Avoid Earth wetland normality, mushrooms or spore ecosystems, generic cyberpunk neon, medieval fantasy, horror, readable text, labels, logos, watermarks, prompt-card layout, or ordinary Earth boats.\\n\\nReusable fill-in-the-blank template: Show [KORRUN DAILY-LIFE ACTIVITY] on the Korrun Silt Choir tidal world, preserving the resonant black-green mudflats, terraced basalt ribs, rose salt fog, brine-glass tools, silt ceramic, reed wraps, bell buoys, wet opaline six-limbed amphibious inhabitants, ripple-written mud, low copper light, and practical lived-in fieldwork. Replace [ACTIVITY], [WEATHER CONDITION], [TOOLS], and [SETTLEMENT OR LANDFORM] while keeping the scene realistic, photographed, tactile, non-human, and consistent with Korrun Silt Choir continuity.",
+    "image": "images/2026-06-27-weekly-world-image-korrun-silt-choir-bell-buoy-weather-watc.jpg",
+    "date": "2026-06-27",
+    "batch": "Daily Prompt",
+    "slot": "weekly-world-image",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "world": {
+      "name": "Korrun Silt Choir",
+      "description": "A resonant tidal alien world where many-legged amphibious inhabitants shape cities, weather memory, and transit through mineral mudflats, brine-glass tools, bell buoys, and sung silt ceramics.",
+      "continuity": "Preserves Korrun's black-green resonant mudflats, rose salt fog, basalt ribs, bell buoys, brine-glass instruments, wet opaline six-limbed inhabitants, and low copper tidal light.",
+      "entryDescription": "Weather keepers listen to vibrating bell-buoy posts from a basalt lookout as prism tide clouds arrive across the brine pools."
+    }
   }
 ]
