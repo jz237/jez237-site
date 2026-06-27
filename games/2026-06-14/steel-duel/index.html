@@ -52,6 +52,8 @@
   .online-labels{display:grid;grid-template-columns:1fr 120px;gap:8px;margin-bottom:4px;color:var(--dim);font-size:10px;text-align:left}
   .online-hint{margin-top:7px;color:var(--dim);font-size:10px;text-align:left;line-height:1.35}
   .online-status{min-height:16px;margin-top:7px;color:var(--dim);font-size:11px;text-align:left}
+  .online-tools{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;margin-top:8px}
+  .online-quality{font-size:10px;color:var(--dim);text-align:left;min-height:14px}
   .open-rooms{margin-top:10px;padding-top:10px;border-top:1px solid var(--edge)}
   .open-rooms-head{display:flex;align-items:center;justify-content:space-between;gap:8px;color:var(--dim);font-size:10px;text-align:left}
   .mini-btn{border:1px solid var(--edge);border-radius:8px;background:#161d2b;color:var(--ink);font:inherit;font-size:10px;padding:5px 8px;cursor:pointer}
@@ -181,6 +183,10 @@
         <label class="online-name-row"><span>NAME</span><input id="onlineName" class="online-name" maxlength="12" placeholder="PLAYER NAME" /></label>
         <button id="btnOnlineConnect" class="btn primary">START / JOIN ROOM</button>
         <div id="onlineStatus" class="online-status"></div>
+        <div class="online-tools">
+          <div id="onlineQuality" class="online-quality"></div>
+          <button id="btnCopyInvite" class="mini-btn" type="button">COPY INVITE</button>
+        </div>
         <div id="onlineLobby" class="online-lobby">
           <div class="lobby-title"><span>WAITING ROOM</span><span id="lobbyRoomLabel"></span></div>
           <div id="lobbySlots" class="slot-list"></div>
