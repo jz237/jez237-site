@@ -49,5 +49,22 @@
       "description": "Believable invented tidal reed marsh animal with transparent lateral balance fins, vibration-sensing chin whiskers, and wet jade skin with copper speckles.",
       "template": "Design a believable [HABITAT] creature with [ADAPTATION 1], [ADAPTATION 2], and [TEXTURE/COLOR], shown as a realistic natural-history creature study."
     }
+  },
+  {
+    "id": "2026-06-27-creature-design-basalt-crevice-lanternback",
+    "title": "Basalt Crevice Lanternback",
+    "tests": "Prompt follows creature-design slot: believable habitat/adaptation animal, finished natural-history image, no prompt-card text.",
+    "prompt": "Design a believable volcanic sea-cliff crevice creature called the Basalt Crevice Lanternback with heat-shedding dorsal plates, bioluminescent throat sacs, and charcoal hide with pale amber vents, shown as a realistic natural-history creature study. Create a finished square field-study photograph on a wind-carved black basalt sea cliff at dusk: one adult animal about the size of a fox emerges sideways from a narrow warm rock crevice above crashing surf, with a low compact body, six sure-footed gripping limbs with rough suction pads, a wedge-shaped head, small protected eyes under bony brow ridges, a line of thin copper-black dorsal plates lifted slightly to vent heat, two translucent amber throat sacs glowing softly under the jaw, charcoal pebbled hide, pale amber heat vents along the ribs, salt crystals on the feet, and a flexible tail braced against the rock. Show one smaller juvenile tucked deeper in the crevice, tide spray beads, mineral stains, steam wisps from sun-warmed stone, limpets and hardy cliff lichens for scale, rough basalt fractures, glistening wet ledges, and distant gray-green surf below. Use low dusk light mixed with the creature throat glow, shallow documentary depth of field, believable anatomy, tactile skin and stone textures, clear scale cues, and a quiet natural-history field-photography mood. The image itself should be the finished creature study, not a prompt card: no readable labels, no captions, no arrows, no poster layout, no fantasy monster styling, no gore, no logos, no watermark, no people, no extra limbs beyond the intended six, no incoherent anatomy, no blank studio background.\n\nReusable fill-in-the-blank template: Design a believable [HABITAT] creature with [ADAPTATION 1], [ADAPTATION 2], and [TEXTURE/COLOR], shown as a realistic natural-history creature study. Make the finished image show [LIFE STAGE OR GROUPING] in [SPECIFIC MICROHABITAT], with visible anatomy, scale cues, habitat traces, material textures, and lighting that explain how the adaptations work without turning the image into a labeled prompt card.\n\nWhat the reusable visual operation changes or emphasizes: it turns a habitat-and-adaptation brief into a plausible original animal study, emphasizing ecological logic, coherent anatomy, tactile surface detail, scale, and behavior in context.\n\nExample substitution: [HABITAT] = volcanic sea-cliff crevices; [ADAPTATION 1] = heat-shedding dorsal plates; [ADAPTATION 2] = bioluminescent throat sacs; [TEXTURE/COLOR] = charcoal hide with pale amber vents; [LIFE STAGE OR GROUPING] = one adult with one juvenile; [SPECIFIC MICROHABITAT] = warm basalt crevice above crashing surf.",
+    "image": "images/2026-06-27-creature-design-basalt-crevice-lanternback.jpg",
+    "date": "2026-06-27",
+    "batch": "Daily Prompt",
+    "slot": "creature-design",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "creatureDesign": {
+      "name": "Basalt Crevice Lanternback",
+      "description": "Believable invented volcanic sea-cliff animal with heat-shedding dorsal plates, bioluminescent throat sacs, and charcoal hide with pale amber vents.",
+      "template": "Design a believable [HABITAT] creature with [ADAPTATION 1], [ADAPTATION 2], and [TEXTURE/COLOR], shown as a realistic natural-history creature study."
+    }
   }
 ]
