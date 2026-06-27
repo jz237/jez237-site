@@ -1,0 +1,19 @@
+name = "iron-ridge-online"
+main = "workers/iron-ridge-online.js"
+compatibility_date = "2026-06-26"
+
+[[durable_objects.bindings]]
+name = "IRON_RIDGE_ROOMS"
+class_name = "IronRidgeRoom"
+
+[[durable_objects.bindings]]
+name = "IRON_RIDGE_LOBBY"
+class_name = "IronRidgeLobby"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["IronRidgeRoom"]
+
+[[migrations]]
+tag = "v2"
+new_sqlite_classes = ["IronRidgeLobby"]
