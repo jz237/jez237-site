@@ -121,7 +121,13 @@
   let campaign = null;          // campaign run state (null outside campaign mode)
   let mouseX = LW / 2, mouseY = LH / 2, mouseDown = false, mouseFresh = 0;
   const stick = { active: false, id: null, ox: 0, oy: 0, dx: 0, dy: 0 };
-  let online = { ws: null, room: '', role: null, id: null, mode: 'duel', name: 'PLAYER', names: { p1: 'P1', p2: 'P2' }, ready: { p1: false, p2: false }, status: '', connected: false, started: false, lastInput: 0, lastSnapshot: 0, peers: [] };
+  let online = {
+    ws: null, room: '', role: null, id: null, mode: 'duel', name: 'PLAYER',
+    names: { p1: 'P1', p2: 'P2' }, ready: { p1: false, p2: false },
+    status: '', connected: false, started: false, lastInput: 0, lastSnapshot: 0,
+    lastPing: 0, lastPong: 0, ping: null, reconnects: 0, reconnectTimer: 0, manualClose: false,
+    peers: [],
+  };
 
   let controls = [ctrl(), ctrl(), ctrl(), ctrl()];
   function ctrl() { return { fwd: false, back: false, left: false, right: false, fire: false, driveVec: null, aimVec: null }; }
@@ -173,7 +179,16 @@
     score = { p1: Number(s.score && s.score.p1) || 0, p2: Number(s.score && s.score.p2) || 0 };
     timeLeft = Number(s.timeLeft) || 0; matchTime = Number(s.matchTime) || DEFAULT_TIME;
     freezeT = Number(s.freezeT) || 0; winner = s.winner || null; tick = Number(s.tick) || tick;
-    tanks = s.tanks.map(t => ({ ...t, path: null, pathTick: -999 }));
+    if (!headless && online.connected && online.role !== 'p1' && state === 'playing' && tanks.length === s.tanks.length) {
+      for (let i = 0; i < s.tanks.length; i++) {
+        const cur = tanks[i], next = { ...s.tanks[i], path: null, pathTick: -999 };
+        if (!cur) { tanks[i] = next; continue; }
+        const keepX = Number(cur.x), keepY = Number(cur.y), keepH = Number(cur.heading), keepT = Number(cur.turret);
+        tanks[i] = { ...next, x: keepX, y: keepY, heading: keepH, turret: keepT, net: { x: next.x, y: next.y, heading: next.heading, turret: next.turret } };
+      }
+    } else {
+      tanks = s.tanks.map(t => ({ ...t, path: null, pathTick: -999 }));
+    }
     shells = Array.isArray(s.shells) ? s.shells.map(sh => ({ ...sh })) : [];
     mines = Array.isArray(s.mines) ? s.mines.map(m => ({ ...m })) : [];
     if (Array.isArray(s.solid)) for (let r = 0; r < ROWS; r++) solid[r] = s.solid[r].slice();
@@ -827,7 +842,8 @@
     ctx.font = 'bold 34px Menlo,Consolas,monospace'; ctx.textAlign = 'center'; ctx.fillText(Math.ceil(timeLeft).toString().padStart(2, '0'), w / 2, h / 2);
     ctx.fillStyle = T.inkDim; ctx.font = '11px Menlo,Consolas,monospace';
     const onlineLabel = online.connected ? 'ONLINE ' + String(online.role || '').toUpperCase() + '  ·  ' : '';
-    const modeLabel = state === 'attract' ? 'ATTRACT - CPU vs CPU' : onlineLabel + (mode === 'cpu' ? 'P1  vs  CPU' : (mode === 'watch' ? 'CPU 1  vs  CPU 2' : (mode === 'coop' ? 'CO-OP  vs  ENEMY TANKS' : 'P1  vs  P2')));
+    const quality = online.connected && !mobileView ? onlineQualityText().toUpperCase() + '  ·  ' : '';
+    const modeLabel = state === 'attract' ? 'ATTRACT - CPU vs CPU' : onlineLabel + quality + (mode === 'cpu' ? 'P1  vs  CPU' : (mode === 'watch' ? 'CPU 1  vs  CPU 2' : (mode === 'coop' ? 'CO-OP  vs  ENEMY TANKS' : 'P1  vs  P2')));
     ctx.fillText(modeLabel, w / 2, h - 10);
     if (freezeT > 0 && state === 'playing') { ctx.fillStyle = T.inkDim; ctx.font = 'bold 13px Menlo,Consolas,monospace'; ctx.fillText('- RELOADING -', w / 2, h / 2 + 22); }
   }
@@ -942,6 +958,44 @@
     online.status = text || '';
     const el = $('onlineStatus'); if (el) el.textContent = online.status;
   }
+  function resetOnlineState(keep) {
+    if (online.reconnectTimer) { clearTimeout(online.reconnectTimer); online.reconnectTimer = 0; }
+    online = {
+      ws: null,
+      room: keep && keep.room || '',
+      role: null,
+      id: null,
+      mode: keep && keep.mode || 'duel',
+      name: keep && keep.name || 'PLAYER',
+      names: { p1: 'P1', p2: 'P2' },
+      ready: { p1: false, p2: false },
+      status: '',
+      connected: false,
+      started: false,
+      lastInput: 0,
+      lastSnapshot: 0,
+      lastPing: 0,
+      lastPong: 0,
+      ping: null,
+      reconnects: keep && keep.reconnects || 0,
+      reconnectTimer: 0,
+      manualClose: false,
+      peers: [],
+    };
+  }
+  function onlineQualityText() {
+    if (!online.connected) return '';
+    const age = online.lastPong ? perfNow() - online.lastPong : 0;
+    if (!online.ping) return 'checking link';
+    if (age > 9000) return 'link stale';
+    return 'ping ' + Math.round(online.ping) + 'ms';
+  }
+  function updateOnlineMeta() {
+    const q = $('onlineQuality');
+    if (q) q.textContent = onlineQualityText();
+    const copy = $('btnCopyInvite');
+    if (copy) copy.disabled = !online.room;
+  }
   function onlinePlayer(role) { return online.peers.find(p => p.role === role); }
   function syncPeerNames() {
     for (const peer of online.peers) {
@@ -955,6 +1009,7 @@
     lobby.classList.toggle('on', show);
     if (!show) return;
     if (label) label.textContent = online.room || '';
+    updateOnlineMeta();
     syncPeerNames();
     const rows = [
       { role: 'p1', title: 'P1' },
@@ -984,12 +1039,47 @@
   }
   function onlineUrl(room) { return ONLINE_WS.replace(/\/+$/, '') + '/' + encodeURIComponent(room); }
   function onlineHttpBase() { return ONLINE_WS.replace(/^wss:/, 'https:').replace(/^ws:/, 'http:').replace(/\/ws\/?$/, ''); }
+  function inviteUrl() {
+    const u = new URL(location.href);
+    u.searchParams.set('online', online.room || cleanRoom(''));
+    u.searchParams.set('mode', online.mode || 'duel');
+    u.hash = 'online';
+    return u.toString();
+  }
+  async function copyInvite() {
+    if (!online.room) return;
+    const url = inviteUrl();
+    try {
+      await navigator.clipboard.writeText(url);
+      setOnlineStatus('Invite link copied for room ' + online.room);
+    } catch (e) {
+      const inp = $('onlineRoom'); if (inp) { inp.focus(); inp.select(); }
+      setOnlineStatus('Invite: ' + url);
+    }
+  }
   function escapeHtml(v) {
     return String(v == null ? '' : v).replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
   }
   function onlineSend(data) {
     if (!online.ws || online.ws.readyState !== WebSocket.OPEN) return false;
     online.ws.send(JSON.stringify(data)); return true;
+  }
+  function sendOnlinePing(now) {
+    if (!online.connected || now - online.lastPing < 3000) return;
+    online.lastPing = now;
+    onlineSend({ type: 'ping', sent: now });
+  }
+  function smoothOnlineView(dt) {
+    if (!online.connected || online.role === 'p1' || state !== 'playing') return;
+    const k = 1 - Math.pow(0.001, Math.min(0.08, dt) / 0.12);
+    for (const t of tanks) {
+      if (!t || !t.net) continue;
+      t.x += (t.net.x - t.x) * k;
+      t.y += (t.net.y - t.y) * k;
+      t.heading += wrapAngle(t.net.heading - t.heading) * k;
+      t.turret += wrapAngle(t.net.turret - t.turret) * k;
+      if (Math.hypot(t.net.x - t.x, t.net.y - t.y) < 0.35) { t.x = t.net.x; t.y = t.net.y; }
+    }
   }
   function controlPacket(c) {
     return {
@@ -1041,10 +1131,12 @@
   function disconnectOnline() {
     const keepName = online.name || 'PLAYER';
     const keepMode = online.mode || 'duel';
+    online.manualClose = true;
+    if (online.reconnectTimer) { clearTimeout(online.reconnectTimer); online.reconnectTimer = 0; }
     if (online.ws) {
       try { online.ws.close(1000, 'menu'); } catch {}
     }
-    online = { ws: null, room: '', role: null, id: null, mode: keepMode, name: keepName, names: { p1: 'P1', p2: 'P2' }, ready: { p1: false, p2: false }, status: '', connected: false, started: false, lastInput: 0, lastSnapshot: 0, peers: [] };
+    resetOnlineState({ name: keepName, mode: keepMode });
     setOnlineStatus('');
     renderOnlineLobby();
   }
@@ -1074,6 +1166,13 @@
       renderOnlineLobby();
       return;
     }
+    if (data.type === 'pong') {
+      const sent = Number(data.sent) || online.lastPing;
+      online.ping = Math.max(1, perfNow() - sent);
+      online.lastPong = perfNow();
+      updateOnlineMeta();
+      return;
+    }
     if (data.type === 'peer') {
       online.peers = data.peers || [];
       if (!onlinePlayer('p1')) online.ready.p1 = false;
@@ -1098,33 +1197,48 @@
     if (data.type === 'snapshot' && online.role !== 'p1') applySnapshot(data.snapshot);
     if (data.type === 'error') setOnlineStatus('Online error: ' + data.message);
   }
-  function connectOnline() {
+  function connectOnline(rejoining) {
     const inp = $('onlineRoom'), sel = $('onlineMode'), nameInput = $('onlineName');
     const room = cleanRoom(inp && inp.value);
     if (inp) inp.value = room;
     online.name = cleanName(nameInput && nameInput.value);
     if (nameInput) nameInput.value = online.name;
     online.mode = sel && sel.value === 'coop' ? 'coop' : 'duel';
-    if (online.ws) disconnectOnline();
-    setOnlineStatus('Connecting to room ' + room + '...');
+    if (online.ws && !rejoining) disconnectOnline();
+    if (!rejoining) online.reconnects = 0;
+    online.manualClose = false;
+    setOnlineStatus((rejoining ? 'Reconnecting to ' : 'Connecting to room ') + room + '...');
     online.room = room;
     online.ready = { p1: false, p2: false };
-    online.started = false;
+    if (!rejoining) online.started = false;
     online.peers = [];
     renderOnlineLobby();
     const ws = new WebSocket(onlineUrl(room));
     online.ws = ws;
-    ws.addEventListener('open', () => setOnlineStatus('Connected · assigning slot...'));
+    ws.addEventListener('open', () => { online.reconnects = 0; setOnlineStatus('Connected · assigning slot...'); });
     ws.addEventListener('message', e => {
       try { handleOnlineMessage(JSON.parse(e.data)); }
       catch { setOnlineStatus('Online error: bad server message'); }
     });
     ws.addEventListener('close', () => {
-      const wasRoom = online.room;
+      const wasRoom = online.room, keepMode = online.mode, keepName = online.name, wasManual = online.manualClose;
+      const canReconnect = !wasManual && wasRoom && online.reconnects < 3;
       online.connected = false; online.ws = null; online.role = null;
-      online.started = false; online.ready = { p1: false, p2: false }; online.peers = [];
+      online.ready = { p1: false, p2: false }; online.peers = [];
       renderOnlineLobby();
-      if (wasRoom) setOnlineStatus('Disconnected from room ' + wasRoom);
+      if (canReconnect) {
+        online.reconnects++;
+        setOnlineStatus('Connection dropped · reconnecting ' + online.reconnects + '/3');
+        online.reconnectTimer = setTimeout(() => {
+          const inp2 = $('onlineRoom'), sel2 = $('onlineMode'), name2 = $('onlineName');
+          if (inp2) inp2.value = wasRoom;
+          if (sel2) sel2.value = keepMode;
+          if (name2) name2.value = keepName;
+          connectOnline(true);
+        }, 900 + online.reconnects * 700);
+      } else if (wasRoom) {
+        setOnlineStatus('Disconnected from room ' + wasRoom);
+      }
     });
     ws.addEventListener('error', () => setOnlineStatus('Online connection failed'));
   }
@@ -1206,6 +1320,8 @@
     if (state === 'playing' || state === 'attract') { acc += dt; let n = 0; while (acc >= STEP && n < 5) { update(); acc -= STEP; n++; } }
     sendOnlineInput(t);
     sendOnlineSnapshot(t, false);
+    sendOnlinePing(t);
+    smoothOnlineView(dt);
     if (SDArt) { PARTS.update(dt); TRACKS.update(dt); }
     render();
   }
@@ -1649,6 +1765,7 @@
     click('btnOnline', () => { showOverlay('online'); refreshOpenRooms(); const r = $('onlineRoom'); if (r) r.focus(); });
     click('btnOnlineConnect', connectOnline);
     click('btnRoomsRefresh', refreshOpenRooms);
+    click('btnCopyInvite', copyInvite);
     click('btnOnlineReady', toggleOnlineReady);
     click('btnOnlineStart', () => startOnlineHost(online.mode));
     click('btnOnlineBack', () => { disconnectOnline(); startAttract(); showOverlay('title'); });
@@ -1675,11 +1792,19 @@
     loadSettings(); setMuted(muted); setAutoFire(autoFire);   // restore + sync persisted options
 
     const q = new URLSearchParams(location.search);
+    const invitedRoom = q.get('online') || q.get('room');
+    if (invitedRoom || location.hash === '#online') {
+      const roomInput = $('onlineRoom'), modeInput = $('onlineMode');
+      if (roomInput && invitedRoom) roomInput.value = cleanRoom(invitedRoom);
+      if (modeInput && q.get('mode')) modeInput.value = q.get('mode') === 'coop' ? 'coop' : 'duel';
+      showOverlay('online');
+      refreshOpenRooms();
+    }
     headless = q.has('headless');
     if (q.has('test')) { const r = runTests(); console.log('[Steel Duel] tests ' + r.pass + '/' + r.total, r.details.filter(d => !d.pass)); }
     if (q.has('shot')) { setupShot(q.get('shot')); window.__shotReady = true; }
     else if (q.has('campaign')) { startCampaign((parseInt(q.get('campaign'), 10) || 1) - 1, parseInt(q.get('players'), 10) || 1, aiLevel, 1); }
-    else { startAttract(); showOverlay('title'); }
+    else { startAttract(); if (!(invitedRoom || location.hash === '#online')) showOverlay('title'); }
     if (q.has('bots')) { startGame('cpu'); bots = [true, true]; tankSkill = [0.8, 0.8]; }
 
     if (!headless) { lastT = perfNow(); rafId = requestAnimationFrame(frame); }
