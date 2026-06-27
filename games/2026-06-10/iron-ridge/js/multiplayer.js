@@ -121,6 +121,28 @@ export class Multiplayer {
     }
   }
 
+  async findMatch() {
+    const ctl = new AbortController();
+    const timer = setTimeout(() => ctl.abort(), 6000);
+    try {
+      const res = await fetch(`${this.httpBase()}/match`, { cache: 'no-store', signal: ctl.signal });
+      const data = await res.json();
+      return data?.room ? {
+        room: cleanRoom(data.room),
+        host: cleanName(data.host || 'TANKER'),
+        count: Math.max(0, Number(data.count) || 0),
+      } : null;
+    } catch {
+      return null;
+    } finally {
+      clearTimeout(timer);
+    }
+  }
+
+  onlineCount() {
+    return this.connected ? this.peers.size + 1 : 0;
+  }
+
   connect(room, name) {
     this.disconnect(false);
     this.room = cleanRoom(room || this.room || randomRoom());

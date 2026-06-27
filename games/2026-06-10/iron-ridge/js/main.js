@@ -123,6 +123,7 @@ const multiplayer = new Multiplayer({
   onRemoteFire: handleRemoteFire,
   onStatus: syncMultiplayerStatus,
 });
+let quickMatchWaiting = false;
 
 // post-processing
 const composer = new EffectComposer(renderer);
@@ -172,10 +173,18 @@ function syncMultiplayerStatus(text = '') {
   const status = $('mp-status');
   const hudEl = $('mp-hud');
   const room = multiplayer.room ? cleanRoom(multiplayer.room) : '';
+  const onlineCount = multiplayer.onlineCount();
+  if (quickMatchWaiting && multiplayer.connected && onlineCount < 2) {
+    text = `Room ${room} · waiting for another player`;
+  }
   if (status) status.textContent = text || (room ? `Room ${room}` : 'Optional co-op room: share the link, deploy, and other tanks appear on the ridge.');
   if (hudEl) {
-    hudEl.textContent = multiplayer.connected ? `ONLINE ${room} · ${multiplayer.peers.size + 1} TANKS` : '';
+    hudEl.textContent = multiplayer.connected ? `ONLINE ${room} · ${onlineCount} TANK${onlineCount === 1 ? '' : 'S'}` : '';
     hudEl.classList.toggle('hidden', !multiplayer.connected);
+  }
+  if (quickMatchWaiting && multiplayer.connected && onlineCount >= 2 && G.state !== 'playing') {
+    quickMatchWaiting = false;
+    deployAfterOnlineConnect();
   }
 }
 
@@ -195,7 +204,7 @@ async function refreshRooms() {
     return [];
   }
   if (!rooms.length) {
-    box.innerHTML = '<div class="mp-room-empty">No waiting rooms. Quick Match will host one.</div>';
+    box.innerHTML = '<div class="mp-room-empty">No one waiting. Quick Match will wait for the next player.</div>';
     return [];
   }
   box.innerHTML = rooms.map(room => `
@@ -250,6 +259,7 @@ function handleRemoteFire(raw) {
 }
 
 function deployAfterOnlineConnect() {
+  quickMatchWaiting = false;
   audio.ensure();
   audio.resume();
   if (G.state !== 'playing') startGame();
@@ -961,6 +971,7 @@ $('btn-play').addEventListener('click', () => {
   startGame();
 });
 $('btn-mp-connect')?.addEventListener('click', async () => {
+  quickMatchWaiting = false;
   const room = cleanRoom($('mp-room')?.value || multiplayer.room || randomRoom());
   const name = cleanName($('mp-name')?.value || multiplayer.name || LB.lastInitials() || 'TANKER');
   $('mp-room').value = room;
@@ -971,18 +982,29 @@ $('btn-mp-connect')?.addEventListener('click', async () => {
   } catch {}
 });
 $('btn-mp-quick')?.addEventListener('click', async () => {
-  syncMultiplayerStatus('Finding an open room...');
-  const rooms = await refreshRooms();
-  const room = rooms?.[0]?.room || randomRoom();
+  quickMatchWaiting = true;
+  syncMultiplayerStatus('Finding another player...');
+  const match = await multiplayer.findMatch();
+  if (!match?.room) {
+    quickMatchWaiting = false;
+    syncMultiplayerStatus('Quick Match unavailable. Try a room code.');
+    return;
+  }
+  const room = match.room;
   const name = cleanName($('mp-name')?.value || multiplayer.name || LB.lastInitials() || 'TANKER');
   $('mp-room').value = room;
   $('mp-name').value = name;
   try {
     await multiplayer.connect(room, name);
-    deployAfterOnlineConnect();
-  } catch {}
+    if (multiplayer.onlineCount() >= 2) deployAfterOnlineConnect();
+    else syncMultiplayerStatus(`Room ${room} · waiting for another player`);
+    refreshRooms();
+  } catch {
+    quickMatchWaiting = false;
+  }
 });
 $('btn-mp-new')?.addEventListener('click', () => {
+  quickMatchWaiting = false;
   const room = randomRoom();
   $('mp-room').value = room;
   multiplayer.room = room;
