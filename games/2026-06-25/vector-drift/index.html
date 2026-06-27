@@ -100,7 +100,7 @@ const keys = new Set();
 const pointer = { down:false };
 const state = { running:false, practice:false, ended:false, t:0, score:0, wave:1, shapeIndex:0, hull:100, zaps:0, combo:0, bestCombo:0, pulse:0, pulseCooldown:0, heat:0, overheated:false, lane:0, targetLane:0, laneVel:0, fireTimer:0, spawnTimer:0, messageUntil:0 };
 let audioCtx=null, lastShotSound=0;
-let player, web=[], enemies=[], shots=[], sparks=[], stars=[];
+let player, web=[], enemies=[], shots=[], sparks=[], hazards=[], stars=[];
 let globalScores=null, globalScoreStatus="loading", pendingScore=0, lastSubmit=null;
 
 function clamp(v,a,b){ return Math.max(a, Math.min(b, v)); }
@@ -301,18 +301,31 @@ function reset(practice=false) {
 
 function cleanup() {
   if (player) scene.remove(player);
-  clearList(web); clearList(enemies); clearList(shots); clearList(sparks); clearList(stars);
-  player=null; enemies=[]; shots=[]; sparks=[]; stars=[];
+  clearList(web); clearList(enemies); clearList(shots); clearList(sparks); clearList(hazards); clearList(stars);
+  player=null; enemies=[]; shots=[]; sparks=[]; hazards=[]; stars=[];
 }
 function clearList(list){ for (const o of list) scene.remove(o.root || o.mesh || o); list.length = 0; }
 
+function addLaneScar(lane, duration=3.2) {
+  const safeLane = Math.round(lane + lanes * 1000) % lanes;
+  const pts = [
+    lanePos(safeLane-.22, nearZ+.25,1.1), lanePos(safeLane+.22, nearZ+.25,1.1),
+    lanePos(safeLane, nearZ+.55,1.08), lanePos(safeLane, nearZ-8,.94),
+    lanePos(safeLane-.12, nearZ-1,1.02), lanePos(safeLane+.12, nearZ-5,.97)
+  ];
+  const mesh = new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(pts), basic(red, .82));
+  scene.add(mesh);
+  hazards.push({ mesh, lane:safeLane, life:duration, maxLife:duration, tick:0 });
+}
+
 function chooseEnemyType() {
-  const available = Object.entries(enemyTypes).filter(([,type]) => state.wave >= type.unlock);
+  const pressure = state.wave + Math.floor(state.t / 28);
+  const available = Object.entries(enemyTypes).filter(([,type]) => pressure >= type.unlock);
   const roll = Math.random();
-  if (state.wave >= 5 && roll > .82) return "bomber";
-  if (state.wave >= 4 && roll > .64) return "shield";
-  if (state.wave >= 3 && roll > .46) return "splitter";
-  if (state.wave >= 2 && roll > .28) return "weaver";
+  if (pressure >= 5 && roll > .84) return "bomber";
+  if (pressure >= 4 && roll > .68) return "shield";
+  if (pressure >= 3 && roll > .48) return "splitter";
+  if (pressure >= 2 && roll > .28) return "weaver";
   return available[Math.floor(rand(available.length))]?.[0] || "crawler";
 }
 
@@ -405,6 +418,7 @@ function hitEnemy(enemy, shot) {
   state.score += pts; state.zaps++;
   state.pulse = Math.min(12, state.pulse + 1);
   burst(enemy.root.position, enemy.color, enemy.typeKey === "bomber" ? 38 : 26);
+  if (enemy.typeKey === "bomber") addLaneScar(enemy.lane, dangerBonus ? 3.8 : 2.8);
   toast(`${enemy.type.name}${dangerBonus ? " save" : ""} +${pts}  x${multiplier.toFixed(1)}`, .65);
   if (enemy.typeKey === "splitter" && !enemy.child) {
     makeEnemy((Math.round(enemy.lane)-1+lanes)%lanes, enemy.z-5, "crawler", true);
@@ -641,7 +655,22 @@ function update(dt) {
       const bomber = e.typeKey === "bomber";
       state.hull -= state.practice ? (dist<=1?6:2) + (bomber?4:0) : (dist<=1?14:5) + (bomber?8:0);
       burst(e.root.position, red, bomber?48:dist<=1?34:16);
+      if (bomber) addLaneScar(e.lane, 4.2);
       toast(bomber ? "Bomber breach." : dist<=1 ? "Rim impact." : "Web damage.", .9);
+      if (state.hull <= 0) endRun();
+    }
+  }
+
+  for (const h of hazards) {
+    h.life -= dt;
+    h.tick -= dt;
+    h.mesh.material.opacity = Math.max(.08, h.life / h.maxLife * .82);
+    const dist = Math.min(Math.abs(h.lane-lane), lanes-Math.abs(h.lane-lane));
+    if (dist <= 0 && h.tick <= 0) {
+      h.tick = .55;
+      state.hull -= state.practice ? 2 : 4;
+      state.combo = 0;
+      toast("Scarred lane.", .45);
       if (state.hull <= 0) endRun();
     }
   }
@@ -656,6 +685,7 @@ function update(dt) {
   prune(shots, o=>o.life>0 && o.z>farZ-10);
   prune(enemies, o=>!o.dead && o.z<nearZ+5);
   prune(sparks, o=>o.life>0);
+  prune(hazards, o=>o.life>0);
 }
 
 function prune(list, keep) {
