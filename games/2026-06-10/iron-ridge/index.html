@@ -161,6 +161,7 @@
     border: none; border-radius: 10px; padding: 12px 30px; margin: 6px 4px;
   }
   .btn:active { transform: translateY(1px); }
+  .btn:disabled { cursor: progress; opacity: 0.58; transform: none; }
   .btn.secondary { background: #2a331f; color: var(--ink); border: 1px solid var(--panel-border); }
   .controls-info {
     text-align: left; font-size: 13px; color: var(--muted);
@@ -193,7 +194,13 @@
   }
   .mp-actions { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
   .mp-actions .btn { flex: 1 1 106px; margin: 0; padding: 9px 10px; font-size: 12px; letter-spacing: 1px; }
+  .mp-actions .btn.danger {
+    background: #3b2020; color: #ffd7c7; border-color: rgba(255, 156, 91, 0.38);
+  }
   .mp-status { min-height: 16px; margin-top: 7px; color: var(--muted); font-size: 12px; line-height: 1.35; }
+  .mp-status.ready { color: var(--accent2); }
+  .mp-status.warn { color: #ffd58f; }
+  .mp-status.bad { color: #ff9c8f; }
   .mp-rooms-head {
     display: flex; align-items: center; justify-content: space-between; gap: 8px;
     margin-top: 9px; padding-top: 8px; border-top: 1px solid var(--panel-border);
@@ -398,7 +405,8 @@
         <button class="btn secondary" id="btn-mp-quick">⚡ QUICK MATCH</button>
         <button class="btn secondary" id="btn-mp-connect">🌐 JOIN CODE</button>
         <button class="btn secondary" id="btn-mp-new">NEW CODE</button>
-        <button class="btn secondary" id="btn-mp-copy">COPY LINK</button>
+        <button class="btn secondary" id="btn-mp-copy">SHARE LINK</button>
+        <button class="btn secondary danger hidden" id="btn-mp-leave">LEAVE ROOM</button>
       </div>
       <div class="mp-rooms-head"><span>OPEN ROOMS</span><button class="mp-mini" id="btn-mp-refresh">REFRESH</button></div>
       <div class="mp-room-list" id="mp-rooms"><div class="mp-room-empty">Checking for waiting tanks...</div></div>

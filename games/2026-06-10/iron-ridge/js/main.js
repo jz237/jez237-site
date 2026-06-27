@@ -124,6 +124,7 @@ const multiplayer = new Multiplayer({
   onStatus: syncMultiplayerStatus,
 });
 let quickMatchWaiting = false;
+let roomsRefreshAt = 0;
 
 // post-processing
 const composer = new EffectComposer(renderer);
@@ -177,15 +178,35 @@ function syncMultiplayerStatus(text = '') {
   if (quickMatchWaiting && multiplayer.connected && onlineCount < 2) {
     text = `Room ${room} · waiting for another player`;
   }
-  if (status) status.textContent = text || (room ? `Room ${room}` : 'Optional co-op room: share the link, deploy, and other tanks appear on the ridge.');
+  if (status) {
+    const fallback = room ? `Room ${room}` : 'Optional co-op room: share the link, deploy, and other tanks appear on the ridge.';
+    status.textContent = text || fallback;
+    status.classList.toggle('ready', multiplayer.connected);
+    status.classList.toggle('warn', multiplayer.connecting || quickMatchWaiting);
+    status.classList.toggle('bad', /failed|unavailable|dropped|stalled|disconnected/i.test(status.textContent));
+  }
+  syncMultiplayerButtons();
   if (hudEl) {
-    hudEl.textContent = multiplayer.connected ? `ONLINE ${room} · ${onlineCount} TANK${onlineCount === 1 ? '' : 'S'}` : '';
+    const ping = multiplayer.latency ? ` · ${multiplayer.latency}MS` : '';
+    hudEl.textContent = multiplayer.connected ? `ONLINE ${room} · ${onlineCount} TANK${onlineCount === 1 ? '' : 'S'}${ping}` : '';
     hudEl.classList.toggle('hidden', !multiplayer.connected);
   }
   if (quickMatchWaiting && multiplayer.connected && onlineCount >= 2 && G.state !== 'playing') {
     quickMatchWaiting = false;
     deployAfterOnlineConnect();
   }
+}
+
+function syncMultiplayerButtons() {
+  const busy = multiplayer.connecting || quickMatchWaiting;
+  for (const id of ['btn-mp-quick', 'btn-mp-connect', 'btn-mp-new']) {
+    const btn = $(id);
+    if (btn) btn.disabled = busy;
+  }
+  const leave = $('btn-mp-leave');
+  if (leave) leave.classList.toggle('hidden', !multiplayer.connected && !multiplayer.connecting);
+  const connect = $('btn-mp-connect');
+  if (connect) connect.textContent = multiplayer.connected ? '🌐 SWITCH ROOM' : '🌐 JOIN CODE';
 }
 
 function escHtml(value) {
@@ -224,7 +245,9 @@ async function refreshRooms() {
     try {
       await multiplayer.connect(room, name);
       deployAfterOnlineConnect();
-    } catch {}
+    } catch {
+      syncMultiplayerStatus('Join failed. Try Quick Match or a new code.');
+    }
   }));
   return rooms;
 }
@@ -263,7 +286,8 @@ function deployAfterOnlineConnect() {
   audio.ensure();
   audio.resume();
   if (G.state !== 'playing') startGame();
-  syncMultiplayerStatus(`Room ${cleanRoom(multiplayer.room)} · deployed`);
+  const count = multiplayer.onlineCount();
+  syncMultiplayerStatus(`Room ${cleanRoom(multiplayer.room)} · deployed · ${count} online`);
 }
 
 // ---------------------------------------------------------------- quality
@@ -979,7 +1003,9 @@ $('btn-mp-connect')?.addEventListener('click', async () => {
   try {
     await multiplayer.connect(room, name);
     deployAfterOnlineConnect();
-  } catch {}
+  } catch {
+    syncMultiplayerStatus(`Could not join ${room}. Check the code or try Quick Match.`);
+  }
 });
 $('btn-mp-quick')?.addEventListener('click', async () => {
   quickMatchWaiting = true;
@@ -1001,6 +1027,7 @@ $('btn-mp-quick')?.addEventListener('click', async () => {
     refreshRooms();
   } catch {
     quickMatchWaiting = false;
+    syncMultiplayerStatus('Quick Match connection failed. Try again.');
   }
 });
 $('btn-mp-new')?.addEventListener('click', () => {
@@ -1017,11 +1044,22 @@ $('btn-mp-copy')?.addEventListener('click', async () => {
   $('mp-room').value = room;
   const link = multiplayer.shareUrl();
   try {
-    await navigator.clipboard.writeText(link);
-    syncMultiplayerStatus(`Copied room ${room} link`);
+    if (navigator.share && isTouch) {
+      await navigator.share({ title: 'Iron Ridge room', text: `Join Iron Ridge room ${room}`, url: link });
+      syncMultiplayerStatus(`Shared room ${room}`);
+    } else {
+      await navigator.clipboard.writeText(link);
+      syncMultiplayerStatus(`Copied room ${room} link`);
+    }
   } catch {
     syncMultiplayerStatus(link);
   }
+});
+$('btn-mp-leave')?.addEventListener('click', () => {
+  quickMatchWaiting = false;
+  multiplayer.disconnect();
+  syncMultiplayerStatus('Left online room. Solo deployment stays ready.');
+  refreshRooms();
 });
 $('btn-resume').addEventListener('click', resumeGame);
 $('btn-quit').addEventListener('click', () => {
@@ -1310,6 +1348,10 @@ function loop(now) {
 
   if (G.state === 'menu') menuFrame(dt);
   else gameFrame(dt);
+  if (G.state === 'menu' && G.time > roomsRefreshAt) {
+    roomsRefreshAt = G.time + (multiplayer.connected ? 10 : 18);
+    refreshRooms();
+  }
 
   fpsTimer += dt;
   if (fpsTimer > 0.5) {
