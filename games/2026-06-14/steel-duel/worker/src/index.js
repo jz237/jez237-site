@@ -136,6 +136,11 @@ export class SteelDuelRoom extends DurableObject {
       return;
     }
 
+    if (data.type === "ping") {
+      ws.send(JSON.stringify({ type: "pong", sent: Number(data.sent) || 0, t: Date.now() }));
+      return;
+    }
+
     if (data.type === "hello") {
       const updated = { ...meta, name: cleanName(data.name) };
       ws.serializeAttachment(updated);
