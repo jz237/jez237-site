@@ -1258,5 +1258,23 @@
       "continuity": "Preserves Korrun Silt Choir's resonant tidal mudflats, basalt ribs, brine-glass, silt ceramic, bell buoys, wet clay memory tiles, and non-human amphibious inhabitants.",
       "entryDescription": "Archivists move wet clay memory tiles from sled ferries into a harbor archive during a retreating prism tide."
     }
+  },
+  {
+    "id": "2026-06-27-weekly-world-image-korrun-silt-choir-pressure-harp-bridge-r",
+    "title": "Korrun Silt Choir: Pressure-Harp Bridge Repair",
+    "tests": "Weekly world image for Korrun Silt Choir showing bridge maintenance, pressure-harp infrastructure, non-human amphibious inhabitants, basalt/brine-glass/silt-ceramic materials, and resonant mudflat continuity.",
+    "prompt": "Create a realistic photographed daily-life view from Korrun Silt Choir: show maintenance crews adjusting a pressure-harp bridge with bone-white frequency markers and mud ripples showing safe zones. Use the world bible as canon: alien resonant tidal mudflats, basalt ribs, rose salt fog, brine-glass, silt ceramic, reed wraps, bell buoys, and non-human amphibious inhabitants with low oval bodies, six jointed walking limbs, two paddle-limbs, ridged resonator throats, wet opaline skin, sensory whiskers, and small black bead eyes. Make the scene feel practical, inhabited, tactile, wet, and believable, with shell-horn tools, reed pressure wraps, pumice flotation blocks, muddy ceramic tool trays, wet clay memory tiles on tripods, reflected copper light, and no humans.\n\nReusable fill-in-the-blank template: Create a detailed realistic photographed daily-life view from [WEEKLY_WORLD_NAME], showing [INHABITANTS] performing [EVERYDAY WORK OR RITUAL] around [WORLD-SPECIFIC INFRASTRUCTURE] in [SETTING/LIGHTING]. Preserve the world bible continuity: [GEOGRAPHY], [LIFE FORMS], [MATERIALS/TECHNOLOGY], [PALETTE/LIGHTING], and [RECURRING MOTIFS]. Make the image practical, lived-in, tactile, and coherent rather than a generic sci-fi scene. Avoid humans unless the world bible includes them, franchise cues, readable text, logos, prompt-card framing, and off-canon ecology.\n\nExample substitution: [WEEKLY_WORLD_NAME] = Korrun Silt Choir; [INHABITANTS] = low oval amphibious six-limbed residents with paddle-limbs, resonator throats, opaline wet skin, sensory whiskers, and small black eyes; [EVERYDAY WORK OR RITUAL] = bridge maintenance and harmonic tuning; [WORLD-SPECIFIC INFRASTRUCTURE] = pressure-harp bridge with basalt tuning ribs, brine-glass strips, bone-white frequency markers, and mud-ripple safe zones; [SETTING/LIGHTING] = black-green tidal mudflats under copper sunrise and rose salt fog.",
+    "image": "images/2026-06-27-weekly-world-image-korrun-silt-choir-pressure-harp-bridge-r.jpg",
+    "date": "2026-06-27",
+    "batch": "Daily Prompt",
+    "slot": "weekly_world_image",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "world": {
+      "name": "Korrun Silt Choir",
+      "description": "A tidal alien world where cities, memory, and weather are shaped by resonant mineral mudflats sung into structure by many-legged amphibious inhabitants.",
+      "continuity": "Preserves Korrun Silt Choir continuity: resonant black-green tidal mudflats, basalt tuning ribs, brine-glass, silt ceramic, reed wraps, bell buoys, wet clay memory tiles, copper light, rose salt fog, and non-human amphibious inhabitants.",
+      "entryDescription": "Maintenance crews tune a pressure-harp bridge, using frequency markers and mud ripples to keep the walkway safe across the tidal flats."
+    }
   }
 ]
