@@ -248,6 +248,40 @@
     .log-card .log-text { color: var(--earth-text); }
 
     /* legend */
+    .garden-pulse {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin: 0 0 20px;
+    }
+    .pulse-card {
+      background: linear-gradient(180deg, rgba(45,34,25,.95), rgba(37,45,28,.92));
+      border: 1px solid rgba(158,176,119,.34);
+      border-radius: 8px;
+      padding: 12px 14px;
+      min-height: 118px;
+      box-shadow: -5px 5px 0 rgba(0,0,0,0.36);
+    }
+    .pulse-card .pulse-kicker {
+      color: var(--earth-accent-3);
+      font-size: 11px;
+      font-weight: 700;
+      margin-bottom: 5px;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+    .pulse-card h3 {
+      font-size: 15px;
+      margin: 0 0 6px;
+      line-height: 1.25;
+    }
+    .pulse-card p {
+      color: var(--earth-muted);
+      font-size: 12px;
+      line-height: 1.45;
+      margin: 0;
+    }
+
     .legend {
       display: flex;
       flex-wrap: wrap;
@@ -295,9 +329,13 @@
 
     @media (max-width: 600px) {
       body { background-attachment: scroll; }
+      .garden-pulse { grid-template-columns: 1fr; }
       .day-cell { min-height: 54px; padding: 4px 4px; }
       .day-num { font-size: 11px; }
       .tag { font-size: 9px; padding: 1px 3px; }
+    }
+    @media (min-width: 601px) and (max-width: 900px) {
+      .garden-pulse { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
   </style>
   <link rel="stylesheet" href="../assets/site-enhance.css" />
@@ -309,10 +347,12 @@
   <main class="container">
     <div class="garden-hero">
       <h1>🌱 Garden Calendar</h1>
-      <p>Zone 7a · Philadelphia, PA · ~20 plants</p>
+      <p>Zone 7a · Philadelphia, PA · late-June garden watch</p>
     </div>
 
     <div class="wx-strip" id="wx-strip">🌤️ Loading weather…</div>
+
+    <section class="garden-pulse" id="garden-pulse" aria-label="Current garden status"></section>
 
     <div class="legend">
       <span class="tag tag-water">💧 Water</span>
@@ -325,9 +365,9 @@
     </div>
 
     <div class="month-nav">
-      <button id="prev-btn">← Prev</button>
+      <button id="prev-btn" aria-label="Previous month" title="Previous month">←</button>
       <h2 id="month-label"></h2>
-      <button id="next-btn">Next →</button>
+      <button id="next-btn" aria-label="Next month" title="Next month">→</button>
     </div>
 
     <div class="calendar-grid" id="calendar-grid">
@@ -358,8 +398,46 @@
     const ZONE = "7a";
     const CITY = "Philadelphia, PA";
 
+    const gardenPulse = [
+      {
+        kicker: "Now",
+        title: "Grapevine is loaded",
+        text: "Green clusters are heavy along the arbor and gate. Keep shoots tied, open a little air around clusters, and watch for beetles."
+      },
+      {
+        kicker: "Harvest",
+        title: "Cucumbers have started",
+        text: "The raised-bed cucumber is carrying multiple clean fruits with more flowers behind them. Pick young to keep the vine producing."
+      },
+      {
+        kicker: "Bloom",
+        title: "Yarrow and milkweed are carrying color",
+        text: "Yarrow is in pastel bloom and orange milkweed is still doing pollinator work under the redbud canopy."
+      },
+      {
+        kicker: "Next",
+        title: "Crape myrtle and onion are queued",
+        text: "Dwarf crape myrtle buds are set and ornamental onion scapes are swelling, so early July should add a fresh bloom layer."
+      }
+    ];
+
     // Applications log — add entries here or update via garden_agent.py
     const appLog = [
+      {
+        date: "2026-06-26",
+        text: "📷 Garden calendar refreshed from June 24–26 photos: grapevine clusters heavy, yarrow blooming, ornamental onion and dwarf crape myrtle in bud, side-house bed fully layered.",
+        type: "task"
+      },
+      {
+        date: "2026-06-25",
+        text: "🥒 Cucumber vine confirmed in harvest mode — multiple dark-green fruit sizing up with yellow flowers still open behind them.",
+        type: "harvest"
+      },
+      {
+        date: "2026-06-24",
+        text: "🌿 Back garden entered full late-June density: Rising Sun redbud canopy, orange milkweed bloom, grapevine lattice wall, and the raised-bed cucumber pushing hard.",
+        type: "task"
+      },
       {
         date: "2026-03-26",
         text: "🌿 Crabgrass pre-emergent applied — Scotts Pendimethalin, 10.06 lb bag. Soil temp ~62°F. Rain next day to activate.",
@@ -537,6 +615,19 @@
       // Pre-emergent applied 2026-03-26 → reapplication due ~2026-05-21
       events["2026-05-21"] = events["2026-05-21"] || [];
       events["2026-05-21"].push({ icon: "🌿", label: "Pre-emergent reapplication due", type: "task", note: "~8 weeks after 2026-03-26 Pendimethalin application" });
+      events["2026-06-26"] = events["2026-06-26"] || [];
+      events["2026-06-26"].push(
+        { icon: "🍇", label: "Grapevine: heavy cluster check", type: "task", note: "Clusters are loaded along the arbor — keep enough air around fruit and thin crowded clusters if needed" },
+        { icon: "🌼", label: "Yarrow: peak bloom watch", type: "task", note: "Deadhead spent umbels as they brown; leave fresh pastel heads for pollinators" }
+      );
+      events["2026-06-27"] = events["2026-06-27"] || [];
+      events["2026-06-27"].push({ icon: "🥒", label: "Cucumber harvest watch", type: "harvest", note: "Pick cucumbers while still firm and dark green; frequent harvest keeps new fruit coming" });
+      events["2026-07-02"] = events["2026-07-02"] || [];
+      events["2026-07-02"].push({ icon: "🌸", label: "Ornamental onion bloom watch", type: "task", note: "Late-June scapes were swollen — watch for purple bloom opening and keep foliage until it yellows" });
+      events["2026-07-06"] = events["2026-07-06"] || [];
+      events["2026-07-06"].push({ icon: "🌸", label: "Dwarf Crape Myrtle: bloom watch", type: "task", note: "Buds were set across red stems on Jun 26 — avoid pruning now; just water through heat" });
+      events["2026-07-12"] = events["2026-07-12"] || [];
+      events["2026-07-12"].push({ icon: "🥒", label: "Cucumber succession check", type: "harvest", note: "Harvest every 1-2 days in heat; remove oversized fruit so the vine keeps setting" });
 
       return events;
     }
@@ -555,6 +646,17 @@
     const detailPanel = document.getElementById("detail-panel");
     const detailTitle = document.getElementById("detail-title");
     const eventList  = document.getElementById("event-list");
+
+    function renderGardenPulse() {
+      const container = document.getElementById("garden-pulse");
+      container.innerHTML = "";
+      gardenPulse.forEach(item => {
+        const card = document.createElement("article");
+        card.className = "pulse-card";
+        card.innerHTML = `<div class="pulse-kicker">${item.kicker}</div><h3>${item.title}</h3><p>${item.text}</p>`;
+        container.appendChild(card);
+      });
+    }
 
     function renderCalendar(year, month) {
       // Remove day cells (keep headers)
@@ -767,6 +869,7 @@
       });
     }
 
+    renderGardenPulse();
     renderCalendar(currentYear, currentMonth);
     renderLog();
     loadWeather();
