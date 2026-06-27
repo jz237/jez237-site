@@ -44,6 +44,12 @@ check line-of-sight, and lead their shots.
   and armor-repair supply drops from tank kills.
 - **Scoring:** global top-10 via the site's shared Cloudflare Worker
   (`/scores/iron-ridge` namespace), with localStorage fallback offline.
+- **Online rooms:** optional public multiplayer rooms relay live player
+  pose, names, cannon fire, and lobby presence through the
+  `iron-ridge-online` Cloudflare Worker. Quick Match finds a waiting
+  room or creates one, room-code links can be shared from desktop or
+  mobile, and the browser heartbeat keeps lobbies fresh while players
+  wait.
 
 ## Honest notes on the art
 
