@@ -22,6 +22,7 @@ import { Hud } from './hud.js';
 import { QualityScaler, LEVELS } from './quality.js';
 import { Minimap } from './minimap.js';
 import * as LB from './leaderboard.js';
+import { Multiplayer, cleanName, cleanRoom, randomRoom } from './multiplayer.js';
 
 const $ = (id) => document.getElementById(id);
 
@@ -116,6 +117,12 @@ const input = new Input(canvas);
 const hud = new Hud();
 const waves = new WaveManager();
 const minimap = new Minimap($('minimap'));
+const multiplayer = new Multiplayer({
+  scene,
+  effects,
+  onRemoteFire: handleRemoteFire,
+  onStatus: syncMultiplayerStatus,
+});
 
 // post-processing
 const composer = new EffectComposer(renderer);
@@ -160,6 +167,94 @@ const G = {
 
 let pendingScore = 0;
 let lbMode = 'global';
+
+function syncMultiplayerStatus(text = '') {
+  const status = $('mp-status');
+  const hudEl = $('mp-hud');
+  const room = multiplayer.room ? cleanRoom(multiplayer.room) : '';
+  if (status) status.textContent = text || (room ? `Room ${room}` : 'Optional co-op room: share the link, deploy, and other tanks appear on the ridge.');
+  if (hudEl) {
+    hudEl.textContent = multiplayer.connected ? `ONLINE ${room} · ${multiplayer.peers.size + 1} TANKS` : '';
+    hudEl.classList.toggle('hidden', !multiplayer.connected);
+  }
+}
+
+function escHtml(value) {
+  return String(value).replace(/[&<>"']/g, c => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
+  }[c]));
+}
+
+async function refreshRooms() {
+  const box = $('mp-rooms');
+  if (!box) return [];
+  box.innerHTML = '<div class="mp-room-empty">Checking for waiting tanks...</div>';
+  const rooms = await multiplayer.fetchRooms();
+  if (rooms === null) {
+    box.innerHTML = '<div class="mp-room-empty">Open rooms unavailable</div>';
+    return [];
+  }
+  if (!rooms.length) {
+    box.innerHTML = '<div class="mp-room-empty">No waiting rooms. Quick Match will host one.</div>';
+    return [];
+  }
+  box.innerHTML = rooms.map(room => `
+    <div class="mp-room-row">
+      <div>
+        <div class="mp-room-main">${escHtml(room.room)} · ${escHtml(room.host)}</div>
+        <div class="mp-room-meta">${room.count} online · waiting for allies</div>
+      </div>
+      <button class="mp-room-join" data-room="${escHtml(room.room)}">JOIN</button>
+    </div>
+  `).join('');
+  box.querySelectorAll('.mp-room-join').forEach(btn => btn.addEventListener('click', async () => {
+    const room = cleanRoom(btn.dataset.room || '');
+    $('mp-room').value = room;
+    const name = cleanName($('mp-name')?.value || multiplayer.name || LB.lastInitials() || 'TANKER');
+    $('mp-name').value = name;
+    try {
+      await multiplayer.connect(room, name);
+      deployAfterOnlineConnect();
+    } catch {}
+  }));
+  return rooms;
+}
+
+function multiplayerPacket() {
+  const p = G.player;
+  if (!p || !p.alive || G.state !== 'playing') return null;
+  const b = p.body;
+  return {
+    state: G.state,
+    score: G.score | 0,
+    wave: G.wave | 0,
+    kills: G.kills | 0,
+    hp: Math.ceil(p.hp),
+    x: b.position.x, y: b.position.y, z: b.position.z,
+    qx: b.quaternion.x, qy: b.quaternion.y, qz: b.quaternion.z, qw: b.quaternion.w,
+    turretYaw: p.turretYaw,
+    barrelPitch: p.barrelPitch,
+  };
+}
+
+function handleRemoteFire(raw) {
+  if (!raw || G.state !== 'playing') return;
+  const origin = new THREE.Vector3(Number(raw.ox) || 0, Number(raw.oy) || 0, Number(raw.oz) || 0);
+  const dir = new THREE.Vector3(Number(raw.dx) || 0, Number(raw.dy) || 0, Number(raw.dz) || 1).normalize();
+  if (!Number.isFinite(origin.x + origin.y + origin.z + dir.x + dir.y + dir.z)) return;
+  if (G.player && origin.distanceTo(G.player.visual.root.position) > 520) return;
+  effects.muzzleFlash(origin, dir);
+  const d = camera.position.distanceTo(origin);
+  if (d < 220) audio.fire(Math.max(0.14, 0.7 - d / 260));
+  projectiles.spawn(origin, dir, SHELL.speed, { isPlayer: true, shellDmg: SHELL.damageDirect }, onShellHit);
+}
+
+function deployAfterOnlineConnect() {
+  audio.ensure();
+  audio.resume();
+  if (G.state !== 'playing') startGame();
+  syncMultiplayerStatus(`Room ${cleanRoom(multiplayer.room)} · deployed`);
+}
 
 // ---------------------------------------------------------------- quality
 const quality = new QualityScaler(isTouch ? 1 : 2, (L) => {
@@ -466,6 +561,7 @@ function playerFire() {
   effects.muzzleFlash(shot.origin, shot.dir);
   effects.shake(0.32);
   projectiles.spawn(shot.origin, shot.dir, SHELL.speed, p, onShellHit);
+  multiplayer.sendFire(shot);
   if (p.rack === 0) hud.floater('RESTOCKING…', 'warn');
 }
 
@@ -864,6 +960,47 @@ $('btn-play').addEventListener('click', () => {
   audio.ensure(); audio.resume();
   startGame();
 });
+$('btn-mp-connect')?.addEventListener('click', async () => {
+  const room = cleanRoom($('mp-room')?.value || multiplayer.room || randomRoom());
+  const name = cleanName($('mp-name')?.value || multiplayer.name || LB.lastInitials() || 'TANKER');
+  $('mp-room').value = room;
+  $('mp-name').value = name;
+  try {
+    await multiplayer.connect(room, name);
+    deployAfterOnlineConnect();
+  } catch {}
+});
+$('btn-mp-quick')?.addEventListener('click', async () => {
+  syncMultiplayerStatus('Finding an open room...');
+  const rooms = await refreshRooms();
+  const room = rooms?.[0]?.room || randomRoom();
+  const name = cleanName($('mp-name')?.value || multiplayer.name || LB.lastInitials() || 'TANKER');
+  $('mp-room').value = room;
+  $('mp-name').value = name;
+  try {
+    await multiplayer.connect(room, name);
+    deployAfterOnlineConnect();
+  } catch {}
+});
+$('btn-mp-new')?.addEventListener('click', () => {
+  const room = randomRoom();
+  $('mp-room').value = room;
+  multiplayer.room = room;
+  syncMultiplayerStatus(`New room ${room} ready`);
+});
+$('btn-mp-refresh')?.addEventListener('click', refreshRooms);
+$('btn-mp-copy')?.addEventListener('click', async () => {
+  const room = cleanRoom($('mp-room')?.value || multiplayer.room || randomRoom());
+  multiplayer.room = room;
+  $('mp-room').value = room;
+  const link = multiplayer.shareUrl();
+  try {
+    await navigator.clipboard.writeText(link);
+    syncMultiplayerStatus(`Copied room ${room} link`);
+  } catch {
+    syncMultiplayerStatus(link);
+  }
+});
 $('btn-resume').addEventListener('click', resumeGame);
 $('btn-quit').addEventListener('click', () => {
   resetGame();
@@ -1100,6 +1237,7 @@ function gameFrame(dt) {
     }
   }
   props.update(dt, G.time);
+  multiplayer.update(dt, multiplayerPacket());
 
   // shell whiz-by for incoming fire
   for (const s of projectiles.active) {
@@ -1161,11 +1299,23 @@ function loop(now) {
 }
 
 showMenu();
+{
+  const params = new URLSearchParams(location.search);
+  const room = cleanRoom(params.get('room') || multiplayer.room || randomRoom());
+  const name = cleanName(multiplayer.name || LB.lastInitials() || 'TANKER');
+  $('mp-room').value = room;
+  $('mp-name').value = name;
+  multiplayer.room = room;
+  multiplayer.name = name;
+  if (params.get('room')) syncMultiplayerStatus(`Room ${room} loaded from link — tap JOIN ROOM`);
+  else syncMultiplayerStatus();
+  refreshRooms();
+}
 requestAnimationFrame(loop);
 
 // debug/testing handle (harmless in production)
 window.__IR = {
-  G, quality, world, startGame, waves, props, projectiles, effects, input, camera,
+  G, quality, world, startGame, waves, props, projectiles, effects, input, camera, multiplayer,
   onShellHit, audio,
   player: () => G.player, frames: 0,
   // drive frames manually when rAF is suspended (headless testing)

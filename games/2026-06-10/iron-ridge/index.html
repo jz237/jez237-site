@@ -175,6 +175,57 @@
     border-radius: 10px; padding: 10px 12px; margin: 10px 0;
   }
   .option-row b { color: var(--ink); }
+  .mp-panel {
+    margin: 10px 0;
+    padding: 10px;
+    background: #00000045;
+    border: 1px solid var(--panel-border);
+    border-radius: 10px;
+    text-align: left;
+  }
+  .mp-grid { display: grid; grid-template-columns: 1fr 104px; gap: 8px; }
+  .mp-grid input {
+    pointer-events: auto; min-width: 0;
+    background: #00000060; color: var(--ink);
+    border: 1px solid var(--panel-border); border-radius: 8px;
+    padding: 9px 10px; font-weight: 800; letter-spacing: 1px;
+    text-transform: uppercase; outline: none;
+  }
+  .mp-actions { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+  .mp-actions .btn { flex: 1 1 106px; margin: 0; padding: 9px 10px; font-size: 12px; letter-spacing: 1px; }
+  .mp-status { min-height: 16px; margin-top: 7px; color: var(--muted); font-size: 12px; line-height: 1.35; }
+  .mp-rooms-head {
+    display: flex; align-items: center; justify-content: space-between; gap: 8px;
+    margin-top: 9px; padding-top: 8px; border-top: 1px solid var(--panel-border);
+    color: var(--muted); font-size: 11px; letter-spacing: 1px;
+  }
+  .mp-mini {
+    pointer-events: auto; cursor: pointer;
+    background: transparent; color: var(--muted);
+    border: 1px solid var(--panel-border); border-radius: 7px;
+    padding: 5px 7px; font-weight: 800; font-size: 10px;
+  }
+  .mp-room-list { display: grid; gap: 5px; margin-top: 7px; }
+  .mp-room-row {
+    display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: center;
+    padding: 7px 8px; border: 1px solid var(--panel-border); border-radius: 8px;
+    background: rgba(10, 16, 10, 0.58);
+  }
+  .mp-room-main { font-size: 12px; color: var(--ink); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .mp-room-meta { margin-top: 2px; font-size: 10px; color: var(--muted); }
+  .mp-room-join {
+    pointer-events: auto; cursor: pointer;
+    background: #2a331f; color: var(--ink);
+    border: 1px solid var(--panel-border); border-radius: 7px;
+    padding: 6px 8px; font-weight: 800; font-size: 10px;
+  }
+  .mp-room-empty { padding: 7px 8px; border: 1px dashed var(--panel-border); border-radius: 8px; color: var(--muted); font-size: 11px; }
+  #mp-hud {
+    position: absolute; top: 12px; left: 50%; transform: translateX(-50%);
+    max-width: min(360px, 44vw);
+    padding: 6px 10px; font-size: 12px; color: var(--accent);
+    text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
   .toggle-btn {
     pointer-events: auto; cursor: pointer; min-width: 78px;
     background: #2a331f; color: var(--ink); border: 1px solid var(--panel-border);
@@ -283,6 +334,7 @@
     <div class="row"><span>WAVE</span><b id="wave">1</b></div>
     <div class="row"><span>KILLS</span><b id="kills">0</b></div>
   </div>
+  <div class="hud-panel hidden" id="mp-hud"></div>
   <div id="combo"></div>
 
   <div class="hud-panel" id="hp-panel">
@@ -337,6 +389,21 @@
     <button class="btn" id="btn-play">▶ DEPLOY</button>
     <button class="btn secondary" id="btn-mute">🔊 SOUND ON</button>
     <button class="btn secondary" id="btn-options">OPTIONS</button>
+    <div class="mp-panel">
+      <div class="mp-grid">
+        <input id="mp-room" maxlength="24" placeholder="ROOM CODE" autocomplete="off" />
+        <input id="mp-name" maxlength="12" placeholder="NAME" autocomplete="nickname" />
+      </div>
+      <div class="mp-actions">
+        <button class="btn secondary" id="btn-mp-quick">⚡ QUICK MATCH</button>
+        <button class="btn secondary" id="btn-mp-connect">🌐 JOIN CODE</button>
+        <button class="btn secondary" id="btn-mp-new">NEW CODE</button>
+        <button class="btn secondary" id="btn-mp-copy">COPY LINK</button>
+      </div>
+      <div class="mp-rooms-head"><span>OPEN ROOMS</span><button class="mp-mini" id="btn-mp-refresh">REFRESH</button></div>
+      <div class="mp-room-list" id="mp-rooms"><div class="mp-room-empty">Checking for waiting tanks...</div></div>
+      <div class="mp-status" id="mp-status">Optional co-op room: share the link, deploy, and other tanks appear on the ridge.</div>
+    </div>
     <div class="lb-tabs">
       <button class="lb-tab active" id="tab-global-menu">🌐 GLOBAL TOP 10</button>
       <button class="lb-tab" id="tab-local-menu">📱 LOCAL</button>
