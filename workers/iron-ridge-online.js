@@ -1,5 +1,6 @@
 const MAX_CLIENTS = 12;
 const MAX_MESSAGE = 4096;
+const ROOM_TTL = 45000;
 
 function json(data, init = {}) {
   return new Response(JSON.stringify(data), {
@@ -28,6 +29,15 @@ function cleanName(raw) {
     .replace(/[^A-Z0-9 _-]/g, '')
     .trim()
     .slice(0, 12) || 'TANKER';
+}
+
+function randomRoom() {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  let code = '';
+  const bytes = new Uint8Array(6);
+  crypto.getRandomValues(bytes);
+  for (const byte of bytes) code += chars[byte % chars.length];
+  return code;
 }
 
 export class IronRidgeRoom {
@@ -157,6 +167,14 @@ export class IronRidgeLobby {
 
   async fetch(request) {
     const url = new URL(request.url);
+    const now = Date.now();
+
+    const cleanup = () => {
+      for (const [room, info] of this.rooms) {
+        if (now - info.updatedAt > ROOM_TTL || info.count <= 0) this.rooms.delete(room);
+      }
+    };
+
     if (request.method === 'POST' && url.pathname === '/upsert') {
       let data;
       try { data = await request.json(); } catch { return json({ ok: false }, { status: 400 }); }
@@ -172,14 +190,26 @@ export class IronRidgeLobby {
       return json({ ok: true });
     }
 
-    const now = Date.now();
+    if (url.pathname === '/match') {
+      cleanup();
+      let match = null;
+      for (const info of this.rooms.values()) {
+        if (info.count === 1) {
+          if (!match || info.updatedAt < match.updatedAt) match = info;
+        }
+      }
+      if (!match) {
+        const room = randomRoom();
+        match = { room, host: 'WAITING', count: 1, updatedAt: now };
+        this.rooms.set(room, match);
+      }
+      return json({ room: match.room, host: match.host, count: match.count });
+    }
+
+    cleanup();
     const rooms = [];
     for (const [room, info] of this.rooms) {
-      if (now - info.updatedAt > 45000 || info.count <= 0) {
-        this.rooms.delete(room);
-        continue;
-      }
-      if (info.count < MAX_CLIENTS) rooms.push(info);
+      if (info.count > 0 && info.count < 2) rooms.push(info);
     }
     rooms.sort((a, b) => b.updatedAt - a.updatedAt);
     return json({ rooms: rooms.slice(0, 12) });
@@ -217,7 +247,7 @@ export default {
     const url = new URL(request.url);
     if (request.method === 'OPTIONS') return json({ ok: true });
     if (url.pathname === '/health') return json({ ok: true, service: 'iron-ridge-online' });
-    if (url.pathname === '/rooms') {
+    if (url.pathname === '/rooms' || url.pathname === '/match') {
       const id = env.IRON_RIDGE_LOBBY.idFromName('global');
       return env.IRON_RIDGE_LOBBY.get(id).fetch(request);
     }
