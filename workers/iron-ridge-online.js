@@ -84,6 +84,17 @@ export class IronRidgeRoom {
         return;
       }
 
+      if (data.type === 'ping') {
+        this.send(server, {
+          type: 'pong',
+          t: finite(data.t),
+          count: this.clients.size,
+          serverNow: Date.now(),
+        });
+        this.reportRoom();
+        return;
+      }
+
       if (data.type === 'state') {
         this.broadcast(id, {
           type: 'state',

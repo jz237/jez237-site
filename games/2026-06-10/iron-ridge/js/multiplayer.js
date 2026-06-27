@@ -8,6 +8,7 @@ import { buildTankMesh } from './tank.js';
 const ROOM_KEY = 'iron_ridge_room';
 const MP_NAME_KEY = 'iron_ridge_mp_name';
 const DEFAULT_WS = 'wss://iron-ridge-online.jez237.workers.dev/ws';
+const RECONNECT_DELAYS = [900, 1800, 3600, 6000, 9000];
 
 const clampText = (value, fallback, max) => {
   const clean = String(value || fallback || '')
@@ -38,6 +39,9 @@ class RemoteTank {
       }
     });
     scene.add(this.visual.root);
+    this.label = makeNameLabel(peer.name || 'ALLY');
+    this.label.position.set(0, 3.2, 0);
+    this.visual.root.add(this.label);
     this.targetPos = new THREE.Vector3();
     this.targetQuat = new THREE.Quaternion();
     this.lastSeen = performance.now();
@@ -46,6 +50,7 @@ class RemoteTank {
 
   applyState(s) {
     this.lastSeen = performance.now();
+    updateNameLabel(this.label, this.peer.name || 'ALLY');
     this.targetPos.set(Number(s.x) || 0, Number(s.y) || 2, Number(s.z) || 0);
     this.targetQuat.set(Number(s.qx) || 0, Number(s.qy) || 0, Number(s.qz) || 0, Number(s.qw) || 1).normalize();
     this.visual.turret.rotation.y = Number(s.turretYaw) || 0;
@@ -66,7 +71,62 @@ class RemoteTank {
 
   remove() {
     this.scene.remove(this.visual.root);
+    this.label.material.map?.dispose?.();
+    this.label.material.dispose();
   }
+}
+
+function makeNameLabel(name) {
+  const sprite = new THREE.Sprite(new THREE.SpriteMaterial({
+    map: renderNameTexture(name),
+    transparent: true,
+    depthTest: false,
+    depthWrite: false,
+  }));
+  sprite.scale.set(3.6, 0.72, 1);
+  sprite.userData.labelText = cleanName(name || 'ALLY');
+  return sprite;
+}
+
+function updateNameLabel(sprite, name) {
+  const clean = cleanName(name || 'ALLY');
+  if (!sprite || sprite.userData.labelText === clean) return;
+  const old = sprite.material.map;
+  sprite.material.map = renderNameTexture(clean);
+  sprite.userData.labelText = clean;
+  old?.dispose?.();
+}
+
+function renderNameTexture(name) {
+  const c = document.createElement('canvas');
+  c.width = 256;
+  c.height = 64;
+  const ctx = c.getContext('2d');
+  ctx.clearRect(0, 0, c.width, c.height);
+  ctx.fillStyle = 'rgba(5, 10, 6, 0.74)';
+  roundRect(ctx, 12, 10, 232, 42, 12);
+  ctx.fill();
+  ctx.strokeStyle = 'rgba(182, 211, 106, 0.9)';
+  ctx.lineWidth = 3;
+  ctx.stroke();
+  ctx.fillStyle = '#e9f6cf';
+  ctx.font = '800 22px system-ui, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(cleanName(name || 'ALLY'), 128, 32, 210);
+  const tex = new THREE.CanvasTexture(c);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  return tex;
+}
+
+function roundRect(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.arcTo(x + w, y, x + w, y + h, r);
+  ctx.arcTo(x + w, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r);
+  ctx.arcTo(x, y, x + w, y, r);
+  ctx.closePath();
 }
 
 export class Multiplayer {
@@ -82,6 +142,13 @@ export class Multiplayer {
     this.peers = new Map();
     this.lastState = 0;
     this.connected = false;
+    this.connecting = false;
+    this.manualClose = false;
+    this.reconnectAttempts = 0;
+    this.heartbeatTimer = 0;
+    this.reconnectTimer = 0;
+    this.latency = 0;
+    this.lastPong = 0;
   }
 
   wsBase() {
@@ -143,13 +210,15 @@ export class Multiplayer {
     return this.connected ? this.peers.size + 1 : 0;
   }
 
-  connect(room, name) {
+  connect(room, name, opts = {}) {
     this.disconnect(false);
+    this.manualClose = false;
+    this.connecting = true;
     this.room = cleanRoom(room || this.room || randomRoom());
     this.name = cleanName(name || this.name || 'TANKER');
     localStorage.setItem(ROOM_KEY, this.room);
     localStorage.setItem(MP_NAME_KEY, this.name);
-    this.status(`Connecting to ${this.room}...`);
+    this.status(opts.reconnect ? `Reconnecting to ${this.room}...` : `Connecting to ${this.room}...`);
 
     return new Promise((resolve, reject) => {
       const ws = new WebSocket(this.url(this.room));
@@ -162,20 +231,30 @@ export class Multiplayer {
       };
       this.ws = ws;
       ws.onopen = () => {
+        this.connecting = false;
         this.connected = true;
+        this.reconnectAttempts = 0;
+        this.lastPong = performance.now();
         this.send({ type: 'hello', name: this.name });
+        this.startHeartbeat();
         this.status(`Room ${this.room} connected`);
         settle(true, this);
       };
       ws.onclose = () => {
         if (this.ws === ws) {
+          this.connecting = false;
           this.connected = false;
           this.ws = null;
-          this.status(this.room ? `Room ${this.room} disconnected` : 'Disconnected');
+          this.stopHeartbeat();
+          for (const peer of this.peers.values()) peer.remote?.remove();
+          this.peers.clear();
+          if (!this.manualClose && this.room) this.scheduleReconnect();
+          else this.status(this.room ? `Room ${this.room} disconnected` : 'Disconnected');
         }
         settle(false, new Error('room closed'));
       };
       ws.onerror = () => {
+        this.connecting = false;
         this.status('Room connection failed');
         settle(false, new Error('room connection failed'));
       };
@@ -184,6 +263,11 @@ export class Multiplayer {
   }
 
   disconnect(clear = true) {
+    this.manualClose = true;
+    this.stopHeartbeat();
+    clearTimeout(this.reconnectTimer);
+    this.reconnectTimer = 0;
+    this.connecting = false;
     if (this.ws) {
       try { this.ws.close(1000, 'leave'); } catch {}
     }
@@ -201,6 +285,34 @@ export class Multiplayer {
     return true;
   }
 
+  startHeartbeat() {
+    this.stopHeartbeat();
+    this.heartbeatTimer = setInterval(() => {
+      if (!this.connected) return;
+      const now = performance.now();
+      this.send({ type: 'ping', t: now });
+      if (this.lastPong && now - this.lastPong > 22000) {
+        this.status(`Room ${this.room} connection stalled`);
+      }
+    }, 5000);
+  }
+
+  stopHeartbeat() {
+    if (this.heartbeatTimer) clearInterval(this.heartbeatTimer);
+    this.heartbeatTimer = 0;
+  }
+
+  scheduleReconnect() {
+    if (this.reconnectTimer) return;
+    const delay = RECONNECT_DELAYS[Math.min(this.reconnectAttempts, RECONNECT_DELAYS.length - 1)];
+    this.reconnectAttempts++;
+    this.status(`Connection dropped. Reconnecting in ${Math.ceil(delay / 1000)}s...`);
+    this.reconnectTimer = setTimeout(() => {
+      this.reconnectTimer = 0;
+      this.connect(this.room, this.name, { reconnect: true }).catch(() => {});
+    }, delay);
+  }
+
   handle(raw) {
     let data;
     try { data = JSON.parse(raw); } catch { return; }
@@ -208,6 +320,11 @@ export class Multiplayer {
       this.id = data.id;
       this.room = cleanRoom(data.room || this.room);
       this.status(`Room ${this.room} · ${Math.max(1, Number(data.count) || 1)} online`);
+      return;
+    }
+    if (data.type === 'pong') {
+      this.lastPong = performance.now();
+      this.latency = Math.max(0, Math.round(this.lastPong - (Number(data.t) || this.lastPong)));
       return;
     }
     if (data.type === 'peers') {
