@@ -2535,5 +2535,41 @@
       "description": "Believable invented volcanic sea-cliff animal with heat-shedding dorsal plates, bioluminescent throat sacs, and charcoal hide with pale amber vents.",
       "template": "Design a believable [HABITAT] creature with [ADAPTATION 1], [ADAPTATION 2], and [TEXTURE/COLOR], shown as a realistic natural-history creature study."
     }
+  },
+  {
+    "id": "2026-06-27-hybrid-creature-infographic-salt-veil-basker-development-ma",
+    "title": "Salt Veil Basker: Development Map",
+    "tests": "Generated with GPT Image 2 via OpenClaw CLI; exact source PNG verified under media/tool-image-generation; fictional/non-actionable hybrid concept; archive append converted to JPEG and uploaded to R2.",
+    "prompt": "Create a fictional two-source hybrid-creature development map for the Salt Veil Basker, a non-actionable speculative hybrid of harbor seal + cuttlefish. Show a colorful photorealistic scientific wall chart with a source-trait map, juvenile-to-adult stage strip, large adult anatomy/specimen panel, macro texture windows, habitat swatches, and a field-context scale vignette. The adult should be a broad low belly-crawling coastal form with seal body weight, blunt whiskered head, foreflipper shoulders, translucent cuttlefish side veils, chromatophore mottling, fin-frill edges, soft mantle texture, and fan-tail display.\nReusable template: Create a fictional two-source hybrid-creature pair: first a colorful photorealistic speculative development-map infographic that names [SOURCE A] + [SOURCE B], maps at least two visible trait contributions from each source, includes a juvenile-to-adult stage strip, adult anatomy/specimen panel, macro texture panels, habitat swatches, and field-context scale cue without actionable biology; then create a matching in-the-wild field photo of the same adult phenotype.\nExample substitution: [SOURCE A] = harbor seal; [SOURCE B] = cuttlefish; habitat = dusk salt flats and shallow tidal pools; shared adult phenotype = broad belly-crawling seal mass with cuttlefish veils, chromatophore skin, fin frills, and fan tail.",
+    "image": "images/2026-06-27-hybrid-creature-infographic-salt-veil-basker-development-ma.jpg",
+    "date": "2026-06-27",
+    "batch": "Daily Prompt",
+    "slot": "hybrid-creature-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "hybridCreature": {
+      "name": "Salt Veil Basker",
+      "imageKind": "infographic",
+      "description": "A fictional harbor seal + cuttlefish strain with a low seal-like coastal body, translucent cuttlefish veils, chromatophore mottling, fin frills, and fan-tail display.",
+      "continuity": "Same adult phenotype in both images: broad belly-crawling seal mass, blunt whiskered head, translucent side veils, mottled chromatophore skin, fin-frill edges, fan tail, and dusk salt-flat habitat."
+    }
+  },
+  {
+    "id": "2026-06-27-hybrid-creature-wild-salt-veil-basker-in-the-wild",
+    "title": "Salt Veil Basker: In the Wild",
+    "tests": "Generated with GPT Image 2 via OpenClaw CLI; exact source PNG verified under media/tool-image-generation; matching field-photo continuation of the same fictional/non-actionable hybrid phenotype; archive append converted to JPEG and uploaded to R2.",
+    "prompt": "Create a matching in-the-wild documentary field photo of the adult Salt Veil Basker, a fictional two-source hybrid of harbor seal + cuttlefish, in dusk salt flats and shallow tidal pools. Preserve the same adult phenotype from the development map: broad low belly-crawling coastal body, seal-like blunt whiskered head and foreflipper shoulder structure, cuttlefish-like translucent side veils, mottled chromatophore patches, fin-frill edges, soft mantle texture, and fan-tail display partly spread over wet sand.\nReusable template: Create a matching photorealistic in-the-wild field photo of the same fictional [HYBRID NAME] adult phenotype from [SOURCE A] + [SOURCE B], preserving the source-trait map visibly in the body plan, skin texture, posture, habitat interaction, and scale cues. Avoid text, gore, lab context, and any result that reads as a costume or a pure single-source animal.\nExample substitution: [HYBRID NAME] = Salt Veil Basker; [SOURCE A] = harbor seal; [SOURCE B] = cuttlefish; habitat = dusk salt flats and shallow tide pools.",
+    "image": "images/2026-06-27-hybrid-creature-wild-salt-veil-basker-in-the-wild.jpg",
+    "date": "2026-06-27",
+    "batch": "Daily Prompt",
+    "slot": "hybrid-creature-wild",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "hybridCreature": {
+      "name": "Salt Veil Basker",
+      "imageKind": "wild",
+      "description": "A fictional harbor seal + cuttlefish strain with a low seal-like coastal body, translucent cuttlefish veils, chromatophore mottling, fin frills, and fan-tail display.",
+      "continuity": "Same adult phenotype in both images: broad belly-crawling seal mass, blunt whiskered head, translucent side veils, mottled chromatophore skin, fin-frill edges, fan tail, and dusk salt-flat habitat."
+    }
   }
 ]
