@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>Steel Duel — HD Tank Battle</title>
+<meta name="description" content="Steel Duel — a faithful HD remaster of Atari's 1974 arcade Tank. Two-player top-down maze duel through a deadly minefield, plus a CPU mode, a 1974 CRT homage, and global scores." />
+<style>
+  :root{
+    --amber:#ffb347; --teal:#46d6e8; --ink:#eef3ff; --dim:#8fa0bd;
+    --panel:rgba(14,19,29,.92); --edge:rgba(120,150,200,.18);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;background:#05070c;color:var(--ink);
+    font-family:Menlo,Consolas,"SF Mono",monospace;overflow:hidden;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+  #stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 30%,#0d1320,#05070c 70%);touch-action:none}
+  canvas{display:block;image-rendering:auto;border-radius:6px;box-shadow:0 0 60px rgba(70,120,200,.18),0 14px 40px rgba(0,0,0,.6);touch-action:none}
+  body.mobile-play #stage{align-items:stretch;justify-content:stretch}
+  body.mobile-play canvas{width:100vw!important;height:100dvh!important;border-radius:0;box-shadow:none}
+  /* top-right toolbar */
+  #bar{position:fixed;top:10px;right:12px;display:flex;gap:8px;z-index:20}
+  #bar button{background:var(--panel);border:1px solid var(--edge);color:var(--ink);
+    border-radius:8px;padding:6px 10px;font:inherit;font-size:13px;cursor:pointer}
+  #bar button:hover{border-color:var(--amber)}
+  body.mobile-play #bar{top:64px;right:8px;opacity:.72}
+  body.mobile-play #bar button{padding:5px 8px;font-size:12px}
+  body.classic-mode #bar{opacity:.72}
+  /* overlays */
+  .ov{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:30;
+    background:rgba(4,7,12,.72);backdrop-filter:blur(3px);padding:18px;overflow-y:auto;overscroll-behavior:contain;touch-action:pan-y}
+  .ov.hidden{display:none}
+  #ovTitle{background:rgba(4,7,12,.42);backdrop-filter:none}
+  .card{width:min(560px,94vw);background:var(--panel);border:1px solid var(--edge);
+    border-radius:16px;padding:26px 26px 22px;text-align:center;box-shadow:0 24px 60px rgba(0,0,0,.55);max-height:calc(100dvh - 36px);overflow-y:auto;-webkit-overflow-scrolling:touch;touch-action:pan-y}
+  h1{margin:0 0 2px;font-size:clamp(34px,7vw,56px);letter-spacing:3px;
+    background:linear-gradient(120deg,var(--amber),#fff,var(--teal));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  .sub{color:var(--dim);font-size:13px;margin:0 0 18px;letter-spacing:1px}
+  .btn{display:block;width:100%;margin:9px 0;padding:13px;border-radius:10px;font:inherit;font-size:16px;
+    cursor:pointer;border:1px solid var(--edge);background:#161d2b;color:var(--ink);transition:.15s}
+  .btn:hover{transform:translateY(-1px)}
+  .btn.primary{background:linear-gradient(120deg,#3a2a12,#123038);border-color:var(--amber);font-weight:700}
+  .row{display:flex;gap:10px}.row .btn{flex:1}
+  .opt{display:flex;align-items:center;justify-content:center;gap:10px;color:var(--dim);font-size:13px;margin-top:8px}
+  .watch-options{margin-top:10px;padding-top:10px;border-top:1px solid var(--edge)}
+  .watch-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .watch-opt{display:flex;flex-direction:column;gap:5px;color:var(--dim);font-size:12px}
+  .online-panel{margin-top:10px;padding:10px;border:1px solid var(--edge);border-radius:8px;background:rgba(8,12,20,.62)}
+  .online-grid{display:grid;grid-template-columns:1fr 120px;gap:8px}
+  .online-name{margin-top:8px}
+  .online-name-row{display:grid;grid-template-columns:64px 1fr;gap:8px;align-items:center;margin-top:8px;color:var(--dim);font-size:10px;text-align:left}
+  .online-name-row input{margin:0}
+  .online-labels{display:grid;grid-template-columns:1fr 120px;gap:8px;margin-bottom:4px;color:var(--dim);font-size:10px;text-align:left}
+  .online-hint{margin-top:7px;color:var(--dim);font-size:10px;text-align:left;line-height:1.35}
+  .online-status{min-height:16px;margin-top:7px;color:var(--dim);font-size:11px;text-align:left}
+  .online-tools{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;margin-top:8px}
+  .online-quality{font-size:10px;color:var(--dim);text-align:left;min-height:14px}
+  .open-rooms{margin-top:10px;padding-top:10px;border-top:1px solid var(--edge)}
+  .open-rooms-head{display:flex;align-items:center;justify-content:space-between;gap:8px;color:var(--dim);font-size:10px;text-align:left}
+  .mini-btn{border:1px solid var(--edge);border-radius:8px;background:#161d2b;color:var(--ink);font:inherit;font-size:10px;padding:5px 8px;cursor:pointer}
+  .mini-btn:hover,.room-join:hover{border-color:var(--amber)}
+  .room-list{display:grid;gap:6px;margin-top:7px}
+  .room-row{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;padding:7px 8px;border:1px solid var(--edge);border-radius:8px;background:rgba(12,16,25,.74);text-align:left}
+  .room-main{font-size:12px;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .room-meta{margin-top:2px;font-size:9px;color:var(--dim)}
+  .room-join{border:1px solid var(--edge);border-radius:8px;background:#203042;color:var(--ink);font:inherit;font-size:10px;padding:6px 8px;cursor:pointer}
+  .room-empty{padding:8px;border:1px dashed var(--edge);border-radius:8px;color:var(--dim);font-size:10px;text-align:left}
+  .online-lobby{display:none;margin-top:10px;padding-top:10px;border-top:1px solid var(--edge);text-align:left}
+  .online-lobby.on{display:block}
+  .lobby-title{display:flex;align-items:center;justify-content:space-between;gap:8px;color:var(--dim);font-size:10px}
+  .slot-list{display:grid;gap:6px;margin-top:7px}
+  .slot-row{display:grid;grid-template-columns:56px 1fr auto;gap:8px;align-items:center;padding:7px 8px;border:1px solid var(--edge);border-radius:8px;background:rgba(12,16,25,.74)}
+  .slot-role{font-size:10px;color:var(--dim)}
+  .slot-name{font-size:12px;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .slot-state{font-size:9px;color:var(--dim)}
+  .slot-state.ready{color:var(--amber)}
+  .lobby-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+  .lobby-actions .btn{margin:0;font-size:12px;padding:9px}
+  .lobby-actions .btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+  select,input{background:#0c1019;color:var(--ink);border:1px solid var(--edge);border-radius:8px;padding:8px;font:inherit}
+  .keys{display:grid;grid-template-columns:1fr 1fr;gap:14px;text-align:left;margin:8px 0 4px;font-size:13px;color:var(--dim)}
+  .keys b{color:var(--ink)} .keys h3{margin:0 0 6px;font-size:12px;letter-spacing:1px}
+  .keys .p1{color:var(--amber)} .keys .p2{color:var(--teal)}
+  .result{font-size:30px;letter-spacing:2px;margin:4px 0}
+  .big{font-size:40px;font-weight:700;margin:6px 0 14px}
+  .sb-row{display:flex;justify-content:space-between;padding:7px 12px;border-bottom:1px solid var(--edge);font-size:15px}
+  #overScoreForm.hidden{display:none}
+  /* Faint lower-corner touch pads; hitboxes match the visible controls. */
+  #touch{position:fixed;inset:0;z-index:15;display:none;pointer-events:none}
+  .stick{position:absolute;bottom:22px;width:132px;height:132px;border:0;border-radius:50%;
+    background:transparent;pointer-events:auto;touch-action:none}
+  #stickL{left:16px} #stickR{right:16px}
+  .stick::before{content:"";position:absolute;inset:20px;border-radius:50%;
+    border:1px solid rgba(238,243,255,.16);background:radial-gradient(circle,rgba(238,243,255,.055) 0 26%,rgba(238,243,255,.025) 27% 56%,transparent 57%);
+    box-shadow:0 0 24px rgba(70,214,232,.08);pointer-events:none}
+  #stickR::before{border-color:rgba(255,179,71,.18);box-shadow:0 0 24px rgba(255,179,71,.08)}
+  .knob{position:absolute;left:50%;top:50%;width:54px;height:54px;margin:-27px 0 0 -27px;border-radius:50%;
+    background:rgba(120,140,180,.6);border:1px solid rgba(255,255,255,.3)}
+  #stickRk{background:rgba(255,179,71,.6)}
+  .sticklbl{position:absolute;bottom:8px;left:20px;width:92px;text-align:center;font-size:9px;letter-spacing:1.2px;color:rgba(238,243,255,.18);pointer-events:none}
+  #stickR .sticklbl{color:rgba(255,179,71,.2)}
+  #touchHint{display:none;position:absolute;left:0;right:0;bottom:18px;text-align:center;font-size:11px;letter-spacing:1px;color:rgba(238,243,255,.28);pointer-events:none}
+  #forceFire{display:none;position:absolute;right:18px;bottom:22px;width:104px;height:104px;border:1px solid rgba(255,179,71,.36);
+    border-radius:50%;background:radial-gradient(circle at 35% 28%,rgba(255,210,120,.28),rgba(255,105,70,.16) 52%,rgba(12,16,25,.55));
+    color:#ffd9a4;font:800 13px/1 Menlo,Consolas,monospace;letter-spacing:1.6px;text-transform:uppercase;pointer-events:auto;touch-action:none;
+    box-shadow:0 0 26px rgba(255,120,70,.14),inset 0 0 18px rgba(255,179,71,.08)}
+  #forceFire:active,.force-fire-on #forceFire{background:radial-gradient(circle at 35% 28%,rgba(255,230,150,.45),rgba(255,88,58,.34) 56%,rgba(40,16,14,.75));color:#fff3d4}
+  .knob{display:none}
+  input[type=range]{accent-color:var(--amber)}
+  .footer{margin-top:12px;color:var(--dim);font-size:11px}
+  a{color:var(--teal)}
+  @media (max-width:480px),(max-height:760px){
+    .ov{align-items:flex-start;padding:10px}
+    .card{width:min(560px,96vw);border-radius:12px;padding:16px 16px 14px;max-height:calc(100dvh - 20px)}
+    h1{font-size:clamp(30px,10vw,44px);letter-spacing:2px}
+    .sub{font-size:11px;margin-bottom:10px}
+    .btn{margin:6px 0;padding:10px;font-size:14px}
+    .opt{margin-top:6px;font-size:11px}
+    .watch-options{margin-top:8px;padding-top:8px}
+    .watch-grid{gap:8px}
+    .watch-opt{font-size:10px}
+    .footer{margin-top:8px;font-size:10px}
+  }
+</style>
+</head>
+<body>
+  <div id="stage"><canvas id="game"></canvas></div>
+
+  <div id="bar">
+    <button id="btnClassic" title="Toggle 1974 CRT mode (C)">HD</button>
+    <button id="btnMute" title="Mute (M)">🔊</button>
+  </div>
+
+  <!-- TITLE -->
+  <div id="ovTitle" class="ov">
+    <div class="card">
+      <h1>STEEL&nbsp;DUEL</h1>
+      <p class="sub">HD remaster of Atari TANK (1974) · campaign, duel &amp; co-op</p>
+      <button id="btnCampaign" class="btn primary">🎯 CAMPAIGN (1P)</button>
+      <button id="btnCampaign2" class="btn">🤝 CAMPAIGN CO-OP (2P)</button>
+      <button id="btnDuel" class="btn">⚔️ 2-PLAYER DUEL</button>
+      <button id="btnCoop" class="btn">🛡 SURVIVAL vs ENEMY TANKS</button>
+      <button id="btnCpu" class="btn">🤖 PLAY vs CPU</button>
+      <div class="opt" style="flex-direction:column;gap:6px;margin-top:12px">
+        <div>Opponent CPU skill — <b id="diffLabel" style="color:var(--amber)">Seasoned (45)</b></div>
+        <input id="diffSlider" type="range" min="0" max="100" value="45" style="width:100%">
+        <div style="display:flex;justify-content:space-between;width:100%;font-size:10px;opacity:.6"><span>Stupid</span><span>Can't&nbsp;Defeat</span></div>
+      </div>
+      <div class="watch-options">
+        <button id="btnOnline" class="btn">🌐 ONLINE ROOM</button>
+        <button id="btnWatch" class="btn">👁 WATCH CPU vs CPU</button>
+        <div class="watch-grid">
+          <label class="watch-opt">CPU 1 — <b id="watchLabelA" style="color:var(--amber)">Seasoned (45)</b>
+            <input id="watchSliderA" type="range" min="0" max="100" value="45">
+          </label>
+          <label class="watch-opt">CPU 2 — <b id="watchLabelB" style="color:var(--teal)">Seasoned (45)</b>
+            <input id="watchSliderB" type="range" min="0" max="100" value="45">
+          </label>
+        </div>
+      </div>
+      <div class="row" style="margin-top:12px">
+        <button id="btnHow" class="btn">HOW TO PLAY</button>
+        <button id="btnOptions" class="btn">⚙️ OPTIONS</button>
+        <button id="btnScores" class="btn">🏆 SCORES</button>
+      </div>
+      <div class="footer">v29 · First tank-combat arcade game, Kee&nbsp;Games 1974. Drive your foe into the mines.</div>
+    </div>
+  </div>
+
+  <!-- ONLINE -->
+  <div id="ovOnline" class="ov hidden">
+    <div class="card">
+      <h1 style="font-size:34px">ONLINE ROOM</h1>
+      <p class="sub">Duel or co-op with a shared room code</p>
+      <div class="online-panel">
+        <div class="online-labels"><span>ROOM CODE</span><span>MODE</span></div>
+        <div class="online-grid">
+          <input id="onlineRoom" maxlength="24" placeholder="ROOM CODE" />
+          <select id="onlineMode">
+            <option value="duel">DUEL</option>
+            <option value="coop">CO-OP</option>
+          </select>
+        </div>
+        <label class="online-name-row"><span>NAME</span><input id="onlineName" class="online-name" maxlength="12" placeholder="PLAYER NAME" /></label>
+        <button id="btnOnlineConnect" class="btn primary">START / JOIN ROOM</button>
+        <div id="onlineStatus" class="online-status"></div>
+        <div class="online-tools">
+          <div id="onlineQuality" class="online-quality"></div>
+          <button id="btnCopyInvite" class="mini-btn" type="button">COPY INVITE</button>
+        </div>
+        <div id="onlineLobby" class="online-lobby">
+          <div class="lobby-title"><span>WAITING ROOM</span><span id="lobbyRoomLabel"></span></div>
+          <div id="lobbySlots" class="slot-list"></div>
+          <div class="lobby-actions">
+            <button id="btnOnlineReady" class="btn">READY</button>
+            <button id="btnOnlineStart" class="btn primary">START MATCH</button>
+          </div>
+        </div>
+        <div class="open-rooms">
+          <div class="open-rooms-head"><span>OPEN ROOMS</span><button id="btnRoomsRefresh" class="mini-btn">REFRESH</button></div>
+          <div id="openRooms" class="room-list"><div class="room-empty">Checking for waiting players...</div></div>
+        </div>
+        <div class="online-hint">Open rooms show a waiting P1. Same room code joins the same match. Players ready up in the waiting room, then P1 starts. Two more can spectate.</div>
+      </div>
+      <button id="btnOnlineBack" class="btn">BACK</button>
+    </div>
+  </div>
+
+  <!-- HOW -->
+  <div id="ovHow" class="ov hidden">
+    <div class="card">
+      <h1 style="font-size:34px">HOW TO PLAY</h1>
+      <p class="sub">Campaign: clear every wave and beat the bosses. Versus: outscore the other side.</p>
+      <div class="keys">
+        <div><h3 class="p1">CAMPAIGN / SURVIVAL / vs&nbsp;CPU</h3><b>WASD</b> / arrows or <b>drag anywhere</b> to drive<br><b>Mouse</b> aims · <b>Click</b>/<b>Space</b>/<b>F</b> force-fire<br><span style="opacity:.7">Auto-fires with a clear shot.<br>Mobile: drag anywhere to drive;<br><b>FIRE</b> button blasts walls.</span></div>
+        <div><h3 class="p2">DUEL / LOCAL P2</h3>P1 <b>WASD</b> + <b>Space</b><br>P2 <b>↑ ↓ ← →</b> + <b>Enter</b><br><span style="opacity:.7">(duel keeps faithful tank steering,<br>barrels fire forward)</span></div>
+      </div>
+      <p class="sub" style="margin-top:14px"><b style="color:var(--amber)">Campaign</b> (1P or 2-player co-op): survive waves of enemy tanks across 12 levels and defeat three bosses. Enemy types differ — <b>scouts</b> are fast, <b>brutes</b> are tanky, <b>snipers</b> keep their distance, <b>mine-layers</b> drop mines, and <b>wardens</b> (and the Mauler boss) have a front armor plate, so <b>hit them from the side or behind</b>. You have shared lives; clear a level to earn one back. Co-op revives a downed teammate next wave.</p>
+      <p class="sub" style="margin-top:10px"><b>Versus</b>: 2-player duel and survival co-op use the controls above. Online rooms use the room code, mode, and name fields; ready up, then P1 starts. Shells travel half the arena width, stop at walls, and chip walls open. Mines kill instantly and never come back. Campaign and Versus have separate leaderboards. <b>P</b> pause · <b>C</b> 1974 mode · <b>M</b> mute.</p>
+      <button id="btnHowBack" class="btn primary">BACK</button>
+    </div>
+  </div>
+
+  <!-- OPTIONS -->
+  <div id="ovOptions" class="ov hidden">
+    <div class="card">
+      <h1 style="font-size:34px">OPTIONS</h1>
+      <p class="sub">Saved on this device</p>
+      <button id="optSound" class="btn">🔊 SOUND: ON</button>
+      <button id="optAutoFire" class="btn">🎯 AUTO-FIRE: ON</button>
+      <p class="sub" style="margin-top:8px;text-align:left;line-height:1.4">In Campaign, Survival &amp; vs CPU, <b>auto-fire</b> shoots automatically when an enemy is in a clear line of sight, so you can just drive. Use click, Space, F, or the mobile FIRE button to force-fire through walls.</p>
+      <button id="btnOptionsBack" class="btn primary">BACK</button>
+    </div>
+  </div>
+
+  <!-- PAUSE -->
+  <div id="ovPause" class="ov hidden">
+    <div class="card">
+      <h1 style="font-size:38px">PAUSED</h1>
+      <button id="btnResume" class="btn primary">RESUME</button>
+      <button id="btnQuit" class="btn">QUIT TO MENU</button>
+    </div>
+  </div>
+
+  <!-- OVER -->
+  <div id="ovOver" class="ov hidden">
+    <div class="card">
+      <div class="result" id="overResult">—</div>
+      <div class="big" id="overScore">0 — 0</div>
+      <div id="overScoreForm" class="hidden">
+        <div class="sub" id="overYourScore"></div>
+        <div class="row" style="justify-content:center">
+          <input id="initials" maxlength="3" placeholder="AAA" style="width:90px;text-align:center;text-transform:uppercase" />
+          <button id="btnSubmit" class="btn primary" style="flex:0 0 auto;width:auto">SUBMIT</button>
+        </div>
+      </div>
+      <button id="btnAgain" class="btn primary">PLAY AGAIN</button>
+      <button id="btnMenu" class="btn">MENU</button>
+    </div>
+  </div>
+
+  <!-- SCORES -->
+  <div id="ovScores" class="ov hidden">
+    <div class="card">
+      <h1 style="font-size:34px">🏆 SCORES</h1>
+      <p class="sub">Best CPU, duel, and co-op match scores</p>
+      <div id="scoreBoard"></div>
+      <button id="btnScoresBack" class="btn primary" style="margin-top:14px">BACK</button>
+    </div>
+  </div>
+
+  <!-- TOUCH (assisted modes use Subway-style drag anywhere; duel keeps twin sticks for two local players) -->
+  <div id="touch">
+    <div id="stickL" class="stick"><div id="stickLk" class="knob"></div><span class="sticklbl">MOVE</span></div>
+    <div id="stickR" class="stick"><div id="stickRk" class="knob"></div><span class="sticklbl">AIM · FIRE</span></div>
+    <button id="forceFire" aria-label="force fire">Fire</button>
+    <div id="touchHint">Drag anywhere to drive · FIRE blasts walls</div>
+  </div>
+
+  <script src="audio.js?v=29"></script>
+  <script src="art.js?v=29"></script>
+  <script src="game.js?v=29"></script>
+</body>
+</html>
