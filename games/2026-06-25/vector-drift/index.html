@@ -98,7 +98,7 @@ const enemyTypes = {
 };
 const keys = new Set();
 const pointer = { down:false };
-const state = { running:false, practice:false, ended:false, t:0, score:0, wave:1, shapeIndex:0, hull:100, zaps:0, combo:0, bestCombo:0, pulse:0, pulseCooldown:0, lane:0, targetLane:0, laneVel:0, fireTimer:0, spawnTimer:0, messageUntil:0 };
+const state = { running:false, practice:false, ended:false, t:0, score:0, wave:1, shapeIndex:0, hull:100, zaps:0, combo:0, bestCombo:0, pulse:0, pulseCooldown:0, heat:0, overheated:false, lane:0, targetLane:0, laneVel:0, fireTimer:0, spawnTimer:0, messageUntil:0 };
 let audioCtx=null, lastShotSound=0;
 let player, web=[], enemies=[], shots=[], sparks=[], stars=[];
 let globalScores=null, globalScoreStatus="loading", pendingScore=0, lastSubmit=null;
@@ -288,7 +288,7 @@ function makePlayer() {
 
 function reset(practice=false) {
   cleanup();
-  Object.assign(state,{ running:true, practice, ended:false, t:0, score:0, wave:1, shapeIndex:0, hull:100, zaps:0, combo:0, bestCombo:0, pulse:0, pulseCooldown:0, lane:0, targetLane:0, laneVel:0, fireTimer:0, spawnTimer:practice?2.4:1.8, messageUntil:0 });
+  Object.assign(state,{ running:true, practice, ended:false, t:0, score:0, wave:1, shapeIndex:0, hull:100, zaps:0, combo:0, bestCombo:0, pulse:0, pulseCooldown:0, heat:0, overheated:false, lane:0, targetLane:0, laneVel:0, fireTimer:0, spawnTimer:practice?2.4:1.8, messageUntil:0 });
   player = makePlayer();
   makeWeb();
   makeStars();
@@ -400,11 +400,12 @@ function hitEnemy(enemy, shot) {
   state.combo++;
   state.bestCombo = Math.max(state.bestCombo, state.combo);
   const multiplier = 1 + Math.min(3, state.combo * .1);
-  const pts = Math.floor((enemy.type.points + state.wave * 15) * multiplier);
+  const dangerBonus = enemy.z > nearZ - 14 ? 180 : 0;
+  const pts = Math.floor((enemy.type.points + state.wave * 15 + dangerBonus) * multiplier);
   state.score += pts; state.zaps++;
   state.pulse = Math.min(12, state.pulse + 1);
   burst(enemy.root.position, enemy.color, enemy.typeKey === "bomber" ? 38 : 26);
-  toast(`${enemy.type.name} +${pts}  x${multiplier.toFixed(1)}`, .65);
+  toast(`${enemy.type.name}${dangerBonus ? " save" : ""} +${pts}  x${multiplier.toFixed(1)}`, .65);
   if (enemy.typeKey === "splitter" && !enemy.child) {
     makeEnemy((Math.round(enemy.lane)-1+lanes)%lanes, enemy.z-5, "crawler", true);
     makeEnemy((Math.round(enemy.lane)+1)%lanes, enemy.z-5, "crawler", true);
@@ -438,8 +439,13 @@ function shotArrowGeometry(visualLane, z, length=.9) {
 }
 
 function fire() {
-  if (state.fireTimer > 0) return;
-  state.fireTimer = .26;
+  if (state.fireTimer > 0 || state.overheated) return;
+  state.fireTimer = .28;
+  state.heat = Math.min(1.15, state.heat + .18);
+  if (state.heat >= 1) {
+    state.overheated = true;
+    toast("Cannon overheated.", .8);
+  }
   const lane = Math.round(state.lane + lanes * 1000) % lanes;
   for (const [nudge, zOffset, color, speed] of [[0,0,cyan,82],[.045,.62,gold,76]]) {
     const visualLane = lane + nudge;
@@ -556,15 +562,17 @@ function burst(pos, color, count=14) {
 }
 
 function controls(dt) {
+  const firing = pointer.down || keys.has("Space");
+  const moveFactor = firing ? .38 : 1;
   let move = 0;
   if (keys.has("ArrowLeft") || keys.has("KeyA")) move -= 1;
   if (keys.has("ArrowRight") || keys.has("KeyD")) move += 1;
   move = clamp(move,-1,1);
   if (move) {
-    state.targetLane = (state.targetLane + move * dt * 9.5 + lanes * 1000) % lanes;
+    state.targetLane = (state.targetLane + move * dt * 9.5 * moveFactor + lanes * 1000) % lanes;
   }
   let delta = ((state.targetLane - state.lane + lanes * 1.5) % lanes) - lanes * .5;
-  state.lane = (state.lane + delta * Math.min(1, dt*13) + lanes * 1000) % lanes;
+  state.lane = (state.lane + delta * Math.min(1, dt*13*moveFactor) + lanes * 1000) % lanes;
 }
 
 function update(dt) {
@@ -573,6 +581,11 @@ function update(dt) {
   if (state.t > state.messageUntil) ui.toast.classList.remove("show");
   controls(dt);
   state.fireTimer = Math.max(0, state.fireTimer - dt);
+  state.heat = Math.max(0, state.heat - dt * (state.overheated ? .34 : .18));
+  if (state.overheated && state.heat <= .32) {
+    state.overheated = false;
+    toast("Cannon cooled.", .55);
+  }
   state.pulseCooldown = Math.max(0, state.pulseCooldown - dt);
   if (pointer.down || keys.has("Space")) fire();
   state.spawnTimer -= dt;
@@ -656,7 +669,8 @@ function updateCamera() {
 
 function updateUi() {
   const multiplier = 1 + Math.min(3, state.combo * .1);
-  ui.status.textContent = `Hull ${Math.max(0,Math.round(state.hull))} | Zaps ${String(state.zaps).padStart(2,"0")} | x${multiplier.toFixed(1)}`;
+  const heat = Math.round(clamp(state.heat,0,1) * 100);
+  ui.status.textContent = `Hull ${Math.max(0,Math.round(state.hull))} | Heat ${String(heat).padStart(2,"0")}${state.overheated ? "!" : ""} | x${multiplier.toFixed(1)}`;
   ui.wave.textContent = `Wave ${String(state.wave).padStart(2,"0")} | ${shapes[state.shapeIndex].name}`;
   ui.score.textContent = `Score ${String(Math.floor(state.score)).padStart(6,"0")}`;
   const ready = state.running && state.pulse >= 12 && state.pulseCooldown <= 0;
