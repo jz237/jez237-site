@@ -2583,5 +2583,17 @@
     "slot": "historical-recreation",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-06-27-miniature-diorama-miniature-glasshouse-tram-stop",
+    "title": "Miniature Glasshouse Tram Stop",
+    "tests": "GPT Image 2 miniature-diorama archive entry; exact generated PNG converted to high-quality JPEG and uploaded to R2.",
+    "prompt": "Build a visibly handmade miniature diorama of a tiny glasshouse tram stop after rain, photographed as a finished macro model set rather than a full-size scene. The tram shelter is thumb-sized, made from clear acetate window panes with tiny glue beads, basswood posts, green-painted wire railings, a little wet gravel platform, and a miniature greenhouse roof with individual condensation droplets. Include a half-open model tram door at the platform edge, two matchstick benches, fingernail-sized potted ferns, a puddle made from glossy resin reflecting the roof ribs, scattered scale leaves, tweezers and a paintbrush lying just outside the set for scale, visible cut edges of foam board, brush texture, imperfect hand-painted signage shapes with no readable text, warm practical LEDs inside the shelter, and shallow macro depth of field. Rich tactile detail, believable model-making materials, low camera angle close to the platform, no full-size real scene ambiguity, no flat poster, no labels, no watermark.\n\nReusable fill-in-the-blank template: Build a visibly handmade miniature diorama of [SCENE], with scale cues, tiny props, model-making materials, macro photography, and practical lighting.\n\nExample substitution: [SCENE] = a tiny glasshouse tram stop after rain with acetate greenhouse panes, matchstick benches, resin puddles, miniature ferns, and tools beside the model for scale.",
+    "image": "images/2026-06-27-miniature-diorama-miniature-glasshouse-tram-stop.jpg",
+    "date": "2026-06-27",
+    "batch": "Daily Prompt",
+    "slot": "miniature-diorama",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024"
   }
 ]
