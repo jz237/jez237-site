@@ -38,6 +38,17 @@
     scopeGrid: document.getElementById("scopeGrid"),
     stilPanel: document.getElementById("stilPanel"),
     stilText: document.getElementById("stilText"),
+    miniTitle: document.getElementById("miniTitle"),
+    miniMeta: document.getElementById("miniMeta"),
+    miniFavBtn: document.getElementById("miniFavBtn"),
+    miniPrevBtn: document.getElementById("miniPrevBtn"),
+    miniPlayBtn: document.getElementById("miniPlayBtn"),
+    miniNextBtn: document.getElementById("miniNextBtn"),
+    miniElapsed: document.getElementById("miniElapsed"),
+    miniDuration: document.getElementById("miniDuration"),
+    miniSeekControl: document.getElementById("miniSeekControl"),
+    miniSeekFill: document.getElementById("miniSeekFill"),
+    miniSeekThumb: document.getElementById("miniSeekThumb"),
   };
 
   const state = {
@@ -82,6 +93,22 @@
   function setStatus(text, kind) {
     refs.status.textContent = text;
     refs.status.className = `status${kind ? ` ${kind}` : ""}`;
+    syncMiniMeta();
+  }
+
+  function setPlayButtonText(text) {
+    refs.playBtn.textContent = text;
+    refs.miniPlayBtn.textContent = text;
+    refs.playBtn.setAttribute("aria-label", text === "Pause" ? "Pause SID" : "Play SID");
+    refs.miniPlayBtn.setAttribute("aria-label", text === "Pause" ? "Pause SID" : "Play SID");
+  }
+
+  function syncMiniMeta() {
+    const status = refs.status.textContent;
+    const meta = refs.nowMeta.textContent;
+    refs.miniMeta.textContent = meta && meta !== "webSID emulator standby"
+      ? `${status} / ${meta}`
+      : status;
   }
 
   function readStoredJson(key, fallback) {
@@ -134,8 +161,11 @@
   function updateFavoriteControls() {
     const active = isFavorite(activeTrack());
     refs.favNowBtn.classList.toggle("active", active);
+    refs.miniFavBtn.classList.toggle("active", active);
     refs.favNowBtn.textContent = active ? "★" : "☆";
+    refs.miniFavBtn.textContent = active ? "★" : "☆";
     refs.favNowBtn.setAttribute("aria-pressed", active ? "true" : "false");
+    refs.miniFavBtn.setAttribute("aria-pressed", active ? "true" : "false");
   }
 
   function setSeekNotice(text) {
@@ -248,9 +278,16 @@
     refs.duration.textContent = formatTime(state.currentDuration);
     refs.seekFill.style.width = `${percent}%`;
     refs.seekThumb.style.left = `${percent}%`;
+    refs.miniElapsed.textContent = formatTime(value);
+    refs.miniDuration.textContent = formatTime(state.currentDuration);
+    refs.miniSeekFill.style.width = `${percent}%`;
+    refs.miniSeekThumb.style.left = `${percent}%`;
     refs.seekControl.setAttribute("aria-valuemax", String(Math.round(state.currentDuration)));
     refs.seekControl.setAttribute("aria-valuenow", String(Math.round(value)));
     refs.seekControl.setAttribute("aria-valuetext", formatTime(value));
+    refs.miniSeekControl.setAttribute("aria-valuemax", String(Math.round(state.currentDuration)));
+    refs.miniSeekControl.setAttribute("aria-valuenow", String(Math.round(value)));
+    refs.miniSeekControl.setAttribute("aria-valuetext", formatTime(value));
   }
 
   function currentTrackUrl() {
@@ -391,6 +428,8 @@
     const released = songInfo && songInfo.songReleased ? songInfo.songReleased : track.fileName;
     refs.nowTitle.textContent = title;
     refs.nowMeta.textContent = `${author} | ${released}`;
+    refs.miniTitle.textContent = title;
+    syncMiniMeta();
   }
 
   async function loadTrack(track, autoplay) {
@@ -404,10 +443,12 @@
     state.currentTrack = track;
     setStatus("Loading", "");
     setSeekNotice("");
-    refs.playBtn.textContent = autoplay ? "Pause" : "Play";
+    setPlayButtonText(autoplay ? "Pause" : "Play");
     refs.scope.classList.remove("playing");
     refs.nowTitle.textContent = track.title;
     refs.nowMeta.textContent = `${track.composer} | ${track.fileName}`;
+    refs.miniTitle.textContent = track.title;
+    syncMiniMeta();
     updateFavoriteControls();
     updateStil(track);
     renderTracks();
@@ -439,13 +480,13 @@
         player.resume();
         state.playing = true;
         beginProgressClock(0);
-        refs.playBtn.textContent = "Pause";
+        setPlayButtonText("Pause");
         refs.scope.classList.add("playing");
         setStatus("Playing", "ready");
       } else {
         player.pause();
         state.playing = false;
-        refs.playBtn.textContent = "Play";
+        setPlayButtonText("Play");
         refs.scope.classList.remove("playing");
         setStatus("Ready", "ready");
       }
@@ -453,10 +494,11 @@
       console.error(error);
       state.pendingAutoplay = false;
       state.playing = false;
-      refs.playBtn.textContent = "Play";
+      setPlayButtonText("Play");
       refs.scope.classList.remove("playing");
       setStatus("Error", "error");
       refs.nowMeta.textContent = error.message || "SID playback failed";
+      syncMiniMeta();
     } finally {
       state.loading = false;
       if (!state.seeking) setSeekNotice("");
@@ -467,7 +509,7 @@
     wakeAudio();
     if (state.loading) {
       state.pendingAutoplay = true;
-      refs.playBtn.textContent = "Pause";
+      setPlayButtonText("Pause");
       setStatus("Loading", "");
       return;
     }
@@ -481,14 +523,14 @@
       holdProgressClock();
       player.pause();
       state.playing = false;
-      refs.playBtn.textContent = "Play";
+      setPlayButtonText("Play");
       refs.scope.classList.remove("playing");
       setStatus("Paused", "");
     } else {
       beginProgressClock(state.fallbackPosition);
       player.resume();
       state.playing = true;
-      refs.playBtn.textContent = "Pause";
+      setPlayButtonText("Pause");
       refs.scope.classList.add("playing");
       setStatus("Playing", "ready");
     }
@@ -507,7 +549,7 @@
     state.playing = false;
     state.fallbackPosition = 0;
     state.wallStarted = 0;
-    refs.playBtn.textContent = "Play";
+    setPlayButtonText("Play");
     refs.scope.classList.remove("playing");
     renderSeekPosition(0);
     setStatus("Stopped", "");
@@ -523,7 +565,7 @@
     if (state.ending || state.loading || state.seeking || !state.currentTrack) return;
     state.ending = true;
     state.playing = false;
-    refs.playBtn.textContent = "Play";
+    setPlayButtonText("Play");
     refs.scope.classList.remove("playing");
 
     if (state.loop) {
@@ -654,14 +696,14 @@
       beginProgressClock(target);
       player.resume();
       state.playing = true;
-      refs.playBtn.textContent = "Pause";
+      setPlayButtonText("Pause");
       refs.scope.classList.add("playing");
       setStatus("Playing", "ready");
     } else {
       state.wallStarted = 0;
       player.pause();
       state.playing = false;
-      refs.playBtn.textContent = "Play";
+      setPlayButtonText("Play");
       refs.scope.classList.remove("playing");
       setStatus("Paused", "");
     }
@@ -715,21 +757,88 @@
     performSeek(targetValue);
   }
 
-  function progressValueFromPoint(clientX) {
-    const rect = refs.seekControl.getBoundingClientRect();
+  function progressValueFromPoint(clientX, control) {
+    const rect = control.getBoundingClientRect();
     if (!rect.width) return Number(refs.progress.value) || 0;
     const ratio = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
     return ratio * state.currentDuration;
   }
 
-  function previewSeekFromPoint(clientX) {
-    const target = progressValueFromPoint(clientX);
+  function previewSeekFromPoint(clientX, control = refs.seekControl) {
+    const target = progressValueFromPoint(clientX, control);
     renderSeekPosition(target);
     return target;
   }
 
-  function seekFromPoint(clientX) {
-    seekToProgress(previewSeekFromPoint(clientX));
+  function seekFromPoint(clientX, control = refs.seekControl) {
+    seekToProgress(previewSeekFromPoint(clientX, control));
+  }
+
+  function stepSeekFromKey(event) {
+    if (!state.currentTrack) return;
+    const current = Number(refs.progress.value) || 0;
+    const step = event.shiftKey ? 10000 : 5000;
+    let target = current;
+
+    if (event.key === "ArrowLeft") target = current - step;
+    if (event.key === "ArrowRight") target = current + step;
+    if (event.key === "PageDown") target = current - 30000;
+    if (event.key === "PageUp") target = current + 30000;
+    if (event.key === "Home") target = 0;
+    if (event.key === "End") target = state.currentDuration;
+
+    if (target !== current) {
+      event.preventDefault();
+      seekToProgress(target);
+    }
+  }
+
+  function wireSeekControl(control) {
+    control.addEventListener("pointerdown", (event) => {
+      if (!state.currentTrack) return;
+      event.preventDefault();
+      wakeAudio();
+      state.pointerSeeking = true;
+      state.scrubbing = true;
+      control.setPointerCapture(event.pointerId);
+      previewSeekFromPoint(event.clientX, control);
+    });
+    control.addEventListener("pointermove", (event) => {
+      if (!state.pointerSeeking) return;
+      event.preventDefault();
+      previewSeekFromPoint(event.clientX, control);
+    });
+    control.addEventListener("pointerup", (event) => {
+      if (!state.pointerSeeking) return;
+      event.preventDefault();
+      state.pointerSeeking = false;
+      seekFromPoint(event.clientX, control);
+    });
+    control.addEventListener("pointercancel", () => {
+      state.pointerSeeking = false;
+      state.scrubbing = false;
+    });
+    control.addEventListener("touchstart", (event) => {
+      if (!state.currentTrack) return;
+      event.preventDefault();
+      wakeAudio();
+      state.scrubbing = true;
+      const touch = event.changedTouches[0];
+      if (touch) previewSeekFromPoint(touch.clientX, control);
+    }, { passive: false });
+    control.addEventListener("touchmove", (event) => {
+      if (!state.currentTrack) return;
+      event.preventDefault();
+      const touch = event.changedTouches[0];
+      if (touch) previewSeekFromPoint(touch.clientX, control);
+    }, { passive: false });
+    control.addEventListener("touchend", (event) => {
+      if (!state.currentTrack) return;
+      event.preventDefault();
+      const touch = event.changedTouches[0];
+      if (touch) seekFromPoint(touch.clientX, control);
+    }, { passive: false });
+    control.addEventListener("keydown", stepSeekFromKey);
   }
 
   function wireEvents() {
@@ -739,7 +848,14 @@
     refs.playBtn.addEventListener("pointerdown", wakeAudio, { passive: true });
     refs.prevBtn.addEventListener("pointerdown", wakeAudio, { passive: true });
     refs.nextBtn.addEventListener("pointerdown", wakeAudio, { passive: true });
+    refs.miniPlayBtn.addEventListener("pointerdown", wakeAudio, { passive: true });
+    refs.miniPrevBtn.addEventListener("pointerdown", wakeAudio, { passive: true });
+    refs.miniNextBtn.addEventListener("pointerdown", wakeAudio, { passive: true });
     refs.playBtn.addEventListener("click", () => togglePlay().catch((error) => {
+      console.error(error);
+      setStatus("Error", "error");
+    }));
+    refs.miniPlayBtn.addEventListener("click", () => togglePlay().catch((error) => {
       console.error(error);
       setStatus("Error", "error");
     }));
@@ -748,11 +864,22 @@
       wakeAudio();
       move(-1);
     });
+    refs.miniPrevBtn.addEventListener("click", () => {
+      wakeAudio();
+      move(-1);
+    });
     refs.nextBtn.addEventListener("click", () => {
       wakeAudio();
       move(1);
     });
+    refs.miniNextBtn.addEventListener("click", () => {
+      wakeAudio();
+      move(1);
+    });
     refs.favNowBtn.addEventListener("click", () => {
+      toggleFavorite(activeTrack());
+    });
+    refs.miniFavBtn.addEventListener("click", () => {
       toggleFavorite(activeTrack());
     });
     refs.loopBtn.addEventListener("click", () => {
@@ -766,74 +893,14 @@
       const player = getPlayer();
       if (player) player.setVolume(volume);
     });
-    refs.seekControl.addEventListener("pointerdown", (event) => {
-      if (!state.currentTrack) return;
-      event.preventDefault();
-      wakeAudio();
-      state.pointerSeeking = true;
-      state.scrubbing = true;
-      refs.seekControl.setPointerCapture(event.pointerId);
-      previewSeekFromPoint(event.clientX);
-    });
-    refs.seekControl.addEventListener("pointermove", (event) => {
-      if (!state.pointerSeeking) return;
-      event.preventDefault();
-      previewSeekFromPoint(event.clientX);
-    });
-    refs.seekControl.addEventListener("pointerup", (event) => {
-      if (!state.pointerSeeking) return;
-      event.preventDefault();
-      state.pointerSeeking = false;
-      seekFromPoint(event.clientX);
-    });
-    refs.seekControl.addEventListener("pointercancel", () => {
-      state.pointerSeeking = false;
-      state.scrubbing = false;
-    });
-    refs.seekControl.addEventListener("touchstart", (event) => {
-      if (!state.currentTrack) return;
-      event.preventDefault();
-      wakeAudio();
-      state.scrubbing = true;
-      const touch = event.changedTouches[0];
-      if (touch) previewSeekFromPoint(touch.clientX);
-    }, { passive: false });
-    refs.seekControl.addEventListener("touchmove", (event) => {
-      if (!state.currentTrack) return;
-      event.preventDefault();
-      const touch = event.changedTouches[0];
-      if (touch) previewSeekFromPoint(touch.clientX);
-    }, { passive: false });
-    refs.seekControl.addEventListener("touchend", (event) => {
-      if (!state.currentTrack) return;
-      event.preventDefault();
-      const touch = event.changedTouches[0];
-      if (touch) seekFromPoint(touch.clientX);
-    }, { passive: false });
+    wireSeekControl(refs.seekControl);
+    wireSeekControl(refs.miniSeekControl);
     refs.progress.addEventListener("input", () => {
       if (state.pointerSeeking) return;
       state.scrubbing = true;
       renderSeekPosition(Number(refs.progress.value));
     });
     refs.progress.addEventListener("change", seekToProgress);
-    refs.seekControl.addEventListener("keydown", (event) => {
-      if (!state.currentTrack) return;
-      const current = Number(refs.progress.value) || 0;
-      const step = event.shiftKey ? 10000 : 5000;
-      let target = current;
-
-      if (event.key === "ArrowLeft") target = current - step;
-      if (event.key === "ArrowRight") target = current + step;
-      if (event.key === "PageDown") target = current - 30000;
-      if (event.key === "PageUp") target = current + 30000;
-      if (event.key === "Home") target = 0;
-      if (event.key === "End") target = state.currentDuration;
-
-      if (target !== current) {
-        event.preventDefault();
-        seekToProgress(target);
-      }
-    });
   }
 
   function chooseInitialTrack() {
@@ -847,6 +914,8 @@
     if (track) {
       refs.nowTitle.textContent = track.title;
       refs.nowMeta.textContent = `${track.composer} | ${track.fileName}`;
+      refs.miniTitle.textContent = track.title;
+      syncMiniMeta();
       updateFavoriteControls();
       updateStil(track);
     }
