@@ -1,6 +1,6 @@
 import { ChiptuneJsPlayer } from "./vendor/chiptune3.js";
 
-const PLAYER_BASE = "/experiments/amiga-mod-player/";
+const PLAYER_BASE = new URL("./", window.location.href).href;
 const tracks = Array.isArray(window.AMIGA_MOD_LIBRARY) ? window.AMIGA_MOD_LIBRARY : [];
 const composers = Array.isArray(window.AMIGA_MOD_COMPOSERS) ? window.AMIGA_MOD_COMPOSERS : [];
 const FAVORITES_KEY = "amiga-mod-player-favorites";
@@ -197,7 +197,7 @@ function updateFavoriteControls() {
 }
 
 function trackUrl(track) {
-  return new URL(track.path, window.location.origin + PLAYER_BASE).href;
+  return new URL(track.path, PLAYER_BASE).href;
 }
 
 function renderSeekPosition(seconds) {
