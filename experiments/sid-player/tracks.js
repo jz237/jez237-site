@@ -11,8 +11,8 @@ window.SID_LIBRARY = [
     "top100Title": "Wizball",
     "top100Composer": "Martin Galway",
     "top100Source": "sids/Galway_Martin/Wizball.sid",
-    "durationMs": 6000,
-    "durationText": "0:06"
+    "durationMs": 215000,
+    "durationText": "3:35"
   },
   {
     "id": "RGFnbGlzaF9CZW4vTGFzdF9OaW5qYS5zaWQ",
@@ -146,8 +146,8 @@ window.SID_LIBRARY = [
     "top100Title": "Last Ninja 3",
     "top100Composer": "Reyn Ouwehand",
     "top100Source": "sids/Ouwehand_Reyn/Last_Ninja_3.sid",
-    "durationMs": 8000,
-    "durationText": "0:08"
+    "durationMs": 287000,
+    "durationText": "4:47"
   },
   {
     "id": "R2Fsd2F5X01hcnRpbi9SYW1ib19GaXJzdF9CbG9vZF9QYXJ0X0lJLnNpZA",
@@ -297,7 +297,9 @@ window.SID_LIBRARY = [
     "top100Rank": 20,
     "top100Title": "Ghosts'n Goblins",
     "top100Composer": "Mark Cooksey",
-    "top100Source": "HVSC_Top_100.zip"
+    "top100Source": "HVSC_Top_100.zip",
+    "durationMs": 230000,
+    "durationText": "3:50"
   },
   {
     "id": "SHViYmFyZF9Sb2IvTmVtZXNpc190aGVfV2FybG9jay5zaWQ",
@@ -594,8 +596,8 @@ window.SID_LIBRARY = [
     "top100Title": "Yie Ar Kung Fu",
     "top100Composer": "Martin Galway",
     "top100Source": "sids/Galway_Martin/Yie_Ar_Kung_Fu.sid",
-    "durationMs": 2000,
-    "durationText": "0:02"
+    "durationMs": 540000,
+    "durationText": "9:00"
   },
   {
     "id": "736964732f544f503130302f3034315f48797374657269612e736964",
@@ -609,7 +611,9 @@ window.SID_LIBRARY = [
     "top100Rank": 41,
     "top100Title": "Hysteria",
     "top100Composer": "Fred Gray",
-    "top100Source": "HVSC_Top_100.zip"
+    "top100Source": "HVSC_Top_100.zip",
+    "durationMs": 60000,
+    "durationText": "1:00"
   },
   {
     "id": "736964732f544f503130302f3034325f446566656e6465725f6f665f7468655f43726f776e2e736964",
@@ -1223,8 +1227,8 @@ window.SID_LIBRARY = [
     "top100Title": "The Vikings",
     "top100Composer": "Ben Daglish",
     "top100Source": "sids/Daglish_Ben/Vikings.sid",
-    "durationMs": 4000,
-    "durationText": "0:04"
+    "durationMs": 146000,
+    "durationText": "2:26"
   },
   {
     "id": "736964732f544f503130302f3038335f46414d455f312e736964",
