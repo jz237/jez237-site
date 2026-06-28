@@ -1048,8 +1048,8 @@ function wireEvents() {
 
 function chooseInitialTrack() {
   state.filtered = tracks;
-  const lotusIndex = tracks.findIndex((track) => track.id === "barry-leitch-lotus2-title");
-  state.selected = lotusIndex >= 0 ? lotusIndex : 0;
+  const pinballFantasiesIndex = tracks.findIndex((track) => track.id === "olof-gustafsson-pinball-fantasies-ecran-titre");
+  state.selected = pinballFantasiesIndex >= 0 ? pinballFantasiesIndex : 0;
   const track = tracks[state.selected];
   if (!track) return;
   refs.nowTitle.textContent = track.title;
