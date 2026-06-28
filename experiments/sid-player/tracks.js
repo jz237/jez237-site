@@ -2628,6 +2628,15256 @@ window.SID_LIBRARY = [
     "size": 8059
   },
   {
+    "id": "R0FNRVMvMC05LzAwN19DYXJfQ2hhc2Uuc2lk",
+    "title": "007 Car Chase",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "007_Car_Chase.sid",
+    "path": "sids/GAMES/0-9/007_Car_Chase.sid",
+    "size": 582,
+    "category": "0-9"
+  },
+  {
+    "id": "R0FNRVMvMC05LzEwX0tub2Nrb3V0X0JBU0lDLnNpZA",
+    "title": "10 Knockout BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "10_Knockout_BASIC.sid",
+    "path": "sids/GAMES/0-9/10_Knockout_BASIC.sid",
+    "size": 2469,
+    "category": "0-9"
+  },
+  {
+    "id": "R0FNRVMvMC05LzEwX1ByaW50X1JhY2VyX1JldmFtcC5zaWQ",
+    "title": "10 Print Racer Revamp",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "10_Print_Racer_Revamp.sid",
+    "path": "sids/GAMES/0-9/10_Print_Racer_Revamp.sid",
+    "size": 537,
+    "category": "0-9"
+  },
+  {
+    "id": "R0FNRVMvMC05LzEwMF9NaWxlX1JhY2Uuc2lk",
+    "title": "100 Mile Race",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "100_Mile_Race.sid",
+    "path": "sids/GAMES/0-9/100_Mile_Race.sid",
+    "size": 538,
+    "category": "0-9"
+  },
+  {
+    "id": "R0FNRVMvMC05LzE5OTQtVGVuX1llYXJzX0FmdGVyLnNpZA",
+    "title": "1994-Ten Years After",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "1994-Ten_Years_After.sid",
+    "path": "sids/GAMES/0-9/1994-Ten_Years_After.sid",
+    "size": 542,
+    "category": "0-9"
+  },
+  {
+    "id": "R0FNRVMvMC05LzIwX1RvbnMuc2lk",
+    "title": "20 Tons",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "20_Tons.sid",
+    "path": "sids/GAMES/0-9/20_Tons.sid",
+    "size": 1267,
+    "category": "0-9"
+  },
+  {
+    "id": "R0FNRVMvMC05LzIxMTIuc2lk",
+    "title": "2112",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "2112.sid",
+    "path": "sids/GAMES/0-9/2112.sid",
+    "size": 3115,
+    "category": "0-9"
+  },
+  {
+    "id": "R0FNRVMvMC05LzIyMUJfQmFrZXJfU3RyZWV0LnNpZA",
+    "title": "221B Baker Street",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "221B_Baker_Street.sid",
+    "path": "sids/GAMES/0-9/221B_Baker_Street.sid",
+    "size": 10087,
+    "category": "0-9"
+  },
+  {
+    "id": "R0FNRVMvMC05LzMtRF9Ta3JhbWJsZS5zaWQ",
+    "title": "3-D Skramble",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "3-D_Skramble.sid",
+    "path": "sids/GAMES/0-9/3-D_Skramble.sid",
+    "size": 1946,
+    "category": "0-9"
+  },
+  {
+    "id": "R0FNRVMvMC05LzNEX1dhdGVyc2tpLnNpZA",
+    "title": "3D Waterski",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "3D_Waterski.sid",
+    "path": "sids/GAMES/0-9/3D_Waterski.sid",
+    "size": 1439,
+    "category": "0-9"
+  },
+  {
+    "id": "R0FNRVMvMC05LzR4NF9PZmYtUm9hZF9SYWNpbmcuc2lk",
+    "title": "4x4 Off-Road Racing",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "4x4_Off-Road_Racing.sid",
+    "path": "sids/GAMES/0-9/4x4_Off-Road_Racing.sid",
+    "size": 4855,
+    "category": "0-9"
+  },
+  {
+    "id": "R0FNRVMvMC05LzVfbWFsXzUuc2lk",
+    "title": "5 mal 5",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "5_mal_5.sid",
+    "path": "sids/GAMES/0-9/5_mal_5.sid",
+    "size": 1773,
+    "category": "0-9"
+  },
+  {
+    "id": "R0FNRVMvMC05LzV0aF9HZWFyLnNpZA",
+    "title": "5th Gear",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "5th_Gear.sid",
+    "path": "sids/GAMES/0-9/5th_Gear.sid",
+    "size": 5272,
+    "category": "0-9"
+  },
+  {
+    "id": "R0FNRVMvMC05LzcyMF9VU0FfVmVyc2lvbi5zaWQ",
+    "title": "720 USA Version",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "720_USA_Version.sid",
+    "path": "sids/GAMES/0-9/720_USA_Version.sid",
+    "size": 12471,
+    "category": "0-9"
+  },
+  {
+    "id": "R0FNRVMvMC05LzgtYml0X0NpdmlsaXphdGlvbnMuc2lk",
+    "title": "8-bit Civilizations",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "8-bit_Civilizations.sid",
+    "path": "sids/GAMES/0-9/8-bit_Civilizations.sid",
+    "size": 2424,
+    "category": "0-9"
+  },
+  {
+    "id": "R0FNRVMvMC05LzhCaXRfRHVuZ2Vvbl9QcmV2aWV3LnNpZA",
+    "title": "8Bit Dungeon Preview",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "8Bit_Dungeon_Preview.sid",
+    "path": "sids/GAMES/0-9/8Bit_Dungeon_Preview.sid",
+    "size": 3299,
+    "category": "0-9"
+  },
+  {
+    "id": "R0FNRVMvMC05LzhCaXRfR29ibGluX1ByZXZpZXcuc2lk",
+    "title": "8Bit Goblin Preview",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "8Bit_Goblin_Preview.sid",
+    "path": "sids/GAMES/0-9/8Bit_Goblin_Preview.sid",
+    "size": 854,
+    "category": "0-9"
+  },
+  {
+    "id": "R0FNRVMvMC05LzlfdG9fNV9UeXBpbmcuc2lk",
+    "title": "9 to 5 Typing",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "9_to_5_Typing.sid",
+    "path": "sids/GAMES/0-9/9_to_5_Typing.sid",
+    "size": 2586,
+    "category": "0-9"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0FfQ19FLnNpZA",
+    "title": "A C E",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "A_C_E.sid",
+    "path": "sids/GAMES/A-F/A_C_E.sid",
+    "size": 7673,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0FfUF9FX1hfcHJldmlldy5zaWQ",
+    "title": "A P E X preview",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "A_P_E_X_preview.sid",
+    "path": "sids/GAMES/A-F/A_P_E_X_preview.sid",
+    "size": 2654,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0FfUG9wcGxlc19DaHJpc3RtYXNfQWR2ZW50dXJlLnNpZA",
+    "title": "A Popples Christmas Adventure",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "A_Popples_Christmas_Adventure.sid",
+    "path": "sids/GAMES/A-F/A_Popples_Christmas_Adventure.sid",
+    "size": 7369,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0FieXNzLnNpZA",
+    "title": "Abyss",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Abyss.sid",
+    "path": "sids/GAMES/A-F/Abyss.sid",
+    "size": 4014,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0FjY29sYWRlc19Db21pY3Muc2lk",
+    "title": "Accolades Comics",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Accolades_Comics.sid",
+    "path": "sids/GAMES/A-F/Accolades_Comics.sid",
+    "size": 48477,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0FjdF9HYW1lX0JBU0lDLnNpZA",
+    "title": "Act Game BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Act_Game_BASIC.sid",
+    "path": "sids/GAMES/A-F/Act_Game_BASIC.sid",
+    "size": 710,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0FjdGlvbl9TZXJ2aWNlLnNpZA",
+    "title": "Action Service",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Action_Service.sid",
+    "path": "sids/GAMES/A-F/Action_Service.sid",
+    "size": 6211,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0FjdGlvbi1CYWxsLnNpZA",
+    "title": "Action-Ball",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Action-Ball.sid",
+    "path": "sids/GAMES/A-F/Action-Ball.sid",
+    "size": 11390,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0FkZGFtc19GYW1pbHkuc2lk",
+    "title": "Addams Family",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Addams_Family.sid",
+    "path": "sids/GAMES/A-F/Addams_Family.sid",
+    "size": 3880,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0FkZGljdGFfQmFsbC5zaWQ",
+    "title": "Addicta Ball",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Addicta_Ball.sid",
+    "path": "sids/GAMES/A-F/Addicta_Ball.sid",
+    "size": 1693,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0FkdmFuY2VkX1RhY3RpY2FsX0ZpZ2h0ZXIuc2lk",
+    "title": "Advanced Tactical Fighter",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Advanced_Tactical_Fighter.sid",
+    "path": "sids/GAMES/A-F/Advanced_Tactical_Fighter.sid",
+    "size": 1790,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0Flcm9iaWNzLnNpZA",
+    "title": "Aerobics",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Aerobics.sid",
+    "path": "sids/GAMES/A-F/Aerobics.sid",
+    "size": 15850,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0FnZW50X09yYW5nZS5zaWQ",
+    "title": "Agent Orange",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Agent_Orange.sid",
+    "path": "sids/GAMES/A-F/Agent_Orange.sid",
+    "size": 1130,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0FnZW50X1VPUC5zaWQ",
+    "title": "Agent UOP",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Agent_UOP.sid",
+    "path": "sids/GAMES/A-F/Agent_UOP.sid",
+    "size": 5412,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0FnaGFtaXguc2lk",
+    "title": "Aghamix",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Aghamix.sid",
+    "path": "sids/GAMES/A-F/Aghamix.sid",
+    "size": 8813,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0FpcmxpbmUuc2lk",
+    "title": "Airline",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Airline.sid",
+    "path": "sids/GAMES/A-F/Airline.sid",
+    "size": 9013,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0FsYmVydF9CQVNJQy5zaWQ",
+    "title": "Albert BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Albert_BASIC.sid",
+    "path": "sids/GAMES/A-F/Albert_BASIC.sid",
+    "size": 1505,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0FsY2F0cmF6LnNpZA",
+    "title": "Alcatraz",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Alcatraz.sid",
+    "path": "sids/GAMES/A-F/Alcatraz.sid",
+    "size": 513,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0FsY2F6YXIuc2lk",
+    "title": "Alcazar",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Alcazar.sid",
+    "path": "sids/GAMES/A-F/Alcazar.sid",
+    "size": 620,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0FsY2hpbWlhLnNpZA",
+    "title": "Alchimia",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Alchimia.sid",
+    "path": "sids/GAMES/A-F/Alchimia.sid",
+    "size": 4094,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0FsZWFfSmFjdGEuc2lk",
+    "title": "Alea Jacta",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Alea_Jacta.sid",
+    "path": "sids/GAMES/A-F/Alea_Jacta.sid",
+    "size": 15743,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0FsZl90aGVfRmlyc3RfQWR2ZW50dXJlLnNpZA",
+    "title": "Alf the First Adventure",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Alf_the_First_Adventure.sid",
+    "path": "sids/GAMES/A-F/Alf_the_First_Adventure.sid",
+    "size": 2412,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0FsaV9CYWJhLnNpZA",
+    "title": "Ali Baba",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Ali_Baba.sid",
+    "path": "sids/GAMES/A-F/Ali_Baba.sid",
+    "size": 6902,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0FsaWFudHMuc2lk",
+    "title": "Aliants",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Aliants.sid",
+    "path": "sids/GAMES/A-F/Aliants.sid",
+    "size": 1259,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0FsaWNlX2luX1ZpZGVvbGFuZC1UaGVfRnVydGhlcl9BZHZlbnR1cmVzLnNpZA",
+    "title": "Alice in Videoland-The Further Adventures",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Alice_in_Videoland-The_Further_Adventures.sid",
+    "path": "sids/GAMES/A-F/Alice_in_Videoland-The_Further_Adventures.sid",
+    "size": 1703,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0FsaWNlX2luX1dvbmRlcmxhbmQuc2lk",
+    "title": "Alice in Wonderland",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Alice_in_Wonderland.sid",
+    "path": "sids/GAMES/A-F/Alice_in_Wonderland.sid",
+    "size": 2111,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0FsaWVuX0F0dGFja182NF9CQVNJQy5zaWQ",
+    "title": "Alien Attack 64 BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Alien_Attack_64_BASIC.sid",
+    "path": "sids/GAMES/A-F/Alien_Attack_64_BASIC.sid",
+    "size": 550,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0FsaWVuX1RlcnJvcmRvbWUuc2lk",
+    "title": "Alien Terrordome",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Alien_Terrordome.sid",
+    "path": "sids/GAMES/A-F/Alien_Terrordome.sid",
+    "size": 1750,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0FsaWVuYXRvci5zaWQ",
+    "title": "Alienator",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Alienator.sid",
+    "path": "sids/GAMES/A-F/Alienator.sid",
+    "size": 4045,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0FsbF9OZXdfRmFtaWx5X0ZldWRfQkFTSUMuc2lk",
+    "title": "All New Family Feud BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "All_New_Family_Feud_BASIC.sid",
+    "path": "sids/GAMES/A-F/All_New_Family_Feud_BASIC.sid",
+    "size": 2030,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0Fsb25lX2FuZF9EYW5nZXJvdXMuc2lk",
+    "title": "Alone and Dangerous",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Alone_and_Dangerous.sid",
+    "path": "sids/GAMES/A-F/Alone_and_Dangerous.sid",
+    "size": 2701,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0FscGhhX09tZWdhX1J1bi5zaWQ",
+    "title": "Alpha Omega Run",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Alpha_Omega_Run.sid",
+    "path": "sids/GAMES/A-F/Alpha_Omega_Run.sid",
+    "size": 5370,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0FsdGVybmF0ZV9SZWFsaXR5LVRoZV9EdW5nZW9uLnNpZA",
+    "title": "Alternate Reality-The Dungeon",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Alternate_Reality-The_Dungeon.sid",
+    "path": "sids/GAMES/A-F/Alternate_Reality-The_Dungeon.sid",
+    "size": 7701,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0FtYXppbmdfTWF6ZS5zaWQ",
+    "title": "Amazing Maze",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Amazing_Maze.sid",
+    "path": "sids/GAMES/A-F/Amazing_Maze.sid",
+    "size": 716,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0FtYXpvbi5zaWQ",
+    "title": "Amazon",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Amazon.sid",
+    "path": "sids/GAMES/A-F/Amazon.sid",
+    "size": 3038,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0FtYXpvbl9XYXJyaW9yLnNpZA",
+    "title": "Amazon Warrior",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Amazon_Warrior.sid",
+    "path": "sids/GAMES/A-F/Amazon_Warrior.sid",
+    "size": 3087,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0FtcGhpYmlhbi5zaWQ",
+    "title": "Amphibian",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Amphibian.sid",
+    "path": "sids/GAMES/A-F/Amphibian.sid",
+    "size": 309,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0FuZHJvaWRfMi5zaWQ",
+    "title": "Android 2",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Android_2.sid",
+    "path": "sids/GAMES/A-F/Android_2.sid",
+    "size": 2900,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0FuZ2llUHVmZnlfUXVlc3Quc2lk",
+    "title": "AngiePuffy Quest",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "AngiePuffy_Quest.sid",
+    "path": "sids/GAMES/A-F/AngiePuffy_Quest.sid",
+    "size": 1855,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0FuZ3J5X05pbmphX0JBU0lDLnNpZA",
+    "title": "Angry Ninja BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Angry_Ninja_BASIC.sid",
+    "path": "sids/GAMES/A-F/Angry_Ninja_BASIC.sid",
+    "size": 21384,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0FuaW1hdGVkX1N0cmlwX1Bva2VyLnNpZA",
+    "title": "Animated Strip Poker",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Animated_Strip_Poker.sid",
+    "path": "sids/GAMES/A-F/Animated_Strip_Poker.sid",
+    "size": 4527,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0Fub3RoZXJfU2V4X0FkdmVudHVyZS5zaWQ",
+    "title": "Another Sex Adventure",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Another_Sex_Adventure.sid",
+    "path": "sids/GAMES/A-F/Another_Sex_Adventure.sid",
+    "size": 2105,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0FudGljcy5zaWQ",
+    "title": "Antics",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Antics.sid",
+    "path": "sids/GAMES/A-F/Antics.sid",
+    "size": 2911,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0FwYWNoZV9TdHJpa2Uuc2lk",
+    "title": "Apache Strike",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Apache_Strike.sid",
+    "path": "sids/GAMES/A-F/Apache_Strike.sid",
+    "size": 2466,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0FwYXJ0bWVudF9vZl9NeXN0ZXJ5X0JBU0lDLnNpZA",
+    "title": "Apartment of Mystery BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Apartment_of_Mystery_BASIC.sid",
+    "path": "sids/GAMES/A-F/Apartment_of_Mystery_BASIC.sid",
+    "size": 1561,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0FwZV9DcmF6ZS5zaWQ",
+    "title": "Ape Craze",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Ape_Craze.sid",
+    "path": "sids/GAMES/A-F/Ape_Craze.sid",
+    "size": 634,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0FxdWFfUmFjZXIuc2lk",
+    "title": "Aqua Racer",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Aqua_Racer.sid",
+    "path": "sids/GAMES/A-F/Aqua_Racer.sid",
+    "size": 1751,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0FxdWFudG9yLnNpZA",
+    "title": "Aquantor",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Aquantor.sid",
+    "path": "sids/GAMES/A-F/Aquantor.sid",
+    "size": 1252,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0FyYWNobmUuc2lk",
+    "title": "Arachne",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Arachne.sid",
+    "path": "sids/GAMES/A-F/Arachne.sid",
+    "size": 5502,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0FyYWNobm9waG9iaWEuc2lk",
+    "title": "Arachnophobia",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Arachnophobia.sid",
+    "path": "sids/GAMES/A-F/Arachnophobia.sid",
+    "size": 3660,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0FyYWtuaWZvZS5zaWQ",
+    "title": "Araknifoe",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Araknifoe.sid",
+    "path": "sids/GAMES/A-F/Araknifoe.sid",
+    "size": 3104,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0FyY19vZl9ZZXNvZC5zaWQ",
+    "title": "Arc of Yesod",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Arc_of_Yesod.sid",
+    "path": "sids/GAMES/A-F/Arc_of_Yesod.sid",
+    "size": 2583,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0FyY2FkZV9QaWxvdC5zaWQ",
+    "title": "Arcade Pilot",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Arcade_Pilot.sid",
+    "path": "sids/GAMES/A-F/Arcade_Pilot.sid",
+    "size": 10818,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0FyY2FuYS5zaWQ",
+    "title": "Arcana",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Arcana.sid",
+    "path": "sids/GAMES/A-F/Arcana.sid",
+    "size": 1834,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0FyY2hpcGVsYWdvLnNpZA",
+    "title": "Archipelago",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Archipelago.sid",
+    "path": "sids/GAMES/A-F/Archipelago.sid",
+    "size": 4221,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0FyY2hvbl9JSUlfRXhjaXRlci5zaWQ",
+    "title": "Archon III Exciter",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Archon_III_Exciter.sid",
+    "path": "sids/GAMES/A-F/Archon_III_Exciter.sid",
+    "size": 2970,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0FyY3RpY19TaGlwd3JlY2suc2lk",
+    "title": "Arctic Shipwreck",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Arctic_Shipwreck.sid",
+    "path": "sids/GAMES/A-F/Arctic_Shipwreck.sid",
+    "size": 2381,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0FyZXguc2lk",
+    "title": "Arex",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Arex.sid",
+    "path": "sids/GAMES/A-F/Arex.sid",
+    "size": 1981,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0FyZ29zX0V4cGVkaXRpb24uc2lk",
+    "title": "Argos Expedition",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Argos_Expedition.sid",
+    "path": "sids/GAMES/A-F/Argos_Expedition.sid",
+    "size": 1829,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0FyaXRobWV0aWNpYW4uc2lk",
+    "title": "Arithmetician",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Arithmetician.sid",
+    "path": "sids/GAMES/A-F/Arithmetician.sid",
+    "size": 8790,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0FzdGVyb2lkX1J1bi5zaWQ",
+    "title": "Asteroid Run",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Asteroid_Run.sid",
+    "path": "sids/GAMES/A-F/Asteroid_Run.sid",
+    "size": 512,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0FzdGVyb2lkX1dhci5zaWQ",
+    "title": "Asteroid War",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Asteroid_War.sid",
+    "path": "sids/GAMES/A-F/Asteroid_War.sid",
+    "size": 960,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0FzdGVyb2lkcy5zaWQ",
+    "title": "Asteroids",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Asteroids.sid",
+    "path": "sids/GAMES/A-F/Asteroids.sid",
+    "size": 2449,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0FzdGV4XzY0LnNpZA",
+    "title": "Astex 64",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Astex_64.sid",
+    "path": "sids/GAMES/A-F/Astex_64.sid",
+    "size": 349,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0FzdHJvX0NoYXNlLnNpZA",
+    "title": "Astro Chase",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Astro_Chase.sid",
+    "path": "sids/GAMES/A-F/Astro_Chase.sid",
+    "size": 638,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0FzdHJvYmxhc3Quc2lk",
+    "title": "Astroblast",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Astroblast.sid",
+    "path": "sids/GAMES/A-F/Astroblast.sid",
+    "size": 1270,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0FzdHJvaWRzLnNpZA",
+    "title": "Astroids",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Astroids.sid",
+    "path": "sids/GAMES/A-F/Astroids.sid",
+    "size": 3719,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0F0aGFub3Iuc2lk",
+    "title": "Athanor",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Athanor.sid",
+    "path": "sids/GAMES/A-F/Athanor.sid",
+    "size": 2745,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0F0bGFudGlzLnNpZA",
+    "title": "Atlantis",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Atlantis.sid",
+    "path": "sids/GAMES/A-F/Atlantis.sid",
+    "size": 6296,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0F0b2NrLnNpZA",
+    "title": "Atock",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Atock.sid",
+    "path": "sids/GAMES/A-F/Atock.sid",
+    "size": 3945,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0F0dGFja19vZl90aGVfTXV0YW50X05pbmphX0JsdWViZXJyaWVzLnNpZA",
+    "title": "Attack of the Mutant Ninja Blueberries",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Attack_of_the_Mutant_Ninja_Blueberries.sid",
+    "path": "sids/GAMES/A-F/Attack_of_the_Mutant_Ninja_Blueberries.sid",
+    "size": 2775,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0F0dGFja19vZl90aGVfTXV0YW50X05pbmphX0JsdWViZXJyaWVzX0lJLnNpZA",
+    "title": "Attack of the Mutant Ninja Blueberries II",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Attack_of_the_Mutant_Ninja_Blueberries_II.sid",
+    "path": "sids/GAMES/A-F/Attack_of_the_Mutant_Ninja_Blueberries_II.sid",
+    "size": 2400,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0F0dGFja19vZl90aGVfUEVUU0NJSV9Sb2JvdHMuc2lk",
+    "title": "Attack of the PETSCII Robots",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Attack_of_the_PETSCII_Robots.sid",
+    "path": "sids/GAMES/A-F/Attack_of_the_PETSCII_Robots.sid",
+    "size": 10588,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0F1Zl9XaWVkZXJzZWhlbl9QZXRfQkFTSUMuc2lk",
+    "title": "Auf Wiedersehen Pet BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Auf_Wiedersehen_Pet_BASIC.sid",
+    "path": "sids/GAMES/A-F/Auf_Wiedersehen_Pet_BASIC.sid",
+    "size": 2808,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0F1c3NpZV9HYW1lcy5zaWQ",
+    "title": "Aussie Games",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Aussie_Games.sid",
+    "path": "sids/GAMES/A-F/Aussie_Games.sid",
+    "size": 20134,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0F1c3RyYWxvcGl0aWN1c19Sb2J1c3R1cy5zaWQ",
+    "title": "Australopiticus Robustus",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Australopiticus_Robustus.sid",
+    "path": "sids/GAMES/A-F/Australopiticus_Robustus.sid",
+    "size": 3574,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0F1dGhlbnRpY19UZXRyaXMuc2lk",
+    "title": "Authentic Tetris",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Authentic_Tetris.sid",
+    "path": "sids/GAMES/A-F/Authentic_Tetris.sid",
+    "size": 16378,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0F1dG9fNjQuc2lk",
+    "title": "Auto 64",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Auto_64.sid",
+    "path": "sids/GAMES/A-F/Auto_64.sid",
+    "size": 307,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0F1dG8tTWFuaWEuc2lk",
+    "title": "Auto-Mania",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Auto-Mania.sid",
+    "path": "sids/GAMES/A-F/Auto-Mania.sid",
+    "size": 684,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0F2b2lkLnNpZA",
+    "title": "Avoid",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Avoid.sid",
+    "path": "sids/GAMES/A-F/Avoid.sid",
+    "size": 1360,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0F2b2lkX3RoZV9Ob2lkLnNpZA",
+    "title": "Avoid the Noid",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Avoid_the_Noid.sid",
+    "path": "sids/GAMES/A-F/Avoid_the_Noid.sid",
+    "size": 3014,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0F4aXNfS29tcHV0ZXJrdW5zdF9JbnRyby5zaWQ",
+    "title": "Axis Komputerkunst Intro",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Axis_Komputerkunst_Intro.sid",
+    "path": "sids/GAMES/A-F/Axis_Komputerkunst_Intro.sid",
+    "size": 979,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JhYWwuc2lk",
+    "title": "Baal",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Baal.sid",
+    "path": "sids/GAMES/A-F/Baal.sid",
+    "size": 4161,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JhYnlsb25zX0Fyay5zaWQ",
+    "title": "Babylons Ark",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Babylons_Ark.sid",
+    "path": "sids/GAMES/A-F/Babylons_Ark.sid",
+    "size": 3709,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JhY2Nhcm9vLnNpZA",
+    "title": "Baccaroo",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Baccaroo.sid",
+    "path": "sids/GAMES/A-F/Baccaroo.sid",
+    "size": 855,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JhY2tfdG9fUmVhbGl0eS5zaWQ",
+    "title": "Back to Reality",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Back_to_Reality.sid",
+    "path": "sids/GAMES/A-F/Back_to_Reality.sid",
+    "size": 2231,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JhZ2l0bWFuLnNpZA",
+    "title": "Bagitman",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Bagitman.sid",
+    "path": "sids/GAMES/A-F/Bagitman.sid",
+    "size": 4616,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JhamlfQkFTSUMuc2lk",
+    "title": "Baji BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Baji_BASIC.sid",
+    "path": "sids/GAMES/A-F/Baji_BASIC.sid",
+    "size": 1497,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JhbGwuc2lk",
+    "title": "Ball",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Ball.sid",
+    "path": "sids/GAMES/A-F/Ball.sid",
+    "size": 11383,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JhbGxfVHJhcF9CQVNJQy5zaWQ",
+    "title": "Ball Trap BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Ball_Trap_BASIC.sid",
+    "path": "sids/GAMES/A-F/Ball_Trap_BASIC.sid",
+    "size": 2944,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JhbGxvbmZsdWdfQkFTSUMuc2lk",
+    "title": "Ballonflug BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Ballonflug_BASIC.sid",
+    "path": "sids/GAMES/A-F/Ballonflug_BASIC.sid",
+    "size": 999,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JhbGxvb25fNjQuc2lk",
+    "title": "Balloon 64",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Balloon_64.sid",
+    "path": "sids/GAMES/A-F/Balloon_64.sid",
+    "size": 1310,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JhbGxvb25yYWNlX0JBU0lDLnNpZA",
+    "title": "Balloonrace BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Balloonrace_BASIC.sid",
+    "path": "sids/GAMES/A-F/Balloonrace_BASIC.sid",
+    "size": 968,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JhbGxzLnNpZA",
+    "title": "Balls",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Balls.sid",
+    "path": "sids/GAMES/A-F/Balls.sid",
+    "size": 540,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JhbG9vbi5zaWQ",
+    "title": "Baloon",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Baloon.sid",
+    "path": "sids/GAMES/A-F/Baloon.sid",
+    "size": 975,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JhbmstUm9iYmVyX0JBU0lDLnNpZA",
+    "title": "Bank-Robber BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Bank-Robber_BASIC.sid",
+    "path": "sids/GAMES/A-F/Bank-Robber_BASIC.sid",
+    "size": 800,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JhcmRzX1RhbGUuc2lk",
+    "title": "Bards Tale",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Bards_Tale.sid",
+    "path": "sids/GAMES/A-F/Bards_Tale.sid",
+    "size": 2660,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JhcmRzX1RhbGVfSUlJLVRoaWVmX29mX0ZhdGUuc2lk",
+    "title": "Bards Tale III-Thief of Fate",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Bards_Tale_III-Thief_of_Fate.sid",
+    "path": "sids/GAMES/A-F/Bards_Tale_III-Thief_of_Fate.sid",
+    "size": 2369,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JhcnJpZXItU3lzdGVtLnNpZA",
+    "title": "Barrier-System",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Barrier-System.sid",
+    "path": "sids/GAMES/A-F/Barrier-System.sid",
+    "size": 1426,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0Jhc2tldF9NYW5hZ2VyLnNpZA",
+    "title": "Basket Manager",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Basket_Manager.sid",
+    "path": "sids/GAMES/A-F/Basket_Manager.sid",
+    "size": 4350,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JhdGhfVGltZS5zaWQ",
+    "title": "Bath Time",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Bath_Time.sid",
+    "path": "sids/GAMES/A-F/Bath_Time.sid",
+    "size": 1318,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JhdHRsZV9Db21tYW5kLnNpZA",
+    "title": "Battle Command",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Battle_Command.sid",
+    "path": "sids/GAMES/A-F/Battle_Command.sid",
+    "size": 1486,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JhdHRsZV9mb3JfQ3Jvbm9zLnNpZA",
+    "title": "Battle for Cronos",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Battle_for_Cronos.sid",
+    "path": "sids/GAMES/A-F/Battle_for_Cronos.sid",
+    "size": 2306,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JhdHRsZV9TdGF0aW9ucy5zaWQ",
+    "title": "Battle Stations",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Battle_Stations.sid",
+    "path": "sids/GAMES/A-F/Battle_Stations.sid",
+    "size": 2654,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JhdHRsZV9UaHJvbmUuc2lk",
+    "title": "Battle Throne",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Battle_Throne.sid",
+    "path": "sids/GAMES/A-F/Battle_Throne.sid",
+    "size": 10677,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JhdHRsZV90aHJvdWdoX1RpbWUuc2lk",
+    "title": "Battle through Time",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Battle_through_Time.sid",
+    "path": "sids/GAMES/A-F/Battle_through_Time.sid",
+    "size": 5245,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JhdHRsZWZyb250LnNpZA",
+    "title": "Battlefront",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Battlefront.sid",
+    "path": "sids/GAMES/A-F/Battlefront.sid",
+    "size": 363,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JhdHRsZXNoaXBzLnNpZA",
+    "title": "Battleships",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Battleships.sid",
+    "path": "sids/GAMES/A-F/Battleships.sid",
+    "size": 6462,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JlYWNoX0J1Z2d5X1NpbXVsYXRvci5zaWQ",
+    "title": "Beach Buggy Simulator",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Beach_Buggy_Simulator.sid",
+    "path": "sids/GAMES/A-F/Beach_Buggy_Simulator.sid",
+    "size": 4838,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JlYWNoX0hlYWRfSUkuc2lk",
+    "title": "Beach Head II",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Beach_Head_II.sid",
+    "path": "sids/GAMES/A-F/Beach_Head_II.sid",
+    "size": 12094,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JlYWNoX1ZvbGxleS5zaWQ",
+    "title": "Beach Volley",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Beach_Volley.sid",
+    "path": "sids/GAMES/A-F/Beach_Volley.sid",
+    "size": 7310,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JlYXJfQm92dmVyLnNpZA",
+    "title": "Bear Bovver",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Bear_Bovver.sid",
+    "path": "sids/GAMES/A-F/Bear_Bovver.sid",
+    "size": 1116,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JlYXJfR2VvcmdlLnNpZA",
+    "title": "Bear George",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Bear_George.sid",
+    "path": "sids/GAMES/A-F/Bear_George.sid",
+    "size": 2547,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JlbGxyaW5nZXJfSUkuc2lk",
+    "title": "Bellringer II",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Bellringer_II.sid",
+    "path": "sids/GAMES/A-F/Bellringer_II.sid",
+    "size": 382,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JlbG93X3RoZV9Sb290LnNpZA",
+    "title": "Below the Root",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Below_the_Root.sid",
+    "path": "sids/GAMES/A-F/Below_the_Root.sid",
+    "size": 1030,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JlbmppX1NwYWNlX1Jlc2N1ZS5zaWQ",
+    "title": "Benji Space Rescue",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Benji_Space_Rescue.sid",
+    "path": "sids/GAMES/A-F/Benji_Space_Rescue.sid",
+    "size": 910,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JlcmFuaWEuc2lk",
+    "title": "Berania",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Berania.sid",
+    "path": "sids/GAMES/A-F/Berania.sid",
+    "size": 38561,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JlcmtzX0ZvdXIuc2lk",
+    "title": "Berks Four",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Berks_Four.sid",
+    "path": "sids/GAMES/A-F/Berks_Four.sid",
+    "size": 2343,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JpZ19CZW4uc2lk",
+    "title": "Big Ben",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Big_Ben.sid",
+    "path": "sids/GAMES/A-F/Big_Ben.sid",
+    "size": 2495,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JpZ19NYWMuc2lk",
+    "title": "Big Mac",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Big_Mac.sid",
+    "path": "sids/GAMES/A-F/Big_Mac.sid",
+    "size": 4561,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JpbGxfRGFfU25vd21hbi5zaWQ",
+    "title": "Bill Da Snowman",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Bill_Da_Snowman.sid",
+    "path": "sids/GAMES/A-F/Bill_Da_Snowman.sid",
+    "size": 564,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JpbGx5X3RoZV9Qb3N0bWFuLnNpZA",
+    "title": "Billy the Postman",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Billy_the_Postman.sid",
+    "path": "sids/GAMES/A-F/Billy_the_Postman.sid",
+    "size": 3730,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0Jpb25pY19Db21tYW5kb19VU0FfVmVyc2lvbi5zaWQ",
+    "title": "Bionic Commando USA Version",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Bionic_Commando_USA_Version.sid",
+    "path": "sids/GAMES/A-F/Bionic_Commando_USA_Version.sid",
+    "size": 4156,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0Jpb25pY19HcmFubnkuc2lk",
+    "title": "Bionic Granny",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Bionic_Granny.sid",
+    "path": "sids/GAMES/A-F/Bionic_Granny.sid",
+    "size": 685,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JpcmRfTW90aGVyLnNpZA",
+    "title": "Bird Mother",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Bird_Mother.sid",
+    "path": "sids/GAMES/A-F/Bird_Mother.sid",
+    "size": 3406,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JpdF9FeG9yY2lzdC5zaWQ",
+    "title": "Bit Exorcist",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Bit_Exorcist.sid",
+    "path": "sids/GAMES/A-F/Bit_Exorcist.sid",
+    "size": 987,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JsYWNrX0FkZGVyX0JBU0lDLnNpZA",
+    "title": "Black Adder BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Black_Adder_BASIC.sid",
+    "path": "sids/GAMES/A-F/Black_Adder_BASIC.sid",
+    "size": 1066,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JsYWNrX0hhd2suc2lk",
+    "title": "Black Hawk",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Black_Hawk.sid",
+    "path": "sids/GAMES/A-F/Black_Hawk.sid",
+    "size": 4158,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JsYWNrX01hZ2ljLnNpZA",
+    "title": "Black Magic",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Black_Magic.sid",
+    "path": "sids/GAMES/A-F/Black_Magic.sid",
+    "size": 5182,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JsYWtob2xlLnNpZA",
+    "title": "Blakhole",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Blakhole.sid",
+    "path": "sids/GAMES/A-F/Blakhole.sid",
+    "size": 3281,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JsYXN0X0JhbGwuc2lk",
+    "title": "Blast Ball",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Blast_Ball.sid",
+    "path": "sids/GAMES/A-F/Blast_Ball.sid",
+    "size": 6447,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JsaXAtVmlkZW9fQ2xhc3NpY3Muc2lk",
+    "title": "Blip-Video Classics",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Blip-Video_Classics.sid",
+    "path": "sids/GAMES/A-F/Blip-Video_Classics.sid",
+    "size": 6573,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JsaXR6LnNpZA",
+    "title": "Blitz",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Blitz.sid",
+    "path": "sids/GAMES/A-F/Blitz.sid",
+    "size": 2820,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0Jsb2JfcHJldmlldy5zaWQ",
+    "title": "Blob preview",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Blob_preview.sid",
+    "path": "sids/GAMES/A-F/Blob_preview.sid",
+    "size": 2124,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0Jsb2NrYnVzdGVyc18xOTg0LnNpZA",
+    "title": "Blockbusters 1984",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Blockbusters_1984.sid",
+    "path": "sids/GAMES/A-F/Blockbusters_1984.sid",
+    "size": 3176,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0Jsb2NrYnVzdGVyc18xOTg4LnNpZA",
+    "title": "Blockbusters 1988",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Blockbusters_1988.sid",
+    "path": "sids/GAMES/A-F/Blockbusters_1988.sid",
+    "size": 672,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0Jsb2NrYnVzdGVycy1Hb2xkX1J1bi5zaWQ",
+    "title": "Blockbusters-Gold Run",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Blockbusters-Gold_Run.sid",
+    "path": "sids/GAMES/A-F/Blockbusters-Gold_Run.sid",
+    "size": 1068,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0Jsb2Nrb3V0LnNpZA",
+    "title": "Blockout",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Blockout.sid",
+    "path": "sids/GAMES/A-F/Blockout.sid",
+    "size": 2138,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JsdWVfYW5kX3RoZV9HcmF5X0JBU0lDLnNpZA",
+    "title": "Blue and the Gray BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Blue_and_the_Gray_BASIC.sid",
+    "path": "sids/GAMES/A-F/Blue_and_the_Gray_BASIC.sid",
+    "size": 905,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JsdWVfTWF4XzIwMDEuc2lk",
+    "title": "Blue Max 2001",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Blue_Max_2001.sid",
+    "path": "sids/GAMES/A-F/Blue_Max_2001.sid",
+    "size": 894,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JsdWVzX0Jyb3RoZXJzX01pc3Npb25faW50cm8uc2lk",
+    "title": "Blues Brothers Mission intro",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Blues_Brothers_Mission_intro.sid",
+    "path": "sids/GAMES/A-F/Blues_Brothers_Mission_intro.sid",
+    "size": 1854,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JvYnNsZWlnaC5zaWQ",
+    "title": "Bobsleigh",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Bobsleigh.sid",
+    "path": "sids/GAMES/A-F/Bobsleigh.sid",
+    "size": 1558,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JvY2NpYV9CQVNJQy5zaWQ",
+    "title": "Boccia BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Boccia_BASIC.sid",
+    "path": "sids/GAMES/A-F/Boccia_BASIC.sid",
+    "size": 2601,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JvZF9TcXVhZC5zaWQ",
+    "title": "Bod Squad",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Bod_Squad.sid",
+    "path": "sids/GAMES/A-F/Bod_Squad.sid",
+    "size": 6690,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JPRkhfU2VydmVyc19VbmRlcl9TaWVnZS5zaWQ",
+    "title": "BOFH Servers Under Siege",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "BOFH_Servers_Under_Siege.sid",
+    "path": "sids/GAMES/A-F/BOFH_Servers_Under_Siege.sid",
+    "size": 4402,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JvaW5nLnNpZA",
+    "title": "Boing",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Boing.sid",
+    "path": "sids/GAMES/A-F/Boing.sid",
+    "size": 3104,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JvbWJfQ2F0Y2guc2lk",
+    "title": "Bomb Catch",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Bomb_Catch.sid",
+    "path": "sids/GAMES/A-F/Bomb_Catch.sid",
+    "size": 1744,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JvbWJfTWFuaWEuc2lk",
+    "title": "Bomb Mania",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Bomb_Mania.sid",
+    "path": "sids/GAMES/A-F/Bomb_Mania.sid",
+    "size": 5151,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JvbnpvLnNpZA",
+    "title": "Bonzo",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Bonzo.sid",
+    "path": "sids/GAMES/A-F/Bonzo.sid",
+    "size": 914,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0Jvb2dhLUJvb190aGVfRmxlYS5zaWQ",
+    "title": "Booga-Boo the Flea",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Booga-Boo_the_Flea.sid",
+    "path": "sids/GAMES/A-F/Booga-Boo_the_Flea.sid",
+    "size": 2737,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0Jvb21iYXN0aWNfQmVubnlfcHJldmlldy5zaWQ",
+    "title": "Boombastic Benny preview",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Boombastic_Benny_preview.sid",
+    "path": "sids/GAMES/A-F/Boombastic_Benny_preview.sid",
+    "size": 5816,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0Jvb3RsZWdfQmFuZGl0cy5zaWQ",
+    "title": "Bootleg Bandits",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Bootleg_Bandits.sid",
+    "path": "sids/GAMES/A-F/Bootleg_Bandits.sid",
+    "size": 650,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JvcHBpZXNfR3JlYXRfV29yZF9DaGFzZS5zaWQ",
+    "title": "Boppies Great Word Chase",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Boppies_Great_Word_Chase.sid",
+    "path": "sids/GAMES/A-F/Boppies_Great_Word_Chase.sid",
+    "size": 853,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0Jvc3N6dS5zaWQ",
+    "title": "Bosszu",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Bosszu.sid",
+    "path": "sids/GAMES/A-F/Bosszu.sid",
+    "size": 2778,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JvdWxkZXJfRGFzaC5zaWQ",
+    "title": "Boulder Dash",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Boulder_Dash.sid",
+    "path": "sids/GAMES/A-F/Boulder_Dash.sid",
+    "size": 1156,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JvdWxkZXJfRGFzaF9JSS5zaWQ",
+    "title": "Boulder Dash II",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Boulder_Dash_II.sid",
+    "path": "sids/GAMES/A-F/Boulder_Dash_II.sid",
+    "size": 1134,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JvdW5jZXIuc2lk",
+    "title": "Bouncer",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Bouncer.sid",
+    "path": "sids/GAMES/A-F/Bouncer.sid",
+    "size": 689,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JvdW5jaF9wcmV2aWV3LnNpZA",
+    "title": "Bounch preview",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Bounch_preview.sid",
+    "path": "sids/GAMES/A-F/Bounch_preview.sid",
+    "size": 3036,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JvdW50eV9Cb2JfU3RyaWtlc19CYWNrLnNpZA",
+    "title": "Bounty Bob Strikes Back",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Bounty_Bob_Strikes_Back.sid",
+    "path": "sids/GAMES/A-F/Bounty_Bob_Strikes_Back.sid",
+    "size": 2878,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JvdW56eS5zaWQ",
+    "title": "Bounzy",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Bounzy.sid",
+    "path": "sids/GAMES/A-F/Bounzy.sid",
+    "size": 4162,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0Jvd2xpbmcuc2lk",
+    "title": "Bowling",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Bowling.sid",
+    "path": "sids/GAMES/A-F/Bowling.sid",
+    "size": 5438,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JveGVzLnNpZA",
+    "title": "Boxes",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Boxes.sid",
+    "path": "sids/GAMES/A-F/Boxes.sid",
+    "size": 9170,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JvenVtYS5zaWQ",
+    "title": "Bozuma",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Bozuma.sid",
+    "path": "sids/GAMES/A-F/Bozuma.sid",
+    "size": 28467,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JyYWluc3Rvcm0uc2lk",
+    "title": "Brainstorm",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Brainstorm.sid",
+    "path": "sids/GAMES/A-F/Brainstorm.sid",
+    "size": 5375,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JyYXZlX0FmcmljYW5fSHVudHJlc3Muc2lk",
+    "title": "Brave African Huntress",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Brave_African_Huntress.sid",
+    "path": "sids/GAMES/A-F/Brave_African_Huntress.sid",
+    "size": 6270,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JyZWFrX0RhbmNlLnNpZA",
+    "title": "Break Dance",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Break_Dance.sid",
+    "path": "sids/GAMES/A-F/Break_Dance.sid",
+    "size": 2543,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JyZWFrX0ZldmVyLnNpZA",
+    "title": "Break Fever",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Break_Fever.sid",
+    "path": "sids/GAMES/A-F/Break_Fever.sid",
+    "size": 14558,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JyZWFrLUluLnNpZA",
+    "title": "Break-In",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Break-In.sid",
+    "path": "sids/GAMES/A-F/Break-In.sid",
+    "size": 11346,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JyZWFrZG93bi5zaWQ",
+    "title": "Breakdown",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Breakdown.sid",
+    "path": "sids/GAMES/A-F/Breakdown.sid",
+    "size": 4209,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JyZWFrZXIuc2lk",
+    "title": "Breaker",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Breaker.sid",
+    "path": "sids/GAMES/A-F/Breaker.sid",
+    "size": 4222,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JyZWFraW4uc2lk",
+    "title": "Breakin",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Breakin.sid",
+    "path": "sids/GAMES/A-F/Breakin.sid",
+    "size": 512,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JyZWFrdGhydV9pbl8zRC5zaWQ",
+    "title": "Breakthru in 3D",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Breakthru_in_3D.sid",
+    "path": "sids/GAMES/A-F/Breakthru_in_3D.sid",
+    "size": 1370,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JyZWF0aGFseXplci5zaWQ",
+    "title": "Breathalyzer",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Breathalyzer.sid",
+    "path": "sids/GAMES/A-F/Breathalyzer.sid",
+    "size": 3763,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JyaWFuX0Jsb29kYXhlLnNpZA",
+    "title": "Brian Bloodaxe",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Brian_Bloodaxe.sid",
+    "path": "sids/GAMES/A-F/Brian_Bloodaxe.sid",
+    "size": 1027,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JyaWFuX0phY2tzX1N1cGVyc3Rhcl9DaGFsbGVuZ2Uuc2lk",
+    "title": "Brian Jacks Superstar Challenge",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Brian_Jacks_Superstar_Challenge.sid",
+    "path": "sids/GAMES/A-F/Brian_Jacks_Superstar_Challenge.sid",
+    "size": 2468,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JyaWNrX091dF82NF9CQVNJQy5zaWQ",
+    "title": "Brick Out 64 BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Brick_Out_64_BASIC.sid",
+    "path": "sids/GAMES/A-F/Brick_Out_64_BASIC.sid",
+    "size": 605,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JyaWNrb3V0X0JBU0lDLnNpZA",
+    "title": "Brickout BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Brickout_BASIC.sid",
+    "path": "sids/GAMES/A-F/Brickout_BASIC.sid",
+    "size": 762,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JyaWRlX29mX0ZyYW5rZW5zdGVpbi5zaWQ",
+    "title": "Bride of Frankenstein",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Bride_of_Frankenstein.sid",
+    "path": "sids/GAMES/A-F/Bride_of_Frankenstein.sid",
+    "size": 798,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JyaXN0bGVzLnNpZA",
+    "title": "Bristles",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Bristles.sid",
+    "path": "sids/GAMES/A-F/Bristles.sid",
+    "size": 1677,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0Jyb2tlci5zaWQ",
+    "title": "Broker",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Broker.sid",
+    "path": "sids/GAMES/A-F/Broker.sid",
+    "size": 11385,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JydW5oaWxkZV9Mb3Zlc19CcnVub19CQVNJQy5zaWQ",
+    "title": "Brunhilde Loves Bruno BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Brunhilde_Loves_Bruno_BASIC.sid",
+    "path": "sids/GAMES/A-F/Brunhilde_Loves_Bruno_BASIC.sid",
+    "size": 3877,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JydXRhbGx5X0JyYWluc3Rvcm0uc2lk",
+    "title": "Brutally Brainstorm",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Brutally_Brainstorm.sid",
+    "path": "sids/GAMES/A-F/Brutally_Brainstorm.sid",
+    "size": 2842,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JyeWFuX1JvYnNvbnNfU3VwZXJfTGVhZ3VlLnNpZA",
+    "title": "Bryan Robsons Super League",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Bryan_Robsons_Super_League.sid",
+    "path": "sids/GAMES/A-F/Bryan_Robsons_Super_League.sid",
+    "size": 2006,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0J1YmJsZV9HaG9zdC5zaWQ",
+    "title": "Bubble Ghost",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Bubble_Ghost.sid",
+    "path": "sids/GAMES/A-F/Bubble_Ghost.sid",
+    "size": 6274,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0J1YmJsZXIuc2lk",
+    "title": "Bubbler",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Bubbler.sid",
+    "path": "sids/GAMES/A-F/Bubbler.sid",
+    "size": 3279,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0J1Y2tfUm9nZXJzLnNpZA",
+    "title": "Buck Rogers",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Buck_Rogers.sid",
+    "path": "sids/GAMES/A-F/Buck_Rogers.sid",
+    "size": 1169,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0J1Y2tfUm9nZXJzX0NvdW50ZG93bl90b19Eb29tc2RheS5zaWQ",
+    "title": "Buck Rogers Countdown to Doomsday",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Buck_Rogers_Countdown_to_Doomsday.sid",
+    "path": "sids/GAMES/A-F/Buck_Rogers_Countdown_to_Doomsday.sid",
+    "size": 2337,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0J1ZGR5X0J1YmJsZS5zaWQ",
+    "title": "Buddy Bubble",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Buddy_Bubble.sid",
+    "path": "sids/GAMES/A-F/Buddy_Bubble.sid",
+    "size": 3821,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0J1Z19CQVNJQy5zaWQ",
+    "title": "Bug BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Bug_BASIC.sid",
+    "path": "sids/GAMES/A-F/Bug_BASIC.sid",
+    "size": 936,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0J1Z19CbGl0ei5zaWQ",
+    "title": "Bug Blitz",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Bug_Blitz.sid",
+    "path": "sids/GAMES/A-F/Bug_Blitz.sid",
+    "size": 3108,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0J1bGdlLnNpZA",
+    "title": "Bulge",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Bulge.sid",
+    "path": "sids/GAMES/A-F/Bulge.sid",
+    "size": 420,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0J1bGxpb24uc2lk",
+    "title": "Bullion",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Bullion.sid",
+    "path": "sids/GAMES/A-F/Bullion.sid",
+    "size": 1372,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0J1bGxzZXllLnNpZA",
+    "title": "Bullseye",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Bullseye.sid",
+    "path": "sids/GAMES/A-F/Bullseye.sid",
+    "size": 2705,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0J1bWJsZV9CZWUuc2lk",
+    "title": "Bumble Bee",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Bumble_Bee.sid",
+    "path": "sids/GAMES/A-F/Bumble_Bee.sid",
+    "size": 4063,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0J1bWJsZS1CZWUuc2lk",
+    "title": "Bumble-Bee",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Bumble-Bee.sid",
+    "path": "sids/GAMES/A-F/Bumble-Bee.sid",
+    "size": 4281,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0J1bm55X1phcC5zaWQ",
+    "title": "Bunny Zap",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Bunny_Zap.sid",
+    "path": "sids/GAMES/A-F/Bunny_Zap.sid",
+    "size": 766,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0J1cmdlcl9DaGFzZS5zaWQ",
+    "title": "Burger Chase",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Burger_Chase.sid",
+    "path": "sids/GAMES/A-F/Burger_Chase.sid",
+    "size": 1216,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0J1cm5pbl9SdWJiZXIuc2lk",
+    "title": "Burnin Rubber",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Burnin_Rubber.sid",
+    "path": "sids/GAMES/A-F/Burnin_Rubber.sid",
+    "size": 1176,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0J1dHRlcmZseS5zaWQ",
+    "title": "Butterfly",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Butterfly.sid",
+    "path": "sids/GAMES/A-F/Butterfly.sid",
+    "size": 524,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0J1enpfT2ZmLnNpZA",
+    "title": "Buzz Off",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Buzz_Off.sid",
+    "path": "sids/GAMES/A-F/Buzz_Off.sid",
+    "size": 3000,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0J5dGVfSW52YWRlcnMuc2lk",
+    "title": "Byte Invaders",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Byte_Invaders.sid",
+    "path": "sids/GAMES/A-F/Byte_Invaders.sid",
+    "size": 1906,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NfZXN0X2xhX3ZpZV9CQVNJQy5zaWQ",
+    "title": "C est la vie BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "C_est_la_vie_BASIC.sid",
+    "path": "sids/GAMES/A-F/C_est_la_vie_BASIC.sid",
+    "size": 4537,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NhYl9IdXN0bGUuc2lk",
+    "title": "Cab Hustle",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Cab_Hustle.sid",
+    "path": "sids/GAMES/A-F/Cab_Hustle.sid",
+    "size": 1685,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NhZXNhcl90aGVfQ2F0LnNpZA",
+    "title": "Caesar the Cat",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Caesar_the_Cat.sid",
+    "path": "sids/GAMES/A-F/Caesar_the_Cat.sid",
+    "size": 2170,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NhbGlmb3JuaWFfUHJvX0dvbGYuc2lk",
+    "title": "California Pro Golf",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "California_Pro_Golf.sid",
+    "path": "sids/GAMES/A-F/California_Pro_Golf.sid",
+    "size": 12573,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NhbGlmb3JuaWFfUmFpc2luc19hbmRfdGhlX0NlcmVhbF9GYWN0b3J5LnNpZA",
+    "title": "California Raisins and the Cereal Factory",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "California_Raisins_and_the_Cereal_Factory.sid",
+    "path": "sids/GAMES/A-F/California_Raisins_and_the_Cereal_Factory.sid",
+    "size": 2269,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NhbHZpbi5zaWQ",
+    "title": "Calvin",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Calvin.sid",
+    "path": "sids/GAMES/A-F/Calvin.sid",
+    "size": 1563,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NhbWJvZGlhX1JhaWQuc2lk",
+    "title": "Cambodia Raid",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Cambodia_Raid.sid",
+    "path": "sids/GAMES/A-F/Cambodia_Raid.sid",
+    "size": 4030,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NhbWJvZ2lhLnNpZA",
+    "title": "Cambogia",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Cambogia.sid",
+    "path": "sids/GAMES/A-F/Cambogia.sid",
+    "size": 9278,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NhbWVsb3RfV2FycmlvcnMuc2lk",
+    "title": "Camelot Warriors",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Camelot_Warriors.sid",
+    "path": "sids/GAMES/A-F/Camelot_Warriors.sid",
+    "size": 7314,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NhbmR5X0JhbmRpdF9CQVNJQy5zaWQ",
+    "title": "Candy Bandit BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Candy_Bandit_BASIC.sid",
+    "path": "sids/GAMES/A-F/Candy_Bandit_BASIC.sid",
+    "size": 1773,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0Nhbm9ucmlkZXIuc2lk",
+    "title": "Canonrider",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Canonrider.sid",
+    "path": "sids/GAMES/A-F/Canonrider.sid",
+    "size": 11391,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NhcHRhaW5fQmxvb2Quc2lk",
+    "title": "Captain Blood",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Captain_Blood.sid",
+    "path": "sids/GAMES/A-F/Captain_Blood.sid",
+    "size": 4682,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NhcHRhaW5fRnV0dXJlX1ByZXZpZXcuc2lk",
+    "title": "Captain Future Preview",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Captain_Future_Preview.sid",
+    "path": "sids/GAMES/A-F/Captain_Future_Preview.sid",
+    "size": 5474,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NhcHRhaW5fS2VsbHkuc2lk",
+    "title": "Captain Kelly",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Captain_Kelly.sid",
+    "path": "sids/GAMES/A-F/Captain_Kelly.sid",
+    "size": 563,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NhcHRhaW5fS2lkZC5zaWQ",
+    "title": "Captain Kidd",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Captain_Kidd.sid",
+    "path": "sids/GAMES/A-F/Captain_Kidd.sid",
+    "size": 5728,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NhcHRhaW5fU3RhcmstVGhlX01pc3Npb24uc2lk",
+    "title": "Captain Stark-The Mission",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Captain_Stark-The_Mission.sid",
+    "path": "sids/GAMES/A-F/Captain_Stark-The_Mission.sid",
+    "size": 2737,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NhcHRpdmUuc2lk",
+    "title": "Captive",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Captive.sid",
+    "path": "sids/GAMES/A-F/Captive.sid",
+    "size": 7342,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0Nhci1SYWMuc2lk",
+    "title": "Car-Rac",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Car-Rac.sid",
+    "path": "sids/GAMES/A-F/Car-Rac.sid",
+    "size": 11385,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NhcmRfU2hhcmtzLnNpZA",
+    "title": "Card Sharks",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Card_Sharks.sid",
+    "path": "sids/GAMES/A-F/Card_Sharks.sid",
+    "size": 2832,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NhcnJpZXJfQ29tbWFuZC5zaWQ",
+    "title": "Carrier Command",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Carrier_Command.sid",
+    "path": "sids/GAMES/A-F/Carrier_Command.sid",
+    "size": 4469,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NhcnJ5X29uX0xhdWdoaW5nLnNpZA",
+    "title": "Carry on Laughing",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Carry_on_Laughing.sid",
+    "path": "sids/GAMES/A-F/Carry_on_Laughing.sid",
+    "size": 12372,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0Nhc2lub19Qb2tlcl9CQVNJQy5zaWQ",
+    "title": "Casino Poker BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Casino_Poker_BASIC.sid",
+    "path": "sids/GAMES/A-F/Casino_Poker_BASIC.sid",
+    "size": 1970,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0Nhc3RsZS5zaWQ",
+    "title": "Castle",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Castle.sid",
+    "path": "sids/GAMES/A-F/Castle.sid",
+    "size": 6275,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0Nhc3RsZV9EZWZlbmNlX1ByZXZpZXcuc2lk",
+    "title": "Castle Defence Preview",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Castle_Defence_Preview.sid",
+    "path": "sids/GAMES/A-F/Castle_Defence_Preview.sid",
+    "size": 6838,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0Nhc3RsZV9vZl9MaWZlLnNpZA",
+    "title": "Castle of Life",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Castle_of_Life.sid",
+    "path": "sids/GAMES/A-F/Castle_of_Life.sid",
+    "size": 1800,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0Nhc3RsZV9vZl9NYWRuZXNzLnNpZA",
+    "title": "Castle of Madness",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Castle_of_Madness.sid",
+    "path": "sids/GAMES/A-F/Castle_of_Madness.sid",
+    "size": 16877,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0Nhc3RsZV9SYWlkLnNpZA",
+    "title": "Castle Raid",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Castle_Raid.sid",
+    "path": "sids/GAMES/A-F/Castle_Raid.sid",
+    "size": 34033,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0Nhc3RsZV9TaGFkb3dnYXRlLnNpZA",
+    "title": "Castle Shadowgate",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Castle_Shadowgate.sid",
+    "path": "sids/GAMES/A-F/Castle_Shadowgate.sid",
+    "size": 33613,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0Nhc3RsZS1LaW5nZG9tLnNpZA",
+    "title": "Castle-Kingdom",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Castle-Kingdom.sid",
+    "path": "sids/GAMES/A-F/Castle-Kingdom.sid",
+    "size": 2334,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0Nhc3RsZXNfYW5kX01vbnN0ZXJzLnNpZA",
+    "title": "Castles and Monsters",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Castles_and_Monsters.sid",
+    "path": "sids/GAMES/A-F/Castles_and_Monsters.sid",
+    "size": 2185,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NhdGFseXBzZS5zaWQ",
+    "title": "Catalypse",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Catalypse.sid",
+    "path": "sids/GAMES/A-F/Catalypse.sid",
+    "size": 13935,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NhdGFseXBzZV9zcGVlY2guc2lk",
+    "title": "Catalypse speech",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Catalypse_speech.sid",
+    "path": "sids/GAMES/A-F/Catalypse_speech.sid",
+    "size": 47495,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NhdHNfbl9Dcml0dGVycy5zaWQ",
+    "title": "Cats n Critters",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Cats_n_Critters.sid",
+    "path": "sids/GAMES/A-F/Cats_n_Critters.sid",
+    "size": 2812,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NhdWxkcm9uLnNpZA",
+    "title": "Cauldron",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Cauldron.sid",
+    "path": "sids/GAMES/A-F/Cauldron.sid",
+    "size": 1764,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NhdXNlc19vZl9DaGFvcy5zaWQ",
+    "title": "Causes of Chaos",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Causes_of_Chaos.sid",
+    "path": "sids/GAMES/A-F/Causes_of_Chaos.sid",
+    "size": 3966,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NhdmVfQ2xpbWJlci5zaWQ",
+    "title": "Cave Climber",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Cave_Climber.sid",
+    "path": "sids/GAMES/A-F/Cave_Climber.sid",
+    "size": 482,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NhdmVfRmlnaHRlci5zaWQ",
+    "title": "Cave Fighter",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Cave_Fighter.sid",
+    "path": "sids/GAMES/A-F/Cave_Fighter.sid",
+    "size": 1568,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NhdmVfb2ZfRGVhdGguc2lk",
+    "title": "Cave of Death",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Cave_of_Death.sid",
+    "path": "sids/GAMES/A-F/Cave_of_Death.sid",
+    "size": 1072,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NhdmVsb24uc2lk",
+    "title": "Cavelon",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Cavelon.sid",
+    "path": "sids/GAMES/A-F/Cavelon.sid",
+    "size": 2876,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NhdmVsb25fSUkuc2lk",
+    "title": "Cavelon II",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Cavelon_II.sid",
+    "path": "sids/GAMES/A-F/Cavelon_II.sid",
+    "size": 2447,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NhdmVtYW5fVWdoLUx5bXBpY3Muc2lk",
+    "title": "Caveman Ugh-Lympics",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Caveman_Ugh-Lympics.sid",
+    "path": "sids/GAMES/A-F/Caveman_Ugh-Lympics.sid",
+    "size": 10598,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NhdmVybi5zaWQ",
+    "title": "Cavern",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Cavern.sid",
+    "path": "sids/GAMES/A-F/Cavern.sid",
+    "size": 3078,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NhdmVybnNfb2ZfRGVhdGhfSUkuc2lk",
+    "title": "Caverns of Death II",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Caverns_of_Death_II.sid",
+    "path": "sids/GAMES/A-F/Caverns_of_Death_II.sid",
+    "size": 1108,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NhdmVybnNfb2ZfWHlkcmFocHVyLnNpZA",
+    "title": "Caverns of Xydrahpur",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Caverns_of_Xydrahpur.sid",
+    "path": "sids/GAMES/A-F/Caverns_of_Xydrahpur.sid",
+    "size": 980,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NlbGxfRGVmZW5zZS5zaWQ",
+    "title": "Cell Defense",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Cell_Defense.sid",
+    "path": "sids/GAMES/A-F/Cell_Defense.sid",
+    "size": 2397,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NlbnR1cmlvLnNpZA",
+    "title": "Centurio",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Centurio.sid",
+    "path": "sids/GAMES/A-F/Centurio.sid",
+    "size": 15749,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NoYWluX1JlYWN0aW9uLnNpZA",
+    "title": "Chain Reaction",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Chain_Reaction.sid",
+    "path": "sids/GAMES/A-F/Chain_Reaction.sid",
+    "size": 394,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NoYWluLVJlYWN0aW9uX0JBU0lDLnNpZA",
+    "title": "Chain-Reaction BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Chain-Reaction_BASIC.sid",
+    "path": "sids/GAMES/A-F/Chain-Reaction_BASIC.sid",
+    "size": 1021,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NoYW1wLnNpZA",
+    "title": "Champ",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Champ.sid",
+    "path": "sids/GAMES/A-F/Champ.sid",
+    "size": 3389,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NoYW1waW9uc19vZl9Lcnlubi5zaWQ",
+    "title": "Champions of Krynn",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Champions_of_Krynn.sid",
+    "path": "sids/GAMES/A-F/Champions_of_Krynn.sid",
+    "size": 3777,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NoYXJsaWVfYW5kX3RoZV9KdWdzX0JBU0lDLnNpZA",
+    "title": "Charlie and the Jugs BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Charlie_and_the_Jugs_BASIC.sid",
+    "path": "sids/GAMES/A-F/Charlie_and_the_Jugs_BASIC.sid",
+    "size": 799,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NoZW5pbGxlLnNpZA",
+    "title": "Chenille",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Chenille.sid",
+    "path": "sids/GAMES/A-F/Chenille.sid",
+    "size": 646,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NoZXNzX01hc3Rlci5zaWQ",
+    "title": "Chess Master",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Chess_Master.sid",
+    "path": "sids/GAMES/A-F/Chess_Master.sid",
+    "size": 779,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NoZXN0X0J1bXAuc2lk",
+    "title": "Chest Bump",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Chest_Bump.sid",
+    "path": "sids/GAMES/A-F/Chest_Bump.sid",
+    "size": 3201,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NoaWNraW5fQ2hhc2Uuc2lk",
+    "title": "Chickin Chase",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Chickin_Chase.sid",
+    "path": "sids/GAMES/A-F/Chickin_Chase.sid",
+    "size": 2074,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NoaWVmX1RvbWFoYXdrc19HYW1lcy5zaWQ",
+    "title": "Chief Tomahawks Games",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Chief_Tomahawks_Games.sid",
+    "path": "sids/GAMES/A-F/Chief_Tomahawks_Games.sid",
+    "size": 1072,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NoaWxseV9XaWxseS5zaWQ",
+    "title": "Chilly Willy",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Chilly_Willy.sid",
+    "path": "sids/GAMES/A-F/Chilly_Willy.sid",
+    "size": 2945,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NoaW5lc2VfSnVnZ2xlci5zaWQ",
+    "title": "Chinese Juggler",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Chinese_Juggler.sid",
+    "path": "sids/GAMES/A-F/Chinese_Juggler.sid",
+    "size": 4232,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NoaXBfRmFjdG9yeS5zaWQ",
+    "title": "Chip Factory",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Chip_Factory.sid",
+    "path": "sids/GAMES/A-F/Chip_Factory.sid",
+    "size": 1566,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NoaXJpYmlkdWYuc2lk",
+    "title": "Chiribiduf",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Chiribiduf.sid",
+    "path": "sids/GAMES/A-F/Chiribiduf.sid",
+    "size": 3518,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0Nob21wZXJfTWFuLnNpZA",
+    "title": "Chomper Man",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Chomper_Man.sid",
+    "path": "sids/GAMES/A-F/Chomper_Man.sid",
+    "size": 288,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0Nob3JkY2VudHJhdGlvbi5zaWQ",
+    "title": "Chordcentration",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Chordcentration.sid",
+    "path": "sids/GAMES/A-F/Chordcentration.sid",
+    "size": 2043,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NocmlzdG1hc19FdmVfMTk4M19CQVNJQy5zaWQ",
+    "title": "Christmas Eve 1983 BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Christmas_Eve_1983_BASIC.sid",
+    "path": "sids/GAMES/A-F/Christmas_Eve_1983_BASIC.sid",
+    "size": 1140,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NocmlzdG1hc19FdmVfMTk4Nl9CQVNJQy5zaWQ",
+    "title": "Christmas Eve 1986 BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Christmas_Eve_1986_BASIC.sid",
+    "path": "sids/GAMES/A-F/Christmas_Eve_1986_BASIC.sid",
+    "size": 1123,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NodWNraWVfRWdnLnNpZA",
+    "title": "Chuckie Egg",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Chuckie_Egg.sid",
+    "path": "sids/GAMES/A-F/Chuckie_Egg.sid",
+    "size": 547,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NpcmN1c19DaGFybGllLnNpZA",
+    "title": "Circus Charlie",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Circus_Charlie.sid",
+    "path": "sids/GAMES/A-F/Circus_Charlie.sid",
+    "size": 1875,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NpcmN1c19DaXJjdXMuc2lk",
+    "title": "Circus Circus",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Circus_Circus.sid",
+    "path": "sids/GAMES/A-F/Circus_Circus.sid",
+    "size": 2482,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0Npc2NvX0hlYXQuc2lk",
+    "title": "Cisco Heat",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Cisco_Heat.sid",
+    "path": "sids/GAMES/A-F/Cisco_Heat.sid",
+    "size": 3658,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NpdGFkZWxfb2ZfQ2hhb3Muc2lk",
+    "title": "Citadel of Chaos",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Citadel_of_Chaos.sid",
+    "path": "sids/GAMES/A-F/Citadel_of_Chaos.sid",
+    "size": 7967,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NsYXNzaWNfQ29uY2VudHJhdGlvbi5zaWQ",
+    "title": "Classic Concentration",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Classic_Concentration.sid",
+    "path": "sids/GAMES/A-F/Classic_Concentration.sid",
+    "size": 2878,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NsZXZlcl9hbmRfU21hcnQuc2lk",
+    "title": "Clever and Smart",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Clever_and_Smart.sid",
+    "path": "sids/GAMES/A-F/Clever_and_Smart.sid",
+    "size": 11346,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NsaWZmaGFuZ2VyLnNpZA",
+    "title": "Cliffhanger",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Cliffhanger.sid",
+    "path": "sids/GAMES/A-F/Cliffhanger.sid",
+    "size": 311,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0Nsb3VkX0tpbmdkb21zLnNpZA",
+    "title": "Cloud Kingdoms",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Cloud_Kingdoms.sid",
+    "path": "sids/GAMES/A-F/Cloud_Kingdoms.sid",
+    "size": 8486,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NsdWUtTWFzdGVyX0RldGVjdGl2ZS5zaWQ",
+    "title": "Clue-Master Detective",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Clue-Master_Detective.sid",
+    "path": "sids/GAMES/A-F/Clue-Master_Detective.sid",
+    "size": 3026,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NvY28tTm90ZXMuc2lk",
+    "title": "Coco-Notes",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Coco-Notes.sid",
+    "path": "sids/GAMES/A-F/Coco-Notes.sid",
+    "size": 4493,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NvY29kdWVsX0JBU0lDLnNpZA",
+    "title": "Cocoduel BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Cocoduel_BASIC.sid",
+    "path": "sids/GAMES/A-F/Cocoduel_BASIC.sid",
+    "size": 845,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NvZGVfSHVudGVyLnNpZA",
+    "title": "Code Hunter",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Code_Hunter.sid",
+    "path": "sids/GAMES/A-F/Code_Hunter.sid",
+    "size": 3966,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NvZGVfTWFzdGVyXzY0X0JBU0lDLnNpZA",
+    "title": "Code Master 64 BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Code_Master_64_BASIC.sid",
+    "path": "sids/GAMES/A-F/Code_Master_64_BASIC.sid",
+    "size": 1150,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NvbG9ueS5zaWQ",
+    "title": "Colony",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Colony.sid",
+    "path": "sids/GAMES/A-F/Colony.sid",
+    "size": 1630,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NvbG9yX1NjcmFiYmxlLnNpZA",
+    "title": "Color Scrabble",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Color_Scrabble.sid",
+    "path": "sids/GAMES/A-F/Color_Scrabble.sid",
+    "size": 4470,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NvbG9yLUNvZGVfQkFTSUMuc2lk",
+    "title": "Color-Code BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Color-Code_BASIC.sid",
+    "path": "sids/GAMES/A-F/Color-Code_BASIC.sid",
+    "size": 1668,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NvbG9yZmxvb2Quc2lk",
+    "title": "Colorflood",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Colorflood.sid",
+    "path": "sids/GAMES/A-F/Colorflood.sid",
+    "size": 11346,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NvbG9zc3VzX0JyaWRnZV80LnNpZA",
+    "title": "Colossus Bridge 4",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Colossus_Bridge_4.sid",
+    "path": "sids/GAMES/A-F/Colossus_Bridge_4.sid",
+    "size": 1021,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NvbWJhdF9MZWFkZXIuc2lk",
+    "title": "Combat Leader",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Combat_Leader.sid",
+    "path": "sids/GAMES/A-F/Combat_Leader.sid",
+    "size": 2814,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NvbWV0LnNpZA",
+    "title": "Comet",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Comet.sid",
+    "path": "sids/GAMES/A-F/Comet.sid",
+    "size": 13534,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NvbXBsZXRlX0NvbXB1dGVyX0ZpcmV3b3Jrc19DZWxlYnJhdGlvbl9LaXQuc2lk",
+    "title": "Complete Computer Fireworks Celebration Kit",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Complete_Computer_Fireworks_Celebration_Kit.sid",
+    "path": "sids/GAMES/A-F/Complete_Computer_Fireworks_Celebration_Kit.sid",
+    "size": 33150,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NvbXB1dHJpdmlhLnNpZA",
+    "title": "Computrivia",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Computrivia.sid",
+    "path": "sids/GAMES/A-F/Computrivia.sid",
+    "size": 616,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NvbmdvX0JvbmdvLnNpZA",
+    "title": "Congo Bongo",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Congo_Bongo.sid",
+    "path": "sids/GAMES/A-F/Congo_Bongo.sid",
+    "size": 865,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NvbmdvX0JvbmdvX3ZlcnNpb25fMi5zaWQ",
+    "title": "Congo Bongo version 2",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Congo_Bongo_version_2.sid",
+    "path": "sids/GAMES/A-F/Congo_Bongo_version_2.sid",
+    "size": 3023,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NvbnRpbmVudGFsX0NpcmN1cy5zaWQ",
+    "title": "Continental Circus",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Continental_Circus.sid",
+    "path": "sids/GAMES/A-F/Continental_Circus.sid",
+    "size": 5304,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0Nvcm1hbi5zaWQ",
+    "title": "Corman",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Corman.sid",
+    "path": "sids/GAMES/A-F/Corman.sid",
+    "size": 2023,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0Nvc21pY19Db252b3kuc2lk",
+    "title": "Cosmic Convoy",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Cosmic_Convoy.sid",
+    "path": "sids/GAMES/A-F/Cosmic_Convoy.sid",
+    "size": 1556,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0Nvc21pY19LaWxsZXIuc2lk",
+    "title": "Cosmic Killer",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Cosmic_Killer.sid",
+    "path": "sids/GAMES/A-F/Cosmic_Killer.sid",
+    "size": 475,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NvdW50X0R1Y2t1bGEuc2lk",
+    "title": "Count Duckula",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Count_Duckula.sid",
+    "path": "sids/GAMES/A-F/Count_Duckula.sid",
+    "size": 2421,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NvdW50ZG93bi5zaWQ",
+    "title": "Countdown",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Countdown.sid",
+    "path": "sids/GAMES/A-F/Countdown.sid",
+    "size": 3208,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0Nvd2JveV9LaWR6LnNpZA",
+    "title": "Cowboy Kidz",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Cowboy_Kidz.sid",
+    "path": "sids/GAMES/A-F/Cowboy_Kidz.sid",
+    "size": 6894,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NyYWNrZXJzX1JldmVuZ2VfSVYuc2lk",
+    "title": "Crackers Revenge IV",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Crackers_Revenge_IV.sid",
+    "path": "sids/GAMES/A-F/Crackers_Revenge_IV.sid",
+    "size": 1910,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NyYXNoLnNpZA",
+    "title": "Crash",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Crash.sid",
+    "path": "sids/GAMES/A-F/Crash.sid",
+    "size": 1906,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NyYXp5X0Nhcl9CQVNJQy5zaWQ",
+    "title": "Crazy Car BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Crazy_Car_BASIC.sid",
+    "path": "sids/GAMES/A-F/Crazy_Car_BASIC.sid",
+    "size": 1199,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NyYXp5X0NhcnMuc2lk",
+    "title": "Crazy Cars",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Crazy_Cars.sid",
+    "path": "sids/GAMES/A-F/Crazy_Cars.sid",
+    "size": 2453,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NyYXp5X0NvbnZleW9yc19CQVNJQy5zaWQ",
+    "title": "Crazy Conveyors BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Crazy_Conveyors_BASIC.sid",
+    "path": "sids/GAMES/A-F/Crazy_Conveyors_BASIC.sid",
+    "size": 4563,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NyZWF0ZV93aXRoX0dhcmZpZWxkLnNpZA",
+    "title": "Create with Garfield",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Create_with_Garfield.sid",
+    "path": "sids/GAMES/A-F/Create_with_Garfield.sid",
+    "size": 1946,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NyZWRfQnJlYWtzX091dC5zaWQ",
+    "title": "Cred Breaks Out",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Cred_Breaks_Out.sid",
+    "path": "sids/GAMES/A-F/Cred_Breaks_Out.sid",
+    "size": 1513,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NyZWVwcy5zaWQ",
+    "title": "Creeps",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Creeps.sid",
+    "path": "sids/GAMES/A-F/Creeps.sid",
+    "size": 2659,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NyaWJiYWdlX0JBU0lDLnNpZA",
+    "title": "Cribbage BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Cribbage_BASIC.sid",
+    "path": "sids/GAMES/A-F/Cribbage_BASIC.sid",
+    "size": 2139,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NyaXRpY2FsX01hc3Muc2lk",
+    "title": "Critical Mass",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Critical_Mass.sid",
+    "path": "sids/GAMES/A-F/Critical_Mass.sid",
+    "size": 2800,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0Nyb3NzLnNpZA",
+    "title": "Cross",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Cross.sid",
+    "path": "sids/GAMES/A-F/Cross.sid",
+    "size": 4094,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0Nyb3NzX0ludmVydF8yX3ByZXZpZXcuc2lk",
+    "title": "Cross Invert 2 preview",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Cross_Invert_2_preview.sid",
+    "path": "sids/GAMES/A-F/Cross_Invert_2_preview.sid",
+    "size": 2959,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0Nyb3NzZmlyZS5zaWQ",
+    "title": "Crossfire",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Crossfire.sid",
+    "path": "sids/GAMES/A-F/Crossfire.sid",
+    "size": 1928,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0Nyb3Nzd29yZF9Ud2lzdGVyX0JBU0lDLnNpZA",
+    "title": "Crossword Twister BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Crossword_Twister_BASIC.sid",
+    "path": "sids/GAMES/A-F/Crossword_Twister_BASIC.sid",
+    "size": 2257,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NydXNoX0NydW1ibGVfYW5kX0Nob21wLnNpZA",
+    "title": "Crush Crumble and Chomp",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Crush_Crumble_and_Chomp.sid",
+    "path": "sids/GAMES/A-F/Crush_Crumble_and_Chomp.sid",
+    "size": 6298,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NyeXN0YWxfQ2FzdGxlc18xOTg0LnNpZA",
+    "title": "Crystal Castles 1984",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Crystal_Castles_1984.sid",
+    "path": "sids/GAMES/A-F/Crystal_Castles_1984.sid",
+    "size": 1386,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NyeXN0YWxfQ2FzdGxlc18xOTg2LnNpZA",
+    "title": "Crystal Castles 1986",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Crystal_Castles_1986.sid",
+    "path": "sids/GAMES/A-F/Crystal_Castles_1986.sid",
+    "size": 2377,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NyeXN0YWxsdXMuc2lk",
+    "title": "Crystallus",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Crystallus.sid",
+    "path": "sids/GAMES/A-F/Crystallus.sid",
+    "size": 526,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0NyeXN0YWxzX29mX0NhcnVzLnNpZA",
+    "title": "Crystals of Carus",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Crystals_of_Carus.sid",
+    "path": "sids/GAMES/A-F/Crystals_of_Carus.sid",
+    "size": 4182,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0N1YmVfQkFTSUMuc2lk",
+    "title": "Cube BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Cube_BASIC.sid",
+    "path": "sids/GAMES/A-F/Cube_BASIC.sid",
+    "size": 1935,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0N1YmlzLnNpZA",
+    "title": "Cubis",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Cubis.sid",
+    "path": "sids/GAMES/A-F/Cubis.sid",
+    "size": 654,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0N5YmVydHJvbl9NaXNzaW9uLnNpZA",
+    "title": "Cybertron Mission",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Cybertron_Mission.sid",
+    "path": "sids/GAMES/A-F/Cybertron_Mission.sid",
+    "size": 724,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0N5YmVyd29ybS5zaWQ",
+    "title": "Cyberworm",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Cyberworm.sid",
+    "path": "sids/GAMES/A-F/Cyberworm.sid",
+    "size": 517,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0N5YmV4X0VzY2FwZS5zaWQ",
+    "title": "Cybex Escape",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Cybex_Escape.sid",
+    "path": "sids/GAMES/A-F/Cybex_Escape.sid",
+    "size": 2315,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0N5Y2xvbnMuc2lk",
+    "title": "Cyclons",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Cyclons.sid",
+    "path": "sids/GAMES/A-F/Cyclons.sid",
+    "size": 1950,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0RfSV9TX0NfdGhlX0dhbWUuc2lk",
+    "title": "D I S C the Game",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "D_I_S_C_the_Game.sid",
+    "path": "sids/GAMES/A-F/D_I_S_C_the_Game.sid",
+    "size": 3592,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0RhbGxhc19RdWVzdC5zaWQ",
+    "title": "Dallas Quest",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Dallas_Quest.sid",
+    "path": "sids/GAMES/A-F/Dallas_Quest.sid",
+    "size": 1191,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0RhbWUuc2lk",
+    "title": "Dame",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Dame.sid",
+    "path": "sids/GAMES/A-F/Dame.sid",
+    "size": 2142,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0RhbmNpbmdfTW9uc3Rlci5zaWQ",
+    "title": "Dancing Monster",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Dancing_Monster.sid",
+    "path": "sids/GAMES/A-F/Dancing_Monster.sid",
+    "size": 1904,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0Rhbmdlcl9Ecml2ZS5zaWQ",
+    "title": "Danger Drive",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Danger_Drive.sid",
+    "path": "sids/GAMES/A-F/Danger_Drive.sid",
+    "size": 2837,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0Rhbmdlcl9Nb3VzZV9pbl9Eb3VibGVfVHJvdWJsZS5zaWQ",
+    "title": "Danger Mouse in Double Trouble",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Danger_Mouse_in_Double_Trouble.sid",
+    "path": "sids/GAMES/A-F/Danger_Mouse_in_Double_Trouble.sid",
+    "size": 1549,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0RhbmdlcmJhbGxfUHJldmlld19nYW1lX292ZXIuc2lk",
+    "title": "Dangerball Preview game over",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Dangerball_Preview_game_over.sid",
+    "path": "sids/GAMES/A-F/Dangerball_Preview_game_over.sid",
+    "size": 3061,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0RhbmdlcmJhbGxfUHJldmlld190aGVfZW5kLnNpZA",
+    "title": "Dangerball Preview the end",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Dangerball_Preview_the_end.sid",
+    "path": "sids/GAMES/A-F/Dangerball_Preview_the_end.sid",
+    "size": 2563,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0Rhbmdlcm91c19TcG9ydHNfRGVhZGx5X1Nwb3J0cy5zaWQ",
+    "title": "Dangerous Sports Deadly Sports",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Dangerous_Sports_Deadly_Sports.sid",
+    "path": "sids/GAMES/A-F/Dangerous_Sports_Deadly_Sports.sid",
+    "size": 1844,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0RhcmtfTG9yZC5zaWQ",
+    "title": "Dark Lord",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Dark_Lord.sid",
+    "path": "sids/GAMES/A-F/Dark_Lord.sid",
+    "size": 17421,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0RhcmtfVG93ZXJfQkFTSUMuc2lk",
+    "title": "Dark Tower BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Dark_Tower_BASIC.sid",
+    "path": "sids/GAMES/A-F/Dark_Tower_BASIC.sid",
+    "size": 2477,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0Rhc19TY2h3ZXJ0X1NrYXIuc2lk",
+    "title": "Das Schwert Skar",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Das_Schwert_Skar.sid",
+    "path": "sids/GAMES/A-F/Das_Schwert_Skar.sid",
+    "size": 26360,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0Rhdm9rLnNpZA",
+    "title": "Davok",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Davok.sid",
+    "path": "sids/GAMES/A-F/Davok.sid",
+    "size": 7102,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0RhdnktS2luZ19vZl90aGVfV2lsZF9Gcm9udGllci5zaWQ",
+    "title": "Davy-King of the Wild Frontier",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Davy-King_of_the_Wild_Frontier.sid",
+    "path": "sids/GAMES/A-F/Davy-King_of_the_Wild_Frontier.sid",
+    "size": 12374,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0RheXNfb2ZfVGh1bmRlci5zaWQ",
+    "title": "Days of Thunder",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Days_of_Thunder.sid",
+    "path": "sids/GAMES/A-F/Days_of_Thunder.sid",
+    "size": 3255,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0RlYWN0aXZhdG9ycy5zaWQ",
+    "title": "Deactivators",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Deactivators.sid",
+    "path": "sids/GAMES/A-F/Deactivators.sid",
+    "size": 4201,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0RlYWR6b25lLnNpZA",
+    "title": "Deadzone",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Deadzone.sid",
+    "path": "sids/GAMES/A-F/Deadzone.sid",
+    "size": 431,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0RlYXRoX0Jsb3dfcHJldmlldy5zaWQ",
+    "title": "Death Blow preview",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Death_Blow_preview.sid",
+    "path": "sids/GAMES/A-F/Death_Blow_preview.sid",
+    "size": 2374,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0RlYXRoX2luX0VmZmVjdC5zaWQ",
+    "title": "Death in Effect",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Death_in_Effect.sid",
+    "path": "sids/GAMES/A-F/Death_in_Effect.sid",
+    "size": 43634,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0RlYXRoX0tuaWdodHNfb2ZfS3J5bm4uc2lk",
+    "title": "Death Knights of Krynn",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Death_Knights_of_Krynn.sid",
+    "path": "sids/GAMES/A-F/Death_Knights_of_Krynn.sid",
+    "size": 4489,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0RlYXRoX1N0YXJfSW50ZXJjZXB0b3Iuc2lk",
+    "title": "Death Star Interceptor",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Death_Star_Interceptor.sid",
+    "path": "sids/GAMES/A-F/Death_Star_Interceptor.sid",
+    "size": 1504,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0RlYXRoX1RyYXBfNjQuc2lk",
+    "title": "Death Trap 64",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Death_Trap_64.sid",
+    "path": "sids/GAMES/A-F/Death_Trap_64.sid",
+    "size": 2162,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0RlYXRoZmxvb2Quc2lk",
+    "title": "Deathflood",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Deathflood.sid",
+    "path": "sids/GAMES/A-F/Deathflood.sid",
+    "size": 8750,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0RlZXBfVHJvdWJsZS5zaWQ",
+    "title": "Deep Trouble",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Deep_Trouble.sid",
+    "path": "sids/GAMES/A-F/Deep_Trouble.sid",
+    "size": 7856,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0RlZmVuc2V1ci5zaWQ",
+    "title": "Defenseur",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Defenseur.sid",
+    "path": "sids/GAMES/A-F/Defenseur.sid",
+    "size": 273,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0RlbGl0dG9fU3VsX05pbG8uc2lk",
+    "title": "Delitto Sul Nilo",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Delitto_Sul_Nilo.sid",
+    "path": "sids/GAMES/A-F/Delitto_Sul_Nilo.sid",
+    "size": 3390,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0RlbHRhcGxhbmUuc2lk",
+    "title": "Deltaplane",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Deltaplane.sid",
+    "path": "sids/GAMES/A-F/Deltaplane.sid",
+    "size": 8052,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0RlbHZlX0RlZXBlci5zaWQ",
+    "title": "Delve Deeper",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Delve_Deeper.sid",
+    "path": "sids/GAMES/A-F/Delve_Deeper.sid",
+    "size": 3281,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0RlbW9uX1N0YWxrZXJzLnNpZA",
+    "title": "Demon Stalkers",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Demon_Stalkers.sid",
+    "path": "sids/GAMES/A-F/Demon_Stalkers.sid",
+    "size": 4152,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0RlbW9uc19vZl9Ub3Bhei5zaWQ",
+    "title": "Demons of Topaz",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Demons_of_Topaz.sid",
+    "path": "sids/GAMES/A-F/Demons_of_Topaz.sid",
+    "size": 4190,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0Rlc2VydF9EZWNpc2lvbi5zaWQ",
+    "title": "Desert Decision",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Desert_Decision.sid",
+    "path": "sids/GAMES/A-F/Desert_Decision.sid",
+    "size": 899,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0Rlc3Ryb3llci5zaWQ",
+    "title": "Destroyer",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Destroyer.sid",
+    "path": "sids/GAMES/A-F/Destroyer.sid",
+    "size": 2223,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0RldGVjdGl2ZV9HYW1lLnNpZA",
+    "title": "Detective Game",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Detective_Game.sid",
+    "path": "sids/GAMES/A-F/Detective_Game.sid",
+    "size": 2106,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0RldmlhbnRzLnNpZA",
+    "title": "Deviants",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Deviants.sid",
+    "path": "sids/GAMES/A-F/Deviants.sid",
+    "size": 4748,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0Rldmlsc19HYWxsZXJ5LnNpZA",
+    "title": "Devils Gallery",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Devils_Gallery.sid",
+    "path": "sids/GAMES/A-F/Devils_Gallery.sid",
+    "size": 5112,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0Rldmlsc19Jc2xhbmQuc2lk",
+    "title": "Devils Island",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Devils_Island.sid",
+    "path": "sids/GAMES/A-F/Devils_Island.sid",
+    "size": 2830,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0RpYW1vbmRfSHVudGVyLnNpZA",
+    "title": "Diamond Hunter",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Diamond_Hunter.sid",
+    "path": "sids/GAMES/A-F/Diamond_Hunter.sid",
+    "size": 11346,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0RpY2t5c19EaWFtb25kcy5zaWQ",
+    "title": "Dickys Diamonds",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Dickys_Diamonds.sid",
+    "path": "sids/GAMES/A-F/Dickys_Diamonds.sid",
+    "size": 1626,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0RpZV9BbGllbl9TbGltZS5zaWQ",
+    "title": "Die Alien Slime",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Die_Alien_Slime.sid",
+    "path": "sids/GAMES/A-F/Die_Alien_Slime.sid",
+    "size": 6251,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0RpZV9kcmVpX011c2tldGllcmUuc2lk",
+    "title": "Die drei Musketiere",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Die_drei_Musketiere.sid",
+    "path": "sids/GAMES/A-F/Die_drei_Musketiere.sid",
+    "size": 2785,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0RpZV9IYXJkLnNpZA",
+    "title": "Die Hard",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Die_Hard.sid",
+    "path": "sids/GAMES/A-F/Die_Hard.sid",
+    "size": 5414,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0RpZV9QcnVlZnVuZy5zaWQ",
+    "title": "Die Pruefung",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Die_Pruefung.sid",
+    "path": "sids/GAMES/A-F/Die_Pruefung.sid",
+    "size": 24497,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0RpZ19EdWcuc2lk",
+    "title": "Dig Dug",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Dig_Dug.sid",
+    "path": "sids/GAMES/A-F/Dig_Dug.sid",
+    "size": 1715,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0RpZ2dlci5zaWQ",
+    "title": "Digger",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Digger.sid",
+    "path": "sids/GAMES/A-F/Digger.sid",
+    "size": 387,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0Rpbmt5X0Rvby5zaWQ",
+    "title": "Dinky Doo",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Dinky_Doo.sid",
+    "path": "sids/GAMES/A-F/Dinky_Doo.sid",
+    "size": 1260,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0RpcnR5LnNpZA",
+    "title": "Dirty",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Dirty.sid",
+    "path": "sids/GAMES/A-F/Dirty.sid",
+    "size": 17128,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0Rpc2ttYW4uc2lk",
+    "title": "Diskman",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Diskman.sid",
+    "path": "sids/GAMES/A-F/Diskman.sid",
+    "size": 322,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0RvX29yX0RpZS5zaWQ",
+    "title": "Do or Die",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Do_or_Die.sid",
+    "path": "sids/GAMES/A-F/Do_or_Die.sid",
+    "size": 7021,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0RvY19Db3Ntb3Muc2lk",
+    "title": "Doc Cosmos",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Doc_Cosmos.sid",
+    "path": "sids/GAMES/A-F/Doc_Cosmos.sid",
+    "size": 2998,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0RvY3Rvcl9Eb29tc19SZXZlbmdlLnNpZA",
+    "title": "Doctor Dooms Revenge",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Doctor_Dooms_Revenge.sid",
+    "path": "sids/GAMES/A-F/Doctor_Dooms_Revenge.sid",
+    "size": 18357,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0RvZ2ZpZ2h0X2luX1NwYWNlLnNpZA",
+    "title": "Dogfight in Space",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Dogfight_in_Space.sid",
+    "path": "sids/GAMES/A-F/Dogfight_in_Space.sid",
+    "size": 240,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0RvbWVfQnVnZ3kuc2lk",
+    "title": "Dome Buggy",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Dome_Buggy.sid",
+    "path": "sids/GAMES/A-F/Dome_Buggy.sid",
+    "size": 1334,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0RvbWluby5zaWQ",
+    "title": "Domino",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Domino.sid",
+    "path": "sids/GAMES/A-F/Domino.sid",
+    "size": 6841,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0RvbmtleV9Lb25nLnNpZA",
+    "title": "Donkey Kong",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Donkey_Kong.sid",
+    "path": "sids/GAMES/A-F/Donkey_Kong.sid",
+    "size": 5624,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0RvdWJsZV9EaWdnZXIuc2lk",
+    "title": "Double Digger",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Double_Digger.sid",
+    "path": "sids/GAMES/A-F/Double_Digger.sid",
+    "size": 4366,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0RvdWJsZV9EcmliYmxlLnNpZA",
+    "title": "Double Dribble",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Double_Dribble.sid",
+    "path": "sids/GAMES/A-F/Double_Dribble.sid",
+    "size": 23883,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0Rvd25fdGhlX0NoaW1uZXlfQkFTSUMuc2lk",
+    "title": "Down the Chimney BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Down_the_Chimney_BASIC.sid",
+    "path": "sids/GAMES/A-F/Down_the_Chimney_BASIC.sid",
+    "size": 1423,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0Rvd25oaWxsLVNraV9KdW1wX0JBU0lDLnNpZA",
+    "title": "Downhill-Ski Jump BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Downhill-Ski_Jump_BASIC.sid",
+    "path": "sids/GAMES/A-F/Downhill-Ski_Jump_BASIC.sid",
+    "size": 1556,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0RyX1BpbXBsZXNfRG9nLnNpZA",
+    "title": "Dr Pimples Dog",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Dr_Pimples_Dog.sid",
+    "path": "sids/GAMES/A-F/Dr_Pimples_Dog.sid",
+    "size": 419,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0RyX1dob19hbmRfdGhlX01pbmVzX29mX1RlcnJvci5zaWQ",
+    "title": "Dr Who and the Mines of Terror",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Dr_Who_and_the_Mines_of_Terror.sid",
+    "path": "sids/GAMES/A-F/Dr_Who_and_the_Mines_of_Terror.sid",
+    "size": 8043,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0RyYWdvbl9uX1ByaW5jZXNzLnNpZA",
+    "title": "Dragon n Princess",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Dragon_n_Princess.sid",
+    "path": "sids/GAMES/A-F/Dragon_n_Princess.sid",
+    "size": 2417,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0RyYWdvbl9XYXJzLnNpZA",
+    "title": "Dragon Wars",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Dragon_Wars.sid",
+    "path": "sids/GAMES/A-F/Dragon_Wars.sid",
+    "size": 1156,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0RyYWdvbnJpZGVyc19vZl9QZXJuLnNpZA",
+    "title": "Dragonriders of Pern",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Dragonriders_of_Pern.sid",
+    "path": "sids/GAMES/A-F/Dragonriders_of_Pern.sid",
+    "size": 2925,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0RyYWdvbnNfS2luZ2RvbS5zaWQ",
+    "title": "Dragons Kingdom",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Dragons_Kingdom.sid",
+    "path": "sids/GAMES/A-F/Dragons_Kingdom.sid",
+    "size": 9492,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0RyYWdvbnNfTGFpci5zaWQ",
+    "title": "Dragons Lair",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Dragons_Lair.sid",
+    "path": "sids/GAMES/A-F/Dragons_Lair.sid",
+    "size": 4302,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0RyYWdvbnNfb2ZfRmxhbWUuc2lk",
+    "title": "Dragons of Flame",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Dragons_of_Flame.sid",
+    "path": "sids/GAMES/A-F/Dragons_of_Flame.sid",
+    "size": 1468,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0RyYXVnaHRzX0JBU0lDLnNpZA",
+    "title": "Draughts BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Draughts_BASIC.sid",
+    "path": "sids/GAMES/A-F/Draughts_BASIC.sid",
+    "size": 1983,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0RyZWFtX0NhcnMuc2lk",
+    "title": "Dream Cars",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Dream_Cars.sid",
+    "path": "sids/GAMES/A-F/Dream_Cars.sid",
+    "size": 2942,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0RyZWlfRHJhY2hlbnRvZXRlci5zaWQ",
+    "title": "Drei Drachentoeter",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Drei_Drachentoeter.sid",
+    "path": "sids/GAMES/A-F/Drei_Drachentoeter.sid",
+    "size": 1146,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0RyZWxicy5zaWQ",
+    "title": "Drelbs",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Drelbs.sid",
+    "path": "sids/GAMES/A-F/Drelbs.sid",
+    "size": 1197,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0Ryb2wuc2lk",
+    "title": "Drol",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Drol.sid",
+    "path": "sids/GAMES/A-F/Drol.sid",
+    "size": 1405,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0Ryb3BwZXIuc2lk",
+    "title": "Dropper",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Dropper.sid",
+    "path": "sids/GAMES/A-F/Dropper.sid",
+    "size": 2752,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0R1ZWwuc2lk",
+    "title": "Duel",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Duel.sid",
+    "path": "sids/GAMES/A-F/Duel.sid",
+    "size": 1246,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0R1bmdlb24uc2lk",
+    "title": "Dungeon",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Dungeon.sid",
+    "path": "sids/GAMES/A-F/Dungeon.sid",
+    "size": 2733,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0R1bmdlb25fQmxhc3Rlci5zaWQ",
+    "title": "Dungeon Blaster",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Dungeon_Blaster.sid",
+    "path": "sids/GAMES/A-F/Dungeon_Blaster.sid",
+    "size": 1377,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0R1bmdlb25zX29mX0Rvb20uc2lk",
+    "title": "Dungeons of Doom",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Dungeons_of_Doom.sid",
+    "path": "sids/GAMES/A-F/Dungeons_of_Doom.sid",
+    "size": 24251,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0R5bmFtaXRlX0Rhbi5zaWQ",
+    "title": "Dynamite Dan",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Dynamite_Dan.sid",
+    "path": "sids/GAMES/A-F/Dynamite_Dan.sid",
+    "size": 2944,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0R5bmFtaXRlX0R1ZXguc2lk",
+    "title": "Dynamite Duex",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Dynamite_Duex.sid",
+    "path": "sids/GAMES/A-F/Dynamite_Duex.sid",
+    "size": 14907,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0VhdG1hbmlhYy5zaWQ",
+    "title": "Eatmaniac",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Eatmaniac.sid",
+    "path": "sids/GAMES/A-F/Eatmaniac.sid",
+    "size": 11346,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0VkZV9CQVNJQy5zaWQ",
+    "title": "Ede BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Ede_BASIC.sid",
+    "path": "sids/GAMES/A-F/Ede_BASIC.sid",
+    "size": 2201,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0VpZG9sb24uc2lk",
+    "title": "Eidolon",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Eidolon.sid",
+    "path": "sids/GAMES/A-F/Eidolon.sid",
+    "size": 2958,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0VsZWN0aW9uLnNpZA",
+    "title": "Election",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Election.sid",
+    "path": "sids/GAMES/A-F/Election.sid",
+    "size": 852,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0VsZXZhdG9yX0FjdGlvbl9SZW1ha2Uuc2lk",
+    "title": "Elevator Action Remake",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Elevator_Action_Remake.sid",
+    "path": "sids/GAMES/A-F/Elevator_Action_Remake.sid",
+    "size": 3690,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0VsZXZhdG9yX011c2ljLnNpZA",
+    "title": "Elevator Music",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Elevator_Music.sid",
+    "path": "sids/GAMES/A-F/Elevator_Music.sid",
+    "size": 3683,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0VsaWRvbi5zaWQ",
+    "title": "Elidon",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Elidon.sid",
+    "path": "sids/GAMES/A-F/Elidon.sid",
+    "size": 3519,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0VtcGlyZS5zaWQ",
+    "title": "Empire",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Empire.sid",
+    "path": "sids/GAMES/A-F/Empire.sid",
+    "size": 1758,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0VuZXJneV9XYXJyaW9yLnNpZA",
+    "title": "Energy Warrior",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Energy_Warrior.sid",
+    "path": "sids/GAMES/A-F/Energy_Warrior.sid",
+    "size": 3088,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0VuZ2luZWVyX0h1bXB0eS5zaWQ",
+    "title": "Engineer Humpty",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Engineer_Humpty.sid",
+    "path": "sids/GAMES/A-F/Engineer_Humpty.sid",
+    "size": 685,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0VuZ2xhbmRfQ2hhbXBpb25zaGlwX1NwZWNpYWwuc2lk",
+    "title": "England Championship Special",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "England_Championship_Special.sid",
+    "path": "sids/GAMES/A-F/England_Championship_Special.sid",
+    "size": 3080,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0VudGVyX3RoZV9OaW5qYS5zaWQ",
+    "title": "Enter the Ninja",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Enter_the_Ninja.sid",
+    "path": "sids/GAMES/A-F/Enter_the_Ninja.sid",
+    "size": 636,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0VydWNhLnNpZA",
+    "title": "Eruca",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Eruca.sid",
+    "path": "sids/GAMES/A-F/Eruca.sid",
+    "size": 3246,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0VzY2FwZV9mcm9tX05ld19Zb3JrLnNpZA",
+    "title": "Escape from New York",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Escape_from_New_York.sid",
+    "path": "sids/GAMES/A-F/Escape_from_New_York.sid",
+    "size": 4012,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0VzY2FwZV9mcm9tX3RoZV9EYXJrX1ByaXNvbi5zaWQ",
+    "title": "Escape from the Dark Prison",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Escape_from_the_Dark_Prison.sid",
+    "path": "sids/GAMES/A-F/Escape_from_the_Dark_Prison.sid",
+    "size": 10558,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0VzY2FwZV9mcm9tX3RoZV9ERFIuc2lk",
+    "title": "Escape from the DDR",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Escape_from_the_DDR.sid",
+    "path": "sids/GAMES/A-F/Escape_from_the_DDR.sid",
+    "size": 1287,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0VzY2FwZV9mcm9tX3RoZV9XYXN0ZV9EaXNwb3NhbF9Vbml0X0JBU0lDLnNpZA",
+    "title": "Escape from the Waste Disposal Unit BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Escape_from_the_Waste_Disposal_Unit_BASIC.sid",
+    "path": "sids/GAMES/A-F/Escape_from_the_Waste_Disposal_Unit_BASIC.sid",
+    "size": 2717,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0VzdHJhLnNpZA",
+    "title": "Estra",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Estra.sid",
+    "path": "sids/GAMES/A-F/Estra.sid",
+    "size": 5044,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0V1cmVrYS5zaWQ",
+    "title": "Eureka",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Eureka.sid",
+    "path": "sids/GAMES/A-F/Eureka.sid",
+    "size": 3614,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0V1cm9wZWFuX0Zvb3RiYWxsX0NoYW1wLnNpZA",
+    "title": "European Football Champ",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "European_Football_Champ.sid",
+    "path": "sids/GAMES/A-F/European_Football_Champ.sid",
+    "size": 2554,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0V2ZXJ5b25lc19hX1dhbGx5LnNpZA",
+    "title": "Everyones a Wally",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Everyones_a_Wally.sid",
+    "path": "sids/GAMES/A-F/Everyones_a_Wally.sid",
+    "size": 2790,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0V2aWxfRGVhZC5zaWQ",
+    "title": "Evil Dead",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Evil_Dead.sid",
+    "path": "sids/GAMES/A-F/Evil_Dead.sid",
+    "size": 2174,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0V4b25fUnVubmVyLnNpZA",
+    "title": "Exon Runner",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Exon_Runner.sid",
+    "path": "sids/GAMES/A-F/Exon_Runner.sid",
+    "size": 448,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0V4cHJlc3NfUmFpZGVyLnNpZA",
+    "title": "Express Raider",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Express_Raider.sid",
+    "path": "sids/GAMES/A-F/Express_Raider.sid",
+    "size": 5923,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0V5ZS5zaWQ",
+    "title": "Eye",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Eye.sid",
+    "path": "sids/GAMES/A-F/Eye.sid",
+    "size": 1227,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0YtMTRfVG9tY2F0LnNpZA",
+    "title": "F-14 Tomcat",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "F-14_Tomcat.sid",
+    "path": "sids/GAMES/A-F/F-14_Tomcat.sid",
+    "size": 3432,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0ZhY2VfT2ZmLnNpZA",
+    "title": "Face Off",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Face_Off.sid",
+    "path": "sids/GAMES/A-F/Face_Off.sid",
+    "size": 3395,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0ZhY2VzX29mX0hhYXJuZS5zaWQ",
+    "title": "Faces of Haarne",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Faces_of_Haarne.sid",
+    "path": "sids/GAMES/A-F/Faces_of_Haarne.sid",
+    "size": 7330,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0ZhZXJ5X1RhbGVfQWR2ZW50dXJlLnNpZA",
+    "title": "Faery Tale Adventure",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Faery_Tale_Adventure.sid",
+    "path": "sids/GAMES/A-F/Faery_Tale_Adventure.sid",
+    "size": 4030,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0ZhbGxfR3V5LnNpZA",
+    "title": "Fall Guy",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Fall_Guy.sid",
+    "path": "sids/GAMES/A-F/Fall_Guy.sid",
+    "size": 1887,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0ZhbGxlbl9BbmdlbC5zaWQ",
+    "title": "Fallen Angel",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Fallen_Angel.sid",
+    "path": "sids/GAMES/A-F/Fallen_Angel.sid",
+    "size": 1567,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0ZhbnRhc3lhLnNpZA",
+    "title": "Fantasya",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Fantasya.sid",
+    "path": "sids/GAMES/A-F/Fantasya.sid",
+    "size": 1918,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0ZhcnN0YXIuc2lk",
+    "title": "Farstar",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Farstar.sid",
+    "path": "sids/GAMES/A-F/Farstar.sid",
+    "size": 3208,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0ZlYXJsZXNzX0ZyZWQuc2lk",
+    "title": "Fearless Fred",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Fearless_Fred.sid",
+    "path": "sids/GAMES/A-F/Fearless_Fred.sid",
+    "size": 6458,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0ZpY2tsZS5zaWQ",
+    "title": "Fickle",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Fickle.sid",
+    "path": "sids/GAMES/A-F/Fickle.sid",
+    "size": 1422,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0ZpZnRlZW5fM0Quc2lk",
+    "title": "Fifteen 3D",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Fifteen_3D.sid",
+    "path": "sids/GAMES/A-F/Fifteen_3D.sid",
+    "size": 2169,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0ZpZnRoX1F1YWRyYW50LnNpZA",
+    "title": "Fifth Quadrant",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Fifth_Quadrant.sid",
+    "path": "sids/GAMES/A-F/Fifth_Quadrant.sid",
+    "size": 2558,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0ZpZ2h0ZXJfUGlsb3Quc2lk",
+    "title": "Fighter Pilot",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Fighter_Pilot.sid",
+    "path": "sids/GAMES/A-F/Fighter_Pilot.sid",
+    "size": 660,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0ZpZ2h0aW5nX1dhcnJpb3Iuc2lk",
+    "title": "Fighting Warrior",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Fighting_Warrior.sid",
+    "path": "sids/GAMES/A-F/Fighting_Warrior.sid",
+    "size": 4227,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0ZpbmFsX1Rlbm5pcy5zaWQ",
+    "title": "Final Tennis",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Final_Tennis.sid",
+    "path": "sids/GAMES/A-F/Final_Tennis.sid",
+    "size": 12172,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0ZpcmVfYW5kX0ZvcmdldF9JSS5zaWQ",
+    "title": "Fire and Forget II",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Fire_and_Forget_II.sid",
+    "path": "sids/GAMES/A-F/Fire_and_Forget_II.sid",
+    "size": 8274,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0ZpcmVfQnJlYXRoLnNpZA",
+    "title": "Fire Breath",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Fire_Breath.sid",
+    "path": "sids/GAMES/A-F/Fire_Breath.sid",
+    "size": 5166,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0ZpcmVfQnVnLnNpZA",
+    "title": "Fire Bug",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Fire_Bug.sid",
+    "path": "sids/GAMES/A-F/Fire_Bug.sid",
+    "size": 1501,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0ZpcmVfS2luZy5zaWQ",
+    "title": "Fire King",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Fire_King.sid",
+    "path": "sids/GAMES/A-F/Fire_King.sid",
+    "size": 13323,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0ZpcmVfVHJhY2suc2lk",
+    "title": "Fire Track",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Fire_Track.sid",
+    "path": "sids/GAMES/A-F/Fire_Track.sid",
+    "size": 2272,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0ZpcmUtRHJpbGwuc2lk",
+    "title": "Fire-Drill",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Fire-Drill.sid",
+    "path": "sids/GAMES/A-F/Fire-Drill.sid",
+    "size": 2859,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0ZpcmViaXJkLnNpZA",
+    "title": "Firebird",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Firebird.sid",
+    "path": "sids/GAMES/A-F/Firebird.sid",
+    "size": 3453,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0ZpcmVxdWVzdC5zaWQ",
+    "title": "Firequest",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Firequest.sid",
+    "path": "sids/GAMES/A-F/Firequest.sid",
+    "size": 3890,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0ZpcmVUcmFwLnNpZA",
+    "title": "FireTrap",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "FireTrap.sid",
+    "path": "sids/GAMES/A-F/FireTrap.sid",
+    "size": 3606,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0ZpdmVfYV9TaWRlLnNpZA",
+    "title": "Five a Side",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Five_a_Side.sid",
+    "path": "sids/GAMES/A-F/Five_a_Side.sid",
+    "size": 8792,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0ZsYWsuc2lk",
+    "title": "Flak",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Flak.sid",
+    "path": "sids/GAMES/A-F/Flak.sid",
+    "size": 1502,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0ZsYXBwaXR5LnNpZA",
+    "title": "Flappity",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Flappity.sid",
+    "path": "sids/GAMES/A-F/Flappity.sid",
+    "size": 2745,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0ZsYXNjaEJpZXIuc2lk",
+    "title": "FlaschBier",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "FlaschBier.sid",
+    "path": "sids/GAMES/A-F/FlaschBier.sid",
+    "size": 1408,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0ZsZWV0X0ZlZXQuc2lk",
+    "title": "Fleet Feet",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Fleet_Feet.sid",
+    "path": "sids/GAMES/A-F/Fleet_Feet.sid",
+    "size": 1970,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0ZsaWdodF9EZWNrLnNpZA",
+    "title": "Flight Deck",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Flight_Deck.sid",
+    "path": "sids/GAMES/A-F/Flight_Deck.sid",
+    "size": 2919,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0ZsaW50c3RvbmVzX1lhYmJhX0RhYmJhX0Rvby5zaWQ",
+    "title": "Flintstones Yabba Dabba Doo",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Flintstones_Yabba_Dabba_Doo.sid",
+    "path": "sids/GAMES/A-F/Flintstones_Yabba_Dabba_Doo.sid",
+    "size": 3792,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0ZsaXBfYW5kX0Zsb3Auc2lk",
+    "title": "Flip and Flop",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Flip_and_Flop.sid",
+    "path": "sids/GAMES/A-F/Flip_and_Flop.sid",
+    "size": 2240,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0Zsb3BweV9CaXJkX1ByZXZpZXcuc2lk",
+    "title": "Floppy Bird Preview",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Floppy_Bird_Preview.sid",
+    "path": "sids/GAMES/A-F/Floppy_Bird_Preview.sid",
+    "size": 4197,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0Zsb3BweV9CaXJkX1ByZXZpZXdfMi5zaWQ",
+    "title": "Floppy Bird Preview 2",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Floppy_Bird_Preview_2.sid",
+    "path": "sids/GAMES/A-F/Floppy_Bird_Preview_2.sid",
+    "size": 3161,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0Zsb3JpZGFfTWFuX1NhdmVzX3RoZV9Xb3JsZC5zaWQ",
+    "title": "Florida Man Saves the World",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Florida_Man_Saves_the_World.sid",
+    "path": "sids/GAMES/A-F/Florida_Man_Saves_the_World.sid",
+    "size": 3220,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0Zsb3dlcl9NYW4uc2lk",
+    "title": "Flower Man",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Flower_Man.sid",
+    "path": "sids/GAMES/A-F/Flower_Man.sid",
+    "size": 1743,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0Zsb3lkX29mX3RoZV9KdW5nbGUuc2lk",
+    "title": "Floyd of the Jungle",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Floyd_of_the_Jungle.sid",
+    "path": "sids/GAMES/A-F/Floyd_of_the_Jungle.sid",
+    "size": 2062,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0ZseWluZ19TaGFyay5zaWQ",
+    "title": "Flying Shark",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Flying_Shark.sid",
+    "path": "sids/GAMES/A-F/Flying_Shark.sid",
+    "size": 4990,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0ZseWluZ19TaGFya19wcmV2aWV3LnNpZA",
+    "title": "Flying Shark preview",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Flying_Shark_preview.sid",
+    "path": "sids/GAMES/A-F/Flying_Shark_preview.sid",
+    "size": 2627,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0ZvcmJpZGRlbl9GcnVpdC5zaWQ",
+    "title": "Forbidden Fruit",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Forbidden_Fruit.sid",
+    "path": "sids/GAMES/A-F/Forbidden_Fruit.sid",
+    "size": 1767,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0ZvcmNlX1NldmVuLnNpZA",
+    "title": "Force Seven",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Force_Seven.sid",
+    "path": "sids/GAMES/A-F/Force_Seven.sid",
+    "size": 1098,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0ZvcmVzdF9vZl9Eb29tLnNpZA",
+    "title": "Forest of Doom",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Forest_of_Doom.sid",
+    "path": "sids/GAMES/A-F/Forest_of_Doom.sid",
+    "size": 7232,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0ZvcnRyZXNzX0JBU0lDLnNpZA",
+    "title": "Fortress BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Fortress_BASIC.sid",
+    "path": "sids/GAMES/A-F/Fortress_BASIC.sid",
+    "size": 4936,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0ZvcnRyZXNzX1VuZGVyZ3JvdW5kLnNpZA",
+    "title": "Fortress Underground",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Fortress_Underground.sid",
+    "path": "sids/GAMES/A-F/Fortress_Underground.sid",
+    "size": 1814,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0ZvdG9fRml0dGVyLnNpZA",
+    "title": "Foto Fitter",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Foto_Fitter.sid",
+    "path": "sids/GAMES/A-F/Foto_Fitter.sid",
+    "size": 2123,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0ZvdXJzX29yX01vcmUuc2lk",
+    "title": "Fours or More",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Fours_or_More.sid",
+    "path": "sids/GAMES/A-F/Fours_or_More.sid",
+    "size": 3598,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0ZyYW5reS5zaWQ",
+    "title": "Franky",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Franky.sid",
+    "path": "sids/GAMES/A-F/Franky.sid",
+    "size": 4730,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0ZyZWFrX0ZhY3Rvcnkuc2lk",
+    "title": "Freak Factory",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Freak_Factory.sid",
+    "path": "sids/GAMES/A-F/Freak_Factory.sid",
+    "size": 1145,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0ZyZWQuc2lk",
+    "title": "Fred",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Fred.sid",
+    "path": "sids/GAMES/A-F/Fred.sid",
+    "size": 2462,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0ZyZWRkeV9IYXJkZXN0LnNpZA",
+    "title": "Freddy Hardest",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Freddy_Hardest.sid",
+    "path": "sids/GAMES/A-F/Freddy_Hardest.sid",
+    "size": 3838,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0ZyZWRkeXNfUHV6emxpbmdfQWR2ZW50dXJlcy5zaWQ",
+    "title": "Freddys Puzzling Adventures",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Freddys_Puzzling_Adventures.sid",
+    "path": "sids/GAMES/A-F/Freddys_Puzzling_Adventures.sid",
+    "size": 5050,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0ZyZWV3YXkuc2lk",
+    "title": "Freeway",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Freeway.sid",
+    "path": "sids/GAMES/A-F/Freeway.sid",
+    "size": 4286,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0ZyZW5jaF9CQVNJQy5zaWQ",
+    "title": "French BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "French_BASIC.sid",
+    "path": "sids/GAMES/A-F/French_BASIC.sid",
+    "size": 869,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0ZyZW56eS5zaWQ",
+    "title": "Frenzy",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Frenzy.sid",
+    "path": "sids/GAMES/A-F/Frenzy.sid",
+    "size": 1729,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0ZyaWRheV90aGVfMTN0aC5zaWQ",
+    "title": "Friday the 13th",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Friday_the_13th.sid",
+    "path": "sids/GAMES/A-F/Friday_the_13th.sid",
+    "size": 7926,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0Zyb2Vobi5zaWQ",
+    "title": "Froehn",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Froehn.sid",
+    "path": "sids/GAMES/A-F/Froehn.sid",
+    "size": 5767,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0Zyb2dnZXIuc2lk",
+    "title": "Frogger",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Frogger.sid",
+    "path": "sids/GAMES/A-F/Frogger.sid",
+    "size": 2676,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0Zyb2dnZXJfSUktVGhyZWVfRGVlcC5zaWQ",
+    "title": "Frogger II-Three Deep",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Frogger_II-Three_Deep.sid",
+    "path": "sids/GAMES/A-F/Frogger_II-Three_Deep.sid",
+    "size": 1203,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0Zyb2dnZXJfUGFya2VyX0Jyb3Muc2lk",
+    "title": "Frogger Parker Bros",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Frogger_Parker_Bros.sid",
+    "path": "sids/GAMES/A-F/Frogger_Parker_Bros.sid",
+    "size": 1284,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0Zyb2dzX2FuZF9GbGllcy5zaWQ",
+    "title": "Frogs and Flies",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Frogs_and_Flies.sid",
+    "path": "sids/GAMES/A-F/Frogs_and_Flies.sid",
+    "size": 11592,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0Zyb3NwaS5zaWQ",
+    "title": "Frospi",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Frospi.sid",
+    "path": "sids/GAMES/A-F/Frospi.sid",
+    "size": 2254,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0ZTU19MaWJlcmF0b3Iuc2lk",
+    "title": "FSS Liberator",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "FSS_Liberator.sid",
+    "path": "sids/GAMES/A-F/FSS_Liberator.sid",
+    "size": 3728,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0Z1Z2dlci5zaWQ",
+    "title": "Fugger",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Fugger.sid",
+    "path": "sids/GAMES/A-F/Fugger.sid",
+    "size": 22701,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0Z1bWFyLnNpZA",
+    "title": "Fumar",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Fumar.sid",
+    "path": "sids/GAMES/A-F/Fumar.sid",
+    "size": 302,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0Z1c3NiYWxsX3ByZXZpZXcuc2lk",
+    "title": "Fussball preview",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Fussball_preview.sid",
+    "path": "sids/GAMES/A-F/Fussball_preview.sid",
+    "size": 1912,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0Z1dHVyZV9TaG9jay5zaWQ",
+    "title": "Future Shock",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Future_Shock.sid",
+    "path": "sids/GAMES/A-F/Future_Shock.sid",
+    "size": 1714,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0dhbGFjdGljX0JhdHRsZXMuc2lk",
+    "title": "Galactic Battles",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Galactic_Battles.sid",
+    "path": "sids/GAMES/G-L/Galactic_Battles.sid",
+    "size": 2084,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0dhbGFjdGljX0dhcmRlbmVyLnNpZA",
+    "title": "Galactic Gardener",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Galactic_Gardener.sid",
+    "path": "sids/GAMES/G-L/Galactic_Gardener.sid",
+    "size": 785,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0dhbGFjdGljX011bmNoZXIuc2lk",
+    "title": "Galactic Muncher",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Galactic_Muncher.sid",
+    "path": "sids/GAMES/G-L/Galactic_Muncher.sid",
+    "size": 5905,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0dhbGF4LWktQmlyZHMuc2lk",
+    "title": "Galax-i-Birds",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Galax-i-Birds.sid",
+    "path": "sids/GAMES/G-L/Galax-i-Birds.sid",
+    "size": 1358,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0dhbGF4aW9ucy5zaWQ",
+    "title": "Galaxions",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Galaxions.sid",
+    "path": "sids/GAMES/G-L/Galaxions.sid",
+    "size": 323,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0dhbGl2YW4uc2lk",
+    "title": "Galivan",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Galivan.sid",
+    "path": "sids/GAMES/G-L/Galivan.sid",
+    "size": 3067,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0dhbHlhLnNpZA",
+    "title": "Galya",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Galya.sid",
+    "path": "sids/GAMES/G-L/Galya.sid",
+    "size": 799,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0dhbWVfb2ZfTGlmZV9CQVNJQy5zaWQ",
+    "title": "Game of Life BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Game_of_Life_BASIC.sid",
+    "path": "sids/GAMES/G-L/Game_of_Life_BASIC.sid",
+    "size": 1263,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0dhbWUtTWFzdGVyLnNpZA",
+    "title": "Game-Master",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Game-Master.sid",
+    "path": "sids/GAMES/G-L/Game-Master.sid",
+    "size": 4520,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0dhbmRhbGZfdGhlX1NvcmNlcmVyLnNpZA",
+    "title": "Gandalf the Sorcerer",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Gandalf_the_Sorcerer.sid",
+    "path": "sids/GAMES/G-L/Gandalf_the_Sorcerer.sid",
+    "size": 1318,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0dhbmRhbGZfdGhlX1NvcmNlcmVyX2xvYWRlci5zaWQ",
+    "title": "Gandalf the Sorcerer loader",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Gandalf_the_Sorcerer_loader.sid",
+    "path": "sids/GAMES/G-L/Gandalf_the_Sorcerer_loader.sid",
+    "size": 2382,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0dhcmRlbl9vZl9FZGVuLnNpZA",
+    "title": "Garden of Eden",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Garden_of_Eden.sid",
+    "path": "sids/GAMES/G-L/Garden_of_Eden.sid",
+    "size": 374,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0dhdGVzX29mX0Rhd24uc2lk",
+    "title": "Gates of Dawn",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Gates_of_Dawn.sid",
+    "path": "sids/GAMES/G-L/Gates_of_Dawn.sid",
+    "size": 586,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0dhdGV3YXlfdG9fdGhlX1NhdmFnZV9Gcm9udGllci5zaWQ",
+    "title": "Gateway to the Savage Frontier",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Gateway_to_the_Savage_Frontier.sid",
+    "path": "sids/GAMES/G-L/Gateway_to_the_Savage_Frontier.sid",
+    "size": 3397,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0dlbXN0b25lX1dhcnJpb3Iuc2lk",
+    "title": "Gemstone Warrior",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Gemstone_Warrior.sid",
+    "path": "sids/GAMES/G-L/Gemstone_Warrior.sid",
+    "size": 2218,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0dlby1NYXRyaXguc2lk",
+    "title": "Geo-Matrix",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Geo-Matrix.sid",
+    "path": "sids/GAMES/G-L/Geo-Matrix.sid",
+    "size": 4041,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0dlb0x1ZG8uc2lk",
+    "title": "GeoLudo",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "GeoLudo.sid",
+    "path": "sids/GAMES/G-L/GeoLudo.sid",
+    "size": 4058,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0dlcmxvY19CQVNJQy5zaWQ",
+    "title": "Gerloc BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Gerloc_BASIC.sid",
+    "path": "sids/GAMES/G-L/Gerloc_BASIC.sid",
+    "size": 1630,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0dlcnJ5X0FuZGVyc29uc19UaHVuZGVyYmlyZHMuc2lk",
+    "title": "Gerry Andersons Thunderbirds",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Gerry_Andersons_Thunderbirds.sid",
+    "path": "sids/GAMES/G-L/Gerry_Andersons_Thunderbirds.sid",
+    "size": 3873,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0dldF9hX0xpZmUuc2lk",
+    "title": "Get a Life",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Get_a_Life.sid",
+    "path": "sids/GAMES/G-L/Get_a_Life.sid",
+    "size": 6997,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0dldF9SZWFkeV9mb3JfTnVtYmVyLnNpZA",
+    "title": "Get Ready for Number",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Get_Ready_for_Number.sid",
+    "path": "sids/GAMES/G-L/Get_Ready_for_Number.sid",
+    "size": 1056,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0doZWRkYWZpYWguc2lk",
+    "title": "Gheddafiah",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Gheddafiah.sid",
+    "path": "sids/GAMES/G-L/Gheddafiah.sid",
+    "size": 4032,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0dob3N0X0J1bm55LnNpZA",
+    "title": "Ghost Bunny",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Ghost_Bunny.sid",
+    "path": "sids/GAMES/G-L/Ghost_Bunny.sid",
+    "size": 11472,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0dob3N0X0h1bnRlcnMuc2lk",
+    "title": "Ghost Hunters",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Ghost_Hunters.sid",
+    "path": "sids/GAMES/G-L/Ghost_Hunters.sid",
+    "size": 3201,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0dob3N0aHVudF9CQVNJQy5zaWQ",
+    "title": "Ghosthunt BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Ghosthunt_BASIC.sid",
+    "path": "sids/GAMES/G-L/Ghosthunt_BASIC.sid",
+    "size": 630,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0dob3Vscy5zaWQ",
+    "title": "Ghouls",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Ghouls.sid",
+    "path": "sids/GAMES/G-L/Ghouls.sid",
+    "size": 942,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0dsYWRpYXRvci5zaWQ",
+    "title": "Gladiator",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Gladiator.sid",
+    "path": "sids/GAMES/G-L/Gladiator.sid",
+    "size": 2954,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0dsaWRlcl9QaWxvdC5zaWQ",
+    "title": "Glider Pilot",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Glider_Pilot.sid",
+    "path": "sids/GAMES/G-L/Glider_Pilot.sid",
+    "size": 1236,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0dsb2JldHJvdHRlci5zaWQ",
+    "title": "Globetrotter",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Globetrotter.sid",
+    "path": "sids/GAMES/G-L/Globetrotter.sid",
+    "size": 6155,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0dPX0JBU0lDLnNpZA",
+    "title": "GO BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "GO_BASIC.sid",
+    "path": "sids/GAMES/G-L/GO_BASIC.sid",
+    "size": 1981,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0dvZHNfcHJldmlldy5zaWQ",
+    "title": "Gods preview",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Gods_preview.sid",
+    "path": "sids/GAMES/G-L/Gods_preview.sid",
+    "size": 14207,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0dvbGRmZXZlci5zaWQ",
+    "title": "Goldfever",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Goldfever.sid",
+    "path": "sids/GAMES/G-L/Goldfever.sid",
+    "size": 425,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0dvbGRyYXVzY2hfQkFTSUMuc2lk",
+    "title": "Goldrausch BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Goldrausch_BASIC.sid",
+    "path": "sids/GAMES/G-L/Goldrausch_BASIC.sid",
+    "size": 705,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0dvbGZfTWFzdGVyLnNpZA",
+    "title": "Golf Master",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Golf_Master.sid",
+    "path": "sids/GAMES/G-L/Golf_Master.sid",
+    "size": 10398,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0dvcnlfR2hvc3RfcHJldmlldy5zaWQ",
+    "title": "Gory Ghost preview",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Gory_Ghost_preview.sid",
+    "path": "sids/GAMES/G-L/Gory_Ghost_preview.sid",
+    "size": 2049,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0dQQUNfRGVtZW50aWFfRGVmZW5kZXIuc2lk",
+    "title": "GPAC Dementia Defender",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "GPAC_Dementia_Defender.sid",
+    "path": "sids/GAMES/G-L/GPAC_Dementia_Defender.sid",
+    "size": 3481,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0dyYWJfSXQuc2lk",
+    "title": "Grab It",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Grab_It.sid",
+    "path": "sids/GAMES/G-L/Grab_It.sid",
+    "size": 4303,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0dyYWJiZXIuc2lk",
+    "title": "Grabber",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Grabber.sid",
+    "path": "sids/GAMES/G-L/Grabber.sid",
+    "size": 1856,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0dyYWRpdXMuc2lk",
+    "title": "Gradius",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Gradius.sid",
+    "path": "sids/GAMES/G-L/Gradius.sid",
+    "size": 2082,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0dyYW5kX1NsYW1fQmFzZWJhbGwuc2lk",
+    "title": "Grand Slam Baseball",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Grand_Slam_Baseball.sid",
+    "path": "sids/GAMES/G-L/Grand_Slam_Baseball.sid",
+    "size": 1074,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0dyYXZpdHJpeC5zaWQ",
+    "title": "Gravitrix",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Gravitrix.sid",
+    "path": "sids/GAMES/G-L/Gravitrix.sid",
+    "size": 7976,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0dyZWF0X0VzY2FwZS5zaWQ",
+    "title": "Great Escape",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Great_Escape.sid",
+    "path": "sids/GAMES/G-L/Great_Escape.sid",
+    "size": 4926,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0dyZW1saW5zLnNpZA",
+    "title": "Gremlins",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Gremlins.sid",
+    "path": "sids/GAMES/G-L/Gremlins.sid",
+    "size": 1951,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0dyZXlmZWxsLnNpZA",
+    "title": "Greyfell",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Greyfell.sid",
+    "path": "sids/GAMES/G-L/Greyfell.sid",
+    "size": 485,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0dyaWR0cmFwLnNpZA",
+    "title": "Gridtrap",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Gridtrap.sid",
+    "path": "sids/GAMES/G-L/Gridtrap.sid",
+    "size": 1624,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0dyaWpwX1plLnNpZA",
+    "title": "Grijp Ze",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Grijp_Ze.sid",
+    "path": "sids/GAMES/G-L/Grijp_Ze.sid",
+    "size": 10237,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0dyb2Vzc2Vud2FybnNpbm5pZ19Cb3VsZGVyX0Rhc2guc2lk",
+    "title": "Groessenwarnsinnig Boulder Dash",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Groessenwarnsinnig_Boulder_Dash.sid",
+    "path": "sids/GAMES/G-L/Groessenwarnsinnig_Boulder_Dash.sid",
+    "size": 5830,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0dydW5pb3plcmNhLnNpZA",
+    "title": "Gruniozerca",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Gruniozerca.sid",
+    "path": "sids/GAMES/G-L/Gruniozerca.sid",
+    "size": 1421,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0d1bHBlcl82NC5zaWQ",
+    "title": "Gulper 64",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Gulper_64.sid",
+    "path": "sids/GAMES/G-L/Gulper_64.sid",
+    "size": 4236,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0d1bXNob2Uuc2lk",
+    "title": "Gumshoe",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Gumshoe.sid",
+    "path": "sids/GAMES/G-L/Gumshoe.sid",
+    "size": 724,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0d1bl9TbW9rZS5zaWQ",
+    "title": "Gun Smoke",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Gun_Smoke.sid",
+    "path": "sids/GAMES/G-L/Gun_Smoke.sid",
+    "size": 5966,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0d1bnNoaXAuc2lk",
+    "title": "Gunship",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Gunship.sid",
+    "path": "sids/GAMES/G-L/Gunship.sid",
+    "size": 2492,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0d3ZW5kb2x5bl9CQVNJQy5zaWQ",
+    "title": "Gwendolyn BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Gwendolyn_BASIC.sid",
+    "path": "sids/GAMES/G-L/Gwendolyn_BASIC.sid",
+    "size": 1386,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0d5cm9zY29wZV8zLnNpZA",
+    "title": "Gyroscope 3",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Gyroscope_3.sid",
+    "path": "sids/GAMES/G-L/Gyroscope_3.sid",
+    "size": 601,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0d5cnVzcy5zaWQ",
+    "title": "Gyruss",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Gyruss.sid",
+    "path": "sids/GAMES/G-L/Gyruss.sid",
+    "size": 2247,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0hhY2tfQXR0YWNrLnNpZA",
+    "title": "Hack Attack",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Hack_Attack.sid",
+    "path": "sids/GAMES/G-L/Hack_Attack.sid",
+    "size": 1846,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0hhZWdhcl9kZXJfU2NocmVja2xpY2hlLnNpZA",
+    "title": "Haegar der Schreckliche",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Haegar_der_Schreckliche.sid",
+    "path": "sids/GAMES/G-L/Haegar_der_Schreckliche.sid",
+    "size": 27681,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0hha2thYV9IYW51cmlhLnNpZA",
+    "title": "Hakkaa Hanuria",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Hakkaa_Hanuria.sid",
+    "path": "sids/GAMES/G-L/Hakkaa_Hanuria.sid",
+    "size": 1615,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0hhbGN5b24uc2lk",
+    "title": "Halcyon",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Halcyon.sid",
+    "path": "sids/GAMES/G-L/Halcyon.sid",
+    "size": 10350,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0hhbGZ0aW1lX0JhdHRsaW5fQmFuZHMuc2lk",
+    "title": "Halftime Battlin Bands",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Halftime_Battlin_Bands.sid",
+    "path": "sids/GAMES/G-L/Halftime_Battlin_Bands.sid",
+    "size": 1968,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0hhbGlmYXguc2lk",
+    "title": "Halifax",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Halifax.sid",
+    "path": "sids/GAMES/G-L/Halifax.sid",
+    "size": 7922,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0hhbGxleV9NaXNzaW9uLnNpZA",
+    "title": "Halley Mission",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Halley_Mission.sid",
+    "path": "sids/GAMES/G-L/Halley_Mission.sid",
+    "size": 2594,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0hhbWJ1cmdlcnNfR29pbmdfdG9fU3dpdHplcmxhbmQuc2lk",
+    "title": "Hamburgers Going to Switzerland",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Hamburgers_Going_to_Switzerland.sid",
+    "path": "sids/GAMES/G-L/Hamburgers_Going_to_Switzerland.sid",
+    "size": 4812,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0hhbW1lcl9CQVNJQy5zaWQ",
+    "title": "Hammer BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Hammer_BASIC.sid",
+    "path": "sids/GAMES/G-L/Hammer_BASIC.sid",
+    "size": 608,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0hhbW11cmFiaS5zaWQ",
+    "title": "Hammurabi",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Hammurabi.sid",
+    "path": "sids/GAMES/G-L/Hammurabi.sid",
+    "size": 2625,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0hhbmdtYW5zX0hhemFyZC5zaWQ",
+    "title": "Hangmans Hazard",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Hangmans_Hazard.sid",
+    "path": "sids/GAMES/G-L/Hangmans_Hazard.sid",
+    "size": 1966,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0hhcmFrX0lyaS5zaWQ",
+    "title": "Harak Iri",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Harak_Iri.sid",
+    "path": "sids/GAMES/G-L/Harak_Iri.sid",
+    "size": 10814,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0hhcmNvbi5zaWQ",
+    "title": "Harcon",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Harcon.sid",
+    "path": "sids/GAMES/G-L/Harcon.sid",
+    "size": 14150,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0hhcmRfSGF0X01hY2suc2lk",
+    "title": "Hard Hat Mack",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Hard_Hat_Mack.sid",
+    "path": "sids/GAMES/G-L/Hard_Hat_Mack.sid",
+    "size": 2843,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0hhcmRfV29yay5zaWQ",
+    "title": "Hard Work",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Hard_Work.sid",
+    "path": "sids/GAMES/G-L/Hard_Work.sid",
+    "size": 357,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0hhcnZleV9TbWl0aF9TaG93X0p1bXBlci5zaWQ",
+    "title": "Harvey Smith Show Jumper",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Harvey_Smith_Show_Jumper.sid",
+    "path": "sids/GAMES/G-L/Harvey_Smith_Show_Jumper.sid",
+    "size": 3118,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0hhdF9Ucmljay5zaWQ",
+    "title": "Hat Trick",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Hat_Trick.sid",
+    "path": "sids/GAMES/G-L/Hat_Trick.sid",
+    "size": 3119,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0hhd2tfUGF0cm9sLnNpZA",
+    "title": "Hawk Patrol",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Hawk_Patrol.sid",
+    "path": "sids/GAMES/G-L/Hawk_Patrol.sid",
+    "size": 689,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0hhd2tfcHJldmlldy5zaWQ",
+    "title": "Hawk preview",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Hawk_preview.sid",
+    "path": "sids/GAMES/G-L/Hawk_preview.sid",
+    "size": 3737,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0hlYWRfQ29hY2hfQkFTSUMuc2lk",
+    "title": "Head Coach BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Head_Coach_BASIC.sid",
+    "path": "sids/GAMES/G-L/Head_Coach_BASIC.sid",
+    "size": 848,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0hlYWRfdG9fSGVhZC5zaWQ",
+    "title": "Head to Head",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Head_to_Head.sid",
+    "path": "sids/GAMES/G-L/Head_to_Head.sid",
+    "size": 278,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0hlYWRhY2hlLnNpZA",
+    "title": "Headache",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Headache.sid",
+    "path": "sids/GAMES/G-L/Headache.sid",
+    "size": 1033,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0hlbGlfRHJvcC5zaWQ",
+    "title": "Heli Drop",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Heli_Drop.sid",
+    "path": "sids/GAMES/G-L/Heli_Drop.sid",
+    "size": 606,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0hlbGktSnVtcC5zaWQ",
+    "title": "Heli-Jump",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Heli-Jump.sid",
+    "path": "sids/GAMES/G-L/Heli-Jump.sid",
+    "size": 737,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0hlbnJ5c19Ib3VzZS5zaWQ",
+    "title": "Henrys House",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Henrys_House.sid",
+    "path": "sids/GAMES/G-L/Henrys_House.sid",
+    "size": 741,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0hlcmJlcnRfb25fdGhlX1Nsb3Blcy5zaWQ",
+    "title": "Herbert on the Slopes",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Herbert_on_the_Slopes.sid",
+    "path": "sids/GAMES/G-L/Herbert_on_the_Slopes.sid",
+    "size": 507,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0hlcmJ5X2luX0FjdGlvbi5zaWQ",
+    "title": "Herby in Action",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Herby_in_Action.sid",
+    "path": "sids/GAMES/G-L/Herby_in_Action.sid",
+    "size": 4269,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0hlcmN1bGVzX1NsYXllcl9vZl90aGVfRGFtbmVkLnNpZA",
+    "title": "Hercules Slayer of the Damned",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Hercules_Slayer_of_the_Damned.sid",
+    "path": "sids/GAMES/G-L/Hercules_Slayer_of_the_Damned.sid",
+    "size": 8990,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0hlcm1hbm9zLnNpZA",
+    "title": "Hermanos",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Hermanos.sid",
+    "path": "sids/GAMES/G-L/Hermanos.sid",
+    "size": 1611,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0hldF9ad2FhcmRfdmFuX2RlX0tvbmluZy5zaWQ",
+    "title": "Het Zwaard van de Koning",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Het_Zwaard_van_de_Koning.sid",
+    "path": "sids/GAMES/G-L/Het_Zwaard_van_de_Koning.sid",
+    "size": 519,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0hpX0JvdW5jZXIuc2lk",
+    "title": "Hi Bouncer",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Hi_Bouncer.sid",
+    "path": "sids/GAMES/G-L/Hi_Bouncer.sid",
+    "size": 2410,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0hpX1FfUXVpei5zaWQ",
+    "title": "Hi Q Quiz",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Hi_Q_Quiz.sid",
+    "path": "sids/GAMES/G-L/Hi_Q_Quiz.sid",
+    "size": 8943,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0hpZ2hfRGl2aW5nX0Rhbl9CQVNJQy5zaWQ",
+    "title": "High Diving Dan BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "High_Diving_Dan_BASIC.sid",
+    "path": "sids/GAMES/G-L/High_Diving_Dan_BASIC.sid",
+    "size": 530,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0hpbHRvbl9Ib3RlbC5zaWQ",
+    "title": "Hilton Hotel",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Hilton_Hotel.sid",
+    "path": "sids/GAMES/G-L/Hilton_Hotel.sid",
+    "size": 909,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0hpdG9raXJpLnNpZA",
+    "title": "Hitokiri",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Hitokiri.sid",
+    "path": "sids/GAMES/G-L/Hitokiri.sid",
+    "size": 2678,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0hvbGVfaW5fT25lLnNpZA",
+    "title": "Hole in One",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Hole_in_One.sid",
+    "path": "sids/GAMES/G-L/Hole_in_One.sid",
+    "size": 2174,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0hvbG8uc2lk",
+    "title": "Holo",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Holo.sid",
+    "path": "sids/GAMES/G-L/Holo.sid",
+    "size": 5675,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0hvb2tfRG9kZ2VyLnNpZA",
+    "title": "Hook Dodger",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Hook_Dodger.sid",
+    "path": "sids/GAMES/G-L/Hook_Dodger.sid",
+    "size": 686,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0hvb3Blci5zaWQ",
+    "title": "Hooper",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Hooper.sid",
+    "path": "sids/GAMES/G-L/Hooper.sid",
+    "size": 3354,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0hvcGVsZXNzLnNpZA",
+    "title": "Hopeless",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Hopeless.sid",
+    "path": "sids/GAMES/G-L/Hopeless.sid",
+    "size": 2051,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0hvcmFjZV9Hb2VzX1NraWluZy5zaWQ",
+    "title": "Horace Goes Skiing",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Horace_Goes_Skiing.sid",
+    "path": "sids/GAMES/G-L/Horace_Goes_Skiing.sid",
+    "size": 2233,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0hvcnJvcl9DaXR5LnNpZA",
+    "title": "Horror City",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Horror_City.sid",
+    "path": "sids/GAMES/G-L/Horror_City.sid",
+    "size": 1981,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0hvcnNlZ3VhcmQuc2lk",
+    "title": "Horseguard",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Horseguard.sid",
+    "path": "sids/GAMES/G-L/Horseguard.sid",
+    "size": 1063,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0hvdF9Qb3Auc2lk",
+    "title": "Hot Pop",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Hot_Pop.sid",
+    "path": "sids/GAMES/G-L/Hot_Pop.sid",
+    "size": 1889,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0hvdF9TaG90LnNpZA",
+    "title": "Hot Shot",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Hot_Shot.sid",
+    "path": "sids/GAMES/G-L/Hot_Shot.sid",
+    "size": 2028,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0hvdF9XaGVlbHNfMTk4NF9CQVNJQy5zaWQ",
+    "title": "Hot Wheels 1984 BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Hot_Wheels_1984_BASIC.sid",
+    "path": "sids/GAMES/G-L/Hot_Wheels_1984_BASIC.sid",
+    "size": 686,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0hvdF9XaGVlbHNfMTk4NS5zaWQ",
+    "title": "Hot Wheels 1985",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Hot_Wheels_1985.sid",
+    "path": "sids/GAMES/G-L/Hot_Wheels_1985.sid",
+    "size": 2877,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0hvdXNlX29mX1VzaGVyLnNpZA",
+    "title": "House of Usher",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "House_of_Usher.sid",
+    "path": "sids/GAMES/G-L/House_of_Usher.sid",
+    "size": 1020,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0hvd190b19iZV9hX0NvbXBsZXRlX0Jhc3RhcmQuc2lk",
+    "title": "How to be a Complete Bastard",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "How_to_be_a_Complete_Bastard.sid",
+    "path": "sids/GAMES/G-L/How_to_be_a_Complete_Bastard.sid",
+    "size": 4254,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0h1Y2tfb25fdGhlX01pc3Npc3NpcHBpLnNpZA",
+    "title": "Huck on the Mississippi",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Huck_on_the_Mississippi.sid",
+    "path": "sids/GAMES/G-L/Huck_on_the_Mississippi.sid",
+    "size": 3417,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0h1bXB0eV9EdW1wdHlfbWVldHNfRnV6enlfV3V6emkuc2lk",
+    "title": "Humpty Dumpty meets Fuzzy Wuzzi",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Humpty_Dumpty_meets_Fuzzy_Wuzzi.sid",
+    "path": "sids/GAMES/G-L/Humpty_Dumpty_meets_Fuzzy_Wuzzi.sid",
+    "size": 845,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0h1bXB0eV9pbl90aGVfR2FyZGVuLnNpZA",
+    "title": "Humpty in the Garden",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Humpty_in_the_Garden.sid",
+    "path": "sids/GAMES/G-L/Humpty_in_the_Garden.sid",
+    "size": 1442,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0h1bmNoYmFjay5zaWQ",
+    "title": "Hunchback",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Hunchback.sid",
+    "path": "sids/GAMES/G-L/Hunchback.sid",
+    "size": 416,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0h1bmNoYmFja19hdF90aGVfT2x5bXBpY3Muc2lk",
+    "title": "Hunchback at the Olympics",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Hunchback_at_the_Olympics.sid",
+    "path": "sids/GAMES/G-L/Hunchback_at_the_Olympics.sid",
+    "size": 585,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0h1bmdhcm9yaW5nLnNpZA",
+    "title": "Hungaroring",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Hungaroring.sid",
+    "path": "sids/GAMES/G-L/Hungaroring.sid",
+    "size": 706,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0h1bmdyeV9Ib3JhY2Uuc2lk",
+    "title": "Hungry Horace",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Hungry_Horace.sid",
+    "path": "sids/GAMES/G-L/Hungry_Horace.sid",
+    "size": 4451,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0h1c3RsZXIuc2lk",
+    "title": "Hustler",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Hustler.sid",
+    "path": "sids/GAMES/G-L/Hustler.sid",
+    "size": 2561,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0h5ZHJhLnNpZA",
+    "title": "Hydra",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Hydra.sid",
+    "path": "sids/GAMES/G-L/Hydra.sid",
+    "size": 4198,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0h5cGVyX0JsYXN0LnNpZA",
+    "title": "Hyper Blast",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Hyper_Blast.sid",
+    "path": "sids/GAMES/G-L/Hyper_Blast.sid",
+    "size": 1793,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0h5cGVyX0NpcmN1aXQuc2lk",
+    "title": "Hyper Circuit",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Hyper_Circuit.sid",
+    "path": "sids/GAMES/G-L/Hyper_Circuit.sid",
+    "size": 1678,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0h5cGVyX0R5bmVfU2lkZWFybXMuc2lk",
+    "title": "Hyper Dyne Sidearms",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Hyper_Dyne_Sidearms.sid",
+    "path": "sids/GAMES/G-L/Hyper_Dyne_Sidearms.sid",
+    "size": 7695,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0h5cGVydGhydXN0LnNpZA",
+    "title": "Hyperthrust",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Hyperthrust.sid",
+    "path": "sids/GAMES/G-L/Hyperthrust.sid",
+    "size": 7063,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0h5c3RlcmlhLnNpZA",
+    "title": "Hysteria",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Hysteria.sid",
+    "path": "sids/GAMES/G-L/Hysteria.sid",
+    "size": 4520,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0lfQmFsbF8yLnNpZA",
+    "title": "I Ball 2",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "I_Ball_2.sid",
+    "path": "sids/GAMES/G-L/I_Ball_2.sid",
+    "size": 14058,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0lfUGxheV8zRF9UZW5uaXMuc2lk",
+    "title": "I Play 3D Tennis",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "I_Play_3D_Tennis.sid",
+    "path": "sids/GAMES/G-L/I_Play_3D_Tennis.sid",
+    "size": 19886,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0ljZV9QYWxhY2VfMTk4NC5zaWQ",
+    "title": "Ice Palace 1984",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Ice_Palace_1984.sid",
+    "path": "sids/GAMES/G-L/Ice_Palace_1984.sid",
+    "size": 358,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0ljZV9QYWxhY2VfMTk4NS5zaWQ",
+    "title": "Ice Palace 1985",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Ice_Palace_1985.sid",
+    "path": "sids/GAMES/G-L/Ice_Palace_1985.sid",
+    "size": 1774,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0ljaWNsZV9Xb3Jrcy5zaWQ",
+    "title": "Icicle Works",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Icicle_Works.sid",
+    "path": "sids/GAMES/G-L/Icicle_Works.sid",
+    "size": 1287,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0lkb3JlZ2Vzei5zaWQ",
+    "title": "Idoregesz",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Idoregesz.sid",
+    "path": "sids/GAMES/G-L/Idoregesz.sid",
+    "size": 1043,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0lrYXJpX0lJSS1UaGVfUmVzY3VlLnNpZA",
+    "title": "Ikari III-The Rescue",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Ikari_III-The_Rescue.sid",
+    "path": "sids/GAMES/G-L/Ikari_III-The_Rescue.sid",
+    "size": 6711,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0lrYXJpX1dhcnJpb3JzX1VTQV9WZXJzaW9uLnNpZA",
+    "title": "Ikari Warriors USA Version",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Ikari_Warriors_USA_Version.sid",
+    "path": "sids/GAMES/G-L/Ikari_Warriors_USA_Version.sid",
+    "size": 2166,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0lsX1JhZ25vLnNpZA",
+    "title": "Il Ragno",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Il_Ragno.sid",
+    "path": "sids/GAMES/G-L/Il_Ragno.sid",
+    "size": 4990,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0lsbF9TYXZpb3Iuc2lk",
+    "title": "Ill Savior",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Ill_Savior.sid",
+    "path": "sids/GAMES/G-L/Ill_Savior.sid",
+    "size": 3251,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0ltaG90ZXAuc2lk",
+    "title": "Imhotep",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Imhotep.sid",
+    "path": "sids/GAMES/G-L/Imhotep.sid",
+    "size": 2177,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0ltbWVuc2l0eV9wcmV2aWV3LnNpZA",
+    "title": "Immensity preview",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Immensity_preview.sid",
+    "path": "sids/GAMES/G-L/Immensity_preview.sid",
+    "size": 5679,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0ltbWVuc2l0eV9wcmV2aWV3XzIuc2lk",
+    "title": "Immensity preview 2",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Immensity_preview_2.sid",
+    "path": "sids/GAMES/G-L/Immensity_preview_2.sid",
+    "size": 10547,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0ltcGVyYXRvcl9CQVNJQy5zaWQ",
+    "title": "Imperator BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Imperator_BASIC.sid",
+    "path": "sids/GAMES/G-L/Imperator_BASIC.sid",
+    "size": 9381,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0ltcGVyaXVtX1JvbWFudW0uc2lk",
+    "title": "Imperium Romanum",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Imperium_Romanum.sid",
+    "path": "sids/GAMES/G-L/Imperium_Romanum.sid",
+    "size": 11393,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0ltcG9zc2libGVfTWlzc2lvbl9JSS5zaWQ",
+    "title": "Impossible Mission II",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Impossible_Mission_II.sid",
+    "path": "sids/GAMES/G-L/Impossible_Mission_II.sid",
+    "size": 6843,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0ltcG9zc2libGVfTWlzc2lvbl9JSV92MS5zaWQ",
+    "title": "Impossible Mission II v1",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Impossible_Mission_II_v1.sid",
+    "path": "sids/GAMES/G-L/Impossible_Mission_II_v1.sid",
+    "size": 1202,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0luZGlhbmFfSm9uZXNfYW5kX3RoZV9UZW1wbGVfb2ZfRG9vbS5zaWQ",
+    "title": "Indiana Jones and the Temple of Doom",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Indiana_Jones_and_the_Temple_of_Doom.sid",
+    "path": "sids/GAMES/G-L/Indiana_Jones_and_the_Temple_of_Doom.sid",
+    "size": 1401,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0luZGlhbmFfSm9uZXNfaW5fdGhlX0xvc3RfS2luZ2RvbS5zaWQ",
+    "title": "Indiana Jones in the Lost Kingdom",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Indiana_Jones_in_the_Lost_Kingdom.sid",
+    "path": "sids/GAMES/G-L/Indiana_Jones_in_the_Lost_Kingdom.sid",
+    "size": 3353,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0luZmVybmFsX1J1bm5lci5zaWQ",
+    "title": "Infernal Runner",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Infernal_Runner.sid",
+    "path": "sids/GAMES/G-L/Infernal_Runner.sid",
+    "size": 4222,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0luZmVybm9fQkFTSUMuc2lk",
+    "title": "Inferno BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Inferno_BASIC.sid",
+    "path": "sids/GAMES/G-L/Inferno_BASIC.sid",
+    "size": 1097,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0luZmluaXRlX0luZmVybm9fQkFTSUMuc2lk",
+    "title": "Infinite Inferno BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Infinite_Inferno_BASIC.sid",
+    "path": "sids/GAMES/G-L/Infinite_Inferno_BASIC.sid",
+    "size": 3197,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0luanVyZWRfRW5naW5lLnNpZA",
+    "title": "Injured Engine",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Injured_Engine.sid",
+    "path": "sids/GAMES/G-L/Injured_Engine.sid",
+    "size": 1442,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0luc2VjdF9EZWZlbnNlLnNpZA",
+    "title": "Insect Defense",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Insect_Defense.sid",
+    "path": "sids/GAMES/G-L/Insect_Defense.sid",
+    "size": 481,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0luc3BlY3Rvcl9CQVNJQy5zaWQ",
+    "title": "Inspector BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Inspector_BASIC.sid",
+    "path": "sids/GAMES/G-L/Inspector_BASIC.sid",
+    "size": 1010,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0luc3RpdHV0ZS5zaWQ",
+    "title": "Institute",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Institute.sid",
+    "path": "sids/GAMES/G-L/Institute.sid",
+    "size": 575,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0ludGVybmF0aW9uYWxfU3BvcnRzX0NoYWxsZW5nZS5zaWQ",
+    "title": "International Sports Challenge",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "International_Sports_Challenge.sid",
+    "path": "sids/GAMES/G-L/International_Sports_Challenge.sid",
+    "size": 11703,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0ludGVydmlldy5zaWQ",
+    "title": "Interview",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Interview.sid",
+    "path": "sids/GAMES/G-L/Interview.sid",
+    "size": 5034,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0ludG9fdGhlX0VhZ2xlc19OZXN0LnNpZA",
+    "title": "Into the Eagles Nest",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Into_the_Eagles_Nest.sid",
+    "path": "sids/GAMES/G-L/Into_the_Eagles_Nest.sid",
+    "size": 1210,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0l0YWx5XzE5OTAuc2lk",
+    "title": "Italy 1990",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Italy_1990.sid",
+    "path": "sids/GAMES/G-L/Italy_1990.sid",
+    "size": 2971,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0otQmlyZC5zaWQ",
+    "title": "J-Bird",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "J-Bird.sid",
+    "path": "sids/GAMES/G-L/J-Bird.sid",
+    "size": 1008,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0phY2tfQnVsbGV0LnNpZA",
+    "title": "Jack Bullet",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Jack_Bullet.sid",
+    "path": "sids/GAMES/G-L/Jack_Bullet.sid",
+    "size": 4478,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0phbV9JdC5zaWQ",
+    "title": "Jam It",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Jam_It.sid",
+    "path": "sids/GAMES/G-L/Jam_It.sid",
+    "size": 1399,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0phbWVzX0JvbmQuc2lk",
+    "title": "James Bond",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "James_Bond.sid",
+    "path": "sids/GAMES/G-L/James_Bond.sid",
+    "size": 1186,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0phbWVzX1BvbmRfSUktQ29kZW5hbWVfUm9ib2NvZC5zaWQ",
+    "title": "James Pond II-Codename Robocod",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "James_Pond_II-Codename_Robocod.sid",
+    "path": "sids/GAMES/G-L/James_Pond_II-Codename_Robocod.sid",
+    "size": 9688,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0phd19CcmVha2VyLnNpZA",
+    "title": "Jaw Breaker",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Jaw_Breaker.sid",
+    "path": "sids/GAMES/G-L/Jaw_Breaker.sid",
+    "size": 457,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0plZXBfQ29tbWFuZC5zaWQ",
+    "title": "Jeep Command",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Jeep_Command.sid",
+    "path": "sids/GAMES/G-L/Jeep_Command.sid",
+    "size": 5804,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0plZXBlcnNfQ3JlZXBlcnMuc2lk",
+    "title": "Jeepers Creepers",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Jeepers_Creepers.sid",
+    "path": "sids/GAMES/G-L/Jeepers_Creepers.sid",
+    "size": 1858,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0plcmVtaWFzX1JhdHRlcmZsYXR0ZXIuc2lk",
+    "title": "Jeremias Ratterflatter",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Jeremias_Ratterflatter.sid",
+    "path": "sids/GAMES/G-L/Jeremias_Ratterflatter.sid",
+    "size": 12007,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0plc3N5X3RoZV9Xb3JtLnNpZA",
+    "title": "Jessy the Worm",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Jessy_the_Worm.sid",
+    "path": "sids/GAMES/G-L/Jessy_the_Worm.sid",
+    "size": 11385,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0pldF9Db21iYXRfU2ltdWxhdG9yLnNpZA",
+    "title": "Jet Combat Simulator",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Jet_Combat_Simulator.sid",
+    "path": "sids/GAMES/G-L/Jet_Combat_Simulator.sid",
+    "size": 1647,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0pldF9EdWVsLnNpZA",
+    "title": "Jet Duel",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Jet_Duel.sid",
+    "path": "sids/GAMES/G-L/Jet_Duel.sid",
+    "size": 645,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0pldF9Qb3dlcl9KYWNrLnNpZA",
+    "title": "Jet Power Jack",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Jet_Power_Jack.sid",
+    "path": "sids/GAMES/G-L/Jet_Power_Jack.sid",
+    "size": 3386,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0pldF9TZXRfV2lsbHkuc2lk",
+    "title": "Jet Set Willy",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Jet_Set_Willy.sid",
+    "path": "sids/GAMES/G-L/Jet_Set_Willy.sid",
+    "size": 4998,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0pldF9TZXRfV2lsbHlfSUkuc2lk",
+    "title": "Jet Set Willy II",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Jet_Set_Willy_II.sid",
+    "path": "sids/GAMES/G-L/Jet_Set_Willy_II.sid",
+    "size": 4139,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0pldC1Cb290X0phY2suc2lk",
+    "title": "Jet-Boot Jack",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Jet-Boot_Jack.sid",
+    "path": "sids/GAMES/G-L/Jet-Boot_Jack.sid",
+    "size": 614,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0pldGFuLU1hcnRpYW5fQ2hlc3Muc2lk",
+    "title": "Jetan-Martian Chess",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Jetan-Martian_Chess.sid",
+    "path": "sids/GAMES/G-L/Jetan-Martian_Chess.sid",
+    "size": 5630,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0pldHNldF9KZWxseS5zaWQ",
+    "title": "Jetset Jelly",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Jetset_Jelly.sid",
+    "path": "sids/GAMES/G-L/Jetset_Jelly.sid",
+    "size": 1722,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0pldHNvbnMuc2lk",
+    "title": "Jetsons",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Jetsons.sid",
+    "path": "sids/GAMES/G-L/Jetsons.sid",
+    "size": 4827,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0pld2Vsc19vZl9CYWJ5bG9uLnNpZA",
+    "title": "Jewels of Babylon",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Jewels_of_Babylon.sid",
+    "path": "sids/GAMES/G-L/Jewels_of_Babylon.sid",
+    "size": 5230,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0ppbm5fR2VuaWUuc2lk",
+    "title": "Jinn Genie",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Jinn_Genie.sid",
+    "path": "sids/GAMES/G-L/Jinn_Genie.sid",
+    "size": 2240,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0pvYl9mb3JfTmV3cy5zaWQ",
+    "title": "Job for News",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Job_for_News.sid",
+    "path": "sids/GAMES/G-L/Job_for_News.sid",
+    "size": 11385,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0pvZV9CbGFkZV8yLnNpZA",
+    "title": "Joe Blade 2",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Joe_Blade_2.sid",
+    "path": "sids/GAMES/G-L/Joe_Blade_2.sid",
+    "size": 6532,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0pvZV90aGVfV2hpenpfS2lkLnNpZA",
+    "title": "Joe the Whizz Kid",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Joe_the_Whizz_Kid.sid",
+    "path": "sids/GAMES/G-L/Joe_the_Whizz_Kid.sid",
+    "size": 4736,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0pvaG5fRWx3YXlzX1F1YXJ0ZXJiYWNrLnNpZA",
+    "title": "John Elways Quarterback",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "John_Elways_Quarterback.sid",
+    "path": "sids/GAMES/G-L/John_Elways_Quarterback.sid",
+    "size": 6654,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0pvaG5ueV9SZWJfQkFTSUMuc2lk",
+    "title": "Johnny Reb BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Johnny_Reb_BASIC.sid",
+    "path": "sids/GAMES/G-L/Johnny_Reb_BASIC.sid",
+    "size": 1314,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0pvbmFoX0JhcnJpbmd0b25zX1NxdWFzaC5zaWQ",
+    "title": "Jonah Barringtons Squash",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Jonah_Barringtons_Squash.sid",
+    "path": "sids/GAMES/G-L/Jonah_Barringtons_Squash.sid",
+    "size": 35395,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0pvdXJuZXlfdG9fdGhlX0NlbnRyZV9vZl90aGVfRWFydGguc2lk",
+    "title": "Journey to the Centre of the Earth",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Journey_to_the_Centre_of_the_Earth.sid",
+    "path": "sids/GAMES/G-L/Journey_to_the_Centre_of_the_Earth.sid",
+    "size": 2314,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0p1YW5qZV9KdWVnYV9pbl9TaW52ZXJsYW5kLnNpZA",
+    "title": "Juanje Juega in Sinverland",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Juanje_Juega_in_Sinverland.sid",
+    "path": "sids/GAMES/G-L/Juanje_Juega_in_Sinverland.sid",
+    "size": 4870,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0p1bXBfbl9DcmF0ZS5zaWQ",
+    "title": "Jump n Crate",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Jump_n_Crate.sid",
+    "path": "sids/GAMES/G-L/Jump_n_Crate.sid",
+    "size": 2894,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0p1bXBfcHJldmlldy5zaWQ",
+    "title": "Jump preview",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Jump_preview.sid",
+    "path": "sids/GAMES/G-L/Jump_preview.sid",
+    "size": 3452,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0p1bXBpbl9KYWNrLnNpZA",
+    "title": "Jumpin Jack",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Jumpin_Jack.sid",
+    "path": "sids/GAMES/G-L/Jumpin_Jack.sid",
+    "size": 2611,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0p1bXBtYW4uc2lk",
+    "title": "Jumpman",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Jumpman.sid",
+    "path": "sids/GAMES/G-L/Jumpman.sid",
+    "size": 3869,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0p1bXBtYW5fSnVuaW9yLnNpZA",
+    "title": "Jumpman Junior",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Jumpman_Junior.sid",
+    "path": "sids/GAMES/G-L/Jumpman_Junior.sid",
+    "size": 3353,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0p1bmdsZV9IdW50LnNpZA",
+    "title": "Jungle Hunt",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Jungle_Hunt.sid",
+    "path": "sids/GAMES/G-L/Jungle_Hunt.sid",
+    "size": 2002,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0p1bmdsZV9SYWlkLnNpZA",
+    "title": "Jungle Raid",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Jungle_Raid.sid",
+    "path": "sids/GAMES/G-L/Jungle_Raid.sid",
+    "size": 4919,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0p1bmdsZV9TdG9yeS5zaWQ",
+    "title": "Jungle Story",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Jungle_Story.sid",
+    "path": "sids/GAMES/G-L/Jungle_Story.sid",
+    "size": 685,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0p1bmt5YXJkX0phbG9waWVzLnNpZA",
+    "title": "Junkyard Jalopies",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Junkyard_Jalopies.sid",
+    "path": "sids/GAMES/G-L/Junkyard_Jalopies.sid",
+    "size": 700,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0p1cGl0ZXJfTGFuZGVyLnNpZA",
+    "title": "Jupiter Lander",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Jupiter_Lander.sid",
+    "path": "sids/GAMES/G-L/Jupiter_Lander.sid",
+    "size": 707,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0p1cmwuc2lk",
+    "title": "Jurl",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Jurl.sid",
+    "path": "sids/GAMES/G-L/Jurl.sid",
+    "size": 2491,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0thaXNlci5zaWQ",
+    "title": "Kaiser",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Kaiser.sid",
+    "path": "sids/GAMES/G-L/Kaiser.sid",
+    "size": 1107,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0tha3R1cy5zaWQ",
+    "title": "Kaktus",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Kaktus.sid",
+    "path": "sids/GAMES/G-L/Kaktus.sid",
+    "size": 332,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0thbWktS2F6ZS5zaWQ",
+    "title": "Kami-Kaze",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Kami-Kaze.sid",
+    "path": "sids/GAMES/G-L/Kami-Kaze.sid",
+    "size": 332,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0thbmUuc2lk",
+    "title": "Kane",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Kane.sid",
+    "path": "sids/GAMES/G-L/Kane.sid",
+    "size": 2623,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0thbmVfSUkuc2lk",
+    "title": "Kane II",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Kane_II.sid",
+    "path": "sids/GAMES/G-L/Kane_II.sid",
+    "size": 2653,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0thbmdhcm9lLnNpZA",
+    "title": "Kangaroe",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Kangaroe.sid",
+    "path": "sids/GAMES/G-L/Kangaroe.sid",
+    "size": 512,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0thbmdhcnVkeS5zaWQ",
+    "title": "Kangarudy",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Kangarudy.sid",
+    "path": "sids/GAMES/G-L/Kangarudy.sid",
+    "size": 17944,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0thcHJpb2xlbl9GbG95ZF90aGVfRHJvaWQuc2lk",
+    "title": "Kapriolen Floyd the Droid",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Kapriolen_Floyd_the_Droid.sid",
+    "path": "sids/GAMES/G-L/Kapriolen_Floyd_the_Droid.sid",
+    "size": 2942,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0thcmF0ZV9DaGFtcC5zaWQ",
+    "title": "Karate Champ",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Karate_Champ.sid",
+    "path": "sids/GAMES/G-L/Karate_Champ.sid",
+    "size": 2431,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0thcmF0ZWthLnNpZA",
+    "title": "Karateka",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Karateka.sid",
+    "path": "sids/GAMES/G-L/Karateka.sid",
+    "size": 6419,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0thcm5vdi5zaWQ",
+    "title": "Karnov",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Karnov.sid",
+    "path": "sids/GAMES/G-L/Karnov.sid",
+    "size": 1341,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0thcnRpbmdfR3JhbmRfUHJpeC5zaWQ",
+    "title": "Karting Grand Prix",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Karting_Grand_Prix.sid",
+    "path": "sids/GAMES/G-L/Karting_Grand_Prix.sid",
+    "size": 8594,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0thdF9UcmFwLnNpZA",
+    "title": "Kat Trap",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Kat_Trap.sid",
+    "path": "sids/GAMES/G-L/Kat_Trap.sid",
+    "size": 5121,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0thdHpfdW5kX01hdXMuc2lk",
+    "title": "Katz und Maus",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Katz_und_Maus.sid",
+    "path": "sids/GAMES/G-L/Katz_und_Maus.sid",
+    "size": 8391,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0thdmFsa2FkX0JBU0lDLnNpZA",
+    "title": "Kavalkad BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Kavalkad_BASIC.sid",
+    "path": "sids/GAMES/G-L/Kavalkad_BASIC.sid",
+    "size": 1709,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0theWFrLnNpZA",
+    "title": "Kayak",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Kayak.sid",
+    "path": "sids/GAMES/G-L/Kayak.sid",
+    "size": 953,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0theWRlbl9HYXJ0aC5zaWQ",
+    "title": "Kayden Garth",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Kayden_Garth.sid",
+    "path": "sids/GAMES/G-L/Kayden_Garth.sid",
+    "size": 11390,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0themlrLnNpZA",
+    "title": "Kazik",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Kazik.sid",
+    "path": "sids/GAMES/G-L/Kazik.sid",
+    "size": 2775,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0tlcm1pdHNfRWxlY3Ryb25pY19TdG9yeW1ha2VyLnNpZA",
+    "title": "Kermits Electronic Storymaker",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Kermits_Electronic_Storymaker.sid",
+    "path": "sids/GAMES/G-L/Kermits_Electronic_Storymaker.sid",
+    "size": 5573,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0tpY2tfb2ZfdGhlX1NwZWFyLnNpZA",
+    "title": "Kick of the Spear",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Kick_of_the_Spear.sid",
+    "path": "sids/GAMES/G-L/Kick_of_the_Spear.sid",
+    "size": 1597,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0tpY2tfb2ZfdGhlX1NwZWFyXzIuc2lk",
+    "title": "Kick of the Spear 2",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Kick_of_the_Spear_2.sid",
+    "path": "sids/GAMES/G-L/Kick_of_the_Spear_2.sid",
+    "size": 1394,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0tpbGwuc2lk",
+    "title": "Kill",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Kill.sid",
+    "path": "sids/GAMES/G-L/Kill.sid",
+    "size": 3706,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0tpbGxlcl9CYWxscy5zaWQ",
+    "title": "Killer Balls",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Killer_Balls.sid",
+    "path": "sids/GAMES/G-L/Killer_Balls.sid",
+    "size": 2816,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0tpbGxlcl9DcmFicy5zaWQ",
+    "title": "Killer Crabs",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Killer_Crabs.sid",
+    "path": "sids/GAMES/G-L/Killer_Crabs.sid",
+    "size": 1292,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0tpbGxlcl9HYW1lcy5zaWQ",
+    "title": "Killer Games",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Killer_Games.sid",
+    "path": "sids/GAMES/G-L/Killer_Games.sid",
+    "size": 8605,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0tpbGxlcl9PbGl2ZXMuc2lk",
+    "title": "Killer Olives",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Killer_Olives.sid",
+    "path": "sids/GAMES/G-L/Killer_Olives.sid",
+    "size": 1294,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0tpbGxpbmdfTWFjaGluZS5zaWQ",
+    "title": "Killing Machine",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Killing_Machine.sid",
+    "path": "sids/GAMES/G-L/Killing_Machine.sid",
+    "size": 5122,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0tpb3NrX0JBU0lDLnNpZA",
+    "title": "Kiosk BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Kiosk_BASIC.sid",
+    "path": "sids/GAMES/G-L/Kiosk_BASIC.sid",
+    "size": 1386,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0tpc3NfTWUuc2lk",
+    "title": "Kiss Me",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Kiss_Me.sid",
+    "path": "sids/GAMES/G-L/Kiss_Me.sid",
+    "size": 7422,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0tuaWdodF9SaWRlci5zaWQ",
+    "title": "Knight Rider",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Knight_Rider.sid",
+    "path": "sids/GAMES/G-L/Knight_Rider.sid",
+    "size": 5549,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0tvYmF5YXNoaV9OYXJ1LnNpZA",
+    "title": "Kobayashi Naru",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Kobayashi_Naru.sid",
+    "path": "sids/GAMES/G-L/Kobayashi_Naru.sid",
+    "size": 726,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0tva290b25pX1dpbGYuc2lk",
+    "title": "Kokotoni Wilf",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Kokotoni_Wilf.sid",
+    "path": "sids/GAMES/G-L/Kokotoni_Wilf.sid",
+    "size": 4443,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0tvbmRpX0tydXNoLnNpZA",
+    "title": "Kondi Krush",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Kondi_Krush.sid",
+    "path": "sids/GAMES/G-L/Kondi_Krush.sid",
+    "size": 2708,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0tvcm9uaXNfUmlmdC5zaWQ",
+    "title": "Koronis Rift",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Koronis_Rift.sid",
+    "path": "sids/GAMES/G-L/Koronis_Rift.sid",
+    "size": 852,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0tvc2NpX1pvc3RhbHlfUnp1Y29uZS5zaWQ",
+    "title": "Kosci Zostaly Rzucone",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Kosci_Zostaly_Rzucone.sid",
+    "path": "sids/GAMES/G-L/Kosci_Zostaly_Rzucone.sid",
+    "size": 3029,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0tvc21pY19LYW5nYS5zaWQ",
+    "title": "Kosmic Kanga",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Kosmic_Kanga.sid",
+    "path": "sids/GAMES/G-L/Kosmic_Kanga.sid",
+    "size": 408,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0tvc21vLUtvYnVzLnNpZA",
+    "title": "Kosmo-Kobus",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Kosmo-Kobus.sid",
+    "path": "sids/GAMES/G-L/Kosmo-Kobus.sid",
+    "size": 982,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0tvc3RhamEuc2lk",
+    "title": "Kostaja",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Kostaja.sid",
+    "path": "sids/GAMES/G-L/Kostaja.sid",
+    "size": 396,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0tyYWtlbnMuc2lk",
+    "title": "Krakens",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Krakens.sid",
+    "path": "sids/GAMES/G-L/Krakens.sid",
+    "size": 1363,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0tyaWVnX3VtX2RpZV9Lcm9uZV9JSS5zaWQ",
+    "title": "Krieg um die Krone II",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Krieg_um_die_Krone_II.sid",
+    "path": "sids/GAMES/G-L/Krieg_um_die_Krone_II.sid",
+    "size": 3110,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0tyaXNwLnNpZA",
+    "title": "Krisp",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Krisp.sid",
+    "path": "sids/GAMES/G-L/Krisp.sid",
+    "size": 2818,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0tyeXB0b24uc2lk",
+    "title": "Krypton",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Krypton.sid",
+    "path": "sids/GAMES/G-L/Krypton.sid",
+    "size": 638,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0tyeXN0YWxzX29mX1pvbmcuc2lk",
+    "title": "Krystals of Zong",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Krystals_of_Zong.sid",
+    "path": "sids/GAMES/G-L/Krystals_of_Zong.sid",
+    "size": 1803,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0t1aGFsYS1BZHZlbnR1cmUuc2lk",
+    "title": "Kuhala-Adventure",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Kuhala-Adventure.sid",
+    "path": "sids/GAMES/G-L/Kuhala-Adventure.sid",
+    "size": 7361,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0t1bmctRnVfTWFzdGVyLnNpZA",
+    "title": "Kung-Fu Master",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Kung-Fu_Master.sid",
+    "path": "sids/GAMES/G-L/Kung-Fu_Master.sid",
+    "size": 1942,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0t5ZS5zaWQ",
+    "title": "Kye",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Kye.sid",
+    "path": "sids/GAMES/G-L/Kye.sid",
+    "size": 2379,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0xfVGVzdC5zaWQ",
+    "title": "L Test",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "L_Test.sid",
+    "path": "sids/GAMES/G-L/L_Test.sid",
+    "size": 1435,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0xhX0NoZW5pbGxlLnNpZA",
+    "title": "La Chenille",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "La_Chenille.sid",
+    "path": "sids/GAMES/G-L/La_Chenille.sid",
+    "size": 721,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0xhX0hvcmNhX0JBU0lDLnNpZA",
+    "title": "La Horca BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "La_Horca_BASIC.sid",
+    "path": "sids/GAMES/G-L/La_Horca_BASIC.sid",
+    "size": 1341,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0xhX1JhbmFfU3RyZWdhdGEuc2lk",
+    "title": "La Rana Stregata",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "La_Rana_Stregata.sid",
+    "path": "sids/GAMES/G-L/La_Rana_Stregata.sid",
+    "size": 4026,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0xhX1NhbGFfRGVnbGlfRW5pZ21pLnNpZA",
+    "title": "La Sala Degli Enigmi",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "La_Sala_Degli_Enigmi.sid",
+    "path": "sids/GAMES/G-L/La_Sala_Degli_Enigmi.sid",
+    "size": 4218,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0xhX1R1aWxlX0JBU0lDLnNpZA",
+    "title": "La Tuile BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "La_Tuile_BASIC.sid",
+    "path": "sids/GAMES/G-L/La_Tuile_BASIC.sid",
+    "size": 1300,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0xhX1ZpdGFfZGVsbG9fU3BpbmFyZWxsby5zaWQ",
+    "title": "La Vita dello Spinarello",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "La_Vita_dello_Spinarello.sid",
+    "path": "sids/GAMES/G-L/La_Vita_dello_Spinarello.sid",
+    "size": 3646,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0xhYmlyaW50aC5zaWQ",
+    "title": "Labirinth",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Labirinth.sid",
+    "path": "sids/GAMES/G-L/Labirinth.sid",
+    "size": 1929,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0xhYnlyaW50aC5zaWQ",
+    "title": "Labyrinth",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Labyrinth.sid",
+    "path": "sids/GAMES/G-L/Labyrinth.sid",
+    "size": 7318,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0xhZHlfRHVjay5zaWQ",
+    "title": "Lady Duck",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Lady_Duck.sid",
+    "path": "sids/GAMES/G-L/Lady_Duck.sid",
+    "size": 838,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0xhZHlfVHV0LnNpZA",
+    "title": "Lady Tut",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Lady_Tut.sid",
+    "path": "sids/GAMES/G-L/Lady_Tut.sid",
+    "size": 1080,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0xhbmRfb2ZfTmV2ZXJ3aGVyZS5zaWQ",
+    "title": "Land of Neverwhere",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Land_of_Neverwhere.sid",
+    "path": "sids/GAMES/G-L/Land_of_Neverwhere.sid",
+    "size": 2574,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0xhcGlzX1BoaWxvc29waG9ydW0uc2lk",
+    "title": "Lapis Philosophorum",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Lapis_Philosophorum.sid",
+    "path": "sids/GAMES/G-L/Lapis_Philosophorum.sid",
+    "size": 1014,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0xhc2VyX0xlZ2lvbi5zaWQ",
+    "title": "Laser Legion",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Laser_Legion.sid",
+    "path": "sids/GAMES/G-L/Laser_Legion.sid",
+    "size": 2990,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0xhdXJlbF9hbmRfSGFyZHkuc2lk",
+    "title": "Laurel and Hardy",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Laurel_and_Hardy.sid",
+    "path": "sids/GAMES/G-L/Laurel_and_Hardy.sid",
+    "size": 627,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0xhemVyX01hemUuc2lk",
+    "title": "Lazer Maze",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Lazer_Maze.sid",
+    "path": "sids/GAMES/G-L/Lazer_Maze.sid",
+    "size": 1428,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0xlYXBpbmdfTGFycnkuc2lk",
+    "title": "Leaping Larry",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Leaping_Larry.sid",
+    "path": "sids/GAMES/G-L/Leaping_Larry.sid",
+    "size": 3848,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0xlZGVyaG9zZW4uc2lk",
+    "title": "Lederhosen",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Lederhosen.sid",
+    "path": "sids/GAMES/G-L/Lederhosen.sid",
+    "size": 11383,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0xlZ2FjeV9vZl90aGVfQW5jaWVudHMuc2lk",
+    "title": "Legacy of the Ancients",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Legacy_of_the_Ancients.sid",
+    "path": "sids/GAMES/G-L/Legacy_of_the_Ancients.sid",
+    "size": 5054,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0xlZ2VuZF9vZl90aGVfS251Y2tlci1Ib2xlLnNpZA",
+    "title": "Legend of the Knucker-Hole",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Legend_of_the_Knucker-Hole.sid",
+    "path": "sids/GAMES/G-L/Legend_of_the_Knucker-Hole.sid",
+    "size": 1686,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0xlZ2VuZF9vZl9aZWxkYV9QcmV2aWV3LnNpZA",
+    "title": "Legend of Zelda Preview",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Legend_of_Zelda_Preview.sid",
+    "path": "sids/GAMES/G-L/Legend_of_Zelda_Preview.sid",
+    "size": 1038,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0xlcm5haWFfQkFTSUMuc2lk",
+    "title": "Lernaia BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Lernaia_BASIC.sid",
+    "path": "sids/GAMES/G-L/Lernaia_BASIC.sid",
+    "size": 1020,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0xlc3Rlci5zaWQ",
+    "title": "Lester",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Lester.sid",
+    "path": "sids/GAMES/G-L/Lester.sid",
+    "size": 8995,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0xldGhhbC5zaWQ",
+    "title": "Lethal",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Lethal.sid",
+    "path": "sids/GAMES/G-L/Lethal.sid",
+    "size": 4843,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0xldHNfTWFrZV9hX0M2NF9HYW1lX1ByZXZpZXdfVjMuc2lk",
+    "title": "Lets Make a C64 Game Preview V3",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Lets_Make_a_C64_Game_Preview_V3.sid",
+    "path": "sids/GAMES/G-L/Lets_Make_a_C64_Game_Preview_V3.sid",
+    "size": 2001,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0xpZ2h0LXdhdmVzLnNpZA",
+    "title": "Light-waves",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Light-waves.sid",
+    "path": "sids/GAMES/G-L/Light-waves.sid",
+    "size": 3443,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0xpbHlfTGFuZGVyLnNpZA",
+    "title": "Lily Lander",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Lily_Lander.sid",
+    "path": "sids/GAMES/G-L/Lily_Lander.sid",
+    "size": 1790,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0xpdHRsZV9EcmFnb24tQ29va2llX1JhaWRlcnMuc2lk",
+    "title": "Little Dragon-Cookie Raiders",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Little_Dragon-Cookie_Raiders.sid",
+    "path": "sids/GAMES/G-L/Little_Dragon-Cookie_Raiders.sid",
+    "size": 2391,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0xpdHRsZV9IYXRzX01hemUuc2lk",
+    "title": "Little Hats Maze",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Little_Hats_Maze.sid",
+    "path": "sids/GAMES/G-L/Little_Hats_Maze.sid",
+    "size": 11941,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0xpdHRsZV9LbmlnaHRfQXJ0aHVyLnNpZA",
+    "title": "Little Knight Arthur",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Little_Knight_Arthur.sid",
+    "path": "sids/GAMES/G-L/Little_Knight_Arthur.sid",
+    "size": 7818,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0xpdHRsZV9QdWNrX0dvZXNfSG9tZS5zaWQ",
+    "title": "Little Puck Goes Home",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Little_Puck_Goes_Home.sid",
+    "path": "sids/GAMES/G-L/Little_Puck_Goes_Home.sid",
+    "size": 416,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0xpdmluZ3N0b25lX1N1cG9uZ28uc2lk",
+    "title": "Livingstone Supongo",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Livingstone_Supongo.sid",
+    "path": "sids/GAMES/G-L/Livingstone_Supongo.sid",
+    "size": 3136,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0xvY29tb3Rpb24uc2lk",
+    "title": "Locomotion",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Locomotion.sid",
+    "path": "sids/GAMES/G-L/Locomotion.sid",
+    "size": 5544,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0xvZGVfUnVubmVyLnNpZA",
+    "title": "Lode Runner",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Lode_Runner.sid",
+    "path": "sids/GAMES/G-L/Lode_Runner.sid",
+    "size": 2942,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0xvaXNhaWRhLnNpZA",
+    "title": "Loisaida",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Loisaida.sid",
+    "path": "sids/GAMES/G-L/Loisaida.sid",
+    "size": 463,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0xvbGxpcG9wcy5zaWQ",
+    "title": "Lollipops",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Lollipops.sid",
+    "path": "sids/GAMES/G-L/Lollipops.sid",
+    "size": 2304,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0xvbmVseV9IZWFydHNfQkFTSUMuc2lk",
+    "title": "Lonely Hearts BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Lonely_Hearts_BASIC.sid",
+    "path": "sids/GAMES/G-L/Lonely_Hearts_BASIC.sid",
+    "size": 682,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0xvb2tfU2hhcnAuc2lk",
+    "title": "Look Sharp",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Look_Sharp.sid",
+    "path": "sids/GAMES/G-L/Look_Sharp.sid",
+    "size": 1314,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0xvb25leV9CYWxsb29uLnNpZA",
+    "title": "Looney Balloon",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Looney_Balloon.sid",
+    "path": "sids/GAMES/G-L/Looney_Balloon.sid",
+    "size": 2297,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0xvcmRzX29mX0NvbnF1ZXN0LnNpZA",
+    "title": "Lords of Conquest",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Lords_of_Conquest.sid",
+    "path": "sids/GAMES/G-L/Lords_of_Conquest.sid",
+    "size": 8923,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0xvcmRzX29mX0Rvb20uc2lk",
+    "title": "Lords of Doom",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Lords_of_Doom.sid",
+    "path": "sids/GAMES/G-L/Lords_of_Doom.sid",
+    "size": 25721,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0xvcmVsbGEuc2lk",
+    "title": "Lorella",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Lorella.sid",
+    "path": "sids/GAMES/G-L/Lorella.sid",
+    "size": 10238,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0xvc19BbmdlbGVzX1NXQVQuc2lk",
+    "title": "Los Angeles SWAT",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Los_Angeles_SWAT.sid",
+    "path": "sids/GAMES/G-L/Los_Angeles_SWAT.sid",
+    "size": 4023,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0xvc2VyX0JBU0lDLnNpZA",
+    "title": "Loser BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Loser_BASIC.sid",
+    "path": "sids/GAMES/G-L/Loser_BASIC.sid",
+    "size": 1299,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0xvc3Quc2lk",
+    "title": "Lost",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Lost.sid",
+    "path": "sids/GAMES/G-L/Lost.sid",
+    "size": 9917,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0xvc3RfaW5fdGhlX0xhYnlyaW50aF9CQVNJQy5zaWQ",
+    "title": "Lost in the Labyrinth BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Lost_in_the_Labyrinth_BASIC.sid",
+    "path": "sids/GAMES/G-L/Lost_in_the_Labyrinth_BASIC.sid",
+    "size": 1615,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0xvc3RfUm9ib3RfSUlfcHJldmlldy5zaWQ",
+    "title": "Lost Robot II preview",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Lost_Robot_II_preview.sid",
+    "path": "sids/GAMES/G-L/Lost_Robot_II_preview.sid",
+    "size": 3635,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0xvdHVzX0VzcHJpdF9UdXJib19DaGFsbGVuZ2Uuc2lk",
+    "title": "Lotus Esprit Turbo Challenge",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Lotus_Esprit_Turbo_Challenge.sid",
+    "path": "sids/GAMES/G-L/Lotus_Esprit_Turbo_Challenge.sid",
+    "size": 4422,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0xvdmVfVHJhbXAuc2lk",
+    "title": "Love Tramp",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Love_Tramp.sid",
+    "path": "sids/GAMES/G-L/Love_Tramp.sid",
+    "size": 31274,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0x1Y2t5X0VnZy5zaWQ",
+    "title": "Lucky Egg",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Lucky_Egg.sid",
+    "path": "sids/GAMES/G-L/Lucky_Egg.sid",
+    "size": 12021,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0x1ZG9fQkFTSUMuc2lk",
+    "title": "Ludo BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Ludo_BASIC.sid",
+    "path": "sids/GAMES/G-L/Ludo_BASIC.sid",
+    "size": 3352,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0x1bmFsaWdodC5zaWQ",
+    "title": "Lunalight",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Lunalight.sid",
+    "path": "sids/GAMES/G-L/Lunalight.sid",
+    "size": 4158,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0x1bmFyX0plZXAuc2lk",
+    "title": "Lunar Jeep",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Lunar_Jeep.sid",
+    "path": "sids/GAMES/G-L/Lunar_Jeep.sid",
+    "size": 608,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01fVV9MX0Uuc2lk",
+    "title": "M U L E",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "M_U_L_E.sid",
+    "path": "sids/GAMES/M-R/M_U_L_E.sid",
+    "size": 1732,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01hY2FkYW1fQnVtcGVyLnNpZA",
+    "title": "Macadam Bumper",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Macadam_Bumper.sid",
+    "path": "sids/GAMES/M-R/Macadam_Bumper.sid",
+    "size": 1150,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01hY2hpbmUuc2lk",
+    "title": "Machine",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Machine.sid",
+    "path": "sids/GAMES/M-R/Machine.sid",
+    "size": 11385,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01hZF9Nb25rZXkuc2lk",
+    "title": "Mad Monkey",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Mad_Monkey.sid",
+    "path": "sids/GAMES/M-R/Mad_Monkey.sid",
+    "size": 826,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01hZF9QbGFuZXRzLnNpZA",
+    "title": "Mad Planets",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Mad_Planets.sid",
+    "path": "sids/GAMES/M-R/Mad_Planets.sid",
+    "size": 1567,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01hZGl4LnNpZA",
+    "title": "Madix",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Madix.sid",
+    "path": "sids/GAMES/M-R/Madix.sid",
+    "size": 4683,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01hZWxzdHJvbS5zaWQ",
+    "title": "Maelstrom",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Maelstrom.sid",
+    "path": "sids/GAMES/M-R/Maelstrom.sid",
+    "size": 381,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01hZ2F6aW5lLnNpZA",
+    "title": "Magazine",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Magazine.sid",
+    "path": "sids/GAMES/M-R/Magazine.sid",
+    "size": 6220,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01hZ2ljLnNpZA",
+    "title": "Magic",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Magic.sid",
+    "path": "sids/GAMES/M-R/Magic.sid",
+    "size": 1814,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01hZ2ljX0R1ZWwuc2lk",
+    "title": "Magic Duel",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Magic_Duel.sid",
+    "path": "sids/GAMES/M-R/Magic_Duel.sid",
+    "size": 1696,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01hZ2ljX0hvdXNlLnNpZA",
+    "title": "Magic House",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Magic_House.sid",
+    "path": "sids/GAMES/M-R/Magic_House.sid",
+    "size": 8478,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01hZ2ljX0ppZ3Nhd19CQVNJQy5zaWQ",
+    "title": "Magic Jigsaw BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Magic_Jigsaw_BASIC.sid",
+    "path": "sids/GAMES/M-R/Magic_Jigsaw_BASIC.sid",
+    "size": 678,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01hZ2ljX01hcmJsZXMuc2lk",
+    "title": "Magic Marbles",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Magic_Marbles.sid",
+    "path": "sids/GAMES/M-R/Magic_Marbles.sid",
+    "size": 1152,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01hZ2ljX1NlcnBlbnQuc2lk",
+    "title": "Magic Serpent",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Magic_Serpent.sid",
+    "path": "sids/GAMES/M-R/Magic_Serpent.sid",
+    "size": 6174,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01hZ2ljX1RpbGUuc2lk",
+    "title": "Magic Tile",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Magic_Tile.sid",
+    "path": "sids/GAMES/M-R/Magic_Tile.sid",
+    "size": 11346,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01hZ2ljaWFuc19CYWxsLnNpZA",
+    "title": "Magicians Ball",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Magicians_Ball.sid",
+    "path": "sids/GAMES/M-R/Magicians_Ball.sid",
+    "size": 4014,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01hZ25ldHJvbi5zaWQ",
+    "title": "Magnetron",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Magnetron.sid",
+    "path": "sids/GAMES/M-R/Magnetron.sid",
+    "size": 3607,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01haW5fRnJhbWUuc2lk",
+    "title": "Main Frame",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Main_Frame.sid",
+    "path": "sids/GAMES/M-R/Main_Frame.sid",
+    "size": 4291,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01ham9yX0JsaW5rLnNpZA",
+    "title": "Major Blink",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Major_Blink.sid",
+    "path": "sids/GAMES/M-R/Major_Blink.sid",
+    "size": 3181,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01hbGlidS5zaWQ",
+    "title": "Malibu",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Malibu.sid",
+    "path": "sids/GAMES/M-R/Malibu.sid",
+    "size": 698,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01hbl9DYXRjaF9hX1BlYS5zaWQ",
+    "title": "Man Catch a Pea",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Man_Catch_a_Pea.sid",
+    "path": "sids/GAMES/M-R/Man_Catch_a_Pea.sid",
+    "size": 11346,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01hbl9mcm9tX04tMTAuc2lk",
+    "title": "Man from N-10",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Man_from_N-10.sid",
+    "path": "sids/GAMES/M-R/Man_from_N-10.sid",
+    "size": 745,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01hbmNhbGEuc2lk",
+    "title": "Mancala",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Mancala.sid",
+    "path": "sids/GAMES/M-R/Mancala.sid",
+    "size": 3390,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01hbmRyYWdvcmUuc2lk",
+    "title": "Mandragore",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Mandragore.sid",
+    "path": "sids/GAMES/M-R/Mandragore.sid",
+    "size": 4722,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01hbmljX01pbmVyLnNpZA",
+    "title": "Manic Miner",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Manic_Miner.sid",
+    "path": "sids/GAMES/M-R/Manic_Miner.sid",
+    "size": 1223,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01hbnRhLU1hbmlhLnNpZA",
+    "title": "Manta-Mania",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Manta-Mania.sid",
+    "path": "sids/GAMES/M-R/Manta-Mania.sid",
+    "size": 839,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01hcmJsZV9Cb3kuc2lk",
+    "title": "Marble Boy",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Marble_Boy.sid",
+    "path": "sids/GAMES/M-R/Marble_Boy.sid",
+    "size": 1114,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01hcmJsZV9NYWRuZXNzLnNpZA",
+    "title": "Marble Madness",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Marble_Madness.sid",
+    "path": "sids/GAMES/M-R/Marble_Madness.sid",
+    "size": 12798,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01hcmlvX0Jyb3Muc2lk",
+    "title": "Mario Bros",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Mario_Bros.sid",
+    "path": "sids/GAMES/M-R/Mario_Bros.sid",
+    "size": 1102,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01hcmlvc19DZW1lbnRfRmFjdG9yeV9DNjQuc2lk",
+    "title": "Marios Cement Factory C64",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Marios_Cement_Factory_C64.sid",
+    "path": "sids/GAMES/M-R/Marios_Cement_Factory_C64.sid",
+    "size": 3949,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01hc2hlZF9UdXJ0bGVzLnNpZA",
+    "title": "Mashed Turtles",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Mashed_Turtles.sid",
+    "path": "sids/GAMES/M-R/Mashed_Turtles.sid",
+    "size": 2179,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01hc3Rlcl9EaWdnZXIuc2lk",
+    "title": "Master Digger",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Master_Digger.sid",
+    "path": "sids/GAMES/M-R/Master_Digger.sid",
+    "size": 431,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01hc3Rlcl9vZl9DYW1vdWZsYWdlX0JBU0lDLnNpZA",
+    "title": "Master of Camouflage BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Master_of_Camouflage_BASIC.sid",
+    "path": "sids/GAMES/M-R/Master_of_Camouflage_BASIC.sid",
+    "size": 564,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01hc3Rlcm1pbmQuc2lk",
+    "title": "Mastermind",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Mastermind.sid",
+    "path": "sids/GAMES/M-R/Mastermind.sid",
+    "size": 17240,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01hc3RlcnNfb2ZfVGltZS5zaWQ",
+    "title": "Masters of Time",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Masters_of_Time.sid",
+    "path": "sids/GAMES/M-R/Masters_of_Time.sid",
+    "size": 480,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01hdHJpeC5zaWQ",
+    "title": "Matrix",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Matrix.sid",
+    "path": "sids/GAMES/M-R/Matrix.sid",
+    "size": 6656,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01heGlfR29sZi5zaWQ",
+    "title": "Maxi Golf",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Maxi_Golf.sid",
+    "path": "sids/GAMES/M-R/Maxi_Golf.sid",
+    "size": 2896,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01heHdlbGxfTWFub3ItU2t1bGxfb2ZfRG9vbS5zaWQ",
+    "title": "Maxwell Manor-Skull of Doom",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Maxwell_Manor-Skull_of_Doom.sid",
+    "path": "sids/GAMES/M-R/Maxwell_Manor-Skull_of_Doom.sid",
+    "size": 484,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01hemUuc2lk",
+    "title": "Maze",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Maze.sid",
+    "path": "sids/GAMES/M-R/Maze.sid",
+    "size": 3472,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01hemVfR3JhemVfR2FtZV9CQVNJQy5zaWQ",
+    "title": "Maze Graze Game BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Maze_Graze_Game_BASIC.sid",
+    "path": "sids/GAMES/M-R/Maze_Graze_Game_BASIC.sid",
+    "size": 1594,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01hemluZ2VyX1ouc2lk",
+    "title": "Mazinger Z",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Mazinger_Z.sid",
+    "path": "sids/GAMES/M-R/Mazinger_Z.sid",
+    "size": 10987,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01jX1JhdC5zaWQ",
+    "title": "Mc Rat",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Mc_Rat.sid",
+    "path": "sids/GAMES/M-R/Mc_Rat.sid",
+    "size": 2834,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01jRG9uYWxkX0xhbmQuc2lk",
+    "title": "McDonald Land",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "McDonald_Land.sid",
+    "path": "sids/GAMES/M-R/McDonald_Land.sid",
+    "size": 9854,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01lYW5fQ2FyLnNpZA",
+    "title": "Mean Car",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Mean_Car.sid",
+    "path": "sids/GAMES/M-R/Mean_Car.sid",
+    "size": 2978,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01lYW5fQ2l0eS5zaWQ",
+    "title": "Mean City",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Mean_City.sid",
+    "path": "sids/GAMES/M-R/Mean_City.sid",
+    "size": 3720,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01lYW5fU3RyZWV0cy5zaWQ",
+    "title": "Mean Streets",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Mean_Streets.sid",
+    "path": "sids/GAMES/M-R/Mean_Streets.sid",
+    "size": 3518,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01lZGlhdG9yLnNpZA",
+    "title": "Mediator",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Mediator.sid",
+    "path": "sids/GAMES/M-R/Mediator.sid",
+    "size": 4914,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01lZGl0ZXJyYW5lYW5fQWlyX1dhci5zaWQ",
+    "title": "Mediterranean Air War",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Mediterranean_Air_War.sid",
+    "path": "sids/GAMES/M-R/Mediterranean_Air_War.sid",
+    "size": 1898,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01lZ2FfUGFyYXRyb29wZXIuc2lk",
+    "title": "Mega Paratrooper",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Mega_Paratrooper.sid",
+    "path": "sids/GAMES/M-R/Mega_Paratrooper.sid",
+    "size": 19844,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01lZ2FfVHVyYm8uc2lk",
+    "title": "Mega Turbo",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Mega_Turbo.sid",
+    "path": "sids/GAMES/M-R/Mega_Turbo.sid",
+    "size": 689,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01lZ2FfV2l6YXJkc19wcmV2aWV3LnNpZA",
+    "title": "Mega Wizards preview",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Mega_Wizards_preview.sid",
+    "path": "sids/GAMES/M-R/Mega_Wizards_preview.sid",
+    "size": 2914,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01lZ2FibGFzdC5zaWQ",
+    "title": "Megablast",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Megablast.sid",
+    "path": "sids/GAMES/M-R/Megablast.sid",
+    "size": 6326,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01lZ2Fub3ZhLnNpZA",
+    "title": "Meganova",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Meganova.sid",
+    "path": "sids/GAMES/M-R/Meganova.sid",
+    "size": 8888,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01lbW9yeV8xOTg1X0JBU0lDLnNpZA",
+    "title": "Memory 1985 BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Memory_1985_BASIC.sid",
+    "path": "sids/GAMES/M-R/Memory_1985_BASIC.sid",
+    "size": 3178,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01lbW9yeV8xOTkxLnNpZA",
+    "title": "Memory 1991",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Memory_1991.sid",
+    "path": "sids/GAMES/M-R/Memory_1991.sid",
+    "size": 1447,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01lbW9yeV9NYW4uc2lk",
+    "title": "Memory Man",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Memory_Man.sid",
+    "path": "sids/GAMES/M-R/Memory_Man.sid",
+    "size": 11346,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01lcmNlbmFyaWVzLnNpZA",
+    "title": "Mercenaries",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Mercenaries.sid",
+    "path": "sids/GAMES/M-R/Mercenaries.sid",
+    "size": 12304,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01lcmNlbmFyeV9sb2FkZXIuc2lk",
+    "title": "Mercenary loader",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Mercenary_loader.sid",
+    "path": "sids/GAMES/M-R/Mercenary_loader.sid",
+    "size": 1478,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01lcnJ5X0NocmlzdG1hcy5zaWQ",
+    "title": "Merry Christmas",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Merry_Christmas.sid",
+    "path": "sids/GAMES/M-R/Merry_Christmas.sid",
+    "size": 1404,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01ldGFfR2FsYWN0aWNfTGxhbWFzLnNpZA",
+    "title": "Meta Galactic Llamas",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Meta_Galactic_Llamas.sid",
+    "path": "sids/GAMES/M-R/Meta_Galactic_Llamas.sid",
+    "size": 2272,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01ldGFsX1BpcmFtaWQuc2lk",
+    "title": "Metal Piramid",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Metal_Piramid.sid",
+    "path": "sids/GAMES/M-R/Metal_Piramid.sid",
+    "size": 8819,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01ldHJvLUNyb3NzLnNpZA",
+    "title": "Metro-Cross",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Metro-Cross.sid",
+    "path": "sids/GAMES/M-R/Metro-Cross.sid",
+    "size": 3817,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01leGljb184Ni5zaWQ",
+    "title": "Mexico 86",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Mexico_86.sid",
+    "path": "sids/GAMES/M-R/Mexico_86.sid",
+    "size": 3227,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01pY3JvX01vdXNlX0dvZXNfRGUtQnVnZ2luZy5zaWQ",
+    "title": "Micro Mouse Goes De-Bugging",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Micro_Mouse_Goes_De-Bugging.sid",
+    "path": "sids/GAMES/M-R/Micro_Mouse_Goes_De-Bugging.sid",
+    "size": 471,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01pY3JvY29zbS5zaWQ",
+    "title": "Microcosm",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Microcosm.sid",
+    "path": "sids/GAMES/M-R/Microcosm.sid",
+    "size": 1150,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01pY3JvY29zbW8uc2lk",
+    "title": "Microcosmo",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Microcosmo.sid",
+    "path": "sids/GAMES/M-R/Microcosmo.sid",
+    "size": 8438,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01pZG5pZ2h0X0V4cHJlc3NfQkFTSUMuc2lk",
+    "title": "Midnight Express BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Midnight_Express_BASIC.sid",
+    "path": "sids/GAMES/M-R/Midnight_Express_BASIC.sid",
+    "size": 4167,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01pZ2h0X2FuZF9NYWdpY19JLVNlY3JldF9vZl90aGVfSW5uZXJfU2FuY3R1bS5zaWQ",
+    "title": "Might and Magic I-Secret of the Inner Sanctum",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Might_and_Magic_I-Secret_of_the_Inner_Sanctum.sid",
+    "path": "sids/GAMES/M-R/Might_and_Magic_I-Secret_of_the_Inner_Sanctum.sid",
+    "size": 1984,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01pZ2h0eV9Cb21iamFjay5zaWQ",
+    "title": "Mighty Bombjack",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Mighty_Bombjack.sid",
+    "path": "sids/GAMES/M-R/Mighty_Bombjack.sid",
+    "size": 3792,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01pa2VfTWVjaC5zaWQ",
+    "title": "Mike Mech",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Mike_Mech.sid",
+    "path": "sids/GAMES/M-R/Mike_Mech.sid",
+    "size": 1535,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01pbGxlbml1bV9XYXJyaW9ycy5zaWQ",
+    "title": "Millenium Warriors",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Millenium_Warriors.sid",
+    "path": "sids/GAMES/M-R/Millenium_Warriors.sid",
+    "size": 6934,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01pbWl6dWt1X1NhZ2FfNEsuc2lk",
+    "title": "Mimizuku Saga 4K",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Mimizuku_Saga_4K.sid",
+    "path": "sids/GAMES/M-R/Mimizuku_Saga_4K.sid",
+    "size": 1839,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01pbmRfR2FtZXMuc2lk",
+    "title": "Mind Games",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Mind_Games.sid",
+    "path": "sids/GAMES/M-R/Mind_Games.sid",
+    "size": 3232,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01pbmR0cmFwLnNpZA",
+    "title": "Mindtrap",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Mindtrap.sid",
+    "path": "sids/GAMES/M-R/Mindtrap.sid",
+    "size": 2571,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01pbmVmaWVsZC5zaWQ",
+    "title": "Minefield",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Minefield.sid",
+    "path": "sids/GAMES/M-R/Minefield.sid",
+    "size": 3641,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01pbmVyLnNpZA",
+    "title": "Miner",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Miner.sid",
+    "path": "sids/GAMES/M-R/Miner.sid",
+    "size": 4783,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01pbmVyX1Byb3BoZXRfcHJldmlldy5zaWQ",
+    "title": "Miner Prophet preview",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Miner_Prophet_preview.sid",
+    "path": "sids/GAMES/M-R/Miner_Prophet_preview.sid",
+    "size": 1614,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01pbmlfR29sZi5zaWQ",
+    "title": "Mini Golf",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Mini_Golf.sid",
+    "path": "sids/GAMES/M-R/Mini_Golf.sid",
+    "size": 3977,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01pbm90YXguc2lk",
+    "title": "Minotax",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Minotax.sid",
+    "path": "sids/GAMES/M-R/Minotax.sid",
+    "size": 1108,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01pc3NpbGVfRXZhZGUuc2lk",
+    "title": "Missile Evade",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Missile_Evade.sid",
+    "path": "sids/GAMES/M-R/Missile_Evade.sid",
+    "size": 5853,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01pc3Npb25jb2RlX0NYLTEzX0JBU0lDLnNpZA",
+    "title": "Missioncode CX-13 BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Missioncode_CX-13_BASIC.sid",
+    "path": "sids/GAMES/M-R/Missioncode_CX-13_BASIC.sid",
+    "size": 1395,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01pc3Npb25lX1R3YWluLnNpZA",
+    "title": "Missione Twain",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Missione_Twain.sid",
+    "path": "sids/GAMES/M-R/Missione_Twain.sid",
+    "size": 1413,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01pc3Rlcl9Sb2dlcnNfTmVpZ2hib3Job29kLnNpZA",
+    "title": "Mister Rogers Neighborhood",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Mister_Rogers_Neighborhood.sid",
+    "path": "sids/GAMES/M-R/Mister_Rogers_Neighborhood.sid",
+    "size": 4076,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01pdF9KZWFuc191bmRfSGVsbGViYXJkZS5zaWQ",
+    "title": "Mit Jeans und Hellebarde",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Mit_Jeans_und_Hellebarde.sid",
+    "path": "sids/GAMES/M-R/Mit_Jeans_und_Hellebarde.sid",
+    "size": 19576,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01vZWJpdXMuc2lk",
+    "title": "Moebius",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Moebius.sid",
+    "path": "sids/GAMES/M-R/Moebius.sid",
+    "size": 15272,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01vbmR1c19GaWdodF9QYWxhY2Uuc2lk",
+    "title": "Mondus Fight Palace",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Mondus_Fight_Palace.sid",
+    "path": "sids/GAMES/M-R/Mondus_Fight_Palace.sid",
+    "size": 3816,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01vbmtleV9NYWdpYy5zaWQ",
+    "title": "Monkey Magic",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Monkey_Magic.sid",
+    "path": "sids/GAMES/M-R/Monkey_Magic.sid",
+    "size": 3908,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01vbm8uc2lk",
+    "title": "Mono",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Mono.sid",
+    "path": "sids/GAMES/M-R/Mono.sid",
+    "size": 8444,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01vbnN0ZXJzXzY0LnNpZA",
+    "title": "Monsters 64",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Monsters_64.sid",
+    "path": "sids/GAMES/M-R/Monsters_64.sid",
+    "size": 1544,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01vbnRyaXguc2lk",
+    "title": "Montrix",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Montrix.sid",
+    "path": "sids/GAMES/M-R/Montrix.sid",
+    "size": 2750,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01vb25fUGF0cm9sLnNpZA",
+    "title": "Moon Patrol",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Moon_Patrol.sid",
+    "path": "sids/GAMES/M-R/Moon_Patrol.sid",
+    "size": 1329,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01vb25wYXRyb2xfSUkuc2lk",
+    "title": "Moonpatrol II",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Moonpatrol_II.sid",
+    "path": "sids/GAMES/M-R/Moonpatrol_II.sid",
+    "size": 2342,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01vb25yYWNlci5zaWQ",
+    "title": "Moonracer",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Moonracer.sid",
+    "path": "sids/GAMES/M-R/Moonracer.sid",
+    "size": 3349,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01vb25yYWtlci5zaWQ",
+    "title": "Moonraker",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Moonraker.sid",
+    "path": "sids/GAMES/M-R/Moonraker.sid",
+    "size": 812,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01vb253YWxrZXIuc2lk",
+    "title": "Moonwalker",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Moonwalker.sid",
+    "path": "sids/GAMES/M-R/Moonwalker.sid",
+    "size": 4618,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01vc2Nvd19TdW1taXQuc2lk",
+    "title": "Moscow Summit",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Moscow_Summit.sid",
+    "path": "sids/GAMES/M-R/Moscow_Summit.sid",
+    "size": 7688,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01vdXNlX1RyYXAuc2lk",
+    "title": "Mouse Trap",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Mouse_Trap.sid",
+    "path": "sids/GAMES/M-R/Mouse_Trap.sid",
+    "size": 1262,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01vdmUtSXRfcHJldmlldy5zaWQ",
+    "title": "Move-It preview",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Move-It_preview.sid",
+    "path": "sids/GAMES/M-R/Move-It_preview.sid",
+    "size": 1919,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01vdmllX0J1c2luZXNzLnNpZA",
+    "title": "Movie Business",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Movie_Business.sid",
+    "path": "sids/GAMES/M-R/Movie_Business.sid",
+    "size": 8659,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01yX0Rvc19DYXN0bGUuc2lk",
+    "title": "Mr Dos Castle",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Mr_Dos_Castle.sid",
+    "path": "sids/GAMES/M-R/Mr_Dos_Castle.sid",
+    "size": 1936,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01yX0VnZ2hlYWQuc2lk",
+    "title": "Mr Egghead",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Mr_Egghead.sid",
+    "path": "sids/GAMES/M-R/Mr_Egghead.sid",
+    "size": 689,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01yX1dpei5zaWQ",
+    "title": "Mr Wiz",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Mr_Wiz.sid",
+    "path": "sids/GAMES/M-R/Mr_Wiz.sid",
+    "size": 1406,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01zX1BhY21hbi5zaWQ",
+    "title": "Ms Pacman",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Ms_Pacman.sid",
+    "path": "sids/GAMES/M-R/Ms_Pacman.sid",
+    "size": 1370,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01UVl9SZW1vdGVfQ29udHJvbC5zaWQ",
+    "title": "MTV Remote Control",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "MTV_Remote_Control.sid",
+    "path": "sids/GAMES/M-R/MTV_Remote_Control.sid",
+    "size": 2329,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL011bmNoLnNpZA",
+    "title": "Munch",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Munch.sid",
+    "path": "sids/GAMES/M-R/Munch.sid",
+    "size": 3226,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL011bmNoX0xvYWQuc2lk",
+    "title": "Munch Load",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Munch_Load.sid",
+    "path": "sids/GAMES/M-R/Munch_Load.sid",
+    "size": 2201,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL011bmNoX01hbmlhLnNpZA",
+    "title": "Munch Mania",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Munch_Mania.sid",
+    "path": "sids/GAMES/M-R/Munch_Mania.sid",
+    "size": 400,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL011bmNoZXIuc2lk",
+    "title": "Muncher",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Muncher.sid",
+    "path": "sids/GAMES/M-R/Muncher.sid",
+    "size": 4370,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL011cmRlcl9vbl90aGVfQXRsYW50aWMuc2lk",
+    "title": "Murder on the Atlantic",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Murder_on_the_Atlantic.sid",
+    "path": "sids/GAMES/M-R/Murder_on_the_Atlantic.sid",
+    "size": 3947,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL011c2ljbWFuLnNpZA",
+    "title": "Musicman",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Musicman.sid",
+    "path": "sids/GAMES/M-R/Musicman.sid",
+    "size": 1517,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL015X0RheV9vbl90aGVfSGlnaHdheV9OVFNDLnNpZA",
+    "title": "My Day on the Highway NTSC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "My_Day_on_the_Highway_NTSC.sid",
+    "path": "sids/GAMES/M-R/My_Day_on_the_Highway_NTSC.sid",
+    "size": 4266,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL015X0RheV9vbl90aGVfSGlnaHdheV9QQUwuc2lk",
+    "title": "My Day on the Highway PAL",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "My_Day_on_the_Highway_PAL.sid",
+    "path": "sids/GAMES/M-R/My_Day_on_the_Highway_PAL.sid",
+    "size": 4265,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL015c3RlcmlvdXNfTW91bnRhaW4uc2lk",
+    "title": "Mysterious Mountain",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Mysterious_Mountain.sid",
+    "path": "sids/GAMES/M-R/Mysterious_Mountain.sid",
+    "size": 4094,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL015c3Rlcml4LnNpZA",
+    "title": "Mysterix",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Mysterix.sid",
+    "path": "sids/GAMES/M-R/Mysterix.sid",
+    "size": 948,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL015c3RlcnlfVm95YWdlLnNpZA",
+    "title": "Mystery Voyage",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Mystery_Voyage.sid",
+    "path": "sids/GAMES/M-R/Mystery_Voyage.sid",
+    "size": 28163,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL015c3RpY19ab25lLnNpZA",
+    "title": "Mystic Zone",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Mystic_Zone.sid",
+    "path": "sids/GAMES/M-R/Mystic_Zone.sid",
+    "size": 9189,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL05hamVtbmlrLnNpZA",
+    "title": "Najemnik",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Najemnik.sid",
+    "path": "sids/GAMES/M-R/Najemnik.sid",
+    "size": 3358,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL05hamVtbmlrLVBvd3JvdC5zaWQ",
+    "title": "Najemnik-Powrot",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Najemnik-Powrot.sid",
+    "path": "sids/GAMES/M-R/Najemnik-Powrot.sid",
+    "size": 4716,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL05hbGxlX0FlaC1QdWguc2lk",
+    "title": "Nalle Aeh-Puh",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Nalle_Aeh-Puh.sid",
+    "path": "sids/GAMES/M-R/Nalle_Aeh-Puh.sid",
+    "size": 2356,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL05BVE9fQXNzYXVsdF9Db3Vyc2Uuc2lk",
+    "title": "NATO Assault Course",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "NATO_Assault_Course.sid",
+    "path": "sids/GAMES/M-R/NATO_Assault_Course.sid",
+    "size": 1669,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL05hdXRpbHVzLnNpZA",
+    "title": "Nautilus",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Nautilus.sid",
+    "path": "sids/GAMES/M-R/Nautilus.sid",
+    "size": 5917,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL05lYnVsdXMuc2lk",
+    "title": "Nebulus",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Nebulus.sid",
+    "path": "sids/GAMES/M-R/Nebulus.sid",
+    "size": 5384,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL05lY3JvbWFuY2VyLnNpZA",
+    "title": "Necromancer",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Necromancer.sid",
+    "path": "sids/GAMES/M-R/Necromancer.sid",
+    "size": 842,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL05lZ2F0cm9uLnNpZA",
+    "title": "Negatron",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Negatron.sid",
+    "path": "sids/GAMES/M-R/Negatron.sid",
+    "size": 12081,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL05lbWVzaXMuc2lk",
+    "title": "Nemesis",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Nemesis.sid",
+    "path": "sids/GAMES/M-R/Nemesis.sid",
+    "size": 15479,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL05lcHR1bmVfTGFuZGVyX0VsaXRlLnNpZA",
+    "title": "Neptune Lander Elite",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Neptune_Lander_Elite.sid",
+    "path": "sids/GAMES/M-R/Neptune_Lander_Elite.sid",
+    "size": 5089,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL05lcHR1bmVfTGFuZGVyX0VsaXRlX1ByZXZpZXcuc2lk",
+    "title": "Neptune Lander Elite Preview",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Neptune_Lander_Elite_Preview.sid",
+    "path": "sids/GAMES/M-R/Neptune_Lander_Elite_Preview.sid",
+    "size": 1249,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL05ldGhlcl9FYXJ0aC5zaWQ",
+    "title": "Nether Earth",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Nether_Earth.sid",
+    "path": "sids/GAMES/M-R/Nether_Earth.sid",
+    "size": 1746,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL05ldmVyZW5kaW5nX1N0b3J5X0lJLnNpZA",
+    "title": "Neverending Story II",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Neverending_Story_II.sid",
+    "path": "sids/GAMES/M-R/Neverending_Story_II.sid",
+    "size": 15865,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL05ld19Zb3JrX0NpdHkuc2lk",
+    "title": "New York City",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "New_York_City.sid",
+    "path": "sids/GAMES/M-R/New_York_City.sid",
+    "size": 1931,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL05ld2NvbWVyLnNpZA",
+    "title": "Newcomer",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Newcomer.sid",
+    "path": "sids/GAMES/M-R/Newcomer.sid",
+    "size": 20093,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL05leHVzLnNpZA",
+    "title": "Nexus",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Nexus.sid",
+    "path": "sids/GAMES/M-R/Nexus.sid",
+    "size": 3519,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL05pYmJsZXIuc2lk",
+    "title": "Nibbler",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Nibbler.sid",
+    "path": "sids/GAMES/M-R/Nibbler.sid",
+    "size": 778,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL05pY29zX1J1bi5zaWQ",
+    "title": "Nicos Run",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Nicos_Run.sid",
+    "path": "sids/GAMES/M-R/Nicos_Run.sid",
+    "size": 3079,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL05pZ2h0X0tuaWdodC5zaWQ",
+    "title": "Night Knight",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Night_Knight.sid",
+    "path": "sids/GAMES/M-R/Night_Knight.sid",
+    "size": 2699,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL05pZ2h0X1NoYWRlLnNpZA",
+    "title": "Night Shade",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Night_Shade.sid",
+    "path": "sids/GAMES/M-R/Night_Shade.sid",
+    "size": 3184,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL05pZ2h0bWFyZS5zaWQ",
+    "title": "Nightmare",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Nightmare.sid",
+    "path": "sids/GAMES/M-R/Nightmare.sid",
+    "size": 1610,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL05pZ2h0d2Fsa2VyX0JBU0lDLnNpZA",
+    "title": "Nightwalker BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Nightwalker_BASIC.sid",
+    "path": "sids/GAMES/M-R/Nightwalker_BASIC.sid",
+    "size": 2238,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL05pbmphX01hc3Rlci5zaWQ",
+    "title": "Ninja Master",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Ninja_Master.sid",
+    "path": "sids/GAMES/M-R/Ninja_Master.sid",
+    "size": 7798,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL05pdGVyaWRlci5zaWQ",
+    "title": "Niterider",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Niterider.sid",
+    "path": "sids/GAMES/M-R/Niterider.sid",
+    "size": 689,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL05vc2ZlcmF0dV90aGVfVmFtcHlyZS5zaWQ",
+    "title": "Nosferatu the Vampyre",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Nosferatu_the_Vampyre.sid",
+    "path": "sids/GAMES/M-R/Nosferatu_the_Vampyre.sid",
+    "size": 1255,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL05vdmFsb2FkX2xvYWRlci5zaWQ",
+    "title": "Novaload loader",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Novaload_loader.sid",
+    "path": "sids/GAMES/M-R/Novaload_loader.sid",
+    "size": 1250,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL051Y2xldXMuc2lk",
+    "title": "Nucleus",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Nucleus.sid",
+    "path": "sids/GAMES/M-R/Nucleus.sid",
+    "size": 11393,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL051bWJlcl9Cb3dsaW5nLnNpZA",
+    "title": "Number Bowling",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Number_Bowling.sid",
+    "path": "sids/GAMES/M-R/Number_Bowling.sid",
+    "size": 846,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL051bWJlcl9RdWVzdF9CQVNJQy5zaWQ",
+    "title": "Number Quest BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Number_Quest_BASIC.sid",
+    "path": "sids/GAMES/M-R/Number_Quest_BASIC.sid",
+    "size": 660,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL051bWJlcl9UdW1ibGVyLnNpZA",
+    "title": "Number Tumbler",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Number_Tumbler.sid",
+    "path": "sids/GAMES/M-R/Number_Tumbler.sid",
+    "size": 397,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL051dGNyYWthLnNpZA",
+    "title": "Nutcraka",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Nutcraka.sid",
+    "path": "sids/GAMES/M-R/Nutcraka.sid",
+    "size": 1130,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL09fUmlsZXlzX01pbmUuc2lk",
+    "title": "O Rileys Mine",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "O_Rileys_Mine.sid",
+    "path": "sids/GAMES/M-R/O_Rileys_Mine.sid",
+    "size": 1613,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL09ic3Rlcm50ZS5zaWQ",
+    "title": "Obsternte",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Obsternte.sid",
+    "path": "sids/GAMES/M-R/Obsternte.sid",
+    "size": 2228,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL09jZWFuX0NvbnF1ZXJvci5zaWQ",
+    "title": "Ocean Conqueror",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Ocean_Conqueror.sid",
+    "path": "sids/GAMES/M-R/Ocean_Conqueror.sid",
+    "size": 1926,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL09jZWFuX1Jhbmdlci5zaWQ",
+    "title": "Ocean Ranger",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Ocean_Ranger.sid",
+    "path": "sids/GAMES/M-R/Ocean_Ranger.sid",
+    "size": 27345,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL09keXNzZXkuc2lk",
+    "title": "Odyssey",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Odyssey.sid",
+    "path": "sids/GAMES/M-R/Odyssey.sid",
+    "size": 2951,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL09mZmljaWFsX0ZhdGhlcl9DaHJpc3RtYXNfR2FtZS5zaWQ",
+    "title": "Official Father Christmas Game",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Official_Father_Christmas_Game.sid",
+    "path": "sids/GAMES/M-R/Official_Father_Christmas_Game.sid",
+    "size": 2753,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL09oX05vLnNpZA",
+    "title": "Oh No",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Oh_No.sid",
+    "path": "sids/GAMES/M-R/Oh_No.sid",
+    "size": 3718,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL09pc2FjLnNpZA",
+    "title": "Oisac",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Oisac.sid",
+    "path": "sids/GAMES/M-R/Oisac.sid",
+    "size": 440,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL09sZF9NYW5zaW9uX1ByZXZpZXcuc2lk",
+    "title": "Old Mansion Preview",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Old_Mansion_Preview.sid",
+    "path": "sids/GAMES/M-R/Old_Mansion_Preview.sid",
+    "size": 1801,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL09tZWdhLVBsYW5ldGVfSW52aXNpYmxlLnNpZA",
+    "title": "Omega-Planete Invisible",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Omega-Planete_Invisible.sid",
+    "path": "sids/GAMES/M-R/Omega-Planete_Invisible.sid",
+    "size": 8695,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL09uX2FfTW92ZS5zaWQ",
+    "title": "On a Move",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "On_a_Move.sid",
+    "path": "sids/GAMES/M-R/On_a_Move.sid",
+    "size": 7232,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL09uZV9vbl9PbmVfRXJ2aW5nX2FuZF9CaXJkLnNpZA",
+    "title": "One on One Erving and Bird",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "One_on_One_Erving_and_Bird.sid",
+    "path": "sids/GAMES/M-R/One_on_One_Erving_and_Bird.sid",
+    "size": 3710,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL09vbG9uZ19QcmV2aWV3LnNpZA",
+    "title": "Oolong Preview",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Oolong_Preview.sid",
+    "path": "sids/GAMES/M-R/Oolong_Preview.sid",
+    "size": 1399,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL09wZXJhdGlvbl9Bbm9yaWEuc2lk",
+    "title": "Operation Anoria",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Operation_Anoria.sid",
+    "path": "sids/GAMES/M-R/Operation_Anoria.sid",
+    "size": 1213,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL09wZXJhdGlvbl9Ib3JtdXouc2lk",
+    "title": "Operation Hormuz",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Operation_Hormuz.sid",
+    "path": "sids/GAMES/M-R/Operation_Hormuz.sid",
+    "size": 2548,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL09wZXJhdGlvbl9NZXJrdXIuc2lk",
+    "title": "Operation Merkur",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Operation_Merkur.sid",
+    "path": "sids/GAMES/M-R/Operation_Merkur.sid",
+    "size": 1698,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL09wZXJhdGlvbl9OZXB0dW4uc2lk",
+    "title": "Operation Neptun",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Operation_Neptun.sid",
+    "path": "sids/GAMES/M-R/Operation_Neptun.sid",
+    "size": 1606,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL09wZXJhdGlvbl9PbWVnYV9CbGFzdC5zaWQ",
+    "title": "Operation Omega Blast",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Operation_Omega_Blast.sid",
+    "path": "sids/GAMES/M-R/Operation_Omega_Blast.sid",
+    "size": 1942,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL09yYml0cm9uLnNpZA",
+    "title": "Orbitron",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Orbitron.sid",
+    "path": "sids/GAMES/M-R/Orbitron.sid",
+    "size": 639,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL09yZGVhbC5zaWQ",
+    "title": "Ordeal",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Ordeal.sid",
+    "path": "sids/GAMES/M-R/Ordeal.sid",
+    "size": 2949,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL09yaW9uLnNpZA",
+    "title": "Orion",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Orion.sid",
+    "path": "sids/GAMES/M-R/Orion.sid",
+    "size": 11346,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL09ybV9hbmRfQ2hlZXAtTmFycm93X1NxdWVha3Muc2lk",
+    "title": "Orm and Cheep-Narrow Squeaks",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Orm_and_Cheep-Narrow_Squeaks.sid",
+    "path": "sids/GAMES/M-R/Orm_and_Cheep-Narrow_Squeaks.sid",
+    "size": 894,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL090aGVsbG9fQkFTSUMuc2lk",
+    "title": "Othello BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Othello_BASIC.sid",
+    "path": "sids/GAMES/M-R/Othello_BASIC.sid",
+    "size": 2116,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL091dF9vbl9hX0xpbWIuc2lk",
+    "title": "Out on a Limb",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Out_on_a_Limb.sid",
+    "path": "sids/GAMES/M-R/Out_on_a_Limb.sid",
+    "size": 22114,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL091dGJyZWFrLnNpZA",
+    "title": "Outbreak",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Outbreak.sid",
+    "path": "sids/GAMES/M-R/Outbreak.sid",
+    "size": 1597,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL091dGxhdy5zaWQ",
+    "title": "Outlaw",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Outlaw.sid",
+    "path": "sids/GAMES/M-R/Outlaw.sid",
+    "size": 549,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1BhYy1NYW4uc2lk",
+    "title": "Pac-Man",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Pac-Man.sid",
+    "path": "sids/GAMES/M-R/Pac-Man.sid",
+    "size": 315,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1BhY2JveS5zaWQ",
+    "title": "Pacboy",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Pacboy.sid",
+    "path": "sids/GAMES/M-R/Pacboy.sid",
+    "size": 2430,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1BhY2NpZS5zaWQ",
+    "title": "Paccie",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Paccie.sid",
+    "path": "sids/GAMES/M-R/Paccie.sid",
+    "size": 6742,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1BhY29zX1BldGUuc2lk",
+    "title": "Pacos Pete",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Pacos_Pete.sid",
+    "path": "sids/GAMES/M-R/Pacos_Pete.sid",
+    "size": 14194,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1BhZGRpbmd0b25zX0dhcmRlbl9BZHZlbnR1cmUuc2lk",
+    "title": "Paddingtons Garden Adventure",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Paddingtons_Garden_Adventure.sid",
+    "path": "sids/GAMES/M-R/Paddingtons_Garden_Adventure.sid",
+    "size": 400,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1BhaW50ZXJib3kuc2lk",
+    "title": "Painterboy",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Painterboy.sid",
+    "path": "sids/GAMES/M-R/Painterboy.sid",
+    "size": 2094,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1BhbmNoby5zaWQ",
+    "title": "Pancho",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Pancho.sid",
+    "path": "sids/GAMES/M-R/Pancho.sid",
+    "size": 4047,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1BhbmljLnNpZA",
+    "title": "Panic",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Panic.sid",
+    "path": "sids/GAMES/M-R/Panic.sid",
+    "size": 758,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1BhcGVyX1JvdXRlLnNpZA",
+    "title": "Paper Route",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Paper_Route.sid",
+    "path": "sids/GAMES/M-R/Paper_Route.sid",
+    "size": 525,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1BhcmFkcm9pZC5zaWQ",
+    "title": "Paradroid",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Paradroid.sid",
+    "path": "sids/GAMES/M-R/Paradroid.sid",
+    "size": 1426,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1BhcmFnb24uc2lk",
+    "title": "Paragon",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Paragon.sid",
+    "path": "sids/GAMES/M-R/Paragon.sid",
+    "size": 1060,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1BhcmlnaV9EYWthci5zaWQ",
+    "title": "Parigi Dakar",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Parigi_Dakar.sid",
+    "path": "sids/GAMES/M-R/Parigi_Dakar.sid",
+    "size": 1399,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1Bhcmt5X2FuZF90aGVfWWVsbG93X1N1Ym1hcmluZS5zaWQ",
+    "title": "Parky and the Yellow Submarine",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Parky_and_the_Yellow_Submarine.sid",
+    "path": "sids/GAMES/M-R/Parky_and_the_Yellow_Submarine.sid",
+    "size": 876,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1BhcnR5X1F1aXouc2lk",
+    "title": "Party Quiz",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Party_Quiz.sid",
+    "path": "sids/GAMES/M-R/Party_Quiz.sid",
+    "size": 3688,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1Bhc3RlLU1hbl9QYXQuc2lk",
+    "title": "Paste-Man Pat",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Paste-Man_Pat.sid",
+    "path": "sids/GAMES/M-R/Paste-Man_Pat.sid",
+    "size": 3243,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1BhdWxjaGVuc19TY2hpZWJ1bmcuc2lk",
+    "title": "Paulchens Schiebung",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Paulchens_Schiebung.sid",
+    "path": "sids/GAMES/M-R/Paulchens_Schiebung.sid",
+    "size": 994,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1BlYWNlX1dvbWVuLnNpZA",
+    "title": "Peace Women",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Peace_Women.sid",
+    "path": "sids/GAMES/M-R/Peace_Women.sid",
+    "size": 9777,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1BlYXJsX29mX0Rhd24uc2lk",
+    "title": "Pearl of Dawn",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Pearl_of_Dawn.sid",
+    "path": "sids/GAMES/M-R/Pearl_of_Dawn.sid",
+    "size": 31195,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1BlZ19KdW1wX0JBU0lDLnNpZA",
+    "title": "Peg Jump BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Peg_Jump_BASIC.sid",
+    "path": "sids/GAMES/M-R/Peg_Jump_BASIC.sid",
+    "size": 2277,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1BlbmV0cmF0b3Iuc2lk",
+    "title": "Penetrator",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Penetrator.sid",
+    "path": "sids/GAMES/M-R/Penetrator.sid",
+    "size": 7382,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1BlbmdvX0JBU0lDLnNpZA",
+    "title": "Pengo BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Pengo_BASIC.sid",
+    "path": "sids/GAMES/M-R/Pengo_BASIC.sid",
+    "size": 1019,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1BlbnNhdGUuc2lk",
+    "title": "Pensate",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Pensate.sid",
+    "path": "sids/GAMES/M-R/Pensate.sid",
+    "size": 1124,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1BlbnRhZ29yYXRfSUkuc2lk",
+    "title": "Pentagorat II",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Pentagorat_II.sid",
+    "path": "sids/GAMES/M-R/Pentagorat_II.sid",
+    "size": 6547,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1BlbnRhZ3JhbS5zaWQ",
+    "title": "Pentagram",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Pentagram.sid",
+    "path": "sids/GAMES/M-R/Pentagram.sid",
+    "size": 1510,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1BlcHBpc19RdWVzdC5zaWQ",
+    "title": "Peppis Quest",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Peppis_Quest.sid",
+    "path": "sids/GAMES/M-R/Peppis_Quest.sid",
+    "size": 5254,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1BlcmN5X1BhdWxfUGlja3dpY2suc2lk",
+    "title": "Percy Paul Pickwick",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Percy_Paul_Pickwick.sid",
+    "path": "sids/GAMES/M-R/Percy_Paul_Pickwick.sid",
+    "size": 15442,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1BlcmN5X1Blbmd1aW4uc2lk",
+    "title": "Percy Penguin",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Percy_Penguin.sid",
+    "path": "sids/GAMES/M-R/Percy_Penguin.sid",
+    "size": 452,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1Blc3Ryb3kuc2lk",
+    "title": "Pestroy",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Pestroy.sid",
+    "path": "sids/GAMES/M-R/Pestroy.sid",
+    "size": 729,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1BldGNoLnNpZA",
+    "title": "Petch",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Petch.sid",
+    "path": "sids/GAMES/M-R/Petch.sid",
+    "size": 1402,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1BldGVyLnNpZA",
+    "title": "Peter",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Peter.sid",
+    "path": "sids/GAMES/M-R/Peter.sid",
+    "size": 916,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1BldGVyX1BpbG90LnNpZA",
+    "title": "Peter Pilot",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Peter_Pilot.sid",
+    "path": "sids/GAMES/M-R/Peter_Pilot.sid",
+    "size": 5377,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1BldGVyX1NoaWx0b25zX0hhbmRiYWxsX01hcmFkb25hLnNpZA",
+    "title": "Peter Shiltons Handball Maradona",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Peter_Shiltons_Handball_Maradona.sid",
+    "path": "sids/GAMES/M-R/Peter_Shiltons_Handball_Maradona.sid",
+    "size": 17022,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1BldHJvbF9hbmRfQ29fQkFTSUMuc2lk",
+    "title": "Petrol and Co BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Petrol_and_Co_BASIC.sid",
+    "path": "sids/GAMES/M-R/Petrol_and_Co_BASIC.sid",
+    "size": 1993,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1BoYWxzYmVyZy5zaWQ",
+    "title": "Phalsberg",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Phalsberg.sid",
+    "path": "sids/GAMES/M-R/Phalsberg.sid",
+    "size": 1562,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1BoYW50b20uc2lk",
+    "title": "Phantom",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Phantom.sid",
+    "path": "sids/GAMES/M-R/Phantom.sid",
+    "size": 7555,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1BoYXJhb2hzX0N1cnNlLnNpZA",
+    "title": "Pharaohs Curse",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Pharaohs_Curse.sid",
+    "path": "sids/GAMES/M-R/Pharaohs_Curse.sid",
+    "size": 409,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1BpY2tfbl9QaWxlLnNpZA",
+    "title": "Pick n Pile",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Pick_n_Pile.sid",
+    "path": "sids/GAMES/M-R/Pick_n_Pile.sid",
+    "size": 5080,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1BpZ3NfaW5fU3BhY2Uuc2lk",
+    "title": "Pigs in Space",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Pigs_in_Space.sid",
+    "path": "sids/GAMES/M-R/Pigs_in_Space.sid",
+    "size": 644,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1Bpbl9VcC5zaWQ",
+    "title": "Pin Up",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Pin_Up.sid",
+    "path": "sids/GAMES/M-R/Pin_Up.sid",
+    "size": 4478,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1BpbmctUG9uZ19DbGFzc2ljLnNpZA",
+    "title": "Ping-Pong Classic",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Ping-Pong_Classic.sid",
+    "path": "sids/GAMES/M-R/Ping-Pong_Classic.sid",
+    "size": 415,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1BpbmdvLnNpZA",
+    "title": "Pingo",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Pingo.sid",
+    "path": "sids/GAMES/M-R/Pingo.sid",
+    "size": 7230,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1BpcGVfTWFuaWEuc2lk",
+    "title": "Pipe Mania",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Pipe_Mania.sid",
+    "path": "sids/GAMES/M-R/Pipe_Mania.sid",
+    "size": 3043,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1BpcGVsaW5lX0JBU0lDLnNpZA",
+    "title": "Pipeline BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Pipeline_BASIC.sid",
+    "path": "sids/GAMES/M-R/Pipeline_BASIC.sid",
+    "size": 1356,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1BpcmFjeS5zaWQ",
+    "title": "Piracy",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Piracy.sid",
+    "path": "sids/GAMES/M-R/Piracy.sid",
+    "size": 4989,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1BpcmF0ZXMuc2lk",
+    "title": "Pirates",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Pirates.sid",
+    "path": "sids/GAMES/M-R/Pirates.sid",
+    "size": 2174,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1BpcmF0aS5zaWQ",
+    "title": "Pirati",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Pirati.sid",
+    "path": "sids/GAMES/M-R/Pirati.sid",
+    "size": 1008,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1BpdGZhbGxfSUktTG9zdF9DYXZlcm5zLnNpZA",
+    "title": "Pitfall II-Lost Caverns",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Pitfall_II-Lost_Caverns.sid",
+    "path": "sids/GAMES/M-R/Pitfall_II-Lost_Caverns.sid",
+    "size": 3723,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1BsYW5ldF9YMi5zaWQ",
+    "title": "Planet X2",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Planet_X2.sid",
+    "path": "sids/GAMES/M-R/Planet_X2.sid",
+    "size": 2663,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1BsYXF1ZV9NYW4uc2lk",
+    "title": "Plaque Man",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Plaque_Man.sid",
+    "path": "sids/GAMES/M-R/Plaque_Man.sid",
+    "size": 648,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1BsYXRmb3JtX01hbmlhX3ByZXZpZXcuc2lk",
+    "title": "Platform Mania preview",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Platform_Mania_preview.sid",
+    "path": "sids/GAMES/M-R/Platform_Mania_preview.sid",
+    "size": 2665,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1BsYXlfWW91cl9DYXJkc19SaWdodC5zaWQ",
+    "title": "Play Your Cards Right",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Play_Your_Cards_Right.sid",
+    "path": "sids/GAMES/M-R/Play_Your_Cards_Right.sid",
+    "size": 3043,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1BsYXlib3kuc2lk",
+    "title": "Playboy",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Playboy.sid",
+    "path": "sids/GAMES/M-R/Playboy.sid",
+    "size": 4094,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1BsYXlkYXlzLnNpZA",
+    "title": "Playdays",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Playdays.sid",
+    "path": "sids/GAMES/M-R/Playdays.sid",
+    "size": 1131,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1BsdW1iX0NyYXp5LnNpZA",
+    "title": "Plumb Crazy",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Plumb_Crazy.sid",
+    "path": "sids/GAMES/M-R/Plumb_Crazy.sid",
+    "size": 990,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1BsdW1iZXJzX1NtaWxlX3ByZXZpZXcuc2lk",
+    "title": "Plumbers Smile preview",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Plumbers_Smile_preview.sid",
+    "path": "sids/GAMES/M-R/Plumbers_Smile_preview.sid",
+    "size": 2921,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1BvY2tldF9Sb2NrZXRzLnNpZA",
+    "title": "Pocket Rockets",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Pocket_Rockets.sid",
+    "path": "sids/GAMES/M-R/Pocket_Rockets.sid",
+    "size": 7457,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1BvZ290cm9uLnNpZA",
+    "title": "Pogotron",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Pogotron.sid",
+    "path": "sids/GAMES/M-R/Pogotron.sid",
+    "size": 1902,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1Bva2VyLnNpZA",
+    "title": "Poker",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Poker.sid",
+    "path": "sids/GAMES/M-R/Poker.sid",
+    "size": 2965,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1BvbGVfUG9zaXRpb24uc2lk",
+    "title": "Pole Position",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Pole_Position.sid",
+    "path": "sids/GAMES/M-R/Pole_Position.sid",
+    "size": 1671,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1BvbGVfUG9zaXRpb25fSUkuc2lk",
+    "title": "Pole Position II",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Pole_Position_II.sid",
+    "path": "sids/GAMES/M-R/Pole_Position_II.sid",
+    "size": 3583,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1BvbGljZV9DYWRldC5zaWQ",
+    "title": "Police Cadet",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Police_Cadet.sid",
+    "path": "sids/GAMES/M-R/Police_Cadet.sid",
+    "size": 804,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1Bvbmd5LnNpZA",
+    "title": "Pongy",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Pongy.sid",
+    "path": "sids/GAMES/M-R/Pongy.sid",
+    "size": 3432,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1Bvb2wuc2lk",
+    "title": "Pool",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Pool.sid",
+    "path": "sids/GAMES/M-R/Pool.sid",
+    "size": 519,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1Bvb3lhbi5zaWQ",
+    "title": "Pooyan",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Pooyan.sid",
+    "path": "sids/GAMES/M-R/Pooyan.sid",
+    "size": 2023,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1BvcGV5ZS5zaWQ",
+    "title": "Popeye",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Popeye.sid",
+    "path": "sids/GAMES/M-R/Popeye.sid",
+    "size": 2133,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1BvcHBlbS5zaWQ",
+    "title": "Poppem",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Poppem.sid",
+    "path": "sids/GAMES/M-R/Poppem.sid",
+    "size": 1302,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1Bvd2VyX29mX0JsYWNrX0JhbmRpdC5zaWQ",
+    "title": "Power of Black Bandit",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Power_of_Black_Bandit.sid",
+    "path": "sids/GAMES/M-R/Power_of_Black_Bandit.sid",
+    "size": 4631,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1Bvd2VycGxheV9UaGVfR2FtZV9vZl90aGVfR29kcy5zaWQ",
+    "title": "Powerplay The Game of the Gods",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Powerplay_The_Game_of_the_Gods.sid",
+    "path": "sids/GAMES/M-R/Powerplay_The_Game_of_the_Gods.sid",
+    "size": 3724,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1Bvd2Vyc19vZl9HbG9vbS5zaWQ",
+    "title": "Powers of Gloom",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Powers_of_Gloom.sid",
+    "path": "sids/GAMES/M-R/Powers_of_Gloom.sid",
+    "size": 3015,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1ByZWRhdG9yXzIuc2lk",
+    "title": "Predator 2",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Predator_2.sid",
+    "path": "sids/GAMES/M-R/Predator_2.sid",
+    "size": 3867,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1BSRVguc2lk",
+    "title": "PREX",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "PREX.sid",
+    "path": "sids/GAMES/M-R/PREX.sid",
+    "size": 11074,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1ByaXpvbmVfUHJldmlldy5zaWQ",
+    "title": "Prizone Preview",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Prizone_Preview.sid",
+    "path": "sids/GAMES/M-R/Prizone_Preview.sid",
+    "size": 7035,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1Byb2hpYml0aW9uLnNpZA",
+    "title": "Prohibition",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Prohibition.sid",
+    "path": "sids/GAMES/M-R/Prohibition.sid",
+    "size": 7328,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1Byb2plY3RfRmlyZXN0YXJ0LnNpZA",
+    "title": "Project Firestart",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Project_Firestart.sid",
+    "path": "sids/GAMES/M-R/Project_Firestart.sid",
+    "size": 6457,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1Byb3NwZWN0b3JfQkFTSUMuc2lk",
+    "title": "Prospector BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Prospector_BASIC.sid",
+    "path": "sids/GAMES/M-R/Prospector_BASIC.sid",
+    "size": 1658,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1Byb3RlY3Rvcl9JSS5zaWQ",
+    "title": "Protector II",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Protector_II.sid",
+    "path": "sids/GAMES/M-R/Protector_II.sid",
+    "size": 1727,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1Byb3RpdW0uc2lk",
+    "title": "Protium",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Protium.sid",
+    "path": "sids/GAMES/M-R/Protium.sid",
+    "size": 6621,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1Bzc3N0LnNpZA",
+    "title": "Pssst",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Pssst.sid",
+    "path": "sids/GAMES/M-R/Pssst.sid",
+    "size": 3509,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1BzeWNhc3RyaWEuc2lk",
+    "title": "Psycastria",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Psycastria.sid",
+    "path": "sids/GAMES/M-R/Psycastria.sid",
+    "size": 16239,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1B1cHB5cy5zaWQ",
+    "title": "Puppys",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Puppys.sid",
+    "path": "sids/GAMES/M-R/Puppys.sid",
+    "size": 1318,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1B1cnBsZV9UdXJ0bGVzLnNpZA",
+    "title": "Purple Turtles",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Purple_Turtles.sid",
+    "path": "sids/GAMES/M-R/Purple_Turtles.sid",
+    "size": 1362,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1B1c2gtSXQuc2lk",
+    "title": "Push-It",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Push-It.sid",
+    "path": "sids/GAMES/M-R/Push-It.sid",
+    "size": 4552,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1B1c3Nfbl9Cb290cy5zaWQ",
+    "title": "Puss n Boots",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Puss_n_Boots.sid",
+    "path": "sids/GAMES/M-R/Puss_n_Boots.sid",
+    "size": 409,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1B1enpsZV9NYXN0ZXIuc2lk",
+    "title": "Puzzle Master",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Puzzle_Master.sid",
+    "path": "sids/GAMES/M-R/Puzzle_Master.sid",
+    "size": 20347,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1B5amFtYXJhbWEuc2lk",
+    "title": "Pyjamarama",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Pyjamarama.sid",
+    "path": "sids/GAMES/M-R/Pyjamarama.sid",
+    "size": 976,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1B5cmFtaWRzX1ByZXZpZXcuc2lk",
+    "title": "Pyramids Preview",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Pyramids_Preview.sid",
+    "path": "sids/GAMES/M-R/Pyramids_Preview.sid",
+    "size": 11370,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1FfQmVydF92ZXJzaW9uXzIuc2lk",
+    "title": "Q Bert version 2",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Q_Bert_version_2.sid",
+    "path": "sids/GAMES/M-R/Q_Bert_version_2.sid",
+    "size": 510,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1F1YWRyYW50XzQuc2lk",
+    "title": "Quadrant 4",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Quadrant_4.sid",
+    "path": "sids/GAMES/M-R/Quadrant_4.sid",
+    "size": 4440,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1F1YXJpLnNpZA",
+    "title": "Quari",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Quari.sid",
+    "path": "sids/GAMES/M-R/Quari.sid",
+    "size": 2968,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1F1YXJ0ZXJob3JzZV9CQVNJQy5zaWQ",
+    "title": "Quarterhorse BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Quarterhorse_BASIC.sid",
+    "path": "sids/GAMES/M-R/Quarterhorse_BASIC.sid",
+    "size": 701,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1F1YXJ4LnNpZA",
+    "title": "Quarx",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Quarx.sid",
+    "path": "sids/GAMES/M-R/Quarx.sid",
+    "size": 11316,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1F1YXNpbW9kby5zaWQ",
+    "title": "Quasimodo",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Quasimodo.sid",
+    "path": "sids/GAMES/M-R/Quasimodo.sid",
+    "size": 847,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1F1YXNpbW9kb3NfQ2hyaXN0bWFzX0NhcGVyLnNpZA",
+    "title": "Quasimodos Christmas Caper",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Quasimodos_Christmas_Caper.sid",
+    "path": "sids/GAMES/M-R/Quasimodos_Christmas_Caper.sid",
+    "size": 3475,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1F1YXRyaWVtZV9EaW1lbnNpb24uc2lk",
+    "title": "Quatrieme Dimension",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Quatrieme_Dimension.sid",
+    "path": "sids/GAMES/M-R/Quatrieme_Dimension.sid",
+    "size": 4131,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1F1ZXN0LnNpZA",
+    "title": "Quest",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Quest.sid",
+    "path": "sids/GAMES/M-R/Quest.sid",
+    "size": 1090,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1F1ZXN0X29mX0tpbmdzX0JBU0lDLnNpZA",
+    "title": "Quest of Kings BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Quest_of_Kings_BASIC.sid",
+    "path": "sids/GAMES/M-R/Quest_of_Kings_BASIC.sid",
+    "size": 1219,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1F1ZXN0X29mX3RoZV9TcGFjZV9CZWFnbGUuc2lk",
+    "title": "Quest of the Space Beagle",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Quest_of_the_Space_Beagle.sid",
+    "path": "sids/GAMES/M-R/Quest_of_the_Space_Beagle.sid",
+    "size": 1918,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1F1aWNrX1RoaW5raW5nLVJvYm90X1RhbGVzX0JBU0lDLnNpZA",
+    "title": "Quick Thinking-Robot Tales BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Quick_Thinking-Robot_Tales_BASIC.sid",
+    "path": "sids/GAMES/M-R/Quick_Thinking-Robot_Tales_BASIC.sid",
+    "size": 1706,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1F1aWNraV9CQVNJQy5zaWQ",
+    "title": "Quicki BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Quicki_BASIC.sid",
+    "path": "sids/GAMES/M-R/Quicki_BASIC.sid",
+    "size": 1401,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1F1aW54LnNpZA",
+    "title": "Quinx",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Quinx.sid",
+    "path": "sids/GAMES/M-R/Quinx.sid",
+    "size": 850,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1F1aXotTWFzdGVyX3YzXzguc2lk",
+    "title": "Quiz-Master v3 8",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Quiz-Master_v3_8.sid",
+    "path": "sids/GAMES/M-R/Quiz-Master_v3_8.sid",
+    "size": 1255,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1F1b19WYWRpcy5zaWQ",
+    "title": "Quo Vadis",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Quo_Vadis.sid",
+    "path": "sids/GAMES/M-R/Quo_Vadis.sid",
+    "size": 3875,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1JhYmJpdF9QaWUuc2lk",
+    "title": "Rabbit Pie",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Rabbit_Pie.sid",
+    "path": "sids/GAMES/M-R/Rabbit_Pie.sid",
+    "size": 363,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1JhY2Vfd2l0aF90aGVfRGV2aWwuc2lk",
+    "title": "Race with the Devil",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Race_with_the_Devil.sid",
+    "path": "sids/GAMES/M-R/Race_with_the_Devil.sid",
+    "size": 5995,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1JhZGFyX1JhdF9SYWNlLnNpZA",
+    "title": "Radar Rat Race",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Radar_Rat_Race.sid",
+    "path": "sids/GAMES/M-R/Radar_Rat_Race.sid",
+    "size": 728,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1JhZGRpc2gtVHdvLnNpZA",
+    "title": "Raddish-Two",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Raddish-Two.sid",
+    "path": "sids/GAMES/M-R/Raddish-Two.sid",
+    "size": 1215,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1JhZGl1cy5zaWQ",
+    "title": "Radius",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Radius.sid",
+    "path": "sids/GAMES/M-R/Radius.sid",
+    "size": 4186,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1JhZ3NfdG9fUmljaGVzLnNpZA",
+    "title": "Rags to Riches",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Rags_to_Riches.sid",
+    "path": "sids/GAMES/M-R/Rags_to_Riches.sid",
+    "size": 4190,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1JhaWRfMjAwMC5zaWQ",
+    "title": "Raid 2000",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Raid_2000.sid",
+    "path": "sids/GAMES/M-R/Raid_2000.sid",
+    "size": 3476,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1JhaWxyb2FkX1dvcmtzLnNpZA",
+    "title": "Railroad Works",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Railroad_Works.sid",
+    "path": "sids/GAMES/M-R/Railroad_Works.sid",
+    "size": 6560,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1JhaW5ib3dfV2Fsa2VyLnNpZA",
+    "title": "Rainbow Walker",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Rainbow_Walker.sid",
+    "path": "sids/GAMES/M-R/Rainbow_Walker.sid",
+    "size": 1375,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1JhbGx5X0Nyb3NzLnNpZA",
+    "title": "Rally Cross",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Rally_Cross.sid",
+    "path": "sids/GAMES/M-R/Rally_Cross.sid",
+    "size": 2430,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1JhbGx5X1NpbXVsYXRvci5zaWQ",
+    "title": "Rally Simulator",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Rally_Simulator.sid",
+    "path": "sids/GAMES/M-R/Rally_Simulator.sid",
+    "size": 3829,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1JhcGlkX0ZpcmUuc2lk",
+    "title": "Rapid Fire",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Rapid_Fire.sid",
+    "path": "sids/GAMES/M-R/Rapid_Fire.sid",
+    "size": 430,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1JhdF9TcGxhdC5zaWQ",
+    "title": "Rat Splat",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Rat_Splat.sid",
+    "path": "sids/GAMES/M-R/Rat_Splat.sid",
+    "size": 6837,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1JhdHRsZXIuc2lk",
+    "title": "Rattler",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Rattler.sid",
+    "path": "sids/GAMES/M-R/Rattler.sid",
+    "size": 647,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1JlYWN0aW9uLnNpZA",
+    "title": "Reaction",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Reaction.sid",
+    "path": "sids/GAMES/M-R/Reaction.sid",
+    "size": 9962,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1JlYmVscy5zaWQ",
+    "title": "Rebels",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Rebels.sid",
+    "path": "sids/GAMES/M-R/Rebels.sid",
+    "size": 7654,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1Jla2Vud29uZGVyLnNpZA",
+    "title": "Rekenwonder",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Rekenwonder.sid",
+    "path": "sids/GAMES/M-R/Rekenwonder.sid",
+    "size": 1951,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1JlbmVnYWRlLnNpZA",
+    "title": "Renegade",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Renegade.sid",
+    "path": "sids/GAMES/M-R/Renegade.sid",
+    "size": 5925,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1JlcHRvbi5zaWQ",
+    "title": "Repton",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Repton.sid",
+    "path": "sids/GAMES/M-R/Repton.sid",
+    "size": 543,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1Jlc2N1ZV9vbl9GcmFjdGFsdXMuc2lk",
+    "title": "Rescue on Fractalus",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Rescue_on_Fractalus.sid",
+    "path": "sids/GAMES/M-R/Rescue_on_Fractalus.sid",
+    "size": 4145,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1Jlc2N1aW5nX09yYy5zaWQ",
+    "title": "Rescuing Orc",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Rescuing_Orc.sid",
+    "path": "sids/GAMES/M-R/Rescuing_Orc.sid",
+    "size": 4532,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1JldHVybl9vZl90aGVfSmVkaS5zaWQ",
+    "title": "Return of the Jedi",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Return_of_the_Jedi.sid",
+    "path": "sids/GAMES/M-R/Return_of_the_Jedi.sid",
+    "size": 8129,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1JldHVybl9vZl90aGVfU3BhY2VfV2FycmlvcnMuc2lk",
+    "title": "Return of the Space Warriors",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Return_of_the_Space_Warriors.sid",
+    "path": "sids/GAMES/M-R/Return_of_the_Space_Warriors.sid",
+    "size": 2509,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1JldmVsYXRpb24uc2lk",
+    "title": "Revelation",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Revelation.sid",
+    "path": "sids/GAMES/M-R/Revelation.sid",
+    "size": 2472,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1JldmVyc2kuc2lk",
+    "title": "Reversi",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Reversi.sid",
+    "path": "sids/GAMES/M-R/Reversi.sid",
+    "size": 1662,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1JldmVyc2lfQkFTSUMuc2lk",
+    "title": "Reversi BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Reversi_BASIC.sid",
+    "path": "sids/GAMES/M-R/Reversi_BASIC.sid",
+    "size": 860,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1JoeW1lc19hbmRfUmlkZGxlcy5zaWQ",
+    "title": "Rhymes and Riddles",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Rhymes_and_Riddles.sid",
+    "path": "sids/GAMES/M-R/Rhymes_and_Riddles.sid",
+    "size": 5206,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1JpZGRsZXNfYW5kX1N0b25lcy5zaWQ",
+    "title": "Riddles and Stones",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Riddles_and_Stones.sid",
+    "path": "sids/GAMES/M-R/Riddles_and_Stones.sid",
+    "size": 47980,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1JpbmdzX29mX01lZHVzYS5zaWQ",
+    "title": "Rings of Medusa",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Rings_of_Medusa.sid",
+    "path": "sids/GAMES/M-R/Rings_of_Medusa.sid",
+    "size": 22716,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1JpbmdzaWRlLnNpZA",
+    "title": "Ringside",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Ringside.sid",
+    "path": "sids/GAMES/M-R/Ringside.sid",
+    "size": 11346,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1JpdmVyX0NoYXNlLnNpZA",
+    "title": "River Chase",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "River_Chase.sid",
+    "path": "sids/GAMES/M-R/River_Chase.sid",
+    "size": 15344,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1JNU19UaXRhbmljLnNpZA",
+    "title": "RMS Titanic",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "RMS_Titanic.sid",
+    "path": "sids/GAMES/M-R/RMS_Titanic.sid",
+    "size": 4251,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1JvYWRfUm9sbGVyLnNpZA",
+    "title": "Road Roller",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Road_Roller.sid",
+    "path": "sids/GAMES/M-R/Road_Roller.sid",
+    "size": 303,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1JvYWRydW5uZXIuc2lk",
+    "title": "Roadrunner",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Roadrunner.sid",
+    "path": "sids/GAMES/M-R/Roadrunner.sid",
+    "size": 775,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1JvYmJ5LnNpZA",
+    "title": "Robby",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Robby.sid",
+    "path": "sids/GAMES/M-R/Robby.sid",
+    "size": 875,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1JvYmluX0hvb2RzX0dvbGQuc2lk",
+    "title": "Robin Hoods Gold",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Robin_Hoods_Gold.sid",
+    "path": "sids/GAMES/M-R/Robin_Hoods_Gold.sid",
+    "size": 1383,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1JvYmluX29mX3RoZV9Xb29kLnNpZA",
+    "title": "Robin of the Wood",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Robin_of_the_Wood.sid",
+    "path": "sids/GAMES/M-R/Robin_of_the_Wood.sid",
+    "size": 1878,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1JvYm9ib2x0LnNpZA",
+    "title": "Robobolt",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Robobolt.sid",
+    "path": "sids/GAMES/M-R/Robobolt.sid",
+    "size": 3242,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1JvYm9zZXJ2YW50LnNpZA",
+    "title": "Roboservant",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Roboservant.sid",
+    "path": "sids/GAMES/M-R/Roboservant.sid",
+    "size": 1982,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1JvYm94LnNpZA",
+    "title": "Robox",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Robox.sid",
+    "path": "sids/GAMES/M-R/Robox.sid",
+    "size": 3300,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1JvYm96b25lLnNpZA",
+    "title": "Robozone",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Robozone.sid",
+    "path": "sids/GAMES/M-R/Robozone.sid",
+    "size": 4199,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1JvY2tfRmFsbC5zaWQ",
+    "title": "Rock Fall",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Rock_Fall.sid",
+    "path": "sids/GAMES/M-R/Rock_Fall.sid",
+    "size": 889,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1JvY2tldF9CYWxsLnNpZA",
+    "title": "Rocket Ball",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Rocket_Ball.sid",
+    "path": "sids/GAMES/M-R/Rocket_Ball.sid",
+    "size": 6814,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1JvY2t1cy1UaGVfR2FtZS5zaWQ",
+    "title": "Rockus-The Game",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Rockus-The_Game.sid",
+    "path": "sids/GAMES/M-R/Rockus-The_Game.sid",
+    "size": 8755,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1JvZG5leV90b190aGVfUmVzY3VlLnNpZA",
+    "title": "Rodney to the Rescue",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Rodney_to_the_Rescue.sid",
+    "path": "sids/GAMES/M-R/Rodney_to_the_Rescue.sid",
+    "size": 293,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1JvbGxlcmJveS5zaWQ",
+    "title": "Rollerboy",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Rollerboy.sid",
+    "path": "sids/GAMES/M-R/Rollerboy.sid",
+    "size": 7563,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1JvbGxlcmNvYXN0ZXJfUnVtYmxlci5zaWQ",
+    "title": "Rollercoaster Rumbler",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Rollercoaster_Rumbler.sid",
+    "path": "sids/GAMES/M-R/Rollercoaster_Rumbler.sid",
+    "size": 2956,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1JvbGxpbi5zaWQ",
+    "title": "Rollin",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Rollin.sid",
+    "path": "sids/GAMES/M-R/Rollin.sid",
+    "size": 1214,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1JvbGxpbmdfVGh1bmRlci5zaWQ",
+    "title": "Rolling Thunder",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Rolling_Thunder.sid",
+    "path": "sids/GAMES/M-R/Rolling_Thunder.sid",
+    "size": 3181,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1JvbXVsdXMuc2lk",
+    "title": "Romulus",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Romulus.sid",
+    "path": "sids/GAMES/M-R/Romulus.sid",
+    "size": 2277,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1Jvb3Rlci5zaWQ",
+    "title": "Rooter",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Rooter.sid",
+    "path": "sids/GAMES/M-R/Rooter.sid",
+    "size": 21630,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1Jvb3Rpbl9Ub290aW4uc2lk",
+    "title": "Rootin Tootin",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Rootin_Tootin.sid",
+    "path": "sids/GAMES/M-R/Rootin_Tootin.sid",
+    "size": 1162,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1JvdWxldHRlX0JBU0lDLnNpZA",
+    "title": "Roulette BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Roulette_BASIC.sid",
+    "path": "sids/GAMES/M-R/Roulette_BASIC.sid",
+    "size": 510,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1JveV9vZl90aGVfUm92ZXJzLnNpZA",
+    "title": "Roy of the Rovers",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Roy_of_the_Rovers.sid",
+    "path": "sids/GAMES/M-R/Roy_of_the_Rovers.sid",
+    "size": 1849,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1JveWFsX0h1bnQuc2lk",
+    "title": "Royal Hunt",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Royal_Hunt.sid",
+    "path": "sids/GAMES/M-R/Royal_Hunt.sid",
+    "size": 3185,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1J1YmJpc2hfTW9uc3Rlci5zaWQ",
+    "title": "Rubbish Monster",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Rubbish_Monster.sid",
+    "path": "sids/GAMES/M-R/Rubbish_Monster.sid",
+    "size": 1956,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1J1bl9mb3JfRGlhbW9uZHMuc2lk",
+    "title": "Run for Diamonds",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Run_for_Diamonds.sid",
+    "path": "sids/GAMES/M-R/Run_for_Diamonds.sid",
+    "size": 927,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1J1bm5pbmdfTWFuLnNpZA",
+    "title": "Running Man",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Running_Man.sid",
+    "path": "sids/GAMES/M-R/Running_Man.sid",
+    "size": 1375,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1J1cGVydF9hbmRfdGhlX0ljZV9DYXN0bGUuc2lk",
+    "title": "Rupert and the Ice Castle",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Rupert_and_the_Ice_Castle.sid",
+    "path": "sids/GAMES/M-R/Rupert_and_the_Ice_Castle.sid",
+    "size": 4520,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NfT19TLnNpZA",
+    "title": "S O S",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "S_O_S.sid",
+    "path": "sids/GAMES/S-Z/S_O_S.sid",
+    "size": 896,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NhYm90ZXVyLnNpZA",
+    "title": "Saboteur",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Saboteur.sid",
+    "path": "sids/GAMES/S-Z/Saboteur.sid",
+    "size": 3169,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NhYnJlX1d1bGYuc2lk",
+    "title": "Sabre Wulf",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Sabre_Wulf.sid",
+    "path": "sids/GAMES/S-Z/Sabre_Wulf.sid",
+    "size": 1364,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NhZ29yX2Rlcl9Fcm9iZXJlci5zaWQ",
+    "title": "Sagor der Eroberer",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Sagor_der_Eroberer.sid",
+    "path": "sids/GAMES/S-Z/Sagor_der_Eroberer.sid",
+    "size": 830,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NhaWxpbmcuc2lk",
+    "title": "Sailing",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Sailing.sid",
+    "path": "sids/GAMES/S-Z/Sailing.sid",
+    "size": 7550,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NhaW50c190b19TaW5uZXJzX0JBU0lDLnNpZA",
+    "title": "Saints to Sinners BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Saints_to_Sinners_BASIC.sid",
+    "path": "sids/GAMES/S-Z/Saints_to_Sinners_BASIC.sid",
+    "size": 2361,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NhbGl2YV9LaWQuc2lk",
+    "title": "Saliva Kid",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Saliva_Kid.sid",
+    "path": "sids/GAMES/S-Z/Saliva_Kid.sid",
+    "size": 20227,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NhbGl2YV9LaWRfcHJldmlldy5zaWQ",
+    "title": "Saliva Kid preview",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Saliva_Kid_preview.sid",
+    "path": "sids/GAMES/S-Z/Saliva_Kid_preview.sid",
+    "size": 8492,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NhbGx5c19HYXJkZW5fcHJldmlldy5zaWQ",
+    "title": "Sallys Garden preview",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Sallys_Garden_preview.sid",
+    "path": "sids/GAMES/S-Z/Sallys_Garden_preview.sid",
+    "size": 1555,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NhbHRhc2FsdGEuc2lk",
+    "title": "Saltasalta",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Saltasalta.sid",
+    "path": "sids/GAMES/S-Z/Saltasalta.sid",
+    "size": 1083,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NhbW15X0xpZ2h0Zm9vdC5zaWQ",
+    "title": "Sammy Lightfoot",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Sammy_Lightfoot.sid",
+    "path": "sids/GAMES/S-Z/Sammy_Lightfoot.sid",
+    "size": 1340,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NhbXVyYWlfVHJpbG9neS5zaWQ",
+    "title": "Samurai Trilogy",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Samurai_Trilogy.sid",
+    "path": "sids/GAMES/S-Z/Samurai_Trilogy.sid",
+    "size": 10698,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NhbnRhc19Ucm91Ymxlcy5zaWQ",
+    "title": "Santas Troubles",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Santas_Troubles.sid",
+    "path": "sids/GAMES/S-Z/Santas_Troubles.sid",
+    "size": 3500,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NhcmFuX1RyaWxvZ2llX0JBU0lDLnNpZA",
+    "title": "Saran Trilogie BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Saran_Trilogie_BASIC.sid",
+    "path": "sids/GAMES/S-Z/Saran_Trilogie_BASIC.sid",
+    "size": 3148,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NhdWNlcl9BdHRhY2suc2lk",
+    "title": "Saucer Attack",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Saucer_Attack.sid",
+    "path": "sids/GAMES/S-Z/Saucer_Attack.sid",
+    "size": 638,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NjYWxleHRyaWMuc2lk",
+    "title": "Scalextric",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Scalextric.sid",
+    "path": "sids/GAMES/S-Z/Scalextric.sid",
+    "size": 509,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NjYXJhYi5zaWQ",
+    "title": "Scarab",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Scarab.sid",
+    "path": "sids/GAMES/S-Z/Scarab.sid",
+    "size": 1500,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NjYXJhYmFldXMuc2lk",
+    "title": "Scarabaeus",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Scarabaeus.sid",
+    "path": "sids/GAMES/S-Z/Scarabaeus.sid",
+    "size": 6590,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NjYXJwZXIuc2lk",
+    "title": "Scarper",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Scarper.sid",
+    "path": "sids/GAMES/S-Z/Scarper.sid",
+    "size": 2780,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NjaGl6b2ZyZW5pYS5zaWQ",
+    "title": "Schizofrenia",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Schizofrenia.sid",
+    "path": "sids/GAMES/S-Z/Schizofrenia.sid",
+    "size": 4901,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NjaG90dGVyLnNpZA",
+    "title": "Schotter",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Schotter.sid",
+    "path": "sids/GAMES/S-Z/Schotter.sid",
+    "size": 423,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1Njb29ieV9Eb28uc2lk",
+    "title": "Scooby Doo",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Scooby_Doo.sid",
+    "path": "sids/GAMES/S-Z/Scooby_Doo.sid",
+    "size": 4315,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1Njb3R0aS5zaWQ",
+    "title": "Scotti",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Scotti.sid",
+    "path": "sids/GAMES/S-Z/Scotti.sid",
+    "size": 1312,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NjcmlsbGluZ19CQVNJQy5zaWQ",
+    "title": "Scrilling BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Scrilling_BASIC.sid",
+    "path": "sids/GAMES/S-Z/Scrilling_BASIC.sid",
+    "size": 1104,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NjcnVwbGVzLnNpZA",
+    "title": "Scruples",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Scruples.sid",
+    "path": "sids/GAMES/S-Z/Scruples.sid",
+    "size": 4506,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NlY3JldF9vZl9Nb25rZXlfSXNsYW5kX3R1bmVfNS5zaWQ",
+    "title": "Secret of Monkey Island tune 5",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Secret_of_Monkey_Island_tune_5.sid",
+    "path": "sids/GAMES/S-Z/Secret_of_Monkey_Island_tune_5.sid",
+    "size": 3566,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NlY3JldF9vZl9Nb25rZXlfSXNsYW5kX3R1bmVfNi5zaWQ",
+    "title": "Secret of Monkey Island tune 6",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Secret_of_Monkey_Island_tune_6.sid",
+    "path": "sids/GAMES/S-Z/Secret_of_Monkey_Island_tune_6.sid",
+    "size": 1259,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NlY3JldF9vZl9Nb25rZXlfSXNsYW5kX3R1bmVfOS5zaWQ",
+    "title": "Secret of Monkey Island tune 9",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Secret_of_Monkey_Island_tune_9.sid",
+    "path": "sids/GAMES/S-Z/Secret_of_Monkey_Island_tune_9.sid",
+    "size": 3422,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NlY3JldF9vZl90aGVfU2lsdmVyX0JsYWRlcy5zaWQ",
+    "title": "Secret of the Silver Blades",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Secret_of_the_Silver_Blades.sid",
+    "path": "sids/GAMES/S-Z/Secret_of_the_Silver_Blades.sid",
+    "size": 2518,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NlY3VyaXR5X0FsZXJ0LnNpZA",
+    "title": "Security Alert",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Security_Alert.sid",
+    "path": "sids/GAMES/S-Z/Security_Alert.sid",
+    "size": 8188,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NlZWtfYW5kX0Rlc3Ryb3lfQkFTSUMuc2lk",
+    "title": "Seek and Destroy BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Seek_and_Destroy_BASIC.sid",
+    "path": "sids/GAMES/S-Z/Seek_and_Destroy_BASIC.sid",
+    "size": 2047,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NlZXNhdy5zaWQ",
+    "title": "Seesaw",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Seesaw.sid",
+    "path": "sids/GAMES/S-Z/Seesaw.sid",
+    "size": 1661,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NlamQuc2lk",
+    "title": "Sejd",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Sejd.sid",
+    "path": "sids/GAMES/S-Z/Sejd.sid",
+    "size": 1831,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NlbnRpbmVsLnNpZA",
+    "title": "Sentinel",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Sentinel.sid",
+    "path": "sids/GAMES/S-Z/Sentinel.sid",
+    "size": 1962,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NlbnRpbmVsX1dvcmxkcy1GdXR1cmVfTWFnaWMuc2lk",
+    "title": "Sentinel Worlds-Future Magic",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Sentinel_Worlds-Future_Magic.sid",
+    "path": "sids/GAMES/S-Z/Sentinel_Worlds-Future_Magic.sid",
+    "size": 34149,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NlcnBlbnRpbmUuc2lk",
+    "title": "Serpentine",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Serpentine.sid",
+    "path": "sids/GAMES/S-Z/Serpentine.sid",
+    "size": 601,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1Nlc3Npb24uc2lk",
+    "title": "Session",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Session.sid",
+    "path": "sids/GAMES/S-Z/Session.sid",
+    "size": 18885,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1Nlc3Npb25faW5zdHJ1Y3Rpb25zLnNpZA",
+    "title": "Session instructions",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Session_instructions.sid",
+    "path": "sids/GAMES/S-Z/Session_instructions.sid",
+    "size": 3236,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NldmVuX0NpdGllc19vZl9Hb2xkLnNpZA",
+    "title": "Seven Cities of Gold",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Seven_Cities_of_Gold.sid",
+    "path": "sids/GAMES/S-Z/Seven_Cities_of_Gold.sid",
+    "size": 1700,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NldmVuX0VsZXZlbi5zaWQ",
+    "title": "Seven Eleven",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Seven_Eleven.sid",
+    "path": "sids/GAMES/S-Z/Seven_Eleven.sid",
+    "size": 5680,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NoYWNrbGVkLnNpZA",
+    "title": "Shackled",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Shackled.sid",
+    "path": "sids/GAMES/S-Z/Shackled.sid",
+    "size": 3470,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NoYWZ0X1JhaWRlci5zaWQ",
+    "title": "Shaft Raider",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Shaft_Raider.sid",
+    "path": "sids/GAMES/S-Z/Shaft_Raider.sid",
+    "size": 788,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NoYXJkcy5zaWQ",
+    "title": "Shards",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Shards.sid",
+    "path": "sids/GAMES/S-Z/Shards.sid",
+    "size": 2204,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NoZWxsc2hvY2suc2lk",
+    "title": "Shellshock",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Shellshock.sid",
+    "path": "sids/GAMES/S-Z/Shellshock.sid",
+    "size": 6318,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NoaWZ0LnNpZA",
+    "title": "Shift",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Shift.sid",
+    "path": "sids/GAMES/S-Z/Shift.sid",
+    "size": 11420,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NoaXBfQkFTSUMuc2lk",
+    "title": "Ship BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Ship_BASIC.sid",
+    "path": "sids/GAMES/S-Z/Ship_BASIC.sid",
+    "size": 1129,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1Nob290X2VtX1VwLnNpZA",
+    "title": "Shoot em Up",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Shoot_em_Up.sid",
+    "path": "sids/GAMES/S-Z/Shoot_em_Up.sid",
+    "size": 2047,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1Nob290X091dC5zaWQ",
+    "title": "Shoot Out",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Shoot_Out.sid",
+    "path": "sids/GAMES/S-Z/Shoot_Out.sid",
+    "size": 6197,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1Nob290aW5nX0dhbGxlcnlfQkFTSUMuc2lk",
+    "title": "Shooting Gallery BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Shooting_Gallery_BASIC.sid",
+    "path": "sids/GAMES/S-Z/Shooting_Gallery_BASIC.sid",
+    "size": 1921,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1Nob3RfdGhlX0dvdWxkcy5zaWQ",
+    "title": "Shot the Goulds",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Shot_the_Goulds.sid",
+    "path": "sids/GAMES/S-Z/Shot_the_Goulds.sid",
+    "size": 474,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NodWZmbGVfQkFTSUMuc2lk",
+    "title": "Shuffle BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Shuffle_BASIC.sid",
+    "path": "sids/GAMES/S-Z/Shuffle_BASIC.sid",
+    "size": 1905,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NpbW9uLnNpZA",
+    "title": "Simon",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Simon.sid",
+    "path": "sids/GAMES/S-Z/Simon.sid",
+    "size": 1755,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NpbXBzb25zX0FyY2FkZV9HYW1lLnNpZA",
+    "title": "Simpsons Arcade Game",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Simpsons_Arcade_Game.sid",
+    "path": "sids/GAMES/S-Z/Simpsons_Arcade_Game.sid",
+    "size": 39037,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NpbmJhZF9hbmRfdGhlX1Rocm9uZV9vZl90aGVfRmFsY29uLnNpZA",
+    "title": "Sinbad and the Throne of the Falcon",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Sinbad_and_the_Throne_of_the_Falcon.sid",
+    "path": "sids/GAMES/S-Z/Sinbad_and_the_Throne_of_the_Falcon.sid",
+    "size": 17022,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NpbmdsZV9FeHRyZW1lX0ZyZWVkb20uc2lk",
+    "title": "Single Extreme Freedom",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Single_Extreme_Freedom.sid",
+    "path": "sids/GAMES/S-Z/Single_Extreme_Freedom.sid",
+    "size": 31615,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NrYXRlX29yX0RpZS5zaWQ",
+    "title": "Skate or Die",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Skate_or_Die.sid",
+    "path": "sids/GAMES/S-Z/Skate_or_Die.sid",
+    "size": 28062,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NrYXRlYm9hcmRfU2FtX0JBU0lDLnNpZA",
+    "title": "Skateboard Sam BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Skateboard_Sam_BASIC.sid",
+    "path": "sids/GAMES/S-Z/Skateboard_Sam_BASIC.sid",
+    "size": 1922,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NrZWwuc2lk",
+    "title": "Skel",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Skel.sid",
+    "path": "sids/GAMES/S-Z/Skel.sid",
+    "size": 643,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NraV9KdW1wX0JBU0lDLnNpZA",
+    "title": "Ski Jump BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Ski_Jump_BASIC.sid",
+    "path": "sids/GAMES/S-Z/Ski_Jump_BASIC.sid",
+    "size": 1549,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NraV9XZWx0Y3VwLnNpZA",
+    "title": "Ski Weltcup",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Ski_Weltcup.sid",
+    "path": "sids/GAMES/S-Z/Ski_Weltcup.sid",
+    "size": 2180,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NraWVyLnNpZA",
+    "title": "Skier",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Skier.sid",
+    "path": "sids/GAMES/S-Z/Skier.sid",
+    "size": 3070,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NraW5hdXRpY19CQVNJQy5zaWQ",
+    "title": "Skinautic BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Skinautic_BASIC.sid",
+    "path": "sids/GAMES/S-Z/Skinautic_BASIC.sid",
+    "size": 1514,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1Nrb29sX0RhemUuc2lk",
+    "title": "Skool Daze",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Skool_Daze.sid",
+    "path": "sids/GAMES/S-Z/Skool_Daze.sid",
+    "size": 1157,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NrcmFtYmxlLnNpZA",
+    "title": "Skramble",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Skramble.sid",
+    "path": "sids/GAMES/S-Z/Skramble.sid",
+    "size": 3346,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NrdWxsLnNpZA",
+    "title": "Skull",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Skull.sid",
+    "path": "sids/GAMES/S-Z/Skull.sid",
+    "size": 5007,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NreV9SdW5uZXIuc2lk",
+    "title": "Sky Runner",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Sky_Runner.sid",
+    "path": "sids/GAMES/S-Z/Sky_Runner.sid",
+    "size": 6358,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NsYXBzaG90LnNpZA",
+    "title": "Slapshot",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Slapshot.sid",
+    "path": "sids/GAMES/S-Z/Slapshot.sid",
+    "size": 4527,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NtYXJ0aWVfb25fdGhlX1RyaXAuc2lk",
+    "title": "Smartie on the Trip",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Smartie_on_the_Trip.sid",
+    "path": "sids/GAMES/S-Z/Smartie_on_the_Trip.sid",
+    "size": 966,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NtYXNoLnNpZA",
+    "title": "Smash",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Smash.sid",
+    "path": "sids/GAMES/S-Z/Smash.sid",
+    "size": 5698,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NtaXRoc19TdXBlcl9DaGFtcHMuc2lk",
+    "title": "Smiths Super Champs",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Smiths_Super_Champs.sid",
+    "path": "sids/GAMES/S-Z/Smiths_Super_Champs.sid",
+    "size": 1571,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NtcnRfTmVib19Tdm9ib2R1X0JBU0lDLnNpZA",
+    "title": "Smrt Nebo Svobodu BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Smrt_Nebo_Svobodu_BASIC.sid",
+    "path": "sids/GAMES/S-Z/Smrt_Nebo_Svobodu_BASIC.sid",
+    "size": 3361,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NtdWdnbGVyLnNpZA",
+    "title": "Smuggler",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Smuggler.sid",
+    "path": "sids/GAMES/S-Z/Smuggler.sid",
+    "size": 1366,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NuYWtlcy5zaWQ",
+    "title": "Snakes",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Snakes.sid",
+    "path": "sids/GAMES/S-Z/Snakes.sid",
+    "size": 814,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NuYXJlLnNpZA",
+    "title": "Snare",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Snare.sid",
+    "path": "sids/GAMES/S-Z/Snare.sid",
+    "size": 1382,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NuZWsuc2lk",
+    "title": "Snek",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Snek.sid",
+    "path": "sids/GAMES/S-Z/Snek.sid",
+    "size": 3031,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NOS192c19DQVBDT01fVjEuc2lk",
+    "title": "SNK vs CAPCOM V1",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "SNK_vs_CAPCOM_V1.sid",
+    "path": "sids/GAMES/S-Z/SNK_vs_CAPCOM_V1.sid",
+    "size": 45024,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1Nub2tpZS5zaWQ",
+    "title": "Snokie",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Snokie.sid",
+    "path": "sids/GAMES/S-Z/Snokie.sid",
+    "size": 2366,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1Nub29rZXIuc2lk",
+    "title": "Snooker",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Snooker.sid",
+    "path": "sids/GAMES/S-Z/Snooker.sid",
+    "size": 392,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1Nub29weV9QdXp6bGUuc2lk",
+    "title": "Snoopy Puzzle",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Snoopy_Puzzle.sid",
+    "path": "sids/GAMES/S-Z/Snoopy_Puzzle.sid",
+    "size": 414,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1Nub3dfUnVuLnNpZA",
+    "title": "Snow Run",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Snow_Run.sid",
+    "path": "sids/GAMES/S-Z/Snow_Run.sid",
+    "size": 251,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1Nub3dtYW5fTXJfRnJlZXplLnNpZA",
+    "title": "Snowman Mr Freeze",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Snowman_Mr_Freeze.sid",
+    "path": "sids/GAMES/S-Z/Snowman_Mr_Freeze.sid",
+    "size": 3990,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1Nub3dzdG9ybS5zaWQ",
+    "title": "Snowstorm",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Snowstorm.sid",
+    "path": "sids/GAMES/S-Z/Snowstorm.sid",
+    "size": 6644,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NvY2Nlcl9Cb3NzLnNpZA",
+    "title": "Soccer Boss",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Soccer_Boss.sid",
+    "path": "sids/GAMES/S-Z/Soccer_Boss.sid",
+    "size": 2304,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NvY2Nlcl9DaGFsbGVuZ2Uuc2lk",
+    "title": "Soccer Challenge",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Soccer_Challenge.sid",
+    "path": "sids/GAMES/S-Z/Soccer_Challenge.sid",
+    "size": 2914,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NvZnR3YXJlXzIwMDBfTG9nby5zaWQ",
+    "title": "Software 2000 Logo",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Software_2000_Logo.sid",
+    "path": "sids/GAMES/S-Z/Software_2000_Logo.sid",
+    "size": 4200,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NvbGRpZXJfb2ZfRm9ydHVuZS5zaWQ",
+    "title": "Soldier of Fortune",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Soldier_of_Fortune.sid",
+    "path": "sids/GAMES/S-Z/Soldier_of_Fortune.sid",
+    "size": 2215,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NvbGl0YWlyZS5zaWQ",
+    "title": "Solitaire",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Solitaire.sid",
+    "path": "sids/GAMES/S-Z/Solitaire.sid",
+    "size": 9451,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NvbGl0YWlyZV9CQVNJQy5zaWQ",
+    "title": "Solitaire BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Solitaire_BASIC.sid",
+    "path": "sids/GAMES/S-Z/Solitaire_BASIC.sid",
+    "size": 1292,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NvbGl0YXJpby1Dcm9zcy5zaWQ",
+    "title": "Solitario-Cross",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Solitario-Cross.sid",
+    "path": "sids/GAMES/S-Z/Solitario-Cross.sid",
+    "size": 3902,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NvcmNlcmVyc19BcHByZW50aWNlLnNpZA",
+    "title": "Sorcerers Apprentice",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Sorcerers_Apprentice.sid",
+    "path": "sids/GAMES/S-Z/Sorcerers_Apprentice.sid",
+    "size": 1694,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NvcmNlcnkuc2lk",
+    "title": "Sorcery",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Sorcery.sid",
+    "path": "sids/GAMES/S-Z/Sorcery.sid",
+    "size": 1417,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NwYWNlX0FjZS5zaWQ",
+    "title": "Space Ace",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Space_Ace.sid",
+    "path": "sids/GAMES/S-Z/Space_Ace.sid",
+    "size": 19722,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NwYWNlX0FjZV8yMTAxLnNpZA",
+    "title": "Space Ace 2101",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Space_Ace_2101.sid",
+    "path": "sids/GAMES/S-Z/Space_Ace_2101.sid",
+    "size": 823,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NwYWNlX0VzY2FwZS5zaWQ",
+    "title": "Space Escape",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Space_Escape.sid",
+    "path": "sids/GAMES/S-Z/Space_Escape.sid",
+    "size": 1104,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NwYWNlX0dhbWVfMTk5MC5zaWQ",
+    "title": "Space Game 1990",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Space_Game_1990.sid",
+    "path": "sids/GAMES/S-Z/Space_Game_1990.sid",
+    "size": 11346,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NwYWNlX0dhbWVfMjAyNC5zaWQ",
+    "title": "Space Game 2024",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Space_Game_2024.sid",
+    "path": "sids/GAMES/S-Z/Space_Game_2024.sid",
+    "size": 6888,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NwYWNlX1N0YXRpb25fMjMuc2lk",
+    "title": "Space Station 23",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Space_Station_23.sid",
+    "path": "sids/GAMES/S-Z/Space_Station_23.sid",
+    "size": 1812,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NwYWNlX1R1bm5lbC5zaWQ",
+    "title": "Space Tunnel",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Space_Tunnel.sid",
+    "path": "sids/GAMES/S-Z/Space_Tunnel.sid",
+    "size": 4249,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NwYWNlX1dhcnJpb3Iuc2lk",
+    "title": "Space Warrior",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Space_Warrior.sid",
+    "path": "sids/GAMES/S-Z/Space_Warrior.sid",
+    "size": 6068,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NwYWNlc2h1dHRsZV9CQVNJQy5zaWQ",
+    "title": "Spaceshuttle BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Spaceshuttle_BASIC.sid",
+    "path": "sids/GAMES/S-Z/Spaceshuttle_BASIC.sid",
+    "size": 852,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NwYWdoZXR0aV9XZXN0ZXJuX1NpbXVsYXRvci5zaWQ",
+    "title": "Spaghetti Western Simulator",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Spaghetti_Western_Simulator.sid",
+    "path": "sids/GAMES/S-Z/Spaghetti_Western_Simulator.sid",
+    "size": 5452,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NwYXJ0YWN1cy1UaGVfU3dvcmRzbGF5ZXIuc2lk",
+    "title": "Spartacus-The Swordslayer",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Spartacus-The_Swordslayer.sid",
+    "path": "sids/GAMES/S-Z/Spartacus-The_Swordslayer.sid",
+    "size": 4714,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NwZWNpYWxfRGVsaXZlcnkuc2lk",
+    "title": "Special Delivery",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Special_Delivery.sid",
+    "path": "sids/GAMES/S-Z/Special_Delivery.sid",
+    "size": 498,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NwZWVkX0tpbmcuc2lk",
+    "title": "Speed King",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Speed_King.sid",
+    "path": "sids/GAMES/S-Z/Speed_King.sid",
+    "size": 1374,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NwZWVkX01hemVfUmFiYml0LnNpZA",
+    "title": "Speed Maze Rabbit",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Speed_Maze_Rabbit.sid",
+    "path": "sids/GAMES/S-Z/Speed_Maze_Rabbit.sid",
+    "size": 2799,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NwZWVkX01hemVfUmFiYml0X1YxXzEuc2lk",
+    "title": "Speed Maze Rabbit V1 1",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Speed_Maze_Rabbit_V1_1.sid",
+    "path": "sids/GAMES/S-Z/Speed_Maze_Rabbit_V1_1.sid",
+    "size": 2844,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NwZWVkX1J1bWJsZXIuc2lk",
+    "title": "Speed Rumbler",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Speed_Rumbler.sid",
+    "path": "sids/GAMES/S-Z/Speed_Rumbler.sid",
+    "size": 8247,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NwZWxsX05vdy5zaWQ",
+    "title": "Spell Now",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Spell_Now.sid",
+    "path": "sids/GAMES/S-Z/Spell_Now.sid",
+    "size": 3390,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NwZWxsb29uLnNpZA",
+    "title": "Spelloon",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Spelloon.sid",
+    "path": "sids/GAMES/S-Z/Spelloon.sid",
+    "size": 291,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NwZWxsc2Vla2VyLnNpZA",
+    "title": "Spellseeker",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Spellseeker.sid",
+    "path": "sids/GAMES/S-Z/Spellseeker.sid",
+    "size": 1120,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NwZWx1bmtlci5zaWQ",
+    "title": "Spelunker",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Spelunker.sid",
+    "path": "sids/GAMES/S-Z/Spelunker.sid",
+    "size": 2983,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NwaGVyaXhfcHJldmlldy5zaWQ",
+    "title": "Spherix preview",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Spherix_preview.sid",
+    "path": "sids/GAMES/S-Z/Spherix_preview.sid",
+    "size": 10082,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NwaGVyb24uc2lk",
+    "title": "Spheron",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Spheron.sid",
+    "path": "sids/GAMES/S-Z/Spheron.sid",
+    "size": 4222,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NwaWtlX0JBU0lDLnNpZA",
+    "title": "Spike BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Spike_BASIC.sid",
+    "path": "sids/GAMES/S-Z/Spike_BASIC.sid",
+    "size": 3692,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NwaWtlX0M2NF9EaXNsaWtlLnNpZA",
+    "title": "Spike C64 Dislike",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Spike_C64_Dislike.sid",
+    "path": "sids/GAMES/S-Z/Spike_C64_Dislike.sid",
+    "size": 1988,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NwaWtlc19QZWFrLnNpZA",
+    "title": "Spikes Peak",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Spikes_Peak.sid",
+    "path": "sids/GAMES/S-Z/Spikes_Peak.sid",
+    "size": 1102,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1Nwb29rcy5zaWQ",
+    "title": "Spooks",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Spooks.sid",
+    "path": "sids/GAMES/S-Z/Spooks.sid",
+    "size": 1473,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1Nwb3J0aW5nX05ld3NfQmFzZWJhbGwuc2lk",
+    "title": "Sporting News Baseball",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Sporting_News_Baseball.sid",
+    "path": "sids/GAMES/S-Z/Sporting_News_Baseball.sid",
+    "size": 3486,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NweV9BZ2VudF9EZWF0aG1hdGNoX1ByZXZpZXcuc2lk",
+    "title": "Spy Agent Deathmatch Preview",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Spy_Agent_Deathmatch_Preview.sid",
+    "path": "sids/GAMES/S-Z/Spy_Agent_Deathmatch_Preview.sid",
+    "size": 3977,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NweV9IdW50ZXIuc2lk",
+    "title": "Spy Hunter",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Spy_Hunter.sid",
+    "path": "sids/GAMES/S-Z/Spy_Hunter.sid",
+    "size": 874,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NweV9TdHJpa2VzX0JhY2suc2lk",
+    "title": "Spy Strikes Back",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Spy_Strikes_Back.sid",
+    "path": "sids/GAMES/S-Z/Spy_Strikes_Back.sid",
+    "size": 4990,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NweXNfRGVtaXNlLnNpZA",
+    "title": "Spys Demise",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Spys_Demise.sid",
+    "path": "sids/GAMES/S-Z/Spys_Demise.sid",
+    "size": 3219,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NxdWl6X0JBU0lDLnNpZA",
+    "title": "Squiz BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Squiz_BASIC.sid",
+    "path": "sids/GAMES/S-Z/Squiz_BASIC.sid",
+    "size": 3642,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1N0YWNrXzY0X1NpbW9uX0JBU0lDLnNpZA",
+    "title": "Stack 64 Simon BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Stack_64_Simon_BASIC.sid",
+    "path": "sids/GAMES/S-Z/Stack_64_Simon_BASIC.sid",
+    "size": 2933,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1N0YW5kaW5nX1N0b25lcy5zaWQ",
+    "title": "Standing Stones",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Standing_Stones.sid",
+    "path": "sids/GAMES/S-Z/Standing_Stones.sid",
+    "size": 2188,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1N0YXJfQ3Jhc2guc2lk",
+    "title": "Star Crash",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Star_Crash.sid",
+    "path": "sids/GAMES/S-Z/Star_Crash.sid",
+    "size": 5059,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1N0YXJfUmFjZS5zaWQ",
+    "title": "Star Race",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Star_Race.sid",
+    "path": "sids/GAMES/S-Z/Star_Race.sid",
+    "size": 304,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1N0YXJfUmFpZGVyc19JSS5zaWQ",
+    "title": "Star Raiders II",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Star_Raiders_II.sid",
+    "path": "sids/GAMES/S-Z/Star_Raiders_II.sid",
+    "size": 1013,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1N0YXJfU2hpcF9FbnRyeV9CQVNJQy5zaWQ",
+    "title": "Star Ship Entry BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Star_Ship_Entry_BASIC.sid",
+    "path": "sids/GAMES/S-Z/Star_Ship_Entry_BASIC.sid",
+    "size": 606,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1N0YXJfU3Rvcm0uc2lk",
+    "title": "Star Storm",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Star_Storm.sid",
+    "path": "sids/GAMES/S-Z/Star_Storm.sid",
+    "size": 4743,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1N0YXJfVHJhZGVyLnNpZA",
+    "title": "Star Trader",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Star_Trader.sid",
+    "path": "sids/GAMES/S-Z/Star_Trader.sid",
+    "size": 2174,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1N0YXJfVHJvb3Blci5zaWQ",
+    "title": "Star Trooper",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Star_Trooper.sid",
+    "path": "sids/GAMES/S-Z/Star_Trooper.sid",
+    "size": 2206,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1N0YXJmbGlnaHQuc2lk",
+    "title": "Starflight",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Starflight.sid",
+    "path": "sids/GAMES/S-Z/Starflight.sid",
+    "size": 12614,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1N0YXJxdWFrZS5zaWQ",
+    "title": "Starquake",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Starquake.sid",
+    "path": "sids/GAMES/S-Z/Starquake.sid",
+    "size": 3853,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1N0YXJzYXQuc2lk",
+    "title": "Starsat",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Starsat.sid",
+    "path": "sids/GAMES/S-Z/Starsat.sid",
+    "size": 5022,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1N0YXJzaGlwX0FuZHJvbWVkYS5zaWQ",
+    "title": "Starship Andromeda",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Starship_Andromeda.sid",
+    "path": "sids/GAMES/S-Z/Starship_Andromeda.sid",
+    "size": 3326,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1N0ZWFsdGguc2lk",
+    "title": "Stealth",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Stealth.sid",
+    "path": "sids/GAMES/S-Z/Stealth.sid",
+    "size": 794,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1N0ZWVsX0hlcm9zLnNpZA",
+    "title": "Steel Heros",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Steel_Heros.sid",
+    "path": "sids/GAMES/S-Z/Steel_Heros.sid",
+    "size": 2485,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1N0ZWluc2NobGFnX0JBU0lDLnNpZA",
+    "title": "Steinschlag BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Steinschlag_BASIC.sid",
+    "path": "sids/GAMES/S-Z/Steinschlag_BASIC.sid",
+    "size": 1212,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1N0ZXZlX0RhdmlzX1Nub29rZXIuc2lk",
+    "title": "Steve Davis Snooker",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Steve_Davis_Snooker.sid",
+    "path": "sids/GAMES/S-Z/Steve_Davis_Snooker.sid",
+    "size": 1513,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1N0b2NrX25fQm9uZHMuc2lk",
+    "title": "Stock n Bonds",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Stock_n_Bonds.sid",
+    "path": "sids/GAMES/S-Z/Stock_n_Bonds.sid",
+    "size": 11346,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1N0b2NrYWRlLnNpZA",
+    "title": "Stockade",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Stockade.sid",
+    "path": "sids/GAMES/S-Z/Stockade.sid",
+    "size": 550,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1N0b2NrZXIuc2lk",
+    "title": "Stocker",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Stocker.sid",
+    "path": "sids/GAMES/S-Z/Stocker.sid",
+    "size": 2439,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1N0b3JtX1dhcnJpb3Iuc2lk",
+    "title": "Storm Warrior",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Storm_Warrior.sid",
+    "path": "sids/GAMES/S-Z/Storm_Warrior.sid",
+    "size": 7209,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1N0b3JtX1dhcnJpb3JfbG9hZGVyLnNpZA",
+    "title": "Storm Warrior loader",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Storm_Warrior_loader.sid",
+    "path": "sids/GAMES/S-Z/Storm_Warrior_loader.sid",
+    "size": 2968,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1N0cmFuZ2Vsb29wLnNpZA",
+    "title": "Strangeloop",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Strangeloop.sid",
+    "path": "sids/GAMES/S-Z/Strangeloop.sid",
+    "size": 1687,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1N0cmVldF9GaWdodGVyLnNpZA",
+    "title": "Street Fighter",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Street_Fighter.sid",
+    "path": "sids/GAMES/S-Z/Street_Fighter.sid",
+    "size": 3070,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1N0cmVldF9GaWdodGVyX1VTQV9WZXJzaW9uLnNpZA",
+    "title": "Street Fighter USA Version",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Street_Fighter_USA_Version.sid",
+    "path": "sids/GAMES/S-Z/Street_Fighter_USA_Version.sid",
+    "size": 7479,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1N0cmVldF9Sb2Quc2lk",
+    "title": "Street Rod",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Street_Rod.sid",
+    "path": "sids/GAMES/S-Z/Street_Rod.sid",
+    "size": 10089,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1N0cmVldF9TcG9ydHNfQmFzZWJhbGwuc2lk",
+    "title": "Street Sports Baseball",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Street_Sports_Baseball.sid",
+    "path": "sids/GAMES/S-Z/Street_Sports_Baseball.sid",
+    "size": 1737,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1N0cmVldF9TcG9ydHNfQmFza2V0YmFsbC5zaWQ",
+    "title": "Street Sports Basketball",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Street_Sports_Basketball.sid",
+    "path": "sids/GAMES/S-Z/Street_Sports_Basketball.sid",
+    "size": 3238,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1N0cmVldF9TcG9ydHNfRm9vdGJhbGwuc2lk",
+    "title": "Street Sports Football",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Street_Sports_Football.sid",
+    "path": "sids/GAMES/S-Z/Street_Sports_Football.sid",
+    "size": 4650,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1N0cmVldF9TcG9ydHNfU29jY2VyLnNpZA",
+    "title": "Street Sports Soccer",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Street_Sports_Soccer.sid",
+    "path": "sids/GAMES/S-Z/Street_Sports_Soccer.sid",
+    "size": 3463,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1N0cmlrZV9GbGVldC5zaWQ",
+    "title": "Strike Fleet",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Strike_Fleet.sid",
+    "path": "sids/GAMES/S-Z/Strike_Fleet.sid",
+    "size": 3310,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1N0cmlrZV9Gb3JjZV9IYXJyaWVyLnNpZA",
+    "title": "Strike Force Harrier",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Strike_Force_Harrier.sid",
+    "path": "sids/GAMES/S-Z/Strike_Force_Harrier.sid",
+    "size": 4818,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1N0cmluZ2VyLnNpZA",
+    "title": "Stringer",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Stringer.sid",
+    "path": "sids/GAMES/S-Z/Stringer.sid",
+    "size": 1345,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1N0cmlwX1Bva2VyX0JBU0lDLnNpZA",
+    "title": "Strip Poker BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Strip_Poker_BASIC.sid",
+    "path": "sids/GAMES/S-Z/Strip_Poker_BASIC.sid",
+    "size": 3612,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1N0cm9rZXIuc2lk",
+    "title": "Stroker",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Stroker.sid",
+    "path": "sids/GAMES/S-Z/Stroker.sid",
+    "size": 1656,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1N0cnlrZXJfaW5fdGhlX0NyeXB0c19vZl9Ucm9nYW4uc2lk",
+    "title": "Stryker in the Crypts of Trogan",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Stryker_in_the_Crypts_of_Trogan.sid",
+    "path": "sids/GAMES/S-Z/Stryker_in_the_Crypts_of_Trogan.sid",
+    "size": 5523,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1N0dW50X0Jpa2Uuc2lk",
+    "title": "Stunt Bike",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Stunt_Bike.sid",
+    "path": "sids/GAMES/S-Z/Stunt_Bike.sid",
+    "size": 638,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1N1Yl9IdW50LnNpZA",
+    "title": "Sub Hunt",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Sub_Hunt.sid",
+    "path": "sids/GAMES/S-Z/Sub_Hunt.sid",
+    "size": 546,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1N1Ym1hcmluZV9SZXNjdWUuc2lk",
+    "title": "Submarine Rescue",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Submarine_Rescue.sid",
+    "path": "sids/GAMES/S-Z/Submarine_Rescue.sid",
+    "size": 1120,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1N1aWNpZGVfUnVuLnNpZA",
+    "title": "Suicide Run",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Suicide_Run.sid",
+    "path": "sids/GAMES/S-Z/Suicide_Run.sid",
+    "size": 1214,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1N1aWNpZGVfVm95YWdlLnNpZA",
+    "title": "Suicide Voyage",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Suicide_Voyage.sid",
+    "path": "sids/GAMES/S-Z/Suicide_Voyage.sid",
+    "size": 2395,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1N1bW1lcl9HYW1lcy5zaWQ",
+    "title": "Summer Games",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Summer_Games.sid",
+    "path": "sids/GAMES/S-Z/Summer_Games.sid",
+    "size": 4776,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1N1bm55X1NoaW5lLnNpZA",
+    "title": "Sunny Shine",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Sunny_Shine.sid",
+    "path": "sids/GAMES/S-Z/Sunny_Shine.sid",
+    "size": 21836,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1N1cGVyX0dhbGF4aWUuc2lk",
+    "title": "Super Galaxie",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Super_Galaxie.sid",
+    "path": "sids/GAMES/S-Z/Super_Galaxie.sid",
+    "size": 754,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1N1cGVyX01hcmlvX0Jyb3NfNjQuc2lk",
+    "title": "Super Mario Bros 64",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Super_Mario_Bros_64.sid",
+    "path": "sids/GAMES/S-Z/Super_Mario_Bros_64.sid",
+    "size": 7054,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1N1cGVyX01hcmlvX0Jyb3NfNjRfMlNJRC5zaWQ",
+    "title": "Super Mario Bros 64 2SID",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Super_Mario_Bros_64_2SID.sid",
+    "path": "sids/GAMES/S-Z/Super_Mario_Bros_64_2SID.sid",
+    "size": 7054,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1N1cGVyX1JpZGVyLnNpZA",
+    "title": "Super Rider",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Super_Rider.sid",
+    "path": "sids/GAMES/S-Z/Super_Rider.sid",
+    "size": 4278,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1N1cGVyX1NwcmludC5zaWQ",
+    "title": "Super Sprint",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Super_Sprint.sid",
+    "path": "sids/GAMES/S-Z/Super_Sprint.sid",
+    "size": 3292,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1N1cGVyX1RhY3Quc2lk",
+    "title": "Super Tact",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Super_Tact.sid",
+    "path": "sids/GAMES/S-Z/Super_Tact.sid",
+    "size": 4706,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1N1cGVyX1pheHhvbi5zaWQ",
+    "title": "Super Zaxxon",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Super_Zaxxon.sid",
+    "path": "sids/GAMES/S-Z/Super_Zaxxon.sid",
+    "size": 4110,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1N1cGVybWFuLVRoZV9HYW1lLnNpZA",
+    "title": "Superman-The Game",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Superman-The_Game.sid",
+    "path": "sids/GAMES/S-Z/Superman-The_Game.sid",
+    "size": 2375,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1N1cGVydGFua19CQVNJQy5zaWQ",
+    "title": "Supertank BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Supertank_BASIC.sid",
+    "path": "sids/GAMES/S-Z/Supertank_BASIC.sid",
+    "size": 2350,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1N1cmZjaGFtcC5zaWQ",
+    "title": "Surfchamp",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Surfchamp.sid",
+    "path": "sids/GAMES/S-Z/Surfchamp.sid",
+    "size": 1349,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1N1cnZpdm9yLnNpZA",
+    "title": "Survivor",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Survivor.sid",
+    "path": "sids/GAMES/S-Z/Survivor.sid",
+    "size": 682,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1N3YXJtLnNpZA",
+    "title": "Swarm",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Swarm.sid",
+    "path": "sids/GAMES/S-Z/Swarm.sid",
+    "size": 2268,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1N3b29wLnNpZA",
+    "title": "Swoop",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Swoop.sid",
+    "path": "sids/GAMES/S-Z/Swoop.sid",
+    "size": 1692,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1N3b3JkX29mX0ZhcmdvYWxfQkFTSUMuc2lk",
+    "title": "Sword of Fargoal BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Sword_of_Fargoal_BASIC.sid",
+    "path": "sids/GAMES/S-Z/Sword_of_Fargoal_BASIC.sid",
+    "size": 4297,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1N3b3JkX29mX0thZGFzaC5zaWQ",
+    "title": "Sword of Kadash",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Sword_of_Kadash.sid",
+    "path": "sids/GAMES/S-Z/Sword_of_Kadash.sid",
+    "size": 1298,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1N5bnRheC5zaWQ",
+    "title": "Syntax",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Syntax.sid",
+    "path": "sids/GAMES/S-Z/Syntax.sid",
+    "size": 6910,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1N5c3RlbS5zaWQ",
+    "title": "System",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "System.sid",
+    "path": "sids/GAMES/S-Z/System.sid",
+    "size": 5321,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1N5c3RlbV82NTU5NV9CQVNJQy5zaWQ",
+    "title": "System 65595 BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "System_65595_BASIC.sid",
+    "path": "sids/GAMES/S-Z/System_65595_BASIC.sid",
+    "size": 1605,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1QtUmV4XzY0LnNpZA",
+    "title": "T-Rex 64",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "T-Rex_64.sid",
+    "path": "sids/GAMES/S-Z/T-Rex_64.sid",
+    "size": 2527,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1QtUmV4XzY0X1ByZXZpZXcuc2lk",
+    "title": "T-Rex 64 Preview",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "T-Rex_64_Preview.sid",
+    "path": "sids/GAMES/S-Z/T-Rex_64_Preview.sid",
+    "size": 2017,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1RhZy5zaWQ",
+    "title": "Tag",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Tag.sid",
+    "path": "sids/GAMES/S-Z/Tag.sid",
+    "size": 2468,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1RhZ19UZWFtX1dyZXN0bGluZy5zaWQ",
+    "title": "Tag Team Wrestling",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Tag_Team_Wrestling.sid",
+    "path": "sids/GAMES/S-Z/Tag_Team_Wrestling.sid",
+    "size": 2769,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1Rha2VfRG93bi5zaWQ",
+    "title": "Take Down",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Take_Down.sid",
+    "path": "sids/GAMES/S-Z/Take_Down.sid",
+    "size": 9854,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1RhbGVzX29mX3RoZV9DYXQuc2lk",
+    "title": "Tales of the Cat",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Tales_of_the_Cat.sid",
+    "path": "sids/GAMES/S-Z/Tales_of_the_Cat.sid",
+    "size": 3161,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1RhbGtpbmdfVGVhY2hlci5zaWQ",
+    "title": "Talking Teacher",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Talking_Teacher.sid",
+    "path": "sids/GAMES/S-Z/Talking_Teacher.sid",
+    "size": 5724,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1Rhbmsuc2lk",
+    "title": "Tank",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Tank.sid",
+    "path": "sids/GAMES/S-Z/Tank.sid",
+    "size": 2965,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1RhbmtfRGl2aXNpb24uc2lk",
+    "title": "Tank Division",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Tank_Division.sid",
+    "path": "sids/GAMES/S-Z/Tank_Division.sid",
+    "size": 3361,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1RhbmtfRmlnaHQuc2lk",
+    "title": "Tank Fight",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Tank_Fight.sid",
+    "path": "sids/GAMES/S-Z/Tank_Fight.sid",
+    "size": 3246,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1RhbmtfV2FyX0NvbnN0cnVjdGlvbl9TZXQuc2lk",
+    "title": "Tank War Construction Set",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Tank_War_Construction_Set.sid",
+    "path": "sids/GAMES/S-Z/Tank_War_Construction_Set.sid",
+    "size": 829,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1RhcHBlci5zaWQ",
+    "title": "Tapper",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Tapper.sid",
+    "path": "sids/GAMES/S-Z/Tapper.sid",
+    "size": 1311,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1Rhcmdvbi02NC5zaWQ",
+    "title": "Targon-64",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Targon-64.sid",
+    "path": "sids/GAMES/S-Z/Targon-64.sid",
+    "size": 3386,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1Rhc2tfSUlJLnNpZA",
+    "title": "Task III",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Task_III.sid",
+    "path": "sids/GAMES/S-Z/Task_III.sid",
+    "size": 6531,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1Rhc2stRi5zaWQ",
+    "title": "Task-F",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Task-F.sid",
+    "path": "sids/GAMES/S-Z/Task-F.sid",
+    "size": 4222,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1RhdV9aZXJvLnNpZA",
+    "title": "Tau Zero",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Tau_Zero.sid",
+    "path": "sids/GAMES/S-Z/Tau_Zero.sid",
+    "size": 2201,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1Rhenouc2lk",
+    "title": "Tazz",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Tazz.sid",
+    "path": "sids/GAMES/S-Z/Tazz.sid",
+    "size": 1480,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1RlYWNoZXJidXN0ZXJzLnNpZA",
+    "title": "Teacherbusters",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Teacherbusters.sid",
+    "path": "sids/GAMES/S-Z/Teacherbusters.sid",
+    "size": 2219,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1RlbGVuZ2FyZF9CQVNJQy5zaWQ",
+    "title": "Telengard BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Telengard_BASIC.sid",
+    "path": "sids/GAMES/S-Z/Telengard_BASIC.sid",
+    "size": 3191,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1RlbXBsZV9vZl9BcHNoYWkuc2lk",
+    "title": "Temple of Apshai",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Temple_of_Apshai.sid",
+    "path": "sids/GAMES/S-Z/Temple_of_Apshai.sid",
+    "size": 2262,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1RlbXBsZV9vZl9BcHNoYWlfVHJpbG9neS5zaWQ",
+    "title": "Temple of Apshai Trilogy",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Temple_of_Apshai_Trilogy.sid",
+    "path": "sids/GAMES/S-Z/Temple_of_Apshai_Trilogy.sid",
+    "size": 10294,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1Rlbm5pc19CQVNJQy5zaWQ",
+    "title": "Tennis BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Tennis_BASIC.sid",
+    "path": "sids/GAMES/S-Z/Tennis_BASIC.sid",
+    "size": 732,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1RlcnJpYmxlX1R3aW5zX0JBU0lDLnNpZA",
+    "title": "Terrible Twins BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Terrible_Twins_BASIC.sid",
+    "path": "sids/GAMES/S-Z/Terrible_Twins_BASIC.sid",
+    "size": 1337,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1RlcnJvcl9vZl90aGVfRGVlcC5zaWQ",
+    "title": "Terror of the Deep",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Terror_of_the_Deep.sid",
+    "path": "sids/GAMES/S-Z/Terror_of_the_Deep.sid",
+    "size": 1723,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1Rlc3RfQkFTSUMuc2lk",
+    "title": "Test BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Test_BASIC.sid",
+    "path": "sids/GAMES/S-Z/Test_BASIC.sid",
+    "size": 627,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1Rlc3RfRHJpdmUuc2lk",
+    "title": "Test Drive",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Test_Drive.sid",
+    "path": "sids/GAMES/S-Z/Test_Drive.sid",
+    "size": 4534,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1RldGhlcl9UZXJyYWluX0JBU0lDLnNpZA",
+    "title": "Tether Terrain BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Tether_Terrain_BASIC.sid",
+    "path": "sids/GAMES/S-Z/Tether_Terrain_BASIC.sid",
+    "size": 1501,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1RldHJvaWQuc2lk",
+    "title": "Tetroid",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Tetroid.sid",
+    "path": "sids/GAMES/S-Z/Tetroid.sid",
+    "size": 4065,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1RoaW5rX0JBU0lDLnNpZA",
+    "title": "Think BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Think_BASIC.sid",
+    "path": "sids/GAMES/S-Z/Think_BASIC.sid",
+    "size": 2005,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1RoaW5rX1R3aWNlX3ByZXZpZXcuc2lk",
+    "title": "Think Twice preview",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Think_Twice_preview.sid",
+    "path": "sids/GAMES/S-Z/Think_Twice_preview.sid",
+    "size": 1673,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1Rocm91Z2hfdGhlX1RyYXBfRG9vci5zaWQ",
+    "title": "Through the Trap Door",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Through_the_Trap_Door.sid",
+    "path": "sids/GAMES/S-Z/Through_the_Trap_Door.sid",
+    "size": 4610,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1RocnVzdF9JSS5zaWQ",
+    "title": "Thrust II",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Thrust_II.sid",
+    "path": "sids/GAMES/S-Z/Thrust_II.sid",
+    "size": 7886,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1RodW5kZXJfQmxhZGUuc2lk",
+    "title": "Thunder Blade",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Thunder_Blade.sid",
+    "path": "sids/GAMES/S-Z/Thunder_Blade.sid",
+    "size": 4484,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1RpbHQuc2lk",
+    "title": "Tilt",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Tilt.sid",
+    "path": "sids/GAMES/S-Z/Tilt.sid",
+    "size": 4261,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1RpbWVfQ3J5c3RhbF9wcmV2aWV3LnNpZA",
+    "title": "Time Crystal preview",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Time_Crystal_preview.sid",
+    "path": "sids/GAMES/S-Z/Time_Crystal_preview.sid",
+    "size": 3685,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1RpbWVfUHV6emxlLnNpZA",
+    "title": "Time Puzzle",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Time_Puzzle.sid",
+    "path": "sids/GAMES/S-Z/Time_Puzzle.sid",
+    "size": 14264,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1RpbWVfUnVubmVyLnNpZA",
+    "title": "Time Runner",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Time_Runner.sid",
+    "path": "sids/GAMES/S-Z/Time_Runner.sid",
+    "size": 1880,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1RpbWVfVHVubmVsLnNpZA",
+    "title": "Time Tunnel",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Time_Tunnel.sid",
+    "path": "sids/GAMES/S-Z/Time_Tunnel.sid",
+    "size": 3110,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1RpbWVfWmVyby5zaWQ",
+    "title": "Time Zero",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Time_Zero.sid",
+    "path": "sids/GAMES/S-Z/Time_Zero.sid",
+    "size": 2894,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1RpbWV6b25lLnNpZA",
+    "title": "Timezone",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Timezone.sid",
+    "path": "sids/GAMES/S-Z/Timezone.sid",
+    "size": 4478,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1RpdGFuaWMtVGhlX0FkdmVudHVyZV9CZWdpbnMuc2lk",
+    "title": "Titanic-The Adventure Begins",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Titanic-The_Adventure_Begins.sid",
+    "path": "sids/GAMES/S-Z/Titanic-The_Adventure_Begins.sid",
+    "size": 1408,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1RpdGFucy5zaWQ",
+    "title": "Titans",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Titans.sid",
+    "path": "sids/GAMES/S-Z/Titans.sid",
+    "size": 951,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1RvY2NhdGEuc2lk",
+    "title": "Toccata",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Toccata.sid",
+    "path": "sids/GAMES/S-Z/Toccata.sid",
+    "size": 946,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1RvbHRla2Euc2lk",
+    "title": "Tolteka",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Tolteka.sid",
+    "path": "sids/GAMES/S-Z/Tolteka.sid",
+    "size": 4399,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1RvbWJfb2ZfdGhlX1BoYXJhby5zaWQ",
+    "title": "Tomb of the Pharao",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Tomb_of_the_Pharao.sid",
+    "path": "sids/GAMES/S-Z/Tomb_of_the_Pharao.sid",
+    "size": 865,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1RvbnRpLnNpZA",
+    "title": "Tonti",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Tonti.sid",
+    "path": "sids/GAMES/S-Z/Tonti.sid",
+    "size": 885,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1Rvb3RoX0ludmFkZXJzLnNpZA",
+    "title": "Tooth Invaders",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Tooth_Invaders.sid",
+    "path": "sids/GAMES/S-Z/Tooth_Invaders.sid",
+    "size": 2430,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1RvcHBlcl90aGVfQ29wcGVyLnNpZA",
+    "title": "Topper the Copper",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Topper_the_Copper.sid",
+    "path": "sids/GAMES/S-Z/Topper_the_Copper.sid",
+    "size": 1395,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1RvdXJfZGVfRXVyb3BlLnNpZA",
+    "title": "Tour de Europe",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Tour_de_Europe.sid",
+    "path": "sids/GAMES/S-Z/Tour_de_Europe.sid",
+    "size": 502,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1RvdXJfZGVfRnJhbmNlLnNpZA",
+    "title": "Tour de France",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Tour_de_France.sid",
+    "path": "sids/GAMES/S-Z/Tour_de_France.sid",
+    "size": 12670,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1Rvd2VyLnNpZA",
+    "title": "Tower",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Tower.sid",
+    "path": "sids/GAMES/S-Z/Tower.sid",
+    "size": 615,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1Rvd24tUmVzY3VlX0JBU0lDLnNpZA",
+    "title": "Town-Rescue BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Town-Rescue_BASIC.sid",
+    "path": "sids/GAMES/S-Z/Town-Rescue_BASIC.sid",
+    "size": 565,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1RveXouc2lk",
+    "title": "Toyz",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Toyz.sid",
+    "path": "sids/GAMES/S-Z/Toyz.sid",
+    "size": 6729,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1RyYWNrX2FuZF9GaWVsZF8xOTg0LnNpZA",
+    "title": "Track and Field 1984",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Track_and_Field_1984.sid",
+    "path": "sids/GAMES/S-Z/Track_and_Field_1984.sid",
+    "size": 1916,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1RyYWNrX2FuZF9GaWVsZF8xOTg3LnNpZA",
+    "title": "Track and Field 1987",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Track_and_Field_1987.sid",
+    "path": "sids/GAMES/S-Z/Track_and_Field_1987.sid",
+    "size": 3454,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1RyYWZmaWMuc2lk",
+    "title": "Traffic",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Traffic.sid",
+    "path": "sids/GAMES/S-Z/Traffic.sid",
+    "size": 4205,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1RyYWZmaWNfSmFtX0JBU0lDLnNpZA",
+    "title": "Traffic Jam BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Traffic_Jam_BASIC.sid",
+    "path": "sids/GAMES/S-Z/Traffic_Jam_BASIC.sid",
+    "size": 1492,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1RyYWlsX1dlc3RfQkFTSUMuc2lk",
+    "title": "Trail West BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Trail_West_BASIC.sid",
+    "path": "sids/GAMES/S-Z/Trail_West_BASIC.sid",
+    "size": 1272,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1RyYWlucy5zaWQ",
+    "title": "Trains",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Trains.sid",
+    "path": "sids/GAMES/S-Z/Trains.sid",
+    "size": 11049,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1RyZWFkX0JlYXIuc2lk",
+    "title": "Tread Bear",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Tread_Bear.sid",
+    "path": "sids/GAMES/S-Z/Tread_Bear.sid",
+    "size": 3547,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1RyZWFzdXJlX0h1bnQuc2lk",
+    "title": "Treasure Hunt",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Treasure_Hunt.sid",
+    "path": "sids/GAMES/S-Z/Treasure_Hunt.sid",
+    "size": 1322,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1RyZWFzdXJlX0lzbGFuZC5zaWQ",
+    "title": "Treasure Island",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Treasure_Island.sid",
+    "path": "sids/GAMES/S-Z/Treasure_Island.sid",
+    "size": 2346,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1RyZWFzdXJlc19vZl9SYS5zaWQ",
+    "title": "Treasures of Ra",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Treasures_of_Ra.sid",
+    "path": "sids/GAMES/S-Z/Treasures_of_Ra.sid",
+    "size": 627,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1RyZW5lci5zaWQ",
+    "title": "Trener",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Trener.sid",
+    "path": "sids/GAMES/S-Z/Trener.sid",
+    "size": 438,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1RyaWFkLnNpZA",
+    "title": "Triad",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Triad.sid",
+    "path": "sids/GAMES/S-Z/Triad.sid",
+    "size": 1687,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1RyaWFuZ28uc2lk",
+    "title": "Triango",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Triango.sid",
+    "path": "sids/GAMES/S-Z/Triango.sid",
+    "size": 1769,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1RyaWNrbHlfQkFTSUMuc2lk",
+    "title": "Trickly BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Trickly_BASIC.sid",
+    "path": "sids/GAMES/S-Z/Trickly_BASIC.sid",
+    "size": 2251,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1RyaXZpYV9VSy5zaWQ",
+    "title": "Trivia UK",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Trivia_UK.sid",
+    "path": "sids/GAMES/S-Z/Trivia_UK.sid",
+    "size": 1918,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1RyaXZpYV92Ml8wLnNpZA",
+    "title": "Trivia v2 0",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Trivia_v2_0.sid",
+    "path": "sids/GAMES/S-Z/Trivia_v2_0.sid",
+    "size": 3966,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1Ryb2xsc19hbmRfVHJpYnVsYXRpb25zLnNpZA",
+    "title": "Trolls and Tribulations",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Trolls_and_Tribulations.sid",
+    "path": "sids/GAMES/S-Z/Trolls_and_Tribulations.sid",
+    "size": 6579,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1Ryb25fQkFTSUMuc2lk",
+    "title": "Tron BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Tron_BASIC.sid",
+    "path": "sids/GAMES/S-Z/Tron_BASIC.sid",
+    "size": 2677,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1Ryb25fQ29uc3RydWN0aW9uX1NldC5zaWQ",
+    "title": "Tron Construction Set",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Tron_Construction_Set.sid",
+    "path": "sids/GAMES/S-Z/Tron_Construction_Set.sid",
+    "size": 324,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1Ryb29wZXJfVHJ1Y2suc2lk",
+    "title": "Trooper Truck",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Trooper_Truck.sid",
+    "path": "sids/GAMES/S-Z/Trooper_Truck.sid",
+    "size": 776,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1Ryb3VibGVfQnViYmxlLnNpZA",
+    "title": "Trouble Bubble",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Trouble_Bubble.sid",
+    "path": "sids/GAMES/S-Z/Trouble_Bubble.sid",
+    "size": 4294,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1RydWNraW5nX1VTQV9CQVNJQy5zaWQ",
+    "title": "Trucking USA BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Trucking_USA_BASIC.sid",
+    "path": "sids/GAMES/S-Z/Trucking_USA_BASIC.sid",
+    "size": 2409,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1R1bm5lbF9vZl9Eb29tLnNpZA",
+    "title": "Tunnel of Doom",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Tunnel_of_Doom.sid",
+    "path": "sids/GAMES/S-Z/Tunnel_of_Doom.sid",
+    "size": 1334,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1R1bm5lbF9vZl90aGVfQmlyZHMuc2lk",
+    "title": "Tunnel of the Birds",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Tunnel_of_the_Birds.sid",
+    "path": "sids/GAMES/S-Z/Tunnel_of_the_Birds.sid",
+    "size": 2416,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1R1bm5lbF9WaXNpb24uc2lk",
+    "title": "Tunnel Vision",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Tunnel_Vision.sid",
+    "path": "sids/GAMES/S-Z/Tunnel_Vision.sid",
+    "size": 23738,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1R1cmJvX0VzcHJpdC5zaWQ",
+    "title": "Turbo Esprit",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Turbo_Esprit.sid",
+    "path": "sids/GAMES/S-Z/Turbo_Esprit.sid",
+    "size": 1270,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1R1cmJvX0thcnRfUmFjZXIuc2lk",
+    "title": "Turbo Kart Racer",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Turbo_Kart_Racer.sid",
+    "path": "sids/GAMES/S-Z/Turbo_Kart_Racer.sid",
+    "size": 4653,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1R3aW5reV9Hb2VzX0hpa2luZy5zaWQ",
+    "title": "Twinky Goes Hiking",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Twinky_Goes_Hiking.sid",
+    "path": "sids/GAMES/S-Z/Twinky_Goes_Hiking.sid",
+    "size": 2782,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1R3b190b19PbmUuc2lk",
+    "title": "Two to One",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Two_to_One.sid",
+    "path": "sids/GAMES/S-Z/Two_to_One.sid",
+    "size": 7598,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1VfU19MLnNpZA",
+    "title": "U S L",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "U_S_L.sid",
+    "path": "sids/GAMES/S-Z/U_S_L.sid",
+    "size": 2046,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1VGRi5zaWQ",
+    "title": "UFF",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "UFF.sid",
+    "path": "sids/GAMES/S-Z/UFF.sid",
+    "size": 5223,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1VGT19Bbm4uc2lk",
+    "title": "UFO Ann",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "UFO_Ann.sid",
+    "path": "sids/GAMES/S-Z/UFO_Ann.sid",
+    "size": 1304,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1VGT19JX0JBU0lDLnNpZA",
+    "title": "UFO I BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "UFO_I_BASIC.sid",
+    "path": "sids/GAMES/S-Z/UFO_I_BASIC.sid",
+    "size": 617,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1VGT19JSV9CQVNJQy5zaWQ",
+    "title": "UFO II BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "UFO_II_BASIC.sid",
+    "path": "sids/GAMES/S-Z/UFO_II_BASIC.sid",
+    "size": 771,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1VGT19TdHJpa2Uuc2lk",
+    "title": "UFO Strike",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "UFO_Strike.sid",
+    "path": "sids/GAMES/S-Z/UFO_Strike.sid",
+    "size": 447,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1VnaC5zaWQ",
+    "title": "Ugh",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Ugh.sid",
+    "path": "sids/GAMES/S-Z/Ugh.sid",
+    "size": 8781,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1VqX1ZhZG55dWdhdC5zaWQ",
+    "title": "Uj Vadnyugat",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Uj_Vadnyugat.sid",
+    "path": "sids/GAMES/S-Z/Uj_Vadnyugat.sid",
+    "size": 3016,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1VOX1NxdWFkcm9uLnNpZA",
+    "title": "UN Squadron",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "UN_Squadron.sid",
+    "path": "sids/GAMES/S-Z/UN_Squadron.sid",
+    "size": 4235,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1VuZGVyZ3JvdW5kLnNpZA",
+    "title": "Underground",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Underground.sid",
+    "path": "sids/GAMES/S-Z/Underground.sid",
+    "size": 2726,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1VuZGVyZ3JvdW5kX1pvbmUuc2lk",
+    "title": "Underground Zone",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Underground_Zone.sid",
+    "path": "sids/GAMES/S-Z/Underground_Zone.sid",
+    "size": 3454,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1VuZGVyd3VybGRlLnNpZA",
+    "title": "Underwurlde",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Underwurlde.sid",
+    "path": "sids/GAMES/S-Z/Underwurlde.sid",
+    "size": 2814,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1VuaW52aXRlZC5zaWQ",
+    "title": "Uninvited",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Uninvited.sid",
+    "path": "sids/GAMES/S-Z/Uninvited.sid",
+    "size": 869,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1VuaXRlZF9TdGF0ZXNfQWR2ZW50dXJlLnNpZA",
+    "title": "United States Adventure",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "United_States_Adventure.sid",
+    "path": "sids/GAMES/S-Z/United_States_Adventure.sid",
+    "size": 1881,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1VwX25fRG93bi5zaWQ",
+    "title": "Up n Down",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Up_n_Down.sid",
+    "path": "sids/GAMES/S-Z/Up_n_Down.sid",
+    "size": 1749,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1VwX25fU2hvb3Quc2lk",
+    "title": "Up n Shoot",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Up_n_Shoot.sid",
+    "path": "sids/GAMES/S-Z/Up_n_Shoot.sid",
+    "size": 566,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1VyYWwuc2lk",
+    "title": "Ural",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Ural.sid",
+    "path": "sids/GAMES/S-Z/Ural.sid",
+    "size": 19769,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1ZhZ2VyXzMuc2lk",
+    "title": "Vager 3",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Vager_3.sid",
+    "path": "sids/GAMES/S-Z/Vager_3.sid",
+    "size": 1665,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1ZhbGt5cmllXzE3LnNpZA",
+    "title": "Valkyrie 17",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Valkyrie_17.sid",
+    "path": "sids/GAMES/S-Z/Valkyrie_17.sid",
+    "size": 2834,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1ZhcmRhbi5zaWQ",
+    "title": "Vardan",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Vardan.sid",
+    "path": "sids/GAMES/S-Z/Vardan.sid",
+    "size": 6415,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1ZlZ2FzX0Nhc2lub18yLnNpZA",
+    "title": "Vegas Casino 2",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Vegas_Casino_2.sid",
+    "path": "sids/GAMES/S-Z/Vegas_Casino_2.sid",
+    "size": 824,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1ZlbmRldHRhLnNpZA",
+    "title": "Vendetta",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Vendetta.sid",
+    "path": "sids/GAMES/S-Z/Vendetta.sid",
+    "size": 11547,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1ZpY3RvcnlfUm9hZC5zaWQ",
+    "title": "Victory Road",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Victory_Road.sid",
+    "path": "sids/GAMES/S-Z/Victory_Road.sid",
+    "size": 2566,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1ZpZGVvX0RhcnRzLnNpZA",
+    "title": "Video Darts",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Video_Darts.sid",
+    "path": "sids/GAMES/S-Z/Video_Darts.sid",
+    "size": 558,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1ZpZXJfaW5fZWluZXJfUmVpaGUuc2lk",
+    "title": "Vier in einer Reihe",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Vier_in_einer_Reihe.sid",
+    "path": "sids/GAMES/S-Z/Vier_in_einer_Reihe.sid",
+    "size": 2790,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1ZpZXRuYW0uc2lk",
+    "title": "Vietnam",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Vietnam.sid",
+    "path": "sids/GAMES/S-Z/Vietnam.sid",
+    "size": 490,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1ZpZ2lsYW50ZS5zaWQ",
+    "title": "Vigilante",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Vigilante.sid",
+    "path": "sids/GAMES/S-Z/Vigilante.sid",
+    "size": 1382,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1Zpb2xhdG9yLnNpZA",
+    "title": "Violator",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Violator.sid",
+    "path": "sids/GAMES/S-Z/Violator.sid",
+    "size": 19310,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1ZpcGVyLnNpZA",
+    "title": "Viper",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Viper.sid",
+    "path": "sids/GAMES/S-Z/Viper.sid",
+    "size": 1078,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1ZpdGFtaW4uc2lk",
+    "title": "Vitamin",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Vitamin.sid",
+    "path": "sids/GAMES/S-Z/Vitamin.sid",
+    "size": 1037,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1ZveWFnZXIuc2lk",
+    "title": "Voyager",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Voyager.sid",
+    "path": "sids/GAMES/S-Z/Voyager.sid",
+    "size": 15639,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1dhbGwuc2lk",
+    "title": "Wall",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Wall.sid",
+    "path": "sids/GAMES/S-Z/Wall.sid",
+    "size": 11476,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1dhbGxzdHJlZXRfMi5zaWQ",
+    "title": "Wallstreet 2",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Wallstreet_2.sid",
+    "path": "sids/GAMES/S-Z/Wallstreet_2.sid",
+    "size": 2454,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1dhbmRlcnVuZy5zaWQ",
+    "title": "Wanderung",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Wanderung.sid",
+    "path": "sids/GAMES/S-Z/Wanderung.sid",
+    "size": 19576,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1dhcl9pbl9NaWRkbGVfRWFydGguc2lk",
+    "title": "War in Middle Earth",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "War_in_Middle_Earth.sid",
+    "path": "sids/GAMES/S-Z/War_in_Middle_Earth.sid",
+    "size": 1643,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1dhcl9NYWNoaW5lLnNpZA",
+    "title": "War Machine",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "War_Machine.sid",
+    "path": "sids/GAMES/S-Z/War_Machine.sid",
+    "size": 2778,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1dhcl9QbGF5LnNpZA",
+    "title": "War Play",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "War_Play.sid",
+    "path": "sids/GAMES/S-Z/War_Play.sid",
+    "size": 714,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1dhckdhbWVzLnNpZA",
+    "title": "WarGames",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "WarGames.sid",
+    "path": "sids/GAMES/S-Z/WarGames.sid",
+    "size": 1948,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1dhcnJpb3JzX29mX1p5cGFyLnNpZA",
+    "title": "Warriors of Zypar",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Warriors_of_Zypar.sid",
+    "path": "sids/GAMES/S-Z/Warriors_of_Zypar.sid",
+    "size": 2725,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1dhc3RlZF9UaW1lLnNpZA",
+    "title": "Wasted Time",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Wasted_Time.sid",
+    "path": "sids/GAMES/S-Z/Wasted_Time.sid",
+    "size": 12803,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1dhc3RlbGFuZHMuc2lk",
+    "title": "Wastelands",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Wastelands.sid",
+    "path": "sids/GAMES/S-Z/Wastelands.sid",
+    "size": 51967,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1dhdGVyX1BvbG8uc2lk",
+    "title": "Water Polo",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Water_Polo.sid",
+    "path": "sids/GAMES/S-Z/Water_Polo.sid",
+    "size": 3535,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1dhdnlfTmF2eS5zaWQ",
+    "title": "Wavy Navy",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Wavy_Navy.sid",
+    "path": "sids/GAMES/S-Z/Wavy_Navy.sid",
+    "size": 2744,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1dlX3RoZV9QZW9wbGUuc2lk",
+    "title": "We the People",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "We_the_People.sid",
+    "path": "sids/GAMES/S-Z/We_the_People.sid",
+    "size": 3390,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1dlYXRoZXJfVGFtZXJzLnNpZA",
+    "title": "Weather Tamers",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Weather_Tamers.sid",
+    "path": "sids/GAMES/S-Z/Weather_Tamers.sid",
+    "size": 1514,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1dlbGx0cmlzLnNpZA",
+    "title": "Welltris",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Welltris.sid",
+    "path": "sids/GAMES/S-Z/Welltris.sid",
+    "size": 1852,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1dlcmV3b2x2ZXNfb2ZfTG9uZG9uLnNpZA",
+    "title": "Werewolves of London",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Werewolves_of_London.sid",
+    "path": "sids/GAMES/S-Z/Werewolves_of_London.sid",
+    "size": 4383,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1dlc3Quc2lk",
+    "title": "West",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "West.sid",
+    "path": "sids/GAMES/S-Z/West.sid",
+    "size": 2328,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1dlc3Rlcm5fR2FtZXMuc2lk",
+    "title": "Western Games",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Western_Games.sid",
+    "path": "sids/GAMES/S-Z/Western_Games.sid",
+    "size": 22294,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1doZWVsX29mX0ZvcnR1bmUuc2lk",
+    "title": "Wheel of Fortune",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Wheel_of_Fortune.sid",
+    "path": "sids/GAMES/S-Z/Wheel_of_Fortune.sid",
+    "size": 4082,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1doZWVsX29mX0ZvcnR1bmVfQkFTSUMuc2lk",
+    "title": "Wheel of Fortune BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Wheel_of_Fortune_BASIC.sid",
+    "path": "sids/GAMES/S-Z/Wheel_of_Fortune_BASIC.sid",
+    "size": 1539,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1doZWVsaWVzLnNpZA",
+    "title": "Wheelies",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Wheelies.sid",
+    "path": "sids/GAMES/S-Z/Wheelies.sid",
+    "size": 8318,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1doaXRlX1ZpcGVyLnNpZA",
+    "title": "White Viper",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "White_Viper.sid",
+    "path": "sids/GAMES/S-Z/White_Viper.sid",
+    "size": 4129,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1doaXRlaG91c2VfQmx1ZXMuc2lk",
+    "title": "Whitehouse Blues",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Whitehouse_Blues.sid",
+    "path": "sids/GAMES/S-Z/Whitehouse_Blues.sid",
+    "size": 5238,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1dob19EYXJlc19XaW5zLnNpZA",
+    "title": "Who Dares Wins",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Who_Dares_Wins.sid",
+    "path": "sids/GAMES/S-Z/Who_Dares_Wins.sid",
+    "size": 2988,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1dob19GcmFtZWRfUm9nZXJfUmFiYml0LnNpZA",
+    "title": "Who Framed Roger Rabbit",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Who_Framed_Roger_Rabbit.sid",
+    "path": "sids/GAMES/S-Z/Who_Framed_Roger_Rabbit.sid",
+    "size": 13001,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1dob19LaWxsZWRfQ29ja19Sb2Jpbl9CQVNJQy5zaWQ",
+    "title": "Who Killed Cock Robin BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Who_Killed_Cock_Robin_BASIC.sid",
+    "path": "sids/GAMES/S-Z/Who_Killed_Cock_Robin_BASIC.sid",
+    "size": 1605,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1dpYnN0YXJzLnNpZA",
+    "title": "Wibstars",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Wibstars.sid",
+    "path": "sids/GAMES/S-Z/Wibstars.sid",
+    "size": 1446,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1dpZWxyZW5uZW4uc2lk",
+    "title": "Wielrennen",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Wielrennen.sid",
+    "path": "sids/GAMES/S-Z/Wielrennen.sid",
+    "size": 905,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1dpbGRfUmlkZS5zaWQ",
+    "title": "Wild Ride",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Wild_Ride.sid",
+    "path": "sids/GAMES/S-Z/Wild_Ride.sid",
+    "size": 904,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1dpbGRfU3RyZWV0cy5zaWQ",
+    "title": "Wild Streets",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Wild_Streets.sid",
+    "path": "sids/GAMES/S-Z/Wild_Streets.sid",
+    "size": 5051,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1dpbGRfV2VzdC5zaWQ",
+    "title": "Wild West",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Wild_West.sid",
+    "path": "sids/GAMES/S-Z/Wild_West.sid",
+    "size": 4310,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1dpbGxvdy5zaWQ",
+    "title": "Willow",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Willow.sid",
+    "path": "sids/GAMES/S-Z/Willow.sid",
+    "size": 3949,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1dpbmR3YWxrZXIuc2lk",
+    "title": "Windwalker",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Windwalker.sid",
+    "path": "sids/GAMES/S-Z/Windwalker.sid",
+    "size": 1465,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1dpbnRlcl9PbHltcGlhZF84OF9sb2FkZXIuc2lk",
+    "title": "Winter Olympiad 88 loader",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Winter_Olympiad_88_loader.sid",
+    "path": "sids/GAMES/S-Z/Winter_Olympiad_88_loader.sid",
+    "size": 1990,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1dpbnRlci1Ib2xpZGF5cy5zaWQ",
+    "title": "Winter-Holidays",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Winter-Holidays.sid",
+    "path": "sids/GAMES/S-Z/Winter-Holidays.sid",
+    "size": 4670,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1dpcGVvdXQuc2lk",
+    "title": "Wipeout",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Wipeout.sid",
+    "path": "sids/GAMES/S-Z/Wipeout.sid",
+    "size": 2236,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1dpdGNoU3dpdGNoLnNpZA",
+    "title": "WitchSwitch",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "WitchSwitch.sid",
+    "path": "sids/GAMES/S-Z/WitchSwitch.sid",
+    "size": 5906,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1dpemFyZF9vZl9Xb3Iuc2lk",
+    "title": "Wizard of Wor",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Wizard_of_Wor.sid",
+    "path": "sids/GAMES/S-Z/Wizard_of_Wor.sid",
+    "size": 1543,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1dpemFyZHNfTGFpci5zaWQ",
+    "title": "Wizards Lair",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Wizards_Lair.sid",
+    "path": "sids/GAMES/S-Z/Wizards_Lair.sid",
+    "size": 1636,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1dsYWRjYS5zaWQ",
+    "title": "Wladca",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Wladca.sid",
+    "path": "sids/GAMES/S-Z/Wladca.sid",
+    "size": 3505,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1dvbmRlcmJveS5zaWQ",
+    "title": "Wonderboy",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Wonderboy.sid",
+    "path": "sids/GAMES/S-Z/Wonderboy.sid",
+    "size": 4246,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1dvbmRlcmJveV9pbl9Nb25zdGVybGFuZC5zaWQ",
+    "title": "Wonderboy in Monsterland",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Wonderboy_in_Monsterland.sid",
+    "path": "sids/GAMES/S-Z/Wonderboy_in_Monsterland.sid",
+    "size": 6977,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1dvb2RwZWNrZXIuc2lk",
+    "title": "Woodpecker",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Woodpecker.sid",
+    "path": "sids/GAMES/S-Z/Woodpecker.sid",
+    "size": 2136,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1dvcmtpbmdfU3RvbmUuc2lk",
+    "title": "Working Stone",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Working_Stone.sid",
+    "path": "sids/GAMES/S-Z/Working_Stone.sid",
+    "size": 7125,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1dvcmxkLnNpZA",
+    "title": "World",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "World.sid",
+    "path": "sids/GAMES/S-Z/World.sid",
+    "size": 1132,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1dvcmxkX0NoYW1waW9uc2hpcF9Tb2NjZXIuc2lk",
+    "title": "World Championship Soccer",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "World_Championship_Soccer.sid",
+    "path": "sids/GAMES/S-Z/World_Championship_Soccer.sid",
+    "size": 4539,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1dvcmxkX0N1cC5zaWQ",
+    "title": "World Cup",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "World_Cup.sid",
+    "path": "sids/GAMES/S-Z/World_Cup.sid",
+    "size": 1870,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1dvcmxkX0N1cF9Dcmlja2V0LnNpZA",
+    "title": "World Cup Cricket",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "World_Cup_Cricket.sid",
+    "path": "sids/GAMES/S-Z/World_Cup_Cricket.sid",
+    "size": 1150,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1dvcmxkX0N1cF9Tb2NjZXIuc2lk",
+    "title": "World Cup Soccer",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "World_Cup_Soccer.sid",
+    "path": "sids/GAMES/S-Z/World_Cup_Soccer.sid",
+    "size": 866,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1dvcmxkX0dhbWVzLnNpZA",
+    "title": "World Games",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "World_Games.sid",
+    "path": "sids/GAMES/S-Z/World_Games.sid",
+    "size": 24909,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1dvcmxkX1Nlcmllc19CYXNlYmFsbC5zaWQ",
+    "title": "World Series Baseball",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "World_Series_Baseball.sid",
+    "path": "sids/GAMES/S-Z/World_Series_Baseball.sid",
+    "size": 2076,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1dvcmxkX1Ryb3BoeV9Tb2NjZXIuc2lk",
+    "title": "World Trophy Soccer",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "World_Trophy_Soccer.sid",
+    "path": "sids/GAMES/S-Z/World_Trophy_Soccer.sid",
+    "size": 4734,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1dvcmxkY3VwLVNraWluZ19JSS5zaWQ",
+    "title": "Worldcup-Skiing II",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Worldcup-Skiing_II.sid",
+    "path": "sids/GAMES/S-Z/Worldcup-Skiing_II.sid",
+    "size": 16310,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1dvcm0uc2lk",
+    "title": "Worm",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Worm.sid",
+    "path": "sids/GAMES/S-Z/Worm.sid",
+    "size": 2493,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1dvcm1fNjQuc2lk",
+    "title": "Worm 64",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Worm_64.sid",
+    "path": "sids/GAMES/S-Z/Worm_64.sid",
+    "size": 726,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1dvcnJvbi5zaWQ",
+    "title": "Worron",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Worron.sid",
+    "path": "sids/GAMES/S-Z/Worron.sid",
+    "size": 6463,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1d1bGZwYWNrLnNpZA",
+    "title": "Wulfpack",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Wulfpack.sid",
+    "path": "sids/GAMES/S-Z/Wulfpack.sid",
+    "size": 922,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1d5dmVybnMuc2lk",
+    "title": "Wyverns",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Wyverns.sid",
+    "path": "sids/GAMES/S-Z/Wyverns.sid",
+    "size": 2954,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1gtTWVuLU1hZG5lc3NfaW5fTXVyZGVyd29ybGQuc2lk",
+    "title": "X-Men-Madness in Murderworld",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "X-Men-Madness_in_Murderworld.sid",
+    "path": "sids/GAMES/S-Z/X-Men-Madness_in_Murderworld.sid",
+    "size": 6231,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1hlbm9uX1Jhbmdlci5zaWQ",
+    "title": "Xenon Ranger",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Xenon_Ranger.sid",
+    "path": "sids/GAMES/S-Z/Xenon_Ranger.sid",
+    "size": 4494,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1hlcnR5bi1YLnNpZA",
+    "title": "Xertyn-X",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Xertyn-X.sid",
+    "path": "sids/GAMES/S-Z/Xertyn-X.sid",
+    "size": 3754,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1hldmlvdXMuc2lk",
+    "title": "Xevious",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Xevious.sid",
+    "path": "sids/GAMES/S-Z/Xevious.sid",
+    "size": 763,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1htYXNfUHJlenppZS5zaWQ",
+    "title": "Xmas Prezzie",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Xmas_Prezzie.sid",
+    "path": "sids/GAMES/S-Z/Xmas_Prezzie.sid",
+    "size": 5003,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1hvbm94X2VuZC5zaWQ",
+    "title": "Xonox end",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Xonox_end.sid",
+    "path": "sids/GAMES/S-Z/Xonox_end.sid",
+    "size": 3452,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1hvci5zaWQ",
+    "title": "Xor",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Xor.sid",
+    "path": "sids/GAMES/S-Z/Xor.sid",
+    "size": 1340,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1h5Ym90cy5zaWQ",
+    "title": "Xybots",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Xybots.sid",
+    "path": "sids/GAMES/S-Z/Xybots.sid",
+    "size": 3154,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1h5cGh1cy5zaWQ",
+    "title": "Xyphus",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Xyphus.sid",
+    "path": "sids/GAMES/S-Z/Xyphus.sid",
+    "size": 3894,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1h5dHJpcy1UaGVfR2FtZV9wcmV2aWV3LnNpZA",
+    "title": "Xytris-The Game preview",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Xytris-The_Game_preview.sid",
+    "path": "sids/GAMES/S-Z/Xytris-The_Game_preview.sid",
+    "size": 5558,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1lhbnR6ZWVfQkFTSUMuc2lk",
+    "title": "Yantzee BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Yantzee_BASIC.sid",
+    "path": "sids/GAMES/S-Z/Yantzee_BASIC.sid",
+    "size": 1660,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1llbGxvd19TdWJtYXJpbmVfQkFTSUMuc2lk",
+    "title": "Yellow Submarine BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Yellow_Submarine_BASIC.sid",
+    "path": "sids/GAMES/S-Z/Yellow_Submarine_BASIC.sid",
+    "size": 2530,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1lvdW5nX09uZXMuc2lk",
+    "title": "Young Ones",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Young_Ones.sid",
+    "path": "sids/GAMES/S-Z/Young_Ones.sid",
+    "size": 7290,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1lvdXJfRmF0aGVyc19OaWdodG1hcmUuc2lk",
+    "title": "Your Fathers Nightmare",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Your_Fathers_Nightmare.sid",
+    "path": "sids/GAMES/S-Z/Your_Fathers_Nightmare.sid",
+    "size": 9542,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1l1Y2F0YW4uc2lk",
+    "title": "Yucatan",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Yucatan.sid",
+    "path": "sids/GAMES/S-Z/Yucatan.sid",
+    "size": 2955,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1phZ2hlbi5zaWQ",
+    "title": "Zaghen",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Zaghen.sid",
+    "path": "sids/GAMES/S-Z/Zaghen.sid",
+    "size": 4154,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1pha19NY0tyYWNrZW4uc2lk",
+    "title": "Zak McKracken",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Zak_McKracken.sid",
+    "path": "sids/GAMES/S-Z/Zak_McKracken.sid",
+    "size": 18012,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1phdWJlcndhbGRfMTk4N19CQVNJQy5zaWQ",
+    "title": "Zauberwald 1987 BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Zauberwald_1987_BASIC.sid",
+    "path": "sids/GAMES/S-Z/Zauberwald_1987_BASIC.sid",
+    "size": 1530,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1phdWJlcndhbGRfMTk4OS5zaWQ",
+    "title": "Zauberwald 1989",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Zauberwald_1989.sid",
+    "path": "sids/GAMES/S-Z/Zauberwald_1989.sid",
+    "size": 2411,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1plaXRfZGVyX1N0aWxsZS5zaWQ",
+    "title": "Zeit der Stille",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Zeit_der_Stille.sid",
+    "path": "sids/GAMES/S-Z/Zeit_der_Stille.sid",
+    "size": 9292,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1plbmppLnNpZA",
+    "title": "Zenji",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Zenji.sid",
+    "path": "sids/GAMES/S-Z/Zenji.sid",
+    "size": 2829,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1plbm9uLnNpZA",
+    "title": "Zenon",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Zenon.sid",
+    "path": "sids/GAMES/S-Z/Zenon.sid",
+    "size": 788,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1plcm8tWF9wcmV2aWV3LnNpZA",
+    "title": "Zero-X preview",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Zero-X_preview.sid",
+    "path": "sids/GAMES/S-Z/Zero-X_preview.sid",
+    "size": 3484,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1pldXNfcHJldmlldy5zaWQ",
+    "title": "Zeus preview",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Zeus_preview.sid",
+    "path": "sids/GAMES/S-Z/Zeus_preview.sid",
+    "size": 11346,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1ppbGNoLnNpZA",
+    "title": "Zilch",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Zilch.sid",
+    "path": "sids/GAMES/S-Z/Zilch.sid",
+    "size": 6205,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1ppbHZlcnZsb290X0JBU0lDLnNpZA",
+    "title": "Zilvervloot BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Zilvervloot_BASIC.sid",
+    "path": "sids/GAMES/S-Z/Zilvervloot_BASIC.sid",
+    "size": 1317,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1ppbmpfQ29tcGxleC5zaWQ",
+    "title": "Zinj Complex",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Zinj_Complex.sid",
+    "path": "sids/GAMES/S-Z/Zinj_Complex.sid",
+    "size": 2879,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1pvZGlhLnNpZA",
+    "title": "Zodia",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Zodia.sid",
+    "path": "sids/GAMES/S-Z/Zodia.sid",
+    "size": 12213,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1pvZ2dvbi5zaWQ",
+    "title": "Zoggon",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Zoggon.sid",
+    "path": "sids/GAMES/S-Z/Zoggon.sid",
+    "size": 2090,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1pvaWQuc2lk",
+    "title": "Zoid",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Zoid.sid",
+    "path": "sids/GAMES/S-Z/Zoid.sid",
+    "size": 1486,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1pvbWJpLnNpZA",
+    "title": "Zombi",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Zombi.sid",
+    "path": "sids/GAMES/S-Z/Zombi.sid",
+    "size": 11346,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1pvbmFfUXVhcnRhLnNpZA",
+    "title": "Zona Quarta",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Zona_Quarta.sid",
+    "path": "sids/GAMES/S-Z/Zona_Quarta.sid",
+    "size": 887,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1pvb21lcmFuZy5zaWQ",
+    "title": "Zoomerang",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Zoomerang.sid",
+    "path": "sids/GAMES/S-Z/Zoomerang.sid",
+    "size": 3148,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1pyZW5pdGUuc2lk",
+    "title": "Zrenite",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Zrenite.sid",
+    "path": "sids/GAMES/S-Z/Zrenite.sid",
+    "size": 6203,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1p1bHUuc2lk",
+    "title": "Zulu",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Zulu.sid",
+    "path": "sids/GAMES/S-Z/Zulu.sid",
+    "size": 787,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1p5cmF4LnNpZA",
+    "title": "Zyrax",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Zyrax.sid",
+    "path": "sids/GAMES/S-Z/Zyrax.sid",
+    "size": 341,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1p5cm9uLnNpZA",
+    "title": "Zyron",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Zyron.sid",
+    "path": "sids/GAMES/S-Z/Zyron.sid",
+    "size": 1725,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1p5cm9uc19Fc2NhcGUuc2lk",
+    "title": "Zyrons Escape",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Zyrons_Escape.sid",
+    "path": "sids/GAMES/S-Z/Zyrons_Escape.sid",
+    "size": 1646,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1p5eC5zaWQ",
+    "title": "Zyx",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Zyx.sid",
+    "path": "sids/GAMES/S-Z/Zyx.sid",
+    "size": 746,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1p6enouc2lk",
+    "title": "Zzzz",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Zzzz.sid",
+    "path": "sids/GAMES/S-Z/Zzzz.sid",
+    "size": 2873,
+    "category": "S-Z"
+  },
+  {
     "id": "R3JheV9NYXR0L1dvcmt0dW5lcy8yMDAxX1RoZW1lLnNpZA",
     "title": "2001 Theme",
     "composer": "Gray Matt",
@@ -8137,6 +23387,7 @@ window.SID_LIBRARY = [
   }
 ];
 window.SID_COMPOSERS = [
+  "Games",
   "Bjerregaard Johannes",
   "Daglish Ben",
   "Dunn David",

@@ -173,7 +173,7 @@
       const composerMatch = composer === "all" || track.composer === composer;
       if (!composerMatch) return false;
       if (!query) return true;
-      return normalize(`${track.title} ${track.composer} ${track.fileName}`).includes(query);
+      return normalize(`${track.title} ${track.composer} ${track.category || ""} ${track.fileName}`).includes(query);
     });
 
     if (state.selected >= state.filtered.length) state.selected = 0;
@@ -200,7 +200,9 @@
         <span class="track-size"></span>
       `;
       row.querySelector(".track-title").textContent = track.title;
-      row.querySelector(".track-composer").textContent = track.composer;
+      row.querySelector(".track-composer").textContent = track.category
+        ? `${track.composer} / ${track.category}`
+        : track.composer;
       row.querySelector(".track-size").textContent = formatBytes(track.size);
       row.addEventListener("pointerdown", wakeAudio, { passive: true });
       row.addEventListener("click", () => {
