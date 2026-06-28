@@ -28964,6 +28964,17 @@ window.SID_LIBRARY = [
     "size": 4226,
     "durationMs": 8000,
     "durationText": "0:08"
+  },
+  {
+    "id": "TW9wcGUvQmxvb2RfTW9uZXkuc2lk",
+    "title": "Blood Money",
+    "composer": "Moppe",
+    "composerKey": "Moppe",
+    "fileName": "Blood_Money.sid",
+    "path": "sids/Moppe/Blood_Money.sid",
+    "size": 7264,
+    "durationMs": 287324,
+    "durationText": "4:47.324"
   }
 ];
 window.SID_COMPOSERS = [
@@ -28993,6 +29004,7 @@ window.SID_COMPOSERS = [
   "Martin Walker",
   "Michael Hendriks",
   "Mike Alsop",
+  "Moppe",
   "Neil Brennan",
   "Ouwehand Reyn",
   "Peter Clarke",

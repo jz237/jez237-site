@@ -1,10 +1,10 @@
 HVSC 84 SID set for the browser player
 Updated: 2026-06-28
 Source archive: https://hvsc.sannic.nl/HVSC%2084/HVSC_84-all-of-them.7z
-Total .sid files: 2458
+Total .sid files: 2459
 
 Contents:
-- 904 curated composer SIDs from HVSC MUSICIANS folders.
+- 905 curated composer SIDs from HVSC MUSICIANS folders.
 - 1525 C64 game SIDs from HVSC C64Music/GAMES.
 
 Composer folders:
@@ -17,6 +17,7 @@ Galway_Martin: 40
 Gray_Matt: 57
 Hubbard_Rob: 96
 Huelsbeck_Chris: 51
+Moppe: 1
 Ouwehand_Reyn: 129
 Tel_Jeroen: 176
 Whittaker_David: 103
