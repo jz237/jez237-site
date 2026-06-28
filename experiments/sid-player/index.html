@@ -311,8 +311,56 @@
       accent-color: var(--accent);
     }
 
-    #progress {
+    .seek-control {
+      position: relative;
+      height: 34px;
+      display: grid;
+      align-items: center;
       touch-action: none;
+      cursor: pointer;
+    }
+
+    .seek-control:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 3px;
+      border-radius: 6px;
+    }
+
+    .native-progress {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .seek-rail {
+      position: relative;
+      height: 12px;
+      border: 1px solid rgba(127, 214, 194, .34);
+      border-radius: 999px;
+      background: #0c1015;
+      overflow: visible;
+    }
+
+    .seek-fill {
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 0%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    }
+
+    .seek-thumb {
+      position: absolute;
+      top: 50%;
+      left: 0%;
+      width: 22px;
+      height: 22px;
+      border: 2px solid #101319;
+      border-radius: 50%;
+      background: var(--accent-2);
+      box-shadow: 0 0 0 1px rgba(242, 199, 102, .72), 0 5px 16px rgba(0, 0, 0, .34);
+      transform: translate(-50%, -50%);
     }
 
     .scope {
@@ -505,7 +553,13 @@
 
           <div class="progress-row">
             <span id="elapsed">0:00</span>
-            <input id="progress" type="range" min="0" max="180000" value="0" step="100">
+            <div id="seekControl" class="seek-control" role="slider" tabindex="0" aria-label="Playback position" aria-valuemin="0" aria-valuemax="180000" aria-valuenow="0" aria-valuetext="0:00">
+              <input id="progress" class="native-progress" type="range" min="0" max="180000" value="0" step="100" tabindex="-1" aria-hidden="true">
+              <div class="seek-rail" aria-hidden="true">
+                <div id="seekFill" class="seek-fill"></div>
+                <div id="seekThumb" class="seek-thumb"></div>
+              </div>
+            </div>
             <span id="duration">3:00</span>
           </div>
 
@@ -533,6 +587,6 @@
   </script>
   <script src="/experiments/sid-player/vendor/websid/backend_websid.js?v=20260628d"></script>
   <script src="/experiments/sid-player/tracks.js?v=20260628d"></script>
-  <script src="/experiments/sid-player/app.js?v=20260628f"></script>
+  <script src="/experiments/sid-player/app.js?v=20260628g"></script>
 </body>
 </html>
