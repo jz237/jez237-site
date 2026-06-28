@@ -43,8 +43,10 @@ use these instructions before writing code or snippets.
 - `/computer-chronicle/` - daily historical computer newspaper section,
   focused on personal computers and personal computer gaming from 40
   years ago today.
-- `/ai-sounds/` - AI-generated music and sound archive copied from
-  Discord's AI Sounds channel.
+- `/ai-sounds/` - computer-generated sound hub linking to Commodore 64
+  SID music, Commodore Amiga music, and AI-generated music.
+- `/ai-sounds/ai-generated-music/` - AI-generated music and sound archive
+  copied from Discord's AI Sounds channel.
 - `/ai-sounds/player-lab.html` - player UI lab for AI sounds.
 - `/games/` - GameMaster Arcade and playable prototypes.
 - `/weather/` - local weather console.
@@ -433,10 +435,13 @@ tracked, and the generated image path. Do not invent prompts or dates.
 
 ## AI sounds
 
-AI sounds live in `/ai-sounds/`.
+AI-generated music lives in `/ai-sounds/ai-generated-music/`.
 
-The page preserves AI-generated tracks copied from Discord's AI Sounds
-channel. Future updates should keep the focus on individual tracks:
+The `/ai-sounds/` route is now a computer-generated sound hub that links
+to the C64 SID player, Amiga MOD player, and AI-generated music archive.
+
+The AI-generated music archive preserves tracks copied from Discord's AI
+Sounds channel. Future updates should keep the focus on individual tracks:
 title, file, duration/size/date where known, prompt idea, recipe,
 context, and audio file.
 
