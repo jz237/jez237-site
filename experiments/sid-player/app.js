@@ -2,7 +2,7 @@
   const PLAYER_BASE = "/experiments/sid-player/";
   const tracks = Array.isArray(window.SID_LIBRARY) ? window.SID_LIBRARY : [];
   const composers = Array.isArray(window.SID_COMPOSERS) ? window.SID_COMPOSERS : [];
-  const DEFAULT_DURATION_MS = 180000;
+  const FALLBACK_SEEK_WINDOW_MS = 600000;
 
   const refs = {
     trackTotal: document.getElementById("trackTotal"),
@@ -34,7 +34,8 @@
     filtered: [],
     selected: 0,
     currentTrack: null,
-    currentDuration: DEFAULT_DURATION_MS,
+    currentDuration: FALLBACK_SEEK_WINDOW_MS,
+    durationKnown: false,
     initialized: null,
     playing: false,
     loading: false,
@@ -116,10 +117,14 @@
 
   function bestDuration() {
     const player = getPlayer();
-    if (!player) return DEFAULT_DURATION_MS;
+    state.durationKnown = false;
+    if (!player) return FALLBACK_SEEK_WINDOW_MS;
     const max = Number(player.getMaxPlaybackPosition());
-    if (Number.isFinite(max) && max > 5000) return max;
-    return DEFAULT_DURATION_MS;
+    if (Number.isFinite(max) && max > 5000) {
+      state.durationKnown = true;
+      return max;
+    }
+    return FALLBACK_SEEK_WINDOW_MS;
   }
 
   function playbackPosition() {
@@ -266,7 +271,7 @@
       const player = await ensurePlayer();
       await ScriptNodePlayer.loadMusicFromURL(
         new URL(track.path, window.location.origin + PLAYER_BASE).href,
-        { track: -1, timeout: DEFAULT_DURATION_MS / 1000, traceSID: false },
+        { track: -1, timeout: -1, traceSID: false },
         () => {
           throw new Error(`Could not load ${track.fileName}`);
         },
@@ -376,10 +381,14 @@
 
   function updateProgress() {
     if (state.currentTrack && !state.scrubbing && !state.seeking) {
-      const pos = Math.min(playbackPosition(), state.currentDuration);
+      const rawPosition = playbackPosition();
+      if (!state.durationKnown && rawPosition > state.currentDuration - 30000) {
+        state.currentDuration += FALLBACK_SEEK_WINDOW_MS;
+      }
+      const pos = state.durationKnown ? Math.min(rawPosition, state.currentDuration) : rawPosition;
       renderSeekPosition(pos);
 
-      if (state.playing && pos >= state.currentDuration - 300) {
+      if (state.durationKnown && state.playing && pos >= state.currentDuration - 300) {
         onTrackEnd();
       }
     }
@@ -464,7 +473,7 @@
 
     await ScriptNodePlayer.loadMusicFromURL(
       currentTrackUrl(),
-      { track: -1, timeout: DEFAULT_DURATION_MS / 1000, traceSID: false },
+      { track: -1, timeout: -1, traceSID: false },
       () => {
         throw new Error(`Could not reload ${state.currentTrack.fileName}`);
       },
