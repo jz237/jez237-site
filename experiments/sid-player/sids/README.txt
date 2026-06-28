@@ -1,9 +1,13 @@
-﻿HVSC 84 curated SID set
-Created: 2026-06-27T14:32:00
+HVSC 84 SID set for the browser player
+Updated: 2026-06-28
 Source archive: https://hvsc.sannic.nl/HVSC%2084/HVSC_84-all-of-them.7z
-Selection rule: known high-quality C64 SID/game composers, copied from HVSC MUSICIANS folders, organized by composer.
-Total .sid files: 904
+Total .sid files: 2429
 
+Contents:
+- 904 curated composer SIDs from HVSC MUSICIANS folders.
+- 1525 C64 game SIDs from HVSC C64Music/GAMES.
+
+Composer folders:
 Bjerregaard_Johannes: 88
 Daglish_Ben: 89
 Dunn_David: 45
@@ -16,3 +20,10 @@ Huelsbeck_Chris: 51
 Ouwehand_Reyn: 129
 Tel_Jeroen: 176
 Whittaker_David: 103
+
+Game folders:
+GAMES/0-9: 18
+GAMES/A-F: 491
+GAMES/G-L: 287
+GAMES/M-R: 334
+GAMES/S-Z: 395
