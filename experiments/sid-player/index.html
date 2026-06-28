@@ -68,6 +68,13 @@
       color: var(--accent);
     }
 
+    button.icon-button {
+      min-width: 40px;
+      padding: 0 10px;
+      font-size: 1.05rem;
+      line-height: 1;
+    }
+
     button.primary {
       background: #1d3b38;
       border-color: rgba(127, 214, 194, .7);
@@ -187,7 +194,7 @@
     .track {
       width: 100%;
       display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
+      grid-template-columns: minmax(0, 1fr) auto auto;
       gap: 8px;
       align-items: center;
       min-height: 54px;
@@ -195,6 +202,24 @@
       padding: 8px 10px;
       text-align: left;
       background: #171a20;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+    }
+
+    .track-main {
+      min-height: 0;
+      min-width: 0;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      text-align: left;
+    }
+
+    .track-main:hover,
+    .track-main:focus-visible {
+      color: var(--text);
+      border-color: transparent;
+      box-shadow: none;
     }
 
     .track-title,
@@ -216,10 +241,25 @@
       font-size: .82rem;
     }
 
-    .track-size {
+    .track-duration,
+    .track-favorite {
       color: var(--accent-2);
       font-size: .76rem;
       font-variant-numeric: tabular-nums;
+    }
+
+    .track-favorite {
+      min-width: 34px;
+      min-height: 34px;
+      padding: 0;
+      color: var(--muted);
+      background: #13171d;
+    }
+
+    .track-favorite.active {
+      color: var(--accent-2);
+      border-color: rgba(242, 199, 102, .7);
+      background: rgba(242, 199, 102, .11);
     }
 
     .track.active {
@@ -230,7 +270,7 @@
     .deck {
       min-width: 0;
       display: grid;
-      grid-template-rows: auto auto 1fr auto;
+      grid-template-rows: auto auto 1fr auto auto;
       padding: 16px;
       gap: 16px;
       overflow: hidden;
@@ -266,6 +306,12 @@
       font-size: .85rem;
     }
 
+    .now-actions {
+      display: flex;
+      gap: 8px;
+      align-items: start;
+    }
+
     .status.ready {
       color: var(--good);
       border-color: rgba(142, 227, 143, .45);
@@ -287,7 +333,7 @@
 
     .buttons {
       display: grid;
-      grid-template-columns: repeat(5, minmax(72px, 1fr));
+      grid-template-columns: repeat(6, minmax(64px, 1fr));
       gap: 8px;
     }
 
@@ -304,6 +350,17 @@
 
     .volume-row {
       grid-template-columns: 64px minmax(0, 1fr) 48px;
+    }
+
+    .seek-notice {
+      min-height: 18px;
+      color: var(--accent-2);
+      font-size: .78rem;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .seek-notice[hidden] {
+      display: none;
     }
 
     input[type="range"] {
@@ -375,6 +432,18 @@
       overflow: hidden;
     }
 
+    .deck.scope-compact {
+      grid-template-rows: auto auto minmax(88px, 130px) auto auto;
+    }
+
+    .deck.scope-hidden {
+      grid-template-rows: auto auto auto auto;
+    }
+
+    .deck.scope-hidden .scope {
+      display: none;
+    }
+
     .scope-grid {
       width: min(620px, 86%);
       height: min(260px, 55%);
@@ -419,6 +488,34 @@
       line-height: 1.4;
     }
 
+    .stil-panel {
+      min-height: 0;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #12161c;
+      padding: 12px;
+    }
+
+    .stil-panel[hidden] {
+      display: none;
+    }
+
+    .stil-panel h3 {
+      margin: 0 0 8px;
+      color: var(--accent);
+      font-size: .88rem;
+    }
+
+    .stil-panel pre {
+      max-height: 150px;
+      margin: 0;
+      overflow: auto;
+      white-space: pre-wrap;
+      text-align: left;
+      color: var(--muted);
+      font: .78rem/1.45 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+
     footer a {
       color: var(--accent);
     }
@@ -459,9 +556,17 @@
       .deck {
         order: -1;
         min-height: 0;
-        grid-template-rows: auto auto minmax(104px, 18dvh) auto;
+        grid-template-rows: auto auto minmax(104px, 18dvh) auto auto;
         gap: 10px;
         padding: 12px;
+      }
+
+      .deck.scope-compact {
+        grid-template-rows: auto auto minmax(76px, 12dvh) auto auto;
+      }
+
+      .deck.scope-hidden {
+        grid-template-rows: auto auto auto auto;
       }
 
       .library {
@@ -529,6 +634,7 @@
           <input id="search" type="search" placeholder="Search SID files" autocomplete="off">
           <select id="collectionFilter" aria-label="Collection filter">
             <option value="all">All SID files</option>
+            <option value="favorites">Favorites</option>
             <option value="top100">HVSC Top 100</option>
             <option value="games">Games</option>
           </select>
@@ -544,7 +650,10 @@
             <h2 id="nowTitle" class="now-title">Select a SID</h2>
             <div id="nowMeta" class="now-meta">webSID emulator standby</div>
           </div>
-          <div id="status" class="status">Idle</div>
+          <div class="now-actions">
+            <button id="favNowBtn" class="icon-button" type="button" title="Favorite current SID" aria-label="Favorite current SID">☆</button>
+            <div id="status" class="status">Idle</div>
+          </div>
         </div>
 
         <div class="controls">
@@ -554,6 +663,7 @@
             <button id="stopBtn" type="button" title="Stop">Stop</button>
             <button id="nextBtn" type="button" title="Next">Next</button>
             <button id="loopBtn" type="button" title="Loop current SID">Loop</button>
+            <button id="scopeModeBtn" type="button" title="Analyzer display mode">Scope</button>
           </div>
 
           <div class="progress-row">
@@ -573,11 +683,18 @@
             <input id="volume" type="range" min="0" max="1" value="0.78" step="0.01">
             <span id="volumeText">78%</span>
           </div>
+
+          <div id="seekNotice" class="seek-notice" hidden></div>
         </div>
 
         <div id="scope" class="scope" aria-hidden="true">
           <div id="scopeGrid" class="scope-grid"></div>
         </div>
+
+        <section id="stilPanel" class="stil-panel" hidden>
+          <h3>HVSC Notes</h3>
+          <pre id="stilText"></pre>
+        </section>
 
         <footer>
           webSID emulator by Juergen Wothke, CC BY-NC-SA 4.0. SID files are served from the local curated sample library.
@@ -592,6 +709,7 @@
   </script>
   <script src="/experiments/sid-player/vendor/websid/backend_websid.js?v=20260628d"></script>
   <script src="/experiments/sid-player/tracks.js?v=20260628g"></script>
-  <script src="/experiments/sid-player/app.js?v=20260628j"></script>
+  <script src="/experiments/sid-player/stil.js?v=20260628a"></script>
+  <script src="/experiments/sid-player/app.js?v=20260628k"></script>
 </body>
 </html>
