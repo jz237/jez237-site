@@ -10,7 +10,9 @@ window.SID_LIBRARY = [
     "top100Rank": 1,
     "top100Title": "Wizball",
     "top100Composer": "Martin Galway",
-    "top100Source": "sids/Galway_Martin/Wizball.sid"
+    "top100Source": "sids/Galway_Martin/Wizball.sid",
+    "durationMs": 6000,
+    "durationText": "0:06"
   },
   {
     "id": "RGFnbGlzaF9CZW4vTGFzdF9OaW5qYS5zaWQ",
@@ -23,7 +25,9 @@ window.SID_LIBRARY = [
     "top100Rank": 2,
     "top100Title": "The Last Ninja",
     "top100Composer": "Ben Daglish & Anthony Lees",
-    "top100Source": "sids/Daglish_Ben/Last_Ninja.sid"
+    "top100Source": "sids/Daglish_Ben/Last_Ninja.sid",
+    "durationMs": 292000,
+    "durationText": "4:52"
   },
   {
     "id": "SHViYmFyZF9Sb2IvU2FueGlvbi5zaWQ",
@@ -36,7 +40,9 @@ window.SID_LIBRARY = [
     "top100Rank": 3,
     "top100Title": "Sanxion",
     "top100Composer": "Rob Hubbard",
-    "top100Source": "sids/Hubbard_Rob/Sanxion.sid"
+    "top100Source": "sids/Hubbard_Rob/Sanxion.sid",
+    "durationMs": 334000,
+    "durationText": "5:34"
   },
   {
     "id": "SHViYmFyZF9Sb2IvQ29tbWFuZG8uc2lk",
@@ -49,7 +55,9 @@ window.SID_LIBRARY = [
     "top100Rank": 4,
     "top100Title": "Commando",
     "top100Composer": "Rob Hubbard",
-    "top100Source": "sids/Hubbard_Rob/Commando.sid"
+    "top100Source": "sids/Hubbard_Rob/Commando.sid",
+    "durationMs": 235594,
+    "durationText": "3:55.594"
   },
   {
     "id": "SHViYmFyZF9Sb2IvSW50ZXJuYXRpb25hbF9LYXJhdGUuc2lk",
@@ -62,7 +70,9 @@ window.SID_LIBRARY = [
     "top100Rank": 5,
     "top100Title": "International Karate",
     "top100Composer": "Rob Hubbard",
-    "top100Source": "sids/Hubbard_Rob/International_Karate.sid"
+    "top100Source": "sids/Hubbard_Rob/International_Karate.sid",
+    "durationMs": 645000,
+    "durationText": "10:45"
   },
   {
     "id": "VGVsX0plcm9lbi9DeWJlcm5vaWRfSUkuc2lk",
@@ -75,7 +85,9 @@ window.SID_LIBRARY = [
     "top100Rank": 6,
     "top100Title": "Cybernoid II",
     "top100Composer": "Jeroen Tel / Maniacs of Noise",
-    "top100Source": "sids/Tel_Jeroen/Cybernoid_II.sid"
+    "top100Source": "sids/Tel_Jeroen/Cybernoid_II.sid",
+    "durationMs": 346000,
+    "durationText": "5:46"
   },
   {
     "id": "SHViYmFyZF9Sb2IvRGVsdGEuc2lk",
@@ -88,7 +100,9 @@ window.SID_LIBRARY = [
     "top100Rank": 7,
     "top100Title": "Delta",
     "top100Composer": "Rob Hubbard",
-    "top100Source": "sids/Hubbard_Rob/Delta.sid"
+    "top100Source": "sids/Hubbard_Rob/Delta.sid",
+    "durationMs": 682000,
+    "durationText": "11:22"
   },
   {
     "id": "SHViYmFyZF9Sb2IvTW9udHlfb25fdGhlX1J1bi5zaWQ",
@@ -101,7 +115,9 @@ window.SID_LIBRARY = [
     "top100Rank": 8,
     "top100Title": "Monty on the Run",
     "top100Composer": "Rob Hubbard",
-    "top100Source": "sids/Hubbard_Rob/Monty_on_the_Run.sid"
+    "top100Source": "sids/Hubbard_Rob/Monty_on_the_Run.sid",
+    "durationMs": 350000,
+    "durationText": "5:50"
   },
   {
     "id": "VGVsX0plcm9lbi9DeWJlcm5vaWQuc2lk",
@@ -114,7 +130,9 @@ window.SID_LIBRARY = [
     "top100Rank": 9,
     "top100Title": "Cybernoid",
     "top100Composer": "Jeroen Tel / Maniacs of Noise",
-    "top100Source": "sids/Tel_Jeroen/Cybernoid.sid"
+    "top100Source": "sids/Tel_Jeroen/Cybernoid.sid",
+    "durationMs": 400000,
+    "durationText": "6:40"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9MYXN0X05pbmphXzMuc2lk",
@@ -127,7 +145,9 @@ window.SID_LIBRARY = [
     "top100Rank": 10,
     "top100Title": "Last Ninja 3",
     "top100Composer": "Reyn Ouwehand",
-    "top100Source": "sids/Ouwehand_Reyn/Last_Ninja_3.sid"
+    "top100Source": "sids/Ouwehand_Reyn/Last_Ninja_3.sid",
+    "durationMs": 8000,
+    "durationText": "0:08"
   },
   {
     "id": "R2Fsd2F5X01hcnRpbi9SYW1ib19GaXJzdF9CbG9vZF9QYXJ0X0lJLnNpZA",
@@ -140,7 +160,9 @@ window.SID_LIBRARY = [
     "top100Rank": 11,
     "top100Title": "Rambo: First Blood Part II",
     "top100Composer": "Martin Galway",
-    "top100Source": "sids/Galway_Martin/Rambo_First_Blood_Part_II.sid"
+    "top100Source": "sids/Galway_Martin/Rambo_First_Blood_Part_II.sid",
+    "durationMs": 216000,
+    "durationText": "3:36"
   },
   {
     "id": "R3JheV9NYXR0L0xhc3RfTmluamFfMi5zaWQ",
@@ -153,7 +175,9 @@ window.SID_LIBRARY = [
     "top100Rank": 12,
     "top100Title": "Last Ninja 2",
     "top100Composer": "Matt Gray",
-    "top100Source": "sids/Gray_Matt/Last_Ninja_2.sid"
+    "top100Source": "sids/Gray_Matt/Last_Ninja_2.sid",
+    "durationMs": 267000,
+    "durationText": "4:27"
   },
   {
     "id": "736964732f544f503130302f3031335f4d7574616e74732e736964",
@@ -167,7 +191,9 @@ window.SID_LIBRARY = [
     "top100Rank": 13,
     "top100Title": "Mutants",
     "top100Composer": "Fred Gray",
-    "top100Source": "HVSC_Top_100.zip"
+    "top100Source": "HVSC_Top_100.zip",
+    "durationMs": 250000,
+    "durationText": "4:10"
   },
   {
     "id": "SHViYmFyZF9Sb2IvS251Y2tsZWJ1c3RlcnMuc2lk",
@@ -180,7 +206,9 @@ window.SID_LIBRARY = [
     "top100Rank": 14,
     "top100Title": "Knucklebusters",
     "top100Composer": "Rob Hubbard",
-    "top100Source": "sids/Hubbard_Rob/Knucklebusters.sid"
+    "top100Source": "sids/Hubbard_Rob/Knucklebusters.sid",
+    "durationMs": 1002000,
+    "durationText": "16:42"
   },
   {
     "id": "R2Fsd2F5X01hcnRpbi9Bcmthbm9pZC5zaWQ",
@@ -193,7 +221,9 @@ window.SID_LIBRARY = [
     "top100Rank": 15,
     "top100Title": "Arkanoid",
     "top100Composer": "Martin Galway",
-    "top100Source": "sids/Galway_Martin/Arkanoid.sid"
+    "top100Source": "sids/Galway_Martin/Arkanoid.sid",
+    "durationMs": 142000,
+    "durationText": "2:22"
   },
   {
     "id": "SHViYmFyZF9Sb2IvQ3JhenlfQ29tZXRzLnNpZA",
@@ -206,7 +236,9 @@ window.SID_LIBRARY = [
     "top100Rank": 16,
     "top100Title": "Crazy Comets",
     "top100Composer": "Rob Hubbard",
-    "top100Source": "sids/Hubbard_Rob/Crazy_Comets.sid"
+    "top100Source": "sids/Hubbard_Rob/Crazy_Comets.sid",
+    "durationMs": 276000,
+    "durationText": "4:36"
   },
   {
     "id": "SHViYmFyZF9Sb2IvQXVmX1dpZWRlcnNlaGVuX01vbnR5LnNpZA",
@@ -219,7 +251,9 @@ window.SID_LIBRARY = [
     "top100Rank": 17,
     "top100Title": "Auf Wiedersehen Monty",
     "top100Composer": "Rob Hubbard & Ben Daglish",
-    "top100Source": "sids/Hubbard_Rob/Auf_Wiedersehen_Monty.sid"
+    "top100Source": "sids/Hubbard_Rob/Auf_Wiedersehen_Monty.sid",
+    "durationMs": 368000,
+    "durationText": "6:08"
   },
   {
     "id": "SHVlbHNiZWNrX0NocmlzL0dyZWF0X0dpYW5hX1Npc3RlcnMuc2lk",
@@ -232,7 +266,9 @@ window.SID_LIBRARY = [
     "top100Rank": 18,
     "top100Title": "The Great Giana Sisters",
     "top100Composer": "Chris H�lsbeck",
-    "top100Source": "sids/Huelsbeck_Chris/Great_Giana_Sisters.sid"
+    "top100Source": "sids/Huelsbeck_Chris/Great_Giana_Sisters.sid",
+    "durationMs": 221821,
+    "durationText": "3:41.821"
   },
   {
     "id": "Rm9sbGluX1RpbS9HaG91bHNfbl9HaG9zdHMuc2lk",
@@ -245,7 +281,9 @@ window.SID_LIBRARY = [
     "top100Rank": 19,
     "top100Title": "Ghouls 'n' Ghosts",
     "top100Composer": "Tim Follin",
-    "top100Source": "sids/Follin_Tim/Ghouls_n_Ghosts.sid"
+    "top100Source": "sids/Follin_Tim/Ghouls_n_Ghosts.sid",
+    "durationMs": 259257,
+    "durationText": "4:19.257"
   },
   {
     "id": "736964732f544f503130302f3032305f47686f7374735f6e5f476f626c696e732e736964",
@@ -272,7 +310,9 @@ window.SID_LIBRARY = [
     "top100Rank": 21,
     "top100Title": "Nemesis the Warlock",
     "top100Composer": "Rob Hubbard",
-    "top100Source": "sids/Hubbard_Rob/Nemesis_the_Warlock.sid"
+    "top100Source": "sids/Hubbard_Rob/Nemesis_the_Warlock.sid",
+    "durationMs": 412000,
+    "durationText": "6:52"
   },
   {
     "id": "R2Fsd2F5X01hcnRpbi9HcmVlbl9CZXJldC5zaWQ",
@@ -285,7 +325,9 @@ window.SID_LIBRARY = [
     "top100Rank": 22,
     "top100Title": "Green Beret",
     "top100Composer": "Martin Galway",
-    "top100Source": "sids/Galway_Martin/Green_Beret.sid"
+    "top100Source": "sids/Galway_Martin/Green_Beret.sid",
+    "durationMs": 213000,
+    "durationText": "3:33"
   },
   {
     "id": "736964732f544f503130302f3032335f5468655f5761795f6f665f7468655f4578706c6f64696e675f466973742e736964",
@@ -313,7 +355,9 @@ window.SID_LIBRARY = [
     "top100Rank": 24,
     "top100Title": "Platoon",
     "top100Composer": "Jonathan Dunn",
-    "top100Source": "HVSC_Top_100.zip"
+    "top100Source": "HVSC_Top_100.zip",
+    "durationMs": 123000,
+    "durationText": "2:03"
   },
   {
     "id": "SHVlbHNiZWNrX0NocmlzL1ItVHlwZS5zaWQ",
@@ -326,7 +370,9 @@ window.SID_LIBRARY = [
     "top100Rank": 25,
     "top100Title": "R-type",
     "top100Composer": "Chris H�lsbeck & Ramiro Vaca",
-    "top100Source": "sids/Huelsbeck_Chris/R-Type.sid"
+    "top100Source": "sids/Huelsbeck_Chris/R-Type.sid",
+    "durationMs": 131000,
+    "durationText": "2:11"
   },
   {
     "id": "SHViYmFyZF9Sb2IvTGlnaHRmb3JjZS5zaWQ",
@@ -339,7 +385,9 @@ window.SID_LIBRARY = [
     "top100Rank": 26,
     "top100Title": "Lightforce",
     "top100Composer": "Rob Hubbard",
-    "top100Source": "sids/Hubbard_Rob/Lightforce.sid"
+    "top100Source": "sids/Hubbard_Rob/Lightforce.sid",
+    "durationMs": 433481,
+    "durationText": "7:13.481"
   },
   {
     "id": "RGFnbGlzaF9CZW4vQ29icmEuc2lk",
@@ -352,7 +400,9 @@ window.SID_LIBRARY = [
     "top100Rank": 27,
     "top100Title": "Cobra",
     "top100Composer": "Ben Daglish",
-    "top100Source": "sids/Daglish_Ben/Cobra.sid"
+    "top100Source": "sids/Daglish_Ben/Cobra.sid",
+    "durationMs": 186097,
+    "durationText": "3:06.097"
   },
   {
     "id": "VGVsX0plcm9lbi9Sb2JvQ29wXzMuc2lk",
@@ -365,7 +415,9 @@ window.SID_LIBRARY = [
     "top100Rank": 28,
     "top100Title": "Robocop 3",
     "top100Composer": "Jeroen Tel / Maniacs of Noise",
-    "top100Source": "sids/Tel_Jeroen/RoboCop_3.sid"
+    "top100Source": "sids/Tel_Jeroen/RoboCop_3.sid",
+    "durationMs": 235254,
+    "durationText": "3:55.254"
   },
   {
     "id": "736964732f544f503130302f3032395f4d7974682e736964",
@@ -392,7 +444,9 @@ window.SID_LIBRARY = [
     "top100Rank": 30,
     "top100Title": "The Master of Magic",
     "top100Composer": "Rob Hubbard",
-    "top100Source": "sids/Hubbard_Rob/Master_of_Magic.sid"
+    "top100Source": "sids/Hubbard_Rob/Master_of_Magic.sid",
+    "durationMs": 321000,
+    "durationText": "5:21"
   },
   {
     "id": "VGVsX0plcm9lbi9UdXJib19PdXRydW4uc2lk",
@@ -405,7 +459,9 @@ window.SID_LIBRARY = [
     "top100Rank": 31,
     "top100Title": "Turbo Outrun",
     "top100Composer": "Jeroen Tel / Maniacs of Noise",
-    "top100Source": "sids/Tel_Jeroen/Turbo_Outrun.sid"
+    "top100Source": "sids/Tel_Jeroen/Turbo_Outrun.sid",
+    "durationMs": 475000,
+    "durationText": "7:55"
   },
   {
     "id": "RGFnbGlzaF9CZW4vVHJhcC5zaWQ",
@@ -418,7 +474,9 @@ window.SID_LIBRARY = [
     "top100Rank": 32,
     "top100Title": "Trap",
     "top100Composer": "Ben Daglish",
-    "top100Source": "sids/Daglish_Ben/Trap.sid"
+    "top100Source": "sids/Daglish_Ben/Trap.sid",
+    "durationMs": 586000,
+    "durationText": "9:46"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvU3dlZXQuc2lk",
@@ -431,7 +489,9 @@ window.SID_LIBRARY = [
     "top100Rank": 33,
     "top100Title": "Sweet",
     "top100Composer": "Johannes Bjerregaard",
-    "top100Source": "sids/Bjerregaard_Johannes/Sweet.sid"
+    "top100Source": "sids/Bjerregaard_Johannes/Sweet.sid",
+    "durationMs": 223000,
+    "durationText": "3:43"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvU3Rvcm1sb3JkLnNpZA",
@@ -444,7 +504,9 @@ window.SID_LIBRARY = [
     "top100Rank": 34,
     "top100Title": "Stormlord",
     "top100Composer": "Johannes Bjerregaard & J. Tel",
-    "top100Source": "sids/Bjerregaard_Johannes/Stormlord.sid"
+    "top100Source": "sids/Bjerregaard_Johannes/Stormlord.sid",
+    "durationMs": 369000,
+    "durationText": "6:09"
   },
   {
     "id": "SHViYmFyZF9Sb2IvU3BlbGxib3VuZC5zaWQ",
@@ -457,7 +519,9 @@ window.SID_LIBRARY = [
     "top100Rank": 35,
     "top100Title": "Spellbound",
     "top100Composer": "Rob Hubbard",
-    "top100Source": "sids/Hubbard_Rob/Spellbound.sid"
+    "top100Source": "sids/Hubbard_Rob/Spellbound.sid",
+    "durationMs": 341000,
+    "durationText": "5:41"
   },
   {
     "id": "R2Fsd2F5X01hcnRpbi9QYXJhbGxheC5zaWQ",
@@ -470,7 +534,9 @@ window.SID_LIBRARY = [
     "top100Rank": 36,
     "top100Title": "Parallax",
     "top100Composer": "Martin Galway",
-    "top100Source": "sids/Galway_Martin/Parallax.sid"
+    "top100Source": "sids/Galway_Martin/Parallax.sid",
+    "durationMs": 683200,
+    "durationText": "11:23.2"
   },
   {
     "id": "SHViYmFyZF9Sb2IvSUtfcGx1cy5zaWQ",
@@ -483,7 +549,9 @@ window.SID_LIBRARY = [
     "top100Rank": 37,
     "top100Title": "IK+",
     "top100Composer": "Rob Hubbard",
-    "top100Source": "sids/Hubbard_Rob/IK_plus.sid"
+    "top100Source": "sids/Hubbard_Rob/IK_plus.sid",
+    "durationMs": 462000,
+    "durationText": "7:42"
   },
   {
     "id": "736964732f544f503130302f3033385f5a616d7a6172612e736964",
@@ -510,7 +578,9 @@ window.SID_LIBRARY = [
     "top100Rank": 39,
     "top100Title": "Comic Bakery",
     "top100Composer": "Martin Galway",
-    "top100Source": "sids/Galway_Martin/Comic_Bakery.sid"
+    "top100Source": "sids/Galway_Martin/Comic_Bakery.sid",
+    "durationMs": 189000,
+    "durationText": "3:09"
   },
   {
     "id": "R2Fsd2F5X01hcnRpbi9ZaWVfQXJfS3VuZ19GdS5zaWQ",
@@ -523,7 +593,9 @@ window.SID_LIBRARY = [
     "top100Rank": 40,
     "top100Title": "Yie Ar Kung Fu",
     "top100Composer": "Martin Galway",
-    "top100Source": "sids/Galway_Martin/Yie_Ar_Kung_Fu.sid"
+    "top100Source": "sids/Galway_Martin/Yie_Ar_Kung_Fu.sid",
+    "durationMs": 2000,
+    "durationText": "0:02"
   },
   {
     "id": "736964732f544f503130302f3034315f48797374657269612e736964",
@@ -578,7 +650,9 @@ window.SID_LIBRARY = [
     "top100Rank": 44,
     "top100Title": "To Be on Top",
     "top100Composer": "Chris H�lsbeck",
-    "top100Source": "sids/Huelsbeck_Chris/To_be_on_Top.sid"
+    "top100Source": "sids/Huelsbeck_Chris/To_be_on_Top.sid",
+    "durationMs": 324000,
+    "durationText": "5:24"
   },
   {
     "id": "736964732f544f503130302f3034355f41726d616c7974652e736964",
@@ -605,7 +679,9 @@ window.SID_LIBRARY = [
     "top100Rank": 46,
     "top100Title": "Mega Apocalypse",
     "top100Composer": "Rob Hubbard & Simon Nicol",
-    "top100Source": "sids/Hubbard_Rob/Mega_Apocalypse.sid"
+    "top100Source": "sids/Hubbard_Rob/Mega_Apocalypse.sid",
+    "durationMs": 441000,
+    "durationText": "7:21"
   },
   {
     "id": "SHVlbHNiZWNrX0NocmlzL0FudGljc19EdWxjZWRvX0NvZ2l0YXRpb25pcy5zaWQ",
@@ -618,7 +694,9 @@ window.SID_LIBRARY = [
     "top100Rank": 47,
     "top100Title": "Dulcedo Cogitationis",
     "top100Composer": "Chris H�lsbeck",
-    "top100Source": "sids/Huelsbeck_Chris/Antics_Dulcedo_Cogitationis.sid"
+    "top100Source": "sids/Huelsbeck_Chris/Antics_Dulcedo_Cogitationis.sid",
+    "durationMs": 339000,
+    "durationText": "5:39"
   },
   {
     "id": "RGFnbGlzaF9CZW4vVGhpbmdfQm91bmNlc19CYWNrLnNpZA",
@@ -631,7 +709,9 @@ window.SID_LIBRARY = [
     "top100Rank": 48,
     "top100Title": "Thing Bounces Back",
     "top100Composer": "Ben Daglish",
-    "top100Source": "sids/Daglish_Ben/Thing_Bounces_Back.sid"
+    "top100Source": "sids/Daglish_Ben/Thing_Bounces_Back.sid",
+    "durationMs": 162000,
+    "durationText": "2:42"
   },
   {
     "id": "736964732f544f503130302f3034395f526f626f636f702e736964",
@@ -659,7 +739,9 @@ window.SID_LIBRARY = [
     "top100Rank": 50,
     "top100Title": "Cooperation Demo",
     "top100Composer": "Kim Christensen (Future Freak)",
-    "top100Source": "HVSC_Top_100.zip"
+    "top100Source": "HVSC_Top_100.zip",
+    "durationMs": 243000,
+    "durationText": "4:03"
   },
   {
     "id": "SHViYmFyZF9Sb2IvWm9pZHMuc2lk",
@@ -672,7 +754,9 @@ window.SID_LIBRARY = [
     "top100Rank": 51,
     "top100Title": "Zoids",
     "top100Composer": "Rob Hubbard",
-    "top100Source": "sids/Hubbard_Rob/Zoids.sid"
+    "top100Source": "sids/Hubbard_Rob/Zoids.sid",
+    "durationMs": 304000,
+    "durationText": "5:04"
   },
   {
     "id": "VGVsX0plcm9lbi9TdXByZW1hY3kuc2lk",
@@ -685,7 +769,9 @@ window.SID_LIBRARY = [
     "top100Rank": 52,
     "top100Title": "Supremacy",
     "top100Composer": "Jeroen Tel / Maniacs of Noise",
-    "top100Source": "sids/Tel_Jeroen/Supremacy.sid"
+    "top100Source": "sids/Tel_Jeroen/Supremacy.sid",
+    "durationMs": 231000,
+    "durationText": "3:51"
   },
   {
     "id": "736964732f544f503130302f3035335f436f6d706c6565746f2e736964",
@@ -712,7 +798,9 @@ window.SID_LIBRARY = [
     "top100Rank": 54,
     "top100Title": "Driller",
     "top100Composer": "Matt Gray",
-    "top100Source": "sids/Gray_Matt/Driller.sid"
+    "top100Source": "sids/Gray_Matt/Driller.sid",
+    "durationMs": 521000,
+    "durationText": "8:41"
   },
   {
     "id": "R2Fsd2F5X01hcnRpbi9UaW1lc19vZl9Mb3JlLnNpZA",
@@ -725,7 +813,9 @@ window.SID_LIBRARY = [
     "top100Rank": 55,
     "top100Title": "Times of Lore",
     "top100Composer": "Martin Galway",
-    "top100Source": "sids/Galway_Martin/Times_of_Lore.sid"
+    "top100Source": "sids/Galway_Martin/Times_of_Lore.sid",
+    "durationMs": 460000,
+    "durationText": "7:40"
   },
   {
     "id": "SHViYmFyZF9Sb2IvT25lX01hbl9hbmRfaGlzX0Ryb2lkLnNpZA",
@@ -738,7 +828,9 @@ window.SID_LIBRARY = [
     "top100Rank": 56,
     "top100Title": "One Man & His Droid",
     "top100Composer": "Rob Hubbard",
-    "top100Source": "sids/Hubbard_Rob/One_Man_and_his_Droid.sid"
+    "top100Source": "sids/Hubbard_Rob/One_Man_and_his_Droid.sid",
+    "durationMs": 347296,
+    "durationText": "5:47.296"
   },
   {
     "id": "VGVsX0plcm9lbi9TYXZhZ2Uuc2lk",
@@ -751,7 +843,9 @@ window.SID_LIBRARY = [
     "top100Rank": 57,
     "top100Title": "Savage",
     "top100Composer": "Jeroen Tel / Maniacs of Noise",
-    "top100Source": "sids/Tel_Jeroen/Savage.sid"
+    "top100Source": "sids/Tel_Jeroen/Savage.sid",
+    "durationMs": 384000,
+    "durationText": "6:24"
   },
   {
     "id": "SHViYmFyZF9Sb2IvQUNFX0lJLnNpZA",
@@ -764,7 +858,9 @@ window.SID_LIBRARY = [
     "top100Rank": 58,
     "top100Title": "ACE II",
     "top100Composer": "Rob Hubbard",
-    "top100Source": "sids/Hubbard_Rob/ACE_II.sid"
+    "top100Source": "sids/Hubbard_Rob/ACE_II.sid",
+    "durationMs": 312822,
+    "durationText": "5:12.822"
   },
   {
     "id": "SHViYmFyZF9Sb2IvVGhydXN0LnNpZA",
@@ -777,7 +873,9 @@ window.SID_LIBRARY = [
     "top100Rank": 59,
     "top100Title": "Thrust",
     "top100Composer": "Rob Hubbard",
-    "top100Source": "sids/Hubbard_Rob/Thrust.sid"
+    "top100Source": "sids/Hubbard_Rob/Thrust.sid",
+    "durationMs": 402000,
+    "durationText": "6:42"
   },
   {
     "id": "SHViYmFyZF9Sb2IvQk1YX0tpZHouc2lk",
@@ -790,7 +888,9 @@ window.SID_LIBRARY = [
     "top100Rank": 60,
     "top100Title": "BMX Kidz",
     "top100Composer": "Rob Hubbard & Jori Olkkonen",
-    "top100Source": "sids/Hubbard_Rob/BMX_Kidz.sid"
+    "top100Source": "sids/Hubbard_Rob/BMX_Kidz.sid",
+    "durationMs": 182000,
+    "durationText": "3:02"
   },
   {
     "id": "VGVsX0plcm9lbi9LaW5ldGl4LnNpZA",
@@ -803,7 +903,9 @@ window.SID_LIBRARY = [
     "top100Rank": 61,
     "top100Title": "Kinetix",
     "top100Composer": "Jeroen Tel / Maniacs of Noise",
-    "top100Source": "sids/Tel_Jeroen/Kinetix.sid"
+    "top100Source": "sids/Tel_Jeroen/Kinetix.sid",
+    "durationMs": 743000,
+    "durationText": "12:23"
   },
   {
     "id": "736964732f544f503130302f3036325f5363726f6c6c5f4d616368696e652e736964",
@@ -817,7 +919,9 @@ window.SID_LIBRARY = [
     "top100Rank": 62,
     "top100Title": "Scroll Machine",
     "top100Composer": "Jori Olkkonen (Yip)",
-    "top100Source": "HVSC_Top_100.zip"
+    "top100Source": "HVSC_Top_100.zip",
+    "durationMs": 241000,
+    "durationText": "4:01"
   },
   {
     "id": "SHVlbHNiZWNrX0NocmlzL0JhYnlfb2ZfQ2FuX0d1cnUuc2lk",
@@ -830,7 +934,9 @@ window.SID_LIBRARY = [
     "top100Rank": 63,
     "top100Title": "The Baby of Can Guru",
     "top100Composer": "Chris H�lsbeck",
-    "top100Source": "sids/Huelsbeck_Chris/Baby_of_Can_Guru.sid"
+    "top100Source": "sids/Huelsbeck_Chris/Baby_of_Can_Guru.sid",
+    "durationMs": 531000,
+    "durationText": "8:51"
   },
   {
     "id": "736964732f544f503130302f3036345f57697a61726472792e736964",
@@ -857,7 +963,9 @@ window.SID_LIBRARY = [
     "top100Rank": 65,
     "top100Title": "Gauntlet III",
     "top100Composer": "Tim & Geoff Follin",
-    "top100Source": "sids/Follin_Tim/Gauntlet_III.sid"
+    "top100Source": "sids/Follin_Tim/Gauntlet_III.sid",
+    "durationMs": 135325,
+    "durationText": "2:15.325"
   },
   {
     "id": "736964732f544f503130302f3036365f53796e74685f53616d706c652e736964",
@@ -871,7 +979,9 @@ window.SID_LIBRARY = [
     "top100Rank": 66,
     "top100Title": "Synth Sample",
     "top100Composer": "Georg Feil",
-    "top100Source": "HVSC_Top_100.zip"
+    "top100Source": "HVSC_Top_100.zip",
+    "durationMs": 305000,
+    "durationText": "5:05"
   },
   {
     "id": "736964732f544f503130302f3036375f4772616e645f507269785f436972637569742e736964",
@@ -885,7 +995,9 @@ window.SID_LIBRARY = [
     "top100Rank": 67,
     "top100Title": "Grand Prix Circuit",
     "top100Composer": "Kris Hatlelid",
-    "top100Source": "HVSC_Top_100.zip"
+    "top100Source": "HVSC_Top_100.zip",
+    "durationMs": 76000,
+    "durationText": "1:16"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvTmlnaHRkYXduLnNpZA",
@@ -898,7 +1010,9 @@ window.SID_LIBRARY = [
     "top100Rank": 68,
     "top100Title": "Nightdawn",
     "top100Composer": "Johannes Bjerregaard",
-    "top100Source": "sids/Bjerregaard_Johannes/Nightdawn.sid"
+    "top100Source": "sids/Bjerregaard_Johannes/Nightdawn.sid",
+    "durationMs": 268153,
+    "durationText": "4:28.153"
   },
   {
     "id": "Rm9sbGluX1RpbS9TY3VtYmFsbC5zaWQ",
@@ -911,7 +1025,9 @@ window.SID_LIBRARY = [
     "top100Rank": 69,
     "top100Title": "Scumball",
     "top100Composer": "Tim Follin",
-    "top100Source": "sids/Follin_Tim/Scumball.sid"
+    "top100Source": "sids/Follin_Tim/Scumball.sid",
+    "durationMs": 75000,
+    "durationText": "1:15"
   },
   {
     "id": "736964732f544f503130302f3037305f525f495f535f4b2e736964",
@@ -925,7 +1041,9 @@ window.SID_LIBRARY = [
     "top100Rank": 70,
     "top100Title": "R.I.S.K.",
     "top100Composer": "Wally Beben",
-    "top100Source": "HVSC_Top_100.zip"
+    "top100Source": "HVSC_Top_100.zip",
+    "durationMs": 195000,
+    "durationText": "3:15"
   },
   {
     "id": "736964732f544f503130302f3037315f526f636b795f537461722e736964",
@@ -939,7 +1057,9 @@ window.SID_LIBRARY = [
     "top100Rank": 71,
     "top100Title": "Rocky Star",
     "top100Composer": "Kim Christensen (Future Freak)",
-    "top100Source": "HVSC_Top_100.zip"
+    "top100Source": "HVSC_Top_100.zip",
+    "durationMs": 241000,
+    "durationText": "4:01"
   },
   {
     "id": "736964732f544f503130302f3037325f536e6172652e736964",
@@ -966,7 +1086,9 @@ window.SID_LIBRARY = [
     "top100Rank": 73,
     "top100Title": "Bionic Commando",
     "top100Composer": "Tim Follin",
-    "top100Source": "sids/Follin_Tim/Bionic_Commando.sid"
+    "top100Source": "sids/Follin_Tim/Bionic_Commando.sid",
+    "durationMs": 49000,
+    "durationText": "0:49"
   },
   {
     "id": "SHVlbHNiZWNrX0NocmlzL0thdGFraXMuc2lk",
@@ -979,7 +1101,9 @@ window.SID_LIBRARY = [
     "top100Rank": 74,
     "top100Title": "Katakis",
     "top100Composer": "Chris H�lsbeck",
-    "top100Source": "sids/Huelsbeck_Chris/Katakis.sid"
+    "top100Source": "sids/Huelsbeck_Chris/Katakis.sid",
+    "durationMs": 333000,
+    "durationText": "5:33"
   },
   {
     "id": "SHViYmFyZF9Sb2IvR2VycnlfdGhlX0dlcm0uc2lk",
@@ -992,7 +1116,9 @@ window.SID_LIBRARY = [
     "top100Rank": 75,
     "top100Title": "Gerry the Germ",
     "top100Composer": "Rob Hubbard",
-    "top100Source": "sids/Hubbard_Rob/Gerry_the_Germ.sid"
+    "top100Source": "sids/Hubbard_Rob/Gerry_the_Germ.sid",
+    "durationMs": 92000,
+    "durationText": "1:32"
   },
   {
     "id": "VGVsX0plcm9lbi9FbGltaW5hdG9yLnNpZA",
@@ -1005,7 +1131,9 @@ window.SID_LIBRARY = [
     "top100Rank": 76,
     "top100Title": "Eliminator",
     "top100Composer": "Jeroen Tel / Maniacs of Noise",
-    "top100Source": "sids/Tel_Jeroen/Eliminator.sid"
+    "top100Source": "sids/Tel_Jeroen/Eliminator.sid",
+    "durationMs": 438000,
+    "durationText": "7:18"
   },
   {
     "id": "RGFnbGlzaF9CZW4vQnVsbGRvZy5zaWQ",
@@ -1018,7 +1146,9 @@ window.SID_LIBRARY = [
     "top100Rank": 77,
     "top100Title": "Bulldog",
     "top100Composer": "Ben Daglish",
-    "top100Source": "sids/Daglish_Ben/Bulldog.sid"
+    "top100Source": "sids/Daglish_Ben/Bulldog.sid",
+    "durationMs": 153000,
+    "durationText": "2:33"
   },
   {
     "id": "736964732f544f503130302f3037385f52616d70617274732e736964",
@@ -1032,7 +1162,9 @@ window.SID_LIBRARY = [
     "top100Rank": 78,
     "top100Title": "Ramparts",
     "top100Composer": "Mark Cooksey",
-    "top100Source": "HVSC_Top_100.zip"
+    "top100Source": "HVSC_Top_100.zip",
+    "durationMs": 65000,
+    "durationText": "1:05"
   },
   {
     "id": "RGFnbGlzaF9CZW4vQXJrX1BhbmRvcmEuc2lk",
@@ -1045,7 +1177,9 @@ window.SID_LIBRARY = [
     "top100Rank": 79,
     "top100Title": "Ark Pandora",
     "top100Composer": "Ben Daglish",
-    "top100Source": "sids/Daglish_Ben/Ark_Pandora.sid"
+    "top100Source": "sids/Daglish_Ben/Ark_Pandora.sid",
+    "durationMs": 84000,
+    "durationText": "1:24"
   },
   {
     "id": "R2Fsd2F5X01hcnRpbi9NaWFtaV9WaWNlLnNpZA",
@@ -1058,7 +1192,9 @@ window.SID_LIBRARY = [
     "top100Rank": 80,
     "top100Title": "Miami Vice",
     "top100Composer": "Martin Galway",
-    "top100Source": "sids/Galway_Martin/Miami_Vice.sid"
+    "top100Source": "sids/Galway_Martin/Miami_Vice.sid",
+    "durationMs": 689503,
+    "durationText": "11:29.503"
   },
   {
     "id": "SHViYmFyZF9Sb2IvV2FyaGF3ay5zaWQ",
@@ -1071,7 +1207,9 @@ window.SID_LIBRARY = [
     "top100Rank": 81,
     "top100Title": "Warhawk",
     "top100Composer": "Rob Hubbard",
-    "top100Source": "sids/Hubbard_Rob/Warhawk.sid"
+    "top100Source": "sids/Hubbard_Rob/Warhawk.sid",
+    "durationMs": 264000,
+    "durationText": "4:24"
   },
   {
     "id": "RGFnbGlzaF9CZW4vVmlraW5ncy5zaWQ",
@@ -1084,7 +1222,9 @@ window.SID_LIBRARY = [
     "top100Rank": 82,
     "top100Title": "The Vikings",
     "top100Composer": "Ben Daglish",
-    "top100Source": "sids/Daglish_Ben/Vikings.sid"
+    "top100Source": "sids/Daglish_Ben/Vikings.sid",
+    "durationMs": 4000,
+    "durationText": "0:04"
   },
   {
     "id": "736964732f544f503130302f3038335f46414d455f312e736964",
@@ -1112,7 +1252,9 @@ window.SID_LIBRARY = [
     "top100Rank": 84,
     "top100Title": "SYS4096",
     "top100Composer": "Juha-Matti Hilpinen (AMJ)",
-    "top100Source": "HVSC_Top_100.zip"
+    "top100Source": "HVSC_Top_100.zip",
+    "durationMs": 168000,
+    "durationText": "2:48"
   },
   {
     "id": "736964732f544f503130302f3038355f4261746d616e5f6c6f6e672e736964",
@@ -1126,7 +1268,9 @@ window.SID_LIBRARY = [
     "top100Rank": 85,
     "top100Title": "Batman (long)",
     "top100Composer": "Jens-Christian Huus",
-    "top100Source": "HVSC_Top_100.zip"
+    "top100Source": "HVSC_Top_100.zip",
+    "durationMs": 293000,
+    "durationText": "4:53"
   },
   {
     "id": "R2Fsd2F5X01hcnRpbi9NaWtpZS5zaWQ",
@@ -1139,7 +1283,9 @@ window.SID_LIBRARY = [
     "top100Rank": 86,
     "top100Title": "Mikie",
     "top100Composer": "Martin Galway",
-    "top100Source": "sids/Galway_Martin/Mikie.sid"
+    "top100Source": "sids/Galway_Martin/Mikie.sid",
+    "durationMs": 289000,
+    "durationText": "4:49"
   },
   {
     "id": "736964732f544f503130302f3038375f5a69675f5a61672e736964",
@@ -1153,7 +1299,9 @@ window.SID_LIBRARY = [
     "top100Rank": 87,
     "top100Title": "Zig Zag",
     "top100Composer": "Antony Crowther",
-    "top100Source": "HVSC_Top_100.zip"
+    "top100Source": "HVSC_Top_100.zip",
+    "durationMs": 235000,
+    "durationText": "3:55"
   },
   {
     "id": "VGVsX0plcm9lbi9CYXR0bGVfVmFsbGV5LnNpZA",
@@ -1166,7 +1314,9 @@ window.SID_LIBRARY = [
     "top100Rank": 88,
     "top100Title": "Battle Valley",
     "top100Composer": "Jeroen Tel / Maniacs of Noise",
-    "top100Source": "sids/Tel_Jeroen/Battle_Valley.sid"
+    "top100Source": "sids/Tel_Jeroen/Battle_Valley.sid",
+    "durationMs": 420000,
+    "durationText": "7:00"
   },
   {
     "id": "736964732f544f503130302f3038395f43686f726469616e2e736964",
@@ -1193,7 +1343,9 @@ window.SID_LIBRARY = [
     "top100Rank": 90,
     "top100Title": "Combat Crazy",
     "top100Composer": "Jeroen Tel / Maniacs of Noise",
-    "top100Source": "sids/Tel_Jeroen/Combat_Crazy.sid"
+    "top100Source": "sids/Tel_Jeroen/Combat_Crazy.sid",
+    "durationMs": 415000,
+    "durationText": "6:55"
   },
   {
     "id": "VGVsX0plcm9lbi9IYXdrZXllLnNpZA",
@@ -1206,7 +1358,9 @@ window.SID_LIBRARY = [
     "top100Rank": 91,
     "top100Title": "Hawkeye",
     "top100Composer": "Jeroen Tel / Maniacs of Noise",
-    "top100Source": "sids/Tel_Jeroen/Hawkeye.sid"
+    "top100Source": "sids/Tel_Jeroen/Hawkeye.sid",
+    "durationMs": 385000,
+    "durationText": "6:25"
   },
   {
     "id": "R2Fsd2F5X01hcnRpbi9TaG9ydF9DaXJjdWl0LnNpZA",
@@ -1219,7 +1373,9 @@ window.SID_LIBRARY = [
     "top100Rank": 92,
     "top100Title": "Short Circuit",
     "top100Composer": "Martin Galway",
-    "top100Source": "sids/Galway_Martin/Short_Circuit.sid"
+    "top100Source": "sids/Galway_Martin/Short_Circuit.sid",
+    "durationMs": 241000,
+    "durationText": "4:01"
   },
   {
     "id": "736964732f544f503130302f3039335f444e415f57617272696f722e736964",
@@ -1233,7 +1389,9 @@ window.SID_LIBRARY = [
     "top100Rank": 93,
     "top100Title": "DNA Warrior",
     "top100Composer": "Thomas Petersen & K.Christensen",
-    "top100Source": "HVSC_Top_100.zip"
+    "top100Source": "HVSC_Top_100.zip",
+    "durationMs": 265000,
+    "durationText": "4:25"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL0dsaWRlcl9SaWRlci5zaWQ",
@@ -1246,7 +1404,9 @@ window.SID_LIBRARY = [
     "top100Rank": 94,
     "top100Title": "Glider Rider",
     "top100Composer": "David Whittaker",
-    "top100Source": "sids/Whittaker_David/Glider_Rider.sid"
+    "top100Source": "sids/Whittaker_David/Glider_Rider.sid",
+    "durationMs": 100000,
+    "durationText": "1:40"
   },
   {
     "id": "736964732f544f503130302f3039355f5572696469756d2e736964",
@@ -1260,7 +1420,9 @@ window.SID_LIBRARY = [
     "top100Rank": 95,
     "top100Title": "Uridium",
     "top100Composer": "Steve Turner",
-    "top100Source": "HVSC_Top_100.zip"
+    "top100Source": "HVSC_Top_100.zip",
+    "durationMs": 38000,
+    "durationText": "0:38"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvVGh1bmRlcl9Gb3JjZS5zaWQ",
@@ -1273,7 +1435,9 @@ window.SID_LIBRARY = [
     "top100Rank": 96,
     "top100Title": "Thunderforce",
     "top100Composer": "Johannes Bjerregaard",
-    "top100Source": "sids/Bjerregaard_Johannes/Thunder_Force.sid"
+    "top100Source": "sids/Bjerregaard_Johannes/Thunder_Force.sid",
+    "durationMs": 137897,
+    "durationText": "2:17.897"
   },
   {
     "id": "SHViYmFyZF9Sb2IvS2VudGlsbGEuc2lk",
@@ -1286,7 +1450,9 @@ window.SID_LIBRARY = [
     "top100Rank": 97,
     "top100Title": "Kentilla",
     "top100Composer": "Rob Hubbard",
-    "top100Source": "sids/Hubbard_Rob/Kentilla.sid"
+    "top100Source": "sids/Hubbard_Rob/Kentilla.sid",
+    "durationMs": 779000,
+    "durationText": "12:59"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvQ3JhenlfQ29tZXRzX3JlbWl4LnNpZA",
@@ -1299,7 +1465,9 @@ window.SID_LIBRARY = [
     "top100Rank": 98,
     "top100Title": "Crazy Comets (remix)",
     "top100Composer": "Johannes Bjerregaard",
-    "top100Source": "sids/Bjerregaard_Johannes/Crazy_Comets_remix.sid"
+    "top100Source": "sids/Bjerregaard_Johannes/Crazy_Comets_remix.sid",
+    "durationMs": 264000,
+    "durationText": "4:24"
   },
   {
     "id": "R2Fsd2F5X01hcnRpbi9UZXJyYV9DcmVzdGEuc2lk",
@@ -1312,7 +1480,9 @@ window.SID_LIBRARY = [
     "top100Rank": 99,
     "top100Title": "Terra Cresta",
     "top100Composer": "Martin Galway",
-    "top100Source": "sids/Galway_Martin/Terra_Cresta.sid"
+    "top100Source": "sids/Galway_Martin/Terra_Cresta.sid",
+    "durationMs": 221000,
+    "durationText": "3:41"
   },
   {
     "id": "736964732f544f503130302f3130305f5465747269732e736964",
@@ -1335,7 +1505,9 @@ window.SID_LIBRARY = [
     "composerKey": "Bjerregaard_Johannes",
     "fileName": "2nd.sid",
     "path": "sids/Bjerregaard_Johannes/2nd.sid",
-    "size": 2296
+    "size": 2296,
+    "durationMs": 52000,
+    "durationText": "0:52"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvQWNlX0lJX3JlbWFrZS5zaWQ",
@@ -1344,7 +1516,9 @@ window.SID_LIBRARY = [
     "composerKey": "Bjerregaard_Johannes",
     "fileName": "Ace_II_remake.sid",
     "path": "sids/Bjerregaard_Johannes/Ace_II_remake.sid",
-    "size": 3514
+    "size": 3514,
+    "durationMs": 39000,
+    "durationText": "0:39"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvQWdhaW5fSXRzX0pCLnNpZA",
@@ -1353,7 +1527,9 @@ window.SID_LIBRARY = [
     "composerKey": "Bjerregaard_Johannes",
     "fileName": "Again_Its_JB.sid",
     "path": "sids/Bjerregaard_Johannes/Again_Its_JB.sid",
-    "size": 1662
+    "size": 1662,
+    "durationMs": 42000,
+    "durationText": "0:42"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvQWxmX1RWX1RoZW1lLnNpZA",
@@ -1362,7 +1538,9 @@ window.SID_LIBRARY = [
     "composerKey": "Bjerregaard_Johannes",
     "fileName": "Alf_TV_Theme.sid",
     "path": "sids/Bjerregaard_Johannes/Alf_TV_Theme.sid",
-    "size": 3677
+    "size": 3677,
+    "durationMs": 31000,
+    "durationText": "0:31"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvQmFsbG9vbi5zaWQ",
@@ -1371,7 +1549,9 @@ window.SID_LIBRARY = [
     "composerKey": "Bjerregaard_Johannes",
     "fileName": "Balloon.sid",
     "path": "sids/Bjerregaard_Johannes/Balloon.sid",
-    "size": 3691
+    "size": 3691,
+    "durationMs": 21000,
+    "durationText": "0:21"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvQmlsbGllX0plYW4uc2lk",
@@ -1380,7 +1560,9 @@ window.SID_LIBRARY = [
     "composerKey": "Bjerregaard_Johannes",
     "fileName": "Billie_Jean.sid",
     "path": "sids/Bjerregaard_Johannes/Billie_Jean.sid",
-    "size": 3883
+    "size": 3883,
+    "durationMs": 143000,
+    "durationText": "2:23"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvQmxvYmJ5LnNpZA",
@@ -1389,7 +1571,9 @@ window.SID_LIBRARY = [
     "composerKey": "Bjerregaard_Johannes",
     "fileName": "Blobby.sid",
     "path": "sids/Bjerregaard_Johannes/Blobby.sid",
-    "size": 3383
+    "size": 3383,
+    "durationMs": 62000,
+    "durationText": "1:02"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvQmx1ZV9Nb25kYXlfODguc2lk",
@@ -1398,7 +1582,9 @@ window.SID_LIBRARY = [
     "composerKey": "Bjerregaard_Johannes",
     "fileName": "Blue_Monday_88.sid",
     "path": "sids/Bjerregaard_Johannes/Blue_Monday_88.sid",
-    "size": 3996
+    "size": 3996,
+    "durationMs": 201139,
+    "durationText": "3:21.139"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvQ2FtZWxfUmlkZXJzX0luYy5zaWQ",
@@ -1407,7 +1593,9 @@ window.SID_LIBRARY = [
     "composerKey": "Bjerregaard_Johannes",
     "fileName": "Camel_Riders_Inc.sid",
     "path": "sids/Bjerregaard_Johannes/Camel_Riders_Inc.sid",
-    "size": 4712
+    "size": 4712,
+    "durationMs": 73000,
+    "durationText": "1:13"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvQ2FudF9TdG9wLnNpZA",
@@ -1416,7 +1604,9 @@ window.SID_LIBRARY = [
     "composerKey": "Bjerregaard_Johannes",
     "fileName": "Cant_Stop.sid",
     "path": "sids/Bjerregaard_Johannes/Cant_Stop.sid",
-    "size": 2893
+    "size": 2893,
+    "durationMs": 179000,
+    "durationText": "2:59"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvQ2hhc2Uuc2lk",
@@ -1425,7 +1615,9 @@ window.SID_LIBRARY = [
     "composerKey": "Bjerregaard_Johannes",
     "fileName": "Chase.sid",
     "path": "sids/Bjerregaard_Johannes/Chase.sid",
-    "size": 2622
+    "size": 2622,
+    "durationMs": 89000,
+    "durationText": "1:29"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvQ2hhc2VfdjIuc2lk",
@@ -1434,7 +1626,9 @@ window.SID_LIBRARY = [
     "composerKey": "Bjerregaard_Johannes",
     "fileName": "Chase_v2.sid",
     "path": "sids/Bjerregaard_Johannes/Chase_v2.sid",
-    "size": 3680
+    "size": 3680,
+    "durationMs": 46060,
+    "durationText": "0:46.06"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvQ3V0ZV9UdW5lLnNpZA",
@@ -1443,7 +1637,9 @@ window.SID_LIBRARY = [
     "composerKey": "Bjerregaard_Johannes",
     "fileName": "Cute_Tune.sid",
     "path": "sids/Bjerregaard_Johannes/Cute_Tune.sid",
-    "size": 3846
+    "size": 3846,
+    "durationMs": 69907,
+    "durationText": "1:09.907"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvRE1DX0RlbW9fSVZfdHVuZV8xLnNpZA",
@@ -1452,7 +1648,9 @@ window.SID_LIBRARY = [
     "composerKey": "Bjerregaard_Johannes",
     "fileName": "DMC_Demo_IV_tune_1.sid",
     "path": "sids/Bjerregaard_Johannes/DMC_Demo_IV_tune_1.sid",
-    "size": 4060
+    "size": 4060,
+    "durationMs": 247000,
+    "durationText": "4:07"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvRE1DX0RlbW9fSVZfdHVuZV8yLnNpZA",
@@ -1461,7 +1659,9 @@ window.SID_LIBRARY = [
     "composerKey": "Bjerregaard_Johannes",
     "fileName": "DMC_Demo_IV_tune_2.sid",
     "path": "sids/Bjerregaard_Johannes/DMC_Demo_IV_tune_2.sid",
-    "size": 2990
+    "size": 2990,
+    "durationMs": 184000,
+    "durationText": "3:04"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvRE1DX0RlbW9fSVZfdHVuZV8zLnNpZA",
@@ -1470,7 +1670,9 @@ window.SID_LIBRARY = [
     "composerKey": "Bjerregaard_Johannes",
     "fileName": "DMC_Demo_IV_tune_3.sid",
     "path": "sids/Bjerregaard_Johannes/DMC_Demo_IV_tune_3.sid",
-    "size": 2050
+    "size": 2050,
+    "durationMs": 66000,
+    "durationText": "1:06"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvRE1DX0RlbW9fSVZfdHVuZV81LnNpZA",
@@ -1479,7 +1681,9 @@ window.SID_LIBRARY = [
     "composerKey": "Bjerregaard_Johannes",
     "fileName": "DMC_Demo_IV_tune_5.sid",
     "path": "sids/Bjerregaard_Johannes/DMC_Demo_IV_tune_5.sid",
-    "size": 1560
+    "size": 1560,
+    "durationMs": 226000,
+    "durationText": "3:46"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvRGVlbF8xLnNpZA",
@@ -1488,7 +1692,9 @@ window.SID_LIBRARY = [
     "composerKey": "Bjerregaard_Johannes",
     "fileName": "Deel_1.sid",
     "path": "sids/Bjerregaard_Johannes/Deel_1.sid",
-    "size": 3324
+    "size": 3324,
+    "durationMs": 70000,
+    "durationText": "1:10"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvRGVlbF8yLnNpZA",
@@ -1497,7 +1703,9 @@ window.SID_LIBRARY = [
     "composerKey": "Bjerregaard_Johannes",
     "fileName": "Deel_2.sid",
     "path": "sids/Bjerregaard_Johannes/Deel_2.sid",
-    "size": 3260
+    "size": 3260,
+    "durationMs": 50000,
+    "durationText": "0:50"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvRGVwZWNoZV9Nb2RlX1NvbmdzLnNpZA",
@@ -1506,7 +1714,9 @@ window.SID_LIBRARY = [
     "composerKey": "Bjerregaard_Johannes",
     "fileName": "Depeche_Mode_Songs.sid",
     "path": "sids/Bjerregaard_Johannes/Depeche_Mode_Songs.sid",
-    "size": 14709
+    "size": 14709,
+    "durationMs": 291000,
+    "durationText": "4:51"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvRG9taW5vX0RhbmNpbmcuc2lk",
@@ -1515,7 +1725,9 @@ window.SID_LIBRARY = [
     "composerKey": "Bjerregaard_Johannes",
     "fileName": "Domino_Dancing.sid",
     "path": "sids/Bjerregaard_Johannes/Domino_Dancing.sid",
-    "size": 3606
+    "size": 3606,
+    "durationMs": 108000,
+    "durationText": "1:48"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvRHJhZ29uLnNpZA",
@@ -1524,7 +1736,9 @@ window.SID_LIBRARY = [
     "composerKey": "Bjerregaard_Johannes",
     "fileName": "Dragon.sid",
     "path": "sids/Bjerregaard_Johannes/Dragon.sid",
-    "size": 5213
+    "size": 5213,
+    "durationMs": 41000,
+    "durationText": "0:41"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvRHJhZ29uX1N3b3JkLnNpZA",
@@ -1533,7 +1747,9 @@ window.SID_LIBRARY = [
     "composerKey": "Bjerregaard_Johannes",
     "fileName": "Dragon_Sword.sid",
     "path": "sids/Bjerregaard_Johannes/Dragon_Sword.sid",
-    "size": 4453
+    "size": 4453,
+    "durationMs": 55000,
+    "durationText": "0:55"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvRHJlYW1pbmcuc2lk",
@@ -1542,7 +1758,9 @@ window.SID_LIBRARY = [
     "composerKey": "Bjerregaard_Johannes",
     "fileName": "Dreaming.sid",
     "path": "sids/Bjerregaard_Johannes/Dreaming.sid",
-    "size": 2456
+    "size": 2456,
+    "durationMs": 83000,
+    "durationText": "1:23"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvRHJlYW1pbmdfMi5zaWQ",
@@ -1551,7 +1769,9 @@ window.SID_LIBRARY = [
     "composerKey": "Bjerregaard_Johannes",
     "fileName": "Dreaming_2.sid",
     "path": "sids/Bjerregaard_Johannes/Dreaming_2.sid",
-    "size": 3716
+    "size": 3716,
+    "durationMs": 273000,
+    "durationText": "4:33"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvRHVtbXlfSUkuc2lk",
@@ -1560,7 +1780,9 @@ window.SID_LIBRARY = [
     "composerKey": "Bjerregaard_Johannes",
     "fileName": "Dummy_II.sid",
     "path": "sids/Bjerregaard_Johannes/Dummy_II.sid",
-    "size": 3670
+    "size": 3670,
+    "durationMs": 52000,
+    "durationText": "0:52"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvRHVtbXluYXl0b3Muc2lk",
@@ -1569,7 +1791,9 @@ window.SID_LIBRARY = [
     "composerKey": "Bjerregaard_Johannes",
     "fileName": "Dummynaytos.sid",
     "path": "sids/Bjerregaard_Johannes/Dummynaytos.sid",
-    "size": 3532
+    "size": 3532,
+    "durationMs": 22000,
+    "durationText": "0:22"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvRWFnbGVzLnNpZA",
@@ -1578,7 +1802,9 @@ window.SID_LIBRARY = [
     "composerKey": "Bjerregaard_Johannes",
     "fileName": "Eagles.sid",
     "path": "sids/Bjerregaard_Johannes/Eagles.sid",
-    "size": 4006
+    "size": 4006,
+    "durationMs": 66000,
+    "durationText": "1:06"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvRmF0XzYuc2lk",
@@ -1587,7 +1813,9 @@ window.SID_LIBRARY = [
     "composerKey": "Bjerregaard_Johannes",
     "fileName": "Fat_6.sid",
     "path": "sids/Bjerregaard_Johannes/Fat_6.sid",
-    "size": 4011
+    "size": 4011,
+    "durationMs": 61367,
+    "durationText": "1:01.367"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvRmF0X0NvbXBsZXRlXzIuc2lk",
@@ -1596,7 +1824,9 @@ window.SID_LIBRARY = [
     "composerKey": "Bjerregaard_Johannes",
     "fileName": "Fat_Complete_2.sid",
     "path": "sids/Bjerregaard_Johannes/Fat_Complete_2.sid",
-    "size": 3923
+    "size": 3923,
+    "durationMs": 42535,
+    "durationText": "0:42.535"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvRmlyc3RfVHJ5X1BTWC5zaWQ",
@@ -1605,7 +1835,9 @@ window.SID_LIBRARY = [
     "composerKey": "Bjerregaard_Johannes",
     "fileName": "First_Try_PSX.sid",
     "path": "sids/Bjerregaard_Johannes/First_Try_PSX.sid",
-    "size": 3563
+    "size": 3563,
+    "durationMs": 23063,
+    "durationText": "0:23.063"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvRmxpbWJvc19RdWVzdF9tYWluLnNpZA",
@@ -1614,7 +1846,9 @@ window.SID_LIBRARY = [
     "composerKey": "Bjerregaard_Johannes",
     "fileName": "Flimbos_Quest_main.sid",
     "path": "sids/Bjerregaard_Johannes/Flimbos_Quest_main.sid",
-    "size": 10948
+    "size": 10948,
+    "durationMs": 115000,
+    "durationText": "1:55"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvRm91cnRoX0RpbWVuc2lvbi5zaWQ",
@@ -1623,7 +1857,9 @@ window.SID_LIBRARY = [
     "composerKey": "Bjerregaard_Johannes",
     "fileName": "Fourth_Dimension.sid",
     "path": "sids/Bjerregaard_Johannes/Fourth_Dimension.sid",
-    "size": 3465
+    "size": 3465,
+    "durationMs": 315000,
+    "durationText": "5:15"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvRnJlbmNoX0ZyaXRlcy5zaWQ",
@@ -1632,7 +1868,9 @@ window.SID_LIBRARY = [
     "composerKey": "Bjerregaard_Johannes",
     "fileName": "French_Frites.sid",
     "path": "sids/Bjerregaard_Johannes/French_Frites.sid",
-    "size": 2260
+    "size": 2260,
+    "durationMs": 87000,
+    "durationText": "1:27"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvRnJ1aXRiYW5rLnNpZA",
@@ -1641,7 +1879,9 @@ window.SID_LIBRARY = [
     "composerKey": "Bjerregaard_Johannes",
     "fileName": "Fruitbank.sid",
     "path": "sids/Bjerregaard_Johannes/Fruitbank.sid",
-    "size": 7199
+    "size": 7199,
+    "durationMs": 239000,
+    "durationText": "3:59"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvSGFwcHlfSmluZ2xlLnNpZA",
@@ -1650,7 +1890,9 @@ window.SID_LIBRARY = [
     "composerKey": "Bjerregaard_Johannes",
     "fileName": "Happy_Jingle.sid",
     "path": "sids/Bjerregaard_Johannes/Happy_Jingle.sid",
-    "size": 3620
+    "size": 3620,
+    "durationMs": 9000,
+    "durationText": "0:09"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvSGl0X3RoZV9CYXplLnNpZA",
@@ -1659,7 +1901,9 @@ window.SID_LIBRARY = [
     "composerKey": "Bjerregaard_Johannes",
     "fileName": "Hit_the_Baze.sid",
     "path": "sids/Bjerregaard_Johannes/Hit_the_Baze.sid",
-    "size": 3183
+    "size": 3183,
+    "durationMs": 115000,
+    "durationText": "1:55"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvSW5fdGhlX01vb2Quc2lk",
@@ -1668,7 +1912,9 @@ window.SID_LIBRARY = [
     "composerKey": "Bjerregaard_Johannes",
     "fileName": "In_the_Mood.sid",
     "path": "sids/Bjerregaard_Johannes/In_the_Mood.sid",
-    "size": 3931
+    "size": 3931,
+    "durationMs": 69000,
+    "durationText": "1:09"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvSmF6el8xLnNpZA",
@@ -1677,7 +1923,9 @@ window.SID_LIBRARY = [
     "composerKey": "Bjerregaard_Johannes",
     "fileName": "Jazz_1.sid",
     "path": "sids/Bjerregaard_Johannes/Jazz_1.sid",
-    "size": 3660
+    "size": 3660,
+    "durationMs": 47000,
+    "durationText": "0:47"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvSmF6el8yLnNpZA",
@@ -1686,7 +1934,9 @@ window.SID_LIBRARY = [
     "composerKey": "Bjerregaard_Johannes",
     "fileName": "Jazz_2.sid",
     "path": "sids/Bjerregaard_Johannes/Jazz_2.sid",
-    "size": 3563
+    "size": 3563,
+    "durationMs": 35000,
+    "durationText": "0:35"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvSmF6el8zLnNpZA",
@@ -1695,7 +1945,9 @@ window.SID_LIBRARY = [
     "composerKey": "Bjerregaard_Johannes",
     "fileName": "Jazz_3.sid",
     "path": "sids/Bjerregaard_Johannes/Jazz_3.sid",
-    "size": 3415
+    "size": 3415,
+    "durationMs": 35000,
+    "durationText": "0:35"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvSmF6el80LnNpZA",
@@ -1704,7 +1956,9 @@ window.SID_LIBRARY = [
     "composerKey": "Bjerregaard_Johannes",
     "fileName": "Jazz_4.sid",
     "path": "sids/Bjerregaard_Johannes/Jazz_4.sid",
-    "size": 3561
+    "size": 3561,
+    "durationMs": 24000,
+    "durationText": "0:24"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvSm9oYW5uZXNfQmplcnJlZ2FhcmRfMDEuc2lk",
@@ -1713,7 +1967,9 @@ window.SID_LIBRARY = [
     "composerKey": "Bjerregaard_Johannes",
     "fileName": "Johannes_Bjerregaard_01.sid",
     "path": "sids/Bjerregaard_Johannes/Johannes_Bjerregaard_01.sid",
-    "size": 3967
+    "size": 3967,
+    "durationMs": 228200,
+    "durationText": "3:48.2"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvS2FtaWthemUuc2lk",
@@ -1722,7 +1978,9 @@ window.SID_LIBRARY = [
     "composerKey": "Bjerregaard_Johannes",
     "fileName": "Kamikaze.sid",
     "path": "sids/Bjerregaard_Johannes/Kamikaze.sid",
-    "size": 4660
+    "size": 4660,
+    "durationMs": 253000,
+    "durationText": "4:13"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvTV9BX0NfSC5zaWQ",
@@ -1731,7 +1989,9 @@ window.SID_LIBRARY = [
     "composerKey": "Bjerregaard_Johannes",
     "fileName": "M_A_C_H.sid",
     "path": "sids/Bjerregaard_Johannes/M_A_C_H.sid",
-    "size": 9741
+    "size": 9741,
+    "durationMs": 44200,
+    "durationText": "0:44.2"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvTVNJX0RlbW8uc2lk",
@@ -1740,7 +2000,9 @@ window.SID_LIBRARY = [
     "composerKey": "Bjerregaard_Johannes",
     "fileName": "MSI_Demo.sid",
     "path": "sids/Bjerregaard_Johannes/MSI_Demo.sid",
-    "size": 5558
+    "size": 5558,
+    "durationMs": 321759,
+    "durationText": "5:21.759"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvTWFnbmV0aWNfRmllbGRzLnNpZA",
@@ -1749,7 +2011,9 @@ window.SID_LIBRARY = [
     "composerKey": "Bjerregaard_Johannes",
     "fileName": "Magnetic_Fields.sid",
     "path": "sids/Bjerregaard_Johannes/Magnetic_Fields.sid",
-    "size": 3328
+    "size": 3328,
+    "durationMs": 172000,
+    "durationText": "2:52"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvTWV0YWxsaWMuc2lk",
@@ -1758,7 +2022,9 @@ window.SID_LIBRARY = [
     "composerKey": "Bjerregaard_Johannes",
     "fileName": "Metallic.sid",
     "path": "sids/Bjerregaard_Johannes/Metallic.sid",
-    "size": 8318
+    "size": 8318,
+    "durationMs": 30000,
+    "durationText": "0:30"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvTWl4ZXJwbG90LnNpZA",
@@ -1767,7 +2033,9 @@ window.SID_LIBRARY = [
     "composerKey": "Bjerregaard_Johannes",
     "fileName": "Mixerplot.sid",
     "path": "sids/Bjerregaard_Johannes/Mixerplot.sid",
-    "size": 2846
+    "size": 2846,
+    "durationMs": 151000,
+    "durationText": "2:31"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvTXVzODYuc2lk",
@@ -1776,7 +2044,9 @@ window.SID_LIBRARY = [
     "composerKey": "Bjerregaard_Johannes",
     "fileName": "Mus86.sid",
     "path": "sids/Bjerregaard_Johannes/Mus86.sid",
-    "size": 3956
+    "size": 3956,
+    "durationMs": 255000,
+    "durationText": "4:15"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvTXVzaWNfRGVtby5zaWQ",
@@ -1785,7 +2055,9 @@ window.SID_LIBRARY = [
     "composerKey": "Bjerregaard_Johannes",
     "fileName": "Music_Demo.sid",
     "path": "sids/Bjerregaard_Johannes/Music_Demo.sid",
-    "size": 3397
+    "size": 3397,
+    "durationMs": 81000,
+    "durationText": "1:21"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvTXl0aF9EZW1vLnNpZA",
@@ -1794,7 +2066,9 @@ window.SID_LIBRARY = [
     "composerKey": "Bjerregaard_Johannes",
     "fileName": "Myth_Demo.sid",
     "path": "sids/Bjerregaard_Johannes/Myth_Demo.sid",
-    "size": 4516
+    "size": 4516,
+    "durationMs": 179000,
+    "durationText": "2:59"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvTmFtbmFtX1NwZWNpYWwuc2lk",
@@ -1803,7 +2077,9 @@ window.SID_LIBRARY = [
     "composerKey": "Bjerregaard_Johannes",
     "fileName": "Namnam_Special.sid",
     "path": "sids/Bjerregaard_Johannes/Namnam_Special.sid",
-    "size": 3020
+    "size": 3020,
+    "durationMs": 128000,
+    "durationText": "2:08"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvT21lZ2FfRm9yY2VfT25lLnNpZA",
@@ -1812,7 +2088,9 @@ window.SID_LIBRARY = [
     "composerKey": "Bjerregaard_Johannes",
     "fileName": "Omega_Force_One.sid",
     "path": "sids/Bjerregaard_Johannes/Omega_Force_One.sid",
-    "size": 2465
+    "size": 2465,
+    "durationMs": 72000,
+    "durationText": "1:12"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvUHJlZGljdGFibGVfbWFpbi5zaWQ",
@@ -1821,7 +2099,9 @@ window.SID_LIBRARY = [
     "composerKey": "Bjerregaard_Johannes",
     "fileName": "Predictable_main.sid",
     "path": "sids/Bjerregaard_Johannes/Predictable_main.sid",
-    "size": 4734
+    "size": 4734,
+    "durationMs": 174000,
+    "durationText": "2:54"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvUmFndGltZV9Bbm5vXzg3LnNpZA",
@@ -1830,7 +2110,9 @@ window.SID_LIBRARY = [
     "composerKey": "Bjerregaard_Johannes",
     "fileName": "Ragtime_Anno_87.sid",
     "path": "sids/Bjerregaard_Johannes/Ragtime_Anno_87.sid",
-    "size": 2825
+    "size": 2825,
+    "durationMs": 63000,
+    "durationText": "1:03"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvUm9hZGJsYXN0ZXIuc2lk",
@@ -1839,7 +2121,9 @@ window.SID_LIBRARY = [
     "composerKey": "Bjerregaard_Johannes",
     "fileName": "Roadblaster.sid",
     "path": "sids/Bjerregaard_Johannes/Roadblaster.sid",
-    "size": 3399
+    "size": 3399,
+    "durationMs": 21000,
+    "durationText": "0:21"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvUm9ja2J1c3Rlci5zaWQ",
@@ -1848,7 +2132,9 @@ window.SID_LIBRARY = [
     "composerKey": "Bjerregaard_Johannes",
     "fileName": "Rockbuster.sid",
     "path": "sids/Bjerregaard_Johannes/Rockbuster.sid",
-    "size": 3092
+    "size": 3092,
+    "durationMs": 184000,
+    "durationText": "3:04"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvUm9zYW5uYS5zaWQ",
@@ -1857,7 +2143,9 @@ window.SID_LIBRARY = [
     "composerKey": "Bjerregaard_Johannes",
     "fileName": "Rosanna.sid",
     "path": "sids/Bjerregaard_Johannes/Rosanna.sid",
-    "size": 2729
+    "size": 2729,
+    "durationMs": 84000,
+    "durationText": "1:24"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvU1RJSTguc2lk",
@@ -1866,7 +2154,9 @@ window.SID_LIBRARY = [
     "composerKey": "Bjerregaard_Johannes",
     "fileName": "STII8.sid",
     "path": "sids/Bjerregaard_Johannes/STII8.sid",
-    "size": 3248
+    "size": 3248,
+    "durationMs": 58000,
+    "durationText": "0:58"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvU2FyYWguc2lk",
@@ -1875,7 +2165,9 @@ window.SID_LIBRARY = [
     "composerKey": "Bjerregaard_Johannes",
     "fileName": "Sarah.sid",
     "path": "sids/Bjerregaard_Johannes/Sarah.sid",
-    "size": 3417
+    "size": 3417,
+    "durationMs": 249000,
+    "durationText": "4:09"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvU2NhbmRhbG91cy5zaWQ",
@@ -1884,7 +2176,9 @@ window.SID_LIBRARY = [
     "composerKey": "Bjerregaard_Johannes",
     "fileName": "Scandalous.sid",
     "path": "sids/Bjerregaard_Johannes/Scandalous.sid",
-    "size": 3155
+    "size": 3155,
+    "durationMs": 161000,
+    "durationText": "2:41"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvU2hhcGUuc2lk",
@@ -1893,7 +2187,9 @@ window.SID_LIBRARY = [
     "composerKey": "Bjerregaard_Johannes",
     "fileName": "Shape.sid",
     "path": "sids/Bjerregaard_Johannes/Shape.sid",
-    "size": 2057
+    "size": 2057,
+    "durationMs": 116000,
+    "durationText": "1:56"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvU2thdGVib2FyZC5zaWQ",
@@ -1902,7 +2198,9 @@ window.SID_LIBRARY = [
     "composerKey": "Bjerregaard_Johannes",
     "fileName": "Skateboard.sid",
     "path": "sids/Bjerregaard_Johannes/Skateboard.sid",
-    "size": 2342
+    "size": 2342,
+    "durationMs": 20473,
+    "durationText": "0:20.473"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvU2xpbWJvNC5zaWQ",
@@ -1911,7 +2209,9 @@ window.SID_LIBRARY = [
     "composerKey": "Bjerregaard_Johannes",
     "fileName": "Slimbo4.sid",
     "path": "sids/Bjerregaard_Johannes/Slimbo4.sid",
-    "size": 3787
+    "size": 3787,
+    "durationMs": 31000,
+    "durationText": "0:31"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvU29hcF9UaGVtZS5zaWQ",
@@ -1920,7 +2220,9 @@ window.SID_LIBRARY = [
     "composerKey": "Bjerregaard_Johannes",
     "fileName": "Soap_Theme.sid",
     "path": "sids/Bjerregaard_Johannes/Soap_Theme.sid",
-    "size": 3882
+    "size": 3882,
+    "durationMs": 46000,
+    "durationText": "0:46"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvU29tZV9Tb3VsLnNpZA",
@@ -1929,7 +2231,9 @@ window.SID_LIBRARY = [
     "composerKey": "Bjerregaard_Johannes",
     "fileName": "Some_Soul.sid",
     "path": "sids/Bjerregaard_Johannes/Some_Soul.sid",
-    "size": 3546
+    "size": 3546,
+    "durationMs": 52000,
+    "durationText": "0:52"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvU3BhY2VnYW1lX011c2ljLnNpZA",
@@ -1938,7 +2242,9 @@ window.SID_LIBRARY = [
     "composerKey": "Bjerregaard_Johannes",
     "fileName": "Spacegame_Music.sid",
     "path": "sids/Bjerregaard_Johannes/Spacegame_Music.sid",
-    "size": 4621
+    "size": 4621,
+    "durationMs": 295000,
+    "durationText": "4:55"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvU3BlY2lhbF9BZ2VudC5zaWQ",
@@ -1947,7 +2253,9 @@ window.SID_LIBRARY = [
     "composerKey": "Bjerregaard_Johannes",
     "fileName": "Special_Agent.sid",
     "path": "sids/Bjerregaard_Johannes/Special_Agent.sid",
-    "size": 3346
+    "size": 3346,
+    "durationMs": 223445,
+    "durationText": "3:43.445"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvU3B5X3ZzX1NweV9JSUkuc2lk",
@@ -1956,7 +2264,9 @@ window.SID_LIBRARY = [
     "composerKey": "Bjerregaard_Johannes",
     "fileName": "Spy_vs_Spy_III.sid",
     "path": "sids/Bjerregaard_Johannes/Spy_vs_Spy_III.sid",
-    "size": 3160
+    "size": 3160,
+    "durationMs": 187413,
+    "durationText": "3:07.413"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvU3Rvcm1sb3JkX1YyLnNpZA",
@@ -1965,7 +2275,9 @@ window.SID_LIBRARY = [
     "composerKey": "Bjerregaard_Johannes",
     "fileName": "Stormlord_V2.sid",
     "path": "sids/Bjerregaard_Johannes/Stormlord_V2.sid",
-    "size": 3395
+    "size": 3395,
+    "durationMs": 77000,
+    "durationText": "1:17"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvU3RyZWV0X0NyZWRfQm94aW5nLnNpZA",
@@ -1974,7 +2286,9 @@ window.SID_LIBRARY = [
     "composerKey": "Bjerregaard_Johannes",
     "fileName": "Street_Cred_Boxing.sid",
     "path": "sids/Bjerregaard_Johannes/Street_Cred_Boxing.sid",
-    "size": 4317
+    "size": 4317,
+    "durationMs": 178117,
+    "durationText": "2:58.117"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvVGVzdC5zaWQ",
@@ -1983,7 +2297,9 @@ window.SID_LIBRARY = [
     "composerKey": "Bjerregaard_Johannes",
     "fileName": "Test.sid",
     "path": "sids/Bjerregaard_Johannes/Test.sid",
-    "size": 3652
+    "size": 3652,
+    "durationMs": 162000,
+    "durationText": "2:42"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvVGlnZXJfTWlzc2lvbi5zaWQ",
@@ -1992,7 +2308,9 @@ window.SID_LIBRARY = [
     "composerKey": "Bjerregaard_Johannes",
     "fileName": "Tiger_Mission.sid",
     "path": "sids/Bjerregaard_Johannes/Tiger_Mission.sid",
-    "size": 6112
+    "size": 6112,
+    "durationMs": 119170,
+    "durationText": "1:59.17"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvVGlueV9TeW1waG9ueS5zaWQ",
@@ -2001,7 +2319,9 @@ window.SID_LIBRARY = [
     "composerKey": "Bjerregaard_Johannes",
     "fileName": "Tiny_Symphony.sid",
     "path": "sids/Bjerregaard_Johannes/Tiny_Symphony.sid",
-    "size": 2928
+    "size": 2928,
+    "durationMs": 77000,
+    "durationText": "1:17"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvVHViYS5zaWQ",
@@ -2010,7 +2330,9 @@ window.SID_LIBRARY = [
     "composerKey": "Bjerregaard_Johannes",
     "fileName": "Tuba.sid",
     "path": "sids/Bjerregaard_Johannes/Tuba.sid",
-    "size": 2140
+    "size": 2140,
+    "durationMs": 29000,
+    "durationText": "0:29"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvVHdpbGlnaHRfQmV5b25kLnNpZA",
@@ -2019,7 +2341,9 @@ window.SID_LIBRARY = [
     "composerKey": "Bjerregaard_Johannes",
     "fileName": "Twilight_Beyond.sid",
     "path": "sids/Bjerregaard_Johannes/Twilight_Beyond.sid",
-    "size": 4648
+    "size": 4648,
+    "durationMs": 412000,
+    "durationText": "6:52"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvVVNBX1R1bmUuc2lk",
@@ -2028,7 +2352,9 @@ window.SID_LIBRARY = [
     "composerKey": "Bjerregaard_Johannes",
     "fileName": "USA_Tune.sid",
     "path": "sids/Bjerregaard_Johannes/USA_Tune.sid",
-    "size": 2629
+    "size": 2629,
+    "durationMs": 11000,
+    "durationText": "0:11"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvVmlraW5nc19sb2FkZXIuc2lk",
@@ -2037,7 +2363,9 @@ window.SID_LIBRARY = [
     "composerKey": "Bjerregaard_Johannes",
     "fileName": "Vikings_loader.sid",
     "path": "sids/Bjerregaard_Johannes/Vikings_loader.sid",
-    "size": 3265
+    "size": 3265,
+    "durationMs": 20000,
+    "durationText": "0:20"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvV2FubmFfR2V0X1NpY2suc2lk",
@@ -2046,7 +2374,9 @@ window.SID_LIBRARY = [
     "composerKey": "Bjerregaard_Johannes",
     "fileName": "Wanna_Get_Sick.sid",
     "path": "sids/Bjerregaard_Johannes/Wanna_Get_Sick.sid",
-    "size": 2516
+    "size": 2516,
+    "durationMs": 162000,
+    "durationText": "2:42"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvV2hlbl9XaWxsX0lfQmVfRmFtb3VzLnNpZA",
@@ -2055,7 +2385,9 @@ window.SID_LIBRARY = [
     "composerKey": "Bjerregaard_Johannes",
     "fileName": "When_Will_I_Be_Famous.sid",
     "path": "sids/Bjerregaard_Johannes/When_Will_I_Be_Famous.sid",
-    "size": 3057
+    "size": 3057,
+    "durationMs": 118803,
+    "durationText": "1:58.803"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvV2hvX0lzX1JvYmJfVm9sXzEuc2lk",
@@ -2064,7 +2396,9 @@ window.SID_LIBRARY = [
     "composerKey": "Bjerregaard_Johannes",
     "fileName": "Who_Is_Robb_Vol_1.sid",
     "path": "sids/Bjerregaard_Johannes/Who_Is_Robb_Vol_1.sid",
-    "size": 3964
+    "size": 3964,
+    "durationMs": 30645,
+    "durationText": "0:30.645"
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvWm9vbS5zaWQ",
@@ -2073,7 +2407,9 @@ window.SID_LIBRARY = [
     "composerKey": "Bjerregaard_Johannes",
     "fileName": "Zoom.sid",
     "path": "sids/Bjerregaard_Johannes/Zoom.sid",
-    "size": 4049
+    "size": 4049,
+    "durationMs": 24000,
+    "durationText": "0:24"
   },
   {
     "id": "RGFnbGlzaF9CZW4vNzIwX0RlZ3JlZXMuc2lk",
@@ -2082,7 +2418,9 @@ window.SID_LIBRARY = [
     "composerKey": "Daglish_Ben",
     "fileName": "720_Degrees.sid",
     "path": "sids/Daglish_Ben/720_Degrees.sid",
-    "size": 4053
+    "size": 4053,
+    "durationMs": 57000,
+    "durationText": "0:57"
   },
   {
     "id": "RGFnbGlzaF9CZW4vQWx0ZXJuYXRpdmVfV29ybGRfR2FtZXMuc2lk",
@@ -2091,7 +2429,9 @@ window.SID_LIBRARY = [
     "composerKey": "Daglish_Ben",
     "fileName": "Alternative_World_Games.sid",
     "path": "sids/Daglish_Ben/Alternative_World_Games.sid",
-    "size": 44430
+    "size": 44430,
+    "durationMs": 87000,
+    "durationText": "1:27"
   },
   {
     "id": "RGFnbGlzaF9CZW4vQXJ0dXJhLnNpZA",
@@ -2100,7 +2440,9 @@ window.SID_LIBRARY = [
     "composerKey": "Daglish_Ben",
     "fileName": "Artura.sid",
     "path": "sids/Daglish_Ben/Artura.sid",
-    "size": 4493
+    "size": 4493,
+    "durationMs": 206000,
+    "durationText": "3:26"
   },
   {
     "id": "RGFnbGlzaF9CZW4vQXZlbmdlci5zaWQ",
@@ -2109,7 +2451,9 @@ window.SID_LIBRARY = [
     "composerKey": "Daglish_Ben",
     "fileName": "Avenger.sid",
     "path": "sids/Daglish_Ben/Avenger.sid",
-    "size": 3613
+    "size": 3613,
+    "durationMs": 120000,
+    "durationText": "2:00"
   },
   {
     "id": "RGFnbGlzaF9CZW4vQmFzaWxfdGhlX0dyZWF0X01vdXNlX0RldGVjdGl2ZS5zaWQ",
@@ -2118,7 +2462,9 @@ window.SID_LIBRARY = [
     "composerKey": "Daglish_Ben",
     "fileName": "Basil_the_Great_Mouse_Detective.sid",
     "path": "sids/Daglish_Ben/Basil_the_Great_Mouse_Detective.sid",
-    "size": 3210
+    "size": 3210,
+    "durationMs": 57000,
+    "durationText": "0:57"
   },
   {
     "id": "RGFnbGlzaF9CZW4vQmlnZ2xlcy5zaWQ",
@@ -2127,7 +2473,9 @@ window.SID_LIBRARY = [
     "composerKey": "Daglish_Ben",
     "fileName": "Biggles.sid",
     "path": "sids/Daglish_Ben/Biggles.sid",
-    "size": 4862
+    "size": 4862,
+    "durationMs": 124000,
+    "durationText": "2:04"
   },
   {
     "id": "RGFnbGlzaF9CZW4vQmxhY2tfVGh1bmRlci5zaWQ",
@@ -2136,7 +2484,9 @@ window.SID_LIBRARY = [
     "composerKey": "Daglish_Ben",
     "fileName": "Black_Thunder.sid",
     "path": "sids/Daglish_Ben/Black_Thunder.sid",
-    "size": 5302
+    "size": 5302,
+    "durationMs": 175000,
+    "durationText": "2:55"
   },
   {
     "id": "RGFnbGlzaF9CZW4vQmxhc3Rlcm9pZHMuc2lk",
@@ -2145,7 +2495,9 @@ window.SID_LIBRARY = [
     "composerKey": "Daglish_Ben",
     "fileName": "Blasteroids.sid",
     "path": "sids/Daglish_Ben/Blasteroids.sid",
-    "size": 3164
+    "size": 3164,
+    "durationMs": 33000,
+    "durationText": "0:33"
   },
   {
     "id": "RGFnbGlzaF9CZW4vQmxpdHprcmllZy5zaWQ",
@@ -2154,7 +2506,9 @@ window.SID_LIBRARY = [
     "composerKey": "Daglish_Ben",
     "fileName": "Blitzkrieg.sid",
     "path": "sids/Daglish_Ben/Blitzkrieg.sid",
-    "size": 3205
+    "size": 3205,
+    "durationMs": 215000,
+    "durationText": "3:35"
   },
   {
     "id": "RGFnbGlzaF9CZW4vQmxvb2RfQnJvdGhlcnMuc2lk",
@@ -2163,7 +2517,9 @@ window.SID_LIBRARY = [
     "composerKey": "Daglish_Ben",
     "fileName": "Blood_Brothers.sid",
     "path": "sids/Daglish_Ben/Blood_Brothers.sid",
-    "size": 3662
+    "size": 3662,
+    "durationMs": 226000,
+    "durationText": "3:46"
   },
   {
     "id": "RGFnbGlzaF9CZW4vQmxvb2RfVmFsbGV5LnNpZA",
@@ -2172,7 +2528,9 @@ window.SID_LIBRARY = [
     "composerKey": "Daglish_Ben",
     "fileName": "Blood_Valley.sid",
     "path": "sids/Daglish_Ben/Blood_Valley.sid",
-    "size": 3518
+    "size": 3518,
+    "durationMs": 134000,
+    "durationText": "2:14"
   },
   {
     "id": "RGFnbGlzaF9CZW4vQm9iYnlfQmVhcmluZy5zaWQ",
@@ -2181,7 +2539,9 @@ window.SID_LIBRARY = [
     "composerKey": "Daglish_Ben",
     "fileName": "Bobby_Bearing.sid",
     "path": "sids/Daglish_Ben/Bobby_Bearing.sid",
-    "size": 3151
+    "size": 3151,
+    "durationMs": 65000,
+    "durationText": "1:05"
   },
   {
     "id": "RGFnbGlzaF9CZW4vQm9tYm8uc2lk",
@@ -2190,7 +2550,9 @@ window.SID_LIBRARY = [
     "composerKey": "Daglish_Ben",
     "fileName": "Bombo.sid",
     "path": "sids/Daglish_Ben/Bombo.sid",
-    "size": 4222
+    "size": 4222,
+    "durationMs": 123000,
+    "durationText": "2:03"
   },
   {
     "id": "RGFnbGlzaF9CZW4vQnV0Y2hlcl9IaWxsLnNpZA",
@@ -2199,7 +2561,9 @@ window.SID_LIBRARY = [
     "composerKey": "Daglish_Ben",
     "fileName": "Butcher_Hill.sid",
     "path": "sids/Daglish_Ben/Butcher_Hill.sid",
-    "size": 5262
+    "size": 5262,
+    "durationMs": 186000,
+    "durationText": "3:06"
   },
   {
     "id": "RGFnbGlzaF9CZW4vQ2hhbGxlbmdlX29mX3RoZV9Hb2JvdHNfb25fdGhlX01vZWJpdXNfU3RyaXAuc2lk",
@@ -2208,7 +2572,9 @@ window.SID_LIBRARY = [
     "composerKey": "Daglish_Ben",
     "fileName": "Challenge_of_the_Gobots_on_the_Moebius_Strip.sid",
     "path": "sids/Daglish_Ben/Challenge_of_the_Gobots_on_the_Moebius_Strip.sid",
-    "size": 3585
+    "size": 3585,
+    "durationMs": 202000,
+    "durationText": "3:22"
   },
   {
     "id": "RGFnbGlzaF9CZW4vQ2hpY2tlbl9Tb25nX3Muc2lk",
@@ -2217,7 +2583,9 @@ window.SID_LIBRARY = [
     "composerKey": "Daglish_Ben",
     "fileName": "Chicken_Song_s.sid",
     "path": "sids/Daglish_Ben/Chicken_Song_s.sid",
-    "size": 3350
+    "size": 3350,
+    "durationMs": 224000,
+    "durationText": "3:44"
   },
   {
     "id": "RGFnbGlzaF9CZW4vQ2h1YmJ5X0dyaXN0bGUuc2lk",
@@ -2226,7 +2594,9 @@ window.SID_LIBRARY = [
     "composerKey": "Daglish_Ben",
     "fileName": "Chubby_Gristle.sid",
     "path": "sids/Daglish_Ben/Chubby_Gristle.sid",
-    "size": 3504
+    "size": 3504,
+    "durationMs": 135000,
+    "durationText": "2:15"
   },
   {
     "id": "RGFnbGlzaF9CZW4vRGFnbGlzaF8wMS5zaWQ",
@@ -2235,7 +2605,9 @@ window.SID_LIBRARY = [
     "composerKey": "Daglish_Ben",
     "fileName": "Daglish_01.sid",
     "path": "sids/Daglish_Ben/Daglish_01.sid",
-    "size": 2938
+    "size": 2938,
+    "durationMs": 111000,
+    "durationText": "1:51"
   },
   {
     "id": "RGFnbGlzaF9CZW4vRGFya19GdXNpb24uc2lk",
@@ -2244,7 +2616,9 @@ window.SID_LIBRARY = [
     "composerKey": "Daglish_Ben",
     "fileName": "Dark_Fusion.sid",
     "path": "sids/Daglish_Ben/Dark_Fusion.sid",
-    "size": 5766
+    "size": 5766,
+    "durationMs": 112000,
+    "durationText": "1:52"
   },
   {
     "id": "RGFnbGlzaF9CZW4vRGVhdGhTY2FwZS5zaWQ",
@@ -2253,7 +2627,9 @@ window.SID_LIBRARY = [
     "composerKey": "Daglish_Ben",
     "fileName": "DeathScape.sid",
     "path": "sids/Daglish_Ben/DeathScape.sid",
-    "size": 3198
+    "size": 3198,
+    "durationMs": 202000,
+    "durationText": "3:22"
   },
   {
     "id": "RGFnbGlzaF9CZW4vRGVhdGhXaXNoX0lJSS5zaWQ",
@@ -2262,7 +2638,9 @@ window.SID_LIBRARY = [
     "composerKey": "Daglish_Ben",
     "fileName": "DeathWish_III.sid",
     "path": "sids/Daglish_Ben/DeathWish_III.sid",
-    "size": 3662
+    "size": 3662,
+    "durationMs": 178000,
+    "durationText": "2:58"
   },
   {
     "id": "RGFnbGlzaF9CZW4vRGVmZW5kZXJzX29mX3RoZV9FYXJ0aC5zaWQ",
@@ -2271,7 +2649,9 @@ window.SID_LIBRARY = [
     "composerKey": "Daglish_Ben",
     "fileName": "Defenders_of_the_Earth.sid",
     "path": "sids/Daglish_Ben/Defenders_of_the_Earth.sid",
-    "size": 5314
+    "size": 5314,
+    "durationMs": 177000,
+    "durationText": "2:57"
   },
   {
     "id": "RGFnbGlzaF9CZW4vRGVmbGVrdG9yLnNpZA",
@@ -2280,7 +2660,9 @@ window.SID_LIBRARY = [
     "composerKey": "Daglish_Ben",
     "fileName": "Deflektor.sid",
     "path": "sids/Daglish_Ben/Deflektor.sid",
-    "size": 4081
+    "size": 4081,
+    "durationMs": 171000,
+    "durationText": "2:51"
   },
   {
     "id": "RGFnbGlzaF9CZW4vRG9nZmlnaHRfMjE4Ny5zaWQ",
@@ -2289,7 +2671,9 @@ window.SID_LIBRARY = [
     "composerKey": "Daglish_Ben",
     "fileName": "Dogfight_2187.sid",
     "path": "sids/Daglish_Ben/Dogfight_2187.sid",
-    "size": 3326
+    "size": 3326,
+    "durationMs": 197000,
+    "durationText": "3:17"
   },
   {
     "id": "RGFnbGlzaF9CZW4vRmlyZWxvcmQuc2lk",
@@ -2298,7 +2682,9 @@ window.SID_LIBRARY = [
     "composerKey": "Daglish_Ben",
     "fileName": "Firelord.sid",
     "path": "sids/Daglish_Ben/Firelord.sid",
-    "size": 3966
+    "size": 3966,
+    "durationMs": 170000,
+    "durationText": "2:50"
   },
   {
     "id": "RGFnbGlzaF9CZW4vRmxpbnRzdG9uZXMuc2lk",
@@ -2307,7 +2693,9 @@ window.SID_LIBRARY = [
     "composerKey": "Daglish_Ben",
     "fileName": "Flintstones.sid",
     "path": "sids/Daglish_Ben/Flintstones.sid",
-    "size": 5628
+    "size": 5628,
+    "durationMs": 32116,
+    "durationText": "0:32.116"
   },
   {
     "id": "RGFnbGlzaF9CZW4vRm9vdGJhbGxlcl9vZl90aGVfWWVhci5zaWQ",
@@ -2316,7 +2704,9 @@ window.SID_LIBRARY = [
     "composerKey": "Daglish_Ben",
     "fileName": "Footballer_of_the_Year.sid",
     "path": "sids/Daglish_Ben/Footballer_of_the_Year.sid",
-    "size": 4439
+    "size": 4439,
+    "durationMs": 123000,
+    "durationText": "2:03"
   },
   {
     "id": "RGFnbGlzaF9CZW4vRm9vdGJhbGxlcl9vZl90aGVfWWVhcl8yLnNpZA",
@@ -2325,7 +2715,9 @@ window.SID_LIBRARY = [
     "composerKey": "Daglish_Ben",
     "fileName": "Footballer_of_the_Year_2.sid",
     "path": "sids/Daglish_Ben/Footballer_of_the_Year_2.sid",
-    "size": 4691
+    "size": 4691,
+    "durationMs": 99000,
+    "durationText": "1:39"
   },
   {
     "id": "RGFnbGlzaF9CZW4vRnV0dXJlX0tuaWdodC5zaWQ",
@@ -2334,7 +2726,9 @@ window.SID_LIBRARY = [
     "composerKey": "Daglish_Ben",
     "fileName": "Future_Knight.sid",
     "path": "sids/Daglish_Ben/Future_Knight.sid",
-    "size": 3420
+    "size": 3420,
+    "durationMs": 180000,
+    "durationText": "3:00"
   },
   {
     "id": "RGFnbGlzaF9CZW4vRnV0dXJlX0tuaWdodF9JSS5zaWQ",
@@ -2343,7 +2737,9 @@ window.SID_LIBRARY = [
     "composerKey": "Daglish_Ben",
     "fileName": "Future_Knight_II.sid",
     "path": "sids/Daglish_Ben/Future_Knight_II.sid",
-    "size": 2419
+    "size": 2419,
+    "durationMs": 137000,
+    "durationText": "2:17"
   },
   {
     "id": "RGFnbGlzaF9CZW4vR2FyeV9MaW5la2Vyc19Ib3RfU2hvdC5zaWQ",
@@ -2352,7 +2748,9 @@ window.SID_LIBRARY = [
     "composerKey": "Daglish_Ben",
     "fileName": "Gary_Linekers_Hot_Shot.sid",
     "path": "sids/Daglish_Ben/Gary_Linekers_Hot_Shot.sid",
-    "size": 3293
+    "size": 3293,
+    "durationMs": 81000,
+    "durationText": "1:21"
   },
   {
     "id": "RGFnbGlzaF9CZW4vR2FyeV9MaW5la2Vyc19TdXBlcl9Ta2lsbHMuc2lk",
@@ -2361,7 +2759,9 @@ window.SID_LIBRARY = [
     "composerKey": "Daglish_Ben",
     "fileName": "Gary_Linekers_Super_Skills.sid",
     "path": "sids/Daglish_Ben/Gary_Linekers_Super_Skills.sid",
-    "size": 3742
+    "size": 3742,
+    "durationMs": 101000,
+    "durationText": "1:41"
   },
   {
     "id": "RGFnbGlzaF9CZW4vR2F1bnRsZXQuc2lk",
@@ -2370,7 +2770,9 @@ window.SID_LIBRARY = [
     "composerKey": "Daglish_Ben",
     "fileName": "Gauntlet.sid",
     "path": "sids/Daglish_Ben/Gauntlet.sid",
-    "size": 2672
+    "size": 2672,
+    "durationMs": 18000,
+    "durationText": "0:18"
   },
   {
     "id": "RGFnbGlzaF9CZW4vR2F1bnRsZXRfSUkuc2lk",
@@ -2379,7 +2781,9 @@ window.SID_LIBRARY = [
     "composerKey": "Daglish_Ben",
     "fileName": "Gauntlet_II.sid",
     "path": "sids/Daglish_Ben/Gauntlet_II.sid",
-    "size": 3059
+    "size": 3059,
+    "durationMs": 18000,
+    "durationText": "0:18"
   },
   {
     "id": "RGFnbGlzaF9CZW4vR3JlZ19Ob3JtYW5zX1VsdGltYXRlX0dvbGYuc2lk",
@@ -2388,7 +2792,9 @@ window.SID_LIBRARY = [
     "composerKey": "Daglish_Ben",
     "fileName": "Greg_Normans_Ultimate_Golf.sid",
     "path": "sids/Daglish_Ben/Greg_Normans_Ultimate_Golf.sid",
-    "size": 3717
+    "size": 3717,
+    "durationMs": 227000,
+    "durationText": "3:47"
   },
   {
     "id": "RGFnbGlzaF9CZW4vSF9BX1RfRS5zaWQ",
@@ -2397,7 +2803,9 @@ window.SID_LIBRARY = [
     "composerKey": "Daglish_Ben",
     "fileName": "H_A_T_E.sid",
     "path": "sids/Daglish_Ben/H_A_T_E.sid",
-    "size": 3702
+    "size": 3702,
+    "durationMs": 115000,
+    "durationText": "1:55"
   },
   {
     "id": "RGFnbGlzaF9CZW4vSGFkZXNfTmVidWxhLnNpZA",
@@ -2406,7 +2814,9 @@ window.SID_LIBRARY = [
     "composerKey": "Daglish_Ben",
     "fileName": "Hades_Nebula.sid",
     "path": "sids/Daglish_Ben/Hades_Nebula.sid",
-    "size": 5704
+    "size": 5704,
+    "durationMs": 99000,
+    "durationText": "1:39"
   },
   {
     "id": "RGFnbGlzaF9CZW4vSGFydmV5X0hlYWRiYW5nZXIuc2lk",
@@ -2415,7 +2825,9 @@ window.SID_LIBRARY = [
     "composerKey": "Daglish_Ben",
     "fileName": "Harvey_Headbanger.sid",
     "path": "sids/Daglish_Ben/Harvey_Headbanger.sid",
-    "size": 4226
+    "size": 4226,
+    "durationMs": 13000,
+    "durationText": "0:13"
   },
   {
     "id": "RGFnbGlzaF9CZW4vSGUtTWFuX2FuZF90aGVfTWFzdGVyc19vZl90aGVfVW5pdmVyc2Uuc2lk",
@@ -2424,7 +2836,9 @@ window.SID_LIBRARY = [
     "composerKey": "Daglish_Ben",
     "fileName": "He-Man_and_the_Masters_of_the_Universe.sid",
     "path": "sids/Daglish_Ben/He-Man_and_the_Masters_of_the_Universe.sid",
-    "size": 4108
+    "size": 4108,
+    "durationMs": 65000,
+    "durationText": "1:05"
   },
   {
     "id": "RGFnbGlzaF9CZW4vSGVyb2VzX29mX3RoZV9MYW5jZS5zaWQ",
@@ -2433,7 +2847,9 @@ window.SID_LIBRARY = [
     "composerKey": "Daglish_Ben",
     "fileName": "Heroes_of_the_Lance.sid",
     "path": "sids/Daglish_Ben/Heroes_of_the_Lance.sid",
-    "size": 3224
+    "size": 3224,
+    "durationMs": 31000,
+    "durationText": "0:31"
   },
   {
     "id": "RGFnbGlzaF9CZW4vSmFja190aGVfTmlwcGVyLnNpZA",
@@ -2442,7 +2858,9 @@ window.SID_LIBRARY = [
     "composerKey": "Daglish_Ben",
     "fileName": "Jack_the_Nipper.sid",
     "path": "sids/Daglish_Ben/Jack_the_Nipper.sid",
-    "size": 6521
+    "size": 6521,
+    "durationMs": 1000,
+    "durationText": "0:01"
   },
   {
     "id": "RGFnbGlzaF9CZW4vSmFja190aGVfTmlwcGVyX0lJLnNpZA",
@@ -2451,7 +2869,9 @@ window.SID_LIBRARY = [
     "composerKey": "Daglish_Ben",
     "fileName": "Jack_the_Nipper_II.sid",
     "path": "sids/Daglish_Ben/Jack_the_Nipper_II.sid",
-    "size": 4722
+    "size": 4722,
+    "durationMs": 51000,
+    "durationText": "0:51"
   },
   {
     "id": "RGFnbGlzaF9CZW4vSmFwYW5lc2Uuc2lk",
@@ -2460,7 +2880,9 @@ window.SID_LIBRARY = [
     "composerKey": "Daglish_Ben",
     "fileName": "Japanese.sid",
     "path": "sids/Daglish_Ben/Japanese.sid",
-    "size": 7773
+    "size": 7773,
+    "durationMs": 252812,
+    "durationText": "4:12.812"
   },
   {
     "id": "RGFnbGlzaF9CZW4vS2V0dGxlLnNpZA",
@@ -2469,7 +2891,9 @@ window.SID_LIBRARY = [
     "composerKey": "Daglish_Ben",
     "fileName": "Kettle.sid",
     "path": "sids/Daglish_Ben/Kettle.sid",
-    "size": 6806
+    "size": 6806,
+    "durationMs": 159000,
+    "durationText": "2:39"
   },
   {
     "id": "RGFnbGlzaF9CZW4vS2lsbGVyLVJpbmcuc2lk",
@@ -2478,7 +2902,9 @@ window.SID_LIBRARY = [
     "composerKey": "Daglish_Ben",
     "fileName": "Killer-Ring.sid",
     "path": "sids/Daglish_Ben/Killer-Ring.sid",
-    "size": 3279
+    "size": 3279,
+    "durationMs": 215000,
+    "durationText": "3:35"
   },
   {
     "id": "RGFnbGlzaF9CZW4vS3Jha291dC5zaWQ",
@@ -2487,7 +2913,9 @@ window.SID_LIBRARY = [
     "composerKey": "Daglish_Ben",
     "fileName": "Krakout.sid",
     "path": "sids/Daglish_Ben/Krakout.sid",
-    "size": 6142
+    "size": 6142,
+    "durationMs": 170000,
+    "durationText": "2:50"
   },
   {
     "id": "RGFnbGlzaF9CZW4vTF9PX0NfTy5zaWQ",
@@ -2496,7 +2924,9 @@ window.SID_LIBRARY = [
     "composerKey": "Daglish_Ben",
     "fileName": "L_O_C_O.sid",
     "path": "sids/Daglish_Ben/L_O_C_O.sid",
-    "size": 9694
+    "size": 9694,
+    "durationMs": 324000,
+    "durationText": "5:24"
   },
   {
     "id": "RGFnbGlzaF9CZW4vTHVuYXJpLnNpZA",
@@ -2505,7 +2935,9 @@ window.SID_LIBRARY = [
     "composerKey": "Daglish_Ben",
     "fileName": "Lunari.sid",
     "path": "sids/Daglish_Ben/Lunari.sid",
-    "size": 3481
+    "size": 3481,
+    "durationMs": 108000,
+    "durationText": "1:48"
   },
   {
     "id": "RGFnbGlzaF9CZW4vTUFTS19JSUlfVmVub21fU3RyaWtlc19CYWNrLnNpZA",
@@ -2514,7 +2946,9 @@ window.SID_LIBRARY = [
     "composerKey": "Daglish_Ben",
     "fileName": "MASK_III_Venom_Strikes_Back.sid",
     "path": "sids/Daglish_Ben/MASK_III_Venom_Strikes_Back.sid",
-    "size": 4194
+    "size": 4194,
+    "durationMs": 181000,
+    "durationText": "3:01"
   },
   {
     "id": "RGFnbGlzaF9CZW4vTWFzay5zaWQ",
@@ -2523,7 +2957,9 @@ window.SID_LIBRARY = [
     "composerKey": "Daglish_Ben",
     "fileName": "Mask.sid",
     "path": "sids/Daglish_Ben/Mask.sid",
-    "size": 3720
+    "size": 3720,
+    "durationMs": 64000,
+    "durationText": "1:04"
   },
   {
     "id": "RGFnbGlzaF9CZW4vTWFza19JSS5zaWQ",
@@ -2532,7 +2968,9 @@ window.SID_LIBRARY = [
     "composerKey": "Daglish_Ben",
     "fileName": "Mask_II.sid",
     "path": "sids/Daglish_Ben/Mask_II.sid",
-    "size": 3395
+    "size": 3395,
+    "durationMs": 64000,
+    "durationText": "1:04"
   },
   {
     "id": "RGFnbGlzaF9CZW4vTWFzdGVyc19vZl90aGVfVW5pdmVyc2Uuc2lk",
@@ -2541,7 +2979,9 @@ window.SID_LIBRARY = [
     "composerKey": "Daglish_Ben",
     "fileName": "Masters_of_the_Universe.sid",
     "path": "sids/Daglish_Ben/Masters_of_the_Universe.sid",
-    "size": 7538
+    "size": 7538,
+    "durationMs": 78000,
+    "durationText": "1:18"
   },
   {
     "id": "RGFnbGlzaF9CZW4vTWlja2V5X01vdXNlLnNpZA",
@@ -2550,7 +2990,9 @@ window.SID_LIBRARY = [
     "composerKey": "Daglish_Ben",
     "fileName": "Mickey_Mouse.sid",
     "path": "sids/Daglish_Ben/Mickey_Mouse.sid",
-    "size": 3844
+    "size": 3844,
+    "durationMs": 121000,
+    "durationText": "2:01"
   },
   {
     "id": "RGFnbGlzaF9CZW4vTW91bnRpZV9NaWNrc19EZWF0aF9SaWRlLnNpZA",
@@ -2559,7 +3001,9 @@ window.SID_LIBRARY = [
     "composerKey": "Daglish_Ben",
     "fileName": "Mountie_Micks_Death_Ride.sid",
     "path": "sids/Daglish_Ben/Mountie_Micks_Death_Ride.sid",
-    "size": 3238
+    "size": 3238,
+    "durationMs": 188000,
+    "durationText": "3:08"
   },
   {
     "id": "RGFnbGlzaF9CZW4vTXVuc3RlcnMuc2lk",
@@ -2568,7 +3012,9 @@ window.SID_LIBRARY = [
     "composerKey": "Daglish_Ben",
     "fileName": "Munsters.sid",
     "path": "sids/Daglish_Ben/Munsters.sid",
-    "size": 3455
+    "size": 3455,
+    "durationMs": 103000,
+    "durationText": "1:43"
   },
   {
     "id": "RGFnbGlzaF9CZW4vTm9ydGhzdGFyLnNpZA",
@@ -2577,7 +3023,9 @@ window.SID_LIBRARY = [
     "composerKey": "Daglish_Ben",
     "fileName": "Northstar.sid",
     "path": "sids/Daglish_Ben/Northstar.sid",
-    "size": 4087
+    "size": 4087,
+    "durationMs": 44000,
+    "durationText": "0:44"
   },
   {
     "id": "RGFnbGlzaF9CZW4vT2xsaV9hbmRfTGlzc2Euc2lk",
@@ -2586,7 +3034,9 @@ window.SID_LIBRARY = [
     "composerKey": "Daglish_Ben",
     "fileName": "Olli_and_Lissa.sid",
     "path": "sids/Daglish_Ben/Olli_and_Lissa.sid",
-    "size": 3843
+    "size": 3843,
+    "durationMs": 16000,
+    "durationText": "0:16"
   },
   {
     "id": "RGFnbGlzaF9CZW4vUGFjLU1hbmlhLnNpZA",
@@ -2595,7 +3045,9 @@ window.SID_LIBRARY = [
     "composerKey": "Daglish_Ben",
     "fileName": "Pac-Mania.sid",
     "path": "sids/Daglish_Ben/Pac-Mania.sid",
-    "size": 5167
+    "size": 5167,
+    "durationMs": 85000,
+    "durationText": "1:25"
   },
   {
     "id": "RGFnbGlzaF9CZW4vUGVyY3lfdGhlX1BvdHR5X1BpZ2Vvbi5zaWQ",
@@ -2604,7 +3056,9 @@ window.SID_LIBRARY = [
     "composerKey": "Daglish_Ben",
     "fileName": "Percy_the_Potty_Pigeon.sid",
     "path": "sids/Daglish_Ben/Percy_the_Potty_Pigeon.sid",
-    "size": 3658
+    "size": 3658,
+    "durationMs": 56000,
+    "durationText": "0:56"
   },
   {
     "id": "RGFnbGlzaF9CZW4vUHViX0dhbWVzLnNpZA",
@@ -2613,7 +3067,9 @@ window.SID_LIBRARY = [
     "composerKey": "Daglish_Ben",
     "fileName": "Pub_Games.sid",
     "path": "sids/Daglish_Ben/Pub_Games.sid",
-    "size": 6074
+    "size": 6074,
+    "durationMs": 87000,
+    "durationText": "1:27"
   },
   {
     "id": "RGFnbGlzaF9CZW4vUmUtQm91bmRlci5zaWQ",
@@ -2622,7 +3078,9 @@ window.SID_LIBRARY = [
     "composerKey": "Daglish_Ben",
     "fileName": "Re-Bounder.sid",
     "path": "sids/Daglish_Ben/Re-Bounder.sid",
-    "size": 5263
+    "size": 5263,
+    "durationMs": 117000,
+    "durationText": "1:57"
   },
   {
     "id": "RGFnbGlzaF9CZW4vUmVhbF9TdHVudF9FeHBlcnRzLnNpZA",
@@ -2631,7 +3089,9 @@ window.SID_LIBRARY = [
     "composerKey": "Daglish_Ben",
     "fileName": "Real_Stunt_Experts.sid",
     "path": "sids/Daglish_Ben/Real_Stunt_Experts.sid",
-    "size": 3834
+    "size": 3834,
+    "durationMs": 157000,
+    "durationText": "2:37"
   },
   {
     "id": "RGFnbGlzaF9CZW4vUmV0dXJuX29mX3RoZV9NdXRhbnRfQ2FtZWxzLnNpZA",
@@ -2640,7 +3100,9 @@ window.SID_LIBRARY = [
     "composerKey": "Daglish_Ben",
     "fileName": "Return_of_the_Mutant_Camels.sid",
     "path": "sids/Daglish_Ben/Return_of_the_Mutant_Camels.sid",
-    "size": 3742
+    "size": 3742,
+    "durationMs": 245000,
+    "durationText": "4:05"
   },
   {
     "id": "RGFnbGlzaF9CZW4vUm9sbGluZ19TdG9uZWQuc2lk",
@@ -2649,7 +3111,9 @@ window.SID_LIBRARY = [
     "composerKey": "Daglish_Ben",
     "fileName": "Rolling_Stoned.sid",
     "path": "sids/Daglish_Ben/Rolling_Stoned.sid",
-    "size": 3942
+    "size": 3942,
+    "durationMs": 186000,
+    "durationText": "3:06"
   },
   {
     "id": "RGFnbGlzaF9CZW4vU2thdGVfQ3Jhenkuc2lk",
@@ -2658,7 +3122,9 @@ window.SID_LIBRARY = [
     "composerKey": "Daglish_Ben",
     "fileName": "Skate_Crazy.sid",
     "path": "sids/Daglish_Ben/Skate_Crazy.sid",
-    "size": 3672
+    "size": 3672,
+    "durationMs": 8000,
+    "durationText": "0:08"
   },
   {
     "id": "RGFnbGlzaF9CZW4vU2thdGVSb2NrLnNpZA",
@@ -2667,7 +3133,9 @@ window.SID_LIBRARY = [
     "composerKey": "Daglish_Ben",
     "fileName": "SkateRock.sid",
     "path": "sids/Daglish_Ben/SkateRock.sid",
-    "size": 4678
+    "size": 4678,
+    "durationMs": 36000,
+    "durationText": "0:36"
   },
   {
     "id": "RGFnbGlzaF9CZW4vU3RhaXJ3YXlfdG9fSGVhdmVuLnNpZA",
@@ -2676,7 +3144,9 @@ window.SID_LIBRARY = [
     "composerKey": "Daglish_Ben",
     "fileName": "Stairway_to_Heaven.sid",
     "path": "sids/Daglish_Ben/Stairway_to_Heaven.sid",
-    "size": 10323
+    "size": 10323,
+    "durationMs": 461000,
+    "durationText": "7:41"
   },
   {
     "id": "RGFnbGlzaF9CZW4vU3VwZXJfQ2Fycy5zaWQ",
@@ -2685,7 +3155,9 @@ window.SID_LIBRARY = [
     "composerKey": "Daglish_Ben",
     "fileName": "Super_Cars.sid",
     "path": "sids/Daglish_Ben/Super_Cars.sid",
-    "size": 4726
+    "size": 4726,
+    "durationMs": 177000,
+    "durationText": "2:57"
   },
   {
     "id": "RGFnbGlzaF9CZW4vU3VwZXJzcG9ydHMuc2lk",
@@ -2694,7 +3166,9 @@ window.SID_LIBRARY = [
     "composerKey": "Daglish_Ben",
     "fileName": "Supersports.sid",
     "path": "sids/Daglish_Ben/Supersports.sid",
-    "size": 3247
+    "size": 3247,
+    "durationMs": 101000,
+    "durationText": "1:41"
   },
   {
     "id": "RGFnbGlzaF9CZW4vU3dpdGNoYmxhZGUuc2lk",
@@ -2703,7 +3177,9 @@ window.SID_LIBRARY = [
     "composerKey": "Daglish_Ben",
     "fileName": "Switchblade.sid",
     "path": "sids/Daglish_Ben/Switchblade.sid",
-    "size": 5626
+    "size": 5626,
+    "durationMs": 170000,
+    "durationText": "2:50"
   },
   {
     "id": "RGFnbGlzaF9CZW4vVGVjaG5vQ29wLnNpZA",
@@ -2712,7 +3188,9 @@ window.SID_LIBRARY = [
     "composerKey": "Daglish_Ben",
     "fileName": "TechnoCop.sid",
     "path": "sids/Daglish_Ben/TechnoCop.sid",
-    "size": 4870
+    "size": 4870,
+    "durationMs": 154000,
+    "durationText": "2:34"
   },
   {
     "id": "RGFnbGlzaF9CZW4vVGVjaG5vQ29wX1YyLnNpZA",
@@ -2721,7 +3199,9 @@ window.SID_LIBRARY = [
     "composerKey": "Daglish_Ben",
     "fileName": "TechnoCop_V2.sid",
     "path": "sids/Daglish_Ben/TechnoCop_V2.sid",
-    "size": 3868
+    "size": 3868,
+    "durationMs": 184000,
+    "durationText": "3:04"
   },
   {
     "id": "RGFnbGlzaF9CZW4vVGVycmFtZXguc2lk",
@@ -2730,7 +3210,9 @@ window.SID_LIBRARY = [
     "composerKey": "Daglish_Ben",
     "fileName": "Terramex.sid",
     "path": "sids/Daglish_Ben/Terramex.sid",
-    "size": 3524
+    "size": 3524,
+    "durationMs": 194000,
+    "durationText": "3:14"
   },
   {
     "id": "RGFnbGlzaF9CZW4vVGhleV9TdG9sZV9hX01pbGxpb24uc2lk",
@@ -2739,7 +3221,9 @@ window.SID_LIBRARY = [
     "composerKey": "Daglish_Ben",
     "fileName": "They_Stole_a_Million.sid",
     "path": "sids/Daglish_Ben/They_Stole_a_Million.sid",
-    "size": 2693
+    "size": 2693,
+    "durationMs": 68992,
+    "durationText": "1:08.992"
   },
   {
     "id": "RGFnbGlzaF9CZW4vV2F5X29mX3RoZV9UaWdlci5zaWQ",
@@ -2748,7 +3232,9 @@ window.SID_LIBRARY = [
     "composerKey": "Daglish_Ben",
     "fileName": "Way_of_the_Tiger.sid",
     "path": "sids/Daglish_Ben/Way_of_the_Tiger.sid",
-    "size": 3109
+    "size": 3109,
+    "durationMs": 169000,
+    "durationText": "2:49"
   },
   {
     "id": "RGFnbGlzaF9CZW4vV2VfTV9VX1NfSV9DXzEuc2lk",
@@ -2757,7 +3243,9 @@ window.SID_LIBRARY = [
     "composerKey": "Daglish_Ben",
     "fileName": "We_M_U_S_I_C_1.sid",
     "path": "sids/Daglish_Ben/We_M_U_S_I_C_1.sid",
-    "size": 12672
+    "size": 12672,
+    "durationMs": 170396,
+    "durationText": "2:50.396"
   },
   {
     "id": "RGFnbGlzaF9CZW4vV2VfTV9VX1NfSV9DXzIuc2lk",
@@ -2766,7 +3254,9 @@ window.SID_LIBRARY = [
     "composerKey": "Daglish_Ben",
     "fileName": "We_M_U_S_I_C_2.sid",
     "path": "sids/Daglish_Ben/We_M_U_S_I_C_2.sid",
-    "size": 7682
+    "size": 7682,
+    "durationMs": 24819,
+    "durationText": "0:24.819"
   },
   {
     "id": "RGFnbGlzaF9CZW4vV2VfTV9VX1NfSV9DXzMuc2lk",
@@ -2775,7 +3265,9 @@ window.SID_LIBRARY = [
     "composerKey": "Daglish_Ben",
     "fileName": "We_M_U_S_I_C_3.sid",
     "path": "sids/Daglish_Ben/We_M_U_S_I_C_3.sid",
-    "size": 11213
+    "size": 11213,
+    "durationMs": 90516,
+    "durationText": "1:30.516"
   },
   {
     "id": "RGFnbGlzaF9CZW4vV2VfTV9VX1NfSV9DXzg2LnNpZA",
@@ -2784,7 +3276,9 @@ window.SID_LIBRARY = [
     "composerKey": "Daglish_Ben",
     "fileName": "We_M_U_S_I_C_86.sid",
     "path": "sids/Daglish_Ben/We_M_U_S_I_C_86.sid",
-    "size": 21238
+    "size": 21238,
+    "durationMs": 17920,
+    "durationText": "0:17.92"
   },
   {
     "id": "RGFnbGlzaF9CZW4vV2lsbGlhbV9Xb2JibGVyLnNpZA",
@@ -2793,7 +3287,9 @@ window.SID_LIBRARY = [
     "composerKey": "Daglish_Ben",
     "fileName": "William_Wobbler.sid",
     "path": "sids/Daglish_Ben/William_Wobbler.sid",
-    "size": 10228
+    "size": 10228,
+    "durationMs": 44000,
+    "durationText": "0:44"
   },
   {
     "id": "RGFnbGlzaF9CZW4vV2l6YXJkX1dhcnouc2lk",
@@ -2802,7 +3298,9 @@ window.SID_LIBRARY = [
     "composerKey": "Daglish_Ben",
     "fileName": "Wizard_Warz.sid",
     "path": "sids/Daglish_Ben/Wizard_Warz.sid",
-    "size": 4234
+    "size": 4234,
+    "durationMs": 202000,
+    "durationText": "3:22"
   },
   {
     "id": "RGFnbGlzaF9CZW4vWmFyamF6LnNpZA",
@@ -2811,7 +3309,9 @@ window.SID_LIBRARY = [
     "composerKey": "Daglish_Ben",
     "fileName": "Zarjaz.sid",
     "path": "sids/Daglish_Ben/Zarjaz.sid",
-    "size": 4478
+    "size": 4478,
+    "durationMs": 226000,
+    "durationText": "3:46"
   },
   {
     "id": "RHVubl9EYXZpZC9BZHZhbmNlZF9QaW5iYWxsX1NpbXVsYXRvci5zaWQ",
@@ -2820,7 +3320,9 @@ window.SID_LIBRARY = [
     "composerKey": "Dunn_David",
     "fileName": "Advanced_Pinball_Simulator.sid",
     "path": "sids/Dunn_David/Advanced_Pinball_Simulator.sid",
-    "size": 4058
+    "size": 4058,
+    "durationMs": 31000,
+    "durationText": "0:31"
   },
   {
     "id": "RHVubl9EYXZpZC9CYXR0bGVfb2ZfTWlkd2F5LnNpZA",
@@ -2829,7 +3331,9 @@ window.SID_LIBRARY = [
     "composerKey": "Dunn_David",
     "fileName": "Battle_of_Midway.sid",
     "path": "sids/Dunn_David/Battle_of_Midway.sid",
-    "size": 1361
+    "size": 1361,
+    "durationMs": 20000,
+    "durationText": "0:20"
   },
   {
     "id": "RHVubl9EYXZpZC9DYW5vZV9SYWNlX1NpbXVsYXRvci5zaWQ",
@@ -2838,7 +3342,9 @@ window.SID_LIBRARY = [
     "composerKey": "Dunn_David",
     "fileName": "Canoe_Race_Simulator.sid",
     "path": "sids/Dunn_David/Canoe_Race_Simulator.sid",
-    "size": 1260
+    "size": 1260,
+    "durationMs": 21000,
+    "durationText": "0:21"
   },
   {
     "id": "RHVubl9EYXZpZC9DYXRhY29tYnMuc2lk",
@@ -2847,7 +3353,9 @@ window.SID_LIBRARY = [
     "composerKey": "Dunn_David",
     "fileName": "Catacombs.sid",
     "path": "sids/Dunn_David/Catacombs.sid",
-    "size": 4014
+    "size": 4014,
+    "durationMs": 14000,
+    "durationText": "0:14"
   },
   {
     "id": "RHVubl9EYXZpZC9DaGlsbGVyLnNpZA",
@@ -2856,7 +3364,9 @@ window.SID_LIBRARY = [
     "composerKey": "Dunn_David",
     "fileName": "Chiller.sid",
     "path": "sids/Dunn_David/Chiller.sid",
-    "size": 3273
+    "size": 3273,
+    "durationMs": 5000,
+    "durationText": "0:05"
   },
   {
     "id": "RHVubl9EYXZpZC9DaGlsbGVyX3YyLnNpZA",
@@ -2865,7 +3375,9 @@ window.SID_LIBRARY = [
     "composerKey": "Dunn_David",
     "fileName": "Chiller_v2.sid",
     "path": "sids/Dunn_David/Chiller_v2.sid",
-    "size": 3273
+    "size": 3273,
+    "durationMs": 6000,
+    "durationText": "0:06"
   },
   {
     "id": "RHVubl9EYXZpZC9EYWxleV9UaG9tcHNvbnNfRGVjYXRobG9uLnNpZA",
@@ -2874,7 +3386,9 @@ window.SID_LIBRARY = [
     "composerKey": "Dunn_David",
     "fileName": "Daley_Thompsons_Decathlon.sid",
     "path": "sids/Dunn_David/Daley_Thompsons_Decathlon.sid",
-    "size": 2620
+    "size": 2620,
+    "durationMs": 38000,
+    "durationText": "0:38"
   },
   {
     "id": "RHVubl9EYXZpZC9EYXJrX1Rvd2VyLnNpZA",
@@ -2883,7 +3397,9 @@ window.SID_LIBRARY = [
     "composerKey": "Dunn_David",
     "fileName": "Dark_Tower.sid",
     "path": "sids/Dunn_David/Dark_Tower.sid",
-    "size": 4734
+    "size": 4734,
+    "durationMs": 58000,
+    "durationText": "0:58"
   },
   {
     "id": "RHVubl9EYXZpZC9Eb21haW4uc2lk",
@@ -2892,7 +3408,9 @@ window.SID_LIBRARY = [
     "composerKey": "Dunn_David",
     "fileName": "Domain.sid",
     "path": "sids/Dunn_David/Domain.sid",
-    "size": 3524
+    "size": 3524,
+    "durationMs": 53867,
+    "durationText": "0:53.867"
   },
   {
     "id": "RHVubl9EYXZpZC9FbGl0ZS5zaWQ",
@@ -2901,7 +3419,9 @@ window.SID_LIBRARY = [
     "composerKey": "Dunn_David",
     "fileName": "Elite.sid",
     "path": "sids/Dunn_David/Elite.sid",
-    "size": 6343
+    "size": 6343,
+    "durationMs": 88000,
+    "durationText": "1:28"
   },
   {
     "id": "RHVubl9EYXZpZC9FbGl0ZV8xMjguc2lk",
@@ -2910,7 +3430,9 @@ window.SID_LIBRARY = [
     "composerKey": "Dunn_David",
     "fileName": "Elite_128.sid",
     "path": "sids/Dunn_David/Elite_128.sid",
-    "size": 5805
+    "size": 5805,
+    "durationMs": 128000,
+    "durationText": "2:08"
   },
   {
     "id": "RHVubl9EYXZpZC9FbGl0ZV8xMjhfTlRTQy5zaWQ",
@@ -2919,7 +3441,9 @@ window.SID_LIBRARY = [
     "composerKey": "Dunn_David",
     "fileName": "Elite_128_NTSC.sid",
     "path": "sids/Dunn_David/Elite_128_NTSC.sid",
-    "size": 5804
+    "size": 5804,
+    "durationMs": 131000,
+    "durationText": "2:11"
   },
   {
     "id": "RHVubl9EYXZpZC9Fc2NhcGVfZnJvbV9QYXJhZGlzZS5zaWQ",
@@ -2928,7 +3452,9 @@ window.SID_LIBRARY = [
     "composerKey": "Dunn_David",
     "fileName": "Escape_from_Paradise.sid",
     "path": "sids/Dunn_David/Escape_from_Paradise.sid",
-    "size": 4734
+    "size": 4734,
+    "durationMs": 70921,
+    "durationText": "1:10.921"
   },
   {
     "id": "RHVubl9EYXZpZC9GaW5kZXJzX0tlZXBlcnMuc2lk",
@@ -2937,7 +3463,9 @@ window.SID_LIBRARY = [
     "composerKey": "Dunn_David",
     "fileName": "Finders_Keepers.sid",
     "path": "sids/Dunn_David/Finders_Keepers.sid",
-    "size": 3168
+    "size": 3168,
+    "durationMs": 92000,
+    "durationText": "1:32"
   },
   {
     "id": "RHVubl9EYXZpZC9GbGlnaHRfUGF0aF83Mzcuc2lk",
@@ -2946,7 +3474,9 @@ window.SID_LIBRARY = [
     "composerKey": "Dunn_David",
     "fileName": "Flight_Path_737.sid",
     "path": "sids/Dunn_David/Flight_Path_737.sid",
-    "size": 1758
+    "size": 1758,
+    "durationMs": 41000,
+    "durationText": "0:41"
   },
   {
     "id": "RHVubl9EYXZpZC9Gb3VydGhfUHJvdG9jb2wuc2lk",
@@ -2955,7 +3485,9 @@ window.SID_LIBRARY = [
     "composerKey": "Dunn_David",
     "fileName": "Fourth_Protocol.sid",
     "path": "sids/Dunn_David/Fourth_Protocol.sid",
-    "size": 4246
+    "size": 4246,
+    "durationMs": 149000,
+    "durationText": "2:29"
   },
   {
     "id": "RHVubl9EYXZpZC9HaWxsaWdhbnNfR29sZC5zaWQ",
@@ -2964,7 +3496,9 @@ window.SID_LIBRARY = [
     "composerKey": "Dunn_David",
     "fileName": "Gilligans_Gold.sid",
     "path": "sids/Dunn_David/Gilligans_Gold.sid",
-    "size": 4982
+    "size": 4982,
+    "durationMs": 23000,
+    "durationText": "0:23"
   },
   {
     "id": "RHVubl9EYXZpZC9IaWdobm9vbi5zaWQ",
@@ -2973,7 +3507,9 @@ window.SID_LIBRARY = [
     "composerKey": "Dunn_David",
     "fileName": "Highnoon.sid",
     "path": "sids/Dunn_David/Highnoon.sid",
-    "size": 4118
+    "size": 4118,
+    "durationMs": 23704,
+    "durationText": "0:23.704"
   },
   {
     "id": "RHVubl9EYXZpZC9IeXBlcl9CaWtlci5zaWQ",
@@ -2982,7 +3518,9 @@ window.SID_LIBRARY = [
     "composerKey": "Dunn_David",
     "fileName": "Hyper_Biker.sid",
     "path": "sids/Dunn_David/Hyper_Biker.sid",
-    "size": 1662
+    "size": 1662,
+    "durationMs": 26000,
+    "durationText": "0:26"
   },
   {
     "id": "RHVubl9EYXZpZC9JbnRlcm5hdGlvbmFsX1J1Z2J5X1NpbXVsYXRvci5zaWQ",
@@ -2991,7 +3529,9 @@ window.SID_LIBRARY = [
     "composerKey": "Dunn_David",
     "fileName": "International_Rugby_Simulator.sid",
     "path": "sids/Dunn_David/International_Rugby_Simulator.sid",
-    "size": 4522
+    "size": 4522,
+    "durationMs": 65000,
+    "durationText": "1:05"
   },
   {
     "id": "RHVubl9EYXZpZC9JbnRlcm5hdGlvbmFsX1NwZWVkd2F5LnNpZA",
@@ -3000,7 +3540,9 @@ window.SID_LIBRARY = [
     "composerKey": "Dunn_David",
     "fileName": "International_Speedway.sid",
     "path": "sids/Dunn_David/International_Speedway.sid",
-    "size": 3110
+    "size": 3110,
+    "durationMs": 36000,
+    "durationText": "0:36"
   },
   {
     "id": "RHVubl9EYXZpZC9KZXRfQmlrZV9TaW11bGF0b3Iuc2lk",
@@ -3009,7 +3551,9 @@ window.SID_LIBRARY = [
     "composerKey": "Dunn_David",
     "fileName": "Jet_Bike_Simulator.sid",
     "path": "sids/Dunn_David/Jet_Bike_Simulator.sid",
-    "size": 9942
+    "size": 9942,
+    "durationMs": 45966,
+    "durationText": "0:45.966"
   },
   {
     "id": "RHVubl9EYXZpZC9KdW1wX0pldC5zaWQ",
@@ -3018,7 +3562,9 @@ window.SID_LIBRARY = [
     "composerKey": "Dunn_David",
     "fileName": "Jump_Jet.sid",
     "path": "sids/Dunn_David/Jump_Jet.sid",
-    "size": 10903
+    "size": 10903,
+    "durationMs": 54000,
+    "durationText": "0:54"
   },
   {
     "id": "RHVubl9EYXZpZC9Lcm9tYXpvbmUuc2lk",
@@ -3027,7 +3573,9 @@ window.SID_LIBRARY = [
     "composerKey": "Dunn_David",
     "fileName": "Kromazone.sid",
     "path": "sids/Dunn_David/Kromazone.sid",
-    "size": 5417
+    "size": 5417,
+    "durationMs": 170000,
+    "durationText": "2:50"
   },
   {
     "id": "RHVubl9EYXZpZC9MYXNfVmVnYXMuc2lk",
@@ -3036,7 +3584,9 @@ window.SID_LIBRARY = [
     "composerKey": "Dunn_David",
     "fileName": "Las_Vegas.sid",
     "path": "sids/Dunn_David/Las_Vegas.sid",
-    "size": 1082
+    "size": 1082,
+    "durationMs": 14000,
+    "durationText": "0:14"
   },
   {
     "id": "RHVubl9EYXZpZC9NYWdpY19NYWRuZXNzLnNpZA",
@@ -3045,7 +3595,9 @@ window.SID_LIBRARY = [
     "composerKey": "Dunn_David",
     "fileName": "Magic_Madness.sid",
     "path": "sids/Dunn_David/Magic_Madness.sid",
-    "size": 3662
+    "size": 3662,
+    "durationMs": 77000,
+    "durationText": "1:17"
   },
   {
     "id": "RHVubl9EYXZpZC9OaWdodF9SYWNlci5zaWQ",
@@ -3054,7 +3606,9 @@ window.SID_LIBRARY = [
     "composerKey": "Dunn_David",
     "fileName": "Night_Racer.sid",
     "path": "sids/Dunn_David/Night_Racer.sid",
-    "size": 4078
+    "size": 4078,
+    "durationMs": 65000,
+    "durationText": "1:05"
   },
   {
     "id": "RHVubl9EYXZpZC9Ob250ZXJyYXF1ZW91cy5zaWQ",
@@ -3063,7 +3617,9 @@ window.SID_LIBRARY = [
     "composerKey": "Dunn_David",
     "fileName": "Nonterraqueous.sid",
     "path": "sids/Dunn_David/Nonterraqueous.sid",
-    "size": 2406
+    "size": 2406,
+    "durationMs": 53200,
+    "durationText": "0:53.2"
   },
   {
     "id": "RHVubl9EYXZpZC9QX0NfRnV6ei5zaWQ",
@@ -3072,7 +3628,9 @@ window.SID_LIBRARY = [
     "composerKey": "Dunn_David",
     "fileName": "P_C_Fuzz.sid",
     "path": "sids/Dunn_David/P_C_Fuzz.sid",
-    "size": 2799
+    "size": 2799,
+    "durationMs": 83000,
+    "durationText": "1:23"
   },
   {
     "id": "RHVubl9EYXZpZC9QaXBlcy5zaWQ",
@@ -3081,7 +3639,9 @@ window.SID_LIBRARY = [
     "composerKey": "Dunn_David",
     "fileName": "Pipes.sid",
     "path": "sids/Dunn_David/Pipes.sid",
-    "size": 3989
+    "size": 3989,
+    "durationMs": 169638,
+    "durationText": "2:49.638"
   },
   {
     "id": "RHVubl9EYXZpZC9Qb3dlcl9Cb2F0X1JhY2Uuc2lk",
@@ -3090,7 +3650,9 @@ window.SID_LIBRARY = [
     "composerKey": "Dunn_David",
     "fileName": "Power_Boat_Race.sid",
     "path": "sids/Dunn_David/Power_Boat_Race.sid",
-    "size": 2926
+    "size": 2926,
+    "durationMs": 75000,
+    "durationText": "1:15"
   },
   {
     "id": "RHVubl9EYXZpZC9Qcm9kaWd5LnNpZA",
@@ -3099,7 +3661,9 @@ window.SID_LIBRARY = [
     "composerKey": "Dunn_David",
     "fileName": "Prodigy.sid",
     "path": "sids/Dunn_David/Prodigy.sid",
-    "size": 3504
+    "size": 3504,
+    "durationMs": 64000,
+    "durationText": "1:04"
   },
   {
     "id": "RHVubl9EYXZpZC9SYWcuc2lk",
@@ -3108,7 +3672,9 @@ window.SID_LIBRARY = [
     "composerKey": "Dunn_David",
     "fileName": "Rag.sid",
     "path": "sids/Dunn_David/Rag.sid",
-    "size": 2864
+    "size": 2864,
+    "durationMs": 96000,
+    "durationText": "1:36"
   },
   {
     "id": "RHVubl9EYXZpZC9SaW5nX01hc3Rlci5zaWQ",
@@ -3117,7 +3683,9 @@ window.SID_LIBRARY = [
     "composerKey": "Dunn_David",
     "fileName": "Ring_Master.sid",
     "path": "sids/Dunn_David/Ring_Master.sid",
-    "size": 4870
+    "size": 4870,
+    "durationMs": 21000,
+    "durationText": "0:21"
   },
   {
     "id": "RHVubl9EYXZpZC9TbmFwX0RyYWdvbi5zaWQ",
@@ -3126,7 +3694,9 @@ window.SID_LIBRARY = [
     "composerKey": "Dunn_David",
     "fileName": "Snap_Dragon.sid",
     "path": "sids/Dunn_David/Snap_Dragon.sid",
-    "size": 4204
+    "size": 4204,
+    "durationMs": 93000,
+    "durationText": "1:33"
   },
   {
     "id": "RHVubl9EYXZpZC9Tb3VsX0dlbV9vZl9NYXJ0ZWsuc2lk",
@@ -3135,7 +3705,9 @@ window.SID_LIBRARY = [
     "composerKey": "Dunn_David",
     "fileName": "Soul_Gem_of_Martek.sid",
     "path": "sids/Dunn_David/Soul_Gem_of_Martek.sid",
-    "size": 5543
+    "size": 5543,
+    "durationMs": 23000,
+    "durationText": "0:23"
   },
   {
     "id": "RHVubl9EYXZpZC9TcGFjZV9IdW50ZXIuc2lk",
@@ -3144,7 +3716,9 @@ window.SID_LIBRARY = [
     "composerKey": "Dunn_David",
     "fileName": "Space_Hunter.sid",
     "path": "sids/Dunn_David/Space_Hunter.sid",
-    "size": 3574
+    "size": 3574,
+    "durationMs": 117000,
+    "durationText": "1:57"
   },
   {
     "id": "RHVubl9EYXZpZC9TdGFyX1RyZWstVGhlX1JlYmVsX1VuaXZlcnNlLnNpZA",
@@ -3153,7 +3727,9 @@ window.SID_LIBRARY = [
     "composerKey": "Dunn_David",
     "fileName": "Star_Trek-The_Rebel_Universe.sid",
     "path": "sids/Dunn_David/Star_Trek-The_Rebel_Universe.sid",
-    "size": 2671
+    "size": 2671,
+    "durationMs": 47000,
+    "durationText": "0:47"
   },
   {
     "id": "RHVubl9EYXZpZC9UaGFpX0JveGluZy5zaWQ",
@@ -3162,7 +3738,9 @@ window.SID_LIBRARY = [
     "composerKey": "Dunn_David",
     "fileName": "Thai_Boxing.sid",
     "path": "sids/Dunn_David/Thai_Boxing.sid",
-    "size": 3731
+    "size": 3731,
+    "durationMs": 85000,
+    "durationText": "1:25"
   },
   {
     "id": "RHVubl9EYXZpZC9UaGVhdHJlX0V1cm9wZS5zaWQ",
@@ -3171,7 +3749,9 @@ window.SID_LIBRARY = [
     "composerKey": "Dunn_David",
     "fileName": "Theatre_Europe.sid",
     "path": "sids/Dunn_David/Theatre_Europe.sid",
-    "size": 2534
+    "size": 2534,
+    "durationMs": 56000,
+    "durationText": "0:56"
   },
   {
     "id": "RHVubl9EYXZpZC9Ub3JuYWRvX0xvd19MZXZlbC5zaWQ",
@@ -3180,7 +3760,9 @@ window.SID_LIBRARY = [
     "composerKey": "Dunn_David",
     "fileName": "Tornado_Low_Level.sid",
     "path": "sids/Dunn_David/Tornado_Low_Level.sid",
-    "size": 1686
+    "size": 1686,
+    "durationMs": 23000,
+    "durationText": "0:23"
   },
   {
     "id": "RHVubl9EYXZpZC9UcmFwZG9vci5zaWQ",
@@ -3189,7 +3771,9 @@ window.SID_LIBRARY = [
     "composerKey": "Dunn_David",
     "fileName": "Trapdoor.sid",
     "path": "sids/Dunn_David/Trapdoor.sid",
-    "size": 2942
+    "size": 2942,
+    "durationMs": 50000,
+    "durationText": "0:50"
   },
   {
     "id": "RHVubl9EYXZpZC9Ucm9waWNhbF9GZXZlci5zaWQ",
@@ -3198,7 +3782,9 @@ window.SID_LIBRARY = [
     "composerKey": "Dunn_David",
     "fileName": "Tropical_Fever.sid",
     "path": "sids/Dunn_David/Tropical_Fever.sid",
-    "size": 2315
+    "size": 2315,
+    "durationMs": 22000,
+    "durationText": "0:22"
   },
   {
     "id": "RHVubl9EYXZpZC9aZXRhXzcuc2lk",
@@ -3207,7 +3793,9 @@ window.SID_LIBRARY = [
     "composerKey": "Dunn_David",
     "fileName": "Zeta_7.sid",
     "path": "sids/Dunn_David/Zeta_7.sid",
-    "size": 5489
+    "size": 5489,
+    "durationMs": 76000,
+    "durationText": "1:16"
   },
   {
     "id": "RHVubl9EYXZpZC9ab2RpYWMuc2lk",
@@ -3216,7 +3804,9 @@ window.SID_LIBRARY = [
     "composerKey": "Dunn_David",
     "fileName": "Zodiac.sid",
     "path": "sids/Dunn_David/Zodiac.sid",
-    "size": 1264
+    "size": 1264,
+    "durationMs": 26000,
+    "durationText": "0:26"
   },
   {
     "id": "Rm9sbGluX0dlb2ZmL0FpZ2luYXNfUHJvcGhlY3kuc2lk",
@@ -3225,7 +3815,9 @@ window.SID_LIBRARY = [
     "composerKey": "Follin_Geoff",
     "fileName": "Aiginas_Prophecy.sid",
     "path": "sids/Follin_Geoff/Aiginas_Prophecy.sid",
-    "size": 11631
+    "size": 11631,
+    "durationMs": 124000,
+    "durationText": "2:04"
   },
   {
     "id": "Rm9sbGluX0dlb2ZmL0JhYnlfQmx1ZXMuc2lk",
@@ -3234,7 +3826,9 @@ window.SID_LIBRARY = [
     "composerKey": "Follin_Geoff",
     "fileName": "Baby_Blues.sid",
     "path": "sids/Follin_Geoff/Baby_Blues.sid",
-    "size": 6386
+    "size": 6386,
+    "durationMs": 20000,
+    "durationText": "0:20"
   },
   {
     "id": "Rm9sbGluX0dlb2ZmL0NoZXN0ZXJfRmllbGQuc2lk",
@@ -3243,7 +3837,9 @@ window.SID_LIBRARY = [
     "composerKey": "Follin_Geoff",
     "fileName": "Chester_Field.sid",
     "path": "sids/Follin_Geoff/Chester_Field.sid",
-    "size": 11262
+    "size": 11262,
+    "durationMs": 87000,
+    "durationText": "1:27"
   },
   {
     "id": "Rm9sbGluX0dlb2ZmL0Nvc21pY19TdG9ybS5zaWQ",
@@ -3252,7 +3848,9 @@ window.SID_LIBRARY = [
     "composerKey": "Follin_Geoff",
     "fileName": "Cosmic_Storm.sid",
     "path": "sids/Follin_Geoff/Cosmic_Storm.sid",
-    "size": 10488
+    "size": 10488,
+    "durationMs": 116000,
+    "durationText": "1:56"
   },
   {
     "id": "Rm9sbGluX0dlb2ZmL0Zvb3Rsb29zZS5zaWQ",
@@ -3261,7 +3859,9 @@ window.SID_LIBRARY = [
     "composerKey": "Follin_Geoff",
     "fileName": "Footloose.sid",
     "path": "sids/Follin_Geoff/Footloose.sid",
-    "size": 9031
+    "size": 9031,
+    "durationMs": 145936,
+    "durationText": "2:25.936"
   },
   {
     "id": "Rm9sbGluX0dlb2ZmL0dob3N0dG93bi5zaWQ",
@@ -3270,7 +3870,9 @@ window.SID_LIBRARY = [
     "composerKey": "Follin_Geoff",
     "fileName": "Ghosttown.sid",
     "path": "sids/Follin_Geoff/Ghosttown.sid",
-    "size": 7265
+    "size": 7265,
+    "durationMs": 114000,
+    "durationText": "1:54"
   },
   {
     "id": "Rm9sbGluX0dlb2ZmL0dvb3NlYnVzdGVycy5zaWQ",
@@ -3279,7 +3881,9 @@ window.SID_LIBRARY = [
     "composerKey": "Follin_Geoff",
     "fileName": "Goosebusters.sid",
     "path": "sids/Follin_Geoff/Goosebusters.sid",
-    "size": 7012
+    "size": 7012,
+    "durationMs": 123000,
+    "durationText": "2:03"
   },
   {
     "id": "Rm9sbGluX0dlb2ZmL0d1bnNsaW5nZXIuc2lk",
@@ -3288,7 +3892,9 @@ window.SID_LIBRARY = [
     "composerKey": "Follin_Geoff",
     "fileName": "Gunslinger.sid",
     "path": "sids/Follin_Geoff/Gunslinger.sid",
-    "size": 7453
+    "size": 7453,
+    "durationMs": 42000,
+    "durationText": "0:42"
   },
   {
     "id": "Rm9sbGluX0dlb2ZmL011c2ljX0RlbW9fVmVyc2lvbl8yLnNpZA",
@@ -3297,7 +3903,9 @@ window.SID_LIBRARY = [
     "composerKey": "Follin_Geoff",
     "fileName": "Music_Demo_Version_2.sid",
     "path": "sids/Follin_Geoff/Music_Demo_Version_2.sid",
-    "size": 32444
+    "size": 32444,
+    "durationMs": 68000,
+    "durationText": "1:08"
   },
   {
     "id": "Rm9sbGluX0dlb2ZmL1B1enpuaWMuc2lk",
@@ -3306,7 +3914,9 @@ window.SID_LIBRARY = [
     "composerKey": "Follin_Geoff",
     "fileName": "Puzznic.sid",
     "path": "sids/Follin_Geoff/Puzznic.sid",
-    "size": 9052
+    "size": 9052,
+    "durationMs": 14000,
+    "durationText": "0:14"
   },
   {
     "id": "Rm9sbGluX0dlb2ZmL1NseV9TcHlfU2VjcmV0X0FnZW50LnNpZA",
@@ -3315,7 +3925,9 @@ window.SID_LIBRARY = [
     "composerKey": "Follin_Geoff",
     "fileName": "Sly_Spy_Secret_Agent.sid",
     "path": "sids/Follin_Geoff/Sly_Spy_Secret_Agent.sid",
-    "size": 37502
+    "size": 37502,
+    "durationMs": 67031,
+    "durationText": "1:07.031"
   },
   {
     "id": "Rm9sbGluX0dlb2ZmL1NvbGFyX0pldG1hbi5zaWQ",
@@ -3324,7 +3936,9 @@ window.SID_LIBRARY = [
     "composerKey": "Follin_Geoff",
     "fileName": "Solar_Jetman.sid",
     "path": "sids/Follin_Geoff/Solar_Jetman.sid",
-    "size": 6597
+    "size": 6597,
+    "durationMs": 58000,
+    "durationText": "0:58"
   },
   {
     "id": "Rm9sbGluX1RpbS9BZ2VudF9YX0lJX1RoZV9NYWRfUHJvZnNfQmFjay5zaWQ",
@@ -3333,7 +3947,9 @@ window.SID_LIBRARY = [
     "composerKey": "Follin_Tim",
     "fileName": "Agent_X_II_The_Mad_Profs_Back.sid",
     "path": "sids/Follin_Tim/Agent_X_II_The_Mad_Profs_Back.sid",
-    "size": 21389
+    "size": 21389,
+    "durationMs": 154000,
+    "durationText": "2:34"
   },
   {
     "id": "Rm9sbGluX1RpbS9CbGFja19MYW1wLnNpZA",
@@ -3342,7 +3958,9 @@ window.SID_LIBRARY = [
     "composerKey": "Follin_Tim",
     "fileName": "Black_Lamp.sid",
     "path": "sids/Follin_Tim/Black_Lamp.sid",
-    "size": 7043
+    "size": 7043,
+    "durationMs": 138000,
+    "durationText": "2:18"
   },
   {
     "id": "Rm9sbGluX1RpbS9Cb2R5c2xhbS5zaWQ",
@@ -3351,7 +3969,9 @@ window.SID_LIBRARY = [
     "composerKey": "Follin_Tim",
     "fileName": "Bodyslam.sid",
     "path": "sids/Follin_Tim/Bodyslam.sid",
-    "size": 7107
+    "size": 7107,
+    "durationMs": 116000,
+    "durationText": "1:56"
   },
   {
     "id": "Rm9sbGluX1RpbS9HaG91bHNfbl9HaG9zdHNfQWx0ZXJuYXRlLnNpZA",
@@ -3360,7 +3980,9 @@ window.SID_LIBRARY = [
     "composerKey": "Follin_Tim",
     "fileName": "Ghouls_n_Ghosts_Alternate.sid",
     "path": "sids/Follin_Tim/Ghouls_n_Ghosts_Alternate.sid",
-    "size": 4202
+    "size": 4202,
+    "durationMs": 53000,
+    "durationText": "0:53"
   },
   {
     "id": "Rm9sbGluX1RpbS9MX0VfRF9TdG9ybS5zaWQ",
@@ -3369,7 +3991,9 @@ window.SID_LIBRARY = [
     "composerKey": "Follin_Tim",
     "fileName": "L_E_D_Storm.sid",
     "path": "sids/Follin_Tim/L_E_D_Storm.sid",
-    "size": 13155
+    "size": 13155,
+    "durationMs": 114000,
+    "durationText": "1:54"
   },
   {
     "id": "Rm9sbGluX1RpbS9MX0VfRF9TdG9ybV9BbHRlcm5hdGUuc2lk",
@@ -3378,7 +4002,9 @@ window.SID_LIBRARY = [
     "composerKey": "Follin_Tim",
     "fileName": "L_E_D_Storm_Alternate.sid",
     "path": "sids/Follin_Tim/L_E_D_Storm_Alternate.sid",
-    "size": 6846
+    "size": 6846,
+    "durationMs": 114000,
+    "durationText": "1:54"
   },
   {
     "id": "Rm9sbGluX1RpbS9NYWdpY19Kb2huc29uc19CYXNrZXRiYWxsLnNpZA",
@@ -3387,7 +4013,9 @@ window.SID_LIBRARY = [
     "composerKey": "Follin_Tim",
     "fileName": "Magic_Johnsons_Basketball.sid",
     "path": "sids/Follin_Tim/Magic_Johnsons_Basketball.sid",
-    "size": 6739
+    "size": 6739,
+    "durationMs": 81000,
+    "durationText": "1:21"
   },
   {
     "id": "Rm9sbGluX1RpbS9NdXNpY19EZW1vX1ZlcnNpb25fMS5zaWQ",
@@ -3396,7 +4024,9 @@ window.SID_LIBRARY = [
     "composerKey": "Follin_Tim",
     "fileName": "Music_Demo_Version_1.sid",
     "path": "sids/Follin_Tim/Music_Demo_Version_1.sid",
-    "size": 24383
+    "size": 24383,
+    "durationMs": 138000,
+    "durationText": "2:18"
   },
   {
     "id": "Rm9sbGluX1RpbS9QZXRlcl9QYWNrX1JhdC5zaWQ",
@@ -3405,7 +4035,9 @@ window.SID_LIBRARY = [
     "composerKey": "Follin_Tim",
     "fileName": "Peter_Pack_Rat.sid",
     "path": "sids/Follin_Tim/Peter_Pack_Rat.sid",
-    "size": 6255
+    "size": 6255,
+    "durationMs": 64000,
+    "durationText": "1:04"
   },
   {
     "id": "Rm9sbGluX1RpbS9Qc3ljaG9fUGlnc19VWEIuc2lk",
@@ -3414,7 +4046,9 @@ window.SID_LIBRARY = [
     "composerKey": "Follin_Tim",
     "fileName": "Psycho_Pigs_UXB.sid",
     "path": "sids/Follin_Tim/Psycho_Pigs_UXB.sid",
-    "size": 6674
+    "size": 6674,
+    "durationMs": 15000,
+    "durationText": "0:15"
   },
   {
     "id": "Rm9sbGluX1RpbS9RaXguc2lk",
@@ -3423,7 +4057,9 @@ window.SID_LIBRARY = [
     "composerKey": "Follin_Tim",
     "fileName": "Qix.sid",
     "path": "sids/Follin_Tim/Qix.sid",
-    "size": 7597
+    "size": 7597,
+    "durationMs": 14000,
+    "durationText": "0:14"
   },
   {
     "id": "Rm9sbGluX1RpbS9SYXdfUmVjcnVpdC5zaWQ",
@@ -3432,7 +4068,9 @@ window.SID_LIBRARY = [
     "composerKey": "Follin_Tim",
     "fileName": "Raw_Recruit.sid",
     "path": "sids/Follin_Tim/Raw_Recruit.sid",
-    "size": 5038
+    "size": 5038,
+    "durationMs": 110000,
+    "durationText": "1:50"
   },
   {
     "id": "Rm9sbGluX1RpbS9Ta3lfU2hhcmsuc2lk",
@@ -3441,7 +4079,9 @@ window.SID_LIBRARY = [
     "composerKey": "Follin_Tim",
     "fileName": "Sky_Shark.sid",
     "path": "sids/Follin_Tim/Sky_Shark.sid",
-    "size": 7878
+    "size": 7878,
+    "durationMs": 33000,
+    "durationText": "0:33"
   },
   {
     "id": "Rm9sbGluX1RpbS9UZXN0X0JpdHMuc2lk",
@@ -3450,7 +4090,9 @@ window.SID_LIBRARY = [
     "composerKey": "Follin_Tim",
     "fileName": "Test_Bits.sid",
     "path": "sids/Follin_Tim/Test_Bits.sid",
-    "size": 4363
+    "size": 4363,
+    "durationMs": 24000,
+    "durationText": "0:24"
   },
   {
     "id": "R2Fsd2F5X01hcnRpbi9Bcmthbm9pZF9hbHRlcm5hdGl2ZV9kcnVtcy5zaWQ",
@@ -3459,7 +4101,9 @@ window.SID_LIBRARY = [
     "composerKey": "Galway_Martin",
     "fileName": "Arkanoid_alternative_drums.sid",
     "path": "sids/Galway_Martin/Arkanoid_alternative_drums.sid",
-    "size": 8157
+    "size": 8157,
+    "durationMs": 144302,
+    "durationText": "2:24.302"
   },
   {
     "id": "R2Fsd2F5X01hcnRpbi9BdGhlbmEuc2lk",
@@ -3468,7 +4112,9 @@ window.SID_LIBRARY = [
     "composerKey": "Galway_Martin",
     "fileName": "Athena.sid",
     "path": "sids/Galway_Martin/Athena.sid",
-    "size": 8516
+    "size": 8516,
+    "durationMs": 120000,
+    "durationText": "2:00"
   },
   {
     "id": "R2Fsd2F5X01hcnRpbi9Db21iYXRfU2Nob29sLnNpZA",
@@ -3477,7 +4123,9 @@ window.SID_LIBRARY = [
     "composerKey": "Galway_Martin",
     "fileName": "Combat_School.sid",
     "path": "sids/Galway_Martin/Combat_School.sid",
-    "size": 11390
+    "size": 11390,
+    "durationMs": 137000,
+    "durationText": "2:17"
   },
   {
     "id": "R2Fsd2F5X01hcnRpbi9Db21tYW5kb19IaWdoLVNjb3JlLnNpZA",
@@ -3486,7 +4134,9 @@ window.SID_LIBRARY = [
     "composerKey": "Galway_Martin",
     "fileName": "Commando_High-Score.sid",
     "path": "sids/Galway_Martin/Commando_High-Score.sid",
-    "size": 4020
+    "size": 4020,
+    "durationMs": 131000,
+    "durationText": "2:11"
   },
   {
     "id": "R2Fsd2F5X01hcnRpbi9EYWxleV9UaG9tcHNvbnNfRGVjYXRobG9uX2xvYWRlci5zaWQ",
@@ -3495,7 +4145,9 @@ window.SID_LIBRARY = [
     "composerKey": "Galway_Martin",
     "fileName": "Daley_Thompsons_Decathlon_loader.sid",
     "path": "sids/Galway_Martin/Daley_Thompsons_Decathlon_loader.sid",
-    "size": 2068
+    "size": 2068,
+    "durationMs": 46000,
+    "durationText": "0:46"
   },
   {
     "id": "R2Fsd2F5X01hcnRpbi9HYW1lX092ZXIuc2lk",
@@ -3504,7 +4156,9 @@ window.SID_LIBRARY = [
     "composerKey": "Galway_Martin",
     "fileName": "Game_Over.sid",
     "path": "sids/Galway_Martin/Game_Over.sid",
-    "size": 8574
+    "size": 8574,
+    "durationMs": 310000,
+    "durationText": "5:10"
   },
   {
     "id": "R2Fsd2F5X01hcnRpbi9IZWxpa29wdGVyX0phZ2Quc2lk",
@@ -3513,7 +4167,9 @@ window.SID_LIBRARY = [
     "composerKey": "Galway_Martin",
     "fileName": "Helikopter_Jagd.sid",
     "path": "sids/Galway_Martin/Helikopter_Jagd.sid",
-    "size": 7742
+    "size": 7742,
+    "durationMs": 175000,
+    "durationText": "2:55"
   },
   {
     "id": "R2Fsd2F5X01hcnRpbi9IaWdobGFuZGVyLnNpZA",
@@ -3522,7 +4178,9 @@ window.SID_LIBRARY = [
     "composerKey": "Galway_Martin",
     "fileName": "Highlander.sid",
     "path": "sids/Galway_Martin/Highlander.sid",
-    "size": 6051
+    "size": 6051,
+    "durationMs": 192000,
+    "durationText": "3:12"
   },
   {
     "id": "R2Fsd2F5X01hcnRpbi9IdW5jaGJhY2tfSUkuc2lk",
@@ -3531,7 +4189,9 @@ window.SID_LIBRARY = [
     "composerKey": "Galway_Martin",
     "fileName": "Hunchback_II.sid",
     "path": "sids/Galway_Martin/Hunchback_II.sid",
-    "size": 3982
+    "size": 3982,
+    "durationMs": 1000,
+    "durationText": "0:01"
   },
   {
     "id": "R2Fsd2F5X01hcnRpbi9IeXBlcl9TcG9ydHMuc2lk",
@@ -3540,7 +4200,9 @@ window.SID_LIBRARY = [
     "composerKey": "Galway_Martin",
     "fileName": "Hyper_Sports.sid",
     "path": "sids/Galway_Martin/Hyper_Sports.sid",
-    "size": 8318
+    "size": 8318,
+    "durationMs": 1000,
+    "durationText": "0:01"
   },
   {
     "id": "R2Fsd2F5X01hcnRpbi9JbnNlY3RzX2luX1NwYWNlLnNpZA",
@@ -3549,7 +4211,9 @@ window.SID_LIBRARY = [
     "composerKey": "Galway_Martin",
     "fileName": "Insects_in_Space.sid",
     "path": "sids/Galway_Martin/Insects_in_Space.sid",
-    "size": 4213
+    "size": 4213,
+    "durationMs": 169199,
+    "durationText": "2:49.199"
   },
   {
     "id": "R2Fsd2F5X01hcnRpbi9Lb25nX1N0cmlrZXNfQmFjay5zaWQ",
@@ -3558,7 +4222,9 @@ window.SID_LIBRARY = [
     "composerKey": "Galway_Martin",
     "fileName": "Kong_Strikes_Back.sid",
     "path": "sids/Galway_Martin/Kong_Strikes_Back.sid",
-    "size": 4030
+    "size": 4030,
+    "durationMs": 40861,
+    "durationText": "0:40.861"
   },
   {
     "id": "R2Fsd2F5X01hcnRpbi9NYXRjaF9EYXkuc2lk",
@@ -3567,7 +4233,9 @@ window.SID_LIBRARY = [
     "composerKey": "Galway_Martin",
     "fileName": "Match_Day.sid",
     "path": "sids/Galway_Martin/Match_Day.sid",
-    "size": 4702
+    "size": 4702,
+    "durationMs": 49682,
+    "durationText": "0:49.682"
   },
   {
     "id": "R2Fsd2F5X01hcnRpbi9NaWNyb1Byb3NlX1NvY2Nlcl9WMS5zaWQ",
@@ -3576,7 +4244,9 @@ window.SID_LIBRARY = [
     "composerKey": "Galway_Martin",
     "fileName": "MicroProse_Soccer_V1.sid",
     "path": "sids/Galway_Martin/MicroProse_Soccer_V1.sid",
-    "size": 5458
+    "size": 5458,
+    "durationMs": 48000,
+    "durationText": "0:48"
   },
   {
     "id": "R2Fsd2F5X01hcnRpbi9NaWNyb1Byb3NlX1NvY2Nlcl9pbmRvb3Iuc2lk",
@@ -3585,7 +4255,9 @@ window.SID_LIBRARY = [
     "composerKey": "Galway_Martin",
     "fileName": "MicroProse_Soccer_indoor.sid",
     "path": "sids/Galway_Martin/MicroProse_Soccer_indoor.sid",
-    "size": 4715
+    "size": 4715,
+    "durationMs": 48000,
+    "durationText": "0:48"
   },
   {
     "id": "R2Fsd2F5X01hcnRpbi9NaWNyb1Byb3NlX1NvY2Nlcl9pbnRyby5zaWQ",
@@ -3594,7 +4266,9 @@ window.SID_LIBRARY = [
     "composerKey": "Galway_Martin",
     "fileName": "MicroProse_Soccer_intro.sid",
     "path": "sids/Galway_Martin/MicroProse_Soccer_intro.sid",
-    "size": 4350
+    "size": 4350,
+    "durationMs": 96000,
+    "durationText": "1:36"
   },
   {
     "id": "R2Fsd2F5X01hcnRpbi9NaWNyb1Byb3NlX1NvY2Nlcl9vdXRkb29yLnNpZA",
@@ -3603,7 +4277,9 @@ window.SID_LIBRARY = [
     "composerKey": "Galway_Martin",
     "fileName": "MicroProse_Soccer_outdoor.sid",
     "path": "sids/Galway_Martin/MicroProse_Soccer_outdoor.sid",
-    "size": 3722
+    "size": 3722,
+    "durationMs": 48000,
+    "durationText": "0:48"
   },
   {
     "id": "R2Fsd2F5X01hcnRpbi9OZXZlcmVuZGluZ19TdG9yeS5zaWQ",
@@ -3612,7 +4288,9 @@ window.SID_LIBRARY = [
     "composerKey": "Galway_Martin",
     "fileName": "Neverending_Story.sid",
     "path": "sids/Galway_Martin/Neverending_Story.sid",
-    "size": 4758
+    "size": 4758,
+    "durationMs": 218000,
+    "durationText": "3:38"
   },
   {
     "id": "R2Fsd2F5X01hcnRpbi9PY2Vhbl9Mb2FkZXJfMS5zaWQ",
@@ -3621,7 +4299,9 @@ window.SID_LIBRARY = [
     "composerKey": "Galway_Martin",
     "fileName": "Ocean_Loader_1.sid",
     "path": "sids/Galway_Martin/Ocean_Loader_1.sid",
-    "size": 5292
+    "size": 5292,
+    "durationMs": 202000,
+    "durationText": "3:22"
   },
   {
     "id": "R2Fsd2F5X01hcnRpbi9PY2Vhbl9Mb2FkZXJfMi5zaWQ",
@@ -3630,7 +4310,9 @@ window.SID_LIBRARY = [
     "composerKey": "Galway_Martin",
     "fileName": "Ocean_Loader_2.sid",
     "path": "sids/Galway_Martin/Ocean_Loader_2.sid",
-    "size": 3449
+    "size": 3449,
+    "durationMs": 253000,
+    "durationText": "4:13"
   },
   {
     "id": "R2Fsd2F5X01hcnRpbi9QaW5nX1Bvbmcuc2lk",
@@ -3639,7 +4321,9 @@ window.SID_LIBRARY = [
     "composerKey": "Galway_Martin",
     "fileName": "Ping_Pong.sid",
     "path": "sids/Galway_Martin/Ping_Pong.sid",
-    "size": 6180
+    "size": 6180,
+    "durationMs": 47000,
+    "durationText": "0:47"
   },
   {
     "id": "R2Fsd2F5X01hcnRpbi9SYXN0YW4uc2lk",
@@ -3648,7 +4332,9 @@ window.SID_LIBRARY = [
     "composerKey": "Galway_Martin",
     "fileName": "Rastan.sid",
     "path": "sids/Galway_Martin/Rastan.sid",
-    "size": 6553
+    "size": 6553,
+    "durationMs": 10000,
+    "durationText": "0:10"
   },
   {
     "id": "R2Fsd2F5X01hcnRpbi9Sb2xhbmRzX1JhdHJhY2Uuc2lk",
@@ -3657,7 +4343,9 @@ window.SID_LIBRARY = [
     "composerKey": "Galway_Martin",
     "fileName": "Rolands_Ratrace.sid",
     "path": "sids/Galway_Martin/Rolands_Ratrace.sid",
-    "size": 7304
+    "size": 7304,
+    "durationMs": 85000,
+    "durationText": "1:25"
   },
   {
     "id": "R2Fsd2F5X01hcnRpbi9TbGFwX0ZpZ2h0LnNpZA",
@@ -3666,7 +4354,9 @@ window.SID_LIBRARY = [
     "composerKey": "Galway_Martin",
     "fileName": "Slap_Fight.sid",
     "path": "sids/Galway_Martin/Slap_Fight.sid",
-    "size": 6323
+    "size": 6323,
+    "durationMs": 7000,
+    "durationText": "0:07"
   },
   {
     "id": "R2Fsd2F5X01hcnRpbi9TdHJlZXRfSGF3ay5zaWQ",
@@ -3675,7 +4365,9 @@ window.SID_LIBRARY = [
     "composerKey": "Galway_Martin",
     "fileName": "Street_Hawk.sid",
     "path": "sids/Galway_Martin/Street_Hawk.sid",
-    "size": 10217
+    "size": 10217,
+    "durationMs": 355000,
+    "durationText": "5:55"
   },
   {
     "id": "R2Fsd2F5X01hcnRpbi9TdHJlZXRfSGF3a19Qcm90b3R5cGUuc2lk",
@@ -3684,7 +4376,9 @@ window.SID_LIBRARY = [
     "composerKey": "Galway_Martin",
     "fileName": "Street_Hawk_Prototype.sid",
     "path": "sids/Galway_Martin/Street_Hawk_Prototype.sid",
-    "size": 5716
+    "size": 5716,
+    "durationMs": 181000,
+    "durationText": "3:01"
   },
   {
     "id": "R2Fsd2F5X01hcnRpbi9Td2FnLnNpZA",
@@ -3693,7 +4387,9 @@ window.SID_LIBRARY = [
     "composerKey": "Galway_Martin",
     "fileName": "Swag.sid",
     "path": "sids/Galway_Martin/Swag.sid",
-    "size": 2904
+    "size": 2904,
+    "durationMs": 13000,
+    "durationText": "0:13"
   },
   {
     "id": "R2Fsd2F5X01hcnRpbi9ZaWVfQXJfS3VuZ19GdV9JSS5zaWQ",
@@ -3702,7 +4398,9 @@ window.SID_LIBRARY = [
     "composerKey": "Galway_Martin",
     "fileName": "Yie_Ar_Kung_Fu_II.sid",
     "path": "sids/Galway_Martin/Yie_Ar_Kung_Fu_II.sid",
-    "size": 8059
+    "size": 8059,
+    "durationMs": 203000,
+    "durationText": "3:23"
   },
   {
     "id": "R0FNRVMvMC05LzAwN19DYXJfQ2hhc2Uuc2lk",
@@ -3712,7 +4410,9 @@ window.SID_LIBRARY = [
     "fileName": "007_Car_Chase.sid",
     "path": "sids/GAMES/0-9/007_Car_Chase.sid",
     "size": 582,
-    "category": "0-9"
+    "category": "0-9",
+    "durationMs": 10000,
+    "durationText": "0:10"
   },
   {
     "id": "R0FNRVMvMC05LzEwX0tub2Nrb3V0X0JBU0lDLnNpZA",
@@ -3722,7 +4422,9 @@ window.SID_LIBRARY = [
     "fileName": "10_Knockout_BASIC.sid",
     "path": "sids/GAMES/0-9/10_Knockout_BASIC.sid",
     "size": 2469,
-    "category": "0-9"
+    "category": "0-9",
+    "durationMs": 45000,
+    "durationText": "0:45"
   },
   {
     "id": "R0FNRVMvMC05LzEwX1ByaW50X1JhY2VyX1JldmFtcC5zaWQ",
@@ -3732,7 +4434,9 @@ window.SID_LIBRARY = [
     "fileName": "10_Print_Racer_Revamp.sid",
     "path": "sids/GAMES/0-9/10_Print_Racer_Revamp.sid",
     "size": 537,
-    "category": "0-9"
+    "category": "0-9",
+    "durationMs": 136667,
+    "durationText": "2:16.667"
   },
   {
     "id": "R0FNRVMvMC05LzEwMF9NaWxlX1JhY2Uuc2lk",
@@ -3742,7 +4446,9 @@ window.SID_LIBRARY = [
     "fileName": "100_Mile_Race.sid",
     "path": "sids/GAMES/0-9/100_Mile_Race.sid",
     "size": 538,
-    "category": "0-9"
+    "category": "0-9",
+    "durationMs": 4000,
+    "durationText": "0:04"
   },
   {
     "id": "R0FNRVMvMC05LzE5OTQtVGVuX1llYXJzX0FmdGVyLnNpZA",
@@ -3752,7 +4458,9 @@ window.SID_LIBRARY = [
     "fileName": "1994-Ten_Years_After.sid",
     "path": "sids/GAMES/0-9/1994-Ten_Years_After.sid",
     "size": 542,
-    "category": "0-9"
+    "category": "0-9",
+    "durationMs": 38000,
+    "durationText": "0:38"
   },
   {
     "id": "R0FNRVMvMC05LzIwX1RvbnMuc2lk",
@@ -3762,7 +4470,9 @@ window.SID_LIBRARY = [
     "fileName": "20_Tons.sid",
     "path": "sids/GAMES/0-9/20_Tons.sid",
     "size": 1267,
-    "category": "0-9"
+    "category": "0-9",
+    "durationMs": 112000,
+    "durationText": "1:52"
   },
   {
     "id": "R0FNRVMvMC05LzIxMTIuc2lk",
@@ -3772,7 +4482,9 @@ window.SID_LIBRARY = [
     "fileName": "2112.sid",
     "path": "sids/GAMES/0-9/2112.sid",
     "size": 3115,
-    "category": "0-9"
+    "category": "0-9",
+    "durationMs": 262000,
+    "durationText": "4:22"
   },
   {
     "id": "R0FNRVMvMC05LzIyMUJfQmFrZXJfU3RyZWV0LnNpZA",
@@ -3782,7 +4494,9 @@ window.SID_LIBRARY = [
     "fileName": "221B_Baker_Street.sid",
     "path": "sids/GAMES/0-9/221B_Baker_Street.sid",
     "size": 10087,
-    "category": "0-9"
+    "category": "0-9",
+    "durationMs": 22000,
+    "durationText": "0:22"
   },
   {
     "id": "R0FNRVMvMC05LzMtRF9Ta3JhbWJsZS5zaWQ",
@@ -3792,7 +4506,9 @@ window.SID_LIBRARY = [
     "fileName": "3-D_Skramble.sid",
     "path": "sids/GAMES/0-9/3-D_Skramble.sid",
     "size": 1946,
-    "category": "0-9"
+    "category": "0-9",
+    "durationMs": 66000,
+    "durationText": "1:06"
   },
   {
     "id": "R0FNRVMvMC05LzNEX1dhdGVyc2tpLnNpZA",
@@ -3802,7 +4518,9 @@ window.SID_LIBRARY = [
     "fileName": "3D_Waterski.sid",
     "path": "sids/GAMES/0-9/3D_Waterski.sid",
     "size": 1439,
-    "category": "0-9"
+    "category": "0-9",
+    "durationMs": 15000,
+    "durationText": "0:15"
   },
   {
     "id": "R0FNRVMvMC05LzR4NF9PZmYtUm9hZF9SYWNpbmcuc2lk",
@@ -3812,7 +4530,9 @@ window.SID_LIBRARY = [
     "fileName": "4x4_Off-Road_Racing.sid",
     "path": "sids/GAMES/0-9/4x4_Off-Road_Racing.sid",
     "size": 4855,
-    "category": "0-9"
+    "category": "0-9",
+    "durationMs": 82373,
+    "durationText": "1:22.373"
   },
   {
     "id": "R0FNRVMvMC05LzVfbWFsXzUuc2lk",
@@ -3822,7 +4542,9 @@ window.SID_LIBRARY = [
     "fileName": "5_mal_5.sid",
     "path": "sids/GAMES/0-9/5_mal_5.sid",
     "size": 1773,
-    "category": "0-9"
+    "category": "0-9",
+    "durationMs": 23000,
+    "durationText": "0:23"
   },
   {
     "id": "R0FNRVMvMC05LzV0aF9HZWFyLnNpZA",
@@ -3832,7 +4554,9 @@ window.SID_LIBRARY = [
     "fileName": "5th_Gear.sid",
     "path": "sids/GAMES/0-9/5th_Gear.sid",
     "size": 5272,
-    "category": "0-9"
+    "category": "0-9",
+    "durationMs": 8000,
+    "durationText": "0:08"
   },
   {
     "id": "R0FNRVMvMC05LzcyMF9VU0FfVmVyc2lvbi5zaWQ",
@@ -3842,7 +4566,9 @@ window.SID_LIBRARY = [
     "fileName": "720_USA_Version.sid",
     "path": "sids/GAMES/0-9/720_USA_Version.sid",
     "size": 12471,
-    "category": "0-9"
+    "category": "0-9",
+    "durationMs": 14000,
+    "durationText": "0:14"
   },
   {
     "id": "R0FNRVMvMC05LzgtYml0X0NpdmlsaXphdGlvbnMuc2lk",
@@ -3852,7 +4578,9 @@ window.SID_LIBRARY = [
     "fileName": "8-bit_Civilizations.sid",
     "path": "sids/GAMES/0-9/8-bit_Civilizations.sid",
     "size": 2424,
-    "category": "0-9"
+    "category": "0-9",
+    "durationMs": 97000,
+    "durationText": "1:37"
   },
   {
     "id": "R0FNRVMvMC05LzhCaXRfRHVuZ2Vvbl9QcmV2aWV3LnNpZA",
@@ -3862,7 +4590,9 @@ window.SID_LIBRARY = [
     "fileName": "8Bit_Dungeon_Preview.sid",
     "path": "sids/GAMES/0-9/8Bit_Dungeon_Preview.sid",
     "size": 3299,
-    "category": "0-9"
+    "category": "0-9",
+    "durationMs": 51110,
+    "durationText": "0:51.11"
   },
   {
     "id": "R0FNRVMvMC05LzhCaXRfR29ibGluX1ByZXZpZXcuc2lk",
@@ -3872,7 +4602,9 @@ window.SID_LIBRARY = [
     "fileName": "8Bit_Goblin_Preview.sid",
     "path": "sids/GAMES/0-9/8Bit_Goblin_Preview.sid",
     "size": 854,
-    "category": "0-9"
+    "category": "0-9",
+    "durationMs": 38684,
+    "durationText": "0:38.684"
   },
   {
     "id": "R0FNRVMvMC05LzlfdG9fNV9UeXBpbmcuc2lk",
@@ -3882,7 +4614,9 @@ window.SID_LIBRARY = [
     "fileName": "9_to_5_Typing.sid",
     "path": "sids/GAMES/0-9/9_to_5_Typing.sid",
     "size": 2586,
-    "category": "0-9"
+    "category": "0-9",
+    "durationMs": 53000,
+    "durationText": "0:53"
   },
   {
     "id": "R0FNRVMvQS1GL0FfQ19FLnNpZA",
@@ -3892,7 +4626,9 @@ window.SID_LIBRARY = [
     "fileName": "A_C_E.sid",
     "path": "sids/GAMES/A-F/A_C_E.sid",
     "size": 7673,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 2000,
+    "durationText": "0:02"
   },
   {
     "id": "R0FNRVMvQS1GL0FfUF9FX1hfcHJldmlldy5zaWQ",
@@ -3902,7 +4638,9 @@ window.SID_LIBRARY = [
     "fileName": "A_P_E_X_preview.sid",
     "path": "sids/GAMES/A-F/A_P_E_X_preview.sid",
     "size": 2654,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 31000,
+    "durationText": "0:31"
   },
   {
     "id": "R0FNRVMvQS1GL0FfUG9wcGxlc19DaHJpc3RtYXNfQWR2ZW50dXJlLnNpZA",
@@ -3912,7 +4650,9 @@ window.SID_LIBRARY = [
     "fileName": "A_Popples_Christmas_Adventure.sid",
     "path": "sids/GAMES/A-F/A_Popples_Christmas_Adventure.sid",
     "size": 7369,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 36000,
+    "durationText": "0:36"
   },
   {
     "id": "R0FNRVMvQS1GL0FieXNzLnNpZA",
@@ -3922,7 +4662,9 @@ window.SID_LIBRARY = [
     "fileName": "Abyss.sid",
     "path": "sids/GAMES/A-F/Abyss.sid",
     "size": 4014,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 252000,
+    "durationText": "4:12"
   },
   {
     "id": "R0FNRVMvQS1GL0FjY29sYWRlc19Db21pY3Muc2lk",
@@ -3932,7 +4674,9 @@ window.SID_LIBRARY = [
     "fileName": "Accolades_Comics.sid",
     "path": "sids/GAMES/A-F/Accolades_Comics.sid",
     "size": 48477,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 58000,
+    "durationText": "0:58"
   },
   {
     "id": "R0FNRVMvQS1GL0FjdF9HYW1lX0JBU0lDLnNpZA",
@@ -3942,7 +4686,9 @@ window.SID_LIBRARY = [
     "fileName": "Act_Game_BASIC.sid",
     "path": "sids/GAMES/A-F/Act_Game_BASIC.sid",
     "size": 710,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 12000,
+    "durationText": "0:12"
   },
   {
     "id": "R0FNRVMvQS1GL0FjdGlvbl9TZXJ2aWNlLnNpZA",
@@ -3952,7 +4698,9 @@ window.SID_LIBRARY = [
     "fileName": "Action_Service.sid",
     "path": "sids/GAMES/A-F/Action_Service.sid",
     "size": 6211,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 49000,
+    "durationText": "0:49"
   },
   {
     "id": "R0FNRVMvQS1GL0FjdGlvbi1CYWxsLnNpZA",
@@ -3962,7 +4710,9 @@ window.SID_LIBRARY = [
     "fileName": "Action-Ball.sid",
     "path": "sids/GAMES/A-F/Action-Ball.sid",
     "size": 11390,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 31000,
+    "durationText": "0:31"
   },
   {
     "id": "R0FNRVMvQS1GL0FkZGFtc19GYW1pbHkuc2lk",
@@ -3972,7 +4722,9 @@ window.SID_LIBRARY = [
     "fileName": "Addams_Family.sid",
     "path": "sids/GAMES/A-F/Addams_Family.sid",
     "size": 3880,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 36000,
+    "durationText": "0:36"
   },
   {
     "id": "R0FNRVMvQS1GL0FkZGljdGFfQmFsbC5zaWQ",
@@ -3982,7 +4734,9 @@ window.SID_LIBRARY = [
     "fileName": "Addicta_Ball.sid",
     "path": "sids/GAMES/A-F/Addicta_Ball.sid",
     "size": 1693,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 4000,
+    "durationText": "0:04"
   },
   {
     "id": "R0FNRVMvQS1GL0FkdmFuY2VkX1RhY3RpY2FsX0ZpZ2h0ZXIuc2lk",
@@ -3992,7 +4746,9 @@ window.SID_LIBRARY = [
     "fileName": "Advanced_Tactical_Fighter.sid",
     "path": "sids/GAMES/A-F/Advanced_Tactical_Fighter.sid",
     "size": 1790,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 129000,
+    "durationText": "2:09"
   },
   {
     "id": "R0FNRVMvQS1GL0Flcm9iaWNzLnNpZA",
@@ -4002,7 +4758,9 @@ window.SID_LIBRARY = [
     "fileName": "Aerobics.sid",
     "path": "sids/GAMES/A-F/Aerobics.sid",
     "size": 15850,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 176000,
+    "durationText": "2:56"
   },
   {
     "id": "R0FNRVMvQS1GL0FnZW50X09yYW5nZS5zaWQ",
@@ -4012,7 +4770,9 @@ window.SID_LIBRARY = [
     "fileName": "Agent_Orange.sid",
     "path": "sids/GAMES/A-F/Agent_Orange.sid",
     "size": 1130,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 16000,
+    "durationText": "0:16"
   },
   {
     "id": "R0FNRVMvQS1GL0FnZW50X1VPUC5zaWQ",
@@ -4022,7 +4782,9 @@ window.SID_LIBRARY = [
     "fileName": "Agent_UOP.sid",
     "path": "sids/GAMES/A-F/Agent_UOP.sid",
     "size": 5412,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 113000,
+    "durationText": "1:53"
   },
   {
     "id": "R0FNRVMvQS1GL0FnaGFtaXguc2lk",
@@ -4032,7 +4794,9 @@ window.SID_LIBRARY = [
     "fileName": "Aghamix.sid",
     "path": "sids/GAMES/A-F/Aghamix.sid",
     "size": 8813,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 122015,
+    "durationText": "2:02.015"
   },
   {
     "id": "R0FNRVMvQS1GL0FpcmxpbmUuc2lk",
@@ -4042,7 +4806,9 @@ window.SID_LIBRARY = [
     "fileName": "Airline.sid",
     "path": "sids/GAMES/A-F/Airline.sid",
     "size": 9013,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 164000,
+    "durationText": "2:44"
   },
   {
     "id": "R0FNRVMvQS1GL0FsYmVydF9CQVNJQy5zaWQ",
@@ -4052,7 +4818,9 @@ window.SID_LIBRARY = [
     "fileName": "Albert_BASIC.sid",
     "path": "sids/GAMES/A-F/Albert_BASIC.sid",
     "size": 1505,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 10000,
+    "durationText": "0:10"
   },
   {
     "id": "R0FNRVMvQS1GL0FsY2F0cmF6LnNpZA",
@@ -4062,7 +4830,9 @@ window.SID_LIBRARY = [
     "fileName": "Alcatraz.sid",
     "path": "sids/GAMES/A-F/Alcatraz.sid",
     "size": 513,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 27000,
+    "durationText": "0:27"
   },
   {
     "id": "R0FNRVMvQS1GL0FsY2F6YXIuc2lk",
@@ -4072,7 +4842,9 @@ window.SID_LIBRARY = [
     "fileName": "Alcazar.sid",
     "path": "sids/GAMES/A-F/Alcazar.sid",
     "size": 620,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 334000,
+    "durationText": "5:34"
   },
   {
     "id": "R0FNRVMvQS1GL0FsY2hpbWlhLnNpZA",
@@ -4082,7 +4854,9 @@ window.SID_LIBRARY = [
     "fileName": "Alchimia.sid",
     "path": "sids/GAMES/A-F/Alchimia.sid",
     "size": 4094,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 220000,
+    "durationText": "3:40"
   },
   {
     "id": "R0FNRVMvQS1GL0FsZWFfSmFjdGEuc2lk",
@@ -4092,7 +4866,9 @@ window.SID_LIBRARY = [
     "fileName": "Alea_Jacta.sid",
     "path": "sids/GAMES/A-F/Alea_Jacta.sid",
     "size": 15743,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 81000,
+    "durationText": "1:21"
   },
   {
     "id": "R0FNRVMvQS1GL0FsZl90aGVfRmlyc3RfQWR2ZW50dXJlLnNpZA",
@@ -4102,7 +4878,9 @@ window.SID_LIBRARY = [
     "fileName": "Alf_the_First_Adventure.sid",
     "path": "sids/GAMES/A-F/Alf_the_First_Adventure.sid",
     "size": 2412,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 13561,
+    "durationText": "0:13.561"
   },
   {
     "id": "R0FNRVMvQS1GL0FsaV9CYWJhLnNpZA",
@@ -4112,7 +4890,9 @@ window.SID_LIBRARY = [
     "fileName": "Ali_Baba.sid",
     "path": "sids/GAMES/A-F/Ali_Baba.sid",
     "size": 6902,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 218000,
+    "durationText": "3:38"
   },
   {
     "id": "R0FNRVMvQS1GL0FsaWFudHMuc2lk",
@@ -4122,7 +4902,9 @@ window.SID_LIBRARY = [
     "fileName": "Aliants.sid",
     "path": "sids/GAMES/A-F/Aliants.sid",
     "size": 1259,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 61000,
+    "durationText": "1:01"
   },
   {
     "id": "R0FNRVMvQS1GL0FsaWNlX2luX1ZpZGVvbGFuZC1UaGVfRnVydGhlcl9BZHZlbnR1cmVzLnNpZA",
@@ -4132,7 +4914,9 @@ window.SID_LIBRARY = [
     "fileName": "Alice_in_Videoland-The_Further_Adventures.sid",
     "path": "sids/GAMES/A-F/Alice_in_Videoland-The_Further_Adventures.sid",
     "size": 1703,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 31000,
+    "durationText": "0:31"
   },
   {
     "id": "R0FNRVMvQS1GL0FsaWNlX2luX1dvbmRlcmxhbmQuc2lk",
@@ -4142,7 +4926,9 @@ window.SID_LIBRARY = [
     "fileName": "Alice_in_Wonderland.sid",
     "path": "sids/GAMES/A-F/Alice_in_Wonderland.sid",
     "size": 2111,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 20000,
+    "durationText": "0:20"
   },
   {
     "id": "R0FNRVMvQS1GL0FsaWVuX0F0dGFja182NF9CQVNJQy5zaWQ",
@@ -4152,7 +4938,9 @@ window.SID_LIBRARY = [
     "fileName": "Alien_Attack_64_BASIC.sid",
     "path": "sids/GAMES/A-F/Alien_Attack_64_BASIC.sid",
     "size": 550,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 23000,
+    "durationText": "0:23"
   },
   {
     "id": "R0FNRVMvQS1GL0FsaWVuX1RlcnJvcmRvbWUuc2lk",
@@ -4162,7 +4950,9 @@ window.SID_LIBRARY = [
     "fileName": "Alien_Terrordome.sid",
     "path": "sids/GAMES/A-F/Alien_Terrordome.sid",
     "size": 1750,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 82000,
+    "durationText": "1:22"
   },
   {
     "id": "R0FNRVMvQS1GL0FsaWVuYXRvci5zaWQ",
@@ -4172,7 +4962,9 @@ window.SID_LIBRARY = [
     "fileName": "Alienator.sid",
     "path": "sids/GAMES/A-F/Alienator.sid",
     "size": 4045,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 21000,
+    "durationText": "0:21"
   },
   {
     "id": "R0FNRVMvQS1GL0FsbF9OZXdfRmFtaWx5X0ZldWRfQkFTSUMuc2lk",
@@ -4182,7 +4974,9 @@ window.SID_LIBRARY = [
     "fileName": "All_New_Family_Feud_BASIC.sid",
     "path": "sids/GAMES/A-F/All_New_Family_Feud_BASIC.sid",
     "size": 2030,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 8202,
+    "durationText": "0:08.202"
   },
   {
     "id": "R0FNRVMvQS1GL0Fsb25lX2FuZF9EYW5nZXJvdXMuc2lk",
@@ -4192,7 +4986,9 @@ window.SID_LIBRARY = [
     "fileName": "Alone_and_Dangerous.sid",
     "path": "sids/GAMES/A-F/Alone_and_Dangerous.sid",
     "size": 2701,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 62000,
+    "durationText": "1:02"
   },
   {
     "id": "R0FNRVMvQS1GL0FscGhhX09tZWdhX1J1bi5zaWQ",
@@ -4202,7 +4998,9 @@ window.SID_LIBRARY = [
     "fileName": "Alpha_Omega_Run.sid",
     "path": "sids/GAMES/A-F/Alpha_Omega_Run.sid",
     "size": 5370,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 181000,
+    "durationText": "3:01"
   },
   {
     "id": "R0FNRVMvQS1GL0FsdGVybmF0ZV9SZWFsaXR5LVRoZV9EdW5nZW9uLnNpZA",
@@ -4212,7 +5010,9 @@ window.SID_LIBRARY = [
     "fileName": "Alternate_Reality-The_Dungeon.sid",
     "path": "sids/GAMES/A-F/Alternate_Reality-The_Dungeon.sid",
     "size": 7701,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 271000,
+    "durationText": "4:31"
   },
   {
     "id": "R0FNRVMvQS1GL0FtYXppbmdfTWF6ZS5zaWQ",
@@ -4222,7 +5022,9 @@ window.SID_LIBRARY = [
     "fileName": "Amazing_Maze.sid",
     "path": "sids/GAMES/A-F/Amazing_Maze.sid",
     "size": 716,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 21000,
+    "durationText": "0:21"
   },
   {
     "id": "R0FNRVMvQS1GL0FtYXpvbi5zaWQ",
@@ -4232,7 +5034,9 @@ window.SID_LIBRARY = [
     "fileName": "Amazon.sid",
     "path": "sids/GAMES/A-F/Amazon.sid",
     "size": 3038,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 29000,
+    "durationText": "0:29"
   },
   {
     "id": "R0FNRVMvQS1GL0FtYXpvbl9XYXJyaW9yLnNpZA",
@@ -4242,7 +5046,9 @@ window.SID_LIBRARY = [
     "fileName": "Amazon_Warrior.sid",
     "path": "sids/GAMES/A-F/Amazon_Warrior.sid",
     "size": 3087,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 74000,
+    "durationText": "1:14"
   },
   {
     "id": "R0FNRVMvQS1GL0FtcGhpYmlhbi5zaWQ",
@@ -4252,7 +5058,9 @@ window.SID_LIBRARY = [
     "fileName": "Amphibian.sid",
     "path": "sids/GAMES/A-F/Amphibian.sid",
     "size": 309,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 24536,
+    "durationText": "0:24.536"
   },
   {
     "id": "R0FNRVMvQS1GL0FuZHJvaWRfMi5zaWQ",
@@ -4262,7 +5070,9 @@ window.SID_LIBRARY = [
     "fileName": "Android_2.sid",
     "path": "sids/GAMES/A-F/Android_2.sid",
     "size": 2900,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 85000,
+    "durationText": "1:25"
   },
   {
     "id": "R0FNRVMvQS1GL0FuZ2llUHVmZnlfUXVlc3Quc2lk",
@@ -4272,7 +5082,9 @@ window.SID_LIBRARY = [
     "fileName": "AngiePuffy_Quest.sid",
     "path": "sids/GAMES/A-F/AngiePuffy_Quest.sid",
     "size": 1855,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 107020,
+    "durationText": "1:47.02"
   },
   {
     "id": "R0FNRVMvQS1GL0FuZ3J5X05pbmphX0JBU0lDLnNpZA",
@@ -4282,7 +5094,9 @@ window.SID_LIBRARY = [
     "fileName": "Angry_Ninja_BASIC.sid",
     "path": "sids/GAMES/A-F/Angry_Ninja_BASIC.sid",
     "size": 21384,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 159000,
+    "durationText": "2:39"
   },
   {
     "id": "R0FNRVMvQS1GL0FuaW1hdGVkX1N0cmlwX1Bva2VyLnNpZA",
@@ -4292,7 +5106,9 @@ window.SID_LIBRARY = [
     "fileName": "Animated_Strip_Poker.sid",
     "path": "sids/GAMES/A-F/Animated_Strip_Poker.sid",
     "size": 4527,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 1869,
+    "durationText": "0:01.869"
   },
   {
     "id": "R0FNRVMvQS1GL0Fub3RoZXJfU2V4X0FkdmVudHVyZS5zaWQ",
@@ -4302,7 +5118,9 @@ window.SID_LIBRARY = [
     "fileName": "Another_Sex_Adventure.sid",
     "path": "sids/GAMES/A-F/Another_Sex_Adventure.sid",
     "size": 2105,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 52000,
+    "durationText": "0:52"
   },
   {
     "id": "R0FNRVMvQS1GL0FudGljcy5zaWQ",
@@ -4312,7 +5130,9 @@ window.SID_LIBRARY = [
     "fileName": "Antics.sid",
     "path": "sids/GAMES/A-F/Antics.sid",
     "size": 2911,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 6000,
+    "durationText": "0:06"
   },
   {
     "id": "R0FNRVMvQS1GL0FwYWNoZV9TdHJpa2Uuc2lk",
@@ -4322,7 +5142,9 @@ window.SID_LIBRARY = [
     "fileName": "Apache_Strike.sid",
     "path": "sids/GAMES/A-F/Apache_Strike.sid",
     "size": 2466,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 40000,
+    "durationText": "0:40"
   },
   {
     "id": "R0FNRVMvQS1GL0FwYXJ0bWVudF9vZl9NeXN0ZXJ5X0JBU0lDLnNpZA",
@@ -4332,7 +5154,9 @@ window.SID_LIBRARY = [
     "fileName": "Apartment_of_Mystery_BASIC.sid",
     "path": "sids/GAMES/A-F/Apartment_of_Mystery_BASIC.sid",
     "size": 1561,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 15000,
+    "durationText": "0:15"
   },
   {
     "id": "R0FNRVMvQS1GL0FwZV9DcmF6ZS5zaWQ",
@@ -4342,7 +5166,9 @@ window.SID_LIBRARY = [
     "fileName": "Ape_Craze.sid",
     "path": "sids/GAMES/A-F/Ape_Craze.sid",
     "size": 634,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 13000,
+    "durationText": "0:13"
   },
   {
     "id": "R0FNRVMvQS1GL0FxdWFfUmFjZXIuc2lk",
@@ -4352,7 +5178,9 @@ window.SID_LIBRARY = [
     "fileName": "Aqua_Racer.sid",
     "path": "sids/GAMES/A-F/Aqua_Racer.sid",
     "size": 1751,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 42000,
+    "durationText": "0:42"
   },
   {
     "id": "R0FNRVMvQS1GL0FxdWFudG9yLnNpZA",
@@ -4362,7 +5190,9 @@ window.SID_LIBRARY = [
     "fileName": "Aquantor.sid",
     "path": "sids/GAMES/A-F/Aquantor.sid",
     "size": 1252,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 8000,
+    "durationText": "0:08"
   },
   {
     "id": "R0FNRVMvQS1GL0FyYWNobmUuc2lk",
@@ -4372,7 +5202,9 @@ window.SID_LIBRARY = [
     "fileName": "Arachne.sid",
     "path": "sids/GAMES/A-F/Arachne.sid",
     "size": 5502,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 54000,
+    "durationText": "0:54"
   },
   {
     "id": "R0FNRVMvQS1GL0FyYWNobm9waG9iaWEuc2lk",
@@ -4382,7 +5214,9 @@ window.SID_LIBRARY = [
     "fileName": "Arachnophobia.sid",
     "path": "sids/GAMES/A-F/Arachnophobia.sid",
     "size": 3660,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 23000,
+    "durationText": "0:23"
   },
   {
     "id": "R0FNRVMvQS1GL0FyYWtuaWZvZS5zaWQ",
@@ -4392,7 +5226,9 @@ window.SID_LIBRARY = [
     "fileName": "Araknifoe.sid",
     "path": "sids/GAMES/A-F/Araknifoe.sid",
     "size": 3104,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 125000,
+    "durationText": "2:05"
   },
   {
     "id": "R0FNRVMvQS1GL0FyY19vZl9ZZXNvZC5zaWQ",
@@ -4402,7 +5238,9 @@ window.SID_LIBRARY = [
     "fileName": "Arc_of_Yesod.sid",
     "path": "sids/GAMES/A-F/Arc_of_Yesod.sid",
     "size": 2583,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 44428,
+    "durationText": "0:44.428"
   },
   {
     "id": "R0FNRVMvQS1GL0FyY2FkZV9QaWxvdC5zaWQ",
@@ -4412,7 +5250,9 @@ window.SID_LIBRARY = [
     "fileName": "Arcade_Pilot.sid",
     "path": "sids/GAMES/A-F/Arcade_Pilot.sid",
     "size": 10818,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 33000,
+    "durationText": "0:33"
   },
   {
     "id": "R0FNRVMvQS1GL0FyY2FuYS5zaWQ",
@@ -4422,7 +5262,9 @@ window.SID_LIBRARY = [
     "fileName": "Arcana.sid",
     "path": "sids/GAMES/A-F/Arcana.sid",
     "size": 1834,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 44000,
+    "durationText": "0:44"
   },
   {
     "id": "R0FNRVMvQS1GL0FyY2hpcGVsYWdvLnNpZA",
@@ -4432,7 +5274,9 @@ window.SID_LIBRARY = [
     "fileName": "Archipelago.sid",
     "path": "sids/GAMES/A-F/Archipelago.sid",
     "size": 4221,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 78000,
+    "durationText": "1:18"
   },
   {
     "id": "R0FNRVMvQS1GL0FyY2hvbl9JSUlfRXhjaXRlci5zaWQ",
@@ -4442,7 +5286,9 @@ window.SID_LIBRARY = [
     "fileName": "Archon_III_Exciter.sid",
     "path": "sids/GAMES/A-F/Archon_III_Exciter.sid",
     "size": 2970,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 33000,
+    "durationText": "0:33"
   },
   {
     "id": "R0FNRVMvQS1GL0FyY3RpY19TaGlwd3JlY2suc2lk",
@@ -4452,7 +5298,9 @@ window.SID_LIBRARY = [
     "fileName": "Arctic_Shipwreck.sid",
     "path": "sids/GAMES/A-F/Arctic_Shipwreck.sid",
     "size": 2381,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 10000,
+    "durationText": "0:10"
   },
   {
     "id": "R0FNRVMvQS1GL0FyZXguc2lk",
@@ -4462,7 +5310,9 @@ window.SID_LIBRARY = [
     "fileName": "Arex.sid",
     "path": "sids/GAMES/A-F/Arex.sid",
     "size": 1981,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 28884,
+    "durationText": "0:28.884"
   },
   {
     "id": "R0FNRVMvQS1GL0FyZ29zX0V4cGVkaXRpb24uc2lk",
@@ -4472,7 +5322,9 @@ window.SID_LIBRARY = [
     "fileName": "Argos_Expedition.sid",
     "path": "sids/GAMES/A-F/Argos_Expedition.sid",
     "size": 1829,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 37000,
+    "durationText": "0:37"
   },
   {
     "id": "R0FNRVMvQS1GL0FyaXRobWV0aWNpYW4uc2lk",
@@ -4482,7 +5334,9 @@ window.SID_LIBRARY = [
     "fileName": "Arithmetician.sid",
     "path": "sids/GAMES/A-F/Arithmetician.sid",
     "size": 8790,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 74000,
+    "durationText": "1:14"
   },
   {
     "id": "R0FNRVMvQS1GL0FzdGVyb2lkX1J1bi5zaWQ",
@@ -4492,7 +5346,9 @@ window.SID_LIBRARY = [
     "fileName": "Asteroid_Run.sid",
     "path": "sids/GAMES/A-F/Asteroid_Run.sid",
     "size": 512,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 4063,
+    "durationText": "0:04.063"
   },
   {
     "id": "R0FNRVMvQS1GL0FzdGVyb2lkX1dhci5zaWQ",
@@ -4502,7 +5358,9 @@ window.SID_LIBRARY = [
     "fileName": "Asteroid_War.sid",
     "path": "sids/GAMES/A-F/Asteroid_War.sid",
     "size": 960,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 31000,
+    "durationText": "0:31"
   },
   {
     "id": "R0FNRVMvQS1GL0FzdGVyb2lkcy5zaWQ",
@@ -4512,7 +5370,9 @@ window.SID_LIBRARY = [
     "fileName": "Asteroids.sid",
     "path": "sids/GAMES/A-F/Asteroids.sid",
     "size": 2449,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 129150,
+    "durationText": "2:09.15"
   },
   {
     "id": "R0FNRVMvQS1GL0FzdGV4XzY0LnNpZA",
@@ -4522,7 +5382,9 @@ window.SID_LIBRARY = [
     "fileName": "Astex_64.sid",
     "path": "sids/GAMES/A-F/Astex_64.sid",
     "size": 349,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 11000,
+    "durationText": "0:11"
   },
   {
     "id": "R0FNRVMvQS1GL0FzdHJvX0NoYXNlLnNpZA",
@@ -4532,7 +5394,9 @@ window.SID_LIBRARY = [
     "fileName": "Astro_Chase.sid",
     "path": "sids/GAMES/A-F/Astro_Chase.sid",
     "size": 638,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 46000,
+    "durationText": "0:46"
   },
   {
     "id": "R0FNRVMvQS1GL0FzdHJvYmxhc3Quc2lk",
@@ -4542,7 +5406,9 @@ window.SID_LIBRARY = [
     "fileName": "Astroblast.sid",
     "path": "sids/GAMES/A-F/Astroblast.sid",
     "size": 1270,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 15342,
+    "durationText": "0:15.342"
   },
   {
     "id": "R0FNRVMvQS1GL0FzdHJvaWRzLnNpZA",
@@ -4552,7 +5418,9 @@ window.SID_LIBRARY = [
     "fileName": "Astroids.sid",
     "path": "sids/GAMES/A-F/Astroids.sid",
     "size": 3719,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 25002,
+    "durationText": "0:25.002"
   },
   {
     "id": "R0FNRVMvQS1GL0F0aGFub3Iuc2lk",
@@ -4562,7 +5430,9 @@ window.SID_LIBRARY = [
     "fileName": "Athanor.sid",
     "path": "sids/GAMES/A-F/Athanor.sid",
     "size": 2745,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 176000,
+    "durationText": "2:56"
   },
   {
     "id": "R0FNRVMvQS1GL0F0bGFudGlzLnNpZA",
@@ -4572,7 +5442,9 @@ window.SID_LIBRARY = [
     "fileName": "Atlantis.sid",
     "path": "sids/GAMES/A-F/Atlantis.sid",
     "size": 6296,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 185000,
+    "durationText": "3:05"
   },
   {
     "id": "R0FNRVMvQS1GL0F0b2NrLnNpZA",
@@ -4582,7 +5454,9 @@ window.SID_LIBRARY = [
     "fileName": "Atock.sid",
     "path": "sids/GAMES/A-F/Atock.sid",
     "size": 3945,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 70443,
+    "durationText": "1:10.443"
   },
   {
     "id": "R0FNRVMvQS1GL0F0dGFja19vZl90aGVfTXV0YW50X05pbmphX0JsdWViZXJyaWVzLnNpZA",
@@ -4592,7 +5466,9 @@ window.SID_LIBRARY = [
     "fileName": "Attack_of_the_Mutant_Ninja_Blueberries.sid",
     "path": "sids/GAMES/A-F/Attack_of_the_Mutant_Ninja_Blueberries.sid",
     "size": 2775,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 247100,
+    "durationText": "4:07.1"
   },
   {
     "id": "R0FNRVMvQS1GL0F0dGFja19vZl90aGVfTXV0YW50X05pbmphX0JsdWViZXJyaWVzX0lJLnNpZA",
@@ -4602,7 +5478,9 @@ window.SID_LIBRARY = [
     "fileName": "Attack_of_the_Mutant_Ninja_Blueberries_II.sid",
     "path": "sids/GAMES/A-F/Attack_of_the_Mutant_Ninja_Blueberries_II.sid",
     "size": 2400,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 122612,
+    "durationText": "2:02.612"
   },
   {
     "id": "R0FNRVMvQS1GL0F0dGFja19vZl90aGVfUEVUU0NJSV9Sb2JvdHMuc2lk",
@@ -4612,7 +5490,9 @@ window.SID_LIBRARY = [
     "fileName": "Attack_of_the_PETSCII_Robots.sid",
     "path": "sids/GAMES/A-F/Attack_of_the_PETSCII_Robots.sid",
     "size": 10588,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 52403,
+    "durationText": "0:52.403"
   },
   {
     "id": "R0FNRVMvQS1GL0F1Zl9XaWVkZXJzZWhlbl9QZXRfQkFTSUMuc2lk",
@@ -4622,7 +5502,9 @@ window.SID_LIBRARY = [
     "fileName": "Auf_Wiedersehen_Pet_BASIC.sid",
     "path": "sids/GAMES/A-F/Auf_Wiedersehen_Pet_BASIC.sid",
     "size": 2808,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 4345,
+    "durationText": "0:04.345"
   },
   {
     "id": "R0FNRVMvQS1GL0F1c3NpZV9HYW1lcy5zaWQ",
@@ -4632,7 +5514,9 @@ window.SID_LIBRARY = [
     "fileName": "Aussie_Games.sid",
     "path": "sids/GAMES/A-F/Aussie_Games.sid",
     "size": 20134,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 18000,
+    "durationText": "0:18"
   },
   {
     "id": "R0FNRVMvQS1GL0F1c3RyYWxvcGl0aWN1c19Sb2J1c3R1cy5zaWQ",
@@ -4642,7 +5526,9 @@ window.SID_LIBRARY = [
     "fileName": "Australopiticus_Robustus.sid",
     "path": "sids/GAMES/A-F/Australopiticus_Robustus.sid",
     "size": 3574,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 181000,
+    "durationText": "3:01"
   },
   {
     "id": "R0FNRVMvQS1GL0F1dGhlbnRpY19UZXRyaXMuc2lk",
@@ -4652,7 +5538,9 @@ window.SID_LIBRARY = [
     "fileName": "Authentic_Tetris.sid",
     "path": "sids/GAMES/A-F/Authentic_Tetris.sid",
     "size": 16378,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 38509,
+    "durationText": "0:38.509"
   },
   {
     "id": "R0FNRVMvQS1GL0F1dG9fNjQuc2lk",
@@ -4662,7 +5550,9 @@ window.SID_LIBRARY = [
     "fileName": "Auto_64.sid",
     "path": "sids/GAMES/A-F/Auto_64.sid",
     "size": 307,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 17000,
+    "durationText": "0:17"
   },
   {
     "id": "R0FNRVMvQS1GL0F1dG8tTWFuaWEuc2lk",
@@ -4672,7 +5562,9 @@ window.SID_LIBRARY = [
     "fileName": "Auto-Mania.sid",
     "path": "sids/GAMES/A-F/Auto-Mania.sid",
     "size": 684,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 18000,
+    "durationText": "0:18"
   },
   {
     "id": "R0FNRVMvQS1GL0F2b2lkLnNpZA",
@@ -4682,7 +5574,9 @@ window.SID_LIBRARY = [
     "fileName": "Avoid.sid",
     "path": "sids/GAMES/A-F/Avoid.sid",
     "size": 1360,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 3851,
+    "durationText": "0:03.851"
   },
   {
     "id": "R0FNRVMvQS1GL0F2b2lkX3RoZV9Ob2lkLnNpZA",
@@ -4692,7 +5586,9 @@ window.SID_LIBRARY = [
     "fileName": "Avoid_the_Noid.sid",
     "path": "sids/GAMES/A-F/Avoid_the_Noid.sid",
     "size": 3014,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 12838,
+    "durationText": "0:12.838"
   },
   {
     "id": "R0FNRVMvQS1GL0F4aXNfS29tcHV0ZXJrdW5zdF9JbnRyby5zaWQ",
@@ -4702,7 +5598,9 @@ window.SID_LIBRARY = [
     "fileName": "Axis_Komputerkunst_Intro.sid",
     "path": "sids/GAMES/A-F/Axis_Komputerkunst_Intro.sid",
     "size": 979,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 36869,
+    "durationText": "0:36.869"
   },
   {
     "id": "R0FNRVMvQS1GL0JPRkhfU2VydmVyc19VbmRlcl9TaWVnZS5zaWQ",
@@ -4712,7 +5610,9 @@ window.SID_LIBRARY = [
     "fileName": "BOFH_Servers_Under_Siege.sid",
     "path": "sids/GAMES/A-F/BOFH_Servers_Under_Siege.sid",
     "size": 4402,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 350000,
+    "durationText": "5:50"
   },
   {
     "id": "R0FNRVMvQS1GL0JhYWwuc2lk",
@@ -4722,7 +5622,9 @@ window.SID_LIBRARY = [
     "fileName": "Baal.sid",
     "path": "sids/GAMES/A-F/Baal.sid",
     "size": 4161,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 127000,
+    "durationText": "2:07"
   },
   {
     "id": "R0FNRVMvQS1GL0JhYnlsb25zX0Fyay5zaWQ",
@@ -4732,7 +5634,9 @@ window.SID_LIBRARY = [
     "fileName": "Babylons_Ark.sid",
     "path": "sids/GAMES/A-F/Babylons_Ark.sid",
     "size": 3709,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 38325,
+    "durationText": "0:38.325"
   },
   {
     "id": "R0FNRVMvQS1GL0JhY2Nhcm9vLnNpZA",
@@ -4742,7 +5646,9 @@ window.SID_LIBRARY = [
     "fileName": "Baccaroo.sid",
     "path": "sids/GAMES/A-F/Baccaroo.sid",
     "size": 855,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 54000,
+    "durationText": "0:54"
   },
   {
     "id": "R0FNRVMvQS1GL0JhY2tfdG9fUmVhbGl0eS5zaWQ",
@@ -4752,7 +5658,9 @@ window.SID_LIBRARY = [
     "fileName": "Back_to_Reality.sid",
     "path": "sids/GAMES/A-F/Back_to_Reality.sid",
     "size": 2231,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 67000,
+    "durationText": "1:07"
   },
   {
     "id": "R0FNRVMvQS1GL0JhZ2l0bWFuLnNpZA",
@@ -4762,7 +5670,9 @@ window.SID_LIBRARY = [
     "fileName": "Bagitman.sid",
     "path": "sids/GAMES/A-F/Bagitman.sid",
     "size": 4616,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 13000,
+    "durationText": "0:13"
   },
   {
     "id": "R0FNRVMvQS1GL0JhamlfQkFTSUMuc2lk",
@@ -4772,7 +5682,9 @@ window.SID_LIBRARY = [
     "fileName": "Baji_BASIC.sid",
     "path": "sids/GAMES/A-F/Baji_BASIC.sid",
     "size": 1497,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 7000,
+    "durationText": "0:07"
   },
   {
     "id": "R0FNRVMvQS1GL0JhbGwuc2lk",
@@ -4782,7 +5694,9 @@ window.SID_LIBRARY = [
     "fileName": "Ball.sid",
     "path": "sids/GAMES/A-F/Ball.sid",
     "size": 11383,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 51201,
+    "durationText": "0:51.201"
   },
   {
     "id": "R0FNRVMvQS1GL0JhbGxfVHJhcF9CQVNJQy5zaWQ",
@@ -4792,7 +5706,9 @@ window.SID_LIBRARY = [
     "fileName": "Ball_Trap_BASIC.sid",
     "path": "sids/GAMES/A-F/Ball_Trap_BASIC.sid",
     "size": 2944,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 22000,
+    "durationText": "0:22"
   },
   {
     "id": "R0FNRVMvQS1GL0JhbGxvbmZsdWdfQkFTSUMuc2lk",
@@ -4802,7 +5718,9 @@ window.SID_LIBRARY = [
     "fileName": "Ballonflug_BASIC.sid",
     "path": "sids/GAMES/A-F/Ballonflug_BASIC.sid",
     "size": 999,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 13287,
+    "durationText": "0:13.287"
   },
   {
     "id": "R0FNRVMvQS1GL0JhbGxvb25fNjQuc2lk",
@@ -4812,7 +5730,9 @@ window.SID_LIBRARY = [
     "fileName": "Balloon_64.sid",
     "path": "sids/GAMES/A-F/Balloon_64.sid",
     "size": 1310,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 11238,
+    "durationText": "0:11.238"
   },
   {
     "id": "R0FNRVMvQS1GL0JhbGxvb25yYWNlX0JBU0lDLnNpZA",
@@ -4822,7 +5742,9 @@ window.SID_LIBRARY = [
     "fileName": "Balloonrace_BASIC.sid",
     "path": "sids/GAMES/A-F/Balloonrace_BASIC.sid",
     "size": 968,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 6133,
+    "durationText": "0:06.133"
   },
   {
     "id": "R0FNRVMvQS1GL0JhbGxzLnNpZA",
@@ -4832,7 +5754,9 @@ window.SID_LIBRARY = [
     "fileName": "Balls.sid",
     "path": "sids/GAMES/A-F/Balls.sid",
     "size": 540,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 11000,
+    "durationText": "0:11"
   },
   {
     "id": "R0FNRVMvQS1GL0JhbG9vbi5zaWQ",
@@ -4842,7 +5766,9 @@ window.SID_LIBRARY = [
     "fileName": "Baloon.sid",
     "path": "sids/GAMES/A-F/Baloon.sid",
     "size": 975,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 23570,
+    "durationText": "0:23.57"
   },
   {
     "id": "R0FNRVMvQS1GL0JhbmstUm9iYmVyX0JBU0lDLnNpZA",
@@ -4852,7 +5778,9 @@ window.SID_LIBRARY = [
     "fileName": "Bank-Robber_BASIC.sid",
     "path": "sids/GAMES/A-F/Bank-Robber_BASIC.sid",
     "size": 800,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 31000,
+    "durationText": "0:31"
   },
   {
     "id": "R0FNRVMvQS1GL0JhcmRzX1RhbGUuc2lk",
@@ -4862,7 +5790,9 @@ window.SID_LIBRARY = [
     "fileName": "Bards_Tale.sid",
     "path": "sids/GAMES/A-F/Bards_Tale.sid",
     "size": 2660,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 4000,
+    "durationText": "0:04"
   },
   {
     "id": "R0FNRVMvQS1GL0JhcmRzX1RhbGVfSUlJLVRoaWVmX29mX0ZhdGUuc2lk",
@@ -4872,7 +5802,9 @@ window.SID_LIBRARY = [
     "fileName": "Bards_Tale_III-Thief_of_Fate.sid",
     "path": "sids/GAMES/A-F/Bards_Tale_III-Thief_of_Fate.sid",
     "size": 2369,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 16000,
+    "durationText": "0:16"
   },
   {
     "id": "R0FNRVMvQS1GL0JhcnJpZXItU3lzdGVtLnNpZA",
@@ -4882,7 +5814,9 @@ window.SID_LIBRARY = [
     "fileName": "Barrier-System.sid",
     "path": "sids/GAMES/A-F/Barrier-System.sid",
     "size": 1426,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 14000,
+    "durationText": "0:14"
   },
   {
     "id": "R0FNRVMvQS1GL0Jhc2tldF9NYW5hZ2VyLnNpZA",
@@ -4892,7 +5826,9 @@ window.SID_LIBRARY = [
     "fileName": "Basket_Manager.sid",
     "path": "sids/GAMES/A-F/Basket_Manager.sid",
     "size": 4350,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 106000,
+    "durationText": "1:46"
   },
   {
     "id": "R0FNRVMvQS1GL0JhdGhfVGltZS5zaWQ",
@@ -4902,7 +5838,9 @@ window.SID_LIBRARY = [
     "fileName": "Bath_Time.sid",
     "path": "sids/GAMES/A-F/Bath_Time.sid",
     "size": 1318,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 128000,
+    "durationText": "2:08"
   },
   {
     "id": "R0FNRVMvQS1GL0JhdHRsZV9Db21tYW5kLnNpZA",
@@ -4912,7 +5850,9 @@ window.SID_LIBRARY = [
     "fileName": "Battle_Command.sid",
     "path": "sids/GAMES/A-F/Battle_Command.sid",
     "size": 1486,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 51000,
+    "durationText": "0:51"
   },
   {
     "id": "R0FNRVMvQS1GL0JhdHRsZV9TdGF0aW9ucy5zaWQ",
@@ -4922,7 +5862,9 @@ window.SID_LIBRARY = [
     "fileName": "Battle_Stations.sid",
     "path": "sids/GAMES/A-F/Battle_Stations.sid",
     "size": 2654,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 50000,
+    "durationText": "0:50"
   },
   {
     "id": "R0FNRVMvQS1GL0JhdHRsZV9UaHJvbmUuc2lk",
@@ -4932,7 +5874,9 @@ window.SID_LIBRARY = [
     "fileName": "Battle_Throne.sid",
     "path": "sids/GAMES/A-F/Battle_Throne.sid",
     "size": 10677,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 62000,
+    "durationText": "1:02"
   },
   {
     "id": "R0FNRVMvQS1GL0JhdHRsZV9mb3JfQ3Jvbm9zLnNpZA",
@@ -4942,7 +5886,9 @@ window.SID_LIBRARY = [
     "fileName": "Battle_for_Cronos.sid",
     "path": "sids/GAMES/A-F/Battle_for_Cronos.sid",
     "size": 2306,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 172391,
+    "durationText": "2:52.391"
   },
   {
     "id": "R0FNRVMvQS1GL0JhdHRsZV90aHJvdWdoX1RpbWUuc2lk",
@@ -4952,7 +5898,9 @@ window.SID_LIBRARY = [
     "fileName": "Battle_through_Time.sid",
     "path": "sids/GAMES/A-F/Battle_through_Time.sid",
     "size": 5245,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 63000,
+    "durationText": "1:03"
   },
   {
     "id": "R0FNRVMvQS1GL0JhdHRsZWZyb250LnNpZA",
@@ -4962,7 +5910,9 @@ window.SID_LIBRARY = [
     "fileName": "Battlefront.sid",
     "path": "sids/GAMES/A-F/Battlefront.sid",
     "size": 363,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 7983,
+    "durationText": "0:07.983"
   },
   {
     "id": "R0FNRVMvQS1GL0JhdHRsZXNoaXBzLnNpZA",
@@ -4972,7 +5922,9 @@ window.SID_LIBRARY = [
     "fileName": "Battleships.sid",
     "path": "sids/GAMES/A-F/Battleships.sid",
     "size": 6462,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 281000,
+    "durationText": "4:41"
   },
   {
     "id": "R0FNRVMvQS1GL0JlYWNoX0J1Z2d5X1NpbXVsYXRvci5zaWQ",
@@ -4982,7 +5934,9 @@ window.SID_LIBRARY = [
     "fileName": "Beach_Buggy_Simulator.sid",
     "path": "sids/GAMES/A-F/Beach_Buggy_Simulator.sid",
     "size": 4838,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 152000,
+    "durationText": "2:32"
   },
   {
     "id": "R0FNRVMvQS1GL0JlYWNoX0hlYWRfSUkuc2lk",
@@ -4992,7 +5946,9 @@ window.SID_LIBRARY = [
     "fileName": "Beach_Head_II.sid",
     "path": "sids/GAMES/A-F/Beach_Head_II.sid",
     "size": 12094,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 37000,
+    "durationText": "0:37"
   },
   {
     "id": "R0FNRVMvQS1GL0JlYWNoX1ZvbGxleS5zaWQ",
@@ -5002,7 +5958,9 @@ window.SID_LIBRARY = [
     "fileName": "Beach_Volley.sid",
     "path": "sids/GAMES/A-F/Beach_Volley.sid",
     "size": 7310,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 71000,
+    "durationText": "1:11"
   },
   {
     "id": "R0FNRVMvQS1GL0JlYXJfQm92dmVyLnNpZA",
@@ -5012,7 +5970,9 @@ window.SID_LIBRARY = [
     "fileName": "Bear_Bovver.sid",
     "path": "sids/GAMES/A-F/Bear_Bovver.sid",
     "size": 1116,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 36000,
+    "durationText": "0:36"
   },
   {
     "id": "R0FNRVMvQS1GL0JlYXJfR2VvcmdlLnNpZA",
@@ -5022,7 +5982,9 @@ window.SID_LIBRARY = [
     "fileName": "Bear_George.sid",
     "path": "sids/GAMES/A-F/Bear_George.sid",
     "size": 2547,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 46000,
+    "durationText": "0:46"
   },
   {
     "id": "R0FNRVMvQS1GL0JlbGxyaW5nZXJfSUkuc2lk",
@@ -5032,7 +5994,9 @@ window.SID_LIBRARY = [
     "fileName": "Bellringer_II.sid",
     "path": "sids/GAMES/A-F/Bellringer_II.sid",
     "size": 382,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 15997,
+    "durationText": "0:15.997"
   },
   {
     "id": "R0FNRVMvQS1GL0JlbG93X3RoZV9Sb290LnNpZA",
@@ -5042,7 +6006,9 @@ window.SID_LIBRARY = [
     "fileName": "Below_the_Root.sid",
     "path": "sids/GAMES/A-F/Below_the_Root.sid",
     "size": 1030,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 25000,
+    "durationText": "0:25"
   },
   {
     "id": "R0FNRVMvQS1GL0JlbmppX1NwYWNlX1Jlc2N1ZS5zaWQ",
@@ -5052,7 +6018,9 @@ window.SID_LIBRARY = [
     "fileName": "Benji_Space_Rescue.sid",
     "path": "sids/GAMES/A-F/Benji_Space_Rescue.sid",
     "size": 910,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 82000,
+    "durationText": "1:22"
   },
   {
     "id": "R0FNRVMvQS1GL0JlcmFuaWEuc2lk",
@@ -5062,7 +6030,9 @@ window.SID_LIBRARY = [
     "fileName": "Berania.sid",
     "path": "sids/GAMES/A-F/Berania.sid",
     "size": 38561,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 11000,
+    "durationText": "0:11"
   },
   {
     "id": "R0FNRVMvQS1GL0JlcmtzX0ZvdXIuc2lk",
@@ -5072,7 +6042,9 @@ window.SID_LIBRARY = [
     "fileName": "Berks_Four.sid",
     "path": "sids/GAMES/A-F/Berks_Four.sid",
     "size": 2343,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 11258,
+    "durationText": "0:11.258"
   },
   {
     "id": "R0FNRVMvQS1GL0JpZ19CZW4uc2lk",
@@ -5082,7 +6054,9 @@ window.SID_LIBRARY = [
     "fileName": "Big_Ben.sid",
     "path": "sids/GAMES/A-F/Big_Ben.sid",
     "size": 2495,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 7000,
+    "durationText": "0:07"
   },
   {
     "id": "R0FNRVMvQS1GL0JpZ19NYWMuc2lk",
@@ -5092,7 +6066,9 @@ window.SID_LIBRARY = [
     "fileName": "Big_Mac.sid",
     "path": "sids/GAMES/A-F/Big_Mac.sid",
     "size": 4561,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 102000,
+    "durationText": "1:42"
   },
   {
     "id": "R0FNRVMvQS1GL0JpbGxfRGFfU25vd21hbi5zaWQ",
@@ -5102,7 +6078,9 @@ window.SID_LIBRARY = [
     "fileName": "Bill_Da_Snowman.sid",
     "path": "sids/GAMES/A-F/Bill_Da_Snowman.sid",
     "size": 564,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 14000,
+    "durationText": "0:14"
   },
   {
     "id": "R0FNRVMvQS1GL0JpbGx5X3RoZV9Qb3N0bWFuLnNpZA",
@@ -5112,7 +6090,9 @@ window.SID_LIBRARY = [
     "fileName": "Billy_the_Postman.sid",
     "path": "sids/GAMES/A-F/Billy_the_Postman.sid",
     "size": 3730,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 106000,
+    "durationText": "1:46"
   },
   {
     "id": "R0FNRVMvQS1GL0Jpb25pY19Db21tYW5kb19VU0FfVmVyc2lvbi5zaWQ",
@@ -5122,7 +6102,9 @@ window.SID_LIBRARY = [
     "fileName": "Bionic_Commando_USA_Version.sid",
     "path": "sids/GAMES/A-F/Bionic_Commando_USA_Version.sid",
     "size": 4156,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 136000,
+    "durationText": "2:16"
   },
   {
     "id": "R0FNRVMvQS1GL0Jpb25pY19HcmFubnkuc2lk",
@@ -5132,7 +6114,9 @@ window.SID_LIBRARY = [
     "fileName": "Bionic_Granny.sid",
     "path": "sids/GAMES/A-F/Bionic_Granny.sid",
     "size": 685,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 20000,
+    "durationText": "0:20"
   },
   {
     "id": "R0FNRVMvQS1GL0JpcmRfTW90aGVyLnNpZA",
@@ -5142,7 +6126,9 @@ window.SID_LIBRARY = [
     "fileName": "Bird_Mother.sid",
     "path": "sids/GAMES/A-F/Bird_Mother.sid",
     "size": 3406,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 18000,
+    "durationText": "0:18"
   },
   {
     "id": "R0FNRVMvQS1GL0JpdF9FeG9yY2lzdC5zaWQ",
@@ -5152,7 +6138,9 @@ window.SID_LIBRARY = [
     "fileName": "Bit_Exorcist.sid",
     "path": "sids/GAMES/A-F/Bit_Exorcist.sid",
     "size": 987,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 80000,
+    "durationText": "1:20"
   },
   {
     "id": "R0FNRVMvQS1GL0JsYWNrX0FkZGVyX0JBU0lDLnNpZA",
@@ -5162,7 +6150,9 @@ window.SID_LIBRARY = [
     "fileName": "Black_Adder_BASIC.sid",
     "path": "sids/GAMES/A-F/Black_Adder_BASIC.sid",
     "size": 1066,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 21000,
+    "durationText": "0:21"
   },
   {
     "id": "R0FNRVMvQS1GL0JsYWNrX0hhd2suc2lk",
@@ -5172,7 +6162,9 @@ window.SID_LIBRARY = [
     "fileName": "Black_Hawk.sid",
     "path": "sids/GAMES/A-F/Black_Hawk.sid",
     "size": 4158,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 54000,
+    "durationText": "0:54"
   },
   {
     "id": "R0FNRVMvQS1GL0JsYWNrX01hZ2ljLnNpZA",
@@ -5182,7 +6174,9 @@ window.SID_LIBRARY = [
     "fileName": "Black_Magic.sid",
     "path": "sids/GAMES/A-F/Black_Magic.sid",
     "size": 5182,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 125000,
+    "durationText": "2:05"
   },
   {
     "id": "R0FNRVMvQS1GL0JsYWtob2xlLnNpZA",
@@ -5192,7 +6186,9 @@ window.SID_LIBRARY = [
     "fileName": "Blakhole.sid",
     "path": "sids/GAMES/A-F/Blakhole.sid",
     "size": 3281,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 61000,
+    "durationText": "1:01"
   },
   {
     "id": "R0FNRVMvQS1GL0JsYXN0X0JhbGwuc2lk",
@@ -5202,7 +6198,9 @@ window.SID_LIBRARY = [
     "fileName": "Blast_Ball.sid",
     "path": "sids/GAMES/A-F/Blast_Ball.sid",
     "size": 6447,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 225000,
+    "durationText": "3:45"
   },
   {
     "id": "R0FNRVMvQS1GL0JsaXAtVmlkZW9fQ2xhc3NpY3Muc2lk",
@@ -5212,7 +6210,9 @@ window.SID_LIBRARY = [
     "fileName": "Blip-Video_Classics.sid",
     "path": "sids/GAMES/A-F/Blip-Video_Classics.sid",
     "size": 6573,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 262000,
+    "durationText": "4:22"
   },
   {
     "id": "R0FNRVMvQS1GL0JsaXR6LnNpZA",
@@ -5222,7 +6222,9 @@ window.SID_LIBRARY = [
     "fileName": "Blitz.sid",
     "path": "sids/GAMES/A-F/Blitz.sid",
     "size": 2820,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 44689,
+    "durationText": "0:44.689"
   },
   {
     "id": "R0FNRVMvQS1GL0Jsb2JfcHJldmlldy5zaWQ",
@@ -5232,7 +6234,9 @@ window.SID_LIBRARY = [
     "fileName": "Blob_preview.sid",
     "path": "sids/GAMES/A-F/Blob_preview.sid",
     "size": 2124,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 91932,
+    "durationText": "1:31.932"
   },
   {
     "id": "R0FNRVMvQS1GL0Jsb2NrYnVzdGVyc18xOTg0LnNpZA",
@@ -5242,7 +6246,9 @@ window.SID_LIBRARY = [
     "fileName": "Blockbusters_1984.sid",
     "path": "sids/GAMES/A-F/Blockbusters_1984.sid",
     "size": 3176,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 24000,
+    "durationText": "0:24"
   },
   {
     "id": "R0FNRVMvQS1GL0Jsb2NrYnVzdGVyc18xOTg4LnNpZA",
@@ -5252,7 +6258,9 @@ window.SID_LIBRARY = [
     "fileName": "Blockbusters_1988.sid",
     "path": "sids/GAMES/A-F/Blockbusters_1988.sid",
     "size": 672,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 5000,
+    "durationText": "0:05"
   },
   {
     "id": "R0FNRVMvQS1GL0Jsb2NrYnVzdGVycy1Hb2xkX1J1bi5zaWQ",
@@ -5262,7 +6270,9 @@ window.SID_LIBRARY = [
     "fileName": "Blockbusters-Gold_Run.sid",
     "path": "sids/GAMES/A-F/Blockbusters-Gold_Run.sid",
     "size": 1068,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 20000,
+    "durationText": "0:20"
   },
   {
     "id": "R0FNRVMvQS1GL0Jsb2Nrb3V0LnNpZA",
@@ -5272,7 +6282,9 @@ window.SID_LIBRARY = [
     "fileName": "Blockout.sid",
     "path": "sids/GAMES/A-F/Blockout.sid",
     "size": 2138,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 42000,
+    "durationText": "0:42"
   },
   {
     "id": "R0FNRVMvQS1GL0JsdWVfTWF4XzIwMDEuc2lk",
@@ -5282,7 +6294,9 @@ window.SID_LIBRARY = [
     "fileName": "Blue_Max_2001.sid",
     "path": "sids/GAMES/A-F/Blue_Max_2001.sid",
     "size": 894,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 75000,
+    "durationText": "1:15"
   },
   {
     "id": "R0FNRVMvQS1GL0JsdWVfYW5kX3RoZV9HcmF5X0JBU0lDLnNpZA",
@@ -5292,7 +6306,9 @@ window.SID_LIBRARY = [
     "fileName": "Blue_and_the_Gray_BASIC.sid",
     "path": "sids/GAMES/A-F/Blue_and_the_Gray_BASIC.sid",
     "size": 905,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 9991,
+    "durationText": "0:09.991"
   },
   {
     "id": "R0FNRVMvQS1GL0JsdWVzX0Jyb3RoZXJzX01pc3Npb25faW50cm8uc2lk",
@@ -5302,7 +6318,9 @@ window.SID_LIBRARY = [
     "fileName": "Blues_Brothers_Mission_intro.sid",
     "path": "sids/GAMES/A-F/Blues_Brothers_Mission_intro.sid",
     "size": 1854,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 68000,
+    "durationText": "1:08"
   },
   {
     "id": "R0FNRVMvQS1GL0JvYnNsZWlnaC5zaWQ",
@@ -5312,7 +6330,9 @@ window.SID_LIBRARY = [
     "fileName": "Bobsleigh.sid",
     "path": "sids/GAMES/A-F/Bobsleigh.sid",
     "size": 1558,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 73561,
+    "durationText": "1:13.561"
   },
   {
     "id": "R0FNRVMvQS1GL0JvY2NpYV9CQVNJQy5zaWQ",
@@ -5322,7 +6342,9 @@ window.SID_LIBRARY = [
     "fileName": "Boccia_BASIC.sid",
     "path": "sids/GAMES/A-F/Boccia_BASIC.sid",
     "size": 2601,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 9298,
+    "durationText": "0:09.298"
   },
   {
     "id": "R0FNRVMvQS1GL0JvZF9TcXVhZC5zaWQ",
@@ -5332,7 +6354,9 @@ window.SID_LIBRARY = [
     "fileName": "Bod_Squad.sid",
     "path": "sids/GAMES/A-F/Bod_Squad.sid",
     "size": 6690,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 174000,
+    "durationText": "2:54"
   },
   {
     "id": "R0FNRVMvQS1GL0JvaW5nLnNpZA",
@@ -5342,7 +6366,9 @@ window.SID_LIBRARY = [
     "fileName": "Boing.sid",
     "path": "sids/GAMES/A-F/Boing.sid",
     "size": 3104,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 121000,
+    "durationText": "2:01"
   },
   {
     "id": "R0FNRVMvQS1GL0JvbWJfQ2F0Y2guc2lk",
@@ -5352,7 +6378,9 @@ window.SID_LIBRARY = [
     "fileName": "Bomb_Catch.sid",
     "path": "sids/GAMES/A-F/Bomb_Catch.sid",
     "size": 1744,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 35000,
+    "durationText": "0:35"
   },
   {
     "id": "R0FNRVMvQS1GL0JvbWJfTWFuaWEuc2lk",
@@ -5362,7 +6390,9 @@ window.SID_LIBRARY = [
     "fileName": "Bomb_Mania.sid",
     "path": "sids/GAMES/A-F/Bomb_Mania.sid",
     "size": 5151,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 103000,
+    "durationText": "1:43"
   },
   {
     "id": "R0FNRVMvQS1GL0JvbnpvLnNpZA",
@@ -5372,7 +6402,9 @@ window.SID_LIBRARY = [
     "fileName": "Bonzo.sid",
     "path": "sids/GAMES/A-F/Bonzo.sid",
     "size": 914,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 8563,
+    "durationText": "0:08.563"
   },
   {
     "id": "R0FNRVMvQS1GL0Jvb2dhLUJvb190aGVfRmxlYS5zaWQ",
@@ -5382,7 +6414,9 @@ window.SID_LIBRARY = [
     "fileName": "Booga-Boo_the_Flea.sid",
     "path": "sids/GAMES/A-F/Booga-Boo_the_Flea.sid",
     "size": 2737,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 30521,
+    "durationText": "0:30.521"
   },
   {
     "id": "R0FNRVMvQS1GL0Jvb21iYXN0aWNfQmVubnlfcHJldmlldy5zaWQ",
@@ -5392,7 +6426,9 @@ window.SID_LIBRARY = [
     "fileName": "Boombastic_Benny_preview.sid",
     "path": "sids/GAMES/A-F/Boombastic_Benny_preview.sid",
     "size": 5816,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 104000,
+    "durationText": "1:44"
   },
   {
     "id": "R0FNRVMvQS1GL0Jvb3RsZWdfQmFuZGl0cy5zaWQ",
@@ -5402,7 +6438,9 @@ window.SID_LIBRARY = [
     "fileName": "Bootleg_Bandits.sid",
     "path": "sids/GAMES/A-F/Bootleg_Bandits.sid",
     "size": 650,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 12000,
+    "durationText": "0:12"
   },
   {
     "id": "R0FNRVMvQS1GL0JvcHBpZXNfR3JlYXRfV29yZF9DaGFzZS5zaWQ",
@@ -5412,7 +6450,9 @@ window.SID_LIBRARY = [
     "fileName": "Boppies_Great_Word_Chase.sid",
     "path": "sids/GAMES/A-F/Boppies_Great_Word_Chase.sid",
     "size": 853,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 13000,
+    "durationText": "0:13"
   },
   {
     "id": "R0FNRVMvQS1GL0Jvc3N6dS5zaWQ",
@@ -5422,7 +6462,9 @@ window.SID_LIBRARY = [
     "fileName": "Bosszu.sid",
     "path": "sids/GAMES/A-F/Bosszu.sid",
     "size": 2778,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 3000,
+    "durationText": "0:03"
   },
   {
     "id": "R0FNRVMvQS1GL0JvdWxkZXJfRGFzaC5zaWQ",
@@ -5432,7 +6474,9 @@ window.SID_LIBRARY = [
     "fileName": "Boulder_Dash.sid",
     "path": "sids/GAMES/A-F/Boulder_Dash.sid",
     "size": 1156,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 17000,
+    "durationText": "0:17"
   },
   {
     "id": "R0FNRVMvQS1GL0JvdWxkZXJfRGFzaF9JSS5zaWQ",
@@ -5442,7 +6486,9 @@ window.SID_LIBRARY = [
     "fileName": "Boulder_Dash_II.sid",
     "path": "sids/GAMES/A-F/Boulder_Dash_II.sid",
     "size": 1134,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 12900,
+    "durationText": "0:12.9"
   },
   {
     "id": "R0FNRVMvQS1GL0JvdW5jZXIuc2lk",
@@ -5452,7 +6498,9 @@ window.SID_LIBRARY = [
     "fileName": "Bouncer.sid",
     "path": "sids/GAMES/A-F/Bouncer.sid",
     "size": 689,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 9000,
+    "durationText": "0:09"
   },
   {
     "id": "R0FNRVMvQS1GL0JvdW5jaF9wcmV2aWV3LnNpZA",
@@ -5462,7 +6510,9 @@ window.SID_LIBRARY = [
     "fileName": "Bounch_preview.sid",
     "path": "sids/GAMES/A-F/Bounch_preview.sid",
     "size": 3036,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 39000,
+    "durationText": "0:39"
   },
   {
     "id": "R0FNRVMvQS1GL0JvdW50eV9Cb2JfU3RyaWtlc19CYWNrLnNpZA",
@@ -5472,7 +6522,9 @@ window.SID_LIBRARY = [
     "fileName": "Bounty_Bob_Strikes_Back.sid",
     "path": "sids/GAMES/A-F/Bounty_Bob_Strikes_Back.sid",
     "size": 2878,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 17000,
+    "durationText": "0:17"
   },
   {
     "id": "R0FNRVMvQS1GL0JvdW56eS5zaWQ",
@@ -5482,7 +6534,9 @@ window.SID_LIBRARY = [
     "fileName": "Bounzy.sid",
     "path": "sids/GAMES/A-F/Bounzy.sid",
     "size": 4162,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 61000,
+    "durationText": "1:01"
   },
   {
     "id": "R0FNRVMvQS1GL0Jvd2xpbmcuc2lk",
@@ -5492,7 +6546,9 @@ window.SID_LIBRARY = [
     "fileName": "Bowling.sid",
     "path": "sids/GAMES/A-F/Bowling.sid",
     "size": 5438,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 190000,
+    "durationText": "3:10"
   },
   {
     "id": "R0FNRVMvQS1GL0JveGVzLnNpZA",
@@ -5502,7 +6558,9 @@ window.SID_LIBRARY = [
     "fileName": "Boxes.sid",
     "path": "sids/GAMES/A-F/Boxes.sid",
     "size": 9170,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 118000,
+    "durationText": "1:58"
   },
   {
     "id": "R0FNRVMvQS1GL0JvenVtYS5zaWQ",
@@ -5512,7 +6570,9 @@ window.SID_LIBRARY = [
     "fileName": "Bozuma.sid",
     "path": "sids/GAMES/A-F/Bozuma.sid",
     "size": 28467,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 63000,
+    "durationText": "1:03"
   },
   {
     "id": "R0FNRVMvQS1GL0JyYWluc3Rvcm0uc2lk",
@@ -5522,7 +6582,9 @@ window.SID_LIBRARY = [
     "fileName": "Brainstorm.sid",
     "path": "sids/GAMES/A-F/Brainstorm.sid",
     "size": 5375,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 186062,
+    "durationText": "3:06.062"
   },
   {
     "id": "R0FNRVMvQS1GL0JyYXZlX0FmcmljYW5fSHVudHJlc3Muc2lk",
@@ -5532,7 +6594,9 @@ window.SID_LIBRARY = [
     "fileName": "Brave_African_Huntress.sid",
     "path": "sids/GAMES/A-F/Brave_African_Huntress.sid",
     "size": 6270,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 57000,
+    "durationText": "0:57"
   },
   {
     "id": "R0FNRVMvQS1GL0JyZWFrX0RhbmNlLnNpZA",
@@ -5542,7 +6606,9 @@ window.SID_LIBRARY = [
     "fileName": "Break_Dance.sid",
     "path": "sids/GAMES/A-F/Break_Dance.sid",
     "size": 2543,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 23500,
+    "durationText": "0:23.5"
   },
   {
     "id": "R0FNRVMvQS1GL0JyZWFrX0ZldmVyLnNpZA",
@@ -5552,7 +6618,9 @@ window.SID_LIBRARY = [
     "fileName": "Break_Fever.sid",
     "path": "sids/GAMES/A-F/Break_Fever.sid",
     "size": 14558,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 258000,
+    "durationText": "4:18"
   },
   {
     "id": "R0FNRVMvQS1GL0JyZWFrLUluLnNpZA",
@@ -5562,7 +6630,9 @@ window.SID_LIBRARY = [
     "fileName": "Break-In.sid",
     "path": "sids/GAMES/A-F/Break-In.sid",
     "size": 11346,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 129000,
+    "durationText": "2:09"
   },
   {
     "id": "R0FNRVMvQS1GL0JyZWFrZG93bi5zaWQ",
@@ -5572,7 +6642,9 @@ window.SID_LIBRARY = [
     "fileName": "Breakdown.sid",
     "path": "sids/GAMES/A-F/Breakdown.sid",
     "size": 4209,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 144000,
+    "durationText": "2:24"
   },
   {
     "id": "R0FNRVMvQS1GL0JyZWFrZXIuc2lk",
@@ -5582,7 +6654,9 @@ window.SID_LIBRARY = [
     "fileName": "Breaker.sid",
     "path": "sids/GAMES/A-F/Breaker.sid",
     "size": 4222,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 189000,
+    "durationText": "3:09"
   },
   {
     "id": "R0FNRVMvQS1GL0JyZWFraW4uc2lk",
@@ -5592,7 +6666,9 @@ window.SID_LIBRARY = [
     "fileName": "Breakin.sid",
     "path": "sids/GAMES/A-F/Breakin.sid",
     "size": 512,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 5000,
+    "durationText": "0:05"
   },
   {
     "id": "R0FNRVMvQS1GL0JyZWFrdGhydV9pbl8zRC5zaWQ",
@@ -5602,7 +6678,9 @@ window.SID_LIBRARY = [
     "fileName": "Breakthru_in_3D.sid",
     "path": "sids/GAMES/A-F/Breakthru_in_3D.sid",
     "size": 1370,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 35000,
+    "durationText": "0:35"
   },
   {
     "id": "R0FNRVMvQS1GL0JyZWF0aGFseXplci5zaWQ",
@@ -5612,7 +6690,9 @@ window.SID_LIBRARY = [
     "fileName": "Breathalyzer.sid",
     "path": "sids/GAMES/A-F/Breathalyzer.sid",
     "size": 3763,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 46000,
+    "durationText": "0:46"
   },
   {
     "id": "R0FNRVMvQS1GL0JyaWFuX0Jsb29kYXhlLnNpZA",
@@ -5622,7 +6702,9 @@ window.SID_LIBRARY = [
     "fileName": "Brian_Bloodaxe.sid",
     "path": "sids/GAMES/A-F/Brian_Bloodaxe.sid",
     "size": 1027,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 16000,
+    "durationText": "0:16"
   },
   {
     "id": "R0FNRVMvQS1GL0JyaWFuX0phY2tzX1N1cGVyc3Rhcl9DaGFsbGVuZ2Uuc2lk",
@@ -5632,7 +6714,9 @@ window.SID_LIBRARY = [
     "fileName": "Brian_Jacks_Superstar_Challenge.sid",
     "path": "sids/GAMES/A-F/Brian_Jacks_Superstar_Challenge.sid",
     "size": 2468,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 34000,
+    "durationText": "0:34"
   },
   {
     "id": "R0FNRVMvQS1GL0JyaWNrX091dF82NF9CQVNJQy5zaWQ",
@@ -5642,7 +6726,9 @@ window.SID_LIBRARY = [
     "fileName": "Brick_Out_64_BASIC.sid",
     "path": "sids/GAMES/A-F/Brick_Out_64_BASIC.sid",
     "size": 605,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 6655,
+    "durationText": "0:06.655"
   },
   {
     "id": "R0FNRVMvQS1GL0JyaWNrb3V0X0JBU0lDLnNpZA",
@@ -5652,7 +6738,9 @@ window.SID_LIBRARY = [
     "fileName": "Brickout_BASIC.sid",
     "path": "sids/GAMES/A-F/Brickout_BASIC.sid",
     "size": 762,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 7000,
+    "durationText": "0:07"
   },
   {
     "id": "R0FNRVMvQS1GL0JyaWRlX29mX0ZyYW5rZW5zdGVpbi5zaWQ",
@@ -5662,7 +6750,9 @@ window.SID_LIBRARY = [
     "fileName": "Bride_of_Frankenstein.sid",
     "path": "sids/GAMES/A-F/Bride_of_Frankenstein.sid",
     "size": 798,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 14025,
+    "durationText": "0:14.025"
   },
   {
     "id": "R0FNRVMvQS1GL0JyaXN0bGVzLnNpZA",
@@ -5672,7 +6762,9 @@ window.SID_LIBRARY = [
     "fileName": "Bristles.sid",
     "path": "sids/GAMES/A-F/Bristles.sid",
     "size": 1677,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 33972,
+    "durationText": "0:33.972"
   },
   {
     "id": "R0FNRVMvQS1GL0Jyb2tlci5zaWQ",
@@ -5682,7 +6774,9 @@ window.SID_LIBRARY = [
     "fileName": "Broker.sid",
     "path": "sids/GAMES/A-F/Broker.sid",
     "size": 11385,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 31000,
+    "durationText": "0:31"
   },
   {
     "id": "R0FNRVMvQS1GL0JydW5oaWxkZV9Mb3Zlc19CcnVub19CQVNJQy5zaWQ",
@@ -5692,7 +6786,9 @@ window.SID_LIBRARY = [
     "fileName": "Brunhilde_Loves_Bruno_BASIC.sid",
     "path": "sids/GAMES/A-F/Brunhilde_Loves_Bruno_BASIC.sid",
     "size": 3877,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 66000,
+    "durationText": "1:06"
   },
   {
     "id": "R0FNRVMvQS1GL0JydXRhbGx5X0JyYWluc3Rvcm0uc2lk",
@@ -5702,7 +6798,9 @@ window.SID_LIBRARY = [
     "fileName": "Brutally_Brainstorm.sid",
     "path": "sids/GAMES/A-F/Brutally_Brainstorm.sid",
     "size": 2842,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 72000,
+    "durationText": "1:12"
   },
   {
     "id": "R0FNRVMvQS1GL0JyeWFuX1JvYnNvbnNfU3VwZXJfTGVhZ3VlLnNpZA",
@@ -5712,7 +6810,9 @@ window.SID_LIBRARY = [
     "fileName": "Bryan_Robsons_Super_League.sid",
     "path": "sids/GAMES/A-F/Bryan_Robsons_Super_League.sid",
     "size": 2006,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 12791,
+    "durationText": "0:12.791"
   },
   {
     "id": "R0FNRVMvQS1GL0J1YmJsZV9HaG9zdC5zaWQ",
@@ -5722,7 +6822,9 @@ window.SID_LIBRARY = [
     "fileName": "Bubble_Ghost.sid",
     "path": "sids/GAMES/A-F/Bubble_Ghost.sid",
     "size": 6274,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 18000,
+    "durationText": "0:18"
   },
   {
     "id": "R0FNRVMvQS1GL0J1YmJsZXIuc2lk",
@@ -5732,7 +6834,9 @@ window.SID_LIBRARY = [
     "fileName": "Bubbler.sid",
     "path": "sids/GAMES/A-F/Bubbler.sid",
     "size": 3279,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 30000,
+    "durationText": "0:30"
   },
   {
     "id": "R0FNRVMvQS1GL0J1Y2tfUm9nZXJzLnNpZA",
@@ -5742,7 +6846,9 @@ window.SID_LIBRARY = [
     "fileName": "Buck_Rogers.sid",
     "path": "sids/GAMES/A-F/Buck_Rogers.sid",
     "size": 1169,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 5000,
+    "durationText": "0:05"
   },
   {
     "id": "R0FNRVMvQS1GL0J1Y2tfUm9nZXJzX0NvdW50ZG93bl90b19Eb29tc2RheS5zaWQ",
@@ -5752,7 +6858,9 @@ window.SID_LIBRARY = [
     "fileName": "Buck_Rogers_Countdown_to_Doomsday.sid",
     "path": "sids/GAMES/A-F/Buck_Rogers_Countdown_to_Doomsday.sid",
     "size": 2337,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 42000,
+    "durationText": "0:42"
   },
   {
     "id": "R0FNRVMvQS1GL0J1ZGR5X0J1YmJsZS5zaWQ",
@@ -5762,7 +6870,9 @@ window.SID_LIBRARY = [
     "fileName": "Buddy_Bubble.sid",
     "path": "sids/GAMES/A-F/Buddy_Bubble.sid",
     "size": 3821,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 89000,
+    "durationText": "1:29"
   },
   {
     "id": "R0FNRVMvQS1GL0J1Z19CQVNJQy5zaWQ",
@@ -5772,7 +6882,9 @@ window.SID_LIBRARY = [
     "fileName": "Bug_BASIC.sid",
     "path": "sids/GAMES/A-F/Bug_BASIC.sid",
     "size": 936,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 6000,
+    "durationText": "0:06"
   },
   {
     "id": "R0FNRVMvQS1GL0J1Z19CbGl0ei5zaWQ",
@@ -5782,7 +6894,9 @@ window.SID_LIBRARY = [
     "fileName": "Bug_Blitz.sid",
     "path": "sids/GAMES/A-F/Bug_Blitz.sid",
     "size": 3108,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 36000,
+    "durationText": "0:36"
   },
   {
     "id": "R0FNRVMvQS1GL0J1bGdlLnNpZA",
@@ -5792,7 +6906,9 @@ window.SID_LIBRARY = [
     "fileName": "Bulge.sid",
     "path": "sids/GAMES/A-F/Bulge.sid",
     "size": 420,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 19000,
+    "durationText": "0:19"
   },
   {
     "id": "R0FNRVMvQS1GL0J1bGxpb24uc2lk",
@@ -5802,7 +6918,9 @@ window.SID_LIBRARY = [
     "fileName": "Bullion.sid",
     "path": "sids/GAMES/A-F/Bullion.sid",
     "size": 1372,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 15000,
+    "durationText": "0:15"
   },
   {
     "id": "R0FNRVMvQS1GL0J1bGxzZXllLnNpZA",
@@ -5812,7 +6930,9 @@ window.SID_LIBRARY = [
     "fileName": "Bullseye.sid",
     "path": "sids/GAMES/A-F/Bullseye.sid",
     "size": 2705,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 22000,
+    "durationText": "0:22"
   },
   {
     "id": "R0FNRVMvQS1GL0J1bWJsZV9CZWUuc2lk",
@@ -5822,7 +6942,9 @@ window.SID_LIBRARY = [
     "fileName": "Bumble_Bee.sid",
     "path": "sids/GAMES/A-F/Bumble_Bee.sid",
     "size": 4063,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 1000,
+    "durationText": "0:01"
   },
   {
     "id": "R0FNRVMvQS1GL0J1bWJsZS1CZWUuc2lk",
@@ -5832,7 +6954,9 @@ window.SID_LIBRARY = [
     "fileName": "Bumble-Bee.sid",
     "path": "sids/GAMES/A-F/Bumble-Bee.sid",
     "size": 4281,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 90000,
+    "durationText": "1:30"
   },
   {
     "id": "R0FNRVMvQS1GL0J1bm55X1phcC5zaWQ",
@@ -5842,7 +6966,9 @@ window.SID_LIBRARY = [
     "fileName": "Bunny_Zap.sid",
     "path": "sids/GAMES/A-F/Bunny_Zap.sid",
     "size": 766,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 10000,
+    "durationText": "0:10"
   },
   {
     "id": "R0FNRVMvQS1GL0J1cmdlcl9DaGFzZS5zaWQ",
@@ -5852,7 +6978,9 @@ window.SID_LIBRARY = [
     "fileName": "Burger_Chase.sid",
     "path": "sids/GAMES/A-F/Burger_Chase.sid",
     "size": 1216,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 9000,
+    "durationText": "0:09"
   },
   {
     "id": "R0FNRVMvQS1GL0J1cm5pbl9SdWJiZXIuc2lk",
@@ -5862,7 +6990,9 @@ window.SID_LIBRARY = [
     "fileName": "Burnin_Rubber.sid",
     "path": "sids/GAMES/A-F/Burnin_Rubber.sid",
     "size": 1176,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 53000,
+    "durationText": "0:53"
   },
   {
     "id": "R0FNRVMvQS1GL0J1dHRlcmZseS5zaWQ",
@@ -5872,7 +7002,9 @@ window.SID_LIBRARY = [
     "fileName": "Butterfly.sid",
     "path": "sids/GAMES/A-F/Butterfly.sid",
     "size": 524,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 12000,
+    "durationText": "0:12"
   },
   {
     "id": "R0FNRVMvQS1GL0J1enpfT2ZmLnNpZA",
@@ -5882,7 +7014,9 @@ window.SID_LIBRARY = [
     "fileName": "Buzz_Off.sid",
     "path": "sids/GAMES/A-F/Buzz_Off.sid",
     "size": 3000,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 5512,
+    "durationText": "0:05.512"
   },
   {
     "id": "R0FNRVMvQS1GL0J5dGVfSW52YWRlcnMuc2lk",
@@ -5892,7 +7026,9 @@ window.SID_LIBRARY = [
     "fileName": "Byte_Invaders.sid",
     "path": "sids/GAMES/A-F/Byte_Invaders.sid",
     "size": 1906,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 63208,
+    "durationText": "1:03.208"
   },
   {
     "id": "R0FNRVMvQS1GL0NfZXN0X2xhX3ZpZV9CQVNJQy5zaWQ",
@@ -5902,7 +7038,9 @@ window.SID_LIBRARY = [
     "fileName": "C_est_la_vie_BASIC.sid",
     "path": "sids/GAMES/A-F/C_est_la_vie_BASIC.sid",
     "size": 4537,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 74000,
+    "durationText": "1:14"
   },
   {
     "id": "R0FNRVMvQS1GL0NhYl9IdXN0bGUuc2lk",
@@ -5912,7 +7050,9 @@ window.SID_LIBRARY = [
     "fileName": "Cab_Hustle.sid",
     "path": "sids/GAMES/A-F/Cab_Hustle.sid",
     "size": 1685,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 156111,
+    "durationText": "2:36.111"
   },
   {
     "id": "R0FNRVMvQS1GL0NhZXNhcl90aGVfQ2F0LnNpZA",
@@ -5922,7 +7062,9 @@ window.SID_LIBRARY = [
     "fileName": "Caesar_the_Cat.sid",
     "path": "sids/GAMES/A-F/Caesar_the_Cat.sid",
     "size": 2170,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 9000,
+    "durationText": "0:09"
   },
   {
     "id": "R0FNRVMvQS1GL0NhbGlmb3JuaWFfUHJvX0dvbGYuc2lk",
@@ -5932,7 +7074,9 @@ window.SID_LIBRARY = [
     "fileName": "California_Pro_Golf.sid",
     "path": "sids/GAMES/A-F/California_Pro_Golf.sid",
     "size": 12573,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 144000,
+    "durationText": "2:24"
   },
   {
     "id": "R0FNRVMvQS1GL0NhbGlmb3JuaWFfUmFpc2luc19hbmRfdGhlX0NlcmVhbF9GYWN0b3J5LnNpZA",
@@ -5942,7 +7086,9 @@ window.SID_LIBRARY = [
     "fileName": "California_Raisins_and_the_Cereal_Factory.sid",
     "path": "sids/GAMES/A-F/California_Raisins_and_the_Cereal_Factory.sid",
     "size": 2269,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 41000,
+    "durationText": "0:41"
   },
   {
     "id": "R0FNRVMvQS1GL0NhbHZpbi5zaWQ",
@@ -5952,7 +7098,9 @@ window.SID_LIBRARY = [
     "fileName": "Calvin.sid",
     "path": "sids/GAMES/A-F/Calvin.sid",
     "size": 1563,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 22733,
+    "durationText": "0:22.733"
   },
   {
     "id": "R0FNRVMvQS1GL0NhbWJvZGlhX1JhaWQuc2lk",
@@ -5962,7 +7110,9 @@ window.SID_LIBRARY = [
     "fileName": "Cambodia_Raid.sid",
     "path": "sids/GAMES/A-F/Cambodia_Raid.sid",
     "size": 4030,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 90000,
+    "durationText": "1:30"
   },
   {
     "id": "R0FNRVMvQS1GL0NhbWJvZ2lhLnNpZA",
@@ -5972,7 +7122,9 @@ window.SID_LIBRARY = [
     "fileName": "Cambogia.sid",
     "path": "sids/GAMES/A-F/Cambogia.sid",
     "size": 9278,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 174000,
+    "durationText": "2:54"
   },
   {
     "id": "R0FNRVMvQS1GL0NhbWVsb3RfV2FycmlvcnMuc2lk",
@@ -5982,7 +7134,9 @@ window.SID_LIBRARY = [
     "fileName": "Camelot_Warriors.sid",
     "path": "sids/GAMES/A-F/Camelot_Warriors.sid",
     "size": 7314,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 204000,
+    "durationText": "3:24"
   },
   {
     "id": "R0FNRVMvQS1GL0NhbmR5X0JhbmRpdF9CQVNJQy5zaWQ",
@@ -5992,7 +7146,9 @@ window.SID_LIBRARY = [
     "fileName": "Candy_Bandit_BASIC.sid",
     "path": "sids/GAMES/A-F/Candy_Bandit_BASIC.sid",
     "size": 1773,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 6000,
+    "durationText": "0:06"
   },
   {
     "id": "R0FNRVMvQS1GL0Nhbm9ucmlkZXIuc2lk",
@@ -6002,7 +7158,9 @@ window.SID_LIBRARY = [
     "fileName": "Canonrider.sid",
     "path": "sids/GAMES/A-F/Canonrider.sid",
     "size": 11391,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 169000,
+    "durationText": "2:49"
   },
   {
     "id": "R0FNRVMvQS1GL0NhcHRhaW5fQmxvb2Quc2lk",
@@ -6012,7 +7170,9 @@ window.SID_LIBRARY = [
     "fileName": "Captain_Blood.sid",
     "path": "sids/GAMES/A-F/Captain_Blood.sid",
     "size": 4682,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 123000,
+    "durationText": "2:03"
   },
   {
     "id": "R0FNRVMvQS1GL0NhcHRhaW5fRnV0dXJlX1ByZXZpZXcuc2lk",
@@ -6022,7 +7182,9 @@ window.SID_LIBRARY = [
     "fileName": "Captain_Future_Preview.sid",
     "path": "sids/GAMES/A-F/Captain_Future_Preview.sid",
     "size": 5474,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 552000,
+    "durationText": "9:12"
   },
   {
     "id": "R0FNRVMvQS1GL0NhcHRhaW5fS2VsbHkuc2lk",
@@ -6032,7 +7194,9 @@ window.SID_LIBRARY = [
     "fileName": "Captain_Kelly.sid",
     "path": "sids/GAMES/A-F/Captain_Kelly.sid",
     "size": 563,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 43000,
+    "durationText": "0:43"
   },
   {
     "id": "R0FNRVMvQS1GL0NhcHRhaW5fS2lkZC5zaWQ",
@@ -6042,7 +7206,9 @@ window.SID_LIBRARY = [
     "fileName": "Captain_Kidd.sid",
     "path": "sids/GAMES/A-F/Captain_Kidd.sid",
     "size": 5728,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 113000,
+    "durationText": "1:53"
   },
   {
     "id": "R0FNRVMvQS1GL0NhcHRhaW5fU3RhcmstVGhlX01pc3Npb24uc2lk",
@@ -6052,7 +7218,9 @@ window.SID_LIBRARY = [
     "fileName": "Captain_Stark-The_Mission.sid",
     "path": "sids/GAMES/A-F/Captain_Stark-The_Mission.sid",
     "size": 2737,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 131000,
+    "durationText": "2:11"
   },
   {
     "id": "R0FNRVMvQS1GL0NhcHRpdmUuc2lk",
@@ -6062,7 +7230,9 @@ window.SID_LIBRARY = [
     "fileName": "Captive.sid",
     "path": "sids/GAMES/A-F/Captive.sid",
     "size": 7342,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 129000,
+    "durationText": "2:09"
   },
   {
     "id": "R0FNRVMvQS1GL0Nhci1SYWMuc2lk",
@@ -6072,7 +7242,9 @@ window.SID_LIBRARY = [
     "fileName": "Car-Rac.sid",
     "path": "sids/GAMES/A-F/Car-Rac.sid",
     "size": 11385,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 31000,
+    "durationText": "0:31"
   },
   {
     "id": "R0FNRVMvQS1GL0NhcmRfU2hhcmtzLnNpZA",
@@ -6082,7 +7254,9 @@ window.SID_LIBRARY = [
     "fileName": "Card_Sharks.sid",
     "path": "sids/GAMES/A-F/Card_Sharks.sid",
     "size": 2832,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 53000,
+    "durationText": "0:53"
   },
   {
     "id": "R0FNRVMvQS1GL0NhcnJpZXJfQ29tbWFuZC5zaWQ",
@@ -6092,7 +7266,9 @@ window.SID_LIBRARY = [
     "fileName": "Carrier_Command.sid",
     "path": "sids/GAMES/A-F/Carrier_Command.sid",
     "size": 4469,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 93000,
+    "durationText": "1:33"
   },
   {
     "id": "R0FNRVMvQS1GL0NhcnJ5X29uX0xhdWdoaW5nLnNpZA",
@@ -6102,7 +7278,9 @@ window.SID_LIBRARY = [
     "fileName": "Carry_on_Laughing.sid",
     "path": "sids/GAMES/A-F/Carry_on_Laughing.sid",
     "size": 12372,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 554000,
+    "durationText": "9:14"
   },
   {
     "id": "R0FNRVMvQS1GL0Nhc2lub19Qb2tlcl9CQVNJQy5zaWQ",
@@ -6112,7 +7290,9 @@ window.SID_LIBRARY = [
     "fileName": "Casino_Poker_BASIC.sid",
     "path": "sids/GAMES/A-F/Casino_Poker_BASIC.sid",
     "size": 1970,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 24000,
+    "durationText": "0:24"
   },
   {
     "id": "R0FNRVMvQS1GL0Nhc3RsZS5zaWQ",
@@ -6122,7 +7302,9 @@ window.SID_LIBRARY = [
     "fileName": "Castle.sid",
     "path": "sids/GAMES/A-F/Castle.sid",
     "size": 6275,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 291420,
+    "durationText": "4:51.42"
   },
   {
     "id": "R0FNRVMvQS1GL0Nhc3RsZV9EZWZlbmNlX1ByZXZpZXcuc2lk",
@@ -6132,7 +7314,9 @@ window.SID_LIBRARY = [
     "fileName": "Castle_Defence_Preview.sid",
     "path": "sids/GAMES/A-F/Castle_Defence_Preview.sid",
     "size": 6838,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 102100,
+    "durationText": "1:42.1"
   },
   {
     "id": "R0FNRVMvQS1GL0Nhc3RsZV9SYWlkLnNpZA",
@@ -6142,7 +7326,9 @@ window.SID_LIBRARY = [
     "fileName": "Castle_Raid.sid",
     "path": "sids/GAMES/A-F/Castle_Raid.sid",
     "size": 34033,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 10846,
+    "durationText": "0:10.846"
   },
   {
     "id": "R0FNRVMvQS1GL0Nhc3RsZV9TaGFkb3dnYXRlLnNpZA",
@@ -6152,7 +7338,9 @@ window.SID_LIBRARY = [
     "fileName": "Castle_Shadowgate.sid",
     "path": "sids/GAMES/A-F/Castle_Shadowgate.sid",
     "size": 33613,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 53222,
+    "durationText": "0:53.222"
   },
   {
     "id": "R0FNRVMvQS1GL0Nhc3RsZV9vZl9MaWZlLnNpZA",
@@ -6162,7 +7350,9 @@ window.SID_LIBRARY = [
     "fileName": "Castle_of_Life.sid",
     "path": "sids/GAMES/A-F/Castle_of_Life.sid",
     "size": 1800,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 88000,
+    "durationText": "1:28"
   },
   {
     "id": "R0FNRVMvQS1GL0Nhc3RsZV9vZl9NYWRuZXNzLnNpZA",
@@ -6172,7 +7362,9 @@ window.SID_LIBRARY = [
     "fileName": "Castle_of_Madness.sid",
     "path": "sids/GAMES/A-F/Castle_of_Madness.sid",
     "size": 16877,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 39000,
+    "durationText": "0:39"
   },
   {
     "id": "R0FNRVMvQS1GL0Nhc3RsZS1LaW5nZG9tLnNpZA",
@@ -6182,7 +7374,9 @@ window.SID_LIBRARY = [
     "fileName": "Castle-Kingdom.sid",
     "path": "sids/GAMES/A-F/Castle-Kingdom.sid",
     "size": 2334,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 123000,
+    "durationText": "2:03"
   },
   {
     "id": "R0FNRVMvQS1GL0Nhc3RsZXNfYW5kX01vbnN0ZXJzLnNpZA",
@@ -6192,7 +7386,9 @@ window.SID_LIBRARY = [
     "fileName": "Castles_and_Monsters.sid",
     "path": "sids/GAMES/A-F/Castles_and_Monsters.sid",
     "size": 2185,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 103443,
+    "durationText": "1:43.443"
   },
   {
     "id": "R0FNRVMvQS1GL0NhdGFseXBzZS5zaWQ",
@@ -6202,7 +7398,9 @@ window.SID_LIBRARY = [
     "fileName": "Catalypse.sid",
     "path": "sids/GAMES/A-F/Catalypse.sid",
     "size": 13935,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 115000,
+    "durationText": "1:55"
   },
   {
     "id": "R0FNRVMvQS1GL0NhdGFseXBzZV9zcGVlY2guc2lk",
@@ -6212,7 +7410,9 @@ window.SID_LIBRARY = [
     "fileName": "Catalypse_speech.sid",
     "path": "sids/GAMES/A-F/Catalypse_speech.sid",
     "size": 47495,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 16000,
+    "durationText": "0:16"
   },
   {
     "id": "R0FNRVMvQS1GL0NhdHNfbl9Dcml0dGVycy5zaWQ",
@@ -6222,7 +7422,9 @@ window.SID_LIBRARY = [
     "fileName": "Cats_n_Critters.sid",
     "path": "sids/GAMES/A-F/Cats_n_Critters.sid",
     "size": 2812,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 76630,
+    "durationText": "1:16.63"
   },
   {
     "id": "R0FNRVMvQS1GL0NhdWxkcm9uLnNpZA",
@@ -6232,7 +7434,9 @@ window.SID_LIBRARY = [
     "fileName": "Cauldron.sid",
     "path": "sids/GAMES/A-F/Cauldron.sid",
     "size": 1764,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 148000,
+    "durationText": "2:28"
   },
   {
     "id": "R0FNRVMvQS1GL0NhdXNlc19vZl9DaGFvcy5zaWQ",
@@ -6242,7 +7446,9 @@ window.SID_LIBRARY = [
     "fileName": "Causes_of_Chaos.sid",
     "path": "sids/GAMES/A-F/Causes_of_Chaos.sid",
     "size": 3966,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 187000,
+    "durationText": "3:07"
   },
   {
     "id": "R0FNRVMvQS1GL0NhdmVfQ2xpbWJlci5zaWQ",
@@ -6252,7 +7458,9 @@ window.SID_LIBRARY = [
     "fileName": "Cave_Climber.sid",
     "path": "sids/GAMES/A-F/Cave_Climber.sid",
     "size": 482,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 2478,
+    "durationText": "0:02.478"
   },
   {
     "id": "R0FNRVMvQS1GL0NhdmVfRmlnaHRlci5zaWQ",
@@ -6262,7 +7470,9 @@ window.SID_LIBRARY = [
     "fileName": "Cave_Fighter.sid",
     "path": "sids/GAMES/A-F/Cave_Fighter.sid",
     "size": 1568,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 186798,
+    "durationText": "3:06.798"
   },
   {
     "id": "R0FNRVMvQS1GL0NhdmVfb2ZfRGVhdGguc2lk",
@@ -6272,7 +7482,9 @@ window.SID_LIBRARY = [
     "fileName": "Cave_of_Death.sid",
     "path": "sids/GAMES/A-F/Cave_of_Death.sid",
     "size": 1072,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 23170,
+    "durationText": "0:23.17"
   },
   {
     "id": "R0FNRVMvQS1GL0NhdmVsb24uc2lk",
@@ -6282,7 +7494,9 @@ window.SID_LIBRARY = [
     "fileName": "Cavelon.sid",
     "path": "sids/GAMES/A-F/Cavelon.sid",
     "size": 2876,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 1000,
+    "durationText": "0:01"
   },
   {
     "id": "R0FNRVMvQS1GL0NhdmVsb25fSUkuc2lk",
@@ -6292,7 +7506,9 @@ window.SID_LIBRARY = [
     "fileName": "Cavelon_II.sid",
     "path": "sids/GAMES/A-F/Cavelon_II.sid",
     "size": 2447,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 2000,
+    "durationText": "0:02"
   },
   {
     "id": "R0FNRVMvQS1GL0NhdmVtYW5fVWdoLUx5bXBpY3Muc2lk",
@@ -6302,7 +7518,9 @@ window.SID_LIBRARY = [
     "fileName": "Caveman_Ugh-Lympics.sid",
     "path": "sids/GAMES/A-F/Caveman_Ugh-Lympics.sid",
     "size": 10598,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 50000,
+    "durationText": "0:50"
   },
   {
     "id": "R0FNRVMvQS1GL0NhdmVybi5zaWQ",
@@ -6312,7 +7530,9 @@ window.SID_LIBRARY = [
     "fileName": "Cavern.sid",
     "path": "sids/GAMES/A-F/Cavern.sid",
     "size": 3078,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 128000,
+    "durationText": "2:08"
   },
   {
     "id": "R0FNRVMvQS1GL0NhdmVybnNfb2ZfRGVhdGhfSUkuc2lk",
@@ -6322,7 +7542,9 @@ window.SID_LIBRARY = [
     "fileName": "Caverns_of_Death_II.sid",
     "path": "sids/GAMES/A-F/Caverns_of_Death_II.sid",
     "size": 1108,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 26000,
+    "durationText": "0:26"
   },
   {
     "id": "R0FNRVMvQS1GL0NhdmVybnNfb2ZfWHlkcmFocHVyLnNpZA",
@@ -6332,7 +7554,9 @@ window.SID_LIBRARY = [
     "fileName": "Caverns_of_Xydrahpur.sid",
     "path": "sids/GAMES/A-F/Caverns_of_Xydrahpur.sid",
     "size": 980,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 35000,
+    "durationText": "0:35"
   },
   {
     "id": "R0FNRVMvQS1GL0NlbGxfRGVmZW5zZS5zaWQ",
@@ -6342,7 +7566,9 @@ window.SID_LIBRARY = [
     "fileName": "Cell_Defense.sid",
     "path": "sids/GAMES/A-F/Cell_Defense.sid",
     "size": 2397,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 16000,
+    "durationText": "0:16"
   },
   {
     "id": "R0FNRVMvQS1GL0NlbnR1cmlvLnNpZA",
@@ -6352,7 +7578,9 @@ window.SID_LIBRARY = [
     "fileName": "Centurio.sid",
     "path": "sids/GAMES/A-F/Centurio.sid",
     "size": 15749,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 196000,
+    "durationText": "3:16"
   },
   {
     "id": "R0FNRVMvQS1GL0NoYWluX1JlYWN0aW9uLnNpZA",
@@ -6362,7 +7590,9 @@ window.SID_LIBRARY = [
     "fileName": "Chain_Reaction.sid",
     "path": "sids/GAMES/A-F/Chain_Reaction.sid",
     "size": 394,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 11000,
+    "durationText": "0:11"
   },
   {
     "id": "R0FNRVMvQS1GL0NoYWluLVJlYWN0aW9uX0JBU0lDLnNpZA",
@@ -6372,7 +7602,9 @@ window.SID_LIBRARY = [
     "fileName": "Chain-Reaction_BASIC.sid",
     "path": "sids/GAMES/A-F/Chain-Reaction_BASIC.sid",
     "size": 1021,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 19878,
+    "durationText": "0:19.878"
   },
   {
     "id": "R0FNRVMvQS1GL0NoYW1wLnNpZA",
@@ -6382,7 +7614,9 @@ window.SID_LIBRARY = [
     "fileName": "Champ.sid",
     "path": "sids/GAMES/A-F/Champ.sid",
     "size": 3389,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 110000,
+    "durationText": "1:50"
   },
   {
     "id": "R0FNRVMvQS1GL0NoYW1waW9uc19vZl9Lcnlubi5zaWQ",
@@ -6392,7 +7626,9 @@ window.SID_LIBRARY = [
     "fileName": "Champions_of_Krynn.sid",
     "path": "sids/GAMES/A-F/Champions_of_Krynn.sid",
     "size": 3777,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 71000,
+    "durationText": "1:11"
   },
   {
     "id": "R0FNRVMvQS1GL0NoYXJsaWVfYW5kX3RoZV9KdWdzX0JBU0lDLnNpZA",
@@ -6402,7 +7638,9 @@ window.SID_LIBRARY = [
     "fileName": "Charlie_and_the_Jugs_BASIC.sid",
     "path": "sids/GAMES/A-F/Charlie_and_the_Jugs_BASIC.sid",
     "size": 799,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 10117,
+    "durationText": "0:10.117"
   },
   {
     "id": "R0FNRVMvQS1GL0NoZW5pbGxlLnNpZA",
@@ -6412,7 +7650,9 @@ window.SID_LIBRARY = [
     "fileName": "Chenille.sid",
     "path": "sids/GAMES/A-F/Chenille.sid",
     "size": 646,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 10000,
+    "durationText": "0:10"
   },
   {
     "id": "R0FNRVMvQS1GL0NoZXNzX01hc3Rlci5zaWQ",
@@ -6422,7 +7662,9 @@ window.SID_LIBRARY = [
     "fileName": "Chess_Master.sid",
     "path": "sids/GAMES/A-F/Chess_Master.sid",
     "size": 779,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 8087,
+    "durationText": "0:08.087"
   },
   {
     "id": "R0FNRVMvQS1GL0NoZXN0X0J1bXAuc2lk",
@@ -6432,7 +7674,9 @@ window.SID_LIBRARY = [
     "fileName": "Chest_Bump.sid",
     "path": "sids/GAMES/A-F/Chest_Bump.sid",
     "size": 3201,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 104000,
+    "durationText": "1:44"
   },
   {
     "id": "R0FNRVMvQS1GL0NoaWNraW5fQ2hhc2Uuc2lk",
@@ -6442,7 +7686,9 @@ window.SID_LIBRARY = [
     "fileName": "Chickin_Chase.sid",
     "path": "sids/GAMES/A-F/Chickin_Chase.sid",
     "size": 2074,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 7000,
+    "durationText": "0:07"
   },
   {
     "id": "R0FNRVMvQS1GL0NoaWVmX1RvbWFoYXdrc19HYW1lcy5zaWQ",
@@ -6452,7 +7698,9 @@ window.SID_LIBRARY = [
     "fileName": "Chief_Tomahawks_Games.sid",
     "path": "sids/GAMES/A-F/Chief_Tomahawks_Games.sid",
     "size": 1072,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 42000,
+    "durationText": "0:42"
   },
   {
     "id": "R0FNRVMvQS1GL0NoaWxseV9XaWxseS5zaWQ",
@@ -6462,7 +7710,9 @@ window.SID_LIBRARY = [
     "fileName": "Chilly_Willy.sid",
     "path": "sids/GAMES/A-F/Chilly_Willy.sid",
     "size": 2945,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 34801,
+    "durationText": "0:34.801"
   },
   {
     "id": "R0FNRVMvQS1GL0NoaW5lc2VfSnVnZ2xlci5zaWQ",
@@ -6472,7 +7722,9 @@ window.SID_LIBRARY = [
     "fileName": "Chinese_Juggler.sid",
     "path": "sids/GAMES/A-F/Chinese_Juggler.sid",
     "size": 4232,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 1000,
+    "durationText": "0:01"
   },
   {
     "id": "R0FNRVMvQS1GL0NoaXBfRmFjdG9yeS5zaWQ",
@@ -6482,7 +7734,9 @@ window.SID_LIBRARY = [
     "fileName": "Chip_Factory.sid",
     "path": "sids/GAMES/A-F/Chip_Factory.sid",
     "size": 1566,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 39000,
+    "durationText": "0:39"
   },
   {
     "id": "R0FNRVMvQS1GL0NoaXJpYmlkdWYuc2lk",
@@ -6492,7 +7746,9 @@ window.SID_LIBRARY = [
     "fileName": "Chiribiduf.sid",
     "path": "sids/GAMES/A-F/Chiribiduf.sid",
     "size": 3518,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 38000,
+    "durationText": "0:38"
   },
   {
     "id": "R0FNRVMvQS1GL0Nob21wZXJfTWFuLnNpZA",
@@ -6502,7 +7758,9 @@ window.SID_LIBRARY = [
     "fileName": "Chomper_Man.sid",
     "path": "sids/GAMES/A-F/Chomper_Man.sid",
     "size": 288,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 5000,
+    "durationText": "0:05"
   },
   {
     "id": "R0FNRVMvQS1GL0Nob3JkY2VudHJhdGlvbi5zaWQ",
@@ -6512,7 +7770,9 @@ window.SID_LIBRARY = [
     "fileName": "Chordcentration.sid",
     "path": "sids/GAMES/A-F/Chordcentration.sid",
     "size": 2043,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 7000,
+    "durationText": "0:07"
   },
   {
     "id": "R0FNRVMvQS1GL0NocmlzdG1hc19FdmVfMTk4M19CQVNJQy5zaWQ",
@@ -6522,7 +7782,9 @@ window.SID_LIBRARY = [
     "fileName": "Christmas_Eve_1983_BASIC.sid",
     "path": "sids/GAMES/A-F/Christmas_Eve_1983_BASIC.sid",
     "size": 1140,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 32000,
+    "durationText": "0:32"
   },
   {
     "id": "R0FNRVMvQS1GL0NocmlzdG1hc19FdmVfMTk4Nl9CQVNJQy5zaWQ",
@@ -6532,7 +7794,9 @@ window.SID_LIBRARY = [
     "fileName": "Christmas_Eve_1986_BASIC.sid",
     "path": "sids/GAMES/A-F/Christmas_Eve_1986_BASIC.sid",
     "size": 1123,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 19000,
+    "durationText": "0:19"
   },
   {
     "id": "R0FNRVMvQS1GL0NodWNraWVfRWdnLnNpZA",
@@ -6542,7 +7806,9 @@ window.SID_LIBRARY = [
     "fileName": "Chuckie_Egg.sid",
     "path": "sids/GAMES/A-F/Chuckie_Egg.sid",
     "size": 547,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 13000,
+    "durationText": "0:13"
   },
   {
     "id": "R0FNRVMvQS1GL0NpcmN1c19DaGFybGllLnNpZA",
@@ -6552,7 +7818,9 @@ window.SID_LIBRARY = [
     "fileName": "Circus_Charlie.sid",
     "path": "sids/GAMES/A-F/Circus_Charlie.sid",
     "size": 1875,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 16049,
+    "durationText": "0:16.049"
   },
   {
     "id": "R0FNRVMvQS1GL0NpcmN1c19DaXJjdXMuc2lk",
@@ -6562,7 +7830,9 @@ window.SID_LIBRARY = [
     "fileName": "Circus_Circus.sid",
     "path": "sids/GAMES/A-F/Circus_Circus.sid",
     "size": 2482,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 88000,
+    "durationText": "1:28"
   },
   {
     "id": "R0FNRVMvQS1GL0Npc2NvX0hlYXQuc2lk",
@@ -6572,7 +7842,9 @@ window.SID_LIBRARY = [
     "fileName": "Cisco_Heat.sid",
     "path": "sids/GAMES/A-F/Cisco_Heat.sid",
     "size": 3658,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 108000,
+    "durationText": "1:48"
   },
   {
     "id": "R0FNRVMvQS1GL0NpdGFkZWxfb2ZfQ2hhb3Muc2lk",
@@ -6582,7 +7854,9 @@ window.SID_LIBRARY = [
     "fileName": "Citadel_of_Chaos.sid",
     "path": "sids/GAMES/A-F/Citadel_of_Chaos.sid",
     "size": 7967,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 47700,
+    "durationText": "0:47.7"
   },
   {
     "id": "R0FNRVMvQS1GL0NsYXNzaWNfQ29uY2VudHJhdGlvbi5zaWQ",
@@ -6592,7 +7866,9 @@ window.SID_LIBRARY = [
     "fileName": "Classic_Concentration.sid",
     "path": "sids/GAMES/A-F/Classic_Concentration.sid",
     "size": 2878,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 2000,
+    "durationText": "0:02"
   },
   {
     "id": "R0FNRVMvQS1GL0NsZXZlcl9hbmRfU21hcnQuc2lk",
@@ -6602,7 +7878,9 @@ window.SID_LIBRARY = [
     "fileName": "Clever_and_Smart.sid",
     "path": "sids/GAMES/A-F/Clever_and_Smart.sid",
     "size": 11346,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 206000,
+    "durationText": "3:26"
   },
   {
     "id": "R0FNRVMvQS1GL0NsaWZmaGFuZ2VyLnNpZA",
@@ -6612,7 +7890,9 @@ window.SID_LIBRARY = [
     "fileName": "Cliffhanger.sid",
     "path": "sids/GAMES/A-F/Cliffhanger.sid",
     "size": 311,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 10000,
+    "durationText": "0:10"
   },
   {
     "id": "R0FNRVMvQS1GL0Nsb3VkX0tpbmdkb21zLnNpZA",
@@ -6622,7 +7902,9 @@ window.SID_LIBRARY = [
     "fileName": "Cloud_Kingdoms.sid",
     "path": "sids/GAMES/A-F/Cloud_Kingdoms.sid",
     "size": 8486,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 173000,
+    "durationText": "2:53"
   },
   {
     "id": "R0FNRVMvQS1GL0NsdWUtTWFzdGVyX0RldGVjdGl2ZS5zaWQ",
@@ -6632,7 +7914,9 @@ window.SID_LIBRARY = [
     "fileName": "Clue-Master_Detective.sid",
     "path": "sids/GAMES/A-F/Clue-Master_Detective.sid",
     "size": 3026,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 3000,
+    "durationText": "0:03"
   },
   {
     "id": "R0FNRVMvQS1GL0NvY28tTm90ZXMuc2lk",
@@ -6642,7 +7926,9 @@ window.SID_LIBRARY = [
     "fileName": "Coco-Notes.sid",
     "path": "sids/GAMES/A-F/Coco-Notes.sid",
     "size": 4493,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 7311,
+    "durationText": "0:07.311"
   },
   {
     "id": "R0FNRVMvQS1GL0NvY29kdWVsX0JBU0lDLnNpZA",
@@ -6652,7 +7938,9 @@ window.SID_LIBRARY = [
     "fileName": "Cocoduel_BASIC.sid",
     "path": "sids/GAMES/A-F/Cocoduel_BASIC.sid",
     "size": 845,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 11000,
+    "durationText": "0:11"
   },
   {
     "id": "R0FNRVMvQS1GL0NvZGVfSHVudGVyLnNpZA",
@@ -6662,7 +7950,9 @@ window.SID_LIBRARY = [
     "fileName": "Code_Hunter.sid",
     "path": "sids/GAMES/A-F/Code_Hunter.sid",
     "size": 3966,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 139000,
+    "durationText": "2:19"
   },
   {
     "id": "R0FNRVMvQS1GL0NvZGVfTWFzdGVyXzY0X0JBU0lDLnNpZA",
@@ -6672,7 +7962,9 @@ window.SID_LIBRARY = [
     "fileName": "Code_Master_64_BASIC.sid",
     "path": "sids/GAMES/A-F/Code_Master_64_BASIC.sid",
     "size": 1150,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 5970,
+    "durationText": "0:05.97"
   },
   {
     "id": "R0FNRVMvQS1GL0NvbG9ueS5zaWQ",
@@ -6682,7 +7974,9 @@ window.SID_LIBRARY = [
     "fileName": "Colony.sid",
     "path": "sids/GAMES/A-F/Colony.sid",
     "size": 1630,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 58000,
+    "durationText": "0:58"
   },
   {
     "id": "R0FNRVMvQS1GL0NvbG9yX1NjcmFiYmxlLnNpZA",
@@ -6692,7 +7986,9 @@ window.SID_LIBRARY = [
     "fileName": "Color_Scrabble.sid",
     "path": "sids/GAMES/A-F/Color_Scrabble.sid",
     "size": 4470,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 52000,
+    "durationText": "0:52"
   },
   {
     "id": "R0FNRVMvQS1GL0NvbG9yLUNvZGVfQkFTSUMuc2lk",
@@ -6702,7 +7998,9 @@ window.SID_LIBRARY = [
     "fileName": "Color-Code_BASIC.sid",
     "path": "sids/GAMES/A-F/Color-Code_BASIC.sid",
     "size": 1668,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 88689,
+    "durationText": "1:28.689"
   },
   {
     "id": "R0FNRVMvQS1GL0NvbG9yZmxvb2Quc2lk",
@@ -6712,7 +8010,9 @@ window.SID_LIBRARY = [
     "fileName": "Colorflood.sid",
     "path": "sids/GAMES/A-F/Colorflood.sid",
     "size": 11346,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 107000,
+    "durationText": "1:47"
   },
   {
     "id": "R0FNRVMvQS1GL0NvbG9zc3VzX0JyaWRnZV80LnNpZA",
@@ -6722,7 +8022,9 @@ window.SID_LIBRARY = [
     "fileName": "Colossus_Bridge_4.sid",
     "path": "sids/GAMES/A-F/Colossus_Bridge_4.sid",
     "size": 1021,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 26000,
+    "durationText": "0:26"
   },
   {
     "id": "R0FNRVMvQS1GL0NvbWJhdF9MZWFkZXIuc2lk",
@@ -6732,7 +8034,9 @@ window.SID_LIBRARY = [
     "fileName": "Combat_Leader.sid",
     "path": "sids/GAMES/A-F/Combat_Leader.sid",
     "size": 2814,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 85000,
+    "durationText": "1:25"
   },
   {
     "id": "R0FNRVMvQS1GL0NvbWV0LnNpZA",
@@ -6742,7 +8046,9 @@ window.SID_LIBRARY = [
     "fileName": "Comet.sid",
     "path": "sids/GAMES/A-F/Comet.sid",
     "size": 13534,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 146000,
+    "durationText": "2:26"
   },
   {
     "id": "R0FNRVMvQS1GL0NvbXBsZXRlX0NvbXB1dGVyX0ZpcmV3b3Jrc19DZWxlYnJhdGlvbl9LaXQuc2lk",
@@ -6752,7 +8058,9 @@ window.SID_LIBRARY = [
     "fileName": "Complete_Computer_Fireworks_Celebration_Kit.sid",
     "path": "sids/GAMES/A-F/Complete_Computer_Fireworks_Celebration_Kit.sid",
     "size": 33150,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 60000,
+    "durationText": "1:00"
   },
   {
     "id": "R0FNRVMvQS1GL0NvbXB1dHJpdmlhLnNpZA",
@@ -6762,7 +8070,9 @@ window.SID_LIBRARY = [
     "fileName": "Computrivia.sid",
     "path": "sids/GAMES/A-F/Computrivia.sid",
     "size": 616,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 18000,
+    "durationText": "0:18"
   },
   {
     "id": "R0FNRVMvQS1GL0NvbmdvX0JvbmdvLnNpZA",
@@ -6772,7 +8082,9 @@ window.SID_LIBRARY = [
     "fileName": "Congo_Bongo.sid",
     "path": "sids/GAMES/A-F/Congo_Bongo.sid",
     "size": 865,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 16000,
+    "durationText": "0:16"
   },
   {
     "id": "R0FNRVMvQS1GL0NvbmdvX0JvbmdvX3ZlcnNpb25fMi5zaWQ",
@@ -6782,7 +8094,9 @@ window.SID_LIBRARY = [
     "fileName": "Congo_Bongo_version_2.sid",
     "path": "sids/GAMES/A-F/Congo_Bongo_version_2.sid",
     "size": 3023,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 5000,
+    "durationText": "0:05"
   },
   {
     "id": "R0FNRVMvQS1GL0NvbnRpbmVudGFsX0NpcmN1cy5zaWQ",
@@ -6792,7 +8106,9 @@ window.SID_LIBRARY = [
     "fileName": "Continental_Circus.sid",
     "path": "sids/GAMES/A-F/Continental_Circus.sid",
     "size": 5304,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 14000,
+    "durationText": "0:14"
   },
   {
     "id": "R0FNRVMvQS1GL0Nvcm1hbi5zaWQ",
@@ -6802,7 +8118,9 @@ window.SID_LIBRARY = [
     "fileName": "Corman.sid",
     "path": "sids/GAMES/A-F/Corman.sid",
     "size": 2023,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 136000,
+    "durationText": "2:16"
   },
   {
     "id": "R0FNRVMvQS1GL0Nvc21pY19Db252b3kuc2lk",
@@ -6812,7 +8130,9 @@ window.SID_LIBRARY = [
     "fileName": "Cosmic_Convoy.sid",
     "path": "sids/GAMES/A-F/Cosmic_Convoy.sid",
     "size": 1556,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 30000,
+    "durationText": "0:30"
   },
   {
     "id": "R0FNRVMvQS1GL0Nvc21pY19LaWxsZXIuc2lk",
@@ -6822,7 +8142,9 @@ window.SID_LIBRARY = [
     "fileName": "Cosmic_Killer.sid",
     "path": "sids/GAMES/A-F/Cosmic_Killer.sid",
     "size": 475,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 18253,
+    "durationText": "0:18.253"
   },
   {
     "id": "R0FNRVMvQS1GL0NvdW50X0R1Y2t1bGEuc2lk",
@@ -6832,7 +8154,9 @@ window.SID_LIBRARY = [
     "fileName": "Count_Duckula.sid",
     "path": "sids/GAMES/A-F/Count_Duckula.sid",
     "size": 2421,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 55000,
+    "durationText": "0:55"
   },
   {
     "id": "R0FNRVMvQS1GL0NvdW50ZG93bi5zaWQ",
@@ -6842,7 +8166,9 @@ window.SID_LIBRARY = [
     "fileName": "Countdown.sid",
     "path": "sids/GAMES/A-F/Countdown.sid",
     "size": 3208,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 18000,
+    "durationText": "0:18"
   },
   {
     "id": "R0FNRVMvQS1GL0Nvd2JveV9LaWR6LnNpZA",
@@ -6852,7 +8178,9 @@ window.SID_LIBRARY = [
     "fileName": "Cowboy_Kidz.sid",
     "path": "sids/GAMES/A-F/Cowboy_Kidz.sid",
     "size": 6894,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 255000,
+    "durationText": "4:15"
   },
   {
     "id": "R0FNRVMvQS1GL0NyYWNrZXJzX1JldmVuZ2VfSVYuc2lk",
@@ -6862,7 +8190,9 @@ window.SID_LIBRARY = [
     "fileName": "Crackers_Revenge_IV.sid",
     "path": "sids/GAMES/A-F/Crackers_Revenge_IV.sid",
     "size": 1910,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 72000,
+    "durationText": "1:12"
   },
   {
     "id": "R0FNRVMvQS1GL0NyYXNoLnNpZA",
@@ -6872,7 +8202,9 @@ window.SID_LIBRARY = [
     "fileName": "Crash.sid",
     "path": "sids/GAMES/A-F/Crash.sid",
     "size": 1906,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 43000,
+    "durationText": "0:43"
   },
   {
     "id": "R0FNRVMvQS1GL0NyYXp5X0Nhcl9CQVNJQy5zaWQ",
@@ -6882,7 +8214,9 @@ window.SID_LIBRARY = [
     "fileName": "Crazy_Car_BASIC.sid",
     "path": "sids/GAMES/A-F/Crazy_Car_BASIC.sid",
     "size": 1199,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 17770,
+    "durationText": "0:17.77"
   },
   {
     "id": "R0FNRVMvQS1GL0NyYXp5X0NhcnMuc2lk",
@@ -6892,7 +8226,9 @@ window.SID_LIBRARY = [
     "fileName": "Crazy_Cars.sid",
     "path": "sids/GAMES/A-F/Crazy_Cars.sid",
     "size": 2453,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 200000,
+    "durationText": "3:20"
   },
   {
     "id": "R0FNRVMvQS1GL0NyYXp5X0NvbnZleW9yc19CQVNJQy5zaWQ",
@@ -6902,7 +8238,9 @@ window.SID_LIBRARY = [
     "fileName": "Crazy_Conveyors_BASIC.sid",
     "path": "sids/GAMES/A-F/Crazy_Conveyors_BASIC.sid",
     "size": 4563,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 8047,
+    "durationText": "0:08.047"
   },
   {
     "id": "R0FNRVMvQS1GL0NyZWF0ZV93aXRoX0dhcmZpZWxkLnNpZA",
@@ -6912,7 +8250,9 @@ window.SID_LIBRARY = [
     "fileName": "Create_with_Garfield.sid",
     "path": "sids/GAMES/A-F/Create_with_Garfield.sid",
     "size": 1946,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 8000,
+    "durationText": "0:08"
   },
   {
     "id": "R0FNRVMvQS1GL0NyZWRfQnJlYWtzX091dC5zaWQ",
@@ -6922,7 +8262,9 @@ window.SID_LIBRARY = [
     "fileName": "Cred_Breaks_Out.sid",
     "path": "sids/GAMES/A-F/Cred_Breaks_Out.sid",
     "size": 1513,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 103705,
+    "durationText": "1:43.705"
   },
   {
     "id": "R0FNRVMvQS1GL0NyZWVwcy5zaWQ",
@@ -6932,7 +8274,9 @@ window.SID_LIBRARY = [
     "fileName": "Creeps.sid",
     "path": "sids/GAMES/A-F/Creeps.sid",
     "size": 2659,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 45600,
+    "durationText": "0:45.6"
   },
   {
     "id": "R0FNRVMvQS1GL0NyaWJiYWdlX0JBU0lDLnNpZA",
@@ -6942,7 +8286,9 @@ window.SID_LIBRARY = [
     "fileName": "Cribbage_BASIC.sid",
     "path": "sids/GAMES/A-F/Cribbage_BASIC.sid",
     "size": 2139,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 21000,
+    "durationText": "0:21"
   },
   {
     "id": "R0FNRVMvQS1GL0NyaXRpY2FsX01hc3Muc2lk",
@@ -6952,7 +8298,9 @@ window.SID_LIBRARY = [
     "fileName": "Critical_Mass.sid",
     "path": "sids/GAMES/A-F/Critical_Mass.sid",
     "size": 2800,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 27000,
+    "durationText": "0:27"
   },
   {
     "id": "R0FNRVMvQS1GL0Nyb3NzLnNpZA",
@@ -6962,7 +8310,9 @@ window.SID_LIBRARY = [
     "fileName": "Cross.sid",
     "path": "sids/GAMES/A-F/Cross.sid",
     "size": 4094,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 106000,
+    "durationText": "1:46"
   },
   {
     "id": "R0FNRVMvQS1GL0Nyb3NzX0ludmVydF8yX3ByZXZpZXcuc2lk",
@@ -6972,7 +8322,9 @@ window.SID_LIBRARY = [
     "fileName": "Cross_Invert_2_preview.sid",
     "path": "sids/GAMES/A-F/Cross_Invert_2_preview.sid",
     "size": 2959,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 296000,
+    "durationText": "4:56"
   },
   {
     "id": "R0FNRVMvQS1GL0Nyb3NzZmlyZS5zaWQ",
@@ -6982,7 +8334,9 @@ window.SID_LIBRARY = [
     "fileName": "Crossfire.sid",
     "path": "sids/GAMES/A-F/Crossfire.sid",
     "size": 1928,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 45000,
+    "durationText": "0:45"
   },
   {
     "id": "R0FNRVMvQS1GL0Nyb3Nzd29yZF9Ud2lzdGVyX0JBU0lDLnNpZA",
@@ -6992,7 +8346,9 @@ window.SID_LIBRARY = [
     "fileName": "Crossword_Twister_BASIC.sid",
     "path": "sids/GAMES/A-F/Crossword_Twister_BASIC.sid",
     "size": 2257,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 5000,
+    "durationText": "0:05"
   },
   {
     "id": "R0FNRVMvQS1GL0NydXNoX0NydW1ibGVfYW5kX0Nob21wLnNpZA",
@@ -7002,7 +8358,9 @@ window.SID_LIBRARY = [
     "fileName": "Crush_Crumble_and_Chomp.sid",
     "path": "sids/GAMES/A-F/Crush_Crumble_and_Chomp.sid",
     "size": 6298,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 55000,
+    "durationText": "0:55"
   },
   {
     "id": "R0FNRVMvQS1GL0NyeXN0YWxfQ2FzdGxlc18xOTg0LnNpZA",
@@ -7012,7 +8370,9 @@ window.SID_LIBRARY = [
     "fileName": "Crystal_Castles_1984.sid",
     "path": "sids/GAMES/A-F/Crystal_Castles_1984.sid",
     "size": 1386,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 26658,
+    "durationText": "0:26.658"
   },
   {
     "id": "R0FNRVMvQS1GL0NyeXN0YWxfQ2FzdGxlc18xOTg2LnNpZA",
@@ -7022,7 +8382,9 @@ window.SID_LIBRARY = [
     "fileName": "Crystal_Castles_1986.sid",
     "path": "sids/GAMES/A-F/Crystal_Castles_1986.sid",
     "size": 2377,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 5000,
+    "durationText": "0:05"
   },
   {
     "id": "R0FNRVMvQS1GL0NyeXN0YWxsdXMuc2lk",
@@ -7032,7 +8394,9 @@ window.SID_LIBRARY = [
     "fileName": "Crystallus.sid",
     "path": "sids/GAMES/A-F/Crystallus.sid",
     "size": 526,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 12000,
+    "durationText": "0:12"
   },
   {
     "id": "R0FNRVMvQS1GL0NyeXN0YWxzX29mX0NhcnVzLnNpZA",
@@ -7042,7 +8406,9 @@ window.SID_LIBRARY = [
     "fileName": "Crystals_of_Carus.sid",
     "path": "sids/GAMES/A-F/Crystals_of_Carus.sid",
     "size": 4182,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 96000,
+    "durationText": "1:36"
   },
   {
     "id": "R0FNRVMvQS1GL0N1YmVfQkFTSUMuc2lk",
@@ -7052,7 +8418,9 @@ window.SID_LIBRARY = [
     "fileName": "Cube_BASIC.sid",
     "path": "sids/GAMES/A-F/Cube_BASIC.sid",
     "size": 1935,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 9148,
+    "durationText": "0:09.148"
   },
   {
     "id": "R0FNRVMvQS1GL0N1YmlzLnNpZA",
@@ -7062,7 +8430,9 @@ window.SID_LIBRARY = [
     "fileName": "Cubis.sid",
     "path": "sids/GAMES/A-F/Cubis.sid",
     "size": 654,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 63000,
+    "durationText": "1:03"
   },
   {
     "id": "R0FNRVMvQS1GL0N5YmVydHJvbl9NaXNzaW9uLnNpZA",
@@ -7072,7 +8442,9 @@ window.SID_LIBRARY = [
     "fileName": "Cybertron_Mission.sid",
     "path": "sids/GAMES/A-F/Cybertron_Mission.sid",
     "size": 724,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 11000,
+    "durationText": "0:11"
   },
   {
     "id": "R0FNRVMvQS1GL0N5YmVyd29ybS5zaWQ",
@@ -7082,7 +8454,9 @@ window.SID_LIBRARY = [
     "fileName": "Cyberworm.sid",
     "path": "sids/GAMES/A-F/Cyberworm.sid",
     "size": 517,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 15000,
+    "durationText": "0:15"
   },
   {
     "id": "R0FNRVMvQS1GL0N5YmV4X0VzY2FwZS5zaWQ",
@@ -7092,7 +8466,9 @@ window.SID_LIBRARY = [
     "fileName": "Cybex_Escape.sid",
     "path": "sids/GAMES/A-F/Cybex_Escape.sid",
     "size": 2315,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 44000,
+    "durationText": "0:44"
   },
   {
     "id": "R0FNRVMvQS1GL0N5Y2xvbnMuc2lk",
@@ -7102,7 +8478,9 @@ window.SID_LIBRARY = [
     "fileName": "Cyclons.sid",
     "path": "sids/GAMES/A-F/Cyclons.sid",
     "size": 1950,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 77000,
+    "durationText": "1:17"
   },
   {
     "id": "R0FNRVMvQS1GL0RfSV9TX0NfdGhlX0dhbWUuc2lk",
@@ -7112,7 +8490,9 @@ window.SID_LIBRARY = [
     "fileName": "D_I_S_C_the_Game.sid",
     "path": "sids/GAMES/A-F/D_I_S_C_the_Game.sid",
     "size": 3592,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 116000,
+    "durationText": "1:56"
   },
   {
     "id": "R0FNRVMvQS1GL0RhbGxhc19RdWVzdC5zaWQ",
@@ -7122,7 +8502,9 @@ window.SID_LIBRARY = [
     "fileName": "Dallas_Quest.sid",
     "path": "sids/GAMES/A-F/Dallas_Quest.sid",
     "size": 1191,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 41000,
+    "durationText": "0:41"
   },
   {
     "id": "R0FNRVMvQS1GL0RhbWUuc2lk",
@@ -7132,7 +8514,9 @@ window.SID_LIBRARY = [
     "fileName": "Dame.sid",
     "path": "sids/GAMES/A-F/Dame.sid",
     "size": 2142,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 58000,
+    "durationText": "0:58"
   },
   {
     "id": "R0FNRVMvQS1GL0RhbmNpbmdfTW9uc3Rlci5zaWQ",
@@ -7142,7 +8526,9 @@ window.SID_LIBRARY = [
     "fileName": "Dancing_Monster.sid",
     "path": "sids/GAMES/A-F/Dancing_Monster.sid",
     "size": 1904,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 316200,
+    "durationText": "5:16.2"
   },
   {
     "id": "R0FNRVMvQS1GL0Rhbmdlcl9Ecml2ZS5zaWQ",
@@ -7152,7 +8538,9 @@ window.SID_LIBRARY = [
     "fileName": "Danger_Drive.sid",
     "path": "sids/GAMES/A-F/Danger_Drive.sid",
     "size": 2837,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 104000,
+    "durationText": "1:44"
   },
   {
     "id": "R0FNRVMvQS1GL0Rhbmdlcl9Nb3VzZV9pbl9Eb3VibGVfVHJvdWJsZS5zaWQ",
@@ -7162,7 +8550,9 @@ window.SID_LIBRARY = [
     "fileName": "Danger_Mouse_in_Double_Trouble.sid",
     "path": "sids/GAMES/A-F/Danger_Mouse_in_Double_Trouble.sid",
     "size": 1549,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 30000,
+    "durationText": "0:30"
   },
   {
     "id": "R0FNRVMvQS1GL0RhbmdlcmJhbGxfUHJldmlld19nYW1lX292ZXIuc2lk",
@@ -7172,7 +8562,9 @@ window.SID_LIBRARY = [
     "fileName": "Dangerball_Preview_game_over.sid",
     "path": "sids/GAMES/A-F/Dangerball_Preview_game_over.sid",
     "size": 3061,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 214507,
+    "durationText": "3:34.507"
   },
   {
     "id": "R0FNRVMvQS1GL0RhbmdlcmJhbGxfUHJldmlld190aGVfZW5kLnNpZA",
@@ -7182,7 +8574,9 @@ window.SID_LIBRARY = [
     "fileName": "Dangerball_Preview_the_end.sid",
     "path": "sids/GAMES/A-F/Dangerball_Preview_the_end.sid",
     "size": 2563,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 54106,
+    "durationText": "0:54.106"
   },
   {
     "id": "R0FNRVMvQS1GL0Rhbmdlcm91c19TcG9ydHNfRGVhZGx5X1Nwb3J0cy5zaWQ",
@@ -7192,7 +8586,9 @@ window.SID_LIBRARY = [
     "fileName": "Dangerous_Sports_Deadly_Sports.sid",
     "path": "sids/GAMES/A-F/Dangerous_Sports_Deadly_Sports.sid",
     "size": 1844,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 46000,
+    "durationText": "0:46"
   },
   {
     "id": "R0FNRVMvQS1GL0RhcmtfTG9yZC5zaWQ",
@@ -7202,7 +8598,9 @@ window.SID_LIBRARY = [
     "fileName": "Dark_Lord.sid",
     "path": "sids/GAMES/A-F/Dark_Lord.sid",
     "size": 17421,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 63621,
+    "durationText": "1:03.621"
   },
   {
     "id": "R0FNRVMvQS1GL0RhcmtfVG93ZXJfQkFTSUMuc2lk",
@@ -7212,7 +8610,9 @@ window.SID_LIBRARY = [
     "fileName": "Dark_Tower_BASIC.sid",
     "path": "sids/GAMES/A-F/Dark_Tower_BASIC.sid",
     "size": 2477,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 4760,
+    "durationText": "0:04.76"
   },
   {
     "id": "R0FNRVMvQS1GL0Rhc19TY2h3ZXJ0X1NrYXIuc2lk",
@@ -7222,7 +8622,9 @@ window.SID_LIBRARY = [
     "fileName": "Das_Schwert_Skar.sid",
     "path": "sids/GAMES/A-F/Das_Schwert_Skar.sid",
     "size": 26360,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 502000,
+    "durationText": "8:22"
   },
   {
     "id": "R0FNRVMvQS1GL0Rhdm9rLnNpZA",
@@ -7232,7 +8634,9 @@ window.SID_LIBRARY = [
     "fileName": "Davok.sid",
     "path": "sids/GAMES/A-F/Davok.sid",
     "size": 7102,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 118000,
+    "durationText": "1:58"
   },
   {
     "id": "R0FNRVMvQS1GL0RhdnktS2luZ19vZl90aGVfV2lsZF9Gcm9udGllci5zaWQ",
@@ -7242,7 +8646,9 @@ window.SID_LIBRARY = [
     "fileName": "Davy-King_of_the_Wild_Frontier.sid",
     "path": "sids/GAMES/A-F/Davy-King_of_the_Wild_Frontier.sid",
     "size": 12374,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 11500,
+    "durationText": "0:11.5"
   },
   {
     "id": "R0FNRVMvQS1GL0RheXNfb2ZfVGh1bmRlci5zaWQ",
@@ -7252,7 +8658,9 @@ window.SID_LIBRARY = [
     "fileName": "Days_of_Thunder.sid",
     "path": "sids/GAMES/A-F/Days_of_Thunder.sid",
     "size": 3255,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 80000,
+    "durationText": "1:20"
   },
   {
     "id": "R0FNRVMvQS1GL0RlYWN0aXZhdG9ycy5zaWQ",
@@ -7262,7 +8670,9 @@ window.SID_LIBRARY = [
     "fileName": "Deactivators.sid",
     "path": "sids/GAMES/A-F/Deactivators.sid",
     "size": 4201,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 301000,
+    "durationText": "5:01"
   },
   {
     "id": "R0FNRVMvQS1GL0RlYWR6b25lLnNpZA",
@@ -7272,7 +8682,9 @@ window.SID_LIBRARY = [
     "fileName": "Deadzone.sid",
     "path": "sids/GAMES/A-F/Deadzone.sid",
     "size": 431,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 6000,
+    "durationText": "0:06"
   },
   {
     "id": "R0FNRVMvQS1GL0RlYXRoX0Jsb3dfcHJldmlldy5zaWQ",
@@ -7282,7 +8694,9 @@ window.SID_LIBRARY = [
     "fileName": "Death_Blow_preview.sid",
     "path": "sids/GAMES/A-F/Death_Blow_preview.sid",
     "size": 2374,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 51000,
+    "durationText": "0:51"
   },
   {
     "id": "R0FNRVMvQS1GL0RlYXRoX0tuaWdodHNfb2ZfS3J5bm4uc2lk",
@@ -7292,7 +8706,9 @@ window.SID_LIBRARY = [
     "fileName": "Death_Knights_of_Krynn.sid",
     "path": "sids/GAMES/A-F/Death_Knights_of_Krynn.sid",
     "size": 4489,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 71000,
+    "durationText": "1:11"
   },
   {
     "id": "R0FNRVMvQS1GL0RlYXRoX1N0YXJfSW50ZXJjZXB0b3Iuc2lk",
@@ -7302,7 +8718,9 @@ window.SID_LIBRARY = [
     "fileName": "Death_Star_Interceptor.sid",
     "path": "sids/GAMES/A-F/Death_Star_Interceptor.sid",
     "size": 1504,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 39762,
+    "durationText": "0:39.762"
   },
   {
     "id": "R0FNRVMvQS1GL0RlYXRoX1RyYXBfNjQuc2lk",
@@ -7312,7 +8730,9 @@ window.SID_LIBRARY = [
     "fileName": "Death_Trap_64.sid",
     "path": "sids/GAMES/A-F/Death_Trap_64.sid",
     "size": 2162,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 2934,
+    "durationText": "0:02.934"
   },
   {
     "id": "R0FNRVMvQS1GL0RlYXRoX2luX0VmZmVjdC5zaWQ",
@@ -7322,7 +8742,9 @@ window.SID_LIBRARY = [
     "fileName": "Death_in_Effect.sid",
     "path": "sids/GAMES/A-F/Death_in_Effect.sid",
     "size": 43634,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 446000,
+    "durationText": "7:26"
   },
   {
     "id": "R0FNRVMvQS1GL0RlYXRoZmxvb2Quc2lk",
@@ -7332,7 +8754,9 @@ window.SID_LIBRARY = [
     "fileName": "Deathflood.sid",
     "path": "sids/GAMES/A-F/Deathflood.sid",
     "size": 8750,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 165987,
+    "durationText": "2:45.987"
   },
   {
     "id": "R0FNRVMvQS1GL0RlZXBfVHJvdWJsZS5zaWQ",
@@ -7342,7 +8766,9 @@ window.SID_LIBRARY = [
     "fileName": "Deep_Trouble.sid",
     "path": "sids/GAMES/A-F/Deep_Trouble.sid",
     "size": 7856,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 116000,
+    "durationText": "1:56"
   },
   {
     "id": "R0FNRVMvQS1GL0RlZmVuc2V1ci5zaWQ",
@@ -7352,7 +8778,9 @@ window.SID_LIBRARY = [
     "fileName": "Defenseur.sid",
     "path": "sids/GAMES/A-F/Defenseur.sid",
     "size": 273,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 5000,
+    "durationText": "0:05"
   },
   {
     "id": "R0FNRVMvQS1GL0RlbGl0dG9fU3VsX05pbG8uc2lk",
@@ -7362,7 +8790,9 @@ window.SID_LIBRARY = [
     "fileName": "Delitto_Sul_Nilo.sid",
     "path": "sids/GAMES/A-F/Delitto_Sul_Nilo.sid",
     "size": 3390,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 99000,
+    "durationText": "1:39"
   },
   {
     "id": "R0FNRVMvQS1GL0RlbHRhcGxhbmUuc2lk",
@@ -7372,7 +8802,9 @@ window.SID_LIBRARY = [
     "fileName": "Deltaplane.sid",
     "path": "sids/GAMES/A-F/Deltaplane.sid",
     "size": 8052,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 98000,
+    "durationText": "1:38"
   },
   {
     "id": "R0FNRVMvQS1GL0RlbHZlX0RlZXBlci5zaWQ",
@@ -7382,7 +8814,9 @@ window.SID_LIBRARY = [
     "fileName": "Delve_Deeper.sid",
     "path": "sids/GAMES/A-F/Delve_Deeper.sid",
     "size": 3281,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 32081,
+    "durationText": "0:32.081"
   },
   {
     "id": "R0FNRVMvQS1GL0RlbW9uX1N0YWxrZXJzLnNpZA",
@@ -7392,7 +8826,9 @@ window.SID_LIBRARY = [
     "fileName": "Demon_Stalkers.sid",
     "path": "sids/GAMES/A-F/Demon_Stalkers.sid",
     "size": 4152,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 45000,
+    "durationText": "0:45"
   },
   {
     "id": "R0FNRVMvQS1GL0RlbW9uc19vZl9Ub3Bhei5zaWQ",
@@ -7402,7 +8838,9 @@ window.SID_LIBRARY = [
     "fileName": "Demons_of_Topaz.sid",
     "path": "sids/GAMES/A-F/Demons_of_Topaz.sid",
     "size": 4190,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 145000,
+    "durationText": "2:25"
   },
   {
     "id": "R0FNRVMvQS1GL0Rlc2VydF9EZWNpc2lvbi5zaWQ",
@@ -7412,7 +8850,9 @@ window.SID_LIBRARY = [
     "fileName": "Desert_Decision.sid",
     "path": "sids/GAMES/A-F/Desert_Decision.sid",
     "size": 899,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 15154,
+    "durationText": "0:15.154"
   },
   {
     "id": "R0FNRVMvQS1GL0Rlc3Ryb3llci5zaWQ",
@@ -7422,7 +8862,9 @@ window.SID_LIBRARY = [
     "fileName": "Destroyer.sid",
     "path": "sids/GAMES/A-F/Destroyer.sid",
     "size": 2223,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 26000,
+    "durationText": "0:26"
   },
   {
     "id": "R0FNRVMvQS1GL0RldGVjdGl2ZV9HYW1lLnNpZA",
@@ -7432,7 +8874,9 @@ window.SID_LIBRARY = [
     "fileName": "Detective_Game.sid",
     "path": "sids/GAMES/A-F/Detective_Game.sid",
     "size": 2106,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 59000,
+    "durationText": "0:59"
   },
   {
     "id": "R0FNRVMvQS1GL0RldmlhbnRzLnNpZA",
@@ -7442,7 +8886,9 @@ window.SID_LIBRARY = [
     "fileName": "Deviants.sid",
     "path": "sids/GAMES/A-F/Deviants.sid",
     "size": 4748,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 5000,
+    "durationText": "0:05"
   },
   {
     "id": "R0FNRVMvQS1GL0Rldmlsc19HYWxsZXJ5LnNpZA",
@@ -7452,7 +8898,9 @@ window.SID_LIBRARY = [
     "fileName": "Devils_Gallery.sid",
     "path": "sids/GAMES/A-F/Devils_Gallery.sid",
     "size": 5112,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 177000,
+    "durationText": "2:57"
   },
   {
     "id": "R0FNRVMvQS1GL0Rldmlsc19Jc2xhbmQuc2lk",
@@ -7462,7 +8910,9 @@ window.SID_LIBRARY = [
     "fileName": "Devils_Island.sid",
     "path": "sids/GAMES/A-F/Devils_Island.sid",
     "size": 2830,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 168541,
+    "durationText": "2:48.541"
   },
   {
     "id": "R0FNRVMvQS1GL0RpYW1vbmRfSHVudGVyLnNpZA",
@@ -7472,7 +8922,9 @@ window.SID_LIBRARY = [
     "fileName": "Diamond_Hunter.sid",
     "path": "sids/GAMES/A-F/Diamond_Hunter.sid",
     "size": 11346,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 38000,
+    "durationText": "0:38"
   },
   {
     "id": "R0FNRVMvQS1GL0RpY2t5c19EaWFtb25kcy5zaWQ",
@@ -7482,7 +8934,9 @@ window.SID_LIBRARY = [
     "fileName": "Dickys_Diamonds.sid",
     "path": "sids/GAMES/A-F/Dickys_Diamonds.sid",
     "size": 1626,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 55000,
+    "durationText": "0:55"
   },
   {
     "id": "R0FNRVMvQS1GL0RpZV9BbGllbl9TbGltZS5zaWQ",
@@ -7492,7 +8946,9 @@ window.SID_LIBRARY = [
     "fileName": "Die_Alien_Slime.sid",
     "path": "sids/GAMES/A-F/Die_Alien_Slime.sid",
     "size": 6251,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 1000,
+    "durationText": "0:01"
   },
   {
     "id": "R0FNRVMvQS1GL0RpZV9IYXJkLnNpZA",
@@ -7502,7 +8958,9 @@ window.SID_LIBRARY = [
     "fileName": "Die_Hard.sid",
     "path": "sids/GAMES/A-F/Die_Hard.sid",
     "size": 5414,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 103000,
+    "durationText": "1:43"
   },
   {
     "id": "R0FNRVMvQS1GL0RpZV9QcnVlZnVuZy5zaWQ",
@@ -7512,7 +8970,9 @@ window.SID_LIBRARY = [
     "fileName": "Die_Pruefung.sid",
     "path": "sids/GAMES/A-F/Die_Pruefung.sid",
     "size": 24497,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 256000,
+    "durationText": "4:16"
   },
   {
     "id": "R0FNRVMvQS1GL0RpZV9kcmVpX011c2tldGllcmUuc2lk",
@@ -7522,7 +8982,9 @@ window.SID_LIBRARY = [
     "fileName": "Die_drei_Musketiere.sid",
     "path": "sids/GAMES/A-F/Die_drei_Musketiere.sid",
     "size": 2785,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 279000,
+    "durationText": "4:39"
   },
   {
     "id": "R0FNRVMvQS1GL0RpZ19EdWcuc2lk",
@@ -7532,7 +8994,9 @@ window.SID_LIBRARY = [
     "fileName": "Dig_Dug.sid",
     "path": "sids/GAMES/A-F/Dig_Dug.sid",
     "size": 1715,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 8609,
+    "durationText": "0:08.609"
   },
   {
     "id": "R0FNRVMvQS1GL0RpZ2dlci5zaWQ",
@@ -7542,7 +9006,9 @@ window.SID_LIBRARY = [
     "fileName": "Digger.sid",
     "path": "sids/GAMES/A-F/Digger.sid",
     "size": 387,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 4000,
+    "durationText": "0:04"
   },
   {
     "id": "R0FNRVMvQS1GL0Rpbmt5X0Rvby5zaWQ",
@@ -7552,7 +9018,9 @@ window.SID_LIBRARY = [
     "fileName": "Dinky_Doo.sid",
     "path": "sids/GAMES/A-F/Dinky_Doo.sid",
     "size": 1260,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 21000,
+    "durationText": "0:21"
   },
   {
     "id": "R0FNRVMvQS1GL0RpcnR5LnNpZA",
@@ -7562,7 +9030,9 @@ window.SID_LIBRARY = [
     "fileName": "Dirty.sid",
     "path": "sids/GAMES/A-F/Dirty.sid",
     "size": 17128,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 113000,
+    "durationText": "1:53"
   },
   {
     "id": "R0FNRVMvQS1GL0Rpc2ttYW4uc2lk",
@@ -7572,7 +9042,9 @@ window.SID_LIBRARY = [
     "fileName": "Diskman.sid",
     "path": "sids/GAMES/A-F/Diskman.sid",
     "size": 322,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 8660,
+    "durationText": "0:08.66"
   },
   {
     "id": "R0FNRVMvQS1GL0RvX29yX0RpZS5zaWQ",
@@ -7582,7 +9054,9 @@ window.SID_LIBRARY = [
     "fileName": "Do_or_Die.sid",
     "path": "sids/GAMES/A-F/Do_or_Die.sid",
     "size": 7021,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 160000,
+    "durationText": "2:40"
   },
   {
     "id": "R0FNRVMvQS1GL0RvY19Db3Ntb3Muc2lk",
@@ -7592,7 +9066,9 @@ window.SID_LIBRARY = [
     "fileName": "Doc_Cosmos.sid",
     "path": "sids/GAMES/A-F/Doc_Cosmos.sid",
     "size": 2998,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 199185,
+    "durationText": "3:19.185"
   },
   {
     "id": "R0FNRVMvQS1GL0RvY3Rvcl9Eb29tc19SZXZlbmdlLnNpZA",
@@ -7602,7 +9078,9 @@ window.SID_LIBRARY = [
     "fileName": "Doctor_Dooms_Revenge.sid",
     "path": "sids/GAMES/A-F/Doctor_Dooms_Revenge.sid",
     "size": 18357,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 25000,
+    "durationText": "0:25"
   },
   {
     "id": "R0FNRVMvQS1GL0RvZ2ZpZ2h0X2luX1NwYWNlLnNpZA",
@@ -7612,7 +9090,9 @@ window.SID_LIBRARY = [
     "fileName": "Dogfight_in_Space.sid",
     "path": "sids/GAMES/A-F/Dogfight_in_Space.sid",
     "size": 240,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 20545,
+    "durationText": "0:20.545"
   },
   {
     "id": "R0FNRVMvQS1GL0RvbWVfQnVnZ3kuc2lk",
@@ -7622,7 +9102,9 @@ window.SID_LIBRARY = [
     "fileName": "Dome_Buggy.sid",
     "path": "sids/GAMES/A-F/Dome_Buggy.sid",
     "size": 1334,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 9000,
+    "durationText": "0:09"
   },
   {
     "id": "R0FNRVMvQS1GL0RvbWluby5zaWQ",
@@ -7632,7 +9114,9 @@ window.SID_LIBRARY = [
     "fileName": "Domino.sid",
     "path": "sids/GAMES/A-F/Domino.sid",
     "size": 6841,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 216000,
+    "durationText": "3:36"
   },
   {
     "id": "R0FNRVMvQS1GL0RvbmtleV9Lb25nLnNpZA",
@@ -7642,7 +9126,9 @@ window.SID_LIBRARY = [
     "fileName": "Donkey_Kong.sid",
     "path": "sids/GAMES/A-F/Donkey_Kong.sid",
     "size": 5624,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 6000,
+    "durationText": "0:06"
   },
   {
     "id": "R0FNRVMvQS1GL0RvdWJsZV9EaWdnZXIuc2lk",
@@ -7652,7 +9138,9 @@ window.SID_LIBRARY = [
     "fileName": "Double_Digger.sid",
     "path": "sids/GAMES/A-F/Double_Digger.sid",
     "size": 4366,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 91000,
+    "durationText": "1:31"
   },
   {
     "id": "R0FNRVMvQS1GL0RvdWJsZV9EcmliYmxlLnNpZA",
@@ -7662,7 +9150,9 @@ window.SID_LIBRARY = [
     "fileName": "Double_Dribble.sid",
     "path": "sids/GAMES/A-F/Double_Dribble.sid",
     "size": 23883,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 40000,
+    "durationText": "0:40"
   },
   {
     "id": "R0FNRVMvQS1GL0Rvd25fdGhlX0NoaW1uZXlfQkFTSUMuc2lk",
@@ -7672,7 +9162,9 @@ window.SID_LIBRARY = [
     "fileName": "Down_the_Chimney_BASIC.sid",
     "path": "sids/GAMES/A-F/Down_the_Chimney_BASIC.sid",
     "size": 1423,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 12000,
+    "durationText": "0:12"
   },
   {
     "id": "R0FNRVMvQS1GL0Rvd25oaWxsLVNraV9KdW1wX0JBU0lDLnNpZA",
@@ -7682,7 +9174,9 @@ window.SID_LIBRARY = [
     "fileName": "Downhill-Ski_Jump_BASIC.sid",
     "path": "sids/GAMES/A-F/Downhill-Ski_Jump_BASIC.sid",
     "size": 1556,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 9000,
+    "durationText": "0:09"
   },
   {
     "id": "R0FNRVMvQS1GL0RyX1BpbXBsZXNfRG9nLnNpZA",
@@ -7692,7 +9186,9 @@ window.SID_LIBRARY = [
     "fileName": "Dr_Pimples_Dog.sid",
     "path": "sids/GAMES/A-F/Dr_Pimples_Dog.sid",
     "size": 419,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 12000,
+    "durationText": "0:12"
   },
   {
     "id": "R0FNRVMvQS1GL0RyX1dob19hbmRfdGhlX01pbmVzX29mX1RlcnJvci5zaWQ",
@@ -7702,7 +9198,9 @@ window.SID_LIBRARY = [
     "fileName": "Dr_Who_and_the_Mines_of_Terror.sid",
     "path": "sids/GAMES/A-F/Dr_Who_and_the_Mines_of_Terror.sid",
     "size": 8043,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 89000,
+    "durationText": "1:29"
   },
   {
     "id": "R0FNRVMvQS1GL0RyYWdvbl9XYXJzLnNpZA",
@@ -7712,7 +9210,9 @@ window.SID_LIBRARY = [
     "fileName": "Dragon_Wars.sid",
     "path": "sids/GAMES/A-F/Dragon_Wars.sid",
     "size": 1156,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 33000,
+    "durationText": "0:33"
   },
   {
     "id": "R0FNRVMvQS1GL0RyYWdvbl9uX1ByaW5jZXNzLnNpZA",
@@ -7722,7 +9222,9 @@ window.SID_LIBRARY = [
     "fileName": "Dragon_n_Princess.sid",
     "path": "sids/GAMES/A-F/Dragon_n_Princess.sid",
     "size": 2417,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 217419,
+    "durationText": "3:37.419"
   },
   {
     "id": "R0FNRVMvQS1GL0RyYWdvbnJpZGVyc19vZl9QZXJuLnNpZA",
@@ -7732,7 +9234,9 @@ window.SID_LIBRARY = [
     "fileName": "Dragonriders_of_Pern.sid",
     "path": "sids/GAMES/A-F/Dragonriders_of_Pern.sid",
     "size": 2925,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 43000,
+    "durationText": "0:43"
   },
   {
     "id": "R0FNRVMvQS1GL0RyYWdvbnNfS2luZ2RvbS5zaWQ",
@@ -7742,7 +9246,9 @@ window.SID_LIBRARY = [
     "fileName": "Dragons_Kingdom.sid",
     "path": "sids/GAMES/A-F/Dragons_Kingdom.sid",
     "size": 9492,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 31000,
+    "durationText": "0:31"
   },
   {
     "id": "R0FNRVMvQS1GL0RyYWdvbnNfTGFpci5zaWQ",
@@ -7752,7 +9258,9 @@ window.SID_LIBRARY = [
     "fileName": "Dragons_Lair.sid",
     "path": "sids/GAMES/A-F/Dragons_Lair.sid",
     "size": 4302,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 53000,
+    "durationText": "0:53"
   },
   {
     "id": "R0FNRVMvQS1GL0RyYWdvbnNfb2ZfRmxhbWUuc2lk",
@@ -7762,7 +9270,9 @@ window.SID_LIBRARY = [
     "fileName": "Dragons_of_Flame.sid",
     "path": "sids/GAMES/A-F/Dragons_of_Flame.sid",
     "size": 1468,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 15000,
+    "durationText": "0:15"
   },
   {
     "id": "R0FNRVMvQS1GL0RyYXVnaHRzX0JBU0lDLnNpZA",
@@ -7772,7 +9282,9 @@ window.SID_LIBRARY = [
     "fileName": "Draughts_BASIC.sid",
     "path": "sids/GAMES/A-F/Draughts_BASIC.sid",
     "size": 1983,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 5000,
+    "durationText": "0:05"
   },
   {
     "id": "R0FNRVMvQS1GL0RyZWFtX0NhcnMuc2lk",
@@ -7782,7 +9294,9 @@ window.SID_LIBRARY = [
     "fileName": "Dream_Cars.sid",
     "path": "sids/GAMES/A-F/Dream_Cars.sid",
     "size": 2942,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 26000,
+    "durationText": "0:26"
   },
   {
     "id": "R0FNRVMvQS1GL0RyZWlfRHJhY2hlbnRvZXRlci5zaWQ",
@@ -7792,7 +9306,9 @@ window.SID_LIBRARY = [
     "fileName": "Drei_Drachentoeter.sid",
     "path": "sids/GAMES/A-F/Drei_Drachentoeter.sid",
     "size": 1146,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 61000,
+    "durationText": "1:01"
   },
   {
     "id": "R0FNRVMvQS1GL0RyZWxicy5zaWQ",
@@ -7802,7 +9318,9 @@ window.SID_LIBRARY = [
     "fileName": "Drelbs.sid",
     "path": "sids/GAMES/A-F/Drelbs.sid",
     "size": 1197,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 26000,
+    "durationText": "0:26"
   },
   {
     "id": "R0FNRVMvQS1GL0Ryb2wuc2lk",
@@ -7812,7 +9330,9 @@ window.SID_LIBRARY = [
     "fileName": "Drol.sid",
     "path": "sids/GAMES/A-F/Drol.sid",
     "size": 1405,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 35000,
+    "durationText": "0:35"
   },
   {
     "id": "R0FNRVMvQS1GL0Ryb3BwZXIuc2lk",
@@ -7822,7 +9342,9 @@ window.SID_LIBRARY = [
     "fileName": "Dropper.sid",
     "path": "sids/GAMES/A-F/Dropper.sid",
     "size": 2752,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 13000,
+    "durationText": "0:13"
   },
   {
     "id": "R0FNRVMvQS1GL0R1ZWwuc2lk",
@@ -7832,7 +9354,9 @@ window.SID_LIBRARY = [
     "fileName": "Duel.sid",
     "path": "sids/GAMES/A-F/Duel.sid",
     "size": 1246,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 82000,
+    "durationText": "1:22"
   },
   {
     "id": "R0FNRVMvQS1GL0R1bmdlb24uc2lk",
@@ -7842,7 +9366,9 @@ window.SID_LIBRARY = [
     "fileName": "Dungeon.sid",
     "path": "sids/GAMES/A-F/Dungeon.sid",
     "size": 2733,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 226000,
+    "durationText": "3:46"
   },
   {
     "id": "R0FNRVMvQS1GL0R1bmdlb25fQmxhc3Rlci5zaWQ",
@@ -7852,7 +9378,9 @@ window.SID_LIBRARY = [
     "fileName": "Dungeon_Blaster.sid",
     "path": "sids/GAMES/A-F/Dungeon_Blaster.sid",
     "size": 1377,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 4000,
+    "durationText": "0:04"
   },
   {
     "id": "R0FNRVMvQS1GL0R1bmdlb25zX29mX0Rvb20uc2lk",
@@ -7862,7 +9390,9 @@ window.SID_LIBRARY = [
     "fileName": "Dungeons_of_Doom.sid",
     "path": "sids/GAMES/A-F/Dungeons_of_Doom.sid",
     "size": 24251,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 21337,
+    "durationText": "0:21.337"
   },
   {
     "id": "R0FNRVMvQS1GL0R5bmFtaXRlX0Rhbi5zaWQ",
@@ -7872,7 +9402,9 @@ window.SID_LIBRARY = [
     "fileName": "Dynamite_Dan.sid",
     "path": "sids/GAMES/A-F/Dynamite_Dan.sid",
     "size": 2944,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 47000,
+    "durationText": "0:47"
   },
   {
     "id": "R0FNRVMvQS1GL0R5bmFtaXRlX0R1ZXguc2lk",
@@ -7882,7 +9414,9 @@ window.SID_LIBRARY = [
     "fileName": "Dynamite_Duex.sid",
     "path": "sids/GAMES/A-F/Dynamite_Duex.sid",
     "size": 14907,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 31000,
+    "durationText": "0:31"
   },
   {
     "id": "R0FNRVMvQS1GL0VhdG1hbmlhYy5zaWQ",
@@ -7892,7 +9426,9 @@ window.SID_LIBRARY = [
     "fileName": "Eatmaniac.sid",
     "path": "sids/GAMES/A-F/Eatmaniac.sid",
     "size": 11346,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 199000,
+    "durationText": "3:19"
   },
   {
     "id": "R0FNRVMvQS1GL0VkZV9CQVNJQy5zaWQ",
@@ -7902,7 +9438,9 @@ window.SID_LIBRARY = [
     "fileName": "Ede_BASIC.sid",
     "path": "sids/GAMES/A-F/Ede_BASIC.sid",
     "size": 2201,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 18000,
+    "durationText": "0:18"
   },
   {
     "id": "R0FNRVMvQS1GL0VpZG9sb24uc2lk",
@@ -7912,7 +9450,9 @@ window.SID_LIBRARY = [
     "fileName": "Eidolon.sid",
     "path": "sids/GAMES/A-F/Eidolon.sid",
     "size": 2958,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 67000,
+    "durationText": "1:07"
   },
   {
     "id": "R0FNRVMvQS1GL0VsZWN0aW9uLnNpZA",
@@ -7922,7 +9462,9 @@ window.SID_LIBRARY = [
     "fileName": "Election.sid",
     "path": "sids/GAMES/A-F/Election.sid",
     "size": 852,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 26000,
+    "durationText": "0:26"
   },
   {
     "id": "R0FNRVMvQS1GL0VsZXZhdG9yX0FjdGlvbl9SZW1ha2Uuc2lk",
@@ -7932,7 +9474,9 @@ window.SID_LIBRARY = [
     "fileName": "Elevator_Action_Remake.sid",
     "path": "sids/GAMES/A-F/Elevator_Action_Remake.sid",
     "size": 3690,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 28400,
+    "durationText": "0:28.4"
   },
   {
     "id": "R0FNRVMvQS1GL0VsZXZhdG9yX011c2ljLnNpZA",
@@ -7942,7 +9486,9 @@ window.SID_LIBRARY = [
     "fileName": "Elevator_Music.sid",
     "path": "sids/GAMES/A-F/Elevator_Music.sid",
     "size": 3683,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 116000,
+    "durationText": "1:56"
   },
   {
     "id": "R0FNRVMvQS1GL0VsaWRvbi5zaWQ",
@@ -7952,7 +9498,9 @@ window.SID_LIBRARY = [
     "fileName": "Elidon.sid",
     "path": "sids/GAMES/A-F/Elidon.sid",
     "size": 3519,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 97000,
+    "durationText": "1:37"
   },
   {
     "id": "R0FNRVMvQS1GL0VtcGlyZS5zaWQ",
@@ -7962,7 +9510,9 @@ window.SID_LIBRARY = [
     "fileName": "Empire.sid",
     "path": "sids/GAMES/A-F/Empire.sid",
     "size": 1758,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 15000,
+    "durationText": "0:15"
   },
   {
     "id": "R0FNRVMvQS1GL0VuZXJneV9XYXJyaW9yLnNpZA",
@@ -7972,7 +9522,9 @@ window.SID_LIBRARY = [
     "fileName": "Energy_Warrior.sid",
     "path": "sids/GAMES/A-F/Energy_Warrior.sid",
     "size": 3088,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 229830,
+    "durationText": "3:49.83"
   },
   {
     "id": "R0FNRVMvQS1GL0VuZ2luZWVyX0h1bXB0eS5zaWQ",
@@ -7982,7 +9534,9 @@ window.SID_LIBRARY = [
     "fileName": "Engineer_Humpty.sid",
     "path": "sids/GAMES/A-F/Engineer_Humpty.sid",
     "size": 685,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 21000,
+    "durationText": "0:21"
   },
   {
     "id": "R0FNRVMvQS1GL0VuZ2xhbmRfQ2hhbXBpb25zaGlwX1NwZWNpYWwuc2lk",
@@ -7992,7 +9546,9 @@ window.SID_LIBRARY = [
     "fileName": "England_Championship_Special.sid",
     "path": "sids/GAMES/A-F/England_Championship_Special.sid",
     "size": 3080,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 44000,
+    "durationText": "0:44"
   },
   {
     "id": "R0FNRVMvQS1GL0VudGVyX3RoZV9OaW5qYS5zaWQ",
@@ -8002,7 +9558,9 @@ window.SID_LIBRARY = [
     "fileName": "Enter_the_Ninja.sid",
     "path": "sids/GAMES/A-F/Enter_the_Ninja.sid",
     "size": 636,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 21000,
+    "durationText": "0:21"
   },
   {
     "id": "R0FNRVMvQS1GL0VydWNhLnNpZA",
@@ -8012,7 +9570,9 @@ window.SID_LIBRARY = [
     "fileName": "Eruca.sid",
     "path": "sids/GAMES/A-F/Eruca.sid",
     "size": 3246,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 21000,
+    "durationText": "0:21"
   },
   {
     "id": "R0FNRVMvQS1GL0VzY2FwZV9mcm9tX05ld19Zb3JrLnNpZA",
@@ -8022,7 +9582,9 @@ window.SID_LIBRARY = [
     "fileName": "Escape_from_New_York.sid",
     "path": "sids/GAMES/A-F/Escape_from_New_York.sid",
     "size": 4012,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 32000,
+    "durationText": "0:32"
   },
   {
     "id": "R0FNRVMvQS1GL0VzY2FwZV9mcm9tX3RoZV9ERFIuc2lk",
@@ -8032,7 +9594,9 @@ window.SID_LIBRARY = [
     "fileName": "Escape_from_the_DDR.sid",
     "path": "sids/GAMES/A-F/Escape_from_the_DDR.sid",
     "size": 1287,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 10000,
+    "durationText": "0:10"
   },
   {
     "id": "R0FNRVMvQS1GL0VzY2FwZV9mcm9tX3RoZV9EYXJrX1ByaXNvbi5zaWQ",
@@ -8042,7 +9606,9 @@ window.SID_LIBRARY = [
     "fileName": "Escape_from_the_Dark_Prison.sid",
     "path": "sids/GAMES/A-F/Escape_from_the_Dark_Prison.sid",
     "size": 10558,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 50000,
+    "durationText": "0:50"
   },
   {
     "id": "R0FNRVMvQS1GL0VzY2FwZV9mcm9tX3RoZV9XYXN0ZV9EaXNwb3NhbF9Vbml0X0JBU0lDLnNpZA",
@@ -8052,7 +9618,9 @@ window.SID_LIBRARY = [
     "fileName": "Escape_from_the_Waste_Disposal_Unit_BASIC.sid",
     "path": "sids/GAMES/A-F/Escape_from_the_Waste_Disposal_Unit_BASIC.sid",
     "size": 2717,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 7000,
+    "durationText": "0:07"
   },
   {
     "id": "R0FNRVMvQS1GL0VzdHJhLnNpZA",
@@ -8062,7 +9630,9 @@ window.SID_LIBRARY = [
     "fileName": "Estra.sid",
     "path": "sids/GAMES/A-F/Estra.sid",
     "size": 5044,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 95000,
+    "durationText": "1:35"
   },
   {
     "id": "R0FNRVMvQS1GL0V1cmVrYS5zaWQ",
@@ -8072,7 +9642,9 @@ window.SID_LIBRARY = [
     "fileName": "Eureka.sid",
     "path": "sids/GAMES/A-F/Eureka.sid",
     "size": 3614,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 9000,
+    "durationText": "0:09"
   },
   {
     "id": "R0FNRVMvQS1GL0V1cm9wZWFuX0Zvb3RiYWxsX0NoYW1wLnNpZA",
@@ -8082,7 +9654,9 @@ window.SID_LIBRARY = [
     "fileName": "European_Football_Champ.sid",
     "path": "sids/GAMES/A-F/European_Football_Champ.sid",
     "size": 2554,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 53000,
+    "durationText": "0:53"
   },
   {
     "id": "R0FNRVMvQS1GL0V2ZXJ5b25lc19hX1dhbGx5LnNpZA",
@@ -8092,7 +9666,9 @@ window.SID_LIBRARY = [
     "fileName": "Everyones_a_Wally.sid",
     "path": "sids/GAMES/A-F/Everyones_a_Wally.sid",
     "size": 2790,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 103000,
+    "durationText": "1:43"
   },
   {
     "id": "R0FNRVMvQS1GL0V2aWxfRGVhZC5zaWQ",
@@ -8102,7 +9678,9 @@ window.SID_LIBRARY = [
     "fileName": "Evil_Dead.sid",
     "path": "sids/GAMES/A-F/Evil_Dead.sid",
     "size": 2174,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 24000,
+    "durationText": "0:24"
   },
   {
     "id": "R0FNRVMvQS1GL0V4b25fUnVubmVyLnNpZA",
@@ -8112,7 +9690,9 @@ window.SID_LIBRARY = [
     "fileName": "Exon_Runner.sid",
     "path": "sids/GAMES/A-F/Exon_Runner.sid",
     "size": 448,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 11000,
+    "durationText": "0:11"
   },
   {
     "id": "R0FNRVMvQS1GL0V4cHJlc3NfUmFpZGVyLnNpZA",
@@ -8122,7 +9702,9 @@ window.SID_LIBRARY = [
     "fileName": "Express_Raider.sid",
     "path": "sids/GAMES/A-F/Express_Raider.sid",
     "size": 5923,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 21000,
+    "durationText": "0:21"
   },
   {
     "id": "R0FNRVMvQS1GL0V5ZS5zaWQ",
@@ -8132,7 +9714,9 @@ window.SID_LIBRARY = [
     "fileName": "Eye.sid",
     "path": "sids/GAMES/A-F/Eye.sid",
     "size": 1227,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 86000,
+    "durationText": "1:26"
   },
   {
     "id": "R0FNRVMvQS1GL0YtMTRfVG9tY2F0LnNpZA",
@@ -8142,7 +9726,9 @@ window.SID_LIBRARY = [
     "fileName": "F-14_Tomcat.sid",
     "path": "sids/GAMES/A-F/F-14_Tomcat.sid",
     "size": 3432,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 65000,
+    "durationText": "1:05"
   },
   {
     "id": "R0FNRVMvQS1GL0ZTU19MaWJlcmF0b3Iuc2lk",
@@ -8152,7 +9738,9 @@ window.SID_LIBRARY = [
     "fileName": "FSS_Liberator.sid",
     "path": "sids/GAMES/A-F/FSS_Liberator.sid",
     "size": 3728,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 296878,
+    "durationText": "4:56.878"
   },
   {
     "id": "R0FNRVMvQS1GL0ZhY2VfT2ZmLnNpZA",
@@ -8162,7 +9750,9 @@ window.SID_LIBRARY = [
     "fileName": "Face_Off.sid",
     "path": "sids/GAMES/A-F/Face_Off.sid",
     "size": 3395,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 22000,
+    "durationText": "0:22"
   },
   {
     "id": "R0FNRVMvQS1GL0ZhY2VzX29mX0hhYXJuZS5zaWQ",
@@ -8172,7 +9762,9 @@ window.SID_LIBRARY = [
     "fileName": "Faces_of_Haarne.sid",
     "path": "sids/GAMES/A-F/Faces_of_Haarne.sid",
     "size": 7330,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 192858,
+    "durationText": "3:12.858"
   },
   {
     "id": "R0FNRVMvQS1GL0ZhZXJ5X1RhbGVfQWR2ZW50dXJlLnNpZA",
@@ -8182,7 +9774,9 @@ window.SID_LIBRARY = [
     "fileName": "Faery_Tale_Adventure.sid",
     "path": "sids/GAMES/A-F/Faery_Tale_Adventure.sid",
     "size": 4030,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 52000,
+    "durationText": "0:52"
   },
   {
     "id": "R0FNRVMvQS1GL0ZhbGxfR3V5LnNpZA",
@@ -8192,7 +9786,9 @@ window.SID_LIBRARY = [
     "fileName": "Fall_Guy.sid",
     "path": "sids/GAMES/A-F/Fall_Guy.sid",
     "size": 1887,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 29000,
+    "durationText": "0:29"
   },
   {
     "id": "R0FNRVMvQS1GL0ZhbGxlbl9BbmdlbC5zaWQ",
@@ -8202,7 +9798,9 @@ window.SID_LIBRARY = [
     "fileName": "Fallen_Angel.sid",
     "path": "sids/GAMES/A-F/Fallen_Angel.sid",
     "size": 1567,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 16000,
+    "durationText": "0:16"
   },
   {
     "id": "R0FNRVMvQS1GL0ZhbnRhc3lhLnNpZA",
@@ -8212,7 +9810,9 @@ window.SID_LIBRARY = [
     "fileName": "Fantasya.sid",
     "path": "sids/GAMES/A-F/Fantasya.sid",
     "size": 1918,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 43000,
+    "durationText": "0:43"
   },
   {
     "id": "R0FNRVMvQS1GL0ZhcnN0YXIuc2lk",
@@ -8222,7 +9822,9 @@ window.SID_LIBRARY = [
     "fileName": "Farstar.sid",
     "path": "sids/GAMES/A-F/Farstar.sid",
     "size": 3208,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 136000,
+    "durationText": "2:16"
   },
   {
     "id": "R0FNRVMvQS1GL0ZlYXJsZXNzX0ZyZWQuc2lk",
@@ -8232,7 +9834,9 @@ window.SID_LIBRARY = [
     "fileName": "Fearless_Fred.sid",
     "path": "sids/GAMES/A-F/Fearless_Fred.sid",
     "size": 6458,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 89000,
+    "durationText": "1:29"
   },
   {
     "id": "R0FNRVMvQS1GL0ZpY2tsZS5zaWQ",
@@ -8242,7 +9846,9 @@ window.SID_LIBRARY = [
     "fileName": "Fickle.sid",
     "path": "sids/GAMES/A-F/Fickle.sid",
     "size": 1422,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 16000,
+    "durationText": "0:16"
   },
   {
     "id": "R0FNRVMvQS1GL0ZpZnRlZW5fM0Quc2lk",
@@ -8252,7 +9858,9 @@ window.SID_LIBRARY = [
     "fileName": "Fifteen_3D.sid",
     "path": "sids/GAMES/A-F/Fifteen_3D.sid",
     "size": 2169,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 47000,
+    "durationText": "0:47"
   },
   {
     "id": "R0FNRVMvQS1GL0ZpZnRoX1F1YWRyYW50LnNpZA",
@@ -8262,7 +9870,9 @@ window.SID_LIBRARY = [
     "fileName": "Fifth_Quadrant.sid",
     "path": "sids/GAMES/A-F/Fifth_Quadrant.sid",
     "size": 2558,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 79000,
+    "durationText": "1:19"
   },
   {
     "id": "R0FNRVMvQS1GL0ZpZ2h0ZXJfUGlsb3Quc2lk",
@@ -8272,7 +9882,9 @@ window.SID_LIBRARY = [
     "fileName": "Fighter_Pilot.sid",
     "path": "sids/GAMES/A-F/Fighter_Pilot.sid",
     "size": 660,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 15000,
+    "durationText": "0:15"
   },
   {
     "id": "R0FNRVMvQS1GL0ZpZ2h0aW5nX1dhcnJpb3Iuc2lk",
@@ -8282,7 +9894,9 @@ window.SID_LIBRARY = [
     "fileName": "Fighting_Warrior.sid",
     "path": "sids/GAMES/A-F/Fighting_Warrior.sid",
     "size": 4227,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 116000,
+    "durationText": "1:56"
   },
   {
     "id": "R0FNRVMvQS1GL0ZpbmFsX1Rlbm5pcy5zaWQ",
@@ -8292,7 +9906,9 @@ window.SID_LIBRARY = [
     "fileName": "Final_Tennis.sid",
     "path": "sids/GAMES/A-F/Final_Tennis.sid",
     "size": 12172,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 114000,
+    "durationText": "1:54"
   },
   {
     "id": "R0FNRVMvQS1GL0ZpcmVfQnJlYXRoLnNpZA",
@@ -8302,7 +9918,9 @@ window.SID_LIBRARY = [
     "fileName": "Fire_Breath.sid",
     "path": "sids/GAMES/A-F/Fire_Breath.sid",
     "size": 5166,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 3000,
+    "durationText": "0:03"
   },
   {
     "id": "R0FNRVMvQS1GL0ZpcmVfQnVnLnNpZA",
@@ -8312,7 +9930,9 @@ window.SID_LIBRARY = [
     "fileName": "Fire_Bug.sid",
     "path": "sids/GAMES/A-F/Fire_Bug.sid",
     "size": 1501,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 74000,
+    "durationText": "1:14"
   },
   {
     "id": "R0FNRVMvQS1GL0ZpcmVfS2luZy5zaWQ",
@@ -8322,7 +9942,9 @@ window.SID_LIBRARY = [
     "fileName": "Fire_King.sid",
     "path": "sids/GAMES/A-F/Fire_King.sid",
     "size": 13323,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 328000,
+    "durationText": "5:28"
   },
   {
     "id": "R0FNRVMvQS1GL0ZpcmVfVHJhY2suc2lk",
@@ -8332,7 +9954,9 @@ window.SID_LIBRARY = [
     "fileName": "Fire_Track.sid",
     "path": "sids/GAMES/A-F/Fire_Track.sid",
     "size": 2272,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 137000,
+    "durationText": "2:17"
   },
   {
     "id": "R0FNRVMvQS1GL0ZpcmVfYW5kX0ZvcmdldF9JSS5zaWQ",
@@ -8342,7 +9966,9 @@ window.SID_LIBRARY = [
     "fileName": "Fire_and_Forget_II.sid",
     "path": "sids/GAMES/A-F/Fire_and_Forget_II.sid",
     "size": 8274,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 57000,
+    "durationText": "0:57"
   },
   {
     "id": "R0FNRVMvQS1GL0ZpcmUtRHJpbGwuc2lk",
@@ -8352,7 +9978,9 @@ window.SID_LIBRARY = [
     "fileName": "Fire-Drill.sid",
     "path": "sids/GAMES/A-F/Fire-Drill.sid",
     "size": 2859,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 65000,
+    "durationText": "1:05"
   },
   {
     "id": "R0FNRVMvQS1GL0ZpcmVUcmFwLnNpZA",
@@ -8362,7 +9990,9 @@ window.SID_LIBRARY = [
     "fileName": "FireTrap.sid",
     "path": "sids/GAMES/A-F/FireTrap.sid",
     "size": 3606,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 100000,
+    "durationText": "1:40"
   },
   {
     "id": "R0FNRVMvQS1GL0ZpcmViaXJkLnNpZA",
@@ -8372,7 +10002,9 @@ window.SID_LIBRARY = [
     "fileName": "Firebird.sid",
     "path": "sids/GAMES/A-F/Firebird.sid",
     "size": 3453,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 28000,
+    "durationText": "0:28"
   },
   {
     "id": "R0FNRVMvQS1GL0ZpcmVxdWVzdC5zaWQ",
@@ -8382,7 +10014,9 @@ window.SID_LIBRARY = [
     "fileName": "Firequest.sid",
     "path": "sids/GAMES/A-F/Firequest.sid",
     "size": 3890,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 11000,
+    "durationText": "0:11"
   },
   {
     "id": "R0FNRVMvQS1GL0ZpdmVfYV9TaWRlLnNpZA",
@@ -8392,7 +10026,9 @@ window.SID_LIBRARY = [
     "fileName": "Five_a_Side.sid",
     "path": "sids/GAMES/A-F/Five_a_Side.sid",
     "size": 8792,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 7000,
+    "durationText": "0:07"
   },
   {
     "id": "R0FNRVMvQS1GL0ZsYWsuc2lk",
@@ -8402,7 +10038,9 @@ window.SID_LIBRARY = [
     "fileName": "Flak.sid",
     "path": "sids/GAMES/A-F/Flak.sid",
     "size": 1502,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 59000,
+    "durationText": "0:59"
   },
   {
     "id": "R0FNRVMvQS1GL0ZsYXBwaXR5LnNpZA",
@@ -8412,7 +10050,9 @@ window.SID_LIBRARY = [
     "fileName": "Flappity.sid",
     "path": "sids/GAMES/A-F/Flappity.sid",
     "size": 2745,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 107273,
+    "durationText": "1:47.273"
   },
   {
     "id": "R0FNRVMvQS1GL0ZsYXNjaEJpZXIuc2lk",
@@ -8422,7 +10062,9 @@ window.SID_LIBRARY = [
     "fileName": "FlaschBier.sid",
     "path": "sids/GAMES/A-F/FlaschBier.sid",
     "size": 1408,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 47000,
+    "durationText": "0:47"
   },
   {
     "id": "R0FNRVMvQS1GL0ZsZWV0X0ZlZXQuc2lk",
@@ -8432,7 +10074,9 @@ window.SID_LIBRARY = [
     "fileName": "Fleet_Feet.sid",
     "path": "sids/GAMES/A-F/Fleet_Feet.sid",
     "size": 1970,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 35000,
+    "durationText": "0:35"
   },
   {
     "id": "R0FNRVMvQS1GL0ZsaWdodF9EZWNrLnNpZA",
@@ -8442,7 +10086,9 @@ window.SID_LIBRARY = [
     "fileName": "Flight_Deck.sid",
     "path": "sids/GAMES/A-F/Flight_Deck.sid",
     "size": 2919,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 317000,
+    "durationText": "5:17"
   },
   {
     "id": "R0FNRVMvQS1GL0ZsaW50c3RvbmVzX1lhYmJhX0RhYmJhX0Rvby5zaWQ",
@@ -8452,7 +10098,9 @@ window.SID_LIBRARY = [
     "fileName": "Flintstones_Yabba_Dabba_Doo.sid",
     "path": "sids/GAMES/A-F/Flintstones_Yabba_Dabba_Doo.sid",
     "size": 3792,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 25000,
+    "durationText": "0:25"
   },
   {
     "id": "R0FNRVMvQS1GL0ZsaXBfYW5kX0Zsb3Auc2lk",
@@ -8462,7 +10110,9 @@ window.SID_LIBRARY = [
     "fileName": "Flip_and_Flop.sid",
     "path": "sids/GAMES/A-F/Flip_and_Flop.sid",
     "size": 2240,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 60000,
+    "durationText": "1:00"
   },
   {
     "id": "R0FNRVMvQS1GL0Zsb3BweV9CaXJkX1ByZXZpZXcuc2lk",
@@ -8472,7 +10122,9 @@ window.SID_LIBRARY = [
     "fileName": "Floppy_Bird_Preview.sid",
     "path": "sids/GAMES/A-F/Floppy_Bird_Preview.sid",
     "size": 4197,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 77827,
+    "durationText": "1:17.827"
   },
   {
     "id": "R0FNRVMvQS1GL0Zsb3BweV9CaXJkX1ByZXZpZXdfMi5zaWQ",
@@ -8482,7 +10134,9 @@ window.SID_LIBRARY = [
     "fileName": "Floppy_Bird_Preview_2.sid",
     "path": "sids/GAMES/A-F/Floppy_Bird_Preview_2.sid",
     "size": 3161,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 19100,
+    "durationText": "0:19.1"
   },
   {
     "id": "R0FNRVMvQS1GL0Zsb3JpZGFfTWFuX1NhdmVzX3RoZV9Xb3JsZC5zaWQ",
@@ -8492,7 +10146,9 @@ window.SID_LIBRARY = [
     "fileName": "Florida_Man_Saves_the_World.sid",
     "path": "sids/GAMES/A-F/Florida_Man_Saves_the_World.sid",
     "size": 3220,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 4400,
+    "durationText": "0:04.4"
   },
   {
     "id": "R0FNRVMvQS1GL0Zsb3dlcl9NYW4uc2lk",
@@ -8502,7 +10158,9 @@ window.SID_LIBRARY = [
     "fileName": "Flower_Man.sid",
     "path": "sids/GAMES/A-F/Flower_Man.sid",
     "size": 1743,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 55991,
+    "durationText": "0:55.991"
   },
   {
     "id": "R0FNRVMvQS1GL0Zsb3lkX29mX3RoZV9KdW5nbGUuc2lk",
@@ -8512,7 +10170,9 @@ window.SID_LIBRARY = [
     "fileName": "Floyd_of_the_Jungle.sid",
     "path": "sids/GAMES/A-F/Floyd_of_the_Jungle.sid",
     "size": 2062,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 12000,
+    "durationText": "0:12"
   },
   {
     "id": "R0FNRVMvQS1GL0ZseWluZ19TaGFyay5zaWQ",
@@ -8522,7 +10182,9 @@ window.SID_LIBRARY = [
     "fileName": "Flying_Shark.sid",
     "path": "sids/GAMES/A-F/Flying_Shark.sid",
     "size": 4990,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 20000,
+    "durationText": "0:20"
   },
   {
     "id": "R0FNRVMvQS1GL0ZseWluZ19TaGFya19wcmV2aWV3LnNpZA",
@@ -8532,7 +10194,9 @@ window.SID_LIBRARY = [
     "fileName": "Flying_Shark_preview.sid",
     "path": "sids/GAMES/A-F/Flying_Shark_preview.sid",
     "size": 2627,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 20000,
+    "durationText": "0:20"
   },
   {
     "id": "R0FNRVMvQS1GL0ZvcmJpZGRlbl9GcnVpdC5zaWQ",
@@ -8542,7 +10206,9 @@ window.SID_LIBRARY = [
     "fileName": "Forbidden_Fruit.sid",
     "path": "sids/GAMES/A-F/Forbidden_Fruit.sid",
     "size": 1767,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 22000,
+    "durationText": "0:22"
   },
   {
     "id": "R0FNRVMvQS1GL0ZvcmNlX1NldmVuLnNpZA",
@@ -8552,7 +10218,9 @@ window.SID_LIBRARY = [
     "fileName": "Force_Seven.sid",
     "path": "sids/GAMES/A-F/Force_Seven.sid",
     "size": 1098,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 157000,
+    "durationText": "2:37"
   },
   {
     "id": "R0FNRVMvQS1GL0ZvcmVzdF9vZl9Eb29tLnNpZA",
@@ -8562,7 +10230,9 @@ window.SID_LIBRARY = [
     "fileName": "Forest_of_Doom.sid",
     "path": "sids/GAMES/A-F/Forest_of_Doom.sid",
     "size": 7232,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 121000,
+    "durationText": "2:01"
   },
   {
     "id": "R0FNRVMvQS1GL0ZvcnRyZXNzX0JBU0lDLnNpZA",
@@ -8572,7 +10242,9 @@ window.SID_LIBRARY = [
     "fileName": "Fortress_BASIC.sid",
     "path": "sids/GAMES/A-F/Fortress_BASIC.sid",
     "size": 4936,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 67103,
+    "durationText": "1:07.103"
   },
   {
     "id": "R0FNRVMvQS1GL0ZvcnRyZXNzX1VuZGVyZ3JvdW5kLnNpZA",
@@ -8582,7 +10254,9 @@ window.SID_LIBRARY = [
     "fileName": "Fortress_Underground.sid",
     "path": "sids/GAMES/A-F/Fortress_Underground.sid",
     "size": 1814,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 308939,
+    "durationText": "5:08.939"
   },
   {
     "id": "R0FNRVMvQS1GL0ZvdG9fRml0dGVyLnNpZA",
@@ -8592,7 +10266,9 @@ window.SID_LIBRARY = [
     "fileName": "Foto_Fitter.sid",
     "path": "sids/GAMES/A-F/Foto_Fitter.sid",
     "size": 2123,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 78000,
+    "durationText": "1:18"
   },
   {
     "id": "R0FNRVMvQS1GL0ZvdXJzX29yX01vcmUuc2lk",
@@ -8602,7 +10278,9 @@ window.SID_LIBRARY = [
     "fileName": "Fours_or_More.sid",
     "path": "sids/GAMES/A-F/Fours_or_More.sid",
     "size": 3598,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 91971,
+    "durationText": "1:31.971"
   },
   {
     "id": "R0FNRVMvQS1GL0ZyYW5reS5zaWQ",
@@ -8612,7 +10290,9 @@ window.SID_LIBRARY = [
     "fileName": "Franky.sid",
     "path": "sids/GAMES/A-F/Franky.sid",
     "size": 4730,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 238746,
+    "durationText": "3:58.746"
   },
   {
     "id": "R0FNRVMvQS1GL0ZyZWFrX0ZhY3Rvcnkuc2lk",
@@ -8622,7 +10302,9 @@ window.SID_LIBRARY = [
     "fileName": "Freak_Factory.sid",
     "path": "sids/GAMES/A-F/Freak_Factory.sid",
     "size": 1145,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 97119,
+    "durationText": "1:37.119"
   },
   {
     "id": "R0FNRVMvQS1GL0ZyZWQuc2lk",
@@ -8632,7 +10314,9 @@ window.SID_LIBRARY = [
     "fileName": "Fred.sid",
     "path": "sids/GAMES/A-F/Fred.sid",
     "size": 2462,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 23000,
+    "durationText": "0:23"
   },
   {
     "id": "R0FNRVMvQS1GL0ZyZWRkeV9IYXJkZXN0LnNpZA",
@@ -8642,7 +10326,9 @@ window.SID_LIBRARY = [
     "fileName": "Freddy_Hardest.sid",
     "path": "sids/GAMES/A-F/Freddy_Hardest.sid",
     "size": 3838,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 176000,
+    "durationText": "2:56"
   },
   {
     "id": "R0FNRVMvQS1GL0ZyZWRkeXNfUHV6emxpbmdfQWR2ZW50dXJlcy5zaWQ",
@@ -8652,7 +10338,9 @@ window.SID_LIBRARY = [
     "fileName": "Freddys_Puzzling_Adventures.sid",
     "path": "sids/GAMES/A-F/Freddys_Puzzling_Adventures.sid",
     "size": 5050,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 6000,
+    "durationText": "0:06"
   },
   {
     "id": "R0FNRVMvQS1GL0ZyZWV3YXkuc2lk",
@@ -8662,7 +10350,9 @@ window.SID_LIBRARY = [
     "fileName": "Freeway.sid",
     "path": "sids/GAMES/A-F/Freeway.sid",
     "size": 4286,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 358000,
+    "durationText": "5:58"
   },
   {
     "id": "R0FNRVMvQS1GL0ZyZW5jaF9CQVNJQy5zaWQ",
@@ -8672,7 +10362,9 @@ window.SID_LIBRARY = [
     "fileName": "French_BASIC.sid",
     "path": "sids/GAMES/A-F/French_BASIC.sid",
     "size": 869,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 9000,
+    "durationText": "0:09"
   },
   {
     "id": "R0FNRVMvQS1GL0ZyZW56eS5zaWQ",
@@ -8682,7 +10374,9 @@ window.SID_LIBRARY = [
     "fileName": "Frenzy.sid",
     "path": "sids/GAMES/A-F/Frenzy.sid",
     "size": 1729,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 13000,
+    "durationText": "0:13"
   },
   {
     "id": "R0FNRVMvQS1GL0ZyaWRheV90aGVfMTN0aC5zaWQ",
@@ -8692,7 +10386,9 @@ window.SID_LIBRARY = [
     "fileName": "Friday_the_13th.sid",
     "path": "sids/GAMES/A-F/Friday_the_13th.sid",
     "size": 7926,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 129119,
+    "durationText": "2:09.119"
   },
   {
     "id": "R0FNRVMvQS1GL0Zyb2Vobi5zaWQ",
@@ -8702,7 +10398,9 @@ window.SID_LIBRARY = [
     "fileName": "Froehn.sid",
     "path": "sids/GAMES/A-F/Froehn.sid",
     "size": 5767,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 116000,
+    "durationText": "1:56"
   },
   {
     "id": "R0FNRVMvQS1GL0Zyb2dnZXIuc2lk",
@@ -8712,7 +10410,9 @@ window.SID_LIBRARY = [
     "fileName": "Frogger.sid",
     "path": "sids/GAMES/A-F/Frogger.sid",
     "size": 2676,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 153000,
+    "durationText": "2:33"
   },
   {
     "id": "R0FNRVMvQS1GL0Zyb2dnZXJfSUktVGhyZWVfRGVlcC5zaWQ",
@@ -8722,7 +10422,9 @@ window.SID_LIBRARY = [
     "fileName": "Frogger_II-Three_Deep.sid",
     "path": "sids/GAMES/A-F/Frogger_II-Three_Deep.sid",
     "size": 1203,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 19000,
+    "durationText": "0:19"
   },
   {
     "id": "R0FNRVMvQS1GL0Zyb2dnZXJfUGFya2VyX0Jyb3Muc2lk",
@@ -8732,7 +10434,9 @@ window.SID_LIBRARY = [
     "fileName": "Frogger_Parker_Bros.sid",
     "path": "sids/GAMES/A-F/Frogger_Parker_Bros.sid",
     "size": 1284,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 1000,
+    "durationText": "0:01"
   },
   {
     "id": "R0FNRVMvQS1GL0Zyb2dzX2FuZF9GbGllcy5zaWQ",
@@ -8742,7 +10446,9 @@ window.SID_LIBRARY = [
     "fileName": "Frogs_and_Flies.sid",
     "path": "sids/GAMES/A-F/Frogs_and_Flies.sid",
     "size": 11592,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 19000,
+    "durationText": "0:19"
   },
   {
     "id": "R0FNRVMvQS1GL0Zyb3NwaS5zaWQ",
@@ -8752,7 +10458,9 @@ window.SID_LIBRARY = [
     "fileName": "Frospi.sid",
     "path": "sids/GAMES/A-F/Frospi.sid",
     "size": 2254,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 100308,
+    "durationText": "1:40.308"
   },
   {
     "id": "R0FNRVMvQS1GL0Z1Z2dlci5zaWQ",
@@ -8762,7 +10470,9 @@ window.SID_LIBRARY = [
     "fileName": "Fugger.sid",
     "path": "sids/GAMES/A-F/Fugger.sid",
     "size": 22701,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 70000,
+    "durationText": "1:10"
   },
   {
     "id": "R0FNRVMvQS1GL0Z1bWFyLnNpZA",
@@ -8772,7 +10482,9 @@ window.SID_LIBRARY = [
     "fileName": "Fumar.sid",
     "path": "sids/GAMES/A-F/Fumar.sid",
     "size": 302,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 10494,
+    "durationText": "0:10.494"
   },
   {
     "id": "R0FNRVMvQS1GL0Z1c3NiYWxsX3ByZXZpZXcuc2lk",
@@ -8782,7 +10494,9 @@ window.SID_LIBRARY = [
     "fileName": "Fussball_preview.sid",
     "path": "sids/GAMES/A-F/Fussball_preview.sid",
     "size": 1912,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 85000,
+    "durationText": "1:25"
   },
   {
     "id": "R0FNRVMvQS1GL0Z1dHVyZV9TaG9jay5zaWQ",
@@ -8792,7 +10506,9 @@ window.SID_LIBRARY = [
     "fileName": "Future_Shock.sid",
     "path": "sids/GAMES/A-F/Future_Shock.sid",
     "size": 1714,
-    "category": "A-F"
+    "category": "A-F",
+    "durationMs": 45248,
+    "durationText": "0:45.248"
   },
   {
     "id": "R0FNRVMvRy1ML0dPX0JBU0lDLnNpZA",
@@ -8802,7 +10518,9 @@ window.SID_LIBRARY = [
     "fileName": "GO_BASIC.sid",
     "path": "sids/GAMES/G-L/GO_BASIC.sid",
     "size": 1981,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 7000,
+    "durationText": "0:07"
   },
   {
     "id": "R0FNRVMvRy1ML0dQQUNfRGVtZW50aWFfRGVmZW5kZXIuc2lk",
@@ -8812,7 +10530,9 @@ window.SID_LIBRARY = [
     "fileName": "GPAC_Dementia_Defender.sid",
     "path": "sids/GAMES/G-L/GPAC_Dementia_Defender.sid",
     "size": 3481,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 28000,
+    "durationText": "0:28"
   },
   {
     "id": "R0FNRVMvRy1ML0dhbGFjdGljX0JhdHRsZXMuc2lk",
@@ -8822,7 +10542,9 @@ window.SID_LIBRARY = [
     "fileName": "Galactic_Battles.sid",
     "path": "sids/GAMES/G-L/Galactic_Battles.sid",
     "size": 2084,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 13000,
+    "durationText": "0:13"
   },
   {
     "id": "R0FNRVMvRy1ML0dhbGFjdGljX0dhcmRlbmVyLnNpZA",
@@ -8832,7 +10554,9 @@ window.SID_LIBRARY = [
     "fileName": "Galactic_Gardener.sid",
     "path": "sids/GAMES/G-L/Galactic_Gardener.sid",
     "size": 785,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 24000,
+    "durationText": "0:24"
   },
   {
     "id": "R0FNRVMvRy1ML0dhbGFjdGljX011bmNoZXIuc2lk",
@@ -8842,7 +10566,9 @@ window.SID_LIBRARY = [
     "fileName": "Galactic_Muncher.sid",
     "path": "sids/GAMES/G-L/Galactic_Muncher.sid",
     "size": 5905,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 49000,
+    "durationText": "0:49"
   },
   {
     "id": "R0FNRVMvRy1ML0dhbGF4LWktQmlyZHMuc2lk",
@@ -8852,7 +10578,9 @@ window.SID_LIBRARY = [
     "fileName": "Galax-i-Birds.sid",
     "path": "sids/GAMES/G-L/Galax-i-Birds.sid",
     "size": 1358,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 52000,
+    "durationText": "0:52"
   },
   {
     "id": "R0FNRVMvRy1ML0dhbGF4aW9ucy5zaWQ",
@@ -8862,7 +10590,9 @@ window.SID_LIBRARY = [
     "fileName": "Galaxions.sid",
     "path": "sids/GAMES/G-L/Galaxions.sid",
     "size": 323,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 4000,
+    "durationText": "0:04"
   },
   {
     "id": "R0FNRVMvRy1ML0dhbGl2YW4uc2lk",
@@ -8872,7 +10602,9 @@ window.SID_LIBRARY = [
     "fileName": "Galivan.sid",
     "path": "sids/GAMES/G-L/Galivan.sid",
     "size": 3067,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 41000,
+    "durationText": "0:41"
   },
   {
     "id": "R0FNRVMvRy1ML0dhbHlhLnNpZA",
@@ -8882,7 +10614,9 @@ window.SID_LIBRARY = [
     "fileName": "Galya.sid",
     "path": "sids/GAMES/G-L/Galya.sid",
     "size": 799,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 45000,
+    "durationText": "0:45"
   },
   {
     "id": "R0FNRVMvRy1ML0dhbWVfb2ZfTGlmZV9CQVNJQy5zaWQ",
@@ -8892,7 +10626,9 @@ window.SID_LIBRARY = [
     "fileName": "Game_of_Life_BASIC.sid",
     "path": "sids/GAMES/G-L/Game_of_Life_BASIC.sid",
     "size": 1263,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 8000,
+    "durationText": "0:08"
   },
   {
     "id": "R0FNRVMvRy1ML0dhbWUtTWFzdGVyLnNpZA",
@@ -8902,7 +10638,9 @@ window.SID_LIBRARY = [
     "fileName": "Game-Master.sid",
     "path": "sids/GAMES/G-L/Game-Master.sid",
     "size": 4520,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 207000,
+    "durationText": "3:27"
   },
   {
     "id": "R0FNRVMvRy1ML0dhbmRhbGZfdGhlX1NvcmNlcmVyLnNpZA",
@@ -8912,7 +10650,9 @@ window.SID_LIBRARY = [
     "fileName": "Gandalf_the_Sorcerer.sid",
     "path": "sids/GAMES/G-L/Gandalf_the_Sorcerer.sid",
     "size": 1318,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 48000,
+    "durationText": "0:48"
   },
   {
     "id": "R0FNRVMvRy1ML0dhbmRhbGZfdGhlX1NvcmNlcmVyX2xvYWRlci5zaWQ",
@@ -8922,7 +10662,9 @@ window.SID_LIBRARY = [
     "fileName": "Gandalf_the_Sorcerer_loader.sid",
     "path": "sids/GAMES/G-L/Gandalf_the_Sorcerer_loader.sid",
     "size": 2382,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 113000,
+    "durationText": "1:53"
   },
   {
     "id": "R0FNRVMvRy1ML0dhcmRlbl9vZl9FZGVuLnNpZA",
@@ -8932,7 +10674,9 @@ window.SID_LIBRARY = [
     "fileName": "Garden_of_Eden.sid",
     "path": "sids/GAMES/G-L/Garden_of_Eden.sid",
     "size": 374,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 31000,
+    "durationText": "0:31"
   },
   {
     "id": "R0FNRVMvRy1ML0dhdGVzX29mX0Rhd24uc2lk",
@@ -8942,7 +10686,9 @@ window.SID_LIBRARY = [
     "fileName": "Gates_of_Dawn.sid",
     "path": "sids/GAMES/G-L/Gates_of_Dawn.sid",
     "size": 586,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 280000,
+    "durationText": "4:40"
   },
   {
     "id": "R0FNRVMvRy1ML0dhdGV3YXlfdG9fdGhlX1NhdmFnZV9Gcm9udGllci5zaWQ",
@@ -8952,7 +10698,9 @@ window.SID_LIBRARY = [
     "fileName": "Gateway_to_the_Savage_Frontier.sid",
     "path": "sids/GAMES/G-L/Gateway_to_the_Savage_Frontier.sid",
     "size": 3397,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 54000,
+    "durationText": "0:54"
   },
   {
     "id": "R0FNRVMvRy1ML0dlbXN0b25lX1dhcnJpb3Iuc2lk",
@@ -8962,7 +10710,9 @@ window.SID_LIBRARY = [
     "fileName": "Gemstone_Warrior.sid",
     "path": "sids/GAMES/G-L/Gemstone_Warrior.sid",
     "size": 2218,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 344000,
+    "durationText": "5:44"
   },
   {
     "id": "R0FNRVMvRy1ML0dlby1NYXRyaXguc2lk",
@@ -8972,7 +10722,9 @@ window.SID_LIBRARY = [
     "fileName": "Geo-Matrix.sid",
     "path": "sids/GAMES/G-L/Geo-Matrix.sid",
     "size": 4041,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 123000,
+    "durationText": "2:03"
   },
   {
     "id": "R0FNRVMvRy1ML0dlb0x1ZG8uc2lk",
@@ -8982,7 +10734,9 @@ window.SID_LIBRARY = [
     "fileName": "GeoLudo.sid",
     "path": "sids/GAMES/G-L/GeoLudo.sid",
     "size": 4058,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 145578,
+    "durationText": "2:25.578"
   },
   {
     "id": "R0FNRVMvRy1ML0dlcmxvY19CQVNJQy5zaWQ",
@@ -8992,7 +10746,9 @@ window.SID_LIBRARY = [
     "fileName": "Gerloc_BASIC.sid",
     "path": "sids/GAMES/G-L/Gerloc_BASIC.sid",
     "size": 1630,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 6000,
+    "durationText": "0:06"
   },
   {
     "id": "R0FNRVMvRy1ML0dlcnJ5X0FuZGVyc29uc19UaHVuZGVyYmlyZHMuc2lk",
@@ -9002,7 +10758,9 @@ window.SID_LIBRARY = [
     "fileName": "Gerry_Andersons_Thunderbirds.sid",
     "path": "sids/GAMES/G-L/Gerry_Andersons_Thunderbirds.sid",
     "size": 3873,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 159000,
+    "durationText": "2:39"
   },
   {
     "id": "R0FNRVMvRy1ML0dldF9SZWFkeV9mb3JfTnVtYmVyLnNpZA",
@@ -9012,7 +10770,9 @@ window.SID_LIBRARY = [
     "fileName": "Get_Ready_for_Number.sid",
     "path": "sids/GAMES/G-L/Get_Ready_for_Number.sid",
     "size": 1056,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 18000,
+    "durationText": "0:18"
   },
   {
     "id": "R0FNRVMvRy1ML0dldF9hX0xpZmUuc2lk",
@@ -9022,7 +10782,9 @@ window.SID_LIBRARY = [
     "fileName": "Get_a_Life.sid",
     "path": "sids/GAMES/G-L/Get_a_Life.sid",
     "size": 6997,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 208000,
+    "durationText": "3:28"
   },
   {
     "id": "R0FNRVMvRy1ML0doZWRkYWZpYWguc2lk",
@@ -9032,7 +10794,9 @@ window.SID_LIBRARY = [
     "fileName": "Gheddafiah.sid",
     "path": "sids/GAMES/G-L/Gheddafiah.sid",
     "size": 4032,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 15000,
+    "durationText": "0:15"
   },
   {
     "id": "R0FNRVMvRy1ML0dob3N0X0J1bm55LnNpZA",
@@ -9042,7 +10806,9 @@ window.SID_LIBRARY = [
     "fileName": "Ghost_Bunny.sid",
     "path": "sids/GAMES/G-L/Ghost_Bunny.sid",
     "size": 11472,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 232500,
+    "durationText": "3:52.5"
   },
   {
     "id": "R0FNRVMvRy1ML0dob3N0X0h1bnRlcnMuc2lk",
@@ -9052,7 +10818,9 @@ window.SID_LIBRARY = [
     "fileName": "Ghost_Hunters.sid",
     "path": "sids/GAMES/G-L/Ghost_Hunters.sid",
     "size": 3201,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 21000,
+    "durationText": "0:21"
   },
   {
     "id": "R0FNRVMvRy1ML0dob3N0aHVudF9CQVNJQy5zaWQ",
@@ -9062,7 +10830,9 @@ window.SID_LIBRARY = [
     "fileName": "Ghosthunt_BASIC.sid",
     "path": "sids/GAMES/G-L/Ghosthunt_BASIC.sid",
     "size": 630,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 6244,
+    "durationText": "0:06.244"
   },
   {
     "id": "R0FNRVMvRy1ML0dob3Vscy5zaWQ",
@@ -9072,7 +10842,9 @@ window.SID_LIBRARY = [
     "fileName": "Ghouls.sid",
     "path": "sids/GAMES/G-L/Ghouls.sid",
     "size": 942,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 14000,
+    "durationText": "0:14"
   },
   {
     "id": "R0FNRVMvRy1ML0dsYWRpYXRvci5zaWQ",
@@ -9082,7 +10854,9 @@ window.SID_LIBRARY = [
     "fileName": "Gladiator.sid",
     "path": "sids/GAMES/G-L/Gladiator.sid",
     "size": 2954,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 73000,
+    "durationText": "1:13"
   },
   {
     "id": "R0FNRVMvRy1ML0dsaWRlcl9QaWxvdC5zaWQ",
@@ -9092,7 +10866,9 @@ window.SID_LIBRARY = [
     "fileName": "Glider_Pilot.sid",
     "path": "sids/GAMES/G-L/Glider_Pilot.sid",
     "size": 1236,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 52000,
+    "durationText": "0:52"
   },
   {
     "id": "R0FNRVMvRy1ML0dsb2JldHJvdHRlci5zaWQ",
@@ -9102,7 +10878,9 @@ window.SID_LIBRARY = [
     "fileName": "Globetrotter.sid",
     "path": "sids/GAMES/G-L/Globetrotter.sid",
     "size": 6155,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 98000,
+    "durationText": "1:38"
   },
   {
     "id": "R0FNRVMvRy1ML0dvZHNfcHJldmlldy5zaWQ",
@@ -9112,7 +10890,9 @@ window.SID_LIBRARY = [
     "fileName": "Gods_preview.sid",
     "path": "sids/GAMES/G-L/Gods_preview.sid",
     "size": 14207,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 46000,
+    "durationText": "0:46"
   },
   {
     "id": "R0FNRVMvRy1ML0dvbGRmZXZlci5zaWQ",
@@ -9122,7 +10902,9 @@ window.SID_LIBRARY = [
     "fileName": "Goldfever.sid",
     "path": "sids/GAMES/G-L/Goldfever.sid",
     "size": 425,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 17873,
+    "durationText": "0:17.873"
   },
   {
     "id": "R0FNRVMvRy1ML0dvbGRyYXVzY2hfQkFTSUMuc2lk",
@@ -9132,7 +10914,9 @@ window.SID_LIBRARY = [
     "fileName": "Goldrausch_BASIC.sid",
     "path": "sids/GAMES/G-L/Goldrausch_BASIC.sid",
     "size": 705,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 16323,
+    "durationText": "0:16.323"
   },
   {
     "id": "R0FNRVMvRy1ML0dvbGZfTWFzdGVyLnNpZA",
@@ -9142,7 +10926,9 @@ window.SID_LIBRARY = [
     "fileName": "Golf_Master.sid",
     "path": "sids/GAMES/G-L/Golf_Master.sid",
     "size": 10398,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 160000,
+    "durationText": "2:40"
   },
   {
     "id": "R0FNRVMvRy1ML0dvcnlfR2hvc3RfcHJldmlldy5zaWQ",
@@ -9152,7 +10938,9 @@ window.SID_LIBRARY = [
     "fileName": "Gory_Ghost_preview.sid",
     "path": "sids/GAMES/G-L/Gory_Ghost_preview.sid",
     "size": 2049,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 31000,
+    "durationText": "0:31"
   },
   {
     "id": "R0FNRVMvRy1ML0dyYWJfSXQuc2lk",
@@ -9162,7 +10950,9 @@ window.SID_LIBRARY = [
     "fileName": "Grab_It.sid",
     "path": "sids/GAMES/G-L/Grab_It.sid",
     "size": 4303,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 168182,
+    "durationText": "2:48.182"
   },
   {
     "id": "R0FNRVMvRy1ML0dyYWJiZXIuc2lk",
@@ -9172,7 +10962,9 @@ window.SID_LIBRARY = [
     "fileName": "Grabber.sid",
     "path": "sids/GAMES/G-L/Grabber.sid",
     "size": 1856,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 41239,
+    "durationText": "0:41.239"
   },
   {
     "id": "R0FNRVMvRy1ML0dyYWRpdXMuc2lk",
@@ -9182,7 +10974,9 @@ window.SID_LIBRARY = [
     "fileName": "Gradius.sid",
     "path": "sids/GAMES/G-L/Gradius.sid",
     "size": 2082,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 28000,
+    "durationText": "0:28"
   },
   {
     "id": "R0FNRVMvRy1ML0dyYW5kX1NsYW1fQmFzZWJhbGwuc2lk",
@@ -9192,7 +10986,9 @@ window.SID_LIBRARY = [
     "fileName": "Grand_Slam_Baseball.sid",
     "path": "sids/GAMES/G-L/Grand_Slam_Baseball.sid",
     "size": 1074,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 22000,
+    "durationText": "0:22"
   },
   {
     "id": "R0FNRVMvRy1ML0dyYXZpdHJpeC5zaWQ",
@@ -9202,7 +10998,9 @@ window.SID_LIBRARY = [
     "fileName": "Gravitrix.sid",
     "path": "sids/GAMES/G-L/Gravitrix.sid",
     "size": 7976,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 67052,
+    "durationText": "1:07.052"
   },
   {
     "id": "R0FNRVMvRy1ML0dyZWF0X0VzY2FwZS5zaWQ",
@@ -9212,7 +11010,9 @@ window.SID_LIBRARY = [
     "fileName": "Great_Escape.sid",
     "path": "sids/GAMES/G-L/Great_Escape.sid",
     "size": 4926,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 194000,
+    "durationText": "3:14"
   },
   {
     "id": "R0FNRVMvRy1ML0dyZW1saW5zLnNpZA",
@@ -9222,7 +11022,9 @@ window.SID_LIBRARY = [
     "fileName": "Gremlins.sid",
     "path": "sids/GAMES/G-L/Gremlins.sid",
     "size": 1951,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 10000,
+    "durationText": "0:10"
   },
   {
     "id": "R0FNRVMvRy1ML0dyZXlmZWxsLnNpZA",
@@ -9232,7 +11034,9 @@ window.SID_LIBRARY = [
     "fileName": "Greyfell.sid",
     "path": "sids/GAMES/G-L/Greyfell.sid",
     "size": 485,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 18000,
+    "durationText": "0:18"
   },
   {
     "id": "R0FNRVMvRy1ML0dyaWR0cmFwLnNpZA",
@@ -9242,7 +11046,9 @@ window.SID_LIBRARY = [
     "fileName": "Gridtrap.sid",
     "path": "sids/GAMES/G-L/Gridtrap.sid",
     "size": 1624,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 9000,
+    "durationText": "0:09"
   },
   {
     "id": "R0FNRVMvRy1ML0dyaWpwX1plLnNpZA",
@@ -9252,7 +11058,9 @@ window.SID_LIBRARY = [
     "fileName": "Grijp_Ze.sid",
     "path": "sids/GAMES/G-L/Grijp_Ze.sid",
     "size": 10237,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 188000,
+    "durationText": "3:08"
   },
   {
     "id": "R0FNRVMvRy1ML0dyb2Vzc2Vud2FybnNpbm5pZ19Cb3VsZGVyX0Rhc2guc2lk",
@@ -9262,7 +11070,9 @@ window.SID_LIBRARY = [
     "fileName": "Groessenwarnsinnig_Boulder_Dash.sid",
     "path": "sids/GAMES/G-L/Groessenwarnsinnig_Boulder_Dash.sid",
     "size": 5830,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 257000,
+    "durationText": "4:17"
   },
   {
     "id": "R0FNRVMvRy1ML0dydW5pb3plcmNhLnNpZA",
@@ -9272,7 +11082,9 @@ window.SID_LIBRARY = [
     "fileName": "Gruniozerca.sid",
     "path": "sids/GAMES/G-L/Gruniozerca.sid",
     "size": 1421,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 85000,
+    "durationText": "1:25"
   },
   {
     "id": "R0FNRVMvRy1ML0d1bHBlcl82NC5zaWQ",
@@ -9282,7 +11094,9 @@ window.SID_LIBRARY = [
     "fileName": "Gulper_64.sid",
     "path": "sids/GAMES/G-L/Gulper_64.sid",
     "size": 4236,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 176000,
+    "durationText": "2:56"
   },
   {
     "id": "R0FNRVMvRy1ML0d1bXNob2Uuc2lk",
@@ -9292,7 +11106,9 @@ window.SID_LIBRARY = [
     "fileName": "Gumshoe.sid",
     "path": "sids/GAMES/G-L/Gumshoe.sid",
     "size": 724,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 6000,
+    "durationText": "0:06"
   },
   {
     "id": "R0FNRVMvRy1ML0d1bl9TbW9rZS5zaWQ",
@@ -9302,7 +11118,9 @@ window.SID_LIBRARY = [
     "fileName": "Gun_Smoke.sid",
     "path": "sids/GAMES/G-L/Gun_Smoke.sid",
     "size": 5966,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 27000,
+    "durationText": "0:27"
   },
   {
     "id": "R0FNRVMvRy1ML0d1bnNoaXAuc2lk",
@@ -9312,7 +11130,9 @@ window.SID_LIBRARY = [
     "fileName": "Gunship.sid",
     "path": "sids/GAMES/G-L/Gunship.sid",
     "size": 2492,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 18000,
+    "durationText": "0:18"
   },
   {
     "id": "R0FNRVMvRy1ML0d3ZW5kb2x5bl9CQVNJQy5zaWQ",
@@ -9322,7 +11142,9 @@ window.SID_LIBRARY = [
     "fileName": "Gwendolyn_BASIC.sid",
     "path": "sids/GAMES/G-L/Gwendolyn_BASIC.sid",
     "size": 1386,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 19000,
+    "durationText": "0:19"
   },
   {
     "id": "R0FNRVMvRy1ML0d5cm9zY29wZV8zLnNpZA",
@@ -9332,7 +11154,9 @@ window.SID_LIBRARY = [
     "fileName": "Gyroscope_3.sid",
     "path": "sids/GAMES/G-L/Gyroscope_3.sid",
     "size": 601,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 21000,
+    "durationText": "0:21"
   },
   {
     "id": "R0FNRVMvRy1ML0d5cnVzcy5zaWQ",
@@ -9342,7 +11166,9 @@ window.SID_LIBRARY = [
     "fileName": "Gyruss.sid",
     "path": "sids/GAMES/G-L/Gyruss.sid",
     "size": 2247,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 49000,
+    "durationText": "0:49"
   },
   {
     "id": "R0FNRVMvRy1ML0hhY2tfQXR0YWNrLnNpZA",
@@ -9352,7 +11178,9 @@ window.SID_LIBRARY = [
     "fileName": "Hack_Attack.sid",
     "path": "sids/GAMES/G-L/Hack_Attack.sid",
     "size": 1846,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 69000,
+    "durationText": "1:09"
   },
   {
     "id": "R0FNRVMvRy1ML0hhZWdhcl9kZXJfU2NocmVja2xpY2hlLnNpZA",
@@ -9362,7 +11190,9 @@ window.SID_LIBRARY = [
     "fileName": "Haegar_der_Schreckliche.sid",
     "path": "sids/GAMES/G-L/Haegar_der_Schreckliche.sid",
     "size": 27681,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 317000,
+    "durationText": "5:17"
   },
   {
     "id": "R0FNRVMvRy1ML0hha2thYV9IYW51cmlhLnNpZA",
@@ -9372,7 +11202,9 @@ window.SID_LIBRARY = [
     "fileName": "Hakkaa_Hanuria.sid",
     "path": "sids/GAMES/G-L/Hakkaa_Hanuria.sid",
     "size": 1615,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 38305,
+    "durationText": "0:38.305"
   },
   {
     "id": "R0FNRVMvRy1ML0hhbGN5b24uc2lk",
@@ -9382,7 +11214,9 @@ window.SID_LIBRARY = [
     "fileName": "Halcyon.sid",
     "path": "sids/GAMES/G-L/Halcyon.sid",
     "size": 10350,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 4000,
+    "durationText": "0:04"
   },
   {
     "id": "R0FNRVMvRy1ML0hhbGZ0aW1lX0JhdHRsaW5fQmFuZHMuc2lk",
@@ -9392,7 +11226,9 @@ window.SID_LIBRARY = [
     "fileName": "Halftime_Battlin_Bands.sid",
     "path": "sids/GAMES/G-L/Halftime_Battlin_Bands.sid",
     "size": 1968,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 2000,
+    "durationText": "0:02"
   },
   {
     "id": "R0FNRVMvRy1ML0hhbGlmYXguc2lk",
@@ -9402,7 +11238,9 @@ window.SID_LIBRARY = [
     "fileName": "Halifax.sid",
     "path": "sids/GAMES/G-L/Halifax.sid",
     "size": 7922,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 169000,
+    "durationText": "2:49"
   },
   {
     "id": "R0FNRVMvRy1ML0hhbGxleV9NaXNzaW9uLnNpZA",
@@ -9412,7 +11250,9 @@ window.SID_LIBRARY = [
     "fileName": "Halley_Mission.sid",
     "path": "sids/GAMES/G-L/Halley_Mission.sid",
     "size": 2594,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 56000,
+    "durationText": "0:56"
   },
   {
     "id": "R0FNRVMvRy1ML0hhbWJ1cmdlcnNfR29pbmdfdG9fU3dpdHplcmxhbmQuc2lk",
@@ -9422,7 +11262,9 @@ window.SID_LIBRARY = [
     "fileName": "Hamburgers_Going_to_Switzerland.sid",
     "path": "sids/GAMES/G-L/Hamburgers_Going_to_Switzerland.sid",
     "size": 4812,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 17876,
+    "durationText": "0:17.876"
   },
   {
     "id": "R0FNRVMvRy1ML0hhbW1lcl9CQVNJQy5zaWQ",
@@ -9432,7 +11274,9 @@ window.SID_LIBRARY = [
     "fileName": "Hammer_BASIC.sid",
     "path": "sids/GAMES/G-L/Hammer_BASIC.sid",
     "size": 608,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 31000,
+    "durationText": "0:31"
   },
   {
     "id": "R0FNRVMvRy1ML0hhbW11cmFiaS5zaWQ",
@@ -9442,7 +11286,9 @@ window.SID_LIBRARY = [
     "fileName": "Hammurabi.sid",
     "path": "sids/GAMES/G-L/Hammurabi.sid",
     "size": 2625,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 123074,
+    "durationText": "2:03.074"
   },
   {
     "id": "R0FNRVMvRy1ML0hhbmdtYW5zX0hhemFyZC5zaWQ",
@@ -9452,7 +11298,9 @@ window.SID_LIBRARY = [
     "fileName": "Hangmans_Hazard.sid",
     "path": "sids/GAMES/G-L/Hangmans_Hazard.sid",
     "size": 1966,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 41000,
+    "durationText": "0:41"
   },
   {
     "id": "R0FNRVMvRy1ML0hhcmFrX0lyaS5zaWQ",
@@ -9462,7 +11310,9 @@ window.SID_LIBRARY = [
     "fileName": "Harak_Iri.sid",
     "path": "sids/GAMES/G-L/Harak_Iri.sid",
     "size": 10814,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 110604,
+    "durationText": "1:50.604"
   },
   {
     "id": "R0FNRVMvRy1ML0hhcmNvbi5zaWQ",
@@ -9472,7 +11322,9 @@ window.SID_LIBRARY = [
     "fileName": "Harcon.sid",
     "path": "sids/GAMES/G-L/Harcon.sid",
     "size": 14150,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 67000,
+    "durationText": "1:07"
   },
   {
     "id": "R0FNRVMvRy1ML0hhcmRfSGF0X01hY2suc2lk",
@@ -9482,7 +11334,9 @@ window.SID_LIBRARY = [
     "fileName": "Hard_Hat_Mack.sid",
     "path": "sids/GAMES/G-L/Hard_Hat_Mack.sid",
     "size": 2843,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 2000,
+    "durationText": "0:02"
   },
   {
     "id": "R0FNRVMvRy1ML0hhcmRfV29yay5zaWQ",
@@ -9492,7 +11346,9 @@ window.SID_LIBRARY = [
     "fileName": "Hard_Work.sid",
     "path": "sids/GAMES/G-L/Hard_Work.sid",
     "size": 357,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 11911,
+    "durationText": "0:11.911"
   },
   {
     "id": "R0FNRVMvRy1ML0hhcnZleV9TbWl0aF9TaG93X0p1bXBlci5zaWQ",
@@ -9502,7 +11358,9 @@ window.SID_LIBRARY = [
     "fileName": "Harvey_Smith_Show_Jumper.sid",
     "path": "sids/GAMES/G-L/Harvey_Smith_Show_Jumper.sid",
     "size": 3118,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 65000,
+    "durationText": "1:05"
   },
   {
     "id": "R0FNRVMvRy1ML0hhdF9Ucmljay5zaWQ",
@@ -9512,7 +11370,9 @@ window.SID_LIBRARY = [
     "fileName": "Hat_Trick.sid",
     "path": "sids/GAMES/G-L/Hat_Trick.sid",
     "size": 3119,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 62000,
+    "durationText": "1:02"
   },
   {
     "id": "R0FNRVMvRy1ML0hhd2tfUGF0cm9sLnNpZA",
@@ -9522,7 +11382,9 @@ window.SID_LIBRARY = [
     "fileName": "Hawk_Patrol.sid",
     "path": "sids/GAMES/G-L/Hawk_Patrol.sid",
     "size": 689,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 8000,
+    "durationText": "0:08"
   },
   {
     "id": "R0FNRVMvRy1ML0hhd2tfcHJldmlldy5zaWQ",
@@ -9532,7 +11394,9 @@ window.SID_LIBRARY = [
     "fileName": "Hawk_preview.sid",
     "path": "sids/GAMES/G-L/Hawk_preview.sid",
     "size": 3737,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 236311,
+    "durationText": "3:56.311"
   },
   {
     "id": "R0FNRVMvRy1ML0hlYWRfQ29hY2hfQkFTSUMuc2lk",
@@ -9542,7 +11406,9 @@ window.SID_LIBRARY = [
     "fileName": "Head_Coach_BASIC.sid",
     "path": "sids/GAMES/G-L/Head_Coach_BASIC.sid",
     "size": 848,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 4995,
+    "durationText": "0:04.995"
   },
   {
     "id": "R0FNRVMvRy1ML0hlYWRfdG9fSGVhZC5zaWQ",
@@ -9552,7 +11418,9 @@ window.SID_LIBRARY = [
     "fileName": "Head_to_Head.sid",
     "path": "sids/GAMES/G-L/Head_to_Head.sid",
     "size": 278,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 16077,
+    "durationText": "0:16.077"
   },
   {
     "id": "R0FNRVMvRy1ML0hlYWRhY2hlLnNpZA",
@@ -9562,7 +11430,9 @@ window.SID_LIBRARY = [
     "fileName": "Headache.sid",
     "path": "sids/GAMES/G-L/Headache.sid",
     "size": 1033,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 70000,
+    "durationText": "1:10"
   },
   {
     "id": "R0FNRVMvRy1ML0hlbGlfRHJvcC5zaWQ",
@@ -9572,7 +11442,9 @@ window.SID_LIBRARY = [
     "fileName": "Heli_Drop.sid",
     "path": "sids/GAMES/G-L/Heli_Drop.sid",
     "size": 606,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 10000,
+    "durationText": "0:10"
   },
   {
     "id": "R0FNRVMvRy1ML0hlbGktSnVtcC5zaWQ",
@@ -9582,7 +11454,9 @@ window.SID_LIBRARY = [
     "fileName": "Heli-Jump.sid",
     "path": "sids/GAMES/G-L/Heli-Jump.sid",
     "size": 737,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 13000,
+    "durationText": "0:13"
   },
   {
     "id": "R0FNRVMvRy1ML0hlbnJ5c19Ib3VzZS5zaWQ",
@@ -9592,7 +11466,9 @@ window.SID_LIBRARY = [
     "fileName": "Henrys_House.sid",
     "path": "sids/GAMES/G-L/Henrys_House.sid",
     "size": 741,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 16261,
+    "durationText": "0:16.261"
   },
   {
     "id": "R0FNRVMvRy1ML0hlcmJlcnRfb25fdGhlX1Nsb3Blcy5zaWQ",
@@ -9602,7 +11478,9 @@ window.SID_LIBRARY = [
     "fileName": "Herbert_on_the_Slopes.sid",
     "path": "sids/GAMES/G-L/Herbert_on_the_Slopes.sid",
     "size": 507,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 16794,
+    "durationText": "0:16.794"
   },
   {
     "id": "R0FNRVMvRy1ML0hlcmJ5X2luX0FjdGlvbi5zaWQ",
@@ -9612,7 +11490,9 @@ window.SID_LIBRARY = [
     "fileName": "Herby_in_Action.sid",
     "path": "sids/GAMES/G-L/Herby_in_Action.sid",
     "size": 4269,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 37000,
+    "durationText": "0:37"
   },
   {
     "id": "R0FNRVMvRy1ML0hlcmN1bGVzX1NsYXllcl9vZl90aGVfRGFtbmVkLnNpZA",
@@ -9622,7 +11502,9 @@ window.SID_LIBRARY = [
     "fileName": "Hercules_Slayer_of_the_Damned.sid",
     "path": "sids/GAMES/G-L/Hercules_Slayer_of_the_Damned.sid",
     "size": 8990,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 267000,
+    "durationText": "4:27"
   },
   {
     "id": "R0FNRVMvRy1ML0hlcm1hbm9zLnNpZA",
@@ -9632,7 +11514,9 @@ window.SID_LIBRARY = [
     "fileName": "Hermanos.sid",
     "path": "sids/GAMES/G-L/Hermanos.sid",
     "size": 1611,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 76629,
+    "durationText": "1:16.629"
   },
   {
     "id": "R0FNRVMvRy1ML0hldF9ad2FhcmRfdmFuX2RlX0tvbmluZy5zaWQ",
@@ -9642,7 +11526,9 @@ window.SID_LIBRARY = [
     "fileName": "Het_Zwaard_van_de_Koning.sid",
     "path": "sids/GAMES/G-L/Het_Zwaard_van_de_Koning.sid",
     "size": 519,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 12800,
+    "durationText": "0:12.8"
   },
   {
     "id": "R0FNRVMvRy1ML0hpX0JvdW5jZXIuc2lk",
@@ -9652,7 +11538,9 @@ window.SID_LIBRARY = [
     "fileName": "Hi_Bouncer.sid",
     "path": "sids/GAMES/G-L/Hi_Bouncer.sid",
     "size": 2410,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 18000,
+    "durationText": "0:18"
   },
   {
     "id": "R0FNRVMvRy1ML0hpX1FfUXVpei5zaWQ",
@@ -9662,7 +11550,9 @@ window.SID_LIBRARY = [
     "fileName": "Hi_Q_Quiz.sid",
     "path": "sids/GAMES/G-L/Hi_Q_Quiz.sid",
     "size": 8943,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 51207,
+    "durationText": "0:51.207"
   },
   {
     "id": "R0FNRVMvRy1ML0hpZ2hfRGl2aW5nX0Rhbl9CQVNJQy5zaWQ",
@@ -9672,7 +11562,9 @@ window.SID_LIBRARY = [
     "fileName": "High_Diving_Dan_BASIC.sid",
     "path": "sids/GAMES/G-L/High_Diving_Dan_BASIC.sid",
     "size": 530,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 3752,
+    "durationText": "0:03.752"
   },
   {
     "id": "R0FNRVMvRy1ML0hpbHRvbl9Ib3RlbC5zaWQ",
@@ -9682,7 +11574,9 @@ window.SID_LIBRARY = [
     "fileName": "Hilton_Hotel.sid",
     "path": "sids/GAMES/G-L/Hilton_Hotel.sid",
     "size": 909,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 13000,
+    "durationText": "0:13"
   },
   {
     "id": "R0FNRVMvRy1ML0hpdG9raXJpLnNpZA",
@@ -9692,7 +11586,9 @@ window.SID_LIBRARY = [
     "fileName": "Hitokiri.sid",
     "path": "sids/GAMES/G-L/Hitokiri.sid",
     "size": 2678,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 30644,
+    "durationText": "0:30.644"
   },
   {
     "id": "R0FNRVMvRy1ML0hvbGVfaW5fT25lLnNpZA",
@@ -9702,7 +11598,9 @@ window.SID_LIBRARY = [
     "fileName": "Hole_in_One.sid",
     "path": "sids/GAMES/G-L/Hole_in_One.sid",
     "size": 2174,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 72000,
+    "durationText": "1:12"
   },
   {
     "id": "R0FNRVMvRy1ML0hvbG8uc2lk",
@@ -9712,7 +11610,9 @@ window.SID_LIBRARY = [
     "fileName": "Holo.sid",
     "path": "sids/GAMES/G-L/Holo.sid",
     "size": 5675,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 24000,
+    "durationText": "0:24"
   },
   {
     "id": "R0FNRVMvRy1ML0hvb2tfRG9kZ2VyLnNpZA",
@@ -9722,7 +11622,9 @@ window.SID_LIBRARY = [
     "fileName": "Hook_Dodger.sid",
     "path": "sids/GAMES/G-L/Hook_Dodger.sid",
     "size": 686,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 19089,
+    "durationText": "0:19.089"
   },
   {
     "id": "R0FNRVMvRy1ML0hvb3Blci5zaWQ",
@@ -9732,7 +11634,9 @@ window.SID_LIBRARY = [
     "fileName": "Hooper.sid",
     "path": "sids/GAMES/G-L/Hooper.sid",
     "size": 3354,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 183920,
+    "durationText": "3:03.92"
   },
   {
     "id": "R0FNRVMvRy1ML0hvcGVsZXNzLnNpZA",
@@ -9742,7 +11646,9 @@ window.SID_LIBRARY = [
     "fileName": "Hopeless.sid",
     "path": "sids/GAMES/G-L/Hopeless.sid",
     "size": 2051,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 78000,
+    "durationText": "1:18"
   },
   {
     "id": "R0FNRVMvRy1ML0hvcmFjZV9Hb2VzX1NraWluZy5zaWQ",
@@ -9752,7 +11658,9 @@ window.SID_LIBRARY = [
     "fileName": "Horace_Goes_Skiing.sid",
     "path": "sids/GAMES/G-L/Horace_Goes_Skiing.sid",
     "size": 2233,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 102000,
+    "durationText": "1:42"
   },
   {
     "id": "R0FNRVMvRy1ML0hvcnJvcl9DaXR5LnNpZA",
@@ -9762,7 +11670,9 @@ window.SID_LIBRARY = [
     "fileName": "Horror_City.sid",
     "path": "sids/GAMES/G-L/Horror_City.sid",
     "size": 1981,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 53000,
+    "durationText": "0:53"
   },
   {
     "id": "R0FNRVMvRy1ML0hvcnNlZ3VhcmQuc2lk",
@@ -9772,7 +11682,9 @@ window.SID_LIBRARY = [
     "fileName": "Horseguard.sid",
     "path": "sids/GAMES/G-L/Horseguard.sid",
     "size": 1063,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 45000,
+    "durationText": "0:45"
   },
   {
     "id": "R0FNRVMvRy1ML0hvdF9Qb3Auc2lk",
@@ -9782,7 +11694,9 @@ window.SID_LIBRARY = [
     "fileName": "Hot_Pop.sid",
     "path": "sids/GAMES/G-L/Hot_Pop.sid",
     "size": 1889,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 1000,
+    "durationText": "0:01"
   },
   {
     "id": "R0FNRVMvRy1ML0hvdF9TaG90LnNpZA",
@@ -9792,7 +11706,9 @@ window.SID_LIBRARY = [
     "fileName": "Hot_Shot.sid",
     "path": "sids/GAMES/G-L/Hot_Shot.sid",
     "size": 2028,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 41000,
+    "durationText": "0:41"
   },
   {
     "id": "R0FNRVMvRy1ML0hvdF9XaGVlbHNfMTk4NF9CQVNJQy5zaWQ",
@@ -9802,7 +11718,9 @@ window.SID_LIBRARY = [
     "fileName": "Hot_Wheels_1984_BASIC.sid",
     "path": "sids/GAMES/G-L/Hot_Wheels_1984_BASIC.sid",
     "size": 686,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 43000,
+    "durationText": "0:43"
   },
   {
     "id": "R0FNRVMvRy1ML0hvdF9XaGVlbHNfMTk4NS5zaWQ",
@@ -9812,7 +11730,9 @@ window.SID_LIBRARY = [
     "fileName": "Hot_Wheels_1985.sid",
     "path": "sids/GAMES/G-L/Hot_Wheels_1985.sid",
     "size": 2877,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 43000,
+    "durationText": "0:43"
   },
   {
     "id": "R0FNRVMvRy1ML0hvdXNlX29mX1VzaGVyLnNpZA",
@@ -9822,7 +11742,9 @@ window.SID_LIBRARY = [
     "fileName": "House_of_Usher.sid",
     "path": "sids/GAMES/G-L/House_of_Usher.sid",
     "size": 1020,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 68000,
+    "durationText": "1:08"
   },
   {
     "id": "R0FNRVMvRy1ML0hvd190b19iZV9hX0NvbXBsZXRlX0Jhc3RhcmQuc2lk",
@@ -9832,7 +11754,9 @@ window.SID_LIBRARY = [
     "fileName": "How_to_be_a_Complete_Bastard.sid",
     "path": "sids/GAMES/G-L/How_to_be_a_Complete_Bastard.sid",
     "size": 4254,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 31000,
+    "durationText": "0:31"
   },
   {
     "id": "R0FNRVMvRy1ML0h1Y2tfb25fdGhlX01pc3Npc3NpcHBpLnNpZA",
@@ -9842,7 +11766,9 @@ window.SID_LIBRARY = [
     "fileName": "Huck_on_the_Mississippi.sid",
     "path": "sids/GAMES/G-L/Huck_on_the_Mississippi.sid",
     "size": 3417,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 59373,
+    "durationText": "0:59.373"
   },
   {
     "id": "R0FNRVMvRy1ML0h1bXB0eV9EdW1wdHlfbWVldHNfRnV6enlfV3V6emkuc2lk",
@@ -9852,7 +11778,9 @@ window.SID_LIBRARY = [
     "fileName": "Humpty_Dumpty_meets_Fuzzy_Wuzzi.sid",
     "path": "sids/GAMES/G-L/Humpty_Dumpty_meets_Fuzzy_Wuzzi.sid",
     "size": 845,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 9000,
+    "durationText": "0:09"
   },
   {
     "id": "R0FNRVMvRy1ML0h1bXB0eV9pbl90aGVfR2FyZGVuLnNpZA",
@@ -9862,7 +11790,9 @@ window.SID_LIBRARY = [
     "fileName": "Humpty_in_the_Garden.sid",
     "path": "sids/GAMES/G-L/Humpty_in_the_Garden.sid",
     "size": 1442,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 11000,
+    "durationText": "0:11"
   },
   {
     "id": "R0FNRVMvRy1ML0h1bmNoYmFjay5zaWQ",
@@ -9872,7 +11802,9 @@ window.SID_LIBRARY = [
     "fileName": "Hunchback.sid",
     "path": "sids/GAMES/G-L/Hunchback.sid",
     "size": 416,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 17000,
+    "durationText": "0:17"
   },
   {
     "id": "R0FNRVMvRy1ML0h1bmNoYmFja19hdF90aGVfT2x5bXBpY3Muc2lk",
@@ -9882,7 +11814,9 @@ window.SID_LIBRARY = [
     "fileName": "Hunchback_at_the_Olympics.sid",
     "path": "sids/GAMES/G-L/Hunchback_at_the_Olympics.sid",
     "size": 585,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 8000,
+    "durationText": "0:08"
   },
   {
     "id": "R0FNRVMvRy1ML0h1bmdhcm9yaW5nLnNpZA",
@@ -9892,7 +11826,9 @@ window.SID_LIBRARY = [
     "fileName": "Hungaroring.sid",
     "path": "sids/GAMES/G-L/Hungaroring.sid",
     "size": 706,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 25000,
+    "durationText": "0:25"
   },
   {
     "id": "R0FNRVMvRy1ML0h1bmdyeV9Ib3JhY2Uuc2lk",
@@ -9902,7 +11838,9 @@ window.SID_LIBRARY = [
     "fileName": "Hungry_Horace.sid",
     "path": "sids/GAMES/G-L/Hungry_Horace.sid",
     "size": 4451,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 148000,
+    "durationText": "2:28"
   },
   {
     "id": "R0FNRVMvRy1ML0h1c3RsZXIuc2lk",
@@ -9912,7 +11850,9 @@ window.SID_LIBRARY = [
     "fileName": "Hustler.sid",
     "path": "sids/GAMES/G-L/Hustler.sid",
     "size": 2561,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 47000,
+    "durationText": "0:47"
   },
   {
     "id": "R0FNRVMvRy1ML0h5ZHJhLnNpZA",
@@ -9922,7 +11862,9 @@ window.SID_LIBRARY = [
     "fileName": "Hydra.sid",
     "path": "sids/GAMES/G-L/Hydra.sid",
     "size": 4198,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 121000,
+    "durationText": "2:01"
   },
   {
     "id": "R0FNRVMvRy1ML0h5cGVyX0JsYXN0LnNpZA",
@@ -9932,7 +11874,9 @@ window.SID_LIBRARY = [
     "fileName": "Hyper_Blast.sid",
     "path": "sids/GAMES/G-L/Hyper_Blast.sid",
     "size": 1793,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 18000,
+    "durationText": "0:18"
   },
   {
     "id": "R0FNRVMvRy1ML0h5cGVyX0NpcmN1aXQuc2lk",
@@ -9942,7 +11886,9 @@ window.SID_LIBRARY = [
     "fileName": "Hyper_Circuit.sid",
     "path": "sids/GAMES/G-L/Hyper_Circuit.sid",
     "size": 1678,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 26000,
+    "durationText": "0:26"
   },
   {
     "id": "R0FNRVMvRy1ML0h5cGVyX0R5bmVfU2lkZWFybXMuc2lk",
@@ -9952,7 +11898,9 @@ window.SID_LIBRARY = [
     "fileName": "Hyper_Dyne_Sidearms.sid",
     "path": "sids/GAMES/G-L/Hyper_Dyne_Sidearms.sid",
     "size": 7695,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 26000,
+    "durationText": "0:26"
   },
   {
     "id": "R0FNRVMvRy1ML0h5cGVydGhydXN0LnNpZA",
@@ -9962,7 +11910,9 @@ window.SID_LIBRARY = [
     "fileName": "Hyperthrust.sid",
     "path": "sids/GAMES/G-L/Hyperthrust.sid",
     "size": 7063,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 119000,
+    "durationText": "1:59"
   },
   {
     "id": "R0FNRVMvRy1ML0h5c3RlcmlhLnNpZA",
@@ -9972,7 +11922,9 @@ window.SID_LIBRARY = [
     "fileName": "Hysteria.sid",
     "path": "sids/GAMES/G-L/Hysteria.sid",
     "size": 4520,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 98000,
+    "durationText": "1:38"
   },
   {
     "id": "R0FNRVMvRy1ML0lfQmFsbF8yLnNpZA",
@@ -9982,7 +11934,9 @@ window.SID_LIBRARY = [
     "fileName": "I_Ball_2.sid",
     "path": "sids/GAMES/G-L/I_Ball_2.sid",
     "size": 14058,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 520,
+    "durationText": "0:00.52"
   },
   {
     "id": "R0FNRVMvRy1ML0lfUGxheV8zRF9UZW5uaXMuc2lk",
@@ -9992,7 +11946,9 @@ window.SID_LIBRARY = [
     "fileName": "I_Play_3D_Tennis.sid",
     "path": "sids/GAMES/G-L/I_Play_3D_Tennis.sid",
     "size": 19886,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 300000,
+    "durationText": "5:00"
   },
   {
     "id": "R0FNRVMvRy1ML0ljZV9QYWxhY2VfMTk4NC5zaWQ",
@@ -10002,7 +11958,9 @@ window.SID_LIBRARY = [
     "fileName": "Ice_Palace_1984.sid",
     "path": "sids/GAMES/G-L/Ice_Palace_1984.sid",
     "size": 358,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 16669,
+    "durationText": "0:16.669"
   },
   {
     "id": "R0FNRVMvRy1ML0ljZV9QYWxhY2VfMTk4NS5zaWQ",
@@ -10012,7 +11970,9 @@ window.SID_LIBRARY = [
     "fileName": "Ice_Palace_1985.sid",
     "path": "sids/GAMES/G-L/Ice_Palace_1985.sid",
     "size": 1774,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 42000,
+    "durationText": "0:42"
   },
   {
     "id": "R0FNRVMvRy1ML0ljaWNsZV9Xb3Jrcy5zaWQ",
@@ -10022,7 +11982,9 @@ window.SID_LIBRARY = [
     "fileName": "Icicle_Works.sid",
     "path": "sids/GAMES/G-L/Icicle_Works.sid",
     "size": 1287,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 18215,
+    "durationText": "0:18.215"
   },
   {
     "id": "R0FNRVMvRy1ML0lkb3JlZ2Vzei5zaWQ",
@@ -10032,7 +11994,9 @@ window.SID_LIBRARY = [
     "fileName": "Idoregesz.sid",
     "path": "sids/GAMES/G-L/Idoregesz.sid",
     "size": 1043,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 17702,
+    "durationText": "0:17.702"
   },
   {
     "id": "R0FNRVMvRy1ML0lrYXJpX0lJSS1UaGVfUmVzY3VlLnNpZA",
@@ -10042,7 +12006,9 @@ window.SID_LIBRARY = [
     "fileName": "Ikari_III-The_Rescue.sid",
     "path": "sids/GAMES/G-L/Ikari_III-The_Rescue.sid",
     "size": 6711,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 10000,
+    "durationText": "0:10"
   },
   {
     "id": "R0FNRVMvRy1ML0lrYXJpX1dhcnJpb3JzX1VTQV9WZXJzaW9uLnNpZA",
@@ -10052,7 +12018,9 @@ window.SID_LIBRARY = [
     "fileName": "Ikari_Warriors_USA_Version.sid",
     "path": "sids/GAMES/G-L/Ikari_Warriors_USA_Version.sid",
     "size": 2166,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 46000,
+    "durationText": "0:46"
   },
   {
     "id": "R0FNRVMvRy1ML0lsX1JhZ25vLnNpZA",
@@ -10062,7 +12030,9 @@ window.SID_LIBRARY = [
     "fileName": "Il_Ragno.sid",
     "path": "sids/GAMES/G-L/Il_Ragno.sid",
     "size": 4990,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 102000,
+    "durationText": "1:42"
   },
   {
     "id": "R0FNRVMvRy1ML0lsbF9TYXZpb3Iuc2lk",
@@ -10072,7 +12042,9 @@ window.SID_LIBRARY = [
     "fileName": "Ill_Savior.sid",
     "path": "sids/GAMES/G-L/Ill_Savior.sid",
     "size": 3251,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 11532,
+    "durationText": "0:11.532"
   },
   {
     "id": "R0FNRVMvRy1ML0ltaG90ZXAuc2lk",
@@ -10082,7 +12054,9 @@ window.SID_LIBRARY = [
     "fileName": "Imhotep.sid",
     "path": "sids/GAMES/G-L/Imhotep.sid",
     "size": 2177,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 90000,
+    "durationText": "1:30"
   },
   {
     "id": "R0FNRVMvRy1ML0ltbWVuc2l0eV9wcmV2aWV3LnNpZA",
@@ -10092,7 +12066,9 @@ window.SID_LIBRARY = [
     "fileName": "Immensity_preview.sid",
     "path": "sids/GAMES/G-L/Immensity_preview.sid",
     "size": 5679,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 107000,
+    "durationText": "1:47"
   },
   {
     "id": "R0FNRVMvRy1ML0ltbWVuc2l0eV9wcmV2aWV3XzIuc2lk",
@@ -10102,7 +12078,9 @@ window.SID_LIBRARY = [
     "fileName": "Immensity_preview_2.sid",
     "path": "sids/GAMES/G-L/Immensity_preview_2.sid",
     "size": 10547,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 177000,
+    "durationText": "2:57"
   },
   {
     "id": "R0FNRVMvRy1ML0ltcGVyYXRvcl9CQVNJQy5zaWQ",
@@ -10112,7 +12090,9 @@ window.SID_LIBRARY = [
     "fileName": "Imperator_BASIC.sid",
     "path": "sids/GAMES/G-L/Imperator_BASIC.sid",
     "size": 9381,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 40000,
+    "durationText": "0:40"
   },
   {
     "id": "R0FNRVMvRy1ML0ltcGVyaXVtX1JvbWFudW0uc2lk",
@@ -10122,7 +12102,9 @@ window.SID_LIBRARY = [
     "fileName": "Imperium_Romanum.sid",
     "path": "sids/GAMES/G-L/Imperium_Romanum.sid",
     "size": 11393,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 36000,
+    "durationText": "0:36"
   },
   {
     "id": "R0FNRVMvRy1ML0ltcG9zc2libGVfTWlzc2lvbl9JSS5zaWQ",
@@ -10132,7 +12114,9 @@ window.SID_LIBRARY = [
     "fileName": "Impossible_Mission_II.sid",
     "path": "sids/GAMES/G-L/Impossible_Mission_II.sid",
     "size": 6843,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 53000,
+    "durationText": "0:53"
   },
   {
     "id": "R0FNRVMvRy1ML0ltcG9zc2libGVfTWlzc2lvbl9JSV92MS5zaWQ",
@@ -10142,7 +12126,9 @@ window.SID_LIBRARY = [
     "fileName": "Impossible_Mission_II_v1.sid",
     "path": "sids/GAMES/G-L/Impossible_Mission_II_v1.sid",
     "size": 1202,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 22000,
+    "durationText": "0:22"
   },
   {
     "id": "R0FNRVMvRy1ML0luZGlhbmFfSm9uZXNfYW5kX3RoZV9UZW1wbGVfb2ZfRG9vbS5zaWQ",
@@ -10152,7 +12138,9 @@ window.SID_LIBRARY = [
     "fileName": "Indiana_Jones_and_the_Temple_of_Doom.sid",
     "path": "sids/GAMES/G-L/Indiana_Jones_and_the_Temple_of_Doom.sid",
     "size": 1401,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 59000,
+    "durationText": "0:59"
   },
   {
     "id": "R0FNRVMvRy1ML0luZGlhbmFfSm9uZXNfaW5fdGhlX0xvc3RfS2luZ2RvbS5zaWQ",
@@ -10162,7 +12150,9 @@ window.SID_LIBRARY = [
     "fileName": "Indiana_Jones_in_the_Lost_Kingdom.sid",
     "path": "sids/GAMES/G-L/Indiana_Jones_in_the_Lost_Kingdom.sid",
     "size": 3353,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 44000,
+    "durationText": "0:44"
   },
   {
     "id": "R0FNRVMvRy1ML0luZmVybmFsX1J1bm5lci5zaWQ",
@@ -10172,7 +12162,9 @@ window.SID_LIBRARY = [
     "fileName": "Infernal_Runner.sid",
     "path": "sids/GAMES/G-L/Infernal_Runner.sid",
     "size": 4222,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 38000,
+    "durationText": "0:38"
   },
   {
     "id": "R0FNRVMvRy1ML0luZmVybm9fQkFTSUMuc2lk",
@@ -10182,7 +12174,9 @@ window.SID_LIBRARY = [
     "fileName": "Inferno_BASIC.sid",
     "path": "sids/GAMES/G-L/Inferno_BASIC.sid",
     "size": 1097,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 13000,
+    "durationText": "0:13"
   },
   {
     "id": "R0FNRVMvRy1ML0luZmluaXRlX0luZmVybm9fQkFTSUMuc2lk",
@@ -10192,7 +12186,9 @@ window.SID_LIBRARY = [
     "fileName": "Infinite_Inferno_BASIC.sid",
     "path": "sids/GAMES/G-L/Infinite_Inferno_BASIC.sid",
     "size": 3197,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 62000,
+    "durationText": "1:02"
   },
   {
     "id": "R0FNRVMvRy1ML0luanVyZWRfRW5naW5lLnNpZA",
@@ -10202,7 +12198,9 @@ window.SID_LIBRARY = [
     "fileName": "Injured_Engine.sid",
     "path": "sids/GAMES/G-L/Injured_Engine.sid",
     "size": 1442,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 19000,
+    "durationText": "0:19"
   },
   {
     "id": "R0FNRVMvRy1ML0luc2VjdF9EZWZlbnNlLnNpZA",
@@ -10212,7 +12210,9 @@ window.SID_LIBRARY = [
     "fileName": "Insect_Defense.sid",
     "path": "sids/GAMES/G-L/Insect_Defense.sid",
     "size": 481,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 16000,
+    "durationText": "0:16"
   },
   {
     "id": "R0FNRVMvRy1ML0luc3BlY3Rvcl9CQVNJQy5zaWQ",
@@ -10222,7 +12222,9 @@ window.SID_LIBRARY = [
     "fileName": "Inspector_BASIC.sid",
     "path": "sids/GAMES/G-L/Inspector_BASIC.sid",
     "size": 1010,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 29000,
+    "durationText": "0:29"
   },
   {
     "id": "R0FNRVMvRy1ML0luc3RpdHV0ZS5zaWQ",
@@ -10232,7 +12234,9 @@ window.SID_LIBRARY = [
     "fileName": "Institute.sid",
     "path": "sids/GAMES/G-L/Institute.sid",
     "size": 575,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 11000,
+    "durationText": "0:11"
   },
   {
     "id": "R0FNRVMvRy1ML0ludGVybmF0aW9uYWxfU3BvcnRzX0NoYWxsZW5nZS5zaWQ",
@@ -10242,7 +12246,9 @@ window.SID_LIBRARY = [
     "fileName": "International_Sports_Challenge.sid",
     "path": "sids/GAMES/G-L/International_Sports_Challenge.sid",
     "size": 11703,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 69000,
+    "durationText": "1:09"
   },
   {
     "id": "R0FNRVMvRy1ML0ludGVydmlldy5zaWQ",
@@ -10252,7 +12258,9 @@ window.SID_LIBRARY = [
     "fileName": "Interview.sid",
     "path": "sids/GAMES/G-L/Interview.sid",
     "size": 5034,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 159000,
+    "durationText": "2:39"
   },
   {
     "id": "R0FNRVMvRy1ML0ludG9fdGhlX0VhZ2xlc19OZXN0LnNpZA",
@@ -10262,7 +12270,9 @@ window.SID_LIBRARY = [
     "fileName": "Into_the_Eagles_Nest.sid",
     "path": "sids/GAMES/G-L/Into_the_Eagles_Nest.sid",
     "size": 1210,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 37000,
+    "durationText": "0:37"
   },
   {
     "id": "R0FNRVMvRy1ML0l0YWx5XzE5OTAuc2lk",
@@ -10272,7 +12282,9 @@ window.SID_LIBRARY = [
     "fileName": "Italy_1990.sid",
     "path": "sids/GAMES/G-L/Italy_1990.sid",
     "size": 2971,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 9000,
+    "durationText": "0:09"
   },
   {
     "id": "R0FNRVMvRy1ML0otQmlyZC5zaWQ",
@@ -10282,7 +12294,9 @@ window.SID_LIBRARY = [
     "fileName": "J-Bird.sid",
     "path": "sids/GAMES/G-L/J-Bird.sid",
     "size": 1008,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 17000,
+    "durationText": "0:17"
   },
   {
     "id": "R0FNRVMvRy1ML0phY2tfQnVsbGV0LnNpZA",
@@ -10292,7 +12306,9 @@ window.SID_LIBRARY = [
     "fileName": "Jack_Bullet.sid",
     "path": "sids/GAMES/G-L/Jack_Bullet.sid",
     "size": 4478,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 300000,
+    "durationText": "5:00"
   },
   {
     "id": "R0FNRVMvRy1ML0phbV9JdC5zaWQ",
@@ -10302,7 +12318,9 @@ window.SID_LIBRARY = [
     "fileName": "Jam_It.sid",
     "path": "sids/GAMES/G-L/Jam_It.sid",
     "size": 1399,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 35000,
+    "durationText": "0:35"
   },
   {
     "id": "R0FNRVMvRy1ML0phbWVzX0JvbmQuc2lk",
@@ -10312,7 +12330,9 @@ window.SID_LIBRARY = [
     "fileName": "James_Bond.sid",
     "path": "sids/GAMES/G-L/James_Bond.sid",
     "size": 1186,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 17000,
+    "durationText": "0:17"
   },
   {
     "id": "R0FNRVMvRy1ML0phbWVzX1BvbmRfSUktQ29kZW5hbWVfUm9ib2NvZC5zaWQ",
@@ -10322,7 +12342,9 @@ window.SID_LIBRARY = [
     "fileName": "James_Pond_II-Codename_Robocod.sid",
     "path": "sids/GAMES/G-L/James_Pond_II-Codename_Robocod.sid",
     "size": 9688,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 81000,
+    "durationText": "1:21"
   },
   {
     "id": "R0FNRVMvRy1ML0phd19CcmVha2VyLnNpZA",
@@ -10332,7 +12354,9 @@ window.SID_LIBRARY = [
     "fileName": "Jaw_Breaker.sid",
     "path": "sids/GAMES/G-L/Jaw_Breaker.sid",
     "size": 457,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 8900,
+    "durationText": "0:08.9"
   },
   {
     "id": "R0FNRVMvRy1ML0plZXBfQ29tbWFuZC5zaWQ",
@@ -10342,7 +12366,9 @@ window.SID_LIBRARY = [
     "fileName": "Jeep_Command.sid",
     "path": "sids/GAMES/G-L/Jeep_Command.sid",
     "size": 5804,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 133000,
+    "durationText": "2:13"
   },
   {
     "id": "R0FNRVMvRy1ML0plZXBlcnNfQ3JlZXBlcnMuc2lk",
@@ -10352,7 +12378,9 @@ window.SID_LIBRARY = [
     "fileName": "Jeepers_Creepers.sid",
     "path": "sids/GAMES/G-L/Jeepers_Creepers.sid",
     "size": 1858,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 4500,
+    "durationText": "0:04.5"
   },
   {
     "id": "R0FNRVMvRy1ML0plcmVtaWFzX1JhdHRlcmZsYXR0ZXIuc2lk",
@@ -10362,7 +12390,9 @@ window.SID_LIBRARY = [
     "fileName": "Jeremias_Ratterflatter.sid",
     "path": "sids/GAMES/G-L/Jeremias_Ratterflatter.sid",
     "size": 12007,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 78000,
+    "durationText": "1:18"
   },
   {
     "id": "R0FNRVMvRy1ML0plc3N5X3RoZV9Xb3JtLnNpZA",
@@ -10372,7 +12402,9 @@ window.SID_LIBRARY = [
     "fileName": "Jessy_the_Worm.sid",
     "path": "sids/GAMES/G-L/Jessy_the_Worm.sid",
     "size": 11385,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 166000,
+    "durationText": "2:46"
   },
   {
     "id": "R0FNRVMvRy1ML0pldF9Db21iYXRfU2ltdWxhdG9yLnNpZA",
@@ -10382,7 +12414,9 @@ window.SID_LIBRARY = [
     "fileName": "Jet_Combat_Simulator.sid",
     "path": "sids/GAMES/G-L/Jet_Combat_Simulator.sid",
     "size": 1647,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 29000,
+    "durationText": "0:29"
   },
   {
     "id": "R0FNRVMvRy1ML0pldF9EdWVsLnNpZA",
@@ -10392,7 +12426,9 @@ window.SID_LIBRARY = [
     "fileName": "Jet_Duel.sid",
     "path": "sids/GAMES/G-L/Jet_Duel.sid",
     "size": 645,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 6000,
+    "durationText": "0:06"
   },
   {
     "id": "R0FNRVMvRy1ML0pldF9Qb3dlcl9KYWNrLnNpZA",
@@ -10402,7 +12438,9 @@ window.SID_LIBRARY = [
     "fileName": "Jet_Power_Jack.sid",
     "path": "sids/GAMES/G-L/Jet_Power_Jack.sid",
     "size": 3386,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 77000,
+    "durationText": "1:17"
   },
   {
     "id": "R0FNRVMvRy1ML0pldF9TZXRfV2lsbHkuc2lk",
@@ -10412,7 +12450,9 @@ window.SID_LIBRARY = [
     "fileName": "Jet_Set_Willy.sid",
     "path": "sids/GAMES/G-L/Jet_Set_Willy.sid",
     "size": 4998,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 177000,
+    "durationText": "2:57"
   },
   {
     "id": "R0FNRVMvRy1ML0pldF9TZXRfV2lsbHlfSUkuc2lk",
@@ -10422,7 +12462,9 @@ window.SID_LIBRARY = [
     "fileName": "Jet_Set_Willy_II.sid",
     "path": "sids/GAMES/G-L/Jet_Set_Willy_II.sid",
     "size": 4139,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 163000,
+    "durationText": "2:43"
   },
   {
     "id": "R0FNRVMvRy1ML0pldC1Cb290X0phY2suc2lk",
@@ -10432,7 +12474,9 @@ window.SID_LIBRARY = [
     "fileName": "Jet-Boot_Jack.sid",
     "path": "sids/GAMES/G-L/Jet-Boot_Jack.sid",
     "size": 614,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 14000,
+    "durationText": "0:14"
   },
   {
     "id": "R0FNRVMvRy1ML0pldGFuLU1hcnRpYW5fQ2hlc3Muc2lk",
@@ -10442,7 +12486,9 @@ window.SID_LIBRARY = [
     "fileName": "Jetan-Martian_Chess.sid",
     "path": "sids/GAMES/G-L/Jetan-Martian_Chess.sid",
     "size": 5630,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 201000,
+    "durationText": "3:21"
   },
   {
     "id": "R0FNRVMvRy1ML0pldHNldF9KZWxseS5zaWQ",
@@ -10452,7 +12498,9 @@ window.SID_LIBRARY = [
     "fileName": "Jetset_Jelly.sid",
     "path": "sids/GAMES/G-L/Jetset_Jelly.sid",
     "size": 1722,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 18000,
+    "durationText": "0:18"
   },
   {
     "id": "R0FNRVMvRy1ML0pldHNvbnMuc2lk",
@@ -10462,7 +12510,9 @@ window.SID_LIBRARY = [
     "fileName": "Jetsons.sid",
     "path": "sids/GAMES/G-L/Jetsons.sid",
     "size": 4827,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 64000,
+    "durationText": "1:04"
   },
   {
     "id": "R0FNRVMvRy1ML0pld2Vsc19vZl9CYWJ5bG9uLnNpZA",
@@ -10472,7 +12522,9 @@ window.SID_LIBRARY = [
     "fileName": "Jewels_of_Babylon.sid",
     "path": "sids/GAMES/G-L/Jewels_of_Babylon.sid",
     "size": 5230,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 93000,
+    "durationText": "1:33"
   },
   {
     "id": "R0FNRVMvRy1ML0ppbm5fR2VuaWUuc2lk",
@@ -10482,7 +12534,9 @@ window.SID_LIBRARY = [
     "fileName": "Jinn_Genie.sid",
     "path": "sids/GAMES/G-L/Jinn_Genie.sid",
     "size": 2240,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 16000,
+    "durationText": "0:16"
   },
   {
     "id": "R0FNRVMvRy1ML0pvYl9mb3JfTmV3cy5zaWQ",
@@ -10492,7 +12546,9 @@ window.SID_LIBRARY = [
     "fileName": "Job_for_News.sid",
     "path": "sids/GAMES/G-L/Job_for_News.sid",
     "size": 11385,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 209000,
+    "durationText": "3:29"
   },
   {
     "id": "R0FNRVMvRy1ML0pvZV9CbGFkZV8yLnNpZA",
@@ -10502,7 +12558,9 @@ window.SID_LIBRARY = [
     "fileName": "Joe_Blade_2.sid",
     "path": "sids/GAMES/G-L/Joe_Blade_2.sid",
     "size": 6532,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 107000,
+    "durationText": "1:47"
   },
   {
     "id": "R0FNRVMvRy1ML0pvZV90aGVfV2hpenpfS2lkLnNpZA",
@@ -10512,7 +12570,9 @@ window.SID_LIBRARY = [
     "fileName": "Joe_the_Whizz_Kid.sid",
     "path": "sids/GAMES/G-L/Joe_the_Whizz_Kid.sid",
     "size": 4736,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 127000,
+    "durationText": "2:07"
   },
   {
     "id": "R0FNRVMvRy1ML0pvaG5fRWx3YXlzX1F1YXJ0ZXJiYWNrLnNpZA",
@@ -10522,7 +12582,9 @@ window.SID_LIBRARY = [
     "fileName": "John_Elways_Quarterback.sid",
     "path": "sids/GAMES/G-L/John_Elways_Quarterback.sid",
     "size": 6654,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 5000,
+    "durationText": "0:05"
   },
   {
     "id": "R0FNRVMvRy1ML0pvaG5ueV9SZWJfQkFTSUMuc2lk",
@@ -10532,7 +12594,9 @@ window.SID_LIBRARY = [
     "fileName": "Johnny_Reb_BASIC.sid",
     "path": "sids/GAMES/G-L/Johnny_Reb_BASIC.sid",
     "size": 1314,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 8000,
+    "durationText": "0:08"
   },
   {
     "id": "R0FNRVMvRy1ML0pvbmFoX0JhcnJpbmd0b25zX1NxdWFzaC5zaWQ",
@@ -10542,7 +12606,9 @@ window.SID_LIBRARY = [
     "fileName": "Jonah_Barringtons_Squash.sid",
     "path": "sids/GAMES/G-L/Jonah_Barringtons_Squash.sid",
     "size": 35395,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 1000,
+    "durationText": "0:01"
   },
   {
     "id": "R0FNRVMvRy1ML0pvdXJuZXlfdG9fdGhlX0NlbnRyZV9vZl90aGVfRWFydGguc2lk",
@@ -10552,7 +12618,9 @@ window.SID_LIBRARY = [
     "fileName": "Journey_to_the_Centre_of_the_Earth.sid",
     "path": "sids/GAMES/G-L/Journey_to_the_Centre_of_the_Earth.sid",
     "size": 2314,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 152000,
+    "durationText": "2:32"
   },
   {
     "id": "R0FNRVMvRy1ML0p1YW5qZV9KdWVnYV9pbl9TaW52ZXJsYW5kLnNpZA",
@@ -10562,7 +12630,9 @@ window.SID_LIBRARY = [
     "fileName": "Juanje_Juega_in_Sinverland.sid",
     "path": "sids/GAMES/G-L/Juanje_Juega_in_Sinverland.sid",
     "size": 4870,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 57477,
+    "durationText": "0:57.477"
   },
   {
     "id": "R0FNRVMvRy1ML0p1bXBfbl9DcmF0ZS5zaWQ",
@@ -10572,7 +12642,9 @@ window.SID_LIBRARY = [
     "fileName": "Jump_n_Crate.sid",
     "path": "sids/GAMES/G-L/Jump_n_Crate.sid",
     "size": 2894,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 76610,
+    "durationText": "1:16.61"
   },
   {
     "id": "R0FNRVMvRy1ML0p1bXBfcHJldmlldy5zaWQ",
@@ -10582,7 +12654,9 @@ window.SID_LIBRARY = [
     "fileName": "Jump_preview.sid",
     "path": "sids/GAMES/G-L/Jump_preview.sid",
     "size": 3452,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 77000,
+    "durationText": "1:17"
   },
   {
     "id": "R0FNRVMvRy1ML0p1bXBpbl9KYWNrLnNpZA",
@@ -10592,7 +12666,9 @@ window.SID_LIBRARY = [
     "fileName": "Jumpin_Jack.sid",
     "path": "sids/GAMES/G-L/Jumpin_Jack.sid",
     "size": 2611,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 60000,
+    "durationText": "1:00"
   },
   {
     "id": "R0FNRVMvRy1ML0p1bXBtYW4uc2lk",
@@ -10602,7 +12678,9 @@ window.SID_LIBRARY = [
     "fileName": "Jumpman.sid",
     "path": "sids/GAMES/G-L/Jumpman.sid",
     "size": 3869,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 3000,
+    "durationText": "0:03"
   },
   {
     "id": "R0FNRVMvRy1ML0p1bXBtYW5fSnVuaW9yLnNpZA",
@@ -10612,7 +12690,9 @@ window.SID_LIBRARY = [
     "fileName": "Jumpman_Junior.sid",
     "path": "sids/GAMES/G-L/Jumpman_Junior.sid",
     "size": 3353,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 19000,
+    "durationText": "0:19"
   },
   {
     "id": "R0FNRVMvRy1ML0p1bmdsZV9IdW50LnNpZA",
@@ -10622,7 +12702,9 @@ window.SID_LIBRARY = [
     "fileName": "Jungle_Hunt.sid",
     "path": "sids/GAMES/G-L/Jungle_Hunt.sid",
     "size": 2002,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 4000,
+    "durationText": "0:04"
   },
   {
     "id": "R0FNRVMvRy1ML0p1bmdsZV9SYWlkLnNpZA",
@@ -10632,7 +12714,9 @@ window.SID_LIBRARY = [
     "fileName": "Jungle_Raid.sid",
     "path": "sids/GAMES/G-L/Jungle_Raid.sid",
     "size": 4919,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 193000,
+    "durationText": "3:13"
   },
   {
     "id": "R0FNRVMvRy1ML0p1bmdsZV9TdG9yeS5zaWQ",
@@ -10642,7 +12726,9 @@ window.SID_LIBRARY = [
     "fileName": "Jungle_Story.sid",
     "path": "sids/GAMES/G-L/Jungle_Story.sid",
     "size": 685,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 23000,
+    "durationText": "0:23"
   },
   {
     "id": "R0FNRVMvRy1ML0p1bmt5YXJkX0phbG9waWVzLnNpZA",
@@ -10652,7 +12738,9 @@ window.SID_LIBRARY = [
     "fileName": "Junkyard_Jalopies.sid",
     "path": "sids/GAMES/G-L/Junkyard_Jalopies.sid",
     "size": 700,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 19000,
+    "durationText": "0:19"
   },
   {
     "id": "R0FNRVMvRy1ML0p1cGl0ZXJfTGFuZGVyLnNpZA",
@@ -10662,7 +12750,9 @@ window.SID_LIBRARY = [
     "fileName": "Jupiter_Lander.sid",
     "path": "sids/GAMES/G-L/Jupiter_Lander.sid",
     "size": 707,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 9000,
+    "durationText": "0:09"
   },
   {
     "id": "R0FNRVMvRy1ML0p1cmwuc2lk",
@@ -10672,7 +12762,9 @@ window.SID_LIBRARY = [
     "fileName": "Jurl.sid",
     "path": "sids/GAMES/G-L/Jurl.sid",
     "size": 2491,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 26814,
+    "durationText": "0:26.814"
   },
   {
     "id": "R0FNRVMvRy1ML0thaXNlci5zaWQ",
@@ -10682,7 +12774,9 @@ window.SID_LIBRARY = [
     "fileName": "Kaiser.sid",
     "path": "sids/GAMES/G-L/Kaiser.sid",
     "size": 1107,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 29000,
+    "durationText": "0:29"
   },
   {
     "id": "R0FNRVMvRy1ML0tha3R1cy5zaWQ",
@@ -10692,7 +12786,9 @@ window.SID_LIBRARY = [
     "fileName": "Kaktus.sid",
     "path": "sids/GAMES/G-L/Kaktus.sid",
     "size": 332,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 74000,
+    "durationText": "1:14"
   },
   {
     "id": "R0FNRVMvRy1ML0thbWktS2F6ZS5zaWQ",
@@ -10702,7 +12798,9 @@ window.SID_LIBRARY = [
     "fileName": "Kami-Kaze.sid",
     "path": "sids/GAMES/G-L/Kami-Kaze.sid",
     "size": 332,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 53000,
+    "durationText": "0:53"
   },
   {
     "id": "R0FNRVMvRy1ML0thbmUuc2lk",
@@ -10712,7 +12810,9 @@ window.SID_LIBRARY = [
     "fileName": "Kane.sid",
     "path": "sids/GAMES/G-L/Kane.sid",
     "size": 2623,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 57000,
+    "durationText": "0:57"
   },
   {
     "id": "R0FNRVMvRy1ML0thbmVfSUkuc2lk",
@@ -10722,7 +12822,9 @@ window.SID_LIBRARY = [
     "fileName": "Kane_II.sid",
     "path": "sids/GAMES/G-L/Kane_II.sid",
     "size": 2653,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 23000,
+    "durationText": "0:23"
   },
   {
     "id": "R0FNRVMvRy1ML0thbmdhcm9lLnNpZA",
@@ -10732,7 +12834,9 @@ window.SID_LIBRARY = [
     "fileName": "Kangaroe.sid",
     "path": "sids/GAMES/G-L/Kangaroe.sid",
     "size": 512,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 34805,
+    "durationText": "0:34.805"
   },
   {
     "id": "R0FNRVMvRy1ML0thbmdhcnVkeS5zaWQ",
@@ -10742,7 +12846,9 @@ window.SID_LIBRARY = [
     "fileName": "Kangarudy.sid",
     "path": "sids/GAMES/G-L/Kangarudy.sid",
     "size": 17944,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 31000,
+    "durationText": "0:31"
   },
   {
     "id": "R0FNRVMvRy1ML0thcHJpb2xlbl9GbG95ZF90aGVfRHJvaWQuc2lk",
@@ -10752,7 +12858,9 @@ window.SID_LIBRARY = [
     "fileName": "Kapriolen_Floyd_the_Droid.sid",
     "path": "sids/GAMES/G-L/Kapriolen_Floyd_the_Droid.sid",
     "size": 2942,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 136000,
+    "durationText": "2:16"
   },
   {
     "id": "R0FNRVMvRy1ML0thcmF0ZV9DaGFtcC5zaWQ",
@@ -10762,7 +12870,9 @@ window.SID_LIBRARY = [
     "fileName": "Karate_Champ.sid",
     "path": "sids/GAMES/G-L/Karate_Champ.sid",
     "size": 2431,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 8000,
+    "durationText": "0:08"
   },
   {
     "id": "R0FNRVMvRy1ML0thcmF0ZWthLnNpZA",
@@ -10772,7 +12882,9 @@ window.SID_LIBRARY = [
     "fileName": "Karateka.sid",
     "path": "sids/GAMES/G-L/Karateka.sid",
     "size": 6419,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 58000,
+    "durationText": "0:58"
   },
   {
     "id": "R0FNRVMvRy1ML0thcm5vdi5zaWQ",
@@ -10782,7 +12894,9 @@ window.SID_LIBRARY = [
     "fileName": "Karnov.sid",
     "path": "sids/GAMES/G-L/Karnov.sid",
     "size": 1341,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 1000,
+    "durationText": "0:01"
   },
   {
     "id": "R0FNRVMvRy1ML0thcnRpbmdfR3JhbmRfUHJpeC5zaWQ",
@@ -10792,7 +12906,9 @@ window.SID_LIBRARY = [
     "fileName": "Karting_Grand_Prix.sid",
     "path": "sids/GAMES/G-L/Karting_Grand_Prix.sid",
     "size": 8594,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 215838,
+    "durationText": "3:35.838"
   },
   {
     "id": "R0FNRVMvRy1ML0thdF9UcmFwLnNpZA",
@@ -10802,7 +12918,9 @@ window.SID_LIBRARY = [
     "fileName": "Kat_Trap.sid",
     "path": "sids/GAMES/G-L/Kat_Trap.sid",
     "size": 5121,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 148000,
+    "durationText": "2:28"
   },
   {
     "id": "R0FNRVMvRy1ML0thdHpfdW5kX01hdXMuc2lk",
@@ -10812,7 +12930,9 @@ window.SID_LIBRARY = [
     "fileName": "Katz_und_Maus.sid",
     "path": "sids/GAMES/G-L/Katz_und_Maus.sid",
     "size": 8391,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 190000,
+    "durationText": "3:10"
   },
   {
     "id": "R0FNRVMvRy1ML0thdmFsa2FkX0JBU0lDLnNpZA",
@@ -10822,7 +12942,9 @@ window.SID_LIBRARY = [
     "fileName": "Kavalkad_BASIC.sid",
     "path": "sids/GAMES/G-L/Kavalkad_BASIC.sid",
     "size": 1709,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 17000,
+    "durationText": "0:17"
   },
   {
     "id": "R0FNRVMvRy1ML0theWFrLnNpZA",
@@ -10832,7 +12954,9 @@ window.SID_LIBRARY = [
     "fileName": "Kayak.sid",
     "path": "sids/GAMES/G-L/Kayak.sid",
     "size": 953,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 5518,
+    "durationText": "0:05.518"
   },
   {
     "id": "R0FNRVMvRy1ML0theWRlbl9HYXJ0aC5zaWQ",
@@ -10842,7 +12966,9 @@ window.SID_LIBRARY = [
     "fileName": "Kayden_Garth.sid",
     "path": "sids/GAMES/G-L/Kayden_Garth.sid",
     "size": 11390,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 318000,
+    "durationText": "5:18"
   },
   {
     "id": "R0FNRVMvRy1ML0themlrLnNpZA",
@@ -10852,7 +12978,9 @@ window.SID_LIBRARY = [
     "fileName": "Kazik.sid",
     "path": "sids/GAMES/G-L/Kazik.sid",
     "size": 2775,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 80000,
+    "durationText": "1:20"
   },
   {
     "id": "R0FNRVMvRy1ML0tlcm1pdHNfRWxlY3Ryb25pY19TdG9yeW1ha2VyLnNpZA",
@@ -10862,7 +12990,9 @@ window.SID_LIBRARY = [
     "fileName": "Kermits_Electronic_Storymaker.sid",
     "path": "sids/GAMES/G-L/Kermits_Electronic_Storymaker.sid",
     "size": 5573,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 50820,
+    "durationText": "0:50.82"
   },
   {
     "id": "R0FNRVMvRy1ML0tpY2tfb2ZfdGhlX1NwZWFyLnNpZA",
@@ -10872,7 +13002,9 @@ window.SID_LIBRARY = [
     "fileName": "Kick_of_the_Spear.sid",
     "path": "sids/GAMES/G-L/Kick_of_the_Spear.sid",
     "size": 1597,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 53627,
+    "durationText": "0:53.627"
   },
   {
     "id": "R0FNRVMvRy1ML0tpY2tfb2ZfdGhlX1NwZWFyXzIuc2lk",
@@ -10882,7 +13014,9 @@ window.SID_LIBRARY = [
     "fileName": "Kick_of_the_Spear_2.sid",
     "path": "sids/GAMES/G-L/Kick_of_the_Spear_2.sid",
     "size": 1394,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 26834,
+    "durationText": "0:26.834"
   },
   {
     "id": "R0FNRVMvRy1ML0tpbGwuc2lk",
@@ -10892,7 +13026,9 @@ window.SID_LIBRARY = [
     "fileName": "Kill.sid",
     "path": "sids/GAMES/G-L/Kill.sid",
     "size": 3706,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 92000,
+    "durationText": "1:32"
   },
   {
     "id": "R0FNRVMvRy1ML0tpbGxlcl9CYWxscy5zaWQ",
@@ -10902,7 +13038,9 @@ window.SID_LIBRARY = [
     "fileName": "Killer_Balls.sid",
     "path": "sids/GAMES/G-L/Killer_Balls.sid",
     "size": 2816,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 40878,
+    "durationText": "0:40.878"
   },
   {
     "id": "R0FNRVMvRy1ML0tpbGxlcl9DcmFicy5zaWQ",
@@ -10912,7 +13050,9 @@ window.SID_LIBRARY = [
     "fileName": "Killer_Crabs.sid",
     "path": "sids/GAMES/G-L/Killer_Crabs.sid",
     "size": 1292,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 3754,
+    "durationText": "0:03.754"
   },
   {
     "id": "R0FNRVMvRy1ML0tpbGxlcl9HYW1lcy5zaWQ",
@@ -10922,7 +13062,9 @@ window.SID_LIBRARY = [
     "fileName": "Killer_Games.sid",
     "path": "sids/GAMES/G-L/Killer_Games.sid",
     "size": 8605,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 154000,
+    "durationText": "2:34"
   },
   {
     "id": "R0FNRVMvRy1ML0tpbGxlcl9PbGl2ZXMuc2lk",
@@ -10932,7 +13074,9 @@ window.SID_LIBRARY = [
     "fileName": "Killer_Olives.sid",
     "path": "sids/GAMES/G-L/Killer_Olives.sid",
     "size": 1294,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 35752,
+    "durationText": "0:35.752"
   },
   {
     "id": "R0FNRVMvRy1ML0tpbGxpbmdfTWFjaGluZS5zaWQ",
@@ -10942,7 +13086,9 @@ window.SID_LIBRARY = [
     "fileName": "Killing_Machine.sid",
     "path": "sids/GAMES/G-L/Killing_Machine.sid",
     "size": 5122,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 173000,
+    "durationText": "2:53"
   },
   {
     "id": "R0FNRVMvRy1ML0tpb3NrX0JBU0lDLnNpZA",
@@ -10952,7 +13098,9 @@ window.SID_LIBRARY = [
     "fileName": "Kiosk_BASIC.sid",
     "path": "sids/GAMES/G-L/Kiosk_BASIC.sid",
     "size": 1386,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 10000,
+    "durationText": "0:10"
   },
   {
     "id": "R0FNRVMvRy1ML0tpc3NfTWUuc2lk",
@@ -10962,7 +13110,9 @@ window.SID_LIBRARY = [
     "fileName": "Kiss_Me.sid",
     "path": "sids/GAMES/G-L/Kiss_Me.sid",
     "size": 7422,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 228000,
+    "durationText": "3:48"
   },
   {
     "id": "R0FNRVMvRy1ML0tuaWdodF9SaWRlci5zaWQ",
@@ -10972,7 +13122,9 @@ window.SID_LIBRARY = [
     "fileName": "Knight_Rider.sid",
     "path": "sids/GAMES/G-L/Knight_Rider.sid",
     "size": 5549,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 49000,
+    "durationText": "0:49"
   },
   {
     "id": "R0FNRVMvRy1ML0tvYmF5YXNoaV9OYXJ1LnNpZA",
@@ -10982,7 +13134,9 @@ window.SID_LIBRARY = [
     "fileName": "Kobayashi_Naru.sid",
     "path": "sids/GAMES/G-L/Kobayashi_Naru.sid",
     "size": 726,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 54000,
+    "durationText": "0:54"
   },
   {
     "id": "R0FNRVMvRy1ML0tva290b25pX1dpbGYuc2lk",
@@ -10992,7 +13146,9 @@ window.SID_LIBRARY = [
     "fileName": "Kokotoni_Wilf.sid",
     "path": "sids/GAMES/G-L/Kokotoni_Wilf.sid",
     "size": 4443,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 8000,
+    "durationText": "0:08"
   },
   {
     "id": "R0FNRVMvRy1ML0tvbmRpX0tydXNoLnNpZA",
@@ -11002,7 +13158,9 @@ window.SID_LIBRARY = [
     "fileName": "Kondi_Krush.sid",
     "path": "sids/GAMES/G-L/Kondi_Krush.sid",
     "size": 2708,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 76730,
+    "durationText": "1:16.73"
   },
   {
     "id": "R0FNRVMvRy1ML0tvcm9uaXNfUmlmdC5zaWQ",
@@ -11012,7 +13170,9 @@ window.SID_LIBRARY = [
     "fileName": "Koronis_Rift.sid",
     "path": "sids/GAMES/G-L/Koronis_Rift.sid",
     "size": 852,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 17000,
+    "durationText": "0:17"
   },
   {
     "id": "R0FNRVMvRy1ML0tvc2NpX1pvc3RhbHlfUnp1Y29uZS5zaWQ",
@@ -11022,7 +13182,9 @@ window.SID_LIBRARY = [
     "fileName": "Kosci_Zostaly_Rzucone.sid",
     "path": "sids/GAMES/G-L/Kosci_Zostaly_Rzucone.sid",
     "size": 3029,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 108000,
+    "durationText": "1:48"
   },
   {
     "id": "R0FNRVMvRy1ML0tvc21pY19LYW5nYS5zaWQ",
@@ -11032,7 +13194,9 @@ window.SID_LIBRARY = [
     "fileName": "Kosmic_Kanga.sid",
     "path": "sids/GAMES/G-L/Kosmic_Kanga.sid",
     "size": 408,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 9000,
+    "durationText": "0:09"
   },
   {
     "id": "R0FNRVMvRy1ML0tvc21vLUtvYnVzLnNpZA",
@@ -11042,7 +13206,9 @@ window.SID_LIBRARY = [
     "fileName": "Kosmo-Kobus.sid",
     "path": "sids/GAMES/G-L/Kosmo-Kobus.sid",
     "size": 982,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 10000,
+    "durationText": "0:10"
   },
   {
     "id": "R0FNRVMvRy1ML0tvc3RhamEuc2lk",
@@ -11052,7 +13218,9 @@ window.SID_LIBRARY = [
     "fileName": "Kostaja.sid",
     "path": "sids/GAMES/G-L/Kostaja.sid",
     "size": 396,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 22000,
+    "durationText": "0:22"
   },
   {
     "id": "R0FNRVMvRy1ML0tyYWtlbnMuc2lk",
@@ -11062,7 +13230,9 @@ window.SID_LIBRARY = [
     "fileName": "Krakens.sid",
     "path": "sids/GAMES/G-L/Krakens.sid",
     "size": 1363,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 59600,
+    "durationText": "0:59.6"
   },
   {
     "id": "R0FNRVMvRy1ML0tyaWVnX3VtX2RpZV9Lcm9uZV9JSS5zaWQ",
@@ -11072,7 +13242,9 @@ window.SID_LIBRARY = [
     "fileName": "Krieg_um_die_Krone_II.sid",
     "path": "sids/GAMES/G-L/Krieg_um_die_Krone_II.sid",
     "size": 3110,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 394538,
+    "durationText": "6:34.538"
   },
   {
     "id": "R0FNRVMvRy1ML0tyaXNwLnNpZA",
@@ -11082,7 +13254,9 @@ window.SID_LIBRARY = [
     "fileName": "Krisp.sid",
     "path": "sids/GAMES/G-L/Krisp.sid",
     "size": 2818,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 116000,
+    "durationText": "1:56"
   },
   {
     "id": "R0FNRVMvRy1ML0tyeXB0b24uc2lk",
@@ -11092,7 +13266,9 @@ window.SID_LIBRARY = [
     "fileName": "Krypton.sid",
     "path": "sids/GAMES/G-L/Krypton.sid",
     "size": 638,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 17000,
+    "durationText": "0:17"
   },
   {
     "id": "R0FNRVMvRy1ML0tyeXN0YWxzX29mX1pvbmcuc2lk",
@@ -11102,7 +13278,9 @@ window.SID_LIBRARY = [
     "fileName": "Krystals_of_Zong.sid",
     "path": "sids/GAMES/G-L/Krystals_of_Zong.sid",
     "size": 1803,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 9000,
+    "durationText": "0:09"
   },
   {
     "id": "R0FNRVMvRy1ML0t1aGFsYS1BZHZlbnR1cmUuc2lk",
@@ -11112,7 +13290,9 @@ window.SID_LIBRARY = [
     "fileName": "Kuhala-Adventure.sid",
     "path": "sids/GAMES/G-L/Kuhala-Adventure.sid",
     "size": 7361,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 93612,
+    "durationText": "1:33.612"
   },
   {
     "id": "R0FNRVMvRy1ML0t1bmctRnVfTWFzdGVyLnNpZA",
@@ -11122,7 +13302,9 @@ window.SID_LIBRARY = [
     "fileName": "Kung-Fu_Master.sid",
     "path": "sids/GAMES/G-L/Kung-Fu_Master.sid",
     "size": 1942,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 6000,
+    "durationText": "0:06"
   },
   {
     "id": "R0FNRVMvRy1ML0t5ZS5zaWQ",
@@ -11132,7 +13314,9 @@ window.SID_LIBRARY = [
     "fileName": "Kye.sid",
     "path": "sids/GAMES/G-L/Kye.sid",
     "size": 2379,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 86186,
+    "durationText": "1:26.186"
   },
   {
     "id": "R0FNRVMvRy1ML0xfVGVzdC5zaWQ",
@@ -11142,7 +13326,9 @@ window.SID_LIBRARY = [
     "fileName": "L_Test.sid",
     "path": "sids/GAMES/G-L/L_Test.sid",
     "size": 1435,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 14936,
+    "durationText": "0:14.936"
   },
   {
     "id": "R0FNRVMvRy1ML0xhX0NoZW5pbGxlLnNpZA",
@@ -11152,7 +13338,9 @@ window.SID_LIBRARY = [
     "fileName": "La_Chenille.sid",
     "path": "sids/GAMES/G-L/La_Chenille.sid",
     "size": 721,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 15511,
+    "durationText": "0:15.511"
   },
   {
     "id": "R0FNRVMvRy1ML0xhX0hvcmNhX0JBU0lDLnNpZA",
@@ -11162,7 +13350,9 @@ window.SID_LIBRARY = [
     "fileName": "La_Horca_BASIC.sid",
     "path": "sids/GAMES/G-L/La_Horca_BASIC.sid",
     "size": 1341,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 5781,
+    "durationText": "0:05.781"
   },
   {
     "id": "R0FNRVMvRy1ML0xhX1JhbmFfU3RyZWdhdGEuc2lk",
@@ -11172,7 +13362,9 @@ window.SID_LIBRARY = [
     "fileName": "La_Rana_Stregata.sid",
     "path": "sids/GAMES/G-L/La_Rana_Stregata.sid",
     "size": 4026,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 62000,
+    "durationText": "1:02"
   },
   {
     "id": "R0FNRVMvRy1ML0xhX1NhbGFfRGVnbGlfRW5pZ21pLnNpZA",
@@ -11182,7 +13374,9 @@ window.SID_LIBRARY = [
     "fileName": "La_Sala_Degli_Enigmi.sid",
     "path": "sids/GAMES/G-L/La_Sala_Degli_Enigmi.sid",
     "size": 4218,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 91000,
+    "durationText": "1:31"
   },
   {
     "id": "R0FNRVMvRy1ML0xhX1R1aWxlX0JBU0lDLnNpZA",
@@ -11192,7 +13386,9 @@ window.SID_LIBRARY = [
     "fileName": "La_Tuile_BASIC.sid",
     "path": "sids/GAMES/G-L/La_Tuile_BASIC.sid",
     "size": 1300,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 7038,
+    "durationText": "0:07.038"
   },
   {
     "id": "R0FNRVMvRy1ML0xhX1ZpdGFfZGVsbG9fU3BpbmFyZWxsby5zaWQ",
@@ -11202,7 +13398,9 @@ window.SID_LIBRARY = [
     "fileName": "La_Vita_dello_Spinarello.sid",
     "path": "sids/GAMES/G-L/La_Vita_dello_Spinarello.sid",
     "size": 3646,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 45999,
+    "durationText": "0:45.999"
   },
   {
     "id": "R0FNRVMvRy1ML0xhYmlyaW50aC5zaWQ",
@@ -11212,7 +13410,9 @@ window.SID_LIBRARY = [
     "fileName": "Labirinth.sid",
     "path": "sids/GAMES/G-L/Labirinth.sid",
     "size": 1929,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 71193,
+    "durationText": "1:11.193"
   },
   {
     "id": "R0FNRVMvRy1ML0xhYnlyaW50aC5zaWQ",
@@ -11222,7 +13422,9 @@ window.SID_LIBRARY = [
     "fileName": "Labyrinth.sid",
     "path": "sids/GAMES/G-L/Labyrinth.sid",
     "size": 7318,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 82000,
+    "durationText": "1:22"
   },
   {
     "id": "R0FNRVMvRy1ML0xhZHlfRHVjay5zaWQ",
@@ -11232,7 +13434,9 @@ window.SID_LIBRARY = [
     "fileName": "Lady_Duck.sid",
     "path": "sids/GAMES/G-L/Lady_Duck.sid",
     "size": 838,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 14381,
+    "durationText": "0:14.381"
   },
   {
     "id": "R0FNRVMvRy1ML0xhZHlfVHV0LnNpZA",
@@ -11242,7 +13446,9 @@ window.SID_LIBRARY = [
     "fileName": "Lady_Tut.sid",
     "path": "sids/GAMES/G-L/Lady_Tut.sid",
     "size": 1080,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 16000,
+    "durationText": "0:16"
   },
   {
     "id": "R0FNRVMvRy1ML0xhbmRfb2ZfTmV2ZXJ3aGVyZS5zaWQ",
@@ -11252,7 +13458,9 @@ window.SID_LIBRARY = [
     "fileName": "Land_of_Neverwhere.sid",
     "path": "sids/GAMES/G-L/Land_of_Neverwhere.sid",
     "size": 2574,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 6000,
+    "durationText": "0:06"
   },
   {
     "id": "R0FNRVMvRy1ML0xhcGlzX1BoaWxvc29waG9ydW0uc2lk",
@@ -11262,7 +13470,9 @@ window.SID_LIBRARY = [
     "fileName": "Lapis_Philosophorum.sid",
     "path": "sids/GAMES/G-L/Lapis_Philosophorum.sid",
     "size": 1014,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 18000,
+    "durationText": "0:18"
   },
   {
     "id": "R0FNRVMvRy1ML0xhc2VyX0xlZ2lvbi5zaWQ",
@@ -11272,7 +13482,9 @@ window.SID_LIBRARY = [
     "fileName": "Laser_Legion.sid",
     "path": "sids/GAMES/G-L/Laser_Legion.sid",
     "size": 2990,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 175000,
+    "durationText": "2:55"
   },
   {
     "id": "R0FNRVMvRy1ML0xhdXJlbF9hbmRfSGFyZHkuc2lk",
@@ -11282,7 +13494,9 @@ window.SID_LIBRARY = [
     "fileName": "Laurel_and_Hardy.sid",
     "path": "sids/GAMES/G-L/Laurel_and_Hardy.sid",
     "size": 627,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 106000,
+    "durationText": "1:46"
   },
   {
     "id": "R0FNRVMvRy1ML0xhemVyX01hemUuc2lk",
@@ -11292,7 +13506,9 @@ window.SID_LIBRARY = [
     "fileName": "Lazer_Maze.sid",
     "path": "sids/GAMES/G-L/Lazer_Maze.sid",
     "size": 1428,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 25000,
+    "durationText": "0:25"
   },
   {
     "id": "R0FNRVMvRy1ML0xlYXBpbmdfTGFycnkuc2lk",
@@ -11302,7 +13518,9 @@ window.SID_LIBRARY = [
     "fileName": "Leaping_Larry.sid",
     "path": "sids/GAMES/G-L/Leaping_Larry.sid",
     "size": 3848,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 77000,
+    "durationText": "1:17"
   },
   {
     "id": "R0FNRVMvRy1ML0xlZGVyaG9zZW4uc2lk",
@@ -11312,7 +13530,9 @@ window.SID_LIBRARY = [
     "fileName": "Lederhosen.sid",
     "path": "sids/GAMES/G-L/Lederhosen.sid",
     "size": 11383,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 7848,
+    "durationText": "0:07.848"
   },
   {
     "id": "R0FNRVMvRy1ML0xlZ2FjeV9vZl90aGVfQW5jaWVudHMuc2lk",
@@ -11322,7 +13542,9 @@ window.SID_LIBRARY = [
     "fileName": "Legacy_of_the_Ancients.sid",
     "path": "sids/GAMES/G-L/Legacy_of_the_Ancients.sid",
     "size": 5054,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 288000,
+    "durationText": "4:48"
   },
   {
     "id": "R0FNRVMvRy1ML0xlZ2VuZF9vZl9aZWxkYV9QcmV2aWV3LnNpZA",
@@ -11332,7 +13554,9 @@ window.SID_LIBRARY = [
     "fileName": "Legend_of_Zelda_Preview.sid",
     "path": "sids/GAMES/G-L/Legend_of_Zelda_Preview.sid",
     "size": 1038,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 18534,
+    "durationText": "0:18.534"
   },
   {
     "id": "R0FNRVMvRy1ML0xlZ2VuZF9vZl90aGVfS251Y2tlci1Ib2xlLnNpZA",
@@ -11342,7 +13566,9 @@ window.SID_LIBRARY = [
     "fileName": "Legend_of_the_Knucker-Hole.sid",
     "path": "sids/GAMES/G-L/Legend_of_the_Knucker-Hole.sid",
     "size": 1686,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 11677,
+    "durationText": "0:11.677"
   },
   {
     "id": "R0FNRVMvRy1ML0xlcm5haWFfQkFTSUMuc2lk",
@@ -11352,7 +13578,9 @@ window.SID_LIBRARY = [
     "fileName": "Lernaia_BASIC.sid",
     "path": "sids/GAMES/G-L/Lernaia_BASIC.sid",
     "size": 1020,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 13456,
+    "durationText": "0:13.456"
   },
   {
     "id": "R0FNRVMvRy1ML0xlc3Rlci5zaWQ",
@@ -11362,7 +13590,9 @@ window.SID_LIBRARY = [
     "fileName": "Lester.sid",
     "path": "sids/GAMES/G-L/Lester.sid",
     "size": 8995,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 102166,
+    "durationText": "1:42.166"
   },
   {
     "id": "R0FNRVMvRy1ML0xldGhhbC5zaWQ",
@@ -11372,7 +13602,9 @@ window.SID_LIBRARY = [
     "fileName": "Lethal.sid",
     "path": "sids/GAMES/G-L/Lethal.sid",
     "size": 4843,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 107000,
+    "durationText": "1:47"
   },
   {
     "id": "R0FNRVMvRy1ML0xldHNfTWFrZV9hX0M2NF9HYW1lX1ByZXZpZXdfVjMuc2lk",
@@ -11382,7 +13614,9 @@ window.SID_LIBRARY = [
     "fileName": "Lets_Make_a_C64_Game_Preview_V3.sid",
     "path": "sids/GAMES/G-L/Lets_Make_a_C64_Game_Preview_V3.sid",
     "size": 2001,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 94186,
+    "durationText": "1:34.186"
   },
   {
     "id": "R0FNRVMvRy1ML0xpZ2h0LXdhdmVzLnNpZA",
@@ -11392,7 +13626,9 @@ window.SID_LIBRARY = [
     "fileName": "Light-waves.sid",
     "path": "sids/GAMES/G-L/Light-waves.sid",
     "size": 3443,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 63000,
+    "durationText": "1:03"
   },
   {
     "id": "R0FNRVMvRy1ML0xpbHlfTGFuZGVyLnNpZA",
@@ -11402,7 +13638,9 @@ window.SID_LIBRARY = [
     "fileName": "Lily_Lander.sid",
     "path": "sids/GAMES/G-L/Lily_Lander.sid",
     "size": 1790,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 53906,
+    "durationText": "0:53.906"
   },
   {
     "id": "R0FNRVMvRy1ML0xpdHRsZV9EcmFnb24tQ29va2llX1JhaWRlcnMuc2lk",
@@ -11412,7 +13650,9 @@ window.SID_LIBRARY = [
     "fileName": "Little_Dragon-Cookie_Raiders.sid",
     "path": "sids/GAMES/G-L/Little_Dragon-Cookie_Raiders.sid",
     "size": 2391,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 21000,
+    "durationText": "0:21"
   },
   {
     "id": "R0FNRVMvRy1ML0xpdHRsZV9IYXRzX01hemUuc2lk",
@@ -11422,7 +13662,9 @@ window.SID_LIBRARY = [
     "fileName": "Little_Hats_Maze.sid",
     "path": "sids/GAMES/G-L/Little_Hats_Maze.sid",
     "size": 11941,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 83000,
+    "durationText": "1:23"
   },
   {
     "id": "R0FNRVMvRy1ML0xpdHRsZV9LbmlnaHRfQXJ0aHVyLnNpZA",
@@ -11432,7 +13674,9 @@ window.SID_LIBRARY = [
     "fileName": "Little_Knight_Arthur.sid",
     "path": "sids/GAMES/G-L/Little_Knight_Arthur.sid",
     "size": 7818,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 100000,
+    "durationText": "1:40"
   },
   {
     "id": "R0FNRVMvRy1ML0xpdHRsZV9QdWNrX0dvZXNfSG9tZS5zaWQ",
@@ -11442,7 +13686,9 @@ window.SID_LIBRARY = [
     "fileName": "Little_Puck_Goes_Home.sid",
     "path": "sids/GAMES/G-L/Little_Puck_Goes_Home.sid",
     "size": 416,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 20178,
+    "durationText": "0:20.178"
   },
   {
     "id": "R0FNRVMvRy1ML0xpdmluZ3N0b25lX1N1cG9uZ28uc2lk",
@@ -11452,7 +13698,9 @@ window.SID_LIBRARY = [
     "fileName": "Livingstone_Supongo.sid",
     "path": "sids/GAMES/G-L/Livingstone_Supongo.sid",
     "size": 3136,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 56000,
+    "durationText": "0:56"
   },
   {
     "id": "R0FNRVMvRy1ML0xvY29tb3Rpb24uc2lk",
@@ -11462,7 +13710,9 @@ window.SID_LIBRARY = [
     "fileName": "Locomotion.sid",
     "path": "sids/GAMES/G-L/Locomotion.sid",
     "size": 5544,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 300000,
+    "durationText": "5:00"
   },
   {
     "id": "R0FNRVMvRy1ML0xvZGVfUnVubmVyLnNpZA",
@@ -11472,7 +13722,9 @@ window.SID_LIBRARY = [
     "fileName": "Lode_Runner.sid",
     "path": "sids/GAMES/G-L/Lode_Runner.sid",
     "size": 2942,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 2000,
+    "durationText": "0:02"
   },
   {
     "id": "R0FNRVMvRy1ML0xvaXNhaWRhLnNpZA",
@@ -11482,7 +13734,9 @@ window.SID_LIBRARY = [
     "fileName": "Loisaida.sid",
     "path": "sids/GAMES/G-L/Loisaida.sid",
     "size": 463,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 15000,
+    "durationText": "0:15"
   },
   {
     "id": "R0FNRVMvRy1ML0xvbGxpcG9wcy5zaWQ",
@@ -11492,7 +13746,9 @@ window.SID_LIBRARY = [
     "fileName": "Lollipops.sid",
     "path": "sids/GAMES/G-L/Lollipops.sid",
     "size": 2304,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 17000,
+    "durationText": "0:17"
   },
   {
     "id": "R0FNRVMvRy1ML0xvbmVseV9IZWFydHNfQkFTSUMuc2lk",
@@ -11502,7 +13758,9 @@ window.SID_LIBRARY = [
     "fileName": "Lonely_Hearts_BASIC.sid",
     "path": "sids/GAMES/G-L/Lonely_Hearts_BASIC.sid",
     "size": 682,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 4000,
+    "durationText": "0:04"
   },
   {
     "id": "R0FNRVMvRy1ML0xvb2tfU2hhcnAuc2lk",
@@ -11512,7 +13770,9 @@ window.SID_LIBRARY = [
     "fileName": "Look_Sharp.sid",
     "path": "sids/GAMES/G-L/Look_Sharp.sid",
     "size": 1314,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 3512,
+    "durationText": "0:03.512"
   },
   {
     "id": "R0FNRVMvRy1ML0xvb25leV9CYWxsb29uLnNpZA",
@@ -11522,7 +13782,9 @@ window.SID_LIBRARY = [
     "fileName": "Looney_Balloon.sid",
     "path": "sids/GAMES/G-L/Looney_Balloon.sid",
     "size": 2297,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 42000,
+    "durationText": "0:42"
   },
   {
     "id": "R0FNRVMvRy1ML0xvcmRzX29mX0NvbnF1ZXN0LnNpZA",
@@ -11532,7 +13794,9 @@ window.SID_LIBRARY = [
     "fileName": "Lords_of_Conquest.sid",
     "path": "sids/GAMES/G-L/Lords_of_Conquest.sid",
     "size": 8923,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 37000,
+    "durationText": "0:37"
   },
   {
     "id": "R0FNRVMvRy1ML0xvcmRzX29mX0Rvb20uc2lk",
@@ -11542,7 +13806,9 @@ window.SID_LIBRARY = [
     "fileName": "Lords_of_Doom.sid",
     "path": "sids/GAMES/G-L/Lords_of_Doom.sid",
     "size": 25721,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 460000,
+    "durationText": "7:40"
   },
   {
     "id": "R0FNRVMvRy1ML0xvcmVsbGEuc2lk",
@@ -11552,7 +13818,9 @@ window.SID_LIBRARY = [
     "fileName": "Lorella.sid",
     "path": "sids/GAMES/G-L/Lorella.sid",
     "size": 10238,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 181000,
+    "durationText": "3:01"
   },
   {
     "id": "R0FNRVMvRy1ML0xvc19BbmdlbGVzX1NXQVQuc2lk",
@@ -11562,7 +13830,9 @@ window.SID_LIBRARY = [
     "fileName": "Los_Angeles_SWAT.sid",
     "path": "sids/GAMES/G-L/Los_Angeles_SWAT.sid",
     "size": 4023,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 167000,
+    "durationText": "2:47"
   },
   {
     "id": "R0FNRVMvRy1ML0xvc2VyX0JBU0lDLnNpZA",
@@ -11572,7 +13842,9 @@ window.SID_LIBRARY = [
     "fileName": "Loser_BASIC.sid",
     "path": "sids/GAMES/G-L/Loser_BASIC.sid",
     "size": 1299,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 14000,
+    "durationText": "0:14"
   },
   {
     "id": "R0FNRVMvRy1ML0xvc3Quc2lk",
@@ -11582,7 +13854,9 @@ window.SID_LIBRARY = [
     "fileName": "Lost.sid",
     "path": "sids/GAMES/G-L/Lost.sid",
     "size": 9917,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 129000,
+    "durationText": "2:09"
   },
   {
     "id": "R0FNRVMvRy1ML0xvc3RfUm9ib3RfSUlfcHJldmlldy5zaWQ",
@@ -11592,7 +13866,9 @@ window.SID_LIBRARY = [
     "fileName": "Lost_Robot_II_preview.sid",
     "path": "sids/GAMES/G-L/Lost_Robot_II_preview.sid",
     "size": 3635,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 25000,
+    "durationText": "0:25"
   },
   {
     "id": "R0FNRVMvRy1ML0xvc3RfaW5fdGhlX0xhYnlyaW50aF9CQVNJQy5zaWQ",
@@ -11602,7 +13878,9 @@ window.SID_LIBRARY = [
     "fileName": "Lost_in_the_Labyrinth_BASIC.sid",
     "path": "sids/GAMES/G-L/Lost_in_the_Labyrinth_BASIC.sid",
     "size": 1615,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 7000,
+    "durationText": "0:07"
   },
   {
     "id": "R0FNRVMvRy1ML0xvdHVzX0VzcHJpdF9UdXJib19DaGFsbGVuZ2Uuc2lk",
@@ -11612,7 +13890,9 @@ window.SID_LIBRARY = [
     "fileName": "Lotus_Esprit_Turbo_Challenge.sid",
     "path": "sids/GAMES/G-L/Lotus_Esprit_Turbo_Challenge.sid",
     "size": 4422,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 88000,
+    "durationText": "1:28"
   },
   {
     "id": "R0FNRVMvRy1ML0xvdmVfVHJhbXAuc2lk",
@@ -11622,7 +13902,9 @@ window.SID_LIBRARY = [
     "fileName": "Love_Tramp.sid",
     "path": "sids/GAMES/G-L/Love_Tramp.sid",
     "size": 31274,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 142000,
+    "durationText": "2:22"
   },
   {
     "id": "R0FNRVMvRy1ML0x1Y2t5X0VnZy5zaWQ",
@@ -11632,7 +13914,9 @@ window.SID_LIBRARY = [
     "fileName": "Lucky_Egg.sid",
     "path": "sids/GAMES/G-L/Lucky_Egg.sid",
     "size": 12021,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 103000,
+    "durationText": "1:43"
   },
   {
     "id": "R0FNRVMvRy1ML0x1ZG9fQkFTSUMuc2lk",
@@ -11642,7 +13926,9 @@ window.SID_LIBRARY = [
     "fileName": "Ludo_BASIC.sid",
     "path": "sids/GAMES/G-L/Ludo_BASIC.sid",
     "size": 3352,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 10208,
+    "durationText": "0:10.208"
   },
   {
     "id": "R0FNRVMvRy1ML0x1bmFsaWdodC5zaWQ",
@@ -11652,7 +13938,9 @@ window.SID_LIBRARY = [
     "fileName": "Lunalight.sid",
     "path": "sids/GAMES/G-L/Lunalight.sid",
     "size": 4158,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 224000,
+    "durationText": "3:44"
   },
   {
     "id": "R0FNRVMvRy1ML0x1bmFyX0plZXAuc2lk",
@@ -11662,7 +13950,9 @@ window.SID_LIBRARY = [
     "fileName": "Lunar_Jeep.sid",
     "path": "sids/GAMES/G-L/Lunar_Jeep.sid",
     "size": 608,
-    "category": "G-L"
+    "category": "G-L",
+    "durationMs": 8000,
+    "durationText": "0:08"
   },
   {
     "id": "R0FNRVMvTS1SL01fVV9MX0Uuc2lk",
@@ -11672,7 +13962,9 @@ window.SID_LIBRARY = [
     "fileName": "M_U_L_E.sid",
     "path": "sids/GAMES/M-R/M_U_L_E.sid",
     "size": 1732,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 69000,
+    "durationText": "1:09"
   },
   {
     "id": "R0FNRVMvTS1SL01UVl9SZW1vdGVfQ29udHJvbC5zaWQ",
@@ -11682,7 +13974,9 @@ window.SID_LIBRARY = [
     "fileName": "MTV_Remote_Control.sid",
     "path": "sids/GAMES/M-R/MTV_Remote_Control.sid",
     "size": 2329,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 23000,
+    "durationText": "0:23"
   },
   {
     "id": "R0FNRVMvTS1SL01hY2FkYW1fQnVtcGVyLnNpZA",
@@ -11692,7 +13986,9 @@ window.SID_LIBRARY = [
     "fileName": "Macadam_Bumper.sid",
     "path": "sids/GAMES/M-R/Macadam_Bumper.sid",
     "size": 1150,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 9327,
+    "durationText": "0:09.327"
   },
   {
     "id": "R0FNRVMvTS1SL01hY2hpbmUuc2lk",
@@ -11702,7 +13998,9 @@ window.SID_LIBRARY = [
     "fileName": "Machine.sid",
     "path": "sids/GAMES/M-R/Machine.sid",
     "size": 11385,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 22000,
+    "durationText": "0:22"
   },
   {
     "id": "R0FNRVMvTS1SL01hZF9Nb25rZXkuc2lk",
@@ -11712,7 +14010,9 @@ window.SID_LIBRARY = [
     "fileName": "Mad_Monkey.sid",
     "path": "sids/GAMES/M-R/Mad_Monkey.sid",
     "size": 826,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 33000,
+    "durationText": "0:33"
   },
   {
     "id": "R0FNRVMvTS1SL01hZF9QbGFuZXRzLnNpZA",
@@ -11722,7 +14022,9 @@ window.SID_LIBRARY = [
     "fileName": "Mad_Planets.sid",
     "path": "sids/GAMES/M-R/Mad_Planets.sid",
     "size": 1567,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 12000,
+    "durationText": "0:12"
   },
   {
     "id": "R0FNRVMvTS1SL01hZGl4LnNpZA",
@@ -11732,7 +14034,9 @@ window.SID_LIBRARY = [
     "fileName": "Madix.sid",
     "path": "sids/GAMES/M-R/Madix.sid",
     "size": 4683,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 4000,
+    "durationText": "0:04"
   },
   {
     "id": "R0FNRVMvTS1SL01hZWxzdHJvbS5zaWQ",
@@ -11742,7 +14046,9 @@ window.SID_LIBRARY = [
     "fileName": "Maelstrom.sid",
     "path": "sids/GAMES/M-R/Maelstrom.sid",
     "size": 381,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 24000,
+    "durationText": "0:24"
   },
   {
     "id": "R0FNRVMvTS1SL01hZ2F6aW5lLnNpZA",
@@ -11752,7 +14058,9 @@ window.SID_LIBRARY = [
     "fileName": "Magazine.sid",
     "path": "sids/GAMES/M-R/Magazine.sid",
     "size": 6220,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 161000,
+    "durationText": "2:41"
   },
   {
     "id": "R0FNRVMvTS1SL01hZ2ljLnNpZA",
@@ -11762,7 +14070,9 @@ window.SID_LIBRARY = [
     "fileName": "Magic.sid",
     "path": "sids/GAMES/M-R/Magic.sid",
     "size": 1814,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 39000,
+    "durationText": "0:39"
   },
   {
     "id": "R0FNRVMvTS1SL01hZ2ljX0R1ZWwuc2lk",
@@ -11772,7 +14082,9 @@ window.SID_LIBRARY = [
     "fileName": "Magic_Duel.sid",
     "path": "sids/GAMES/M-R/Magic_Duel.sid",
     "size": 1696,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 16000,
+    "durationText": "0:16"
   },
   {
     "id": "R0FNRVMvTS1SL01hZ2ljX0hvdXNlLnNpZA",
@@ -11782,7 +14094,9 @@ window.SID_LIBRARY = [
     "fileName": "Magic_House.sid",
     "path": "sids/GAMES/M-R/Magic_House.sid",
     "size": 8478,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 20181,
+    "durationText": "0:20.181"
   },
   {
     "id": "R0FNRVMvTS1SL01hZ2ljX0ppZ3Nhd19CQVNJQy5zaWQ",
@@ -11792,7 +14106,9 @@ window.SID_LIBRARY = [
     "fileName": "Magic_Jigsaw_BASIC.sid",
     "path": "sids/GAMES/M-R/Magic_Jigsaw_BASIC.sid",
     "size": 678,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 12263,
+    "durationText": "0:12.263"
   },
   {
     "id": "R0FNRVMvTS1SL01hZ2ljX01hcmJsZXMuc2lk",
@@ -11802,7 +14118,9 @@ window.SID_LIBRARY = [
     "fileName": "Magic_Marbles.sid",
     "path": "sids/GAMES/M-R/Magic_Marbles.sid",
     "size": 1152,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 57000,
+    "durationText": "0:57"
   },
   {
     "id": "R0FNRVMvTS1SL01hZ2ljX1NlcnBlbnQuc2lk",
@@ -11812,7 +14130,9 @@ window.SID_LIBRARY = [
     "fileName": "Magic_Serpent.sid",
     "path": "sids/GAMES/M-R/Magic_Serpent.sid",
     "size": 6174,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 159000,
+    "durationText": "2:39"
   },
   {
     "id": "R0FNRVMvTS1SL01hZ2ljX1RpbGUuc2lk",
@@ -11822,7 +14142,9 @@ window.SID_LIBRARY = [
     "fileName": "Magic_Tile.sid",
     "path": "sids/GAMES/M-R/Magic_Tile.sid",
     "size": 11346,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 143000,
+    "durationText": "2:23"
   },
   {
     "id": "R0FNRVMvTS1SL01hZ2ljaWFuc19CYWxsLnNpZA",
@@ -11832,7 +14154,9 @@ window.SID_LIBRARY = [
     "fileName": "Magicians_Ball.sid",
     "path": "sids/GAMES/M-R/Magicians_Ball.sid",
     "size": 4014,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 13000,
+    "durationText": "0:13"
   },
   {
     "id": "R0FNRVMvTS1SL01hZ25ldHJvbi5zaWQ",
@@ -11842,7 +14166,9 @@ window.SID_LIBRARY = [
     "fileName": "Magnetron.sid",
     "path": "sids/GAMES/M-R/Magnetron.sid",
     "size": 3607,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 13000,
+    "durationText": "0:13"
   },
   {
     "id": "R0FNRVMvTS1SL01haW5fRnJhbWUuc2lk",
@@ -11852,7 +14178,9 @@ window.SID_LIBRARY = [
     "fileName": "Main_Frame.sid",
     "path": "sids/GAMES/M-R/Main_Frame.sid",
     "size": 4291,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 218000,
+    "durationText": "3:38"
   },
   {
     "id": "R0FNRVMvTS1SL01ham9yX0JsaW5rLnNpZA",
@@ -11862,7 +14190,9 @@ window.SID_LIBRARY = [
     "fileName": "Major_Blink.sid",
     "path": "sids/GAMES/M-R/Major_Blink.sid",
     "size": 3181,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 11278,
+    "durationText": "0:11.278"
   },
   {
     "id": "R0FNRVMvTS1SL01hbGlidS5zaWQ",
@@ -11872,7 +14202,9 @@ window.SID_LIBRARY = [
     "fileName": "Malibu.sid",
     "path": "sids/GAMES/M-R/Malibu.sid",
     "size": 698,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 5000,
+    "durationText": "0:05"
   },
   {
     "id": "R0FNRVMvTS1SL01hbl9DYXRjaF9hX1BlYS5zaWQ",
@@ -11882,7 +14214,9 @@ window.SID_LIBRARY = [
     "fileName": "Man_Catch_a_Pea.sid",
     "path": "sids/GAMES/M-R/Man_Catch_a_Pea.sid",
     "size": 11346,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 186000,
+    "durationText": "3:06"
   },
   {
     "id": "R0FNRVMvTS1SL01hbl9mcm9tX04tMTAuc2lk",
@@ -11892,7 +14226,9 @@ window.SID_LIBRARY = [
     "fileName": "Man_from_N-10.sid",
     "path": "sids/GAMES/M-R/Man_from_N-10.sid",
     "size": 745,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 26369,
+    "durationText": "0:26.369"
   },
   {
     "id": "R0FNRVMvTS1SL01hbmNhbGEuc2lk",
@@ -11902,7 +14238,9 @@ window.SID_LIBRARY = [
     "fileName": "Mancala.sid",
     "path": "sids/GAMES/M-R/Mancala.sid",
     "size": 3390,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 48005,
+    "durationText": "0:48.005"
   },
   {
     "id": "R0FNRVMvTS1SL01hbmRyYWdvcmUuc2lk",
@@ -11912,7 +14250,9 @@ window.SID_LIBRARY = [
     "fileName": "Mandragore.sid",
     "path": "sids/GAMES/M-R/Mandragore.sid",
     "size": 4722,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 142000,
+    "durationText": "2:22"
   },
   {
     "id": "R0FNRVMvTS1SL01hbmljX01pbmVyLnNpZA",
@@ -11922,7 +14262,9 @@ window.SID_LIBRARY = [
     "fileName": "Manic_Miner.sid",
     "path": "sids/GAMES/M-R/Manic_Miner.sid",
     "size": 1223,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 31000,
+    "durationText": "0:31"
   },
   {
     "id": "R0FNRVMvTS1SL01hbnRhLU1hbmlhLnNpZA",
@@ -11932,7 +14274,9 @@ window.SID_LIBRARY = [
     "fileName": "Manta-Mania.sid",
     "path": "sids/GAMES/M-R/Manta-Mania.sid",
     "size": 839,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 24000,
+    "durationText": "0:24"
   },
   {
     "id": "R0FNRVMvTS1SL01hcmJsZV9Cb3kuc2lk",
@@ -11942,7 +14286,9 @@ window.SID_LIBRARY = [
     "fileName": "Marble_Boy.sid",
     "path": "sids/GAMES/M-R/Marble_Boy.sid",
     "size": 1114,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 583,
+    "durationText": "0:00.583"
   },
   {
     "id": "R0FNRVMvTS1SL01hcmJsZV9NYWRuZXNzLnNpZA",
@@ -11952,7 +14298,9 @@ window.SID_LIBRARY = [
     "fileName": "Marble_Madness.sid",
     "path": "sids/GAMES/M-R/Marble_Madness.sid",
     "size": 12798,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 16000,
+    "durationText": "0:16"
   },
   {
     "id": "R0FNRVMvTS1SL01hcmlvX0Jyb3Muc2lk",
@@ -11962,7 +14310,9 @@ window.SID_LIBRARY = [
     "fileName": "Mario_Bros.sid",
     "path": "sids/GAMES/M-R/Mario_Bros.sid",
     "size": 1102,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 1000,
+    "durationText": "0:01"
   },
   {
     "id": "R0FNRVMvTS1SL01hcmlvc19DZW1lbnRfRmFjdG9yeV9DNjQuc2lk",
@@ -11972,7 +14322,9 @@ window.SID_LIBRARY = [
     "fileName": "Marios_Cement_Factory_C64.sid",
     "path": "sids/GAMES/M-R/Marios_Cement_Factory_C64.sid",
     "size": 3949,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 103363,
+    "durationText": "1:43.363"
   },
   {
     "id": "R0FNRVMvTS1SL01hc2hlZF9UdXJ0bGVzLnNpZA",
@@ -11982,7 +14334,9 @@ window.SID_LIBRARY = [
     "fileName": "Mashed_Turtles.sid",
     "path": "sids/GAMES/M-R/Mashed_Turtles.sid",
     "size": 2179,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 89378,
+    "durationText": "1:29.378"
   },
   {
     "id": "R0FNRVMvTS1SL01hc3Rlcl9EaWdnZXIuc2lk",
@@ -11992,7 +14346,9 @@ window.SID_LIBRARY = [
     "fileName": "Master_Digger.sid",
     "path": "sids/GAMES/M-R/Master_Digger.sid",
     "size": 431,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 18000,
+    "durationText": "0:18"
   },
   {
     "id": "R0FNRVMvTS1SL01hc3Rlcl9vZl9DYW1vdWZsYWdlX0JBU0lDLnNpZA",
@@ -12002,7 +14358,9 @@ window.SID_LIBRARY = [
     "fileName": "Master_of_Camouflage_BASIC.sid",
     "path": "sids/GAMES/M-R/Master_of_Camouflage_BASIC.sid",
     "size": 564,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 14956,
+    "durationText": "0:14.956"
   },
   {
     "id": "R0FNRVMvTS1SL01hc3Rlcm1pbmQuc2lk",
@@ -12012,7 +14370,9 @@ window.SID_LIBRARY = [
     "fileName": "Mastermind.sid",
     "path": "sids/GAMES/M-R/Mastermind.sid",
     "size": 17240,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 51000,
+    "durationText": "0:51"
   },
   {
     "id": "R0FNRVMvTS1SL01hc3RlcnNfb2ZfVGltZS5zaWQ",
@@ -12022,7 +14382,9 @@ window.SID_LIBRARY = [
     "fileName": "Masters_of_Time.sid",
     "path": "sids/GAMES/M-R/Masters_of_Time.sid",
     "size": 480,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 11000,
+    "durationText": "0:11"
   },
   {
     "id": "R0FNRVMvTS1SL01hdHJpeC5zaWQ",
@@ -12032,7 +14394,9 @@ window.SID_LIBRARY = [
     "fileName": "Matrix.sid",
     "path": "sids/GAMES/M-R/Matrix.sid",
     "size": 6656,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 138000,
+    "durationText": "2:18"
   },
   {
     "id": "R0FNRVMvTS1SL01heGlfR29sZi5zaWQ",
@@ -12042,7 +14406,9 @@ window.SID_LIBRARY = [
     "fileName": "Maxi_Golf.sid",
     "path": "sids/GAMES/M-R/Maxi_Golf.sid",
     "size": 2896,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 19000,
+    "durationText": "0:19"
   },
   {
     "id": "R0FNRVMvTS1SL01heHdlbGxfTWFub3ItU2t1bGxfb2ZfRG9vbS5zaWQ",
@@ -12052,7 +14418,9 @@ window.SID_LIBRARY = [
     "fileName": "Maxwell_Manor-Skull_of_Doom.sid",
     "path": "sids/GAMES/M-R/Maxwell_Manor-Skull_of_Doom.sid",
     "size": 484,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 16699,
+    "durationText": "0:16.699"
   },
   {
     "id": "R0FNRVMvTS1SL01hemUuc2lk",
@@ -12062,7 +14430,9 @@ window.SID_LIBRARY = [
     "fileName": "Maze.sid",
     "path": "sids/GAMES/M-R/Maze.sid",
     "size": 3472,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 89000,
+    "durationText": "1:29"
   },
   {
     "id": "R0FNRVMvTS1SL01hemVfR3JhemVfR2FtZV9CQVNJQy5zaWQ",
@@ -12072,7 +14442,9 @@ window.SID_LIBRARY = [
     "fileName": "Maze_Graze_Game_BASIC.sid",
     "path": "sids/GAMES/M-R/Maze_Graze_Game_BASIC.sid",
     "size": 1594,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 12758,
+    "durationText": "0:12.758"
   },
   {
     "id": "R0FNRVMvTS1SL01hemluZ2VyX1ouc2lk",
@@ -12082,7 +14454,9 @@ window.SID_LIBRARY = [
     "fileName": "Mazinger_Z.sid",
     "path": "sids/GAMES/M-R/Mazinger_Z.sid",
     "size": 10987,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 54210,
+    "durationText": "0:54.21"
   },
   {
     "id": "R0FNRVMvTS1SL01jX1JhdC5zaWQ",
@@ -12092,7 +14466,9 @@ window.SID_LIBRARY = [
     "fileName": "Mc_Rat.sid",
     "path": "sids/GAMES/M-R/Mc_Rat.sid",
     "size": 2834,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 36000,
+    "durationText": "0:36"
   },
   {
     "id": "R0FNRVMvTS1SL01jRG9uYWxkX0xhbmQuc2lk",
@@ -12102,7 +14478,9 @@ window.SID_LIBRARY = [
     "fileName": "McDonald_Land.sid",
     "path": "sids/GAMES/M-R/McDonald_Land.sid",
     "size": 9854,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 35000,
+    "durationText": "0:35"
   },
   {
     "id": "R0FNRVMvTS1SL01lYW5fQ2FyLnNpZA",
@@ -12112,7 +14490,9 @@ window.SID_LIBRARY = [
     "fileName": "Mean_Car.sid",
     "path": "sids/GAMES/M-R/Mean_Car.sid",
     "size": 2978,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 47000,
+    "durationText": "0:47"
   },
   {
     "id": "R0FNRVMvTS1SL01lYW5fQ2l0eS5zaWQ",
@@ -12122,7 +14502,9 @@ window.SID_LIBRARY = [
     "fileName": "Mean_City.sid",
     "path": "sids/GAMES/M-R/Mean_City.sid",
     "size": 3720,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 97000,
+    "durationText": "1:37"
   },
   {
     "id": "R0FNRVMvTS1SL01lYW5fU3RyZWV0cy5zaWQ",
@@ -12132,7 +14514,9 @@ window.SID_LIBRARY = [
     "fileName": "Mean_Streets.sid",
     "path": "sids/GAMES/M-R/Mean_Streets.sid",
     "size": 3518,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 37000,
+    "durationText": "0:37"
   },
   {
     "id": "R0FNRVMvTS1SL01lZGlhdG9yLnNpZA",
@@ -12142,7 +14526,9 @@ window.SID_LIBRARY = [
     "fileName": "Mediator.sid",
     "path": "sids/GAMES/M-R/Mediator.sid",
     "size": 4914,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 23000,
+    "durationText": "0:23"
   },
   {
     "id": "R0FNRVMvTS1SL01lZGl0ZXJyYW5lYW5fQWlyX1dhci5zaWQ",
@@ -12152,7 +14538,9 @@ window.SID_LIBRARY = [
     "fileName": "Mediterranean_Air_War.sid",
     "path": "sids/GAMES/M-R/Mediterranean_Air_War.sid",
     "size": 1898,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 32106,
+    "durationText": "0:32.106"
   },
   {
     "id": "R0FNRVMvTS1SL01lZ2FfUGFyYXRyb29wZXIuc2lk",
@@ -12162,7 +14550,9 @@ window.SID_LIBRARY = [
     "fileName": "Mega_Paratrooper.sid",
     "path": "sids/GAMES/M-R/Mega_Paratrooper.sid",
     "size": 19844,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 23000,
+    "durationText": "0:23"
   },
   {
     "id": "R0FNRVMvTS1SL01lZ2FfVHVyYm8uc2lk",
@@ -12172,7 +14562,9 @@ window.SID_LIBRARY = [
     "fileName": "Mega_Turbo.sid",
     "path": "sids/GAMES/M-R/Mega_Turbo.sid",
     "size": 689,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 27000,
+    "durationText": "0:27"
   },
   {
     "id": "R0FNRVMvTS1SL01lZ2FfV2l6YXJkc19wcmV2aWV3LnNpZA",
@@ -12182,7 +14574,9 @@ window.SID_LIBRARY = [
     "fileName": "Mega_Wizards_preview.sid",
     "path": "sids/GAMES/M-R/Mega_Wizards_preview.sid",
     "size": 2914,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 149707,
+    "durationText": "2:29.707"
   },
   {
     "id": "R0FNRVMvTS1SL01lZ2FibGFzdC5zaWQ",
@@ -12192,7 +14586,9 @@ window.SID_LIBRARY = [
     "fileName": "Megablast.sid",
     "path": "sids/GAMES/M-R/Megablast.sid",
     "size": 6326,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 105654,
+    "durationText": "1:45.654"
   },
   {
     "id": "R0FNRVMvTS1SL01lZ2Fub3ZhLnNpZA",
@@ -12202,7 +14598,9 @@ window.SID_LIBRARY = [
     "fileName": "Meganova.sid",
     "path": "sids/GAMES/M-R/Meganova.sid",
     "size": 8888,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 129000,
+    "durationText": "2:09"
   },
   {
     "id": "R0FNRVMvTS1SL01lbW9yeV8xOTg1X0JBU0lDLnNpZA",
@@ -12212,7 +14610,9 @@ window.SID_LIBRARY = [
     "fileName": "Memory_1985_BASIC.sid",
     "path": "sids/GAMES/M-R/Memory_1985_BASIC.sid",
     "size": 3178,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 35699,
+    "durationText": "0:35.699"
   },
   {
     "id": "R0FNRVMvTS1SL01lbW9yeV8xOTkxLnNpZA",
@@ -12222,7 +14622,9 @@ window.SID_LIBRARY = [
     "fileName": "Memory_1991.sid",
     "path": "sids/GAMES/M-R/Memory_1991.sid",
     "size": 1447,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 13000,
+    "durationText": "0:13"
   },
   {
     "id": "R0FNRVMvTS1SL01lbW9yeV9NYW4uc2lk",
@@ -12232,7 +14634,9 @@ window.SID_LIBRARY = [
     "fileName": "Memory_Man.sid",
     "path": "sids/GAMES/M-R/Memory_Man.sid",
     "size": 11346,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 208613,
+    "durationText": "3:28.613"
   },
   {
     "id": "R0FNRVMvTS1SL01lcmNlbmFyaWVzLnNpZA",
@@ -12242,7 +14646,9 @@ window.SID_LIBRARY = [
     "fileName": "Mercenaries.sid",
     "path": "sids/GAMES/M-R/Mercenaries.sid",
     "size": 12304,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 203000,
+    "durationText": "3:23"
   },
   {
     "id": "R0FNRVMvTS1SL01lcmNlbmFyeV9sb2FkZXIuc2lk",
@@ -12252,7 +14658,9 @@ window.SID_LIBRARY = [
     "fileName": "Mercenary_loader.sid",
     "path": "sids/GAMES/M-R/Mercenary_loader.sid",
     "size": 1478,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 54000,
+    "durationText": "0:54"
   },
   {
     "id": "R0FNRVMvTS1SL01lcnJ5X0NocmlzdG1hcy5zaWQ",
@@ -12262,7 +14670,9 @@ window.SID_LIBRARY = [
     "fileName": "Merry_Christmas.sid",
     "path": "sids/GAMES/M-R/Merry_Christmas.sid",
     "size": 1404,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 62000,
+    "durationText": "1:02"
   },
   {
     "id": "R0FNRVMvTS1SL01ldGFfR2FsYWN0aWNfTGxhbWFzLnNpZA",
@@ -12272,7 +14682,9 @@ window.SID_LIBRARY = [
     "fileName": "Meta_Galactic_Llamas.sid",
     "path": "sids/GAMES/M-R/Meta_Galactic_Llamas.sid",
     "size": 2272,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 62000,
+    "durationText": "1:02"
   },
   {
     "id": "R0FNRVMvTS1SL01ldGFsX1BpcmFtaWQuc2lk",
@@ -12282,7 +14694,9 @@ window.SID_LIBRARY = [
     "fileName": "Metal_Piramid.sid",
     "path": "sids/GAMES/M-R/Metal_Piramid.sid",
     "size": 8819,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 147971,
+    "durationText": "2:27.971"
   },
   {
     "id": "R0FNRVMvTS1SL01ldHJvLUNyb3NzLnNpZA",
@@ -12292,7 +14706,9 @@ window.SID_LIBRARY = [
     "fileName": "Metro-Cross.sid",
     "path": "sids/GAMES/M-R/Metro-Cross.sid",
     "size": 3817,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 3000,
+    "durationText": "0:03"
   },
   {
     "id": "R0FNRVMvTS1SL01leGljb184Ni5zaWQ",
@@ -12302,7 +14718,9 @@ window.SID_LIBRARY = [
     "fileName": "Mexico_86.sid",
     "path": "sids/GAMES/M-R/Mexico_86.sid",
     "size": 3227,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 18193,
+    "durationText": "0:18.193"
   },
   {
     "id": "R0FNRVMvTS1SL01pY3JvX01vdXNlX0dvZXNfRGUtQnVnZ2luZy5zaWQ",
@@ -12312,7 +14730,9 @@ window.SID_LIBRARY = [
     "fileName": "Micro_Mouse_Goes_De-Bugging.sid",
     "path": "sids/GAMES/M-R/Micro_Mouse_Goes_De-Bugging.sid",
     "size": 471,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 9000,
+    "durationText": "0:09"
   },
   {
     "id": "R0FNRVMvTS1SL01pY3JvY29zbS5zaWQ",
@@ -12322,7 +14742,9 @@ window.SID_LIBRARY = [
     "fileName": "Microcosm.sid",
     "path": "sids/GAMES/M-R/Microcosm.sid",
     "size": 1150,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 50000,
+    "durationText": "0:50"
   },
   {
     "id": "R0FNRVMvTS1SL01pY3JvY29zbW8uc2lk",
@@ -12332,7 +14754,9 @@ window.SID_LIBRARY = [
     "fileName": "Microcosmo.sid",
     "path": "sids/GAMES/M-R/Microcosmo.sid",
     "size": 8438,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 224214,
+    "durationText": "3:44.214"
   },
   {
     "id": "R0FNRVMvTS1SL01pZG5pZ2h0X0V4cHJlc3NfQkFTSUMuc2lk",
@@ -12342,7 +14766,9 @@ window.SID_LIBRARY = [
     "fileName": "Midnight_Express_BASIC.sid",
     "path": "sids/GAMES/M-R/Midnight_Express_BASIC.sid",
     "size": 4167,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 9000,
+    "durationText": "0:09"
   },
   {
     "id": "R0FNRVMvTS1SL01pZ2h0X2FuZF9NYWdpY19JLVNlY3JldF9vZl90aGVfSW5uZXJfU2FuY3R1bS5zaWQ",
@@ -12352,7 +14778,9 @@ window.SID_LIBRARY = [
     "fileName": "Might_and_Magic_I-Secret_of_the_Inner_Sanctum.sid",
     "path": "sids/GAMES/M-R/Might_and_Magic_I-Secret_of_the_Inner_Sanctum.sid",
     "size": 1984,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 112344,
+    "durationText": "1:52.344"
   },
   {
     "id": "R0FNRVMvTS1SL01pZ2h0eV9Cb21iamFjay5zaWQ",
@@ -12362,7 +14790,9 @@ window.SID_LIBRARY = [
     "fileName": "Mighty_Bombjack.sid",
     "path": "sids/GAMES/M-R/Mighty_Bombjack.sid",
     "size": 3792,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 1000,
+    "durationText": "0:01"
   },
   {
     "id": "R0FNRVMvTS1SL01pa2VfTWVjaC5zaWQ",
@@ -12372,7 +14802,9 @@ window.SID_LIBRARY = [
     "fileName": "Mike_Mech.sid",
     "path": "sids/GAMES/M-R/Mike_Mech.sid",
     "size": 1535,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 68948,
+    "durationText": "1:08.948"
   },
   {
     "id": "R0FNRVMvTS1SL01pbGxlbml1bV9XYXJyaW9ycy5zaWQ",
@@ -12382,7 +14814,9 @@ window.SID_LIBRARY = [
     "fileName": "Millenium_Warriors.sid",
     "path": "sids/GAMES/M-R/Millenium_Warriors.sid",
     "size": 6934,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 55000,
+    "durationText": "0:55"
   },
   {
     "id": "R0FNRVMvTS1SL01pbWl6dWt1X1NhZ2FfNEsuc2lk",
@@ -12392,7 +14826,9 @@ window.SID_LIBRARY = [
     "fileName": "Mimizuku_Saga_4K.sid",
     "path": "sids/GAMES/M-R/Mimizuku_Saga_4K.sid",
     "size": 1839,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 68969,
+    "durationText": "1:08.969"
   },
   {
     "id": "R0FNRVMvTS1SL01pbmRfR2FtZXMuc2lk",
@@ -12402,7 +14838,9 @@ window.SID_LIBRARY = [
     "fileName": "Mind_Games.sid",
     "path": "sids/GAMES/M-R/Mind_Games.sid",
     "size": 3232,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 42000,
+    "durationText": "0:42"
   },
   {
     "id": "R0FNRVMvTS1SL01pbmR0cmFwLnNpZA",
@@ -12412,7 +14850,9 @@ window.SID_LIBRARY = [
     "fileName": "Mindtrap.sid",
     "path": "sids/GAMES/M-R/Mindtrap.sid",
     "size": 2571,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 62000,
+    "durationText": "1:02"
   },
   {
     "id": "R0FNRVMvTS1SL01pbmVmaWVsZC5zaWQ",
@@ -12422,7 +14862,9 @@ window.SID_LIBRARY = [
     "fileName": "Minefield.sid",
     "path": "sids/GAMES/M-R/Minefield.sid",
     "size": 3641,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 45000,
+    "durationText": "0:45"
   },
   {
     "id": "R0FNRVMvTS1SL01pbmVyLnNpZA",
@@ -12432,7 +14874,9 @@ window.SID_LIBRARY = [
     "fileName": "Miner.sid",
     "path": "sids/GAMES/M-R/Miner.sid",
     "size": 4783,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 122000,
+    "durationText": "2:02"
   },
   {
     "id": "R0FNRVMvTS1SL01pbmVyX1Byb3BoZXRfcHJldmlldy5zaWQ",
@@ -12442,7 +14886,9 @@ window.SID_LIBRARY = [
     "fileName": "Miner_Prophet_preview.sid",
     "path": "sids/GAMES/M-R/Miner_Prophet_preview.sid",
     "size": 1614,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 40240,
+    "durationText": "0:40.24"
   },
   {
     "id": "R0FNRVMvTS1SL01pbmlfR29sZi5zaWQ",
@@ -12452,7 +14898,9 @@ window.SID_LIBRARY = [
     "fileName": "Mini_Golf.sid",
     "path": "sids/GAMES/M-R/Mini_Golf.sid",
     "size": 3977,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 68481,
+    "durationText": "1:08.481"
   },
   {
     "id": "R0FNRVMvTS1SL01pbm90YXguc2lk",
@@ -12462,7 +14910,9 @@ window.SID_LIBRARY = [
     "fileName": "Minotax.sid",
     "path": "sids/GAMES/M-R/Minotax.sid",
     "size": 1108,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 45346,
+    "durationText": "0:45.346"
   },
   {
     "id": "R0FNRVMvTS1SL01pc3NpbGVfRXZhZGUuc2lk",
@@ -12472,7 +14922,9 @@ window.SID_LIBRARY = [
     "fileName": "Missile_Evade.sid",
     "path": "sids/GAMES/M-R/Missile_Evade.sid",
     "size": 5853,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 336325,
+    "durationText": "5:36.325"
   },
   {
     "id": "R0FNRVMvTS1SL01pc3Npb25jb2RlX0NYLTEzX0JBU0lDLnNpZA",
@@ -12482,7 +14934,9 @@ window.SID_LIBRARY = [
     "fileName": "Missioncode_CX-13_BASIC.sid",
     "path": "sids/GAMES/M-R/Missioncode_CX-13_BASIC.sid",
     "size": 1395,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 102000,
+    "durationText": "1:42"
   },
   {
     "id": "R0FNRVMvTS1SL01pc3Npb25lX1R3YWluLnNpZA",
@@ -12492,7 +14946,9 @@ window.SID_LIBRARY = [
     "fileName": "Missione_Twain.sid",
     "path": "sids/GAMES/M-R/Missione_Twain.sid",
     "size": 1413,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 97000,
+    "durationText": "1:37"
   },
   {
     "id": "R0FNRVMvTS1SL01pc3Rlcl9Sb2dlcnNfTmVpZ2hib3Job29kLnNpZA",
@@ -12502,7 +14958,9 @@ window.SID_LIBRARY = [
     "fileName": "Mister_Rogers_Neighborhood.sid",
     "path": "sids/GAMES/M-R/Mister_Rogers_Neighborhood.sid",
     "size": 4076,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 43811,
+    "durationText": "0:43.811"
   },
   {
     "id": "R0FNRVMvTS1SL01pdF9KZWFuc191bmRfSGVsbGViYXJkZS5zaWQ",
@@ -12512,7 +14970,9 @@ window.SID_LIBRARY = [
     "fileName": "Mit_Jeans_und_Hellebarde.sid",
     "path": "sids/GAMES/M-R/Mit_Jeans_und_Hellebarde.sid",
     "size": 19576,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 181000,
+    "durationText": "3:01"
   },
   {
     "id": "R0FNRVMvTS1SL01vZWJpdXMuc2lk",
@@ -12522,7 +14982,9 @@ window.SID_LIBRARY = [
     "fileName": "Moebius.sid",
     "path": "sids/GAMES/M-R/Moebius.sid",
     "size": 15272,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 202524,
+    "durationText": "3:22.524"
   },
   {
     "id": "R0FNRVMvTS1SL01vbmR1c19GaWdodF9QYWxhY2Uuc2lk",
@@ -12532,7 +14994,9 @@ window.SID_LIBRARY = [
     "fileName": "Mondus_Fight_Palace.sid",
     "path": "sids/GAMES/M-R/Mondus_Fight_Palace.sid",
     "size": 3816,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 39000,
+    "durationText": "0:39"
   },
   {
     "id": "R0FNRVMvTS1SL01vbmtleV9NYWdpYy5zaWQ",
@@ -12542,7 +15006,9 @@ window.SID_LIBRARY = [
     "fileName": "Monkey_Magic.sid",
     "path": "sids/GAMES/M-R/Monkey_Magic.sid",
     "size": 3908,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 38000,
+    "durationText": "0:38"
   },
   {
     "id": "R0FNRVMvTS1SL01vbm8uc2lk",
@@ -12552,7 +15018,9 @@ window.SID_LIBRARY = [
     "fileName": "Mono.sid",
     "path": "sids/GAMES/M-R/Mono.sid",
     "size": 8444,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 23150,
+    "durationText": "0:23.15"
   },
   {
     "id": "R0FNRVMvTS1SL01vbnN0ZXJzXzY0LnNpZA",
@@ -12562,7 +15030,9 @@ window.SID_LIBRARY = [
     "fileName": "Monsters_64.sid",
     "path": "sids/GAMES/M-R/Monsters_64.sid",
     "size": 1544,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 130000,
+    "durationText": "2:10"
   },
   {
     "id": "R0FNRVMvTS1SL01vbnRyaXguc2lk",
@@ -12572,7 +15042,9 @@ window.SID_LIBRARY = [
     "fileName": "Montrix.sid",
     "path": "sids/GAMES/M-R/Montrix.sid",
     "size": 2750,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 123000,
+    "durationText": "2:03"
   },
   {
     "id": "R0FNRVMvTS1SL01vb25fUGF0cm9sLnNpZA",
@@ -12582,7 +15054,9 @@ window.SID_LIBRARY = [
     "fileName": "Moon_Patrol.sid",
     "path": "sids/GAMES/M-R/Moon_Patrol.sid",
     "size": 1329,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 23000,
+    "durationText": "0:23"
   },
   {
     "id": "R0FNRVMvTS1SL01vb25wYXRyb2xfSUkuc2lk",
@@ -12592,7 +15066,9 @@ window.SID_LIBRARY = [
     "fileName": "Moonpatrol_II.sid",
     "path": "sids/GAMES/M-R/Moonpatrol_II.sid",
     "size": 2342,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 92000,
+    "durationText": "1:32"
   },
   {
     "id": "R0FNRVMvTS1SL01vb25yYWNlci5zaWQ",
@@ -12602,7 +15078,9 @@ window.SID_LIBRARY = [
     "fileName": "Moonracer.sid",
     "path": "sids/GAMES/M-R/Moonracer.sid",
     "size": 3349,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 116000,
+    "durationText": "1:56"
   },
   {
     "id": "R0FNRVMvTS1SL01vb25yYWtlci5zaWQ",
@@ -12612,7 +15090,9 @@ window.SID_LIBRARY = [
     "fileName": "Moonraker.sid",
     "path": "sids/GAMES/M-R/Moonraker.sid",
     "size": 812,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 25000,
+    "durationText": "0:25"
   },
   {
     "id": "R0FNRVMvTS1SL01vb253YWxrZXIuc2lk",
@@ -12622,7 +15102,9 @@ window.SID_LIBRARY = [
     "fileName": "Moonwalker.sid",
     "path": "sids/GAMES/M-R/Moonwalker.sid",
     "size": 4618,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 27000,
+    "durationText": "0:27"
   },
   {
     "id": "R0FNRVMvTS1SL01vc2Nvd19TdW1taXQuc2lk",
@@ -12632,7 +15114,9 @@ window.SID_LIBRARY = [
     "fileName": "Moscow_Summit.sid",
     "path": "sids/GAMES/M-R/Moscow_Summit.sid",
     "size": 7688,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 43000,
+    "durationText": "0:43"
   },
   {
     "id": "R0FNRVMvTS1SL01vdXNlX1RyYXAuc2lk",
@@ -12642,7 +15126,9 @@ window.SID_LIBRARY = [
     "fileName": "Mouse_Trap.sid",
     "path": "sids/GAMES/M-R/Mouse_Trap.sid",
     "size": 1262,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 40000,
+    "durationText": "0:40"
   },
   {
     "id": "R0FNRVMvTS1SL01vdmUtSXRfcHJldmlldy5zaWQ",
@@ -12652,7 +15138,9 @@ window.SID_LIBRARY = [
     "fileName": "Move-It_preview.sid",
     "path": "sids/GAMES/M-R/Move-It_preview.sid",
     "size": 1919,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 35000,
+    "durationText": "0:35"
   },
   {
     "id": "R0FNRVMvTS1SL01vdmllX0J1c2luZXNzLnNpZA",
@@ -12662,7 +15150,9 @@ window.SID_LIBRARY = [
     "fileName": "Movie_Business.sid",
     "path": "sids/GAMES/M-R/Movie_Business.sid",
     "size": 8659,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 218000,
+    "durationText": "3:38"
   },
   {
     "id": "R0FNRVMvTS1SL01yX0Rvc19DYXN0bGUuc2lk",
@@ -12672,7 +15162,9 @@ window.SID_LIBRARY = [
     "fileName": "Mr_Dos_Castle.sid",
     "path": "sids/GAMES/M-R/Mr_Dos_Castle.sid",
     "size": 1936,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 37000,
+    "durationText": "0:37"
   },
   {
     "id": "R0FNRVMvTS1SL01yX0VnZ2hlYWQuc2lk",
@@ -12682,7 +15174,9 @@ window.SID_LIBRARY = [
     "fileName": "Mr_Egghead.sid",
     "path": "sids/GAMES/M-R/Mr_Egghead.sid",
     "size": 689,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 11000,
+    "durationText": "0:11"
   },
   {
     "id": "R0FNRVMvTS1SL01yX1dpei5zaWQ",
@@ -12692,7 +15186,9 @@ window.SID_LIBRARY = [
     "fileName": "Mr_Wiz.sid",
     "path": "sids/GAMES/M-R/Mr_Wiz.sid",
     "size": 1406,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 6000,
+    "durationText": "0:06"
   },
   {
     "id": "R0FNRVMvTS1SL01zX1BhY21hbi5zaWQ",
@@ -12702,7 +15198,9 @@ window.SID_LIBRARY = [
     "fileName": "Ms_Pacman.sid",
     "path": "sids/GAMES/M-R/Ms_Pacman.sid",
     "size": 1370,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 5000,
+    "durationText": "0:05"
   },
   {
     "id": "R0FNRVMvTS1SL011bmNoLnNpZA",
@@ -12712,7 +15210,9 @@ window.SID_LIBRARY = [
     "fileName": "Munch.sid",
     "path": "sids/GAMES/M-R/Munch.sid",
     "size": 3226,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 93000,
+    "durationText": "1:33"
   },
   {
     "id": "R0FNRVMvTS1SL011bmNoX0xvYWQuc2lk",
@@ -12722,7 +15222,9 @@ window.SID_LIBRARY = [
     "fileName": "Munch_Load.sid",
     "path": "sids/GAMES/M-R/Munch_Load.sid",
     "size": 2201,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 98000,
+    "durationText": "1:38"
   },
   {
     "id": "R0FNRVMvTS1SL011bmNoX01hbmlhLnNpZA",
@@ -12732,7 +15234,9 @@ window.SID_LIBRARY = [
     "fileName": "Munch_Mania.sid",
     "path": "sids/GAMES/M-R/Munch_Mania.sid",
     "size": 400,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 5000,
+    "durationText": "0:05"
   },
   {
     "id": "R0FNRVMvTS1SL011bmNoZXIuc2lk",
@@ -12742,7 +15246,9 @@ window.SID_LIBRARY = [
     "fileName": "Muncher.sid",
     "path": "sids/GAMES/M-R/Muncher.sid",
     "size": 4370,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 128000,
+    "durationText": "2:08"
   },
   {
     "id": "R0FNRVMvTS1SL011cmRlcl9vbl90aGVfQXRsYW50aWMuc2lk",
@@ -12752,7 +15258,9 @@ window.SID_LIBRARY = [
     "fileName": "Murder_on_the_Atlantic.sid",
     "path": "sids/GAMES/M-R/Murder_on_the_Atlantic.sid",
     "size": 3947,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 52488,
+    "durationText": "0:52.488"
   },
   {
     "id": "R0FNRVMvTS1SL011c2ljbWFuLnNpZA",
@@ -12762,7 +15270,9 @@ window.SID_LIBRARY = [
     "fileName": "Musicman.sid",
     "path": "sids/GAMES/M-R/Musicman.sid",
     "size": 1517,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 33000,
+    "durationText": "0:33"
   },
   {
     "id": "R0FNRVMvTS1SL015X0RheV9vbl90aGVfSGlnaHdheV9OVFNDLnNpZA",
@@ -12772,7 +15282,9 @@ window.SID_LIBRARY = [
     "fileName": "My_Day_on_the_Highway_NTSC.sid",
     "path": "sids/GAMES/M-R/My_Day_on_the_Highway_NTSC.sid",
     "size": 4266,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 179722,
+    "durationText": "2:59.722"
   },
   {
     "id": "R0FNRVMvTS1SL015X0RheV9vbl90aGVfSGlnaHdheV9QQUwuc2lk",
@@ -12782,7 +15294,9 @@ window.SID_LIBRARY = [
     "fileName": "My_Day_on_the_Highway_PAL.sid",
     "path": "sids/GAMES/M-R/My_Day_on_the_Highway_PAL.sid",
     "size": 4265,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 178755,
+    "durationText": "2:58.755"
   },
   {
     "id": "R0FNRVMvTS1SL015c3RlcmlvdXNfTW91bnRhaW4uc2lk",
@@ -12792,7 +15306,9 @@ window.SID_LIBRARY = [
     "fileName": "Mysterious_Mountain.sid",
     "path": "sids/GAMES/M-R/Mysterious_Mountain.sid",
     "size": 4094,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 71095,
+    "durationText": "1:11.095"
   },
   {
     "id": "R0FNRVMvTS1SL015c3Rlcml4LnNpZA",
@@ -12802,7 +15318,9 @@ window.SID_LIBRARY = [
     "fileName": "Mysterix.sid",
     "path": "sids/GAMES/M-R/Mysterix.sid",
     "size": 948,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 37000,
+    "durationText": "0:37"
   },
   {
     "id": "R0FNRVMvTS1SL015c3RlcnlfVm95YWdlLnNpZA",
@@ -12812,7 +15330,9 @@ window.SID_LIBRARY = [
     "fileName": "Mystery_Voyage.sid",
     "path": "sids/GAMES/M-R/Mystery_Voyage.sid",
     "size": 28163,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 50755,
+    "durationText": "0:50.755"
   },
   {
     "id": "R0FNRVMvTS1SL015c3RpY19ab25lLnNpZA",
@@ -12822,7 +15342,9 @@ window.SID_LIBRARY = [
     "fileName": "Mystic_Zone.sid",
     "path": "sids/GAMES/M-R/Mystic_Zone.sid",
     "size": 9189,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 98236,
+    "durationText": "1:38.236"
   },
   {
     "id": "R0FNRVMvTS1SL05BVE9fQXNzYXVsdF9Db3Vyc2Uuc2lk",
@@ -12832,7 +15354,9 @@ window.SID_LIBRARY = [
     "fileName": "NATO_Assault_Course.sid",
     "path": "sids/GAMES/M-R/NATO_Assault_Course.sid",
     "size": 1669,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 177000,
+    "durationText": "2:57"
   },
   {
     "id": "R0FNRVMvTS1SL05hamVtbmlrLnNpZA",
@@ -12842,7 +15366,9 @@ window.SID_LIBRARY = [
     "fileName": "Najemnik.sid",
     "path": "sids/GAMES/M-R/Najemnik.sid",
     "size": 3358,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 84000,
+    "durationText": "1:24"
   },
   {
     "id": "R0FNRVMvTS1SL05hamVtbmlrLVBvd3JvdC5zaWQ",
@@ -12852,7 +15378,9 @@ window.SID_LIBRARY = [
     "fileName": "Najemnik-Powrot.sid",
     "path": "sids/GAMES/M-R/Najemnik-Powrot.sid",
     "size": 4716,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 154000,
+    "durationText": "2:34"
   },
   {
     "id": "R0FNRVMvTS1SL05hbGxlX0FlaC1QdWguc2lk",
@@ -12862,7 +15390,9 @@ window.SID_LIBRARY = [
     "fileName": "Nalle_Aeh-Puh.sid",
     "path": "sids/GAMES/M-R/Nalle_Aeh-Puh.sid",
     "size": 2356,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 106974,
+    "durationText": "1:46.974"
   },
   {
     "id": "R0FNRVMvTS1SL05hdXRpbHVzLnNpZA",
@@ -12872,7 +15402,9 @@ window.SID_LIBRARY = [
     "fileName": "Nautilus.sid",
     "path": "sids/GAMES/M-R/Nautilus.sid",
     "size": 5917,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 74000,
+    "durationText": "1:14"
   },
   {
     "id": "R0FNRVMvTS1SL05lYnVsdXMuc2lk",
@@ -12882,7 +15414,9 @@ window.SID_LIBRARY = [
     "fileName": "Nebulus.sid",
     "path": "sids/GAMES/M-R/Nebulus.sid",
     "size": 5384,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 62000,
+    "durationText": "1:02"
   },
   {
     "id": "R0FNRVMvTS1SL05lY3JvbWFuY2VyLnNpZA",
@@ -12892,7 +15426,9 @@ window.SID_LIBRARY = [
     "fileName": "Necromancer.sid",
     "path": "sids/GAMES/M-R/Necromancer.sid",
     "size": 842,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 53000,
+    "durationText": "0:53"
   },
   {
     "id": "R0FNRVMvTS1SL05lZ2F0cm9uLnNpZA",
@@ -12902,7 +15438,9 @@ window.SID_LIBRARY = [
     "fileName": "Negatron.sid",
     "path": "sids/GAMES/M-R/Negatron.sid",
     "size": 12081,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 99595,
+    "durationText": "1:39.595"
   },
   {
     "id": "R0FNRVMvTS1SL05lbWVzaXMuc2lk",
@@ -12912,7 +15450,9 @@ window.SID_LIBRARY = [
     "fileName": "Nemesis.sid",
     "path": "sids/GAMES/M-R/Nemesis.sid",
     "size": 15479,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 25000,
+    "durationText": "0:25"
   },
   {
     "id": "R0FNRVMvTS1SL05lcHR1bmVfTGFuZGVyX0VsaXRlLnNpZA",
@@ -12922,7 +15462,9 @@ window.SID_LIBRARY = [
     "fileName": "Neptune_Lander_Elite.sid",
     "path": "sids/GAMES/M-R/Neptune_Lander_Elite.sid",
     "size": 5089,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 91951,
+    "durationText": "1:31.951"
   },
   {
     "id": "R0FNRVMvTS1SL05lcHR1bmVfTGFuZGVyX0VsaXRlX1ByZXZpZXcuc2lk",
@@ -12932,7 +15474,9 @@ window.SID_LIBRARY = [
     "fileName": "Neptune_Lander_Elite_Preview.sid",
     "path": "sids/GAMES/M-R/Neptune_Lander_Elite_Preview.sid",
     "size": 1249,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 91951,
+    "durationText": "1:31.951"
   },
   {
     "id": "R0FNRVMvTS1SL05ldGhlcl9FYXJ0aC5zaWQ",
@@ -12942,7 +15486,9 @@ window.SID_LIBRARY = [
     "fileName": "Nether_Earth.sid",
     "path": "sids/GAMES/M-R/Nether_Earth.sid",
     "size": 1746,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 86000,
+    "durationText": "1:26"
   },
   {
     "id": "R0FNRVMvTS1SL05ldmVyZW5kaW5nX1N0b3J5X0lJLnNpZA",
@@ -12952,7 +15498,9 @@ window.SID_LIBRARY = [
     "fileName": "Neverending_Story_II.sid",
     "path": "sids/GAMES/M-R/Neverending_Story_II.sid",
     "size": 15865,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 196000,
+    "durationText": "3:16"
   },
   {
     "id": "R0FNRVMvTS1SL05ld19Zb3JrX0NpdHkuc2lk",
@@ -12962,7 +15510,9 @@ window.SID_LIBRARY = [
     "fileName": "New_York_City.sid",
     "path": "sids/GAMES/M-R/New_York_City.sid",
     "size": 1931,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 46000,
+    "durationText": "0:46"
   },
   {
     "id": "R0FNRVMvTS1SL05ld2NvbWVyLnNpZA",
@@ -12972,7 +15522,9 @@ window.SID_LIBRARY = [
     "fileName": "Newcomer.sid",
     "path": "sids/GAMES/M-R/Newcomer.sid",
     "size": 20093,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 202000,
+    "durationText": "3:22"
   },
   {
     "id": "R0FNRVMvTS1SL05leHVzLnNpZA",
@@ -12982,7 +15534,9 @@ window.SID_LIBRARY = [
     "fileName": "Nexus.sid",
     "path": "sids/GAMES/M-R/Nexus.sid",
     "size": 3519,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 397000,
+    "durationText": "6:37"
   },
   {
     "id": "R0FNRVMvTS1SL05pYmJsZXIuc2lk",
@@ -12992,7 +15546,9 @@ window.SID_LIBRARY = [
     "fileName": "Nibbler.sid",
     "path": "sids/GAMES/M-R/Nibbler.sid",
     "size": 778,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 12085,
+    "durationText": "0:12.085"
   },
   {
     "id": "R0FNRVMvTS1SL05pY29zX1J1bi5zaWQ",
@@ -13002,7 +15558,9 @@ window.SID_LIBRARY = [
     "fileName": "Nicos_Run.sid",
     "path": "sids/GAMES/M-R/Nicos_Run.sid",
     "size": 3079,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 189568,
+    "durationText": "3:09.568"
   },
   {
     "id": "R0FNRVMvTS1SL05pZ2h0X0tuaWdodC5zaWQ",
@@ -13012,7 +15570,9 @@ window.SID_LIBRARY = [
     "fileName": "Night_Knight.sid",
     "path": "sids/GAMES/M-R/Night_Knight.sid",
     "size": 2699,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 51093,
+    "durationText": "0:51.093"
   },
   {
     "id": "R0FNRVMvTS1SL05pZ2h0X1NoYWRlLnNpZA",
@@ -13022,7 +15582,9 @@ window.SID_LIBRARY = [
     "fileName": "Night_Shade.sid",
     "path": "sids/GAMES/M-R/Night_Shade.sid",
     "size": 3184,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 2000,
+    "durationText": "0:02"
   },
   {
     "id": "R0FNRVMvTS1SL05pZ2h0bWFyZS5zaWQ",
@@ -13032,7 +15594,9 @@ window.SID_LIBRARY = [
     "fileName": "Nightmare.sid",
     "path": "sids/GAMES/M-R/Nightmare.sid",
     "size": 1610,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 102428,
+    "durationText": "1:42.428"
   },
   {
     "id": "R0FNRVMvTS1SL05pZ2h0d2Fsa2VyX0JBU0lDLnNpZA",
@@ -13042,7 +15606,9 @@ window.SID_LIBRARY = [
     "fileName": "Nightwalker_BASIC.sid",
     "path": "sids/GAMES/M-R/Nightwalker_BASIC.sid",
     "size": 2238,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 23846,
+    "durationText": "0:23.846"
   },
   {
     "id": "R0FNRVMvTS1SL05pbmphX01hc3Rlci5zaWQ",
@@ -13052,7 +15618,9 @@ window.SID_LIBRARY = [
     "fileName": "Ninja_Master.sid",
     "path": "sids/GAMES/M-R/Ninja_Master.sid",
     "size": 7798,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 103000,
+    "durationText": "1:43"
   },
   {
     "id": "R0FNRVMvTS1SL05pdGVyaWRlci5zaWQ",
@@ -13062,7 +15630,9 @@ window.SID_LIBRARY = [
     "fileName": "Niterider.sid",
     "path": "sids/GAMES/M-R/Niterider.sid",
     "size": 689,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 14027,
+    "durationText": "0:14.027"
   },
   {
     "id": "R0FNRVMvTS1SL05vc2ZlcmF0dV90aGVfVmFtcHlyZS5zaWQ",
@@ -13072,7 +15642,9 @@ window.SID_LIBRARY = [
     "fileName": "Nosferatu_the_Vampyre.sid",
     "path": "sids/GAMES/M-R/Nosferatu_the_Vampyre.sid",
     "size": 1255,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 17000,
+    "durationText": "0:17"
   },
   {
     "id": "R0FNRVMvTS1SL05vdmFsb2FkX2xvYWRlci5zaWQ",
@@ -13082,7 +15654,9 @@ window.SID_LIBRARY = [
     "fileName": "Novaload_loader.sid",
     "path": "sids/GAMES/M-R/Novaload_loader.sid",
     "size": 1250,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 44000,
+    "durationText": "0:44"
   },
   {
     "id": "R0FNRVMvTS1SL051Y2xldXMuc2lk",
@@ -13092,7 +15666,9 @@ window.SID_LIBRARY = [
     "fileName": "Nucleus.sid",
     "path": "sids/GAMES/M-R/Nucleus.sid",
     "size": 11393,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 192000,
+    "durationText": "3:12"
   },
   {
     "id": "R0FNRVMvTS1SL051bWJlcl9Cb3dsaW5nLnNpZA",
@@ -13102,7 +15678,9 @@ window.SID_LIBRARY = [
     "fileName": "Number_Bowling.sid",
     "path": "sids/GAMES/M-R/Number_Bowling.sid",
     "size": 846,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 9000,
+    "durationText": "0:09"
   },
   {
     "id": "R0FNRVMvTS1SL051bWJlcl9RdWVzdF9CQVNJQy5zaWQ",
@@ -13112,7 +15690,9 @@ window.SID_LIBRARY = [
     "fileName": "Number_Quest_BASIC.sid",
     "path": "sids/GAMES/M-R/Number_Quest_BASIC.sid",
     "size": 660,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 4000,
+    "durationText": "0:04"
   },
   {
     "id": "R0FNRVMvTS1SL051bWJlcl9UdW1ibGVyLnNpZA",
@@ -13122,7 +15702,9 @@ window.SID_LIBRARY = [
     "fileName": "Number_Tumbler.sid",
     "path": "sids/GAMES/M-R/Number_Tumbler.sid",
     "size": 397,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 18000,
+    "durationText": "0:18"
   },
   {
     "id": "R0FNRVMvTS1SL051dGNyYWthLnNpZA",
@@ -13132,7 +15714,9 @@ window.SID_LIBRARY = [
     "fileName": "Nutcraka.sid",
     "path": "sids/GAMES/M-R/Nutcraka.sid",
     "size": 1130,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 24000,
+    "durationText": "0:24"
   },
   {
     "id": "R0FNRVMvTS1SL09fUmlsZXlzX01pbmUuc2lk",
@@ -13142,7 +15726,9 @@ window.SID_LIBRARY = [
     "fileName": "O_Rileys_Mine.sid",
     "path": "sids/GAMES/M-R/O_Rileys_Mine.sid",
     "size": 1613,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 23000,
+    "durationText": "0:23"
   },
   {
     "id": "R0FNRVMvTS1SL09ic3Rlcm50ZS5zaWQ",
@@ -13152,7 +15738,9 @@ window.SID_LIBRARY = [
     "fileName": "Obsternte.sid",
     "path": "sids/GAMES/M-R/Obsternte.sid",
     "size": 2228,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 39000,
+    "durationText": "0:39"
   },
   {
     "id": "R0FNRVMvTS1SL09jZWFuX0NvbnF1ZXJvci5zaWQ",
@@ -13162,7 +15750,9 @@ window.SID_LIBRARY = [
     "fileName": "Ocean_Conqueror.sid",
     "path": "sids/GAMES/M-R/Ocean_Conqueror.sid",
     "size": 1926,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 30000,
+    "durationText": "0:30"
   },
   {
     "id": "R0FNRVMvTS1SL09jZWFuX1Jhbmdlci5zaWQ",
@@ -13172,7 +15762,9 @@ window.SID_LIBRARY = [
     "fileName": "Ocean_Ranger.sid",
     "path": "sids/GAMES/M-R/Ocean_Ranger.sid",
     "size": 27345,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 30000,
+    "durationText": "0:30"
   },
   {
     "id": "R0FNRVMvTS1SL09keXNzZXkuc2lk",
@@ -13182,7 +15774,9 @@ window.SID_LIBRARY = [
     "fileName": "Odyssey.sid",
     "path": "sids/GAMES/M-R/Odyssey.sid",
     "size": 2951,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 69000,
+    "durationText": "1:09"
   },
   {
     "id": "R0FNRVMvTS1SL09mZmljaWFsX0ZhdGhlcl9DaHJpc3RtYXNfR2FtZS5zaWQ",
@@ -13192,7 +15786,9 @@ window.SID_LIBRARY = [
     "fileName": "Official_Father_Christmas_Game.sid",
     "path": "sids/GAMES/M-R/Official_Father_Christmas_Game.sid",
     "size": 2753,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 16000,
+    "durationText": "0:16"
   },
   {
     "id": "R0FNRVMvTS1SL09oX05vLnNpZA",
@@ -13202,7 +15798,9 @@ window.SID_LIBRARY = [
     "fileName": "Oh_No.sid",
     "path": "sids/GAMES/M-R/Oh_No.sid",
     "size": 3718,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 39000,
+    "durationText": "0:39"
   },
   {
     "id": "R0FNRVMvTS1SL09pc2FjLnNpZA",
@@ -13212,7 +15810,9 @@ window.SID_LIBRARY = [
     "fileName": "Oisac.sid",
     "path": "sids/GAMES/M-R/Oisac.sid",
     "size": 440,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 12000,
+    "durationText": "0:12"
   },
   {
     "id": "R0FNRVMvTS1SL09sZF9NYW5zaW9uX1ByZXZpZXcuc2lk",
@@ -13222,7 +15822,9 @@ window.SID_LIBRARY = [
     "fileName": "Old_Mansion_Preview.sid",
     "path": "sids/GAMES/M-R/Old_Mansion_Preview.sid",
     "size": 1801,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 61308,
+    "durationText": "1:01.308"
   },
   {
     "id": "R0FNRVMvTS1SL09tZWdhLVBsYW5ldGVfSW52aXNpYmxlLnNpZA",
@@ -13232,7 +15834,9 @@ window.SID_LIBRARY = [
     "fileName": "Omega-Planete_Invisible.sid",
     "path": "sids/GAMES/M-R/Omega-Planete_Invisible.sid",
     "size": 8695,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 1034000,
+    "durationText": "17:14"
   },
   {
     "id": "R0FNRVMvTS1SL09uX2FfTW92ZS5zaWQ",
@@ -13242,7 +15846,9 @@ window.SID_LIBRARY = [
     "fileName": "On_a_Move.sid",
     "path": "sids/GAMES/M-R/On_a_Move.sid",
     "size": 7232,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 52000,
+    "durationText": "0:52"
   },
   {
     "id": "R0FNRVMvTS1SL09uZV9vbl9PbmVfRXJ2aW5nX2FuZF9CaXJkLnNpZA",
@@ -13252,7 +15858,9 @@ window.SID_LIBRARY = [
     "fileName": "One_on_One_Erving_and_Bird.sid",
     "path": "sids/GAMES/M-R/One_on_One_Erving_and_Bird.sid",
     "size": 3710,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 53000,
+    "durationText": "0:53"
   },
   {
     "id": "R0FNRVMvTS1SL09vbG9uZ19QcmV2aWV3LnNpZA",
@@ -13262,7 +15870,9 @@ window.SID_LIBRARY = [
     "fileName": "Oolong_Preview.sid",
     "path": "sids/GAMES/M-R/Oolong_Preview.sid",
     "size": 1399,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 24000,
+    "durationText": "0:24"
   },
   {
     "id": "R0FNRVMvTS1SL09wZXJhdGlvbl9Bbm9yaWEuc2lk",
@@ -13272,7 +15882,9 @@ window.SID_LIBRARY = [
     "fileName": "Operation_Anoria.sid",
     "path": "sids/GAMES/M-R/Operation_Anoria.sid",
     "size": 1213,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 18000,
+    "durationText": "0:18"
   },
   {
     "id": "R0FNRVMvTS1SL09wZXJhdGlvbl9Ib3JtdXouc2lk",
@@ -13282,7 +15894,9 @@ window.SID_LIBRARY = [
     "fileName": "Operation_Hormuz.sid",
     "path": "sids/GAMES/M-R/Operation_Hormuz.sid",
     "size": 2548,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 41000,
+    "durationText": "0:41"
   },
   {
     "id": "R0FNRVMvTS1SL09wZXJhdGlvbl9NZXJrdXIuc2lk",
@@ -13292,7 +15906,9 @@ window.SID_LIBRARY = [
     "fileName": "Operation_Merkur.sid",
     "path": "sids/GAMES/M-R/Operation_Merkur.sid",
     "size": 1698,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 55000,
+    "durationText": "0:55"
   },
   {
     "id": "R0FNRVMvTS1SL09wZXJhdGlvbl9OZXB0dW4uc2lk",
@@ -13302,7 +15918,9 @@ window.SID_LIBRARY = [
     "fileName": "Operation_Neptun.sid",
     "path": "sids/GAMES/M-R/Operation_Neptun.sid",
     "size": 1606,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 42798,
+    "durationText": "0:42.798"
   },
   {
     "id": "R0FNRVMvTS1SL09wZXJhdGlvbl9PbWVnYV9CbGFzdC5zaWQ",
@@ -13312,7 +15930,9 @@ window.SID_LIBRARY = [
     "fileName": "Operation_Omega_Blast.sid",
     "path": "sids/GAMES/M-R/Operation_Omega_Blast.sid",
     "size": 1942,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 77000,
+    "durationText": "1:17"
   },
   {
     "id": "R0FNRVMvTS1SL09yYml0cm9uLnNpZA",
@@ -13322,7 +15942,9 @@ window.SID_LIBRARY = [
     "fileName": "Orbitron.sid",
     "path": "sids/GAMES/M-R/Orbitron.sid",
     "size": 639,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 16000,
+    "durationText": "0:16"
   },
   {
     "id": "R0FNRVMvTS1SL09yZGVhbC5zaWQ",
@@ -13332,7 +15954,9 @@ window.SID_LIBRARY = [
     "fileName": "Ordeal.sid",
     "path": "sids/GAMES/M-R/Ordeal.sid",
     "size": 2949,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 77000,
+    "durationText": "1:17"
   },
   {
     "id": "R0FNRVMvTS1SL09yaW9uLnNpZA",
@@ -13342,7 +15966,9 @@ window.SID_LIBRARY = [
     "fileName": "Orion.sid",
     "path": "sids/GAMES/M-R/Orion.sid",
     "size": 11346,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 472000,
+    "durationText": "7:52"
   },
   {
     "id": "R0FNRVMvTS1SL09ybV9hbmRfQ2hlZXAtTmFycm93X1NxdWVha3Muc2lk",
@@ -13352,7 +15978,9 @@ window.SID_LIBRARY = [
     "fileName": "Orm_and_Cheep-Narrow_Squeaks.sid",
     "path": "sids/GAMES/M-R/Orm_and_Cheep-Narrow_Squeaks.sid",
     "size": 894,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 13000,
+    "durationText": "0:13"
   },
   {
     "id": "R0FNRVMvTS1SL090aGVsbG9fQkFTSUMuc2lk",
@@ -13362,7 +15990,9 @@ window.SID_LIBRARY = [
     "fileName": "Othello_BASIC.sid",
     "path": "sids/GAMES/M-R/Othello_BASIC.sid",
     "size": 2116,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 4000,
+    "durationText": "0:04"
   },
   {
     "id": "R0FNRVMvTS1SL091dF9vbl9hX0xpbWIuc2lk",
@@ -13372,7 +16002,9 @@ window.SID_LIBRARY = [
     "fileName": "Out_on_a_Limb.sid",
     "path": "sids/GAMES/M-R/Out_on_a_Limb.sid",
     "size": 22114,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 9000,
+    "durationText": "0:09"
   },
   {
     "id": "R0FNRVMvTS1SL091dGJyZWFrLnNpZA",
@@ -13382,7 +16014,9 @@ window.SID_LIBRARY = [
     "fileName": "Outbreak.sid",
     "path": "sids/GAMES/M-R/Outbreak.sid",
     "size": 1597,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 66000,
+    "durationText": "1:06"
   },
   {
     "id": "R0FNRVMvTS1SL091dGxhdy5zaWQ",
@@ -13392,7 +16026,9 @@ window.SID_LIBRARY = [
     "fileName": "Outlaw.sid",
     "path": "sids/GAMES/M-R/Outlaw.sid",
     "size": 549,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 26000,
+    "durationText": "0:26"
   },
   {
     "id": "R0FNRVMvTS1SL1BSRVguc2lk",
@@ -13402,7 +16038,9 @@ window.SID_LIBRARY = [
     "fileName": "PREX.sid",
     "path": "sids/GAMES/M-R/PREX.sid",
     "size": 11074,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 114934,
+    "durationText": "1:54.934"
   },
   {
     "id": "R0FNRVMvTS1SL1BhYy1NYW4uc2lk",
@@ -13412,7 +16050,9 @@ window.SID_LIBRARY = [
     "fileName": "Pac-Man.sid",
     "path": "sids/GAMES/M-R/Pac-Man.sid",
     "size": 315,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 4213,
+    "durationText": "0:04.213"
   },
   {
     "id": "R0FNRVMvTS1SL1BhY2JveS5zaWQ",
@@ -13422,7 +16062,9 @@ window.SID_LIBRARY = [
     "fileName": "Pacboy.sid",
     "path": "sids/GAMES/M-R/Pacboy.sid",
     "size": 2430,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 108231,
+    "durationText": "1:48.231"
   },
   {
     "id": "R0FNRVMvTS1SL1BhY2NpZS5zaWQ",
@@ -13432,7 +16074,9 @@ window.SID_LIBRARY = [
     "fileName": "Paccie.sid",
     "path": "sids/GAMES/M-R/Paccie.sid",
     "size": 6742,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 101000,
+    "durationText": "1:41"
   },
   {
     "id": "R0FNRVMvTS1SL1BhY29zX1BldGUuc2lk",
@@ -13442,7 +16086,9 @@ window.SID_LIBRARY = [
     "fileName": "Pacos_Pete.sid",
     "path": "sids/GAMES/M-R/Pacos_Pete.sid",
     "size": 14194,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 31000,
+    "durationText": "0:31"
   },
   {
     "id": "R0FNRVMvTS1SL1BhZGRpbmd0b25zX0dhcmRlbl9BZHZlbnR1cmUuc2lk",
@@ -13452,7 +16098,9 @@ window.SID_LIBRARY = [
     "fileName": "Paddingtons_Garden_Adventure.sid",
     "path": "sids/GAMES/M-R/Paddingtons_Garden_Adventure.sid",
     "size": 400,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 12000,
+    "durationText": "0:12"
   },
   {
     "id": "R0FNRVMvTS1SL1BhaW50ZXJib3kuc2lk",
@@ -13462,7 +16110,9 @@ window.SID_LIBRARY = [
     "fileName": "Painterboy.sid",
     "path": "sids/GAMES/M-R/Painterboy.sid",
     "size": 2094,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 62000,
+    "durationText": "1:02"
   },
   {
     "id": "R0FNRVMvTS1SL1BhbmNoby5zaWQ",
@@ -13472,7 +16122,9 @@ window.SID_LIBRARY = [
     "fileName": "Pancho.sid",
     "path": "sids/GAMES/M-R/Pancho.sid",
     "size": 4047,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 78000,
+    "durationText": "1:18"
   },
   {
     "id": "R0FNRVMvTS1SL1BhbmljLnNpZA",
@@ -13482,7 +16134,9 @@ window.SID_LIBRARY = [
     "fileName": "Panic.sid",
     "path": "sids/GAMES/M-R/Panic.sid",
     "size": 758,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 35000,
+    "durationText": "0:35"
   },
   {
     "id": "R0FNRVMvTS1SL1BhcGVyX1JvdXRlLnNpZA",
@@ -13492,7 +16146,9 @@ window.SID_LIBRARY = [
     "fileName": "Paper_Route.sid",
     "path": "sids/GAMES/M-R/Paper_Route.sid",
     "size": 525,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 12750,
+    "durationText": "0:12.75"
   },
   {
     "id": "R0FNRVMvTS1SL1BhcmFkcm9pZC5zaWQ",
@@ -13502,7 +16158,9 @@ window.SID_LIBRARY = [
     "fileName": "Paradroid.sid",
     "path": "sids/GAMES/M-R/Paradroid.sid",
     "size": 1426,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 5000,
+    "durationText": "0:05"
   },
   {
     "id": "R0FNRVMvTS1SL1BhcmFnb24uc2lk",
@@ -13512,7 +16170,9 @@ window.SID_LIBRARY = [
     "fileName": "Paragon.sid",
     "path": "sids/GAMES/M-R/Paragon.sid",
     "size": 1060,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 33000,
+    "durationText": "0:33"
   },
   {
     "id": "R0FNRVMvTS1SL1BhcmlnaV9EYWthci5zaWQ",
@@ -13522,7 +16182,9 @@ window.SID_LIBRARY = [
     "fileName": "Parigi_Dakar.sid",
     "path": "sids/GAMES/M-R/Parigi_Dakar.sid",
     "size": 1399,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 49000,
+    "durationText": "0:49"
   },
   {
     "id": "R0FNRVMvTS1SL1Bhcmt5X2FuZF90aGVfWWVsbG93X1N1Ym1hcmluZS5zaWQ",
@@ -13532,7 +16194,9 @@ window.SID_LIBRARY = [
     "fileName": "Parky_and_the_Yellow_Submarine.sid",
     "path": "sids/GAMES/M-R/Parky_and_the_Yellow_Submarine.sid",
     "size": 876,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 32500,
+    "durationText": "0:32.5"
   },
   {
     "id": "R0FNRVMvTS1SL1BhcnR5X1F1aXouc2lk",
@@ -13542,7 +16206,9 @@ window.SID_LIBRARY = [
     "fileName": "Party_Quiz.sid",
     "path": "sids/GAMES/M-R/Party_Quiz.sid",
     "size": 3688,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 113379,
+    "durationText": "1:53.379"
   },
   {
     "id": "R0FNRVMvTS1SL1Bhc3RlLU1hbl9QYXQuc2lk",
@@ -13552,7 +16218,9 @@ window.SID_LIBRARY = [
     "fileName": "Paste-Man_Pat.sid",
     "path": "sids/GAMES/M-R/Paste-Man_Pat.sid",
     "size": 3243,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 20428,
+    "durationText": "0:20.428"
   },
   {
     "id": "R0FNRVMvTS1SL1BhdWxjaGVuc19TY2hpZWJ1bmcuc2lk",
@@ -13562,7 +16230,9 @@ window.SID_LIBRARY = [
     "fileName": "Paulchens_Schiebung.sid",
     "path": "sids/GAMES/M-R/Paulchens_Schiebung.sid",
     "size": 994,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 50416,
+    "durationText": "0:50.416"
   },
   {
     "id": "R0FNRVMvTS1SL1BlYWNlX1dvbWVuLnNpZA",
@@ -13572,7 +16242,9 @@ window.SID_LIBRARY = [
     "fileName": "Peace_Women.sid",
     "path": "sids/GAMES/M-R/Peace_Women.sid",
     "size": 9777,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 149000,
+    "durationText": "2:29"
   },
   {
     "id": "R0FNRVMvTS1SL1BlYXJsX29mX0Rhd24uc2lk",
@@ -13582,7 +16254,9 @@ window.SID_LIBRARY = [
     "fileName": "Pearl_of_Dawn.sid",
     "path": "sids/GAMES/M-R/Pearl_of_Dawn.sid",
     "size": 31195,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 266000,
+    "durationText": "4:26"
   },
   {
     "id": "R0FNRVMvTS1SL1BlZ19KdW1wX0JBU0lDLnNpZA",
@@ -13592,7 +16266,9 @@ window.SID_LIBRARY = [
     "fileName": "Peg_Jump_BASIC.sid",
     "path": "sids/GAMES/M-R/Peg_Jump_BASIC.sid",
     "size": 2277,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 12000,
+    "durationText": "0:12"
   },
   {
     "id": "R0FNRVMvTS1SL1BlbmV0cmF0b3Iuc2lk",
@@ -13602,7 +16278,9 @@ window.SID_LIBRARY = [
     "fileName": "Penetrator.sid",
     "path": "sids/GAMES/M-R/Penetrator.sid",
     "size": 7382,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 31000,
+    "durationText": "0:31"
   },
   {
     "id": "R0FNRVMvTS1SL1BlbmdvX0JBU0lDLnNpZA",
@@ -13612,7 +16290,9 @@ window.SID_LIBRARY = [
     "fileName": "Pengo_BASIC.sid",
     "path": "sids/GAMES/M-R/Pengo_BASIC.sid",
     "size": 1019,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 30000,
+    "durationText": "0:30"
   },
   {
     "id": "R0FNRVMvTS1SL1BlbnNhdGUuc2lk",
@@ -13622,7 +16302,9 @@ window.SID_LIBRARY = [
     "fileName": "Pensate.sid",
     "path": "sids/GAMES/M-R/Pensate.sid",
     "size": 1124,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 6418,
+    "durationText": "0:06.418"
   },
   {
     "id": "R0FNRVMvTS1SL1BlbnRhZ29yYXRfSUkuc2lk",
@@ -13632,7 +16314,9 @@ window.SID_LIBRARY = [
     "fileName": "Pentagorat_II.sid",
     "path": "sids/GAMES/M-R/Pentagorat_II.sid",
     "size": 6547,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 130495,
+    "durationText": "2:10.495"
   },
   {
     "id": "R0FNRVMvTS1SL1BlbnRhZ3JhbS5zaWQ",
@@ -13642,7 +16326,9 @@ window.SID_LIBRARY = [
     "fileName": "Pentagram.sid",
     "path": "sids/GAMES/M-R/Pentagram.sid",
     "size": 1510,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 22000,
+    "durationText": "0:22"
   },
   {
     "id": "R0FNRVMvTS1SL1BlcHBpc19RdWVzdC5zaWQ",
@@ -13652,7 +16338,9 @@ window.SID_LIBRARY = [
     "fileName": "Peppis_Quest.sid",
     "path": "sids/GAMES/M-R/Peppis_Quest.sid",
     "size": 5254,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 100000,
+    "durationText": "1:40"
   },
   {
     "id": "R0FNRVMvTS1SL1BlcmN5X1BhdWxfUGlja3dpY2suc2lk",
@@ -13662,7 +16350,9 @@ window.SID_LIBRARY = [
     "fileName": "Percy_Paul_Pickwick.sid",
     "path": "sids/GAMES/M-R/Percy_Paul_Pickwick.sid",
     "size": 15442,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 486600,
+    "durationText": "8:06.6"
   },
   {
     "id": "R0FNRVMvTS1SL1BlcmN5X1Blbmd1aW4uc2lk",
@@ -13672,7 +16362,9 @@ window.SID_LIBRARY = [
     "fileName": "Percy_Penguin.sid",
     "path": "sids/GAMES/M-R/Percy_Penguin.sid",
     "size": 452,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 16000,
+    "durationText": "0:16"
   },
   {
     "id": "R0FNRVMvTS1SL1Blc3Ryb3kuc2lk",
@@ -13682,7 +16374,9 @@ window.SID_LIBRARY = [
     "fileName": "Pestroy.sid",
     "path": "sids/GAMES/M-R/Pestroy.sid",
     "size": 729,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 7000,
+    "durationText": "0:07"
   },
   {
     "id": "R0FNRVMvTS1SL1BldGNoLnNpZA",
@@ -13692,7 +16386,9 @@ window.SID_LIBRARY = [
     "fileName": "Petch.sid",
     "path": "sids/GAMES/M-R/Petch.sid",
     "size": 1402,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 18000,
+    "durationText": "0:18"
   },
   {
     "id": "R0FNRVMvTS1SL1BldGVyLnNpZA",
@@ -13702,7 +16398,9 @@ window.SID_LIBRARY = [
     "fileName": "Peter.sid",
     "path": "sids/GAMES/M-R/Peter.sid",
     "size": 916,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 31804,
+    "durationText": "0:31.804"
   },
   {
     "id": "R0FNRVMvTS1SL1BldGVyX1BpbG90LnNpZA",
@@ -13712,7 +16410,9 @@ window.SID_LIBRARY = [
     "fileName": "Peter_Pilot.sid",
     "path": "sids/GAMES/M-R/Peter_Pilot.sid",
     "size": 5377,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 131000,
+    "durationText": "2:11"
   },
   {
     "id": "R0FNRVMvTS1SL1BldGVyX1NoaWx0b25zX0hhbmRiYWxsX01hcmFkb25hLnNpZA",
@@ -13722,7 +16422,9 @@ window.SID_LIBRARY = [
     "fileName": "Peter_Shiltons_Handball_Maradona.sid",
     "path": "sids/GAMES/M-R/Peter_Shiltons_Handball_Maradona.sid",
     "size": 17022,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 124000,
+    "durationText": "2:04"
   },
   {
     "id": "R0FNRVMvTS1SL1BldHJvbF9hbmRfQ29fQkFTSUMuc2lk",
@@ -13732,7 +16434,9 @@ window.SID_LIBRARY = [
     "fileName": "Petrol_and_Co_BASIC.sid",
     "path": "sids/GAMES/M-R/Petrol_and_Co_BASIC.sid",
     "size": 1993,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 37000,
+    "durationText": "0:37"
   },
   {
     "id": "R0FNRVMvTS1SL1BoYWxzYmVyZy5zaWQ",
@@ -13742,7 +16446,9 @@ window.SID_LIBRARY = [
     "fileName": "Phalsberg.sid",
     "path": "sids/GAMES/M-R/Phalsberg.sid",
     "size": 1562,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 42000,
+    "durationText": "0:42"
   },
   {
     "id": "R0FNRVMvTS1SL1BoYW50b20uc2lk",
@@ -13752,7 +16458,9 @@ window.SID_LIBRARY = [
     "fileName": "Phantom.sid",
     "path": "sids/GAMES/M-R/Phantom.sid",
     "size": 7555,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 116000,
+    "durationText": "1:56"
   },
   {
     "id": "R0FNRVMvTS1SL1BoYXJhb2hzX0N1cnNlLnNpZA",
@@ -13762,7 +16470,9 @@ window.SID_LIBRARY = [
     "fileName": "Pharaohs_Curse.sid",
     "path": "sids/GAMES/M-R/Pharaohs_Curse.sid",
     "size": 409,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 33000,
+    "durationText": "0:33"
   },
   {
     "id": "R0FNRVMvTS1SL1BpY2tfbl9QaWxlLnNpZA",
@@ -13772,7 +16482,9 @@ window.SID_LIBRARY = [
     "fileName": "Pick_n_Pile.sid",
     "path": "sids/GAMES/M-R/Pick_n_Pile.sid",
     "size": 5080,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 30600,
+    "durationText": "0:30.6"
   },
   {
     "id": "R0FNRVMvTS1SL1BpZ3NfaW5fU3BhY2Uuc2lk",
@@ -13782,7 +16494,9 @@ window.SID_LIBRARY = [
     "fileName": "Pigs_in_Space.sid",
     "path": "sids/GAMES/M-R/Pigs_in_Space.sid",
     "size": 644,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 20000,
+    "durationText": "0:20"
   },
   {
     "id": "R0FNRVMvTS1SL1Bpbl9VcC5zaWQ",
@@ -13792,7 +16506,9 @@ window.SID_LIBRARY = [
     "fileName": "Pin_Up.sid",
     "path": "sids/GAMES/M-R/Pin_Up.sid",
     "size": 4478,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 112000,
+    "durationText": "1:52"
   },
   {
     "id": "R0FNRVMvTS1SL1BpbmctUG9uZ19DbGFzc2ljLnNpZA",
@@ -13802,7 +16518,9 @@ window.SID_LIBRARY = [
     "fileName": "Ping-Pong_Classic.sid",
     "path": "sids/GAMES/M-R/Ping-Pong_Classic.sid",
     "size": 415,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 9868,
+    "durationText": "0:09.868"
   },
   {
     "id": "R0FNRVMvTS1SL1BpbmdvLnNpZA",
@@ -13812,7 +16530,9 @@ window.SID_LIBRARY = [
     "fileName": "Pingo.sid",
     "path": "sids/GAMES/M-R/Pingo.sid",
     "size": 7230,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 52000,
+    "durationText": "0:52"
   },
   {
     "id": "R0FNRVMvTS1SL1BpcGVfTWFuaWEuc2lk",
@@ -13822,7 +16542,9 @@ window.SID_LIBRARY = [
     "fileName": "Pipe_Mania.sid",
     "path": "sids/GAMES/M-R/Pipe_Mania.sid",
     "size": 3043,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 2994,
+    "durationText": "0:02.994"
   },
   {
     "id": "R0FNRVMvTS1SL1BpcGVsaW5lX0JBU0lDLnNpZA",
@@ -13832,7 +16554,9 @@ window.SID_LIBRARY = [
     "fileName": "Pipeline_BASIC.sid",
     "path": "sids/GAMES/M-R/Pipeline_BASIC.sid",
     "size": 1356,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 10000,
+    "durationText": "0:10"
   },
   {
     "id": "R0FNRVMvTS1SL1BpcmFjeS5zaWQ",
@@ -13842,7 +16566,9 @@ window.SID_LIBRARY = [
     "fileName": "Piracy.sid",
     "path": "sids/GAMES/M-R/Piracy.sid",
     "size": 4989,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 2000,
+    "durationText": "0:02"
   },
   {
     "id": "R0FNRVMvTS1SL1BpcmF0ZXMuc2lk",
@@ -13852,7 +16578,9 @@ window.SID_LIBRARY = [
     "fileName": "Pirates.sid",
     "path": "sids/GAMES/M-R/Pirates.sid",
     "size": 2174,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 13000,
+    "durationText": "0:13"
   },
   {
     "id": "R0FNRVMvTS1SL1BpcmF0aS5zaWQ",
@@ -13862,7 +16590,9 @@ window.SID_LIBRARY = [
     "fileName": "Pirati.sid",
     "path": "sids/GAMES/M-R/Pirati.sid",
     "size": 1008,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 4000,
+    "durationText": "0:04"
   },
   {
     "id": "R0FNRVMvTS1SL1BpdGZhbGxfSUktTG9zdF9DYXZlcm5zLnNpZA",
@@ -13872,7 +16602,9 @@ window.SID_LIBRARY = [
     "fileName": "Pitfall_II-Lost_Caverns.sid",
     "path": "sids/GAMES/M-R/Pitfall_II-Lost_Caverns.sid",
     "size": 3723,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 80000,
+    "durationText": "1:20"
   },
   {
     "id": "R0FNRVMvTS1SL1BsYW5ldF9YMi5zaWQ",
@@ -13882,7 +16614,9 @@ window.SID_LIBRARY = [
     "fileName": "Planet_X2.sid",
     "path": "sids/GAMES/M-R/Planet_X2.sid",
     "size": 2663,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 45412,
+    "durationText": "0:45.412"
   },
   {
     "id": "R0FNRVMvTS1SL1BsYXF1ZV9NYW4uc2lk",
@@ -13892,7 +16626,9 @@ window.SID_LIBRARY = [
     "fileName": "Plaque_Man.sid",
     "path": "sids/GAMES/M-R/Plaque_Man.sid",
     "size": 648,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 7000,
+    "durationText": "0:07"
   },
   {
     "id": "R0FNRVMvTS1SL1BsYXRmb3JtX01hbmlhX3ByZXZpZXcuc2lk",
@@ -13902,7 +16638,9 @@ window.SID_LIBRARY = [
     "fileName": "Platform_Mania_preview.sid",
     "path": "sids/GAMES/M-R/Platform_Mania_preview.sid",
     "size": 2665,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 156000,
+    "durationText": "2:36"
   },
   {
     "id": "R0FNRVMvTS1SL1BsYXlfWW91cl9DYXJkc19SaWdodC5zaWQ",
@@ -13912,7 +16650,9 @@ window.SID_LIBRARY = [
     "fileName": "Play_Your_Cards_Right.sid",
     "path": "sids/GAMES/M-R/Play_Your_Cards_Right.sid",
     "size": 3043,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 34000,
+    "durationText": "0:34"
   },
   {
     "id": "R0FNRVMvTS1SL1BsYXlib3kuc2lk",
@@ -13922,7 +16662,9 @@ window.SID_LIBRARY = [
     "fileName": "Playboy.sid",
     "path": "sids/GAMES/M-R/Playboy.sid",
     "size": 4094,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 91252,
+    "durationText": "1:31.252"
   },
   {
     "id": "R0FNRVMvTS1SL1BsYXlkYXlzLnNpZA",
@@ -13932,7 +16674,9 @@ window.SID_LIBRARY = [
     "fileName": "Playdays.sid",
     "path": "sids/GAMES/M-R/Playdays.sid",
     "size": 1131,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 23000,
+    "durationText": "0:23"
   },
   {
     "id": "R0FNRVMvTS1SL1BsdW1iX0NyYXp5LnNpZA",
@@ -13942,7 +16686,9 @@ window.SID_LIBRARY = [
     "fileName": "Plumb_Crazy.sid",
     "path": "sids/GAMES/M-R/Plumb_Crazy.sid",
     "size": 990,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 13027,
+    "durationText": "0:13.027"
   },
   {
     "id": "R0FNRVMvTS1SL1BsdW1iZXJzX1NtaWxlX3ByZXZpZXcuc2lk",
@@ -13952,7 +16698,9 @@ window.SID_LIBRARY = [
     "fileName": "Plumbers_Smile_preview.sid",
     "path": "sids/GAMES/M-R/Plumbers_Smile_preview.sid",
     "size": 2921,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 15342,
+    "durationText": "0:15.342"
   },
   {
     "id": "R0FNRVMvTS1SL1BvY2tldF9Sb2NrZXRzLnNpZA",
@@ -13962,7 +16710,9 @@ window.SID_LIBRARY = [
     "fileName": "Pocket_Rockets.sid",
     "path": "sids/GAMES/M-R/Pocket_Rockets.sid",
     "size": 7457,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 45000,
+    "durationText": "0:45"
   },
   {
     "id": "R0FNRVMvTS1SL1BvZ290cm9uLnNpZA",
@@ -13972,7 +16722,9 @@ window.SID_LIBRARY = [
     "fileName": "Pogotron.sid",
     "path": "sids/GAMES/M-R/Pogotron.sid",
     "size": 1902,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 172000,
+    "durationText": "2:52"
   },
   {
     "id": "R0FNRVMvTS1SL1Bva2VyLnNpZA",
@@ -13982,7 +16734,9 @@ window.SID_LIBRARY = [
     "fileName": "Poker.sid",
     "path": "sids/GAMES/M-R/Poker.sid",
     "size": 2965,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 11000,
+    "durationText": "0:11"
   },
   {
     "id": "R0FNRVMvTS1SL1BvbGVfUG9zaXRpb24uc2lk",
@@ -13992,7 +16746,9 @@ window.SID_LIBRARY = [
     "fileName": "Pole_Position.sid",
     "path": "sids/GAMES/M-R/Pole_Position.sid",
     "size": 1671,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 5000,
+    "durationText": "0:05"
   },
   {
     "id": "R0FNRVMvTS1SL1BvbGVfUG9zaXRpb25fSUkuc2lk",
@@ -14002,7 +16758,9 @@ window.SID_LIBRARY = [
     "fileName": "Pole_Position_II.sid",
     "path": "sids/GAMES/M-R/Pole_Position_II.sid",
     "size": 3583,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 1000,
+    "durationText": "0:01"
   },
   {
     "id": "R0FNRVMvTS1SL1BvbGljZV9DYWRldC5zaWQ",
@@ -14012,7 +16770,9 @@ window.SID_LIBRARY = [
     "fileName": "Police_Cadet.sid",
     "path": "sids/GAMES/M-R/Police_Cadet.sid",
     "size": 804,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 13938,
+    "durationText": "0:13.938"
   },
   {
     "id": "R0FNRVMvTS1SL1Bvbmd5LnNpZA",
@@ -14022,7 +16782,9 @@ window.SID_LIBRARY = [
     "fileName": "Pongy.sid",
     "path": "sids/GAMES/M-R/Pongy.sid",
     "size": 3432,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 141548,
+    "durationText": "2:21.548"
   },
   {
     "id": "R0FNRVMvTS1SL1Bvb2wuc2lk",
@@ -14032,7 +16794,9 @@ window.SID_LIBRARY = [
     "fileName": "Pool.sid",
     "path": "sids/GAMES/M-R/Pool.sid",
     "size": 519,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 10659,
+    "durationText": "0:10.659"
   },
   {
     "id": "R0FNRVMvTS1SL1Bvb3lhbi5zaWQ",
@@ -14042,7 +16806,9 @@ window.SID_LIBRARY = [
     "fileName": "Pooyan.sid",
     "path": "sids/GAMES/M-R/Pooyan.sid",
     "size": 2023,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 13000,
+    "durationText": "0:13"
   },
   {
     "id": "R0FNRVMvTS1SL1BvcGV5ZS5zaWQ",
@@ -14052,7 +16818,9 @@ window.SID_LIBRARY = [
     "fileName": "Popeye.sid",
     "path": "sids/GAMES/M-R/Popeye.sid",
     "size": 2133,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 1000,
+    "durationText": "0:01"
   },
   {
     "id": "R0FNRVMvTS1SL1BvcHBlbS5zaWQ",
@@ -14062,7 +16830,9 @@ window.SID_LIBRARY = [
     "fileName": "Poppem.sid",
     "path": "sids/GAMES/M-R/Poppem.sid",
     "size": 1302,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 11544,
+    "durationText": "0:11.544"
   },
   {
     "id": "R0FNRVMvTS1SL1Bvd2VyX29mX0JsYWNrX0JhbmRpdC5zaWQ",
@@ -14072,7 +16842,9 @@ window.SID_LIBRARY = [
     "fileName": "Power_of_Black_Bandit.sid",
     "path": "sids/GAMES/M-R/Power_of_Black_Bandit.sid",
     "size": 4631,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 259000,
+    "durationText": "4:19"
   },
   {
     "id": "R0FNRVMvTS1SL1Bvd2VycGxheV9UaGVfR2FtZV9vZl90aGVfR29kcy5zaWQ",
@@ -14082,7 +16854,9 @@ window.SID_LIBRARY = [
     "fileName": "Powerplay_The_Game_of_the_Gods.sid",
     "path": "sids/GAMES/M-R/Powerplay_The_Game_of_the_Gods.sid",
     "size": 3724,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 119000,
+    "durationText": "1:59"
   },
   {
     "id": "R0FNRVMvTS1SL1Bvd2Vyc19vZl9HbG9vbS5zaWQ",
@@ -14092,7 +16866,9 @@ window.SID_LIBRARY = [
     "fileName": "Powers_of_Gloom.sid",
     "path": "sids/GAMES/M-R/Powers_of_Gloom.sid",
     "size": 3015,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 93000,
+    "durationText": "1:33"
   },
   {
     "id": "R0FNRVMvTS1SL1ByZWRhdG9yXzIuc2lk",
@@ -14102,7 +16878,9 @@ window.SID_LIBRARY = [
     "fileName": "Predator_2.sid",
     "path": "sids/GAMES/M-R/Predator_2.sid",
     "size": 3867,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 154000,
+    "durationText": "2:34"
   },
   {
     "id": "R0FNRVMvTS1SL1ByaXpvbmVfUHJldmlldy5zaWQ",
@@ -14112,7 +16890,9 @@ window.SID_LIBRARY = [
     "fileName": "Prizone_Preview.sid",
     "path": "sids/GAMES/M-R/Prizone_Preview.sid",
     "size": 7035,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 127000,
+    "durationText": "2:07"
   },
   {
     "id": "R0FNRVMvTS1SL1Byb2hpYml0aW9uLnNpZA",
@@ -14122,7 +16902,9 @@ window.SID_LIBRARY = [
     "fileName": "Prohibition.sid",
     "path": "sids/GAMES/M-R/Prohibition.sid",
     "size": 7328,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 72000,
+    "durationText": "1:12"
   },
   {
     "id": "R0FNRVMvTS1SL1Byb2plY3RfRmlyZXN0YXJ0LnNpZA",
@@ -14132,7 +16914,9 @@ window.SID_LIBRARY = [
     "fileName": "Project_Firestart.sid",
     "path": "sids/GAMES/M-R/Project_Firestart.sid",
     "size": 6457,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 64000,
+    "durationText": "1:04"
   },
   {
     "id": "R0FNRVMvTS1SL1Byb3NwZWN0b3JfQkFTSUMuc2lk",
@@ -14142,7 +16926,9 @@ window.SID_LIBRARY = [
     "fileName": "Prospector_BASIC.sid",
     "path": "sids/GAMES/M-R/Prospector_BASIC.sid",
     "size": 1658,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 23000,
+    "durationText": "0:23"
   },
   {
     "id": "R0FNRVMvTS1SL1Byb3RlY3Rvcl9JSS5zaWQ",
@@ -14152,7 +16938,9 @@ window.SID_LIBRARY = [
     "fileName": "Protector_II.sid",
     "path": "sids/GAMES/M-R/Protector_II.sid",
     "size": 1727,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 73000,
+    "durationText": "1:13"
   },
   {
     "id": "R0FNRVMvTS1SL1Byb3RpdW0uc2lk",
@@ -14162,7 +16950,9 @@ window.SID_LIBRARY = [
     "fileName": "Protium.sid",
     "path": "sids/GAMES/M-R/Protium.sid",
     "size": 6621,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 57000,
+    "durationText": "0:57"
   },
   {
     "id": "R0FNRVMvTS1SL1Bzc3N0LnNpZA",
@@ -14172,7 +16962,9 @@ window.SID_LIBRARY = [
     "fileName": "Pssst.sid",
     "path": "sids/GAMES/M-R/Pssst.sid",
     "size": 3509,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 61308,
+    "durationText": "1:01.308"
   },
   {
     "id": "R0FNRVMvTS1SL1BzeWNhc3RyaWEuc2lk",
@@ -14182,7 +16974,9 @@ window.SID_LIBRARY = [
     "fileName": "Psycastria.sid",
     "path": "sids/GAMES/M-R/Psycastria.sid",
     "size": 16239,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 87000,
+    "durationText": "1:27"
   },
   {
     "id": "R0FNRVMvTS1SL1B1cHB5cy5zaWQ",
@@ -14192,7 +16986,9 @@ window.SID_LIBRARY = [
     "fileName": "Puppys.sid",
     "path": "sids/GAMES/M-R/Puppys.sid",
     "size": 1318,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 76310,
+    "durationText": "1:16.31"
   },
   {
     "id": "R0FNRVMvTS1SL1B1cnBsZV9UdXJ0bGVzLnNpZA",
@@ -14202,7 +16998,9 @@ window.SID_LIBRARY = [
     "fileName": "Purple_Turtles.sid",
     "path": "sids/GAMES/M-R/Purple_Turtles.sid",
     "size": 1362,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 32000,
+    "durationText": "0:32"
   },
   {
     "id": "R0FNRVMvTS1SL1B1c2gtSXQuc2lk",
@@ -14212,7 +17010,9 @@ window.SID_LIBRARY = [
     "fileName": "Push-It.sid",
     "path": "sids/GAMES/M-R/Push-It.sid",
     "size": 4552,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 322000,
+    "durationText": "5:22"
   },
   {
     "id": "R0FNRVMvTS1SL1B1c3Nfbl9Cb290cy5zaWQ",
@@ -14222,7 +17022,9 @@ window.SID_LIBRARY = [
     "fileName": "Puss_n_Boots.sid",
     "path": "sids/GAMES/M-R/Puss_n_Boots.sid",
     "size": 409,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 16519,
+    "durationText": "0:16.519"
   },
   {
     "id": "R0FNRVMvTS1SL1B1enpsZV9NYXN0ZXIuc2lk",
@@ -14232,7 +17034,9 @@ window.SID_LIBRARY = [
     "fileName": "Puzzle_Master.sid",
     "path": "sids/GAMES/M-R/Puzzle_Master.sid",
     "size": 20347,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 228000,
+    "durationText": "3:48"
   },
   {
     "id": "R0FNRVMvTS1SL1B5amFtYXJhbWEuc2lk",
@@ -14242,7 +17046,9 @@ window.SID_LIBRARY = [
     "fileName": "Pyjamarama.sid",
     "path": "sids/GAMES/M-R/Pyjamarama.sid",
     "size": 976,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 30000,
+    "durationText": "0:30"
   },
   {
     "id": "R0FNRVMvTS1SL1B5cmFtaWRzX1ByZXZpZXcuc2lk",
@@ -14252,7 +17058,9 @@ window.SID_LIBRARY = [
     "fileName": "Pyramids_Preview.sid",
     "path": "sids/GAMES/M-R/Pyramids_Preview.sid",
     "size": 11370,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 75898,
+    "durationText": "1:15.898"
   },
   {
     "id": "R0FNRVMvTS1SL1FfQmVydF92ZXJzaW9uXzIuc2lk",
@@ -14262,7 +17070,9 @@ window.SID_LIBRARY = [
     "fileName": "Q_Bert_version_2.sid",
     "path": "sids/GAMES/M-R/Q_Bert_version_2.sid",
     "size": 510,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 9000,
+    "durationText": "0:09"
   },
   {
     "id": "R0FNRVMvTS1SL1F1YWRyYW50XzQuc2lk",
@@ -14272,7 +17082,9 @@ window.SID_LIBRARY = [
     "fileName": "Quadrant_4.sid",
     "path": "sids/GAMES/M-R/Quadrant_4.sid",
     "size": 4440,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 169000,
+    "durationText": "2:49"
   },
   {
     "id": "R0FNRVMvTS1SL1F1YXJpLnNpZA",
@@ -14282,7 +17094,9 @@ window.SID_LIBRARY = [
     "fileName": "Quari.sid",
     "path": "sids/GAMES/M-R/Quari.sid",
     "size": 2968,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 8958,
+    "durationText": "0:08.958"
   },
   {
     "id": "R0FNRVMvTS1SL1F1YXJ0ZXJob3JzZV9CQVNJQy5zaWQ",
@@ -14292,7 +17106,9 @@ window.SID_LIBRARY = [
     "fileName": "Quarterhorse_BASIC.sid",
     "path": "sids/GAMES/M-R/Quarterhorse_BASIC.sid",
     "size": 701,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 6908,
+    "durationText": "0:06.908"
   },
   {
     "id": "R0FNRVMvTS1SL1F1YXJ4LnNpZA",
@@ -14302,7 +17118,9 @@ window.SID_LIBRARY = [
     "fileName": "Quarx.sid",
     "path": "sids/GAMES/M-R/Quarx.sid",
     "size": 11316,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 6000,
+    "durationText": "0:06"
   },
   {
     "id": "R0FNRVMvTS1SL1F1YXNpbW9kby5zaWQ",
@@ -14312,7 +17130,9 @@ window.SID_LIBRARY = [
     "fileName": "Quasimodo.sid",
     "path": "sids/GAMES/M-R/Quasimodo.sid",
     "size": 847,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 22000,
+    "durationText": "0:22"
   },
   {
     "id": "R0FNRVMvTS1SL1F1YXNpbW9kb3NfQ2hyaXN0bWFzX0NhcGVyLnNpZA",
@@ -14322,7 +17142,9 @@ window.SID_LIBRARY = [
     "fileName": "Quasimodos_Christmas_Caper.sid",
     "path": "sids/GAMES/M-R/Quasimodos_Christmas_Caper.sid",
     "size": 3475,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 3000,
+    "durationText": "0:03"
   },
   {
     "id": "R0FNRVMvTS1SL1F1YXRyaWVtZV9EaW1lbnNpb24uc2lk",
@@ -14332,7 +17154,9 @@ window.SID_LIBRARY = [
     "fileName": "Quatrieme_Dimension.sid",
     "path": "sids/GAMES/M-R/Quatrieme_Dimension.sid",
     "size": 4131,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 118000,
+    "durationText": "1:58"
   },
   {
     "id": "R0FNRVMvTS1SL1F1ZXN0LnNpZA",
@@ -14342,7 +17166,9 @@ window.SID_LIBRARY = [
     "fileName": "Quest.sid",
     "path": "sids/GAMES/M-R/Quest.sid",
     "size": 1090,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 25604,
+    "durationText": "0:25.604"
   },
   {
     "id": "R0FNRVMvTS1SL1F1ZXN0X29mX0tpbmdzX0JBU0lDLnNpZA",
@@ -14352,7 +17178,9 @@ window.SID_LIBRARY = [
     "fileName": "Quest_of_Kings_BASIC.sid",
     "path": "sids/GAMES/M-R/Quest_of_Kings_BASIC.sid",
     "size": 1219,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 13000,
+    "durationText": "0:13"
   },
   {
     "id": "R0FNRVMvTS1SL1F1ZXN0X29mX3RoZV9TcGFjZV9CZWFnbGUuc2lk",
@@ -14362,7 +17190,9 @@ window.SID_LIBRARY = [
     "fileName": "Quest_of_the_Space_Beagle.sid",
     "path": "sids/GAMES/M-R/Quest_of_the_Space_Beagle.sid",
     "size": 1918,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 188000,
+    "durationText": "3:08"
   },
   {
     "id": "R0FNRVMvTS1SL1F1aWNrX1RoaW5raW5nLVJvYm90X1RhbGVzX0JBU0lDLnNpZA",
@@ -14372,7 +17202,9 @@ window.SID_LIBRARY = [
     "fileName": "Quick_Thinking-Robot_Tales_BASIC.sid",
     "path": "sids/GAMES/M-R/Quick_Thinking-Robot_Tales_BASIC.sid",
     "size": 1706,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 12000,
+    "durationText": "0:12"
   },
   {
     "id": "R0FNRVMvTS1SL1F1aWNraV9CQVNJQy5zaWQ",
@@ -14382,7 +17214,9 @@ window.SID_LIBRARY = [
     "fileName": "Quicki_BASIC.sid",
     "path": "sids/GAMES/M-R/Quicki_BASIC.sid",
     "size": 1401,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 8000,
+    "durationText": "0:08"
   },
   {
     "id": "R0FNRVMvTS1SL1F1aW54LnNpZA",
@@ -14392,7 +17226,9 @@ window.SID_LIBRARY = [
     "fileName": "Quinx.sid",
     "path": "sids/GAMES/M-R/Quinx.sid",
     "size": 850,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 14000,
+    "durationText": "0:14"
   },
   {
     "id": "R0FNRVMvTS1SL1F1aXotTWFzdGVyX3YzXzguc2lk",
@@ -14402,7 +17238,9 @@ window.SID_LIBRARY = [
     "fileName": "Quiz-Master_v3_8.sid",
     "path": "sids/GAMES/M-R/Quiz-Master_v3_8.sid",
     "size": 1255,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 23500,
+    "durationText": "0:23.5"
   },
   {
     "id": "R0FNRVMvTS1SL1F1b19WYWRpcy5zaWQ",
@@ -14412,7 +17250,9 @@ window.SID_LIBRARY = [
     "fileName": "Quo_Vadis.sid",
     "path": "sids/GAMES/M-R/Quo_Vadis.sid",
     "size": 3875,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 52000,
+    "durationText": "0:52"
   },
   {
     "id": "R0FNRVMvTS1SL1JNU19UaXRhbmljLnNpZA",
@@ -14422,7 +17262,9 @@ window.SID_LIBRARY = [
     "fileName": "RMS_Titanic.sid",
     "path": "sids/GAMES/M-R/RMS_Titanic.sid",
     "size": 4251,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 105000,
+    "durationText": "1:45"
   },
   {
     "id": "R0FNRVMvTS1SL1JhYmJpdF9QaWUuc2lk",
@@ -14432,7 +17274,9 @@ window.SID_LIBRARY = [
     "fileName": "Rabbit_Pie.sid",
     "path": "sids/GAMES/M-R/Rabbit_Pie.sid",
     "size": 363,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 25000,
+    "durationText": "0:25"
   },
   {
     "id": "R0FNRVMvTS1SL1JhY2Vfd2l0aF90aGVfRGV2aWwuc2lk",
@@ -14442,7 +17286,9 @@ window.SID_LIBRARY = [
     "fileName": "Race_with_the_Devil.sid",
     "path": "sids/GAMES/M-R/Race_with_the_Devil.sid",
     "size": 5995,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 180000,
+    "durationText": "3:00"
   },
   {
     "id": "R0FNRVMvTS1SL1JhZGFyX1JhdF9SYWNlLnNpZA",
@@ -14452,7 +17298,9 @@ window.SID_LIBRARY = [
     "fileName": "Radar_Rat_Race.sid",
     "path": "sids/GAMES/M-R/Radar_Rat_Race.sid",
     "size": 728,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 4000,
+    "durationText": "0:04"
   },
   {
     "id": "R0FNRVMvTS1SL1JhZGRpc2gtVHdvLnNpZA",
@@ -14462,7 +17310,9 @@ window.SID_LIBRARY = [
     "fileName": "Raddish-Two.sid",
     "path": "sids/GAMES/M-R/Raddish-Two.sid",
     "size": 1215,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 25300,
+    "durationText": "0:25.3"
   },
   {
     "id": "R0FNRVMvTS1SL1JhZGl1cy5zaWQ",
@@ -14472,7 +17322,9 @@ window.SID_LIBRARY = [
     "fileName": "Radius.sid",
     "path": "sids/GAMES/M-R/Radius.sid",
     "size": 4186,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 237000,
+    "durationText": "3:57"
   },
   {
     "id": "R0FNRVMvTS1SL1JhZ3NfdG9fUmljaGVzLnNpZA",
@@ -14482,7 +17334,9 @@ window.SID_LIBRARY = [
     "fileName": "Rags_to_Riches.sid",
     "path": "sids/GAMES/M-R/Rags_to_Riches.sid",
     "size": 4190,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 35007,
+    "durationText": "0:35.007"
   },
   {
     "id": "R0FNRVMvTS1SL1JhaWRfMjAwMC5zaWQ",
@@ -14492,7 +17346,9 @@ window.SID_LIBRARY = [
     "fileName": "Raid_2000.sid",
     "path": "sids/GAMES/M-R/Raid_2000.sid",
     "size": 3476,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 49000,
+    "durationText": "0:49"
   },
   {
     "id": "R0FNRVMvTS1SL1JhaWxyb2FkX1dvcmtzLnNpZA",
@@ -14502,7 +17358,9 @@ window.SID_LIBRARY = [
     "fileName": "Railroad_Works.sid",
     "path": "sids/GAMES/M-R/Railroad_Works.sid",
     "size": 6560,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 69000,
+    "durationText": "1:09"
   },
   {
     "id": "R0FNRVMvTS1SL1JhaW5ib3dfV2Fsa2VyLnNpZA",
@@ -14512,7 +17370,9 @@ window.SID_LIBRARY = [
     "fileName": "Rainbow_Walker.sid",
     "path": "sids/GAMES/M-R/Rainbow_Walker.sid",
     "size": 1375,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 5000,
+    "durationText": "0:05"
   },
   {
     "id": "R0FNRVMvTS1SL1JhbGx5X0Nyb3NzLnNpZA",
@@ -14522,7 +17382,9 @@ window.SID_LIBRARY = [
     "fileName": "Rally_Cross.sid",
     "path": "sids/GAMES/M-R/Rally_Cross.sid",
     "size": 2430,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 85000,
+    "durationText": "1:25"
   },
   {
     "id": "R0FNRVMvTS1SL1JhbGx5X1NpbXVsYXRvci5zaWQ",
@@ -14532,7 +17394,9 @@ window.SID_LIBRARY = [
     "fileName": "Rally_Simulator.sid",
     "path": "sids/GAMES/M-R/Rally_Simulator.sid",
     "size": 3829,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 134000,
+    "durationText": "2:14"
   },
   {
     "id": "R0FNRVMvTS1SL1JhcGlkX0ZpcmUuc2lk",
@@ -14542,7 +17406,9 @@ window.SID_LIBRARY = [
     "fileName": "Rapid_Fire.sid",
     "path": "sids/GAMES/M-R/Rapid_Fire.sid",
     "size": 430,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 73000,
+    "durationText": "1:13"
   },
   {
     "id": "R0FNRVMvTS1SL1JhdF9TcGxhdC5zaWQ",
@@ -14552,7 +17418,9 @@ window.SID_LIBRARY = [
     "fileName": "Rat_Splat.sid",
     "path": "sids/GAMES/M-R/Rat_Splat.sid",
     "size": 6837,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 5253,
+    "durationText": "0:05.253"
   },
   {
     "id": "R0FNRVMvTS1SL1JhdHRsZXIuc2lk",
@@ -14562,7 +17430,9 @@ window.SID_LIBRARY = [
     "fileName": "Rattler.sid",
     "path": "sids/GAMES/M-R/Rattler.sid",
     "size": 647,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 17000,
+    "durationText": "0:17"
   },
   {
     "id": "R0FNRVMvTS1SL1JlYWN0aW9uLnNpZA",
@@ -14572,7 +17442,9 @@ window.SID_LIBRARY = [
     "fileName": "Reaction.sid",
     "path": "sids/GAMES/M-R/Reaction.sid",
     "size": 9962,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 138496,
+    "durationText": "2:18.496"
   },
   {
     "id": "R0FNRVMvTS1SL1JlYmVscy5zaWQ",
@@ -14582,7 +17454,9 @@ window.SID_LIBRARY = [
     "fileName": "Rebels.sid",
     "path": "sids/GAMES/M-R/Rebels.sid",
     "size": 7654,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 161000,
+    "durationText": "2:41"
   },
   {
     "id": "R0FNRVMvTS1SL1Jla2Vud29uZGVyLnNpZA",
@@ -14592,7 +17466,9 @@ window.SID_LIBRARY = [
     "fileName": "Rekenwonder.sid",
     "path": "sids/GAMES/M-R/Rekenwonder.sid",
     "size": 1951,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 27000,
+    "durationText": "0:27"
   },
   {
     "id": "R0FNRVMvTS1SL1JlbmVnYWRlLnNpZA",
@@ -14602,7 +17478,9 @@ window.SID_LIBRARY = [
     "fileName": "Renegade.sid",
     "path": "sids/GAMES/M-R/Renegade.sid",
     "size": 5925,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 42000,
+    "durationText": "0:42"
   },
   {
     "id": "R0FNRVMvTS1SL1JlcHRvbi5zaWQ",
@@ -14612,7 +17490,9 @@ window.SID_LIBRARY = [
     "fileName": "Repton.sid",
     "path": "sids/GAMES/M-R/Repton.sid",
     "size": 543,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 7643,
+    "durationText": "0:07.643"
   },
   {
     "id": "R0FNRVMvTS1SL1Jlc2N1ZV9vbl9GcmFjdGFsdXMuc2lk",
@@ -14622,7 +17502,9 @@ window.SID_LIBRARY = [
     "fileName": "Rescue_on_Fractalus.sid",
     "path": "sids/GAMES/M-R/Rescue_on_Fractalus.sid",
     "size": 4145,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 4000,
+    "durationText": "0:04"
   },
   {
     "id": "R0FNRVMvTS1SL1Jlc2N1aW5nX09yYy5zaWQ",
@@ -14632,7 +17514,9 @@ window.SID_LIBRARY = [
     "fileName": "Rescuing_Orc.sid",
     "path": "sids/GAMES/M-R/Rescuing_Orc.sid",
     "size": 4532,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 8000,
+    "durationText": "0:08"
   },
   {
     "id": "R0FNRVMvTS1SL1JldHVybl9vZl90aGVfSmVkaS5zaWQ",
@@ -14642,7 +17526,9 @@ window.SID_LIBRARY = [
     "fileName": "Return_of_the_Jedi.sid",
     "path": "sids/GAMES/M-R/Return_of_the_Jedi.sid",
     "size": 8129,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 65000,
+    "durationText": "1:05"
   },
   {
     "id": "R0FNRVMvTS1SL1JldHVybl9vZl90aGVfU3BhY2VfV2FycmlvcnMuc2lk",
@@ -14652,7 +17538,9 @@ window.SID_LIBRARY = [
     "fileName": "Return_of_the_Space_Warriors.sid",
     "path": "sids/GAMES/M-R/Return_of_the_Space_Warriors.sid",
     "size": 2509,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 119800,
+    "durationText": "1:59.8"
   },
   {
     "id": "R0FNRVMvTS1SL1JldmVsYXRpb24uc2lk",
@@ -14662,7 +17550,9 @@ window.SID_LIBRARY = [
     "fileName": "Revelation.sid",
     "path": "sids/GAMES/M-R/Revelation.sid",
     "size": 2472,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 80000,
+    "durationText": "1:20"
   },
   {
     "id": "R0FNRVMvTS1SL1JldmVyc2kuc2lk",
@@ -14672,7 +17562,9 @@ window.SID_LIBRARY = [
     "fileName": "Reversi.sid",
     "path": "sids/GAMES/M-R/Reversi.sid",
     "size": 1662,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 40000,
+    "durationText": "0:40"
   },
   {
     "id": "R0FNRVMvTS1SL1JldmVyc2lfQkFTSUMuc2lk",
@@ -14682,7 +17574,9 @@ window.SID_LIBRARY = [
     "fileName": "Reversi_BASIC.sid",
     "path": "sids/GAMES/M-R/Reversi_BASIC.sid",
     "size": 860,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 19000,
+    "durationText": "0:19"
   },
   {
     "id": "R0FNRVMvTS1SL1JoeW1lc19hbmRfUmlkZGxlcy5zaWQ",
@@ -14692,7 +17586,9 @@ window.SID_LIBRARY = [
     "fileName": "Rhymes_and_Riddles.sid",
     "path": "sids/GAMES/M-R/Rhymes_and_Riddles.sid",
     "size": 5206,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 80000,
+    "durationText": "1:20"
   },
   {
     "id": "R0FNRVMvTS1SL1JpZGRsZXNfYW5kX1N0b25lcy5zaWQ",
@@ -14702,7 +17598,9 @@ window.SID_LIBRARY = [
     "fileName": "Riddles_and_Stones.sid",
     "path": "sids/GAMES/M-R/Riddles_and_Stones.sid",
     "size": 47980,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 170418,
+    "durationText": "2:50.418"
   },
   {
     "id": "R0FNRVMvTS1SL1JpbmdzX29mX01lZHVzYS5zaWQ",
@@ -14712,7 +17610,9 @@ window.SID_LIBRARY = [
     "fileName": "Rings_of_Medusa.sid",
     "path": "sids/GAMES/M-R/Rings_of_Medusa.sid",
     "size": 22716,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 174000,
+    "durationText": "2:54"
   },
   {
     "id": "R0FNRVMvTS1SL1JpbmdzaWRlLnNpZA",
@@ -14722,7 +17622,9 @@ window.SID_LIBRARY = [
     "fileName": "Ringside.sid",
     "path": "sids/GAMES/M-R/Ringside.sid",
     "size": 11346,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 214000,
+    "durationText": "3:34"
   },
   {
     "id": "R0FNRVMvTS1SL1JpdmVyX0NoYXNlLnNpZA",
@@ -14732,7 +17634,9 @@ window.SID_LIBRARY = [
     "fileName": "River_Chase.sid",
     "path": "sids/GAMES/M-R/River_Chase.sid",
     "size": 15344,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 62000,
+    "durationText": "1:02"
   },
   {
     "id": "R0FNRVMvTS1SL1JvYWRfUm9sbGVyLnNpZA",
@@ -14742,7 +17646,9 @@ window.SID_LIBRARY = [
     "fileName": "Road_Roller.sid",
     "path": "sids/GAMES/M-R/Road_Roller.sid",
     "size": 303,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 22000,
+    "durationText": "0:22"
   },
   {
     "id": "R0FNRVMvTS1SL1JvYWRydW5uZXIuc2lk",
@@ -14752,7 +17658,9 @@ window.SID_LIBRARY = [
     "fileName": "Roadrunner.sid",
     "path": "sids/GAMES/M-R/Roadrunner.sid",
     "size": 775,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 81000,
+    "durationText": "1:21"
   },
   {
     "id": "R0FNRVMvTS1SL1JvYmJ5LnNpZA",
@@ -14762,7 +17670,9 @@ window.SID_LIBRARY = [
     "fileName": "Robby.sid",
     "path": "sids/GAMES/M-R/Robby.sid",
     "size": 875,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 8000,
+    "durationText": "0:08"
   },
   {
     "id": "R0FNRVMvTS1SL1JvYmluX0hvb2RzX0dvbGQuc2lk",
@@ -14772,7 +17682,9 @@ window.SID_LIBRARY = [
     "fileName": "Robin_Hoods_Gold.sid",
     "path": "sids/GAMES/M-R/Robin_Hoods_Gold.sid",
     "size": 1383,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 55000,
+    "durationText": "0:55"
   },
   {
     "id": "R0FNRVMvTS1SL1JvYmluX29mX3RoZV9Xb29kLnNpZA",
@@ -14782,7 +17694,9 @@ window.SID_LIBRARY = [
     "fileName": "Robin_of_the_Wood.sid",
     "path": "sids/GAMES/M-R/Robin_of_the_Wood.sid",
     "size": 1878,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 41000,
+    "durationText": "0:41"
   },
   {
     "id": "R0FNRVMvTS1SL1JvYm9ib2x0LnNpZA",
@@ -14792,7 +17706,9 @@ window.SID_LIBRARY = [
     "fileName": "Robobolt.sid",
     "path": "sids/GAMES/M-R/Robobolt.sid",
     "size": 3242,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 225000,
+    "durationText": "3:45"
   },
   {
     "id": "R0FNRVMvTS1SL1JvYm9zZXJ2YW50LnNpZA",
@@ -14802,7 +17718,9 @@ window.SID_LIBRARY = [
     "fileName": "Roboservant.sid",
     "path": "sids/GAMES/M-R/Roboservant.sid",
     "size": 1982,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 96000,
+    "durationText": "1:36"
   },
   {
     "id": "R0FNRVMvTS1SL1JvYm94LnNpZA",
@@ -14812,7 +17730,9 @@ window.SID_LIBRARY = [
     "fileName": "Robox.sid",
     "path": "sids/GAMES/M-R/Robox.sid",
     "size": 3300,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 94000,
+    "durationText": "1:34"
   },
   {
     "id": "R0FNRVMvTS1SL1JvYm96b25lLnNpZA",
@@ -14822,7 +17742,9 @@ window.SID_LIBRARY = [
     "fileName": "Robozone.sid",
     "path": "sids/GAMES/M-R/Robozone.sid",
     "size": 4199,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 146000,
+    "durationText": "2:26"
   },
   {
     "id": "R0FNRVMvTS1SL1JvY2tfRmFsbC5zaWQ",
@@ -14832,7 +17754,9 @@ window.SID_LIBRARY = [
     "fileName": "Rock_Fall.sid",
     "path": "sids/GAMES/M-R/Rock_Fall.sid",
     "size": 889,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 34000,
+    "durationText": "0:34"
   },
   {
     "id": "R0FNRVMvTS1SL1JvY2tldF9CYWxsLnNpZA",
@@ -14842,7 +17766,9 @@ window.SID_LIBRARY = [
     "fileName": "Rocket_Ball.sid",
     "path": "sids/GAMES/M-R/Rocket_Ball.sid",
     "size": 6814,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 117000,
+    "durationText": "1:57"
   },
   {
     "id": "R0FNRVMvTS1SL1JvY2t1cy1UaGVfR2FtZS5zaWQ",
@@ -14852,7 +17778,9 @@ window.SID_LIBRARY = [
     "fileName": "Rockus-The_Game.sid",
     "path": "sids/GAMES/M-R/Rockus-The_Game.sid",
     "size": 8755,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 44000,
+    "durationText": "0:44"
   },
   {
     "id": "R0FNRVMvTS1SL1JvZG5leV90b190aGVfUmVzY3VlLnNpZA",
@@ -14862,7 +17790,9 @@ window.SID_LIBRARY = [
     "fileName": "Rodney_to_the_Rescue.sid",
     "path": "sids/GAMES/M-R/Rodney_to_the_Rescue.sid",
     "size": 293,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 25000,
+    "durationText": "0:25"
   },
   {
     "id": "R0FNRVMvTS1SL1JvbGxlcmJveS5zaWQ",
@@ -14872,7 +17802,9 @@ window.SID_LIBRARY = [
     "fileName": "Rollerboy.sid",
     "path": "sids/GAMES/M-R/Rollerboy.sid",
     "size": 7563,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 185000,
+    "durationText": "3:05"
   },
   {
     "id": "R0FNRVMvTS1SL1JvbGxlcmNvYXN0ZXJfUnVtYmxlci5zaWQ",
@@ -14882,7 +17814,9 @@ window.SID_LIBRARY = [
     "fileName": "Rollercoaster_Rumbler.sid",
     "path": "sids/GAMES/M-R/Rollercoaster_Rumbler.sid",
     "size": 2956,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 149000,
+    "durationText": "2:29"
   },
   {
     "id": "R0FNRVMvTS1SL1JvbGxpbi5zaWQ",
@@ -14892,7 +17826,9 @@ window.SID_LIBRARY = [
     "fileName": "Rollin.sid",
     "path": "sids/GAMES/M-R/Rollin.sid",
     "size": 1214,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 28000,
+    "durationText": "0:28"
   },
   {
     "id": "R0FNRVMvTS1SL1JvbGxpbmdfVGh1bmRlci5zaWQ",
@@ -14902,7 +17838,9 @@ window.SID_LIBRARY = [
     "fileName": "Rolling_Thunder.sid",
     "path": "sids/GAMES/M-R/Rolling_Thunder.sid",
     "size": 3181,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 73000,
+    "durationText": "1:13"
   },
   {
     "id": "R0FNRVMvTS1SL1JvbXVsdXMuc2lk",
@@ -14912,7 +17850,9 @@ window.SID_LIBRARY = [
     "fileName": "Romulus.sid",
     "path": "sids/GAMES/M-R/Romulus.sid",
     "size": 2277,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 48000,
+    "durationText": "0:48"
   },
   {
     "id": "R0FNRVMvTS1SL1Jvb3Rlci5zaWQ",
@@ -14922,7 +17862,9 @@ window.SID_LIBRARY = [
     "fileName": "Rooter.sid",
     "path": "sids/GAMES/M-R/Rooter.sid",
     "size": 21630,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 230000,
+    "durationText": "3:50"
   },
   {
     "id": "R0FNRVMvTS1SL1Jvb3Rpbl9Ub290aW4uc2lk",
@@ -14932,7 +17874,9 @@ window.SID_LIBRARY = [
     "fileName": "Rootin_Tootin.sid",
     "path": "sids/GAMES/M-R/Rootin_Tootin.sid",
     "size": 1162,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 181000,
+    "durationText": "3:01"
   },
   {
     "id": "R0FNRVMvTS1SL1JvdWxldHRlX0JBU0lDLnNpZA",
@@ -14942,7 +17886,9 @@ window.SID_LIBRARY = [
     "fileName": "Roulette_BASIC.sid",
     "path": "sids/GAMES/M-R/Roulette_BASIC.sid",
     "size": 510,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 16574,
+    "durationText": "0:16.574"
   },
   {
     "id": "R0FNRVMvTS1SL1JveV9vZl90aGVfUm92ZXJzLnNpZA",
@@ -14952,7 +17898,9 @@ window.SID_LIBRARY = [
     "fileName": "Roy_of_the_Rovers.sid",
     "path": "sids/GAMES/M-R/Roy_of_the_Rovers.sid",
     "size": 1849,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 36000,
+    "durationText": "0:36"
   },
   {
     "id": "R0FNRVMvTS1SL1JveWFsX0h1bnQuc2lk",
@@ -14962,7 +17910,9 @@ window.SID_LIBRARY = [
     "fileName": "Royal_Hunt.sid",
     "path": "sids/GAMES/M-R/Royal_Hunt.sid",
     "size": 3185,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 65138,
+    "durationText": "1:05.138"
   },
   {
     "id": "R0FNRVMvTS1SL1J1YmJpc2hfTW9uc3Rlci5zaWQ",
@@ -14972,7 +17922,9 @@ window.SID_LIBRARY = [
     "fileName": "Rubbish_Monster.sid",
     "path": "sids/GAMES/M-R/Rubbish_Monster.sid",
     "size": 1956,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 73000,
+    "durationText": "1:13"
   },
   {
     "id": "R0FNRVMvTS1SL1J1bl9mb3JfRGlhbW9uZHMuc2lk",
@@ -14982,7 +17934,9 @@ window.SID_LIBRARY = [
     "fileName": "Run_for_Diamonds.sid",
     "path": "sids/GAMES/M-R/Run_for_Diamonds.sid",
     "size": 927,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 181949,
+    "durationText": "3:01.949"
   },
   {
     "id": "R0FNRVMvTS1SL1J1bm5pbmdfTWFuLnNpZA",
@@ -14992,7 +17946,9 @@ window.SID_LIBRARY = [
     "fileName": "Running_Man.sid",
     "path": "sids/GAMES/M-R/Running_Man.sid",
     "size": 1375,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 36000,
+    "durationText": "0:36"
   },
   {
     "id": "R0FNRVMvTS1SL1J1cGVydF9hbmRfdGhlX0ljZV9DYXN0bGUuc2lk",
@@ -15002,7 +17958,9 @@ window.SID_LIBRARY = [
     "fileName": "Rupert_and_the_Ice_Castle.sid",
     "path": "sids/GAMES/M-R/Rupert_and_the_Ice_Castle.sid",
     "size": 4520,
-    "category": "M-R"
+    "category": "M-R",
+    "durationMs": 35925,
+    "durationText": "0:35.925"
   },
   {
     "id": "R0FNRVMvUy1aL1NfT19TLnNpZA",
@@ -15012,7 +17970,9 @@ window.SID_LIBRARY = [
     "fileName": "S_O_S.sid",
     "path": "sids/GAMES/S-Z/S_O_S.sid",
     "size": 896,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 202000,
+    "durationText": "3:22"
   },
   {
     "id": "R0FNRVMvUy1aL1NOS192c19DQVBDT01fVjEuc2lk",
@@ -15022,7 +17982,9 @@ window.SID_LIBRARY = [
     "fileName": "SNK_vs_CAPCOM_V1.sid",
     "path": "sids/GAMES/S-Z/SNK_vs_CAPCOM_V1.sid",
     "size": 45024,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 61088,
+    "durationText": "1:01.088"
   },
   {
     "id": "R0FNRVMvUy1aL1NhYm90ZXVyLnNpZA",
@@ -15032,7 +17994,9 @@ window.SID_LIBRARY = [
     "fileName": "Saboteur.sid",
     "path": "sids/GAMES/S-Z/Saboteur.sid",
     "size": 3169,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 107000,
+    "durationText": "1:47"
   },
   {
     "id": "R0FNRVMvUy1aL1NhYnJlX1d1bGYuc2lk",
@@ -15042,7 +18006,9 @@ window.SID_LIBRARY = [
     "fileName": "Sabre_Wulf.sid",
     "path": "sids/GAMES/S-Z/Sabre_Wulf.sid",
     "size": 1364,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 3000,
+    "durationText": "0:03"
   },
   {
     "id": "R0FNRVMvUy1aL1NhZ29yX2Rlcl9Fcm9iZXJlci5zaWQ",
@@ -15052,7 +18018,9 @@ window.SID_LIBRARY = [
     "fileName": "Sagor_der_Eroberer.sid",
     "path": "sids/GAMES/S-Z/Sagor_der_Eroberer.sid",
     "size": 830,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 24918,
+    "durationText": "0:24.918"
   },
   {
     "id": "R0FNRVMvUy1aL1NhaWxpbmcuc2lk",
@@ -15062,7 +18030,9 @@ window.SID_LIBRARY = [
     "fileName": "Sailing.sid",
     "path": "sids/GAMES/S-Z/Sailing.sid",
     "size": 7550,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 52000,
+    "durationText": "0:52"
   },
   {
     "id": "R0FNRVMvUy1aL1NhaW50c190b19TaW5uZXJzX0JBU0lDLnNpZA",
@@ -15072,7 +18042,9 @@ window.SID_LIBRARY = [
     "fileName": "Saints_to_Sinners_BASIC.sid",
     "path": "sids/GAMES/S-Z/Saints_to_Sinners_BASIC.sid",
     "size": 2361,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 21085,
+    "durationText": "0:21.085"
   },
   {
     "id": "R0FNRVMvUy1aL1NhbGl2YV9LaWQuc2lk",
@@ -15082,7 +18054,9 @@ window.SID_LIBRARY = [
     "fileName": "Saliva_Kid.sid",
     "path": "sids/GAMES/S-Z/Saliva_Kid.sid",
     "size": 20227,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 112000,
+    "durationText": "1:52"
   },
   {
     "id": "R0FNRVMvUy1aL1NhbGl2YV9LaWRfcHJldmlldy5zaWQ",
@@ -15092,7 +18066,9 @@ window.SID_LIBRARY = [
     "fileName": "Saliva_Kid_preview.sid",
     "path": "sids/GAMES/S-Z/Saliva_Kid_preview.sid",
     "size": 8492,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 122575,
+    "durationText": "2:02.575"
   },
   {
     "id": "R0FNRVMvUy1aL1NhbGx5c19HYXJkZW5fcHJldmlldy5zaWQ",
@@ -15102,7 +18078,9 @@ window.SID_LIBRARY = [
     "fileName": "Sallys_Garden_preview.sid",
     "path": "sids/GAMES/S-Z/Sallys_Garden_preview.sid",
     "size": 1555,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 6000,
+    "durationText": "0:06"
   },
   {
     "id": "R0FNRVMvUy1aL1NhbHRhc2FsdGEuc2lk",
@@ -15112,7 +18090,9 @@ window.SID_LIBRARY = [
     "fileName": "Saltasalta.sid",
     "path": "sids/GAMES/S-Z/Saltasalta.sid",
     "size": 1083,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 268153,
+    "durationText": "4:28.153"
   },
   {
     "id": "R0FNRVMvUy1aL1NhbW15X0xpZ2h0Zm9vdC5zaWQ",
@@ -15122,7 +18102,9 @@ window.SID_LIBRARY = [
     "fileName": "Sammy_Lightfoot.sid",
     "path": "sids/GAMES/S-Z/Sammy_Lightfoot.sid",
     "size": 1340,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 4000,
+    "durationText": "0:04"
   },
   {
     "id": "R0FNRVMvUy1aL1NhbXVyYWlfVHJpbG9neS5zaWQ",
@@ -15132,7 +18114,9 @@ window.SID_LIBRARY = [
     "fileName": "Samurai_Trilogy.sid",
     "path": "sids/GAMES/S-Z/Samurai_Trilogy.sid",
     "size": 10698,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 193650,
+    "durationText": "3:13.65"
   },
   {
     "id": "R0FNRVMvUy1aL1NhbnRhc19Ucm91Ymxlcy5zaWQ",
@@ -15142,7 +18126,9 @@ window.SID_LIBRARY = [
     "fileName": "Santas_Troubles.sid",
     "path": "sids/GAMES/S-Z/Santas_Troubles.sid",
     "size": 3500,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 40261,
+    "durationText": "0:40.261"
   },
   {
     "id": "R0FNRVMvUy1aL1NhcmFuX1RyaWxvZ2llX0JBU0lDLnNpZA",
@@ -15152,7 +18138,9 @@ window.SID_LIBRARY = [
     "fileName": "Saran_Trilogie_BASIC.sid",
     "path": "sids/GAMES/S-Z/Saran_Trilogie_BASIC.sid",
     "size": 3148,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 70000,
+    "durationText": "1:10"
   },
   {
     "id": "R0FNRVMvUy1aL1NhdWNlcl9BdHRhY2suc2lk",
@@ -15162,7 +18150,9 @@ window.SID_LIBRARY = [
     "fileName": "Saucer_Attack.sid",
     "path": "sids/GAMES/S-Z/Saucer_Attack.sid",
     "size": 638,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 11000,
+    "durationText": "0:11"
   },
   {
     "id": "R0FNRVMvUy1aL1NjYWxleHRyaWMuc2lk",
@@ -15172,7 +18162,9 @@ window.SID_LIBRARY = [
     "fileName": "Scalextric.sid",
     "path": "sids/GAMES/S-Z/Scalextric.sid",
     "size": 509,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 230000,
+    "durationText": "3:50"
   },
   {
     "id": "R0FNRVMvUy1aL1NjYXJhYi5zaWQ",
@@ -15182,7 +18174,9 @@ window.SID_LIBRARY = [
     "fileName": "Scarab.sid",
     "path": "sids/GAMES/S-Z/Scarab.sid",
     "size": 1500,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 24000,
+    "durationText": "0:24"
   },
   {
     "id": "R0FNRVMvUy1aL1NjYXJhYmFldXMuc2lk",
@@ -15192,7 +18186,9 @@ window.SID_LIBRARY = [
     "fileName": "Scarabaeus.sid",
     "path": "sids/GAMES/S-Z/Scarabaeus.sid",
     "size": 6590,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 154000,
+    "durationText": "2:34"
   },
   {
     "id": "R0FNRVMvUy1aL1NjYXJwZXIuc2lk",
@@ -15202,7 +18198,9 @@ window.SID_LIBRARY = [
     "fileName": "Scarper.sid",
     "path": "sids/GAMES/S-Z/Scarper.sid",
     "size": 2780,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 103000,
+    "durationText": "1:43"
   },
   {
     "id": "R0FNRVMvUy1aL1NjaGl6b2ZyZW5pYS5zaWQ",
@@ -15212,7 +18210,9 @@ window.SID_LIBRARY = [
     "fileName": "Schizofrenia.sid",
     "path": "sids/GAMES/S-Z/Schizofrenia.sid",
     "size": 4901,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 225000,
+    "durationText": "3:45"
   },
   {
     "id": "R0FNRVMvUy1aL1NjaG90dGVyLnNpZA",
@@ -15222,7 +18222,9 @@ window.SID_LIBRARY = [
     "fileName": "Schotter.sid",
     "path": "sids/GAMES/S-Z/Schotter.sid",
     "size": 423,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 13944,
+    "durationText": "0:13.944"
   },
   {
     "id": "R0FNRVMvUy1aL1Njb29ieV9Eb28uc2lk",
@@ -15232,7 +18234,9 @@ window.SID_LIBRARY = [
     "fileName": "Scooby_Doo.sid",
     "path": "sids/GAMES/S-Z/Scooby_Doo.sid",
     "size": 4315,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 40000,
+    "durationText": "0:40"
   },
   {
     "id": "R0FNRVMvUy1aL1Njb3R0aS5zaWQ",
@@ -15242,7 +18246,9 @@ window.SID_LIBRARY = [
     "fileName": "Scotti.sid",
     "path": "sids/GAMES/S-Z/Scotti.sid",
     "size": 1312,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 6000,
+    "durationText": "0:06"
   },
   {
     "id": "R0FNRVMvUy1aL1NjcmlsbGluZ19CQVNJQy5zaWQ",
@@ -15252,7 +18258,9 @@ window.SID_LIBRARY = [
     "fileName": "Scrilling_BASIC.sid",
     "path": "sids/GAMES/S-Z/Scrilling_BASIC.sid",
     "size": 1104,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 11000,
+    "durationText": "0:11"
   },
   {
     "id": "R0FNRVMvUy1aL1NjcnVwbGVzLnNpZA",
@@ -15262,7 +18270,9 @@ window.SID_LIBRARY = [
     "fileName": "Scruples.sid",
     "path": "sids/GAMES/S-Z/Scruples.sid",
     "size": 4506,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 26000,
+    "durationText": "0:26"
   },
   {
     "id": "R0FNRVMvUy1aL1NlY3JldF9vZl9Nb25rZXlfSXNsYW5kX3R1bmVfNS5zaWQ",
@@ -15272,7 +18282,9 @@ window.SID_LIBRARY = [
     "fileName": "Secret_of_Monkey_Island_tune_5.sid",
     "path": "sids/GAMES/S-Z/Secret_of_Monkey_Island_tune_5.sid",
     "size": 3566,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 92889,
+    "durationText": "1:32.889"
   },
   {
     "id": "R0FNRVMvUy1aL1NlY3JldF9vZl9Nb25rZXlfSXNsYW5kX3R1bmVfNi5zaWQ",
@@ -15282,7 +18294,9 @@ window.SID_LIBRARY = [
     "fileName": "Secret_of_Monkey_Island_tune_6.sid",
     "path": "sids/GAMES/S-Z/Secret_of_Monkey_Island_tune_6.sid",
     "size": 1259,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 12769,
+    "durationText": "0:12.769"
   },
   {
     "id": "R0FNRVMvUy1aL1NlY3JldF9vZl9Nb25rZXlfSXNsYW5kX3R1bmVfOS5zaWQ",
@@ -15292,7 +18306,9 @@ window.SID_LIBRARY = [
     "fileName": "Secret_of_Monkey_Island_tune_9.sid",
     "path": "sids/GAMES/S-Z/Secret_of_Monkey_Island_tune_9.sid",
     "size": 3422,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 73997,
+    "durationText": "1:13.997"
   },
   {
     "id": "R0FNRVMvUy1aL1NlY3JldF9vZl90aGVfU2lsdmVyX0JsYWRlcy5zaWQ",
@@ -15302,7 +18318,9 @@ window.SID_LIBRARY = [
     "fileName": "Secret_of_the_Silver_Blades.sid",
     "path": "sids/GAMES/S-Z/Secret_of_the_Silver_Blades.sid",
     "size": 2518,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 80000,
+    "durationText": "1:20"
   },
   {
     "id": "R0FNRVMvUy1aL1NlY3VyaXR5X0FsZXJ0LnNpZA",
@@ -15312,7 +18330,9 @@ window.SID_LIBRARY = [
     "fileName": "Security_Alert.sid",
     "path": "sids/GAMES/S-Z/Security_Alert.sid",
     "size": 8188,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 32000,
+    "durationText": "0:32"
   },
   {
     "id": "R0FNRVMvUy1aL1NlZWtfYW5kX0Rlc3Ryb3lfQkFTSUMuc2lk",
@@ -15322,7 +18342,9 @@ window.SID_LIBRARY = [
     "fileName": "Seek_and_Destroy_BASIC.sid",
     "path": "sids/GAMES/S-Z/Seek_and_Destroy_BASIC.sid",
     "size": 2047,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 7000,
+    "durationText": "0:07"
   },
   {
     "id": "R0FNRVMvUy1aL1NlZXNhdy5zaWQ",
@@ -15332,7 +18354,9 @@ window.SID_LIBRARY = [
     "fileName": "Seesaw.sid",
     "path": "sids/GAMES/S-Z/Seesaw.sid",
     "size": 1661,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 20000,
+    "durationText": "0:20"
   },
   {
     "id": "R0FNRVMvUy1aL1NlamQuc2lk",
@@ -15342,7 +18366,9 @@ window.SID_LIBRARY = [
     "fileName": "Sejd.sid",
     "path": "sids/GAMES/S-Z/Sejd.sid",
     "size": 1831,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 81000,
+    "durationText": "1:21"
   },
   {
     "id": "R0FNRVMvUy1aL1NlbnRpbmVsLnNpZA",
@@ -15352,7 +18378,9 @@ window.SID_LIBRARY = [
     "fileName": "Sentinel.sid",
     "path": "sids/GAMES/S-Z/Sentinel.sid",
     "size": 1962,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 6000,
+    "durationText": "0:06"
   },
   {
     "id": "R0FNRVMvUy1aL1NlbnRpbmVsX1dvcmxkcy1GdXR1cmVfTWFnaWMuc2lk",
@@ -15362,7 +18390,9 @@ window.SID_LIBRARY = [
     "fileName": "Sentinel_Worlds-Future_Magic.sid",
     "path": "sids/GAMES/S-Z/Sentinel_Worlds-Future_Magic.sid",
     "size": 34149,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 83000,
+    "durationText": "1:23"
   },
   {
     "id": "R0FNRVMvUy1aL1NlcnBlbnRpbmUuc2lk",
@@ -15372,7 +18402,9 @@ window.SID_LIBRARY = [
     "fileName": "Serpentine.sid",
     "path": "sids/GAMES/S-Z/Serpentine.sid",
     "size": 601,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 1000,
+    "durationText": "0:01"
   },
   {
     "id": "R0FNRVMvUy1aL1Nlc3Npb24uc2lk",
@@ -15382,7 +18414,9 @@ window.SID_LIBRARY = [
     "fileName": "Session.sid",
     "path": "sids/GAMES/S-Z/Session.sid",
     "size": 18885,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 521000,
+    "durationText": "8:41"
   },
   {
     "id": "R0FNRVMvUy1aL1Nlc3Npb25faW5zdHJ1Y3Rpb25zLnNpZA",
@@ -15392,7 +18426,9 @@ window.SID_LIBRARY = [
     "fileName": "Session_instructions.sid",
     "path": "sids/GAMES/S-Z/Session_instructions.sid",
     "size": 3236,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 144000,
+    "durationText": "2:24"
   },
   {
     "id": "R0FNRVMvUy1aL1NldmVuX0NpdGllc19vZl9Hb2xkLnNpZA",
@@ -15402,7 +18438,9 @@ window.SID_LIBRARY = [
     "fileName": "Seven_Cities_of_Gold.sid",
     "path": "sids/GAMES/S-Z/Seven_Cities_of_Gold.sid",
     "size": 1700,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 81000,
+    "durationText": "1:21"
   },
   {
     "id": "R0FNRVMvUy1aL1NldmVuX0VsZXZlbi5zaWQ",
@@ -15412,7 +18450,9 @@ window.SID_LIBRARY = [
     "fileName": "Seven_Eleven.sid",
     "path": "sids/GAMES/S-Z/Seven_Eleven.sid",
     "size": 5680,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 103000,
+    "durationText": "1:43"
   },
   {
     "id": "R0FNRVMvUy1aL1NoYWNrbGVkLnNpZA",
@@ -15422,7 +18462,9 @@ window.SID_LIBRARY = [
     "fileName": "Shackled.sid",
     "path": "sids/GAMES/S-Z/Shackled.sid",
     "size": 3470,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 59200,
+    "durationText": "0:59.2"
   },
   {
     "id": "R0FNRVMvUy1aL1NoYWZ0X1JhaWRlci5zaWQ",
@@ -15432,7 +18474,9 @@ window.SID_LIBRARY = [
     "fileName": "Shaft_Raider.sid",
     "path": "sids/GAMES/S-Z/Shaft_Raider.sid",
     "size": 788,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 14200,
+    "durationText": "0:14.2"
   },
   {
     "id": "R0FNRVMvUy1aL1NoYXJkcy5zaWQ",
@@ -15442,7 +18486,9 @@ window.SID_LIBRARY = [
     "fileName": "Shards.sid",
     "path": "sids/GAMES/S-Z/Shards.sid",
     "size": 2204,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 31000,
+    "durationText": "0:31"
   },
   {
     "id": "R0FNRVMvUy1aL1NoZWxsc2hvY2suc2lk",
@@ -15452,7 +18498,9 @@ window.SID_LIBRARY = [
     "fileName": "Shellshock.sid",
     "path": "sids/GAMES/S-Z/Shellshock.sid",
     "size": 6318,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 77000,
+    "durationText": "1:17"
   },
   {
     "id": "R0FNRVMvUy1aL1NoaWZ0LnNpZA",
@@ -15462,7 +18510,9 @@ window.SID_LIBRARY = [
     "fileName": "Shift.sid",
     "path": "sids/GAMES/S-Z/Shift.sid",
     "size": 11420,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 60805,
+    "durationText": "1:00.805"
   },
   {
     "id": "R0FNRVMvUy1aL1NoaXBfQkFTSUMuc2lk",
@@ -15472,7 +18522,9 @@ window.SID_LIBRARY = [
     "fileName": "Ship_BASIC.sid",
     "path": "sids/GAMES/S-Z/Ship_BASIC.sid",
     "size": 1129,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 6184,
+    "durationText": "0:06.184"
   },
   {
     "id": "R0FNRVMvUy1aL1Nob290X091dC5zaWQ",
@@ -15482,7 +18534,9 @@ window.SID_LIBRARY = [
     "fileName": "Shoot_Out.sid",
     "path": "sids/GAMES/S-Z/Shoot_Out.sid",
     "size": 6197,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 91932,
+    "durationText": "1:31.932"
   },
   {
     "id": "R0FNRVMvUy1aL1Nob290X2VtX1VwLnNpZA",
@@ -15492,7 +18546,9 @@ window.SID_LIBRARY = [
     "fileName": "Shoot_em_Up.sid",
     "path": "sids/GAMES/S-Z/Shoot_em_Up.sid",
     "size": 2047,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 61000,
+    "durationText": "1:01"
   },
   {
     "id": "R0FNRVMvUy1aL1Nob290aW5nX0dhbGxlcnlfQkFTSUMuc2lk",
@@ -15502,7 +18558,9 @@ window.SID_LIBRARY = [
     "fileName": "Shooting_Gallery_BASIC.sid",
     "path": "sids/GAMES/S-Z/Shooting_Gallery_BASIC.sid",
     "size": 1921,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 35000,
+    "durationText": "0:35"
   },
   {
     "id": "R0FNRVMvUy1aL1Nob3RfdGhlX0dvdWxkcy5zaWQ",
@@ -15512,7 +18570,9 @@ window.SID_LIBRARY = [
     "fileName": "Shot_the_Goulds.sid",
     "path": "sids/GAMES/S-Z/Shot_the_Goulds.sid",
     "size": 474,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 10000,
+    "durationText": "0:10"
   },
   {
     "id": "R0FNRVMvUy1aL1NodWZmbGVfQkFTSUMuc2lk",
@@ -15522,7 +18582,9 @@ window.SID_LIBRARY = [
     "fileName": "Shuffle_BASIC.sid",
     "path": "sids/GAMES/S-Z/Shuffle_BASIC.sid",
     "size": 1905,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 8000,
+    "durationText": "0:08"
   },
   {
     "id": "R0FNRVMvUy1aL1NpbW9uLnNpZA",
@@ -15532,7 +18594,9 @@ window.SID_LIBRARY = [
     "fileName": "Simon.sid",
     "path": "sids/GAMES/S-Z/Simon.sid",
     "size": 1755,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 77000,
+    "durationText": "1:17"
   },
   {
     "id": "R0FNRVMvUy1aL1NpbXBzb25zX0FyY2FkZV9HYW1lLnNpZA",
@@ -15542,7 +18606,9 @@ window.SID_LIBRARY = [
     "fileName": "Simpsons_Arcade_Game.sid",
     "path": "sids/GAMES/S-Z/Simpsons_Arcade_Game.sid",
     "size": 39037,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 33000,
+    "durationText": "0:33"
   },
   {
     "id": "R0FNRVMvUy1aL1NpbmJhZF9hbmRfdGhlX1Rocm9uZV9vZl90aGVfRmFsY29uLnNpZA",
@@ -15552,7 +18618,9 @@ window.SID_LIBRARY = [
     "fileName": "Sinbad_and_the_Throne_of_the_Falcon.sid",
     "path": "sids/GAMES/S-Z/Sinbad_and_the_Throne_of_the_Falcon.sid",
     "size": 17022,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 307000,
+    "durationText": "5:07"
   },
   {
     "id": "R0FNRVMvUy1aL1NpbmdsZV9FeHRyZW1lX0ZyZWVkb20uc2lk",
@@ -15562,7 +18630,9 @@ window.SID_LIBRARY = [
     "fileName": "Single_Extreme_Freedom.sid",
     "path": "sids/GAMES/S-Z/Single_Extreme_Freedom.sid",
     "size": 31615,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 167000,
+    "durationText": "2:47"
   },
   {
     "id": "R0FNRVMvUy1aL1NrYXRlX29yX0RpZS5zaWQ",
@@ -15572,7 +18642,9 @@ window.SID_LIBRARY = [
     "fileName": "Skate_or_Die.sid",
     "path": "sids/GAMES/S-Z/Skate_or_Die.sid",
     "size": 28062,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 300000,
+    "durationText": "5:00"
   },
   {
     "id": "R0FNRVMvUy1aL1NrYXRlYm9hcmRfU2FtX0JBU0lDLnNpZA",
@@ -15582,7 +18654,9 @@ window.SID_LIBRARY = [
     "fileName": "Skateboard_Sam_BASIC.sid",
     "path": "sids/GAMES/S-Z/Skateboard_Sam_BASIC.sid",
     "size": 1922,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 12000,
+    "durationText": "0:12"
   },
   {
     "id": "R0FNRVMvUy1aL1NrZWwuc2lk",
@@ -15592,7 +18666,9 @@ window.SID_LIBRARY = [
     "fileName": "Skel.sid",
     "path": "sids/GAMES/S-Z/Skel.sid",
     "size": 643,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 17000,
+    "durationText": "0:17"
   },
   {
     "id": "R0FNRVMvUy1aL1NraV9KdW1wX0JBU0lDLnNpZA",
@@ -15602,7 +18678,9 @@ window.SID_LIBRARY = [
     "fileName": "Ski_Jump_BASIC.sid",
     "path": "sids/GAMES/S-Z/Ski_Jump_BASIC.sid",
     "size": 1549,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 23000,
+    "durationText": "0:23"
   },
   {
     "id": "R0FNRVMvUy1aL1NraV9XZWx0Y3VwLnNpZA",
@@ -15612,7 +18690,9 @@ window.SID_LIBRARY = [
     "fileName": "Ski_Weltcup.sid",
     "path": "sids/GAMES/S-Z/Ski_Weltcup.sid",
     "size": 2180,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 22000,
+    "durationText": "0:22"
   },
   {
     "id": "R0FNRVMvUy1aL1NraWVyLnNpZA",
@@ -15622,7 +18702,9 @@ window.SID_LIBRARY = [
     "fileName": "Skier.sid",
     "path": "sids/GAMES/S-Z/Skier.sid",
     "size": 3070,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 26000,
+    "durationText": "0:26"
   },
   {
     "id": "R0FNRVMvUy1aL1NraW5hdXRpY19CQVNJQy5zaWQ",
@@ -15632,7 +18714,9 @@ window.SID_LIBRARY = [
     "fileName": "Skinautic_BASIC.sid",
     "path": "sids/GAMES/S-Z/Skinautic_BASIC.sid",
     "size": 1514,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 18600,
+    "durationText": "0:18.6"
   },
   {
     "id": "R0FNRVMvUy1aL1Nrb29sX0RhemUuc2lk",
@@ -15642,7 +18726,9 @@ window.SID_LIBRARY = [
     "fileName": "Skool_Daze.sid",
     "path": "sids/GAMES/S-Z/Skool_Daze.sid",
     "size": 1157,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 9000,
+    "durationText": "0:09"
   },
   {
     "id": "R0FNRVMvUy1aL1NrcmFtYmxlLnNpZA",
@@ -15652,7 +18738,9 @@ window.SID_LIBRARY = [
     "fileName": "Skramble.sid",
     "path": "sids/GAMES/S-Z/Skramble.sid",
     "size": 3346,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 41000,
+    "durationText": "0:41"
   },
   {
     "id": "R0FNRVMvUy1aL1NrdWxsLnNpZA",
@@ -15662,7 +18750,9 @@ window.SID_LIBRARY = [
     "fileName": "Skull.sid",
     "path": "sids/GAMES/S-Z/Skull.sid",
     "size": 5007,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 19000,
+    "durationText": "0:19"
   },
   {
     "id": "R0FNRVMvUy1aL1NreV9SdW5uZXIuc2lk",
@@ -15672,7 +18762,9 @@ window.SID_LIBRARY = [
     "fileName": "Sky_Runner.sid",
     "path": "sids/GAMES/S-Z/Sky_Runner.sid",
     "size": 6358,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 230000,
+    "durationText": "3:50"
   },
   {
     "id": "R0FNRVMvUy1aL1NsYXBzaG90LnNpZA",
@@ -15682,7 +18774,9 @@ window.SID_LIBRARY = [
     "fileName": "Slapshot.sid",
     "path": "sids/GAMES/S-Z/Slapshot.sid",
     "size": 4527,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 2000,
+    "durationText": "0:02"
   },
   {
     "id": "R0FNRVMvUy1aL1NtYXJ0aWVfb25fdGhlX1RyaXAuc2lk",
@@ -15692,7 +18786,9 @@ window.SID_LIBRARY = [
     "fileName": "Smartie_on_the_Trip.sid",
     "path": "sids/GAMES/S-Z/Smartie_on_the_Trip.sid",
     "size": 966,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 22000,
+    "durationText": "0:22"
   },
   {
     "id": "R0FNRVMvUy1aL1NtYXNoLnNpZA",
@@ -15702,7 +18798,9 @@ window.SID_LIBRARY = [
     "fileName": "Smash.sid",
     "path": "sids/GAMES/S-Z/Smash.sid",
     "size": 5698,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 93000,
+    "durationText": "1:33"
   },
   {
     "id": "R0FNRVMvUy1aL1NtaXRoc19TdXBlcl9DaGFtcHMuc2lk",
@@ -15712,7 +18810,9 @@ window.SID_LIBRARY = [
     "fileName": "Smiths_Super_Champs.sid",
     "path": "sids/GAMES/S-Z/Smiths_Super_Champs.sid",
     "size": 1571,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 22000,
+    "durationText": "0:22"
   },
   {
     "id": "R0FNRVMvUy1aL1NtcnRfTmVib19Tdm9ib2R1X0JBU0lDLnNpZA",
@@ -15722,7 +18822,9 @@ window.SID_LIBRARY = [
     "fileName": "Smrt_Nebo_Svobodu_BASIC.sid",
     "path": "sids/GAMES/S-Z/Smrt_Nebo_Svobodu_BASIC.sid",
     "size": 3361,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 35000,
+    "durationText": "0:35"
   },
   {
     "id": "R0FNRVMvUy1aL1NtdWdnbGVyLnNpZA",
@@ -15732,7 +18834,9 @@ window.SID_LIBRARY = [
     "fileName": "Smuggler.sid",
     "path": "sids/GAMES/S-Z/Smuggler.sid",
     "size": 1366,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 20509,
+    "durationText": "0:20.509"
   },
   {
     "id": "R0FNRVMvUy1aL1NuYWtlcy5zaWQ",
@@ -15742,7 +18846,9 @@ window.SID_LIBRARY = [
     "fileName": "Snakes.sid",
     "path": "sids/GAMES/S-Z/Snakes.sid",
     "size": 814,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 18000,
+    "durationText": "0:18"
   },
   {
     "id": "R0FNRVMvUy1aL1NuYXJlLnNpZA",
@@ -15752,7 +18858,9 @@ window.SID_LIBRARY = [
     "fileName": "Snare.sid",
     "path": "sids/GAMES/S-Z/Snare.sid",
     "size": 1382,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 3000,
+    "durationText": "0:03"
   },
   {
     "id": "R0FNRVMvUy1aL1NuZWsuc2lk",
@@ -15762,7 +18870,9 @@ window.SID_LIBRARY = [
     "fileName": "Snek.sid",
     "path": "sids/GAMES/S-Z/Snek.sid",
     "size": 3031,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 201000,
+    "durationText": "3:21"
   },
   {
     "id": "R0FNRVMvUy1aL1Nub2tpZS5zaWQ",
@@ -15772,7 +18882,9 @@ window.SID_LIBRARY = [
     "fileName": "Snokie.sid",
     "path": "sids/GAMES/S-Z/Snokie.sid",
     "size": 2366,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 4000,
+    "durationText": "0:04"
   },
   {
     "id": "R0FNRVMvUy1aL1Nub29rZXIuc2lk",
@@ -15782,7 +18894,9 @@ window.SID_LIBRARY = [
     "fileName": "Snooker.sid",
     "path": "sids/GAMES/S-Z/Snooker.sid",
     "size": 392,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 2729,
+    "durationText": "0:02.729"
   },
   {
     "id": "R0FNRVMvUy1aL1Nub29weV9QdXp6bGUuc2lk",
@@ -15792,7 +18906,9 @@ window.SID_LIBRARY = [
     "fileName": "Snoopy_Puzzle.sid",
     "path": "sids/GAMES/S-Z/Snoopy_Puzzle.sid",
     "size": 414,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 20000,
+    "durationText": "0:20"
   },
   {
     "id": "R0FNRVMvUy1aL1Nub3dfUnVuLnNpZA",
@@ -15802,7 +18918,9 @@ window.SID_LIBRARY = [
     "fileName": "Snow_Run.sid",
     "path": "sids/GAMES/S-Z/Snow_Run.sid",
     "size": 251,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 13857,
+    "durationText": "0:13.857"
   },
   {
     "id": "R0FNRVMvUy1aL1Nub3dtYW5fTXJfRnJlZXplLnNpZA",
@@ -15812,7 +18930,9 @@ window.SID_LIBRARY = [
     "fileName": "Snowman_Mr_Freeze.sid",
     "path": "sids/GAMES/S-Z/Snowman_Mr_Freeze.sid",
     "size": 3990,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 19000,
+    "durationText": "0:19"
   },
   {
     "id": "R0FNRVMvUy1aL1Nub3dzdG9ybS5zaWQ",
@@ -15822,7 +18942,9 @@ window.SID_LIBRARY = [
     "fileName": "Snowstorm.sid",
     "path": "sids/GAMES/S-Z/Snowstorm.sid",
     "size": 6644,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 33000,
+    "durationText": "0:33"
   },
   {
     "id": "R0FNRVMvUy1aL1NvY2Nlcl9Cb3NzLnNpZA",
@@ -15832,7 +18954,9 @@ window.SID_LIBRARY = [
     "fileName": "Soccer_Boss.sid",
     "path": "sids/GAMES/S-Z/Soccer_Boss.sid",
     "size": 2304,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 145000,
+    "durationText": "2:25"
   },
   {
     "id": "R0FNRVMvUy1aL1NvY2Nlcl9DaGFsbGVuZ2Uuc2lk",
@@ -15842,7 +18966,9 @@ window.SID_LIBRARY = [
     "fileName": "Soccer_Challenge.sid",
     "path": "sids/GAMES/S-Z/Soccer_Challenge.sid",
     "size": 2914,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 1000,
+    "durationText": "0:01"
   },
   {
     "id": "R0FNRVMvUy1aL1NvZnR3YXJlXzIwMDBfTG9nby5zaWQ",
@@ -15852,7 +18978,9 @@ window.SID_LIBRARY = [
     "fileName": "Software_2000_Logo.sid",
     "path": "sids/GAMES/S-Z/Software_2000_Logo.sid",
     "size": 4200,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 62000,
+    "durationText": "1:02"
   },
   {
     "id": "R0FNRVMvUy1aL1NvbGRpZXJfb2ZfRm9ydHVuZS5zaWQ",
@@ -15862,7 +18990,9 @@ window.SID_LIBRARY = [
     "fileName": "Soldier_of_Fortune.sid",
     "path": "sids/GAMES/S-Z/Soldier_of_Fortune.sid",
     "size": 2215,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 31642,
+    "durationText": "0:31.642"
   },
   {
     "id": "R0FNRVMvUy1aL1NvbGl0YWlyZS5zaWQ",
@@ -15872,7 +19002,9 @@ window.SID_LIBRARY = [
     "fileName": "Solitaire.sid",
     "path": "sids/GAMES/S-Z/Solitaire.sid",
     "size": 9451,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 173000,
+    "durationText": "2:53"
   },
   {
     "id": "R0FNRVMvUy1aL1NvbGl0YWlyZV9CQVNJQy5zaWQ",
@@ -15882,7 +19014,9 @@ window.SID_LIBRARY = [
     "fileName": "Solitaire_BASIC.sid",
     "path": "sids/GAMES/S-Z/Solitaire_BASIC.sid",
     "size": 1292,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 15000,
+    "durationText": "0:15"
   },
   {
     "id": "R0FNRVMvUy1aL1NvbGl0YXJpby1Dcm9zcy5zaWQ",
@@ -15892,7 +19026,9 @@ window.SID_LIBRARY = [
     "fileName": "Solitario-Cross.sid",
     "path": "sids/GAMES/S-Z/Solitario-Cross.sid",
     "size": 3902,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 79726,
+    "durationText": "1:19.726"
   },
   {
     "id": "R0FNRVMvUy1aL1NvcmNlcmVyc19BcHByZW50aWNlLnNpZA",
@@ -15902,7 +19038,9 @@ window.SID_LIBRARY = [
     "fileName": "Sorcerers_Apprentice.sid",
     "path": "sids/GAMES/S-Z/Sorcerers_Apprentice.sid",
     "size": 1694,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 76,
+    "durationText": "0:00.076"
   },
   {
     "id": "R0FNRVMvUy1aL1NvcmNlcnkuc2lk",
@@ -15912,7 +19050,9 @@ window.SID_LIBRARY = [
     "fileName": "Sorcery.sid",
     "path": "sids/GAMES/S-Z/Sorcery.sid",
     "size": 1417,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 14000,
+    "durationText": "0:14"
   },
   {
     "id": "R0FNRVMvUy1aL1NwYWNlX0FjZS5zaWQ",
@@ -15922,7 +19062,9 @@ window.SID_LIBRARY = [
     "fileName": "Space_Ace.sid",
     "path": "sids/GAMES/S-Z/Space_Ace.sid",
     "size": 19722,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 237000,
+    "durationText": "3:57"
   },
   {
     "id": "R0FNRVMvUy1aL1NwYWNlX0FjZV8yMTAxLnNpZA",
@@ -15932,7 +19074,9 @@ window.SID_LIBRARY = [
     "fileName": "Space_Ace_2101.sid",
     "path": "sids/GAMES/S-Z/Space_Ace_2101.sid",
     "size": 823,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 29687,
+    "durationText": "0:29.687"
   },
   {
     "id": "R0FNRVMvUy1aL1NwYWNlX0VzY2FwZS5zaWQ",
@@ -15942,7 +19086,9 @@ window.SID_LIBRARY = [
     "fileName": "Space_Escape.sid",
     "path": "sids/GAMES/S-Z/Space_Escape.sid",
     "size": 1104,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 64250,
+    "durationText": "1:04.25"
   },
   {
     "id": "R0FNRVMvUy1aL1NwYWNlX0dhbWVfMTk5MC5zaWQ",
@@ -15952,7 +19098,9 @@ window.SID_LIBRARY = [
     "fileName": "Space_Game_1990.sid",
     "path": "sids/GAMES/S-Z/Space_Game_1990.sid",
     "size": 11346,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 54000,
+    "durationText": "0:54"
   },
   {
     "id": "R0FNRVMvUy1aL1NwYWNlX0dhbWVfMjAyNC5zaWQ",
@@ -15962,7 +19110,9 @@ window.SID_LIBRARY = [
     "fileName": "Space_Game_2024.sid",
     "path": "sids/GAMES/S-Z/Space_Game_2024.sid",
     "size": 6888,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 23000,
+    "durationText": "0:23"
   },
   {
     "id": "R0FNRVMvUy1aL1NwYWNlX1N0YXRpb25fMjMuc2lk",
@@ -15972,7 +19122,9 @@ window.SID_LIBRARY = [
     "fileName": "Space_Station_23.sid",
     "path": "sids/GAMES/S-Z/Space_Station_23.sid",
     "size": 1812,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 76869,
+    "durationText": "1:16.869"
   },
   {
     "id": "R0FNRVMvUy1aL1NwYWNlX1R1bm5lbC5zaWQ",
@@ -15982,7 +19134,9 @@ window.SID_LIBRARY = [
     "fileName": "Space_Tunnel.sid",
     "path": "sids/GAMES/S-Z/Space_Tunnel.sid",
     "size": 4249,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 17000,
+    "durationText": "0:17"
   },
   {
     "id": "R0FNRVMvUy1aL1NwYWNlX1dhcnJpb3Iuc2lk",
@@ -15992,7 +19146,9 @@ window.SID_LIBRARY = [
     "fileName": "Space_Warrior.sid",
     "path": "sids/GAMES/S-Z/Space_Warrior.sid",
     "size": 6068,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 66000,
+    "durationText": "1:06"
   },
   {
     "id": "R0FNRVMvUy1aL1NwYWNlc2h1dHRsZV9CQVNJQy5zaWQ",
@@ -16002,7 +19158,9 @@ window.SID_LIBRARY = [
     "fileName": "Spaceshuttle_BASIC.sid",
     "path": "sids/GAMES/S-Z/Spaceshuttle_BASIC.sid",
     "size": 852,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 3669,
+    "durationText": "0:03.669"
   },
   {
     "id": "R0FNRVMvUy1aL1NwYWdoZXR0aV9XZXN0ZXJuX1NpbXVsYXRvci5zaWQ",
@@ -16012,7 +19170,9 @@ window.SID_LIBRARY = [
     "fileName": "Spaghetti_Western_Simulator.sid",
     "path": "sids/GAMES/S-Z/Spaghetti_Western_Simulator.sid",
     "size": 5452,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 258000,
+    "durationText": "4:18"
   },
   {
     "id": "R0FNRVMvUy1aL1NwYXJ0YWN1cy1UaGVfU3dvcmRzbGF5ZXIuc2lk",
@@ -16022,7 +19182,9 @@ window.SID_LIBRARY = [
     "fileName": "Spartacus-The_Swordslayer.sid",
     "path": "sids/GAMES/S-Z/Spartacus-The_Swordslayer.sid",
     "size": 4714,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 138000,
+    "durationText": "2:18"
   },
   {
     "id": "R0FNRVMvUy1aL1NwZWNpYWxfRGVsaXZlcnkuc2lk",
@@ -16032,7 +19194,9 @@ window.SID_LIBRARY = [
     "fileName": "Special_Delivery.sid",
     "path": "sids/GAMES/S-Z/Special_Delivery.sid",
     "size": 498,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 18000,
+    "durationText": "0:18"
   },
   {
     "id": "R0FNRVMvUy1aL1NwZWVkX0tpbmcuc2lk",
@@ -16042,7 +19206,9 @@ window.SID_LIBRARY = [
     "fileName": "Speed_King.sid",
     "path": "sids/GAMES/S-Z/Speed_King.sid",
     "size": 1374,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 21000,
+    "durationText": "0:21"
   },
   {
     "id": "R0FNRVMvUy1aL1NwZWVkX01hemVfUmFiYml0LnNpZA",
@@ -16052,7 +19218,9 @@ window.SID_LIBRARY = [
     "fileName": "Speed_Maze_Rabbit.sid",
     "path": "sids/GAMES/S-Z/Speed_Maze_Rabbit.sid",
     "size": 2799,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 92100,
+    "durationText": "1:32.1"
   },
   {
     "id": "R0FNRVMvUy1aL1NwZWVkX01hemVfUmFiYml0X1YxXzEuc2lk",
@@ -16062,7 +19230,9 @@ window.SID_LIBRARY = [
     "fileName": "Speed_Maze_Rabbit_V1_1.sid",
     "path": "sids/GAMES/S-Z/Speed_Maze_Rabbit_V1_1.sid",
     "size": 2844,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 89378,
+    "durationText": "1:29.378"
   },
   {
     "id": "R0FNRVMvUy1aL1NwZWVkX1J1bWJsZXIuc2lk",
@@ -16072,7 +19242,9 @@ window.SID_LIBRARY = [
     "fileName": "Speed_Rumbler.sid",
     "path": "sids/GAMES/S-Z/Speed_Rumbler.sid",
     "size": 8247,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 17000,
+    "durationText": "0:17"
   },
   {
     "id": "R0FNRVMvUy1aL1NwZWxsX05vdy5zaWQ",
@@ -16082,7 +19254,9 @@ window.SID_LIBRARY = [
     "fileName": "Spell_Now.sid",
     "path": "sids/GAMES/S-Z/Spell_Now.sid",
     "size": 3390,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 14000,
+    "durationText": "0:14"
   },
   {
     "id": "R0FNRVMvUy1aL1NwZWxsb29uLnNpZA",
@@ -16092,7 +19266,9 @@ window.SID_LIBRARY = [
     "fileName": "Spelloon.sid",
     "path": "sids/GAMES/S-Z/Spelloon.sid",
     "size": 291,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 3000,
+    "durationText": "0:03"
   },
   {
     "id": "R0FNRVMvUy1aL1NwZWxsc2Vla2VyLnNpZA",
@@ -16102,7 +19278,9 @@ window.SID_LIBRARY = [
     "fileName": "Spellseeker.sid",
     "path": "sids/GAMES/S-Z/Spellseeker.sid",
     "size": 1120,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 14402,
+    "durationText": "0:14.402"
   },
   {
     "id": "R0FNRVMvUy1aL1NwZWx1bmtlci5zaWQ",
@@ -16112,7 +19290,9 @@ window.SID_LIBRARY = [
     "fileName": "Spelunker.sid",
     "path": "sids/GAMES/S-Z/Spelunker.sid",
     "size": 2983,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 69134,
+    "durationText": "1:09.134"
   },
   {
     "id": "R0FNRVMvUy1aL1NwaGVyaXhfcHJldmlldy5zaWQ",
@@ -16122,7 +19302,9 @@ window.SID_LIBRARY = [
     "fileName": "Spherix_preview.sid",
     "path": "sids/GAMES/S-Z/Spherix_preview.sid",
     "size": 10082,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 10000,
+    "durationText": "0:10"
   },
   {
     "id": "R0FNRVMvUy1aL1NwaGVyb24uc2lk",
@@ -16132,7 +19314,9 @@ window.SID_LIBRARY = [
     "fileName": "Spheron.sid",
     "path": "sids/GAMES/S-Z/Spheron.sid",
     "size": 4222,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 146000,
+    "durationText": "2:26"
   },
   {
     "id": "R0FNRVMvUy1aL1NwaWtlX0JBU0lDLnNpZA",
@@ -16142,7 +19326,9 @@ window.SID_LIBRARY = [
     "fileName": "Spike_BASIC.sid",
     "path": "sids/GAMES/S-Z/Spike_BASIC.sid",
     "size": 3692,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 30000,
+    "durationText": "0:30"
   },
   {
     "id": "R0FNRVMvUy1aL1NwaWtlX0M2NF9EaXNsaWtlLnNpZA",
@@ -16152,7 +19338,9 @@ window.SID_LIBRARY = [
     "fileName": "Spike_C64_Dislike.sid",
     "path": "sids/GAMES/S-Z/Spike_C64_Dislike.sid",
     "size": 1988,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 46000,
+    "durationText": "0:46"
   },
   {
     "id": "R0FNRVMvUy1aL1NwaWtlc19QZWFrLnNpZA",
@@ -16162,7 +19350,9 @@ window.SID_LIBRARY = [
     "fileName": "Spikes_Peak.sid",
     "path": "sids/GAMES/S-Z/Spikes_Peak.sid",
     "size": 1102,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 5000,
+    "durationText": "0:05"
   },
   {
     "id": "R0FNRVMvUy1aL1Nwb29rcy5zaWQ",
@@ -16172,7 +19362,9 @@ window.SID_LIBRARY = [
     "fileName": "Spooks.sid",
     "path": "sids/GAMES/S-Z/Spooks.sid",
     "size": 1473,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 26000,
+    "durationText": "0:26"
   },
   {
     "id": "R0FNRVMvUy1aL1Nwb3J0aW5nX05ld3NfQmFzZWJhbGwuc2lk",
@@ -16182,7 +19374,9 @@ window.SID_LIBRARY = [
     "fileName": "Sporting_News_Baseball.sid",
     "path": "sids/GAMES/S-Z/Sporting_News_Baseball.sid",
     "size": 3486,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 37000,
+    "durationText": "0:37"
   },
   {
     "id": "R0FNRVMvUy1aL1NweV9BZ2VudF9EZWF0aG1hdGNoX1ByZXZpZXcuc2lk",
@@ -16192,7 +19386,9 @@ window.SID_LIBRARY = [
     "fileName": "Spy_Agent_Deathmatch_Preview.sid",
     "path": "sids/GAMES/S-Z/Spy_Agent_Deathmatch_Preview.sid",
     "size": 3977,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 89398,
+    "durationText": "1:29.398"
   },
   {
     "id": "R0FNRVMvUy1aL1NweV9IdW50ZXIuc2lk",
@@ -16202,7 +19398,9 @@ window.SID_LIBRARY = [
     "fileName": "Spy_Hunter.sid",
     "path": "sids/GAMES/S-Z/Spy_Hunter.sid",
     "size": 874,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 43343,
+    "durationText": "0:43.343"
   },
   {
     "id": "R0FNRVMvUy1aL1NweV9TdHJpa2VzX0JhY2suc2lk",
@@ -16212,7 +19410,9 @@ window.SID_LIBRARY = [
     "fileName": "Spy_Strikes_Back.sid",
     "path": "sids/GAMES/S-Z/Spy_Strikes_Back.sid",
     "size": 4990,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 539000,
+    "durationText": "8:59"
   },
   {
     "id": "R0FNRVMvUy1aL1NweXNfRGVtaXNlLnNpZA",
@@ -16222,7 +19422,9 @@ window.SID_LIBRARY = [
     "fileName": "Spys_Demise.sid",
     "path": "sids/GAMES/S-Z/Spys_Demise.sid",
     "size": 3219,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 284000,
+    "durationText": "4:44"
   },
   {
     "id": "R0FNRVMvUy1aL1NxdWl6X0JBU0lDLnNpZA",
@@ -16232,7 +19434,9 @@ window.SID_LIBRARY = [
     "fileName": "Squiz_BASIC.sid",
     "path": "sids/GAMES/S-Z/Squiz_BASIC.sid",
     "size": 3642,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 65000,
+    "durationText": "1:05"
   },
   {
     "id": "R0FNRVMvUy1aL1N0YWNrXzY0X1NpbW9uX0JBU0lDLnNpZA",
@@ -16242,7 +19446,9 @@ window.SID_LIBRARY = [
     "fileName": "Stack_64_Simon_BASIC.sid",
     "path": "sids/GAMES/S-Z/Stack_64_Simon_BASIC.sid",
     "size": 2933,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 7000,
+    "durationText": "0:07"
   },
   {
     "id": "R0FNRVMvUy1aL1N0YW5kaW5nX1N0b25lcy5zaWQ",
@@ -16252,7 +19458,9 @@ window.SID_LIBRARY = [
     "fileName": "Standing_Stones.sid",
     "path": "sids/GAMES/S-Z/Standing_Stones.sid",
     "size": 2188,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 95000,
+    "durationText": "1:35"
   },
   {
     "id": "R0FNRVMvUy1aL1N0YXJfQ3Jhc2guc2lk",
@@ -16262,7 +19470,9 @@ window.SID_LIBRARY = [
     "fileName": "Star_Crash.sid",
     "path": "sids/GAMES/S-Z/Star_Crash.sid",
     "size": 5059,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 207000,
+    "durationText": "3:27"
   },
   {
     "id": "R0FNRVMvUy1aL1N0YXJfUmFjZS5zaWQ",
@@ -16272,7 +19482,9 @@ window.SID_LIBRARY = [
     "fileName": "Star_Race.sid",
     "path": "sids/GAMES/S-Z/Star_Race.sid",
     "size": 304,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 11000,
+    "durationText": "0:11"
   },
   {
     "id": "R0FNRVMvUy1aL1N0YXJfUmFpZGVyc19JSS5zaWQ",
@@ -16282,7 +19494,9 @@ window.SID_LIBRARY = [
     "fileName": "Star_Raiders_II.sid",
     "path": "sids/GAMES/S-Z/Star_Raiders_II.sid",
     "size": 1013,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 15323,
+    "durationText": "0:15.323"
   },
   {
     "id": "R0FNRVMvUy1aL1N0YXJfU2hpcF9FbnRyeV9CQVNJQy5zaWQ",
@@ -16292,7 +19506,9 @@ window.SID_LIBRARY = [
     "fileName": "Star_Ship_Entry_BASIC.sid",
     "path": "sids/GAMES/S-Z/Star_Ship_Entry_BASIC.sid",
     "size": 606,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 10000,
+    "durationText": "0:10"
   },
   {
     "id": "R0FNRVMvUy1aL1N0YXJfU3Rvcm0uc2lk",
@@ -16302,7 +19518,9 @@ window.SID_LIBRARY = [
     "fileName": "Star_Storm.sid",
     "path": "sids/GAMES/S-Z/Star_Storm.sid",
     "size": 4743,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 56220,
+    "durationText": "0:56.22"
   },
   {
     "id": "R0FNRVMvUy1aL1N0YXJfVHJhZGVyLnNpZA",
@@ -16312,7 +19530,9 @@ window.SID_LIBRARY = [
     "fileName": "Star_Trader.sid",
     "path": "sids/GAMES/S-Z/Star_Trader.sid",
     "size": 2174,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 162000,
+    "durationText": "2:42"
   },
   {
     "id": "R0FNRVMvUy1aL1N0YXJfVHJvb3Blci5zaWQ",
@@ -16322,7 +19542,9 @@ window.SID_LIBRARY = [
     "fileName": "Star_Trooper.sid",
     "path": "sids/GAMES/S-Z/Star_Trooper.sid",
     "size": 2206,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 102000,
+    "durationText": "1:42"
   },
   {
     "id": "R0FNRVMvUy1aL1N0YXJmbGlnaHQuc2lk",
@@ -16332,7 +19554,9 @@ window.SID_LIBRARY = [
     "fileName": "Starflight.sid",
     "path": "sids/GAMES/S-Z/Starflight.sid",
     "size": 12614,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 111000,
+    "durationText": "1:51"
   },
   {
     "id": "R0FNRVMvUy1aL1N0YXJxdWFrZS5zaWQ",
@@ -16342,7 +19566,9 @@ window.SID_LIBRARY = [
     "fileName": "Starquake.sid",
     "path": "sids/GAMES/S-Z/Starquake.sid",
     "size": 3853,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 65000,
+    "durationText": "1:05"
   },
   {
     "id": "R0FNRVMvUy1aL1N0YXJzYXQuc2lk",
@@ -16352,7 +19578,9 @@ window.SID_LIBRARY = [
     "fileName": "Starsat.sid",
     "path": "sids/GAMES/S-Z/Starsat.sid",
     "size": 5022,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 92761,
+    "durationText": "1:32.761"
   },
   {
     "id": "R0FNRVMvUy1aL1N0YXJzaGlwX0FuZHJvbWVkYS5zaWQ",
@@ -16362,7 +19590,9 @@ window.SID_LIBRARY = [
     "fileName": "Starship_Andromeda.sid",
     "path": "sids/GAMES/S-Z/Starship_Andromeda.sid",
     "size": 3326,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 45000,
+    "durationText": "0:45"
   },
   {
     "id": "R0FNRVMvUy1aL1N0ZWFsdGguc2lk",
@@ -16372,7 +19602,9 @@ window.SID_LIBRARY = [
     "fileName": "Stealth.sid",
     "path": "sids/GAMES/S-Z/Stealth.sid",
     "size": 794,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 25000,
+    "durationText": "0:25"
   },
   {
     "id": "R0FNRVMvUy1aL1N0ZWVsX0hlcm9zLnNpZA",
@@ -16382,7 +19614,9 @@ window.SID_LIBRARY = [
     "fileName": "Steel_Heros.sid",
     "path": "sids/GAMES/S-Z/Steel_Heros.sid",
     "size": 2485,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 85000,
+    "durationText": "1:25"
   },
   {
     "id": "R0FNRVMvUy1aL1N0ZWluc2NobGFnX0JBU0lDLnNpZA",
@@ -16392,7 +19626,9 @@ window.SID_LIBRARY = [
     "fileName": "Steinschlag_BASIC.sid",
     "path": "sids/GAMES/S-Z/Steinschlag_BASIC.sid",
     "size": 1212,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 13907,
+    "durationText": "0:13.907"
   },
   {
     "id": "R0FNRVMvUy1aL1N0ZXZlX0RhdmlzX1Nub29rZXIuc2lk",
@@ -16402,7 +19638,9 @@ window.SID_LIBRARY = [
     "fileName": "Steve_Davis_Snooker.sid",
     "path": "sids/GAMES/S-Z/Steve_Davis_Snooker.sid",
     "size": 1513,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 75000,
+    "durationText": "1:15"
   },
   {
     "id": "R0FNRVMvUy1aL1N0b2NrX25fQm9uZHMuc2lk",
@@ -16412,7 +19650,9 @@ window.SID_LIBRARY = [
     "fileName": "Stock_n_Bonds.sid",
     "path": "sids/GAMES/S-Z/Stock_n_Bonds.sid",
     "size": 11346,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 92000,
+    "durationText": "1:32"
   },
   {
     "id": "R0FNRVMvUy1aL1N0b2NrYWRlLnNpZA",
@@ -16422,7 +19662,9 @@ window.SID_LIBRARY = [
     "fileName": "Stockade.sid",
     "path": "sids/GAMES/S-Z/Stockade.sid",
     "size": 550,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 6000,
+    "durationText": "0:06"
   },
   {
     "id": "R0FNRVMvUy1aL1N0b2NrZXIuc2lk",
@@ -16432,7 +19674,9 @@ window.SID_LIBRARY = [
     "fileName": "Stocker.sid",
     "path": "sids/GAMES/S-Z/Stocker.sid",
     "size": 2439,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 45833,
+    "durationText": "0:45.833"
   },
   {
     "id": "R0FNRVMvUy1aL1N0b3JtX1dhcnJpb3Iuc2lk",
@@ -16442,7 +19686,9 @@ window.SID_LIBRARY = [
     "fileName": "Storm_Warrior.sid",
     "path": "sids/GAMES/S-Z/Storm_Warrior.sid",
     "size": 7209,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 119000,
+    "durationText": "1:59"
   },
   {
     "id": "R0FNRVMvUy1aL1N0b3JtX1dhcnJpb3JfbG9hZGVyLnNpZA",
@@ -16452,7 +19698,9 @@ window.SID_LIBRARY = [
     "fileName": "Storm_Warrior_loader.sid",
     "path": "sids/GAMES/S-Z/Storm_Warrior_loader.sid",
     "size": 2968,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 92011,
+    "durationText": "1:32.011"
   },
   {
     "id": "R0FNRVMvUy1aL1N0cmFuZ2Vsb29wLnNpZA",
@@ -16462,7 +19710,9 @@ window.SID_LIBRARY = [
     "fileName": "Strangeloop.sid",
     "path": "sids/GAMES/S-Z/Strangeloop.sid",
     "size": 1687,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 132000,
+    "durationText": "2:12"
   },
   {
     "id": "R0FNRVMvUy1aL1N0cmVldF9GaWdodGVyLnNpZA",
@@ -16472,7 +19722,9 @@ window.SID_LIBRARY = [
     "fileName": "Street_Fighter.sid",
     "path": "sids/GAMES/S-Z/Street_Fighter.sid",
     "size": 3070,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 45968,
+    "durationText": "0:45.968"
   },
   {
     "id": "R0FNRVMvUy1aL1N0cmVldF9GaWdodGVyX1VTQV9WZXJzaW9uLnNpZA",
@@ -16482,7 +19734,9 @@ window.SID_LIBRARY = [
     "fileName": "Street_Fighter_USA_Version.sid",
     "path": "sids/GAMES/S-Z/Street_Fighter_USA_Version.sid",
     "size": 7479,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 3000,
+    "durationText": "0:03"
   },
   {
     "id": "R0FNRVMvUy1aL1N0cmVldF9Sb2Quc2lk",
@@ -16492,7 +19746,9 @@ window.SID_LIBRARY = [
     "fileName": "Street_Rod.sid",
     "path": "sids/GAMES/S-Z/Street_Rod.sid",
     "size": 10089,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 32000,
+    "durationText": "0:32"
   },
   {
     "id": "R0FNRVMvUy1aL1N0cmVldF9TcG9ydHNfQmFzZWJhbGwuc2lk",
@@ -16502,7 +19758,9 @@ window.SID_LIBRARY = [
     "fileName": "Street_Sports_Baseball.sid",
     "path": "sids/GAMES/S-Z/Street_Sports_Baseball.sid",
     "size": 1737,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 31000,
+    "durationText": "0:31"
   },
   {
     "id": "R0FNRVMvUy1aL1N0cmVldF9TcG9ydHNfQmFza2V0YmFsbC5zaWQ",
@@ -16512,7 +19770,9 @@ window.SID_LIBRARY = [
     "fileName": "Street_Sports_Basketball.sid",
     "path": "sids/GAMES/S-Z/Street_Sports_Basketball.sid",
     "size": 3238,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 135000,
+    "durationText": "2:15"
   },
   {
     "id": "R0FNRVMvUy1aL1N0cmVldF9TcG9ydHNfRm9vdGJhbGwuc2lk",
@@ -16522,7 +19782,9 @@ window.SID_LIBRARY = [
     "fileName": "Street_Sports_Football.sid",
     "path": "sids/GAMES/S-Z/Street_Sports_Football.sid",
     "size": 4650,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 58000,
+    "durationText": "0:58"
   },
   {
     "id": "R0FNRVMvUy1aL1N0cmVldF9TcG9ydHNfU29jY2VyLnNpZA",
@@ -16532,7 +19794,9 @@ window.SID_LIBRARY = [
     "fileName": "Street_Sports_Soccer.sid",
     "path": "sids/GAMES/S-Z/Street_Sports_Soccer.sid",
     "size": 3463,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 116000,
+    "durationText": "1:56"
   },
   {
     "id": "R0FNRVMvUy1aL1N0cmlrZV9GbGVldC5zaWQ",
@@ -16542,7 +19806,9 @@ window.SID_LIBRARY = [
     "fileName": "Strike_Fleet.sid",
     "path": "sids/GAMES/S-Z/Strike_Fleet.sid",
     "size": 3310,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 16000,
+    "durationText": "0:16"
   },
   {
     "id": "R0FNRVMvUy1aL1N0cmlrZV9Gb3JjZV9IYXJyaWVyLnNpZA",
@@ -16552,7 +19818,9 @@ window.SID_LIBRARY = [
     "fileName": "Strike_Force_Harrier.sid",
     "path": "sids/GAMES/S-Z/Strike_Force_Harrier.sid",
     "size": 4818,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 52000,
+    "durationText": "0:52"
   },
   {
     "id": "R0FNRVMvUy1aL1N0cmluZ2VyLnNpZA",
@@ -16562,7 +19830,9 @@ window.SID_LIBRARY = [
     "fileName": "Stringer.sid",
     "path": "sids/GAMES/S-Z/Stringer.sid",
     "size": 1345,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 317000,
+    "durationText": "5:17"
   },
   {
     "id": "R0FNRVMvUy1aL1N0cmlwX1Bva2VyX0JBU0lDLnNpZA",
@@ -16572,7 +19842,9 @@ window.SID_LIBRARY = [
     "fileName": "Strip_Poker_BASIC.sid",
     "path": "sids/GAMES/S-Z/Strip_Poker_BASIC.sid",
     "size": 3612,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 10000,
+    "durationText": "0:10"
   },
   {
     "id": "R0FNRVMvUy1aL1N0cm9rZXIuc2lk",
@@ -16582,7 +19854,9 @@ window.SID_LIBRARY = [
     "fileName": "Stroker.sid",
     "path": "sids/GAMES/S-Z/Stroker.sid",
     "size": 1656,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 26000,
+    "durationText": "0:26"
   },
   {
     "id": "R0FNRVMvUy1aL1N0cnlrZXJfaW5fdGhlX0NyeXB0c19vZl9Ucm9nYW4uc2lk",
@@ -16592,7 +19866,9 @@ window.SID_LIBRARY = [
     "fileName": "Stryker_in_the_Crypts_of_Trogan.sid",
     "path": "sids/GAMES/S-Z/Stryker_in_the_Crypts_of_Trogan.sid",
     "size": 5523,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 185000,
+    "durationText": "3:05"
   },
   {
     "id": "R0FNRVMvUy1aL1N0dW50X0Jpa2Uuc2lk",
@@ -16602,7 +19878,9 @@ window.SID_LIBRARY = [
     "fileName": "Stunt_Bike.sid",
     "path": "sids/GAMES/S-Z/Stunt_Bike.sid",
     "size": 638,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 9000,
+    "durationText": "0:09"
   },
   {
     "id": "R0FNRVMvUy1aL1N1Yl9IdW50LnNpZA",
@@ -16612,7 +19890,9 @@ window.SID_LIBRARY = [
     "fileName": "Sub_Hunt.sid",
     "path": "sids/GAMES/S-Z/Sub_Hunt.sid",
     "size": 546,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 14000,
+    "durationText": "0:14"
   },
   {
     "id": "R0FNRVMvUy1aL1N1Ym1hcmluZV9SZXNjdWUuc2lk",
@@ -16622,7 +19902,9 @@ window.SID_LIBRARY = [
     "fileName": "Submarine_Rescue.sid",
     "path": "sids/GAMES/S-Z/Submarine_Rescue.sid",
     "size": 1120,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 23000,
+    "durationText": "0:23"
   },
   {
     "id": "R0FNRVMvUy1aL1N1aWNpZGVfUnVuLnNpZA",
@@ -16632,7 +19914,9 @@ window.SID_LIBRARY = [
     "fileName": "Suicide_Run.sid",
     "path": "sids/GAMES/S-Z/Suicide_Run.sid",
     "size": 1214,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 49737,
+    "durationText": "0:49.737"
   },
   {
     "id": "R0FNRVMvUy1aL1N1aWNpZGVfVm95YWdlLnNpZA",
@@ -16642,7 +19926,9 @@ window.SID_LIBRARY = [
     "fileName": "Suicide_Voyage.sid",
     "path": "sids/GAMES/S-Z/Suicide_Voyage.sid",
     "size": 2395,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 149000,
+    "durationText": "2:29"
   },
   {
     "id": "R0FNRVMvUy1aL1N1bW1lcl9HYW1lcy5zaWQ",
@@ -16652,7 +19938,9 @@ window.SID_LIBRARY = [
     "fileName": "Summer_Games.sid",
     "path": "sids/GAMES/S-Z/Summer_Games.sid",
     "size": 4776,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 23000,
+    "durationText": "0:23"
   },
   {
     "id": "R0FNRVMvUy1aL1N1bm55X1NoaW5lLnNpZA",
@@ -16662,7 +19950,9 @@ window.SID_LIBRARY = [
     "fileName": "Sunny_Shine.sid",
     "path": "sids/GAMES/S-Z/Sunny_Shine.sid",
     "size": 21836,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 178197,
+    "durationText": "2:58.197"
   },
   {
     "id": "R0FNRVMvUy1aL1N1cGVyX0dhbGF4aWUuc2lk",
@@ -16672,7 +19962,9 @@ window.SID_LIBRARY = [
     "fileName": "Super_Galaxie.sid",
     "path": "sids/GAMES/S-Z/Super_Galaxie.sid",
     "size": 754,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 15627,
+    "durationText": "0:15.627"
   },
   {
     "id": "R0FNRVMvUy1aL1N1cGVyX01hcmlvX0Jyb3NfNjQuc2lk",
@@ -16682,7 +19974,9 @@ window.SID_LIBRARY = [
     "fileName": "Super_Mario_Bros_64.sid",
     "path": "sids/GAMES/S-Z/Super_Mario_Bros_64.sid",
     "size": 7054,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 70800,
+    "durationText": "1:10.8"
   },
   {
     "id": "R0FNRVMvUy1aL1N1cGVyX01hcmlvX0Jyb3NfNjRfMlNJRC5zaWQ",
@@ -16692,7 +19986,9 @@ window.SID_LIBRARY = [
     "fileName": "Super_Mario_Bros_64_2SID.sid",
     "path": "sids/GAMES/S-Z/Super_Mario_Bros_64_2SID.sid",
     "size": 7054,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 70800,
+    "durationText": "1:10.8"
   },
   {
     "id": "R0FNRVMvUy1aL1N1cGVyX1JpZGVyLnNpZA",
@@ -16702,7 +19998,9 @@ window.SID_LIBRARY = [
     "fileName": "Super_Rider.sid",
     "path": "sids/GAMES/S-Z/Super_Rider.sid",
     "size": 4278,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 17000,
+    "durationText": "0:17"
   },
   {
     "id": "R0FNRVMvUy1aL1N1cGVyX1NwcmludC5zaWQ",
@@ -16712,7 +20010,9 @@ window.SID_LIBRARY = [
     "fileName": "Super_Sprint.sid",
     "path": "sids/GAMES/S-Z/Super_Sprint.sid",
     "size": 3292,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 15000,
+    "durationText": "0:15"
   },
   {
     "id": "R0FNRVMvUy1aL1N1cGVyX1RhY3Quc2lk",
@@ -16722,7 +20022,9 @@ window.SID_LIBRARY = [
     "fileName": "Super_Tact.sid",
     "path": "sids/GAMES/S-Z/Super_Tact.sid",
     "size": 4706,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 157000,
+    "durationText": "2:37"
   },
   {
     "id": "R0FNRVMvUy1aL1N1cGVyX1pheHhvbi5zaWQ",
@@ -16732,7 +20034,9 @@ window.SID_LIBRARY = [
     "fileName": "Super_Zaxxon.sid",
     "path": "sids/GAMES/S-Z/Super_Zaxxon.sid",
     "size": 4110,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 26000,
+    "durationText": "0:26"
   },
   {
     "id": "R0FNRVMvUy1aL1N1cGVybWFuLVRoZV9HYW1lLnNpZA",
@@ -16742,7 +20046,9 @@ window.SID_LIBRARY = [
     "fileName": "Superman-The_Game.sid",
     "path": "sids/GAMES/S-Z/Superman-The_Game.sid",
     "size": 2375,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 13710,
+    "durationText": "0:13.71"
   },
   {
     "id": "R0FNRVMvUy1aL1N1cGVydGFua19CQVNJQy5zaWQ",
@@ -16752,7 +20058,9 @@ window.SID_LIBRARY = [
     "fileName": "Supertank_BASIC.sid",
     "path": "sids/GAMES/S-Z/Supertank_BASIC.sid",
     "size": 2350,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 34000,
+    "durationText": "0:34"
   },
   {
     "id": "R0FNRVMvUy1aL1N1cmZjaGFtcC5zaWQ",
@@ -16762,7 +20070,9 @@ window.SID_LIBRARY = [
     "fileName": "Surfchamp.sid",
     "path": "sids/GAMES/S-Z/Surfchamp.sid",
     "size": 1349,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 38000,
+    "durationText": "0:38"
   },
   {
     "id": "R0FNRVMvUy1aL1N1cnZpdm9yLnNpZA",
@@ -16772,7 +20082,9 @@ window.SID_LIBRARY = [
     "fileName": "Survivor.sid",
     "path": "sids/GAMES/S-Z/Survivor.sid",
     "size": 682,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 27000,
+    "durationText": "0:27"
   },
   {
     "id": "R0FNRVMvUy1aL1N3YXJtLnNpZA",
@@ -16782,7 +20094,9 @@ window.SID_LIBRARY = [
     "fileName": "Swarm.sid",
     "path": "sids/GAMES/S-Z/Swarm.sid",
     "size": 2268,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 176202,
+    "durationText": "2:56.202"
   },
   {
     "id": "R0FNRVMvUy1aL1N3b29wLnNpZA",
@@ -16792,7 +20106,9 @@ window.SID_LIBRARY = [
     "fileName": "Swoop.sid",
     "path": "sids/GAMES/S-Z/Swoop.sid",
     "size": 1692,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 96000,
+    "durationText": "1:36"
   },
   {
     "id": "R0FNRVMvUy1aL1N3b3JkX29mX0ZhcmdvYWxfQkFTSUMuc2lk",
@@ -16802,7 +20118,9 @@ window.SID_LIBRARY = [
     "fileName": "Sword_of_Fargoal_BASIC.sid",
     "path": "sids/GAMES/S-Z/Sword_of_Fargoal_BASIC.sid",
     "size": 4297,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 4000,
+    "durationText": "0:04"
   },
   {
     "id": "R0FNRVMvUy1aL1N3b3JkX29mX0thZGFzaC5zaWQ",
@@ -16812,7 +20130,9 @@ window.SID_LIBRARY = [
     "fileName": "Sword_of_Kadash.sid",
     "path": "sids/GAMES/S-Z/Sword_of_Kadash.sid",
     "size": 1298,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 17000,
+    "durationText": "0:17"
   },
   {
     "id": "R0FNRVMvUy1aL1N5bnRheC5zaWQ",
@@ -16822,7 +20142,9 @@ window.SID_LIBRARY = [
     "fileName": "Syntax.sid",
     "path": "sids/GAMES/S-Z/Syntax.sid",
     "size": 6910,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 112000,
+    "durationText": "1:52"
   },
   {
     "id": "R0FNRVMvUy1aL1N5c3RlbS5zaWQ",
@@ -16832,7 +20154,9 @@ window.SID_LIBRARY = [
     "fileName": "System.sid",
     "path": "sids/GAMES/S-Z/System.sid",
     "size": 5321,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 234000,
+    "durationText": "3:54"
   },
   {
     "id": "R0FNRVMvUy1aL1N5c3RlbV82NTU5NV9CQVNJQy5zaWQ",
@@ -16842,7 +20166,9 @@ window.SID_LIBRARY = [
     "fileName": "System_65595_BASIC.sid",
     "path": "sids/GAMES/S-Z/System_65595_BASIC.sid",
     "size": 1605,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 22000,
+    "durationText": "0:22"
   },
   {
     "id": "R0FNRVMvUy1aL1QtUmV4XzY0LnNpZA",
@@ -16852,7 +20178,9 @@ window.SID_LIBRARY = [
     "fileName": "T-Rex_64.sid",
     "path": "sids/GAMES/S-Z/T-Rex_64.sid",
     "size": 2527,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 67053,
+    "durationText": "1:07.053"
   },
   {
     "id": "R0FNRVMvUy1aL1QtUmV4XzY0X1ByZXZpZXcuc2lk",
@@ -16862,7 +20190,9 @@ window.SID_LIBRARY = [
     "fileName": "T-Rex_64_Preview.sid",
     "path": "sids/GAMES/S-Z/T-Rex_64_Preview.sid",
     "size": 2017,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 11492,
+    "durationText": "0:11.492"
   },
   {
     "id": "R0FNRVMvUy1aL1RhZy5zaWQ",
@@ -16872,7 +20202,9 @@ window.SID_LIBRARY = [
     "fileName": "Tag.sid",
     "path": "sids/GAMES/S-Z/Tag.sid",
     "size": 2468,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 23000,
+    "durationText": "0:23"
   },
   {
     "id": "R0FNRVMvUy1aL1RhZ19UZWFtX1dyZXN0bGluZy5zaWQ",
@@ -16882,7 +20214,9 @@ window.SID_LIBRARY = [
     "fileName": "Tag_Team_Wrestling.sid",
     "path": "sids/GAMES/S-Z/Tag_Team_Wrestling.sid",
     "size": 2769,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 37000,
+    "durationText": "0:37"
   },
   {
     "id": "R0FNRVMvUy1aL1Rha2VfRG93bi5zaWQ",
@@ -16892,7 +20226,9 @@ window.SID_LIBRARY = [
     "fileName": "Take_Down.sid",
     "path": "sids/GAMES/S-Z/Take_Down.sid",
     "size": 9854,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 47000,
+    "durationText": "0:47"
   },
   {
     "id": "R0FNRVMvUy1aL1RhbGVzX29mX3RoZV9DYXQuc2lk",
@@ -16902,7 +20238,9 @@ window.SID_LIBRARY = [
     "fileName": "Tales_of_the_Cat.sid",
     "path": "sids/GAMES/S-Z/Tales_of_the_Cat.sid",
     "size": 3161,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 111000,
+    "durationText": "1:51"
   },
   {
     "id": "R0FNRVMvUy1aL1RhbGtpbmdfVGVhY2hlci5zaWQ",
@@ -16912,7 +20250,9 @@ window.SID_LIBRARY = [
     "fileName": "Talking_Teacher.sid",
     "path": "sids/GAMES/S-Z/Talking_Teacher.sid",
     "size": 5724,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 18000,
+    "durationText": "0:18"
   },
   {
     "id": "R0FNRVMvUy1aL1Rhbmsuc2lk",
@@ -16922,7 +20262,9 @@ window.SID_LIBRARY = [
     "fileName": "Tank.sid",
     "path": "sids/GAMES/S-Z/Tank.sid",
     "size": 2965,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 34000,
+    "durationText": "0:34"
   },
   {
     "id": "R0FNRVMvUy1aL1RhbmtfRGl2aXNpb24uc2lk",
@@ -16932,7 +20274,9 @@ window.SID_LIBRARY = [
     "fileName": "Tank_Division.sid",
     "path": "sids/GAMES/S-Z/Tank_Division.sid",
     "size": 3361,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 123000,
+    "durationText": "2:03"
   },
   {
     "id": "R0FNRVMvUy1aL1RhbmtfRmlnaHQuc2lk",
@@ -16942,7 +20286,9 @@ window.SID_LIBRARY = [
     "fileName": "Tank_Fight.sid",
     "path": "sids/GAMES/S-Z/Tank_Fight.sid",
     "size": 3246,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 49000,
+    "durationText": "0:49"
   },
   {
     "id": "R0FNRVMvUy1aL1RhbmtfV2FyX0NvbnN0cnVjdGlvbl9TZXQuc2lk",
@@ -16952,7 +20298,9 @@ window.SID_LIBRARY = [
     "fileName": "Tank_War_Construction_Set.sid",
     "path": "sids/GAMES/S-Z/Tank_War_Construction_Set.sid",
     "size": 829,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 33000,
+    "durationText": "0:33"
   },
   {
     "id": "R0FNRVMvUy1aL1RhcHBlci5zaWQ",
@@ -16962,7 +20310,9 @@ window.SID_LIBRARY = [
     "fileName": "Tapper.sid",
     "path": "sids/GAMES/S-Z/Tapper.sid",
     "size": 1311,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 9000,
+    "durationText": "0:09"
   },
   {
     "id": "R0FNRVMvUy1aL1Rhcmdvbi02NC5zaWQ",
@@ -16972,7 +20322,9 @@ window.SID_LIBRARY = [
     "fileName": "Targon-64.sid",
     "path": "sids/GAMES/S-Z/Targon-64.sid",
     "size": 3386,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 338000,
+    "durationText": "5:38"
   },
   {
     "id": "R0FNRVMvUy1aL1Rhc2tfSUlJLnNpZA",
@@ -16982,7 +20334,9 @@ window.SID_LIBRARY = [
     "fileName": "Task_III.sid",
     "path": "sids/GAMES/S-Z/Task_III.sid",
     "size": 6531,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 380000,
+    "durationText": "6:20"
   },
   {
     "id": "R0FNRVMvUy1aL1Rhc2stRi5zaWQ",
@@ -16992,7 +20346,9 @@ window.SID_LIBRARY = [
     "fileName": "Task-F.sid",
     "path": "sids/GAMES/S-Z/Task-F.sid",
     "size": 4222,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 154022,
+    "durationText": "2:34.022"
   },
   {
     "id": "R0FNRVMvUy1aL1RhdV9aZXJvLnNpZA",
@@ -17002,7 +20358,9 @@ window.SID_LIBRARY = [
     "fileName": "Tau_Zero.sid",
     "path": "sids/GAMES/S-Z/Tau_Zero.sid",
     "size": 2201,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 151000,
+    "durationText": "2:31"
   },
   {
     "id": "R0FNRVMvUy1aL1Rhenouc2lk",
@@ -17012,7 +20370,9 @@ window.SID_LIBRARY = [
     "fileName": "Tazz.sid",
     "path": "sids/GAMES/S-Z/Tazz.sid",
     "size": 1480,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 72000,
+    "durationText": "1:12"
   },
   {
     "id": "R0FNRVMvUy1aL1RlYWNoZXJidXN0ZXJzLnNpZA",
@@ -17022,7 +20382,9 @@ window.SID_LIBRARY = [
     "fileName": "Teacherbusters.sid",
     "path": "sids/GAMES/S-Z/Teacherbusters.sid",
     "size": 2219,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 76000,
+    "durationText": "1:16"
   },
   {
     "id": "R0FNRVMvUy1aL1RlbGVuZ2FyZF9CQVNJQy5zaWQ",
@@ -17032,7 +20394,9 @@ window.SID_LIBRARY = [
     "fileName": "Telengard_BASIC.sid",
     "path": "sids/GAMES/S-Z/Telengard_BASIC.sid",
     "size": 3191,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 59000,
+    "durationText": "0:59"
   },
   {
     "id": "R0FNRVMvUy1aL1RlbXBsZV9vZl9BcHNoYWkuc2lk",
@@ -17042,7 +20406,9 @@ window.SID_LIBRARY = [
     "fileName": "Temple_of_Apshai.sid",
     "path": "sids/GAMES/S-Z/Temple_of_Apshai.sid",
     "size": 2262,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 20000,
+    "durationText": "0:20"
   },
   {
     "id": "R0FNRVMvUy1aL1RlbXBsZV9vZl9BcHNoYWlfVHJpbG9neS5zaWQ",
@@ -17052,7 +20418,9 @@ window.SID_LIBRARY = [
     "fileName": "Temple_of_Apshai_Trilogy.sid",
     "path": "sids/GAMES/S-Z/Temple_of_Apshai_Trilogy.sid",
     "size": 10294,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 56000,
+    "durationText": "0:56"
   },
   {
     "id": "R0FNRVMvUy1aL1Rlbm5pc19CQVNJQy5zaWQ",
@@ -17062,7 +20430,9 @@ window.SID_LIBRARY = [
     "fileName": "Tennis_BASIC.sid",
     "path": "sids/GAMES/S-Z/Tennis_BASIC.sid",
     "size": 732,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 31000,
+    "durationText": "0:31"
   },
   {
     "id": "R0FNRVMvUy1aL1RlcnJpYmxlX1R3aW5zX0JBU0lDLnNpZA",
@@ -17072,7 +20442,9 @@ window.SID_LIBRARY = [
     "fileName": "Terrible_Twins_BASIC.sid",
     "path": "sids/GAMES/S-Z/Terrible_Twins_BASIC.sid",
     "size": 1337,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 7000,
+    "durationText": "0:07"
   },
   {
     "id": "R0FNRVMvUy1aL1RlcnJvcl9vZl90aGVfRGVlcC5zaWQ",
@@ -17082,7 +20454,9 @@ window.SID_LIBRARY = [
     "fileName": "Terror_of_the_Deep.sid",
     "path": "sids/GAMES/S-Z/Terror_of_the_Deep.sid",
     "size": 1723,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 36407,
+    "durationText": "0:36.407"
   },
   {
     "id": "R0FNRVMvUy1aL1Rlc3RfQkFTSUMuc2lk",
@@ -17092,7 +20466,9 @@ window.SID_LIBRARY = [
     "fileName": "Test_BASIC.sid",
     "path": "sids/GAMES/S-Z/Test_BASIC.sid",
     "size": 627,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 11000,
+    "durationText": "0:11"
   },
   {
     "id": "R0FNRVMvUy1aL1Rlc3RfRHJpdmUuc2lk",
@@ -17102,7 +20478,9 @@ window.SID_LIBRARY = [
     "fileName": "Test_Drive.sid",
     "path": "sids/GAMES/S-Z/Test_Drive.sid",
     "size": 4534,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 279000,
+    "durationText": "4:39"
   },
   {
     "id": "R0FNRVMvUy1aL1RldGhlcl9UZXJyYWluX0JBU0lDLnNpZA",
@@ -17112,7 +20490,9 @@ window.SID_LIBRARY = [
     "fileName": "Tether_Terrain_BASIC.sid",
     "path": "sids/GAMES/S-Z/Tether_Terrain_BASIC.sid",
     "size": 1501,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 26000,
+    "durationText": "0:26"
   },
   {
     "id": "R0FNRVMvUy1aL1RldHJvaWQuc2lk",
@@ -17122,7 +20502,9 @@ window.SID_LIBRARY = [
     "fileName": "Tetroid.sid",
     "path": "sids/GAMES/S-Z/Tetroid.sid",
     "size": 4065,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 58000,
+    "durationText": "0:58"
   },
   {
     "id": "R0FNRVMvUy1aL1RoaW5rX0JBU0lDLnNpZA",
@@ -17132,7 +20514,9 @@ window.SID_LIBRARY = [
     "fileName": "Think_BASIC.sid",
     "path": "sids/GAMES/S-Z/Think_BASIC.sid",
     "size": 2005,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 50049,
+    "durationText": "0:50.049"
   },
   {
     "id": "R0FNRVMvUy1aL1RoaW5rX1R3aWNlX3ByZXZpZXcuc2lk",
@@ -17142,7 +20526,9 @@ window.SID_LIBRARY = [
     "fileName": "Think_Twice_preview.sid",
     "path": "sids/GAMES/S-Z/Think_Twice_preview.sid",
     "size": 1673,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 23000,
+    "durationText": "0:23"
   },
   {
     "id": "R0FNRVMvUy1aL1Rocm91Z2hfdGhlX1RyYXBfRG9vci5zaWQ",
@@ -17152,7 +20538,9 @@ window.SID_LIBRARY = [
     "fileName": "Through_the_Trap_Door.sid",
     "path": "sids/GAMES/S-Z/Through_the_Trap_Door.sid",
     "size": 4610,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 1000,
+    "durationText": "0:01"
   },
   {
     "id": "R0FNRVMvUy1aL1RocnVzdF9JSS5zaWQ",
@@ -17162,7 +20550,9 @@ window.SID_LIBRARY = [
     "fileName": "Thrust_II.sid",
     "path": "sids/GAMES/S-Z/Thrust_II.sid",
     "size": 7886,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 131000,
+    "durationText": "2:11"
   },
   {
     "id": "R0FNRVMvUy1aL1RodW5kZXJfQmxhZGUuc2lk",
@@ -17172,7 +20562,9 @@ window.SID_LIBRARY = [
     "fileName": "Thunder_Blade.sid",
     "path": "sids/GAMES/S-Z/Thunder_Blade.sid",
     "size": 4484,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 170000,
+    "durationText": "2:50"
   },
   {
     "id": "R0FNRVMvUy1aL1RpbHQuc2lk",
@@ -17182,7 +20574,9 @@ window.SID_LIBRARY = [
     "fileName": "Tilt.sid",
     "path": "sids/GAMES/S-Z/Tilt.sid",
     "size": 4261,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 131000,
+    "durationText": "2:11"
   },
   {
     "id": "R0FNRVMvUy1aL1RpbWVfQ3J5c3RhbF9wcmV2aWV3LnNpZA",
@@ -17192,7 +20586,9 @@ window.SID_LIBRARY = [
     "fileName": "Time_Crystal_preview.sid",
     "path": "sids/GAMES/S-Z/Time_Crystal_preview.sid",
     "size": 3685,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 54000,
+    "durationText": "0:54"
   },
   {
     "id": "R0FNRVMvUy1aL1RpbWVfUHV6emxlLnNpZA",
@@ -17202,7 +20598,9 @@ window.SID_LIBRARY = [
     "fileName": "Time_Puzzle.sid",
     "path": "sids/GAMES/S-Z/Time_Puzzle.sid",
     "size": 14264,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 118000,
+    "durationText": "1:58"
   },
   {
     "id": "R0FNRVMvUy1aL1RpbWVfUnVubmVyLnNpZA",
@@ -17212,7 +20610,9 @@ window.SID_LIBRARY = [
     "fileName": "Time_Runner.sid",
     "path": "sids/GAMES/S-Z/Time_Runner.sid",
     "size": 1880,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 4000,
+    "durationText": "0:04"
   },
   {
     "id": "R0FNRVMvUy1aL1RpbWVfVHVubmVsLnNpZA",
@@ -17222,7 +20622,9 @@ window.SID_LIBRARY = [
     "fileName": "Time_Tunnel.sid",
     "path": "sids/GAMES/S-Z/Time_Tunnel.sid",
     "size": 3110,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 25000,
+    "durationText": "0:25"
   },
   {
     "id": "R0FNRVMvUy1aL1RpbWVfWmVyby5zaWQ",
@@ -17232,7 +20634,9 @@ window.SID_LIBRARY = [
     "fileName": "Time_Zero.sid",
     "path": "sids/GAMES/S-Z/Time_Zero.sid",
     "size": 2894,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 146000,
+    "durationText": "2:26"
   },
   {
     "id": "R0FNRVMvUy1aL1RpbWV6b25lLnNpZA",
@@ -17242,7 +20646,9 @@ window.SID_LIBRARY = [
     "fileName": "Timezone.sid",
     "path": "sids/GAMES/S-Z/Timezone.sid",
     "size": 4478,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 77000,
+    "durationText": "1:17"
   },
   {
     "id": "R0FNRVMvUy1aL1RpdGFuaWMtVGhlX0FkdmVudHVyZV9CZWdpbnMuc2lk",
@@ -17252,7 +20658,9 @@ window.SID_LIBRARY = [
     "fileName": "Titanic-The_Adventure_Begins.sid",
     "path": "sids/GAMES/S-Z/Titanic-The_Adventure_Begins.sid",
     "size": 1408,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 16000,
+    "durationText": "0:16"
   },
   {
     "id": "R0FNRVMvUy1aL1RpdGFucy5zaWQ",
@@ -17262,7 +20670,9 @@ window.SID_LIBRARY = [
     "fileName": "Titans.sid",
     "path": "sids/GAMES/S-Z/Titans.sid",
     "size": 951,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 16703,
+    "durationText": "0:16.703"
   },
   {
     "id": "R0FNRVMvUy1aL1RvY2NhdGEuc2lk",
@@ -17272,7 +20682,9 @@ window.SID_LIBRARY = [
     "fileName": "Toccata.sid",
     "path": "sids/GAMES/S-Z/Toccata.sid",
     "size": 946,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 7023,
+    "durationText": "0:07.023"
   },
   {
     "id": "R0FNRVMvUy1aL1RvbHRla2Euc2lk",
@@ -17282,7 +20694,9 @@ window.SID_LIBRARY = [
     "fileName": "Tolteka.sid",
     "path": "sids/GAMES/S-Z/Tolteka.sid",
     "size": 4399,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 81000,
+    "durationText": "1:21"
   },
   {
     "id": "R0FNRVMvUy1aL1RvbWJfb2ZfdGhlX1BoYXJhby5zaWQ",
@@ -17292,7 +20706,9 @@ window.SID_LIBRARY = [
     "fileName": "Tomb_of_the_Pharao.sid",
     "path": "sids/GAMES/S-Z/Tomb_of_the_Pharao.sid",
     "size": 865,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 31123,
+    "durationText": "0:31.123"
   },
   {
     "id": "R0FNRVMvUy1aL1RvbnRpLnNpZA",
@@ -17302,7 +20718,9 @@ window.SID_LIBRARY = [
     "fileName": "Tonti.sid",
     "path": "sids/GAMES/S-Z/Tonti.sid",
     "size": 885,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 36000,
+    "durationText": "0:36"
   },
   {
     "id": "R0FNRVMvUy1aL1Rvb3RoX0ludmFkZXJzLnNpZA",
@@ -17312,7 +20730,9 @@ window.SID_LIBRARY = [
     "fileName": "Tooth_Invaders.sid",
     "path": "sids/GAMES/S-Z/Tooth_Invaders.sid",
     "size": 2430,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 7000,
+    "durationText": "0:07"
   },
   {
     "id": "R0FNRVMvUy1aL1RvcHBlcl90aGVfQ29wcGVyLnNpZA",
@@ -17322,7 +20742,9 @@ window.SID_LIBRARY = [
     "fileName": "Topper_the_Copper.sid",
     "path": "sids/GAMES/S-Z/Topper_the_Copper.sid",
     "size": 1395,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 31000,
+    "durationText": "0:31"
   },
   {
     "id": "R0FNRVMvUy1aL1RvdXJfZGVfRXVyb3BlLnNpZA",
@@ -17332,7 +20754,9 @@ window.SID_LIBRARY = [
     "fileName": "Tour_de_Europe.sid",
     "path": "sids/GAMES/S-Z/Tour_de_Europe.sid",
     "size": 502,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 21878,
+    "durationText": "0:21.878"
   },
   {
     "id": "R0FNRVMvUy1aL1RvdXJfZGVfRnJhbmNlLnNpZA",
@@ -17342,7 +20766,9 @@ window.SID_LIBRARY = [
     "fileName": "Tour_de_France.sid",
     "path": "sids/GAMES/S-Z/Tour_de_France.sid",
     "size": 12670,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 38300,
+    "durationText": "0:38.3"
   },
   {
     "id": "R0FNRVMvUy1aL1Rvd2VyLnNpZA",
@@ -17352,7 +20778,9 @@ window.SID_LIBRARY = [
     "fileName": "Tower.sid",
     "path": "sids/GAMES/S-Z/Tower.sid",
     "size": 615,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 17000,
+    "durationText": "0:17"
   },
   {
     "id": "R0FNRVMvUy1aL1Rvd24tUmVzY3VlX0JBU0lDLnNpZA",
@@ -17362,7 +20790,9 @@ window.SID_LIBRARY = [
     "fileName": "Town-Rescue_BASIC.sid",
     "path": "sids/GAMES/S-Z/Town-Rescue_BASIC.sid",
     "size": 565,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 2731,
+    "durationText": "0:02.731"
   },
   {
     "id": "R0FNRVMvUy1aL1RveXouc2lk",
@@ -17372,7 +20802,9 @@ window.SID_LIBRARY = [
     "fileName": "Toyz.sid",
     "path": "sids/GAMES/S-Z/Toyz.sid",
     "size": 6729,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 142000,
+    "durationText": "2:22"
   },
   {
     "id": "R0FNRVMvUy1aL1RyYWNrX2FuZF9GaWVsZF8xOTg0LnNpZA",
@@ -17382,7 +20814,9 @@ window.SID_LIBRARY = [
     "fileName": "Track_and_Field_1984.sid",
     "path": "sids/GAMES/S-Z/Track_and_Field_1984.sid",
     "size": 1916,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 3000,
+    "durationText": "0:03"
   },
   {
     "id": "R0FNRVMvUy1aL1RyYWNrX2FuZF9GaWVsZF8xOTg3LnNpZA",
@@ -17392,7 +20826,9 @@ window.SID_LIBRARY = [
     "fileName": "Track_and_Field_1987.sid",
     "path": "sids/GAMES/S-Z/Track_and_Field_1987.sid",
     "size": 3454,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 22000,
+    "durationText": "0:22"
   },
   {
     "id": "R0FNRVMvUy1aL1RyYWZmaWMuc2lk",
@@ -17402,7 +20838,9 @@ window.SID_LIBRARY = [
     "fileName": "Traffic.sid",
     "path": "sids/GAMES/S-Z/Traffic.sid",
     "size": 4205,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 108228,
+    "durationText": "1:48.228"
   },
   {
     "id": "R0FNRVMvUy1aL1RyYWZmaWNfSmFtX0JBU0lDLnNpZA",
@@ -17412,7 +20850,9 @@ window.SID_LIBRARY = [
     "fileName": "Traffic_Jam_BASIC.sid",
     "path": "sids/GAMES/S-Z/Traffic_Jam_BASIC.sid",
     "size": 1492,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 20000,
+    "durationText": "0:20"
   },
   {
     "id": "R0FNRVMvUy1aL1RyYWlsX1dlc3RfQkFTSUMuc2lk",
@@ -17422,7 +20862,9 @@ window.SID_LIBRARY = [
     "fileName": "Trail_West_BASIC.sid",
     "path": "sids/GAMES/S-Z/Trail_West_BASIC.sid",
     "size": 1272,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 23000,
+    "durationText": "0:23"
   },
   {
     "id": "R0FNRVMvUy1aL1RyYWlucy5zaWQ",
@@ -17432,7 +20874,9 @@ window.SID_LIBRARY = [
     "fileName": "Trains.sid",
     "path": "sids/GAMES/S-Z/Trains.sid",
     "size": 11049,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 40000,
+    "durationText": "0:40"
   },
   {
     "id": "R0FNRVMvUy1aL1RyZWFkX0JlYXIuc2lk",
@@ -17442,7 +20886,9 @@ window.SID_LIBRARY = [
     "fileName": "Tread_Bear.sid",
     "path": "sids/GAMES/S-Z/Tread_Bear.sid",
     "size": 3547,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 164000,
+    "durationText": "2:44"
   },
   {
     "id": "R0FNRVMvUy1aL1RyZWFzdXJlX0h1bnQuc2lk",
@@ -17452,7 +20898,9 @@ window.SID_LIBRARY = [
     "fileName": "Treasure_Hunt.sid",
     "path": "sids/GAMES/S-Z/Treasure_Hunt.sid",
     "size": 1322,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 59000,
+    "durationText": "0:59"
   },
   {
     "id": "R0FNRVMvUy1aL1RyZWFzdXJlX0lzbGFuZC5zaWQ",
@@ -17462,7 +20910,9 @@ window.SID_LIBRARY = [
     "fileName": "Treasure_Island.sid",
     "path": "sids/GAMES/S-Z/Treasure_Island.sid",
     "size": 2346,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 116000,
+    "durationText": "1:56"
   },
   {
     "id": "R0FNRVMvUy1aL1RyZWFzdXJlc19vZl9SYS5zaWQ",
@@ -17472,7 +20922,9 @@ window.SID_LIBRARY = [
     "fileName": "Treasures_of_Ra.sid",
     "path": "sids/GAMES/S-Z/Treasures_of_Ra.sid",
     "size": 627,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 58259,
+    "durationText": "0:58.259"
   },
   {
     "id": "R0FNRVMvUy1aL1RyZW5lci5zaWQ",
@@ -17482,7 +20934,9 @@ window.SID_LIBRARY = [
     "fileName": "Trener.sid",
     "path": "sids/GAMES/S-Z/Trener.sid",
     "size": 438,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 48576,
+    "durationText": "0:48.576"
   },
   {
     "id": "R0FNRVMvUy1aL1RyaWFkLnNpZA",
@@ -17492,7 +20946,9 @@ window.SID_LIBRARY = [
     "fileName": "Triad.sid",
     "path": "sids/GAMES/S-Z/Triad.sid",
     "size": 1687,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 43000,
+    "durationText": "0:43"
   },
   {
     "id": "R0FNRVMvUy1aL1RyaWFuZ28uc2lk",
@@ -17502,7 +20958,9 @@ window.SID_LIBRARY = [
     "fileName": "Triango.sid",
     "path": "sids/GAMES/S-Z/Triango.sid",
     "size": 1769,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 20000,
+    "durationText": "0:20"
   },
   {
     "id": "R0FNRVMvUy1aL1RyaWNrbHlfQkFTSUMuc2lk",
@@ -17512,7 +20970,9 @@ window.SID_LIBRARY = [
     "fileName": "Trickly_BASIC.sid",
     "path": "sids/GAMES/S-Z/Trickly_BASIC.sid",
     "size": 2251,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 18000,
+    "durationText": "0:18"
   },
   {
     "id": "R0FNRVMvUy1aL1RyaXZpYV9VSy5zaWQ",
@@ -17522,7 +20982,9 @@ window.SID_LIBRARY = [
     "fileName": "Trivia_UK.sid",
     "path": "sids/GAMES/S-Z/Trivia_UK.sid",
     "size": 1918,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 23000,
+    "durationText": "0:23"
   },
   {
     "id": "R0FNRVMvUy1aL1RyaXZpYV92Ml8wLnNpZA",
@@ -17532,7 +20994,9 @@ window.SID_LIBRARY = [
     "fileName": "Trivia_v2_0.sid",
     "path": "sids/GAMES/S-Z/Trivia_v2_0.sid",
     "size": 3966,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 85000,
+    "durationText": "1:25"
   },
   {
     "id": "R0FNRVMvUy1aL1Ryb2xsc19hbmRfVHJpYnVsYXRpb25zLnNpZA",
@@ -17542,7 +21006,9 @@ window.SID_LIBRARY = [
     "fileName": "Trolls_and_Tribulations.sid",
     "path": "sids/GAMES/S-Z/Trolls_and_Tribulations.sid",
     "size": 6579,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 56000,
+    "durationText": "0:56"
   },
   {
     "id": "R0FNRVMvUy1aL1Ryb25fQkFTSUMuc2lk",
@@ -17552,7 +21018,9 @@ window.SID_LIBRARY = [
     "fileName": "Tron_BASIC.sid",
     "path": "sids/GAMES/S-Z/Tron_BASIC.sid",
     "size": 2677,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 48000,
+    "durationText": "0:48"
   },
   {
     "id": "R0FNRVMvUy1aL1Ryb25fQ29uc3RydWN0aW9uX1NldC5zaWQ",
@@ -17562,7 +21030,9 @@ window.SID_LIBRARY = [
     "fileName": "Tron_Construction_Set.sid",
     "path": "sids/GAMES/S-Z/Tron_Construction_Set.sid",
     "size": 324,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 21000,
+    "durationText": "0:21"
   },
   {
     "id": "R0FNRVMvUy1aL1Ryb29wZXJfVHJ1Y2suc2lk",
@@ -17572,7 +21042,9 @@ window.SID_LIBRARY = [
     "fileName": "Trooper_Truck.sid",
     "path": "sids/GAMES/S-Z/Trooper_Truck.sid",
     "size": 776,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 143000,
+    "durationText": "2:23"
   },
   {
     "id": "R0FNRVMvUy1aL1Ryb3VibGVfQnViYmxlLnNpZA",
@@ -17582,7 +21054,9 @@ window.SID_LIBRARY = [
     "fileName": "Trouble_Bubble.sid",
     "path": "sids/GAMES/S-Z/Trouble_Bubble.sid",
     "size": 4294,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 93562,
+    "durationText": "1:33.562"
   },
   {
     "id": "R0FNRVMvUy1aL1RydWNraW5nX1VTQV9CQVNJQy5zaWQ",
@@ -17592,7 +21066,9 @@ window.SID_LIBRARY = [
     "fileName": "Trucking_USA_BASIC.sid",
     "path": "sids/GAMES/S-Z/Trucking_USA_BASIC.sid",
     "size": 2409,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 12000,
+    "durationText": "0:12"
   },
   {
     "id": "R0FNRVMvUy1aL1R1bm5lbF9WaXNpb24uc2lk",
@@ -17602,7 +21078,9 @@ window.SID_LIBRARY = [
     "fileName": "Tunnel_Vision.sid",
     "path": "sids/GAMES/S-Z/Tunnel_Vision.sid",
     "size": 23738,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 149000,
+    "durationText": "2:29"
   },
   {
     "id": "R0FNRVMvUy1aL1R1bm5lbF9vZl9Eb29tLnNpZA",
@@ -17612,7 +21090,9 @@ window.SID_LIBRARY = [
     "fileName": "Tunnel_of_Doom.sid",
     "path": "sids/GAMES/S-Z/Tunnel_of_Doom.sid",
     "size": 1334,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 38000,
+    "durationText": "0:38"
   },
   {
     "id": "R0FNRVMvUy1aL1R1bm5lbF9vZl90aGVfQmlyZHMuc2lk",
@@ -17622,7 +21102,9 @@ window.SID_LIBRARY = [
     "fileName": "Tunnel_of_the_Birds.sid",
     "path": "sids/GAMES/S-Z/Tunnel_of_the_Birds.sid",
     "size": 2416,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 57274,
+    "durationText": "0:57.274"
   },
   {
     "id": "R0FNRVMvUy1aL1R1cmJvX0VzcHJpdC5zaWQ",
@@ -17632,7 +21114,9 @@ window.SID_LIBRARY = [
     "fileName": "Turbo_Esprit.sid",
     "path": "sids/GAMES/S-Z/Turbo_Esprit.sid",
     "size": 1270,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 59000,
+    "durationText": "0:59"
   },
   {
     "id": "R0FNRVMvUy1aL1R1cmJvX0thcnRfUmFjZXIuc2lk",
@@ -17642,7 +21126,9 @@ window.SID_LIBRARY = [
     "fileName": "Turbo_Kart_Racer.sid",
     "path": "sids/GAMES/S-Z/Turbo_Kart_Racer.sid",
     "size": 4653,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 140000,
+    "durationText": "2:20"
   },
   {
     "id": "R0FNRVMvUy1aL1R3aW5reV9Hb2VzX0hpa2luZy5zaWQ",
@@ -17652,7 +21138,9 @@ window.SID_LIBRARY = [
     "fileName": "Twinky_Goes_Hiking.sid",
     "path": "sids/GAMES/S-Z/Twinky_Goes_Hiking.sid",
     "size": 2782,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 31000,
+    "durationText": "0:31"
   },
   {
     "id": "R0FNRVMvUy1aL1R3b190b19PbmUuc2lk",
@@ -17662,7 +21150,9 @@ window.SID_LIBRARY = [
     "fileName": "Two_to_One.sid",
     "path": "sids/GAMES/S-Z/Two_to_One.sid",
     "size": 7598,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 145000,
+    "durationText": "2:25"
   },
   {
     "id": "R0FNRVMvUy1aL1VfU19MLnNpZA",
@@ -17672,7 +21162,9 @@ window.SID_LIBRARY = [
     "fileName": "U_S_L.sid",
     "path": "sids/GAMES/S-Z/U_S_L.sid",
     "size": 2046,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 135000,
+    "durationText": "2:15"
   },
   {
     "id": "R0FNRVMvUy1aL1VGRi5zaWQ",
@@ -17682,7 +21174,9 @@ window.SID_LIBRARY = [
     "fileName": "UFF.sid",
     "path": "sids/GAMES/S-Z/UFF.sid",
     "size": 5223,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 82000,
+    "durationText": "1:22"
   },
   {
     "id": "R0FNRVMvUy1aL1VGT19Bbm4uc2lk",
@@ -17692,7 +21186,9 @@ window.SID_LIBRARY = [
     "fileName": "UFO_Ann.sid",
     "path": "sids/GAMES/S-Z/UFO_Ann.sid",
     "size": 1304,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 18000,
+    "durationText": "0:18"
   },
   {
     "id": "R0FNRVMvUy1aL1VGT19JX0JBU0lDLnNpZA",
@@ -17702,7 +21198,9 @@ window.SID_LIBRARY = [
     "fileName": "UFO_I_BASIC.sid",
     "path": "sids/GAMES/S-Z/UFO_I_BASIC.sid",
     "size": 617,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 17929,
+    "durationText": "0:17.929"
   },
   {
     "id": "R0FNRVMvUy1aL1VGT19JSV9CQVNJQy5zaWQ",
@@ -17712,7 +21210,9 @@ window.SID_LIBRARY = [
     "fileName": "UFO_II_BASIC.sid",
     "path": "sids/GAMES/S-Z/UFO_II_BASIC.sid",
     "size": 771,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 17408,
+    "durationText": "0:17.408"
   },
   {
     "id": "R0FNRVMvUy1aL1VGT19TdHJpa2Uuc2lk",
@@ -17722,7 +21222,9 @@ window.SID_LIBRARY = [
     "fileName": "UFO_Strike.sid",
     "path": "sids/GAMES/S-Z/UFO_Strike.sid",
     "size": 447,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 12459,
+    "durationText": "0:12.459"
   },
   {
     "id": "R0FNRVMvUy1aL1VOX1NxdWFkcm9uLnNpZA",
@@ -17732,7 +21234,9 @@ window.SID_LIBRARY = [
     "fileName": "UN_Squadron.sid",
     "path": "sids/GAMES/S-Z/UN_Squadron.sid",
     "size": 4235,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 52000,
+    "durationText": "0:52"
   },
   {
     "id": "R0FNRVMvUy1aL1VnaC5zaWQ",
@@ -17742,7 +21246,9 @@ window.SID_LIBRARY = [
     "fileName": "Ugh.sid",
     "path": "sids/GAMES/S-Z/Ugh.sid",
     "size": 8781,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 57000,
+    "durationText": "0:57"
   },
   {
     "id": "R0FNRVMvUy1aL1VqX1ZhZG55dWdhdC5zaWQ",
@@ -17752,7 +21258,9 @@ window.SID_LIBRARY = [
     "fileName": "Uj_Vadnyugat.sid",
     "path": "sids/GAMES/S-Z/Uj_Vadnyugat.sid",
     "size": 3016,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 3000,
+    "durationText": "0:03"
   },
   {
     "id": "R0FNRVMvUy1aL1VuZGVyZ3JvdW5kLnNpZA",
@@ -17762,7 +21270,9 @@ window.SID_LIBRARY = [
     "fileName": "Underground.sid",
     "path": "sids/GAMES/S-Z/Underground.sid",
     "size": 2726,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 12000,
+    "durationText": "0:12"
   },
   {
     "id": "R0FNRVMvUy1aL1VuZGVyZ3JvdW5kX1pvbmUuc2lk",
@@ -17772,7 +21282,9 @@ window.SID_LIBRARY = [
     "fileName": "Underground_Zone.sid",
     "path": "sids/GAMES/S-Z/Underground_Zone.sid",
     "size": 3454,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 100000,
+    "durationText": "1:40"
   },
   {
     "id": "R0FNRVMvUy1aL1VuZGVyd3VybGRlLnNpZA",
@@ -17782,7 +21294,9 @@ window.SID_LIBRARY = [
     "fileName": "Underwurlde.sid",
     "path": "sids/GAMES/S-Z/Underwurlde.sid",
     "size": 2814,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 47000,
+    "durationText": "0:47"
   },
   {
     "id": "R0FNRVMvUy1aL1VuaW52aXRlZC5zaWQ",
@@ -17792,7 +21306,9 @@ window.SID_LIBRARY = [
     "fileName": "Uninvited.sid",
     "path": "sids/GAMES/S-Z/Uninvited.sid",
     "size": 869,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 5018,
+    "durationText": "0:05.018"
   },
   {
     "id": "R0FNRVMvUy1aL1VuaXRlZF9TdGF0ZXNfQWR2ZW50dXJlLnNpZA",
@@ -17802,7 +21318,9 @@ window.SID_LIBRARY = [
     "fileName": "United_States_Adventure.sid",
     "path": "sids/GAMES/S-Z/United_States_Adventure.sid",
     "size": 1881,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 72541,
+    "durationText": "1:12.541"
   },
   {
     "id": "R0FNRVMvUy1aL1VwX25fRG93bi5zaWQ",
@@ -17812,7 +21330,9 @@ window.SID_LIBRARY = [
     "fileName": "Up_n_Down.sid",
     "path": "sids/GAMES/S-Z/Up_n_Down.sid",
     "size": 1749,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 5300,
+    "durationText": "0:05.3"
   },
   {
     "id": "R0FNRVMvUy1aL1VwX25fU2hvb3Quc2lk",
@@ -17822,7 +21342,9 @@ window.SID_LIBRARY = [
     "fileName": "Up_n_Shoot.sid",
     "path": "sids/GAMES/S-Z/Up_n_Shoot.sid",
     "size": 566,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 7000,
+    "durationText": "0:07"
   },
   {
     "id": "R0FNRVMvUy1aL1VyYWwuc2lk",
@@ -17832,7 +21354,9 @@ window.SID_LIBRARY = [
     "fileName": "Ural.sid",
     "path": "sids/GAMES/S-Z/Ural.sid",
     "size": 19769,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 404000,
+    "durationText": "6:44"
   },
   {
     "id": "R0FNRVMvUy1aL1ZhZ2VyXzMuc2lk",
@@ -17842,7 +21366,9 @@ window.SID_LIBRARY = [
     "fileName": "Vager_3.sid",
     "path": "sids/GAMES/S-Z/Vager_3.sid",
     "size": 1665,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 96000,
+    "durationText": "1:36"
   },
   {
     "id": "R0FNRVMvUy1aL1ZhbGt5cmllXzE3LnNpZA",
@@ -17852,7 +21378,9 @@ window.SID_LIBRARY = [
     "fileName": "Valkyrie_17.sid",
     "path": "sids/GAMES/S-Z/Valkyrie_17.sid",
     "size": 2834,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 24000,
+    "durationText": "0:24"
   },
   {
     "id": "R0FNRVMvUy1aL1ZhcmRhbi5zaWQ",
@@ -17862,7 +21390,9 @@ window.SID_LIBRARY = [
     "fileName": "Vardan.sid",
     "path": "sids/GAMES/S-Z/Vardan.sid",
     "size": 6415,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 4000,
+    "durationText": "0:04"
   },
   {
     "id": "R0FNRVMvUy1aL1ZlZ2FzX0Nhc2lub18yLnNpZA",
@@ -17872,7 +21402,9 @@ window.SID_LIBRARY = [
     "fileName": "Vegas_Casino_2.sid",
     "path": "sids/GAMES/S-Z/Vegas_Casino_2.sid",
     "size": 824,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 12900,
+    "durationText": "0:12.9"
   },
   {
     "id": "R0FNRVMvUy1aL1ZlbmRldHRhLnNpZA",
@@ -17882,7 +21414,9 @@ window.SID_LIBRARY = [
     "fileName": "Vendetta.sid",
     "path": "sids/GAMES/S-Z/Vendetta.sid",
     "size": 11547,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 175000,
+    "durationText": "2:55"
   },
   {
     "id": "R0FNRVMvUy1aL1ZpY3RvcnlfUm9hZC5zaWQ",
@@ -17892,7 +21426,9 @@ window.SID_LIBRARY = [
     "fileName": "Victory_Road.sid",
     "path": "sids/GAMES/S-Z/Victory_Road.sid",
     "size": 2566,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 56000,
+    "durationText": "0:56"
   },
   {
     "id": "R0FNRVMvUy1aL1ZpZGVvX0RhcnRzLnNpZA",
@@ -17902,7 +21438,9 @@ window.SID_LIBRARY = [
     "fileName": "Video_Darts.sid",
     "path": "sids/GAMES/S-Z/Video_Darts.sid",
     "size": 558,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 22000,
+    "durationText": "0:22"
   },
   {
     "id": "R0FNRVMvUy1aL1ZpZXJfaW5fZWluZXJfUmVpaGUuc2lk",
@@ -17912,7 +21450,9 @@ window.SID_LIBRARY = [
     "fileName": "Vier_in_einer_Reihe.sid",
     "path": "sids/GAMES/S-Z/Vier_in_einer_Reihe.sid",
     "size": 2790,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 87000,
+    "durationText": "1:27"
   },
   {
     "id": "R0FNRVMvUy1aL1ZpZXRuYW0uc2lk",
@@ -17922,7 +21462,9 @@ window.SID_LIBRARY = [
     "fileName": "Vietnam.sid",
     "path": "sids/GAMES/S-Z/Vietnam.sid",
     "size": 490,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 13000,
+    "durationText": "0:13"
   },
   {
     "id": "R0FNRVMvUy1aL1ZpZ2lsYW50ZS5zaWQ",
@@ -17932,7 +21474,9 @@ window.SID_LIBRARY = [
     "fileName": "Vigilante.sid",
     "path": "sids/GAMES/S-Z/Vigilante.sid",
     "size": 1382,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 35000,
+    "durationText": "0:35"
   },
   {
     "id": "R0FNRVMvUy1aL1Zpb2xhdG9yLnNpZA",
@@ -17942,7 +21486,9 @@ window.SID_LIBRARY = [
     "fileName": "Violator.sid",
     "path": "sids/GAMES/S-Z/Violator.sid",
     "size": 19310,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 3041,
+    "durationText": "0:03.041"
   },
   {
     "id": "R0FNRVMvUy1aL1ZpcGVyLnNpZA",
@@ -17952,7 +21498,9 @@ window.SID_LIBRARY = [
     "fileName": "Viper.sid",
     "path": "sids/GAMES/S-Z/Viper.sid",
     "size": 1078,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 20440,
+    "durationText": "0:20.44"
   },
   {
     "id": "R0FNRVMvUy1aL1ZpdGFtaW4uc2lk",
@@ -17962,7 +21510,9 @@ window.SID_LIBRARY = [
     "fileName": "Vitamin.sid",
     "path": "sids/GAMES/S-Z/Vitamin.sid",
     "size": 1037,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 30200,
+    "durationText": "0:30.2"
   },
   {
     "id": "R0FNRVMvUy1aL1ZveWFnZXIuc2lk",
@@ -17972,7 +21522,9 @@ window.SID_LIBRARY = [
     "fileName": "Voyager.sid",
     "path": "sids/GAMES/S-Z/Voyager.sid",
     "size": 15639,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 49000,
+    "durationText": "0:49"
   },
   {
     "id": "R0FNRVMvUy1aL1dhbGwuc2lk",
@@ -17982,7 +21534,9 @@ window.SID_LIBRARY = [
     "fileName": "Wall.sid",
     "path": "sids/GAMES/S-Z/Wall.sid",
     "size": 11476,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 63915,
+    "durationText": "1:03.915"
   },
   {
     "id": "R0FNRVMvUy1aL1dhbGxzdHJlZXRfMi5zaWQ",
@@ -17992,7 +21546,9 @@ window.SID_LIBRARY = [
     "fileName": "Wallstreet_2.sid",
     "path": "sids/GAMES/S-Z/Wallstreet_2.sid",
     "size": 2454,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 184000,
+    "durationText": "3:04"
   },
   {
     "id": "R0FNRVMvUy1aL1dhbmRlcnVuZy5zaWQ",
@@ -18002,7 +21558,9 @@ window.SID_LIBRARY = [
     "fileName": "Wanderung.sid",
     "path": "sids/GAMES/S-Z/Wanderung.sid",
     "size": 19576,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 191000,
+    "durationText": "3:11"
   },
   {
     "id": "R0FNRVMvUy1aL1dhcl9NYWNoaW5lLnNpZA",
@@ -18012,7 +21570,9 @@ window.SID_LIBRARY = [
     "fileName": "War_Machine.sid",
     "path": "sids/GAMES/S-Z/War_Machine.sid",
     "size": 2778,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 196000,
+    "durationText": "3:16"
   },
   {
     "id": "R0FNRVMvUy1aL1dhcl9QbGF5LnNpZA",
@@ -18022,7 +21582,9 @@ window.SID_LIBRARY = [
     "fileName": "War_Play.sid",
     "path": "sids/GAMES/S-Z/War_Play.sid",
     "size": 714,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 13000,
+    "durationText": "0:13"
   },
   {
     "id": "R0FNRVMvUy1aL1dhcl9pbl9NaWRkbGVfRWFydGguc2lk",
@@ -18032,7 +21594,9 @@ window.SID_LIBRARY = [
     "fileName": "War_in_Middle_Earth.sid",
     "path": "sids/GAMES/S-Z/War_in_Middle_Earth.sid",
     "size": 1643,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 48000,
+    "durationText": "0:48"
   },
   {
     "id": "R0FNRVMvUy1aL1dhckdhbWVzLnNpZA",
@@ -18042,7 +21606,9 @@ window.SID_LIBRARY = [
     "fileName": "WarGames.sid",
     "path": "sids/GAMES/S-Z/WarGames.sid",
     "size": 1948,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 1000,
+    "durationText": "0:01"
   },
   {
     "id": "R0FNRVMvUy1aL1dhcnJpb3JzX29mX1p5cGFyLnNpZA",
@@ -18052,7 +21618,9 @@ window.SID_LIBRARY = [
     "fileName": "Warriors_of_Zypar.sid",
     "path": "sids/GAMES/S-Z/Warriors_of_Zypar.sid",
     "size": 2725,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 32000,
+    "durationText": "0:32"
   },
   {
     "id": "R0FNRVMvUy1aL1dhc3RlZF9UaW1lLnNpZA",
@@ -18062,7 +21630,9 @@ window.SID_LIBRARY = [
     "fileName": "Wasted_Time.sid",
     "path": "sids/GAMES/S-Z/Wasted_Time.sid",
     "size": 12803,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 125900,
+    "durationText": "2:05.9"
   },
   {
     "id": "R0FNRVMvUy1aL1dhc3RlbGFuZHMuc2lk",
@@ -18072,7 +21642,9 @@ window.SID_LIBRARY = [
     "fileName": "Wastelands.sid",
     "path": "sids/GAMES/S-Z/Wastelands.sid",
     "size": 51967,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 100000,
+    "durationText": "1:40"
   },
   {
     "id": "R0FNRVMvUy1aL1dhdGVyX1BvbG8uc2lk",
@@ -18082,7 +21654,9 @@ window.SID_LIBRARY = [
     "fileName": "Water_Polo.sid",
     "path": "sids/GAMES/S-Z/Water_Polo.sid",
     "size": 3535,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 141000,
+    "durationText": "2:21"
   },
   {
     "id": "R0FNRVMvUy1aL1dhdnlfTmF2eS5zaWQ",
@@ -18092,7 +21666,9 @@ window.SID_LIBRARY = [
     "fileName": "Wavy_Navy.sid",
     "path": "sids/GAMES/S-Z/Wavy_Navy.sid",
     "size": 2744,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 12000,
+    "durationText": "0:12"
   },
   {
     "id": "R0FNRVMvUy1aL1dlX3RoZV9QZW9wbGUuc2lk",
@@ -18102,7 +21678,9 @@ window.SID_LIBRARY = [
     "fileName": "We_the_People.sid",
     "path": "sids/GAMES/S-Z/We_the_People.sid",
     "size": 3390,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 13000,
+    "durationText": "0:13"
   },
   {
     "id": "R0FNRVMvUy1aL1dlYXRoZXJfVGFtZXJzLnNpZA",
@@ -18112,7 +21690,9 @@ window.SID_LIBRARY = [
     "fileName": "Weather_Tamers.sid",
     "path": "sids/GAMES/S-Z/Weather_Tamers.sid",
     "size": 1514,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 19000,
+    "durationText": "0:19"
   },
   {
     "id": "R0FNRVMvUy1aL1dlbGx0cmlzLnNpZA",
@@ -18122,7 +21702,9 @@ window.SID_LIBRARY = [
     "fileName": "Welltris.sid",
     "path": "sids/GAMES/S-Z/Welltris.sid",
     "size": 1852,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 44000,
+    "durationText": "0:44"
   },
   {
     "id": "R0FNRVMvUy1aL1dlcmV3b2x2ZXNfb2ZfTG9uZG9uLnNpZA",
@@ -18132,7 +21714,9 @@ window.SID_LIBRARY = [
     "fileName": "Werewolves_of_London.sid",
     "path": "sids/GAMES/S-Z/Werewolves_of_London.sid",
     "size": 4383,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 35000,
+    "durationText": "0:35"
   },
   {
     "id": "R0FNRVMvUy1aL1dlc3Quc2lk",
@@ -18142,7 +21726,9 @@ window.SID_LIBRARY = [
     "fileName": "West.sid",
     "path": "sids/GAMES/S-Z/West.sid",
     "size": 2328,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 19000,
+    "durationText": "0:19"
   },
   {
     "id": "R0FNRVMvUy1aL1dlc3Rlcm5fR2FtZXMuc2lk",
@@ -18152,7 +21738,9 @@ window.SID_LIBRARY = [
     "fileName": "Western_Games.sid",
     "path": "sids/GAMES/S-Z/Western_Games.sid",
     "size": 22294,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 165728,
+    "durationText": "2:45.728"
   },
   {
     "id": "R0FNRVMvUy1aL1doZWVsX29mX0ZvcnR1bmUuc2lk",
@@ -18162,7 +21750,9 @@ window.SID_LIBRARY = [
     "fileName": "Wheel_of_Fortune.sid",
     "path": "sids/GAMES/S-Z/Wheel_of_Fortune.sid",
     "size": 4082,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 30000,
+    "durationText": "0:30"
   },
   {
     "id": "R0FNRVMvUy1aL1doZWVsX29mX0ZvcnR1bmVfQkFTSUMuc2lk",
@@ -18172,7 +21762,9 @@ window.SID_LIBRARY = [
     "fileName": "Wheel_of_Fortune_BASIC.sid",
     "path": "sids/GAMES/S-Z/Wheel_of_Fortune_BASIC.sid",
     "size": 1539,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 20000,
+    "durationText": "0:20"
   },
   {
     "id": "R0FNRVMvUy1aL1doZWVsaWVzLnNpZA",
@@ -18182,7 +21774,9 @@ window.SID_LIBRARY = [
     "fileName": "Wheelies.sid",
     "path": "sids/GAMES/S-Z/Wheelies.sid",
     "size": 8318,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 75000,
+    "durationText": "1:15"
   },
   {
     "id": "R0FNRVMvUy1aL1doaXRlX1ZpcGVyLnNpZA",
@@ -18192,7 +21786,9 @@ window.SID_LIBRARY = [
     "fileName": "White_Viper.sid",
     "path": "sids/GAMES/S-Z/White_Viper.sid",
     "size": 4129,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 199000,
+    "durationText": "3:19"
   },
   {
     "id": "R0FNRVMvUy1aL1doaXRlaG91c2VfQmx1ZXMuc2lk",
@@ -18202,7 +21798,9 @@ window.SID_LIBRARY = [
     "fileName": "Whitehouse_Blues.sid",
     "path": "sids/GAMES/S-Z/Whitehouse_Blues.sid",
     "size": 5238,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 207000,
+    "durationText": "3:27"
   },
   {
     "id": "R0FNRVMvUy1aL1dob19EYXJlc19XaW5zLnNpZA",
@@ -18212,7 +21810,9 @@ window.SID_LIBRARY = [
     "fileName": "Who_Dares_Wins.sid",
     "path": "sids/GAMES/S-Z/Who_Dares_Wins.sid",
     "size": 2988,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 76000,
+    "durationText": "1:16"
   },
   {
     "id": "R0FNRVMvUy1aL1dob19GcmFtZWRfUm9nZXJfUmFiYml0LnNpZA",
@@ -18222,7 +21822,9 @@ window.SID_LIBRARY = [
     "fileName": "Who_Framed_Roger_Rabbit.sid",
     "path": "sids/GAMES/S-Z/Who_Framed_Roger_Rabbit.sid",
     "size": 13001,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 59000,
+    "durationText": "0:59"
   },
   {
     "id": "R0FNRVMvUy1aL1dob19LaWxsZWRfQ29ja19Sb2Jpbl9CQVNJQy5zaWQ",
@@ -18232,7 +21834,9 @@ window.SID_LIBRARY = [
     "fileName": "Who_Killed_Cock_Robin_BASIC.sid",
     "path": "sids/GAMES/S-Z/Who_Killed_Cock_Robin_BASIC.sid",
     "size": 1605,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 4000,
+    "durationText": "0:04"
   },
   {
     "id": "R0FNRVMvUy1aL1dpYnN0YXJzLnNpZA",
@@ -18242,7 +21846,9 @@ window.SID_LIBRARY = [
     "fileName": "Wibstars.sid",
     "path": "sids/GAMES/S-Z/Wibstars.sid",
     "size": 1446,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 103000,
+    "durationText": "1:43"
   },
   {
     "id": "R0FNRVMvUy1aL1dpZWxyZW5uZW4uc2lk",
@@ -18252,7 +21858,9 @@ window.SID_LIBRARY = [
     "fileName": "Wielrennen.sid",
     "path": "sids/GAMES/S-Z/Wielrennen.sid",
     "size": 905,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 30000,
+    "durationText": "0:30"
   },
   {
     "id": "R0FNRVMvUy1aL1dpbGRfUmlkZS5zaWQ",
@@ -18262,7 +21870,9 @@ window.SID_LIBRARY = [
     "fileName": "Wild_Ride.sid",
     "path": "sids/GAMES/S-Z/Wild_Ride.sid",
     "size": 904,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 67000,
+    "durationText": "1:07"
   },
   {
     "id": "R0FNRVMvUy1aL1dpbGRfU3RyZWV0cy5zaWQ",
@@ -18272,7 +21882,9 @@ window.SID_LIBRARY = [
     "fileName": "Wild_Streets.sid",
     "path": "sids/GAMES/S-Z/Wild_Streets.sid",
     "size": 5051,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 152000,
+    "durationText": "2:32"
   },
   {
     "id": "R0FNRVMvUy1aL1dpbGRfV2VzdC5zaWQ",
@@ -18282,7 +21894,9 @@ window.SID_LIBRARY = [
     "fileName": "Wild_West.sid",
     "path": "sids/GAMES/S-Z/Wild_West.sid",
     "size": 4310,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 16000,
+    "durationText": "0:16"
   },
   {
     "id": "R0FNRVMvUy1aL1dpbGxvdy5zaWQ",
@@ -18292,7 +21906,9 @@ window.SID_LIBRARY = [
     "fileName": "Willow.sid",
     "path": "sids/GAMES/S-Z/Willow.sid",
     "size": 3949,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 16000,
+    "durationText": "0:16"
   },
   {
     "id": "R0FNRVMvUy1aL1dpbmR3YWxrZXIuc2lk",
@@ -18302,7 +21918,9 @@ window.SID_LIBRARY = [
     "fileName": "Windwalker.sid",
     "path": "sids/GAMES/S-Z/Windwalker.sid",
     "size": 1465,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 4000,
+    "durationText": "0:04"
   },
   {
     "id": "R0FNRVMvUy1aL1dpbnRlcl9PbHltcGlhZF84OF9sb2FkZXIuc2lk",
@@ -18312,7 +21930,9 @@ window.SID_LIBRARY = [
     "fileName": "Winter_Olympiad_88_loader.sid",
     "path": "sids/GAMES/S-Z/Winter_Olympiad_88_loader.sid",
     "size": 1990,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 50000,
+    "durationText": "0:50"
   },
   {
     "id": "R0FNRVMvUy1aL1dpbnRlci1Ib2xpZGF5cy5zaWQ",
@@ -18322,7 +21942,9 @@ window.SID_LIBRARY = [
     "fileName": "Winter-Holidays.sid",
     "path": "sids/GAMES/S-Z/Winter-Holidays.sid",
     "size": 4670,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 145000,
+    "durationText": "2:25"
   },
   {
     "id": "R0FNRVMvUy1aL1dpcGVvdXQuc2lk",
@@ -18332,7 +21954,9 @@ window.SID_LIBRARY = [
     "fileName": "Wipeout.sid",
     "path": "sids/GAMES/S-Z/Wipeout.sid",
     "size": 2236,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 7000,
+    "durationText": "0:07"
   },
   {
     "id": "R0FNRVMvUy1aL1dpdGNoU3dpdGNoLnNpZA",
@@ -18342,7 +21966,9 @@ window.SID_LIBRARY = [
     "fileName": "WitchSwitch.sid",
     "path": "sids/GAMES/S-Z/WitchSwitch.sid",
     "size": 5906,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 11000,
+    "durationText": "0:11"
   },
   {
     "id": "R0FNRVMvUy1aL1dpemFyZF9vZl9Xb3Iuc2lk",
@@ -18352,7 +21978,9 @@ window.SID_LIBRARY = [
     "fileName": "Wizard_of_Wor.sid",
     "path": "sids/GAMES/S-Z/Wizard_of_Wor.sid",
     "size": 1543,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 4000,
+    "durationText": "0:04"
   },
   {
     "id": "R0FNRVMvUy1aL1dpemFyZHNfTGFpci5zaWQ",
@@ -18362,7 +21990,9 @@ window.SID_LIBRARY = [
     "fileName": "Wizards_Lair.sid",
     "path": "sids/GAMES/S-Z/Wizards_Lair.sid",
     "size": 1636,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 16000,
+    "durationText": "0:16"
   },
   {
     "id": "R0FNRVMvUy1aL1dsYWRjYS5zaWQ",
@@ -18372,7 +22002,9 @@ window.SID_LIBRARY = [
     "fileName": "Wladca.sid",
     "path": "sids/GAMES/S-Z/Wladca.sid",
     "size": 3505,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 149000,
+    "durationText": "2:29"
   },
   {
     "id": "R0FNRVMvUy1aL1dvbmRlcmJveS5zaWQ",
@@ -18382,7 +22014,9 @@ window.SID_LIBRARY = [
     "fileName": "Wonderboy.sid",
     "path": "sids/GAMES/S-Z/Wonderboy.sid",
     "size": 4246,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 28000,
+    "durationText": "0:28"
   },
   {
     "id": "R0FNRVMvUy1aL1dvbmRlcmJveV9pbl9Nb25zdGVybGFuZC5zaWQ",
@@ -18392,7 +22026,9 @@ window.SID_LIBRARY = [
     "fileName": "Wonderboy_in_Monsterland.sid",
     "path": "sids/GAMES/S-Z/Wonderboy_in_Monsterland.sid",
     "size": 6977,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 26000,
+    "durationText": "0:26"
   },
   {
     "id": "R0FNRVMvUy1aL1dvb2RwZWNrZXIuc2lk",
@@ -18402,7 +22038,9 @@ window.SID_LIBRARY = [
     "fileName": "Woodpecker.sid",
     "path": "sids/GAMES/S-Z/Woodpecker.sid",
     "size": 2136,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 38000,
+    "durationText": "0:38"
   },
   {
     "id": "R0FNRVMvUy1aL1dvcmtpbmdfU3RvbmUuc2lk",
@@ -18412,7 +22050,9 @@ window.SID_LIBRARY = [
     "fileName": "Working_Stone.sid",
     "path": "sids/GAMES/S-Z/Working_Stone.sid",
     "size": 7125,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 116000,
+    "durationText": "1:56"
   },
   {
     "id": "R0FNRVMvUy1aL1dvcmxkLnNpZA",
@@ -18422,7 +22062,9 @@ window.SID_LIBRARY = [
     "fileName": "World.sid",
     "path": "sids/GAMES/S-Z/World.sid",
     "size": 1132,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 66000,
+    "durationText": "1:06"
   },
   {
     "id": "R0FNRVMvUy1aL1dvcmxkX0NoYW1waW9uc2hpcF9Tb2NjZXIuc2lk",
@@ -18432,7 +22074,9 @@ window.SID_LIBRARY = [
     "fileName": "World_Championship_Soccer.sid",
     "path": "sids/GAMES/S-Z/World_Championship_Soccer.sid",
     "size": 4539,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 100000,
+    "durationText": "1:40"
   },
   {
     "id": "R0FNRVMvUy1aL1dvcmxkX0N1cC5zaWQ",
@@ -18442,7 +22086,9 @@ window.SID_LIBRARY = [
     "fileName": "World_Cup.sid",
     "path": "sids/GAMES/S-Z/World_Cup.sid",
     "size": 1870,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 12400,
+    "durationText": "0:12.4"
   },
   {
     "id": "R0FNRVMvUy1aL1dvcmxkX0N1cF9Dcmlja2V0LnNpZA",
@@ -18452,7 +22098,9 @@ window.SID_LIBRARY = [
     "fileName": "World_Cup_Cricket.sid",
     "path": "sids/GAMES/S-Z/World_Cup_Cricket.sid",
     "size": 1150,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 29000,
+    "durationText": "0:29"
   },
   {
     "id": "R0FNRVMvUy1aL1dvcmxkX0N1cF9Tb2NjZXIuc2lk",
@@ -18462,7 +22110,9 @@ window.SID_LIBRARY = [
     "fileName": "World_Cup_Soccer.sid",
     "path": "sids/GAMES/S-Z/World_Cup_Soccer.sid",
     "size": 866,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 38000,
+    "durationText": "0:38"
   },
   {
     "id": "R0FNRVMvUy1aL1dvcmxkX0dhbWVzLnNpZA",
@@ -18472,7 +22122,9 @@ window.SID_LIBRARY = [
     "fileName": "World_Games.sid",
     "path": "sids/GAMES/S-Z/World_Games.sid",
     "size": 24909,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 33000,
+    "durationText": "0:33"
   },
   {
     "id": "R0FNRVMvUy1aL1dvcmxkX1Nlcmllc19CYXNlYmFsbC5zaWQ",
@@ -18482,7 +22134,9 @@ window.SID_LIBRARY = [
     "fileName": "World_Series_Baseball.sid",
     "path": "sids/GAMES/S-Z/World_Series_Baseball.sid",
     "size": 2076,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 19000,
+    "durationText": "0:19"
   },
   {
     "id": "R0FNRVMvUy1aL1dvcmxkX1Ryb3BoeV9Tb2NjZXIuc2lk",
@@ -18492,7 +22146,9 @@ window.SID_LIBRARY = [
     "fileName": "World_Trophy_Soccer.sid",
     "path": "sids/GAMES/S-Z/World_Trophy_Soccer.sid",
     "size": 4734,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 9000,
+    "durationText": "0:09"
   },
   {
     "id": "R0FNRVMvUy1aL1dvcmxkY3VwLVNraWluZ19JSS5zaWQ",
@@ -18502,7 +22158,9 @@ window.SID_LIBRARY = [
     "fileName": "Worldcup-Skiing_II.sid",
     "path": "sids/GAMES/S-Z/Worldcup-Skiing_II.sid",
     "size": 16310,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 23100,
+    "durationText": "0:23.1"
   },
   {
     "id": "R0FNRVMvUy1aL1dvcm0uc2lk",
@@ -18512,7 +22170,9 @@ window.SID_LIBRARY = [
     "fileName": "Worm.sid",
     "path": "sids/GAMES/S-Z/Worm.sid",
     "size": 2493,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 58000,
+    "durationText": "0:58"
   },
   {
     "id": "R0FNRVMvUy1aL1dvcm1fNjQuc2lk",
@@ -18522,7 +22182,9 @@ window.SID_LIBRARY = [
     "fileName": "Worm_64.sid",
     "path": "sids/GAMES/S-Z/Worm_64.sid",
     "size": 726,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 11735,
+    "durationText": "0:11.735"
   },
   {
     "id": "R0FNRVMvUy1aL1dvcnJvbi5zaWQ",
@@ -18532,7 +22194,9 @@ window.SID_LIBRARY = [
     "fileName": "Worron.sid",
     "path": "sids/GAMES/S-Z/Worron.sid",
     "size": 6463,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 26800,
+    "durationText": "0:26.8"
   },
   {
     "id": "R0FNRVMvUy1aL1d1bGZwYWNrLnNpZA",
@@ -18542,7 +22206,9 @@ window.SID_LIBRARY = [
     "fileName": "Wulfpack.sid",
     "path": "sids/GAMES/S-Z/Wulfpack.sid",
     "size": 922,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 41031,
+    "durationText": "0:41.031"
   },
   {
     "id": "R0FNRVMvUy1aL1d5dmVybnMuc2lk",
@@ -18552,7 +22218,9 @@ window.SID_LIBRARY = [
     "fileName": "Wyverns.sid",
     "path": "sids/GAMES/S-Z/Wyverns.sid",
     "size": 2954,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 246000,
+    "durationText": "4:06"
   },
   {
     "id": "R0FNRVMvUy1aL1gtTWVuLU1hZG5lc3NfaW5fTXVyZGVyd29ybGQuc2lk",
@@ -18562,7 +22230,9 @@ window.SID_LIBRARY = [
     "fileName": "X-Men-Madness_in_Murderworld.sid",
     "path": "sids/GAMES/S-Z/X-Men-Madness_in_Murderworld.sid",
     "size": 6231,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 44000,
+    "durationText": "0:44"
   },
   {
     "id": "R0FNRVMvUy1aL1hlbm9uX1Jhbmdlci5zaWQ",
@@ -18572,7 +22242,9 @@ window.SID_LIBRARY = [
     "fileName": "Xenon_Ranger.sid",
     "path": "sids/GAMES/S-Z/Xenon_Ranger.sid",
     "size": 4494,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 253000,
+    "durationText": "4:13"
   },
   {
     "id": "R0FNRVMvUy1aL1hlcnR5bi1YLnNpZA",
@@ -18582,7 +22254,9 @@ window.SID_LIBRARY = [
     "fileName": "Xertyn-X.sid",
     "path": "sids/GAMES/S-Z/Xertyn-X.sid",
     "size": 3754,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 80000,
+    "durationText": "1:20"
   },
   {
     "id": "R0FNRVMvUy1aL1hldmlvdXMuc2lk",
@@ -18592,7 +22266,9 @@ window.SID_LIBRARY = [
     "fileName": "Xevious.sid",
     "path": "sids/GAMES/S-Z/Xevious.sid",
     "size": 763,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 8000,
+    "durationText": "0:08"
   },
   {
     "id": "R0FNRVMvUy1aL1htYXNfUHJlenppZS5zaWQ",
@@ -18602,7 +22278,9 @@ window.SID_LIBRARY = [
     "fileName": "Xmas_Prezzie.sid",
     "path": "sids/GAMES/S-Z/Xmas_Prezzie.sid",
     "size": 5003,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 121000,
+    "durationText": "2:01"
   },
   {
     "id": "R0FNRVMvUy1aL1hvbm94X2VuZC5zaWQ",
@@ -18612,7 +22290,9 @@ window.SID_LIBRARY = [
     "fileName": "Xonox_end.sid",
     "path": "sids/GAMES/S-Z/Xonox_end.sid",
     "size": 3452,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 57000,
+    "durationText": "0:57"
   },
   {
     "id": "R0FNRVMvUy1aL1hvci5zaWQ",
@@ -18622,7 +22302,9 @@ window.SID_LIBRARY = [
     "fileName": "Xor.sid",
     "path": "sids/GAMES/S-Z/Xor.sid",
     "size": 1340,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 74000,
+    "durationText": "1:14"
   },
   {
     "id": "R0FNRVMvUy1aL1h5Ym90cy5zaWQ",
@@ -18632,7 +22314,9 @@ window.SID_LIBRARY = [
     "fileName": "Xybots.sid",
     "path": "sids/GAMES/S-Z/Xybots.sid",
     "size": 3154,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 71000,
+    "durationText": "1:11"
   },
   {
     "id": "R0FNRVMvUy1aL1h5cGh1cy5zaWQ",
@@ -18642,7 +22326,9 @@ window.SID_LIBRARY = [
     "fileName": "Xyphus.sid",
     "path": "sids/GAMES/S-Z/Xyphus.sid",
     "size": 3894,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 52000,
+    "durationText": "0:52"
   },
   {
     "id": "R0FNRVMvUy1aL1h5dHJpcy1UaGVfR2FtZV9wcmV2aWV3LnNpZA",
@@ -18652,7 +22338,9 @@ window.SID_LIBRARY = [
     "fileName": "Xytris-The_Game_preview.sid",
     "path": "sids/GAMES/S-Z/Xytris-The_Game_preview.sid",
     "size": 5558,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 8000,
+    "durationText": "0:08"
   },
   {
     "id": "R0FNRVMvUy1aL1lhbnR6ZWVfQkFTSUMuc2lk",
@@ -18662,7 +22350,9 @@ window.SID_LIBRARY = [
     "fileName": "Yantzee_BASIC.sid",
     "path": "sids/GAMES/S-Z/Yantzee_BASIC.sid",
     "size": 1660,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 31547,
+    "durationText": "0:31.547"
   },
   {
     "id": "R0FNRVMvUy1aL1llbGxvd19TdWJtYXJpbmVfQkFTSUMuc2lk",
@@ -18672,7 +22362,9 @@ window.SID_LIBRARY = [
     "fileName": "Yellow_Submarine_BASIC.sid",
     "path": "sids/GAMES/S-Z/Yellow_Submarine_BASIC.sid",
     "size": 2530,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 22000,
+    "durationText": "0:22"
   },
   {
     "id": "R0FNRVMvUy1aL1lvdW5nX09uZXMuc2lk",
@@ -18682,7 +22374,9 @@ window.SID_LIBRARY = [
     "fileName": "Young_Ones.sid",
     "path": "sids/GAMES/S-Z/Young_Ones.sid",
     "size": 7290,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 117400,
+    "durationText": "1:57.4"
   },
   {
     "id": "R0FNRVMvUy1aL1lvdXJfRmF0aGVyc19OaWdodG1hcmUuc2lk",
@@ -18692,7 +22386,9 @@ window.SID_LIBRARY = [
     "fileName": "Your_Fathers_Nightmare.sid",
     "path": "sids/GAMES/S-Z/Your_Fathers_Nightmare.sid",
     "size": 9542,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 77000,
+    "durationText": "1:17"
   },
   {
     "id": "R0FNRVMvUy1aL1l1Y2F0YW4uc2lk",
@@ -18702,7 +22398,9 @@ window.SID_LIBRARY = [
     "fileName": "Yucatan.sid",
     "path": "sids/GAMES/S-Z/Yucatan.sid",
     "size": 2955,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 64000,
+    "durationText": "1:04"
   },
   {
     "id": "R0FNRVMvUy1aL1phZ2hlbi5zaWQ",
@@ -18712,7 +22410,9 @@ window.SID_LIBRARY = [
     "fileName": "Zaghen.sid",
     "path": "sids/GAMES/S-Z/Zaghen.sid",
     "size": 4154,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 51000,
+    "durationText": "0:51"
   },
   {
     "id": "R0FNRVMvUy1aL1pha19NY0tyYWNrZW4uc2lk",
@@ -18722,7 +22422,9 @@ window.SID_LIBRARY = [
     "fileName": "Zak_McKracken.sid",
     "path": "sids/GAMES/S-Z/Zak_McKracken.sid",
     "size": 18012,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 86000,
+    "durationText": "1:26"
   },
   {
     "id": "R0FNRVMvUy1aL1phdWJlcndhbGRfMTk4N19CQVNJQy5zaWQ",
@@ -18732,7 +22434,9 @@ window.SID_LIBRARY = [
     "fileName": "Zauberwald_1987_BASIC.sid",
     "path": "sids/GAMES/S-Z/Zauberwald_1987_BASIC.sid",
     "size": 1530,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 12153,
+    "durationText": "0:12.153"
   },
   {
     "id": "R0FNRVMvUy1aL1phdWJlcndhbGRfMTk4OS5zaWQ",
@@ -18742,7 +22446,9 @@ window.SID_LIBRARY = [
     "fileName": "Zauberwald_1989.sid",
     "path": "sids/GAMES/S-Z/Zauberwald_1989.sid",
     "size": 2411,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 153000,
+    "durationText": "2:33"
   },
   {
     "id": "R0FNRVMvUy1aL1plaXRfZGVyX1N0aWxsZS5zaWQ",
@@ -18752,7 +22458,9 @@ window.SID_LIBRARY = [
     "fileName": "Zeit_der_Stille.sid",
     "path": "sids/GAMES/S-Z/Zeit_der_Stille.sid",
     "size": 9292,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 97000,
+    "durationText": "1:37"
   },
   {
     "id": "R0FNRVMvUy1aL1plbmppLnNpZA",
@@ -18762,7 +22470,9 @@ window.SID_LIBRARY = [
     "fileName": "Zenji.sid",
     "path": "sids/GAMES/S-Z/Zenji.sid",
     "size": 2829,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 6000,
+    "durationText": "0:06"
   },
   {
     "id": "R0FNRVMvUy1aL1plbm9uLnNpZA",
@@ -18772,7 +22482,9 @@ window.SID_LIBRARY = [
     "fileName": "Zenon.sid",
     "path": "sids/GAMES/S-Z/Zenon.sid",
     "size": 788,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 25610,
+    "durationText": "0:25.61"
   },
   {
     "id": "R0FNRVMvUy1aL1plcm8tWF9wcmV2aWV3LnNpZA",
@@ -18782,7 +22494,9 @@ window.SID_LIBRARY = [
     "fileName": "Zero-X_preview.sid",
     "path": "sids/GAMES/S-Z/Zero-X_preview.sid",
     "size": 3484,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 198000,
+    "durationText": "3:18"
   },
   {
     "id": "R0FNRVMvUy1aL1pldXNfcHJldmlldy5zaWQ",
@@ -18792,7 +22506,9 @@ window.SID_LIBRARY = [
     "fileName": "Zeus_preview.sid",
     "path": "sids/GAMES/S-Z/Zeus_preview.sid",
     "size": 11346,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 61000,
+    "durationText": "1:01"
   },
   {
     "id": "R0FNRVMvUy1aL1ppbGNoLnNpZA",
@@ -18802,7 +22518,9 @@ window.SID_LIBRARY = [
     "fileName": "Zilch.sid",
     "path": "sids/GAMES/S-Z/Zilch.sid",
     "size": 6205,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 25000,
+    "durationText": "0:25"
   },
   {
     "id": "R0FNRVMvUy1aL1ppbHZlcnZsb290X0JBU0lDLnNpZA",
@@ -18812,7 +22530,9 @@ window.SID_LIBRARY = [
     "fileName": "Zilvervloot_BASIC.sid",
     "path": "sids/GAMES/S-Z/Zilvervloot_BASIC.sid",
     "size": 1317,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 32257,
+    "durationText": "0:32.257"
   },
   {
     "id": "R0FNRVMvUy1aL1ppbmpfQ29tcGxleC5zaWQ",
@@ -18822,7 +22542,9 @@ window.SID_LIBRARY = [
     "fileName": "Zinj_Complex.sid",
     "path": "sids/GAMES/S-Z/Zinj_Complex.sid",
     "size": 2879,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 132000,
+    "durationText": "2:12"
   },
   {
     "id": "R0FNRVMvUy1aL1pvZGlhLnNpZA",
@@ -18832,7 +22554,9 @@ window.SID_LIBRARY = [
     "fileName": "Zodia.sid",
     "path": "sids/GAMES/S-Z/Zodia.sid",
     "size": 12213,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 188000,
+    "durationText": "3:08"
   },
   {
     "id": "R0FNRVMvUy1aL1pvZ2dvbi5zaWQ",
@@ -18842,7 +22566,9 @@ window.SID_LIBRARY = [
     "fileName": "Zoggon.sid",
     "path": "sids/GAMES/S-Z/Zoggon.sid",
     "size": 2090,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 217000,
+    "durationText": "3:37"
   },
   {
     "id": "R0FNRVMvUy1aL1pvaWQuc2lk",
@@ -18852,7 +22578,9 @@ window.SID_LIBRARY = [
     "fileName": "Zoid.sid",
     "path": "sids/GAMES/S-Z/Zoid.sid",
     "size": 1486,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 18803,
+    "durationText": "0:18.803"
   },
   {
     "id": "R0FNRVMvUy1aL1pvbWJpLnNpZA",
@@ -18862,7 +22590,9 @@ window.SID_LIBRARY = [
     "fileName": "Zombi.sid",
     "path": "sids/GAMES/S-Z/Zombi.sid",
     "size": 11346,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 462000,
+    "durationText": "7:42"
   },
   {
     "id": "R0FNRVMvUy1aL1pvbmFfUXVhcnRhLnNpZA",
@@ -18872,7 +22602,9 @@ window.SID_LIBRARY = [
     "fileName": "Zona_Quarta.sid",
     "path": "sids/GAMES/S-Z/Zona_Quarta.sid",
     "size": 887,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 27743,
+    "durationText": "0:27.743"
   },
   {
     "id": "R0FNRVMvUy1aL1pvb21lcmFuZy5zaWQ",
@@ -18882,7 +22614,9 @@ window.SID_LIBRARY = [
     "fileName": "Zoomerang.sid",
     "path": "sids/GAMES/S-Z/Zoomerang.sid",
     "size": 3148,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 186000,
+    "durationText": "3:06"
   },
   {
     "id": "R0FNRVMvUy1aL1pyZW5pdGUuc2lk",
@@ -18892,7 +22626,9 @@ window.SID_LIBRARY = [
     "fileName": "Zrenite.sid",
     "path": "sids/GAMES/S-Z/Zrenite.sid",
     "size": 6203,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 445000,
+    "durationText": "7:25"
   },
   {
     "id": "R0FNRVMvUy1aL1p1bHUuc2lk",
@@ -18902,7 +22638,9 @@ window.SID_LIBRARY = [
     "fileName": "Zulu.sid",
     "path": "sids/GAMES/S-Z/Zulu.sid",
     "size": 787,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 129000,
+    "durationText": "2:09"
   },
   {
     "id": "R0FNRVMvUy1aL1p5cmF4LnNpZA",
@@ -18912,7 +22650,9 @@ window.SID_LIBRARY = [
     "fileName": "Zyrax.sid",
     "path": "sids/GAMES/S-Z/Zyrax.sid",
     "size": 341,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 12000,
+    "durationText": "0:12"
   },
   {
     "id": "R0FNRVMvUy1aL1p5cm9uLnNpZA",
@@ -18922,7 +22662,9 @@ window.SID_LIBRARY = [
     "fileName": "Zyron.sid",
     "path": "sids/GAMES/S-Z/Zyron.sid",
     "size": 1725,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 56000,
+    "durationText": "0:56"
   },
   {
     "id": "R0FNRVMvUy1aL1p5cm9uc19Fc2NhcGUuc2lk",
@@ -18932,7 +22674,9 @@ window.SID_LIBRARY = [
     "fileName": "Zyrons_Escape.sid",
     "path": "sids/GAMES/S-Z/Zyrons_Escape.sid",
     "size": 1646,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 226000,
+    "durationText": "3:46"
   },
   {
     "id": "R0FNRVMvUy1aL1p5eC5zaWQ",
@@ -18942,7 +22686,9 @@ window.SID_LIBRARY = [
     "fileName": "Zyx.sid",
     "path": "sids/GAMES/S-Z/Zyx.sid",
     "size": 746,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 46000,
+    "durationText": "0:46"
   },
   {
     "id": "R0FNRVMvUy1aL1p6enouc2lk",
@@ -18952,7 +22698,9 @@ window.SID_LIBRARY = [
     "fileName": "Zzzz.sid",
     "path": "sids/GAMES/S-Z/Zzzz.sid",
     "size": 2873,
-    "category": "S-Z"
+    "category": "S-Z",
+    "durationMs": 6000,
+    "durationText": "0:06"
   },
   {
     "id": "R3JheV9NYXR0L1dvcmt0dW5lcy8yMDAxX1RoZW1lLnNpZA",
@@ -18961,7 +22709,9 @@ window.SID_LIBRARY = [
     "composerKey": "Gray_Matt",
     "fileName": "2001_Theme.sid",
     "path": "sids/Gray_Matt/Worktunes/2001_Theme.sid",
-    "size": 2714
+    "size": 2714,
+    "durationMs": 56000,
+    "durationText": "0:56"
   },
   {
     "id": "R3JheV9NYXR0LzcyMF9EZWdyZWVzLnNpZA",
@@ -18970,7 +22720,9 @@ window.SID_LIBRARY = [
     "composerKey": "Gray_Matt",
     "fileName": "720_Degrees.sid",
     "path": "sids/Gray_Matt/720_Degrees.sid",
-    "size": 11346
+    "size": 11346,
+    "durationMs": 154000,
+    "durationText": "2:34"
   },
   {
     "id": "R3JheV9NYXR0L0Fsd2F5c19vbl9NeV9NaW5kLnNpZA",
@@ -18979,7 +22731,9 @@ window.SID_LIBRARY = [
     "composerKey": "Gray_Matt",
     "fileName": "Always_on_My_Mind.sid",
     "path": "sids/Gray_Matt/Always_on_My_Mind.sid",
-    "size": 19411
+    "size": 19411,
+    "durationMs": 85000,
+    "durationText": "1:25"
   },
   {
     "id": "R3JheV9NYXR0L0F0bW9zcGhlcmUuc2lk",
@@ -18988,7 +22742,9 @@ window.SID_LIBRARY = [
     "composerKey": "Gray_Matt",
     "fileName": "Atmosphere.sid",
     "path": "sids/Gray_Matt/Atmosphere.sid",
-    "size": 9791
+    "size": 9791,
+    "durationMs": 336000,
+    "durationText": "5:36"
   },
   {
     "id": "R3JheV9NYXR0L0F0bW9zcGhlcmVfSUkuc2lk",
@@ -18997,7 +22753,9 @@ window.SID_LIBRARY = [
     "composerKey": "Gray_Matt",
     "fileName": "Atmosphere_II.sid",
     "path": "sids/Gray_Matt/Atmosphere_II.sid",
-    "size": 7065
+    "size": 7065,
+    "durationMs": 201000,
+    "durationText": "3:21"
   },
   {
     "id": "R3JheV9NYXR0L0F1dHVtbl9CcmVlemUuc2lk",
@@ -19006,7 +22764,9 @@ window.SID_LIBRARY = [
     "composerKey": "Gray_Matt",
     "fileName": "Autumn_Breeze.sid",
     "path": "sids/Gray_Matt/Autumn_Breeze.sid",
-    "size": 6821
+    "size": 6821,
+    "durationMs": 169000,
+    "durationText": "2:49"
   },
   {
     "id": "R3JheV9NYXR0L0Jhbmdrb2tfS25pZ2h0c19Mb2FkZXIuc2lk",
@@ -19015,7 +22775,9 @@ window.SID_LIBRARY = [
     "composerKey": "Gray_Matt",
     "fileName": "Bangkok_Knights_Loader.sid",
     "path": "sids/Gray_Matt/Bangkok_Knights_Loader.sid",
-    "size": 2994
+    "size": 2994,
+    "durationMs": 285000,
+    "durationText": "4:45"
   },
   {
     "id": "R3JheV9NYXR0L0Nob29fQ2hvb19CbHVlcy5zaWQ",
@@ -19024,7 +22786,9 @@ window.SID_LIBRARY = [
     "composerKey": "Gray_Matt",
     "fileName": "Choo_Choo_Blues.sid",
     "path": "sids/Gray_Matt/Choo_Choo_Blues.sid",
-    "size": 11385
+    "size": 11385,
+    "durationMs": 256000,
+    "durationText": "4:16"
   },
   {
     "id": "R3JheV9NYXR0L0NvbmNlcnQuc2lk",
@@ -19033,7 +22797,9 @@ window.SID_LIBRARY = [
     "composerKey": "Gray_Matt",
     "fileName": "Concert.sid",
     "path": "sids/Gray_Matt/Concert.sid",
-    "size": 19321
+    "size": 19321,
+    "durationMs": 89000,
+    "durationText": "1:29"
   },
   {
     "id": "R3JheV9NYXR0L0NyYXp5X0NvbWV0c19TcGVjaWFsX1JlLU1peC5zaWQ",
@@ -19042,7 +22808,9 @@ window.SID_LIBRARY = [
     "composerKey": "Gray_Matt",
     "fileName": "Crazy_Comets_Special_Re-Mix.sid",
     "path": "sids/Gray_Matt/Crazy_Comets_Special_Re-Mix.sid",
-    "size": 11384
+    "size": 11384,
+    "durationMs": 234000,
+    "durationText": "3:54"
   },
   {
     "id": "R3JheV9NYXR0L0RlbGl2ZXJhbmNlLnNpZA",
@@ -19051,7 +22819,9 @@ window.SID_LIBRARY = [
     "composerKey": "Gray_Matt",
     "fileName": "Deliverance.sid",
     "path": "sids/Gray_Matt/Deliverance.sid",
-    "size": 11390
+    "size": 11390,
+    "durationMs": 223000,
+    "durationText": "3:43"
   },
   {
     "id": "R3JheV9NYXR0L0RvbWluYXRvci5zaWQ",
@@ -19060,7 +22830,9 @@ window.SID_LIBRARY = [
     "composerKey": "Gray_Matt",
     "fileName": "Dominator.sid",
     "path": "sids/Gray_Matt/Dominator.sid",
-    "size": 11014
+    "size": 11014,
+    "durationMs": 217000,
+    "durationText": "3:37"
   },
   {
     "id": "R3JheV9NYXR0L0VsZWN0aW9uLnNpZA",
@@ -19069,7 +22841,9 @@ window.SID_LIBRARY = [
     "composerKey": "Gray_Matt",
     "fileName": "Election.sid",
     "path": "sids/Gray_Matt/Election.sid",
-    "size": 11385
+    "size": 11385,
+    "durationMs": 46000,
+    "durationText": "0:46"
   },
   {
     "id": "R3JheV9NYXR0L0VsZWN0cm9iZWF0LnNpZA",
@@ -19078,7 +22852,9 @@ window.SID_LIBRARY = [
     "composerKey": "Gray_Matt",
     "fileName": "Electrobeat.sid",
     "path": "sids/Gray_Matt/Electrobeat.sid",
-    "size": 6304
+    "size": 6304,
+    "durationMs": 135000,
+    "durationText": "2:15"
   },
   {
     "id": "R3JheV9NYXR0L0VxdWFsaXplci5zaWQ",
@@ -19087,7 +22863,9 @@ window.SID_LIBRARY = [
     "composerKey": "Gray_Matt",
     "fileName": "Equalizer.sid",
     "path": "sids/Gray_Matt/Equalizer.sid",
-    "size": 15579
+    "size": 15579,
+    "durationMs": 127000,
+    "durationText": "2:07"
   },
   {
     "id": "R3JheV9NYXR0L0V4Y2x1c2l2ZV9EZW1vLnNpZA",
@@ -19096,7 +22874,9 @@ window.SID_LIBRARY = [
     "composerKey": "Gray_Matt",
     "fileName": "Exclusive_Demo.sid",
     "path": "sids/Gray_Matt/Exclusive_Demo.sid",
-    "size": 8449
+    "size": 8449,
+    "durationMs": 105000,
+    "durationText": "1:45"
   },
   {
     "id": "R3JheV9NYXR0L0Zhbl9NYWlsLnNpZA",
@@ -19105,7 +22885,9 @@ window.SID_LIBRARY = [
     "composerKey": "Gray_Matt",
     "fileName": "Fan_Mail.sid",
     "path": "sids/Gray_Matt/Fan_Mail.sid",
-    "size": 11638
+    "size": 11638,
+    "durationMs": 56000,
+    "durationText": "0:56"
   },
   {
     "id": "R3JheV9NYXR0L0ZydWl0X01hY2hpbmVfU2ltdWxhdG9yLnNpZA",
@@ -19114,7 +22896,9 @@ window.SID_LIBRARY = [
     "composerKey": "Gray_Matt",
     "fileName": "Fruit_Machine_Simulator.sid",
     "path": "sids/Gray_Matt/Fruit_Machine_Simulator.sid",
-    "size": 3206
+    "size": 3206,
+    "durationMs": 136779,
+    "durationText": "2:16.779"
   },
   {
     "id": "R3JheV9NYXR0L0Z1bmt5X0xpbWl0cy5zaWQ",
@@ -19123,7 +22907,9 @@ window.SID_LIBRARY = [
     "composerKey": "Gray_Matt",
     "fileName": "Funky_Limits.sid",
     "path": "sids/Gray_Matt/Funky_Limits.sid",
-    "size": 8173
+    "size": 8173,
+    "durationMs": 200000,
+    "durationText": "3:20"
   },
   {
     "id": "R3JheV9NYXR0L0d1bnNoaXBfV2FycmlvcnMuc2lk",
@@ -19132,7 +22918,9 @@ window.SID_LIBRARY = [
     "composerKey": "Gray_Matt",
     "fileName": "Gunship_Warriors.sid",
     "path": "sids/Gray_Matt/Gunship_Warriors.sid",
-    "size": 11346
+    "size": 11346,
+    "durationMs": 135000,
+    "durationText": "2:15"
   },
   {
     "id": "R3JheV9NYXR0L0hvbGlkYXlfUmUtTWl4LnNpZA",
@@ -19141,7 +22929,9 @@ window.SID_LIBRARY = [
     "composerKey": "Gray_Matt",
     "fileName": "Holiday_Re-Mix.sid",
     "path": "sids/Gray_Matt/Holiday_Re-Mix.sid",
-    "size": 11384
+    "size": 11384,
+    "durationMs": 297000,
+    "durationText": "4:57"
   },
   {
     "id": "R3JheV9NYXR0L0h1bnRlcnNfTW9vbi5zaWQ",
@@ -19150,7 +22940,9 @@ window.SID_LIBRARY = [
     "composerKey": "Gray_Matt",
     "fileName": "Hunters_Moon.sid",
     "path": "sids/Gray_Matt/Hunters_Moon.sid",
-    "size": 7163
+    "size": 7163,
+    "durationMs": 246000,
+    "durationText": "4:06"
   },
   {
     "id": "R3JheV9NYXR0L0h1bnRlcnNfTW9vbl9SZW1hc3RlcmVkLnNpZA",
@@ -19159,7 +22951,9 @@ window.SID_LIBRARY = [
     "composerKey": "Gray_Matt",
     "fileName": "Hunters_Moon_Remastered.sid",
     "path": "sids/Gray_Matt/Hunters_Moon_Remastered.sid",
-    "size": 10722
+    "size": 10722,
+    "durationMs": 184000,
+    "durationText": "3:04"
   },
   {
     "id": "R3JheV9NYXR0L0h5cGVyaW9uXzIuc2lk",
@@ -19168,7 +22962,9 @@ window.SID_LIBRARY = [
     "composerKey": "Gray_Matt",
     "fileName": "Hyperion_2.sid",
     "path": "sids/Gray_Matt/Hyperion_2.sid",
-    "size": 3660
+    "size": 3660,
+    "durationMs": 193000,
+    "durationText": "3:13"
   },
   {
     "id": "R3JheV9NYXR0L0lfV2FzX0JvcmVkLnNpZA",
@@ -19177,7 +22973,9 @@ window.SID_LIBRARY = [
     "composerKey": "Gray_Matt",
     "fileName": "I_Was_Bored.sid",
     "path": "sids/Gray_Matt/I_Was_Bored.sid",
-    "size": 11941
+    "size": 11941,
+    "durationMs": 202000,
+    "durationText": "3:22"
   },
   {
     "id": "R3JheV9NYXR0L0p1a2Vib3hfNjQuc2lk",
@@ -19186,7 +22984,9 @@ window.SID_LIBRARY = [
     "composerKey": "Gray_Matt",
     "fileName": "Jukebox_64.sid",
     "path": "sids/Gray_Matt/Jukebox_64.sid",
-    "size": 19910
+    "size": 19910,
+    "durationMs": 492000,
+    "durationText": "8:12"
   },
   {
     "id": "R3JheV9NYXR0L0p1a2Vib3hfNjRfUGFydF8yLnNpZA",
@@ -19195,7 +22995,9 @@ window.SID_LIBRARY = [
     "composerKey": "Gray_Matt",
     "fileName": "Jukebox_64_Part_2.sid",
     "path": "sids/Gray_Matt/Jukebox_64_Part_2.sid",
-    "size": 19885
+    "size": 19885,
+    "durationMs": 377000,
+    "durationText": "6:17"
   },
   {
     "id": "R3JheV9NYXR0L0tHQl9TdXBlcnNweS5zaWQ",
@@ -19204,7 +23006,9 @@ window.SID_LIBRARY = [
     "composerKey": "Gray_Matt",
     "fileName": "KGB_Superspy.sid",
     "path": "sids/Gray_Matt/KGB_Superspy.sid",
-    "size": 3902
+    "size": 3902,
+    "durationMs": 205000,
+    "durationText": "3:25"
   },
   {
     "id": "R3JheV9NYXR0L01hZ25ldGljX0ZpZWxkcy5zaWQ",
@@ -19213,7 +23017,9 @@ window.SID_LIBRARY = [
     "composerKey": "Gray_Matt",
     "fileName": "Magnetic_Fields.sid",
     "path": "sids/Gray_Matt/Magnetic_Fields.sid",
-    "size": 11385
+    "size": 11385,
+    "durationMs": 107000,
+    "durationText": "1:47"
   },
   {
     "id": "R3JheV9NYXR0L01ha2VfTXlfRGF5LnNpZA",
@@ -19222,7 +23028,9 @@ window.SID_LIBRARY = [
     "composerKey": "Gray_Matt",
     "fileName": "Make_My_Day.sid",
     "path": "sids/Gray_Matt/Make_My_Day.sid",
-    "size": 2692
+    "size": 2692,
+    "durationMs": 164727,
+    "durationText": "2:44.727"
   },
   {
     "id": "R3JheV9NYXR0L01hemVfTWFuaWEuc2lk",
@@ -19231,7 +23039,9 @@ window.SID_LIBRARY = [
     "composerKey": "Gray_Matt",
     "fileName": "Maze_Mania.sid",
     "path": "sids/Gray_Matt/Maze_Mania.sid",
-    "size": 4100
+    "size": 4100,
+    "durationMs": 179000,
+    "durationText": "2:59"
   },
   {
     "id": "R3JheV9NYXR0L01lYW5fU3RyZWFrLnNpZA",
@@ -19240,7 +23050,9 @@ window.SID_LIBRARY = [
     "composerKey": "Gray_Matt",
     "fileName": "Mean_Streak.sid",
     "path": "sids/Gray_Matt/Mean_Streak.sid",
-    "size": 3471
+    "size": 3471,
+    "durationMs": 123000,
+    "durationText": "2:03"
   },
   {
     "id": "R3JheV9NYXR0L01lYW5fU3RyZWFrX0xvYWRlci5zaWQ",
@@ -19249,7 +23061,9 @@ window.SID_LIBRARY = [
     "composerKey": "Gray_Matt",
     "fileName": "Mean_Streak_Loader.sid",
     "path": "sids/Gray_Matt/Mean_Streak_Loader.sid",
-    "size": 2438
+    "size": 2438,
+    "durationMs": 221000,
+    "durationText": "3:41"
   },
   {
     "id": "R3JheV9NYXR0L1dvcmt0dW5lcy9NZWFuX1N0cmVha192MS5zaWQ",
@@ -19258,7 +23072,9 @@ window.SID_LIBRARY = [
     "composerKey": "Gray_Matt",
     "fileName": "Mean_Streak_v1.sid",
     "path": "sids/Gray_Matt/Worktunes/Mean_Streak_v1.sid",
-    "size": 2041
+    "size": 2041,
+    "durationMs": 57000,
+    "durationText": "0:57"
   },
   {
     "id": "R3JheV9NYXR0L01lbF9hbmRfS2ltLnNpZA",
@@ -19267,7 +23083,9 @@ window.SID_LIBRARY = [
     "composerKey": "Gray_Matt",
     "fileName": "Mel_and_Kim.sid",
     "path": "sids/Gray_Matt/Mel_and_Kim.sid",
-    "size": 11346
+    "size": 11346,
+    "durationMs": 112000,
+    "durationText": "1:52"
   },
   {
     "id": "R3JheV9NYXR0L01vdG9jcm9zcy5zaWQ",
@@ -19276,7 +23094,9 @@ window.SID_LIBRARY = [
     "composerKey": "Gray_Matt",
     "fileName": "Motocross.sid",
     "path": "sids/Gray_Matt/Motocross.sid",
-    "size": 4518
+    "size": 4518,
+    "durationMs": 199000,
+    "durationText": "3:19"
   },
   {
     "id": "R3JheV9NYXR0L1BoYW50b21fUm9jay5zaWQ",
@@ -19285,7 +23105,9 @@ window.SID_LIBRARY = [
     "composerKey": "Gray_Matt",
     "fileName": "Phantom_Rock.sid",
     "path": "sids/Gray_Matt/Phantom_Rock.sid",
-    "size": 11822
+    "size": 11822,
+    "durationMs": 118000,
+    "durationText": "1:58"
   },
   {
     "id": "R3JheV9NYXR0L1BvZ29fU3RpY2tfT2x5bXBpY3Muc2lk",
@@ -19294,7 +23116,9 @@ window.SID_LIBRARY = [
     "composerKey": "Gray_Matt",
     "fileName": "Pogo_Stick_Olympics.sid",
     "path": "sids/Gray_Matt/Pogo_Stick_Olympics.sid",
-    "size": 2713
+    "size": 2713,
+    "durationMs": 148129,
+    "durationText": "2:28.129"
   },
   {
     "id": "R3JheV9NYXR0L1Byb2Zlc3Npb25hbF9CTVhfU2ltdWxhdG9yLnNpZA",
@@ -19303,7 +23127,9 @@ window.SID_LIBRARY = [
     "composerKey": "Gray_Matt",
     "fileName": "Professional_BMX_Simulator.sid",
     "path": "sids/Gray_Matt/Professional_BMX_Simulator.sid",
-    "size": 9423
+    "size": 9423,
+    "durationMs": 69000,
+    "durationText": "1:09"
   },
   {
     "id": "R3JheV9NYXR0L1BzeWNoZWQuc2lk",
@@ -19312,7 +23138,9 @@ window.SID_LIBRARY = [
     "composerKey": "Gray_Matt",
     "fileName": "Psyched.sid",
     "path": "sids/Gray_Matt/Psyched.sid",
-    "size": 11390
+    "size": 11390,
+    "durationMs": 253000,
+    "durationText": "4:13"
   },
   {
     "id": "R3JheV9NYXR0L1B1bXBfVXAuc2lk",
@@ -19321,7 +23149,9 @@ window.SID_LIBRARY = [
     "composerKey": "Gray_Matt",
     "fileName": "Pump_Up.sid",
     "path": "sids/Gray_Matt/Pump_Up.sid",
-    "size": 19329
+    "size": 19329,
+    "durationMs": 277000,
+    "durationText": "4:37"
   },
   {
     "id": "R3JheV9NYXR0L1F1ZWRleC5zaWQ",
@@ -19330,7 +23160,9 @@ window.SID_LIBRARY = [
     "composerKey": "Gray_Matt",
     "fileName": "Quedex.sid",
     "path": "sids/Gray_Matt/Quedex.sid",
-    "size": 14418
+    "size": 14418,
+    "durationMs": 241000,
+    "durationText": "4:01"
   },
   {
     "id": "R3JheV9NYXR0L1JfQV9DX0VfWS5zaWQ",
@@ -19339,7 +23171,9 @@ window.SID_LIBRARY = [
     "composerKey": "Gray_Matt",
     "fileName": "R_A_C_E_Y.sid",
     "path": "sids/Gray_Matt/R_A_C_E_Y.sid",
-    "size": 11384
+    "size": 11384,
+    "durationMs": 133000,
+    "durationText": "2:13"
   },
   {
     "id": "R3JheV9NYXR0L1JvY2tpbi5zaWQ",
@@ -19348,7 +23182,9 @@ window.SID_LIBRARY = [
     "composerKey": "Gray_Matt",
     "fileName": "Rockin.sid",
     "path": "sids/Gray_Matt/Rockin.sid",
-    "size": 5663
+    "size": 5663,
+    "durationMs": 132000,
+    "durationText": "2:12"
   },
   {
     "id": "R3JheV9NYXR0L1Nhbnhpb25fUmUtbG9hZC5zaWQ",
@@ -19357,7 +23193,9 @@ window.SID_LIBRARY = [
     "composerKey": "Gray_Matt",
     "fileName": "Sanxion_Re-load.sid",
     "path": "sids/Gray_Matt/Sanxion_Re-load.sid",
-    "size": 11475
+    "size": 11475,
+    "durationMs": 219000,
+    "durationText": "3:39"
   },
   {
     "id": "R3JheV9NYXR0L1NlcnBlbnRfRGVtby5zaWQ",
@@ -19366,7 +23204,9 @@ window.SID_LIBRARY = [
     "composerKey": "Gray_Matt",
     "fileName": "Serpent_Demo.sid",
     "path": "sids/Gray_Matt/Serpent_Demo.sid",
-    "size": 7510
+    "size": 7510,
+    "durationMs": 51000,
+    "durationText": "0:51"
   },
   {
     "id": "R3JheV9NYXR0L1RIRUM2NC1IYWxsX29mX0ZhbWUuc2lk",
@@ -19375,7 +23215,9 @@ window.SID_LIBRARY = [
     "composerKey": "Gray_Matt",
     "fileName": "THEC64-Hall_of_Fame.sid",
     "path": "sids/Gray_Matt/THEC64-Hall_of_Fame.sid",
-    "size": 3175
+    "size": 3175,
+    "durationMs": 81000,
+    "durationText": "1:21"
   },
   {
     "id": "R3JheV9NYXR0L1RpbWVkX091dC5zaWQ",
@@ -19384,7 +23226,9 @@ window.SID_LIBRARY = [
     "composerKey": "Gray_Matt",
     "fileName": "Timed_Out.sid",
     "path": "sids/Gray_Matt/Timed_Out.sid",
-    "size": 11389
+    "size": 11389,
+    "durationMs": 464000,
+    "durationText": "7:44"
   },
   {
     "id": "R3JheV9NYXR0L1RvbV9Ub20uc2lk",
@@ -19393,7 +23237,9 @@ window.SID_LIBRARY = [
     "composerKey": "Gray_Matt",
     "fileName": "Tom_Tom.sid",
     "path": "sids/Gray_Matt/Tom_Tom.sid",
-    "size": 7800
+    "size": 7800,
+    "durationMs": 173000,
+    "durationText": "2:53"
   },
   {
     "id": "R3JheV9NYXR0L1RyZWFzdXJlX0lzbGFuZF9EaXp6eS5zaWQ",
@@ -19402,7 +23248,9 @@ window.SID_LIBRARY = [
     "composerKey": "Gray_Matt",
     "fileName": "Treasure_Island_Dizzy.sid",
     "path": "sids/Gray_Matt/Treasure_Island_Dizzy.sid",
-    "size": 7678
+    "size": 7678,
+    "durationMs": 58000,
+    "durationText": "0:58"
   },
   {
     "id": "R3JheV9NYXR0L1R1c2tlci5zaWQ",
@@ -19411,7 +23259,9 @@ window.SID_LIBRARY = [
     "composerKey": "Gray_Matt",
     "fileName": "Tusker.sid",
     "path": "sids/Gray_Matt/Tusker.sid",
-    "size": 12734
+    "size": 12734,
+    "durationMs": 340000,
+    "durationText": "5:40"
   },
   {
     "id": "R3JheV9NYXR0L1ZlbmRldHRhLnNpZA",
@@ -19420,7 +23270,9 @@ window.SID_LIBRARY = [
     "composerKey": "Gray_Matt",
     "fileName": "Vendetta.sid",
     "path": "sids/Gray_Matt/Vendetta.sid",
-    "size": 6379
+    "size": 6379,
+    "durationMs": 354000,
+    "durationText": "5:54"
   },
   {
     "id": "R3JheV9NYXR0L1dhcnJpb3JzLnNpZA",
@@ -19429,7 +23281,9 @@ window.SID_LIBRARY = [
     "composerKey": "Gray_Matt",
     "fileName": "Warriors.sid",
     "path": "sids/Gray_Matt/Warriors.sid",
-    "size": 2708
+    "size": 2708,
+    "durationMs": 246000,
+    "durationText": "4:06"
   },
   {
     "id": "R3JheV9NYXR0L1dheV9PdXRfaW5fU3BhY2Uuc2lk",
@@ -19438,7 +23292,9 @@ window.SID_LIBRARY = [
     "composerKey": "Gray_Matt",
     "fileName": "Way_Out_in_Space.sid",
     "path": "sids/Gray_Matt/Way_Out_in_Space.sid",
-    "size": 7726
+    "size": 7726,
+    "durationMs": 243000,
+    "durationText": "4:03"
   },
   {
     "id": "R3JheV9NYXR0L1lvZ2lfQmVhci5zaWQ",
@@ -19447,7 +23303,9 @@ window.SID_LIBRARY = [
     "composerKey": "Gray_Matt",
     "fileName": "Yogi_Bear.sid",
     "path": "sids/Gray_Matt/Yogi_Bear.sid",
-    "size": 7002
+    "size": 7002,
+    "durationMs": 180000,
+    "durationText": "3:00"
   },
   {
     "id": "SHViYmFyZF9Sb2IvNV9UaXRsZV9UdW5lcy5zaWQ",
@@ -19456,7 +23314,9 @@ window.SID_LIBRARY = [
     "composerKey": "Hubbard_Rob",
     "fileName": "5_Title_Tunes.sid",
     "path": "sids/Hubbard_Rob/5_Title_Tunes.sid",
-    "size": 11849
+    "size": 11849,
+    "durationMs": 61288,
+    "durationText": "1:01.288"
   },
   {
     "id": "SHViYmFyZF9Sb2IvQWN0aW9uX0Jpa2VyLnNpZA",
@@ -19465,7 +23325,9 @@ window.SID_LIBRARY = [
     "composerKey": "Hubbard_Rob",
     "fileName": "Action_Biker.sid",
     "path": "sids/Hubbard_Rob/Action_Biker.sid",
-    "size": 3136
+    "size": 3136,
+    "durationMs": 189000,
+    "durationText": "3:09"
   },
   {
     "id": "SHViYmFyZF9Sb2IvQWZ0ZXJfOC5zaWQ",
@@ -19474,7 +23336,9 @@ window.SID_LIBRARY = [
     "composerKey": "Hubbard_Rob",
     "fileName": "After_8.sid",
     "path": "sids/Hubbard_Rob/After_8.sid",
-    "size": 8065
+    "size": 8065,
+    "durationMs": 290000,
+    "durationText": "4:50"
   },
   {
     "id": "SHViYmFyZF9Sb2IvQXJjYWRlX0NsYXNzaWNzLnNpZA",
@@ -19483,7 +23347,9 @@ window.SID_LIBRARY = [
     "composerKey": "Hubbard_Rob",
     "fileName": "Arcade_Classics.sid",
     "path": "sids/Hubbard_Rob/Arcade_Classics.sid",
-    "size": 7531
+    "size": 7531,
+    "durationMs": 391000,
+    "durationText": "6:31"
   },
   {
     "id": "SHViYmFyZF9Sb2IvQmFuZ2tva19LbmlnaHRzLnNpZA",
@@ -19492,7 +23358,9 @@ window.SID_LIBRARY = [
     "composerKey": "Hubbard_Rob",
     "fileName": "Bangkok_Knights.sid",
     "path": "sids/Hubbard_Rob/Bangkok_Knights.sid",
-    "size": 4351
+    "size": 4351,
+    "durationMs": 383000,
+    "durationText": "6:23"
   },
   {
     "id": "SHViYmFyZF9Sb2IvQmF0dGxlX29mX0JyaXRhaW4uc2lk",
@@ -19501,7 +23369,9 @@ window.SID_LIBRARY = [
     "composerKey": "Hubbard_Rob",
     "fileName": "Battle_of_Britain.sid",
     "path": "sids/Hubbard_Rob/Battle_of_Britain.sid",
-    "size": 4222
+    "size": 4222,
+    "durationMs": 231000,
+    "durationText": "3:51"
   },
   {
     "id": "SHViYmFyZF9Sb2IvQnVtcF9TZXRfU3Bpa2Uuc2lk",
@@ -19510,7 +23380,9 @@ window.SID_LIBRARY = [
     "composerKey": "Hubbard_Rob",
     "fileName": "Bump_Set_Spike.sid",
     "path": "sids/Hubbard_Rob/Bump_Set_Spike.sid",
-    "size": 4222
+    "size": 4222,
+    "durationMs": 188000,
+    "durationText": "3:08"
   },
   {
     "id": "SHViYmFyZF9Sb2IvQ2FzaW9fRXh0ZW5kZWQuc2lk",
@@ -19519,7 +23391,9 @@ window.SID_LIBRARY = [
     "composerKey": "Hubbard_Rob",
     "fileName": "Casio_Extended.sid",
     "path": "sids/Hubbard_Rob/Casio_Extended.sid",
-    "size": 6747
+    "size": 6747,
+    "durationMs": 321759,
+    "durationText": "5:21.759"
   },
   {
     "id": "SHViYmFyZF9Sb2IvQ2hhaW5fUmVhY3Rpb24uc2lk",
@@ -19528,7 +23402,9 @@ window.SID_LIBRARY = [
     "composerKey": "Hubbard_Rob",
     "fileName": "Chain_Reaction.sid",
     "path": "sids/Hubbard_Rob/Chain_Reaction.sid",
-    "size": 3367
+    "size": 3367,
+    "durationMs": 258900,
+    "durationText": "4:18.9"
   },
   {
     "id": "SHViYmFyZF9Sb2IvQ2hpY2tlbl9Tb25nLnNpZA",
@@ -19537,7 +23413,9 @@ window.SID_LIBRARY = [
     "composerKey": "Hubbard_Rob",
     "fileName": "Chicken_Song.sid",
     "path": "sids/Hubbard_Rob/Chicken_Song.sid",
-    "size": 3654
+    "size": 3654,
+    "durationMs": 300000,
+    "durationText": "5:00"
   },
   {
     "id": "SHViYmFyZF9Sb2IvQ2hpbWVyYS5zaWQ",
@@ -19546,7 +23424,9 @@ window.SID_LIBRARY = [
     "composerKey": "Hubbard_Rob",
     "fileName": "Chimera.sid",
     "path": "sids/Hubbard_Rob/Chimera.sid",
-    "size": 12440
+    "size": 12440,
+    "durationMs": 219000,
+    "durationText": "3:39"
   },
   {
     "id": "SHViYmFyZF9Sb2IvQ29tbW9kb3JlXzY0X011c2ljX0V4YW1wbGVzLnNpZA",
@@ -19555,7 +23435,9 @@ window.SID_LIBRARY = [
     "composerKey": "Hubbard_Rob",
     "fileName": "Commodore_64_Music_Examples.sid",
     "path": "sids/Hubbard_Rob/Commodore_64_Music_Examples.sid",
-    "size": 14908
+    "size": 14908,
+    "durationMs": 53341,
+    "durationText": "0:53.341"
   },
   {
     "id": "SHViYmFyZF9Sb2IvQ29uZnV6aW9uLnNpZA",
@@ -19564,7 +23446,9 @@ window.SID_LIBRARY = [
     "composerKey": "Hubbard_Rob",
     "fileName": "Confuzion.sid",
     "path": "sids/Hubbard_Rob/Confuzion.sid",
-    "size": 2508
+    "size": 2508,
+    "durationMs": 254500,
+    "durationText": "4:14.5"
   },
   {
     "id": "SHViYmFyZF9Sb2IvRGVlcF9TdHJpa2Uuc2lk",
@@ -19573,7 +23457,9 @@ window.SID_LIBRARY = [
     "composerKey": "Hubbard_Rob",
     "fileName": "Deep_Strike.sid",
     "path": "sids/Hubbard_Rob/Deep_Strike.sid",
-    "size": 3094
+    "size": 3094,
+    "durationMs": 216000,
+    "durationText": "3:36"
   },
   {
     "id": "SHViYmFyZF9Sb2IvRGVsdGFfTWl4LUUtTG9hZF9sb2FkZXIuc2lk",
@@ -19582,7 +23468,9 @@ window.SID_LIBRARY = [
     "composerKey": "Hubbard_Rob",
     "fileName": "Delta_Mix-E-Load_loader.sid",
     "path": "sids/Hubbard_Rob/Delta_Mix-E-Load_loader.sid",
-    "size": 3649
+    "size": 3649,
+    "durationMs": 121000,
+    "durationText": "2:01"
   },
   {
     "id": "SHViYmFyZF9Sb2IvRGV2aWxzX0dhbG9wLnNpZA",
@@ -19591,7 +23479,9 @@ window.SID_LIBRARY = [
     "composerKey": "Hubbard_Rob",
     "fileName": "Devils_Galop.sid",
     "path": "sids/Hubbard_Rob/Devils_Galop.sid",
-    "size": 3933
+    "size": 3933,
+    "durationMs": 209400,
+    "durationText": "3:29.4"
   },
   {
     "id": "SHViYmFyZF9Sb2IvRG9udF9TdGVwX29uX015X1dpcmUuc2lk",
@@ -19600,7 +23490,9 @@ window.SID_LIBRARY = [
     "composerKey": "Hubbard_Rob",
     "fileName": "Dont_Step_on_My_Wire.sid",
     "path": "sids/Hubbard_Rob/Dont_Step_on_My_Wire.sid",
-    "size": 7571
+    "size": 7571,
+    "durationMs": 321759,
+    "durationText": "5:21.759"
   },
   {
     "id": "SHViYmFyZF9Sb2IvRHJhZ29uc19MYWlyX1BhcnRfSUkuc2lk",
@@ -19609,7 +23501,9 @@ window.SID_LIBRARY = [
     "composerKey": "Hubbard_Rob",
     "fileName": "Dragons_Lair_Part_II.sid",
     "path": "sids/Hubbard_Rob/Dragons_Lair_Part_II.sid",
-    "size": 8062
+    "size": 8062,
+    "durationMs": 62000,
+    "durationText": "1:02"
   },
   {
     "id": "SHViYmFyZF9Sb2IvRXJhX29mX0VpZG9sb24uc2lk",
@@ -19618,7 +23512,9 @@ window.SID_LIBRARY = [
     "composerKey": "Hubbard_Rob",
     "fileName": "Era_of_Eidolon.sid",
     "path": "sids/Hubbard_Rob/Era_of_Eidolon.sid",
-    "size": 6263
+    "size": 6263,
+    "durationMs": 184000,
+    "durationText": "3:04"
   },
   {
     "id": "SHViYmFyZF9Sb2IvRmxhc2hfR29yZG9uLnNpZA",
@@ -19627,7 +23523,9 @@ window.SID_LIBRARY = [
     "composerKey": "Hubbard_Rob",
     "fileName": "Flash_Gordon.sid",
     "path": "sids/Hubbard_Rob/Flash_Gordon.sid",
-    "size": 5291
+    "size": 5291,
+    "durationMs": 388519,
+    "durationText": "6:28.519"
   },
   {
     "id": "SHViYmFyZF9Sb2IvRm9vZF9GZXVkLnNpZA",
@@ -19636,7 +23534,9 @@ window.SID_LIBRARY = [
     "composerKey": "Hubbard_Rob",
     "fileName": "Food_Feud.sid",
     "path": "sids/Hubbard_Rob/Food_Feud.sid",
-    "size": 3453
+    "size": 3453,
+    "durationMs": 249000,
+    "durationText": "4:09"
   },
   {
     "id": "SHViYmFyZF9Sb2IvRm9ybXVsYV8xX1NpbXVsYXRvci5zaWQ",
@@ -19645,7 +23545,9 @@ window.SID_LIBRARY = [
     "composerKey": "Hubbard_Rob",
     "fileName": "Formula_1_Simulator.sid",
     "path": "sids/Hubbard_Rob/Formula_1_Simulator.sid",
-    "size": 3390
+    "size": 3390,
+    "durationMs": 211000,
+    "durationText": "3:31"
   },
   {
     "id": "SHViYmFyZF9Sb2IvR2FtZV9LaWxsZXIuc2lk",
@@ -19654,7 +23556,9 @@ window.SID_LIBRARY = [
     "composerKey": "Hubbard_Rob",
     "fileName": "Game_Killer.sid",
     "path": "sids/Hubbard_Rob/Game_Killer.sid",
-    "size": 2886
+    "size": 2886,
+    "durationMs": 177000,
+    "durationText": "2:57"
   },
   {
     "id": "SHViYmFyZF9Sb2IvR2VvZmZfQ2FwZXNfU3Ryb25nbWFuX0NoYWxsZW5nZS5zaWQ",
@@ -19663,7 +23567,9 @@ window.SID_LIBRARY = [
     "composerKey": "Hubbard_Rob",
     "fileName": "Geoff_Capes_Strongman_Challenge.sid",
     "path": "sids/Hubbard_Rob/Geoff_Capes_Strongman_Challenge.sid",
-    "size": 3333
+    "size": 3333,
+    "durationMs": 16000,
+    "durationText": "0:16"
   },
   {
     "id": "SHViYmFyZF9Sb2IvR29fR29fRGFzaC5zaWQ",
@@ -19672,7 +23578,9 @@ window.SID_LIBRARY = [
     "composerKey": "Hubbard_Rob",
     "fileName": "Go_Go_Dash.sid",
     "path": "sids/Hubbard_Rob/Go_Go_Dash.sid",
-    "size": 11960
+    "size": 11960,
+    "durationMs": 191525,
+    "durationText": "3:11.525"
   },
   {
     "id": "SHViYmFyZF9Sb2IvR3JlbWxpbnMuc2lk",
@@ -19681,7 +23589,9 @@ window.SID_LIBRARY = [
     "composerKey": "Hubbard_Rob",
     "fileName": "Gremlins.sid",
     "path": "sids/Hubbard_Rob/Gremlins.sid",
-    "size": 7947
+    "size": 7947,
+    "durationMs": 153220,
+    "durationText": "2:33.22"
   },
   {
     "id": "SHViYmFyZF9Sb2IvSG9sbHl3b29kX29yX0J1c3Quc2lk",
@@ -19690,7 +23600,9 @@ window.SID_LIBRARY = [
     "composerKey": "Hubbard_Rob",
     "fileName": "Hollywood_or_Bust.sid",
     "path": "sids/Hubbard_Rob/Hollywood_or_Bust.sid",
-    "size": 5030
+    "size": 5030,
+    "durationMs": 70000,
+    "durationText": "1:10"
   },
   {
     "id": "SHViYmFyZF9Sb2IvSHVtYW5fUmFjZS5zaWQ",
@@ -19699,7 +23611,9 @@ window.SID_LIBRARY = [
     "composerKey": "Hubbard_Rob",
     "fileName": "Human_Race.sid",
     "path": "sids/Hubbard_Rob/Human_Race.sid",
-    "size": 4574
+    "size": 4574,
+    "durationMs": 164554,
+    "durationText": "2:44.554"
   },
   {
     "id": "SHViYmFyZF9Sb2IvSHVudGVyX1BhdHJvbC5zaWQ",
@@ -19708,7 +23622,9 @@ window.SID_LIBRARY = [
     "composerKey": "Hubbard_Rob",
     "fileName": "Hunter_Patrol.sid",
     "path": "sids/Hubbard_Rob/Hunter_Patrol.sid",
-    "size": 3806
+    "size": 3806,
+    "durationMs": 217000,
+    "durationText": "3:37"
   },
   {
     "id": "SHViYmFyZF9Sb2IvSV9CYWxsLnNpZA",
@@ -19717,7 +23633,9 @@ window.SID_LIBRARY = [
     "composerKey": "Hubbard_Rob",
     "fileName": "I_Ball.sid",
     "path": "sids/Hubbard_Rob/I_Ball.sid",
-    "size": 13132
+    "size": 13132,
+    "durationMs": 297601,
+    "durationText": "4:57.601"
   },
   {
     "id": "SHViYmFyZF9Sb2IvS2luZ3Nfb2ZfdGhlX0JlYWNoX2luZ2FtZS5zaWQ",
@@ -19726,7 +23644,9 @@ window.SID_LIBRARY = [
     "composerKey": "Hubbard_Rob",
     "fileName": "Kings_of_the_Beach_ingame.sid",
     "path": "sids/Hubbard_Rob/Kings_of_the_Beach_ingame.sid",
-    "size": 2837
+    "size": 2837,
+    "durationMs": 7000,
+    "durationText": "0:07"
   },
   {
     "id": "SHViYmFyZF9Sb2IvS2luZ3Nfb2ZfdGhlX0JlYWNoX2ludHJvLnNpZA",
@@ -19735,7 +23655,9 @@ window.SID_LIBRARY = [
     "composerKey": "Hubbard_Rob",
     "fileName": "Kings_of_the_Beach_intro.sid",
     "path": "sids/Hubbard_Rob/Kings_of_the_Beach_intro.sid",
-    "size": 20334
+    "size": 20334,
+    "durationMs": 246000,
+    "durationText": "4:06"
   },
   {
     "id": "SHViYmFyZF9Sb2IvTGFrZXJzX3ZzX0NlbHRpY3Muc2lk",
@@ -19744,7 +23666,9 @@ window.SID_LIBRARY = [
     "composerKey": "Hubbard_Rob",
     "fileName": "Lakers_vs_Celtics.sid",
     "path": "sids/Hubbard_Rob/Lakers_vs_Celtics.sid",
-    "size": 6375
+    "size": 6375,
+    "durationMs": 166000,
+    "durationText": "2:46"
   },
   {
     "id": "SHViYmFyZF9Sb2IvTGFzX1ZlZ2FzX1ZpZGVvX1Bva2VyLnNpZA",
@@ -19753,7 +23677,9 @@ window.SID_LIBRARY = [
     "composerKey": "Hubbard_Rob",
     "fileName": "Las_Vegas_Video_Poker.sid",
     "path": "sids/Hubbard_Rob/Las_Vegas_Video_Poker.sid",
-    "size": 3542
+    "size": 3542,
+    "durationMs": 106000,
+    "durationText": "1:46"
   },
   {
     "id": "SHViYmFyZF9Sb2IvTGFzdF9WOC5zaWQ",
@@ -19762,7 +23688,9 @@ window.SID_LIBRARY = [
     "composerKey": "Hubbard_Rob",
     "fileName": "Last_V8.sid",
     "path": "sids/Hubbard_Rob/Last_V8.sid",
-    "size": 13888
+    "size": 13888,
+    "durationMs": 138000,
+    "durationText": "2:18"
   },
   {
     "id": "SHViYmFyZF9Sb2IvTGFzdF9WOF9DMTI4X3ZlcnNpb24uc2lk",
@@ -19771,7 +23699,9 @@ window.SID_LIBRARY = [
     "composerKey": "Hubbard_Rob",
     "fileName": "Last_V8_C128_version.sid",
     "path": "sids/Hubbard_Rob/Last_V8_C128_version.sid",
-    "size": 17682
+    "size": 17682,
+    "durationMs": 138000,
+    "durationText": "2:18"
   },
   {
     "id": "SHViYmFyZF9Sb2IvTGlvbl9IZWFydC5zaWQ",
@@ -19780,7 +23710,9 @@ window.SID_LIBRARY = [
     "composerKey": "Hubbard_Rob",
     "fileName": "Lion_Heart.sid",
     "path": "sids/Hubbard_Rob/Lion_Heart.sid",
-    "size": 7777
+    "size": 7777,
+    "durationMs": 214511,
+    "durationText": "3:34.511"
   },
   {
     "id": "SHViYmFyZF9Sb2IvTW96YXJ0LnNpZA",
@@ -19789,7 +23721,9 @@ window.SID_LIBRARY = [
     "composerKey": "Hubbard_Rob",
     "fileName": "Mozart.sid",
     "path": "sids/Hubbard_Rob/Mozart.sid",
-    "size": 4222
+    "size": 4222,
+    "durationMs": 126000,
+    "durationText": "2:06"
   },
   {
     "id": "SHViYmFyZF9Sb2IvTXJfTWVhbmVyLnNpZA",
@@ -19798,7 +23732,9 @@ window.SID_LIBRARY = [
     "composerKey": "Hubbard_Rob",
     "fileName": "Mr_Meaner.sid",
     "path": "sids/Hubbard_Rob/Mr_Meaner.sid",
-    "size": 8759
+    "size": 8759,
+    "durationMs": 264043,
+    "durationText": "4:24.043"
   },
   {
     "id": "SHViYmFyZF9Sb2IvTmluZXRlZW4uc2lk",
@@ -19807,7 +23743,9 @@ window.SID_LIBRARY = [
     "composerKey": "Hubbard_Rob",
     "fileName": "Nineteen.sid",
     "path": "sids/Hubbard_Rob/Nineteen.sid",
-    "size": 3650
+    "size": 3650,
+    "durationMs": 202000,
+    "durationText": "3:22"
   },
   {
     "id": "SHViYmFyZF9Sb2IvTmluamEuc2lk",
@@ -19816,7 +23754,9 @@ window.SID_LIBRARY = [
     "composerKey": "Hubbard_Rob",
     "fileName": "Ninja.sid",
     "path": "sids/Hubbard_Rob/Ninja.sid",
-    "size": 2147
+    "size": 2147,
+    "durationMs": 123000,
+    "durationText": "2:03"
   },
   {
     "id": "SHViYmFyZF9Sb2IvT2ZmX3RoZV9DdWZmLnNpZA",
@@ -19825,7 +23765,9 @@ window.SID_LIBRARY = [
     "composerKey": "Hubbard_Rob",
     "fileName": "Off_the_Cuff.sid",
     "path": "sids/Hubbard_Rob/Off_the_Cuff.sid",
-    "size": 10880
+    "size": 10880,
+    "durationMs": 196113,
+    "durationText": "3:16.113"
   },
   {
     "id": "SHViYmFyZF9Sb2IvT25lX29uX09uZV9Kb3JkYW5fdnNfQmlyZC5zaWQ",
@@ -19834,7 +23776,9 @@ window.SID_LIBRARY = [
     "composerKey": "Hubbard_Rob",
     "fileName": "One_on_One_Jordan_vs_Bird.sid",
     "path": "sids/Hubbard_Rob/One_on_One_Jordan_vs_Bird.sid",
-    "size": 37378
+    "size": 37378,
+    "durationMs": 185000,
+    "durationText": "3:05"
   },
   {
     "id": "SHViYmFyZF9Sb2IvUGFjaWZpY19Db2FzdC5zaWQ",
@@ -19843,7 +23787,9 @@ window.SID_LIBRARY = [
     "composerKey": "Hubbard_Rob",
     "fileName": "Pacific_Coast.sid",
     "path": "sids/Hubbard_Rob/Pacific_Coast.sid",
-    "size": 10256
+    "size": 10256,
+    "durationMs": 206846,
+    "durationText": "3:26.846"
   },
   {
     "id": "SHViYmFyZF9Sb2IvUGFuZG9yYS5zaWQ",
@@ -19852,7 +23798,9 @@ window.SID_LIBRARY = [
     "composerKey": "Hubbard_Rob",
     "fileName": "Pandora.sid",
     "path": "sids/Hubbard_Rob/Pandora.sid",
-    "size": 3175
+    "size": 3175,
+    "durationMs": 150000,
+    "durationText": "2:30"
   },
   {
     "id": "SHViYmFyZF9Sb2IvUGhhbnRvbXNfb2ZfdGhlX0FzdGVyb2lkLnNpZA",
@@ -19861,7 +23809,9 @@ window.SID_LIBRARY = [
     "composerKey": "Hubbard_Rob",
     "fileName": "Phantoms_of_the_Asteroid.sid",
     "path": "sids/Hubbard_Rob/Phantoms_of_the_Asteroid.sid",
-    "size": 4370
+    "size": 4370,
+    "durationMs": 255384,
+    "durationText": "4:15.384"
   },
   {
     "id": "SHViYmFyZF9Sb2IvUG93ZXJwbGF5X0hvY2tleV9VU0FfdnNfVVNTUi5zaWQ",
@@ -19870,7 +23820,9 @@ window.SID_LIBRARY = [
     "composerKey": "Hubbard_Rob",
     "fileName": "Powerplay_Hockey_USA_vs_USSR.sid",
     "path": "sids/Hubbard_Rob/Powerplay_Hockey_USA_vs_USSR.sid",
-    "size": 11598
+    "size": 11598,
+    "durationMs": 156000,
+    "durationText": "2:36"
   },
   {
     "id": "SHViYmFyZF9Sb2IvUHJvdGV1cy5zaWQ",
@@ -19879,7 +23831,9 @@ window.SID_LIBRARY = [
     "composerKey": "Hubbard_Rob",
     "fileName": "Proteus.sid",
     "path": "sids/Hubbard_Rob/Proteus.sid",
-    "size": 3582
+    "size": 3582,
+    "durationMs": 240000,
+    "durationText": "4:00"
   },
   {
     "id": "SHViYmFyZF9Sb2IvUHlnbWllc19SZXZlbmdlLnNpZA",
@@ -19888,7 +23842,9 @@ window.SID_LIBRARY = [
     "composerKey": "Hubbard_Rob",
     "fileName": "Pygmies_Revenge.sid",
     "path": "sids/Hubbard_Rob/Pygmies_Revenge.sid",
-    "size": 6385
+    "size": 6385,
+    "durationMs": 296243,
+    "durationText": "4:56.243"
   },
   {
     "id": "SHViYmFyZF9Sb2IvUmFkaW9fQUNFLnNpZA",
@@ -19897,7 +23853,9 @@ window.SID_LIBRARY = [
     "composerKey": "Hubbard_Rob",
     "fileName": "Radio_ACE.sid",
     "path": "sids/Hubbard_Rob/Radio_ACE.sid",
-    "size": 10417
+    "size": 10417,
+    "durationMs": 291121,
+    "durationText": "4:51.121"
   },
   {
     "id": "SHViYmFyZF9Sb2IvUmFzcHV0aW4uc2lk",
@@ -19906,7 +23864,9 @@ window.SID_LIBRARY = [
     "composerKey": "Hubbard_Rob",
     "fileName": "Rasputin.sid",
     "path": "sids/Hubbard_Rob/Rasputin.sid",
-    "size": 4168
+    "size": 4168,
+    "durationMs": 307000,
+    "durationText": "5:07"
   },
   {
     "id": "SHViYmFyZF9Sb2IvUmljb2NoZXQuc2lk",
@@ -19915,7 +23875,9 @@ window.SID_LIBRARY = [
     "composerKey": "Hubbard_Rob",
     "fileName": "Ricochet.sid",
     "path": "sids/Hubbard_Rob/Ricochet.sid",
-    "size": 6914
+    "size": 6914,
+    "durationMs": 202000,
+    "durationText": "3:22"
   },
   {
     "id": "SHViYmFyZF9Sb2IvUmlra3kuc2lk",
@@ -19924,7 +23886,9 @@ window.SID_LIBRARY = [
     "composerKey": "Hubbard_Rob",
     "fileName": "Rikky.sid",
     "path": "sids/Hubbard_Rob/Rikky.sid",
-    "size": 6990
+    "size": 6990,
+    "durationMs": 302520,
+    "durationText": "5:02.52"
   },
   {
     "id": "SHViYmFyZF9Sb2IvUm9ic19MaWZlLnNpZA",
@@ -19933,7 +23897,9 @@ window.SID_LIBRARY = [
     "composerKey": "Hubbard_Rob",
     "fileName": "Robs_Life.sid",
     "path": "sids/Hubbard_Rob/Robs_Life.sid",
-    "size": 17775
+    "size": 17775,
+    "durationMs": 209399,
+    "durationText": "3:29.399"
   },
   {
     "id": "SHViYmFyZF9Sb2IvUm9ja19UZWxsc190aGVfVGFsZS5zaWQ",
@@ -19942,7 +23908,9 @@ window.SID_LIBRARY = [
     "composerKey": "Hubbard_Rob",
     "fileName": "Rock_Tells_the_Tale.sid",
     "path": "sids/Hubbard_Rob/Rock_Tells_the_Tale.sid",
-    "size": 9928
+    "size": 9928,
+    "durationMs": 391000,
+    "durationText": "6:31"
   },
   {
     "id": "SHViYmFyZF9Sb2IvU2Fib3RldXJfSUkuc2lk",
@@ -19951,7 +23919,9 @@ window.SID_LIBRARY = [
     "composerKey": "Hubbard_Rob",
     "fileName": "Saboteur_II.sid",
     "path": "sids/Hubbard_Rob/Saboteur_II.sid",
-    "size": 3221
+    "size": 3221,
+    "durationMs": 258000,
+    "durationText": "4:18"
   },
   {
     "id": "SHViYmFyZF9Sb2IvU2FtYW50aGFfRm94X1N0cmlwX1Bva2VyLnNpZA",
@@ -19960,7 +23930,9 @@ window.SID_LIBRARY = [
     "composerKey": "Hubbard_Rob",
     "fileName": "Samantha_Fox_Strip_Poker.sid",
     "path": "sids/Hubbard_Rob/Samantha_Fox_Strip_Poker.sid",
-    "size": 3566
+    "size": 3566,
+    "durationMs": 1000,
+    "durationText": "0:01"
   },
   {
     "id": "SHViYmFyZF9Sb2IvU2FtcGxlX011c2ljX2Zyb21fSV9LYXJhdGUuc2lk",
@@ -19969,7 +23941,9 @@ window.SID_LIBRARY = [
     "composerKey": "Hubbard_Rob",
     "fileName": "Sample_Music_from_I_Karate.sid",
     "path": "sids/Hubbard_Rob/Sample_Music_from_I_Karate.sid",
-    "size": 3737
+    "size": 3737,
+    "durationMs": 219195,
+    "durationText": "3:39.195"
   },
   {
     "id": "SHViYmFyZF9Sb2IvU2hvY2t3YXlfUmlkZXIuc2lk",
@@ -19978,7 +23952,9 @@ window.SID_LIBRARY = [
     "composerKey": "Hubbard_Rob",
     "fileName": "Shockway_Rider.sid",
     "path": "sids/Hubbard_Rob/Shockway_Rider.sid",
-    "size": 3771
+    "size": 3771,
+    "durationMs": 325649,
+    "durationText": "5:25.649"
   },
   {
     "id": "SHViYmFyZF9Sb2IvU2lnbWFfU2V2ZW4uc2lk",
@@ -19987,7 +23963,9 @@ window.SID_LIBRARY = [
     "composerKey": "Hubbard_Rob",
     "fileName": "Sigma_Seven.sid",
     "path": "sids/Hubbard_Rob/Sigma_Seven.sid",
-    "size": 2014
+    "size": 2014,
+    "durationMs": 74000,
+    "durationText": "1:14"
   },
   {
     "id": "SHViYmFyZF9Sb2IvU2thdGVfb3JfRGllX2ludHJvLnNpZA",
@@ -19996,7 +23974,9 @@ window.SID_LIBRARY = [
     "composerKey": "Hubbard_Rob",
     "fileName": "Skate_or_Die_intro.sid",
     "path": "sids/Hubbard_Rob/Skate_or_Die_intro.sid",
-    "size": 16847
+    "size": 16847,
+    "durationMs": 242596,
+    "durationText": "4:02.596"
   },
   {
     "id": "SHViYmFyZF9Sb2IvU3Rhcl9QYXdzLnNpZA",
@@ -20005,7 +23985,9 @@ window.SID_LIBRARY = [
     "composerKey": "Hubbard_Rob",
     "fileName": "Star_Paws.sid",
     "path": "sids/Hubbard_Rob/Star_Paws.sid",
-    "size": 3451
+    "size": 3451,
+    "durationMs": 185339,
+    "durationText": "3:05.339"
   },
   {
     "id": "SHViYmFyZF9Sb2IvU3VuX05ldmVyX1NoaW5lcy5zaWQ",
@@ -20014,7 +23996,9 @@ window.SID_LIBRARY = [
     "composerKey": "Hubbard_Rob",
     "fileName": "Sun_Never_Shines.sid",
     "path": "sids/Hubbard_Rob/Sun_Never_Shines.sid",
-    "size": 9880
+    "size": 9880,
+    "durationMs": 162803,
+    "durationText": "2:42.803"
   },
   {
     "id": "SHViYmFyZF9Sb2IvVGFyemFuLnNpZA",
@@ -20023,7 +24007,9 @@ window.SID_LIBRARY = [
     "composerKey": "Hubbard_Rob",
     "fileName": "Tarzan.sid",
     "path": "sids/Hubbard_Rob/Tarzan.sid",
-    "size": 8834
+    "size": 8834,
+    "durationMs": 88120,
+    "durationText": "1:28.12"
   },
   {
     "id": "SHViYmFyZF9Sb2IvVGFza19Gb3JjZS5zaWQ",
@@ -20032,7 +24018,9 @@ window.SID_LIBRARY = [
     "composerKey": "Hubbard_Rob",
     "fileName": "Task_Force.sid",
     "path": "sids/Hubbard_Rob/Task_Force.sid",
-    "size": 4526
+    "size": 4526,
+    "durationMs": 213500,
+    "durationText": "3:33.5"
   },
   {
     "id": "SHViYmFyZF9Sb2IvVGhhbmF0b3Muc2lk",
@@ -20041,7 +24029,9 @@ window.SID_LIBRARY = [
     "composerKey": "Hubbard_Rob",
     "fileName": "Thanatos.sid",
     "path": "sids/Hubbard_Rob/Thanatos.sid",
-    "size": 2012
+    "size": 2012,
+    "durationMs": 58000,
+    "durationText": "0:58"
   },
   {
     "id": "SHViYmFyZF9Sb2IvVGhpbmdfb25fYV9TcHJpbmcuc2lk",
@@ -20050,7 +24040,9 @@ window.SID_LIBRARY = [
     "composerKey": "Hubbard_Rob",
     "fileName": "Thing_on_a_Spring.sid",
     "path": "sids/Hubbard_Rob/Thing_on_a_Spring.sid",
-    "size": 3929
+    "size": 3929,
+    "durationMs": 218200,
+    "durationText": "3:38.2"
   },
   {
     "id": "SHViYmFyZF9Sb2IvVGh1bmRlcmNhdHMuc2lk",
@@ -20059,7 +24051,9 @@ window.SID_LIBRARY = [
     "composerKey": "Hubbard_Rob",
     "fileName": "Thundercats.sid",
     "path": "sids/Hubbard_Rob/Thundercats.sid",
-    "size": 4771
+    "size": 4771,
+    "durationMs": 248562,
+    "durationText": "4:08.562"
   },
   {
     "id": "SHViYmFyZF9Sb2IvVHJhbnMtQXRsYW50aWNfQmFsbG9vbl9DaGFsbGVuZ2Uuc2lk",
@@ -20068,7 +24062,9 @@ window.SID_LIBRARY = [
     "composerKey": "Hubbard_Rob",
     "fileName": "Trans-Atlantic_Balloon_Challenge.sid",
     "path": "sids/Hubbard_Rob/Trans-Atlantic_Balloon_Challenge.sid",
-    "size": 4482
+    "size": 4482,
+    "durationMs": 255065,
+    "durationText": "4:15.065"
   },
   {
     "id": "SHViYmFyZF9Sb2IvVXBfdXBfYW5kX0F3YXkuc2lk",
@@ -20077,7 +24073,9 @@ window.SID_LIBRARY = [
     "composerKey": "Hubbard_Rob",
     "fileName": "Up_up_and_Away.sid",
     "path": "sids/Hubbard_Rob/Up_up_and_Away.sid",
-    "size": 2464
+    "size": 2464,
+    "durationMs": 52000,
+    "durationText": "0:52"
   },
   {
     "id": "SHViYmFyZF9Sb2IvV19BX1Iuc2lk",
@@ -20086,7 +24084,9 @@ window.SID_LIBRARY = [
     "composerKey": "Hubbard_Rob",
     "fileName": "W_A_R.sid",
     "path": "sids/Hubbard_Rob/W_A_R.sid",
-    "size": 5898
+    "size": 5898,
+    "durationMs": 574000,
+    "durationText": "9:34"
   },
   {
     "id": "SHViYmFyZF9Sb2IvV19BX1JfUHJldmlldy5zaWQ",
@@ -20095,7 +24095,9 @@ window.SID_LIBRARY = [
     "composerKey": "Hubbard_Rob",
     "fileName": "W_A_R_Preview.sid",
     "path": "sids/Hubbard_Rob/W_A_R_Preview.sid",
-    "size": 3154
+    "size": 3154,
+    "durationMs": 179000,
+    "durationText": "2:59"
   },
   {
     "id": "SHViYmFyZF9Sb2IvV2l6LnNpZA",
@@ -20104,7 +24106,9 @@ window.SID_LIBRARY = [
     "composerKey": "Hubbard_Rob",
     "fileName": "Wiz.sid",
     "path": "sids/Hubbard_Rob/Wiz.sid",
-    "size": 4222
+    "size": 4222,
+    "durationMs": 334000,
+    "durationText": "5:34"
   },
   {
     "id": "SHViYmFyZF9Sb2IvWm9vbG9vay5zaWQ",
@@ -20113,7 +24117,9 @@ window.SID_LIBRARY = [
     "composerKey": "Hubbard_Rob",
     "fileName": "Zoolook.sid",
     "path": "sids/Hubbard_Rob/Zoolook.sid",
-    "size": 3251
+    "size": 3251,
+    "durationMs": 259000,
+    "durationText": "4:19"
   },
   {
     "id": "SHVlbHNiZWNrX0NocmlzL0FudGljcy5zaWQ",
@@ -20122,7 +24128,9 @@ window.SID_LIBRARY = [
     "composerKey": "Huelsbeck_Chris",
     "fileName": "Antics.sid",
     "path": "sids/Huelsbeck_Chris/Antics.sid",
-    "size": 12228
+    "size": 12228,
+    "durationMs": 281000,
+    "durationText": "4:41"
   },
   {
     "id": "SHVlbHNiZWNrX0NocmlzL0FudGljc19DaGlwX1dhci5zaWQ",
@@ -20131,7 +24139,9 @@ window.SID_LIBRARY = [
     "composerKey": "Huelsbeck_Chris",
     "fileName": "Antics_Chip_War.sid",
     "path": "sids/Huelsbeck_Chris/Antics_Chip_War.sid",
-    "size": 26663
+    "size": 26663,
+    "durationMs": 291110,
+    "durationText": "4:51.11"
   },
   {
     "id": "SHVlbHNiZWNrX0NocmlzL0F4ZWxfRi5zaWQ",
@@ -20140,7 +24150,9 @@ window.SID_LIBRARY = [
     "composerKey": "Huelsbeck_Chris",
     "fileName": "Axel_F.sid",
     "path": "sids/Huelsbeck_Chris/Axel_F.sid",
-    "size": 11346
+    "size": 11346,
+    "durationMs": 105000,
+    "durationText": "1:45"
   },
   {
     "id": "SHVlbHNiZWNrX0NocmlzL0JhZF9DYXQuc2lk",
@@ -20149,7 +24161,9 @@ window.SID_LIBRARY = [
     "composerKey": "Huelsbeck_Chris",
     "fileName": "Bad_Cat.sid",
     "path": "sids/Huelsbeck_Chris/Bad_Cat.sid",
-    "size": 40408
+    "size": 40408,
+    "durationMs": 475997,
+    "durationText": "7:55.997"
   },
   {
     "id": "SHVlbHNiZWNrX0NocmlzL0JlaW5nX0JvaWxlZC5zaWQ",
@@ -20158,7 +24172,9 @@ window.SID_LIBRARY = [
     "composerKey": "Huelsbeck_Chris",
     "fileName": "Being_Boiled.sid",
     "path": "sids/Huelsbeck_Chris/Being_Boiled.sid",
-    "size": 11346
+    "size": 11346,
+    "durationMs": 216000,
+    "durationText": "3:36"
   },
   {
     "id": "SHVlbHNiZWNrX0NocmlzL0J1Z2JvbWJlci5zaWQ",
@@ -20167,7 +24183,9 @@ window.SID_LIBRARY = [
     "composerKey": "Huelsbeck_Chris",
     "fileName": "Bugbomber.sid",
     "path": "sids/Huelsbeck_Chris/Bugbomber.sid",
-    "size": 4013
+    "size": 4013,
+    "durationMs": 70246,
+    "durationText": "1:10.246"
   },
   {
     "id": "SHVlbHNiZWNrX0NocmlzL1dvcmt0dW5lcy9DZWxlYnJhdGlvbl9UaGVtZS5zaWQ",
@@ -20176,7 +24194,9 @@ window.SID_LIBRARY = [
     "composerKey": "Huelsbeck_Chris",
     "fileName": "Celebration_Theme.sid",
     "path": "sids/Huelsbeck_Chris/Worktunes/Celebration_Theme.sid",
-    "size": 11346
+    "size": 11346,
+    "durationMs": 80000,
+    "durationText": "1:20"
   },
   {
     "id": "SHVlbHNiZWNrX0NocmlzL0NpcmN1c19BdHRyYWN0aW9ucy5zaWQ",
@@ -20185,7 +24205,9 @@ window.SID_LIBRARY = [
     "composerKey": "Huelsbeck_Chris",
     "fileName": "Circus_Attractions.sid",
     "path": "sids/Huelsbeck_Chris/Circus_Attractions.sid",
-    "size": 9390
+    "size": 9390,
+    "durationMs": 121000,
+    "durationText": "2:01"
   },
   {
     "id": "SHVlbHNiZWNrX0NocmlzL0NvbXBpbGF0aW9uX0kuc2lk",
@@ -20194,7 +24216,9 @@ window.SID_LIBRARY = [
     "composerKey": "Huelsbeck_Chris",
     "fileName": "Compilation_I.sid",
     "path": "sids/Huelsbeck_Chris/Compilation_I.sid",
-    "size": 12589
+    "size": 12589,
+    "durationMs": 273000,
+    "durationText": "4:33"
   },
   {
     "id": "SHVlbHNiZWNrX0NocmlzL0NvbXBpbGF0aW9uX0lJSS5zaWQ",
@@ -20203,7 +24227,9 @@ window.SID_LIBRARY = [
     "composerKey": "Huelsbeck_Chris",
     "fileName": "Compilation_III.sid",
     "path": "sids/Huelsbeck_Chris/Compilation_III.sid",
-    "size": 10344
+    "size": 10344,
+    "durationMs": 311000,
+    "durationText": "5:11"
   },
   {
     "id": "SHVlbHNiZWNrX0NocmlzL0RhbmNlX2F0X05pZ2h0LnNpZA",
@@ -20212,7 +24238,9 @@ window.SID_LIBRARY = [
     "composerKey": "Huelsbeck_Chris",
     "fileName": "Dance_at_Night.sid",
     "path": "sids/Huelsbeck_Chris/Dance_at_Night.sid",
-    "size": 23634
+    "size": 23634,
+    "durationMs": 482000,
+    "durationText": "8:02"
   },
   {
     "id": "SHVlbHNiZWNrX0NocmlzL0Rhbmdlcl9GcmVhay5zaWQ",
@@ -20221,7 +24249,9 @@ window.SID_LIBRARY = [
     "composerKey": "Huelsbeck_Chris",
     "fileName": "Danger_Freak.sid",
     "path": "sids/Huelsbeck_Chris/Danger_Freak.sid",
-    "size": 32401
+    "size": 32401,
+    "durationMs": 252630,
+    "durationText": "4:12.63"
   },
   {
     "id": "SHVlbHNiZWNrX0NocmlzL0Rvd25fYXRfdGhlX1Ryb2xscy5zaWQ",
@@ -20230,7 +24260,9 @@ window.SID_LIBRARY = [
     "composerKey": "Huelsbeck_Chris",
     "fileName": "Down_at_the_Trolls.sid",
     "path": "sids/Huelsbeck_Chris/Down_at_the_Trolls.sid",
-    "size": 29721
+    "size": 29721,
+    "durationMs": 233197,
+    "durationText": "3:53.197"
   },
   {
     "id": "SHVlbHNiZWNrX0NocmlzL1dvcmt0dW5lcy9EcmVhbXlfQmVsbHMuc2lk",
@@ -20239,7 +24271,9 @@ window.SID_LIBRARY = [
     "composerKey": "Huelsbeck_Chris",
     "fileName": "Dreamy_Bells.sid",
     "path": "sids/Huelsbeck_Chris/Worktunes/Dreamy_Bells.sid",
-    "size": 11346
+    "size": 11346,
+    "durationMs": 175000,
+    "durationText": "2:55"
   },
   {
     "id": "SHVlbHNiZWNrX0NocmlzL1dvcmt0dW5lcy9FeHBlcmltZW50XzEuc2lk",
@@ -20248,7 +24282,9 @@ window.SID_LIBRARY = [
     "composerKey": "Huelsbeck_Chris",
     "fileName": "Experiment_1.sid",
     "path": "sids/Huelsbeck_Chris/Worktunes/Experiment_1.sid",
-    "size": 11346
+    "size": 11346,
+    "durationMs": 54000,
+    "durationText": "0:54"
   },
   {
     "id": "SHVlbHNiZWNrX0NocmlzL1dvcmt0dW5lcy9FeHBlcmltZW50XzIuc2lk",
@@ -20257,7 +24293,9 @@ window.SID_LIBRARY = [
     "composerKey": "Huelsbeck_Chris",
     "fileName": "Experiment_2.sid",
     "path": "sids/Huelsbeck_Chris/Worktunes/Experiment_2.sid",
-    "size": 11346
+    "size": 11346,
+    "durationMs": 31000,
+    "durationText": "0:31"
   },
   {
     "id": "SHVlbHNiZWNrX0NocmlzL0ZpcnN0X1RGTVhfU29uZy5zaWQ",
@@ -20266,7 +24304,9 @@ window.SID_LIBRARY = [
     "composerKey": "Huelsbeck_Chris",
     "fileName": "First_TFMX_Song.sid",
     "path": "sids/Huelsbeck_Chris/First_TFMX_Song.sid",
-    "size": 4382
+    "size": 4382,
+    "durationMs": 90000,
+    "durationText": "1:30"
   },
   {
     "id": "SHVlbHNiZWNrX0NocmlzL1dvcmt0dW5lcy9GcmFudGljX0NpdHkuc2lk",
@@ -20275,7 +24315,9 @@ window.SID_LIBRARY = [
     "composerKey": "Huelsbeck_Chris",
     "fileName": "Frantic_City.sid",
     "path": "sids/Huelsbeck_Chris/Worktunes/Frantic_City.sid",
-    "size": 11346
+    "size": 11346,
+    "durationMs": 46000,
+    "durationText": "0:46"
   },
   {
     "id": "SHVlbHNiZWNrX0NocmlzL0dlbV9YLnNpZA",
@@ -20284,7 +24326,9 @@ window.SID_LIBRARY = [
     "composerKey": "Huelsbeck_Chris",
     "fileName": "Gem_X.sid",
     "path": "sids/Huelsbeck_Chris/Gem_X.sid",
-    "size": 10966
+    "size": 10966,
+    "durationMs": 244000,
+    "durationText": "4:04"
   },
   {
     "id": "SHVlbHNiZWNrX0NocmlzL0dyYW5kX01vbnN0ZXJfU2xhbS5zaWQ",
@@ -20293,7 +24337,9 @@ window.SID_LIBRARY = [
     "composerKey": "Huelsbeck_Chris",
     "fileName": "Grand_Monster_Slam.sid",
     "path": "sids/Huelsbeck_Chris/Grand_Monster_Slam.sid",
-    "size": 11535
+    "size": 11535,
+    "durationMs": 218000,
+    "durationText": "3:38"
   },
   {
     "id": "SHVlbHNiZWNrX0NocmlzL0hhcmRfbl9IZWF2eS5zaWQ",
@@ -20302,7 +24348,9 @@ window.SID_LIBRARY = [
     "composerKey": "Huelsbeck_Chris",
     "fileName": "Hard_n_Heavy.sid",
     "path": "sids/Huelsbeck_Chris/Hard_n_Heavy.sid",
-    "size": 7244
+    "size": 7244,
+    "durationMs": 71542,
+    "durationText": "1:11.542"
   },
   {
     "id": "SHVlbHNiZWNrX0NocmlzL0hvbGlkYXlfTW9ybmluZy5zaWQ",
@@ -20311,7 +24359,9 @@ window.SID_LIBRARY = [
     "composerKey": "Huelsbeck_Chris",
     "fileName": "Holiday_Morning.sid",
     "path": "sids/Huelsbeck_Chris/Holiday_Morning.sid",
-    "size": 11346
+    "size": 11346,
+    "durationMs": 385000,
+    "durationText": "6:25"
   },
   {
     "id": "SHVlbHNiZWNrX0NocmlzL0hvbGlkYXlfTmlnaHQuc2lk",
@@ -20320,7 +24370,9 @@ window.SID_LIBRARY = [
     "composerKey": "Huelsbeck_Chris",
     "fileName": "Holiday_Night.sid",
     "path": "sids/Huelsbeck_Chris/Holiday_Night.sid",
-    "size": 11346
+    "size": 11346,
+    "durationMs": 154000,
+    "durationText": "2:34"
   },
   {
     "id": "SHVlbHNiZWNrX0NocmlzL0hvbGx5d29vZF9Qb2tlcl9Qcm8uc2lk",
@@ -20329,7 +24381,9 @@ window.SID_LIBRARY = [
     "composerKey": "Huelsbeck_Chris",
     "fileName": "Hollywood_Poker_Pro.sid",
     "path": "sids/Huelsbeck_Chris/Hollywood_Poker_Pro.sid",
-    "size": 14206
+    "size": 14206,
+    "durationMs": 363000,
+    "durationText": "6:03"
   },
   {
     "id": "SHVlbHNiZWNrX0NocmlzL0hvdXN5LnNpZA",
@@ -20338,7 +24392,9 @@ window.SID_LIBRARY = [
     "composerKey": "Huelsbeck_Chris",
     "fileName": "Housy.sid",
     "path": "sids/Huelsbeck_Chris/Housy.sid",
-    "size": 7220
+    "size": 7220,
+    "durationMs": 394000,
+    "durationText": "6:34"
   },
   {
     "id": "SHVlbHNiZWNrX0NocmlzL0l0YWxvX0Rpc2NvX0luc3BpcmF0aW9uLnNpZA",
@@ -20347,7 +24403,9 @@ window.SID_LIBRARY = [
     "composerKey": "Huelsbeck_Chris",
     "fileName": "Italo_Disco_Inspiration.sid",
     "path": "sids/Huelsbeck_Chris/Italo_Disco_Inspiration.sid",
-    "size": 5132
+    "size": 5132,
+    "durationMs": 235000,
+    "durationText": "3:55"
   },
   {
     "id": "SHVlbHNiZWNrX0NocmlzL0ppbmtzLnNpZA",
@@ -20356,7 +24414,9 @@ window.SID_LIBRARY = [
     "composerKey": "Huelsbeck_Chris",
     "fileName": "Jinks.sid",
     "path": "sids/Huelsbeck_Chris/Jinks.sid",
-    "size": 24331
+    "size": 24331,
+    "durationMs": 266000,
+    "durationText": "4:26"
   },
   {
     "id": "SHVlbHNiZWNrX0NocmlzL01hZG5lc3Muc2lk",
@@ -20365,7 +24425,9 @@ window.SID_LIBRARY = [
     "composerKey": "Huelsbeck_Chris",
     "fileName": "Madness.sid",
     "path": "sids/Huelsbeck_Chris/Madness.sid",
-    "size": 15913
+    "size": 15913,
+    "durationMs": 286000,
+    "durationText": "4:46"
   },
   {
     "id": "SHVlbHNiZWNrX0NocmlzL1dvcmt0dW5lcy9NZWxvZHkuc2lk",
@@ -20374,7 +24436,9 @@ window.SID_LIBRARY = [
     "composerKey": "Huelsbeck_Chris",
     "fileName": "Melody.sid",
     "path": "sids/Huelsbeck_Chris/Worktunes/Melody.sid",
-    "size": 11346
+    "size": 11346,
+    "durationMs": 31000,
+    "durationText": "0:31"
   },
   {
     "id": "SHVlbHNiZWNrX0NocmlzL01ldHJvX0RhbmNlLnNpZA",
@@ -20383,7 +24447,9 @@ window.SID_LIBRARY = [
     "composerKey": "Huelsbeck_Chris",
     "fileName": "Metro_Dance.sid",
     "path": "sids/Huelsbeck_Chris/Metro_Dance.sid",
-    "size": 5530
+    "size": 5530,
+    "durationMs": 199000,
+    "durationText": "3:19"
   },
   {
     "id": "SHVlbHNiZWNrX0NocmlzL1dvcmt0dW5lcy9NeXN0aWNfSXNsYW5kLnNpZA",
@@ -20392,7 +24458,9 @@ window.SID_LIBRARY = [
     "composerKey": "Huelsbeck_Chris",
     "fileName": "Mystic_Island.sid",
     "path": "sids/Huelsbeck_Chris/Worktunes/Mystic_Island.sid",
-    "size": 11346
+    "size": 11346,
+    "durationMs": 37000,
+    "durationText": "0:37"
   },
   {
     "id": "SHVlbHNiZWNrX0NocmlzL09uZV9OaWdodF9Nb3JlLnNpZA",
@@ -20401,7 +24469,9 @@ window.SID_LIBRARY = [
     "composerKey": "Huelsbeck_Chris",
     "fileName": "One_Night_More.sid",
     "path": "sids/Huelsbeck_Chris/One_Night_More.sid",
-    "size": 11346
+    "size": 11346,
+    "durationMs": 207000,
+    "durationText": "3:27"
   },
   {
     "id": "SHVlbHNiZWNrX0NocmlzL094eG9uaWFuLnNpZA",
@@ -20410,7 +24480,9 @@ window.SID_LIBRARY = [
     "composerKey": "Huelsbeck_Chris",
     "fileName": "Oxxonian.sid",
     "path": "sids/Huelsbeck_Chris/Oxxonian.sid",
-    "size": 6055
+    "size": 6055,
+    "durationMs": 242000,
+    "durationText": "4:02"
   },
   {
     "id": "SHVlbHNiZWNrX0NocmlzL1BsYW5ldF9vZl9XYXIuc2lk",
@@ -20419,7 +24491,9 @@ window.SID_LIBRARY = [
     "composerKey": "Huelsbeck_Chris",
     "fileName": "Planet_of_War.sid",
     "path": "sids/Huelsbeck_Chris/Planet_of_War.sid",
-    "size": 3216
+    "size": 3216,
+    "durationMs": 135000,
+    "durationText": "2:15"
   },
   {
     "id": "SHVlbHNiZWNrX0NocmlzL1F1YWRyb3BoZW5pYS5zaWQ",
@@ -20428,7 +24502,9 @@ window.SID_LIBRARY = [
     "composerKey": "Huelsbeck_Chris",
     "fileName": "Quadrophenia.sid",
     "path": "sids/Huelsbeck_Chris/Quadrophenia.sid",
-    "size": 24455
+    "size": 24455,
+    "durationMs": 340000,
+    "durationText": "5:40"
   },
   {
     "id": "SHVlbHNiZWNrX0NocmlzL1NoYWRlcy5zaWQ",
@@ -20437,7 +24513,9 @@ window.SID_LIBRARY = [
     "composerKey": "Huelsbeck_Chris",
     "fileName": "Shades.sid",
     "path": "sids/Huelsbeck_Chris/Shades.sid",
-    "size": 10942
+    "size": 10942,
+    "durationMs": 298500,
+    "durationText": "4:58.5"
   },
   {
     "id": "SHVlbHNiZWNrX0NocmlzL1NoYWRlc19maWx0ZXJfY29ycmVjdGVkLnNpZA",
@@ -20446,7 +24524,9 @@ window.SID_LIBRARY = [
     "composerKey": "Huelsbeck_Chris",
     "fileName": "Shades_filter_corrected.sid",
     "path": "sids/Huelsbeck_Chris/Shades_filter_corrected.sid",
-    "size": 11070
+    "size": 11070,
+    "durationMs": 298500,
+    "durationText": "4:58.5"
   },
   {
     "id": "SHVlbHNiZWNrX0NocmlzL1NraV9EYW5jZS5zaWQ",
@@ -20455,7 +24535,9 @@ window.SID_LIBRARY = [
     "composerKey": "Huelsbeck_Chris",
     "fileName": "Ski_Dance.sid",
     "path": "sids/Huelsbeck_Chris/Ski_Dance.sid",
-    "size": 11346
+    "size": 11346,
+    "durationMs": 230300,
+    "durationText": "3:50.3"
   },
   {
     "id": "SHVlbHNiZWNrX0NocmlzL1NvbGRpZXIuc2lk",
@@ -20464,7 +24546,9 @@ window.SID_LIBRARY = [
     "composerKey": "Huelsbeck_Chris",
     "fileName": "Soldier.sid",
     "path": "sids/Huelsbeck_Chris/Soldier.sid",
-    "size": 22142
+    "size": 22142,
+    "durationMs": 305000,
+    "durationText": "5:05"
   },
   {
     "id": "SHVlbHNiZWNrX0NocmlzL1NwaGVyaWNhbC5zaWQ",
@@ -20473,7 +24557,9 @@ window.SID_LIBRARY = [
     "composerKey": "Huelsbeck_Chris",
     "fileName": "Spherical.sid",
     "path": "sids/Huelsbeck_Chris/Spherical.sid",
-    "size": 18729
+    "size": 18729,
+    "durationMs": 123000,
+    "durationText": "2:03"
   },
   {
     "id": "SHVlbHNiZWNrX0NocmlzL1N0YXJiYWxsLnNpZA",
@@ -20482,7 +24568,9 @@ window.SID_LIBRARY = [
     "composerKey": "Huelsbeck_Chris",
     "fileName": "Starball.sid",
     "path": "sids/Huelsbeck_Chris/Starball.sid",
-    "size": 13615
+    "size": 13615,
+    "durationMs": 338000,
+    "durationText": "5:38"
   },
   {
     "id": "SHVlbHNiZWNrX0NocmlzL1RoaXJkX1RGTVhfU29uZy5zaWQ",
@@ -20491,7 +24579,9 @@ window.SID_LIBRARY = [
     "composerKey": "Huelsbeck_Chris",
     "fileName": "Third_TFMX_Song.sid",
     "path": "sids/Huelsbeck_Chris/Third_TFMX_Song.sid",
-    "size": 4682
+    "size": 4682,
+    "durationMs": 135000,
+    "durationText": "2:15"
   },
   {
     "id": "SHVlbHNiZWNrX0NocmlzL1dvcmt0dW5lcy9UdXRvcmlhbF9Tb25nLnNpZA",
@@ -20500,7 +24590,9 @@ window.SID_LIBRARY = [
     "composerKey": "Huelsbeck_Chris",
     "fileName": "Tutorial_Song.sid",
     "path": "sids/Huelsbeck_Chris/Worktunes/Tutorial_Song.sid",
-    "size": 11346
+    "size": 11346,
+    "durationMs": 23000,
+    "durationText": "0:23"
   },
   {
     "id": "SHVlbHNiZWNrX0NocmlzL1dvcmt0dW5lcy9VbnVzZWRfSW5nYW1lLnNpZA",
@@ -20509,7 +24601,9 @@ window.SID_LIBRARY = [
     "composerKey": "Huelsbeck_Chris",
     "fileName": "Unused_Ingame.sid",
     "path": "sids/Huelsbeck_Chris/Worktunes/Unused_Ingame.sid",
-    "size": 11346
+    "size": 11346,
+    "durationMs": 117000,
+    "durationText": "1:57"
   },
   {
     "id": "SHVlbHNiZWNrX0NocmlzL1dlbGxlbnJlaXRlci5zaWQ",
@@ -20518,7 +24612,9 @@ window.SID_LIBRARY = [
     "composerKey": "Huelsbeck_Chris",
     "fileName": "Wellenreiter.sid",
     "path": "sids/Huelsbeck_Chris/Wellenreiter.sid",
-    "size": 5960
+    "size": 5960,
+    "durationMs": 192621,
+    "durationText": "3:12.621"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi80VTIuc2lk",
@@ -20527,7 +24623,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "4U2.sid",
     "path": "sids/Ouwehand_Reyn/4U2.sid",
-    "size": 3300
+    "size": 3300,
+    "durationMs": 108000,
+    "durationText": "1:48"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9BX0ZlZWxpbl9Ub3VjaC5zaWQ",
@@ -20536,7 +24634,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "A_Feelin_Touch.sid",
     "path": "sids/Ouwehand_Reyn/A_Feelin_Touch.sid",
-    "size": 3648
+    "size": 3648,
+    "durationMs": 169000,
+    "durationText": "2:49"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9BX0dhbWVfT3Zlcl9UdW5lLnNpZA",
@@ -20545,7 +24645,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "A_Game_Over_Tune.sid",
     "path": "sids/Ouwehand_Reyn/A_Game_Over_Tune.sid",
-    "size": 1861
+    "size": 1861,
+    "durationMs": 11000,
+    "durationText": "0:11"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9BcmVuYS5zaWQ",
@@ -20554,7 +24656,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Arena.sid",
     "path": "sids/Ouwehand_Reyn/Arena.sid",
-    "size": 46187
+    "size": 46187,
+    "durationMs": 114000,
+    "durationText": "1:54"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9Bcm1hZGEuc2lk",
@@ -20563,7 +24667,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Armada.sid",
     "path": "sids/Ouwehand_Reyn/Armada.sid",
-    "size": 4920
+    "size": 4920,
+    "durationMs": 5000,
+    "durationText": "0:05"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9BdWRpb19BcnQuc2lk",
@@ -20572,7 +24678,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Audio_Art.sid",
     "path": "sids/Ouwehand_Reyn/Audio_Art.sid",
-    "size": 3277
+    "size": 3277,
+    "durationMs": 290000,
+    "durationText": "4:50"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9CYWRfQmxvb2QtQ2l0eS5zaWQ",
@@ -20581,7 +24689,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Bad_Blood-City.sid",
     "path": "sids/Ouwehand_Reyn/Bad_Blood-City.sid",
-    "size": 2980
+    "size": 2980,
+    "durationMs": 104000,
+    "durationText": "1:44"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9CYWRfQmxvb2QtQ2l0eV9CZWxvdy5zaWQ",
@@ -20590,7 +24700,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Bad_Blood-City_Below.sid",
     "path": "sids/Ouwehand_Reyn/Bad_Blood-City_Below.sid",
-    "size": 2681
+    "size": 2681,
+    "durationMs": 90000,
+    "durationText": "1:30"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9CYWRfQmxvb2QtUGxhbmVzLnNpZA",
@@ -20599,7 +24711,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Bad_Blood-Planes.sid",
     "path": "sids/Ouwehand_Reyn/Bad_Blood-Planes.sid",
-    "size": 2695
+    "size": 2695,
+    "durationMs": 102000,
+    "durationText": "1:42"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9CYXRtYW5pYV9JSV8yLnNpZA",
@@ -20608,7 +24722,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Batmania_II_2.sid",
     "path": "sids/Ouwehand_Reyn/Batmania_II_2.sid",
-    "size": 2780
+    "size": 2780,
+    "durationMs": 142000,
+    "durationText": "2:22"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9CYXRtYW5pYV9JSV8zLnNpZA",
@@ -20617,7 +24733,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Batmania_II_3.sid",
     "path": "sids/Ouwehand_Reyn/Batmania_II_3.sid",
-    "size": 2802
+    "size": 2802,
+    "durationMs": 223000,
+    "durationText": "3:43"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9CYXRtYW5pYV9JSV80LnNpZA",
@@ -20626,7 +24744,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Batmania_II_4.sid",
     "path": "sids/Ouwehand_Reyn/Batmania_II_4.sid",
-    "size": 4330
+    "size": 4330,
+    "durationMs": 337000,
+    "durationText": "5:37"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9CYXRtYW5pYV9JSV81LnNpZA",
@@ -20635,7 +24755,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Batmania_II_5.sid",
     "path": "sids/Ouwehand_Reyn/Batmania_II_5.sid",
-    "size": 2693
+    "size": 2693,
+    "durationMs": 113000,
+    "durationText": "1:53"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9CbGFja21haWxfVHVuZV8xLnNpZA",
@@ -20644,7 +24766,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Blackmail_Tune_1.sid",
     "path": "sids/Ouwehand_Reyn/Blackmail_Tune_1.sid",
-    "size": 3964
+    "size": 3964,
+    "durationMs": 201100,
+    "durationText": "3:21.1"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9DYXZlbWFuX05pbmphLnNpZA",
@@ -20653,7 +24777,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Caveman_Ninja.sid",
     "path": "sids/Ouwehand_Reyn/Caveman_Ninja.sid",
-    "size": 3843
+    "size": 3843,
+    "durationMs": 17000,
+    "durationText": "0:17"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9DaGluZXNlX1dhbGwuc2lk",
@@ -20662,7 +24788,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Chinese_Wall.sid",
     "path": "sids/Ouwehand_Reyn/Chinese_Wall.sid",
-    "size": 12414
+    "size": 12414,
+    "durationMs": 210000,
+    "durationText": "3:30"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9DaHJpc3RtYXNfUmVtaXguc2lk",
@@ -20671,7 +24799,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Christmas_Remix.sid",
     "path": "sids/Ouwehand_Reyn/Christmas_Remix.sid",
-    "size": 2446
+    "size": 2446,
+    "durationMs": 83000,
+    "durationText": "1:23"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9Db25jZXJ0c19pbl9DaGluYV8xLnNpZA",
@@ -20680,7 +24810,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Concerts_in_China_1.sid",
     "path": "sids/Ouwehand_Reyn/Concerts_in_China_1.sid",
-    "size": 2055
+    "size": 2055,
+    "durationMs": 28000,
+    "durationText": "0:28"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9Db25jZXJ0c19pbl9DaGluYV8yLnNpZA",
@@ -20689,7 +24821,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Concerts_in_China_2.sid",
     "path": "sids/Ouwehand_Reyn/Concerts_in_China_2.sid",
-    "size": 2133
+    "size": 2133,
+    "durationMs": 46000,
+    "durationText": "0:46"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9Db250YXhpYS5zaWQ",
@@ -20698,7 +24832,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Contaxia.sid",
     "path": "sids/Ouwehand_Reyn/Contaxia.sid",
-    "size": 3086
+    "size": 3086,
+    "durationMs": 227000,
+    "durationText": "3:47"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9Db3NNYWlsX3R1bmVfMDguc2lk",
@@ -20707,7 +24843,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "CosMail_tune_08.sid",
     "path": "sids/Ouwehand_Reyn/CosMail_tune_08.sid",
-    "size": 3658
+    "size": 3658,
+    "durationMs": 85000,
+    "durationText": "1:25"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9EZWFkbG9jay5zaWQ",
@@ -20716,7 +24854,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Deadlock.sid",
     "path": "sids/Ouwehand_Reyn/Deadlock.sid",
-    "size": 5462
+    "size": 5462,
+    "durationMs": 236000,
+    "durationText": "3:56"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9EZXJ2aXNoX0Quc2lk",
@@ -20725,7 +24865,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Dervish_D.sid",
     "path": "sids/Ouwehand_Reyn/Dervish_D.sid",
-    "size": 2390
+    "size": 2390,
+    "durationMs": 187000,
+    "durationText": "3:07"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9EaWduaWZpZWRfdHVuZV8xLnNpZA",
@@ -20734,7 +24876,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Dignified_tune_1.sid",
     "path": "sids/Ouwehand_Reyn/Dignified_tune_1.sid",
-    "size": 4437
+    "size": 4437,
+    "durationMs": 349849,
+    "durationText": "5:49.849"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9Eb21pbmF0aW9uLnNpZA",
@@ -20743,7 +24887,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Domination.sid",
     "path": "sids/Ouwehand_Reyn/Domination.sid",
-    "size": 3711
+    "size": 3711,
+    "durationMs": 255000,
+    "durationText": "4:15"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9Eb250X0NyeS5zaWQ",
@@ -20752,7 +24898,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Dont_Cry.sid",
     "path": "sids/Ouwehand_Reyn/Dont_Cry.sid",
-    "size": 3272
+    "size": 3272,
+    "durationMs": 195000,
+    "durationText": "3:15"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9Xb3JrdHVuZXMvRHVmX0Rpc2NvX0RyZXluLnNpZA",
@@ -20761,7 +24909,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Duf_Disco_Dreyn.sid",
     "path": "sids/Ouwehand_Reyn/Worktunes/Duf_Disco_Dreyn.sid",
-    "size": 1851
+    "size": 1851,
+    "durationMs": 35000,
+    "durationText": "0:35"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9EdXRjaF9CcmVlemVfRkxJX1Njcm9sbC5zaWQ",
@@ -20770,7 +24920,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Dutch_Breeze_FLI_Scroll.sid",
     "path": "sids/Ouwehand_Reyn/Dutch_Breeze_FLI_Scroll.sid",
-    "size": 4775
+    "size": 4775,
+    "durationMs": 215000,
+    "durationText": "3:35"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9EdXRjaF9CcmVlemVfRmxpcF90aGVfRmxvcC5zaWQ",
@@ -20779,7 +24931,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Dutch_Breeze_Flip_the_Flop.sid",
     "path": "sids/Ouwehand_Reyn/Dutch_Breeze_Flip_the_Flop.sid",
-    "size": 4389
+    "size": 4389,
+    "durationMs": 150000,
+    "durationText": "2:30"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9EdXRjaF9CcmVlemVfS3JhbWVSLnNpZA",
@@ -20788,7 +24942,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Dutch_Breeze_KrameR.sid",
     "path": "sids/Ouwehand_Reyn/Dutch_Breeze_KrameR.sid",
-    "size": 4447
+    "size": 4447,
+    "durationMs": 123000,
+    "durationText": "2:03"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9EdXRjaF9CcmVlemVfU29mdF9hbmRfV2V0LnNpZA",
@@ -20797,7 +24953,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Dutch_Breeze_Soft_and_Wet.sid",
     "path": "sids/Ouwehand_Reyn/Dutch_Breeze_Soft_and_Wet.sid",
-    "size": 4767
+    "size": 4767,
+    "durationMs": 175000,
+    "durationText": "2:55"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9EdXRjaF9CcmVlemVfVGhlX0Nvdy5zaWQ",
@@ -20806,7 +24964,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Dutch_Breeze_The_Cow.sid",
     "path": "sids/Ouwehand_Reyn/Dutch_Breeze_The_Cow.sid",
-    "size": 4174
+    "size": 4174,
+    "durationMs": 141000,
+    "durationText": "2:21"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9EdXRjaF9CcmVlemVfVGhlX0VuZC5zaWQ",
@@ -20815,7 +24975,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Dutch_Breeze_The_End.sid",
     "path": "sids/Ouwehand_Reyn/Dutch_Breeze_The_End.sid",
-    "size": 3782
+    "size": 3782,
+    "durationMs": 135000,
+    "durationText": "2:15"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9EdXRjaF9CcmVlemVfVmluZ2VycGFydF8xLnNpZA",
@@ -20824,7 +24986,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Dutch_Breeze_Vingerpart_1.sid",
     "path": "sids/Ouwehand_Reyn/Dutch_Breeze_Vingerpart_1.sid",
-    "size": 3759
+    "size": 3759,
+    "durationMs": 22984,
+    "durationText": "0:22.984"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9FYXN5X0dvaW4uc2lk",
@@ -20833,7 +24997,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Easy_Goin.sid",
     "path": "sids/Ouwehand_Reyn/Easy_Goin.sid",
-    "size": 3759
+    "size": 3759,
+    "durationMs": 269000,
+    "durationText": "4:29"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9Xb3JrdHVuZXMvRWFzeV9IYXJkZnVjay5zaWQ",
@@ -20842,7 +25008,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Easy_Hardfuck.sid",
     "path": "sids/Ouwehand_Reyn/Worktunes/Easy_Hardfuck.sid",
-    "size": 2260
+    "size": 2260,
+    "durationMs": 75000,
+    "durationText": "1:15"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9FZmZlX1NuZWwuc2lk",
@@ -20851,7 +25019,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Effe_Snel.sid",
     "path": "sids/Ouwehand_Reyn/Effe_Snel.sid",
-    "size": 2174
+    "size": 2174,
+    "durationMs": 31000,
+    "durationText": "0:31"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9FbGVjdHJpY2l0eS5zaWQ",
@@ -20860,7 +25030,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Electricity.sid",
     "path": "sids/Ouwehand_Reyn/Electricity.sid",
-    "size": 2808
+    "size": 2808,
+    "durationMs": 137000,
+    "durationText": "2:17"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9FeWVfdG9fRXllLnNpZA",
@@ -20869,7 +25041,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Eye_to_Eye.sid",
     "path": "sids/Ouwehand_Reyn/Eye_to_Eye.sid",
-    "size": 3285
+    "size": 3285,
+    "durationMs": 171000,
+    "durationText": "2:51"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9GYWxjb25fRHVtcC5zaWQ",
@@ -20878,7 +25052,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Falcon_Dump.sid",
     "path": "sids/Ouwehand_Reyn/Falcon_Dump.sid",
-    "size": 3525
+    "size": 3525,
+    "durationMs": 346000,
+    "durationText": "5:46"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9GYWxjb25fVG4uc2lk",
@@ -20887,7 +25063,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Falcon_Tn.sid",
     "path": "sids/Ouwehand_Reyn/Falcon_Tn.sid",
-    "size": 2737
+    "size": 2737,
+    "durationMs": 100000,
+    "durationText": "1:40"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9GYW1laGFsbC5zaWQ",
@@ -20896,7 +25074,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Famehall.sid",
     "path": "sids/Ouwehand_Reyn/Famehall.sid",
-    "size": 2296
+    "size": 2296,
+    "durationMs": 62000,
+    "durationText": "1:02"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9GaW5hbC5zaWQ",
@@ -20905,7 +25085,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Final.sid",
     "path": "sids/Ouwehand_Reyn/Final.sid",
-    "size": 2757
+    "size": 2757,
+    "durationMs": 262000,
+    "durationText": "4:22"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9GaXJlcGl0LnNpZA",
@@ -20914,7 +25096,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Firepit.sid",
     "path": "sids/Ouwehand_Reyn/Firepit.sid",
-    "size": 10743
+    "size": 10743,
+    "durationMs": 93000,
+    "durationText": "1:33"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9GaXJlcGl0X3VudXNlZC5zaWQ",
@@ -20923,7 +25107,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Firepit_unused.sid",
     "path": "sids/Ouwehand_Reyn/Firepit_unused.sid",
-    "size": 3150
+    "size": 3150,
+    "durationMs": 303584,
+    "durationText": "5:03.584"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9GaXJzdF9NT05fdHVuZS5zaWQ",
@@ -20932,7 +25118,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "First_MON_tune.sid",
     "path": "sids/Ouwehand_Reyn/First_MON_tune.sid",
-    "size": 3550
+    "size": 3550,
+    "durationMs": 25538,
+    "durationText": "0:25.538"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9GbGltYm9zX1F1ZXN0XzJfZGVtby5zaWQ",
@@ -20941,7 +25129,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Flimbos_Quest_2_demo.sid",
     "path": "sids/Ouwehand_Reyn/Flimbos_Quest_2_demo.sid",
-    "size": 4730
+    "size": 4730,
+    "durationMs": 2000,
+    "durationText": "0:02"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9GbGltYm9zX1F1ZXN0X2ludHJvLnNpZA",
@@ -20950,7 +25140,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Flimbos_Quest_intro.sid",
     "path": "sids/Ouwehand_Reyn/Flimbos_Quest_intro.sid",
-    "size": 8179
+    "size": 8179,
+    "durationMs": 137897,
+    "durationText": "2:17.897"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9Gb3JfRHJpdmUuc2lk",
@@ -20959,7 +25151,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "For_Drive.sid",
     "path": "sids/Ouwehand_Reyn/For_Drive.sid",
-    "size": 3520
+    "size": 3520,
+    "durationMs": 123000,
+    "durationText": "2:03"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9Gb3JfUHVsc2FyLnNpZA",
@@ -20968,7 +25162,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "For_Pulsar.sid",
     "path": "sids/Ouwehand_Reyn/For_Pulsar.sid",
-    "size": 3387
+    "size": 3387,
+    "durationMs": 162000,
+    "durationText": "2:42"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9GdW5fRnVuLnNpZA",
@@ -20977,7 +25173,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Fun_Fun.sid",
     "path": "sids/Ouwehand_Reyn/Fun_Fun.sid",
-    "size": 3351
+    "size": 3351,
+    "durationMs": 127000,
+    "durationText": "2:07"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9GdW5jaWUuc2lk",
@@ -20986,7 +25184,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Funcie.sid",
     "path": "sids/Ouwehand_Reyn/Funcie.sid",
-    "size": 3849
+    "size": 3849,
+    "durationMs": 256000,
+    "durationText": "4:16"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9HUF9UdW5lLnNpZA",
@@ -20995,7 +25195,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "GP_Tune.sid",
     "path": "sids/Ouwehand_Reyn/GP_Tune.sid",
-    "size": 2294
+    "size": 2294,
+    "durationMs": 104000,
+    "durationText": "1:44"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9Hb2xmX1R1bmUuc2lk",
@@ -21004,7 +25206,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Golf_Tune.sid",
     "path": "sids/Ouwehand_Reyn/Golf_Tune.sid",
-    "size": 3161
+    "size": 3161,
+    "durationMs": 59000,
+    "durationText": "0:59"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9IYXBweV9CaXJ0aGRheV9SZW1peC5zaWQ",
@@ -21013,7 +25217,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Happy_Birthday_Remix.sid",
     "path": "sids/Ouwehand_Reyn/Happy_Birthday_Remix.sid",
-    "size": 3628
+    "size": 3628,
+    "durationMs": 146000,
+    "durationText": "2:26"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9IYXJkcm9ja19WZWlucy5zaWQ",
@@ -21022,7 +25228,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Hardrock_Veins.sid",
     "path": "sids/Ouwehand_Reyn/Hardrock_Veins.sid",
-    "size": 38256
+    "size": 38256,
+    "durationMs": 17000,
+    "durationText": "0:17"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9IYXdrZXllX0hpc2NvcmUuc2lk",
@@ -21031,7 +25239,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Hawkeye_Hiscore.sid",
     "path": "sids/Ouwehand_Reyn/Hawkeye_Hiscore.sid",
-    "size": 1590
+    "size": 1590,
+    "durationMs": 24899,
+    "durationText": "0:24.899"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9IZWxpX1Jlc2N1ZS5zaWQ",
@@ -21040,7 +25250,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Heli_Rescue.sid",
     "path": "sids/Ouwehand_Reyn/Heli_Rescue.sid",
-    "size": 6202
+    "size": 6202,
+    "durationMs": 168000,
+    "durationText": "2:48"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9IZWxpY29wdGVyc3BlbC5zaWQ",
@@ -21049,7 +25261,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Helicopterspel.sid",
     "path": "sids/Ouwehand_Reyn/Helicopterspel.sid",
-    "size": 5107
+    "size": 5107,
+    "durationMs": 230000,
+    "durationText": "3:50"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9IZWxwLnNpZA",
@@ -21058,7 +25272,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Help.sid",
     "path": "sids/Ouwehand_Reyn/Help.sid",
-    "size": 3374
+    "size": 3374,
+    "durationMs": 10494,
+    "durationText": "0:10.494"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9IaWdoX1Jlc29sdXRpb24uc2lk",
@@ -21067,7 +25283,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "High_Resolution.sid",
     "path": "sids/Ouwehand_Reyn/High_Resolution.sid",
-    "size": 3381
+    "size": 3381,
+    "durationMs": 219000,
+    "durationText": "3:39"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9Ib3VzZV9TaGl0LnNpZA",
@@ -21076,7 +25294,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "House_Shit.sid",
     "path": "sids/Ouwehand_Reyn/House_Shit.sid",
-    "size": 2830
+    "size": 2830,
+    "durationMs": 137000,
+    "durationText": "2:17"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9IdXJyeV9Ud2ljZS5zaWQ",
@@ -21085,7 +25305,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Hurry_Twice.sid",
     "path": "sids/Ouwehand_Reyn/Hurry_Twice.sid",
-    "size": 3131
+    "size": 3131,
+    "durationMs": 177000,
+    "durationText": "2:57"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9JX0xpa2VfQ2hvcGluLnNpZA",
@@ -21094,7 +25316,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "I_Like_Chopin.sid",
     "path": "sids/Ouwehand_Reyn/I_Like_Chopin.sid",
-    "size": 3689
+    "size": 3689,
+    "durationMs": 77000,
+    "durationText": "1:17"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9Jbl9DaGFuY2Uuc2lk",
@@ -21103,7 +25327,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "In_Chance.sid",
     "path": "sids/Ouwehand_Reyn/In_Chance.sid",
-    "size": 2735
+    "size": 2735,
+    "durationMs": 269000,
+    "durationText": "4:29"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9Jbl9LYXJhdGUuc2lk",
@@ -21112,7 +25338,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "In_Karate.sid",
     "path": "sids/Ouwehand_Reyn/In_Karate.sid",
-    "size": 2955
+    "size": 2955,
+    "durationMs": 324000,
+    "durationText": "5:24"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9JbmZpbml0eS5zaWQ",
@@ -21121,7 +25349,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Infinity.sid",
     "path": "sids/Ouwehand_Reyn/Infinity.sid",
-    "size": 3686
+    "size": 3686,
+    "durationMs": 97000,
+    "durationText": "1:37"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9JeGlvbl9NdXNpY19QcmV2aWV3LnNpZA",
@@ -21130,7 +25360,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Ixion_Music_Preview.sid",
     "path": "sids/Ouwehand_Reyn/Ixion_Music_Preview.sid",
-    "size": 6526
+    "size": 6526,
+    "durationMs": 91951,
+    "durationText": "1:31.951"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9LbmlnaHRzLnNpZA",
@@ -21139,7 +25371,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Knights.sid",
     "path": "sids/Ouwehand_Reyn/Knights.sid",
-    "size": 2552
+    "size": 2552,
+    "durationMs": 52000,
+    "durationText": "0:52"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9MTjNfTHZsXzVfVGVtcGxlX29mX0VhcnRoLnNpZA",
@@ -21148,7 +25382,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "LN3_Lvl_5_Temple_of_Earth.sid",
     "path": "sids/Ouwehand_Reyn/LN3_Lvl_5_Temple_of_Earth.sid",
-    "size": 3937
+    "size": 3937,
+    "durationMs": 198000,
+    "durationText": "3:18"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9MYXN0X05pbmphX1JlbWl4LnNpZA",
@@ -21157,7 +25393,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Last_Ninja_Remix.sid",
     "path": "sids/Ouwehand_Reyn/Last_Ninja_Remix.sid",
-    "size": 23898
+    "size": 23898,
+    "durationMs": 331000,
+    "durationText": "5:31"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9MZXNzb25zX2luX0xvdmUuc2lk",
@@ -21166,7 +25404,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Lessons_in_Love.sid",
     "path": "sids/Ouwehand_Reyn/Lessons_in_Love.sid",
-    "size": 3088
+    "size": 3088,
+    "durationMs": 235000,
+    "durationText": "3:55"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9MaWx5X1dhc19IZXJlLnNpZA",
@@ -21175,7 +25415,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Lily_Was_Here.sid",
     "path": "sids/Ouwehand_Reyn/Lily_Was_Here.sid",
-    "size": 2732
+    "size": 2732,
+    "durationMs": 236851,
+    "durationText": "3:56.851"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9Mb25kb25fRGVtby5zaWQ",
@@ -21184,7 +25426,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "London_Demo.sid",
     "path": "sids/Ouwehand_Reyn/London_Demo.sid",
-    "size": 2302
+    "size": 2302,
+    "durationMs": 113000,
+    "durationText": "1:53"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9Xb3JrdHVuZXMvTWFjTWFnaWNfU29uZ18xLnNpZA",
@@ -21193,7 +25437,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "MacMagic_Song_1.sid",
     "path": "sids/Ouwehand_Reyn/Worktunes/MacMagic_Song_1.sid",
-    "size": 11346
+    "size": 11346,
+    "durationMs": 294000,
+    "durationText": "4:54"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9Xb3JrdHVuZXMvTWFjTWFnaWNfU29uZ18yLnNpZA",
@@ -21202,7 +25448,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "MacMagic_Song_2.sid",
     "path": "sids/Ouwehand_Reyn/Worktunes/MacMagic_Song_2.sid",
-    "size": 11346
+    "size": 11346,
+    "durationMs": 237000,
+    "durationText": "3:57"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9Xb3JrdHVuZXMvTWFjTWFnaWNfU29uZ18zLnNpZA",
@@ -21211,7 +25459,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "MacMagic_Song_3.sid",
     "path": "sids/Ouwehand_Reyn/Worktunes/MacMagic_Song_3.sid",
-    "size": 19313
+    "size": 19313,
+    "durationMs": 95000,
+    "durationText": "1:35"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9Xb3JrdHVuZXMvTWFjTWFnaWNfU29uZ180LnNpZA",
@@ -21220,7 +25470,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "MacMagic_Song_4.sid",
     "path": "sids/Ouwehand_Reyn/Worktunes/MacMagic_Song_4.sid",
-    "size": 11346
+    "size": 11346,
+    "durationMs": 205000,
+    "durationText": "3:25"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9Xb3JrdHVuZXMvTWFjTWFnaWNfU29uZ182LnNpZA",
@@ -21229,7 +25481,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "MacMagic_Song_6.sid",
     "path": "sids/Ouwehand_Reyn/Worktunes/MacMagic_Song_6.sid",
-    "size": 11346
+    "size": 11346,
+    "durationMs": 126000,
+    "durationText": "2:06"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9Xb3JrdHVuZXMvTWFjTWFnaWNfU29uZ183LnNpZA",
@@ -21238,7 +25492,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "MacMagic_Song_7.sid",
     "path": "sids/Ouwehand_Reyn/Worktunes/MacMagic_Song_7.sid",
-    "size": 11346
+    "size": 11346,
+    "durationMs": 146000,
+    "durationText": "2:26"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9Xb3JrdHVuZXMvTWFjTWFnaWNfU29uZ185LnNpZA",
@@ -21247,7 +25503,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "MacMagic_Song_9.sid",
     "path": "sids/Ouwehand_Reyn/Worktunes/MacMagic_Song_9.sid",
-    "size": 11391
+    "size": 11391,
+    "durationMs": 60000,
+    "durationText": "1:00"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9Xb3JrdHVuZXMvTWFjTWFnaXhfMDEuc2lk",
@@ -21256,7 +25514,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "MacMagix_01.sid",
     "path": "sids/Ouwehand_Reyn/Worktunes/MacMagix_01.sid",
-    "size": 2248
+    "size": 2248,
+    "durationMs": 23000,
+    "durationText": "0:23"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9NYWNNYWdpeF9NZXNzLnNpZA",
@@ -21265,7 +25525,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "MacMagix_Mess.sid",
     "path": "sids/Ouwehand_Reyn/MacMagix_Mess.sid",
-    "size": 3357
+    "size": 3357,
+    "durationMs": 127000,
+    "durationText": "2:07"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9NYWdhemluZV9JbnRyb19UdW5lLnNpZA",
@@ -21274,7 +25536,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Magazine_Intro_Tune.sid",
     "path": "sids/Ouwehand_Reyn/Magazine_Intro_Tune.sid",
-    "size": 2966
+    "size": 2966,
+    "durationMs": 160000,
+    "durationText": "2:40"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9NYW1iYV9pc3N1ZV8xLnNpZA",
@@ -21283,7 +25547,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Mamba_issue_1.sid",
     "path": "sids/Ouwehand_Reyn/Mamba_issue_1.sid",
-    "size": 4375
+    "size": 4375,
+    "durationMs": 551000,
+    "durationText": "9:11"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9NYXN0ZXJfRGVzaWduX0dyb3VwX3R1bmVfMi5zaWQ",
@@ -21292,7 +25558,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Master_Design_Group_tune_2.sid",
     "path": "sids/Ouwehand_Reyn/Master_Design_Group_tune_2.sid",
-    "size": 3398
+    "size": 3398,
+    "durationMs": 219000,
+    "durationText": "3:39"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9NZWRpc2NoX0NlbnRydW1fV2VzdC5zaWQ",
@@ -21301,7 +25569,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Medisch_Centrum_West.sid",
     "path": "sids/Ouwehand_Reyn/Medisch_Centrum_West.sid",
-    "size": 1952
+    "size": 1952,
+    "durationMs": 68000,
+    "durationText": "1:08"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9NZXJyeV9OZXdfWWVhcl9TY29vcC5zaWQ",
@@ -21310,7 +25580,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Merry_New_Year_Scoop.sid",
     "path": "sids/Ouwehand_Reyn/Merry_New_Year_Scoop.sid",
-    "size": 2830
+    "size": 2830,
+    "durationMs": 74000,
+    "durationText": "1:14"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9NaWRuaWdodF9FeHByZXNzLnNpZA",
@@ -21319,7 +25591,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Midnight_Express.sid",
     "path": "sids/Ouwehand_Reyn/Midnight_Express.sid",
-    "size": 3820
+    "size": 3820,
+    "durationMs": 89000,
+    "durationText": "1:29"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9NaXNzX0VkLnNpZA",
@@ -21328,7 +25602,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Miss_Ed.sid",
     "path": "sids/Ouwehand_Reyn/Miss_Ed.sid",
-    "size": 4014
+    "size": 4014,
+    "durationMs": 120000,
+    "durationText": "2:00"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9Nb05fRGVtb19UdW5lX0lJLnNpZA",
@@ -21337,7 +25613,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "MoN_Demo_Tune_II.sid",
     "path": "sids/Ouwehand_Reyn/MoN_Demo_Tune_II.sid",
-    "size": 3781
+    "size": 3781,
+    "durationMs": 184000,
+    "durationText": "3:04"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9PdXRfSXNfT3V0LnNpZA",
@@ -21346,7 +25624,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Out_Is_Out.sid",
     "path": "sids/Ouwehand_Reyn/Out_Is_Out.sid",
-    "size": 3614
+    "size": 3614,
+    "durationMs": 104000,
+    "durationText": "1:44"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9QYXJhZGl6ZS5zaWQ",
@@ -21355,7 +25635,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Paradize.sid",
     "path": "sids/Ouwehand_Reyn/Paradize.sid",
-    "size": 2548
+    "size": 2548,
+    "durationMs": 104000,
+    "durationText": "1:44"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9QYXJhZGl6ZV8yLnNpZA",
@@ -21364,7 +25646,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Paradize_2.sid",
     "path": "sids/Ouwehand_Reyn/Paradize_2.sid",
-    "size": 2866
+    "size": 2866,
+    "durationMs": 131000,
+    "durationText": "2:11"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9QYXJ0eV9UdW5lLnNpZA",
@@ -21373,7 +25657,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Party_Tune.sid",
     "path": "sids/Ouwehand_Reyn/Party_Tune.sid",
-    "size": 3113
+    "size": 3113,
+    "durationMs": 200000,
+    "durationText": "3:20"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9QZXBwZXJlZF9QaXp6YS5zaWQ",
@@ -21382,7 +25668,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Peppered_Pizza.sid",
     "path": "sids/Ouwehand_Reyn/Peppered_Pizza.sid",
-    "size": 3258
+    "size": 3258,
+    "durationMs": 265000,
+    "durationText": "4:25"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9QcmltYXJ5X1N0YXIuc2lk",
@@ -21391,7 +25679,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Primary_Star.sid",
     "path": "sids/Ouwehand_Reyn/Primary_Star.sid",
-    "size": 3974
+    "size": 3974,
+    "durationMs": 167000,
+    "durationText": "2:47"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9Qcm9wYWdhbmRhX01fT19OLnNpZA",
@@ -21400,7 +25690,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Propaganda_M_O_N.sid",
     "path": "sids/Ouwehand_Reyn/Propaganda_M_O_N.sid",
-    "size": 3203
+    "size": 3203,
+    "durationMs": 185000,
+    "durationText": "3:05"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9SaWRlcl9NaXguc2lk",
@@ -21409,7 +25701,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Rider_Mix.sid",
     "path": "sids/Ouwehand_Reyn/Rider_Mix.sid",
-    "size": 2570
+    "size": 2570,
+    "durationMs": 157000,
+    "durationText": "2:37"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9SaWZmcy5zaWQ",
@@ -21418,7 +25712,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Riffs.sid",
     "path": "sids/Ouwehand_Reyn/Riffs.sid",
-    "size": 1778
+    "size": 1778,
+    "durationMs": 95762,
+    "durationText": "1:35.762"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9Sb2NrX25fUm9sbC5zaWQ",
@@ -21427,7 +25723,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Rock_n_Roll.sid",
     "path": "sids/Ouwehand_Reyn/Rock_n_Roll.sid",
-    "size": 1741
+    "size": 1741,
+    "durationMs": 93000,
+    "durationText": "1:33"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9SdWxpbmdfU3BlZWR6YXguc2lk",
@@ -21436,7 +25734,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Ruling_Speedzax.sid",
     "path": "sids/Ouwehand_Reyn/Ruling_Speedzax.sid",
-    "size": 3626
+    "size": 3626,
+    "durationMs": 146000,
+    "durationText": "2:26"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9TX1dfQV9GXzJfdHVuZV8xLnNpZA",
@@ -21445,7 +25745,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "S_W_A_F_2_tune_1.sid",
     "path": "sids/Ouwehand_Reyn/S_W_A_F_2_tune_1.sid",
-    "size": 22641
+    "size": 22641,
+    "durationMs": 199246,
+    "durationText": "3:19.246"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9TaGFwZV9JbnRyby5zaWQ",
@@ -21454,7 +25756,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Shape_Intro.sid",
     "path": "sids/Ouwehand_Reyn/Shape_Intro.sid",
-    "size": 2896
+    "size": 2896,
+    "durationMs": 162000,
+    "durationText": "2:42"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9TaGFwZV9SZW1peC5zaWQ",
@@ -21463,7 +25767,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Shape_Remix.sid",
     "path": "sids/Ouwehand_Reyn/Shape_Remix.sid",
-    "size": 3531
+    "size": 3531,
+    "durationMs": 285000,
+    "durationText": "4:45"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9TaXh0aF9TZW5zZV9aYXguc2lk",
@@ -21472,7 +25778,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Sixth_Sense_Zax.sid",
     "path": "sids/Ouwehand_Reyn/Sixth_Sense_Zax.sid",
-    "size": 3454
+    "size": 3454,
+    "durationMs": 185000,
+    "durationText": "3:05"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9Tb2xvX1NwZWN0YWNsZS5zaWQ",
@@ -21481,7 +25789,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Solo_Spectacle.sid",
     "path": "sids/Ouwehand_Reyn/Solo_Spectacle.sid",
-    "size": 11346
+    "size": 11346,
+    "durationMs": 116000,
+    "durationText": "1:56"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9TcGVlZHpheC5zaWQ",
@@ -21490,7 +25800,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Speedzax.sid",
     "path": "sids/Ouwehand_Reyn/Speedzax.sid",
-    "size": 3060
+    "size": 3060,
+    "durationMs": 261000,
+    "durationText": "4:21"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9TcGlkaWVfQWdhLnNpZA",
@@ -21499,7 +25811,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Spidie_Aga.sid",
     "path": "sids/Ouwehand_Reyn/Spidie_Aga.sid",
-    "size": 3190
+    "size": 3190,
+    "durationMs": 269000,
+    "durationText": "4:29"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9TdG9ybWxvcmRfMi5zaWQ",
@@ -21508,7 +25822,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Stormlord_2.sid",
     "path": "sids/Ouwehand_Reyn/Stormlord_2.sid",
-    "size": 4323
+    "size": 4323,
+    "durationMs": 219000,
+    "durationText": "3:39"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9TdHJhbmdlcl9pbl9hX1N0cmFuZ2VfTGFuZC5zaWQ",
@@ -21517,7 +25833,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Stranger_in_a_Strange_Land.sid",
     "path": "sids/Ouwehand_Reyn/Stranger_in_a_Strange_Land.sid",
-    "size": 4612
+    "size": 4612,
+    "durationMs": 425182,
+    "durationText": "7:05.182"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9TdXBlcl9TdG9ja19DYXIuc2lk",
@@ -21526,7 +25844,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Super_Stock_Car.sid",
     "path": "sids/Ouwehand_Reyn/Super_Stock_Car.sid",
-    "size": 3684
+    "size": 3684,
+    "durationMs": 250000,
+    "durationText": "4:10"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9TdXBlcl9UcnVja2VyLnNpZA",
@@ -21535,7 +25855,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Super_Trucker.sid",
     "path": "sids/Ouwehand_Reyn/Super_Trucker.sid",
-    "size": 12190
+    "size": 12190,
+    "durationMs": 346000,
+    "durationText": "5:46"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9Td2VldHphay5zaWQ",
@@ -21544,7 +25866,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Sweetzak.sid",
     "path": "sids/Ouwehand_Reyn/Sweetzak.sid",
-    "size": 2713
+    "size": 2713,
+    "durationMs": 169000,
+    "durationText": "2:49"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9Xb3JrdHVuZXMvU3ludGhlc2l6ZXJfR3JlYXRlc3Quc2lk",
@@ -21553,7 +25877,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Synthesizer_Greatest.sid",
     "path": "sids/Ouwehand_Reyn/Worktunes/Synthesizer_Greatest.sid",
-    "size": 2204
+    "size": 2204,
+    "durationMs": 77000,
+    "durationText": "1:17"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9UZXJtaW5hdG9yLnNpZA",
@@ -21562,7 +25888,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Terminator.sid",
     "path": "sids/Ouwehand_Reyn/Terminator.sid",
-    "size": 3057
+    "size": 3057,
+    "durationMs": 83000,
+    "durationText": "1:23"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9UZXRyaXNfcGx1cy5zaWQ",
@@ -21571,7 +25899,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Tetris_plus.sid",
     "path": "sids/Ouwehand_Reyn/Tetris_plus.sid",
-    "size": 4243
+    "size": 4243,
+    "durationMs": 77000,
+    "durationText": "1:17"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9UdXJib2NoYXJnZV9wcmV2aWV3LnNpZA",
@@ -21580,7 +25910,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Turbocharge_preview.sid",
     "path": "sids/Ouwehand_Reyn/Turbocharge_preview.sid",
-    "size": 36709
+    "size": 36709,
+    "durationMs": 175000,
+    "durationText": "2:55"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9UdXJib2NoYXJnZV9wcmV2aWV3X2FsdGVybmF0aXZlX3RyYWNrcy5zaWQ",
@@ -21589,7 +25921,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Turbocharge_preview_alternative_tracks.sid",
     "path": "sids/Ouwehand_Reyn/Turbocharge_preview_alternative_tracks.sid",
-    "size": 18285
+    "size": 18285,
+    "durationMs": 160000,
+    "durationText": "2:40"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9UdXJib2NoYXJnZV9wcmV2aWV3X2RpZ2lzLnNpZA",
@@ -21598,7 +25932,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Turbocharge_preview_digis.sid",
     "path": "sids/Ouwehand_Reyn/Turbocharge_preview_digis.sid",
-    "size": 15982
+    "size": 15982,
+    "durationMs": 92000,
+    "durationText": "1:32"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9Ud2ljZV9Jc19CZXN0LnNpZA",
@@ -21607,7 +25943,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Twice_Is_Best.sid",
     "path": "sids/Ouwehand_Reyn/Twice_Is_Best.sid",
-    "size": 4404
+    "size": 4404,
+    "durationMs": 188000,
+    "durationText": "3:08"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9Vbmtub3duX1Nvbmcuc2lk",
@@ -21616,7 +25954,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Unknown_Song.sid",
     "path": "sids/Ouwehand_Reyn/Unknown_Song.sid",
-    "size": 11346
+    "size": 11346,
+    "durationMs": 221000,
+    "durationText": "3:41"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9WZXJvbmljYS5zaWQ",
@@ -21625,7 +25965,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Veronica.sid",
     "path": "sids/Ouwehand_Reyn/Veronica.sid",
-    "size": 3299
+    "size": 3299,
+    "durationMs": 219000,
+    "durationText": "3:39"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9XZW5keS5zaWQ",
@@ -21634,7 +25976,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Wendy.sid",
     "path": "sids/Ouwehand_Reyn/Wendy.sid",
-    "size": 3540
+    "size": 3540,
+    "durationMs": 154000,
+    "durationText": "2:34"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9XaGF0X0hhdmVfSV9Eb25lX1RvLnNpZA",
@@ -21643,7 +25987,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "What_Have_I_Done_To.sid",
     "path": "sids/Ouwehand_Reyn/What_Have_I_Done_To.sid",
-    "size": 3804
+    "size": 3804,
+    "durationMs": 100000,
+    "durationText": "1:40"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9XaGF0X2FfSmF6ei5zaWQ",
@@ -21652,7 +25998,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "What_a_Jazz.sid",
     "path": "sids/Ouwehand_Reyn/What_a_Jazz.sid",
-    "size": 1918
+    "size": 1918,
+    "durationMs": 35000,
+    "durationText": "0:35"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9YOThfdHVuZS5zaWQ",
@@ -21661,7 +26009,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "X98_tune.sid",
     "path": "sids/Ouwehand_Reyn/X98_tune.sid",
-    "size": 3967
+    "size": 3967,
+    "durationMs": 197000,
+    "durationText": "3:17"
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9Yb29sLnNpZA",
@@ -21670,7 +26020,9 @@ window.SID_LIBRARY = [
     "composerKey": "Ouwehand_Reyn",
     "fileName": "Xool.sid",
     "path": "sids/Ouwehand_Reyn/Xool.sid",
-    "size": 3836
+    "size": 3836,
+    "durationMs": 177000,
+    "durationText": "2:57"
   },
   {
     "id": "VGVsX0plcm9lbi8wNS0wOS04Ny5zaWQ",
@@ -21679,7 +26031,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "05-09-87.sid",
     "path": "sids/Tel_Jeroen/05-09-87.sid",
-    "size": 1996
+    "size": 1996,
+    "durationMs": 41000,
+    "durationText": "0:41"
   },
   {
     "id": "VGVsX0plcm9lbi8yNDAwX0FELnNpZA",
@@ -21688,7 +26042,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "2400_AD.sid",
     "path": "sids/Tel_Jeroen/2400_AD.sid",
-    "size": 15758
+    "size": 15758,
+    "durationMs": 459865,
+    "durationText": "7:39.865"
   },
   {
     "id": "VGVsX0plcm9lbi82NF9Ed2FyZnNfb25fWFRDLnNpZA",
@@ -21697,7 +26053,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "64_Dwarfs_on_XTC.sid",
     "path": "sids/Tel_Jeroen/64_Dwarfs_on_XTC.sid",
-    "size": 4087
+    "size": 4087,
+    "durationMs": 191543,
+    "durationText": "3:11.543"
   },
   {
     "id": "VGVsX0plcm9lbi9BY2NlbGVyYXRpb24tbWl4LnNpZA",
@@ -21706,7 +26064,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Acceleration-mix.sid",
     "path": "sids/Tel_Jeroen/Acceleration-mix.sid",
-    "size": 4659
+    "size": 4659,
+    "durationMs": 116000,
+    "durationText": "1:56"
   },
   {
     "id": "VGVsX0plcm9lbi9BZnRlcmJ1cm5lci5zaWQ",
@@ -21715,7 +26075,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Afterburner.sid",
     "path": "sids/Tel_Jeroen/Afterburner.sid",
-    "size": 31054
+    "size": 31054,
+    "durationMs": 333000,
+    "durationText": "5:33"
   },
   {
     "id": "VGVsX0plcm9lbi9BbGxveXJ1bi5zaWQ",
@@ -21724,7 +26086,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Alloyrun.sid",
     "path": "sids/Tel_Jeroen/Alloyrun.sid",
-    "size": 4681
+    "size": 4681,
+    "durationMs": 407000,
+    "durationText": "6:47"
   },
   {
     "id": "VGVsX0plcm9lbi9BbGxveXJ1bl92Mi5zaWQ",
@@ -21733,7 +26097,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Alloyrun_v2.sid",
     "path": "sids/Tel_Jeroen/Alloyrun_v2.sid",
-    "size": 5769
+    "size": 5769,
+    "durationMs": 410000,
+    "durationText": "6:50"
   },
   {
     "id": "VGVsX0plcm9lbi9BbHRlcm5hdGl2ZV9GdWVsLnNpZA",
@@ -21742,7 +26108,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Alternative_Fuel.sid",
     "path": "sids/Tel_Jeroen/Alternative_Fuel.sid",
-    "size": 5694
+    "size": 5694,
+    "durationMs": 155000,
+    "durationText": "2:35"
   },
   {
     "id": "VGVsX0plcm9lbi9BcnB2ZXJoYWFsLnNpZA",
@@ -21751,7 +26119,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Arpverhaal.sid",
     "path": "sids/Tel_Jeroen/Arpverhaal.sid",
-    "size": 2786
+    "size": 2786,
+    "durationMs": 173000,
+    "durationText": "2:53"
   },
   {
     "id": "VGVsX0plcm9lbi9Bc3Bhcl9HcmFuZF9Qcml4X01hc3Rlci5zaWQ",
@@ -21760,7 +26130,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Aspar_Grand_Prix_Master.sid",
     "path": "sids/Tel_Jeroen/Aspar_Grand_Prix_Master.sid",
-    "size": 5498
+    "size": 5498,
+    "durationMs": 10000,
+    "durationText": "0:10"
   },
   {
     "id": "VGVsX0plcm9lbi9BdG1vc3BoZXJlLnNpZA",
@@ -21769,7 +26141,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Atmosphere.sid",
     "path": "sids/Tel_Jeroen/Atmosphere.sid",
-    "size": 4107
+    "size": 4107,
+    "durationMs": 143000,
+    "durationText": "2:23"
   },
   {
     "id": "VGVsX0plcm9lbi9CYWRfQmxvb2Quc2lk",
@@ -21778,7 +26152,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Bad_Blood.sid",
     "path": "sids/Tel_Jeroen/Bad_Blood.sid",
-    "size": 11343
+    "size": 11343,
+    "durationMs": 6000,
+    "durationText": "0:06"
   },
   {
     "id": "VGVsX0plcm9lbi9CYW50YW0uc2lk",
@@ -21787,7 +26163,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Bantam.sid",
     "path": "sids/Tel_Jeroen/Bantam.sid",
-    "size": 2898
+    "size": 2898,
+    "durationMs": 81000,
+    "durationText": "1:21"
   },
   {
     "id": "VGVsX0plcm9lbi9CZWFzdGllX0JveXMuc2lk",
@@ -21796,7 +26174,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Beastie_Boys.sid",
     "path": "sids/Tel_Jeroen/Beastie_Boys.sid",
-    "size": 2439
+    "size": 2439,
+    "durationMs": 77000,
+    "durationText": "1:17"
   },
   {
     "id": "VGVsX0plcm9lbi9CZWdpbm5pbmcuc2lk",
@@ -21805,7 +26185,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Beginning.sid",
     "path": "sids/Tel_Jeroen/Beginning.sid",
-    "size": 2588
+    "size": 2588,
+    "durationMs": 47000,
+    "durationText": "0:47"
   },
   {
     "id": "VGVsX0plcm9lbi9CZWdpbm5pbmdfdjIuc2lk",
@@ -21814,7 +26196,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Beginning_v2.sid",
     "path": "sids/Tel_Jeroen/Beginning_v2.sid",
-    "size": 2408
+    "size": 2408,
+    "durationMs": 46000,
+    "durationText": "0:46"
   },
   {
     "id": "VGVsX0plcm9lbi9CaXJkcy5zaWQ",
@@ -21823,7 +26207,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Birds.sid",
     "path": "sids/Tel_Jeroen/Birds.sid",
-    "size": 11384
+    "size": 11384,
+    "durationMs": 91066,
+    "durationText": "1:31.066"
   },
   {
     "id": "VGVsX0plcm9lbi9CbG9uZF9CbHViYmVyLnNpZA",
@@ -21832,7 +26218,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Blond_Blubber.sid",
     "path": "sids/Tel_Jeroen/Blond_Blubber.sid",
-    "size": 11962
+    "size": 11962,
+    "durationMs": 81000,
+    "durationText": "1:21"
   },
   {
     "id": "VGVsX0plcm9lbi9DaGFydF9BdHRhY2suc2lk",
@@ -21841,7 +26229,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Chart_Attack.sid",
     "path": "sids/Tel_Jeroen/Chart_Attack.sid",
-    "size": 23645
+    "size": 23645,
+    "durationMs": 213000,
+    "durationText": "3:33"
   },
   {
     "id": "VGVsX0plcm9lbi9DaGFydF9BdHRhY2tfMi5zaWQ",
@@ -21850,7 +26240,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Chart_Attack_2.sid",
     "path": "sids/Tel_Jeroen/Chart_Attack_2.sid",
-    "size": 23645
+    "size": 23645,
+    "durationMs": 200000,
+    "durationText": "3:20"
   },
   {
     "id": "VGVsX0plcm9lbi9DaGFydF9BdHRhY2tfMy5zaWQ",
@@ -21859,7 +26251,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Chart_Attack_3.sid",
     "path": "sids/Tel_Jeroen/Chart_Attack_3.sid",
-    "size": 23645
+    "size": 23645,
+    "durationMs": 107000,
+    "durationText": "1:47"
   },
   {
     "id": "VGVsX0plcm9lbi9DaGFydF9BdHRhY2tfNS5zaWQ",
@@ -21868,7 +26262,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Chart_Attack_5.sid",
     "path": "sids/Tel_Jeroen/Chart_Attack_5.sid",
-    "size": 23645
+    "size": 23645,
+    "durationMs": 152000,
+    "durationText": "2:32"
   },
   {
     "id": "VGVsX0plcm9lbi9DaGFydF9BdHRhY2tfNi5zaWQ",
@@ -21877,7 +26273,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Chart_Attack_6.sid",
     "path": "sids/Tel_Jeroen/Chart_Attack_6.sid",
-    "size": 23645
+    "size": 23645,
+    "durationMs": 129000,
+    "durationText": "2:09"
   },
   {
     "id": "VGVsX0plcm9lbi9DaGFydF9BdHRhY2tfNy5zaWQ",
@@ -21886,7 +26284,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Chart_Attack_7.sid",
     "path": "sids/Tel_Jeroen/Chart_Attack_7.sid",
-    "size": 23645
+    "size": 23645,
+    "durationMs": 258000,
+    "durationText": "4:18"
   },
   {
     "id": "VGVsX0plcm9lbi9DaGFydF9BdHRhY2tfOS5zaWQ",
@@ -21895,7 +26295,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Chart_Attack_9.sid",
     "path": "sids/Tel_Jeroen/Chart_Attack_9.sid",
-    "size": 23673
+    "size": 23673,
+    "durationMs": 112000,
+    "durationText": "1:52"
   },
   {
     "id": "VGVsX0plcm9lbi9DaGFydHMuc2lk",
@@ -21904,7 +26306,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Charts.sid",
     "path": "sids/Tel_Jeroen/Charts.sid",
-    "size": 23645
+    "size": 23645,
+    "durationMs": 198000,
+    "durationText": "3:18"
   },
   {
     "id": "VGVsX0plcm9lbi9DaGlsZHJlbl9Tb25ncy5zaWQ",
@@ -21913,7 +26317,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Children_Songs.sid",
     "path": "sids/Tel_Jeroen/Children_Songs.sid",
-    "size": 4078
+    "size": 4078,
+    "durationMs": 184000,
+    "durationText": "3:04"
   },
   {
     "id": "VGVsX0plcm9lbi9DaHJvbWVfTWV0MS5zaWQ",
@@ -21922,7 +26328,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Chrome_Met1.sid",
     "path": "sids/Tel_Jeroen/Chrome_Met1.sid",
-    "size": 2875
+    "size": 2875,
+    "durationMs": 108000,
+    "durationText": "1:48"
   },
   {
     "id": "VGVsX0plcm9lbi9DbGFzc2ljX1BpZWNlLnNpZA",
@@ -21931,7 +26339,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Classic_Piece.sid",
     "path": "sids/Tel_Jeroen/Classic_Piece.sid",
-    "size": 6014
+    "size": 6014,
+    "durationMs": 47000,
+    "durationText": "0:47"
   },
   {
     "id": "VGVsX0plcm9lbi9DbG9zaW5nX0luLnNpZA",
@@ -21940,7 +26350,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Closing_In.sid",
     "path": "sids/Tel_Jeroen/Closing_In.sid",
-    "size": 3812
+    "size": 3812,
+    "durationMs": 93000,
+    "durationText": "1:33"
   },
   {
     "id": "VGVsX0plcm9lbi9EYW5fRGFyZV8zLnNpZA",
@@ -21949,7 +26361,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Dan_Dare_3.sid",
     "path": "sids/Tel_Jeroen/Dan_Dare_3.sid",
-    "size": 6999
+    "size": 6999,
+    "durationMs": 255000,
+    "durationText": "4:15"
   },
   {
     "id": "VGVsX0plcm9lbi9EYXJpbmdfRG90cy5zaWQ",
@@ -21958,7 +26372,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Daring_Dots.sid",
     "path": "sids/Tel_Jeroen/Daring_Dots.sid",
-    "size": 8199
+    "size": 8199,
+    "durationMs": 52000,
+    "durationText": "0:52"
   },
   {
     "id": "VGVsX0plcm9lbi9EZWVsXzMuc2lk",
@@ -21967,7 +26383,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Deel_3.sid",
     "path": "sids/Tel_Jeroen/Deel_3.sid",
-    "size": 3916
+    "size": 3916,
+    "durationMs": 143000,
+    "durationText": "2:23"
   },
   {
     "id": "VGVsX0plcm9lbi9EZWVsXzQuc2lk",
@@ -21976,7 +26394,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Deel_4.sid",
     "path": "sids/Tel_Jeroen/Deel_4.sid",
-    "size": 3436
+    "size": 3436,
+    "durationMs": 77000,
+    "durationText": "1:17"
   },
   {
     "id": "VGVsX0plcm9lbi9EZW1vU29uZy5zaWQ",
@@ -21985,7 +26405,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "DemoSong.sid",
     "path": "sids/Tel_Jeroen/DemoSong.sid",
-    "size": 3013
+    "size": 3013,
+    "durationMs": 93000,
+    "durationText": "1:33"
   },
   {
     "id": "VGVsX0plcm9lbi9EaWdpLVBpZWNlX2Zvcl9UZWxlY29tc29mdC5zaWQ",
@@ -21994,7 +26416,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Digi-Piece_for_Telecomsoft.sid",
     "path": "sids/Tel_Jeroen/Digi-Piece_for_Telecomsoft.sid",
-    "size": 13918
+    "size": 13918,
+    "durationMs": 419000,
+    "durationText": "6:59"
   },
   {
     "id": "VGVsX0plcm9lbi9EdXRjaF9CcmVlemVfaW50cm9kdWN0aW9uLnNpZA",
@@ -22003,7 +26427,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Dutch_Breeze_introduction.sid",
     "path": "sids/Tel_Jeroen/Dutch_Breeze_introduction.sid",
-    "size": 2942
+    "size": 2942,
+    "durationMs": 98000,
+    "durationText": "1:38"
   },
   {
     "id": "VGVsX0plcm9lbi9EeWluZ19IaWdoLnNpZA",
@@ -22012,7 +26438,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Dying_High.sid",
     "path": "sids/Tel_Jeroen/Dying_High.sid",
-    "size": 7389
+    "size": 7389,
+    "durationMs": 131000,
+    "durationText": "2:11"
   },
   {
     "id": "VGVsX0plcm9lbi9FYXJ0aHF1YWtlLnNpZA",
@@ -22021,7 +26449,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Earthquake.sid",
     "path": "sids/Tel_Jeroen/Earthquake.sid",
-    "size": 23634
+    "size": 23634,
+    "durationMs": 273076,
+    "durationText": "4:33.076"
   },
   {
     "id": "VGVsX0plcm9lbi9FbmVteV9TY291dF9wcmV2aWV3LnNpZA",
@@ -22030,7 +26460,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Enemy_Scout_preview.sid",
     "path": "sids/Tel_Jeroen/Enemy_Scout_preview.sid",
-    "size": 3555
+    "size": 3555,
+    "durationMs": 16000,
+    "durationText": "0:16"
   },
   {
     "id": "VGVsX0plcm9lbi9FcXVpbm94ZV80LnNpZA",
@@ -22039,7 +26471,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Equinoxe_4.sid",
     "path": "sids/Tel_Jeroen/Equinoxe_4.sid",
-    "size": 11346
+    "size": 11346,
+    "durationMs": 320000,
+    "durationText": "5:20"
   },
   {
     "id": "VGVsX0plcm9lbi9FeHByZXNzaXZlX0RlbW9fSUlfUHJldmlldy5zaWQ",
@@ -22048,7 +26482,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Expressive_Demo_II_Preview.sid",
     "path": "sids/Tel_Jeroen/Expressive_Demo_II_Preview.sid",
-    "size": 3112
+    "size": 3112,
+    "durationMs": 204292,
+    "durationText": "3:24.292"
   },
   {
     "id": "VGVsX0plcm9lbi9GaW5hbF9Db3VudGRvd24uc2lk",
@@ -22057,7 +26493,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Final_Countdown.sid",
     "path": "sids/Tel_Jeroen/Final_Countdown.sid",
-    "size": 11385
+    "size": 11385,
+    "durationMs": 253000,
+    "durationText": "4:13"
   },
   {
     "id": "VGVsX0plcm9lbi9GaW5hbF9Db3VudGRvd25fMi5zaWQ",
@@ -22066,7 +26504,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Final_Countdown_2.sid",
     "path": "sids/Tel_Jeroen/Final_Countdown_2.sid",
-    "size": 19549
+    "size": 19549,
+    "durationMs": 50000,
+    "durationText": "0:50"
   },
   {
     "id": "VGVsX0plcm9lbi9GaW5hbF9Db3VudGRvd25fQkFTSUMuc2lk",
@@ -22075,7 +26515,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Final_Countdown_BASIC.sid",
     "path": "sids/Tel_Jeroen/Final_Countdown_BASIC.sid",
-    "size": 4471
+    "size": 4471,
+    "durationMs": 47000,
+    "durationText": "0:47"
   },
   {
     "id": "VGVsX0plcm9lbi9GcmVha3lfVHVuZS5zaWQ",
@@ -22084,7 +26526,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Freaky_Tune.sid",
     "path": "sids/Tel_Jeroen/Freaky_Tune.sid",
-    "size": 15442
+    "size": 15442,
+    "durationMs": 138000,
+    "durationText": "2:18"
   },
   {
     "id": "VGVsX0plcm9lbi9GdW5fRnVuLnNpZA",
@@ -22093,7 +26537,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Fun_Fun.sid",
     "path": "sids/Tel_Jeroen/Fun_Fun.sid",
-    "size": 3285
+    "size": 3285,
+    "durationMs": 48000,
+    "durationText": "0:48"
   },
   {
     "id": "VGVsX0plcm9lbi9GdXp6YmFsbF9sZXZlbF8yLnNpZA",
@@ -22102,7 +26548,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Fuzzball_level_2.sid",
     "path": "sids/Tel_Jeroen/Fuzzball_level_2.sid",
-    "size": 4139
+    "size": 4139,
+    "durationMs": 20000,
+    "durationText": "0:20"
   },
   {
     "id": "VGVsX0plcm9lbi9GdXp6YmFsbF9wcmV2aWV3LnNpZA",
@@ -22111,7 +26559,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Fuzzball_preview.sid",
     "path": "sids/Tel_Jeroen/Fuzzball_preview.sid",
-    "size": 3829
+    "size": 3829,
+    "durationMs": 97000,
+    "durationText": "1:37"
   },
   {
     "id": "VGVsX0plcm9lbi9GdXp6YmFsbF90aXRsZV9hbmRfaGlzY29yZS5zaWQ",
@@ -22120,7 +26570,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Fuzzball_title_and_hiscore.sid",
     "path": "sids/Tel_Jeroen/Fuzzball_title_and_hiscore.sid",
-    "size": 3711
+    "size": 3711,
+    "durationMs": 82000,
+    "durationText": "1:22"
   },
   {
     "id": "VGVsX0plcm9lbi9HX0lfSGVyby5zaWQ",
@@ -22129,7 +26581,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "G_I_Hero.sid",
     "path": "sids/Tel_Jeroen/G_I_Hero.sid",
-    "size": 5882
+    "size": 5882,
+    "durationMs": 416000,
+    "durationText": "6:56"
   },
   {
     "id": "VGVsX0plcm9lbi9HYXBsdXMuc2lk",
@@ -22138,7 +26592,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Gaplus.sid",
     "path": "sids/Tel_Jeroen/Gaplus.sid",
-    "size": 7612
+    "size": 7612,
+    "durationMs": 340000,
+    "durationText": "5:40"
   },
   {
     "id": "VGVsX0plcm9lbi9HYXBsdXNfcHJldmlldy5zaWQ",
@@ -22147,7 +26603,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Gaplus_preview.sid",
     "path": "sids/Tel_Jeroen/Gaplus_preview.sid",
-    "size": 4602
+    "size": 4602,
+    "durationMs": 361000,
+    "durationText": "6:01"
   },
   {
     "id": "VGVsX0plcm9lbi9HZXRfUmVhZHkuc2lk",
@@ -22156,7 +26614,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Get_Ready.sid",
     "path": "sids/Tel_Jeroen/Get_Ready.sid",
-    "size": 23673
+    "size": 23673,
+    "durationMs": 161000,
+    "durationText": "2:41"
   },
   {
     "id": "VGVsX0plcm9lbi9HaG9zdF9uX1RlbGxvLnNpZA",
@@ -22165,7 +26625,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Ghost_n_Tello.sid",
     "path": "sids/Tel_Jeroen/Ghost_n_Tello.sid",
-    "size": 11385
+    "size": 11385,
+    "durationMs": 46000,
+    "durationText": "0:46"
   },
   {
     "id": "VGVsX0plcm9lbi9Hb2xkZW5fQXhlLnNpZA",
@@ -22174,7 +26636,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Golden_Axe.sid",
     "path": "sids/Tel_Jeroen/Golden_Axe.sid",
-    "size": 14196
+    "size": 14196,
+    "durationMs": 255000,
+    "durationText": "4:15"
   },
   {
     "id": "VGVsX0plcm9lbi9IYXBweV9KVC5zaWQ",
@@ -22183,7 +26647,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Happy_JT.sid",
     "path": "sids/Tel_Jeroen/Happy_JT.sid",
-    "size": 2557
+    "size": 2557,
+    "durationMs": 41000,
+    "durationText": "0:41"
   },
   {
     "id": "VGVsX0plcm9lbi9IYXJkX1JvY2suc2lk",
@@ -22192,7 +26658,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Hard_Rock.sid",
     "path": "sids/Tel_Jeroen/Hard_Rock.sid",
-    "size": 5854
+    "size": 5854,
+    "durationMs": 123000,
+    "durationText": "2:03"
   },
   {
     "id": "VGVsX0plcm9lbi9IYXdrZXllX1Byb3RvXzEuc2lk",
@@ -22201,7 +26669,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Hawkeye_Proto_1.sid",
     "path": "sids/Tel_Jeroen/Hawkeye_Proto_1.sid",
-    "size": 5116
+    "size": 5116,
+    "durationMs": 275794,
+    "durationText": "4:35.794"
   },
   {
     "id": "VGVsX0plcm9lbi9IYXdrZXllX2xvYWRlci5zaWQ",
@@ -22210,7 +26680,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Hawkeye_loader.sid",
     "path": "sids/Tel_Jeroen/Hawkeye_loader.sid",
-    "size": 5759
+    "size": 5759,
+    "durationMs": 31000,
+    "durationText": "0:31"
   },
   {
     "id": "VGVsX0plcm9lbi9Ib3RfUm9kLnNpZA",
@@ -22219,7 +26691,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Hot_Rod.sid",
     "path": "sids/Tel_Jeroen/Hot_Rod.sid",
-    "size": 24262
+    "size": 24262,
+    "durationMs": 213631,
+    "durationText": "3:33.631"
   },
   {
     "id": "VGVsX0plcm9lbi9JX09fVS5zaWQ",
@@ -22228,7 +26702,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "I_O_U.sid",
     "path": "sids/Tel_Jeroen/I_O_U.sid",
-    "size": 23674
+    "size": 23674,
+    "durationMs": 161000,
+    "durationText": "2:41"
   },
   {
     "id": "VGVsX0plcm9lbi9JY2VfQWdlLnNpZA",
@@ -22237,7 +26713,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Ice_Age.sid",
     "path": "sids/Tel_Jeroen/Ice_Age.sid",
-    "size": 4958
+    "size": 4958,
+    "durationMs": 340500,
+    "durationText": "5:40.5"
   },
   {
     "id": "VGVsX0plcm9lbi9JZXRzX3Zhbl9KVC5zaWQ",
@@ -22246,7 +26724,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Iets_van_JT.sid",
     "path": "sids/Tel_Jeroen/Iets_van_JT.sid",
-    "size": 4688
+    "size": 4688,
+    "durationMs": 176202,
+    "durationText": "2:56.202"
   },
   {
     "id": "VGVsX0plcm9lbi9Ja2FyaV9Vbmlvbi5zaWQ",
@@ -22255,7 +26735,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Ikari_Union.sid",
     "path": "sids/Tel_Jeroen/Ikari_Union.sid",
-    "size": 2486
+    "size": 2486,
+    "durationMs": 39000,
+    "durationText": "0:39"
   },
   {
     "id": "VGVsX0plcm9lbi9JbnRyby5zaWQ",
@@ -22264,7 +26746,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Intro.sid",
     "path": "sids/Tel_Jeroen/Intro.sid",
-    "size": 2964
+    "size": 2964,
+    "durationMs": 77000,
+    "durationText": "1:17"
   },
   {
     "id": "VGVsX0plcm9lbi9JbnZlc3RfZW5kLnNpZA",
@@ -22273,7 +26757,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Invest_end.sid",
     "path": "sids/Tel_Jeroen/Invest_end.sid",
-    "size": 1406
+    "size": 1406,
+    "durationMs": 24000,
+    "durationText": "0:24"
   },
   {
     "id": "VGVsX0plcm9lbi9JbnZlc3RfaW50cm8uc2lk",
@@ -22282,7 +26768,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Invest_intro.sid",
     "path": "sids/Tel_Jeroen/Invest_intro.sid",
-    "size": 3950
+    "size": 3950,
+    "durationMs": 150000,
+    "durationText": "2:30"
   },
   {
     "id": "VGVsX0plcm9lbi9Jcm9uX0xvcmQuc2lk",
@@ -22291,7 +26779,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Iron_Lord.sid",
     "path": "sids/Tel_Jeroen/Iron_Lord.sid",
-    "size": 4887
+    "size": 4887,
+    "durationMs": 323000,
+    "durationText": "5:23"
   },
   {
     "id": "VGVsX0plcm9lbi9JdHNfYV9TaW4uc2lk",
@@ -22300,7 +26790,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Its_a_Sin.sid",
     "path": "sids/Tel_Jeroen/Its_a_Sin.sid",
-    "size": 23681
+    "size": 23681,
+    "durationMs": 260000,
+    "durationText": "4:20"
   },
   {
     "id": "VGVsX0plcm9lbi9KVF80Mi5zaWQ",
@@ -22309,7 +26801,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "JT_42.sid",
     "path": "sids/Tel_Jeroen/JT_42.sid",
-    "size": 3483
+    "size": 3483,
+    "durationMs": 154000,
+    "durationText": "2:34"
   },
   {
     "id": "VGVsX0plcm9lbi9KVF9JLnNpZA",
@@ -22318,7 +26812,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "JT_I.sid",
     "path": "sids/Tel_Jeroen/JT_I.sid",
-    "size": 11385
+    "size": 11385,
+    "durationMs": 60000,
+    "durationText": "1:00"
   },
   {
     "id": "VGVsX0plcm9lbi9KVF9JSS5zaWQ",
@@ -22327,7 +26823,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "JT_II.sid",
     "path": "sids/Tel_Jeroen/JT_II.sid",
-    "size": 15481
+    "size": 15481,
+    "durationMs": 266000,
+    "durationText": "4:26"
   },
   {
     "id": "VGVsX0plcm9lbi9KVF9pbl9Sb2JzLnNpZA",
@@ -22336,7 +26834,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "JT_in_Robs.sid",
     "path": "sids/Tel_Jeroen/JT_in_Robs.sid",
-    "size": 3967
+    "size": 3967,
+    "durationMs": 100000,
+    "durationText": "1:40"
   },
   {
     "id": "VGVsX0plcm9lbi9KVF9pbl9TcGFjZS5zaWQ",
@@ -22345,7 +26845,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "JT_in_Space.sid",
     "path": "sids/Tel_Jeroen/JT_in_Space.sid",
-    "size": 3536
+    "size": 3536,
+    "durationMs": 169000,
+    "durationText": "2:49"
   },
   {
     "id": "VGVsX0plcm9lbi9KYXJyZV9NaXguc2lk",
@@ -22354,7 +26856,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Jarre_Mix.sid",
     "path": "sids/Tel_Jeroen/Jarre_Mix.sid",
-    "size": 11385
+    "size": 11385,
+    "durationMs": 217000,
+    "durationText": "3:37"
   },
   {
     "id": "VGVsX0plcm9lbi9KYXp6LnNpZA",
@@ -22363,7 +26867,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Jazz.sid",
     "path": "sids/Tel_Jeroen/Jazz.sid",
-    "size": 2708
+    "size": 2708,
+    "durationMs": 23000,
+    "durationText": "0:23"
   },
   {
     "id": "VGVsX0plcm9lbi9KZXJvZW4uc2lk",
@@ -22372,7 +26878,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Jeroen.sid",
     "path": "sids/Tel_Jeroen/Jeroen.sid",
-    "size": 3098
+    "size": 3098,
+    "durationMs": 77000,
+    "durationText": "1:17"
   },
   {
     "id": "VGVsX0plcm9lbi9LT1VEX0hFLnNpZA",
@@ -22381,7 +26889,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "KOUD_HE.sid",
     "path": "sids/Tel_Jeroen/KOUD_HE.sid",
-    "size": 11021
+    "size": 11021,
+    "durationMs": 369000,
+    "durationText": "6:09"
   },
   {
     "id": "VGVsX0plcm9lbi9MYWR5c19Pd24uc2lk",
@@ -22390,7 +26900,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Ladys_Own.sid",
     "path": "sids/Tel_Jeroen/Ladys_Own.sid",
-    "size": 3118
+    "size": 3118,
+    "durationMs": 100000,
+    "durationText": "1:40"
   },
   {
     "id": "VGVsX0plcm9lbi9MZWFkZXJfb2ZfdGhlX1BhY2suc2lk",
@@ -22399,7 +26911,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Leader_of_the_Pack.sid",
     "path": "sids/Tel_Jeroen/Leader_of_the_Pack.sid",
-    "size": 23673
+    "size": 23673,
+    "durationMs": 123000,
+    "durationText": "2:03"
   },
   {
     "id": "VGVsX0plcm9lbi9MZW1taW5ncy5zaWQ",
@@ -22408,7 +26922,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Lemmings.sid",
     "path": "sids/Tel_Jeroen/Lemmings.sid",
-    "size": 28583
+    "size": 28583,
+    "durationMs": 24000,
+    "durationText": "0:24"
   },
   {
     "id": "VGVsX0plcm9lbi9MZW1taW5nc19lbmRfc2NyZWVuLnNpZA",
@@ -22417,7 +26933,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Lemmings_end_screen.sid",
     "path": "sids/Tel_Jeroen/Lemmings_end_screen.sid",
-    "size": 33191
+    "size": 33191,
+    "durationMs": 52000,
+    "durationText": "0:52"
   },
   {
     "id": "VGVsX0plcm9lbi9MZXRoYWwuc2lk",
@@ -22426,7 +26944,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Lethal.sid",
     "path": "sids/Tel_Jeroen/Lethal.sid",
-    "size": 14389
+    "size": 14389,
+    "durationMs": 357000,
+    "durationText": "5:57"
   },
   {
     "id": "VGVsX0plcm9lbi9MaWJlcnR5X0xlbW1pbmdzLnNpZA",
@@ -22435,7 +26955,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Liberty_Lemmings.sid",
     "path": "sids/Tel_Jeroen/Liberty_Lemmings.sid",
-    "size": 3711
+    "size": 3711,
+    "durationMs": 92000,
+    "durationText": "1:32"
   },
   {
     "id": "VGVsX0plcm9lbi9MaXN0ZW5fVHdpY2Uuc2lk",
@@ -22444,7 +26966,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Listen_Twice.sid",
     "path": "sids/Tel_Jeroen/Listen_Twice.sid",
-    "size": 4935
+    "size": 4935,
+    "durationMs": 107274,
+    "durationText": "1:47.274"
   },
   {
     "id": "VGVsX0plcm9lbi9Mb29raW5nX0Fyb3VuZC5zaWQ",
@@ -22453,7 +26977,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Looking_Around.sid",
     "path": "sids/Tel_Jeroen/Looking_Around.sid",
-    "size": 3775
+    "size": 3775,
+    "durationMs": 81000,
+    "durationText": "1:21"
   },
   {
     "id": "VGVsX0plcm9lbi9Mb3N0X2luX0NoaW5hLnNpZA",
@@ -22462,7 +26988,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Lost_in_China.sid",
     "path": "sids/Tel_Jeroen/Lost_in_China.sid",
-    "size": 3368
+    "size": 3368,
+    "durationMs": 62000,
+    "durationText": "1:02"
   },
   {
     "id": "VGVsX0plcm9lbi9NX0FfQ19DLnNpZA",
@@ -22471,7 +26999,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "M_A_C_C.sid",
     "path": "sids/Tel_Jeroen/M_A_C_C.sid",
-    "size": 4481
+    "size": 4481,
+    "durationMs": 200000,
+    "durationText": "3:20"
   },
   {
     "id": "VGVsX0plcm9lbi9NYWRvbm5hX01peC5zaWQ",
@@ -22480,7 +27010,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Madonna_Mix.sid",
     "path": "sids/Tel_Jeroen/Madonna_Mix.sid",
-    "size": 23673
+    "size": 23673,
+    "durationMs": 369000,
+    "durationText": "6:09"
   },
   {
     "id": "VGVsX0plcm9lbi9NZW1iZXJfRGVtby5zaWQ",
@@ -22489,7 +27021,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Member_Demo.sid",
     "path": "sids/Tel_Jeroen/Member_Demo.sid",
-    "size": 23645
+    "size": 23645,
+    "durationMs": 220000,
+    "durationText": "3:40"
   },
   {
     "id": "VGVsX0plcm9lbi9Nb25fRGVtb18xOTkxLnNpZA",
@@ -22498,7 +27032,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Mon_Demo_1991.sid",
     "path": "sids/Tel_Jeroen/Mon_Demo_1991.sid",
-    "size": 2571
+    "size": 2571,
+    "durationMs": 138400,
+    "durationText": "2:18.4"
   },
   {
     "id": "VGVsX0plcm9lbi9Nb25pdG9yX01hZG5lc3NfMS5zaWQ",
@@ -22507,7 +27043,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Monitor_Madness_1.sid",
     "path": "sids/Tel_Jeroen/Monitor_Madness_1.sid",
-    "size": 2007
+    "size": 2007,
+    "durationMs": 21000,
+    "durationText": "0:21"
   },
   {
     "id": "VGVsX0plcm9lbi9Nb25pdG9yX01hZG5lc3NfMi5zaWQ",
@@ -22516,7 +27054,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Monitor_Madness_2.sid",
     "path": "sids/Tel_Jeroen/Monitor_Madness_2.sid",
-    "size": 2149
+    "size": 2149,
+    "durationMs": 31000,
+    "durationText": "0:31"
   },
   {
     "id": "VGVsX0plcm9lbi9NdXNpY19NaXhfMS5zaWQ",
@@ -22525,7 +27065,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Music_Mix_1.sid",
     "path": "sids/Tel_Jeroen/Music_Mix_1.sid",
-    "size": 23634
+    "size": 23634,
+    "durationMs": 92000,
+    "durationText": "1:32"
   },
   {
     "id": "VGVsX0plcm9lbi9NdXNpY19NaXhfMi5zaWQ",
@@ -22534,7 +27076,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Music_Mix_2.sid",
     "path": "sids/Tel_Jeroen/Music_Mix_2.sid",
-    "size": 19583
+    "size": 19583,
+    "durationMs": 107000,
+    "durationText": "1:47"
   },
   {
     "id": "VGVsX0plcm9lbi9NdXNpY19NaXhfNS5zaWQ",
@@ -22543,7 +27087,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Music_Mix_5.sid",
     "path": "sids/Tel_Jeroen/Music_Mix_5.sid",
-    "size": 23679
+    "size": 23679,
+    "durationMs": 56000,
+    "durationText": "0:56"
   },
   {
     "id": "VGVsX0plcm9lbi9NdXNpY19NaXhfNi5zaWQ",
@@ -22552,7 +27098,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Music_Mix_6.sid",
     "path": "sids/Tel_Jeroen/Music_Mix_6.sid",
-    "size": 23673
+    "size": 23673,
+    "durationMs": 48000,
+    "durationText": "0:48"
   },
   {
     "id": "VGVsX0plcm9lbi9NeXRoLnNpZA",
@@ -22561,7 +27109,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Myth.sid",
     "path": "sids/Tel_Jeroen/Myth.sid",
-    "size": 17022
+    "size": 17022,
+    "durationMs": 266306,
+    "durationText": "4:26.306"
   },
   {
     "id": "VGVsX0plcm9lbi9NeXRoX01peC5zaWQ",
@@ -22570,7 +27120,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Myth_Mix.sid",
     "path": "sids/Tel_Jeroen/Myth_Mix.sid",
-    "size": 4222
+    "size": 4222,
+    "durationMs": 267000,
+    "durationText": "4:27"
   },
   {
     "id": "VGVsX0plcm9lbi9OYXZ5X01vdmVzLnNpZA",
@@ -22579,7 +27131,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Navy_Moves.sid",
     "path": "sids/Tel_Jeroen/Navy_Moves.sid",
-    "size": 8244
+    "size": 8244,
+    "durationMs": 125000,
+    "durationText": "2:05"
   },
   {
     "id": "VGVsX0plcm9lbi9OYXZ5X01vdmVzX2FsdGVybmF0ZV92ZXJzaW9uLnNpZA",
@@ -22588,7 +27142,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Navy_Moves_alternate_version.sid",
     "path": "sids/Tel_Jeroen/Navy_Moves_alternate_version.sid",
-    "size": 4487
+    "size": 4487,
+    "durationMs": 125000,
+    "durationText": "2:05"
   },
   {
     "id": "VGVsX0plcm9lbi9OZXdfRGlzay5zaWQ",
@@ -22597,7 +27153,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "New_Disk.sid",
     "path": "sids/Tel_Jeroen/New_Disk.sid",
-    "size": 17022
+    "size": 17022,
+    "durationMs": 99600,
+    "durationText": "1:39.6"
   },
   {
     "id": "VGVsX0plcm9lbi9OaWdodGh1bnRlci5zaWQ",
@@ -22606,7 +27164,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Nighthunter.sid",
     "path": "sids/Tel_Jeroen/Nighthunter.sid",
-    "size": 30350
+    "size": 30350,
+    "durationMs": 292000,
+    "durationText": "4:52"
   },
   {
     "id": "VGVsX0plcm9lbi9Ob2lzeV9QaWxsYXJzX3R1bmVfMS5zaWQ",
@@ -22615,7 +27175,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Noisy_Pillars_tune_1.sid",
     "path": "sids/Tel_Jeroen/Noisy_Pillars_tune_1.sid",
-    "size": 2563
+    "size": 2563,
+    "durationMs": 77000,
+    "durationText": "1:17"
   },
   {
     "id": "VGVsX0plcm9lbi9Ob2lzeV9QaWxsYXJzX3R1bmVfMi5zaWQ",
@@ -22624,7 +27186,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Noisy_Pillars_tune_2.sid",
     "path": "sids/Tel_Jeroen/Noisy_Pillars_tune_2.sid",
-    "size": 2522
+    "size": 2522,
+    "durationMs": 92000,
+    "durationText": "1:32"
   },
   {
     "id": "VGVsX0plcm9lbi9Ob2lzeV9QaWxsYXJzX3R1bmVfMy5zaWQ",
@@ -22633,7 +27197,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Noisy_Pillars_tune_3.sid",
     "path": "sids/Tel_Jeroen/Noisy_Pillars_tune_3.sid",
-    "size": 2348
+    "size": 2348,
+    "durationMs": 77000,
+    "durationText": "1:17"
   },
   {
     "id": "VGVsX0plcm9lbi9Ob3J0aF9hbmRfU291dGguc2lk",
@@ -22642,7 +27208,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "North_and_South.sid",
     "path": "sids/Tel_Jeroen/North_and_South.sid",
-    "size": 14462
+    "size": 14462,
+    "durationMs": 127000,
+    "durationText": "2:07"
   },
   {
     "id": "VGVsX0plcm9lbi9Ob3RoaW5nX1dyb25nLnNpZA",
@@ -22651,7 +27219,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Nothing_Wrong.sid",
     "path": "sids/Tel_Jeroen/Nothing_Wrong.sid",
-    "size": 5266
+    "size": 5266,
+    "durationMs": 168000,
+    "durationText": "2:48"
   },
   {
     "id": "VGVsX0plcm9lbi9Pbmx5X1lvdS5zaWQ",
@@ -22660,7 +27230,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Only_You.sid",
     "path": "sids/Tel_Jeroen/Only_You.sid",
-    "size": 23678
+    "size": 23678,
+    "durationMs": 62000,
+    "durationText": "1:02"
   },
   {
     "id": "VGVsX0plcm9lbi9Pcmlvbl9JbnRyby5zaWQ",
@@ -22669,7 +27241,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Orion_Intro.sid",
     "path": "sids/Tel_Jeroen/Orion_Intro.sid",
-    "size": 2765
+    "size": 2765,
+    "durationMs": 70000,
+    "durationText": "1:10"
   },
   {
     "id": "VGVsX0plcm9lbi9PdXRydW5fRXVyb3BhLnNpZA",
@@ -22678,7 +27252,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Outrun_Europa.sid",
     "path": "sids/Tel_Jeroen/Outrun_Europa.sid",
-    "size": 50042
+    "size": 50042,
+    "durationMs": 173000,
+    "durationText": "2:53"
   },
   {
     "id": "VGVsX0plcm9lbi9PdXRydW5fRXVyb3BlX2xldmVscy5zaWQ",
@@ -22687,7 +27263,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Outrun_Europe_levels.sid",
     "path": "sids/Tel_Jeroen/Outrun_Europe_levels.sid",
-    "size": 5687
+    "size": 5687,
+    "durationMs": 209000,
+    "durationText": "3:29"
   },
   {
     "id": "VGVsX0plcm9lbi9Pd25fQ29tcGFueS5zaWQ",
@@ -22696,7 +27274,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Own_Company.sid",
     "path": "sids/Tel_Jeroen/Own_Company.sid",
-    "size": 11385
+    "size": 11385,
+    "durationMs": 76000,
+    "durationText": "1:16"
   },
   {
     "id": "VGVsX0plcm9lbi9QYWxfc2luZV9ob2VuZXJfdHVuZV8xLnNpZA",
@@ -22705,7 +27285,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Pal_sine_hoener_tune_1.sid",
     "path": "sids/Tel_Jeroen/Pal_sine_hoener_tune_1.sid",
-    "size": 3972
+    "size": 3972,
+    "durationMs": 90018,
+    "durationText": "1:30.018"
   },
   {
     "id": "VGVsX0plcm9lbi9Qb3NlaWRvbl9QbGFuZXRfRWxldmVuLnNpZA",
@@ -22714,7 +27296,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Poseidon_Planet_Eleven.sid",
     "path": "sids/Tel_Jeroen/Poseidon_Planet_Eleven.sid",
-    "size": 3966
+    "size": 3966,
+    "durationMs": 189000,
+    "durationText": "3:09"
   },
   {
     "id": "VGVsX0plcm9lbi9Qb3dlcmhvdXNlLnNpZA",
@@ -22723,7 +27307,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Powerhouse.sid",
     "path": "sids/Tel_Jeroen/Powerhouse.sid",
-    "size": 7047
+    "size": 7047,
+    "durationMs": 255000,
+    "durationText": "4:15"
   },
   {
     "id": "VGVsX0plcm9lbi9SZWRfTW9vbi5zaWQ",
@@ -22732,7 +27318,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Red_Moon.sid",
     "path": "sids/Tel_Jeroen/Red_Moon.sid",
-    "size": 23645
+    "size": 23645,
+    "durationMs": 128000,
+    "durationText": "2:08"
   },
   {
     "id": "VGVsX0plcm9lbi9SZWdnYWVfRXhhbXBsZS5zaWQ",
@@ -22741,7 +27329,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Reggae_Example.sid",
     "path": "sids/Tel_Jeroen/Reggae_Example.sid",
-    "size": 2614
+    "size": 2614,
+    "durationMs": 35000,
+    "durationText": "0:35"
   },
   {
     "id": "VGVsX0plcm9lbi9SZW1hcmtfSW50cm8uc2lk",
@@ -22750,7 +27340,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Remark_Intro.sid",
     "path": "sids/Tel_Jeroen/Remark_Intro.sid",
-    "size": 1756
+    "size": 1756,
+    "durationMs": 131000,
+    "durationText": "2:11"
   },
   {
     "id": "VGVsX0plcm9lbi9SZW1hcmtfTXVzaWMuc2lk",
@@ -22759,7 +27351,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Remark_Music.sid",
     "path": "sids/Tel_Jeroen/Remark_Music.sid",
-    "size": 2685
+    "size": 2685,
+    "durationMs": 47881,
+    "durationText": "0:47.881"
   },
   {
     "id": "VGVsX0plcm9lbi9SZXN0YXJ0LnNpZA",
@@ -22768,7 +27362,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Restart.sid",
     "path": "sids/Tel_Jeroen/Restart.sid",
-    "size": 3753
+    "size": 3753,
+    "durationMs": 289400,
+    "durationText": "4:49.4"
   },
   {
     "id": "VGVsX0plcm9lbi9Sb3R0ZW5fUmVtYWtlLnNpZA",
@@ -22777,7 +27373,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Rotten_Remake.sid",
     "path": "sids/Tel_Jeroen/Rotten_Remake.sid",
-    "size": 2590
+    "size": 2590,
+    "durationMs": 55000,
+    "durationText": "0:55"
   },
   {
     "id": "VGVsX0plcm9lbi9SdWJpY29uLnNpZA",
@@ -22786,7 +27384,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Rubicon.sid",
     "path": "sids/Tel_Jeroen/Rubicon.sid",
-    "size": 35454
+    "size": 35454,
+    "durationMs": 245000,
+    "durationText": "4:05"
   },
   {
     "id": "VGVsX0plcm9lbi9SdWJpY29uX0xvYWRfMS5zaWQ",
@@ -22795,7 +27395,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Rubicon_Load_1.sid",
     "path": "sids/Tel_Jeroen/Rubicon_Load_1.sid",
-    "size": 2537
+    "size": 2537,
+    "durationMs": 169000,
+    "durationText": "2:49"
   },
   {
     "id": "VGVsX0plcm9lbi9SdWJpY29uX0xvYWRfMi5zaWQ",
@@ -22804,7 +27406,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Rubicon_Load_2.sid",
     "path": "sids/Tel_Jeroen/Rubicon_Load_2.sid",
-    "size": 2437
+    "size": 2437,
+    "durationMs": 47000,
+    "durationText": "0:47"
   },
   {
     "id": "VGVsX0plcm9lbi9TLUV4cHJlc3Muc2lk",
@@ -22813,7 +27417,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "S-Express.sid",
     "path": "sids/Tel_Jeroen/S-Express.sid",
-    "size": 1993
+    "size": 1993,
+    "durationMs": 107272,
+    "durationText": "1:47.272"
   },
   {
     "id": "VGVsX0plcm9lbi9TYW1wbGUuc2lk",
@@ -22822,7 +27428,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Sample.sid",
     "path": "sids/Tel_Jeroen/Sample.sid",
-    "size": 3585
+    "size": 3585,
+    "durationMs": 72000,
+    "durationText": "1:12"
   },
   {
     "id": "VGVsX0plcm9lbi9TY291dC5zaWQ",
@@ -22831,7 +27439,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Scout.sid",
     "path": "sids/Tel_Jeroen/Scout.sid",
-    "size": 4147
+    "size": 4147,
+    "durationMs": 246000,
+    "durationText": "4:06"
   },
   {
     "id": "VGVsX0plcm9lbi9TY3JvbGxfSXRfVXAuc2lk",
@@ -22840,7 +27450,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Scroll_It_Up.sid",
     "path": "sids/Tel_Jeroen/Scroll_It_Up.sid",
-    "size": 11346
+    "size": 11346,
+    "durationMs": 181000,
+    "durationText": "3:01"
   },
   {
     "id": "VGVsX0plcm9lbi9TaGVfU2FpZF9CZV9Mb25nLnNpZA",
@@ -22849,7 +27461,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "She_Said_Be_Long.sid",
     "path": "sids/Tel_Jeroen/She_Said_Be_Long.sid",
-    "size": 4611
+    "size": 4611,
+    "durationMs": 181000,
+    "durationText": "3:01"
   },
   {
     "id": "VGVsX0plcm9lbi9TaWRfS2lkei5zaWQ",
@@ -22858,7 +27472,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Sid_Kidz.sid",
     "path": "sids/Tel_Jeroen/Sid_Kidz.sid",
-    "size": 4898
+    "size": 4898,
+    "durationMs": 115000,
+    "durationText": "1:55"
   },
   {
     "id": "VGVsX0plcm9lbi9TbWFzaF9UVi5zaWQ",
@@ -22867,7 +27483,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Smash_TV.sid",
     "path": "sids/Tel_Jeroen/Smash_TV.sid",
-    "size": 8879
+    "size": 8879,
+    "durationMs": 111000,
+    "durationText": "1:51"
   },
   {
     "id": "VGVsX0plcm9lbi9Tb21ldGhpbmdfR3JlZW4uc2lk",
@@ -22876,7 +27494,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Something_Green.sid",
     "path": "sids/Tel_Jeroen/Something_Green.sid",
-    "size": 8009
+    "size": 8009,
+    "durationMs": 144000,
+    "durationText": "2:24"
   },
   {
     "id": "VGVsX0plcm9lbi9Tb21ldGltZXMuc2lk",
@@ -22885,7 +27505,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Sometimes.sid",
     "path": "sids/Tel_Jeroen/Sometimes.sid",
-    "size": 23673
+    "size": 23673,
+    "durationMs": 207000,
+    "durationText": "3:27"
   },
   {
     "id": "VGVsX0plcm9lbi9Tb25pY19Tb3VsLnNpZA",
@@ -22894,7 +27516,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Sonic_Soul.sid",
     "path": "sids/Tel_Jeroen/Sonic_Soul.sid",
-    "size": 5433
+    "size": 5433,
+    "durationMs": 158000,
+    "durationText": "2:38"
   },
   {
     "id": "VGVsX0plcm9lbi9Tb3VuZF9EZW1vXzEuc2lk",
@@ -22903,7 +27527,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Sound_Demo_1.sid",
     "path": "sids/Tel_Jeroen/Sound_Demo_1.sid",
-    "size": 11364
+    "size": 11364,
+    "durationMs": 123000,
+    "durationText": "2:03"
   },
   {
     "id": "VGVsX0plcm9lbi9Tb3VuZF9EZW1vXzIuc2lk",
@@ -22912,7 +27538,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Sound_Demo_2.sid",
     "path": "sids/Tel_Jeroen/Sound_Demo_2.sid",
-    "size": 11364
+    "size": 11364,
+    "durationMs": 138000,
+    "durationText": "2:18"
   },
   {
     "id": "VGVsX0plcm9lbi9TdGFyYmFsbC5zaWQ",
@@ -22921,7 +27549,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Starball.sid",
     "path": "sids/Tel_Jeroen/Starball.sid",
-    "size": 3534
+    "size": 3534,
+    "durationMs": 139000,
+    "durationText": "2:19"
   },
   {
     "id": "VGVsX0plcm9lbi9TdWJ1cmJpYS5zaWQ",
@@ -22930,7 +27560,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Suburbia.sid",
     "path": "sids/Tel_Jeroen/Suburbia.sid",
-    "size": 23672
+    "size": 23672,
+    "durationMs": 92000,
+    "durationText": "1:32"
   },
   {
     "id": "VGVsX0plcm9lbi9TdXBlcl9DdXBfRm9vdGJhbGwuc2lk",
@@ -22939,7 +27571,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Super_Cup_Football.sid",
     "path": "sids/Tel_Jeroen/Super_Cup_Football.sid",
-    "size": 5054
+    "size": 5054,
+    "durationMs": 135000,
+    "durationText": "2:15"
   },
   {
     "id": "VGVsX0plcm9lbi9TdXBlcl9Nb25hY29fR3JhbmRfUHJpeC5zaWQ",
@@ -22948,7 +27582,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Super_Monaco_Grand_Prix.sid",
     "path": "sids/Tel_Jeroen/Super_Monaco_Grand_Prix.sid",
-    "size": 6940
+    "size": 6940,
+    "durationMs": 183703,
+    "durationText": "3:03.703"
   },
   {
     "id": "VGVsX0plcm9lbi9TeW5kcm9tZS5zaWQ",
@@ -22957,7 +27593,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Syndrome.sid",
     "path": "sids/Tel_Jeroen/Syndrome.sid",
-    "size": 23673
+    "size": 23673,
+    "durationMs": 146000,
+    "durationText": "2:26"
   },
   {
     "id": "VGVsX0plcm9lbi9UZWVuYWdlX011dGFudF9IZXJvX1R1cnRsZXMuc2lk",
@@ -22966,7 +27604,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Teenage_Mutant_Hero_Turtles.sid",
     "path": "sids/Tel_Jeroen/Teenage_Mutant_Hero_Turtles.sid",
-    "size": 14551
+    "size": 14551,
+    "durationMs": 11492,
+    "durationText": "0:11.492"
   },
   {
     "id": "VGVsX0plcm9lbi9UZWxfMS5zaWQ",
@@ -22975,7 +27615,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Tel_1.sid",
     "path": "sids/Tel_Jeroen/Tel_1.sid",
-    "size": 1923
+    "size": 1923,
+    "durationMs": 31000,
+    "durationText": "0:31"
   },
   {
     "id": "VGVsX0plcm9lbi9UaGF0c19wcmV2aWV3LnNpZA",
@@ -22984,7 +27626,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Thats_preview.sid",
     "path": "sids/Tel_Jeroen/Thats_preview.sid",
-    "size": 3454
+    "size": 3454,
+    "durationMs": 39000,
+    "durationText": "0:39"
   },
   {
     "id": "VGVsX0plcm9lbi9UaGF0c190aGVfV2F5X0l0X0lzX21haW4uc2lk",
@@ -22993,7 +27637,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Thats_the_Way_It_Is_main.sid",
     "path": "sids/Tel_Jeroen/Thats_the_Way_It_Is_main.sid",
-    "size": 8074
+    "size": 8074,
+    "durationMs": 427150,
+    "durationText": "7:07.15"
   },
   {
     "id": "VGVsX0plcm9lbi9UaW50aW5fb25fdGhlX01vb24uc2lk",
@@ -23002,7 +27648,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Tintin_on_the_Moon.sid",
     "path": "sids/Tel_Jeroen/Tintin_on_the_Moon.sid",
-    "size": 4202
+    "size": 4202,
+    "durationMs": 231000,
+    "durationText": "3:51"
   },
   {
     "id": "VGVsX0plcm9lbi9Ub21jYXQuc2lk",
@@ -23011,7 +27659,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Tomcat.sid",
     "path": "sids/Tel_Jeroen/Tomcat.sid",
-    "size": 5474
+    "size": 5474,
+    "durationMs": 153000,
+    "durationText": "2:33"
   },
   {
     "id": "VGVsX0plcm9lbi9Ub3BfVHJ1Y2tlci5zaWQ",
@@ -23020,7 +27670,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Top_Trucker.sid",
     "path": "sids/Tel_Jeroen/Top_Trucker.sid",
-    "size": 4942
+    "size": 4942,
+    "durationMs": 169000,
+    "durationText": "2:49"
   },
   {
     "id": "VGVsX0plcm9lbi9UcmF1bWF0aWMuc2lk",
@@ -23029,7 +27681,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Traumatic.sid",
     "path": "sids/Tel_Jeroen/Traumatic.sid",
-    "size": 3856
+    "size": 3856,
+    "durationMs": 138000,
+    "durationText": "2:18"
   },
   {
     "id": "VGVsX0plcm9lbi9Ucml2aWFfVGhlX1VsdGltYXRlX0NoYWxsZW5nZS5zaWQ",
@@ -23038,7 +27692,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Trivia_The_Ultimate_Challenge.sid",
     "path": "sids/Tel_Jeroen/Trivia_The_Ultimate_Challenge.sid",
-    "size": 4956
+    "size": 4956,
+    "durationMs": 148000,
+    "durationText": "2:28"
   },
   {
     "id": "VGVsX0plcm9lbi9UcnlpbmdfT3V0LnNpZA",
@@ -23047,7 +27703,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Trying_Out.sid",
     "path": "sids/Tel_Jeroen/Trying_Out.sid",
-    "size": 2345
+    "size": 2345,
+    "durationMs": 47000,
+    "durationText": "0:47"
   },
   {
     "id": "VGVsX0plcm9lbi9UcnlpbmdfT3V0XzIuc2lk",
@@ -23056,7 +27714,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Trying_Out_2.sid",
     "path": "sids/Tel_Jeroen/Trying_Out_2.sid",
-    "size": 2319
+    "size": 2319,
+    "durationMs": 103000,
+    "durationText": "1:43"
   },
   {
     "id": "VGVsX0plcm9lbi9UcnlpbmdfT3V0XzJfdjEuc2lk",
@@ -23065,7 +27725,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Trying_Out_2_v1.sid",
     "path": "sids/Tel_Jeroen/Trying_Out_2_v1.sid",
-    "size": 2220
+    "size": 2220,
+    "durationMs": 62000,
+    "durationText": "1:02"
   },
   {
     "id": "VGVsX0plcm9lbi9UcnlpbmdfT3V0XzMuc2lk",
@@ -23074,7 +27736,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Trying_Out_3.sid",
     "path": "sids/Tel_Jeroen/Trying_Out_3.sid",
-    "size": 2222
+    "size": 2222,
+    "durationMs": 52000,
+    "durationText": "0:52"
   },
   {
     "id": "VGVsX0plcm9lbi9UdXJyaWNhbl9pbnRyb19zcGVlY2guc2lk",
@@ -23083,7 +27747,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Turrican_intro_speech.sid",
     "path": "sids/Tel_Jeroen/Turrican_intro_speech.sid",
-    "size": 47116
+    "size": 47116,
+    "durationMs": 17000,
+    "durationText": "0:17"
   },
   {
     "id": "VGVsX0plcm9lbi9VYmktU291bmQuc2lk",
@@ -23092,7 +27758,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Ubi-Sound.sid",
     "path": "sids/Tel_Jeroen/Ubi-Sound.sid",
-    "size": 5049
+    "size": 5049,
+    "durationMs": 238000,
+    "durationText": "3:58"
   },
   {
     "id": "VGVsX0plcm9lbi9VbnVzZWRfMS5zaWQ",
@@ -23101,7 +27769,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Unused_1.sid",
     "path": "sids/Tel_Jeroen/Unused_1.sid",
-    "size": 3710
+    "size": 3710,
+    "durationMs": 70000,
+    "durationText": "1:10"
   },
   {
     "id": "VGVsX0plcm9lbi9WaWN0cml4LnNpZA",
@@ -23110,7 +27780,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Victrix.sid",
     "path": "sids/Tel_Jeroen/Victrix.sid",
-    "size": 3786
+    "size": 3786,
+    "durationMs": 77000,
+    "durationText": "1:17"
   },
   {
     "id": "VGVsX0plcm9lbi9WaW9vbF9UZWxsby5zaWQ",
@@ -23119,7 +27791,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Viool_Tello.sid",
     "path": "sids/Tel_Jeroen/Viool_Tello.sid",
-    "size": 3431
+    "size": 3431,
+    "durationMs": 31000,
+    "durationText": "0:31"
   },
   {
     "id": "VGVsX0plcm9lbi9WaXouc2lk",
@@ -23128,7 +27802,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Viz.sid",
     "path": "sids/Tel_Jeroen/Viz.sid",
-    "size": 28286
+    "size": 28286,
+    "durationMs": 137200,
+    "durationText": "2:17.2"
   },
   {
     "id": "VGVsX0plcm9lbi9XZWVtb2VkLnNpZA",
@@ -23137,7 +27813,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Weemoed.sid",
     "path": "sids/Tel_Jeroen/Weemoed.sid",
-    "size": 2570
+    "size": 2570,
+    "durationMs": 42000,
+    "durationText": "0:42"
   },
   {
     "id": "VGVsX0plcm9lbi9XaXp6eS5zaWQ",
@@ -23146,7 +27824,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Wizzy.sid",
     "path": "sids/Tel_Jeroen/Wizzy.sid",
-    "size": 3177
+    "size": 3177,
+    "durationMs": 82000,
+    "durationText": "1:22"
   },
   {
     "id": "VGVsX0plcm9lbi9aeW5vbl9aYWsuc2lk",
@@ -23155,7 +27835,9 @@ window.SID_LIBRARY = [
     "composerKey": "Tel_Jeroen",
     "fileName": "Zynon_Zak.sid",
     "path": "sids/Tel_Jeroen/Zynon_Zak.sid",
-    "size": 3566
+    "size": 3566,
+    "durationMs": 188000,
+    "durationText": "3:08"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkLzE4MC5zaWQ",
@@ -23164,7 +27846,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "180.sid",
     "path": "sids/Whittaker_David/180.sid",
-    "size": 8830
+    "size": 8830,
+    "durationMs": 45967,
+    "durationText": "0:45.967"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkLzRfU29jY2VyX1NpbXNfU29jY2VyX1NraWxscy5zaWQ",
@@ -23173,7 +27857,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "4_Soccer_Sims_Soccer_Skills.sid",
     "path": "sids/Whittaker_David/4_Soccer_Sims_Soccer_Skills.sid",
-    "size": 2812
+    "size": 2812,
+    "durationMs": 31000,
+    "durationText": "0:31"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL0FsbF9Qb2ludHNfQnVsbGV0aW4uc2lk",
@@ -23182,7 +27868,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "All_Points_Bulletin.sid",
     "path": "sids/Whittaker_David/All_Points_Bulletin.sid",
-    "size": 4583
+    "size": 4583,
+    "durationMs": 43000,
+    "durationText": "0:43"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL0FsbF9UZXJyYWluX1ZlaGljbGVfU2ltdWxhdG9yLnNpZA",
@@ -23191,7 +27879,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "All_Terrain_Vehicle_Simulator.sid",
     "path": "sids/Whittaker_David/All_Terrain_Vehicle_Simulator.sid",
-    "size": 3501
+    "size": 3501,
+    "durationMs": 188000,
+    "durationText": "3:08"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL0FtYXVyb3RlLnNpZA",
@@ -23200,7 +27890,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Amaurote.sid",
     "path": "sids/Whittaker_David/Amaurote.sid",
-    "size": 3902
+    "size": 3902,
+    "durationMs": 382000,
+    "durationText": "6:22"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL0FyY2FkZV9GbGlnaHRfU2ltdWxhdG9yLnNpZA",
@@ -23209,7 +27901,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Arcade_Flight_Simulator.sid",
     "path": "sids/Whittaker_David/Arcade_Flight_Simulator.sid",
-    "size": 4220
+    "size": 4220,
+    "durationMs": 144000,
+    "durationText": "2:24"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL0FybWFnZWRkb25fTWFuLnNpZA",
@@ -23218,7 +27912,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Armageddon_Man.sid",
     "path": "sids/Whittaker_David/Armageddon_Man.sid",
-    "size": 3690
+    "size": 3690,
+    "durationMs": 139000,
+    "durationText": "2:19"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL0JNWF9TaW11bGF0b3Iuc2lk",
@@ -23227,7 +27923,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "BMX_Simulator.sid",
     "path": "sids/Whittaker_David/BMX_Simulator.sid",
-    "size": 3926
+    "size": 3926,
+    "durationMs": 43000,
+    "durationText": "0:43"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL0JhY2tfdG9fdGhlX0Z1dHVyZV9JSS5zaWQ",
@@ -23236,7 +27934,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Back_to_the_Future_II.sid",
     "path": "sids/Whittaker_David/Back_to_the_Future_II.sid",
-    "size": 22484
+    "size": 22484,
+    "durationMs": 127000,
+    "durationText": "2:07"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL0JhbGxfQ3Jhenkuc2lk",
@@ -23245,7 +27945,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Ball_Crazy.sid",
     "path": "sids/Whittaker_David/Ball_Crazy.sid",
-    "size": 2642
+    "size": 2642,
+    "durationMs": 81000,
+    "durationText": "1:21"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL0JldmVybHlfSGlsbHNfQ29wLnNpZA",
@@ -23254,7 +27956,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Beverly_Hills_Cop.sid",
     "path": "sids/Whittaker_David/Beverly_Hills_Cop.sid",
-    "size": 2784
+    "size": 2784,
+    "durationMs": 132000,
+    "durationText": "2:12"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL0JleW9uZF90aGVfSWNlX1BhbGFjZS5zaWQ",
@@ -23263,7 +27967,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Beyond_the_Ice_Palace.sid",
     "path": "sids/Whittaker_David/Beyond_the_Ice_Palace.sid",
-    "size": 4078
+    "size": 4078,
+    "durationMs": 294000,
+    "durationText": "4:54"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL0JsYXplci5zaWQ",
@@ -23272,7 +27978,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Blazer.sid",
     "path": "sids/Whittaker_David/Blazer.sid",
-    "size": 4366
+    "size": 4366,
+    "durationMs": 86000,
+    "durationText": "1:26"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL0JyYXZlU3RhcnIuc2lk",
@@ -23281,7 +27989,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "BraveStarr.sid",
     "path": "sids/Whittaker_David/BraveStarr.sid",
-    "size": 4177
+    "size": 4177,
+    "durationMs": 211000,
+    "durationText": "3:31"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL0J1ZmZhbG9fQmlsbHNfV2lsZF9XZXN0X1Nob3cuc2lk",
@@ -23290,7 +28000,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Buffalo_Bills_Wild_West_Show.sid",
     "path": "sids/Whittaker_David/Buffalo_Bills_Wild_West_Show.sid",
-    "size": 14462
+    "size": 14462,
+    "durationMs": 85000,
+    "durationText": "1:25"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL0NhcHRhaW5fRml6ei5zaWQ",
@@ -23299,7 +28011,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Captain_Fizz.sid",
     "path": "sids/Whittaker_David/Captain_Fizz.sid",
-    "size": 3326
+    "size": 3326,
+    "durationMs": 190000,
+    "durationText": "3:10"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL0NoZWFwX1NrYXRlLnNpZA",
@@ -23308,7 +28022,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Cheap_Skate.sid",
     "path": "sids/Whittaker_David/Cheap_Skate.sid",
-    "size": 3180
+    "size": 3180,
+    "durationMs": 77000,
+    "durationText": "1:17"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL0NoaWNrZW5fRmFybS5zaWQ",
@@ -23317,7 +28033,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Chicken_Farm.sid",
     "path": "sids/Whittaker_David/Chicken_Farm.sid",
-    "size": 3940
+    "size": 3940,
+    "durationMs": 95000,
+    "durationText": "1:35"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL0Nvc21vbnV0LnNpZA",
@@ -23326,7 +28044,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Cosmonut.sid",
     "path": "sids/Whittaker_David/Cosmonut.sid",
-    "size": 2642
+    "size": 2642,
+    "durationMs": 77000,
+    "durationText": "1:17"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL0RhcmtfQ2FzdGxlLnNpZA",
@@ -23335,7 +28055,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Dark_Castle.sid",
     "path": "sids/Whittaker_David/Dark_Castle.sid",
-    "size": 24692
+    "size": 24692,
+    "durationMs": 181000,
+    "durationText": "3:01"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL0RhdmlkX011c2ljX0RlbW9fMi5zaWQ",
@@ -23344,7 +28066,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "David_Music_Demo_2.sid",
     "path": "sids/Whittaker_David/David_Music_Demo_2.sid",
-    "size": 1720
+    "size": 1720,
+    "durationMs": 38000,
+    "durationText": "0:38"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL0RhdmlkX011c2ljX0RlbW9fMy5zaWQ",
@@ -23353,7 +28077,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "David_Music_Demo_3.sid",
     "path": "sids/Whittaker_David/David_Music_Demo_3.sid",
-    "size": 1719
+    "size": 1719,
+    "durationMs": 31000,
+    "durationText": "0:31"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL0RlZmNvbS5zaWQ",
@@ -23362,7 +28088,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Defcom.sid",
     "path": "sids/Whittaker_David/Defcom.sid",
-    "size": 3847
+    "size": 3847,
+    "durationMs": 106000,
+    "durationText": "1:46"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL0Rpenp5LnNpZA",
@@ -23371,7 +28099,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Dizzy.sid",
     "path": "sids/Whittaker_David/Dizzy.sid",
-    "size": 3699
+    "size": 3699,
+    "durationMs": 73000,
+    "durationText": "1:13"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL0R5bmFtaWNfRHVvLnNpZA",
@@ -23380,7 +28110,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Dynamic_Duo.sid",
     "path": "sids/Whittaker_David/Dynamic_Duo.sid",
-    "size": 3774
+    "size": 3774,
+    "durationMs": 121000,
+    "durationText": "2:01"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL0VsZWt0cmFfR2xpZGUuc2lk",
@@ -23389,7 +28121,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Elektra_Glide.sid",
     "path": "sids/Whittaker_David/Elektra_Glide.sid",
-    "size": 3966
+    "size": 3966,
+    "durationMs": 135000,
+    "durationText": "2:15"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL0VsZXZhdG9yX0FjdGlvbi5zaWQ",
@@ -23398,7 +28132,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Elevator_Action.sid",
     "path": "sids/Whittaker_David/Elevator_Action.sid",
-    "size": 3114
+    "size": 3114,
+    "durationMs": 72000,
+    "durationText": "1:12"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL0VtbHluX0h1Z2hlc19BcmNhZGVfUXVpei5zaWQ",
@@ -23407,7 +28143,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Emlyn_Hughes_Arcade_Quiz.sid",
     "path": "sids/Whittaker_David/Emlyn_Hughes_Arcade_Quiz.sid",
-    "size": 4719
+    "size": 4719,
+    "durationMs": 78000,
+    "durationText": "1:18"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL0VuZHVyb19SYWNlci5zaWQ",
@@ -23416,7 +28154,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Enduro_Racer.sid",
     "path": "sids/Whittaker_David/Enduro_Racer.sid",
-    "size": 3833
+    "size": 3833,
+    "durationMs": 17000,
+    "durationText": "0:17"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL0V4b3JjaXN0LnNpZA",
@@ -23425,7 +28165,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Exorcist.sid",
     "path": "sids/Whittaker_David/Exorcist.sid",
-    "size": 1597
+    "size": 1597,
+    "durationMs": 42700,
+    "durationText": "0:42.7"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL0V4dGVybWluYXRvci5zaWQ",
@@ -23434,7 +28176,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Exterminator.sid",
     "path": "sids/Whittaker_David/Exterminator.sid",
-    "size": 4158
+    "size": 4158,
+    "durationMs": 19000,
+    "durationText": "0:19"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL0ZldWQuc2lk",
@@ -23443,7 +28187,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Feud.sid",
     "path": "sids/Whittaker_David/Feud.sid",
-    "size": 3982
+    "size": 3982,
+    "durationMs": 93000,
+    "durationText": "1:33"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL0dhenphXzIuc2lk",
@@ -23452,7 +28198,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Gazza_2.sid",
     "path": "sids/Whittaker_David/Gazza_2.sid",
-    "size": 4478
+    "size": 4478,
+    "durationMs": 69000,
+    "durationText": "1:09"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL0dob3N0YnVzdGVyc19JSS5zaWQ",
@@ -23461,7 +28209,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Ghostbusters_II.sid",
     "path": "sids/Whittaker_David/Ghostbusters_II.sid",
-    "size": 7269
+    "size": 7269,
+    "durationMs": 71000,
+    "durationText": "1:11"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL0dyYW5kX1ByaXhfU2ltdWxhdG9yLnNpZA",
@@ -23470,7 +28220,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Grand_Prix_Simulator.sid",
     "path": "sids/Whittaker_David/Grand_Prix_Simulator.sid",
-    "size": 8926
+    "size": 8926,
+    "durationMs": 103000,
+    "durationText": "1:43"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL0dyYW5nZV9IaWxsLnNpZA",
@@ -23479,7 +28231,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Grange_Hill.sid",
     "path": "sids/Whittaker_David/Grange_Hill.sid",
-    "size": 3080
+    "size": 3080,
+    "durationMs": 123000,
+    "durationText": "2:03"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL0hlbHRlcl9Ta2VsdGVyLnNpZA",
@@ -23488,7 +28242,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Helter_Skelter.sid",
     "path": "sids/Whittaker_David/Helter_Skelter.sid",
-    "size": 3836
+    "size": 3836,
+    "durationMs": 3000,
+    "durationText": "0:03"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL0hvY3VzX0ZvY3VzLnNpZA",
@@ -23497,7 +28253,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Hocus_Focus.sid",
     "path": "sids/Whittaker_David/Hocus_Focus.sid",
-    "size": 4359
+    "size": 4359,
+    "durationMs": 26000,
+    "durationText": "0:26"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL0h1bXBocmV5LnNpZA",
@@ -23506,7 +28264,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Humphrey.sid",
     "path": "sids/Whittaker_David/Humphrey.sid",
-    "size": 610
+    "size": 610,
+    "durationMs": 8000,
+    "durationText": "0:08"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL0h5cGVyYm93bC5zaWQ",
@@ -23515,7 +28275,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Hyperbowl.sid",
     "path": "sids/Whittaker_David/Hyperbowl.sid",
-    "size": 2751
+    "size": 2751,
+    "durationMs": 119000,
+    "durationText": "1:59"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL0lPLnNpZA",
@@ -23524,7 +28286,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "IO.sid",
     "path": "sids/Whittaker_David/IO.sid",
-    "size": 3926
+    "size": 3926,
+    "durationMs": 141000,
+    "durationText": "2:21"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL0luZmVjdGlvbi5zaWQ",
@@ -23533,7 +28297,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Infection.sid",
     "path": "sids/Whittaker_David/Infection.sid",
-    "size": 3208
+    "size": 3208,
+    "durationMs": 81800,
+    "durationText": "1:21.8"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL0lyb25fSG9yc2Uuc2lk",
@@ -23542,7 +28308,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Iron_Horse.sid",
     "path": "sids/Whittaker_David/Iron_Horse.sid",
-    "size": 2672
+    "size": 2672,
+    "durationMs": 221000,
+    "durationText": "3:41"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL0lzbGFuZF9vZl9Ecl9EZXN0cnVjdG8uc2lk",
@@ -23551,7 +28319,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Island_of_Dr_Destructo.sid",
     "path": "sids/Whittaker_David/Island_of_Dr_Destructo.sid",
-    "size": 3129
+    "size": 3129,
+    "durationMs": 148000,
+    "durationText": "2:28"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL0phaWxfQnJlYWsuc2lk",
@@ -23560,7 +28330,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Jail_Break.sid",
     "path": "sids/Whittaker_David/Jail_Break.sid",
-    "size": 15283
+    "size": 15283,
+    "durationMs": 108800,
+    "durationText": "1:48.8"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL0tuaWdodF9HYW1lcy5zaWQ",
@@ -23569,7 +28341,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Knight_Games.sid",
     "path": "sids/Whittaker_David/Knight_Games.sid",
-    "size": 19380
+    "size": 19380,
+    "durationMs": 21000,
+    "durationText": "0:21"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL0tuaWdodF9UeW1lLnNpZA",
@@ -23578,7 +28352,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Knight_Tyme.sid",
     "path": "sids/Whittaker_David/Knight_Tyme.sid",
-    "size": 3597
+    "size": 3597,
+    "durationMs": 213000,
+    "durationText": "3:33"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL0xhc3RfTWlzc2lvbi5zaWQ",
@@ -23587,7 +28363,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Last_Mission.sid",
     "path": "sids/Whittaker_David/Last_Mission.sid",
-    "size": 3254
+    "size": 3254,
+    "durationMs": 87000,
+    "durationText": "1:27"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL0xhemVyLUZvcmNlLnNpZA",
@@ -23596,7 +28374,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Lazer-Force.sid",
     "path": "sids/Whittaker_David/Lazer-Force.sid",
-    "size": 2725
+    "size": 2725,
+    "durationMs": 262000,
+    "durationText": "4:22"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL0xhenlfSm9uZXMuc2lk",
@@ -23605,7 +28385,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Lazy_Jones.sid",
     "path": "sids/Whittaker_David/Lazy_Jones.sid",
-    "size": 3454
+    "size": 3454,
+    "durationMs": 12802,
+    "durationText": "0:12.802"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL0xldmlhdGhhbi5zaWQ",
@@ -23614,7 +28396,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Leviathan.sid",
     "path": "sids/Whittaker_David/Leviathan.sid",
-    "size": 3230
+    "size": 3230,
+    "durationMs": 103000,
+    "durationText": "1:43"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL0xpY2VuY2VfdG9fS2lsbC5zaWQ",
@@ -23623,7 +28407,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Licence_to_Kill.sid",
     "path": "sids/Whittaker_David/Licence_to_Kill.sid",
-    "size": 4222
+    "size": 4222,
+    "durationMs": 126000,
+    "durationText": "2:06"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL0xpdHRsZV9JY2FydXMuc2lk",
@@ -23632,7 +28418,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Little_Icarus.sid",
     "path": "sids/Whittaker_David/Little_Icarus.sid",
-    "size": 1219
+    "size": 1219,
+    "durationMs": 25000,
+    "durationText": "0:25"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL0xpdmluZ19EYXlsaWdodHMuc2lk",
@@ -23641,7 +28429,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Living_Daylights.sid",
     "path": "sids/Whittaker_David/Living_Daylights.sid",
-    "size": 3405
+    "size": 3405,
+    "durationMs": 26000,
+    "durationText": "0:26"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL0xvbmVfV29sZl90aGVfTWlycm9yX29mX0RlYXRoLnNpZA",
@@ -23650,7 +28440,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Lone_Wolf_the_Mirror_of_Death.sid",
     "path": "sids/Whittaker_David/Lone_Wolf_the_Mirror_of_Death.sid",
-    "size": 4230
+    "size": 4230,
+    "durationMs": 144000,
+    "durationText": "2:24"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL0xvb3B6LnNpZA",
@@ -23659,7 +28451,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Loopz.sid",
     "path": "sids/Whittaker_David/Loopz.sid",
-    "size": 5702
+    "size": 5702,
+    "durationMs": 118000,
+    "durationText": "1:58"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL01heF9IZWFkcm9vbS5zaWQ",
@@ -23668,7 +28462,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Max_Headroom.sid",
     "path": "sids/Whittaker_David/Max_Headroom.sid",
-    "size": 40702
+    "size": 40702,
+    "durationMs": 39000,
+    "durationText": "0:39"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL01heF9IZWFkcm9vbV9wcmV2aWV3LnNpZA",
@@ -23677,7 +28473,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Max_Headroom_preview.sid",
     "path": "sids/Whittaker_David/Max_Headroom_preview.sid",
-    "size": 1466
+    "size": 1466,
+    "durationMs": 30000,
+    "durationText": "0:30"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL01heF9IZWFkcm9vbV9wcmV2aWV3X3YyLnNpZA",
@@ -23686,7 +28484,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Max_Headroom_preview_v2.sid",
     "path": "sids/Whittaker_David/Max_Headroom_preview_v2.sid",
-    "size": 3182
+    "size": 3182,
+    "durationMs": 30645,
+    "durationText": "0:30.645"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL01heWhlbS5zaWQ",
@@ -23695,7 +28495,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Mayhem.sid",
     "path": "sids/Whittaker_David/Mayhem.sid",
-    "size": 520
+    "size": 520,
+    "durationMs": 7000,
+    "durationText": "0:07"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL01lbmFjZS5zaWQ",
@@ -23704,7 +28506,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Menace.sid",
     "path": "sids/Whittaker_David/Menace.sid",
-    "size": 4531
+    "size": 4531,
+    "durationMs": 61300,
+    "durationText": "1:01.3"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL01pYW1pX0RpY2Uuc2lk",
@@ -23713,7 +28517,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Miami_Dice.sid",
     "path": "sids/Whittaker_David/Miami_Dice.sid",
-    "size": 2926
+    "size": 2926,
+    "durationMs": 139000,
+    "durationText": "2:19"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL01pbGtfUmFjZS5zaWQ",
@@ -23722,7 +28528,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Milk_Race.sid",
     "path": "sids/Whittaker_David/Milk_Race.sid",
-    "size": 3520
+    "size": 3520,
+    "durationMs": 90000,
+    "durationText": "1:30"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL01vZGVsLnNpZA",
@@ -23731,7 +28539,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Model.sid",
     "path": "sids/Whittaker_David/Model.sid",
-    "size": 3085
+    "size": 3085,
+    "durationMs": 62000,
+    "durationText": "1:02"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL01yX1dpbm8uc2lk",
@@ -23740,7 +28550,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Mr_Wino.sid",
     "path": "sids/Whittaker_David/Mr_Wino.sid",
-    "size": 3907
+    "size": 3907,
+    "durationMs": 82000,
+    "durationText": "1:22"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL1BhZGRsZV9NYW5pYS5zaWQ",
@@ -23749,7 +28561,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Paddle_Mania.sid",
     "path": "sids/Whittaker_David/Paddle_Mania.sid",
-    "size": 13490
+    "size": 13490,
+    "durationMs": 8224,
+    "durationText": "0:08.224"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL1BhbmRvcmFzX0JveC5zaWQ",
@@ -23758,7 +28572,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Pandoras_Box.sid",
     "path": "sids/Whittaker_David/Pandoras_Box.sid",
-    "size": 634
+    "size": 634,
+    "durationMs": 21000,
+    "durationText": "0:21"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL1BhbnRoZXIuc2lk",
@@ -23767,7 +28583,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Panther.sid",
     "path": "sids/Whittaker_David/Panther.sid",
-    "size": 3454
+    "size": 3454,
+    "durationMs": 175000,
+    "durationText": "2:55"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL1BvbHRlcmdlaXN0LnNpZA",
@@ -23776,7 +28594,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Poltergeist.sid",
     "path": "sids/Whittaker_David/Poltergeist.sid",
-    "size": 3810
+    "size": 3810,
+    "durationMs": 273000,
+    "durationText": "4:33"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL1Byb2Zlc3Npb25hbF9Tbm9va2VyX1NpbXVsYXRvci5zaWQ",
@@ -23785,7 +28605,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Professional_Snooker_Simulator.sid",
     "path": "sids/Whittaker_David/Professional_Snooker_Simulator.sid",
-    "size": 2463
+    "size": 2463,
+    "durationMs": 56000,
+    "durationText": "0:56"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL1B1bmNoeS5zaWQ",
@@ -23794,7 +28616,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Punchy.sid",
     "path": "sids/Whittaker_David/Punchy.sid",
-    "size": 1036
+    "size": 1036,
+    "durationMs": 16000,
+    "durationText": "0:16"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL1F1YXJ0ZXQuc2lk",
@@ -23803,7 +28627,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Quartet.sid",
     "path": "sids/Whittaker_David/Quartet.sid",
-    "size": 3943
+    "size": 3943,
+    "durationMs": 6000,
+    "durationText": "0:06"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL1JhY2VfQWdhaW5zdF9UaW1lLnNpZA",
@@ -23812,7 +28638,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Race_Against_Time.sid",
     "path": "sids/Whittaker_David/Race_Against_Time.sid",
-    "size": 4312
+    "size": 4312,
+    "durationMs": 98000,
+    "durationText": "1:38"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL1JlYWxfR2hvc3RidXN0ZXJzLnNpZA",
@@ -23821,7 +28649,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Real_Ghostbusters.sid",
     "path": "sids/Whittaker_David/Real_Ghostbusters.sid",
-    "size": 4329
+    "size": 4329,
+    "durationMs": 149000,
+    "durationText": "2:29"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL1JlZF9NYXguc2lk",
@@ -23830,7 +28660,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Red_Max.sid",
     "path": "sids/Whittaker_David/Red_Max.sid",
-    "size": 4222
+    "size": 4222,
+    "durationMs": 47000,
+    "durationText": "0:47"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL1JvYWRCbGFzdGVycy5zaWQ",
@@ -23839,7 +28671,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "RoadBlasters.sid",
     "path": "sids/Whittaker_David/RoadBlasters.sid",
-    "size": 5406
+    "size": 5406,
+    "durationMs": 24000,
+    "durationText": "0:24"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL1J5Z2FyLnNpZA",
@@ -23848,7 +28682,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Rygar.sid",
     "path": "sids/Whittaker_David/Rygar.sid",
-    "size": 3833
+    "size": 3833,
+    "durationMs": 41000,
+    "durationText": "0:41"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL1NsYWluZS5zaWQ",
@@ -23857,7 +28693,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Slaine.sid",
     "path": "sids/Whittaker_David/Slaine.sid",
-    "size": 3769
+    "size": 3769,
+    "durationMs": 155000,
+    "durationText": "2:35"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL1NvbG9tb25zX0tleS5zaWQ",
@@ -23866,7 +28704,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Solomons_Key.sid",
     "path": "sids/Whittaker_David/Solomons_Key.sid",
-    "size": 3550
+    "size": 3550,
+    "durationMs": 24000,
+    "durationText": "0:24"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL1NwZWVkYmFsbC5zaWQ",
@@ -23875,7 +28715,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Speedball.sid",
     "path": "sids/Whittaker_David/Speedball.sid",
-    "size": 5118
+    "size": 5118,
+    "durationMs": 150000,
+    "durationText": "2:30"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL1NwaXR0aW5nX0ltYWdlLnNpZA",
@@ -23884,7 +28726,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Spitting_Image.sid",
     "path": "sids/Whittaker_David/Spitting_Image.sid",
-    "size": 4422
+    "size": 4422,
+    "durationMs": 22000,
+    "durationText": "0:22"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL1NwbGl0X1BlcnNvbmFsaXRpZXMuc2lk",
@@ -23893,7 +28737,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Split_Personalities.sid",
     "path": "sids/Whittaker_David/Split_Personalities.sid",
-    "size": 4104
+    "size": 4104,
+    "durationMs": 68000,
+    "durationText": "1:08"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL1Nwb3JlLnNpZA",
@@ -23902,7 +28748,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Spore.sid",
     "path": "sids/Whittaker_David/Spore.sid",
-    "size": 2415
+    "size": 2415,
+    "durationMs": 116000,
+    "durationText": "1:56"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL1Nwb3J0aW5nX1RyaWFuZ2xlcy5zaWQ",
@@ -23911,7 +28759,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Sporting_Triangles.sid",
     "path": "sids/Whittaker_David/Sporting_Triangles.sid",
-    "size": 3346
+    "size": 3346,
+    "durationMs": 91000,
+    "durationText": "1:31"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL1N0YXJfV2Fycy5zaWQ",
@@ -23920,7 +28770,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Star_Wars.sid",
     "path": "sids/Whittaker_David/Star_Wars.sid",
-    "size": 3183
+    "size": 3183,
+    "durationMs": 53000,
+    "durationText": "0:53"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL1N0b3JtLnNpZA",
@@ -23929,7 +28781,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Storm.sid",
     "path": "sids/Whittaker_David/Storm.sid",
-    "size": 2624
+    "size": 2624,
+    "durationMs": 64000,
+    "durationText": "1:04"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL1N0b3JtYnJpbmdlci5zaWQ",
@@ -23938,7 +28792,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Stormbringer.sid",
     "path": "sids/Whittaker_David/Stormbringer.sid",
-    "size": 4052
+    "size": 4052,
+    "durationMs": 260000,
+    "durationText": "4:20"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL1N0cmVldF9TdXJmZXIuc2lk",
@@ -23947,7 +28803,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Street_Surfer.sid",
     "path": "sids/Whittaker_David/Street_Surfer.sid",
-    "size": 4183
+    "size": 4183,
+    "durationMs": 94000,
+    "durationText": "1:34"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL1N1cGVyX0ctTWFuLnNpZA",
@@ -23956,7 +28814,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Super_G-Man.sid",
     "path": "sids/Whittaker_David/Super_G-Man.sid",
-    "size": 3939
+    "size": 3939,
+    "durationMs": 93000,
+    "durationText": "1:33"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL1N1cGVyX1JvYmluX0hvb2Quc2lk",
@@ -23965,7 +28825,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Super_Robin_Hood.sid",
     "path": "sids/Whittaker_David/Super_Robin_Hood.sid",
-    "size": 3949
+    "size": 3949,
+    "durationMs": 111000,
+    "durationText": "1:51"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL1N1cGVyX1N0dW50bWFuLnNpZA",
@@ -23974,7 +28836,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Super_Stuntman.sid",
     "path": "sids/Whittaker_David/Super_Stuntman.sid",
-    "size": 3296
+    "size": 3296,
+    "durationMs": 47000,
+    "durationText": "0:47"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL1RlcnJhX0NvZ25pdGEuc2lk",
@@ -23983,7 +28847,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Terra_Cognita.sid",
     "path": "sids/Whittaker_David/Terra_Cognita.sid",
-    "size": 3520
+    "size": 3520,
+    "durationMs": 55000,
+    "durationText": "0:55"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL1RyYW50b3JfVGhlX0xhc3RfU3Rvcm1fVHJvb3Blci5zaWQ",
@@ -23992,7 +28858,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Trantor_The_Last_Storm_Trooper.sid",
     "path": "sids/Whittaker_David/Trantor_The_Last_Storm_Trooper.sid",
-    "size": 4085
+    "size": 4085,
+    "durationMs": 221000,
+    "durationText": "3:41"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL1RyZWFzdXJlX0lzbGFuZC5zaWQ",
@@ -24001,7 +28869,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Treasure_Island.sid",
     "path": "sids/Whittaker_David/Treasure_Island.sid",
-    "size": 1994
+    "size": 1994,
+    "durationMs": 20000,
+    "durationText": "0:20"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL1RyaXBsZV9Ub3VybmFtZW50LnNpZA",
@@ -24010,7 +28880,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Triple_Tournament.sid",
     "path": "sids/Whittaker_David/Triple_Tournament.sid",
-    "size": 2287
+    "size": 2287,
+    "durationMs": 3000,
+    "durationText": "0:03"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL1R1YmUuc2lk",
@@ -24019,7 +28891,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Tube.sid",
     "path": "sids/Whittaker_David/Tube.sid",
-    "size": 2958
+    "size": 2958,
+    "durationMs": 122000,
+    "durationText": "2:02"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL1ZhbXBpcmUuc2lk",
@@ -24028,7 +28902,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Vampire.sid",
     "path": "sids/Whittaker_David/Vampire.sid",
-    "size": 4209
+    "size": 4209,
+    "durationMs": 108000,
+    "durationText": "1:48"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL1dhcl9DYXJzX0NvbnN0cnVjdGlvbl9LaXQuc2lk",
@@ -24037,7 +28913,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "War_Cars_Construction_Kit.sid",
     "path": "sids/Whittaker_David/War_Cars_Construction_Kit.sid",
-    "size": 3400
+    "size": 3400,
+    "durationMs": 77000,
+    "durationText": "1:17"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL1dpbGxvd19QYXR0ZXJuLnNpZA",
@@ -24046,7 +28924,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Willow_Pattern.sid",
     "path": "sids/Whittaker_David/Willow_Pattern.sid",
-    "size": 1918
+    "size": 1918,
+    "durationMs": 17718,
+    "durationText": "0:17.718"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL1dpemFyZHNfUGV0LnNpZA",
@@ -24055,7 +28935,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Wizards_Pet.sid",
     "path": "sids/Whittaker_David/Wizards_Pet.sid",
-    "size": 3398
+    "size": 3398,
+    "durationMs": 93000,
+    "durationText": "1:33"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL1dyYXRoX29mX3RoZV9EZW1vbi5zaWQ",
@@ -24064,7 +28946,9 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Wrath_of_the_Demon.sid",
     "path": "sids/Whittaker_David/Wrath_of_the_Demon.sid",
-    "size": 20831
+    "size": 20831,
+    "durationMs": 56000,
+    "durationText": "0:56"
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL1p1Yi5zaWQ",
@@ -24073,10 +28957,11 @@ window.SID_LIBRARY = [
     "composerKey": "Whittaker_David",
     "fileName": "Zub.sid",
     "path": "sids/Whittaker_David/Zub.sid",
-    "size": 4226
+    "size": 4226,
+    "durationMs": 8000,
+    "durationText": "0:08"
   }
 ];
-
 window.SID_COMPOSERS = [
   "Anders Andr�en (ATOO)",
   "Antony Crowther",
