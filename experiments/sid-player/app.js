@@ -1,5 +1,5 @@
 (function () {
-  const PLAYER_BASE = "/experiments/sid-player/";
+  const PLAYER_BASE = new URL("./", window.location.href).href;
   const tracks = Array.isArray(window.SID_LIBRARY) ? window.SID_LIBRARY : [];
   const composers = Array.isArray(window.SID_COMPOSERS) ? window.SID_COMPOSERS : [];
   const stilNotes = window.SID_STIL && typeof window.SID_STIL === "object" ? window.SID_STIL : {};
@@ -292,7 +292,7 @@
 
   function currentTrackUrl() {
     if (!state.currentTrack) return "";
-    return new URL(state.currentTrack.path, window.location.origin + PLAYER_BASE).href;
+    return new URL(state.currentTrack.path, PLAYER_BASE).href;
   }
 
   function updateStil(track) {
@@ -462,7 +462,7 @@
     try {
       const player = await ensurePlayer();
       await ScriptNodePlayer.loadMusicFromURL(
-        new URL(track.path, window.location.origin + PLAYER_BASE).href,
+        new URL(track.path, PLAYER_BASE).href,
         { track: -1, timeout: -1, traceSID: false },
         () => {
           throw new Error(`Could not load ${track.fileName}`);
