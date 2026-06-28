@@ -2595,5 +2595,22 @@
     "slot": "miniature-diorama",
     "model": "openai/gpt-image-2",
     "size": "1536x1024"
+  },
+  {
+    "id": "2026-06-28-factual-infographic-factual-infographic-how-a-refrigerator-",
+    "title": "Factual infographic: How a Refrigerator Door Seal Works",
+    "tests": "Tests whether GPT Image 2 can produce a readable, accurate service-bench factual infographic with multiple concrete information layers instead of a generic flat poster.",
+    "prompt": "Create a finished square factual infographic titled \"How a Refrigerator Door Seal Works\" about a real magnetic refrigerator gasket, photographed as a polished service-bench wall chart mounted above an open appliance repair workbench. Include a central cutaway of the refrigerator door edge meeting the cabinet frame, an exploded parts strip for the gasket flap, hollow chamber, magnetic strip, retainer groove, steel contact face, and door liner, a close/open sequence showing compression seal, magnetic pull-in, warm-air leak path, condensation risk, and cleaning-safe reseating, macro windows for dusty gasket folds and moisture beads, a material/physics panel with restrained arrows for magnet attraction, air exchange, and heat/moisture movement, a service context panel with a flashlight, soft cloth, mild soapy water, nonmetal scraper, and paper towel roll, plus a good-contact versus damaged-corner comparison. Use conservative real-world/non-fiction information, clean readable labels, no fake statistics, no brand names, no logos, no QR codes, no dense paragraphs, no prompt-card text.\n\nReusable fill-in-the-blank template: Create a factual detailed infographic about [REAL_WORLD_TOPIC], using conservative real-world information, clean labels, a central cutaway or main mechanism panel, an exploded parts or process sequence, macro/material detail windows, a real-world service/workbench/field context panel, and a scale or comparison vignette. Preserve factual accuracy about [SPECIFIC_MECHANISM_OR_SUBJECT]; avoid invented data, fictional lore, brand logos, private data, fake precise statistics, and overly wordy poster text.\n\nExample substitution: [REAL_WORLD_TOPIC] = magnetic refrigerator gasket; [SPECIFIC_MECHANISM_OR_SUBJECT] = flexible gasket profile, embedded magnet strip, compression seal, warm-air leak path, condensation risk, and cleaning-safe detail.",
+    "image": "images/2026-06-28-factual-infographic-factual-infographic-how-a-refrigerator-.jpg",
+    "date": "2026-06-28",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "factualInfographic": {
+      "topic": "magnetic refrigerator gasket",
+      "description": "Shows how a flexible magnetic refrigerator door gasket compresses against the cabinet, limits warm-air leaks, and can develop condensation risk when dirty, twisted, or poorly seated.",
+      "sourceNote": "Conservative general appliance-engineering knowledge; avoids brand-specific instructions, fake statistics, and unsafe bypass details."
+    }
   }
 ]
