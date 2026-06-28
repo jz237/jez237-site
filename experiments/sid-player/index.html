@@ -1,0 +1,527 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Native SID Player</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #111216;
+      --panel: #191b21;
+      --panel-2: #222630;
+      --line: #343944;
+      --text: #eef2f4;
+      --muted: #a8b1bc;
+      --accent: #7fd6c2;
+      --accent-2: #f2c766;
+      --bad: #ff897d;
+      --good: #8ee38f;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      height: 100%;
+    }
+
+    body {
+      margin: 0;
+      overflow: hidden;
+      background:
+        linear-gradient(180deg, rgba(17, 18, 22, .95), rgba(17, 18, 22, 1)),
+        repeating-linear-gradient(90deg, rgba(127, 214, 194, .05) 0 1px, transparent 1px 18px),
+        var(--bg);
+      color: var(--text);
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    button {
+      min-height: 40px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--panel-2);
+      color: var(--text);
+      cursor: pointer;
+    }
+
+    button:hover,
+    button:focus-visible {
+      border-color: var(--accent);
+      color: var(--accent);
+      outline: none;
+    }
+
+    button.active {
+      border-color: var(--accent);
+      background: rgba(127, 214, 194, .14);
+      color: var(--accent);
+    }
+
+    button.primary {
+      background: #1d3b38;
+      border-color: rgba(127, 214, 194, .7);
+    }
+
+    .app {
+      height: 100dvh;
+      display: grid;
+      grid-template-rows: auto 1fr;
+      padding: 18px;
+      gap: 14px;
+    }
+
+    .topbar {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 16px;
+      align-items: end;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 14px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(1.55rem, 3vw, 2.6rem);
+      line-height: 1;
+      letter-spacing: 0;
+    }
+
+    .summary {
+      color: var(--muted);
+      margin-top: 6px;
+      font-size: .92rem;
+    }
+
+    .stat {
+      min-width: 130px;
+      border: 1px solid var(--line);
+      background: rgba(25, 27, 33, .9);
+      border-radius: 8px;
+      padding: 10px 12px;
+      text-align: right;
+    }
+
+    .stat strong {
+      display: block;
+      color: var(--accent);
+      font-size: 1.65rem;
+      line-height: 1;
+    }
+
+    .stat span {
+      display: block;
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: .78rem;
+      text-transform: uppercase;
+    }
+
+    .workspace {
+      min-height: 0;
+      display: grid;
+      grid-template-columns: minmax(290px, 380px) minmax(0, 1fr);
+      gap: 14px;
+    }
+
+    .library,
+    .deck {
+      min-height: 0;
+      border: 1px solid var(--line);
+      background: rgba(25, 27, 33, .94);
+      border-radius: 8px;
+    }
+
+    .library {
+      display: grid;
+      grid-template-rows: auto 1fr;
+    }
+
+    .searchbar {
+      display: grid;
+      gap: 10px;
+      padding: 12px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    input[type="search"],
+    select {
+      width: 100%;
+      min-height: 40px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: #11151b;
+      color: var(--text);
+      padding: 0 10px;
+      outline: none;
+    }
+
+    input[type="search"]:focus,
+    select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(127, 214, 194, .16);
+    }
+
+    .list-meta {
+      color: var(--muted);
+      font-size: .82rem;
+    }
+
+    .track-list {
+      min-height: 0;
+      overflow: auto;
+      overscroll-behavior: contain;
+      padding: 8px;
+    }
+
+    .track {
+      width: 100%;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 8px;
+      align-items: center;
+      min-height: 54px;
+      margin: 0 0 7px;
+      padding: 8px 10px;
+      text-align: left;
+      background: #171a20;
+    }
+
+    .track-title,
+    .track-composer,
+    .now-title,
+    .now-meta {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .track-title {
+      font-weight: 700;
+    }
+
+    .track-composer {
+      margin-top: 2px;
+      color: var(--muted);
+      font-size: .82rem;
+    }
+
+    .track-size {
+      color: var(--accent-2);
+      font-size: .76rem;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .track.active {
+      border-color: var(--accent);
+      background: rgba(127, 214, 194, .12);
+    }
+
+    .deck {
+      min-width: 0;
+      display: grid;
+      grid-template-rows: auto auto 1fr auto;
+      padding: 16px;
+      gap: 16px;
+      overflow: hidden;
+    }
+
+    .now {
+      min-width: 0;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 14px;
+      align-items: start;
+    }
+
+    .now-title {
+      margin: 0;
+      font-size: clamp(1.35rem, 3vw, 2.45rem);
+      line-height: 1.05;
+      letter-spacing: 0;
+    }
+
+    .now-meta {
+      margin-top: 7px;
+      color: var(--muted);
+    }
+
+    .status {
+      min-width: 122px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 8px 10px;
+      color: var(--muted);
+      text-align: right;
+      font-size: .85rem;
+    }
+
+    .status.ready {
+      color: var(--good);
+      border-color: rgba(142, 227, 143, .45);
+    }
+
+    .status.error {
+      color: var(--bad);
+      border-color: rgba(255, 137, 125, .5);
+    }
+
+    .controls {
+      display: grid;
+      gap: 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #14171d;
+      padding: 14px;
+    }
+
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(72px, 1fr));
+      gap: 8px;
+    }
+
+    .progress-row,
+    .volume-row {
+      display: grid;
+      grid-template-columns: 54px minmax(0, 1fr) 54px;
+      gap: 10px;
+      align-items: center;
+      color: var(--muted);
+      font-size: .84rem;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .volume-row {
+      grid-template-columns: 64px minmax(0, 1fr) 48px;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--accent);
+    }
+
+    .scope {
+      min-height: 0;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background:
+        linear-gradient(180deg, rgba(127, 214, 194, .06), transparent),
+        #101319;
+      overflow: hidden;
+    }
+
+    .scope-grid {
+      width: min(620px, 86%);
+      height: min(260px, 55%);
+      display: grid;
+      grid-template-columns: repeat(32, 1fr);
+      gap: 5px;
+      align-items: end;
+    }
+
+    .bar {
+      min-height: 8%;
+      background: linear-gradient(180deg, var(--accent-2), var(--accent));
+      border-radius: 2px 2px 0 0;
+      opacity: .42;
+      transform-origin: bottom;
+    }
+
+    .playing .bar {
+      animation: pulse 900ms ease-in-out infinite alternate;
+      opacity: .88;
+    }
+
+    .bar:nth-child(3n) { animation-duration: 720ms; }
+    .bar:nth-child(4n) { animation-duration: 1040ms; }
+    .bar:nth-child(5n) { animation-duration: 620ms; }
+
+    @keyframes pulse {
+      from { transform: scaleY(.24); }
+      to { transform: scaleY(1); }
+    }
+
+    footer {
+      color: var(--muted);
+      font-size: .78rem;
+      line-height: 1.4;
+    }
+
+    footer a {
+      color: var(--accent);
+    }
+
+    @media (max-width: 820px) {
+      body {
+        overflow: auto;
+      }
+
+      .app {
+        height: auto;
+        min-height: 100dvh;
+        padding: 12px;
+        gap: 10px;
+      }
+
+      .topbar,
+      .workspace,
+      .now {
+        grid-template-columns: 1fr;
+      }
+
+      .topbar {
+        gap: 10px;
+        padding-bottom: 10px;
+      }
+
+      .stat {
+        min-width: 0;
+        text-align: left;
+      }
+
+      .workspace {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .deck {
+        order: -1;
+        min-height: 0;
+        grid-template-rows: auto auto minmax(104px, 18dvh) auto;
+        gap: 10px;
+        padding: 12px;
+      }
+
+      .library {
+        min-height: 0;
+        height: min(48dvh, 430px);
+      }
+
+      .track-list {
+        min-height: 0;
+      }
+
+      .buttons {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+      }
+
+      .buttons button {
+        min-width: 0;
+        padding-inline: 6px;
+      }
+
+      .controls {
+        gap: 10px;
+        padding: 10px;
+      }
+
+      .summary,
+      footer {
+        font-size: .75rem;
+      }
+    }
+
+    @media (max-width: 460px) {
+      .buttons {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .progress-row {
+        grid-template-columns: 42px minmax(0, 1fr) 42px;
+        gap: 8px;
+      }
+
+      .volume-row {
+        grid-template-columns: 52px minmax(0, 1fr) 42px;
+        gap: 8px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header class="topbar">
+      <div>
+        <h1>Native SID Player</h1>
+        <div class="summary">Browser-side C64 SID emulation, loaded from the local HVSC sample set.</div>
+      </div>
+      <div class="stat">
+        <strong id="trackTotal">904</strong>
+        <span>SID files</span>
+      </div>
+    </header>
+
+    <section class="workspace" aria-label="SID player">
+      <aside class="library" aria-label="SID library">
+        <div class="searchbar">
+          <input id="search" type="search" placeholder="Search SID files" autocomplete="off">
+          <select id="composerFilter" aria-label="Composer filter"></select>
+          <div id="listMeta" class="list-meta">0 shown</div>
+        </div>
+        <div id="trackList" class="track-list" role="listbox" aria-label="Tracks"></div>
+      </aside>
+
+      <section class="deck" aria-label="Player controls">
+        <div class="now">
+          <div>
+            <h2 id="nowTitle" class="now-title">Select a SID</h2>
+            <div id="nowMeta" class="now-meta">webSID emulator standby</div>
+          </div>
+          <div id="status" class="status">Idle</div>
+        </div>
+
+        <div class="controls">
+          <div class="buttons">
+            <button id="prevBtn" type="button" title="Previous">Prev</button>
+            <button id="playBtn" class="primary" type="button" title="Play or pause">Play</button>
+            <button id="stopBtn" type="button" title="Stop">Stop</button>
+            <button id="nextBtn" type="button" title="Next">Next</button>
+            <button id="loopBtn" type="button" title="Loop current SID">Loop</button>
+          </div>
+
+          <div class="progress-row">
+            <span id="elapsed">0:00</span>
+            <input id="progress" type="range" min="0" max="180000" value="0" step="100">
+            <span id="duration">3:00</span>
+          </div>
+
+          <div class="volume-row">
+            <span>Volume</span>
+            <input id="volume" type="range" min="0" max="1" value="0.78" step="0.01">
+            <span id="volumeText">78%</span>
+          </div>
+        </div>
+
+        <div id="scope" class="scope" aria-hidden="true">
+          <div id="scopeGrid" class="scope-grid"></div>
+        </div>
+
+        <footer>
+          webSID emulator by Juergen Wothke, CC BY-NC-SA 4.0. SID files are served from the local curated sample library.
+        </footer>
+      </section>
+    </section>
+  </main>
+
+  <script src="/experiments/sid-player/vendor/webaudio/scriptprocessor_player.js?v=20260628b"></script>
+  <script>
+    window.WASM_SEARCH_PATH = "/experiments/sid-player/vendor/websid/";
+  </script>
+  <script src="/experiments/sid-player/vendor/websid/backend_websid.js?v=20260628b"></script>
+  <script src="/experiments/sid-player/tracks.js?v=20260628b"></script>
+  <script src="/experiments/sid-player/app.js?v=20260628b"></script>
+</body>
+</html>
