@@ -40,6 +40,7 @@
     ending: false,
     fallbackPosition: 0,
     wallStarted: 0,
+    pointerSeeking: false,
   };
 
   function formatTime(ms) {
@@ -403,9 +404,13 @@
     refs.scopeGrid.appendChild(fragment);
   }
 
-  function seekToProgress() {
+  function seekToProgress(targetValue) {
     const player = getPlayer();
-    const target = Math.max(0, Math.min(Number(refs.progress.value) || 0, state.currentDuration));
+    const sourceValue = typeof targetValue === "number" || typeof targetValue === "string"
+      ? targetValue
+      : refs.progress.value;
+    const target = Math.max(0, Math.min(Number(sourceValue) || 0, state.currentDuration));
+    refs.progress.value = String(target);
 
     if (player && typeof player.seekPlaybackPosition === "function") {
       try {
@@ -423,6 +428,24 @@
     }
     refs.elapsed.textContent = formatTime(target);
     state.scrubbing = false;
+  }
+
+  function progressValueFromPoint(clientX) {
+    const rect = refs.progress.getBoundingClientRect();
+    if (!rect.width) return Number(refs.progress.value) || 0;
+    const ratio = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
+    return ratio * state.currentDuration;
+  }
+
+  function previewSeekFromPoint(clientX) {
+    const target = progressValueFromPoint(clientX);
+    refs.progress.value = String(target);
+    refs.elapsed.textContent = formatTime(target);
+    return target;
+  }
+
+  function seekFromPoint(clientX) {
+    seekToProgress(previewSeekFromPoint(clientX));
   }
 
   function wireEvents() {
@@ -454,19 +477,56 @@
       const player = getPlayer();
       if (player) player.setVolume(volume);
     });
-    refs.progress.addEventListener("pointerdown", () => {
+    refs.progress.addEventListener("pointerdown", (event) => {
+      if (!state.currentTrack) return;
+      event.preventDefault();
+      wakeAudio();
+      state.pointerSeeking = true;
       state.scrubbing = true;
+      refs.progress.setPointerCapture(event.pointerId);
+      seekFromPoint(event.clientX);
     });
-    refs.progress.addEventListener("touchstart", () => {
+    refs.progress.addEventListener("pointermove", (event) => {
+      if (!state.pointerSeeking) return;
+      event.preventDefault();
+      previewSeekFromPoint(event.clientX);
+    });
+    refs.progress.addEventListener("pointerup", (event) => {
+      if (!state.pointerSeeking) return;
+      event.preventDefault();
+      state.pointerSeeking = false;
+      seekFromPoint(event.clientX);
+    });
+    refs.progress.addEventListener("pointercancel", () => {
+      state.pointerSeeking = false;
+      state.scrubbing = false;
+    });
+    refs.progress.addEventListener("touchstart", (event) => {
+      if (!state.currentTrack || window.PointerEvent) return;
+      event.preventDefault();
+      wakeAudio();
       state.scrubbing = true;
-    }, { passive: true });
+      const touch = event.changedTouches[0];
+      if (touch) seekFromPoint(touch.clientX);
+    }, { passive: false });
+    refs.progress.addEventListener("touchmove", (event) => {
+      if (!state.currentTrack || window.PointerEvent) return;
+      event.preventDefault();
+      const touch = event.changedTouches[0];
+      if (touch) previewSeekFromPoint(touch.clientX);
+    }, { passive: false });
+    refs.progress.addEventListener("touchend", (event) => {
+      if (!state.currentTrack || window.PointerEvent) return;
+      event.preventDefault();
+      const touch = event.changedTouches[0];
+      if (touch) seekFromPoint(touch.clientX);
+    }, { passive: false });
     refs.progress.addEventListener("input", () => {
+      if (state.pointerSeeking) return;
       state.scrubbing = true;
       refs.elapsed.textContent = formatTime(Number(refs.progress.value));
     });
     refs.progress.addEventListener("change", seekToProgress);
-    refs.progress.addEventListener("pointerup", seekToProgress);
-    refs.progress.addEventListener("touchend", seekToProgress);
     refs.progress.addEventListener("keyup", (event) => {
       if (["ArrowLeft", "ArrowRight", "Home", "End", "PageUp", "PageDown"].includes(event.key)) {
         seekToProgress();
