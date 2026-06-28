@@ -648,10 +648,13 @@
 
     @media (max-width: 1024px) {
       body {
-        overflow: auto;
+        overflow-x: hidden;
+        overflow-y: auto;
       }
 
       .app {
+        width: 100%;
+        max-width: 100%;
         height: auto;
         min-height: 100dvh;
         padding: calc(112px + env(safe-area-inset-top)) 12px 12px;
