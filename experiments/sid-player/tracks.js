@@ -1,5 +1,1334 @@
 window.SID_LIBRARY = [
   {
+    "id": "R2Fsd2F5X01hcnRpbi9XaXpiYWxsLnNpZA",
+    "title": "Wizball",
+    "composer": "Galway Martin",
+    "composerKey": "Galway_Martin",
+    "fileName": "Wizball.sid",
+    "path": "sids/Galway_Martin/Wizball.sid",
+    "size": 8446,
+    "top100Rank": 1,
+    "top100Title": "Wizball",
+    "top100Composer": "Martin Galway",
+    "top100Source": "sids/Galway_Martin/Wizball.sid"
+  },
+  {
+    "id": "RGFnbGlzaF9CZW4vTGFzdF9OaW5qYS5zaWQ",
+    "title": "Last Ninja",
+    "composer": "Daglish Ben",
+    "composerKey": "Daglish_Ben",
+    "fileName": "Last_Ninja.sid",
+    "path": "sids/Daglish_Ben/Last_Ninja.sid",
+    "size": 35617,
+    "top100Rank": 2,
+    "top100Title": "The Last Ninja",
+    "top100Composer": "Ben Daglish & Anthony Lees",
+    "top100Source": "sids/Daglish_Ben/Last_Ninja.sid"
+  },
+  {
+    "id": "SHViYmFyZF9Sb2IvU2FueGlvbi5zaWQ",
+    "title": "Sanxion",
+    "composer": "Hubbard Rob",
+    "composerKey": "Hubbard_Rob",
+    "fileName": "Sanxion.sid",
+    "path": "sids/Hubbard_Rob/Sanxion.sid",
+    "size": 7614,
+    "top100Rank": 3,
+    "top100Title": "Sanxion",
+    "top100Composer": "Rob Hubbard",
+    "top100Source": "sids/Hubbard_Rob/Sanxion.sid"
+  },
+  {
+    "id": "SHViYmFyZF9Sb2IvQ29tbWFuZG8uc2lk",
+    "title": "Commando",
+    "composer": "Hubbard Rob",
+    "composerKey": "Hubbard_Rob",
+    "fileName": "Commando.sid",
+    "path": "sids/Hubbard_Rob/Commando.sid",
+    "size": 4165,
+    "top100Rank": 4,
+    "top100Title": "Commando",
+    "top100Composer": "Rob Hubbard",
+    "top100Source": "sids/Hubbard_Rob/Commando.sid"
+  },
+  {
+    "id": "SHViYmFyZF9Sb2IvSW50ZXJuYXRpb25hbF9LYXJhdGUuc2lk",
+    "title": "International Karate",
+    "composer": "Hubbard Rob",
+    "composerKey": "Hubbard_Rob",
+    "fileName": "International_Karate.sid",
+    "path": "sids/Hubbard_Rob/International_Karate.sid",
+    "size": 4734,
+    "top100Rank": 5,
+    "top100Title": "International Karate",
+    "top100Composer": "Rob Hubbard",
+    "top100Source": "sids/Hubbard_Rob/International_Karate.sid"
+  },
+  {
+    "id": "VGVsX0plcm9lbi9DeWJlcm5vaWRfSUkuc2lk",
+    "title": "Cybernoid II",
+    "composer": "Tel Jeroen",
+    "composerKey": "Tel_Jeroen",
+    "fileName": "Cybernoid_II.sid",
+    "path": "sids/Tel_Jeroen/Cybernoid_II.sid",
+    "size": 4502,
+    "top100Rank": 6,
+    "top100Title": "Cybernoid II",
+    "top100Composer": "Jeroen Tel / Maniacs of Noise",
+    "top100Source": "sids/Tel_Jeroen/Cybernoid_II.sid"
+  },
+  {
+    "id": "SHViYmFyZF9Sb2IvRGVsdGEuc2lk",
+    "title": "Delta",
+    "composer": "Hubbard Rob",
+    "composerKey": "Hubbard_Rob",
+    "fileName": "Delta.sid",
+    "path": "sids/Hubbard_Rob/Delta.sid",
+    "size": 5246,
+    "top100Rank": 7,
+    "top100Title": "Delta",
+    "top100Composer": "Rob Hubbard",
+    "top100Source": "sids/Hubbard_Rob/Delta.sid"
+  },
+  {
+    "id": "SHViYmFyZF9Sb2IvTW9udHlfb25fdGhlX1J1bi5zaWQ",
+    "title": "Monty on the Run",
+    "composer": "Hubbard Rob",
+    "composerKey": "Hubbard_Rob",
+    "fileName": "Monty_on_the_Run.sid",
+    "path": "sids/Hubbard_Rob/Monty_on_the_Run.sid",
+    "size": 5694,
+    "top100Rank": 8,
+    "top100Title": "Monty on the Run",
+    "top100Composer": "Rob Hubbard",
+    "top100Source": "sids/Hubbard_Rob/Monty_on_the_Run.sid"
+  },
+  {
+    "id": "VGVsX0plcm9lbi9DeWJlcm5vaWQuc2lk",
+    "title": "Cybernoid",
+    "composer": "Tel Jeroen",
+    "composerKey": "Tel_Jeroen",
+    "fileName": "Cybernoid.sid",
+    "path": "sids/Tel_Jeroen/Cybernoid.sid",
+    "size": 4734,
+    "top100Rank": 9,
+    "top100Title": "Cybernoid",
+    "top100Composer": "Jeroen Tel / Maniacs of Noise",
+    "top100Source": "sids/Tel_Jeroen/Cybernoid.sid"
+  },
+  {
+    "id": "T3V3ZWhhbmRfUmV5bi9MYXN0X05pbmphXzMuc2lk",
+    "title": "Last Ninja 3",
+    "composer": "Ouwehand Reyn",
+    "composerKey": "Ouwehand_Reyn",
+    "fileName": "Last_Ninja_3.sid",
+    "path": "sids/Ouwehand_Reyn/Last_Ninja_3.sid",
+    "size": 30179,
+    "top100Rank": 10,
+    "top100Title": "Last Ninja 3",
+    "top100Composer": "Reyn Ouwehand",
+    "top100Source": "sids/Ouwehand_Reyn/Last_Ninja_3.sid"
+  },
+  {
+    "id": "R2Fsd2F5X01hcnRpbi9SYW1ib19GaXJzdF9CbG9vZF9QYXJ0X0lJLnNpZA",
+    "title": "Rambo First Blood Part II",
+    "composer": "Galway Martin",
+    "composerKey": "Galway_Martin",
+    "fileName": "Rambo_First_Blood_Part_II.sid",
+    "path": "sids/Galway_Martin/Rambo_First_Blood_Part_II.sid",
+    "size": 16778,
+    "top100Rank": 11,
+    "top100Title": "Rambo: First Blood Part II",
+    "top100Composer": "Martin Galway",
+    "top100Source": "sids/Galway_Martin/Rambo_First_Blood_Part_II.sid"
+  },
+  {
+    "id": "R3JheV9NYXR0L0xhc3RfTmluamFfMi5zaWQ",
+    "title": "Last Ninja 2",
+    "composer": "Gray Matt",
+    "composerKey": "Gray_Matt",
+    "fileName": "Last_Ninja_2.sid",
+    "path": "sids/Gray_Matt/Last_Ninja_2.sid",
+    "size": 43277,
+    "top100Rank": 12,
+    "top100Title": "Last Ninja 2",
+    "top100Composer": "Matt Gray",
+    "top100Source": "sids/Gray_Matt/Last_Ninja_2.sid"
+  },
+  {
+    "id": "736964732f544f503130302f3031335f4d7574616e74732e736964",
+    "title": "Mutants",
+    "composer": "Fred Gray",
+    "composerKey": "TOP100",
+    "fileName": "013_Mutants.sid",
+    "path": "sids/TOP100/013_Mutants.sid",
+    "size": 3892,
+    "category": "HVSC Top 100",
+    "top100Rank": 13,
+    "top100Title": "Mutants",
+    "top100Composer": "Fred Gray",
+    "top100Source": "HVSC_Top_100.zip"
+  },
+  {
+    "id": "SHViYmFyZF9Sb2IvS251Y2tsZWJ1c3RlcnMuc2lk",
+    "title": "Knucklebusters",
+    "composer": "Hubbard Rob",
+    "composerKey": "Hubbard_Rob",
+    "fileName": "Knucklebusters.sid",
+    "path": "sids/Hubbard_Rob/Knucklebusters.sid",
+    "size": 7178,
+    "top100Rank": 14,
+    "top100Title": "Knucklebusters",
+    "top100Composer": "Rob Hubbard",
+    "top100Source": "sids/Hubbard_Rob/Knucklebusters.sid"
+  },
+  {
+    "id": "R2Fsd2F5X01hcnRpbi9Bcmthbm9pZC5zaWQ",
+    "title": "Arkanoid",
+    "composer": "Galway Martin",
+    "composerKey": "Galway_Martin",
+    "fileName": "Arkanoid.sid",
+    "path": "sids/Galway_Martin/Arkanoid.sid",
+    "size": 9834,
+    "top100Rank": 15,
+    "top100Title": "Arkanoid",
+    "top100Composer": "Martin Galway",
+    "top100Source": "sids/Galway_Martin/Arkanoid.sid"
+  },
+  {
+    "id": "SHViYmFyZF9Sb2IvQ3JhenlfQ29tZXRzLnNpZA",
+    "title": "Crazy Comets",
+    "composer": "Hubbard Rob",
+    "composerKey": "Hubbard_Rob",
+    "fileName": "Crazy_Comets.sid",
+    "path": "sids/Hubbard_Rob/Crazy_Comets.sid",
+    "size": 4494,
+    "top100Rank": 16,
+    "top100Title": "Crazy Comets",
+    "top100Composer": "Rob Hubbard",
+    "top100Source": "sids/Hubbard_Rob/Crazy_Comets.sid"
+  },
+  {
+    "id": "SHViYmFyZF9Sb2IvQXVmX1dpZWRlcnNlaGVuX01vbnR5LnNpZA",
+    "title": "Auf Wiedersehen Monty",
+    "composer": "Hubbard Rob",
+    "composerKey": "Hubbard_Rob",
+    "fileName": "Auf_Wiedersehen_Monty.sid",
+    "path": "sids/Hubbard_Rob/Auf_Wiedersehen_Monty.sid",
+    "size": 5544,
+    "top100Rank": 17,
+    "top100Title": "Auf Wiedersehen Monty",
+    "top100Composer": "Rob Hubbard & Ben Daglish",
+    "top100Source": "sids/Hubbard_Rob/Auf_Wiedersehen_Monty.sid"
+  },
+  {
+    "id": "SHVlbHNiZWNrX0NocmlzL0dyZWF0X0dpYW5hX1Npc3RlcnMuc2lk",
+    "title": "Great Giana Sisters",
+    "composer": "Huelsbeck Chris",
+    "composerKey": "Huelsbeck_Chris",
+    "fileName": "Great_Giana_Sisters.sid",
+    "path": "sids/Huelsbeck_Chris/Great_Giana_Sisters.sid",
+    "size": 23445,
+    "top100Rank": 18,
+    "top100Title": "The Great Giana Sisters",
+    "top100Composer": "Chris H�lsbeck",
+    "top100Source": "sids/Huelsbeck_Chris/Great_Giana_Sisters.sid"
+  },
+  {
+    "id": "Rm9sbGluX1RpbS9HaG91bHNfbl9HaG9zdHMuc2lk",
+    "title": "Ghouls n Ghosts",
+    "composer": "Follin Tim",
+    "composerKey": "Follin_Tim",
+    "fileName": "Ghouls_n_Ghosts.sid",
+    "path": "sids/Follin_Tim/Ghouls_n_Ghosts.sid",
+    "size": 19005,
+    "top100Rank": 19,
+    "top100Title": "Ghouls 'n' Ghosts",
+    "top100Composer": "Tim Follin",
+    "top100Source": "sids/Follin_Tim/Ghouls_n_Ghosts.sid"
+  },
+  {
+    "id": "736964732f544f503130302f3032305f47686f7374735f6e5f476f626c696e732e736964",
+    "title": "Ghosts'n Goblins",
+    "composer": "Mark Cooksey",
+    "composerKey": "TOP100",
+    "fileName": "020_Ghosts_n_Goblins.sid",
+    "path": "sids/TOP100/020_Ghosts_n_Goblins.sid",
+    "size": 5566,
+    "category": "HVSC Top 100",
+    "top100Rank": 20,
+    "top100Title": "Ghosts'n Goblins",
+    "top100Composer": "Mark Cooksey",
+    "top100Source": "HVSC_Top_100.zip"
+  },
+  {
+    "id": "SHViYmFyZF9Sb2IvTmVtZXNpc190aGVfV2FybG9jay5zaWQ",
+    "title": "Nemesis the Warlock",
+    "composer": "Hubbard Rob",
+    "composerKey": "Hubbard_Rob",
+    "fileName": "Nemesis_the_Warlock.sid",
+    "path": "sids/Hubbard_Rob/Nemesis_the_Warlock.sid",
+    "size": 4644,
+    "top100Rank": 21,
+    "top100Title": "Nemesis the Warlock",
+    "top100Composer": "Rob Hubbard",
+    "top100Source": "sids/Hubbard_Rob/Nemesis_the_Warlock.sid"
+  },
+  {
+    "id": "R2Fsd2F5X01hcnRpbi9HcmVlbl9CZXJldC5zaWQ",
+    "title": "Green Beret",
+    "composer": "Galway Martin",
+    "composerKey": "Galway_Martin",
+    "fileName": "Green_Beret.sid",
+    "path": "sids/Galway_Martin/Green_Beret.sid",
+    "size": 12520,
+    "top100Rank": 22,
+    "top100Title": "Green Beret",
+    "top100Composer": "Martin Galway",
+    "top100Source": "sids/Galway_Martin/Green_Beret.sid"
+  },
+  {
+    "id": "736964732f544f503130302f3032335f5468655f5761795f6f665f7468655f4578706c6f64696e675f466973742e736964",
+    "title": "The Way of the Exploding Fist",
+    "composer": "Neil Brennan",
+    "composerKey": "TOP100",
+    "fileName": "023_The_Way_of_the_Exploding_Fist.sid",
+    "path": "sids/TOP100/023_The_Way_of_the_Exploding_Fist.sid",
+    "size": 10622,
+    "category": "HVSC Top 100",
+    "top100Rank": 23,
+    "top100Title": "The Way of the Exploding Fist",
+    "top100Composer": "Neil Brennan",
+    "top100Source": "HVSC_Top_100.zip"
+  },
+  {
+    "id": "736964732f544f503130302f3032345f506c61746f6f6e2e736964",
+    "title": "Platoon",
+    "composer": "Jonathan Dunn",
+    "composerKey": "TOP100",
+    "fileName": "024_Platoon.sid",
+    "path": "sids/TOP100/024_Platoon.sid",
+    "size": 11814,
+    "category": "HVSC Top 100",
+    "top100Rank": 24,
+    "top100Title": "Platoon",
+    "top100Composer": "Jonathan Dunn",
+    "top100Source": "HVSC_Top_100.zip"
+  },
+  {
+    "id": "SHVlbHNiZWNrX0NocmlzL1ItVHlwZS5zaWQ",
+    "title": "R-Type",
+    "composer": "Huelsbeck Chris",
+    "composerKey": "Huelsbeck_Chris",
+    "fileName": "R-Type.sid",
+    "path": "sids/Huelsbeck_Chris/R-Type.sid",
+    "size": 40666,
+    "top100Rank": 25,
+    "top100Title": "R-type",
+    "top100Composer": "Chris H�lsbeck & Ramiro Vaca",
+    "top100Source": "sids/Huelsbeck_Chris/R-Type.sid"
+  },
+  {
+    "id": "SHViYmFyZF9Sb2IvTGlnaHRmb3JjZS5zaWQ",
+    "title": "Lightforce",
+    "composer": "Hubbard Rob",
+    "composerKey": "Hubbard_Rob",
+    "fileName": "Lightforce.sid",
+    "path": "sids/Hubbard_Rob/Lightforce.sid",
+    "size": 3710,
+    "top100Rank": 26,
+    "top100Title": "Lightforce",
+    "top100Composer": "Rob Hubbard",
+    "top100Source": "sids/Hubbard_Rob/Lightforce.sid"
+  },
+  {
+    "id": "RGFnbGlzaF9CZW4vQ29icmEuc2lk",
+    "title": "Cobra",
+    "composer": "Daglish Ben",
+    "composerKey": "Daglish_Ben",
+    "fileName": "Cobra.sid",
+    "path": "sids/Daglish_Ben/Cobra.sid",
+    "size": 3945,
+    "top100Rank": 27,
+    "top100Title": "Cobra",
+    "top100Composer": "Ben Daglish",
+    "top100Source": "sids/Daglish_Ben/Cobra.sid"
+  },
+  {
+    "id": "VGVsX0plcm9lbi9Sb2JvQ29wXzMuc2lk",
+    "title": "RoboCop 3",
+    "composer": "Tel Jeroen",
+    "composerKey": "Tel_Jeroen",
+    "fileName": "RoboCop_3.sid",
+    "path": "sids/Tel_Jeroen/RoboCop_3.sid",
+    "size": 10590,
+    "top100Rank": 28,
+    "top100Title": "Robocop 3",
+    "top100Composer": "Jeroen Tel / Maniacs of Noise",
+    "top100Source": "sids/Tel_Jeroen/RoboCop_3.sid"
+  },
+  {
+    "id": "736964732f544f503130302f3032395f4d7974682e736964",
+    "title": "Myth",
+    "composer": "Jeroen Tel / Maniacs of Noise",
+    "composerKey": "TOP100",
+    "fileName": "029_Myth.sid",
+    "path": "sids/TOP100/029_Myth.sid",
+    "size": 15901,
+    "category": "HVSC Top 100",
+    "top100Rank": 29,
+    "top100Title": "Myth",
+    "top100Composer": "Jeroen Tel / Maniacs of Noise",
+    "top100Source": "HVSC_Top_100.zip"
+  },
+  {
+    "id": "SHViYmFyZF9Sb2IvTWFzdGVyX29mX01hZ2ljLnNpZA",
+    "title": "Master of Magic",
+    "composer": "Hubbard Rob",
+    "composerKey": "Hubbard_Rob",
+    "fileName": "Master_of_Magic.sid",
+    "path": "sids/Hubbard_Rob/Master_of_Magic.sid",
+    "size": 3182,
+    "top100Rank": 30,
+    "top100Title": "The Master of Magic",
+    "top100Composer": "Rob Hubbard",
+    "top100Source": "sids/Hubbard_Rob/Master_of_Magic.sid"
+  },
+  {
+    "id": "VGVsX0plcm9lbi9UdXJib19PdXRydW4uc2lk",
+    "title": "Turbo Outrun",
+    "composer": "Tel Jeroen",
+    "composerKey": "Tel_Jeroen",
+    "fileName": "Turbo_Outrun.sid",
+    "path": "sids/Tel_Jeroen/Turbo_Outrun.sid",
+    "size": 56430,
+    "top100Rank": 31,
+    "top100Title": "Turbo Outrun",
+    "top100Composer": "Jeroen Tel / Maniacs of Noise",
+    "top100Source": "sids/Tel_Jeroen/Turbo_Outrun.sid"
+  },
+  {
+    "id": "RGFnbGlzaF9CZW4vVHJhcC5zaWQ",
+    "title": "Trap",
+    "composer": "Daglish Ben",
+    "composerKey": "Daglish_Ben",
+    "fileName": "Trap.sid",
+    "path": "sids/Daglish_Ben/Trap.sid",
+    "size": 4478,
+    "top100Rank": 32,
+    "top100Title": "Trap",
+    "top100Composer": "Ben Daglish",
+    "top100Source": "sids/Daglish_Ben/Trap.sid"
+  },
+  {
+    "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvU3dlZXQuc2lk",
+    "title": "Sweet",
+    "composer": "Bjerregaard Johannes",
+    "composerKey": "Bjerregaard_Johannes",
+    "fileName": "Sweet.sid",
+    "path": "sids/Bjerregaard_Johannes/Sweet.sid",
+    "size": 2538,
+    "top100Rank": 33,
+    "top100Title": "Sweet",
+    "top100Composer": "Johannes Bjerregaard",
+    "top100Source": "sids/Bjerregaard_Johannes/Sweet.sid"
+  },
+  {
+    "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvU3Rvcm1sb3JkLnNpZA",
+    "title": "Stormlord",
+    "composer": "Bjerregaard Johannes",
+    "composerKey": "Bjerregaard_Johannes",
+    "fileName": "Stormlord.sid",
+    "path": "sids/Bjerregaard_Johannes/Stormlord.sid",
+    "size": 36318,
+    "top100Rank": 34,
+    "top100Title": "Stormlord",
+    "top100Composer": "Johannes Bjerregaard & J. Tel",
+    "top100Source": "sids/Bjerregaard_Johannes/Stormlord.sid"
+  },
+  {
+    "id": "SHViYmFyZF9Sb2IvU3BlbGxib3VuZC5zaWQ",
+    "title": "Spellbound",
+    "composer": "Hubbard Rob",
+    "composerKey": "Hubbard_Rob",
+    "fileName": "Spellbound.sid",
+    "path": "sids/Hubbard_Rob/Spellbound.sid",
+    "size": 4221,
+    "top100Rank": 35,
+    "top100Title": "Spellbound",
+    "top100Composer": "Rob Hubbard",
+    "top100Source": "sids/Hubbard_Rob/Spellbound.sid"
+  },
+  {
+    "id": "R2Fsd2F5X01hcnRpbi9QYXJhbGxheC5zaWQ",
+    "title": "Parallax",
+    "composer": "Galway Martin",
+    "composerKey": "Galway_Martin",
+    "fileName": "Parallax.sid",
+    "path": "sids/Galway_Martin/Parallax.sid",
+    "size": 7281,
+    "top100Rank": 36,
+    "top100Title": "Parallax",
+    "top100Composer": "Martin Galway",
+    "top100Source": "sids/Galway_Martin/Parallax.sid"
+  },
+  {
+    "id": "SHViYmFyZF9Sb2IvSUtfcGx1cy5zaWQ",
+    "title": "IK plus",
+    "composer": "Hubbard Rob",
+    "composerKey": "Hubbard_Rob",
+    "fileName": "IK_plus.sid",
+    "path": "sids/Hubbard_Rob/IK_plus.sid",
+    "size": 4613,
+    "top100Rank": 37,
+    "top100Title": "IK+",
+    "top100Composer": "Rob Hubbard",
+    "top100Source": "sids/Hubbard_Rob/IK_plus.sid"
+  },
+  {
+    "id": "736964732f544f503130302f3033385f5a616d7a6172612e736964",
+    "title": "Zamzara",
+    "composer": "Charles Deenen/Maniacs of Noise",
+    "composerKey": "TOP100",
+    "fileName": "038_Zamzara.sid",
+    "path": "sids/TOP100/038_Zamzara.sid",
+    "size": 4878,
+    "category": "HVSC Top 100",
+    "top100Rank": 38,
+    "top100Title": "Zamzara",
+    "top100Composer": "Charles Deenen/Maniacs of Noise",
+    "top100Source": "HVSC_Top_100.zip"
+  },
+  {
+    "id": "R2Fsd2F5X01hcnRpbi9Db21pY19CYWtlcnkuc2lk",
+    "title": "Comic Bakery",
+    "composer": "Galway Martin",
+    "composerKey": "Galway_Martin",
+    "fileName": "Comic_Bakery.sid",
+    "path": "sids/Galway_Martin/Comic_Bakery.sid",
+    "size": 8574,
+    "top100Rank": 39,
+    "top100Title": "Comic Bakery",
+    "top100Composer": "Martin Galway",
+    "top100Source": "sids/Galway_Martin/Comic_Bakery.sid"
+  },
+  {
+    "id": "R2Fsd2F5X01hcnRpbi9ZaWVfQXJfS3VuZ19GdS5zaWQ",
+    "title": "Yie Ar Kung Fu",
+    "composer": "Galway Martin",
+    "composerKey": "Galway_Martin",
+    "fileName": "Yie_Ar_Kung_Fu.sid",
+    "path": "sids/Galway_Martin/Yie_Ar_Kung_Fu.sid",
+    "size": 7934,
+    "top100Rank": 40,
+    "top100Title": "Yie Ar Kung Fu",
+    "top100Composer": "Martin Galway",
+    "top100Source": "sids/Galway_Martin/Yie_Ar_Kung_Fu.sid"
+  },
+  {
+    "id": "736964732f544f503130302f3034315f48797374657269612e736964",
+    "title": "Hysteria",
+    "composer": "Fred Gray",
+    "composerKey": "TOP100",
+    "fileName": "041_Hysteria.sid",
+    "path": "sids/TOP100/041_Hysteria.sid",
+    "size": 4358,
+    "category": "HVSC Top 100",
+    "top100Rank": 41,
+    "top100Title": "Hysteria",
+    "top100Composer": "Fred Gray",
+    "top100Source": "HVSC_Top_100.zip"
+  },
+  {
+    "id": "736964732f544f503130302f3034325f446566656e6465725f6f665f7468655f43726f776e2e736964",
+    "title": "Defender of the Crown",
+    "composer": "Richard Joseph",
+    "composerKey": "TOP100",
+    "fileName": "042_Defender_of_the_Crown.sid",
+    "path": "sids/TOP100/042_Defender_of_the_Crown.sid",
+    "size": 10918,
+    "category": "HVSC Top 100",
+    "top100Rank": 42,
+    "top100Title": "Defender of the Crown",
+    "top100Composer": "Richard Joseph",
+    "top100Source": "HVSC_Top_100.zip"
+  },
+  {
+    "id": "736964732f544f503130302f3034335f4f6365616e5f4c6f616465725f332e736964",
+    "title": "Ocean Loader 3",
+    "composer": "Peter Clarke",
+    "composerKey": "TOP100",
+    "fileName": "043_Ocean_Loader_3.sid",
+    "path": "sids/TOP100/043_Ocean_Loader_3.sid",
+    "size": 6982,
+    "category": "HVSC Top 100",
+    "top100Rank": 43,
+    "top100Title": "Ocean Loader 3",
+    "top100Composer": "Peter Clarke",
+    "top100Source": "HVSC_Top_100.zip"
+  },
+  {
+    "id": "SHVlbHNiZWNrX0NocmlzL1RvX2JlX29uX1RvcC5zaWQ",
+    "title": "To be on Top",
+    "composer": "Huelsbeck Chris",
+    "composerKey": "Huelsbeck_Chris",
+    "fileName": "To_be_on_Top.sid",
+    "path": "sids/Huelsbeck_Chris/To_be_on_Top.sid",
+    "size": 42487,
+    "top100Rank": 44,
+    "top100Title": "To Be on Top",
+    "top100Composer": "Chris H�lsbeck",
+    "top100Source": "sids/Huelsbeck_Chris/To_be_on_Top.sid"
+  },
+  {
+    "id": "736964732f544f503130302f3034355f41726d616c7974652e736964",
+    "title": "Armalyte",
+    "composer": "Martin Walker",
+    "composerKey": "TOP100",
+    "fileName": "045_Armalyte.sid",
+    "path": "sids/TOP100/045_Armalyte.sid",
+    "size": 4096,
+    "category": "HVSC Top 100",
+    "top100Rank": 45,
+    "top100Title": "Armalyte",
+    "top100Composer": "Martin Walker",
+    "top100Source": "HVSC_Top_100.zip"
+  },
+  {
+    "id": "SHViYmFyZF9Sb2IvTWVnYV9BcG9jYWx5cHNlLnNpZA",
+    "title": "Mega Apocalypse",
+    "composer": "Hubbard Rob",
+    "composerKey": "Hubbard_Rob",
+    "fileName": "Mega_Apocalypse.sid",
+    "path": "sids/Hubbard_Rob/Mega_Apocalypse.sid",
+    "size": 21717,
+    "top100Rank": 46,
+    "top100Title": "Mega Apocalypse",
+    "top100Composer": "Rob Hubbard & Simon Nicol",
+    "top100Source": "sids/Hubbard_Rob/Mega_Apocalypse.sid"
+  },
+  {
+    "id": "SHVlbHNiZWNrX0NocmlzL0FudGljc19EdWxjZWRvX0NvZ2l0YXRpb25pcy5zaWQ",
+    "title": "Antics Dulcedo Cogitationis",
+    "composer": "Huelsbeck Chris",
+    "composerKey": "Huelsbeck_Chris",
+    "fileName": "Antics_Dulcedo_Cogitationis.sid",
+    "path": "sids/Huelsbeck_Chris/Antics_Dulcedo_Cogitationis.sid",
+    "size": 24702,
+    "top100Rank": 47,
+    "top100Title": "Dulcedo Cogitationis",
+    "top100Composer": "Chris H�lsbeck",
+    "top100Source": "sids/Huelsbeck_Chris/Antics_Dulcedo_Cogitationis.sid"
+  },
+  {
+    "id": "RGFnbGlzaF9CZW4vVGhpbmdfQm91bmNlc19CYWNrLnNpZA",
+    "title": "Thing Bounces Back",
+    "composer": "Daglish Ben",
+    "composerKey": "Daglish_Ben",
+    "fileName": "Thing_Bounces_Back.sid",
+    "path": "sids/Daglish_Ben/Thing_Bounces_Back.sid",
+    "size": 4734,
+    "top100Rank": 48,
+    "top100Title": "Thing Bounces Back",
+    "top100Composer": "Ben Daglish",
+    "top100Source": "sids/Daglish_Ben/Thing_Bounces_Back.sid"
+  },
+  {
+    "id": "736964732f544f503130302f3034395f526f626f636f702e736964",
+    "title": "Robocop",
+    "composer": "Jonathan Dunn",
+    "composerKey": "TOP100",
+    "fileName": "049_Robocop.sid",
+    "path": "sids/TOP100/049_Robocop.sid",
+    "size": 12921,
+    "category": "HVSC Top 100",
+    "top100Rank": 49,
+    "top100Title": "Robocop",
+    "top100Composer": "Jonathan Dunn",
+    "top100Source": "HVSC_Top_100.zip"
+  },
+  {
+    "id": "736964732f544f503130302f3035305f436f6f7065726174696f6e5f44656d6f2e736964",
+    "title": "Cooperation Demo",
+    "composer": "Kim Christensen (Future Freak)",
+    "composerKey": "TOP100",
+    "fileName": "050_Cooperation_Demo.sid",
+    "path": "sids/TOP100/050_Cooperation_Demo.sid",
+    "size": 2942,
+    "category": "HVSC Top 100",
+    "top100Rank": 50,
+    "top100Title": "Cooperation Demo",
+    "top100Composer": "Kim Christensen (Future Freak)",
+    "top100Source": "HVSC_Top_100.zip"
+  },
+  {
+    "id": "SHViYmFyZF9Sb2IvWm9pZHMuc2lk",
+    "title": "Zoids",
+    "composer": "Hubbard Rob",
+    "composerKey": "Hubbard_Rob",
+    "fileName": "Zoids.sid",
+    "path": "sids/Hubbard_Rob/Zoids.sid",
+    "size": 2814,
+    "top100Rank": 51,
+    "top100Title": "Zoids",
+    "top100Composer": "Rob Hubbard",
+    "top100Source": "sids/Hubbard_Rob/Zoids.sid"
+  },
+  {
+    "id": "VGVsX0plcm9lbi9TdXByZW1hY3kuc2lk",
+    "title": "Supremacy",
+    "composer": "Tel Jeroen",
+    "composerKey": "Tel_Jeroen",
+    "fileName": "Supremacy.sid",
+    "path": "sids/Tel_Jeroen/Supremacy.sid",
+    "size": 4382,
+    "top100Rank": 52,
+    "top100Title": "Supremacy",
+    "top100Composer": "Jeroen Tel / Maniacs of Noise",
+    "top100Source": "sids/Tel_Jeroen/Supremacy.sid"
+  },
+  {
+    "id": "736964732f544f503130302f3035335f436f6d706c6565746f2e736964",
+    "title": "Compleeto!",
+    "composer": "Anders Andr�en (ATOO)",
+    "composerKey": "TOP100",
+    "fileName": "053_Compleeto.sid",
+    "path": "sids/TOP100/053_Compleeto.sid",
+    "size": 3428,
+    "category": "HVSC Top 100",
+    "top100Rank": 53,
+    "top100Title": "Compleeto!",
+    "top100Composer": "Anders Andr�en (ATOO)",
+    "top100Source": "HVSC_Top_100.zip"
+  },
+  {
+    "id": "R3JheV9NYXR0L0RyaWxsZXIuc2lk",
+    "title": "Driller",
+    "composer": "Gray Matt",
+    "composerKey": "Gray_Matt",
+    "fileName": "Driller.sid",
+    "path": "sids/Gray_Matt/Driller.sid",
+    "size": 3438,
+    "top100Rank": 54,
+    "top100Title": "Driller",
+    "top100Composer": "Matt Gray",
+    "top100Source": "sids/Gray_Matt/Driller.sid"
+  },
+  {
+    "id": "R2Fsd2F5X01hcnRpbi9UaW1lc19vZl9Mb3JlLnNpZA",
+    "title": "Times of Lore",
+    "composer": "Galway Martin",
+    "composerKey": "Galway_Martin",
+    "fileName": "Times_of_Lore.sid",
+    "path": "sids/Galway_Martin/Times_of_Lore.sid",
+    "size": 13319,
+    "top100Rank": 55,
+    "top100Title": "Times of Lore",
+    "top100Composer": "Martin Galway",
+    "top100Source": "sids/Galway_Martin/Times_of_Lore.sid"
+  },
+  {
+    "id": "SHViYmFyZF9Sb2IvT25lX01hbl9hbmRfaGlzX0Ryb2lkLnNpZA",
+    "title": "One Man and his Droid",
+    "composer": "Hubbard Rob",
+    "composerKey": "Hubbard_Rob",
+    "fileName": "One_Man_and_his_Droid.sid",
+    "path": "sids/Hubbard_Rob/One_Man_and_his_Droid.sid",
+    "size": 4100,
+    "top100Rank": 56,
+    "top100Title": "One Man & His Droid",
+    "top100Composer": "Rob Hubbard",
+    "top100Source": "sids/Hubbard_Rob/One_Man_and_his_Droid.sid"
+  },
+  {
+    "id": "VGVsX0plcm9lbi9TYXZhZ2Uuc2lk",
+    "title": "Savage",
+    "composer": "Tel Jeroen",
+    "composerKey": "Tel_Jeroen",
+    "fileName": "Savage.sid",
+    "path": "sids/Tel_Jeroen/Savage.sid",
+    "size": 26569,
+    "top100Rank": 57,
+    "top100Title": "Savage",
+    "top100Composer": "Jeroen Tel / Maniacs of Noise",
+    "top100Source": "sids/Tel_Jeroen/Savage.sid"
+  },
+  {
+    "id": "SHViYmFyZF9Sb2IvQUNFX0lJLnNpZA",
+    "title": "ACE II",
+    "composer": "Hubbard Rob",
+    "composerKey": "Hubbard_Rob",
+    "fileName": "ACE_II.sid",
+    "path": "sids/Hubbard_Rob/ACE_II.sid",
+    "size": 3454,
+    "top100Rank": 58,
+    "top100Title": "ACE II",
+    "top100Composer": "Rob Hubbard",
+    "top100Source": "sids/Hubbard_Rob/ACE_II.sid"
+  },
+  {
+    "id": "SHViYmFyZF9Sb2IvVGhydXN0LnNpZA",
+    "title": "Thrust",
+    "composer": "Hubbard Rob",
+    "composerKey": "Hubbard_Rob",
+    "fileName": "Thrust.sid",
+    "path": "sids/Hubbard_Rob/Thrust.sid",
+    "size": 3710,
+    "top100Rank": 59,
+    "top100Title": "Thrust",
+    "top100Composer": "Rob Hubbard",
+    "top100Source": "sids/Hubbard_Rob/Thrust.sid"
+  },
+  {
+    "id": "SHViYmFyZF9Sb2IvQk1YX0tpZHouc2lk",
+    "title": "BMX Kidz",
+    "composer": "Hubbard Rob",
+    "composerKey": "Hubbard_Rob",
+    "fileName": "BMX_Kidz.sid",
+    "path": "sids/Hubbard_Rob/BMX_Kidz.sid",
+    "size": 10909,
+    "top100Rank": 60,
+    "top100Title": "BMX Kidz",
+    "top100Composer": "Rob Hubbard & Jori Olkkonen",
+    "top100Source": "sids/Hubbard_Rob/BMX_Kidz.sid"
+  },
+  {
+    "id": "VGVsX0plcm9lbi9LaW5ldGl4LnNpZA",
+    "title": "Kinetix",
+    "composer": "Tel Jeroen",
+    "composerKey": "Tel_Jeroen",
+    "fileName": "Kinetix.sid",
+    "path": "sids/Tel_Jeroen/Kinetix.sid",
+    "size": 5841,
+    "top100Rank": 61,
+    "top100Title": "Kinetix",
+    "top100Composer": "Jeroen Tel / Maniacs of Noise",
+    "top100Source": "sids/Tel_Jeroen/Kinetix.sid"
+  },
+  {
+    "id": "736964732f544f503130302f3036325f5363726f6c6c5f4d616368696e652e736964",
+    "title": "Scroll Machine",
+    "composer": "Jori Olkkonen (Yip)",
+    "composerKey": "TOP100",
+    "fileName": "062_Scroll_Machine.sid",
+    "path": "sids/TOP100/062_Scroll_Machine.sid",
+    "size": 15422,
+    "category": "HVSC Top 100",
+    "top100Rank": 62,
+    "top100Title": "Scroll Machine",
+    "top100Composer": "Jori Olkkonen (Yip)",
+    "top100Source": "HVSC_Top_100.zip"
+  },
+  {
+    "id": "SHVlbHNiZWNrX0NocmlzL0JhYnlfb2ZfQ2FuX0d1cnUuc2lk",
+    "title": "Baby of Can Guru",
+    "composer": "Huelsbeck Chris",
+    "composerKey": "Huelsbeck_Chris",
+    "fileName": "Baby_of_Can_Guru.sid",
+    "path": "sids/Huelsbeck_Chris/Baby_of_Can_Guru.sid",
+    "size": 27774,
+    "top100Rank": 63,
+    "top100Title": "The Baby of Can Guru",
+    "top100Composer": "Chris H�lsbeck",
+    "top100Source": "sids/Huelsbeck_Chris/Baby_of_Can_Guru.sid"
+  },
+  {
+    "id": "736964732f544f503130302f3036345f57697a61726472792e736964",
+    "title": "Wizardry",
+    "composer": "Mike Alsop",
+    "composerKey": "TOP100",
+    "fileName": "064_Wizardry.sid",
+    "path": "sids/TOP100/064_Wizardry.sid",
+    "size": 12414,
+    "category": "HVSC Top 100",
+    "top100Rank": 64,
+    "top100Title": "Wizardry",
+    "top100Composer": "Mike Alsop",
+    "top100Source": "HVSC_Top_100.zip"
+  },
+  {
+    "id": "Rm9sbGluX1RpbS9HYXVudGxldF9JSUkuc2lk",
+    "title": "Gauntlet III",
+    "composer": "Follin Tim",
+    "composerKey": "Follin_Tim",
+    "fileName": "Gauntlet_III.sid",
+    "path": "sids/Follin_Tim/Gauntlet_III.sid",
+    "size": 6642,
+    "top100Rank": 65,
+    "top100Title": "Gauntlet III",
+    "top100Composer": "Tim & Geoff Follin",
+    "top100Source": "sids/Follin_Tim/Gauntlet_III.sid"
+  },
+  {
+    "id": "736964732f544f503130302f3036365f53796e74685f53616d706c652e736964",
+    "title": "Synth Sample",
+    "composer": "Georg Feil",
+    "composerKey": "TOP100",
+    "fileName": "066_Synth_Sample.sid",
+    "path": "sids/TOP100/066_Synth_Sample.sid",
+    "size": 17399,
+    "category": "HVSC Top 100",
+    "top100Rank": 66,
+    "top100Title": "Synth Sample",
+    "top100Composer": "Georg Feil",
+    "top100Source": "HVSC_Top_100.zip"
+  },
+  {
+    "id": "736964732f544f503130302f3036375f4772616e645f507269785f436972637569742e736964",
+    "title": "Grand Prix Circuit",
+    "composer": "Kris Hatlelid",
+    "composerKey": "TOP100",
+    "fileName": "067_Grand_Prix_Circuit.sid",
+    "path": "sids/TOP100/067_Grand_Prix_Circuit.sid",
+    "size": 14206,
+    "category": "HVSC Top 100",
+    "top100Rank": 67,
+    "top100Title": "Grand Prix Circuit",
+    "top100Composer": "Kris Hatlelid",
+    "top100Source": "HVSC_Top_100.zip"
+  },
+  {
+    "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvTmlnaHRkYXduLnNpZA",
+    "title": "Nightdawn",
+    "composer": "Bjerregaard Johannes",
+    "composerKey": "Bjerregaard_Johannes",
+    "fileName": "Nightdawn.sid",
+    "path": "sids/Bjerregaard_Johannes/Nightdawn.sid",
+    "size": 16205,
+    "top100Rank": 68,
+    "top100Title": "Nightdawn",
+    "top100Composer": "Johannes Bjerregaard",
+    "top100Source": "sids/Bjerregaard_Johannes/Nightdawn.sid"
+  },
+  {
+    "id": "Rm9sbGluX1RpbS9TY3VtYmFsbC5zaWQ",
+    "title": "Scumball",
+    "composer": "Follin Tim",
+    "composerKey": "Follin_Tim",
+    "fileName": "Scumball.sid",
+    "path": "sids/Follin_Tim/Scumball.sid",
+    "size": 3619,
+    "top100Rank": 69,
+    "top100Title": "Scumball",
+    "top100Composer": "Tim Follin",
+    "top100Source": "sids/Follin_Tim/Scumball.sid"
+  },
+  {
+    "id": "736964732f544f503130302f3037305f525f495f535f4b2e736964",
+    "title": "R.I.S.K.",
+    "composer": "Wally Beben",
+    "composerKey": "TOP100",
+    "fileName": "070_R_I_S_K.sid",
+    "path": "sids/TOP100/070_R_I_S_K.sid",
+    "size": 3330,
+    "category": "HVSC Top 100",
+    "top100Rank": 70,
+    "top100Title": "R.I.S.K.",
+    "top100Composer": "Wally Beben",
+    "top100Source": "HVSC_Top_100.zip"
+  },
+  {
+    "id": "736964732f544f503130302f3037315f526f636b795f537461722e736964",
+    "title": "Rocky Star",
+    "composer": "Kim Christensen (Future Freak)",
+    "composerKey": "TOP100",
+    "fileName": "071_Rocky_Star.sid",
+    "path": "sids/TOP100/071_Rocky_Star.sid",
+    "size": 20337,
+    "category": "HVSC Top 100",
+    "top100Rank": 71,
+    "top100Title": "Rocky Star",
+    "top100Composer": "Kim Christensen (Future Freak)",
+    "top100Source": "HVSC_Top_100.zip"
+  },
+  {
+    "id": "736964732f544f503130302f3037325f536e6172652e736964",
+    "title": "Snare",
+    "composer": "Martin Walker",
+    "composerKey": "TOP100",
+    "fileName": "072_Snare.sid",
+    "path": "sids/TOP100/072_Snare.sid",
+    "size": 6065,
+    "category": "HVSC Top 100",
+    "top100Rank": 72,
+    "top100Title": "Snare",
+    "top100Composer": "Martin Walker",
+    "top100Source": "HVSC_Top_100.zip"
+  },
+  {
+    "id": "Rm9sbGluX1RpbS9CaW9uaWNfQ29tbWFuZG8uc2lk",
+    "title": "Bionic Commando",
+    "composer": "Follin Tim",
+    "composerKey": "Follin_Tim",
+    "fileName": "Bionic_Commando.sid",
+    "path": "sids/Follin_Tim/Bionic_Commando.sid",
+    "size": 12158,
+    "top100Rank": 73,
+    "top100Title": "Bionic Commando",
+    "top100Composer": "Tim Follin",
+    "top100Source": "sids/Follin_Tim/Bionic_Commando.sid"
+  },
+  {
+    "id": "SHVlbHNiZWNrX0NocmlzL0thdGFraXMuc2lk",
+    "title": "Katakis",
+    "composer": "Huelsbeck Chris",
+    "composerKey": "Huelsbeck_Chris",
+    "fileName": "Katakis.sid",
+    "path": "sids/Huelsbeck_Chris/Katakis.sid",
+    "size": 27201,
+    "top100Rank": 74,
+    "top100Title": "Katakis",
+    "top100Composer": "Chris H�lsbeck",
+    "top100Source": "sids/Huelsbeck_Chris/Katakis.sid"
+  },
+  {
+    "id": "SHViYmFyZF9Sb2IvR2VycnlfdGhlX0dlcm0uc2lk",
+    "title": "Gerry the Germ",
+    "composer": "Hubbard Rob",
+    "composerKey": "Hubbard_Rob",
+    "fileName": "Gerry_the_Germ.sid",
+    "path": "sids/Hubbard_Rob/Gerry_the_Germ.sid",
+    "size": 6742,
+    "top100Rank": 75,
+    "top100Title": "Gerry the Germ",
+    "top100Composer": "Rob Hubbard",
+    "top100Source": "sids/Hubbard_Rob/Gerry_the_Germ.sid"
+  },
+  {
+    "id": "VGVsX0plcm9lbi9FbGltaW5hdG9yLnNpZA",
+    "title": "Eliminator",
+    "composer": "Tel Jeroen",
+    "composerKey": "Tel_Jeroen",
+    "fileName": "Eliminator.sid",
+    "path": "sids/Tel_Jeroen/Eliminator.sid",
+    "size": 6298,
+    "top100Rank": 76,
+    "top100Title": "Eliminator",
+    "top100Composer": "Jeroen Tel / Maniacs of Noise",
+    "top100Source": "sids/Tel_Jeroen/Eliminator.sid"
+  },
+  {
+    "id": "RGFnbGlzaF9CZW4vQnVsbGRvZy5zaWQ",
+    "title": "Bulldog",
+    "composer": "Daglish Ben",
+    "composerKey": "Daglish_Ben",
+    "fileName": "Bulldog.sid",
+    "path": "sids/Daglish_Ben/Bulldog.sid",
+    "size": 3358,
+    "top100Rank": 77,
+    "top100Title": "Bulldog",
+    "top100Composer": "Ben Daglish",
+    "top100Source": "sids/Daglish_Ben/Bulldog.sid"
+  },
+  {
+    "id": "736964732f544f503130302f3037385f52616d70617274732e736964",
+    "title": "Ramparts",
+    "composer": "Mark Cooksey",
+    "composerKey": "TOP100",
+    "fileName": "078_Ramparts.sid",
+    "path": "sids/TOP100/078_Ramparts.sid",
+    "size": 8446,
+    "category": "HVSC Top 100",
+    "top100Rank": 78,
+    "top100Title": "Ramparts",
+    "top100Composer": "Mark Cooksey",
+    "top100Source": "HVSC_Top_100.zip"
+  },
+  {
+    "id": "RGFnbGlzaF9CZW4vQXJrX1BhbmRvcmEuc2lk",
+    "title": "Ark Pandora",
+    "composer": "Daglish Ben",
+    "composerKey": "Daglish_Ben",
+    "fileName": "Ark_Pandora.sid",
+    "path": "sids/Daglish_Ben/Ark_Pandora.sid",
+    "size": 5502,
+    "top100Rank": 79,
+    "top100Title": "Ark Pandora",
+    "top100Composer": "Ben Daglish",
+    "top100Source": "sids/Daglish_Ben/Ark_Pandora.sid"
+  },
+  {
+    "id": "R2Fsd2F5X01hcnRpbi9NaWFtaV9WaWNlLnNpZA",
+    "title": "Miami Vice",
+    "composer": "Galway Martin",
+    "composerKey": "Galway_Martin",
+    "fileName": "Miami_Vice.sid",
+    "path": "sids/Galway_Martin/Miami_Vice.sid",
+    "size": 6782,
+    "top100Rank": 80,
+    "top100Title": "Miami Vice",
+    "top100Composer": "Martin Galway",
+    "top100Source": "sids/Galway_Martin/Miami_Vice.sid"
+  },
+  {
+    "id": "SHViYmFyZF9Sb2IvV2FyaGF3ay5zaWQ",
+    "title": "Warhawk",
+    "composer": "Hubbard Rob",
+    "composerKey": "Hubbard_Rob",
+    "fileName": "Warhawk.sid",
+    "path": "sids/Hubbard_Rob/Warhawk.sid",
+    "size": 4065,
+    "top100Rank": 81,
+    "top100Title": "Warhawk",
+    "top100Composer": "Rob Hubbard",
+    "top100Source": "sids/Hubbard_Rob/Warhawk.sid"
+  },
+  {
+    "id": "RGFnbGlzaF9CZW4vVmlraW5ncy5zaWQ",
+    "title": "Vikings",
+    "composer": "Daglish Ben",
+    "composerKey": "Daglish_Ben",
+    "fileName": "Vikings.sid",
+    "path": "sids/Daglish_Ben/Vikings.sid",
+    "size": 5476,
+    "top100Rank": 82,
+    "top100Title": "The Vikings",
+    "top100Composer": "Ben Daglish",
+    "top100Source": "sids/Daglish_Ben/Vikings.sid"
+  },
+  {
+    "id": "736964732f544f503130302f3038335f46414d455f312e736964",
+    "title": "FAME (1)",
+    "composer": "Michael Hendriks",
+    "composerKey": "TOP100",
+    "fileName": "083_FAME_1.sid",
+    "path": "sids/TOP100/083_FAME_1.sid",
+    "size": 3551,
+    "category": "HVSC Top 100",
+    "top100Rank": 83,
+    "top100Title": "FAME (1)",
+    "top100Composer": "Michael Hendriks",
+    "top100Source": "HVSC_Top_100.zip"
+  },
+  {
+    "id": "736964732f544f503130302f3038345f535953343039362e736964",
+    "title": "SYS4096",
+    "composer": "Juha-Matti Hilpinen (AMJ)",
+    "composerKey": "TOP100",
+    "fileName": "084_SYS4096.sid",
+    "path": "sids/TOP100/084_SYS4096.sid",
+    "size": 5891,
+    "category": "HVSC Top 100",
+    "top100Rank": 84,
+    "top100Title": "SYS4096",
+    "top100Composer": "Juha-Matti Hilpinen (AMJ)",
+    "top100Source": "HVSC_Top_100.zip"
+  },
+  {
+    "id": "736964732f544f503130302f3038355f4261746d616e5f6c6f6e672e736964",
+    "title": "Batman (long)",
+    "composer": "Jens-Christian Huus",
+    "composerKey": "TOP100",
+    "fileName": "085_Batman_long.sid",
+    "path": "sids/TOP100/085_Batman_long.sid",
+    "size": 5190,
+    "category": "HVSC Top 100",
+    "top100Rank": 85,
+    "top100Title": "Batman (long)",
+    "top100Composer": "Jens-Christian Huus",
+    "top100Source": "HVSC_Top_100.zip"
+  },
+  {
+    "id": "R2Fsd2F5X01hcnRpbi9NaWtpZS5zaWQ",
+    "title": "Mikie",
+    "composer": "Galway Martin",
+    "composerKey": "Galway_Martin",
+    "fileName": "Mikie.sid",
+    "path": "sids/Galway_Martin/Mikie.sid",
+    "size": 13158,
+    "top100Rank": 86,
+    "top100Title": "Mikie",
+    "top100Composer": "Martin Galway",
+    "top100Source": "sids/Galway_Martin/Mikie.sid"
+  },
+  {
+    "id": "736964732f544f503130302f3038375f5a69675f5a61672e736964",
+    "title": "Zig Zag",
+    "composer": "Antony Crowther",
+    "composerKey": "TOP100",
+    "fileName": "087_Zig_Zag.sid",
+    "path": "sids/TOP100/087_Zig_Zag.sid",
+    "size": 3397,
+    "category": "HVSC Top 100",
+    "top100Rank": 87,
+    "top100Title": "Zig Zag",
+    "top100Composer": "Antony Crowther",
+    "top100Source": "HVSC_Top_100.zip"
+  },
+  {
+    "id": "VGVsX0plcm9lbi9CYXR0bGVfVmFsbGV5LnNpZA",
+    "title": "Battle Valley",
+    "composer": "Tel Jeroen",
+    "composerKey": "Tel_Jeroen",
+    "fileName": "Battle_Valley.sid",
+    "path": "sids/Tel_Jeroen/Battle_Valley.sid",
+    "size": 3680,
+    "top100Rank": 88,
+    "top100Title": "Battle Valley",
+    "top100Composer": "Jeroen Tel / Maniacs of Noise",
+    "top100Source": "sids/Tel_Jeroen/Battle_Valley.sid"
+  },
+  {
+    "id": "736964732f544f503130302f3038395f43686f726469616e2e736964",
+    "title": "Chordian",
+    "composer": "Jens-Christian Huus",
+    "composerKey": "TOP100",
+    "fileName": "089_Chordian.sid",
+    "path": "sids/TOP100/089_Chordian.sid",
+    "size": 5460,
+    "category": "HVSC Top 100",
+    "top100Rank": 89,
+    "top100Title": "Chordian",
+    "top100Composer": "Jens-Christian Huus",
+    "top100Source": "HVSC_Top_100.zip"
+  },
+  {
+    "id": "VGVsX0plcm9lbi9Db21iYXRfQ3Jhenkuc2lk",
+    "title": "Combat Crazy",
+    "composer": "Tel Jeroen",
+    "composerKey": "Tel_Jeroen",
+    "fileName": "Combat_Crazy.sid",
+    "path": "sids/Tel_Jeroen/Combat_Crazy.sid",
+    "size": 5236,
+    "top100Rank": 90,
+    "top100Title": "Combat Crazy",
+    "top100Composer": "Jeroen Tel / Maniacs of Noise",
+    "top100Source": "sids/Tel_Jeroen/Combat_Crazy.sid"
+  },
+  {
+    "id": "VGVsX0plcm9lbi9IYXdrZXllLnNpZA",
+    "title": "Hawkeye",
+    "composer": "Tel Jeroen",
+    "composerKey": "Tel_Jeroen",
+    "fileName": "Hawkeye.sid",
+    "path": "sids/Tel_Jeroen/Hawkeye.sid",
+    "size": 8894,
+    "top100Rank": 91,
+    "top100Title": "Hawkeye",
+    "top100Composer": "Jeroen Tel / Maniacs of Noise",
+    "top100Source": "sids/Tel_Jeroen/Hawkeye.sid"
+  },
+  {
+    "id": "R2Fsd2F5X01hcnRpbi9TaG9ydF9DaXJjdWl0LnNpZA",
+    "title": "Short Circuit",
+    "composer": "Galway Martin",
+    "composerKey": "Galway_Martin",
+    "fileName": "Short_Circuit.sid",
+    "path": "sids/Galway_Martin/Short_Circuit.sid",
+    "size": 9559,
+    "top100Rank": 92,
+    "top100Title": "Short Circuit",
+    "top100Composer": "Martin Galway",
+    "top100Source": "sids/Galway_Martin/Short_Circuit.sid"
+  },
+  {
+    "id": "736964732f544f503130302f3039335f444e415f57617272696f722e736964",
+    "title": "DNA Warrior",
+    "composer": "Thomas Petersen & K.Christensen",
+    "composerKey": "TOP100",
+    "fileName": "093_DNA_Warrior.sid",
+    "path": "sids/TOP100/093_DNA_Warrior.sid",
+    "size": 6622,
+    "category": "HVSC Top 100",
+    "top100Rank": 93,
+    "top100Title": "DNA Warrior",
+    "top100Composer": "Thomas Petersen & K.Christensen",
+    "top100Source": "HVSC_Top_100.zip"
+  },
+  {
+    "id": "V2hpdHRha2VyX0RhdmlkL0dsaWRlcl9SaWRlci5zaWQ",
+    "title": "Glider Rider",
+    "composer": "Whittaker David",
+    "composerKey": "Whittaker_David",
+    "fileName": "Glider_Rider.sid",
+    "path": "sids/Whittaker_David/Glider_Rider.sid",
+    "size": 6270,
+    "top100Rank": 94,
+    "top100Title": "Glider Rider",
+    "top100Composer": "David Whittaker",
+    "top100Source": "sids/Whittaker_David/Glider_Rider.sid"
+  },
+  {
+    "id": "736964732f544f503130302f3039355f5572696469756d2e736964",
+    "title": "Uridium",
+    "composer": "Steve Turner",
+    "composerKey": "TOP100",
+    "fileName": "095_Uridium.sid",
+    "path": "sids/TOP100/095_Uridium.sid",
+    "size": 2686,
+    "category": "HVSC Top 100",
+    "top100Rank": 95,
+    "top100Title": "Uridium",
+    "top100Composer": "Steve Turner",
+    "top100Source": "HVSC_Top_100.zip"
+  },
+  {
+    "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvVGh1bmRlcl9Gb3JjZS5zaWQ",
+    "title": "Thunder Force",
+    "composer": "Bjerregaard Johannes",
+    "composerKey": "Bjerregaard_Johannes",
+    "fileName": "Thunder_Force.sid",
+    "path": "sids/Bjerregaard_Johannes/Thunder_Force.sid",
+    "size": 5993,
+    "top100Rank": 96,
+    "top100Title": "Thunderforce",
+    "top100Composer": "Johannes Bjerregaard",
+    "top100Source": "sids/Bjerregaard_Johannes/Thunder_Force.sid"
+  },
+  {
+    "id": "SHViYmFyZF9Sb2IvS2VudGlsbGEuc2lk",
+    "title": "Kentilla",
+    "composer": "Hubbard Rob",
+    "composerKey": "Hubbard_Rob",
+    "fileName": "Kentilla.sid",
+    "path": "sids/Hubbard_Rob/Kentilla.sid",
+    "size": 4474,
+    "top100Rank": 97,
+    "top100Title": "Kentilla",
+    "top100Composer": "Rob Hubbard",
+    "top100Source": "sids/Hubbard_Rob/Kentilla.sid"
+  },
+  {
+    "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvQ3JhenlfQ29tZXRzX3JlbWl4LnNpZA",
+    "title": "Crazy Comets remix",
+    "composer": "Bjerregaard Johannes",
+    "composerKey": "Bjerregaard_Johannes",
+    "fileName": "Crazy_Comets_remix.sid",
+    "path": "sids/Bjerregaard_Johannes/Crazy_Comets_remix.sid",
+    "size": 3507,
+    "top100Rank": 98,
+    "top100Title": "Crazy Comets (remix)",
+    "top100Composer": "Johannes Bjerregaard",
+    "top100Source": "sids/Bjerregaard_Johannes/Crazy_Comets_remix.sid"
+  },
+  {
+    "id": "R2Fsd2F5X01hcnRpbi9UZXJyYV9DcmVzdGEuc2lk",
+    "title": "Terra Cresta",
+    "composer": "Galway Martin",
+    "composerKey": "Galway_Martin",
+    "fileName": "Terra_Cresta.sid",
+    "path": "sids/Galway_Martin/Terra_Cresta.sid",
+    "size": 8981,
+    "top100Rank": 99,
+    "top100Title": "Terra Cresta",
+    "top100Composer": "Martin Galway",
+    "top100Source": "sids/Galway_Martin/Terra_Cresta.sid"
+  },
+  {
+    "id": "736964732f544f503130302f3130305f5465747269732e736964",
+    "title": "Tetris",
+    "composer": "Wally Beben",
+    "composerKey": "TOP100",
+    "fileName": "100_Tetris.sid",
+    "path": "sids/TOP100/100_Tetris.sid",
+    "size": 13665,
+    "category": "HVSC Top 100",
+    "top100Rank": 100,
+    "top100Title": "Tetris",
+    "top100Composer": "Wally Beben",
+    "top100Source": "HVSC_Top_100.zip"
+  },
+  {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvMm5kLnNpZA",
     "title": "2nd",
     "composer": "Bjerregaard Johannes",
@@ -108,15 +1437,6 @@ window.SID_LIBRARY = [
     "size": 3680
   },
   {
-    "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvQ3JhenlfQ29tZXRzX3JlbWl4LnNpZA",
-    "title": "Crazy Comets remix",
-    "composer": "Bjerregaard Johannes",
-    "composerKey": "Bjerregaard_Johannes",
-    "fileName": "Crazy_Comets_remix.sid",
-    "path": "sids/Bjerregaard_Johannes/Crazy_Comets_remix.sid",
-    "size": 3507
-  },
-  {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvQ3V0ZV9UdW5lLnNpZA",
     "title": "Cute Tune",
     "composer": "Bjerregaard Johannes",
@@ -124,33 +1444,6 @@ window.SID_LIBRARY = [
     "fileName": "Cute_Tune.sid",
     "path": "sids/Bjerregaard_Johannes/Cute_Tune.sid",
     "size": 3846
-  },
-  {
-    "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvRGVlbF8xLnNpZA",
-    "title": "Deel 1",
-    "composer": "Bjerregaard Johannes",
-    "composerKey": "Bjerregaard_Johannes",
-    "fileName": "Deel_1.sid",
-    "path": "sids/Bjerregaard_Johannes/Deel_1.sid",
-    "size": 3324
-  },
-  {
-    "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvRGVlbF8yLnNpZA",
-    "title": "Deel 2",
-    "composer": "Bjerregaard Johannes",
-    "composerKey": "Bjerregaard_Johannes",
-    "fileName": "Deel_2.sid",
-    "path": "sids/Bjerregaard_Johannes/Deel_2.sid",
-    "size": 3260
-  },
-  {
-    "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvRGVwZWNoZV9Nb2RlX1NvbmdzLnNpZA",
-    "title": "Depeche Mode Songs",
-    "composer": "Bjerregaard Johannes",
-    "composerKey": "Bjerregaard_Johannes",
-    "fileName": "Depeche_Mode_Songs.sid",
-    "path": "sids/Bjerregaard_Johannes/Depeche_Mode_Songs.sid",
-    "size": 14709
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvRE1DX0RlbW9fSVZfdHVuZV8xLnNpZA",
@@ -187,6 +1480,33 @@ window.SID_LIBRARY = [
     "fileName": "DMC_Demo_IV_tune_5.sid",
     "path": "sids/Bjerregaard_Johannes/DMC_Demo_IV_tune_5.sid",
     "size": 1560
+  },
+  {
+    "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvRGVlbF8xLnNpZA",
+    "title": "Deel 1",
+    "composer": "Bjerregaard Johannes",
+    "composerKey": "Bjerregaard_Johannes",
+    "fileName": "Deel_1.sid",
+    "path": "sids/Bjerregaard_Johannes/Deel_1.sid",
+    "size": 3324
+  },
+  {
+    "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvRGVlbF8yLnNpZA",
+    "title": "Deel 2",
+    "composer": "Bjerregaard Johannes",
+    "composerKey": "Bjerregaard_Johannes",
+    "fileName": "Deel_2.sid",
+    "path": "sids/Bjerregaard_Johannes/Deel_2.sid",
+    "size": 3260
+  },
+  {
+    "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvRGVwZWNoZV9Nb2RlX1NvbmdzLnNpZA",
+    "title": "Depeche Mode Songs",
+    "composer": "Bjerregaard Johannes",
+    "composerKey": "Bjerregaard_Johannes",
+    "fileName": "Depeche_Mode_Songs.sid",
+    "path": "sids/Bjerregaard_Johannes/Depeche_Mode_Songs.sid",
+    "size": 14709
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvRG9taW5vX0RhbmNpbmcuc2lk",
@@ -414,6 +1734,15 @@ window.SID_LIBRARY = [
     "size": 9741
   },
   {
+    "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvTVNJX0RlbW8uc2lk",
+    "title": "MSI Demo",
+    "composer": "Bjerregaard Johannes",
+    "composerKey": "Bjerregaard_Johannes",
+    "fileName": "MSI_Demo.sid",
+    "path": "sids/Bjerregaard_Johannes/MSI_Demo.sid",
+    "size": 5558
+  },
+  {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvTWFnbmV0aWNfRmllbGRzLnNpZA",
     "title": "Magnetic Fields",
     "composer": "Bjerregaard Johannes",
@@ -439,15 +1768,6 @@ window.SID_LIBRARY = [
     "fileName": "Mixerplot.sid",
     "path": "sids/Bjerregaard_Johannes/Mixerplot.sid",
     "size": 2846
-  },
-  {
-    "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvTVNJX0RlbW8uc2lk",
-    "title": "MSI Demo",
-    "composer": "Bjerregaard Johannes",
-    "composerKey": "Bjerregaard_Johannes",
-    "fileName": "MSI_Demo.sid",
-    "path": "sids/Bjerregaard_Johannes/MSI_Demo.sid",
-    "size": 5558
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvTXVzODYuc2lk",
@@ -484,15 +1804,6 @@ window.SID_LIBRARY = [
     "fileName": "Namnam_Special.sid",
     "path": "sids/Bjerregaard_Johannes/Namnam_Special.sid",
     "size": 3020
-  },
-  {
-    "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvTmlnaHRkYXduLnNpZA",
-    "title": "Nightdawn",
-    "composer": "Bjerregaard Johannes",
-    "composerKey": "Bjerregaard_Johannes",
-    "fileName": "Nightdawn.sid",
-    "path": "sids/Bjerregaard_Johannes/Nightdawn.sid",
-    "size": 16205
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvT21lZ2FfRm9yY2VfT25lLnNpZA",
@@ -547,6 +1858,15 @@ window.SID_LIBRARY = [
     "fileName": "Rosanna.sid",
     "path": "sids/Bjerregaard_Johannes/Rosanna.sid",
     "size": 2729
+  },
+  {
+    "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvU1RJSTguc2lk",
+    "title": "STII8",
+    "composer": "Bjerregaard Johannes",
+    "composerKey": "Bjerregaard_Johannes",
+    "fileName": "STII8.sid",
+    "path": "sids/Bjerregaard_Johannes/STII8.sid",
+    "size": 3248
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvU2FyYWguc2lk",
@@ -639,24 +1959,6 @@ window.SID_LIBRARY = [
     "size": 3160
   },
   {
-    "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvU1RJSTguc2lk",
-    "title": "STII8",
-    "composer": "Bjerregaard Johannes",
-    "composerKey": "Bjerregaard_Johannes",
-    "fileName": "STII8.sid",
-    "path": "sids/Bjerregaard_Johannes/STII8.sid",
-    "size": 3248
-  },
-  {
-    "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvU3Rvcm1sb3JkLnNpZA",
-    "title": "Stormlord",
-    "composer": "Bjerregaard Johannes",
-    "composerKey": "Bjerregaard_Johannes",
-    "fileName": "Stormlord.sid",
-    "path": "sids/Bjerregaard_Johannes/Stormlord.sid",
-    "size": 36318
-  },
-  {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvU3Rvcm1sb3JkX1YyLnNpZA",
     "title": "Stormlord V2",
     "composer": "Bjerregaard Johannes",
@@ -675,15 +1977,6 @@ window.SID_LIBRARY = [
     "size": 4317
   },
   {
-    "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvU3dlZXQuc2lk",
-    "title": "Sweet",
-    "composer": "Bjerregaard Johannes",
-    "composerKey": "Bjerregaard_Johannes",
-    "fileName": "Sweet.sid",
-    "path": "sids/Bjerregaard_Johannes/Sweet.sid",
-    "size": 2538
-  },
-  {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvVGVzdC5zaWQ",
     "title": "Test",
     "composer": "Bjerregaard Johannes",
@@ -691,15 +1984,6 @@ window.SID_LIBRARY = [
     "fileName": "Test.sid",
     "path": "sids/Bjerregaard_Johannes/Test.sid",
     "size": 3652
-  },
-  {
-    "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvVGh1bmRlcl9Gb3JjZS5zaWQ",
-    "title": "Thunder Force",
-    "composer": "Bjerregaard Johannes",
-    "composerKey": "Bjerregaard_Johannes",
-    "fileName": "Thunder_Force.sid",
-    "path": "sids/Bjerregaard_Johannes/Thunder_Force.sid",
-    "size": 5993
   },
   {
     "id": "QmplcnJlZ2FhcmRfSm9oYW5uZXMvVGlnZXJfTWlzc2lvbi5zaWQ",
@@ -810,15 +2094,6 @@ window.SID_LIBRARY = [
     "size": 44430
   },
   {
-    "id": "RGFnbGlzaF9CZW4vQXJrX1BhbmRvcmEuc2lk",
-    "title": "Ark Pandora",
-    "composer": "Daglish Ben",
-    "composerKey": "Daglish_Ben",
-    "fileName": "Ark_Pandora.sid",
-    "path": "sids/Daglish_Ben/Ark_Pandora.sid",
-    "size": 5502
-  },
-  {
     "id": "RGFnbGlzaF9CZW4vQXJ0dXJhLnNpZA",
     "title": "Artura",
     "composer": "Daglish Ben",
@@ -918,15 +2193,6 @@ window.SID_LIBRARY = [
     "size": 4222
   },
   {
-    "id": "RGFnbGlzaF9CZW4vQnVsbGRvZy5zaWQ",
-    "title": "Bulldog",
-    "composer": "Daglish Ben",
-    "composerKey": "Daglish_Ben",
-    "fileName": "Bulldog.sid",
-    "path": "sids/Daglish_Ben/Bulldog.sid",
-    "size": 3358
-  },
-  {
     "id": "RGFnbGlzaF9CZW4vQnV0Y2hlcl9IaWxsLnNpZA",
     "title": "Butcher Hill",
     "composer": "Daglish Ben",
@@ -961,15 +2227,6 @@ window.SID_LIBRARY = [
     "fileName": "Chubby_Gristle.sid",
     "path": "sids/Daglish_Ben/Chubby_Gristle.sid",
     "size": 3504
-  },
-  {
-    "id": "RGFnbGlzaF9CZW4vQ29icmEuc2lk",
-    "title": "Cobra",
-    "composer": "Daglish Ben",
-    "composerKey": "Daglish_Ben",
-    "fileName": "Cobra.sid",
-    "path": "sids/Daglish_Ben/Cobra.sid",
-    "size": 3945
   },
   {
     "id": "RGFnbGlzaF9CZW4vRGFnbGlzaF8wMS5zaWQ",
@@ -1242,15 +2499,6 @@ window.SID_LIBRARY = [
     "size": 9694
   },
   {
-    "id": "RGFnbGlzaF9CZW4vTGFzdF9OaW5qYS5zaWQ",
-    "title": "Last Ninja",
-    "composer": "Daglish Ben",
-    "composerKey": "Daglish_Ben",
-    "fileName": "Last_Ninja.sid",
-    "path": "sids/Daglish_Ben/Last_Ninja.sid",
-    "size": 35617
-  },
-  {
     "id": "RGFnbGlzaF9CZW4vTHVuYXJpLnNpZA",
     "title": "Lunari",
     "composer": "Daglish Ben",
@@ -1258,6 +2506,15 @@ window.SID_LIBRARY = [
     "fileName": "Lunari.sid",
     "path": "sids/Daglish_Ben/Lunari.sid",
     "size": 3481
+  },
+  {
+    "id": "RGFnbGlzaF9CZW4vTUFTS19JSUlfVmVub21fU3RyaWtlc19CYWNrLnNpZA",
+    "title": "MASK III Venom Strikes Back",
+    "composer": "Daglish Ben",
+    "composerKey": "Daglish_Ben",
+    "fileName": "MASK_III_Venom_Strikes_Back.sid",
+    "path": "sids/Daglish_Ben/MASK_III_Venom_Strikes_Back.sid",
+    "size": 4194
   },
   {
     "id": "RGFnbGlzaF9CZW4vTWFzay5zaWQ",
@@ -1276,15 +2533,6 @@ window.SID_LIBRARY = [
     "fileName": "Mask_II.sid",
     "path": "sids/Daglish_Ben/Mask_II.sid",
     "size": 3395
-  },
-  {
-    "id": "RGFnbGlzaF9CZW4vTUFTS19JSUlfVmVub21fU3RyaWtlc19CYWNrLnNpZA",
-    "title": "MASK III Venom Strikes Back",
-    "composer": "Daglish Ben",
-    "composerKey": "Daglish_Ben",
-    "fileName": "MASK_III_Venom_Strikes_Back.sid",
-    "path": "sids/Daglish_Ben/MASK_III_Venom_Strikes_Back.sid",
-    "size": 4194
   },
   {
     "id": "RGFnbGlzaF9CZW4vTWFzdGVyc19vZl90aGVfVW5pdmVyc2Uuc2lk",
@@ -1492,33 +2740,6 @@ window.SID_LIBRARY = [
     "fileName": "They_Stole_a_Million.sid",
     "path": "sids/Daglish_Ben/They_Stole_a_Million.sid",
     "size": 2693
-  },
-  {
-    "id": "RGFnbGlzaF9CZW4vVGhpbmdfQm91bmNlc19CYWNrLnNpZA",
-    "title": "Thing Bounces Back",
-    "composer": "Daglish Ben",
-    "composerKey": "Daglish_Ben",
-    "fileName": "Thing_Bounces_Back.sid",
-    "path": "sids/Daglish_Ben/Thing_Bounces_Back.sid",
-    "size": 4734
-  },
-  {
-    "id": "RGFnbGlzaF9CZW4vVHJhcC5zaWQ",
-    "title": "Trap",
-    "composer": "Daglish Ben",
-    "composerKey": "Daglish_Ben",
-    "fileName": "Trap.sid",
-    "path": "sids/Daglish_Ben/Trap.sid",
-    "size": 4478
-  },
-  {
-    "id": "RGFnbGlzaF9CZW4vVmlraW5ncy5zaWQ",
-    "title": "Vikings",
-    "composer": "Daglish Ben",
-    "composerKey": "Daglish_Ben",
-    "fileName": "Vikings.sid",
-    "path": "sids/Daglish_Ben/Vikings.sid",
-    "size": 5476
   },
   {
     "id": "RGFnbGlzaF9CZW4vV2F5X29mX3RoZV9UaWdlci5zaWQ",
@@ -2115,15 +3336,6 @@ window.SID_LIBRARY = [
     "size": 21389
   },
   {
-    "id": "Rm9sbGluX1RpbS9CaW9uaWNfQ29tbWFuZG8uc2lk",
-    "title": "Bionic Commando",
-    "composer": "Follin Tim",
-    "composerKey": "Follin_Tim",
-    "fileName": "Bionic_Commando.sid",
-    "path": "sids/Follin_Tim/Bionic_Commando.sid",
-    "size": 12158
-  },
-  {
     "id": "Rm9sbGluX1RpbS9CbGFja19MYW1wLnNpZA",
     "title": "Black Lamp",
     "composer": "Follin Tim",
@@ -2140,24 +3352,6 @@ window.SID_LIBRARY = [
     "fileName": "Bodyslam.sid",
     "path": "sids/Follin_Tim/Bodyslam.sid",
     "size": 7107
-  },
-  {
-    "id": "Rm9sbGluX1RpbS9HYXVudGxldF9JSUkuc2lk",
-    "title": "Gauntlet III",
-    "composer": "Follin Tim",
-    "composerKey": "Follin_Tim",
-    "fileName": "Gauntlet_III.sid",
-    "path": "sids/Follin_Tim/Gauntlet_III.sid",
-    "size": 6642
-  },
-  {
-    "id": "Rm9sbGluX1RpbS9HaG91bHNfbl9HaG9zdHMuc2lk",
-    "title": "Ghouls n Ghosts",
-    "composer": "Follin Tim",
-    "composerKey": "Follin_Tim",
-    "fileName": "Ghouls_n_Ghosts.sid",
-    "path": "sids/Follin_Tim/Ghouls_n_Ghosts.sid",
-    "size": 19005
   },
   {
     "id": "Rm9sbGluX1RpbS9HaG91bHNfbl9HaG9zdHNfQWx0ZXJuYXRlLnNpZA",
@@ -2241,15 +3435,6 @@ window.SID_LIBRARY = [
     "size": 5038
   },
   {
-    "id": "Rm9sbGluX1RpbS9TY3VtYmFsbC5zaWQ",
-    "title": "Scumball",
-    "composer": "Follin Tim",
-    "composerKey": "Follin_Tim",
-    "fileName": "Scumball.sid",
-    "path": "sids/Follin_Tim/Scumball.sid",
-    "size": 3619
-  },
-  {
     "id": "Rm9sbGluX1RpbS9Ta3lfU2hhcmsuc2lk",
     "title": "Sky Shark",
     "composer": "Follin Tim",
@@ -2266,15 +3451,6 @@ window.SID_LIBRARY = [
     "fileName": "Test_Bits.sid",
     "path": "sids/Follin_Tim/Test_Bits.sid",
     "size": 4363
-  },
-  {
-    "id": "R2Fsd2F5X01hcnRpbi9Bcmthbm9pZC5zaWQ",
-    "title": "Arkanoid",
-    "composer": "Galway Martin",
-    "composerKey": "Galway_Martin",
-    "fileName": "Arkanoid.sid",
-    "path": "sids/Galway_Martin/Arkanoid.sid",
-    "size": 9834
   },
   {
     "id": "R2Fsd2F5X01hcnRpbi9Bcmthbm9pZF9hbHRlcm5hdGl2ZV9kcnVtcy5zaWQ",
@@ -2304,15 +3480,6 @@ window.SID_LIBRARY = [
     "size": 11390
   },
   {
-    "id": "R2Fsd2F5X01hcnRpbi9Db21pY19CYWtlcnkuc2lk",
-    "title": "Comic Bakery",
-    "composer": "Galway Martin",
-    "composerKey": "Galway_Martin",
-    "fileName": "Comic_Bakery.sid",
-    "path": "sids/Galway_Martin/Comic_Bakery.sid",
-    "size": 8574
-  },
-  {
     "id": "R2Fsd2F5X01hcnRpbi9Db21tYW5kb19IaWdoLVNjb3JlLnNpZA",
     "title": "Commando High-Score",
     "composer": "Galway Martin",
@@ -2338,15 +3505,6 @@ window.SID_LIBRARY = [
     "fileName": "Game_Over.sid",
     "path": "sids/Galway_Martin/Game_Over.sid",
     "size": 8574
-  },
-  {
-    "id": "R2Fsd2F5X01hcnRpbi9HcmVlbl9CZXJldC5zaWQ",
-    "title": "Green Beret",
-    "composer": "Galway Martin",
-    "composerKey": "Galway_Martin",
-    "fileName": "Green_Beret.sid",
-    "path": "sids/Galway_Martin/Green_Beret.sid",
-    "size": 12520
   },
   {
     "id": "R2Fsd2F5X01hcnRpbi9IZWxpa29wdGVyX0phZ2Quc2lk",
@@ -2412,13 +3570,13 @@ window.SID_LIBRARY = [
     "size": 4702
   },
   {
-    "id": "R2Fsd2F5X01hcnRpbi9NaWFtaV9WaWNlLnNpZA",
-    "title": "Miami Vice",
+    "id": "R2Fsd2F5X01hcnRpbi9NaWNyb1Byb3NlX1NvY2Nlcl9WMS5zaWQ",
+    "title": "MicroProse Soccer V1",
     "composer": "Galway Martin",
     "composerKey": "Galway_Martin",
-    "fileName": "Miami_Vice.sid",
-    "path": "sids/Galway_Martin/Miami_Vice.sid",
-    "size": 6782
+    "fileName": "MicroProse_Soccer_V1.sid",
+    "path": "sids/Galway_Martin/MicroProse_Soccer_V1.sid",
+    "size": 5458
   },
   {
     "id": "R2Fsd2F5X01hcnRpbi9NaWNyb1Byb3NlX1NvY2Nlcl9pbmRvb3Iuc2lk",
@@ -2448,24 +3606,6 @@ window.SID_LIBRARY = [
     "size": 3722
   },
   {
-    "id": "R2Fsd2F5X01hcnRpbi9NaWNyb1Byb3NlX1NvY2Nlcl9WMS5zaWQ",
-    "title": "MicroProse Soccer V1",
-    "composer": "Galway Martin",
-    "composerKey": "Galway_Martin",
-    "fileName": "MicroProse_Soccer_V1.sid",
-    "path": "sids/Galway_Martin/MicroProse_Soccer_V1.sid",
-    "size": 5458
-  },
-  {
-    "id": "R2Fsd2F5X01hcnRpbi9NaWtpZS5zaWQ",
-    "title": "Mikie",
-    "composer": "Galway Martin",
-    "composerKey": "Galway_Martin",
-    "fileName": "Mikie.sid",
-    "path": "sids/Galway_Martin/Mikie.sid",
-    "size": 13158
-  },
-  {
     "id": "R2Fsd2F5X01hcnRpbi9OZXZlcmVuZGluZ19TdG9yeS5zaWQ",
     "title": "Neverending Story",
     "composer": "Galway Martin",
@@ -2493,15 +3633,6 @@ window.SID_LIBRARY = [
     "size": 3449
   },
   {
-    "id": "R2Fsd2F5X01hcnRpbi9QYXJhbGxheC5zaWQ",
-    "title": "Parallax",
-    "composer": "Galway Martin",
-    "composerKey": "Galway_Martin",
-    "fileName": "Parallax.sid",
-    "path": "sids/Galway_Martin/Parallax.sid",
-    "size": 7281
-  },
-  {
     "id": "R2Fsd2F5X01hcnRpbi9QaW5nX1Bvbmcuc2lk",
     "title": "Ping Pong",
     "composer": "Galway Martin",
@@ -2509,15 +3640,6 @@ window.SID_LIBRARY = [
     "fileName": "Ping_Pong.sid",
     "path": "sids/Galway_Martin/Ping_Pong.sid",
     "size": 6180
-  },
-  {
-    "id": "R2Fsd2F5X01hcnRpbi9SYW1ib19GaXJzdF9CbG9vZF9QYXJ0X0lJLnNpZA",
-    "title": "Rambo First Blood Part II",
-    "composer": "Galway Martin",
-    "composerKey": "Galway_Martin",
-    "fileName": "Rambo_First_Blood_Part_II.sid",
-    "path": "sids/Galway_Martin/Rambo_First_Blood_Part_II.sid",
-    "size": 16778
   },
   {
     "id": "R2Fsd2F5X01hcnRpbi9SYXN0YW4uc2lk",
@@ -2536,15 +3658,6 @@ window.SID_LIBRARY = [
     "fileName": "Rolands_Ratrace.sid",
     "path": "sids/Galway_Martin/Rolands_Ratrace.sid",
     "size": 7304
-  },
-  {
-    "id": "R2Fsd2F5X01hcnRpbi9TaG9ydF9DaXJjdWl0LnNpZA",
-    "title": "Short Circuit",
-    "composer": "Galway Martin",
-    "composerKey": "Galway_Martin",
-    "fileName": "Short_Circuit.sid",
-    "path": "sids/Galway_Martin/Short_Circuit.sid",
-    "size": 9559
   },
   {
     "id": "R2Fsd2F5X01hcnRpbi9TbGFwX0ZpZ2h0LnNpZA",
@@ -2581,42 +3694,6 @@ window.SID_LIBRARY = [
     "fileName": "Swag.sid",
     "path": "sids/Galway_Martin/Swag.sid",
     "size": 2904
-  },
-  {
-    "id": "R2Fsd2F5X01hcnRpbi9UZXJyYV9DcmVzdGEuc2lk",
-    "title": "Terra Cresta",
-    "composer": "Galway Martin",
-    "composerKey": "Galway_Martin",
-    "fileName": "Terra_Cresta.sid",
-    "path": "sids/Galway_Martin/Terra_Cresta.sid",
-    "size": 8981
-  },
-  {
-    "id": "R2Fsd2F5X01hcnRpbi9UaW1lc19vZl9Mb3JlLnNpZA",
-    "title": "Times of Lore",
-    "composer": "Galway Martin",
-    "composerKey": "Galway_Martin",
-    "fileName": "Times_of_Lore.sid",
-    "path": "sids/Galway_Martin/Times_of_Lore.sid",
-    "size": 13319
-  },
-  {
-    "id": "R2Fsd2F5X01hcnRpbi9XaXpiYWxsLnNpZA",
-    "title": "Wizball",
-    "composer": "Galway Martin",
-    "composerKey": "Galway_Martin",
-    "fileName": "Wizball.sid",
-    "path": "sids/Galway_Martin/Wizball.sid",
-    "size": 8446
-  },
-  {
-    "id": "R2Fsd2F5X01hcnRpbi9ZaWVfQXJfS3VuZ19GdS5zaWQ",
-    "title": "Yie Ar Kung Fu",
-    "composer": "Galway Martin",
-    "composerKey": "Galway_Martin",
-    "fileName": "Yie_Ar_Kung_Fu.sid",
-    "path": "sids/Galway_Martin/Yie_Ar_Kung_Fu.sid",
-    "size": 7934
   },
   {
     "id": "R2Fsd2F5X01hcnRpbi9ZaWVfQXJfS3VuZ19GdV9JSS5zaWQ",
@@ -3628,6 +4705,16 @@ window.SID_LIBRARY = [
     "category": "A-F"
   },
   {
+    "id": "R0FNRVMvQS1GL0JPRkhfU2VydmVyc19VbmRlcl9TaWVnZS5zaWQ",
+    "title": "BOFH Servers Under Siege",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "BOFH_Servers_Under_Siege.sid",
+    "path": "sids/GAMES/A-F/BOFH_Servers_Under_Siege.sid",
+    "size": 4402,
+    "category": "A-F"
+  },
+  {
     "id": "R0FNRVMvQS1GL0JhYWwuc2lk",
     "title": "Baal",
     "composer": "Games",
@@ -3828,16 +4915,6 @@ window.SID_LIBRARY = [
     "category": "A-F"
   },
   {
-    "id": "R0FNRVMvQS1GL0JhdHRsZV9mb3JfQ3Jvbm9zLnNpZA",
-    "title": "Battle for Cronos",
-    "composer": "Games",
-    "composerKey": "GAMES",
-    "fileName": "Battle_for_Cronos.sid",
-    "path": "sids/GAMES/A-F/Battle_for_Cronos.sid",
-    "size": 2306,
-    "category": "A-F"
-  },
-  {
     "id": "R0FNRVMvQS1GL0JhdHRsZV9TdGF0aW9ucy5zaWQ",
     "title": "Battle Stations",
     "composer": "Games",
@@ -3855,6 +4932,16 @@ window.SID_LIBRARY = [
     "fileName": "Battle_Throne.sid",
     "path": "sids/GAMES/A-F/Battle_Throne.sid",
     "size": 10677,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JhdHRsZV9mb3JfQ3Jvbm9zLnNpZA",
+    "title": "Battle for Cronos",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Battle_for_Cronos.sid",
+    "path": "sids/GAMES/A-F/Battle_for_Cronos.sid",
+    "size": 2306,
     "category": "A-F"
   },
   {
@@ -4188,16 +5275,6 @@ window.SID_LIBRARY = [
     "category": "A-F"
   },
   {
-    "id": "R0FNRVMvQS1GL0JsdWVfYW5kX3RoZV9HcmF5X0JBU0lDLnNpZA",
-    "title": "Blue and the Gray BASIC",
-    "composer": "Games",
-    "composerKey": "GAMES",
-    "fileName": "Blue_and_the_Gray_BASIC.sid",
-    "path": "sids/GAMES/A-F/Blue_and_the_Gray_BASIC.sid",
-    "size": 905,
-    "category": "A-F"
-  },
-  {
     "id": "R0FNRVMvQS1GL0JsdWVfTWF4XzIwMDEuc2lk",
     "title": "Blue Max 2001",
     "composer": "Games",
@@ -4205,6 +5282,16 @@ window.SID_LIBRARY = [
     "fileName": "Blue_Max_2001.sid",
     "path": "sids/GAMES/A-F/Blue_Max_2001.sid",
     "size": 894,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0JsdWVfYW5kX3RoZV9HcmF5X0JBU0lDLnNpZA",
+    "title": "Blue and the Gray BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Blue_and_the_Gray_BASIC.sid",
+    "path": "sids/GAMES/A-F/Blue_and_the_Gray_BASIC.sid",
+    "size": 905,
     "category": "A-F"
   },
   {
@@ -4245,16 +5332,6 @@ window.SID_LIBRARY = [
     "fileName": "Bod_Squad.sid",
     "path": "sids/GAMES/A-F/Bod_Squad.sid",
     "size": 6690,
-    "category": "A-F"
-  },
-  {
-    "id": "R0FNRVMvQS1GL0JPRkhfU2VydmVyc19VbmRlcl9TaWVnZS5zaWQ",
-    "title": "BOFH Servers Under Siege",
-    "composer": "Games",
-    "composerKey": "GAMES",
-    "fileName": "BOFH_Servers_Under_Siege.sid",
-    "path": "sids/GAMES/A-F/BOFH_Servers_Under_Siege.sid",
-    "size": 4402,
     "category": "A-F"
   },
   {
@@ -5058,26 +6135,6 @@ window.SID_LIBRARY = [
     "category": "A-F"
   },
   {
-    "id": "R0FNRVMvQS1GL0Nhc3RsZV9vZl9MaWZlLnNpZA",
-    "title": "Castle of Life",
-    "composer": "Games",
-    "composerKey": "GAMES",
-    "fileName": "Castle_of_Life.sid",
-    "path": "sids/GAMES/A-F/Castle_of_Life.sid",
-    "size": 1800,
-    "category": "A-F"
-  },
-  {
-    "id": "R0FNRVMvQS1GL0Nhc3RsZV9vZl9NYWRuZXNzLnNpZA",
-    "title": "Castle of Madness",
-    "composer": "Games",
-    "composerKey": "GAMES",
-    "fileName": "Castle_of_Madness.sid",
-    "path": "sids/GAMES/A-F/Castle_of_Madness.sid",
-    "size": 16877,
-    "category": "A-F"
-  },
-  {
     "id": "R0FNRVMvQS1GL0Nhc3RsZV9SYWlkLnNpZA",
     "title": "Castle Raid",
     "composer": "Games",
@@ -5095,6 +6152,26 @@ window.SID_LIBRARY = [
     "fileName": "Castle_Shadowgate.sid",
     "path": "sids/GAMES/A-F/Castle_Shadowgate.sid",
     "size": 33613,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0Nhc3RsZV9vZl9MaWZlLnNpZA",
+    "title": "Castle of Life",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Castle_of_Life.sid",
+    "path": "sids/GAMES/A-F/Castle_of_Life.sid",
+    "size": 1800,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0Nhc3RsZV9vZl9NYWRuZXNzLnNpZA",
+    "title": "Castle of Madness",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Castle_of_Madness.sid",
+    "path": "sids/GAMES/A-F/Castle_of_Madness.sid",
+    "size": 16877,
     "category": "A-F"
   },
   {
@@ -6208,16 +7285,6 @@ window.SID_LIBRARY = [
     "category": "A-F"
   },
   {
-    "id": "R0FNRVMvQS1GL0RlYXRoX2luX0VmZmVjdC5zaWQ",
-    "title": "Death in Effect",
-    "composer": "Games",
-    "composerKey": "GAMES",
-    "fileName": "Death_in_Effect.sid",
-    "path": "sids/GAMES/A-F/Death_in_Effect.sid",
-    "size": 43634,
-    "category": "A-F"
-  },
-  {
     "id": "R0FNRVMvQS1GL0RlYXRoX0tuaWdodHNfb2ZfS3J5bm4uc2lk",
     "title": "Death Knights of Krynn",
     "composer": "Games",
@@ -6245,6 +7312,16 @@ window.SID_LIBRARY = [
     "fileName": "Death_Trap_64.sid",
     "path": "sids/GAMES/A-F/Death_Trap_64.sid",
     "size": 2162,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0RlYXRoX2luX0VmZmVjdC5zaWQ",
+    "title": "Death in Effect",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Death_in_Effect.sid",
+    "path": "sids/GAMES/A-F/Death_in_Effect.sid",
+    "size": 43634,
     "category": "A-F"
   },
   {
@@ -6418,16 +7495,6 @@ window.SID_LIBRARY = [
     "category": "A-F"
   },
   {
-    "id": "R0FNRVMvQS1GL0RpZV9kcmVpX011c2tldGllcmUuc2lk",
-    "title": "Die drei Musketiere",
-    "composer": "Games",
-    "composerKey": "GAMES",
-    "fileName": "Die_drei_Musketiere.sid",
-    "path": "sids/GAMES/A-F/Die_drei_Musketiere.sid",
-    "size": 2785,
-    "category": "A-F"
-  },
-  {
     "id": "R0FNRVMvQS1GL0RpZV9IYXJkLnNpZA",
     "title": "Die Hard",
     "composer": "Games",
@@ -6445,6 +7512,16 @@ window.SID_LIBRARY = [
     "fileName": "Die_Pruefung.sid",
     "path": "sids/GAMES/A-F/Die_Pruefung.sid",
     "size": 24497,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0RpZV9kcmVpX011c2tldGllcmUuc2lk",
+    "title": "Die drei Musketiere",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Die_drei_Musketiere.sid",
+    "path": "sids/GAMES/A-F/Die_drei_Musketiere.sid",
+    "size": 2785,
     "category": "A-F"
   },
   {
@@ -6628,16 +7705,6 @@ window.SID_LIBRARY = [
     "category": "A-F"
   },
   {
-    "id": "R0FNRVMvQS1GL0RyYWdvbl9uX1ByaW5jZXNzLnNpZA",
-    "title": "Dragon n Princess",
-    "composer": "Games",
-    "composerKey": "GAMES",
-    "fileName": "Dragon_n_Princess.sid",
-    "path": "sids/GAMES/A-F/Dragon_n_Princess.sid",
-    "size": 2417,
-    "category": "A-F"
-  },
-  {
     "id": "R0FNRVMvQS1GL0RyYWdvbl9XYXJzLnNpZA",
     "title": "Dragon Wars",
     "composer": "Games",
@@ -6645,6 +7712,16 @@ window.SID_LIBRARY = [
     "fileName": "Dragon_Wars.sid",
     "path": "sids/GAMES/A-F/Dragon_Wars.sid",
     "size": 1156,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0RyYWdvbl9uX1ByaW5jZXNzLnNpZA",
+    "title": "Dragon n Princess",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Dragon_n_Princess.sid",
+    "path": "sids/GAMES/A-F/Dragon_n_Princess.sid",
+    "size": 2417,
     "category": "A-F"
   },
   {
@@ -6948,16 +8025,6 @@ window.SID_LIBRARY = [
     "category": "A-F"
   },
   {
-    "id": "R0FNRVMvQS1GL0VzY2FwZV9mcm9tX3RoZV9EYXJrX1ByaXNvbi5zaWQ",
-    "title": "Escape from the Dark Prison",
-    "composer": "Games",
-    "composerKey": "GAMES",
-    "fileName": "Escape_from_the_Dark_Prison.sid",
-    "path": "sids/GAMES/A-F/Escape_from_the_Dark_Prison.sid",
-    "size": 10558,
-    "category": "A-F"
-  },
-  {
     "id": "R0FNRVMvQS1GL0VzY2FwZV9mcm9tX3RoZV9ERFIuc2lk",
     "title": "Escape from the DDR",
     "composer": "Games",
@@ -6965,6 +8032,16 @@ window.SID_LIBRARY = [
     "fileName": "Escape_from_the_DDR.sid",
     "path": "sids/GAMES/A-F/Escape_from_the_DDR.sid",
     "size": 1287,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0VzY2FwZV9mcm9tX3RoZV9EYXJrX1ByaXNvbi5zaWQ",
+    "title": "Escape from the Dark Prison",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Escape_from_the_Dark_Prison.sid",
+    "path": "sids/GAMES/A-F/Escape_from_the_Dark_Prison.sid",
+    "size": 10558,
     "category": "A-F"
   },
   {
@@ -7065,6 +8142,16 @@ window.SID_LIBRARY = [
     "fileName": "F-14_Tomcat.sid",
     "path": "sids/GAMES/A-F/F-14_Tomcat.sid",
     "size": 3432,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0ZTU19MaWJlcmF0b3Iuc2lk",
+    "title": "FSS Liberator",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "FSS_Liberator.sid",
+    "path": "sids/GAMES/A-F/FSS_Liberator.sid",
+    "size": 3728,
     "category": "A-F"
   },
   {
@@ -7208,16 +8295,6 @@ window.SID_LIBRARY = [
     "category": "A-F"
   },
   {
-    "id": "R0FNRVMvQS1GL0ZpcmVfYW5kX0ZvcmdldF9JSS5zaWQ",
-    "title": "Fire and Forget II",
-    "composer": "Games",
-    "composerKey": "GAMES",
-    "fileName": "Fire_and_Forget_II.sid",
-    "path": "sids/GAMES/A-F/Fire_and_Forget_II.sid",
-    "size": 8274,
-    "category": "A-F"
-  },
-  {
     "id": "R0FNRVMvQS1GL0ZpcmVfQnJlYXRoLnNpZA",
     "title": "Fire Breath",
     "composer": "Games",
@@ -7258,6 +8335,16 @@ window.SID_LIBRARY = [
     "category": "A-F"
   },
   {
+    "id": "R0FNRVMvQS1GL0ZpcmVfYW5kX0ZvcmdldF9JSS5zaWQ",
+    "title": "Fire and Forget II",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Fire_and_Forget_II.sid",
+    "path": "sids/GAMES/A-F/Fire_and_Forget_II.sid",
+    "size": 8274,
+    "category": "A-F"
+  },
+  {
     "id": "R0FNRVMvQS1GL0ZpcmUtRHJpbGwuc2lk",
     "title": "Fire-Drill",
     "composer": "Games",
@@ -7265,6 +8352,16 @@ window.SID_LIBRARY = [
     "fileName": "Fire-Drill.sid",
     "path": "sids/GAMES/A-F/Fire-Drill.sid",
     "size": 2859,
+    "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvQS1GL0ZpcmVUcmFwLnNpZA",
+    "title": "FireTrap",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "FireTrap.sid",
+    "path": "sids/GAMES/A-F/FireTrap.sid",
+    "size": 3606,
     "category": "A-F"
   },
   {
@@ -7285,16 +8382,6 @@ window.SID_LIBRARY = [
     "fileName": "Firequest.sid",
     "path": "sids/GAMES/A-F/Firequest.sid",
     "size": 3890,
-    "category": "A-F"
-  },
-  {
-    "id": "R0FNRVMvQS1GL0ZpcmVUcmFwLnNpZA",
-    "title": "FireTrap",
-    "composer": "Games",
-    "composerKey": "GAMES",
-    "fileName": "FireTrap.sid",
-    "path": "sids/GAMES/A-F/FireTrap.sid",
-    "size": 3606,
     "category": "A-F"
   },
   {
@@ -7668,16 +8755,6 @@ window.SID_LIBRARY = [
     "category": "A-F"
   },
   {
-    "id": "R0FNRVMvQS1GL0ZTU19MaWJlcmF0b3Iuc2lk",
-    "title": "FSS Liberator",
-    "composer": "Games",
-    "composerKey": "GAMES",
-    "fileName": "FSS_Liberator.sid",
-    "path": "sids/GAMES/A-F/FSS_Liberator.sid",
-    "size": 3728,
-    "category": "A-F"
-  },
-  {
     "id": "R0FNRVMvQS1GL0Z1Z2dlci5zaWQ",
     "title": "Fugger",
     "composer": "Games",
@@ -7716,6 +8793,26 @@ window.SID_LIBRARY = [
     "path": "sids/GAMES/A-F/Future_Shock.sid",
     "size": 1714,
     "category": "A-F"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0dPX0JBU0lDLnNpZA",
+    "title": "GO BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "GO_BASIC.sid",
+    "path": "sids/GAMES/G-L/GO_BASIC.sid",
+    "size": 1981,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0dQQUNfRGVtZW50aWFfRGVmZW5kZXIuc2lk",
+    "title": "GPAC Dementia Defender",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "GPAC_Dementia_Defender.sid",
+    "path": "sids/GAMES/G-L/GPAC_Dementia_Defender.sid",
+    "size": 3481,
+    "category": "G-L"
   },
   {
     "id": "R0FNRVMvRy1ML0dhbGFjdGljX0JhdHRsZXMuc2lk",
@@ -7908,16 +9005,6 @@ window.SID_LIBRARY = [
     "category": "G-L"
   },
   {
-    "id": "R0FNRVMvRy1ML0dldF9hX0xpZmUuc2lk",
-    "title": "Get a Life",
-    "composer": "Games",
-    "composerKey": "GAMES",
-    "fileName": "Get_a_Life.sid",
-    "path": "sids/GAMES/G-L/Get_a_Life.sid",
-    "size": 6997,
-    "category": "G-L"
-  },
-  {
     "id": "R0FNRVMvRy1ML0dldF9SZWFkeV9mb3JfTnVtYmVyLnNpZA",
     "title": "Get Ready for Number",
     "composer": "Games",
@@ -7925,6 +9012,16 @@ window.SID_LIBRARY = [
     "fileName": "Get_Ready_for_Number.sid",
     "path": "sids/GAMES/G-L/Get_Ready_for_Number.sid",
     "size": 1056,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0dldF9hX0xpZmUuc2lk",
+    "title": "Get a Life",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Get_a_Life.sid",
+    "path": "sids/GAMES/G-L/Get_a_Life.sid",
+    "size": 6997,
     "category": "G-L"
   },
   {
@@ -8008,16 +9105,6 @@ window.SID_LIBRARY = [
     "category": "G-L"
   },
   {
-    "id": "R0FNRVMvRy1ML0dPX0JBU0lDLnNpZA",
-    "title": "GO BASIC",
-    "composer": "Games",
-    "composerKey": "GAMES",
-    "fileName": "GO_BASIC.sid",
-    "path": "sids/GAMES/G-L/GO_BASIC.sid",
-    "size": 1981,
-    "category": "G-L"
-  },
-  {
     "id": "R0FNRVMvRy1ML0dvZHNfcHJldmlldy5zaWQ",
     "title": "Gods preview",
     "composer": "Games",
@@ -8065,16 +9152,6 @@ window.SID_LIBRARY = [
     "fileName": "Gory_Ghost_preview.sid",
     "path": "sids/GAMES/G-L/Gory_Ghost_preview.sid",
     "size": 2049,
-    "category": "G-L"
-  },
-  {
-    "id": "R0FNRVMvRy1ML0dQQUNfRGVtZW50aWFfRGVmZW5kZXIuc2lk",
-    "title": "GPAC Dementia Defender",
-    "composer": "Games",
-    "composerKey": "GAMES",
-    "fileName": "GPAC_Dementia_Defender.sid",
-    "path": "sids/GAMES/G-L/GPAC_Dementia_Defender.sid",
-    "size": 3481,
     "category": "G-L"
   },
   {
@@ -10248,16 +11325,6 @@ window.SID_LIBRARY = [
     "category": "G-L"
   },
   {
-    "id": "R0FNRVMvRy1ML0xlZ2VuZF9vZl90aGVfS251Y2tlci1Ib2xlLnNpZA",
-    "title": "Legend of the Knucker-Hole",
-    "composer": "Games",
-    "composerKey": "GAMES",
-    "fileName": "Legend_of_the_Knucker-Hole.sid",
-    "path": "sids/GAMES/G-L/Legend_of_the_Knucker-Hole.sid",
-    "size": 1686,
-    "category": "G-L"
-  },
-  {
     "id": "R0FNRVMvRy1ML0xlZ2VuZF9vZl9aZWxkYV9QcmV2aWV3LnNpZA",
     "title": "Legend of Zelda Preview",
     "composer": "Games",
@@ -10265,6 +11332,16 @@ window.SID_LIBRARY = [
     "fileName": "Legend_of_Zelda_Preview.sid",
     "path": "sids/GAMES/G-L/Legend_of_Zelda_Preview.sid",
     "size": 1038,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0xlZ2VuZF9vZl90aGVfS251Y2tlci1Ib2xlLnNpZA",
+    "title": "Legend of the Knucker-Hole",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Legend_of_the_Knucker-Hole.sid",
+    "path": "sids/GAMES/G-L/Legend_of_the_Knucker-Hole.sid",
+    "size": 1686,
     "category": "G-L"
   },
   {
@@ -10508,16 +11585,6 @@ window.SID_LIBRARY = [
     "category": "G-L"
   },
   {
-    "id": "R0FNRVMvRy1ML0xvc3RfaW5fdGhlX0xhYnlyaW50aF9CQVNJQy5zaWQ",
-    "title": "Lost in the Labyrinth BASIC",
-    "composer": "Games",
-    "composerKey": "GAMES",
-    "fileName": "Lost_in_the_Labyrinth_BASIC.sid",
-    "path": "sids/GAMES/G-L/Lost_in_the_Labyrinth_BASIC.sid",
-    "size": 1615,
-    "category": "G-L"
-  },
-  {
     "id": "R0FNRVMvRy1ML0xvc3RfUm9ib3RfSUlfcHJldmlldy5zaWQ",
     "title": "Lost Robot II preview",
     "composer": "Games",
@@ -10525,6 +11592,16 @@ window.SID_LIBRARY = [
     "fileName": "Lost_Robot_II_preview.sid",
     "path": "sids/GAMES/G-L/Lost_Robot_II_preview.sid",
     "size": 3635,
+    "category": "G-L"
+  },
+  {
+    "id": "R0FNRVMvRy1ML0xvc3RfaW5fdGhlX0xhYnlyaW50aF9CQVNJQy5zaWQ",
+    "title": "Lost in the Labyrinth BASIC",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Lost_in_the_Labyrinth_BASIC.sid",
+    "path": "sids/GAMES/G-L/Lost_in_the_Labyrinth_BASIC.sid",
+    "size": 1615,
     "category": "G-L"
   },
   {
@@ -10595,6 +11672,16 @@ window.SID_LIBRARY = [
     "fileName": "M_U_L_E.sid",
     "path": "sids/GAMES/M-R/M_U_L_E.sid",
     "size": 1732,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL01UVl9SZW1vdGVfQ29udHJvbC5zaWQ",
+    "title": "MTV Remote Control",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "MTV_Remote_Control.sid",
+    "path": "sids/GAMES/M-R/MTV_Remote_Control.sid",
+    "size": 2329,
     "category": "M-R"
   },
   {
@@ -11618,16 +12705,6 @@ window.SID_LIBRARY = [
     "category": "M-R"
   },
   {
-    "id": "R0FNRVMvTS1SL01UVl9SZW1vdGVfQ29udHJvbC5zaWQ",
-    "title": "MTV Remote Control",
-    "composer": "Games",
-    "composerKey": "GAMES",
-    "fileName": "MTV_Remote_Control.sid",
-    "path": "sids/GAMES/M-R/MTV_Remote_Control.sid",
-    "size": 2329,
-    "category": "M-R"
-  },
-  {
     "id": "R0FNRVMvTS1SL011bmNoLnNpZA",
     "title": "Munch",
     "composer": "Games",
@@ -11748,6 +12825,16 @@ window.SID_LIBRARY = [
     "category": "M-R"
   },
   {
+    "id": "R0FNRVMvTS1SL05BVE9fQXNzYXVsdF9Db3Vyc2Uuc2lk",
+    "title": "NATO Assault Course",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "NATO_Assault_Course.sid",
+    "path": "sids/GAMES/M-R/NATO_Assault_Course.sid",
+    "size": 1669,
+    "category": "M-R"
+  },
+  {
     "id": "R0FNRVMvTS1SL05hamVtbmlrLnNpZA",
     "title": "Najemnik",
     "composer": "Games",
@@ -11775,16 +12862,6 @@ window.SID_LIBRARY = [
     "fileName": "Nalle_Aeh-Puh.sid",
     "path": "sids/GAMES/M-R/Nalle_Aeh-Puh.sid",
     "size": 2356,
-    "category": "M-R"
-  },
-  {
-    "id": "R0FNRVMvTS1SL05BVE9fQXNzYXVsdF9Db3Vyc2Uuc2lk",
-    "title": "NATO Assault Course",
-    "composer": "Games",
-    "composerKey": "GAMES",
-    "fileName": "NATO_Assault_Course.sid",
-    "path": "sids/GAMES/M-R/NATO_Assault_Course.sid",
-    "size": 1669,
     "category": "M-R"
   },
   {
@@ -12315,6 +13392,16 @@ window.SID_LIBRARY = [
     "fileName": "Outlaw.sid",
     "path": "sids/GAMES/M-R/Outlaw.sid",
     "size": 549,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1BSRVguc2lk",
+    "title": "PREX",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "PREX.sid",
+    "path": "sids/GAMES/M-R/PREX.sid",
+    "size": 11074,
     "category": "M-R"
   },
   {
@@ -13018,16 +14105,6 @@ window.SID_LIBRARY = [
     "category": "M-R"
   },
   {
-    "id": "R0FNRVMvTS1SL1BSRVguc2lk",
-    "title": "PREX",
-    "composer": "Games",
-    "composerKey": "GAMES",
-    "fileName": "PREX.sid",
-    "path": "sids/GAMES/M-R/PREX.sid",
-    "size": 11074,
-    "category": "M-R"
-  },
-  {
     "id": "R0FNRVMvTS1SL1ByaXpvbmVfUHJldmlldy5zaWQ",
     "title": "Prizone Preview",
     "composer": "Games",
@@ -13335,6 +14412,16 @@ window.SID_LIBRARY = [
     "fileName": "Quo_Vadis.sid",
     "path": "sids/GAMES/M-R/Quo_Vadis.sid",
     "size": 3875,
+    "category": "M-R"
+  },
+  {
+    "id": "R0FNRVMvTS1SL1JNU19UaXRhbmljLnNpZA",
+    "title": "RMS Titanic",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "RMS_Titanic.sid",
+    "path": "sids/GAMES/M-R/RMS_Titanic.sid",
+    "size": 4251,
     "category": "M-R"
   },
   {
@@ -13648,16 +14735,6 @@ window.SID_LIBRARY = [
     "category": "M-R"
   },
   {
-    "id": "R0FNRVMvTS1SL1JNU19UaXRhbmljLnNpZA",
-    "title": "RMS Titanic",
-    "composer": "Games",
-    "composerKey": "GAMES",
-    "fileName": "RMS_Titanic.sid",
-    "path": "sids/GAMES/M-R/RMS_Titanic.sid",
-    "size": 4251,
-    "category": "M-R"
-  },
-  {
     "id": "R0FNRVMvTS1SL1JvYWRfUm9sbGVyLnNpZA",
     "title": "Road Roller",
     "composer": "Games",
@@ -13935,6 +15012,16 @@ window.SID_LIBRARY = [
     "fileName": "S_O_S.sid",
     "path": "sids/GAMES/S-Z/S_O_S.sid",
     "size": 896,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1NOS192c19DQVBDT01fVjEuc2lk",
+    "title": "SNK vs CAPCOM V1",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "SNK_vs_CAPCOM_V1.sid",
+    "path": "sids/GAMES/S-Z/SNK_vs_CAPCOM_V1.sid",
+    "size": 45024,
     "category": "S-Z"
   },
   {
@@ -14388,16 +15475,6 @@ window.SID_LIBRARY = [
     "category": "S-Z"
   },
   {
-    "id": "R0FNRVMvUy1aL1Nob290X2VtX1VwLnNpZA",
-    "title": "Shoot em Up",
-    "composer": "Games",
-    "composerKey": "GAMES",
-    "fileName": "Shoot_em_Up.sid",
-    "path": "sids/GAMES/S-Z/Shoot_em_Up.sid",
-    "size": 2047,
-    "category": "S-Z"
-  },
-  {
     "id": "R0FNRVMvUy1aL1Nob290X091dC5zaWQ",
     "title": "Shoot Out",
     "composer": "Games",
@@ -14405,6 +15482,16 @@ window.SID_LIBRARY = [
     "fileName": "Shoot_Out.sid",
     "path": "sids/GAMES/S-Z/Shoot_Out.sid",
     "size": 6197,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1Nob290X2VtX1VwLnNpZA",
+    "title": "Shoot em Up",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Shoot_em_Up.sid",
+    "path": "sids/GAMES/S-Z/Shoot_em_Up.sid",
+    "size": 2047,
     "category": "S-Z"
   },
   {
@@ -14675,16 +15762,6 @@ window.SID_LIBRARY = [
     "fileName": "Snek.sid",
     "path": "sids/GAMES/S-Z/Snek.sid",
     "size": 3031,
-    "category": "S-Z"
-  },
-  {
-    "id": "R0FNRVMvUy1aL1NOS192c19DQVBDT01fVjEuc2lk",
-    "title": "SNK vs CAPCOM V1",
-    "composer": "Games",
-    "composerKey": "GAMES",
-    "fileName": "SNK_vs_CAPCOM_V1.sid",
-    "path": "sids/GAMES/S-Z/SNK_vs_CAPCOM_V1.sid",
-    "size": 45024,
     "category": "S-Z"
   },
   {
@@ -16518,6 +17595,16 @@ window.SID_LIBRARY = [
     "category": "S-Z"
   },
   {
+    "id": "R0FNRVMvUy1aL1R1bm5lbF9WaXNpb24uc2lk",
+    "title": "Tunnel Vision",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "Tunnel_Vision.sid",
+    "path": "sids/GAMES/S-Z/Tunnel_Vision.sid",
+    "size": 23738,
+    "category": "S-Z"
+  },
+  {
     "id": "R0FNRVMvUy1aL1R1bm5lbF9vZl9Eb29tLnNpZA",
     "title": "Tunnel of Doom",
     "composer": "Games",
@@ -16535,16 +17622,6 @@ window.SID_LIBRARY = [
     "fileName": "Tunnel_of_the_Birds.sid",
     "path": "sids/GAMES/S-Z/Tunnel_of_the_Birds.sid",
     "size": 2416,
-    "category": "S-Z"
-  },
-  {
-    "id": "R0FNRVMvUy1aL1R1bm5lbF9WaXNpb24uc2lk",
-    "title": "Tunnel Vision",
-    "composer": "Games",
-    "composerKey": "GAMES",
-    "fileName": "Tunnel_Vision.sid",
-    "path": "sids/GAMES/S-Z/Tunnel_Vision.sid",
-    "size": 23738,
     "category": "S-Z"
   },
   {
@@ -16648,6 +17725,16 @@ window.SID_LIBRARY = [
     "category": "S-Z"
   },
   {
+    "id": "R0FNRVMvUy1aL1VOX1NxdWFkcm9uLnNpZA",
+    "title": "UN Squadron",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "UN_Squadron.sid",
+    "path": "sids/GAMES/S-Z/UN_Squadron.sid",
+    "size": 4235,
+    "category": "S-Z"
+  },
+  {
     "id": "R0FNRVMvUy1aL1VnaC5zaWQ",
     "title": "Ugh",
     "composer": "Games",
@@ -16665,16 +17752,6 @@ window.SID_LIBRARY = [
     "fileName": "Uj_Vadnyugat.sid",
     "path": "sids/GAMES/S-Z/Uj_Vadnyugat.sid",
     "size": 3016,
-    "category": "S-Z"
-  },
-  {
-    "id": "R0FNRVMvUy1aL1VOX1NxdWFkcm9uLnNpZA",
-    "title": "UN Squadron",
-    "composer": "Games",
-    "composerKey": "GAMES",
-    "fileName": "UN_Squadron.sid",
-    "path": "sids/GAMES/S-Z/UN_Squadron.sid",
-    "size": 4235,
     "category": "S-Z"
   },
   {
@@ -16928,16 +18005,6 @@ window.SID_LIBRARY = [
     "category": "S-Z"
   },
   {
-    "id": "R0FNRVMvUy1aL1dhcl9pbl9NaWRkbGVfRWFydGguc2lk",
-    "title": "War in Middle Earth",
-    "composer": "Games",
-    "composerKey": "GAMES",
-    "fileName": "War_in_Middle_Earth.sid",
-    "path": "sids/GAMES/S-Z/War_in_Middle_Earth.sid",
-    "size": 1643,
-    "category": "S-Z"
-  },
-  {
     "id": "R0FNRVMvUy1aL1dhcl9NYWNoaW5lLnNpZA",
     "title": "War Machine",
     "composer": "Games",
@@ -16955,6 +18022,16 @@ window.SID_LIBRARY = [
     "fileName": "War_Play.sid",
     "path": "sids/GAMES/S-Z/War_Play.sid",
     "size": 714,
+    "category": "S-Z"
+  },
+  {
+    "id": "R0FNRVMvUy1aL1dhcl9pbl9NaWRkbGVfRWFydGguc2lk",
+    "title": "War in Middle Earth",
+    "composer": "Games",
+    "composerKey": "GAMES",
+    "fileName": "War_in_Middle_Earth.sid",
+    "path": "sids/GAMES/S-Z/War_in_Middle_Earth.sid",
+    "size": 1643,
     "category": "S-Z"
   },
   {
@@ -17986,15 +19063,6 @@ window.SID_LIBRARY = [
     "size": 11014
   },
   {
-    "id": "R3JheV9NYXR0L0RyaWxsZXIuc2lk",
-    "title": "Driller",
-    "composer": "Gray Matt",
-    "composerKey": "Gray_Matt",
-    "fileName": "Driller.sid",
-    "path": "sids/Gray_Matt/Driller.sid",
-    "size": 3438
-  },
-  {
     "id": "R3JheV9NYXR0L0VsZWN0aW9uLnNpZA",
     "title": "Election",
     "composer": "Gray Matt",
@@ -18137,15 +19205,6 @@ window.SID_LIBRARY = [
     "fileName": "KGB_Superspy.sid",
     "path": "sids/Gray_Matt/KGB_Superspy.sid",
     "size": 3902
-  },
-  {
-    "id": "R3JheV9NYXR0L0xhc3RfTmluamFfMi5zaWQ",
-    "title": "Last Ninja 2",
-    "composer": "Gray Matt",
-    "composerKey": "Gray_Matt",
-    "fileName": "Last_Ninja_2.sid",
-    "path": "sids/Gray_Matt/Last_Ninja_2.sid",
-    "size": 43277
   },
   {
     "id": "R3JheV9NYXR0L01hZ25ldGljX0ZpZWxkcy5zaWQ",
@@ -18400,15 +19459,6 @@ window.SID_LIBRARY = [
     "size": 11849
   },
   {
-    "id": "SHViYmFyZF9Sb2IvQUNFX0lJLnNpZA",
-    "title": "ACE II",
-    "composer": "Hubbard Rob",
-    "composerKey": "Hubbard_Rob",
-    "fileName": "ACE_II.sid",
-    "path": "sids/Hubbard_Rob/ACE_II.sid",
-    "size": 3454
-  },
-  {
     "id": "SHViYmFyZF9Sb2IvQWN0aW9uX0Jpa2VyLnNpZA",
     "title": "Action Biker",
     "composer": "Hubbard Rob",
@@ -18436,15 +19486,6 @@ window.SID_LIBRARY = [
     "size": 7531
   },
   {
-    "id": "SHViYmFyZF9Sb2IvQXVmX1dpZWRlcnNlaGVuX01vbnR5LnNpZA",
-    "title": "Auf Wiedersehen Monty",
-    "composer": "Hubbard Rob",
-    "composerKey": "Hubbard_Rob",
-    "fileName": "Auf_Wiedersehen_Monty.sid",
-    "path": "sids/Hubbard_Rob/Auf_Wiedersehen_Monty.sid",
-    "size": 5544
-  },
-  {
     "id": "SHViYmFyZF9Sb2IvQmFuZ2tva19LbmlnaHRzLnNpZA",
     "title": "Bangkok Knights",
     "composer": "Hubbard Rob",
@@ -18461,15 +19502,6 @@ window.SID_LIBRARY = [
     "fileName": "Battle_of_Britain.sid",
     "path": "sids/Hubbard_Rob/Battle_of_Britain.sid",
     "size": 4222
-  },
-  {
-    "id": "SHViYmFyZF9Sb2IvQk1YX0tpZHouc2lk",
-    "title": "BMX Kidz",
-    "composer": "Hubbard Rob",
-    "composerKey": "Hubbard_Rob",
-    "fileName": "BMX_Kidz.sid",
-    "path": "sids/Hubbard_Rob/BMX_Kidz.sid",
-    "size": 10909
   },
   {
     "id": "SHViYmFyZF9Sb2IvQnVtcF9TZXRfU3Bpa2Uuc2lk",
@@ -18517,15 +19549,6 @@ window.SID_LIBRARY = [
     "size": 12440
   },
   {
-    "id": "SHViYmFyZF9Sb2IvQ29tbWFuZG8uc2lk",
-    "title": "Commando",
-    "composer": "Hubbard Rob",
-    "composerKey": "Hubbard_Rob",
-    "fileName": "Commando.sid",
-    "path": "sids/Hubbard_Rob/Commando.sid",
-    "size": 4165
-  },
-  {
     "id": "SHViYmFyZF9Sb2IvQ29tbW9kb3JlXzY0X011c2ljX0V4YW1wbGVzLnNpZA",
     "title": "Commodore 64 Music Examples",
     "composer": "Hubbard Rob",
@@ -18544,15 +19567,6 @@ window.SID_LIBRARY = [
     "size": 2508
   },
   {
-    "id": "SHViYmFyZF9Sb2IvQ3JhenlfQ29tZXRzLnNpZA",
-    "title": "Crazy Comets",
-    "composer": "Hubbard Rob",
-    "composerKey": "Hubbard_Rob",
-    "fileName": "Crazy_Comets.sid",
-    "path": "sids/Hubbard_Rob/Crazy_Comets.sid",
-    "size": 4494
-  },
-  {
     "id": "SHViYmFyZF9Sb2IvRGVlcF9TdHJpa2Uuc2lk",
     "title": "Deep Strike",
     "composer": "Hubbard Rob",
@@ -18560,15 +19574,6 @@ window.SID_LIBRARY = [
     "fileName": "Deep_Strike.sid",
     "path": "sids/Hubbard_Rob/Deep_Strike.sid",
     "size": 3094
-  },
-  {
-    "id": "SHViYmFyZF9Sb2IvRGVsdGEuc2lk",
-    "title": "Delta",
-    "composer": "Hubbard Rob",
-    "composerKey": "Hubbard_Rob",
-    "fileName": "Delta.sid",
-    "path": "sids/Hubbard_Rob/Delta.sid",
-    "size": 5246
   },
   {
     "id": "SHViYmFyZF9Sb2IvRGVsdGFfTWl4LUUtTG9hZF9sb2FkZXIuc2lk",
@@ -18661,15 +19666,6 @@ window.SID_LIBRARY = [
     "size": 3333
   },
   {
-    "id": "SHViYmFyZF9Sb2IvR2VycnlfdGhlX0dlcm0uc2lk",
-    "title": "Gerry the Germ",
-    "composer": "Hubbard Rob",
-    "composerKey": "Hubbard_Rob",
-    "fileName": "Gerry_the_Germ.sid",
-    "path": "sids/Hubbard_Rob/Gerry_the_Germ.sid",
-    "size": 6742
-  },
-  {
     "id": "SHViYmFyZF9Sb2IvR29fR29fRGFzaC5zaWQ",
     "title": "Go Go Dash",
     "composer": "Hubbard Rob",
@@ -18724,33 +19720,6 @@ window.SID_LIBRARY = [
     "size": 13132
   },
   {
-    "id": "SHViYmFyZF9Sb2IvSUtfcGx1cy5zaWQ",
-    "title": "IK plus",
-    "composer": "Hubbard Rob",
-    "composerKey": "Hubbard_Rob",
-    "fileName": "IK_plus.sid",
-    "path": "sids/Hubbard_Rob/IK_plus.sid",
-    "size": 4613
-  },
-  {
-    "id": "SHViYmFyZF9Sb2IvSW50ZXJuYXRpb25hbF9LYXJhdGUuc2lk",
-    "title": "International Karate",
-    "composer": "Hubbard Rob",
-    "composerKey": "Hubbard_Rob",
-    "fileName": "International_Karate.sid",
-    "path": "sids/Hubbard_Rob/International_Karate.sid",
-    "size": 4734
-  },
-  {
-    "id": "SHViYmFyZF9Sb2IvS2VudGlsbGEuc2lk",
-    "title": "Kentilla",
-    "composer": "Hubbard Rob",
-    "composerKey": "Hubbard_Rob",
-    "fileName": "Kentilla.sid",
-    "path": "sids/Hubbard_Rob/Kentilla.sid",
-    "size": 4474
-  },
-  {
     "id": "SHViYmFyZF9Sb2IvS2luZ3Nfb2ZfdGhlX0JlYWNoX2luZ2FtZS5zaWQ",
     "title": "Kings of the Beach ingame",
     "composer": "Hubbard Rob",
@@ -18767,15 +19736,6 @@ window.SID_LIBRARY = [
     "fileName": "Kings_of_the_Beach_intro.sid",
     "path": "sids/Hubbard_Rob/Kings_of_the_Beach_intro.sid",
     "size": 20334
-  },
-  {
-    "id": "SHViYmFyZF9Sb2IvS251Y2tsZWJ1c3RlcnMuc2lk",
-    "title": "Knucklebusters",
-    "composer": "Hubbard Rob",
-    "composerKey": "Hubbard_Rob",
-    "fileName": "Knucklebusters.sid",
-    "path": "sids/Hubbard_Rob/Knucklebusters.sid",
-    "size": 7178
   },
   {
     "id": "SHViYmFyZF9Sb2IvTGFrZXJzX3ZzX0NlbHRpY3Muc2lk",
@@ -18814,15 +19774,6 @@ window.SID_LIBRARY = [
     "size": 17682
   },
   {
-    "id": "SHViYmFyZF9Sb2IvTGlnaHRmb3JjZS5zaWQ",
-    "title": "Lightforce",
-    "composer": "Hubbard Rob",
-    "composerKey": "Hubbard_Rob",
-    "fileName": "Lightforce.sid",
-    "path": "sids/Hubbard_Rob/Lightforce.sid",
-    "size": 3710
-  },
-  {
     "id": "SHViYmFyZF9Sb2IvTGlvbl9IZWFydC5zaWQ",
     "title": "Lion Heart",
     "composer": "Hubbard Rob",
@@ -18830,33 +19781,6 @@ window.SID_LIBRARY = [
     "fileName": "Lion_Heart.sid",
     "path": "sids/Hubbard_Rob/Lion_Heart.sid",
     "size": 7777
-  },
-  {
-    "id": "SHViYmFyZF9Sb2IvTWFzdGVyX29mX01hZ2ljLnNpZA",
-    "title": "Master of Magic",
-    "composer": "Hubbard Rob",
-    "composerKey": "Hubbard_Rob",
-    "fileName": "Master_of_Magic.sid",
-    "path": "sids/Hubbard_Rob/Master_of_Magic.sid",
-    "size": 3182
-  },
-  {
-    "id": "SHViYmFyZF9Sb2IvTWVnYV9BcG9jYWx5cHNlLnNpZA",
-    "title": "Mega Apocalypse",
-    "composer": "Hubbard Rob",
-    "composerKey": "Hubbard_Rob",
-    "fileName": "Mega_Apocalypse.sid",
-    "path": "sids/Hubbard_Rob/Mega_Apocalypse.sid",
-    "size": 21717
-  },
-  {
-    "id": "SHViYmFyZF9Sb2IvTW9udHlfb25fdGhlX1J1bi5zaWQ",
-    "title": "Monty on the Run",
-    "composer": "Hubbard Rob",
-    "composerKey": "Hubbard_Rob",
-    "fileName": "Monty_on_the_Run.sid",
-    "path": "sids/Hubbard_Rob/Monty_on_the_Run.sid",
-    "size": 5694
   },
   {
     "id": "SHViYmFyZF9Sb2IvTW96YXJ0LnNpZA",
@@ -18875,15 +19799,6 @@ window.SID_LIBRARY = [
     "fileName": "Mr_Meaner.sid",
     "path": "sids/Hubbard_Rob/Mr_Meaner.sid",
     "size": 8759
-  },
-  {
-    "id": "SHViYmFyZF9Sb2IvTmVtZXNpc190aGVfV2FybG9jay5zaWQ",
-    "title": "Nemesis the Warlock",
-    "composer": "Hubbard Rob",
-    "composerKey": "Hubbard_Rob",
-    "fileName": "Nemesis_the_Warlock.sid",
-    "path": "sids/Hubbard_Rob/Nemesis_the_Warlock.sid",
-    "size": 4644
   },
   {
     "id": "SHViYmFyZF9Sb2IvTmluZXRlZW4uc2lk",
@@ -18911,15 +19826,6 @@ window.SID_LIBRARY = [
     "fileName": "Off_the_Cuff.sid",
     "path": "sids/Hubbard_Rob/Off_the_Cuff.sid",
     "size": 10880
-  },
-  {
-    "id": "SHViYmFyZF9Sb2IvT25lX01hbl9hbmRfaGlzX0Ryb2lkLnNpZA",
-    "title": "One Man and his Droid",
-    "composer": "Hubbard Rob",
-    "composerKey": "Hubbard_Rob",
-    "fileName": "One_Man_and_his_Droid.sid",
-    "path": "sids/Hubbard_Rob/One_Man_and_his_Droid.sid",
-    "size": 4100
   },
   {
     "id": "SHViYmFyZF9Sb2IvT25lX29uX09uZV9Kb3JkYW5fdnNfQmlyZC5zaWQ",
@@ -19066,15 +19972,6 @@ window.SID_LIBRARY = [
     "size": 3737
   },
   {
-    "id": "SHViYmFyZF9Sb2IvU2FueGlvbi5zaWQ",
-    "title": "Sanxion",
-    "composer": "Hubbard Rob",
-    "composerKey": "Hubbard_Rob",
-    "fileName": "Sanxion.sid",
-    "path": "sids/Hubbard_Rob/Sanxion.sid",
-    "size": 7614
-  },
-  {
     "id": "SHViYmFyZF9Sb2IvU2hvY2t3YXlfUmlkZXIuc2lk",
     "title": "Shockway Rider",
     "composer": "Hubbard Rob",
@@ -19100,15 +19997,6 @@ window.SID_LIBRARY = [
     "fileName": "Skate_or_Die_intro.sid",
     "path": "sids/Hubbard_Rob/Skate_or_Die_intro.sid",
     "size": 16847
-  },
-  {
-    "id": "SHViYmFyZF9Sb2IvU3BlbGxib3VuZC5zaWQ",
-    "title": "Spellbound",
-    "composer": "Hubbard Rob",
-    "composerKey": "Hubbard_Rob",
-    "fileName": "Spellbound.sid",
-    "path": "sids/Hubbard_Rob/Spellbound.sid",
-    "size": 4221
   },
   {
     "id": "SHViYmFyZF9Sb2IvU3Rhcl9QYXdzLnNpZA",
@@ -19165,15 +20053,6 @@ window.SID_LIBRARY = [
     "size": 3929
   },
   {
-    "id": "SHViYmFyZF9Sb2IvVGhydXN0LnNpZA",
-    "title": "Thrust",
-    "composer": "Hubbard Rob",
-    "composerKey": "Hubbard_Rob",
-    "fileName": "Thrust.sid",
-    "path": "sids/Hubbard_Rob/Thrust.sid",
-    "size": 3710
-  },
-  {
     "id": "SHViYmFyZF9Sb2IvVGh1bmRlcmNhdHMuc2lk",
     "title": "Thundercats",
     "composer": "Hubbard Rob",
@@ -19219,15 +20098,6 @@ window.SID_LIBRARY = [
     "size": 3154
   },
   {
-    "id": "SHViYmFyZF9Sb2IvV2FyaGF3ay5zaWQ",
-    "title": "Warhawk",
-    "composer": "Hubbard Rob",
-    "composerKey": "Hubbard_Rob",
-    "fileName": "Warhawk.sid",
-    "path": "sids/Hubbard_Rob/Warhawk.sid",
-    "size": 4065
-  },
-  {
     "id": "SHViYmFyZF9Sb2IvV2l6LnNpZA",
     "title": "Wiz",
     "composer": "Hubbard Rob",
@@ -19235,15 +20105,6 @@ window.SID_LIBRARY = [
     "fileName": "Wiz.sid",
     "path": "sids/Hubbard_Rob/Wiz.sid",
     "size": 4222
-  },
-  {
-    "id": "SHViYmFyZF9Sb2IvWm9pZHMuc2lk",
-    "title": "Zoids",
-    "composer": "Hubbard Rob",
-    "composerKey": "Hubbard_Rob",
-    "fileName": "Zoids.sid",
-    "path": "sids/Hubbard_Rob/Zoids.sid",
-    "size": 2814
   },
   {
     "id": "SHViYmFyZF9Sb2IvWm9vbG9vay5zaWQ",
@@ -19273,15 +20134,6 @@ window.SID_LIBRARY = [
     "size": 26663
   },
   {
-    "id": "SHVlbHNiZWNrX0NocmlzL0FudGljc19EdWxjZWRvX0NvZ2l0YXRpb25pcy5zaWQ",
-    "title": "Antics Dulcedo Cogitationis",
-    "composer": "Huelsbeck Chris",
-    "composerKey": "Huelsbeck_Chris",
-    "fileName": "Antics_Dulcedo_Cogitationis.sid",
-    "path": "sids/Huelsbeck_Chris/Antics_Dulcedo_Cogitationis.sid",
-    "size": 24702
-  },
-  {
     "id": "SHVlbHNiZWNrX0NocmlzL0F4ZWxfRi5zaWQ",
     "title": "Axel F",
     "composer": "Huelsbeck Chris",
@@ -19289,15 +20141,6 @@ window.SID_LIBRARY = [
     "fileName": "Axel_F.sid",
     "path": "sids/Huelsbeck_Chris/Axel_F.sid",
     "size": 11346
-  },
-  {
-    "id": "SHVlbHNiZWNrX0NocmlzL0JhYnlfb2ZfQ2FuX0d1cnUuc2lk",
-    "title": "Baby of Can Guru",
-    "composer": "Huelsbeck Chris",
-    "composerKey": "Huelsbeck_Chris",
-    "fileName": "Baby_of_Can_Guru.sid",
-    "path": "sids/Huelsbeck_Chris/Baby_of_Can_Guru.sid",
-    "size": 27774
   },
   {
     "id": "SHVlbHNiZWNrX0NocmlzL0JhZF9DYXQuc2lk",
@@ -19453,15 +20296,6 @@ window.SID_LIBRARY = [
     "size": 11535
   },
   {
-    "id": "SHVlbHNiZWNrX0NocmlzL0dyZWF0X0dpYW5hX1Npc3RlcnMuc2lk",
-    "title": "Great Giana Sisters",
-    "composer": "Huelsbeck Chris",
-    "composerKey": "Huelsbeck_Chris",
-    "fileName": "Great_Giana_Sisters.sid",
-    "path": "sids/Huelsbeck_Chris/Great_Giana_Sisters.sid",
-    "size": 23445
-  },
-  {
     "id": "SHVlbHNiZWNrX0NocmlzL0hhcmRfbl9IZWF2eS5zaWQ",
     "title": "Hard n Heavy",
     "composer": "Huelsbeck Chris",
@@ -19523,15 +20357,6 @@ window.SID_LIBRARY = [
     "fileName": "Jinks.sid",
     "path": "sids/Huelsbeck_Chris/Jinks.sid",
     "size": 24331
-  },
-  {
-    "id": "SHVlbHNiZWNrX0NocmlzL0thdGFraXMuc2lk",
-    "title": "Katakis",
-    "composer": "Huelsbeck Chris",
-    "composerKey": "Huelsbeck_Chris",
-    "fileName": "Katakis.sid",
-    "path": "sids/Huelsbeck_Chris/Katakis.sid",
-    "size": 27201
   },
   {
     "id": "SHVlbHNiZWNrX0NocmlzL01hZG5lc3Muc2lk",
@@ -19606,15 +20431,6 @@ window.SID_LIBRARY = [
     "size": 24455
   },
   {
-    "id": "SHVlbHNiZWNrX0NocmlzL1ItVHlwZS5zaWQ",
-    "title": "R-Type",
-    "composer": "Huelsbeck Chris",
-    "composerKey": "Huelsbeck_Chris",
-    "fileName": "R-Type.sid",
-    "path": "sids/Huelsbeck_Chris/R-Type.sid",
-    "size": 40666
-  },
-  {
     "id": "SHVlbHNiZWNrX0NocmlzL1NoYWRlcy5zaWQ",
     "title": "Shades",
     "composer": "Huelsbeck Chris",
@@ -19676,15 +20492,6 @@ window.SID_LIBRARY = [
     "fileName": "Third_TFMX_Song.sid",
     "path": "sids/Huelsbeck_Chris/Third_TFMX_Song.sid",
     "size": 4682
-  },
-  {
-    "id": "SHVlbHNiZWNrX0NocmlzL1RvX2JlX29uX1RvcC5zaWQ",
-    "title": "To be on Top",
-    "composer": "Huelsbeck Chris",
-    "composerKey": "Huelsbeck_Chris",
-    "fileName": "To_be_on_Top.sid",
-    "path": "sids/Huelsbeck_Chris/To_be_on_Top.sid",
-    "size": 42487
   },
   {
     "id": "SHVlbHNiZWNrX0NocmlzL1dvcmt0dW5lcy9UdXRvcmlhbF9Tb25nLnNpZA",
@@ -20182,15 +20989,6 @@ window.SID_LIBRARY = [
     "size": 3849
   },
   {
-    "id": "T3V3ZWhhbmRfUmV5bi9Hb2xmX1R1bmUuc2lk",
-    "title": "Golf Tune",
-    "composer": "Ouwehand Reyn",
-    "composerKey": "Ouwehand_Reyn",
-    "fileName": "Golf_Tune.sid",
-    "path": "sids/Ouwehand_Reyn/Golf_Tune.sid",
-    "size": 3161
-  },
-  {
     "id": "T3V3ZWhhbmRfUmV5bi9HUF9UdW5lLnNpZA",
     "title": "GP Tune",
     "composer": "Ouwehand Reyn",
@@ -20198,6 +20996,15 @@ window.SID_LIBRARY = [
     "fileName": "GP_Tune.sid",
     "path": "sids/Ouwehand_Reyn/GP_Tune.sid",
     "size": 2294
+  },
+  {
+    "id": "T3V3ZWhhbmRfUmV5bi9Hb2xmX1R1bmUuc2lk",
+    "title": "Golf Tune",
+    "composer": "Ouwehand Reyn",
+    "composerKey": "Ouwehand_Reyn",
+    "fileName": "Golf_Tune.sid",
+    "path": "sids/Ouwehand_Reyn/Golf_Tune.sid",
+    "size": 3161
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9IYXBweV9CaXJ0aGRheV9SZW1peC5zaWQ",
@@ -20335,13 +21142,13 @@ window.SID_LIBRARY = [
     "size": 2552
   },
   {
-    "id": "T3V3ZWhhbmRfUmV5bi9MYXN0X05pbmphXzMuc2lk",
-    "title": "Last Ninja 3",
+    "id": "T3V3ZWhhbmRfUmV5bi9MTjNfTHZsXzVfVGVtcGxlX29mX0VhcnRoLnNpZA",
+    "title": "LN3 Lvl 5 Temple of Earth",
     "composer": "Ouwehand Reyn",
     "composerKey": "Ouwehand_Reyn",
-    "fileName": "Last_Ninja_3.sid",
-    "path": "sids/Ouwehand_Reyn/Last_Ninja_3.sid",
-    "size": 30179
+    "fileName": "LN3_Lvl_5_Temple_of_Earth.sid",
+    "path": "sids/Ouwehand_Reyn/LN3_Lvl_5_Temple_of_Earth.sid",
+    "size": 3937
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9MYXN0X05pbmphX1JlbWl4LnNpZA",
@@ -20369,15 +21176,6 @@ window.SID_LIBRARY = [
     "fileName": "Lily_Was_Here.sid",
     "path": "sids/Ouwehand_Reyn/Lily_Was_Here.sid",
     "size": 2732
-  },
-  {
-    "id": "T3V3ZWhhbmRfUmV5bi9MTjNfTHZsXzVfVGVtcGxlX29mX0VhcnRoLnNpZA",
-    "title": "LN3 Lvl 5 Temple of Earth",
-    "composer": "Ouwehand Reyn",
-    "composerKey": "Ouwehand_Reyn",
-    "fileName": "LN3_Lvl_5_Temple_of_Earth.sid",
-    "path": "sids/Ouwehand_Reyn/LN3_Lvl_5_Temple_of_Earth.sid",
-    "size": 3937
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9Mb25kb25fRGVtby5zaWQ",
@@ -20839,15 +21637,6 @@ window.SID_LIBRARY = [
     "size": 3540
   },
   {
-    "id": "T3V3ZWhhbmRfUmV5bi9XaGF0X2FfSmF6ei5zaWQ",
-    "title": "What a Jazz",
-    "composer": "Ouwehand Reyn",
-    "composerKey": "Ouwehand_Reyn",
-    "fileName": "What_a_Jazz.sid",
-    "path": "sids/Ouwehand_Reyn/What_a_Jazz.sid",
-    "size": 1918
-  },
-  {
     "id": "T3V3ZWhhbmRfUmV5bi9XaGF0X0hhdmVfSV9Eb25lX1RvLnNpZA",
     "title": "What Have I Done To",
     "composer": "Ouwehand Reyn",
@@ -20855,6 +21644,15 @@ window.SID_LIBRARY = [
     "fileName": "What_Have_I_Done_To.sid",
     "path": "sids/Ouwehand_Reyn/What_Have_I_Done_To.sid",
     "size": 3804
+  },
+  {
+    "id": "T3V3ZWhhbmRfUmV5bi9XaGF0X2FfSmF6ei5zaWQ",
+    "title": "What a Jazz",
+    "composer": "Ouwehand Reyn",
+    "composerKey": "Ouwehand_Reyn",
+    "fileName": "What_a_Jazz.sid",
+    "path": "sids/Ouwehand_Reyn/What_a_Jazz.sid",
+    "size": 1918
   },
   {
     "id": "T3V3ZWhhbmRfUmV5bi9YOThfdHVuZS5zaWQ",
@@ -20990,15 +21788,6 @@ window.SID_LIBRARY = [
     "fileName": "Bantam.sid",
     "path": "sids/Tel_Jeroen/Bantam.sid",
     "size": 2898
-  },
-  {
-    "id": "VGVsX0plcm9lbi9CYXR0bGVfVmFsbGV5LnNpZA",
-    "title": "Battle Valley",
-    "composer": "Tel Jeroen",
-    "composerKey": "Tel_Jeroen",
-    "fileName": "Battle_Valley.sid",
-    "path": "sids/Tel_Jeroen/Battle_Valley.sid",
-    "size": 3680
   },
   {
     "id": "VGVsX0plcm9lbi9CZWFzdGllX0JveXMuc2lk",
@@ -21154,33 +21943,6 @@ window.SID_LIBRARY = [
     "size": 3812
   },
   {
-    "id": "VGVsX0plcm9lbi9Db21iYXRfQ3Jhenkuc2lk",
-    "title": "Combat Crazy",
-    "composer": "Tel Jeroen",
-    "composerKey": "Tel_Jeroen",
-    "fileName": "Combat_Crazy.sid",
-    "path": "sids/Tel_Jeroen/Combat_Crazy.sid",
-    "size": 5236
-  },
-  {
-    "id": "VGVsX0plcm9lbi9DeWJlcm5vaWQuc2lk",
-    "title": "Cybernoid",
-    "composer": "Tel Jeroen",
-    "composerKey": "Tel_Jeroen",
-    "fileName": "Cybernoid.sid",
-    "path": "sids/Tel_Jeroen/Cybernoid.sid",
-    "size": 4734
-  },
-  {
-    "id": "VGVsX0plcm9lbi9DeWJlcm5vaWRfSUkuc2lk",
-    "title": "Cybernoid II",
-    "composer": "Tel Jeroen",
-    "composerKey": "Tel_Jeroen",
-    "fileName": "Cybernoid_II.sid",
-    "path": "sids/Tel_Jeroen/Cybernoid_II.sid",
-    "size": 4502
-  },
-  {
     "id": "VGVsX0plcm9lbi9EYW5fRGFyZV8zLnNpZA",
     "title": "Dan Dare 3",
     "composer": "Tel Jeroen",
@@ -21260,15 +22022,6 @@ window.SID_LIBRARY = [
     "fileName": "Earthquake.sid",
     "path": "sids/Tel_Jeroen/Earthquake.sid",
     "size": 23634
-  },
-  {
-    "id": "VGVsX0plcm9lbi9FbGltaW5hdG9yLnNpZA",
-    "title": "Eliminator",
-    "composer": "Tel Jeroen",
-    "composerKey": "Tel_Jeroen",
-    "fileName": "Eliminator.sid",
-    "path": "sids/Tel_Jeroen/Eliminator.sid",
-    "size": 6298
   },
   {
     "id": "VGVsX0plcm9lbi9FbmVteV9TY291dF9wcmV2aWV3LnNpZA",
@@ -21442,13 +22195,13 @@ window.SID_LIBRARY = [
     "size": 5854
   },
   {
-    "id": "VGVsX0plcm9lbi9IYXdrZXllLnNpZA",
-    "title": "Hawkeye",
+    "id": "VGVsX0plcm9lbi9IYXdrZXllX1Byb3RvXzEuc2lk",
+    "title": "Hawkeye Proto 1",
     "composer": "Tel Jeroen",
     "composerKey": "Tel_Jeroen",
-    "fileName": "Hawkeye.sid",
-    "path": "sids/Tel_Jeroen/Hawkeye.sid",
-    "size": 8894
+    "fileName": "Hawkeye_Proto_1.sid",
+    "path": "sids/Tel_Jeroen/Hawkeye_Proto_1.sid",
+    "size": 5116
   },
   {
     "id": "VGVsX0plcm9lbi9IYXdrZXllX2xvYWRlci5zaWQ",
@@ -21458,15 +22211,6 @@ window.SID_LIBRARY = [
     "fileName": "Hawkeye_loader.sid",
     "path": "sids/Tel_Jeroen/Hawkeye_loader.sid",
     "size": 5759
-  },
-  {
-    "id": "VGVsX0plcm9lbi9IYXdrZXllX1Byb3RvXzEuc2lk",
-    "title": "Hawkeye Proto 1",
-    "composer": "Tel Jeroen",
-    "composerKey": "Tel_Jeroen",
-    "fileName": "Hawkeye_Proto_1.sid",
-    "path": "sids/Tel_Jeroen/Hawkeye_Proto_1.sid",
-    "size": 5116
   },
   {
     "id": "VGVsX0plcm9lbi9Ib3RfUm9kLnNpZA",
@@ -21559,33 +22303,6 @@ window.SID_LIBRARY = [
     "size": 23681
   },
   {
-    "id": "VGVsX0plcm9lbi9KYXJyZV9NaXguc2lk",
-    "title": "Jarre Mix",
-    "composer": "Tel Jeroen",
-    "composerKey": "Tel_Jeroen",
-    "fileName": "Jarre_Mix.sid",
-    "path": "sids/Tel_Jeroen/Jarre_Mix.sid",
-    "size": 11385
-  },
-  {
-    "id": "VGVsX0plcm9lbi9KYXp6LnNpZA",
-    "title": "Jazz",
-    "composer": "Tel Jeroen",
-    "composerKey": "Tel_Jeroen",
-    "fileName": "Jazz.sid",
-    "path": "sids/Tel_Jeroen/Jazz.sid",
-    "size": 2708
-  },
-  {
-    "id": "VGVsX0plcm9lbi9KZXJvZW4uc2lk",
-    "title": "Jeroen",
-    "composer": "Tel Jeroen",
-    "composerKey": "Tel_Jeroen",
-    "fileName": "Jeroen.sid",
-    "path": "sids/Tel_Jeroen/Jeroen.sid",
-    "size": 3098
-  },
-  {
     "id": "VGVsX0plcm9lbi9KVF80Mi5zaWQ",
     "title": "JT 42",
     "composer": "Tel Jeroen",
@@ -21631,13 +22348,31 @@ window.SID_LIBRARY = [
     "size": 3536
   },
   {
-    "id": "VGVsX0plcm9lbi9LaW5ldGl4LnNpZA",
-    "title": "Kinetix",
+    "id": "VGVsX0plcm9lbi9KYXJyZV9NaXguc2lk",
+    "title": "Jarre Mix",
     "composer": "Tel Jeroen",
     "composerKey": "Tel_Jeroen",
-    "fileName": "Kinetix.sid",
-    "path": "sids/Tel_Jeroen/Kinetix.sid",
-    "size": 5841
+    "fileName": "Jarre_Mix.sid",
+    "path": "sids/Tel_Jeroen/Jarre_Mix.sid",
+    "size": 11385
+  },
+  {
+    "id": "VGVsX0plcm9lbi9KYXp6LnNpZA",
+    "title": "Jazz",
+    "composer": "Tel Jeroen",
+    "composerKey": "Tel_Jeroen",
+    "fileName": "Jazz.sid",
+    "path": "sids/Tel_Jeroen/Jazz.sid",
+    "size": 2708
+  },
+  {
+    "id": "VGVsX0plcm9lbi9KZXJvZW4uc2lk",
+    "title": "Jeroen",
+    "composer": "Tel Jeroen",
+    "composerKey": "Tel_Jeroen",
+    "fileName": "Jeroen.sid",
+    "path": "sids/Tel_Jeroen/Jeroen.sid",
+    "size": 3098
   },
   {
     "id": "VGVsX0plcm9lbi9LT1VEX0hFLnNpZA",
@@ -22036,15 +22771,6 @@ window.SID_LIBRARY = [
     "size": 3753
   },
   {
-    "id": "VGVsX0plcm9lbi9Sb2JvQ29wXzMuc2lk",
-    "title": "RoboCop 3",
-    "composer": "Tel Jeroen",
-    "composerKey": "Tel_Jeroen",
-    "fileName": "RoboCop_3.sid",
-    "path": "sids/Tel_Jeroen/RoboCop_3.sid",
-    "size": 10590
-  },
-  {
     "id": "VGVsX0plcm9lbi9Sb3R0ZW5fUmVtYWtlLnNpZA",
     "title": "Rotten Remake",
     "composer": "Tel Jeroen",
@@ -22097,15 +22823,6 @@ window.SID_LIBRARY = [
     "fileName": "Sample.sid",
     "path": "sids/Tel_Jeroen/Sample.sid",
     "size": 3585
-  },
-  {
-    "id": "VGVsX0plcm9lbi9TYXZhZ2Uuc2lk",
-    "title": "Savage",
-    "composer": "Tel Jeroen",
-    "composerKey": "Tel_Jeroen",
-    "fileName": "Savage.sid",
-    "path": "sids/Tel_Jeroen/Savage.sid",
-    "size": 26569
   },
   {
     "id": "VGVsX0plcm9lbi9TY291dC5zaWQ",
@@ -22234,15 +22951,6 @@ window.SID_LIBRARY = [
     "size": 6940
   },
   {
-    "id": "VGVsX0plcm9lbi9TdXByZW1hY3kuc2lk",
-    "title": "Supremacy",
-    "composer": "Tel Jeroen",
-    "composerKey": "Tel_Jeroen",
-    "fileName": "Supremacy.sid",
-    "path": "sids/Tel_Jeroen/Supremacy.sid",
-    "size": 4382
-  },
-  {
     "id": "VGVsX0plcm9lbi9TeW5kcm9tZS5zaWQ",
     "title": "Syndrome",
     "composer": "Tel Jeroen",
@@ -22367,15 +23075,6 @@ window.SID_LIBRARY = [
     "fileName": "Trying_Out_3.sid",
     "path": "sids/Tel_Jeroen/Trying_Out_3.sid",
     "size": 2222
-  },
-  {
-    "id": "VGVsX0plcm9lbi9UdXJib19PdXRydW4uc2lk",
-    "title": "Turbo Outrun",
-    "composer": "Tel Jeroen",
-    "composerKey": "Tel_Jeroen",
-    "fileName": "Turbo_Outrun.sid",
-    "path": "sids/Tel_Jeroen/Turbo_Outrun.sid",
-    "size": 56430
   },
   {
     "id": "VGVsX0plcm9lbi9UdXJyaWNhbl9pbnRyb19zcGVlY2guc2lk",
@@ -22522,6 +23221,15 @@ window.SID_LIBRARY = [
     "size": 3690
   },
   {
+    "id": "V2hpdHRha2VyX0RhdmlkL0JNWF9TaW11bGF0b3Iuc2lk",
+    "title": "BMX Simulator",
+    "composer": "Whittaker David",
+    "composerKey": "Whittaker_David",
+    "fileName": "BMX_Simulator.sid",
+    "path": "sids/Whittaker_David/BMX_Simulator.sid",
+    "size": 3926
+  },
+  {
     "id": "V2hpdHRha2VyX0RhdmlkL0JhY2tfdG9fdGhlX0Z1dHVyZV9JSS5zaWQ",
     "title": "Back to the Future II",
     "composer": "Whittaker David",
@@ -22565,15 +23273,6 @@ window.SID_LIBRARY = [
     "fileName": "Blazer.sid",
     "path": "sids/Whittaker_David/Blazer.sid",
     "size": 4366
-  },
-  {
-    "id": "V2hpdHRha2VyX0RhdmlkL0JNWF9TaW11bGF0b3Iuc2lk",
-    "title": "BMX Simulator",
-    "composer": "Whittaker David",
-    "composerKey": "Whittaker_David",
-    "fileName": "BMX_Simulator.sid",
-    "path": "sids/Whittaker_David/BMX_Simulator.sid",
-    "size": 3926
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL0JyYXZlU3RhcnIuc2lk",
@@ -22765,15 +23464,6 @@ window.SID_LIBRARY = [
     "size": 7269
   },
   {
-    "id": "V2hpdHRha2VyX0RhdmlkL0dsaWRlcl9SaWRlci5zaWQ",
-    "title": "Glider Rider",
-    "composer": "Whittaker David",
-    "composerKey": "Whittaker_David",
-    "fileName": "Glider_Rider.sid",
-    "path": "sids/Whittaker_David/Glider_Rider.sid",
-    "size": 6270
-  },
-  {
     "id": "V2hpdHRha2VyX0RhdmlkL0dyYW5kX1ByaXhfU2ltdWxhdG9yLnNpZA",
     "title": "Grand Prix Simulator",
     "composer": "Whittaker David",
@@ -22828,15 +23518,6 @@ window.SID_LIBRARY = [
     "size": 2751
   },
   {
-    "id": "V2hpdHRha2VyX0RhdmlkL0luZmVjdGlvbi5zaWQ",
-    "title": "Infection",
-    "composer": "Whittaker David",
-    "composerKey": "Whittaker_David",
-    "fileName": "Infection.sid",
-    "path": "sids/Whittaker_David/Infection.sid",
-    "size": 3208
-  },
-  {
     "id": "V2hpdHRha2VyX0RhdmlkL0lPLnNpZA",
     "title": "IO",
     "composer": "Whittaker David",
@@ -22844,6 +23525,15 @@ window.SID_LIBRARY = [
     "fileName": "IO.sid",
     "path": "sids/Whittaker_David/IO.sid",
     "size": 3926
+  },
+  {
+    "id": "V2hpdHRha2VyX0RhdmlkL0luZmVjdGlvbi5zaWQ",
+    "title": "Infection",
+    "composer": "Whittaker David",
+    "composerKey": "Whittaker_David",
+    "fileName": "Infection.sid",
+    "path": "sids/Whittaker_David/Infection.sid",
+    "size": 3208
   },
   {
     "id": "V2hpdHRha2VyX0RhdmlkL0lyb25fSG9yc2Uuc2lk",
@@ -23386,18 +24076,41 @@ window.SID_LIBRARY = [
     "size": 4226
   }
 ];
+
 window.SID_COMPOSERS = [
-  "Games",
+  "Anders Andr�en (ATOO)",
+  "Antony Crowther",
   "Bjerregaard Johannes",
+  "Charles Deenen/Maniacs of Noise",
   "Daglish Ben",
   "Dunn David",
   "Follin Geoff",
   "Follin Tim",
+  "Fred Gray",
   "Galway Martin",
+  "Games",
+  "Georg Feil",
   "Gray Matt",
   "Hubbard Rob",
   "Huelsbeck Chris",
+  "Jens-Christian Huus",
+  "Jeroen Tel / Maniacs of Noise",
+  "Jonathan Dunn",
+  "Jori Olkkonen (Yip)",
+  "Juha-Matti Hilpinen (AMJ)",
+  "Kim Christensen (Future Freak)",
+  "Kris Hatlelid",
+  "Mark Cooksey",
+  "Martin Walker",
+  "Michael Hendriks",
+  "Mike Alsop",
+  "Neil Brennan",
   "Ouwehand Reyn",
+  "Peter Clarke",
+  "Richard Joseph",
+  "Steve Turner",
   "Tel Jeroen",
+  "Thomas Petersen & K.Christensen",
+  "Wally Beben",
   "Whittaker David"
 ];
