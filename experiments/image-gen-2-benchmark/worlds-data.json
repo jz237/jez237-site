@@ -1312,5 +1312,23 @@
       "continuity": "Preserves Korrun Silt Choir inhabitants, resonant tidal mudflats, tripod-raised domestic objects, brine-glass, silt ceramic, bell buoys, rose salt fog, and copper sunrise light.",
       "entryDescription": "A retreating-tide marketplace where Korrun residents trade reed wraps, frequency markers, clay memory tiles, brine-glass cups, shell-horn tools, and tidal garden goods from tripod-raised stalls."
     }
+  },
+  {
+    "id": "2026-06-28-weekly-world-image-korrun-silt-choir-mud-elevator-lock-queu",
+    "title": "Korrun Silt Choir: Mud Elevator Lock Queue",
+    "tests": "Generated with openai/gpt-image-2 via OpenClaw CLI; exact output file verified non-empty before append.",
+    "prompt": "Create a finished photorealistic square field photograph from the invented alien world Korrun Silt Choir, showing a mud-elevator lock queue during low tide. The scene is a lived-in daily-life view, not a chart or poster: non-human amphibious residents with low oval bodies, six jointed walking limbs, two broad paddle-limbs, ridged resonator throats, wet opaline skin, crown-like sensory whiskers, small black bead eyes, and subtle color-changing side membranes wait calmly as a basalt mud-elevator lock drains water through ribbed black channels. Show wet ceramic luggage raised on delicate tripods, shallow fin-keel sled ferries parked below, brine-glass handrails, woven reed pressure wraps, shell-horn tools, bone-white frequency markers, ripple-written mud underfoot, floating pumice blocks, pale fan reeds and black mineral grass along the lock walls, rose salt fog, mirror-brine pools, and a low copper sun reflected in black-green tidal basins. Include practical worn details: mineral lacquer scuffs on the lock gates, tide stains, droplets on opaline skin, muddy footprints from six-limbed residents, small domestic objects kept above water on thin tripods, and careful scale cues showing the lock, queue, sleds, and inhabitants interacting physically. Use believable documentary lens depth, wet surface reflections, tactile alien materials, copper haze, jade brine highlights, and dense coherent detail. Avoid humans, humanoid settlers, Earth wetland normality, mushrooms or spores, generic cyberpunk neon, medieval fantasy, readable text, logos, captions, signs, maps, prompt-card framing, horror, gore, and watermarks.\n\nReusable fill-in-the-blank template: Create a realistic photographed daily-life scene from [WEEKLY_WORLD_NAME], showing [DAILY_LIFE_ACTIVITY] at [SPECIFIC_LOCATION]. Preserve the world's canon ecology, inhabitants, materials, technology, palette, lighting, and recurring motifs, and make the image feel like a lived-in field photograph with tactile environmental detail, physical interaction, scale cues, and no prompt-card text.\n\nExample substitution: [WEEKLY_WORLD_NAME] = Korrun Silt Choir; [DAILY_LIFE_ACTIVITY] = residents waiting in a mud-elevator lock queue as the tide drains; [SPECIFIC_LOCATION] = a ribbed basalt lock beside black-green tidal basins with fin-keel sled ferries below.",
+    "image": "images/2026-06-28-weekly-world-image-korrun-silt-choir-mud-elevator-lock-queu.jpg",
+    "date": "2026-06-28",
+    "batch": "Daily Prompt",
+    "slot": "weekly-world-image",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "world": {
+      "name": "Korrun Silt Choir",
+      "description": "A resonant tidal alien world where non-human amphibious inhabitants shape black-green mineral mudflats, brine-glass settlements, and basalt transit systems through throat harmonics, foot-drumming, and tide-aware craft.",
+      "continuity": "Preserves Korrun Silt Choir elements: six-limbed opaline amphibious residents, basalt tidal infrastructure, brine-glass, reed wraps, shell-horn tools, bone-white frequency markers, ripple-written mud, rose salt fog, and low copper light.",
+      "entryDescription": "Residents queue inside a draining basalt mud-elevator lock with ceramic luggage on tripods and fin-keel sled ferries waiting below during low tide."
+    }
   }
 ]
