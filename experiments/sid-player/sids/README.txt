@@ -1,7 +1,7 @@
 HVSC 84 SID set for the browser player
 Updated: 2026-06-28
 Source archive: https://hvsc.sannic.nl/HVSC%2084/HVSC_84-all-of-them.7z
-Total .sid files: 2429
+Total .sid files: 2458
 
 Contents:
 - 904 curated composer SIDs from HVSC MUSICIANS folders.
@@ -27,3 +27,6 @@ GAMES/A-F: 491
 GAMES/G-L: 287
 GAMES/M-R: 334
 GAMES/S-Z: 395
+
+Top lists:
+HVSC Top 100: 100 ranked fan favorites from LaLa/HVSC Top 100; 29 missing canonical entries imported into sids/TOP100.

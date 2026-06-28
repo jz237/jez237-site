@@ -7,6 +7,7 @@
   const refs = {
     trackTotal: document.getElementById("trackTotal"),
     search: document.getElementById("search"),
+    collectionFilter: document.getElementById("collectionFilter"),
     composerFilter: document.getElementById("composerFilter"),
     listMeta: document.getElementById("listMeta"),
     trackList: document.getElementById("trackList"),
@@ -198,13 +199,22 @@
 
   function applyFilters() {
     const query = normalize(refs.search.value);
+    const collection = refs.collectionFilter.value;
     const composer = refs.composerFilter.value;
     state.filtered = tracks.filter((track) => {
+      const collectionMatch = collection === "all"
+        || (collection === "top100" && track.top100Rank)
+        || (collection === "games" && track.composerKey === "GAMES");
+      if (!collectionMatch) return false;
       const composerMatch = composer === "all" || track.composer === composer;
       if (!composerMatch) return false;
       if (!query) return true;
-      return normalize(`${track.title} ${track.composer} ${track.category || ""} ${track.fileName}`).includes(query);
+      return normalize(`${track.title} ${track.composer} ${track.category || ""} ${track.fileName} ${track.top100Title || ""}`).includes(query);
     });
+
+    if (collection === "top100") {
+      state.filtered.sort((a, b) => (a.top100Rank || 999) - (b.top100Rank || 999));
+    }
 
     if (state.selected >= state.filtered.length) state.selected = 0;
     renderTracks();
@@ -212,7 +222,10 @@
 
   function renderTracks() {
     refs.trackList.innerHTML = "";
-    refs.listMeta.textContent = `${state.filtered.length} shown`;
+    const top100Count = state.filtered.filter((track) => track.top100Rank).length;
+    refs.listMeta.textContent = refs.collectionFilter.value === "top100"
+      ? `${top100Count} ranked favorites`
+      : `${state.filtered.length} shown`;
 
     const fragment = document.createDocumentFragment();
     state.filtered.forEach((track, index) => {
@@ -230,8 +243,11 @@
         <span class="track-size"></span>
       `;
       row.querySelector(".track-title").textContent = track.title;
-      row.querySelector(".track-composer").textContent = track.category
-        ? `${track.composer} / ${track.category}`
+      const label = track.top100Rank
+        ? `#${track.top100Rank} HVSC Top 100`
+        : track.category;
+      row.querySelector(".track-composer").textContent = label
+        ? `${track.composer} / ${label}`
         : track.composer;
       row.querySelector(".track-size").textContent = formatBytes(track.size);
       row.addEventListener("pointerdown", wakeAudio, { passive: true });
@@ -570,6 +586,7 @@
 
   function wireEvents() {
     refs.search.addEventListener("input", applyFilters);
+    refs.collectionFilter.addEventListener("change", applyFilters);
     refs.composerFilter.addEventListener("change", applyFilters);
     refs.playBtn.addEventListener("pointerdown", wakeAudio, { passive: true });
     refs.prevBtn.addEventListener("pointerdown", wakeAudio, { passive: true });
