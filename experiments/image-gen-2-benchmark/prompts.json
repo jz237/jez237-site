@@ -2677,5 +2677,17 @@
     "slot": "miniature-diorama",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-06-28-historical-recreation-historical-recreation-1910s-print-sho",
+    "title": "Historical recreation: 1910s Print Shop Ink Mixing",
+    "tests": "Generated with GPT Image 2 via OpenClaw CLI; verified source PNG exists; append-entry converted to JPEG and uploaded to R2.",
+    "prompt": "Create a finished realistic square historical recreation photograph of a 1910s letterpress print shop ink-mixing bench during a quiet morning setup. Show a plausible small commercial print shop around 1914 with a scarred wooden ink-mixing bench, cast-iron hand press and platen press, composing sticks, locked type formes, galley trays, brass ink knives, glass ink slabs, ceramic pigment jars with blank worn surfaces, oilcloth rags, twine, wooden furniture blocks, chase frames, quoins, brayer, hand-cranked proofing roller, and edge-on stacks of unprinted rag paper. Include two varied period print workers mixing ink by warm shop lamps and cool high-window daylight, with ink gloss, oxidized iron, worn oak grain, cotton fibers, brass patina, ceramic chips, and paper dust. Keep everything plausible for the 1910s: no plastic, no modern safety tape, no hard hats, no LED lights, no modern logos, no barcode or QR code, no contemporary tools, no fake claims, no steampunk machinery, no readable writing, no poster layout.\n\nReusable fill-in-the-blank template: Create a finished realistic historical recreation of [ERA] [PLACE OR WORKSPACE] showing [EVERYDAY ACTIVITY OR WORK PROCESS] around [PERIOD OBJECT OR TOOL]. Use accurate period materials such as [MATERIALS], period lighting such as [LIGHTING], and environmental details such as [SURFACE WEAR], [TOOLS], [FURNISHINGS], and [ATMOSPHERE]. Keep the scene plausible for [YEAR RANGE]: no modern artifacts, no anachronistic lighting, no logos, no readable labels, no fantasy or steampunk devices. Make it feel photographed, tactile, and lived-in rather than staged as a modern museum display.\n\nExample substitution: [ERA] = 1910s; [PLACE OR WORKSPACE] = small commercial letterpress print shop; [EVERYDAY ACTIVITY OR WORK PROCESS] = morning ink mixing at the bench; [PERIOD OBJECT OR TOOL] = ink knives, glass slabs, brayer, composing sticks, locked formes, quoins, chase frames, galley trays, hand press, and platen press; [MATERIALS] = worn oak, cast iron, brass, ceramic, glass, cotton rag paper, oilcloth, twine, and printer ink; [LIGHTING] = warm shop lamps mixed with cool daylight through high dusty windows.",
+    "image": "images/2026-06-28-historical-recreation-historical-recreation-1910s-print-sho.jpg",
+    "date": "2026-06-28",
+    "batch": "Daily Prompt",
+    "slot": "historical-recreation",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
