@@ -1,0 +1,851 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Amiga MOD Player</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #101216;
+      --panel: #191c22;
+      --panel-2: #222733;
+      --line: #343b48;
+      --text: #eef2f4;
+      --muted: #a8b1bc;
+      --accent: #7fd6c2;
+      --accent-2: #f2c766;
+      --bad: #ff897d;
+      --good: #8ee38f;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      height: 100%;
+    }
+
+    body {
+      margin: 0;
+      overflow: hidden;
+      background:
+        linear-gradient(180deg, rgba(16, 18, 22, .96), rgba(16, 18, 22, 1)),
+        repeating-linear-gradient(90deg, rgba(127, 214, 194, .05) 0 1px, transparent 1px 18px),
+        var(--bg);
+      color: var(--text);
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    button {
+      min-height: 40px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--panel-2);
+      color: var(--text);
+      cursor: pointer;
+    }
+
+    button:hover,
+    button:focus-visible {
+      border-color: var(--accent);
+      color: var(--accent);
+      outline: none;
+    }
+
+    button.active {
+      border-color: var(--accent);
+      background: rgba(127, 214, 194, .14);
+      color: var(--accent);
+    }
+
+    button.icon-button {
+      min-width: 40px;
+      padding: 0 10px;
+      font-size: 1.05rem;
+      line-height: 1;
+    }
+
+    button.primary {
+      background: #1d3b38;
+      border-color: rgba(127, 214, 194, .7);
+    }
+
+    .app {
+      height: 100dvh;
+      display: grid;
+      grid-template-rows: auto 1fr;
+      padding: 18px;
+      gap: 14px;
+    }
+
+    .topbar {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 16px;
+      align-items: end;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 14px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(1.55rem, 3vw, 2.6rem);
+      line-height: 1;
+      letter-spacing: 0;
+    }
+
+    .summary {
+      color: var(--muted);
+      margin-top: 6px;
+      font-size: .92rem;
+    }
+
+    .stat {
+      min-width: 130px;
+      border: 1px solid var(--line);
+      background: rgba(25, 28, 34, .9);
+      border-radius: 8px;
+      padding: 10px 12px;
+      text-align: right;
+    }
+
+    .stat strong {
+      display: block;
+      color: var(--accent);
+      font-size: 1.65rem;
+      line-height: 1;
+    }
+
+    .stat span {
+      display: block;
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: .78rem;
+      text-transform: uppercase;
+    }
+
+    .workspace {
+      min-height: 0;
+      display: grid;
+      grid-template-columns: minmax(290px, 380px) minmax(0, 1fr);
+      gap: 14px;
+    }
+
+    .library,
+    .deck {
+      min-height: 0;
+      border: 1px solid var(--line);
+      background: rgba(25, 28, 34, .94);
+      border-radius: 8px;
+    }
+
+    .library {
+      display: grid;
+      grid-template-rows: auto 1fr;
+    }
+
+    .searchbar {
+      display: grid;
+      gap: 10px;
+      padding: 12px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    input[type="search"],
+    select {
+      width: 100%;
+      min-height: 40px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: #11151b;
+      color: var(--text);
+      padding: 0 10px;
+      outline: none;
+    }
+
+    input[type="search"]:focus,
+    select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(127, 214, 194, .16);
+    }
+
+    .list-meta {
+      color: var(--muted);
+      font-size: .82rem;
+    }
+
+    .track-list {
+      min-height: 0;
+      overflow: auto;
+      overscroll-behavior: contain;
+      padding: 8px;
+    }
+
+    .track {
+      width: 100%;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto auto;
+      gap: 8px;
+      align-items: center;
+      min-height: 54px;
+      margin: 0 0 7px;
+      padding: 8px 10px;
+      text-align: left;
+      background: #171a20;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+    }
+
+    .track-main {
+      min-height: 0;
+      min-width: 0;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      text-align: left;
+    }
+
+    .track-main:hover,
+    .track-main:focus-visible {
+      color: var(--text);
+      border-color: transparent;
+      box-shadow: none;
+    }
+
+    .track-title,
+    .track-composer,
+    .now-title,
+    .now-meta {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .track-title {
+      font-weight: 700;
+    }
+
+    .track-composer {
+      margin-top: 2px;
+      color: var(--muted);
+      font-size: .82rem;
+    }
+
+    .track-duration,
+    .track-favorite {
+      color: var(--accent-2);
+      font-size: .76rem;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .track-favorite {
+      min-width: 34px;
+      min-height: 34px;
+      padding: 0;
+      color: var(--muted);
+      background: #13171d;
+    }
+
+    .track-favorite.active {
+      color: var(--accent-2);
+      border-color: rgba(242, 199, 102, .7);
+      background: rgba(242, 199, 102, .11);
+    }
+
+    .track.active {
+      border-color: var(--accent);
+      background: rgba(127, 214, 194, .12);
+    }
+
+    .deck {
+      min-width: 0;
+      display: grid;
+      grid-template-rows: auto auto 1fr auto auto;
+      padding: 16px;
+      gap: 16px;
+      overflow: hidden;
+    }
+
+    .now {
+      min-width: 0;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 14px;
+      align-items: start;
+    }
+
+    .now-title {
+      margin: 0;
+      font-size: clamp(1.35rem, 3vw, 2.45rem);
+      line-height: 1.05;
+      letter-spacing: 0;
+    }
+
+    .now-meta {
+      margin-top: 7px;
+      color: var(--muted);
+    }
+
+    .now-actions {
+      display: flex;
+      gap: 8px;
+      align-items: start;
+    }
+
+    .status {
+      min-width: 122px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 8px 10px;
+      color: var(--muted);
+      text-align: right;
+      font-size: .85rem;
+    }
+
+    .status.ready {
+      color: var(--good);
+      border-color: rgba(142, 227, 143, .45);
+    }
+
+    .status.error {
+      color: var(--bad);
+      border-color: rgba(255, 137, 125, .5);
+    }
+
+    .controls {
+      display: grid;
+      gap: 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #14171d;
+      padding: 14px;
+    }
+
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(64px, 1fr));
+      gap: 8px;
+    }
+
+    .progress-row,
+    .volume-row {
+      display: grid;
+      grid-template-columns: 54px minmax(0, 1fr) 54px;
+      gap: 10px;
+      align-items: center;
+      color: var(--muted);
+      font-size: .84rem;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .volume-row {
+      grid-template-columns: 64px minmax(0, 1fr) 48px;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--accent);
+    }
+
+    .seek-control {
+      position: relative;
+      height: 34px;
+      display: grid;
+      align-items: center;
+      touch-action: none;
+      cursor: pointer;
+    }
+
+    .seek-control:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 3px;
+      border-radius: 6px;
+    }
+
+    .native-progress {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .seek-rail {
+      position: relative;
+      height: 12px;
+      border: 1px solid rgba(127, 214, 194, .34);
+      border-radius: 999px;
+      background: #0c1015;
+      overflow: visible;
+    }
+
+    .seek-fill {
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 0%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    }
+
+    .seek-thumb {
+      position: absolute;
+      top: 50%;
+      left: 0%;
+      width: 22px;
+      height: 22px;
+      border: 2px solid #101319;
+      border-radius: 50%;
+      background: var(--accent-2);
+      box-shadow: 0 0 0 1px rgba(242, 199, 102, .72), 0 5px 16px rgba(0, 0, 0, .34);
+      transform: translate(-50%, -50%);
+    }
+
+    .scope {
+      min-height: 0;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background:
+        linear-gradient(180deg, rgba(127, 214, 194, .06), transparent),
+        #101319;
+      overflow: hidden;
+    }
+
+    .deck.scope-compact {
+      grid-template-rows: auto auto minmax(88px, 130px) auto auto;
+    }
+
+    .deck.scope-hidden {
+      grid-template-rows: auto auto auto auto;
+    }
+
+    .deck.scope-hidden .scope {
+      display: none;
+    }
+
+    .scope-grid {
+      width: min(620px, 86%);
+      height: min(260px, 55%);
+      display: grid;
+      grid-template-columns: repeat(32, 1fr);
+      gap: 5px;
+      align-items: end;
+    }
+
+    .bar {
+      min-height: 8%;
+      background: linear-gradient(180deg, var(--accent-2), var(--accent));
+      border-radius: 2px 2px 0 0;
+      opacity: .42;
+      transform-origin: bottom;
+      transition: height 90ms linear, opacity 160ms ease;
+    }
+
+    .playing .bar {
+      animation: pulse 900ms ease-in-out infinite alternate;
+      opacity: .88;
+    }
+
+    .scope.live .bar {
+      animation: none;
+      opacity: .9;
+      transform: none;
+    }
+
+    .bar:nth-child(3n) { animation-duration: 720ms; }
+    .bar:nth-child(4n) { animation-duration: 1040ms; }
+    .bar:nth-child(5n) { animation-duration: 620ms; }
+
+    @keyframes pulse {
+      from { transform: scaleY(.24); }
+      to { transform: scaleY(1); }
+    }
+
+    .info-panel {
+      min-height: 0;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #12161c;
+      padding: 12px;
+    }
+
+    .info-panel h3 {
+      margin: 0 0 8px;
+      color: var(--accent);
+      font-size: .88rem;
+    }
+
+    .info-panel dl {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: 5px 12px;
+      margin: 0;
+      color: var(--muted);
+      font-size: .78rem;
+    }
+
+    .info-panel dt {
+      color: var(--accent-2);
+    }
+
+    .info-panel dd {
+      min-width: 0;
+      margin: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    footer {
+      color: var(--muted);
+      font-size: .78rem;
+      line-height: 1.4;
+    }
+
+    footer a {
+      color: var(--accent);
+    }
+
+    .mini-player {
+      display: none;
+    }
+
+    @media (max-width: 820px) {
+      body {
+        overflow: auto;
+      }
+
+      .app {
+        height: auto;
+        min-height: 100dvh;
+        padding: 12px 12px calc(112px + env(safe-area-inset-bottom));
+        gap: 10px;
+      }
+
+      .topbar,
+      .workspace,
+      .now {
+        grid-template-columns: 1fr;
+      }
+
+      .topbar {
+        gap: 10px;
+        padding-bottom: 10px;
+      }
+
+      .stat {
+        min-width: 0;
+        text-align: left;
+      }
+
+      .workspace {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .deck {
+        order: -1;
+        min-height: 0;
+        grid-template-rows: auto auto minmax(104px, 18dvh) auto auto;
+        gap: 10px;
+        padding: 12px;
+      }
+
+      .deck.scope-compact {
+        grid-template-rows: auto auto minmax(76px, 12dvh) auto auto;
+      }
+
+      .deck.scope-hidden {
+        grid-template-rows: auto auto auto auto;
+      }
+
+      .library {
+        min-height: 0;
+        height: min(48dvh, 430px);
+      }
+
+      .buttons {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+      }
+
+      .buttons button {
+        min-width: 0;
+        padding-inline: 6px;
+      }
+
+      .controls {
+        gap: 10px;
+        padding: 10px;
+      }
+
+      .summary,
+      footer {
+        font-size: .75rem;
+      }
+
+      .mini-player {
+        position: fixed;
+        z-index: 20;
+        left: 10px;
+        right: 10px;
+        bottom: calc(10px + env(safe-area-inset-bottom));
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 8px 10px;
+        align-items: center;
+        border: 1px solid rgba(127, 214, 194, .45);
+        border-radius: 8px;
+        background: rgba(18, 21, 27, .96);
+        box-shadow: 0 -10px 34px rgba(0, 0, 0, .46);
+        padding: 10px;
+        backdrop-filter: blur(12px);
+      }
+
+      .mini-copy {
+        min-width: 0;
+      }
+
+      .mini-title,
+      .mini-meta {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .mini-title {
+        font-weight: 800;
+        line-height: 1.15;
+      }
+
+      .mini-meta {
+        margin-top: 2px;
+        color: var(--muted);
+        font-size: .75rem;
+      }
+
+      .mini-actions {
+        display: grid;
+        grid-template-columns: repeat(4, 36px);
+        gap: 6px;
+      }
+
+      .mini-actions button {
+        min-width: 0;
+        min-height: 36px;
+        padding: 0;
+        font-size: .72rem;
+        line-height: 1;
+      }
+
+      .mini-play {
+        background: #1d3b38;
+        border-color: rgba(127, 214, 194, .7);
+      }
+
+      .mini-progress {
+        grid-column: 1 / -1;
+        display: grid;
+        grid-template-columns: 40px minmax(0, 1fr) 40px;
+        gap: 8px;
+        align-items: center;
+        color: var(--muted);
+        font-size: .74rem;
+        font-variant-numeric: tabular-nums;
+      }
+
+      .mini-seek {
+        position: relative;
+        height: 28px;
+        display: grid;
+        align-items: center;
+        touch-action: none;
+      }
+
+      .mini-rail {
+        position: relative;
+        height: 9px;
+        border: 1px solid rgba(127, 214, 194, .32);
+        border-radius: 999px;
+        background: #0c1015;
+      }
+
+      .mini-fill {
+        position: absolute;
+        inset: 0 auto 0 0;
+        width: 0%;
+        border-radius: 999px;
+        background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      }
+
+      .mini-thumb {
+        position: absolute;
+        top: 50%;
+        left: 0%;
+        width: 18px;
+        height: 18px;
+        border: 2px solid #101319;
+        border-radius: 50%;
+        background: var(--accent-2);
+        transform: translate(-50%, -50%);
+      }
+    }
+
+    @media (max-width: 460px) {
+      .buttons {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .progress-row {
+        grid-template-columns: 42px minmax(0, 1fr) 42px;
+        gap: 8px;
+      }
+
+      .volume-row {
+        grid-template-columns: 52px minmax(0, 1fr) 42px;
+        gap: 8px;
+      }
+
+      .mini-player {
+        left: 8px;
+        right: 8px;
+        bottom: calc(8px + env(safe-area-inset-bottom));
+      }
+
+      .mini-actions {
+        grid-template-columns: repeat(4, 34px);
+      }
+
+      .mini-actions button {
+        min-height: 34px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header class="topbar">
+      <div>
+        <h1>Amiga MOD Player</h1>
+        <div class="summary">Browser-side ProTracker and tracker module playback from a local Amiga-era starter set.</div>
+      </div>
+      <div class="stat">
+        <strong id="trackTotal">10</strong>
+        <span>MOD files</span>
+      </div>
+    </header>
+
+    <section class="workspace" aria-label="Amiga MOD player">
+      <aside class="library" aria-label="MOD library">
+        <div class="searchbar">
+          <input id="search" type="search" placeholder="Search MOD files" autocomplete="off">
+          <select id="collectionFilter" aria-label="Collection filter">
+            <option value="all">All MOD files</option>
+            <option value="favorites">Favorites</option>
+            <option value="game">Game Music</option>
+            <option value="demo">Demo Scene</option>
+          </select>
+          <select id="composerFilter" aria-label="Composer filter"></select>
+          <div id="listMeta" class="list-meta">0 shown</div>
+        </div>
+        <div id="trackList" class="track-list" role="listbox" aria-label="Tracks"></div>
+      </aside>
+
+      <section class="deck" aria-label="Player controls">
+        <div class="now">
+          <div>
+            <h2 id="nowTitle" class="now-title">Select a MOD</h2>
+            <div id="nowMeta" class="now-meta">libopenmpt standby</div>
+          </div>
+          <div class="now-actions">
+            <button id="favNowBtn" class="icon-button" type="button" title="Favorite current MOD" aria-label="Favorite current MOD">☆</button>
+            <div id="status" class="status">Idle</div>
+          </div>
+        </div>
+
+        <div class="controls">
+          <div class="buttons">
+            <button id="prevBtn" type="button" title="Previous">Prev</button>
+            <button id="playBtn" class="primary" type="button" title="Play or pause">Play</button>
+            <button id="stopBtn" type="button" title="Stop">Stop</button>
+            <button id="nextBtn" type="button" title="Next">Next</button>
+            <button id="loopBtn" type="button" title="Loop current MOD">Loop</button>
+            <button id="scopeModeBtn" type="button" title="Analyzer display mode">Scope</button>
+          </div>
+
+          <div class="progress-row">
+            <span id="elapsed">0:00</span>
+            <div id="seekControl" class="seek-control" role="slider" tabindex="0" aria-label="Playback position" aria-valuemin="0" aria-valuemax="180" aria-valuenow="0" aria-valuetext="0:00">
+              <input id="progress" class="native-progress" type="range" min="0" max="180" value="0" step="0.1" tabindex="-1" aria-hidden="true">
+              <div class="seek-rail" aria-hidden="true">
+                <div id="seekFill" class="seek-fill"></div>
+                <div id="seekThumb" class="seek-thumb"></div>
+              </div>
+            </div>
+            <span id="duration">--:--</span>
+          </div>
+
+          <div class="volume-row">
+            <span>Volume</span>
+            <input id="volume" type="range" min="0" max="1" value="0.78" step="0.01">
+            <span id="volumeText">78%</span>
+          </div>
+        </div>
+
+        <div id="scope" class="scope" aria-hidden="true">
+          <div id="scopeGrid" class="scope-grid"></div>
+        </div>
+
+        <section class="info-panel">
+          <h3>Module Info</h3>
+          <dl>
+            <dt>Format</dt><dd id="infoFormat">MOD</dd>
+            <dt>Patterns</dt><dd id="infoPatterns">--</dd>
+            <dt>Orders</dt><dd id="infoOrders">--</dd>
+            <dt>Source</dt><dd id="infoSource">Modland ProTracker archive</dd>
+          </dl>
+        </section>
+
+        <footer>
+          Playback uses chiptune3/libopenmpt. Starter modules are mirrored locally from Modland's ProTracker archive.
+        </footer>
+      </section>
+    </section>
+  </main>
+
+  <div class="mini-player" aria-label="Sticky player controls">
+    <div class="mini-copy">
+      <div id="miniTitle" class="mini-title">Select a MOD</div>
+      <div id="miniMeta" class="mini-meta">Idle</div>
+    </div>
+    <div class="mini-actions">
+      <button id="miniFavBtn" type="button" title="Favorite current MOD" aria-label="Favorite current MOD">☆</button>
+      <button id="miniPrevBtn" type="button" title="Previous MOD" aria-label="Previous MOD">Prev</button>
+      <button id="miniPlayBtn" class="mini-play" type="button" title="Play or pause" aria-label="Play or pause">Play</button>
+      <button id="miniNextBtn" type="button" title="Next MOD" aria-label="Next MOD">Next</button>
+    </div>
+    <div class="mini-progress">
+      <span id="miniElapsed">0:00</span>
+      <div id="miniSeekControl" class="mini-seek" role="slider" tabindex="0" aria-label="Playback position" aria-valuemin="0" aria-valuemax="180" aria-valuenow="0" aria-valuetext="0:00">
+        <div class="mini-rail" aria-hidden="true">
+          <div id="miniSeekFill" class="mini-fill"></div>
+          <div id="miniSeekThumb" class="mini-thumb"></div>
+        </div>
+      </div>
+      <span id="miniDuration">--:--</span>
+    </div>
+  </div>
+
+  <script src="/experiments/amiga-mod-player/tracks.js?v=20260628a"></script>
+  <script type="module" src="/experiments/amiga-mod-player/app.js?v=20260628a"></script>
+</body>
+</html>
