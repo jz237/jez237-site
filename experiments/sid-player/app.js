@@ -38,12 +38,14 @@
     initialized: null,
     playing: false,
     loading: false,
+    seeking: false,
     loop: false,
     scrubbing: false,
     ending: false,
     fallbackPosition: 0,
     wallStarted: 0,
     pointerSeeking: false,
+    seekToken: 0,
   };
 
   function formatTime(ms) {
@@ -167,6 +169,11 @@
     refs.seekControl.setAttribute("aria-valuemax", String(Math.round(state.currentDuration)));
     refs.seekControl.setAttribute("aria-valuenow", String(Math.round(value)));
     refs.seekControl.setAttribute("aria-valuetext", formatTime(value));
+  }
+
+  function currentTrackUrl() {
+    if (!state.currentTrack) return "";
+    return new URL(state.currentTrack.path, window.location.origin + PLAYER_BASE).href;
   }
 
   function renderComposers() {
@@ -350,7 +357,7 @@
   }
 
   async function onTrackEnd() {
-    if (state.ending || state.loading || !state.currentTrack) return;
+    if (state.ending || state.loading || state.seeking || !state.currentTrack) return;
     state.ending = true;
     state.playing = false;
     refs.playBtn.textContent = "Play";
@@ -368,7 +375,7 @@
   }
 
   function updateProgress() {
-    if (state.currentTrack && !state.scrubbing) {
+    if (state.currentTrack && !state.scrubbing && !state.seeking) {
       const pos = Math.min(playbackPosition(), state.currentDuration);
       renderSeekPosition(pos);
 
@@ -416,29 +423,123 @@
     refs.scopeGrid.appendChild(fragment);
   }
 
-  function seekToProgress(targetValue) {
+  function waitForUi() {
+    return new Promise((resolve) => window.setTimeout(resolve, 0));
+  }
+
+  async function fastForwardBackend(target, token) {
+    const backend = window.backend;
+    if (!backend || typeof backend.computeAudioSamples !== "function" || typeof backend.getAudioBufferLength !== "function") {
+      throw new Error("SID fast-forward is not available");
+    }
+
+    const sampleRate = typeof ScriptNodePlayer.getWebAudioSampleRate === "function"
+      ? ScriptNodePlayer.getWebAudioSampleRate()
+      : 44100;
+    const bufferLength = Math.max(1, Number(backend.getAudioBufferLength()) || 1024);
+    const calls = Math.ceil((sampleRate * (target / 1000)) / bufferLength);
+
+    for (let i = 0; i < calls; i += 1) {
+      if (token !== state.seekToken) return false;
+      backend.computeAudioSamples();
+      if (i > 0 && i % 240 === 0) {
+        setStatus(`Seeking ${formatTime((i / calls) * target)}`, "");
+        await waitForUi();
+      }
+    }
+
+    if (backend._transformer && typeof backend._transformer.seekPosition === "function") {
+      backend._transformer.seekPosition(target);
+    }
+    return true;
+  }
+
+  async function manualSeekTo(player, target, token) {
+    const wasPlaying = state.playing;
+    const volume = Number(refs.volume.value);
+
+    setStatus(`Seeking ${formatTime(target)}`, "");
+    player.pause();
+    player.setVolume(0);
+
+    await ScriptNodePlayer.loadMusicFromURL(
+      currentTrackUrl(),
+      { track: -1, timeout: DEFAULT_DURATION_MS / 1000, traceSID: false },
+      () => {
+        throw new Error(`Could not reload ${state.currentTrack.fileName}`);
+      },
+      () => {}
+    );
+
+    if (token !== state.seekToken) return;
+    player.pause();
+    const completed = await fastForwardBackend(target, token);
+    if (!completed || token !== state.seekToken) return;
+
+    player.setVolume(volume);
+    state.fallbackPosition = target;
+
+    if (wasPlaying) {
+      beginProgressClock(target);
+      player.resume();
+      state.playing = true;
+      refs.playBtn.textContent = "Pause";
+      refs.scope.classList.add("playing");
+      setStatus("Playing", "ready");
+    } else {
+      state.wallStarted = 0;
+      player.pause();
+      state.playing = false;
+      refs.playBtn.textContent = "Play";
+      refs.scope.classList.remove("playing");
+      setStatus("Paused", "");
+    }
+  }
+
+  async function performSeek(targetValue) {
     const player = getPlayer();
     const sourceValue = typeof targetValue === "number" || typeof targetValue === "string"
       ? targetValue
       : refs.progress.value;
     const target = Math.max(0, Math.min(Number(sourceValue) || 0, state.currentDuration));
+    const token = state.seekToken + 1;
+    state.seekToken = token;
+    state.seeking = true;
+    state.scrubbing = true;
     renderSeekPosition(target);
 
-    if (player && typeof player.seekPlaybackPosition === "function") {
-      try {
+    try {
+      if (!player || typeof player.seekPlaybackPosition !== "function") {
+        throw new Error("SID player is not ready");
+      }
+
+      const maxSeek = Number(player.getMaxPlaybackPosition());
+      if (Number.isFinite(maxSeek) && maxSeek > 0) {
         player.seekPlaybackPosition(target);
-      } catch (error) {
-        console.warn(error);
+      } else {
+        await manualSeekTo(player, target, token);
+      }
+
+      if (token !== state.seekToken) return;
+      state.fallbackPosition = target;
+      if (state.playing) {
+        state.wallStarted = performance.now() - target;
+      } else {
+        state.wallStarted = 0;
+      }
+    } catch (error) {
+      console.error(error);
+      setStatus("Seek failed", "error");
+    } finally {
+      if (token === state.seekToken) {
+        state.seeking = false;
+        state.scrubbing = false;
       }
     }
+  }
 
-    state.fallbackPosition = target;
-    if (state.playing) {
-      state.wallStarted = performance.now() - target;
-    } else {
-      state.wallStarted = 0;
-    }
-    state.scrubbing = false;
+  function seekToProgress(targetValue) {
+    performSeek(targetValue);
   }
 
   function progressValueFromPoint(clientX) {
@@ -494,7 +595,7 @@
       state.pointerSeeking = true;
       state.scrubbing = true;
       refs.seekControl.setPointerCapture(event.pointerId);
-      seekFromPoint(event.clientX);
+      previewSeekFromPoint(event.clientX);
     });
     refs.seekControl.addEventListener("pointermove", (event) => {
       if (!state.pointerSeeking) return;
@@ -517,7 +618,7 @@
       wakeAudio();
       state.scrubbing = true;
       const touch = event.changedTouches[0];
-      if (touch) seekFromPoint(touch.clientX);
+      if (touch) previewSeekFromPoint(touch.clientX);
     }, { passive: false });
     refs.seekControl.addEventListener("touchmove", (event) => {
       if (!state.currentTrack) return;
