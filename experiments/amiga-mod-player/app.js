@@ -66,9 +66,20 @@ const state = {
   initialized: null,
   audioContext: null,
   audioUnlocked: false,
+  audioElement: null,
+  audioSource: null,
+  audioBuffer: null,
+  audioBufferPath: "",
+  audioBufferSource: null,
+  audioGain: null,
+  stoppingAudio: false,
   player: null,
   analyser: null,
   analyserData: null,
+  modAnalyser: null,
+  modAnalyserData: null,
+  audioAnalyser: null,
+  audioAnalyserData: null,
   playing: false,
   loading: false,
   seeking: false,
@@ -98,6 +109,15 @@ function formatBytes(size) {
   return `${Math.round(size / 1024)} KB`;
 }
 
+function isAudioTrack(track) {
+  return track && ["MP3", "OGG", "WAV", "M4A"].includes(String(track.format || "").toUpperCase());
+}
+
+function trackLengthLabel(track) {
+  if (Number.isFinite(track && track.duration) && track.duration > 0) return formatTime(track.duration);
+  return formatBytes(track && track.size);
+}
+
 function readStoredJson(key, fallback) {
   try {
     const value = window.localStorage.getItem(key);
@@ -125,8 +145,8 @@ function setStatus(text, kind) {
 function setPlayButtonText(text) {
   refs.playBtn.textContent = text;
   refs.miniPlayBtn.textContent = text;
-  refs.playBtn.setAttribute("aria-label", text === "Pause" ? "Pause MOD" : "Play MOD");
-  refs.miniPlayBtn.setAttribute("aria-label", text === "Pause" ? "Pause MOD" : "Play MOD");
+  refs.playBtn.setAttribute("aria-label", text === "Pause" ? "Pause track" : "Play track");
+  refs.miniPlayBtn.setAttribute("aria-label", text === "Pause" ? "Pause track" : "Play track");
 }
 
 function syncMiniMeta() {
@@ -204,7 +224,11 @@ function renderSeekPosition(seconds) {
 
 function currentPlaybackPosition() {
   if (!state.playing || !state.playStartedAt) return state.currentPosition;
-  return state.playOffset + ((performance.now() - state.playStartedAt) / 1000);
+  const elapsed = state.playOffset + ((performance.now() - state.playStartedAt) / 1000);
+  if (isAudioTrack(state.currentTrack) && state.currentDuration > 0) {
+    return state.loop ? elapsed % state.currentDuration : Math.min(elapsed, state.currentDuration);
+  }
+  return elapsed;
 }
 
 function setNowPlaying(track, meta) {
@@ -217,8 +241,12 @@ function setNowPlaying(track, meta) {
 function updateInfo(track, meta = null) {
   refs.infoFormat.textContent = track ? track.format : "MOD";
   refs.infoSource.textContent = track ? track.source : "Modland ProTracker archive";
-  refs.infoPatterns.textContent = meta && Number.isFinite(meta.totalPatterns) ? String(meta.totalPatterns) : "--";
-  refs.infoOrders.textContent = meta && Number.isFinite(meta.totalOrders) ? String(meta.totalOrders) : "--";
+  refs.infoPatterns.textContent = isAudioTrack(track)
+    ? "Audio"
+    : meta && Number.isFinite(meta.totalPatterns) ? String(meta.totalPatterns) : "--";
+  refs.infoOrders.textContent = isAudioTrack(track)
+    ? "--"
+    : meta && Number.isFinite(meta.totalOrders) ? String(meta.totalOrders) : "--";
 }
 
 function setScopeMode(mode) {
@@ -281,15 +309,16 @@ async function unlockAudioContext() {
 
 async function wakeAudio() {
   const context = await unlockAudioContext();
-  const player = await ensurePlayer();
-  if (player && player.context && player.context.state === "suspended") {
-    await player.context.resume();
-  }
   return context;
 }
 
 function wireAnalyser(player) {
-  if (state.analyser || !player || !player.context || !player.gain) return;
+  if (!player || !player.context || !player.gain) return;
+  if (state.modAnalyser) {
+    state.analyser = state.modAnalyser;
+    state.analyserData = state.modAnalyserData;
+    return;
+  }
   const analyser = player.context.createAnalyser();
   analyser.fftSize = 256;
   analyser.smoothingTimeConstant = 0.78;
@@ -300,8 +329,150 @@ function wireAnalyser(player) {
   }
   player.gain.connect(analyser);
   analyser.connect(player.context.destination);
-  state.analyser = analyser;
-  state.analyserData = new Uint8Array(analyser.frequencyBinCount);
+  state.modAnalyser = analyser;
+  state.modAnalyserData = new Uint8Array(analyser.frequencyBinCount);
+  state.analyser = state.modAnalyser;
+  state.analyserData = state.modAnalyserData;
+}
+
+function useModAnalyser() {
+  if (state.modAnalyser && state.modAnalyserData) {
+    state.analyser = state.modAnalyser;
+    state.analyserData = state.modAnalyserData;
+  }
+}
+
+function ensureAudioElement() {
+  if (state.audioElement) return state.audioElement;
+  const audio = new Audio();
+  audio.preload = "metadata";
+  audio.style.display = "none";
+  document.body.appendChild(audio);
+
+  audio.addEventListener("loadedmetadata", () => {
+    if (!isAudioTrack(state.currentTrack) || state.loadedPath !== state.currentTrack.path) return;
+    const duration = Number.isFinite(audio.duration) && audio.duration > 0
+      ? audio.duration
+      : Number(state.currentTrack.duration) || DEFAULT_DURATION;
+    state.currentDuration = duration;
+    state.nativeDuration = duration;
+    renderSeekPosition(audio.currentTime || 0);
+  });
+
+  audio.addEventListener("timeupdate", () => {
+    if (!isAudioTrack(state.currentTrack) || state.scrubbing || state.seeking) return;
+    state.currentPosition = audio.currentTime || 0;
+    renderSeekPosition(state.currentPosition);
+  });
+
+  audio.addEventListener("ended", () => {
+    if (!isAudioTrack(state.currentTrack)) return;
+    if (state.loop) {
+      audio.currentTime = 0;
+      audio.play().catch((error) => {
+        console.error(error);
+        setStatus("Error", "error");
+      });
+      return;
+    }
+    onTrackEnd();
+  });
+
+  audio.addEventListener("error", () => {
+    console.error(audio.error);
+    state.playing = false;
+    refs.scope.classList.remove("playing");
+    setPlayButtonText("Play");
+    setStatus("Error", "error");
+  });
+
+  const context = getAudioContext();
+  const source = context.createMediaElementSource(audio);
+  const analyser = context.createAnalyser();
+  analyser.fftSize = 256;
+  analyser.smoothingTimeConstant = 0.78;
+  source.connect(analyser);
+  analyser.connect(context.destination);
+  state.audioElement = audio;
+  state.audioSource = source;
+  state.audioAnalyser = analyser;
+  state.audioAnalyserData = new Uint8Array(analyser.frequencyBinCount);
+  return audio;
+}
+
+function useAudioAnalyser() {
+  ensureAudioElement();
+  state.analyser = state.audioAnalyser;
+  state.analyserData = state.audioAnalyserData;
+}
+
+function ensureAudioBufferGraph() {
+  const context = getAudioContext();
+  if (!state.audioGain) {
+    const gain = context.createGain();
+    const analyser = context.createAnalyser();
+    analyser.fftSize = 256;
+    analyser.smoothingTimeConstant = 0.78;
+    gain.connect(analyser);
+    analyser.connect(context.destination);
+    state.audioGain = gain;
+    state.audioAnalyser = analyser;
+    state.audioAnalyserData = new Uint8Array(analyser.frequencyBinCount);
+  }
+  state.audioGain.gain.value = Number(refs.volume.value);
+  state.analyser = state.audioAnalyser;
+  state.analyserData = state.audioAnalyserData;
+  return context;
+}
+
+async function loadAudioBuffer(track) {
+  const context = ensureAudioBufferGraph();
+  if (state.audioBuffer && state.audioBufferPath === track.path) return state.audioBuffer;
+  const response = await fetch(trackUrl(track));
+  if (!response.ok) throw new Error(`Could not load ${track.title}`);
+  const data = await response.arrayBuffer();
+  state.audioBuffer = await context.decodeAudioData(data);
+  state.audioBufferPath = track.path;
+  return state.audioBuffer;
+}
+
+function stopAudioBufferSource(resetPosition = false) {
+  if (!state.audioBufferSource) return;
+  state.stoppingAudio = true;
+  try {
+    state.audioBufferSource.stop();
+  } catch (error) {
+    console.warn(error);
+  }
+  state.audioBufferSource.disconnect();
+  state.audioBufferSource = null;
+  state.stoppingAudio = false;
+  if (resetPosition) {
+    state.currentPosition = 0;
+    state.playOffset = 0;
+    state.playStartedAt = 0;
+  }
+}
+
+function startAudioBufferPlayback(offset = state.currentPosition || 0) {
+  if (!state.audioBuffer || !state.audioGain) return;
+  const context = getAudioContext();
+  stopAudioBufferSource();
+  const duration = state.audioBuffer.duration || state.currentDuration || DEFAULT_DURATION;
+  const source = context.createBufferSource();
+  source.buffer = state.audioBuffer;
+  source.loop = state.loop;
+  source.connect(state.audioGain);
+  source.onended = () => {
+    if (state.audioBufferSource !== source) return;
+    if (state.stoppingAudio || state.loop || !isAudioTrack(state.currentTrack)) return;
+    onTrackEnd();
+  };
+  state.audioBufferSource = source;
+  state.currentPosition = Math.max(0, Math.min(offset, duration));
+  state.playOffset = state.currentPosition;
+  state.playStartedAt = performance.now();
+  source.start(0, state.currentPosition % duration);
 }
 
 function ensurePlayer() {
@@ -403,11 +574,11 @@ function renderTracks() {
         <span class="track-composer"></span>
       </button>
       <span class="track-duration"></span>
-      <button class="track-favorite" type="button" aria-label="Favorite MOD"></button>
+      <button class="track-favorite" type="button" aria-label="Favorite track"></button>
     `;
     row.querySelector(".track-title").textContent = track.title;
     row.querySelector(".track-composer").textContent = `${track.composer} / ${track.collection}`;
-    row.querySelector(".track-duration").textContent = formatBytes(track.size);
+    row.querySelector(".track-duration").textContent = trackLengthLabel(track);
     const favoriteButton = row.querySelector(".track-favorite");
     const activeFavorite = isFavorite(track);
     favoriteButton.classList.toggle("active", activeFavorite);
@@ -439,13 +610,12 @@ async function fetchModule(track) {
   return response.arrayBuffer();
 }
 
-async function loadTrack(track, autoplay) {
-  if (!track || state.loading) return;
-  state.loading = true;
+function resetTrackState(track, autoplay) {
+  if (!track) return;
   state.currentTrack = track;
   state.currentPosition = 0;
-  state.currentDuration = DEFAULT_DURATION;
-  state.nativeDuration = DEFAULT_DURATION;
+  state.currentDuration = Number(track.duration) || DEFAULT_DURATION;
+  state.nativeDuration = Number(track.duration) || DEFAULT_DURATION;
   state.loopingModule = false;
   state.playOffset = 0;
   state.playStartedAt = 0;
@@ -461,10 +631,71 @@ async function loadTrack(track, autoplay) {
   updateInfo(track);
   renderTracks();
   renderSeekPosition(0);
+}
+
+function stopAudioPlayback(resetPosition = true) {
+  stopAudioBufferSource(resetPosition);
+  const audio = state.audioElement;
+  if (!audio) return;
+  audio.pause();
+  if (resetPosition) {
+    try {
+      audio.currentTime = 0;
+    } catch (error) {
+      console.warn(error);
+    }
+  }
+}
+
+async function loadAudioTrack(track, autoplay) {
+  if (!track || state.loading) return;
+  state.loading = true;
+  resetTrackState(track, autoplay);
 
   try {
     if (autoplay) await wakeAudio();
+    if (state.player) state.player.stop();
+    stopAudioPlayback();
+    const buffer = await loadAudioBuffer(track);
+    state.currentDuration = buffer.duration || Number(track.duration) || DEFAULT_DURATION;
+    state.nativeDuration = state.currentDuration;
+    state.loadedPath = track.path;
+    renderSeekPosition(0);
+    if (autoplay) {
+      startAudioBufferPlayback(0);
+      state.playing = true;
+      refs.scope.classList.add("playing");
+      setPlayButtonText("Pause");
+      setStatus("Playing", "ready");
+    } else {
+      state.playing = false;
+      refs.scope.classList.remove("playing");
+      setPlayButtonText("Play");
+      setStatus("Ready", "ready");
+    }
+  } catch (error) {
+    console.error(error);
+    state.playing = false;
+    setPlayButtonText("Play");
+    refs.scope.classList.remove("playing");
+    setStatus("Error", "error");
+    refs.nowMeta.textContent = error.message || "Audio playback failed";
+    syncMiniMeta();
+  } finally {
+    state.loading = false;
+  }
+}
+
+async function loadModuleTrack(track, autoplay) {
+  if (!track || state.loading) return;
+  state.loading = true;
+  resetTrackState(track, autoplay);
+
+  try {
+    if (autoplay) await wakeAudio();
+    stopAudioPlayback();
     const player = await ensurePlayer();
+    useModAnalyser();
     const buffer = await fetchModule(track);
     player.play(buffer);
     player.setRepeatCount(state.loop ? -1 : 0);
@@ -497,16 +728,46 @@ async function loadTrack(track, autoplay) {
   }
 }
 
+async function loadTrack(track, autoplay) {
+  if (isAudioTrack(track)) {
+    await loadAudioTrack(track, autoplay);
+    return;
+  }
+  await loadModuleTrack(track, autoplay);
+}
+
 async function togglePlay() {
   await wakeAudio();
   const track = state.currentTrack || selectedTrack();
   if (!track) return;
-  const player = await ensurePlayer();
 
   if (state.loadedPath !== track.path) {
     await loadTrack(track, true);
     return;
   }
+
+  if (isAudioTrack(track)) {
+    if (state.playing) {
+      state.currentPosition = currentPlaybackPosition();
+      stopAudioBufferSource();
+      state.playing = false;
+      refs.scope.classList.remove("playing");
+      setPlayButtonText("Play");
+      setStatus("Paused", "");
+    } else {
+      if (!state.audioBuffer || state.audioBufferPath !== track.path) {
+        await loadAudioBuffer(track);
+      }
+      startAudioBufferPlayback(state.currentPosition);
+      state.playing = true;
+      refs.scope.classList.add("playing");
+      setPlayButtonText("Pause");
+      setStatus("Playing", "ready");
+    }
+    return;
+  }
+
+  const player = await ensurePlayer();
 
   if (state.playing) {
     player.pause();
@@ -531,6 +792,7 @@ async function togglePlay() {
 function stopPlayback() {
   const player = state.player;
   if (player) player.stop();
+  stopAudioPlayback();
   state.playing = false;
   state.currentPosition = 0;
   state.playOffset = 0;
@@ -562,7 +824,8 @@ function onTrackEnd() {
 }
 
 function performSeek(targetValue) {
-  if (!state.currentTrack || !state.player || state.loadedPath !== state.currentTrack.path) return;
+  if (!state.currentTrack) return;
+  if (!isAudioTrack(state.currentTrack) && state.loadedPath !== state.currentTrack.path) return;
   const target = Math.max(0, Math.min(Number(targetValue) || 0, state.currentDuration));
   state.seeking = true;
   state.scrubbing = true;
@@ -570,6 +833,15 @@ function performSeek(targetValue) {
   state.playOffset = target;
   state.playStartedAt = state.playing ? performance.now() : 0;
   renderSeekPosition(target);
+  if (isAudioTrack(state.currentTrack)) {
+    if (state.playing) startAudioBufferPlayback(target);
+    window.setTimeout(() => {
+      state.seeking = false;
+      state.scrubbing = false;
+    }, 100);
+    return;
+  }
+  if (!state.player) return;
   const nativeTarget = state.loopingModule && state.nativeDuration > 0
     ? target % state.nativeDuration
     : target;
@@ -617,6 +889,13 @@ function stepSeekFromKey(event) {
 }
 
 function wireSeekControl(control) {
+  control.addEventListener("click", (event) => {
+    if (!state.currentTrack) return;
+    event.preventDefault();
+    wakeAudio().catch(console.warn);
+    state.pointerSeeking = false;
+    seekFromPoint(event.clientX, control);
+  });
   control.addEventListener("pointerdown", (event) => {
     if (!state.currentTrack) return;
     event.preventDefault();
@@ -668,6 +947,17 @@ function wireSeekControl(control) {
   control.addEventListener("keydown", stepSeekFromKey);
 }
 
+function wireSeekDelegation() {
+  document.addEventListener("click", (event) => {
+    const control = event.target.closest("#seekControl, #miniSeekControl");
+    if (!control || !state.currentTrack) return;
+    event.preventDefault();
+    state.pointerSeeking = false;
+    wakeAudio().catch(console.warn);
+    seekFromPoint(event.clientX, control);
+  }, true);
+}
+
 function buildScope() {
   const fragment = document.createDocumentFragment();
   for (let i = 0; i < 32; i += 1) {
@@ -681,6 +971,11 @@ function buildScope() {
 }
 
 function renderSpectrum() {
+  if (state.playing && isAudioTrack(state.currentTrack) && !state.scrubbing && !state.seeking) {
+    state.currentPosition = currentPlaybackPosition();
+    renderSeekPosition(state.currentPosition);
+  }
+
   const bars = refs.scopeGrid.children;
   if (state.analyser && state.analyserData && bars.length) {
     state.analyser.getByteFrequencyData(state.analyserData);
@@ -731,15 +1026,18 @@ function wireEvents() {
     state.loop = !state.loop;
     refs.loopBtn.classList.toggle("active", state.loop);
     if (state.player) state.player.setRepeatCount(state.loop ? -1 : 0);
+    if (state.audioElement) state.audioElement.loop = state.loop;
   });
   refs.scopeModeBtn.addEventListener("click", cycleScopeMode);
   refs.volume.addEventListener("input", () => {
     const volume = Number(refs.volume.value);
     refs.volumeText.textContent = `${Math.round(volume * 100)}%`;
     if (state.player) state.player.setVol(volume);
+    if (state.audioElement) state.audioElement.volume = volume;
   });
   wireSeekControl(refs.seekControl);
   wireSeekControl(refs.miniSeekControl);
+  wireSeekDelegation();
   refs.progress.addEventListener("input", () => {
     if (state.pointerSeeking) return;
     state.scrubbing = true;
