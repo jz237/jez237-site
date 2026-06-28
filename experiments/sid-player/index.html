@@ -958,13 +958,13 @@
 
   <a class="jump-top" href="#top" aria-label="Jump to top">Top</a>
 
-  <script src="/experiments/sid-player/vendor/webaudio/scriptprocessor_player.js?v=20260628d"></script>
+  <script src="vendor/webaudio/scriptprocessor_player.js?v=20260628e"></script>
   <script>
-    window.WASM_SEARCH_PATH = "/experiments/sid-player/vendor/websid/";
+    window.WASM_SEARCH_PATH = new URL("vendor/websid/", window.location.href).href;
   </script>
-  <script src="/experiments/sid-player/vendor/websid/backend_websid.js?v=20260628d"></script>
-  <script src="/experiments/sid-player/tracks.js?v=20260628i"></script>
-  <script src="/experiments/sid-player/stil.js?v=20260628a"></script>
-  <script src="/experiments/sid-player/app.js?v=20260628m"></script>
+  <script src="vendor/websid/backend_websid.js?v=20260628e"></script>
+  <script src="tracks.js?v=20260628j"></script>
+  <script src="stil.js?v=20260628b"></script>
+  <script src="app.js?v=20260628n"></script>
 </body>
 </html>
