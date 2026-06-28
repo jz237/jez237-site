@@ -1,207 +1,521 @@
-# llms.txt — instructions for AI assistants helping with this site
+# llms.txt - instructions for AI assistants helping with this site
 
-Site:   jez237-site (github.com/jz237/jez237-site → https://jz237.github.io/jez237-site/)
-Owner:  Jez
-Purpose: personal garden journal, photo archive, and workbench.
+Site: jez237-site
+Repository: https://github.com/jz237/jez237-site
+Live URL: https://jez237.com/
+Owner: Jez
+Timezone: America/New_York
 
-If a user uploads a plant, pet, garden, or insect photo and asks you to
-"add it to my site" / "put it in the right section" / similar, follow
-these instructions exactly.
+Purpose: this is Jez's personal web workbench. It includes a garden and
+plant progress journal, photo archive, AI news stream, AI sound archive,
+image-generation prompt gallery, playable experiments, weather console,
+stock/market tools, operations pages, and prototypes.
 
-## 1. Identify the subject
+If the user asks you to add, update, or organize something on this site,
+use these instructions before writing code or snippets.
 
-Look at the image carefully. What is it?
+## Current site map
 
-- PLANT — note common name, cultivar if visible, current stage (bud
-  break, bloom, leaf-out, full leaf, fall color, dormant, fruiting).
-- BED / COMPOSITION — note which plants are visible and the scene type.
-- INSECT / POLLINATOR — note the species if identifiable and what it's
-  doing (visiting flower, feeding on host, resting, etc).
-- PET — one of the house cats (Luca, Cosmo, Taco, Marty). Note pose or
-  activity if it's memorable.
-- GARDEN SCENE without a clear plant subject — goes to photos/garden/.
+- `/` - home dashboard and section hub. The footer has a tiny contact
+  link for `jez@jez237.com`; do not add contact pitch copy unless Jez
+  explicitly asks for it.
+- `/plants/` - 2026 garden progress, plant timelines, garden scenes,
+  insects, wildlife, and past-year references.
+- `/garden/` - practical garden calendar and timing notes.
+- `/photos/` - casual photo archive, including cats and garden images.
+- `/experiments/image-gen-2-benchmark/` - daily GPT Image 2 prompts and
+  generated image gallery.
+- `/experiments/image-gen-2-benchmark/worlds.html` - fictional-world
+  image archive views.
+- `/experiments/image-gen-2-benchmark/hybrid-creatures.html` - hybrid
+  creature development-map and wild-photo archive views.
+- `/experiments/image-gen-2-benchmark/creature-designs.html` - creature
+  design archive views.
+- `/experiments/image-gen-2-benchmark/random-rendering-style.html` - random
+  rendering-style and visual-medium archive views.
+- `/experiments/image-gen-2-benchmark/subject-artifacts.html` - subject
+  artifact archive views.
+- `/experiments/image-gen-2-benchmark/data-artifacts.html` - data
+  artifact archive views.
+- `/experiments/image-gen-2-benchmark/mirthcap-story.html` - Mirthcap
+  story/artifact page.
+- `/ai-news/` - curated AI model and tooling news feed.
+- `/computer-chronicle/` - daily historical computer newspaper section,
+  focused on personal computers and personal computer gaming from 40
+  years ago today.
+- `/ai-sounds/` - AI-generated music and sound archive copied from
+  Discord's AI Sounds channel, with full waveform players.
+- `/computer-generated-sounds/` - computer-generated sound hub linking to
+  Commodore 64 SID music, Commodore Amiga music, and AI-generated music.
+- `/ai-sounds/player-lab.html` - player UI lab for AI sounds.
+- `/games/` - GameMaster Arcade and playable prototypes.
+- `/weather/` - local weather console.
+- `/stock-market/` - Stock Command Center.
+- `/ops/` - operations, stats, runtime notes, and dashboard material.
+- `/plex/` - Plex/media utility page.
+- `/how-ai-works/` - interactive "How AI Works" explainer.
+- `/how-ai-works/training-alignment.html` - alignment/training
+  interactive explainer.
+- `/experiments/ai-explainer/` - interactive "How AI Works" explainer.
+- `/experiments/ai-explainer/training-alignment.html` - alternate
+  training/alignment explainer route.
+- `/samples/aquarium/` - aquarium sample page.
+- `/prototypes/hidden-reef/` - Hidden Reef aquarium store prototype.
+- Hidden Reef prototype subpages include
+  `/prototypes/hidden-reef/about/`,
+  `/prototypes/hidden-reef/brands/`,
+  `/prototypes/hidden-reef/category/`,
+  `/prototypes/hidden-reef/contact/`,
+  `/prototypes/hidden-reef/decor/`,
+  `/prototypes/hidden-reef/equipment/`,
+  `/prototypes/hidden-reef/food/`,
+  `/prototypes/hidden-reef/freshwater/`,
+  `/prototypes/hidden-reef/maintenance/`,
+  `/prototypes/hidden-reef/pond/`,
+  `/prototypes/hidden-reef/sales/`,
+  `/prototypes/hidden-reef/saltwater/`, and
+  `/prototypes/hidden-reef/lightspeed-integration/`.
+- `/prototypes/hidden-reef/learn/` and its topic pages - Hidden Reef
+  learn-center prototype articles.
+- The home page links to Bauder Signs externally and Stock Command Center
+  internally.
 
-If you genuinely cannot tell what the image is, ask before acting.
+## Path rules
 
-## 2. Choose the destination
+The site is served locally from the repo root and deployed to Cloudflare
+Pages at the domain root. There is no `<base>` tag. Use depth-aware
+relative paths in HTML, CSS, JS, and inline styles.
 
-Existing PLANT pages live at `/plants/<slug>/index.html`. Current slugs:
-
-| Slug                        | Subject                                                   |
-| --------------------------- | --------------------------------------------------------- |
-| climbing-hydrangea          | Climbing hydrangea vine on trellis                        |
-| dwarf-peach-tree            | Young dwarf peach, pink spring bloom                      |
-| forsythia                   | Forsythia trained on lattice                              |
-| garden-beds                 | Combined side-house foundation bed + mixed perennial bed  |
-| grapevine                   | Grape arch on lattice                                     |
-| interesting-insects         | Pollinators, caterpillars, butterflies                    |
-| past-years                  | 2025 and earlier reference shots                          |
-| pugster-butterfly-bushes    | Pugster buddleia                                          |
-| rising-sun-redbud           | Rising Sun Cercis canadensis                              |
-| shaina                      | Shaina Japanese maple                                     |
-| twomblys-red-sentinel       | Twombly's Red Sentinel Japanese maple                     |
-| white-rose-bush             | Old white rose bush                                       |
-
-Decision tree:
-
-- Photo matches an existing plant slug → **add a dated entry to that page**.
-- Photo is a NEW plant not yet tracked → **create a new plant page** (see template below).
-- Photo is a bed / multi-plant composition → add to `/plants/garden-beds/`.
-- Photo is an insect or pollinator → add to `/plants/interesting-insects/`.
-- Photo is a cat → add to `/photos/cats/` (gallery is image files plus a list — see the page for pattern).
-- Photo is a general garden scene → add to `/photos/garden/`.
-
-## 3. File the photo
-
-Save the image at:
-`photos/garden/images/YYYY/MM/<slug>-YYYY-MM-DD[-variant].jpg`
+Never use root-absolute paths like `/assets/...`, `/photos/...`, or
+`/plants/...` inside site files. They break local previews and nested
+pages.
 
 Examples:
-- `photos/garden/images/2026/04/rising-sun-redbud-2026-04-12.jpg`
-- `photos/garden/images/2026/04/dwarf-peach-tree-2026-03-29.jpg`
-- `photos/garden/images/2026/04/side-house-bed-2026-04-16-shaina-angle.jpg`
 
-Cat photos live at: `photos/cats/images/<descriptive-name>.jpg`
+| Page depth | Example page | Asset prefix |
+| ---------- | ------------ | ------------ |
+| 0 | `/index.html` | `assets/styles.css` |
+| 1 | `/plants/index.html` | `../assets/styles.css` |
+| 2 | `/plants/<slug>/index.html` | `../../assets/styles.css` |
 
-Use the actual date the photo was taken when known; otherwise today's date.
+Fully qualified external URLs are fine. Existing navigation scripts may
+build their own links; do not rewrite those unless you understand the
+pattern.
 
-### CRITICAL — path conventions in HTML
+GitHub repo `jz237/jez237-site` is the source of truth, but the live
+custom domain is Cloudflare Pages project `jez237-site`, not GitHub
+Pages. After pushing a user-facing change, deploy the committed repo to
+Cloudflare Pages with:
 
-The site is served at the repo root locally AND at
-`https://jz237.github.io/jez237-site/` on GitHub Pages. There is **no
-`<base>` tag**, so every relative URL in HTML resolves against the
-CURRENT DOCUMENT's URL. Use depth-aware relative paths, not
-root-absolute.
+```bash
+/home/jez237/.openclaw/workspace/scripts/deploy_cloudflare_pages_site.sh /home/jez237/.openclaw/workspace/jez237-website
+```
 
-| Page depth              | Example page path                | Asset prefix          |
-| ----------------------- | -------------------------------- | --------------------- |
-| 0 (site root)           | `/index.html`, `/404.html`       | `assets/styles.css`   |
-| 1 (section)             | `/plants/index.html`             | `../assets/styles.css`|
-| 2 (sub-page — most plant pages) | `/plants/<slug>/index.html` | `../../assets/styles.css` |
+The helper creates a clean upload snapshot and excludes local temp,
+script, data-source, and generated-image folders. Verify live changes on
+`https://jez237.com/`, not only on GitHub Pages or a Pages preview URL.
 
-NEVER use root-absolute paths (`/assets/...`, `/photos/...`, `/plants/...`) in
-`href`, `src`, `<link>`, `<script>`, or `background-image: url(...)` —
-they break on GitHub Pages because the site lives at the `/jez237-site/`
-subpath. The only exceptions: fully qualified `https://...` URLs (fine),
-and nav.js-generated links (which construct the subpath themselves).
+## Garden and plant photos
 
-Plant sub-pages are **depth 2** — every asset or photo reference must
-start with `../../`. Check your paths before outputting.
+If Jez uploads a plant, pet, garden, or insect photo and asks you to add
+it to the site, first identify the subject:
 
-## 4. Write in the site's voice
+- Plant: common name, cultivar if visible, stage, and condition.
+- Bed or composition: plants visible and the scene type.
+- Insect or wildlife: species if identifiable and behavior.
+- Cat: Luca, Cosmo, Taco, or Marty, if recognizable.
+- General garden scene: wider view without one clear plant subject.
 
-Entries are editorial, observational, specific, and a bit reflective —
-not precious or overwrought. See existing pages (especially
-`/plants/dwarf-peach-tree/` and `/plants/rising-sun-redbud/`) for tone.
+Use the actual photo date if known; otherwise use today's date.
 
-Style rules:
-- One descriptive paragraph of 2-4 sentences.
-- End with an italic pull-quote in a `<div class="quote">` — one
-  memorable sentence about this specific moment.
-- Bullet list of 3-5 concrete observations (no filler).
-- Entry title: 3-6 words, character-appropriate.
-- Dated header formatted like "April 16, 2026".
-- Avoid: emoji-heavy prose, marketing copy, listicle-style bullets, "Wow!"
+Current plant/reference slugs:
 
-Vocabulary the site uses a lot (safe to match): bud break, leaf-out,
-spring flare, bloom overlap, structure, framework, composition, layered,
-anchor plant, soft layer, sculptural, in the brick-edged bed, the lattice.
+| Slug | Subject |
+| ---- | ------- |
+| `baptisia` | Baptisia / Lemon Meringue |
+| `climbing-hydrangea` | Climbing hydrangea vine |
+| `coreopsis` | Coreopsis |
+| `dwarf-peach-tree` | Young dwarf peach tree |
+| `forsythia` | Forsythia trained on lattice |
+| `garden-beds` | Multi-plant beds and compositions |
+| `grapevine` | Grapevine and arbor/lattice views |
+| `hostas` | Hostas |
+| `interesting-insects` | Pollinators, butterflies, caterpillars, wildlife |
+| `lemony-lace-elderberry` | Lemony Lace elderberry |
+| `little-henry-sweetspire` | Little Henry sweetspire |
+| `narrow-upright-yew` | Narrow upright yew |
+| `orange-rocket-barberry` | Orange Rocket barberry |
+| `orange-milkweed` | Orange milkweed / butterfly weed |
+| `past-years` | 2025 and earlier reference photos |
+| `pugster-butterfly-bushes` | Pugster butterfly bushes |
+| `purple-loropetalum` | Purple loropetalum |
+| `rhododendron` | Rhododendron |
+| `rising-sun-redbud` | Rising Sun redbud |
+| `salvia` | Salvia |
+| `shaina` | Shaina Japanese maple |
+| `speedwell` | Speedwell |
+| `sunshine-ligustrum` | Sunshine ligustrum |
+| `twomblys-red-sentinel` | Twombly's Red Sentinel Japanese maple |
+| `variegated-japanese-euonymus` | Variegated Japanese euonymus |
+| `white-rose-bush` | Old white rose bush |
 
-## 5. Template — new timeline entry (for existing plant page)
+Destination rules:
 
-Insert inside the target page's `<section class="timeline-stack">`:
+- Existing plant -> add a dated entry to `/plants/<slug>/index.html`.
+- New tracked plant -> create `/plants/<new-slug>/index.html` and add it
+  to `/plants/index.html`.
+- Bed or mixed composition -> use `/plants/garden-beds/`.
+- Insect, pollinator, caterpillar, wildlife -> use
+  `/plants/interesting-insects/`.
+- Cat -> use `/photos/cats/`.
+- General garden scene -> use `/photos/garden/` or the garden scenes
+  section of `/plants/`.
+
+Garden image path:
+
+`photos/garden/images/YYYY/MM/<slug>-YYYY-MM-DD[-variant].jpg`
+
+Garden image storage rule: do not commit new garden image binaries to
+Git. Upload them to Cloudflare R2 with `scripts/upload_garden_image_to_r2.py`
+using the same `photos/garden/images/YYYY/MM/...` key, then commit only
+the HTML/metadata pointer. Cloudflare Pages redirects
+`/photos/garden/images/*` to the R2 object, so existing relative image
+paths continue to work on the live site.
+
+Examples:
+
+- `photos/garden/images/2026/05/rising-sun-redbud-2026-05-06.jpg`
+- `photos/garden/images/2026/05/front-planter-pugster-barberry-2026-05-31.jpg`
+
+Cat image path:
+
+`photos/cats/images/<descriptive-name>.jpg`
+
+## Garden writing voice
+
+Garden entries should sound observational, specific, and a little
+reflective. Do not write marketing copy, generic captions, listicles, or
+emoji-heavy prose.
+
+Good entry pattern:
+
+- Entry title: 3-6 words.
+- Date format: `May 31, 2026`.
+- One paragraph of 2-4 concrete sentences.
+- One italic quote line in `<div class="quote">`.
+- 3-5 bullet observations.
+- Newest entries first within each timeline.
+
+Useful vocabulary: bud break, leaf-out, bloom, first flush, structure,
+framework, composition, layered, anchor plant, soft layer, sculptural,
+brick-edged bed, lattice, foundation bed.
+
+Template for an existing plant page:
 
 ```html
 <article class="timeline-entry">
   <div class="split">
     <div>
-      <div class="entry-date">April 16, 2026</div>
-      <h2 class="entry-title">Short evocative title</h2>
+      <div class="entry-date">May 31, 2026</div>
+      <h2 class="entry-title">Short specific title</h2>
       <div class="entry-copy">
-        Two or three sentences of observation in the voice above. Keep
-        it concrete and specific — what stage the plant is at, what the
-        light is doing, what the surrounding planting adds.
-        <div class="quote">One italic sentence that captures the moment.</div>
+        Two or three concrete sentences about the plant, light, stage,
+        surrounding bed, or change since the last entry.
+        <div class="quote">One sentence that captures this exact moment.</div>
       </div>
     </div>
     <div>
-      <img class="photo" src="../../photos/garden/images/2026/04/<slug>-2026-04-16.jpg" alt="Descriptive alt text" loading="lazy" decoding="async" />
+      <img class="photo" src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/05/front-planter-pugster-barberry-2026-05-31.jpg" alt="Short descriptive alt text" loading="lazy" decoding="async">
     </div>
   </div>
   <ul class="bullet-list">
-    <li>first concrete observation</li>
-    <li>second observation</li>
-    <li>third observation</li>
+    <li>First concrete observation.</li>
+    <li>Second concrete observation.</li>
+    <li>Third concrete observation.</li>
   </ul>
 </article>
 ```
 
-Entries on each page are ordered by date, newest first.
+For a new plant page, copy the structure from an existing page such as
+`/plants/dwarf-peach-tree/index.html`, then add a directory card to
+`/plants/index.html`.
 
-## 6. Template — new plant page (`/plants/<new-slug>/index.html`)
+## AI news
 
-Copy the structure from `/plants/dwarf-peach-tree/index.html`. Key parts
-to change:
-- `<title>` — "Plant Name — Plant Progress"
-- `.kicker` — "Plant Progress · Latin name"
-- `<h1 class="title">` — plant name
-- `<p class="muted">` — one-line lede about the plant's character
-- `:root { --earth-accent... }` in the inline `<style>` — accent colors
-  that suit the plant (pink for peach, blue-green for maple, etc).
-  Keep it tasteful and not neon.
-- First `<section class="panel split">` — an editorial intro paragraph
-  (not a duplicate of the first timeline entry's photo).
-- `<section class="timeline-stack">` — one initial timeline entry.
+AI news lives in `/ai-news/`.
 
-After creating the page, also add a feature card to
-`/plants/index.html`'s "All live pages" grid:
+Important files:
 
-```html
-<a class="feature-card tilt" href="./<new-slug>/">
-  <div class="feature-media" style="background-image:url('../photos/garden/images/2026/04/<slug>-2026-04-16.jpg')"></div>
-  <div class="feature-copy">
-    <div class="mini-date">live page</div>
-    <h3>Plant Name</h3>
-    <p>One sentence summary.</p>
-    <div class="meta-pills"><span class="pill">tag1</span><span class="pill">tag2</span></div>
-  </div>
-</a>
+- `ai-news/feeds.json` - source list.
+- `ai-news/fetch_ai_news.py` - fetch, dedupe, score, and output script.
+- `ai-news/data/items.json` - persistent item store.
+- `ai-news/public/ai-news-latest.json` - latest public feed.
+- `ai-news/public/ai-news-daily-YYYY-MM-DD.json` - daily digest.
+- `ai-news/index.html` - rendered page shell.
+
+To add or adjust feeds, edit `ai-news/feeds.json`, then run the fetch
+script from the `ai-news/` directory. Validate that JSON output updates
+and that the page still loads from relative paths. Some sources may rate
+limit or block fetches; do not fake items from unavailable feeds.
+
+Recent feed focus includes AI model/tooling releases such as Ollama,
+LiteLLM, Hugging Face Transformers, llama.cpp, and Model Context
+Protocol SDK releases.
+
+## Computer Chronicle
+
+Computer Chronicle lives in `/computer-chronicle/`.
+
+This is intended to update every morning as a chronological weekly 1982
+historical newspaper section. Each new issue should use the next week
+from the Chronicle state file, while `currentDate` records the publication
+date in Jez's timezone, `America/New_York`.
+The newest issue must match today's America/New_York publication date and
+the next 1982 sequence week before a daily image is generated or posted.
+Do not let the image cron treat the latest archived issue as current just
+because it is newest in the JSON.
+Every morning update must preserve the previous day's issue in the
+archive before replacing the current front page. Do not overwrite or
+discard yesterday's researched issue; keep it in `issues` so the archive
+selector and old links can still load it.
+
+The intended experience is a nostalgic morning read, not a deep research
+report. Keep it skimmable in roughly 2-5 minutes, with a familiar daily
+section rhythm and one small "oh wow" curiosity item when possible.
+Each morning should feel like a new issue, not yesterday's page with new
+text. Vary the `visualProfile` when appropriate: layout, strapline,
+accent palette, paper feel, `heroImage`, article image placement, ad
+treatment, and which sidebars are emphasized.
+Use `masthead` for issue-front copy. The title may remain the publication
+identity, but the kicker/deck should reflect the day's editorial angle.
+
+Nostalgia texture to favor when it is historically appropriate: TRS-80,
+Commodore 64/C64C, Atari 800/XL, Amiga, BBS culture, modem calling,
+phone phreaking, warez-trading culture, movie/music collecting, arcades,
+malls, consumer technology, electronics, and electric guitars. Do not
+make the page only about these topics; it should still read first as a
+newspaper from the historical day.
+
+Editorial priority:
+
+- Prefer personal computers, home computing, office PC software, and
+  personal computer or console gaming when there is a choice.
+- Include multiple games when possible, and list the original/current
+  platform context for each game rather than only the title.
+- Use exact-day computer news when verified.
+- If exact-day computer news is thin, use same-week or same-month
+  personal-computing items with confidence labels.
+- If the target date has no strong exact-day computer story, say so
+  plainly in the issue and use exact-day culture/business/world items as
+  date anchors while keeping same-week computer material clearly labeled.
+- If the computer desk has no strong lead, use a real world/business
+  fallback headline for that historical date while keeping the computer
+  roundup visible.
+- Include a small Dow/Nasdaq market box when verified daily closes are
+  available.
+- If including music, prefer period rock-radio or album-rock tracks over
+  general pop hits unless Jez asks otherwise.
+- Use real period advertisements or clearly sourced ad references.
+  Do not invent fictional businesses or ads for the page.
+- Do not expose image-generation prompts, prompt builders, or private
+  generation briefs in public HTML, JavaScript, or JSON.
+- Keep the browser print/PDF output source-safe. The `Print Issue`
+  control should render the researched page itself as the newspaper
+  artifact; generated newspaper images are style experiments unless a
+  later pipeline can lock the text to verified page data.
+- Keep source/confidence labels in the data. Do not turn context into
+  fake exact-day claims.
+- Put source links near the article, sidebar, shelf item, chart, or ad
+  they support using item-level source references. The bottom source log
+  can remain as a research index, but readers should not have to hunt
+  there to see where a visible claim came from.
+- Include `accuracyLedger` for each issue. It should quickly count and
+  explain exact-day items, same-week/current-period items, and period
+  context/generated visual material so the morning issue has an audit
+  trail without becoming a research memo.
+- Treat `bbsNote`, `curiosity`, `periodAd`, and the game shelf as daily
+  rotating editorial slots. The BBS item should read like a dated sysop
+  log or board digest tied to that issue, not a generic explanation of
+  what BBSes were.
+- Use `briefs` for small disposable notices that make the issue feel
+  alive: mall notes, phone-line notes, short media/arcade/electronics
+  observations, or tiny context items tied to the day. Rotate them often.
+- Include several clippings/images when possible. Treat them as daily
+  photo assignments, not permanent era wallpaper. Each issue should use
+  new or deliberately selected clippings tied to that day's visible
+  stories, games, BBS topics, ad references, music, mall/arcade context,
+  or technology items.
+- Place images with the article, shelf, sidebar, or digest item they
+  illustrate. Do not use a standalone generic clipping gallery unless
+  the whole issue is explicitly designed around a photo spread.
+- Do not reuse the same generated period-style clipping set across daily
+  issues unless it is intentionally framed as a recurring masthead/house
+  art asset. Label generated period-style visuals as visual context
+  rather than archival evidence.
+- Static or slow-changing sections are acceptable only when they are
+  explicitly framed as context, prices, verification, or archive tooling.
+- The `Tomorrow's Desk` panel is operational guidance for the next daily
+  run. It should stay compact and rotate only when the update workflow
+  changes; it is hidden from print output.
+- If the current day's researched issue is missing, the page must make
+  that clear and show the latest archived issue as stale rather than
+  silently presenting it as today's paper.
+- Daily Discord newspaper images must be based on the current issue whose
+  `currentDate` equals today's America/New_York date and whose
+  `historicDate` is the next chronological 1982 week from the Chronicle
+  state file. If that issue is missing or stale, do not generate a generic
+  1980s image; report that the Chronicle issue needs the correct week
+  first.
+- Daily Discord newspaper images should include visible date-specific
+  cues from the issue's exact-day and accuracy-ledger fields. The image
+  can be nostalgic, but the caption/prompt source must be date-first:
+  exact-day items, prior-trading-day notes, same-week computer items, and
+  period context must not be collapsed into one fake headline pile.
+- When publishing a new issue, move yesterday's issue into the archive
+  first, then add today's issue as the newest/current entry. The archive
+  is part of the product, not cleanup debris.
+- Use `visualProfile` for issue-level presentation choices. Keep changes
+  restrained and newspaper-like, but avoid repeating the same visual mix
+  every day.
+- Use `heroImage` for the issue-front visual. It should normally change
+  with each daily issue and tie to the day's strongest verified or
+  contextual story.
+- Use `masthead` for the daily front-page kicker, title, and deck. Keep
+  it concise and newspaper-like.
+- The front-page index is rendered from issue data as a morning skim. It
+  can be overridden with `frontPageIndex` entries when a day needs
+  specific teasers, but avoid making it a second table of contents.
+- Use `layoutPlan` to vary department order by issue. The strongest or
+  most nostalgic verified material can move upward; utility sections
+  like source trail and verification should usually stay near the bottom.
+- Use `sectionChrome` to rename labels and section titles when the day
+  calls for it. Avoid generic reuse like "Modem Desk" every morning if a
+  more issue-specific label fits.
+
+Important files:
+
+- `computer-chronicle/index.html` - rendered page shell.
+- `computer-chronicle/assets/chronicle.js` - client-side renderer.
+- `computer-chronicle/data/issues.json` - public structured issue data.
+- `computer-chronicle/validate-issue-data.mjs` - validation script for
+  archive order, 1982 weekly sequence mode, source references, image files,
+  and public prompt-safety checks.
+
+Before publishing a Chronicle update, run:
+
+```bash
+node computer-chronicle/validate-issue-data.mjs
 ```
 
-## 7. Output
+## Image prompt gallery
 
-Deliver to the user, in this order:
+The Daily GPT Image 2 prompt gallery lives at
+`/experiments/image-gen-2-benchmark/`.
 
-1. **Destination**: the exact page URL and whether you're adding to an
-   existing page or creating a new one.
-2. **Filename**: where the image should be saved (full relative path).
-3. **HTML snippet(s)**: exactly what to paste and where.
-   - For an existing page: show the `<article class="timeline-entry">`
-     block and name the line number or nearest marker to insert before.
-   - For a new page: show the full file contents.
-   - If landing-page card changes are needed, show those too.
-4. **Commit message** in the style of: `feat: add April 16 entry for
-   rising-sun-redbud` or `feat: add new plant page for japanese-maple-bloodgood`.
+Important files:
 
-Do NOT invent plant species, cultivars, dates, or past history.
-Do NOT change the site voice or color palette mid-entry.
-Do NOT add entries to pages whose subject doesn't match the image.
+- `experiments/image-gen-2-benchmark/index.html`
+- `experiments/image-gen-2-benchmark/worlds.html`
+- `experiments/image-gen-2-benchmark/hybrid-creatures.html`
+- `experiments/image-gen-2-benchmark/creature-designs.html`
+- `experiments/image-gen-2-benchmark/random-rendering-style.html`
+- `experiments/image-gen-2-benchmark/subject-artifacts.html`
+- `experiments/image-gen-2-benchmark/data-artifacts.html`
+- `experiments/image-gen-2-benchmark/mirthcap-story.html`
+- `experiments/image-gen-2-benchmark/prompts.json`
+- `experiments/image-gen-2-benchmark/gallery-data.json`
+- `experiments/image-gen-2-benchmark/worlds-data.json`
+- `experiments/image-gen-2-benchmark/hybrid-creatures-data.json`
+- `experiments/image-gen-2-benchmark/creature-designs-data.json`
+- `experiments/image-gen-2-benchmark/random-rendering-style-data.json`
+- Image assets under that experiment's folders.
 
-If anything is ambiguous, ask before acting.
+Keep prompt records factual: prompt text, date, model/context if already
+tracked, and the generated image path. Do not invent prompts or dates.
 
-## 8. Image considerations
+## AI sounds
 
-- Expected aspect ratio: photos are displayed at 4:5 or 16:10 crops
-  (controlled by CSS `--photo-aspect`).
-- Large images are fine — no resize required on your end.
-- Alt text: describe what's in the frame in 6-12 words. Accessibility
-  matters, so avoid "image of" / "photo of" prefixes.
+AI-generated music lives in `/ai-sounds/ai-generated-music/`.
 
-## 9. Related files
+The `/ai-sounds/` route is now a computer-generated sound hub that links
+to the C64 SID player, Amiga MOD player, and AI-generated music archive.
 
-- `content/site.json` — featured cards on the home page. Only touch if
-  the new plant is especially featured-worthy.
-- `garden/index.html` — the practical calendar. Only touch if the entry
-  is about a task/timing, not a photo.
-- `assets/plant-page.css` and `assets/design.css` — site-wide styles,
-  do not modify without reason.
+The AI-generated music archive preserves tracks copied from Discord's AI
+Sounds channel. Future updates should keep the focus on individual tracks:
+title, file, duration/size/date where known, prompt idea, recipe,
+context, and audio file.
+
+Do not invent generic artwork. If adding per-track images, use artwork
+Jez provided or explicitly approved.
+
+## Games, weather, ops, and prototypes
+
+- Add new playable experiments through `/games/index.html` using the
+  existing card and link patterns.
+- Current shipped game directories with pages include:
+  `/games/2026-06-05/invaders/`,
+  `/games/2026-06-05/neon-invaders/`,
+  `/games/2026-06-09/choplifter/`,
+  `/games/2026-06-09/fluid/`,
+  `/games/2026-06-09/subway-siege-blackout/`,
+  `/games/2026-06-10/eddy/`,
+  `/games/2026-06-10/glimmer-grotto/`,
+  `/games/2026-06-10/hollow-deep/`,
+  `/games/2026-06-10/iron-ridge/`,
+  `/games/2026-06-11/corner-pocket/`,
+  `/games/2026-06-11/eight-ball-deluxe/`,
+  `/games/2026-06-12/pay-dirt/`,
+  `/games/2026-06-14/steel-duel/`,
+  `/games/2026-06-19/neon-vector-arena/`, and
+  `/games/hard-hat-mac/`.
+- Games that use global high scores point to
+  `https://game-scores.jez237.workers.dev/scores/<namespace>`. Keep new
+  score namespaces stable and game-specific. Do not submit fake public
+  scores just to test; use GET/OPTIONS/CORS checks unless Jez approves a
+  test entry.
+- Weather console changes should stay inside `/weather/` unless the
+  home-page card also needs copy or art updates.
+- Stock Command Center changes should stay inside `/stock-market/`
+  unless the home-page card also needs copy or art updates.
+- Ops/stat pages should stay inside `/ops/` unless promoted to the home
+  page.
+- Hidden Reef prototype work belongs under `/prototypes/hidden-reef/`
+  unless Jez asks to deploy it elsewhere.
+
+## Home page
+
+The home page is a workbench hub. If adding a major new site section,
+update both:
+
+- the card grid in `/index.html`
+- the assistant-facing overview in this `llms.txt`
+
+Do not use `content/site.json` as the only source of truth for the
+current home page; the live home card grid is currently hardcoded in
+`index.html`.
+
+The homepage footer intentionally keeps contact minimal: GitHub repo
+link, separator, and `mailto:jez@jez237.com`. Cloudflare may obfuscate
+the raw HTML with its email-protection wrapper on the live domain; this
+is expected as long as the browser displays the address normally.
+
+## Output to Jez
+
+When proposing or completing a site update, report:
+
+1. What changed.
+2. The exact files changed.
+3. Any commands run to validate or regenerate data.
+4. The commit hash if pushed.
+
+If the task involves an uploaded image and you are not directly editing
+the repo, provide:
+
+1. Destination page.
+2. Image filename/path.
+3. HTML snippet and insertion point.
+4. Suggested commit message.
+
+Do not invent plant IDs, cultivars, dates, prompts, track details, news
+items, or history. Ask if the subject or destination is genuinely
+ambiguous.
