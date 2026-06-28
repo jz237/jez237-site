@@ -1294,5 +1294,23 @@
       "continuity": "Preserves Korrun's black-green resonant mudflats, rose salt fog, basalt ribs, bell buoys, brine-glass instruments, wet opaline six-limbed inhabitants, and low copper tidal light.",
       "entryDescription": "Weather keepers listen to vibrating bell-buoy posts from a basalt lookout as prism tide clouds arrive across the brine pools."
     }
+  },
+  {
+    "id": "2026-06-28-weekly-world-image-korrun-silt-choir-silt-market-tripod-sta",
+    "title": "Korrun Silt Choir: Silt Market Tripod Stalls",
+    "tests": "Primary GPT Image 2 CLI succeeded on first attempt; exact output file verified non-empty before append; world-only archive entry appended with JPEG conversion and R2 upload.",
+    "prompt": "Create a finished photorealistic square field photograph from the invented weekly world Korrun Silt Choir, showing Silt Market Tripod Stalls during a retreating tide. The scene is an alien tidal marketplace raised on delicate three-legged ceramic and basalt tripods over glossy black-green mud shelves, with non-human amphibious Korrun residents moving between stalls: low oval bodies, six jointed walking limbs, two broad paddle-limbs, ridged resonator throats, wet opaline skin, crown-like sensory whiskers, small black bead eyes, and subtle color changes along side membranes. Show stalls selling woven reed pressure wraps, bone-white frequency markers, mineral lacquer bowls, wet clay memory tiles, translucent brine-glass cups, shell-horn tools, black mineral grass bundles, copper-veined kelp mats, and bladder-root floats. Include bell-buoy navigation posts vibrating in the background, basalt ribs, mirror-brine pools, rose salt fog, hollow stone chimneys, floating pumice gardens, mud ripples from foot-drumming, brine droplets on every surface, and domestic objects kept above the tide on thin supports. Make it feel like a realistic expedition photograph of everyday alien life: low copper sunrise light, wet reflections, shallow documentary lens depth, practical wear, tactile mud and ceramic texture, believable scale cues, no humans, no Earth wetland normality, no mushrooms, no generic cyberpunk neon, no readable text, no brand logos, no poster layout, no prompt card.\n\nReusable fill-in-the-blank template: Show [WEEKLY_WORLD] residents at [DAILY_LIFE_LOCATION_OR_ACTIVITY] in a realistic photographed alien-world scene, preserving [WORLD_GEOGRAPHY], [INHABITANT_BODY_PLAN], [MATERIALS_TECHNOLOGY], [RECURRING_MOTIFS], and [PALETTE_LIGHTING]. Make the image feel like a lived-in field photograph with tactile surfaces, scale cues, practical wear, and world-specific ecology instead of generic sci-fi scenery.\n\nExample substitution: [WEEKLY_WORLD] = Korrun Silt Choir; [DAILY_LIFE_LOCATION_OR_ACTIVITY] = Silt Market Tripod Stalls during a retreating tide; [WORLD_GEOGRAPHY] = glossy black-green tidal mud shelves, basalt ribs, mirror-brine pools, rose salt fog, hollow stone chimneys, and floating pumice gardens; [INHABITANT_BODY_PLAN] = low oval amphibious bodies with six jointed walking limbs, two paddle-limbs, ridged resonator throats, opaline wet skin, sensory whiskers, and bead eyes; [MATERIALS_TECHNOLOGY] = silt ceramic, basalt tripods, brine-glass, reed pressure wraps, shell-horn tools, mineral lacquer, bone-white frequency markers, and clay memory tiles; [RECURRING_MOTIFS] = bell buoys, mud ripples, domestic objects held above the tide, and foot-drumming communication.",
+    "image": "images/2026-06-28-weekly-world-image-korrun-silt-choir-silt-market-tripod-sta.jpg",
+    "date": "2026-06-28",
+    "batch": "Daily Prompt",
+    "slot": "weekly-world-image",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "world": {
+      "name": "Korrun Silt Choir",
+      "description": "A resonant alien tidal civilization of amphibious inhabitants living among black-green mudflats, basalt ribs, brine-glass tools, bell buoys, and wet clay memory tiles.",
+      "continuity": "Preserves Korrun Silt Choir inhabitants, resonant tidal mudflats, tripod-raised domestic objects, brine-glass, silt ceramic, bell buoys, rose salt fog, and copper sunrise light.",
+      "entryDescription": "A retreating-tide marketplace where Korrun residents trade reed wraps, frequency markers, clay memory tiles, brine-glass cups, shell-horn tools, and tidal garden goods from tripod-raised stalls."
+    }
   }
 ]
