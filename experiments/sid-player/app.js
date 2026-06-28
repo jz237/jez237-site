@@ -45,7 +45,7 @@
     fallbackPosition: 0,
     wallStarted: 0,
     pointerSeeking: false,
-    seekToken: 0,
+    seekRunId: 0,
   };
 
   function formatTime(ms) {
@@ -427,7 +427,7 @@
     return new Promise((resolve) => window.setTimeout(resolve, 0));
   }
 
-  async function fastForwardBackend(target, token) {
+  async function fastForwardBackend(target, seekId) {
     const backend = window.backend;
     if (!backend || typeof backend.computeAudioSamples !== "function" || typeof backend.getAudioBufferLength !== "function") {
       throw new Error("SID fast-forward is not available");
@@ -440,7 +440,7 @@
     const calls = Math.ceil((sampleRate * (target / 1000)) / bufferLength);
 
     for (let i = 0; i < calls; i += 1) {
-      if (token !== state.seekToken) return false;
+      if (seekId !== state.seekRunId) return false;
       backend.computeAudioSamples();
       if (i > 0 && i % 240 === 0) {
         setStatus(`Seeking ${formatTime((i / calls) * target)}`, "");
@@ -454,7 +454,7 @@
     return true;
   }
 
-  async function manualSeekTo(player, target, token) {
+  async function manualSeekTo(player, target, seekId) {
     const wasPlaying = state.playing;
     const volume = Number(refs.volume.value);
 
@@ -471,10 +471,10 @@
       () => {}
     );
 
-    if (token !== state.seekToken) return;
+    if (seekId !== state.seekRunId) return;
     player.pause();
-    const completed = await fastForwardBackend(target, token);
-    if (!completed || token !== state.seekToken) return;
+    const completed = await fastForwardBackend(target, seekId);
+    if (!completed || seekId !== state.seekRunId) return;
 
     player.setVolume(volume);
     state.fallbackPosition = target;
@@ -502,8 +502,8 @@
       ? targetValue
       : refs.progress.value;
     const target = Math.max(0, Math.min(Number(sourceValue) || 0, state.currentDuration));
-    const token = state.seekToken + 1;
-    state.seekToken = token;
+    const seekId = state.seekRunId + 1;
+    state.seekRunId = seekId;
     state.seeking = true;
     state.scrubbing = true;
     renderSeekPosition(target);
@@ -517,10 +517,10 @@
       if (Number.isFinite(maxSeek) && maxSeek > 0) {
         player.seekPlaybackPosition(target);
       } else {
-        await manualSeekTo(player, target, token);
+        await manualSeekTo(player, target, seekId);
       }
 
-      if (token !== state.seekToken) return;
+      if (seekId !== state.seekRunId) return;
       state.fallbackPosition = target;
       if (state.playing) {
         state.wallStarted = performance.now() - target;
@@ -531,7 +531,7 @@
       console.error(error);
       setStatus("Seek failed", "error");
     } finally {
-      if (token === state.seekToken) {
+      if (seekId === state.seekRunId) {
         state.seeking = false;
         state.scrubbing = false;
       }
