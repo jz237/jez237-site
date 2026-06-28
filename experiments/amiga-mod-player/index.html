@@ -642,7 +642,11 @@
       display: none;
     }
 
-    @media (max-width: 820px) {
+    .jump-top {
+      display: none;
+    }
+
+    @media (max-width: 1024px) {
       body {
         overflow: auto;
       }
@@ -740,6 +744,27 @@
         box-shadow: 0 10px 34px rgba(0, 0, 0, .46);
         padding: 10px;
         backdrop-filter: blur(12px);
+      }
+
+      .jump-top {
+        position: fixed;
+        right: 10px;
+        bottom: calc(10px + env(safe-area-inset-bottom));
+        z-index: 21;
+        display: inline-grid;
+        min-width: 58px;
+        min-height: 40px;
+        place-items: center;
+        border: 1px solid rgba(41, 215, 255, .62);
+        border-top: 5px solid var(--amiga-blue);
+        border-radius: 3px;
+        background: rgba(12, 18, 34, .94);
+        color: var(--accent);
+        font-weight: 800;
+        text-decoration: none;
+        text-transform: uppercase;
+        box-shadow: inset 1px 1px 0 rgba(255, 255, 255, .22), 0 10px 28px rgba(0, 0, 0, .34);
+        backdrop-filter: blur(10px);
       }
 
       .mini-copy {
@@ -852,6 +877,11 @@
         top: calc(8px + env(safe-area-inset-top));
       }
 
+      .jump-top {
+        right: 8px;
+        bottom: calc(8px + env(safe-area-inset-bottom));
+      }
+
       .mini-actions {
         grid-template-columns: repeat(4, 34px);
       }
@@ -863,24 +893,24 @@
   </style>
 </head>
 <body>
-  <main class="app">
+  <main id="top" class="app">
     <header class="topbar">
       <div>
         <h1>Amiga MOD Player</h1>
-        <div class="summary">Browser-side ProTracker and tracker module playback from a local Amiga-era collection.</div>
+        <div class="summary">Browser-side ProTracker modules and Amiga-era soundtrack playback from a local collection.</div>
       </div>
       <div class="stat">
         <strong id="trackTotal">10</strong>
-        <span>MOD files</span>
+        <span>Tracks</span>
       </div>
     </header>
 
     <section class="workspace" aria-label="Amiga MOD player">
-      <aside class="library" aria-label="MOD library">
+      <aside class="library" aria-label="Track library">
         <div class="searchbar">
-          <input id="search" type="search" placeholder="Search MOD files" autocomplete="off">
+          <input id="search" type="search" placeholder="Search tracks" autocomplete="off">
           <select id="collectionFilter" aria-label="Collection filter">
-            <option value="all">All MOD files</option>
+            <option value="all">All tracks</option>
             <option value="favorites">Favorites</option>
             <option value="game">Game Music</option>
             <option value="popular">Popular MODs</option>
@@ -895,11 +925,11 @@
       <section class="deck" aria-label="Player controls">
         <div class="now">
           <div>
-            <h2 id="nowTitle" class="now-title">Select a MOD</h2>
+            <h2 id="nowTitle" class="now-title">Select a track</h2>
             <div id="nowMeta" class="now-meta">libopenmpt standby</div>
           </div>
           <div class="now-actions">
-            <button id="favNowBtn" class="icon-button" type="button" title="Favorite current MOD" aria-label="Favorite current MOD">☆</button>
+            <button id="favNowBtn" class="icon-button" type="button" title="Favorite current track" aria-label="Favorite current track">☆</button>
             <div id="status" class="status">Idle</div>
           </div>
         </div>
@@ -910,7 +940,7 @@
             <button id="playBtn" class="primary" type="button" title="Play or pause">Play</button>
             <button id="stopBtn" type="button" title="Stop">Stop</button>
             <button id="nextBtn" type="button" title="Next">Next</button>
-            <button id="loopBtn" type="button" title="Loop current MOD">Loop</button>
+            <button id="loopBtn" type="button" title="Loop current track">Loop</button>
             <button id="scopeModeBtn" type="button" title="Analyzer display mode">Scope</button>
           </div>
 
@@ -948,7 +978,7 @@
         </section>
 
         <footer>
-          Playback uses chiptune3/libopenmpt. Modules are mirrored locally from Modland's ProTracker archive.
+          Playback uses chiptune3/libopenmpt for tracker modules and native WebAudio for mirrored soundtrack tracks.
         </footer>
       </section>
     </section>
@@ -956,14 +986,14 @@
 
   <div class="mini-player" aria-label="Sticky player controls">
     <div class="mini-copy">
-      <div id="miniTitle" class="mini-title">Select a MOD</div>
+      <div id="miniTitle" class="mini-title">Select a track</div>
       <div id="miniMeta" class="mini-meta">Idle</div>
     </div>
     <div class="mini-actions">
-      <button id="miniFavBtn" type="button" title="Favorite current MOD" aria-label="Favorite current MOD">☆</button>
-      <button id="miniPrevBtn" type="button" title="Previous MOD" aria-label="Previous MOD">Prev</button>
+      <button id="miniFavBtn" type="button" title="Favorite current track" aria-label="Favorite current track">☆</button>
+      <button id="miniPrevBtn" type="button" title="Previous track" aria-label="Previous track">Prev</button>
       <button id="miniPlayBtn" class="mini-play" type="button" title="Play or pause" aria-label="Play or pause">Play</button>
-      <button id="miniNextBtn" type="button" title="Next MOD" aria-label="Next MOD">Next</button>
+      <button id="miniNextBtn" type="button" title="Next track" aria-label="Next track">Next</button>
     </div>
     <div class="mini-progress">
       <span id="miniElapsed">0:00</span>
@@ -977,7 +1007,9 @@
     </div>
   </div>
 
-  <script src="/experiments/amiga-mod-player/tracks.js?v=20260628f"></script>
-  <script type="module" src="/experiments/amiga-mod-player/app.js?v=20260628f"></script>
+  <a class="jump-top" href="#top" aria-label="Jump to top">Top</a>
+
+  <script src="/experiments/amiga-mod-player/tracks.js?v=20260628g"></script>
+  <script type="module" src="/experiments/amiga-mod-player/app.js?v=20260628g"></script>
 </body>
 </html>
