@@ -316,6 +316,7 @@ function applyFilters() {
       || (collection === "favorites" && isFavorite(track))
       || (collection === "game" && track.collection === "Game Music")
       || (collection === "popular" && track.collection === "Popular MODs")
+      || (collection === "cracktro" && track.collection === "Cracktro Scene")
       || (collection === "demo" && track.collection === "Demo Scene");
     if (!collectionMatch) return false;
     if (composer !== "all" && track.composer !== composer) return false;
