@@ -60,6 +60,8 @@ const state = {
   currentDuration: DEFAULT_DURATION,
   currentPosition: 0,
   initialized: null,
+  audioContext: null,
+  audioUnlocked: false,
   player: null,
   analyser: null,
   analyserData: null,
@@ -233,11 +235,47 @@ function cycleScopeMode() {
   else setScopeMode("full");
 }
 
+function getAudioContext() {
+  if (state.audioContext) return state.audioContext;
+  const AudioContextCtor = window.AudioContext || window.webkitAudioContext;
+  if (!AudioContextCtor) throw new Error("WebAudio is not supported");
+  state.audioContext = new AudioContextCtor();
+  return state.audioContext;
+}
+
+async function unlockAudioContext() {
+  const context = getAudioContext();
+  if (context.state === "suspended") {
+    await context.resume();
+  }
+  if (!state.audioUnlocked) {
+    const source = context.createBufferSource();
+    const gain = context.createGain();
+    source.buffer = context.createBuffer(1, 1, context.sampleRate);
+    gain.gain.value = 0;
+    source.connect(gain);
+    gain.connect(context.destination);
+    source.start(0);
+    state.audioUnlocked = true;
+    window.setTimeout(() => {
+      try {
+        source.disconnect();
+        gain.disconnect();
+      } catch (error) {
+        console.warn(error);
+      }
+    }, 50);
+  }
+  return context;
+}
+
 async function wakeAudio() {
+  const context = await unlockAudioContext();
   const player = await ensurePlayer();
   if (player && player.context && player.context.state === "suspended") {
     await player.context.resume();
   }
+  return context;
 }
 
 function wireAnalyser(player) {
@@ -260,7 +298,10 @@ function ensurePlayer() {
   if (state.initialized) return state.initialized;
   setStatus("Starting", "");
   state.initialized = new Promise((resolve, reject) => {
-    const player = new ChiptuneJsPlayer({ repeatCount: 0 });
+    const player = new ChiptuneJsPlayer({
+      repeatCount: 0,
+      context: getAudioContext(),
+    });
     state.player = player;
     player.onInitialized(() => {
       player.setVol(Number(refs.volume.value));
@@ -403,6 +444,7 @@ async function loadTrack(track, autoplay) {
   renderSeekPosition(0);
 
   try {
+    if (autoplay) await wakeAudio();
     const player = await ensurePlayer();
     const buffer = await fetchModule(track);
     player.play(buffer);
@@ -703,10 +745,6 @@ function init() {
   buildScope();
   wireEvents();
   renderSpectrum();
-  ensurePlayer().catch((error) => {
-    console.error(error);
-    setStatus("Error", "error");
-  });
 }
 
 init();
