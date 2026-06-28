@@ -692,8 +692,15 @@
       }
 
       .library {
+        display: block;
         min-height: 0;
-        height: min(48dvh, 430px);
+        height: auto;
+      }
+
+      .track-list {
+        min-height: 0;
+        overflow: visible;
+        overscroll-behavior: auto;
       }
 
       .buttons {
