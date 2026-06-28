@@ -347,17 +347,21 @@
     state.filtered = tracks.filter((track) => {
       const collectionMatch = collection === "all"
         || (collection === "favorites" && isFavorite(track))
-        || (collection === "top100" && track.top100Rank)
+        || (collection === "top100" && (track.top100Rank || track.sidChartRank))
         || (collection === "games" && track.composerKey === "GAMES");
       if (!collectionMatch) return false;
       const composerMatch = composer === "all" || track.composer === composer;
       if (!composerMatch) return false;
       if (!query) return true;
-      return normalize(`${track.title} ${track.composer} ${track.category || ""} ${track.fileName} ${track.top100Title || ""}`).includes(query);
+      return normalize(`${track.title} ${track.composer} ${track.category || ""} ${track.fileName} ${track.top100Title || ""} ${track.sidChartTitle || ""}`).includes(query);
     });
 
     if (collection === "top100") {
-      state.filtered.sort((a, b) => (a.top100Rank || 999) - (b.top100Rank || 999));
+      state.filtered.sort((a, b) => {
+        const aRank = a.top100Rank || 1000 + (a.sidChartRank || 999);
+        const bRank = b.top100Rank || 1000 + (b.sidChartRank || 999);
+        return aRank - bRank;
+      });
     }
 
     if (state.selected >= state.filtered.length) state.selected = 0;
@@ -366,11 +370,11 @@
 
   function renderTracks() {
     refs.trackList.innerHTML = "";
-    const top100Count = state.filtered.filter((track) => track.top100Rank).length;
+    const top100Count = state.filtered.filter((track) => track.top100Rank || track.sidChartRank).length;
     refs.listMeta.textContent = refs.collectionFilter.value === "favorites"
       ? `${state.filtered.length} favorites`
       : refs.collectionFilter.value === "top100"
-      ? `${top100Count} ranked favorites`
+      ? `${top100Count} chart favorites`
       : `${state.filtered.length} shown`;
 
     const fragment = document.createDocumentFragment();
@@ -391,6 +395,8 @@
       row.querySelector(".track-title").textContent = track.title;
       const label = track.top100Rank
         ? `#${track.top100Rank} HVSC Top 100`
+        : track.sidChartRank
+        ? `#${track.sidChartRank} SID Chart 1997`
         : track.category;
       row.querySelector(".track-composer").textContent = label
         ? `${track.composer} / ${label}`
