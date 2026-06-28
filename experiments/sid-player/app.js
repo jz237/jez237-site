@@ -6,6 +6,9 @@
   const FALLBACK_SEEK_WINDOW_MS = 600000;
   const FAVORITES_KEY = "sid-player-favorites";
   const SCOPE_MODE_KEY = "sid-player-scope-mode";
+  const COMPOSER_LABELS = {
+    "Hubbard Rob": "Rob Hubbard"
+  };
 
   const refs = {
     trackTotal: document.getElementById("trackTotal"),
@@ -88,6 +91,10 @@
 
   function normalize(value) {
     return String(value || "").toLowerCase();
+  }
+
+  function displayComposer(composer) {
+    return COMPOSER_LABELS[composer] || composer;
   }
 
   function setStatus(text, kind) {
@@ -335,7 +342,7 @@
     for (const composer of composers) {
       const option = document.createElement("option");
       option.value = composer;
-      option.textContent = composer;
+      option.textContent = displayComposer(composer);
       refs.composerFilter.appendChild(option);
     }
   }
@@ -399,8 +406,8 @@
         ? `#${track.sidChartRank} SID Chart 1997`
         : track.category;
       row.querySelector(".track-composer").textContent = label
-        ? `${track.composer} / ${label}`
-        : track.composer;
+        ? `${displayComposer(track.composer)} / ${label}`
+        : displayComposer(track.composer);
       row.querySelector(".track-duration").textContent = track.durationMs ? formatTime(track.durationMs) : formatBytes(track.size);
       const favoriteButton = row.querySelector(".track-favorite");
       const activeFavorite = isFavorite(track);
@@ -430,7 +437,7 @@
 
   function setNowPlaying(track, songInfo) {
     const title = songInfo && songInfo.songName ? songInfo.songName : track.title;
-    const author = songInfo && songInfo.songAuthor ? songInfo.songAuthor : track.composer;
+    const author = songInfo && songInfo.songAuthor ? songInfo.songAuthor : displayComposer(track.composer);
     const released = songInfo && songInfo.songReleased ? songInfo.songReleased : track.fileName;
     refs.nowTitle.textContent = title;
     refs.nowMeta.textContent = `${author} | ${released}`;
@@ -452,7 +459,7 @@
     setPlayButtonText(autoplay ? "Pause" : "Play");
     refs.scope.classList.remove("playing");
     refs.nowTitle.textContent = track.title;
-    refs.nowMeta.textContent = `${track.composer} | ${track.fileName}`;
+    refs.nowMeta.textContent = `${displayComposer(track.composer)} | ${track.fileName}`;
     refs.miniTitle.textContent = track.title;
     syncMiniMeta();
     updateFavoriteControls();
@@ -910,16 +917,24 @@
   }
 
   function chooseInitialTrack() {
-    const exactCommandoIndex = tracks.findIndex((track) => track.composerKey === "Hubbard_Rob" && track.fileName === "Commando.sid");
-    const commandoIndex = exactCommandoIndex >= 0
-      ? exactCommandoIndex
-      : tracks.findIndex((track) => normalize(track.title).includes("commando"));
-    state.filtered = tracks;
-    state.selected = commandoIndex >= 0 ? commandoIndex : 0;
-    const track = tracks[state.selected];
+    const exactLastV8Index = tracks.findIndex((track) => track.composerKey === "Hubbard_Rob" && track.fileName === "Last_V8.sid");
+    const lastV8Index = exactLastV8Index >= 0
+      ? exactLastV8Index
+      : tracks.findIndex((track) => track.composerKey === "Hubbard_Rob" && normalize(track.title) === "last v8");
+    const defaultTrack = tracks[lastV8Index >= 0 ? lastV8Index : 0];
+    const hasComposerOption = defaultTrack && Array.from(refs.composerFilter.options).some((option) => option.value === defaultTrack.composer);
+    if (hasComposerOption) {
+      refs.composerFilter.value = defaultTrack.composer;
+      state.filtered = tracks.filter((track) => track.composer === defaultTrack.composer);
+      state.selected = Math.max(0, state.filtered.findIndex((track) => track === defaultTrack));
+    } else {
+      state.filtered = tracks;
+      state.selected = lastV8Index >= 0 ? lastV8Index : 0;
+    }
+    const track = selectedTrack();
     if (track) {
       refs.nowTitle.textContent = track.title;
-      refs.nowMeta.textContent = `${track.composer} | ${track.fileName}`;
+      refs.nowMeta.textContent = `${displayComposer(track.composer)} | ${track.fileName}`;
       refs.miniTitle.textContent = track.title;
       syncMiniMeta();
       updateFavoriteControls();
