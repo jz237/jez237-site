@@ -338,11 +338,18 @@
       border-radius: 2px 2px 0 0;
       opacity: .42;
       transform-origin: bottom;
+      transition: height 90ms linear, opacity 160ms ease;
     }
 
     .playing .bar {
       animation: pulse 900ms ease-in-out infinite alternate;
       opacity: .88;
+    }
+
+    .scope.live .bar {
+      animation: none;
+      opacity: .9;
+      transform: none;
     }
 
     .bar:nth-child(3n) { animation-duration: 720ms; }
@@ -522,6 +529,6 @@
   </script>
   <script src="/experiments/sid-player/vendor/websid/backend_websid.js?v=20260628d"></script>
   <script src="/experiments/sid-player/tracks.js?v=20260628d"></script>
-  <script src="/experiments/sid-player/app.js?v=20260628d"></script>
+  <script src="/experiments/sid-player/app.js?v=20260628e"></script>
 </body>
 </html>
