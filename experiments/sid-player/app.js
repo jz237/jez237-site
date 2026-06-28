@@ -99,7 +99,7 @@
 
     setStatus("Starting", "");
     window.backend = new SIDBackendAdapter(undefined, undefined, undefined);
-    state.initialized = ScriptNodePlayer.initialize(window.backend, onTrackEnd).then(() => {
+    state.initialized = ScriptNodePlayer.initialize(window.backend, onTrackEnd, [], true).then(() => {
       const player = getPlayer();
       if (player) player.setVolume(Number(refs.volume.value));
       setStatus("Ready", "ready");
@@ -366,6 +366,31 @@
     window.requestAnimationFrame(updateProgress);
   }
 
+  function renderSpectrum() {
+    const player = getPlayer();
+    const data = player && typeof player.getFreqByteData === "function" ? player.getFreqByteData() : null;
+    const bars = refs.scopeGrid.children;
+
+    if (data && data.length) {
+      refs.scope.classList.add("live");
+      const step = Math.max(1, Math.floor(data.length / bars.length));
+      for (let i = 0; i < bars.length; i += 1) {
+        let peak = 0;
+        const start = i * step;
+        const end = Math.min(data.length, start + step);
+        for (let j = start; j < end; j += 1) {
+          if (data[j] > peak) peak = data[j];
+        }
+        const level = Math.max(8, Math.round((peak / 255) * 100));
+        bars[i].style.height = `${level}%`;
+      }
+    } else {
+      refs.scope.classList.remove("live");
+    }
+
+    window.requestAnimationFrame(renderSpectrum);
+  }
+
   function buildScope() {
     const fragment = document.createDocumentFragment();
     for (let i = 0; i < 32; i += 1) {
@@ -376,6 +401,28 @@
       fragment.appendChild(bar);
     }
     refs.scopeGrid.appendChild(fragment);
+  }
+
+  function seekToProgress() {
+    const player = getPlayer();
+    const target = Math.max(0, Math.min(Number(refs.progress.value) || 0, state.currentDuration));
+
+    if (player && typeof player.seekPlaybackPosition === "function") {
+      try {
+        player.seekPlaybackPosition(target);
+      } catch (error) {
+        console.warn(error);
+      }
+    }
+
+    state.fallbackPosition = target;
+    if (state.playing) {
+      state.wallStarted = performance.now() - target;
+    } else {
+      state.wallStarted = 0;
+    }
+    refs.elapsed.textContent = formatTime(target);
+    state.scrubbing = false;
   }
 
   function wireEvents() {
@@ -407,23 +454,23 @@
       const player = getPlayer();
       if (player) player.setVolume(volume);
     });
+    refs.progress.addEventListener("pointerdown", () => {
+      state.scrubbing = true;
+    });
+    refs.progress.addEventListener("touchstart", () => {
+      state.scrubbing = true;
+    }, { passive: true });
     refs.progress.addEventListener("input", () => {
       state.scrubbing = true;
       refs.elapsed.textContent = formatTime(Number(refs.progress.value));
     });
-    refs.progress.addEventListener("change", () => {
-      const player = getPlayer();
-      const target = Number(refs.progress.value);
-      if (player) {
-        try {
-          player.seekPlaybackPosition(target);
-        } catch (error) {
-          console.warn(error);
-        }
+    refs.progress.addEventListener("change", seekToProgress);
+    refs.progress.addEventListener("pointerup", seekToProgress);
+    refs.progress.addEventListener("touchend", seekToProgress);
+    refs.progress.addEventListener("keyup", (event) => {
+      if (["ArrowLeft", "ArrowRight", "Home", "End", "PageUp", "PageDown"].includes(event.key)) {
+        seekToProgress();
       }
-      state.fallbackPosition = target;
-      if (state.playing) state.wallStarted = performance.now() - target;
-      state.scrubbing = false;
     });
   }
 
@@ -451,6 +498,7 @@
     buildScope();
     wireEvents();
     updateProgress();
+    renderSpectrum();
     ensurePlayer().catch((error) => {
       console.error(error);
       setStatus("Error", "error");
