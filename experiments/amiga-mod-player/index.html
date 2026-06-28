@@ -878,6 +878,8 @@
         left: 8px;
         right: 8px;
         top: calc(8px + env(safe-area-inset-top));
+        grid-template-columns: 1fr;
+        gap: 7px;
       }
 
       .jump-top {
@@ -885,12 +887,21 @@
         bottom: calc(8px + env(safe-area-inset-bottom));
       }
 
+      .app {
+        padding-top: calc(154px + env(safe-area-inset-top));
+      }
+
       .mini-actions {
-        grid-template-columns: repeat(4, 34px);
+        width: 100%;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
       }
 
       .mini-actions button {
         min-height: 34px;
+      }
+
+      .mini-progress {
+        grid-template-columns: 34px minmax(0, 1fr) 34px;
       }
     }
   </style>
