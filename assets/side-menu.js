@@ -42,7 +42,7 @@
         ['image-gen', 'experiments/image-gen-2-benchmark/', 'imageGen', 'GPT Image 2 Gallery'],
         ['ai-news', 'ai-news/', 'aiNews', 'AI News'],
         ['computer-chronicle', 'computer-chronicle/', 'chronicle', 'Computer Chronicle'],
-        ['ai-sounds', 'ai-sounds/', 'aiSounds', 'Computer Generated Sounds'],
+        ['ai-sounds', 'ai-sounds/', 'aiSounds', 'AI Generated Sounds'],
         ['photos', 'photos/', 'photos', 'Photos, kept casual'],
         ['games', 'games/', 'games', 'GameMaster Arcade'],
         ['ai-explainer', 'experiments/ai-explainer/', 'aiExplainer', 'How AI Works']
