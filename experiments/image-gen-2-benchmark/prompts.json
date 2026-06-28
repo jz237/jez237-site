@@ -2612,5 +2612,41 @@
       "description": "Shows how a flexible magnetic refrigerator door gasket compresses against the cabinet, limits warm-air leaks, and can develop condensation risk when dirty, twisted, or poorly seated.",
       "sourceNote": "Conservative general appliance-engineering knowledge; avoids brand-specific instructions, fake statistics, and unsafe bypass details."
     }
+  },
+  {
+    "id": "2026-06-28-hybrid-creature-infographic-ochre-spindlejaw-development-ma",
+    "title": "Ochre Spindlejaw: Development Map",
+    "tests": "Hybrid creature development map; sources kangaroo + aardvark; fictional non-actionable source-trait map with stage strip, adult specimen panel, macro windows, habitat swatches, and scale vignette.",
+    "prompt": "Create a fictional two-source hybrid-creature development map for the Ochre Spindlejaw, a non-actionable speculative hybrid of kangaroo + aardvark. Show a colorful photorealistic scientific wall chart on a dry clay field-station workbench with a source-trait map, juvenile-to-adult stage strip, large adult specimen/anatomy panel, macro texture/color windows, dry badlands habitat swatches, and a field-context scale vignette. Kangaroo contributes long springing hind limbs, counterbalancing body angle, enlarged hock leverage, and fast low running posture; aardvark contributes narrow shovel jaw, tucked digging forelimbs, blunt ears, coarse ochre hide, and burrow-oriented snout. Keep labels concise and fictional; no real genetics, lab protocols, equipment steps, surgery, or gore.\\n\\nReusable template: Create a fictional two-source hybrid-creature pair for [HYBRID_NAME], using exactly [SOURCE_A] + [SOURCE_B]. First generate a colorful photorealistic scientific development-map infographic with a source-trait map, juvenile-to-adult stage strip, adult specimen panel, macro texture/color panels, habitat swatches, and field-context scale vignette. Then generate a matching in-the-wild field photo of the same adult phenotype in [HABITAT]. Keep it clearly fictional and non-actionable: no real gene names, no lab protocol steps, no surgery, no gore.\\n\\nExample substitution: [HYBRID_NAME] = Ochre Spindlejaw; [SOURCE_A] = kangaroo; [SOURCE_B] = aardvark; [HABITAT] = dry clay badlands; adult phenotype = low side-profile runner with kangaroo-like springing hind limbs, counterbalancing body angle, tucked aardvark-like digging forelimbs, narrow shovel jaw, blunt ears, and coarse ochre scale-fur.",
+    "image": "images/2026-06-28-hybrid-creature-infographic-ochre-spindlejaw-development-ma.jpg",
+    "date": "2026-06-28",
+    "batch": "Daily Prompt",
+    "slot": "hybrid-creature-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "hybridCreature": {
+      "name": "Ochre Spindlejaw",
+      "imageKind": "infographic",
+      "description": "Fictional non-actionable hybrid of kangaroo + aardvark: a low side-profile badlands runner with kangaroo hind-limb leverage and aardvark digging/head traits.",
+      "continuity": "Sources: kangaroo + aardvark. Shared adult phenotype: low side-profile runner with long springing hind limbs, counterbalancing body angle, tucked digging forelimbs, narrow shovel jaw, blunt ears, coarse ochre scale-fur, and dry clay badlands habitat."
+    }
+  },
+  {
+    "id": "2026-06-28-hybrid-creature-wild-ochre-spindlejaw-in-the-wild",
+    "title": "Ochre Spindlejaw: In the Wild",
+    "tests": "Hybrid creature wild companion; same kangaroo + aardvark adult phenotype and dry clay badlands continuity as the development map.",
+    "prompt": "Create a matching photorealistic in-the-wild field photo of the adult Ochre Spindlejaw, a fictional two-source hybrid of kangaroo + aardvark, in dry clay badlands at dawn. Preserve the same adult phenotype from the development map: low side-profile runner, kangaroo-like long springing hind limbs, enlarged hock leverage, counterbalancing body angle, muscular rump, aardvark-like narrow shovel jaw, blunt ears, burrow-oriented snout, tucked digging forelimbs, dust-coated claw pads, and coarse ochre scale-fur. Show it moving left to right beside a burrow mouth with cracked clay, sparse scrub, badland ridges, track impressions, warm dawn side light, believable weight, documentary field-camera imperfections, and no text.\\n\\nReusable template: Create a matching photorealistic in-the-wild field photo of the same fictional [HYBRID_NAME] adult phenotype from [SOURCE_A] + [SOURCE_B], preserving the source-trait map visibly in the body plan, skin texture, posture, habitat interaction, locomotion, and scale cues. Avoid text, gore, lab context, and any result that reads as a costume or a pure single-source animal.\\n\\nExample substitution: [HYBRID_NAME] = Ochre Spindlejaw; [SOURCE_A] = kangaroo; [SOURCE_B] = aardvark; [HABITAT] = dry clay badlands at dawn; shared adult phenotype = low side-profile runner with kangaroo hind-limb leverage and aardvark shovel-jaw/digging traits.",
+    "image": "images/2026-06-28-hybrid-creature-wild-ochre-spindlejaw-in-the-wild.jpg",
+    "date": "2026-06-28",
+    "batch": "Daily Prompt",
+    "slot": "hybrid-creature-wild",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "hybridCreature": {
+      "name": "Ochre Spindlejaw",
+      "imageKind": "wild",
+      "description": "Fictional non-actionable hybrid of kangaroo + aardvark: a low badlands runner preserving the same adult phenotype as the development map.",
+      "continuity": "Sources: kangaroo + aardvark. Shared adult phenotype: low side-profile runner with long springing hind limbs, counterbalancing body angle, tucked digging forelimbs, narrow shovel jaw, blunt ears, coarse ochre scale-fur, and dry clay badlands habitat."
+    }
   }
 ]
