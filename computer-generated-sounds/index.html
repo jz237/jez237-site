@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script>(function(){try{var root=document.documentElement;if(localStorage.getItem("theme")==="light")root.setAttribute("data-theme","light");var touch=navigator.maxTouchPoints&&navigator.maxTouchPoints>0;var wide=window.innerWidth>=761||Math.min(screen.width||0,screen.height||0)>=700;if(touch&&wide)root.classList.add("is-touch-tablet");}catch(e){}})();</script>
+  <title>Computer Generated Sounds — Jez237</title>
+  <meta name="description" content="Computer Generated Sounds links to Commodore 64 SID music, Commodore Amiga music, and AI-generated music experiments from Jez237." />
+  <meta name="keywords" content="computer generated sounds, Commodore 64 SID music, C64 music, Amiga MOD music, AI generated music, Jez237" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://jez237.com/computer-generated-sounds/" />
+  <meta property="og:title" content="Computer Generated Sounds — Jez237" />
+  <meta property="og:description" content="Commodore 64 SID music, Commodore Amiga music, and AI-generated music experiments." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://jez237.com/computer-generated-sounds/" />
+  <link rel="icon" type="image/svg+xml" href="../assets/brand.svg" />
+  <link rel="stylesheet" href="../assets/styles.css" />
+  <link rel="stylesheet" href="../assets/site-enhance.css" />
+  <link rel="stylesheet" href="../assets/design.css?v=computer-generated-sounds-20260628" />
+  <link rel="stylesheet" href="../assets/workbench-theme.css?v=computer-generated-sounds-20260628" />
+  <style>
+    main.container { max-width: 1200px; margin: 0 auto; padding: 22px clamp(16px,3vw,40px) 80px; }
+    .sounds-kicker { position: relative; z-index: 1; display: inline-flex; width: max-content; color: var(--brand-gold); text-transform: uppercase; letter-spacing: .16em; font-size: 11px; font-weight: 700; }
+    .sounds-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+    .sounds-card { position: relative; overflow: hidden; min-height: 260px; display: grid; align-content: start; gap: 12px; padding: 22px; border: 1px solid rgba(255,255,255,.14); border-radius: 24px; background: linear-gradient(145deg, rgba(4,10,22,.76), rgba(2,7,16,.56)); color: var(--ink-hi); text-decoration: none; box-shadow: 0 16px 42px rgba(0,0,0,.26), inset 0 1px 0 rgba(255,255,255,.06); transition: transform .24s ease, border-color .24s ease, box-shadow .24s ease; }
+    .sounds-card:hover { transform: translateY(-3px); border-color: rgba(232,197,122,.36); box-shadow: 0 20px 54px rgba(0,0,0,.34), inset 0 1px 0 rgba(255,255,255,.08); }
+    .sounds-card::before { content:""; position:absolute; inset:0; background: var(--card-bg); opacity:.9; }
+    .sounds-card::after { content:""; position:absolute; inset:0; background: linear-gradient(180deg, rgba(2,7,16,.76) 0%, rgba(2,7,16,.46) 42%, rgba(0,0,0,.5) 100%), linear-gradient(90deg, rgba(2,7,16,.78) 0%, rgba(2,7,16,.36) 58%, rgba(0,0,0,.18) 100%); }
+    .sounds-card h2, .sounds-card p, .sounds-card span { position: relative; z-index: 1; }
+    .sounds-card h2 { margin:0; font-size: clamp(24px, 3vw, 36px); line-height:.98; letter-spacing:-.03em; }
+    .sounds-card p { margin:0; color:#d4e0e7; line-height:1.45; }
+    .sounds-card span { width:max-content; color: var(--brand-gold); font-size: 13px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+    .sounds-card--sid { --card-bg: url('../assets/ai-sounds/commodore-64-sid-card-20260628.webp') center / cover no-repeat; }
+    .sounds-card--amiga { --card-bg: url('../assets/ai-sounds/commodore-amiga-mod-card-20260628.webp') center / cover no-repeat; }
+    .sounds-card--ai { --card-bg: linear-gradient(180deg, rgba(0,0,0,.02), rgba(0,0,0,.34)), url('../assets/ai-sounds/realistic-waveform-20260531.webp') center / cover no-repeat; }
+    @media (max-width: 900px) { .sounds-grid { grid-template-columns: 1fr; } .sounds-card { min-height: 210px; } }
+    @media (max-width: 860px) { .desktop-hub { border-radius:0; } main.container { padding-inline:0; } .hub-main { padding:14px 10px 28px !important; } }
+  </style>
+</head>
+<body class="ai-sounds-page">
+  <header id="site-nav" class="home-hidden-nav"></header>
+  <main class="container workbench-home">
+    <section class="desktop-hub" aria-labelledby="sounds-title">
+      <aside class="hub-sidebar" aria-label="Site sections">
+        <a class="hub-brand" href="../"><strong>Jez237</strong><span>Philadelphia · Zone 7a</span></a>
+        <p class="sidebar-note">An AI site for experiments.</p>
+        <nav class="side-nav" data-site-menu data-active="ai-sounds" data-base="../"></nav>
+        <div class="side-controls" aria-hidden="true"><span>☼</span><span>☾</span><span>⚙</span></div>
+      </aside>
+      <div class="hub-main">
+        <div class="hub-topbar">
+          <div>
+            <span class="sounds-kicker">AI + Media Lab</span>
+            <h1 id="sounds-title">Computer Generated Sounds</h1>
+            <p>Three listening rooms for machine-made and machine-played music: SID chips, Amiga modules, and newer AI-generated tracks.</p>
+          </div>
+          <div class="topbar-actions"><a href="../">Overview</a><button type="button" aria-label="Menu">☰</button></div>
+        </div>
+        <section class="sounds-grid" aria-label="Sound section links">
+          <a class="sounds-card sounds-card--sid" href="../experiments/sid-player/">
+            <span>Commodore 64</span>
+            <h2>SID Music</h2>
+            <p>Curated C64 SID tracks in the browser-native player.</p>
+          </a>
+          <a class="sounds-card sounds-card--amiga" href="../experiments/amiga-mod-player/">
+            <span>Commodore Amiga</span>
+            <h2>Amiga Music</h2>
+            <p>MOD tracker music and Amiga game soundtrack material.</p>
+          </a>
+          <a class="sounds-card sounds-card--ai" href="../ai-sounds/">
+            <span>Generated archive</span>
+            <h2>AI Generated Music</h2>
+            <p>The existing Discord-sourced AI music archive and full audio players.</p>
+          </a>
+        </section>
+      </div>
+    </section>
+  </main>
+  <script src="../assets/nav.js"></script>
+  <script src="../assets/side-menu.js"></script>
+  <script src="../assets/site-enhance.js"></script>
+</body>
+</html>

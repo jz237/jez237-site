@@ -43,10 +43,10 @@ use these instructions before writing code or snippets.
 - `/computer-chronicle/` - daily historical computer newspaper section,
   focused on personal computers and personal computer gaming from 40
   years ago today.
-- `/ai-sounds/` - computer-generated sound hub linking to Commodore 64
-  SID music, Commodore Amiga music, and AI-generated music.
-- `/ai-sounds/ai-generated-music/` - AI-generated music and sound archive
-  copied from Discord's AI Sounds channel.
+- `/ai-sounds/` - AI-generated music and sound archive copied from
+  Discord's AI Sounds channel, with full waveform players.
+- `/computer-generated-sounds/` - computer-generated sound hub linking to
+  Commodore 64 SID music, Commodore Amiga music, and AI-generated music.
 - `/ai-sounds/player-lab.html` - player UI lab for AI sounds.
 - `/games/` - GameMaster Arcade and playable prototypes.
 - `/weather/` - local weather console.
