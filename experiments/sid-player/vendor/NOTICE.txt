@@ -1,0 +1,8 @@
+webSID
+Copyright (C) Juergen Wothke
+License: Creative Commons Attribution-NonCommercial-ShareAlike 4.0
+Source: https://bitbucket.org/wothke/websid
+
+webaudio-player
+Copyright (C) Juergen Wothke
+Source: https://bitbucket.org/wothke/webaudio-player
