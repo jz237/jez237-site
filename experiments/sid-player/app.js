@@ -119,6 +119,11 @@
   function bestDuration() {
     const player = getPlayer();
     state.durationKnown = false;
+    const trackDuration = Number(state.currentTrack && state.currentTrack.durationMs);
+    if (Number.isFinite(trackDuration) && trackDuration > 5000) {
+      state.durationKnown = true;
+      return trackDuration;
+    }
     if (!player) return FALLBACK_SEEK_WINDOW_MS;
     const max = Number(player.getMaxPlaybackPosition());
     if (Number.isFinite(max) && max > 5000) {
