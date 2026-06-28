@@ -5,7 +5,8 @@ const tracks = Array.isArray(window.AMIGA_MOD_LIBRARY) ? window.AMIGA_MOD_LIBRAR
 const composers = Array.isArray(window.AMIGA_MOD_COMPOSERS) ? window.AMIGA_MOD_COMPOSERS : [];
 const FAVORITES_KEY = "amiga-mod-player-favorites";
 const SCOPE_MODE_KEY = "amiga-mod-player-scope-mode";
-const DEFAULT_DURATION = 180;
+const DEFAULT_DURATION = 600;
+const SHORT_LOOP_DURATION = 90;
 
 const refs = {
   trackTotal: document.getElementById("trackTotal"),
@@ -58,7 +59,10 @@ const state = {
   currentTrack: null,
   loadedPath: "",
   currentDuration: DEFAULT_DURATION,
+  nativeDuration: DEFAULT_DURATION,
   currentPosition: 0,
+  playStartedAt: 0,
+  playOffset: 0,
   initialized: null,
   audioContext: null,
   audioUnlocked: false,
@@ -68,7 +72,8 @@ const state = {
   playing: false,
   loading: false,
   seeking: false,
-  loop: false,
+  loop: true,
+  loopingModule: false,
   scrubbing: false,
   ending: false,
   pointerSeeking: false,
@@ -197,6 +202,11 @@ function renderSeekPosition(seconds) {
   refs.miniSeekControl.setAttribute("aria-valuetext", formatTime(value));
 }
 
+function currentPlaybackPosition() {
+  if (!state.playing || !state.playStartedAt) return state.currentPosition;
+  return state.playOffset + ((performance.now() - state.playStartedAt) / 1000);
+}
+
 function setNowPlaying(track, meta) {
   refs.nowTitle.textContent = track.title;
   refs.nowMeta.textContent = `${track.composer} | ${track.collection}`;
@@ -299,7 +309,7 @@ function ensurePlayer() {
   setStatus("Starting", "");
   state.initialized = new Promise((resolve, reject) => {
     const player = new ChiptuneJsPlayer({
-      repeatCount: 0,
+      repeatCount: -1,
       context: getAudioContext(),
     });
     state.player = player;
@@ -311,14 +321,19 @@ function ensurePlayer() {
     });
     player.onMetadata((meta) => {
       if (!state.currentTrack) return;
-      state.currentDuration = Number(meta && meta.dur) > 0 ? Number(meta.dur) : DEFAULT_DURATION;
+      const nativeDuration = Number(meta && meta.dur) > 0 ? Number(meta.dur) : 0;
+      state.nativeDuration = nativeDuration || DEFAULT_DURATION;
+      state.loopingModule = nativeDuration > 0 && nativeDuration < SHORT_LOOP_DURATION;
+      state.currentDuration = state.loopingModule ? DEFAULT_DURATION : (nativeDuration || DEFAULT_DURATION);
       setNowPlaying(state.currentTrack, meta);
       updateInfo(state.currentTrack, meta);
       renderSeekPosition(state.currentPosition);
     });
     player.onProgress((progress) => {
       if (state.scrubbing || state.seeking) return;
-      state.currentPosition = Number(progress && progress.pos) || 0;
+      state.currentPosition = state.loopingModule
+        ? Math.min(currentPlaybackPosition(), state.currentDuration)
+        : Number(progress && progress.pos) || 0;
       renderSeekPosition(state.currentPosition);
     });
     player.onEnded(() => {
@@ -430,6 +445,10 @@ async function loadTrack(track, autoplay) {
   state.currentTrack = track;
   state.currentPosition = 0;
   state.currentDuration = DEFAULT_DURATION;
+  state.nativeDuration = DEFAULT_DURATION;
+  state.loopingModule = false;
+  state.playOffset = 0;
+  state.playStartedAt = 0;
   state.loadedPath = "";
   setStatus("Loading", "");
   setPlayButtonText(autoplay ? "Pause" : "Play");
@@ -452,12 +471,15 @@ async function loadTrack(track, autoplay) {
     player.setVol(Number(refs.volume.value));
     state.loadedPath = track.path;
     state.playing = true;
+    state.playOffset = 0;
+    state.playStartedAt = performance.now();
     refs.scope.classList.add("playing");
     setPlayButtonText("Pause");
     setStatus("Playing", "ready");
     if (!autoplay) {
       player.pause();
       state.playing = false;
+      state.playStartedAt = 0;
       refs.scope.classList.remove("playing");
       setPlayButtonText("Play");
       setStatus("Ready", "ready");
@@ -488,6 +510,9 @@ async function togglePlay() {
 
   if (state.playing) {
     player.pause();
+    state.currentPosition = currentPlaybackPosition();
+    state.playOffset = state.currentPosition;
+    state.playStartedAt = 0;
     state.playing = false;
     refs.scope.classList.remove("playing");
     setPlayButtonText("Play");
@@ -495,6 +520,8 @@ async function togglePlay() {
   } else {
     player.unpause();
     state.playing = true;
+    state.playOffset = state.currentPosition;
+    state.playStartedAt = performance.now();
     refs.scope.classList.add("playing");
     setPlayButtonText("Pause");
     setStatus("Playing", "ready");
@@ -506,6 +533,8 @@ function stopPlayback() {
   if (player) player.stop();
   state.playing = false;
   state.currentPosition = 0;
+  state.playOffset = 0;
+  state.playStartedAt = 0;
   state.loadedPath = "";
   refs.scope.classList.remove("playing");
   setPlayButtonText("Play");
@@ -523,6 +552,7 @@ function onTrackEnd() {
   if (state.ending || state.loading || state.seeking || !state.currentTrack) return;
   state.ending = true;
   state.playing = false;
+  state.playStartedAt = 0;
   refs.scope.classList.remove("playing");
   setPlayButtonText("Play");
   move(1);
@@ -537,8 +567,13 @@ function performSeek(targetValue) {
   state.seeking = true;
   state.scrubbing = true;
   state.currentPosition = target;
+  state.playOffset = target;
+  state.playStartedAt = state.playing ? performance.now() : 0;
   renderSeekPosition(target);
-  state.player.setPos(target);
+  const nativeTarget = state.loopingModule && state.nativeDuration > 0
+    ? target % state.nativeDuration
+    : target;
+  state.player.setPos(nativeTarget);
   window.setTimeout(() => {
     state.seeking = false;
     state.scrubbing = false;
@@ -737,6 +772,7 @@ function init() {
   }
   refs.trackTotal.textContent = String(tracks.length);
   refs.volumeText.textContent = `${Math.round(Number(refs.volume.value) * 100)}%`;
+  refs.loopBtn.classList.toggle("active", state.loop);
   renderSeekPosition(0);
   setScopeMode(state.scopeMode);
   renderComposers();
