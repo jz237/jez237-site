@@ -3030,24 +3030,136 @@ window.AMIGA_MOD_LIBRARY = [
     "size": 76568
   },
   {
+    "id": "olof-gustafsson-pinball-dreams-ecran-titre",
+    "title": "Pinball Dreams - Ecran Titre",
+    "composer": "Olof Gustafsson",
+    "collection": "Game Music",
+    "format": "MP3",
+    "path": "audio/Pinball_Dreams/01_ecran_titre.mp3",
+    "source": "KHInsider Pinball Dreams Amiga gamerip; mirrored locally",
+    "duration": 324,
+    "size": 6306024
+  },
+  {
+    "id": "olof-gustafsson-pinball-dreams-ignition",
+    "title": "Pinball Dreams - Ignition",
+    "composer": "Olof Gustafsson",
+    "collection": "Game Music",
+    "format": "MP3",
+    "path": "audio/Pinball_Dreams/02_ignition.mp3",
+    "source": "KHInsider Pinball Dreams Amiga gamerip; mirrored locally",
+    "duration": 296,
+    "size": 5797435
+  },
+  {
+    "id": "olof-gustafsson-pinball-dreams-steel-wheels",
+    "title": "Pinball Dreams - Steel Wheels",
+    "composer": "Olof Gustafsson",
+    "collection": "Game Music",
+    "format": "MP3",
+    "path": "audio/Pinball_Dreams/03_steel_wheels.mp3",
+    "source": "KHInsider Pinball Dreams Amiga gamerip; mirrored locally",
+    "duration": 249,
+    "size": 4869795
+  },
+  {
+    "id": "olof-gustafsson-pinball-dreams-beat-box",
+    "title": "Pinball Dreams - Beat Box",
+    "composer": "Olof Gustafsson",
+    "collection": "Game Music",
+    "format": "MP3",
+    "path": "audio/Pinball_Dreams/04_beat_box.mp3",
+    "source": "KHInsider Pinball Dreams Amiga gamerip; mirrored locally",
+    "duration": 269,
+    "size": 5425545
+  },
+  {
+    "id": "olof-gustafsson-pinball-dreams-nightmare",
+    "title": "Pinball Dreams - Nightmare",
+    "composer": "Olof Gustafsson",
+    "collection": "Game Music",
+    "format": "MP3",
+    "path": "audio/Pinball_Dreams/05_nightmare.mp3",
+    "source": "KHInsider Pinball Dreams Amiga gamerip; mirrored locally",
+    "duration": 367,
+    "size": 7190277
+  },
+  {
+    "id": "olof-gustafsson-pinball-dreams-return-to-menu",
+    "title": "Pinball Dreams - Return To Menu",
+    "composer": "Olof Gustafsson",
+    "collection": "Game Music",
+    "format": "MP3",
+    "path": "audio/Pinball_Dreams/06_return_to_menu.mp3",
+    "source": "KHInsider Pinball Dreams Amiga gamerip; mirrored locally",
+    "duration": 168,
+    "size": 3287402
+  },
+  {
+    "id": "olof-gustafsson-pinball-fantasies-ecran-titre",
+    "title": "Pinball Fantasies - Ecran Titre",
+    "composer": "Olof Gustafsson",
+    "collection": "Game Music",
+    "format": "MP3",
+    "path": "audio/Pinball_Fantasies/01_ecran_titre.mp3",
+    "source": "KHInsider Pinball Fantasies Amiga gamerip; mirrored locally",
+    "duration": 293,
+    "size": 5747952
+  },
+  {
     "id": "olof-gustafsson-pinball-fantasies-party-land",
     "title": "Pinball Fantasies - Party Land",
     "composer": "Olof Gustafsson",
     "collection": "Game Music",
-    "format": "MOD",
-    "path": "mods/Pinball/pinball_fantasies_party_land.mod",
-    "source": "Mod Archive module 82567; Digital Illusions original converted with Pro-Wizard",
-    "size": 210760
+    "format": "MP3",
+    "path": "audio/Pinball_Fantasies/02_party_land.mp3",
+    "source": "KHInsider Pinball Fantasies Amiga gamerip; mirrored locally",
+    "duration": 254,
+    "size": 4985517
   },
   {
-    "id": "4-mat-pinball-dreams-2-level-3",
-    "title": "Pinball Dreams 2 - Level 3",
-    "composer": "4-Mat",
+    "id": "olof-gustafsson-pinball-fantasies-speed-devils",
+    "title": "Pinball Fantasies - Speed Devils",
+    "composer": "Olof Gustafsson",
     "collection": "Game Music",
-    "format": "MOD",
-    "path": "mods/Pinball/pinball_dreams_2_-_level3.mod",
-    "source": "Mod Archive module 77700",
-    "size": 205094
+    "format": "MP3",
+    "path": "audio/Pinball_Fantasies/03_speed_devils.mp3",
+    "source": "KHInsider Pinball Fantasies Amiga gamerip; mirrored locally",
+    "duration": 332,
+    "size": 6511359
+  },
+  {
+    "id": "olof-gustafsson-pinball-fantasies-billion-dollar-game-show",
+    "title": "Pinball Fantasies - Billion Dollar Game Show",
+    "composer": "Olof Gustafsson",
+    "collection": "Game Music",
+    "format": "MP3",
+    "path": "audio/Pinball_Fantasies/04_billion_dollar_game_show.mp3",
+    "source": "KHInsider Pinball Fantasies Amiga gamerip; mirrored locally",
+    "duration": 269,
+    "size": 5333398
+  },
+  {
+    "id": "olof-gustafsson-pinball-fantasies-stones-and-bones",
+    "title": "Pinball Fantasies - Stones And Bones",
+    "composer": "Olof Gustafsson",
+    "collection": "Game Music",
+    "format": "MP3",
+    "path": "audio/Pinball_Fantasies/05_stones_and_bones.mp3",
+    "source": "KHInsider Pinball Fantasies Amiga gamerip; mirrored locally",
+    "duration": 411,
+    "size": 7918823
+  },
+  {
+    "id": "olof-gustafsson-pinball-fantasies-return-to-menu",
+    "title": "Pinball Fantasies - Return To Menu",
+    "composer": "Olof Gustafsson",
+    "collection": "Game Music",
+    "format": "MP3",
+    "path": "audio/Pinball_Fantasies/06_return_to_menu.mp3",
+    "source": "KHInsider Pinball Fantasies Amiga gamerip; mirrored locally",
+    "duration": 77,
+    "size": 1535528
   }
 ];
 
