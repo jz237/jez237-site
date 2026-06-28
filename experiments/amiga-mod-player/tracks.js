@@ -3028,6 +3028,26 @@ window.AMIGA_MOD_LIBRARY = [
     "path": "mods/Zoltar/technostyle_z_.mod",
     "source": "Modland ProTracker archive",
     "size": 76568
+  },
+  {
+    "id": "olof-gustafsson-pinball-fantasies-party-land",
+    "title": "Pinball Fantasies - Party Land",
+    "composer": "Olof Gustafsson",
+    "collection": "Game Music",
+    "format": "MOD",
+    "path": "mods/Pinball/pinball_fantasies_party_land.mod",
+    "source": "Mod Archive module 82567; Digital Illusions original converted with Pro-Wizard",
+    "size": 210760
+  },
+  {
+    "id": "4-mat-pinball-dreams-2-level-3",
+    "title": "Pinball Dreams 2 - Level 3",
+    "composer": "4-Mat",
+    "collection": "Game Music",
+    "format": "MOD",
+    "path": "mods/Pinball/pinball_dreams_2_-_level3.mod",
+    "source": "Mod Archive module 77700",
+    "size": 205094
   }
 ];
 
@@ -3057,6 +3077,7 @@ window.AMIGA_MOD_COMPOSERS = [
   "Moby",
   "Mr. Man",
   "Mr. Root",
+  "Olof Gustafsson",
   "Oracle Soul",
   "Paranoid",
   "Razor",
