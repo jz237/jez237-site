@@ -2,7 +2,10 @@
   const PLAYER_BASE = "/experiments/sid-player/";
   const tracks = Array.isArray(window.SID_LIBRARY) ? window.SID_LIBRARY : [];
   const composers = Array.isArray(window.SID_COMPOSERS) ? window.SID_COMPOSERS : [];
+  const stilNotes = window.SID_STIL && typeof window.SID_STIL === "object" ? window.SID_STIL : {};
   const FALLBACK_SEEK_WINDOW_MS = 600000;
+  const FAVORITES_KEY = "sid-player-favorites";
+  const SCOPE_MODE_KEY = "sid-player-scope-mode";
 
   const refs = {
     trackTotal: document.getElementById("trackTotal"),
@@ -13,22 +16,28 @@
     trackList: document.getElementById("trackList"),
     nowTitle: document.getElementById("nowTitle"),
     nowMeta: document.getElementById("nowMeta"),
+    deck: document.querySelector(".deck"),
     status: document.getElementById("status"),
+    favNowBtn: document.getElementById("favNowBtn"),
     prevBtn: document.getElementById("prevBtn"),
     playBtn: document.getElementById("playBtn"),
     stopBtn: document.getElementById("stopBtn"),
     nextBtn: document.getElementById("nextBtn"),
     loopBtn: document.getElementById("loopBtn"),
+    scopeModeBtn: document.getElementById("scopeModeBtn"),
     elapsed: document.getElementById("elapsed"),
     duration: document.getElementById("duration"),
     seekControl: document.getElementById("seekControl"),
     seekFill: document.getElementById("seekFill"),
     seekThumb: document.getElementById("seekThumb"),
     progress: document.getElementById("progress"),
+    seekNotice: document.getElementById("seekNotice"),
     volume: document.getElementById("volume"),
     volumeText: document.getElementById("volumeText"),
     scope: document.getElementById("scope"),
     scopeGrid: document.getElementById("scopeGrid"),
+    stilPanel: document.getElementById("stilPanel"),
+    stilText: document.getElementById("stilText"),
   };
 
   const state = {
@@ -48,6 +57,9 @@
     wallStarted: 0,
     pointerSeeking: false,
     seekRunId: 0,
+    pendingAutoplay: false,
+    favorites: new Set(),
+    scopeMode: "full",
   };
 
   function formatTime(ms) {
@@ -70,6 +82,65 @@
   function setStatus(text, kind) {
     refs.status.textContent = text;
     refs.status.className = `status${kind ? ` ${kind}` : ""}`;
+  }
+
+  function readStoredJson(key, fallback) {
+    try {
+      const value = window.localStorage.getItem(key);
+      return value ? JSON.parse(value) : fallback;
+    } catch (error) {
+      console.warn(error);
+      return fallback;
+    }
+  }
+
+  function writeStoredJson(key, value) {
+    try {
+      window.localStorage.setItem(key, JSON.stringify(value));
+    } catch (error) {
+      console.warn(error);
+    }
+  }
+
+  function favoriteKey(track) {
+    return track ? track.path : "";
+  }
+
+  function isFavorite(track) {
+    return state.favorites.has(favoriteKey(track));
+  }
+
+  function activeTrack() {
+    return state.currentTrack || selectedTrack();
+  }
+
+  function saveFavorites() {
+    writeStoredJson(FAVORITES_KEY, Array.from(state.favorites));
+  }
+
+  function toggleFavorite(track) {
+    if (!track) return;
+    const key = favoriteKey(track);
+    if (state.favorites.has(key)) {
+      state.favorites.delete(key);
+    } else {
+      state.favorites.add(key);
+    }
+    saveFavorites();
+    updateFavoriteControls();
+    applyFilters();
+  }
+
+  function updateFavoriteControls() {
+    const active = isFavorite(activeTrack());
+    refs.favNowBtn.classList.toggle("active", active);
+    refs.favNowBtn.textContent = active ? "★" : "☆";
+    refs.favNowBtn.setAttribute("aria-pressed", active ? "true" : "false");
+  }
+
+  function setSeekNotice(text) {
+    refs.seekNotice.hidden = !text;
+    refs.seekNotice.textContent = text || "";
   }
 
   function getPlayer() {
@@ -187,6 +258,36 @@
     return new URL(state.currentTrack.path, window.location.origin + PLAYER_BASE).href;
   }
 
+  function updateStil(track) {
+    const note = track ? stilNotes[track.path] : "";
+    refs.stilPanel.hidden = !note;
+    refs.stilText.textContent = note || "";
+  }
+
+  function setScopeMode(mode) {
+    state.scopeMode = ["full", "compact", "hidden"].includes(mode) ? mode : "full";
+    refs.deck.classList.toggle("scope-compact", state.scopeMode === "compact");
+    refs.deck.classList.toggle("scope-hidden", state.scopeMode === "hidden");
+    const label = state.scopeMode === "full"
+      ? "Scope Full"
+      : state.scopeMode === "compact"
+        ? "Scope Compact"
+        : "Scope Hidden";
+    refs.scopeModeBtn.textContent = label;
+    refs.scopeModeBtn.setAttribute("aria-pressed", state.scopeMode === "hidden" ? "true" : "false");
+    try {
+      window.localStorage.setItem(SCOPE_MODE_KEY, state.scopeMode);
+    } catch (error) {
+      console.warn(error);
+    }
+  }
+
+  function cycleScopeMode() {
+    if (state.scopeMode === "full") setScopeMode("compact");
+    else if (state.scopeMode === "compact") setScopeMode("hidden");
+    else setScopeMode("full");
+  }
+
   function renderComposers() {
     refs.composerFilter.innerHTML = "";
     const all = document.createElement("option");
@@ -208,6 +309,7 @@
     const composer = refs.composerFilter.value;
     state.filtered = tracks.filter((track) => {
       const collectionMatch = collection === "all"
+        || (collection === "favorites" && isFavorite(track))
         || (collection === "top100" && track.top100Rank)
         || (collection === "games" && track.composerKey === "GAMES");
       if (!collectionMatch) return false;
@@ -228,24 +330,26 @@
   function renderTracks() {
     refs.trackList.innerHTML = "";
     const top100Count = state.filtered.filter((track) => track.top100Rank).length;
-    refs.listMeta.textContent = refs.collectionFilter.value === "top100"
+    refs.listMeta.textContent = refs.collectionFilter.value === "favorites"
+      ? `${state.filtered.length} favorites`
+      : refs.collectionFilter.value === "top100"
       ? `${top100Count} ranked favorites`
       : `${state.filtered.length} shown`;
 
     const fragment = document.createDocumentFragment();
     state.filtered.forEach((track, index) => {
-      const row = document.createElement("button");
-      row.type = "button";
-      row.className = `track${track === state.currentTrack ? " active" : ""}`;
+      const row = document.createElement("div");
+      row.className = `track${track === activeTrack() ? " active" : ""}`;
       row.setAttribute("role", "option");
-      row.setAttribute("aria-selected", track === state.currentTrack ? "true" : "false");
+      row.setAttribute("aria-selected", track === activeTrack() ? "true" : "false");
       row.dataset.index = String(index);
       row.innerHTML = `
-        <span>
+        <button class="track-main" type="button">
           <span class="track-title"></span>
           <span class="track-composer"></span>
-        </span>
-        <span class="track-size"></span>
+        </button>
+        <span class="track-duration"></span>
+        <button class="track-favorite" type="button" aria-label="Favorite SID"></button>
       `;
       row.querySelector(".track-title").textContent = track.title;
       const label = track.top100Rank
@@ -254,9 +358,19 @@
       row.querySelector(".track-composer").textContent = label
         ? `${track.composer} / ${label}`
         : track.composer;
-      row.querySelector(".track-size").textContent = formatBytes(track.size);
-      row.addEventListener("pointerdown", wakeAudio, { passive: true });
-      row.addEventListener("click", () => {
+      row.querySelector(".track-duration").textContent = track.durationMs ? formatTime(track.durationMs) : formatBytes(track.size);
+      const favoriteButton = row.querySelector(".track-favorite");
+      const activeFavorite = isFavorite(track);
+      favoriteButton.classList.toggle("active", activeFavorite);
+      favoriteButton.textContent = activeFavorite ? "★" : "☆";
+      favoriteButton.setAttribute("aria-pressed", activeFavorite ? "true" : "false");
+      favoriteButton.addEventListener("click", (event) => {
+        event.stopPropagation();
+        toggleFavorite(track);
+      });
+      const mainButton = row.querySelector(".track-main");
+      mainButton.addEventListener("pointerdown", wakeAudio, { passive: true });
+      mainButton.addEventListener("click", () => {
         wakeAudio();
         state.selected = index;
         loadTrack(track, true);
@@ -280,12 +394,22 @@
   }
 
   async function loadTrack(track, autoplay) {
-    if (!track || state.loading) return;
+    if (!track) return;
+    if (state.loading) {
+      state.pendingAutoplay = state.pendingAutoplay || autoplay;
+      return;
+    }
     state.loading = true;
+    state.pendingAutoplay = Boolean(autoplay);
     state.currentTrack = track;
     setStatus("Loading", "");
+    setSeekNotice("");
+    refs.playBtn.textContent = autoplay ? "Pause" : "Play";
+    refs.scope.classList.remove("playing");
     refs.nowTitle.textContent = track.title;
     refs.nowMeta.textContent = `${track.composer} | ${track.fileName}`;
+    updateFavoriteControls();
+    updateStil(track);
     renderTracks();
 
     try {
@@ -304,10 +428,14 @@
       state.fallbackPosition = 0;
       state.wallStarted = 0;
       setNowPlaying(track, info);
+      updateFavoriteControls();
+      updateStil(track);
       refs.duration.textContent = formatTime(state.currentDuration);
       renderSeekPosition(0);
 
-      if (autoplay) {
+      const shouldAutoplay = state.pendingAutoplay;
+      state.pendingAutoplay = false;
+      if (shouldAutoplay) {
         player.resume();
         state.playing = true;
         beginProgressClock(0);
@@ -323,6 +451,7 @@
       }
     } catch (error) {
       console.error(error);
+      state.pendingAutoplay = false;
       state.playing = false;
       refs.playBtn.textContent = "Play";
       refs.scope.classList.remove("playing");
@@ -330,11 +459,18 @@
       refs.nowMeta.textContent = error.message || "SID playback failed";
     } finally {
       state.loading = false;
+      if (!state.seeking) setSeekNotice("");
     }
   }
 
   async function togglePlay() {
     wakeAudio();
+    if (state.loading) {
+      state.pendingAutoplay = true;
+      refs.playBtn.textContent = "Pause";
+      setStatus("Loading", "");
+      return;
+    }
     const player = await ensurePlayer();
     if (!state.currentTrack) {
       await loadTrack(selectedTrack(), true);
@@ -359,6 +495,7 @@
   }
 
   function stopPlayback() {
+    state.pendingAutoplay = false;
     const player = getPlayer();
     if (!player) return;
     player.pause();
@@ -473,7 +610,9 @@
       if (seekId !== state.seekRunId) return false;
       backend.computeAudioSamples();
       if (i > 0 && i % 240 === 0) {
-        setStatus(`Seeking ${formatTime((i / calls) * target)}`, "");
+        const seekPosition = (i / calls) * target;
+        setStatus(`Seeking ${formatTime(seekPosition)}`, "");
+        setSeekNotice(`Fast-forwarding ${formatTime(seekPosition)} / ${formatTime(target)}`);
         await waitForUi();
       }
     }
@@ -489,6 +628,7 @@
     const volume = Number(refs.volume.value);
 
     setStatus(`Seeking ${formatTime(target)}`, "");
+    setSeekNotice(`Preparing seek to ${formatTime(target)}`);
     player.pause();
     player.setVolume(0);
 
@@ -508,6 +648,7 @@
 
     player.setVolume(volume);
     state.fallbackPosition = target;
+    setSeekNotice("");
 
     if (wasPlaying) {
       beginProgressClock(target);
@@ -560,10 +701,12 @@
     } catch (error) {
       console.error(error);
       setStatus("Seek failed", "error");
+      setSeekNotice("Seek failed");
     } finally {
       if (seekId === state.seekRunId) {
         state.seeking = false;
         state.scrubbing = false;
+        if (refs.status.textContent !== "Seek failed") setSeekNotice("");
       }
     }
   }
@@ -609,10 +752,14 @@
       wakeAudio();
       move(1);
     });
+    refs.favNowBtn.addEventListener("click", () => {
+      toggleFavorite(activeTrack());
+    });
     refs.loopBtn.addEventListener("click", () => {
       state.loop = !state.loop;
       refs.loopBtn.classList.toggle("active", state.loop);
     });
+    refs.scopeModeBtn.addEventListener("click", cycleScopeMode);
     refs.volume.addEventListener("input", () => {
       const volume = Number(refs.volume.value);
       refs.volumeText.textContent = `${Math.round(volume * 100)}%`;
@@ -700,13 +847,23 @@
     if (track) {
       refs.nowTitle.textContent = track.title;
       refs.nowMeta.textContent = `${track.composer} | ${track.fileName}`;
+      updateFavoriteControls();
+      updateStil(track);
     }
   }
 
   function init() {
+    state.favorites = new Set(readStoredJson(FAVORITES_KEY, []));
+    try {
+      state.scopeMode = window.localStorage.getItem(SCOPE_MODE_KEY) || "full";
+    } catch (error) {
+      console.warn(error);
+      state.scopeMode = "full";
+    }
     refs.trackTotal.textContent = String(tracks.length);
     refs.volumeText.textContent = `${Math.round(Number(refs.volume.value) * 100)}%`;
     renderSeekPosition(0);
+    setScopeMode(state.scopeMode);
     renderComposers();
     chooseInitialTrack();
     applyFilters();
