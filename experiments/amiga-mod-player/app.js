@@ -315,6 +315,7 @@ function applyFilters() {
     const collectionMatch = collection === "all"
       || (collection === "favorites" && isFavorite(track))
       || (collection === "game" && track.collection === "Game Music")
+      || (collection === "popular" && track.collection === "Popular MODs")
       || (collection === "demo" && track.collection === "Demo Scene");
     if (!collectionMatch) return false;
     if (composer !== "all" && track.composer !== composer) return false;
