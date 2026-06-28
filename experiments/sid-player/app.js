@@ -20,6 +20,9 @@
     loopBtn: document.getElementById("loopBtn"),
     elapsed: document.getElementById("elapsed"),
     duration: document.getElementById("duration"),
+    seekControl: document.getElementById("seekControl"),
+    seekFill: document.getElementById("seekFill"),
+    seekThumb: document.getElementById("seekThumb"),
     progress: document.getElementById("progress"),
     volume: document.getElementById("volume"),
     volumeText: document.getElementById("volumeText"),
@@ -152,6 +155,20 @@
     state.wallStarted = 0;
   }
 
+  function renderSeekPosition(ms) {
+    const value = Math.max(0, Math.min(Number(ms) || 0, state.currentDuration));
+    const percent = state.currentDuration > 0 ? (value / state.currentDuration) * 100 : 0;
+    refs.progress.max = String(state.currentDuration);
+    refs.progress.value = String(value);
+    refs.elapsed.textContent = formatTime(value);
+    refs.duration.textContent = formatTime(state.currentDuration);
+    refs.seekFill.style.width = `${percent}%`;
+    refs.seekThumb.style.left = `${percent}%`;
+    refs.seekControl.setAttribute("aria-valuemax", String(Math.round(state.currentDuration)));
+    refs.seekControl.setAttribute("aria-valuenow", String(Math.round(value)));
+    refs.seekControl.setAttribute("aria-valuetext", formatTime(value));
+  }
+
   function renderComposers() {
     refs.composerFilter.innerHTML = "";
     const all = document.createElement("option");
@@ -255,8 +272,7 @@
       state.wallStarted = 0;
       setNowPlaying(track, info);
       refs.duration.textContent = formatTime(state.currentDuration);
-      refs.progress.max = String(state.currentDuration);
-      refs.progress.value = "0";
+      renderSeekPosition(0);
 
       if (autoplay) {
         player.resume();
@@ -323,8 +339,7 @@
     state.wallStarted = 0;
     refs.playBtn.textContent = "Play";
     refs.scope.classList.remove("playing");
-    refs.progress.value = "0";
-    refs.elapsed.textContent = "0:00";
+    renderSeekPosition(0);
     setStatus("Stopped", "");
   }
 
@@ -355,10 +370,7 @@
   function updateProgress() {
     if (state.currentTrack && !state.scrubbing) {
       const pos = Math.min(playbackPosition(), state.currentDuration);
-      refs.progress.max = String(state.currentDuration);
-      refs.progress.value = String(pos);
-      refs.elapsed.textContent = formatTime(pos);
-      refs.duration.textContent = formatTime(state.currentDuration);
+      renderSeekPosition(pos);
 
       if (state.playing && pos >= state.currentDuration - 300) {
         onTrackEnd();
@@ -410,7 +422,7 @@
       ? targetValue
       : refs.progress.value;
     const target = Math.max(0, Math.min(Number(sourceValue) || 0, state.currentDuration));
-    refs.progress.value = String(target);
+    renderSeekPosition(target);
 
     if (player && typeof player.seekPlaybackPosition === "function") {
       try {
@@ -426,12 +438,11 @@
     } else {
       state.wallStarted = 0;
     }
-    refs.elapsed.textContent = formatTime(target);
     state.scrubbing = false;
   }
 
   function progressValueFromPoint(clientX) {
-    const rect = refs.progress.getBoundingClientRect();
+    const rect = refs.seekControl.getBoundingClientRect();
     if (!rect.width) return Number(refs.progress.value) || 0;
     const ratio = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
     return ratio * state.currentDuration;
@@ -439,8 +450,7 @@
 
   function previewSeekFromPoint(clientX) {
     const target = progressValueFromPoint(clientX);
-    refs.progress.value = String(target);
-    refs.elapsed.textContent = formatTime(target);
+    renderSeekPosition(target);
     return target;
   }
 
@@ -477,46 +487,46 @@
       const player = getPlayer();
       if (player) player.setVolume(volume);
     });
-    refs.progress.addEventListener("pointerdown", (event) => {
+    refs.seekControl.addEventListener("pointerdown", (event) => {
       if (!state.currentTrack) return;
       event.preventDefault();
       wakeAudio();
       state.pointerSeeking = true;
       state.scrubbing = true;
-      refs.progress.setPointerCapture(event.pointerId);
+      refs.seekControl.setPointerCapture(event.pointerId);
       seekFromPoint(event.clientX);
     });
-    refs.progress.addEventListener("pointermove", (event) => {
+    refs.seekControl.addEventListener("pointermove", (event) => {
       if (!state.pointerSeeking) return;
       event.preventDefault();
       previewSeekFromPoint(event.clientX);
     });
-    refs.progress.addEventListener("pointerup", (event) => {
+    refs.seekControl.addEventListener("pointerup", (event) => {
       if (!state.pointerSeeking) return;
       event.preventDefault();
       state.pointerSeeking = false;
       seekFromPoint(event.clientX);
     });
-    refs.progress.addEventListener("pointercancel", () => {
+    refs.seekControl.addEventListener("pointercancel", () => {
       state.pointerSeeking = false;
       state.scrubbing = false;
     });
-    refs.progress.addEventListener("touchstart", (event) => {
-      if (!state.currentTrack || window.PointerEvent) return;
+    refs.seekControl.addEventListener("touchstart", (event) => {
+      if (!state.currentTrack) return;
       event.preventDefault();
       wakeAudio();
       state.scrubbing = true;
       const touch = event.changedTouches[0];
       if (touch) seekFromPoint(touch.clientX);
     }, { passive: false });
-    refs.progress.addEventListener("touchmove", (event) => {
-      if (!state.currentTrack || window.PointerEvent) return;
+    refs.seekControl.addEventListener("touchmove", (event) => {
+      if (!state.currentTrack) return;
       event.preventDefault();
       const touch = event.changedTouches[0];
       if (touch) previewSeekFromPoint(touch.clientX);
     }, { passive: false });
-    refs.progress.addEventListener("touchend", (event) => {
-      if (!state.currentTrack || window.PointerEvent) return;
+    refs.seekControl.addEventListener("touchend", (event) => {
+      if (!state.currentTrack) return;
       event.preventDefault();
       const touch = event.changedTouches[0];
       if (touch) seekFromPoint(touch.clientX);
@@ -524,12 +534,25 @@
     refs.progress.addEventListener("input", () => {
       if (state.pointerSeeking) return;
       state.scrubbing = true;
-      refs.elapsed.textContent = formatTime(Number(refs.progress.value));
+      renderSeekPosition(Number(refs.progress.value));
     });
     refs.progress.addEventListener("change", seekToProgress);
-    refs.progress.addEventListener("keyup", (event) => {
-      if (["ArrowLeft", "ArrowRight", "Home", "End", "PageUp", "PageDown"].includes(event.key)) {
-        seekToProgress();
+    refs.seekControl.addEventListener("keydown", (event) => {
+      if (!state.currentTrack) return;
+      const current = Number(refs.progress.value) || 0;
+      const step = event.shiftKey ? 10000 : 5000;
+      let target = current;
+
+      if (event.key === "ArrowLeft") target = current - step;
+      if (event.key === "ArrowRight") target = current + step;
+      if (event.key === "PageDown") target = current - 30000;
+      if (event.key === "PageUp") target = current + 30000;
+      if (event.key === "Home") target = 0;
+      if (event.key === "End") target = state.currentDuration;
+
+      if (target !== current) {
+        event.preventDefault();
+        seekToProgress(target);
       }
     });
   }
@@ -551,7 +574,7 @@
   function init() {
     refs.trackTotal.textContent = String(tracks.length);
     refs.volumeText.textContent = `${Math.round(Number(refs.volume.value) * 100)}%`;
-    refs.duration.textContent = formatTime(DEFAULT_DURATION_MS);
+    renderSeekPosition(0);
     renderComposers();
     chooseInitialTrack();
     applyFilters();
