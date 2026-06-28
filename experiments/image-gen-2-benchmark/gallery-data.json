@@ -2665,5 +2665,17 @@
       "description": "Believable invented alpine thaw meadow animal with wide snowshoe toes, a root-probing flexible muzzle, and cream fur with moss-green striping.",
       "template": "Design a believable [HABITAT] creature with [ADAPTATION 1], [ADAPTATION 2], and [TEXTURE/COLOR], shown as a realistic natural-history creature study."
     }
+  },
+  {
+    "id": "2026-06-28-miniature-diorama-thumb-sized-canal-bakery",
+    "title": "Thumb-Sized Canal Bakery",
+    "tests": "Generated via openclaw infer image generate using openai/gpt-image-2; verified exact output file exists and is non-empty before append.",
+    "prompt": "Build a visibly handmade miniature diorama of a thumb-sized canal bakery window at blue hour, photographed as a finished macro model set rather than a full-size street scene. The bakery is built into a tiny canal wall: basswood brickwork with individual painted mortar lines, a resin canal only a few centimeters wide reflecting warm amber window light, a fingernail-sized striped awning made from painted fabric scraps, acetate window panes with glue beads, clay loaves and pastries no larger than sesame seeds, a matchstick display counter, tiny brass-wire bread racks, paper-thin tissue curtains with no readable text, a miniature flour sack made from muslin, a thread-wrapped delivery basket, and a little canal boat carved from balsa tied to a pin-sized ring. Include clear scale cues outside the set: tweezers, a hobby knife, a size 000 paintbrush, a bottle cap used as a mixing palette, visible foam-board cut edges, dried glue, brush texture, fingerprints in the resin edge, and scattered model-making crumbs. Use warm practical LEDs inside the bakery, cool blue reflected light on the canal, shallow macro depth of field, low camera angle close to the waterline, rich tactile handmade detail, and no full-size real scene ambiguity. No people, no readable labels, no logos, no watermark, no flat poster, no prompt-card text.\n\nReusable fill-in-the-blank template: Build a visibly handmade miniature diorama of [SCENE], with scale cues, tiny props, model-making materials, macro photography, and practical lighting.\n\nExample substitution: [SCENE] = a thumb-sized canal bakery window at blue hour with basswood brickwork, resin canal reflections, seed-sized clay pastries, acetate panes, miniature baking props, and model-making tools beside the set for scale.",
+    "image": "images/2026-06-28-miniature-diorama-thumb-sized-canal-bakery.jpg",
+    "date": "2026-06-28",
+    "batch": "Daily Prompt",
+    "slot": "miniature-diorama",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
