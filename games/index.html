@@ -1234,11 +1234,13 @@
       '2026-06-22/snake-awakening/',
       '2026-06-24/particle-creature-arena/',
       '2026-06-25/vector-drift/',
+      '2026-06-29/steel-ribbon-racer/',
       'hard-hat-mac/'
     ]);
     const gameHref = g => g.href || `${SITE_GAME_PATHS.has(g.path) ? SITE_BASE : LEGACY_BASE}${g.path}`;
     const games = [
       // Featured (polished)
+      { title: 'Steel Ribbon Racer',            path: '2026-06-29/steel-ribbon-racer/',    emoji: '🏎️', date: 'Jun 29', cat: 'arcade',    tag: 'experimental', desc: 'Unfinished modern Stunt Car Racer-inspired prototype with cockpit view, elevated ribbon tracks, jumps, landing physics, boost, damage, scoring, generated engine audio, and mobile touch controls' },
       { title: 'Steel Duel',                    path: '2026-06-14/steel-duel/',            emoji: '🔫', date: 'Jun 14', cat: 'arcade',    tag: 'featured',    desc: 'HD remaster of Atari TANK (1974), the first tank-combat arcade game — a top-down duel through a walled maze and a deadly central minefield, now with a full 12-level single-player &amp; co-op CAMPAIGN: fight waves of six distinct enemy tank types (scouts, brutes, snipers, mine-layers, front-armored wardens) across open arenas and battle three multi-phase bosses — the Bastion, the Mauler, and the Iron Warlord. Smart A*-pathfinding CPU with a Stupid→Can\'t-Defeat skill slider (it routes around walls and never suicides on mines), an attract-mode title where two AIs duel, online rooms, local/online co-op against enemy tanks, mouse-aimed independent turret + WASD on desktop, twin-stick on mobile, destructible walls you can blast open, a one-click 1974 CRT mode, particle juice + screen shake, and global scores. Campaign (1P + 2P co-op), 1P vs CPU, 2P duel, survival co-op, keyboard/mouse + touch, synth audio' },
       { title: 'Neon Vector Arena 3D',          path: '2026-06-24/particle-creature-arena/', emoji: '✴️', date: 'Jun 24', cat: 'arcade', tag: 'featured', desc: '3D twin-stick version of Neon Vector Arena with manual aim/fire, shield/lives/bombs, combo scoring, power cores, warning rings, boss waves, and low-poly vector geometry' },
       { title: 'Snake Awakening',               path: '2026-06-22/snake-awakening/',       emoji: '🐍', date: 'Jun 22', cat: 'arcade',    tag: 'featured',    desc: 'A self-playing, genre-bending snake game where the snake gradually realizes it is inside a snake game, then turns that awareness into mechanics. Classic snake mutates into meta arcade, RTS command mode, cozy farming, bullet-hell patch storm, and a rule-breaking escape finale. Keyboard + touch, local and global high scores' },
@@ -1297,7 +1299,7 @@
       'super star trek', 'depth charge',
       'subway siege blackout', 'neon invaders', 'vortex storm eater',
       'void echo', 'gravity weaver', 'storm echo', 'neon vector arena demo',
-      'neon vector arena 3d', 'vector tempest'
+      'neon vector arena 3d', 'vector tempest', 'steel ribbon racer'
     ]);
     const slugTitle = t => t.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
     games.forEach(g => { g.status = UNFINISHED.has(slugTitle(g.title)) ? 'unfinished' : 'released'; });
@@ -1332,7 +1334,8 @@
       ['fluid', 'fluid'], ['invaders', 'invaders'], ['choplifter', 'chopper'],
       ['particle', 'fluid'],
       ['snake awakening', 'serpent'],
-      ['serpent', 'serpent']
+      ['serpent', 'serpent'],
+      ['steel ribbon', 'drift']
     ];
     function iconEffect(g) {
       const key = slugTitle(g.title);
