@@ -83,5 +83,22 @@
       "description": "Believable invented alpine thaw meadow animal with wide snowshoe toes, a root-probing flexible muzzle, and cream fur with moss-green striping.",
       "template": "Design a believable [HABITAT] creature with [ADAPTATION 1], [ADAPTATION 2], and [TEXTURE/COLOR], shown as a realistic natural-history creature study."
     }
+  },
+  {
+    "id": "2026-06-29-creature-design-fogbank-needle-grazer",
+    "title": "Fogbank Needle Grazer",
+    "tests": "Generated with openclaw infer image generate using openai/gpt-image-2; verified exact source PNG exists before append.",
+    "prompt": "Design a believable coastal fog cliff creature called the Fogbank Needle Grazer with moisture-combing whiskers, split gripping hooves, and slate fur with pale green lichen flecks, shown as a realistic natural-history creature study. Create a finished square documentary wildlife photograph on a wind-carved seaside cliff at dawn fog: one adult about the size of a small antelope stands side-on across a steep slick ledge, body low and balanced, four split cloven hooves gripping wet basalt cracks, long comb-like white whiskers fanning forward and visibly catching beads of fog water, narrow browsing muzzle reaching into mats of salt-tough cliff moss, high shoulders, flexible spine, small wind-folded ears, black almond eyes under heavy brow ridges, and dense slate-gray fur broken with pale green lichen flecks and darker rain streaks. Include one juvenile tucked beneath an overhang, barnacle-colored mineral crusts, tufts of sea pink and hardy grass, wet stone shine, distant blurred surf far below, gull-free empty air, tiny trickles of condensed water running toward the creature's mouth, and a few shed whisker fibers snagged on rock for scale. Use low dawn light diffused by fog, crisp macro natural-history detail, believable anatomy and weight, ecological logic that makes the adaptations clear without labels, and shallow documentary depth of field. The image itself should be the finished creature study, not a prompt card: no readable text, no captions, no arrows, no poster layout, no fantasy monster styling, no gore, no logos, no watermark, no people, no extra limbs beyond four legs, no incoherent anatomy, no blank studio background.\n\nReusable fill-in-the-blank template: Design a believable [HABITAT] creature with [ADAPTATION 1], [ADAPTATION 2], and [TEXTURE/COLOR], shown as a realistic natural-history creature study. Make the finished image show [LIFE STAGE OR GROUPING] in [SPECIFIC MICROHABITAT], with visible anatomy, scale cues, habitat traces, material textures, and lighting that explain how the adaptations work without turning the image into a labeled prompt card.\n\nWhat the reusable visual operation changes or emphasizes: it turns a habitat-and-adaptation brief into a plausible original animal study, emphasizing ecological logic, coherent anatomy, tactile surface detail, scale, and behavior in context.\n\nExample substitution: [HABITAT] = coastal fog cliff; [ADAPTATION 1] = moisture-combing whiskers; [ADAPTATION 2] = split gripping hooves; [TEXTURE/COLOR] = slate fur with pale green lichen flecks; [LIFE STAGE OR GROUPING] = one adult with one juvenile; [SPECIFIC MICROHABITAT] = steep wet basalt ledge above dawn surf fog.",
+    "image": "images/2026-06-29-creature-design-fogbank-needle-grazer.jpg",
+    "date": "2026-06-29",
+    "batch": "Daily Prompt",
+    "slot": "creature-design",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "creatureDesign": {
+      "name": "Fogbank Needle Grazer",
+      "description": "A believable coastal fog-cliff grazer with fog-combing whiskers, split gripping hooves, and lichen-flecked slate fur.",
+      "template": "Design a believable [HABITAT] creature with [ADAPTATION 1], [ADAPTATION 2], and [TEXTURE/COLOR], shown as a realistic natural-history creature study."
+    }
   }
 ]
