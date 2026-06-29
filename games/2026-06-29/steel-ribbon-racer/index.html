@@ -4,8 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Steel Ribbon Racer</title>
-    <script type="module" crossorigin src="./assets/index-L4A_GLdN.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-BCNCL7PC.css">
+    <script type="module" crossorigin src="./assets/index-DrSaWo-V.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-Co5MxcVJ.css">
   </head>
   <body>
     <div id="app">
@@ -76,7 +76,16 @@
         <p>Suspended stunt racing, cockpit terror, and expensive landings.</p>
         <button id="startBtn">Start Season</button>
         <button id="practiceBtn">Practice Run</button>
-        <button id="freeRunBtn">Free Run (Course Check)</button>
+        <div class="course-select">
+          <span>Course — <b id="courseName">The Little Ramp</b></span>
+          <div class="course-buttons">
+            <button class="course-btn" data-course="0">1</button>
+            <button class="course-btn" data-course="1">2</button>
+            <button class="course-btn" data-course="2">3</button>
+            <button class="course-btn" data-course="3">4</button>
+          </div>
+        </div>
+        <button id="freeRunBtn">Course Check (Free Run)</button>
         <div class="league">
           <span>Division Four</span>
           <b>1. Crowther</b>
