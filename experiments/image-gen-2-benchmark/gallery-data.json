@@ -2812,5 +2812,22 @@
       "description": "A fictional deep-sea anglerfish + human hybrid with a humanoid vertical-swimmer body plan, webbed five-fingered hands, cranial lure, fin fringes, dark gelatinous skin, and blue-green bioluminescent freckles.",
       "continuity": "Both images preserve the same Abyssal Lantern Warden phenotype: upright human-derived torso and hands, anglerfish lure and jaw, fin-fringed limbs, charcoal skin, and cyan bioluminescence in blackwater habitat."
     }
+  },
+  {
+    "id": "2026-06-29-random-image-style-random-rendering-style-technical-airbrus",
+    "title": "Random rendering style: Technical Airbrush Aquarium Workshop",
+    "tests": "Generated with openai/gpt-image-2 via OpenClaw CLI; verified exact PNG output path existed before append; append-entry converted to JPEG and uploaded to R2.",
+    "prompt": "Create a finished square image of a crowded aquarium maintenance workshop rendered as richly detailed technical airbrush art, like a late-1970s precision illustration painted with smooth gradients, crisp masking, soft sprayed highlights, and controlled edge work. The subject is a practical workbench scene, not a poster: clear acrylic quarantine tanks with condensation beads, coiled silicone tubing, brass hose valves, algae scrapers, siphon bulbs, filter cartridges opened for inspection, ceramic bio-media in small trays, test vials with colored liquid, damp towels, unlabeled buckets, and a magnifying lamp casting clean white light across wet glass and metal. Use layered perspective and visible hand-rendered airbrush texture, tiny droplets, translucent water surfaces, reflections, and shadowed tool drawers. No readable text, no logos, no prompt-card layout, no centered product photo, no cinematic scene, no people as the focus.\n\nReusable template: Render a crowded [WORKSHOP_OR_MAINTENANCE_SPACE] as a richly detailed [STYLE_OR_MEDIUM] image with [TOOLS], [WET_OR_REFLECTIVE_SURFACES], [OPENED_PARTS_OR_MATERIAL_TRAYS], [SPECIFIC_LIGHTING], and no prompt-card text.",
+    "image": "images/2026-06-29-random-image-style-random-rendering-style-technical-airbrus.jpg",
+    "date": "2026-06-29",
+    "batch": "Daily Prompt",
+    "slot": "random-image-style",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "randomRenderingStyle": {
+      "medium": "technical airbrush",
+      "description": "A detailed aquarium maintenance workbench rendered as precise late-1970s technical airbrush art.",
+      "template": "Render a crowded [WORKSHOP_OR_MAINTENANCE_SPACE] as a richly detailed [STYLE_OR_MEDIUM] image with [TOOLS], [WET_OR_REFLECTIVE_SURFACES], [OPENED_PARTS_OR_MATERIAL_TRAYS], [SPECIFIC_LIGHTING], and no prompt-card text."
+    }
   }
 ]
