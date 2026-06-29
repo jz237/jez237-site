@@ -1,1 +1,19 @@
-[]
+[
+  {
+    "id": "2026-06-29-world-that-never-was-maple-junction-moon-milk-diner-postcar",
+    "title": "Maple Junction Moon-Milk Diner Postcard",
+    "tests": "World That Never Was slot: clearly fictional alternate local-history postcard, period tactile detail, natural readable artifact text, no claim of being real.",
+    "prompt": "Create a clearly fictional 1950s roadside linen postcard artifact for \"Maple Junction Moon-Milk Diner\", an imaginary Pennsylvania attraction from a world that never existed. The finished image should look like a photographed vintage postcard laid on a sign-shop counter, not a modern graphic mockup: aged linen-card texture, softly faded inks, worn corners, slight paper curl, tiny halftone dots, and believable period printing imperfections. The postcard illustration shows a humid summer dusk roadside diner with chrome trim, warm counter lights in the windows, a crescent-shaped neon milk-bottle sign glowing pale blue-white above the roof, hand-painted souvenir racks near the entrance, and a few parked 1950s cars catching reflections from wet pavement. Include small readable fictional place text such as \"Maple Junction Moon-Milk Diner\" and \"Route 6, Pennsylvania\" as period postcard lettering, but avoid dense paragraphs and avoid implying this is real. Add inspectable physical details around the card: an old diner matchbook, a pencil, a small stack of color swatches, and dust in raking light. Nostalgic, tactile, richly detailed, plausible alternate local-history artifact, photographed documentary style.\n\nReusable template: Create a clearly fictional [ERA] [ARTIFACT_OR_DOCUMENTARY_SCENE] for \"[IMAGINARY_PLACE_OR_OBJECT]\", an imaginary [REGION_OR_SETTING] subject from a world that never existed. Make it feel like a discovered archive object or documentary photograph with [PERIOD_MATERIALS], [WEATHERING_OR_PRINT_TEXTURE], [SIGNAGE_OR_LOCAL_DESIGN_DETAILS], and small readable fictional place text, while clearly framing it as imaginary rather than real.",
+    "image": "images/2026-06-29-world-that-never-was-maple-junction-moon-milk-diner-postcar.jpg",
+    "date": "2026-06-29",
+    "batch": "Daily Prompt",
+    "slot": "world-that-never-was",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "worldThatNeverWas": {
+      "artifact": "Maple Junction Moon-Milk Diner Postcard",
+      "description": "A fictional 1950s Pennsylvania roadside postcard for an imaginary Moon-Milk diner, presented as a weathered alternate-history archive artifact.",
+      "template": "Create a clearly fictional [ERA] [ARTIFACT_OR_DOCUMENTARY_SCENE] for [IMAGINARY_PLACE_OR_OBJECT], using period materials, weathering, local signage/design details, and small readable fictional text while making clear it is imaginary."
+    }
+  }
+]
