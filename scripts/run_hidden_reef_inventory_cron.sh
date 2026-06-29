@@ -51,6 +51,7 @@ node scripts/refresh_hidden_reef_products.mjs \
 
 node scripts/import_hidden_reef_sitemap_products.mjs \
   --write \
+  --prune-missing \
   --concurrency 4
 
 node scripts/update_hidden_reef_new_arrivals.mjs \
