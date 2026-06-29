@@ -2706,5 +2706,22 @@
       "description": "A toy repair bench rendered as a tactile risograph print with spot colors, halftone grain, paper texture, and slight ink misregistration.",
       "template": "Render [SUBJECT] as a richly detailed [STYLE_OR_MEDIUM] image with tactile format-specific marks, clear subject silhouette, environmental context, and no prompt-card text."
     }
+  },
+  {
+    "id": "2026-06-29-factual-infographic-factual-infographic-how-a-manual-can-op",
+    "title": "Factual infographic: How a Manual Can Opener Works",
+    "tests": "Generated with GPT Image 2 via OpenClaw CLI; exact output path verified before append; factual/non-fiction infographic prompt includes central cutaway, process sequence, exploded parts, macro material windows, workbench context, and safe comparison vignette.",
+    "prompt": "Create a finished square factual infographic titled \"How a Manual Can Opener Works\" explaining a real handheld rotary can opener using conservative real-world information. Make it a polished, photorealistic service-bench engineering wall chart mounted above a tidy kitchen-tool repair workbench. Include a large central cutaway of the opener clamped to a can rim; a four-step open/squeeze/rotate/shear sequence; an exploded parts tray for the cutting wheel, feed wheel, gear teeth, knob shaft, hinge pin, handle grips, and rivets; macro windows for bevel edge, worn gear teeth, stamped stainless texture, grip texture, burrs, cleaning residue, and water droplets; a workbench context panel with an opened unbranded can, dull spare opener, soft brush, dish towel, screwdriver, loupe, and parts cup; and a good-contact versus slipping/dull-wheel comparison. Use concise labels, blue rotation arrows, amber pressure highlights, brushed steel, black rubber, red enamel bench edge, soft daylight, realistic shadows, and dense tactile detail. Avoid brand names, logos, fake exact statistics, private data, QR codes, dense paragraphs, service procedures, invented mechanisms, gore, watermark, signature, and prompt-card framing.\n\nReusable fill-in-the-blank template: Create a finished square factual infographic titled [INFOGRAPHIC TITLE] explaining [REAL-WORLD TOOL OR MECHANISM] using conservative real-world information. Make it a polished photorealistic [FIELD OR SERVICE CONTEXT] wall chart mounted above a believable [WORKBENCH OR ENVIRONMENT]. Include [CENTRAL CUTAWAY OR MAIN MECHANISM PANEL], [STEP-BY-STEP PROCESS SEQUENCE], [EXPLODED PARTS OR STAGE STRIP], at least two [MACRO MATERIAL OR WEAR WINDOWS], [REAL-WORLD CONTEXT TOOLS OR SCALE CUES], and [COMPARISON OR SAFE OBSERVATION VIGNETTE]. Use concise labels and accurate material detail. Avoid fake exact statistics, invented mechanisms, brand logos, private data, legal claims, service procedures, dense paragraphs, and prompt-card framing.\n\nExample substitution: [INFOGRAPHIC TITLE] = How a Manual Can Opener Works; [REAL-WORLD TOOL OR MECHANISM] = handheld rotary can opener; [FIELD OR SERVICE CONTEXT] = kitchen-tool repair; [WORKBENCH OR ENVIRONMENT] = tidy service bench; [CENTRAL CUTAWAY OR MAIN MECHANISM PANEL] = opener clamped to a can rim with handles, hinge, knob, gear, feed wheel, cutting wheel, pins, rivets, and lid/rim cross-section; [STEP-BY-STEP PROCESS SEQUENCE] = open jaws, squeeze to seat wheels, rotate knob, shear lid; [EXPLODED PARTS OR STAGE STRIP] = cutting wheel, feed wheel, gear teeth, knob shaft, hinge pin, grips, rivets; [MACRO MATERIAL OR WEAR WINDOWS] = bevel edge, worn gear teeth, stamped steel, grip texture, burrs, water droplets; [REAL-WORLD CONTEXT TOOLS OR SCALE CUES] = opened unbranded can, dull spare opener, soft brush, dish towel, small screwdriver, loupe, and parts cup; [COMPARISON OR SAFE OBSERVATION VIGNETTE] = good contact versus slipping or dull wheel.",
+    "image": "images/2026-06-29-factual-infographic-factual-infographic-how-a-manual-can-op.jpg",
+    "date": "2026-06-29",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "factualInfographic": {
+      "topic": "Manual can opener mechanism",
+      "description": "A conservative non-fiction engineering infographic explaining how a handheld rotary can opener clamps, feeds, and cuts around a can lid.",
+      "sourceNote": "General real-world mechanical description; no brand-specific claims, exact statistics, or repair instructions."
+    }
   }
 ]
