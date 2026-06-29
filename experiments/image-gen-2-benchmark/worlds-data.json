@@ -1330,5 +1330,23 @@
       "continuity": "Preserves Korrun Silt Choir elements: six-limbed opaline amphibious residents, basalt tidal infrastructure, brine-glass, reed wraps, shell-horn tools, bone-white frequency markers, ripple-written mud, rose salt fog, and low copper light.",
       "entryDescription": "Residents queue inside a draining basalt mud-elevator lock with ceramic luggage on tripods and fin-keel sled ferries waiting below during low tide."
     }
+  },
+  {
+    "id": "2026-06-29-overnight-thornlight-meridian-scientific-field-chart",
+    "title": "Thornlight Meridian Scientific Field Chart",
+    "tests": "Weekly world intro chart for the new ISO week world, satisfying the fictional-world scientific field-chart requirement with terrain, ecology, settlement, inhabitant, transit, material, process, daily-life, and field-kit layers.",
+    "prompt": "Create a detailed fictional scientific/world field chart for Thornlight Meridian, a dry alien highland world where dawn-powered crystal thorns, wind-harp canyons, and long-limbed gliding inhabitants make cities along moving bands of warm light. Include a central terrain/ecology cutaway, settlement cross-section, inhabitant body-plan study, wind-harp transit diagram, macro material windows, dawn weather/ecology sequence, daily-life vignette strip, and field-kit scale/context corner. Make it rich, organized, colorful, photorealistic, tactile, and clearly fictional. Avoid tidal mudflat motifs, glass space habitat, mushrooms or spores, humans, generic neon cyberpunk, fantasy village styling, brand logos, dense paragraphs, fake real-world claims, protocol steps, and prompt-card text.\n\nReusable fill-in-the-blank template: Create a detailed scientific/world field chart for [WEEKLY_WORLD_NAME]. Include a clear world title, [ECOLOGY_OR_TERRAIN_CUTAWAY], [SETTLEMENT_OR_HABITAT_CROSS_SECTION], [INHABITANT_BODY_PLAN_STUDY], [TRANSIT_OR_INFRASTRUCTURE_DIAGRAM], [MATERIAL_TECHNOLOGY_SWATCHES], [WEATHER_OR_PROCESS_SEQUENCE], [DAILY_LIFE_VIGNETTE_STRIP], and [FIELD_KIT_OR_SCALE_CONTEXT]. Make it a polished museum natural-history chart for a fictional world, with photorealistic specimen panels, concise labels, tactile materials, and coherent world-bible continuity.\n\nExample substitution: [WEEKLY_WORLD_NAME] = Thornlight Meridian; [ECOLOGY_OR_TERRAIN_CUTAWAY] = ochre mesa seas, chalk wind canyons, violet glass dunes, crystal-thorn forests, mirror salt pans, and crawling amber meridian sunrise bands; [SETTLEMENT_OR_HABITAT_CROSS_SECTION] = Sunneedle Roost and Meridian Steps with ceramic shade sled docks, glider perches, prism cairns, dust-silk shade cloth, and thorn-anchor elevators; [INHABITANT_BODY_PLAN_STUDY] = narrow mantislike gliding inhabitants with four walking limbs, two folded sail-limbs, translucent amber wing membranes, long balancing tails, slate skin, faceted side eyes, and mouth feelers.",
+    "image": "images/2026-06-29-overnight-thornlight-meridian-scientific-field-chart.jpg",
+    "date": "2026-06-29",
+    "batch": "Daily Prompt",
+    "slot": "overnight",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "world": {
+      "name": "Thornlight Meridian",
+      "description": "A dry alien highland world where dawn-powered crystal thorns, wind-harp canyons, and long-limbed gliding inhabitants make cities along moving bands of warm light.",
+      "continuity": "Preserves amber crystal-thorn groves, chalk wind canyons, violet glass dunes, wind-harp infrastructure, dust-silk shade cloth, gliding non-human inhabitants, and hot amber dawn light.",
+      "entryDescription": "A scientific field chart introducing Thornlight Meridian through terrain, settlements, inhabitants, transit, material culture, dawn ecology, and field-kit context."
+    }
   }
 ]
