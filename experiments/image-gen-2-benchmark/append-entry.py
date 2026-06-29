@@ -28,6 +28,7 @@ FACTUAL_INFOGRAPHICS = ROOT / "factual-infographics-data.json"
 HYBRID_CREATURES = ROOT / "hybrid-creatures-data.json"
 CREATURE_DESIGNS = ROOT / "creature-designs-data.json"
 RANDOM_RENDERING_STYLES = ROOT / "random-rendering-style-data.json"
+WORLD_THAT_NEVER_WAS = ROOT / "world-that-never-was-data.json"
 IMAGES = ROOT / "images"
 DEFAULT_R2_ACCOUNT_ID = "ac73a259dff5a3cbeccbb78824ac0db6"
 DEFAULT_R2_BUCKET = "jez237-site-media"
@@ -128,6 +129,10 @@ def main() -> None:
     ap.add_argument("--random-rendering-style-description", default="")
     ap.add_argument("--random-rendering-style-template", default="")
     ap.add_argument("--random-rendering-style-only", action="store_true", help="Append to random-rendering-style-data.json only, not the main prompt gallery")
+    ap.add_argument("--world-that-never-was-artifact", default="")
+    ap.add_argument("--world-that-never-was-description", default="")
+    ap.add_argument("--world-that-never-was-template", default="")
+    ap.add_argument("--world-that-never-was-only", action="store_true", help="Append to world-that-never-was-data.json only, not the main prompt gallery")
     ap.add_argument("--skip-r2-upload", action="store_true", help="Copy the image locally but do not upload it to Cloudflare R2")
     ap.add_argument("--r2-bucket", default=os.environ.get("IMAGE_ARCHIVE_R2_BUCKET", DEFAULT_R2_BUCKET))
     ap.add_argument("--r2-prefix", default=os.environ.get("IMAGE_ARCHIVE_R2_PREFIX", DEFAULT_R2_PREFIX))
@@ -208,10 +213,16 @@ def main() -> None:
             "description": args.random_rendering_style_description.strip() or args.tests,
             "template": args.random_rendering_style_template.strip(),
         }
+    if args.world_that_never_was_artifact.strip() or args.slot == "world-that-never-was":
+        entry["worldThatNeverWas"] = {
+            "artifact": args.world_that_never_was_artifact.strip() or args.title,
+            "description": args.world_that_never_was_description.strip() or args.tests,
+            "template": args.world_that_never_was_template.strip(),
+        }
 
-    exclusive = [args.world_only, args.data_artifact_only, args.subject_artifact_only, args.factual_infographic_only, args.hybrid_creature_only, args.creature_design_only, args.random_rendering_style_only]
+    exclusive = [args.world_only, args.data_artifact_only, args.subject_artifact_only, args.factual_infographic_only, args.hybrid_creature_only, args.creature_design_only, args.random_rendering_style_only, args.world_that_never_was_only]
     if sum(1 for flag in exclusive if flag) > 1:
-        raise SystemExit("--world-only, --data-artifact-only, --subject-artifact-only, --factual-infographic-only, --hybrid-creature-only, --creature-design-only, and --random-rendering-style-only are mutually exclusive")
+        raise SystemExit("--world-only, --data-artifact-only, --subject-artifact-only, --factual-infographic-only, --hybrid-creature-only, --creature-design-only, --random-rendering-style-only, and --world-that-never-was-only are mutually exclusive")
     if args.world_only:
         paths = (WORLDS,)
     elif args.data_artifact_only:
@@ -226,6 +237,8 @@ def main() -> None:
         paths = (CREATURE_DESIGNS,)
     elif args.random_rendering_style_only:
         paths = (RANDOM_RENDERING_STYLES,)
+    elif args.world_that_never_was_only:
+        paths = (WORLD_THAT_NEVER_WAS,)
     else:
         paths = (DATA, PROMPTS)
         if entry.get("factualInfographic"):
@@ -236,6 +249,8 @@ def main() -> None:
             paths = (*paths, CREATURE_DESIGNS)
         if entry.get("randomRenderingStyle"):
             paths = (*paths, RANDOM_RENDERING_STYLES)
+        if entry.get("worldThatNeverWas"):
+            paths = (*paths, WORLD_THAT_NEVER_WAS)
     for path in paths:
         data = load(path)
         data.append(entry)
