@@ -1348,5 +1348,23 @@
       "continuity": "Preserves amber crystal-thorn groves, chalk wind canyons, violet glass dunes, wind-harp infrastructure, dust-silk shade cloth, gliding non-human inhabitants, and hot amber dawn light.",
       "entryDescription": "A scientific field chart introducing Thornlight Meridian through terrain, settlements, inhabitants, transit, material culture, dawn ecology, and field-kit context."
     }
+  },
+  {
+    "id": "2026-06-29-weekly-world-image-thornlight-meridian-sunneedle-roost-glid",
+    "title": "Thornlight Meridian: Sunneedle Roost Glider Launch",
+    "tests": "Generated with GPT Image 2 via OpenClaw CLI; verified exact source PNG path; appended as weekly-world-only archive entry with R2 JPEG upload.",
+    "prompt": "Create a finished realistic photographed square image from the fictional weekly world Thornlight Meridian: Sunneedle Roost Glider Launch. Show non-human gliding inhabitants launching from ceramic-and-crystal perches at hot amber dawn above ochre mesa seas and chalk-white wind canyons. The inhabitants have narrow mantislike torsos, four walking limbs gripping the perch, two translucent amber folded sail-limbs opening into the updraft, long balancing tails, matte slate skin, faceted side eyes, and delicate mouth feelers; they communicate through subtle wing shimmer and tail taps. Include launch attendants with basalt tools adjusting dust-silk harness clasps, a dust-sail ferry far below, long amber meridian light bands crawling across violet glass dunes, mineral dust halos in crisp dry air, shadow-cold ravines for scale, worn ceramic edges, polished handholds, fluttering bone-white shade cloth, glittering thorn-crystal facets, believable lens depth, and dry dawn glare. No humans, no Earth desert town, no generic neon sci-fi, no mushrooms or spores, no franchise cues, no readable text, no logos, no poster layout, no prompt-card text.\n\nReusable fill-in-the-blank template: Show [WEEKLY_WORLD_NAME] daily life at [LOCATION_OR_ACTIVITY], preserving the world bible: [GEOGRAPHY], [INHABITANT_BODY_PLAN], [MATERIALS_TECHNOLOGY], [TRANSIT_OR_INFRASTRUCTURE], [PALETTE_LIGHTING], and [RECURRING_MOTIFS]. Render it as realistic photographed imagery with tactile materials, believable environmental scale, practical tools, and no humans, no franchise cues, no readable text, and no generic Earth setting.\n\nExample substitution: [WEEKLY_WORLD_NAME] = Thornlight Meridian; [LOCATION_OR_ACTIVITY] = Sunneedle Roost glider launch; [GEOGRAPHY] = ochre mesa seas, chalk-white wind canyons, violet glass dunes, mineral thorn forests, shadow-cold ravines, and long sunrise meridian bands; [INHABITANT_BODY_PLAN] = narrow mantislike torsos, four walking limbs, two translucent amber sail-limbs, long balancing tails, matte slate skin, faceted side eyes, and mouth feelers; [MATERIALS_TECHNOLOGY] = porous sun-baked ceramic, amber thorn-crystal, dust-silk harnesses, blue wax leaf laminate, copper root fiber, basalt tools, prism beacon cairns, and wind-harp resonator frames.",
+    "image": "images/2026-06-29-weekly-world-image-thornlight-meridian-sunneedle-roost-glid.jpg",
+    "date": "2026-06-29",
+    "batch": "Daily Prompt",
+    "slot": "weekly-world-image",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "world": {
+      "name": "Thornlight Meridian",
+      "description": "A dry alien highland world of ochre mesas, chalk wind canyons, violet glass dunes, crystal-thorn groves, and gliding non-human inhabitants who live along moving dawn meridian bands.",
+      "continuity": "Preserves Thornlight Meridian's amber dawn light, crystal thorns, wind-harp frames, dust-silk gear, ceramic highland settlements, and long-limbed gliding inhabitants.",
+      "entryDescription": "A documentary-style view of gliding inhabitants launching from Sunneedle Roost perches while attendants tune harnesses and wind-harp structures in the dawn updraft."
+    }
   }
 ]
