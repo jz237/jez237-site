@@ -4,6 +4,7 @@ import path from 'node:path';
 
 const repoRoot = path.resolve(import.meta.dirname, '..');
 const pagePath = path.join(repoRoot, 'prototypes/hidden-reef/index.html');
+const saleDataPath = path.join(repoRoot, 'prototypes/hidden-reef/assets/sale-data.js');
 const reportDir = path.join(repoRoot, 'tmp', `hidden-reef-specials-${new Date().toISOString().replace(/[:.]/g, '-')}`);
 const homeUrl = 'https://www.thehiddenreef.com/';
 const salesUrl = 'https://www.thehiddenreef.com/sales-online/';
@@ -18,9 +19,9 @@ const artBySlug = {
     alt: 'Premium reef care products arranged beside a reef aquarium'
   },
   'sale-innovative-marine-mto-50-off': {
-    image: 'assets/site/specials/innovative-marine-mto-special-gpt2.jpg',
+    image: 'assets/site/specials/innovative-marine-mto-import.jpg',
     label: 'Large MTO reef systems with APS stands',
-    alt: 'Large premium reef aquarium system in a blue-lit showroom'
+    alt: 'Innovative Marine made-to-order aquariums promotion: save 50 percent on MTO orders'
   },
   'innovative-marine-10-off-25-100-g-complete': {
     image: 'assets/site/specials/innovative-marine-complete-special-gpt2.jpg',
@@ -38,9 +39,9 @@ const artBySlug = {
     alt: 'Reef aquarium automation and monitoring equipment beside a reef tank'
   },
   aiosale: {
-    image: 'assets/site/product-reef-system.jpg',
+    image: 'assets/site/specials/nuvo-starter-kits-import.jpg',
     label: 'Featured AIO aquarium systems',
-    alt: 'All-in-one aquarium system in a clean showroom setting'
+    alt: 'NUVO starter kits promotion with Fusion 15 AIO Cube and Fusion 20 AIO Long aquarium sale pricing'
   }
 };
 
@@ -55,7 +56,21 @@ const copyBySlug = {
     title: 'Innovative Marine MTO Systems',
     primaryLabel: 'Shop MTO Systems',
     discountLabel: '50% off MTO reef systems',
-    localCategory: { label: 'Plan a setup', href: 'category/?cat=equipment' }
+    localCategory: { label: 'Plan a setup', href: 'category/?cat=equipment' },
+    imageText: [
+      'Innovative Marine',
+      'Built to inspire. Designed for life.',
+      'Made-to-Order Aquariums',
+      'Made to order. Built for you. Worth the wait.',
+      'Save 50% on all MTO orders',
+      '112-240 gallons. Wide range of sizes.',
+      'Tank + stand or complete system. Choose your perfect setup.',
+      'Premium euro-braced designs. Built stronger. Built safer.',
+      'Please allow 4-6 months. Crafted with care just for you.',
+      'Order yours today',
+      'Trusted quality, built in California',
+      'Available at The Hidden Reef'
+    ]
   },
   'innovative-marine-10-off-25-100-g-complete': {
     title: 'Innovative Marine 25-100 Gallon Sale',
@@ -79,7 +94,23 @@ const copyBySlug = {
     title: 'Innovative Marine AIO Aquariums',
     primaryLabel: 'Shop AIO Aquariums',
     discountLabel: 'Homepage feature',
-    localCategory: { label: 'See aquariums', href: 'category/?cat=aquariums' }
+    localCategory: { label: 'See aquariums', href: 'category/?cat=aquariums' },
+    imageText: [
+      'NUVO Starter Kits',
+      'Ready to ship. In stock. Lowest price.',
+      'Fusion 15 AIO Cube Aquarium. Desktop starter kit.',
+      'Fusion 15 dimensions: 15 in x 15 in x 15 in.',
+      'Fusion 15 price: $99.99.',
+      'Fusion 20 AIO Long Aquarium. Desktop starter kit.',
+      'Fusion 20 dimensions: 23.6 in x 15 in x 13 in.',
+      'Fusion 20 price: $169.99.',
+      'All-in-one filtration',
+      'Sleek, modern design',
+      'Easy setup and maintenance',
+      'Vibrant reef ready',
+      'Shop now',
+      'Premium quality. Beautiful results. Right on your desk.'
+    ]
   }
 };
 
@@ -138,7 +169,7 @@ async function fetchHtml(url) {
     const response = await fetch(url, {
       signal: controller.signal,
       headers: {
-        'user-agent': 'Mozilla/5.0 Hidden Reef weekly specials refresh',
+        'user-agent': 'Mozilla/5.0 Hidden Reef daily specials refresh',
         accept: 'text/html,application/xhtml+xml'
       }
     });
@@ -339,14 +370,14 @@ function shortProductName(name) {
 }
 
 function artFor(department, products) {
+  const configured = artBySlug[department.slug];
   if (department.homepageImage) {
     return {
       image: department.homepageImage,
-      label: artBySlug[department.slug]?.label || department.title,
-      alt: artBySlug[department.slug]?.alt || department.title
+      label: configured?.label || department.title,
+      alt: configured?.alt || department.title
     };
   }
-  const configured = artBySlug[department.slug];
   if (configured) return configured;
   const first = products.find(product => product.imageUrl);
   return {
@@ -373,43 +404,133 @@ async function enrichDepartment(department) {
     art: artFor(department, products),
     discountLabel: copyBySlug[department.slug]?.discountLabel || '',
     primaryLabel: copyBySlug[department.slug]?.primaryLabel || 'Shop Sale',
-    localCategory: copyBySlug[department.slug]?.localCategory || localCategoryFor(department.title)
+    localCategory: copyBySlug[department.slug]?.localCategory || localCategoryFor(department.title),
+    imageText: copyBySlug[department.slug]?.imageText || []
   };
 }
 
-function renderSlide(special) {
+function renderDiscountBadge(special) {
+  if (special.discount) return `${special.discount}%<small>off</small>`;
+  const label = special.discountLabel || '';
+  const explicit = label.match(/(\d+)\s*%/);
+  if (explicit) return `${explicit[1]}%<small>off</small>`;
+  return 'Sale<small>now</small>';
+}
+
+function renderCard(special) {
   const discountText = special.discountLabel || (special.discount ? `${special.discount}% off` : 'Sale pricing');
-  const burst = special.discount ? `${special.discount}%<small>off</small>` : 'Sale<small>now</small>';
   const countText = `${special.count} sale ${special.count === 1 ? 'item' : 'items'}`;
   const example = special.example ? `\n                <li>${escapeHtml(special.example)}</li>` : '';
-  return `          <article class="special-slide">
-            <div class="special-copy">
-              <em>${escapeHtml(special.eyebrow)}</em>
+  return `          <article class="special-card">
+            <a class="special-card__media" href="${escapeHtml(special.url)}" target="_blank" rel="noopener">
+              <img src="${escapeHtml(special.art.image)}" alt="${escapeHtml(special.art.alt)}" />
+              <span class="special-card__discount">${renderDiscountBadge(special)}</span>
+            </a>
+            <div class="special-card__body">
+              <span class="special-card__eyebrow">${escapeHtml(special.eyebrow)}</span>
               <h2>${escapeHtml(special.title)}</h2>
               <p>${escapeHtml(special.description)}</p>
-              <ul class="special-meta">
+              <ul class="special-card__notes">
                 <li>${escapeHtml(discountText)}</li>
                 <li>${escapeHtml(countText)}</li>${example}
               </ul>
               <div class="special-actions">
                 <a class="btn" href="${escapeHtml(special.url)}" target="_blank" rel="noopener">${escapeHtml(special.primaryLabel)}</a>
+                <a class="btn secondary" href="sales/?sale=${escapeHtml(special.slug)}#sale-view">View sale items</a>
                 <a class="btn secondary" href="${escapeHtml(special.localCategory.href)}">${escapeHtml(special.localCategory.label)}</a>
               </div>
-            </div>
-            <div class="special-media">
-              <img class="special-art-image" src="${escapeHtml(special.art.image)}" alt="${escapeHtml(special.art.alt)}" />
-              <div class="special-media-label">${escapeHtml(special.art.label)}</div>
-              <div class="special-price-burst">${burst}</div>
             </div>
           </article>`;
 }
 
-function replaceSpecialsTrack(page, renderedSlides) {
-  const pattern = /(<div class="specials-track" id="specials-track">\n)([\s\S]*?)(\n\s*<\/div>\n\s*<\/div>\n\s*<div class="special-controls")/;
+function renderSpecialsSection(specials) {
+  if (!specials.length) return '<!-- THR_SPECIALS_START -->\n    <!-- THR_SPECIALS_END -->';
+  const renderedCards = specials.map(renderCard).join('\n');
+  return `<!-- THR_SPECIALS_START -->
+    <section class="specials-spotlight" aria-labelledby="specials-title">
+      <div class="specials-head">
+        <span id="specials-title">Current specials</span>
+        <a href="sales/">View all sale departments</a>
+      </div>
+      <div class="specials-carousel">
+        <div class="specials-track" id="specials-track">
+${renderedCards}
+        </div>
+      </div>
+      <div class="special-controls" aria-label="Specials carousel controls">
+        <div class="special-arrows">
+          <button class="special-control" type="button" data-special-dir="-1" aria-label="Previous special">‹</button>
+          <button class="special-control" type="button" data-special-dir="1" aria-label="Next special">›</button>
+        </div>
+        <div class="special-dots" id="special-dots" aria-label="Choose special"></div>
+      </div>
+    </section>
+    <!-- THR_SPECIALS_END -->`;
+}
+
+function replaceSpecialsSection(page, specials) {
+  const pattern = /<!-- THR_SPECIALS_START -->[\s\S]*?<!-- THR_SPECIALS_END -->/;
   if (!pattern.test(page)) {
-    throw new Error('Could not find specials carousel track in homepage');
+    throw new Error('Could not find managed specials section in homepage');
   }
-  return page.replace(pattern, (_match, prefix, _currentSlides, suffix) => `${prefix}${renderedSlides.join('\n')}${suffix}`);
+  return page.replace(pattern, renderSpecialsSection(specials));
+}
+
+function uniqueDepartments(departments) {
+  const seen = new Set();
+  const unique = [];
+  departments.forEach(department => {
+    const key = department.url || department.slug || department.title;
+    if (!key || seen.has(key)) return;
+    seen.add(key);
+    unique.push(department);
+  });
+  return unique;
+}
+
+function saleDataProduct(product) {
+  return {
+    name: product.name || '',
+    price: product.price || '',
+    oldPrice: product.oldPrice || '',
+    productUrl: product.productUrl || '',
+    imageUrl: product.imageUrl || ''
+  };
+}
+
+function saleDataDepartment(special) {
+  return {
+    title: special.title,
+    slug: special.slug,
+    url: special.url,
+    eyebrow: special.eyebrow,
+    count: special.count,
+    discount: special.discount,
+    discountLabel: special.discountLabel,
+    description: special.description,
+    primaryLabel: special.primaryLabel,
+    localCategory: special.localCategory,
+    art: special.art,
+    products: special.products.map(saleDataProduct)
+  };
+}
+
+function renderSaleDataFile(specials, sourceMode) {
+  const payload = {
+    generatedAt: new Date().toISOString(),
+    sourceUrl: salesUrl,
+    sourceMode,
+    departments: specials.map(saleDataDepartment)
+  };
+  const json = JSON.stringify(payload, null, 2)
+    .replace(/<\/script/gi, '<\\/script')
+    .replace(/\u2028/g, '\\u2028')
+    .replace(/\u2029/g, '\\u2029');
+  return `// The Hidden Reef sale data\n// Generated by scripts/update_hidden_reef_specials.mjs\nwindow.THR_SALE_DATA = ${json};\n`;
+}
+
+function comparableSaleData(file) {
+  return file.replace(/"generatedAt":\s*"[^"]*",/, '"generatedAt": "",');
 }
 
 await fs.mkdir(reportDir, { recursive: true });
@@ -422,19 +543,21 @@ const homepagePromos = parseHomepagePromos(homeHtml).map(promo => ({
   ...promo,
   count: salesDepartmentByUrl.get(promo.url)?.count || promo.count
 }));
-const departments = (homepagePromos.length ? homepagePromos : salesDepartments).slice(0, maxSpecials);
-if (!departments.length) {
-  throw new Error('No sale departments parsed from Hidden Reef homepage or sales page');
-}
+const allDepartments = uniqueDepartments([...homepagePromos, ...salesDepartments]);
+const carouselDepartments = (homepagePromos.length ? homepagePromos : salesDepartments).slice(0, maxSpecials);
 
-const specials = [];
-for (const department of departments) {
-  specials.push(await enrichDepartment(department));
+const enrichedByUrl = new Map();
+for (const department of uniqueDepartments([...carouselDepartments, ...allDepartments])) {
+  enrichedByUrl.set(department.url, await enrichDepartment(department));
 }
+const specials = carouselDepartments.map(department => enrichedByUrl.get(department.url)).filter(Boolean);
+const salePageSpecials = allDepartments.map(department => enrichedByUrl.get(department.url)).filter(Boolean);
 
 const page = await fs.readFile(pagePath, 'utf8');
-const nextPage = replaceSpecialsTrack(page, specials.map(renderSlide));
-const changed = nextPage !== page;
+const previousSaleData = await fs.readFile(saleDataPath, 'utf8').catch(() => '');
+const nextPage = replaceSpecialsSection(page, specials);
+const nextSaleData = renderSaleDataFile(salePageSpecials, homepagePromos.length ? 'homepage-and-sales-dropdown' : 'sales-online');
+const changed = nextPage !== page || comparableSaleData(nextSaleData) !== comparableSaleData(previousSaleData);
 
 const report = {
   timestamp: new Date().toISOString(),
@@ -442,9 +565,12 @@ const report = {
   sourceMode: homepagePromos.length ? 'homepage-promos' : 'sales-online-fallback',
   write,
   changed,
+  saleDepartments: salePageSpecials.length,
   specials: specials.map(special => ({
     title: special.title,
     url: special.url,
+    homepageImage: special.homepageImage || '',
+    artImage: special.art.image,
     count: special.count,
     discount: special.discount,
     firstProduct: special.products[0]?.name || ''
@@ -455,6 +581,7 @@ await fs.writeFile(path.join(reportDir, 'report.json'), `${JSON.stringify(report
 
 if (write && changed) {
   await fs.writeFile(pagePath, nextPage);
+  await fs.writeFile(saleDataPath, nextSaleData);
 }
 
 console.log(JSON.stringify({
