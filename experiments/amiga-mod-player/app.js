@@ -1047,10 +1047,19 @@ function wireEvents() {
 }
 
 function chooseInitialTrack() {
-  state.filtered = tracks;
+  const defaultComposer = "Olof Gustafsson";
+  if (composers.includes(defaultComposer)) {
+    refs.composerFilter.value = defaultComposer;
+  }
   const pinballFantasiesIndex = tracks.findIndex((track) => track.id === "olof-gustafsson-pinball-fantasies-ecran-titre");
-  state.selected = pinballFantasiesIndex >= 0 ? pinballFantasiesIndex : 0;
-  const track = tracks[state.selected];
+  const defaultTrack = pinballFantasiesIndex >= 0
+    ? tracks[pinballFantasiesIndex]
+    : tracks.find((track) => track.composer === defaultComposer);
+  state.filtered = refs.composerFilter.value === defaultComposer
+    ? tracks.filter((track) => track.composer === defaultComposer)
+    : tracks;
+  state.selected = Math.max(0, state.filtered.findIndex((track) => track === defaultTrack));
+  const track = selectedTrack();
   if (!track) return;
   refs.nowTitle.textContent = track.title;
   refs.nowMeta.textContent = `${track.composer} | ${track.collection}`;
