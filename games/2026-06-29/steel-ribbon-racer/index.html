@@ -4,8 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Steel Ribbon Racer</title>
-    <script type="module" crossorigin src="./assets/index-CAQIzi28.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-CWQ9efwN.css">
+    <script type="module" crossorigin src="./assets/index-DIVeaGRu.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-f0aDlnw9.css">
   </head>
   <body>
     <div id="app">
@@ -46,7 +46,13 @@
         <div><b id="timer">00:00.0</b><span id="score">Score 0</span></div>
       </div>
 
+      <div id="raceStrip" aria-hidden="true">
+        <span>YOU<i id="playerProgress"></i></span>
+        <span>RIVAL<i id="rivalProgress"></i></span>
+      </div>
+
       <div id="centerMessage" class="hidden"></div>
+      <div id="speedFx" aria-hidden="true"></div>
       <div id="damageFx" aria-hidden="true">
         <i></i><i></i><i></i><i></i><i></i>
       </div>
@@ -77,6 +83,7 @@
       <section id="result" class="screen hidden">
         <div class="logo small">Race Complete</div>
         <p id="resultText"></p>
+        <div id="resultStats" class="league"></div>
         <button id="againBtn">Race Again</button>
       </section>
     </div>
