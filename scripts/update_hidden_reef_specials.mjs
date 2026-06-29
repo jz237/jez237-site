@@ -371,14 +371,14 @@ function shortProductName(name) {
 
 function artFor(department, products) {
   const configured = artBySlug[department.slug];
-  if (configured) return configured;
   if (department.homepageImage) {
     return {
       image: department.homepageImage,
-      label: department.title,
-      alt: department.title
+      label: configured?.label || department.title,
+      alt: configured?.alt || department.title
     };
   }
+  if (configured) return configured;
   const first = products.find(product => product.imageUrl);
   return {
     image: first?.imageUrl || 'assets/site/hidden-reef-masthead.png',
@@ -569,6 +569,8 @@ const report = {
   specials: specials.map(special => ({
     title: special.title,
     url: special.url,
+    homepageImage: special.homepageImage || '',
+    artImage: special.art.image,
     count: special.count,
     discount: special.discount,
     firstProduct: special.products[0]?.name || ''
