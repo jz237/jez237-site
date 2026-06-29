@@ -5927,6 +5927,30 @@ window.AMIGA_MOD_LIBRARY = [
     "duration": 72,
     "size": 2565389
   }
+,
+
+  {
+    "id": "ray-norrish-blood-money-intro",
+    "title": "Blood Money - Intro",
+    "composer": "Ray Norrish",
+    "collection": "Game Music",
+    "format": "MP3",
+    "path": "audio/Blood_Money/01_intro.mp3",
+    "source": "KHInsider Blood Money Amiga gamerip; mirrored locally",
+    "duration": 153,
+    "size": 4425691
+  },
+  {
+    "id": "ray-norrish-blood-money-in-game-music",
+    "title": "Blood Money - In-Game Music",
+    "composer": "Ray Norrish",
+    "collection": "Game Music",
+    "format": "MP3",
+    "path": "audio/Blood_Money/02_in_game_music.mp3",
+    "source": "KHInsider Blood Money Amiga gamerip; mirrored locally",
+    "duration": 264,
+    "size": 7363211
+  }
 
 ];
 
@@ -5963,6 +5987,7 @@ window.AMIGA_MOD_COMPOSERS = [
   "Oracle Soul",
   "Paranoid",
   "Patrick Phelan",
+  "Ray Norrish",
   "Razor",
   "Richard Joseph",
   "Romeo Knight",
