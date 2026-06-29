@@ -250,5 +250,41 @@
       "description": "A fictional cave-river hybrid combining anglerfish lure anatomy with pangolin armor, digging forelimbs, and curled railback posture.",
       "continuity": "Same low armored cave-river adult with cyan jaw lure, dark wet skin, blunt digging foreclaws, and curled plated tail."
     }
+  },
+  {
+    "id": "2026-06-29-hybrid-creature-infographic-abyssal-lantern-warden-developm",
+    "title": "Abyssal Lantern Warden: Development Map",
+    "tests": "Manual hybrid-creature pair requested by Jez; sources deep-sea anglerfish + human; infographic includes source-trait map, adult specimen, stage strip, macro panels, habitat swatches, and field-context scale cue.",
+    "prompt": "Create a colorful photorealistic speculative scientific development-map infographic for a clearly fictional, non-actionable hybrid creature named \"Abyssal Lantern Warden\", with the two source organisms/groups stated as deep-sea anglerfish + human. Show a central adult specimen suspended vertically in blackwater with humanoid torso, long human-derived arms, webbed five-fingered hands, anglerfish cranial lure, wide hinged jaw, fin fringes, dark gelatinous skin, and cyan bioluminescent freckles. Include a source-trait map, juvenile-to-adult stage strip, macro texture windows, habitat swatches, and field-context scale vignette. Keep all biology fictional and non-actionable; no real gene names, no protocols, no gore.\n\nReusable template: Create a fictional hybrid-creature development-map infographic for [HYBRID_NAME], sources [SOURCE_A] + [SOURCE_B]. Show exactly two source columns with visible trait contributions, a central adult specimen panel, juvenile-to-adult stage strip, macro texture/detail windows, habitat swatches, and a small field-context scale vignette. Keep it speculative, non-actionable, photorealistic, and clearly derived from both sources.",
+    "image": "images/2026-06-29-hybrid-creature-infographic-abyssal-lantern-warden-developm.jpg",
+    "date": "2026-06-29",
+    "batch": "Daily Prompt",
+    "slot": "hybrid-creature-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "hybridCreature": {
+      "name": "Abyssal Lantern Warden",
+      "imageKind": "infographic",
+      "description": "A fictional deep-sea anglerfish + human hybrid with a humanoid vertical-swimmer body plan, webbed five-fingered hands, cranial lure, fin fringes, dark gelatinous skin, and blue-green bioluminescent freckles.",
+      "continuity": "Both images preserve the same Abyssal Lantern Warden phenotype: upright human-derived torso and hands, anglerfish lure and jaw, fin-fringed limbs, charcoal skin, and cyan bioluminescence in blackwater habitat."
+    }
+  },
+  {
+    "id": "2026-06-29-hybrid-creature-wild-abyssal-lantern-warden-in-the-wild",
+    "title": "Abyssal Lantern Warden: In the Wild",
+    "tests": "Manual hybrid-creature pair requested by Jez; sources deep-sea anglerfish + human; wild image preserves the same adult phenotype and shows blackwater field-photo habitat continuity.",
+    "prompt": "Create a matching photorealistic in-the-wild field photo of the fictional \"Abyssal Lantern Warden\", sources deep-sea anglerfish + human. Show the same adult phenotype from the development map: humanoid upright torso and shoulders, long human-derived arms with webbed five-fingered hands, alert face-plane gaze, flexible cyan-green anglerfish lure, wide hinged jaw with small translucent teeth, fin-fringed limbs, mottled gelatinous charcoal skin, and blue-green bioluminescent freckles. Frame it as a deep-sea blackwater wildlife encounter with red submersible observation light, marine snow, hydrothermal haze, and a distant scale cue. No labels, no gore, no lab equipment.\n\nReusable template: Create a matching in-the-wild field photograph of [HYBRID_NAME], sources [SOURCE_A] + [SOURCE_B], using the same adult phenotype from its development-map infographic. Place it in [HABITAT], preserve the visible trait contributions from both sources, use documentary wildlife lighting and scale cues, and avoid costume, studio portrait, gore, or lab imagery.",
+    "image": "images/2026-06-29-hybrid-creature-wild-abyssal-lantern-warden-in-the-wild.jpg",
+    "date": "2026-06-29",
+    "batch": "Daily Prompt",
+    "slot": "hybrid-creature-wild",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1536",
+    "hybridCreature": {
+      "name": "Abyssal Lantern Warden",
+      "imageKind": "wild",
+      "description": "A fictional deep-sea anglerfish + human hybrid with a humanoid vertical-swimmer body plan, webbed five-fingered hands, cranial lure, fin fringes, dark gelatinous skin, and blue-green bioluminescent freckles.",
+      "continuity": "Both images preserve the same Abyssal Lantern Warden phenotype: upright human-derived torso and hands, anglerfish lure and jaw, fin-fringed limbs, charcoal skin, and cyan bioluminescence in blackwater habitat."
+    }
   }
 ]
