@@ -113,6 +113,22 @@ function isAudioTrack(track) {
   return track && ["MP3", "OGG", "WAV", "M4A"].includes(String(track.format || "").toUpperCase());
 }
 
+function applyVolume(volume = Number(refs.volume.value)) {
+  const nextVolume = Math.max(0, Math.min(1, Number(volume) || 0));
+  refs.volume.value = String(nextVolume);
+  refs.volumeText.textContent = `${Math.round(nextVolume * 100)}%`;
+  if (state.player) state.player.setVol(nextVolume);
+  if (state.audioGain) {
+    const context = state.audioContext;
+    if (context) {
+      state.audioGain.gain.setTargetAtTime(nextVolume, context.currentTime, 0.01);
+    } else {
+      state.audioGain.gain.value = nextVolume;
+    }
+  }
+  if (state.audioElement) state.audioElement.volume = nextVolume;
+}
+
 function trackLengthLabel(track) {
   if (Number.isFinite(track && track.duration) && track.duration > 0) return formatTime(track.duration);
   return formatBytes(track && track.size);
@@ -419,7 +435,7 @@ function ensureAudioBufferGraph() {
     state.audioAnalyser = analyser;
     state.audioAnalyserData = new Uint8Array(analyser.frequencyBinCount);
   }
-  state.audioGain.gain.value = Number(refs.volume.value);
+  applyVolume();
   state.analyser = state.audioAnalyser;
   state.analyserData = state.audioAnalyserData;
   return context;
@@ -485,7 +501,7 @@ function ensurePlayer() {
     });
     state.player = player;
     player.onInitialized(() => {
-      player.setVol(Number(refs.volume.value));
+      applyVolume();
       wireAnalyser(player);
       setStatus("Ready", "ready");
       resolve(player);
@@ -699,7 +715,7 @@ async function loadModuleTrack(track, autoplay) {
     const buffer = await fetchModule(track);
     player.play(buffer);
     player.setRepeatCount(state.loop ? -1 : 0);
-    player.setVol(Number(refs.volume.value));
+    applyVolume();
     state.loadedPath = track.path;
     state.playing = true;
     state.playOffset = 0;
@@ -1030,10 +1046,7 @@ function wireEvents() {
   });
   refs.scopeModeBtn.addEventListener("click", cycleScopeMode);
   refs.volume.addEventListener("input", () => {
-    const volume = Number(refs.volume.value);
-    refs.volumeText.textContent = `${Math.round(volume * 100)}%`;
-    if (state.player) state.player.setVol(volume);
-    if (state.audioElement) state.audioElement.volume = volume;
+    applyVolume();
   });
   wireSeekControl(refs.seekControl);
   wireSeekControl(refs.miniSeekControl);
