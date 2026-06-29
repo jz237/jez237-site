@@ -2740,5 +2740,41 @@
       "description": "A believable coastal fog-cliff grazer with fog-combing whiskers, split gripping hooves, and lichen-flecked slate fur.",
       "template": "Design a believable [HABITAT] creature with [ADAPTATION 1], [ADAPTATION 2], and [TEXTURE/COLOR], shown as a realistic natural-history creature study."
     }
+  },
+  {
+    "id": "2026-06-29-hybrid-creature-infographic-lanternjaw-railback-development",
+    "title": "Lanternjaw Railback: Development Map",
+    "tests": "Hybrid creature development-map infographic; sources: deep-sea anglerfish + pangolin; non-actionable fictional labels; includes source-trait map, stage strip, adult panel, macro panels, habitat swatches, and scale vignette.",
+    "prompt": "Create a fictional two-source hybrid-creature development map for Lanternjaw Railback, using exactly deep-sea anglerfish + pangolin. Make a colorful photorealistic scientific wall chart over a damp cave-field workbench. Show a source-trait map where anglerfish contributes luminous jaw lure, deep-set glassy eyes, dark wet skin, pressure-rounded head, and soft fin-like throat folds, while pangolin contributes overlapping keratin armor plates, arched railback silhouette, curled defensive posture, heavy digging forelimbs, and tapering plated tail. Include a juvenile-to-adult stage strip, a large low quadrupedal adult specimen panel curled around a cave pool, macro windows for wet skin, lure membrane, armor plates, claw wear, and cave-water droplets, limestone cave-river habitat swatches, and a field scale vignette with tracks and unbranded measuring tools. Keep it fictional and non-actionable: concise labels only, no real gene names, no protocols, no surgery, no gore, no lab steps, no logos, no QR codes.\n\nReusable template: Create a fictional two-source hybrid-creature pair for [HYBRID_NAME], using exactly [SOURCE_A] + [SOURCE_B]. First generate a colorful photorealistic scientific development-map infographic with a source-trait map, juvenile-to-adult stage strip, adult specimen panel, macro texture/color panels, habitat swatches, and field-context scale vignette. Then generate a matching in-the-wild field photo of the same adult phenotype in [HABITAT]. Keep it clearly fictional and non-actionable: no real gene names, no lab protocol steps, no surgery, no gore.\n\nExample substitution: [HYBRID_NAME] = Lanternjaw Railback; [SOURCE_A] = deep-sea anglerfish; [SOURCE_B] = pangolin; [HABITAT] = dark limestone cave river; adult phenotype = low quadrupedal arched railback with cyan luminous jaw lure, deep-set eyes, dark wet skin, soft throat folds, overlapping armor plates, blunt digging foreclaws, curled defensive posture, and tapering plated tail.",
+    "image": "images/2026-06-29-hybrid-creature-infographic-lanternjaw-railback-development.jpg",
+    "date": "2026-06-29",
+    "batch": "Daily Prompt",
+    "slot": "hybrid-creature-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "hybridCreature": {
+      "name": "Lanternjaw Railback",
+      "imageKind": "infographic",
+      "description": "A fictional cave-river hybrid combining anglerfish lure anatomy with pangolin armor, digging forelimbs, and curled railback posture.",
+      "continuity": "Same low armored cave-river adult with cyan jaw lure, dark wet skin, blunt digging foreclaws, and curled plated tail."
+    }
+  },
+  {
+    "id": "2026-06-29-hybrid-creature-wild-lanternjaw-railback-in-the-wild",
+    "title": "Lanternjaw Railback: In the Wild",
+    "tests": "Hybrid creature wild field photo; sources: deep-sea anglerfish + pangolin; matches the development-map phenotype in a limestone cave river.",
+    "prompt": "Create a matching photorealistic in-the-wild field photo of the adult Lanternjaw Railback, a fictional two-source hybrid of deep-sea anglerfish + pangolin, in a dark limestone cave river. Preserve the same adult phenotype from the development map: low quadrupedal arched railback body, overlapping amber-brown keratin armor plates, dark wet skin between plates, pressure-rounded anglerfish-like head, deep-set glassy eyes, cyan luminous jaw lure hanging from the lower mouth edge, soft fin-like throat folds, heavy blunt-clawed digging forelimbs, compact hind limbs, and a tapering plated tail partly curled around the body. Show it side-on beside a shallow cave pool with the lure reflecting in black water, claws scraping slick calcite, mossy cave-mouth light, mineral crust, muddy burrow bank, droplets on armor edges, and track impressions. No people, no labels, no lab scene, no gore, no readable text, no watermark, no logo.\n\nReusable template: Create a matching photorealistic in-the-wild field photo of the same fictional [HYBRID_NAME] adult phenotype from [SOURCE_A] + [SOURCE_B], preserving the source-trait map visibly in the body plan, skin texture, posture, habitat interaction, locomotion, and scale cues. Avoid text, gore, lab context, and any result that reads as a costume or a pure single-source animal.\n\nExample substitution: [HYBRID_NAME] = Lanternjaw Railback; [SOURCE_A] = deep-sea anglerfish; [SOURCE_B] = pangolin; [HABITAT] = dark limestone cave river; shared adult phenotype = low quadrupedal arched railback with luminous jaw lure, wet anglerfish-like head and throat folds, overlapping pangolin armor, heavy digging foreclaws, curled defensive posture, and plated tail.",
+    "image": "images/2026-06-29-hybrid-creature-wild-lanternjaw-railback-in-the-wild.jpg",
+    "date": "2026-06-29",
+    "batch": "Daily Prompt",
+    "slot": "hybrid-creature-wild",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "hybridCreature": {
+      "name": "Lanternjaw Railback",
+      "imageKind": "wild",
+      "description": "A fictional cave-river hybrid combining anglerfish lure anatomy with pangolin armor, digging forelimbs, and curled railback posture.",
+      "continuity": "Same low armored cave-river adult with cyan jaw lure, dark wet skin, blunt digging foreclaws, and curled plated tail."
+    }
   }
 ]
