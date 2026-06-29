@@ -2846,5 +2846,17 @@
       "description": "A fictional 1950s Pennsylvania roadside postcard for an imaginary Moon-Milk diner, presented as a weathered alternate-history archive artifact.",
       "template": "Create a clearly fictional [ERA] [ARTIFACT_OR_DOCUMENTARY_SCENE] for [IMAGINARY_PLACE_OR_OBJECT], using period materials, weathering, local signage/design details, and small readable fictional text while making clear it is imaginary."
     }
+  },
+  {
+    "id": "2026-06-29-miniature-diorama-pocket-subway-tile-bakery",
+    "title": "Pocket Subway Tile Bakery",
+    "tests": "Generated with GPT Image 2 shell CLI; exact output path verified under /home/jez237/.openclaw/media/tool-image-generation before append; miniature-diorama archive entry.",
+    "prompt": "Build a visibly handmade miniature diorama of a pocket-sized subway-tile bakery counter with seed-sized pastries, acetate sneeze guard, basswood cabinets, scale tools, macro lighting, and visible model materials. Finished example: create a photorealistic macro photograph of a dollhouse-scale bakery counter on a model-maker workbench, with hand-cut glossy white subway tiles, uneven grout, basswood cabinets, acetate sneeze guard reflections, seed-sized croissants and berry tarts, styrene-and-wire espresso machine, chalk-powder flour smudges, copper-wire cooling racks, matchstick rolling pins, toothpick pastry tongs, and nearby coin, tweezers, hobby knife, paint jars, masking tape, tile offcuts, and scale ruler proving the small size. Show the open side of the miniature with foam-core wall edges, cabinet seams, glue beads, brush-painted glaze, acetate thickness, and hidden wiring, lit by warm under-counter LEDs and a cool desk lamp. No logos, no readable signage, no prompt-card text, no full-size bakery, no people.\n\nReusable fill-in-the-blank template: Build a visibly handmade miniature diorama of [TINY_PLACE_OR_COUNTER] with [SMALL_SCALE_MAIN_FEATURES], [TRANSPARENT_OR_REFLECTIVE_DETAIL], [HANDMADE_MATERIALS], [SCALE_CUES], macro lighting, and visible model-construction edges. Make it a finished photorealistic macro image, not a prompt card.\n\nExample substitution: [TINY_PLACE_OR_COUNTER] = a pocket-sized subway-tile bakery counter; [SMALL_SCALE_MAIN_FEATURES] = seed-sized pastries, tiny espresso machine, pinhead trays, copper-wire cooling racks, and matchstick rolling pins; [TRANSPARENT_OR_REFLECTIVE_DETAIL] = acetate sneeze guard; [HANDMADE_MATERIALS] = basswood cabinets, foam-core wall edges, styrene, chalk powder, glue beads, brush-painted glaze, and tile offcuts; [SCALE_CUES] = coin, tweezers, hobby knife, paint jars, masking tape roll, and scale ruler.",
+    "image": "images/2026-06-29-miniature-diorama-pocket-subway-tile-bakery.jpg",
+    "date": "2026-06-29",
+    "batch": "Daily Prompt",
+    "slot": "miniature-diorama",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024"
   }
 ]
