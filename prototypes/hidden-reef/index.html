@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>The Hidden Reef - Aquariums, Fish, Coral, Ponds</title>
   <link rel="icon" type="image/png" href="assets/site/logo.png" />
-  <link rel="stylesheet" href="assets/thr-cards.css?v=20260530-public-preview" />
+  <link rel="stylesheet" href="assets/thr-cards.css?v=20260604-sale-prices" />
   <style>
     :root {
       --blue-950: #003b63;
@@ -38,6 +38,18 @@
       color: var(--ink);
       background:
         linear-gradient(180deg, #ffffff 0, #f4fbfd 92px, var(--page) 320px, #dcecf3 100%);
+    }
+    .reef-background {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+    .page {
+      position: relative;
+      z-index: 1;
     }
     body.cart-open { overflow: hidden; }
     body.link-modal-open { overflow: hidden; }
@@ -385,8 +397,8 @@
       border: 1px solid rgba(116,205,235,0.2);
       border-radius: 8px;
       background:
-        linear-gradient(180deg, rgba(11,48,70,0.78), rgba(5,22,34,0.98)),
-        #071a27;
+        linear-gradient(180deg, rgba(11,48,70,0.66), rgba(5,22,34,0.84)),
+        rgba(7,26,39,0.8);
       text-align: center;
       box-shadow: var(--card-depth), inset 0 1px 0 rgba(255,255,255,0.04);
       cursor: pointer;
@@ -397,7 +409,7 @@
       position: absolute;
       inset: 0;
       z-index: 1;
-      background: linear-gradient(180deg, transparent 34%, rgba(2,17,29,0.9) 76%, rgba(2,17,29,0.98));
+      background: linear-gradient(180deg, transparent 34%, rgba(2,17,29,0.78) 76%, rgba(2,17,29,0.9));
       pointer-events: none;
     }
     .cat::after {
@@ -466,11 +478,11 @@
       margin: 18px 0 12px;
       border: 1px solid rgba(116,205,235,0.22);
       border-radius: 8px;
-      overflow: hidden;
+      padding: clamp(16px, 2.4vw, 24px);
       background:
         radial-gradient(circle at 76% 4%, rgba(116,205,235,0.2), transparent 30%),
         radial-gradient(circle at 8% 100%, rgba(255,123,50,0.12), transparent 32%),
-        linear-gradient(180deg, #071f32 0%, #041827 100%);
+        linear-gradient(180deg, rgba(7,31,50,0.88) 0%, rgba(4,24,39,0.82) 100%);
       box-shadow:
         var(--card-depth),
         inset 0 1px 0 rgba(255,255,255,0.04);
@@ -480,9 +492,7 @@
       align-items: center;
       justify-content: space-between;
       gap: 18px;
-      padding: 15px 18px;
-      border-bottom: 1px solid rgba(147,112,255,0.2);
-      background: rgba(3,18,29,0.54);
+      margin-bottom: 16px;
     }
     .specials-head span {
       color: #40d9ff;
@@ -496,72 +506,132 @@
       font-size: 13px;
       font-weight: 900;
     }
-    .specials-window {
+    .specials-carousel {
       overflow: hidden;
+      border: 1px solid rgba(116,205,235,0.16);
+      border-radius: 8px;
+      background: rgba(2,17,29,0.32);
     }
     .specials-track {
       display: flex;
-      transition: transform 0.58s cubic-bezier(.22,.8,.25,1);
+      transition: transform 0.48s cubic-bezier(.22,.8,.25,1);
       will-change: transform;
     }
-    .special-slide {
+    .special-card {
       display: grid;
-      grid-template-columns: minmax(0, 1.04fr) minmax(280px, .72fr);
-      gap: 18px;
-      min-width: 100%;
-      padding: clamp(18px, 3vw, 28px);
-    }
-    .special-copy {
-      display: grid;
-      align-content: center;
-      gap: 12px;
+      grid-template-rows: auto 1fr;
+      flex: 0 0 100%;
       min-width: 0;
+      overflow: hidden;
+      background:
+        linear-gradient(180deg, rgba(8,35,52,0.84), rgba(4,24,39,0.86)),
+        rgba(6,28,43,0.78);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
     }
-    .special-copy em {
+    .special-card__media {
+      position: relative;
+      display: grid;
+      place-items: center;
+      padding: clamp(8px, 1.4vw, 12px);
+      border-bottom: 1px solid rgba(116,205,235,0.16);
+      background:
+        linear-gradient(135deg, rgba(255,255,255,0.98), rgba(230,244,248,0.96)),
+        #f3fbfd;
+    }
+    .special-card__media img {
+      display: block;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 1968 / 799;
+      object-fit: contain;
+      object-position: center;
+      border-radius: 5px;
+      box-shadow: 0 10px 22px rgba(0,0,0,0.18);
+    }
+    .special-card__discount {
+      position: absolute;
+      right: clamp(16px, 2.6vw, 28px);
+      top: clamp(16px, 2.6vw, 28px);
+      z-index: 2;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 104px;
+      min-height: 62px;
+      padding: 10px 14px;
+      border: 2px solid rgba(255,255,255,0.88);
+      border-radius: 7px;
+      color: #fff;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.16), transparent 34%),
+        linear-gradient(135deg, #ff451f 0%, #dc1812 54%, #990d09 100%);
+      box-shadow:
+        0 12px 24px rgba(0,0,0,0.36),
+        inset 0 1px 0 rgba(255,255,255,0.26);
+      text-align: center;
+      font-size: clamp(24px, 4vw, 42px);
+      font-weight: 1000;
+      line-height: 0.86;
+      text-transform: uppercase;
+      transform: rotate(-1.5deg);
+    }
+    .special-card__discount small {
+      display: block;
+      margin-top: 5px;
+      font-size: 12px;
+      letter-spacing: 0.13em;
+      line-height: 1;
+    }
+    .special-card__body {
+      display: grid;
+      align-content: start;
+      gap: 10px;
+      padding: clamp(14px, 2vw, 18px);
+    }
+    .special-card__eyebrow {
       width: fit-content;
-      padding: 5px 9px;
-      border: 1px solid rgba(255,123,50,0.45);
+      padding: 5px 8px;
+      border: 1px solid rgba(255,123,50,0.42);
       border-radius: 999px;
       color: #ffd5bf;
       background: rgba(255,123,50,0.12);
-      font-style: normal;
-      font-size: 11px;
+      font-size: 10.5px;
       font-weight: 950;
       letter-spacing: 0.1em;
+      line-height: 1;
       text-transform: uppercase;
     }
-    .special-copy h2 {
-      max-width: 680px;
+    .special-card h2 {
       margin: 0;
       color: #fff;
       font-family: Georgia, "Times New Roman", serif;
-      font-size: clamp(34px, 4.4vw, 58px);
-      line-height: 0.96;
+      font-size: clamp(23px, 2.4vw, 34px);
+      line-height: 1;
       letter-spacing: 0;
     }
-    .special-copy p {
-      max-width: 690px;
+    .special-card p {
       margin: 0;
       color: #b9d9e7;
-      font-size: 14px;
-      line-height: 1.55;
+      font-size: 13px;
+      line-height: 1.5;
     }
-    .special-meta {
+    .special-card__notes {
       display: flex;
       flex-wrap: wrap;
-      gap: 8px;
-      margin: 2px 0 0;
+      gap: 7px;
+      margin: 0;
       padding: 0;
       list-style: none;
     }
-    .special-meta li {
-      padding: 7px 9px;
+    .special-card__notes li {
+      padding: 6px 8px;
       border: 1px solid rgba(116,205,235,0.18);
       border-radius: 6px;
       color: #eaf8fc;
-      background: rgba(8,35,52,0.72);
-      font-size: 12px;
+      background: rgba(2,17,29,0.46);
+      font-size: 11.5px;
       font-weight: 850;
+      line-height: 1.25;
     }
     .special-actions {
       display: flex;
@@ -569,166 +639,17 @@
       gap: 10px;
       margin-top: 4px;
     }
-    .special-media {
-      position: relative;
-      min-height: 245px;
-      overflow: hidden;
-      border: 1px solid rgba(116,205,235,0.2);
-      border-radius: 8px;
-      background:
-        radial-gradient(circle at 20% 18%, rgba(116,205,235,0.2), transparent 30%),
-        linear-gradient(145deg, rgba(255,255,255,0.96), rgba(221,241,247,0.92) 58%, rgba(180,218,229,0.9)),
-        #edf8fb;
-      box-shadow:
-        inset 0 1px 0 rgba(255,255,255,0.65),
-        -8px 12px 22px rgba(0,0,0,0.28);
-    }
-    .special-art-image {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      min-height: 245px;
-      object-fit: cover;
-      object-position: center;
-      display: block;
-      filter: saturate(1.08) contrast(1.04);
-    }
-    .special-media::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background:
-        linear-gradient(120deg, transparent 0 42%, rgba(116,205,235,0.12) 42% 44%, transparent 44%),
-        radial-gradient(circle at 80% 76%, rgba(255,123,50,0.16), transparent 26%);
-      pointer-events: none;
-    }
-    .special-product-stack {
-      position: relative;
-      z-index: 1;
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      align-items: end;
-      gap: 10px;
-    }
-    .special-product-card {
-      display: grid;
-      place-items: center;
-      min-height: 212px;
-      padding: 12px;
-      border: 1px solid rgba(6,48,70,0.12);
-      border-radius: 8px;
-      background: rgba(255,255,255,0.92);
-      box-shadow: -6px 10px 18px rgba(0,0,0,0.28);
-    }
-    .special-product-card:nth-child(2) {
-      transform: translateY(-10px);
-    }
-    .special-product-card img {
-      width: 100%;
-      height: 190px;
-      object-fit: contain;
-      display: block;
-      filter: saturate(1.05) contrast(1.03);
-    }
-    .special-product-card--single {
-      grid-column: 1 / -1;
-      min-height: 232px;
-    }
-    .special-product-card--single img {
-      height: 212px;
-    }
-    .special-media-label {
-      position: absolute;
-      left: 16px;
-      right: 16px;
-      bottom: 18px;
-      z-index: 2;
-      color: #dff8ff;
-      text-align: left;
-      font-size: 12px;
-      font-weight: 950;
-      letter-spacing: 0.08em;
-      line-height: 1.25;
-      text-shadow: 0 2px 10px rgba(0,0,0,0.8);
-      text-transform: uppercase;
-    }
-    .special-media--logo img {
-      object-fit: contain;
-      padding: 30px;
-      background: #fff;
-    }
-    .special-media::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      z-index: 1;
-      background:
-        linear-gradient(90deg, rgba(2,17,29,0.34), transparent 42%),
-        linear-gradient(180deg, transparent 46%, rgba(2,17,29,0.86));
-      pointer-events: none;
-    }
-    .special-price-burst {
-      position: absolute;
-      left: 16px;
-      top: 16px;
-      z-index: 2;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      width: clamp(128px, 13vw, 168px);
-      min-height: 82px;
-      padding: 10px 14px 12px;
-      border: 3px solid rgba(255,255,255,0.92);
-      border-radius: 7px;
-      color: #fff;
-      background:
-        linear-gradient(180deg, rgba(255,255,255,0.18), transparent 32%),
-        linear-gradient(135deg, #ff4a1f 0%, #e02017 50%, #a70f0b 100%);
-      box-shadow:
-        0 16px 30px rgba(0,0,0,0.42),
-        0 0 0 1px rgba(80,0,0,0.24),
-        inset 0 1px 0 rgba(255,255,255,0.28);
-      text-align: center;
-      font-size: clamp(34px, 4vw, 50px);
-      font-weight: 1000;
-      line-height: 0.78;
-      letter-spacing: -0.02em;
-      text-transform: uppercase;
-      transform: rotate(-1.5deg);
-    }
-    .special-price-burst::before {
-      content: "Sale";
-      display: block;
-      margin-bottom: 6px;
-      padding: 3px 8px;
-      border-radius: 3px;
-      color: #9a1008;
-      background: #fff2cf;
-      font-size: 12px;
-      font-weight: 1000;
-      letter-spacing: 0.12em;
-      line-height: 1;
-      text-transform: uppercase;
-    }
-    .special-price-burst small {
-      display: block;
-      margin-top: 8px;
-      font-size: 14px;
-      letter-spacing: 0.14em;
-      line-height: 1;
-      text-transform: uppercase;
-    }
     .special-controls {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 12px;
-      padding: 0 18px 16px;
+      margin-top: 14px;
     }
-    .special-arrows {
+    .special-arrows,
+    .special-dots {
       display: flex;
+      align-items: center;
       gap: 8px;
     }
     .special-control {
@@ -736,7 +657,7 @@
       place-items: center;
       width: 38px;
       height: 38px;
-      border: 1px solid rgba(147,112,255,0.28);
+      border: 1px solid rgba(116,205,235,0.28);
       border-radius: 6px;
       color: #dff8ff;
       background: rgba(8,35,52,0.72);
@@ -744,11 +665,9 @@
       font-weight: 900;
       cursor: pointer;
     }
-    .special-dots {
-      display: flex;
-      gap: 7px;
-      align-items: center;
-      justify-content: center;
+    .special-control:disabled {
+      opacity: 0.42;
+      cursor: default;
     }
     .special-dot {
       width: 10px;
@@ -777,7 +696,7 @@
       border-radius: 8px;
       background:
         radial-gradient(circle at 100% 0%, rgba(116,205,235,0.14), transparent 38%),
-        #071a27;
+        rgba(7,26,39,0.82);
       box-shadow: var(--card-depth);
       transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
     }
@@ -927,7 +846,7 @@
       border-radius: 8px;
       background:
         linear-gradient(180deg, rgba(255,255,255,0.04), transparent 42%),
-        #fff;
+        rgba(255,255,255,0.94);
       box-shadow: var(--card-depth-light);
       transition: transform 0.16s ease, border-color 0.16s ease, box-shadow 0.16s ease;
     }
@@ -945,7 +864,7 @@
       padding: 10px;
       border: 1px solid rgba(206,194,246,0.85);
       border-radius: 7px;
-      background: #fff;
+      background: rgba(255,255,255,0.95);
       transition: transform .24s ease, filter .24s ease;
     }
     .product:hover img {
@@ -1046,7 +965,7 @@
       width: 52px;
       height: 52px;
       border-radius: 50%;
-      background: #fff;
+      background: rgba(255,255,255,0.94);
       color: var(--blue-900);
       font-size: 26px;
     }
@@ -1069,6 +988,12 @@
       box-shadow: var(--card-depth-light);
     }
     .brand-tile img { max-width: 100%; max-height: 46px; object-fit: contain; }
+    .brand-tile:hover,
+    .brand-tile:focus-visible {
+      border-color: rgba(0, 167, 183, .72);
+      box-shadow: 0 0 0 3px rgba(64, 217, 255, .2), var(--card-depth-light);
+      text-decoration: none;
+    }
     .brand-tile--emblem img { max-height: 58px; }
     .guides {
       display: grid;
@@ -1097,7 +1022,7 @@
       border-radius: 8px;
       background:
         radial-gradient(circle at 86% 0%, rgba(116,205,235,0.16), transparent 30%),
-        linear-gradient(180deg, #071f32 0%, #041827 100%);
+        linear-gradient(180deg, rgba(7,31,50,0.88) 0%, rgba(4,24,39,0.82) 100%);
       box-shadow: var(--card-depth), inset 0 1px 0 rgba(255,255,255,0.04);
     }
     .learn-copy {
@@ -1139,6 +1064,35 @@
     .learn-actions .btn.secondary {
       padding-inline: 14px;
     }
+    .symptom-strip {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 2px;
+    }
+    .symptom-chip {
+      display: grid;
+      gap: 4px;
+      min-height: 78px;
+      padding: 11px 12px;
+      border: 1px solid rgba(116,205,235,0.22);
+      border-radius: 8px;
+      color: #dff8ff;
+      background: rgba(3,18,29,0.66);
+      box-shadow: -6px 9px 12px rgba(0,0,0,0.3);
+    }
+    .symptom-chip span {
+      color: #40d9ff;
+      font-size: 10px;
+      font-weight: 950;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .symptom-chip strong {
+      color: #fff;
+      font-size: 14px;
+      line-height: 1.12;
+    }
     .learn-split {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1173,7 +1127,7 @@
       overflow: hidden;
       border: 1px solid rgba(116,205,235,0.22);
       border-radius: 8px;
-      background: #fff;
+      background: rgba(255,255,255,0.94);
       box-shadow: var(--card-depth);
       transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
     }
@@ -1217,7 +1171,7 @@
       color: #eaf8fc;
       background:
         radial-gradient(circle at 100% 0%, rgba(116,205,235,0.14), transparent 36%),
-        #071a27;
+        rgba(7,26,39,0.82);
       box-shadow: var(--card-depth), inset 0 1px 0 rgba(255,255,255,0.035);
       cursor: pointer;
       transition: transform 0.16s ease, border-color 0.16s ease, box-shadow 0.16s ease;
@@ -1429,7 +1383,7 @@
       isolation: isolate;
       border: 1px solid rgba(116,205,235,0.28);
       border-radius: 8px;
-      background: #071a27;
+      background: rgba(7,26,39,0.9);
       box-shadow: 0 28px 90px rgba(0,0,0,0.55);
       opacity: 0;
       transform: translateY(18px) scale(.985);
@@ -1453,7 +1407,8 @@
 		      position: relative;
 		      display: grid;
 		      grid-column: 1;
-	      align-items: center;
+	      align-items: start;
+      justify-items: center;
       min-height: 520px;
       padding: 24px;
       overflow: hidden;
@@ -1466,16 +1421,22 @@
       width: 100%;
       height: auto;
       max-height: 540px;
+      align-self: start;
       object-fit: contain;
       filter: drop-shadow(0 18px 24px rgba(13,47,65,0.18));
       transform-origin: center;
-      transition: filter .18s ease;
+      transition: filter .18s ease, transform .18s ease;
       pointer-events: none;
     }
     .link-modal__media.is-zoomed {
       cursor: crosshair;
     }
     .link-modal__media.is-zoomed .link-modal__image {
+      filter: drop-shadow(0 22px 30px rgba(13,47,65,0.24));
+    }
+    .link-modal__media.is-touch-zoomed .link-modal__image {
+      transform: translate3d(var(--modal-touch-pan-x, 0), var(--modal-touch-pan-y, 0), 0) scale(var(--modal-touch-scale, 2.6));
+      transform-origin: var(--modal-touch-x, 50%) var(--modal-touch-y, 50%);
       filter: drop-shadow(0 22px 30px rgba(13,47,65,0.24));
     }
     .link-modal__zoom-lens {
@@ -1526,23 +1487,7 @@
       transform: scale(var(--modal-image-zoom, 2.55));
       transform-origin: var(--modal-zoom-x, 50%) var(--modal-zoom-y, 50%);
     }
-    .link-modal__zoom-hint {
-      position: absolute;
-      left: 14px;
-      bottom: 14px;
-      z-index: 2;
-      padding: 6px 9px;
-      border-radius: 6px;
-      color: #eaf8fc;
-      background: rgba(3,24,38,0.78);
-      box-shadow: 0 6px 14px rgba(0,0,0,0.22);
-      font-size: 11px;
-      font-weight: 900;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-	      pointer-events: none;
-	    }
-		    .link-modal__thumbs {
+    .link-modal__thumbs {
 		      display: flex;
 		      grid-column: 1;
 		      grid-row: 1;
@@ -1768,8 +1713,6 @@
       .categories { grid-template-columns: repeat(4, minmax(0,1fr)); }
       .product-grid { grid-template-columns: repeat(3, minmax(0,1fr)); }
       .promo-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
-      .special-slide { grid-template-columns: 1fr; }
-      .special-media { min-height: 220px; }
       .live-links { grid-template-columns: repeat(2, minmax(0,1fr)); }
       .learn-panel { grid-template-columns: 1fr; }
       .learn-split { grid-template-columns: 1fr; }
@@ -1792,88 +1735,57 @@
       .hero p { margin-bottom: 14px; font-size: 13px; line-height: 1.42; }
       .button-row { gap: 8px; }
       .btn { min-height: 38px; padding: 9px 14px; }
-      .specials-spotlight { margin-top: 12px; }
+      .specials-spotlight {
+        margin-top: 12px;
+        padding: 14px;
+      }
       .specials-head {
         display: grid;
         gap: 5px;
-        padding: 11px 14px;
+        margin-bottom: 12px;
       }
-      .special-slide {
-        gap: 12px;
-        padding: 14px 14px 15px;
+      .special-card__media {
+        padding: 8px;
       }
-      .special-copy {
-        gap: 9px;
+      .special-card__discount {
+        right: 14px;
+        top: 14px;
+        min-width: 78px;
+        min-height: 48px;
+        padding: 8px 10px;
+        font-size: 23px;
       }
-      .special-copy em {
-        padding: 4px 8px;
-        font-size: 10px;
+      .special-card__discount small {
+        margin-top: 4px;
+        font-size: 9px;
       }
-      .special-copy h2 {
-        font-size: clamp(28px, 8vw, 36px);
-        line-height: 0.98;
+      .special-card__body {
+        padding: 13px;
       }
-      .special-copy p {
+      .special-card h2 {
+        font-size: clamp(24px, 7vw, 31px);
+      }
+      .special-card p {
         font-size: 12.5px;
         line-height: 1.45;
       }
-      .special-meta {
+      .special-card__notes {
         gap: 6px;
       }
-      .special-meta li {
-        padding: 6px 8px;
+      .special-card__notes li {
+        padding: 6px 7px;
         font-size: 11px;
-        line-height: 1.25;
       }
       .special-actions {
         gap: 8px;
       }
-      .special-media,
-      .special-product-card {
-        min-height: 156px;
-      }
-      .special-media {
-        padding: 10px;
-      }
-      .special-art-image {
-        min-height: 156px;
-      }
-      .special-product-stack {
-        gap: 7px;
-      }
-      .special-product-card {
-        padding: 8px;
-      }
-      .special-product-card img {
-        height: 136px;
-      }
-      .special-product-card--single img {
-        height: 164px;
-      }
-      .special-media-label {
-        left: 12px;
-        right: 12px;
-        bottom: 15px;
-        font-size: 10px;
-      }
-      .special-price-burst {
-        left: 12px;
-        top: 12px;
-        width: 104px;
-        min-height: 68px;
-        padding: 8px 10px 9px;
-        font-size: 29px;
-      }
-      .special-price-burst::before {
-        margin-bottom: 5px;
-        font-size: 10px;
-      }
-      .special-price-burst small {
-        margin-top: 6px;
-        font-size: 11px;
-      }
       .special-controls {
-        padding: 0 14px 12px;
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 9px;
+      }
+      .special-dots {
+        justify-content: end;
       }
       .categories { grid-template-columns: repeat(2, minmax(0,1fr)); }
       .category-intro { display: block; }
@@ -1893,6 +1805,8 @@
 	        min-height: 180px;
 	        max-height: 34vh;
 	        padding: 14px;
+	        cursor: zoom-in;
+	        touch-action: none;
 	      }
 		      .link-modal__gallery {
 		        grid-template-columns: 1fr;
@@ -1901,12 +1815,14 @@
 		      .link-modal__gallery.has-thumbs {
 		        grid-template-columns: 1fr;
 		      }
-		      .link-modal__media {
-		        grid-column: 1;
-		      }
-		      .link-modal__thumbs {
-		        grid-column: 1;
-		        grid-row: auto;
+			      .link-modal__media,
+			      .link-modal__gallery.has-thumbs .link-modal__media {
+			        grid-column: 1;
+			        grid-row: 1;
+			      }
+			      .link-modal__thumbs {
+			        grid-column: 1;
+			        grid-row: 2;
 		        flex-direction: row;
 		        padding: 8px;
 		        overflow-x: auto;
@@ -1932,7 +1848,8 @@
       .link-modal__facts { grid-template-columns: 1fr; }
       .link-modal__actions { grid-template-columns: 1fr; }
 	      .promo-grid, .guides { grid-template-columns: 1fr; }
-	      .learn-preview-grid { grid-template-columns: 1fr; }
+	      .learn-preview-grid,
+	      .symptom-strip { grid-template-columns: 1fr; }
 	      .learn-preview,
 	      .learn-preview img { min-height: 210px; }
 	      .product-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
@@ -2005,7 +1922,7 @@
       color: #9fc6d6;
     }
     .search-box {
-      background: #102b3b;
+      background: rgba(16,43,59,0.86);
       border-color: rgba(116,205,235,0.24);
       box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
     }
@@ -2032,7 +1949,7 @@
       background:
         radial-gradient(circle at 85% 0%, rgba(116,205,235,0.16), transparent 30%),
         radial-gradient(circle at 8% 100%, rgba(141,108,255,0.11), transparent 36%),
-        linear-gradient(180deg, #071f32 0%, #041827 100%);
+        linear-gradient(180deg, rgba(7,31,50,0.88) 0%, rgba(4,24,39,0.82) 100%);
       box-shadow: 0 22px 54px rgba(0,0,0,0.28);
     }
 	    #products .section-head { margin-top: 0; }
@@ -2054,7 +1971,7 @@
 	      width: min(100%, 520px);
 	      height: 44px;
 	      border-color: rgba(116,205,235,0.28);
-	      background: #102b3b;
+	      background: rgba(16,43,59,0.86);
 	    }
 	    .shopping-search button {
 	      width: auto;
@@ -2112,7 +2029,7 @@
 	      border: 1px solid rgba(116,205,235,0.22);
 	      border-radius: 6px;
 	      color: #eaf8fc;
-	      background: #102b3b;
+		      background: rgba(16,43,59,0.86);
 	      font-weight: 800;
 	    }
 	    .product-controls button,
@@ -2169,7 +2086,7 @@
 	      border: 1px solid rgba(116,205,235,0.22);
 	      border-radius: 999px;
 	      color: #284f65;
-	      background: #fff;
+	      background: rgba(255,255,255,0.9);
 	      font-size: 13px;
 	      font-weight: 900;
 	    }
@@ -2216,7 +2133,7 @@
 	      padding: 0;
 	      border: 1px solid rgba(116,205,235,0.2);
 	      border-radius: 8px;
-	      background: radial-gradient(circle at 100% 0%, rgba(141,108,255,0.08), transparent 38%), #071a27;
+	      background: radial-gradient(circle at 100% 0%, rgba(141,108,255,0.08), transparent 38%), rgba(7,26,39,0.84);
 	      overflow: hidden;
 	      box-shadow: 0 10px 18px rgba(0,0,0,0.24), inset 0 1px 0 rgba(255,255,255,0.035);
 	    }
@@ -2296,7 +2213,7 @@
     #products .filters button {
       color: #18455b;
       border-color: #c7dfe8;
-      background: #fff;
+      background: rgba(255,255,255,0.94);
     }
     #products .filters button.active {
       color: #fff;
@@ -2305,7 +2222,7 @@
       box-shadow: 0 8px 18px rgba(0,139,173,0.24);
     }
     #products .product {
-      background: #fff;
+      background: rgba(255,255,255,0.94);
       border-color: #d5e7ee;
       box-shadow: var(--card-depth-light);
     }
@@ -2314,7 +2231,7 @@
     }
     #products .product img {
       border-color: #d8e8ef;
-      background: #fff;
+      background: rgba(255,255,255,0.95);
     }
     #products .product h3 { color: #102f43; }
     #products .product p { color: #5d7582; }
@@ -2323,12 +2240,12 @@
     #products .price-row { border-color: #d8e8ef; }
     .product,
     .guide {
-      background: #071a27;
+      background: rgba(7,26,39,0.84);
       border-color: rgba(116,205,235,0.18);
       box-shadow: var(--card-depth), inset 0 1px 0 rgba(255,255,255,0.035);
     }
     .brand-tile {
-      background: #fff;
+      background: rgba(255,255,255,0.94);
       border-color: rgba(195,222,232,0.74);
       box-shadow: var(--card-depth-light);
     }
@@ -2337,7 +2254,7 @@
     .product p,
     .guide p { color: #9fb8c7; }
     .product img {
-      background: #fff;
+      background: rgba(255,255,255,0.95);
       border-radius: 5px;
     }
     .promo-card {
@@ -2345,7 +2262,7 @@
       box-shadow: var(--card-depth);
     }
     .filters button {
-      background: #071a27;
+      background: rgba(7,26,39,0.84);
       border-color: rgba(116,205,235,0.22);
       color: #d8f3fb;
     }
@@ -2357,15 +2274,15 @@
         url("assets/site/hero-store.jpg") center/cover no-repeat;
     }
     .footer {
-      background: linear-gradient(180deg, #052137, #031321);
+      background: linear-gradient(180deg, rgba(5,33,55,0.88), rgba(3,19,33,0.84));
       border: 1px solid rgba(116,205,235,0.14);
     }
     .drawer {
-      background: #071a27;
+      background: rgba(7,26,39,0.9);
       color: #f0fbff;
       border-left: 1px solid rgba(116,205,235,0.2);
     }
-    .cart-item { background: #0c2637; border-color: rgba(116,205,235,0.18); }
+    .cart-item { background: rgba(12,38,55,0.9); border-color: rgba(116,205,235,0.18); }
     .header {
       grid-template-columns: minmax(260px, 1fr) auto;
       row-gap: 12px;
@@ -2752,7 +2669,7 @@
       border: 1px solid rgba(116,205,235,0.2);
       border-bottom: 0;
       border-radius: 0;
-      background: #020914;
+      background: rgba(2,9,20,0.9);
       box-shadow: -8px 12px 17px rgba(0,0,0,0.38);
     }
     .header.masthead .brand {
@@ -2786,7 +2703,7 @@
       margin: 0;
       border-top: 1px solid rgba(116,205,235,0.12);
       border-bottom: 1px solid rgba(116,205,235,0.24);
-      background: #021523;
+      background: rgba(2,21,35,0.88);
     }
     .header.masthead + .main-nav a {
       min-height: 40px;
@@ -2876,6 +2793,7 @@
   <link rel="stylesheet" href="assets/site-masthead.css?v=20260525-learning-path-frame" />
 </head>
 <body>
+  <canvas class="reef-background" data-reef-background aria-hidden="true"></canvas>
   <main class="page" id="top">
     <header class="header masthead">
       <a class="brand" href="./">
@@ -2914,59 +2832,61 @@
         <h1 id="page-title">Build Your Perfect Aquatic World</h1>
         <p>Everything aquarium: freshwater, saltwater, ponds, plants, coral, equipment, food, and expert help from a real local store.</p>
         <div class="button-row">
-          <a class="btn" href="category/?filter=new-arrivals">Shop New Arrivals</a>
+          <a class="btn" href="category/?filter=sale-items">Shop Sale Items</a>
+          <a class="btn secondary" href="category/?filter=new-arrivals">New Arrivals</a>
           <a class="btn secondary" href="#visit">Visit the Store</a>
         </div>
       </div>
     </section>
 
+    <!-- THR_SPECIALS_START -->
     <section class="specials-spotlight" aria-labelledby="specials-title">
       <div class="specials-head">
         <span id="specials-title">Current specials</span>
-        <a href="https://www.thehiddenreef.com/sales-online/" target="_blank" rel="noopener">View all sale departments</a>
+        <a href="sales/">View all sale departments</a>
       </div>
-      <div class="specials-window">
+      <div class="specials-carousel">
         <div class="specials-track" id="specials-track">
-          <article class="special-slide">
-            <div class="special-copy">
-              <em>Made to order</em>
+          <article class="special-card">
+            <a class="special-card__media" href="https://www.thehiddenreef.com/sales-online/sale-innovative-marine-mto-50-off/" target="_blank" rel="noopener">
+              <img src="https://cdn.shoplightspeed.com/shops/648211/themes/13296/v/1162485/assets/hero-banner-2-image.jpg?20260520132110" alt="Innovative Marine made-to-order aquariums promotion: save 50 percent on MTO orders" />
+              <span class="special-card__discount">50%<small>off</small></span>
+            </a>
+            <div class="special-card__body">
+              <span class="special-card__eyebrow">Made to order</span>
               <h2>Innovative Marine MTO Systems</h2>
               <p>Plan a larger reef build with made-to-order lagoon, EXT, and SR Pro aquarium systems paired with sturdy APS-style stands.</p>
-              <ul class="special-meta">
+              <ul class="special-card__notes">
                 <li>50% off MTO reef systems</li>
                 <li>50 sale items</li>
                 <li>Examples: INT 112 LAGOON AQUARIUM W / APS STAND WHITE (MADE TO ORDER) $2,796.50, INT 112 LAGOON AQUARIUM W / APS STAND BLACK (MADE TO ORDER) $2,796.50</li>
               </ul>
               <div class="special-actions">
                 <a class="btn" href="https://www.thehiddenreef.com/sales-online/sale-innovative-marine-mto-50-off/" target="_blank" rel="noopener">Shop MTO Systems</a>
+                <a class="btn secondary" href="sales/?sale=sale-innovative-marine-mto-50-off#sale-view">View sale items</a>
                 <a class="btn secondary" href="category/?cat=equipment">Plan a setup</a>
               </div>
             </div>
-            <div class="special-media">
-              <img class="special-art-image" src="https://cdn.shoplightspeed.com/shops/648211/themes/13296/v/1162485/assets/hero-banner-2-image.jpg?20260520132110" alt="Large premium reef aquarium system in a blue-lit showroom" />
-              <div class="special-media-label">Large MTO reef systems with APS stands</div>
-              <div class="special-price-burst">50%<small>off</small></div>
-            </div>
           </article>
-          <article class="special-slide">
-            <div class="special-copy">
-              <em>Current sale</em>
+          <article class="special-card">
+            <a class="special-card__media" href="https://www.thehiddenreef.com/tags/aiosale/" target="_blank" rel="noopener">
+              <img src="https://cdn.shoplightspeed.com/shops/648211/themes/13296/v/1162930/assets/cta.jpg?20260529143045" alt="NUVO starter kits promotion with Fusion 15 AIO Cube and Fusion 20 AIO Long aquarium sale pricing" />
+              <span class="special-card__discount">Sale<small>now</small></span>
+            </a>
+            <div class="special-card__body">
+              <span class="special-card__eyebrow">Current sale</span>
               <h2>Innovative Marine AIO Aquariums</h2>
               <p>Their homepage is featuring compact Innovative Marine all-in-one aquariums, a good fit for clean desktop or small-room setups.</p>
-              <ul class="special-meta">
+              <ul class="special-card__notes">
                 <li>Homepage feature</li>
                 <li>2 sale items</li>
                 <li>Examples: FUSION AIO 20 LONG AQUARIUM $169.99, FUSION 15 AIO CUBE AQUARIUM DESKTOP $99.99</li>
               </ul>
               <div class="special-actions">
                 <a class="btn" href="https://www.thehiddenreef.com/tags/aiosale/" target="_blank" rel="noopener">Shop AIO Aquariums</a>
+                <a class="btn secondary" href="sales/?sale=aiosale#sale-view">View sale items</a>
                 <a class="btn secondary" href="category/?cat=aquariums">See aquariums</a>
               </div>
-            </div>
-            <div class="special-media">
-              <img class="special-art-image" src="https://cdn.shoplightspeed.com/shops/648211/themes/13296/v/1162930/assets/cta.jpg?20260529143045" alt="All-in-one aquarium system in a clean showroom setting" />
-              <div class="special-media-label">Featured AIO aquarium systems</div>
-              <div class="special-price-burst">Sale<small>now</small></div>
             </div>
           </article>
         </div>
@@ -2979,27 +2899,7 @@
         <div class="special-dots" id="special-dots" aria-label="Choose special"></div>
       </div>
     </section>
-
-    <section class="section-band alt" aria-labelledby="learn-title">
-      <div class="section-head">
-        <h2 id="learn-title">Learn the System</h2>
-        <a href="learn/">View all care guides</a>
-      </div>
-      <div class="learn-panel">
-        <div class="learn-copy">
-          <span>Help Center</span>
-          <h3>Aquarium guides and troubleshooting.</h3>
-          <p>Clear help for starter tanks, equipment choices, care routines, water quality, and troubleshooting, written so you can understand the system before choosing the next step.</p>
-          <div class="learn-actions">
-            <a class="btn" href="learn/">Open Help Center</a>
-            <a class="btn secondary" href="learn/#starter-checklists">Start a Tank</a>
-            <a class="btn secondary" href="learn/#troubleshooting">Fix a Problem</a>
-            <a class="btn secondary" href="learn/#filtration-equipment">Equipment</a>
-            <a class="btn secondary" href="learn/#care-routines">Care Guides</a>
-          </div>
-        </div>
-      </div>
-    </section>
+    <!-- THR_SPECIALS_END -->
 
     <section class="section-band alt" aria-label="Departments">
       <div class="category-intro">
@@ -3025,7 +2925,7 @@
         </form>
         <a class="cart-button shopping-cart" href="https://www.thehiddenreef.com/" target="_blank" rel="noopener" aria-label="Shop on Hidden Reef">
           🛒
-          <strong>List</strong>
+          <strong>Cart</strong>
           <span id="cart-count">↗</span>
         </a>
       </div>
@@ -3059,16 +2959,47 @@
         <a href="brands/">See Full List of Brands</a>
       </div>
       <div class="brands">
-        <div class="brand-tile"><img src="assets/site/brand-api.png" alt="API" /></div>
-        <div class="brand-tile"><img src="assets/site/brand-aquatop.png" alt="Aquatop" /></div>
-        <div class="brand-tile"><img src="assets/site/brand-fluval.png" alt="Fluval" /></div>
-        <div class="brand-tile brand-tile--emblem"><img src="assets/site/brand-innovative-marine.png" alt="Innovative Marine" /></div>
-        <div class="brand-tile"><img src="assets/site/brand-red-sea.svg" alt="Red Sea" /></div>
-        <div class="brand-tile"><img src="assets/site/brand-seachem.png" alt="Seachem" /></div>
-        <div class="brand-tile"><img src="assets/site/brand-sera.svg" alt="Sera" /></div>
-        <div class="brand-tile"><img src="assets/site/brand-tetra.png" alt="Tetra" /></div>
-        <div class="brand-tile brand-tile--emblem"><img src="assets/site/brand-underwater-treasures.png" alt="Underwater Treasures" /></div>
-        <div class="brand-tile brand-tile--emblem"><img src="assets/site/brand-zoo-med.png" alt="Zoo Med" /></div>
+        <a class="brand-tile" href="category/?brand=API" aria-label="Shop API products"><img src="assets/site/brand-api.png" alt="API" /></a>
+        <a class="brand-tile" href="category/?brand=Aquatop" aria-label="Shop Aquatop products"><img src="assets/site/brand-aquatop.png" alt="Aquatop" /></a>
+        <a class="brand-tile" href="category/?brand=Fluval" aria-label="Shop Fluval products"><img src="assets/site/brand-fluval.png" alt="Fluval" /></a>
+        <a class="brand-tile brand-tile--emblem" href="category/?brand=Innovative%20Marine" aria-label="Shop Innovative Marine products"><img src="assets/site/brand-innovative-marine.png" alt="Innovative Marine" /></a>
+        <a class="brand-tile" href="category/?brand=Red%20Sea" aria-label="Shop Red Sea products"><img src="assets/site/brand-red-sea.svg" alt="Red Sea" /></a>
+        <a class="brand-tile" href="category/?brand=Seachem" aria-label="Shop Seachem products"><img src="assets/site/brand-seachem.png" alt="Seachem" /></a>
+        <a class="brand-tile" href="category/?brand=Sera" aria-label="Shop Sera products"><img src="assets/site/brand-sera.svg" alt="Sera" /></a>
+        <a class="brand-tile" href="category/?brand=Tetra" aria-label="Shop Tetra products"><img src="assets/site/brand-tetra.png" alt="Tetra" /></a>
+        <a class="brand-tile brand-tile--emblem" href="category/?brand=Underwater%20Treasures" aria-label="Shop Underwater Treasures products"><img src="assets/site/brand-underwater-treasures.png" alt="Underwater Treasures" /></a>
+        <a class="brand-tile brand-tile--emblem" href="category/?brand=Zoo%20Med" aria-label="Shop Zoo Med products"><img src="assets/site/brand-zoo-med.png" alt="Zoo Med" /></a>
+      </div>
+    </section>
+
+    <section class="section-band alt" aria-labelledby="learn-title">
+      <div class="section-head">
+        <h2 id="learn-title">Learn the System</h2>
+        <a href="learn/">View all care guides</a>
+      </div>
+      <div class="learn-panel">
+        <div class="learn-copy">
+          <span>Help Center</span>
+          <h3>Aquarium guides and troubleshooting.</h3>
+          <p>Clear help for starter tanks, equipment choices, care routines, water quality, and troubleshooting, written so you can understand the system before choosing the next step.</p>
+          <div class="learn-actions">
+            <a class="btn" href="learn/">Open Help Center</a>
+            <a class="btn secondary" href="learn/#starter-checklists">Start a Tank</a>
+            <a class="btn secondary" href="learn/#tank-triage">Fix a Problem</a>
+            <a class="btn secondary" href="learn/#filtration-equipment">Equipment</a>
+            <a class="btn secondary" href="learn/#care-routines">Care Guides</a>
+          </div>
+          <div class="symptom-strip" aria-label="Quick tank problem shortcuts">
+            <a class="symptom-chip" href="learn/?symptom=breathing#tank-triage"><span>Urgent</span><strong>Fish breathing hard</strong></a>
+            <a class="symptom-chip" href="learn/?symptom=cloudy#tank-triage"><span>Water</span><strong>Cloudy or milky water</strong></a>
+            <a class="symptom-chip" href="learn/?symptom=green#tank-triage"><span>Green water</span><strong>Water itself is green</strong></a>
+            <a class="symptom-chip" href="learn/?symptom=algae#tank-triage"><span>Growth</span><strong>Algae taking over</strong></a>
+            <a class="symptom-chip" href="learn/?symptom=sick#tank-triage"><span>Health</span><strong>White spots or flashing</strong></a>
+            <a class="symptom-chip" href="learn/?symptom=coral&amp;tank=reef#tank-triage"><span>Reef</span><strong>Coral not opening</strong></a>
+            <a class="symptom-chip" href="learn/?symptom=inverts#tank-triage"><span>Inverts</span><strong>Snails or shrimp dying</strong></a>
+            <a class="symptom-chip" href="learn/?symptom=smell#tank-triage"><span>Odor</span><strong>Tank smells bad</strong></a>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -3083,17 +3014,19 @@
   </main>
 
   <aside class="drawer" aria-label="Cart drawer">
-    <div class="drawer-head"><h2>Your cart</h2><button class="close-cart" type="button">Close</button></div>
+    <div class="drawer-head"><h2>Preview list</h2><button class="close-cart" type="button">Close</button></div>
     <div id="cart-items" class="cart-items"></div>
-    <p id="empty-cart" class="empty-cart">Your cart is empty. Add products to get started.</p>
-    <a class="btn" href="https://www.thehiddenreef.com/" target="_blank" rel="noopener" style="display:block;text-align:center">Shop on Hidden Reef →</a>
+    <p id="empty-cart" class="empty-cart">Your preview list is empty. Add products you want to check with the store.</p>
+    <a class="btn" href="https://www.thehiddenreef.com/" target="_blank" rel="noopener" style="display:block;text-align:center">Shop on Hidden Reef site →</a>
   </aside>
 
 	  <script src="assets/products.js"></script>
-	  <script src="assets/product-data.js?v=20260530-public-preview"></script>
+	  <script src="assets/product-data.js?v=20260530-sitemap-complete"></script>
+	  <script src="assets/new-arrivals.js?v=20260604-full-list"></script>
+	  <script src="assets/sale-data.js?v=20260603-sales-menu"></script>
 	  <script src="assets/catalog-utils.js"></script>
 	  <script src="assets/thr-cards.js"></script>
-	  <script src="assets/link-modal.js?v=20260530-public-preview"></script>
+	  <script src="assets/link-modal.js?v=20260601-touch-pan"></script>
 	  <script>
 	    window.THR_CATEGORY_CONFIG = {
 	      assetBase: 'assets',
@@ -3149,15 +3082,19 @@
 	      window.setInterval(rotateHero, reducedHeroMotion ? 11000 : 7200);
 	    }
 	    const specialsTrack = document.getElementById('specials-track');
-	    const specialSlides = Array.from(document.querySelectorAll('.special-slide'));
+	    const specialSlides = specialsTrack ? Array.from(specialsTrack.querySelectorAll('.special-card')) : [];
 	    const specialDots = document.getElementById('special-dots');
 	    if (specialsTrack && specialSlides.length && specialDots) {
 	      let activeSpecial = 0;
-	      let specialsTimer = null;
 	      specialDots.innerHTML = specialSlides.map((slide, index) =>
 	        '<button class="special-dot' + (index === 0 ? ' is-active' : '') + '" type="button" data-special-index="' + index + '" aria-label="Show special ' + (index + 1) + '"></button>'
 	      ).join('');
 	      const dots = Array.from(specialDots.querySelectorAll('.special-dot'));
+	      const controls = Array.from(document.querySelectorAll('[data-special-dir]'));
+	      const controlsWrap = document.querySelector('.special-controls');
+	      if (specialSlides.length <= 1 && controlsWrap) {
+	        controlsWrap.hidden = true;
+	      }
 	      function setSpecial(index) {
 	        activeSpecial = (index + specialSlides.length) % specialSlides.length;
 	        specialsTrack.style.transform = 'translateX(' + (-100 * activeSpecial) + '%)';
@@ -3165,27 +3102,16 @@
 	          dot.classList.toggle('is-active', dotIndex === activeSpecial);
 	        });
 	      }
-	      function startSpecialsTimer() {
-	        window.clearInterval(specialsTimer);
-	        if (specialSlides.length <= 1) return;
-	        specialsTimer = window.setInterval(() => {
-	          if (document.hidden) return;
-	          setSpecial(activeSpecial + 1);
-	        }, 6500);
-	      }
-	      document.querySelectorAll('[data-special-dir]').forEach(button => {
+	      controls.forEach(button => {
 	        button.addEventListener('click', () => {
 	          setSpecial(activeSpecial + Number(button.dataset.specialDir || 1));
-	          startSpecialsTimer();
 	        });
 	      });
 	      dots.forEach(dot => {
 	        dot.addEventListener('click', () => {
 	          setSpecial(Number(dot.dataset.specialIndex || 0));
-	          startSpecialsTimer();
 	        });
 	      });
-	      startSpecialsTimer();
 	    }
 	    const revealTargets = Array.from(document.querySelectorAll('.section-band, .footer'));
 	    const reducedPageMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -3216,6 +3142,7 @@
 	    }
 	    renderCart();
 	  </script>
-	  <script src="assets/category.js?v=20260530-public-preview"></script>
-	</body>
+	  <script src="assets/reef-background.js?v=20260603-water8"></script>
+		  <script src="assets/category.js?v=20260604-sale-prices"></script>
+</body>
 	</html>
