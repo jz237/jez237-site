@@ -27,6 +27,17 @@
     .sound-hero p { position:relative; z-index:1; max-width: 780px; color: var(--ink-mid); font-size: clamp(15px, 2vw, 19px); line-height:1.55; }
     .sound-lab-stats { position:relative; z-index:1; display:flex; flex-wrap:wrap; gap:10px; margin-top:24px; }
     .sound-lab-stats span { padding:10px 14px; border:1px solid rgba(255,255,255,.12); border-radius:999px; background:rgba(255,255,255,.055); color:var(--ink-mid); font-size:13px; }
+    .sound-room-links { display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:12px; margin:0 0 18px; }
+    .sound-room-link { position:relative; overflow:hidden; min-width:0; padding:16px 18px; border:1px solid rgba(255,255,255,.13); border-radius:18px; background:linear-gradient(135deg, rgba(5,14,28,.74), rgba(0,0,0,.3)); color:var(--ink-hi); text-decoration:none; box-shadow:0 14px 32px rgba(0,0,0,.22), inset 0 1px 0 rgba(255,255,255,.06); }
+    .sound-room-link::before { content:""; position:absolute; inset:0; background:var(--room-bg); opacity:.42; }
+    .sound-room-link span, .sound-room-link strong, .sound-room-link small { position:relative; z-index:1; display:block; }
+    .sound-room-link span { color:var(--brand-gold); font-size:11px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; }
+    .sound-room-link strong { margin-top:6px; font-size:clamp(18px, 2vw, 24px); line-height:1; }
+    .sound-room-link small { margin-top:7px; color:var(--ink-mid); font-size:12px; line-height:1.35; }
+    .sound-room-link:hover { border-color:rgba(232,197,122,.38); transform:translateY(-1px); }
+    .sound-room-link--sid { --room-bg:radial-gradient(circle at 20% 20%, rgba(127,255,255,.35), transparent 34%), linear-gradient(135deg, rgba(64,49,141,.92), rgba(20,15,67,.85)); }
+    .sound-room-link--amiga { --room-bg:radial-gradient(circle at 78% 15%, rgba(41,215,255,.28), transparent 32%), linear-gradient(135deg, rgba(14,21,45,.9), rgba(255,93,46,.28)); }
+    .sound-room-link--hub { --room-bg:linear-gradient(90deg, rgba(232,197,122,.22), transparent), url('../assets/ai-sounds/realistic-waveform-20260531.webp') center / cover no-repeat; }
     .sound-view-toolbar { position:sticky; top:calc(var(--nav-height, 58px) + 8px); z-index:5; display:flex; align-items:center; justify-content:space-between; gap:12px; margin:0 0 18px; padding:10px; border:1px solid rgba(232,197,122,.22); border-radius:20px; background:linear-gradient(135deg, rgba(10,16,28,.92), rgba(4,10,22,.78)); box-shadow:0 16px 36px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.06); backdrop-filter:blur(14px); }
     .sound-view-label { min-width:0; color:var(--ink-hi); font-size:13px; font-weight:900; letter-spacing:.08em; text-transform:uppercase; }
     .sound-view-toggle { display:inline-flex; flex:0 0 auto; gap:4px; margin:0; padding:4px; border:1px solid rgba(255,255,255,.14); border-radius:999px; background:rgba(0,0,0,.22); }
@@ -120,7 +131,7 @@
     .sound-note { margin-top:18px; padding:18px 20px; border:1px solid rgba(232,197,122,.16); border-radius:22px; background:rgba(232,197,122,.055); color:var(--ink-lo); }
     .sound-note strong { color: var(--ink-hi); }
     @media (max-width: 1160px) { .sound-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-    @media (max-width: 700px) { .sound-grid { grid-template-columns:1fr; } }
+    @media (max-width: 700px) { .sound-grid, .sound-room-links { grid-template-columns:1fr; } }
     @media (min-width: 761px) {
       .is-touch-tablet body.ai-sounds-page .desktop-hub {
         grid-template-columns: 1fr;
@@ -204,6 +215,23 @@
           </div>
           <div class="topbar-actions"><a href="../">Overview</a><button type="button" aria-label="Menu">☰</button></div>
         </div>
+        <nav class="sound-room-links" aria-label="Computer-generated sound rooms">
+          <a class="sound-room-link sound-room-link--sid" href="../experiments/sid-player/">
+            <span>Commodore 64</span>
+            <strong>SID Music</strong>
+            <small>Curated C64 chip music in the browser player.</small>
+          </a>
+          <a class="sound-room-link sound-room-link--amiga" href="../experiments/amiga-mod-player/">
+            <span>Commodore Amiga</span>
+            <strong>Amiga MODs</strong>
+            <small>Tracker modules and Amiga game soundtrack material.</small>
+          </a>
+          <a class="sound-room-link sound-room-link--hub" href="../computer-generated-sounds/">
+            <span>Sound rooms</span>
+            <strong>All Computer Audio</strong>
+            <small>The combined C64, Amiga, and generated-music hub.</small>
+          </a>
+        </nav>
         <!--
           AI maintainer addendum:
           Jez asked to remove the visible "AI Sounds archive" intro/header language.
