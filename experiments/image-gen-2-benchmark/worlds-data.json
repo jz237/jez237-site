@@ -1384,5 +1384,23 @@
       "continuity": "Preserves Thornlight Meridian elements: ochre mesas, chalk wind canyons, violet glass dunes, amber thorn-crystal, dust-silk shade cloth, wind-harp frames, and gliding mantislike inhabitants with amber sail-limbs.",
       "entryDescription": "A daily market on the Meridian Steps where gliding residents trade leaf laminate, thorn-crystal beads, dust-silk cloth, ceramic water bulbs, and basalt tools under crawling dawn light."
     }
+  },
+  {
+    "id": "2026-06-30-weekly-world-image-thornlight-meridian-cleftwind-market-cab",
+    "title": "Thornlight Meridian: Cleftwind Market Cableway",
+    "tests": "Generated with GPT Image 2; checked for Thornlight Meridian continuity, realistic photographed worldbuilding, non-human inhabitants, no readable text, no humans, and no paper/poster layout.",
+    "prompt": "Create a realistic photographed square image from the invented alien world Thornlight Meridian: commuters riding wind-harp cableway baskets through chalk-white canyon slots at dawn. The world is a dry alien highland of ochre mesa seas, chalk wind canyons, violet glass dunes, amber crystal-thorn groves, mirror salt pans, floating dust halos, and long warm meridian bands of sunrise crawling across stone. Show the cableway as practical infrastructure: woven dust-silk suspension baskets, polished wind-harp resonator frames, ceramic pulleys, thorn-crystal anchor points, copper root-fiber lashings, prism beacon beads, and bone-white shade cloth snapping in a dry updraft. Inside and around the baskets are non-human gliding inhabitants with narrow mantislike torsos, four walking limbs folded carefully, two sail-limbs tucked close with translucent amber wing membranes, long balancing tails, matte slate skin, faceted side eyes, and delicate mouth feelers; they communicate through wing shimmer, tail taps, and small throat clicks, not spoken signs. Below the cableway, include ceramic shade sleds crawling along a sunline ramp, blue wax fan-leaf bundles, basalt hand tools, dust-sail ferry silhouettes far below, and violet glass dunes beyond the canyon mouth. Make the scene lived-in and tactile: worn ceramic edges, mineral dust on basket rims, frayed dust-silk knots, scratched prism beads, small tool hooks, packed commuter parcels, sunrise highlights through amber wing membranes, crisp dry air, lens depth, believable scale, and dense material detail. No humans, no Earth desert town, no readable text, no logos, no mushroom or fungal motifs, no cyberpunk neon, no fantasy village styling, no spaceship habitat, no tidal mudflat imagery, no poster or prompt-card layout.\n\nReusable fill-in-the-blank template: Show [NON_HUMAN_INHABITANTS] using [ALIEN_TRANSIT_OR_INFRASTRUCTURE] in [ALIEN_WORLD_LOCATION], with [WORLD_MATERIALS], [ECOLOGY_OR_LANDSCAPE], practical wear, scale cues, dense tactile detail, and realistic photographed lighting. Preserve the named world bible continuity and avoid turning the image into a text-forward poster or generic Earth location.\n\nExample substitution: [NON_HUMAN_INHABITANTS] = Thornlight Meridian gliding inhabitants; [ALIEN_TRANSIT_OR_INFRASTRUCTURE] = wind-harp cableway baskets; [ALIEN_WORLD_LOCATION] = chalk-white canyon slots above violet glass dunes; [WORLD_MATERIALS] = porous ceramic, dust-silk, thorn-crystal, copper root fiber, prism beads, bone-white shade cloth; [ECOLOGY_OR_LANDSCAPE] = amber crystal-thorn groves, ochre mesas, sunline ramps, floating dust halos.",
+    "image": "images/2026-06-30-weekly-world-image-thornlight-meridian-cleftwind-market-cab.jpg",
+    "date": "2026-06-30",
+    "batch": "Daily Prompt",
+    "slot": "weekly-world-image",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "world": {
+      "name": "Thornlight Meridian",
+      "description": "A dry alien highland world where dawn-powered crystal thorns, wind-harp canyons, and long-limbed gliding inhabitants make cities along moving bands of warm light.",
+      "continuity": "Preserves Thornlight Meridian chalk canyons, violet glass dunes, amber crystal-thorn technology, dust-silk shade cloth, wind-harp infrastructure, and non-human gliding inhabitants with slate skin and amber sail-limbs.",
+      "entryDescription": "Commuters ride suspended wind-harp cableway baskets through a chalk canyon while shade sleds move below and violet glass dunes glow beyond the canyon mouth."
+    }
   }
 ]
