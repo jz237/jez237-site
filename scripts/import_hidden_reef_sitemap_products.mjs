@@ -11,6 +11,7 @@ const userAgent = 'Mozilla/5.0 Hidden Reef public sitemap catalog import';
 
 const args = parseArgs(process.argv.slice(2));
 const write = Boolean(args.write);
+const pruneMissing = Boolean(args['prune-missing']);
 const concurrency = Number(args.concurrency || 4);
 const limit = Number(args.limit || 0);
 const timestamp = new Date().toISOString();
@@ -22,6 +23,8 @@ function parseArgs(argv) {
     const arg = argv[index];
     if (arg === '--write') {
       parsed.write = true;
+    } else if (arg === '--prune-missing') {
+      parsed['prune-missing'] = true;
     } else if (arg.startsWith('--')) {
       parsed[arg.slice(2)] = argv[index + 1];
       index += 1;
@@ -140,6 +143,7 @@ function serializeProducts(productsBySlug, metadata) {
     ...(metadata.presentationLine ? [metadata.presentationLine] : []),
     ...(metadata.galleryLine ? [metadata.galleryLine] : []),
     ...(metadata.removedLine ? [metadata.removedLine] : []),
+    ...(metadata.publicSitemapPruneLine ? [metadata.publicSitemapPruneLine] : []),
     `// Public sitemap import: ${metadata.sitemapCount} products checked ${metadata.timestamp}`,
     '',
     'const THR_PRODUCTS = {'
@@ -166,6 +170,28 @@ function serializeProducts(productsBySlug, metadata) {
   return lines.join('\n');
 }
 
+function pruneProductsMissingFromSitemap(productsBySlug, sitemapProductUrlSet) {
+  const removed = [];
+  for (const [slug, products] of Object.entries(productsBySlug)) {
+    if (!Array.isArray(products)) continue;
+    const kept = [];
+    for (const product of products) {
+      const productUrl = normalizeUrl(product?.productUrl || '');
+      if (productUrl && !sitemapProductUrlSet.has(productUrl)) {
+        removed.push({
+          slug,
+          name: product.name || '',
+          productUrl: product.productUrl || ''
+        });
+        continue;
+      }
+      kept.push(product);
+    }
+    productsBySlug[slug] = kept;
+  }
+  return removed;
+}
+
 const productDataJs = await fs.readFile(productDataPath, 'utf8');
 const dataWindow = loadBrowserScript(productDataJs, productDataPath);
 const productsBySlug = dataWindow.THR_PRODUCTS;
@@ -175,6 +201,10 @@ const existingPublicByUrl = new Map(existingPublic.map(product => [normalizeUrl(
 const sitemapXml = await fetchText(sitemapUrl);
 let sitemapProductUrls = [...sitemapXml.matchAll(/<loc>([^<]+\.html)<\/loc>/g)].map(match => decodeHtml(match[1]));
 sitemapProductUrls = [...new Set(sitemapProductUrls.map(url => normalizeUrl(url)))].sort();
+const sitemapProductUrlSet = new Set(sitemapProductUrls);
+const prunedMissingProducts = pruneMissing
+  ? pruneProductsMissingFromSitemap(productsBySlug, sitemapProductUrlSet)
+  : [];
 
 const mappedUrls = new Set();
 for (const [slug, products] of Object.entries(productsBySlug)) {
@@ -214,10 +244,21 @@ productsBySlug[sitemapSlug] = imported;
 const report = {
   timestamp,
   write,
+  pruneMissing,
   sitemapProducts: sitemapProductUrls.length,
   mappedProductUrls: mappedUrls.size,
   sitemapOnlyProducts: neededUrls.length,
   imported: imported.length,
+  prunedMissingProducts: prunedMissingProducts.length,
+  prunedMissingProductsBySlug: Object.fromEntries(
+    Object.entries(
+      prunedMissingProducts.reduce((counts, product) => {
+        counts[product.slug] = (counts[product.slug] || 0) + 1;
+        return counts;
+      }, {})
+    ).sort(([left], [right]) => left.localeCompare(right))
+  ),
+  removed: prunedMissingProducts,
   errors
 };
 const reportPath = path.join(reportDir, 'report.json');
@@ -230,7 +271,10 @@ if (write) {
     refreshedAt: dataWindow.THR_PRODUCT_META?.refreshedAt || '',
     presentationLine: productDataJs.match(/^\/\/ Presentation refresh:.*$/m)?.[0] || '',
     galleryLine: productDataJs.match(/^\/\/ Gallery refresh:.*$/m)?.[0] || '',
-    removedLine: productDataJs.match(/^\/\/ Removed stale 404 product URLs:.*$/m)?.[0] || ''
+    removedLine: productDataJs.match(/^\/\/ Removed stale 404 product URLs:.*$/m)?.[0] || '',
+    publicSitemapPruneLine: prunedMissingProducts.length
+      ? `// Public sitemap prune: ${prunedMissingProducts.length} products removed ${timestamp}`
+      : productDataJs.match(/^\/\/ Public sitemap prune:.*$/m)?.[0] || ''
   });
   await fs.writeFile(productDataPath, nextJs);
 }
@@ -241,6 +285,7 @@ console.log(JSON.stringify({
   mappedProductUrls: mappedUrls.size,
   sitemapOnlyProducts: neededUrls.length,
   imported: imported.length,
+  prunedMissingProducts: prunedMissingProducts.length,
   errors: errors.length,
   reportPath
 }, null, 2));
