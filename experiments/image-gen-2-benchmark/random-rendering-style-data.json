@@ -100,5 +100,22 @@
       "description": "A detailed aquarium maintenance workbench rendered as precise late-1970s technical airbrush art.",
       "template": "Render a crowded [WORKSHOP_OR_MAINTENANCE_SPACE] as a richly detailed [STYLE_OR_MEDIUM] image with [TOOLS], [WET_OR_REFLECTIVE_SURFACES], [OPENED_PARTS_OR_MATERIAL_TRAYS], [SPECIFIC_LIGHTING], and no prompt-card text."
     }
+  },
+  {
+    "id": "2026-06-30-random-image-style-random-rendering-style-voxel-seed-vault-",
+    "title": "Random rendering style: Voxel Seed-Vault Workroom",
+    "tests": "Generated with GPT Image 2 via OpenClaw CLI; verified exact output path exists; archive JSON parse and R2 URL checks performed after append.",
+    "prompt": "Create a finished square image of a subterranean seed-vault workroom rendered as richly detailed voxel graphics, like a tactile block-built 3D scene with tiny cubic geometry, crisp stepped shadows, and no text. The subject is an active conservation workspace, not a poster and not a centered object photo: tiered cold-storage shelves made of tiny translucent frosted voxel blocks, seed jars with colored caps but no readable labels, open sorting trays of varied seeds, a blocky magnifier lamp, insulated sample crates, frost on the floor tiles, copper pipe condensate, a small germination test bench with damp paper grids represented only as texture, gloved blocky hands visible at the edge arranging trays without showing a face, a rolling cart with soil plugs, humidity beads, amber status lights, and a curved concrete tunnel wall behind it. Make the voxel medium control everything: visible cube units, chunky edges, stepped light falloff, gridded reflections on glass, small block particles, and layered depth like a high-end isometric game asset photographed with macro depth of field. Use a palette of cold mint glass, dark concrete, warm amber lamps, copper pipes, red seed caps, pale wood trays, and soft white frost. Avoid readable text, logos, watermarks, paper-poster layout, cinematic scene framing, flat illustration, realistic photo texture, and any result that looks like a normal room with a voxel filter.\n\nReusable fill-in-the-blank template: Render [SUBJECT_OR_WORKSPACE] as a richly detailed [STYLE_OR_MEDIUM] image where the chosen medium visibly controls the construction, lighting, texture, and spatial logic. Include [FORMAT_SPECIFIC_MARKS_OR_MATERIALS], [ENVIRONMENTAL_CONTEXT], [ACTIVE_USE_OR_DISPLAY_SYSTEM], [SPECIFIC_PALETTE], and tactile fine detail. Avoid readable text, logos, prompt-card layout, plain centered object display, and a generic filter effect.\n\nExample substitution: [SUBJECT_OR_WORKSPACE] = a subterranean seed-vault workroom; [STYLE_OR_MEDIUM] = voxel graphics; [FORMAT_SPECIFIC_MARKS_OR_MATERIALS] = tiny cubic geometry, chunky edges, stepped light falloff, gridded glass reflections, small block particles; [ENVIRONMENTAL_CONTEXT] = curved concrete tunnel, frost, copper pipes, cold-storage shelves; [ACTIVE_USE_OR_DISPLAY_SYSTEM] = seed sorting trays, germination bench, rolling cart, gloved hands at the edge; [SPECIFIC_PALETTE] = cold mint glass, dark concrete, warm amber lamps, copper pipes, red seed caps, pale wood trays, and soft white frost.",
+    "image": "images/2026-06-30-random-image-style-random-rendering-style-voxel-seed-vault-.jpg",
+    "date": "2026-06-30",
+    "batch": "Daily Prompt",
+    "slot": "random-image-style",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "randomRenderingStyle": {
+      "medium": "voxel graphics",
+      "description": "A subterranean seed-vault conservation workroom built as a dense voxel-graphics scene with glass shelves, seed trays, frost, copper pipes, and amber work lights.",
+      "template": "Render [SUBJECT_OR_WORKSPACE] as a richly detailed [STYLE_OR_MEDIUM] image where the chosen medium visibly controls the construction, lighting, texture, and spatial logic. Include [FORMAT_SPECIFIC_MARKS_OR_MATERIALS], [ENVIRONMENTAL_CONTEXT], [ACTIVE_USE_OR_DISPLAY_SYSTEM], [SPECIFIC_PALETTE], and tactile fine detail. Avoid readable text, logos, prompt-card layout, plain centered object display, and a generic filter effect."
+    }
   }
 ]
