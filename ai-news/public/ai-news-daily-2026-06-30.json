@@ -1,6 +1,6 @@
 {
   "date": "2026-06-30",
-  "updatedAt": "2026-06-30T16:00:01.277655+00:00",
+  "updatedAt": "2026-06-30T17:00:01.158752+00:00",
   "items": [
     {
       "title": "Amazon launches new $1 billion FDE org, following OpenAI and Anthropic",
@@ -15,11 +15,11 @@
       "image": "public/thumbnails/news-2a3081502c3cf7578d.webp",
       "published": "2026-06-30T15:00:00+00:00",
       "firstSeen": "2026-06-30T16:00:01.277655+00:00",
-      "lastSeen": "2026-06-30T16:00:01.277655+00:00",
+      "lastSeen": "2026-06-30T17:00:01.158752+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 20.0599,
+      "score": 20.0305,
       "signalGroup": "Model releases",
       "sourceTier": "Reported source",
       "whyItMatters": "A model release changes the practical menu: capability, pricing, context, or deployment options may shift for real workflows.",
@@ -31,8 +31,7 @@
       },
       "tryWorthy": true,
       "toolCandidate": false,
-      "clusterKey": "openai-anthropic-amazon-launches-billion-fde-org",
-      "imageOriginal": "https://techcrunch.com/wp-content/uploads/2024/05/GettyImages-1808364693.jpg?w=1200"
+      "clusterKey": "openai-anthropic-amazon-launches-billion-fde-org"
     },
     {
       "title": "Meta is telling engineers to handle Claude Code and Codex with care",
@@ -50,7 +49,7 @@
       "lastSeen": "2026-06-30T14:43:28.867408+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 15.9406,
+      "score": 15.9134,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Reported source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -66,6 +65,130 @@
       "imageOriginal": "https://media.thenextweb.com/2026/06/working-at-odense-data-center.avif"
     },
     {
+      "title": "X launches hosted MCP server so AI tools can plug into its API directly",
+      "url": "https://thenextweb.com/news/x-hosted-mcp-server-ai-tools-api",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "X has launched a hosted Model Context Protocol server that lets AI tools like Claude, Cursor, and Grok Build connect directly to its API using a user’s own account permissions. The move eliminates the integration work developers previously had to do on their own, from building a custom MCP server to handling authentication. X joins [&hellip;]\nThis story continues at The Next Web",
+      "image": "public/thumbnails/news-7e428292689a7a47b4.avif",
+      "published": "2026-06-30T15:31:36+00:00",
+      "firstSeen": "2026-06-30T17:00:01.158752+00:00",
+      "lastSeen": "2026-06-30T17:00:01.158752+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 12.6059,
+      "signalGroup": "Agents & tooling",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
+      "brief": {
+        "whatHappened": "X launches hosted MCP server so AI tools can plug into its API directly",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "mcp-launches-hosted-mcp-server-tools",
+      "imageOriginal": "https://media.thenextweb.com/2026/06/x-hosted-mcp-server-ai-tools-api.avif"
+    },
+    {
+      "title": "How ChatGPT adoption has expanded",
+      "url": "https://openai.com/index/how-chatgpt-adoption-has-expanded",
+      "source": "OpenAI News",
+      "sourceUrl": "https://openai.com/news/rss.xml",
+      "sourceWeight": 1.0,
+      "sourceRole": "primary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "New OpenAI Signals data shows how ChatGPT adoption is growing globally, with users increasing usage, exploring more capabilities, and driving growth across regions and languages.",
+      "image": "public/thumbnails/news-cb6f5473535030d53c.png",
+      "published": "2026-06-30T09:00:00+00:00",
+      "firstSeen": "2026-06-30T17:00:01.158752+00:00",
+      "lastSeen": "2026-06-30T17:00:01.158752+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 11.2808,
+      "signalGroup": "Product updates",
+      "sourceTier": "Primary source",
+      "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
+      "brief": {
+        "whatHappened": "How ChatGPT adoption has expanded",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via OpenAI News."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "chatgpt-how-chatgpt-adoption-has-expanded",
+      "imageOriginal": "https://images.ctfassets.net/kftzwdyauwt9/7pYrohTaJusmMwISBrPGF3/8d3e678444d2b6a22ba62085b9a3bb8b/Frame-1.png?w=1600&h=900&fit=fill"
+    },
+    {
+      "title": "Start building with Nano Banana 2 Lite and Gemini Omni Flash",
+      "url": "https://deepmind.google/blog/start-building-with-nano-banana-2-lite-and-gemini-omni-flash",
+      "source": "Google DeepMind Blog",
+      "sourceUrl": "https://deepmind.google/blog/rss.xml",
+      "sourceWeight": 0.95,
+      "sourceRole": "primary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "",
+      "image": "public/thumbnails/news-4c5f314c65347c5a5e.png",
+      "published": "2026-06-30T16:02:40+00:00",
+      "firstSeen": "2026-06-30T17:00:01.158752+00:00",
+      "lastSeen": "2026-06-30T17:00:01.158752+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 9.4012,
+      "signalGroup": "Product updates",
+      "sourceTier": "Primary source",
+      "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
+      "brief": {
+        "whatHappened": "Start building with Nano Banana 2 Lite and Gemini Omni Flash",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via Google DeepMind Blog."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "gemini-start-building-nano-banana-lite",
+      "imageOriginal": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/gemini-omni__keyword_v6.width-1300.png"
+    },
+    {
+      "title": "Have your agent record video demos of its work with shot-scraper video",
+      "url": "https://simonwillison.net/2026/Jun/30/shot-scraper-video",
+      "source": "Simon Willison",
+      "sourceUrl": "https://simonwillison.net/atom/everything/",
+      "sourceWeight": 0.85,
+      "sourceRole": "primary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "shot-scraper video is a new command introduced in today's shot-scraper 1.10 release which accepts a storyboard.yml file defining a routine to run against a web application and uses Playwright to record a video of that routine. I've written before about the importance of having coding agents produce demos of their work; this is my latest attempt at enabling them to do that.\nHere's an example video created using shot-scraper video, exercising a still in development feature adding the ability to create new tables in Datasette from pasted CSV, TSV or JSON data:\n\n    \n        \n    \n\nThat video was ",
+      "image": "public/thumbnails/news-12aa40ee68c0d04901.jpg",
+      "published": "2026-06-30T16:54:26+00:00",
+      "firstSeen": "2026-06-30T17:00:01.158752+00:00",
+      "lastSeen": "2026-06-30T17:00:01.158752+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "editorial_score_pass",
+      "score": 9.1872,
+      "signalGroup": "Agents & tooling",
+      "sourceTier": "Primary source",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
+      "brief": {
+        "whatHappened": "Have your agent record video demos of its work with shot-scraper video",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via Simon Willison."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "have-your-agent-record-video-demos",
+      "imageOriginal": "https://static.simonwillison.net/static/2026/shot-scraper-video-card.jpg"
+    },
+    {
       "title": "Into the Omniverse: Three Workflows for Improving Vision AI Agent Accuracy With Synthetic Data and Fine-Tuning",
       "url": "https://blogs.nvidia.com/blog/vision-ai-agent-skills-omniverse-metropolis",
       "source": "NVIDIA Blog",
@@ -78,10 +201,10 @@
       "image": "public/thumbnails/news-050e62d27b19e36ba6.png",
       "published": "2026-06-30T13:00:27+00:00",
       "firstSeen": "2026-06-30T14:00:02.085783+00:00",
-      "lastSeen": "2026-06-30T16:00:01.277655+00:00",
+      "lastSeen": "2026-06-30T17:00:01.158752+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.3022,
+      "score": 8.2745,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Primary source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -112,7 +235,7 @@
       "lastSeen": "2026-06-30T13:00:01.308624+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.9752,
+      "score": 7.9499,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
@@ -128,6 +251,99 @@
       "imageOriginal": "https://media.thenextweb.com/2026/06/anthropic-fable-5-vs-openai-gpt-5-5-benchmark-comparison.avif"
     },
     {
+      "title": "SkillOpt: Agent skills as trainable parameters",
+      "url": "https://www.microsoft.com/en-us/research/blog/skillopt-agent-skills-as-trainable-parameters",
+      "source": "Microsoft Research Blog",
+      "sourceUrl": "https://www.microsoft.com/en-us/research/feed/",
+      "sourceWeight": 0.9,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "AI agents often fail because their instructions, or skills, are manually modified with no guarantee of improvement. Learn how SkillOpt turns skill editing into a training process, making agent behavior more reliable without changing model weights.\nThe post SkillOpt: Agent skills as trainable parameters appeared first on Microsoft Research.",
+      "image": "public/thumbnails/news-3019c7bc48f3e0f05c.jpg",
+      "published": "2026-06-30T16:50:02+00:00",
+      "firstSeen": "2026-06-30T17:00:01.158752+00:00",
+      "lastSeen": "2026-06-30T17:00:01.158752+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "editorial_score_pass",
+      "score": 7.8549,
+      "signalGroup": "Agents & tooling",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
+      "brief": {
+        "whatHappened": "SkillOpt: Agent skills as trainable parameters",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via Microsoft Research Blog."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "skillopt-agent-skills-trainable-parameters",
+      "imageOriginal": "https://www.microsoft.com/en-us/research/wp-content/uploads/2026/06/SkillOpt-TWLIFB-1200x627-1-scaled.jpg"
+    },
+    {
+      "title": "Build generative UI for AI agents on Amazon Bedrock AgentCore with the AG-UI protocol",
+      "url": "https://aws.amazon.com/blogs/machine-learning/build-generative-ui-for-ai-agents-on-amazon-bedrock-agentcore-with-the-ag-ui-protocol",
+      "source": "AWS Machine Learning Blog",
+      "sourceUrl": "https://aws.amazon.com/blogs/machine-learning/feed/",
+      "sourceWeight": 0.72,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "This post walks through how AG-UI integrates into the Fullstack AgentCore Solution Template (FAST) to build interactive agent frontends on Amazon Bedrock AgentCore. We then show how CopilotKit extends this with generative UI, shared state, and human-in-the-loop interactions, all deployed on Amazon Bedrock AgentCore.",
+      "image": "public/thumbnails/news-4182cedc7c27c84978.png",
+      "published": "2026-06-30T16:46:17+00:00",
+      "firstSeen": "2026-06-30T17:00:01.158752+00:00",
+      "lastSeen": "2026-06-30T17:00:01.158752+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 6.801,
+      "signalGroup": "Agents & tooling",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
+      "brief": {
+        "whatHappened": "Build generative UI for AI agents on Amazon Bedrock AgentCore with the AG-UI protocol",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via AWS Machine Learning Blog."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "build-generative-agents-amazon-bedrock-agentcore",
+      "imageOriginal": "https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2026/06/23/20863.png"
+    },
+    {
+      "title": "Chamath’s AI coding startup 8090 raises $135M, and he’s CEO",
+      "url": "https://thenextweb.com/news/chamath-palihapitiya-8090-135m-series-a-ai-coding",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Salesforce led the Series A, which 8090 announced this week. The pitch behind it is blunt. AI can already write code. The hard part is stopping enterprise software from falling apart as dozens of agents and engineers change it every week. TechCrunch first reported the round, and the company confirmed the details. The investor list [&hellip;]\nThis story continues at The Next Web",
+      "image": "public/thumbnails/news-ed0a1791265bcc36d9.avif",
+      "published": "2026-06-30T16:25:33+00:00",
+      "firstSeen": "2026-06-30T17:00:01.158752+00:00",
+      "lastSeen": "2026-06-30T17:00:01.158752+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 6.2326,
+      "signalGroup": "Agents & tooling",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
+      "brief": {
+        "whatHappened": "Chamath’s AI coding startup 8090 raises $135M, and he’s CEO",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "chamath-coding-startup-8090-raises-135m",
+      "imageOriginal": "https://media.thenextweb.com/2026/06/Chamath-Palihapitiya.avif"
+    },
+    {
       "title": "Meet the lawyer who beat Elon Musk — twice",
       "url": "https://www.theverge.com/column/959270/elon-musk-open-ai-bill-savitt-twitter",
       "source": "The Verge AI",
@@ -140,10 +356,10 @@
       "image": "public/thumbnails/news-a748a92bc137599c62.webp",
       "published": "2026-06-30T12:00:00+00:00",
       "firstSeen": "2026-06-30T13:00:01.308624+00:00",
-      "lastSeen": "2026-06-30T16:00:01.277655+00:00",
+      "lastSeen": "2026-06-30T17:00:01.158752+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 4.9443,
+      "score": 4.9173,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
@@ -170,10 +386,10 @@
       "image": "public/thumbnails/news-e492d15ada04aaef36.avif",
       "published": "2026-06-30T14:51:03+00:00",
       "firstSeen": "2026-06-30T16:00:01.277655+00:00",
-      "lastSeen": "2026-06-30T16:00:01.277655+00:00",
+      "lastSeen": "2026-06-30T17:00:01.158752+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 4.8154,
+      "score": 4.7862,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Reported source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -201,10 +417,10 @@
       "image": "public/thumbnails/news-04d7dae125a7b75937.webp",
       "published": "2026-06-30T09:00:00+00:00",
       "firstSeen": "2026-06-30T09:00:02.018862+00:00",
-      "lastSeen": "2026-06-30T16:00:01.277655+00:00",
+      "lastSeen": "2026-06-30T17:00:01.158752+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 4.7956,
+      "score": 4.7708,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Reported source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -231,10 +447,10 @@
       "image": "public/thumbnails/news-ac69a2cd468a0efff0.jpg",
       "published": "2026-06-30T15:08:42+00:00",
       "firstSeen": "2026-06-30T16:00:01.277655+00:00",
-      "lastSeen": "2026-06-30T16:00:01.277655+00:00",
+      "lastSeen": "2026-06-30T17:00:01.158752+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 4.7642,
+      "score": 4.7347,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Reported source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -246,8 +462,7 @@
       },
       "tryWorthy": true,
       "toolCandidate": false,
-      "clusterKey": "mcp-offers-mcp-server-make-platform",
-      "imageOriginal": "https://techcrunch.com/wp-content/uploads/2023/08/twitter-x-logo-musk-pattern.jpg?resize=1200%2C675"
+      "clusterKey": "mcp-offers-mcp-server-make-platform"
     },
     {
       "title": "Straiker raises $64M to secure the AI agents running your company",
@@ -265,7 +480,7 @@
       "lastSeen": "2026-06-30T11:00:01.388786+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 4.6438,
+      "score": 4.6193,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Reported source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -293,10 +508,10 @@
       "image": "public/thumbnails/news-9bcfc5b447201ade1e.png",
       "published": "2026-06-30T15:00:57+00:00",
       "firstSeen": "2026-06-30T16:00:01.277655+00:00",
-      "lastSeen": "2026-06-30T16:00:01.277655+00:00",
+      "lastSeen": "2026-06-30T17:00:01.158752+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 4.5603,
+      "score": 4.531,
       "signalGroup": "Infrastructure",
       "sourceTier": "Primary source",
       "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
@@ -312,244 +527,35 @@
       "imageOriginal": "https://blogs.nvidia.com/wp-content/uploads/2026/06/press-inference-ai-aws-beat-1920x1080-1.png"
     },
     {
-      "title": "Visual Studio 2026 Brings AI Deeper Into Development and It’s 93% Off Right Now",
-      "url": "https://www.techrepublic.com/article/microsoft-visual-studio-professional-2026",
-      "source": "TechRepublic AI",
-      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
+      "title": "AI shopping just beat search at its own game on Prime Day",
+      "url": "https://thenextweb.com/news/ai-shopping-prime-day-amazon-chatbots",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
       "sourceWeight": 0.75,
       "sourceRole": "secondary",
       "sourceType": "",
       "category": "AI",
-      "summary": "Microsoft's latest 64-bit IDE adds AI-assisted coding, faster performance, and advanced collaboration tools.\nThe post Visual Studio 2026 Brings AI Deeper Into Development and It’s 93% Off Right Now appeared first on TechRepublic.",
-      "image": "public/thumbnails/news-f9f7d63e8cb38fb2f3.jpg",
-      "published": "2026-06-30T12:30:40+00:00",
-      "firstSeen": "2026-06-30T15:00:01.866707+00:00",
-      "lastSeen": "2026-06-30T16:00:01.277655+00:00",
+      "summary": "Amazon built Prime Day to keep shoppers inside its own marketplace. This year, AI shopping sent its best customers in from outside: a chatbot made the recommendation. US shoppers spent a record $26.4bn across retail sites during the four-day Prime Day event, according to Adobe Analytics. The more interesting number is not the total. It [&hellip;]\nThis story continues at The Next Web",
+      "image": "public/thumbnails/news-44b575db18fdf45192.avif",
+      "published": "2026-06-30T16:11:09+00:00",
+      "firstSeen": "2026-06-30T17:00:01.158752+00:00",
+      "lastSeen": "2026-06-30T17:00:01.158752+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 4.5484,
+      "score": 4.5254,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
       "brief": {
-        "whatHappened": "Visual Studio 2026 Brings AI Deeper Into Development and It’s 93% Off Right Now",
-        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
-        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
-        "sourceFrame": "Seen via TechRepublic AI."
-      },
-      "tryWorthy": true,
-      "toolCandidate": false,
-      "clusterKey": "visual-studio-2026-brings-deeper-development"
-    },
-    {
-      "title": "China’s LineShine Tops Supercomputer List Despite AI Benchmark Gap",
-      "url": "https://www.techrepublic.com/article/news-apac-china-lineshine-fastest-supercomputer",
-      "source": "TechRepublic AI",
-      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
-      "sourceWeight": 0.75,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "China’s LineShine debuted as the world’s fastest supercomputer on TOP500, but mixed-precision benchmark results complicate its AI performance claim.\nThe post China’s LineShine Tops Supercomputer List Despite AI Benchmark Gap appeared first on TechRepublic.",
-      "image": "public/thumbnails/news-9aea8009cbcc620736.jpg",
-      "published": "2026-06-30T08:36:10+00:00",
-      "firstSeen": "2026-06-30T15:00:01.866707+00:00",
-      "lastSeen": "2026-06-30T16:00:01.277655+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 4.0957,
-      "signalGroup": "Infrastructure",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
-      "brief": {
-        "whatHappened": "China’s LineShine Tops Supercomputer List Despite AI Benchmark Gap",
-        "whoItAffects": "Anyone affected by AI compute cost, speed, availability, or hardware supply.",
-        "practicalImpact": "Infrastructure shifts often show up later as cheaper tools, higher limits, or new bottlenecks.",
-        "sourceFrame": "Seen via TechRepublic AI."
-      },
-      "tryWorthy": false,
-      "toolCandidate": false,
-      "clusterKey": "china-lineshine-tops-supercomputer-list-despite"
-    },
-    {
-      "title": "Apple says it is shipping security updates early as AI speeds up hacking",
-      "url": "https://thenextweb.com/news/apple-early-security-updates-ai",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "For years Apple released most of its security fixes the way it releases everything else, on a schedule, bundled into the next big version of iOS and delivered when the company was ready rather than when the flaw was found. That timetable now has a new constraint, and Apple has decided it can no longer [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/apple-lobbying-us-approval-cxmt-blacklisted-memory-chips.avif",
-      "published": "2026-06-30T09:37:16+00:00",
-      "firstSeen": "2026-06-30T11:00:01.388786+00:00",
-      "lastSeen": "2026-06-30T13:00:01.308624+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.7714,
-      "signalGroup": "Policy & risk",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Policy and risk stories often become product constraints later, especially around data access, safety claims, export rules, and copyright.",
-      "brief": {
-        "whatHappened": "Apple says it is shipping security updates early as AI speeds up hacking",
-        "whoItAffects": "Product builders, platform users, and anyone depending on model access or data rights.",
-        "practicalImpact": "Policy moves can become tomorrow's product limits, compliance burden, or availability issue.",
-        "sourceFrame": "Seen via The Next Web."
-      },
-      "tryWorthy": true,
-      "toolCandidate": false,
-      "clusterKey": "apple-shipping-security-updates-early-speeds"
-    },
-    {
-      "title": "iPhone 18 Pro supplier list and parts exposed in Tata data leak",
-      "url": "https://thenextweb.com/news/iphone-18-pro-supplier-leak-tata",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "The most tightly held document in consumer electronics is the bill of materials, and a chunk of Apple’s appears to be sitting on the dark web. Files posted by the ransomware group World Leaks contain component lists, supplier names, and photographs tied to the unreleased iPhone 18 Pro, stolen from Tata Electronics, Apple’s manufacturing partner [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/Apple.avif",
-      "published": "2026-06-30T08:50:53+00:00",
-      "firstSeen": "2026-06-30T10:00:01.959366+00:00",
-      "lastSeen": "2026-06-30T12:00:01.370611+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.7518,
-      "signalGroup": "Product updates",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
-      "brief": {
-        "whatHappened": "iPhone 18 Pro supplier list and parts exposed in Tata data leak",
+        "whatHappened": "AI shopping just beat search at its own game on Prime Day",
         "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
         "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
         "sourceFrame": "Seen via The Next Web."
       },
-      "tryWorthy": true,
-      "toolCandidate": false,
-      "clusterKey": "iphone-pro-supplier-list-parts-exposed"
-    },
-    {
-      "title": "Libby will filter out AI content, kind of",
-      "url": "https://www.theverge.com/column/959433/libby-ai-filter",
-      "source": "The Verge AI",
-      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
-      "sourceWeight": 0.9,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "This is Lowpass by Janko Roettgers, a newsletter on the ever-evolving intersection of tech and entertainment, syndicated just for The Verge subscribers once a week. \"AI is the new frontier for us,\" says Marc DeBevoise, who took over as the new CEO of OverDrive last week. OverDrive is best known for the ebook lending app [&#8230;]",
-      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/24148705/PXL_20221028_153245856.jpg?quality=90&strip=all&crop=0%2C15.232329842932%2C100%2C69.535340314136&w=1200",
-      "published": "2026-06-30T15:30:00+00:00",
-      "firstSeen": "2026-06-30T16:00:01.277655+00:00",
-      "lastSeen": "2026-06-30T16:00:01.277655+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.4448,
-      "signalGroup": "Product updates",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
-      "brief": {
-        "whatHappened": "Libby will filter out AI content, kind of",
-        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
-        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
-        "sourceFrame": "Seen via The Verge AI."
-      },
       "tryWorthy": false,
       "toolCandidate": false,
-      "clusterKey": "libby-will-filter-out-content-kind"
-    },
-    {
-      "title": "Why Specialization Is Inevitable",
-      "url": "https://huggingface.co/blog/Dharma-AI/why-specialization-is-inevitable",
-      "source": "Hugging Face Blog",
-      "sourceUrl": "https://huggingface.co/blog/feed.xml",
-      "sourceWeight": 0.95,
-      "sourceRole": "primary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "",
-      "image": "https://cdn-uploads.huggingface.co/production/uploads/69d815b52c6db28cfdfdd422/Av4v9_l94sEUj-etRFOLb.png",
-      "published": "2026-06-30T14:39:11+00:00",
-      "firstSeen": "2026-06-30T14:43:28.867408+00:00",
-      "lastSeen": "2026-06-30T16:00:01.277655+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.3896,
-      "signalGroup": "Product updates",
-      "sourceTier": "Primary source",
-      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
-      "brief": {
-        "whatHappened": "Why Specialization Is Inevitable",
-        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
-        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
-        "sourceFrame": "Seen via Hugging Face Blog."
-      },
-      "tryWorthy": false,
-      "toolCandidate": false,
-      "clusterKey": "why-specialization-inevitable"
-    },
-    {
-      "title": "Chrome is putting things on your computer you never agreed to",
-      "url": "https://thenextweb.com/news/chrome-ai-silent-install-malicious-extension-privacy",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "Your browser has been busy on your behalf. This week brought two reminders that Chrome can put things on your machine you never agreed to. One came from Google. One came from an impostor. Both used the same quiet machinery. Chrome runs on billions of devices, which makes it one of the most powerful pieces [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/Google-Chrome-Mockup.avif",
-      "published": "2026-06-30T08:23:59+00:00",
-      "firstSeen": "2026-06-30T09:00:02.018862+00:00",
-      "lastSeen": "2026-06-30T11:00:01.388786+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 3.3406,
-      "signalGroup": "Agents & tooling",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
-      "brief": {
-        "whatHappened": "Chrome is putting things on your computer you never agreed to",
-        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
-        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
-        "sourceFrame": "Seen via The Next Web."
-      },
-      "tryWorthy": false,
-      "toolCandidate": false,
-      "clusterKey": "chrome-putting-things-your-computer-you"
-    },
-    {
-      "title": "The Supreme Court just made it harder for police to track your phone",
-      "url": "https://thenextweb.com/news/scotus-geofence-warrants-phone-location-privacy",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "Your phone keeps a minute-by-minute diary of where you go. The US Supreme Court has now ruled that police cannot simply demand it. In a major win for digital privacy, the court said geofence searches need a warrant. The 6-3 decision lands on a practice that has quietly spread through US policing. When investigators have [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2013/07/84661557.avif",
-      "published": "2026-06-30T08:12:14+00:00",
-      "firstSeen": "2026-06-30T09:00:02.018862+00:00",
-      "lastSeen": "2026-06-30T10:00:01.959366+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 3.3358,
-      "signalGroup": "Policy & risk",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Policy and risk stories often become product constraints later, especially around data access, safety claims, export rules, and copyright.",
-      "brief": {
-        "whatHappened": "The Supreme Court just made it harder for police to track your phone",
-        "whoItAffects": "Product builders, platform users, and anyone depending on model access or data rights.",
-        "practicalImpact": "Policy moves can become tomorrow's product limits, compliance burden, or availability issue.",
-        "sourceFrame": "Seen via The Next Web."
-      },
-      "tryWorthy": false,
-      "toolCandidate": false,
-      "clusterKey": "supreme-court-just-made-harder-police"
+      "clusterKey": "shopping-just-beat-search-own-game",
+      "imageOriginal": "https://media.thenextweb.com/2026/06/online-shopping.avif"
     }
   ],
   "tools": [
@@ -566,10 +572,10 @@
       "image": "public/thumbnails/news-c5f462b461ce114c9f.avif",
       "published": "2026-06-25T05:47:05+00:00",
       "firstSeen": "2026-06-26T08:00:01.499506+00:00",
-      "lastSeen": "2026-06-30T16:00:01.277655+00:00",
+      "lastSeen": "2026-06-30T17:00:01.158752+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.5375,
+      "score": 7.5367,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -599,10 +605,10 @@
       "image": "public/thumbnails/news-099aa7484406bdf5f9.avif",
       "published": "2026-06-29T16:54:09+00:00",
       "firstSeen": "2026-06-30T08:00:01.738579+00:00",
-      "lastSeen": "2026-06-30T16:00:01.277655+00:00",
+      "lastSeen": "2026-06-30T17:00:01.158752+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.4871,
+      "score": 7.4712,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -632,10 +638,10 @@
       "image": "",
       "published": "2026-06-19T18:14:21+00:00",
       "firstSeen": "2026-06-25T14:53:44.092288+00:00",
-      "lastSeen": "2026-06-30T16:00:01.277655+00:00",
+      "lastSeen": "2026-06-30T17:00:01.158752+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 6.5088,
+      "score": 6.5087,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -698,10 +704,10 @@
       "image": "public/thumbnails/news-6568576f444e6c5bc4.avif",
       "published": "2026-06-25T20:15:56+00:00",
       "firstSeen": "2026-06-27T08:00:01.988916+00:00",
-      "lastSeen": "2026-06-30T16:00:01.277655+00:00",
+      "lastSeen": "2026-06-30T17:00:01.158752+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.8522,
+      "score": 3.851,
       "signalGroup": "Product updates",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
@@ -734,7 +740,7 @@
       "lastSeen": "2026-06-30T07:00:01.628161+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.8147,
+      "score": 3.8145,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -764,10 +770,10 @@
       "image": "https://ph-files.imgix.net/ea5cfd31-1b70-4e8c-90ca-a87e8ab8ddc6.png?auto=format&fit=crop&frame=1&h=512&w=1024",
       "published": "2026-06-27T12:16:36+00:00",
       "firstSeen": "2026-06-29T08:00:01.336271+00:00",
-      "lastSeen": "2026-06-30T16:00:01.277655+00:00",
+      "lastSeen": "2026-06-30T17:00:01.158752+00:00",
       "editorial_allow": false,
       "editorial_reason": "watchlist_low_signal",
-      "score": 3.7422,
+      "score": 3.7386,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -800,7 +806,7 @@
       "lastSeen": "2026-06-30T12:00:01.370611+00:00",
       "editorial_allow": false,
       "editorial_reason": "watchlist_low_signal",
-      "score": 3.6934,
+      "score": 3.6719,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -837,10 +843,10 @@
       "image": "public/thumbnails/news-c5f462b461ce114c9f.avif",
       "published": "2026-06-25T05:47:05+00:00",
       "firstSeen": "2026-06-26T08:00:01.499506+00:00",
-      "lastSeen": "2026-06-30T16:00:01.277655+00:00",
+      "lastSeen": "2026-06-30T17:00:01.158752+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.5375,
+      "score": 7.5367,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -870,10 +876,10 @@
       "image": "public/thumbnails/news-099aa7484406bdf5f9.avif",
       "published": "2026-06-29T16:54:09+00:00",
       "firstSeen": "2026-06-30T08:00:01.738579+00:00",
-      "lastSeen": "2026-06-30T16:00:01.277655+00:00",
+      "lastSeen": "2026-06-30T17:00:01.158752+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.4871,
+      "score": 7.4712,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -903,10 +909,10 @@
       "image": "",
       "published": "2026-06-19T18:14:21+00:00",
       "firstSeen": "2026-06-25T14:53:44.092288+00:00",
-      "lastSeen": "2026-06-30T16:00:01.277655+00:00",
+      "lastSeen": "2026-06-30T17:00:01.158752+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 6.5088,
+      "score": 6.5087,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -969,10 +975,10 @@
       "image": "public/thumbnails/news-6568576f444e6c5bc4.avif",
       "published": "2026-06-25T20:15:56+00:00",
       "firstSeen": "2026-06-27T08:00:01.988916+00:00",
-      "lastSeen": "2026-06-30T16:00:01.277655+00:00",
+      "lastSeen": "2026-06-30T17:00:01.158752+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.8522,
+      "score": 3.851,
       "signalGroup": "Product updates",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
@@ -1005,7 +1011,7 @@
       "lastSeen": "2026-06-30T07:00:01.628161+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.8147,
+      "score": 3.8145,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -1035,10 +1041,10 @@
       "image": "https://ph-files.imgix.net/ea5cfd31-1b70-4e8c-90ca-a87e8ab8ddc6.png?auto=format&fit=crop&frame=1&h=512&w=1024",
       "published": "2026-06-27T12:16:36+00:00",
       "firstSeen": "2026-06-29T08:00:01.336271+00:00",
-      "lastSeen": "2026-06-30T16:00:01.277655+00:00",
+      "lastSeen": "2026-06-30T17:00:01.158752+00:00",
       "editorial_allow": false,
       "editorial_reason": "watchlist_low_signal",
-      "score": 3.7422,
+      "score": 3.7386,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -1071,7 +1077,7 @@
       "lastSeen": "2026-06-30T12:00:01.370611+00:00",
       "editorial_allow": false,
       "editorial_reason": "watchlist_low_signal",
-      "score": 3.6934,
+      "score": 3.6719,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -1102,8 +1108,8 @@
       "category": "AI",
       "sourceType": "",
       "status": "ok",
-      "items": 1024,
-      "checkedAt": "2026-06-30T16:00:01.277655+00:00"
+      "items": 1026,
+      "checkedAt": "2026-06-30T17:00:01.158752+00:00"
     },
     {
       "source": "Google AI Blog",
@@ -1113,7 +1119,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-06-30T16:00:01.277655+00:00"
+      "checkedAt": "2026-06-30T17:00:01.158752+00:00"
     },
     {
       "source": "Google DeepMind Blog",
@@ -1123,7 +1129,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-06-30T16:00:01.277655+00:00"
+      "checkedAt": "2026-06-30T17:00:01.158752+00:00"
     },
     {
       "source": "Google Research Blog",
@@ -1133,7 +1139,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-06-30T16:00:01.277655+00:00"
+      "checkedAt": "2026-06-30T17:00:01.158752+00:00"
     },
     {
       "source": "Hugging Face Blog",
@@ -1143,7 +1149,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 813,
-      "checkedAt": "2026-06-30T16:00:01.277655+00:00"
+      "checkedAt": "2026-06-30T17:00:01.158752+00:00"
     },
     {
       "source": "NVIDIA Blog",
@@ -1153,7 +1159,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 18,
-      "checkedAt": "2026-06-30T16:00:01.277655+00:00"
+      "checkedAt": "2026-06-30T17:00:01.158752+00:00"
     },
     {
       "source": "AWS Machine Learning Blog",
@@ -1163,7 +1169,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-06-30T16:00:01.277655+00:00"
+      "checkedAt": "2026-06-30T17:00:01.158752+00:00"
     },
     {
       "source": "Artificial Intelligence News",
@@ -1173,7 +1179,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 12,
-      "checkedAt": "2026-06-30T16:00:01.277655+00:00"
+      "checkedAt": "2026-06-30T17:00:01.158752+00:00"
     },
     {
       "source": "Ars Technica (AI/Tech)",
@@ -1183,7 +1189,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-06-30T16:00:01.277655+00:00"
+      "checkedAt": "2026-06-30T17:00:01.158752+00:00"
     },
     {
       "source": "Together AI Blog",
@@ -1193,7 +1199,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-06-30T16:00:01.277655+00:00"
+      "checkedAt": "2026-06-30T17:00:01.158752+00:00"
     },
     {
       "source": "TechRepublic AI",
@@ -1203,7 +1209,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-06-30T16:00:01.277655+00:00"
+      "checkedAt": "2026-06-30T17:00:01.158752+00:00"
     },
     {
       "source": "ScienceDaily AI",
@@ -1213,7 +1219,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 60,
-      "checkedAt": "2026-06-30T16:00:01.277655+00:00"
+      "checkedAt": "2026-06-30T17:00:01.158752+00:00"
     },
     {
       "source": "The Next Web",
@@ -1223,7 +1229,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-06-30T16:00:01.277655+00:00"
+      "checkedAt": "2026-06-30T17:00:01.158752+00:00"
     },
     {
       "source": "BBC Discovery",
@@ -1233,7 +1239,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 847,
-      "checkedAt": "2026-06-30T16:00:01.277655+00:00"
+      "checkedAt": "2026-06-30T17:00:01.158752+00:00"
     },
     {
       "source": "BBC Infinite Monkey Cage",
@@ -1243,7 +1249,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 239,
-      "checkedAt": "2026-06-30T16:00:01.277655+00:00"
+      "checkedAt": "2026-06-30T17:00:01.158752+00:00"
     },
     {
       "source": "BBC The Life Scientific",
@@ -1253,7 +1259,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 356,
-      "checkedAt": "2026-06-30T16:00:01.277655+00:00"
+      "checkedAt": "2026-06-30T17:00:01.158752+00:00"
     },
     {
       "source": "TechCrunch AI",
@@ -1263,7 +1269,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-06-30T16:00:01.277655+00:00"
+      "checkedAt": "2026-06-30T17:00:01.158752+00:00"
     },
     {
       "source": "Anthropic News",
@@ -1273,7 +1279,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 231,
-      "checkedAt": "2026-06-30T16:00:01.277655+00:00"
+      "checkedAt": "2026-06-30T17:00:01.158752+00:00"
     },
     {
       "source": "The Verge AI",
@@ -1283,7 +1289,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-06-30T16:00:01.277655+00:00"
+      "checkedAt": "2026-06-30T17:00:01.158752+00:00"
     },
     {
       "source": "VentureBeat AI",
@@ -1293,7 +1299,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 7,
-      "checkedAt": "2026-06-30T16:00:01.277655+00:00"
+      "checkedAt": "2026-06-30T17:00:01.158752+00:00"
     },
     {
       "source": "Simon Willison",
@@ -1303,7 +1309,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 30,
-      "checkedAt": "2026-06-30T16:00:01.277655+00:00"
+      "checkedAt": "2026-06-30T17:00:01.158752+00:00"
     },
     {
       "source": "Interconnects AI",
@@ -1313,7 +1319,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-06-30T16:00:01.277655+00:00"
+      "checkedAt": "2026-06-30T17:00:01.158752+00:00"
     },
     {
       "source": "Latent Space",
@@ -1323,7 +1329,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-06-30T16:00:01.277655+00:00"
+      "checkedAt": "2026-06-30T17:00:01.158752+00:00"
     },
     {
       "source": "Import AI",
@@ -1333,7 +1339,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-06-30T16:00:01.277655+00:00"
+      "checkedAt": "2026-06-30T17:00:01.158752+00:00"
     },
     {
       "source": "Microsoft Research Blog",
@@ -1343,7 +1349,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-06-30T16:00:01.277655+00:00"
+      "checkedAt": "2026-06-30T17:00:01.158752+00:00"
     },
     {
       "source": "LiteLLM Releases",
@@ -1353,7 +1359,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-06-30T16:00:01.277655+00:00"
+      "checkedAt": "2026-06-30T17:00:01.158752+00:00"
     },
     {
       "source": "Hugging Face Transformers Releases",
@@ -1363,7 +1369,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-06-30T16:00:01.277655+00:00"
+      "checkedAt": "2026-06-30T17:00:01.158752+00:00"
     },
     {
       "source": "Model Context Protocol Python SDK Releases",
@@ -1373,7 +1379,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-06-30T16:00:01.277655+00:00"
+      "checkedAt": "2026-06-30T17:00:01.158752+00:00"
     },
     {
       "source": "Model Context Protocol Spec Releases",
@@ -1383,7 +1389,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 8,
-      "checkedAt": "2026-06-30T16:00:01.277655+00:00"
+      "checkedAt": "2026-06-30T17:00:01.158752+00:00"
     },
     {
       "source": "OpenAI Cookbook Releases",
@@ -1393,7 +1399,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 0,
-      "checkedAt": "2026-06-30T16:00:01.277655+00:00"
+      "checkedAt": "2026-06-30T17:00:01.158752+00:00"
     },
     {
       "source": "Product Hunt AI",
@@ -1403,7 +1409,7 @@
       "sourceType": "tool-directory",
       "status": "ok",
       "items": 50,
-      "checkedAt": "2026-06-30T16:00:01.277655+00:00"
+      "checkedAt": "2026-06-30T17:00:01.158752+00:00"
     }
   ],
   "errors": []
