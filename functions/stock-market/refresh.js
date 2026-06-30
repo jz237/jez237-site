@@ -119,6 +119,18 @@ async function mapLimit(items, limit, fn) {
   return results;
 }
 
+const REFRESH_COOLDOWN_SECONDS = 8;
+
+function isSameOriginRequest(request) {
+  const sourceHeader = request.headers.get("origin") || request.headers.get("referer");
+  if (!sourceHeader) return false;
+  try {
+    return new URL(sourceHeader).hostname === new URL(request.url).hostname;
+  } catch {
+    return false;
+  }
+}
+
 export async function onRequest(context) {
   const request = context.request;
   if (!["GET", "HEAD", "POST"].includes(request.method)) {
@@ -127,6 +139,29 @@ export async function onRequest(context) {
       headers: { Allow: "GET, HEAD, POST" },
     });
   }
+
+  if (!isSameOriginRequest(request)) {
+    return new Response("Forbidden", {
+      status: 403,
+      headers: { "Cache-Control": "no-store" },
+    });
+  }
+
+  const cache = caches.default;
+  const cooldownKey = new Request(new URL("/__internal/stock-refresh-cooldown", request.url));
+  if (await cache.match(cooldownKey)) {
+    return new Response(JSON.stringify({ error: "refresh on cooldown, try again shortly" }), {
+      status: 429,
+      headers: {
+        "Cache-Control": "no-store",
+        "Content-Type": "application/json; charset=utf-8",
+        "Retry-After": String(REFRESH_COOLDOWN_SECONDS),
+      },
+    });
+  }
+  await cache.put(cooldownKey, new Response("1", {
+    headers: { "Cache-Control": `max-age=${REFRESH_COOLDOWN_SECONDS}` },
+  }));
 
   try {
     const data = await staticStocks(request);
