@@ -410,7 +410,10 @@ async function init() {
     applyFilters();
   } catch (e) {
     const wrap = document.getElementById('news-grid');
-    wrap.innerHTML = `<div class="item">Could not load feed data: ${e.message}</div>`;
+    const item = document.createElement('div');
+    item.className = 'item';
+    item.textContent = `Could not load feed data: ${e.message}`;
+    wrap.replaceChildren(item);
   }
 }
 

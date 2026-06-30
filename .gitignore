@@ -17,5 +17,16 @@ build/
 /experiments/image-gen-2-benchmark/images/
 /photos/garden/images/
 
+# Secrets/credentials
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.pfx
+id_rsa*
+secrets.*
+credentials.json
+
 # macOS
 .DS_Store
