@@ -1,7 +1,38 @@
 {
   "date": "2026-06-30",
-  "updatedAt": "2026-06-30T10:00:01.959366+00:00",
+  "updatedAt": "2026-06-30T11:00:01.388786+00:00",
   "items": [
+    {
+      "title": "Marc Andreessen says ChatGPT beats 99% of doctors. The evidence says no",
+      "url": "https://thenextweb.com/news/andreessen-doctor-chatgpt-better-than-doctors",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Marc Andreessen has a bold new claim about your health. The billionaire investor says “Doctor ChatGPT” is already a better doctor than 99% of human ones. Doctors, and the peer-reviewed evidence, strongly disagree. Andreessen made the remark on Joe Rogan’s podcast in early June. The New York Post clipped the line, and it spread fast [&hellip;]\nThis story continues at The Next Web",
+      "image": "public/thumbnails/news-833a1105ef941f4a30.avif",
+      "published": "2026-06-30T09:46:14+00:00",
+      "firstSeen": "2026-06-30T11:00:01.388786+00:00",
+      "lastSeen": "2026-06-30T11:00:01.388786+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 8.1131,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
+      "brief": {
+        "whatHappened": "Marc Andreessen says ChatGPT beats 99% of doctors. The evidence says no",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "chatgpt-marc-andreessen-chatgpt-beats-doctors",
+      "imageOriginal": "https://media.thenextweb.com/2026/06/anthropic-fable-5-vs-openai-gpt-5-5-benchmark-comparison.avif"
+    },
     {
       "title": "Crypto exchange OKX wants AI agents to hire and pay each other",
       "url": "https://techcrunch.com/2026/06/30/crypto-exchange-okx-wants-ai-agents-to-hire-and-pay-each-other",
@@ -15,10 +46,10 @@
       "image": "public/thumbnails/news-04d7dae125a7b75937.webp",
       "published": "2026-06-30T09:00:00+00:00",
       "firstSeen": "2026-06-30T09:00:02.018862+00:00",
-      "lastSeen": "2026-06-30T10:00:01.959366+00:00",
+      "lastSeen": "2026-06-30T11:00:01.388786+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 4.9598,
+      "score": 4.9305,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Reported source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -45,10 +76,10 @@
       "image": "public/thumbnails/news-343327fa1abca199fe.avif",
       "published": "2026-06-30T08:31:36+00:00",
       "firstSeen": "2026-06-30T10:00:01.959366+00:00",
-      "lastSeen": "2026-06-30T10:00:01.959366+00:00",
+      "lastSeen": "2026-06-30T11:00:01.388786+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 4.8059,
+      "score": 4.777,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Reported source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -64,6 +95,36 @@
       "imageOriginal": "https://media.thenextweb.com/2026/06/straiker-raises-64m-series-a-to-secure-the-agentic-workforce.avif"
     },
     {
+      "title": "Apple says it is shipping security updates early as AI speeds up hacking",
+      "url": "https://thenextweb.com/news/apple-early-security-updates-ai",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "For years Apple released most of its security fixes the way it releases everything else, on a schedule, bundled into the next big version of iOS and delivered when the company was ready rather than when the flaw was found. That timetable now has a new constraint, and Apple has decided it can no longer [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/apple-lobbying-us-approval-cxmt-blacklisted-memory-chips.avif",
+      "published": "2026-06-30T09:37:16+00:00",
+      "firstSeen": "2026-06-30T11:00:01.388786+00:00",
+      "lastSeen": "2026-06-30T11:00:01.388786+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.9087,
+      "signalGroup": "Policy & risk",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Policy and risk stories often become product constraints later, especially around data access, safety claims, export rules, and copyright.",
+      "brief": {
+        "whatHappened": "Apple says it is shipping security updates early as AI speeds up hacking",
+        "whoItAffects": "Product builders, platform users, and anyone depending on model access or data rights.",
+        "practicalImpact": "Policy moves can become tomorrow's product limits, compliance burden, or availability issue.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "apple-shipping-security-updates-early-speeds"
+    },
+    {
       "title": "iPhone 18 Pro supplier list and parts exposed in Tata data leak",
       "url": "https://thenextweb.com/news/iphone-18-pro-supplier-leak-tata",
       "source": "The Next Web",
@@ -76,10 +137,10 @@
       "image": "https://media.thenextweb.com/2026/05/Apple.avif",
       "published": "2026-06-30T08:50:53+00:00",
       "firstSeen": "2026-06-30T10:00:01.959366+00:00",
-      "lastSeen": "2026-06-30T10:00:01.959366+00:00",
+      "lastSeen": "2026-06-30T11:00:01.388786+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.9153,
+      "score": 3.8862,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
@@ -106,10 +167,10 @@
       "image": "https://media.thenextweb.com/2026/06/Google-Chrome-Mockup.avif",
       "published": "2026-06-30T08:23:59+00:00",
       "firstSeen": "2026-06-30T09:00:02.018862+00:00",
-      "lastSeen": "2026-06-30T10:00:01.959366+00:00",
+      "lastSeen": "2026-06-30T11:00:01.388786+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.5022,
+      "score": 3.4733,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Reported source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -139,7 +200,7 @@
       "lastSeen": "2026-06-30T10:00:01.959366+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.4964,
+      "score": 3.4678,
       "signalGroup": "Policy & risk",
       "sourceTier": "Reported source",
       "whyItMatters": "Policy and risk stories often become product constraints later, especially around data access, safety claims, export rules, and copyright.",
@@ -166,10 +227,10 @@
       "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Gemini_Generated_Image_k2dxu1k2.max-600x600.format-webp.webp",
       "published": "2026-06-30T06:00:00+00:00",
       "firstSeen": "2026-06-30T07:00:01.628161+00:00",
-      "lastSeen": "2026-06-30T10:00:01.959366+00:00",
+      "lastSeen": "2026-06-30T11:00:01.388786+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3143,
+      "score": 3.2873,
       "signalGroup": "Product updates",
       "sourceTier": "Primary source",
       "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
@@ -196,10 +257,10 @@
       "image": "https://substackcdn.com/image/youtube/w_728,c_limit/htM02KMNZnk",
       "published": "2026-06-30T06:47:27+00:00",
       "firstSeen": "2026-06-30T07:00:01.628161+00:00",
-      "lastSeen": "2026-06-30T10:00:01.959366+00:00",
+      "lastSeen": "2026-06-30T11:00:01.388786+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3102,
+      "score": 3.2826,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
@@ -231,10 +292,10 @@
       "image": "https://media.thenextweb.com/2026/06/CMA.avif",
       "published": "2026-06-30T09:20:42+00:00",
       "firstSeen": "2026-06-30T10:00:01.959366+00:00",
-      "lastSeen": "2026-06-30T10:00:01.959366+00:00",
+      "lastSeen": "2026-06-30T11:00:01.388786+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2302,
+      "score": 3.2006,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
@@ -249,6 +310,96 @@
       "clusterKey": "google-regulator-proposes-letting-developers-steer"
     },
     {
+      "title": "China’s Nexchip seeks up to $890m in Hong Kong share sale",
+      "url": "https://thenextweb.com/news/chinas-nexchip-seeks-up-to-890m-in-hong-kong-share-sale",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Nexchip Semiconductor is China’s third-largest pure-play foundry, a sentence that until recently would not have led to a Hong Kong listing. It does now. The Hefei-based, state-backed chipmaker is seeking to raise up to HK$6.98 billion, or roughly $890 million, in a share sale that adds to a sudden rush of Chinese semiconductor companies floating [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/nexchip-hong-kong-listing-chip.avif",
+      "published": "2026-06-30T10:21:43+00:00",
+      "firstSeen": "2026-06-30T11:00:01.388786+00:00",
+      "lastSeen": "2026-06-30T11:00:01.388786+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1307,
+      "signalGroup": "Infrastructure",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
+      "brief": {
+        "whatHappened": "China’s Nexchip seeks up to $890m in Hong Kong share sale",
+        "whoItAffects": "Anyone affected by AI compute cost, speed, availability, or hardware supply.",
+        "practicalImpact": "Infrastructure shifts often show up later as cheaper tools, higher limits, or new bottlenecks.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "china-nexchip-seeks-890m-hong-kong"
+    },
+    {
+      "title": "Australia sues Amazon over Prime Video ads, citing unfair contract terms",
+      "url": "https://thenextweb.com/news/australia-sues-amazon-prime-video-ads",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "The ACCC alleges Amazon buried unfair terms in Prime contracts, then used them to add ads to Prime Video for more than a million subscribers without offering refunds. The complaint Australia’s consumer regulator filed against Amazon this week turns on a small print clause and a large grievance. The Australian Competition and Consumer Commission alleges [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/australia-fair-work-commission-ai-workload-generative-tribunals.avif",
+      "published": "2026-06-30T09:48:58+00:00",
+      "firstSeen": "2026-06-30T11:00:01.388786+00:00",
+      "lastSeen": "2026-06-30T11:00:01.388786+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1144,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
+      "brief": {
+        "whatHappened": "Australia sues Amazon over Prime Video ads, citing unfair contract terms",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "australia-sues-amazon-prime-video-ads"
+    },
+    {
+      "title": "US House passes kids online safety package, setting up a Senate fight",
+      "url": "https://thenextweb.com/news/us-house-passes-kids-online-safety",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "After years in which children’s online safety bills passed the Senate and then died quietly in the House, the House moved first this time, and immediately reopened the argument that has stalled the effort for half a decade. On Monday it passed a sweeping youth online safety package by 267 to 117, the first time [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/USA-flag.avif",
+      "published": "2026-06-30T09:30:04+00:00",
+      "firstSeen": "2026-06-30T11:00:01.388786+00:00",
+      "lastSeen": "2026-06-30T11:00:01.388786+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1051,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
+      "brief": {
+        "whatHappened": "US House passes kids online safety package, setting up a Senate fight",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "house-passes-kids-online-safety-package"
+    },
+    {
       "title": "The AI jobs debate just got messier",
       "url": "https://techcrunch.com/2026/06/29/the-ai-jobs-debate-just-got-messier",
       "source": "TechCrunch AI",
@@ -261,10 +412,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/GettyImages-2256487455.jpg?w=1024",
       "published": "2026-06-30T04:01:00+00:00",
       "firstSeen": "2026-06-30T04:39:18.067717+00:00",
-      "lastSeen": "2026-06-30T10:00:01.959366+00:00",
+      "lastSeen": "2026-06-30T11:00:01.388786+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1215,
+      "score": 2.096,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
@@ -291,10 +442,10 @@
       "image": "https://media.thenextweb.com/2026/06/Tejpaul-Bhatia.avif",
       "published": "2026-06-30T08:48:17+00:00",
       "firstSeen": "2026-06-30T10:00:01.959366+00:00",
-      "lastSeen": "2026-06-30T10:00:01.959366+00:00",
+      "lastSeen": "2026-06-30T11:00:01.388786+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1141,
+      "score": 2.0849,
       "signalGroup": "Business",
       "sourceTier": "Reported source",
       "whyItMatters": "Business moves are a map of where the industry thinks the bottlenecks and durable demand will be.",
@@ -323,10 +474,10 @@
       "image": "public/thumbnails/news-099aa7484406bdf5f9.avif",
       "published": "2026-06-29T16:54:09+00:00",
       "firstSeen": "2026-06-30T08:00:01.738579+00:00",
-      "lastSeen": "2026-06-30T10:00:01.959366+00:00",
+      "lastSeen": "2026-06-30T11:00:01.388786+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.5921,
+      "score": 7.5734,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -356,10 +507,10 @@
       "image": "public/thumbnails/news-c5f462b461ce114c9f.avif",
       "published": "2026-06-25T05:47:05+00:00",
       "firstSeen": "2026-06-26T08:00:01.499506+00:00",
-      "lastSeen": "2026-06-30T10:00:01.959366+00:00",
+      "lastSeen": "2026-06-30T11:00:01.388786+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.5429,
+      "score": 7.5419,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -389,7 +540,7 @@
       "image": "",
       "published": "2026-06-19T18:14:21+00:00",
       "firstSeen": "2026-06-25T14:53:44.092288+00:00",
-      "lastSeen": "2026-06-30T10:00:01.959366+00:00",
+      "lastSeen": "2026-06-30T11:00:01.388786+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
       "score": 6.5089,
@@ -455,10 +606,10 @@
       "image": "public/thumbnails/news-6568576f444e6c5bc4.avif",
       "published": "2026-06-25T20:15:56+00:00",
       "firstSeen": "2026-06-27T08:00:01.988916+00:00",
-      "lastSeen": "2026-06-30T10:00:01.959366+00:00",
+      "lastSeen": "2026-06-30T11:00:01.388786+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.8602,
+      "score": 3.8588,
       "signalGroup": "Product updates",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
@@ -476,39 +627,6 @@
       "clusterKey": "folio"
     },
     {
-      "title": "Cursor for iOS",
-      "url": "https://www.producthunt.com/products/cursor-for-ios",
-      "source": "Product Hunt AI",
-      "sourceUrl": "https://www.producthunt.com/feed?category=artificial-intelligence",
-      "sourceWeight": 0.72,
-      "sourceRole": "watchlist",
-      "sourceType": "tool-directory",
-      "category": "AI",
-      "summary": "Build with coding agents from anywhere\n          \n          \n            Discussion\n            |\n            Link",
-      "image": "https://ph-files.imgix.net/cd0d1e71-589a-4d98-a22f-344db9dc89da.png?auto=format&fit=crop&frame=1&h=512&w=1024",
-      "published": "2026-06-30T03:52:28+00:00",
-      "firstSeen": "2026-06-30T08:00:01.738579+00:00",
-      "lastSeen": "2026-06-30T10:00:01.959366+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "watchlist_low_signal",
-      "score": 3.8359,
-      "signalGroup": "Agents & tooling",
-      "sourceTier": "Watchlist source",
-      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
-      "brief": {
-        "whatHappened": "Cursor for iOS",
-        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
-        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
-        "sourceFrame": "Seen via Product Hunt AI."
-      },
-      "tryWorthy": true,
-      "toolCandidate": true,
-      "toolName": "Cursor for iOS",
-      "toolLabel": "Cursor for iOS",
-      "toolSummary": "Build with coding agents from anywhere",
-      "clusterKey": "cursor-cursor-ios"
-    },
-    {
       "title": "Sipcode",
       "url": "https://www.producthunt.com/products/sipcode",
       "source": "Product Hunt AI",
@@ -524,7 +642,7 @@
       "lastSeen": "2026-06-30T07:00:01.628161+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.8159,
+      "score": 3.8157,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -542,6 +660,39 @@
       "clusterKey": "sipcode"
     },
     {
+      "title": "Cursor for iOS",
+      "url": "https://www.producthunt.com/products/cursor-for-ios",
+      "source": "Product Hunt AI",
+      "sourceUrl": "https://www.producthunt.com/feed?category=artificial-intelligence",
+      "sourceWeight": 0.72,
+      "sourceRole": "watchlist",
+      "sourceType": "tool-directory",
+      "category": "AI",
+      "summary": "Build with coding agents from anywhere\n          \n          \n            Discussion\n            |\n            Link",
+      "image": "https://ph-files.imgix.net/cd0d1e71-589a-4d98-a22f-344db9dc89da.png?auto=format&fit=crop&frame=1&h=512&w=1024",
+      "published": "2026-06-30T03:52:28+00:00",
+      "firstSeen": "2026-06-30T08:00:01.738579+00:00",
+      "lastSeen": "2026-06-30T11:00:01.388786+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "watchlist_low_signal",
+      "score": 3.8105,
+      "signalGroup": "Agents & tooling",
+      "sourceTier": "Watchlist source",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
+      "brief": {
+        "whatHappened": "Cursor for iOS",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via Product Hunt AI."
+      },
+      "tryWorthy": true,
+      "toolCandidate": true,
+      "toolName": "Cursor for iOS",
+      "toolLabel": "Cursor for iOS",
+      "toolSummary": "Build with coding agents from anywhere",
+      "clusterKey": "cursor-cursor-ios"
+    },
+    {
       "title": "Agent Mode by Receiptor AI",
       "url": "https://www.producthunt.com/products/receiptor-ai",
       "source": "Product Hunt AI",
@@ -554,10 +705,10 @@
       "image": "https://ph-files.imgix.net/ea5cfd31-1b70-4e8c-90ca-a87e8ab8ddc6.png?auto=format&fit=crop&frame=1&h=512&w=1024",
       "published": "2026-06-27T12:16:36+00:00",
       "firstSeen": "2026-06-29T08:00:01.336271+00:00",
-      "lastSeen": "2026-06-30T10:00:01.959366+00:00",
+      "lastSeen": "2026-06-30T11:00:01.388786+00:00",
       "editorial_allow": false,
       "editorial_reason": "watchlist_low_signal",
-      "score": 3.7666,
+      "score": 3.7622,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -589,10 +740,10 @@
       "image": "public/thumbnails/news-099aa7484406bdf5f9.avif",
       "published": "2026-06-29T16:54:09+00:00",
       "firstSeen": "2026-06-30T08:00:01.738579+00:00",
-      "lastSeen": "2026-06-30T10:00:01.959366+00:00",
+      "lastSeen": "2026-06-30T11:00:01.388786+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.5921,
+      "score": 7.5734,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -622,10 +773,10 @@
       "image": "public/thumbnails/news-c5f462b461ce114c9f.avif",
       "published": "2026-06-25T05:47:05+00:00",
       "firstSeen": "2026-06-26T08:00:01.499506+00:00",
-      "lastSeen": "2026-06-30T10:00:01.959366+00:00",
+      "lastSeen": "2026-06-30T11:00:01.388786+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.5429,
+      "score": 7.5419,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -655,7 +806,7 @@
       "image": "",
       "published": "2026-06-19T18:14:21+00:00",
       "firstSeen": "2026-06-25T14:53:44.092288+00:00",
-      "lastSeen": "2026-06-30T10:00:01.959366+00:00",
+      "lastSeen": "2026-06-30T11:00:01.388786+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
       "score": 6.5089,
@@ -721,10 +872,10 @@
       "image": "public/thumbnails/news-6568576f444e6c5bc4.avif",
       "published": "2026-06-25T20:15:56+00:00",
       "firstSeen": "2026-06-27T08:00:01.988916+00:00",
-      "lastSeen": "2026-06-30T10:00:01.959366+00:00",
+      "lastSeen": "2026-06-30T11:00:01.388786+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.8602,
+      "score": 3.8588,
       "signalGroup": "Product updates",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
@@ -742,39 +893,6 @@
       "clusterKey": "folio"
     },
     {
-      "title": "Cursor for iOS",
-      "url": "https://www.producthunt.com/products/cursor-for-ios",
-      "source": "Product Hunt AI",
-      "sourceUrl": "https://www.producthunt.com/feed?category=artificial-intelligence",
-      "sourceWeight": 0.72,
-      "sourceRole": "watchlist",
-      "sourceType": "tool-directory",
-      "category": "AI",
-      "summary": "Build with coding agents from anywhere\n          \n          \n            Discussion\n            |\n            Link",
-      "image": "https://ph-files.imgix.net/cd0d1e71-589a-4d98-a22f-344db9dc89da.png?auto=format&fit=crop&frame=1&h=512&w=1024",
-      "published": "2026-06-30T03:52:28+00:00",
-      "firstSeen": "2026-06-30T08:00:01.738579+00:00",
-      "lastSeen": "2026-06-30T10:00:01.959366+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "watchlist_low_signal",
-      "score": 3.8359,
-      "signalGroup": "Agents & tooling",
-      "sourceTier": "Watchlist source",
-      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
-      "brief": {
-        "whatHappened": "Cursor for iOS",
-        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
-        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
-        "sourceFrame": "Seen via Product Hunt AI."
-      },
-      "tryWorthy": true,
-      "toolCandidate": true,
-      "toolName": "Cursor for iOS",
-      "toolLabel": "Cursor for iOS",
-      "toolSummary": "Build with coding agents from anywhere",
-      "clusterKey": "cursor-cursor-ios"
-    },
-    {
       "title": "Sipcode",
       "url": "https://www.producthunt.com/products/sipcode",
       "source": "Product Hunt AI",
@@ -790,7 +908,7 @@
       "lastSeen": "2026-06-30T07:00:01.628161+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.8159,
+      "score": 3.8157,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -808,6 +926,39 @@
       "clusterKey": "sipcode"
     },
     {
+      "title": "Cursor for iOS",
+      "url": "https://www.producthunt.com/products/cursor-for-ios",
+      "source": "Product Hunt AI",
+      "sourceUrl": "https://www.producthunt.com/feed?category=artificial-intelligence",
+      "sourceWeight": 0.72,
+      "sourceRole": "watchlist",
+      "sourceType": "tool-directory",
+      "category": "AI",
+      "summary": "Build with coding agents from anywhere\n          \n          \n            Discussion\n            |\n            Link",
+      "image": "https://ph-files.imgix.net/cd0d1e71-589a-4d98-a22f-344db9dc89da.png?auto=format&fit=crop&frame=1&h=512&w=1024",
+      "published": "2026-06-30T03:52:28+00:00",
+      "firstSeen": "2026-06-30T08:00:01.738579+00:00",
+      "lastSeen": "2026-06-30T11:00:01.388786+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "watchlist_low_signal",
+      "score": 3.8105,
+      "signalGroup": "Agents & tooling",
+      "sourceTier": "Watchlist source",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
+      "brief": {
+        "whatHappened": "Cursor for iOS",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via Product Hunt AI."
+      },
+      "tryWorthy": true,
+      "toolCandidate": true,
+      "toolName": "Cursor for iOS",
+      "toolLabel": "Cursor for iOS",
+      "toolSummary": "Build with coding agents from anywhere",
+      "clusterKey": "cursor-cursor-ios"
+    },
+    {
       "title": "Agent Mode by Receiptor AI",
       "url": "https://www.producthunt.com/products/receiptor-ai",
       "source": "Product Hunt AI",
@@ -820,10 +971,10 @@
       "image": "https://ph-files.imgix.net/ea5cfd31-1b70-4e8c-90ca-a87e8ab8ddc6.png?auto=format&fit=crop&frame=1&h=512&w=1024",
       "published": "2026-06-27T12:16:36+00:00",
       "firstSeen": "2026-06-29T08:00:01.336271+00:00",
-      "lastSeen": "2026-06-30T10:00:01.959366+00:00",
+      "lastSeen": "2026-06-30T11:00:01.388786+00:00",
       "editorial_allow": false,
       "editorial_reason": "watchlist_low_signal",
-      "score": 3.7666,
+      "score": 3.7622,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -850,7 +1001,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 1024,
-      "checkedAt": "2026-06-30T10:00:01.959366+00:00"
+      "checkedAt": "2026-06-30T11:00:01.388786+00:00"
     },
     {
       "source": "Google AI Blog",
@@ -860,7 +1011,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-06-30T10:00:01.959366+00:00"
+      "checkedAt": "2026-06-30T11:00:01.388786+00:00"
     },
     {
       "source": "Google DeepMind Blog",
@@ -870,7 +1021,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-06-30T10:00:01.959366+00:00"
+      "checkedAt": "2026-06-30T11:00:01.388786+00:00"
     },
     {
       "source": "Google Research Blog",
@@ -880,7 +1031,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-06-30T10:00:01.959366+00:00"
+      "checkedAt": "2026-06-30T11:00:01.388786+00:00"
     },
     {
       "source": "Hugging Face Blog",
@@ -890,7 +1041,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 811,
-      "checkedAt": "2026-06-30T10:00:01.959366+00:00"
+      "checkedAt": "2026-06-30T11:00:01.388786+00:00"
     },
     {
       "source": "NVIDIA Blog",
@@ -900,7 +1051,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 18,
-      "checkedAt": "2026-06-30T10:00:01.959366+00:00"
+      "checkedAt": "2026-06-30T11:00:01.388786+00:00"
     },
     {
       "source": "AWS Machine Learning Blog",
@@ -910,7 +1061,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-06-30T10:00:01.959366+00:00"
+      "checkedAt": "2026-06-30T11:00:01.388786+00:00"
     },
     {
       "source": "Artificial Intelligence News",
@@ -920,7 +1071,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 12,
-      "checkedAt": "2026-06-30T10:00:01.959366+00:00"
+      "checkedAt": "2026-06-30T11:00:01.388786+00:00"
     },
     {
       "source": "Ars Technica (AI/Tech)",
@@ -930,7 +1081,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-06-30T10:00:01.959366+00:00"
+      "checkedAt": "2026-06-30T11:00:01.388786+00:00"
     },
     {
       "source": "Together AI Blog",
@@ -940,7 +1091,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-06-30T10:00:01.959366+00:00"
+      "checkedAt": "2026-06-30T11:00:01.388786+00:00"
     },
     {
       "source": "TechRepublic AI",
@@ -950,7 +1101,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-06-30T10:00:01.959366+00:00"
+      "checkedAt": "2026-06-30T11:00:01.388786+00:00"
     },
     {
       "source": "ScienceDaily AI",
@@ -960,7 +1111,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 60,
-      "checkedAt": "2026-06-30T10:00:01.959366+00:00"
+      "checkedAt": "2026-06-30T11:00:01.388786+00:00"
     },
     {
       "source": "The Next Web",
@@ -970,7 +1121,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-06-30T10:00:01.959366+00:00"
+      "checkedAt": "2026-06-30T11:00:01.388786+00:00"
     },
     {
       "source": "BBC Discovery",
@@ -980,7 +1131,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 847,
-      "checkedAt": "2026-06-30T10:00:01.959366+00:00"
+      "checkedAt": "2026-06-30T11:00:01.388786+00:00"
     },
     {
       "source": "BBC Infinite Monkey Cage",
@@ -990,7 +1141,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 239,
-      "checkedAt": "2026-06-30T10:00:01.959366+00:00"
+      "checkedAt": "2026-06-30T11:00:01.388786+00:00"
     },
     {
       "source": "BBC The Life Scientific",
@@ -1000,7 +1151,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 356,
-      "checkedAt": "2026-06-30T10:00:01.959366+00:00"
+      "checkedAt": "2026-06-30T11:00:01.388786+00:00"
     },
     {
       "source": "TechCrunch AI",
@@ -1010,7 +1161,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-06-30T10:00:01.959366+00:00"
+      "checkedAt": "2026-06-30T11:00:01.388786+00:00"
     },
     {
       "source": "Anthropic News",
@@ -1020,7 +1171,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 231,
-      "checkedAt": "2026-06-30T10:00:01.959366+00:00"
+      "checkedAt": "2026-06-30T11:00:01.388786+00:00"
     },
     {
       "source": "The Verge AI",
@@ -1030,7 +1181,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-06-30T10:00:01.959366+00:00"
+      "checkedAt": "2026-06-30T11:00:01.388786+00:00"
     },
     {
       "source": "VentureBeat AI",
@@ -1040,7 +1191,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 7,
-      "checkedAt": "2026-06-30T10:00:01.959366+00:00"
+      "checkedAt": "2026-06-30T11:00:01.388786+00:00"
     },
     {
       "source": "Simon Willison",
@@ -1050,7 +1201,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 30,
-      "checkedAt": "2026-06-30T10:00:01.959366+00:00"
+      "checkedAt": "2026-06-30T11:00:01.388786+00:00"
     },
     {
       "source": "Interconnects AI",
@@ -1060,7 +1211,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-06-30T10:00:01.959366+00:00"
+      "checkedAt": "2026-06-30T11:00:01.388786+00:00"
     },
     {
       "source": "Latent Space",
@@ -1070,7 +1221,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-06-30T10:00:01.959366+00:00"
+      "checkedAt": "2026-06-30T11:00:01.388786+00:00"
     },
     {
       "source": "Import AI",
@@ -1080,7 +1231,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-06-30T10:00:01.959366+00:00"
+      "checkedAt": "2026-06-30T11:00:01.388786+00:00"
     },
     {
       "source": "Microsoft Research Blog",
@@ -1090,7 +1241,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-06-30T10:00:01.959366+00:00"
+      "checkedAt": "2026-06-30T11:00:01.388786+00:00"
     },
     {
       "source": "LiteLLM Releases",
@@ -1100,7 +1251,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-06-30T10:00:01.959366+00:00"
+      "checkedAt": "2026-06-30T11:00:01.388786+00:00"
     },
     {
       "source": "Hugging Face Transformers Releases",
@@ -1110,7 +1261,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-06-30T10:00:01.959366+00:00"
+      "checkedAt": "2026-06-30T11:00:01.388786+00:00"
     },
     {
       "source": "Model Context Protocol Python SDK Releases",
@@ -1120,7 +1271,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-06-30T10:00:01.959366+00:00"
+      "checkedAt": "2026-06-30T11:00:01.388786+00:00"
     },
     {
       "source": "Model Context Protocol Spec Releases",
@@ -1130,7 +1281,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 8,
-      "checkedAt": "2026-06-30T10:00:01.959366+00:00"
+      "checkedAt": "2026-06-30T11:00:01.388786+00:00"
     },
     {
       "source": "OpenAI Cookbook Releases",
@@ -1140,7 +1291,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 0,
-      "checkedAt": "2026-06-30T10:00:01.959366+00:00"
+      "checkedAt": "2026-06-30T11:00:01.388786+00:00"
     },
     {
       "source": "Product Hunt AI",
@@ -1150,7 +1301,7 @@
       "sourceType": "tool-directory",
       "status": "ok",
       "items": 50,
-      "checkedAt": "2026-06-30T10:00:01.959366+00:00"
+      "checkedAt": "2026-06-30T11:00:01.388786+00:00"
     }
   ],
   "errors": []
