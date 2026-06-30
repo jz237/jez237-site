@@ -1366,5 +1366,23 @@
       "continuity": "Preserves Thornlight Meridian's amber dawn light, crystal thorns, wind-harp frames, dust-silk gear, ceramic highland settlements, and long-limbed gliding inhabitants.",
       "entryDescription": "A documentary-style view of gliding inhabitants launching from Sunneedle Roost perches while attendants tune harnesses and wind-harp structures in the dawn updraft."
     }
+  },
+  {
+    "id": "2026-06-30-weekly-world-thornlight-meridian-meridian-steps-shade-marke",
+    "title": "Thornlight Meridian: Meridian Steps Shade Market",
+    "tests": "Weekly world continuity; realistic photographed alien daily-life scene; no humans, no readable text, no poster layout.",
+    "prompt": "Show a market on sunline walking ramps where residents trade wax leaf laminate, thorn-crystal beads, dust-silk shade cloth, and ceramic water bulbs under moving bands of dawn light. Finished example: create a realistic photographed daily-life image from Thornlight Meridian at the Meridian Steps Shade Market on early-dawn sunline walking ramps. Show non-human gliding inhabitants with narrow mantislike torsos, four walking limbs, folded amber sail-limbs, long balancing tails, matte slate skin, faceted eyes, and delicate mouth feelers trading waxy blue leaf laminate, amber thorn-crystal beads, woven dust-silk shade cloth, ceramic water bulbs, copper root-fiber cord, prism glass beads, and matte basalt tools. Anchor the scene in ochre mesa steps above chalk-white wind canyons, violet glass dunes, amber crystal-thorn groves, wind-harp resonator frames, glider perches, bone-white shade cloth, and crawling bands of warm sunrise light. Include porous ceramic wear, mineral dust, dew spines, kite-seed ribbons, dust-sail ferry silhouettes, and wing-shimmer/tail-tap communication gestures. No humans, no Earth desert town, no readable text, no logos, no prompt-card layout.\\n\\nReusable template: Create a realistic photographed daily-life view from [WEEKLY_WORLD_NAME]: show [ALIEN_INHABITANTS] doing [EVERYDAY_ACTIVITY] in [SPECIFIC_SETTLEMENT_OR_INFRASTRUCTURE], using [WORLD_MATERIALS], [ECOLOGY_OR_TECHNOLOGY], [LIGHTING], and [TACTILE_SCALE_CUES]. Keep the world bible consistent, non-human when appropriate, practical, lived-in, richly detailed, and free of logos or prompt-card text.\\n\\nExample substitution: [WEEKLY_WORLD_NAME] = Thornlight Meridian; [ALIEN_INHABITANTS] = gliding mantislike inhabitants with amber sail-limbs and long balancing tails; [EVERYDAY_ACTIVITY] = market trade; [SPECIFIC_SETTLEMENT_OR_INFRASTRUCTURE] = Meridian Steps sunline walking ramps; [WORLD_MATERIALS] = ceramic, dust-silk, thorn-crystal, wax leaf laminate, copper root fiber, basalt, and prism glass; [ECOLOGY_OR_TECHNOLOGY] = crystal-thorn groves, wind-harp resonators, dew spines, glider perches, and dust-sail ferries; [LIGHTING] = warm crawling dawn meridian bands in crisp dry air.",
+    "image": "images/2026-06-30-weekly-world-thornlight-meridian-meridian-steps-shade-marke.jpg",
+    "date": "2026-06-30",
+    "batch": "Daily Prompt",
+    "slot": "weekly-world",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "world": {
+      "name": "Thornlight Meridian",
+      "description": "A dry alien highland world of dawn-powered crystal thorns, wind-harp canyons, and gliding non-human inhabitants living along moving bands of warm light.",
+      "continuity": "Preserves Thornlight Meridian elements: ochre mesas, chalk wind canyons, violet glass dunes, amber thorn-crystal, dust-silk shade cloth, wind-harp frames, and gliding mantislike inhabitants with amber sail-limbs.",
+      "entryDescription": "A daily market on the Meridian Steps where gliding residents trade leaf laminate, thorn-crystal beads, dust-silk cloth, ceramic water bulbs, and basalt tools under crawling dawn light."
+    }
   }
 ]
