@@ -23,6 +23,27 @@ function isToolSource(item) {
   return item?.toolCandidate === true || item?.sourceType === 'tool-directory' || item?.sourceType === 'tool-release';
 }
 
+function localDateKey(date = new Date()) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
+function dayIndexForKey(key) {
+  const match = /^(\d{4})-(\d{2})-(\d{2})/.exec(key || '');
+  if (!match) return 0;
+  const [, year, month, day] = match.map(Number);
+  return Math.floor(Date.UTC(year, month - 1, day) / 86400000);
+}
+
+function rotateForDailyTools(items, news, limit) {
+  if (items.length <= limit) return items.slice(0, limit);
+  const key = news.date || localDateKey();
+  const offset = dayIndexForKey(key) % items.length;
+  return [...items.slice(offset), ...items.slice(0, offset)].slice(0, limit);
+}
+
 const FILL_EXCLUDED_REASONS = new Set([
   'fluff',
   'framework_or_plumbing',
@@ -227,13 +248,13 @@ function renderTools(news) {
     });
   const seen = new Set();
   const tools = [...(news.tools || []), ...fallback]
-    .filter(i => i && i.url && !seen.has(i.url) && seen.add(i.url))
-    .slice(0, 6);
+    .filter(i => i && i.url && !seen.has(i.url) && seen.add(i.url));
+  const dailyTools = rotateForDailyTools(tools, news, 6);
   wrap.innerHTML = '';
-  if (!tools.length) return;
+  if (!dailyTools.length) return;
   wrap.appendChild(el('h2', 'news-tools-title', 'Tools Worth Trying'));
   const row = el('div', 'news-tools-row');
-  tools.forEach(item => {
+  dailyTools.forEach(item => {
     const a = document.createElement('a');
     a.className = 'news-tool-pill';
     a.href = item.url;
