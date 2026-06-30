@@ -1,7 +1,98 @@
 {
   "date": "2026-06-30",
-  "updatedAt": "2026-06-30T08:00:01.738579+00:00",
+  "updatedAt": "2026-06-30T09:00:02.018862+00:00",
   "items": [
+    {
+      "title": "Crypto exchange OKX wants AI agents to hire and pay each other",
+      "url": "https://techcrunch.com/2026/06/30/crypto-exchange-okx-wants-ai-agents-to-hire-and-pay-each-other",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "OKX is bringing together payments, identity and reputation into a marketplace for AI agents.",
+      "image": "public/thumbnails/news-04d7dae125a7b75937.webp",
+      "published": "2026-06-30T09:00:00+00:00",
+      "firstSeen": "2026-06-30T09:00:02.018862+00:00",
+      "lastSeen": "2026-06-30T09:00:02.018862+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 4.99,
+      "signalGroup": "Agents & tooling",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
+      "brief": {
+        "whatHappened": "Crypto exchange OKX wants AI agents to hire and pay each other",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via TechCrunch AI."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "crypto-exchange-okx-wants-agents-hire",
+      "imageOriginal": "https://techcrunch.com/wp-content/uploads/2026/06/okx-ai.jpg?resize=1200%2C800"
+    },
+    {
+      "title": "Chrome is putting things on your computer you never agreed to",
+      "url": "https://thenextweb.com/news/chrome-ai-silent-install-malicious-extension-privacy",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Your browser has been busy on your behalf. This week brought two reminders that Chrome can put things on your machine you never agreed to. One came from Google. One came from an impostor. Both used the same quiet machinery. Chrome runs on billions of devices, which makes it one of the most powerful pieces [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/Google-Chrome-Mockup.avif",
+      "published": "2026-06-30T08:23:59+00:00",
+      "firstSeen": "2026-06-30T09:00:02.018862+00:00",
+      "lastSeen": "2026-06-30T09:00:02.018862+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 3.5318,
+      "signalGroup": "Agents & tooling",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
+      "brief": {
+        "whatHappened": "Chrome is putting things on your computer you never agreed to",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "chrome-putting-things-your-computer-you"
+    },
+    {
+      "title": "The Supreme Court just made it harder for police to track your phone",
+      "url": "https://thenextweb.com/news/scotus-geofence-warrants-phone-location-privacy",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Your phone keeps a minute-by-minute diary of where you go. The US Supreme Court has now ruled that police cannot simply demand it. In a major win for digital privacy, the court said geofence searches need a warrant. The 6-3 decision lands on a practice that has quietly spread through US policing. When investigators have [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2013/07/84661557.avif",
+      "published": "2026-06-30T08:12:14+00:00",
+      "firstSeen": "2026-06-30T09:00:02.018862+00:00",
+      "lastSeen": "2026-06-30T09:00:02.018862+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 3.5259,
+      "signalGroup": "Policy & risk",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Policy and risk stories often become product constraints later, especially around data access, safety claims, export rules, and copyright.",
+      "brief": {
+        "whatHappened": "The Supreme Court just made it harder for police to track your phone",
+        "whoItAffects": "Product builders, platform users, and anyone depending on model access or data rights.",
+        "practicalImpact": "Policy moves can become tomorrow's product limits, compliance burden, or availability issue.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "supreme-court-just-made-harder-police"
+    },
     {
       "title": "Unlocking Britain’s next era of productivity: Building a nation of AI trailblazers",
       "url": "https://blog.google/company-news/inside-google/around-the-globe/google-europe/united-kingdom/unlocking-britains-next-era-of-productivity-building-a-nation-of-ai-trailblazers",
@@ -15,10 +106,10 @@
       "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Gemini_Generated_Image_k2dxu1k2.max-600x600.format-webp.webp",
       "published": "2026-06-30T06:00:00+00:00",
       "firstSeen": "2026-06-30T07:00:01.628161+00:00",
-      "lastSeen": "2026-06-30T08:00:01.738579+00:00",
+      "lastSeen": "2026-06-30T09:00:02.018862+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3705,
+      "score": 3.342,
       "signalGroup": "Product updates",
       "sourceTier": "Primary source",
       "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
@@ -45,10 +136,10 @@
       "image": "https://substackcdn.com/image/youtube/w_728,c_limit/htM02KMNZnk",
       "published": "2026-06-30T06:47:27+00:00",
       "firstSeen": "2026-06-30T07:00:01.628161+00:00",
-      "lastSeen": "2026-06-30T08:00:01.738579+00:00",
+      "lastSeen": "2026-06-30T09:00:02.018862+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3677,
+      "score": 3.3385,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
@@ -80,10 +171,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/GettyImages-2256487455.jpg?w=1024",
       "published": "2026-06-30T04:01:00+00:00",
       "firstSeen": "2026-06-30T04:39:18.067717+00:00",
-      "lastSeen": "2026-06-30T08:00:01.738579+00:00",
+      "lastSeen": "2026-06-30T09:00:02.018862+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1748,
+      "score": 2.1478,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
@@ -112,10 +203,10 @@
       "image": "public/thumbnails/news-099aa7484406bdf5f9.avif",
       "published": "2026-06-29T16:54:09+00:00",
       "firstSeen": "2026-06-30T08:00:01.738579+00:00",
-      "lastSeen": "2026-06-30T08:00:01.738579+00:00",
+      "lastSeen": "2026-06-30T09:00:02.018862+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.6312,
+      "score": 7.6114,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -130,8 +221,7 @@
       "toolName": "Pluno",
       "toolLabel": "Pluno",
       "toolSummary": "Browser agent that’s 10x faster than Claude",
-      "clusterKey": "pluno",
-      "imageOriginal": "https://ph-files.imgix.net/7aefe371-0b98-41fd-ae42-bd510471199e.png?auto=format&fit=crop&frame=1&h=512&w=1024"
+      "clusterKey": "pluno"
     },
     {
       "title": "Gemini Spark",
@@ -146,10 +236,10 @@
       "image": "public/thumbnails/news-c5f462b461ce114c9f.avif",
       "published": "2026-06-25T05:47:05+00:00",
       "firstSeen": "2026-06-26T08:00:01.499506+00:00",
-      "lastSeen": "2026-06-30T08:00:01.738579+00:00",
+      "lastSeen": "2026-06-30T09:00:02.018862+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.5449,
+      "score": 7.5439,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -179,10 +269,10 @@
       "image": "",
       "published": "2026-06-19T18:14:21+00:00",
       "firstSeen": "2026-06-25T14:53:44.092288+00:00",
-      "lastSeen": "2026-06-30T07:00:01.628161+00:00",
+      "lastSeen": "2026-06-30T09:00:02.018862+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 6.509,
+      "score": 6.5089,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -212,7 +302,7 @@
       "image": "",
       "published": "2026-06-16T10:15:38+00:00",
       "firstSeen": "2026-06-25T14:53:44.092288+00:00",
-      "lastSeen": "2026-06-30T08:00:01.738579+00:00",
+      "lastSeen": "2026-06-30T09:00:02.018862+00:00",
       "editorial_allow": false,
       "editorial_reason": "watchlist_low_signal",
       "score": 3.9081,
@@ -245,10 +335,10 @@
       "image": "https://ph-files.imgix.net/cd0d1e71-589a-4d98-a22f-344db9dc89da.png?auto=format&fit=crop&frame=1&h=512&w=1024",
       "published": "2026-06-30T03:52:28+00:00",
       "firstSeen": "2026-06-30T08:00:01.738579+00:00",
-      "lastSeen": "2026-06-30T08:00:01.738579+00:00",
+      "lastSeen": "2026-06-30T09:00:02.018862+00:00",
       "editorial_allow": false,
       "editorial_reason": "watchlist_low_signal",
-      "score": 3.8889,
+      "score": 3.862,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -278,10 +368,10 @@
       "image": "public/thumbnails/news-6568576f444e6c5bc4.avif",
       "published": "2026-06-25T20:15:56+00:00",
       "firstSeen": "2026-06-27T08:00:01.988916+00:00",
-      "lastSeen": "2026-06-30T08:00:01.738579+00:00",
+      "lastSeen": "2026-06-30T09:00:02.018862+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.8632,
+      "score": 3.8617,
       "signalGroup": "Product updates",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
@@ -314,7 +404,7 @@
       "lastSeen": "2026-06-30T07:00:01.628161+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.8163,
+      "score": 3.8161,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -344,10 +434,10 @@
       "image": "https://ph-files.imgix.net/ea5cfd31-1b70-4e8c-90ca-a87e8ab8ddc6.png?auto=format&fit=crop&frame=1&h=512&w=1024",
       "published": "2026-06-27T12:16:36+00:00",
       "firstSeen": "2026-06-29T08:00:01.336271+00:00",
-      "lastSeen": "2026-06-30T08:00:01.738579+00:00",
+      "lastSeen": "2026-06-30T09:00:02.018862+00:00",
       "editorial_allow": false,
       "editorial_reason": "watchlist_low_signal",
-      "score": 3.7756,
+      "score": 3.7711,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -379,10 +469,10 @@
       "image": "public/thumbnails/news-099aa7484406bdf5f9.avif",
       "published": "2026-06-29T16:54:09+00:00",
       "firstSeen": "2026-06-30T08:00:01.738579+00:00",
-      "lastSeen": "2026-06-30T08:00:01.738579+00:00",
+      "lastSeen": "2026-06-30T09:00:02.018862+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.6312,
+      "score": 7.6114,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -397,8 +487,7 @@
       "toolName": "Pluno",
       "toolLabel": "Pluno",
       "toolSummary": "Browser agent that’s 10x faster than Claude",
-      "clusterKey": "pluno",
-      "imageOriginal": "https://ph-files.imgix.net/7aefe371-0b98-41fd-ae42-bd510471199e.png?auto=format&fit=crop&frame=1&h=512&w=1024"
+      "clusterKey": "pluno"
     },
     {
       "title": "Gemini Spark",
@@ -413,10 +502,10 @@
       "image": "public/thumbnails/news-c5f462b461ce114c9f.avif",
       "published": "2026-06-25T05:47:05+00:00",
       "firstSeen": "2026-06-26T08:00:01.499506+00:00",
-      "lastSeen": "2026-06-30T08:00:01.738579+00:00",
+      "lastSeen": "2026-06-30T09:00:02.018862+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.5449,
+      "score": 7.5439,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -446,10 +535,10 @@
       "image": "",
       "published": "2026-06-19T18:14:21+00:00",
       "firstSeen": "2026-06-25T14:53:44.092288+00:00",
-      "lastSeen": "2026-06-30T07:00:01.628161+00:00",
+      "lastSeen": "2026-06-30T09:00:02.018862+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 6.509,
+      "score": 6.5089,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -479,7 +568,7 @@
       "image": "",
       "published": "2026-06-16T10:15:38+00:00",
       "firstSeen": "2026-06-25T14:53:44.092288+00:00",
-      "lastSeen": "2026-06-30T08:00:01.738579+00:00",
+      "lastSeen": "2026-06-30T09:00:02.018862+00:00",
       "editorial_allow": false,
       "editorial_reason": "watchlist_low_signal",
       "score": 3.9081,
@@ -512,10 +601,10 @@
       "image": "https://ph-files.imgix.net/cd0d1e71-589a-4d98-a22f-344db9dc89da.png?auto=format&fit=crop&frame=1&h=512&w=1024",
       "published": "2026-06-30T03:52:28+00:00",
       "firstSeen": "2026-06-30T08:00:01.738579+00:00",
-      "lastSeen": "2026-06-30T08:00:01.738579+00:00",
+      "lastSeen": "2026-06-30T09:00:02.018862+00:00",
       "editorial_allow": false,
       "editorial_reason": "watchlist_low_signal",
-      "score": 3.8889,
+      "score": 3.862,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -545,10 +634,10 @@
       "image": "public/thumbnails/news-6568576f444e6c5bc4.avif",
       "published": "2026-06-25T20:15:56+00:00",
       "firstSeen": "2026-06-27T08:00:01.988916+00:00",
-      "lastSeen": "2026-06-30T08:00:01.738579+00:00",
+      "lastSeen": "2026-06-30T09:00:02.018862+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.8632,
+      "score": 3.8617,
       "signalGroup": "Product updates",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
@@ -581,7 +670,7 @@
       "lastSeen": "2026-06-30T07:00:01.628161+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.8163,
+      "score": 3.8161,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -611,10 +700,10 @@
       "image": "https://ph-files.imgix.net/ea5cfd31-1b70-4e8c-90ca-a87e8ab8ddc6.png?auto=format&fit=crop&frame=1&h=512&w=1024",
       "published": "2026-06-27T12:16:36+00:00",
       "firstSeen": "2026-06-29T08:00:01.336271+00:00",
-      "lastSeen": "2026-06-30T08:00:01.738579+00:00",
+      "lastSeen": "2026-06-30T09:00:02.018862+00:00",
       "editorial_allow": false,
       "editorial_reason": "watchlist_low_signal",
-      "score": 3.7756,
+      "score": 3.7711,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -641,7 +730,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 1024,
-      "checkedAt": "2026-06-30T08:00:01.738579+00:00"
+      "checkedAt": "2026-06-30T09:00:02.018862+00:00"
     },
     {
       "source": "Google AI Blog",
@@ -651,7 +740,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-06-30T08:00:01.738579+00:00"
+      "checkedAt": "2026-06-30T09:00:02.018862+00:00"
     },
     {
       "source": "Google DeepMind Blog",
@@ -661,7 +750,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-06-30T08:00:01.738579+00:00"
+      "checkedAt": "2026-06-30T09:00:02.018862+00:00"
     },
     {
       "source": "Google Research Blog",
@@ -671,7 +760,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-06-30T08:00:01.738579+00:00"
+      "checkedAt": "2026-06-30T09:00:02.018862+00:00"
     },
     {
       "source": "Hugging Face Blog",
@@ -681,7 +770,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 811,
-      "checkedAt": "2026-06-30T08:00:01.738579+00:00"
+      "checkedAt": "2026-06-30T09:00:02.018862+00:00"
     },
     {
       "source": "NVIDIA Blog",
@@ -691,7 +780,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 18,
-      "checkedAt": "2026-06-30T08:00:01.738579+00:00"
+      "checkedAt": "2026-06-30T09:00:02.018862+00:00"
     },
     {
       "source": "AWS Machine Learning Blog",
@@ -701,7 +790,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-06-30T08:00:01.738579+00:00"
+      "checkedAt": "2026-06-30T09:00:02.018862+00:00"
     },
     {
       "source": "Artificial Intelligence News",
@@ -711,7 +800,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 12,
-      "checkedAt": "2026-06-30T08:00:01.738579+00:00"
+      "checkedAt": "2026-06-30T09:00:02.018862+00:00"
     },
     {
       "source": "Ars Technica (AI/Tech)",
@@ -721,7 +810,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-06-30T08:00:01.738579+00:00"
+      "checkedAt": "2026-06-30T09:00:02.018862+00:00"
     },
     {
       "source": "Together AI Blog",
@@ -731,7 +820,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-06-30T08:00:01.738579+00:00"
+      "checkedAt": "2026-06-30T09:00:02.018862+00:00"
     },
     {
       "source": "TechRepublic AI",
@@ -741,7 +830,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-06-30T08:00:01.738579+00:00"
+      "checkedAt": "2026-06-30T09:00:02.018862+00:00"
     },
     {
       "source": "ScienceDaily AI",
@@ -751,7 +840,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 60,
-      "checkedAt": "2026-06-30T08:00:01.738579+00:00"
+      "checkedAt": "2026-06-30T09:00:02.018862+00:00"
     },
     {
       "source": "The Next Web",
@@ -761,7 +850,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-06-30T08:00:01.738579+00:00"
+      "checkedAt": "2026-06-30T09:00:02.018862+00:00"
     },
     {
       "source": "BBC Discovery",
@@ -771,7 +860,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 847,
-      "checkedAt": "2026-06-30T08:00:01.738579+00:00"
+      "checkedAt": "2026-06-30T09:00:02.018862+00:00"
     },
     {
       "source": "BBC Infinite Monkey Cage",
@@ -781,7 +870,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 239,
-      "checkedAt": "2026-06-30T08:00:01.738579+00:00"
+      "checkedAt": "2026-06-30T09:00:02.018862+00:00"
     },
     {
       "source": "BBC The Life Scientific",
@@ -791,7 +880,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 356,
-      "checkedAt": "2026-06-30T08:00:01.738579+00:00"
+      "checkedAt": "2026-06-30T09:00:02.018862+00:00"
     },
     {
       "source": "TechCrunch AI",
@@ -801,7 +890,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-06-30T08:00:01.738579+00:00"
+      "checkedAt": "2026-06-30T09:00:02.018862+00:00"
     },
     {
       "source": "Anthropic News",
@@ -811,7 +900,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 231,
-      "checkedAt": "2026-06-30T08:00:01.738579+00:00"
+      "checkedAt": "2026-06-30T09:00:02.018862+00:00"
     },
     {
       "source": "The Verge AI",
@@ -821,7 +910,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-06-30T08:00:01.738579+00:00"
+      "checkedAt": "2026-06-30T09:00:02.018862+00:00"
     },
     {
       "source": "VentureBeat AI",
@@ -831,7 +920,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 7,
-      "checkedAt": "2026-06-30T08:00:01.738579+00:00"
+      "checkedAt": "2026-06-30T09:00:02.018862+00:00"
     },
     {
       "source": "Simon Willison",
@@ -841,7 +930,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 30,
-      "checkedAt": "2026-06-30T08:00:01.738579+00:00"
+      "checkedAt": "2026-06-30T09:00:02.018862+00:00"
     },
     {
       "source": "Interconnects AI",
@@ -851,7 +940,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-06-30T08:00:01.738579+00:00"
+      "checkedAt": "2026-06-30T09:00:02.018862+00:00"
     },
     {
       "source": "Latent Space",
@@ -861,7 +950,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-06-30T08:00:01.738579+00:00"
+      "checkedAt": "2026-06-30T09:00:02.018862+00:00"
     },
     {
       "source": "Import AI",
@@ -871,7 +960,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-06-30T08:00:01.738579+00:00"
+      "checkedAt": "2026-06-30T09:00:02.018862+00:00"
     },
     {
       "source": "Microsoft Research Blog",
@@ -881,7 +970,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-06-30T08:00:01.738579+00:00"
+      "checkedAt": "2026-06-30T09:00:02.018862+00:00"
     },
     {
       "source": "LiteLLM Releases",
@@ -891,7 +980,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-06-30T08:00:01.738579+00:00"
+      "checkedAt": "2026-06-30T09:00:02.018862+00:00"
     },
     {
       "source": "Hugging Face Transformers Releases",
@@ -901,7 +990,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-06-30T08:00:01.738579+00:00"
+      "checkedAt": "2026-06-30T09:00:02.018862+00:00"
     },
     {
       "source": "Model Context Protocol Python SDK Releases",
@@ -911,7 +1000,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-06-30T08:00:01.738579+00:00"
+      "checkedAt": "2026-06-30T09:00:02.018862+00:00"
     },
     {
       "source": "Model Context Protocol Spec Releases",
@@ -921,7 +1010,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 8,
-      "checkedAt": "2026-06-30T08:00:01.738579+00:00"
+      "checkedAt": "2026-06-30T09:00:02.018862+00:00"
     },
     {
       "source": "OpenAI Cookbook Releases",
@@ -931,7 +1020,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 0,
-      "checkedAt": "2026-06-30T08:00:01.738579+00:00"
+      "checkedAt": "2026-06-30T09:00:02.018862+00:00"
     },
     {
       "source": "Product Hunt AI",
@@ -941,7 +1030,7 @@
       "sourceType": "tool-directory",
       "status": "ok",
       "items": 50,
-      "checkedAt": "2026-06-30T08:00:01.738579+00:00"
+      "checkedAt": "2026-06-30T09:00:02.018862+00:00"
     }
   ],
   "errors": []
