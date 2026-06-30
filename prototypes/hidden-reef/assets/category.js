@@ -6,6 +6,8 @@
 
   const PRODUCTS_PER_PAGE = 24;
   const NEW_ARRIVALS_FILTER = 'new-arrivals';
+  const SALE_ITEMS_FILTER = 'sale-items';
+  const CURRENT_VIEW_FILTER = 'current-view';
   const NEW_ARRIVAL_SLUGS = ['starter-kits', 'planted', 'flake-tropical', 'skimmers', 'pond-supplies', 'led-fixtures', 'ornaments', 'gravel-cleaners', 'controllers', 'pumps'];
   const pageConfig = window.THR_CATEGORY_CONFIG || {};
   const categoryBase = pageConfig.categoryBase || './';
@@ -19,6 +21,7 @@
   let currentSubcategory = null;
   let currentResultLabel = '';
   let showNewArrivalsFilter = false;
+  let showSaleItemsFilter = false;
   let categoryHeroRotator = 0;
 
   function getParams() {
@@ -28,16 +31,13 @@
       sub: p.get('sub') || '',
       filter: p.get('filter') || '',
       brand: p.get('brand') || '',
+      search: p.get('search') || '',
       page: parseInt(p.get('page')) || 1
     };
   }
 
   function findCategory(catSlug) {
     if (!THR || !THR.categories) return null;
-    for (const key of Object.keys(THR.categories)) {
-      const cat = THR.categories[key];
-      if (cat.slug === catSlug) return cat;
-    }
     if (THR.departmentMap && THR.departmentMap[catSlug]) {
       const departmentNames = {
         freshwater: 'Freshwater',
@@ -71,6 +71,10 @@
         description: departmentDescriptions[catSlug] || 'Browse department products',
         children
       };
+    }
+    for (const key of Object.keys(THR.categories)) {
+      const cat = THR.categories[key];
+      if (cat.slug === catSlug) return cat;
     }
     return null;
   }
@@ -132,6 +136,15 @@
     return products;
   }
 
+  function getAllCatalogProducts() {
+    let products = [];
+    if (!window.THR_PRODUCTS) return products;
+    for (const key of Object.keys(THR_PRODUCTS)) {
+      products = products.concat(getProducts(key));
+    }
+    return products;
+  }
+
   function getCategoryMeta(subSlug) {
     const categories = window.THR?.categories || {};
     for (const groupSlug of Object.keys(categories)) {
@@ -171,14 +184,29 @@
     if (!el) return;
     const meta = window.THR_PRODUCT_META || {};
     const total = Number(meta.total || 0).toLocaleString();
+    const publicProducts = Number(meta.publicSitemapProducts || 0).toLocaleString();
     const updated = formatUpdatedAt(meta.refreshedAt);
     const updatedText = updated ? ` Updated ${updated}.` : '';
-    el.textContent = `Preview catalog. Prices and availability can change; confirm with the store before making a special trip. ${total} catalog items are checked daily.${updatedText}`;
+    const coverageText = meta.publicSitemapProducts
+      ? `${publicProducts} public product pages are covered, with ${total} catalog rows including variants and category listings.`
+      : `${total} catalog items are checked daily.`;
+    el.textContent = `Preview catalog. Prices and availability can change; confirm with the store before making a special trip. ${coverageText}${updatedText}`;
   }
 
   function parsePrice(price) {
     const number = parseFloat(String(price || '').replace(/[^0-9.]/g, ''));
     return Number.isFinite(number) ? number : null;
+  }
+
+  function getDiscountPercent(price, oldPrice) {
+    const sale = parsePrice(price);
+    const regular = parsePrice(oldPrice);
+    if (!sale || !regular || regular <= sale) return 0;
+    return Math.round(((regular - sale) / regular) * 100);
+  }
+
+  function normalizeDiscountLabel(label) {
+    return String(label || '').replace(/\s+/g, ' ').trim();
   }
 
   function extractBrand(name) {
@@ -198,6 +226,45 @@
         .forEach(product => keys.add(getProductKey(product)));
     });
     return keys;
+  }
+
+  function getNewArrivalProducts(products) {
+    const arrivals = window.THR_NEW_ARRIVALS?.products;
+    if (Array.isArray(arrivals) && arrivals.length) {
+      return arrivals.map(product => Object.assign({}, product, {
+        categorySlug: 'new-arrivals',
+        categoryName: 'New Arrivals',
+        groupSlug: 'new-arrivals',
+        groupName: 'New Arrivals'
+      }));
+    }
+    const keys = getNewArrivalKeys(products);
+    return products.filter(product => keys.has(getProductKey(product)));
+  }
+
+  function getSaleProducts() {
+    const departments = window.THR_SALE_DATA?.departments;
+    if (!Array.isArray(departments)) return [];
+    const seen = new Set();
+    return departments.flatMap(department => {
+      const products = Array.isArray(department.products) ? department.products : [];
+      return products.map(product => {
+        const key = product.productUrl || `${department.slug}:${product.name}`;
+        if (seen.has(key)) return null;
+        seen.add(key);
+        return Object.assign({}, product, {
+          categorySlug: SALE_ITEMS_FILTER,
+          categoryName: 'Sale Items',
+          groupSlug: SALE_ITEMS_FILTER,
+          groupName: 'Sale Items',
+          isSaleItem: true,
+          saleDepartment: department.title,
+          saleDiscount: department.discount || getDiscountPercent(product.price, product.oldPrice),
+          saleDiscountLabel: normalizeDiscountLabel(department.discountLabel || (department.discount ? department.discount + '% off' : 'Sale pricing')),
+          saleDepartmentUrl: department.url || ''
+        });
+      }).filter(Boolean);
+    });
   }
 
   function escapeHtml(value) {
@@ -228,13 +295,25 @@
   function applyProductControls(products) {
     const controls = getActiveControls();
     const query = controls.query.toLowerCase();
-    const newArrivalKeys = controls.category === NEW_ARRIVALS_FILTER ? getNewArrivalKeys(products) : null;
-    let filtered = products.filter(product => {
+    const allProducts = getAllCatalogProducts();
+    const sourceProducts = controls.category === CURRENT_VIEW_FILTER
+      ? products
+      : controls.category === NEW_ARRIVALS_FILTER
+      ? getNewArrivalProducts(allProducts)
+      : controls.category === SALE_ITEMS_FILTER
+        ? getSaleProducts()
+        : controls.category
+          ? allProducts
+          : allProducts;
+    let filtered = sourceProducts.filter(product => {
       const name = product.name || '';
       const brand = extractBrand(name);
       const matchesQuery = !query || name.toLowerCase().includes(query) || brand.toLowerCase().includes(query);
       const matchesCategory = !controls.category ||
-        (controls.category === NEW_ARRIVALS_FILTER ? newArrivalKeys.has(getProductKey(product)) : product.groupSlug === controls.category);
+        controls.category === CURRENT_VIEW_FILTER ||
+        controls.category === NEW_ARRIVALS_FILTER ||
+        controls.category === SALE_ITEMS_FILTER ||
+        product.groupSlug === controls.category;
       const matchesBrand = !controls.brand || brand === controls.brand;
       return matchesQuery && matchesCategory && matchesBrand;
     });
@@ -246,17 +325,24 @@
     const el = document.getElementById('product-controls');
     if (!el) return;
 
-    const brands = Array.from(new Set(products.map(product => extractBrand(product.name)).filter(Boolean))).sort((a, b) => a.localeCompare(b));
+    const allProducts = getAllCatalogProducts();
+    const filterProducts = allProducts.concat(getSaleProducts(), getNewArrivalProducts(allProducts));
+    const brands = Array.from(new Set(filterProducts.map(product => extractBrand(product.name)).filter(Boolean))).sort((a, b) => a.localeCompare(b));
+    const requestedBrand = getParams().brand;
+    if (requestedBrand && !brands.includes(requestedBrand)) brands.push(requestedBrand);
+    brands.sort((a, b) => a.localeCompare(b));
     const brandOptions = brands.map(brand => '<option value="' + escapeHtml(brand) + '">' + escapeHtml(brand) + '</option>').join('');
-    const categories = Array.from(new Map(products
+    const categories = Array.from(new Map(allProducts
       .filter(product => product.groupSlug && product.groupName)
       .filter(product => product.groupSlug !== 'aquariums')
       .map(product => [product.groupSlug, product.groupName]))
       .entries())
       .sort((a, b) => a[1].localeCompare(b[1]));
+    const currentViewOption = currentResultLabel ? '<option value="' + CURRENT_VIEW_FILTER + '">' + escapeHtml(currentResultLabel) + '</option>' : '';
+    const saleItemsOption = showSaleItemsFilter ? '<option value="' + SALE_ITEMS_FILTER + '">Sale Items</option>' : '';
     const newArrivalsOption = showNewArrivalsFilter ? '<option value="' + NEW_ARRIVALS_FILTER + '">New Arrivals</option>' : '';
-    const categoryOptions = newArrivalsOption + categories.map(([slug, name]) => '<option value="' + escapeHtml(slug) + '">' + escapeHtml(name) + '</option>').join('');
-    el.innerHTML = '<label><span>Category</span><select id="category-filter"><option value="">All categories</option>' + categoryOptions + '</select></label><label><span>Brand</span><select id="brand-filter"><option value="">All brands</option>' + brandOptions + '</select></label><label><span>Sort</span><select id="sort-products"><option value="featured">Featured order</option><option value="name-asc">Name A-Z</option><option value="price-asc">Price low to high</option><option value="price-desc">Price high to low</option></select></label><button type="button" id="reset-products">Reset</button><a class="home-control" href="' + homeHref + '">Home</a>';
+    const categoryOptions = currentViewOption + '<option value="">All categories</option>' + saleItemsOption + newArrivalsOption + categories.map(([slug, name]) => '<option value="' + escapeHtml(slug) + '">' + escapeHtml(name) + '</option>').join('');
+    el.innerHTML = '<label><span>Category</span><select id="category-filter">' + categoryOptions + '</select></label><label><span>Brand</span><select id="brand-filter"><option value="">All brands</option>' + brandOptions + '</select></label><label><span>Sort</span><select id="sort-products"><option value="featured">Featured order</option><option value="name-asc">Name A-Z</option><option value="price-asc">Price low to high</option><option value="price-desc">Price high to low</option></select></label><button type="button" id="reset-products">Reset</button><a class="home-control" href="' + homeHref + '">Home</a>';
 
     el.querySelectorAll('select').forEach(control => {
       control.addEventListener('change', () => updateProductView(1));
@@ -267,7 +353,7 @@
       const brandFilter = document.getElementById('brand-filter');
       const sortControl = document.getElementById('sort-products');
       if (searchInput) searchInput.value = '';
-      if (categoryFilter) categoryFilter.value = '';
+      if (categoryFilter) categoryFilter.value = currentResultLabel ? CURRENT_VIEW_FILTER : '';
       if (brandFilter) brandFilter.value = '';
       if (sortControl) sortControl.value = 'featured';
       updateProductView(1);
@@ -279,9 +365,9 @@
     if (!el) return;
     let html = `<a href="../">Home</a><span>›</span>`;
     if (cat) {
-      html += `<a href="?cat=${cat.slug}">${cat.name}</a>`;
+      html += `<a href="?cat=${escapeHtml(cat.slug)}">${escapeHtml(cat.name)}</a>`;
       if (sub) {
-        html += `<span>›</span><span style="color:#fff;">${sub.name}</span>`;
+        html += `<span>›</span><span style="color:#fff;">${escapeHtml(sub.name)}</span>`;
       }
     }
     el.innerHTML = html;
@@ -436,8 +522,8 @@
         title: 'Food & Care',
         items: [
           { type: 'link', label: 'Salt Mix & Additives', href: '?cat=additives' },
-          { type: 'link', label: 'Test Kits & Refractometers', href: '?cat=maintenance' },
-          { type: 'link', label: 'Calcium, Alk & Magnesium', href: '?cat=additives' },
+          { type: 'link', label: 'Test Kits & Refractometers', href: '?cat=maintenance&sub=marine-test-kits' },
+          { type: 'link', label: 'Calcium, Alk & Magnesium', href: '?cat=additives&sub=coral-supplements' },
           { type: 'link', label: 'Water Conditioner', href: '?cat=additives&sub=water-conditioners' }
         ]
       },
@@ -565,8 +651,8 @@
         title: 'Food & Care',
         items: [
           { type: 'link', label: 'Pond Food & Feeding', href: '?cat=pond&sub=pond-food' },
-          { type: 'link', label: 'Water Treatments', href: '?cat=maintenance' },
-          { type: 'link', label: 'Bacteria & Startup', href: '?cat=maintenance' },
+          { type: 'link', label: 'Water Treatments', href: '?cat=pond&sub=pond-additives' },
+          { type: 'link', label: 'Bacteria & Startup', href: '?cat=pond&sub=pond-bacteria' },
           { type: 'link', label: 'Seasonal Care', href: '?cat=maintenance' }
         ]
       }
@@ -586,7 +672,7 @@
       {
         title: 'Related Departments',
         items: [
-          { type: 'link', label: 'Filter Media & Replacement', href: '?cat=maintenance' },
+          { type: 'link', label: 'Filter Media & Replacement', href: '?cat=maintenance&sub=filter-media' },
           { type: 'link', label: 'Food & Water Care', href: '?cat=food' },
           { type: 'link', label: 'Freshwater', href: '?cat=freshwater' },
           { type: 'link', label: 'Saltwater', href: '?cat=saltwater' }
@@ -643,8 +729,9 @@
         open: true,
         items: [
           { type: 'link', label: 'All Maintenance', href: '?cat=maintenance', active: true },
-          { type: 'link', label: 'Test Kits', href: '?cat=maintenance' },
-          { type: 'link', label: 'Filter Media', href: '?cat=maintenance' },
+          { type: 'link', label: 'Test Kits', href: '?cat=maintenance&sub=test-kits' },
+          { type: 'link', label: 'Marine Test Kits', href: '?cat=maintenance&sub=marine-test-kits' },
+          { type: 'link', label: 'Filter Media', href: '?cat=maintenance&sub=filter-media' },
           { type: 'link', label: 'Algae Control', href: '?cat=maintenance&sub=gravel-cleaners' },
           { type: 'link', label: 'Cleaning Tools', href: '?cat=maintenance&sub=gravel-cleaners' }
         ]
@@ -654,7 +741,7 @@
         items: [
           { type: 'link', label: 'Gravel Vac & Siphons', href: '?cat=maintenance&sub=gravel-cleaners' },
           { type: 'link', label: 'Magnetic Cleaners', href: '?cat=maintenance&sub=gravel-cleaners' },
-          { type: 'link', label: 'Filter Replacements', href: '?cat=maintenance' },
+          { type: 'link', label: 'Filter Replacements', href: '?cat=maintenance&sub=filter-media' },
           { type: 'link', label: 'Water Change Systems', href: '?cat=maintenance&sub=gravel-cleaners' }
         ]
       }
@@ -701,12 +788,7 @@
         button.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
       });
     });
-    el.querySelectorAll('[data-sidebar-filter]').forEach(link => {
-      link.addEventListener('click', event => {
-        event.preventDefault();
-        applySidebarFilter(link);
-      });
-    });
+    // Let sidebar anchors navigate normally so URL, header, breadcrumb, and products stay in sync.
   }
 
   function applySidebarFilter(link) {
@@ -743,7 +825,7 @@
     const categoryFilter = document.getElementById('category-filter');
     const brandFilter = document.getElementById('brand-filter');
     const sortControl = document.getElementById('sort-products');
-    if (categoryFilter) categoryFilter.value = '';
+    if (categoryFilter) categoryFilter.value = currentResultLabel ? CURRENT_VIEW_FILTER : '';
     if (brandFilter) brandFilter.value = '';
     if (sortControl) sortControl.value = 'featured';
     updateProductView(1);
@@ -770,11 +852,23 @@
       const imgAlt = (p.name || 'Product').replace(/"/g, '&quot;');
       const name = (p.name || 'Unknown Product').replace(/</g, '&lt;');
       const price = formatPrice(p.price);
+      const oldPrice = p.oldPrice ? formatPrice(p.oldPrice) : '';
       const url = p.productUrl || '#';
       const pageLabel = p.page > 1 ? `Page ${p.page}` : '';
       const brandHtml = brand ? `<span class="thr-brand">${brand}</span>` : '';
       const badge = pageLabel ? `<span class="thr-page">${pageLabel}</span>` : '';
-      const optionBadge = p.variants && p.variants.length > 1 ? `<span class="thr-options">${p.variants.length} options</span>` : '';
+      const isSaleItem = Boolean(p.isSaleItem);
+      const optionBadge = !isSaleItem && p.variants && p.variants.length > 1 ? `<span class="thr-options">${p.variants.length} options</span>` : '';
+      const discountPercent = p.saleDiscount || getDiscountPercent(p.price, p.oldPrice);
+      const saleBadgeText = discountPercent ? `${discountPercent}% off` : 'Sale';
+      const saleBadge = isSaleItem ? `<span class="thr-sale-badge">${escapeHtml(saleBadgeText)}</span>` : '';
+      const priceHtml = isSaleItem && oldPrice
+        ? `<span class="thr-price-row"><span class="thr-price thr-price--sale">${price}</span><span class="thr-old-price">${oldPrice}</span></span>`
+        : `<span class="thr-price${isSaleItem ? ' thr-price--sale' : ''}">${price}</span>`;
+      const saleMetaParts = [p.saleDepartment, p.saleDiscountLabel].filter(Boolean);
+      const saleMeta = isSaleItem && saleMetaParts.length
+        ? `<span class="thr-sale-meta">${escapeHtml(saleMetaParts.join(' · '))}</span>`
+        : '';
 
       html += `
         <a class="thr-product" href="${url}" target="_blank" rel="noopener">
@@ -784,10 +878,12 @@
             <img src="${imgSrc}" alt="${imgAlt}" loading="lazy" onerror="this.parentElement.style.background='linear-gradient(180deg,#0c2030,#071a27)';this.style.display='none'" />
             ${badge}
             ${optionBadge}
+            ${saleBadge}
           </div>
           <div class="thr-info">
-            <span class="thr-price">${price}</span>
+            ${priceHtml}
             <h3 class="thr-name">${name}</h3>
+            ${saleMeta}
           </div>
         </a>`;
     });
@@ -831,7 +927,7 @@
     const selectedCategory = controls.category
       ? document.querySelector('#category-filter option:checked')?.textContent || ''
       : '';
-    const label = selectedCategory || currentResultLabel || (sub ? sub.name : 'All products');
+    const label = selectedCategory || 'All products';
     const rawCount = Number(rawTotal || 0);
     const variantNote = rawCount && rawCount !== total
       ? `<small>${rawCount.toLocaleString()} catalog items including variants</small>`
@@ -841,9 +937,11 @@
 
   function updateProductView(page) {
     currentPage = page || 1;
+    const controls = getActiveControls();
     const filteredProducts = applyProductControls(baseProducts);
     const rawFilteredCount = filteredProducts.length;
-    currentProducts = window.THR?.groupProductVariants ? THR.groupProductVariants(filteredProducts) : filteredProducts;
+    const shouldGroupVariants = controls.category !== NEW_ARRIVALS_FILTER;
+    currentProducts = shouldGroupVariants && window.THR?.groupProductVariants ? THR.groupProductVariants(filteredProducts) : filteredProducts;
     const totalPages = Math.max(1, Math.ceil(currentProducts.length / PRODUCTS_PER_PAGE));
     currentPage = Math.min(currentPage, totalPages);
     const start = (currentPage - 1) * PRODUCTS_PER_PAGE;
@@ -867,7 +965,8 @@
     currentCategory = cat;
     currentSubcategory = sub;
     currentResultLabel = sub ? sub.name : (cat ? cat.name : '');
-    showNewArrivalsFilter = !cat && !sub;
+    showNewArrivalsFilter = getNewArrivalProducts(getAllCatalogProducts()).length > 0;
+    showSaleItemsFilter = getSaleProducts().length > 0;
     setMainNavActive(cat ? cat.slug : '');
 
     renderBreadcrumb(cat, sub);
@@ -883,28 +982,28 @@
     } else if (cat) {
       products = getCategoryProducts(cat);
     } else {
-      products = [];
-      if (window.THR_PRODUCTS) {
-        for (const key of Object.keys(THR_PRODUCTS)) {
-          products = products.concat(getProducts(key));
-        }
-      }
+      products = getAllCatalogProducts();
     }
     baseProducts = products;
     currentProducts = products;
     renderProductControls(products);
+    const categoryFilter = document.getElementById('category-filter');
+    if (categoryFilter && currentResultLabel) categoryFilter.value = CURRENT_VIEW_FILTER;
     if (params.brand) {
       const brandFilter = document.getElementById('brand-filter');
       if (brandFilter) brandFilter.value = params.brand;
     }
     const initialFilter = params.filter || defaultFilter;
     if (showNewArrivalsFilter && initialFilter === NEW_ARRIVALS_FILTER) {
-      const categoryFilter = document.getElementById('category-filter');
       if (categoryFilter) categoryFilter.value = NEW_ARRIVALS_FILTER;
+    }
+    if (showSaleItemsFilter && initialFilter === SALE_ITEMS_FILTER) {
+      if (categoryFilter) categoryFilter.value = SALE_ITEMS_FILTER;
     }
 
     const searchInput = document.getElementById('search');
     if (searchInput) {
+      if (params.search) searchInput.value = params.search;
       searchInput.addEventListener('input', () => updateProductView(1));
     }
 
