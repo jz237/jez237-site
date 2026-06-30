@@ -32,5 +32,22 @@
       "description": "Fictional 1962 Pine Barrens motor-court pool attraction photographed as a humid alternate-local-history evening scene.",
       "template": "Create a clearly fictional [ERA] [ARTIFACT_OR_DOCUMENTARY_SCENE] for \"[IMAGINARY_PLACE_OR_OBJECT]\", an imaginary [REGION_OR_SETTING] subject from a world that never existed. Make it feel like a discovered archive object or documentary photograph with [PERIOD_MATERIALS], [WEATHERING_OR_SURFACE_TEXTURE], [SIGNAGE_OR_LOCAL_DESIGN_DETAILS], [ENVIRONMENTAL_CONTEXT], and small readable fictional place text only when naturally part of the scene, while clearly framing it as imaginary rather than real."
     }
+  },
+  {
+    "id": "2026-06-30-world-that-never-was-riverglass-snack-stand-close-up",
+    "title": "Riverglass Snack Stand Close-Up",
+    "tests": "World That Never Was companion close-up; snack stand clearly featured; period materials and rainy poolside lighting preserved; no modern branding or real-world claim.",
+    "prompt": "Edit the Riverglass Motor Court Glow Pool image into a close-up view of the snack stand on the right side. Preserve the same fictional 1962 roadside motel pool world, rainy dusk lighting, warm bulbs, wet pavement reflections, and slightly mysterious documentary realism. Frame the snack stand as the main subject, showing the service window, display case with pastries and snacks, menu boards, warm interior light, weathered counter, and surrounding poolside details. Keep it believable as a zoomed-in companion image from the same scene, with no modern branding, no added people, no exaggerated fantasy elements, and only minimal fictional period-style text.",
+    "image": "images/2026-06-30-world-that-never-was-riverglass-snack-stand-close-up.jpg",
+    "date": "2026-06-30",
+    "batch": "Daily Prompt",
+    "slot": "world-that-never-was",
+    "model": "openai/gpt-image-2",
+    "size": "1402x1122",
+    "worldThatNeverWas": {
+      "artifact": "Riverglass Motor Court Snack Stand",
+      "description": "A close-up companion view of the fictional Riverglass Motor Court Glow Pool snack stand, lit by warm bulbs on a rainy evening with pastry cases, menu boards, wet concrete, and worn poolside fixtures from an imaginary 1962 roadside motel courtyard.",
+      "template": "Create a close-up companion image for a clearly fictional [ERA] [PLACE_DETAIL] from \"[IMAGINARY_PLACE]\". Keep the invented local-history setting consistent, emphasizing [PERIOD_MATERIALS], [WEATHERING], [LIGHTING], and only minimal fictional text that belongs naturally in the scene."
+    }
   }
 ]
