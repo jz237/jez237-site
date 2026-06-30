@@ -365,9 +365,9 @@
     if (!el) return;
     let html = `<a href="../">Home</a><span>›</span>`;
     if (cat) {
-      html += `<a href="?cat=${cat.slug}">${cat.name}</a>`;
+      html += `<a href="?cat=${escapeHtml(cat.slug)}">${escapeHtml(cat.name)}</a>`;
       if (sub) {
-        html += `<span>›</span><span style="color:#fff;">${sub.name}</span>`;
+        html += `<span>›</span><span style="color:#fff;">${escapeHtml(sub.name)}</span>`;
       }
     }
     el.innerHTML = html;
