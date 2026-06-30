@@ -2858,5 +2858,22 @@
     "slot": "miniature-diorama",
     "model": "openai/gpt-image-2",
     "size": "1536x1024"
+  },
+  {
+    "id": "2026-06-30-factual-infographic-factual-infographic-how-a-zipper-slider",
+    "title": "Factual infographic: How a Zipper Slider Interlocks Teeth",
+    "tests": "Real-world non-fiction engineering infographic with zipper slider cutaway, process sequence, macro detail windows, material swatches, workbench context, and safe observation comparison.",
+    "prompt": "Create a finished square factual infographic titled \"How a Zipper Slider Interlocks Teeth\" explaining a real coil or molded-tooth zipper using conservative real-world information. Make it a polished photorealistic repair-bench engineering wall chart mounted above a textile repair workbench, not a flat school poster. Include a large central cutaway of the zipper slider body moving along two tape halves, a four-step separated-teeth-to-closed-chain sequence, an exploded parts strip, macro windows for tooth profile, tape fibers, stitching tension, worn channel, bent tooth, and frayed fabric, material/function swatches, a real textile repair workbench vignette, and a good alignment versus skipped-teeth comparison panel. Use concise factual labels, blue motion arrows, amber pressure highlights, brushed metal, navy fabric, off-white woven tape, red inspection marks, soft daylight, realistic shadows, and dense tactile detail. Avoid brand names, logos, fake exact statistics, private data, QR codes, dense paragraphs, repair instructions, invented mechanisms, watermark, signature, prompt-card framing, and unreadable filler text.\n\nReusable fill-in-the-blank template: Create a finished square factual infographic titled [INFOGRAPHIC_TITLE] explaining [REAL_WORLD_TOOL_OR_MECHANISM] using conservative real-world information. Make it a polished photorealistic [FIELD_OR_SERVICE_CONTEXT] wall chart mounted above a believable [WORKBENCH_OR_ENVIRONMENT]. Include [CENTRAL_CUTAWAY_OR_MAIN_MECHANISM_PANEL], [STEP_BY_STEP_PROCESS_SEQUENCE], [EXPLODED_PARTS_OR_STAGE_STRIP], at least two [MACRO_MATERIAL_OR_WEAR_WINDOWS], [REAL_WORLD_CONTEXT_TOOLS_OR_SCALE_CUES], and [COMPARISON_OR_SAFE_OBSERVATION_VIGNETTE]. Use concise labels and accurate material detail. Avoid fake exact statistics, invented mechanisms, brand logos, private data, legal claims, service procedures, dense paragraphs, and prompt-card framing.\n\nExample substitution: [INFOGRAPHIC_TITLE] = How a Zipper Slider Interlocks Teeth; [REAL_WORLD_TOOL_OR_MECHANISM] = zipper slider and zipper teeth; [FIELD_OR_SERVICE_CONTEXT] = textile repair; [WORKBENCH_OR_ENVIRONMENT] = jacket and zipper repair bench; [CENTRAL_CUTAWAY_OR_MAIN_MECHANISM_PANEL] = slider Y-channel guiding two tape halves into interlocked teeth; [STEP_BY_STEP_PROCESS_SEQUENCE] = separated teeth enter, guided convergence, teeth interlock, closed chain exits; [EXPLODED_PARTS_OR_STAGE_STRIP] = slider body, pull tab, stops, tape, coil or molded teeth, stitching, fabric edge; [MACRO_MATERIAL_OR_WEAR_WINDOWS] = tooth profile, woven tape fibers, stitching tension, worn slider channel, bent tooth, frayed fabric; [REAL_WORLD_CONTEXT_TOOLS_OR_SCALE_CUES] = jacket edge, seam ripper, pliers, spare slider, loupe, thread spool, fabric clips, unbranded parts tray; [COMPARISON_OR_SAFE_OBSERVATION_VIGNETTE] = good tooth alignment versus skipped teeth and loose slider.",
+    "image": "images/2026-06-30-factual-infographic-factual-infographic-how-a-zipper-slider.jpg",
+    "date": "2026-06-30",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "factualInfographic": {
+      "topic": "Zipper slider tooth interlocking mechanism",
+      "description": "Explains how a real zipper slider guides separated teeth into an interlocked chain, with conservative engineering labels and repair-bench context.",
+      "sourceNote": "Real-world/non-fiction mechanical topic; conservative general zipper construction, no invented statistics or repair procedure."
+    }
   }
 ]
