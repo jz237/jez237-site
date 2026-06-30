@@ -1,8 +1,337 @@
 {
-  "generatedAt": "2026-06-29T12:02:30.960Z",
+  "generatedAt": "2026-06-30T12:02:33.505Z",
   "editorialPriority": "When there is a choice, prefer personal computers, home computing, office PC software, and personal computer or console gaming over broad enterprise technology.",
   "fallbackPolicy": "Use exact-day computer news when verified. If none exists, use same-week or same-month personal-computing items with confidence labels, then fall back to a wider world/business headline.",
   "issues": [
+    {
+      "currentDate": "2026-06-30",
+      "historicDate": "1983-02-07",
+      "displayDate": "Week of February 7-13, 1983",
+      "edition": "Issue 028 - Weekly 1982 Computer & Culture Chronicle",
+      "visualProfile": "February 1983 computer weekly: Atari keyboard add-on news, IBM PC software momentum, video-game magazine shelves, warm newsprint, red and blue section furniture.",
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "Weekly 1982 Computer & Culture Chronicle",
+        "dateline": "Week of February 7-13, 1983",
+        "price": "25 cents"
+      },
+      "layoutPlan": "Lead with Atari turning the VCS game console toward low-cost computing, anchor the page with game-cartridge and keyboard imagery, then scan Lotus 1-2-3, computer magazines, retail prices, radio, and movie counters.",
+      "sectionChrome": {
+        "primary": "brick red",
+        "secondary": "blue ink",
+        "texture": "aged newsprint, halftone photos, tight column rules"
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1983-02-07.png",
+        "alt": "GPT Image 2 newspaper-style Computer Chronicle front page for the week of February 7-13, 1983",
+        "caption": "GPT Image 2 newspaper-style front page generated from structured Computer Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "This week catches Atari trying to turn a living-room game machine into a starter computer while IBM PC users keep hearing Lotus 1-2-3 pitched as the new spreadsheet standard.",
+      "morningLine": "Atari adds a computer keyboard to the VCS conversation, Lotus 1-2-3 keeps pulling office buyers toward the IBM PC, Down Under leads the singles chart, and Tootsie stays atop the weekend box office.",
+      "lead": {
+        "headline": "Atari pitches a keyboard path from game console to computer",
+        "summary": "On February 9, 1983, UPI reported that Atari unveiled a low-cost computer keyboard designed to turn its video-game system into a home computer, a telling sign of how console makers were chasing the family-computing shelf.",
+        "confidence": "High",
+        "sourceRefs": [
+          0
+        ]
+      },
+      "computerItems": [
+        {
+          "title": "Atari keyboard add-on targets the living room",
+          "summary": "Atari framed the accessory as a way to move beyond cartridges and make a familiar game system feel like a household computer.",
+          "confidence": "High",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "title": "Lotus 1-2-3 is fresh on IBM PC desks",
+          "summary": "Lotus 1-2-3 went on sale in late January 1983, pairing spreadsheet, charting, and database features in one IBM PC package and quickly becoming a business-software talking point.",
+          "confidence": "High",
+          "sourceRefs": [
+            1
+          ]
+        },
+        {
+          "title": "Compute! sells an all-new games issue",
+          "summary": "Compute! issue 33, dated February 1983, promoted home, educational, and recreational computing with an all-new games issue and joystick coverage.",
+          "confidence": "High",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "title": "Video-game magazines keep the Atari 5200 and Super Pac-Man in view",
+          "summary": "February 1983 game-magazine shelves highlighted Super Pac-Man, the Atari 5200, and new third-party Intellivision titles as cartridge competition stayed crowded.",
+          "confidence": "Medium",
+          "sourceRefs": [
+            3
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "Lotus 1-2-3",
+          "detail": "New IBM PC spreadsheet/database/graphics package, on sale from January 26, 1983.",
+          "confidence": "High",
+          "sourceRefs": [
+            1
+          ]
+        },
+        {
+          "name": "VisiCalc",
+          "detail": "Established spreadsheet name still used as the comparison point for new business software.",
+          "confidence": "High",
+          "sourceRefs": [
+            1
+          ]
+        },
+        {
+          "name": "WordStar",
+          "detail": "Period-standard microcomputer word processor for CP/M and expanding business systems.",
+          "confidence": "Medium",
+          "sourceRefs": [
+            4
+          ]
+        },
+        {
+          "name": "dBASE II",
+          "detail": "Ashton-Tate database software remained a key business-micro package in early 1983.",
+          "confidence": "Medium",
+          "sourceRefs": [
+            5
+          ]
+        },
+        {
+          "name": "Atari BASIC",
+          "detail": "Built-in and cartridge BASIC remained central to Atari 8-bit home-computer use.",
+          "confidence": "Medium",
+          "sourceRefs": [
+            6
+          ]
+        }
+      ],
+      "storeShelves": [
+        {
+          "item": "Atari 2600 / VCS",
+          "price": "about $99-$130",
+          "note": "Game console at the center of Atari keyboard-conversion coverage.",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "item": "Commodore 64",
+          "price": "about $595",
+          "note": "A major home-computer shelf rival in early 1983 retail advertising.",
+          "sourceRefs": [
+            7
+          ]
+        },
+        {
+          "item": "TI-99/4A",
+          "price": "under $200 after rebates in many ads",
+          "note": "Texas Instruments continued the aggressive low-price home-computer fight.",
+          "sourceRefs": [
+            7
+          ]
+        },
+        {
+          "item": "Atari 5200",
+          "price": "about $269",
+          "note": "Premium console visible in February 1983 game-magazine coverage.",
+          "sourceRefs": [
+            3
+          ]
+        },
+        {
+          "item": "Lotus 1-2-3 for IBM PC",
+          "price": "$495 list",
+          "note": "Launch-era business-software price commonly cited for the package.",
+          "sourceRefs": [
+            1
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "Lotus 1-2-3",
+          "price": "$495 list",
+          "confidence": "High",
+          "sourceRefs": [
+            1
+          ],
+          "note": "New IBM PC office-software benchmark."
+        },
+        {
+          "item": "Compute! magazine",
+          "price": "$2.50 cover",
+          "confidence": "High",
+          "sourceRefs": [
+            2
+          ],
+          "note": "February 1983 issue 33 cover price."
+        },
+        {
+          "item": "Atari 5200 console",
+          "price": "about $269",
+          "confidence": "Medium",
+          "sourceRefs": [
+            3
+          ],
+          "note": "Period retail-ad range around the console push."
+        },
+        {
+          "item": "Commodore 64",
+          "price": "about $595",
+          "confidence": "Medium",
+          "sourceRefs": [
+            7
+          ],
+          "note": "Typical early-1983 advertised shelf price before deeper later cuts."
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "Radio counter: Down Under at No. 1",
+          "summary": "The Billboard Hot 100 dated February 12, 1983 put Men at Work's Down Under at the top, with Toto's Africa just behind it.",
+          "confidence": "High",
+          "sourceRefs": [
+            8
+          ]
+        },
+        {
+          "headline": "Movie counter: Tootsie holds weekend lead",
+          "summary": "For February 11-13, 1983, Box Office Mojo lists Tootsie at No. 1, followed by 48 Hrs., The Entity, Gandhi, and Without a Trace.",
+          "confidence": "High",
+          "sourceRefs": [
+            9
+          ]
+        },
+        {
+          "headline": "Arcade names fill the game aisle",
+          "summary": "Super Pac-Man, Zaxxon, Donkey Kong Jr., Pole Position, and Ms. Pac-Man were among the period titles carrying arcade and home-conversion interest into early 1983.",
+          "confidence": "Medium",
+          "sourceRefs": [
+            3
+          ]
+        },
+        {
+          "headline": "Home computing sells as family entertainment",
+          "summary": "Magazine covers and retail pages kept mixing education, games, joysticks, and BASIC, blurring the line between console play and computer ownership.",
+          "confidence": "High",
+          "sourceRefs": [
+            2,
+            3
+          ]
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "Down Under",
+          "artist": "Men at Work"
+        },
+        {
+          "rank": 2,
+          "title": "Africa",
+          "artist": "Toto"
+        },
+        {
+          "rank": 3,
+          "title": "Baby, Come to Me",
+          "artist": "Patti Austin with James Ingram"
+        },
+        {
+          "rank": 4,
+          "title": "You Are",
+          "artist": "Lionel Richie"
+        },
+        {
+          "rank": 5,
+          "title": "Stray Cat Strut",
+          "artist": "Stray Cats"
+        }
+      ],
+      "periodAd": {
+        "headline": "Make Your Game Machine Compute",
+        "summary": "Ask about Atari keyboard add-ons, BASIC cartridges, joystick games, and family computer bundles. IBM PC users: Lotus 1-2-3 now in stock.",
+        "style": "boxed retail ad with a console, keyboard, cartridges, floppy disks, red sale rules, and blue price stars"
+      },
+      "market": {
+        "headline": "Console makers chase the computer aisle",
+        "summary": "Atari's keyboard announcement shows how the home-computer boom pressured game companies to promise productivity, programming, and education alongside play.",
+        "confidence": "High",
+        "sourceRefs": [
+          0,
+          2,
+          3
+        ]
+      },
+      "accuracyLedger": {
+        "items": [
+          "Historic week set from state file: 1983-02-07 through 1983-02-13.",
+          "Lead story anchored to UPI archive dated February 9, 1983 about Atari's keyboard accessory.",
+          "Lotus 1-2-3 timing uses January 26, 1983 on-sale references and is labeled launch-era context.",
+          "Music chart uses Billboard Hot 100 week dated February 12, 1983.",
+          "Movie chart uses Box Office Mojo domestic weekend February 11-13, 1983."
+        ]
+      },
+      "sources": [
+        {
+          "title": "UPI Archives - Atari transforms video game into home computer",
+          "url": "https://www.upi.com/Archives/1983/02/09/Atari-transforms-video-game-into-home-computer/3105413614800/",
+          "note": "Dated February 9, 1983; basis for lead item."
+        },
+        {
+          "title": "This Day in Tech History - Lotus 1-2-3 Goes on Sale",
+          "url": "https://thisdayintechhistory.com/01/26/lotus-1-2-3-goes-on-sale/",
+          "note": "Launch date and platform context for Lotus 1-2-3."
+        },
+        {
+          "title": "Compute! Issue 33, February 1983",
+          "url": "https://colorcomputerarchive.com/repo/Documents/Magazines/Compute%20(Clean)/Compute_Issue_033_1983_Feb.pdf",
+          "note": "Cover cues, price, and home-computing/game framing."
+        },
+        {
+          "title": "Video Games magazine, February 1983 scan",
+          "url": "https://www.digitpress.com/library/magazines/video_games/video_games_feb83.pdf",
+          "note": "Period game-magazine shelf cues."
+        },
+        {
+          "title": "WordStar history overview",
+          "url": "https://en.wikipedia.org/wiki/WordStar",
+          "note": "Period software context."
+        },
+        {
+          "title": "dBASE history overview",
+          "url": "https://en.wikipedia.org/wiki/DBase",
+          "note": "Period software context."
+        },
+        {
+          "title": "Atari 8-bit family overview",
+          "url": "https://en.wikipedia.org/wiki/Atari_8-bit_computers",
+          "note": "Atari BASIC and home-computer context."
+        },
+        {
+          "title": "Early 1983 home computer retail-ad context",
+          "url": "https://archive.org/details/byte-magazine-1983-02",
+          "note": "Period advertising and price-range corroboration."
+        },
+        {
+          "title": "Billboard Hot 100 week of February 12, 1983",
+          "url": "https://billboard.elpee.jp/hot100/week/1983-02-12",
+          "note": "Top singles chart for the week."
+        },
+        {
+          "title": "Box Office Mojo - Domestic 1983 Weekend 6",
+          "url": "https://www.boxofficemojo.com/weekend/1983W06/",
+          "note": "Weekend movie chart for February 11-13, 1983."
+        }
+      ]
+    },
     {
       "currentDate": "2026-06-29",
       "historicDate": "1983-01-31",
