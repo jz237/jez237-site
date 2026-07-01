@@ -19,7 +19,7 @@
     { href: ROOT + '/experiments/ai-explainer/', label: 'How AI Works', sections: ['experiments/ai-explainer'] },
     { href: 'https://hidden-reef.pages.dev/', label: 'Hidden Reef', sections: ['prototypes/hidden-reef'], external: true },
     { href: ROOT + '/ops/', label: 'Ops', sections: ['ops'] },
-    { href: 'https://jz237.github.io/stock-command-center/', label: 'Stocks', external: true },
+    { href: ROOT + '/stock-market/', label: 'Stocks', sections: ['stock-market'] },
     { href: 'https://baudersigns.com/', label: 'Bauder Signs', external: true }
   ];
 
