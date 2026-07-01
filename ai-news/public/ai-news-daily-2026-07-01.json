@@ -1,7 +1,39 @@
 {
   "date": "2026-07-01",
-  "updatedAt": "2026-07-01T20:00:01.868972+00:00",
+  "updatedAt": "2026-07-01T21:00:01.982925+00:00",
   "items": [
+    {
+      "title": "Anthropic ships Claude Sonnet 5 — its most agentic Sonnet",
+      "url": "https://aidailybrief.ai/e/2026-07-01#claude-sonnet-5",
+      "source": "The AI Daily Brief",
+      "sourceUrl": "https://aidailybrief.ai/e/2026-07-01",
+      "sourceWeight": 0.88,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Models: Pitched as nearly as good as Opus 4.8 for a fraction of the cost, Sonnet 5 sits a few points shy of Opus on major coding benchmarks but posted a big jump on GDPVal, hinting at strong end-to-end agentic follow-through. NLW suspects the timing means Anthropic didn't expect Fable 5 back so soon.",
+      "image": "",
+      "featuredLatest": true,
+      "published": "2026-07-01T16:00:00+00:00",
+      "firstSeen": "2026-07-01T21:00:01.982925+00:00",
+      "lastSeen": "2026-07-01T21:00:01.982925+00:00",
+      "model_release": true,
+      "editorial_allow": true,
+      "editorial_reason": "source_curated",
+      "score": 23.9393,
+      "signalGroup": "Model releases",
+      "sourceTier": "Reported source",
+      "whyItMatters": "A model release changes the practical menu: capability, pricing, context, or deployment options may shift for real workflows.",
+      "brief": {
+        "whatHappened": "Anthropic ships Claude Sonnet 5 — its most agentic Sonnet",
+        "whoItAffects": "Builders, tool users, and anyone comparing model capability or cost.",
+        "practicalImpact": "Check whether the release changes what is worth trying, routing, or paying for.",
+        "sourceFrame": "Seen via The AI Daily Brief."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "anthropic-claude-anthropic-ships-claude-sonnet-most"
+    },
     {
       "title": "Gemini Spark, Google’s agentic assistant, is now available on Mac",
       "url": "https://techcrunch.com/2026/07/01/gemini-spark-googles-agentic-assistant-is-now-available-on-mac",
@@ -16,11 +48,11 @@
       "featuredLatest": false,
       "published": "2026-07-01T14:20:19+00:00",
       "firstSeen": "2026-07-01T14:26:06.831755+00:00",
-      "lastSeen": "2026-07-01T20:00:01.868972+00:00",
+      "lastSeen": "2026-07-01T21:00:01.982925+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 21.3299,
+      "score": 21.3042,
       "signalGroup": "Model releases",
       "sourceTier": "Reported source",
       "whyItMatters": "A model release changes the practical menu: capability, pricing, context, or deployment options may shift for real workflows.",
@@ -33,6 +65,38 @@
       "tryWorthy": true,
       "toolCandidate": false,
       "clusterKey": "google-gemini-gemini-spark-google-agentic-assistant"
+    },
+    {
+      "title": "Claude Tag is coming to Microsoft Teams",
+      "url": "https://aidailybrief.ai/e/2026-07-01#claude-tag-teams",
+      "source": "The AI Daily Brief",
+      "sourceUrl": "https://aidailybrief.ai/e/2026-07-01",
+      "sourceWeight": 0.88,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Enterprise: Anthropic told Microsoft it plans to bring Claude Tag to Teams. It's an organization-centric agent — not tied to any user — with persistent memory and tool access, and it actually calls the full Claude Code suite rather than plain Claude.",
+      "image": "public/thumbnails/news-713b8dd999573d7a6b.png",
+      "featuredLatest": true,
+      "published": "2026-07-01T16:00:00+00:00",
+      "firstSeen": "2026-07-01T21:00:01.982925+00:00",
+      "lastSeen": "2026-07-01T21:00:01.982925+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "source_curated",
+      "score": 14.3893,
+      "signalGroup": "Agents & tooling",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
+      "brief": {
+        "whatHappened": "Claude Tag is coming to Microsoft Teams",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via The AI Daily Brief."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "claude-claude-tag-coming-microsoft-teams",
+      "imageOriginal": "https://aidailybrief.ai/og/2026-07-01.png"
     },
     {
       "title": "Google built a great smart speaker, but Gemini isn’t ready for it",
@@ -48,10 +112,10 @@
       "featuredLatest": false,
       "published": "2026-07-01T12:00:00+00:00",
       "firstSeen": "2026-07-01T13:00:01.369771+00:00",
-      "lastSeen": "2026-07-01T20:00:01.868972+00:00",
+      "lastSeen": "2026-07-01T21:00:01.982925+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.2408,
+      "score": 10.2167,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
@@ -64,6 +128,69 @@
       "tryWorthy": false,
       "toolCandidate": false,
       "clusterKey": "google-gemini-google-built-great-smart-speaker"
+    },
+    {
+      "title": "OpenAI cut inference costs in half — sort of",
+      "url": "https://aidailybrief.ai/e/2026-07-01#openai-inference-half",
+      "source": "The AI Daily Brief",
+      "sourceUrl": "https://aidailybrief.ai/e/2026-07-01",
+      "sourceWeight": 0.88,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Compute: The Information reports OpenAI found an optimization technique that halved inference requirements for existing models, letting it serve all signed-out ChatGPT users on just 100 GPUs. The technique wasn't disclosed; speculation ranges from quantization to query routing — and none of those improve larger models without quality trade-offs.",
+      "image": "public/thumbnails/news-713b8dd999573d7a6b.png",
+      "featuredLatest": true,
+      "published": "2026-07-01T16:00:00+00:00",
+      "firstSeen": "2026-07-01T21:00:01.982925+00:00",
+      "lastSeen": "2026-07-01T21:00:01.982925+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "source_curated",
+      "score": 10.0893,
+      "signalGroup": "Infrastructure",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
+      "brief": {
+        "whatHappened": "OpenAI cut inference costs in half — sort of",
+        "whoItAffects": "Anyone affected by AI compute cost, speed, availability, or hardware supply.",
+        "practicalImpact": "Infrastructure shifts often show up later as cheaper tools, higher limits, or new bottlenecks.",
+        "sourceFrame": "Seen via The AI Daily Brief."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "openai-openai-cut-inference-costs-half",
+      "imageOriginal": "https://aidailybrief.ai/og/2026-07-01.png"
+    },
+    {
+      "title": "Only a small fraction of coding tasks fall back to Opus",
+      "url": "https://aidailybrief.ai/e/2026-07-01#fallback-to-opus",
+      "source": "The AI Daily Brief",
+      "sourceUrl": "https://aidailybrief.ai/e/2026-07-01",
+      "sourceWeight": 0.88,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Models: The announcement's line that \"some routine tasks like coding and debugging will fall back to Opus 4.8\" sparked backlash that the relaunch was \"fake.\" The Claude Code team clarified the wording was loose: only a small fraction of routine coding and debugging tasks get flagged and reverted to Opus.",
+      "image": "",
+      "featuredLatest": true,
+      "published": "2026-07-01T16:00:00+00:00",
+      "firstSeen": "2026-07-01T21:00:01.982925+00:00",
+      "lastSeen": "2026-07-01T21:00:01.982925+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "source_curated",
+      "score": 9.2893,
+      "signalGroup": "Agents & tooling",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
+      "brief": {
+        "whatHappened": "Only a small fraction of coding tasks fall back to Opus",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via The AI Daily Brief."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "only-small-fraction-coding-tasks-fall"
     },
     {
       "title": "US lifts export controls on Anthropic’s Fable 5, clearing the model’s return",
@@ -81,7 +208,7 @@
       "lastSeen": "2026-07-01T10:12:24.669413+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.8306,
+      "score": 8.8092,
       "signalGroup": "Policy & risk",
       "sourceTier": "Reported source",
       "whyItMatters": "Policy and risk stories often become product constraints later, especially around data access, safety claims, export rules, and copyright.",
@@ -113,7 +240,7 @@
       "lastSeen": "2026-07-01T17:24:59.107108+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.3972,
+      "score": 8.3712,
       "signalGroup": "Business",
       "sourceTier": "Reported source",
       "whyItMatters": "Business moves are a map of where the industry thinks the bottlenecks and durable demand will be.",
@@ -142,10 +269,10 @@
       "featuredLatest": false,
       "published": "2026-07-01T17:09:26+00:00",
       "firstSeen": "2026-07-01T18:00:01.469355+00:00",
-      "lastSeen": "2026-07-01T20:00:01.868972+00:00",
+      "lastSeen": "2026-07-01T21:00:01.982925+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.0665,
+      "score": 8.0386,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
@@ -161,35 +288,36 @@
       "imageOriginal": "https://media.thenextweb.com/2026/07/krafton-subnautica-2-bonus-settlement-ceo-resigns.avif"
     },
     {
-      "title": "How Big Is the AI Economy?",
-      "url": "https://aidailybrief.ai/e/2026-06-30",
+      "title": "The most exciting things in AI are plug-ins in Word or Excel... we have a structural position in knowledge work.",
+      "url": "https://aidailybrief.ai/e/2026-07-01#nadella-structural-position",
       "source": "The AI Daily Brief",
-      "sourceUrl": "https://aidailybrief.ai/",
+      "sourceUrl": "https://aidailybrief.ai/e/2026-07-01",
       "sourceWeight": 0.88,
       "sourceRole": "secondary",
       "sourceType": "",
       "category": "AI",
-      "summary": "OpenAI-style bubble talk is on a low ebb, so it's a good time to ask dispassionately: how big is the AI economy right now? Exponential View's new report says $175B annualized and growing 3x faster than any IT wave before it — while the headlines fill with identity checks, agent-neutrality bills, and a memory shortage nasty enough to earn the name Ramageddon.",
-      "image": "public/thumbnails/news-37700848dc6af32764.png",
-      "featuredLatest": false,
-      "published": "2026-07-01T20:00:10.991666+00:00",
-      "firstSeen": "2026-07-01T14:26:06.831755+00:00",
-      "lastSeen": "2026-07-01T20:00:01.868972+00:00",
+      "summary": "Enterprise: — Satya Nadella, Microsoft CEO. Satya Nadella framed third-party agents like Claude as reinforcing Microsoft's ecosystem — though NLW wonders whether the tune changes as Claude gets more endemic across knowledge work.",
+      "image": "public/thumbnails/news-713b8dd999573d7a6b.png",
+      "featuredLatest": true,
+      "published": "2026-07-01T16:00:00+00:00",
+      "firstSeen": "2026-07-01T21:00:01.982925+00:00",
+      "lastSeen": "2026-07-01T21:00:01.982925+00:00",
       "editorial_allow": true,
-      "editorial_reason": "editorial_score_pass",
-      "score": 7.432,
+      "editorial_reason": "source_curated",
+      "score": 7.8893,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Reported source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
       "brief": {
-        "whatHappened": "How Big Is the AI Economy?",
+        "whatHappened": "The most exciting things in AI are plug-ins in Word or Excel... we have a structural position in knowledge work",
         "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
         "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
         "sourceFrame": "Seen via The AI Daily Brief."
       },
       "tryWorthy": true,
       "toolCandidate": false,
-      "clusterKey": "how-big-economy"
+      "clusterKey": "most-exciting-things-plug-ins-word-excel",
+      "imageOriginal": "https://aidailybrief.ai/og/2026-07-01.png"
     },
     {
       "title": "“BioShocking” tricks AI browsers into leaking your passwords",
@@ -208,7 +336,7 @@
       "lastSeen": "2026-07-01T14:28:36.883723+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 7.4282,
+      "score": 7.4041,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Reported source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -240,7 +368,7 @@
       "lastSeen": "2026-07-01T15:13:39.243433+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 7.2501,
+      "score": 7.2254,
       "signalGroup": "Business",
       "sourceTier": "Reported source",
       "whyItMatters": "Business moves are a map of where the industry thinks the bottlenecks and durable demand will be.",
@@ -256,6 +384,38 @@
       "imageOriginal": "https://media.thenextweb.com/2026/07/base44-becomes-first-app-creation-platform-to-launch-its-own-proprietary-llm-base-1.avif"
     },
     {
+      "title": "Anthropic: the jailbreak exposed no unique dangerous capability",
+      "url": "https://aidailybrief.ai/e/2026-07-01#anthropic-jailbreak-defense",
+      "source": "The AI Daily Brief",
+      "sourceUrl": "https://aidailybrief.ai/e/2026-07-01",
+      "sourceWeight": 0.88,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Models: Anthropic said testing confirmed many less-capable models — including GPT-5.5 and Kimi K2.7 — could identify the same vulnerabilities Fable 5 flagged, and the reported technique only involved routine defensive cybersecurity work. It trained a new classifier claiming a 99% block rate, validated by Commerce's Center for AI Standards and Innovation as \"extraordinarily strong.\"",
+      "image": "public/thumbnails/news-713b8dd999573d7a6b.png",
+      "featuredLatest": true,
+      "published": "2026-07-01T16:00:00+00:00",
+      "firstSeen": "2026-07-01T21:00:01.982925+00:00",
+      "lastSeen": "2026-07-01T21:00:01.982925+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "source_curated",
+      "score": 7.1893,
+      "signalGroup": "Policy & risk",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Policy and risk stories often become product constraints later, especially around data access, safety claims, export rules, and copyright.",
+      "brief": {
+        "whatHappened": "Anthropic: the jailbreak exposed no unique dangerous capability",
+        "whoItAffects": "Product builders, platform users, and anyone depending on model access or data rights.",
+        "practicalImpact": "Policy moves can become tomorrow's product limits, compliance burden, or availability issue.",
+        "sourceFrame": "Seen via The AI Daily Brief."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "anthropic-anthropic-jailbreak-exposed-unique-dangerous",
+      "imageOriginal": "https://aidailybrief.ai/og/2026-07-01.png"
+    },
+    {
       "title": "🔬 The Coolest Diffusion Research Isn't in LLMs — Evan Feinberg & Sergey Edunov, Genesis Molecular AI",
       "url": "https://www.latent.space/p/the-coolest-diffusion-research-isnt",
       "source": "Latent Space",
@@ -269,10 +429,10 @@
       "featuredLatest": false,
       "published": "2026-07-01T14:42:39+00:00",
       "firstSeen": "2026-07-01T14:48:40.938685+00:00",
-      "lastSeen": "2026-07-01T20:00:01.868972+00:00",
+      "lastSeen": "2026-07-01T21:00:01.982925+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.5537,
+      "score": 6.5277,
       "signalGroup": "Research",
       "sourceTier": "Reported source",
       "whyItMatters": "Research items are useful when they hint at future product behavior, benchmark movement, or techniques likely to show up in tools.",
@@ -285,6 +445,38 @@
       "tryWorthy": false,
       "toolCandidate": false,
       "clusterKey": "coolest-diffusion-research-isn-llms-evan"
+    },
+    {
+      "title": "AWS drops $1B on forward-deployed engineers",
+      "url": "https://aidailybrief.ai/e/2026-07-01#aws-fte-division",
+      "source": "The AI Daily Brief",
+      "sourceUrl": "https://aidailybrief.ai/e/2026-07-01",
+      "sourceWeight": 0.88,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Enterprise: AWS is investing a billion dollars in a new unit of forward-deployed engineers to help customers set up AI tools, joining OpenAI, Anthropic, Google, and Microsoft in the FTE race. It's upskilling salespeople into \"solution architects\" and focusing on healthcare, government, and financial services.",
+      "image": "public/thumbnails/news-713b8dd999573d7a6b.png",
+      "featuredLatest": true,
+      "published": "2026-07-01T16:00:00+00:00",
+      "firstSeen": "2026-07-01T21:00:01.982925+00:00",
+      "lastSeen": "2026-07-01T21:00:01.982925+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "source_curated",
+      "score": 6.1893,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
+      "brief": {
+        "whatHappened": "AWS drops $1B on forward-deployed engineers",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via The AI Daily Brief."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "aws-aws-drops-forward-deployed-engineers",
+      "imageOriginal": "https://aidailybrief.ai/og/2026-07-01.png"
     },
     {
       "title": "Run NVIDIA Nemotron and OpenAI GPT OSS models on Amazon Bedrock in AWS GovCloud (US)",
@@ -300,10 +492,10 @@
       "featuredLatest": false,
       "published": "2026-07-01T18:14:34+00:00",
       "firstSeen": "2026-07-01T19:00:02.130568+00:00",
-      "lastSeen": "2026-07-01T20:00:01.868972+00:00",
+      "lastSeen": "2026-07-01T21:00:01.982925+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.0556,
+      "score": 6.0269,
       "signalGroup": "Infrastructure",
       "sourceTier": "Reported source",
       "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
@@ -334,7 +526,7 @@
       "lastSeen": "2026-07-01T18:00:01.469355+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.8168,
+      "score": 5.7903,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Reported source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -348,37 +540,6 @@
       "toolCandidate": false,
       "clusterKey": "uipath-shares-rebound-wall-street-warms",
       "imageOriginal": "https://media.thenextweb.com/2026/07/UiPath-Logo.avif"
-    },
-    {
-      "title": "Cloudflare’s new policy pushes AI companies to pay for publishers’ content",
-      "url": "https://techcrunch.com/2026/07/01/cloudflares-new-policy-pushes-ai-companies-to-pay-for-publishers-content",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "Cloudflare is giving AI companies until September 15 to separate web crawlers used for search from those used for AI training and agents, or risk being blocked by default on many publisher sites.",
-      "image": "public/thumbnails/news-0872f12ce4f094ef3a.webp",
-      "featuredLatest": false,
-      "published": "2026-07-01T17:48:37+00:00",
-      "firstSeen": "2026-07-01T18:00:01.469355+00:00",
-      "lastSeen": "2026-07-01T20:00:01.868972+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 5.6251,
-      "signalGroup": "Agents & tooling",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
-      "brief": {
-        "whatHappened": "Cloudflare’s new policy pushes AI companies to pay for publishers’ content",
-        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
-        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
-        "sourceFrame": "Seen via TechCrunch AI."
-      },
-      "tryWorthy": true,
-      "toolCandidate": false,
-      "clusterKey": "cloudflare-policy-pushes-companies-pay-publishers"
     },
     {
       "title": "DeepSeek breaks China’s AI price war with peak-hour surge pricing",
@@ -397,7 +558,7 @@
       "lastSeen": "2026-07-01T14:28:36.883723+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.6246,
+      "score": 5.6007,
       "signalGroup": "Business",
       "sourceTier": "Reported source",
       "whyItMatters": "Business moves are a map of where the industry thinks the bottlenecks and durable demand will be.",
@@ -411,164 +572,6 @@
       "toolCandidate": false,
       "clusterKey": "deepseek-breaks-china-price-war-peak-hour",
       "imageOriginal": "https://media.thenextweb.com/2026/04/DeepSeek.avif"
-    },
-    {
-      "title": "Aikido buys Israel’s Root to patch open source with AI",
-      "url": "https://thenextweb.com/news/aikido-acquires-root-open-source-ai-patching",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "A Belgian cybersecurity unicorn has bought an Israeli startup with an unusual trick. Its AI agents fix an open-source flaw without breaking the app that depends on it, something most security tools cannot do. Aikido Security, based in Ghent, became Europe’s fastest cybersecurity company to reach a $1bn valuation in January. It has now acquired [&hellip;]\nThis story continues at The Next Web",
-      "image": "public/thumbnails/news-6ba33e06ca9b25ef7f.avif",
-      "featuredLatest": false,
-      "published": "2026-07-01T13:09:08+00:00",
-      "firstSeen": "2026-07-01T14:00:01.179346+00:00",
-      "lastSeen": "2026-07-01T15:13:39.243433+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 5.4594,
-      "signalGroup": "Agents & tooling",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
-      "brief": {
-        "whatHappened": "Aikido buys Israel’s Root to patch open source with AI",
-        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
-        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
-        "sourceFrame": "Seen via The Next Web."
-      },
-      "tryWorthy": true,
-      "toolCandidate": false,
-      "clusterKey": "aikido-buys-israel-root-patch-open",
-      "imageOriginal": "https://media.thenextweb.com/2026/07/root-founders.avif"
-    },
-    {
-      "title": "OpenAI’s first hardware is a macro pad for Codex coders",
-      "url": "https://thenextweb.com/news/openai-codex-micro-hardware-work-louder",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "OpenAI’s first piece of hardware is not the mysterious gadget everyone is waiting for. It is a small keyboard for people who talk to an AI all day. On Monday, the OpenAI Developers account posted a short video on X. It showed a small square device with a grid of buttons, glowing through a cycle [&hellip;]\nThis story continues at The Next Web",
-      "image": "public/thumbnails/news-463b1589bef957ac97.avif",
-      "featuredLatest": false,
-      "published": "2026-07-01T12:37:28+00:00",
-      "firstSeen": "2026-07-01T14:00:01.179346+00:00",
-      "lastSeen": "2026-07-01T14:28:36.883723+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 4.9462,
-      "signalGroup": "Agents & tooling",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
-      "brief": {
-        "whatHappened": "OpenAI’s first hardware is a macro pad for Codex coders",
-        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
-        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
-        "sourceFrame": "Seen via The Next Web."
-      },
-      "tryWorthy": false,
-      "toolCandidate": false,
-      "clusterKey": "openai-openai-first-hardware-macro-pad",
-      "imageOriginal": "https://media.thenextweb.com/2026/07/OpenAI-Codex-Device.avif"
-    },
-    {
-      "title": "Simplify model selection in Amazon Bedrock with the open source Model Profiler",
-      "url": "https://aws.amazon.com/blogs/machine-learning/simplify-model-selection-in-amazon-bedrock-with-the-open-source-model-profiler",
-      "source": "AWS Machine Learning Blog",
-      "sourceUrl": "https://aws.amazon.com/blogs/machine-learning/feed/",
-      "sourceWeight": 0.72,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "The Amazon Bedrock Model Profiler is an open source tool that aggregates model metadata from multiple AWS APIs and external sources into a single, searchable interface. In this post, you’ll learn what the Model Profiler provides, the real-world scenarios it supports, and how to deploy it in your own environment in under five minutes.",
-      "image": "public/thumbnails/news-1656ef648d6e427ed5.png",
-      "featuredLatest": false,
-      "published": "2026-07-01T17:46:54+00:00",
-      "firstSeen": "2026-07-01T18:00:01.469355+00:00",
-      "lastSeen": "2026-07-01T20:00:01.868972+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 4.8422,
-      "signalGroup": "Product updates",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
-      "brief": {
-        "whatHappened": "Simplify model selection in Amazon Bedrock with the open source Model Profiler",
-        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
-        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
-        "sourceFrame": "Seen via AWS Machine Learning Blog."
-      },
-      "tryWorthy": true,
-      "toolCandidate": false,
-      "clusterKey": "simplify-model-selection-amazon-bedrock-open"
-    },
-    {
-      "title": "Building a serverless A2A gateway for agent discovery, routing, and access control",
-      "url": "https://aws.amazon.com/blogs/machine-learning/building-a-serverless-a2a-gateway-for-agent-discovery-routing-and-access-control",
-      "source": "AWS Machine Learning Blog",
-      "sourceUrl": "https://aws.amazon.com/blogs/machine-learning/feed/",
-      "sourceWeight": 0.72,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "In this post, you will learn how to build a serverless A2A gateway on AWS that hosts multiple agents behind a single domain using path-based routing (/agents/{agentId}). Standard A2A clients work without modification.",
-      "image": "public/thumbnails/news-30cb663a9b43ebc671.png",
-      "featuredLatest": false,
-      "published": "2026-07-01T18:07:06+00:00",
-      "firstSeen": "2026-07-01T19:00:02.130568+00:00",
-      "lastSeen": "2026-07-01T20:00:01.868972+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 4.752,
-      "signalGroup": "Agents & tooling",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
-      "brief": {
-        "whatHappened": "Building a serverless A2A gateway for agent discovery, routing, and access control",
-        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
-        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
-        "sourceFrame": "Seen via AWS Machine Learning Blog."
-      },
-      "tryWorthy": true,
-      "toolCandidate": false,
-      "clusterKey": "building-serverless-a2a-gateway-agent-discovery"
-    },
-    {
-      "title": "Warp CEO Zach Lloyd on why software factories are the next phase of coding",
-      "url": "https://www.latent.space/p/software-factories",
-      "source": "Latent Space",
-      "sourceUrl": "https://www.latent.space/feed",
-      "sourceWeight": 0.86,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "Warp's founder thinks every major software project will soon run on an automated factory. He discusses why and how engineers should prepare for this shift.",
-      "image": "public/thumbnails/news-c275b83af5d298d31a.jpg",
-      "featuredLatest": false,
-      "published": "2026-07-01T14:28:23+00:00",
-      "firstSeen": "2026-07-01T14:33:03.762320+00:00",
-      "lastSeen": "2026-07-01T20:00:01.868972+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 4.5474,
-      "signalGroup": "Product updates",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
-      "brief": {
-        "whatHappened": "Warp CEO Zach Lloyd on why software factories are the next phase of coding",
-        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
-        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
-        "sourceFrame": "Seen via Latent Space."
-      },
-      "tryWorthy": true,
-      "toolCandidate": false,
-      "clusterKey": "warp-ceo-zach-lloyd-why-software",
-      "imageOriginal": "https://substackcdn.com/image/fetch/$s_!kQB7!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fa4140e59-9bc8-4685-8af0-0cf86b6f998f_1280x720.jpeg"
     }
   ],
   "tools": [
@@ -586,11 +589,11 @@
       "featuredLatest": false,
       "published": "2026-06-30T18:30:12+00:00",
       "firstSeen": "2026-07-01T08:00:01.990182+00:00",
-      "lastSeen": "2026-07-01T20:00:01.868972+00:00",
+      "lastSeen": "2026-07-01T21:00:01.982925+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.6498,
+      "score": 14.6349,
       "signalGroup": "Model releases",
       "sourceTier": "Watchlist source",
       "whyItMatters": "A model release changes the practical menu: capability, pricing, context, or deployment options may shift for real workflows.",
@@ -621,10 +624,10 @@
       "featuredLatest": false,
       "published": "2026-06-30T20:22:29+00:00",
       "firstSeen": "2026-07-01T08:00:01.990182+00:00",
-      "lastSeen": "2026-07-01T20:00:01.868972+00:00",
+      "lastSeen": "2026-07-01T21:00:01.982925+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.7787,
+      "score": 7.763,
       "signalGroup": "Media generation",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Media-model updates affect what can be made quickly, what still needs craft, and where creative pipelines may change next.",
@@ -655,10 +658,10 @@
       "featuredLatest": false,
       "published": "2026-06-30T18:19:10+00:00",
       "firstSeen": "2026-07-01T08:00:01.990182+00:00",
-      "lastSeen": "2026-07-01T20:00:01.868972+00:00",
+      "lastSeen": "2026-07-01T21:00:01.982925+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.747,
+      "score": 7.7322,
       "signalGroup": "Research",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Research items are useful when they hint at future product behavior, benchmark movement, or techniques likely to show up in tools.",
@@ -689,10 +692,10 @@
       "featuredLatest": false,
       "published": "2026-06-25T05:47:05+00:00",
       "firstSeen": "2026-06-26T08:00:01.499506+00:00",
-      "lastSeen": "2026-07-01T20:00:01.868972+00:00",
+      "lastSeen": "2026-07-01T21:00:01.982925+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.5216,
+      "score": 7.5212,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -723,10 +726,10 @@
       "featuredLatest": false,
       "published": "2026-06-29T16:54:09+00:00",
       "firstSeen": "2026-06-30T08:00:01.738579+00:00",
-      "lastSeen": "2026-07-01T20:00:01.868972+00:00",
+      "lastSeen": "2026-07-01T21:00:01.982925+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.174,
+      "score": 7.1668,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -759,7 +762,7 @@
       "lastSeen": "2026-07-01T07:00:01.645672+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 6.5084,
+      "score": 6.5083,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -823,10 +826,10 @@
       "featuredLatest": false,
       "published": "2026-06-25T20:15:56+00:00",
       "firstSeen": "2026-06-27T08:00:01.988916+00:00",
-      "lastSeen": "2026-07-01T20:00:01.868972+00:00",
+      "lastSeen": "2026-07-01T21:00:01.982925+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.8283,
+      "score": 3.8277,
       "signalGroup": "Product updates",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
@@ -859,11 +862,11 @@
       "featuredLatest": false,
       "published": "2026-06-30T18:30:12+00:00",
       "firstSeen": "2026-07-01T08:00:01.990182+00:00",
-      "lastSeen": "2026-07-01T20:00:01.868972+00:00",
+      "lastSeen": "2026-07-01T21:00:01.982925+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.6498,
+      "score": 14.6349,
       "signalGroup": "Model releases",
       "sourceTier": "Watchlist source",
       "whyItMatters": "A model release changes the practical menu: capability, pricing, context, or deployment options may shift for real workflows.",
@@ -894,10 +897,10 @@
       "featuredLatest": false,
       "published": "2026-06-30T20:22:29+00:00",
       "firstSeen": "2026-07-01T08:00:01.990182+00:00",
-      "lastSeen": "2026-07-01T20:00:01.868972+00:00",
+      "lastSeen": "2026-07-01T21:00:01.982925+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.7787,
+      "score": 7.763,
       "signalGroup": "Media generation",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Media-model updates affect what can be made quickly, what still needs craft, and where creative pipelines may change next.",
@@ -928,10 +931,10 @@
       "featuredLatest": false,
       "published": "2026-06-30T18:19:10+00:00",
       "firstSeen": "2026-07-01T08:00:01.990182+00:00",
-      "lastSeen": "2026-07-01T20:00:01.868972+00:00",
+      "lastSeen": "2026-07-01T21:00:01.982925+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.747,
+      "score": 7.7322,
       "signalGroup": "Research",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Research items are useful when they hint at future product behavior, benchmark movement, or techniques likely to show up in tools.",
@@ -962,10 +965,10 @@
       "featuredLatest": false,
       "published": "2026-06-25T05:47:05+00:00",
       "firstSeen": "2026-06-26T08:00:01.499506+00:00",
-      "lastSeen": "2026-07-01T20:00:01.868972+00:00",
+      "lastSeen": "2026-07-01T21:00:01.982925+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.5216,
+      "score": 7.5212,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -996,10 +999,10 @@
       "featuredLatest": false,
       "published": "2026-06-29T16:54:09+00:00",
       "firstSeen": "2026-06-30T08:00:01.738579+00:00",
-      "lastSeen": "2026-07-01T20:00:01.868972+00:00",
+      "lastSeen": "2026-07-01T21:00:01.982925+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.174,
+      "score": 7.1668,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -1032,7 +1035,7 @@
       "lastSeen": "2026-07-01T07:00:01.645672+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 6.5084,
+      "score": 6.5083,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -1096,10 +1099,10 @@
       "featuredLatest": false,
       "published": "2026-06-25T20:15:56+00:00",
       "firstSeen": "2026-06-27T08:00:01.988916+00:00",
-      "lastSeen": "2026-07-01T20:00:01.868972+00:00",
+      "lastSeen": "2026-07-01T21:00:01.982925+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.8283,
+      "score": 3.8277,
       "signalGroup": "Product updates",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
@@ -1126,7 +1129,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 1028,
-      "checkedAt": "2026-07-01T20:00:01.868972+00:00"
+      "checkedAt": "2026-07-01T21:00:01.982925+00:00"
     },
     {
       "source": "Google AI Blog",
@@ -1136,7 +1139,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-01T20:00:01.868972+00:00"
+      "checkedAt": "2026-07-01T21:00:01.982925+00:00"
     },
     {
       "source": "Google DeepMind Blog",
@@ -1146,7 +1149,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-07-01T20:00:01.868972+00:00"
+      "checkedAt": "2026-07-01T21:00:01.982925+00:00"
     },
     {
       "source": "Google Research Blog",
@@ -1156,7 +1159,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-07-01T20:00:01.868972+00:00"
+      "checkedAt": "2026-07-01T21:00:01.982925+00:00"
     },
     {
       "source": "Hugging Face Blog",
@@ -1166,7 +1169,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 814,
-      "checkedAt": "2026-07-01T20:00:01.868972+00:00"
+      "checkedAt": "2026-07-01T21:00:01.982925+00:00"
     },
     {
       "source": "NVIDIA Blog",
@@ -1176,7 +1179,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 18,
-      "checkedAt": "2026-07-01T20:00:01.868972+00:00"
+      "checkedAt": "2026-07-01T21:00:01.982925+00:00"
     },
     {
       "source": "AWS Machine Learning Blog",
@@ -1186,7 +1189,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-01T20:00:01.868972+00:00"
+      "checkedAt": "2026-07-01T21:00:01.982925+00:00"
     },
     {
       "source": "Artificial Intelligence News",
@@ -1196,7 +1199,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 12,
-      "checkedAt": "2026-07-01T20:00:01.868972+00:00"
+      "checkedAt": "2026-07-01T21:00:01.982925+00:00"
     },
     {
       "source": "Ars Technica (AI/Tech)",
@@ -1206,7 +1209,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-01T20:00:01.868972+00:00"
+      "checkedAt": "2026-07-01T21:00:01.982925+00:00"
     },
     {
       "source": "Together AI Blog",
@@ -1216,7 +1219,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-07-01T20:00:01.868972+00:00"
+      "checkedAt": "2026-07-01T21:00:01.982925+00:00"
     },
     {
       "source": "TechRepublic AI",
@@ -1226,7 +1229,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-01T20:00:01.868972+00:00"
+      "checkedAt": "2026-07-01T21:00:01.982925+00:00"
     },
     {
       "source": "ScienceDaily AI",
@@ -1236,7 +1239,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 60,
-      "checkedAt": "2026-07-01T20:00:01.868972+00:00"
+      "checkedAt": "2026-07-01T21:00:01.982925+00:00"
     },
     {
       "source": "The Next Web",
@@ -1246,7 +1249,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-01T20:00:01.868972+00:00"
+      "checkedAt": "2026-07-01T21:00:01.982925+00:00"
     },
     {
       "source": "BBC Discovery",
@@ -1256,7 +1259,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 847,
-      "checkedAt": "2026-07-01T20:00:01.868972+00:00"
+      "checkedAt": "2026-07-01T21:00:01.982925+00:00"
     },
     {
       "source": "BBC Infinite Monkey Cage",
@@ -1266,7 +1269,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 239,
-      "checkedAt": "2026-07-01T20:00:01.868972+00:00"
+      "checkedAt": "2026-07-01T21:00:01.982925+00:00"
     },
     {
       "source": "BBC The Life Scientific",
@@ -1276,7 +1279,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 356,
-      "checkedAt": "2026-07-01T20:00:01.868972+00:00"
+      "checkedAt": "2026-07-01T21:00:01.982925+00:00"
     },
     {
       "source": "TechCrunch AI",
@@ -1286,7 +1289,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-01T20:00:01.868972+00:00"
+      "checkedAt": "2026-07-01T21:00:01.982925+00:00"
     },
     {
       "source": "Anthropic News",
@@ -1296,7 +1299,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 234,
-      "checkedAt": "2026-07-01T20:00:01.868972+00:00"
+      "checkedAt": "2026-07-01T21:00:01.982925+00:00"
     },
     {
       "source": "The Verge AI",
@@ -1306,7 +1309,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-01T20:00:01.868972+00:00"
+      "checkedAt": "2026-07-01T21:00:01.982925+00:00"
     },
     {
       "source": "VentureBeat AI",
@@ -1316,7 +1319,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 7,
-      "checkedAt": "2026-07-01T20:00:01.868972+00:00"
+      "checkedAt": "2026-07-01T21:00:01.982925+00:00"
     },
     {
       "source": "Simon Willison",
@@ -1326,7 +1329,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 30,
-      "checkedAt": "2026-07-01T20:00:01.868972+00:00"
+      "checkedAt": "2026-07-01T21:00:01.982925+00:00"
     },
     {
       "source": "Interconnects AI",
@@ -1336,7 +1339,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-01T20:00:01.868972+00:00"
+      "checkedAt": "2026-07-01T21:00:01.982925+00:00"
     },
     {
       "source": "Latent Space",
@@ -1346,7 +1349,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-01T20:00:01.868972+00:00"
+      "checkedAt": "2026-07-01T21:00:01.982925+00:00"
     },
     {
       "source": "Import AI",
@@ -1356,7 +1359,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-01T20:00:01.868972+00:00"
+      "checkedAt": "2026-07-01T21:00:01.982925+00:00"
     },
     {
       "source": "The AI Daily Brief",
@@ -1365,8 +1368,8 @@
       "category": "AI",
       "sourceType": "",
       "status": "ok",
-      "items": 154,
-      "checkedAt": "2026-07-01T20:00:01.868972+00:00"
+      "items": 156,
+      "checkedAt": "2026-07-01T21:00:01.982925+00:00"
     },
     {
       "source": "Microsoft Research Blog",
@@ -1376,7 +1379,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-01T20:00:01.868972+00:00"
+      "checkedAt": "2026-07-01T21:00:01.982925+00:00"
     },
     {
       "source": "LiteLLM Releases",
@@ -1386,7 +1389,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-01T20:00:01.868972+00:00"
+      "checkedAt": "2026-07-01T21:00:01.982925+00:00"
     },
     {
       "source": "Hugging Face Transformers Releases",
@@ -1396,7 +1399,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-01T20:00:01.868972+00:00"
+      "checkedAt": "2026-07-01T21:00:01.982925+00:00"
     },
     {
       "source": "Model Context Protocol Python SDK Releases",
@@ -1406,7 +1409,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-01T20:00:01.868972+00:00"
+      "checkedAt": "2026-07-01T21:00:01.982925+00:00"
     },
     {
       "source": "Model Context Protocol Spec Releases",
@@ -1416,7 +1419,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 8,
-      "checkedAt": "2026-07-01T20:00:01.868972+00:00"
+      "checkedAt": "2026-07-01T21:00:01.982925+00:00"
     },
     {
       "source": "OpenAI Cookbook Releases",
@@ -1426,7 +1429,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 0,
-      "checkedAt": "2026-07-01T20:00:01.868972+00:00"
+      "checkedAt": "2026-07-01T21:00:01.982925+00:00"
     },
     {
       "source": "Product Hunt AI",
@@ -1436,7 +1439,7 @@
       "sourceType": "tool-directory",
       "status": "ok",
       "items": 50,
-      "checkedAt": "2026-07-01T20:00:01.868972+00:00"
+      "checkedAt": "2026-07-01T21:00:01.982925+00:00"
     }
   ],
   "errors": []
