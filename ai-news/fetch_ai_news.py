@@ -926,6 +926,46 @@ def clean_inline_html(value):
     return re.sub(r"\s+", " ", value).strip()
 
 
+def parse_ymd_from_url(url, now):
+    m = re.search(r"/e/(\d{4})-(\d{2})-(\d{2})(?:[/?#]|$)", url or "")
+    if not m:
+        return now
+    try:
+        year, month, day = map(int, m.groups())
+        return datetime(year, month, day, 12, tzinfo=LOCAL_TZ).astimezone(timezone.utc)
+    except ValueError:
+        return now
+
+
+def extract_ai_daily_brief_cards(page_html, page_url, source_name, weight, published, limit=60):
+    items = []
+    for block in re.findall(r'<article\b[\s\S]*?</article>', page_html or "", flags=re.IGNORECASE):
+        link_match = re.search(r'data-link=["\']([^"\']+)["\']', block, flags=re.IGNORECASE)
+        title_match = re.search(r'<h3 class=["\']nug-h["\'][^>]*>([\s\S]*?)</h3>', block, flags=re.IGNORECASE)
+        summary_match = re.search(r'<p class=["\']nug-b["\']>(.*?)</p>', block, flags=re.IGNORECASE)
+        tag_match = re.search(r'<span class=["\']tag["\']>(.*?)</span>', block, flags=re.IGNORECASE)
+        if not link_match or not title_match:
+            continue
+        tag = clean_inline_html(tag_match.group(1) if tag_match else "")
+        title = clean_inline_html(title_match.group(1))
+        summary = clean_inline_html(summary_match.group(1) if summary_match else "")
+        if tag:
+            summary = f"{tag}: {summary}".strip()
+        url = urllib.parse.urljoin(page_url, html.unescape(link_match.group(1)))
+        items.append({
+            "title": title,
+            "url": url,
+            "published": published,
+            "summary": summary[:600],
+            "image": "",
+            "source": source_name,
+            "sourceUrl": page_url,
+            "sourceWeight": weight,
+            "featuredLatest": True,
+        })
+    return items[:limit]
+
+
 def scrape_ai_daily_brief(page_url, source_name, weight):
     """Scrape AI Daily Brief front-page editions and Most Sharable cards."""
     items = []
@@ -937,6 +977,7 @@ def scrape_ai_daily_brief(page_url, source_name, weight):
 
     base_url = f"{urllib.parse.urlparse(page_url).scheme}://{urllib.parse.urlparse(page_url).netloc}"
     now = now_utc()
+    edition_urls = []
 
     today_match = re.search(
         r'<section\b[^>]*id=["\']today["\'][\s\S]*?<h2[^>]*class=["\']lead-head["\'][^>]*>(.*?)</h2>[\s\S]*?<p[^>]*class=["\']lead-dek["\'][^>]*>(.*?)</p>[\s\S]*?<a[^>]+class=["\']btn-primary["\'][^>]+href=["\']([^"\']+)["\']',
@@ -944,9 +985,11 @@ def scrape_ai_daily_brief(page_url, source_name, weight):
         flags=re.IGNORECASE,
     )
     if today_match:
+        today_url = urllib.parse.urljoin(base_url, html.unescape(today_match.group(3)))
+        edition_urls.append(today_url)
         items.append({
             "title": clean_inline_html(today_match.group(1)),
-            "url": urllib.parse.urljoin(base_url, html.unescape(today_match.group(3))),
+            "url": today_url,
             "published": now,
             "summary": clean_inline_html(today_match.group(2))[:600],
             "image": "",
@@ -968,6 +1011,7 @@ def scrape_ai_daily_brief(page_url, source_name, weight):
             if not title_match:
                 continue
             url = urllib.parse.urljoin(base_url, html.unescape(title_match.group(1)))
+            edition_urls.append(url)
             items.append({
                 "title": clean_inline_html(title_match.group(2)),
                 "url": url,
@@ -985,36 +1029,35 @@ def scrape_ai_daily_brief(page_url, source_name, weight):
         flags=re.IGNORECASE,
     )
     if share_match:
-        for block in re.findall(r'<article\b[\s\S]*?</article>', share_match.group(1), flags=re.IGNORECASE):
-            link_match = re.search(r'data-link=["\']([^"\']+)["\']', block, flags=re.IGNORECASE)
-            title_match = re.search(r'<h3 class=["\']nug-h["\'][^>]*>[\s\S]*?<a [^>]*>(.*?)</a>', block, flags=re.IGNORECASE)
-            summary_match = re.search(r'<p class=["\']nug-b["\']>(.*?)</p>', block, flags=re.IGNORECASE)
-            date_match = re.search(r'<span class=["\']card-date["\']>(.*?)</span>', block, flags=re.IGNORECASE)
-            tag_match = re.search(r'<span class=["\']tag["\']>(.*?)</span>', block, flags=re.IGNORECASE)
-            if not link_match or not title_match:
-                continue
-            tag = clean_inline_html(tag_match.group(1) if tag_match else "")
-            title = clean_inline_html(title_match.group(1))
-            summary = clean_inline_html(summary_match.group(1) if summary_match else "")
-            if tag:
-                summary = f"{tag}: {summary}".strip()
-            items.append({
-                "title": title,
-                "url": html.unescape(link_match.group(1)),
-                "published": parse_month_day(clean_inline_html(date_match.group(1) if date_match else ""), now),
-                "summary": summary[:600],
-                "image": "",
-                "source": source_name,
-                "sourceUrl": page_url,
-                "sourceWeight": weight,
-                "featuredLatest": True,
-            })
+        items.extend(extract_ai_daily_brief_cards(
+            share_match.group(1),
+            page_url,
+            source_name,
+            weight,
+            now,
+            limit=12,
+        ))
+
+    for edition_url in list(dict.fromkeys(edition_urls))[:6]:
+        try:
+            edition_html = fetch_url(edition_url).decode("utf-8", errors="ignore")
+        except Exception as e:
+            print(f"[scrape_ai_daily_brief] Edition error {edition_url}: {e}")
+            continue
+        items.extend(extract_ai_daily_brief_cards(
+            edition_html,
+            edition_url,
+            source_name,
+            weight,
+            parse_ymd_from_url(edition_url, now),
+            limit=45,
+        ))
 
     deduped = {}
     for item in items:
         if item.get("title") and item.get("url"):
             deduped[canonicalize_url(item["url"])] = item
-    return list(deduped.values())[:30]
+    return list(deduped.values())[:180]
 
 
 def main():
@@ -1178,6 +1221,9 @@ def main():
         ):
             it["editorial_allow"] = True
             it["editorial_reason"] = "high_score_override"
+        if it.get("source") == "The AI Daily Brief" and it.get("featuredLatest"):
+            it["editorial_allow"] = True
+            it["editorial_reason"] = "source_curated"
 
     # Add structured editorial metadata for the frontend.
     for it in all_items:
@@ -1229,7 +1275,7 @@ def main():
         [i for i in article_items if i.get("featuredLatest")],
         key=lambda x: (x["score"], x["published_dt"]),
         reverse=True,
-    )[:8]
+    )[:40]
     latest_by_url = {}
     for it in ai_items + sci_items + featured_latest:
         latest_by_url[it.get("url", "")] = it
