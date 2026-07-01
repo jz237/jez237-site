@@ -1,6 +1,6 @@
 {
   "date": "2026-07-01",
-  "updatedAt": "2026-07-01T07:00:01.645672+00:00",
+  "updatedAt": "2026-07-01T08:00:01.990182+00:00",
   "items": [
     {
       "title": "AIEWF Daily Dispatch: Loops, Software Factories & Forward Deployed Engineers",
@@ -15,10 +15,10 @@
       "image": "https://substackcdn.com/image/fetch/$s_!i4cw!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fee341b9f-8fd3-47e5-87db-9b3d0fc72de5_1280x720.jpeg",
       "published": "2026-07-01T04:46:21+00:00",
       "firstSeen": "2026-07-01T04:54:06.503627+00:00",
-      "lastSeen": "2026-07-01T07:00:01.645672+00:00",
+      "lastSeen": "2026-07-01T08:00:01.990182+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.938,
+      "score": 3.9097,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Reported source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -31,10 +31,143 @@
       "tryWorthy": true,
       "toolCandidate": false,
       "clusterKey": "aiewf-daily-dispatch-loops-software-factories"
+    },
+    {
+      "title": "Judge clears states to try claim that Meta hooked children on Facebook and Instagram",
+      "url": "https://thenextweb.com/news/meta-addiction-states-lawsuit-dismissal-denied",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Meta will have to defend in court the accusation that it built Facebook and Instagram to addict children, after a federal judge on Monday refused to dismiss the heart of a lawsuit brought by attorneys general from 29 states. US District Judge Yvonne Gonzalez Rogers, sitting in Oakland, California, let the states press claims that Meta [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/meta-amazon-graviton-chips-agentic-ai.avif",
+      "published": "2026-07-01T07:26:21+00:00",
+      "firstSeen": "2026-07-01T08:00:01.990182+00:00",
+      "lastSeen": "2026-07-01T08:00:01.990182+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.133,
+      "signalGroup": "Policy & risk",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Policy and risk stories often become product constraints later, especially around data access, safety claims, export rules, and copyright.",
+      "brief": {
+        "whatHappened": "Judge clears states to try claim that Meta hooked children on Facebook and Instagram",
+        "whoItAffects": "Product builders, platform users, and anyone depending on model access or data rights.",
+        "practicalImpact": "Policy moves can become tomorrow's product limits, compliance burden, or availability issue.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "meta-judge-clears-states-try-claim"
     }
   ],
   "tools": [
     {
+      "title": "Claude Sonnet 5",
+      "url": "https://www.producthunt.com/products/claude",
+      "source": "Product Hunt AI",
+      "sourceUrl": "https://www.producthunt.com/feed?category=artificial-intelligence",
+      "sourceWeight": 0.72,
+      "sourceRole": "watchlist",
+      "sourceType": "tool-directory",
+      "category": "AI",
+      "summary": "AI that plans, acts, and gets work done\n          \n          \n            Discussion\n            |\n            Link",
+      "image": "public/thumbnails/news-f4e39098d44bc8bc5b.avif",
+      "published": "2026-06-30T18:30:12+00:00",
+      "firstSeen": "2026-07-01T08:00:01.990182+00:00",
+      "lastSeen": "2026-07-01T08:00:01.990182+00:00",
+      "model_release": true,
+      "editorial_allow": true,
+      "editorial_reason": "model_release",
+      "score": 14.8641,
+      "signalGroup": "Model releases",
+      "sourceTier": "Watchlist source",
+      "whyItMatters": "A model release changes the practical menu: capability, pricing, context, or deployment options may shift for real workflows.",
+      "brief": {
+        "whatHappened": "Claude Sonnet 5",
+        "whoItAffects": "Builders, tool users, and anyone comparing model capability or cost.",
+        "practicalImpact": "Check whether the release changes what is worth trying, routing, or paying for.",
+        "sourceFrame": "Seen via Product Hunt AI."
+      },
+      "tryWorthy": true,
+      "toolCandidate": true,
+      "toolName": "Claude Sonnet 5",
+      "toolLabel": "Claude Sonnet 5",
+      "toolSummary": "AI that plans, acts, and gets work done",
+      "clusterKey": "claude-claude-sonnet",
+      "imageOriginal": "https://ph-files.imgix.net/dcd66b83-6e6f-4481-bae8-d89be04178ef.png?auto=format&fit=crop&frame=1&h=512&w=1024"
+    },
+    {
+      "title": "Gemini Omni Flash",
+      "url": "https://www.producthunt.com/products/gemini-omni-flash",
+      "source": "Product Hunt AI",
+      "sourceUrl": "https://www.producthunt.com/feed?category=artificial-intelligence",
+      "sourceWeight": 0.72,
+      "sourceRole": "watchlist",
+      "sourceType": "tool-directory",
+      "category": "AI",
+      "summary": "High-quality video generation and conversational editing\n          \n          \n            Discussion\n            |\n            Link",
+      "image": "public/thumbnails/news-e50dafc764f27ae111.avif",
+      "published": "2026-06-30T20:22:29+00:00",
+      "firstSeen": "2026-07-01T08:00:01.990182+00:00",
+      "lastSeen": "2026-07-01T08:00:01.990182+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 8.0044,
+      "signalGroup": "Media generation",
+      "sourceTier": "Watchlist source",
+      "whyItMatters": "Media-model updates affect what can be made quickly, what still needs craft, and where creative pipelines may change next.",
+      "brief": {
+        "whatHappened": "Gemini Omni Flash",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via Product Hunt AI."
+      },
+      "tryWorthy": false,
+      "toolCandidate": true,
+      "toolName": "Gemini Omni Flash",
+      "toolLabel": "Gemini Omni Flash",
+      "toolSummary": "High-quality video generation and conversational editing",
+      "clusterKey": "gemini-gemini-omni-flash",
+      "imageOriginal": "https://ph-files.imgix.net/000b87df-f8d1-46fe-8c95-4149a0aa4154.png?auto=format&fit=crop&frame=1&h=512&w=1024"
+    },
+    {
+      "title": "Claude Science",
+      "url": "https://www.producthunt.com/products/claude-for-desktop",
+      "source": "Product Hunt AI",
+      "sourceUrl": "https://www.producthunt.com/feed?category=artificial-intelligence",
+      "sourceWeight": 0.72,
+      "sourceRole": "watchlist",
+      "sourceType": "tool-directory",
+      "category": "AI",
+      "summary": "Your research partner for rigorous science\n          \n          \n            Discussion\n            |\n            Link",
+      "image": "public/thumbnails/news-0ae1dea5473e53e696.avif",
+      "published": "2026-06-30T18:19:10+00:00",
+      "firstSeen": "2026-07-01T08:00:01.990182+00:00",
+      "lastSeen": "2026-07-01T08:00:01.990182+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 7.9602,
+      "signalGroup": "Research",
+      "sourceTier": "Watchlist source",
+      "whyItMatters": "Research items are useful when they hint at future product behavior, benchmark movement, or techniques likely to show up in tools.",
+      "brief": {
+        "whatHappened": "Claude Science",
+        "whoItAffects": "People tracking where model behavior, evaluation, or training techniques may head next.",
+        "practicalImpact": "Useful if the idea looks likely to move from paper into products or tooling.",
+        "sourceFrame": "Seen via Product Hunt AI."
+      },
+      "tryWorthy": false,
+      "toolCandidate": true,
+      "toolName": "Claude Science",
+      "toolLabel": "Claude Science",
+      "toolSummary": "Your research partner for rigorous science",
+      "clusterKey": "claude-claude-science",
+      "imageOriginal": "https://ph-files.imgix.net/69e33637-6065-49ad-87d7-8fdec63aaa69.webp?auto=format&fit=crop&frame=1&h=512&w=1024"
+    },
+    {
       "title": "Gemini Spark",
       "url": "https://www.producthunt.com/products/gemini-spark",
       "source": "Product Hunt AI",
@@ -47,10 +180,10 @@
       "image": "public/thumbnails/news-c5f462b461ce114c9f.avif",
       "published": "2026-06-25T05:47:05+00:00",
       "firstSeen": "2026-06-26T08:00:01.499506+00:00",
-      "lastSeen": "2026-07-01T07:00:01.645672+00:00",
+      "lastSeen": "2026-07-01T08:00:01.990182+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.5275,
+      "score": 7.5269,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -80,10 +213,10 @@
       "image": "public/thumbnails/news-099aa7484406bdf5f9.avif",
       "published": "2026-06-29T16:54:09+00:00",
       "firstSeen": "2026-06-30T08:00:01.738579+00:00",
-      "lastSeen": "2026-07-01T07:00:01.645672+00:00",
+      "lastSeen": "2026-07-01T08:00:01.990182+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.2898,
+      "score": 7.2793,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -179,10 +312,10 @@
       "image": "public/thumbnails/news-6568576f444e6c5bc4.avif",
       "published": "2026-06-25T20:15:56+00:00",
       "firstSeen": "2026-06-27T08:00:01.988916+00:00",
-      "lastSeen": "2026-07-01T07:00:01.645672+00:00",
+      "lastSeen": "2026-07-01T08:00:01.990182+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.8371,
+      "score": 3.8363,
       "signalGroup": "Product updates",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
@@ -198,114 +331,113 @@
       "toolLabel": "Folio AI",
       "toolSummary": "Claude for PowerPoint, on steroids",
       "clusterKey": "folio"
-    },
-    {
-      "title": "Sipcode",
-      "url": "https://www.producthunt.com/products/sipcode",
-      "source": "Product Hunt AI",
-      "sourceUrl": "https://www.producthunt.com/feed?category=artificial-intelligence",
-      "sourceWeight": 0.72,
-      "sourceRole": "watchlist",
-      "sourceType": "tool-directory",
-      "category": "AI",
-      "summary": "Keep Claude Code's context clean for sharper answers\n          \n          \n            Discussion\n            |\n            Link",
-      "image": "",
-      "published": "2026-06-23T00:11:52+00:00",
-      "firstSeen": "2026-06-25T14:53:44.092288+00:00",
-      "lastSeen": "2026-06-30T07:00:01.628161+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 3.8124,
-      "signalGroup": "Agents & tooling",
-      "sourceTier": "Watchlist source",
-      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
-      "brief": {
-        "whatHappened": "Sipcode",
-        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
-        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
-        "sourceFrame": "Seen via Product Hunt AI."
-      },
-      "tryWorthy": false,
-      "toolCandidate": true,
-      "toolName": "Sipcode",
-      "toolLabel": "Sipcode",
-      "toolSummary": "Keep Claude Code's context clean for sharper answers",
-      "clusterKey": "sipcode"
-    },
-    {
-      "title": "Agent Mode by Receiptor AI",
-      "url": "https://www.producthunt.com/products/receiptor-ai",
-      "source": "Product Hunt AI",
-      "sourceUrl": "https://www.producthunt.com/feed?category=artificial-intelligence",
-      "sourceWeight": 0.72,
-      "sourceRole": "watchlist",
-      "sourceType": "tool-directory",
-      "category": "AI",
-      "summary": "Bookkeeping assistant that runs receipt workflows end-to-end\n          \n          \n            Discussion\n            |\n            Link",
-      "image": "https://ph-files.imgix.net/ea5cfd31-1b70-4e8c-90ca-a87e8ab8ddc6.png?auto=format&fit=crop&frame=1&h=512&w=1024",
-      "published": "2026-06-27T12:16:36+00:00",
-      "firstSeen": "2026-06-29T08:00:01.336271+00:00",
-      "lastSeen": "2026-07-01T07:00:01.645672+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "watchlist_low_signal",
-      "score": 3.6965,
-      "signalGroup": "Agents & tooling",
-      "sourceTier": "Watchlist source",
-      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
-      "brief": {
-        "whatHappened": "Agent Mode by Receiptor AI",
-        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
-        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
-        "sourceFrame": "Seen via Product Hunt AI."
-      },
-      "tryWorthy": true,
-      "toolCandidate": true,
-      "toolName": "Agent Mode by Receiptor AI",
-      "toolLabel": "Agent Mode by Receiptor AI",
-      "toolSummary": "Bookkeeping assistant that runs receipt workflows end-to-end",
-      "clusterKey": "agent-mode-receiptor"
-    },
-    {
-      "title": "Cursor for iOS",
-      "url": "https://www.producthunt.com/products/cursor-for-ios",
-      "source": "Product Hunt AI",
-      "sourceUrl": "https://www.producthunt.com/feed?category=artificial-intelligence",
-      "sourceWeight": 0.72,
-      "sourceRole": "watchlist",
-      "sourceType": "tool-directory",
-      "category": "AI",
-      "summary": "Build with coding agents from anywhere\n          \n          \n            Discussion\n            |\n            Link",
-      "image": "https://ph-files.imgix.net/cd0d1e71-589a-4d98-a22f-344db9dc89da.png?auto=format&fit=crop&frame=1&h=512&w=1024",
-      "published": "2026-06-30T03:52:28+00:00",
-      "firstSeen": "2026-06-30T08:00:01.738579+00:00",
-      "lastSeen": "2026-06-30T12:00:01.370611+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "watchlist_low_signal",
-      "score": 3.4258,
-      "signalGroup": "Agents & tooling",
-      "sourceTier": "Watchlist source",
-      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
-      "brief": {
-        "whatHappened": "Cursor for iOS",
-        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
-        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
-        "sourceFrame": "Seen via Product Hunt AI."
-      },
-      "tryWorthy": true,
-      "toolCandidate": true,
-      "toolName": "Cursor for iOS",
-      "toolLabel": "Cursor for iOS",
-      "toolSummary": "Build with coding agents from anywhere",
-      "clusterKey": "cursor-cursor-ios",
-      "clusterTitle": "Cursor for iOS",
-      "clusterSize": 2,
-      "relatedSources": [
-        "Product Hunt AI"
-      ]
     }
   ],
   "tryWorthy": [
     {
+      "title": "Claude Sonnet 5",
+      "url": "https://www.producthunt.com/products/claude",
+      "source": "Product Hunt AI",
+      "sourceUrl": "https://www.producthunt.com/feed?category=artificial-intelligence",
+      "sourceWeight": 0.72,
+      "sourceRole": "watchlist",
+      "sourceType": "tool-directory",
+      "category": "AI",
+      "summary": "AI that plans, acts, and gets work done\n          \n          \n            Discussion\n            |\n            Link",
+      "image": "public/thumbnails/news-f4e39098d44bc8bc5b.avif",
+      "published": "2026-06-30T18:30:12+00:00",
+      "firstSeen": "2026-07-01T08:00:01.990182+00:00",
+      "lastSeen": "2026-07-01T08:00:01.990182+00:00",
+      "model_release": true,
+      "editorial_allow": true,
+      "editorial_reason": "model_release",
+      "score": 14.8641,
+      "signalGroup": "Model releases",
+      "sourceTier": "Watchlist source",
+      "whyItMatters": "A model release changes the practical menu: capability, pricing, context, or deployment options may shift for real workflows.",
+      "brief": {
+        "whatHappened": "Claude Sonnet 5",
+        "whoItAffects": "Builders, tool users, and anyone comparing model capability or cost.",
+        "practicalImpact": "Check whether the release changes what is worth trying, routing, or paying for.",
+        "sourceFrame": "Seen via Product Hunt AI."
+      },
+      "tryWorthy": true,
+      "toolCandidate": true,
+      "toolName": "Claude Sonnet 5",
+      "toolLabel": "Claude Sonnet 5",
+      "toolSummary": "AI that plans, acts, and gets work done",
+      "clusterKey": "claude-claude-sonnet",
+      "imageOriginal": "https://ph-files.imgix.net/dcd66b83-6e6f-4481-bae8-d89be04178ef.png?auto=format&fit=crop&frame=1&h=512&w=1024"
+    },
+    {
+      "title": "Gemini Omni Flash",
+      "url": "https://www.producthunt.com/products/gemini-omni-flash",
+      "source": "Product Hunt AI",
+      "sourceUrl": "https://www.producthunt.com/feed?category=artificial-intelligence",
+      "sourceWeight": 0.72,
+      "sourceRole": "watchlist",
+      "sourceType": "tool-directory",
+      "category": "AI",
+      "summary": "High-quality video generation and conversational editing\n          \n          \n            Discussion\n            |\n            Link",
+      "image": "public/thumbnails/news-e50dafc764f27ae111.avif",
+      "published": "2026-06-30T20:22:29+00:00",
+      "firstSeen": "2026-07-01T08:00:01.990182+00:00",
+      "lastSeen": "2026-07-01T08:00:01.990182+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 8.0044,
+      "signalGroup": "Media generation",
+      "sourceTier": "Watchlist source",
+      "whyItMatters": "Media-model updates affect what can be made quickly, what still needs craft, and where creative pipelines may change next.",
+      "brief": {
+        "whatHappened": "Gemini Omni Flash",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via Product Hunt AI."
+      },
+      "tryWorthy": false,
+      "toolCandidate": true,
+      "toolName": "Gemini Omni Flash",
+      "toolLabel": "Gemini Omni Flash",
+      "toolSummary": "High-quality video generation and conversational editing",
+      "clusterKey": "gemini-gemini-omni-flash",
+      "imageOriginal": "https://ph-files.imgix.net/000b87df-f8d1-46fe-8c95-4149a0aa4154.png?auto=format&fit=crop&frame=1&h=512&w=1024"
+    },
+    {
+      "title": "Claude Science",
+      "url": "https://www.producthunt.com/products/claude-for-desktop",
+      "source": "Product Hunt AI",
+      "sourceUrl": "https://www.producthunt.com/feed?category=artificial-intelligence",
+      "sourceWeight": 0.72,
+      "sourceRole": "watchlist",
+      "sourceType": "tool-directory",
+      "category": "AI",
+      "summary": "Your research partner for rigorous science\n          \n          \n            Discussion\n            |\n            Link",
+      "image": "public/thumbnails/news-0ae1dea5473e53e696.avif",
+      "published": "2026-06-30T18:19:10+00:00",
+      "firstSeen": "2026-07-01T08:00:01.990182+00:00",
+      "lastSeen": "2026-07-01T08:00:01.990182+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 7.9602,
+      "signalGroup": "Research",
+      "sourceTier": "Watchlist source",
+      "whyItMatters": "Research items are useful when they hint at future product behavior, benchmark movement, or techniques likely to show up in tools.",
+      "brief": {
+        "whatHappened": "Claude Science",
+        "whoItAffects": "People tracking where model behavior, evaluation, or training techniques may head next.",
+        "practicalImpact": "Useful if the idea looks likely to move from paper into products or tooling.",
+        "sourceFrame": "Seen via Product Hunt AI."
+      },
+      "tryWorthy": false,
+      "toolCandidate": true,
+      "toolName": "Claude Science",
+      "toolLabel": "Claude Science",
+      "toolSummary": "Your research partner for rigorous science",
+      "clusterKey": "claude-claude-science",
+      "imageOriginal": "https://ph-files.imgix.net/69e33637-6065-49ad-87d7-8fdec63aaa69.webp?auto=format&fit=crop&frame=1&h=512&w=1024"
+    },
+    {
       "title": "Gemini Spark",
       "url": "https://www.producthunt.com/products/gemini-spark",
       "source": "Product Hunt AI",
@@ -318,10 +450,10 @@
       "image": "public/thumbnails/news-c5f462b461ce114c9f.avif",
       "published": "2026-06-25T05:47:05+00:00",
       "firstSeen": "2026-06-26T08:00:01.499506+00:00",
-      "lastSeen": "2026-07-01T07:00:01.645672+00:00",
+      "lastSeen": "2026-07-01T08:00:01.990182+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.5275,
+      "score": 7.5269,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -351,10 +483,10 @@
       "image": "public/thumbnails/news-099aa7484406bdf5f9.avif",
       "published": "2026-06-29T16:54:09+00:00",
       "firstSeen": "2026-06-30T08:00:01.738579+00:00",
-      "lastSeen": "2026-07-01T07:00:01.645672+00:00",
+      "lastSeen": "2026-07-01T08:00:01.990182+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.2898,
+      "score": 7.2793,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -450,10 +582,10 @@
       "image": "public/thumbnails/news-6568576f444e6c5bc4.avif",
       "published": "2026-06-25T20:15:56+00:00",
       "firstSeen": "2026-06-27T08:00:01.988916+00:00",
-      "lastSeen": "2026-07-01T07:00:01.645672+00:00",
+      "lastSeen": "2026-07-01T08:00:01.990182+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.8371,
+      "score": 3.8363,
       "signalGroup": "Product updates",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
@@ -469,110 +601,6 @@
       "toolLabel": "Folio AI",
       "toolSummary": "Claude for PowerPoint, on steroids",
       "clusterKey": "folio"
-    },
-    {
-      "title": "Sipcode",
-      "url": "https://www.producthunt.com/products/sipcode",
-      "source": "Product Hunt AI",
-      "sourceUrl": "https://www.producthunt.com/feed?category=artificial-intelligence",
-      "sourceWeight": 0.72,
-      "sourceRole": "watchlist",
-      "sourceType": "tool-directory",
-      "category": "AI",
-      "summary": "Keep Claude Code's context clean for sharper answers\n          \n          \n            Discussion\n            |\n            Link",
-      "image": "",
-      "published": "2026-06-23T00:11:52+00:00",
-      "firstSeen": "2026-06-25T14:53:44.092288+00:00",
-      "lastSeen": "2026-06-30T07:00:01.628161+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 3.8124,
-      "signalGroup": "Agents & tooling",
-      "sourceTier": "Watchlist source",
-      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
-      "brief": {
-        "whatHappened": "Sipcode",
-        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
-        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
-        "sourceFrame": "Seen via Product Hunt AI."
-      },
-      "tryWorthy": false,
-      "toolCandidate": true,
-      "toolName": "Sipcode",
-      "toolLabel": "Sipcode",
-      "toolSummary": "Keep Claude Code's context clean for sharper answers",
-      "clusterKey": "sipcode"
-    },
-    {
-      "title": "Agent Mode by Receiptor AI",
-      "url": "https://www.producthunt.com/products/receiptor-ai",
-      "source": "Product Hunt AI",
-      "sourceUrl": "https://www.producthunt.com/feed?category=artificial-intelligence",
-      "sourceWeight": 0.72,
-      "sourceRole": "watchlist",
-      "sourceType": "tool-directory",
-      "category": "AI",
-      "summary": "Bookkeeping assistant that runs receipt workflows end-to-end\n          \n          \n            Discussion\n            |\n            Link",
-      "image": "https://ph-files.imgix.net/ea5cfd31-1b70-4e8c-90ca-a87e8ab8ddc6.png?auto=format&fit=crop&frame=1&h=512&w=1024",
-      "published": "2026-06-27T12:16:36+00:00",
-      "firstSeen": "2026-06-29T08:00:01.336271+00:00",
-      "lastSeen": "2026-07-01T07:00:01.645672+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "watchlist_low_signal",
-      "score": 3.6965,
-      "signalGroup": "Agents & tooling",
-      "sourceTier": "Watchlist source",
-      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
-      "brief": {
-        "whatHappened": "Agent Mode by Receiptor AI",
-        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
-        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
-        "sourceFrame": "Seen via Product Hunt AI."
-      },
-      "tryWorthy": true,
-      "toolCandidate": true,
-      "toolName": "Agent Mode by Receiptor AI",
-      "toolLabel": "Agent Mode by Receiptor AI",
-      "toolSummary": "Bookkeeping assistant that runs receipt workflows end-to-end",
-      "clusterKey": "agent-mode-receiptor"
-    },
-    {
-      "title": "Cursor for iOS",
-      "url": "https://www.producthunt.com/products/cursor-for-ios",
-      "source": "Product Hunt AI",
-      "sourceUrl": "https://www.producthunt.com/feed?category=artificial-intelligence",
-      "sourceWeight": 0.72,
-      "sourceRole": "watchlist",
-      "sourceType": "tool-directory",
-      "category": "AI",
-      "summary": "Build with coding agents from anywhere\n          \n          \n            Discussion\n            |\n            Link",
-      "image": "https://ph-files.imgix.net/cd0d1e71-589a-4d98-a22f-344db9dc89da.png?auto=format&fit=crop&frame=1&h=512&w=1024",
-      "published": "2026-06-30T03:52:28+00:00",
-      "firstSeen": "2026-06-30T08:00:01.738579+00:00",
-      "lastSeen": "2026-06-30T12:00:01.370611+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "watchlist_low_signal",
-      "score": 3.4258,
-      "signalGroup": "Agents & tooling",
-      "sourceTier": "Watchlist source",
-      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
-      "brief": {
-        "whatHappened": "Cursor for iOS",
-        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
-        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
-        "sourceFrame": "Seen via Product Hunt AI."
-      },
-      "tryWorthy": true,
-      "toolCandidate": true,
-      "toolName": "Cursor for iOS",
-      "toolLabel": "Cursor for iOS",
-      "toolSummary": "Build with coding agents from anywhere",
-      "clusterKey": "cursor-cursor-ios",
-      "clusterTitle": "Cursor for iOS",
-      "clusterSize": 2,
-      "relatedSources": [
-        "Product Hunt AI"
-      ]
     }
   ],
   "sourceHealth": [
@@ -584,7 +612,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 1028,
-      "checkedAt": "2026-07-01T07:00:01.645672+00:00"
+      "checkedAt": "2026-07-01T08:00:01.990182+00:00"
     },
     {
       "source": "Google AI Blog",
@@ -594,7 +622,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-01T07:00:01.645672+00:00"
+      "checkedAt": "2026-07-01T08:00:01.990182+00:00"
     },
     {
       "source": "Google DeepMind Blog",
@@ -604,7 +632,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-07-01T07:00:01.645672+00:00"
+      "checkedAt": "2026-07-01T08:00:01.990182+00:00"
     },
     {
       "source": "Google Research Blog",
@@ -614,7 +642,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-07-01T07:00:01.645672+00:00"
+      "checkedAt": "2026-07-01T08:00:01.990182+00:00"
     },
     {
       "source": "Hugging Face Blog",
@@ -624,7 +652,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 813,
-      "checkedAt": "2026-07-01T07:00:01.645672+00:00"
+      "checkedAt": "2026-07-01T08:00:01.990182+00:00"
     },
     {
       "source": "NVIDIA Blog",
@@ -634,7 +662,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 18,
-      "checkedAt": "2026-07-01T07:00:01.645672+00:00"
+      "checkedAt": "2026-07-01T08:00:01.990182+00:00"
     },
     {
       "source": "AWS Machine Learning Blog",
@@ -644,7 +672,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-01T07:00:01.645672+00:00"
+      "checkedAt": "2026-07-01T08:00:01.990182+00:00"
     },
     {
       "source": "Artificial Intelligence News",
@@ -654,7 +682,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 12,
-      "checkedAt": "2026-07-01T07:00:01.645672+00:00"
+      "checkedAt": "2026-07-01T08:00:01.990182+00:00"
     },
     {
       "source": "Ars Technica (AI/Tech)",
@@ -664,7 +692,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-01T07:00:01.645672+00:00"
+      "checkedAt": "2026-07-01T08:00:01.990182+00:00"
     },
     {
       "source": "Together AI Blog",
@@ -674,7 +702,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-07-01T07:00:01.645672+00:00"
+      "checkedAt": "2026-07-01T08:00:01.990182+00:00"
     },
     {
       "source": "TechRepublic AI",
@@ -684,7 +712,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-01T07:00:01.645672+00:00"
+      "checkedAt": "2026-07-01T08:00:01.990182+00:00"
     },
     {
       "source": "ScienceDaily AI",
@@ -694,7 +722,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 60,
-      "checkedAt": "2026-07-01T07:00:01.645672+00:00"
+      "checkedAt": "2026-07-01T08:00:01.990182+00:00"
     },
     {
       "source": "The Next Web",
@@ -704,7 +732,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-01T07:00:01.645672+00:00"
+      "checkedAt": "2026-07-01T08:00:01.990182+00:00"
     },
     {
       "source": "BBC Discovery",
@@ -714,7 +742,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 847,
-      "checkedAt": "2026-07-01T07:00:01.645672+00:00"
+      "checkedAt": "2026-07-01T08:00:01.990182+00:00"
     },
     {
       "source": "BBC Infinite Monkey Cage",
@@ -724,7 +752,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 239,
-      "checkedAt": "2026-07-01T07:00:01.645672+00:00"
+      "checkedAt": "2026-07-01T08:00:01.990182+00:00"
     },
     {
       "source": "BBC The Life Scientific",
@@ -734,7 +762,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 356,
-      "checkedAt": "2026-07-01T07:00:01.645672+00:00"
+      "checkedAt": "2026-07-01T08:00:01.990182+00:00"
     },
     {
       "source": "TechCrunch AI",
@@ -744,7 +772,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-01T07:00:01.645672+00:00"
+      "checkedAt": "2026-07-01T08:00:01.990182+00:00"
     },
     {
       "source": "Anthropic News",
@@ -754,7 +782,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 234,
-      "checkedAt": "2026-07-01T07:00:01.645672+00:00"
+      "checkedAt": "2026-07-01T08:00:01.990182+00:00"
     },
     {
       "source": "The Verge AI",
@@ -764,7 +792,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-01T07:00:01.645672+00:00"
+      "checkedAt": "2026-07-01T08:00:01.990182+00:00"
     },
     {
       "source": "VentureBeat AI",
@@ -774,7 +802,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 7,
-      "checkedAt": "2026-07-01T07:00:01.645672+00:00"
+      "checkedAt": "2026-07-01T08:00:01.990182+00:00"
     },
     {
       "source": "Simon Willison",
@@ -784,7 +812,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 30,
-      "checkedAt": "2026-07-01T07:00:01.645672+00:00"
+      "checkedAt": "2026-07-01T08:00:01.990182+00:00"
     },
     {
       "source": "Interconnects AI",
@@ -794,7 +822,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-01T07:00:01.645672+00:00"
+      "checkedAt": "2026-07-01T08:00:01.990182+00:00"
     },
     {
       "source": "Latent Space",
@@ -804,7 +832,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-01T07:00:01.645672+00:00"
+      "checkedAt": "2026-07-01T08:00:01.990182+00:00"
     },
     {
       "source": "Import AI",
@@ -814,7 +842,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-01T07:00:01.645672+00:00"
+      "checkedAt": "2026-07-01T08:00:01.990182+00:00"
     },
     {
       "source": "Microsoft Research Blog",
@@ -824,7 +852,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-01T07:00:01.645672+00:00"
+      "checkedAt": "2026-07-01T08:00:01.990182+00:00"
     },
     {
       "source": "LiteLLM Releases",
@@ -834,7 +862,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-01T07:00:01.645672+00:00"
+      "checkedAt": "2026-07-01T08:00:01.990182+00:00"
     },
     {
       "source": "Hugging Face Transformers Releases",
@@ -844,7 +872,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-01T07:00:01.645672+00:00"
+      "checkedAt": "2026-07-01T08:00:01.990182+00:00"
     },
     {
       "source": "Model Context Protocol Python SDK Releases",
@@ -854,7 +882,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-01T07:00:01.645672+00:00"
+      "checkedAt": "2026-07-01T08:00:01.990182+00:00"
     },
     {
       "source": "Model Context Protocol Spec Releases",
@@ -864,7 +892,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 8,
-      "checkedAt": "2026-07-01T07:00:01.645672+00:00"
+      "checkedAt": "2026-07-01T08:00:01.990182+00:00"
     },
     {
       "source": "OpenAI Cookbook Releases",
@@ -874,7 +902,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 0,
-      "checkedAt": "2026-07-01T07:00:01.645672+00:00"
+      "checkedAt": "2026-07-01T08:00:01.990182+00:00"
     },
     {
       "source": "Product Hunt AI",
@@ -884,7 +912,7 @@
       "sourceType": "tool-directory",
       "status": "ok",
       "items": 50,
-      "checkedAt": "2026-07-01T07:00:01.645672+00:00"
+      "checkedAt": "2026-07-01T08:00:01.990182+00:00"
     }
   ],
   "errors": []
