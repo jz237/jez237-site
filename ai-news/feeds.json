@@ -169,6 +169,14 @@
     "role": "secondary"
   },
   {
+    "name": "The AI Daily Brief",
+    "url": "https://aidailybrief.ai/",
+    "weight": 0.88,
+    "category": "AI",
+    "role": "secondary",
+    "type": "ai-daily-brief"
+  },
+  {
     "name": "Microsoft Research Blog",
     "url": "https://www.microsoft.com/en-us/research/feed/",
     "weight": 0.9,
