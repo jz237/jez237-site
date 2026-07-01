@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Steel Ribbon Racer</title>
+    <script type="module" src="/src/main.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <canvas id="game"></canvas>
+
+      <div id="cockpit" aria-hidden="true">
+        <div class="glass-reflection"></div>
+        <div class="roll top"></div>
+        <div class="roll left"></div>
+        <div class="roll right"></div>
+        <div class="strut strut-left"></div>
+        <div class="strut strut-right"></div>
+        <div class="dashboard">
+          <div class="dial-wrap">
+            <canvas id="speedo"></canvas>
+          </div>
+          <div class="dial-wrap">
+            <canvas id="boostGauge"></canvas>
+          </div>
+          <div class="needle-wrap">
+            <canvas id="tach"></canvas>
+          </div>
+          <div class="bar danger">
+            <span>DAMAGE</span>
+            <i id="damage"></i>
+          </div>
+          <div class="gauge">
+            <span>LAP</span>
+            <strong id="lap">1/3</strong>
+          </div>
+        </div>
+      </div>
+
+      <div id="hud">
+        <div><b id="position">DIV 4</b><span id="trackName">The Little Ramp</span></div>
+        <div><b id="timer">00:00.0</b><span id="score">Score 0</span></div>
+      </div>
+
+      <div id="raceStrip" aria-hidden="true">
+        <span>YOU<i id="playerProgress"></i></span>
+        <span>RIVAL<i id="rivalProgress"></i></span>
+      </div>
+
+      <div id="centerMessage" class="hidden"></div>
+      <div id="speedFx" aria-hidden="true"></div>
+      <div id="damageFx" aria-hidden="true"></div>
+
+      <div id="touchControls" aria-label="Touch driving controls">
+        <div class="touch-left">
+          <div class="touch-stick look-stick" data-stick="look" aria-label="Camera look joystick">
+            <div class="stick-track x-track"></div>
+            <div class="stick-track y-track"></div>
+            <div class="stick-knob"></div>
+            <span>LOOK</span>
+          </div>
+        </div>
+        <div class="touch-right">
+          <button class="boost-button" data-code="ShiftLeft" aria-label="Boost">&#9889;</button>
+          <div class="touch-stick drive-stick" data-stick="drive" aria-label="Steering, throttle and brake joystick">
+            <div class="stick-track"></div>
+            <div class="stick-knob"></div>
+            <span>STEER · DRIVE</span>
+          </div>
+        </div>
+      </div>
+
+      <section id="menu" class="screen">
+        <div class="logo">Steel Ribbon Racer</div>
+        <p>Suspended stunt racing, cockpit terror, and expensive landings.</p>
+        <button id="startBtn">Start Season</button>
+        <button id="practiceBtn">Practice Run</button>
+        <div class="course-select">
+          <span>Course — <b id="courseName">The Little Ramp</b></span>
+          <div class="course-buttons">
+            <button class="course-btn" data-course="0">1</button>
+            <button class="course-btn" data-course="1">2</button>
+            <button class="course-btn" data-course="2">3</button>
+            <button class="course-btn" data-course="3">4</button>
+          </div>
+        </div>
+        <button id="freeRunBtn">Course Check (Free Run)</button>
+        <button id="roamBtn">Free Roam City</button>
+        <div class="league">
+          <span>Division Four</span>
+          <b>1. Crowther</b>
+          <b>2. Bishop</b>
+          <b>3. Maddock</b>
+          <b>4. You</b>
+        </div>
+        <small id="best">Best score 0</small>
+      </section>
+
+      <section id="result" class="screen hidden">
+        <div class="logo small">Race Complete</div>
+        <p id="resultText"></p>
+        <div id="resultStats" class="league"></div>
+        <button id="againBtn">Race Again</button>
+      </section>
+    </div>
+  </body>
+</html>
