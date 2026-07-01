@@ -3,26 +3,40 @@ import json
 import math
 import os
 import re
+import hashlib
+import html
 import urllib.request
 import urllib.parse
 from datetime import datetime, timedelta, timezone
 from email.utils import parsedate_to_datetime
+from zoneinfo import ZoneInfo
 import xml.etree.ElementTree as ET
 
 BASE = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.path.join(BASE, "data")
 PUBLIC_DIR = os.path.join(BASE, "public")
+THUMBNAIL_DIR = os.path.join(PUBLIC_DIR, "thumbnails")
 FEEDS_PATH = os.path.join(BASE, "feeds.json")
 STORE_PATH = os.path.join(DATA_DIR, "items.json")
 IMAGE_CACHE_PATH = os.path.join(DATA_DIR, "image_cache.json")
+ARCHIVE_INDEX_PATH = os.path.join(PUBLIC_DIR, "archive-index.json")
 
 USER_AGENT = "Mozilla/5.0 (compatible; AI-News-Bot/1.0; +https://openclaw.ai)"
+LOCAL_TZ = ZoneInfo("America/New_York")
 MAX_STORE_ITEMS = 1500
 MAX_ITEM_AGE_DAYS = 14
-TOP_DAILY_COUNT = 12
+TOP_DAILY_COUNT = 18
 TOP_LATEST_COUNT = 50
+HIGH_SCORE_EDITORIAL_OVERRIDE = 4.0
 MAX_OG_FETCH_PER_RUN = 20
+MAX_THUMBNAIL_FETCH_PER_RUN = 30
+MAX_THUMBNAIL_BYTES = 4 * 1024 * 1024
 IMAGE_CACHE_TTL_DAYS = 7
+EXCLUDED_TOPIC_PATTERNS = [
+    "llama.cpp",
+    "ggml-org/llama.cpp",
+    "github.com/ggml-org/llama.cpp",
+]
 
 KEYWORDS = {
     "major": ["release", "launch", "announces", "introduces", "debut", "new model", "api", "open source"],
@@ -100,6 +114,12 @@ MODEL_RELEASE_SIGNALS = [
     "available today", "available now", "open sourced", "open-sourced",
 ]
 
+CLUSTER_STOPWORDS = {
+    "the", "a", "an", "and", "or", "but", "to", "of", "in", "on", "for", "with", "its",
+    "is", "are", "was", "were", "as", "at", "by", "from", "this", "that", "new", "ai",
+    "artificial", "intelligence", "says", "after", "about", "into", "over", "now"
+}
+
 
 def now_utc():
     return datetime.now(timezone.utc)
@@ -108,6 +128,7 @@ def now_utc():
 def ensure_dirs():
     os.makedirs(DATA_DIR, exist_ok=True)
     os.makedirs(PUBLIC_DIR, exist_ok=True)
+    os.makedirs(THUMBNAIL_DIR, exist_ok=True)
 
 
 def load_json(path, default):
@@ -128,10 +149,379 @@ def canonicalize_url(url):
         q = urllib.parse.parse_qsl(p.query, keep_blank_values=False)
         q = [(k, v) for (k, v) in q if not k.lower().startswith("utm_") and k.lower() not in {"ref", "source"}]
         new_query = urllib.parse.urlencode(q)
-        clean = urllib.parse.urlunparse((p.scheme, p.netloc.lower(), p.path.rstrip("/"), "", new_query, ""))
+        fragment = p.fragment if p.netloc.lower().endswith("aidailybrief.ai") else ""
+        clean = urllib.parse.urlunparse((p.scheme, p.netloc.lower(), p.path.rstrip("/"), "", new_query, fragment))
         return clean
     except Exception:
         return url.strip()
+
+
+def sanitize_image_url(url):
+    """Return a publishable image URL, or empty string for signed/private URLs."""
+    if not url:
+        return ""
+    url = html.unescape(url)
+    url = canonicalize_url(url)
+    try:
+        p = urllib.parse.urlparse(url)
+    except Exception:
+        return ""
+    if p.netloc.lower() == "private-user-images.githubusercontent.com":
+        return ""
+    query_keys = {k.lower() for k, _ in urllib.parse.parse_qsl(p.query, keep_blank_values=True)}
+    signed_keys = {
+        "jwt",
+        "x-amz-credential",
+        "x-amz-signature",
+        "x-amz-security-token",
+        "x-amz-date",
+        "x-amz-expires",
+    }
+    if query_keys & signed_keys:
+        return ""
+    return url
+
+
+def source_role_bonus(role):
+    if role == "primary":
+        return 1.0
+    if role == "watchlist":
+        return -1.2
+    return 0.0
+
+
+def source_role_label(role):
+    return {
+        "primary": "Primary source",
+        "secondary": "Reported source",
+        "watchlist": "Watchlist source",
+    }.get(role or "secondary", "Reported source")
+
+
+def classify_signal_group(item):
+    title = (item.get("title") or "").lower()
+    summary = (item.get("summary") or "").lower()
+    text_blob = f"{title} {summary}"
+
+    if item.get("model_release"):
+        return "Model releases"
+    if any(w in text_blob for w in ["agent", "computer use", "tool use", "mcp", "claude code", "codex", "browser"]):
+        return "Agents & tooling"
+    if any(w in text_blob for w in ["image generation", "video generation", "voice", "audio", "multimodal", "vision"]):
+        return "Media generation"
+    if any(w in text_blob for w in ["gpu", "chip", "nvidia", "cerebras", "micron", "memory", "compute", "data center", "datacentre"]):
+        return "Infrastructure"
+    if any(w in text_blob for w in ["policy", "lawsuit", "copyright", "regulation", "privacy", "security", "governance", "export control", "distillation"]):
+        return "Policy & risk"
+    if any(w in text_blob for w in ["research", "paper", "benchmark", "arxiv", "evaluation", "study"]):
+        return "Research"
+    if any(w in text_blob for w in ["funding", "valuation", "stock", "earnings", "acquires", "startup", "revenue"]):
+        return "Business"
+    return "Product updates"
+
+
+def make_why_it_matters(item):
+    group = item.get("signalGroup") or classify_signal_group(item)
+    title = (item.get("title") or "").lower()
+    summary = (item.get("summary") or "").lower()
+    text_blob = f"{title} {summary}"
+
+    if item.get("model_release"):
+        return "A model release changes the practical menu: capability, pricing, context, or deployment options may shift for real workflows."
+    if group == "Agents & tooling":
+        return "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill."
+    if group == "Media generation":
+        return "Media-model updates affect what can be made quickly, what still needs craft, and where creative pipelines may change next."
+    if group == "Infrastructure":
+        return "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost."
+    if group == "Policy & risk":
+        return "Policy and risk stories often become product constraints later, especially around data access, safety claims, export rules, and copyright."
+    if group == "Research":
+        return "Research items are useful when they hint at future product behavior, benchmark movement, or techniques likely to show up in tools."
+    if group == "Business":
+        return "Business moves are a map of where the industry thinks the bottlenecks and durable demand will be."
+    if any(w in text_blob for w in ["openai", "anthropic", "google", "gemini", "claude", "chatgpt", "grok"]):
+        return "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental."
+    return "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure."
+
+
+def make_structured_brief(item):
+    title = item.get("title") or "Untitled story"
+    source = item.get("source") or "Unknown source"
+    group = item.get("signalGroup") or classify_signal_group(item)
+
+    what = title.rstrip(".")
+    if group == "Model releases":
+        who = "Builders, tool users, and anyone comparing model capability or cost."
+        impact = "Check whether the release changes what is worth trying, routing, or paying for."
+    elif group == "Agents & tooling":
+        who = "People building or using agent workflows, automation, coding tools, and workplace assistants."
+        impact = "Watch permissions, reliability, and integration details before treating it as production-ready."
+    elif group == "Infrastructure":
+        who = "Anyone affected by AI compute cost, speed, availability, or hardware supply."
+        impact = "Infrastructure shifts often show up later as cheaper tools, higher limits, or new bottlenecks."
+    elif group == "Policy & risk":
+        who = "Product builders, platform users, and anyone depending on model access or data rights."
+        impact = "Policy moves can become tomorrow's product limits, compliance burden, or availability issue."
+    elif group == "Research":
+        who = "People tracking where model behavior, evaluation, or training techniques may head next."
+        impact = "Useful if the idea looks likely to move from paper into products or tooling."
+    elif group == "Business":
+        who = "People reading the industry map: capital, hiring, acquisitions, and market pressure."
+        impact = "The money trail usually points at where companies think the durable demand is."
+    else:
+        who = "AI watchers looking for practical shifts in products, platforms, or adoption."
+        impact = "Skim for whether this changes what to try, trust, buy, or ignore."
+
+    return {
+        "whatHappened": what,
+        "whoItAffects": who,
+        "practicalImpact": impact,
+        "sourceFrame": f"Seen via {source}.",
+    }
+
+
+def try_worthy(item):
+    text_blob = f"{item.get('title') or ''} {item.get('summary') or ''}".lower()
+    if item.get("model_release"):
+        return True
+    return any(w in text_blob for w in [
+        "available", "launch", "released", "api", "tool", "agent", "computer use",
+        "coding", "plugin", "open source", "github", "cookbook", "sdk"
+    ])
+
+
+VERSION_TITLE_RE = re.compile(
+    r"^(?:v?\d+(?:\.\d+){1,3}(?:[-+][a-z0-9_.-]+)?|release\s+v?\d+(?:\.\d+){1,3})$",
+    re.IGNORECASE,
+)
+
+
+def source_tool_name(source):
+    name = (source or "").strip()
+    name = re.sub(r"\s+releases?$", "", name, flags=re.IGNORECASE)
+    return {
+        "Model Context Protocol Python SDK": "MCP Python SDK",
+        "Model Context Protocol Spec": "MCP Specification",
+        "Hugging Face Transformers": "Transformers",
+    }.get(name, name)
+
+
+def clean_tool_summary(item):
+    summary = re.sub(r"\s+", " ", item.get("summary") or "").strip()
+    summary = re.sub(r"\bDiscussion\s*\|\s*Link\b", "", summary).strip()
+    summary = re.sub(r"\s+", " ", summary)
+    if not summary:
+        source_type = item.get("sourceType")
+        if source_type == "tool-release":
+            summary = "New release from a known AI/developer tool."
+        elif source_type == "tool-directory":
+            summary = "New AI product listing."
+    if len(summary) > 150:
+        summary = summary[:147].rstrip() + "..."
+    return summary
+
+
+def enrich_tool_metadata(item):
+    source_type = item.get("sourceType") or ""
+    title = (item.get("title") or "").strip()
+    source = item.get("source") or ""
+    is_release = source_type == "tool-release"
+    is_directory = source_type == "tool-directory"
+
+    if not (is_release or is_directory):
+        item["toolCandidate"] = False
+        return
+
+    tool_name = source_tool_name(source) if is_release else re.sub(r"\s+-\s+.*$", "", title).strip()
+    if not tool_name:
+        tool_name = title or source
+
+    if is_release and VERSION_TITLE_RE.match(title):
+        label = f"{tool_name} {title}"
+    else:
+        label = title or tool_name
+
+    item["toolCandidate"] = True
+    item["toolName"] = tool_name
+    item["toolLabel"] = label
+    item["toolSummary"] = clean_tool_summary(item)
+
+
+def tool_rank(item):
+    source_type = item.get("sourceType")
+    source_bonus = 25.0 if source_type == "tool-directory" else 6.0 if source_type == "tool-release" else 0
+    recency = item.get("published", "")
+    return (source_bonus + float(item.get("score", 0)), recency)
+
+
+def story_cluster_key(item):
+    title = (item.get("title") or "").lower()
+    title = re.sub(r"[^a-z0-9\s+-]", " ", title)
+    words = [w for w in title.split() if len(w) > 2 and w not in CLUSTER_STOPWORDS]
+
+    brands = [
+        "openai", "chatgpt", "anthropic", "claude", "google", "gemini", "deepmind",
+        "mistral", "grok", "xai", "meta", "llama", "nvidia", "aws", "figma",
+        "cerebras", "micron", "openrouter", "cursor", "windsurf", "mcp"
+    ]
+    brand_hits = [b for b in brands if b in title]
+    if brand_hits:
+        key_words = brand_hits + words[:5]
+    else:
+        key_words = words[:6]
+    return "-".join(key_words)[:90] or hashlib.sha1((item.get("url") or title).encode("utf-8")).hexdigest()[:12]
+
+
+def attach_cluster_metadata(items):
+    clusters = {}
+    for it in items:
+        key = story_cluster_key(it)
+        it["clusterKey"] = key
+        clusters.setdefault(key, []).append(it)
+
+    for key, members in clusters.items():
+        sources = sorted({m.get("source") for m in members if m.get("source")})
+        if len(members) > 1:
+            members_sorted = sorted(members, key=lambda x: (x.get("score", 0), x.get("published", "")), reverse=True)
+            title = members_sorted[0].get("title", "Related coverage")
+            for m in members:
+                m["clusterTitle"] = title
+                m["clusterSize"] = len(members)
+                m["relatedSources"] = sources
+
+
+def build_archive_index(public_dir):
+    entries = []
+    for name in os.listdir(public_dir):
+        m = re.match(r"ai-news-daily-(\d{4}-\d{2}-\d{2})\.json$", name)
+        if not m:
+            continue
+        path = os.path.join(public_dir, name)
+        try:
+            data = load_json(path, {})
+            count = len(data.get("items", []))
+            if count == 0:
+                continue
+            entries.append({
+                "date": m.group(1),
+                "path": f"public/{name}",
+                "count": count,
+                "updatedAt": data.get("updatedAt", ""),
+            })
+        except Exception:
+            continue
+    entries.sort(key=lambda x: x["date"], reverse=True)
+    return entries[:45]
+
+
+def image_extension(content_type, url):
+    content_type = (content_type or "").split(";")[0].strip().lower()
+    by_type = {
+        "image/jpeg": "jpg",
+        "image/jpg": "jpg",
+        "image/png": "png",
+        "image/webp": "webp",
+        "image/gif": "gif",
+        "image/avif": "avif",
+    }
+    if content_type in by_type:
+        return by_type[content_type]
+
+    path = urllib.parse.urlparse(url).path.lower()
+    for ext in ("jpg", "jpeg", "png", "webp", "gif", "avif"):
+        if path.endswith("." + ext):
+            return "jpg" if ext == "jpeg" else ext
+    return "jpg"
+
+
+def cache_thumbnail(image_url, item_url, cache_items, now):
+    image_url = sanitize_image_url(image_url)
+    if not image_url or image_url.startswith("data:") or image_url.startswith("public/thumbnails/"):
+        return image_url, False
+
+    cache_key = "thumb:" + canonicalize_url(image_url)
+    cached = cache_items.get(cache_key, {})
+    local_path = cached.get("localPath", "") if isinstance(cached, dict) else ""
+    if local_path and os.path.exists(os.path.join(BASE, local_path)):
+        return local_path, False
+
+    try:
+        headers = {
+            "User-Agent": USER_AGENT,
+            "Accept": "image/avif,image/webp,image/*,*/*;q=0.8",
+        }
+        if item_url:
+            parsed = urllib.parse.urlparse(item_url)
+            if parsed.scheme and parsed.netloc:
+                headers["Referer"] = f"{parsed.scheme}://{parsed.netloc}/"
+
+        req = urllib.request.Request(image_url, headers=headers)
+        with urllib.request.urlopen(req, timeout=16) as r:
+            content_type = r.headers.get("Content-Type", "")
+            if not content_type.lower().startswith("image/"):
+                return image_url, False
+            data = r.read(MAX_THUMBNAIL_BYTES + 1)
+            if len(data) > MAX_THUMBNAIL_BYTES:
+                return image_url, False
+
+        ext = image_extension(content_type, image_url)
+        digest = hashlib.sha1(image_url.encode("utf-8")).hexdigest()[:18]
+        filename = f"news-{digest}.{ext}"
+        disk_path = os.path.join(THUMBNAIL_DIR, filename)
+        local_path = f"public/thumbnails/{filename}"
+
+        with open(disk_path, "wb") as f:
+            f.write(data)
+
+        cache_items[cache_key] = {
+            "sourceImage": image_url,
+            "localPath": local_path,
+            "checkedAt": now.isoformat(),
+        }
+        return local_path, True
+    except Exception:
+        return image_url, False
+
+
+def is_local_thumbnail(path):
+    return (path or "").startswith("public/thumbnails/")
+
+
+def restore_non_public_thumbnails(all_items, public_thumbnail_paths):
+    for it in all_items:
+        image = it.get("image", "")
+        if is_local_thumbnail(image) and image not in public_thumbnail_paths and it.get("imageOriginal"):
+            it["image"] = it.get("imageOriginal")
+            it.pop("imageOriginal", None)
+
+
+def cleanup_thumbnail_dir(public_thumbnail_paths):
+    removed = 0
+    if not os.path.isdir(THUMBNAIL_DIR):
+        return removed
+    keep = {os.path.basename(path) for path in public_thumbnail_paths if is_local_thumbnail(path)}
+    for name in os.listdir(THUMBNAIL_DIR):
+        if not name.startswith("news-"):
+            continue
+        if name not in keep:
+            try:
+                os.remove(os.path.join(THUMBNAIL_DIR, name))
+                removed += 1
+            except OSError:
+                pass
+    return removed
+
+
+def is_excluded_item(item):
+    haystack = " ".join([
+        item.get("title") or "",
+        item.get("url") or "",
+        item.get("source") or "",
+        item.get("sourceUrl") or "",
+        item.get("summary") or "",
+    ]).lower()
+    return any(pattern in haystack for pattern in EXCLUDED_TOPIC_PATTERNS)
 
 
 def try_parse_date(value):
@@ -315,8 +705,8 @@ def parse_feed_xml(xml_bytes, source_name, source_url, source_weight):
     return items
 
 
-def fetch_url(url):
-    req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
+def fetch_url(url, user_agent=None):
+    req = urllib.request.Request(url, headers={"User-Agent": user_agent or USER_AGENT})
     with urllib.request.urlopen(req, timeout=20) as r:
         return r.read()
 
@@ -324,10 +714,25 @@ def fetch_url(url):
 def flag_model_release(item):
     """Detect if an item is specifically about a new AI model release.
     Sets item["model_release"] = True if matched. Returns True/False."""
+    item.pop("model_release", None)
     title = (item.get("title") or "").lower()
     summary = (item.get("summary") or "").lower()
     text_blob = f"{title} {summary}"
-    matched = any(sig in text_blob for sig in MODEL_RELEASE_SIGNALS)
+    trusted_body_signals = {
+        "openai releases", "openai launches", "openai announces",
+        "anthropic releases", "anthropic launches", "anthropic announces",
+        "google releases", "google launches", "google deepmind releases",
+        "meta releases", "meta launches", "meta ai releases",
+        "mistral releases", "mistral launches", "mistral ai releases",
+        "deepseek releases", "deepseek launches",
+        "xai releases", "xai launches", "grok releases",
+        "cohere releases", "cohere launches",
+        "nvidia releases", "nvidia launches",
+        "amazon releases", "amazon launches",
+    }
+    matched = any(sig in title for sig in MODEL_RELEASE_SIGNALS) or any(
+        sig in text_blob for sig in trusted_body_signals
+    )
     if matched:
         item["model_release"] = True
     return matched
@@ -353,9 +758,19 @@ def editorial_gate(item):
     hard_downrank_hits = sum(1 for w in EDITORIAL_PRIORITY["hard_downrank"] if w in text_blob)
     fluff_hits = sum(1 for w in EDITORIAL_PRIORITY["fluff_downrank"] if w in text_blob)
 
+    if any(phrase in text_blob for phrase in ["does not use ai", "doesn't use ai", "without ai"]):
+        return False, "not_ai_story"
+
+    if re.match(r"^[a-z0-9_.-]+/[a-z0-9_.-]+$", title):
+        return False, "repo_title_low_context"
+
     # Strong product/platform/capability news should pass.
     if hard_boost_hits >= 1 and (capability_hits >= 1 or impact_hits >= 1 or big_name_hits >= 2):
         return True, "major_product_news"
+
+    # Noisy sources can still surface, but only when the story has a strong signal.
+    if item.get("sourceRole") == "watchlist" and hard_boost_hits == 0 and not item.get("model_release"):
+        return False, "watchlist_low_signal"
 
     # Important big-company AI platform stories.
     if big_name_hits >= 2 and (capability_hits >= 1 or impact_hits >= 1):
@@ -442,7 +857,7 @@ def score_item(item, now):
     hours_old = max(0.0, (now - published).total_seconds() / 3600.0)
     recency = math.exp(-hours_old / 36.0)  # half-ish life ~25h
 
-    return round((item.get("sourceWeight", 0.7) * 1.4) + keyword_score + editorial_score + (recency * 1.1), 4)
+    return round((item.get("sourceWeight", 0.7) * 1.4) + source_role_bonus(item.get("sourceRole")) + keyword_score + editorial_score + (recency * 1.1), 4)
 
 
 def scrape_llm_stats_news(page_url, source_name, weight):
@@ -484,11 +899,174 @@ def scrape_llm_stats_news(page_url, source_name, weight):
     return items[:30]
 
 
+def parse_month_day(value, now):
+    value = html.unescape(value or "").strip()
+    m = re.match(r"^([A-Za-z]{3,9})\s+(\d{1,2})(?:,\s*(\d{4}))?$", value)
+    if not m:
+        return now
+    month_name, day, year = m.groups()
+    try:
+        year = int(year or now.astimezone(LOCAL_TZ).year)
+        dt = datetime.strptime(f"{month_name} {int(day)} {year}", "%b %d %Y")
+    except ValueError:
+        try:
+            dt = datetime.strptime(f"{month_name} {int(day)} {year}", "%B %d %Y")
+        except ValueError:
+            return now
+    local_dt = dt.replace(hour=12, tzinfo=LOCAL_TZ)
+    if local_dt > now.astimezone(LOCAL_TZ) + timedelta(days=1):
+        local_dt = local_dt.replace(year=local_dt.year - 1)
+    return local_dt.astimezone(timezone.utc)
+
+
+def clean_inline_html(value):
+    value = re.sub(r"<!--.*?-->", "", value or "", flags=re.DOTALL)
+    value = re.sub(r"<[^>]+>", " ", value)
+    value = html.unescape(value)
+    return re.sub(r"\s+", " ", value).strip()
+
+
+def parse_ymd_from_url(url, now):
+    m = re.search(r"/e/(\d{4})-(\d{2})-(\d{2})(?:[/?#]|$)", url or "")
+    if not m:
+        return now
+    try:
+        year, month, day = map(int, m.groups())
+        return datetime(year, month, day, 12, tzinfo=LOCAL_TZ).astimezone(timezone.utc)
+    except ValueError:
+        return now
+
+
+def extract_ai_daily_brief_cards(page_html, page_url, source_name, weight, published, limit=60):
+    items = []
+    for block in re.findall(r'<article\b[\s\S]*?</article>', page_html or "", flags=re.IGNORECASE):
+        link_match = re.search(r'data-link=["\']([^"\']+)["\']', block, flags=re.IGNORECASE)
+        title_match = re.search(r'<h3 class=["\']nug-h["\'][^>]*>([\s\S]*?)</h3>', block, flags=re.IGNORECASE)
+        summary_match = re.search(r'<p class=["\']nug-b["\']>(.*?)</p>', block, flags=re.IGNORECASE)
+        tag_match = re.search(r'<span class=["\']tag["\']>(.*?)</span>', block, flags=re.IGNORECASE)
+        if not link_match or not title_match:
+            continue
+        tag = clean_inline_html(tag_match.group(1) if tag_match else "")
+        title = clean_inline_html(title_match.group(1))
+        summary = clean_inline_html(summary_match.group(1) if summary_match else "")
+        if tag:
+            summary = f"{tag}: {summary}".strip()
+        url = urllib.parse.urljoin(page_url, html.unescape(link_match.group(1)))
+        items.append({
+            "title": title,
+            "url": url,
+            "published": published,
+            "summary": summary[:600],
+            "image": "",
+            "source": source_name,
+            "sourceUrl": page_url,
+            "sourceWeight": weight,
+            "featuredLatest": True,
+        })
+    return items[:limit]
+
+
+def scrape_ai_daily_brief(page_url, source_name, weight):
+    """Scrape AI Daily Brief front-page editions and Most Sharable cards."""
+    items = []
+    try:
+        page_html = fetch_url(page_url).decode("utf-8", errors="ignore")
+    except Exception as e:
+        print(f"[scrape_ai_daily_brief] Error: {e}")
+        return items
+
+    base_url = f"{urllib.parse.urlparse(page_url).scheme}://{urllib.parse.urlparse(page_url).netloc}"
+    now = now_utc()
+    edition_urls = []
+
+    today_match = re.search(
+        r'<section\b[^>]*id=["\']today["\'][\s\S]*?<h2[^>]*class=["\']lead-head["\'][^>]*>(.*?)</h2>[\s\S]*?<p[^>]*class=["\']lead-dek["\'][^>]*>(.*?)</p>[\s\S]*?<a[^>]+class=["\']btn-primary["\'][^>]+href=["\']([^"\']+)["\']',
+        page_html,
+        flags=re.IGNORECASE,
+    )
+    if today_match:
+        today_url = urllib.parse.urljoin(base_url, html.unescape(today_match.group(3)))
+        edition_urls.append(today_url)
+        items.append({
+            "title": clean_inline_html(today_match.group(1)),
+            "url": today_url,
+            "published": now,
+            "summary": clean_inline_html(today_match.group(2))[:600],
+            "image": "",
+            "source": source_name,
+            "sourceUrl": page_url,
+            "sourceWeight": weight,
+        })
+
+    recent_match = re.search(
+        r'<section class=["\']editions["\'][^>]*>([\s\S]*?)</section>',
+        page_html,
+        flags=re.IGNORECASE,
+    )
+    if recent_match:
+        for block in re.findall(r'<div class=["\']ed [\s\S]*?</div></div>', recent_match.group(1), flags=re.IGNORECASE):
+            title_match = re.search(r'<a class=["\']ed-title["\'] href=["\']([^"\']+)["\']>(.*?)</a>', block, flags=re.IGNORECASE)
+            teaser_match = re.search(r'<div class=["\']ed-teaser["\']>(.*?)</div>', block, flags=re.IGNORECASE)
+            date_match = re.search(r'<div class=["\']ed-kicker["\']>\s*([A-Za-z]{3,9}\s+\d{1,2})', block, flags=re.IGNORECASE)
+            if not title_match:
+                continue
+            url = urllib.parse.urljoin(base_url, html.unescape(title_match.group(1)))
+            edition_urls.append(url)
+            items.append({
+                "title": clean_inline_html(title_match.group(2)),
+                "url": url,
+                "published": parse_month_day(date_match.group(1) if date_match else "", now),
+                "summary": clean_inline_html(teaser_match.group(1) if teaser_match else "")[:600],
+                "image": "",
+                "source": source_name,
+                "sourceUrl": page_url,
+                "sourceWeight": weight,
+            })
+
+    share_match = re.search(
+        r'<section[^>]+id=["\']shareables["\'][^>]*>([\s\S]*?)</section>',
+        page_html,
+        flags=re.IGNORECASE,
+    )
+    if share_match:
+        items.extend(extract_ai_daily_brief_cards(
+            share_match.group(1),
+            page_url,
+            source_name,
+            weight,
+            now,
+            limit=12,
+        ))
+
+    for edition_url in list(dict.fromkeys(edition_urls))[:6]:
+        try:
+            edition_html = fetch_url(edition_url).decode("utf-8", errors="ignore")
+        except Exception as e:
+            print(f"[scrape_ai_daily_brief] Edition error {edition_url}: {e}")
+            continue
+        items.extend(extract_ai_daily_brief_cards(
+            edition_html,
+            edition_url,
+            source_name,
+            weight,
+            parse_ymd_from_url(edition_url, now),
+            limit=45,
+        ))
+
+    deduped = {}
+    for item in items:
+        if item.get("title") and item.get("url"):
+            deduped[canonicalize_url(item["url"])] = item
+    return list(deduped.values())[:180]
+
+
 def main():
     ensure_dirs()
     now = now_utc()
 
     feeds = load_json(FEEDS_PATH, [])
+    feed_roles = {f.get("name"): f.get("role", "secondary") for f in feeds if f.get("name")}
+    feed_source_types = {f.get("name"): f.get("sourceType", "") for f in feeds if f.get("name")}
     store = load_json(STORE_PATH, {"items": []})
     image_cache = load_json(IMAGE_CACHE_PATH, {"items": {}})
     cache_items = image_cache.get("items", {})
@@ -501,26 +1079,56 @@ def main():
 
     fetched = []
     errors = []
+    source_health = []
 
     for feed in feeds:
         name = feed.get("name")
         url = feed.get("url")
         weight = float(feed.get("weight", 0.7))
         category = feed.get("category", "AI")
+        role = feed.get("role", "secondary")
+        source_type = feed.get("sourceType", "")
         scrape_type = feed.get("type", "rss")
+        user_agent = feed.get("userAgent") or feed.get("user_agent")
         if not name or not url:
             continue
         try:
             if scrape_type == "llm-stats-news":
                 items = scrape_llm_stats_news(url, name, weight)
+            elif scrape_type == "ai-daily-brief":
+                items = scrape_ai_daily_brief(url, name, weight)
             else:
-                body = fetch_url(url)
+                body = fetch_url(url, user_agent=user_agent)
                 items = parse_feed_xml(body, name, url, weight)
             for item in items:
                 item["category"] = category
+                item["sourceRole"] = role
+                item["sourceType"] = source_type
             fetched.extend(items)
+            source_health.append({
+                "source": name,
+                "url": url,
+                "role": role,
+                "category": category,
+                "sourceType": source_type,
+                "status": "ok",
+                "items": len(items),
+                "checkedAt": now.isoformat(),
+            })
         except Exception as e:
-            errors.append({"source": name, "url": url, "error": str(e)})
+            error = {"source": name, "url": url, "error": str(e)}
+            errors.append(error)
+            source_health.append({
+                "source": name,
+                "url": url,
+                "role": role,
+                "category": category,
+                "sourceType": source_type,
+                "status": "error",
+                "items": 0,
+                "error": str(e),
+                "checkedAt": now.isoformat(),
+            })
 
     # Merge + normalize
     cutoff = now - timedelta(days=MAX_ITEM_AGE_DAYS)
@@ -539,9 +1147,12 @@ def main():
             "source": item.get("source") or existing_item.get("source", "Unknown"),
             "sourceUrl": item.get("sourceUrl") or existing_item.get("sourceUrl", ""),
             "sourceWeight": item.get("sourceWeight", existing_item.get("sourceWeight", 0.7)),
+            "sourceRole": item.get("sourceRole") or existing_item.get("sourceRole", "secondary"),
+            "sourceType": item.get("sourceType") or existing_item.get("sourceType", ""),
             "category": item.get("category") or existing_item.get("category", "AI"),
             "summary": item.get("summary") or existing_item.get("summary", ""),
-            "image": canonicalize_url(item.get("image", "")) if item.get("image") else existing_item.get("image", ""),
+            "image": sanitize_image_url(item.get("image", "")) if item.get("image") else sanitize_image_url(existing_item.get("image", "")),
+            "featuredLatest": item.get("featuredLatest", existing_item.get("featuredLatest", False)),
             "published": (dt or now).isoformat(),
             "firstSeen": existing_item.get("firstSeen") or now.isoformat(),
             "lastSeen": now.isoformat(),
@@ -549,7 +1160,15 @@ def main():
         existing[item["url"]] = merged
 
     allowed_sources = {f.get("name") for f in feeds if f.get("name")}
-    all_items = [it for it in existing.values() if it.get("source") in allowed_sources]
+    all_items = [
+        it for it in existing.values()
+        if it.get("source") in allowed_sources and not is_excluded_item(it)
+    ]
+    for it in all_items:
+        if not it.get("sourceRole"):
+            it["sourceRole"] = feed_roles.get(it.get("source"), "secondary")
+        if not it.get("sourceType"):
+            it["sourceType"] = feed_source_types.get(it.get("source"), "")
 
     # Parse dates first
     for it in all_items:
@@ -569,16 +1188,16 @@ def main():
         if checked_at and checked_at > cache_cutoff:
             cached_image = cached.get("image", "") if isinstance(cached, dict) else ""
             if cached_image:
-                it["image"] = canonicalize_url(cached_image)
+                it["image"] = sanitize_image_url(cached_image)
             continue
 
         img = fetch_og_image(url)
         if img:
-            it["image"] = canonicalize_url(img)
+            it["image"] = sanitize_image_url(img)
             og_fetched += 1
 
         cache_items[url] = {
-            "image": img,
+            "image": sanitize_image_url(img),
             "checkedAt": now.isoformat(),
         }
 
@@ -595,24 +1214,85 @@ def main():
 
     # Override editorial gate for high-scoring items
     for it in all_items:
-        if it["score"] >= 5.5 and not it.get("editorial_allow"):
+        if (
+            it["score"] >= HIGH_SCORE_EDITORIAL_OVERRIDE
+            and not it.get("editorial_allow")
+            and it.get("editorial_reason") not in {"fluff", "framework_or_plumbing", "not_ai_story", "watchlist_low_signal", "repo_title_low_context"}
+        ):
             it["editorial_allow"] = True
             it["editorial_reason"] = "high_score_override"
+        if it.get("source") == "The AI Daily Brief" and it.get("featuredLatest"):
+            it["editorial_allow"] = True
+            it["editorial_reason"] = "source_curated"
+
+    # Add structured editorial metadata for the frontend.
+    for it in all_items:
+        it["signalGroup"] = classify_signal_group(it)
+        it["sourceTier"] = source_role_label(it.get("sourceRole"))
+        it["whyItMatters"] = make_why_it_matters(it)
+        it["brief"] = make_structured_brief(it)
+        it["tryWorthy"] = try_worthy(it)
+        enrich_tool_metadata(it)
+
+    attach_cluster_metadata(all_items)
+
+    # Cache thumbnails locally so the browser is not blocked by CSP or hotlink limits.
+    thumb_fetched = 0
+    thumb_candidates = sorted(
+        [
+            it for it in all_items
+            if it.get("image") and (it.get("editorial_allow") or it.get("category") == "Science")
+        ],
+        key=lambda x: (x["published_dt"], x.get("editorial_allow") is True, x.get("score", 0)),
+        reverse=True,
+    )
+    for it in thumb_candidates:
+        if thumb_fetched >= MAX_THUMBNAIL_FETCH_PER_RUN:
+            break
+        local_image, fetched_thumb = cache_thumbnail(it.get("image", ""), it.get("url", ""), cache_items, now)
+        if local_image:
+            if local_image != it.get("image") and not it.get("imageOriginal"):
+                it["imageOriginal"] = it.get("image")
+            it["image"] = local_image
+        if fetched_thumb:
+            thumb_fetched += 1
 
     all_items.sort(key=lambda x: (x["published_dt"], x["score"]), reverse=True)
     all_items = all_items[:MAX_STORE_ITEMS]
 
-    # Build outputs
-    today = now.date()
-    today_items = [it for it in all_items if it["published_dt"].date() == today]
+    # Build outputs. Tool-source records belong in the tool strip, not the article grids.
+    article_items = [i for i in all_items if not i.get("toolCandidate")]
+    today = now.astimezone(LOCAL_TZ).date()
+    today_items = [it for it in article_items if it["published_dt"].astimezone(LOCAL_TZ).date() == today]
     today_items.sort(key=lambda x: x["score"], reverse=True)
     daily_top = today_items[:TOP_DAILY_COUNT]
 
-    ai_items = sorted([i for i in all_items if i.get("category","AI") == "AI"],
-                      key=lambda x: (x["published_dt"], x["score"]), reverse=True)[:40]
-    sci_items = sorted([i for i in all_items if i.get("category") == "Science"],
+    ai_items = sorted([i for i in article_items if i.get("category","AI") == "AI"],
+                      key=lambda x: (x["published_dt"], x["score"]), reverse=True)[:TOP_LATEST_COUNT]
+    sci_items = sorted([i for i in article_items if i.get("category") == "Science"],
                        key=lambda x: (x["published_dt"], x["score"]), reverse=True)[:20]
-    latest = ai_items + sci_items
+    featured_latest = sorted(
+        [i for i in article_items if i.get("featuredLatest")],
+        key=lambda x: (x["score"], x["published_dt"]),
+        reverse=True,
+    )[:40]
+    latest_by_url = {}
+    for it in ai_items + sci_items + featured_latest:
+        latest_by_url[it.get("url", "")] = it
+    latest = list(latest_by_url.values())
+    tool_items = sorted(
+        [i for i in all_items if i.get("category") == "AI" and i.get("toolCandidate")],
+        key=tool_rank,
+        reverse=True,
+    )[:8]
+    try_worthy_items = tool_items
+    public_thumbnail_paths = {
+        it.get("image", "")
+        for it in (latest + daily_top + tool_items)
+        if is_local_thumbnail(it.get("image", ""))
+    }
+    restore_non_public_thumbnails(all_items, public_thumbnail_paths)
+    thumbnails_removed = cleanup_thumbnail_dir(public_thumbnail_paths)
 
     # Strip helper key
     for coll in (all_items, daily_top, latest):
@@ -621,17 +1301,33 @@ def main():
 
     save_json(STORE_PATH, {"updatedAt": now.isoformat(), "items": all_items})
     save_json(IMAGE_CACHE_PATH, {"updatedAt": now.isoformat(), "items": cache_items})
-    save_json(os.path.join(PUBLIC_DIR, "ai-news-latest.json"), {"updatedAt": now.isoformat(), "items": latest, "errors": errors})
-    save_json(os.path.join(PUBLIC_DIR, f"ai-news-daily-{today.isoformat()}.json"), {"date": today.isoformat(), "updatedAt": now.isoformat(), "items": daily_top, "errors": errors})
+    save_json(os.path.join(PUBLIC_DIR, "ai-news-latest.json"), {
+        "updatedAt": now.isoformat(),
+        "items": latest,
+        "tools": tool_items,
+        "tryWorthy": try_worthy_items,
+        "sourceHealth": source_health,
+        "errors": errors,
+    })
+    save_json(os.path.join(PUBLIC_DIR, f"ai-news-daily-{today.isoformat()}.json"), {
+        "date": today.isoformat(),
+        "updatedAt": now.isoformat(),
+        "items": daily_top,
+        "tools": tool_items,
+        "tryWorthy": try_worthy_items,
+        "sourceHealth": source_health,
+        "errors": errors,
+    })
+    save_json(ARCHIVE_INDEX_PATH, {"updatedAt": now.isoformat(), "archives": build_archive_index(PUBLIC_DIR)})
 
     # Minimal static page
     html_items = "\n".join(
-        f'<li><a href="{it["url"]}" target="_blank" rel="noopener">{it["title"]}</a> '
-        f'<small>({it["source"]} · score {it["score"]})</small></li>'
+        f'<li><a href="{html.escape(it["url"], quote=True)}" target="_blank" rel="noopener">{html.escape(it["title"])}</a> '
+        f'<small>({html.escape(it["source"])} · score {it["score"]})</small></li>'
         for it in daily_top
     ) or "<li>No items yet.</li>"
 
-    html = f"""<!doctype html>
+    html_doc = f"""<!doctype html>
 <html lang=\"en\">
 <head>
   <meta charset=\"utf-8\" />
@@ -655,12 +1351,14 @@ def main():
 </html>
 """
     with open(os.path.join(PUBLIC_DIR, "index.html"), "w", encoding="utf-8") as f:
-        f.write(html)
+        f.write(html_doc)
 
     print(f"Fetched feeds: {len(feeds)}")
     print(f"Stored items: {len(all_items)}")
     print(f"Today's top: {len(daily_top)}")
     print(f"OG images fetched this run: {og_fetched}")
+    print(f"Thumbnails cached this run: {thumb_fetched}")
+    print(f"Unused thumbnails removed: {thumbnails_removed}")
     if errors:
         print(f"Feed errors: {len(errors)}")
 
