@@ -117,5 +117,22 @@
       "description": "A subterranean seed-vault conservation workroom built as a dense voxel-graphics scene with glass shelves, seed trays, frost, copper pipes, and amber work lights.",
       "template": "Render [SUBJECT_OR_WORKSPACE] as a richly detailed [STYLE_OR_MEDIUM] image where the chosen medium visibly controls the construction, lighting, texture, and spatial logic. Include [FORMAT_SPECIFIC_MARKS_OR_MATERIALS], [ENVIRONMENTAL_CONTEXT], [ACTIVE_USE_OR_DISPLAY_SYSTEM], [SPECIFIC_PALETTE], and tactile fine detail. Avoid readable text, logos, prompt-card layout, plain centered object display, and a generic filter effect."
     }
+  },
+  {
+    "id": "2026-07-01-random-image-style-random-rendering-style-stained-glass-lau",
+    "title": "Random rendering style: Stained Glass Laundromat Nursery",
+    "tests": "Generated with GPT Image 2 through the OpenClaw CLI; verified exact PNG provenance path, random rendering-style slot, stained-glass medium, finished visual example, no prompt-card text, no readable labels, and no flat document layout.",
+    "prompt": "Create a finished square image of an after-hours laundromat converted into a plant nursery, rendered as richly detailed stained glass art rather than a photograph or poster. The scene shows rows of circular washing-machine doors transformed into glowing glass rondels, shelves of propagated pothos and begonias, glass jars with cuttings in water, a rolling metal laundry cart full of terracotta pots, damp floor reflections, hanging grow lights as jewel-like halos, watering cans, seed trays, folded towels, and a back wall of dark window panes with rain outside. Make the stained-glass medium unmistakable: lead came outlines of varied thickness, translucent colored glass pieces, rippled cathedral glass texture, opalescent whites, emerald and jade plant glass, amber lamp glow, cobalt night windows, ruby and peach accents, solder seams, small bubbles and striations in the glass, and light passing through the panels onto the floor. Use a three-quarter interior composition with deep perspective down the laundromat aisle, dense tactile detail, clear silhouettes, and no readable text, no signage, no labels, no logos, no watermark, no prompt-card framing, no cinematic movie still, no plain centered object display, and no flat document layout.\n\nSource photo needed: none.\n\nReusable fill-in-the-blank template: Render [SUBJECT_OR_PLACE] as a richly detailed [STYLE_OR_MEDIUM] image where the medium controls the color, edge quality, surface texture, lighting, and composition. Include [ENVIRONMENTAL_CONTEXT], [TACTILE_DETAILS], [FUNCTIONAL_OBJECTS], [MATERIAL_TEXTURES], and [LIGHTING_BEHAVIOR]. Keep the finished image as a visual example rather than an instruction card: no readable text, logos, labels, watermarks, prompt framing, flat document layout, or generic centered object display.\n\nWhat the reusable visual operation changes or emphasizes: it turns a place or scene into a finished rendering-style showcase where the chosen medium drives structure, palette, transparency, light behavior, and fine surface detail.\n\nExample substitution: [SUBJECT_OR_PLACE] = an after-hours laundromat converted into a plant nursery; [STYLE_OR_MEDIUM] = stained glass art; [ENVIRONMENTAL_CONTEXT] = rain-dark windows, damp floor reflections, and deep perspective down a laundromat aisle; [TACTILE_DETAILS] = lead came outlines, rippled cathedral glass, opalescent whites, bubbles, solder seams, and glass striations; [FUNCTIONAL_OBJECTS] = washing-machine rondels, propagated plants, glass jars, laundry cart, terracotta pots, grow lights, watering cans, seed trays, and folded towels; [LIGHTING_BEHAVIOR] = amber grow-light halos and cobalt rainy night glass casting colored reflections.",
+    "image": "images/2026-07-01-random-image-style-random-rendering-style-stained-glass-lau.jpg",
+    "date": "2026-07-01",
+    "batch": "Daily Prompt",
+    "slot": "random-image-style",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "randomRenderingStyle": {
+      "medium": "stained glass art",
+      "description": "An after-hours laundromat plant nursery rebuilt as luminous stained glass, with lead seams, rippled colored panes, and rainlit reflections.",
+      "template": "Render [SUBJECT_OR_PLACE] as a richly detailed [STYLE_OR_MEDIUM] image where the medium controls color, edge quality, surface texture, lighting, and composition."
+    }
   }
 ]
