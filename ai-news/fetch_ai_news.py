@@ -149,7 +149,8 @@ def canonicalize_url(url):
         q = urllib.parse.parse_qsl(p.query, keep_blank_values=False)
         q = [(k, v) for (k, v) in q if not k.lower().startswith("utm_") and k.lower() not in {"ref", "source"}]
         new_query = urllib.parse.urlencode(q)
-        clean = urllib.parse.urlunparse((p.scheme, p.netloc.lower(), p.path.rstrip("/"), "", new_query, ""))
+        fragment = p.fragment if p.netloc.lower().endswith("aidailybrief.ai") else ""
+        clean = urllib.parse.urlunparse((p.scheme, p.netloc.lower(), p.path.rstrip("/"), "", new_query, fragment))
         return clean
     except Exception:
         return url.strip()
@@ -898,6 +899,124 @@ def scrape_llm_stats_news(page_url, source_name, weight):
     return items[:30]
 
 
+def parse_month_day(value, now):
+    value = html.unescape(value or "").strip()
+    m = re.match(r"^([A-Za-z]{3,9})\s+(\d{1,2})(?:,\s*(\d{4}))?$", value)
+    if not m:
+        return now
+    month_name, day, year = m.groups()
+    try:
+        year = int(year or now.astimezone(LOCAL_TZ).year)
+        dt = datetime.strptime(f"{month_name} {int(day)} {year}", "%b %d %Y")
+    except ValueError:
+        try:
+            dt = datetime.strptime(f"{month_name} {int(day)} {year}", "%B %d %Y")
+        except ValueError:
+            return now
+    local_dt = dt.replace(hour=12, tzinfo=LOCAL_TZ)
+    if local_dt > now.astimezone(LOCAL_TZ) + timedelta(days=1):
+        local_dt = local_dt.replace(year=local_dt.year - 1)
+    return local_dt.astimezone(timezone.utc)
+
+
+def clean_inline_html(value):
+    value = re.sub(r"<!--.*?-->", "", value or "", flags=re.DOTALL)
+    value = re.sub(r"<[^>]+>", " ", value)
+    value = html.unescape(value)
+    return re.sub(r"\s+", " ", value).strip()
+
+
+def scrape_ai_daily_brief(page_url, source_name, weight):
+    """Scrape AI Daily Brief front-page editions and Most Sharable cards."""
+    items = []
+    try:
+        page_html = fetch_url(page_url).decode("utf-8", errors="ignore")
+    except Exception as e:
+        print(f"[scrape_ai_daily_brief] Error: {e}")
+        return items
+
+    base_url = f"{urllib.parse.urlparse(page_url).scheme}://{urllib.parse.urlparse(page_url).netloc}"
+    now = now_utc()
+
+    today_match = re.search(
+        r'<section\b[^>]*id=["\']today["\'][\s\S]*?<h2[^>]*class=["\']lead-head["\'][^>]*>(.*?)</h2>[\s\S]*?<p[^>]*class=["\']lead-dek["\'][^>]*>(.*?)</p>[\s\S]*?<a[^>]+class=["\']btn-primary["\'][^>]+href=["\']([^"\']+)["\']',
+        page_html,
+        flags=re.IGNORECASE,
+    )
+    if today_match:
+        items.append({
+            "title": clean_inline_html(today_match.group(1)),
+            "url": urllib.parse.urljoin(base_url, html.unescape(today_match.group(3))),
+            "published": now,
+            "summary": clean_inline_html(today_match.group(2))[:600],
+            "image": "",
+            "source": source_name,
+            "sourceUrl": page_url,
+            "sourceWeight": weight,
+        })
+
+    recent_match = re.search(
+        r'<section class=["\']editions["\'][^>]*>([\s\S]*?)</section>',
+        page_html,
+        flags=re.IGNORECASE,
+    )
+    if recent_match:
+        for block in re.findall(r'<div class=["\']ed [\s\S]*?</div></div>', recent_match.group(1), flags=re.IGNORECASE):
+            title_match = re.search(r'<a class=["\']ed-title["\'] href=["\']([^"\']+)["\']>(.*?)</a>', block, flags=re.IGNORECASE)
+            teaser_match = re.search(r'<div class=["\']ed-teaser["\']>(.*?)</div>', block, flags=re.IGNORECASE)
+            date_match = re.search(r'<div class=["\']ed-kicker["\']>\s*([A-Za-z]{3,9}\s+\d{1,2})', block, flags=re.IGNORECASE)
+            if not title_match:
+                continue
+            url = urllib.parse.urljoin(base_url, html.unescape(title_match.group(1)))
+            items.append({
+                "title": clean_inline_html(title_match.group(2)),
+                "url": url,
+                "published": parse_month_day(date_match.group(1) if date_match else "", now),
+                "summary": clean_inline_html(teaser_match.group(1) if teaser_match else "")[:600],
+                "image": "",
+                "source": source_name,
+                "sourceUrl": page_url,
+                "sourceWeight": weight,
+            })
+
+    share_match = re.search(
+        r'<section[^>]+id=["\']shareables["\'][^>]*>([\s\S]*?)</section>',
+        page_html,
+        flags=re.IGNORECASE,
+    )
+    if share_match:
+        for block in re.findall(r'<article\b[\s\S]*?</article>', share_match.group(1), flags=re.IGNORECASE):
+            link_match = re.search(r'data-link=["\']([^"\']+)["\']', block, flags=re.IGNORECASE)
+            title_match = re.search(r'<h3 class=["\']nug-h["\'][^>]*>[\s\S]*?<a [^>]*>(.*?)</a>', block, flags=re.IGNORECASE)
+            summary_match = re.search(r'<p class=["\']nug-b["\']>(.*?)</p>', block, flags=re.IGNORECASE)
+            date_match = re.search(r'<span class=["\']card-date["\']>(.*?)</span>', block, flags=re.IGNORECASE)
+            tag_match = re.search(r'<span class=["\']tag["\']>(.*?)</span>', block, flags=re.IGNORECASE)
+            if not link_match or not title_match:
+                continue
+            tag = clean_inline_html(tag_match.group(1) if tag_match else "")
+            title = clean_inline_html(title_match.group(1))
+            summary = clean_inline_html(summary_match.group(1) if summary_match else "")
+            if tag:
+                summary = f"{tag}: {summary}".strip()
+            items.append({
+                "title": title,
+                "url": html.unescape(link_match.group(1)),
+                "published": parse_month_day(clean_inline_html(date_match.group(1) if date_match else ""), now),
+                "summary": summary[:600],
+                "image": "",
+                "source": source_name,
+                "sourceUrl": page_url,
+                "sourceWeight": weight,
+                "featuredLatest": True,
+            })
+
+    deduped = {}
+    for item in items:
+        if item.get("title") and item.get("url"):
+            deduped[canonicalize_url(item["url"])] = item
+    return list(deduped.values())[:30]
+
+
 def main():
     ensure_dirs()
     now = now_utc()
@@ -933,6 +1052,8 @@ def main():
         try:
             if scrape_type == "llm-stats-news":
                 items = scrape_llm_stats_news(url, name, weight)
+            elif scrape_type == "ai-daily-brief":
+                items = scrape_ai_daily_brief(url, name, weight)
             else:
                 body = fetch_url(url, user_agent=user_agent)
                 items = parse_feed_xml(body, name, url, weight)
@@ -988,6 +1109,7 @@ def main():
             "category": item.get("category") or existing_item.get("category", "AI"),
             "summary": item.get("summary") or existing_item.get("summary", ""),
             "image": sanitize_image_url(item.get("image", "")) if item.get("image") else sanitize_image_url(existing_item.get("image", "")),
+            "featuredLatest": item.get("featuredLatest", existing_item.get("featuredLatest", False)),
             "published": (dt or now).isoformat(),
             "firstSeen": existing_item.get("firstSeen") or now.isoformat(),
             "lastSeen": now.isoformat(),
@@ -1100,10 +1222,18 @@ def main():
     daily_top = today_items[:TOP_DAILY_COUNT]
 
     ai_items = sorted([i for i in article_items if i.get("category","AI") == "AI"],
-                      key=lambda x: (x["published_dt"], x["score"]), reverse=True)[:40]
+                      key=lambda x: (x["published_dt"], x["score"]), reverse=True)[:TOP_LATEST_COUNT]
     sci_items = sorted([i for i in article_items if i.get("category") == "Science"],
                        key=lambda x: (x["published_dt"], x["score"]), reverse=True)[:20]
-    latest = ai_items + sci_items
+    featured_latest = sorted(
+        [i for i in article_items if i.get("featuredLatest")],
+        key=lambda x: (x["score"], x["published_dt"]),
+        reverse=True,
+    )[:8]
+    latest_by_url = {}
+    for it in ai_items + sci_items + featured_latest:
+        latest_by_url[it.get("url", "")] = it
+    latest = list(latest_by_url.values())
     tool_items = sorted(
         [i for i in all_items if i.get("category") == "AI" and i.get("toolCandidate")],
         key=tool_rank,
