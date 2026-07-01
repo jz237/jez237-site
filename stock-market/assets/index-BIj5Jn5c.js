@@ -4224,7 +4224,7 @@ return n?JSON.parse(n):t}catch{return t}}function ja(){let[e,t]=(0,l.useState)(n
 return()=>window.clearInterval(e)},[]);
 let ce=(0,l.useCallback)(async(e=!1)=>{let n=e?`?t=${Date.now()}`:``;
 f(!0);
-try{let[e,i,o]=await Promise.all([fetch(`/stock-market/data/stocks.json${n}`).then(e=>e.json()),fetch(`/stock-market/data/portfolio.json${n}`).then(e=>e.json()).catch(()=>null),fetch(`/stock-market/data/history.json${n}`).then(e=>e.json()).catch(()=>null)]);
+try{let[e,i,o]=await Promise.all([fetch(`data/stocks.json${n}`).then(e=>e.json()),fetch(`data/portfolio.json${n}`).then(e=>e.json()).catch(()=>null),fetch(`data/history.json${n}`).then(e=>e.json()).catch(()=>null)]);
 if(!Array.isArray(e.stocks))throw Error(`unexpected stocks.json shape`);
 t(e),o&&r(o);
 let s=Aa(`commandCenterPortfolio`,null);
