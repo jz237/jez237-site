@@ -1,7 +1,38 @@
 {
   "date": "2026-07-01",
-  "updatedAt": "2026-07-01T12:00:01.396363+00:00",
+  "updatedAt": "2026-07-01T13:00:01.369771+00:00",
   "items": [
+    {
+      "title": "Google built a great smart speaker, but Gemini isn’t ready for it",
+      "url": "https://www.theverge.com/tech/959503/google-home-speaker-review-gemini-for-home",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Smart speakers have spent the past few years searching for a compelling second act. Beyond music, timers, and controlling your lights, they've struggled to justify taking up space on the kitchen counter. AI promised to change that. Amazon debuted its new hardware powered by a revamped Alexa last fall, and now it's finally Google's turn. [&#8230;]",
+      "image": "public/thumbnails/news-6859bebddb92a1019f.webp",
+      "published": "2026-07-01T12:00:00+00:00",
+      "firstSeen": "2026-07-01T13:00:01.369771+00:00",
+      "lastSeen": "2026-07-01T13:00:01.369771+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 10.4299,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
+      "brief": {
+        "whatHappened": "Google built a great smart speaker, but Gemini isn’t ready for it",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via The Verge AI."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "google-gemini-google-built-great-smart-speaker",
+      "imageOriginal": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/268614_Google_Home_Speaker_JTuohy_0009.jpg?quality=90&strip=all&crop=0%2C10.732984293194%2C100%2C78.534031413613&w=1200"
+    },
     {
       "title": "US lifts export controls on Anthropic’s Fable 5, clearing the model’s return",
       "url": "https://thenextweb.com/news/anthropic-fable-5-export-controls-lifted",
@@ -18,7 +49,7 @@
       "lastSeen": "2026-07-01T10:12:24.669413+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.0248,
+      "score": 8.9981,
       "signalGroup": "Policy & risk",
       "sourceTier": "Reported source",
       "whyItMatters": "Policy and risk stories often become product constraints later, especially around data access, safety claims, export rules, and copyright.",
@@ -34,6 +65,68 @@
       "imageOriginal": "https://media.thenextweb.com/2026/06/anthropic-mythos-eu-enisa-cybersecurity-access.avif"
     },
     {
+      "title": "“BioShocking” tricks AI browsers into leaking your passwords",
+      "url": "https://thenextweb.com/news/bioshocking-ai-browser-credential-leak-layerx",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Security researchers convinced six AI browsers they were playing a game. The browsers then handed over their users’ passwords and treated it as a win. The firm behind it, LayerX, calls the technique BioShocking, and says it worked on every agent it tried. The list reads like a roll-call of the new AI browser market: [&hellip;]\nThis story continues at The Next Web",
+      "image": "public/thumbnails/news-338e620fa1d170a694.avif",
+      "published": "2026-07-01T11:53:38+00:00",
+      "firstSeen": "2026-07-01T13:00:01.369771+00:00",
+      "lastSeen": "2026-07-01T13:00:01.369771+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "editorial_score_pass",
+      "score": 7.6167,
+      "signalGroup": "Agents & tooling",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
+      "brief": {
+        "whatHappened": "“BioShocking” tricks AI browsers into leaking your passwords",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "bioshocking-tricks-browsers-leaking-your-passwords",
+      "imageOriginal": "https://media.thenextweb.com/2026/07/layerxsecurity-bioshocking-agent-research.avif"
+    },
+    {
+      "title": "DeepSeek breaks China’s AI price war with peak-hour surge pricing",
+      "url": "https://thenextweb.com/news/deepseek-peak-hour-api-surcharge-v4-price-war",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "DeepSeek lit China’s AI price war by making tokens absurdly cheap. Now it is doing something no rival has dared: charging more when demand runs high. The Chinese startup has told API customers it will double the price of its V4 models during busy hours, according to the South China Morning Post, which saw the [&hellip;]\nThis story continues at The Next Web",
+      "image": "public/thumbnails/news-19506a552c08e0f0ea.avif",
+      "published": "2026-07-01T11:44:50+00:00",
+      "firstSeen": "2026-07-01T13:00:01.369771+00:00",
+      "lastSeen": "2026-07-01T13:00:01.369771+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.8124,
+      "signalGroup": "Business",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Business moves are a map of where the industry thinks the bottlenecks and durable demand will be.",
+      "brief": {
+        "whatHappened": "DeepSeek breaks China’s AI price war with peak-hour surge pricing",
+        "whoItAffects": "People reading the industry map: capital, hiring, acquisitions, and market pressure.",
+        "practicalImpact": "The money trail usually points at where companies think the durable demand is.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "deepseek-breaks-china-price-war-peak-hour",
+      "imageOriginal": "https://media.thenextweb.com/2026/04/DeepSeek.avif"
+    },
+    {
       "title": "AIEWF Daily Dispatch: Loops, Software Factories & Forward Deployed Engineers",
       "url": "https://www.latent.space/p/aiewf-daily-dispatch-loops",
       "source": "Latent Space",
@@ -46,10 +139,10 @@
       "image": "https://substackcdn.com/image/fetch/$s_!i4cw!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fee341b9f-8fd3-47e5-87db-9b3d0fc72de5_1280x720.jpeg",
       "published": "2026-07-01T04:46:21+00:00",
       "firstSeen": "2026-07-01T04:54:06.503627+00:00",
-      "lastSeen": "2026-07-01T12:00:01.396363+00:00",
+      "lastSeen": "2026-07-01T13:00:01.369771+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.8039,
+      "score": 3.7793,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Reported source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -64,6 +157,36 @@
       "clusterKey": "aiewf-daily-dispatch-loops-software-factories"
     },
     {
+      "title": "NIH unveils the world’s largest genomics-and-health database",
+      "url": "https://thenextweb.com/news/nih-all-of-us-largest-genomics-health-database",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "The US government has just handed scientists the largest map of human health ever assembled. It pairs more than half a million genomes with real medical records, and it arrives as the programme behind it faces deep budget cuts. The database comes from All of Us, a research programme run by the National Institutes of [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/07/The-National-Institutes-of-Health.avif",
+      "published": "2026-07-01T12:21:20+00:00",
+      "firstSeen": "2026-07-01T13:00:01.369771+00:00",
+      "lastSeen": "2026-07-01T13:00:01.369771+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 3.5305,
+      "signalGroup": "Research",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Research items are useful when they hint at future product behavior, benchmark movement, or techniques likely to show up in tools.",
+      "brief": {
+        "whatHappened": "NIH unveils the world’s largest genomics-and-health database",
+        "whoItAffects": "People tracking where model behavior, evaluation, or training techniques may head next.",
+        "practicalImpact": "Useful if the idea looks likely to move from paper into products or tooling.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "nih-unveils-world-largest-genomics-and-health-database"
+    },
+    {
       "title": "Japan’s answer to its worker shortage: An AI model for 10 million robots",
       "url": "https://www.artificialintelligence-news.com/news/japan-ai-robots-2040-national-ai-model",
       "source": "Artificial Intelligence News",
@@ -76,10 +199,10 @@
       "image": "",
       "published": "2026-07-01T11:00:00+00:00",
       "firstSeen": "2026-07-01T12:00:01.396363+00:00",
-      "lastSeen": "2026-07-01T12:00:01.396363+00:00",
+      "lastSeen": "2026-07-01T13:00:01.369771+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3179,
+      "score": 3.2885,
       "signalGroup": "Business",
       "sourceTier": "Reported source",
       "whyItMatters": "Business moves are a map of where the industry thinks the bottlenecks and durable demand will be.",
@@ -94,6 +217,36 @@
       "clusterKey": "japan-answer-worker-shortage-model-million"
     },
     {
+      "title": "Healthcare’s AI Revolution Has Forgotten the Human Being",
+      "url": "https://thenextweb.com/news/healthcare-ai-revolution-forgotten-human-being-freddy-del-barrio",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Artificial intelligence has arrived in healthcare with extraordinary promise. Every week brings another announcement of an AI assistant, a smarter chatbot, an automated workflow, or a digital caregiver. The excitement is understandable. Healthcare systems are under immense pressure, caregivers are overwhelmed, and aging populations are growing faster than the workforce that supports them. Yet I [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/healthcare-ai-revolution-forgotten-human-being-freddy-del-barrio.avif",
+      "published": "2026-07-01T11:37:21+00:00",
+      "firstSeen": "2026-07-01T13:00:01.369771+00:00",
+      "lastSeen": "2026-07-01T13:00:01.369771+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.2087,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
+      "brief": {
+        "whatHappened": "Healthcare’s AI Revolution Has Forgotten the Human Being",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "healthcare-revolution-has-forgotten-human-being"
+    },
+    {
       "title": "EU tech chief and Tim Cook hold ‘constructive’ talks as Siri AI stays blocked in Europe",
       "url": "https://thenextweb.com/news/apple-eu-siri-ai-dma-cook-virkkunen-talks",
       "source": "The Next Web",
@@ -106,10 +259,10 @@
       "image": "https://media.thenextweb.com/2026/07/Henna-Virkkunen.avif",
       "published": "2026-07-01T09:28:26+00:00",
       "firstSeen": "2026-07-01T10:00:01.555041+00:00",
-      "lastSeen": "2026-07-01T12:00:01.396363+00:00",
+      "lastSeen": "2026-07-01T13:00:01.369771+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1754,
+      "score": 3.1474,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
@@ -139,7 +292,7 @@
       "lastSeen": "2026-07-01T12:00:01.396363+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1301,
+      "score": 3.1033,
       "signalGroup": "Business",
       "sourceTier": "Reported source",
       "whyItMatters": "Business moves are a map of where the industry thinks the bottlenecks and durable demand will be.",
@@ -166,10 +319,10 @@
       "image": "",
       "published": "2026-07-01T10:00:00+00:00",
       "firstSeen": "2026-07-01T10:00:01.555041+00:00",
-      "lastSeen": "2026-07-01T12:00:01.396363+00:00",
+      "lastSeen": "2026-07-01T13:00:01.369771+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 2.8885,
+      "score": 2.86,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Reported source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -196,10 +349,10 @@
       "image": "https://media.thenextweb.com/2026/05/United-Nations.avif",
       "published": "2026-07-01T09:58:12+00:00",
       "firstSeen": "2026-07-01T11:00:01.219488+00:00",
-      "lastSeen": "2026-07-01T12:00:01.396363+00:00",
+      "lastSeen": "2026-07-01T13:00:01.369771+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7897,
+      "score": 2.7612,
       "signalGroup": "Policy & risk",
       "sourceTier": "Reported source",
       "whyItMatters": "Policy and risk stories often become product constraints later, especially around data access, safety claims, export rules, and copyright.",
@@ -229,7 +382,7 @@
       "lastSeen": "2026-07-01T12:00:01.396363+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7427,
+      "score": 2.7155,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
@@ -259,7 +412,7 @@
       "lastSeen": "2026-07-01T12:00:01.396363+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7375,
+      "score": 2.7105,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
@@ -274,6 +427,36 @@
       "clusterKey": "visa-mastercard-140-firms-launch-open"
     },
     {
+      "title": "AI video startup Higgsfield is in talks to raise at a $5bn valuation",
+      "url": "https://thenextweb.com/news/higgsfield-ai-5bn-valuation-funding-round",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Higgsfield AI did not exist before March 2025. Fifteen months on, the video startup is in talks to raise money at a $5bn valuation, four times its worth at the start of the year. The company is seeking $300mn to $500mn, The Information first reported. That would value it at $5bn before the new money, [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/07/higgsfield.avif",
+      "published": "2026-07-01T12:03:47+00:00",
+      "firstSeen": "2026-07-01T13:00:01.369771+00:00",
+      "lastSeen": "2026-07-01T13:00:01.369771+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1217,
+      "signalGroup": "Business",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Business moves are a map of where the industry thinks the bottlenecks and durable demand will be.",
+      "brief": {
+        "whatHappened": "AI video startup Higgsfield is in talks to raise at a $5bn valuation",
+        "whoItAffects": "People reading the industry map: capital, hiring, acquisitions, and market pressure.",
+        "practicalImpact": "The money trail usually points at where companies think the durable demand is.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "video-startup-higgsfield-talks-raise-5bn"
+    },
+    {
       "title": "Cross-border payroll runs on $200B and zero shared infrastructure",
       "url": "https://thenextweb.com/news/cross-border-payroll-infrastructure-exchange",
       "source": "The Next Web",
@@ -286,10 +469,10 @@
       "image": "https://media.thenextweb.com/2026/07/Multiplier-Global-Payroll.avif",
       "published": "2026-07-01T11:09:27+00:00",
       "firstSeen": "2026-07-01T12:00:01.396363+00:00",
-      "lastSeen": "2026-07-01T12:00:01.396363+00:00",
+      "lastSeen": "2026-07-01T13:00:01.369771+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1245,
+      "score": 2.0951,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
@@ -316,10 +499,10 @@
       "image": "https://media.thenextweb.com/2023/12/tiktok-europe-data-centre-norway-1.avif",
       "published": "2026-07-01T09:34:35+00:00",
       "firstSeen": "2026-07-01T11:00:01.219488+00:00",
-      "lastSeen": "2026-07-01T12:00:01.396363+00:00",
+      "lastSeen": "2026-07-01T13:00:01.369771+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0784,
+      "score": 2.0502,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
@@ -346,10 +529,10 @@
       "image": "https://media.thenextweb.com/2026/07/CEO-Tan-Teck-Long.avif",
       "published": "2026-07-01T08:38:08+00:00",
       "firstSeen": "2026-07-01T10:00:01.555041+00:00",
-      "lastSeen": "2026-07-01T12:00:01.396363+00:00",
+      "lastSeen": "2026-07-01T13:00:01.369771+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0518,
+      "score": 2.0244,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
@@ -362,126 +545,6 @@
       "tryWorthy": false,
       "toolCandidate": false,
       "clusterKey": "ocbc-lift-annual-tech-spending-above"
-    },
-    {
-      "title": "Uber-backed Lime prices its IPO at $25 a share, raising about $174m",
-      "url": "https://thenextweb.com/news/lime-ipo-priced-25-dollars-nasdaq",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "Lime has priced its US initial public offering at $25 a share, according to Bloomberg News. That is the midpoint of the $24 to $26 range the company had marketed. The offering raised roughly $174m in total. Neutron Holdings, the corporate entity behind Lime, sold 6.68 million shares in the deal. Shareholders including chief executive Wayne [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/Lime.avif",
-      "published": "2026-07-01T07:56:22+00:00",
-      "firstSeen": "2026-07-01T09:00:01.913389+00:00",
-      "lastSeen": "2026-07-01T12:00:01.396363+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.0327,
-      "signalGroup": "Product updates",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
-      "brief": {
-        "whatHappened": "Uber-backed Lime prices its IPO at $25 a share, raising about $174m",
-        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
-        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
-        "sourceFrame": "Seen via The Next Web."
-      },
-      "tryWorthy": false,
-      "toolCandidate": false,
-      "clusterKey": "uber-backed-lime-prices-ipo-share-raising"
-    },
-    {
-      "title": "Microsoft plans to cut under 2.5% of its workforce in a fresh round of layoffs",
-      "url": "https://thenextweb.com/news/microsoft-layoffs-under-2-5-percent-2026",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "Microsoft is preparing to cut under 2.5% of its workforce in another round of layoffs, according to a Business Insider report picked up on Tuesday. The reductions could be announced as soon as next week, and they would affect thousands of roles across the company. Sales and consulting teams are in the frame, alongside jobs [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/microsoft-threatens-security-researcher-nightmare-eclipse.avif",
-      "published": "2026-07-01T07:33:05+00:00",
-      "firstSeen": "2026-07-01T09:00:01.913389+00:00",
-      "lastSeen": "2026-07-01T10:12:24.669413+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.0221,
-      "signalGroup": "Product updates",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
-      "brief": {
-        "whatHappened": "Microsoft plans to cut under 2.5% of its workforce in a fresh round of layoffs",
-        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
-        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
-        "sourceFrame": "Seen via The Next Web."
-      },
-      "tryWorthy": false,
-      "toolCandidate": false,
-      "clusterKey": "microsoft-plans-cut-under-workforce-fresh"
-    },
-    {
-      "title": "Judge clears states to try claim that Meta hooked children on Facebook and Instagram",
-      "url": "https://thenextweb.com/news/meta-addiction-states-lawsuit-dismissal-denied",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "Meta will have to defend in court the accusation that it built Facebook and Instagram to addict children, after a federal judge on Monday refused to dismiss the heart of a lawsuit brought by attorneys general from 29 states. US District Judge Yvonne Gonzalez Rogers, sitting in Oakland, California, let the states press claims that Meta [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/04/meta-amazon-graviton-chips-agentic-ai.avif",
-      "published": "2026-07-01T07:26:21+00:00",
-      "firstSeen": "2026-07-01T08:00:01.990182+00:00",
-      "lastSeen": "2026-07-01T10:12:24.669413+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.0191,
-      "signalGroup": "Policy & risk",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Policy and risk stories often become product constraints later, especially around data access, safety claims, export rules, and copyright.",
-      "brief": {
-        "whatHappened": "Judge clears states to try claim that Meta hooked children on Facebook and Instagram",
-        "whoItAffects": "Product builders, platform users, and anyone depending on model access or data rights.",
-        "practicalImpact": "Policy moves can become tomorrow's product limits, compliance burden, or availability issue.",
-        "sourceFrame": "Seen via The Next Web."
-      },
-      "tryWorthy": false,
-      "toolCandidate": false,
-      "clusterKey": "meta-judge-clears-states-try-claim"
-    },
-    {
-      "title": "AI hardware demand keeps Asia’s factories humming as the Iran war bites",
-      "url": "https://thenextweb.com/news/asian-factories-ai-boom-june-pmi",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "Asia’s factories grew again in June, and the global scramble for AI hardware is doing much of the lifting, according to survey data published this week. Brisk demand for chips, servers, and data-centre equipment kept order books full even as the Iran war pushed up energy costs and lengthened shipping times across the region. The [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2022/01/edge-ai-hardware-ic.avif",
-      "published": "2026-07-01T07:44:30+00:00",
-      "firstSeen": "2026-07-01T09:00:01.913389+00:00",
-      "lastSeen": "2026-07-01T12:00:01.396363+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.1273,
-      "signalGroup": "Infrastructure",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
-      "brief": {
-        "whatHappened": "AI hardware demand keeps Asia’s factories humming as the Iran war bites",
-        "whoItAffects": "Anyone affected by AI compute cost, speed, availability, or hardware supply.",
-        "practicalImpact": "Infrastructure shifts often show up later as cheaper tools, higher limits, or new bottlenecks.",
-        "sourceFrame": "Seen via The Next Web."
-      },
-      "tryWorthy": false,
-      "toolCandidate": false,
-      "clusterKey": "hardware-demand-keeps-asia-factories-humming"
     }
   ],
   "tools": [
@@ -498,11 +561,11 @@
       "image": "public/thumbnails/news-f4e39098d44bc8bc5b.avif",
       "published": "2026-06-30T18:30:12+00:00",
       "firstSeen": "2026-07-01T08:00:01.990182+00:00",
-      "lastSeen": "2026-07-01T12:00:01.396363+00:00",
+      "lastSeen": "2026-07-01T13:00:01.369771+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.7846,
+      "score": 14.766,
       "signalGroup": "Model releases",
       "sourceTier": "Watchlist source",
       "whyItMatters": "A model release changes the practical menu: capability, pricing, context, or deployment options may shift for real workflows.",
@@ -532,10 +595,10 @@
       "image": "public/thumbnails/news-e50dafc764f27ae111.avif",
       "published": "2026-06-30T20:22:29+00:00",
       "firstSeen": "2026-07-01T08:00:01.990182+00:00",
-      "lastSeen": "2026-07-01T12:00:01.396363+00:00",
+      "lastSeen": "2026-07-01T13:00:01.369771+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.9207,
+      "score": 7.9011,
       "signalGroup": "Media generation",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Media-model updates affect what can be made quickly, what still needs craft, and where creative pipelines may change next.",
@@ -565,10 +628,10 @@
       "image": "public/thumbnails/news-0ae1dea5473e53e696.avif",
       "published": "2026-06-30T18:19:10+00:00",
       "firstSeen": "2026-07-01T08:00:01.990182+00:00",
-      "lastSeen": "2026-07-01T12:00:01.396363+00:00",
+      "lastSeen": "2026-07-01T13:00:01.369771+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.8811,
+      "score": 7.8627,
       "signalGroup": "Research",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Research items are useful when they hint at future product behavior, benchmark movement, or techniques likely to show up in tools.",
@@ -598,10 +661,10 @@
       "image": "public/thumbnails/news-c5f462b461ce114c9f.avif",
       "published": "2026-06-25T05:47:05+00:00",
       "firstSeen": "2026-06-26T08:00:01.499506+00:00",
-      "lastSeen": "2026-07-01T12:00:01.396363+00:00",
+      "lastSeen": "2026-07-01T13:00:01.369771+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.525,
+      "score": 7.5245,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -631,10 +694,10 @@
       "image": "public/thumbnails/news-099aa7484406bdf5f9.avif",
       "published": "2026-06-29T16:54:09+00:00",
       "firstSeen": "2026-06-30T08:00:01.738579+00:00",
-      "lastSeen": "2026-07-01T12:00:01.396363+00:00",
+      "lastSeen": "2026-07-01T13:00:01.369771+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.2403,
+      "score": 7.2312,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -730,10 +793,10 @@
       "image": "public/thumbnails/news-6568576f444e6c5bc4.avif",
       "published": "2026-06-25T20:15:56+00:00",
       "firstSeen": "2026-06-27T08:00:01.988916+00:00",
-      "lastSeen": "2026-07-01T12:00:01.396363+00:00",
+      "lastSeen": "2026-07-01T13:00:01.369771+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.8333,
+      "score": 3.8327,
       "signalGroup": "Product updates",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
@@ -765,11 +828,11 @@
       "image": "public/thumbnails/news-f4e39098d44bc8bc5b.avif",
       "published": "2026-06-30T18:30:12+00:00",
       "firstSeen": "2026-07-01T08:00:01.990182+00:00",
-      "lastSeen": "2026-07-01T12:00:01.396363+00:00",
+      "lastSeen": "2026-07-01T13:00:01.369771+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.7846,
+      "score": 14.766,
       "signalGroup": "Model releases",
       "sourceTier": "Watchlist source",
       "whyItMatters": "A model release changes the practical menu: capability, pricing, context, or deployment options may shift for real workflows.",
@@ -799,10 +862,10 @@
       "image": "public/thumbnails/news-e50dafc764f27ae111.avif",
       "published": "2026-06-30T20:22:29+00:00",
       "firstSeen": "2026-07-01T08:00:01.990182+00:00",
-      "lastSeen": "2026-07-01T12:00:01.396363+00:00",
+      "lastSeen": "2026-07-01T13:00:01.369771+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.9207,
+      "score": 7.9011,
       "signalGroup": "Media generation",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Media-model updates affect what can be made quickly, what still needs craft, and where creative pipelines may change next.",
@@ -832,10 +895,10 @@
       "image": "public/thumbnails/news-0ae1dea5473e53e696.avif",
       "published": "2026-06-30T18:19:10+00:00",
       "firstSeen": "2026-07-01T08:00:01.990182+00:00",
-      "lastSeen": "2026-07-01T12:00:01.396363+00:00",
+      "lastSeen": "2026-07-01T13:00:01.369771+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.8811,
+      "score": 7.8627,
       "signalGroup": "Research",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Research items are useful when they hint at future product behavior, benchmark movement, or techniques likely to show up in tools.",
@@ -865,10 +928,10 @@
       "image": "public/thumbnails/news-c5f462b461ce114c9f.avif",
       "published": "2026-06-25T05:47:05+00:00",
       "firstSeen": "2026-06-26T08:00:01.499506+00:00",
-      "lastSeen": "2026-07-01T12:00:01.396363+00:00",
+      "lastSeen": "2026-07-01T13:00:01.369771+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.525,
+      "score": 7.5245,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -898,10 +961,10 @@
       "image": "public/thumbnails/news-099aa7484406bdf5f9.avif",
       "published": "2026-06-29T16:54:09+00:00",
       "firstSeen": "2026-06-30T08:00:01.738579+00:00",
-      "lastSeen": "2026-07-01T12:00:01.396363+00:00",
+      "lastSeen": "2026-07-01T13:00:01.369771+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.2403,
+      "score": 7.2312,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -997,10 +1060,10 @@
       "image": "public/thumbnails/news-6568576f444e6c5bc4.avif",
       "published": "2026-06-25T20:15:56+00:00",
       "firstSeen": "2026-06-27T08:00:01.988916+00:00",
-      "lastSeen": "2026-07-01T12:00:01.396363+00:00",
+      "lastSeen": "2026-07-01T13:00:01.369771+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.8333,
+      "score": 3.8327,
       "signalGroup": "Product updates",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
@@ -1027,7 +1090,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 1028,
-      "checkedAt": "2026-07-01T12:00:01.396363+00:00"
+      "checkedAt": "2026-07-01T13:00:01.369771+00:00"
     },
     {
       "source": "Google AI Blog",
@@ -1037,7 +1100,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-01T12:00:01.396363+00:00"
+      "checkedAt": "2026-07-01T13:00:01.369771+00:00"
     },
     {
       "source": "Google DeepMind Blog",
@@ -1047,7 +1110,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-07-01T12:00:01.396363+00:00"
+      "checkedAt": "2026-07-01T13:00:01.369771+00:00"
     },
     {
       "source": "Google Research Blog",
@@ -1057,7 +1120,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-07-01T12:00:01.396363+00:00"
+      "checkedAt": "2026-07-01T13:00:01.369771+00:00"
     },
     {
       "source": "Hugging Face Blog",
@@ -1067,7 +1130,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 813,
-      "checkedAt": "2026-07-01T12:00:01.396363+00:00"
+      "checkedAt": "2026-07-01T13:00:01.369771+00:00"
     },
     {
       "source": "NVIDIA Blog",
@@ -1077,7 +1140,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 18,
-      "checkedAt": "2026-07-01T12:00:01.396363+00:00"
+      "checkedAt": "2026-07-01T13:00:01.369771+00:00"
     },
     {
       "source": "AWS Machine Learning Blog",
@@ -1087,7 +1150,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-01T12:00:01.396363+00:00"
+      "checkedAt": "2026-07-01T13:00:01.369771+00:00"
     },
     {
       "source": "Artificial Intelligence News",
@@ -1097,7 +1160,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 12,
-      "checkedAt": "2026-07-01T12:00:01.396363+00:00"
+      "checkedAt": "2026-07-01T13:00:01.369771+00:00"
     },
     {
       "source": "Ars Technica (AI/Tech)",
@@ -1107,7 +1170,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-01T12:00:01.396363+00:00"
+      "checkedAt": "2026-07-01T13:00:01.369771+00:00"
     },
     {
       "source": "Together AI Blog",
@@ -1117,7 +1180,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-07-01T12:00:01.396363+00:00"
+      "checkedAt": "2026-07-01T13:00:01.369771+00:00"
     },
     {
       "source": "TechRepublic AI",
@@ -1127,7 +1190,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-01T12:00:01.396363+00:00"
+      "checkedAt": "2026-07-01T13:00:01.369771+00:00"
     },
     {
       "source": "ScienceDaily AI",
@@ -1137,7 +1200,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 60,
-      "checkedAt": "2026-07-01T12:00:01.396363+00:00"
+      "checkedAt": "2026-07-01T13:00:01.369771+00:00"
     },
     {
       "source": "The Next Web",
@@ -1147,7 +1210,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-01T12:00:01.396363+00:00"
+      "checkedAt": "2026-07-01T13:00:01.369771+00:00"
     },
     {
       "source": "BBC Discovery",
@@ -1157,7 +1220,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 847,
-      "checkedAt": "2026-07-01T12:00:01.396363+00:00"
+      "checkedAt": "2026-07-01T13:00:01.369771+00:00"
     },
     {
       "source": "BBC Infinite Monkey Cage",
@@ -1167,7 +1230,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 239,
-      "checkedAt": "2026-07-01T12:00:01.396363+00:00"
+      "checkedAt": "2026-07-01T13:00:01.369771+00:00"
     },
     {
       "source": "BBC The Life Scientific",
@@ -1177,7 +1240,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 356,
-      "checkedAt": "2026-07-01T12:00:01.396363+00:00"
+      "checkedAt": "2026-07-01T13:00:01.369771+00:00"
     },
     {
       "source": "TechCrunch AI",
@@ -1187,7 +1250,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-01T12:00:01.396363+00:00"
+      "checkedAt": "2026-07-01T13:00:01.369771+00:00"
     },
     {
       "source": "Anthropic News",
@@ -1197,7 +1260,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 234,
-      "checkedAt": "2026-07-01T12:00:01.396363+00:00"
+      "checkedAt": "2026-07-01T13:00:01.369771+00:00"
     },
     {
       "source": "The Verge AI",
@@ -1207,7 +1270,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-01T12:00:01.396363+00:00"
+      "checkedAt": "2026-07-01T13:00:01.369771+00:00"
     },
     {
       "source": "VentureBeat AI",
@@ -1217,7 +1280,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 7,
-      "checkedAt": "2026-07-01T12:00:01.396363+00:00"
+      "checkedAt": "2026-07-01T13:00:01.369771+00:00"
     },
     {
       "source": "Simon Willison",
@@ -1227,7 +1290,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 30,
-      "checkedAt": "2026-07-01T12:00:01.396363+00:00"
+      "checkedAt": "2026-07-01T13:00:01.369771+00:00"
     },
     {
       "source": "Interconnects AI",
@@ -1237,7 +1300,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-01T12:00:01.396363+00:00"
+      "checkedAt": "2026-07-01T13:00:01.369771+00:00"
     },
     {
       "source": "Latent Space",
@@ -1247,7 +1310,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-01T12:00:01.396363+00:00"
+      "checkedAt": "2026-07-01T13:00:01.369771+00:00"
     },
     {
       "source": "Import AI",
@@ -1257,7 +1320,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-01T12:00:01.396363+00:00"
+      "checkedAt": "2026-07-01T13:00:01.369771+00:00"
     },
     {
       "source": "Microsoft Research Blog",
@@ -1267,7 +1330,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-01T12:00:01.396363+00:00"
+      "checkedAt": "2026-07-01T13:00:01.369771+00:00"
     },
     {
       "source": "LiteLLM Releases",
@@ -1277,7 +1340,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-01T12:00:01.396363+00:00"
+      "checkedAt": "2026-07-01T13:00:01.369771+00:00"
     },
     {
       "source": "Hugging Face Transformers Releases",
@@ -1287,7 +1350,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-01T12:00:01.396363+00:00"
+      "checkedAt": "2026-07-01T13:00:01.369771+00:00"
     },
     {
       "source": "Model Context Protocol Python SDK Releases",
@@ -1297,7 +1360,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-01T12:00:01.396363+00:00"
+      "checkedAt": "2026-07-01T13:00:01.369771+00:00"
     },
     {
       "source": "Model Context Protocol Spec Releases",
@@ -1307,7 +1370,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 8,
-      "checkedAt": "2026-07-01T12:00:01.396363+00:00"
+      "checkedAt": "2026-07-01T13:00:01.369771+00:00"
     },
     {
       "source": "OpenAI Cookbook Releases",
@@ -1317,7 +1380,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 0,
-      "checkedAt": "2026-07-01T12:00:01.396363+00:00"
+      "checkedAt": "2026-07-01T13:00:01.369771+00:00"
     },
     {
       "source": "Product Hunt AI",
@@ -1327,7 +1390,7 @@
       "sourceType": "tool-directory",
       "status": "ok",
       "items": 50,
-      "checkedAt": "2026-07-01T12:00:01.396363+00:00"
+      "checkedAt": "2026-07-01T13:00:01.369771+00:00"
     }
   ],
   "errors": []
