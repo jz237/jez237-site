@@ -1402,5 +1402,23 @@
       "continuity": "Preserves Thornlight Meridian chalk canyons, violet glass dunes, amber crystal-thorn technology, dust-silk shade cloth, wind-harp infrastructure, and non-human gliding inhabitants with slate skin and amber sail-limbs.",
       "entryDescription": "Commuters ride suspended wind-harp cableway baskets through a chalk canyon while shade sleds move below and violet glass dunes glow beyond the canyon mouth."
     }
+  },
+  {
+    "id": "2026-07-01-weekly-world-image-thornlight-meridian-halo-sluice-dew-harv",
+    "title": "Thornlight Meridian: Halo Sluice Dew Harvest",
+    "tests": "Weekly-world image for Thornlight Meridian; preserves world bible continuity, non-human gliding inhabitants, alien dew-harvest activity, and realistic photographed rendering without prompt-card text.",
+    "prompt": "Create a finished realistic photographed daily-life image from the invented alien world Thornlight Meridian: Halo Sluice Dew Harvest. Show the Halo Sluice settlement before sunrise on a dry ochre mesa, where non-human gliding inhabitants harvest dew from translucent thorn spines as the first amber meridian band reaches the ridge. The inhabitants have narrow mantislike torsos, four walking limbs, two folded sail-limbs with translucent amber wing membranes, long balancing tails, matte slate skin, faceted side eyes, and delicate mouth feelers; they should feel like a practical non-human society, not people in costumes. Compose the scene at waist-height beside the work line: amber crystal-thorn groves arch over porous sun-baked ceramic basins, copper root nets catch beadlike dew drops, black lichen crust spreads across the stone, violet glass dunes and chalk-white wind canyons sit in the background, and floating dust halos glow in the cold pre-dawn air. Include tactile world-specific details: woven dust-silk shade cloth tied to thorn-anchor posts, blue wax leaf laminate splash guards, matte basalt scraping tools, prism glass bead measures, wind-harp resonator frames faintly visible on a nearby ridge, dew spines glittering with macro droplets, worn ceramic rim chips, mineral dust on limbs and tools, and long crisp shadows crossing ochre stone. Use documentary alien field photography, believable lens depth, dry atmospheric perspective, practical work gestures, rich material detail, and hot amber dawn light mixing with cool violet shadow. No readable text, no labels, no title, no poster layout, no humans, no astronauts, no ordinary Earth desert town, no mushrooms or spores, no glass space habitat, no generic neon sci-fi, no fantasy village, no brand logos, no watermark.\n\nReusable fill-in-the-blank template: Create a finished realistic photographed daily-life image from the invented alien world [WORLD_NAME]: [SCENE_NAME]. Show [NON_HUMAN_INHABITANTS] performing [DAILY_LIFE_ACTIVITY] in [SPECIFIC_SETTLEMENT_OR_TERRAIN], preserving the world's geography, ecology, materials, transit logic, palette, and recurring motifs. Include tactile tools, local infrastructure, scale cues, weather or lighting behavior, and practical gestures that make the society feel lived-in rather than generic sci-fi. Avoid humans as the main society, franchise cues, ordinary Earth settings with props, prompt-card text, and contradictions of the world bible.\n\nExample substitution: [WORLD_NAME] = Thornlight Meridian; [SCENE_NAME] = Halo Sluice Dew Harvest; [NON_HUMAN_INHABITANTS] = gliding mantislike inhabitants with four walking limbs, folded sail-limbs, amber wing membranes, tails, slate skin, faceted eyes, and mouth feelers; [DAILY_LIFE_ACTIVITY] = harvesting dew from translucent thorn spines before sunrise; [SPECIFIC_SETTLEMENT_OR_TERRAIN] = Halo Sluice on an ochre mesa beside amber crystal-thorn groves, copper root nets, ceramic basins, black lichen crust, violet glass dunes, and chalk wind canyons.",
+    "image": "images/2026-07-01-weekly-world-image-thornlight-meridian-halo-sluice-dew-harv.jpg",
+    "date": "2026-07-01",
+    "batch": "Daily Prompt",
+    "slot": "weekly-world-image",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "world": {
+      "name": "Thornlight Meridian",
+      "description": "A dry alien highland world where dawn-powered crystal thorns, wind-harp canyons, and long-limbed gliding inhabitants make cities along moving bands of warm light.",
+      "continuity": "Preserves Thornlight Meridian's ochre mesas, crystal-thorn dew spines, copper root nets, ceramic tools, violet glass dunes, chalk canyons, dust halos, and gliding mantislike inhabitants.",
+      "entryDescription": "Dew-harvest workers at Halo Sluice collect beadlike moisture from translucent thorn spines before sunrise."
+    }
   }
 ]
