@@ -117,5 +117,22 @@
       "description": "A badger-sized alpine salt-flat animal with glassy shoulder sails, sifting tusks, and salt-crusted lavender-gray hide.",
       "template": "Design a believable [HABITAT] creature with [ADAPTATION 1], [ADAPTATION 2], and [TEXTURE/COLOR], shown as a realistic natural-history creature study."
     }
+  },
+  {
+    "id": "2026-07-01-creature-design-mangrove-glassroot-skimmer",
+    "title": "Mangrove Glassroot Skimmer",
+    "tests": "Generated with GPT Image 2 via OpenClaw CLI; verified source file exists; appended as creature-design archive entry with R2 JPEG upload.",
+    "prompt": "Design a believable brackish mangrove-root creature called the Mangrove Glassroot Skimmer with translucent salt-filtering throat fans, stilted mud-sensing toes, and olive-black skin flecked with amber glassy nodules, shown as a realistic natural-history creature study. Create a finished square documentary wildlife photograph in a dense mangrove creek at low tide: one adult animal about the size of a hare moves sideways through wet black mud between arched mangrove roots, with a low flexible body, four long stiltlike legs ending in broad sensitive toe pads that dimple the mud surface, a narrow wedge head with protected side eyes, a pair of translucent amber throat fans partly opened to shed briny water droplets, small whisker-like feelers touching the root bark, and olive-black pebbled skin scattered with glassy amber salt nodules along the shoulders and tail. Include two juveniles hiding under a tangle of pneumatophores, tiny fiddler-crab burrows, brackish foam rings, fallen yellow mangrove leaves, slick root reflections, mud ripples around the feet, salt crystals on the throat fan edges, and a natural scale cue from a nearby half-buried shell. Use humid morning light filtered through leaves, shallow documentary depth of field, believable anatomy and weight, tactile wet mud, bark, skin, and salt textures, and ecological logic that makes the adaptations clear without labels. The image itself should be the finished creature study, not a prompt card: no readable text, no captions, no arrows, no poster layout, no fantasy monster styling, no gore, no logos, no watermark, no people, no extra limbs beyond four legs, no incoherent anatomy, no blank studio background.\n\nReusable fill-in-the-blank template: Design a believable [HABITAT] creature with [ADAPTATION 1], [ADAPTATION 2], and [TEXTURE/COLOR], shown as a realistic natural-history creature study. Make the finished image show [LIFE STAGE OR GROUPING] in [SPECIFIC MICROHABITAT], with visible anatomy, scale cues, habitat traces, material textures, and lighting that explain how the adaptations work without turning the image into a labeled prompt card.\n\nWhat the reusable visual operation changes or emphasizes: it turns a habitat-and-adaptation brief into a plausible original animal study, emphasizing ecological logic, coherent anatomy, tactile surface detail, scale, and behavior in context.\n\nExample substitution: [HABITAT] = brackish mangrove roots at low tide; [ADAPTATION 1] = translucent salt-filtering throat fans; [ADAPTATION 2] = stilted mud-sensing toes; [TEXTURE/COLOR] = olive-black skin flecked with amber glassy nodules; [LIFE STAGE OR GROUPING] = one adult with two juveniles; [SPECIFIC MICROHABITAT] = wet black mud between arched mangrove roots and pneumatophores.",
+    "image": "images/2026-07-01-creature-design-mangrove-glassroot-skimmer.jpg",
+    "date": "2026-07-01",
+    "batch": "Daily Prompt",
+    "slot": "creature-design",
+    "model": "gpt-image-2",
+    "size": "1024x1024",
+    "creatureDesign": {
+      "name": "Mangrove Glassroot Skimmer",
+      "description": "A hare-sized mangrove-creek animal with salt-filtering throat fans, stilted mud-sensing toes, and olive-black skin flecked with amber nodules.",
+      "template": "Design a believable [HABITAT] creature with [ADAPTATION 1], [ADAPTATION 2], and [TEXTURE/COLOR], shown as a realistic natural-history creature study."
+    }
   }
 ]
