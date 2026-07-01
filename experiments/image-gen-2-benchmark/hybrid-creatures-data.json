@@ -322,5 +322,41 @@
       "description": "A fictional leaf-tailed gecko + hummingbird hybrid photographed in a rainy cloud-forest flower canopy.",
       "continuity": "Shared phenotype: vertical-clinging cloud-forest adult with gecko limbs and leaf-tail plus hummingbird nectar beak, iridescent throat, and translucent wings."
     }
+  },
+  {
+    "id": "2026-07-01-hybrid-creature-infographic-reedglass-spoonwalker-developme",
+    "title": "Reedglass Spoonwalker: Development Map",
+    "tests": "Synchronous GPT Image 2 CLI generation succeeded on first attempt; exact output path verified under /home/jez237/.openclaw/media/tool-image-generation; append-entry.py converted/uploaded JPEG to R2.",
+    "prompt": "Create a colorful photorealistic speculative scientific development-map infographic for a clearly fictional hybrid creature named \"Reedglass Spoonwalker\", using exactly two source organisms: roseate spoonbill + glass frog. Make it a landscape scientific wall chart assembled on a humid marsh field-station bench, with restrained concise labels and no actionable biology. Include these distinct visual layers: a source-trait map showing roseate spoonbill contributes long stilt legs, flattened spoon-shaped bill, rose-pink shoulder feather fans, wading posture, and shallow-water sweep-feeding behavior, while glass frog contributes translucent lime-green belly skin, visible soft organ silhouettes as pale shapes, adhesive toe pads, large gold side-set eyes, and glossy wet amphibian skin; a juvenile-to-adult stage strip with three non-procedural life stages; a large central adult specimen panel showing a tall knee-high wader standing side-on in ankle-deep water with two long spoonbill-like legs, a light arched amphibian torso, glassy green translucent belly, rose feather fans folded like shoulder sails, a broad spoon-shaped bill, large glass-frog eyes, and four small sticky foretoes held close to the body; macro texture windows for translucent belly membrane, rose feather barbs, wet toe pads, spoon-bill edge, and gold eye surface; habitat swatches for dawn reed marsh, floating duckweed, wet cypress roots, rose reflected water, and rain-beaded leaves; and a field-context scale vignette with a boot print, a reed stem, a small nonbranded caliper, and a shallow sample tray on the bench. Use clean scientific color coding, photorealistic specimen lighting, tactile bench materials, dew, mud flecks, restrained arrows, and readable but minimal labels. Keep it clearly fictional and non-actionable: no real gene names, no lab protocols, no equipment steps, no surgery, no gore, no brand logos, no QR codes, no dense paragraphs, no prompt-card text.\n\nReusable fill-in-the-blank template: Create a fictional two-source hybrid-creature pair for [HYBRID_NAME], using exactly [SOURCE_A] + [SOURCE_B]. First generate a colorful photorealistic scientific development-map infographic with a source-trait map, juvenile-to-adult stage strip, adult specimen panel, macro texture/color panels, habitat swatches, and field-context scale vignette. Then generate a matching in-the-wild field photo of the same adult phenotype in [HABITAT]. Keep it clearly fictional and non-actionable: no real gene names, no lab protocol steps, no surgery, no gore.\n\nExample substitution: [HYBRID_NAME] = Reedglass Spoonwalker; [SOURCE_A] = roseate spoonbill; [SOURCE_B] = glass frog; [HABITAT] = dawn reed marsh after rain; adult phenotype = a tall knee-high wader with spoonbill stilt legs, flattened spoon bill, rose shoulder feather fans, glass-frog translucent belly, sticky toe pads, glossy lime skin, and large gold side-set eyes.",
+    "image": "images/2026-07-01-hybrid-creature-infographic-reedglass-spoonwalker-developme.jpg",
+    "date": "2026-07-01",
+    "batch": "Daily Prompt",
+    "slot": "hybrid-creature-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "hybridCreature": {
+      "name": "Reedglass Spoonwalker",
+      "imageKind": "infographic",
+      "description": "A fictional roseate spoonbill + glass frog hybrid with a tall marsh-wading body, rose shoulder fans, spoon bill, translucent glassy belly, sticky toe pads, and gold amphibian eyes.",
+      "continuity": "Same adult phenotype across both images: tall dawn-marsh wader combining spoonbill stilt legs, spoon bill, rose feather fans, translucent glass-frog belly, sticky toe pads, lime wet skin, and gold side-set eyes."
+    }
+  },
+  {
+    "id": "2026-07-01-hybrid-creature-wild-reedglass-spoonwalker-in-the-wild",
+    "title": "Reedglass Spoonwalker: In the Wild",
+    "tests": "Synchronous GPT Image 2 CLI generation succeeded on first attempt; exact output path verified under /home/jez237/.openclaw/media/tool-image-generation; append-entry.py converted/uploaded JPEG to R2.",
+    "prompt": "Create a matching photorealistic in-the-wild documentary field photo of the adult \"Reedglass Spoonwalker\", a clearly fictional two-source hybrid of roseate spoonbill + glass frog, in a dawn reed marsh after rain. Preserve the exact adult phenotype from the development map: a tall knee-high wading animal standing side-on in ankle-deep water, two long roseate-spoonbill-like stilt legs with pale pink joints, a broad flattened spoon-shaped bill sweeping just above the water, rose-pink feather fans folded like small shoulder sails, a light arched amphibian torso, glossy wet lime-green glass-frog skin, a translucent belly where pale soft organ silhouettes show through as abstract shapes, large gold side-set glass-frog eyes, sticky toe pads dimpling floating duckweed, and four small sticky foretoes tucked close beneath the chest. Show it stepping between cypress knees and reed stems with rain beads on leaves, rose dawn reflections, muddy ripples from its feet, a few disturbed tiny insects on the water surface, duckweed caught on the toe pads, and a boot-print scale cue in the mud at the edge of frame. Use long-lens wildlife photography, low marsh-level camera angle, shallow documentary depth of field, humid morning haze, tactile feathers, glassy skin, wet wood, mud, and water texture. No labels, no text, no people, no lab setting, no gore, no logos, no watermark, no costume look, no pure bird or pure frog result; it must visibly combine roseate spoonbill traits and glass frog traits in the same adult creature.\n\nReusable fill-in-the-blank template: Create a matching photorealistic in-the-wild field photo of the same fictional [HYBRID_NAME] adult phenotype from [SOURCE_A] + [SOURCE_B], preserving the source-trait map visibly in the body plan, skin texture, posture, habitat interaction, locomotion, and scale cues. Avoid text, gore, lab context, and any result that reads as a costume or a pure single-source animal.\n\nExample substitution: [HYBRID_NAME] = Reedglass Spoonwalker; [SOURCE_A] = roseate spoonbill; [SOURCE_B] = glass frog; [HABITAT] = dawn reed marsh after rain; shared adult phenotype = tall side-on wader with spoonbill legs, spoon bill, rose shoulder fans, translucent glass-frog belly, sticky toe pads, glossy lime skin, and large gold eyes.",
+    "image": "images/2026-07-01-hybrid-creature-wild-reedglass-spoonwalker-in-the-wild.jpg",
+    "date": "2026-07-01",
+    "batch": "Daily Prompt",
+    "slot": "hybrid-creature-wild",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "hybridCreature": {
+      "name": "Reedglass Spoonwalker",
+      "imageKind": "wild",
+      "description": "A fictional roseate spoonbill + glass frog hybrid photographed in its dawn reed-marsh habitat.",
+      "continuity": "Same adult phenotype across both images: tall dawn-marsh wader combining spoonbill stilt legs, spoon bill, rose feather fans, translucent glass-frog belly, sticky toe pads, lime wet skin, and gold side-set eyes."
+    }
   }
 ]
