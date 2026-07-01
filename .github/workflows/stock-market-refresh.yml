@@ -25,7 +25,10 @@ jobs:
         run: |
           eastern_hour="$(TZ=America/New_York date +%H)"
           eastern_minute="$(TZ=America/New_York date +%M)"
-          if [ "$eastern_minute" = "31" ] && [ "$eastern_hour" -ge 9 ] && [ "$eastern_hour" -le 16 ]; then
+          eastern_total=$((10#$eastern_hour * 60 + 10#$eastern_minute))
+          market_start=$((9 * 60 + 31))
+          market_end=$((16 * 60 + 31))
+          if [ "$eastern_total" -ge "$market_start" ] && [ "$eastern_total" -le "$market_end" ]; then
             echo "run=true" >> "$GITHUB_OUTPUT"
           else
             echo "run=false" >> "$GITHUB_OUTPUT"
