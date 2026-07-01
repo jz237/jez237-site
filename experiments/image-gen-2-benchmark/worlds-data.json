@@ -1420,5 +1420,23 @@
       "continuity": "Preserves Thornlight Meridian's ochre mesas, crystal-thorn dew spines, copper root nets, ceramic tools, violet glass dunes, chalk canyons, dust halos, and gliding mantislike inhabitants.",
       "entryDescription": "Dew-harvest workers at Halo Sluice collect beadlike moisture from translucent thorn spines before sunrise."
     }
+  },
+  {
+    "id": "2026-07-01-weekly-world-image-thornlight-meridian-thorn-kiln-quarter-f",
+    "title": "Thornlight Meridian: Thorn-Kiln Quarter Firing Shift",
+    "tests": "Generated via openclaw infer image generate using openai/gpt-image-2; verified output file exists and inspected image.",
+    "prompt": "Create a finished square realistic photographed daily-life image from Thornlight Meridian: show artisans firing porous sun-baked ceramic in a kiln quarter shaded by bone-white dust-silk cloth, with amber thorn-crystal glaze chips, matte basalt tools, copper-root tongs, wind-harp resonator frames, and juveniles practicing tail-tap signals beside glowing kiln vents. Preserve Thornlight Meridian continuity: dry ochre highlands, chalk-white wind canyons, violet glass dunes, amber crystal-thorn groves, non-human gliding inhabitants with mantislike torsos, four walking limbs, folded translucent amber sail-limbs, long balancing tails, matte slate skin, faceted side eyes, and practical worn ceramic technology. Make the finished image a tactile documentary field photograph with warm dawn meridian light, cool canyon shadows, ash, heat shimmer, mineral dust, cracked ceramic surfaces, rich material detail, and no readable text, humans, poster layout, or generic sci-fi styling.\n\nReusable fill-in-the-blank template: Create a realistic photographed daily-life view from [INVENTED_ALIEN_WORLD], showing [LOCAL_WORK_PROCESS_OR_RITUAL] in [SPECIFIC_SETTLEMENT_OR_ECOLOGICAL_SETTING]. Preserve the world bible's geography, inhabitants, materials, technology, palette, recurring motifs, and hard avoids. Include non-Earth ecology/materials, practical tools, scale cues, tactile surface wear, lived-in behavior, and coherent lighting; avoid humans, generic franchise sci-fi, flat chart/poster composition, readable text, and Earth locations with alien props.\n\nExample substitution: [INVENTED_ALIEN_WORLD] = Thornlight Meridian; [LOCAL_WORK_PROCESS_OR_RITUAL] = artisans firing porous sun-baked ceramic while juveniles practice tail-tap kiln signals; [SPECIFIC_SETTLEMENT_OR_ECOLOGICAL_SETTING] = Thorn-Kiln Quarter, an ochre highland kiln yard carved into chalk-white canyon stone under bone-white dust-silk shade cloths.",
+    "image": "images/2026-07-01-weekly-world-image-thornlight-meridian-thorn-kiln-quarter-f.jpg",
+    "date": "2026-07-01",
+    "batch": "Daily Prompt",
+    "slot": "weekly-world-image",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "world": {
+      "name": "Thornlight Meridian",
+      "description": "A dry alien highland world where dawn-powered crystal thorns, wind-harp canyons, and long-limbed gliding inhabitants build daily life along moving bands of warm meridian light.",
+      "continuity": "Preserves Thornlight Meridian's ochre highlands, chalk canyon kilns, amber crystal-thorn materials, dust-silk shade cloth, basalt tools, and non-human gliding inhabitants with folded amber sail-limbs and tail-tap communication.",
+      "entryDescription": "A kiln-quarter work shift where inhabitants fire porous ceramic vessels, sort thorn-crystal glaze chips, and teach juveniles tail-tap firing signals under dawn shade cloth."
+    }
   }
 ]
