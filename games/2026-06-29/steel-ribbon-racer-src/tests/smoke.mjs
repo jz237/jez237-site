@@ -423,6 +423,90 @@ const browser = await chromium.launch({
   await ctx.close();
 }
 
+// ---------- v3.4: generated audio, static merge, drift combos, day/night, stunt jumps ----------
+{
+  const ctx = await browser.newContext({ viewport: { width: 1600, height: 900 } });
+  const page = await ctx.newPage();
+  const errors = [];
+  page.on("pageerror", (e) => errors.push(String(e)));
+  await page.goto(url, { waitUntil: "networkidle" });
+  await ready(page);
+  // starting roam is the user gesture: Yd -> La -> audio init + sample fetch
+  await page.locator("#roamBtn").click();
+  await page.waitForTimeout(900);
+
+  // generated SFX + music decode after the first gesture
+  const audio = await poll(page, () => window.__steelRibbonDebug.audioInfo(), (a) => a && a.samples >= 9, 60);
+  check("generated SFX samples decoded", audio && audio.samples >= 9, `samples=${audio?.samples}`);
+  const musicLive = await poll(
+    page,
+    () => window.__steelRibbonDebug.audioInfo().sampleLoops,
+    (l) => l.includes("music"),
+    40,
+  );
+  check("music sample loop running", !!musicLive && musicLive.includes("music"), JSON.stringify(musicLive));
+
+  // static-scenery merge dropped thousands of meshes; draw calls stay under a real budget
+  const ri = await page.evaluate(() => window.__steelRibbonDebug.renderInfo());
+  check(
+    "static merge active",
+    ri.staticMerge && ri.staticMerge.meshesRemoved > 800,
+    JSON.stringify(ri.staticMerge),
+  );
+  check("draw calls reduced", ri.calls > 100 && ri.calls < 3400, `calls=${ri.calls}`);
+
+  // day/night: night mode darkens, day mode brightens, dusk restores
+  await page.evaluate(() => window.__steelRibbonDebug.setTod("night"));
+  const night = await poll(page, () => window.__steelRibbonDebug.todInfo(), (t) => t.night > 0.9, 60);
+  check("night mode reaches full blend", !!night && night.night > 0.9, JSON.stringify(night));
+  await page.evaluate(() => window.__steelRibbonDebug.setTod("day"));
+  const day = await poll(page, () => window.__steelRibbonDebug.todInfo(), (t) => t.day > 0.9, 60);
+  check("day mode reaches full blend", !!day && day.day > 0.9, JSON.stringify(day));
+  await page.evaluate(() => window.__steelRibbonDebug.setTod("dusk"));
+
+  // drift combo: bank one drift (held well past the 0.55s game-time minimum — the
+  // headless sim runs in slow motion), combo counter arms for the next
+  await page.evaluate(() => window.__steelRibbonDebug.setRoamPos(80, 250, 0, 95));
+  await page.keyboard.down("ArrowUp");
+  await page.keyboard.down("Space");
+  await page.keyboard.down("KeyA");
+  // hold until the drift accumulator is safely past the 0.55s game-time bank threshold
+  await poll(page, () => window.__steelRibbonTelemetry.driftT, (t) => t > 0.75, 90);
+  await page.keyboard.up("Space");
+  await page.keyboard.up("KeyA");
+  const combo = await poll(page, () => window.__steelRibbonTelemetry.driftCombo, (c) => c >= 1, 50);
+  await page.keyboard.up("ArrowUp");
+  check("drift combo arms after banked drift", combo >= 1, `combo=${combo}`);
+
+  // stunt ramps: placed, and launching off one pays a stunt bonus with slow-mo
+  const ramps = await page.evaluate(() => window.__steelRibbonDebug.listStuntRamps());
+  check("stunt ramps placed", ramps.length >= 4, `ramps=${ramps.length}`);
+  // try up to 3 ramps — a random layout can still park a surprise on an approach
+  let stunt = null,
+    sawSloMo = false;
+  for (let ri3 = 0; ri3 < Math.min(3, ramps.length) && !stunt; ri3++) {
+    await page.evaluate((idx) => {
+      const r = window.__steelRibbonDebug.listStuntRamps()[idx],
+        fx = Math.sin(r.yaw),
+        fz = -Math.cos(r.yaw);
+      window.__steelRibbonDebug.setRoamPos(r.x - fx * 55, r.z - fz * 55, r.yaw, 108);
+    }, ri3);
+    await page.keyboard.down("KeyW");
+    for (let k = 0; k < 90 && !stunt; k++) {
+      const t = await page.evaluate(() => window.__steelRibbonTelemetry);
+      if (t.sloMoT > 0) sawSloMo = true;
+      if (t.stunts > 0) stunt = t;
+      await page.waitForTimeout(250);
+    }
+    await page.keyboard.up("KeyW");
+  }
+  check("stunt jump lands a bonus", !!stunt && stunt.score > 100, `stunts=${stunt?.stunts} score=${stunt?.score}`);
+  check("stunt slow-mo triggered", sawSloMo, `sawSloMo=${sawSloMo}`);
+
+  check("no console errors (v3.4)", errors.length === 0, errors.slice(0, 3).join(" | "));
+  await ctx.close();
+}
+
 // ---------- v3.3: vehicle theft (parked + traffic), own-car marker, heli scale ----------
 {
   const ctx = await browser.newContext({ viewport: { width: 1600, height: 900 } });
